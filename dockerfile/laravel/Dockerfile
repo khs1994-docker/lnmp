@@ -7,3 +7,5 @@ RUN composer global require "laravel/installer"
 RUN ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/
 
 WORKDIR /app
+
+ENTRYPOINT ["laravel", "new"]
