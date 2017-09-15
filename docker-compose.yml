@@ -55,7 +55,9 @@ services:
       dockerfile: Dockerfile
     image: lnmp-mongo:latest
     volumes:
+      - ./config/mongodb/mongod.conf:/etc/mongod.conf
       - ./var/lib/mongo:/data/db
+      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
     # ports:
     #   - "27017:27017"
 
