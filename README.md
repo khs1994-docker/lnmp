@@ -23,6 +23,7 @@
 * Redis
 * Memcached
 * MongoDB
+* PostgreSQL
 * RabbitMQ
 
 ## 文件夹结构

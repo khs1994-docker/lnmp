@@ -18,6 +18,7 @@ Changelog
 * 增加：Memcached
 * 增加：RabbitMQ
 * 增加：Laravel
+* 增加：PostgreSQL
 
 #### v17.09 rc1
 
