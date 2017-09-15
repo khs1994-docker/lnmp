@@ -41,10 +41,4 @@ echo -e "\n\033[32mINFO\033[0m mkdir log folder SUCCESS\n"
 
 # 初始化完成提示
 
-# 构建镜像
-
-cd dockerfile/laravel-artisan/
-
-docker build -t lnmp-laravel-artisan .
-
 echo -e "\033[32mINFO\033[0m  inin is SUCCESS please RUN \" docker-compose up -d \""

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# 项目测试脚本
+docker-compose down
+
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+
+./init.sh
+
+./build.sh
+
+docker-compose up -d
+
+curl 127.0.0.1
+
+docker-compose down
+
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+curl 127.0.0.1
+
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
