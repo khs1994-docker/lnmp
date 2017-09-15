@@ -45,6 +45,12 @@
 |`error.log`      |`./logs/mysql/error.log`|`/var/log/mysql/error.log`|
 |`/var/lib/mysql/`|`./var/lib/mysql`       |`/var/lib/mysql`|
 
+## PostgreSQL
+
+|名称|本机|容器|
+|--|--|--|
+|`/var/lib/postgresql/`|`./var/lib/postgresql`|`/var/lib/postgresql`|
+
 ## MongoDB
 
 |名称|本机|容器|
