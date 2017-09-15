@@ -1,6 +1,6 @@
 FROM php:fpm
 
-WORKDIR /app/${LARAVEL_APP_NAME}
+WORKDIR /app
 
 ENTRYPOINT ["php", "artisan"]
 
