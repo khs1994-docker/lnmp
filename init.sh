@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# 初始化脚本
 # 安装 docker-compose
 
 which docker-compose

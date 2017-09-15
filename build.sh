@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 构建镜像
+# 构建单容器镜像
 
 cd dockerfile/laravel
 

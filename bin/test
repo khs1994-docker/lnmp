@@ -1,13 +1,21 @@
 #!/bin/bash
 
 # 项目测试脚本
+# 删除原项目
+
 docker-compose down
 
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
 
+# 初始化
+
 ./init.sh
 
+# 构建单容器
+
 ./build.sh
+
+# 测试开发环境
 
 docker-compose up -d
 
@@ -15,8 +23,24 @@ curl 127.0.0.1
 
 docker-compose down
 
+# 测试生产环境
+
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 curl 127.0.0.1
 
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+
+# 新建 Laravel 项目
+
+rm -rf app/test
+
+bin/laravel test
+
+# 测试 php artisan
+
+bin/php-artisan test -V
+
+# 测试 composer
+
+bin/composer test update

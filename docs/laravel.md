@@ -14,8 +14,10 @@ $ bin/laravel [PATH]
 $ bin/php-artisan [PATH] [COMMAND]
 ```
 
-## 安装 Laravel 依赖包
+## 安装升级 Laravel 依赖包
 
 ```bash
-bin/composer [PATH] [COMMAND]
+$ bin/composer [PATH] install
+
+$ bin/composer [PATH] update
 ```
