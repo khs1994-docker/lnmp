@@ -49,17 +49,6 @@ services:
       - ./config/nginx:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx
 
-  laravel:
-    build:
-      context: ./dockerfile/laravel/
-      dockerfile: Dockerfile
-    image: lnmp-laravel:latest
-    volumes:
-      - ./app:/app
-    env_file: .env
-    command: laravel new $LARAVEL_APP_NAME
-    tty: true
-
   mongo:
     build:
       context: ./dockerfile/mongodb/

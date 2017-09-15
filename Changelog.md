@@ -1,10 +1,15 @@
 Changelog
 ==============
 
+#### v17.09 rc4
+
+* 增加 `生产环境` 配置
+
 #### v17.09 rc3
 
 * 优化 Dockerfile
 * 优化镜像占用空间(暂时搁置，不采用 alpine，仍采用 Debian)，挂载 `/etc/localtime` 修改时区在 macOS 不生效。
+* 完善支持文档
 
 #### v17.09 rc2
 
