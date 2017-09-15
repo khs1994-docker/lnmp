@@ -22,6 +22,7 @@ services:
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./var/lib/redis:/data
+      - ./logs/redis:/var/log/redis
     command: redis-server /usr/local/etc/redis/redis.conf
 
   php7:
