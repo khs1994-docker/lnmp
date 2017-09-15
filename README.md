@@ -12,6 +12,19 @@
 
 # 项目说明
 
+## 包含软件
+
+* Nginx
+* MySQL
+* PHP7
+* Laravel
+* Laravel artisan
+* Composer
+* Redis
+* Memcached
+* MongoDB
+* RabbitMQ
+
 ## 文件夹结构
 
 |文件夹|说明|
