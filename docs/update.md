@@ -7,7 +7,18 @@ $ docker-compose down
 
 $ docker images | grep lnmp
 
-$ docker rmi lnmp-mysql lnmp-redis lnmp-php lnmp-nginx
+$ docker rmi lnmp-php \
+             lnmp-postgresql \
+             lnmp-mongo \
+             lnmp-memcached \
+             lnmp-mysql \
+             lnmp-rabbitmq \
+             lnmp-redis \
+             lnmp-nginx
 
 $ docker-compose build
+
+# 重新构建单容器镜像
+
+$ ./build.sh
 ```

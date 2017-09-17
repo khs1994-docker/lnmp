@@ -1,3 +1,5 @@
+# Composer
+
 ```bash
 $ bin/composer [path] [COMMAND]
 ```

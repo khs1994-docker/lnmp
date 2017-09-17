@@ -27,3 +27,7 @@ RUN pecl install mongodb \
          && pecl install memcached \
          && pecl install xdebug \
          && docker-php-ext-enable mongodb memcached redis xdebug
+
+RUN rm -r /var/lib/apt/lists/*
+
+WORKDIR /app
