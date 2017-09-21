@@ -3,15 +3,16 @@
 [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp)
 [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp)
 
-务必分清`本机`路径和`容器内`路径，请仔细对照 `docker-compose.yml` 文件，或阅读 [path.md](docs/path.md)。  
+务必分清 `本机` 路径和 `容器内` 路径，请仔细对照 `docker-compose.yml` 文件或阅读 [支持文档](docs/path.md)。
+
 提前安装配置好 [`docker-compose`](https://www.khs1994.com/docker/compose.html)
 
 # 更新记录
 
-每季度（17.09，17.12，18.03...）更新一个大版本，版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)
+每季度（17.09，17.12，18.03...）更新一个大版本，版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
 
 
-查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)
+查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
 # 项目说明
 
@@ -49,8 +50,10 @@
 # Usage
 
 * 根据实际配置修改 `.env`
+
 * 配置 `./config/php/xdebug.ini` 中的本机IP、本机端口
-* 更多用法请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/master/docs)
+
+* 更多用法请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/dev/docs)
 
 ## 启动
 
@@ -87,7 +90,10 @@ $ docker-compose down
 
 # CLI
 
+为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./docker-lnmp.sh`)，用法请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/dev/docs)。
+
 # More
+
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)

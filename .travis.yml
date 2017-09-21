@@ -33,6 +33,7 @@ script:
 - cd dockerfile/php-fpm
 - rm -rf sources.list
 - cp sources.list.default sources.list
+- cd -
 - "./docker-lnmp.sh test"
 branches:
   only:
