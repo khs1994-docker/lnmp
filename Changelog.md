@@ -5,8 +5,8 @@ Changelog
 
 * 编写命令行工具（CLI）`docker-lnmp.sh`
 * 优化 Dockerfile
-* 优化镜像占用空间(暂时搁置，不采用 alpine，仍采用 Debian)，挂载 `/etc/localtime` 修改时区在 macOS 不生效。
 * 编写支持文档
+* 增加由 `Travis CI` 支持的项目自动化测试
 
 #### v17.09 rc2
 
@@ -18,7 +18,6 @@ Changelog
 * 增加：MongoDB
 * 增加：Memcached
 * 增加：RabbitMQ
-* 增加：Laravel
 * 增加：PostgreSQL
 
 #### v17.09 rc1

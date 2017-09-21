@@ -38,6 +38,6 @@ script:
 branches:
   only:
   - master
-  - dev
+#  - dev
 env:
   - DOCKER_COMPOSE_VERSION=1.16.1
