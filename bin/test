@@ -9,21 +9,15 @@ echo
 
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
 
-echo -e "\033[32mINFO\033[0m 删除原有项目成功\n"
+echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
 # 初始化
 
 ./init.sh
 
-echo -e "\033[32mINFO\033[0m 初始化项目成功\n"
+echo -e "\033[32mINFO\033[0m  初始化项目成功\n"
 
-# 构建单容器
-
-echo
-
-./build.sh
-
-echo -e "\033[32mINFO\033[0m 构建单容器成功\n"
+# 构建单容器 已包含在 初始化脚本中
 
 # 测试开发环境
 
@@ -54,7 +48,7 @@ echo
 
 docker-compose down
 
-echo -e "\033[32mINFO\033[0m 开发环境测试完毕\n"
+echo -e "\033[32mINFO\033[0m  开发环境测试完毕\n"
 
 # 测试生产环境
 
@@ -85,7 +79,7 @@ echo
 
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
 
-echo -e "\033[32mINFO\033[0m 生产环境测试完毕\n"
+echo -e "\033[32mINFO\033[0m  生产环境测试完毕\n"
 
 # 新建 Laravel 项目
 
@@ -93,16 +87,16 @@ rm -rf app/test
 
 bin/laravel test
 
-echo -e "\033[32mINFO\033[0m 测试新建 Laravel 项目完毕\n"
+echo -e "\033[32mINFO\033[0m  测试新建 Laravel 项目完毕\n"
 
 # 测试 php artisan
 
 bin/php-artisan test -V
 
-echo -e "\033[32mINFO\033[0m 测试 php artisan 完毕\n"
+echo -e "\033[32mINFO\033[0m  测试 php artisan 完毕\n"
 
 # 测试 composer
 
 bin/composer test --version
 
-echo -e "\033[32mINFO\033[0m 测试 composer 完毕\n"
+echo -e "\033[32mINFO\033[0m  测试 composer 完毕\n"

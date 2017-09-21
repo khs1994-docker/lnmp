@@ -3,6 +3,7 @@ Changelog
 
 #### v17.09 rc3
 
+* 编写命令行工具（CLI）`docker-lnmp.sh`
 * 优化 Dockerfile
 * 优化镜像占用空间(暂时搁置，不采用 alpine，仍采用 Debian)，挂载 `/etc/localtime` 修改时区在 macOS 不生效。
 * 编写支持文档
