@@ -21,30 +21,40 @@ logs(){
   mkdir -p logs/mongodb
   cd logs/mongodb
   touch mongo.log
+
+  # 部分文件可能提示没有写入权限
+
+  chmod 777 *
   cd -
 
   mkdir -p logs/mysql
   cd logs/mysql
-  touch error.log
+  echo > error.log
+  chmod 777 *
   cd -
 
   mkdir -p logs/nginx
   cd logs/nginx
-  touch error.log access.log
+  echo > error.log
+  echo > access.log
+  chmod 777 *
   cd -
 
   mkdir -p logs/php-fpm
   cd logs/php-fpm
-  touch error.log access.log xdebug-remote.log
+  echo > error.log
+  echo > access.log
+  echo > xdebug-remote.log
+  chmod 777 *
   cd -
 
   mkdir -p logs/redis
   cd logs/redis
-  touch redis.log
+  echo > redis.log
+  chmod 777 *
   cd -
 
   echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
-
   echo
   echo
 }
@@ -59,6 +69,10 @@ function build() {
 
   docker rmi lnmp-laravel \
              lnmp-laravel-artisan
+
+  echo -e "\033[32mINFO\033[0m  Remove images Success\n"
+  echo
+  echo
 
   # 构建单容器镜像
 
@@ -153,6 +167,29 @@ case $1 in
   cleanup )
     cleanup
     ;;
+  laravel )
+    read -p "请输入路径: ./app/" path
+    echo
+    echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
+    bin/laravel $path
+    ;;
+  artisan )
+    read -p  "请输入路径: ./app/" path
+    read -p  "请输入命令: php artisan " cmd
+    echo
+    echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
+    bin/php-artisan $path $cmd
+    ;;
+  composer )
+    read -p "请输入路径: ./app/" path
+    read -p  "请输入命令: composer " cmd
+    echo
+    echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
+    bin/composer $path $cmd
+    ;;
+  test )
+    bin/test
+    ;;
   * )
   echo  "
 Docker-LNMP CLI "$VERSION"
@@ -160,12 +197,16 @@ Docker-LNMP CLI "$VERSION"
 USAGE: ./docker-lnmp COMMAND
 
 Commands:
-  init      : 初始化部署环境
-  build     : 构建单容器镜像
-  cleanup   : 清理已构建 docker images 、清理日志文件
-  help      : 输出帮助信息
+  init         初始化部署环境
+  build        构建单容器镜像
+  cleanup      清理已构建 docker images 、清理日志文件
+  laravel      新建 Laravel 项目
+  artisan      使用 Laravel 命令行工具 artisan
+  composer     使用 Composer
+  help         输出帮助信息
+  test         开发者一键测试脚本
 
-Run './docker-lnmp COMMAND --help' for more information on the command
+Read './docs/*.md' for more information on the command
 "
 ;;
 esac
