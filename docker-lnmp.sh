@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=v17.09-rc2
+VERSION=v17.09-rc3
 
 # 构建单容器镜像
 
@@ -61,7 +61,7 @@ function init() {
     sudo mv docker-compose /usr/local/bin
   fi
 
-  echo -e "\033[32mINFO\033[0m  Mkdir log folder\n"
+  echo -e "\033[32mINFO\033[0m  mkdir log folder\n"
 
   # 创建日志文件
 
@@ -92,15 +92,15 @@ function init() {
   touch redis.log
   cd -
 
-  echo -e "\n\033[32mINFO\033[0m  Mkdir log folder SUCCESS\n"
-
-  # 初始化完成提示
-
-  echo -e "\033[32mINFO\033[0m  Init is SUCCESS please RUN \" docker-compose up -d \""
+  echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
 
   # 构建单容器
 
   build
+
+  # 初始化完成提示
+
+  echo -e "\033[32mINFO\033[0m  Init is SUCCESS please RUN  'docker-compose up -d' "
 }
 
 cleanup (){
@@ -131,12 +131,15 @@ case $1 in
   echo  "
 Docker-LNMP CLI "$VERSION"
 
-Options:
+USAGE: ./docker-lnmp COMMAND
 
-init      : 初始化部署环境
-build     : 构建单容器镜像
-cleanup   : 清理环境
-help      : 输出帮助信息
+Commands:
+  init      : 初始化部署环境
+  build     : 构建单容器镜像
+  cleanup   : 清理环境
+  help      : 输出帮助信息
+
+Run './docker-lnmp COMMAND --help' for more information on the command
 "
 ;;
 esac
