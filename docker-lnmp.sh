@@ -4,11 +4,58 @@ VERSION=v17.09-rc3
 
 # 构建单容器镜像
 
+logs(){
+  # 创建日志文件
+
+  echo -e "\033[32mINFO\033[0m  mkdir log folder\n"
+
+  cd logs
+
+  rm -rf mongodb \
+         mysql \
+         nginx \
+         php-fpm \
+         redis
+  cd -
+
+  mkdir -p logs/mongodb
+  cd logs/mongodb
+  touch mongo.log
+  cd -
+
+  mkdir -p logs/mysql
+  cd logs/mysql
+  touch error.log
+  cd -
+
+  mkdir -p logs/nginx
+  cd logs/nginx
+  touch error.log access.log
+  cd -
+
+  mkdir -p logs/php-fpm
+  cd logs/php-fpm
+  touch error.log access.log xdebug-remote.log
+  cd -
+
+  mkdir -p logs/redis
+  cd logs/redis
+  touch redis.log
+  cd -
+
+  echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
+
+  echo
+  echo
+}
+
 function build() {
 
   #statements
 
   docker images | grep lnmp
+
+  echo
 
   docker rmi lnmp-laravel \
              lnmp-laravel-artisan
@@ -28,6 +75,9 @@ function build() {
   echo -e "\033[32mINFO\033[0m  Build lnmp-laravel-artisan Success\n"
 
   docker images | grep lnmp
+
+  echo
+  echo
 }
 
 # 初始化
@@ -61,38 +111,9 @@ function init() {
     sudo mv docker-compose /usr/local/bin
   fi
 
-  echo -e "\033[32mINFO\033[0m  mkdir log folder\n"
-
   # 创建日志文件
 
-  # rm -rf logs/*
-
-  mkdir -p logs/mongodb
-  cd logs/mongodb
-  touch mongo.log
-  cd -
-
-  mkdir -p logs/mysql
-  cd logs/mysql
-  touch error.log
-  cd -
-
-  mkdir -p logs/nginx
-  cd logs/nginx
-  touch error.log access.log
-  cd -
-
-  mkdir -p logs/php-fpm
-  cd logs/php-fpm
-  touch error.log access.log xdebug-remote.log
-  cd -
-
-  mkdir -p logs/redis
-  cd logs/redis
-  touch redis.log
-  cd -
-
-  echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
+  logs
 
   # 构建单容器
 
@@ -115,6 +136,11 @@ cleanup (){
              lnmp-rabbitmq \
              lnmp-redis \
              lnmp-nginx
+
+   # 清理日志文件
+   logs
+
+   echo -e "\033[32mINFO\033[0m  Clean is SUCCESS please RUN  './docker-lnmp init' "
 }
 
 case $1 in
@@ -136,7 +162,7 @@ USAGE: ./docker-lnmp COMMAND
 Commands:
   init      : 初始化部署环境
   build     : 构建单容器镜像
-  cleanup   : 清理环境
+  cleanup   : 清理已构建 docker images 、清理日志文件
   help      : 输出帮助信息
 
 Run './docker-lnmp COMMAND --help' for more information on the command
