@@ -1,5 +1,8 @@
 # LNMP Docker Compose
 
+[![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp)
+[![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp)
+
 务必分清`本机`路径和`容器内`路径，请仔细对照 `docker-compose.yml` 文件，或阅读 [path.md](docs/path.md)。  
 提前安装配置好 [`docker-compose`](https://www.khs1994.com/docker/compose.html)
 
@@ -60,6 +63,8 @@ $ ./init.sh
 ### 开发环境
 
 ```bash
+$ ./docker-lnmp.sh init
+
 $ docker-compose up -d
 
 $ curl 127.0.0.1
@@ -69,6 +74,8 @@ Welcome use khs1994-docker/lnmp
 ### 生产环境
 
 ```bash
+$ ./docker-lnmp.sh init
+
 $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
