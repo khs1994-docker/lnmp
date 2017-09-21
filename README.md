@@ -50,12 +50,6 @@
 
 * 根据实际配置修改 `.env`
 * 配置 `./config/php/xdebug.ini` 中的本机IP、本机端口
-* 运行`初始化`脚本（完成 `docker-compose` 安装「由于国内网络问题可能会失败」、日志文件创建）
-
-```bash
-$ ./init.sh
-```
-
 * 更多用法请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/master/docs)
 
 ## 启动
@@ -91,11 +85,9 @@ $ docker-compose stop
 $ docker-compose down
 ```
 
-# LNMP 配置
-
-各容器默认配置请到 [这里](https://github.com/khs1994-docker/lnmp-default-config) 查看
+# CLI
 
 # More
-
+* [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)

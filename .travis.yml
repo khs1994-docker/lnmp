@@ -2,6 +2,9 @@ language: bash
 sudo: required
 services:
 - docker
+cache:
+  directories:
+  - var/lib/composer
 before_install:
 # 升级 Docker 最新 test
 - docker --version
@@ -27,6 +30,9 @@ before_install:
 - git config --global user.name "khs1994-merge-robot"
 - git config --global user.email "ai@khs1994.com"
 script:
+- cd dockerfile/php-fpm
+- rm -rf sources.list
+- cp sources.list.default sources.list
 - "./docker-lnmp.sh test"
 branches:
   only:
