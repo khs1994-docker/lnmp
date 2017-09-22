@@ -5,5 +5,5 @@ CMD=$2
 docker run --rm \
        -v $PWD/var/lib/composer \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       composer \
-       ${CMD}
+       lnmp-php \
+       composer ${CMD}

@@ -3,7 +3,9 @@
 LARAVEL_PATH=$1
 
 docker run --rm -it \
+      -u $USER:www-data\
+      -v /etc/passwd:/etc/passwd \
       -v $PWD/app:/app \
-      -v $PWD/var/lib/composer/cache:/tmp/cache \
-      lnmp-laravel \
-      $LARAVEL_PATH
+      -v $PWD/tmp/cache:/tmp/cache \
+      lnmp-php \
+      laravel new $LARAVEL_PATH

@@ -2,8 +2,6 @@
 
 VERSION=v17.09-rc3
 
-# 构建单容器镜像
-
 logs(){
   # 创建日志文件
 
@@ -54,42 +52,13 @@ logs(){
   chmod 777 *
   cd -
 
+  cd tmp
+  rm -rf cache
+  mkdir cache
+  chmod 777 cache
+  cd -
+
   echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
-  echo
-  echo
-}
-
-function build() {
-
-  #statements
-
-  docker images | grep lnmp
-
-  echo
-
-  docker rmi lnmp-laravel \
-             lnmp-laravel-artisan
-
-  echo -e "\033[32mINFO\033[0m  Remove images Success\n"
-  echo
-  echo
-
-  # 构建单容器镜像
-
-  cd dockerfile/laravel
-
-  docker build -t lnmp-laravel .
-
-  echo -e "\033[32mINFO\033[0m  Build lnmp-laravel Success\n"
-
-  cd ../laravel-artisan
-
-  docker build -t lnmp-laravel-artisan .
-
-  echo -e "\033[32mINFO\033[0m  Build lnmp-laravel-artisan Success\n"
-
-  docker images | grep lnmp
-
   echo
   echo
 }
@@ -129,10 +98,6 @@ function init() {
 
   logs
 
-  # 构建单容器
-
-  build
-
   # 初始化完成提示
 
   echo -e "\033[32mINFO\033[0m  Init is SUCCESS please RUN  'docker-compose up -d' "
@@ -160,9 +125,6 @@ cleanup (){
 case $1 in
   init )
     init
-    ;;
-  build )
-    build
     ;;
   cleanup )
     cleanup
@@ -198,7 +160,6 @@ USAGE: ./docker-lnmp COMMAND
 
 Commands:
   init         初始化部署环境
-  build        构建单容器镜像
   cleanup      清理已构建 docker images 、清理日志文件
   laravel      新建 Laravel 项目
   artisan      使用 Laravel 命令行工具 artisan
