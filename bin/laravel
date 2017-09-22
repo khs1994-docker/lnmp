@@ -14,4 +14,4 @@ sudo chown -R `id -u`:`id -g` app/$1
 
 cp app/.env* app/$1
 
-chmod 777 app/$1/storage
+chmod -R 777 app/$1/storage
