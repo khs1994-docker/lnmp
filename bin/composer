@@ -3,7 +3,7 @@
 COMPOSE_PATH=$1
 CMD=$2
 docker run --rm \
-       -v $PWD/var/lib/composer \
+       -v $PWD/tmp/cache:/tmp/cache \
        -v $PWD/app/${COMPOSE_PATH}:/app \
        lnmp-php \
        composer ${CMD}
