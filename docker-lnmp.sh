@@ -53,7 +53,7 @@ logs(){
   cd -
 
   cd tmp
-  rm -rf cache
+  sudo rm -rf cache
   mkdir cache
   chmod 777 cache
   cd -
@@ -106,8 +106,6 @@ function init() {
 cleanup (){
   # 清理 images
   docker rmi lnmp-php \
-             lnmp-laravel-artisan \
-             lnmp-laravel \
              lnmp-postgresql \
              lnmp-mongo \
              lnmp-memcached \
@@ -133,28 +131,28 @@ case $1 in
     read -p "请输入路径: ./app/" path
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
-    bin/laravel $path
+    bin/laravel ${path}
     ;;
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
-    bin/php-artisan $path $cmd
+    bin/php-artisan ${path} ${cmd}
     ;;
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
-    bin/composer $path $cmd
+    bin/composer ${path} ${cmd}
     ;;
   test )
     bin/test
     ;;
   * )
   echo  "
-Docker-LNMP CLI "$VERSION"
+Docker-LNMP CLI ${VERSION}
 
 USAGE: ./docker-lnmp COMMAND
 
