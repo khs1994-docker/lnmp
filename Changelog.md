@@ -4,7 +4,7 @@ Changelog
 #### v17.09 rc3
 
 * 编写命令行工具（CLI）`docker-lnmp.sh`
-* 优化 Dockerfile
+* 优化 Dockerfile ,针对国内时区、网络等进行深度优化
 * 编写支持文档
 * 增加由 `Travis CI` 支持的项目自动化测试
 

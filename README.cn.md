@@ -62,7 +62,7 @@ Welcome use khs1994-docker/lnmp
 
 ## 生产环境
 
-开启 `容器即服务( Caas )` 之旅
+开启 `容器即服务( Caas )` 之旅。
 
 ```bash
 $ ./docker-lnmp.sh production
@@ -84,8 +84,16 @@ $ docker-compose down
 
 为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./docker-lnmp.sh`)，用法请查看 [支持文档](docs/cli.md)。
 
+# 生产环境用户
+
+## khs1994.com
+
+## xc725.wang
+
 # 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
+* [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
+* [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)

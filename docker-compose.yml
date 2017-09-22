@@ -2,10 +2,11 @@ version: '3'
 
 services:
   mysql:
-    build:
-      context: ./dockerfile/mysql/
-      dockerfile: Dockerfile
-    image: lnmp-mysql:latest
+    # build:
+    #   context: ./dockerfile/mysql/
+    #   dockerfile: Dockerfile
+    #image: lnmp-mysql:latest
+    image: mysql:latest
     env_file: .env
     #environment:
     #  # your password
@@ -15,10 +16,12 @@ services:
       - ./logs/mysql:/var/log/mysql
 
   redis:
-    build:
-      context: ./dockerfile/redis/
-      dockerfile: Dockerfile
-    image: lnmp-redis:latest
+    # build:
+    #   context: ./dockerfile/redis/
+    #   dockerfile: Dockerfile
+    # image: lnmp-redis:latest
+    image: redis:latest
+    env_file: .env
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./var/lib/redis:/data
@@ -84,10 +87,12 @@ services:
     command: php-fpm -R
 
   web:
-    build:
-      context: ./dockerfile/nginx/
-      dockerfile: Dockerfile
-    image: lnmp-nginx:latest
+    # build:
+    #   context: ./dockerfile/nginx/
+    #   dockerfile: Dockerfile
+    # image: lnmp-nginx:latest
+    image: nginx:latest
+    env_file: .env
     ports:
       - "443:443"
       - "80:80"

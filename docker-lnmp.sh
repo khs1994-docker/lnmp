@@ -1,6 +1,7 @@
 #!/bin/bash
 
 VERSION=v17.09-rc3
+DOCKER_COMPOSE_VERSION=1.16.1
 
 logs(){
   # 创建日志文件
@@ -53,7 +54,7 @@ logs(){
   cd -
 
   cd tmp
-  sudo rm -rf cache
+  rm -rf cache
   mkdir cache
   chmod 777 cache
   cd -
@@ -61,6 +62,25 @@ logs(){
   echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
   echo
   echo
+}
+
+# 是否安装 Docker Compose
+
+install_docker_compose(){
+
+    echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
+
+    # https://api.github.com/repos/docker/compose/releases/latest
+
+    # DOCKER_COMPOSE_VERSION=1.16.1
+
+    curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+
+    chmod +x docker-compose
+
+    echo $PATH
+
+    sudo mv docker-compose /usr/local/bin
 }
 
 # 初始化
@@ -76,22 +96,9 @@ function init() {
     docker-compose --version
 
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
-
+    echo
   else
-
-    echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
-
-    # https://api.github.com/repos/docker/compose/releases/latest
-
-    DOCKER_COMPOSE_VERSION=1.16.1
-
-    curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-
-    chmod +x docker-compose
-
-    echo $PATH
-
-    sudo mv docker-compose /usr/local/bin
+    install_docker_compose
   fi
 
   # 创建日志文件
@@ -101,6 +108,7 @@ function init() {
   # 初始化完成提示
 
   echo -e "\033[32mINFO\033[0m  Init is SUCCESS please RUN  'docker-compose up -d' "
+  echo
 }
 
 cleanup (){
