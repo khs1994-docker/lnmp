@@ -7,3 +7,11 @@ docker run --rm -it \
       -v $PWD/tmp/cache:/tmp/cache \
       lnmp-php \
       laravel new $LARAVEL_PATH
+
+#sudo chmod -R 777 app/$1
+
+sudo chown -R `id -u`:`id -g` app/$1
+
+cp app/.env* app/$1
+
+chmod 777 app/$1/storage

@@ -8,3 +8,5 @@ services:
       - ./config/php/null.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf
       - ./logs/php-fpm:/var/log/php-fpm
+    environment:
+      - APP_ENV=production

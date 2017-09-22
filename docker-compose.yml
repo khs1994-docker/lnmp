@@ -73,6 +73,8 @@ services:
       context: ./dockerfile/php-fpm/
       dockerfile: Dockerfile
     image: lnmp-php:latest
+    environment:
+      - APP_ENV=development
     volumes:
       - ./app:/app
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
