@@ -3,8 +3,6 @@
 LARAVEL_PATH=$1
 
 docker run --rm -it \
-      -u $USER:www-data\
-      -v /etc/passwd:/etc/passwd \
       -v $PWD/app:/app \
       -v $PWD/tmp/cache:/tmp/cache \
       lnmp-php \
