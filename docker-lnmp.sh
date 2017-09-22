@@ -124,15 +124,18 @@ case $1 in
   init )
     init
     ;;
+
   cleanup )
     cleanup
     ;;
+
   laravel )
     read -p "请输入路径: ./app/" path
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
     bin/laravel ${path}
     ;;
+
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
@@ -140,6 +143,7 @@ case $1 in
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
     bin/php-artisan ${path} ${cmd}
     ;;
+
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
@@ -147,9 +151,11 @@ case $1 in
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
     bin/composer ${path} ${cmd}
     ;;
+
   test )
     bin/test
     ;;
+
   production )
     init
 
@@ -158,6 +164,14 @@ case $1 in
          -f docker-compose.prod.yml \
          up -d
     ;;
+
+    production-down )
+    docker-compose \
+         -f docker-compose.yml \
+         -f docker-compose.prod.yml \
+         down
+    ;;
+
   * )
   echo  "
 Docker-LNMP CLI ${VERSION}
@@ -165,14 +179,15 @@ Docker-LNMP CLI ${VERSION}
 USAGE: ./docker-lnmp COMMAND
 
 Commands:
-  init         初始化部署环境
-  cleanup      清理已构建 docker images 、清理日志文件
-  laravel      新建 Laravel 项目
-  artisan      使用 Laravel 命令行工具 artisan
-  composer     使用 Composer
-  help         输出帮助信息
-  production   LNMP 生产环境部署
-  test         开发者一键测试脚本
+  init              初始化部署环境
+  cleanup           清理已构建 docker images ，日志文件
+  laravel           新建 Laravel 项目
+  artisan           使用 Laravel 命令行工具 artisan
+  composer          使用 Composer
+  help              输出帮助信息
+  production        LNMP 生产环境部署
+  production-down   移除 生产环境下的 LNMP Docker
+  test              开发者一键测试脚本
 
 Read './docs/*.md' for more information on the command
 "

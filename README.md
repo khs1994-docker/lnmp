@@ -8,7 +8,7 @@ Build LNMP within 10 minutes powered by Docker Compose.
 
 # Changelog
 
-Updates every quarter (17.09, 17.12, 18.03, etc), For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases)，
+Updates every quarter (17.09, 17.12, 18.03, etc), For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 # Overview
 
@@ -60,7 +60,7 @@ Welcome use khs1994-docker/lnmp
 
 ```
 
-Start PHP project(e.g Laravel) in `./app/` folder。
+Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
 
 ## Run in Production
 
@@ -84,7 +84,7 @@ $ docker-compose down
 
 # CLI
 
-Interactive `./docker-lnmp.sh` easy to access Laravel、artisan、composer. For more information about LNMP Docker CLI, see [Documents](docs/cli.md)
+Interactive `./docker-lnmp.sh` easy to access Laravel, Laravel artisan, composer, etc. For more information about LNMP Docker CLI, see [Documents](docs/cli.md).
 
 # More Information
 

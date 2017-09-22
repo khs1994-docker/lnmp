@@ -6,7 +6,7 @@
 
 # 更新记录
 
-每季度（17.09，17.12，18.03...）更新一个大版本，版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
+每季度（17.09，17.12，18.03...）更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
 # 项目说明
 
@@ -58,7 +58,7 @@ Welcome use khs1994-docker/lnmp
 
 ```
 
-在 `./app` 目录下开始项目开发。
+在 `./app` 目录下开始 PHP 项目开发。
 
 ## 生产环境
 
