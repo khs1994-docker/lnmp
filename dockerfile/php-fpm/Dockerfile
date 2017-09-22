@@ -50,7 +50,11 @@ RUN curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/compos
  && composer --ansi --version --no-interaction \
  && rm -rf /tmp/* /tmp/.htaccess
 
+# composer chinese mirror
+
 RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
+
+# install laravel installer
 
 RUN composer global require "laravel/installer"
 
