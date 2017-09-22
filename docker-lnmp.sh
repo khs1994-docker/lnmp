@@ -150,6 +150,14 @@ case $1 in
   test )
     bin/test
     ;;
+  production )
+    init
+
+    docker-compose \
+         -f docker-compose.yml \
+         -f docker-compose.prod.yml \
+         up -d
+    ;;
   * )
   echo  "
 Docker-LNMP CLI ${VERSION}
@@ -163,6 +171,7 @@ Commands:
   artisan      使用 Laravel 命令行工具 artisan
   composer     使用 Composer
   help         输出帮助信息
+  production   LNMP 生产环境部署
   test         开发者一键测试脚本
 
 Read './docs/*.md' for more information on the command

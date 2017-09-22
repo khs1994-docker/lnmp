@@ -1,15 +1,12 @@
 # LNMP Docker
 
-[![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp)
-[![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp)
+[![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)]() [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/lnmp.svg)]() [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)]()
 
 项目目标：使用 Docker Compose 快速搭建 LNMP 环境。
 
 # 更新记录
 
-每季度（17.09，17.12，18.03...）更新一个大版本，版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
-
-查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
+每季度（17.09，17.12，18.03...）更新一个大版本，版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
 # 项目说明
 
@@ -18,6 +15,7 @@
 * Nginx
 * MySQL
 * PHP7
+* PHP7-FPM
 * Laravel
 * Laravel artisan
 * Composer
@@ -36,6 +34,7 @@
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
 |`var`         |数据文件|
+|`tmp`         |临时文件|
 |`docs`        |支持文档|
 |`bin`         |脚本封装|
 
@@ -44,13 +43,9 @@
 * 80
 * 443
 
-# Usage
+# 快速上手
 
-使用之前务必阅读 [支持文档](https://github.com/khs1994-docker/lnmp/tree/dev/docs)
-
-## 启动
-
-### 开发环境
+## 开发环境
 
 ```bash
 $ ./docker-lnmp.sh init
@@ -65,12 +60,12 @@ Welcome use khs1994-docker/lnmp
 
 在 `./app` 目录下开始项目开发。
 
-### 生产环境
+## 生产环境
+
+开启 `容器即服务( Caas )` 之旅
 
 ```bash
-$ ./docker-lnmp.sh init
-
-$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+$ ./docker-lnmp.sh production
 ```
 
 ## 停止
@@ -85,11 +80,11 @@ $ docker-compose stop
 $ docker-compose down
 ```
 
-# CLI
+# 命令行工具
 
 为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./docker-lnmp.sh`)，用法请查看 [支持文档](docs/cli.md)。
 
-# More
+# 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
