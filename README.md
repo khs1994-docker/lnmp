@@ -30,7 +30,7 @@ Updates every quarter (17.09, 17.12, 18.03, etc), For more release information a
 ## Folder Structure
 
 |Folder|description|
-|--|--|
+|:--|:--|
 |`app`         |PHP project       |
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |

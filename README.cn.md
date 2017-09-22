@@ -28,7 +28,7 @@
 ## 文件夹结构
 
 |文件夹|说明|
-|--|--|
+|:--|:--|
 |`app`         |项目文件（HTML,PHP,etc）|
 |`config`      |配置文件|               
 |`dockerfile`  |自定义 Dockerfile|
