@@ -3,7 +3,7 @@
 # 项目测试脚本
 # 删除原项目
 
-docker-compose down
+./docker-lnmp.sh development-down
 
 echo
 
@@ -11,15 +11,9 @@ echo
 
 echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
-# 初始化
-
-./docker-lnmp.sh init
-
-echo -e "\033[32mINFO\033[0m  初始化项目成功\n"
-
 # 测试开发环境
 
-docker-compose up -d
+./docker-lnmp.sh development
 
 echo
 
@@ -32,11 +26,9 @@ echo
 curl 127.0.0.1
 
 echo
-
 date
-sleep 120
+read -t 120 -p "请等待120s，或按回车键继续" var
 date
-
 echo
 
 docker ps -a | grep "lnmp"
@@ -44,13 +36,15 @@ docker ps -a | grep "lnmp"
 echo
 echo
 
-docker-compose down
+./docker-lnmp.sh development-down
 
 echo -e "\033[32mINFO\033[0m  开发环境测试完毕\n"
 
 # 测试生产环境
 
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+./docker-lnmp.sh production
 
 echo
 
@@ -63,11 +57,10 @@ sleep 5
 curl 127.0.0.1
 
 echo
-
 date
-sleep 120
+#sleep 120
+read -t 120 -p "请等待120s，或按回车键继续" var
 date
-
 echo
 
 docker ps -a | grep "lnmp"
@@ -75,7 +68,7 @@ docker ps -a | grep "lnmp"
 echo
 echo
 
-./docker-lnmp.sh production
+./docker-lnmp.sh production-down
 
 echo -e "\033[32mINFO\033[0m  生产环境测试完毕\n"
 

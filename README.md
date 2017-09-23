@@ -50,9 +50,7 @@ Updates every quarter (17.09, 17.12, 18.03, etc), For more release information a
 ## Start in Devlopment
 
 ```bash
-$ ./docker-lnmp.sh init
-
-$ docker-compose up -d
+$ ./docker-lnmp.sh devlopment
 
 $ curl 127.0.0.1
 
@@ -79,7 +77,7 @@ $ docker-compose stop
 ## Stop and remove
 
 ```bash
-$ docker-compose down
+$ ./docker-lnmp.sh devlopment-down | production-down
 ```
 
 # CLI

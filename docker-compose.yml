@@ -72,10 +72,10 @@ services:
 
 
   php7:
-    build:
-      context: ./dockerfile/php-fpm/
-      dockerfile: Dockerfile
-    image: lnmp-php:latest
+    # build:
+    #   context: ./dockerfile/php-fpm/
+    #   dockerfile: Dockerfile
+    image: khs1994/php-fpm:latest
     environment:
       - APP_ENV=development
     volumes:

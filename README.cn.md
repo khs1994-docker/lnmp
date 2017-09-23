@@ -48,9 +48,7 @@
 ## 开发环境
 
 ```bash
-$ ./docker-lnmp.sh init
-
-$ docker-compose up -d
+$ ./docker-lnmp.sh devlopment
 
 $ curl 127.0.0.1
 
@@ -77,7 +75,7 @@ $ docker-compose stop
 ## 销毁
 
 ```bash
-$ docker-compose down
+$ ./docker-lnmp.sh devlopment-down | production-down
 ```
 
 # 命令行工具

@@ -1,7 +1,10 @@
 #!/bin/bash
 
 VERSION=v17.09-rc3
+
 DOCKER_COMPOSE_VERSION=1.16.1
+
+ENV=$1
 
 logs(){
   # 创建日志文件
@@ -85,9 +88,20 @@ install_docker_compose(){
 
 # 初始化
 
-function init() {
-  if [ $1 = 'development' ];then
+function init {
+  if [ "$ENV" = "development" ];then
+    echo "$ENV"
     git submodule update --init --recursive
+
+    echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
+    echo
+  fi
+
+  if [ "$ENV" = "production" ];then
+    echo "$ENV"
+    # 复制项目文件、配置文件
+    echo -e "\033[32mINFO\033[0m  Copy app and nginx conf ...\n"
+    echo
   fi
   # docker-compose 是否安装
 
@@ -175,20 +189,20 @@ case $1 in
          up -d
     ;;
 
-    production-down )
+  production-down )
     docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          down
     ;;
 
-    development )
+  development )
     init
 
     docker-compose up -d
     ;;
 
-    development-down )
+  development-down )
 
     docker-compose down
 
