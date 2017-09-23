@@ -5,26 +5,9 @@
 
 # 更新记录
 
-每季度（17.09，17.12，18.03...）更新一个大版本，版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)
-
-
-查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)
+版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)
 
 # 项目说明
-
-## 包含软件
-
-* Nginx
-* MySQL
-* PHP7
-* Laravel
-* Laravel artisan
-* Composer
-* Redis
-* Memcached
-* MongoDB
-* PostgreSQL
-* RabbitMQ
 
 ## 文件夹结构
 
@@ -36,7 +19,6 @@
 |`logs`        |日志文件|
 |`var`         |数据文件|
 |`docs`        |支持文档|
-|`bin`         |脚本封装|
 
 ## 端口暴露
 
@@ -53,23 +35,15 @@
 $ ./init.sh
 ```
 
-* 更多用法请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/master/docs)
+* 更多用法请查看 [支持文档](https://github.com/khs1994-docker/lnmp/docs/)
 
 ## 启动
-
-### 开发环境
 
 ```bash
 $ docker-compose up -d
 
 $ curl 127.0.0.1
 Welcome use khs1994-docker/lnmp
-```
-
-### 生产环境
-
-```bash
-$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
 ## 停止

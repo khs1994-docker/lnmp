@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# 初始化脚本
 # 安装 docker-compose
 
 which docker-compose
@@ -17,24 +16,13 @@ else
   echo $PATH
   sudo mv docker-compose /usr/local/bin
 fi
-
 echo -e "\033[32mINFO\033[0m mkdir log folder\n"
 
 # 创建日志文件
 
 rm -rf logs/*
 
-mkdir -p logs/mongodb
-cd logs/mongodb
-touch mongo.log
-cd -
-
-mkdir -p logs/mysql
-cd logs/mysql
-touch error.log
-cd -
-
-mkdir -p logs/nginx
+mkdir -p logs/nginx/
 cd logs/nginx
 touch error.log access.log
 cd -
@@ -44,13 +32,13 @@ cd logs/php-fpm
 touch error.log access.log xdebug-remote.log
 cd -
 
-mkdir -p logs/redis
-cd logs/redis
-touch redis.log
+mkdir -p logs/mysql
+cd logs/mysql
+touch error.log
 cd -
 
 echo -e "\n\033[32mINFO\033[0m mkdir log folder SUCCESS\n"
 
 # 初始化完成提示
 
-echo -e "\033[32mINFO\033[0m  init is SUCCESS please RUN \" docker-compose up -d \""
+echo -e "\033[32mINFO\033[0m  inin is SUCCESS please RUN \" docker-compose up -d \""

@@ -5,20 +5,15 @@ Changelog
 
 * 优化 Dockerfile
 * 优化镜像占用空间(暂时搁置，不采用 alpine，仍采用 Debian)，挂载 `/etc/localtime` 修改时区在 macOS 不生效。
-* 编写支持文档
 
 #### v17.09 rc2
 
-* 增加 `生产环境` 配置
 * 增加：Composer
-* 增加：Laravel
-* 增加：Laravel artisan
 * 以下增加软件默认注释，请按需开启
 * 增加：MongoDB
 * 增加：Memcached
 * 增加：RabbitMQ
 * 增加：Laravel
-* 增加：PostgreSQL
 
 #### v17.09 rc1
 

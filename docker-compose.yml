@@ -22,51 +22,7 @@ services:
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
       - ./var/lib/redis:/data
-      - ./logs/redis:/var/log/redis
     command: redis-server /usr/local/etc/redis/redis.conf
-
-  # mongo:
-  #   build:
-  #     context: ./dockerfile/mongodb/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-mongo:latest
-  #   volumes:
-  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
-  #     - ./var/lib/mongo:/data/db
-  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-  #   # ports:
-  #   #   - "27017:27017"
-  #
-  # memcached:
-  #   build:
-  #     context: ./dockerfile/memcached/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-memcached:latest
-  #   # ports:
-  #   #   - "11211:11211"
-  #
-  # rabbitmq:
-  #   build:
-  #     context: ./dockerfile/rabbitmq/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-rabbitmq:latest
-  #   volumes:
-  #     - ./var/lib/rabbitmq:/var/lib/rabbitmq
-  #   # ports:
-  #   #   - "15672:15672"
-  #   #   - "5672:5672"
-  #
-  # postgresql:
-  #   build:
-  #     context: ./dockerfile/postgresql/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-postgresql:latest
-  #   env_file: .env
-  #   volumes:
-  #     - ./var/lib/postgresql:/var/lib/postgresql
-  #   # ports:
-  #   #   - "5432:5432"
-
 
   php7:
     build:
