@@ -93,6 +93,7 @@ $ ./docker-lnmp.sh devlopment-down | production-down
 # 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
+* [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)

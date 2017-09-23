@@ -2,7 +2,7 @@
 
 [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)]() [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/lnmp.svg)]() [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)]()
 
-Build LNMP within 10 minutes powered by Docker Compose.
+Build LNMP within 2 minutes powered by Docker Compose.
 
 * [中文文档](README.cn.md)
 
@@ -93,6 +93,7 @@ Interactive `./docker-lnmp.sh` easy to access Laravel, Laravel artisan, composer
 # More Information
 
 * [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
+* [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
