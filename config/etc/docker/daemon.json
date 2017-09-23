@@ -1,0 +1,11 @@
+{
+  "registry-mirrors": [
+    "https://wcafmbzt.mirror.aliyuncs.com"
+  ],
+  "debug": true,
+  "dns": [
+    "114.114.114.114",
+    "8.8.8.8"
+  ],
+  "experimental": true
+}

@@ -1,22 +1,23 @@
-# LNMP Docker Compose
+# LNMP Docker
 
-务必分清`本机`路径和`容器内`路径，请仔细对照 `docker-compose.yml` 文件，或阅读 [path.md](docs/path.md)。  
-提前安装配置好 [`docker-compose`](https://www.khs1994.com/docker/compose.html)
+[![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)]() [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/lnmp.svg)]() [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)]()
 
-# 更新记录
+Build LNMP within 2 minutes powered by Docker Compose.
 
-每季度（17.09，17.12，18.03...）更新一个大版本，版本命名方式为（YY-MM），更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)
+* [中文文档](README.cn.md)
 
+# Changelog
 
-查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)
+Updates every quarter (17.09, 17.12, 18.03, etc), For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-# 项目说明
+# Overview
 
-## 包含软件
+## What's inside
 
 * Nginx
 * MySQL
 * PHP7
+* PHP7-FPM
 * Laravel
 * Laravel artisan
 * Composer
@@ -26,69 +27,74 @@
 * PostgreSQL
 * RabbitMQ
 
-## 文件夹结构
+## Folder Structure
 
-|文件夹|说明|
-|--|--|
-|`app`         |项目文件（HTML,PHP,etc）|
-|`config`      |配置文件|               
-|`dockerfile`  |自定义 Dockerfile|
-|`logs`        |日志文件|
-|`var`         |数据文件|
-|`docs`        |支持文档|
-|`bin`         |脚本封装|
+|Folder|description|
+|:--|:--|
+|`app`         |PHP project       |
+|`config`      |configuration file|               
+|`dockerfile`  |Dockerfile        |
+|`logs`        |logs file         |
+|`var`         |databases file    |
+|`tmp`         |Composer cache file ,etc |
+|`docs`        |Support Documents        |
+|`bin`         |bash script              |
 
-## 端口暴露
+## Exposed Ports
 
 * 80
 * 443
 
-# Usage
+# Quick Start
 
-* 根据实际配置修改 `.env`
-* 配置 `./config/php/xdebug.ini` 中的本机IP、本机端口
-* 运行`初始化`脚本（完成 `docker-compose` 安装「由于国内网络问题可能会失败」、日志文件创建）
+## Start in Devlopment
 
 ```bash
-$ ./init.sh
-```
-
-* 更多用法请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/master/docs)
-
-## 启动
-
-### 开发环境
-
-```bash
-$ docker-compose up -d
+$ ./docker-lnmp.sh devlopment
 
 $ curl 127.0.0.1
+
 Welcome use khs1994-docker/lnmp
+
 ```
 
-### 生产环境
+Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
+
+## Run in Production
+
+Containers as a Service(Caas)
 
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+$ ./docker-lnmp.sh production
 ```
 
-## 停止
+## Stop
 
 ```bash
 $ docker-compose stop
 ```
 
-## 销毁
+## Stop and remove
 
 ```bash
-$ docker-compose down
+$ ./docker-lnmp.sh devlopment-down | production-down
 ```
 
-# LNMP 配置
+# CLI
 
-各容器默认配置请到 [这里](https://github.com/khs1994-docker/lnmp-default-config) 查看
+Interactive `./docker-lnmp.sh` easy to access Laravel, Laravel artisan, composer, etc. For more information about LNMP Docker CLI, see [Documents](docs/cli.md).
 
-# More
+# Production users
 
+## khs1994.com
+
+## xc725.wang
+
+# More Information
+
+* [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
+* [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
+* [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
+* [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  php7:
+    build:
+      context: ./dockerfile/php-fpm/
+      dockerfile: Dockerfile
+      # 执行 $ docker-compose up -d 说明是开发环境
+    environment:
+      - APP_ENV=development
