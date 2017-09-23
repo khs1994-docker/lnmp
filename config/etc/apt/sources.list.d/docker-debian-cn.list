@@ -1,0 +1,5 @@
+# https://yq.aliyun.com/articles/110806
+
+# curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/debian/gpg | sudo apt-key add -
+
+deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/debian stretch test

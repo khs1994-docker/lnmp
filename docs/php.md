@@ -2,6 +2,7 @@
 
 * redis
 * memcached
+* mongodb
 * xdebug(生产环境不启用)
 * pdo_mysql
-* mongodb
+* pdo_pgsql

@@ -1,0 +1,43 @@
+language: bash
+sudo: required
+services:
+- docker
+cache:
+  directories:
+  - var/lib/composer
+before_install:
+# 升级 Docker 最新 test
+- docker --version
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+- sudo apt-get update
+- sudo apt-get -y install docker-ce
+- docker --version
+# 升级最新 Docker Compose
+- docker-compose --version
+- sudo rm /usr/local/bin/docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv docker-compose /usr/local/bin
+- docker-compose --version
+# 部署公钥
+- openssl aes-256-cbc -K $encrypted_3418790a352e_key -iv $encrypted_3418790a352e_iv
+  -in bin/khs1994-robot.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- echo "TZ='Asia/Shanghai'; export TZ" >> ~/.profile
+- ". ~/.profile"
+- date
+- git config --global user.name "khs1994-merge-robot"
+- git config --global user.email "ai@khs1994.com"
+script:
+# - cd dockerfile/php-fpm
+# - rm -rf sources.list
+# - cp sources.list.default sources.list
+# - cd -
+- "./docker-lnmp.sh test"
+branches:
+  only:
+  - master
+  - dev
+env:
+  - DOCKER_COMPOSE_VERSION=1.16.1

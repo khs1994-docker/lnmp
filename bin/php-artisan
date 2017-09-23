@@ -6,5 +6,5 @@ CMD=$2
 
 docker run --rm \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       lnmp-laravel-artisan \
-       ${CMD}
+       lnmp-php \
+       php artisan ${CMD}

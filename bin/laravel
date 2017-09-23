@@ -4,6 +4,14 @@ LARAVEL_PATH=$1
 
 docker run --rm -it \
       -v $PWD/app:/app \
-      -v $PWD/var/lib/composer/cache:/tmp/cache \
-      lnmp-laravel \
-      $LARAVEL_PATH
+      -v $PWD/tmp/cache:/tmp/cache \
+      lnmp-php \
+      laravel new $LARAVEL_PATH
+
+#sudo chmod -R 777 app/$1
+
+sudo chown -R `id -u`:`id -g` app/$1
+
+cp app/.env* app/$1
+
+chmod -R 777 app/$1/storage
