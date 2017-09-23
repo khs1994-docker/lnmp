@@ -1,0 +1,9 @@
+#!/bin/bash
+
+LARAVEL_PATH=$1
+
+docker run --rm -it \
+      -v $PWD/app:/app \
+      -v $PWD/var/lib/composer/cache:/tmp/cache \
+      lnmp-laravel \
+      $LARAVEL_PATH
