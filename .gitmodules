@@ -4,6 +4,3 @@
 [submodule "config/nginx"]
 	path = config/nginx
 	url = git@github.com:khs1994-docker/lnmp-nginx-conf-demo.git
-[submodule "lnmp-nginx-conf-demo"]
-	path = lnmp-nginx-conf-demo
-	url = git@github.com:khs1994-docker/lnmp-nginx-conf-demo.git

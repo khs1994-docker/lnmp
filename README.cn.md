@@ -29,8 +29,8 @@
 
 |文件夹|说明|
 |:--|:--|
-|`app`         |项目文件（HTML,PHP,etc）|
-|`config`      |配置文件|               
+|`app`         |项目文件（HTML,PHP,etc）「位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|
+|`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
 |`var`         |数据文件|
