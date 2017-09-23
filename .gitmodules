@@ -1,0 +1,3 @@
+[submodule "app"]
+	path = app
+	url = git@github.com:khs1994-docker/lnmp-app-demo.git
