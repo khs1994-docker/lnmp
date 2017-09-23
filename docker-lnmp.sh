@@ -56,10 +56,14 @@ logs(){
   chmod 777 *
   cd -
 
+  # 不清理 Composer 缓存
   cd tmp
-  rm -rf cache
-  mkdir cache
-  chmod 777 cache
+  if [ -d cache ];then
+    echo -e "\n\033[32mINFO\033[0m  Composer cache nerver clean ,please human clean\n"
+  else
+    mkdir cache
+    chmod 777 cache
+  fi
   cd -
 
   echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
@@ -101,6 +105,8 @@ function init {
     echo "$ENV"
     # 复制项目文件、配置文件
     echo -e "\033[32mINFO\033[0m  Copy app and nginx conf ...\n"
+    # 安装 Composer 包
+    # bin/composer-production test install
     echo
   fi
   # docker-compose 是否安装
@@ -225,7 +231,7 @@ Commands:
   development-down  移除开发环境下的 LNMP Docker
   production        LNMP 生产环境部署
   production-down   移除生产环境下的 LNMP Docker
-  test              开发者一键测试脚本
+  test              生产环境一键测试脚本[开发者选项，普通用户请勿使用]
 
 Read './docs/*.md' for more information on the command
 "

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 项目测试脚本
+# 生产环境自动测试脚本，开发环境由本人真机手动测试
 # 删除原项目
 
 ./docker-lnmp.sh development-down
@@ -11,7 +11,9 @@ echo
 
 echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
-# 测试开发环境
+# 默认不测试开发环境！！！
+
+development(){
 
 ./docker-lnmp.sh development
 
@@ -39,6 +41,8 @@ echo
 ./docker-lnmp.sh development-down
 
 echo -e "\033[32mINFO\033[0m  开发环境测试完毕\n"
+
+}
 
 # 测试生产环境
 
@@ -72,22 +76,22 @@ echo
 
 echo -e "\033[32mINFO\033[0m  生产环境测试完毕\n"
 
-# 新建 Laravel 项目
-
-rm -rf app/test
-
-bin/laravel test
-
-echo -e "\033[32mINFO\033[0m  测试新建 Laravel 项目完毕\n"
-
-# 测试 php artisan
-
-bin/php-artisan test -V
-
-echo -e "\033[32mINFO\033[0m  测试 php artisan 完毕\n"
-
+# # 新建 Laravel 项目
+#
+# rm -rf app/test
+#
+# bin/laravel test
+#
+# echo -e "\033[32mINFO\033[0m  测试新建 Laravel 项目完毕\n"
+#
+# # 测试 php artisan
+#
+# bin/php-artisan test -V
+#
+# echo -e "\033[32mINFO\033[0m  测试 php artisan 完毕\n"
+#
 # 测试 composer
 
-bin/composer test --version
+bin/composer-production demo --version
 
 echo -e "\033[32mINFO\033[0m  测试 composer 完毕\n"

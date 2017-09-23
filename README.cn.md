@@ -66,6 +66,8 @@ Welcome use khs1994-docker/lnmp
 $ ./docker-lnmp.sh production
 ```
 
+尽可能拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有服务器）。
+
 ## 停止
 
 ```bash
