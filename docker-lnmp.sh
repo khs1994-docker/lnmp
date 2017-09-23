@@ -86,7 +86,9 @@ install_docker_compose(){
 # 初始化
 
 function init() {
-
+  if [ $1 = 'development' ];then
+    git submodule update --init --recursive
+  fi
   # docker-compose 是否安装
 
   which docker-compose
@@ -180,6 +182,18 @@ case $1 in
          down
     ;;
 
+    development )
+    init
+
+    docker-compose up -d
+    ;;
+
+    development-down )
+
+    docker-compose down
+
+    ;;
+
   * )
   echo  "
 Docker-LNMP CLI ${VERSION}
@@ -193,8 +207,10 @@ Commands:
   artisan           使用 Laravel 命令行工具 artisan
   composer          使用 Composer
   help              输出帮助信息
+  development       LNMP 开发环境部署
+  development-down  移除开发环境下的 LNMP Docker
   production        LNMP 生产环境部署
-  production-down   移除 生产环境下的 LNMP Docker
+  production-down   移除生产环境下的 LNMP Docker
   test              开发者一键测试脚本
 
 Read './docs/*.md' for more information on the command
