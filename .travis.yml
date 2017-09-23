@@ -30,10 +30,10 @@ before_install:
 - git config --global user.name "khs1994-merge-robot"
 - git config --global user.email "ai@khs1994.com"
 script:
-- cd dockerfile/php-fpm
-- rm -rf sources.list
-- cp sources.list.default sources.list
-- cd -
+# - cd dockerfile/php-fpm
+# - rm -rf sources.list
+# - cp sources.list.default sources.list
+# - cd -
 - "./docker-lnmp.sh test"
 branches:
   only:

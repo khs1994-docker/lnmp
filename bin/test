@@ -13,7 +13,7 @@ echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
 # 默认不测试开发环境！！！
 
-development(){
+development() {
 
 ./docker-lnmp.sh development
 
