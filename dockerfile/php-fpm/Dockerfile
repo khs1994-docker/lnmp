@@ -56,8 +56,8 @@ RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 # install laravel installer
 
-RUN composer global require "laravel/installer"
-
-RUN ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/
+RUN composer global require "laravel/installer" \
+    && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
+    && rm -rf /tmp/cache
 
 WORKDIR /app
