@@ -8,6 +8,8 @@ $ ./docker-lnmp.sh laravel
 # 之后输入路径
 ```
 
+修改 Laravel 项目下的 `config/database.php` 配置文件`'client' => 'phpredis'`
+
 ## artisan
 
 ```bash

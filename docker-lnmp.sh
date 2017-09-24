@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=v17.09-rc3
+VERSION=v17.09-rc4
 
 DOCKER_COMPOSE_VERSION=1.16.1
 
@@ -13,48 +13,67 @@ logs(){
 
   cd logs
 
-  rm -rf mongodb \
-         mysql \
-         nginx \
-         php-fpm \
-         redis
+#  rm -rf mongodb \
+#         mysql \
+#         nginx \
+#         php-fpm \
+#         redis
   cd -
 
-  mkdir -p logs/mongodb
-  cd logs/mongodb
-  touch mongo.log
+  if [ -d "logs/mongodb" ];then
+    echo
+  else
+    mkdir -p logs/mongodb
+    cd logs/mongodb
+    touch mongo.log
+    # 部分文件可能提示没有写入权限
 
-  # 部分文件可能提示没有写入权限
+    chmod 777 *
+    cd -
+   fi
 
-  chmod 777 *
-  cd -
+  if [ -d "logs/mysql" ];then
+    echo
+  else
+    mkdir -p logs/mysql
+    cd logs/mysql
+    echo > error.log
+    chmod 777 *
+    cd -
+  fi
 
-  mkdir -p logs/mysql
-  cd logs/mysql
-  echo > error.log
-  chmod 777 *
-  cd -
+  if [ -d "logs/nginx" ];then
+    echo
+  else
+    mkdir -p logs/nginx
+    cd logs/nginx
+    echo > error.log
+    echo > access.log
+    chmod 777 *
+    cd -
+  fi
 
-  mkdir -p logs/nginx
-  cd logs/nginx
-  echo > error.log
-  echo > access.log
-  chmod 777 *
-  cd -
+  if [ -d "logs/php-fpm" ];then
+    echo
+  else
+    mkdir -p logs/php-fpm
+    cd logs/php-fpm
+    echo > error.log
+    echo > access.log
+    echo > xdebug-remote.log
+    chmod 777 *
+    cd -
+  fi
 
-  mkdir -p logs/php-fpm
-  cd logs/php-fpm
-  echo > error.log
-  echo > access.log
-  echo > xdebug-remote.log
-  chmod 777 *
-  cd -
-
-  mkdir -p logs/redis
-  cd logs/redis
-  echo > redis.log
-  chmod 777 *
-  cd -
+  if [ -d "logs/redis" ];then
+    echo
+  else
+    mkdir -p logs/redis
+    cd logs/redis
+    echo > redis.log
+    chmod 777 *
+    cd -
+  fi
 
   # 不清理 Composer 缓存
   cd tmp
@@ -72,6 +91,33 @@ logs(){
 }
 
 # 是否安装 Docker Compose
+# cn
+install_docker_compose_cn(){
+  # 判断是否安装
+  command -v docker-compose >/dev/null 2>&1
+  if [ $? = 0 ];then
+    #存在
+    docker-compose --version
+    echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
+    echo
+
+  else
+
+    echo -e "\033[32mINFO\033[0m  cn docker-compose is installing...\n"
+
+    if [ -f "docker-compose" ];then
+      # 是否存在文件
+      # Thanks Aliyun CODE
+      # 判断操作系统
+      chmod +x docker-compose
+      echo $PATH
+      sudo mv docker-compose /usr/local/bin
+      else
+        # 命令行下载不了，请自行下载
+        echo -e "使用浏览器打开\nhttps://code.aliyun.com/khs1994-docker/compose-cn-mirror/tags/${DOCKER_COMPOSE_VERSION}\n进行下载，并改名为 ' docker-compose ' "
+    fi
+  fi
+}
 
 install_docker_compose(){
 
@@ -93,6 +139,8 @@ install_docker_compose(){
 # 初始化
 
 function init {
+  # 开发环境 拉取示例项目
+  # cn github
   if [ "$ENV" = "development" ];then
     echo "$ENV"
     git submodule update --init --recursive
@@ -100,7 +148,7 @@ function init {
     echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
     echo
   fi
-
+  # 生产环境 转移项目文件、配置文件、安装依赖包
   if [ "$ENV" = "production" ];then
     echo "$ENV"
     # 复制项目文件、配置文件
@@ -109,9 +157,11 @@ function init {
     # bin/composer-production test install
     echo
   fi
-  # docker-compose 是否安装
 
-  which docker-compose
+  # docker-compose 是否安装
+  # which docker-compose
+
+  command -v docker-compose >/dev/null 2>&1
 
   if [ $? = 0 ];then
     #存在
@@ -211,7 +261,10 @@ case $1 in
   development-down )
 
     docker-compose down
+    ;;
 
+  compose )
+    install_docker_compose_cn
     ;;
 
   * )
@@ -221,17 +274,18 @@ Docker-LNMP CLI ${VERSION}
 USAGE: ./docker-lnmp COMMAND
 
 Commands:
-  init              初始化部署环境
-  cleanup           清理已构建 docker images ，日志文件
-  laravel           新建 Laravel 项目
-  artisan           使用 Laravel 命令行工具 artisan
-  composer          使用 Composer
-  help              输出帮助信息
-  development       LNMP 开发环境部署
-  development-down  移除开发环境下的 LNMP Docker
-  production        LNMP 生产环境部署
-  production-down   移除生产环境下的 LNMP Docker
-  test              生产环境一键测试脚本[开发者选项，普通用户请勿使用]
+  compose             安装 docker-compose (针对国内用户)
+  init                初始化部署环境
+  cleanup             清理已构建 docker images ，日志文件
+  laravel             新建 Laravel 项目
+  artisan             使用 Laravel 命令行工具 artisan
+  composer            使用 Composer
+  help                输出帮助信息
+  development         LNMP 开发环境部署
+  development-down    移除开发环境下的 LNMP Docker
+  production          LNMP 生产环境部署
+  production-down     移除生产环境下的 LNMP Docker
+  test                生产环境一键测试脚本[开发者选项，普通用户请勿使用]
 
 Read './docs/*.md' for more information on the command
 "

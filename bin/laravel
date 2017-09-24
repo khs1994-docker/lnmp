@@ -12,6 +12,10 @@ docker run --rm -it \
 
 sudo chown -R `id -u`:`id -g` app/$1
 
+# 使用 .env.development 或 .env.production 不使用 .env 文件
+
+mv app/$1/.env app/$1/.env.backup
+
 cp app/.env* app/$1
 
 chmod -R 777 app/$1/storage

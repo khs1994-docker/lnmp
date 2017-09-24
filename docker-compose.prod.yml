@@ -1,13 +1,14 @@
-version: '3'
+version: '3.3'
 
 services:
   php7:
+    # 生产环境拉取镜像
     image: khs1994/php-fpm:latest
     volumes:
       - ./app:/app
-      - ./config/php/php-production.ini:/usr/local/etc/php/php.ini
-      - ./config/php/null.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-      - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf
+      - ./config/php/php-production.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php/null.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm
     environment:
       - APP_ENV=production
