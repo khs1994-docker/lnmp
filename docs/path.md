@@ -14,12 +14,12 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`php.ini`                 |`./config/php/php.ini`          |`/usr/local/etc/php/php.ini`                         |
-|`docker-php-ext-redis.ini`|`./config/php/conf.d/xdebug.ini`|`/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini`|
-|`php-fpm.conf`            |`./config/php/php-fpm.conf`     |`/usr/local/etc/php-fpm.conf`                        |
-|`php-fpm.d/`              |`./config/php/php-fpm.d`        |`/usr/local/etc/php-fpm.d`                           |
-|`docker.conf`             |`./config/php/docker.conf`      |`/usr/local/etc/php-fpm.d/docker.conf`               |
-|`app/`                    |`./app`                         |`/app`                                               |
+|`php.ini`                  |`./config/php/php.ini`          |`/usr/local/etc/php/php.ini`                         |
+|`docker-php-ext-xdebug.ini`|`./config/php/conf.d/xdebug.ini`|`/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini`|
+|`php-fpm.conf`             |`./config/php/php-fpm.conf`     |`/usr/local/etc/php-fpm.conf`                        |
+|`php-fpm.d/`               |`./config/php/php-fpm.d`        |`/usr/local/etc/php-fpm.d`                           |
+|`docker.conf`              |`./config/php/docker.conf`      |`/usr/local/etc/php-fpm.d/docker.conf`               |
+|`app/`                     |`./app`                         |`/app`                                               |
 
 ## Composer Laravel
 

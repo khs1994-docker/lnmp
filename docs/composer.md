@@ -1,5 +1,7 @@
 # Composer
 
+交互式输入
+
 ```bash
 $ ./lnmp-docker.sh composer
 

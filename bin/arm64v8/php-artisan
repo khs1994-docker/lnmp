@@ -1,10 +1,10 @@
 #!/bin/bash
 
 COMPOSE_PATH=$1
-
 CMD=$2
+TAG=7.1.9
 
 docker run --rm \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       lnmp-php \
+       lnmp-arm64v8-php::${TAG} \
        php artisan ${CMD}

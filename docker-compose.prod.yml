@@ -1,6 +1,7 @@
 version: '3.3'
 
 services:
+  
   redis:
     # 生产环境拉取镜像（可以配置私有仓库）
     image: khs1994/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine

@@ -4,11 +4,23 @@
 
 项目目标：使用 Docker Compose 快速搭建 LNMP 环境。
 
+项目初衷：搭建一个 LNMP 环境（不知道为什么我不喜欢 apt yum 来安装 LNMP,也没有用过一键安装脚本）需要手动下载 LNMP 源码包，安装依赖包，编译，编译出错再安装依赖包，再修改默认配置，这样一个过程差不多半天过去了。Docker 的优点是轻量、跨平台、提供一致的环境（避免在我这里行换到你那就不行的问题），我之前一直使用 `docker run` 来使用 Docker，问题是启动一个容器需要写参数、环境变量、挂载文件目录等，造成命令的繁杂，不易读，之后我就将 `docker run ...` 写入脚本文件，通过运行脚本文件来启动Docker。接触 Docker Compose 之后把原来的项目（哪怕是一个容器）也写成 `docker-compose.yml` 来使用 Docker，Docker Compose 是一种容器编排工具，说人话就是管理多个容器的工具，以启动 LNMP（包括 Redis ） 为例，使用 `docker run` 你需要执行四条命令，而使用 Docker Compose 你只需执行 `docker-compose up -d` 就把四个容器全部启动了，这还不包括停止容器，容器依赖方式等操作。此项目是给大家提供一种思路，也是本人对 Docker 的实践，也为了学习使用 Git 来管理项目。
+
 # 更新记录
 
 每季度（17.09，17.12，18.03...）更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
+# 准备
+
+本项目需要以下软件：
+
+* Docker CE
+
+* Docker Composer
+
 # 项目说明
+
+本项目支持 `x86_64` 架构的 Linux, macOS, Windows 10 (PC)，并且支持 `armhf` 架构的 Debian。
 
 ## 包含软件
 
@@ -52,7 +64,9 @@ $ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp
+Welcome use khs1994-docker/lnmp v17.09-rc4
+
+development
 
 ```
 
@@ -66,7 +80,7 @@ Welcome use khs1994-docker/lnmp
 $ ./lnmp-docker.sh production
 ```
 
-尽可能拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有服务器）。
+生产环境镜像请按需定制，并且尽可能的拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有仓库，
 
 ## 停止
 
@@ -77,7 +91,7 @@ $ docker-compose stop
 ## 销毁
 
 ```bash
-$ ./lnmp-docker.sh devlopment-down | production-down
+$ ./lnmp-docker.sh " devlopment-down | production-down "
 ```
 
 # 命令行工具
@@ -86,9 +100,9 @@ $ ./lnmp-docker.sh devlopment-down | production-down
 
 # 生产环境用户
 
-## khs1994.com
+## [khs1994.com](//khs1994.com)
 
-## xc725.wang
+## [xc725.wang](//xc725.wang)
 
 # 更多资料
 

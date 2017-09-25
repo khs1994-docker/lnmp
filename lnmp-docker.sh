@@ -6,9 +6,9 @@ DOCKER_COMPOSE_VERSION=1.16.1
 
 ENV=$1
 
-logs(){
-  # 创建日志文件
+# 创建日志文件
 
+logs(){
   echo -e "\033[32mINFO\033[0m  mkdir log folder\n"
 
   cd logs
@@ -141,9 +141,10 @@ install_docker_compose(){
 function demo {
   #statements
   echo "$ENV"
+  echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
+
   git submodule update --init --recursive
 
-  echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
   echo
 }
 
@@ -152,17 +153,15 @@ function init {
   # cn github
   case $ENV in
     development )
-    demo
-    ;;
+      echo "$ENV"
+      demo
+      ;;
 
   # 生产环境 转移项目文件、配置文件、安装依赖包
   production )
     echo "$ENV"
-    # 复制项目文件、配置文件
-    echo -e "\033[32mINFO\033[0m  Copy app and nginx conf ...\n"
-    # 安装 Composer 包
-    # bin/composer-production test install
-    echo
+    # 请在此脚本定义要执行的操作
+    bin/production-init
     ;;
 
   arm32v7 )
@@ -201,14 +200,17 @@ function init {
 
 cleanup (){
   # 清理 images
-  docker rmi lnmp-php \
-             lnmp-postgresql \
-             lnmp-mongo \
-             lnmp-memcached \
-             lnmp-mysql \
-             lnmp-rabbitmq \
-             lnmp-redis \
-             lnmp-nginx
+  # docker rmi lnmp-php \
+  #            lnmp-postgresql \
+  #            lnmp-mongo \
+  #            lnmp-memcached \
+  #            lnmp-mysql \
+  #            lnmp-rabbitmq \
+  #            lnmp-redis \
+  #            lnmp-nginx
+  # 不自动清理，列出镜像，用户自己清理
+  docker images | grep "lnmp"
+  docker images | grep "khs1994"
 
    # 清理日志文件
    cd logs
@@ -217,8 +219,8 @@ cleanup (){
            nginx \
            php-fpm \
            redis
-
-   echo -e "\033[32mINFO\033[0m  Clean is SUCCESS please RUN  './docker-lnmp init' "
+   logs
+   echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file "
 }
 
 case $1 in
@@ -311,7 +313,7 @@ Docker-LNMP CLI ${VERSION}
 USAGE: ./docker-lnmp COMMAND
 
 Commands:
-  compose             安装 docker-compose (针对国内用户)
+  compose             安装 docker-compose 方法提示(针对国内用户)
   init                初始化部署环境
   demo                克隆示例项目、配置文件
   cleanup             清理已构建 docker images ，日志文件

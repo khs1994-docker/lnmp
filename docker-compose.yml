@@ -1,8 +1,10 @@
 version: '3.3'
 
 services:
+
   mysql:
     # 开发环境使用自定义镜像，构建规则在 override 中定义
+    # 变量从 .env 文件读取例如镜像 tag
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     env_file:
       - ./.env

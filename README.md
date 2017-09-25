@@ -10,7 +10,17 @@ Build LNMP within 2 minutes powered by Docker Compose.
 
 Updates every quarter (17.09, 17.12, 18.03, etc), For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
+# Prerequisites
+
+To use LNMP Docker,you need:
+
+* Docker CE
+
+* Docker Composer
+
 # Overview
+
+LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian on `armhf`.
 
 ## What's inside
 
@@ -54,7 +64,9 @@ $ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp
+Welcome use khs1994-docker/lnmp v17.09-rc4
+
+development
 
 ```
 
@@ -77,18 +89,18 @@ $ docker-compose stop
 ## Stop and remove
 
 ```bash
-$ ./lnmp-docker.sh devlopment-down | production-down
+$ ./lnmp-docker.sh " devlopment-down | production-down "
 ```
 
 # CLI
 
 Interactive `./lnmp-docker.sh` easy to access Laravel, Laravel artisan, composer, etc. For more information about LNMP Docker CLI, see [Documents](docs/cli.md).
 
-# Production users
+# Who use in Production?
 
-## khs1994.com
+## [khs1994.com](//khs1994.com)
 
-## xc725.wang
+## [xc725.wang](//xc725.wang)
 
 # More Information
 
