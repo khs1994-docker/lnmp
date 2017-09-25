@@ -50,7 +50,7 @@ Updates every quarter (17.09, 17.12, 18.03, etc), For more release information a
 ## Start in Devlopment
 
 ```bash
-$ ./docker-lnmp.sh devlopment
+$ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
 
@@ -65,7 +65,7 @@ Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
 Containers as a Service(Caas)
 
 ```bash
-$ ./docker-lnmp.sh production
+$ ./lnmp-docker.sh production
 ```
 
 ## Stop
@@ -77,12 +77,12 @@ $ docker-compose stop
 ## Stop and remove
 
 ```bash
-$ ./docker-lnmp.sh devlopment-down | production-down
+$ ./lnmp-docker.sh devlopment-down | production-down
 ```
 
 # CLI
 
-Interactive `./docker-lnmp.sh` easy to access Laravel, Laravel artisan, composer, etc. For more information about LNMP Docker CLI, see [Documents](docs/cli.md).
+Interactive `./lnmp-docker.sh` easy to access Laravel, Laravel artisan, composer, etc. For more information about LNMP Docker CLI, see [Documents](docs/cli.md).
 
 # Production users
 

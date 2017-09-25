@@ -2,7 +2,7 @@
 
 * [PhpStorm](phpstorm.md)
 
-* [docker-lnmp CLI](cli.md)
+* [lnmp-docker CLI](cli.md)
 
 * [HTTPS](https.md)
 
@@ -22,15 +22,13 @@
 
 # 安装 Docker CE
 
+* [Aliyun mirror](https://yq.aliyun.com/articles/110806)
+
 ## Ubuntu
 
 ```
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+$ curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) test"
 $ sudo apt-get update
 $ sudo apt-get -y install docker-ce
 ```
-
-## Deepin
-
-## Fedora

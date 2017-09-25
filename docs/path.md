@@ -3,9 +3,9 @@
 |名称|本机|容器|
 |--|--|--|
 |`nginx.conf`|`./config/etc/nginx/nginx.conf`|`/etc/nginx/nginx.conf`    |
-|`conf.d/`   |`./config/nginx`              |`/etc/nginx/conf.d`        |
-|`error.log` |`./logs/nginx/error.log`        |`/var/log/nginx/error.log` |
-|`access.log`|`./logs/nginx/access.log`       |`/var/log/nginx/access.log`|
+|`conf.d/`   |`./config/nginx`               |`/etc/nginx/conf.d`        |
+|`error.log` |`./logs/nginx/error.log`       |`/var/log/nginx/error.log` |
+|`access.log`|`./logs/nginx/access.log`      |`/var/log/nginx/access.log`|
 |`app/`      |`./app`                        |`/app`                     |
 
 # PHP
@@ -25,7 +25,7 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`缓存`|`./var/lib/composer/cache`|`/tmp/cache`|
+|`缓存`|`./tmp/cache`|`/tmp/cache`|
 
 # 缓存
 

@@ -3,22 +3,26 @@
 ## 新建 Laravel 项目
 
 ```bash
-$ ./docker-lnmp.sh laravel
+$ ./lnmp-docker.sh laravel
 
 # 之后输入路径
 ```
 
-修改 Laravel 项目下的 `config/database.php` 配置文件`'client' => 'phpredis'`
+例如路径输入 `test`，相当于在 `./app/` 执行 `laravel new test`。
+
+注意修改 Laravel 项目的 Redis 客户端配置（`config/database.php` 配置文件 `'client' => 'phpredis'`）。
 
 ## artisan
 
 ```bash
-$ ./docker-lnmp.sh artisan
+$ ./lnmp-docker.sh artisan
 
 # 之后输入路径
 
 # 之后输入要执行的参数
 ```
+
+例如路径输入 `test`，参数输入 `--version`，相当于在 `./app/test/` 执行 `php artisan --version`
 
 ### artisan 参数列表
 
@@ -130,7 +134,7 @@ Available commands:
 ## 安装升级 Laravel 依赖包
 
 ```bash
-$ ./docker-lnmp.sh composer
+$ ./lnmp-docker.sh composer
 
 # 之后输入路径
 

@@ -12,6 +12,8 @@ services:
     #environment:
     #  # your password
     #  - MYSQL_ROOT_PASSWORD=mytest
+    ports:
+      - "3306:3306"
     volumes:
       - ./var/lib/mysql:/var/lib/mysql
       - ./logs/mysql:/var/log/mysql
@@ -21,7 +23,7 @@ services:
     #   context: ./dockerfile/redis/
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
-    image: "redis:${KHS1994_LNMP_REDIS_VERSION}"
+    image: "arm32v7/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
@@ -74,7 +76,10 @@ services:
 
   php7:
     # 开发环境使用自定义镜像，构建规则在 override 中定义
-    image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}"
+    build:
+      context: ./dockerfile/arm32v7/php-fpm/
+      dockerfile: Dockerfile
+    image: "lnmp-arm32v7-php:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
       - ./app:/app
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
@@ -84,13 +89,14 @@ services:
     command: ["php-fpm"]
     environment:
       - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4
+      - APP_ENV=development
 
   nginx:
     # build:
     #   context: ./dockerfile/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
-    image: "nginx:${KHS1994_LNMP_NGINX_VERSION}"
+    image: "arm32v7/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file: .env
     ports:
       - "443:443"

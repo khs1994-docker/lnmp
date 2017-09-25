@@ -48,7 +48,7 @@
 ## 开发环境
 
 ```bash
-$ ./docker-lnmp.sh devlopment
+$ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
 
@@ -63,7 +63,7 @@ Welcome use khs1994-docker/lnmp
 开启 `容器即服务( Caas )` 之旅。
 
 ```bash
-$ ./docker-lnmp.sh production
+$ ./lnmp-docker.sh production
 ```
 
 尽可能拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有服务器）。
@@ -77,12 +77,12 @@ $ docker-compose stop
 ## 销毁
 
 ```bash
-$ ./docker-lnmp.sh devlopment-down | production-down
+$ ./lnmp-docker.sh devlopment-down | production-down
 ```
 
 # 命令行工具
 
-为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./docker-lnmp.sh`)，用法请查看 [支持文档](docs/cli.md)。
+为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./lnmp-docker.sh`)，用法请查看 [支持文档](docs/cli.md)。
 
 # 生产环境用户
 
