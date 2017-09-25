@@ -13,11 +13,6 @@ logs(){
 
   cd logs
 
-#  rm -rf mongodb \
-#         mysql \
-#         nginx \
-#         php-fpm \
-#         redis
   cd -
 
   if [ -d "logs/mongodb" ];then
@@ -33,28 +28,30 @@ logs(){
    fi
 
   if [ -d "logs/mysql" ];then
-    echo
+    echo -e "\n\033[32mINFO\033[0m  logs/mysql existence\n"
   else
     mkdir -p logs/mysql
     cd logs/mysql
     echo > error.log
+    echo -e "\n\033[32mINFO\033[0m  mkdir logs/mysql and touch log file\n"
     chmod 777 *
     cd -
   fi
 
   if [ -d "logs/nginx" ];then
-    echo
+    echo -e "\n\033[32mINFO\033[0m  logs/nginx existence\n"
   else
     mkdir -p logs/nginx
     cd logs/nginx
     echo > error.log
     echo > access.log
     chmod 777 *
+    echo -e "\n\033[32mINFO\033[0m  mkdir logs/nginx and touch log file\n"
     cd -
   fi
 
   if [ -d "logs/php-fpm" ];then
-    echo
+    echo -e "\n\033[32mINFO\033[0m  logs/php-fpm existence\n"
   else
     mkdir -p logs/php-fpm
     cd logs/php-fpm
@@ -62,26 +59,29 @@ logs(){
     echo > access.log
     echo > xdebug-remote.log
     chmod 777 *
+    echo -e "\n\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file\n"
     cd -
   fi
 
   if [ -d "logs/redis" ];then
-    echo
+    echo -e "\n\033[32mINFO\033[0m  logs/redis existence\n"
   else
     mkdir -p logs/redis
     cd logs/redis
     echo > redis.log
     chmod 777 *
+    echo -e "\n\033[32mINFO\033[0m  mkdir logs/redis and touch log file\n"
     cd -
   fi
 
   # 不清理 Composer 缓存
   cd tmp
   if [ -d cache ];then
-    echo -e "\n\033[32mINFO\033[0m  Composer cache nerver clean ,please human clean\n"
+    echo -e "\n\033[32mINFO\033[0m  Composer cache existence\n"
   else
     mkdir cache
     chmod 777 cache
+    echo -e "\n\033[32mINFO\033[0m  mkdir ./tmp/cache\n"
   fi
   cd -
 
@@ -211,7 +211,12 @@ cleanup (){
              lnmp-nginx
 
    # 清理日志文件
-   logs
+   cd logs
+   rm -rf mongodb \
+           mysql \
+           nginx \
+           php-fpm \
+           redis
 
    echo -e "\033[32mINFO\033[0m  Clean is SUCCESS please RUN  './docker-lnmp init' "
 }
@@ -318,6 +323,10 @@ Commands:
   development-down    移除开发环境下的 LNMP Docker
   production          LNMP 生产环境部署
   production-down     移除生产环境下的 LNMP Docker
+  arm32v7             树莓派开发环境部署
+  arm32v7-down        移除树莓派中的 LNMP Docker
+  arm64v8             未来特性（暂时未开启）
+  arm64v8-down        未来特性（暂时未开启）
   test                生产环境一键测试脚本[开发者选项，普通用户请勿使用]
 
 Read './docs/*.md' for more information on the command

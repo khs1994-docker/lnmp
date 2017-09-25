@@ -2,10 +2,7 @@ version: '3.3'
 
 services:
   mysql:
-    # build:
-    #   context: ./dockerfile/mysql/
-    #   dockerfile: Dockerfile
-    #image: lnmp-mysql:latest
+    # 开发环境使用自定义镜像，构建规则在 override 中定义
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     env_file:
       - ./.env
@@ -13,20 +10,16 @@ services:
     #  # your password
     #  - MYSQL_ROOT_PASSWORD=mytest
     volumes:
-      - ./var/lib/mysql:/var/lib/mysql
-      - ./logs/mysql:/var/log/mysql
+      - ./var/lib/mysql:/var/lib/mysql:rw
+      - ./logs/mysql:/var/log/mysql:rw
 
   redis:
-    # build:
-    #   context: ./dockerfile/redis/
-    #   dockerfile: Dockerfile
-    # image: lnmp-redis:latest
-    image: "redis:${KHS1994_LNMP_REDIS_VERSION}"
+    image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: .env
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./var/lib/redis:/data
-      - ./logs/redis:/var/log/redis
+      - ./var/lib/redis:/data:rw
+      - ./logs/redis:/var/log/redis:rw
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
   # mongo:
@@ -73,24 +66,19 @@ services:
 
 
   php7:
-    # 开发环境使用自定义镜像，构建规则在 override 中定义
     image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
-      - ./app:/app
+      - ./app:/app:rw
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      - ./logs/php-fpm:/var/log/php-fpm
+      - ./logs/php-fpm:/var/log/php-fpm:rw
     command: ["php-fpm"]
     environment:
       - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4
 
   nginx:
-    # build:
-    #   context: ./dockerfile/nginx/
-    #   dockerfile: Dockerfile
-    # image: lnmp-nginx:latest
-    image: "nginx:${KHS1994_LNMP_NGINX_VERSION}"
+    image: "lnmp-nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file: .env
     ports:
       - "443:443"
@@ -99,4 +87,4 @@ services:
       - ./app:/app
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./logs/nginx:/var/log/nginx
+      - ./logs/nginx:/var/log/nginx:rw

@@ -1,14 +1,15 @@
 version: '3.3'
 
 services:
+  redis:
+    # 生产环境拉取镜像（可以配置私有仓库）
+    image: khs1994/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+  nginx:
+    image: khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine
   php7:
-    # 生产环境拉取镜像
-    image: khs1994/php-fpm:latest
+    image: khs1994/php-fpm:7.1.9
     volumes:
-      - ./app:/app
       - ./config/php/php-production.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/null.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-      - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      - ./logs/php-fpm:/var/log/php-fpm
     environment:
       - APP_ENV=production

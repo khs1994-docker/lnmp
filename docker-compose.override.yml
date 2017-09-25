@@ -1,10 +1,26 @@
 version: '3.3'
 
 services:
+
+  # mysql:
+  #   # 开发环境构建镜像，在此处定义
+  #   build:
+  #     context: ./dockerfile/mysql/
+  #     dockerfile: Dockerfile
+
+  redis:
+    build:
+      context: ./dockerfile/redis/
+      dockerfile: Dockerfile
+
   php7:
     build:
       context: ./dockerfile/php-fpm/
       dockerfile: Dockerfile
-      # 执行 $ docker-compose up -d 说明是开发环境
     environment:
       - APP_ENV=development
+
+  nginx:
+    build:
+      context: ./dockerfile/nginx/
+      dockerfile: Dockerfile
