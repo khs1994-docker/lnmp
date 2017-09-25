@@ -31,7 +31,7 @@ script:
 # - rm -rf sources.list
 # - cp sources.list.default sources.list
 # - cd -
-- "./docker-lnmp.sh test"
+- "./lnmp-docker.sh test"
 branches:
   only:
   - master

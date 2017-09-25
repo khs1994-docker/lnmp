@@ -1,5 +1,7 @@
 # khs1994-dockeer/lnmp 支持文档
 
+* [项目初衷](why.md)
+
 * [PhpStorm](phpstorm.md)
 
 * [lnmp-docker CLI](cli.md)
@@ -24,22 +26,22 @@
 
 * [常见问题](question.md)
 
-# 安装 Docker CE
+## 安装 Docker CE
 
 * [Aliyun mirror](https://yq.aliyun.com/articles/110806)
-* [ mirror]()
+* [USTC mirror](http://mirrors.ustc.edu.cn/help/docker-ce.html)
 
-## Ubuntu
+### Ubuntu
 
-```
+```bash
 $ curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
 $ sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) test"
 $ sudo apt-get update
 $ sudo apt-get -y install docker-ce
 ```
 
-# Docker Compose
+## Docker Compose
 
 windows 10 、macOS 中的 docker-ce 自带 docker-compose。
 
-Linux 请在 GitHub 下载二进制文件、或使用 Python 包管理工具 pip 进行安装。
+Linux 请在 [GitHub](https://github.com/docker/compose/releases) 下载二进制文件、或使用 Python 包管理工具 pip 进行安装。

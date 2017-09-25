@@ -3,10 +3,14 @@
 * iconv
 * mcrypt
 * gd
-* redis
-* memcached
-* mongodb
-* xdebug(生产环境不启用)
+* [redis](https://pecl.php.net/package/redis)
+* [memcached ( memcache 太旧)](https://pecl.php.net/package/memcached)
+* [mongodb ( mongo 已经废弃)](https://pecl.php.net/package/mongodb)
+* [xdebug (生产环境不启用)](https://pecl.php.net/package/xdebug)
 * pdo_mysql
 * pdo_pgsql
-* zip
+* [zip](https://pecl.php.net/package/zip)
+
+## More Information
+
+* [mongodb](https://github.com/mongodb/mongo-php-driver)
