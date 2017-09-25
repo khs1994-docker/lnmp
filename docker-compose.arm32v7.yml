@@ -1,22 +1,22 @@
 version: '3.3'
 
 services:
-  mysql:
-    # build:
-    #   context: ./dockerfile/mysql/
-    #   dockerfile: Dockerfile
-    #image: lnmp-mysql:latest
-    image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
-    env_file:
-      - ./.env
-    #environment:
-    #  # your password
-    #  - MYSQL_ROOT_PASSWORD=mytest
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./var/lib/mysql:/var/lib/mysql
-      - ./logs/mysql:/var/log/mysql
+  # mysql:
+  #   # build:
+  #   #   context: ./dockerfile/mysql/
+  #   #   dockerfile: Dockerfile
+  #   #image: lnmp-mysql:latest
+  #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
+  #   env_file:
+  #     - ./.env
+  #   #environment:
+  #   #  # your password
+  #   #  - MYSQL_ROOT_PASSWORD=mytest
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - ./var/lib/mysql:/var/lib/mysql
+  #     - ./logs/mysql:/var/log/mysql
 
   redis:
     # build:

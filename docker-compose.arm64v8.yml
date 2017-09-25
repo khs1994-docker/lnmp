@@ -1,0 +1,108 @@
+version: '3.3'
+
+services:
+  # mysql:
+  #   # build:
+  #   #   context: ./dockerfile/mysql/
+  #   #   dockerfile: Dockerfile
+  #   #image: lnmp-mysql:latest
+  #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
+  #   env_file:
+  #     - ./.env
+  #   #environment:
+  #   #  # your password
+  #   #  - MYSQL_ROOT_PASSWORD=mytest
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - ./var/lib/mysql:/var/lib/mysql
+  #     - ./logs/mysql:/var/log/mysql
+
+  redis:
+    # build:
+    #   context: ./dockerfile/redis/
+    #   dockerfile: Dockerfile
+    # image: lnmp-redis:latest
+    image: "arm64v8/redis:${KHS1994_LNMP_REDIS_VERSION}"
+    env_file: .env
+    volumes:
+      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./var/lib/redis:/data
+      - ./logs/redis:/var/log/redis
+    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+
+  # mongo:
+  #   build:
+  #     context: ./dockerfile/mongodb/
+  #     dockerfile: Dockerfile
+  #   image: lnmp-mongo:latest
+  #   volumes:
+  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
+  #     - ./var/lib/mongo:/data/db
+  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+  #   # ports:
+  #   #   - "27017:27017"
+  #
+  # memcached:
+  #   build:
+  #     context: ./dockerfile/memcached/
+  #     dockerfile: Dockerfile
+  #   image: lnmp-memcached:latest
+  #   # ports:
+  #   #   - "11211:11211"
+  #
+  # rabbitmq:
+  #   build:
+  #     context: ./dockerfile/rabbitmq/
+  #     dockerfile: Dockerfile
+  #   image: lnmp-rabbitmq:latest
+  #   volumes:
+  #     - ./var/lib/rabbitmq:/var/lib/rabbitmq
+  #   # ports:
+  #   #   - "15672:15672"
+  #   #   - "5672:5672"
+  #
+  # postgresql:
+  #   build:
+  #     context: ./dockerfile/postgresql/
+  #     dockerfile: Dockerfile
+  #   image: lnmp-postgresql:latest
+  #   env_file: .env
+  #   volumes:
+  #     - ./var/lib/postgresql:/var/lib/postgresql
+  #   # ports:
+  #   #   - "5432:5432"
+
+
+  php7:
+    # 开发环境使用自定义镜像，构建规则在 override 中定义
+    build:
+      context: ./dockerfile/arm32v7/php-fpm/
+      dockerfile: Dockerfile
+    image: "lnmp-arm64v8-php:${KHS1994_LNMP_PHP_VERSION}"
+    volumes:
+      - ./app:/app
+      - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./logs/php-fpm:/var/log/php-fpm
+    command: ["php-fpm"]
+    environment:
+      - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4
+      - APP_ENV=development
+
+  nginx:
+    # build:
+    #   context: ./dockerfile/nginx/
+    #   dockerfile: Dockerfile
+    # image: lnmp-nginx:latest
+    image: "arm64v8/nginx:${KHS1994_LNMP_NGINX_VERSION}"
+    env_file: .env
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./app:/app
+      - ./config/nginx:/etc/nginx/conf.d:ro
+      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx

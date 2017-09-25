@@ -290,11 +290,14 @@ case $1 in
     init
     docker-compose -f docker-compose.arm32v7.yml up -d
     ;;
-  arm32v7 down )
+  arm32v7-down )
+    docker-compose -f docker-compose.arm32v7.yml down
     ;;
   arm64v8 )
+    # docker-compose -f docker-compose.arm64v8.yml up -d
     ;;
-  arm64v8 down )
+  arm64v8-down )
+    # docker-compose -f docker-compose.arm64v8.yml down
     ;;
   * )
   echo  "
