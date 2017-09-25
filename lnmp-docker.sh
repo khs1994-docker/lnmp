@@ -138,26 +138,42 @@ install_docker_compose(){
 
 # 初始化
 
+function demo {
+  #statements
+  echo "$ENV"
+  git submodule update --init --recursive
+
+  echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
+  echo
+}
+
 function init {
   # 开发环境 拉取示例项目
   # cn github
-  if [ "$ENV" = "development" ];then
-    echo "$ENV"
-    git submodule update --init --recursive
+  case $ENV in
+    development )
+    demo
+    ;;
 
-    echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
-    echo
-  fi
   # 生产环境 转移项目文件、配置文件、安装依赖包
-  if [ "$ENV" = "production" ];then
+  production )
     echo "$ENV"
     # 复制项目文件、配置文件
     echo -e "\033[32mINFO\033[0m  Copy app and nginx conf ...\n"
     # 安装 Composer 包
     # bin/composer-production test install
     echo
-  fi
+    ;;
 
+  arm32v7 )
+    demo
+    ;;
+
+  arm32v8 )
+    demo
+    ;;
+
+  esac
   # docker-compose 是否安装
   # which docker-compose
 
@@ -203,6 +219,10 @@ cleanup (){
 case $1 in
   init )
     init
+    ;;
+
+  demo )
+    demo
     ;;
 
   cleanup )
@@ -266,7 +286,16 @@ case $1 in
   compose )
     install_docker_compose_cn
     ;;
-
+  arm32v7 )
+    init
+    docker-compose -f docker-compose.arm32v7.yml up -d
+    ;;
+  arm32v7 down )
+    ;;
+  arm64v8 )
+    ;;
+  arm64v8 down )
+    ;;
   * )
   echo  "
 Docker-LNMP CLI ${VERSION}
@@ -276,6 +305,7 @@ USAGE: ./docker-lnmp COMMAND
 Commands:
   compose             安装 docker-compose (针对国内用户)
   init                初始化部署环境
+  demo                克隆示例项目、配置文件
   cleanup             清理已构建 docker images ，日志文件
   laravel             新建 Laravel 项目
   artisan             使用 Laravel 命令行工具 artisan
