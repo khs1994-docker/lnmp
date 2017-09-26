@@ -1,2 +1,5 @@
 .DS_Store
 .idea
+docker-compose
+docker-compose-Darwin-x86_64
+docker-compose-Linux-x86_64

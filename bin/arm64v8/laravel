@@ -6,7 +6,7 @@ TAG=7.1.9
 docker run --rm -it \
       -v $PWD/app:/app \
       -v $PWD/tmp/cache:/tmp/cache \
-      lnmp-php::${TAG} \
+      lnmp-arm64v8-php:${TAG} \
       laravel new $LARAVEL_PATH
 
 #sudo chmod -R 777 app/$1

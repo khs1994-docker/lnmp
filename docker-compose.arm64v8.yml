@@ -2,26 +2,35 @@ version: '3.3'
 
 services:
 
-  mysql:
-    # 开发环境使用自定义镜像，构建规则在 override 中定义
-    # 变量从 .env 文件读取例如镜像 tag
-    image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
-    env_file:
-      - ./.env
-    #environment:
-    #  # your password
-    #  - MYSQL_ROOT_PASSWORD=mytest
-    volumes:
-      - ./var/lib/mysql:/var/lib/mysql:rw
-      - ./logs/mysql:/var/log/mysql:rw
+  # MySQL 暂时没有  arm 镜像
+  # mysql:
+  #   # build:
+  #   #   context: ./dockerfile/mysql/
+  #   #   dockerfile: Dockerfile
+  #   #image: lnmp-mysql:latest
+  #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
+  #   env_file:
+  #     - ./.env
+  #   #environment:
+  #   #  # your password
+  #   #  - MYSQL_ROOT_PASSWORD=mytest
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - ./var/lib/mysql:/var/lib/mysql
+  #     - ./logs/mysql:/var/log/mysql
 
   redis:
-    image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    # build:
+    #   context: ./dockerfile/redis/
+    #   dockerfile: Dockerfile
+    # image: lnmp-redis:latest
+    image: "arm64v8/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./var/lib/redis:/data:rw
-      - ./logs/redis:/var/log/redis:rw
+      - ./var/lib/redis:/data
+      - ./logs/redis:/var/log/redis
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
   # mongo:
@@ -68,19 +77,28 @@ services:
 
 
   php7:
-    image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}"
+    # 开发环境使用自定义镜像，构建规则在 override 中定义
+    build:
+      context: ./dockerfile/arm32v7/php-fpm/
+      dockerfile: Dockerfile
+    image: "khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
-      - ./app:/app:rw
+      - ./app:/app
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      - ./logs/php-fpm:/var/log/php-fpm:rw
+      - ./logs/php-fpm:/var/log/php-fpm
     command: ["php-fpm"]
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4
+      - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4 arm64v8
+      - APP_ENV=development
 
   nginx:
-    image: "lnmp-nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    # build:
+    #   context: ./dockerfile/nginx/
+    #   dockerfile: Dockerfile
+    # image: lnmp-nginx:latest
+    image: "arm64v8/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file: .env
     ports:
       - "443:443"
@@ -89,4 +107,4 @@ services:
       - ./app:/app
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./logs/nginx:/var/log/nginx:rw
+      - ./logs/nginx:/var/log/nginx

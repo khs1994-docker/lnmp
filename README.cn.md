@@ -2,13 +2,25 @@
 
 [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)]() [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/lnmp.svg)]() [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)]()
 
-项目目标：使用 Docker Compose 快速搭建 LNMP 环境。
+使用 Docker Compose 快速搭建 LNMP 环境。
+
+* [项目初衷](docs/why.md)
 
 # 更新记录
 
 每季度（17.09，17.12，18.03...）更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
+# 准备
+
+本项目需要以下软件：
+
+* Docker CE
+
+* Docker Composer
+
 # 项目说明
+
+本项目支持 `x86_64` 架构的 Linux, macOS, Windows 10 (PC)，并且支持 `armhf` 架构的 Debian。
 
 ## 包含软件
 
@@ -48,11 +60,13 @@
 ## 开发环境
 
 ```bash
-$ ./docker-lnmp.sh devlopment
+$ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp
+Welcome use khs1994-docker/lnmp v17.09-rc4
+
+development
 
 ```
 
@@ -63,10 +77,10 @@ Welcome use khs1994-docker/lnmp
 开启 `容器即服务( Caas )` 之旅。
 
 ```bash
-$ ./docker-lnmp.sh production
+$ ./lnmp-docker.sh production
 ```
 
-尽可能拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有服务器）。
+生产环境镜像请按需定制，并且尽可能的拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有仓库，
 
 ## 停止
 
@@ -77,18 +91,25 @@ $ docker-compose stop
 ## 销毁
 
 ```bash
-$ ./docker-lnmp.sh devlopment-down | production-down
+$ ./lnmp-docker.sh " devlopment-down | production-down "
 ```
 
 # 命令行工具
 
-为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./docker-lnmp.sh`)，用法请查看 [支持文档](docs/cli.md)。
+为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./lnmp-docker.sh`)，用法请查看 [支持文档](docs/cli.md)。
 
 # 生产环境用户
 
-## khs1994.com
+## [khs1994.com](//khs1994.com)
 
-## xc725.wang
+## [xc725.wang](//xc725.wang)
+
+# 项目国内镜像
+
+* TGit：https://git.qcloud.com/khs1994-docker/lnmp.git
+* 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
+* 码云：https://gitee.com/khs1994/lnmp
+* Coding：https://git.coding.net/khs1994/lnmp.git
 
 # 更多资料
 

@@ -6,5 +6,5 @@ TAG=7.1.9
 
 docker run --rm \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       lnmp-php:${TAG} \
+       lnmp-arm64v8-php::${TAG} \
        php artisan ${CMD}

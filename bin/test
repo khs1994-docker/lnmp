@@ -3,11 +3,11 @@
 # 生产环境自动测试脚本，开发环境由本人真机手动测试
 # 删除原项目
 
-./docker-lnmp.sh development-down
+./lnmp-docker.sh development-down
 
 echo
 
-./docker-lnmp.sh production-down
+./lnmp-docker.sh production-down
 
 echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
@@ -15,7 +15,7 @@ echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
 development() {
 
-./docker-lnmp.sh development
+./lnmp-docker.sh development
 
 echo
 
@@ -38,7 +38,7 @@ docker ps -a | grep "lnmp"
 echo
 echo
 
-./docker-lnmp.sh development-down
+./lnmp-docker.sh development-down
 
 echo -e "\033[32mINFO\033[0m  开发环境测试完毕\n"
 
@@ -50,7 +50,7 @@ echo -e "\033[32mINFO\033[0m  开发环境测试完毕\n"
 
 echo -e "\033[32mINFO\033[0m  生产环境测试开始\n"
 
-./docker-lnmp.sh production
+./lnmp-docker.sh production
 
 echo
 
@@ -74,7 +74,7 @@ docker ps -a | grep "lnmp"
 echo
 echo
 
-./docker-lnmp.sh production-down
+./lnmp-docker.sh production-down
 
 echo -e "\033[32mINFO\033[0m  生产环境测试完毕\n"
 
