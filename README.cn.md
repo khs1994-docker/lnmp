@@ -80,7 +80,7 @@ development
 $ ./lnmp-docker.sh production
 ```
 
-生产环境镜像请按需定制，并且尽可能的拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有仓库，
+生产环境镜像请按需定制，并且尽可能的拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有仓库)。
 
 ## 停止
 
@@ -108,12 +108,13 @@ $ ./lnmp-docker.sh " devlopment-down | production-down "
 
 * TGit：https://git.qcloud.com/khs1994-docker/lnmp.git
 * 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
-* 码云：https://gitee.com/khs1994/lnmp
+* 码云：https://gitee.com/khs1994/lnmp.git
 * Coding：https://git.coding.net/khs1994/lnmp.git
 
 # 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
+* [Docker 从入门到实践](https://github.com/yeasy/docker_practice)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)

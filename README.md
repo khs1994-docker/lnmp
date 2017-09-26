@@ -105,6 +105,7 @@ Interactive `./lnmp-docker.sh` easy to access Laravel, Laravel artisan, composer
 # More Information
 
 * [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
+* [docker_practice](https://github.com/yeasy/docker_practice)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
