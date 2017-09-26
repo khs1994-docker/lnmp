@@ -10,6 +10,7 @@ Changelog
 #### v17.09 rc5
 
 * 常规性的升级软件
+* 增加数据库、缓存备份功能
 
 |Name|Image|Version|Linux|
 |:--|:--|:--|:--|

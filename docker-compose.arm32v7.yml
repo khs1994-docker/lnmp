@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  
+
   # MySQL 暂时没有  arm 镜像
   # mysql:
   #   # build:
@@ -78,10 +78,10 @@ services:
 
   php7:
     # 开发环境使用自定义镜像，构建规则在 override 中定义
-    build:
-      context: ./dockerfile/arm32v7/php-fpm/
-      dockerfile: Dockerfile
-    image: "lnmp-arm32v7-php:${KHS1994_LNMP_PHP_VERSION}"
+    # build:
+    #   context: ./dockerfile/arm32v7/php-fpm/
+    #   dockerfile: Dockerfile
+    image: "khs1994/arm32v7-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
       - ./app:/app
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
@@ -90,7 +90,7 @@ services:
       - ./logs/php-fpm:/var/log/php-fpm
     command: ["php-fpm"]
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION= "v17.09-rc4 arm32v7"
+      - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4 arm32v7
       - APP_ENV=development
 
   nginx:

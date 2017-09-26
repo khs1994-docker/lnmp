@@ -4,7 +4,7 @@
 
 使用 Docker Compose 快速搭建 LNMP 环境。
 
-* [项目初衷](/docs/why.md)
+* [项目初衷](docs/why.md)
 
 # 更新记录
 
@@ -103,6 +103,13 @@ $ ./lnmp-docker.sh " devlopment-down | production-down "
 ## [khs1994.com](//khs1994.com)
 
 ## [xc725.wang](//xc725.wang)
+
+# 项目国内镜像
+
+* TGit：https://git.qcloud.com/khs1994-docker/lnmp.git
+* 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
+* 码云：https://gitee.com/khs1994/lnmp
+* Coding：https://git.coding.net/khs1994/lnmp.git
 
 # 更多资料
 

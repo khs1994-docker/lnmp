@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  
+
   # MySQL 暂时没有  arm 镜像
   # mysql:
   #   # build:
@@ -81,7 +81,7 @@ services:
     build:
       context: ./dockerfile/arm32v7/php-fpm/
       dockerfile: Dockerfile
-    image: "lnmp-arm64v8-php:${KHS1994_LNMP_PHP_VERSION}"
+    image: "khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
       - ./app:/app
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
@@ -90,7 +90,7 @@ services:
       - ./logs/php-fpm:/var/log/php-fpm
     command: ["php-fpm"]
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION="v17.09-rc4 arm64v8"
+      - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4 arm64v8
       - APP_ENV=development
 
   nginx:
