@@ -4,7 +4,8 @@
 
 Build LNMP within 2 minutes powered by Docker Compose.
 
-* [中文文档](README.cn.md)
+* [中文说明](README.cn.md)
+* [Documents](docs/)
 
 # Changelog
 
@@ -17,6 +18,43 @@ To use LNMP Docker,you need:
 * Docker CE
 
 * Docker Composer
+
+# Quick Start
+
+## Start in Devlopment
+
+```bash
+$ ./lnmp-docker.sh devlopment
+
+$ curl 127.0.0.1
+
+Welcome use khs1994-docker/lnmp v17.09-rc4
+
+development
+
+```
+
+Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
+
+## Run in Production
+
+Containers as a Service(Caas)
+
+```bash
+$ ./lnmp-docker.sh production
+```
+
+## Stop
+
+```bash
+$ docker-compose stop
+```
+
+## Stop and remove
+
+```bash
+$ docker-compose down
+```
 
 # Overview
 
@@ -54,43 +92,6 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 
 * 80
 * 443
-
-# Quick Start
-
-## Start in Devlopment
-
-```bash
-$ ./lnmp-docker.sh devlopment
-
-$ curl 127.0.0.1
-
-Welcome use khs1994-docker/lnmp v17.09-rc4
-
-development
-
-```
-
-Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
-
-## Run in Production
-
-Containers as a Service(Caas)
-
-```bash
-$ ./lnmp-docker.sh production
-```
-
-## Stop
-
-```bash
-$ docker-compose stop
-```
-
-## Stop and remove
-
-```bash
-$ ./lnmp-docker.sh " devlopment-down | production-down "
-```
 
 # CLI
 

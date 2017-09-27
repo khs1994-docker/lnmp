@@ -77,7 +77,7 @@ services:
 
 
   php7:
-    # 开发环境使用自定义镜像，构建规则在 override 中定义
+    # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
     # build:
     #   context: ./dockerfile/arm32v7/php-fpm/
     #   dockerfile: Dockerfile

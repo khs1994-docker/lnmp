@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+
+  redis:
+    build:
+      context: ./dockerfile/redis/
+      dockerfile: Dockerfile
+
+  php7:
+    build:
+      context: ./dockerfile/php-fpm/
+      dockerfile: Dockerfile
+    environment:
+      - APP_ENV=development
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Build Docker Image
+
+  nginx:
+    build:
+      context: ./dockerfile/nginx/
+      dockerfile: Dockerfile

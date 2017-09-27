@@ -9,18 +9,8 @@ Changelog
 
 #### v17.09 rc5
 
-* 常规性的升级软件
+* 为加快部署速度，开发环境、生产环境全部默认 `拉取` 镜像
 * 增加数据库、缓存备份功能
-
-|Name|Image|Version|Linux|
-|:--|:--|:--|:--|
-|nginx  |khs1994/nginx:1.13.5-alpine|1.13.5 |Alpine|
-|MySQL  |mysql:5.7.19               |5.7.19 |Debian:jessie|
-|Redis  |khs1994/redis:4.0.2-alpine |4.0.2  |Alpine|
-|php-fpm|khs1994/php-fpm:7.1.9      |7.1.9  |Debian:jessie|
-|-|-|-|-|
-|docker-compose|-|1.16.1|-|
-|docker-ce|-|17.09|-|
 
 #### v17.09 rc4
 
@@ -29,7 +19,7 @@ Changelog
 * 展望性支持 `arm64v8` 树莓派 3
 * 编写支持文档
 * 优化 Dockerfile
-* Docker Image TAG 锁定，提供一致性的环境
+* Docker Image TAG 锁定(在 `./.env` 文件定义)，提供一致性的环境
 
 |Name|Image|Version|Linux|
 |:--|:--|:--|:--|

@@ -6,6 +6,8 @@
 
 * [项目初衷](docs/why.md)
 
+* [支持文档](docs)
+
 # 更新记录
 
 每季度（17.09，17.12，18.03...）更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
@@ -17,6 +19,45 @@
 * Docker CE
 
 * Docker Composer
+
+# 快速上手
+
+## 开发环境
+
+开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
+
+```bash
+$ ./lnmp-docker.sh devlopment
+
+$ curl 127.0.0.1
+
+Welcome use khs1994-docker/lnmp v17.09-rc4
+
+development
+
+```
+
+在 `./app` 目录下开始 PHP 项目开发。
+
+## 生产环境
+
+生产环境默认拉取镜像，马上开启 `容器即服务( Caas )` 之旅！
+
+```bash
+$ ./lnmp-docker.sh production
+```
+
+## 停止
+
+```bash
+$ docker-compose stop
+```
+
+## 销毁
+
+```bash
+$ docker-compose down
+```
 
 # 项目说明
 
@@ -54,45 +95,6 @@
 
 * 80
 * 443
-
-# 快速上手
-
-## 开发环境
-
-```bash
-$ ./lnmp-docker.sh devlopment
-
-$ curl 127.0.0.1
-
-Welcome use khs1994-docker/lnmp v17.09-rc4
-
-development
-
-```
-
-在 `./app` 目录下开始 PHP 项目开发。
-
-## 生产环境
-
-开启 `容器即服务( Caas )` 之旅。
-
-```bash
-$ ./lnmp-docker.sh production
-```
-
-生产环境镜像请按需定制，并且尽可能的拉取镜像，避免构建镜像占用时间（部署 Docker 镜像私有仓库)。
-
-## 停止
-
-```bash
-$ docker-compose stop
-```
-
-## 销毁
-
-```bash
-$ ./lnmp-docker.sh " devlopment-down | production-down "
-```
 
 # 命令行工具
 

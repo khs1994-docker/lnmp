@@ -76,8 +76,6 @@ services:
       - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
     command: ["php-fpm"]
-    environment:
-      - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4
 
   nginx:
     image: "lnmp-nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"

@@ -1,12 +1,14 @@
 version: '3.3'
 
 services:
-  
+
   redis:
-    # 生产环境拉取镜像（可以配置私有仓库）
+    # 生产环境默认拉取镜像（可以配置私有仓库）
     image: khs1994/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+
   nginx:
     image: khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine
+
   php7:
     image: khs1994/php-fpm:7.1.9
     volumes:
@@ -14,3 +16,4 @@ services:
       - ./config/php/null.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
     environment:
       - APP_ENV=production
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image

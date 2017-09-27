@@ -2,17 +2,23 @@
 
 * [项目初衷](why.md)
 
-* [PhpStorm](phpstorm.md)
+* [路径说明](path.md)
+
+* [开发环境 & 构建镜像](development.md)
 
 * [lnmp-docker CLI](cli.md)
 
-* [nginx & HTTPS](https.md)
+* [nginx & HTTPS 配置](https.md)
 
-* [PHP 扩展列表](php.md)
+* PHP
 
-* [xdebug](xdebug.md)
+  * [PHP 扩展列表](php.md)
 
-* [laravel](laravel.md)
+  * [PhpStorm](phpstorm.md)
+
+  * [xdebug](xdebug.md)
+
+  * [laravel](laravel.md)
 
 * [生产环境](production.md)
 
@@ -20,16 +26,15 @@
 
 * [备份](backup.md)
 
-* [路径说明](path.md)
-
 * [测试脚本](test.md)
 
 * [常见问题](question.md)
 
 ## 安装 Docker CE
 
-* [Aliyun mirror](https://yq.aliyun.com/articles/110806)
 * [USTC mirror](http://mirrors.ustc.edu.cn/help/docker-ce.html)
+
+* [Aliyun mirror](https://yq.aliyun.com/articles/110806)
 
 ### Ubuntu
 
@@ -39,6 +44,10 @@ $ sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/
 $ sudo apt-get update
 $ sudo apt-get -y install docker-ce
 ```
+
+### Debian
+
+### CentOS 7
 
 ## Docker Compose
 

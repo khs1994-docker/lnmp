@@ -1,8 +1,6 @@
 #!/bin/bash
 
-VERSION=v17.09-rc4
-
-DOCKER_COMPOSE_VERSION=1.16.1
+. .env
 
 ENV=$1
 
@@ -140,7 +138,6 @@ install_docker_compose(){
 
 function demo {
   #statements
-  echo "$ENV"
   echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
 
   git submodule update --init --recursive
@@ -194,7 +191,7 @@ function init {
 
   # 初始化完成提示
 
-  echo -e "\033[32mINFO\033[0m  Init is SUCCESS please RUN  'docker-compose up -d' "
+  echo -e "\033[32mINFO\033[0m  Init is SUCCESS"
   echo
 }
 
@@ -272,23 +269,30 @@ case $1 in
          up -d
     ;;
 
-  production-down )
-    docker-compose \
-         -f docker-compose.yml \
-         -f docker-compose.prod.yml \
-         down
-    ;;
+  # production-down )
+  #   docker-compose \
+  #        -f docker-compose.yml \
+  #        -f docker-compose.prod.yml \
+  #        down
+  #   ;;
 
   development )
     init
 
-    docker-compose up -d
+    case $2 in
+      --build )
+        docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
+        ;;
+      * )
+        docker-compose up -d
+        ;;
+    esac
     ;;
 
-  development-down )
-
-    docker-compose down
-    ;;
+  # development-down )
+  #
+  #   docker-compose down
+  #   ;;
 
   compose )
     install_docker_compose_cn
@@ -308,28 +312,27 @@ case $1 in
     ;;
   * )
   echo  "
-Docker-LNMP CLI ${VERSION}
+Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` `uname -m`
 
 USAGE: ./docker-lnmp COMMAND
 
 Commands:
-  compose             安装 docker-compose 方法提示(针对国内用户)
-  init                初始化部署环境
-  demo                克隆示例项目、配置文件
-  cleanup             清理已构建 docker images ，日志文件
-  laravel             新建 Laravel 项目
-  artisan             使用 Laravel 命令行工具 artisan
-  composer            使用 Composer
-  help                输出帮助信息
-  development         LNMP 开发环境部署
-  development-down    移除开发环境下的 LNMP Docker
-  production          LNMP 生产环境部署
-  production-down     移除生产环境下的 LNMP Docker
-  arm32v7             树莓派开发环境部署
-  arm32v7-down        移除树莓派中的 LNMP Docker
-  arm64v8             未来特性（暂时未开启）
-  arm64v8-down        未来特性（暂时未开启）
-  test                生产环境一键测试脚本[开发者选项，普通用户请勿使用]
+  compose              安装 docker-compose 方法提示(针对国内用户)
+  init                 初始化部署环境
+  demo                 克隆示例项目、配置文件
+  cleanup              清理已构建 docker images ，日志文件
+  laravel              新建 Laravel 项目
+  artisan              使用 Laravel 命令行工具 artisan
+  composer             使用 Composer
+  help                 输出帮助信息
+  development          LNMP 开发环境部署
+  development --build  LNMP 开发环境部署(构建镜像)
+  production           LNMP 生产环境部署
+  arm32v7              树莓派开发环境部署
+  arm32v7-down         移除树莓派中的 LNMP Docker
+  arm64v8              未来特性（暂时未开启）
+  arm64v8-down         未来特性（暂时未开启）
+  test                 生产环境一键测试脚本[开发者选项，普通用户请勿使用]
 
 Read './docs/*.md' for more information on the command
 "
