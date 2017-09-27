@@ -18,9 +18,9 @@
 
 本项目需要以下软件：
 
-* Docker CE
+* Docker CE 17.06.0+
 
-* Docker Composer
+* Docker Composer 1.16.1+
 
 # 快速上手
 
@@ -90,7 +90,7 @@ $ docker-compose down
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
-|`var`         |数据文件|
+|`var`         |数据文件，未来将使用数据卷|
 |`tmp`         |临时文件|
 |`docs`        |支持文档|
 |`bin`         |脚本封装|
@@ -121,6 +121,7 @@ $ docker-compose down
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
 * [Docker 从入门到实践](https://github.com/yeasy/docker_practice)
+* [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)

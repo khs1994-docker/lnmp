@@ -15,9 +15,9 @@ Updates every quarter (17.09, 17.12, 18.03, etc), For more release information a
 
 To use LNMP Docker,you need:
 
-* Docker CE
+* Docker CE 17.06.0+
 
-* Docker Composer
+* Docker Composer 1.16.1+
 
 # Quick Start
 
@@ -109,6 +109,7 @@ On Linux or macOS,Interactive `./lnmp-docker.sh` easy to access Laravel, Laravel
 
 * [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
 * [docker_practice](https://github.com/yeasy/docker_practice)
+* [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)

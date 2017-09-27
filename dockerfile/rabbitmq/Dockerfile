@@ -1,3 +1,3 @@
-FROM rabbitmq
+FROM rabbitmq:3.6.12-alpine
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+RUN apk add --no-cache tzdata

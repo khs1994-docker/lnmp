@@ -1,5 +1,4 @@
-version: '3.3'
-
+version: "3.3"
 services:
 
   mysql:
@@ -11,71 +10,99 @@ services:
     #environment:
     #  # your password
     #  - MYSQL_ROOT_PASSWORD=mytest
+    networks:
+      - backend
     volumes:
-      - ./var/lib/mysql:/var/lib/mysql:rw
+      - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
 
   redis:
     image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: .env
+    ports:
+      - "6379"
+    networks:
+      - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - ./var/lib/redis:/data:rw
       - ./logs/redis:/var/log/redis:rw
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-  # mongo:
-  #   build:
-  #     context: ./dockerfile/mongodb/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-mongo:latest
-  #   volumes:
-  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
-  #     - ./var/lib/mongo:/data/db
-  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-  #   # ports:
-  #   #   - "27017:27017"
-  #
-  # memcached:
-  #   build:
-  #     context: ./dockerfile/memcached/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-memcached:latest
-  #   # ports:
-  #   #   - "11211:11211"
-  #
-  # rabbitmq:
-  #   build:
-  #     context: ./dockerfile/rabbitmq/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-rabbitmq:latest
-  #   volumes:
-  #     - ./var/lib/rabbitmq:/var/lib/rabbitmq
-  #   # ports:
-  #   #   - "15672:15672"
-  #   #   - "5672:5672"
-  #
-  # postgresql:
-  #   build:
-  #     context: ./dockerfile/postgresql/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-postgresql:latest
-  #   env_file: .env
-  #   volumes:
-  #     - ./var/lib/postgresql:/var/lib/postgresql
-  #   # ports:
-  #   #   - "5432:5432"
+  memcached:
+    image: lnmp-memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+    networks:
+      - backend
+    ports:
+      - "11211"
 
+  rabbitmq:
+    image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
+    volumes:
+      - ./var/lib/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - backend
+    ports:
+      - "15672"
+      - "5672"
+
+  postgresql:
+    image: lnmp-postgresql:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+    env_file: .env
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    ports:
+      - "5432"
+
+  mongo:
+    image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
+    volumes:
+      - ./config/mongodb/mongod.conf:/etc/mongod.conf
+      - mongodb-data:/data/db
+      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+    networks:
+      - backend
+    ports:
+      - "27017"
 
   php7:
     image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}"
+    # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ./app:/app:rw
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
+    networks:
+      - frontend
+      - backend
+    dns:
+      - 114.114.114.114
     command: ["php-fpm"]
+    # entrypoint: /code/entrypoint.sh
+    # entrypoint:
+    # - php
+    # - -d
+    # - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+    # - -d
+    # - memory_limit=-1
+    # - vendor/bin/phpunit
+    # extra_hosts:
+    #   - "somehost:162.242.195.82"
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost"]
+    #   interval: 1m30s
+    #   timeout: 10s
+    #   retries: 3
+    # ports:
+    #   - "3000-3005"
+    #   - "9090-9091:8080-8081"
+    #   - "127.0.0.1:8001:8001"
+    #   - "127.0.0.1:5000-5010:5000-5010"
+    #   - "6060:6060/udp"
 
   nginx:
     image: "lnmp-nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
@@ -88,3 +115,15 @@ services:
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
+    dns: 8.8.8.8
+    networks:
+      - frontend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  mysql-data:
+  pg-data:
+  mongodb-data:

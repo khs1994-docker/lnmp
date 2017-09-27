@@ -1,7 +1,7 @@
-FROM memcached
+FROM memcached:1.5.1-alpine
 
 USER root
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+RUN apk add --no-cache tzdata
 
 USER memcache
