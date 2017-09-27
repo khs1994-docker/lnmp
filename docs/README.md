@@ -8,7 +8,7 @@
 
 * [lnmp-docker CLI](cli.md)
 
-* [nginx & HTTPS 配置](https.md)
+* [nginx & HTTPS 配置](nginx-with-https.md)
 
 * PHP
 
@@ -24,9 +24,13 @@
 
 * [arm32v7 & arm64v8](arm.md)
 
+* [空间占用情况](size.md)
+
 * [备份](backup.md)
 
 * [测试脚本](test.md)
+
+* [Windows 10](windows.md)
 
 * [常见问题](question.md)
 

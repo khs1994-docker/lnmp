@@ -4,6 +4,8 @@
 
 使用 Docker Compose 快速搭建 LNMP 环境。
 
+注意本项目不优先支持 Windows，如果您只会使用 Windows，请提出 [issues](https://github.com/khs1994-docker/lnmp/issues/new)，我视大家反馈情况可能会针对 Windows 进行优化。
+
 * [项目初衷](docs/why.md)
 
 * [支持文档](docs)
@@ -21,6 +23,8 @@
 * Docker Composer
 
 # 快速上手
+
+本节命令仅适用于 Linux 和 macOS，若使用 Docker for Windows，请查看[支持文档](docs/windows.md)。
 
 ## 开发环境
 
@@ -98,7 +102,7 @@ $ docker-compose down
 
 # 命令行工具
 
-为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./lnmp-docker.sh`)，用法请查看 [支持文档](docs/cli.md)。
+在 Linux 或 macOS 中，为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./lnmp-docker.sh`)，用法请查看 [支持文档](docs/cli.md)。
 
 # 生产环境用户
 
