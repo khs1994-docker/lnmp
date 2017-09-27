@@ -6,21 +6,16 @@ ENV=$1
 
 # 创建日志文件
 
-logs(){
+logs() {
   echo -e "\033[32mINFO\033[0m  mkdir log folder\n"
 
-  cd logs
-
-  cd -
-
   if [ -d "logs/mongodb" ];then
-    echo
+    echo -e "\n\033[32mINFO\033[0m  logs/mongo existence\n"
   else
     mkdir -p logs/mongodb
     cd logs/mongodb
     touch mongo.log
     # 部分文件可能提示没有写入权限
-
     chmod 777 *
     cd -
    fi
@@ -90,7 +85,7 @@ logs(){
 
 # 是否安装 Docker Compose
 # cn
-install_docker_compose_cn(){
+install_docker_compose_cn() {
   # 判断是否安装
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
@@ -98,15 +93,10 @@ install_docker_compose_cn(){
     docker-compose --version
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
     echo
-
   else
-
     echo -e "\033[32mINFO\033[0m  cn docker-compose is installing...\n"
-
     if [ -f "docker-compose" ];then
-      # 是否存在文件
-      # Thanks Aliyun CODE
-      # 判断操作系统
+      # 是否存在文件，Thanks Aliyun CODE
       chmod +x docker-compose
       echo $PATH
       sudo mv docker-compose /usr/local/bin
@@ -117,13 +107,11 @@ install_docker_compose_cn(){
   fi
 }
 
-install_docker_compose(){
+install_docker_compose() {
 
     echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
-
+    # 版本在 .env 文件定义
     # https://api.github.com/repos/docker/compose/releases/latest
-
-    # DOCKER_COMPOSE_VERSION=1.16.1
 
     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
 
@@ -134,16 +122,17 @@ install_docker_compose(){
     sudo mv docker-compose /usr/local/bin
 }
 
-# 初始化
+# 克隆示例项目
 
 function demo {
   #statements
   echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
-
   git submodule update --init --recursive
-
+  echo
   echo
 }
+
+# 初始化
 
 function init {
   # 开发环境 拉取示例项目
@@ -155,20 +144,19 @@ function init {
       ;;
 
   # 生产环境 转移项目文件、配置文件、安装依赖包
-  production )
-    echo "$ENV"
-    # 请在此脚本定义要执行的操作
-    bin/production-init
-    ;;
+    production )
+      echo "$ENV"
+      # 请在 ./bin/production-init 定义要执行的操作
+      bin/production-init
+      ;;
 
-  arm32v7 )
-    demo
-    ;;
+    arm32v7 )
+      demo
+      ;;
 
-  arm32v8 )
-    demo
-    ;;
-
+    arm32v8 )
+      demo
+      ;;
   esac
   # docker-compose 是否安装
   # which docker-compose
@@ -193,9 +181,10 @@ function init {
 
   echo -e "\033[32mINFO\033[0m  Init is SUCCESS"
   echo
+  echo
 }
 
-cleanup (){
+cleanup () {
   # 清理 images
   # docker rmi lnmp-php \
   #            lnmp-postgresql \
@@ -216,11 +205,13 @@ cleanup (){
            nginx \
            php-fpm \
            redis
+
+   # 建立空白日志文件夹及文件
    logs
    echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file "
 }
-
-case $1 in
+main() {
+  case $1 in
   init )
     init
     ;;
@@ -269,12 +260,16 @@ case $1 in
          up -d
     ;;
 
-  # production-down )
-  #   docker-compose \
-  #        -f docker-compose.yml \
-  #        -f docker-compose.prod.yml \
-  #        down
-  #   ;;
+  compose )
+    install_docker_compose_cn
+    ;;
+
+  production-config )
+    docker-compose \
+         -f docker-compose.yml \
+         -f docker-compose.prod.yml \
+         config
+    ;;
 
   development )
     init
@@ -289,29 +284,25 @@ case $1 in
     esac
     ;;
 
-  # development-down )
-  #
-  #   docker-compose down
-  #   ;;
-
-  compose )
-    install_docker_compose_cn
+  development-config )
+    docker-compose -f docker-compose.yml -f docker-compose.build.yml config
     ;;
+
   arm32v7 )
     init
     docker-compose -f docker-compose.arm32v7.yml up -d
     ;;
-  arm32v7-down )
-    docker-compose -f docker-compose.arm32v7.yml down
+  arm32v7-config )
+    docker-compose -f docker-compose.arm32v7.yml config
     ;;
   arm64v8 )
     # docker-compose -f docker-compose.arm64v8.yml up -d
     ;;
-  arm64v8-down )
-    # docker-compose -f docker-compose.arm64v8.yml down
+  arm64v8-config )
+    docker-compose -f docker-compose.arm64v8.yml config
     ;;
   * )
-  echo  "
+  echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` `uname -m`
 
 USAGE: ./docker-lnmp COMMAND
@@ -336,5 +327,7 @@ Commands:
 
 Read './docs/*.md' for more information on the command
 "
-;;
-esac
+    ;;
+  esac
+}
+main $1 $2

@@ -24,7 +24,7 @@
 
 # 快速上手
 
-本节命令仅适用于 Linux 和 macOS，若使用 Docker for Windows，请查看[支持文档](docs/windows.md)。
+本节命令仅适用于 Linux 和 macOS，若使用 Docker for Windows，请查看 [支持文档](docs/windows.md)。
 
 ## 开发环境
 
@@ -35,7 +35,7 @@ $ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v17.09-rc4
+Welcome use khs1994-docker/lnmp v17.09-rc5 x86_64 With Pull Docker Image
 
 development
 
