@@ -4,7 +4,7 @@ services:
   # MySQL 暂时没有  arm 镜像
   # mysql:
   #   # build:
-  #   #   context: ./dockerfile/mysql/
+  #   #   context: ./dockerfile/arm6v8/mysql/
   #   #   dockerfile: Dockerfile
   #   #image: lnmp-mysql:latest
   #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
@@ -21,7 +21,7 @@ services:
 
   redis:
     # build:
-    #   context: ./dockerfile/redis/
+    #   context: ./dockerfile/arm64v8/redis/
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
     image: "arm64v8/redis:${KHS1994_LNMP_REDIS_VERSION}"
@@ -36,26 +36,11 @@ services:
     ports:
       - "6379"
 
-  mongo:
-    build:
-      context: ./dockerfile/mongodb/
-      dockerfile: Dockerfile
-    image: lnmp-mongo:latest
-    env_file: .env
-    volumes:
-      - ./config/mongodb/mongod.conf:/etc/mongod.conf
-      - mongodb-data:/data/db
-      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-    networks:
-      - backend
-    ports:
-      - "27017"
-
   memcached:
-    build:
-      context: ./dockerfile/memcached/
-      dockerfile: Dockerfile
-    image: lnmp-memcached:latest
+    # build:
+    #   context: ./dockerfile/arm64v8/memcached/
+    #   dockerfile: Dockerfile
+    image: arm64v8/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
     env_file: .env
     networks:
       - backend
@@ -63,10 +48,10 @@ services:
       - "11211"
 
   rabbitmq:
-    build:
-      context: ./dockerfile/rabbitmq/
-      dockerfile: Dockerfile
-    image: lnmp-rabbitmq:latest
+    # build:
+    #   context: ./dockerfile/arm64v8/rabbitmq/
+    #   dockerfile: Dockerfile
+    image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
     env_file: .env
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
@@ -77,10 +62,10 @@ services:
       - "5672"
 
   postgresql:
-    build:
-      context: ./dockerfile/postgresql/
-      dockerfile: Dockerfile
-    image: lnmp-postgresql:latest
+    # build:
+    #   context: ./dockerfile/arm64v8/postgresql/
+    #   dockerfile: Dockerfile
+    image: arm64v8/postgresql:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file:
       - ./.env
     networks:
@@ -90,11 +75,26 @@ services:
     ports:
       - "5432"
 
+  # mongo:
+  #   # build:
+  #   #   context: ./dockerfile/arm64v8/mongodb/
+  #   #   dockerfile: Dockerfile
+  #   image: arm64v8/mongo:${KHS1994_LNMP_MONGODB_VERSION}
+  #   env_file: .env
+  #   volumes:
+  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
+  #     - mongodb-data:/data/db
+  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+  #   networks:
+  #     - backend
+  #   ports:
+  #     - "27017"
+  #   command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
     # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
     # build:
-    #   context: ./dockerfile/arm32v7/php-fpm/
+    #   context: ./dockerfile/arm64v8/php-fpm/
     #   dockerfile: Dockerfile
     image: "khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
@@ -113,7 +113,7 @@ services:
 
   nginx:
     # build:
-    #   context: ./dockerfile/nginx/
+    #   context: ./dockerfile/arm64v8/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
     image: "arm64v8/nginx:${KHS1994_LNMP_NGINX_VERSION}"

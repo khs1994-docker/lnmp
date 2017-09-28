@@ -4,7 +4,7 @@ services:
   # MySQL 暂时没有  arm 镜像
   # mysql:
   #   # build:
-  #   #   context: ./dockerfile/mysql/
+  #   #   context: ./dockerfile/arm32v7/mysql/
   #   #   dockerfile: Dockerfile
   #   #image: lnmp-mysql:latest
   #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
@@ -21,7 +21,7 @@ services:
 
   redis:
     # build:
-    #   context: ./dockerfile/redis/
+    #   context: ./dockerfile/arm32v7/redis/
     #   dockerfile: Dockerfile
     image: "arm32v7/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
@@ -35,25 +35,11 @@ services:
       - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-  mongo:
-    # build:
-    #   context: ./dockerfile/mongodb/
-    #   dockerfile: Dockerfile
-    image: arm32v7/mongo:latest
-    volumes:
-      - ./config/mongodb/mongod.conf:/etc/mongod.conf
-      - mongodb-data:/data/db
-      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-    networks:
-      - backend
-    ports:
-      - "27017"
-
   memcached:
     # build:
-    #   context: ./dockerfile/memcached/
+    #   context: ./dockerfile/arm32v7/memcached/
     #   dockerfile: Dockerfile
-    image: arm32v7/memcached:latest
+    image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
     networks:
       - backend
     ports:
@@ -61,9 +47,9 @@ services:
 
   rabbitmq:
     # build:
-    #   context: ./dockerfile/rabbitmq/
+    #   context: ./dockerfile/arm32v7/rabbitmq/
     #   dockerfile: Dockerfile
-    image: arm32v7/rabbitmq:latest
+    image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
@@ -74,9 +60,9 @@ services:
 
   postgresql:
     # build:
-    #   context: ./dockerfile/postgresql/
+    #   context: ./dockerfile/arm32v7/postgresql/
     #   dockerfile: Dockerfile
-    image: arm32v7/postgresql:latest
+    image: arm32v7/postgresql:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file: .env
     volumes:
       - postgresql-data:/var/lib/postgresql
@@ -84,6 +70,21 @@ services:
       - backend
     ports:
       - "5432"
+
+  # mongo:
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/mongodb/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/mongo:${KHS1994_LNMP_MONGODB_VERSION}
+  #   volumes:
+  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
+  #     - mongodb-data:/data/db
+  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+  #   networks:
+  #     - backend
+  #   ports:
+  #     - "27017"
+  #   command: ["mongod","--config","/etc/mongod.conf"]
 
 
   php7:
@@ -108,7 +109,7 @@ services:
 
   nginx:
     # build:
-    #   context: ./dockerfile/nginx/
+    #   context: ./dockerfile/arm32v7/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
     image: "arm32v7/nginx:${KHS1994_LNMP_NGINX_VERSION}"
@@ -131,7 +132,7 @@ networks:
 volumes:
   # mysql-data:
   pg-data:
-  mongodb-data:
+  # mongodb-data:
   redis-data:
   rabbitmq-data:
   postgresql-data:

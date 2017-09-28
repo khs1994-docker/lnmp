@@ -212,6 +212,10 @@ cleanup () {
 }
 main() {
   case $1 in
+  compose )
+    install_docker_compose_cn
+    ;;
+
   init )
     init
     ;;
@@ -224,6 +228,10 @@ main() {
     cleanup
     ;;
 
+  test )
+    bin/test
+    ;;
+    
   laravel )
     read -p "请输入路径: ./app/" path
     echo
@@ -247,10 +255,6 @@ main() {
     bin/composer ${path} ${cmd}
     ;;
 
-  test )
-    bin/test
-    ;;
-
   production )
     init
 
@@ -258,10 +262,6 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          up -d
-    ;;
-
-  compose )
-    install_docker_compose_cn
     ;;
 
   production-config )
@@ -297,6 +297,7 @@ main() {
     ;;
   arm64v8 )
     # docker-compose -f docker-compose.arm64v8.yml up -d
+    echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持 "
     ;;
   arm64v8-config )
     docker-compose -f docker-compose.arm64v8.yml config
