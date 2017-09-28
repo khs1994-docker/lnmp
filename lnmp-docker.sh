@@ -7,7 +7,7 @@ ARCH=`uname -m`
 
 # 创建日志文件
 
-logs() {
+logs(){
   echo -e "\033[32mINFO\033[0m  mkdir log folder\n"
 
   if [ -d "logs/mongodb" ];then
@@ -86,7 +86,7 @@ logs() {
 
 # 是否安装 Docker Compose
 # cn
-install_docker_compose_cn() {
+install_docker_compose_cn(){
   # 判断是否安装
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
@@ -108,7 +108,7 @@ install_docker_compose_cn() {
   fi
 }
 
-install_docker_compose() {
+install_docker_compose(){
 
     echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
     # 版本在 .env 文件定义
@@ -123,8 +123,11 @@ install_docker_compose() {
     sudo mv docker-compose /usr/local/bin
 }
 
-# 克隆示例项目
+function mysql_demo {
+  docker-compose exec mysql /backup/demo.sh
+}
 
+# 克隆示例项目
 function demo {
   #statements
   echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
@@ -185,7 +188,7 @@ function init {
   echo
 }
 
-cleanup () {
+cleanup(){
   # 清理 images
   # docker rmi lnmp-php \
   #            lnmp-postgresql \
@@ -211,8 +214,13 @@ cleanup () {
    logs
    echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file\n"
 }
+
+backup(){
+  docker-compose exec mysql /backup/restore.sh
+}
+
 main() {
-  echo ${ARCH}
+  echo -e "${ARCH}\n"
   case $1 in
   compose )
     install_docker_compose_cn
@@ -220,26 +228,28 @@ main() {
 
   init )
     init
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   demo )
     demo
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   cleanup )
     cleanup
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   test )
     bin/test
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   laravel )
     read -p "请输入路径: ./app/" path
+    echo
+    echo -e  "\033[32mINFO\033[0m  在容器内 /app/${path} 执行 laravel new ${path}"
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
     if [ ${ARCH} = "x86_64" ];then
@@ -247,12 +257,14 @@ main() {
     else
       bin/arm32v7/laravel ${path}
     fi
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
+    echo
+    echo -e  "\033[32mINFO\033[0m  在容器内 /app/${path} 执行 php artisan ${cmd}"
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
     if [ ${ARCH} = "x86_64" ];then
@@ -260,12 +272,14 @@ main() {
     else
       bin/arm32v7/php-artisan ${path} ${cmd}
     fi
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
+    echo
+    echo -e  "\033[32mINFO\033[0m  在容器内 /app/${path} 执行 composer ${cmd}"
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
     if [ ${ARCH} = "x86_64" ];then
@@ -273,7 +287,7 @@ main() {
     else
       bin/arm32v7/composer ${path} ${cmd}
     fi
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   production )
@@ -283,7 +297,7 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          up -d
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
 
@@ -292,7 +306,7 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          config
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   development )
@@ -307,24 +321,36 @@ main() {
           docker-compose up -d
           ;;
       esac
-    elif [ ${ARCH} = "armv7l" ]; then
+    elif [ ${ARCH} = "armv7l" ];then
       docker-compose -f docker-compose.arm32v7.yml up -d
     else
       echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持\n"
     fi
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
     ;;
 
   development-config )
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
       docker-compose -f docker-compose.yml -f docker-compose.build.yml config
-    elif [ ${ARCH} = "armv7l" ]; then
+    elif [ ${ARCH} = "armv7l" ];then
       docker-compose -f docker-compose.arm32v7.yml config
     else
       echo -e "\033[32mINFO\033[0m  ${ARCH} 暂不支持\n"
     fi
-    echo ${ARCH}
+    echo -e "\n${ARCH}\n"
+    ;;
+
+  backup )
+    backup
+    ;;
+
+  restore )
+    restore
+    ;;
+
+  mysql-demo )
+    mysql_demo
     ;;
 
   * )
@@ -335,17 +361,20 @@ USAGE: ./docker-lnmp COMMAND
 
 Commands:
   compose              安装 docker-compose 方法提示(针对国内用户)
-  init                 初始化部署环境
+  cleanup              清理日志文件
   demo                 克隆示例项目、配置文件
-  cleanup              清理已构建 docker images，日志文件
+  mysql-demo           创建示例 MySQL 数据库
+  init                 初始化部署环境
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer
-  help                 输出帮助信息
   development          LNMP 开发环境部署（支持 x86_64 arm32v7 arm64v8 架构）
   development --build  LNMP 开发环境部署--构建镜像（支持 x86_64 ）
   production           LNMP 生产环境部署（支持 x86_64 ）
+  backup               备份数据库
+  restore              恢复数据库
   test                 生产环境一键测试脚本[开发者选项，普通用户请勿使用]
+  help                 输出帮助信息
 
 Read './docs/*.md' for more information on the command
 "

@@ -15,6 +15,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
+      - ./backup/mysql:/backup
 
   redis:
     image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
