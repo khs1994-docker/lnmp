@@ -118,9 +118,9 @@ services:
     # image: lnmp-nginx:latest
     image: "arm64v8/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file: .env
-    # ports:
-    #   - "443:443"
-    #   - "80:80"
+    ports:
+      - "443:443"
+      - "80:80"
     volumes:
       - ./app:/app
       - ./config/nginx:/etc/nginx/conf.d:ro

@@ -180,7 +180,7 @@ function init {
 
   # 初始化完成提示
 
-  echo -e "\033[32mINFO\033[0m  Init is SUCCESS"
+  echo -e "\033[32mINFO\033[0m  Init is SUCCESS\n"
   echo
   echo
 }
@@ -209,7 +209,7 @@ cleanup () {
 
    # 建立空白日志文件夹及文件
    logs
-   echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file "
+   echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file\n"
 }
 main() {
   echo ${ARCH}
@@ -310,7 +310,7 @@ main() {
     elif [ ${ARCH} = "armv7l" ]; then
       docker-compose -f docker-compose.arm32v7.yml up -d
     else
-      echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持 "
+      echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持\n"
     fi
     echo ${ARCH}
     ;;
@@ -322,25 +322,11 @@ main() {
     elif [ ${ARCH} = "armv7l" ]; then
       docker-compose -f docker-compose.arm32v7.yml config
     else
-      echo -e "\033[32mINFO\033[0m  ${ARCH} 暂不支持 "
+      echo -e "\033[32mINFO\033[0m  ${ARCH} 暂不支持\n"
     fi
     echo ${ARCH}
     ;;
 
-  # arm32v7 )
-  #   init
-  #   docker-compose -f docker-compose.arm32v7.yml up -d
-  #   ;;
-  # arm32v7-config )
-  #   docker-compose -f docker-compose.arm32v7.yml config
-  #   ;;
-  # arm64v8 )
-  #   # docker-compose -f docker-compose.arm64v8.yml up -d
-  #   echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持 "
-  #   ;;
-  # arm64v8-config )
-  #   docker-compose -f docker-compose.arm64v8.yml config
-  #   ;;
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}

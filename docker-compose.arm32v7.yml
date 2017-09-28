@@ -42,8 +42,8 @@ services:
     image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
     networks:
       - backend
-    ports:
-      - "11211"
+    # ports:
+    #   - "11211"
 
   rabbitmq:
     # build:
