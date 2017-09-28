@@ -29,10 +29,10 @@ services:
       - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - redis-dat:/data
+      - redis-data:/data
       - ./logs/redis:/var/log/redis
-    ports:
-      - "6379"
+    # ports:
+    #   - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
   memcached:
@@ -54,9 +54,9 @@ services:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - backend
-    ports:
-      - "15672"
-      - "5672"
+    # ports:
+    #   - "15672"
+    #   - "5672"
 
   postgresql:
     # build:
@@ -68,8 +68,8 @@ services:
       - postgresql-data:/var/lib/postgresql
     networks:
       - backend
-    ports:
-      - "5432"
+    # ports:
+    #   - "5432"
 
   # mongo:
   #   # build:

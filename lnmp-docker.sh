@@ -3,6 +3,7 @@
 . .env
 
 ENV=$1
+ARCH=`uname -m`
 
 # 创建日志文件
 
@@ -211,6 +212,7 @@ cleanup () {
    echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file "
 }
 main() {
+  echo ${ARCH}
   case $1 in
   compose )
     install_docker_compose_cn
@@ -218,25 +220,34 @@ main() {
 
   init )
     init
+    echo ${ARCH}
     ;;
 
   demo )
     demo
+    echo ${ARCH}
     ;;
 
   cleanup )
     cleanup
+    echo ${ARCH}
     ;;
 
   test )
     bin/test
+    echo ${ARCH}
     ;;
-    
+
   laravel )
     read -p "请输入路径: ./app/" path
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
-    bin/laravel ${path}
+    if [ ${ARCH} = "x86_64" ];then
+      bin/laravel ${path}
+    else
+      bin/arm32v7/laravel ${path}
+    fi
+    echo ${ARCH}
     ;;
 
   artisan )
@@ -244,7 +255,12 @@ main() {
     read -p  "请输入命令: php artisan " cmd
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
-    bin/php-artisan ${path} ${cmd}
+    if [ ${ARCH} = "x86_64" ];then
+      bin/php-artisan ${path} ${cmd}
+    else
+      bin/arm32v7/php-artisan ${path} ${cmd}
+    fi
+    echo ${ARCH}
     ;;
 
   composer )
@@ -252,7 +268,12 @@ main() {
     read -p  "请输入命令: composer " cmd
     echo
     echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
-    bin/composer ${path} ${cmd}
+    if [ ${ARCH} = "x86_64" ];then
+      bin/composer ${path} ${cmd}
+    else
+      bin/arm32v7/composer ${path} ${cmd}
+    fi
+    echo ${ARCH}
     ;;
 
   production )
@@ -262,49 +283,67 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          up -d
+    echo ${ARCH}
     ;;
+
 
   production-config )
     docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          config
+    echo ${ARCH}
     ;;
 
   development )
     init
-
-    case $2 in
-      --build )
-        docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
-        ;;
-      * )
-        docker-compose up -d
-        ;;
-    esac
+    # 判断架构
+    if [ ${ARCH} = "x86_64" ];then
+      case $2 in
+        --build )
+          docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
+          ;;
+        * )
+          docker-compose up -d
+          ;;
+      esac
+    elif [ ${ARCH} = "armv7l" ]; then
+      docker-compose -f docker-compose.arm32v7.yml up -d
+    else
+      echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持 "
+    fi
+    echo ${ARCH}
     ;;
 
   development-config )
-    docker-compose -f docker-compose.yml -f docker-compose.build.yml config
+    # 判断架构
+    if [ ${ARCH} = "x86_64" ];then
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml config
+    elif [ ${ARCH} = "armv7l" ]; then
+      docker-compose -f docker-compose.arm32v7.yml config
+    else
+      echo -e "\033[32mINFO\033[0m  ${ARCH} 暂不支持 "
+    fi
+    echo ${ARCH}
     ;;
 
-  arm32v7 )
-    init
-    docker-compose -f docker-compose.arm32v7.yml up -d
-    ;;
-  arm32v7-config )
-    docker-compose -f docker-compose.arm32v7.yml config
-    ;;
-  arm64v8 )
-    # docker-compose -f docker-compose.arm64v8.yml up -d
-    echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持 "
-    ;;
-  arm64v8-config )
-    docker-compose -f docker-compose.arm64v8.yml config
-    ;;
+  # arm32v7 )
+  #   init
+  #   docker-compose -f docker-compose.arm32v7.yml up -d
+  #   ;;
+  # arm32v7-config )
+  #   docker-compose -f docker-compose.arm32v7.yml config
+  #   ;;
+  # arm64v8 )
+  #   # docker-compose -f docker-compose.arm64v8.yml up -d
+  #   echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持 "
+  #   ;;
+  # arm64v8-config )
+  #   docker-compose -f docker-compose.arm64v8.yml config
+  #   ;;
   * )
   echo  -e "
-Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` `uname -m`
+Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
 
 USAGE: ./docker-lnmp COMMAND
 
@@ -312,18 +351,14 @@ Commands:
   compose              安装 docker-compose 方法提示(针对国内用户)
   init                 初始化部署环境
   demo                 克隆示例项目、配置文件
-  cleanup              清理已构建 docker images ，日志文件
+  cleanup              清理已构建 docker images，日志文件
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer
   help                 输出帮助信息
-  development          LNMP 开发环境部署
-  development --build  LNMP 开发环境部署(构建镜像)
-  production           LNMP 生产环境部署
-  arm32v7              树莓派开发环境部署
-  arm32v7-down         移除树莓派中的 LNMP Docker
-  arm64v8              未来特性（暂时未开启）
-  arm64v8-down         未来特性（暂时未开启）
+  development          LNMP 开发环境部署（支持 x86_64 arm32v7 arm64v8 架构）
+  development --build  LNMP 开发环境部署--构建镜像（支持 x86_64 ）
+  production           LNMP 生产环境部署（支持 x86_64 ）
   test                 生产环境一键测试脚本[开发者选项，普通用户请勿使用]
 
 Read './docs/*.md' for more information on the command
