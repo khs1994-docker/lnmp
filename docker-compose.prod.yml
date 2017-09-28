@@ -12,7 +12,7 @@ services:
     image: khs1994/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
 
   postgresql:
-    image: khs1994/postgresql:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+    image: khs1994/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
 
   php7:
     image: khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}

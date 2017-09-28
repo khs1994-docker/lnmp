@@ -65,7 +65,7 @@ services:
     # build:
     #   context: ./dockerfile/arm64v8/postgresql/
     #   dockerfile: Dockerfile
-    image: arm64v8/postgresql:${KHS1994_LNMP_POSTGRESQL_VERSION}
+    image: arm64v8/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file:
       - ./.env
     networks:

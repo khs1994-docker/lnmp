@@ -47,7 +47,7 @@ services:
       - "5672"
 
   postgresql:
-    image: lnmp-postgresql:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+    image: lnmp-postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
     env_file: .env
     volumes:
       - postgresql-data:/var/lib/postgresql/data

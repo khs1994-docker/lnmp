@@ -62,7 +62,7 @@ services:
     # build:
     #   context: ./dockerfile/arm32v7/postgresql/
     #   dockerfile: Dockerfile
-    image: arm32v7/postgresql:${KHS1994_LNMP_POSTGRESQL_VERSION}
+    image: arm32v7/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file: .env
     volumes:
       - postgresql-data:/var/lib/postgresql
