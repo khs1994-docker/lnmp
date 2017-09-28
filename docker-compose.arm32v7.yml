@@ -23,60 +23,67 @@ services:
     # build:
     #   context: ./dockerfile/redis/
     #   dockerfile: Dockerfile
-    # image: lnmp-redis:latest
     image: "arm32v7/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
-    ports:
-      - "6379"
     networks:
       - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./var/lib/redis:/data
+      - redis-dat:/data
       - ./logs/redis:/var/log/redis
+    ports:
+      - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-  # mongo:
-  #   build:
-  #     context: ./dockerfile/mongodb/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-mongo:latest
-  #   volumes:
-  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
-  #     - ./var/lib/mongo:/data/db
-  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-  #   # ports:
-  #   #   - "27017:27017"
-  #
-  # memcached:
-  #   build:
-  #     context: ./dockerfile/memcached/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-memcached:latest
-  #   # ports:
-  #   #   - "11211:11211"
-  #
-  # rabbitmq:
-  #   build:
-  #     context: ./dockerfile/rabbitmq/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-rabbitmq:latest
-  #   volumes:
-  #     - ./var/lib/rabbitmq:/var/lib/rabbitmq
-  #   # ports:
-  #   #   - "15672:15672"
-  #   #   - "5672:5672"
-  #
-  # postgresql:
-  #   build:
-  #     context: ./dockerfile/postgresql/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-postgresql:latest
-  #   env_file: .env
-  #   volumes:
-  #     - ./var/lib/postgresql:/var/lib/postgresql
-  #   # ports:
-  #   #   - "5432:5432"
+  mongo:
+    # build:
+    #   context: ./dockerfile/mongodb/
+    #   dockerfile: Dockerfile
+    image: arm32v7/mongo:latest
+    volumes:
+      - ./config/mongodb/mongod.conf:/etc/mongod.conf
+      - mongodb-data:/data/db
+      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+    networks:
+      - backend
+    ports:
+      - "27017"
+
+  memcached:
+    # build:
+    #   context: ./dockerfile/memcached/
+    #   dockerfile: Dockerfile
+    image: arm32v7/memcached:latest
+    networks:
+      - backend
+    ports:
+      - "11211"
+
+  rabbitmq:
+    # build:
+    #   context: ./dockerfile/rabbitmq/
+    #   dockerfile: Dockerfile
+    image: arm32v7/rabbitmq:latest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - backend
+    ports:
+      - "15672"
+      - "5672"
+
+  postgresql:
+    # build:
+    #   context: ./dockerfile/postgresql/
+    #   dockerfile: Dockerfile
+    image: arm32v7/postgresql:latest
+    env_file: .env
+    volumes:
+      - postgresql-data:/var/lib/postgresql
+    networks:
+      - backend
+    ports:
+      - "5432"
 
 
   php7:
@@ -120,3 +127,11 @@ services:
 networks:
   frontend:
   backend:
+
+volumes:
+  # mysql-data:
+  pg-data:
+  mongodb-data:
+  redis-data:
+  rabbitmq-data:
+  postgresql-data:

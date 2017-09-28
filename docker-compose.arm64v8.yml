@@ -16,7 +16,7 @@ services:
   #   ports:
   #     - "3306:3306"
   #   volumes:
-  #     - ./var/lib/mysql:/var/lib/mysql
+  #     - mysql-data:/var/lib/mysql
   #     - ./logs/mysql:/var/log/mysql
 
   redis:
@@ -26,57 +26,69 @@ services:
     # image: lnmp-redis:latest
     image: "arm64v8/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
-    ports:
-      - "6379"
     networks:
       - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./var/lib/redis:/data
+      - redis-data:/data
       - ./logs/redis:/var/log/redis
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "6379"
 
-  # mongo:
-  #   build:
-  #     context: ./dockerfile/mongodb/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-mongo:latest
-  #   volumes:
-  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
-  #     - ./var/lib/mongo:/data/db
-  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-  #   # ports:
-  #   #   - "27017:27017"
-  #
-  # memcached:
-  #   build:
-  #     context: ./dockerfile/memcached/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-memcached:latest
-  #   # ports:
-  #   #   - "11211:11211"
-  #
-  # rabbitmq:
-  #   build:
-  #     context: ./dockerfile/rabbitmq/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-rabbitmq:latest
-  #   volumes:
-  #     - ./var/lib/rabbitmq:/var/lib/rabbitmq
-  #   # ports:
-  #   #   - "15672:15672"
-  #   #   - "5672:5672"
-  #
-  # postgresql:
-  #   build:
-  #     context: ./dockerfile/postgresql/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-postgresql:latest
-  #   env_file: .env
-  #   volumes:
-  #     - ./var/lib/postgresql:/var/lib/postgresql
-  #   # ports:
-  #   #   - "5432:5432"
+  mongo:
+    build:
+      context: ./dockerfile/mongodb/
+      dockerfile: Dockerfile
+    image: lnmp-mongo:latest
+    env_file: .env
+    volumes:
+      - ./config/mongodb/mongod.conf:/etc/mongod.conf
+      - mongodb-data:/data/db
+      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+    networks:
+      - backend
+    ports:
+      - "27017"
+
+  memcached:
+    build:
+      context: ./dockerfile/memcached/
+      dockerfile: Dockerfile
+    image: lnmp-memcached:latest
+    env_file: .env
+    networks:
+      - backend
+    ports:
+      - "11211"
+
+  rabbitmq:
+    build:
+      context: ./dockerfile/rabbitmq/
+      dockerfile: Dockerfile
+    image: lnmp-rabbitmq:latest
+    env_file: .env
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - backend
+    ports:
+      - "15672"
+      - "5672"
+
+  postgresql:
+    build:
+      context: ./dockerfile/postgresql/
+      dockerfile: Dockerfile
+    image: lnmp-postgresql:latest
+    env_file:
+      - ./.env
+    networks:
+      - backend
+    volumes:
+      - postgresql-data:/var/lib/postgresql
+    ports:
+      - "5432"
 
 
   php7:
@@ -116,7 +128,15 @@ services:
       - ./logs/nginx:/var/log/nginx
     networks:
       - frontend
-      
+
 networks:
   frontend:
   backend:
+
+volumes:
+  # mysql-data:
+  pg-data:
+  mongodb-data:
+  redis-data:
+  rabbitmq-data:
+  postgresql-data:

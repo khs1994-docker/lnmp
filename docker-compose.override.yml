@@ -5,7 +5,7 @@ services:
     # 开发环境默认拉取镜像，也可以构建镜像
     image: khs1994/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
 
-  memcached:
+  memcached: 
     image: khs1994/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
 
   rabbitmq:

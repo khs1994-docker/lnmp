@@ -1,6 +1,6 @@
 # ARM 架构
 
-[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/) 是树莓派[官方系统 Raspbian (基于 Debian 9)](https://www.raspberrypi.org/downloads/raspbian/)可以直接使用的。
+[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/) 是树莓派 [官方系统 Raspbian (基于 Debian 9)](https://www.raspberrypi.org/downloads/raspbian/) 可以直接使用的。
 
 [arm64v8 Docker image](https://hub.docker.com/u/arm64v8/) 即 arm 64位 架构在第三方系统（如 [Rancher OS](rancher.com/rancher-os)）可以使用，树莓派官方没有发布 arm 64位 系统。
 

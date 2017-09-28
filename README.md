@@ -15,9 +15,9 @@ Updates every quarter (17.09, 17.12, 18.03, etc), For more release information a
 
 To use LNMP Docker,you need:
 
-* Docker CE 17.06.0+
+* [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
 
-* Docker Composer 1.16.1+
+* [Docker Composer](https://github.com/docker/compose) 1.16.1+
 
 # Quick Start
 
@@ -85,7 +85,6 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
-|`var`         |databases file    |
 |`tmp`         |Composer cache file ,etc |
 |`docs`        |Support Documents        |
 |`bin`         |bash script              |

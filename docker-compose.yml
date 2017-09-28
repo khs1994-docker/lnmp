@@ -25,7 +25,7 @@ services:
       - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./var/lib/redis:/data:rw
+      - redis-data:/data:rw
       - ./logs/redis:/var/log/redis:rw
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
@@ -39,7 +39,7 @@ services:
   rabbitmq:
     image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
     volumes:
-      - ./var/lib/rabbitmq:/var/lib/rabbitmq
+      - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - backend
     ports:
@@ -127,3 +127,5 @@ volumes:
   mysql-data:
   pg-data:
   mongodb-data:
+  redis-data:
+  rabbitmq-data:

@@ -18,9 +18,9 @@
 
 本项目需要以下软件：
 
-* Docker CE 17.06.0+
+* [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
 
-* Docker Composer 1.16.1+
+* [Docker Composer](https://github.com/docker/compose) 1.16.1+
 
 # 快速上手
 
@@ -90,7 +90,6 @@ $ docker-compose down
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
-|`var`         |数据文件，未来将使用数据卷|
 |`tmp`         |临时文件|
 |`docs`        |支持文档|
 |`bin`         |脚本封装|
