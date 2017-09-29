@@ -95,32 +95,43 @@ install_docker_compose_cn(){
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
     echo
   else
-    echo -e "\033[32mINFO\033[0m  cn docker-compose is installing...\n"
-    if [ -f "docker-compose" ];then
-      # 是否存在文件，Thanks Aliyun CODE
+    if [ `uname -s` = "linux"  ${ARCH} = "x86_64" ];then
+      echo -e "\033[32mINFO\033[0m  cn docker-compose is installing...\n"
+      cd bin/compose
+      git fetch origin
+      git reset --hard origin/master
       chmod +x docker-compose
-      echo $PATH
-      sudo mv docker-compose /usr/local/bin
+      . /etc/os-release
+      if [ `echo $ID` = "coreos" ];then
+        # 如果是 CoreOS 移动到 /opt/bin
+        sudo mv docker-compose-`uname -s`-${ARCH} /opt/bin/docker-compose
       else
-        # 命令行下载不了，请自行下载
-        echo -e "使用浏览器打开\nhttps://code.aliyun.com/khs1994-docker/compose-cn-mirror/tags/${DOCKER_COMPOSE_VERSION}\n进行下载，并改名为 ' docker-compose ' "
+        sudo mv docker-compose-`uname -s`-${ARCH} /usr/local/bin/docker-compose
+      fi
+      cd - && pwd
+    else
+      echo -e "\033[32mINFO\033[0m  `uname -s` ${ARCH} 暂不支持自动安装，请使用执行 pip install docker-compose\n"
     fi
   fi
 }
 
 install_docker_compose(){
-
+  command -v docker-compose >/dev/null 2>&1
+  if [ $? = 0 ];then
+    #存在
+    docker-compose --version
+    echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
+    echo
+  else
     echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
     # 版本在 .env 文件定义
     # https://api.github.com/repos/docker/compose/releases/latest
-
     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-
     chmod +x docker-compose
-
     echo $PATH
-
     sudo mv docker-compose /usr/local/bin
+    install_docker_compose
+  fi
 }
 
 function mysql_demo {
@@ -163,19 +174,8 @@ function init {
       ;;
   esac
   # docker-compose 是否安装
-  # which docker-compose
 
-  command -v docker-compose >/dev/null 2>&1
-
-  if [ $? = 0 ];then
-    #存在
-    docker-compose --version
-
-    echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
-    echo
-  else
-    install_docker_compose
-  fi
+  install_docker_compose
 
   # 创建日志文件
 
@@ -216,7 +216,27 @@ cleanup(){
 }
 
 backup(){
+  docker-compose exec mysql /backup/backup.sh
+}
+
+restore(){
   docker-compose exec mysql /backup/restore.sh
+}
+
+update(){
+  git fetch origin
+  BRANCH=`git rev-parse --abbrev-ref HEAD`
+  if [ ${BRANCH} = `dev` ];then
+    git reset --hard origin/dev
+  else
+    git checkout dev
+    git reset --hard origin/dev
+  fi
+}
+
+commit(){
+  git add .
+  git commit -m "Update [skip ci]"
 }
 
 main() {
@@ -244,6 +264,10 @@ main() {
   test )
     bin/test
     echo -e "\n${ARCH}\n"
+    ;;
+    
+  commit )
+    commit
     ;;
 
   laravel )
@@ -353,6 +377,10 @@ main() {
     mysql_demo
     ;;
 
+  update )
+    update
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
@@ -360,7 +388,7 @@ Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
 USAGE: ./docker-lnmp COMMAND
 
 Commands:
-  compose              安装 docker-compose 方法提示(针对国内用户)
+  compose              国内用户安装 docker-compose (Linux X86_64)
   cleanup              清理日志文件
   demo                 克隆示例项目、配置文件
   mysql-demo           创建示例 MySQL 数据库
@@ -373,8 +401,11 @@ Commands:
   production           LNMP 生产环境部署（支持 x86_64 ）
   backup               备份数据库
   restore              恢复数据库
-  test                 生产环境一键测试脚本[开发者选项，普通用户请勿使用]
+  update               更新项目到最新版
   help                 输出帮助信息
+  test                 生产环境一键测试脚本[开发者选项]
+  commit               提交项目[开发者选项]
+
 
 Read './docs/*.md' for more information on the command
 "

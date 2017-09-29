@@ -31,6 +31,10 @@
 开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
 
 ```bash
+$ git clone -b dev --depth=2 git@github.com:khs1994-docker/lnmp.git
+
+$ cd lnmp
+
 $ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
@@ -48,6 +52,10 @@ development
 生产环境默认拉取镜像，马上开启 `容器即服务( Caas )` 之旅！
 
 ```bash
+$ git clone -b master --depth=2 git@github.com:khs1994-docker/lnmp.git
+
+$ cd lnmp
+
 $ ./lnmp-docker.sh production
 ```
 

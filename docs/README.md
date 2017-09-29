@@ -57,4 +57,4 @@ $ sudo apt-get -y install docker-ce
 
 windows 10 、macOS 中的 docker-ce 自带 docker-compose。
 
-Linux 请在 [GitHub](https://github.com/docker/compose/releases) 下载二进制文件、或使用 Python 包管理工具 pip 进行安装。
+Linux x86_64 请在 [GitHub](https://github.com/docker/compose/releases) 下载二进制文件、或使用 Python 包管理工具 pip 进行安装。

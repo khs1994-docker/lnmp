@@ -26,6 +26,10 @@ If you use Docker for Windows,see [Documents](docs/windows.md).
 ## Start in Devlopment
 
 ```bash
+$ git clone -b dev --depth=2 git@github.com:khs1994-docker/lnmp.git
+
+$ cd lnmp
+
 $ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
@@ -43,6 +47,10 @@ Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
 Containers as a Service(Caas)
 
 ```bash
+$ git clone -b master --depth=2 git@github.com:khs1994-docker/lnmp.git
+
+$ cd lnmp
+
 $ ./lnmp-docker.sh production
 ```
 
