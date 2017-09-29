@@ -100,7 +100,7 @@ install_docker_compose_cn(){
       cd bin/compose
       git fetch origin
       git reset --hard origin/master
-      chmod +x docker-compose
+      chmod +x docker-compose-`uname -s`-${ARCH}
       . /etc/os-release
       if [ `echo $ID` = "coreos" ];then
         # 如果是 CoreOS 移动到 /opt/bin
@@ -225,8 +225,8 @@ restore(){
 
 update(){
   git fetch origin
-  BRANCH=`git rev-parse --abbrev-ref HEAD\n`
-  echo -e "\n\033[32mINFO\033[0m  Branch is ${BRANCH}"
+  BRANCH=`git rev-parse --abbrev-ref HEAD`
+  echo -e "\n\033[32mINFO\033[0m  Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git reset --hard origin/dev
   elif [ ${BRANCH} = "master" ];then
