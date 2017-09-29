@@ -226,7 +226,7 @@ restore(){
 update(){
   git fetch origin
   BRANCH=`git rev-parse --abbrev-ref HEAD`
-  if [ ${BRANCH} = `dev` ];then
+  if [ ${BRANCH} = "dev" ];then
     git reset --hard origin/dev
   else
     git checkout dev
@@ -265,7 +265,7 @@ main() {
     bin/test
     echo -e "\n${ARCH}\n"
     ;;
-    
+
   commit )
     commit
     ;;
