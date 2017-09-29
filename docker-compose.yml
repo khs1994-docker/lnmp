@@ -73,7 +73,7 @@ services:
   #   command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
-    image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}"
+    image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ./app:/app:rw

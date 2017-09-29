@@ -2,9 +2,12 @@
 echo -e "$0\n"
 COMPOSE_PATH=$1
 CMD=$2
-TAG=7.1.9
+TAG=7.1.9-alpine
+IMAGE=khs1994/php-fpm
+# if build image
+# IMAGE=lnmp-php
 
 docker run --rm \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       lnmp-php:${TAG} \
+       ${IMAGE}:${TAG} \
        php artisan ${CMD}

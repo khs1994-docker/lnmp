@@ -1,12 +1,15 @@
 #!/bin/bash
 echo -e "$0\n"
 LARAVEL_PATH=$1
-TAG=7.1.9
+TAG=7.1.9-alpine
+IMAGE=khs1994/php-fpm
+# if build image
+# IMAGE=lnmp-php
 
 docker run --rm -it \
       -v $PWD/app:/app \
       -v $PWD/tmp/cache:/tmp/cache \
-      lnmp-php:${TAG} \
+      ${IMAGE}:${TAG} \
       laravel new $LARAVEL_PATH
 
 #sudo chmod -R 777 app/$1

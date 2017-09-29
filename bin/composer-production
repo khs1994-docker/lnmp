@@ -4,7 +4,7 @@
 echo -e "$0\n"
 COMPOSE_PATH=$1
 CMD=$2
-TAG=7.1.9
+TAG=7.1.9-alpine
 
 docker run --rm \
        -v $PWD/tmp/cache:/tmp/cache \
