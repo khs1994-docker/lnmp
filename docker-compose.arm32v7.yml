@@ -35,41 +35,41 @@ services:
     #   - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-  memcached:
-    # build:
-    #   context: ./dockerfile/arm32v7/memcached/
-    #   dockerfile: Dockerfile
-    image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
-    networks:
-      - backend
-    # ports:
-    #   - "11211"
-
-  rabbitmq:
-    # build:
-    #   context: ./dockerfile/arm32v7/rabbitmq/
-    #   dockerfile: Dockerfile
-    image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    networks:
-      - backend
-    # ports:
-    #   - "15672"
-    #   - "5672"
-
-  postgresql:
-    # build:
-    #   context: ./dockerfile/arm32v7/postgresql/
-    #   dockerfile: Dockerfile
-    image: arm32v7/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
-    env_file: .env
-    volumes:
-      - postgresql-data:/var/lib/postgresql
-    networks:
-      - backend
-    # ports:
-    #   - "5432"
+  # memcached:
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/memcached/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "11211"
+  #
+  # rabbitmq:
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/rabbitmq/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "15672"
+  #   #   - "5672"
+  #
+  # postgresql:
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/postgresql/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
+  #   env_file: .env
+  #   volumes:
+  #     - postgresql-data:/var/lib/postgresql
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "5432"
 
   # mongo:
   #   # build:

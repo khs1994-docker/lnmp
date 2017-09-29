@@ -21,23 +21,23 @@ services:
         com.khs1994.label-with-empty-value: ""
     image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/php-fpm:${KHS1994_LNMP_PHP_VERSION}
 
-  memcached:
-    build:
-      context: ./dockerfile/memcached/
-      dockerfile: Dockerfile
-    image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
-
-  rabbitmq:
-    build:
-      context: ./dockerfile/rabbitmq/
-      dockerfile: Dockerfile
-    image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
-
-  postgresql:
-    build:
-      context: ./dockerfile/postgresql/
-      dockerfile: Dockerfile
-    image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  # memcached:
+  #   build:
+  #     context: ./dockerfile/memcached/
+  #     dockerfile: Dockerfile
+  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #
+  # rabbitmq:
+  #   build:
+  #     context: ./dockerfile/rabbitmq/
+  #     dockerfile: Dockerfile
+  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
+  #
+  # postgresql:
+  #   build:
+  #     context: ./dockerfile/postgresql/
+  #     dockerfile: Dockerfile
+  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
 
   nginx:
     build:

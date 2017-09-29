@@ -36,44 +36,44 @@ services:
     # ports:
     #   - "6379"
 
-  memcached:
-    # build:
-    #   context: ./dockerfile/arm64v8/memcached/
-    #   dockerfile: Dockerfile
-    image: arm64v8/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
-    env_file: .env
-    networks:
-      - backend
-    # ports:
-    #   - "11211"
-
-  rabbitmq:
-    # build:
-    #   context: ./dockerfile/arm64v8/rabbitmq/
-    #   dockerfile: Dockerfile
-    image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
-    env_file: .env
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    networks:
-      - backend
-    # ports:
-    #   - "15672"
-    #   - "5672"
-
-  postgresql:
-    # build:
-    #   context: ./dockerfile/arm64v8/postgresql/
-    #   dockerfile: Dockerfile
-    image: arm64v8/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
-    env_file:
-      - ./.env
-    networks:
-      - backend
-    volumes:
-      - postgresql-data:/var/lib/postgresql
-    # ports:
-    #   - "5432"
+  # memcached:
+  #   # build:
+  #   #   context: ./dockerfile/arm64v8/memcached/
+  #   #   dockerfile: Dockerfile
+  #   image: arm64v8/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
+  #   env_file: .env
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "11211"
+  #
+  # rabbitmq:
+  #   # build:
+  #   #   context: ./dockerfile/arm64v8/rabbitmq/
+  #   #   dockerfile: Dockerfile
+  #   image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
+  #   env_file: .env
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "15672"
+  #   #   - "5672"
+  #
+  # postgresql:
+  #   # build:
+  #   #   context: ./dockerfile/arm64v8/postgresql/
+  #   #   dockerfile: Dockerfile
+  #   image: arm64v8/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - backend
+  #   volumes:
+  #     - postgresql-data:/var/lib/postgresql
+  #   # ports:
+  #   #   - "5432"
 
   # mongo:
   #   # build:

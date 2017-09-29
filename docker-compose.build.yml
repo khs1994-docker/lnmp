@@ -22,20 +22,20 @@ services:
       - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Build Docker Image
 
-  memcached:
-    build:
-      context: ./dockerfile/memcached/
-      dockerfile: Dockerfile
-
-  rabbitmq:
-    build:
-      context: ./dockerfile/rabbitmq/
-      dockerfile: Dockerfile
-
-  postgresql:
-    build:
-      context: ./dockerfile/postgresql/
-      dockerfile: Dockerfile
+  # memcached:
+  #   build:
+  #     context: ./dockerfile/memcached/
+  #     dockerfile: Dockerfile
+  #
+  # rabbitmq:
+  #   build:
+  #     context: ./dockerfile/rabbitmq/
+  #     dockerfile: Dockerfile
+  #
+  # postgresql:
+  #   build:
+  #     context: ./dockerfile/postgresql/
+  #     dockerfile: Dockerfile
 
   nginx:
     build:

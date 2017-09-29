@@ -31,46 +31,46 @@ services:
       - ./logs/redis:/var/log/redis:rw
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-  memcached:
-    image: lnmp-memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
-    networks:
-      - backend
-    # ports:
-    #   - "11211"
-
-  rabbitmq:
-    image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq:rw
-    networks:
-      - backend
-    # ports:
-    #   - "15672"
-    #   - "5672"
-
-  postgresql:
-    image: lnmp-postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
-    env_file: .env
-    volumes:
-      - postgresql-data:/var/lib/postgresql/data:rw
-    networks:
-      - backend
-    # ports:
-    #   - "5432"
-
-  mongo:
-    image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-    env_file:
-      - ./.env
-    volumes:
-      - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
-      - mongodb-data:/data/db:rw
-      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
-    networks:
-      - backend
-    # ports:
-    #   - "27017"
-    command: ["mongod","--config","/etc/mongod.conf"]
+  # memcached:
+  #   image: lnmp-memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "11211"
+  #
+  # rabbitmq:
+  #   image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq:rw
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "15672"
+  #   #   - "5672"
+  #
+  # postgresql:
+  #   image: lnmp-postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   env_file: .env
+  #   volumes:
+  #     - postgresql-data:/var/lib/postgresql/data:rw
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "5432"
+  #
+  # mongo:
+  #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
+  #   env_file:
+  #     - ./.env
+  #   volumes:
+  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
+  #     - mongodb-data:/data/db:rw
+  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "27017"
+  #   command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
     image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}"
