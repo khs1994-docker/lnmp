@@ -23,7 +23,7 @@ curl 127.0.0.1 && echo && date
 
 #sleep 120
 
-read -t 20 -p "请等待120s，或按回车键继续" var
+read -t 20 -p "请等待20s，或按回车键继续" var
 
 date && echo && docker ps -a && echo -e "\n\n"
 

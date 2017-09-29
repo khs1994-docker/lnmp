@@ -53,9 +53,10 @@ logs(){
   if [ -d "tmp/cache" ];then
     echo -e "\n\033[32mINFO\033[0m  Composer cache existence\n"
   else
-    cd tmp && mkdir cache && chmod 777 cache && echo -e "\n\033[32mINFO\033[0m  mkdir ./tmp/cache\n"
+    cd tmp && mkdir cache && chmod 777 cache && cd -
+    echo -e "\n\033[32mINFO\033[0m  mkdir tmp/cache\n"
   fi
-  pwd && echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n" && echo && echo
+  pwd && echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n" && echo -e "\n\n"
 }
 
 # 是否安装 Docker Compose [cn]
