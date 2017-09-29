@@ -1,97 +1,34 @@
 #!/bin/bash
+
 echo $0
+
 # 生产环境自动测试脚本，开发环境由本人真机手动测试
 # 删除原项目
 
-./lnmp-docker.sh development-down
-
-echo
-
-./lnmp-docker.sh production-down
+docker-compose down -v
 
 echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
-# 默认不测试开发环境！！！
-
-development() {
-
-./lnmp-docker.sh development
-
-echo
-
-docker ps -a | grep "lnmp"
-
-sleep 5
-
-echo
-
-curl 127.0.0.1
-
-echo
-date
-read -t 120 -p "请等待120s，或按回车键继续" var
-date
-echo
-
-docker ps -a | grep "lnmp"
-
-echo
-echo
-
-./lnmp-docker.sh development-down
-
-echo -e "\033[32mINFO\033[0m  开发环境测试完毕\n"
-
-}
-
 # 测试生产环境
-
-# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 echo -e "\033[32mINFO\033[0m  生产环境测试开始\n"
 
 ./lnmp-docker.sh production
 
-echo
-
-docker ps -a | grep "lnmp"
-
-echo
+echo && docker ps -a && echo
 
 sleep 5
 
-curl 127.0.0.1
+curl 127.0.0.1 && echo && date
 
-echo
-date
 #sleep 120
-read -t 120 -p "请等待120s，或按回车键继续" var
-date
-echo
 
-docker ps -a | grep "lnmp"
+read -t 20 -p "请等待120s，或按回车键继续" var
 
-echo
-echo
+date && echo && docker ps -a && echo -e "\n\n"
 
-./lnmp-docker.sh production-down
+docker-compose down && echo -e "\033[32mINFO\033[0m  生产环境测试完毕\n"
 
-echo -e "\033[32mINFO\033[0m  生产环境测试完毕\n"
-
-# # 新建 Laravel 项目
-#
-# rm -rf app/test
-#
-# bin/laravel test
-#
-# echo -e "\033[32mINFO\033[0m  测试新建 Laravel 项目完毕\n"
-#
-# # 测试 php artisan
-#
-# bin/php-artisan test -V
-#
-# echo -e "\033[32mINFO\033[0m  测试 php artisan 完毕\n"
-#
 # 测试 composer
 
 bin/composer-production demo --version
