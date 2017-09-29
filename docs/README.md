@@ -1,6 +1,11 @@
 # khs1994-dockeer/lnmp 支持文档
 
+安装好 Docker CE 并配置好镜像加速器（推荐阿里云），并安装 [docker-compose](https://github.com/docker/compose/releases) 这里不再赘述。
+
+
 * [项目初衷](why.md)
+
+* [项目初始化过程](init.md)
 
 * [路径说明](path.md)
 
@@ -34,27 +39,7 @@
 
 * [常见问题](question.md)
 
-## 安装 Docker CE
+## More Information
 
-* [USTC mirror](http://mirrors.ustc.edu.cn/help/docker-ce.html)
-
-* [Aliyun mirror](https://yq.aliyun.com/articles/110806)
-
-### Ubuntu
-
-```bash
-$ curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
-$ sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) test"
-$ sudo apt-get update
-$ sudo apt-get -y install docker-ce
-```
-
-### Debian
-
-### CentOS 7
-
-## Docker Compose
-
-windows 10 、macOS 中的 docker-ce 自带 docker-compose。
-
-Linux x86_64 请在 [GitHub](https://github.com/docker/compose/releases) 下载二进制文件、或使用 Python 包管理工具 pip 进行安装。
+* [Docker CE 安装教程](https://www.khs1994.com/docker/README.html)
+* [docker-compose 安装教程](https://www.khs1994.com/docker/compose.html)

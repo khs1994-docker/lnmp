@@ -1,3 +1,5 @@
 #!/bin/bash
 
-mysql -uroot -p${MYSQL_ROOT_PASSWORD} test > /backup/"$(date "+%Y%m%d-%H.%M")".sql
+BACKUP_DATABASES=test
+
+mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} ${BACKUP_DATABASES} > /backup/"$(date "+%Y%m%d-%H.%M")".sql

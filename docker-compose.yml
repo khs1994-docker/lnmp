@@ -15,7 +15,8 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
-      - ./backup/mysql:/backup
+      - ./backup/mysql:/backup:rw
+    command: ["mysqld","--character-set-server=utf8mb4"]
 
   redis:
     image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
@@ -40,7 +41,7 @@ services:
   rabbitmq:
     image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq-data:/var/lib/rabbitmq:rw
     networks:
       - backend
     # ports:
@@ -51,7 +52,7 @@ services:
     image: lnmp-postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
     env_file: .env
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
+      - postgresql-data:/var/lib/postgresql/data:rw
     networks:
       - backend
     # ports:
@@ -62,9 +63,9 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./config/mongodb/mongod.conf:/etc/mongod.conf
-      - mongodb-data:/data/db
-      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+      - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
+      - mongodb-data:/data/db:rw
+      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
     networks:
       - backend
     # ports:

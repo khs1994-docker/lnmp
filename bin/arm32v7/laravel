@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo -e "$0\n"
 LARAVEL_PATH=$1
 TAG=7.1.9
 

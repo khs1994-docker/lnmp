@@ -13,33 +13,23 @@ logs(){
   if [ -d "logs/mongodb" ];then
     echo -e "\n\033[32mINFO\033[0m  logs/mongo existence\n"
   else
-    mkdir -p logs/mongodb
-    cd logs/mongodb
-    touch mongo.log
-    # 部分文件可能提示没有写入权限
-    chmod 777 *
+    mkdir -p logs/mongodb && cd logs/mongodb && echo > mongo.log && chmod 777 *
+    echo -e "\n\033[32mINFO\033[0m  mkdir logs/mongod and touch log file\n"
     cd -
    fi
 
   if [ -d "logs/mysql" ];then
     echo -e "\n\033[32mINFO\033[0m  logs/mysql existence\n"
   else
-    mkdir -p logs/mysql
-    cd logs/mysql
-    echo > error.log
+    mkdir -p logs/mysql && cd logs/mysql && echo > error.log && chmod 777 *
     echo -e "\n\033[32mINFO\033[0m  mkdir logs/mysql and touch log file\n"
-    chmod 777 *
     cd -
   fi
 
   if [ -d "logs/nginx" ];then
     echo -e "\n\033[32mINFO\033[0m  logs/nginx existence\n"
   else
-    mkdir -p logs/nginx
-    cd logs/nginx
-    echo > error.log
-    echo > access.log
-    chmod 777 *
+    mkdir -p logs/nginx && cd logs/nginx && echo > error.log && echo > access.log && chmod 777 *
     echo -e "\n\033[32mINFO\033[0m  mkdir logs/nginx and touch log file\n"
     cd -
   fi
@@ -47,12 +37,7 @@ logs(){
   if [ -d "logs/php-fpm" ];then
     echo -e "\n\033[32mINFO\033[0m  logs/php-fpm existence\n"
   else
-    mkdir -p logs/php-fpm
-    cd logs/php-fpm
-    echo > error.log
-    echo > access.log
-    echo > xdebug-remote.log
-    chmod 777 *
+    mkdir -p logs/php-fpm && cd logs/php-fpm && echo > error.log && echo > access.log && echo > xdebug-remote.log && chmod 777 *
     echo -e "\n\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file\n"
     cd -
   fi
@@ -60,47 +45,34 @@ logs(){
   if [ -d "logs/redis" ];then
     echo -e "\n\033[32mINFO\033[0m  logs/redis existence\n"
   else
-    mkdir -p logs/redis
-    cd logs/redis
-    echo > redis.log
-    chmod 777 *
+    mkdir -p logs/redis && cd logs/redis && echo > redis.log && chmod 777 *
     echo -e "\n\033[32mINFO\033[0m  mkdir logs/redis and touch log file\n"
     cd -
   fi
-
   # 不清理 Composer 缓存
-  cd tmp
-  if [ -d cache ];then
+  if [ -d "tmp/cache" ];then
     echo -e "\n\033[32mINFO\033[0m  Composer cache existence\n"
   else
-    mkdir cache
-    chmod 777 cache
-    echo -e "\n\033[32mINFO\033[0m  mkdir ./tmp/cache\n"
+    cd tmp && mkdir cache && chmod 777 cache && echo -e "\n\033[32mINFO\033[0m  mkdir ./tmp/cache\n"
   fi
-  cd -
-
-  echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
-  echo
-  echo
+  pwd && echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n" && echo && echo
 }
 
-# 是否安装 Docker Compose
-# cn
+# 是否安装 Docker Compose [cn]
+
 install_docker_compose_cn(){
   # 判断是否安装
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     #存在
     docker-compose --version
-    echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
-    echo
+    echo -e "\033[32mINFO\033[0m  docker-compose already installed"
   else
     if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
       echo -e "\033[32mINFO\033[0m  cn docker-compose is installing...\n"
       cd bin/compose
       git fetch origin
-      git reset --hard origin/master
-      chmod +x docker-compose-`uname -s`-${ARCH}
+      git reset --hard origin/master && chmod +x docker-compose-`uname -s`-${ARCH}
       . /etc/os-release
       if [ `echo $ID` = "coreos" ];then
         # 如果是 CoreOS 移动到 /opt/bin
@@ -108,12 +80,14 @@ install_docker_compose_cn(){
       else
         sudo mv docker-compose-`uname -s`-${ARCH} /usr/local/bin/docker-compose
       fi
-      cd - && pwd
+      install_docker_compose_cn
     else
       echo -e "\033[32mINFO\033[0m  `uname -s` ${ARCH} 暂不支持自动安装，请使用执行 pip install docker-compose\n"
     fi
   fi
 }
+
+# 是否安装 Docker Compose
 
 install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
@@ -121,37 +95,35 @@ install_docker_compose(){
     #存在
     docker-compose --version
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
-    echo
   else
     echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
     # 版本在 .env 文件定义
     # https://api.github.com/repos/docker/compose/releases/latest
     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     chmod +x docker-compose
-    echo $PATH
-    sudo mv docker-compose /usr/local/bin
+    echo $PATH && sudo mv docker-compose /usr/local/bin
     install_docker_compose
   fi
 }
+
+# 创建示例数据库
 
 function mysql_demo {
   docker-compose exec mysql /backup/demo.sh
 }
 
-# 克隆示例项目
+# 克隆示例项目、nginx 配置文件
+
 function demo {
   #statements
   echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
-  git submodule update --init --recursive
-  echo
-  echo
+  git submodule update --init --recursive && echo -e "\n"
 }
 
 # 初始化
 
 function init {
-  # 开发环境 拉取示例项目
-  # cn github
+  # 开发环境 拉取示例项目 [cn github]
   case $ENV in
     development )
       echo "$ENV"
@@ -174,19 +146,14 @@ function init {
       ;;
   esac
   # docker-compose 是否安装
-
   install_docker_compose
-
   # 创建日志文件
-
   logs
-
   # 初始化完成提示
-
-  echo -e "\033[32mINFO\033[0m  Init is SUCCESS\n"
-  echo
-  echo
+  echo -e "\033[32mINFO\033[0m  Init is SUCCESS\n\n"
 }
+
+# 清理日志文件
 
 cleanup(){
   # 清理 images
@@ -201,27 +168,32 @@ cleanup(){
   # 不自动清理，列出镜像，用户自己清理
   docker images | grep "lnmp"
   docker images | grep "khs1994"
-
    # 清理日志文件
    cd logs
    rm -rf mongodb \
            mysql \
            nginx \
            php-fpm \
-           redis
-
+           redis \
+      && cd -
    # 建立空白日志文件夹及文件
    logs
    echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file\n"
 }
 
+# 备份数据库
+
 backup(){
   docker-compose exec mysql /backup/backup.sh
 }
 
+# 恢复数据库
+
 restore(){
   docker-compose exec mysql /backup/restore.sh
 }
+
+# 更新项目
 
 update(){
   git fetch origin
@@ -232,15 +204,18 @@ update(){
   elif [ ${BRANCH} = "master" ];then
     git reset --hard origin/master
   else
-    git checkout dev
-    git reset --hard origin/dev
+    git checkout dev && git reset --hard origin/dev
   fi
 }
+
+# 提交项目「开发者选项」
 
 commit(){
   git add .
   git commit -m "Update [skip ci]"
 }
+
+# 入口文件
 
 main() {
   echo -e "${ARCH}\n"
@@ -275,10 +250,8 @@ main() {
 
   laravel )
     read -p "请输入路径: ./app/" path
-    echo
-    echo -e  "\033[32mINFO\033[0m  在容器内 /app/${path} 执行 laravel new ${path}"
-    echo
-    echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
+    echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 laravel new ${path}"
+    echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
     if [ ${ARCH} = "x86_64" ];then
       bin/laravel ${path}
     else
@@ -290,10 +263,7 @@ main() {
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
-    echo
-    echo -e  "\033[32mINFO\033[0m  在容器内 /app/${path} 执行 php artisan ${cmd}"
-    echo
-    echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
+    echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 php artisan ${cmd}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
     if [ ${ARCH} = "x86_64" ];then
       bin/php-artisan ${path} ${cmd}
     else
@@ -305,10 +275,8 @@ main() {
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
-    echo
-    echo -e  "\033[32mINFO\033[0m  在容器内 /app/${path} 执行 composer ${cmd}"
-    echo
-    echo -e  "\033[32mINFO\033[0m  以下为输出内容\n\n"
+    echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 composer ${cmd}"
+    echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
     if [ ${ARCH} = "x86_64" ];then
       bin/composer ${path} ${cmd}
     else
@@ -319,7 +287,6 @@ main() {
 
   production )
     init
-
     docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
@@ -384,6 +351,10 @@ main() {
     update
     ;;
 
+  mysql-cli )
+    docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
@@ -393,8 +364,9 @@ USAGE: ./docker-lnmp COMMAND
 Commands:
   compose              国内用户安装 docker-compose (Linux X86_64)
   cleanup              清理日志文件
-  demo                 克隆示例项目、配置文件
+  demo                 克隆示例项目、nginx 配置文件
   mysql-demo           创建示例 MySQL 数据库
+  mysql-cli            使用命令行管理 MySQL
   init                 初始化部署环境
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
@@ -406,8 +378,8 @@ Commands:
   restore              恢复数据库
   update               更新项目到最新版
   help                 输出帮助信息
-  test                 生产环境一键测试脚本[开发者选项]
-  commit               提交项目[开发者选项]
+  test                 生产环境一键测试脚本「开发者选项」
+  commit               提交项目「开发者选项」
 
 
 Read './docs/*.md' for more information on the command
@@ -415,4 +387,5 @@ Read './docs/*.md' for more information on the command
     ;;
   esac
 }
+
 main $1 $2
