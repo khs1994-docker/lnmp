@@ -1,11 +1,10 @@
-version: '3.3'
-
+version: "3.3"
 services:
 
   # MySQL 暂时没有  arm 镜像
   # mysql:
   #   # build:
-  #   #   context: ./dockerfile/mysql/
+  #   #   context: ./dockerfile/arm32v7/mysql/
   #   #   dockerfile: Dockerfile
   #   #image: lnmp-mysql:latest
   #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
@@ -22,62 +21,74 @@ services:
 
   redis:
     # build:
-    #   context: ./dockerfile/redis/
+    #   context: ./dockerfile/arm32v7/redis/
     #   dockerfile: Dockerfile
-    # image: lnmp-redis:latest
     image: "arm32v7/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
+    networks:
+      - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - ./var/lib/redis:/data
+      - redis-data:/data
       - ./logs/redis:/var/log/redis
+    # ports:
+    #   - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-  # mongo:
-  #   build:
-  #     context: ./dockerfile/mongodb/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-mongo:latest
-  #   volumes:
-  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
-  #     - ./var/lib/mongo:/data/db
-  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-  #   # ports:
-  #   #   - "27017:27017"
-  #
   # memcached:
-  #   build:
-  #     context: ./dockerfile/memcached/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-memcached:latest
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/memcached/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
+  #   networks:
+  #     - backend
   #   # ports:
-  #   #   - "11211:11211"
+  #   #   - "11211"
   #
   # rabbitmq:
-  #   build:
-  #     context: ./dockerfile/rabbitmq/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-rabbitmq:latest
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/rabbitmq/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
   #   volumes:
-  #     - ./var/lib/rabbitmq:/var/lib/rabbitmq
+  #     - rabbitmq-data:/var/lib/rabbitmq
+  #   networks:
+  #     - backend
   #   # ports:
-  #   #   - "15672:15672"
-  #   #   - "5672:5672"
+  #   #   - "15672"
+  #   #   - "5672"
   #
   # postgresql:
-  #   build:
-  #     context: ./dockerfile/postgresql/
-  #     dockerfile: Dockerfile
-  #   image: lnmp-postgresql:latest
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/postgresql/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
   #   env_file: .env
   #   volumes:
-  #     - ./var/lib/postgresql:/var/lib/postgresql
+  #     - postgresql-data:/var/lib/postgresql
+  #   networks:
+  #     - backend
   #   # ports:
-  #   #   - "5432:5432"
+  #   #   - "5432"
+
+  # mongo:
+  #   # build:
+  #   #   context: ./dockerfile/arm32v7/mongodb/
+  #   #   dockerfile: Dockerfile
+  #   image: arm32v7/mongo:${KHS1994_LNMP_MONGODB_VERSION}
+  #   volumes:
+  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
+  #     - mongodb-data:/data/db
+  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
+  #   networks:
+  #     - backend
+  #   ports:
+  #     - "27017"
+  #   command: ["mongod","--config","/etc/mongod.conf"]
 
 
   php7:
-    # 开发环境使用自定义镜像，构建规则在 override 中定义
+    # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
     # build:
     #   context: ./dockerfile/arm32v7/php-fpm/
     #   dockerfile: Dockerfile
@@ -88,6 +99,9 @@ services:
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm
+    networks:
+      - frontend
+      - backend
     command: ["php-fpm"]
     environment:
       - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4 arm32v7
@@ -95,7 +109,7 @@ services:
 
   nginx:
     # build:
-    #   context: ./dockerfile/nginx/
+    #   context: ./dockerfile/arm32v7/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
     image: "arm32v7/nginx:${KHS1994_LNMP_NGINX_VERSION}"
@@ -108,3 +122,17 @@ services:
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx
+    networks:
+      - frontend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  # mysql-data:
+  pg-data:
+  # mongodb-data:
+  redis-data:
+  rabbitmq-data:
+  postgresql-data:

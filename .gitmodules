@@ -4,3 +4,6 @@
 [submodule "config/nginx"]
 	path = config/nginx
 	url = https://github.com/khs1994-docker/lnmp-nginx-conf-demo.git
+[submodule "bin/compose"]
+	path = bin/compose
+	url = https://code.aliyun.com/khs1994/compose-linux.git

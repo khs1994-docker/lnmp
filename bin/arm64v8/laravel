@@ -1,12 +1,12 @@
 #!/bin/bash
-
+echo -e "$0\n"
 LARAVEL_PATH=$1
 TAG=7.1.9
 
 docker run --rm -it \
       -v $PWD/app:/app \
       -v $PWD/tmp/cache:/tmp/cache \
-      lnmp-arm64v8-php:${TAG} \
+      khs1994/arm64v8-php-fpm:${TAG} \
       laravel new $LARAVEL_PATH
 
 #sudo chmod -R 777 app/$1

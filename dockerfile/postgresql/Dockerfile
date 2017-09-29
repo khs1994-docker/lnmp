@@ -1,3 +1,3 @@
-FROM postgres
+FROM postgres:9.6.5-alpine
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+RUN apk add --no-cache tzdata

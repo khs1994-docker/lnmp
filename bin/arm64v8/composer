@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo -e "$0\n"
 COMPOSE_PATH=$1
 CMD=$2
 TAG=7.1.9
@@ -7,5 +7,5 @@ TAG=7.1.9
 docker run --rm \
        -v $PWD/tmp/cache:/tmp/cache \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       lnmp-arm64v8-php:${TAG} \
+       khs1994/arm64v8-php-fpm:${TAG} \
        composer ${CMD}

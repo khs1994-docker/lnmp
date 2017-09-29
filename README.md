@@ -4,7 +4,8 @@
 
 Build LNMP within 2 minutes powered by Docker Compose.
 
-* [中文文档](README.cn.md)
+* [中文说明](README.cn.md)
+* [Documents](docs/)
 
 # Changelog
 
@@ -14,9 +15,56 @@ Updates every quarter (17.09, 17.12, 18.03, etc), For more release information a
 
 To use LNMP Docker,you need:
 
-* Docker CE
+* [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
 
-* Docker Composer
+* [Docker Composer](https://github.com/docker/compose) 1.16.1+
+
+# Quick Start
+
+If you use Docker for Windows,see [Documents](docs/windows.md).
+
+## Start in Devlopment
+
+```bash
+$ git clone -b dev --depth=2 git@github.com:khs1994-docker/lnmp.git
+
+$ cd lnmp
+
+$ ./lnmp-docker.sh devlopment
+
+$ curl 127.0.0.1
+
+Welcome use khs1994-docker/lnmp v17.09-rc5 x86_64 With Pull Docker Image
+
+development
+
+```
+
+Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
+
+## Run in Production
+
+Containers as a Service(Caas)
+
+```bash
+$ git clone -b master --depth=2 git@github.com:khs1994-docker/lnmp.git
+
+$ cd lnmp
+
+$ ./lnmp-docker.sh production
+```
+
+## Stop
+
+```bash
+$ docker-compose stop
+```
+
+## Stop and remove
+
+```bash
+$ docker-compose down
+```
 
 # Overview
 
@@ -45,7 +93,6 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
-|`var`         |databases file    |
 |`tmp`         |Composer cache file ,etc |
 |`docs`        |Support Documents        |
 |`bin`         |bash script              |
@@ -55,46 +102,9 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 * 80
 * 443
 
-# Quick Start
-
-## Start in Devlopment
-
-```bash
-$ ./lnmp-docker.sh devlopment
-
-$ curl 127.0.0.1
-
-Welcome use khs1994-docker/lnmp v17.09-rc4
-
-development
-
-```
-
-Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
-
-## Run in Production
-
-Containers as a Service(Caas)
-
-```bash
-$ ./lnmp-docker.sh production
-```
-
-## Stop
-
-```bash
-$ docker-compose stop
-```
-
-## Stop and remove
-
-```bash
-$ ./lnmp-docker.sh " devlopment-down | production-down "
-```
-
 # CLI
 
-Interactive `./lnmp-docker.sh` easy to access Laravel, Laravel artisan, composer, etc. For more information about LNMP Docker CLI, see [Documents](docs/cli.md).
+On Linux or macOS,Interactive `./lnmp-docker.sh` easy to access Laravel, Laravel artisan, composer, etc. For more information about LNMP Docker CLI, see [Documents](docs/cli.md).
 
 # Who use in Production?
 
@@ -105,6 +115,8 @@ Interactive `./lnmp-docker.sh` easy to access Laravel, Laravel artisan, composer
 # More Information
 
 * [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
+* [docker_practice](https://github.com/yeasy/docker_practice)
+* [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
 * [kasperisager/php-dockerized](https://github.com/kasperisager/php-dockerized)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
