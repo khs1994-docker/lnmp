@@ -95,7 +95,7 @@ install_docker_compose_cn(){
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
     echo
   else
-    if [ `uname -s` = "linux"  ${ARCH} = "x86_64" ];then
+    if [ `uname -s` = "Linux"  ${ARCH} = "x86_64" ];then
       echo -e "\033[32mINFO\033[0m  cn docker-compose is installing...\n"
       cd bin/compose
       git fetch origin
@@ -226,8 +226,11 @@ restore(){
 update(){
   git fetch origin
   BRANCH=`git rev-parse --abbrev-ref HEAD`
+  echo -e "\033[32mINFO\033[0m  Branch is ${BRANCH}"
   if [ ${BRANCH} = "dev" ];then
     git reset --hard origin/dev
+  elif [ ${BRANCH} = "master" ];then
+    git reset --hard origin/master
   else
     git checkout dev
     git reset --hard origin/dev
