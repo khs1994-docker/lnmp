@@ -356,6 +356,11 @@ main() {
     docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
     ;;
 
+  push )
+    docker-compose -f docker-compose.yml -f docker-compose.push.yml build \
+      && docker-compose -f docker-compose.yml -f docker-compose.push.yml push
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
@@ -373,14 +378,17 @@ Commands:
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer
   development          LNMP 开发环境部署（支持 x86_64 arm32v7 arm64v8 架构）
+  development-config   调试开发环境 Docker Compose
   development --build  LNMP 开发环境部署--构建镜像（支持 x86_64 ）
   production           LNMP 生产环境部署（支持 x86_64 ）
+  production-config    调试生产环境 Docker Compose
+  push                 构建 Docker 镜像并推送到 Docker 私有仓库，以用于生产环境
   backup               备份数据库
   restore              恢复数据库
   update               更新项目到最新版
   help                 输出帮助信息
-  test                 生产环境一键测试脚本「开发者选项」
-  commit               提交项目「开发者选项」
+  test                 「开发者选项」生产环境一键测试脚本
+  commit               「开发者选项」提交项目
 
 
 Read './docs/*.md' for more information on the command
