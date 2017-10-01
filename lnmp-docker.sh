@@ -254,11 +254,7 @@ main() {
     read -p "请输入路径: ./app/" path
     echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 laravel new ${path}"
     echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
-    if [ ${ARCH} = "x86_64" ];then
-      bin/laravel ${path}
-    else
-      bin/arm32v7/laravel ${path}
-    fi
+    bin/laravel ${path}
     echo -e "\n${ARCH}\n"
     ;;
 
@@ -266,11 +262,7 @@ main() {
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
     echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 php artisan ${cmd}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
-    if [ ${ARCH} = "x86_64" ];then
-      bin/php-artisan ${path} ${cmd}
-    else
-      bin/arm32v7/php-artisan ${path} ${cmd}
-    fi
+    bin/php-artisan ${path} ${cmd}
     echo -e "\n${ARCH}\n"
     ;;
 
@@ -279,11 +271,7 @@ main() {
     read -p  "请输入命令: composer " cmd
     echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 composer ${cmd}"
     echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
-    if [ ${ARCH} = "x86_64" ];then
-      bin/composer ${path} ${cmd}
-    else
-      bin/arm32v7/composer ${path} ${cmd}
-    fi
+    bin/composer ${path} ${cmd}
     echo -e "\n${ARCH}\n"
     ;;
 
