@@ -1,11 +1,34 @@
 #!/bin/bash
+
+. .env
 echo -e "$0\n"
 COMPOSE_PATH=$1
 CMD=$2
-TAG=7.1.9
+ARCH=`uname -m`
 
-docker run --rm \
+# 判断架构
+
+if [ $ARCH = "armv7l" ];then
+  DOCKER_IMAGE=khs1994/arm32v7-php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}
+elif [ $ARCH = "aarch64" ];then
+  DOCKER_IMAGE=false
+else
+  DOCKER_IMAGE=khs1994/php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine
+fi
+
+# if build image
+# DOCKER_IMAGE=lnmp-php
+
+if [ ${DOCKER_IMAGE} = "false" ];then
+  echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
+else
+echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${COMPOSE_PATH} 执行 composer ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
+
+docker run --rm -it \
        -v $PWD/tmp/cache:/tmp/cache \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       lnmp-php:${TAG} \
+       ${DOCKER_IMAGE}:${TAG} \
        composer ${CMD}
+fi

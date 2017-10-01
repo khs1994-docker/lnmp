@@ -7,10 +7,31 @@ Changelog
 
 #### v17.09 rc10
 
+#### v17.09 rc6
+
+* php-fpm 基于 Alpine Linux
+* 由于文件权限问题，php-fpm 使用 `root` 替代 `www-data` 用户
+* `./lnmp-docker` 增加架构判断（`x86_64`、`armv7l(arm32v7)`、`aarch64(arm64v8)`）来执行对应的命令
+* 升级软件版本：* 表示该软件进行了升级
+
+|Update|Name|Image|Version|Linux|
+|:--|:--|:--|:--|:--|
+||[nginx](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.5-alpine    |1.13.5 |Alpine|
+||MySQL                                                    |mysql:5.7.19                   |5.7.19 |Debian:jessie|
+||[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |4.0.2  |Alpine|
+|*|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)    |khs1994/php-fpm:7.1.10-alpine  |7.1.10 |Alpine|
+||[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.1-alpine |1.5.1  |Alpine|
+||[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |3.6.12 |Alpine|
+||[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:9.6.5-alpine  |9.6.5  |Alpine|
+||MongoDB                                                  |mongo:3.5.13                   |3.5.13 |Debian:jessie|
+|-|-|-|-|-|
+||docker-compose                                           |-|1.16.1|-|
+||docker-ce                                                |-|17.09|-|
+
 #### v17.09 rc5
 
-* 为加快部署速度，开发环境、生产环境全部默认 `拉取` 镜像
-* 增加 MySQL 备份功能
+* 为加快部署速度，全部默认 `拉取` 镜像
+* 增加 MySQL 备份、恢复功能
 
 #### v17.09 rc4
 

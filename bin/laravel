@@ -1,13 +1,32 @@
 #!/bin/bash
+. .env
 echo -e "$0\n"
 LARAVEL_PATH=$1
-TAG=7.1.9
+ARCH=`uname -m`
+
+if [ $ARCH = "armv7l" ];then
+  DOCKER_IMAGE=khs1994/arm32v7-php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}
+elif [ $ARCH = "aarch64" ]; then
+  DOCKER_IMAGE=false
+else
+  DOCKER_IMAGE=khs1994/php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine
+fi
+
+# if build image
+# DOCKER_IMAGE=lnmp-php
+if [ ${DOCKER_IMAGE} = "false" ];then
+    echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
+else
+
+echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/ 执行 laravel new ${LARAVEL_PATH}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
 docker run --rm -it \
-      -v $PWD/app:/app \
-      -v $PWD/tmp/cache:/tmp/cache \
-      lnmp-php:${TAG} \
-      laravel new $LARAVEL_PATH
+       -v $PWD/tmp/cache:/tmp/cache \
+       -v $PWD/app:/app \
+       ${DOCKER_IMAGE}:${TAG} \
+       laravel new $LARAVEL_PATH
 
 #sudo chmod -R 777 app/$1
 
@@ -20,3 +39,4 @@ mv app/$1/.env app/$1/.env.backup
 cp app/.env* app/$1
 
 chmod -R 777 app/$1/storage
+fi

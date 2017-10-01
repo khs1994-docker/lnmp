@@ -9,7 +9,7 @@ services:
 
   php7:
     build:
-      context: ./dockerfile/php-fpm/
+      context: ./dockerfile/php-fpm-alpine/
       dockerfile: Dockerfile
       # build 时的变量，相当于 Dockerfile 中的 ENV
       args:
@@ -19,7 +19,7 @@ services:
         com.khs1994.description: "Extend Official PHP_FPM Docker Image"
         com.khs1994.department: "Chinese"
         com.khs1994.label-with-empty-value: ""
-    image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/php-fpm:${KHS1994_LNMP_PHP_VERSION}
+    image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine
 
   # memcached:
   #   build:

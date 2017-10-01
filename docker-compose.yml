@@ -73,20 +73,21 @@ services:
   #   command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
-    image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}"
+    image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ./app:/app:rw
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-      - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
     networks:
       - frontend
       - backend
     dns:
       - 114.114.114.114
-    command: ["php-fpm"]
+    command: ["php-fpm","-R"]
     # entrypoint: /code/entrypoint.sh
     # entrypoint:
     # - php

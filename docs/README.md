@@ -25,6 +25,8 @@
 
   * [laravel](laravel.md)
 
+  * [Composer](composer.md)
+
 * [生产环境](production.md)
 
 * [arm32v7 & arm64v8](arm.md)

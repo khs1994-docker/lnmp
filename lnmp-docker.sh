@@ -169,7 +169,8 @@ cleanup(){
   # 不自动清理，列出镜像，用户自己清理
   docker images | grep "lnmp"
   docker images | grep "khs1994"
-   # 清理日志文件
+
+  # 清理日志文件
    cd logs
    rm -rf mongodb \
            mysql \
@@ -251,38 +252,21 @@ main() {
 
   laravel )
     read -p "请输入路径: ./app/" path
-    echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 laravel new ${path}"
-    echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
-    if [ ${ARCH} = "x86_64" ];then
-      bin/laravel ${path}
-    else
-      bin/arm32v7/laravel ${path}
-    fi
+    bin/laravel ${path}
     echo -e "\n${ARCH}\n"
     ;;
 
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
-    echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 php artisan ${cmd}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
-    if [ ${ARCH} = "x86_64" ];then
-      bin/php-artisan ${path} ${cmd}
-    else
-      bin/arm32v7/php-artisan ${path} ${cmd}
-    fi
+    bin/php-artisan ${path} ${cmd}
     echo -e "\n${ARCH}\n"
     ;;
 
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
-    echo -e  "\n\033[32mINFO\033[0m  在容器内 /app/${path} 执行 composer ${cmd}"
-    echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
-    if [ ${ARCH} = "x86_64" ];then
-      bin/composer ${path} ${cmd}
-    else
-      bin/arm32v7/composer ${path} ${cmd}
-    fi
+    bin/composer ${path} ${cmd}
     echo -e "\n${ARCH}\n"
     ;;
 
@@ -356,6 +340,34 @@ main() {
     docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
     ;;
 
+  php-cli )
+    docker-compose exec php7 bash
+    ;;
+
+  redis-cli )
+    docker-compose exec redis sh
+    ;;
+  memcached-cli )
+    docker-compose exec memcached sh
+    ;;
+  rabbitmq-cli )
+    docker-compose exec rabbitmq sh
+    ;;
+  postgres-cli )
+    docker-compose exec postgresql sh
+    ;;
+  mongo-cli )
+    docker-compose exec mongo bash
+    ;;
+  nginx-cli )
+    docker-compose exec nginx sh
+    ;;
+
+  push )
+    docker-compose -f docker-compose.yml -f docker-compose.push.yml build \
+      && docker-compose -f docker-compose.yml -f docker-compose.push.yml push
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
@@ -364,23 +376,33 @@ USAGE: ./docker-lnmp COMMAND
 
 Commands:
   compose              国内用户安装 docker-compose (Linux X86_64)
+  init                 初始化部署环境
   cleanup              清理日志文件
   demo                 克隆示例项目、nginx 配置文件
   mysql-demo           创建示例 MySQL 数据库
   mysql-cli            使用命令行管理 MySQL
-  init                 初始化部署环境
+  php-cli              使用命令行管理 PHP-FPM
+  redis-cli            使用命令行管理 Redis
+  memcached-cli        使用命令行管理 Memcached
+  rabbitmq-cli         使用命令行管理 RabbitMQ
+  postgres-cli         使用命令行管理 PostgreSQL
+  mongo-cli            使用命令行管理 MongoDB
+  nginx-cli            使用命令行管理 nginx
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer
   development          LNMP 开发环境部署（支持 x86_64 arm32v7 arm64v8 架构）
+  development-config   调试开发环境 Docker Compose
   development --build  LNMP 开发环境部署--构建镜像（支持 x86_64 ）
   production           LNMP 生产环境部署（支持 x86_64 ）
+  production-config    调试生产环境 Docker Compose
+  push                 构建 Docker 镜像并推送到 Docker 私有仓库，以用于生产环境
   backup               备份数据库
   restore              恢复数据库
   update               更新项目到最新版
   help                 输出帮助信息
-  test                 生产环境一键测试脚本「开发者选项」
-  commit               提交项目「开发者选项」
+  test                 「开发者选项」生产环境一键测试脚本
+  commit               「开发者选项」提交项目
 
 
 Read './docs/*.md' for more information on the command
