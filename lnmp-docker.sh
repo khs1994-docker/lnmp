@@ -169,7 +169,8 @@ cleanup(){
   # 不自动清理，列出镜像，用户自己清理
   docker images | grep "lnmp"
   docker images | grep "khs1994"
-   # 清理日志文件
+
+  # 清理日志文件
    cd logs
    rm -rf mongodb \
            mysql \
@@ -363,6 +364,21 @@ main() {
   redis-cli )
     docker-compose exec redis sh
     ;;
+  memcached-cli )
+    docker-compose exec memcached sh
+    ;;
+  rabbitmq-cli )
+    docker-compose exec rabbitmq sh
+    ;;
+  postgres-cli )
+    docker-compose exec postgresql sh
+    ;;
+  mongo-cli )
+    docker-compose exec mongo bash
+    ;;
+  nginx-cli )
+    docker-compose exec nginx sh
+    ;;
 
   push )
     docker-compose -f docker-compose.yml -f docker-compose.push.yml build \
@@ -384,6 +400,11 @@ Commands:
   mysql-cli            使用命令行管理 MySQL
   php-cli              使用命令行管理 PHP-FPM
   redis-cli            使用命令行管理 Redis
+  memcached-cli        使用命令行管理 Memcached
+  rabbitmq-cli         使用命令行管理 RabbitMQ
+  postgres-cli         使用命令行管理 PostgreSQL
+  mongo-cli            使用命令行管理 MongoDB
+  nginx-cli            使用命令行管理 nginx
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer

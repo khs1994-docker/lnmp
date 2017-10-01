@@ -35,41 +35,41 @@ services:
     #   - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
-  # memcached:
-  #   # build:
-  #   #   context: ./dockerfile/arm32v7/memcached/
-  #   #   dockerfile: Dockerfile
-  #   image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
-  #   networks:
-  #     - backend
-  #   # ports:
-  #   #   - "11211"
-  #
-  # rabbitmq:
-  #   # build:
-  #   #   context: ./dockerfile/arm32v7/rabbitmq/
-  #   #   dockerfile: Dockerfile
-  #   image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
-  #   volumes:
-  #     - rabbitmq-data:/var/lib/rabbitmq
-  #   networks:
-  #     - backend
-  #   # ports:
-  #   #   - "15672"
-  #   #   - "5672"
-  #
-  # postgresql:
-  #   # build:
-  #   #   context: ./dockerfile/arm32v7/postgresql/
-  #   #   dockerfile: Dockerfile
-  #   image: arm32v7/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
-  #   env_file: .env
-  #   volumes:
-  #     - postgresql-data:/var/lib/postgresql
-  #   networks:
-  #     - backend
-  #   # ports:
-  #   #   - "5432"
+  memcached:
+    # build:
+    #   context: ./dockerfile/arm32v7/memcached/
+    #   dockerfile: Dockerfile
+    image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
+    networks:
+      - backend
+    # ports:
+    #   - "11211"
+
+  rabbitmq:
+    # build:
+    #   context: ./dockerfile/arm32v7/rabbitmq/
+    #   dockerfile: Dockerfile
+    image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - backend
+    # ports:
+    #   - "15672"
+    #   - "5672"
+
+  postgresql:
+    # build:
+    #   context: ./dockerfile/arm32v7/postgresql/
+    #   dockerfile: Dockerfile
+    image: arm32v7/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
+    env_file: .env
+    volumes:
+      - postgresql-data:/var/lib/postgresql
+    networks:
+      - backend
+    # ports:
+    #   - "5432"
 
   # mongo:
   #   # build:
@@ -97,12 +97,13 @@ services:
       - ./app:/app
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-      - ./config/php/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm
     networks:
       - frontend
       - backend
-    command: ["php-fpm"]
+    command: ["php-fpm","-R"]
     environment:
       - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4 arm32v7
       - APP_ENV=development
