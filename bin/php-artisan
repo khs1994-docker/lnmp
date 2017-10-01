@@ -1,7 +1,7 @@
 #!/bin/bash
 . .env
 echo -e "$0\n"
-COMPOSE_PATH=$1
+LARAVEL_PATH=$1
 CMD=$2
 ARCH=`uname -m`
 
@@ -21,8 +21,12 @@ fi
 if [ ${DOCKER_IMAGE} = "false" ];then
     echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
 else
-docker run --rm \
-       -v $PWD/app/${COMPOSE_PATH}:/app \
+
+echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${LARAVEL_PATH} 执行 php artisan ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
+
+
+docker run --rm -it \
+       -v $PWD/app/${LARAVEL_PATH}:/app \
        ${DOCKER_IMAGE}:${TAG} \
        php artisan ${CMD}
 fi

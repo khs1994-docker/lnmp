@@ -19,11 +19,14 @@ fi
 if [ ${DOCKER_IMAGE} = "false" ];then
     echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
 else
-docker run --rm \
+
+echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/ 执行 laravel new ${LARAVEL_PATH}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
+
+docker run --rm -it \
        -v $PWD/tmp/cache:/tmp/cache \
-       -v $PWD/app/${COMPOSE_PATH}:/app \
+       -v $PWD/app:/app \
        ${DOCKER_IMAGE}:${TAG} \
-      laravel new $LARAVEL_PATH
+       laravel new $LARAVEL_PATH
 
 #sudo chmod -R 777 app/$1
 
