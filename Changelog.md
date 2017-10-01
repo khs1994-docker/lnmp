@@ -5,6 +5,8 @@ Changelog
 
 #### v17.12 rc1
 
+* 生产环境 CI/CD (Git + webhooks) (Docker + webhooks)
+
 #### v17.09 rc10
 
 #### v17.09 rc6

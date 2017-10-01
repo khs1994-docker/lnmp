@@ -7,3 +7,6 @@
 [submodule "bin/compose"]
 	path = bin/compose
 	url = https://code.aliyun.com/khs1994/compose-linux.git
+[submodule "ci"]
+	path = ci
+	url = https://github.com/khs1994-docker/github-webhook-handler.git
