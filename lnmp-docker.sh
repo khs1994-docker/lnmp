@@ -356,6 +356,14 @@ main() {
     docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
     ;;
 
+  php-cli )
+    docker-compose exec php7 bash
+    ;;
+
+  redis-cli )
+    docker-compose exec redis sh
+    ;;
+
   push )
     docker-compose -f docker-compose.yml -f docker-compose.push.yml build \
       && docker-compose -f docker-compose.yml -f docker-compose.push.yml push
@@ -369,11 +377,13 @@ USAGE: ./docker-lnmp COMMAND
 
 Commands:
   compose              国内用户安装 docker-compose (Linux X86_64)
+  init                 初始化部署环境
   cleanup              清理日志文件
   demo                 克隆示例项目、nginx 配置文件
   mysql-demo           创建示例 MySQL 数据库
   mysql-cli            使用命令行管理 MySQL
-  init                 初始化部署环境
+  php-cli              使用命令行管理 PHP-FPM
+  redis-cli            使用命令行管理 Redis
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer

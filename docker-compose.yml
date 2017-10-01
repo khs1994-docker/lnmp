@@ -87,7 +87,7 @@ services:
       - backend
     dns:
       - 114.114.114.114
-    command: ["php-fpm"]
+    command: ["php-fpm","-R"]
     # entrypoint: /code/entrypoint.sh
     # entrypoint:
     # - php

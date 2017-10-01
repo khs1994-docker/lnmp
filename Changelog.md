@@ -10,6 +10,8 @@ Changelog
 #### v17.09 rc6
 
 * php-fpm 基于 Alpine Linux
+* 由于文件权限问题，php-fpm 使用 `root` 替代 `www-data` 用户
+* `./lnmp-docker` 增加架构判断（`x86_64`、`armv7l`、`aarch64`）来执行对应的命令
 * 升级软件版本：* 表示该软件进行了升级
 
 |Update|Name|Image|Version|Linux|

@@ -1,13 +1,28 @@
 #!/bin/bash
+. .env
 echo -e "$0\n"
 COMPOSE_PATH=$1
 CMD=$2
-TAG=7.1.9-alpine
-IMAGE=khs1994/php-fpm
-# if build image
-# IMAGE=lnmp-php
+ARCH=`uname -m`
 
+if [ $ARCH = "armv7l" ];then
+  DOCKER_IMAGE=khs1994/arm32v7-php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}
+elif [ $ARCH = "aarch64" ]; then
+  DOCKER_IMAGE=false
+else
+  DOCKER_IMAGE=khs1994/php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine
+fi
+
+# if build image
+# DOCKER_IMAGE=lnmp-php
+
+if [ ${DOCKER_IMAGE} = "false" ];then
+    echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
+else
 docker run --rm \
        -v $PWD/app/${COMPOSE_PATH}:/app \
-       ${IMAGE}:${TAG} \
+       ${DOCKER_IMAGE}:${TAG} \
        php artisan ${CMD}
+fi
