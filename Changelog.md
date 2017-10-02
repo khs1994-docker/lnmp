@@ -10,6 +10,7 @@ Changelog
 #### v17.09 rc10
 
 * 实验性支持 `arm64v8` 树莓派 3：树莓派使用 [Ubuntu 版本的 arm64 Docker](http://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/dists/xenial/pool/test/arm64/)
+* Fix: TZ in php-fpm
 
 #### v17.09 rc6
 
