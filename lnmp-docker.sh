@@ -5,6 +5,12 @@
 ENV=$1
 ARCH=`uname -m`
 
+# 不支持信息
+
+NOTSUPPORT(){
+  echo -e "\033[32mINFO\033[0m `uname -s` ${ARCH} 暂不支持\n"
+}
+
 # 创建日志文件
 
 logs(){
@@ -59,35 +65,6 @@ logs(){
   pwd && echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n" && echo -e "\n\n"
 }
 
-# 是否安装 Docker Compose [cn]
-
-install_docker_compose_cn(){
-  # 判断是否安装
-  command -v docker-compose >/dev/null 2>&1
-  if [ $? = 0 ];then
-    #存在
-    docker-compose --version
-    echo -e "\033[32mINFO\033[0m  docker-compose already installed"
-  else
-    if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
-      echo -e "\033[32mINFO\033[0m  cn docker-compose is installing...\n"
-      cd bin/compose
-      git fetch origin
-      git reset --hard origin/master && chmod +x docker-compose-`uname -s`-${ARCH}
-      . /etc/os-release
-      if [ `echo $ID` = "coreos" ];then
-        # 如果是 CoreOS 移动到 /opt/bin
-        sudo mv docker-compose-`uname -s`-${ARCH} /opt/bin/docker-compose
-      else
-        sudo mv docker-compose-`uname -s`-${ARCH} /usr/local/bin/docker-compose
-      fi
-      install_docker_compose_cn
-    else
-      echo -e "\033[32mINFO\033[0m  `uname -s` ${ARCH} 暂不支持自动安装，请使用执行 pip install docker-compose\n"
-    fi
-  fi
-}
-
 # 是否安装 Docker Compose
 
 install_docker_compose(){
@@ -106,15 +83,18 @@ install_docker_compose(){
       # pip 源
       if [ !-d "~/.pip"];then
         mkdir -p ~/.pip
-        echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" >> ~/.pip/pip.conf
+        echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
       fi
       sudo pip3 install docker-compose
-    else
+    elif [ `uanme -s` = "Linux" -o `uname -s` = "Darwin" ];then
       # 版本在 .env 文件定义
       # https://api.github.com/repos/docker/compose/releases/latest
+      # Linux macOS
       curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
       chmod +x docker-compose
       echo $PATH && sudo mv docker-compose /usr/local/bin
+    else
+      NOTSUPPORT
     fi
   fi
 }
@@ -143,19 +123,11 @@ function init {
       demo
       ;;
 
-  # 生产环境 转移项目文件、配置文件、安装依赖包
+    # 生产环境 转移项目文件、配置文件、安装依赖包
     production )
       echo "$ENV"
       # 请在 ./bin/production-init 定义要执行的操作
       bin/production-init
-      ;;
-
-    arm32v7 )
-      demo
-      ;;
-
-    arm32v8 )
-      demo
       ;;
   esac
   # docker-compose 是否安装
@@ -234,9 +206,6 @@ commit(){
 main() {
   echo -e "${ARCH}\n"
   case $1 in
-  compose )
-    install_docker_compose_cn
-    ;;
 
   init )
     init
@@ -283,14 +252,18 @@ main() {
     ;;
 
   production )
-    init
-    docker-compose \
+    # 仅允许运行在 Linux x86_64
+    if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
+      init
+      docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          up -d
-    echo -e "\n${ARCH}\n"
+      echo -e "\n${ARCH}\n"
+    else
+      echo -e "\033[32mINFO\033[0m  生产环境不支持 `uname -s` ${ARCH}\n"
+    fi
     ;;
-
 
   production-config )
     docker-compose \
@@ -298,6 +271,11 @@ main() {
          -f docker-compose.prod.yml \
          config
     echo -e "\n${ARCH}\n"
+    ;;
+
+  ci )
+    echo -e "\033[32mINFO\033[0m  自定义 .emv .update.js 之后再开启此项目\n"
+    cd ci && docker-compose up -d
     ;;
 
   development )
@@ -317,7 +295,7 @@ main() {
     elif [ ${ARCH} = "aarch64" ];then
       docker-compose -f docker-compose.arm64v8.yml up -d
     else
-      echo -e "\033[32mINFO\033[0m  ${ARCH} 暂不支持\n"
+      NOTSUPPORT
     fi
     echo -e "\n${ARCH}\n"
     ;;
@@ -328,8 +306,10 @@ main() {
       docker-compose -f docker-compose.yml -f docker-compose.build.yml config
     elif [ ${ARCH} = "armv7l" ];then
       docker-compose -f docker-compose.arm32v7.yml config
+    elif [ ${ARCH} = "aarch64" ];then
+      docker-compose -f docker-compose.arm64v8.yml config
     else
-      echo -e "\033[32mINFO\033[0m  ${ARCH} 暂不支持\n"
+      NOTSUPPORT
     fi
     echo -e "\n${ARCH}\n"
     ;;
@@ -389,7 +369,6 @@ Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
 USAGE: ./docker-lnmp COMMAND
 
 Commands:
-  compose              国内用户安装 docker-compose (Linux X86_64)
   init                 初始化部署环境
   cleanup              清理日志文件
   demo                 克隆示例项目、nginx 配置文件
@@ -406,10 +385,11 @@ Commands:
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer
   development          LNMP 开发环境部署（支持 x86_64 arm32v7 arm64v8 架构）
-  development-config   调试开发环境 Docker Compose
+  development-config   调试开发环境 Docker Compose 配置
   development --build  LNMP 开发环境部署--构建镜像（支持 x86_64 ）
-  production           LNMP 生产环境部署（支持 x86_64 ）
-  production-config    调试生产环境 Docker Compose
+  production           LNMP 生产环境部署（仅支持 Linux x86_64 ）
+  production-config    调试生产环境 Docker Compose 配置
+  ci                   生产环境自动更新项目为最新（配置好项目再开启）
   push                 构建 Docker 镜像并推送到 Docker 私有仓库，以用于生产环境
   backup               备份数据库
   restore              恢复数据库

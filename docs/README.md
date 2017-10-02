@@ -33,8 +33,6 @@
 
 * [arm32v7 && arm64v8](arm.md)
 
-* [空间占用情况](size.md)
-
 * [备份 && 恢复](backup.md)
 
 * [测试脚本](test.md)

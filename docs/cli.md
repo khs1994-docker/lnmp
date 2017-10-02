@@ -24,12 +24,11 @@
 
 |场景|原始命令|
 |:--|:--|
-|开发环境 拉取镜像*|`docker-compose up -d`|
-|开发环境 构建镜像|`docker-compose -f docker-compose.yaml -f docker-compose.build.yml up -d`|
-|生产环境        |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d`|
-|arm32v7        |`docker-compose -f docker-compose.arm32v7.yaml up -d`|
-|arm64v8        |`docker-compose -f docker-compose.arm64v8.yaml up -d`|
+|开发环境 拉取镜像* |`docker-compose up -d`|
+|开发环境 构建镜像  |`docker-compose -f docker-compose.yaml -f docker-compose.build.yml up -d`|
+|生产环境          |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d` |
+|arm32v7         |`docker-compose -f docker-compose.arm32v7.yaml up -d`|
+|arm64v8         |`docker-compose -f docker-compose.arm64v8.yaml up -d`|
 
-备注： `docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
-
+备注： `docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。生产环境 ( Linux x86_64 ) 和 `arm` 架构默认拉取镜像。
 调试参数配置请把 `up -d` 替换为 `config` 即可。
