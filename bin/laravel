@@ -8,10 +8,13 @@ if [ $ARCH = "armv7l" ];then
   DOCKER_IMAGE=khs1994/arm32v7-php-fpm
   TAG=${KHS1994_LNMP_PHP_VERSION}
 elif [ $ARCH = "aarch64" ]; then
-  DOCKER_IMAGE=false
-else
+  DOCKER_IMAGE=khs1994/arm64v8-php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}
+elif [ $ARCH = "x86_64" ];then
   DOCKER_IMAGE=khs1994/php-fpm
   TAG=${KHS1994_LNMP_PHP_VERSION}-alpine
+else
+  DOCKER_IMAGE="false"
 fi
 
 # if build image

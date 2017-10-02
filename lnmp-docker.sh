@@ -98,12 +98,19 @@ install_docker_compose(){
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
   else
     echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
-    # 版本在 .env 文件定义
-    # https://api.github.com/repos/docker/compose/releases/latest
-    curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    chmod +x docker-compose
-    echo $PATH && sudo mv docker-compose /usr/local/bin
-    install_docker_compose
+    if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch"];then
+      #arm
+      sudo apt install -y python3-pip
+      mkdir -p ~/.pip
+      echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" >> ~/.pip/pip.conf
+      sudo pip3 install docker-compose
+    else
+      # 版本在 .env 文件定义
+      # https://api.github.com/repos/docker/compose/releases/latest
+      curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+      chmod +x docker-compose
+      echo $PATH && sudo mv docker-compose /usr/local/bin
+    fi
   fi
 }
 
@@ -302,8 +309,10 @@ main() {
       esac
     elif [ ${ARCH} = "armv7l" ];then
       docker-compose -f docker-compose.arm32v7.yml up -d
+    elif [ ${ARCH} = "aarch64" ];then
+      docker-compose -f docker-compose.arm64v8.yml up -d
     else
-      echo -e "\033[32mINFO\033[0m  arm64v8 暂不支持\n"
+      echo -e "\033[32mINFO\033[0m  ${ARCH} 暂不支持\n"
     fi
     echo -e "\n${ARCH}\n"
     ;;
