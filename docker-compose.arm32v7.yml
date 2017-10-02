@@ -105,6 +105,7 @@ services:
       - backend
     command: ["php-fpm","-R"]
     environment:
+      - TZ=Asia/Shanghai
       - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4 arm32v7
       - APP_ENV=development
 
@@ -132,8 +133,7 @@ networks:
 
 volumes:
   # mysql-data:
-  pg-data:
+  postgresql-data:
   # mongodb-data:
   redis-data:
   rabbitmq-data:
-  postgresql-data:

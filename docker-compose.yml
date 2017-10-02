@@ -88,6 +88,8 @@ services:
     dns:
       - 114.114.114.114
     command: ["php-fpm","-R"]
+    environment:
+      - TZ=Asia/Shanghai
     # entrypoint: /code/entrypoint.sh
     # entrypoint:
     # - php

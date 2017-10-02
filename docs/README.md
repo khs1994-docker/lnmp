@@ -5,11 +5,13 @@
 
 * [项目初衷](why.md)
 
+* [国内网络问题](cn.md)
+
 * [项目初始化过程](init.md)
 
 * [路径说明](path.md)
 
-* [开发环境 & 构建镜像](development.md)
+* [开发环境 && 构建镜像](development.md)
 
 * [lnmp-docker CLI](cli.md)
 
@@ -29,11 +31,11 @@
 
 * [生产环境](production.md)
 
-* [arm32v7 & arm64v8](arm.md)
+* [arm32v7 && arm64v8](arm.md)
 
 * [空间占用情况](size.md)
 
-* [备份](backup.md)
+* [备份 && 恢复](backup.md)
 
 * [测试脚本](test.md)
 

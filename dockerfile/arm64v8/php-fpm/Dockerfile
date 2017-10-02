@@ -1,4 +1,4 @@
-FROM php:7.1.10-fpm
+FROM arm64v8/php:7.1.10-fpm
 
 # cn
 
@@ -16,7 +16,7 @@ RUN set -xe \
         libpq-dev \
         zlib1g-dev \
 	" \
-	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
+  && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
 	       && pecl install mongodb \
 	       && pecl install redis \
 	       && pecl install memcached \

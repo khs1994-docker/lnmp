@@ -1,7 +1,5 @@
 FROM arm32v7/php:7.1.10-fpm
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
-
 # cn
 
 COPY ./sources.list /etc/apt/sources.list
@@ -18,15 +16,15 @@ RUN set -xe \
         libpq-dev \
         zlib1g-dev \
 	" \
-  && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
+	&& apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
+	       && pecl install mongodb \
+	       && pecl install redis \
+	       && pecl install memcached \
+	       && pecl install xdebug \
+	       && docker-php-ext-enable mongodb memcached redis xdebug \
     	   && docker-php-ext-install -j$(nproc) iconv mcrypt pdo_pgsql pdo_mysql zip \
     	   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    	   && docker-php-ext-install -j$(nproc) gd \
-         && pecl install mongodb \
-         && pecl install redis \
-         && pecl install memcached \
-         && pecl install xdebug \
-         && docker-php-ext-enable mongodb memcached redis xdebug
+    	   && docker-php-ext-install -j$(nproc) gd
 
 # install composer
 

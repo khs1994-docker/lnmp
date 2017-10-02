@@ -1,0 +1,12 @@
+{
+  "name": "LNMP-Docker-CI/CD",
+  "version": "0.0.1",
+  "author": "khs1994-docker",
+  "private": true,
+  "scripts": {
+    "start": "node update.js",
+  },
+  "dependencies": {
+    "hexo": "^3.3.9"
+  }
+}
