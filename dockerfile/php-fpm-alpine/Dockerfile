@@ -1,6 +1,6 @@
 FROM php:7.1.10-fpm-alpine
 
-# 替换源
+# cn
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 

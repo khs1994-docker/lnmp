@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+  
+  arm32v7-php-fpm:
+    build: .
+    image: khs1994/arm32v7-php-fpm:${TAG}

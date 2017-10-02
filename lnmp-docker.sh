@@ -93,16 +93,21 @@ install_docker_compose_cn(){
 install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
-    #存在
+    # 存在
     docker-compose --version
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
   else
-    echo -e "\033[32mINFO\033[0m  docker-compose is installing...\n"
-    if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch"];then
+    # 不存在
+    echo -e "\033[32mINFO\033[0m  docker-compose is installing ...\n"
+    if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
       #arm
+      echo -e "\033[32mINFO\033[0m  ${ARCH} docker-compose is installing by pip3 ...\n"
       sudo apt install -y python3-pip
-      mkdir -p ~/.pip
-      echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" >> ~/.pip/pip.conf
+      # pip 源
+      if [ !-d "~/.pip"];then
+        mkdir -p ~/.pip
+        echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" >> ~/.pip/pip.conf
+      fi
       sudo pip3 install docker-compose
     else
       # 版本在 .env 文件定义

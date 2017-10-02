@@ -25,7 +25,7 @@ if [ ${DOCKER_IMAGE} = "false" ];then
     echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
 else
 
-echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${LARAVEL_PATH} 执行 php artisan ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
+echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${LARAVEL_PATH} 执行 $ php artisan ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
 
 docker run --rm -it \
