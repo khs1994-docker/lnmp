@@ -9,13 +9,12 @@ Changelog
 
 Bug fixes:
 * Fix CI/CD in `Production`
+* Fix `app`
 
 Changes:
 
 * Add `crontab` example
 * ADD `bash` example
-
-Updates:
 
 #### v17.09 rc7
 
