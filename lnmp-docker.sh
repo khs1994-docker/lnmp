@@ -187,6 +187,7 @@ update(){
 commit(){
   git add .
   git commit -m "Update [skip ci]"
+  git push origin dev
 }
 
 # 入口文件
