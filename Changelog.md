@@ -14,7 +14,7 @@ Bug fixes:
 Changes:
 
 * Add `crontab` example
-* ADD `bash` example
+* Add `bash` example
 
 #### v17.09 rc7
 
