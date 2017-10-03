@@ -1,6 +1,3 @@
-[submodule "app"]
-	path = app
-	url = https://github.com/khs1994-docker/lnmp-app-demo.git
 [submodule "config/nginx"]
 	path = config/nginx
 	url = https://github.com/khs1994-docker/lnmp-nginx-conf-demo.git

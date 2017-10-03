@@ -8,6 +8,7 @@ Changelog
 #### v17.09 rc8
 
 Bug fixes:
+* Fix CI/CD in `Production`
 
 Changes:
 
