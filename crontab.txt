@@ -1,0 +1,2 @@
+59 */2 * * * curl https://api.khs1994.com/wechat/getAccessToken > /tmp/wx-accesston.txt
+30 0 * * * /data/lnmp/bash/backup.sh

@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  node:
+    build: .
+    image: khs1994/github-webhook-handler:latest
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ~/.ssh:/root/.ssh/
+      - /data/lnmp:/data/lnmp
+    ports:
+      - "${YOUR_PORT}:7777"

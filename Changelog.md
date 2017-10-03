@@ -5,11 +5,16 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc8
+
 Bug fixes:
+* Fix CI/CD in `Production`
+* Fix `app`
 
 Changes:
 
-Updates:
+* Add `crontab` example
+* ADD `bash` example
 
 #### v17.09 rc7
 
@@ -76,9 +81,9 @@ Changes:
 
 Bug fixes:
 * Fix `Dockerfile`
-* Add `Travis CI`
 
 Changes:
+* Add `Travis CI`
 * Add 交互式命令行工具 `lnmp-docker.sh`，在 Linux、macOS 一切操作均可使用 `./lnmp-docker.sh` 完成
 
 #### v17.09 rc2
