@@ -109,7 +109,8 @@ services:
       - backend
     command: ["php-fpm","-R"]
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=v17.09-rc4 arm64v8
+      - TZ=Asia/Shanghai
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} arm64v8 With Pull Docker Image
       - APP_ENV=development
 
   nginx:
@@ -136,7 +137,7 @@ networks:
 
 volumes:
   # mysql-data:
-  pg-data:
+  postgresql-data:
   # mongodb-data:
   redis-data:
   rabbitmq-data:

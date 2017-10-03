@@ -12,10 +12,13 @@ if [ $ARCH = "armv7l" ];then
   DOCKER_IMAGE=khs1994/arm32v7-php-fpm
   TAG=${KHS1994_LNMP_PHP_VERSION}
 elif [ $ARCH = "aarch64" ];then
-  DOCKER_IMAGE=false
-else
+  DOCKER_IMAGE=khs1994/arm64v8-php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}
+elif [ $ARCH = "x86_64" ];then
   DOCKER_IMAGE=khs1994/php-fpm
   TAG=${KHS1994_LNMP_PHP_VERSION}-alpine
+else
+  DOCKER_IMAGE="false"
 fi
 
 # if build image
@@ -24,7 +27,7 @@ fi
 if [ ${DOCKER_IMAGE} = "false" ];then
   echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
 else
-echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${COMPOSE_PATH} 执行 composer ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
+echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${COMPOSE_PATH} 执行 $ composer ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
 docker run --rm -it \
        -v $PWD/tmp/cache:/tmp/cache \
