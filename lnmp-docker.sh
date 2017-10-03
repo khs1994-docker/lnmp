@@ -14,55 +14,55 @@ NOTSUPPORT(){
 # 创建日志文件
 
 logs(){
-  echo -e "\033[32mINFO\033[0m  mkdir log folder\n"
+  echo -e "\033[32mINFO\033[0m  mkdir log folder"
 
   if [ -d "logs/mongodb" ];then
-    echo -e "\n\033[32mINFO\033[0m  logs/mongo existence\n"
+    echo -e "\033[32mINFO\033[0m  logs/mongo existence"
   else
     mkdir -p logs/mongodb && cd logs/mongodb && echo > mongo.log && chmod 777 *
-    echo -e "\n\033[32mINFO\033[0m  mkdir logs/mongod and touch log file\n"
+    echo -e "\033[32mINFO\033[0m  mkdir logs/mongod and touch log file"
     cd -
    fi
 
   if [ -d "logs/mysql" ];then
-    echo -e "\n\033[32mINFO\033[0m  logs/mysql existence\n"
+    echo -e "\033[32mINFO\033[0m  logs/mysql existence"
   else
     mkdir -p logs/mysql && cd logs/mysql && echo > error.log && chmod 777 *
-    echo -e "\n\033[32mINFO\033[0m  mkdir logs/mysql and touch log file\n"
+    echo -e "\033[32mINFO\033[0m  mkdir logs/mysql and touch log file"
     cd -
   fi
 
   if [ -d "logs/nginx" ];then
-    echo -e "\n\033[32mINFO\033[0m  logs/nginx existence\n"
+    echo -e "\033[32mINFO\033[0m  logs/nginx existence"
   else
     mkdir -p logs/nginx && cd logs/nginx && echo > error.log && echo > access.log && chmod 777 *
-    echo -e "\n\033[32mINFO\033[0m  mkdir logs/nginx and touch log file\n"
+    echo -e "\033[32mINFO\033[0m  mkdir logs/nginx and touch log file"
     cd -
   fi
 
   if [ -d "logs/php-fpm" ];then
-    echo -e "\n\033[32mINFO\033[0m  logs/php-fpm existence\n"
+    echo -e "\033[32mINFO\033[0m  logs/php-fpm existence"
   else
     mkdir -p logs/php-fpm && cd logs/php-fpm && echo > error.log && echo > access.log && echo > xdebug-remote.log && chmod 777 *
-    echo -e "\n\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file\n"
+    echo -e "\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file"
     cd -
   fi
 
   if [ -d "logs/redis" ];then
-    echo -e "\n\033[32mINFO\033[0m  logs/redis existence\n"
+    echo -e "\033[32mINFO\033[0m  logs/redis existence"
   else
     mkdir -p logs/redis && cd logs/redis && echo > redis.log && chmod 777 *
-    echo -e "\n\033[32mINFO\033[0m  mkdir logs/redis and touch log file\n"
+    echo -e "\033[32mINFO\033[0m  mkdir logs/redis and touch log file"
     cd -
   fi
   # 不清理 Composer 缓存
   if [ -d "tmp/cache" ];then
-    echo -e "\n\033[32mINFO\033[0m  Composer cache existence\n"
+    echo -e "\033[32mINFO\033[0m  Composer cache existence"
   else
     cd tmp && mkdir cache && chmod 777 cache && cd -
-    echo -e "\n\033[32mINFO\033[0m  mkdir tmp/cache\n"
+    echo -e "\033[32mINFO\033[0m  mkdir tmp/cache"
   fi
-  pwd && echo -e "\n\033[32mINFO\033[0m  mkdir log folder SUCCESS\n" && echo -e "\n\n"
+  pwd && echo -e "\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
 }
 
 # 是否安装 Docker Compose
@@ -71,8 +71,8 @@ install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
-    docker-compose --version
     echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
+    docker-compose --version
   else
     # 不存在
     echo -e "\033[32mINFO\033[0m  docker-compose is installing ...\n"
@@ -97,6 +97,7 @@ install_docker_compose(){
       NOTSUPPORT
     fi
   fi
+  echo
 }
 
 # 创建示例数据库
@@ -110,7 +111,7 @@ function mysql_demo {
 function demo {
   #statements
   echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
-  git submodule update --init --recursive && echo -e "\n"
+  git submodule update --init --recursive
 }
 
 # 初始化
@@ -135,22 +136,12 @@ function init {
   # 创建日志文件
   logs
   # 初始化完成提示
-  echo -e "\033[32mINFO\033[0m  Init is SUCCESS\n\n"
+  echo -e "\033[32mINFO\033[0m  Init is SUCCESS\n"
 }
 
 # 清理日志文件
 
 cleanup(){
-  # 清理 images
-  # docker rmi lnmp-php \
-  #            lnmp-postgresql \
-  #            lnmp-mongo \
-  #            lnmp-memcached \
-  #            lnmp-mysql \
-  #            lnmp-rabbitmq \
-  #            lnmp-redis \
-  #            lnmp-nginx
-  # 不自动清理，列出镜像，用户自己清理
   docker images | grep "lnmp"
   docker images | grep "khs1994"
 
@@ -161,10 +152,7 @@ cleanup(){
            nginx \
            php-fpm \
            redis \
-      && cd -
-   # 建立空白日志文件夹及文件
-   logs
-   echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file\n"
+      && cd - && logs && echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file\n"
 }
 
 # 备份数据库
@@ -208,23 +196,19 @@ main() {
   case $1 in
 
   init )
-    init
-    echo -e "\n${ARCH}\n"
+    init && echo -e "${ARCH}"
     ;;
 
   demo )
-    demo
-    echo -e "\n${ARCH}\n"
+    demo && echo -e "${ARCH}"
     ;;
 
   cleanup )
-    cleanup
-    echo -e "\n${ARCH}\n"
+    cleanup && echo -e "${ARCH}"
     ;;
 
   test )
-    bin/test
-    echo -e "\n${ARCH}\n"
+    bin/test && echo -e "${ARCH}"
     ;;
 
   commit )
@@ -233,22 +217,19 @@ main() {
 
   laravel )
     read -p "请输入路径: ./app/" path
-    bin/laravel ${path}
-    echo -e "\n${ARCH}\n"
+    bin/laravel ${path} && echo -e "\n${ARCH}"
     ;;
 
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
-    bin/php-artisan ${path} ${cmd}
-    echo -e "\n${ARCH}\n"
+    bin/php-artisan ${path} ${cmd} && echo -e "\n${ARCH}"
     ;;
 
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
-    bin/composer ${path} ${cmd}
-    echo -e "\n${ARCH}\n"
+    bin/composer ${path} ${cmd} && echo -e "\n${ARCH}"
     ;;
 
   production )
@@ -259,7 +240,7 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          up -d
-      echo -e "\n${ARCH}\n"
+      echo -e "${ARCH}"
     else
       echo -e "\033[32mINFO\033[0m  生产环境不支持 `uname -s` ${ARCH}\n"
     fi
@@ -270,7 +251,7 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          config
-    echo -e "\n${ARCH}\n"
+    echo -e "${ARCH}"
     ;;
 
   ci )
@@ -297,7 +278,7 @@ main() {
     else
       NOTSUPPORT
     fi
-    echo -e "\n${ARCH}\n"
+    echo -e "${ARCH}"
     ;;
 
   development-config )
@@ -311,7 +292,7 @@ main() {
     else
       NOTSUPPORT
     fi
-    echo -e "\n${ARCH}\n"
+    echo -e "${ARCH}"
     ;;
 
   backup )
@@ -373,14 +354,7 @@ Commands:
   cleanup              清理日志文件
   demo                 克隆示例项目、nginx 配置文件
   mysql-demo           创建示例 MySQL 数据库
-  mysql-cli            使用命令行管理 MySQL
-  php-cli              使用命令行管理 PHP-FPM
-  redis-cli            使用命令行管理 Redis
-  memcached-cli        使用命令行管理 Memcached
-  rabbitmq-cli         使用命令行管理 RabbitMQ
-  postgres-cli         使用命令行管理 PostgreSQL
-  mongo-cli            使用命令行管理 MongoDB
-  nginx-cli            使用命令行管理 nginx
+  mysql-cli | php-cli | redis-cli | memcached-cli | rabbitmq-cli | postgres-cli | mongo-cli | nginx-cli
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
   composer             使用 Composer
