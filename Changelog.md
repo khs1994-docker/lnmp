@@ -5,6 +5,8 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc9
+
 #### v17.09 rc8
 
 Bug fixes:
@@ -12,7 +14,6 @@ Bug fixes:
 * Fix `app`
 
 Changes:
-
 * Add `crontab` example
 * Add `bash` example
 
