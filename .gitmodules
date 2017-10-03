@@ -4,6 +4,3 @@
 [submodule "config/nginx"]
 	path = config/nginx
 	url = https://github.com/khs1994-docker/lnmp-nginx-conf-demo.git
-[submodule "ci"]
-	path = ci
-	url = https://github.com/khs1994-docker/github-webhook-handler.git
