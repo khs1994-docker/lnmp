@@ -8,3 +8,4 @@ services:
 #    command: ["composer","install"]
     command: ["composer","update"]
 #    command: ["php","artisan","--version"]
+#    command: ["laravel","new",""]
