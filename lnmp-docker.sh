@@ -158,13 +158,13 @@ cleanup(){
 # 备份数据库
 
 backup(){
-  docker-compose exec mysql /backup/backup.sh
+  docker-compose exec mysql /backup/backup.sh $@
 }
 
 # 恢复数据库
 
 restore(){
-  docker-compose exec mysql /backup/restore.sh
+  docker-compose exec mysql /backup/restore.sh $1
 }
 
 # 更新项目
@@ -256,8 +256,12 @@ main() {
     ;;
 
   ci )
-    echo -e "\033[32mINFO\033[0m  自定义 .emv .update.js 之后再开启此项目\n"
-    cd ci && docker-compose up -d
+    cd ci
+    if [ -f ".env" -a -f ".update.js" ];then
+      docker-compose up -d
+    else
+      echo -e "\033[32mINFO\033[0m  自定义 .env .update.js 之后再运行\n"
+    fi
     ;;
 
   development )
@@ -297,11 +301,11 @@ main() {
     ;;
 
   backup )
-    backup
+    backup $2 $3 $4 $5 $6 $7 $8 $9
     ;;
 
   restore )
-    restore
+    restore $2
     ;;
 
   mysql-demo )
@@ -366,8 +370,8 @@ Commands:
   production-config    调试生产环境 Docker Compose 配置
   ci                   生产环境自动更新项目为最新（配置好项目再开启）
   push                 构建 Docker 镜像并推送到 Docker 私有仓库，以用于生产环境
-  backup               备份数据库
-  restore              恢复数据库
+  backup               备份 MySQL 数据库「加参数」
+  restore              恢复 MySQL 数据库「加 SQL 文件名」
   update               更新项目到最新版
   help                 输出帮助信息
   test                 「开发者选项」生产环境一键测试脚本
@@ -380,4 +384,4 @@ Read './docs/*.md' for more information on the command
   esac
 }
 
-main $1 $2
+main $1 $2 $3 $4 $5 $6 $7 $8 $9

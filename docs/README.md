@@ -21,8 +21,6 @@
 
   * [PHP 扩展列表](php.md)
 
-  * [PhpStorm](phpstorm.md)
-
   * [xdebug](xdebug.md)
 
   * [laravel](laravel.md)

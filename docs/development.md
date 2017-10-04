@@ -9,7 +9,7 @@ $ ./lnmp-docker.sh devlopment --build
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v17.09-rc5 x86_64 With Build Docker Image
+Welcome use khs1994-docker/lnmp v17.09 x86_64 With Build Docker Image
 
 development
 
@@ -21,7 +21,7 @@ development
 
 PhpStorm 打开本项目
 
-克隆 PHP 项目文件到 `./app/`
+克隆 PHP 项目文件到 `./app` 目录下
 
 ### Linux, macOS, Windows 10(Git Bash)
 
@@ -29,6 +29,8 @@ PhpStorm 打开本项目
 
 ### Windows 10
 
-修改 `./bin/docker-compose.windows.yml` 中 `volumes` 项目路径 `command` 要执行的命令
+修改 `./bin/docker-compose.windows.yml`
+
+其中 `volumes` 为项目路径， `command` 为要执行的命令
 
 执行 `docker-compose -f bin/docker-compose.windows.yml up`
