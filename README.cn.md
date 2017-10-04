@@ -4,8 +4,6 @@
 
 使用 Docker Compose 快速搭建 LNMP 环境。
 
-注意本项目不优先支持 Windows，如果您只会使用 Windows，请提出 [issues](https://github.com/khs1994-docker/lnmp/issues/new)，我视大家反馈情况可能会针对 Windows 进行优化。
-
 * [项目初衷](docs/why.md)
 
 * [支持文档](docs)

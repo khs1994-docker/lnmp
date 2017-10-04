@@ -31,4 +31,4 @@ PhpStorm 打开本项目
 
 修改 `./bin/docker-compose.windows.yml` 中 `volumes` 项目路径 `command` 要执行的命令
 
-执行 docker-compose -f bin/docker-compose.windows.yml up)
+执行 `docker-compose -f bin/docker-compose.windows.yml up`

@@ -1,5 +1,16 @@
 #!/bin/bash
 
+set -e
+
+error(){
+return 1
+}
+
+if [ -f "khs1994-robot.enc" ];then
+ echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"
+ error
+fi
+
 . .env
 echo -e "$0\n"
 COMPOSE_PATH=$1
@@ -8,30 +19,37 @@ ARCH=`uname -m`
 
 # 判断架构
 
-if [ $ARCH = "armv7l" ];then
-  DOCKER_IMAGE=khs1994/arm32v7-php-fpm
-  TAG=${KHS1994_LNMP_PHP_VERSION}
-elif [ $ARCH = "aarch64" ];then
+if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
   DOCKER_IMAGE=khs1994/arm64v8-php-fpm
+  if [ ${ARCH}= "armv7l" ];then
+    DOCKER_IMAGE=khs1994/arm32v7-php-fpm
+  fi
   TAG=${KHS1994_LNMP_PHP_VERSION}
-elif [ $ARCH = "x86_64" ];then
+elif [ ${ARCH} = "x86_64" ];then
   DOCKER_IMAGE=khs1994/php-fpm
   TAG=${KHS1994_LNMP_PHP_VERSION}-alpine
 else
-  DOCKER_IMAGE="false"
+  echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
+  error
 fi
 
 # if build image
 # DOCKER_IMAGE=lnmp-php
 
-if [ ${DOCKER_IMAGE} = "false" ];then
-  echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
-else
 echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${COMPOSE_PATH} 执行 $ composer ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
-docker run --rm -it \
-       -v $PWD/tmp/cache:/tmp/cache \
-       -v $PWD/app/${COMPOSE_PATH}:/app \
-       ${DOCKER_IMAGE}:${TAG} \
-       composer ${CMD}
-fi
+echo -e "version: \"3.3\"
+services:
+
+  laravel:
+    image: ${DOCKER_IMAGE}:${TAG}
+    volumes:
+      - ../tmp/cache:/tmp/cache
+      - ../app/${COMPOSE_PATH}:/app
+    command: [\"composer\",\"${CMD}\"]
+    tty: true
+
+" > bin/docker-compose.bash.yml
+docker-compose -f bin/docker-compose.bash.yml up
+docker-compose -f bin/docker-compose.bash.yml down
+
