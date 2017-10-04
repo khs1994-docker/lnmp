@@ -5,6 +5,11 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc9
+
+Changes:
+* Support `Windows 10` Powered By Git bash
+
 #### v17.09 rc8
 
 Bug fixes:
@@ -12,9 +17,8 @@ Bug fixes:
 * Fix `app`
 
 Changes:
-
 * Add `crontab` example
-* ADD `bash` example
+* Add `bash` example
 
 #### v17.09 rc7
 

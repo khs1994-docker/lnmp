@@ -1,5 +1,16 @@
 #!/bin/bash
 
+set -e
+
+error(){
+  return 1
+}
+
+if [ -f "khs1994-robot.enc" ];then
+  echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"
+  error
+fi
+
 echo $0
 
 # 生产环境自动测试脚本，开发环境由本人真机手动测试

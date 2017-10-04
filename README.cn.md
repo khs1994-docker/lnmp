@@ -4,8 +4,6 @@
 
 使用 Docker Compose 快速搭建 LNMP 环境。
 
-注意本项目不优先支持 Windows，如果您只会使用 Windows，请提出 [issues](https://github.com/khs1994-docker/lnmp/issues/new)，我视大家反馈情况可能会针对 Windows 进行优化。
-
 * [项目初衷](docs/why.md)
 
 * [支持文档](docs)
@@ -24,14 +22,14 @@
 
 # 快速上手
 
-本节命令仅适用于 Linux 和 macOS，若使用 Docker for Windows，请查看 [支持文档](docs/windows.md)。
+本节命令适用于 Linux，macOS, Windows 10（Git Bash）。
 
 ## 开发环境
 
 开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
 
 ```bash
-$ git clone -b dev --depth=2 git@github.com:khs1994-docker/lnmp.git
+$ git clone -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
 
@@ -49,7 +47,7 @@ development
 
 ## 生产环境
 
-生产环境默认拉取镜像，马上开启 `容器即服务( Caas )` 之旅！
+生产环境默认拉取镜像，马上开启 `容器即服务( CaaS )` 之旅！
 
 ```bash
 $ git clone -b master --depth=2 git@github.com:khs1994-docker/lnmp.git

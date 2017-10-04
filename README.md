@@ -21,12 +21,12 @@ To use LNMP Docker,you need:
 
 # Quick Start
 
-If you use Docker for Windows,see [Documents](docs/windows.md).
+Support Linux, macOS, Windows 10(Git Bash).
 
 ## Start in Devlopment
 
 ```bash
-$ git clone -b dev --depth=2 git@github.com:khs1994-docker/lnmp.git
+$ git clone -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
 
@@ -44,7 +44,7 @@ Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
 
 ## Run in Production
 
-Containers as a Service(Caas)
+Containers as a Service(CaaS)
 
 ```bash
 $ git clone -b master --depth=2 git@github.com:khs1994-docker/lnmp.git
