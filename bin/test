@@ -32,7 +32,7 @@ sleep 5
 
 curl 127.0.0.1 && echo && date
 
-#sleep 120
+set --
 
 read -t 20 -p "请等待20s，或按回车键继续" var
 
