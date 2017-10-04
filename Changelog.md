@@ -7,6 +7,9 @@ Changelog
 
 #### v17.09 rc9
 
+Changes:
+* Support `Windows 10` Powered By Git bash
+
 #### v17.09 rc8
 
 Bug fixes:

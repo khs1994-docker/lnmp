@@ -21,7 +21,7 @@ ARCH=`uname -m`
 
 if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
   DOCKER_IMAGE=khs1994/arm64v8-php-fpm
-  if [ ${ARCH}= "armv7l" ];then
+  if [ ${ARCH} = "armv7l" ];then
     DOCKER_IMAGE=khs1994/arm32v7-php-fpm
   fi
   TAG=${KHS1994_LNMP_PHP_VERSION}
