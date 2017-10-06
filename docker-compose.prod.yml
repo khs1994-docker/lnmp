@@ -17,6 +17,7 @@ services:
   php7:
     image: khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine
     volumes:
+      - ~/.ssh:/root/.ssh:rw
       - ./config/php/php-production.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/null.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
     environment:
