@@ -10,7 +10,7 @@
 
 * 使用 Composer
 
-* 生产环境使用 Composer 安装 PHP 项目依赖包
+* 命令行执行 PHP 文件
 
 ## 原始命令详解
 
@@ -22,13 +22,13 @@
 
 使用 `docker-compose` 来启动、停止、销毁容器的参数分别是 `up -d` `stop` `down`，通过 `-f` 来加载 `docker-compose.yml` (可以任意命名，也可以是 json 格式)，本项目的 CLI 就是对以上一些命令的封装。
 
-|场景|原始命令|
-|:--|:--|
-|开发环境 拉取镜像* |`docker-compose up -d`|
-|开发环境 构建镜像  |`docker-compose -f docker-compose.yaml -f docker-compose.build.yml up -d`|
-|生产环境          |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d` |
-|arm32v7         |`docker-compose -f docker-compose.arm32v7.yaml up -d`|
-|arm64v8         |`docker-compose -f docker-compose.arm64v8.yaml up -d`|
+|场景|CLI|原始命令|
+|:--|:--|:-|
+|开发环境 拉取镜像  | `$ ./lnmp-docker development`         |`docker-compose up -d`|
+|开发环境 构建镜像  | `$ ./lnmp-docker development --build` |`docker-compose -f docker-compose.yaml -f docker-compose.build.yml up -d`|
+|arm32v7         | `$ ./lnmp-docker development`         |`docker-compose -f docker-compose.arm32v7.yaml up -d`|
+|arm64v8         | `$ ./lnmp-docker development`         |`docker-compose -f docker-compose.arm64v8.yaml up -d`|
+|生产环境         | `$ ./lnmp-docker production`          |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d` |
 
 备注： `docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。生产环境 ( Linux x86_64 ) 和 `arm` 架构默认拉取镜像。
 调试参数配置请把 `up -d` 替换为 `config` 即可。
