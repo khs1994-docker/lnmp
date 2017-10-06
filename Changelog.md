@@ -5,6 +5,11 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc10
+
+Bug fixes:
+* Fix git ssh-key CI/CD in `Production`
+
 #### v17.09 rc9
 
 Changes:
