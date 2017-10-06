@@ -7,14 +7,14 @@ Changelog
 
 #### v17.09 rc11
 
-Updates:
-* `PostgreSQL` 10.0
-
 #### v17.09 rc10
 
 Bug fixes:
 * Fix git ssh-key CI/CD in `Production`
 * Fix MySQL backup and restore
+
+Updates:
+* `PostgreSQL` 10.0
 
 #### v17.09 rc9
 
