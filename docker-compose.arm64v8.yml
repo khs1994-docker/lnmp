@@ -24,6 +24,7 @@ services:
     #   context: ./dockerfile/arm64v8/redis/
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
+    restart: always
     image: "arm64v8/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
     networks:
@@ -40,6 +41,7 @@ services:
     # build:
     #   context: ./dockerfile/arm64v8/memcached/
     #   dockerfile: Dockerfile
+    restart: always
     image: arm64v8/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
     env_file: .env
     networks:
@@ -51,6 +53,7 @@ services:
     # build:
     #   context: ./dockerfile/arm64v8/rabbitmq/
     #   dockerfile: Dockerfile
+    restart: always
     image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
     env_file: .env
     volumes:
@@ -65,6 +68,7 @@ services:
     # build:
     #   context: ./dockerfile/arm64v8/postgresql/
     #   dockerfile: Dockerfile
+    restart: always
     image: arm64v8/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file:
       - ./.env
@@ -96,6 +100,7 @@ services:
     # build:
     #   context: ./dockerfile/arm64v8/php-fpm/
     #   dockerfile: Dockerfile
+    restart: always
     image: "khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
       - ./app:/app
@@ -118,6 +123,7 @@ services:
     #   context: ./dockerfile/arm64v8/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
+    restart: always
     image: "arm64v8/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file: .env
     ports:

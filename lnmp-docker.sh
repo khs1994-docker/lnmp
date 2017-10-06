@@ -260,7 +260,7 @@ main() {
     if [ -f ".env" -a -f ".update.js" ];then
       docker-compose up -d
     else
-      echo -e "\033[32mINFO\033[0m  自定义 .env .update.js 之后再运行\n"
+      echo -e "\033[32mINFO\033[0m  自定义 .env .update.js 之后再运行 $ ci/init.sh \n"
     fi
     ;;
 
@@ -372,9 +372,9 @@ USAGE: ./docker-lnmp COMMAND
 Commands:
   init                 初始化部署环境
   cleanup              清理日志文件
-  demo                 克隆示例项目、nginx 配置文件
+  demo                 克隆 nginx 配置文件
   mysql-demo           创建示例 MySQL 数据库
-  php                  命令行执行 PHP 文件「./app 路径 PHP文件名」
+  php                  命令行执行 PHP 文件「相对于 ./app 的路径 PHP文件名」
   mysql-cli | php-cli | redis-cli | memcached-cli | rabbitmq-cli | postgres-cli | mongo-cli | nginx-cli
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan
@@ -384,7 +384,7 @@ Commands:
   development --build  LNMP 开发环境部署--构建镜像（支持 x86_64 ）
   production           LNMP 生产环境部署（仅支持 Linux x86_64 ）
   production-config    调试生产环境 Docker Compose 配置
-  ci                   生产环境自动更新项目为最新（配置好项目再开启）
+  ci                   生产环境自动更新项目为最新
   push                 构建 Docker 镜像并推送到 Docker 私有仓库，以用于生产环境
   backup               备份 MySQL 数据库「加参数」
   restore              恢复 MySQL 数据库「加 SQL 文件名」

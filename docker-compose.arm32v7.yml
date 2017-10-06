@@ -23,6 +23,7 @@ services:
     # build:
     #   context: ./dockerfile/arm32v7/redis/
     #   dockerfile: Dockerfile
+    restart: always
     image: "arm32v7/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
     networks:
@@ -39,6 +40,7 @@ services:
     # build:
     #   context: ./dockerfile/arm32v7/memcached/
     #   dockerfile: Dockerfile
+    restart: always
     image: arm32v7/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
     networks:
       - backend
@@ -49,6 +51,7 @@ services:
     # build:
     #   context: ./dockerfile/arm32v7/rabbitmq/
     #   dockerfile: Dockerfile
+    restart: always
     image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
@@ -62,6 +65,7 @@ services:
     # build:
     #   context: ./dockerfile/arm32v7/postgresql/
     #   dockerfile: Dockerfile
+    restart: always
     image: arm32v7/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file: .env
     volumes:
@@ -92,6 +96,7 @@ services:
     # build:
     #   context: ./dockerfile/arm32v7/php-fpm/
     #   dockerfile: Dockerfile
+    restart: always
     image: "khs1994/arm32v7-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
       - ./app:/app
@@ -114,6 +119,7 @@ services:
     #   context: ./dockerfile/arm32v7/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
+    restart: always
     image: "arm32v7/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file: .env
     ports:
