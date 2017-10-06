@@ -1,3 +1,9 @@
-Windows 不能使用 `./lnmp-docker.sh`。
+# Windows 10
 
-请在 [CLI](cli.md) 一节参考原始命令详解，手动执行命令。
+Windows 10 使用 (Git Bash) 执行 `./lnmp-docker.sh`。
+
+在 `PhpStorm` 中，将 `terminal` 路径改为 `Git Bash` 路径。
+
+## More Information
+
+* https://git-scm.com/download/win

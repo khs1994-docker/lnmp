@@ -5,6 +5,17 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc11
+
+Updates:
+* `PostgreSQL` 10.0
+
+#### v17.09 rc10
+
+Bug fixes:
+* Fix git ssh-key CI/CD in `Production`
+* Fix MySQL backup and restore
+
 #### v17.09 rc9
 
 Changes:
@@ -40,20 +51,6 @@ Changes:
 Updates:
 * `php-fpm` 7.1.10
 
-|Name|Image|Version|Linux|
-|:--|:--|:--|:--|
-|[nginx](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.5-alpine    |1.13.5 |Alpine|
-|MySQL                                                    |mysql:5.7.19                   |5.7.19 |Debian:jessie|
-|[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |4.0.2  |Alpine|
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |7.1.10 |Alpine|
-|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.1-alpine |1.5.1  |Alpine|
-|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |3.6.12 |Alpine|
-|[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:9.6.5-alpine  |9.6.5  |Alpine|
-|MongoDB                                                  |mongo:3.5.13                   |3.5.13 |Debian:jessie|
-|-|-|-|-|
-|docker-compose                                           |-|1.16.1|-|
-|docker-ce                                                |-|17.09|-|
-
 #### v17.09 rc5
 
 Changes:
@@ -70,16 +67,6 @@ Changes:
 * Support `arm32v7`
 * Add Documents
 * Add Docker 镜像 TAG 锁定(在 `./.env` 文件定义)，提供一致性的环境
-
-|Name|Image|Version|Linux|
-|:--|:--|:--|:--|
-|nginx  |khs1994/nginx:1.13.5-alpine|1.13.5 |Alpine|
-|MySQL  |mysql:5.7.19               |5.7.19 |Debian:jessie|
-|Redis  |khs1994/redis:4.0.2-alpine |4.0.2  |Alpine|
-|php-fpm|khs1994/php-fpm:7.1.9      |7.1.9  |Debian:jessie|
-|-|-|-|-|
-|docker-compose|-|1.16.1|-|
-|docker-ce|-|17.09|-|
 
 #### v17.09 rc3
 

@@ -38,6 +38,7 @@ fi
 
 echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${LARAVEL_PATH} 执行 $ php artisan ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
+cd bin
 
 echo -e "version: \"3.3\"
 services:
@@ -50,7 +51,7 @@ services:
     command: [\"composer\",\"${CMD}\"]
     tty: true
 
-" > bin/docker-compose.bash.yml
-docker-compose -f bin/docker-compose.bash.yml up
-docker-compose -f bin/docker-compose.bash.yml down
+" > docker-compose.bash.yml
 
+docker-compose -f docker-compose.bash.yml up
+docker-compose -f docker-compose.bash.yml down

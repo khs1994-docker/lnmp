@@ -7,7 +7,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ~/.ssh:/root/.ssh/
-      - /data/lnmp:/data/lnmp
+      - ~/.ssh:/root/.ssh:rw
+      - /data/lnmp:/data/lnmp:rw
     ports:
       - "${YOUR_PORT}:7777"

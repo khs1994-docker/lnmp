@@ -21,8 +21,6 @@
 
   * [PHP 扩展列表](php.md)
 
-  * [PhpStorm](phpstorm.md)
-
   * [xdebug](xdebug.md)
 
   * [laravel](laravel.md)
@@ -30,6 +28,8 @@
   * [Composer](composer.md)
 
 * [生产环境](production.md)
+
+* [CI/CD](ci.md)
 
 * [arm32v7 && arm64v8](arm.md)
 

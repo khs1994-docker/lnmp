@@ -43,7 +43,7 @@ development
 
 ```
 
-在 `./app` 目录下开始 PHP 项目开发。
+在 `./config/nginx/` 新建 nginx 配置文件，在 `./app` 目录下开始 PHP 项目开发。
 
 ## 生产环境
 
@@ -75,30 +75,32 @@ $ docker-compose down
 
 ## 包含软件
 
-* Nginx
-* MySQL
-* PHP7
-* PHP7-FPM
-* Laravel
-* Laravel artisan
-* Composer
-* Redis
-* Memcached
-* MongoDB
-* PostgreSQL
-* RabbitMQ
+|Name|Docker Image|Version|Based|
+|:-- |:--         |:--    |:--  |
+|[NGINX](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.5-alpine    |`1.13.5` |Alpine|
+|MySQL                                                    |mysql:5.7.19                   |`5.7.19` |Debian:jessie|
+|[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |`4.0.2`  |Alpine|
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |`7.1.10` |Alpine|
+|Laravel                                                  |khs1994/php-fpm:7.1.10-alpine  |`5.5`    |Alpine|
+|Composer                                                 |khs1994/php-fpm:7.1.10-alpine  |`1.5.2`  |Alpine|
+|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.1-alpine |`1.5.1`  |Alpine|
+|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |`3.6.12` |Alpine|
+|[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:10.0-alpine   |`10.0`   |Alpine:3.6|
+|MongoDB                                                  |mongo:3.5.13                   |`3.5.13` |Debian:jessie|
+
 
 ## 文件夹结构
 
 |文件夹|说明|
 |:--|:--|
-|`app`         |项目文件（HTML,PHP,etc）「位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|
+|`app`         |项目文件（HTML, PHP, etc）|
+|`backup`      |备份文件|
+|`bash`        |用户自定义脚本文件|
+|`ci`          |CI/CD|
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
 |`tmp`         |临时文件|
-|`docs`        |支持文档|
-|`bin`         |脚本封装|
 
 ## 端口暴露
 

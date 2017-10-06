@@ -1,5 +1,11 @@
 #!/bin/bash
 
-BACKUP_DATABASES=test
-
-mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} ${BACKUP_DATABASES} > /backup/"$(date "+%Y%m%d-%H.%M")".sql
+if [ ! -n "$1" ] ;then
+  echo -e "请传入参数
+database [tables]
+--databases [OPTIONS] DB1 [DB2 DB3...]
+--all-databases [OPTIONS]
+"
+else
+  mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} "$@" > /backup/"$(date "+%Y%m%d-%H.%M")".sql
+fi
