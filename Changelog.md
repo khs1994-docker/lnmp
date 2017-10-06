@@ -5,6 +5,8 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc11
+
 #### v17.09 rc10
 
 Bug fixes:
