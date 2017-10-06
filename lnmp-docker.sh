@@ -348,6 +348,21 @@ main() {
       && docker-compose -f docker-compose.yml -f docker-compose.push.yml push
     ;;
 
+  php )
+    cd app
+    echo "version: \"3.3\"
+services:
+
+  php:
+    image: khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine
+    volumes:
+      - ./$2:/app
+    command: [\"php\",\"$3\"]
+" > docker-compose.yml
+
+    docker-compose up && docker-compose down
+   ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
@@ -359,6 +374,7 @@ Commands:
   cleanup              清理日志文件
   demo                 克隆示例项目、nginx 配置文件
   mysql-demo           创建示例 MySQL 数据库
+  php                  命令行执行 PHP 文件「./app 路径 PHP文件名」
   mysql-cli | php-cli | redis-cli | memcached-cli | rabbitmq-cli | postgres-cli | mongo-cli | nginx-cli
   laravel              新建 Laravel 项目
   artisan              使用 Laravel 命令行工具 artisan

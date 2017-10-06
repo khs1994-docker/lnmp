@@ -43,7 +43,7 @@ development
 
 ```
 
-在 `./app` 目录下开始 PHP 项目开发。
+在 `./config/nginx/` 新建 nginx 配置文件，在 `./app` 目录下开始 PHP 项目开发。
 
 ## 生产环境
 
@@ -93,13 +93,14 @@ $ docker-compose down
 
 |文件夹|说明|
 |:--|:--|
-|`app`         |项目文件（HTML,PHP,etc）「位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|
+|`app`         |项目文件（HTML, PHP, etc）|
+|`backup`      |备份文件|
+|`bash`        |用户自定义脚本文件|
+|`ci`          |CI/CD|
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
 |`tmp`         |临时文件|
-|`docs`        |支持文档|
-|`bin`         |脚本封装|
 
 ## 端口暴露
 
