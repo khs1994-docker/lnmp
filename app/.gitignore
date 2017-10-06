@@ -4,4 +4,3 @@
 !README.md
 !.env.development
 !.env.production
-!docker-compose.yml
