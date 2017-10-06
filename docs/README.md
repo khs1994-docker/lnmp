@@ -29,6 +29,8 @@
 
 * [生产环境](production.md)
 
+* [CI/CD](ci.md)
+
 * [arm32v7 && arm64v8](arm.md)
 
 * [备份 && 恢复](backup.md)
