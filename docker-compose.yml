@@ -2,6 +2,7 @@ version: "3.3"
 services:
 
   mysql:
+    restart: always
     # 开发环境使用自定义镜像，构建规则在 override 中定义
     # 变量从 .env 文件读取例如镜像 tag
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
@@ -10,7 +11,6 @@ services:
     #environment:
     #  # your password
     #  - MYSQL_ROOT_PASSWORD=mytest
-    restart: always
     networks:
       - backend
     volumes:
@@ -20,11 +20,11 @@ services:
     command: ["mysqld","--character-set-server=utf8mb4"]
 
   redis:
+    restart: always
     image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: .env
     # ports:
     #   - "6379"
-    restart: always
     networks:
       - backend
     volumes:
@@ -34,36 +34,37 @@ services:
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
   # memcached:
+  #   restart: always
   #   image: lnmp-memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
-  #   restart: always
   #   # ports:
   #   #   - "11211"
   #
   # rabbitmq:
+  #   restart: always
   #   image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
   #     - backend
-  #   restart: always
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
   #
   # postgresql:
+  #    restart: always
   #   image: lnmp-postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   env_file: .env
   #   volumes:
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
-  #   restart: always
   #   # ports:
   #   #   - "5432"
   #
   # mongo:
+  #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   env_file:
   #     - ./.env
@@ -73,12 +74,12 @@ services:
   #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
   #   networks:
   #     - backend
-  #   restart: always
   #   # ports:
   #   #   - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
+    restart: always
     image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
@@ -91,7 +92,6 @@ services:
     networks:
       - frontend
       - backend
-    restart: always
     dns:
       - 114.114.114.114
     command: ["php-fpm","-R"]
@@ -120,13 +120,13 @@ services:
     #   - "6060:6060/udp"
 
   nginx:
+    restart: always
     image: "lnmp-nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file: .env
     ports:
       - "443:443"
       - "80:80"
     volumes:
-    restart: always
       - ./app:/app
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro

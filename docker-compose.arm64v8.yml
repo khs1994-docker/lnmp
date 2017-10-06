@@ -7,6 +7,7 @@ services:
   #   #   context: ./dockerfile/arm6v8/mysql/
   #   #   dockerfile: Dockerfile
   #   #image: lnmp-mysql:latest
+  #   restart: always
   #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
   #   env_file:
   #     - ./.env
@@ -83,6 +84,7 @@ services:
   #   # build:
   #   #   context: ./dockerfile/arm64v8/mongodb/
   #   #   dockerfile: Dockerfile
+  #   restart: always
   #   image: arm64v8/mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   env_file: .env
   #   volumes:
