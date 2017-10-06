@@ -7,14 +7,14 @@ Changelog
 
 #### v17.09 rc11
 
+Changes:
+* Add `restart:always` in Docker Compose file
+
 #### v17.09 rc10
 
 Bug fixes:
 * Fix git ssh-key CI/CD in `Production`
 * Fix MySQL backup and restore
-
-Changes:
-* Add `restart:always` in Docker Compose file
 
 Updates:
 * `PostgreSQL` 10.0
