@@ -10,6 +10,9 @@ Changelog
 Changes:
 * Add `restart:always` in Docker Compose file
 
+Updates:
+* `Memcached` 1.5.2
+
 #### v17.09 rc10
 
 Bug fixes:

@@ -83,7 +83,7 @@ $ docker-compose down
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |`7.1.10` |Alpine|
 |Laravel                                                  |khs1994/php-fpm:7.1.10-alpine  |`5.5`    |Alpine|
 |Composer                                                 |khs1994/php-fpm:7.1.10-alpine  |`1.5.2`  |Alpine|
-|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.1-alpine |`1.5.1`  |Alpine|
+|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.2-alpine |`1.5.2`  |Alpine|
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |`3.6.12` |Alpine|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:10.0-alpine   |`10.0`   |Alpine:3.6|
 |MongoDB                                                  |mongo:3.5.13                   |`3.5.13` |Debian:jessie|
