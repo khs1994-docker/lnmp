@@ -12,6 +12,7 @@ Changes:
 
 Updates:
 * `Memcached` 1.5.2
+* `nginx` 1.13.6
 
 #### v17.09 rc10
 

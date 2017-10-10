@@ -74,7 +74,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.5-alpine    |`1.13.5` |Alpine:3.5|
+|[NGINX](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.5-alpine    |`1.13.6` |Alpine:3.5|
 |MySQL                                                    |mysql:5.7.19                   |`5.7.19` |Debian:jessie|
 |[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |`4.0.2`  |Alpine:3.6|
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |`7.1.10` |Alpine:3.4|
