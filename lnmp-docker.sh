@@ -4,6 +4,7 @@
 
 ENV=$1
 ARCH=`uname -m`
+OS=`uname -s`
 
 # 不支持信息
 
@@ -201,7 +202,7 @@ commit(){
 # 入口文件
 
 main() {
-  echo -e "\n\033[32mINFO\033[0m  ARCH is ${ARCH}\n"
+  echo -e "\n\033[32mINFO\033[0m  ARCH is ${OS} ${ARCH}\n"
   case $1 in
 
   init )
@@ -370,7 +371,7 @@ services:
 
   * )
   echo  -e "
-Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
+Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
 USAGE: ./docker-lnmp COMMAND
 
