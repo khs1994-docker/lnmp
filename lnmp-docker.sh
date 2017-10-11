@@ -15,54 +15,58 @@ NOTSUPPORT(){
 
 logs(){
   echo -e "\033[32mINFO\033[0m  mkdir log folder"
-
-  if [ -d "logs/mongodb" ];then
-    echo -e "\033[32mINFO\033[0m  logs/mongo existence"
+  cd logs
+  if [ -d "mongodb" ];then
+    echo -e "\033[32mINFO\033[0m  logs/mongodb existence"
   else
-    mkdir -p logs/mongodb && cd logs/mongodb && echo > mongo.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/mongod and touch log file"
-    cd -
+    mkdir mongodb && echo > mongodb/mongo.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/mongod and touch log file"
    fi
 
-  if [ -d "logs/mysql" ];then
+  if [ -d "mysql" ];then
     echo -e "\033[32mINFO\033[0m  logs/mysql existence"
   else
-    mkdir -p logs/mysql && cd logs/mysql && echo > error.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/mysql and touch log file"
-    cd -
+    mkdir mysql && echo > mysql/error.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/mysql and touch log file"
   fi
 
-  if [ -d "logs/nginx" ];then
+  if [ -d "nginx" ];then
     echo -e "\033[32mINFO\033[0m  logs/nginx existence"
   else
-    mkdir -p logs/nginx && cd logs/nginx && echo > error.log && echo > access.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/nginx and touch log file"
-    cd -
+    mkdir nginx && echo > nginx/error.log && echo > nginx/access.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/nginx and touch log file"
   fi
 
-  if [ -d "logs/php-fpm" ];then
+  if [ -d "php-fpm" ];then
     echo -e "\033[32mINFO\033[0m  logs/php-fpm existence"
   else
-    mkdir -p logs/php-fpm && cd logs/php-fpm && echo > error.log && echo > access.log && echo > xdebug-remote.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file"
-    cd -
+    mkdir php-fpm && echo > php-fpm/error.log && echo > php-fpm/access.log \
+    && echo > php-fpm/xdebug-remote.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file"
   fi
 
-  if [ -d "logs/redis" ];then
+  if [ -d "redis" ];then
     echo -e "\033[32mINFO\033[0m  logs/redis existence"
   else
-    mkdir -p logs/redis && cd logs/redis && echo > redis.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/redis and touch log file"
-    cd -
+    mkdir redis && echo > redis/redis.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/redis and touch log file"
   fi
+  chmod -R 777 mongodb \
+               mysql \
+               nginx \
+               php-fpm \
+               redis
+
+  cd -
+
   # 不清理 Composer 缓存
   if [ -d "tmp/cache" ];then
-    echo -e "\033[32mINFO\033[0m  Composer cache existence"
+    echo -e "\033[32mINFO\033[0m  Composer cache file existence"
   else
-    cd tmp && mkdir cache && chmod 777 cache && cd -
+    mkdir -p tmp/cache && chmod 777 tmp/cache
     echo -e "\033[32mINFO\033[0m  mkdir tmp/cache"
   fi
-  pwd && echo -e "\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
+  echo -e "\033[32mINFO\033[0m  mkdir log folder and file SUCCESS\n"
 }
 
 # 是否安装 Docker Compose
@@ -142,11 +146,6 @@ function init {
 # 清理日志文件
 
 cleanup(){
-  echo -e "\033[32mINFO\033[0m  不要在没有初始化之前执行清理命令\n"
-  docker images | grep "lnmp"
-  docker images | grep "khs1994"
-
-  # 清理日志文件
    cd logs \
       && echo > mongodb/mongo.log \
       && echo > mysql/error.log \
@@ -156,7 +155,7 @@ cleanup(){
       && echo > php-fpm/error.log \
       && echo > php-fpm/xdebug-remote.log \
       && echo > redis/redis.log \
-      && echo -e "\n\033[32mINFO\033[0m  默认不清理镜像，Clean log files SUCCESS\n"
+      && echo -e "\n\033[32mINFO\033[0m  Clean log files SUCCESS\n"
 }
 
 # 备份数据库

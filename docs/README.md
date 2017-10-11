@@ -35,11 +35,15 @@
 
 * [备份 && 恢复](backup.md)
 
-* [测试脚本](test.md)
+* [清理](cleanup.md)
 
 * [Windows 10](windows.md)
 
 * [常见问题](question.md)
+
+* 项目开发
+
+  * [测试脚本](test.md)
 
 ## More Information
 
