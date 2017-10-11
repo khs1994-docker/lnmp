@@ -7,14 +7,22 @@ Changelog
 
 #### v17.09 rc11
 
+Changes:
+* Add `restart:always` in Docker Compose file
+* Add `Gogs`
+
 Updates:
-* `PostgreSQL` 10.0
+* `Memcached` 1.5.2
+* `nginx` 1.13.6
 
 #### v17.09 rc10
 
 Bug fixes:
 * Fix git ssh-key CI/CD in `Production`
 * Fix MySQL backup and restore
+
+Updates:
+* `PostgreSQL` 10.0
 
 #### v17.09 rc9
 

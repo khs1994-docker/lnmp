@@ -1,6 +1,6 @@
 # LNMP Docker
 
-[![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)]() [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/lnmp.svg)]() [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)]()
+[![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/khs1994-docker/lnmp/dev.svg)](https://github.com/khs1994-docker/lnmp/tree/dev)
 
 Build LNMP within 2 minutes powered by Docker Compose.
 
@@ -74,16 +74,17 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.5-alpine    |`1.13.5` |Alpine|
+|[NGINX](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.5-alpine    |`1.13.6` |Alpine:3.5|
 |MySQL                                                    |mysql:5.7.19                   |`5.7.19` |Debian:jessie|
-|[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |`4.0.2`  |Alpine|
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |`7.1.10` |Alpine|
-|Laravel                                                  |khs1994/php-fpm:7.1.10-alpine  |`5.5`    |Alpine|
-|Composer                                                 |khs1994/php-fpm:7.1.10-alpine  |`1.5.2`  |Alpine|
-|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.1-alpine |`1.5.1`  |Alpine|
-|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |`3.6.12` |Alpine|
+|[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |`4.0.2`  |Alpine:3.6|
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |`7.1.10` |Alpine:3.4|
+|Laravel                                                  |khs1994/php-fpm:7.1.10-alpine  |`5.5`    |Alpine:3.4|
+|Composer                                                 |khs1994/php-fpm:7.1.10-alpine  |`1.5.2`  |Alpine:3.4|
+|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.2-alpine |`1.5.2`  |Alpine:3.6|
+|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |`3.6.12` |Alpine:3.5|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:10.0-alpine   |`10.0`   |Alpine:3.6|
 |MongoDB                                                  |mongo:3.5.13                   |`3.5.13` |Debian:jessie|
+|Gogs                                                     |gogs/gogs:latest               |`latest` |Alpine:3.5|
 
 ## Folder Structure
 

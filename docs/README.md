@@ -13,7 +13,7 @@
 
 * [开发环境 && 构建镜像](development.md)
 
-* [lnmp-docker CLI](cli.md)
+* [`lnmp-docker.sh` CLI](cli.md)
 
 * [nginx & HTTPS 配置](nginx-with-https.md)
 

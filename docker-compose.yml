@@ -2,6 +2,7 @@ version: "3.3"
 services:
 
   mysql:
+    restart: always
     # 开发环境使用自定义镜像，构建规则在 override 中定义
     # 变量从 .env 文件读取例如镜像 tag
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
@@ -19,6 +20,7 @@ services:
     command: ["mysqld","--character-set-server=utf8mb4"]
 
   redis:
+    restart: always
     image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: .env
     # ports:
@@ -32,6 +34,7 @@ services:
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
   # memcached:
+  #   restart: always
   #   image: lnmp-memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
@@ -39,6 +42,7 @@ services:
   #   #   - "11211"
   #
   # rabbitmq:
+  #   restart: always
   #   image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
@@ -49,6 +53,7 @@ services:
   #   #   - "5672"
   #
   # postgresql:
+  #    restart: always
   #   image: lnmp-postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   env_file: .env
   #   volumes:
@@ -59,6 +64,7 @@ services:
   #   #   - "5432"
   #
   # mongo:
+  #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   env_file:
   #     - ./.env
@@ -71,8 +77,22 @@ services:
   #   # ports:
   #   #   - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
+  #
+
+  gogs:
+    image: gogs/gogs:${KHS1994_LNMP_GOGS_VERSION}
+    ports:
+      - "22:22"
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - gogs-data:/data:rw
+      - ./config/gogs/app.prod.ini:/data/gogs/conf/app.ini:ro
+      - ./config/nginx/ssl:/data/ssl:ro
 
   php7:
+    restart: always
     image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
@@ -113,6 +133,7 @@ services:
     #   - "6060:6060/udp"
 
   nginx:
+    restart: always
     image: "lnmp-nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file: .env
     ports:
@@ -133,8 +154,9 @@ networks:
 
 volumes:
   mysql-data:
-  pg-data:
-  mongodb-data:
+  #pg-data:
+  #mongodb-data:
   redis-data:
-  rabbitmq-data:
-  postgresql-data:
+  #rabbitmq-data:
+  #postgresql-data:
+  gogs-data:
