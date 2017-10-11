@@ -1,1 +1,1 @@
-# LNMP Docker 示例项目文件
+# PHP 项目文件

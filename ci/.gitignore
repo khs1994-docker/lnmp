@@ -2,3 +2,4 @@ node_modules
 .env
 update.js
 update.sh
+package-lock.json

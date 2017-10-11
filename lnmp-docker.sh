@@ -117,8 +117,10 @@ function demo {
 # 初始化
 
 function init {
-  # 开发环境 拉取示例项目 [cn github]
+  # docker-compose 是否安装
+  install_docker_compose
   case $ENV in
+    # 开发环境 拉取示例项目 [cn github]
     development )
       echo "$ENV"
       demo
@@ -131,8 +133,6 @@ function init {
       bin/production-init
       ;;
   esac
-  # docker-compose 是否安装
-  install_docker_compose
   # 创建日志文件
   logs
   # 初始化完成提示
@@ -142,17 +142,21 @@ function init {
 # 清理日志文件
 
 cleanup(){
+  echo -e "\033[32mINFO\033[0m  不要在没有初始化之前执行清理命令\n"
   docker images | grep "lnmp"
   docker images | grep "khs1994"
 
   # 清理日志文件
-   cd logs
-   rm -rf mongodb \
-           mysql \
-           nginx \
-           php-fpm \
-           redis \
-      && cd - && logs && echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file\n"
+   cd logs \
+      && echo > mongodb/mongo.log \
+      && echo > mysql/error.log \
+      && echo > nginx/error.log \
+      && echo > nginx/access.log \
+      && echo > php-fpm/access.log \
+      && echo > php-fpm/error.log \
+      && echo > php-fpm/xdebug-remote.log \
+      && echo > redis/redis.log \
+      && echo -e "\n\033[32mINFO\033[0m  默认不清理镜像，Clean log files SUCCESS\n"
 }
 
 # 备份数据库
