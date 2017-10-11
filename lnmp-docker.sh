@@ -185,9 +185,15 @@ update(){
 # 提交项目「开发者选项」
 
 commit(){
-  git add .
-  git commit -m "Update [skip ci]"
-  git push origin dev
+  BRANCH=`git rev-parse --abbrev-ref HEAD`
+  echo -e "\n\033[32mINFO\033[0m  Branch is ${BRANCH}\n"
+  if [ ${BRANCH} = "dev" ];then
+    git add .
+    git commit -m "Update [skip ci]"
+    git push origin dev
+  else
+    echo -e "\n\033[32mINFO\033[0m  ${BRANCH} 分支不能自动提交\n"
+  fi
 }
 
 # 入口文件
