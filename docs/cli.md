@@ -1,14 +1,14 @@
 # 命令行工具简要说明
 
-只适用于 Linux、macOS，为避免输入过多的命令，编写了命令行工具简化用户使用，提供了以下功能：
+只适用于 `Linux`、`macOS`，为避免输入过多的命令，编写了命令行工具简化用户使用，提供了以下功能：
 
 * 各种场景和架构中一键启动
 
-* 安装 Laravel 项目
+* 安装 `Laravel` 项目
 
-* 使用 Laravel artisan
+* 使用 `Laravel artisan`
 
-* 使用 Composer
+* 使用 `Composer`
 
 * 命令行执行 PHP 文件
 

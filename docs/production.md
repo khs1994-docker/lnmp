@@ -16,12 +16,12 @@
 
 # 裸机配置
 
-安装 Docker
+安装 `Docker`
 
-配置 Docker 加速器
+配置 `Docker 加速器`
 
-安装 docker-compose
+安装 `docker-compose`
 
-自定义 `./bin/production-init`，拉取项目文件、nginx 配置文件
+自定义 `./bin/production-init`，拉取 `项目文件`、`nginx 配置文件`
 
 执行 `./lnmp-docker.sh production`

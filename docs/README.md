@@ -41,10 +41,6 @@
 
 * [常见问题](question.md)
 
-* 项目开发
-
-  * [测试脚本](test.md)
-
 ## More Information
 
 * [Docker CE 安装教程](https://www.khs1994.com/docker/README.html)
