@@ -57,7 +57,7 @@ logs(){
                php-fpm \
                redis
 
-  cd -
+  cd ../
 
   # 不清理 Composer 缓存
   if [ -d "tmp/cache" ];then
@@ -66,7 +66,7 @@ logs(){
     mkdir -p tmp/cache && chmod 777 tmp/cache
     echo -e "\033[32mINFO\033[0m  mkdir tmp/cache"
   fi
-  echo -e "\033[32mINFO\033[0m  mkdir log folder and file SUCCESS\n"
+  echo -e "\033[32mINFO\033[0m  mkdir log folder and file SUCCESS"
 }
 
 # 是否安装 Docker Compose
@@ -75,8 +75,7 @@ install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
-    echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
-    docker-compose --version
+    echo -e "\033[32mINFO\033[0m  `docker-compose --version` already installed"
   else
     # 不存在
     echo -e "\033[32mINFO\033[0m  docker-compose is installing ...\n"
@@ -202,23 +201,23 @@ commit(){
 # 入口文件
 
 main() {
-  echo -e "${ARCH}\n"
+  echo -e "\n\033[32mINFO\033[0m  ARCH is ${ARCH}\n"
   case $1 in
 
   init )
-    init && echo -e "${ARCH}"
+    init
     ;;
 
   demo )
-    demo && echo -e "${ARCH}"
+    demo
     ;;
 
   cleanup )
-    cleanup && echo -e "${ARCH}"
+    cleanup
     ;;
 
   test )
-    bin/test && echo -e "${ARCH}"
+    bin/test
     ;;
 
   commit )
@@ -227,19 +226,19 @@ main() {
 
   laravel )
     read -p "请输入路径: ./app/" path
-    bin/laravel ${path} && echo -e "\n${ARCH}"
+    bin/laravel ${path}
     ;;
 
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
-    bin/php-artisan ${path} ${cmd} && echo -e "\n${ARCH}"
+    bin/php-artisan ${path} ${cmd}
     ;;
 
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
-    bin/composer ${path} ${cmd} && echo -e "\n${ARCH}"
+    bin/composer ${path} ${cmd}
     ;;
 
   production )
@@ -261,7 +260,6 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          config
-    echo -e "${ARCH}"
     ;;
 
   ci )
@@ -292,7 +290,6 @@ main() {
     else
       NOTSUPPORT
     fi
-    echo -e "${ARCH}"
     ;;
 
   development-config )
@@ -306,7 +303,6 @@ main() {
     else
       NOTSUPPORT
     fi
-    echo -e "${ARCH}"
     ;;
 
   backup )
