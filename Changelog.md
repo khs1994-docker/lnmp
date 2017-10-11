@@ -9,6 +9,7 @@ Changelog
 
 Changes:
 * Add `restart:always` in Docker Compose file
+* Add `Gogs`
 
 Updates:
 * `Memcached` 1.5.2

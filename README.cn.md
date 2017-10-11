@@ -87,7 +87,7 @@ $ docker-compose down
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |`3.6.12` |Alpine:3.5|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:10.0-alpine   |`10.0`   |Alpine:3.6|
 |MongoDB                                                  |mongo:3.5.13                   |`3.5.13` |Debian:jessie|
-
+|Gogs                                                     |gogs/gogs:latest               |`latest` |Alpine:3.5|
 
 ## 文件夹结构
 
