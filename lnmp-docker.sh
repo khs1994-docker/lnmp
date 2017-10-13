@@ -4,6 +4,7 @@
 
 ENV=$1
 ARCH=`uname -m`
+OS=`uname -s`
 
 # 不支持信息
 
@@ -15,54 +16,58 @@ NOTSUPPORT(){
 
 logs(){
   echo -e "\033[32mINFO\033[0m  mkdir log folder"
-
-  if [ -d "logs/mongodb" ];then
-    echo -e "\033[32mINFO\033[0m  logs/mongo existence"
+  cd logs
+  if [ -d "mongodb" ];then
+    echo -e "\033[32mINFO\033[0m  logs/mongodb existence"
   else
-    mkdir -p logs/mongodb && cd logs/mongodb && echo > mongo.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/mongod and touch log file"
-    cd -
+    mkdir mongodb && echo > mongodb/mongo.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/mongod and touch log file"
    fi
 
-  if [ -d "logs/mysql" ];then
+  if [ -d "mysql" ];then
     echo -e "\033[32mINFO\033[0m  logs/mysql existence"
   else
-    mkdir -p logs/mysql && cd logs/mysql && echo > error.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/mysql and touch log file"
-    cd -
+    mkdir mysql && echo > mysql/error.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/mysql and touch log file"
   fi
 
-  if [ -d "logs/nginx" ];then
+  if [ -d "nginx" ];then
     echo -e "\033[32mINFO\033[0m  logs/nginx existence"
   else
-    mkdir -p logs/nginx && cd logs/nginx && echo > error.log && echo > access.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/nginx and touch log file"
-    cd -
+    mkdir nginx && echo > nginx/error.log && echo > nginx/access.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/nginx and touch log file"
   fi
 
-  if [ -d "logs/php-fpm" ];then
+  if [ -d "php-fpm" ];then
     echo -e "\033[32mINFO\033[0m  logs/php-fpm existence"
   else
-    mkdir -p logs/php-fpm && cd logs/php-fpm && echo > error.log && echo > access.log && echo > xdebug-remote.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file"
-    cd -
+    mkdir php-fpm && echo > php-fpm/error.log && echo > php-fpm/access.log \
+    && echo > php-fpm/xdebug-remote.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file"
   fi
 
-  if [ -d "logs/redis" ];then
+  if [ -d "redis" ];then
     echo -e "\033[32mINFO\033[0m  logs/redis existence"
   else
-    mkdir -p logs/redis && cd logs/redis && echo > redis.log && chmod 777 *
-    echo -e "\033[32mINFO\033[0m  mkdir logs/redis and touch log file"
-    cd -
+    mkdir redis && echo > redis/redis.log \
+    && echo -e "\033[32mINFO\033[0m  mkdir logs/redis and touch log file"
   fi
+  chmod -R 777 mongodb \
+               mysql \
+               nginx \
+               php-fpm \
+               redis
+
+  cd ../
+
   # 不清理 Composer 缓存
   if [ -d "tmp/cache" ];then
-    echo -e "\033[32mINFO\033[0m  Composer cache existence"
+    echo -e "\033[32mINFO\033[0m  Composer cache file existence"
   else
-    cd tmp && mkdir cache && chmod 777 cache && cd -
+    mkdir -p tmp/cache && chmod 777 tmp/cache
     echo -e "\033[32mINFO\033[0m  mkdir tmp/cache"
   fi
-  pwd && echo -e "\033[32mINFO\033[0m  mkdir log folder SUCCESS\n"
+  echo -e "\033[32mINFO\033[0m  mkdir log folder and file SUCCESS"
 }
 
 # 是否安装 Docker Compose
@@ -71,8 +76,7 @@ install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
-    echo -e "\033[32mINFO\033[0m  docker-compose already installed\n"
-    docker-compose --version
+    echo -e "\033[32mINFO\033[0m  `docker-compose --version` already installed"
   else
     # 不存在
     echo -e "\033[32mINFO\033[0m  docker-compose is installing ...\n"
@@ -117,8 +121,10 @@ function demo {
 # 初始化
 
 function init {
-  # 开发环境 拉取示例项目 [cn github]
+  # docker-compose 是否安装
+  install_docker_compose
   case $ENV in
+    # 开发环境 拉取示例项目 [cn github]
     development )
       echo "$ENV"
       demo
@@ -131,8 +137,6 @@ function init {
       bin/production-init
       ;;
   esac
-  # docker-compose 是否安装
-  install_docker_compose
   # 创建日志文件
   logs
   # 初始化完成提示
@@ -142,17 +146,16 @@ function init {
 # 清理日志文件
 
 cleanup(){
-  docker images | grep "lnmp"
-  docker images | grep "khs1994"
-
-  # 清理日志文件
-   cd logs
-   rm -rf mongodb \
-           mysql \
-           nginx \
-           php-fpm \
-           redis \
-      && cd - && logs && echo -e "\033[32mINFO\033[0m  Clean SUCCESS and recreate log file\n"
+   cd logs \
+      && echo > mongodb/mongo.log \
+      && echo > mysql/error.log \
+      && echo > nginx/error.log \
+      && echo > nginx/access.log \
+      && echo > php-fpm/access.log \
+      && echo > php-fpm/error.log \
+      && echo > php-fpm/xdebug-remote.log \
+      && echo > redis/redis.log \
+      && echo -e "\n\033[32mINFO\033[0m  Clean log files SUCCESS\n"
 }
 
 # 备份数据库
@@ -185,31 +188,37 @@ update(){
 # 提交项目「开发者选项」
 
 commit(){
-  git add .
-  git commit -m "Update [skip ci]"
-  git push origin dev
+  BRANCH=`git rev-parse --abbrev-ref HEAD`
+  echo -e "\n\033[32mINFO\033[0m  Branch is ${BRANCH}\n"
+  if [ ${BRANCH} = "dev" ];then
+    git add .
+    git commit -m "Update [skip ci]"
+    git push origin dev
+  else
+    echo -e "\n\033[32mINFO\033[0m  ${BRANCH} 分支不能自动提交\n"
+  fi
 }
 
 # 入口文件
 
 main() {
-  echo -e "${ARCH}\n"
+  echo -e "\n\033[32mINFO\033[0m  ARCH is ${OS} ${ARCH}\n"
   case $1 in
 
   init )
-    init && echo -e "${ARCH}"
+    init
     ;;
 
   demo )
-    demo && echo -e "${ARCH}"
+    demo
     ;;
 
   cleanup )
-    cleanup && echo -e "${ARCH}"
+    cleanup
     ;;
 
   test )
-    bin/test && echo -e "${ARCH}"
+    bin/test
     ;;
 
   commit )
@@ -218,19 +227,19 @@ main() {
 
   laravel )
     read -p "请输入路径: ./app/" path
-    bin/laravel ${path} && echo -e "\n${ARCH}"
+    bin/laravel ${path}
     ;;
 
   artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
-    bin/php-artisan ${path} ${cmd} && echo -e "\n${ARCH}"
+    bin/php-artisan ${path} ${cmd}
     ;;
 
   composer )
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
-    bin/composer ${path} ${cmd} && echo -e "\n${ARCH}"
+    bin/composer ${path} ${cmd}
     ;;
 
   production )
@@ -252,7 +261,6 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          config
-    echo -e "${ARCH}"
     ;;
 
   ci )
@@ -283,7 +291,6 @@ main() {
     else
       NOTSUPPORT
     fi
-    echo -e "${ARCH}"
     ;;
 
   development-config )
@@ -297,7 +304,6 @@ main() {
     else
       NOTSUPPORT
     fi
-    echo -e "${ARCH}"
     ;;
 
   backup )
@@ -365,7 +371,7 @@ services:
 
   * )
   echo  -e "
-Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION} `uname -s` ${ARCH}
+Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
 USAGE: ./docker-lnmp COMMAND
 

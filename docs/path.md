@@ -34,7 +34,7 @@
 |名称|本机|容器|
 |--|--|--|
 |`redis.conf`|`./config/redis/redis.conf`|`/usr/local/etc/redis/redis.conf`|
-|`/data/`    |`./var/lib/redis`          |`/data`                          |
+|`/data/`    |`redis-data`               |`/data`                          |
 
 # 数据库
 
@@ -43,18 +43,26 @@
 |名称|本机|容器|
 |--|--|--|
 |`error.log`      |`./logs/mysql/error.log`|`/var/log/mysql/error.log`|
-|`/var/lib/mysql/`|`./var/lib/mysql`       |`/var/lib/mysql`|
+|`/var/lib/mysql/`|`mysql-data`            |`/var/lib/mysql`|
 
 ## PostgreSQL
 
 |名称|本机|容器|
 |--|--|--|
-|`/var/lib/postgresql/`|`./var/lib/postgresql`|`/var/lib/postgresql`|
+|`/var/lib/postgresql/`|`postgresql-data`|`/var/lib/postgresql`|
 
 ## MongoDB
 
 |名称|本机|容器|
 |--|--|--|
-|`/data/db/`  |`./var/lib/mongo`              |`/data/db/`                 |
+|`/data/db/`  |`mongodb-data`                 |`/data/db/`                 |
 |`mongod.conf`|`./config/mongodb/mongod.conf` |`/etc/mongod.conf`          |
 |`mongo.log`  |`./logs/mongodb/mongo.log`     |`/var/log/mongodb/mongo.log`|
+
+# Gogs
+
+|名称|本机|容器|
+|--|--|--|
+|`app.ini`|`./config/gogs/app.prod.ini`|`/data/gogs/conf/app.ini`|
+|`ssl`    |`./config/nginx/ssl`        |`/data/ssl`|
+|`data`   |`gogs-data`                 |`/data`|

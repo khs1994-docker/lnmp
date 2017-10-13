@@ -5,6 +5,14 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc12
+
+Bug fixes:
+* Fix `./lnmp-docker.sh` CLI
+
+Updates:
+* Update Support Documents
+
 #### v17.09 rc11
 
 Changes:

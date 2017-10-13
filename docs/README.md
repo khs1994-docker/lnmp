@@ -5,9 +5,9 @@
 
 * [项目初衷](why.md)
 
-* [国内网络问题](cn.md)
-
 * [项目初始化过程](init.md)
+
+* [国内网络问题](cn.md)
 
 * [路径说明](path.md)
 
@@ -35,7 +35,7 @@
 
 * [备份 && 恢复](backup.md)
 
-* [测试脚本](test.md)
+* [清理](cleanup.md)
 
 * [Windows 10](windows.md)
 
