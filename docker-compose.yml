@@ -43,7 +43,7 @@ services:
   #
   rabbitmq:
     restart: always
-    image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
+    image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq:rw
     networks:
@@ -156,6 +156,6 @@ volumes:
   # pg-data:
   # mongodb-data:
   redis-data:
-  # rabbitmq-data:
+  rabbitmq-data:
   # postgresql-data:
   # gogs-data:

@@ -1,6 +1,6 @@
 FROM php:7.1.10-fpm-alpine
 
-# cn
+# 替换源
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
@@ -24,15 +24,15 @@ ENV KHS1994_PHP_FPM_DEPS \
 
 RUN set -xe \
         && apk add --no-cache $KHS1994_PHP_FPM_DEPS \
+        && docker-php-ext-install -j "$(nproc)" bcmath iconv mcrypt pdo_pgsql pdo_mysql zip \
+        && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+        && docker-php-ext-install -j "$(nproc)" gd \
+        && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && pecl install mongodb \
         && pecl install redis \
         && pecl install memcached \
         && pecl install xdebug \
         && docker-php-ext-enable mongodb redis memcached xdebug \
-        && docker-php-ext-install -j "$(nproc)" iconv mcrypt pdo_pgsql pdo_mysql zip \
-        && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-        && docker-php-ext-install -j "$(nproc)" gd \
-        && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && apk del .build-deps
 
 # install composer

@@ -55,7 +55,7 @@ services:
     #   context: ./dockerfile/arm64v8/rabbitmq/
     #   dockerfile: Dockerfile
     restart: always
-    image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
+    image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
     env_file: .env
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq

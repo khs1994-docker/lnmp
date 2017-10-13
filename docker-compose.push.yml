@@ -31,7 +31,7 @@ services:
   #   build:
   #     context: ./dockerfile/rabbitmq/
   #     dockerfile: Dockerfile
-  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
+  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #
   # postgresql:
   #   build:
