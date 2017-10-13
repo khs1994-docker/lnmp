@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+
+  postgresql:
+    build: .
+    image: khs1994/postgres:${TAG}-alpine

@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+
+  rabbitmq:
+    build: .
+    image: khs1994/rabbitmq:${TAG}-management-alpine

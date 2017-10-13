@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+
+  redis:
+    build: .
+    image: khs1994/redis:${TAG}-alpine

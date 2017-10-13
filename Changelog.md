@@ -8,6 +8,7 @@ Changelog
 #### v17.09 rc13
 
 Bug fixes:
+* Fix `Dockerfile`
 * Fix `RabbitMQ` error
 
 #### v17.09 rc12
