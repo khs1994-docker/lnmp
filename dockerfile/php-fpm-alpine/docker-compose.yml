@@ -1,0 +1,6 @@
+version: "3.3"
+services:
+
+  php-fpm:
+    build: .
+    image: khs1994/php-fpm:${TAG}-alpine

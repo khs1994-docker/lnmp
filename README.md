@@ -17,7 +17,7 @@ To use LNMP Docker,you need:
 
 * [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
 
-* [Docker Composer](https://github.com/docker/compose) 1.16.1+
+* [Docker Compose](https://github.com/docker/compose) 1.16.1+
 
 # Quick Start
 

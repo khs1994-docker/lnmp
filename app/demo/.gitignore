@@ -1,1 +1,3 @@
-.idea
+.ide
+vendor
+composer.lock

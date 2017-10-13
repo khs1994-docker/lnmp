@@ -5,6 +5,12 @@ Changelog
 
 #### v17.12 rc1
 
+#### v17.09 rc13
+
+Bug fixes:
+* Fix `Dockerfile`
+* Fix `RabbitMQ` error
+
 #### v17.09 rc12
 
 Bug fixes:

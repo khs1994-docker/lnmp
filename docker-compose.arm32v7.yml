@@ -53,7 +53,7 @@ services:
     #   context: ./dockerfile/arm32v7/rabbitmq/
     #   dockerfile: Dockerfile
     restart: always
-    image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}
+    image: arm32v7/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
