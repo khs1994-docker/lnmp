@@ -41,16 +41,16 @@ services:
   #   # ports:
   #   #   - "11211"
   #
-  # rabbitmq:
-  #   restart: always
-  #   image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
-  #   volumes:
-  #     - rabbitmq-data:/var/lib/rabbitmq:rw
-  #   networks:
-  #     - backend
-  #   # ports:
-  #   #   - "15672"
-  #   #   - "5672"
+  rabbitmq:
+    restart: always
+    image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-alpine
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq:rw
+    networks:
+      - backend
+    # ports:
+    #   - "15672"
+    #   - "5672"
   #
   # postgresql:
   #    restart: always
@@ -77,7 +77,6 @@ services:
   #   # ports:
   #   #   - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
-  #
   #
   # gogs:
   #   image: gogs/gogs:${KHS1994_LNMP_GOGS_VERSION}
