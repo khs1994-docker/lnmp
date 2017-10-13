@@ -77,16 +77,16 @@ $ docker-compose down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.6-alpine    |`1.13.6` |Alpine:3.5|
+|[NGINX](https://github.com/khs1994-docker/nginx)         |khs1994/nginx:1.13.6-alpine    |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/nginx.svg)](https://github.com/khs1994-docker/nginx/releases) |Alpine:3.5|
 |MySQL                                                    |mysql:5.7.19                   |`5.7.19` |Debian:jessie|
-|[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |`4.0.2`  |Alpine:3.6|
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |`7.1.10` |Alpine:3.4|
+|[Redis](https://github.com/khs1994-docker/redis)         |khs1994/redis:4.0.2-alpine     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)   |Alpine:3.6|
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |khs1994/php-fpm:7.1.10-alpine  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |Alpine:3.4|
 |Laravel                                                  |khs1994/php-fpm:7.1.10-alpine  |`5.5`    |Alpine:3.4|
 |Composer                                                 |khs1994/php-fpm:7.1.10-alpine  |`1.5.2`  |Alpine:3.4|
-|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.2-alpine |`1.5.2`  |Alpine:3.6|
-|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |`3.6.12` |Alpine:3.5|
-|[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:10.0-alpine   |`10.0`   |Alpine:3.6|
-|MongoDB                                                  |mongo:3.5.13                   |`3.5.13` |Debian:jessie|
+|[Memcached](https://github.com/khs1994-docker/memcached) |khs1994/memcached:1.5.2-alpine |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/memcached.svg)](https://github.com/khs1994-docker/memcached/releases)   |Alpine:3.6|
+|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |khs1994/rabbitmq:3.6.12-alpine |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)  |Alpine:3.5|
+|[PostgreSQL](https://github.com/khs1994-docker/postgres) |khs1994/postgres:10.0-alpine   |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)    |Alpine:3.6|
+|MongoDB                                                  |mongo:3.5.13                   |`3.5.13`|Debian:jessie|
 |Gogs                                                     |gogs/gogs:latest               |`latest` |Alpine:3.5|
 
 ## 文件夹结构
