@@ -8,8 +8,8 @@ services:
   # memcached:
   #   image: khs1994/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #
-  rabbitmq:
-    image: khs1994/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  # rabbitmq:
+  #   image: khs1994/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #
   # postgresql:
   #   image: khs1994/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine

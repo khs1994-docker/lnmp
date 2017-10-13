@@ -59,4 +59,8 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
  && rm -rf /tmp/cache /tmp/.htaccess
 
+ENV PS1="[\u@\h \w]# "
+
+# RUN apk add --no-cache vim
+
 WORKDIR /app

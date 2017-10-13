@@ -41,16 +41,16 @@ services:
   #   # ports:
   #   #   - "11211"
   #
-  rabbitmq:
-    restart: always
-    image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq:rw
-    networks:
-      - backend
-    # ports:
-    #   - "15672"
-    #   - "5672"
+  # rabbitmq:
+  #   restart: always
+  #   image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq:rw
+  #   networks:
+  #     - backend
+  #   # ports:
+  #   #   - "15672"
+  #   #   - "5672"
   #
   # postgresql:
   #    restart: always
@@ -156,6 +156,6 @@ volumes:
   # pg-data:
   # mongodb-data:
   redis-data:
-  rabbitmq-data:
+  # rabbitmq-data:
   # postgresql-data:
   # gogs-data:
