@@ -1,5 +1,23 @@
 # 生产环境
 
+>请首先在 `开发环境` 中熟悉本项目的使用方法（包括但不限于项目路径，nginx 配置）。
+
+服务器安装 `Docker`
+
+服务器配置 `Docker 加速器`
+
+服务器安装 `docker-compose`
+
+`Fork` 本项目，删除 `dev` 分支。
+
+`克隆` 你 Fork 的本项目到服务器。
+
+按需修改，包括你需要启用的软件，CI/CD，等。更多信息请阅读 `个性化配置` 一节
+
+执行 `./lnmp-docker.sh production`
+
+>生产环境追求稳定，本项目每月发布一个版本，你只需每月在某天 `同步` 本项目即可。
+
 ## PHP
 
 * 不启用 `xdebug`
@@ -12,16 +30,4 @@
 
 ## Docker 私有仓库
 
-自己构建镜像，推送到私有仓库，生产环境从 Docker 私有仓库拉取镜像。
-
-# 裸机配置
-
-安装 `Docker`
-
-配置 `Docker 加速器`
-
-安装 `docker-compose`
-
-自定义 `./bin/production-init`，拉取 `项目文件`、`nginx 配置文件`
-
-执行 `./lnmp-docker.sh production`
+你可以自己构建镜像，推送到私有仓库，生产环境从 Docker 私有仓库拉取镜像。
