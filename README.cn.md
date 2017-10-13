@@ -47,15 +47,9 @@ development
 
 ## 生产环境
 
-生产环境默认拉取镜像，马上开启 `容器即服务( CaaS )` 之旅！
+马上开启 `容器即服务( CaaS )` 之旅！
 
-```bash
-$ git clone -b master --depth=2 git@github.com:khs1994-docker/lnmp.git
-
-$ cd lnmp
-
-$ ./lnmp-docker.sh production
-```
+更多信息请查看 [支持文档](docs/production.md)。
 
 ## 停止
 

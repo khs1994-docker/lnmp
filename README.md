@@ -44,15 +44,9 @@ Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
 
 ## Run in Production
 
-Containers as a Service(CaaS)
+Start `Containers as a Service(CaaS)`
 
-```bash
-$ git clone -b master --depth=2 git@github.com:khs1994-docker/lnmp.git
-
-$ cd lnmp
-
-$ ./lnmp-docker.sh production
-```
+For more information, see [Documents](docs/production.md).
 
 ## Stop
 
