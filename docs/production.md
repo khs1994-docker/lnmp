@@ -10,7 +10,7 @@
 
 [`Fork` 本项目](https://github.com/khs1994-docker/lnmp/fork)，删除 `dev` 分支
 
-`克隆` 你的项目到服务器
+`克隆` 你 Fork 的项目到服务器
 
 按需修改，包括你需要启用的软件( `docker-compose.yml` )，`CI/CD`，等。更多信息请阅读 `个性化配置` 一节
 
