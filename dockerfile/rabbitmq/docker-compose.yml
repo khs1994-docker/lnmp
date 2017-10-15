@@ -3,4 +3,4 @@ services:
 
   rabbitmq:
     build: .
-    image: khs1994/rabbitmq:${TAG}-management-alpine
+    image: ${DOCKER_HUB_USERNAME}/rabbitmq:${TAG}-management-alpine
