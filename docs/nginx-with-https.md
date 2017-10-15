@@ -12,13 +12,13 @@ server{
   server_name lnmp-docker-laravel-blog-dev.khs1994.com;
   listen 443 ssl http2;
 
-  # 重要 此处为容器内路径 本机 ./app/ 对应容器内 /app/
+  # 「重要」 此处为容器内路径（注意不是本机路径）！ 本机 ./app/ 对应容器内 /app/
 
   root /app/blog/public;
 
   index index.html index.php;
 
-  # 重要 ssl 证书路径 本机 ./config/nginx/ 对应容器内 /etc/nginx/conf.d/
+  # 「重要」 ssl 证书路径，此处为容器内路径（注意不是本机路径）！ 本机 ./config/nginx/ 对应容器内 /etc/nginx/conf.d/
 
   ssl_certificate conf.d/ssl-demo/lnmp-docker-laravel-blog-dev.khs1994.com.cer;
   ssl_certificate_key conf.d/ssl-demo/lnmp-docker-laravel-blog-dev.khs1994.com.key;
@@ -34,7 +34,7 @@ server{
 
   location ~ .*\.php(\/.*)*$ {
 
-    # 重要 php7 为 docker-compose.yml 中定义的服务名，同理在 PHP 文件中连接其他容器请使用 服务名，127.0.0.1 这样肯定是不行的。
+    # 「重要」 php7 为 docker-compose.yml 中定义的服务名，同理在 PHP 文件中连接其他容器请使用 服务名，慎用 127.0.0.1 localhost。
 
     fastcgi_pass php7:9000;
     fastcgi_index index.php;

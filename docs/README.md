@@ -1,6 +1,6 @@
 # khs1994-dockeer/lnmp 支持文档
 
-安装好 Docker CE 并配置好镜像加速器（推荐阿里云），并安装 [docker-compose](https://github.com/docker/compose/releases) 这里不再赘述。
+安装 Docker CE 并配置 `镜像加速器`（阿里云等），并安装 [docker-compose](https://github.com/docker/compose/releases)。
 
 
 * [项目初衷](why.md)
@@ -40,6 +40,8 @@
 * [Windows 10](windows.md)
 
 * [常见问题](question.md)
+
+> 务必分清本机路径和容器内路径，慎用 127.0.0.1 localhost，排查错误请使用 `docker logs` 命令查看日志。 
 
 ## More Information
 

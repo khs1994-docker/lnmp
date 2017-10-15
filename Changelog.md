@@ -1,9 +1,15 @@
 Changelog
 ==============
 
-#### v18.03 rc1
+#### v17.10 rc1
 
-#### v17.12 rc1
+Changes:
+* Move some VARS in `docker-compose.yml` to `.env` file
+
+Updates:
+* Update Support Documents in `Production`
+
+#### v17.09 (2017-10-14)
 
 #### v17.09 rc13
 

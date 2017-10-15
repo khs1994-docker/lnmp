@@ -105,7 +105,7 @@ services:
     restart: always
     image: "khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     volumes:
-      - ./app:/app
+      - ./app:${KHS1994_LNMP_PHP_PATH}:rw
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
@@ -132,7 +132,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:/app
+      - ./app:${KHS1994_LNMP_PHP_PATH}:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx
