@@ -4,7 +4,7 @@ Changelog
 #### v17.10 rc1
 
 Changes:
-将 docker-compose.yml 公共配置移到 `.env` 文件
+* Move some VARS in `docker-compose.yml` to `.env` file
 
 Updates:
 * Update Support Documents in `Production`
