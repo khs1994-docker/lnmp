@@ -3,6 +3,9 @@ Changelog
 
 #### v17.10 rc2
 
+Changes:
+* Rename `.env` to `.env.example`
+
 #### v17.10 rc1
 
 Changes:

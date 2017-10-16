@@ -137,6 +137,13 @@ function init {
       bin/production-init
       ;;
   esac
+  # .env.example to .env
+  if [ -f .env ];then
+    echo -e "\033[31mINFO\033[0m  .env 文件已存在"
+  else
+    echo -e "\033[31mINFO\033[0m  .env 文件不存在"
+    cp .env.example .env
+  fi
   # 创建日志文件
   logs
   # 初始化完成提示
@@ -369,6 +376,9 @@ services:
     docker-compose up && docker-compose down
    ;;
 
+  down )
+    docker-compose down --remove-orphans
+    ;;
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
