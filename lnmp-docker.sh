@@ -121,10 +121,23 @@ function demo {
 function env_status(){
   # .env.example to .env
   if [ -f .env ];then
-    echo -e "\033[31mINFO\033[0m  .env 文件已存在\n"
+    echo -e "\033[32mINFO\033[0m  .env 文件已存在\n"
   else
     echo -e "\033[31mINFO\033[0m  .env 文件不存在\n"
     cp .env.example .env
+    # exit 1
+fi
+}
+
+# 初始化 Gogs
+
+function gogs_init(){
+  # .env.example to .env
+  if [ -f app.prod.ini ];then
+    echo -e "\033[32mINFO\033[0m  app.prod.ini 文件已存在\n"
+  else
+    echo -e "\033[31mINFO\033[0m  app.prod.ini 文件不存在\n"
+    cp app.ini app.prod.ini
     # exit 1
 fi
 }
@@ -281,7 +294,8 @@ main() {
     if [ -f ".env" -a -f ".update.js" ];then
       docker-compose up -d
     else
-      echo -e "\033[32mINFO\033[0m  自定义 .env .update.js 之后再运行 $ ci/init.sh \n"
+      echo -e "\033[31mINFO\033[0m  自定义 .env .update.js 之后再运行 $ ci/init.sh \n"
+      # ./init.sh
     fi
     ;;
 
@@ -406,6 +420,11 @@ services:
     docker-compose down --remove-orphans
     ;;
 
+  gogs-init )
+    cd config/gogs
+    gogs_init
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -432,6 +451,7 @@ Commands:
   backup               备份 MySQL 数据库「加参数」
   restore              恢复 MySQL 数据库「加 SQL 文件名」
   update               更新项目到最新版
+  gogs-init            初始化 Gogs
   help                 输出帮助信息
   test                 「开发者选项」生产环境一键测试脚本
   commit               「开发者选项」提交项目
