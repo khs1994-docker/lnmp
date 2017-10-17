@@ -1,8 +1,8 @@
-# 初始化
+# 项目初始化过程
+
+是否存在 `.env` 文件，没有将 `.env.example` 复制为 `.env`（或者退出脚本）
 
 是否安装 `docker-compose`
-
-是否存在 `.env` 文件，没有将 `.env.example` 复制为 `.env`
 
 如果是 `开发环境`，拉取 `git 子模块`
 
