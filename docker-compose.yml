@@ -6,7 +6,7 @@ services:
     # 变量从 .env 文件读取 例如镜像 tag
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     env_file:
-      - ./.env
+      - ./env/mysql.env
     #environment:
     #  # your password
     #  - MYSQL_ROOT_PASSWORD=mytest
@@ -37,6 +37,7 @@ services:
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
+  #   env_file: .env
   #   # ports:
   #   #   - "11211"
   #
@@ -47,6 +48,7 @@ services:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
   #     - backend
+  #   env_file: .env
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
@@ -54,19 +56,20 @@ services:
   # postgresql:
   #    restart: always
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
-  #   env_file: .env
+  #   env_file:
+  #     - ./env/postgresql.env
   #   volumes:
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
+  #   env_file: .env
   #   # ports:
   #   #   - "5432"
   #
   # mongo:
   #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file:
-  #     - ./.env
+  #   env_file: .env
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db:rw
@@ -103,8 +106,7 @@ services:
     dns:
       - 114.114.114.114
     command: ["php-fpm","-R"]
-    environment:
-      - TZ=Asia/Shanghai
+    env_file: .env 
     # entrypoint: /code/entrypoint.sh
     # entrypoint:
     #   - php
