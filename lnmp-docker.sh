@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. .env
-
 ENV=$1
 ARCH=`uname -m`
 OS=`uname -s`
@@ -118,6 +116,19 @@ function demo {
   git submodule update --init --recursive
 }
 
+# env
+
+function env_status(){
+  # .env.example to .env
+  if [ -f .env ];then
+    echo -e "\033[31mINFO\033[0m  .env 文件已存在\n"
+  else
+    echo -e "\033[31mINFO\033[0m  .env 文件不存在\n"
+    #cp .env.example .env
+    exit 1
+fi
+}
+
 # 初始化
 
 function init {
@@ -137,13 +148,6 @@ function init {
       bin/production-init
       ;;
   esac
-  # .env.example to .env
-  if [ -f .env ];then
-    echo -e "\033[31mINFO\033[0m  .env 文件已存在"
-  else
-    echo -e "\033[31mINFO\033[0m  .env 文件不存在"
-    cp .env.example .env
-  fi
   # 创建日志文件
   logs
   # 初始化完成提示
@@ -210,6 +214,8 @@ commit(){
 
 main() {
   echo -e "\n\033[32mINFO\033[0m  ARCH is ${OS} ${ARCH}\n"
+  env_status
+  . .env
   case $1 in
 
   init )
@@ -303,11 +309,18 @@ main() {
   development-config )
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml config
+      docker-compose \
+        -f docker-compose.yml \
+        -f docker-compose.build.yml \
+        config
     elif [ ${ARCH} = "armv7l" ];then
-      docker-compose -f docker-compose.arm32v7.yml config
+      docker-compose \
+        -f docker-compose.arm32v7.yml \
+        config
     elif [ ${ARCH} = "aarch64" ];then
-      docker-compose -f docker-compose.arm64v8.yml config
+      docker-compose \
+        -f docker-compose.arm64v8.yml \
+        config
     else
       NOTSUPPORT
     fi
@@ -357,8 +370,21 @@ main() {
     ;;
 
   push )
-    docker-compose -f docker-compose.yml -f docker-compose.push.yml build \
-      && docker-compose -f docker-compose.yml -f docker-compose.push.yml push
+    docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose.push.yml \
+      build \
+    && docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose.push.yml \
+      push
+    ;;
+
+  push-config )
+    docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose.push.yml \
+      config \
     ;;
 
   php )
@@ -379,6 +405,7 @@ services:
   down )
     docker-compose down --remove-orphans
     ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
