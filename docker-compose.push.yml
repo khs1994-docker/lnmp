@@ -42,5 +42,5 @@ services:
   nginx:
     build:
       context: ./dockerfile/nginx/
-      dockerfile: Dockerfile
+      dockerfile: source.Dockerfile
     image: "${REGISTRY_URL_AND_USERNAME}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
