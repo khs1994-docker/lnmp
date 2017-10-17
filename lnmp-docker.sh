@@ -124,8 +124,8 @@ function env_status(){
     echo -e "\033[31mINFO\033[0m  .env 文件已存在\n"
   else
     echo -e "\033[31mINFO\033[0m  .env 文件不存在\n"
-    #cp .env.example .env
-    exit 1
+    cp .env.example .env
+    # exit 1
 fi
 }
 
