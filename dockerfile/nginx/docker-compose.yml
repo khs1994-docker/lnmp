@@ -3,4 +3,4 @@ services:
 
   nginx:
     build: .
-    image: khs1994/nginx:${TAG}-alpine
+    image: ${DOCKER_HUB_USERNAME}/nginx:${TAG}-alpine

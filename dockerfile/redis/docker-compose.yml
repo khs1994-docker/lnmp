@@ -3,4 +3,4 @@ services:
 
   redis:
     build: .
-    image: khs1994/redis:${TAG}-alpine
+    image: ${DOCKER_HUB_USERNAME}/redis:${TAG}-alpine

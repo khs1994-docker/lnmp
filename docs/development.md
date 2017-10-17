@@ -9,7 +9,7 @@ $ ./lnmp-docker.sh devlopment --build
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v17.09 x86_64 With Build Docker Image
+Welcome use khs1994-docker/lnmp v17.10 x86_64 With Build Docker Image
 
 development
 
@@ -17,7 +17,15 @@ development
 
 ## 开发过程
 
-克隆本项目
+首先
+
+克隆本项目(也可以，但不推荐)
+
+或者
+
+[`Fork` 本项目](https://github.com/khs1994-docker/lnmp/fork)，删除 `dev` 分支，`克隆` 你 Fork 的项目到本机，通过 `PR` 保持与上游(本项目)的同步（强烈推荐）
+
+之后
 
 PhpStorm 打开本项目
 

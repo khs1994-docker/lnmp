@@ -3,4 +3,4 @@ services:
 
   postgresql:
     build: .
-    image: khs1994/postgres:${TAG}-alpine
+    image: ${DOCKER_HUB_USERNAME}/postgres:${TAG}-alpine

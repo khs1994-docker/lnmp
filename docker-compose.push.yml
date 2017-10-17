@@ -5,7 +5,7 @@ services:
     build:
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: "${REGISTRY_URL}/${REGISTRY_USERNAME}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    image: "${REGISTRY_URL_AND_USERNAME}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
 
   php7:
     build:
@@ -19,28 +19,28 @@ services:
         com.khs1994.description: "Extend Official PHP_FPM Docker Image"
         com.khs1994.department: "Chinese"
         com.khs1994.label-with-empty-value: ""
-    image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine
+    image: ${REGISTRY_URL_AND_USERNAME}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine
 
   # memcached:
   #   build:
   #     context: ./dockerfile/memcached/
   #     dockerfile: Dockerfile
-  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   image: ${REGISTRY_URL_AND_USERNAME}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #
   # rabbitmq:
   #   build:
   #     context: ./dockerfile/rabbitmq/
   #     dockerfile: Dockerfile
-  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   image: ${REGISTRY_URL_AND_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #
   # postgresql:
   #   build:
   #     context: ./dockerfile/postgresql/
   #     dockerfile: Dockerfile
-  #   image: ${REGISTRY_URL}/${REGISTRY_USERNAME}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   image: ${REGISTRY_URL_AND_USERNAME}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
 
   nginx:
     build:
       context: ./dockerfile/nginx/
       dockerfile: Dockerfile
-    image: "${REGISTRY_URL}/${REGISTRY_USERNAME}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    image: "${REGISTRY_URL_AND_USERNAME}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"

@@ -3,4 +3,4 @@ services:
 
   memcached:
     build: .
-    image: khs1994/memcached:${TAG}-alpine
+    image: ${DOCKER_HUB_USERNAME}/memcached:${TAG}-alpine
