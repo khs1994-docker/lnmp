@@ -17,13 +17,14 @@ services:
   #   ports:
   #     - "3306:3306"
   #   volumes:
-  #     - ./var/lib/mysql:/var/lib/mysql
+  #     - mysql-data:/var/lib/mysql
   #     - ./logs/mysql:/var/log/mysql
 
   redis:
     # build:
     #   context: ./dockerfile/arm32v7/redis/
     #   dockerfile: Dockerfile
+    # image: lnmp-redis:latest
     restart: always
     image: "arm32v7/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file: .env
@@ -141,7 +142,8 @@ networks:
 
 volumes:
   # mysql-data:
-  postgresql-data:
-  # mongodb-data:
   redis-data:
   rabbitmq-data:
+  postgresql-data:
+  # mongodb-data:
+  # gogs-data:

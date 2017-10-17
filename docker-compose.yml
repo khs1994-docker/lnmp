@@ -153,9 +153,8 @@ networks:
 
 volumes:
   mysql-data:
-  # pg-data:
-  # mongodb-data:
   redis-data:
   # rabbitmq-data:
   # postgresql-data:
+  # mongodb-data:
   # gogs-data:

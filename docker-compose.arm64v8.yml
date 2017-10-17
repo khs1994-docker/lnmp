@@ -4,7 +4,7 @@ services:
   # MySQL 暂时没有  arm 镜像
   # mysql:
   #   # build:
-  #   #   context: ./dockerfile/arm6v8/mysql/
+  #   #   context: ./dockerfile/arm64v8/mysql/
   #   #   dockerfile: Dockerfile
   #   #image: lnmp-mysql:latest
   #   restart: always
@@ -34,9 +34,9 @@ services:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - redis-data:/data
       - ./logs/redis:/var/log/redis
-    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
     # ports:
     #   - "6379"
+    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
   memcached:
     # build:
@@ -44,7 +44,6 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: arm64v8/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
-    env_file: .env
     networks:
       - backend
     # ports:
@@ -56,7 +55,6 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
-    env_file: .env
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
@@ -71,12 +69,11 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: arm64v8/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
-    env_file:
-      - ./.env
-    networks:
-      - backend
+    env_file: .env
     volumes:
       - postgresql-data:/var/lib/postgresql
+    networks:
+      - backend
     # ports:
     #   - "5432"
 
@@ -86,7 +83,6 @@ services:
   #   #   dockerfile: Dockerfile
   #   restart: always
   #   image: arm64v8/mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file: .env
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
   #     - mongodb-data:/data/db
@@ -96,6 +92,7 @@ services:
   #   ports:
   #     - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
+
 
   php7:
     # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
@@ -145,8 +142,8 @@ networks:
 
 volumes:
   # mysql-data:
-  postgresql-data:
-  # mongodb-data:
   redis-data:
   rabbitmq-data:
   postgresql-data:
+  # mongodb-data:
+  # gogs-data:
