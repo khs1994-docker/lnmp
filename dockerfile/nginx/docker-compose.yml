@@ -2,5 +2,7 @@ version: "3.3"
 services:
 
   nginx:
-    build: .
-    image: khs1994/nginx:${TAG}-alpine
+    build:
+      context: .
+      dockerfile: source.Dockerfile
+    image: ${DOCKER_HUB_USERNAME}/nginx:${TAG}-alpine

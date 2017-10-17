@@ -35,13 +35,15 @@
 
 * [备份 && 恢复](backup.md)
 
+* [Gogs](gogs.md)
+
 * [清理](cleanup.md)
 
 * [Windows 10](windows.md)
 
 * [常见问题](question.md)
 
-> 务必分清本机路径和容器内路径，慎用 127.0.0.1 localhost，排查错误请使用 `docker logs` 命令查看日志。 
+> 务必分清本机路径和容器内路径，慎用 127.0.0.1 localhost，排查错误请使用 `docker logs` 命令查看日志。
 
 ## More Information
 

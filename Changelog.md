@@ -1,6 +1,15 @@
 Changelog
 ==============
 
+#### v17.11 rc1
+
+`.env`:
+
+#### v17.10 rc2
+
+Changes:
+* Rename `.env` to `.env.example`
+
 #### v17.10 rc1
 
 Changes:

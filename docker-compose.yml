@@ -3,11 +3,10 @@ services:
 
   mysql:
     restart: always
-    # 开发环境使用自定义镜像，构建规则在 override 中定义
-    # 变量从 .env 文件读取例如镜像 tag
+    # 变量从 .env 文件读取 例如镜像 tag
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     env_file:
-      - ./.env
+      - ./env/mysql.env
     #environment:
     #  # your password
     #  - MYSQL_ROOT_PASSWORD=mytest
@@ -21,7 +20,7 @@ services:
 
   redis:
     restart: always
-    image: "lnmp-redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: .env
     # ports:
     #   - "6379"
@@ -35,39 +34,42 @@ services:
 
   # memcached:
   #   restart: always
-  #   image: lnmp-memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
+  #   env_file: .env
   #   # ports:
   #   #   - "11211"
   #
   # rabbitmq:
   #   restart: always
-  #   image: lnmp-rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
   #     - backend
+  #   env_file: .env
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
   #
   # postgresql:
   #    restart: always
-  #   image: lnmp-postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
-  #   env_file: .env
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   env_file:
+  #     - ./env/postgresql.env
   #   volumes:
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
+  #   env_file: .env
   #   # ports:
   #   #   - "5432"
   #
   # mongo:
   #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file:
-  #     - ./.env
+  #   env_file: .env
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db:rw
@@ -92,12 +94,9 @@ services:
 
   php7:
     restart: always
-    image: "lnmp-php:${KHS1994_LNMP_PHP_VERSION}-alpine"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}php:${KHS1994_LNMP_PHP_VERSION}-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
-      - ./app:${KHS1994_LNMP_PHP_PATH}:rw
-      - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
-      - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
@@ -107,16 +106,15 @@ services:
     dns:
       - 114.114.114.114
     command: ["php-fpm","-R"]
-    environment:
-      - TZ=Asia/Shanghai
+    env_file: .env 
     # entrypoint: /code/entrypoint.sh
     # entrypoint:
-    # - php
-    # - -d
-    # - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
-    # - -d
-    # - memory_limit=-1
-    # - vendor/bin/phpunit
+    #   - php
+    #   - -d
+    #   - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+    #   - -d
+    #   - memory_limit=-1
+    #   - vendor/bin/phpunit
     # extra_hosts:
     #   - "somehost:162.242.195.82"
     # healthcheck:
@@ -133,13 +131,12 @@ services:
 
   nginx:
     restart: always
-    image: "lnmp-nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file: .env
     ports:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:${KHS1994_LNMP_PHP_PATH}:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
@@ -153,9 +150,8 @@ networks:
 
 volumes:
   mysql-data:
-  # pg-data:
-  # mongodb-data:
   redis-data:
   # rabbitmq-data:
   # postgresql-data:
+  # mongodb-data:
   # gogs-data:

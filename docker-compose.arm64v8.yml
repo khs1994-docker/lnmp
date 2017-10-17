@@ -1,19 +1,21 @@
 version: "3.3"
 services:
 
-  # MySQL 暂时没有  arm 镜像
+  # # MySQL 暂时没有 arm 镜像
   # mysql:
   #   # build:
-  #   #   context: ./dockerfile/arm6v8/mysql/
+  #   #   context: ./dockerfile/arm64v8/mysql/
   #   #   dockerfile: Dockerfile
-  #   #image: lnmp-mysql:latest
+  #   # image: lnmp-mysql:latest
   #   restart: always
-  #   image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
+  #   image: "arm64v8/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
   #   env_file:
   #     - ./.env
-  #   #environment:
-  #   #  # your password
-  #   #  - MYSQL_ROOT_PASSWORD=mytest
+  #   networks:
+  #     - backend
+  #   environment:
+  #   # your password
+  #     - MYSQL_ROOT_PASSWORD=mytest
   #   ports:
   #     - "3306:3306"
   #   volumes:
@@ -27,16 +29,17 @@ services:
     # image: lnmp-redis:latest
     restart: always
     image: "arm64v8/redis:${KHS1994_LNMP_REDIS_VERSION}"
-    env_file: .env
+    env_file:
+      - ./.env
     networks:
       - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - redis-data:/data
       - ./logs/redis:/var/log/redis
-    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
     # ports:
     #   - "6379"
+    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
 
   memcached:
     # build:
@@ -44,7 +47,6 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: arm64v8/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
-    env_file: .env
     networks:
       - backend
     # ports:
@@ -56,11 +58,10 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: arm64v8/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
-    env_file: .env
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - backend
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
     # ports:
     #   - "15672"
     #   - "5672"
@@ -71,8 +72,7 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: arm64v8/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
-    env_file:
-      - ./.env
+    env_file: .env
     networks:
       - backend
     volumes:
@@ -86,16 +86,16 @@ services:
   #   #   dockerfile: Dockerfile
   #   restart: always
   #   image: arm64v8/mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file: .env
+  #   networks:
+  #     - backend
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf
   #     - mongodb-data:/data/db
   #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
-  #   networks:
-  #     - backend
   #   ports:
   #     - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
+
 
   php7:
     # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
@@ -104,6 +104,9 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: "khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
+    networks:
+      - frontend
+      - backend
     volumes:
       - ./app:${KHS1994_LNMP_PHP_PATH}:rw
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
@@ -111,14 +114,11 @@ services:
       - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm
-    networks:
-      - frontend
-      - backend
-    command: ["php-fpm","-R"]
     environment:
       - TZ=Asia/Shanghai
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} arm64v8 With Pull Docker Image
       - APP_ENV=development
+    command: ["php-fpm","-R"]
 
   nginx:
     # build:
@@ -128,6 +128,8 @@ services:
     restart: always
     image: "arm64v8/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file: .env
+    networks:
+      - frontend
     ports:
       - "443:443"
       - "80:80"
@@ -136,8 +138,6 @@ services:
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx
-    networks:
-      - frontend
 
 networks:
   frontend:
@@ -145,8 +145,8 @@ networks:
 
 volumes:
   # mysql-data:
-  postgresql-data:
-  # mongodb-data:
   redis-data:
   rabbitmq-data:
   postgresql-data:
+  # mongodb-data:
+  # gogs-data:

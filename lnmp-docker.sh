@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. .env
-
 ENV=$1
 ARCH=`uname -m`
 OS=`uname -s`
@@ -118,6 +116,32 @@ function demo {
   git submodule update --init --recursive
 }
 
+# env
+
+function env_status(){
+  # .env.example to .env
+  if [ -f .env ];then
+    echo -e "\033[32mINFO\033[0m  .env 文件已存在\n"
+  else
+    echo -e "\033[31mINFO\033[0m  .env 文件不存在\n"
+    cp .env.example .env
+    # exit 1
+fi
+}
+
+# 初始化 Gogs
+
+function gogs_init(){
+  # .env.example to .env
+  if [ -f app.prod.ini ];then
+    echo -e "\033[32mINFO\033[0m  app.prod.ini 文件已存在\n"
+  else
+    echo -e "\033[31mINFO\033[0m  app.prod.ini 文件不存在\n"
+    cp app.ini app.prod.ini
+    # exit 1
+fi
+}
+
 # 初始化
 
 function init {
@@ -203,6 +227,8 @@ commit(){
 
 main() {
   echo -e "\n\033[32mINFO\033[0m  ARCH is ${OS} ${ARCH}\n"
+  env_status
+  . .env
   case $1 in
 
   init )
@@ -268,7 +294,8 @@ main() {
     if [ -f ".env" -a -f ".update.js" ];then
       docker-compose up -d
     else
-      echo -e "\033[32mINFO\033[0m  自定义 .env .update.js 之后再运行 $ ci/init.sh \n"
+      echo -e "\033[31mINFO\033[0m  自定义 .env .update.js 之后再运行 $ ci/init.sh \n"
+      # ./init.sh
     fi
     ;;
 
@@ -296,11 +323,18 @@ main() {
   development-config )
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml config
+      docker-compose \
+        -f docker-compose.yml \
+        -f docker-compose.build.yml \
+        config
     elif [ ${ARCH} = "armv7l" ];then
-      docker-compose -f docker-compose.arm32v7.yml config
+      docker-compose \
+        -f docker-compose.arm32v7.yml \
+        config
     elif [ ${ARCH} = "aarch64" ];then
-      docker-compose -f docker-compose.arm64v8.yml config
+      docker-compose \
+        -f docker-compose.arm64v8.yml \
+        config
     else
       NOTSUPPORT
     fi
@@ -350,8 +384,21 @@ main() {
     ;;
 
   push )
-    docker-compose -f docker-compose.yml -f docker-compose.push.yml build \
-      && docker-compose -f docker-compose.yml -f docker-compose.push.yml push
+    docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose.push.yml \
+      build \
+    && docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose.push.yml \
+      push
+    ;;
+
+  push-config )
+    docker-compose \
+      -f docker-compose.yml \
+      -f docker-compose.push.yml \
+      config \
     ;;
 
   php )
@@ -368,6 +415,15 @@ services:
 
     docker-compose up && docker-compose down
    ;;
+
+  down )
+    docker-compose down --remove-orphans
+    ;;
+
+  gogs-init )
+    cd config/gogs
+    gogs_init
+    ;;
 
   * )
   echo  -e "
@@ -395,6 +451,7 @@ Commands:
   backup               备份 MySQL 数据库「加参数」
   restore              恢复 MySQL 数据库「加 SQL 文件名」
   update               更新项目到最新版
+  gogs-init            初始化 Gogs
   help                 输出帮助信息
   test                 「开发者选项」生产环境一键测试脚本
   commit               「开发者选项」提交项目

@@ -5,6 +5,7 @@ services:
     build:
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
+    # build 镜像名在 docker-compose.yml 定义
 
   php7:
     build:
