@@ -7,7 +7,7 @@ OS=`uname -s`
 # 不支持信息
 
 NOTSUPPORT(){
-  echo -e "\033[32mINFO\033[0m `uname -s` ${ARCH} 暂不支持\n"
+  echo -e "\033[32mINFO\033[0m  Not Support `uname -s` ${ARCH}\n"
   exit 1
 }
 
