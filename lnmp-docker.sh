@@ -229,6 +229,7 @@ main() {
   echo -e "\n\033[32mINFO\033[0m  ARCH is ${OS} ${ARCH}\n"
   env_status
   . .env
+  . env/lnmp.env
   case $1 in
 
   init )
