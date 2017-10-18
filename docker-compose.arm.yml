@@ -10,7 +10,7 @@ services:
   #   restart: always
   #   image: "${ARM_ARCH}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
   #   env_file:
-  #     - ./.env
+  #     - ./env/mysql.env
   #   networks:
   #     - backend
   #   environment:
@@ -72,7 +72,8 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: ${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
-    env_file: .env
+    env_file: 
+      - ./env/postgresql.env
     networks:
       - backend
     volumes:
