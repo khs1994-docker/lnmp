@@ -9,6 +9,7 @@ OS=`uname -s`
 . env/lnmp.env
 
 if [ OS = "Darwin" ];then
+  # 将以什么开头的行替换为新内容
   sed -i '' "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
 else
   sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
