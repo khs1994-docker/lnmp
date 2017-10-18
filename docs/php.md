@@ -10,6 +10,7 @@
 * pdo_mysql
 * pdo_pgsql
 * [zip](https://pecl.php.net/package/zip)
+* bcmath
 
 ## More Information
 

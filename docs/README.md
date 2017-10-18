@@ -1,8 +1,5 @@
 # khs1994-dockeer/lnmp 支持文档
 
-安装 Docker CE 并配置 `镜像加速器`（阿里云等），并安装 [docker-compose](https://github.com/docker/compose/releases)。
-
-
 * [项目初衷](why.md)
 
 * [项目初始化过程](init.md)
