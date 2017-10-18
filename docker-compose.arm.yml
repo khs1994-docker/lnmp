@@ -4,11 +4,11 @@ services:
   # # MySQL 暂时没有 arm 镜像
   # mysql:
   #   # build:
-  #   #   context: ./dockerfile/{$ARM_ARCH}/mysql/
+  #   #   context: ./dockerfile/${ARM_ARCH}/mysql/
   #   #   dockerfile: Dockerfile
   #   # image: lnmp-mysql:latest
   #   restart: always
-  #   image: "{$ARM_ARCH}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
+  #   image: "${ARM_ARCH}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
   #   env_file:
   #     - ./.env
   #   networks:
@@ -24,11 +24,11 @@ services:
 
   redis:
     # build:
-    #   context: ./dockerfile/{$ARM_ARCH}/redis/
+    #   context: ./dockerfile/${ARM_ARCH}/redis/
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
     restart: always
-    image: "{$ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}"
+    image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file:
       - ./.env
     networks:
@@ -43,10 +43,10 @@ services:
 
   memcached:
     # build:
-    #   context: ./dockerfile/{$ARM_ARCH}/memcached/
+    #   context: ./dockerfile/${ARM_ARCH}/memcached/
     #   dockerfile: Dockerfile
     restart: always
-    image: {$ARM_ARCH}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
+    image: ${ARM_ARCH}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
     networks:
       - backend
     # ports:
@@ -54,10 +54,10 @@ services:
 
   rabbitmq:
     # build:
-    #   context: ./dockerfile/{$ARM_ARCH}/rabbitmq/
+    #   context: ./dockerfile/${ARM_ARCH}/rabbitmq/
     #   dockerfile: Dockerfile
     restart: always
-    image: {$ARM_ARCH}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
+    image: ${ARM_ARCH}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
     networks:
       - backend
     volumes:
@@ -68,10 +68,10 @@ services:
 
   postgresql:
     # build:
-    #   context: ./dockerfile/{$ARM_ARCH}/postgresql/
+    #   context: ./dockerfile/${ARM_ARCH}/postgresql/
     #   dockerfile: Dockerfile
     restart: always
-    image: {$ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
+    image: ${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file: .env
     networks:
       - backend
@@ -82,10 +82,10 @@ services:
 
   # mongo:
   #   # build:
-  #   #   context: ./dockerfile/{$ARM_ARCH}/mongodb/
+  #   #   context: ./dockerfile/${ARM_ARCH}/mongodb/
   #   #   dockerfile: Dockerfile
   #   restart: always
-  #   image: {$ARM_ARCH}/mongo:${KHS1994_LNMP_MONGODB_VERSION}
+  #   image: ${ARM_ARCH}/mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   networks:
   #     - backend
   #   volumes:
@@ -100,10 +100,10 @@ services:
   php7:
     # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
     # build:
-    #   context: ./dockerfile/{$ARM_ARCH}/php-fpm/
+    #   context: ./dockerfile/${ARM_ARCH}/php-fpm/
     #   dockerfile: Dockerfile
     restart: always
-    image: "khs1994/{$ARM_ARCH}-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
+    image: "khs1994/${ARM_ARCH}-php-fpm:${KHS1994_LNMP_PHP_VERSION}"
     networks:
       - frontend
       - backend
@@ -116,17 +116,17 @@ services:
       - ./logs/php-fpm:/var/log/php-fpm
     environment:
       - TZ=Asia/Shanghai
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} {$ARM_ARCH} With Pull Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} ${ARM_ARCH} With Pull Docker Image
       - APP_ENV=development
     command: ["php-fpm","-R"]
 
   nginx:
     # build:
-    #   context: ./dockerfile/{$ARM_ARCH}/nginx/
+    #   context: ./dockerfile/${ARM_ARCH}/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
     restart: always
-    image: "{$ARM_ARCH}/nginx:${KHS1994_LNMP_NGINX_VERSION}"
+    image: "${ARM_ARCH}/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file: .env
     networks:
       - frontend
