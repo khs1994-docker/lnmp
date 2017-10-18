@@ -315,9 +315,15 @@ main() {
     if [ ${ARCH} = "x86_64" ];then
       docker-compose up -d
     elif [ ${ARCH} = "armv7l" ];then
-      docker-compose -f docker-compose.arm32v7.yml up -d
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm32v7" >> .env
+      fi
+        docker-compose -f docker-compose.arm.yml up -d
     elif [ ${ARCH} = "aarch64" ];then
-      docker-compose -f docker-compose.arm64v8.yml up -d
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm64v8" >> .env
+      fi
+      docker-compose -f docker-compose.arm.yml up -d
     else
       NOTSUPPORT
     fi
