@@ -256,7 +256,7 @@ main() {
     bin/laravel ${path}
     ;;
 
-  artisan )
+  laravel-artisan )
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
     bin/php-artisan ${path} ${cmd}
@@ -291,11 +291,21 @@ main() {
 
   ci )
     cd ci
-    if [ -f ".env" -a -f ".update.js" ];then
+    if [ -f ".env" -a -f "update.js" ];then
       docker-compose up -d
     else
-      echo -e "\033[31mINFO\033[0m  自定义 .env .update.js 之后再运行 $ ci/init.sh \n"
-      # ./init.sh
+      echo -e "\033[31mINFO\033[0m  .env .update.js update.sh 文件不存在 \n"
+      cp update.example.sh update.sh \
+         && cp update.example.js update.js \
+         && cp .env.example .env
+    fi
+    ;;
+
+  development-build )
+    if [ ${ARCH} = "x86_64" ];then
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
+    else
+      NOTSUPPORT
     fi
     ;;
 
@@ -303,18 +313,17 @@ main() {
     init
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
-      case $2 in
-        --build )
-          docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
-          ;;
-        * )
-          docker-compose up -d
-          ;;
-      esac
+      docker-compose up -d
     elif [ ${ARCH} = "armv7l" ];then
-      docker-compose -f docker-compose.arm32v7.yml up -d
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm32v7" >> .env
+      fi
+        docker-compose -f docker-compose.arm.yml up -d
     elif [ ${ARCH} = "aarch64" ];then
-      docker-compose -f docker-compose.arm64v8.yml up -d
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm64v8" >> .env
+      fi
+      docker-compose -f docker-compose.arm.yml up -d
     else
       NOTSUPPORT
     fi
@@ -328,12 +337,18 @@ main() {
         -f docker-compose.build.yml \
         config
     elif [ ${ARCH} = "armv7l" ];then
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm64v8" >> .env
+      fi
       docker-compose \
-        -f docker-compose.arm32v7.yml \
+        -f docker-compose.arm.yml \
         config
     elif [ ${ARCH} = "aarch64" ];then
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm64v8" >> .env
+      fi
       docker-compose \
-        -f docker-compose.arm64v8.yml \
+        -f docker-compose.arm.yml \
         config
     else
       NOTSUPPORT
@@ -429,35 +444,41 @@ services:
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
-USAGE: ./docker-lnmp COMMAND
+Usage: ./docker-lnmp COMMAND
 
 Commands:
-  init                 初始化部署环境
-  cleanup              清理日志文件
-  demo                 克隆 nginx 配置文件
-  mysql-demo           创建示例 MySQL 数据库
-  php                  命令行执行 PHP 文件「相对于 ./app 的路径 PHP文件名」
-  mysql-cli | php-cli | redis-cli | memcached-cli | rabbitmq-cli | postgres-cli | mongo-cli | nginx-cli
-  laravel              新建 Laravel 项目
-  artisan              使用 Laravel 命令行工具 artisan
-  composer             使用 Composer
-  development          LNMP 开发环境部署（支持 x86_64 arm32v7 arm64v8 架构）
-  development-config   调试开发环境 Docker Compose 配置
-  development --build  LNMP 开发环境部署--构建镜像（支持 x86_64 ）
-  production           LNMP 生产环境部署（仅支持 Linux x86_64 ）
-  production-config    调试生产环境 Docker Compose 配置
-  ci                   生产环境自动更新项目为最新
-  push                 构建 Docker 镜像并推送到 Docker 私有仓库，以用于生产环境
-  backup               备份 MySQL 数据库「加参数」
-  restore              恢复 MySQL 数据库「加 SQL 文件名」
-  update               更新项目到最新版
-  gogs-init            初始化 Gogs
-  help                 输出帮助信息
-  test                 「开发者选项」生产环境一键测试脚本
-  commit               「开发者选项」提交项目
+  backup               Backup MySQL databases
+  cleanup              Cleanup log files
+  ci                   Use CI/CD in Production
+  composer             Use PHP Package Management composer
+  development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
+  development-config   Validate and view the Development(with build images) Compose file
+  development-build    Use LNMP in Development With Build images(Support x86_64)
+  gogs-init            Initialize Gogs
+  help                 Display this help message
+  laravel              Create a new Laravel application
+  laravel-artisan      Use Laravel CLI artisan
+  mysql-demo           Create MySQL test database
+  php                  Run PHP in CLI
+  production           Use LNMP in Production(Only Support Linux x86_64)
+  production-config    Validate and view the Production Compose file
+  push                 Build and Pushes images to Docker Registory v2
+  restore              Restore MySQL databases
 
+Container CLI:
+  memcached-cli
+  mongo-cli
+  mysql-cli
+  nginx-cli
+  php-cli
+  postgres-cli
+  rabbitmq-cli
+  redis-cli
 
-Read './docs/*.md' for more information on the command
+Tools:
+  update                Upgrades LNMP
+
+Read './docs/*.md' for more information about commands.
 "
     ;;
   esac

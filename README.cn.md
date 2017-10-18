@@ -12,6 +12,8 @@
 
 每月更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
+最新的提交位于 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
+
 # 准备
 
 本项目需要以下软件：

@@ -5,6 +5,11 @@ Changelog
 
 `.env`:
 
+#### v17.10 rc3
+
+Changes:
+* Merge `arm32v7` `arm64v8` Compose file into one `docker-compose.arm.yml` 
+
 #### v17.10 rc2
 
 Changes:
