@@ -337,12 +337,18 @@ main() {
         -f docker-compose.build.yml \
         config
     elif [ ${ARCH} = "armv7l" ];then
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm64v8" >> .env
+      fi
       docker-compose \
-        -f docker-compose.arm32v7.yml \
+        -f docker-compose.arm.yml \
         config
     elif [ ${ARCH} = "aarch64" ];then
+      if [ ! ${ARM_ARCH} ];then
+        echo "ARM_ARCH=arm64v8" >> .env
+      fi
       docker-compose \
-        -f docker-compose.arm64v8.yml \
+        -f docker-compose.arm.yml \
         config
     else
       NOTSUPPORT
