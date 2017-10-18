@@ -11,6 +11,8 @@ Build LNMP within 2 minutes powered by Docker Compose.
 
 Updates every month,Version name is `YY-MM`.For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
+latest commit in dev branch,please switch [dev branch](https://github.com/khs1994-docker/lnmp/tree/dev).
+
 # Prerequisites
 
 To use LNMP Docker,you need:
