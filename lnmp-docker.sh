@@ -292,7 +292,7 @@ main() {
     ;;
 
   ci )
-    if [ ${ARCH}= "x86_64" ];then
+    if [ ${ARCH} = "x86_64" ];then
       cd ci
       if [ -f ".env" -a -f "update.js" ];then
         docker-compose up -d
