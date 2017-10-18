@@ -8,6 +8,6 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ~/.ssh:/root/.ssh:rw
-      - /data/lnmp:/data/lnmp:rw
+      - ../:/data/lnmp:rw
     ports:
       - "${YOUR_PORT}:7777"
