@@ -8,6 +8,7 @@ OS=`uname -s`
 
 NOTSUPPORT(){
   echo -e "\033[32mINFO\033[0m `uname -s` ${ARCH} 暂不支持\n"
+  exit 1
 }
 
 # 创建日志文件
@@ -291,14 +292,18 @@ main() {
     ;;
 
   ci )
-    cd ci
-    if [ -f ".env" -a -f "update.js" ];then
-      docker-compose up -d
+    if [ ${ARCH}= "x86_64" ];then
+      cd ci
+      if [ -f ".env" -a -f "update.js" ];then
+        docker-compose up -d
+      else
+        echo -e "\033[31mINFO\033[0m  .env .update.js update.sh 文件不存在 \n"
+        cp update.example.sh update.sh \
+           && cp update.example.js update.js \
+           && cp .env.example .env
+      fi
     else
-      echo -e "\033[31mINFO\033[0m  .env .update.js update.sh 文件不存在 \n"
-      cp update.example.sh update.sh \
-         && cp update.example.js update.js \
-         && cp .env.example .env
+    NOTSUPPORT
     fi
     ;;
 
