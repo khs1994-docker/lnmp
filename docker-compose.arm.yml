@@ -17,7 +17,7 @@ services:
   #   # your password
   #     - MYSQL_ROOT_PASSWORD=mytest
   #   ports:
-  #     - "3306:3306"
+  #     - "${MYSQL_PORT}:3306"
   #   volumes:
   #     - mysql-data:/var/lib/mysql
   #     - ./logs/mysql:/var/log/mysql
