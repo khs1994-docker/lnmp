@@ -156,4 +156,3 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
-  # gogs-data:
