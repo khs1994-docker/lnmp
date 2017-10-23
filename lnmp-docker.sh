@@ -4,18 +4,6 @@ ENV=$1
 ARCH=`uname -m`
 OS=`uname -s`
 
-# 获取正确版本号
-
-. env/.env
-
-if [ OS = "Darwin" ];then
-  # 将以什么开头的行替换为新内容
-  sed -i '' "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-else
-  sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-fi
-
-
 # 不支持信息
 
 NOTSUPPORT(){
