@@ -6,7 +6,7 @@ OS=`uname -s`
 
 # 获取正确版本号
 
-. env/lnmp.env
+. env/.env
 
 if [ OS = "Darwin" ];then
   # 将以什么开头的行替换为新内容
