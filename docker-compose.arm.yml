@@ -81,7 +81,7 @@ services:
     # ports:
     #   - "5432"
 
-  # mongo:
+  # mongodb:
   #   # build:
   #   #   context: ./dockerfile/${ARM_ARCH}/mongodb/
   #   #   dockerfile: Dockerfile

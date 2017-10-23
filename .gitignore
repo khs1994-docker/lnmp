@@ -5,3 +5,4 @@ docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
 *.stackdump
 .env
+!env/.env

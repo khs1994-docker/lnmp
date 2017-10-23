@@ -66,7 +66,7 @@ services:
   #   # ports:
   #   #   - "5432"
   #
-  # mongo:
+  # mongodb:
   #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   env_file: .env
@@ -106,7 +106,7 @@ services:
     dns:
       - 114.114.114.114
     command: ["php-fpm","-R"]
-    env_file: .env 
+    env_file: .env
     # entrypoint: /code/entrypoint.sh
     # entrypoint:
     #   - php

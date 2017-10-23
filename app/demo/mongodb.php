@@ -1,5 +1,5 @@
 <?php
-$manager = new MongoDB\Driver\Manager("mongodb://mongo:27017");  
+$manager = new MongoDB\Driver\Manager("mongodb://mongo:27017");
 
 // 插入数据
 $bulk = new MongoDB\Driver\BulkWrite;
