@@ -4,7 +4,7 @@ ENV=$1
 ARCH=`uname -m`
 OS=`uname -s`
 
-. env/.env
+source env/.env
 
 if [ OS = "Darwin" ];then
   # 将以什么开头的行替换为新内容
