@@ -4,6 +4,8 @@ ENV=$1
 ARCH=`uname -m`
 OS=`uname -s`
 
+# 获取正确版本号
+
 . env/.env
 
 if [ ${OS} = "Darwin" ];then
