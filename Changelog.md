@@ -7,6 +7,10 @@ Changelog
 
 #### v17.10 rc4
 
+Changes:
+* Move `gogs` to `khs1994-docker/ci`
+* Move `ci` to `khs1994-docker/ci/webhooks`
+
 #### v17.10 rc3
 
 Changes:

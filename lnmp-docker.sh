@@ -142,19 +142,6 @@ function env_status(){
 fi
 }
 
-# 初始化 Gogs
-
-function gogs_init(){
-  # .env.example to .env
-  if [ -f app.prod.ini ];then
-    echo -e "\033[32mINFO\033[0m  app.prod.ini 文件已存在\n"
-  else
-    echo -e "\033[31mINFO\033[0m  app.prod.ini 文件不存在\n"
-    cp app.ini app.prod.ini
-    # exit 1
-fi
-}
-
 # 初始化
 
 function init {
@@ -242,7 +229,7 @@ main() {
   echo -e "\n\033[32mINFO\033[0m  ARCH is ${OS} ${ARCH}\n"
   env_status
   . .env
-  . env/lnmp.env
+  . env/.env
   case $1 in
 
   init )
@@ -301,22 +288,6 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          config
-    ;;
-
-  ci )
-    if [ ${ARCH} = "x86_64" ];then
-      cd ci
-      if [ -f ".env" -a -f "update.js" ];then
-        docker-compose up -d
-      else
-        echo -e "\033[31mINFO\033[0m  .env .update.js update.sh 文件不存在 \n"
-        cp update.example.sh update.sh \
-           && cp update.example.js update.js \
-           && cp .env.example .env
-      fi
-    else
-    NOTSUPPORT
-    fi
     ;;
 
   development-build )
@@ -453,11 +424,6 @@ services:
     docker-compose down --remove-orphans
     ;;
 
-  gogs-init )
-    cd config/gogs
-    gogs_init
-    ;;
-
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -467,12 +433,10 @@ Usage: ./docker-lnmp COMMAND
 Commands:
   backup               Backup MySQL databases
   cleanup              Cleanup log files
-  ci                   Use CI/CD in Production
   composer             Use PHP Package Management composer
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
   development-config   Validate and view the Development(with build images) Compose file
   development-build    Use LNMP in Development With Build images(Support x86_64)
-  gogs-init            Initialize Gogs
   help                 Display this help message
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
