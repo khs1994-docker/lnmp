@@ -12,6 +12,8 @@ services:
     #  - MYSQL_ROOT_PASSWORD=mytest
     networks:
       - backend
+    ports:
+      - "${MYSQL_PORT}:3306"
     volumes:
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
@@ -79,18 +81,6 @@ services:
   #   # ports:
   #   #   - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
-  #
-  # gogs:
-  #   image: gogs/gogs:${KHS1994_LNMP_GOGS_VERSION}
-  #   ports:
-  #     - "22:22"
-  #   networks:
-  #     - frontend
-  #     - backend
-  #   volumes:
-  #     - gogs-data:/data:rw
-  #     - ./config/gogs/app.prod.ini:/data/gogs/conf/app.ini:ro
-  #     - ./config/nginx/ssl:/data/ssl:ro
 
   php7:
     restart: always
@@ -154,4 +144,3 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
-  # gogs-data:

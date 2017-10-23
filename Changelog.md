@@ -5,6 +5,11 @@ Changelog
 
 `.env`:
 
+#### v17.10 rc5
+
+Bug fixes:
+* Fix error in `./lnmp-docker.sh`
+
 #### v17.10 rc4
 
 Changes:
