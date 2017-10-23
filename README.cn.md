@@ -83,7 +83,6 @@ $ docker-compose down
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.12-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.5`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.0-alpine`   |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)    |`Alpine:3.6`|
 |MongoDB                                                  |`mongo:3.5.13`                  |[![GitHub release](https://img.shields.io/badge/release-v3.5.13-blue.svg)](https://github.com/docker-library/docs/tree/master/mongo)       |`Debian:jessie`|
-|Gogs                                                     |`gogs/gogs:latest`               |[![GitHub release](https://img.shields.io/badge/release-latest-blue.svg)](https://github.com/gogits/gogs/tree/master/docker)              |`Alpine:3.5`|
 
 ## 文件夹结构
 
@@ -92,7 +91,6 @@ $ docker-compose down
 |`app`         |项目文件（HTML, PHP, etc）|
 |`backup`      |备份文件|
 |`bash`        |用户自定义脚本文件|
-|`ci`          |CI/CD|
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|

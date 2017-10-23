@@ -80,7 +80,6 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.12-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.5`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.0-alpine`   |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)    |`Alpine:3.6`|
 |MongoDB                                                  |`mongo:3.5.13`                  |[![GitHub release](https://img.shields.io/badge/release-v3.5.13-blue.svg)](https://github.com/docker-library/docs/tree/master/mongo)       |`Debian:jessie`|
-|Gogs                                                     |`gogs/gogs:latest`               |[![GitHub release](https://img.shields.io/badge/release-latest-blue.svg)](https://github.com/gogits/gogs/tree/master/docker)              |`Alpine:3.5`|
 
 ## Folder Structure
 
@@ -89,7 +88,6 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 |`app`         |PHP project (HTML, PHP, etc) |
 |`backup`      |backup database file|
 |`bash`        |bash shell script|
-|`ci`          |CI/CD|
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
