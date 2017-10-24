@@ -7,6 +7,9 @@ Changelog
 
 #### v17.10 rc6
 
+Updates:
+* `php-fpm` 7.1.11
+
 #### v17.10 rc5
 
 Bug fixes:
