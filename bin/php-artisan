@@ -37,21 +37,3 @@ fi
 # DOCKER_IMAGE=lnmp-php
 
 echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${LARAVEL_PATH} 执行 $ php artisan ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
-
-cd bin
-
-echo -e "version: \"3.3\"
-services:
-
-  laravel:
-    image: ${DOCKER_IMAGE}:${TAG}
-    volumes:
-      - ../tmp/cache:/tmp/cache
-      - ../app/${LARAVEL_PATH}:/app
-    command: [\"composer\",\"${CMD}\"]
-    tty: true
-
-" > docker-compose.bash.yml
-
-docker-compose -f docker-compose.bash.yml up
-docker-compose -f docker-compose.bash.yml down

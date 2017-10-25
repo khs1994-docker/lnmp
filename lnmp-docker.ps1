@@ -1,4 +1,14 @@
 . .env.ps1
+
+Function init{
+  #.env
+  if (Test-Path .env){
+    Write-Host .env file existing
+  }else{
+    cp .env.example .env
+  }
+  # logs file
+}
 Function help_information{
   echo "Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
@@ -67,6 +77,7 @@ Function main() {
     commit {
       git add .
       git commit -m "Update [skip ci]"
+      git push origin dev
     }
 
     backup {
