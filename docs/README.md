@@ -32,8 +32,6 @@
 
 * [备份 && 恢复](backup.md)
 
-* [Gogs](gogs.md)
-
 * [清理](cleanup.md)
 
 * [Windows 10](windows.md)
