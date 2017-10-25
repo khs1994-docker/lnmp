@@ -30,6 +30,8 @@
 
 开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
 
+如果你使用的是 `Windows 10` 请将 `./lnmp-docker.sh` 替换为 `./lnmp-docker.ps1`。
+
 ```bash
 $ git clone -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 
@@ -103,7 +105,11 @@ $ docker-compose down
 
 # 命令行工具
 
-在 Linux 或 macOS 中，为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./lnmp-docker.sh`)，用法请查看 [支持文档](docs/cli.md)。
+为简化操作方式，本项目提供了 `交互式` 的命令行工具。
+
+在 Linux 或 macOS 中，请使用 [`./lnmp-docker.sh`](docs/cli.md)。
+
+在 Windows 10 中，请使用 [`./lnmp-docker.ps1`](docs/windows.md)。
 
 # 生产环境用户
 
