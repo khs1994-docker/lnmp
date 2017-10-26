@@ -57,15 +57,37 @@ Function cleanup(){
 }
 
 Function composer($COMPOSE_PATH,$CMD){
-  Write-Host $COMPOSE_PATH
-  Write-Host $CMD
   Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
-  docker run -it --rm -v $pwd\app\${COMPOSE_PATH}:/app/${COMPOSE_PATH} khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION composer ${CMD}
+  Write-Host "output information"
+  Write-Host " "
+  docker run -it --rm -v $pwd\app\${COMPOSE_PATH}:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION composer ${CMD}
+}
+
+Function laravel($LARAVEL_PATH){
+  Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/ EXEC $ lrravel new ${LARAVEL_PATH}"
+  Write-Host "output information"
+  Write-Host " "
+  docker run -it --rm -v $pwd\app:/app khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION -v $pwd\tmp\cache:/tmp/cache laravel new ${LARAVEL_PATH}
+}
+
+Function laravel-artisan($LARAVEL_PATH,$CMD){
+  Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/${LARAVEL_PATH} EXEC $ php artisan ${CMD}"
+  Write-Host "output information"
+  Write-Host " "
+  docker run -it --rm -v $pwd\app\${LARAVEL_PATH}:/app khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION php artisan ${CMD}
 }
 
 Function update(){
   git fetch origin
-  git reset --hard origin/dev
+  ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
+  if (${BRANCH} -eq "dev"){
+    git reset --hard origin/dev
+  }elseif(${BRANCH} -eq "master"){
+    git reset --hard origin/master
+  }else{
+    git checkout dev
+    git reset --hard origin/dev
+  }
 }
 
 Function main() {
@@ -77,9 +99,13 @@ Function main() {
     }
 
     commit {
-      git add .
-      git commit -m "Update [skip ci]"
-      git push origin dev
+      ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
+      Write-Host "Branch is ${BRANCH}"
+      if (${BRANCH} -eq "dev"){
+        git add .
+        git commit -m "Update [skip ci]"
+        git push origin dev
+      }
     }
 
     backup {

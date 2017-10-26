@@ -426,7 +426,7 @@ Commands:
   cleanup              Cleanup log files
   composer             Use PHP Package Management composer
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
-  development-config   Validate and view the Development(with build images) Compose file
+  development-config   Validate and view the Development(with build images)Compose file
   development-build    Use LNMP in Development With Build images(Support x86_64)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   help                 Display this help message
