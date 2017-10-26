@@ -1,17 +1,50 @@
 . .env.ps1
 
-Function init{
-  #.env
+Function env_status(){
   if (Test-Path .env){
     Write-Host .env file existing
   }else{
     Write-Host .env file NOT existing
     cp .env.example .env
   }
-  # logs file
 }
 
-Function help_information{
+Function logs(){
+  if (! (Test-Path logs\mongodb)){
+    New-Item logs\mongodb -type directory | Out-Null
+    New-Item logs\mongodb\mongo.log -type file | Out-Null
+  }
+  if (-not (Test-Path logs\mysql)){
+    New-Item logs\mysql -type directory | Out-Null
+    New-Item logs\mysql\error.log -type file | Out-Null
+  }
+  if (! (Test-Path logs\nginx)){
+    New-Item logs\nginx -type directory | Out-Null
+    New-Item logs\nginx\access.log -type file | Out-Null
+    New-Item logs\nginx\error.log -type file | Out-Null
+  }
+  if (! (Test-Path logs\php-fpm)){
+    New-Item logs\php-fpm -type directory | Out-Null
+    New-Item logs\php-fpm\error.log -type file | Out-Null
+    New-Item logs\php-fpm\access.log -type file | Out-Null
+    New-Item logs\php-fpm\xdebug-remote.log -type file | Out-Null
+  }
+  if (! (Test-Path logs\redis)){
+    New-Item logs\redis -type directory | Out-Null
+    New-Item logs\redis\redis.log -type file | Out-Null
+  }
+  if (! (Test-Path tmp\cache)){
+    New-Item tmp\cache -type directory | Out-Null
+  }
+}
+
+Function init(){
+  docker-compose --version
+  logs
+  Write-Host "Init is SUCCESS"
+}
+
+Function help_information(){
   echo "Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
 Usage: ./docker-lnmp.ps1 COMMAND
@@ -53,7 +86,7 @@ Function backup(){
 }
 
 Function cleanup(){
-
+  Write-Host " " | Out
 }
 
 Function composer($COMPOSE_PATH,$CMD){
@@ -64,10 +97,10 @@ Function composer($COMPOSE_PATH,$CMD){
 }
 
 Function laravel($LARAVEL_PATH){
-  Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/ EXEC $ lrravel new ${LARAVEL_PATH}"
+  Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
   Write-Host "output information"
   Write-Host " "
-  docker run -it --rm -v $pwd\app:/app khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION -v $pwd\tmp\cache:/tmp/cache laravel new ${LARAVEL_PATH}
+  docker run -it --rm -v $pwd\app:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION laravel new ${LARAVEL_PATH}
 }
 
 Function laravel-artisan($LARAVEL_PATH,$CMD){
@@ -91,20 +124,24 @@ Function update(){
 }
 
 Function main() {
+  env_status
   switch($args[0])
   {
 
     init {
-
+      init
     }
 
     commit {
       ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
       Write-Host "Branch is ${BRANCH}"
+      Write-Host " "
       if (${BRANCH} -eq "dev"){
         git add .
         git commit -m "Update [skip ci]"
         git push origin dev
+      }else{
+        Write-Host "NOT Support ${BRANCH} branch"
       }
     }
 
@@ -120,7 +157,10 @@ Function main() {
       composer $args[1] $args[2]
     }
 
-    development {}
+    development {
+      init
+      docker-compose up -d
+    }
 
     development-config{
       docker-compose -f docker-compose.yml -f docker-compose.build.yml config
@@ -131,7 +171,7 @@ Function main() {
     }
 
     down {
-
+      docker-compose down
     }
 
     help {
@@ -139,11 +179,11 @@ Function main() {
     }
 
     laravel {
-
+      laravel $args[1]
     }
 
     laravel-artisan {
-
+      laravel-artisan $args[1] $args[2]
     }
 
     mysql-demo {

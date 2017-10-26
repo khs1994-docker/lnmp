@@ -25,31 +25,31 @@ NOTSUPPORT(){
 # 创建日志文件
 
 logs(){
-  echo -e "\033[32mINFO\033[0m  mkdir log folder"
+  echo -e "\033[32mINFO\033[0m  mkdir logs folder"
   cd logs
   if [ -d "mongodb" ];then
-    echo -e "\033[32mINFO\033[0m  logs/mongodb existence"
+    echo -e "\033[32mINFO\033[0m  logs/mongodb existing"
   else
     mkdir mongodb && echo > mongodb/mongo.log \
     && echo -e "\033[32mINFO\033[0m  mkdir logs/mongod and touch log file"
    fi
 
   if [ -d "mysql" ];then
-    echo -e "\033[32mINFO\033[0m  logs/mysql existence"
+    echo -e "\033[32mINFO\033[0m  logs/mysql existing"
   else
     mkdir mysql && echo > mysql/error.log \
     && echo -e "\033[32mINFO\033[0m  mkdir logs/mysql and touch log file"
   fi
 
   if [ -d "nginx" ];then
-    echo -e "\033[32mINFO\033[0m  logs/nginx existence"
+    echo -e "\033[32mINFO\033[0m  logs/nginx existing"
   else
     mkdir nginx && echo > nginx/error.log && echo > nginx/access.log \
     && echo -e "\033[32mINFO\033[0m  mkdir logs/nginx and touch log file"
   fi
 
   if [ -d "php-fpm" ];then
-    echo -e "\033[32mINFO\033[0m  logs/php-fpm existence"
+    echo -e "\033[32mINFO\033[0m  logs/php-fpm existing"
   else
     mkdir php-fpm && echo > php-fpm/error.log && echo > php-fpm/access.log \
     && echo > php-fpm/xdebug-remote.log \
@@ -57,7 +57,7 @@ logs(){
   fi
 
   if [ -d "redis" ];then
-    echo -e "\033[32mINFO\033[0m  logs/redis existence"
+    echo -e "\033[32mINFO\033[0m  logs/redis existing"
   else
     mkdir redis && echo > redis/redis.log \
     && echo -e "\033[32mINFO\033[0m  mkdir logs/redis and touch log file"
@@ -72,7 +72,7 @@ logs(){
 
   # 不清理 Composer 缓存
   if [ -d "tmp/cache" ];then
-    echo -e "\033[32mINFO\033[0m  Composer cache file existence"
+    echo -e "\033[32mINFO\033[0m  Composer cache file existing"
   else
     mkdir -p tmp/cache && chmod 777 tmp/cache
     echo -e "\033[32mINFO\033[0m  mkdir tmp/cache"
