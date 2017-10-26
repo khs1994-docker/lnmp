@@ -380,7 +380,7 @@ main() {
     docker-compose exec postgresql sh
     ;;
   mongo-cli )
-    docker-compose exec mongo bash
+    docker-compose exec mongodb bash
     ;;
   nginx-cli )
     docker-compose exec nginx sh
@@ -405,19 +405,10 @@ main() {
     ;;
 
   php )
-    cd app
-    echo "version: \"3.3\"
-services:
-
-  php:
-    image: khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine
-    volumes:
-      - ./$2:/app
-    command: [\"php\",\"$3\"]
-" > docker-compose.yml
-
-    docker-compose up && docker-compose down
-    rm -rf docker-compose.yml
+    docker run -it --rm \
+      -v $PWD/app/$2:/app/$2 \
+      khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION} \
+      php $3
    ;;
 
   down )
@@ -428,7 +419,7 @@ services:
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
-Usage: ./docker-lnmp COMMAND
+Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
   backup               Backup MySQL databases

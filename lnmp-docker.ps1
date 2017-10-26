@@ -5,22 +5,24 @@ Function init{
   if (Test-Path .env){
     Write-Host .env file existing
   }else{
+    Write-Host .env file NOT existing
     cp .env.example .env
   }
   # logs file
 }
+
 Function help_information{
   echo "Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
-Usage: ./docker-lnmp COMMAND
+Usage: ./docker-lnmp.ps1 COMMAND
 
 Commands:
 backup               Backup MySQL databases
 cleanup              Cleanup log files
 composer             Use PHP Package Management composer
-development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
-development-config   Validate and view the Development(with build images) Compose file
-development-build    Use LNMP in Development With Build images(Support x86_64)
+development          Use LNMP in Development
+development-config   Validate and view the Development(with build images)Compose file
+development-build    Use LNMP in Development With Build images
 down                 Stop and remove LNMP Docker containers, networks, images, and volumes
 help                 Display this help message
 laravel              Create a new Laravel application
@@ -107,7 +109,7 @@ Function main() {
     }
 
     help {
-
+      help_information
     }
 
     laravel {
@@ -135,35 +137,35 @@ Function main() {
     }
 
     memcached-cli {
-
+      docker-compose exec memcached sh
     }
 
     mongo-cli {
-
+      docker-compose exec mongodb bash
     }
 
     mysql-cli {
-
+      docker-compose exec mysql bash
     }
 
     nginx-cli {
-
+      docker-compose exec nginx sh
     }
 
     php-cli {
-
+      docker-compose exec php7 bash
     }
 
     postgres-cli {
-
+      docker-compose exec postgresql sh
     }
 
     rabbitmq-cli {
-
+       docker-compose exec rabbitmq sh
     }
 
     redis-cli {
-
+      docker-compose exec redis sh
     }
 
     update{

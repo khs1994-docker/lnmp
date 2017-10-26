@@ -7,6 +7,8 @@ Changelog
 
 #### v17.10 rc6
 
+Changes:
+* Support `Windows 10` Powered by `power shell`
 Updates:
 * `php-fpm` 7.1.11
 
@@ -77,7 +79,7 @@ Updates:
 #### v17.09 rc9
 
 Changes:
-* Support `Windows 10` Powered By Git bash
+* Support `Windows 10` Powered By `Git bash`
 
 #### v17.09 rc8
 
