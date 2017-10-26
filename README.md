@@ -23,8 +23,6 @@ To use LNMP Docker,you need:
 
 # Quick Start
 
-Support Linux, macOS, Windows 10(Git Bash).
-
 ## Start in Devlopment
 
 If your OS is `Windows 10` please use `./lnmp-docker.ps1` instead of `./lnmp-docker.sh`
