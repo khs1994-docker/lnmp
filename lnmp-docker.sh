@@ -1,6 +1,9 @@
 #!/bin/bash
 
-ENV=$1
+if [ $1 = "development" -o $1 = "production" ];then
+  ENV=$1
+fi
+
 ARCH=`uname -m`
 OS=`uname -s`
 
@@ -18,66 +21,70 @@ fi
 # 不支持信息
 
 NOTSUPPORT(){
-  echo -e "\033[32mINFO\033[0m  Not Support `uname -s` ${ARCH}\n"
+  print_error "Not Support `uname -s` ${ARCH}\n"
   exit 1
+}
+
+print_info(){
+  echo -e "\033[32mINFO\033[0m  $1"
+}
+
+print_error(){
+  echo -e "\033[31mINFO\033[0m  $1"
 }
 
 # 创建日志文件
 
 logs(){
-  echo -e "\033[32mINFO\033[0m  mkdir logs folder"
-  cd logs
-  if [ -d "mongodb" ];then
-    echo -e "\033[32mINFO\033[0m  logs/mongodb existing"
-  else
-    mkdir mongodb && echo > mongodb/mongo.log \
-    && echo -e "\033[32mINFO\033[0m  mkdir logs/mongod and touch log file"
+  if [ ! -d "logs/mongodb" ];then
+    mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log
    fi
 
-  if [ -d "mysql" ];then
-    echo -e "\033[32mINFO\033[0m  logs/mysql existing"
-  else
-    mkdir mysql && echo > mysql/error.log \
-    && echo -e "\033[32mINFO\033[0m  mkdir logs/mysql and touch log file"
+  if [ ! -d "logs/mysql" ];then
+    mkdir -p logs/mysql && echo > logs/mysql/error.log
   fi
 
-  if [ -d "nginx" ];then
-    echo -e "\033[32mINFO\033[0m  logs/nginx existing"
-  else
-    mkdir nginx && echo > nginx/error.log && echo > nginx/access.log \
-    && echo -e "\033[32mINFO\033[0m  mkdir logs/nginx and touch log file"
+  if [ ! -d "logs/nginx" ];then
+    mkdir -p logs/nginx \
+    && echo > logs/nginx/error.log \
+    && echo > logs/nginx/access.log
   fi
 
-  if [ -d "php-fpm" ];then
-    echo -e "\033[32mINFO\033[0m  logs/php-fpm existing"
-  else
-    mkdir php-fpm && echo > php-fpm/error.log && echo > php-fpm/access.log \
-    && echo > php-fpm/xdebug-remote.log \
-    && echo -e "\033[32mINFO\033[0m  mkdir logs/php-fpm and touch log file"
+  if [ ! -d "logs/php-fpm" ];then
+    mkdir -p logs/php-fpm \
+    && echo > logs/php-fpm/error.log \
+    && echo > logs/php-fpm/access.log \
+    && echo > logs/php-fpm/xdebug-remote.log
   fi
 
-  if [ -d "redis" ];then
-    echo -e "\033[32mINFO\033[0m  logs/redis existing"
-  else
-    mkdir redis && echo > redis/redis.log \
-    && echo -e "\033[32mINFO\033[0m  mkdir logs/redis and touch log file"
+  if [ ! -d "logs/redis" ];then
+    mkdir -p logs/redis && echo > logs/redis/redis.log
   fi
-  chmod -R 777 mongodb \
-               mysql \
-               nginx \
-               php-fpm \
-               redis
-
-  cd ../
+  chmod -R 777 logs/mongodb \
+               logs/mysql \
+               logs/nginx \
+               logs/php-fpm \
+               logs/redis
 
   # 不清理 Composer 缓存
-  if [ -d "tmp/cache" ];then
-    echo -e "\033[32mINFO\033[0m  Composer cache file existing"
-  else
+  if [ ! -d "tmp/cache" ];then
     mkdir -p tmp/cache && chmod 777 tmp/cache
-    echo -e "\033[32mINFO\033[0m  mkdir tmp/cache"
   fi
-  echo -e "\033[32mINFO\033[0m  mkdir log folder and file SUCCESS"
+}
+
+# 清理日志文件
+
+cleanup(){
+      logs \
+      && echo > logs/mongodb/mongo.log \
+      && echo > logs/mysql/error.log \
+      && echo > logs/nginx/error.log \
+      && echo > logs/nginx/access.log \
+      && echo > logs/php-fpm/access.log \
+      && echo > logs/php-fpm/error.log \
+      && echo > logs/php-fpm/xdebug-remote.log \
+      && echo > logs/redis/redis.log
+      print_info "Clean log files SUCCESS\n"
 }
 
 # 是否安装 Docker Compose
@@ -86,13 +93,13 @@ install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
-    echo -e "\033[32mINFO\033[0m  `docker-compose --version` already installed"
+    print_info "`docker-compose --version` already installed"
   else
     # 不存在
-    echo -e "\033[32mINFO\033[0m  docker-compose is installing ...\n"
+    print_info "docker-compose is installing ...\n"
     if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
       #arm
-      echo -e "\033[32mINFO\033[0m  ${ARCH} docker-compose is installing by pip3 ...\n"
+      print_info "${ARCH} docker-compose is installing by pip3 ...\n"
       sudo apt install -y python3-pip
       # pip 源
       if [ !-d "~/.pip"];then
@@ -124,7 +131,7 @@ function mysql_demo {
 
 function demo {
   #statements
-  echo -e "\033[32mINFO\033[0m  Import app and nginx conf Demo ...\n"
+  print_info "Import app and nginx conf Demo ...\n"
   git submodule update --init --recursive
 }
 
@@ -133,9 +140,9 @@ function demo {
 function env_status(){
   # .env.example to .env
   if [ -f .env ];then
-    echo -e "\033[32mINFO\033[0m  .env existing\n"
+    print_info ".env existing\n"
   else
-    echo -e "\033[31mINFO\033[0m  .env NOT existing\n"
+    print_error ".env NOT existing\n"
     cp .env.example .env
     # exit 1
 fi
@@ -160,25 +167,8 @@ function init {
       bin/production-init
       ;;
   esac
-  # 创建日志文件
-  logs
   # 初始化完成提示
-  echo -e "\033[32mINFO\033[0m  Init is SUCCESS\n"
-}
-
-# 清理日志文件
-
-cleanup(){
-   cd logs \
-      && echo > mongodb/mongo.log \
-      && echo > mysql/error.log \
-      && echo > nginx/error.log \
-      && echo > nginx/access.log \
-      && echo > php-fpm/access.log \
-      && echo > php-fpm/error.log \
-      && echo > php-fpm/xdebug-remote.log \
-      && echo > redis/redis.log \
-      && echo -e "\n\033[32mINFO\033[0m  Clean log files SUCCESS\n"
+  print_info "Init is SUCCESS\n"
 }
 
 # 备份数据库
@@ -198,7 +188,7 @@ restore(){
 update(){
   git fetch origin
   BRANCH=`git rev-parse --abbrev-ref HEAD`
-  echo -e "\n\033[32mINFO\033[0m  Branch is ${BRANCH}\n"
+  print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git reset --hard origin/dev
   elif [ ${BRANCH} = "master" ];then
@@ -212,20 +202,26 @@ update(){
 
 commit(){
   BRANCH=`git rev-parse --abbrev-ref HEAD`
-  echo -e "\n\033[32mINFO\033[0m  Branch is ${BRANCH}\n"
+  print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git add .
     git commit -m "Update [skip ci]"
     git push origin dev
   else
-    echo -e "\n\033[32mINFO\033[0m  ${BRANCH} 分支不能自动提交\n"
+    print_error "${BRANCH} 分支不能自动提交\n"
   fi
 }
 
 # 入口文件
 
 main() {
-  echo -e "\n\033[32mINFO\033[0m  ARCH is ${OS} ${ARCH}\n"
+  # 创建日志文件夹
+  logs
+  # no sudo
+  if [[ $EUID -eq 0 ]]; then print_error "This script should not be run using sudo!!\n"; exit 1; fi
+  # 架构
+  print_info "ARCH is ${OS} ${ARCH}\n"
+  # .env
   env_status
   . .env
   . env/.env
@@ -276,9 +272,8 @@ main() {
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
          up -d
-      echo -e "${ARCH}"
     else
-      echo -e "\033[32mINFO\033[0m  生产环境不支持 `uname -s` ${ARCH}\n"
+      print_error "生产环境不支持 `uname -s` ${ARCH}\n"
     fi
     ;;
 
