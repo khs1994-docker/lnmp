@@ -11,6 +11,7 @@ Changes:
 * Support `Windows 10` Powered by `power shell`
 Updates:
 * `php-fpm` 7.1.11
+* `MySQL` 5.7.20
 
 #### v17.10 rc5
 
