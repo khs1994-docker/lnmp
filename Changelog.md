@@ -5,6 +5,14 @@ Changelog
 
 `.env`:
 
+#### v17.10 rc6
+
+Changes:
+* NOT Support `Windows 10`
+Updates:
+* `php-fpm` 7.1.11
+* `MySQL` 5.7.20
+
 #### v17.10 rc5
 
 Bug fixes:
@@ -72,7 +80,7 @@ Updates:
 #### v17.09 rc9
 
 Changes:
-* Support `Windows 10` Powered By Git bash
+* Support `Windows 10` Powered By `Git bash`
 
 #### v17.09 rc8
 

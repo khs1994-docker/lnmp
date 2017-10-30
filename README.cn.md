@@ -24,14 +24,14 @@
 
 # 快速上手
 
-本节命令适用于 Linux，macOS, Windows 10（Git Bash）。
-
 ## 开发环境
+
+不再支持 Windows
 
 开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
 
 ```bash
-$ git clone -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
+$ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
 
@@ -74,11 +74,11 @@ $ docker-compose down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[NGINX](https://github.com/khs1994-docker/nginx)         |`khs1994/nginx:1.13.6-alpine`    |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/nginx.svg)](https://github.com/khs1994-docker/nginx/releases)      |`Alpine:3.5`|
-|MySQL                                                    |`mysql:5.7.19`                   |[![GitHub release](https://img.shields.io/badge/release-v5.7.19-blue.svg)](https://github.com/docker-library/docs/tree/master/mysql)       |`Debian:jessie`|
+|MySQL                                                    |`mysql:5.7.20`                   |[![GitHub release](https://img.shields.io/badge/release-v5.7.20-blue.svg)](https://github.com/docker-library/docs/tree/master/mysql)       |`Debian:jessie`|
 |[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.2-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)      |`Alpine:3.6`|
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.1.10-alpine`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.4`|
-|Laravel                                                  |`khs1994/php-fpm:7.1.10-alpine`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.4`|
-|Composer                                                 |`khs1994/php-fpm:7.1.10-alpine`  |[![GitHub release](https://img.shields.io/badge/release-v1.5.2-blue.svg)](https://github.com/docker-library/docs/tree/master/composer)     |`Alpine:3.4`|
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.1.11-alpine`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.4`|
+|Laravel                                                  |`khs1994/php-fpm:7.1.11-alpine`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.4`|
+|Composer                                                 |`khs1994/php-fpm:7.1.11-alpine`  |[![GitHub release](https://img.shields.io/badge/release-v1.5.2-blue.svg)](https://github.com/docker-library/docs/tree/master/composer)     |`Alpine:3.4`|
 |[Memcached](https://github.com/khs1994-docker/memcached) |`khs1994/memcached:1.5.2-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/memcached.svg)](https://github.com/khs1994-docker/memcached/releases)  |`Alpine:3.6`|
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.12-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.5`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.0-alpine`   |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)    |`Alpine:3.6`|
@@ -103,7 +103,7 @@ $ docker-compose down
 
 # 命令行工具
 
-在 Linux 或 macOS 中，为简化操作方式，本项目提供了 `交互式` 的命令行工具(`./lnmp-docker.sh`)，用法请查看 [支持文档](docs/cli.md)。
+为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)。
 
 # 生产环境用户
 
@@ -113,7 +113,6 @@ $ docker-compose down
 
 # 项目国内镜像
 
-* TGit：https://git.qcloud.com/khs1994-docker/lnmp.git
 * 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
 * 码云：https://gitee.com/khs1994/lnmp.git
 * Coding：https://git.coding.net/khs1994/lnmp.git
