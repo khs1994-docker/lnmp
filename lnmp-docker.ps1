@@ -2,8 +2,10 @@
 
 Function env_status(){
   if (Test-Path .env){
+    Write-Host " "
     Write-Host .env file existing
   }else{
+    Write-Host " "
     Write-Host .env file NOT existing
     cp .env.example .env
   }
@@ -90,24 +92,24 @@ Function cleanup(){
 }
 
 Function composer($COMPOSE_PATH,$CMD){
-  Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
+  Write-Host "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
   Write-Host "output information"
   Write-Host " "
-  docker run -it --rm -v $pwd\app\${COMPOSE_PATH}:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION composer ${CMD}
+  docker run -it --rm -v $pwd\app\${COMPOSE_PATH}:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine composer ${CMD}
 }
 
 Function laravel($LARAVEL_PATH){
-  Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
+  Write-Host "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
   Write-Host "output information"
   Write-Host " "
-  docker run -it --rm -v $pwd\app:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION laravel new ${LARAVEL_PATH}
+  docker run -it --rm -v $pwd\app:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine laravel new ${LARAVEL_PATH}
 }
 
 Function laravel-artisan($LARAVEL_PATH,$CMD){
-  Write-Host "IN khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION  /app/${LARAVEL_PATH} EXEC $ php artisan ${CMD}"
+  Write-Host "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine  /app/${LARAVEL_PATH} EXEC $ php artisan ${CMD}"
   Write-Host "output information"
   Write-Host " "
-  docker run -it --rm -v $pwd\app\${LARAVEL_PATH}:/app khs1994/php-fpm:$KHS1994_LNMP_PHP_VERSION php artisan ${CMD}
+  docker run -it --rm -v $pwd\app\${LARAVEL_PATH}:/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine php artisan ${CMD}
 }
 
 Function update(){
@@ -191,7 +193,9 @@ Function main() {
     }
 
     php {
-
+      $PHP_PATH=$args[1]
+      $PHP_FILE=$args[2]
+      docker run -it --rm -v $pwd\app\${PHP_PATH}:/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine php $PHP_FILE
     }
 
     push {

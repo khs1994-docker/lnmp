@@ -31,7 +31,7 @@
 如果你使用的是 `Windows 10` 请将 `./lnmp-docker.sh` 替换为 `./lnmp-docker.ps1`。
 
 ```bash
-$ git clone -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
+$ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
 

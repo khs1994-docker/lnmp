@@ -28,7 +28,7 @@ To use LNMP Docker,you need:
 If your OS is `Windows 10` please use `./lnmp-docker.ps1` instead of `./lnmp-docker.sh`
 
 ```bash
-$ git clone -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
+$ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
 
