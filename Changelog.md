@@ -5,6 +5,8 @@ Changelog
 
 `.env`:
 
+#### v17.10 rc7
+
 #### v17.10 rc6
 
 Changes:
