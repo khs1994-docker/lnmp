@@ -8,7 +8,7 @@ Changelog
 #### v17.10 rc6
 
 Changes:
-* Support `Windows 10` Powered by `power shell`
+* NOT Support `Windows 10`
 Updates:
 * `php-fpm` 7.1.11
 * `MySQL` 5.7.20

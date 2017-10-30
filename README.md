@@ -25,7 +25,7 @@ To use LNMP Docker,you need:
 
 ## Start in Devlopment
 
-If your OS is `Windows 10` please use `./lnmp-docker.ps1` instead of `./lnmp-docker.sh`
+NOT Support Windows
 
 ```bash
 $ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
@@ -100,11 +100,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian
 
 # CLI
 
-Easy to access Laravel, Laravel artisan, composer, etc. Please use CLI.
-
-On Linux or macOS,use [`./lnmp-docker.sh`](docs/cli.md).
-
-On Windows,use [`./lnmp-docker.ps1`](docs/windows.md).
+Easy to access Laravel, Laravel artisan, composer, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
 
 # Who use in Production?
 
