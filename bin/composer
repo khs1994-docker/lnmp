@@ -39,7 +39,7 @@ fi
 echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${COMPOSE_PATH} 执行 $ composer ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
 docker run -it --rm \
-  -v $PWD/app/${COMPOSE_PATH}:/app/${COMPOSE_PATH} \
+  -v $PWD/app/${COMPOSE_PATH}:/app \
   -v $PWD/tmp/cache:/tmp/cache \
   ${DOCKER_IMAGE}:${TAG} \
   composer ${CMD}

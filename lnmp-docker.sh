@@ -415,7 +415,7 @@ main() {
       NOTSUPPORT
     fi
     docker run -it --rm \
-      -v $PWD/app/$2:/app/$2 \
+      -v $PWD/app/$2:/app \
       khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
       php $3
    ;;

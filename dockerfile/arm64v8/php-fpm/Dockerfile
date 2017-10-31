@@ -1,4 +1,4 @@
-FROM arm64v8/php:7.1.11-fpm
+FROM arm64v8/php:7.1.11-fpm-jessie
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 
