@@ -20,7 +20,8 @@ ENV KHS1994_PHP_FPM_DEPS \
                          cyrus-sasl-dev \
                          postgresql-dev \
                          zlib-dev \
-                         tzdata
+                         tzdata \
+                         sqlite-dev
 
 RUN set -xe \
         && apk add --no-cache $KHS1994_PHP_FPM_DEPS \

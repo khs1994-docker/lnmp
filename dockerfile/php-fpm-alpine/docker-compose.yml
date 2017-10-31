@@ -3,4 +3,4 @@ services:
 
   php-fpm:
     build: .
-    image: ${DOCKER_HUB_USERNAME}/php-fpm:${TAG}-alpine
+    image: ${DOCKER_HUB_USERNAME}/php-fpm:${TAG}-alpine3.4

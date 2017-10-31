@@ -407,10 +407,10 @@ main() {
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.4
     elif [ $ARCH="armv7l" ];then
       PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
     elif [ $ARCH="aarch64" ];then
       PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
     else
       NOTSUPPORT
     fi

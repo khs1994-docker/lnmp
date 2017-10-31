@@ -17,6 +17,7 @@ RUN set -xe \
         libmemcached-dev \
         libpq-dev \
         zlib1g-dev \
+				libsqlite3-dev \
 	" \
   && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
     	   && docker-php-ext-install -j$(nproc) bcmath iconv mcrypt pdo_pgsql pdo_mysql pdo_sqlite zip \

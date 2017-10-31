@@ -3,4 +3,4 @@ services:
 
   arm64v8-php-fpm:
     build: .
-    image: ${DOCKER_HUB_USERNAME}/arm64v8-php-fpm:${TAG}
+    image: ${DOCKER_HUB_USERNAME}/arm64v8-php-fpm:${TAG}-jessie

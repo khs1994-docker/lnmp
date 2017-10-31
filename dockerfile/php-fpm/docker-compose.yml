@@ -3,4 +3,4 @@ services:
 
   php-fpm:
     build: .
-    image: ${DOCKER_HUB_USERNAME}/php-fpm:${TAG}
+    image: ${DOCKER_HUB_USERNAME}/php-fpm:${TAG}-jessie
