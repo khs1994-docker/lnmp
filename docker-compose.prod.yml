@@ -15,7 +15,7 @@ services:
   #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
 
   php7:
-    image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine
+    image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.4
     volumes:
       - ~/.ssh:/root/.ssh:rw
       - ./app:${PRODUCTION_LNMP_PHP_PATH}:rw

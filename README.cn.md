@@ -113,6 +113,7 @@ $ docker-compose down
 
 # 项目国内镜像
 
+* TGit：https://git.qcloud.com/khs1994-docker/lnmp.git
 * 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
 * 码云：https://gitee.com/khs1994/lnmp.git
 * Coding：https://git.coding.net/khs1994/lnmp.git

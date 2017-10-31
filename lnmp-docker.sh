@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if [ $1 = "development" -o $1 = "production" ];then
-  ENV=$1
+if [ ! -z $1 ];then
+  if [ $1 = "development" -o $1 = "production" ];then
+    ENV=$1
+  fi
 fi
 
 ARCH=`uname -m`
@@ -400,9 +402,21 @@ main() {
     ;;
 
   php )
+    if [ $ARCH="x86_64" ];then
+      PHP_CLI_DOCKER_IMAGE=php-fpm
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.4
+    elif [ $ARCH="armv7l" ];then
+      PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
+    elif [ $ARCH="aarch64" ];then
+      PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
+    else
+      NOTSUPPORT
+    fi
     docker run -it --rm \
-      -v $PWD/app/$2:/app/$2 \
-      khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION} \
+      -v $PWD/app/$2:/app \
+      khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
       php $3
    ;;
 

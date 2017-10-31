@@ -23,10 +23,10 @@ if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
   if [ ${ARCH} = "armv7l" ];then
     DOCKER_IMAGE=khs1994/arm32v7-php-fpm
   fi
-  TAG=${KHS1994_LNMP_PHP_VERSION}
+  TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
 elif [ ${ARCH} = "x86_64" ];then
   DOCKER_IMAGE=khs1994/php-fpm
-  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine
+  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.4
 else
   echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
   error
