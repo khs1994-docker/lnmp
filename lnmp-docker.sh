@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if [ $1 = "development" -o $1 = "production" ];then
-  ENV=$1
+if [ ! -z $1 ];then
+  if [ $1 = "development" -o $1 = "production" ];then
+    ENV=$1
+  fi
 fi
 
 ARCH=`uname -m`
