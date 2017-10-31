@@ -220,7 +220,7 @@ main() {
   # 创建日志文件夹
   logs
   # no sudo
-  if [[ $EUID -eq 0 ]]; then print_error "This script should not be run using sudo!!\n"; exit 1; fi
+  # if [[ $EUID -eq 0 ]]; then print_error "This script should not be run using sudo!!\n"; exit 1; fi
   # 架构
   print_info "ARCH is ${OS} ${ARCH}\n"
   # .env
