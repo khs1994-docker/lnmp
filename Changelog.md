@@ -4,7 +4,8 @@ Changelog
 #### v17.11 rc1
 
 Updates:
-* Docker Compose `1.17.0-rc1`
+* `Docker Compose` 1.17.0-rc1
+
 #### v17.10 (2017-11-01)
 
 #### v17.10 rc6
