@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.4"
 services:
 
   # # MySQL 暂时没有 arm 镜像

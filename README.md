@@ -64,7 +64,7 @@ $ docker-compose down
 
 # Overview
 
-LNMP Docker is supported on Linux, macOS, Windows 10 (PC) on `x86_64`,and Debian on `armhf`.
+LNMP Docker is supported on Linux, macOS on `x86_64`, and Debian on `armhf`.
 
 ## What's inside
 

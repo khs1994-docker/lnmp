@@ -67,7 +67,7 @@ $ docker-compose down
 
 # 项目说明
 
-本项目支持 `x86_64` 架构的 Linux, macOS, Windows 10 (PC)，并且支持 `armhf` 架构的 Debian。
+本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `armhf` 架构的 Debian。
 
 ## 包含软件
 
