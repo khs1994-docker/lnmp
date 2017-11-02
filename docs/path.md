@@ -58,11 +58,3 @@
 |`/data/db/`  |`mongodb-data`                 |`/data/db/`                 |
 |`mongod.conf`|`./config/mongodb/mongod.conf` |`/etc/mongod.conf`          |
 |`mongo.log`  |`./logs/mongodb/mongo.log`     |`/var/log/mongodb/mongo.log`|
-
-# Gogs
-
-|名称|本机|容器|
-|--|--|--|
-|`app.ini`|`./config/gogs/app.prod.ini`|`/data/gogs/conf/app.ini`|
-|`ssl`    |`./config/nginx/ssl`        |`/data/ssl`|
-|`data`   |`gogs-data`                 |`/data`|

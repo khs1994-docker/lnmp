@@ -9,6 +9,7 @@
 * [xdebug (生产环境不启用)](https://pecl.php.net/package/xdebug)
 * pdo_mysql
 * pdo_pgsql
+* pdo_sqlite
 * [zip](https://pecl.php.net/package/zip)
 * bcmath
 
