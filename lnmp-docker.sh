@@ -114,9 +114,24 @@ install_docker_compose(){
       # 版本在 .env 文件定义
       # https://api.github.com/repos/docker/compose/releases/latest
       # Linux macOS
-      curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-      chmod +x docker-compose
-      echo $PATH && sudo mv docker-compose /usr/local/bin
+      # 克隆中国镜像
+      git clone -b exec --depth=1 https://code.aliyun.com/khs1994-docker/compose-cn-mirror.git .docker-cn-mirror
+      cd .docker-cn-mirror
+      if [ $OS = "Linux" ];then
+        . /etc/os-release
+        if [ $ID = "coreos" ];then
+          sudo cp -a docker-compose-`uname -s`-`uname -m` /opt/bin/
+        else
+          sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/
+        fi
+      cd -
+      elif [ $OS = "Darwin" ];then
+        sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/
+        cd -
+      fi
+      # curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+      # chmod +x docker-compose
+      # echo $PATH && sudo mv docker-compose /usr/local/bin
     else
       NOTSUPPORT
     fi
@@ -154,8 +169,6 @@ fi
 # 初始化
 
 function init {
-  # docker-compose 是否安装
-  install_docker_compose
   case $ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
@@ -239,6 +252,8 @@ main() {
   env_status
   . .env
   . env/.env
+  # docker-compose 是否安装
+  install_docker_compose
   case $1 in
 
   init )
