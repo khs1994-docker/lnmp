@@ -17,9 +17,9 @@ development
 
 ## 开发过程
 
-首先 [`Fork` 本项目](https://github.com/khs1994-docker/lnmp/fork)，删除 `dev` 分支，`克隆` 你 Fork 的项目到本机，通过 `PR` 保持与上游(本项目)的同步
+首先 [`Fork`](https://github.com/khs1994-docker/lnmp/fork) 本项目，删除 `dev` 分支，`克隆` 你 fork 的项目到本机，通过 `PR` 保持与上游（本项目）的同步
 
-这一过程具体请查看 [生产环境配置](production.md)
+这一过程具体请查看 [生产环境配置](production.md)。
 
 之后 PhpStorm 打开本项目，克隆已有的 PHP 项目文件到 `./app` 目录下或在 `./app` 目录下开始新的开发。
 
