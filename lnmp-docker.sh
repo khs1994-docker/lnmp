@@ -2,12 +2,34 @@
 
 if [ ! -z $1 ];then
   if [ $1 = "development" -o $1 = "production" ];then
-    ENV=$1
+    APP_ENV=$1
   fi
 fi
 
+# env
+function print_info(){
+  echo -e "\033[32mINFO\033[0m  $1"
+}
+
+function print_error(){
+  echo -e "\033[31mINFO\033[0m  $1"
+}
+
+function env_status(){
+  # .env.example to .env
+  if [ -f .env ];then
+    print_info ".env existing\n"
+  else
+    print_error ".env NOT existing\n"
+    cp .env.example .env
+    # exit 1
+  fi
+}
+
+env_status
 ARCH=`uname -m`
 OS=`uname -s`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 # 获取正确版本号
 
@@ -27,41 +49,22 @@ NOTSUPPORT(){
   exit 1
 }
 
-print_info(){
-  echo -e "\033[32mINFO\033[0m  $1"
-}
-
-print_error(){
-  echo -e "\033[31mINFO\033[0m  $1"
-}
-
 # 创建日志文件
 
 logs(){
-  if [ ! -d "logs/mongodb" ];then
-    mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log
-   fi
+  if [ ! -d "logs/mongodb" ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
 
-  if [ ! -d "logs/mysql" ];then
-    mkdir -p logs/mysql && echo > logs/mysql/error.log
-  fi
+  if [ ! -d "logs/mysql" ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
 
-  if [ ! -d "logs/nginx" ];then
-    mkdir -p logs/nginx \
-    && echo > logs/nginx/error.log \
-    && echo > logs/nginx/access.log
-  fi
+  if [ ! -d "logs/nginx" ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
 
   if [ ! -d "logs/php-fpm" ];then
-    mkdir -p logs/php-fpm \
-    && echo > logs/php-fpm/error.log \
-    && echo > logs/php-fpm/access.log \
-    && echo > logs/php-fpm/xdebug-remote.log
+    mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
+      && echo > logs/php-fpm/access.log \
+      && echo > logs/php-fpm/xdebug-remote.log
   fi
 
-  if [ ! -d "logs/redis" ];then
-    mkdir -p logs/redis && echo > logs/redis/redis.log
-  fi
+  if [ ! -d "logs/redis" ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
   chmod -R 777 logs/mongodb \
                logs/mysql \
                logs/nginx \
@@ -69,9 +72,7 @@ logs(){
                logs/redis
 
   # 不清理 Composer 缓存
-  if [ ! -d "tmp/cache" ];then
-    mkdir -p tmp/cache && chmod 777 tmp/cache
-  fi
+  if [ ! -d "tmp/cache" ];then mkdir -p tmp/cache && chmod 777 tmp/cache; fi
 }
 
 # 清理日志文件
@@ -91,6 +92,15 @@ cleanup(){
 
 # 是否安装 Docker Compose
 
+install_docker_compose_official(){
+  # 版本在 .env 文件定义
+  # https://api.github.com/repos/docker/compose/releases/latest
+  curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  chmod +x docker-compose
+  echo $PATH && sudo mv docker-compose /usr/local/bin
+  # in CoreOS you must move to /opt/bin
+}
+
 install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
@@ -104,18 +114,29 @@ install_docker_compose(){
       print_info "${ARCH} docker-compose is installing by pip3 ...\n"
       sudo apt install -y python3-pip
       # pip 源
-      if [ !-d "~/.pip"];then
+      if [ !-d "~/.pip" ];then
         mkdir -p ~/.pip
         echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
       fi
       sudo pip3 install docker-compose
-    elif [ `uanme -s` = "Linux" -o `uname -s` = "Darwin" ];then
-      # 版本在 .env 文件定义
-      # https://api.github.com/repos/docker/compose/releases/latest
-      # Linux macOS
-      curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-      chmod +x docker-compose
-      echo $PATH && sudo mv docker-compose /usr/local/bin
+    elif [ $OS = "Linux" -o $OS = "Darwin" ];then
+      # 克隆中国镜像
+      git clone -b exec --depth=1 https://code.aliyun.com/khs1994-docker/compose-cn-mirror.git .docker-cn-mirror
+      cd .docker-cn-mirror
+      if [ -f  "/etc/os-release" ];then
+        # linux
+        . /etc/os-release
+        case $ID in
+          coreos )
+          sudo cp -a docker-compose-`uname -s`-`uname -m` /opt/bin/docker-compose
+          ;;
+        esac
+      else
+          # macOS
+          sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
+      fi
+      rm -rf .docker-cn-mirror
+      cd -
     else
       NOTSUPPORT
     fi
@@ -137,34 +158,21 @@ function demo {
   git submodule update --init --recursive
 }
 
-# env
-
-function env_status(){
-  # .env.example to .env
-  if [ -f .env ];then
-    print_info ".env existing\n"
-  else
-    print_error ".env NOT existing\n"
-    cp .env.example .env
-    # exit 1
-fi
-}
-
 # 初始化
 
 function init {
   # docker-compose 是否安装
   install_docker_compose
-  case $ENV in
+  case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
-      echo "$ENV"
+      echo "$APP_ENV"
       demo
       ;;
 
     # 生产环境 转移项目文件、配置文件、安装依赖包
     production )
-      echo "$ENV"
+      echo "$APP_ENV"
       # 请在 ./bin/production-init 定义要执行的操作
       bin/production-init
       ;;
@@ -189,7 +197,6 @@ restore(){
 
 update(){
   git fetch origin
-  BRANCH=`git rev-parse --abbrev-ref HEAD`
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git reset --hard origin/dev
@@ -203,12 +210,23 @@ update(){
 # 提交项目「开发者选项」
 
 commit(){
-  BRANCH=`git rev-parse --abbrev-ref HEAD`
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git add .
     git commit -m "Update [skip ci]"
     git push origin dev
+  else
+    print_error "${BRANCH} 分支不能自动提交\n"
+  fi
+}
+
+release_rc(){
+  print_info "开始新的 RC 版本开发"
+  print_info "Branch is ${BRANCH}\n"
+  if [ ${BRANCH} = "dev" ];then
+    git fetch origin
+    git reset --hard origin/master
+    git push -f origin dev
   else
     print_error "${BRANCH} 分支不能自动提交\n"
   fi
@@ -223,8 +241,6 @@ main() {
   # if [[ $EUID -eq 0 ]]; then print_error "This script should not be run using sudo!!\n"; exit 1; fi
   # 架构
   print_info "ARCH is ${OS} ${ARCH}\n"
-  # .env
-  env_status
   . .env
   . env/.env
   case $1 in
@@ -247,6 +263,9 @@ main() {
 
   commit )
     commit
+    ;;
+  rc )
+    release_rc
     ;;
 
   laravel )
@@ -280,6 +299,7 @@ main() {
     ;;
 
   production-config )
+    init
     docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
@@ -287,6 +307,7 @@ main() {
     ;;
 
   development-build )
+    init
     if [ ${ARCH} = "x86_64" ];then
       docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
     else
@@ -315,6 +336,7 @@ main() {
     ;;
 
   development-config )
+    init
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
       docker-compose \
@@ -384,6 +406,7 @@ main() {
     ;;
 
   push )
+    init
     docker-compose \
       -f docker-compose.yml \
       -f docker-compose.push.yml \
@@ -395,6 +418,7 @@ main() {
     ;;
 
   push-config )
+    init
     docker-compose \
       -f docker-compose.yml \
       -f docker-compose.push.yml \
@@ -421,6 +445,7 @@ main() {
    ;;
 
   down )
+    init
     docker-compose down --remove-orphans
     ;;
 

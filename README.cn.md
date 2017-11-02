@@ -18,11 +18,13 @@
 
 本项目需要以下软件：
 
-* [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
+* [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
-* [Docker Compose](https://github.com/docker/compose) 1.16.1+
+* [Docker Compose](https://github.com/docker/compose) 1.17.0+
 
 # 快速上手
+
+简单而言，搞明白了项目路径，Nginx 配置就行了，遇到任何问题请提出 issue。
 
 ## 开发环境
 
@@ -80,7 +82,7 @@ $ docker-compose down
 |Laravel                                                  |`khs1994/php-fpm:7.1.11-alpine3.4`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.4`|
 |Composer                                                 |`khs1994/php-fpm:7.1.11-alpine3.4`  |[![GitHub release](https://img.shields.io/badge/release-v1.5.2-blue.svg)](https://github.com/docker-library/docs/tree/master/composer)     |`Alpine:3.4`|
 |[Memcached](https://github.com/khs1994-docker/memcached) |`khs1994/memcached:1.5.2-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/memcached.svg)](https://github.com/khs1994-docker/memcached/releases)  |`Alpine:3.6`|
-|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.12-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.5`|
+|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.12-management-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.5`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.0-alpine`   |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)    |`Alpine:3.6`|
 |MongoDB                                                  |`mongo:3.5.13`                  |[![GitHub release](https://img.shields.io/badge/release-v3.5.13-blue.svg)](https://github.com/docker-library/docs/tree/master/mongo)       |`Debian:jessie`|
 
@@ -118,9 +120,14 @@ $ docker-compose down
 * 码云：https://gitee.com/khs1994/lnmp.git
 * Coding：https://git.coding.net/khs1994/lnmp.git
 
+# CI/CD
+
+请使用 [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
+
 # 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
+* [Docker Compose 中国镜像](https://github.com/khs1994-docker/compose-cn-mirror)
 * [Docker 从入门到实践](https://github.com/yeasy/docker_practice)
 * [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)

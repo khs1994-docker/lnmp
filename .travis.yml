@@ -21,8 +21,6 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_3418790a352e_key -iv $encrypted_3418790a352e_iv
   -in bin/khs1994-robot.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
-- echo "TZ='Asia/Shanghai'; export TZ" >> ~/.profile
-- ". ~/.profile"
 - date
 - git config --global user.name "khs1994-merge-robot"
 - git config --global user.email "ai@khs1994.com"
@@ -37,4 +35,5 @@ branches:
   - master
   - dev
 env:
-  - DOCKER_COMPOSE_VERSION=1.17.0-rc1
+  - DOCKER_COMPOSE_VERSION=1.17.0
+  - TZ=Asia/Shanghai

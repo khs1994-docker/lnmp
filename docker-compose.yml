@@ -94,7 +94,7 @@ services:
       - frontend
       - backend
     dns:
-      - 114.114.114.114
+      - ${DNS}
     command: ["php-fpm","-R"]
     env_file: .env
     # entrypoint: /code/entrypoint.sh
@@ -130,7 +130,7 @@ services:
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
-    dns: 8.8.8.8
+    dns: ${DNS}
     networks:
       - frontend
 
