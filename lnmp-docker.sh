@@ -110,7 +110,7 @@ install_docker_compose(){
         echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
       fi
       sudo pip3 install docker-compose
-    elif [ `uanme -s` = "Linux" -o `uname -s` = "Darwin" ];then
+    elif [ $OS = "Linux" -o $OS = "Darwin" ];then
       # 版本在 .env 文件定义
       # https://api.github.com/repos/docker/compose/releases/latest
       # Linux macOS
