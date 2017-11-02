@@ -10,13 +10,36 @@
 
 [`Fork` 本项目](https://github.com/khs1994-docker/lnmp/fork)，删除 `dev` 分支
 
-`克隆` 你 Fork 的项目到服务器
+`克隆` 你 Fork 的项目到服务器。
+
+```bash
+$ git clone git@github.com:yourname/lnmp.git
+$ cd lnmp
+# 将项目与上游关联
+$ git remote add source git@github.com:khs1994-docker/lnmp.git
+```
 
 按需修改，包括你需要启用的软件( `docker-compose.yml` )，`CI/CD`，等。更多信息请阅读 `个性化配置` 一节
 
 执行 `./lnmp-docker.sh production`
 
 >生产环境追求稳定，本项目每月发布一个版本，你只需每月在某天 `同步` 本项目即可。
+
+在服务器命令行操作
+
+```bash
+$ git fetch source
+$ git rebase source/master
+$ git push -f origin/master
+```
+
+你也可以在网页上操作，在你项目的 PR 页面点击 `New pull request`。
+
+`base fork` 选择你的仓库，不出意外的话页面会发生改变，你只需点击上边的 `compare across fork` 页面就会跳转回来。
+
+之后 `head fork` 选择 `khs1994-docker/lnmp`，点击 `Create pull request`，填写信息。
+
+
 
 ## PHP
 
