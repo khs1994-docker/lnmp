@@ -6,6 +6,27 @@ if [ ! -z $1 ];then
   fi
 fi
 
+# env
+function print_info(){
+  echo -e "\033[32mINFO\033[0m  $1"
+}
+
+function print_error(){
+  echo -e "\033[31mINFO\033[0m  $1"
+}
+
+function env_status(){
+  # .env.example to .env
+  if [ -f .env ];then
+    print_info ".env existing\n"
+  else
+    print_error ".env NOT existing\n"
+    cp .env.example .env
+    # exit 1
+fi
+}
+
+env_status
 ARCH=`uname -m`
 OS=`uname -s`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
@@ -26,14 +47,6 @@ fi
 NOTSUPPORT(){
   print_error "Not Support `uname -s` ${ARCH}\n"
   exit 1
-}
-
-print_info(){
-  echo -e "\033[32mINFO\033[0m  $1"
-}
-
-print_error(){
-  echo -e "\033[31mINFO\033[0m  $1"
 }
 
 # 创建日志文件
@@ -153,19 +166,6 @@ function demo {
   git submodule update --init --recursive
 }
 
-# env
-
-function env_status(){
-  # .env.example to .env
-  if [ -f .env ];then
-    print_info ".env existing\n"
-  else
-    print_error ".env NOT existing\n"
-    cp .env.example .env
-    # exit 1
-fi
-}
-
 # 初始化
 
 function init {
@@ -250,8 +250,6 @@ main() {
   # if [[ $EUID -eq 0 ]]; then print_error "This script should not be run using sudo!!\n"; exit 1; fi
   # 架构
   print_info "ARCH is ${OS} ${ARCH}\n"
-  # .env
-  env_status
   . .env
   . env/.env
   case $1 in
@@ -310,6 +308,7 @@ main() {
     ;;
 
   production-config )
+    init
     docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
@@ -317,6 +316,7 @@ main() {
     ;;
 
   development-build )
+    init
     if [ ${ARCH} = "x86_64" ];then
       docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
     else
@@ -345,6 +345,7 @@ main() {
     ;;
 
   development-config )
+    init
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
       docker-compose \
@@ -414,6 +415,7 @@ main() {
     ;;
 
   push )
+    init
     docker-compose \
       -f docker-compose.yml \
       -f docker-compose.push.yml \
@@ -425,6 +427,7 @@ main() {
     ;;
 
   push-config )
+    init
     docker-compose \
       -f docker-compose.yml \
       -f docker-compose.push.yml \
@@ -451,6 +454,7 @@ main() {
    ;;
 
   down )
+    init
     docker-compose down --remove-orphans
     ;;
 
