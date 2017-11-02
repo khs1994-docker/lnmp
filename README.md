@@ -17,9 +17,9 @@ Latest commit in dev branch,please switch [dev branch](https://github.com/khs199
 
 To use LNMP Docker,you need:
 
-* [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
+* [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
-* [Docker Compose](https://github.com/docker/compose) 1.16.1+
+* [Docker Compose](https://github.com/docker/compose) 1.17.0+
 
 # Quick Start
 

@@ -92,6 +92,15 @@ cleanup(){
 
 # 是否安装 Docker Compose
 
+install_docker_compose_official(){
+  # 版本在 .env 文件定义
+  # https://api.github.com/repos/docker/compose/releases/latest
+  curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  chmod +x docker-compose
+  echo $PATH && sudo mv docker-compose /usr/local/bin
+  # in CoreOS you must move to /opt/bin
+}
+
 install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
@@ -111,13 +120,11 @@ install_docker_compose(){
       fi
       sudo pip3 install docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
-      # 版本在 .env 文件定义
-      # https://api.github.com/repos/docker/compose/releases/latest
-      # Linux macOS
       # 克隆中国镜像
       git clone -b exec --depth=1 https://code.aliyun.com/khs1994-docker/compose-cn-mirror.git .docker-cn-mirror
       cd .docker-cn-mirror
       if [ -f  "/etc/os-release" ];then
+        # linux
         . /etc/os-release
         case $ID in
           coreos )
@@ -125,14 +132,11 @@ install_docker_compose(){
           ;;
         esac
       else
-          # 说明是 macOS
+          # macOS
           sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
       fi
       rm -rf .docker-cn-mirror
       cd -
-      # curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-      # chmod +x docker-compose
-      # echo $PATH && sudo mv docker-compose /usr/local/bin
     else
       NOTSUPPORT
     fi

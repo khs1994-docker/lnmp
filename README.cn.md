@@ -18,11 +18,13 @@
 
 本项目需要以下软件：
 
-* [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
+* [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
-* [Docker Compose](https://github.com/docker/compose) 1.16.1+
+* [Docker Compose](https://github.com/docker/compose) 1.17.0+
 
 # 快速上手
+
+简单而言，搞明白了项目路径，Nginx 配置就行了，遇到任何问题请提出 issue。
 
 ## 开发环境
 
@@ -125,6 +127,7 @@ $ docker-compose down
 # 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
+* [Docker Compose 中国镜像](https://github.com/khs1994-docker/compose-cn-mirror)
 * [Docker 从入门到实践](https://github.com/yeasy/docker_practice)
 * [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)

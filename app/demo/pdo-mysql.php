@@ -1,6 +1,6 @@
 <?php
 
-#提前新建数据库 test
+# 提前新建数据库 test
 
 $pdo=new PDO('mysql:host=mysql;dbname=test;port=3306','root','mytest');
 $sql=<<<EOF
