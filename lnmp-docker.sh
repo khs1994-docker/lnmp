@@ -8,6 +8,7 @@ fi
 
 ARCH=`uname -m`
 OS=`uname -s`
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 # 获取正确版本号
 
@@ -203,12 +204,23 @@ update(){
 # 提交项目「开发者选项」
 
 commit(){
-  BRANCH=`git rev-parse --abbrev-ref HEAD`
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git add .
     git commit -m "Update [skip ci]"
     git push origin dev
+  else
+    print_error "${BRANCH} 分支不能自动提交\n"
+  fi
+}
+
+release_rc(){
+  print_info "开始新的 RC 版本开发"
+  print_info "Branch is ${BRANCH}\n"
+  if [ ${BRANCH} = "dev" ];then
+    git fetch origin
+    git reset --hard origin/master
+    git push -f origin dev
   else
     print_error "${BRANCH} 分支不能自动提交\n"
   fi
@@ -247,6 +259,9 @@ main() {
 
   commit )
     commit
+    ;;
+  rc )
+    release_rc
     ;;
 
   laravel )
