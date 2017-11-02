@@ -37,4 +37,4 @@ branches:
   - master
   - dev
 env:
-  - DOCKER_COMPOSE_VERSION=1.17.0-rc1
+  - DOCKER_COMPOSE_VERSION=1.17.0
