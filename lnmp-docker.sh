@@ -120,15 +120,15 @@ install_docker_compose(){
       if [ $OS = "Linux" ];then
         . /etc/os-release
         if [ $ID = "coreos" ];then
-          sudo cp -a docker-compose-`uname -s`-`uname -m` /opt/bin/
+          sudo cp -a docker-compose-`uname -s`-`uname -m` /opt/bin/docker-compose
         else
-          sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/
+          sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
         fi
-      cd -
       elif [ $OS = "Darwin" ];then
-        sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/
-        cd -
+        sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
       fi
+      rm -rf .docker-cn-mirror
+      cd -
       # curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
       # chmod +x docker-compose
       # echo $PATH && sudo mv docker-compose /usr/local/bin
@@ -169,6 +169,8 @@ fi
 # 初始化
 
 function init {
+  # docker-compose 是否安装
+  install_docker_compose
   case $ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
@@ -252,8 +254,6 @@ main() {
   env_status
   . .env
   . env/.env
-  # docker-compose 是否安装
-  install_docker_compose
   case $1 in
 
   init )
