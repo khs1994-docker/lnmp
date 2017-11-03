@@ -2,3 +2,4 @@
 !*.example.sh
 !.gitignore
 !README.md
+!crontab.example.txt
