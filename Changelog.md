@@ -1,6 +1,12 @@
 Changelog
 ==============
 
+#### v17.11 rc3
+
+Changes:
+* Add LICENSE `Apache License Version 2.0`
+* Add Config files
+
 #### v17.11 rc2
 
 Updates:
