@@ -453,6 +453,8 @@ main() {
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
+Official WebSite https://lnmp.khs1994.com
+
 Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
@@ -486,8 +488,7 @@ Container CLI:
 Tools:
   update                Upgrades LNMP
 
-Read './docs/*.md' for more information about commands.
-"
+Read './docs/*.md' for more information about commands."
     ;;
   esac
 }

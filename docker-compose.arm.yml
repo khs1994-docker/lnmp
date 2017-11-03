@@ -111,10 +111,11 @@ services:
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
-      - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
       - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
-      - ./logs/php-fpm:/var/log/php-fpm
+      - ./logs/php-fpm:/var/log/php-fpm:rw
     environment:
       - TZ=Asia/Shanghai
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} ${ARM_ARCH} With Pull Docker Image

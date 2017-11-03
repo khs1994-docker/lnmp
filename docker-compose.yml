@@ -15,6 +15,7 @@ services:
     ports:
       - "${MYSQL_PORT}:3306"
     volumes:
+      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
@@ -87,6 +88,7 @@ services:
     image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}php:${KHS1994_LNMP_PHP_VERSION}-alpine3.4"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
+      - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
       - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw

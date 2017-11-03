@@ -4,7 +4,7 @@
 
 服务器安装 `Docker` 配置 `Docker 加速器`
 
-[`Fork`](https://github.com/khs1994-docker/lnmp/fork) 本项目，删除 `dev` 分支。`克隆` 你 fork 的项目到服务器。
+[`Fork`](https://github.com/khs1994-docker/lnmp/fork) 本项目之后 `克隆` 你 fork 的项目到服务器。
 
 ```bash
 $ git clone git@github.com:yourname/lnmp.git
