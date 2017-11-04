@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc6
 
+Changes:
+* Support `Docker Swarm`
+
 #### v17.11 rc5
 
 Changes:
