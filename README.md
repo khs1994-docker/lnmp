@@ -1,21 +1,23 @@
 # LNMP Docker
 
-[![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/khs1994-docker/lnmp/dev.svg)](https://github.com/khs1994-docker/lnmp/tree/dev)
+[![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=dev)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Platform](https://img.shields.io/badge/Platform-Linux%E3%80%81macOS%E3%80%81Raspberry%20Pi-blue.svg)](https://github.com/khs1994-docker/lnmp)
 
 Build LNMP within 2 minutes powered by Docker Compose.
 
 * [中文说明](README.cn.md)
 * [Documents](docs/)
 
+LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian on `armhf`. NOT Support Windows!
+
 # Changelog
 
-Updates every month,Version name is `YY-MM`.For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+Updates every month, Version name is `YY-MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-Latest commit in dev branch,please switch [dev branch](https://github.com/khs1994-docker/lnmp/tree/dev).
+Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
 
 # Prerequisites
 
-To use LNMP Docker,you need:
+To use LNMP Docker, you need:
 
 * [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
@@ -23,9 +25,17 @@ To use LNMP Docker,you need:
 
 # Quick Start
 
-## Start in Devlopment
+## Install using the convenience script
 
-NOT Support Windows
+```bash
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+
+# or in production
+
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
+```
+
+## Install using `git clone` in Devlopment
 
 ```bash
 $ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
@@ -42,13 +52,9 @@ development
 
 ```
 
-Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
+## Start PHP Project
 
-## Run in Production
-
-Start `Containers as a Service(CaaS)`
-
-For more information, see [Documents](docs/production.md).
+Start PHP project(e.g, Laravel) in `./app/` folder. And Edit `./config/nginx/yourfilename.conf`.
 
 ## Stop
 
@@ -63,8 +69,6 @@ $ docker-compose down
 ```
 
 # Overview
-
-LNMP Docker is supported on Linux, macOS, on `x86_64`,and Debian on `armhf`.
 
 ## What's inside
 
@@ -100,7 +104,11 @@ LNMP Docker is supported on Linux, macOS, on `x86_64`,and Debian on `armhf`.
 
 # CLI
 
-Easy to access Laravel, Laravel artisan, composer, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
+Easy to access Laravel, Laravel artisan, composer, PHP-CLI, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
+
+# Run in Production
+
+Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/production.md).
 
 # Who use in Production?
 
@@ -122,3 +130,12 @@ Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
+
+# Contributing
+
+Please see [Contributing](CONTRIBUTING.md).
+
+# Thanks
+
+* [Docker Cloud](https://cloud.docker.com)
+* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
