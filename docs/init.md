@@ -13,3 +13,5 @@ $ git submodule update --init --recursive
 如果是 `生产环境`，载入项目文件、nginx 配置文件
 
 建立日志文件夹和空白日志文件
+
+初始化完毕之后执行 `docker-compose up -d`

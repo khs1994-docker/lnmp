@@ -32,10 +32,6 @@
 
 ```bash
 $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-
-# 生产环境
-
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
 ```
 
 ## 使用 `git clone`

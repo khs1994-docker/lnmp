@@ -29,6 +29,6 @@
 |ARM             | `$ ./lnmp-docker.sh development`         |`docker-compose -f docker-compose.arm.yaml up -d`(需要配置 `.env` 文件)     |
 |生产环境         | `$ ./lnmp-docker.sh production`          |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d`  |
 
-备注： `docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
+>`docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
 
 调试参数配置请把 `up -d` 替换为 `config` 即可。

@@ -1,5 +1,6 @@
 * [总结](README.md)
 * [项目初衷](why.md)
+* [安装](install.md)
 * [项目初始化过程](init.md)
 * [路径说明](path.md)
 * [`lnmp-docker.sh`](cli.md)

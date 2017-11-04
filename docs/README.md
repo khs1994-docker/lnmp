@@ -1,4 +1,4 @@
-# khs1994-dockeer/lnmp 支持文档
+# khs1994-docker/lnmp 支持文档
 
 本项目不建议刚学习 LNMP 的新手使用，当掌握 LNMP 到一定程度时，相信你一定会与我产生共鸣：[项目初衷](why.md)。
 

@@ -29,10 +29,6 @@ To use LNMP Docker, you need:
 
 ```bash
 $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-
-# or in production
-
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
 ```
 
 ## Install using `git clone` in Devlopment
