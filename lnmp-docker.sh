@@ -170,13 +170,13 @@ function init {
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
-      echo "$APP_ENV"
+      print_info "$APP_ENV"
       demo
       ;;
 
     # 生产环境 转移项目文件、配置文件、安装依赖包
     production )
-      echo "$APP_ENV"
+      print_info "$APP_ENV"
       # 请在 ./bin/production-init 定义要执行的操作
       bin/production-init
       ;;
