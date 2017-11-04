@@ -15,6 +15,7 @@
   * [Composer](composer.md)
 * 生产环境(重要)
   * [安装](production/install.md)
+  * [配置](production/production.md)
 * 树莓派3
   * [ARM架构](arm.md)
 * [备份恢复](backup.md)
