@@ -13,3 +13,11 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 ```bash
 $ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 ```
+
+## 更新
+
+```bash
+$ git fetch origin
+$ git rebase origin/master
+$ ./lnmp-docker.sh development
+```
