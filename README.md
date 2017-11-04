@@ -104,7 +104,7 @@ Easy to access Laravel, Laravel artisan, composer, PHP-CLI, etc. Please use [`./
 
 # Run in Production
 
-Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/production.md).
+Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/production/README.md).
 
 # Who use in Production?
 
