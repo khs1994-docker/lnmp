@@ -2,13 +2,9 @@
 
 set -e
 
-error(){
-  return 1
-}
-
 if [ -f "khs1994-robot.enc" ];then
   echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"
-  error
+  exit 1
 fi
 
 echo $0

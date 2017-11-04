@@ -1,6 +1,6 @@
 {
   "registry-mirrors": [
-    "https://wcafmbzt.mirror.aliyuncs.com"
+    "https://registry.docker-cn.com"
   ],
   "debug": true,
   "dns": [

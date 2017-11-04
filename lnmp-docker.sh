@@ -90,6 +90,14 @@ cleanup(){
       print_info "Clean log files SUCCESS\n"
 }
 
+gitbook(){
+  docker run -it --rm \
+    -p 4000:4000 \
+    -v $PWD/docs:/tmp/gitbook-src \
+    khs1994/gitbook \
+    server
+}
+
 # 是否安装 Docker Compose
 
 install_docker_compose_official(){
@@ -452,6 +460,9 @@ main() {
     init
     docker-compose down --remove-orphans
     ;;
+  docs )
+    gitbook
+    ;;
 
   * )
   echo  -e "
@@ -469,6 +480,7 @@ Commands:
   development-config   Validate and view the Development(with build images)Compose file
   development-build    Use LNMP in Development With Build images(Support x86_64)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
+  docs                 Support Documents
   help                 Display this help message
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan

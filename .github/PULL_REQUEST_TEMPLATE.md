@@ -6,6 +6,6 @@
 
 <!--Tell us what you did and why-->
 
-### Released version (optional)
+### Release version (optional)
 
 ### Related issues (optional)

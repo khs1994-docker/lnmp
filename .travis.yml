@@ -29,6 +29,7 @@ script:
 # - rm -rf sources.list
 # - cp sources.list.default sources.list
 # - cd -
+- cp .env.travis .env
 - "./lnmp-docker.sh test"
 branches:
   only:

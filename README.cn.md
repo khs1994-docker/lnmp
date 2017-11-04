@@ -32,10 +32,6 @@
 
 ```bash
 $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-
-# 生产环境
-
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
 ```
 
 ## 使用 `git clone`
@@ -113,7 +109,7 @@ $ docker-compose down
 
 # 生产环境
 
-马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production.md)。
+马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)。
 
 # 生产环境用户
 
