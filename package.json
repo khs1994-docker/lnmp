@@ -1,0 +1,11 @@
+{
+  "name": "khs1994-docker_lnmp",
+  "version": "0.0.1",
+  "author": "khs1994.com",
+  "private": true,
+  "scripts": {
+    "server": "gitbook serve",
+    "install": "gitbook install",
+    "build": "gitbook build"
+  }
+}

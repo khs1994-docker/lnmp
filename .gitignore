@@ -4,6 +4,8 @@ docker-compose
 docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
 *.stackdump
+_book
+node_modules
 .env
 .env.backup
 !env/.env
