@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc5
 
+Changes:
+* Add `./lnmp-docker.sh docs` Powered By GitBook
+
 #### v17.11 rc4
 
 Changes:

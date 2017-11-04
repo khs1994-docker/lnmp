@@ -2,22 +2,13 @@
 
 请首先在 [`开发环境`](development.md) 中熟悉本项目的使用方法（包括但不限于项目路径，nginx 配置）。
 
-服务器安装 `Docker` 配置 `Docker 加速器`
-
-```bash
-$ git clone git@github.com:khs1994-docker/lnmp.git
-$ cd lnmp
-```
-
-按需修改，包括你需要启用的软件`docker-compose.yml` `.env` 等。更多信息请阅读 `个性化配置` 一节
+将 PHP 项目 `git 克隆` 到 `./app` 目录下，配置 `./config/nginx/*.conf`。
 
 执行 `./lnmp-docker.sh production`
 
 ## 更新
 
 >生产环境追求稳定，本项目每月第一天发布一个稳定版本，你只需每月第一天 `同步` 本项目即可。
-
-### 在服务器命令行操作
 
 ```bash
 $ git fetch origin
@@ -27,7 +18,7 @@ $ ./lnmp-docker.sh production
 
 ## PHP
 
-* 不启用 `xdebug` 扩展
+* 生产环境不启用 `xdebug` 扩展
 
 ## 个性化配置
 

@@ -1,6 +1,6 @@
 # 命令行工具简要说明
 
-为避免输入过多的命令，编写了命令行工具简化用户使用，提供了以下功能：
+为避免输入过多的命令，我编写了命令行工具来简化操作：
 
 * 各种场景和架构中一键启动
 
@@ -8,7 +8,7 @@
 
 * 使用 `Laravel artisan`
 
-* 使用 `Composer`
+* 使用 PHP 包管理工具 `Composer`
 
 * 命令行执行 PHP 文件
 
@@ -24,11 +24,10 @@
 
 |场景|CLI|原始命令|
 |:--|:--|:-|
-|开发环境 拉取镜像  | `$ ./lnmp-docker development`         |`docker-compose up -d`|
-|开发环境 构建镜像  | `$ ./lnmp-docker development --build` |`docker-compose -f docker-compose.yaml -f docker-compose.build.yml up -d`|
-|arm32v7         | `$ ./lnmp-docker development`         |`docker-compose -f docker-compose.arm32v7.yaml up -d`|
-|arm64v8         | `$ ./lnmp-docker development`         |`docker-compose -f docker-compose.arm64v8.yaml up -d`|
-|生产环境         | `$ ./lnmp-docker production`          |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d` |
+|开发环境 拉取镜像  | `$ ./lnmp-docker.sh development`         |`docker-compose up -d`|
+|开发环境 构建镜像  | `$ ./lnmp-docker.sh development-build`   |`docker-compose -f docker-compose.yaml -f docker-compose.build.yml up -d`|
+|ARM             | `$ ./lnmp-docker.sh development`         |`docker-compose -f docker-compose.arm.yaml up -d`(需要配置 `.env` 文件)     |
+|生产环境         | `$ ./lnmp-docker.sh production`          |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d`  |
 
 备注： `docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
 

@@ -9,13 +9,15 @@ $ git clone -b dev git@github.com:khs1994-docker/lnmp.git
 $ cd lnmp
 ```
 
-按需修改，包括你需要启用的软件`docker-compose.yml` `.env` 等。更多信息请阅读 `个性化配置` 一节
+修改需要启用的软件 `docker-compose.yml`。
 
-执行 `./lnmp-docker.sh development`
+修改镜像前缀、PHP 项目路径 `.env`。
 
-之后 PhpStorm 打开本项目，克隆已有的 PHP 项目文件到 `./app` 目录下或在 `./app` 目录下开始新的开发。
+执行 `./lnmp-docker.sh development`。
 
 在 `./config/nginx/` 参考示例配置，新建 nginx 配置文件。
+
+之后 PhpStorm 打开本项目，克隆已有的 PHP 项目文件到 `./app` 目录下或在 `./app` 目录下开始新的开发。
 
 ## 更新
 
