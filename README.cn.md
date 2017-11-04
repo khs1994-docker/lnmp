@@ -144,6 +144,10 @@ $ docker-compose down
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 
+# 贡献项目
+
+请查看：[如何贡献](CONTRIBUTING.md)
+
 # 感谢
 
 * [Docker Cloud](https://cloud.docker.com)

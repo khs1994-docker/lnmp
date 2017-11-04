@@ -131,6 +131,10 @@ Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 
+# Contributing
+
+Please see [Contributing](CONTRIBUTING.md).
+
 # Thanks
 
 * [Docker Cloud](https://cloud.docker.com)
