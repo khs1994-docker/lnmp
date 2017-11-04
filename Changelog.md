@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc4
 
+Changes:
+* 国内私有仓库推荐 `腾讯云`
+
 #### v17.11 rc3
 
 Changes:

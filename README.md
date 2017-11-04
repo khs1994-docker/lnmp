@@ -130,3 +130,8 @@ Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
+
+# Thanks
+
+* [Docker Cloud](https://cloud.docker.com)
+* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
