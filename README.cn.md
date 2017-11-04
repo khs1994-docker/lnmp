@@ -8,11 +8,13 @@
 
 * [支持文档](docs)
 
+本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `armhf` 架构的 Debian。不再支持 Windows！
+
 # 更新记录
 
 每月更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
-最新的提交位于 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
+最新的提交位于 [dev](https://github.com/khs1994-docker/lnmp/tree/dev) 分支。
 
 # 准备
 
@@ -26,9 +28,17 @@
 
 简单而言，搞明白了项目路径，Nginx 配置就行了，遇到任何问题请提出 issue。
 
-## 开发环境
+## 使用一键安装脚本
 
-不再支持 Windows
+```bash
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+
+# 生产环境
+
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
+```
+
+## 使用 `git clone`
 
 开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
 
@@ -47,13 +57,9 @@ development
 
 ```
 
-在 `./config/nginx/` 新建 nginx 配置文件，在 `./app` 目录下开始 PHP 项目开发。
+## PHP 项目开发
 
-## 生产环境
-
-马上开启 `容器即服务( CaaS )` 之旅！
-
-更多信息请查看 [支持文档](docs/production.md)。
+在 `./app` 目录下开始 PHP 项目开发。在 `./config/nginx/` 新建 nginx 配置文件。
 
 ## 停止
 
@@ -68,8 +74,6 @@ $ docker-compose down
 ```
 
 # 项目说明
-
-本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `armhf` 架构的 Debian。
 
 ## 包含软件
 
@@ -106,6 +110,10 @@ $ docker-compose down
 # 命令行工具
 
 为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)。
+
+# 生产环境
+
+马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production.md)。
 
 # 生产环境用户
 

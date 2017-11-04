@@ -7,15 +7,17 @@ Build LNMP within 2 minutes powered by Docker Compose.
 * [中文说明](README.cn.md)
 * [Documents](docs/)
 
+LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian on `armhf`. NOT Support Windows!
+
 # Changelog
 
-Updates every month,Version name is `YY-MM`.For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+Updates every month, Version name is `YY-MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-Latest commit in dev branch,please switch [dev branch](https://github.com/khs1994-docker/lnmp/tree/dev).
+Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
 
 # Prerequisites
 
-To use LNMP Docker,you need:
+To use LNMP Docker, you need:
 
 * [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
@@ -23,9 +25,17 @@ To use LNMP Docker,you need:
 
 # Quick Start
 
-## Start in Devlopment
+## Install using the convenience script
 
-NOT Support Windows
+```bash
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+
+# or in production
+
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
+```
+
+## Install using `git clone` in Devlopment
 
 ```bash
 $ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
@@ -42,13 +52,9 @@ development
 
 ```
 
-Start PHP project(e.g, Laravel, ThinkPHP) in `./app/` folder.
+## Start PHP Project
 
-## Run in Production
-
-Start `Containers as a Service(CaaS)`
-
-For more information, see [Documents](docs/production.md).
+Start PHP project(e.g, Laravel) in `./app/` folder. And Edit `./config/nginx/yourfilename.conf`.
 
 ## Stop
 
@@ -63,8 +69,6 @@ $ docker-compose down
 ```
 
 # Overview
-
-LNMP Docker is supported on Linux, macOS, on `x86_64`,and Debian on `armhf`.
 
 ## What's inside
 
@@ -100,7 +104,11 @@ LNMP Docker is supported on Linux, macOS, on `x86_64`,and Debian on `armhf`.
 
 # CLI
 
-Easy to access Laravel, Laravel artisan, composer, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
+Easy to access Laravel, Laravel artisan, composer, PHP-CLI, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
+
+# Run in Production
+
+Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/production.md).
 
 # Who use in Production?
 
