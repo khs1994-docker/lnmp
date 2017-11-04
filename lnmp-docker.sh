@@ -128,15 +128,19 @@ install_docker_compose(){
         . /etc/os-release
         case $ID in
           coreos )
-          sudo cp -a docker-compose-`uname -s`-`uname -m` /opt/bin/docker-compose
-          ;;
+            if [ ! -d "/opt/bin" ];then sudo mkdir -p /opt/bin; fi
+            sudo cp -a docker-compose-`uname -s`-`uname -m` /opt/bin/docker-compose
+            ;;
+          * )
+            sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
+            ;;
         esac
       else
           # macOS
           sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
       fi
+      cd ../
       rm -rf .docker-cn-mirror
-      cd -
     else
       NOTSUPPORT
     fi
