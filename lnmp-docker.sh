@@ -105,7 +105,7 @@ gitbook(){
 # 是否安装 Docker Compose
 
 install_docker_compose_official(){
-  # 版本在 .env 文件定义
+  # 版本在 env/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose

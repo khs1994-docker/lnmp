@@ -5,6 +5,7 @@ Changelog
 
 Changes:
 * Support `Docker Swarm`
+* Fix `Dockerfile` `docker-compose,yml`
 
 #### v17.11 rc5
 

@@ -107,7 +107,6 @@ services:
       - ./config/nginx:/etc/nginx/conf.d:ro
       # - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
-    dns: ${DNS}
     networks:
       - frontend
 

@@ -1,10 +1,23 @@
 version: "3.4"
 services:
 
+
+  # 首先停止 docker-compose down
+  # 移除网络 docker network prune
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
   mysql:
-    # docker Swarm 不支持 restart
-    # restart: always
-    # docker Swarm 不支持 .env
+    # docker Swarm 不支持 restart .env
     image: "mysql:5.7.20"
     environment:
       - MYSQL_ROOT_PASSWORD=mytest
