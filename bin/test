@@ -20,17 +20,25 @@ echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
 
 echo -e "\033[32mINFO\033[0m  生产环境测试开始\n"
 
+docker_run(){
+  docker ps -a
+
+  sleep 5
+
+  curl 127.0.0.1
+
+  docker ps -a \
+    && docker-compose down \
+    && echo -e "\033[32mINFO\033[0m  $1\n"
+}
+
 ./lnmp-docker.sh production
 
-echo && docker ps -a && echo
+docker_run "生产环境测试完毕"
 
-sleep 5
+./lnmp-docker.sh test-image
 
-curl 127.0.0.1 && echo && date
-
-date && echo && docker ps -a && echo -e "\n\n"
-
-docker-compose down && echo -e "\033[32mINFO\033[0m  生产环境测试完毕\n"
+docker_run "测试 test 镜像"
 
 # 测试 composer
 

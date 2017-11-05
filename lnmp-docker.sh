@@ -465,6 +465,18 @@ main() {
     gitbook
     ;;
 
+  test-image )
+    init
+    docker-compose \
+      -f docker-compose.test.yml \
+      up -d
+    ;;
+  test-image-down )
+    docker-compose \
+      -f docker-compose.test.yml \
+      down
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -504,6 +516,11 @@ Container CLI:
 
 Tools:
   update                Upgrades LNMP
+  init
+  commit
+  test
+  test-image
+  test-image-down
 
 Read './docs/*.md' for more information about commands."
     ;;
