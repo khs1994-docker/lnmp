@@ -30,21 +30,15 @@ services:
     #   - "6379"
     networks:
       - backend
-    volumes:
-      - redis-data:/data:rw
-      - ./logs/redis:/var/log/redis:rw
-    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+    command: ["redis-server","/redis.conf"]
     deploy:
-      placement:
-        constraints: [node.role == manager]
-    configs:
-      - source: redis_config
-        target: /usr/local/etc/redis/redis.conf
+      replicas: 2
 
   php7:
     image: "khs1994/php-fpm:7.1.11-alpine3.4"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
+      - ./app:/app
       - ./logs/php-fpm:/var/log/php-fpm:rw
     networks:
       - frontend
@@ -62,6 +56,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
+      - ./app:/app
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./logs/nginx:/var/log/nginx:rw
     networks:
@@ -80,8 +75,3 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
-configs:
-  redis_config:
-    file: ./config/redis/redis.config
-  my_other_config:
-    external: true
