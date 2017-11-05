@@ -22,6 +22,10 @@ services:
     environment:
       - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Build Docker Image
+    volumes:
+      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+      - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro      
 
   # memcached:
   #   build:

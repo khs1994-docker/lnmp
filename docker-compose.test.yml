@@ -99,6 +99,27 @@ services:
       - ${DNS}
     command: ["php-fpm","-R"]
     env_file: .env
+    # entrypoint: /code/entrypoint.sh
+    # entrypoint:
+    #   - php
+    #   - -d
+    #   - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+    #   - -d
+    #   - memory_limit=-1
+    #   - vendor/bin/phpunit
+    # extra_hosts:
+    #   - "somehost:162.242.195.82"
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost"]
+    #   interval: 1m30s
+    #   timeout: 10s
+    #   retries: 3
+    # ports:
+    #   - "3000-3005"
+    #   - "9090-9091:8080-8081"
+    #   - "127.0.0.1:8001:8001"
+    #   - "127.0.0.1:5000-5010:5000-5010"
+    #   - "6060:6060/udp"
 
   nginx:
     restart: always

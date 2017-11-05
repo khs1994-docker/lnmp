@@ -1,0 +1,76 @@
+#!/bin/bash
+
+#   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+# Use in Production
+#   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
+LNMP_PATH=lnmp
+
+echo "Welcome use khs1994-docker/lnmp"
+
+if [ ! -z $1 ];then
+  if [ $1 = "production" ];then
+    BRANCH=master
+  fi
+else
+  BRANCH=dev
+fi
+
+clone_ssh(){
+  echo "Your Branch is ${BRANCH}"
+  git clone --recursive -b ${BRANCH} --depth=1 git@github.com:khs1994-docker/lnmp.git $1
+}
+
+clone_https(){
+  echo "Your Branch is ${BRANCH}"
+  git clone --recursive -b ${BRANCH} --depth=1 https://github.com/khs1994-docker/lnmp.git $1
+}
+
+function main() {
+  if [ -d ${LNMP_PATH} ];then
+    echo "${LNMP_PATH} exists"
+    echo "==============================="
+    read -p "Please input path: " LNMP_PATH
+    main
+  else
+    clone
+  fi
+}
+
+function success(){
+  echo "=================================="
+  echo "==========  SUCCESS =============="
+  echo "=================================="
+  echo "Success please exec "
+  echo "$ cd ${LNMP_PATH}"
+  echo "$ ./lnmp-docker.sh development"
+  exit 0
+}
+
+function error(){
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "!!!!!!!!!!!  ERROR  !!!!!!!!!!!!!!"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  exit 1
+}
+
+function clone(){
+  clone_ssh $LNMP_PATH
+
+  if [ $? = "0" ];then
+    success
+  else
+    echo
+    echo "Clone by SSH way is failure, try HTTPS way"
+    clone_https $LNMP_PATH
+    if [ $? = "0" ];then
+      success
+    else
+      error
+    fi
+  fi
+}
+
+main
+
+# WebSite https://github.com/khs1994-docker/lnmp
+# License Apache License Version 2.0

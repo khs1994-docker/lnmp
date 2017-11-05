@@ -6,11 +6,8 @@ services:
     # restart: always
     # docker Swarm 不支持 .env
     image: "mysql:5.7.20"
-    env_file:
-      - ./env/mysql.env
-    #environment:
-    #  # your password
-    #  - MYSQL_ROOT_PASSWORD=mytest
+    environment:
+      - MYSQL_ROOT_PASSWORD=mytest
     networks:
       - backend
     ports:
@@ -22,7 +19,9 @@ services:
       - ./backup/mysql:/backup:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
     deploy:
-      replicas: 3
+      # replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
   redis:
     image: "khs1994/redis:4.0.2-alpine"
@@ -32,66 +31,20 @@ services:
     networks:
       - backend
     volumes:
-      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - redis-data:/data:rw
       - ./logs/redis:/var/log/redis:rw
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
     deploy:
-      replicas: 3
+      placement:
+        constraints: [node.role == manager]
     configs:
       - source: redis_config
         target: /usr/local/etc/redis/redis.conf
-
-  # memcached:
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
-  #   networks:
-  #     - backend
-  #   env_file: .env
-  #   # ports:
-  #   #   - "11211"
-  #
-  # rabbitmq:
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
-  #   volumes:
-  #     - rabbitmq-data:/var/lib/rabbitmq:rw
-  #   networks:
-  #     - backend
-  #   env_file: .env
-  #   # ports:
-  #   #   - "15672"
-  #   #   - "5672"
-  #
-  # postgresql:
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
-  #   env_file:
-  #     - ./env/postgresql.env
-  #   volumes:
-  #     - postgresql-data:/var/lib/postgresql/data:rw
-  #   networks:
-  #     - backend
-  #   env_file: .env
-  #   # ports:
-  #   #   - "5432"
-  #
-  # mongodb:
-  #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file: .env
-  #   volumes:
-  #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
-  #     - mongodb-data:/data/db:rw
-  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
-  #   networks:
-  #     - backend
-  #   # ports:
-  #   #   - "27017"
-  #   command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
     image: "khs1994/php:7.1.11-alpine3.4"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
-      - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
     networks:
       - frontend
@@ -99,10 +52,8 @@ services:
     command: ["php-fpm","-R"]
     env_file: .env
     deploy:
-      replicas: 3
-    configs:
-      - source: php_fpm_config
-        target: /usr/local/etc/php-fpm.conf
+      placement:
+        constraints: [node.role == manager]
 
   nginx:
     image: "khs1994/nginx:1.13.6-alpine"
@@ -112,15 +63,12 @@ services:
       - "80:80"
     volumes:
       - ./config/nginx:/etc/nginx/conf.d:ro
-      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     networks:
       - frontend
     deploy:
-      replicas: 3
-    configs:
-      - source: nginx_config
-        target: /etc/nginx/nginx.conf
+      placement:
+        constraints: [node.role == manager]
 
 networks:
   frontend:
@@ -135,9 +83,5 @@ volumes:
 configs:
   redis_config:
     file: ./config/redis/redis.config
-  php_fpm_config:
-    file: ./config/php/php-fpm.conf
-  nginx_config:
-    file: ./config/etc/nginx/nginx.conf
   my_other_config:
     external: true

@@ -60,6 +60,16 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
  && rm -rf /tmp/cache /tmp/.htaccess
 
+WORKDIR /var/log
+
+RUN mkdir php-fpm \
+ && cd php-fpm \
+ && touch access.log error.log xdebug-remote.log \
+ && chmod -R 777 ../ \
+ && sed -i 's/www-data/root/g' /usr/local/etc/php-fpm.d/www.conf \
+ && sed -i 's/^error_log.*/error_log = \/var\/log\/php-fpm\/error.log/g' /usr/local/etc/php-fpm.d/docker.conf \
+ && sed -i 's/^access.log.*/access.log = \/var\/log\/php-fpm\/access.log/g' /usr/local/etc/php-fpm.d/docker.conf
+
 ENV PS1="[\u@\h \w]# "
 
 # RUN apk add --no-cache vim
