@@ -23,7 +23,7 @@ services:
 
   redis:
     restart: always
-    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}redis:test-alpine"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/redis:test-alpine"
     env_file: .env
     # ports:
     #   - "6379"
@@ -37,7 +37,7 @@ services:
 
   # memcached:
   #   restart: always
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}memcached:test-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/memcached:test-alpine
   #   networks:
   #     - backend
   #   env_file: .env
@@ -46,7 +46,7 @@ services:
   #
   # rabbitmq:
   #   restart: always
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}rabbitmq:test-management-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/rabbitmq:test-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
@@ -58,7 +58,7 @@ services:
   #
   # postgresql:
   #    restart: always
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}postgres:test-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/postgres:test-alpine
   #   env_file:
   #     - ./env/postgresql.env
   #   volumes:
@@ -85,7 +85,7 @@ services:
 
   php7:
     restart: always
-    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}php:test-alpine3.4"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/php-fpm:test-alpine3.4"
     # container_name: khs1994-docker-lnmp-php-fpm
     networks:
       - frontend
@@ -104,7 +104,6 @@ services:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-
     # entrypoint: /code/entrypoint.sh
     # entrypoint:
     #   - php
@@ -129,7 +128,7 @@ services:
 
   nginx:
     restart: always
-    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}nginx:test-alpine"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/nginx:test-alpine"
     env_file: .env
     ports:
       - "443:443"
