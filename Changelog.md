@@ -8,8 +8,6 @@ Changes:
 * Fix `Dockerfile` `docker-compose,yml`
 * Remove Based Debian `php-fpm`, now based Alpine.
 * Default disabled `xdebug` in `php-fpm` Dockerfile
-Updates:
-* `Memcached` 1.5.3
 
 #### v17.11 rc5
 
