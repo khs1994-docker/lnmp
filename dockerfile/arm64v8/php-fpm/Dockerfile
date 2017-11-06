@@ -49,7 +49,8 @@ RUN curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/compos
     && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
     && composer global require "laravel/installer" \
     && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
-    && rm -rf /tmp/cache /tmp/.htaccess
+    && rm -rf /tmp/cache /tmp/.htaccess \
+		&& echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini 
 
 WORKDIR /var/log
 

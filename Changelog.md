@@ -7,6 +7,7 @@ Changes:
 * Support `Docker Swarm`
 * Fix `Dockerfile` `docker-compose,yml`
 * Remove Based Debian `php-fpm`, now based Alpine.
+* Default disabled `xdebug` in `php-fpm` Dockerfile
 Updates:
 * `Memcached` 1.5.3
 

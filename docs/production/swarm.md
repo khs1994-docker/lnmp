@@ -1,4 +1,6 @@
 
+docker-compose 与 Swarm 启动的容器相互冲突，请清除之后再使用另一种方式！
+
 首先停止使用 docker-compose 启动的容器并移除网络
 
 ```bash
@@ -7,21 +9,27 @@ $ docker-compose down
 $ docker network prune
 ```
 
-初始化集群
+## 初始化集群
 
 ```bash
 $ docker swarm init
 
-# 其他节点使用命令加入集群
+# 使用如下命令，按照提示在其他节点执行命令以加入集群
+
+$ docker swarm join-token worker
+
+# 或加入管理节点
+
+$ docker swarm join-token manager
 ```
 
-管理节点使用如下命令
+## 部署服务
 
 ```bash
 $ docker stack deploy -c docker-compose.swarm.yml lnmp
 ```
 
-查看
+## 查看
 
 ```bash
 $ docker stack ls
@@ -32,3 +40,9 @@ $ docker service ls
 
 $ docker service ps lnmp_mysql
 ```
+
+## 浏览器图形化展示节点状态
+
+浏览器打开 `ip:8080`
+
+## More Information

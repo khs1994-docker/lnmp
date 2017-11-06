@@ -58,7 +58,8 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  && composer global require "laravel/installer" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
- && rm -rf /tmp/cache /tmp/.htaccess
+ && rm -rf /tmp/cache /tmp/.htaccess \
+ && echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini 
 
 WORKDIR /var/log
 
