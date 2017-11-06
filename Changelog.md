@@ -6,6 +6,9 @@ Changelog
 Changes:
 * Support `Docker Swarm`
 * Fix `Dockerfile` `docker-compose,yml`
+* Remove Based Debian `php-fpm`, now based Alpine.
+Updates:
+* `Memcached` 1.5.3
 
 #### v17.11 rc5
 

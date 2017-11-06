@@ -102,6 +102,42 @@ gitbook(){
     server
 }
 
+dockerfile-update-sed(){
+  sed -i '' 's/^FROM.*/'"${2}"'/g' dockerfile/$1/Dockerfile
+  sed -i '' 's/^TAG.*/TAG='"${3}"'/g' dockerfile/$1/.env
+  git diff
+}
+
+dockerfile-update(){
+  read -p "Soft is: " SOFT
+  read -p "Version is: " VERSION
+  case $SOFT in
+    memcached )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env.travis
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.travis
+    ;;
+    nginx )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    php-fpm )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    postgresql )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    rabbitmq )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    redis )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    * )
+    print_error "Soft is not existing"
+    dockerfile-update
+  esac
+}
+
 # 是否安装 Docker Compose
 
 install_docker_compose_official(){
@@ -476,6 +512,9 @@ main() {
       -f docker-compose.test.yml \
       down
     ;;
+  dockerfile-update )
+    dockerfile-update
+    ;;
 
   * )
   echo  -e "
@@ -521,6 +560,7 @@ Tools:
   test
   test-image
   test-image-down
+  dockerfile-update    Update Dockerfile By Script
 
 Read './docs/*.md' for more information about commands."
     ;;
