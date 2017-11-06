@@ -515,6 +515,12 @@ main() {
   dockerfile-update )
     dockerfile-update
     ;;
+  swarm )
+    docker stack deploy \
+      -c docker-compose.swarm.yml \
+      lnmp
+    docker stack ps lnmp
+    ;;
 
   * )
   echo  -e "
@@ -542,6 +548,7 @@ Commands:
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
+  swarm                Docker Swarm
 
 Container CLI:
   memcached-cli
