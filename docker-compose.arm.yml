@@ -140,6 +140,8 @@ services:
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - php7       
 
 networks:
   frontend:

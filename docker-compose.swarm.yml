@@ -74,6 +74,8 @@ services:
       - ./logs/nginx:/var/log/nginx:rw
     networks:
       - frontend
+    depends_on:
+      - php7       
     deploy:
       placement:
         constraints: [node.role == manager]
