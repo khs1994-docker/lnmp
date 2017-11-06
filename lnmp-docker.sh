@@ -522,6 +522,10 @@ main() {
     docker stack ps lnmp
     ;;
 
+  swarm-down )
+    docker stack rm lnmp
+    ;;  
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
