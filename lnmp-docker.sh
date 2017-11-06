@@ -30,6 +30,10 @@ env_status
 ARCH=`uname -m`
 OS=`uname -s`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
+COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download/
+COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw/exec/
+# COMPOSE_LINK=https://gitee.com/khs1994/compose-cn-mirror/raw/exec/
+# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw/exec/
 
 # 获取正确版本号
 
@@ -98,12 +102,48 @@ gitbook(){
     server
 }
 
+dockerfile-update-sed(){
+  sed -i '' 's/^FROM.*/'"${2}"'/g' dockerfile/$1/Dockerfile
+  sed -i '' 's/^TAG.*/TAG='"${3}"'/g' dockerfile/$1/.env
+  git diff
+}
+
+dockerfile-update(){
+  read -p "Soft is: " SOFT
+  read -p "Version is: " VERSION
+  case $SOFT in
+    memcached )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env.travis
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.travis
+    ;;
+    nginx )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    php-fpm )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    postgresql )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    rabbitmq )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    redis )
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+    ;;
+    * )
+    print_error "Soft is not existing"
+    dockerfile-update
+  esac
+}
+
 # 是否安装 Docker Compose
 
 install_docker_compose_official(){
-  # 版本在 .env 文件定义
+  # 版本在 env/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
-  curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  curl -L ${COMPOSE_LINK_OFFICIAL}${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
   echo $PATH && sudo mv docker-compose /usr/local/bin
   # in CoreOS you must move to /opt/bin
@@ -128,27 +168,24 @@ install_docker_compose(){
       fi
       sudo pip3 install docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
-      # 克隆中国镜像
-      git clone -b exec --depth=1 https://code.aliyun.com/khs1994-docker/compose-cn-mirror.git .docker-cn-mirror
-      cd .docker-cn-mirror
+      curl -L ${COMPOSE_LINK}docker-compose-`uname -s`-`uname -m` -o docker-compose
+      chmod +x docker-compose
       if [ -f  "/etc/os-release" ];then
         # linux
         . /etc/os-release
         case $ID in
           coreos )
             if [ ! -d "/opt/bin" ];then sudo mkdir -p /opt/bin; fi
-            sudo cp -a docker-compose-`uname -s`-`uname -m` /opt/bin/docker-compose
+            sudo cp -a docker-compose /opt/bin/docker-compose
             ;;
           * )
-            sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
+            sudo cp -a docker-compose /usr/local/bin/docker-compose
             ;;
         esac
       else
           # macOS
-          sudo cp -a docker-compose-`uname -s`-`uname -m` /usr/local/bin/docker-compose
+          sudo cp -a docker-compose /usr/local/bin/docker-compose
       fi
-      cd ../
-      rm -rf .docker-cn-mirror
     else
       NOTSUPPORT
     fi
@@ -464,6 +501,31 @@ main() {
     gitbook
     ;;
 
+  test-image )
+    init
+    docker-compose \
+      -f docker-compose.test.yml \
+      up -d
+    ;;
+  test-image-down )
+    docker-compose \
+      -f docker-compose.test.yml \
+      down
+    ;;
+  dockerfile-update )
+    dockerfile-update
+    ;;
+  swarm )
+    docker stack deploy \
+      -c docker-compose.swarm.yml \
+      lnmp
+    docker stack ps lnmp
+    ;;
+
+  swarm-down )
+    docker stack rm lnmp
+    ;;  
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -490,6 +552,7 @@ Commands:
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
+  swarm                Docker Swarm
 
 Container CLI:
   memcached-cli
@@ -503,6 +566,12 @@ Container CLI:
 
 Tools:
   update                Upgrades LNMP
+  init
+  commit
+  test
+  test-image
+  test-image-down
+  dockerfile-update    Update Dockerfile By Script
 
 Read './docs/*.md' for more information about commands."
     ;;

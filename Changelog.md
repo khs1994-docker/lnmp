@@ -1,6 +1,14 @@
 Changelog
 ==============
 
+#### v17.11 rc6
+
+Changes:
+* Support `Docker Swarm`
+* Fix `Dockerfile` `docker-compose,yml`
+* Remove Based Debian `php-fpm`, now based Alpine.
+* Default disabled `xdebug` in `php-fpm` Dockerfile
+
 #### v17.11 rc5
 
 Changes:

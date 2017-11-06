@@ -1,11 +1,15 @@
-version: "3.3"
+version: "3.4"
 services:
 
   mysql:
     restart: always
+    # 变量从 .env 文件读取 例如镜像 tag
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     env_file:
       - ./env/mysql.env
+    #environment:
+    #  # your password
+    #  - MYSQL_ROOT_PASSWORD=mytest
     networks:
       - backend
     ports:
@@ -19,7 +23,7 @@ services:
 
   redis:
     restart: always
-    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/redis:test-alpine"
     env_file: .env
     # ports:
     #   - "6379"
@@ -33,7 +37,7 @@ services:
 
   # memcached:
   #   restart: always
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/memcached:test-alpine
   #   networks:
   #     - backend
   #   env_file: .env
@@ -42,7 +46,7 @@ services:
   #
   # rabbitmq:
   #   restart: always
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/rabbitmq:test-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
@@ -54,7 +58,7 @@ services:
   #
   # postgresql:
   #    restart: always
-  #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/postgres:test-alpine
   #   env_file:
   #     - ./env/postgresql.env
   #   volumes:
@@ -81,13 +85,8 @@ services:
 
   php7:
     restart: always
-    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}php:${KHS1994_LNMP_PHP_VERSION}-alpine3.4"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/php-fpm:test-alpine3.4"
     # container_name: khs1994-docker-lnmp-php-fpm
-    volumes:
-      # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
-      # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
-      - ./logs/php-fpm:/var/log/php-fpm:rw
     networks:
       - frontend
       - backend
@@ -95,22 +94,54 @@ services:
       - ${DNS}
     command: ["php-fpm","-R"]
     env_file: .env
+    environment:
+      - APP_ENV=development
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image
+    volumes:
+      # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
+      # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+      - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+    # entrypoint: /code/entrypoint.sh
+    # entrypoint:
+    #   - php
+    #   - -d
+    #   - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+    #   - -d
+    #   - memory_limit=-1
+    #   - vendor/bin/phpunit
+    # extra_hosts:
+    #   - "somehost:162.242.195.82"
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost"]
+    #   interval: 1m30s
+    #   timeout: 10s
+    #   retries: 3
+    # ports:
+    #   - "3000-3005"
+    #   - "9090-9091:8080-8081"
+    #   - "127.0.0.1:8001:8001"
+    #   - "127.0.0.1:5000-5010:5000-5010"
+    #   - "6060:6060/udp"
 
   nginx:
     restart: always
-    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/nginx:test-alpine"
     env_file: .env
     ports:
       - "443:443"
       - "80:80"
     volumes:
+      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
       # - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     networks:
       - frontend
     depends_on:
-      - php7
+      - php7       
 
 networks:
   frontend:

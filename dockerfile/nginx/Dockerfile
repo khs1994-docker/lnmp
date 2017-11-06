@@ -6,5 +6,9 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 RUN apk add --no-cache tzdata
 
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# COPY ./conf.d /etc/nginx/conf.d
+
 # RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 # http://wiki.alpinelinux.org/wiki/Setting_the_timezone

@@ -139,6 +139,7 @@ $ docker-compose down
 * [zhaojunlike/docker-lnmp-redis](https://github.com/zhaojunlike/docker-lnmp-redis)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
+* [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
 
 # 贡献项目
 

@@ -4,5 +4,5 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: source.Dockerfile
+      dockerfile: Dockerfile
     image: ${DOCKER_HUB_USERNAME}/nginx:${TAG}-alpine
