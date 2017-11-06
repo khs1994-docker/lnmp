@@ -1,6 +1,11 @@
 Changelog
 ==============
 
+#### v17.11 rc7
+
+Updates:
+* `Memcached` 1.5.3
+
 #### v17.11 rc6
 
 Changes:
