@@ -1,5 +1,5 @@
 
-docker-compose 与 Swarm 启动的容器相互冲突，请清除之后再使用另一种方式！
+docker-compose 与 Swarm 启动的容器相互冲突，请清除之后再使用另一种方式(网络名称不同也可以，这里为了方便直接清除)！
 
 首先停止使用 docker-compose 启动的容器并移除网络
 
