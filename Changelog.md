@@ -110,7 +110,7 @@ Updates:
 
 Bug fixes:
 * Fix git ssh-key CI/CD in `Production`
-* Fix MySQL backup and restore
+* Fix `MySQL` backup and restore
 
 Updates:
 * `PostgreSQL` 10.0
