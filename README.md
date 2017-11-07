@@ -7,7 +7,9 @@ Build LNMP within 2 minutes powered by Docker Compose.
 * [中文说明](README.cn.md)
 * [Documents](docs/)
 
-LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian (Raspberry Pi3) on `arm`. NOT Support Windows!
+NOT Support Windows!
+
+LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
 # Changelog
 
