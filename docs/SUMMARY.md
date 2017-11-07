@@ -16,8 +16,7 @@
 * 生产环境(重要)
   * [安装](production/install.md)
   * [配置](production/README.md)
-  * [Docker Swarm 单节点](production/swarm.md)
-  * [Docker Swarm 三节点](production/swarm-three.md)
+  * [Docker Swarm 三节点](production/swarm.md)
 * 树莓派3
   * [ARM架构](arm.md)
 * [备份恢复](backup.md)

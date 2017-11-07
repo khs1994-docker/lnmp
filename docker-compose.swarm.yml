@@ -2,6 +2,8 @@ version: "3.4"
 services:
 
   # 至少三个节点
+  # docker stack deploy -c docker-compose.swarm.yml lnmp
+  # docker stack ps lnmp
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
@@ -29,6 +31,7 @@ services:
     command: ["mysqld","--character-set-server=utf8mb4"]
     deploy:
       placement:
+        # 在管理节点运行
         constraints: [node.role == manager]
 
   redis:
@@ -40,6 +43,7 @@ services:
       - backend
     command: ["redis-server","/redis.conf"]
     deploy:
+      # 同时运行的容器数量
       replicas: 2
 
   php7:
