@@ -113,21 +113,21 @@ dockerfile-update(){
   read -p "Version is: " VERSION
   case $SOFT in
     memcached )
-      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.travis
     ;;
     nginx )
-      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
     ;;
     php-fpm )
-      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
     ;;
     postgresql )
-      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM postgres:$VERSION-alpine" $VERSION
     ;;
     rabbitmq )
-      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-management-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.travis
     ;;
