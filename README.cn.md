@@ -134,6 +134,15 @@ $ docker-compose down
 
 请使用 [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
+# 贡献项目
+
+请查看：[如何贡献](CONTRIBUTING.md)
+
+# 感谢
+
+* [Docker Cloud](https://cloud.docker.com)
+* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
+
 # 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
@@ -146,12 +155,3 @@ $ docker-compose down
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
-
-# 贡献项目
-
-请查看：[如何贡献](CONTRIBUTING.md)
-
-# 感谢
-
-* [Docker Cloud](https://cloud.docker.com)
-* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)

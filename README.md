@@ -122,6 +122,15 @@ Start `Containers as a Service(CaaS)`. For more information, see [Documents](doc
 
 Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
+# Contributing
+
+Please see [Contributing](CONTRIBUTING.md).
+
+# Thanks
+
+* [Docker Cloud](https://cloud.docker.com)
+* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
+
 # More Information
 
 * [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
@@ -133,12 +142,3 @@ Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
-
-# Contributing
-
-Please see [Contributing](CONTRIBUTING.md).
-
-# Thanks
-
-* [Docker Cloud](https://cloud.docker.com)
-* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
