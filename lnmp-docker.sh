@@ -119,12 +119,18 @@ dockerfile-update(){
     ;;
     nginx )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
+      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env.travis
+      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.travis
     ;;
     php-fpm )
-      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM php:$VERSION-fpm-alpine3.4" $VERSION
+      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env.travis
+      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.travis
     ;;
     postgresql )
       dockerfile-update-sed $SOFT "FROM postgres:$VERSION-alpine" $VERSION
+      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example .env.travis
+      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.travis
     ;;
     rabbitmq )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
@@ -132,11 +138,14 @@ dockerfile-update(){
       sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.travis
     ;;
     redis )
-      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
+      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example .env.travis
+      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.travis
     ;;
     * )
-    print_error "Soft is not existing"
-    dockerfile-update
+      print_error "Soft is not existing"
+      exit 1
+    ;;
   esac
 }
 
