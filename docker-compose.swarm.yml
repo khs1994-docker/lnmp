@@ -1,10 +1,7 @@
 version: "3.4"
 services:
 
-
-  # 首先停止 docker-compose down
-  # 移除网络 docker network prune
-
+  # 至少三个节点
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
@@ -17,7 +14,6 @@ services:
         constraints: [node.role == manager]
 
   mysql:
-    # docker Swarm 不支持 restart .env
     image: "mysql:5.7.20"
     environment:
       - MYSQL_ROOT_PASSWORD=mytest
@@ -32,7 +28,6 @@ services:
       - ./backup/mysql:/backup:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
     deploy:
-      # replicas: 1
       placement:
         constraints: [node.role == manager]
 
@@ -48,37 +43,32 @@ services:
       replicas: 2
 
   php7:
-    image: "khs1994/php-fpm:7.1.11-alpine3.4"
+    image: "khs1994/php-fpm:swarm-7.1.11-alpine3.4"
     # container_name: khs1994-docker-lnmp-php-fpm
-    volumes:
-      - ./app:/app
-      - ./logs/php-fpm:/var/log/php-fpm:rw
+    # volumes:
+    #   - ./logs/php-fpm:/var/log/php-fpm:rw
     networks:
       - frontend
       - backend
     command: ["php-fpm","-R"]
     env_file: .env
     deploy:
-      placement:
-        constraints: [node.role == manager]
+      replicas: 2
 
   nginx:
-    image: "khs1994/nginx:1.13.6-alpine"
+    image: "khs1994/nginx:swarm-1.13.6-alpine"
     env_file: .env
     ports:
       - "443:443"
       - "80:80"
-    volumes:
-      - ./app:/app
-      - ./config/nginx:/etc/nginx/conf.d:ro
-      - ./logs/nginx:/var/log/nginx:rw
+    # volumes:
+    #   - ./logs/nginx:/var/log/nginx:rw
     networks:
       - frontend
     depends_on:
-      - php7       
+      - php7
     deploy:
-      placement:
-        constraints: [node.role == manager]
+      replicas: 2
 
 networks:
   frontend:

@@ -1,3 +1,4 @@
+这里以三节点集群为例。
 
 docker-compose 与 Swarm 启动的容器相互冲突，请清除之后再使用另一种方式(网络名称不同也可以，这里为了方便直接清除)！
 
@@ -44,5 +45,7 @@ $ docker service ps lnmp_mysql
 ## 浏览器图形化展示节点状态
 
 浏览器打开 `ip:8080`
+
+![](../img/docker-swarm-three.png)
 
 ## More Information
