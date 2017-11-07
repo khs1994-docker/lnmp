@@ -1,0 +1,81 @@
+version: "3.4"
+services:
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  mysql:
+    image: "mysql:5.7.20"
+    environment:
+      - MYSQL_ROOT_PASSWORD=mytest
+    networks:
+      - backend
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - mysql-data:/var/lib/mysql:rw
+      - ./logs/mysql:/var/log/mysql:rw
+      - ./backup/mysql:/backup:rw
+    command: ["mysqld","--character-set-server=utf8mb4"]
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  redis:
+    image: "khs1994/redis:4.0.2-alpine"
+    env_file: .env
+    # ports:
+    #   - "6379"
+    networks:
+      - backend
+    command: ["redis-server","/redis.conf"]
+    deploy:
+      replicas: 2
+
+  php7:
+    image: "khs1994/php-fpm:swarm-${KHS1994_LNMP_PHP_VERSION}-alpine3.4"
+    # container_name: khs1994-docker-lnmp-php-fpm
+    # volumes:
+    #   - ./logs/php-fpm:/var/log/php-fpm:rw
+    networks:
+      - frontend
+      - backend
+    command: ["php-fpm","-R"]
+    env_file: .env
+    deploy:
+      replicas: 2
+
+  nginx:
+    image: "khs1994/nginx:swarm-${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    env_file: .env
+    ports:
+      - "443:443"
+      - "80:80"
+    # volumes:
+    #   - ./logs/nginx:/var/log/nginx:rw
+    networks:
+      - frontend
+    depends_on:
+      - php7
+    deploy:
+      replicas: 2
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  mysql-data:
+  redis-data:
+  # rabbitmq-data:
+  # postgresql-data:
+  # mongodb-data:
