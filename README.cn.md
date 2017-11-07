@@ -8,13 +8,17 @@
 
 * [支持文档](docs)
 
-本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `armhf` 架构的 Debian。不再支持 Windows！
+本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `arm` 架构的 Debian(即树莓派)。不再支持 Windows！
 
 # 更新记录
 
 每月更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
 最新的提交位于 [dev](https://github.com/khs1994-docker/lnmp/tree/dev) 分支。
+
+* [v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10)
+
+* [v17.09 2017-10-14](https://github.com/khs1994-docker/lnmp/releases/tag/v17.09)
 
 # 准备
 

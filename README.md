@@ -7,13 +7,17 @@ Build LNMP within 2 minutes powered by Docker Compose.
 * [中文说明](README.cn.md)
 * [Documents](docs/)
 
-LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian on `armhf`. NOT Support Windows!
+LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian (Raspberry Pi3) on `arm`. NOT Support Windows!
 
 # Changelog
 
 Updates every month, Version name is `YY-MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
+
+* [v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10)
+
+* [v17.09 2017-10-14](https://github.com/khs1994-docker/lnmp/releases/tag/v17.09)
 
 # Prerequisites
 

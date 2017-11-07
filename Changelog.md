@@ -10,7 +10,7 @@ Updates:
 
 Changes:
 * Support `Docker Swarm`
-* Fix `Dockerfile` `docker-compose,yml`
+* Fix `Dockerfile` `docker-compose.yml`
 * Remove Based Debian `php-fpm`, now based Alpine.
 * Default disabled `xdebug` in `php-fpm` Dockerfile
 
@@ -133,19 +133,19 @@ Changes:
 #### v17.09 rc7
 
 Bug fixes:
-* Fix TZ in php-fpm
+* Fix TZ in `php-fpm`
 
 Changes:
-* Support `CI/CD` in `Production` (Git + webhooks) (Docker + webhooks)「目前仅支持本项目自动更新」
-* Support `arm64v8` [Ubuntu 版本的 arm64 Docker](http://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/dists/xenial/pool/test/arm64/)
+* Support `CI/CD` in `Production` (Git + webhooks) (Docker + webhooks)
+* Support `arm64v8` [Ubuntu arm64 Docker](http://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/dists/xenial/pool/test/arm64/)
 
 #### v17.09 rc6
 
 Bug fixes:
-* Fix `php-fpm` 使用 `root` 替代 `www-data` 用户
+* Fix `php-fpm` user `root` instead of `www-data`
 
 Changes:
-* Add `php-fpm` 基于 `Alpine Linux`
+* Add `php-fpm` Based `Alpine Linux`
 
 Updates:
 * `php-fpm` 7.1.10
@@ -154,8 +154,8 @@ Updates:
 
 Changes:
 * Add pull Docker Image
-* Add `数据卷`
-* Add `MySQL` 备份、恢复功能
+* Add `Volumes`
+* Add `MySQL` backup and restore
 
 #### v17.09 rc4
 
@@ -165,7 +165,7 @@ Bug fixes:
 Changes:
 * Support `arm32v7`
 * Add Documents
-* Add Docker 镜像 TAG 锁定(在 `./.env` 文件定义)，提供一致性的环境
+* Add Docker Image TAG in `./.env`
 
 #### v17.09 rc3
 
@@ -174,7 +174,7 @@ Bug fixes:
 
 Changes:
 * Add `Travis CI`
-* Add 交互式命令行工具 `lnmp-docker.sh`，在 Linux、macOS 一切操作均可使用 `./lnmp-docker.sh` 完成
+* Add CLI `lnmp-docker.sh`
 
 #### v17.09 rc2
 
@@ -187,4 +187,4 @@ Changes:
 
 Changes:
 * Add `Nginx`, `MySQL`, `Redis`, `PHP`
-* Add `PhpStorm xdebug` 远程调试
+* Add `PhpStorm xdebug`
