@@ -127,7 +127,9 @@ dockerfile-update(){
       dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
     ;;
     rabbitmq )
-      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
+      dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-management-alpine" $VERSION
+      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example .env.travis
+      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.travis
     ;;
     redis )
       dockerfile-update-sed $SOFT "FROM $SOFT-$VERSION-alpine" $VERSION
@@ -524,7 +526,7 @@ main() {
 
   swarm-down )
     docker stack rm lnmp
-    ;;  
+    ;;
 
   * )
   echo  -e "

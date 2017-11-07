@@ -48,4 +48,10 @@ $ docker service ps lnmp_mysql
 
 ![](../img/docker-swarm-three.png)
 
+## 移除服务
+
+```bash
+$ docker stack rm lnmp
+```
+
 ## More Information
