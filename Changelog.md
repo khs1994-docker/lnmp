@@ -1,6 +1,8 @@
 Changelog
 ==============
 
+#### v17.11 rc8
+
 #### v17.11 rc7
 
 Changes:
