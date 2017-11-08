@@ -124,7 +124,7 @@ Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
 # Contributing
 
-Please see [Contributing](CONTRIBUTING.md).
+Please see [Contributing](.github/CONTRIBUTING.md).
 
 # Thanks
 

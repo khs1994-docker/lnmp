@@ -136,7 +136,7 @@ $ docker-compose down
 
 # 贡献项目
 
-请查看：[如何贡献](CONTRIBUTING.md)
+请查看：[如何贡献](.github/CONTRIBUTING.md)
 
 # 感谢
 
