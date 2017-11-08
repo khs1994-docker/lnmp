@@ -97,7 +97,7 @@ cleanup(){
 gitbook(){
   docker run -it --rm \
     -p 4000:4000 \
-    -v $PWD/docs:/tmp/gitbook-src \
+    -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
 }
