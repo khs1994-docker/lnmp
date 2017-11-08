@@ -1,4 +1,4 @@
-FROM rabbitmq:3.6.12-alpine
+FROM rabbitmq:3.6.14-management-alpine
 
 # cn
 

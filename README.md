@@ -7,13 +7,19 @@ Build LNMP within 2 minutes powered by Docker Compose.
 * [中文说明](README.cn.md)
 * [Documents](docs/)
 
-LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian on `armhf`. NOT Support Windows!
+NOT Support Windows!
+
+LNMP Docker is supported on Linux, macOS, on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
 # Changelog
 
 Updates every month, Version name is `YY-MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
+
+* [v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10)
+
+* [v17.09 2017-10-14](https://github.com/khs1994-docker/lnmp/releases/tag/v17.09) **EOL**
 
 # Prerequisites
 
@@ -76,8 +82,8 @@ $ docker-compose down
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.1.11-alpine3.4`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.4`|
 |Laravel                                                  |`khs1994/php-fpm:7.1.11-alpine3.4`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.4`|
 |Composer                                                 |`khs1994/php-fpm:7.1.11-alpine3.4`  |[![GitHub release](https://img.shields.io/badge/release-v1.5.2-blue.svg)](https://github.com/docker-library/docs/tree/master/composer)     |`Alpine:3.4`|
-|[Memcached](https://github.com/khs1994-docker/memcached) |`khs1994/memcached:1.5.2-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/memcached.svg)](https://github.com/khs1994-docker/memcached/releases)  |`Alpine:3.6`|
-|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.12-management-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.5`|
+|[Memcached](https://github.com/khs1994-docker/memcached) |`khs1994/memcached:1.5.3-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/memcached.svg)](https://github.com/khs1994-docker/memcached/releases)  |`Alpine:3.6`|
+|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.14-management-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.5`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.0-alpine`   |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)    |`Alpine:3.6`|
 |MongoDB                                                  |`mongo:3.5.13`                  |[![GitHub release](https://img.shields.io/badge/release-v3.5.13-blue.svg)](https://github.com/docker-library/docs/tree/master/mongo)       |`Debian:jessie`|
 
@@ -116,6 +122,15 @@ Start `Containers as a Service(CaaS)`. For more information, see [Documents](doc
 
 Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
+# Contributing
+
+Please see [Contributing](CONTRIBUTING.md).
+
+# Thanks
+
+* [Docker Cloud](https://cloud.docker.com)
+* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
+
 # More Information
 
 * [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
@@ -127,12 +142,3 @@ Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 * [micooz/docker-lnmp](https://github.com/micooz/docker-lnmp)
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
-
-# Contributing
-
-Please see [Contributing](CONTRIBUTING.md).
-
-# Thanks
-
-* [Docker Cloud](https://cloud.docker.com)
-* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
