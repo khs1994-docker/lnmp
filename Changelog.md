@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc9
 
+Bug fixes:
+* Fix install docker-compose in `./lnmp-docker.sh`
+
 #### v17.11 rc8
 
 Updates:

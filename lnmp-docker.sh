@@ -27,10 +27,10 @@ env_status
 ARCH=`uname -m`
 OS=`uname -s`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
-COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download/
-COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw/exec/
-# COMPOSE_LINK=https://gitee.com/khs1994/compose-cn-mirror/raw/exec/
-# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw/exec/
+COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
+COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
+# COMPOSE_LINK=https://gitee.com/khs1994/compose-cn-mirror/raw
+# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
@@ -151,7 +151,7 @@ dockerfile-update(){
 install_docker_compose_official(){
   # 版本在 env/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
-  curl -L ${COMPOSE_LINK_OFFICIAL}${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
   echo $PATH && sudo mv docker-compose /usr/local/bin
   # in CoreOS you must move to /opt/bin
@@ -176,7 +176,7 @@ install_docker_compose(){
       fi
       sudo pip3 install docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
-      curl -L ${COMPOSE_LINK}docker-compose-`uname -s`-`uname -m` -o docker-compose
+      curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
       chmod +x docker-compose
       if [ -f  "/etc/os-release" ];then
         # linux
