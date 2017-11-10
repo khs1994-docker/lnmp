@@ -1,6 +1,8 @@
 Changelog
 ==============
 
+#### v17.11 rc9
+
 #### v17.11 rc8
 
 Updates:
@@ -89,110 +91,3 @@ Updates:
 * Update Support Documents in `Production`
 
 #### v17.09 (2017-10-14) EOL
-
-#### v17.09 rc13
-
-Bug fixes:
-* Fix `Dockerfile`
-* Fix `RabbitMQ` error
-
-#### v17.09 rc12
-
-Bug fixes:
-* Fix `./lnmp-docker.sh` CLI
-
-Updates:
-* Update Support Documents
-
-#### v17.09 rc11
-
-Changes:
-* Add `restart:always` in Docker Compose file
-* Add `Gogs`
-
-Updates:
-* `Memcached` 1.5.2
-* `nginx` 1.13.6
-
-#### v17.09 rc10
-
-Bug fixes:
-* Fix git ssh-key CI/CD in `Production`
-* Fix `MySQL` backup and restore
-
-Updates:
-* `PostgreSQL` 10.0
-
-#### v17.09 rc9
-
-Changes:
-* Support `Windows 10` Powered By `Git bash`
-
-#### v17.09 rc8
-
-Bug fixes:
-* Fix CI/CD in `Production`
-* Fix `app`
-
-Changes:
-* Add `crontab` example
-* Add `bash` example
-
-#### v17.09 rc7
-
-Bug fixes:
-* Fix TZ in `php-fpm`
-
-Changes:
-* Support `CI/CD` in `Production` (Git + webhooks) (Docker + webhooks)
-* Support `arm64v8` [Ubuntu arm64 Docker](http://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/dists/xenial/pool/test/arm64/)
-
-#### v17.09 rc6
-
-Bug fixes:
-* Fix `php-fpm` user `root` instead of `www-data`
-
-Changes:
-* Add `php-fpm` Based `Alpine Linux`
-
-Updates:
-* `php-fpm` 7.1.10
-
-#### v17.09 rc5
-
-Changes:
-* Add pull Docker Image
-* Add `Volumes`
-* Add `MySQL` backup and restore
-
-#### v17.09 rc4
-
-Bug fixes:
-* Fix `Dockerfile`
-
-Changes:
-* Support `arm32v7`
-* Add Documents
-* Add Docker Image TAG in `./.env`
-
-#### v17.09 rc3
-
-Bug fixes:
-* Fix `Dockerfile`
-
-Changes:
-* Add `Travis CI`
-* Add CLI `lnmp-docker.sh`
-
-#### v17.09 rc2
-
-Changes:
-* Support `Production`
-* Add `Composer`, `Laravel`, `Laravel artisan`
-* Add `MongoDB`, `Memcached`, `RabbitMQ`, `PostgreSQL`
-
-#### v17.09 rc1
-
-Changes:
-* Add `Nginx`, `MySQL`, `Redis`, `PHP`
-* Add `PhpStorm xdebug`
