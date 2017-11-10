@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc8
 
+Updates:
+* `Docker Compose` 1.17.1
+
 #### v17.11 rc7
 
 Changes:
