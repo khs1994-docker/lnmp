@@ -1,21 +1,18 @@
 #!/bin/bash
 
-if [ ! -z $1 ];then
-  if [ $1 = "development" -o $1 = "production" ];then
-    APP_ENV=$1
-  fi
-fi
+
+if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
 # env
-function print_info(){
+print_info(){
   echo -e "\033[32mINFO\033[0m  $1"
 }
 
-function print_error(){
+print_error(){
   echo -e "\033[31mINFO\033[0m  $1"
 }
 
-function env_status(){
+env_status(){
   # .env.example to .env
   if [ -f .env ];then
     print_info ".env existing\n"
@@ -206,13 +203,13 @@ install_docker_compose(){
 
 # 创建示例数据库
 
-function mysql_demo {
+mysql_demo() {
   docker-compose exec mysql /backup/demo.sh
 }
 
 # 克隆示例项目、nginx 配置文件
 
-function demo {
+demo() {
   #statements
   print_info "Import app and nginx conf Demo ...\n"
   git submodule update --init --recursive
@@ -220,7 +217,7 @@ function demo {
 
 # 初始化
 
-function init {
+init() {
   # docker-compose 是否安装
   install_docker_compose
   case $APP_ENV in
@@ -486,13 +483,13 @@ main() {
     ;;
 
   php )
-    if [ $ARCH="x86_64" ];then
+    if [ $ARCH = "x86_64" ];then
       PHP_CLI_DOCKER_IMAGE=php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.4
-    elif [ $ARCH="armv7l" ];then
+    elif [ $ARCH = "armv7l" ];then
       PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
-    elif [ $ARCH="aarch64" ];then
+    elif [ $ARCH = "aarch64" ];then
       PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
     else
