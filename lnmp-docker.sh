@@ -178,16 +178,18 @@ install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
-    # DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
-    # if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-    #   print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
-    #   sudo rm -rf `which docker-compose`
-    #   install_docker_compose
-    #   i=$(($i+1))
-    #   if [ "$i" -eq 2];then exit 1; fi
-    # else
-      print_info "`docker-compose --version` already installed Correct version"
-    # fi
+    if [ ${OS} = Linux ];then
+      DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
+      if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
+        print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
+        sudo rm -rf `which docker-compose`
+        install_docker_compose
+        i=$(($i+1))
+        if [ "$i" -eq 2 ];then exit 1; fi
+      else
+        print_info "`docker-compose --version` already installed Correct version"
+      fi
+    fi
   else
     # 不存在
     print_info "docker-compose v${DOCKER_COMPOSE_VERSION} is installing ...\n"
