@@ -1,6 +1,10 @@
 version: "3.3"
 services:
 
+  mysql:
+    ports:
+      - "${DEV_MYSQL_PORT}:3306"
+
   redis:
     build:
       context: ./dockerfile/redis/
@@ -9,7 +13,7 @@ services:
 
   php7:
     build:
-      context: ./dockerfile/php-fpm-alpine/
+      context: ./dockerfile/php-fpm/
       dockerfile: Dockerfile
       # build 时的变量，相当于 Dockerfile 中的 ENV
       args:
@@ -47,4 +51,4 @@ services:
       context: ./dockerfile/nginx/
       dockerfile: Dockerfile
     volumes:
-      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw      
+      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw

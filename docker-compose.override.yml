@@ -1,6 +1,10 @@
 version: "3.3"
 services:
 
+  mysql:
+    ports:
+      - "${DEV_MYSQL_PORT}:3306"
+      
   redis:
     # 开发环境默认拉取镜像，也可以构建镜像
     # 此处镜像名为 docker-compose config 查看到的镜像
