@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# git remote add origin git@github.com:khs1994-docker/lnmp.git
 
 if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
