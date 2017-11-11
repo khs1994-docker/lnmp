@@ -3,6 +3,7 @@
 # git remote add origin git@github.com:khs1994-docker/lnmp.git
 # git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git
 # git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git
+# git remote add coding git@git.coding.net:khs1994/lnmp.git
 
 if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
