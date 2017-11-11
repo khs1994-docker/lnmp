@@ -13,7 +13,7 @@ services:
     networks:
       - backend
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${DEV_MYSQL_PORT}:3306"
     volumes:
       - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
       - mysql-data:/var/lib/mysql:rw
@@ -141,7 +141,7 @@ services:
     networks:
       - frontend
     depends_on:
-      - php7       
+      - php7
 
 networks:
   frontend:

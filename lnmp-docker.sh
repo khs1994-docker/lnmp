@@ -1,21 +1,18 @@
 #!/bin/bash
 
-if [ ! -z $1 ];then
-  if [ $1 = "development" -o $1 = "production" ];then
-    APP_ENV=$1
-  fi
-fi
+
+if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
 # env
-function print_info(){
+print_info(){
   echo -e "\033[32mINFO\033[0m  $1"
 }
 
-function print_error(){
+print_error(){
   echo -e "\033[31mINFO\033[0m  $1"
 }
 
-function env_status(){
+env_status(){
   # .env.example to .env
   if [ -f .env ];then
     print_info ".env existing\n"
@@ -26,17 +23,29 @@ function env_status(){
   fi
 }
 
+run_docker(){
+  docker info 2>&1 >/dev/null
+  if [ $? -ne 0 ];then
+    clear
+    echo "=========================="
+    echo "=== Please Run Docker ===="
+    echo "=========================="
+    exit 1
+  fi
+}
+
 env_status
 ARCH=`uname -m`
 OS=`uname -s`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
-COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download/
-COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw/exec/
-# COMPOSE_LINK=https://gitee.com/khs1994/compose-cn-mirror/raw/exec/
-# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw/exec/
+COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
+COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
+# COMPOSE_LINK=https://gitee.com/khs1994/compose-cn-mirror/raw
+# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
+. .env
 . env/.env
 
 if [ ${OS} = "Darwin" ];then
@@ -49,7 +58,7 @@ fi
 # 不支持信息
 
 NOTSUPPORT(){
-  print_error "Not Support `uname -s` ${ARCH}\n"
+  print_error "Not Support ${OS} ${ARCH}\n"
   exit 1
 }
 
@@ -154,23 +163,33 @@ dockerfile-update(){
 install_docker_compose_official(){
   # 版本在 env/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
-  curl -L ${COMPOSE_LINK_OFFICIAL}${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
   echo $PATH && sudo mv docker-compose /usr/local/bin
   # in CoreOS you must move to /opt/bin
 }
 
 install_docker_compose(){
+  local i=0
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
-    print_info "`docker-compose --version` already installed"
+    DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
+    if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
+      print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
+      sudo rm -rf `which docker-compose`
+      install_docker_compose
+      i=$(($i+1))
+      if [ $i -eq 2];then exit 1; fi
+    else
+      print_info "`docker-compose --version` already installed Correct version"
+    fi
   else
     # 不存在
-    print_info "docker-compose is installing ...\n"
+    print_info "docker-compose v${DOCKER_COMPOSE_VERSION} is installing ...\n"
     if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
       #arm
-      print_info "${ARCH} docker-compose is installing by pip3 ...\n"
+      print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
       sudo apt install -y python3-pip
       # pip 源
       if [ !-d "~/.pip" ];then
@@ -179,7 +198,7 @@ install_docker_compose(){
       fi
       sudo pip3 install docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
-      curl -L ${COMPOSE_LINK}docker-compose-`uname -s`-`uname -m` -o docker-compose
+      curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
       chmod +x docker-compose
       if [ -f  "/etc/os-release" ];then
         # linux
@@ -206,13 +225,13 @@ install_docker_compose(){
 
 # 创建示例数据库
 
-function mysql_demo {
+mysql_demo() {
   docker-compose exec mysql /backup/demo.sh
 }
 
 # 克隆示例项目、nginx 配置文件
 
-function demo {
+demo() {
   #statements
   print_info "Import app and nginx conf Demo ...\n"
   git submodule update --init --recursive
@@ -220,7 +239,7 @@ function demo {
 
 # 初始化
 
-function init {
+init() {
   # docker-compose 是否安装
   install_docker_compose
   case $APP_ENV in
@@ -256,6 +275,8 @@ restore(){
 # 更新项目
 
 update(){
+  GIT_STATUS=`git status -s`
+  if [ ! -z GIT_STATUS ];then print_error "Please commit then update"; exit 1; fi
   git fetch origin
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
@@ -286,7 +307,7 @@ release_rc(){
   if [ ${BRANCH} = "dev" ];then
     git fetch origin
     git reset --hard origin/master
-    git push -f origin dev
+    # git push -f origin dev
   else
     print_error "${BRANCH} 分支不能自动提交\n"
   fi
@@ -301,8 +322,6 @@ main() {
   # if [[ $EUID -eq 0 ]]; then print_error "This script should not be run using sudo!!\n"; exit 1; fi
   # 架构
   print_info "ARCH is ${OS} ${ARCH}\n"
-  . .env
-  . env/.env
   case $1 in
 
   init )
@@ -318,6 +337,7 @@ main() {
     ;;
 
   test )
+    run_docker
     bin/test
     ;;
 
@@ -329,23 +349,27 @@ main() {
     ;;
 
   laravel )
+    run_docker
     read -p "请输入路径: ./app/" path
     bin/laravel ${path}
     ;;
 
   laravel-artisan )
+    run_docker
     read -p  "请输入路径: ./app/" path
     read -p  "请输入命令: php artisan " cmd
     bin/php-artisan ${path} ${cmd}
     ;;
 
   composer )
+    run_docker
     read -p "请输入路径: ./app/" path
     read -p  "请输入命令: composer " cmd
     bin/composer ${path} ${cmd}
     ;;
 
   production )
+    run_docker
     # 仅允许运行在 Linux x86_64
     if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
       init
@@ -358,15 +382,8 @@ main() {
     fi
     ;;
 
-  production-config )
-    init
-    docker-compose \
-         -f docker-compose.yml \
-         -f docker-compose.prod.yml \
-         config
-    ;;
-
   development-build )
+    run_docker
     init
     if [ ${ARCH} = "x86_64" ];then
       docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
@@ -376,23 +393,32 @@ main() {
     ;;
 
   development )
+    run_docker
     init
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
       docker-compose up -d
     elif [ ${ARCH} = "armv7l" ];then
-      if [ ! ${ARM_ARCH} ];then
+      if [ -z ${ARM_ARCH} ];then
         echo "ARM_ARCH=arm32v7" >> .env
       fi
         docker-compose -f docker-compose.arm.yml up -d
     elif [ ${ARCH} = "aarch64" ];then
-      if [ ! ${ARM_ARCH} ];then
+      if [ -z ${ARM_ARCH} ];then
         echo "ARM_ARCH=arm64v8" >> .env
       fi
       docker-compose -f docker-compose.arm.yml up -d
     else
       NOTSUPPORT
     fi
+    ;;
+
+  production-config )
+    init
+    docker-compose \
+          -f docker-compose.yml \
+          -f docker-compose.prod.yml \
+          config
     ;;
 
   development-config )
@@ -423,14 +449,17 @@ main() {
     ;;
 
   backup )
+    run_docker
     backup $2 $3 $4 $5 $6 $7 $8 $9
     ;;
 
   restore )
+    run_docker
     restore $2
     ;;
 
   mysql-demo )
+    run_docker
     mysql_demo
     ;;
 
@@ -438,34 +467,47 @@ main() {
     update
     ;;
 
+  upgrade )
+    update
+    ;;
+
   mysql-cli )
+    run_docker
     docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
     ;;
 
   php-cli )
+    run_docker
     docker-compose exec php7 bash
     ;;
 
   redis-cli )
+    run_docker
     docker-compose exec redis sh
     ;;
   memcached-cli )
+    run_docker
     docker-compose exec memcached sh
     ;;
   rabbitmq-cli )
+    run_docker
     docker-compose exec rabbitmq sh
     ;;
   postgres-cli )
+    run_docker
     docker-compose exec postgresql sh
     ;;
   mongo-cli )
+    run_docker
     docker-compose exec mongodb bash
     ;;
   nginx-cli )
+    run_docker
     docker-compose exec nginx sh
     ;;
 
   push )
+    run_docker
     init
     docker-compose \
       -f docker-compose.yml \
@@ -486,13 +528,14 @@ main() {
     ;;
 
   php )
-    if [ $ARCH="x86_64" ];then
+    run_docker
+    if [ $ARCH = "x86_64" ];then
       PHP_CLI_DOCKER_IMAGE=php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.4
-    elif [ $ARCH="armv7l" ];then
+    elif [ $ARCH = "armv7l" ];then
       PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
-    elif [ $ARCH="aarch64" ];then
+    elif [ $ARCH = "aarch64" ];then
       PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
     else
@@ -509,10 +552,12 @@ main() {
     docker-compose down --remove-orphans
     ;;
   docs )
+    run_docker
     gitbook
     ;;
 
   test-image )
+    run_docker
     init
     docker-compose \
       -f docker-compose.test.yml \
@@ -527,6 +572,7 @@ main() {
     dockerfile-update
     ;;
   swarm )
+    run_docker
     docker stack deploy \
       -c docker-compose.swarm.yml \
       lnmp
@@ -535,6 +581,11 @@ main() {
 
   swarm-down )
     docker stack rm lnmp
+    ;;
+
+  debug )
+    run_docker
+    install_docker_compose
     ;;
 
   * )
@@ -577,16 +628,34 @@ Container CLI:
 
 Tools:
   update                Upgrades LNMP
+  upgrade               Upgrades LNMP
   init
   commit
   test
   test-image
   test-image-down
   dockerfile-update    Update Dockerfile By Script
+  debug                Debug environment
 
 Read './docs/*.md' for more information about commands."
     ;;
   esac
 }
 
+# i=0
+
 main $1 $2 $3 $4 $5 $6 $7 $8 $9
+
+if [ $? -ne 0 ];then
+  print_error "\nError occurred, try Rebuild environment! please open issue in https://github.com/khs1994-docker/lnmp/issues/new"
+  echo
+  # 重新生成 .env
+  mv .env .env.backup
+  rm -rf .env
+  cp .env.example .env
+  # 更新项目
+  main update
+  print_info "Please reexec"
+  echo "$ ./lnmp-docker.sh $1 $2 $3 $4 $5 $6 $7"
+  exit 1
+fi

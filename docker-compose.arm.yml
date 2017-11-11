@@ -17,7 +17,7 @@ services:
   #   # your password
   #     - MYSQL_ROOT_PASSWORD=mytest
   #   ports:
-  #     - "${MYSQL_PORT}:3306"
+  #     - "${DEV_MYSQL_PORT}:3306"
   #   volumes:
   #     - mysql-data:/var/lib/mysql
   #     - ./logs/mysql:/var/log/mysql
@@ -141,7 +141,7 @@ services:
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx
     depends_on:
-      - php7       
+      - php7
 
 networks:
   frontend:
