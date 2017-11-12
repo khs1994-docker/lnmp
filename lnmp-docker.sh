@@ -198,13 +198,11 @@ install_docker_compose(){
     if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
       #arm
       print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
-      sudo apt install -y python3-pip
+      command -v pip3 >/dev/null 2>&1
+      if [ ! $? = 0 ];then sudo apt install -y python3-pip; fi
       # pip 源
-      if [ !-d "~/.pip" ];then
-        mkdir -p ~/.pip
-        echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
-      fi
-      sudo pip3 install docker-compose
+      if [ ! -d "~/.pip" ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
+      sudo pip3 install --upgrade docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
       curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
       chmod +x docker-compose
