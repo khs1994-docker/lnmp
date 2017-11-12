@@ -1,7 +1,12 @@
 Changelog
 ==============
 
+#### v17.11 rc10
+
 #### v17.11 rc9
+
+Bug fixes:
+* Fix error in `./lnmp-docker.sh`
 
 #### v17.11 rc8
 
