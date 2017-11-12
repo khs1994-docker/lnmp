@@ -113,6 +113,8 @@ gitbook(){
     -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
+
+  exit 0
 }
 
 dockerfile-update-sed(){
@@ -282,7 +284,7 @@ restore(){
 
 update(){
   GIT_STATUS=`git status -s`
-  if [ ! -z ${GIT_STATUS} ];then git status -s; echo; print_error "Please commit then update"; exit 1; fi
+  if [ ! -z "${GIT_STATUS}" ];then git status -s; echo; print_error "Please commit then update"; exit 1; fi
   git fetch origin
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
