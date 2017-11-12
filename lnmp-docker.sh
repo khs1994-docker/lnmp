@@ -184,7 +184,7 @@ install_docker_compose(){
       DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
         print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
-        sudo rm -rf `which docker-compose`
+        if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
         install_docker_compose
         i=$(($i+1))
         if [ "$i" -eq 2 ];then exit 1; fi
@@ -194,7 +194,7 @@ install_docker_compose(){
     fi
   else
     # 不存在
-    print_info "docker-compose v${DOCKER_COMPOSE_VERSION} is installing ...\n"
+    print_error "docker-compose NOT installed, v${DOCKER_COMPOSE_VERSION} is installing ...\n"
     if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
       #arm
       print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
