@@ -317,7 +317,8 @@ release_rc(){
     git reset --hard origin/master
     # git push -f origin dev
   else
-    print_error "${BRANCH} 分支不能自动提交\n"
+    print_error "不能在 ${BRANCH} 分支开始新的开发，请切换到 dev 分支\n"
+    echo -e "\n $ git checkout dev\n"
   fi
 }
 
