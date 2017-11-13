@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc10
 
+Changes:
+* Add `ENV TZ=Asia/Shanghai` in `Dockerfile`
+
 Updates:
 * `PostgreSQL` 10.1
 
