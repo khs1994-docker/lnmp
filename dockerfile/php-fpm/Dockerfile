@@ -1,5 +1,7 @@
 FROM php:7.1.11-fpm-alpine3.4
 
+ENV TZ=Asia/Shanghai
+
 # 替换源
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
@@ -59,7 +61,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && composer global require "laravel/installer" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
  && rm -rf /tmp/cache /tmp/.htaccess \
- && echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini 
+ && echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 WORKDIR /var/log
 

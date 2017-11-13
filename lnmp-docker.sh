@@ -44,7 +44,6 @@ OS=`uname -s`
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
-# COMPOSE_LINK=https://gitee.com/khs1994/compose-cn-mirror/raw
 # COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
@@ -184,7 +183,7 @@ install_docker_compose(){
       DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
         print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
-        sudo rm -rf `which docker-compose`
+        if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
         install_docker_compose
         i=$(($i+1))
         if [ "$i" -eq 2 ];then exit 1; fi
@@ -194,17 +193,15 @@ install_docker_compose(){
     fi
   else
     # 不存在
-    print_info "docker-compose v${DOCKER_COMPOSE_VERSION} is installing ...\n"
+    print_error "docker-compose NOT installed, v${DOCKER_COMPOSE_VERSION} is installing ...\n"
     if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
       #arm
       print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
-      sudo apt install -y python3-pip
+      command -v pip3 >/dev/null 2>&1
+      if [ ! $? = 0 ];then sudo apt install -y python3-pip; fi
       # pip 源
-      if [ !-d "~/.pip" ];then
-        mkdir -p ~/.pip
-        echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
-      fi
-      sudo pip3 install docker-compose
+      if [ ! -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
+      sudo pip3 install --upgrade docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
       curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
       chmod +x docker-compose
@@ -317,7 +314,8 @@ release_rc(){
     git reset --hard origin/master
     # git push -f origin dev
   else
-    print_error "${BRANCH} 分支不能自动提交\n"
+    print_error "不能在 ${BRANCH} 分支开始新的开发，请切换到 dev 分支\n"
+    echo -e "\n $ git checkout dev\n"
   fi
 }
 

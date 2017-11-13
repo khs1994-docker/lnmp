@@ -1,7 +1,18 @@
 Changelog
 ==============
 
+#### v17.11 rc10
+
+Changes:
+* Add `ENV TZ=Asia/Shanghai` in `Dockerfile`
+
+Updates:
+* `PostgreSQL` 10.1
+
 #### v17.11 rc9
+
+Bug fixes:
+* Fix error in `./lnmp-docker.sh`
 
 #### v17.11 rc8
 

@@ -1,5 +1,7 @@
 FROM redis:4.0.2-alpine
 
+ENV TZ=Asia/Shanghai
+
 # cn
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories

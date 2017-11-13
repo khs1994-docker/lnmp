@@ -1,5 +1,7 @@
 FROM nginx:1.13.6-alpine
 
+ENV TZ=Asia/Shanghai
+
 # cn
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
