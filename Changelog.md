@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc10
 
+Updates:
+* `PostgreSQL` 10.1
+
 #### v17.11 rc9
 
 Bug fixes:
