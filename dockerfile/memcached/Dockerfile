@@ -1,5 +1,7 @@
 FROM memcached:1.5.3-alpine
 
+ENV TZ=Asia/Shanghai
+
 USER root
 
 # cn

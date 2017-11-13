@@ -1,6 +1,6 @@
 FROM arm64v8/php:7.1.11-fpm-jessie
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+ENV TZ=Asia/Shanghai
 
 # cn
 
@@ -50,7 +50,7 @@ RUN curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/compos
     && composer global require "laravel/installer" \
     && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
     && rm -rf /tmp/cache /tmp/.htaccess \
-		&& echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini 
+		&& echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 WORKDIR /var/log
 

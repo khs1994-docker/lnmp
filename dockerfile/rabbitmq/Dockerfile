@@ -1,5 +1,7 @@
 FROM rabbitmq:3.6.14-management-alpine
 
+ENV TZ=Asia/Shanghai
+
 # cn
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
