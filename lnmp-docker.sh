@@ -48,8 +48,10 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 if [ ${OS} = "Darwin" ];then
   # 将以什么开头的行替换为新内容
   sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
+  sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" dockerfile/.env
 else
   sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
+  sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" dockerfile/.env
 fi
 
 # 不支持信息
@@ -123,31 +125,37 @@ dockerfile-update(){
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.travis
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' dockerfile/.env
     ;;
     nginx )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.travis
+      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' dockerfile/.env
     ;;
     php-fpm )
       dockerfile-update-sed $SOFT "FROM php:$VERSION-fpm-alpine3.4" $VERSION
       sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.travis
+      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' dockerfile/.env
     ;;
     postgresql )
       dockerfile-update-sed $SOFT "FROM postgres:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.travis
+      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' dockerfile/.env
     ;;
     rabbitmq )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.travis
+      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' dockerfile/.env
     ;;
     redis )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example .env.travis
       sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.travis
+      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' dockerfile/.env
     ;;
     * )
       print_error "Soft is not existing"
@@ -520,6 +528,7 @@ main() {
   push )
     run_docker
     init
+    cd dockerfile
     docker-compose \
       -f docker-compose.yml \
       -f docker-compose.push.yml \
@@ -570,12 +579,14 @@ main() {
   test-image )
     run_docker
     init
+    cd dockerfile
     docker-compose \
       -f docker-compose.test.yml \
       up -d
     ;;
 
   test-image-down )
+    cd dockerfile
     docker-compose \
       -f docker-compose.test.yml \
       down

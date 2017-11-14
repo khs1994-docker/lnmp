@@ -8,7 +8,7 @@
 $ git clone -b dev git@github.com:yourname/lnmp.git
 $ cd lnmp
 # 将项目与上游关联
-$ git remote add source git@github.com:khs1994-docker/lnmp.git
+$ git remote add lnmp git@github.com:khs1994-docker/lnmp.git
 ```
 
 * 增加内容或者修复错误后提交，并推送到自己的仓库。
@@ -24,7 +24,7 @@ $ git push origin/dev
 * 请定期更新自己仓库。
 
 ```bash
-$ git fetch source
-$ git rebase source/dev
+$ git fetch lnmp
+$ git rebase lnmp/dev
 $ git push -f origin dev
 ```

@@ -5,7 +5,7 @@ services:
     build:
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    # 镜像推送到私有仓库
+    # 镜像推送到私有仓库,以用于生产环境
     image: "${REGISTRY_URL_AND_USERNAME}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
 
   php7:
