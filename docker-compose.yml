@@ -112,7 +112,7 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:rw
+      # - ./config/nginx:/etc/nginx/conf.d:ro
       - type: bind
         source: ./config/nginx
         target: /etc/nginx/conf.d
