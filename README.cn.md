@@ -28,7 +28,7 @@
 
 * [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
-* [Docker Compose](https://github.com/docker/compose) 1.17.0+
+* [Docker Compose](https://github.com/docker/compose) 1.17.1+
 
 # 快速上手
 

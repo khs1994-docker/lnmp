@@ -27,7 +27,7 @@ To use LNMP Docker, you need:
 
 * [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
-* [Docker Compose](https://github.com/docker/compose) 1.17.0+
+* [Docker Compose](https://github.com/docker/compose) 1.17.1+
 
 # Quick Start
 
@@ -56,7 +56,7 @@ development
 
 ## Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder. And Edit `./config/nginx/yourfilename.conf`.
+Start PHP project(e.g, Laravel) in `./app/` folder. And edit `./config/nginx/yourfilename.conf`.
 
 ## Stop
 
