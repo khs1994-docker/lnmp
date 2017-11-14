@@ -303,10 +303,9 @@ update(){
     git fetch --depth=1 lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
     print_info `git remote get-url lnmp`
   fi
-  GIT_STATUS=`git status -s`
-  if [ "${GIT_STATUS}" = "M config/nginx" ];then ${GIT_STATUS}=" "; fi
-  if [ ! -z "${GIT_STATUS}" ];then git status -s; echo; print_error "Please commit then update"; exit 1; fi
-  git fetch depth=1 lnmp
+  GIT_STATUS=`git status -s --ignore-submodules`
+  if [ ! -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
+  git fetch --depth=1 lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git reset --hard lnmp/dev
