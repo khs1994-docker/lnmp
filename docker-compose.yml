@@ -13,7 +13,9 @@ services:
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
-    command: ["mysqld","--character-set-server=utf8mb4"]
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
 
   redis:
     restart: always
