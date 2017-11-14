@@ -113,7 +113,7 @@ echo
 echo "--mirror aliyun                 : Clone dev branch from cn mirror"
 echo "--mirror aliyun production      : Clone master branch from cn mirror"
 echo
-echo "wget                            : Download ddev branch by wget"
+echo "wget                            : Download dev branch by wget"
 echo "wget production                 : Download master branch by wget"
 exit 0
 fi
