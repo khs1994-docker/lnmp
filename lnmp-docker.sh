@@ -292,7 +292,7 @@ update(){
     print_error "Your git remote lnmp NOT set, seting..."
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch --depth=1 lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    git fetch lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
     print_info `git remote get-url lnmp`
   elif [ ${GIT_SOURCE_URL} != "git@github.com:khs1994-docker/lnmp.git" -a ${GIT_SOURCE_URL} != "https://github.com/khs1994-docker/lnmp" ];then
     # 存在但是设置错误
@@ -300,12 +300,12 @@ update(){
     git remote rm lnmp
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch --depth=1 lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    git fetch  lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
     print_info `git remote get-url lnmp`
   fi
   GIT_STATUS=`git status -s --ignore-submodules`
   if [ ! -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
-  git fetch --depth=1 lnmp
+  git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git reset --hard lnmp/dev
@@ -334,7 +334,7 @@ release_rc(){
   print_info "开始新的 RC 版本开发"
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
-    git fetch --depth=1 origin
+    git fetch origin
     git reset --hard origin/master
     # git push -f origin dev
   else
