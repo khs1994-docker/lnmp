@@ -84,6 +84,13 @@ function clone(){
     fi
 }
 
+if [ "$1" = --help ];then
+echo "production         : Clone master branch"
+echo "--mirror aliyun    : Clone from cn mirror"
+echo "wget               : Download by wget"
+exit 0
+fi
+
 exist_path
 
 case $1 in
@@ -113,11 +120,7 @@ case $1 in
       LNMP_GIT_HTTPS_URL=https://gitee.com/khs1994/lnmp.git
       ;;
     esac
-  --help )
-  echo "production         : Clone master branch"
-  echo "--mirror aliyun    : Clone from cn mirror"
-  echo "wget               : Download by wget"
-  ;;
+    ;;
   * )
   echo > /dev/null 2>&1
     ;;

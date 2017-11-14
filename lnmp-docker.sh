@@ -325,6 +325,7 @@ commit(){
     git add .
     git commit -m "Update [skip ci]"
     git push origin dev
+    mirror
   else
     print_error "${BRANCH} 分支不能自动提交\n"
   fi
@@ -341,6 +342,16 @@ release_rc(){
     print_error "不能在 ${BRANCH} 分支开始新的开发，请切换到 dev 分支\n"
     echo -e "\n $ git checkout dev\n"
   fi
+}
+
+mirror(){
+  git fetch origin
+  git push -f aliyun master:master
+  git push -f aliyun dev:dev
+  git push -f tgit master:master
+  git push -f tgit dev:dev
+  git push -f coding master:master
+  git push -f coding dev:dev
 }
 
 # 入口文件
@@ -613,10 +624,7 @@ main() {
     ;;
 
   cn-mirror )
-    git fetch origin
-    git push aliyun master:master
-    git push tgit master:master
-    git push coding master:master
+    mirror
     ;;
 
   * )
