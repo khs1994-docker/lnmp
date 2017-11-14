@@ -9,22 +9,16 @@ if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
 # env
 print_info(){
-  echo -e "\033[32mINFO\033[0m  $1"
+  echo -e "\033[32mINFO \033[0m  $@"
 }
 
 print_error(){
-  echo -e "\033[31mINFO\033[0m  $1"
+  echo -e "\033[31mERROR\033[0m  $@"
 }
 
 env_status(){
   # .env.example to .env
-  if [ -f .env ];then
-    print_info ".env existing\n"
-  else
-    print_error ".env NOT existing\n"
-    cp .env.example .env
-    # exit 1
-  fi
+  if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
 }
 
 run_docker(){
@@ -61,8 +55,7 @@ fi
 # 不支持信息
 
 NOTSUPPORT(){
-  print_error "Not Support ${OS} ${ARCH}\n"
-  exit 1
+  print_error "Not Support ${OS} ${ARCH}\n"; exit 1
 }
 
 # 创建日志文件
@@ -170,7 +163,7 @@ install_docker_compose_official(){
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
-  echo $PATH && sudo mv docker-compose /usr/local/bin
+  print_info $PATH && sudo mv docker-compose /usr/local/bin
   # in CoreOS you must move to /opt/bin
 }
 
@@ -280,23 +273,47 @@ restore(){
 # 更新项目
 
 update(){
+  # 不存在 .git 退出
+  if [ ! -d .git ];then exit 1; fi
+  # 检查网络连接
+  ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
+  # 检查源链接
+  git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
+  if [ $? -ne 0 ];then
+    # 不存在
+    print_error "Your git remote lnmp NOT set, seting..."
+    git remote add lnmp git@github.com:khs1994-docker/lnmp.git
+    # 不能使用 SSH
+    git fetch --depth=1 lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    print_info `git remote get-url lnmp`
+  elif [ ${GIT_SOURCE_URL} != "git@github.com:khs1994-docker/lnmp.git" -a ${GIT_SOURCE_URL} != "https://github.com/khs1994-docker/lnmp" ];then
+    # 存在但是设置错误
+    print_error "Your git remote lnmp NOT set Correct, reseting..."
+    git remote rm lnmp
+    git remote add lnmp git@github.com:khs1994-docker/lnmp.git
+    # 不能使用 SSH
+    git fetch --depth=1 lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    print_info `git remote get-url lnmp`
+  fi
   GIT_STATUS=`git status -s`
+  if [ "${GIT_STATUS}" = "M config/nginx" ];then ${GIT_STATUS}=" "; fi
   if [ ! -z "${GIT_STATUS}" ];then git status -s; echo; print_error "Please commit then update"; exit 1; fi
-  git fetch origin
+  git fetch depth=1 lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
-    git reset --hard origin/dev
+    git reset --hard lnmp/dev
   elif [ ${BRANCH} = "master" ];then
-    git reset --hard origin/master
+    git reset --hard lnmp/master
   else
-    git checkout dev && git reset --hard origin/dev
+    print_error "不能在 ${BRANCH} 自动更新，请切换到 dev 或 master 分支"
+    echo -e "\nPlease exec\n\n$ git checkout dev\n"
   fi
 }
 
 # 提交项目「开发者选项」
 
 commit(){
-  print_info "Branch is ${BRANCH}\n"
+  print_info `git remote get-url origin` ${BRANCH}
   if [ ${BRANCH} = "dev" ];then
     git add .
     git commit -m "Update [skip ci]"
@@ -310,7 +327,7 @@ release_rc(){
   print_info "开始新的 RC 版本开发"
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
-    git fetch origin
+    git fetch --depth=1 origin
     git reset --hard origin/master
     # git push -f origin dev
   else
@@ -391,11 +408,7 @@ main() {
   development-build )
     run_docker
     init
-    if [ ${ARCH} = "x86_64" ];then
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
-    else
-      NOTSUPPORT
-    fi
+    if [ ${ARCH} = "x86_64" ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi
     ;;
 
   development )
@@ -405,14 +418,10 @@ main() {
     if [ ${ARCH} = "x86_64" ];then
       docker-compose up -d
     elif [ ${ARCH} = "armv7l" ];then
-      if [ -z ${ARM_ARCH} ];then
-        echo "ARM_ARCH=arm32v7" >> .env
-      fi
+      if [ -z ${ARM_ARCH} ];then echo "ARM_ARCH=arm32v7" >> .env; fi
         docker-compose -f docker-compose.arm.yml up -d
     elif [ ${ARCH} = "aarch64" ];then
-      if [ -z ${ARM_ARCH} ];then
-        echo "ARM_ARCH=arm64v8" >> .env
-      fi
+      if [ -z ${ARM_ARCH} ];then echo "ARM_ARCH=arm64v8" >> .env; fi
       docker-compose -f docker-compose.arm.yml up -d
     else
       NOTSUPPORT
@@ -436,16 +445,12 @@ main() {
         -f docker-compose.build.yml \
         config
     elif [ ${ARCH} = "armv7l" ];then
-      if [ ! ${ARM_ARCH} ];then
-        echo "ARM_ARCH=arm64v8" >> .env
-      fi
+      if [ ! ${ARM_ARCH} ];then echo "ARM_ARCH=arm64v8" >> .env; fi
       docker-compose \
         -f docker-compose.arm.yml \
         config
     elif [ ${ARCH} = "aarch64" ];then
-      if [ ! ${ARM_ARCH} ];then
-        echo "ARM_ARCH=arm64v8" >> .env
-      fi
+      if [ ! ${ARM_ARCH} ];then echo "ARM_ARCH=arm64v8" >> .env; fi
       docker-compose \
         -f docker-compose.arm.yml \
         config
@@ -569,14 +574,17 @@ main() {
       -f docker-compose.test.yml \
       up -d
     ;;
+
   test-image-down )
     docker-compose \
       -f docker-compose.test.yml \
       down
     ;;
+
   dockerfile-update )
     dockerfile-update
     ;;
+
   swarm )
     run_docker
     docker stack deploy \
@@ -592,6 +600,13 @@ main() {
   debug )
     run_docker
     install_docker_compose
+    ;;
+
+  cn-mirror )
+    git fetch origin
+    git push aliyun master:master
+    git push tgit master:master
+    git push coding master:master
     ;;
 
   * )
@@ -642,6 +657,7 @@ Tools:
   test-image-down
   dockerfile-update    Update Dockerfile By Script
   debug                Debug environment
+  cn-mirror            Push master branch to CN mirror
 
 Read './docs/*.md' for more information about commands."
     ;;
@@ -660,8 +676,8 @@ if [ $? -ne 0 ];then
   rm -rf .env
   cp .env.example .env
   # 更新项目
-  main update
-  print_info "Please reexec"
-  echo "$ ./lnmp-docker.sh $1 $2 $3 $4 $5 $6 $7"
+  # main update
+  print_info "Please exec"
+  echo -e "\n$ ./lnmp-docker.sh update \n"
   exit 1
 fi
