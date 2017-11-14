@@ -35,7 +35,7 @@ run_docker(){
 env_status
 ARCH=`uname -m`
 OS=`uname -s`
-BRANCH=`git rev-parse --abbrev-ref HEAD`
+if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 # COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
