@@ -27,7 +27,10 @@ services:
       - backend
     volumes:
       # - ./config/redis/redis.conf:/redis.conf:ro
-      - redis-data:/data:rw
+      # - redis-data:/data:rw
+      - type: volume
+        source: redis-data
+        target: /data
       - ./logs/redis:/var/log/redis:rw
     command: ["redis-server","/redis.conf"]
 
@@ -91,9 +94,11 @@ services:
     networks:
       - frontend
       - backend
+    expose:
+      - "9000"
     dns:
       - ${DNS}
-    command: ["php-fpm","-R"]
+    command: php-fpm -R
     env_file: .env
 
   nginx:
@@ -102,11 +107,19 @@ services:
     env_file: .env
     ports:
       - "443:443"
-      - "80:80"
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
     volumes:
-      - ./config/nginx:/etc/nginx/conf.d:ro
+      # - ./config/nginx:/etc/nginx/conf.d:rw
+      - type: bind
+        source: ./config/nginx
+        target: /etc/nginx/conf.d
       # - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
+    user: root
+    working_dir: /app
     networks:
       - frontend
     depends_on:
