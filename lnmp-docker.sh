@@ -346,12 +346,9 @@ release_rc(){
 
 mirror(){
   git fetch origin
-  git push -f aliyun master:master
-  git push -f aliyun dev:dev
-  git push -f tgit master:master
-  git push -f tgit dev:dev
-  git push -f coding master:master
-  git push -f coding dev:dev
+  git push --mirror aliyun
+  git push --mirror tgit
+  git push --mirror coding
 }
 
 # 入口文件
