@@ -3,30 +3,42 @@
 #   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 # Use in Production
 #   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
+#
+# CN mirror
+#   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh --mirror aliyun | coding | tgit | gitee
+#
+
+rm -rf lnmp-test
+
+LNMP_GIT_SSH_URL=git@github.com:khs1994-docker/lnmp.git
+
+LNMP_GIT_HTTPS_URL=https://github.com/khs1994-docker/lnmp
 
 LNMP_PATH=lnmp
+
+BRANCH=dev
 
 echo "Welcome use khs1994-docker/lnmp"
 
 clone_ssh(){
   echo "Your Branch is ${BRANCH}"
   echo "Clone by SSH way"
-  git clone --recursive -b ${BRANCH} --depth=1 git@github.com:khs1994-docker/lnmp.git $1
+  git clone --recursive -b ${BRANCH} ${LNMP_GIT_SSH_URL} $1 && (cd $1 ; git remote -v ; git branch -a)
 }
 
 clone_https(){
   echo "Your Branch is ${BRANCH}"
   echo "Clone by SSH way is failure, try HTTPS way"
-  git clone --recursive -b ${BRANCH} --depth=1 https://github.com/khs1994-docker/lnmp.git $1
+  git clone --recursive -b ${BRANCH} ${LNMP_GIT_HTTPS_URL} $1 && (cd $1 ; git remote -v ; git branch -a)
 }
 
 wget_git(){
   echo "Download by wget way"
-  wget https://github.com/khs1994-docker/lnmp/archive/dev.zip -O $1.zip
+  wget "${LNMP_GIT_HTTPS_URL}/archive/${BRANCH}.zip" -O $1.zip
   unzip -o $1.zip -d $1 >/dev/null 2>&1
   cd $1
-  cp -a lnmp-dev/. .
-  rm -rf lnmp-dev ../$1.zip
+  cp -a lnmp-${BRANCH}/. .
+  rm -rf lnmp-${BRANCH} ../$1.zip
   success
 }
 
@@ -74,25 +86,60 @@ function clone(){
     fi
 }
 
+mirror(){
+case $1 in
+  coding )
+  LNMP_GIT_SSH_URL=git@git.coding.net:khs1994/lnmp.git
+  LNMP_GIT_HTTPS_URL=https://git.coding.net/khs1994/lnmp
+  ;;
+  tgit )
+  LNMP_GIT_SSH_URL=git@git.qcloud.com:khs1994-docker/lnmp.git
+  LNMP_GIT_HTTPS_URL=https://git.qcloud.com/khs1994-docker/lnmp
+  ;;
+  gitee )
+  LNMP_GIT_SSH_URL=git@gitee.com:khs1994/lnmp.git
+  LNMP_GIT_HTTPS_URL=https://gitee.com/khs1994/lnmp
+  ;;
+  * )
+  LNMP_GIT_SSH_URL=git@code.aliyun.com:khs1994-docker/lnmp.git
+  LNMP_GIT_HTTPS_URL=https://code.aliyun.com/khs1994-docker/lnmp
+  ;;
+esac
+}
+
+if [ "$1" = --help ];then
+echo "production                      : Clone master branch"
+echo
+echo "--mirror aliyun                 : Clone dev branch from cn mirror"
+echo "--mirror aliyun production      : Clone master branch from cn mirror"
+echo
+echo "wget                            : Download dev branch by wget"
+echo "wget production                 : Download master branch by wget"
+exit 0
+fi
+
+exist_path
+
 case $1 in
   production )
     BRANCH=master
     ;;
   wget )
-    BRANCH=dev
-    exist_path
+    if [ "$2" = production ];then BRANCH=master; fi
     wget_git $LNMP_PATH
     ;;
+  --mirror )
+    if [ "$3" = production ];then BRANCH=master; fi
+    mirror $2
+    ;;
   * )
-    BRANCH=dev
+  echo > /dev/null 2>&1
     ;;
 esac
 
-exist_path
-
 command -v git >/dev/null 2>&1
 
-if [ $? = "0" ];then
+if [ $? -eq 0 ];then
   clone
 else
   wget_git

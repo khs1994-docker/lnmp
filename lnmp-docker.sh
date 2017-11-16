@@ -35,7 +35,7 @@ run_docker(){
 env_status
 ARCH=`uname -m`
 OS=`uname -s`
-BRANCH=`git rev-parse --abbrev-ref HEAD`
+if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 # COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
@@ -292,7 +292,7 @@ update(){
     print_error "Your git remote lnmp NOT set, seting..."
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch --depth=1 lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    git fetch lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   elif [ ${GIT_SOURCE_URL} != "git@github.com:khs1994-docker/lnmp.git" -a ${GIT_SOURCE_URL} != "https://github.com/khs1994-docker/lnmp" ];then
     # 存在但是设置错误
@@ -300,13 +300,12 @@ update(){
     git remote rm lnmp
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch --depth=1 lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    git fetch  lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   fi
-  GIT_STATUS=`git status -s`
-  if [ "${GIT_STATUS}" = "M config/nginx" ];then ${GIT_STATUS}=" "; fi
-  if [ ! -z "${GIT_STATUS}" ];then git status -s; echo; print_error "Please commit then update"; exit 1; fi
-  git fetch depth=1 lnmp
+  GIT_STATUS=`git status -s --ignore-submodules`
+  if [ ! -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
+  git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git reset --hard lnmp/dev
@@ -326,6 +325,7 @@ commit(){
     git add .
     git commit -m "Update [skip ci]"
     git push origin dev
+    mirror
   else
     print_error "${BRANCH} 分支不能自动提交\n"
   fi
@@ -335,13 +335,21 @@ release_rc(){
   print_info "开始新的 RC 版本开发"
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
-    git fetch --depth=1 origin
+    git fetch origin
     git reset --hard origin/master
     # git push -f origin dev
   else
     print_error "不能在 ${BRANCH} 分支开始新的开发，请切换到 dev 分支\n"
     echo -e "\n $ git checkout dev\n"
   fi
+}
+
+mirror(){
+  git fetch origin
+  git push --mirror aliyun
+  git push -f tgit dev:dev
+  git push -f tgit master:master
+  git push --mirror coding
 }
 
 # 入口文件
@@ -614,10 +622,7 @@ main() {
     ;;
 
   cn-mirror )
-    git fetch origin
-    git push aliyun master:master
-    git push tgit master:master
-    git push coding master:master
+    mirror
     ;;
 
   * )

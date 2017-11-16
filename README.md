@@ -27,7 +27,7 @@ To use LNMP Docker, you need:
 
 * [Docker CE](https://github.com/docker/docker-ce) 17.10.0+
 
-* [Docker Compose](https://github.com/docker/compose) 1.17.0+
+* [Docker Compose](https://github.com/docker/compose) 1.17.1+
 
 # Quick Start
 
@@ -40,7 +40,7 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 ## Install using `git clone` in Devlopment
 
 ```bash
-$ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
+$ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
 
@@ -56,7 +56,7 @@ development
 
 ## Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder. And Edit `./config/nginx/yourfilename.conf`.
+Start PHP project(e.g, Laravel) in `./app/` folder. And edit `./config/nginx/yourfilename.conf`.
 
 ## Stop
 
