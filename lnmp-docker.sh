@@ -292,7 +292,7 @@ update(){
     print_error "Your git remote lnmp NOT set, seting..."
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    git fetch lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   elif [ ${GIT_SOURCE_URL} != "git@github.com:khs1994-docker/lnmp.git" -a ${GIT_SOURCE_URL} != "https://github.com/khs1994-docker/lnmp" ];then
     # 存在但是设置错误
@@ -300,7 +300,7 @@ update(){
     git remote rm lnmp
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch  lnmp > /dev/null 2>&1 || ( git remote rm lnmp ; git remote add lnmp https://github.com/khs1994-docker/lnmp.git )
+    git fetch  lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   fi
   GIT_STATUS=`git status -s --ignore-submodules`
@@ -347,7 +347,8 @@ release_rc(){
 mirror(){
   git fetch origin
   git push --mirror aliyun
-  git push --mirror tgit
+  git push -f tgit dev:dev
+  git push -f tgit master:master
   git push --mirror coding
 }
 
