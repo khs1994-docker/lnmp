@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc13
 
+Updates:
+* `Docker Compose` file format 3.4
+
 #### v17.11 rc11 and rc12
 
 Bug fixes:
