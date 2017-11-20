@@ -19,6 +19,7 @@ print_error(){
 env_status(){
   # .env.example to .env
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
+  if [ -f dockerfile/.env ];then print_info "dockerfile/.env existing\n"; else print_error "dockerfile/.env NOT existing\n"; cp dockerfile/.env.example dockerfile/.env ; fi
 }
 
 run_docker(){
