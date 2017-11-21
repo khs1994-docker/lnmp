@@ -626,6 +626,10 @@ main() {
     mirror
     ;;
 
+  compose )
+    install_docker_compose_official
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -675,6 +679,7 @@ Tools:
   dockerfile-update    Update Dockerfile By Script
   debug                Debug environment
   cn-mirror            Push master branch to CN mirror
+  compose              Install docker-compose By curl from github
 
 Read './docs/*.md' for more information about commands."
     ;;
