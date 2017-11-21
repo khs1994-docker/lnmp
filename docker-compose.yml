@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.4"
 services:
 
   mysql:
@@ -6,10 +6,11 @@ services:
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     env_file:
       - ./env/mysql.env
+      - ./env/timezone.env
     networks:
       - backend
     volumes:
-      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
@@ -20,7 +21,7 @@ services:
   redis:
     restart: always
     image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
-    env_file: .env
+    env_file: ./env/timezone.env
     # ports:
     #   - "6379"
     networks:
@@ -39,7 +40,7 @@ services:
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
-  #   env_file: .env
+  #   env_file: ./env/timezone.env
   #   # ports:
   #   #   - "11211"
   #
@@ -50,7 +51,7 @@ services:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
   #     - backend
-  #   env_file: .env
+  #   env_file: ./env/timezone.env
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
@@ -60,18 +61,19 @@ services:
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   env_file:
   #     - ./env/postgresql.env
+  #     - ./env/timezone.env
   #   volumes:
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
-  #   env_file: .env
+  #   env_file: ./env/timezone.env
   #   # ports:
   #   #   - "5432"
   #
   # mongodb:
   #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file: .env
+  #   env_file: ./env/timezone.env
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db:rw
@@ -104,7 +106,7 @@ services:
   nginx:
     restart: always
     image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
-    env_file: .env
+    env_file: ./env/timezone.env
     ports:
       - "443:443"
       - target: 80

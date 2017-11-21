@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.4"
 services:
 
   # # MySQL 暂时没有 arm 镜像
@@ -30,13 +30,15 @@ services:
     restart: always
     image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}"
     env_file:
-      - ./.env
+      - ./env/timezone.env
     networks:
       - backend
     volumes:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - redis-data:/data
       - ./logs/redis:/var/log/redis
+    expose:
+      - "6379"
     # ports:
     #   - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
@@ -49,6 +51,8 @@ services:
     image: ${ARM_ARCH}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
     networks:
       - backend
+    env_file:
+      - ./env/timezone.env
     # ports:
     #   - "11211"
 
@@ -62,6 +66,8 @@ services:
       - backend
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
+    env_file:
+      - ./env/timezone.env
     # ports:
     #   - "15672"
     #   - "5672"
@@ -74,6 +80,7 @@ services:
     image: ${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
     env_file:
       - ./env/postgresql.env
+      - ./env/timezone.env
     networks:
       - backend
     volumes:
@@ -95,6 +102,8 @@ services:
   #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
   #   ports:
   #     - "27017"
+  #   env_file:
+  #     - ./env/timezone.env
   #   command: ["mongod","--config","/etc/mongod.conf"]
 
 
@@ -116,8 +125,8 @@ services:
       - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
+    env_file: .env
     environment:
-      - TZ=Asia/Shanghai
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} ${ARM_ARCH} With Pull Docker Image
       - APP_ENV=development
     command: ["php-fpm","-R"]
@@ -129,7 +138,8 @@ services:
     # image: lnmp-nginx:latest
     restart: always
     image: "${ARM_ARCH}/nginx:${KHS1994_LNMP_NGINX_VERSION}"
-    env_file: .env
+    env_file:
+      - ./env/timezone.env
     networks:
       - frontend
     ports:

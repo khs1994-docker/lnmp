@@ -19,6 +19,7 @@ print_error(){
 env_status(){
   # .env.example to .env
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
+  if [ -f dockerfile/.env ];then print_info "dockerfile/.env existing\n"; else print_error "dockerfile/.env NOT existing\n"; cp dockerfile/.env.example dockerfile/.env ; fi
 }
 
 run_docker(){
@@ -625,6 +626,10 @@ main() {
     mirror
     ;;
 
+  compose )
+    install_docker_compose_official
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -674,6 +679,7 @@ Tools:
   dockerfile-update    Update Dockerfile By Script
   debug                Debug environment
   cn-mirror            Push master branch to CN mirror
+  compose              Install docker-compose By curl from github
 
 Read './docs/*.md' for more information about commands."
     ;;

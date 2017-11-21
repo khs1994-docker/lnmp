@@ -2,11 +2,13 @@
 
 COMMIT=`date "+%F %T"`
 
-function push(){
+push(){
   cd $1
-  git add . \
-  && git commit -m "${COMMIT}" \
-  && git push -f origin master
+  if [ -d .git ];then
+    git add . \
+    && git commit -m "${COMMIT}" \
+    && git push -f origin master
+  fi
 }
 
 push "/data/lnmp/app/admin"

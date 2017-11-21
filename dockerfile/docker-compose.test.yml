@@ -7,6 +7,7 @@ services:
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     env_file:
       - ../env/mysql.env
+      - ../env/timezone.env
     #environment:
     #  # your password
     #  - MYSQL_ROOT_PASSWORD=mytest
@@ -24,7 +25,7 @@ services:
   redis:
     restart: always
     image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/redis:test-alpine"
-    env_file: .env
+    env_file: ../env/timezone.env
     # ports:
     #   - "6379"
     networks:
@@ -40,7 +41,7 @@ services:
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/memcached:test-alpine
   #   networks:
   #     - backend
-  #   env_file: .env
+  #   env_file: ../env/timezone.env
   #   # ports:
   #   #   - "11211"
   #
@@ -51,7 +52,7 @@ services:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
   #     - backend
-  #   env_file: .env
+  #   env_file: ../env/timezone.env
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
@@ -61,6 +62,7 @@ services:
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/postgres:test-alpine
   #   env_file:
   #     - ../env/postgresql.env
+  #     - ../env/timezone.env
   #   volumes:
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
@@ -72,7 +74,7 @@ services:
   # mongodb:
   #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file: .env
+  #   env_file: ../env/timezone.env
   #   volumes:
   #     - ../config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db:rw
@@ -93,7 +95,7 @@ services:
     dns:
       - ${DNS}
     command: ["php-fpm","-R"]
-    env_file: .env
+    env_file: ../env/timezone.env
     environment:
       - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With TEST Docker Image
@@ -129,7 +131,7 @@ services:
   nginx:
     restart: always
     image: "${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/nginx:test-alpine"
-    env_file: .env
+    env_file: ../env/timezone.env
     ports:
       - "443:443"
       - "80:80"
