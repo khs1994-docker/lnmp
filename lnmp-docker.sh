@@ -347,10 +347,15 @@ release_rc(){
 
 mirror(){
   git fetch origin
-  git push --mirror aliyun
+  git push -f aliyun dev:dev
+  git push -f aliyun master:master
+  git push -f aliyun --tags
   git push -f tgit dev:dev
   git push -f tgit master:master
-  git push --mirror coding
+  git push -f tgit --tags
+  git push -f coding dev:dev
+  git push -f coding master:master
+  git push -f coding --tags
 }
 
 # 入口文件
