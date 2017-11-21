@@ -29,7 +29,8 @@ script:
 # - rm -rf sources.list
 # - cp sources.list.default sources.list
 # - cd -
-- cp .env.travis .env
+- cp .env.example .env
+- sed -i 's/^PRODUCTIOM_DOCKER_IMAGE_PREFIX.*/PRODUCTIOM_DOCKER_IMAGE_PREFIX=khs1994/g' .env
 - "./lnmp-docker.sh test"
 branches:
   only:
