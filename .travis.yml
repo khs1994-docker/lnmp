@@ -34,6 +34,7 @@ script:
 - "./lnmp-docker.sh compose"
 - docker-compose --version
 - sed -i 's/^PRODUCTIOM_DOCKER_IMAGE_PREFIX.*/PRODUCTIOM_DOCKER_IMAGE_PREFIX=khs1994/g' .env
+- sed -i 's/^PRO_MYSQL_PORT.*/PRO_MYSQL_PORT=127.0.0.1:3306/g' .env
 - "./lnmp-docker.sh test"
 branches:
   only:
@@ -41,5 +42,5 @@ branches:
   - dev
 env:
   global:
-  - DOCKER_COMPOSE_VERSION: 1.17.1
+  # - DOCKER_COMPOSE_VERSION: 1.17.1
   - TZ: Asia/Shanghai
