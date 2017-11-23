@@ -578,22 +578,6 @@ main() {
     gitbook
     ;;
 
-  test-image )
-    run_docker
-    init
-    cd dockerfile
-    docker-compose \
-      -f docker-compose.test.yml \
-      up -d
-    ;;
-
-  test-image-down )
-    cd dockerfile
-    docker-compose \
-      -f docker-compose.test.yml \
-      down
-    ;;
-
   dockerfile-update )
     dockerfile-update
     ;;
@@ -667,8 +651,6 @@ Tools:
   init
   commit
   test
-  test-image
-  test-image-down
   dockerfile-update    Update Dockerfile By Script
   debug                Debug environment
   cn-mirror            Push master branch to CN mirror
