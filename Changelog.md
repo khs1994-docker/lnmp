@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 rc14
 
+Updates:
+* `nginx` 1.13.7
+
 #### v17.11 rc13
 
 Updates:

@@ -1,4 +1,4 @@
-FROM khs1994/nginx:1.13.6-alpine
+FROM khs1994/nginx:1.13.7-alpine
 
 RUN apk add --no-cache git \
       && git clone https://github.com/khs1994-docker/swarm-lnmp-php-demo.git /app \
