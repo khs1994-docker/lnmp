@@ -36,10 +36,6 @@ docker_run(){
 
 docker_run "生产环境测试完毕"
 
-./lnmp-docker.sh test-image
-
-docker_run "测试 test 镜像"
-
 # 测试 composer
 
 bin/composer demo --version
