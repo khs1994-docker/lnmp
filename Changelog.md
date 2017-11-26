@@ -79,6 +79,6 @@ Updates:
 Updates:
 * `Docker Compose` 1.17.0-rc1
 
-#### v17.10 (2017-11-01) EOL
+#### [v17.10 (2017-11-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10)
 
-#### v17.09 (2017-10-14) EOL
+#### [v17.09 (2017-10-14) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v17.09)
