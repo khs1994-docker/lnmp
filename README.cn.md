@@ -8,9 +8,9 @@
 
 * [支持文档](docs)
 
-不再支持 Windows！
+不支持 Windows！
 
-本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `arm` 架构的 Debian(即树莓派)。
+本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `arm` 架构的 Debian(树莓派)。
 
 # 更新记录
 
