@@ -585,7 +585,7 @@ main() {
   swarm )
     run_docker
     docker stack deploy \
-      -c docker-compose.swarm.yml \
+      -c docker-stack.yml \
       lnmp
     docker stack ps lnmp
     ;;

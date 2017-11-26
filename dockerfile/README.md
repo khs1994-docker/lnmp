@@ -5,13 +5,7 @@
 # Build Image Use IN Docker Swarm
 
 ```bash
-$ docker-compose -f docker-compose.swarm-build.yml build
-```
-
-# Test Image
-
-```bash
-$ docker-compose -f docker-compose.test.yml up -d
+$ docker-compose -f docker-stack.build.yml build
 ```
 
 # Push Image To Docker Registry
