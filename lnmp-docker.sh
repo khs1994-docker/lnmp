@@ -124,39 +124,27 @@ dockerfile-update(){
   case $SOFT in
     memcached )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env.travis
-      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.travis
-      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' dockerfile/.env
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env .env
     ;;
     nginx )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env.travis
-      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.travis
-      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' dockerfile/.env
+      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env .env
     ;;
     php-fpm )
       dockerfile-update-sed $SOFT "FROM php:$VERSION-fpm-alpine3.4" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env.travis
-      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.travis
-      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' dockerfile/.env
+      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env .env
     ;;
     postgresql )
-      dockerfile-update-sed $SOFT "FROM postgres:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example .env.travis
-      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.travis
-      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' dockerfile/.env
+      dockerfile-update-sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
+      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env .env
     ;;
     rabbitmq )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example .env.travis
-      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.travis
-      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' dockerfile/.env
+      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env .env
     ;;
     redis )
       dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example .env.travis
-      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.travis
-      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' dockerfile/.env
+      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env .env
     ;;
     * )
       print_error "Soft is not existing"
@@ -347,10 +335,15 @@ release_rc(){
 
 mirror(){
   git fetch origin
-  git push --mirror aliyun
+  git push -f aliyun dev:dev
+  git push -f aliyun master:master
+  git push -f aliyun --tags
   git push -f tgit dev:dev
   git push -f tgit master:master
-  git push --mirror coding
+  git push -f tgit --tags
+  git push -f coding dev:dev
+  git push -f coding master:master
+  git push -f coding --tags
 }
 
 # 入口文件
@@ -585,22 +578,6 @@ main() {
     gitbook
     ;;
 
-  test-image )
-    run_docker
-    init
-    cd dockerfile
-    docker-compose \
-      -f docker-compose.test.yml \
-      up -d
-    ;;
-
-  test-image-down )
-    cd dockerfile
-    docker-compose \
-      -f docker-compose.test.yml \
-      down
-    ;;
-
   dockerfile-update )
     dockerfile-update
     ;;
@@ -674,8 +651,6 @@ Tools:
   init
   commit
   test
-  test-image
-  test-image-down
   dockerfile-update    Update Dockerfile By Script
   debug                Debug environment
   cn-mirror            Push master branch to CN mirror

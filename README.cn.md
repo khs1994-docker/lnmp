@@ -8,9 +8,9 @@
 
 * [支持文档](docs)
 
-不再支持 Windows！
+不支持 Windows！
 
-本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `arm` 架构的 Debian(即树莓派)。
+本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `arm` 架构的 Debian(树莓派)。
 
 # 更新记录
 
@@ -26,7 +26,7 @@
 
 本项目需要以下软件：
 
-* [Docker CE](https://github.com/docker/docker-ce) 17.09.0+
+* [Docker CE](https://github.com/docker/docker-ce) 17.09 Stable +
 
 * [Docker Compose](https://github.com/docker/compose) 1.17.1+
 
@@ -81,7 +81,7 @@ $ docker-compose down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/khs1994-docker/nginx)         |`khs1994/nginx:1.13.6-alpine`    |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/nginx.svg)](https://github.com/khs1994-docker/nginx/releases)      |`Alpine:3.5`|
+|[NGINX](https://github.com/khs1994-docker/nginx)         |`khs1994/nginx:1.13.7-alpine`    |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/nginx.svg)](https://github.com/khs1994-docker/nginx/releases)      |`Alpine:3.5`|
 |MySQL                                                    |`mysql:5.7.20`                   |[![GitHub release](https://img.shields.io/badge/release-v5.7.20-blue.svg)](https://github.com/docker-library/docs/tree/master/mysql)       |`Debian:jessie`|
 |[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.2-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)      |`Alpine:3.6`|
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.1.11-alpine3.4`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.4`|

@@ -1,6 +1,11 @@
 Changelog
 ==============
 
+#### v17.11 rc14
+
+Updates:
+* `nginx` 1.13.7
+
 #### v17.11 rc13
 
 Updates:
@@ -72,43 +77,6 @@ Updates:
 Updates:
 * `Docker Compose` 1.17.0-rc1
 
-#### v17.10 (2017-11-01)
-
-#### v17.10 rc6
-
-Changes:
-* NOT Support `Windows 10`
-Updates:
-* `php-fpm` 7.1.11
-* `MySQL` 5.7.20
-
-#### v17.10 rc5
-
-Bug fixes:
-* Fix error in `./lnmp-docker.sh`
-
-#### v17.10 rc4
-
-Changes:
-* Move `gogs` to `khs1994-docker/ci`
-* Move `ci` to `khs1994-docker/ci/webhooks`
-
-#### v17.10 rc3
-
-Changes:
-* Merge `arm32v7` `arm64v8` Compose file into one `docker-compose.arm.yml`
-
-#### v17.10 rc2
-
-Changes:
-* Rename `.env` to `.env.example`
-
-#### v17.10 rc1
-
-Changes:
-* Move some VARS in `docker-compose.yml` to `.env` file
-
-Updates:
-* Update Support Documents in `Production`
+#### v17.10 (2017-11-01) EOL
 
 #### v17.09 (2017-10-14) EOL

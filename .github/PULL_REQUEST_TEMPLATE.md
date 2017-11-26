@@ -1,11 +1,7 @@
-<!--Thanks for your contribution. See [CONTRIBUTING](CONTRIBUTING.md)
-    for this project's contribution guidelines. Remove these comments
-    as you go. -->
+<!-- Thanks for your contribution. See [CONTRIBUTING](CONTRIBUTING.md) for this project's contribution guidelines. Remove these comments as you go. -->
 
-### Proposed changes
+# 主要改变（贡献者选项）
 
-<!--Tell us what you did and why-->
+<!-- Tell us what you did and why -->
 
-### Release version (optional)
-
-### Related issues (optional)
+# 发布版本（开发者选项）
