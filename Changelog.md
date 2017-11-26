@@ -1,12 +1,8 @@
 Changelog
 ==============
 
-#### v17.11 (2017-12-01)
-
 #### v17.11 rc14
 
-Changes:
-* `khs1994-docker/lnmp` v17.10 End Of Life
 Updates:
 * `nginx` 1.13.7
 
