@@ -40,6 +40,7 @@ Updates:
 
 Changes:
 * `khs1994-docker/lnmp` v17.09 End Of Life
+
 Updates:
 * `Memcached` 1.5.3
 * `RabbitMQ` 3.6.14
