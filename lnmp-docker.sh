@@ -587,7 +587,11 @@ main() {
     docker stack deploy \
       -c docker-stack.yml \
       lnmp
-    docker stack ps lnmp
+    if [ $? -eq 0 ];then
+      docker stack ps lnmp
+    else
+      exit 1
+    fi
     ;;
 
   swarm-down )
@@ -633,7 +637,8 @@ Commands:
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
-  swarm                Docker Swarm
+  swarm                Swarm mode
+  swarm-down           Down Swarm mode
 
 Container CLI:
   memcached-cli
