@@ -3,6 +3,9 @@ Changelog
 
 #### v17.11 (2017-12-01)
 
+Updates:
+* `php-fpm` 7.1.12
+
 #### v17.11 rc14
 
 Updates:
