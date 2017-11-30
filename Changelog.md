@@ -1,6 +1,11 @@
 Changelog
 ==============
 
+#### v17.11 (2017-12-01)
+
+Updates:
+* `php-fpm` 7.1.12
+
 #### v17.11 rc14
 
 Updates:
@@ -38,6 +43,7 @@ Updates:
 
 Changes:
 * `khs1994-docker/lnmp` v17.09 End Of Life
+
 Updates:
 * `Memcached` 1.5.3
 * `RabbitMQ` 3.6.14
@@ -77,6 +83,6 @@ Updates:
 Updates:
 * `Docker Compose` 1.17.0-rc1
 
-#### v17.10 (2017-11-01) EOL
+#### [v17.10 (2017-11-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10)
 
-#### v17.09 (2017-10-14) EOL
+#### [v17.09 (2017-10-14) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v17.09)

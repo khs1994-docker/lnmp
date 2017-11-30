@@ -18,9 +18,9 @@
 
 最新的提交位于 [dev](https://github.com/khs1994-docker/lnmp/tree/dev) 分支。
 
-* [v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10)
+* [v17.11 2017-12-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.11)
 
-* [v17.09 2017-10-14](https://github.com/khs1994-docker/lnmp/releases/tag/v17.09) **EOL**
+* [v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10) **EOL**
 
 # 准备
 
@@ -53,7 +53,7 @@ $ ./lnmp-docker.sh devlopment
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v17.10 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v17.11 x86_64 With Pull Docker Image
 
 development
 

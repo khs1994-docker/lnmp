@@ -32,7 +32,13 @@ services:
       - type: volume
         source: redis-data
         target: /data
-      - ./logs/redis:/var/log/redis:rw
+        volume:
+          nocopy: true
+      # - ./logs/redis:/var/log/redis:rw
+      - type: bind
+        source: ./logs/redis
+        target: /var/log/redis
+        read_only: false
     command: ["redis-server","/redis.conf"]
 
   # memcached:
