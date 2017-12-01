@@ -1,10 +1,12 @@
 Changelog
 ==============
 
+#### v17.12-rc2
+
 #### v17.12-rc1
 
 Changes:
-* Add `ENV TZ=Asia/Shanghai` in `Dockerfile`
+* `khs1994-docker/lnmp` v17.10 End Of Life
 
 Updates:
 * `php-fpm` 7.2.0
