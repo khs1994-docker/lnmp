@@ -131,7 +131,7 @@ dockerfile-update(){
       sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     php-fpm )
-      dockerfile-update-sed $SOFT "FROM php:$VERSION-fpm-alpine3.4" $VERSION
+      dockerfile-update-sed $SOFT "FROM php:$VERSION-fpm-alpine3.6" $VERSION
       sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     postgresql )
@@ -553,7 +553,7 @@ main() {
     run_docker
     if [ $ARCH = "x86_64" ];then
       PHP_CLI_DOCKER_IMAGE=php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.4
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.6
     elif [ $ARCH = "armv7l" ];then
       PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie

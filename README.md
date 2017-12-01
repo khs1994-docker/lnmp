@@ -19,7 +19,7 @@ Latest commit in dev branch, please switch [dev](https://github.com/khs1994-dock
 
 * [v17.11 2017-12-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.11)
 
-* [v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10) **EOL**
+* ~~[v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10) **EOL**~~
 
 # Prerequisites
 
