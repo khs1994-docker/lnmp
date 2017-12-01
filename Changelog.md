@@ -3,6 +3,9 @@ Changelog
 
 #### v17.12-rc1
 
+Changes:
+* Add `ENV TZ=Asia/Shanghai` in `Dockerfile`
+
 Updates:
 * `php-fpm` 7.2.0
 * `Redis` 4.0.4
@@ -56,9 +59,11 @@ Updates:
 
 #### v17.11 rc6
 
-Changes:
-* Support `Docker Swarm`
+Bug fixes:
 * Fix `Dockerfile` `docker-compose.yml`
+
+Changes:
+* Support `Swarm mode`
 * Remove Based Debian `php-fpm`, now based Alpine.
 * Default disabled `xdebug` in `php-fpm` Dockerfile
 
