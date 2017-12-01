@@ -1,4 +1,4 @@
-FROM arm32v7/php:7.1.11-fpm-jessie
+FROM arm32v7/php:7.2.0-fpm-jessie
 
 ENV TZ=Asia/Shanghai
 # cn
@@ -9,7 +9,6 @@ RUN set -xe \
 	      && buildDeps=" \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libmcrypt-dev \
         libpng12-dev \
         libsasl2-dev \
         libssl-dev \
@@ -19,14 +18,13 @@ RUN set -xe \
 				libsqlite3-dev \
 	" \
   && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
-    	   && docker-php-ext-install -j$(nproc) bcmath iconv mcrypt pdo_pgsql pdo_mysql pdo_sqlite zip \
+    	   && docker-php-ext-install -j$(nproc) bcmath iconv pdo_pgsql pdo_mysql pdo_sqlite zip \
     	   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     	   && docker-php-ext-install -j$(nproc) gd \
-         && pecl install mongodb \
-         && pecl install redis \
-         && pecl install memcached \
-         && pecl install xdebug \
-         && docker-php-ext-enable mongodb memcached redis xdebug
+         && pecl install mongodb redis memcached \
+         # xdebug \
+         && docker-php-ext-enable mongodb memcached redis
+				 # xdebug
 
 # install composer
 

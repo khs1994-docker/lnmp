@@ -15,7 +15,7 @@ services:
     build:
       context: ./dockerfile/php-fpm/
       cache_from:
-        - khs1994/php-fpm:latest-alpine3.4
+        - khs1994/php-fpm:latest-alpine3.6
       dockerfile: Dockerfile
       # build 时的变量，相当于 Dockerfile 中的 ARG
       args:

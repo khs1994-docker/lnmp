@@ -1,4 +1,4 @@
-FROM php:7.1.12-fpm-alpine3.4
+FROM php:7.2.0-fpm-alpine3.6
 
 ENV TZ=Asia/Shanghai
 
@@ -15,9 +15,8 @@ ENV KHS1994_PHP_FPM_DEPS \
                          bash \
                          freetype-dev \
                          libjpeg-turbo-dev \
-                         libmcrypt-dev \
                          libpng-dev \
-                         openssl-dev \
+                         libressl-dev \
                          libmemcached-dev \
                          cyrus-sasl-dev \
                          postgresql-dev \
@@ -27,15 +26,14 @@ ENV KHS1994_PHP_FPM_DEPS \
 
 RUN set -xe \
         && apk add --no-cache $KHS1994_PHP_FPM_DEPS \
-        && docker-php-ext-install -j "$(nproc)" bcmath iconv mcrypt pdo_pgsql pdo_mysql pdo_sqlite zip \
+        && docker-php-ext-install -j "$(nproc)" bcmath iconv pdo_pgsql pdo_mysql pdo_sqlite zip \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install -j "$(nproc)" gd \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-        && pecl install mongodb \
-        && pecl install redis \
-        && pecl install memcached \
-        && pecl install xdebug \
-        && docker-php-ext-enable mongodb redis memcached xdebug \
+        && pecl install mongodb redis memcached \
+        # xdebug 目前不支持 7.2 \
+        && docker-php-ext-enable mongodb redis memcached \
+        # xdebug 目前不支持 7.2 \
         && apk del .build-deps
 
 # install composer

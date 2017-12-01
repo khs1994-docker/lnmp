@@ -48,7 +48,7 @@ services:
       replicas: 2
 
   php7:
-    image: "khs1994/php-fpm:swarm-7.1.11-alpine3.4"
+    image: "khs1994/php-fpm:swarm-7.1.11-alpine3.6"
     # container_name: khs1994-docker-lnmp-php-fpm
     # volumes:
     #   - ./logs/php-fpm:/var/log/php-fpm:rw

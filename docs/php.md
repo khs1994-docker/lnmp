@@ -1,7 +1,7 @@
 # PHP 扩展列表
 
 * iconv
-* mcrypt
+* ~~mcrypt (PHP 7.2 已废弃)~~
 * gd
 * [redis](https://pecl.php.net/package/redis)
 * [memcached ( memcache 太旧)](https://pecl.php.net/package/memcached)
