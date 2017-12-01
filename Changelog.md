@@ -3,6 +3,9 @@ Changelog
 
 #### v17.12-rc2
 
+Updates:
+* `composer` 1.5.5
+
 #### v17.12-rc1
 
 Changes:
