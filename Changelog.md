@@ -1,6 +1,12 @@
 Changelog
 ==============
 
+#### v17.12-rc1
+
+Updates:
+* `php-fpm` 7.2.0
+* `Redis` 4.0.4
+
 #### v17.11 (2017-12-01)
 
 Updates:
