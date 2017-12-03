@@ -20,10 +20,8 @@ RUN set -xe \
     	   && docker-php-ext-install -j$(nproc) bcmath pdo_pgsql pdo_mysql zip \
     	   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     	   && docker-php-ext-install -j$(nproc) gd \
-         && pecl install mongodb redis memcached \
-         # xdebug \
-         && docker-php-ext-enable mongodb memcached redis
-				 # xdebug
+         && pecl install mongodb redis memcached https://pecl.php.net/get/xdebug-2.6.0alpha1.tgz \
+         && docker-php-ext-enable mongodb memcached redis xdebug
 
 # install composer
 

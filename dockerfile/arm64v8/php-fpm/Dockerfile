@@ -29,10 +29,8 @@ RUN set -xe \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install -j "$(nproc)" gd \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-        && pecl install mongodb redis memcached \
-        # xdebug 目前不支持 7.2 \
-        && docker-php-ext-enable mongodb redis memcached \
-        # xdebug 目前不支持 7.2 \
+        && pecl install mongodb redis memcached https://pecl.php.net/get/xdebug-2.6.0alpha1.tgz \
+        && docker-php-ext-enable mongodb redis memcached xdebug \
         && apk del .build-deps
 
 # install composer
