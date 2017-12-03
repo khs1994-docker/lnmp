@@ -15,10 +15,9 @@ RUN set -xe \
         libmemcached-dev \
         libpq-dev \
         zlib1g-dev \
-				libsqlite3-dev \
 	" \
   && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
-    	   && docker-php-ext-install -j$(nproc) bcmath iconv pdo_pgsql pdo_mysql pdo_sqlite zip \
+    	   && docker-php-ext-install -j$(nproc) bcmath pdo_pgsql pdo_mysql zip \
     	   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     	   && docker-php-ext-install -j$(nproc) gd \
          && pecl install mongodb redis memcached \
