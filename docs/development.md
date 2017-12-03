@@ -10,7 +10,7 @@
 
 执行 `./lnmp-docker.sh development`。
 
-之后 PhpStorm 打开本项目，克隆已有的 PHP 项目文件到 `./app` 目录下或在 `./app` 目录下开始新的开发。
+之后 `PhpStorm` 打开本项目，克隆已有的 PHP 项目文件到 `./app` 目录下或在 `./app` 目录下开始新的开发。
 
 ### 使用 Composer
 
@@ -35,7 +35,7 @@ $ ./lnmp-docker.sh devlopment-build
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v17.10 x86_64 With Build Docker Image
+Welcome use khs1994-docker/lnmp v17.11 x86_64 With Build Docker Image
 
 development
 

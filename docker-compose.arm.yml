@@ -28,7 +28,7 @@ services:
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
     restart: always
-    image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}"
+    image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}${ARM_BASED_OS}"
     env_file:
       - ./env/timezone.env
     networks:
@@ -113,7 +113,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/php-fpm/
     #   dockerfile: Dockerfile
     restart: always
-    image: "khs1994/${ARM_ARCH}-php-fpm:${KHS1994_LNMP_PHP_VERSION}-jessie"
+    image: "khs1994/${ARM_ARCH}-php-fpm:${KHS1994_LNMP_PHP_VERSION}-${ARM_PHP_BASED_OS}"
     networks:
       - frontend
       - backend

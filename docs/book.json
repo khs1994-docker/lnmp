@@ -4,7 +4,8 @@
   "language": "zh-hans",
   "links": {
     "sidebar": {
-      "Home": "//lnmp.khs1994.com"
+      "Home": "//lnmp.khs1994.com",
+      "GitHub":"https://github.com/khs1994-docker/lnmp"
     }
   },
   "plugins": [

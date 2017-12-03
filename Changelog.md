@@ -1,10 +1,20 @@
 Changelog
 ==============
 
+#### v17.12-rc2
+
+Changes:
+* `php-fpm` ARM64 Based alpine 3.6
+* `Redis` ARM64 Based alpine 3.6
+
+Updates:
+* `composer` 1.5.5
+* `Redis` 4.0.5
+
 #### v17.12-rc1
 
 Changes:
-* Add `ENV TZ=Asia/Shanghai` in `Dockerfile`
+* `khs1994-docker/lnmp` v17.10 End Of Life
 
 Updates:
 * `php-fpm` 7.2.0

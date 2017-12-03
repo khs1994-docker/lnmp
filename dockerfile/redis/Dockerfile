@@ -1,4 +1,4 @@
-FROM redis:4.0.4-alpine
+FROM redis:4.0.5-alpine
 
 ENV TZ=Asia/Shanghai
 

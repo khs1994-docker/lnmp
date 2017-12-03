@@ -1,6 +1,6 @@
 # 清理
 
-将日志文件内容清空
+请务必定期清理日志文件。
 
 ```bash
 $ ./lnmp-docker.sh cleanup

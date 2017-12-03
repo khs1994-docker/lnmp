@@ -21,10 +21,11 @@ ARCH=`uname -m`
 
 if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
   DOCKER_IMAGE=khs1994/arm64v8-php-fpm
+  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.6
   if [ ${ARCH} = "armv7l" ];then
     DOCKER_IMAGE=khs1994/arm32v7-php-fpm
+    TAG=${KHS1994_LNMP_PHP_VERSION}-stretch
   fi
-  TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
 elif [ ${ARCH} = "x86_64" ];then
   DOCKER_IMAGE=khs1994/php-fpm
   TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.6

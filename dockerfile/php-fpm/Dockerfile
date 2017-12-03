@@ -8,10 +8,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 
 ENV KHS1994_PHP_FPM_DEPS \
                          git \
-                         subversion \
-                         openssh \
-                         mercurial \
-                         tini \
+                         # subversion \
+                         openssh-client \
+                         # mercurial \
+                         # tini \
                          bash \
                          freetype-dev \
                          libjpeg-turbo-dev \
@@ -21,32 +21,29 @@ ENV KHS1994_PHP_FPM_DEPS \
                          cyrus-sasl-dev \
                          postgresql-dev \
                          zlib-dev \
-                         tzdata \
-                         sqlite-dev
+                         tzdata
 
 RUN set -xe \
-        && apk add --no-cache $KHS1994_PHP_FPM_DEPS \
-        && docker-php-ext-install -j "$(nproc)" bcmath iconv pdo_pgsql pdo_mysql pdo_sqlite zip \
+        && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_DEPS \
+        && docker-php-ext-install -j "$(nproc)" bcmath pdo_pgsql pdo_mysql zip \
         && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install -j "$(nproc)" gd \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-        && pecl install mongodb redis memcached \
-        # xdebug 目前不支持 7.2 \
-        && docker-php-ext-enable mongodb redis memcached \
-        # xdebug 目前不支持 7.2 \
+        && pecl install mongodb redis memcached https://pecl.php.net/get/xdebug-2.6.0alpha1.tgz \
+        && docker-php-ext-enable mongodb redis memcached xdebug \
         && apk del .build-deps
 
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
-ENV COMPOSER_VERSION 1.5.2
+ENV COMPOSER_VERSION 1.5.5
 
 RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
-    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/da290238de6d63faace0343efbdd5aa9354332c5/web/installer \
+    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
     && php -r " \
-    \$signature = '669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410'; \
+    \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
     \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
     if (!hash_equals(\$signature, \$hash)) { \
         unlink('/tmp/installer.php'); \
