@@ -659,12 +659,12 @@ Read './docs/*.md' for more information about commands."
 # i=0
 
 if [ ${ARCH} = "armv7l" ];then
-    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm32v7/g" .env .env.example
-    sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=stretch/g" .env .env.example
-    sed -i "s/^ARM_ALPINE_OS.*/ARM_ALPINE_OS=/g" .env .env.example
+    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm32v7/g" .env
+    sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=stretch/g" .env
+    sed -i "s/^ARM_ALPINE_OS.*/ARM_ALPINE_OS=/g" .env
 elif [ ${ARCH} = "aarch64" ];then
-    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm64v8/g" .env .env.example
-    sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=alpine3.6/g" .env .env.example
+    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm64v8/g" .env
+    sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=alpine3.6/g" .env
 fi
 
 main $1 $2 $3 $4 $5 $6 $7 $8 $9
