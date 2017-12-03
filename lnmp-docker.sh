@@ -450,7 +450,7 @@ main() {
         -f docker-compose.yml \
         -f docker-compose.build.yml \
         config
-    elif [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64"];then
+    elif [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
       docker-compose \
         -f docker-compose.arm.yml \
         config
