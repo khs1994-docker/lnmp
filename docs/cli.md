@@ -8,9 +8,9 @@
 
 * 使用 `Laravel artisan`
 
-* 使用 PHP 包管理工具 `Composer`
+* 使用 `PHP` 包管理工具 `Composer`
 
-* 命令行执行 PHP 文件
+* 命令行执行 `PHP` 文件
 
 ## 原始命令详解
 

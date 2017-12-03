@@ -3,4 +3,4 @@ services:
 
   arm32v7-php-fpm:
     build: .
-    image: ${DOCKER_HUB_USERNAME}/arm32v7-php-fpm:${TAG}-jessie
+    image: ${DOCKER_HUB_USERNAME}/arm32v7-php-fpm:${TAG}-stretch

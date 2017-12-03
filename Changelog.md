@@ -3,6 +3,10 @@ Changelog
 
 #### v17.12-rc2
 
+Changes:
+* `php-fpm` ARM64 Based alpine 3.6
+* `Redis` ARM64 Based alpine 3.6
+
 Updates:
 * `composer` 1.5.5
 

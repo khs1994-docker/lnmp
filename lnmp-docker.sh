@@ -427,12 +427,8 @@ main() {
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
       docker-compose up -d
-    elif [ ${ARCH} = "armv7l" ];then
-      if [ -z ${ARM_ARCH} ];then echo "ARM_ARCH=arm32v7" >> .env; fi
+    elif [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
         docker-compose -f docker-compose.arm.yml up -d
-    elif [ ${ARCH} = "aarch64" ];then
-      if [ -z ${ARM_ARCH} ];then echo "ARM_ARCH=arm64v8" >> .env; fi
-      docker-compose -f docker-compose.arm.yml up -d
     else
       NOTSUPPORT
     fi
@@ -454,13 +450,7 @@ main() {
         -f docker-compose.yml \
         -f docker-compose.build.yml \
         config
-    elif [ ${ARCH} = "armv7l" ];then
-      if [ ! ${ARM_ARCH} ];then echo "ARM_ARCH=arm64v8" >> .env; fi
-      docker-compose \
-        -f docker-compose.arm.yml \
-        config
-    elif [ ${ARCH} = "aarch64" ];then
-      if [ ! ${ARM_ARCH} ];then echo "ARM_ARCH=arm64v8" >> .env; fi
+    elif [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64"];then
       docker-compose \
         -f docker-compose.arm.yml \
         config
@@ -667,6 +657,15 @@ Read './docs/*.md' for more information about commands."
 }
 
 # i=0
+
+if [ ${ARCH} = "armv7l" ];then
+    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm32v7/g" .env .env.example
+    sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=stretch/g" .env .env.example
+    sed -i "s/^ARM_ALPINE_OS.*/ARM_ALPINE_OS=/g" .env .env.example
+elif [ ${ARCH} = "aarch64" ];then
+    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm64v8/g" .env .env.example
+    sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=alpine3.6/g" .env .env.example
+fi
 
 main $1 $2 $3 $4 $5 $6 $7 $8 $9
 

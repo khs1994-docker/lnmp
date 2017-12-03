@@ -1,4 +1,4 @@
-FROM arm32v7/php:7.2.0-fpm-jessie
+FROM arm32v7/php:7.2.0-fpm-stretch
 
 ENV TZ=Asia/Shanghai
 # cn
@@ -9,7 +9,7 @@ RUN set -xe \
 	      && buildDeps=" \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
-        libpng12-dev \
+        libpng-dev \
         libsasl2-dev \
         libssl-dev \
         libmemcached-dev \

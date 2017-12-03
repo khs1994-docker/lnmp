@@ -16,8 +16,6 @@
 
 每月更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
-最新的提交位于 [dev](https://github.com/khs1994-docker/lnmp/tree/dev) 分支。
-
 * [v17.11 2017-12-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.11)
 
 * ~~[v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10) **EOL**~~
@@ -85,7 +83,7 @@ $ docker-compose down
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)|`mysql:5.7.20`                   |[![GitHub release](https://img.shields.io/badge/release-v5.7.20-blue.svg)](https://github.com/docker-library/docs/tree/master/mysql)       |`Debian:jessie`|
 |[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.4-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)      |`Alpine:3.6`|
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.6`|
-|Laravel                                                  |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.6`|
+|[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.6`|
 |[Composer](https://github.com/docker-library/docs/tree/master/composer) |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)     |`Alpine:3.6`|
 |[Memcached](https://github.com/khs1994-docker/memcached) |`khs1994/memcached:1.5.3-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/memcached.svg)](https://github.com/khs1994-docker/memcached/releases)  |`Alpine:3.6`|
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.14-management-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.6`|
