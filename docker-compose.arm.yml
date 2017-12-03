@@ -113,7 +113,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/php-fpm/
     #   dockerfile: Dockerfile
     restart: always
-    image: "khs1994/${ARM_ARCH}-php-fpm:${KHS1994_LNMP_PHP_VERSION}-${ARM_PHP_OS}"
+    image: "khs1994/${ARM_ARCH}-php-fpm:${KHS1994_LNMP_PHP_VERSION}-${ARM_PHP_BASED_OS}"
     networks:
       - frontend
       - backend
