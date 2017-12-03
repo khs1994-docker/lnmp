@@ -28,7 +28,7 @@ services:
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
     restart: always
-    image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}${ARM_ALPINE_OS}"
+    image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}${ARM_BASED_OS}"
     env_file:
       - ./env/timezone.env
     networks:
