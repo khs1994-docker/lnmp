@@ -2,8 +2,12 @@ version: "3.4"
 services:
 
   # 至少三个节点
-  # docker stack deploy -c docker-compose.swarm.yml lnmp
-  # docker stack ps lnmp
+  # 在开发环境执行，推送准备部署的镜像
+  # $ docker-compose build nginx php7
+  # $ docker-compose push nginx php7
+  # 在集群执行
+  # $ docker stack deploy -c docker-stack.yml lnmp
+  # $ docker stack ps lnmp
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
