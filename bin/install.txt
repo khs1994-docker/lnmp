@@ -72,7 +72,7 @@ error(){
   exit 1
 }
 
-function clone(){
+clone(){
     clone_ssh $LNMP_PATH
     if [ $? = "0" ];then
       success
