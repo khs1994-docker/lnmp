@@ -3,6 +3,12 @@ Changelog
 
 #### v17.12-rc3
 
+Changes:
+* `./bin/install.txt` compatible `sh`
+* `./lnmp-docker.sh` compatible `sh`
+* Add `secrets` in `docker-compose.yml`
+* Add `secrets` `configs` in `docker-stack.yml`
+
 #### v17.12-rc2
 
 Changes:
