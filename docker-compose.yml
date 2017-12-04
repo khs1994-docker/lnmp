@@ -4,9 +4,10 @@ services:
   mysql:
     restart: always
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
-    env_file:
-      - ./env/mysql.env
-      - ./env/timezone.env
+    environment:
+      TZ: 'Asia/Shanghai'
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: test
     networks:
       - backend
     volumes:
@@ -17,6 +18,8 @@ services:
     command:
       - mysqld
       - --character-set-server=utf8mb4
+    secrets:
+      - db_root_password
 
   redis:
     restart: always
@@ -112,7 +115,8 @@ services:
   nginx:
     restart: always
     image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
-    env_file: ./env/timezone.env
+    env_file: 
+      - ./env/timezone.env
     ports:
       - "443:443"
       - target: 80
@@ -143,3 +147,7 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
+
+secrets:
+  db_root_password:
+    file: secrets/db_root_password.txt

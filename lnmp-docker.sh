@@ -572,6 +572,14 @@ main() {
     dockerfile-update
     ;;
 
+  swarm-build )
+    docker-compose -f docker-stack.yml build nginx php7
+  ;;
+
+  swarm-push )
+    docker-compose -f docker-stack.yml push nginx php7
+  ;;
+
   swarm )
     run_docker
     docker stack deploy \
@@ -586,6 +594,10 @@ main() {
 
   swarm-down )
     docker stack rm lnmp
+    ;;
+
+  swarm-create )
+
     ;;
 
   debug )
@@ -627,8 +639,11 @@ Commands:
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-push           Push Swarm image (nginx php7)
   swarm                Swarm mode
   swarm-down           Down Swarm mode
+  swarm-creat          Create Swarm powered by Docker Machine
 
 Container CLI:
   memcached-cli
