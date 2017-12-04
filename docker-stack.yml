@@ -107,5 +107,5 @@ secrets:
     file: secrets/db_root_password.txt
 
 configs:
-  mysqld_conf:
+  mysqld_cnf:
     file: ./config/mysql/mysql.conf.d/mysqld.cnf
