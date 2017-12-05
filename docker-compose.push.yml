@@ -10,8 +10,7 @@ services:
 
   php7:
     build:
-      context: ./dockerfile/php-fpm-alpine/
-      dockerfile: Dockerfile
+      context: ./dockerfile/php-fpm/
       # build 时的变量，相当于 Dockerfile 中的 ENV
       args:
         buildno: 1
@@ -25,23 +24,19 @@ services:
   memcached:
     build:
       context: ./dockerfile/memcached/
-      dockerfile: Dockerfile
     image: ${REGISTRY_URL_AND_USERNAME}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
 
   rabbitmq:
     build:
       context: ./dockerfile/rabbitmq/
-      dockerfile: Dockerfile
     image: ${REGISTRY_URL_AND_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
 
   postgresql:
     build:
       context: ./dockerfile/postgresql/
-      dockerfile: Dockerfile
     image: ${REGISTRY_URL_AND_USERNAME}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
 
   nginx:
     build:
       context: ./dockerfile/nginx/
-      dockerfile: Dockerfile
     image: "${REGISTRY_URL_AND_USERNAME}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"

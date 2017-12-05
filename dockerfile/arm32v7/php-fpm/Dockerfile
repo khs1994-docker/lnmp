@@ -14,14 +14,28 @@ RUN set -xe \
         libssl-dev \
         libmemcached-dev \
         libpq-dev \
-        zlib1g-dev \
+        libzip-dev \
 	" \
   && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
-    	   && docker-php-ext-install -j$(nproc) bcmath pdo_pgsql pdo_mysql zip \
-    	   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+	       && docker-php-ext-configure zip \
+				                             --with-libzip \
+				 && docker-php-ext-install -j$(nproc) zip \
+    	   && docker-php-ext-install -j$(nproc) bcmath \
+				                                      pdo_pgsql \
+																							pdo_mysql \
+																							opcache \
+    	   && docker-php-ext-configure gd \
+				                             --with-freetype-dir=/usr/include/ \
+																		 --with-jpeg-dir=/usr/include/ \
     	   && docker-php-ext-install -j$(nproc) gd \
-         && pecl install mongodb redis memcached https://pecl.php.net/get/xdebug-2.6.0alpha1.tgz \
-         && docker-php-ext-enable mongodb memcached redis xdebug
+         && pecl install mongodb \
+				                 redis \
+												 memcached \
+												 https://pecl.php.net/get/xdebug-2.6.0alpha1.tgz \
+         && docker-php-ext-enable mongodb \
+				                          memcached \
+																	redis \
+																	xdebug
 
 # install composer
 
@@ -42,20 +56,22 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
-    && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
-    && composer global require "laravel/installer" \
-    && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
-    && rm -rf /tmp/cache /tmp/.htaccess \
-		&& echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
-WORKDIR /var/log
-
-RUN mkdir php-fpm \
-		 && cd php-fpm \
-		 && touch access.log error.log xdebug-remote.log \
-		 && chmod -R 777 ../ \
-		 && sed -i 's/www-data/root/g' /usr/local/etc/php-fpm.d/www.conf \
-		 && sed -i 's/^error_log.*/error_log = \/var\/log\/php-fpm\/error.log/g' /usr/local/etc/php-fpm.d/docker.conf \
-		 && sed -i 's/^access.log.*/access.log = \/var\/log\/php-fpm\/access.log/g' /usr/local/etc/php-fpm.d/docker.conf
+ # composer 中国镜像
+ && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
+ # laravel 安装程序
+ && composer global require "laravel/installer" \
+ && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
+ && rm -rf /tmp/cache /tmp/.htaccess \
+ # 默认不启用 xdebug
+ && echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+ # 创建日志文件夹
+ && cd /var/log \
+ && mkdir php-fpm \
+ && cd php-fpm \
+ && touch access.log error.log xdebug-remote.log \
+ && chmod -R 777 ../ \
+ && sed -i 's/www-data/root/g' /usr/local/etc/php-fpm.d/www.conf \
+ && sed -i 's/^error_log.*/error_log = \/var\/log\/php-fpm\/error.log/g' /usr/local/etc/php-fpm.d/docker.conf \
+ && sed -i 's/^access.log.*/access.log = \/var\/log\/php-fpm\/access.log/g' /usr/local/etc/php-fpm.d/docker.conf
 
 WORKDIR /app

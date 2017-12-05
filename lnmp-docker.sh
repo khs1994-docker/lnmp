@@ -19,7 +19,6 @@ print_error(){
 env_status(){
   # .env.example to .env
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
-  if [ -f dockerfile/.env ];then print_info "dockerfile/.env existing\n"; else print_error "dockerfile/.env NOT existing\n"; cp dockerfile/.env.example dockerfile/.env ; fi
 }
 
 run_docker(){
@@ -49,10 +48,8 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 if [ ${OS} = "Darwin" ];then
   # 将以什么开头的行替换为新内容
   sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-  sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" dockerfile/.env
 else
   sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-  sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" dockerfile/.env
 fi
 
 # 不支持信息
@@ -124,27 +121,27 @@ dockerfile_update(){
   case $SOFT in
     memcached )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     nginx )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     php-fpm )
       dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.6" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     postgresql )
       dockerfile_update_sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
-      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     rabbitmq )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     redis )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     * )
       print_error "Soft is not existing"
@@ -527,23 +524,13 @@ main() {
   push )
     run_docker
     init
-    cd dockerfile
-    docker-compose \
-      -f docker-compose.yml \
-      -f docker-compose.push.yml \
-      build \
-    && docker-compose \
-      -f docker-compose.yml \
-      -f docker-compose.push.yml \
-      push
+    docker-compose -f docker-compose.push.yml build \
+    && docker-compose -f docker-compose.push.yml push
     ;;
 
   push-config )
     init
-    docker-compose \
-      -f docker-compose.yml \
-      -f docker-compose.push.yml \
-      config \
+    docker-compose -f docker-compose.push.yml config \
     ;;
 
   php )
@@ -589,9 +576,7 @@ main() {
 
   swarm )
     run_docker
-    docker stack deploy \
-      -c docker-stack.yml \
-      lnmp
+    docker stack deploy -c docker-stack.yml lnmp
     if [ $? -eq 0 ];then
       docker stack ps lnmp
     else
