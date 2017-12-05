@@ -222,12 +222,6 @@ install_docker_compose(){
   echo
 }
 
-# 创建示例数据库
-
-mysql_demo() {
-  docker-compose exec mysql /backup/demo.sh
-}
-
 # 克隆示例项目、nginx 配置文件
 
 demo() {
@@ -473,11 +467,6 @@ main() {
     restore $2
     ;;
 
-  mysql-demo )
-    run_docker
-    mysql_demo
-    ;;
-
   update )
     update
     ;;
@@ -625,7 +614,6 @@ Commands:
   help                 Display this help message
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
-  mysql-demo           Create MySQL test database
   php                  Run PHP in CLI
   production           Use LNMP in Production(Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
@@ -633,9 +621,8 @@ Commands:
   restore              Restore MySQL databases
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
-  swarm                Swarm mode
-  swarm-down           Down Swarm mode
-  swarm-creat          Create Swarm powered by Docker Machine
+  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-down           Remove LNMP stack IN Swarm mode
 
 Container CLI:
   memcached-cli
