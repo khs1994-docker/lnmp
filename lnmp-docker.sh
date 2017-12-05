@@ -169,14 +169,21 @@ install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
+    DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
+    # 但是要判断版本是不是最新的
     if [ ${OS} = Linux ];then
-      DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
         print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
         if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
         install_docker_compose
         i=$(($i+1))
         if [ "$i" -eq 2 ];then exit 1; fi
+      else
+        print_info "`docker-compose --version` already installed Correct version"
+      fi
+    elif [ ${OS} = Darwin ];then
+      if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
+        print_error "`docker-compose --version` NOT installed Correct version,please update you Docker for Mac to latest Edge version"
       else
         print_info "`docker-compose --version` already installed Correct version"
       fi
