@@ -1,6 +1,13 @@
 Changelog
 ==============
 
+#### v17.12-rc4
+
+Bug fixes:
+* Fix error in `./lnmp-docker.sh`
+Updates:
+* `php-fpm` Dockerfiles
+
 #### v17.12-rc3
 
 Changes:

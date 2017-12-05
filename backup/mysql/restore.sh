@@ -6,5 +6,5 @@ if [ ! -n "$1" ] ;then
   echo `ls *.sql`
 else
   FILE_NAME=$1
-  mysql -uroot -p${MYSQL_ROOT_PASSWORD} < /backup/${FILE_NAME}
+  mysql -uroot -p"$(< /run/secrets/db_root_password)" < /backup/${FILE_NAME}
 fi

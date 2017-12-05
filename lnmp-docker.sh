@@ -19,7 +19,6 @@ print_error(){
 env_status(){
   # .env.example to .env
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
-  if [ -f dockerfile/.env ];then print_info "dockerfile/.env existing\n"; else print_error "dockerfile/.env NOT existing\n"; cp dockerfile/.env.example dockerfile/.env ; fi
 }
 
 run_docker(){
@@ -49,10 +48,8 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 if [ ${OS} = "Darwin" ];then
   # 将以什么开头的行替换为新内容
   sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-  sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" dockerfile/.env
 else
   sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-  sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" dockerfile/.env
 fi
 
 # 不支持信息
@@ -124,27 +121,27 @@ dockerfile_update(){
   case $SOFT in
     memcached )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     nginx )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     php-fpm )
       dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.6" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     postgresql )
       dockerfile_update_sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
-      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     rabbitmq )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     redis )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
+      sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     * )
       print_error "Soft is not existing"
@@ -169,14 +166,21 @@ install_docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
+    DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
+    # 但是要判断版本是不是最新的
     if [ ${OS} = Linux ];then
-      DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
         print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
         if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
         install_docker_compose
         i=$(($i+1))
         if [ "$i" -eq 2 ];then exit 1; fi
+      else
+        print_info "`docker-compose --version` already installed Correct version"
+      fi
+    elif [ ${OS} = Darwin ];then
+      if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
+        print_error "`docker-compose --version` NOT installed Correct version,please update you Docker for Mac to latest Edge version"
       else
         print_info "`docker-compose --version` already installed Correct version"
       fi
@@ -216,12 +220,6 @@ install_docker_compose(){
     fi
   fi
   echo
-}
-
-# 创建示例数据库
-
-mysql_demo() {
-  docker-compose exec mysql /backup/demo.sh
 }
 
 # 克隆示例项目、nginx 配置文件
@@ -469,11 +467,6 @@ main() {
     restore $2
     ;;
 
-  mysql-demo )
-    run_docker
-    mysql_demo
-    ;;
-
   update )
     update
     ;;
@@ -520,23 +513,13 @@ main() {
   push )
     run_docker
     init
-    cd dockerfile
-    docker-compose \
-      -f docker-compose.yml \
-      -f docker-compose.push.yml \
-      build \
-    && docker-compose \
-      -f docker-compose.yml \
-      -f docker-compose.push.yml \
-      push
+    docker-compose -f docker-compose.push.yml build \
+    && docker-compose -f docker-compose.push.yml push
     ;;
 
   push-config )
     init
-    docker-compose \
-      -f docker-compose.yml \
-      -f docker-compose.push.yml \
-      config \
+    docker-compose -f docker-compose.push.yml config \
     ;;
 
   php )
@@ -582,9 +565,7 @@ main() {
 
   swarm )
     run_docker
-    docker stack deploy \
-      -c docker-stack.yml \
-      lnmp
+    docker stack deploy -c docker-stack.yml lnmp
     if [ $? -eq 0 ];then
       docker stack ps lnmp
     else
@@ -633,7 +614,6 @@ Commands:
   help                 Display this help message
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
-  mysql-demo           Create MySQL test database
   php                  Run PHP in CLI
   production           Use LNMP in Production(Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
@@ -641,9 +621,8 @@ Commands:
   restore              Restore MySQL databases
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
-  swarm                Swarm mode
-  swarm-down           Down Swarm mode
-  swarm-creat          Create Swarm powered by Docker Machine
+  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-down           Remove LNMP stack IN Swarm mode
 
 Container CLI:
   memcached-cli

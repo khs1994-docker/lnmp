@@ -7,5 +7,5 @@ database [tables]
 --all-databases [OPTIONS]
 "
 else
-  mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} "$@" > /backup/"$(date "+%Y%m%d-%H.%M")".sql
+  mysqldump -uroot -p"$(< /run/secrets/db_root_password)" "$@" > /backup/"$(date "+%Y%m%d-%H.%M")".sql
 fi
