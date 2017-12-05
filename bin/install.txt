@@ -30,6 +30,11 @@ clone_https(){
   echo "Your Branch is ${BRANCH}"
   echo "Clone by SSH way is failure, try HTTPS way"
   git clone --recursive -b ${BRANCH} ${LNMP_GIT_HTTPS_URL} $1 && (cd $1 ; git remote -v ; git branch -a)
+  cd $1
+  # . /etc/os-release
+  which bash 2>&1 >/dev/null
+  if [ $? != 0 ];then sed -i "s/bin\/bash/bin\/sh/g" lnmp-docker.sh; fi
+  # if [ $ID = "boot2docker" ];then sed -i "s/bin\/bash/bin\/sh/g" lnmp-docker.sh; fi
 }
 
 wget_git(){
@@ -72,7 +77,7 @@ error(){
   exit 1
 }
 
-function clone(){
+clone(){
     clone_ssh $LNMP_PATH
     if [ $? = "0" ];then
       success

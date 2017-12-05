@@ -1,4 +1,4 @@
-FROM khs1994/php-fpm:7.1.11-alpine3.4
+FROM khs1994/php-fpm:7.2.0-alpine3.6
 
 RUN cd / \
       rm -rf /app \

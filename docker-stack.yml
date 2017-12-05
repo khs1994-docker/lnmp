@@ -2,8 +2,12 @@ version: "3.4"
 services:
 
   # 至少三个节点
-  # docker stack deploy -c docker-compose.swarm.yml lnmp
-  # docker stack ps lnmp
+  # 在开发环境执行，推送准备部署的镜像
+  # $ docker-compose -f docker-stack.yml build nginx php7
+  # $ docker-compose -f docker-stack.yml push nginx php7
+  # 在集群执行
+  # $ docker stack deploy -c docker-stack.yml lnmp
+  # $ docker stack ps lnmp
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
@@ -19,13 +23,14 @@ services:
     image: "mysql:5.7.20"
     env_file:
       - ./env/timezone.env
-      - ./env/mysql.env
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
+      MYSQL_DATABASE: test
     networks:
       - backend
     ports:
       - "3306:3306"
     volumes:
-      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
@@ -34,6 +39,16 @@ services:
       placement:
         # 在管理节点运行
         constraints: [node.role == manager]
+    secrets:
+      - source: db_root_password
+        target: /etc/db_root_password
+    configs:
+      - source: mysqld_cnf
+        target: /etc/mysql/mysql.conf.d/mysqld.cnf
+        # uid: '103'
+        # gid: '103'
+        # mode: 0440
+
 
   redis:
     image: "khs1994/redis:4.0.2-alpine"
@@ -48,7 +63,8 @@ services:
       replicas: 2
 
   php7:
-    image: "khs1994/php-fpm:swarm-7.1.11-alpine3.6"
+    build: dockerfile/swarm/php-fpm
+    image: "khs1994/php-fpm:swarm-7.2.0-alpine3.6"
     # container_name: khs1994-docker-lnmp-php-fpm
     # volumes:
     #   - ./logs/php-fpm:/var/log/php-fpm:rw
@@ -64,7 +80,8 @@ services:
       replicas: 2
 
   nginx:
-    image: "khs1994/nginx:swarm-1.13.6-alpine"
+    build: dockerfile/swarm/nginx
+    image: "khs1994/nginx:swarm-1.13.7-alpine"
     env_file: ./env/timezone.env
     ports:
       - "443:443"
@@ -88,3 +105,11 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
+
+secrets:
+  db_root_password:
+    file: secrets/db_root_password.txt
+
+configs:
+  mysqld_cnf:
+    file: ./config/mysql/mysql.conf.d/mysqld.cnf

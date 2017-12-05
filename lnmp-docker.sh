@@ -112,38 +112,38 @@ gitbook(){
   exit 0
 }
 
-dockerfile-update-sed(){
+dockerfile_update_sed(){
   sed -i '' 's/^FROM.*/'"${2}"'/g' dockerfile/$1/Dockerfile
   sed -i '' 's/^TAG.*/TAG='"${3}"'/g' dockerfile/$1/.env
   git diff
 }
 
-dockerfile-update(){
+dockerfile_update(){
   read -p "Soft is: " SOFT
   read -p "Version is: " VERSION
   case $SOFT in
     memcached )
-      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
+      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     nginx )
-      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
+      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     php-fpm )
-      dockerfile-update-sed $SOFT "FROM php:$VERSION-fpm-alpine3.6" $VERSION
+      dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.6" $VERSION
       sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     postgresql )
-      dockerfile-update-sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
+      dockerfile_update_sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
       sed -i '' 's/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     rabbitmq )
-      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
+      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     redis )
-      dockerfile-update-sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
+      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' 's/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION='"${VERSION}"'/g' .env.example dockerfile/.env dockerfile/.env.example .env
     ;;
     * )
@@ -569,8 +569,16 @@ main() {
     ;;
 
   dockerfile-update )
-    dockerfile-update
+    dockerfile_update
     ;;
+
+  swarm-build )
+    docker-compose -f docker-stack.yml build nginx php7
+  ;;
+
+  swarm-push )
+    docker-compose -f docker-stack.yml push nginx php7
+  ;;
 
   swarm )
     run_docker
@@ -586,6 +594,10 @@ main() {
 
   swarm-down )
     docker stack rm lnmp
+    ;;
+
+  swarm-create )
+
     ;;
 
   debug )
@@ -627,8 +639,11 @@ Commands:
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-push           Push Swarm image (nginx php7)
   swarm                Swarm mode
   swarm-down           Down Swarm mode
+  swarm-creat          Create Swarm powered by Docker Machine
 
 Container CLI:
   memcached-cli

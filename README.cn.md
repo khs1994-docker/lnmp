@@ -81,7 +81,7 @@ $ docker-compose down
 |:-- |:--         |:--    |:--  |
 |[NGINX](https://github.com/khs1994-docker/nginx)         |`khs1994/nginx:1.13.7-alpine`    |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/nginx.svg)](https://github.com/khs1994-docker/nginx/releases)      |`Alpine:3.5`|
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)|`mysql:5.7.20`                   |[![GitHub release](https://img.shields.io/badge/release-v5.7.20-blue.svg)](https://github.com/docker-library/docs/tree/master/mysql)       |`Debian:jessie`|
-|[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.5-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)      |`Alpine:3.6`|
+|[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.6-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)      |`Alpine:3.6`|
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.6`|
 |[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.6`|
 |[Composer](https://github.com/docker-library/docs/tree/master/composer) |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)     |`Alpine:3.6`|
@@ -131,6 +131,10 @@ $ docker-compose down
 # CI/CD
 
 请使用 [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
+
+# Docker Daemon TLS
+
+请查看 [khs1994-docker/dockerd-tls](https://github.com/khs1994-docker/dockerd-tls)
 
 # 贡献项目
 
