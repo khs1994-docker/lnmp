@@ -8,6 +8,8 @@ Changes:
 * `./lnmp-docker.sh` compatible `sh`
 * Add `secrets` in `docker-compose.yml`
 * Add `secrets` `configs` in `docker-stack.yml`
+Updates:
+* `Redis` 4.0.6
 
 #### v17.12-rc2
 
