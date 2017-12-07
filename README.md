@@ -130,8 +130,6 @@ Open your Browers `127.0.0.1:8080`.
 
 ## [khs1994.com](//khs1994.com)
 
-## [xc725.wang](//xc725.wang)
-
 # CI/CD
 
 Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)

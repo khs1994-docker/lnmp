@@ -133,8 +133,6 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 ## [khs1994.com](//khs1994.com)
 
-## [xc725.wang](//xc725.wang)
-
 # 项目国内镜像
 
 * TGit：https://git.qcloud.com/khs1994-docker/lnmp.git
