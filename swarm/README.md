@@ -10,11 +10,11 @@
 
 构建镜像（镜像中包含 PHP 项目文件）
 
+在 `./dockerfile` 目录下的 `nginx` `php-fpm` 子目录中修改 `Dockerfile.swarm` 文件。
+
+在 `./swarm` 目录下执行
+
 ```bash
-# 在 ../dockerfile/* 编写 Dockerfile.swarm
-
-# 在当前目录执行
-
 $ docker-compose build
 
 $ docker-compose push

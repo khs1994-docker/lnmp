@@ -22,3 +22,5 @@
 * [备份恢复](backup.md)
 * [清理](cleanup.md)
 * [国内网络问题](cn.md)
+* 实验玩法
+  * [LinuxKit](linuxkit.md)

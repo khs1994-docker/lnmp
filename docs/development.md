@@ -2,9 +2,9 @@
 
 ## 开发过程
 
-修改需要启用的软件 `docker-compose.yml`。
+在 `docker-compose.yml` 修改需要启用的软件。
 
-修改镜像前缀、PHP 项目路径 `.env`。
+在 `.env` 修改镜像前缀、PHP 项目路径。
 
 在 `./config/nginx/` 参考示例配置，新建 nginx 配置文件。
 
@@ -26,9 +26,7 @@ $ ./lnmp-docker.sh php blog index.php
 
 ## 构建镜像
 
-在 `./dockerfile/` 下修改 `dockerfile` 文件
-
-之后运行如下命令：
+在 `./dockerfile/` 下修改各个软件 `dockerfile` 文件，之后运行如下命令：
 
 ```bash
 $ ./lnmp-docker.sh devlopment-build

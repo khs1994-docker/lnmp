@@ -1,4 +1,8 @@
-# LinuxKit Run LNMP
+# 使用 LinuxKit 运行 LNMP
+
+实验性支持
+
+>目前暂不支持 MySQL
 
 编写 PHP 项目源代码
 
@@ -21,5 +25,3 @@ $ linuxkit build lnmp.yml
 
 $ linuxkit run -publish 8080:80/tcp lnmp
 ```
-
-* https://github.com/linuxkit/linuxkit
