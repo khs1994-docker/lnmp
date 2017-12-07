@@ -23,13 +23,15 @@ echo "Welcome use khs1994-docker/lnmp"
 clone_ssh(){
   echo "Your Branch is ${BRANCH}"
   echo "Clone by SSH way"
-  git clone --recursive -b ${BRANCH} ${LNMP_GIT_SSH_URL} $1 && (cd $1 ; git remote -v ; git branch -a)
+  git clone --recursive -b ${BRANCH} ${LNMP_GIT_SSH_URL} $1 \
+    && (cd $1 ; git remote add lnmp ${LNMP_GIT_SSH_URL} ; git remote -v ; git branch -a)
 }
 
 clone_https(){
   echo "Your Branch is ${BRANCH}"
   echo "Clone by SSH way is failure, try HTTPS way"
-  git clone --recursive -b ${BRANCH} ${LNMP_GIT_HTTPS_URL} $1 && (cd $1 ; git remote -v ; git branch -a)
+  git clone --recursive -b ${BRANCH} ${LNMP_GIT_HTTPS_URL} $1 \
+    && (cd $1 ; git remote add lnmp ${LNMP_GIT_HTTPS_URL} ; git remote -v ; git branch -a)
   cd $1
   # . /etc/os-release
   which bash 2>&1 >/dev/null
