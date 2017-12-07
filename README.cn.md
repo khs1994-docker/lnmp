@@ -120,6 +120,8 @@ $ docker-compose down
 ```bash
 # OS: macOS
 
+$ cd linuxkit
+
 $ linuxkit build lnmp.yml
 
 $ linuxkit run -publish 8080:80/tcp lnmp

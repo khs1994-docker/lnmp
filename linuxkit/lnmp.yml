@@ -70,7 +70,7 @@ files:
   - path: etc/linuxkit-config
     metadata: yaml
   - path: /etc/nginx/conf.d/linuxkit.conf
-    source: ./config/nginx/linuxkit.conf
+    source: ../config/nginx/linuxkit.conf
   - path: /app/demo/index.php
     contents: |
       <?php

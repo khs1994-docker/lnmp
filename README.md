@@ -117,6 +117,8 @@ Start `Containers as a Service(CaaS)`. For more information, see [Documents](doc
 ```bash
 # OS: macOS
 
+$ cd linuxkit
+
 $ linuxkit build lnmp.yml
 
 $ linuxkit run -publish 8080:80/tcp lnmp
