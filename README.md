@@ -112,6 +112,18 @@ Easy to access Laravel, Laravel artisan, composer, PHP-CLI, etc. Please use [`./
 
 Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/production/README.md).
 
+# LinuxKit
+
+```bash
+# OS: macOS
+
+$ linuxkit build lnmp.yml
+
+$ linuxkit run -publish 8080:80/tcp lnmp
+```
+
+Open your Browers `127.0.0.1:8080`.
+
 # Who use in Production?
 
 ## [khs1994.com](//khs1994.com)

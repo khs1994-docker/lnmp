@@ -115,6 +115,18 @@ $ docker-compose down
 
 马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)。
 
+# LinuxKit (实验性玩法)
+
+```bash
+# OS: macOS
+
+$ linuxkit build lnmp.yml
+
+$ linuxkit run -publish 8080:80/tcp lnmp
+```
+
+浏览器打开 `127.0.0.1:8080`，即可看到网页
+
 # 生产环境用户
 
 ## [khs1994.com](//khs1994.com)
