@@ -1,6 +1,11 @@
 Changelog
 ==============
 
+#### v17.12-rc5
+
+Changes:
+* Add `LinuxKit`
+
 #### v17.12-rc4
 
 Bug fixes:

@@ -7,3 +7,7 @@ docker-compose-Linux-x86_64
 .env
 .env.backup
 !env/.env
+lnmp-cmdline
+lnmp-kernel
+lnmp-state
+*.img

@@ -63,7 +63,6 @@ services:
       replicas: 2
 
   php7:
-    build: dockerfile/swarm/php-fpm
     image: "khs1994/php-fpm:swarm-7.2.0-alpine3.6"
     # container_name: khs1994-docker-lnmp-php-fpm
     # volumes:
@@ -80,7 +79,6 @@ services:
       replicas: 2
 
   nginx:
-    build: dockerfile/swarm/nginx
     image: "khs1994/nginx:swarm-1.13.7-alpine"
     env_file: ./env/timezone.env
     ports:
