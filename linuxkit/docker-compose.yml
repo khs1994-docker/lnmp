@@ -1,0 +1,13 @@
+version: "3.4"
+services:
+  php7:
+    build:
+      context: ../dockerfile/php-fpm
+      dockerfile: Dockerfile.linuxkit
+    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.6
+
+  nginx:
+    build:
+      context: ../dockerfile/nginx
+      dockerfile: Dockerfile.swarm
+    image: khs1994/nginx:linuxkit-1.13.7-alpine
