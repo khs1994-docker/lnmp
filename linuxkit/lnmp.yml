@@ -23,17 +23,43 @@ services:
      - INSECURE=true
   - name: rngd
     image: linuxkit/rngd:842e5e8ece7934f0cab9fd0027b595ff3471e5b9
-  - name: php7
-    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.6
-    capabilities:
-     - CAP_NET_BIND_SERVICE
-     - CAP_CHOWN
-     - CAP_SETUID
-     - CAP_SETGID
-     - CAP_DAC_OVERRIDE
-    command: ["php-fpm", "-R"]
+  # - name: php7
+  #   image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.6
+  #   capabilities:
+  #    - CAP_NET_BIND_SERVICE
+  #    - CAP_CHOWN
+  #    - CAP_SETUID
+  #    - CAP_SETGID
+  #    - CAP_DAC_OVERRIDE
+  #   command: ["php-fpm", "-R"]
+  # - name: mysql
+  #   image: mysql:5.7.20
+  #   env:
+  #    - TZ=Asia/Shanghai
+  #    - MYSQL_ROOT_PASSWORD=mytest
+  #    - MYSQL_DATABASE=test
+  #   capabilities:
+  #    - CAP_NET_BIND_SERVICE
+  #    - CAP_CHOWN
+  #    - CAP_SETUID
+  #    - CAP_SETGID
+  #    - CAP_DAC_OVERRIDE
+  #   command: ["mysqld", "--character-set-server=utf8mb4"]
+  #   net: host
+  # - name: redis
+  #   image: khs1994/redis:4.0.6-alpine
+  #   capabilities:
+  #    - CAP_NET_BIND_SERVICE
+  #    - CAP_CHOWN
+  #    - CAP_SETUID
+  #    - CAP_SETGID
+  #    - CAP_DAC_OVERRIDE
+  #   # command: ["redis-server", "/redis.conf"]
+  #   net: host
   - name: nginx
     image: khs1994/nginx:linuxkit-1.13.7-alpine
+    # env:
+    #  - TZ=Asia/Shanghai
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
@@ -42,6 +68,7 @@ services:
      - CAP_DAC_OVERRIDE
     binds:
      - /etc/resolv.conf:/etc/resolv.conf
+    net: host
 # 只能挂载单个文件
 files:
   - path: etc/containerd/config.toml
@@ -62,6 +89,8 @@ files:
       address = ":13337"
   - path: etc/linuxkit-config
     metadata: yaml
+  # - path: etc/logs/nginx
+  #   directory: true
   # - path: /etc/nginx/conf.d/linuxkit.conf
   #   source: ./config/nginx/conf.d/linuxkit.conf
   # - path: /app/demo/index.php

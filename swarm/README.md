@@ -4,6 +4,12 @@
 
 编写 PHP 项目源代码
 
+本地测试
+
+推送到 GitHub
+
+构建镜像（镜像中包含 PHP 项目文件）
+
 ```bash
 # 在 ../dockerfile/* 编写 Dockerfile.swarm
 

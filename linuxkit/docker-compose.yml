@@ -9,5 +9,5 @@ services:
   nginx:
     build:
       context: ../dockerfile/nginx
-      dockerfile: Dockerfile.swarm
+      dockerfile: Dockerfile.linuxkit
     image: khs1994/nginx:linuxkit-1.13.7-alpine
