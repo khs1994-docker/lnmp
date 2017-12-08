@@ -3,6 +3,9 @@ Changelog
 
 #### v17.12-rc6
 
+Updates:
+* `MongoDB` 3.6.0
+
 #### v17.12-rc5
 
 Changes:
