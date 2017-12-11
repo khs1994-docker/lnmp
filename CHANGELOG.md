@@ -13,10 +13,12 @@ Changes:
 
 #### v17.12-rc4
 
-Bug fixes:
+Bug fixes:  
 * Fix error in `./lnmp-docker.sh`
+
 Changes:
 * Add PHP extension `opcache`
+
 Updates:
 * `php-fpm` Dockerfiles
 
@@ -27,6 +29,7 @@ Changes:
 * `./lnmp-docker.sh` compatible `sh`
 * Add `secrets` in `docker-compose.yml`
 * Add `secrets` `configs` in `docker-stack.yml`
+
 Updates:
 * `Redis` 4.0.6
 
