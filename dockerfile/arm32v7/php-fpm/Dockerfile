@@ -31,7 +31,7 @@ RUN set -xe \
          && pecl install mongodb \
 				                 redis \
 												 memcached \
-												 https://pecl.php.net/get/xdebug-2.6.0alpha1.tgz \
+												 xdebug-beta \
          && docker-php-ext-enable mongodb \
 				                          memcached \
 																	redis \
@@ -63,7 +63,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
  && rm -rf /tmp/cache /tmp/.htaccess \
  # 默认不启用 xdebug
- && echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+ && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
  # 创建日志文件夹
  && cd /var/log \
  && mkdir php-fpm \
