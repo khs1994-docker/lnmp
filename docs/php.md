@@ -10,6 +10,7 @@
 * pdo_pgsql
 * [zip](https://pecl.php.net/package/zip)
 * bcmath
+* opcache
 * 更多扩展请通过 `phpinfo();` 查看
 * 如果你需要增加其他扩展，请到这里反馈：https://github.com/khs1994-docker/lnmp/issues/63
 

@@ -15,6 +15,8 @@ Changes:
 
 Bug fixes:
 * Fix error in `./lnmp-docker.sh`
+Changes:
+* Add PHP extension `opcache`
 Updates:
 * `php-fpm` Dockerfiles
 
