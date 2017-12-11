@@ -5,7 +5,10 @@
 Start LNMP within 2 minutes powered by Docker Compose.
 
 * [中文说明](README.cn.md)
+
 * [Documents](docs/)
+
+* [Asciinema](https://asciinema.org/a/152107)
 
 NOT Support Windows!
 

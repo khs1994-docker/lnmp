@@ -8,6 +8,8 @@
 
 * [支持文档](docs)
 
+* [项目演示](https://asciinema.org/a/152107)
+
 不支持 Windows！
 
 本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `arm` 架构的 Debian(树莓派)。
