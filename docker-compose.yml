@@ -115,7 +115,7 @@ services:
   nginx:
     restart: always
     image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
-    env_file: 
+    env_file:
       - ./env/timezone.env
     ports:
       - "443:443"

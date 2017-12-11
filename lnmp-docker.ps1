@@ -43,6 +43,7 @@ Function logs(){
 Function init(){
   docker-compose --version
   logs
+  git submodule update --init --recursive
   Write-Host "Init is SUCCESS"
 }
 
@@ -62,7 +63,6 @@ down                 Stop and remove LNMP Docker containers, networks, images, a
 help                 Display this help message
 laravel              Create a new Laravel application
 laravel-artisan      Use Laravel CLI artisan
-mysql-demo           Create MySQL test database
 php                  Run PHP in CLI
 push                 Build and Pushes images to Docker Registory v2
 restore              Restore MySQL databases
