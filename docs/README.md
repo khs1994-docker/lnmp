@@ -10,7 +10,7 @@
 
 或在命令行执行 `./lnmp-docker.sh docs` 在本地阅读。
 
-## More Information
+# More Information
 
 * [Docker CE 安装教程](https://www.khs1994.com/docker/README.html)
-* [docker-compose 安装教程](https://www.khs1994.com/docker/docker_compose.html)
+* [docker-compose 安装教程](https://www.khs1994.com/docker/compose.html)

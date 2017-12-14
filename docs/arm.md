@@ -16,7 +16,7 @@ $ ./lnmp-docker.sh development
 |[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[pi 64](https://github.com/bamarni/pi64)|arm64|
 |[armhf Docker image](https://hub.docker.com/u/armhf/)    |已经废弃，已经转移到了上述两个项目中|-|
 
-## More Information
+# More Information
 
 * [树莓派3 安装 Docker](https://www.khs1994.com/raspberry-pi3/docker.html)
 

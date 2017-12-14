@@ -413,7 +413,7 @@ main() {
     fi
     ;;
 
-  development-build )
+  build )
     run_docker
     init
     if [ ${ARCH} = "x86_64" ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi
@@ -440,7 +440,7 @@ main() {
           config
     ;;
 
-  development-config )
+  build-config )
     init
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
@@ -607,11 +607,11 @@ Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
   backup               Backup MySQL databases
+  build                Use LNMP With Build images(Support x86_64)
+  build-config         Validate and view the build images Compose file
   cleanup              Cleanup log files
   composer             Use PHP Package Management composer
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
-  development-config   Validate and view the Development(with build images)Compose file
-  development-build    Use LNMP in Development With Build images(Support x86_64)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
   help                 Display this help message
@@ -670,9 +670,9 @@ if [ $? -ne 0 ];then
   print_error "\nError occurred, try Rebuild environment! please open issue in https://github.com/khs1994-docker/lnmp/issues/new"
   echo
   # 重新生成 .env
-  mv .env .env.backup
-  rm -rf .env
-  cp .env.example .env
+  # mv .env .env.backup
+  # rm -rf .env
+  # cp .env.example .env
   # 更新项目
   # main update
   print_info "Please exec"
