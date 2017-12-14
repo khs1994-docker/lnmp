@@ -180,7 +180,7 @@ install_docker_compose(){
       fi
     elif [ ${OS} = Darwin ];then
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        print_error "`docker-compose --version` NOT installed Correct version,please update you Docker for Mac to latest Edge version"
+        print_error "`docker-compose --version` NOT installed Correct version, please update you Docker for Mac to latest Edge version"
       else
         print_info "`docker-compose --version` already installed Correct version"
       fi
