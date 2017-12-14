@@ -513,13 +513,8 @@ main() {
   push )
     run_docker
     init
-    docker-compose -f docker-compose.push.yml build \
-    && docker-compose -f docker-compose.push.yml push
-    ;;
-
-  push-config )
-    init
-    docker-compose -f docker-compose.push.yml config \
+    docker-compose -f docker-compose.build.yml build \
+    && docker-compose -f docker-compose.build.yml push
     ;;
 
   php )
