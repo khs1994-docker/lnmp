@@ -20,14 +20,14 @@ ARCH=`uname -m`
 
 if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
   DOCKER_IMAGE=khs1994/arm64v8-php-fpm
-  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.6
+  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
   if [ ${ARCH} = "armv7l" ];then
     DOCKER_IMAGE=khs1994/arm32v7-php-fpm
     TAG=${KHS1994_LNMP_PHP_VERSION}-stretch
   fi
 elif [ ${ARCH} = "x86_64" ];then
   DOCKER_IMAGE=khs1994/php-fpm
-  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.6
+  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
 else
   echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
   error

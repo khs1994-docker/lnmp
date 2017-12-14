@@ -95,7 +95,7 @@ services:
 
   php7:
     restart: always
-    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}php:${KHS1994_LNMP_PHP_VERSION}-alpine3.6"
+    image: "${DEVELOPMENT_DOCKER_IMAGE_WITH_BUILD_PREFIX}php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro

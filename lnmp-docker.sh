@@ -128,7 +128,7 @@ dockerfile_update(){
       sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     php-fpm )
-      dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.6" $VERSION
+      dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.7" $VERSION
       sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env
     ;;
     postgresql )
@@ -526,7 +526,7 @@ main() {
     run_docker
     if [ $ARCH = "x86_64" ];then
       PHP_CLI_DOCKER_IMAGE=php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.6
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
     elif [ $ARCH = "armv7l" ];then
       PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
@@ -658,7 +658,7 @@ if [ ${ARCH} = "armv7l" ];then
     sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=/g" .env
 elif [ ${ARCH} = "aarch64" ];then
     sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm64v8/g" .env
-    sed -i "s/^ARM_PHP_BASED_OS.*/ARM_PHP_BASED_OS=alpine3.6/g" .env
+    sed -i "s/^ARM_PHP_BASED_OS.*/ARM_PHP_BASED_OS=alpine3.7/g" .env
 fi
 
 main $1 $2 $3 $4 $5 $6 $7 $8 $9

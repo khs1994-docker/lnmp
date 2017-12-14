@@ -3,6 +3,9 @@ Changelog
 
 #### v17.12-rc6
 
+Changes:
+* `php-fpm` based alpine 3.7
+
 Updates:
 * `MongoDB` 3.6.0
 

@@ -4,7 +4,7 @@ services:
     build:
       context: ../dockerfile/php-fpm
       dockerfile: Dockerfile.linuxkit
-    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.6
+    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.7
 
   nginx:
     build:

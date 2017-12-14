@@ -24,7 +24,7 @@ services:
   - name: rngd
     image: linuxkit/rngd:842e5e8ece7934f0cab9fd0027b595ff3471e5b9
   - name: php7
-    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.6
+    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.7
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
@@ -32,7 +32,7 @@ services:
      - CAP_SETGID
      - CAP_DAC_OVERRIDE
     command: ["php-fpm", "-R"]
-  # 暂时不支持 MySQL  
+  # 暂时不支持 MySQL
   # - name: mysql
   #   image: mysql:5.7.20
   #   env:
