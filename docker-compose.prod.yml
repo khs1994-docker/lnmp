@@ -19,6 +19,21 @@ services:
   #
   # postgresql:
   #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #
+  #
+  # 生产环境默认不启用 phpmyadmin
+  #
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   networks:
+  #     - backend
+  #   environment:
+  #     - PMA_HOST=mysql
+  #   ports:
+  #     - 8080:80
+  #   restart: always
+  #   volumes:
+  #     - phpmyadmin-data:/sessions
 
   php7:
     image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7

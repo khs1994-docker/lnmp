@@ -23,7 +23,7 @@ services:
 
   redis:
     restart: always
-    image: "${REGISTRY_URL_AND_USERNAME}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./env/timezone.env
     # ports:
     #   - "6379"
@@ -46,7 +46,7 @@ services:
 
   # memcached:
   #   restart: always
-  #   image: ${REGISTRY_URL_AND_USERNAME}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
   #   env_file: ./env/timezone.env
@@ -55,7 +55,7 @@ services:
   #
   # rabbitmq:
   #   restart: always
-  #   image: ${REGISTRY_URL_AND_USERNAME}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
@@ -67,7 +67,7 @@ services:
   #
   # postgresql:
   #    restart: always
-  #   image: ${REGISTRY_URL_AND_USERNAME}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   env_file:
   #     - ./env/postgresql.env
   #     - ./env/timezone.env
@@ -95,7 +95,7 @@ services:
 
   php7:
     restart: always
-    image: "${REGISTRY_URL_AND_USERNAME}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
+    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
@@ -114,7 +114,7 @@ services:
 
   nginx:
     restart: always
-    image: "${REGISTRY_URL_AND_USERNAME}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file:
       - ./env/timezone.env
     ports:

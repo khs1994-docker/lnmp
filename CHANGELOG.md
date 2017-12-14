@@ -3,6 +3,9 @@ Changelog
 
 #### v17.12-rc7
 
+Changes:
+* Add `phpMyAdmin`
+
 #### v17.12-rc6
 
 Changes:

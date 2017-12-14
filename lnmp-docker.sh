@@ -478,36 +478,44 @@ main() {
   mysql-cli )
     run_docker
     docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
+    exit 0
     ;;
 
   php-cli )
     run_docker
     docker-compose exec php7 bash
+    exit 0
     ;;
 
   redis-cli )
     run_docker
     docker-compose exec redis sh
+    exit 0
     ;;
   memcached-cli )
     run_docker
     docker-compose exec memcached sh
+    exit 0
     ;;
   rabbitmq-cli )
     run_docker
     docker-compose exec rabbitmq sh
+    exit 0
     ;;
   postgres-cli )
     run_docker
     docker-compose exec postgresql sh
+    exit 0
     ;;
   mongo-cli )
     run_docker
     docker-compose exec mongodb bash
+    exit 0
     ;;
   nginx-cli )
     run_docker
     docker-compose exec nginx sh
+    exit 0
     ;;
 
   push )

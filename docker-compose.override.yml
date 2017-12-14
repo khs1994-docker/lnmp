@@ -33,3 +33,18 @@ services:
    image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine
    volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    networks:
+      - backend
+    environment:
+      - PMA_HOST=mysql
+    ports:
+      - 8080:80
+    volumes:
+      - phpmyadmin-data:/sessions
+
+volumes:
+  phpmyadmin-data:
