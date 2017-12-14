@@ -1,4 +1,4 @@
-FROM arm64v8/php:7.2.0-fpm-alpine3.6
+FROM arm64v8/php:7.2.0-fpm-alpine3.7
 
 ENV TZ=Asia/Shanghai
 
@@ -6,25 +6,31 @@ ENV TZ=Asia/Shanghai
 
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
 
-ENV KHS1994_PHP_FPM_DEPS \
-                         git \
-                         # subversion \
-                         openssh-client \
-                         # mercurial \
-                         # tini \
-                         bash \
-                         freetype-dev \
-                         libjpeg-turbo-dev \
-                         libpng-dev \
+
+RUN set -xe \
+      # 新增的包
+      && KHS1994_PHP_FPM_APKS=" \
+                            git \
+                            # subversion \
+                            openssh-client \
+                            # mercurial \
+                            # tini \
+                            bash \
+                            tzdata \
+                            " \
+      # 不要删除
+      && KHS1994_PHP_FPM_BUILD_DEPS=" \
                          libressl-dev \
                          libmemcached-dev \
                          cyrus-sasl-dev \
                          postgresql-dev \
                          libzip-dev \
-                         tzdata
-
-RUN set -xe \
-        && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_DEPS \
+                         libpng-dev \
+                         freetype-dev \
+                         libjpeg-turbo-dev \
+                         " \
+        && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
+        && apk add --no-cache --virtual .khs1994-php-fpm-build_deps $KHS1994_PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-install zip \
@@ -40,7 +46,8 @@ RUN set -xe \
         && pecl install mongodb \
                         redis \
                         memcached \
-                        https://pecl.php.net/get/xdebug-2.6.0alpha1.tgz \
+                        # 安装测试版的扩展，可以在扩展名后加 -beta
+                        xdebug-beta \
         && docker-php-ext-enable mongodb \
                                  redis \
                                  memcached \
@@ -73,7 +80,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
  && rm -rf /tmp/cache /tmp/.htaccess \
  # 默认不启用 xdebug
- && echo > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+ && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
  # 创建日志文件夹
  && cd /var/log \
  && mkdir php-fpm \

@@ -19,7 +19,7 @@ services:
         com.khs1994.description: "Extend Official PHP_FPM Docker Image"
         com.khs1994.department: "Chinese"
         com.khs1994.label-with-empty-value: ""
-    image: ${REGISTRY_URL_AND_USERNAME}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.6
+    image: ${REGISTRY_URL_AND_USERNAME}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7
 
   memcached:
     build:

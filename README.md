@@ -5,7 +5,10 @@
 Start LNMP within 2 minutes powered by Docker Compose.
 
 * [中文说明](README.cn.md)
+
 * [Documents](docs/)
+
+* [Asciinema](https://asciinema.org/a/152107)
 
 NOT Support Windows!
 
@@ -79,13 +82,13 @@ $ docker-compose down
 |[NGINX](https://github.com/khs1994-docker/nginx)         |`khs1994/nginx:1.13.7-alpine`    |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/nginx.svg)](https://github.com/khs1994-docker/nginx/releases)      |`Alpine:3.5`|
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)|`mysql:5.7.20`                   |[![GitHub release](https://img.shields.io/badge/release-v5.7.20-blue.svg)](https://github.com/docker-library/docs/tree/master/mysql)       |`Debian:jessie`|
 |[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.6-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)      |`Alpine:3.6`|
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.6`|
-|[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.6`|
-|[Composer](https://github.com/docker-library/docs/tree/master/composer) |`khs1994/php-fpm:7.2.0-alpine3.6`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)     |`Alpine:3.6`|
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)  |`Alpine:3.6`|
+|[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                     |`Alpine:3.6`|
+|[Composer](https://github.com/docker-library/docs/tree/master/composer) |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)     |`Alpine:3.6`|
 |[Memcached](https://github.com/khs1994-docker/memcached) |`khs1994/memcached:1.5.3-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/memcached.svg)](https://github.com/khs1994-docker/memcached/releases)  |`Alpine:3.6`|
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.6.14-management-alpine` |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)    |`Alpine:3.6`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.1-alpine`   |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)    |`Alpine:3.6`|
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.5.13`                  |[![GitHub release](https://img.shields.io/badge/release-v3.5.13-blue.svg)](https://github.com/docker-library/docs/tree/master/mongo)       |`Debian:jessie`|
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.6.0`                  |[![GitHub release](https://img.shields.io/badge/release-v3.6.0-blue.svg)](https://github.com/docker-library/docs/tree/master/mongo)       |`Debian:jessie`|
 
 ## Folder Structure
 
@@ -129,8 +132,6 @@ Open your Browers `127.0.0.1:8080`.
 # Who use in Production?
 
 ## [khs1994.com](//khs1994.com)
-
-## [xc725.wang](//xc725.wang)
 
 # CI/CD
 
