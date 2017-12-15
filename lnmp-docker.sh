@@ -293,8 +293,10 @@ update(){
     git fetch  lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   fi
-  GIT_STATUS=`git status -s --ignore-submodules`
-  if [ ! -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
+  if [ "$1" != "-f" ];then
+    GIT_STATUS=`git status -s --ignore-submodules`
+    if [ ! -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
+  fi
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
@@ -475,7 +477,7 @@ main() {
     ;;
 
   upgrade )
-    update
+    update $2
     ;;
 
   mysql-cli )
