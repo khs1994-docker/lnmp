@@ -6,11 +6,13 @@
 
 在 `.env` 修改镜像前缀、PHP 项目路径。
 
-在 `./config/nginx/` 参考示例配置，新建 nginx 配置文件。
+克隆已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹。
+
+在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件。
 
 执行 `./lnmp-docker.sh development`。
 
-之后 `PhpStorm` 打开本项目，克隆已有的 PHP 项目文件到 `./app` 目录下或在 `./app` 目录下开始新的开发。
+`PhpStorm` 打开 `./app/你的项目名称` ，开始编写代码。
 
 ### 使用 Composer
 
@@ -29,7 +31,7 @@ $ ./lnmp-docker.sh php blog index.php
 在 `./dockerfile/` 下修改各个软件 `dockerfile` 文件，之后运行如下命令：
 
 ```bash
-$ ./lnmp-docker.sh devlopment-build
+$ ./lnmp-docker.sh build
 
 $ curl 127.0.0.1
 

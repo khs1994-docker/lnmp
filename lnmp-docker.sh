@@ -180,7 +180,7 @@ install_docker_compose(){
       fi
     elif [ ${OS} = Darwin ];then
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        print_error "`docker-compose --version` NOT installed Correct version,please update you Docker for Mac to latest Edge version"
+        print_error "`docker-compose --version` NOT installed Correct version, please update you Docker for Mac to latest Edge version"
       else
         print_info "`docker-compose --version` already installed Correct version"
       fi
@@ -413,7 +413,7 @@ main() {
     fi
     ;;
 
-  development-build )
+  build )
     run_docker
     init
     if [ ${ARCH} = "x86_64" ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi
@@ -440,7 +440,7 @@ main() {
           config
     ;;
 
-  development-config )
+  build-config )
     init
     # 判断架构
     if [ ${ARCH} = "x86_64" ];then
@@ -478,48 +478,51 @@ main() {
   mysql-cli )
     run_docker
     docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
+    exit 0
     ;;
 
   php-cli )
     run_docker
     docker-compose exec php7 bash
+    exit 0
     ;;
 
   redis-cli )
     run_docker
     docker-compose exec redis sh
+    exit 0
     ;;
   memcached-cli )
     run_docker
     docker-compose exec memcached sh
+    exit 0
     ;;
   rabbitmq-cli )
     run_docker
     docker-compose exec rabbitmq sh
+    exit 0
     ;;
   postgres-cli )
     run_docker
     docker-compose exec postgresql sh
+    exit 0
     ;;
   mongo-cli )
     run_docker
     docker-compose exec mongodb bash
+    exit 0
     ;;
   nginx-cli )
     run_docker
     docker-compose exec nginx sh
+    exit 0
     ;;
 
   push )
     run_docker
     init
-    docker-compose -f docker-compose.push.yml build \
-    && docker-compose -f docker-compose.push.yml push
-    ;;
-
-  push-config )
-    init
-    docker-compose -f docker-compose.push.yml config \
+    docker-compose -f docker-compose.build.yml build \
+    && docker-compose -f docker-compose.build.yml push
     ;;
 
   php )
@@ -604,11 +607,11 @@ Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
   backup               Backup MySQL databases
+  build                Use LNMP With Build images(Support x86_64)
+  build-config         Validate and view the build images Compose file
   cleanup              Cleanup log files
   composer             Use PHP Package Management composer
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
-  development-config   Validate and view the Development(with build images)Compose file
-  development-build    Use LNMP in Development With Build images(Support x86_64)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
   help                 Display this help message
@@ -667,9 +670,9 @@ if [ $? -ne 0 ];then
   print_error "\nError occurred, try Rebuild environment! please open issue in https://github.com/khs1994-docker/lnmp/issues/new"
   echo
   # 重新生成 .env
-  mv .env .env.backup
-  rm -rf .env
-  cp .env.example .env
+  # mv .env .env.backup
+  # rm -rf .env
+  # cp .env.example .env
   # 更新项目
   # main update
   print_info "Please exec"

@@ -4,7 +4,7 @@ nginx 主配置文件位于 `./config/etc/nginx/nginx.conf` （一般情况无�
 
 子配置文件位于 `./config/nginx/*.conf`
 
-主要注意的是 `[文件路径](path.md)` 问题。下面以 `https` 配置为例进行讲解。
+主要注意的是 [文件路径](path.md) 问题。下面以 `https` 配置为例进行讲解。
 
 ```nginx
 
