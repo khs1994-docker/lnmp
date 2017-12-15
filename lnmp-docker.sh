@@ -153,6 +153,9 @@ dockerfile_update(){
 # 是否安装 Docker Compose
 
 install_docker_compose_official(){
+  command -v docker-compose >/dev/null 2>&1
+  if [ $? != 0 ];then exit 1; fi
+  if [ $ARCH != "x86_64" ];then exit 1; fi
   # 版本在 bin/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
