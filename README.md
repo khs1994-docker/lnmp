@@ -10,7 +10,7 @@ Start LNMP within 2 minutes powered by Docker Compose.
 
 * [Asciinema](https://asciinema.org/a/152107)
 
-LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Raspberry Pi3) on `arm32v7` or `arm64v8`.
+LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
 # Changelog
 

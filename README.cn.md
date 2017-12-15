@@ -10,7 +10,7 @@
 
 * [项目演示](https://asciinema.org/a/152107)
 
-本项目支持 `x86_64` 架构的 Linux, macOS，Windows 10 并且支持 `arm32v7` `arm64v8` 架构的 Debian(树莓派)。
+本项目支持 `x86_64` 架构的 Linux, macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
 # 更新记录
 
