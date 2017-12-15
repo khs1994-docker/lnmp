@@ -19,10 +19,16 @@
  Date: 08/10/2017 22:22:52 PM
 */
 
-# 修改为你的数据库名
+#######################################
+#
+# 修改 test 为你的数据库名
+#
+
+CREATE DATABASE IF NOT EXISTS test;
 
 USE test;
 
+#######################################
 
 SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
