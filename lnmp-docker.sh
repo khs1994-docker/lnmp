@@ -154,14 +154,15 @@ dockerfile_update(){
 
 install_docker_compose_official(){
   command -v docker-compose >/dev/null 2>&1
-  if [ $? != 0 ];then exit 1; fi
-  if [ $ARCH != "x86_64" ];then exit 1; fi
+  if [ $? != 0 ];then print_error "docker-compose already install"; exit 1; fi
+  if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
   # 版本在 bin/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
-  print_info $PATH && sudo mv docker-compose /usr/local/bin
+  print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
   # in CoreOS you must move to /opt/bin
+  exit 0
 }
 
 install_docker_compose(){
