@@ -65,22 +65,22 @@ services:
   #   #   - "15672"
   #   #   - "5672"
   #
-  postgresql:
-    restart: always
-    image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
-    environment:
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
-      - POSTGRES_DB=test
-    volumes:
-      - postgresql-data:/var/lib/postgresql/data:rw
-    networks:
-      - backend
-    env_file: ./bin/timezone.env
-    # ports:
-    #   - "5432"
-    secrets:
-      # 默认与 mysql 密码一致。
-      - db_root_password
+  # postgresql:
+  #   restart: always
+  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   environment:
+  #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+  #     - POSTGRES_DB=test
+  #   volumes:
+  #     - postgresql-data:/var/lib/postgresql/data:rw
+  #   networks:
+  #     - backend
+  #   env_file: ./bin/timezone.env
+  #   # ports:
+  #   #   - "5432"
+  #   secrets:
+  #     # 默认与 mysql 密码一致。
+  #     - db_root_password
   #
   # mongodb:
   #   restart: always
@@ -148,7 +148,7 @@ volumes:
   mysql-data:
   redis-data:
   # rabbitmq-data:
-  postgresql-data:
+  # postgresql-data:
   # mongodb-data:
 
 secrets:
