@@ -30,7 +30,7 @@ services:
     restart: always
     image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}${ARM_BASED_OS}"
     env_file:
-      - ./env/timezone.env
+      - ./bin/timezone.env
     networks:
       - backend
     volumes:
@@ -52,7 +52,7 @@ services:
     networks:
       - backend
     env_file:
-      - ./env/timezone.env
+      - ./bin/timezone.env
     # ports:
     #   - "11211"
 
@@ -67,7 +67,7 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     env_file:
-      - ./env/timezone.env
+      - ./bin/timezone.env
     # ports:
     #   - "15672"
     #   - "5672"
@@ -78,15 +78,20 @@ services:
     #   dockerfile: Dockerfile
     restart: always
     image: ${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+      - POSTGRES_DB=test
     env_file:
-      - ./env/postgresql.env
-      - ./env/timezone.env
+      - ./bin/timezone.env
     networks:
       - backend
     volumes:
       - postgresql-data:/var/lib/postgresql
     # ports:
     #   - "5432"
+    secrets:
+      # 默认与 mysql 密码一致。
+      - db_root_password
 
   # mongodb:
   #   # build:
@@ -103,7 +108,7 @@ services:
   #   ports:
   #     - "27017"
   #   env_file:
-  #     - ./env/timezone.env
+  #     - ./bin/timezone.env
   #   command: ["mongod","--config","/etc/mongod.conf"]
 
 
@@ -139,7 +144,7 @@ services:
     restart: always
     image: "${ARM_ARCH}/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file:
-      - ./env/timezone.env
+      - ./bin/timezone.env
     networks:
       - frontend
     ports:
@@ -163,3 +168,7 @@ volumes:
   rabbitmq-data:
   postgresql-data:
   # mongodb-data:
+
+secrets:
+  db_root_password:
+    file: secrets/db_root_password.txt

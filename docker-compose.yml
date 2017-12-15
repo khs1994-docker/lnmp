@@ -11,7 +11,7 @@ services:
     networks:
       - backend
     volumes:
-      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf:ro
+      # - ./config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
@@ -24,7 +24,7 @@ services:
   redis:
     restart: always
     image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
-    env_file: ./env/timezone.env
+    env_file: ./bin/timezone.env
     # ports:
     #   - "6379"
     networks:
@@ -49,7 +49,7 @@ services:
   #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
-  #   env_file: ./env/timezone.env
+  #   env_file: ./bin/timezone.env
   #   # ports:
   #   #   - "11211"
   #
@@ -60,29 +60,32 @@ services:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
   #     - backend
-  #   env_file: ./env/timezone.env
+  #   env_file: ./bin/timezone.env
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
   #
-  # postgresql:
-  #    restart: always
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
-  #   env_file:
-  #     - ./env/postgresql.env
-  #     - ./env/timezone.env
-  #   volumes:
-  #     - postgresql-data:/var/lib/postgresql/data:rw
-  #   networks:
-  #     - backend
-  #   env_file: ./env/timezone.env
-  #   # ports:
-  #   #   - "5432"
+  postgresql:
+    restart: always
+    image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+      - POSTGRES_DB=test
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data:rw
+    networks:
+      - backend
+    env_file: ./bin/timezone.env
+    # ports:
+    #   - "5432"
+    secrets:
+      # 默认与 mysql 密码一致。
+      - db_root_password
   #
   # mongodb:
   #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file: ./env/timezone.env
+  #   env_file: ./bin/timezone.env
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db:rw
@@ -116,7 +119,7 @@ services:
     restart: always
     image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file:
-      - ./env/timezone.env
+      - ./bin/timezone.env
     ports:
       - "443:443"
       - target: 80
@@ -145,7 +148,7 @@ volumes:
   mysql-data:
   redis-data:
   # rabbitmq-data:
-  # postgresql-data:
+  postgresql-data:
   # mongodb-data:
 
 secrets:
