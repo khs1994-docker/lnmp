@@ -16,6 +16,10 @@ print_error(){
   echo -e "\033[31mERROR\033[0m  $@"
 }
 
+NOTSUPPORT(){
+  print_error "Not Support ${OS} ${ARCH}\n"; exit 1
+}
+
 env_status(){
   # .env.example to .env
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
@@ -32,31 +36,23 @@ run_docker(){
   fi
 }
 
-env_status
-ARCH=`uname -m`
-OS=`uname -s`
-if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
+env_status ; ARCH=`uname -m` ; OS=`uname -s`
+
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 # COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
-. .env
-. bin/.env
+. .env ; . bin/.env
+
+if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 
 if [ ${OS} = "Darwin" ];then
-  # 将以什么开头的行替换为新内容
   sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
 else
   sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
 fi
-
-# 不支持信息
-
-NOTSUPPORT(){
-  print_error "Not Support ${OS} ${ARCH}\n"; exit 1
-}
 
 # 创建日志文件
 
@@ -105,8 +101,7 @@ gitbook(){
     -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
-
-  exit 0
+    exit 0
 }
 
 dockerfile_update_sed(){
@@ -184,7 +179,7 @@ install_docker_compose(){
       fi
     elif [ ${OS} = Darwin ];then
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        print_error "`docker-compose --version` NOT installed Correct version, please update you Docker for Mac to latest Edge version"
+        print_error "`docker-compose --version` NOT installed Correct version, Please update you Docker for Mac to latest Edge version"
       else
         print_info "`docker-compose --version` already installed Correct version"
       fi
@@ -229,9 +224,14 @@ install_docker_compose(){
 # 克隆示例项目、nginx 配置文件
 
 demo() {
-  #statements
-  print_info "Import app and nginx conf Demo ...\n"
-  git submodule update --init --recursive
+  if [ -d config/nginx/.git -o -f config/nginx/.git ];then
+    echo > /dev/null 2>&1
+  else
+    print_info "Import app and nginx conf Demo ...\n"
+    # 检查网络连接
+    ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
+    git submodule update --init --recursive
+  fi
 }
 
 # 初始化
@@ -242,13 +242,13 @@ init() {
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
-      print_info "$APP_ENV"
+      print_info "$APP_ENV\n"
       demo
       ;;
 
     # 生产环境 转移项目文件、配置文件、安装依赖包
     production )
-      print_info "$APP_ENV"
+      print_info "$APP_ENV\n"
       # 请在 ./bin/production-init 定义要执行的操作
       bin/production-init
       ;;
@@ -332,7 +332,6 @@ release_rc(){
   if [ ${BRANCH} = "dev" ];then
     git fetch origin
     git reset --hard origin/master
-    # git push -f origin dev
   else
     print_error "不能在 ${BRANCH} 分支开始新的开发，请切换到 dev 分支\n"
     echo -e "\n $ git checkout dev\n"
@@ -495,31 +494,42 @@ main() {
     exit 0
     ;;
 
+  phpmyadmin-cli )
+    run_docker
+    docker-compose exec phpmyadmin sh
+    exit 0
+    ;;
+
   redis-cli )
     run_docker
     docker-compose exec redis sh
     exit 0
     ;;
+
   memcached-cli )
     run_docker
     docker-compose exec memcached sh
     exit 0
     ;;
+
   rabbitmq-cli )
     run_docker
     docker-compose exec rabbitmq sh
     exit 0
     ;;
+
   postgres-cli )
     run_docker
     docker-compose exec postgresql sh
     exit 0
     ;;
+
   mongo-cli )
     run_docker
     docker-compose exec mongodb bash
     exit 0
     ;;
+
   nginx-cli )
     run_docker
     docker-compose exec nginx sh
@@ -557,6 +567,7 @@ main() {
     init
     docker-compose down --remove-orphans
     ;;
+
   docs )
     run_docker
     gitbook
@@ -568,11 +579,11 @@ main() {
 
   swarm-build )
     docker-compose -f docker-stack.yml build nginx php7
-  ;;
+    ;;
 
   swarm-push )
     docker-compose -f docker-stack.yml push nginx php7
-  ;;
+    ;;
 
   swarm )
     run_docker
@@ -615,12 +626,12 @@ Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
   backup               Backup MySQL databases
-  build                Use LNMP With Build images(Support x86_64)
-  build-config         Validate and view the build images Compose file
+  build                Use LNMP With Self Build images(Support x86_64)
+  build-config         Validate and view the Self Build images Compose file
   cleanup              Cleanup log files
   composer             Use PHP Package Management composer
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
-  down                 Stop and remove LNMP Docker containers, networks, images, and volumes
+  down                 Stop and remove LNMP Docker containers, networks
   docs                 Support Documents
   help                 Display this help message
   laravel              Create a new Laravel application
@@ -628,7 +639,7 @@ Commands:
   php                  Run PHP in CLI
   production           Use LNMP in Production(Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
-  push                 Build and Pushes images to Docker Registory v2
+  push                 Build and Pushes images to Your Docker Registory
   restore              Restore MySQL databases
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
@@ -641,6 +652,7 @@ Container CLI:
   mysql-cli
   nginx-cli
   php-cli
+  phpmyadmin-cli
   postgres-cli
   rabbitmq-cli
   redis-cli
