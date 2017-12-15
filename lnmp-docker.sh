@@ -261,12 +261,14 @@ init() {
 
 backup(){
   docker-compose exec mysql /backup/backup.sh $@
+  exit 0
 }
 
 # 恢复数据库
 
 restore(){
   docker-compose exec mysql /backup/restore.sh $1
+  exit 0
 }
 
 # 更新项目

@@ -4,12 +4,14 @@
 
 * 准备网站 `SSL` 证书，假设是 `wechat.domain.com`，上传到服务器 `./app/config/nginx/ssl/` 文件夹下。
 
+* 在提供私有 git 仓库的网站新建名为 `wafer2-quickstart-php` 仓库，这里以 [TGit](https://git.cloud.tencent.com/) 为例。
+
 * 本地克隆示例项目
 
 进入 `./app`
 
 ```bash
-$ git clone https://github.com/tencentyun/wafer2-quickstart-php.git wafer2-quickstart-php
+$ git clone https://github.com/tencentyun/wafer2-quickstart-php.git
 
 $ cd wafer2-quickstart-php
 
