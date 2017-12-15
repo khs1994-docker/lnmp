@@ -8,6 +8,7 @@ services:
   redis:
     # 开发环境默认拉取镜像，也可以构建镜像
     # 此处镜像名为 docker-compose config 查看到的镜像
+    # docker-compose.overrie.yml 覆盖 docker-compose.yml 值
     image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
 
   # memcached:
@@ -16,8 +17,8 @@ services:
   # rabbitmq:
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #
-  postgresql:
-    image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  # postgresql:
+  #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
 
   php7:
     image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7
