@@ -3,6 +3,9 @@ Changelog
 
 #### v17.12-rc8
 
+Changes:
+* 支持微信小程序 `PHP` 后端 Demo。
+
 #### v17.12-rc7
 
 Changes:

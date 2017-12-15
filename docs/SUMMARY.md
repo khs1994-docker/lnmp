@@ -25,3 +25,4 @@
 * [国内网络问题](cn.md)
 * 实验玩法
   * [LinuxKit](linuxkit.md)
+* [微信小程序 PHP 后端部署](wechat.md)  
