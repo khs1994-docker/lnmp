@@ -4,15 +4,19 @@
 
 要想在生产环境部署，当然得在开发环境制作好镜像！
 
-编写 PHP 项目源代码
+编写 PHP 项目源代码（项目中可以必须包含 `Dockerfile`）。
 
 本地测试
 
-推送到 GitHub
+编写生产环境 `nginx` 配置文件，并推送到指定仓库（生产环境 `nginx` 配置文件位于另一 git 仓库中）。
 
-构建镜像（镜像中包含 PHP 项目文件）
+推送到 GitHub (CI/CD 构建镜像)
 
-在 `./dockerfile` 目录下的 `nginx` `php-fpm` 子目录中修改 `Dockerfile.swarm` 文件。
+这样生产环境需要的 Docker 镜像就准备好了。
+
+## 本地测试构建镜像
+
+以下为本地测试镜像步骤。
 
 在 `./swarm` 目录下执行
 
@@ -21,8 +25,6 @@ $ docker-compose build
 
 $ docker-compose push
 ```
-
-这样生产环境需要的 Docker 镜像就准备好了，当然以上步骤中构建镜像无需手动操作，具体实现请自行探索！
 
 # 准备
 

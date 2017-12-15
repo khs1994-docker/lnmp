@@ -6,7 +6,7 @@
 
 单机环境中通过 `数据卷` 将 `项目文件` 挂载到容器中。
 
-将 GitHub 上的 PHP 项目克隆到 `./app` 目录下，之后安装依赖 `./lnmp-docker.sh composer` 交互式填入路径。
+将 GitHub 上的 PHP 项目克隆到 `./app` 目录下，之后使用`./lnmp-docker.sh composer` 交互式填入路径安装依赖。
 
 在 `./config/nginx/*.conf` 增加 nginx 配置。
 
@@ -19,6 +19,10 @@
 ## PHP
 
 * 生产环境不启用 `xdebug` 扩展
+
+## phpMyAdmin
+
+生产环境默认不启用该软件。
 
 ## Docker 私有仓库
 

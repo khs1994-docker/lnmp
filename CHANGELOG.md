@@ -6,6 +6,8 @@ Changelog
 Changes:
 * Add `phpMyAdmin`
 
+* Support `Windows 10` (Not Support LCOW).
+
 #### v17.12-rc6
 
 Changes:

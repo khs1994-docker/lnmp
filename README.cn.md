@@ -1,6 +1,6 @@
 # LNMP Docker
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Platform](https://img.shields.io/badge/Platform-Linux%E3%80%81macOS%E3%80%81Raspberry%20Pi-blue.svg)](https://github.com/khs1994-docker/lnmp)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp)
 
 使用 Docker Compose 快速搭建 LNMP 环境。
 
@@ -10,9 +10,7 @@
 
 * [项目演示](https://asciinema.org/a/152107)
 
-不支持 Windows！
-
-本项目支持 `x86_64` 架构的 Linux, macOS，并且支持 `arm` 架构的 Debian(树莓派)。
+本项目支持 `x86_64` 架构的 Linux, macOS，Windows 10 并且支持 `arm32v7` `arm64v8` 架构的 Debian(树莓派)。
 
 # 更新记录
 
@@ -33,6 +31,10 @@
 # 快速上手
 
 简单而言，搞明白了项目路径，Nginx 配置就行了，遇到任何问题请提出 issue。
+
+## Windows 10
+
+如果你使用的是 Windows 10 请查看 [支持文档](docs/windows.md)。
 
 ## 使用一键安装脚本
 
