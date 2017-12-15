@@ -65,9 +65,9 @@ $ ./lnmp-docker.sh restore wechat.sql
 
 # 生产环境用户
 
-<center>![](https://github.com/khs1994/cxyl/raw/master/wechat-app-12cm.jpg)</center>
+![](https://github.com/khs1994/cxyl/raw/master/wechat-app-12cm.jpg)
 
-<center>**晨曦雨露**</center>
+**晨曦雨露**
 
 # More Information
 
