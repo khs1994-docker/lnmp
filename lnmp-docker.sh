@@ -473,7 +473,7 @@ main() {
     ;;
 
   update )
-    update
+    update $2
     ;;
 
   upgrade )
