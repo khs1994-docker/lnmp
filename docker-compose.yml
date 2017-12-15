@@ -5,9 +5,11 @@ services:
     restart: always
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     environment:
-      TZ: 'Asia/Shanghai'
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
+      # MYSQL_USER:
+      # MYSQL_PASSWORD:
+    env_file: ./bin/timezone.env
     networks:
       - backend
     volumes:

@@ -539,8 +539,7 @@ main() {
   push )
     run_docker
     init
-    docker-compose -f docker-compose.build.yml build \
-    && docker-compose -f docker-compose.build.yml push
+    docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
     ;;
 
   php )
@@ -553,7 +552,7 @@ main() {
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
     elif [ $ARCH = "aarch64" ];then
       PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
+      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
     else
       NOTSUPPORT
     fi
@@ -616,6 +615,10 @@ main() {
     install_docker_compose_official
     ;;
 
+  error )
+    return 1
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -658,8 +661,8 @@ Container CLI:
   redis-cli
 
 Tools:
-  update                Upgrades LNMP
-  upgrade               Upgrades LNMP
+  update               Upgrades LNMP
+  upgrade              Upgrades LNMP
   init
   commit
   test
@@ -687,15 +690,7 @@ fi
 main $1 $2 $3 $4 $5 $6 $7 $8 $9
 
 if [ $? -ne 0 ];then
-  print_error "\nError occurred, try Rebuild environment! please open issue in https://github.com/khs1994-docker/lnmp/issues/new"
-  echo
-  # 重新生成 .env
-  # mv .env .env.backup
-  # rm -rf .env
-  # cp .env.example .env
-  # 更新项目
-  # main update
-  print_info "Please exec"
-  echo -e "\n$ ./lnmp-docker.sh update \n"
+  print_error "Error occurred, Please open issue in https://github.com/khs1994-docker/lnmp/issues/new\n"
+  print_info "Maybe You can try exec\n\n$ ./lnmp-docker.sh update\n\n$ cp .env.example .env\n\n$ mv .env .env.backup\n"
   exit 1
 fi
