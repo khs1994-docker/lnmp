@@ -2,12 +2,12 @@ version: "3.4"
 services:
   php7:
     build:
-      context: ../app/demo
+      context: ../app/demo/alpine
       dockerfile: Dockerfile.linuxkit
     image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.7
 
   nginx:
     build:
-      context: ../app/demo
-      dockerfile: Dockerfile.nginx.linuxkit
+      context: ../app/demo/alpine
+      dockerfile: Dockerfile.linuxkit.nginx
     image: khs1994/nginx:linuxkit-1.13.7-alpine

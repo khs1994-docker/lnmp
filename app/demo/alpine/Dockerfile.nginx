@@ -1,0 +1,20 @@
+FROM khs1994/php-fpm:7.2.0-alpine3.7
+
+WORKDIR /
+
+RUN rm -rf /app /etc/nginx/conf.d \
+      && git clone -b php-fpm https://github.com/khs1994-docker/swarm-lnmp-demo.git /app \
+      && git clone -b nginx https://github.com/khs1994-docker/swarm-lnmp-demo.git /etc/nginx/conf.d \
+      # 删除 .git
+      && rm -rf /app/.git \
+      && rm -rf /etc/nginx/conf.d/.git
+
+FROM khs1994/nginx:1.13.7-alpine
+
+COPY --from=0 /app /app
+
+COPY --from=0 /etc/nginx/conf.d /etc/nginx/conf.d
+
+COPY wait-for-php.sh /wait-for-php.sh
+
+CMD ["/wait-for-php.sh"]

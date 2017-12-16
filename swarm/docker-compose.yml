@@ -2,12 +2,12 @@ version: "3.4"
 services:
   php7:
     build:
-      context: ../app/demo
-      dockerfile: Dockerfile.swarm
+      context: ../app/demo/alpine
+      dockerfile: Dockerfile
     image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
 
   nginx:
     build:
-      context: ../app/demo
-      dockerfile: Dockerfile.nginx.swarm
+      context: ../app/demo/alpine
+      dockerfile: Dockerfile.nginx
     image: khs1994/nginx:swarm-1.13.7-alpine
