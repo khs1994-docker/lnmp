@@ -2,25 +2,14 @@
 
 set -e
 
-error(){
-  return 1
-}
+if [ -f "khs1994-robot.enc" ];then echo -e "\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
 
-if [ -f "khs1994-robot.enc" ];then
-  echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"
-  error
-fi
-
-. .env
-echo -e "$0\n"
-LARAVEL_PATH=$1
-ARCH=`uname -m`
+. .env ; LARAVEL_PATH=$1 ; ARCH=`uname -m`
 
 # 判断架构
 
 if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
   DOCKER_IMAGE=khs1994/arm64v8-php-fpm
-  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
   if [ ${ARCH} = "armv7l" ];then
     DOCKER_IMAGE=khs1994/arm32v7-php-fpm
     TAG=${KHS1994_LNMP_PHP_VERSION}-stretch
@@ -30,13 +19,13 @@ elif [ ${ARCH} = "x86_64" ];then
   TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
 else
   echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
-  error
+  exit 1
 fi
 
 # if build image
 # DOCKER_IMAGE=lnmp-php
 
-echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/ 执行 $ laravel new ${LARAVEL_PATH}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
+echo -e  "\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/ 执行 $ laravel new ${LARAVEL_PATH}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
 docker run -it --rm \
   -v $PWD/app:/app \
@@ -45,7 +34,7 @@ docker run -it --rm \
   laravel new ${LARAVEL_PATH}
 
 if [ `uname -s` = "Linux" -o `uname -s` = "Darwin" ];then
-  sudo chmod -R 777 app/${LARAVEL_PATH}
+  sudo chmod -R 765 app/${LARAVEL_PATH}
   sudo chown -R `id -u`:`id -g` app/${LARAVEL_PATH}
   # 使用 .env.development 或 .env.production 不使用 .env 文件
 fi

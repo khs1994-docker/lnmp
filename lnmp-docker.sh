@@ -36,6 +36,14 @@ run_docker(){
   fi
 }
 
+error(){
+  if [ $? -ne 0 ];then
+    print_error "Error occurred, Please open issue in https://github.com/khs1994-docker/lnmp/issues/new\n"
+    print_info "Maybe You can try exec\n\n$ ./lnmp-docker.sh update\n\n$ cp .env.example .env\n\n$ mv .env .env.backup\n"
+    exit 1
+  fi
+}
+
 env_status ; ARCH=`uname -m` ; OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
@@ -101,7 +109,6 @@ gitbook(){
     -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
-    exit 0
 }
 
 dockerfile_update_sed(){
@@ -261,14 +268,12 @@ init() {
 
 backup(){
   docker-compose exec mysql /backup/backup.sh $@
-  exit 0
 }
 
 # 恢复数据库
 
 restore(){
   docker-compose exec mysql /backup/restore.sh $1
-  exit 0
 }
 
 # 更新项目
@@ -388,21 +393,31 @@ main() {
 
   laravel )
     run_docker
-    read -p "请输入路径: ./app/" path
+    if [ -z "$2" ];then read -p "请输入路径: ./app/" path; else path=$2; fi
     bin/laravel ${path}
     ;;
 
   laravel-artisan )
     run_docker
-    read -p  "请输入路径: ./app/" path
-    read -p  "请输入命令: php artisan " cmd
+    if [ -z "$2" -o -z "$3" ];then
+      read -p  "请输入路径: ./app/" path
+      read -p  "请输入命令: php artisan " cmd
+    else
+      path="$2"
+      cmd="$3"
+    fi
     bin/php-artisan ${path} ${cmd}
     ;;
 
   composer )
     run_docker
-    read -p "请输入路径: ./app/" path
-    read -p  "请输入命令: composer " cmd
+    if [ -z "$2" -o -z "$3" ];then
+      read -p "请输入路径: ./app/" path
+      read -p  "请输入命令: composer " cmd
+    else
+      path="$2"
+      cmd="$3"
+    fi
     bin/composer ${path} ${cmd}
     ;;
 
@@ -418,12 +433,14 @@ main() {
     else
       print_error "生产环境不支持 `uname -s` ${ARCH}\n"
     fi
+    error
     ;;
 
   build )
     run_docker
     init
     if [ ${ARCH} = "x86_64" ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi
+    error
     ;;
 
   development )
@@ -437,6 +454,7 @@ main() {
     else
       NOTSUPPORT
     fi
+    error
     ;;
 
   production-config )
@@ -445,6 +463,7 @@ main() {
           -f docker-compose.yml \
           -f docker-compose.prod.yml \
           config
+    error
     ;;
 
   build-config )
@@ -485,81 +504,79 @@ main() {
   mysql-cli )
     run_docker
     docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
-    exit 0
     ;;
 
   php-cli )
     run_docker
     docker-compose exec php7 bash
-    exit 0
     ;;
 
   phpmyadmin-cli )
     run_docker
     docker-compose exec phpmyadmin sh
-    exit 0
     ;;
 
   redis-cli )
     run_docker
     docker-compose exec redis sh
-    exit 0
     ;;
 
   memcached-cli )
     run_docker
     docker-compose exec memcached sh
-    exit 0
     ;;
 
   rabbitmq-cli )
     run_docker
     docker-compose exec rabbitmq sh
-    exit 0
     ;;
 
   postgres-cli )
     run_docker
     docker-compose exec postgresql sh
-    exit 0
     ;;
 
   mongo-cli )
     run_docker
     docker-compose exec mongodb bash
-    exit 0
     ;;
 
   nginx-cli )
     run_docker
     docker-compose exec nginx sh
-    exit 0
     ;;
 
   push )
     run_docker
     init
     docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
+    error
     ;;
 
   php )
     run_docker
+    PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
     if [ $ARCH = "x86_64" ];then
       PHP_CLI_DOCKER_IMAGE=php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
     elif [ $ARCH = "armv7l" ];then
       PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
       PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
     elif [ $ARCH = "aarch64" ];then
       PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
     else
       NOTSUPPORT
     fi
-    docker run -it --rm \
-      -v $PWD/app/$2:/app \
-      khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
-      php $3
+    if [ -z "$2" -o -z "$3" ];then
+      read -p "请输入路径: ./app/" path
+      read -p "请输入命令: $ php " cmd
+    else
+      path=$2
+      cmd=$3
+    fi
+      docker run -it --rm \
+        -v $PWD/app/${path}:/app \
+        khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
+        php ${cmd}
    ;;
 
   down )
@@ -616,7 +633,7 @@ main() {
     ;;
 
   error )
-    return 1
+    error
     ;;
 
   * )
@@ -688,9 +705,3 @@ elif [ ${ARCH} = "aarch64" ];then
 fi
 
 main $1 $2 $3 $4 $5 $6 $7 $8 $9
-
-if [ $? -ne 0 ];then
-  print_error "Error occurred, Please open issue in https://github.com/khs1994-docker/lnmp/issues/new\n"
-  print_info "Maybe You can try exec\n\n$ ./lnmp-docker.sh update\n\n$ cp .env.example .env\n\n$ mv .env .env.backup\n"
-  exit 1
-fi
