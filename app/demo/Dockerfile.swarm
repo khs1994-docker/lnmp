@@ -6,4 +6,5 @@ RUN cd / \
       && cd /app/demo \
       && if [ -f composer.json ];then echo "Compose packages installing..."; composer install ; echo "Composer packages install success"; \
       else echo "composer.json NOT exists"; fi \
-      && rm -rf /tmp
+      && rm -rf /tmp \
+      && mkdir /tmp
