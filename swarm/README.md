@@ -2,17 +2,15 @@
 
 ## 开发环境
 
-编写 PHP 项目源代码
+编写 PHP 项目源代码(必须包含 `Dockerfile`)
 
 本地测试
 
-推送到 GitHub
+推送到 GitHub，CI/CD 系统进行镜像构建，之后部署到生产环境。
 
-构建镜像（镜像中包含 PHP 项目文件）
+## 本地构建镜像
 
-在 `./dockerfile` 目录下的 `nginx` `php-fpm` 子目录中修改 `Dockerfile.swarm` 文件。
-
-在 `./swarm` 目录下执行
+你也可以在本地构建镜像。在 `./swarm` 目录下修改 `docker-compose.yml` 的构建路径及镜像名称，并执行以下命令构建并推送镜像。
 
 ```bash
 $ docker-compose build

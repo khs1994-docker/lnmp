@@ -22,7 +22,7 @@ services:
   mysql:
     image: "mysql:5.7.20"
     env_file:
-      - ./env/timezone.env
+      - ./bin/timezone.env
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
       MYSQL_DATABASE: test
@@ -52,7 +52,7 @@ services:
 
   redis:
     image: "khs1994/redis:4.0.2-alpine"
-    env_file: ./env/timezone.env
+    env_file: ./bin/timezone.env
     # ports:
     #   - "6379"
     networks:
@@ -80,7 +80,7 @@ services:
 
   nginx:
     image: "khs1994/nginx:swarm-1.13.7-alpine"
-    env_file: ./env/timezone.env
+    env_file: ./bin/timezone.env
     ports:
       - "443:443"
       - "80:80"

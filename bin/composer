@@ -2,26 +2,14 @@
 
 set -e
 
-error(){
-return 1
-}
+if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
 
-if [ -f "khs1994-robot.enc" ];then
- echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"
- error
-fi
-
-. .env
-echo -e "$0\n"
-COMPOSE_PATH=$1
-CMD=$2
-ARCH=`uname -m`
+. .env ; COMPOSE_PATH=$1 ; CMD=$2 ; ARCH=`uname -m`
 
 # 判断架构
 
 if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
   DOCKER_IMAGE=khs1994/arm64v8-php-fpm
-  TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
   if [ ${ARCH} = "armv7l" ];then
     DOCKER_IMAGE=khs1994/arm32v7-php-fpm
     TAG=${KHS1994_LNMP_PHP_VERSION}-stretch
@@ -31,7 +19,7 @@ elif [ ${ARCH} = "x86_64" ];then
   TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
 else
   echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
-  error
+  exit 1
 fi
 
 # if build image

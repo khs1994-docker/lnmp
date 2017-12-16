@@ -1,5 +1,4 @@
 #!/bin/bash
-echo -e "$0\n"
 # 复制项目文件、配置文件
 echo -e "\033[32mINFO\033[0m  Copy app and nginx conf ...\n"
 # 安装 Composer 包

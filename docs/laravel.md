@@ -12,7 +12,21 @@ $ ./lnmp-docker.sh laravel
 
 例如路径输入 `test`，相当于在 `./app/` 执行 `laravel new test`。
 
-请修改 Laravel 项目的 Redis 客户端配置（`config/database.php` 配置文件 `'client' => 'phpredis'`）。
+### Redis
+
+请修改 Laravel 项目的 Redis 客户端配置 `config/database.php` 配置文件
+
+```php
+...
+
+'redis' => [
+    // 'client' => 'predis',
+    'client' => 'phpredis',
+
+],
+
+...
+```
 
 ## artisan
 

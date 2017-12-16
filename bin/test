@@ -2,12 +2,7 @@
 
 set -e
 
-if [ -f "khs1994-robot.enc" ];then
-  echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"
-  exit 1
-fi
-
-echo $0
+if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
 
 # 生产环境自动测试脚本，开发环境由本人真机手动测试
 # 删除原项目
