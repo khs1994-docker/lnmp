@@ -27,7 +27,7 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 ```bash
 # 按一下 enter 才能进入终端
 
-halt
+$ halt
 ```
 
 # Moree Information
