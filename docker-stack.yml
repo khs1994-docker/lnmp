@@ -49,9 +49,8 @@ services:
         # gid: '103'
         # mode: 0440
 
-
   redis:
-    image: "khs1994/redis:4.0.2-alpine"
+    image: "khs1994/redis:4.0.6-alpine"
     env_file: ./bin/timezone.env
     # ports:
     #   - "6379"
@@ -92,6 +91,7 @@ services:
       - php7
     deploy:
       replicas: 2
+    command: ["/wait-for-php.sh"]
 
 networks:
   frontend:

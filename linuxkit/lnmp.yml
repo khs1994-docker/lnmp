@@ -55,6 +55,7 @@ services:
      - CAP_SETUID
      - CAP_SETGID
      - CAP_DAC_OVERRIDE
+    # command 会覆盖 command 和 entrypoint 也就是容器实际运行的就是这里的 command 设置的命令。
     command: ["redis-server", "/redis.conf"]
     net: host
   - name: nginx
