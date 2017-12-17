@@ -24,7 +24,7 @@ services:
   - name: rngd
     image: linuxkit/rngd:842e5e8ece7934f0cab9fd0027b595ff3471e5b9
   - name: php7
-    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.7
+    image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
@@ -59,7 +59,7 @@ services:
     command: ["redis-server", "/redis.conf"]
     net: host
   - name: nginx
-    image: khs1994/nginx:linuxkit-1.13.7-alpine
+    image: khs1994/nginx:swarm-1.13.7-alpine
     # env:
     #  - TZ=Asia/Shanghai
     capabilities:
