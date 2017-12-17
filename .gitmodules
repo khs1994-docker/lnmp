@@ -1,3 +1,6 @@
 [submodule "config/nginx"]
 	path = config/nginx
 	url = https://github.com/khs1994-docker/lnmp-nginx-conf-demo.git
+[submodule "app/linuxkit-demo"]
+	path = app/linuxkit-demo
+	url = https://github.com/khs1994-docker/linuxkit-lnmp-demo.git

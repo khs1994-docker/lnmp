@@ -26,7 +26,7 @@
 $ ./lnmp-docker.sh php blog index.php
 ```
 
-## 构建镜像
+## 自行构建镜像
 
 在 `./dockerfile/` 下修改各个软件 `dockerfile` 文件，之后运行如下命令：
 

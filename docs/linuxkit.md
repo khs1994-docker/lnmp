@@ -2,11 +2,13 @@
 
 >注意，暂不支持 MySQL
 
-编写 PHP 项目源代码(必须包含 `Dockerfile`)
+本地编写 `PHP` 项目源代码（必须包含 `Dockerfile`）及 `nginx` 配置文件。
 
 本地测试
 
-推送到 GitHub
+将 `PHP` 项目源代码推送到 GitHub，CI/CD 开始构建 `PHP` 镜像。
+
+编写生产环境 `nginx` 配置文件，并推送到 GitHub，CI/CD 开始构建 `nginx` 镜像。
 
 在 `./linuxkit` 目录下修改 `docker-compose.yml` 的构建路径，并执行以下命令构建镜像并运行。
 
@@ -27,7 +29,7 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 ```bash
 # 按一下 enter 才能进入终端
 
-halt
+$ halt
 ```
 
 # Moree Information
