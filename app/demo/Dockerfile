@@ -15,3 +15,5 @@ RUN cd /app/demo \
 FROM khs1994/php-fpm:7.2.0-alpine3.7
 
 COPY --from=0 /app /app
+
+CMD ["php-fpm", "-R"]

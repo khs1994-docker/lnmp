@@ -11,5 +11,7 @@ services:
       context: ../config/nginx
       dockerfile: Dockerfile
     image: khs1994/nginx:swarm-1.13.7-alpine
+    ports:
+      - "80:80"
     depends_on:
       - php7
