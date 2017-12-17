@@ -8,7 +8,7 @@
 
 本地测试。
 
-将 PHP 项目源代码推送到 GitHub， CI/CD 构建 `php` 镜像。
+将 `PHP` 项目源代码推送到 GitHub， CI/CD 构建 `php` 镜像。
 
 编写生产环境 `nginx` 配置文件，并推送到 GitHub，CI/CD 构建 `nginx` 镜像。
 
