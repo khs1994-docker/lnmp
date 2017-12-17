@@ -24,7 +24,7 @@ services:
   - name: rngd
     image: linuxkit/rngd:842e5e8ece7934f0cab9fd0027b595ff3471e5b9
   - name: php7
-    image: khs1994/php-fpm:linuxkit-7.2.0-alpine3.7
+    image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
@@ -32,6 +32,10 @@ services:
      - CAP_SETGID
      - CAP_DAC_OVERRIDE
     command: ["php-fpm", "-R"]
+    binds:
+     - /etc/resolv.conf:/etc/resolv.conf
+     - /etc/hosts:/etc/hosts
+    net: host
   # 暂时不支持 MySQL
   # - name: mysql
   #   image: mysql:5.7.20
@@ -55,10 +59,14 @@ services:
      - CAP_SETUID
      - CAP_SETGID
      - CAP_DAC_OVERRIDE
+    # command 会覆盖 command 和 entrypoint 也就是容器实际运行的就是这里的 command 设置的命令。
     command: ["redis-server", "/redis.conf"]
+    binds:
+     - /etc/resolv.conf:/etc/resolv.conf
+     - /etc/hosts:/etc/hosts
     net: host
   - name: nginx
-    image: khs1994/nginx:linuxkit-1.13.7-alpine
+    image: khs1994/nginx:swarm-1.13.7-alpine
     # env:
     #  - TZ=Asia/Shanghai
     capabilities:
@@ -69,6 +77,7 @@ services:
      - CAP_DAC_OVERRIDE
     binds:
      - /etc/resolv.conf:/etc/resolv.conf
+     - /etc/hosts:/etc/hosts
     net: host
 # 只能挂载单个文件
 files:
@@ -90,6 +99,15 @@ files:
       address = ":13337"
   - path: etc/linuxkit-config
     metadata: yaml
+  - path: etc/hosts
+    contents: |
+      127.0.0.1       php7 nginx redis
+      127.0.0.1       localhost
+      ::1     localhost ip6-localhost ip6-loopback
+      fe00::0 ip6-localnet
+      ff00::0 ip6-mcastprefix
+      ff02::1 ip6-allnodes
+      ff02::2 ip6-allrouters
   # - path: etc/logs/nginx
   #   directory: true
   # - path: /etc/nginx/conf.d/linuxkit.conf

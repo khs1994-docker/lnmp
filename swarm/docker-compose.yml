@@ -3,11 +3,15 @@ services:
   php7:
     build:
       context: ../app/demo
-      dockerfile: Dockerfile.swarm
+      dockerfile: Dockerfile
     image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
 
   nginx:
     build:
-      context: ../app/demo
-      dockerfile: Dockerfile.nginx.swarm
+      context: ../config/nginx
+      dockerfile: Dockerfile
     image: khs1994/nginx:swarm-1.13.7-alpine
+    ports:
+      - "80:80"
+    depends_on:
+      - php7

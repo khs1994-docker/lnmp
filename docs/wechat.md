@@ -49,7 +49,7 @@ $ git push tgit master
 $ git clone git@git.qcloud.com:username/wafer2-quickstart-php.git
 ```
 
-* 服务器增加 [ `nginx` 配置](https://github.com/khs1994-docker/lnmp-nginx-conf-demo/blob/master/wechat-demo.conf.example)
+* 服务器增加 [ `nginx` 配置](https://github.com/khs1994-docker/lnmp-nginx-conf-demo/blob/master/example/wechat-demo.conf)
 
 * 服务器新建数据表
 

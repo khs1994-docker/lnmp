@@ -1,6 +1,11 @@
 Changelog
 ==============
 
+#### v17.12-rc9
+
+Changes:
+* Optimize `Swarm` `LinuxKit` Workflow.
+
 #### v17.12-rc8
 
 Changes:

@@ -1,9 +1,0 @@
-FROM khs1994/php-fpm:7.2.0-alpine3.7
-
-RUN cd / \
-      rm -rf /app \
-      && git clone -b php-fpm https://github.com/khs1994-docker/swarm-lnmp-demo.git /app
-
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-
-ENTRYPOINT ["/docker-entrypoint.sh"]

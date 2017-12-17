@@ -332,7 +332,7 @@ commit(){
 }
 
 release_rc(){
-  print_info "开始新的 RC 版本开发"
+  print_info "开始新的 RC 版本开发\n"
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git fetch origin

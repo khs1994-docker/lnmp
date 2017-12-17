@@ -1,7 +1,0 @@
-FROM khs1994/nginx:1.13.7-alpine
-
-RUN apk add --no-cache git \
-      && git clone -b php-fpm https://github.com/khs1994-docker/swarm-lnmp-demo.git /app \
-      && rm -rf /etc/nginx/conf.d \
-      && git clone -b nginx https://github.com/khs1994-docker/swarm-lnmp-demo.git /etc/nginx/conf.d \
-      && apk del git
