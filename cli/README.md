@@ -23,7 +23,7 @@ $ ln -s ~/lnmp/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completion
 适用于 `Linux`
 
 ```bash
-$ sudo ln -s /data/lnmp/cli/lnmp-docker.service /usr/lib/systemd/system/
+$ cp /data/lnmp/cli/lnmp-docker.service /etc/systemd/system/
 
 $ sudo systemctl daemon-reload
 

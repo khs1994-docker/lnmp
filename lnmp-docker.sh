@@ -44,12 +44,6 @@ error(){
   fi
 }
 
-env_status ; ARCH=`uname -m` ; OS=`uname -s`
-
-COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
-COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
-# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
-
 LNMP_PATH=
 
 if [ ! -z ${LNMP_PATH} ];then
@@ -63,6 +57,12 @@ elif [ -f bin/.env ];then
 else
   print_error "please exec this lnmp-docker in LNMP_PATH"
 fi
+
+env_status ; ARCH=`uname -m` ; OS=`uname -s`
+
+COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
+COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
+# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
