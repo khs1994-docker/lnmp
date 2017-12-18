@@ -3,22 +3,26 @@ Changelog
 
 #### v17.12-rc10
 
+Changes:
+* Support `fish` shell completion
+* Add `systemd` unit demo
+
 #### v17.12-rc9
 
 Changes:
-* Optimize `Swarm` `LinuxKit` Workflow.
+* Optimize `Swarm` `LinuxKit` Workflow
 
 #### v17.12-rc8
 
 Changes:
-* 支持微信小程序 `PHP` 后端 Demo。
+* 支持微信小程序 `PHP` 后端 Demo
 
 #### v17.12-rc7
 
 Changes:
 * Add `phpMyAdmin`
 
-* Support `Windows 10` (Not Support LCOW).
+* Support `Windows 10` (Not Support LCOW)
 
 #### v17.12-rc6
 
@@ -83,7 +87,7 @@ Bug fixes:
 Changes:
 * `khs1994-docker/lnmp` v17.09 End Of Life
 * Support `Swarm mode`
-* Remove Based Debian `php-fpm`, now based Alpine.
+* Remove Based Debian `php-fpm`, now based Alpine
 * Default disabled `xdebug` in `php-fpm` Dockerfile
 * Add `ENV TZ=Asia/Shanghai` in `Dockerfile`
 * Add `./lnmp-docker.sh docs` Powered By GitBook
