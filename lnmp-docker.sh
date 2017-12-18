@@ -451,31 +451,16 @@ main() {
     # 仅允许运行在 Linux x86_64
     if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
       init
+      if [ "$2" != "--systemd" ];then opt="-d"; else opt= ; fi
       docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
-         up -d
+         up $opt
     else
       print_error "生产环境不支持 `uname -s` ${ARCH}\n"
     fi
     error
     ;;
-
-    systemd )
-      # 与 production 基本一致，docker-compose 不加 -d 参数
-      run_docker
-      # 仅允许运行在 Linux x86_64
-      if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
-        init
-        docker-compose \
-           -f docker-compose.yml \
-           -f docker-compose.prod.yml \
-           up
-      else
-        print_error "生产环境不支持 `uname -s` ${ARCH}\n"
-      fi
-      error
-      ;;
 
   build )
     run_docker
@@ -488,10 +473,11 @@ main() {
     run_docker
     init
     # 判断架构
+    if [ "$2" != "--systemd" ];then opt="-d"; else opt= ;fi
     if [ ${ARCH} = "x86_64" ];then
-      docker-compose up -d
+      docker-compose up $opt
     elif [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
-        docker-compose -f docker-compose.arm.yml up -d
+        docker-compose -f docker-compose.arm.yml up $opt
     else
       NOTSUPPORT
     fi
@@ -706,7 +692,6 @@ Commands:
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
-  systemd              Manage Docker LNMP by systemd(Only Support Linux x86_64)
 
 Container CLI:
   memcached-cli

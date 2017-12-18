@@ -47,7 +47,7 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
 
 ```bash
-$ cd ~
+$ cd
 
 $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
 

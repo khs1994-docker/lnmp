@@ -4,10 +4,13 @@ Documentation=https://engraver-melody-16476.netlify.com/
 
 [Service]
 WorkingDirectory=/data/lnmp
+# WorkingDirectory=/home/core/lnmp
 Environment=LNMP_PATH=/data/lnmp
+# Environment=LNMP_PATH=/home/core/lnmp
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ExecStartPre=/usr/bin/docker info
-ExecStart=/usr/bin/env PATH=/opt/bin:${PATH} ${LNMP_PATH}/lnmp-docker.sh systemd
+ExecStart=/usr/bin/env PATH=/opt/bin:${PATH} ${LNMP_PATH}/lnmp-docker.sh production --systemd
+# ExecStart=/usr/bin/env PATH=/opt/bin:${PATH} ${LNMP_PATH}/lnmp-docker.sh development --systemd
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/usr/bin/env PATH=/opt/bin:${PATH} ${LNMP_PATH}/lnmp-docker.sh down
 
