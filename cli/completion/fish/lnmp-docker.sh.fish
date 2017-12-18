@@ -18,6 +18,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-build       -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-push        -d     'Push Swarm image (nginx php7'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-deploy      -d     'Deploy LNMP stack TO Swarm mode'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-down        -d     'Remove LNMP stack IN Swarm mode'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a systemd           -d     'Manage Docker LNMP by systemd(Only Support Linux x86_64)'
 
 ##
 

@@ -3,11 +3,13 @@ Description=Start LNMP Within 2 minutes Powered by Docker Compose
 Documentation=https://engraver-melody-16476.netlify.com/
 
 [Service]
-EnvironmentFile=/data/lnmp/.env
+Environment=LNMP_PATH=/data/lnmp
+WorkingDirectory=${LNMP_PATH}
+EnvironmentFile=${LNMP_PATH}/.env
 ExecStartPre=/usr/bin/docker info
-ExecStart=/data/lnmp/lnmp-docker.sh production
-ExecReload=/data/lnmp/lnmp-docker.sh production
-ExecStop=/data/lnmp/lnmp-docker.sh down
+ExecStart=/usr/bin/env PATH=/opt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin ${LNMP_PATH}/lnmp-docker.sh systemd
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/usr/bin/env PATH=/opt/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin ${LNMP_PATH}/lnmp-docker.sh down
 
 [Install]
 WantedBy=multi-user.target

@@ -450,6 +450,21 @@ main() {
     error
     ;;
 
+    systemd )
+      run_docker
+      # 仅允许运行在 Linux x86_64
+      if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
+        init
+        docker-compose \
+           -f docker-compose.yml \
+           -f docker-compose.prod.yml \
+           up
+      else
+        print_error "生产环境不支持 `uname -s` ${ARCH}\n"
+      fi
+      error
+      ;;
+
   build )
     run_docker
     init
