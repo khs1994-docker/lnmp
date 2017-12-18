@@ -18,7 +18,25 @@ $ ln -s ~/lnmp/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completion
 
 ## bash
 
-待添加
+>务必熟悉 `bash` shell 之后再执行此项操作。
+
+在 `~/.bash_profile` 写入以下内容。
+
+```bash
+export PATH=~/lnmp:$PATH
+```
+
+```bash
+# Linux
+
+$ ln -s ~/lnmp/cli/completion/bash/lnmp-docker.sh /etc/bash_completion.d/lnmp-docker.sh
+
+# macOS
+
+$ ln -s ~/lnmp/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_completion.d/lnmp-docker.sh
+```
+
+>注意：请将 `~/lnmp` 替换为本项目实际路径
 
 # systemd
 
@@ -27,7 +45,7 @@ $ ln -s ~/lnmp/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completion
 >务必熟悉 `systemd` 之后再执行此项操作。
 
 ```bash
-$ cp /data/lnmp/cli/lnmp-docker.service /etc/systemd/system/
+$ cp /data/lnmp/cli/systemd/lnmp-docker.service /etc/systemd/system/
 
 $ sudo vi /etc/systemd/system/lnmp-docker.service
 

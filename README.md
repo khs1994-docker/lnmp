@@ -45,6 +45,8 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 ## Install using `git clone` in Devlopment
 
 ```bash
+$ cd
+
 $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
