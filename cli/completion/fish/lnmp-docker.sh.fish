@@ -3,7 +3,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build             -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-config      -d     'Validate and view the Self Build images Compose file'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a cleanup           -d     'Cleanup log files'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a composer          -d     'Use PHP Package Management composer'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development       -d     'Use LNMP in Development(Support x86_64 arm32v7 arm64v8)'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development       -d     'Use LNMP in Development'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a down              -d     'Stop and remove LNMP Docker containers, networks'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a docs              -d     'Support Documents'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a help              -d     'Display this help message'

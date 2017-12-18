@@ -44,19 +44,30 @@ error(){
   fi
 }
 
-LNMP_PATH=
-
-if [ ! -z ${LNMP_PATH} ];then
+lnmp_path(){
+if [ -f bin/.env -a "$1" != "no" ];then
+  . bin/.env
+  if [ "$KHS1994_LNMP_DOCKER_MD5" = "ABC3CDE3FC4348E6EC90E487DE599E34" ];then
+    print_info "LNMP_PATH in THIS PATH $PWD\n"
+    echo > /dev/null 2>&1
+  else
+    lnmp_path no
+  fi
+elif [ ! -z ${LNMP_PATH} ];then
+  print_info "LNMP_PATH is ${LNMP_PATH}\n"
   cd ${LNMP_PATH}
 elif [ -d $HOME/lnmp ];then
+  print_info "LNMP_PATH is $HOME/lnmp\n"
   cd $HOME/lnmp
 elif [ -d /data/lnmp -a -f /data/lnmp/bin/.env ];then
+  print_info "LNMP_PATH is /data/lnmp\n"
   cd /data/lnmp
-elif [ -f bin/.env ];then
-  echo > /dev/null 2>&1
 else
   print_error "please exec this lnmp-docker in LNMP_PATH"
 fi
+}
+
+lnmp_path
 
 env_status ; ARCH=`uname -m` ; OS=`uname -s`
 
@@ -451,6 +462,7 @@ main() {
     ;;
 
     systemd )
+      # 与 production 基本一致，docker-compose 不加 -d 参数
       run_docker
       # 仅允许运行在 Linux x86_64
       if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
@@ -679,7 +691,7 @@ Commands:
   build-config         Validate and view the Self Build images Compose file
   cleanup              Cleanup log files
   composer             Use PHP Package Management composer
-  development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
+  development          Use LNMP in Development
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Support Documents
   help                 Display this help message
@@ -694,6 +706,7 @@ Commands:
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
+  systemd              Manage Docker LNMP by systemd(Only Support Linux x86_64)
 
 Container CLI:
   memcached-cli
