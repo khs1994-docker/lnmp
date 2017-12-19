@@ -621,11 +621,13 @@ main() {
     ;;
 
   swarm-build )
-    docker-compose -f docker-stack.yml build nginx php7
+    cd swarm
+    docker-compose build
     ;;
 
   swarm-push )
-    docker-compose -f docker-stack.yml push nginx php7
+    cd swarm
+    docker-compose push
     ;;
 
   swarm )
