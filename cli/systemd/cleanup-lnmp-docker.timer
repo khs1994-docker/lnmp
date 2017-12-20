@@ -1,8 +1,10 @@
 [Unit]
 Description=Cleanup LNMP Docker logs Weekly
 Documentation=https://doc.lnmp.khs1994.com
+
 [Timer]
-OnCalendar= Mon *_*_* 01:00:00
+OnCalendar=Mon *-*-* 01:00:00
 RandomizedDelaySec=2min
+
 [Install]
-WantedBy=timers.target
+WantedBy=multi-user.target
