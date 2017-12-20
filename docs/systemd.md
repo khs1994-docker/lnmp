@@ -49,7 +49,7 @@ $ sudo cp ./cli/systemd/lnmp-docker.service /etc/systemd/system/
 
 $ sudo vi /etc/systemd/system/lnmp-docker.service
 
-# 自行修改路径为本项目实际路径
+# 务必自行修改路径为本项目实际路径
 
 $ sudo systemctl daemon-reload
 
@@ -69,13 +69,21 @@ $ sudo journalctl -u lnmp-docker
 ```bash
 $ sudo cp -a ./cli/systemd/cleanup-* /etc/systemd/system/
 
+$ sudo vi /etc/systemd/system/cleanup-lnmp-docker.service
+
+# 务必自行修改路径为本项目实际路径
+
 $ sudo systemctl daemon-reload
 
 $ sudo systemctl enable cleanup-lnmp-docker.timer
 
-$ suo systemctl start cleanup-lnmp-docker.timer
+$ sudo systemctl start cleanup-lnmp-docker.timer
 
 $ systemctl list-timers
 
 $ sudo journalctl -u cleanup-lnmp-docker
 ```
+
+# More Information
+
+* https://www.khs1994.com/linux/systemd.html
