@@ -1,6 +1,6 @@
 [Unit]
 Description=Start LNMP Within 2 minutes Powered by Docker Compose
-Documentation=https://engraver-melody-16476.netlify.com/
+Documentation=https://doc.lnmp.khs1994.com
 
 [Service]
 WorkingDirectory=/data/lnmp

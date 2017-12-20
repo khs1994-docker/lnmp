@@ -154,6 +154,10 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 请查看 [khs1994-docker/dockerd-tls](https://github.com/khs1994-docker/dockerd-tls)
 
+# 支持文档
+
+https://doc.lnmp.khs1994.com
+
 # 贡献项目
 
 请查看：[如何贡献](.github/CONTRIBUTING.md)
