@@ -635,7 +635,7 @@ main() {
     docker-compose push
     ;;
 
-  swarm )
+  swarm-deploy )
     run_docker
     docker stack deploy -c docker-stack.yml lnmp
     if [ $? -eq 0 ];then

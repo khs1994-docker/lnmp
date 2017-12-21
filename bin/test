@@ -52,9 +52,10 @@ k8s(){
 }
 
 swarm(){
-  docker swarm init
+  docker node ls > /dev/null 2>&1
+  if [ $? != 0 ];then docker swarm init; fi
   docker stack deploy -c docker-stack.yml lnmp
-  while [[ culr 127.0.0.1 ]]; do
+  while curl 127.0.0.1; do
     #statements
     docker ps -a
     docker stack ls
