@@ -1,6 +1,11 @@
 Changelog
 ==============
 
+#### v17.12-rc11
+
+Changes:
+* Support `k8s`
+
 #### v17.12-rc10
 
 Changes:
