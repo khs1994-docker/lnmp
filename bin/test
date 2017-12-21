@@ -54,15 +54,16 @@ k8s(){
 swarm(){
   docker node ls > /dev/null 2>&1
   if [ $? != 0 ];then docker swarm init; fi
+  docker stack rm lnmp
   docker stack deploy -c docker-stack.yml lnmp
-  while curl 127.0.0.1; do
-    #statements
-    docker ps -a
-    docker stack ls
-    docker stack ps lnmp
-    docker stack services lnmp
-    docker stack rm lnmp
+  until curl 127.0.0.1; do
+    echo "Wait nginx service start"
   done
+  docker ps -a
+  docker stack ls
+  docker stack ps lnmp
+  docker stack services lnmp
+  docker stack rm lnmp
 }
 
 # 测试 composer
