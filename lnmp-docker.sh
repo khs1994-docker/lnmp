@@ -146,10 +146,6 @@ dockerfile_update(){
   read -p "Soft is: " SOFT
   read -p "Version is: " VERSION
   case $SOFT in
-    nginx )
-      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env
-    ;;
     php-fpm )
       dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.7" $VERSION
       sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env

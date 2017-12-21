@@ -4,7 +4,7 @@ Changelog
 #### v17.12-rc10
 
 Changes:
-* Support `fish` shell completion
+* Support `fish` `bash` shell completion
 * Add `systemd` unit and timer demo
 * Support `k8s`
 * Remove khs1994 build image `nginx` `memcached`
