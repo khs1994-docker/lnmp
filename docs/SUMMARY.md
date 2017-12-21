@@ -17,10 +17,11 @@
   * [安装](production/install.md)
   * [配置](production/README.md)
   * [Swarm mode 三节点集群](production/swarm.md)
+  * [k8s](production/k8s.md)
 * 树莓派3
   * [ARM架构](arm.md)
 * [Windows 10](windows.md)  
-* [Systemd](systemd.md)
+* [systemd](systemd.md)
 * [备份恢复](backup.md)
 * [清理](cleanup.md)
 * [国内网络问题](cn.md)

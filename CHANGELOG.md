@@ -6,6 +6,7 @@ Changelog
 Changes:
 * Support `fish` shell completion
 * Add `systemd` unit and timer demo
+* Support `k8s`
 
 #### v17.12-rc9
 

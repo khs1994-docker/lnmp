@@ -187,8 +187,13 @@ install_docker_compose_official(){
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
-  print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
-  # in CoreOS you must move to /opt/bin
+  if [ $1 = "-f" ];then
+    sudo mv docker-compose /usr/local/bin
+    # in CoreOS you must move to /opt/bin
+  else
+    print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
+    # in CoreOS you must move to /opt/bin
+  fi
   exit 0
 }
 
@@ -658,7 +663,7 @@ main() {
     ;;
 
   compose )
-    install_docker_compose_official
+    install_docker_compose_official $2
     ;;
 
   error )

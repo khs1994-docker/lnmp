@@ -84,6 +84,10 @@ $ systemctl list-timers
 $ sudo journalctl -u cleanup-lnmp-docker
 ```
 
+## 定时备份数据文件
+
+与上方内容类似，这里不再赘述。
+
 # More Information
 
 * https://www.khs1994.com/linux/systemd.html

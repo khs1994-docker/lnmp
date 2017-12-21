@@ -4,16 +4,16 @@ set -e
 
 if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
 
-# 生产环境自动测试脚本，开发环境由本人真机手动测试
 # 删除原项目
 
-docker-compose down -v
+print_info(){
+  echo -e "\033[32mINFO\033[0m  $1\n"
+}
 
-echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
-
-# 测试生产环境
-
-echo -e "\033[32mINFO\033[0m  生产环境测试开始\n"
+delete(){
+  docker-compose down -v
+  print_info "删除原有项目成功"
+}
 
 docker_run(){
   docker ps -a
@@ -24,15 +24,44 @@ docker_run(){
 
   docker ps -a \
     && docker-compose down \
-    && echo -e "\033[32mINFO\033[0m  $1\n"
+    && print_info $1
 }
 
-./lnmp-docker.sh production
+# 测试开发环境
 
-docker_run "生产环境测试完毕"
+development(){
+  print_info "开发测试开始"
+
+  ./lnmp-docker.sh development
+
+  docker_run "开发境测试完毕"
+}
+
+# 测试生产环境
+
+production(){
+  print_info "生产环境测试开始"
+
+  ./lnmp-docker.sh production
+
+  docker_run "生产环境测试完毕"
+}
+
+k8s(){
+  echo
+}
+
+swarm(){
+  echo
+}
 
 # 测试 composer
 
+composer(){
+
 bin/composer demo --version
 
-echo -e "\033[32mINFO\033[0m  测试 composer 完毕\n"
+print_info "测试 composer 完毕"
+}
+
+if [ ! -z "$1" ];then $1; else development; production; swarm; k8s; fi
