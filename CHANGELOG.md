@@ -6,7 +6,6 @@ Changelog
 Changes:
 * Support `fish` `bash` shell completion
 * Add `systemd` unit and timer demo
-* Support `k8s`
 * Remove khs1994 build image `nginx` `memcached`
 
 Updates:
