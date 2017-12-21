@@ -40,11 +40,11 @@ jobs:
     - stage: development
       script: bin/test development
     - stage: production
-       script: bin/test production
+      script: bin/test production
     - stage: swarm
-       script: bin/test swarm
+      script: bin/test swarm
     - stage: k8s
-       script: bin/test k8s
+      script: bin/test k8s
 branches:
   only:
   - master
