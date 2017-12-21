@@ -320,7 +320,7 @@ commit(){
   print_info `git remote get-url origin` ${BRANCH}
   if [ ${BRANCH} = "dev" ];then
     git add .
-    git commit -m "Update [skip ci]"
+    git commit -m "Update [skip ci] [skip]"
     git push origin dev
     mirror
   else
