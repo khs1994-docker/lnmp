@@ -44,31 +44,6 @@ error(){
   fi
 }
 
-lnmp_path(){
-if [ -f bin/.env -a "$1" != "no" ];then
-  . bin/.env
-  if [ "$KHS1994_LNMP_DOCKER_MD5" = "ABC3CDE3FC4348E6EC90E487DE599E34" ];then
-    print_info "LNMP_PATH in THIS PATH $PWD\n"
-    echo > /dev/null 2>&1
-  else
-    lnmp_path no
-  fi
-elif [ ! -z ${LNMP_PATH} ];then
-  print_info "LNMP_PATH is ${LNMP_PATH}\n"
-  cd ${LNMP_PATH}
-elif [ -d $HOME/lnmp ];then
-  print_info "LNMP_PATH is $HOME/lnmp\n"
-  cd $HOME/lnmp
-elif [ -d /data/lnmp -a -f /data/lnmp/bin/.env ];then
-  print_info "LNMP_PATH is /data/lnmp\n"
-  cd /data/lnmp
-else
-  print_error "please exec this lnmp-docker in LNMP_PATH"
-fi
-}
-
-lnmp_path
-
 env_status ; ARCH=`uname -m` ; OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
