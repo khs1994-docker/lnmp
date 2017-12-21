@@ -24,7 +24,6 @@ before_install:
 - date
 - git config --global user.name "khs1994-merge-robot"
 - git config --global user.email "ai@khs1994.com"
-script:
 # - cd dockerfile/php-fpm
 # - rm -rf sources.list
 # - cp sources.list.default sources.list
