@@ -121,14 +121,6 @@ dockerfile_update(){
   read -p "Soft is: " SOFT
   read -p "Version is: " VERSION
   case $SOFT in
-    memcached )
-      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_MEMCACHED_VERSION.*/KHS1994_LNMP_MEMCACHED_VERSION='"${VERSION}"'/g' .env.example .env
-    ;;
-    nginx )
-      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' 's/^KHS1994_LNMP_NGINX_VERSION.*/KHS1994_LNMP_NGINX_VERSION='"${VERSION}"'/g' .env.example .env
-    ;;
     php-fpm )
       dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.7" $VERSION
       sed -i '' 's/^KHS1994_LNMP_PHP_VERSION.*/KHS1994_LNMP_PHP_VERSION='"${VERSION}"'/g' .env.example .env
@@ -162,8 +154,13 @@ install_docker_compose_official(){
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
-  print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
-  # in CoreOS you must move to /opt/bin
+  if [ $1 = "-f" ];then
+    sudo mv docker-compose /usr/local/bin
+    # in CoreOS you must move to /opt/bin
+  else
+    print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
+    # in CoreOS you must move to /opt/bin
+  fi
   exit 0
 }
 
@@ -426,10 +423,11 @@ main() {
     # 仅允许运行在 Linux x86_64
     if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
       init
+      if [ "$2" != "--systemd" ];then opt="-d"; else opt= ; fi
       docker-compose \
          -f docker-compose.yml \
          -f docker-compose.prod.yml \
-         up -d
+         up $opt
     else
       print_error "生产环境不支持 `uname -s` ${ARCH}\n"
     fi
@@ -447,10 +445,11 @@ main() {
     run_docker
     init
     # 判断架构
+    if [ "$2" != "--systemd" ];then opt="-d"; else opt= ;fi
     if [ ${ARCH} = "x86_64" ];then
-      docker-compose up -d
+      docker-compose up $opt
     elif [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
-        docker-compose -f docker-compose.arm.yml up -d
+        docker-compose -f docker-compose.arm.yml up $opt
     else
       NOTSUPPORT
     fi
@@ -594,14 +593,16 @@ main() {
     ;;
 
   swarm-build )
-    docker-compose -f docker-stack.yml build nginx php7
+    cd swarm
+    docker-compose build
     ;;
 
   swarm-push )
-    docker-compose -f docker-stack.yml push nginx php7
+    cd swarm
+    docker-compose push
     ;;
 
-  swarm )
+  swarm-deploy )
     run_docker
     docker stack deploy -c docker-stack.yml lnmp
     if [ $? -eq 0 ];then
@@ -629,7 +630,7 @@ main() {
     ;;
 
   compose )
-    install_docker_compose_official
+    install_docker_compose_official $2
     ;;
 
   error )
@@ -650,7 +651,7 @@ Commands:
   build-config         Validate and view the Self Build images Compose file
   cleanup              Cleanup log files
   composer             Use PHP Package Management composer
-  development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
+  development          Use LNMP in Development
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Support Documents
   help                 Display this help message

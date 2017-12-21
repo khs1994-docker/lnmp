@@ -24,18 +24,26 @@ before_install:
 - date
 - git config --global user.name "khs1994-merge-robot"
 - git config --global user.email "ai@khs1994.com"
-script:
 # - cd dockerfile/php-fpm
 # - rm -rf sources.list
 # - cp sources.list.default sources.list
 # - cd -
 - cp .env.example .env
 - docker-compose --version
-- "./lnmp-docker.sh compose"
+- "./lnmp-docker.sh compose -f"
 - docker-compose --version
 - sed -i 's/^PRODUCTIOM_DOCKER_IMAGE_PREFIX.*/PRODUCTIOM_DOCKER_IMAGE_PREFIX=khs1994/g' .env
 - sed -i 's/^PRO_MYSQL_PORT.*/PRO_MYSQL_PORT=127.0.0.1:3306/g' .env
-- "./lnmp-docker.sh test"
+jobs:
+  include:
+    - stage: development
+      script: bin/test development
+    - stage: production
+      script: bin/test production
+    - stage: swarm
+      script: bin/test swarm
+    - stage: k8s
+      script: bin/test k8s
 branches:
   only:
   - master

@@ -7,6 +7,10 @@
 # CN mirror
 #   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh --mirror aliyun | coding | tgit | gitee
 #
+# Support Documents
+#
+# https://doc.lnmp.khs1994.com/
+#
 
 rm -rf lnmp-test
 
@@ -153,4 +157,5 @@ else
 fi
 
 # WebSite https://github.com/khs1994-docker/lnmp
+# Support Documents https://doc.lnmp.khs1994.com/
 # License Apache License Version 2.0

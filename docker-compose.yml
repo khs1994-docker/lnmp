@@ -48,7 +48,7 @@ services:
 
   # memcached:
   #   restart: always
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
   #   env_file: ./bin/timezone.env
@@ -119,7 +119,7 @@ services:
 
   nginx:
     restart: always
-    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    image: "nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file:
       - ./bin/timezone.env
     ports:

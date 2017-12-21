@@ -56,9 +56,9 @@ RUN set -xe \
 
 # install composer
 
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV COMPOSER_HOME /tmp
-ENV COMPOSER_VERSION 1.5.5
+ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
+    COMPOSER_VERSION=1.5.6 \
+    PS1="[\u@\h \w]# "
 
 RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
@@ -90,8 +90,6 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && sed -i 's/www-data/root/g' /usr/local/etc/php-fpm.d/www.conf \
  && sed -i 's/^error_log.*/error_log = \/var\/log\/php-fpm\/error.log/g' /usr/local/etc/php-fpm.d/docker.conf \
  && sed -i 's/^access.log.*/access.log = \/var\/log\/php-fpm\/access.log/g' /usr/local/etc/php-fpm.d/docker.conf
-
-ENV PS1="[\u@\h \w]# "
 
 # RUN apk add --no-cache vim
 

@@ -34,11 +34,6 @@ services:
       - ./config/php/php-development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
 
-  # memcached:
-  #   build:
-  #     context: ./dockerfile/memcached/
-  #     dockerfile: Dockerfile
-  #
   # rabbitmq:
   #   build:
   #     context: ./dockerfile/rabbitmq/
@@ -50,9 +45,6 @@ services:
   #     dockerfile: Dockerfile
 
   nginx:
-    build:
-      context: ./dockerfile/nginx/
-      dockerfile: Dockerfile
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
 

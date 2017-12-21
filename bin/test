@@ -1,19 +1,17 @@
 #!/bin/bash
 
-set -e
-
 if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
 
-# 生产环境自动测试脚本，开发环境由本人真机手动测试
 # 删除原项目
 
-docker-compose down -v
+print_info(){
+  echo -e "\033[32mINFO\033[0m  $1\n"
+}
 
-echo -e "\033[32mINFO\033[0m  删除原有项目成功\n"
-
-# 测试生产环境
-
-echo -e "\033[32mINFO\033[0m  生产环境测试开始\n"
+delete(){
+  docker-compose down -v
+  print_info "删除原有项目成功"
+}
 
 docker_run(){
   docker ps -a
@@ -24,15 +22,64 @@ docker_run(){
 
   docker ps -a \
     && docker-compose down \
-    && echo -e "\033[32mINFO\033[0m  $1\n"
+    && print_info $1
 }
 
-./lnmp-docker.sh production
+# 测试开发环境
 
-docker_run "生产环境测试完毕"
+development(){
+  print_info "开发测试开始"
+
+  ./lnmp-docker.sh development
+
+  docker_run "开发境测试完毕"
+}
+
+# 测试生产环境
+
+production(){
+  print_info "生产环境测试开始"
+
+  ./lnmp-docker.sh production
+
+  docker_run "生产环境测试完毕"
+}
+
+k8s(){
+  curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && \
+  chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && \
+  chmod +x minikube && sudo mv minikube /usr/local/bin/
+  sudo minikube start --vm-driver=none --kubernetes-version=v1.7.0
+  minikube update-context
+  JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; \
+    until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
+}
+
+swarm(){
+  docker node ls > /dev/null 2>&1
+  if [ $? != 0 ];then docker swarm init; fi
+  docker stack rm lnmp
+  docker stack deploy -c docker-stack.yml lnmp
+  until curl 127.0.0.1; do
+    echo "Wait nginx service start"
+    sleep 5
+  done
+  sleep 120
+  docker ps -a
+  docker stack ls
+  docker stack ps lnmp
+  docker stack services lnmp
+  docker stack rm lnmp
+}
 
 # 测试 composer
 
+composer(){
+
 bin/composer demo --version
 
-echo -e "\033[32mINFO\033[0m  测试 composer 完毕\n"
+print_info "测试 composer 完毕"
+}
+
+if [ ! -z "$1" ];then $1; else development; production; swarm; k8s; fi
