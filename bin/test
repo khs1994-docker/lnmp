@@ -59,6 +59,7 @@ swarm(){
   until curl 127.0.0.1; do
     echo "Wait nginx service start"
   done
+  sleep 120
   docker ps -a
   docker stack ls
   docker stack ps lnmp
