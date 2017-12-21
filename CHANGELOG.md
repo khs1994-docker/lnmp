@@ -8,6 +8,9 @@ Changes:
 * Add `systemd` unit and timer demo
 * Support `k8s`
 
+Updates:
+* `Memcached` 1.5.4
+
 #### v17.12-rc9
 
 Changes:
