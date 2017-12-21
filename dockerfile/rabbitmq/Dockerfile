@@ -1,4 +1,4 @@
-FROM rabbitmq:3.6.14-management-alpine
+FROM rabbitmq:3.7.0-management-alpine
 
 ENV TZ=Asia/Shanghai
 

@@ -11,6 +11,7 @@ Changes:
 
 Updates:
 * `Memcached` 1.5.4
+* `RabbitMQ` 3.7.0
 
 #### v17.12-rc9
 

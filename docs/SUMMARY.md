@@ -1,4 +1,4 @@
-* [总结](README.md)
+* [LNMP Docker 支持文档](README.md)
 * [项目初衷](why.md)
 * [安装](install.md)
 * [项目初始化过程](init.md)
