@@ -11,9 +11,6 @@ services:
     # 生产环境默认拉取镜像（可以配置私有仓库）
     image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
 
-  # memcached:
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
-  #
   # rabbitmq:
   #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #
@@ -46,6 +43,5 @@ services:
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image
 
   nginx:
-    image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine
     volumes:
       - ./app:${PRODUCTION_LNMP_PHP_PATH}:rw

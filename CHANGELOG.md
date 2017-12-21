@@ -7,6 +7,7 @@ Changes:
 * Support `fish` shell completion
 * Add `systemd` unit and timer demo
 * Support `k8s`
+* Remove khs1994 build image `nginx` `memcached`
 
 Updates:
 * `Memcached` 1.5.4

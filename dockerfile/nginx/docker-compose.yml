@@ -1,8 +1,0 @@
-version: "3.4"
-services:
-
-  nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ${DOCKER_HUB_USERNAME}/nginx:${TAG}-alpine
