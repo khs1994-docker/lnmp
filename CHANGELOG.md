@@ -6,6 +6,10 @@ Changelog
 Changes:
 * Support `k8s`
 
+Updates:
+* `Composer` 1.5.6
+* `RabbitMQ` 3.7.1
+
 #### v17.12-rc10
 
 Changes:
