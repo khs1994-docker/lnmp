@@ -133,7 +133,7 @@ services:
       - type: bind
         source: ./config/nginx
         target: /etc/nginx/conf.d
-      # - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     user: root
     working_dir: /app
