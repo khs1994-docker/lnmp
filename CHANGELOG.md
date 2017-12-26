@@ -5,10 +5,13 @@ Changelog
 
 Changes:
 * Support `k8s`
+* Add `Apache` 2.4.29
 
 Updates:
 * `Composer` 1.5.6
-* `RabbitMQ` 3.7.1
+* `RabbitMQ` 3.7.2
+* `Docker Compose` 1.18.0
+* `Docker` v17.12 Stable
 
 #### v17.12-rc10
 

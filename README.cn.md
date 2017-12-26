@@ -24,9 +24,9 @@
 
 本项目需要以下软件：
 
-* [Docker CE](https://github.com/docker/docker-ce) 17.09 Stable +
+* [Docker CE](https://github.com/docker/docker-ce) 17.12 Stable +
 
-* [Docker Compose](https://github.com/docker/compose) 1.17.1+
+* [Docker Compose](https://github.com/docker/compose) 1.18.0+
 
 # 快速上手
 

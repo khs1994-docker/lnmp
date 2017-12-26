@@ -142,6 +142,27 @@ services:
     depends_on:
       - php7
 
+  # apache:
+  #   restart: always
+  #   image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
+  #   env_file:
+  #     - ./bin/timezone.env
+  #   ports:
+  #     - "443:443"
+  #     - "80:80"
+  #   volumes:
+  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
+  #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
+  #     - ./app:/app
+  #     - ./logs/apache2:/usr/local/apache2/logs
+  #   user: root
+  #   working_dir: /app
+  #   networks:
+  #     - frontend
+  #   depends_on:
+  #     - php7
+
 networks:
   frontend:
   backend:
