@@ -1,3 +1,6 @@
 [submodule "config/nginx"]
 	path = config/nginx
 	url = https://github.com/khs1994-docker/lnmp-nginx-conf-demo.git
+[submodule "config/apache2"]
+	path = config/apache2
+	url = https://github.com/khs1994-docker/lnmp-nginx-apache2-demo.git
