@@ -85,10 +85,10 @@ $ docker-compose down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/docker-library/docs/tree/master/nginx) |`nginx:1.13.7-alpine`     |![GitHub release](https://img.shields.io/badge/release-v1.13.7-blue.svg)                                                                             |`Alpine:3.5`|
+|[NGINX](https://github.com/docker-library/docs/tree/master/nginx) |`nginx:1.13.8-alpine`     |![GitHub release](https://img.shields.io/badge/release-v1.13.8-blue.svg)                                                                             |`Alpine:3.5`|
 |[Apache](https://github.com/docker-library/docs/tree/master/httpd) |`httpd:2.4.29-alpine`    |![GitHub release](https://img.shields.io/badge/release-v2.4.29-blue.svg)                                                                             |`Alpine:3.6`|
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql) |`mysql:5.7.20`            |![GitHub release](https://img.shields.io/badge/release-v5.7.20-blue.svg)                                                                             |`Debian:jessie`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb) |`mariadb:10.3.2`      |![GitHub release](https://img.shields.io/badge/release-v10.3.2-blue.svg)                                                                             |`Debian:jessie`|
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb) |`mariadb:10.3.3`      |![GitHub release](https://img.shields.io/badge/release-v10.3.3-blue.svg)                                                                             |`Debian:jessie`|
 |[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.6-alpine`       |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)                |`Alpine:3.6`|
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)            |`Alpine:3.7`|
 |[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                               |`Alpine:3.7`|

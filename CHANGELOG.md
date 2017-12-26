@@ -9,13 +9,14 @@ Bug fixes:
 Changes:
 * Support `k8s`
 * Add `Apache` 2.4.29
-* Add `MariaDB` 10.3.2
+* Add `MariaDB` 10.3.3
 
 Updates:
 * `Composer` 1.5.6
 * `RabbitMQ` 3.7.2
 * `Docker Compose` 1.18.0
 * `Docker` v17.12 Stable
+* `nginx` 1.13.8
 
 #### v17.12-rc10
 
