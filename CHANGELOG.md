@@ -3,9 +3,13 @@ Changelog
 
 #### v17.12-rc11
 
+Bug fixes:
+* Fix `composer` `laravel` `laravel-artisan` error in Production
+
 Changes:
 * Support `k8s`
 * Add `Apache` 2.4.29
+* Add `MariaDB` 10.3.2
 
 Updates:
 * `Composer` 1.5.6

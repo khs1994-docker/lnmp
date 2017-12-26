@@ -5,6 +5,10 @@ services:
     ports:
       - "${DEV_MYSQL_PORT}:3306"
 
+  # mariadb:
+  #   ports:
+  #     - "${DEV_MYSQL_PORT}:3306"
+
   redis:
     # 开发环境默认拉取镜像，也可以构建镜像
     # 此处镜像名为 docker-compose config 查看到的镜像
@@ -30,6 +34,10 @@ services:
   nginx:
    volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+
+  # apache:
+  #  volumes:
+  #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

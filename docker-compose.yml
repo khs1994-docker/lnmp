@@ -23,6 +23,28 @@ services:
     secrets:
       - db_root_password
 
+  # mariadb:
+  #   restart: always
+  #   image: "mariadb:${KHS1994_LNMP_MARIADB_VERSION}"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+  #     MYSQL_DATABASE: test
+  #     # MYSQL_USER:
+  #     # MYSQL_PASSWORD:
+  #   env_file: ./bin/timezone.env
+  #   networks:
+  #     - backend
+  #   volumes:
+  #     # - ./config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d:ro
+  #     - mariadb-data:/var/lib/mysql:rw
+  #     - ./logs/mariadb:/var/log/mysql:rw
+  #     - ./backup/mariadb:/backup:rw
+  #   command:
+  #     - mysqld
+  #     - --character-set-server=utf8mb4
+  #   secrets:
+  #     - db_root_password
+
   redis:
     restart: always
     image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
@@ -135,7 +157,6 @@ services:
         target: /etc/nginx/conf.d
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
-    user: root
     working_dir: /app
     networks:
       - frontend
@@ -154,9 +175,7 @@ services:
   #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
   #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
-  #     - ./app:/app
   #     - ./logs/apache2:/usr/local/apache2/logs
-  #   user: root
   #   working_dir: /app
   #   networks:
   #     - frontend
@@ -169,6 +188,7 @@ networks:
 
 volumes:
   mysql-data:
+  # mariadb-data:
   redis-data:
   # rabbitmq-data:
   # postgresql-data:

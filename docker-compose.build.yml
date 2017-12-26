@@ -5,6 +5,10 @@ services:
     ports:
       - "${DEV_MYSQL_PORT}:3306"
 
+  # mariadb:
+  #   ports:
+  #     - "${DEV_MYSQL_PORT}:3306"
+
   redis:
     build:
       context: ./dockerfile/redis/
@@ -47,6 +51,10 @@ services:
   nginx:
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+
+  # apache:
+  #   volumes:
+  #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

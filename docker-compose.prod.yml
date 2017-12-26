@@ -7,6 +7,12 @@ services:
     environment:
       - MYSQL_DATABASE=laravel_admin
 
+  # mariadb:
+  #   ports:
+  #     - "${PRO_MYSQL_PORT}:3306"
+  #   environment:
+  #     - MYSQL_DATABASE=laravel_admin
+
   redis:
     # 生产环境默认拉取镜像（可以配置私有仓库）
     image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
@@ -45,3 +51,7 @@ services:
   nginx:
     volumes:
       - ./app:${PRODUCTION_LNMP_PHP_PATH}:rw
+
+  # apache:
+  #   volumes:
+  #     - ./app:${PRODUCTION_LNMP_PHP_PATH}:rw
