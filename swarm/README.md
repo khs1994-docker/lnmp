@@ -1,1 +1,0 @@
-../docs/production/swarm.md

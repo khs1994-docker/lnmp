@@ -18,12 +18,12 @@
 
 以下为本地测试镜像步骤。
 
-在 `./swarm` 目录下修改 `docker-compose.yml` 的构建路径，并执行以下命令构建镜像并运行。
+执行以下命令构建镜像并运行。
 
 ```bash
-$ docker-compose build
+$ docker-compose -f docker-stack.yml build
 
-$ docker-compose push
+$ docker-compose push php7 nginx
 ```
 
 # 准备

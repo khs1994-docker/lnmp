@@ -65,6 +65,8 @@ fi
 # 创建日志文件
 
 logs(){
+  if ! [ -d "logs/apache2" ];then mkdir -p logs/apache2; fi
+
   if ! [ -d "logs/mongodb" ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
 
   if ! [ -d "logs/mysql" ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
@@ -99,7 +101,9 @@ cleanup(){
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/xdebug-remote.log \
-      && echo > logs/redis/redis.log
+      && echo > logs/redis/redis.log \
+      && echo > logs/apache2/access.log \
+      && echo > logs/apache2/error.log
       print_info "Clean log files SUCCESS\n"
 }
 
@@ -589,13 +593,11 @@ main() {
     ;;
 
   swarm-build )
-    cd swarm
-    docker-compose build
+    docker-compose -f docker-stack.yml build
     ;;
 
   swarm-push )
-    cd swarm
-    docker-compose push
+    docker-compose -f docker-stack.yml push nginx php7
     ;;
 
   swarm-deploy )

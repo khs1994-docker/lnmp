@@ -62,6 +62,7 @@ services:
         constraints: [node.role == manager]
 
   php7:
+    build: ./app/demo
     image: "khs1994/php-fpm:swarm-7.2.0-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     # volumes:
@@ -78,6 +79,7 @@ services:
       replicas: 2
 
   nginx:
+    build: ./config/nginx
     image: "khs1994/nginx:swarm-1.13.8-alpine"
     env_file: ./bin/timezone.env
     ports:
