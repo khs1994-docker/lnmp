@@ -20,6 +20,7 @@ services:
     env_file:
       - ./bin/timezone.env
     environment:
+      # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
       MYSQL_DATABASE: test
     networks:
@@ -27,8 +28,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
       - mysql-data:/var/lib/mysql:rw
-      - ./logs/mysql:/var/log/mysql:rw
+      # - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
     deploy:
@@ -50,12 +52,14 @@ services:
     env_file: ./bin/timezone.env
     # ports:
     #   - "6379"
+    volumes:
+      - redis-data:/data
     networks:
       - backend
     command: ["redis-server","/redis.conf"]
     deploy:
-      # 同时运行的容器数量
-      replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
   php7:
     image: "khs1994/php-fpm:swarm-7.2.0-alpine3.7"
