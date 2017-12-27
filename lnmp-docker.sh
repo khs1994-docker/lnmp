@@ -65,19 +65,19 @@ fi
 # 创建日志文件
 
 logs(){
-  if [ ! -d "logs/mongodb" ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
+  if ! [ -d "logs/mongodb" ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
 
-  if [ ! -d "logs/mysql" ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
+  if ! [ -d "logs/mysql" ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
 
-  if [ ! -d "logs/nginx" ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
+  if ! [ -d "logs/nginx" ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
 
-  if [ ! -d "logs/php-fpm" ];then
+  if ! [ -d "logs/php-fpm" ];then
     mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/xdebug-remote.log
   fi
 
-  if [ ! -d "logs/redis" ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
+  if ! [ -d "logs/redis" ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
   chmod -R 777 logs/mongodb \
                logs/mysql \
                logs/nginx \
@@ -85,7 +85,7 @@ logs(){
                logs/redis
 
   # 不清理 Composer 缓存
-  if [ ! -d "tmp/cache" ];then mkdir -p tmp/cache && chmod 777 tmp/cache; fi
+  if ! [ -d "tmp/cache" ];then mkdir -p tmp/cache && chmod 777 tmp/cache; fi
 }
 
 # 清理日志文件
@@ -195,9 +195,9 @@ install_docker_compose(){
       #arm
       print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
       command -v pip3 >/dev/null 2>&1
-      if [ ! $? = 0 ];then sudo apt install -y python3-pip; fi
+      if [ $? != 0 ];then sudo apt install -y python3-pip; fi
       # pip 源
-      if [ ! -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
+      if ! [ -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
       sudo pip3 install --upgrade docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
       curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
@@ -207,7 +207,7 @@ install_docker_compose(){
         . /etc/os-release
         case $ID in
           coreos )
-            if [ ! -d "/opt/bin" ];then sudo mkdir -p /opt/bin; fi
+            if ! [ -d "/opt/bin" ];then sudo mkdir -p /opt/bin; fi
             sudo cp -a docker-compose /opt/bin/docker-compose
             ;;
           * )
@@ -277,7 +277,7 @@ restore(){
 
 update(){
   # 不存在 .git 退出
-  if [ ! -d .git ];then exit 1; fi
+  if ! [ -d .git ];then exit 1; fi
   # 检查网络连接
   ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
   # 检查源链接
@@ -300,7 +300,7 @@ update(){
   fi
   if [ "$1" != "-f" ];then
     GIT_STATUS=`git status -s --ignore-submodules`
-    if [ ! -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
+    if ! [ -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
   fi
   git fetch lnmp
   print_info "\nBranch is ${BRANCH}\n"
@@ -492,11 +492,7 @@ main() {
     restore $2
     ;;
 
-  update )
-    update $2
-    ;;
-
-  upgrade )
+  update|upgrade )
     update $2
     ;;
 
