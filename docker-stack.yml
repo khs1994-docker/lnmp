@@ -74,7 +74,7 @@ services:
       replicas: 2
 
   nginx:
-    image: "khs1994/nginx:swarm-1.13.7-alpine"
+    image: "khs1994/nginx:swarm-1.13.8-alpine"
     env_file: ./bin/timezone.env
     ports:
       - "443:443"
