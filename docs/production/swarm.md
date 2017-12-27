@@ -23,7 +23,7 @@
 ```bash
 $ docker-compose -f docker-stack.yml build
 
-$ docker-compose push php7 nginx
+$ docker-compose -f docker-stack.yml push php7 nginx
 ```
 
 # 准备

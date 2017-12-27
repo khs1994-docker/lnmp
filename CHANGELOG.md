@@ -17,6 +17,8 @@ Updates:
 * `Docker Compose` 1.18.0
 * `Docker` v17.12 Stable
 * `nginx` 1.13.8
+* `MongoDB` 3.6.1
+* `MySQL` 8.0.3
 
 #### v17.12-rc10
 

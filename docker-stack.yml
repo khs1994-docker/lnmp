@@ -16,7 +16,7 @@ services:
         constraints: [node.role == manager]
 
   mysql:
-    image: "mysql:5.7.20"
+    image: "mysql:8.0.3"
     env_file:
       - ./bin/timezone.env
     environment:
