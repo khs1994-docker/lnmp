@@ -13,7 +13,7 @@ services:
     networks:
       - backend
     volumes:
-      # - ./config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d:ro
+      # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
@@ -35,7 +35,7 @@ services:
   #   networks:
   #     - backend
   #   volumes:
-  #     # - ./config/mariadb/conf.d/mariadb.cnf:/etc/mysql/conf.d/mariadb.cnf
+  #     # - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
   #     - mariadb-data:/var/lib/mysql:rw
   #     - ./logs/mariadb:/var/log/mysql:rw
   #     - ./backup/mariadb:/backup:rw

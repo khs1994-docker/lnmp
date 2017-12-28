@@ -28,7 +28,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./config/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       - mysql-data:/var/lib/mysql:rw
       # - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
