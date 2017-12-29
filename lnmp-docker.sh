@@ -687,8 +687,10 @@ Commands:
   build                Use LNMP With Self Build images(Support x86_64)
   build-config         Validate and view the Self Build images Compose file
   cleanup              Cleanup log files
+  compose              Install docker-compose
   composer             Use PHP Package Management composer
   development          Use LNMP in Development
+  debug                Debug LNMP environment
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Support Documents
   help                 Display this help message
@@ -719,9 +721,8 @@ Container CLI:
 Tools:
   commit               Commit LNMP to Git
   cn-mirror            Push master branch to CN mirror
-  compose              Install docker-compose github
   dockerfile-update    Update Dockerfile By Script
-  debug                Debug LNMP environment
+  rc                   Start new release
   test                 Test LNMP
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
