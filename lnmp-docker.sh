@@ -42,7 +42,7 @@ update_version(){
   for soft in $softs; do
     version="KHS1994_LNMP_${soft}_VERSION"
     eval version=$(echo \$$version)
-    if [ $OS = Darwin ];then
+    if [ $OS = "Darwin" ];then
       sed -i '' 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
     else
       sed -i 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
@@ -177,7 +177,7 @@ dockerfile_update(){
 
 install_docker_compose_official(){
   command -v docker-compose >/dev/null 2>&1
-  if [ $? != 0 ];then print_error "docker-compose already install"; exit 0; fi
+  if [ $? = 0 ];then print_error "docker-compose already install"; exit 0; fi
   if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
   # 版本在 bin/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
@@ -195,7 +195,7 @@ install_docker_compose_official(){
 }
 
 install_docker_compose(){
-  if [ "$1" = "--Official" ];then install_docker_compose_official $2 $3; exit 0;fi
+  if [ "$1" = "--official" ];then install_docker_compose_official $2 $3;fi
 
   local i=0
   command -v docker-compose >/dev/null 2>&1
@@ -656,7 +656,9 @@ main() {
     ;;
 
   debug )
+    # Docker 是否运行
     run_docker
+    # Docker Compose 是否安装
     install_docker_compose
     ;;
 
@@ -690,6 +692,7 @@ Commands:
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Support Documents
   help                 Display this help message
+  init                 Init LNMP environment
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   php                  Run PHP in CLI
@@ -714,15 +717,14 @@ Container CLI:
   redis-cli
 
 Tools:
+  commit               Commit LNMP to Git
+  cn-mirror            Push master branch to CN mirror
+  compose              Install docker-compose github
+  dockerfile-update    Update Dockerfile By Script
+  debug                Debug LNMP environment
+  test                 Test LNMP
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
-  init
-  commit
-  test
-  dockerfile-update    Update Dockerfile By Script
-  debug                Debug environment
-  cn-mirror            Push master branch to CN mirror
-  compose              Install docker-compose By curl from github
 
 Read './docs/*.md' for more information about commands."
     ;;

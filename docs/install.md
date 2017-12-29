@@ -22,4 +22,8 @@ $ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 ```bash
 $ ./lnmp-docker.sh update
+
+# 强制与上游保持一致
+
+$ ./lnmp-docker.sh update -f
 ```
