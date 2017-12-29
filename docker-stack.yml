@@ -16,10 +16,11 @@ services:
         constraints: [node.role == manager]
 
   mysql:
-    image: "mysql:5.7.20"
+    image: "mysql:8.0.3"
     env_file:
       - ./bin/timezone.env
     environment:
+      # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
       MYSQL_DATABASE: test
     networks:
@@ -27,8 +28,9 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       - mysql-data:/var/lib/mysql:rw
-      - ./logs/mysql:/var/log/mysql:rw
+      # - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
     deploy:
@@ -50,14 +52,17 @@ services:
     env_file: ./bin/timezone.env
     # ports:
     #   - "6379"
+    volumes:
+      - redis-data:/data
     networks:
       - backend
     command: ["redis-server","/redis.conf"]
     deploy:
-      # 同时运行的容器数量
-      replicas: 1
+      placement:
+        constraints: [node.role == manager]
 
   php7:
+    build: ./app/demo
     image: "khs1994/php-fpm:swarm-7.2.0-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     # volumes:
@@ -74,7 +79,8 @@ services:
       replicas: 2
 
   nginx:
-    image: "khs1994/nginx:swarm-1.13.7-alpine"
+    build: ./config/nginx
+    image: "khs1994/nginx:swarm-1.13.8-alpine"
     env_file: ./bin/timezone.env
     ports:
       - "443:443"

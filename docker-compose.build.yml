@@ -5,6 +5,10 @@ services:
     ports:
       - "${DEV_MYSQL_PORT}:3306"
 
+  # mariadb:
+  #   ports:
+  #     - "${DEV_MYSQL_PORT}:3306"
+
   redis:
     build:
       context: ./dockerfile/redis/
@@ -48,6 +52,10 @@ services:
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
 
+  # apache:
+  #   volumes:
+  #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     restart: always
@@ -56,7 +64,7 @@ services:
     environment:
       - PMA_HOST=mysql
     ports:
-      - 8080:80
+      - ${PHPMYADMIN_PORT}:80
     volumes:
       - phpmyadmin-data:/sessions
 

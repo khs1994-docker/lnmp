@@ -14,4 +14,4 @@ $ git submodule update --init --recursive
 
 建立日志文件夹和空白日志文件
 
-初始化完毕之后执行 `docker-compose up -d`
+初始化完毕之后执行 `docker-compose [-f FILE_NMAE] up -d`

@@ -235,7 +235,7 @@ Function main() {
     }
 
     swarm-build {
-      docker-compose -f docker-stack.yml build nginx php7
+      docker-compose -f docker-stack.yml build
     }
 
     swarm-push {

@@ -25,6 +25,31 @@ env_status(){
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
 }
 
+update_version(){
+  . .env.example
+
+  local softs='PHP \
+              NGINX \
+              APACHE \
+              MYSQL \
+              MARIADB \
+              REDIS \
+              MEMCACHED \
+              RABBITMQ \
+              POSTGRESQL \
+              MONGODB \
+              '
+  for soft in $softs; do
+    version="KHS1994_LNMP_${soft}_VERSION"
+    eval version=$(echo \$$version)
+    if [ $OS = "Darwin" ];then
+      sed -i '' 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
+    else
+      sed -i 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
+    fi
+  done
+}
+
 run_docker(){
   docker info 2>&1 >/dev/null
   if [ $? -ne 0 ];then
@@ -65,19 +90,21 @@ fi
 # 创建日志文件
 
 logs(){
-  if [ ! -d "logs/mongodb" ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
+  if ! [ -d "logs/apache2" ];then mkdir -p logs/apache2; fi
 
-  if [ ! -d "logs/mysql" ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
+  if ! [ -d "logs/mongodb" ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
 
-  if [ ! -d "logs/nginx" ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
+  if ! [ -d "logs/mysql" ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
 
-  if [ ! -d "logs/php-fpm" ];then
+  if ! [ -d "logs/nginx" ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
+
+  if ! [ -d "logs/php-fpm" ];then
     mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/xdebug-remote.log
   fi
 
-  if [ ! -d "logs/redis" ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
+  if ! [ -d "logs/redis" ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
   chmod -R 777 logs/mongodb \
                logs/mysql \
                logs/nginx \
@@ -85,7 +112,7 @@ logs(){
                logs/redis
 
   # 不清理 Composer 缓存
-  if [ ! -d "tmp/cache" ];then mkdir -p tmp/cache && chmod 777 tmp/cache; fi
+  if ! [ -d "tmp/cache" ];then mkdir -p tmp/cache && chmod 777 tmp/cache; fi
 }
 
 # 清理日志文件
@@ -99,7 +126,9 @@ cleanup(){
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/xdebug-remote.log \
-      && echo > logs/redis/redis.log
+      && echo > logs/redis/redis.log \
+      && echo > logs/apache2/access.log \
+      && echo > logs/apache2/error.log
       print_info "Clean log files SUCCESS\n"
 }
 
@@ -148,14 +177,15 @@ dockerfile_update(){
 
 install_docker_compose_official(){
   command -v docker-compose >/dev/null 2>&1
-  if [ $? != 0 ];then print_error "docker-compose already install"; exit 1; fi
+  if [ $? = 0 ];then print_error "docker-compose already install"; exit 0; fi
   if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
   # 版本在 bin/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
-  if [ $1 = "-f" ];then
-    sudo mv docker-compose /usr/local/bin
+  if [ "$1" = "-f" ];then
+    sudo cp docker-compose /usr/local/bin
+    sudo rm docker-compose
     # in CoreOS you must move to /opt/bin
   else
     print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
@@ -165,6 +195,8 @@ install_docker_compose_official(){
 }
 
 install_docker_compose(){
+  if [ "$1" = "--official" ];then install_docker_compose_official $2 $3;fi
+
   local i=0
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
@@ -173,12 +205,19 @@ install_docker_compose(){
     # 但是要判断版本是不是最新的
     if [ ${OS} = Linux ];then
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
-        if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
-        install_docker_compose
-        i=$(($i+1))
-        if [ "$i" -eq 2 ];then exit 1; fi
+        # 版本错误
+        if [ "$1" = "-f" ];then
+          # 强制更新
+          if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
+          install_docker_compose
+          i=$(($i+1))
+          if [ "$i" -eq 2 ];then exit 1; fi
+        else
+          # 版本错误提示
+          print_error "`docker-compose --version` NOT installed Correct version, Maybe you should EXEC $ ./lnmp-docker.sh compose -f"
+        fi
       else
+        # 版本正确
         print_info "`docker-compose --version` already installed Correct version"
       fi
     elif [ ${OS} = Darwin ];then
@@ -195,9 +234,9 @@ install_docker_compose(){
       #arm
       print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
       command -v pip3 >/dev/null 2>&1
-      if [ ! $? = 0 ];then sudo apt install -y python3-pip; fi
+      if [ $? != 0 ];then sudo apt install -y python3-pip; fi
       # pip 源
-      if [ ! -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
+      if ! [ -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
       sudo pip3 install --upgrade docker-compose
     elif [ $OS = "Linux" -o $OS = "Darwin" ];then
       curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
@@ -207,7 +246,7 @@ install_docker_compose(){
         . /etc/os-release
         case $ID in
           coreos )
-            if [ ! -d "/opt/bin" ];then sudo mkdir -p /opt/bin; fi
+            if ! [ -d "/opt/bin" ];then sudo mkdir -p /opt/bin; fi
             sudo cp -a docker-compose /opt/bin/docker-compose
             ;;
           * )
@@ -243,6 +282,8 @@ demo() {
 init() {
   # docker-compose 是否安装
   install_docker_compose
+  # 升级软件版本
+  update_version
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
@@ -277,7 +318,7 @@ restore(){
 
 update(){
   # 不存在 .git 退出
-  if [ ! -d .git ];then exit 1; fi
+  if ! [ -d .git ];then exit 1; fi
   # 检查网络连接
   ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
   # 检查源链接
@@ -300,7 +341,7 @@ update(){
   fi
   if [ "$1" != "-f" ];then
     GIT_STATUS=`git status -s --ignore-submodules`
-    if [ ! -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
+    if ! [ -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
   fi
   git fetch lnmp
   print_info "\nBranch is ${BRANCH}\n"
@@ -492,11 +533,7 @@ main() {
     restore $2
     ;;
 
-  update )
-    update $2
-    ;;
-
-  upgrade )
+  update|upgrade )
     update $2
     ;;
 
@@ -593,13 +630,11 @@ main() {
     ;;
 
   swarm-build )
-    cd swarm
-    docker-compose build
+    docker-compose -f docker-stack.yml build
     ;;
 
   swarm-push )
-    cd swarm
-    docker-compose push
+    docker-compose -f docker-stack.yml push nginx php7
     ;;
 
   swarm-deploy )
@@ -621,7 +656,9 @@ main() {
     ;;
 
   debug )
+    # Docker 是否运行
     run_docker
+    # Docker Compose 是否安装
     install_docker_compose
     ;;
 
@@ -630,7 +667,7 @@ main() {
     ;;
 
   compose )
-    install_docker_compose_official $2
+    install_docker_compose $2 $3 $4
     ;;
 
   error )
@@ -655,6 +692,7 @@ Commands:
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Support Documents
   help                 Display this help message
+  init                 Init LNMP environment
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   php                  Run PHP in CLI
@@ -679,15 +717,14 @@ Container CLI:
   redis-cli
 
 Tools:
+  commit               Commit LNMP to Git
+  cn-mirror            Push master branch to CN mirror
+  compose              Install docker-compose github
+  dockerfile-update    Update Dockerfile By Script
+  debug                Debug LNMP environment
+  test                 Test LNMP
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
-  init
-  commit
-  test
-  dockerfile-update    Update Dockerfile By Script
-  debug                Debug environment
-  cn-mirror            Push master branch to CN mirror
-  compose              Install docker-compose By curl from github
 
 Read './docs/*.md' for more information about commands."
     ;;

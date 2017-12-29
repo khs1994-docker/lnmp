@@ -13,7 +13,7 @@ services:
     networks:
       - backend
     volumes:
-      # - ./config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d:ro
+      # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
@@ -22,6 +22,28 @@ services:
       - --character-set-server=utf8mb4
     secrets:
       - db_root_password
+
+  # mariadb:
+  #   restart: always
+  #   image: "mariadb:${KHS1994_LNMP_MARIADB_VERSION}"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+  #     MYSQL_DATABASE: test
+  #     # MYSQL_USER:
+  #     # MYSQL_PASSWORD:
+  #   env_file: ./bin/timezone.env
+  #   networks:
+  #     - backend
+  #   volumes:
+  #     # - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
+  #     - mariadb-data:/var/lib/mysql:rw
+  #     - ./logs/mariadb:/var/log/mysql:rw
+  #     - ./backup/mariadb:/backup:rw
+  #   command:
+  #     - mysqld
+  #     - --character-set-server=utf8mb4
+  #   secrets:
+  #     - db_root_password
 
   redis:
     restart: always
@@ -133,14 +155,32 @@ services:
       - type: bind
         source: ./config/nginx
         target: /etc/nginx/conf.d
-      # - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
-    user: root
     working_dir: /app
     networks:
       - frontend
     depends_on:
       - php7
+
+  # apache:
+  #   restart: always
+  #   image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
+  #   env_file:
+  #     - ./bin/timezone.env
+  #   ports:
+  #     - "443:443"
+  #     - "80:80"
+  #   volumes:
+  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
+  #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
+  #     - ./logs/apache2:/usr/local/apache2/logs
+  #   working_dir: /app
+  #   networks:
+  #     - frontend
+  #   depends_on:
+  #     - php7
 
 networks:
   frontend:
@@ -148,6 +188,7 @@ networks:
 
 volumes:
   mysql-data:
+  # mariadb-data:
   redis-data:
   # rabbitmq-data:
   # postgresql-data:

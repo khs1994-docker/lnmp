@@ -10,10 +10,10 @@
 
 编写生产环境 `nginx` 配置文件，并推送到 GitHub，CI/CD 开始构建 `nginx` 镜像。
 
-在 `./linuxkit` 目录下修改 `docker-compose.yml` 的构建路径，并执行以下命令构建镜像并运行。
+执行以下命令构建镜像并运行。
 
 ```bash
-$ docker-compose build
+$ docker-compose -f docker-stack.yml build
 
 # $ docker-compose push
 

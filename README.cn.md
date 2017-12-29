@@ -24,9 +24,9 @@
 
 本项目需要以下软件：
 
-* [Docker CE](https://github.com/docker/docker-ce) 17.09 Stable +
+* [Docker CE](https://github.com/docker/docker-ce) 17.12 Stable +
 
-* [Docker Compose](https://github.com/docker/compose) 1.17.1+
+* [Docker Compose](https://github.com/docker/compose) 1.18.0+
 
 # 快速上手
 
@@ -85,16 +85,18 @@ $ docker-compose down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/docker-library/docs/tree/master/nginx) |`nginx:1.13.7-alpine`     |![GitHub release](https://img.shields.io/badge/release-v1.13.7-blue.svg)                                                                             |`Alpine:3.5`|
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql) |`mysql:5.7.20`            |![GitHub release](https://img.shields.io/badge/release-v5.7.20-blue.svg)                                                                             |`Debian:jessie`|
+|[NGINX](https://github.com/docker-library/docs/tree/master/nginx) |`nginx:1.13.8-alpine`     |[![GitHub release](https://img.shields.io/badge/release-v1.13.8-blue.svg)](https://github.com/nginx/nginx)                                                   |`Alpine:3.5`|
+|[Apache](https://github.com/docker-library/docs/tree/master/httpd) |`httpd:2.4.29-alpine`    |[![GitHub release](https://img.shields.io/badge/release-v2.4.29-blue.svg)](https://github.com/apache/httpd)                                                     |`Alpine:3.6`|
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql) |`mysql:8.0.3`             |[![GitHub release](https://img.shields.io/badge/release-v8.0.3-blue.svg)](https://github.com/mysql/mysql-server)                                                |`Debian:jessie`|
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb) |`mariadb:10.3.3`      |![GitHub release](https://img.shields.io/badge/release-v10.3.3-blue.svg)                                                                             |`Debian:jessie`|
 |[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.6-alpine`       |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)                |`Alpine:3.6`|
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)            |`Alpine:3.7`|
 |[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                               |`Alpine:3.7`|
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)         |`Alpine:3.7`|
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.4-alpine`           |![GitHub release](https://img.shields.io/badge/release-v1.5.4-blue.svg)                                                                       |`Alpine:3.6`|
-|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.7.0-management-alpine`         |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)   |`Alpine:3.7`|
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)                 |`Alpine:3.7`|
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.4-alpine`           |![GitHub release](https://img.shields.io/badge/release-v1.5.4-blue.svg)                                                                             |`Alpine:3.6`|
+|[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.7.2-management-alpine`         |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)        |`Alpine:3.7`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.1-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)                    |`Alpine:3.6`|
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.6.0`            |![GitHub release](https://img.shields.io/badge/release-v3.6.0-blue.svg)                                                                                        |`Debian:jessie`|
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.6.1`            |[![GitHub release](https://img.shields.io/badge/release-v3.6.1-blue.svg)](https://github.com/mongodb/mongo)                                                     |`Debian:jessie`|
 
 ## 文件夹结构
 

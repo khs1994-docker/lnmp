@@ -17,7 +17,8 @@ if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
     TAG=${KHS1994_LNMP_PHP_VERSION}-stretch
   fi
 elif [ ${ARCH} = "x86_64" ];then
-  DOCKER_IMAGE=khs1994/php-fpm
+  docker image ls | grep ccr.ccs.tencentyun.com/khs1994/php-fpm > /dev/null 2>&1
+  if [ "$?" = 0 ];then DOCKER_IMAGE=ccr.ccs.tencentyun.com/khs1994/php-fpm; else DOCKER_IMAGE=khs1994/php-fpm; fi
 else
   echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
   exit 1

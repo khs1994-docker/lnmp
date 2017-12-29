@@ -1,6 +1,24 @@
 Changelog
 ==============
 
+#### v17.12-rc11
+
+Bug fixes:
+* Fix `composer` `laravel` `laravel-artisan` error in Production
+
+Changes:
+* Add `Apache` 2.4.29
+* Add `MariaDB` 10.3.3
+
+Updates:
+* `Composer` 1.5.6
+* `RabbitMQ` 3.7.2
+* `Docker Compose` 1.18.0
+* `Docker` v17.12 Stable
+* `nginx` 1.13.8
+* `MongoDB` 3.6.1
+* `MySQL` 8.0.3
+
 #### v17.12-rc10
 
 Changes:

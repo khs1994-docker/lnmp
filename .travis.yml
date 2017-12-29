@@ -52,3 +52,4 @@ env:
   global:
   # - DOCKER_COMPOSE_VERSION: 1.17.1
   - TZ: Asia/Shanghai
+  - CHANGE_MINIKUBE_NONE_USER: true
