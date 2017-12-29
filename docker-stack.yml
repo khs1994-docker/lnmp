@@ -40,12 +40,6 @@ services:
     secrets:
       - source: db_root_password
         target: /etc/db_root_password
-    configs:
-      - source: mysqld_cnf
-        target: /etc/mysql/mysql.conf.d/mysqld.cnf
-        # uid: '103'
-        # gid: '103'
-        # mode: 0440
 
   redis:
     image: "khs1994/redis:4.0.6-alpine"
@@ -94,6 +88,12 @@ services:
     deploy:
       replicas: 2
     command: ["/wait-for-php.sh"]
+    configs:
+      - source: nginx_conf
+        target: /etc/nginx/nginx.conf
+        # uid: '103'
+        # gid: '103'
+        # mode: 0440
 
 networks:
   frontend:
@@ -111,5 +111,5 @@ secrets:
     file: secrets/db_root_password.txt
 
 configs:
-  mysqld_cnf:
-    file: ./config/mysql/mysql.conf.d/mysqld.cnf
+  nginx_conf:
+    file: ./config/etc/nginx/nginx.conf

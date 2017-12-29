@@ -5,7 +5,7 @@ Changelog
 
 Changes:
 * Support `k8s`
-* `khs1994-docker/lnmp` v17.10 End Of Life
+* `khs1994-docker/lnmp` v17.11 End Of Life
 
 #### v17.12-rc11
 
