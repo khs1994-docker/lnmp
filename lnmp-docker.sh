@@ -25,6 +25,31 @@ env_status(){
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
 }
 
+update_version(){
+  . .env.example
+
+  local softs='PHP \
+              NGINX \
+              APACHE \
+              MYSQL \
+              MARIADB \
+              REDIS \
+              MEMCACHED \
+              RABBITMQ \
+              POSTGRESQL \
+              MONGODB \
+              '
+  for soft in $softs; do
+    version="KHS1994_LNMP_${soft}_VERSION"
+    eval version=$(echo \$$version)
+    if [ $OS = Darwin ];then
+      sed -i '' 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
+    else
+      sed -i 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
+    fi
+  done
+}
+
 run_docker(){
   docker info 2>&1 >/dev/null
   if [ $? -ne 0 ];then
@@ -152,14 +177,15 @@ dockerfile_update(){
 
 install_docker_compose_official(){
   command -v docker-compose >/dev/null 2>&1
-  if [ $? != 0 ];then print_error "docker-compose already install"; exit 1; fi
+  if [ $? != 0 ];then print_error "docker-compose already install"; exit 0; fi
   if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
   # 版本在 bin/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
-  if [ $1 = "-f" ];then
-    sudo mv docker-compose /usr/local/bin
+  if [ "$1" = "-f" ];then
+    sudo cp docker-compose /usr/local/bin
+    sudo rm docker-compose
     # in CoreOS you must move to /opt/bin
   else
     print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
@@ -169,6 +195,8 @@ install_docker_compose_official(){
 }
 
 install_docker_compose(){
+  if [ "$1" = "--Official" ];then install_docker_compose_official $2 $3; exit 0;fi
+
   local i=0
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
@@ -177,12 +205,19 @@ install_docker_compose(){
     # 但是要判断版本是不是最新的
     if [ ${OS} = Linux ];then
       if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        print_error "`docker-compose --version` NOT installed Correct version, reinstall..."
-        if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
-        install_docker_compose
-        i=$(($i+1))
-        if [ "$i" -eq 2 ];then exit 1; fi
+        # 版本错误
+        if [ "$1" = "-f" ];then
+          # 强制更新
+          if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
+          install_docker_compose
+          i=$(($i+1))
+          if [ "$i" -eq 2 ];then exit 1; fi
+        else
+          # 版本错误提示
+          print_error "`docker-compose --version` NOT installed Correct version, Maybe you should EXEC $ ./lnmp-docker.sh compose -f"
+        fi
       else
+        # 版本正确
         print_info "`docker-compose --version` already installed Correct version"
       fi
     elif [ ${OS} = Darwin ];then
@@ -247,6 +282,8 @@ demo() {
 init() {
   # docker-compose 是否安装
   install_docker_compose
+  # 升级软件版本
+  update_version
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
@@ -628,7 +665,7 @@ main() {
     ;;
 
   compose )
-    install_docker_compose_official $2
+    install_docker_compose $2 $3 $4
     ;;
 
   error )

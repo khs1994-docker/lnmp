@@ -47,7 +47,7 @@ services:
     environment:
       - PMA_HOST=mysql
     ports:
-      - 8080:80
+      - ${PHPMYADMIN_PORT}:80
     volumes:
       - phpmyadmin-data:/sessions
 
