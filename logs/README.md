@@ -5,6 +5,10 @@
 ```bash
 .
 ├── README.md
+├── apache2
+│   ├── access.log
+│   └── error.log
+├── mariadb
 ├── mongodb
 │   └── mongo.log
 ├── mysql
