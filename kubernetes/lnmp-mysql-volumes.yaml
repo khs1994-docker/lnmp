@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-mysql-2
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /tmp/data/pv-1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-mysql-1
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /tmp/data/pv-2
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-redis
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /tmp/data/pv-2

@@ -1,0 +1,170 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-stack.yml convert
+    kompose.version: 1.6.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php7
+  name: php7
+spec:
+  clusterIP: None
+  ports:
+  - name: headless
+    port: 55555
+    targetPort: 0
+  selector:
+    io.kompose.service: php7
+status:
+  loadBalancer: {}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-stack.yml convert
+    kompose.version: 1.6.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php7
+  name: php7
+spec:
+  replicas: 2
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: php7
+    spec:
+      containers:
+      - args:
+        - php-fpm
+        - -R
+        env:
+        - name: ARM_ARCH
+          valueFrom:
+            configMapKeyRef:
+              key: ARM_ARCH
+              name: php7-env
+        - name: ARM_BASED_OS
+          valueFrom:
+            configMapKeyRef:
+              key: ARM_BASED_OS
+              name: php7-env
+        - name: ARM_PHP_BASED_OS
+          valueFrom:
+            configMapKeyRef:
+              key: ARM_PHP_BASED_OS
+              name: php7-env
+        - name: COMPOSE_PROJECT_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: COMPOSE_PROJECT_NAME
+              name: php7-env
+        - name: DEVELOPMENT_DOCKER_IMAGE_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              key: DEVELOPMENT_DOCKER_IMAGE_PREFIX
+              name: php7-env
+        - name: DEVELOPMENT_LNMP_PHP_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: DEVELOPMENT_LNMP_PHP_PATH
+              name: php7-env
+        - name: DEV_MYSQL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: DEV_MYSQL_PORT
+              name: php7-env
+        - name: DNS
+          valueFrom:
+            configMapKeyRef:
+              key: DNS
+              name: php7-env
+        - name: KHS1994_LNMP_APACHE_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_APACHE_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_DOCKER_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_DOCKER_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_MARIADB_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_MARIADB_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_MEMCACHED_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_MEMCACHED_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_MONGODB_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_MONGODB_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_MYSQL_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_MYSQL_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_NGINX_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_NGINX_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_PHP_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_PHP_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_POSTGRESQL_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_POSTGRESQL_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_RABBITMQ_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_RABBITMQ_VERSION
+              name: php7-env
+        - name: KHS1994_LNMP_REDIS_VERSION
+          valueFrom:
+            configMapKeyRef:
+              key: KHS1994_LNMP_REDIS_VERSION
+              name: php7-env
+        - name: PHPMYADMIN_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: PHPMYADMIN_PORT
+              name: php7-env
+        - name: PRODUCTIOM_DOCKER_IMAGE_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              key: PRODUCTIOM_DOCKER_IMAGE_PREFIX
+              name: php7-env
+        - name: PRODUCTION_LNMP_PHP_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: PRODUCTION_LNMP_PHP_PATH
+              name: php7-env
+        - name: PRO_MYSQL_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: PRO_MYSQL_PORT
+              name: php7-env
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              key: TZ
+              name: php7-env
+        image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
+        name: php7
+        resources: {}
+      restartPolicy: Always
+status: {}

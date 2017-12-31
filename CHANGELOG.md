@@ -3,9 +3,15 @@ Changelog
 
 #### v17.12
 
+Bug fixes:
+* Fix `composer` `laravel` `laravel-artisan` error
+
 Changes:
 * Support `k8s`
 * `khs1994-docker/lnmp` v17.11 End Of Life
+
+Updates:
+* Update `php.ini`
 
 #### v17.12-rc11
 

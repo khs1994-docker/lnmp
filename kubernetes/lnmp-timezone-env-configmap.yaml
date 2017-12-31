@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  TZ: Asia/Shanghai
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: lnmp-timezone-env

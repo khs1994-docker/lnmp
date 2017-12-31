@@ -431,8 +431,8 @@ main() {
 
   laravel )
     run_docker
-    if [ -z "$2" ];then read -p "请输入路径: ./app/" path; else path=$2; fi
-    bin/laravel ${path}
+    if [ -z "$2" ];then read -p "请输入路径: ./app/" path; else path="$2" cmd="$3 $4 $5 $6 $7 $8 $9"; fi
+    if [ -z "$cmd" ];then bin/laravel ${path}; else bin/laravel ${path} "${cmd}"; fi
     ;;
 
   laravel-artisan )

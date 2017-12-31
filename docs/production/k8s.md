@@ -11,3 +11,25 @@ $ kubectl get services
 
 $ kubectl get pod
 ```
+
+# kubernetes
+
+## 创建数据卷
+
+```bash
+$ kubectl create -f lnmp-mysql-volumes.yaml
+
+$ kubectl get pv
+```
+
+## 创建 secret
+
+```bash
+$ kubectl create secret generic mysql-password --from-literal=password=mytest
+
+$ kubectl get secrets
+```
+
+## 部署 MySQL
+
+```yaml
