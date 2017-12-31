@@ -6,12 +6,16 @@ metadata:
     app: lnmp
 spec:
   ports:
-  - name: "443"
+  - name: https
+    protocol: TCP
     port: 443
-    targetPort: 443
-  - name: "80"
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 80
+  selector:
+    app: lnmp
+    tier: frontend
+  type: LoadBalancer
 status:
   loadBalancer: {}
 ---
