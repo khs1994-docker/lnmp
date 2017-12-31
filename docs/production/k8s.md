@@ -1,15 +1,17 @@
 # Docker for Mac 支持 k8s
 
-启用 k8s 之后，输入如下命令
+启用 `k8s` 之后，输入如下命令
 
 ```bash
-$ docker stack deploy -c docker-stack.yml lnmp
+$ docker stack deploy -c docker-mac.yml lnmp
 
 $ docker stack services lnmp
 
 $ kubectl get services
 
 $ kubectl get pod
+
+$ docker stack rm lnmp
 ```
 
 # kubernetes
@@ -38,7 +40,7 @@ $ kubectl create secret generic lnmp-mysql-password --from-literal=password=myte
 $ kubectl get secrets
 ```
 
-## 部署 MySQL
+## 部署
 
 ```bash
 $ kubectl create -f lnmp-mysql.yaml
