@@ -1,43 +1,32 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose -f docker-stack.yml convert
-    kompose.version: 1.6.0 ()
-  creationTimestamp: null
+  name: lnmp-redis
   labels:
-    io.kompose.service: redis
-  name: redis
+    app: lnmp
 spec:
   clusterIP: None
   ports:
-  - name: headless
-    port: 55555
-    targetPort: 0
+  - port: 3306
   selector:
-    io.kompose.service: redis
+    app: lnmp
 status:
   loadBalancer: {}
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose -f docker-stack.yml convert
-    kompose.version: 1.6.0 ()
-  creationTimestamp: null
+  name: lnmp-redis
   labels:
-    io.kompose.service: redis
-  name: redis
+    app: lnmp
 spec:
   replicas: 1
   strategy:
     type: Recreate
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        io.kompose.service: redis
+        app: lnmp
     spec:
       containers:
       - args:
@@ -48,16 +37,16 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: TZ
-              name: redis-bin-timezone-env
+              name: lnmp-php7-env
         image: khs1994/redis:4.0.6-alpine
-        name: redis
+        name: lnmp-redis
         resources: {}
         volumeMounts:
         - mountPath: /data
-          name: redis-data
+          name: lnmp-redis-data
       restartPolicy: Always
       volumes:
-      - name: redis-data
+      - name: lnmp-redis-data
         persistentVolumeClaim:
-          claimName: redis-data
+          claimName: lnmp-redis-data
 status: {}

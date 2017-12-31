@@ -22,6 +22,12 @@ $ kubectl create -f lnmp-mysql-volumes.yaml
 $ kubectl get pv
 ```
 
+## 创建 config
+
+```bash
+$ kubectl create configmap lnmp-php7-env --from-file
+```
+
 ## 创建 secret
 
 ```bash

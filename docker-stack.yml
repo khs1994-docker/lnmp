@@ -28,7 +28,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       - mysql-data:/var/lib/mysql:rw
       # - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
@@ -65,10 +65,10 @@ services:
       - frontend
       - backend
     command: ["php-fpm","-R"]
-    env_file: .env
+    env_file: ./bin/timezone.env
     environment:
       - APP_ENV=production
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 Docker Swarm
+      - KHS1994_LNMP_DOCKER_VERSION=x86_64 Docker Swarm
     deploy:
       replicas: 2
 

@@ -137,7 +137,9 @@ services:
     dns:
       - ${DNS}
     command: php-fpm -R
-    env_file: .env
+    env_file:
+      - ./bin/timezone.env
+      - ./bin/.env
 
   nginx:
     restart: always
@@ -155,7 +157,7 @@ services:
       - type: bind
         source: ./config/nginx
         target: /etc/nginx/conf.d
-      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/nginx.conf.default:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     working_dir: /app
     networks:
@@ -172,7 +174,7 @@ services:
   #     - "443:443"
   #     - "80:80"
   #   volumes:
-  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./config/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
   #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
   #     - ./logs/apache2:/usr/local/apache2/logs
