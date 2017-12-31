@@ -442,9 +442,9 @@ main() {
       read -p  "请输入命令: php artisan " cmd
     else
       path="$2"
-      cmd="$3"
+      cmd="$3 $4 $5 $6 $7 $8 $9"
     fi
-    bin/php-artisan ${path} ${cmd}
+    bin/php-artisan ${path} "${cmd}"
     ;;
 
   composer )
@@ -454,9 +454,9 @@ main() {
       read -p  "请输入命令: composer " cmd
     else
       path="$2"
-      cmd="$3"
+      cmd="$3 $4 $5 $6 $7 $8 $9"
     fi
-    bin/composer ${path} ${cmd}
+    bin/composer ${path} "${cmd}"
     ;;
 
   production )
