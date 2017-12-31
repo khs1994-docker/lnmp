@@ -3,19 +3,16 @@ services:
 
   # # MySQL 暂时没有 arm 镜像
   # mysql:
-  #   # build:
-  #   #   context: ./dockerfile/${ARM_ARCH}/mysql/
-  #   #   dockerfile: Dockerfile
-  #   # image: lnmp-mysql:latest
   #   restart: always
   #   image: "${ARM_ARCH}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
-  #   env_file:
-  #     - ./env/mysql.env
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+  #     MYSQL_DATABASE: test
+  #     # MYSQL_USER:
+  #     # MYSQL_PASSWORD:
+  #   env_file: ./bin/timezone.env
   #   networks:
   #     - backend
-  #   environment:
-  #   # your password
-  #     - MYSQL_ROOT_PASSWORD=mytest
   #   ports:
   #     - "${DEV_MYSQL_PORT}:3306"
   #   volumes:
@@ -94,9 +91,6 @@ services:
       - db_root_password
 
   # mongodb:
-  #   # build:
-  #   #   context: ./dockerfile/${ARM_ARCH}/mongodb/
-  #   #   dockerfile: Dockerfile
   #   restart: always
   #   image: ${ARM_ARCH}/mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   networks:

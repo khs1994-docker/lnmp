@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lnmp-php7
+  name: php7
   labels:
     app: lnmp
 spec:
@@ -20,6 +20,9 @@ metadata:
   labels:
     app: lnmp
 spec:
+  selector:
+    matchLabels:
+      app: lnmp
   replicas: 2
   strategy: {}
   template:
@@ -36,12 +39,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: TZ
-              name: lnmp-php7-env
+              name: lnmp-env
         - name: APP_ENV
           valueFrom:
             configMapKeyRef:
               key: APP_ENV
-              name: lnmp-php7-env
+              name: lnmp-env
         image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
         name: lnmp-php7
         resources: {}

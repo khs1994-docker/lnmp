@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lnmp-mysql
+  name: mysql
   labels:
     app: lnmp
 spec:
@@ -14,7 +14,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: lnmp-mysql-data
   labels:
     app: lnmp
 spec:
@@ -48,13 +48,15 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-password
+              name: lnmp-mysql-password
               key: password
         - name: TZ
           valueFrom:
              configMapKeyRef:
               key: TZ
-              name: lnmp-timezone-env-configmap.yaml
+              name: lnmp-env
+        - name: MYSQL_DATABASE
+          value: test
         ports:
         - containerPort: 3306
           name: lnmp-mysql
@@ -62,7 +64,7 @@ spec:
         - name: lnmp-mysql-data
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-data
+      - name: lnmp-mysql-data
         persistentVolumeClaim:
           claimName: lnmp-mysql-data
       restartPolicy: Always

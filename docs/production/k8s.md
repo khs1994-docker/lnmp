@@ -17,7 +17,7 @@ $ kubectl get pod
 ## 创建数据卷
 
 ```bash
-$ kubectl create -f lnmp-mysql-volumes.yaml
+$ kubectl create -f lnmp-volumes.yaml
 
 $ kubectl get pv
 ```
@@ -25,17 +25,39 @@ $ kubectl get pv
 ## 创建 config
 
 ```bash
-$ kubectl create configmap lnmp-php7-env --from-file
+$ kubectl create -f lnmp-env.yaml
+
+$ kubectl describe configmap lnmp-env
 ```
 
 ## 创建 secret
 
 ```bash
-$ kubectl create secret generic mysql-password --from-literal=password=mytest
+$ kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
 
 $ kubectl get secrets
 ```
 
 ## 部署 MySQL
 
-```yaml
+```bash
+$ kubectl create -f lnmp-mysql.yaml
+
+$ kubectl create -f lnmp-redis.yaml
+
+$ kubectl create -f lnmp-php7.yaml
+
+$ kubectl create -f lnmp-nginx.yaml
+```
+
+## 删除
+
+```bash
+$ kubectl delete deployment -l app=lnmp
+
+$ kubectl delete service -l app=lnmp
+
+$ kubectl delete pvc -l app=lnmp
+
+$ kubectl delete pv lnmp-mysql-data lnmp-redis-data
+```

@@ -1,17 +1,30 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lnmp-redis
+  name: redis
   labels:
     app: lnmp
 spec:
   clusterIP: None
   ports:
-  - port: 3306
+  - port: 6379
   selector:
     app: lnmp
 status:
   loadBalancer: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-redis-data
+  labels:
+    app: lnmp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -20,6 +33,9 @@ metadata:
   labels:
     app: lnmp
 spec:
+  selector:
+    matchLabels:
+      app: lnmp
   replicas: 1
   strategy:
     type: Recreate
@@ -37,7 +53,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: TZ
-              name: lnmp-php7-env
+              name: lnmp-env
         image: khs1994/redis:4.0.6-alpine
         name: lnmp-redis
         resources: {}

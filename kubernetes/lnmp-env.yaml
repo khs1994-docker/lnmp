@@ -4,5 +4,4 @@ data:
   APP_ENV: production
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
   name: lnmp-env
