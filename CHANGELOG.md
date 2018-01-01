@@ -1,7 +1,7 @@
 Changelog
 ==============
 
-#### v17.12
+#### v17.12 (2018-01-01)
 
 Bug fixes:
 * Fix `composer` `laravel` `laravel-artisan` error
