@@ -157,7 +157,7 @@ services:
       - type: bind
         source: ./config/nginx
         target: /etc/nginx/conf.d
-      - ./config/nginx/nginx.conf.default:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     working_dir: /app
     networks:

@@ -147,7 +147,7 @@ services:
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
-      - ./config/nginx/nginx.conf.default:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/nginx.conf.default:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx
     depends_on:
       - php7
@@ -162,7 +162,7 @@ services:
   #     - "80:80"
   #   volumes:
   #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
-  #     - ./config/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
   #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
   #     - ./logs/apache2:/usr/local/apache2/logs
