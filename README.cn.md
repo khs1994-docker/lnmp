@@ -169,7 +169,7 @@ https://doc.lnmp.khs1994.com
 # 感谢
 
 * [Docker Cloud](https://cloud.docker.com)
-* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
+* [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 
 # 更多资料
 

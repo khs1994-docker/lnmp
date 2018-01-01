@@ -160,7 +160,7 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 # Thanks
 
 * [Docker Cloud](https://cloud.docker.com)
-* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
+* [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 
 # More Information
 

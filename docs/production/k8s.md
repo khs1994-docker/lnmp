@@ -3,7 +3,7 @@
 启用 `k8s` 之后，输入如下命令
 
 ```bash
-$ docker stack deploy -c docker-mac.yml lnmp
+$ docker stack deploy -c docker-k8s.yml lnmp
 
 $ docker stack services lnmp
 
