@@ -174,7 +174,7 @@ services:
   #     - "443:443"
   #     - "80:80"
   #   volumes:
-  #     - ./config/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
   #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
   #     - ./logs/apache2:/usr/local/apache2/logs
