@@ -112,4 +112,4 @@ secrets:
 
 configs:
   nginx_conf:
-    file: ./config/etc/nginx/nginx.conf
+    file: ./config/nginx/nginx.conf.default
