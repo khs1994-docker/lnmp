@@ -62,4 +62,8 @@ $ kubectl delete service -l app=lnmp
 $ kubectl delete pvc -l app=lnmp
 
 $ kubectl delete pv lnmp-mysql-data lnmp-redis-data
+
+$ kubectl delete secret lnmp-mysql-password
+
+$ kubectl delete configmap lnmp-env
 ```
