@@ -16,7 +16,7 @@ status:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: lnmp-php7
+  name: php7
   labels:
     app: lnmp
 spec:
