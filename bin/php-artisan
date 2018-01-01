@@ -1,10 +1,8 @@
 #!/bin/bash
 
-set -e
-
 if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
 
-. .env ; LARAVEL_PATH=$1 ; CMD=$2 ; ARCH=`uname -m`
+. .env ; LARAVEL_PATH=$1 ; CMD="$2" ; ARCH=`uname -m`
 
 # 判断架构
 

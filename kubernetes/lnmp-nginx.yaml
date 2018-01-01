@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: lnmp
+spec:
+  ports:
+  - name: https
+    protocol: TCP
+    port: 443
+  - name: http
+    protocol: TCP
+    port: 80
+  selector:
+    app: lnmp
+    tier: frontend
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: lnmp-nginx
+  labels:
+    app: lnmp
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+  replicas: 2
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: lnmp
+    spec:
+      containers:
+      - args:
+        - /wait-for-php.sh
+        env:
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              key: TZ
+              name: lnmp-env
+        image: khs1994/nginx:swarm-1.13.8-alpine
+        name: lnmp-nginx
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+          name: lnmp-nginx
+        resources: {}
+      restartPolicy: Always
+status: {}

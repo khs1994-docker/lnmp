@@ -1,59 +1,45 @@
-version: "3.4"
+version: "3"
 services:
-
-  # 在集群执行
-  # $ docker stack deploy -c docker-stack.yml lnmp
-  # $ docker stack ps lnmp
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "8080:8080"
-    stop_grace_period: 1m30s
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
 
   mysql:
     image: "mysql:8.0.3"
     env_file:
       - ./bin/timezone.env
     environment:
-      # MYSQL_ROOT_PASSWORD: mytest
-      MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
+      MYSQL_ROOT_PASSWORD: mytest
+      # MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
       MYSQL_DATABASE: test
     networks:
       - backend
     ports:
       - "3306:3306"
-    volumes:
+    # volumes:
       # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
-      - mysql-data:/var/lib/mysql:rw
+      # - mysql-data:/var/lib/mysql:rw
       # - ./logs/mysql:/var/log/mysql:rw
-      - ./backup/mysql:/backup:rw
+      # - ./backup/mysql:/backup:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
-    deploy:
-      placement:
-        # 在管理节点运行
-        constraints: [node.role == manager]
-    secrets:
-      - source: db_root_password
-        target: /etc/db_root_password
+    # deploy:
+      # placement:
+      #   # 在管理节点运行
+      #   constraints: [node.role == manager]
+    # secrets:
+    #   - source: db_root_password
+    #     target: /etc/db_root_password
 
   redis:
     image: "khs1994/redis:4.0.6-alpine"
     env_file: ./bin/timezone.env
     # ports:
     #   - "6379"
-    volumes:
-      - redis-data:/data
+    # volumes:
+      # - redis-data:/data
     networks:
       - backend
     command: ["redis-server","/redis.conf"]
-    deploy:
-      placement:
-        constraints: [node.role == manager]
+    # deploy:
+    #   placement:
+    #     constraints: [node.role == manager]
 
   php7:
     build: ./app/demo
@@ -65,10 +51,10 @@ services:
       - frontend
       - backend
     command: ["php-fpm","-R"]
-    env_file: ./bin/timezone.env
+    env_file: ./.env
     environment:
       - APP_ENV=production
-      - KHS1994_LNMP_DOCKER_VERSION=x86_64 Docker Swarm
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 Docker Swarm
     deploy:
       replicas: 2
 
@@ -88,9 +74,9 @@ services:
     deploy:
       replicas: 2
     command: ["/wait-for-php.sh"]
-    configs:
-      - source: nginx_conf
-        target: /etc/nginx/nginx.conf
+    # configs:
+    #   - source: nginx_conf
+    #     target: /etc/nginx/nginx.conf
         # uid: '103'
         # gid: '103'
         # mode: 0440
@@ -106,10 +92,10 @@ volumes:
   # postgresql-data:
   # mongodb-data:
 
-secrets:
-  db_root_password:
-    file: secrets/db_root_password.txt
+# secrets:
+#   db_root_password:
+#     file: secrets/db_root_password.txt
 
-configs:
-  nginx_conf:
-    file: ./config/etc/nginx/nginx.conf
+# configs:
+#   nginx_conf:
+#     file: ./config/etc/nginx/nginx.conf

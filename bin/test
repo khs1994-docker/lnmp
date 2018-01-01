@@ -59,8 +59,12 @@ k8s(){
     until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
   kubectl cluster-info
-  kubectl run travis-example --image=redis
+
+  cd kubernetes
+  ./kubernetes.sh deploy
   kubectl get deployment
+  kubectl get services
+  ./kubernetes.sh cleanup
 }
 
 swarm(){

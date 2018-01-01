@@ -7,6 +7,6 @@ WorkingDirectory=/data/lnmp
 # WorkingDirectory=/home/core/lnmp
 Environment=LNMP_PATH=/data/lnmp
 # Environment=LNMP_PATH=/home/core/lnmp
-Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
 Type=simple
-ExecStart=/usr/bin/env PATH=/opt/bin:${PATH} ${LNMP_PATH}/lnmp-docker.sh cleanup
+ExecStart=/usr/bin/env ${LNMP_PATH}/lnmp-docker.sh cleanup

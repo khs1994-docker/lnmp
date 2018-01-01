@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: lnmp
+spec:
+  clusterIP: None
+  ports:
+  - port: 6379
+  selector:
+    app: lnmp
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-redis-data
+  labels:
+    app: lnmp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: lnmp-redis
+  labels:
+    app: lnmp
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: lnmp
+    spec:
+      containers:
+      - args:
+        - redis-server
+        - /redis.conf
+        env:
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              key: TZ
+              name: lnmp-env
+        image: khs1994/redis:4.0.6-alpine
+        name: lnmp-redis
+        resources: {}
+        volumeMounts:
+        - mountPath: /data
+          name: lnmp-redis-data
+      restartPolicy: Always
+      volumes:
+      - name: lnmp-redis-data
+        persistentVolumeClaim:
+          claimName: lnmp-redis-data
+status: {}

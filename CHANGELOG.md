@@ -1,6 +1,18 @@
 Changelog
 ==============
 
+#### v17.12 (2018-01-01)
+
+Bug fixes:
+* Fix `composer` `laravel` `laravel-artisan` error
+
+Changes:
+* Support `k8s`
+* `khs1994-docker/lnmp` v17.11 End Of Life
+
+Updates:
+* Update `php.ini`
+
 #### v17.12-rc11
 
 Bug fixes:
@@ -101,32 +113,7 @@ Updates:
 * `php-fpm` 7.2.0
 * `Redis` 4.0.4
 
-#### v17.11 (2017-12-01)
-
-Bug fixes:
-* Fix error in `./lnmp-docker.sh`
-* Fix `Dockerfile` `docker-compose.yml`
-
-Changes:
-* `khs1994-docker/lnmp` v17.09 End Of Life
-* Support `Swarm mode`
-* Remove Based Debian `php-fpm`, now based Alpine
-* Default disabled `xdebug` in `php-fpm` Dockerfile
-* Add `ENV TZ=Asia/Shanghai` in `Dockerfile`
-* Add `./lnmp-docker.sh docs` Powered By GitBook
-* Add LICENSE `Apache License Version 2.0`
-* Add Config files
-* 为尽可能加快部署，国内私有仓库(生产环境)镜像源使用 `腾讯云容器服务`
-
-Updates:
-* `php-fpm` 7.1.12
-* `nginx` 1.13.7
-* `PostgreSQL` 10.1
-* `Memcached` 1.5.3
-* `RabbitMQ` 3.6.14
-* `Docker Compose` 1.17.1
-* `Docker Compose` file format 3.4
-* Update Support Documents
+#### [v17.11 (2017-12-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v17.11)
 
 #### [v17.10 (2017-11-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10)
 

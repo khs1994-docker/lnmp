@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php7
+  labels:
+    app: lnmp
+spec:
+  clusterIP: None
+  ports:
+  - port: 9000
+  selector:
+    app: lnmp
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: lnmp-php7
+  labels:
+    app: lnmp
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+  replicas: 2
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: lnmp
+    spec:
+      containers:
+      - args:
+        - php-fpm
+        - -R
+        env:
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              key: TZ
+              name: lnmp-env
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              key: APP_ENV
+              name: lnmp-env
+        image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
+        name: lnmp-php7
+        resources: {}
+      restartPolicy: Always
+status: {}

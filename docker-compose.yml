@@ -137,7 +137,9 @@ services:
     dns:
       - ${DNS}
     command: php-fpm -R
-    env_file: .env
+    env_file:
+      - ./bin/timezone.env
+      - ./bin/.env
 
   nginx:
     restart: always
