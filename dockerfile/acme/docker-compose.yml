@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+
+  acme:
+    build: .
+    image: khs1994/acme:latest
+    env_file:
+      - ./.env
+    volumes:
+      - ../../config/nginx/ssl:/ssl

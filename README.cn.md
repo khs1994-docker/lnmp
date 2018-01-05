@@ -67,7 +67,11 @@ development
 
 ## PHP 项目开发
 
-在 `./app` 目录下开始 PHP 项目开发。在 `./config/nginx/` 新建 nginx 配置文件。
+在 `./app` 目录下开始 PHP 项目开发，在 `./config/nginx/` 新建 nginx 配置文件。
+
+```bash
+$ ./lnmp-docker.sh new ProjectName
+```
 
 ## 停止
 

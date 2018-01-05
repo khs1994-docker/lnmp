@@ -21,7 +21,7 @@ NOTSUPPORT(){
 }
 
 env_status(){
-  # .env.example to .env
+  # cp .env.example to .env
   if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
 }
 
@@ -314,15 +314,17 @@ restore(){
   docker-compose exec mysql /backup/restore.sh $1
 }
 
+network(){
+  ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
+}
+
 # 更新项目
 
 update(){
   # 不存在 .git 退出
   if ! [ -d .git ];then exit 1; fi
   # 检查网络连接
-  ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
-  # 检查源链接
-  git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
+  network && git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
   if [ $? -ne 0 ];then
     # 不存在
     print_error "Your git remote lnmp NOT set, seting..."
@@ -358,7 +360,8 @@ update(){
 # 提交项目「开发者选项」
 
 commit(){
-  print_info `git remote get-url origin` ${BRANCH}
+  # 检查网络连接
+  network && print_info `git remote get-url origin` ${BRANCH}
   if [ ${BRANCH} = "dev" ];then
     git add .
     git commit -m "Update [skip ci]"
@@ -370,8 +373,7 @@ commit(){
 }
 
 release_rc(){
-  print_info "开始新的 RC 版本开发\n"
-  print_info "Branch is ${BRANCH}\n"
+  print_info "开始新的 RC 版本开发\n"; print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = "dev" ];then
     git fetch origin
     git reset --hard origin/master
@@ -394,19 +396,158 @@ mirror(){
   git push -f coding --tags
 }
 
+nginx_http(){
+
+  echo "server {
+  listen        80;
+  server_name   $1;
+  root          /app/$2;
+  index         index.html index.php;
+
+  location / {
+    try_files \$uri \$uri/ /index.php?\$query_string;
+  }
+
+  location ~ .*\\.php(\\/.*)*$ {
+    fastcgi_pass   php7:9000;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+    include        fastcgi_params;
+  }
+}" >> config/nginx/$1.conf
+
+}
+
+nginx_https(){
+
+  echo "server {
+  listen      80;
+  server_name $1;
+  return 301  https://\$host\$request_uri;
+}
+
+server{
+  listen                     443 ssl http2;
+  server_name                $1;
+  root                       /app/$2;
+  index                      index.html index.php;
+
+  ssl_certificate            conf.d/demo-ssl/$1.crt;
+  ssl_certificate_key        conf.d/demo-ssl/$1.key;
+
+  ssl_session_cache          shared:SSL:1m;
+  ssl_session_timeout        5m;
+  ssl_protocols              TLSv1.2;
+  ssl_ciphers                'ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5';
+  ssl_prefer_server_ciphers  on;
+
+  location / {
+    try_files \$uri \$uri/ /index.php?\$query_string;
+  }
+
+  location ~ .*\.php(\/.*)*$ {
+    fastcgi_pass   php7:9000;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+    include        fastcgi_params;
+  }
+}" > config/nginx/$1.conf
+
+}
+
+# 申请 ssl 证书
+
+ssl(){
+  if [ -z $1 ];then read -p "Please input your domain: 「example www.domain.com 」" url; else url=$1; fi
+    if [ -z $DP_Id ];then
+      print_error "Please set ENV in .env file"
+      exit 1
+    else
+    docker run -it --rm \
+      -v $PWD/config/nginx/ssl:/ssl \
+      -e DP_Id=$DP_Id \
+      -e DP_Key=$DP_Key \
+      -e DNS_TYPE=$DNS_TYPE \
+      -e url=$url \
+      khs1994/acme
+    fi
+}
+
+# 快捷开始 PHP 项目开发
+
+start(){
+
+  if [ -z "$1" ];then read -p "Please input your project name: /app/" name; else name=$1; fi
+
+  if [ -d app/$name ];then print_error "This folder existing"; start; exit 0; fi
+
+  if [ -z "$2" ];then read -p "Please input your domain:「example http[s]://$name.domain.com 」" input_url; else input_url=$2; fi
+
+  protocol=$(echo $input_url | awk -F':' '{print $1}')
+
+  url=$(echo $input_url | awk -F'[/:]' '{print $4}')
+
+  if [ -z $url ];then url=$input_url; protocol=http; fi
+
+  echo; print_info "PROTOCOL IS $protocol\n"
+
+  print_info "URL IS $url"
+
+  if [ $protocol = https ];then
+    # 申请 ssl 证书
+    ssl $url
+    # 生成 nginx 配置文件
+    nginx_https $url $name
+  else
+    nginx_http $url $name
+  fi
+
+  mkdir -p app/$name
+
+  print_info "Please start PHP project in /app/$name"
+}
+
+php_cli(){
+  PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
+  if [ $ARCH = "x86_64" ];then
+    PHP_CLI_DOCKER_IMAGE=php-fpm
+  elif [ $ARCH = "armv7l" ];then
+    PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
+    PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
+  elif [ $ARCH = "aarch64" ];then
+    PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
+  else
+    NOTSUPPORT
+  fi
+  if [ -z "$2" ];then
+    print_error "Please input path or cmd"
+    exit 1
+  else
+    path=$1
+    cmd="$2 $3 $4 $5 $6 $7 $8 $9"
+  fi
+    docker run -it \
+      -v $PWD/app/${path}:/app \
+      khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
+      php "${cmd}"
+}
+
 # 入口文件
 
 main() {
-  # 创建日志文件夹
-  logs
-  # no sudo
-  # if [[ $EUID -eq 0 ]]; then print_error "This script should not be run using sudo!!\n"; exit 1; fi
-  # 架构
-  print_info "ARCH is ${OS} ${ARCH}\n"
-  case $1 in
+  logs; print_info "ARCH is ${OS} ${ARCH}\n"
 
+  case $1 in
   init )
     init
+    ;;
+
+  backup )
+    run_docker; backup $2 $3 $4 $5 $6 $7 $8 $9
+    ;;
+
+  config )
+    docker-compose config
     ;;
 
   demo )
@@ -418,8 +559,7 @@ main() {
     ;;
 
   test )
-    run_docker
-    bin/test
+    run_docker; bin/test
     ;;
 
   commit )
@@ -430,16 +570,14 @@ main() {
     ;;
 
   laravel )
-    run_docker
-    if [ -z "$2" ];then read -p "请输入路径: ./app/" path; else path="$2" cmd="$3 $4 $5 $6 $7 $8 $9"; fi
+    run_docker; if [ -z "$2" ];then read -p "请输入路径: ./app/" path; else path="$2" cmd="$3 $4 $5 $6 $7 $8 $9"; fi
     if [ -z "$cmd" ];then bin/laravel ${path}; else bin/laravel ${path} "${cmd}"; fi
     ;;
 
   laravel-artisan )
     run_docker
-    if [ -z "$2" -o -z "$3" ];then
-      read -p  "请输入路径: ./app/" path
-      read -p  "请输入命令: php artisan " cmd
+    if [ -z "$3" ];then
+      print_error "Please input path or cmd"; exit 1
     else
       path="$2"
       cmd="$3 $4 $5 $6 $7 $8 $9"
@@ -449,9 +587,8 @@ main() {
 
   composer )
     run_docker
-    if [ -z "$2" -o -z "$3" ];then
-      read -p "请输入路径: ./app/" path
-      read -p  "请输入命令: composer " cmd
+    if [ -z "$3" ];then
+      print_error "Please input path or cmd"; exit 1
     else
       path="$2"
       cmd="$3 $4 $5 $6 $7 $8 $9"
@@ -465,10 +602,7 @@ main() {
     if [ `uname -s` = "Linux" -a ${ARCH} = "x86_64" ];then
       init
       if [ "$2" != "--systemd" ];then opt="-d"; else opt= ; fi
-      docker-compose \
-         -f docker-compose.yml \
-         -f docker-compose.prod.yml \
-         up $opt
+      docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
     else
       print_error "生产环境不支持 `uname -s` ${ARCH}\n"
     fi
@@ -476,10 +610,7 @@ main() {
     ;;
 
   build )
-    run_docker
-    init
-    if [ ${ARCH} = "x86_64" ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi
-    error
+    run_docker; init; if [ ${ARCH} = "x86_64" ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi; error
     ;;
 
   development )
@@ -498,39 +629,15 @@ main() {
     ;;
 
   production-config )
-    init
-    docker-compose \
-          -f docker-compose.yml \
-          -f docker-compose.prod.yml \
-          config
-    error
+    init; docker-compose -f docker-compose.yml -f docker-compose.prod.yml config; error
     ;;
 
   build-config )
-    init
-    # 判断架构
-    if [ ${ARCH} = "x86_64" ];then
-      docker-compose \
-        -f docker-compose.yml \
-        -f docker-compose.build.yml \
-        config
-    elif [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
-      docker-compose \
-        -f docker-compose.arm.yml \
-        config
-    else
-      NOTSUPPORT
-    fi
-    ;;
-
-  backup )
-    run_docker
-    backup $2 $3 $4 $5 $6 $7 $8 $9
+    init; if [ ${ARCH} = "x86_64" ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml config; else NOTSUPPORT; fi
     ;;
 
   restore )
-    run_docker
-    restore $2
+    run_docker; restore $2
     ;;
 
   update|upgrade )
@@ -538,91 +645,63 @@ main() {
     ;;
 
   mysql-cli )
-    run_docker
-    docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
+    run_docker; docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
     ;;
 
   php-cli )
-    run_docker
-    docker-compose exec php7 bash
+    run_docker; docker-compose exec php7 bash
     ;;
 
   phpmyadmin-cli )
-    run_docker
-    docker-compose exec phpmyadmin sh
+    run_docker; docker-compose exec phpmyadmin sh
     ;;
 
   redis-cli )
-    run_docker
-    docker-compose exec redis sh
+    run_docker; docker-compose exec redis sh
     ;;
 
   memcached-cli )
-    run_docker
-    docker-compose exec memcached sh
+    run_docker; docker-compose exec memcached sh
     ;;
 
   rabbitmq-cli )
-    run_docker
-    docker-compose exec rabbitmq sh
+    run_docker; docker-compose exec rabbitmq sh
     ;;
 
   postgres-cli )
-    run_docker
-    docker-compose exec postgresql sh
+    run_docker; docker-compose exec postgresql sh
     ;;
 
   mongo-cli )
-    run_docker
-    docker-compose exec mongodb bash
+    run_docker; docker-compose exec mongodb bash
     ;;
 
   nginx-cli )
-    run_docker
-    docker-compose exec nginx sh
+    run_docker; docker-compose exec nginx sh
+    ;;
+
+  apache-cli )
+    run_docker; docker-compose exec apache sh
+    ;;
+
+  mariadb-cli )
+    run_docker; docker-compose exec mariadb bash
     ;;
 
   push )
-    run_docker
-    init
-    docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
-    error
+    run_docker; init; docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push; error
     ;;
 
   php )
-    run_docker
-    PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
-    if [ $ARCH = "x86_64" ];then
-      PHP_CLI_DOCKER_IMAGE=php-fpm
-    elif [ $ARCH = "armv7l" ];then
-      PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
-      PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
-    elif [ $ARCH = "aarch64" ];then
-      PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
-    else
-      NOTSUPPORT
-    fi
-    if [ -z "$2" -o -z "$3" ];then
-      read -p "请输入路径: ./app/" path
-      read -p "请输入命令: $ php " cmd
-    else
-      path=$2
-      cmd=$3
-    fi
-      docker run -it --rm \
-        -v $PWD/app/${path}:/app \
-        khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
-        php ${cmd}
+    run_docker; php_cli $2 $3 $4 $5 $6 $7 $8 $9
    ;;
 
   down )
-    init
-    docker-compose down --remove-orphans
+    init; docker-compose down --remove-orphans
     ;;
 
   docs )
-    run_docker
-    gitbook
+    run_docker; gitbook
     ;;
 
   dockerfile-update )
@@ -638,21 +717,11 @@ main() {
     ;;
 
   swarm-deploy )
-    run_docker
-    docker stack deploy -c docker-stack.yml lnmp
-    if [ $? -eq 0 ];then
-      docker stack ps lnmp
-    else
-      exit 1
-    fi
+    run_docker; docker stack deploy -c docker-stack.yml lnmp; if [ $? -eq 0 ];then docker stack ps lnmp; else exit 1; fi
     ;;
 
   swarm-down )
     docker stack rm lnmp
-    ;;
-
-  swarm-create )
-
     ;;
 
   debug )
@@ -674,6 +743,14 @@ main() {
     error
     ;;
 
+  new )
+    start $2 $3 $4 $5 $6 $7 $8 $9
+    ;;
+
+  ssl )
+    ssl $2 $3 $4 $5 $6 $7 $8 $9
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -684,30 +761,35 @@ Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
   backup               Backup MySQL databases
-  build                Use LNMP With Self Build images(Support x86_64)
+  build                Use LNMP With Self Build images (Only Support x86_64)
   build-config         Validate and view the Self Build images Compose file
   cleanup              Cleanup log files
   compose              Install docker-compose
-  composer             Use PHP Package Management composer
+  composer             Use PHP Dependency Manager Composer
+  config               Validate and view the Development Compose file
   development          Use LNMP in Development
   debug                Debug LNMP environment
   down                 Stop and remove LNMP Docker containers, networks
-  docs                 Support Documents
+  docs                 Read support documents
   help                 Display this help message
   init                 Init LNMP environment
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
+  new                  New PHP Project and generate nginx conf and issue SSL certificate
   php                  Run PHP in CLI
-  production           Use LNMP in Production(Only Support Linux x86_64)
+  production           Use LNMP in Production (Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Your Docker Registory
   restore              Restore MySQL databases
+  ssl                  Issue SSL certificate powered by acme.sh
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
 
 Container CLI:
+  apache-cli
+  mariadb-cli
   memcached-cli
   mongo-cli
   mysql-cli

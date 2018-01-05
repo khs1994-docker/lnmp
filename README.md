@@ -65,7 +65,11 @@ development
 
 ## Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder. And edit nginx conf file `./config/nginx/yourfilename.conf`.
+Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file `./config/nginx/yourfilename.conf`.
+
+```bash
+$ ./lnmp-docker.sh new ProjectName
+```
 
 ## Stop
 
