@@ -1,14 +1,14 @@
 FROM alpine
 
+ENV ACME_SH_VERSION=2.7.5
+
 RUN apk add --no-cache openssl \
                        curl \
                        socat \
-    && wget -O -  https://get.acme.sh | sh
+    && curl https://raw.githubusercontent.com/Neilpang/acme.sh/${ACME_SH_VERSION}/acme.sh | INSTALLONLINE=1  sh
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
 VOLUME /ssl
-
-WORKDIR /ssl
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

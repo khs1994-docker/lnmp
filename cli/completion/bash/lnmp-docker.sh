@@ -5,21 +5,26 @@ complete -W "backup \
         build-config \
         cleanup \
         composer \
+        config \
         development \
         down \
         docs \
         help \
         laravel \
         laravel-artisan \
+        new \
         php \
         production \
         production-config \
         push \
         restore \
+        ssl \
         swarm-build \
         swarm-push \
         swarm-deploy \
         swarm-down \
+        apache-cli \
+        mariadb-cli \
         memcached-cli \
         mongo-cli \
         mysql-cli \

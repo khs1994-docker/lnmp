@@ -1,10 +1,13 @@
 #!/bin/sh
 
 export LE_WORKING_DIR="/root/.acme.sh"
+
+export PATH=/root/.acme.sh:$PATH
+
 alias acme.sh="/root/.acme.sh/acme.sh"
 
 issue(){
-  echo "正在申请证书 ..."
+  echo "正在申请证书 ..." ; echo
 
   acme.sh --issue \
           --debug \
@@ -14,7 +17,7 @@ issue(){
 }
 
 install(){
-  echo "开始转移证书到 /ssl ..."
+  echo "开始转移证书到 /ssl ..." ; echo
 
   acme.sh --install-cert \
     --debug\
@@ -26,9 +29,11 @@ install(){
 
 echo $1
 
-if [ "$1" = bash ];then /bin/sh; exit 0; fi
+if [ "$1" = bash ];then exec /bin/sh; fi
 
-if [ "$#" = 1 ];then $@; exit 0;fi
+if [ "$#" = 1 ];then exec "$@"; fi
+
+if [ "$#" -gt 1 ];then exec "$@"; fi
 
 if [ "$#" = 0 ];then issue; fi
 
