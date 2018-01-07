@@ -619,7 +619,7 @@ main() {
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' -a ${ARCH} = 'x86_64' ];then
       init
-      if ! [ "$2" = "--systemd" ];then opt='-d'; else opt= ; fi
+      if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
       docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
     else
       print_error "生产环境不支持 ${OS} ${ARCH}\n"
@@ -635,7 +635,7 @@ main() {
     run_docker
     init
     # 判断架构
-    if [ "$2" != '--systemd' ];then opt='-d'; else opt= ;fi
+    if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
     if [ ${ARCH} = 'x86_64' ];then
       docker-compose up $opt
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
@@ -655,11 +655,11 @@ main() {
     ;;
 
   restore )
-    run_docker; restore $2
+    run_docker; restore "$@"
     ;;
 
   update|upgrade )
-    update $2
+    update "$@"
     ;;
 
   mysql-cli )
