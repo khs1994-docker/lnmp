@@ -49,7 +49,9 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 ```bash
 $ cd
 
-$ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+$ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+
+# $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
 
 $ cd lnmp
 
@@ -65,7 +67,17 @@ development
 
 ## Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder. And edit nginx conf file `./config/nginx/yourfilename.conf`.
+Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file `./config/nginx/yourfilename.conf`.
+
+```bash
+$ ./lnmp-docker.sh new ProjectName
+```
+
+## List Container
+
+```bash
+$ docker container ls -a -f label=com.khs1994.lnmp
+```
 
 ## Stop
 
@@ -90,9 +102,9 @@ $ docker-compose down
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql) |`mysql:8.0.3`             |[![GitHub release](https://img.shields.io/badge/release-v8.0.3-blue.svg)](https://github.com/mysql/mysql-server)                                                |`Debian:jessie`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb) |`mariadb:10.3.3`      |![GitHub release](https://img.shields.io/badge/release-v10.3.3-blue.svg)                                                                             |`Debian:jessie`|
 |[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.6-alpine`       |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)                |`Alpine:3.6`|
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)            |`Alpine:3.7`|
-|[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                               |`Alpine:3.7`|
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.0-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)                 |`Alpine:3.7`|
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.1-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)            |`Alpine:3.7`|
+|[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.1-alpine3.7`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                               |`Alpine:3.7`|
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.1-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)                 |`Alpine:3.7`|
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.4-alpine`           |![GitHub release](https://img.shields.io/badge/release-v1.5.4-blue.svg)                                                                             |`Alpine:3.6`|
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.7.2-management-alpine`         |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)        |`Alpine:3.7`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.1-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)                    |`Alpine:3.6`|
@@ -160,7 +172,7 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 # Thanks
 
 * [Docker Cloud](https://cloud.docker.com)
-* [Tencent Cloud Container Service](https://console.cloud.tencent.com/ccs)
+* [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 
 # More Information
 

@@ -32,7 +32,7 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 $ halt
 ```
 
-# Moree Information
+# More Information
 
 * https://github.com/linuxkit/linuxkit
 

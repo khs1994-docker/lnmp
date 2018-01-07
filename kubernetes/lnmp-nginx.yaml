@@ -22,7 +22,7 @@ status:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: lnmp-nginx
+  name: nginx
   labels:
     app: lnmp
 spec:

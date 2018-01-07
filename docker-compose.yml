@@ -22,6 +22,10 @@ services:
       - --character-set-server=utf8mb4
     secrets:
       - db_root_password
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.mysql=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   # mariadb:
   #   restart: always
@@ -44,6 +48,10 @@ services:
   #     - --character-set-server=utf8mb4
   #   secrets:
   #     - db_root_password
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mariadb=true"
+  #     - "com.khs1994.lnmp.app.env=development"
 
   redis:
     restart: always
@@ -67,6 +75,10 @@ services:
         target: /var/log/redis
         read_only: false
     command: ["redis-server","/redis.conf"]
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.redis=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   # memcached:
   #   restart: always
@@ -76,6 +88,10 @@ services:
   #   env_file: ./bin/timezone.env
   #   # ports:
   #   #   - "11211"
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.memcached=true"
+  #     - "com.khs1994.lnmp.app.env=development"
   #
   # rabbitmq:
   #   restart: always
@@ -88,6 +104,10 @@ services:
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.rabbitmq=true"
+  #     - "com.khs1994.lnmp.app.env=development"
   #
   # postgresql:
   #   restart: always
@@ -105,6 +125,10 @@ services:
   #   secrets:
   #     # 默认与 mysql 密码一致。
   #     - db_root_password
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.postgresql=true"
+  #     - "com.khs1994.lnmp.app.env=development"
   #
   # mongodb:
   #   restart: always
@@ -119,6 +143,10 @@ services:
   #   # ports:
   #   #   - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mongodb=true"
+  #     - "com.khs1994.lnmp.app.env=development"
 
   php7:
     restart: always
@@ -140,6 +168,10 @@ services:
     env_file:
       - ./bin/timezone.env
       - ./bin/.env
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.php=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   nginx:
     restart: always
@@ -164,6 +196,10 @@ services:
       - frontend
     depends_on:
       - php7
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.nginx=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   # apache:
   #   restart: always
@@ -183,6 +219,10 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.apache=true"
+  #     - "com.khs1994.lnmp.app.env=development"
 
 networks:
   frontend:

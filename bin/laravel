@@ -2,19 +2,19 @@
 
 if [ -f "khs1994-robot.enc" ];then echo -e "\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
 
-. .env ; LARAVEL_PATH=$1; cmd="$2" ARCH=`uname -m`
+. .env ; LARAVEL_PATH=$1; cmd="$2" ; ARCH=`uname -m` ; OS=`uname -s`
 
 # 判断架构
 
 TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
 
-if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then
+if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
   DOCKER_IMAGE=khs1994/arm64v8-php-fpm
-  if [ ${ARCH} = "armv7l" ];then
+  if [ ${ARCH} = 'armv7l' ];then
     DOCKER_IMAGE=khs1994/arm32v7-php-fpm
     TAG=${KHS1994_LNMP_PHP_VERSION}-stretch
   fi
-elif [ ${ARCH} = "x86_64" ];then
+elif [ ${ARCH} = 'x86_64' ];then
   docker image ls | grep ccr.ccs.tencentyun.com/khs1994/php-fpm > /dev/null 2>&1
   if [ "$?" = 0 ];then DOCKER_IMAGE=ccr.ccs.tencentyun.com/khs1994/php-fpm; else DOCKER_IMAGE=khs1994/php-fpm; fi
 else
@@ -33,7 +33,7 @@ docker run -it --rm \
   ${DOCKER_IMAGE}:${TAG} \
   laravel new ${LARAVEL_PATH} ${cmd}
 
-if [ `uname -s` = "Linux" -o `uname -s` = "Darwin" ];then
+if [ ${OS} = 'Linux' ] || [ ${OS} = 'Darwin' ];then
   sudo chmod -R 765 app/${LARAVEL_PATH}
   sudo chown -R `id -u`:`id -g` app/${LARAVEL_PATH}
   # 使用 .env.development 或 .env.production 不使用 .env 文件

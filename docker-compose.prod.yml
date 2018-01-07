@@ -6,22 +6,32 @@ services:
       - "${PRO_MYSQL_PORT}:3306"
     environment:
       - MYSQL_DATABASE=laravel_admin
+    labels:
+      - "com.khs1994.lnmp.app.env=production"
 
   # mariadb:
   #   ports:
   #     - "${PRO_MYSQL_PORT}:3306"
   #   environment:
   #     - MYSQL_DATABASE=laravel_admin
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production"
 
   redis:
     # 生产环境默认拉取镜像（可以配置私有仓库）
     image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+    labels:
+      - "com.khs1994.lnmp.app.env=production"
 
   # rabbitmq:
   #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production"
   #
   # postgresql:
   #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production"
   #
   #
   # 生产环境默认不启用 phpmyadmin
@@ -37,6 +47,8 @@ services:
   #   restart: always
   #   volumes:
   #     - phpmyadmin-data:/sessions
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production"
 
   php7:
     image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7
@@ -47,10 +59,14 @@ services:
     environment:
       - APP_ENV=production
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image
+    labels:
+      - "com.khs1994.lnmp.app.env=production"
 
   nginx:
     volumes:
       - ./app:${PRODUCTION_LNMP_PHP_PATH}:rw
+    labels:
+      - "com.khs1994.lnmp.app.env=production"
 
   # apache:
   #   volumes:

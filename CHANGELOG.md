@@ -1,6 +1,18 @@
 Changelog
 ==============
 
+#### v18.01-rc1
+
+Changes:
+
+* Add `./lnmp-docker.sh new` command
+* Add `./lnmp-docker.sh ssl` command, Support issue `SSL certificate` Powered by acme.sh
+* Add `label` in compose files
+
+Updates:
+* `php-fpm` 7.2.1
+* `composer` 1.6.2
+
 #### v17.12 (2018-01-01)
 
 Bug fixes:
