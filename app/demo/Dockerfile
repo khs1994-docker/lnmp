@@ -1,4 +1,4 @@
-FROM khs1994/php-fpm:7.2.0-alpine3.7
+FROM php:7.2.1-fpm-alpine3.7
 
 COPY . /app/demo/
 
@@ -12,7 +12,7 @@ RUN cd /app/demo \
            echo "composer.json NOT exists"; \
          fi
 
-FROM khs1994/php-fpm:7.2.0-alpine3.7
+FROM php:7.2.1-fpm-alpine3.7
 
 COPY --from=0 /app /app
 

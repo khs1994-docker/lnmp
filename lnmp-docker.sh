@@ -141,7 +141,7 @@ gitbook(){
 }
 
 dockerfile_update_sed(){
-  sed -i '' "s/^FROM.*/${2}/g" dockerfile/$1/Dockerfile
+  sed -i '' "s/^FROM.*/${2}/g" dockerfile/$1/Dockerfile app/demo/Dockerfile
   sed -i '' "s/^TAG.*/TAG=${3}/g" dockerfile/$1/.env
   git diff
 }
