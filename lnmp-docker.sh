@@ -468,19 +468,15 @@ server{
 # 申请 ssl 证书
 
 ssl(){
+  if [ -z "$DP_ID" ];then print_error "Please set ENV in .env file"; exit 1; fi
   if [ -z "$1" ];then read -p "Please input your domain: 「example www.domain.com 」" url; else url=$1; fi
-    if [ -z "$DP_ID" ];then
-      print_error "Please set ENV in .env file"
-      exit 1
-    else
-    docker run -it --rm \
+  docker run -it --rm \
       -v $PWD/config/nginx/ssl:/ssl \
       -e DP_Id=$DP_ID \
       -e DP_Key=$DP_KEY \
       -e DNS_TYPE=$DNS_TYPE \
       -e url=$url \
       khs1994/acme
-    fi
 }
 
 # 快捷开始 PHP 项目开发
@@ -519,6 +515,7 @@ start(){
   mkdir -p app/$name
 
   print_info "Please start PHP project in /app/$name"
+  print_info "Please set hosts in /etc/hosts in development"
 }
 
 php_cli(){
