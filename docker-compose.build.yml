@@ -67,6 +67,8 @@ services:
       - ${PHPMYADMIN_PORT}:80
     volumes:
       - phpmyadmin-data:/sessions
+    labels:
+      - "com.khs1994.lnmp=true"
 
 volumes:
   phpmyadmin-data:

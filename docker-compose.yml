@@ -22,6 +22,8 @@ services:
       - --character-set-server=utf8mb4
     secrets:
       - db_root_password
+    labels:
+      - "com.khs1994.lnmp=true"
 
   # mariadb:
   #   restart: always
@@ -44,6 +46,8 @@ services:
   #     - --character-set-server=utf8mb4
   #   secrets:
   #     - db_root_password
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
 
   redis:
     restart: always
@@ -67,6 +71,8 @@ services:
         target: /var/log/redis
         read_only: false
     command: ["redis-server","/redis.conf"]
+    labels:
+      - "com.khs1994.lnmp=true"
 
   # memcached:
   #   restart: always
@@ -76,6 +82,8 @@ services:
   #   env_file: ./bin/timezone.env
   #   # ports:
   #   #   - "11211"
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
   #
   # rabbitmq:
   #   restart: always
@@ -88,6 +96,8 @@ services:
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
   #
   # postgresql:
   #   restart: always
@@ -105,6 +115,8 @@ services:
   #   secrets:
   #     # 默认与 mysql 密码一致。
   #     - db_root_password
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
   #
   # mongodb:
   #   restart: always
@@ -119,6 +131,8 @@ services:
   #   # ports:
   #   #   - "27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
 
   php7:
     restart: always
@@ -140,6 +154,8 @@ services:
     env_file:
       - ./bin/timezone.env
       - ./bin/.env
+    labels:
+      - "com.khs1994.lnmp=true"
 
   nginx:
     restart: always
@@ -164,6 +180,8 @@ services:
       - frontend
     depends_on:
       - php7
+    labels:
+      - "com.khs1994.lnmp=true"
 
   # apache:
   #   restart: always
@@ -183,6 +201,8 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
 
 networks:
   frontend:
