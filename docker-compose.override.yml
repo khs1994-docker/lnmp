@@ -52,6 +52,8 @@ services:
       - phpmyadmin-data:/sessions
     labels:
       - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.phpmyadmin=true"
+      - "com.khs1994.lnmp.app.env=development"
 
 volumes:
   phpmyadmin-data:

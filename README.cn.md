@@ -73,6 +73,12 @@ development
 $ ./lnmp-docker.sh new ProjectName
 ```
 
+## 查看详情
+
+```bash
+$ docker container ls -a -f label=com.khs1994.lnmp
+```
+
 ## 停止
 
 ```bash

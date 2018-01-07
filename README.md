@@ -71,6 +71,12 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file `./
 $ ./lnmp-docker.sh new ProjectName
 ```
 
+## List Container
+
+```bash
+$ docker container ls -a -f label=com.khs1994.lnmp
+```
+
 ## Stop
 
 ```bash

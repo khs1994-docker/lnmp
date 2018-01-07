@@ -24,6 +24,8 @@ services:
       - db_root_password
     labels:
       - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.mysql=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   # mariadb:
   #   restart: always
@@ -48,6 +50,8 @@ services:
   #     - db_root_password
   #   labels:
   #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mariadb=true"
+  #     - "com.khs1994.lnmp.app.env=development"
 
   redis:
     restart: always
@@ -73,6 +77,8 @@ services:
     command: ["redis-server","/redis.conf"]
     labels:
       - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.redis=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   # memcached:
   #   restart: always
@@ -84,6 +90,8 @@ services:
   #   #   - "11211"
   #   labels:
   #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.memcached=true"
+  #     - "com.khs1994.lnmp.app.env=development"
   #
   # rabbitmq:
   #   restart: always
@@ -98,6 +106,8 @@ services:
   #   #   - "5672"
   #   labels:
   #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.rabbitmq=true"
+  #     - "com.khs1994.lnmp.app.env=development"
   #
   # postgresql:
   #   restart: always
@@ -117,6 +127,8 @@ services:
   #     - db_root_password
   #   labels:
   #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.postgresql=true"
+  #     - "com.khs1994.lnmp.app.env=development"
   #
   # mongodb:
   #   restart: always
@@ -133,6 +145,8 @@ services:
   #   command: ["mongod","--config","/etc/mongod.conf"]
   #   labels:
   #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mongodb=true"
+  #     - "com.khs1994.lnmp.app.env=development"
 
   php7:
     restart: always
@@ -156,6 +170,8 @@ services:
       - ./bin/.env
     labels:
       - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.php=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   nginx:
     restart: always
@@ -182,6 +198,8 @@ services:
       - php7
     labels:
       - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.nginx=true"
+      - "com.khs1994.lnmp.app.env=development"
 
   # apache:
   #   restart: always
@@ -203,6 +221,8 @@ services:
   #     - php7
   #   labels:
   #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.apache=true"
+  #     - "com.khs1994.lnmp.app.env=development"
 
 networks:
   frontend:

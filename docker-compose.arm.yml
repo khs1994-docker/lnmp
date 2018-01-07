@@ -1,7 +1,7 @@
 version: "3.4"
 services:
 
-  # # MySQL 暂时没有 arm 镜像
+  # MySQL 暂时没有 arm 镜像
   # mysql:
   #   restart: always
   #   image: "${ARM_ARCH}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
@@ -18,6 +18,9 @@ services:
   #   volumes:
   #     - mysql-data:/var/lib/mysql
   #     - ./logs/mysql:/var/log/mysql
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mysql=true"
 
   redis:
     # build:
@@ -39,6 +42,9 @@ services:
     # ports:
     #   - "6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.redis=true"
 
   memcached:
     # build:
@@ -52,6 +58,9 @@ services:
       - ./bin/timezone.env
     # ports:
     #   - "11211"
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.memcached=true"
 
   rabbitmq:
     # build:
@@ -68,6 +77,10 @@ services:
     # ports:
     #   - "15672"
     #   - "5672"
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.rabbitmq=true"
+
 
   postgresql:
     # build:
@@ -89,6 +102,9 @@ services:
     secrets:
       # 默认与 mysql 密码一致。
       - db_root_password
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.postgresql=true"
 
   # mongodb:
   #   restart: always
@@ -104,6 +120,9 @@ services:
   #   env_file:
   #     - ./bin/timezone.env
   #   command: ["mongod","--config","/etc/mongod.conf"]
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mongodb=true"
 
 
   php7:
@@ -129,6 +148,9 @@ services:
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} ${ARM_ARCH} With Pull Docker Image
       - APP_ENV=development
     command: ["php-fpm","-R"]
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.php=true"
 
   nginx:
     # build:
@@ -151,6 +173,9 @@ services:
       - ./logs/nginx:/var/log/nginx
     depends_on:
       - php7
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.nginx=true"
 
   # apache:
   #   restart: always
@@ -171,6 +196,9 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.apache=true"
 
 networks:
   frontend:

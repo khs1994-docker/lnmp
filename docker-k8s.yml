@@ -14,15 +14,15 @@ services:
     ports:
       - "3306:3306"
     # volumes:
-      # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
-      # - mysql-data:/var/lib/mysql:rw
-      # - ./logs/mysql:/var/log/mysql:rw
-      # - ./backup/mysql:/backup:rw
+    #   - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+    #   - mysql-data:/var/lib/mysql:rw
+    #   - ./logs/mysql:/var/log/mysql:rw
+    #   - ./backup/mysql:/backup:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
     # deploy:
-      # placement:
-      #   # 在管理节点运行
-      #   constraints: [node.role == manager]
+    #   placement:
+    #     # 在管理节点运行
+    #     constraints: [node.role == manager]
     # secrets:
     #   - source: db_root_password
     #     target: /etc/db_root_password
