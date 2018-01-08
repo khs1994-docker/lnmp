@@ -71,7 +71,17 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file `./
 $ ./lnmp-docker.sh new ProjectName
 ```
 
-## List Container
+## Issue SSL certificate
+
+>powered by [`acme.sh`](https://github.com/Neilpang/acme.sh).
+
+```bash
+$ ./lnmp-docker.sh ssl www.khs1994.com
+```
+
+>Only Support `dnspod.cn` DNS，Please set API key and id in .env file，For more information, see [Documents](docs/nginx-with-https.md).
+
+## List LNMP Container
 
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp

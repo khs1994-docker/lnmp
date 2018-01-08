@@ -73,6 +73,16 @@ development
 $ ./lnmp-docker.sh new ProjectName
 ```
 
+## 一键申请 SSL 证书
+
+>由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持。
+
+```bash
+$ ./lnmp-docker.sh ssl www.khs1994.com
+```
+
+>仅支持 `dnspod.cn` DNS，使用前请提前设置相关密钥，更多信息请查看 [支持文档](docs/nginx-with-https.md)
+
 ## 查看详情
 
 ```bash
