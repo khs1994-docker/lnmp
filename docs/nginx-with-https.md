@@ -1,5 +1,36 @@
 # nginx HTTPS
 
+## 申请 SSL 证书
+
+第一种方法是自行到国内云服务商等处申请 SSL 证书。
+
+你也可以使用以下命令申请（由 [acme.sh](https://github.com/Neilpang/acme.sh) 提供技术支持，感谢 [Let's Encrypt](https://letsencrypt.org/)）。
+
+>在使用之前，提前设置好 `dnspod.cn` api 相关变量
+
+```bash
+# [DNSPOD]
+
+DP_ID=
+DP_KEY=
+```
+
+```bash
+$ ./lnmp-docker.sh ssl www.khs1994.com
+```
+
+其他 DNS 服务商请参照 `acme.sh` [支持文档](https://github.com/Neilpang/acme.sh/tree/master/dnsapi)，设置好相关变量之后，使用 `1acme.sh` 原始命令申请 SSL 证书。
+
+```bash
+$ ./lnmp-docker.sh ssl acme.sh \
+    --issue \
+    --dns dns_gd \
+    -d example.com \
+    -d www.example.com
+```
+
+## 配置 nginx
+
 nginx 主配置文件位于 `./config/etc/nginx/nginx.conf` （一般情况无需修改）。
 
 子配置文件位于 `./config/nginx/*.conf`
@@ -48,3 +79,23 @@ server{
   }
 }
 ```
+
+你也可以在 https://khs1994.gitee.io/server-side-tls/ssl-config-generator/ 便捷的生成 SSL 配置。
+
+## 其他
+
+### 签发自签名证书
+
+请查看：https://github.com/khs1994-docker/tls
+
+## 第三方工具
+
+* https://zerossl.com/
+
+# More Information
+
+* https://letsencrypt.org/docs/client-options/
+
+* https://github.com/khs1994-website/server-side-tls
+
+* https://github.com/khs1994-docker/tls

@@ -73,7 +73,7 @@ $ ./lnmp-docker.sh new ProjectName
 
 ## Issue SSL certificate
 
->powered by [`acme.sh`](https://github.com/Neilpang/acme.sh).
+>Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh).
 
 ```bash
 $ ./lnmp-docker.sh ssl www.khs1994.com
