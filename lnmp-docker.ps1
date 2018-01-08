@@ -94,6 +94,7 @@ Commands:
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
   ssl                  Issue SSL certificate powered by acme.sh
+  ssl-self             Issue Self-signed SSL certificate
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
@@ -252,6 +253,12 @@ Function main() {
 
     restore {
        docker-compose exec mysql /backup/restore.sh $args[1]
+    }
+
+    ssl-self {
+      $DOMAIN=$args[1]
+      docker run -it --rm -v $pwd\config\nginx\ssl-self:/ssl -e DOMAIN=$DOMAIN khs1994/tls
+      printInfo 'Please set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
 
     swarm-build {

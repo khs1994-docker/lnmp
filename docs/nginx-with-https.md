@@ -86,7 +86,11 @@ server{
 
 ### 签发自签名证书
 
-请查看：https://github.com/khs1994-docker/tls
+```bash
+$ ./lnmp-docker.sh ssl-self www.khs1994.com
+```
+
+生成的 ssl 文件位于 `config/nginx/ssl-self`。
 
 ## 第三方工具
 
