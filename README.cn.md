@@ -188,8 +188,11 @@ https://doc.lnmp.khs1994.com
 
 # 感谢
 
+* LNMP
 * [Docker Cloud](https://cloud.docker.com)
 * [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
+* [Let's Encrypt](https://letsencrypt.org/)
+* [acme.sh](https://github.com/Neilpang/acme.sh)
 
 # 更多资料
 
