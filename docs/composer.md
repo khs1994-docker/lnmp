@@ -1,20 +1,16 @@
 # Composer
 
-交互式输入
-
 ```bash
-$ ./lnmp-docker.sh composer
-
-# 之后输入路径
-
-# 之后输入要执行的参数
+$ ./lnmp-docker.sh composer 路径 命令
 ```
 
-例如路径输入 `test`，参数输入 `install`，相当于在 `./app/test/` 执行 `composer install`
+例如路径输入 `test`，命令输入 `install`，相当于在 `./app/test/` 执行 `composer install`
+
+```bash
+$ ./lnmp-docker.sh composer test install
+```
 
 # 命令参数列表
-
-输入 `list` 参数查看，或查看以下资料
 
 ```bash
 ______

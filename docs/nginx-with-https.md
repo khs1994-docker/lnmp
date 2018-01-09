@@ -19,7 +19,7 @@ DP_KEY=
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
-其他 DNS 服务商请参照 `acme.sh` [支持文档](https://github.com/Neilpang/acme.sh/tree/master/dnsapi)，设置好相关变量之后，使用 `1acme.sh` 原始命令申请 SSL 证书。
+其他 DNS 服务商请参照 `acme.sh` [支持文档](https://github.com/Neilpang/acme.sh/tree/master/dnsapi)，设置好相关变量之后，使用 `acme.sh` 原始命令申请 SSL 证书。
 
 ```bash
 $ ./lnmp-docker.sh ssl acme.sh \

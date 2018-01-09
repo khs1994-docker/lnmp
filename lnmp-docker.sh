@@ -133,8 +133,10 @@ cleanup(){
 }
 
 gitbook(){
-  docker run -it --rm \
+  docker rm -f lnmp-docs
+  exec docker run -it --rm \
     -p 4000:4000 \
+    --name lnmp-docs \
     -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
@@ -538,7 +540,7 @@ php_cli(){
     shift
     cmd="$@"
   fi
-    docker run -it \
+    exec docker run -it \
       -v $PWD/app/${path}:/app \
       khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
       php "${cmd}"
@@ -663,6 +665,14 @@ main() {
     run_docker; docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
     ;;
 
+  nginx-conf )
+     if [ -z "$3" ];then print_error "Please set path or url"; exit 1; fi
+     print_info 'Please set hosts in /etc/hosts in development'
+     print_info 'Maybe you need generate nginx https conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
+     if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
+     if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
+     ;;
+
   php-cli )
     run_docker; docker-compose exec php7 bash
     ;;
@@ -766,6 +776,18 @@ main() {
     ssl "$@"
     ;;
 
+  ssl-self )
+    if [ -z "$1" ];then print_error 'Please input url [NOT include https://]'; exit 1; fi
+    docker run -it --rm -v $PWD/config/nginx/ssl-self:/ssl -e DOMAIN=$1 khs1994/tls
+    echo; print_info 'Please set hosts in /etc/hosts'
+    ;;
+
+  tests )
+    exec docker run -it --rm alpine sh
+    echo 0
+    exit 0
+    ;;
+
   * )
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -791,12 +813,14 @@ Commands:
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
+  nginx-config         Generate nginx conf
   php                  Run PHP in CLI
   production           Use LNMP in Production (Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Your Docker Registory
   restore              Restore MySQL databases
-  ssl                  Issue SSL certificate powered by acme.sh
+  ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
+  ssl-self             Issue Self-signed SSL certificate
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode

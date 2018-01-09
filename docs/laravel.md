@@ -31,18 +31,16 @@ $ ./lnmp-docker.sh laravel
 ## artisan
 
 ```bash
-$ ./lnmp-docker.sh artisan
-
-# 之后输入路径
-
-# 之后输入要执行的参数
+$ ./lnmp-docker.sh laravel-artisan 路径 命令
 ```
 
-例如路径输入 `test`，参数输入 `--version`，相当于在 `./app/test/` 执行 `php artisan --version`
+例如路径输入 `test`，命令输入 `--version`，相当于在 `./app/test/` 执行 `php artisan --version`
+
+```bash
+$ ./lnmp-docker.sh laravel-artisan test --version
+```
 
 ### artisan 参数列表
-
-输入 `list` 参数查看，或查看以下资料
 
 ```bash
 Laravel Framework 5.5.9

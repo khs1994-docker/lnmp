@@ -12,6 +12,16 @@
 
 或在命令行执行 `./lnmp-docker.sh docs` 在本地阅读。
 
+# 满足 LNMP 开发全部需求
+
+* 新建 `PHP` 项目
+
+* 生成 `nginx` 配置
+
+* 申请 `SSL` 证书
+
+* 生成 `SSL` 自签名证书用于开发、测试环境
+
 # More Information
 
 * [Docker CE 安装教程](https://www.khs1994.com/docker/README.html)

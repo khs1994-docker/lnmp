@@ -6,9 +6,9 @@
 
 在 `.env` 修改镜像前缀、PHP 项目路径。
 
-克隆已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹。
+克隆已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹（可以使用 `./lnmp-docker.sh new` 交互式的填入项目路径 url）。
 
-在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件。
+在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件（可以使用 `./lnmp-docker.sh nginx-conf` 便捷的生成 nginx 配置文件）。
 
 执行 `./lnmp-docker.sh development`。
 
@@ -16,14 +16,12 @@
 
 ### 使用 Composer
 
-`./lnmp-docker.sh composer` 交互式填入项目路径，要执行的命令，进行依赖的安装或升级
+`./lnmp-docker.sh composer 路径 命令` 进行依赖的安装或升级。
 
 ### 命令行执行 PHP 文件
 
-路径为相对于 `./app` 的目录名。
-
 ```bash
-$ ./lnmp-docker.sh php blog index.php
+$ ./lnmp-docker.sh php 路径 命令
 ```
 
 ## 自行构建镜像

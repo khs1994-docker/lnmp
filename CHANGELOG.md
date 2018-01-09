@@ -3,6 +3,11 @@ Changelog
 
 #### v18.01-rc2
 
+Changes:
+
+* Add `./lnmp-docker.sh nginx-conf` command, Support generate nginx conf
+* Add `./lnmp-docker.sh ssl-self` command, Support issue Self-signed `SSL certificate`
+
 #### v18.01-rc1
 
 Changes:
