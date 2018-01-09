@@ -481,6 +481,10 @@ ssl(){
       khs1994/acme
 }
 
+ssl_self(){
+  docker run -it --rm -v $PWD/config/nginx/ssl-self:/ssl khs1994/tls "$@"
+}
+
 # 快捷开始 PHP 项目开发
 
 start(){
@@ -507,7 +511,12 @@ start(){
 
   if [ $protocol = 'https' ];then
     # 申请 ssl 证书
-    ssl $url
+    read -n 1 -t 5 -p "默认申请公网证书，如果要自签名证书请输入 y Self-Signed SSL certificate? default is n [y/n]:" self_signed
+    if [ -z "$self_signed" ] || [ "$self_signed" = 'n' ];then
+      ssl $url
+    else
+      ssl_self $url
+    fi
     # 生成 nginx 配置文件
     nginx_https $url $name
   else
@@ -777,8 +786,8 @@ main() {
     ;;
 
   ssl-self )
-    if [ -z "$1" ];then print_error 'Please input url [NOT include https://]'; exit 1; fi
-    docker run -it --rm -v $PWD/config/nginx/ssl-self:/ssl -e DOMAIN=$1 khs1994/tls
+    if [ -z "$1" ];then print_error 'Please input ip or url [NOT include https://]'; exit 1; fi
+    ssl_self "$@"
     echo; print_info 'Please set hosts in /etc/hosts'
     ;;
 

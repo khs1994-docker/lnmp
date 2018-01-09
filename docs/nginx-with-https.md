@@ -87,10 +87,12 @@ server{
 ### 签发自签名证书
 
 ```bash
-$ ./lnmp-docker.sh ssl-self www.khs1994.com
+$ ./lnmp-docker.sh ssl-self www.t.khs1994.com
 ```
 
 生成的 ssl 文件位于 `config/nginx/ssl-self`。
+
+> `https://*.t.khs1994.com` 均指向 `127.0.0.1` 你可以使用这个网址测试 `https`。
 
 ## 第三方工具
 

@@ -258,7 +258,7 @@ Function main() {
 
     ssl-self {
       $DOMAIN=$args[1]
-      docker run -it --rm -v $pwd\config\nginx\ssl-self:/ssl -e DOMAIN=$DOMAIN khs1994/tls
+      docker run -it --rm -v $pwd\config\nginx\ssl-self:/ssl khs1994/tls $DOMAIN
       printInfo 'Please set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
 
