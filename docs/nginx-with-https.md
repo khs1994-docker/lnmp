@@ -92,7 +92,13 @@ $ ./lnmp-docker.sh ssl-self www.t.khs1994.com
 
 生成的 ssl 文件位于 `config/nginx/ssl-self`。
 
+务必在浏览器导入根证书（`config/nginx/ssl-self/root-ca.crt`）。
+
 > `https://*.t.khs1994.com` 均指向 `127.0.0.1` 你可以使用这个网址测试 `https`。
+
+## 示例配置
+
+请查看 `config/nginx/demo-*.conf`
 
 ## 第三方工具
 
