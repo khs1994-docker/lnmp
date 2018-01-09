@@ -35,7 +35,8 @@ RUN set -xe \
          && docker-php-ext-enable mongodb \
 				                          memcached \
 																	redis \
-																	xdebug
+																	xdebug \
+         && rm -rf /tmp/*
 
 # install composer
 
@@ -60,7 +61,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  # laravel 安装程序
  && composer global require "laravel/installer" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
- && rm -rf /tmp/cache /tmp/.htaccess /tmp/pear /tmp/installer.php /tmp/*.pub \
+ && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
  # 默认不启用 xdebug
  && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
  # 创建日志文件夹
