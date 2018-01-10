@@ -414,17 +414,15 @@ nginx_http(){
   listen        80;
   server_name   $1;
   root          /app/$2;
-  index         index.html index.php;
+  index         index.html index.htm index.php;
 
   location / {
     try_files \$uri \$uri/ /index.php?\$query_string;
   }
 
-  location ~ .*\\.php(\\/.*)*$ {
+  location ~ /.php$ {
     fastcgi_pass   php7:9000;
-    fastcgi_index  index.php;
-    fastcgi_param  SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-    include        fastcgi_params;
+    include        fastcgi.conf;
   }
 }" > config/nginx/$1.conf
 
@@ -433,16 +431,16 @@ nginx_http(){
 nginx_https(){
 
   echo "server {
-  listen      80;
-  server_name $1;
-  return 301  https://\$host\$request_uri;
+  listen                    80;
+  server_name               $1;
+  return 301                https://\$host\$request_uri;
 }
 
 server{
   listen                     443 ssl http2;
   server_name                $1;
   root                       /app/$2;
-  index                      index.html index.php;
+  index                      index.html index.htm index.php;
 
   ssl_certificate            conf.d/demo-ssl/$1.crt;
   ssl_certificate_key        conf.d/demo-ssl/$1.key;
@@ -453,15 +451,16 @@ server{
   ssl_ciphers                'ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5';
   ssl_prefer_server_ciphers  on;
 
+  ssl_stapling               on;
+  ssl_stapling_verify        on;
+
   location / {
     try_files \$uri \$uri/ /index.php?\$query_string;
   }
 
-  location ~ .*\.php(\/.*)*$ {
+  location ~ /.php$ {
     fastcgi_pass   php7:9000;
-    fastcgi_index  index.php;
-    fastcgi_param  SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-    include        fastcgi_params;
+    include        fastcgi.conf;
   }
 }" > config/nginx/$1.conf
 
@@ -511,11 +510,11 @@ start(){
 
   if [ $protocol = 'https' ];then
     # 申请 ssl 证书
-    read -n 1 -t 5 -p "默认申请公网证书，如果要自签名证书请输入 y Self-Signed SSL certificate? default is n [y/n]:" self_signed
-    if [ -z "$self_signed" ] || [ "$self_signed" = 'n' ];then
-      ssl $url
-    else
+    read -n 1 -t 5 -p "默认申请公网证书，如果要自签名证书请输入 y Self-Signed SSL certificate? [y/N]:" self_signed
+    if [ "$self_signed" = 'y' ];then
       ssl_self $url
+    else
+      ssl $url
     fi
     # 生成 nginx 配置文件
     nginx_https $url $name

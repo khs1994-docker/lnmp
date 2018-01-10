@@ -90,7 +90,7 @@ server{
     try_files $uri $uri/ /index.php?$query_string;
   }
 
-  location ~ .*\.php(\/.*)*$ {
+  location ~ /.php$ {
 
     # 「重要」 php7 为 docker-compose.yml 中定义的服务名
     # 同理在 PHP 文件中连接其他容器请使用 服务名，严禁尝试使用 127.0.0.1 localhost。

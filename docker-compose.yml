@@ -179,7 +179,7 @@ services:
     #
     # TLSv1.3
     #
-    # image: "nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch"
+    # image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch"
     #
     #
     #
