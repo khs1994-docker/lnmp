@@ -420,7 +420,7 @@ nginx_http(){
     try_files \$uri \$uri/ /index.php?\$query_string;
   }
 
-  location ~ /.php$ {
+  location ~ .*\.php(\/.*)*$ {
     fastcgi_pass   php7:9000;
     include        fastcgi.conf;
   }
@@ -458,7 +458,7 @@ server{
     try_files \$uri \$uri/ /index.php?\$query_string;
   }
 
-  location ~ /.php$ {
+  location ~ .*\.php(\/.*)*$ {
     fastcgi_pass   php7:9000;
     include        fastcgi.conf;
   }
@@ -524,7 +524,7 @@ start(){
 
   mkdir -p app/$name
 
-  print_info "Please start PHP project in /app/$name"
+  print_info "Now you can start PHP project in /app/$name"
   print_info "Please set hosts in /etc/hosts in development"
 }
 
@@ -541,7 +541,7 @@ php_cli(){
     NOTSUPPORT
   fi
   if [ -z "$2" ];then
-    print_error "Please input path or cmd"
+    print_error "$ ./lnmp-docker.sh php-cli {PATH} {CMD}"
     exit 1
   else
     path=$1
@@ -600,7 +600,7 @@ main() {
   laravel-artisan )
     run_docker
     if [ -z "$2" ];then
-      print_error "Please input path or cmd"; exit 1
+      print_error "$ ./lnmp-docker.sh laravel-artisan {PATH} {CMD}"; exit 1
     else
       path="$1"
       shift
@@ -612,7 +612,7 @@ main() {
   composer )
     run_docker
     if [ -z "$2" ];then
-      print_error "Please input path or cmd"; exit 1
+      print_error "$ ./lnmp-docker.sh composer {PATH} {CMD}"; exit 1
     else
       path="$1"
       shift
@@ -674,7 +674,7 @@ main() {
     ;;
 
   nginx-conf )
-     if [ -z "$3" ];then print_error "Please set path or url"; exit 1; fi
+     if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-conf {https|http} {PATH} {URL}"; exit 1; fi
      print_info 'Please set hosts in /etc/hosts in development'
      print_info 'Maybe you need generate nginx https conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
@@ -785,7 +785,7 @@ main() {
     ;;
 
   ssl-self )
-    if [ -z "$1" ];then print_error 'Please input ip or url [NOT include https://]'; exit 1; fi
+    if [ -z "$1" ];then print_error '$ ./lnmp-docker.sh ssl-self {IP|DOMAIN}'; exit 1; fi
     ssl_self "$@"
     echo; print_info 'Please set hosts in /etc/hosts'
     ;;
