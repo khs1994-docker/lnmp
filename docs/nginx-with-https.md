@@ -38,30 +38,53 @@ nginx 主配置文件位于 `./config/etc/nginx/nginx.conf` （一般情况无�
 主要注意的是 [文件路径](path.md) 问题。下面以 `https` 配置为例进行讲解。
 
 ```nginx
+# https://github.com/khs1994-website/nginx-https
 
-server{
+server {
+  listen      80;
 
   # 域名
 
-  server_name demo.lnmp.khs1994.com;
-  listen 443 ssl http2;
+  server_name www.t.khs1994.com;
+  return 301  https://$host$request_uri;
+}
+
+server{
+  listen                     443 ssl http2;
+
+  # 域名
+
+  server_name                www.t.khs1994.com;
 
   # 「重要」 此处为容器内路径（注意不是本机路径）！ 本机 ./app/ 对应容器内 /app/
 
-  root /app/blog/public;
+  root                       /app/demo;
+  index                      index.html index.htm index.php;
 
-  index index.html index.php;
+  # RSA & ECC 双证书
 
   # 「重要」 ssl 证书路径，此处为容器内路径（注意不是本机路径）！
   # 本机 ./config/nginx/ 对应容器内 /etc/nginx/conf.d/
 
-  ssl_certificate      conf.d/demo-ssl/demo.lnmp.khs1994.com.cer;
-  ssl_certificate_key  conf.d/demo-ssl/demo.lnmp.khs1994.com.key;
-  ssl_session_cache    shared:SSL:1m;
-  ssl_session_timeout  5m;
-  ssl_protocols        TLSv1.2;
-  ssl_ciphers          'ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5';
-  ssl_prefer_server_ciphers on;
+  ssl_certificate            conf.d/demo-ssl/www.t.khs1994.com.crt;
+  ssl_certificate_key        conf.d/demo-ssl/www.t.khs1994.com.key;
+
+  ssl_certificate            conf.d/demo-ssl/www.t.khs1994.com.crt;
+  ssl_certificate_key        conf.d/demo-ssl/www.t.khs1994.com.key;
+
+  ssl_session_cache          shared:SSL:1m;
+  ssl_session_timeout        5m;
+  ssl_protocols              TLSv1.2; # TLSv1.3;
+
+  # TLSv1.3
+  # ssl_ciphers              TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-256-GCM-SHA384:EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
+
+  ssl_ciphers                'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
+
+  ssl_prefer_server_ciphers  on;
+
+  ssl_stapling on;
+  ssl_stapling_verify on;
 
   location / {
     try_files $uri $uri/ /index.php?$query_string;
@@ -73,9 +96,7 @@ server{
     # 同理在 PHP 文件中连接其他容器请使用 服务名，严禁尝试使用 127.0.0.1 localhost。
 
     fastcgi_pass   php7:9000;
-    fastcgi_index  index.php;
-    fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    include        fastcgi_params;
+    include        fastcgi.conf;
   }
 }
 ```
