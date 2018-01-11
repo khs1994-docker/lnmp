@@ -577,7 +577,7 @@ main() {
     ;;
 
   config )
-    docker-compose config
+    exec docker-compose config
     ;;
 
   demo )
@@ -632,14 +632,27 @@ main() {
   production )
     run_docker
     # 仅允许运行在 Linux x86_64
-    if [ "$OS" = 'Linux' -a ${ARCH} = 'x86_64' ];then
+    if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       init
       if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
-      docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
+      exec docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
-    error
+    ;;
+
+  production-config )
+    init; exec docker-compose -f docker-compose.yml -f docker-compose.prod.yml config
+    ;;
+
+  production-pull )
+    run_docker
+    # 仅允许运行在 Linux x86_64
+    if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
+      init; sleep 2; exec docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+    else
+      print_error "Production NOT Support ${OS} ${ARCH}\n"
+    fi
     ;;
 
   build )
@@ -661,12 +674,8 @@ main() {
     error
     ;;
 
-  production-config )
-    init; docker-compose -f docker-compose.yml -f docker-compose.prod.yml config; error
-    ;;
-
   build-config )
-    init; if [ ${ARCH} = 'x86_64' ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml config; else NOTSUPPORT; fi
+    init; if [ ${ARCH} = 'x86_64' ];then exec docker-compose -f docker-compose.yml -f docker-compose.build.yml config; else NOTSUPPORT; fi
     ;;
 
   restore )
@@ -772,6 +781,21 @@ main() {
     install_docker_compose
     ;;
 
+  development-pull )
+    run_docker; init
+    case "${ARCH}" in
+        x86_64 )
+          sleep 2; exec docker-compose pull
+          ;;
+        aarch64 | armv7l )
+          sleep 2; exec docker-compose -f docker-compose.arm.yml pull
+          ;;
+        * )
+          NOTSUPPORT
+          ;;
+    esac
+     ;;
+
   cn-mirror )
     mirror
     ;;
@@ -821,6 +845,7 @@ Commands:
   composer             Use PHP Dependency Manager Composer
   config               Validate and view the Development Compose file
   development          Use LNMP in Development
+  development-pull     Pull LNMP Docker Images in development
   debug                Debug LNMP environment
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
@@ -833,6 +858,7 @@ Commands:
   php                  Run PHP in CLI
   production           Use LNMP in Production (Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
+  production-pull      Pull LNMP Docker Images in production
   push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt

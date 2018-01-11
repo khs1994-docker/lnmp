@@ -7,6 +7,7 @@ complete -W "backup \
         composer \
         config \
         development \
+        development-pull \
         down \
         docs \
         help \
@@ -16,6 +17,7 @@ complete -W "backup \
         php \
         production \
         production-config \
+        production-pull \
         push \
         restore \
         ssl \
