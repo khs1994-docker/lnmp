@@ -352,7 +352,7 @@ update(){
     if ! [ -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
   fi
   git fetch lnmp
-  print_info "\nBranch is ${BRANCH}\n"
+  print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
     git reset --hard lnmp/dev
   elif [ ${BRANCH} = 'master' ];then
