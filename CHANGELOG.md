@@ -7,6 +7,8 @@ Changes:
 
 * Add `./lnmp-docker.sh nginx-conf` command, Support generate nginx conf
 * Add `./lnmp-docker.sh ssl-self` command, Support issue Self-signed `SSL certificate`
+* Add `./lnmp-docker.sh development-pull`，Support Pull latest LNMP Docker Images in development
+* Add `./lnmp-docker.sh production-pull`，Support Pull latest LNMP Docker Images in production
 * Add `nginx With TLSv1.3` (Advanced, Experimental)
 
 #### v18.01-rc1
