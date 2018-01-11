@@ -20,8 +20,6 @@
 
 * ~~[v17.11 2017-12-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.11) **EOL**~~
 
-* ~~[v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10) **EOL**~~
-
 # 准备
 
 本项目需要以下软件：
@@ -74,6 +72,16 @@ development
 ```bash
 $ ./lnmp-docker.sh new ProjectName
 ```
+
+## 一键申请 SSL 证书
+
+>由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持。
+
+```bash
+$ ./lnmp-docker.sh ssl www.khs1994.com
+```
+
+>仅支持 `dnspod.cn` DNS，使用前请提前设置相关密钥，更多信息请查看 [支持文档](docs/nginx-with-https.md)
 
 ## 查看详情
 
@@ -180,8 +188,11 @@ https://doc.lnmp.khs1994.com
 
 # 感谢
 
+* LNMP
 * [Docker Cloud](https://cloud.docker.com)
 * [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
+* [Let's Encrypt](https://letsencrypt.org/)
+* [acme.sh](https://github.com/Neilpang/acme.sh)
 
 # 更多资料
 

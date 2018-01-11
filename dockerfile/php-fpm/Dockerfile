@@ -33,15 +33,15 @@ RUN set -xe \
         && apk add --no-cache --virtual .khs1994-php-fpm-build_deps $KHS1994_PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure zip \
                                     --with-libzip \
-        && docker-php-ext-install zip \
-        && docker-php-ext-install -j "$(nproc)" bcmath \
-                                                pdo_pgsql \
-                                                pdo_mysql \
-                                                opcache \
         && docker-php-ext-configure gd \
                                     --with-freetype-dir=/usr/include/ \
                                     --with-jpeg-dir=/usr/include/ \
-        && docker-php-ext-install -j "$(nproc)" gd \
+        && docker-php-ext-install -j"$(nproc)" bcmath \
+                                               pdo_pgsql \
+                                               pdo_mysql \
+                                               opcache \
+                                               zip \
+                                               gd \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && pecl install mongodb \
                         redis \
@@ -52,7 +52,8 @@ RUN set -xe \
                                  redis \
                                  memcached \
                                  xdebug \
-        && apk del .build-deps
+        && apk del .build-deps \
+        && rm -rf /tmp/*
 
 # install composer
 
@@ -78,7 +79,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  # laravel 安装程序
  && composer global require "laravel/installer" \
  && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
- && rm -rf /tmp/cache /tmp/.htaccess \
+ && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
  # 默认不启用 xdebug
  && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
  # 创建日志文件夹

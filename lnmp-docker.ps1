@@ -1,12 +1,32 @@
-. .env.ps1
+$global:KHS1994_LNMP_DOCKER_VERSION="v18.01-rc2"
+$global:KHS1994_LNMP_PHP_VERSION="7.2.1"
+
+Function printError(){
+Write-Host " "
+Write-Host 'Error   ' -NoNewLine -ForegroundColor Red
+Write-Host $args['0'];
+Write-Host " "
+}
+
+Function printInfo(){
+Write-Host " "
+Write-Host 'INFO    ' -NoNewLine -ForegroundColor Green
+Write-Host $args['0'];
+Write-Host " "
+}
+
+Function printWarning(){
+Write-Host " "
+Write-Host 'Warning  ' -NoNewLine -ForegroundColor Red
+Write-Host $args['0'];
+Write-Host " "
+}
 
 Function env_status(){
   if (Test-Path .env){
-    Write-Host " "
-    Write-Host .env file existing
+    printInfo '.env file existing'
   }else{
-    Write-Host " "
-    Write-Host .env file NOT existing
+    printWarning '.env file NOT existing'
     cp .env.example .env
   }
 }
@@ -44,7 +64,7 @@ Function init(){
   docker-compose --version
   logs
   git submodule update --init --recursive
-  Write-Host "Init is SUCCESS"
+  printInfo 'Init is SUCCESS'
 }
 
 Function help_information(){
@@ -60,23 +80,30 @@ Commands:
   build-config         Validate and view the build images Compose file
   cleanup              Cleanup log files
   composer             Use PHP Package Management composer
+  config               Validate and view the Development Compose file
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
   help                 Display this help message
+  init                 Init LNMP environment
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
+  new                  New PHP Project and generate nginx conf and issue SSL certificate
   php                  Run PHP in CLI
   production           Use LNMP in Production(Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
+  ssl                  Issue SSL certificate powered by acme.sh
+  ssl-self             Issue Self-signed SSL certificate
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
 
 Container CLI:
+  apache-cli
+  mariadb-cli
   memcached-cli
   mongo-cli
   mysql-cli
@@ -87,15 +114,10 @@ Container CLI:
   redis-cli
 
 Tools:
-  update                Upgrades LNMP
-  upgrade               Upgrades LNMP
-  init
   commit
-  test
-  dockerfile-update    Update Dockerfile By Script
-  debug                Debug environment
   cn-mirror            Push master branch to CN mirror
-  compose              Install docker-compose By curl from github
+  update               Upgrades LNMP
+  upgrade              Upgrades LNMP
 
 Read './docs/*.md' for more information about commands."
 }
@@ -115,23 +137,20 @@ Function cleanup(){
 }
 
 Function composer($COMPOSE_PATH,$CMD){
-  Write-Host "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
-  Write-Host "output information"
-  Write-Host " "
+  printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
+  printInfo 'output information'
   docker run -it --rm -v $pwd\app\${COMPOSE_PATH}:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 composer ${CMD}
 }
 
 Function laravel($LARAVEL_PATH){
-  Write-Host "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
-  Write-Host "output information"
-  Write-Host " "
+  printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
+  printInfo 'output information'
   docker run -it --rm -v $pwd\app:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 laravel new ${LARAVEL_PATH}
 }
 
 Function laravel-artisan($LARAVEL_PATH,$CMD){
-  Write-Host "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${LARAVEL_PATH} EXEC $ php artisan ${CMD}"
-  Write-Host "output information"
-  Write-Host " "
+  printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${LARAVEL_PATH} EXEC $ php artisan ${CMD}"
+  printInfo 'output information'
   docker run -it --rm -v $pwd\app\${LARAVEL_PATH}:/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php artisan ${CMD}
 }
 
@@ -159,15 +178,18 @@ Function main() {
 
     commit {
       ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
-      Write-Host "Branch is ${BRANCH}"
-      Write-Host " "
+      printInfo "Branch is ${BRANCH}"
       if (${BRANCH} -eq "dev"){
         git add .
         git commit -m "Update [skip ci]"
         git push origin dev
       }else{
-        Write-Host "NOT Support ${BRANCH} branch"
+        printError "NOT Support ${BRANCH} branch"
       }
+    }
+
+    config {
+      docker-compose config
     }
 
     backup {
@@ -234,6 +256,12 @@ Function main() {
        docker-compose exec mysql /backup/restore.sh $args[1]
     }
 
+    ssl-self {
+      $DOMAIN=$args[1]
+      docker run -it --rm -v $pwd\config\nginx\ssl-self:/ssl khs1994/tls $DOMAIN
+      printInfo 'Please set hosts in C:\Windows\System32\drivers\etc\hosts'
+    }
+
     swarm-build {
       docker-compose -f docker-stack.yml build
     }
@@ -283,6 +311,10 @@ Function main() {
     }
 
     update{
+      update
+    }
+
+    upgrade {
       update
     }
 

@@ -27,7 +27,7 @@ fi
 
 echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${LARAVEL_PATH} 执行 $ php artisan ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
-docker run -it --rm \
+exec docker run -it --rm \
   -v $PWD/app/${LARAVEL_PATH}:/app \
   ${DOCKER_IMAGE}:${TAG} \
   php artisan ${CMD}

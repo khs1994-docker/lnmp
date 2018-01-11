@@ -12,6 +12,26 @@
 # https://doc.lnmp.khs1994.com/
 #
 
+if [ "$1" = help ];then
+echo "Use in Development
+
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+
+Use in Production
+
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
+
+CN mirror
+
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh --mirror aliyun | coding | tgit | gitee
+
+Support Documents
+
+https://doc.lnmp.khs1994.com/
+"
+exit 0
+fi
+
 rm -rf lnmp-test
 
 LNMP_GIT_SSH_URL=git@github.com:khs1994-docker/lnmp.git
@@ -54,11 +74,12 @@ wget_git(){
 }
 
 exist_path() {
-  if [ -d ${LNMP_PATH} -o -f ${LNMP_PATH} ];then
-    echo "${LNMP_PATH} exists"
+  if [ -d "$1" ] || [ -f "$1" ];then
+    echo "$1 exists"
     echo "==============================="
     read -p "Please input path: " LNMP_PATH
-    exist_path
+    if [ -z "$LNMP_PATH" ];then exit 1; fi
+    exist_path $LNMP_PATH
   fi
 }
 
@@ -129,7 +150,7 @@ echo "wget production                 : Download master branch by wget"
 exit 0
 fi
 
-exist_path
+exist_path $LNMP_PATH
 
 case $1 in
   production )

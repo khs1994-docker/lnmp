@@ -22,8 +22,6 @@ Latest commit in dev branch, please switch [dev](https://github.com/khs1994-dock
 
 * ~~[v17.11 2017-12-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.11) **EOL**~~
 
-* ~~[v17.10 2017-11-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.10) **EOL**~~
-
 # Prerequisites
 
 To use LNMP Docker, you need:
@@ -73,7 +71,17 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file `./
 $ ./lnmp-docker.sh new ProjectName
 ```
 
-## List Container
+## Issue SSL certificate
+
+>Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh).
+
+```bash
+$ ./lnmp-docker.sh ssl www.khs1994.com
+```
+
+>Only Support `dnspod.cn` DNS，Please set API key and id in .env file，For more information, see [Documents](docs/nginx-with-https.md).
+
+## List LNMP Container
 
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
@@ -171,8 +179,11 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 
 # Thanks
 
+* LNMP
 * [Docker Cloud](https://cloud.docker.com)
 * [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
+* [Let's Encrypt](https://letsencrypt.org/)
+* [acme.sh](https://github.com/Neilpang/acme.sh)
 
 # More Information
 

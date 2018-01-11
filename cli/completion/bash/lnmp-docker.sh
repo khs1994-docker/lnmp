@@ -7,6 +7,7 @@ complete -W "backup \
         composer \
         config \
         development \
+        development-pull \
         down \
         docs \
         help \
@@ -16,9 +17,11 @@ complete -W "backup \
         php \
         production \
         production-config \
+        production-pull \
         push \
         restore \
         ssl \
+        ssl-self \
         swarm-build \
         swarm-push \
         swarm-deploy \
@@ -29,6 +32,7 @@ complete -W "backup \
         mongo-cli \
         mysql-cli \
         nginx-cli \
+        nginx-conf \
         php-cli \
         phpmyadmin-cli \
         postgres-cli \

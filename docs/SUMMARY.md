@@ -7,6 +7,7 @@
 * 开发环境
   * [构建镜像](development.md)
 * NGINX
+  * [一键生成配置](nginx-conf.md)
   * [HTTPS 配置](nginx-with-https.md)
 * PHP
   * [PHP 扩展列表](php.md)

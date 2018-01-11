@@ -176,6 +176,13 @@ services:
   nginx:
     restart: always
     image: "nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+    #
+    # TLSv1.3
+    #
+    # image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch"
+    #
+    #
+    #
     env_file:
       - ./bin/timezone.env
     ports:
