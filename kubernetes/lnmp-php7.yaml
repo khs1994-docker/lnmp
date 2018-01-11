@@ -10,6 +10,7 @@ spec:
   - port: 9000
   selector:
     app: lnmp
+    tier: php7
 status:
   loadBalancer: {}
 ---
@@ -23,15 +24,19 @@ spec:
   selector:
     matchLabels:
       app: lnmp
+      tier: php7
   replicas: 2
   strategy: {}
   template:
     metadata:
       labels:
         app: lnmp
+        tier: php7
     spec:
       containers:
-      - args:
+      - image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
+        name: lnmp-php7
+        args:
         - php-fpm
         - -R
         env:
@@ -45,8 +50,9 @@ spec:
             configMapKeyRef:
               key: APP_ENV
               name: lnmp-env
-        image: khs1994/php-fpm:swarm-7.2.0-alpine3.7
-        name: lnmp-php7
+        ports:
+        - containerPort: 9000
+          name: lnmp-php7
         resources: {}
       restartPolicy: Always
 status: {}
