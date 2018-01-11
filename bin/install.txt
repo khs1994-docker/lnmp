@@ -54,7 +54,7 @@ wget_git(){
 }
 
 exist_path() {
-  if [ -d ${LNMP_PATH} -o -f ${LNMP_PATH} ];then
+  if [ -d ${LNMP_PATH} ] || [ -f ${LNMP_PATH} ];then
     echo "${LNMP_PATH} exists"
     echo "==============================="
     read -p "Please input path: " LNMP_PATH

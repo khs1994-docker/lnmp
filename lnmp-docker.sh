@@ -150,7 +150,9 @@ dockerfile_update_sed(){
 
 dockerfile_update(){
   read -p "Soft is: " SOFT
+  if [ -z "$SOFT" ];then echo; print_error 'Please input content'; exit 1; fi
   read -p "Version is: " VERSION
+  if [ -z "VERSION" ];then echo; print_error 'Please input content'; exit 1; fi
   case $SOFT in
     nginx )
       sed -i '' "s#^KHS1994_LNMP_NGINX_VERSION.*#KHS1994_LNMP_NGINX_VERSION=${VERSION}#g" .env.example .env
@@ -339,14 +341,14 @@ update(){
   network && git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
   if [ $? -ne 0 ];then
     # 不存在
-    print_error "Your git remote lnmp NOT set, seting..."
+    print_error "This git remote lnmp NOT set, seting..."
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
     git fetch lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   elif [ ${GIT_SOURCE_URL} != 'git@github.com:khs1994-docker/lnmp.git' -a ${GIT_SOURCE_URL} != 'https://github.com/khs1994-docker/lnmp' ];then
     # 存在但是设置错误
-    print_error "Your git remote lnmp NOT set Correct, reseting..."
+    print_error "This git remote lnmp NOT set Correct, reseting..."
     git remote rm lnmp
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
@@ -364,7 +366,7 @@ update(){
   elif [ ${BRANCH} = 'master' ];then
     git reset --hard lnmp/master
   else
-    print_error "不能在 ${BRANCH} 自动更新，请切换到 dev 或 master 分支"
+    print_error "${BRANCH} error，Please checkout to dev or master branch"
     echo -e "\nPlease exec\n\n$ git checkout dev\n"
   fi
 }
@@ -380,17 +382,17 @@ commit(){
     git push origin dev
     mirror
   else
-    print_error "${BRANCH} 分支不能自动提交\n"
+    print_error "${BRANCH} error\n"
   fi
 }
 
 release_rc(){
-  print_info "开始新的 RC 版本开发\n"; print_info "Branch is ${BRANCH}\n"
+  print_info "Start new RC \n"; print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
     git fetch origin
     git reset --hard origin/master
   else
-    print_error "不能在 ${BRANCH} 分支开始新的开发，请切换到 dev 分支\n"
+    print_error "${BRANCH} error，Please checkout to  dev branch\n"
     echo -e "\n $ git checkout dev\n"
   fi
 }
@@ -470,7 +472,8 @@ server{
 
 ssl(){
   if [ -z "$DP_ID" ];then print_error "Please set ENV in .env file"; exit 1; fi
-  if [ -z "$1" ];then read -p "Please input your domain: 「example www.domain.com 」" url; else url=$1; fi
+  if [ -z "$1" ];then read -p "Please input domain: 「example www.domain.com 」" url; else url=$1; fi
+  if [ -z "$url" ];then echo; print_error 'Please input content'; exit 1; fi
   docker run -it --rm \
       -v $PWD/config/nginx/ssl:/ssl \
       -e DP_Id=$DP_ID \
@@ -492,11 +495,15 @@ start(){
     if [ $arg = '-f' ];then rm -rf app/$1; fi
   done
 
-  if [ -z "$1" ];then read -p "Please input your project name: /app/" name; else name=$1; fi
+  if [ -z "$1" ];then read -p "Please input project name: /app/" name; else name=$1; fi
+
+  if [ -z "$name" ];then echo; print_error 'Please input content'; exit 1; fi
 
   if [ -d app/$name ];then print_error "This folder existing"; exit 1; fi
 
-  if [ -z "$2" -o "$2" = '-f' ];then read -p "Please input your domain:「example http[s]://$name.domain.com 」" input_url; else input_url=$2; fi
+  if [ -z "$2" -o "$2" = '-f' ];then read -p "Please input domain:「example http[s]://$name.domain.com 」" input_url; else input_url=$2; fi
+
+  if [ -z "$input_url" ]; then echo; print_error 'Please input content'; exit 1; fi
 
   protocol=$(echo $input_url | awk -F':' '{print $1}')
 
@@ -541,7 +548,7 @@ php_cli(){
     NOTSUPPORT
   fi
   if [ -z "$2" ];then
-    print_error "$ ./lnmp-docker.sh php-cli {PATH} {CMD}"
+    print_error "$ ./lnmp-docker.sh php {PATH} {CMD}"
     exit 1
   else
     path=$1
@@ -593,7 +600,8 @@ main() {
     ;;
 
   laravel )
-    run_docker; if [ -z "$1" ];then read -p "请输入路径: ./app/" path; else path="$1"; shift ; cmd="$@"; fi
+    run_docker; if [ -z "$1" ];then read -p "Please inuput PHP path: ./app/" path; else path="$1"; shift ; cmd="$@"; fi
+    if [ -z "${path}" ];then echo; print_error 'Please input content'; exit 1; fi
     if [ -z "$cmd" ];then bin/laravel ${path}; else bin/laravel ${path} "${cmd}"; fi
     ;;
 
@@ -629,7 +637,7 @@ main() {
       if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
       docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
     else
-      print_error "生产环境不支持 ${OS} ${ARCH}\n"
+      print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
     error
     ;;
@@ -825,7 +833,7 @@ Commands:
   php                  Run PHP in CLI
   production           Use LNMP in Production (Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
-  push                 Build and Pushes images to Your Docker Registory
+  push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
