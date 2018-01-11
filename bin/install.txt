@@ -74,11 +74,12 @@ wget_git(){
 }
 
 exist_path() {
-  if [ -d ${LNMP_PATH} ] || [ -f ${LNMP_PATH} ];then
-    echo "${LNMP_PATH} exists"
+  if [ -d "$1" ] || [ -f "$1" ];then
+    echo "$1 exists"
     echo "==============================="
     read -p "Please input path: " LNMP_PATH
-    exist_path
+    if [ -z "$LNMP_PATH" ];then exit 1; fi
+    exist_path $LNMP_PATH
   fi
 }
 
@@ -149,7 +150,7 @@ echo "wget production                 : Download master branch by wget"
 exit 0
 fi
 
-exist_path
+exist_path $LNMP_PATH
 
 case $1 in
   production )
