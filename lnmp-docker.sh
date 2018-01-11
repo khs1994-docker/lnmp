@@ -61,14 +61,6 @@ run_docker(){
   fi
 }
 
-error(){
-  if [ $? -ne 0 ];then
-    print_error "Error occurred, Please open issue in https://github.com/khs1994-docker/lnmp/issues/new\n"
-    print_info "Maybe You can try exec\n\n$ ./lnmp-docker.sh update\n\n$ cp .env.example .env\n\n$ mv .env .env.backup\n"
-    exit 1
-  fi
-}
-
 env_status ; ARCH=`uname -m` ; OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
@@ -329,7 +321,7 @@ restore(){
 }
 
 network(){
-  ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
+  ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
 }
 
 # 更新项目
@@ -369,6 +361,8 @@ update(){
     print_error "${BRANCH} error，Please checkout to dev or master branch"
     echo -e "\nPlease exec\n\n$ git checkout dev\n"
   fi
+  command -v bash > /dev/null 2>&1
+  if ! [ $? = 0  ];then sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh; fi
 }
 
 # 提交项目「开发者选项」
@@ -656,7 +650,7 @@ main() {
     ;;
 
   build )
-    run_docker; init; if [ ${ARCH} = 'x86_64' ];then docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi; error
+    run_docker; init; if [ ${ARCH} = 'x86_64' ];then exec docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi
     ;;
 
   development )
@@ -665,13 +659,12 @@ main() {
     # 判断架构
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
     if [ ${ARCH} = 'x86_64' ];then
-      docker-compose up $opt
+      exec docker-compose up $opt
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-        docker-compose -f docker-compose.arm.yml up $opt
+      exec docker-compose -f docker-compose.arm.yml up $opt
     else
       NOTSUPPORT
     fi
-    error
     ;;
 
   build-config )
@@ -739,7 +732,7 @@ main() {
     ;;
 
   push )
-    run_docker; init; docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push; error
+    run_docker; init; exec docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
     ;;
 
   php )
@@ -802,10 +795,6 @@ main() {
 
   compose )
     install_docker_compose "$@"
-    ;;
-
-  error )
-    error
     ;;
 
   new )
