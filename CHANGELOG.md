@@ -1,7 +1,10 @@
 Changelog
 ==============
 
-#### v18.01 (2018-02-01)
+#### v18.01 (2018-01-12)
+
+Bug fixes:
+* Fix error in Kubernetes
 
 Changes:
 * `khs1994-docker/lnmp` v17.12 End Of Life
