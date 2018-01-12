@@ -354,11 +354,11 @@ update(){
 
   for force in "$@"
   do
-    if ! [ "$force" = '-f' ];then
-    GIT_STATUS=`git status -s --ignore-submodules`
-    if ! [ -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
-    fi
+    if [ "$force" = '-f' ];then force='true'; fi
   done
+
+  GIT_STATUS=`git status -s --ignore-submodules`
+  if [ ! -z "${GIT_STATUS}" ] && [ ! "$force" = 'true' ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
