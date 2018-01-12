@@ -382,7 +382,6 @@ commit(){
     git add .
     git commit -m "Update [skip ci]"
     git push origin dev
-    mirror
   else
     print_error "${BRANCH} error\n"
   fi
@@ -400,16 +399,17 @@ release_rc(){
   fi
 }
 
-mirror(){
-  git fetch origin
-  git push -f aliyun dev:dev
-  git push -f aliyun master:master
+cn_mirror(){
+  set_git_remote_lnmp_url
+  git fetch lnmp
+  git push -f aliyun remotes/lnmp/dev:dev
+  git push -f aliyun remotes/lnmp/master:master
   git push -f aliyun --tags
-  git push -f tgit dev:dev
-  git push -f tgit master:master
+  git push -f tgit remotes/lnmp/dev:dev
+  git push -f tgit remotes/lnmp/master:master
   git push -f tgit --tags
-  git push -f coding dev:dev
-  git push -f coding master:master
+  git push -f coding remotes/lnmp/dev:dev
+  git push -f coding remotes/lnmp/master:master
   git push -f coding --tags
 }
 
@@ -799,7 +799,7 @@ main() {
      ;;
 
   cn-mirror )
-    mirror
+    cn_mirror
     ;;
 
   compose )
