@@ -326,10 +326,7 @@ network(){
 
 # 更新项目
 
-update(){
-  # 不存在 .git 退出
-  if ! [ -d .git ];then exit 1; fi
-  # 检查网络连接
+set_git_remote_lnmp_url(){
   network && git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
   if [ $? -ne 0 ];then
     # 不存在
@@ -347,10 +344,21 @@ update(){
     git fetch  lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   fi
-  if ! [ "$1" = '-f' ];then
+}
+
+update(){
+  # 不存在 .git 退出
+  if ! [ -d .git ];then exit 1; fi
+
+  set_git_remote_lnmp_url
+
+  for force in "$@"
+  do
+    if ! [ "$force" = '-f' ];then
     GIT_STATUS=`git status -s --ignore-submodules`
     if ! [ -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
-  fi
+    fi
+  done
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
@@ -381,10 +389,11 @@ commit(){
 }
 
 release_rc(){
+  set_git_remote_lnmp_url
   print_info "Start new RC \n"; print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
-    git fetch origin
-    git reset --hard origin/master
+    git fetch lnmp
+    git reset --hard lnmp/master
   else
     print_error "${BRANCH} error，Please checkout to  dev branch\n"
     echo -e "\n $ git checkout dev\n"
