@@ -9,6 +9,7 @@ spec:
     - port: 3306
   selector:
     app: lnmp
+    tier: mysql
   clusterIP: None
 ---
 apiVersion: v1
@@ -34,12 +35,14 @@ spec:
   selector:
     matchLabels:
       app: lnmp
+      tier: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: lnmp
+        tier: mysql
     spec:
       containers:
       - image: mysql:8.0.3

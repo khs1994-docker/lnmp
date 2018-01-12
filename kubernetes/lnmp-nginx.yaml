@@ -29,15 +29,19 @@ spec:
   selector:
     matchLabels:
       app: lnmp
+      tier: frontend
   replicas: 2
   strategy: {}
   template:
     metadata:
       labels:
         app: lnmp
+        tier: frontend
     spec:
       containers:
-      - args:
+      - image: khs1994/nginx:swarm-1.13.8-alpine
+        name: lnmp-nginx
+        args:
         - /wait-for-php.sh
         env:
         - name: TZ
@@ -45,8 +49,6 @@ spec:
             configMapKeyRef:
               key: TZ
               name: lnmp-env
-        image: khs1994/nginx:swarm-1.13.8-alpine
-        name: lnmp-nginx
         ports:
         - containerPort: 443
         - containerPort: 80

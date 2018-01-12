@@ -10,6 +10,7 @@ spec:
   - port: 6379
   selector:
     app: lnmp
+    tier: redis
 status:
   loadBalancer: {}
 ---
@@ -36,16 +37,19 @@ spec:
   selector:
     matchLabels:
       app: lnmp
-  replicas: 1
+      tier: redis
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: lnmp
+        tier: redis
     spec:
       containers:
-      - args:
+      - image: khs1994/redis:4.0.6-alpine
+        name: lnmp-redis
+        args:
         - redis-server
         - /redis.conf
         env:
@@ -54,12 +58,13 @@ spec:
             configMapKeyRef:
               key: TZ
               name: lnmp-env
-        image: khs1994/redis:4.0.6-alpine
-        name: lnmp-redis
         resources: {}
         volumeMounts:
         - mountPath: /data
           name: lnmp-redis-data
+        ports:
+        - containerPort: 6379
+          name: lnmp-redis
       restartPolicy: Always
       volumes:
       - name: lnmp-redis-data

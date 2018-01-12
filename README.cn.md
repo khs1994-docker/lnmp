@@ -16,9 +16,9 @@
 
 每月更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
-* [v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12)
+* [v18.01 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
 
-* ~~[v17.11 2017-12-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.11) **EOL**~~
+* ~~[v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12) **EOL**~~
 
 # 准备
 
@@ -44,7 +44,7 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 
 ## 使用 `git clone`
 
-开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要构建镜像请在命令后添加 `--build`。
+开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要自行构建镜像请查看 [支持文档](docs/development.md)。
 
 ```bash
 $ cd
@@ -69,8 +69,10 @@ development
 
 在 `./app` 目录下开始 PHP 项目开发，在 `./config/nginx/` 新建 nginx 配置文件。
 
+你也可以使用以下命令快速的新建一个 PHP 项目，并完成后续一系列配置（生成 nginx 配置、申请 SSL 证书）。
+
 ```bash
-$ ./lnmp-docker.sh new ProjectName
+$ ./lnmp-docker.sh new projectName
 ```
 
 ## 一键申请 SSL 证书
@@ -81,7 +83,7 @@ $ ./lnmp-docker.sh new ProjectName
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->仅支持 `dnspod.cn` DNS，使用前请提前设置相关密钥，更多信息请查看 [支持文档](docs/nginx-with-https.md)
+>仅支持 `dnspod.cn` DNS，使用前请提前设置 DNS 服务商的相关密钥。本项目也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)
 
 ## 查看详情
 
@@ -169,6 +171,10 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 * 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
 * 码云：https://gitee.com/khs1994/lnmp.git
 * Coding：https://git.coding.net/khs1994/lnmp.git
+
+# TLSv1.3
+
+请查看 [khs1994-website/tls-1.3](https://github.com/khs1994-website/tls-1.3)
 
 # CI/CD
 
