@@ -15,7 +15,9 @@ $ cp .env.example .env
 
 # 编辑 .env 文件
 
-$ docker-compose up --no-build
+$ docker-compose pull
+
+$ docker-compose up
 ```
 
 # Who use it?
