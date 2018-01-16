@@ -7,6 +7,71 @@
 
 if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
+help(){
+  echo  -e "
+Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
+
+Official WebSite https://lnmp.khs1994.com
+
+Usage: ./docker-lnmp.sh COMMAND
+
+Commands:
+  backup               Backup MySQL databases
+  build                Use LNMP With Self Build images (Only Support x86_64)
+  build-config         Validate and view the Self Build images Compose file
+  cleanup              Cleanup log files
+  compose              Install docker-compose
+  composer             Use PHP Dependency Manager Composer
+  config               Validate and view the Development Compose file
+  development          Use LNMP in Development
+  development-pull     Pull LNMP Docker Images in development
+  debug                Debug LNMP environment
+  down                 Stop and remove LNMP Docker containers, networks
+  docs                 Read support documents
+  help                 Display this help message
+  init                 Init LNMP environment
+  laravel              Create a new Laravel application
+  laravel-artisan      Use Laravel CLI artisan
+  new                  New PHP Project and generate nginx conf and issue SSL certificate
+  nginx-config         Generate nginx conf
+  php                  Run PHP in CLI
+  production           Use LNMP in Production (Only Support Linux x86_64)
+  production-config    Validate and view the Production Compose file
+  production-pull      Pull LNMP Docker Images in production
+  push                 Build and Pushes images to Docker Registory
+  restore              Restore MySQL databases
+  ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
+  ssl-self             Issue Self-signed SSL certificate
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-push           Push Swarm image (nginx php7)
+  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-down           Remove LNMP stack IN Swarm mode
+
+Container CLI:
+  apache-cli
+  mariadb-cli
+  memcached-cli
+  mongo-cli
+  mysql-cli
+  nginx-cli
+  php-cli
+  phpmyadmin-cli
+  postgres-cli
+  rabbitmq-cli
+  redis-cli
+
+Tools:
+  commit               Commit LNMP to Git
+  cn-mirror            Push master branch to CN mirror
+  dockerfile-update    Update Dockerfile By Script
+  rc                   Start new release
+  test                 Test LNMP
+  update               Upgrades LNMP
+  upgrade              Upgrades LNMP
+
+Read './docs/*.md' for more information about commands."
+}
+
 # env
 print_info(){
   echo -e "\033[32mINFO \033[0m  $@"
@@ -821,74 +886,24 @@ main() {
     ;;
 
   tests )
-    exec docker run -it --rm alpine sh
-    echo 0
-    exit 0
+    print_info "Test Shell Script"
+    exec echo
     ;;
 
+  version )
+    echo Docker-LNMP ${KHS1994_LNMP_DOCKER_VERSION}
+    ;;
+
+  -h | --help | help )
+   help
+   ;;
+
   * )
-  echo  -e "
-Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
-
-Official WebSite https://lnmp.khs1994.com
-
-Usage: ./docker-lnmp.sh COMMAND
-
-Commands:
-  backup               Backup MySQL databases
-  build                Use LNMP With Self Build images (Only Support x86_64)
-  build-config         Validate and view the Self Build images Compose file
-  cleanup              Cleanup log files
-  compose              Install docker-compose
-  composer             Use PHP Dependency Manager Composer
-  config               Validate and view the Development Compose file
-  development          Use LNMP in Development
-  development-pull     Pull LNMP Docker Images in development
-  debug                Debug LNMP environment
-  down                 Stop and remove LNMP Docker containers, networks
-  docs                 Read support documents
-  help                 Display this help message
-  init                 Init LNMP environment
-  laravel              Create a new Laravel application
-  laravel-artisan      Use Laravel CLI artisan
-  new                  New PHP Project and generate nginx conf and issue SSL certificate
-  nginx-config         Generate nginx conf
-  php                  Run PHP in CLI
-  production           Use LNMP in Production (Only Support Linux x86_64)
-  production-config    Validate and view the Production Compose file
-  production-pull      Pull LNMP Docker Images in production
-  push                 Build and Pushes images to Docker Registory
-  restore              Restore MySQL databases
-  ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
-  ssl-self             Issue Self-signed SSL certificate
-  swarm-build          Build Swarm image (nginx php7)
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-deploy         Deploy LNMP stack TO Swarm mode
-  swarm-down           Remove LNMP stack IN Swarm mode
-
-Container CLI:
-  apache-cli
-  mariadb-cli
-  memcached-cli
-  mongo-cli
-  mysql-cli
-  nginx-cli
-  php-cli
-  phpmyadmin-cli
-  postgres-cli
-  rabbitmq-cli
-  redis-cli
-
-Tools:
-  commit               Commit LNMP to Git
-  cn-mirror            Push master branch to CN mirror
-  dockerfile-update    Update Dockerfile By Script
-  rc                   Start new release
-  test                 Test LNMP
-  update               Upgrades LNMP
-  upgrade              Upgrades LNMP
-
-Read './docs/*.md' for more information about commands."
+  if ! [ -z "$command" ];then
+    print_info "You Exec docker-compose commands"; echo
+    exec docker-compose $command "$@"
+  fi
+  help
     ;;
   esac
 }

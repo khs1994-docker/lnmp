@@ -1,6 +1,11 @@
 Changelog
 ==============
 
+#### v18.02-rc1
+
+Changes:
+* synchronize `docker-compose` commands, Support exec original `docker-compose` commands in `./lnmp-docker.sh`
+
 #### v18.01 (2018-01-12)
 
 Bug fixes:
