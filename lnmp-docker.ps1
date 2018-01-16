@@ -82,6 +82,7 @@ Commands:
   composer             Use PHP Package Management composer
   config               Validate and view the Development Compose file
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
+  development-pull     Pull LNMP Docker Images in development
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
   help                 Display this help message
@@ -89,9 +90,11 @@ Commands:
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
+  nginx-config         Generate nginx conf
   php                  Run PHP in CLI
   production           Use LNMP in Production(Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
+  production-pull      Pull LNMP Docker Images in production
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
   ssl                  Issue SSL certificate powered by acme.sh

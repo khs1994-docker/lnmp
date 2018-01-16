@@ -16,7 +16,7 @@ kubectl delete configmap lnmp-env
 
 elif [ "$1" = deploy ];then
 
-  kubectl create -f lnmp-volumes.yaml
+  # kubectl create -f lnmp-volumes.yaml
 
   kubectl create -f lnmp-env.yaml
 
