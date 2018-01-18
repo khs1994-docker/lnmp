@@ -14,7 +14,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 # Changelog
 
-Updates every month, Version name is `YY-MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
 
@@ -125,7 +125,7 @@ $ docker-compose down
 |:--|:--|
 |`app`         |PHP project (HTML, PHP, etc) |
 |`backup`      |backup database file|
-|`bash`        |bash shell script|
+|`scripts`     |bash shell script|
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
