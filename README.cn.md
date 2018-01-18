@@ -14,7 +14,7 @@
 
 # 更新记录
 
-每月更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
+每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
 * [v18.01 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
 
@@ -128,7 +128,7 @@ $ docker-compose down
 |:--|:--|
 |`app`         |项目文件（HTML, PHP, etc）|
 |`backup`      |备份文件|
-|`bash`        |用户自定义脚本文件|
+|`scripts`     |用户自定义脚本文件|
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
