@@ -30,6 +30,8 @@ Commands:
   docs                 Read support documents
   help                 Display this help message
   init                 Init LNMP environment
+  k8s                  Deploy LNMP on k8s
+  k8s-down             Remove k8s LNMP
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
@@ -897,6 +899,14 @@ main() {
   -h | --help | help )
    help
    ;;
+
+  k8s )
+    cd kubernetes; ./kubernetes.sh deploy
+    ;;
+
+  k8s-down )
+    cd kubernetes; ./kubernetes.sh cleanup
+    ;;
 
   * )
   if ! [ -z "$command" ];then

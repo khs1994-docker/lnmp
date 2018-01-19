@@ -11,6 +11,8 @@ complete -W "backup \
         down \
         docs \
         help \
+        k8s \
+        k8s-down \
         laravel \
         laravel-artisan \
         new \
