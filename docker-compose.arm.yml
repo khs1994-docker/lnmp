@@ -10,7 +10,7 @@ services:
   #     MYSQL_DATABASE: test
   #     # MYSQL_USER:
   #     # MYSQL_PASSWORD:
-  #   env_file: ./bin/timezone.env
+  #   env_file: ./cli/timezone.env
   #   networks:
   #     - backend
   #   ports:
@@ -30,7 +30,7 @@ services:
     restart: always
     image: "${ARM_ARCH}/redis:${KHS1994_LNMP_REDIS_VERSION}${ARM_BASED_OS}"
     env_file:
-      - ./bin/timezone.env
+      - ./cli/timezone.env
     networks:
       - backend
     volumes:
@@ -55,7 +55,7 @@ services:
     networks:
       - backend
     env_file:
-      - ./bin/timezone.env
+      - ./cli/timezone.env
     # ports:
     #   - "11211"
     labels:
@@ -73,7 +73,7 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     env_file:
-      - ./bin/timezone.env
+      - ./cli/timezone.env
     # ports:
     #   - "15672"
     #   - "5672"
@@ -92,7 +92,7 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
     env_file:
-      - ./bin/timezone.env
+      - ./cli/timezone.env
     networks:
       - backend
     volumes:
@@ -118,7 +118,7 @@ services:
   #   ports:
   #     - "27017"
   #   env_file:
-  #     - ./bin/timezone.env
+  #     - ./cli/timezone.env
   #   command: ["mongod","--config","/etc/mongod.conf"]
   #   labels:
   #     - "com.khs1994.lnmp=true"
@@ -160,7 +160,7 @@ services:
     restart: always
     image: "${ARM_ARCH}/nginx:${KHS1994_LNMP_NGINX_VERSION}"
     env_file:
-      - ./bin/timezone.env
+      - ./cli/timezone.env
     networks:
       - frontend
     ports:
@@ -181,7 +181,7 @@ services:
   #   restart: always
   #   image: "${ARM_ARCH}/httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
   #   env_file:
-  #     - ./bin/timezone.env
+  #     - ./cli/timezone.env
   #   ports:
   #     - "443:443"
   #     - "80:80"

@@ -19,7 +19,7 @@ before_install:
 # - docker-compose --version
 # 部署公钥
 - openssl aes-256-cbc -K $encrypted_3418790a352e_key -iv $encrypted_3418790a352e_iv
-  -in bin/khs1994-robot.enc -out ~/.ssh/id_rsa -d
+  -in cli/khs1994-robot.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
 - date
 - git config --global user.name "khs1994-merge-robot"
@@ -30,20 +30,20 @@ before_install:
 # - cd -
 - cp .env.example .env
 - docker-compose --version
-- "./lnmp-docker.sh compose -f"
-- docker-compose --version
 - sed -i 's/^PRODUCTIOM_DOCKER_IMAGE_PREFIX.*/PRODUCTIOM_DOCKER_IMAGE_PREFIX=khs1994/g' .env
 - sed -i 's/^PRO_MYSQL_PORT.*/PRO_MYSQL_PORT=127.0.0.1:3306/g' .env
+- sudo rm /usr/local/bin/docker-compose
+- ./lnmp-docker.sh compose --official -f
 jobs:
   include:
     - stage: development
-      script: bin/test development
+      script: cli/test development
     - stage: production
-      script: bin/test production
+      script: cli/test production
     - stage: swarm
-      script: bin/test swarm
+      script: cli/test swarm
     - stage: k8s
-      script: bin/test k8s
+      script: cli/test k8s
 branches:
   only:
   - master

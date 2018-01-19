@@ -22,8 +22,17 @@
 
 * 生成 `SSL` 自签名证书用于开发、测试环境
 
+* 支持 `开发环境` `测试环境` `生产环境`
+
+* 支持 `k8s` 部署
+
+
 # More Information
 
 * [Docker CE 安装教程](https://www.khs1994.com/docker/README.html)
 
 * [docker-compose 安装教程](https://www.khs1994.com/docker/compose.html)
+
+# 赞赏我
+
+请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。

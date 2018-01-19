@@ -11,6 +11,8 @@ complete -W "backup \
         down \
         docs \
         help \
+        k8s \
+        k8s-down \
         laravel \
         laravel-artisan \
         new \
@@ -44,6 +46,5 @@ complete -W "backup \
         commit \
         test \
         dockerfile-update \
-        debug \
         cn-mirror \
         compose" lnmp-docker.sh

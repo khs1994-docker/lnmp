@@ -14,7 +14,7 @@
 
 # 更新记录
 
-每月更新版本，版本命名方式为 `YY-MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
+每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
 * [v18.01 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
 
@@ -105,6 +105,10 @@ $ docker-compose down
 
 # 项目说明
 
+## 支持特性
+
+请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)。
+
 ## 包含软件
 
 |Name|Docker Image|Version|Based|
@@ -128,7 +132,7 @@ $ docker-compose down
 |:--|:--|
 |`app`         |项目文件（HTML, PHP, etc）|
 |`backup`      |备份文件|
-|`bash`        |用户自定义脚本文件|
+|`scripts`     |用户自定义脚本文件|
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
@@ -213,3 +217,7 @@ https://doc.lnmp.khs1994.com
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
 * [yeszao/dnmp](https://github.com/yeszao/dnmp)
+
+# 赞赏我
+
+请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。

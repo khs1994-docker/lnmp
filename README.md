@@ -14,7 +14,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 # Changelog
 
-Updates every month, Version name is `YY-MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
 
@@ -102,6 +102,10 @@ $ docker-compose down
 
 # Overview
 
+## Features
+
+Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82).
+
 ## What's inside
 
 |Name|Docker Image|Version|Based|
@@ -125,7 +129,7 @@ $ docker-compose down
 |:--|:--|
 |`app`         |PHP project (HTML, PHP, etc) |
 |`backup`      |backup database file|
-|`bash`        |bash shell script|
+|`scripts`     |bash shell script|
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
@@ -202,3 +206,7 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
 * [yeszao/dnmp](https://github.com/yeszao/dnmp)
+
+# Donate
+
+Please see [https://zan.khs1994.com](https://zan.khs1994.com)。

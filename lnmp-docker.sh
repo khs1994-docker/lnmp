@@ -7,6 +7,72 @@
 
 if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
+help(){
+  echo  -e "
+Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
+
+Official WebSite https://lnmp.khs1994.com
+
+Usage: ./docker-lnmp.sh COMMAND
+
+Commands:
+  backup               Backup MySQL databases
+  build                Use LNMP With Self Build images (Only Support x86_64)
+  build-config         Validate and view the Self Build images Compose file
+  cleanup              Cleanup log files
+  compose              Install docker-compose
+  composer             Use PHP Dependency Manager Composer
+  config               Validate and view the Development Compose file
+  development          Use LNMP in Development
+  development-pull     Pull LNMP Docker Images in development
+  down                 Stop and remove LNMP Docker containers, networks
+  docs                 Read support documents
+  help                 Display this help message
+  init                 Init LNMP environment
+  k8s                  Deploy LNMP on k8s
+  k8s-down             Remove k8s LNMP
+  laravel              Create a new Laravel application
+  laravel-artisan      Use Laravel CLI artisan
+  new                  New PHP Project and generate nginx conf and issue SSL certificate
+  nginx-config         Generate nginx conf
+  php                  Run PHP in CLI
+  production           Use LNMP in Production (Only Support Linux x86_64)
+  production-config    Validate and view the Production Compose file
+  production-pull      Pull LNMP Docker Images in production
+  push                 Build and Pushes images to Docker Registory
+  restore              Restore MySQL databases
+  ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
+  ssl-self             Issue Self-signed SSL certificate
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-push           Push Swarm image (nginx php7)
+  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-down           Remove LNMP stack IN Swarm mode
+
+Container CLI:
+  apache-cli
+  mariadb-cli
+  memcached-cli
+  mongo-cli
+  mysql-cli
+  nginx-cli
+  php-cli
+  phpmyadmin-cli
+  postgres-cli
+  rabbitmq-cli
+  redis-cli
+
+Tools:
+  commit               Commit LNMP to Git
+  cn-mirror            Push master branch to CN mirror
+  dockerfile-update    Update Dockerfile By Script
+  rc                   Start new release
+  test                 Test LNMP
+  update               Upgrades LNMP
+  upgrade              Upgrades LNMP
+
+Read './docs/*.md' for more information about commands."
+}
+
 # env
 print_info(){
   echo -e "\033[32mINFO \033[0m  $@"
@@ -22,7 +88,7 @@ NOTSUPPORT(){
 
 env_status(){
   # cp .env.example to .env
-  if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
+  if [ -f .env ];then print_info ".env file existing\n"; else print_error ".env file NOT existing\n"; cp .env.example .env ; fi
 }
 
 update_version(){
@@ -65,11 +131,10 @@ env_status ; ARCH=`uname -m` ; OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
-# COMPOSE_LINK=https://git.cloud.tencent.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
-. .env ; . bin/.env
+. .env ; . cli/.env
 
 if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 
@@ -185,7 +250,7 @@ install_docker_compose_official(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then print_error "docker-compose already install"; exit 0; fi
   if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
-  # 版本在 bin/.env 文件定义
+  # 版本在 cli/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
@@ -286,8 +351,6 @@ demo() {
 # 初始化
 
 init() {
-  # docker-compose 是否安装
-  install_docker_compose
   # 升级软件版本
   update_version
   case $APP_ENV in
@@ -300,8 +363,8 @@ init() {
     # 生产环境 转移项目文件、配置文件、安装依赖包
     production )
       print_info "$APP_ENV\n"
-      # 请在 ./bin/production-init 定义要执行的操作
-      bin/production-init
+      # 请在 ./scripts/production-init 定义要执行的操作
+      scripts/production-init
       ;;
   esac
   # 初始化完成提示
@@ -326,10 +389,7 @@ network(){
 
 # 更新项目
 
-update(){
-  # 不存在 .git 退出
-  if ! [ -d .git ];then exit 1; fi
-  # 检查网络连接
+set_git_remote_lnmp_url(){
   network && git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
   if [ $? -ne 0 ];then
     # 不存在
@@ -347,10 +407,21 @@ update(){
     git fetch  lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp.git
     print_info `git remote get-url lnmp`
   fi
-  if ! [ "$1" = '-f' ];then
-    GIT_STATUS=`git status -s --ignore-submodules`
-    if ! [ -z "${GIT_STATUS}" ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
-  fi
+}
+
+update(){
+  # 不存在 .git 退出
+  if ! [ -d .git ];then exit 1; fi
+
+  set_git_remote_lnmp_url
+
+  for force in "$@"
+  do
+    if [ "$force" = '-f' ];then force='true'; fi
+  done
+
+  GIT_STATUS=`git status -s --ignore-submodules`
+  if [ ! -z "${GIT_STATUS}" ] && [ ! "$force" = 'true' ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
@@ -374,33 +445,34 @@ commit(){
     git add .
     git commit -m "Update [skip ci]"
     git push origin dev
-    mirror
   else
     print_error "${BRANCH} error\n"
   fi
 }
 
 release_rc(){
+  set_git_remote_lnmp_url
   print_info "Start new RC \n"; print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
-    git fetch origin
-    git reset --hard origin/master
+    git fetch lnmp
+    git reset --hard lnmp/master
   else
     print_error "${BRANCH} error，Please checkout to  dev branch\n"
     echo -e "\n $ git checkout dev\n"
   fi
 }
 
-mirror(){
-  git fetch origin
-  git push -f aliyun dev:dev
-  git push -f aliyun master:master
+cn_mirror(){
+  set_git_remote_lnmp_url
+  git fetch lnmp
+  git push -f aliyun remotes/lnmp/dev:dev
+  git push -f aliyun remotes/lnmp/master:master
   git push -f aliyun --tags
-  git push -f tgit dev:dev
-  git push -f tgit master:master
+  git push -f tgit remotes/lnmp/dev:dev
+  git push -f tgit remotes/lnmp/master:master
   git push -f tgit --tags
-  git push -f coding dev:dev
-  git push -f coding master:master
+  git push -f coding remotes/lnmp/dev:dev
+  git push -f coding remotes/lnmp/master:master
   git push -f coding --tags
 }
 
@@ -559,6 +631,9 @@ php_cli(){
 
 main() {
   logs; print_info "ARCH is ${OS} ${ARCH}\n"
+  print_info `docker --version`
+  echo
+  install_docker_compose
   local command=$1
   shift
   case $command in
@@ -583,7 +658,7 @@ main() {
     ;;
 
   test )
-    run_docker; bin/test
+    run_docker; cli/test
     ;;
 
   commit )
@@ -596,7 +671,7 @@ main() {
   laravel )
     run_docker; if [ -z "$1" ];then read -p "Please inuput PHP path: ./app/" path; else path="$1"; shift ; cmd="$@"; fi
     if [ -z "${path}" ];then echo; print_error 'Please input content'; exit 1; fi
-    if [ -z "$cmd" ];then bin/laravel ${path}; else bin/laravel ${path} "${cmd}"; fi
+    if [ -z "$cmd" ];then cli/laravel ${path}; else cli/laravel ${path} "${cmd}"; fi
     ;;
 
   laravel-artisan )
@@ -608,7 +683,7 @@ main() {
       shift
       cmd="$@"
     fi
-    bin/php-artisan ${path} "${cmd}"
+    cli/php-artisan ${path} "${cmd}"
     ;;
 
   composer )
@@ -620,7 +695,7 @@ main() {
       shift
       cmd="$@"
     fi
-    bin/composer ${path} "${cmd}"
+    cli/composer ${path} "${cmd}"
     ;;
 
   production )
@@ -767,13 +842,6 @@ main() {
     docker stack rm lnmp
     ;;
 
-  debug )
-    # Docker 是否运行
-    run_docker
-    # Docker Compose 是否安装
-    install_docker_compose
-    ;;
-
   development-pull )
     run_docker; init
     case "${ARCH}" in
@@ -790,7 +858,7 @@ main() {
      ;;
 
   cn-mirror )
-    mirror
+    cn_mirror
     ;;
 
   compose )
@@ -812,74 +880,32 @@ main() {
     ;;
 
   tests )
-    exec docker run -it --rm alpine sh
-    echo 0
-    exit 0
+    print_info "Test Shell Script"
+    exec echo
+    ;;
+
+  version )
+    echo Docker-LNMP ${KHS1994_LNMP_DOCKER_VERSION}
+    ;;
+
+  -h | --help | help )
+   help
+   ;;
+
+  k8s )
+    cd kubernetes; ./kubernetes.sh deploy
+    ;;
+
+  k8s-down )
+    cd kubernetes; ./kubernetes.sh cleanup
     ;;
 
   * )
-  echo  -e "
-Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
-
-Official WebSite https://lnmp.khs1994.com
-
-Usage: ./docker-lnmp.sh COMMAND
-
-Commands:
-  backup               Backup MySQL databases
-  build                Use LNMP With Self Build images (Only Support x86_64)
-  build-config         Validate and view the Self Build images Compose file
-  cleanup              Cleanup log files
-  compose              Install docker-compose
-  composer             Use PHP Dependency Manager Composer
-  config               Validate and view the Development Compose file
-  development          Use LNMP in Development
-  development-pull     Pull LNMP Docker Images in development
-  debug                Debug LNMP environment
-  down                 Stop and remove LNMP Docker containers, networks
-  docs                 Read support documents
-  help                 Display this help message
-  init                 Init LNMP environment
-  laravel              Create a new Laravel application
-  laravel-artisan      Use Laravel CLI artisan
-  new                  New PHP Project and generate nginx conf and issue SSL certificate
-  nginx-config         Generate nginx conf
-  php                  Run PHP in CLI
-  production           Use LNMP in Production (Only Support Linux x86_64)
-  production-config    Validate and view the Production Compose file
-  production-pull      Pull LNMP Docker Images in production
-  push                 Build and Pushes images to Docker Registory
-  restore              Restore MySQL databases
-  ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
-  ssl-self             Issue Self-signed SSL certificate
-  swarm-build          Build Swarm image (nginx php7)
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-deploy         Deploy LNMP stack TO Swarm mode
-  swarm-down           Remove LNMP stack IN Swarm mode
-
-Container CLI:
-  apache-cli
-  mariadb-cli
-  memcached-cli
-  mongo-cli
-  mysql-cli
-  nginx-cli
-  php-cli
-  phpmyadmin-cli
-  postgres-cli
-  rabbitmq-cli
-  redis-cli
-
-Tools:
-  commit               Commit LNMP to Git
-  cn-mirror            Push master branch to CN mirror
-  dockerfile-update    Update Dockerfile By Script
-  rc                   Start new release
-  test                 Test LNMP
-  update               Upgrades LNMP
-  upgrade              Upgrades LNMP
-
-Read './docs/*.md' for more information about commands."
+  if ! [ -z "$command" ];then
+    print_info "You Exec docker-compose commands"; echo
+    exec docker-compose $command "$@"
+  fi
+  help
     ;;
   esac
 }

@@ -18,7 +18,7 @@ services:
   mysql:
     image: mysql:8.0.3
     env_file:
-      - ./bin/timezone.env
+      - ./cli/timezone.env
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
@@ -43,7 +43,7 @@ services:
 
   redis:
     image: khs1994/redis:4.0.6-alpine
-    env_file: ./bin/timezone.env
+    env_file: ./cli/timezone.env
     # ports:
     #   - "6379"
     volumes:
@@ -65,7 +65,7 @@ services:
       - frontend
       - backend
     command: ["php-fpm","-R"]
-    env_file: ./bin/timezone.env
+    env_file: ./cli/timezone.env
     environment:
       - APP_ENV=production
       - KHS1994_LNMP_DOCKER_VERSION=x86_64 Docker Swarm
@@ -75,7 +75,7 @@ services:
   nginx:
     build: ./config/nginx
     image: khs1994/nginx:swarm-1.13.8-alpine
-    env_file: ./bin/timezone.env
+    env_file: ./cli/timezone.env
     ports:
       - "443:443"
       - "80:80"

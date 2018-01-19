@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: test
       # MYSQL_USER:
       # MYSQL_PASSWORD:
-    env_file: ./bin/timezone.env
+    env_file: ./cli/timezone.env
     networks:
       - backend
     volumes:
@@ -35,7 +35,7 @@ services:
   #     MYSQL_DATABASE: test
   #     # MYSQL_USER:
   #     # MYSQL_PASSWORD:
-  #   env_file: ./bin/timezone.env
+  #   env_file: ./cli/timezone.env
   #   networks:
   #     - backend
   #   volumes:
@@ -56,7 +56,7 @@ services:
   redis:
     restart: always
     image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
-    env_file: ./bin/timezone.env
+    env_file: ./cli/timezone.env
     # ports:
     #   - "6379"
     networks:
@@ -85,7 +85,7 @@ services:
   #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
-  #   env_file: ./bin/timezone.env
+  #   env_file: ./cli/timezone.env
   #   # ports:
   #   #   - "11211"
   #   labels:
@@ -100,7 +100,7 @@ services:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #   networks:
   #     - backend
-  #   env_file: ./bin/timezone.env
+  #   env_file: ./cli/timezone.env
   #   # ports:
   #   #   - "15672"
   #   #   - "5672"
@@ -119,7 +119,7 @@ services:
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
-  #   env_file: ./bin/timezone.env
+  #   env_file: ./cli/timezone.env
   #   # ports:
   #   #   - "5432"
   #   secrets:
@@ -133,7 +133,7 @@ services:
   # mongodb:
   #   restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-  #   env_file: ./bin/timezone.env
+  #   env_file: ./cli/timezone.env
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db:rw
@@ -166,8 +166,8 @@ services:
       - ${DNS}
     command: php-fpm -R
     env_file:
-      - ./bin/timezone.env
-      - ./bin/.env
+      - ./cli/timezone.env
+      - ./cli/.env
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.php=true"
@@ -184,7 +184,7 @@ services:
     #
     #
     env_file:
-      - ./bin/timezone.env
+      - ./cli/timezone.env
     ports:
       - "443:443"
       - target: 80
@@ -212,7 +212,7 @@ services:
   #   restart: always
   #   image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
   #   env_file:
-  #     - ./bin/timezone.env
+  #     - ./cli/timezone.env
   #   ports:
   #     - "443:443"
   #     - "80:80"
