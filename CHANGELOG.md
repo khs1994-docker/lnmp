@@ -3,8 +3,15 @@ Changelog
 
 #### v18.02-rc1
 
+Bug fixes:
+* Fix `php.ini` error in development #86
+
 Changes:
-* synchronize `docker-compose` commands, Support exec original `docker-compose` commands in `./lnmp-docker.sh`
+* synchronize `docker-compose` commands, Support exec original `docker-compose` commands in `./lnmp-docker.sh` #79
+* Add `./lnmp-docker.sh k8s k8s-down` #82
+* Move `bin` to `cli` #87
+* Add donate #84
+* Update `Apache2` config file #81
 
 #### v18.01 (2018-01-12)
 
