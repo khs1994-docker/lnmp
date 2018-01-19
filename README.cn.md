@@ -105,6 +105,10 @@ $ docker-compose down
 
 # 项目说明
 
+## 支持特性
+
+请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)。
+
 ## 包含软件
 
 |Name|Docker Image|Version|Based|
