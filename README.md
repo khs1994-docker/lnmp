@@ -102,6 +102,10 @@ $ docker-compose down
 
 # Overview
 
+## Features
+
+Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82).
+
 ## What's inside
 
 |Name|Docker Image|Version|Based|
