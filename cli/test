@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
+if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 cli 目录中执行"; exit 1; fi
 
 # 删除原项目
 
@@ -88,7 +88,7 @@ swarm(){
 
 composer(){
 
-bin/composer demo --version
+cli/composer demo --version
 
 print_info "测试 composer 完毕"
 }

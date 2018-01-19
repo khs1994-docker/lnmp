@@ -136,7 +136,7 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
-. .env ; . bin/.env
+. .env ; . cli/.env
 
 if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 
@@ -252,7 +252,7 @@ install_docker_compose_official(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then print_error "docker-compose already install"; exit 0; fi
   if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
-  # 版本在 bin/.env 文件定义
+  # 版本在 cli/.env 文件定义
   # https://api.github.com/repos/docker/compose/releases/latest
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   chmod +x docker-compose
@@ -367,8 +367,8 @@ init() {
     # 生产环境 转移项目文件、配置文件、安装依赖包
     production )
       print_info "$APP_ENV\n"
-      # 请在 ./bin/production-init 定义要执行的操作
-      bin/production-init
+      # 请在 ./scripts/production-init 定义要执行的操作
+      scripts/production-init
       ;;
   esac
   # 初始化完成提示
@@ -662,7 +662,7 @@ main() {
     ;;
 
   test )
-    run_docker; bin/test
+    run_docker; cli/test
     ;;
 
   commit )
@@ -675,7 +675,7 @@ main() {
   laravel )
     run_docker; if [ -z "$1" ];then read -p "Please inuput PHP path: ./app/" path; else path="$1"; shift ; cmd="$@"; fi
     if [ -z "${path}" ];then echo; print_error 'Please input content'; exit 1; fi
-    if [ -z "$cmd" ];then bin/laravel ${path}; else bin/laravel ${path} "${cmd}"; fi
+    if [ -z "$cmd" ];then cli/laravel ${path}; else cli/laravel ${path} "${cmd}"; fi
     ;;
 
   laravel-artisan )
@@ -687,7 +687,7 @@ main() {
       shift
       cmd="$@"
     fi
-    bin/php-artisan ${path} "${cmd}"
+    cli/php-artisan ${path} "${cmd}"
     ;;
 
   composer )
@@ -699,7 +699,7 @@ main() {
       shift
       cmd="$@"
     fi
-    bin/composer ${path} "${cmd}"
+    cli/composer ${path} "${cmd}"
     ;;
 
   production )
