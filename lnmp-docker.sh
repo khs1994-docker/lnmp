@@ -89,7 +89,7 @@ NOTSUPPORT(){
 
 env_status(){
   # cp .env.example to .env
-  if [ -f .env ];then print_info ".env existing\n"; else print_error ".env NOT existing\n"; cp .env.example .env ; fi
+  if [ -f .env ];then print_info ".env file existing\n"; else print_error ".env file NOT existing\n"; cp .env.example .env ; fi
 }
 
 update_version(){
@@ -635,6 +635,9 @@ php_cli(){
 
 main() {
   logs; print_info "ARCH is ${OS} ${ARCH}\n"
+  print_info `docker --version`
+  echo
+  print_info `docker-compose --version`
   local command=$1
   shift
   case $command in
