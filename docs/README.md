@@ -32,3 +32,7 @@
 * [Docker CE 安装教程](https://www.khs1994.com/docker/README.html)
 
 * [docker-compose 安装教程](https://www.khs1994.com/docker/compose.html)
+
+# 赞赏我
+
+请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。
