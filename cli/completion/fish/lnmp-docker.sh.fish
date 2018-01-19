@@ -9,6 +9,8 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development-pull  -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a down              -d     'Stop and remove LNMP Docker containers, networks'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a docs              -d     'Support Documents'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a help              -d     'Display this help message'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a k8s               -d     'Deploy LNMP on k8s'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a k8s-down          -d     'Remove k8s LNMP'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a laravel           -d     'Create a new Laravel application'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a laravel-artisan   -d     'Use Laravel CLI artisan'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a new               -d     'New PHP Project and generate nginx conf and issue SSL certificate'
