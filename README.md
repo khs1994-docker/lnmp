@@ -206,3 +206,7 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
 * [yeszao/dnmp](https://github.com/yeszao/dnmp)
+
+# Donate
+
+Please see [https://zan.khs1994.com](https://zan.khs1994.com)。

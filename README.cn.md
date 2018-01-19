@@ -217,3 +217,7 @@ https://doc.lnmp.khs1994.com
 * [twang2218/docker-lnmp](https://github.com/twang2218/docker-lnmp)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
 * [yeszao/dnmp](https://github.com/yeszao/dnmp)
+
+# 赞赏我
+
+请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。
