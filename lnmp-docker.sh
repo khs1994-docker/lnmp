@@ -319,7 +319,7 @@ docker_compose(){
       elif [ "$OS" = 'Linux' ];then
         print_error "`docker-compose --version` NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
       else
-        print_error "`docker-compose --version` NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
+        print_error "`docker-compose --version` NOT installed Correct version, You MUST update Docker for Windows Edge Version\n"
       fi
     # 安装正确
     else
