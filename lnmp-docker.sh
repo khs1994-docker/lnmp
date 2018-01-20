@@ -244,95 +244,88 @@ dockerfile_update(){
   esac
 }
 
-# 是否安装 Docker Compose
+# 将 compose 移入 PATH
+
+install_docker_compose_move(){
+  if [ -f /etc/os-release ];then
+    . /etc/os-release
+    case "$ID" in
+      coreos )
+        if ! [ -d /opt/bin ];then sudo mkdir -p /opt/bin; fi
+        sudo cp -a /tmp/docker-compose /opt/bin/docker-compose
+        ;;
+      * )
+        sudo cp -a /tmp/docker-compose /usr/local/bin/docker-compose
+        ;;
+    esac
+  else
+    NOTSUPPORT
+  fi
+}
+
+# 从 GitHub 安装 compose
 
 install_docker_compose_official(){
-  command -v docker-compose >/dev/null 2>&1
-  if [ $? = 0 ];then print_error "docker-compose already install"; exit 0; fi
-  if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
-  # 版本在 cli/.env 文件定义
-  # https://api.github.com/repos/docker/compose/releases/latest
-  curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  chmod +x docker-compose
-  if [ "$1" = "-f" ];then
-    sudo cp docker-compose /usr/local/bin
-    sudo rm docker-compose
-    # in CoreOS you must move to /opt/bin
-  else
-    print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
-    # in CoreOS you must move to /opt/bin
-  fi
-  exit 0
+  if [ "$OS" != 'Linux' ];then exit 1;fi
+  curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+  chmod +x /tmp/docker-compose
+  if [ "$1" = "-f" ];then exec install_docker_compose_move; fi
+  exec print_info "Please exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin\n"
+}
+
+# 安装 compose arm 版本
+
+install_docker_compose_arm(){
+  print_info "$OS $ARCH docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
+  command -v pip3 >/dev/null 2>&1
+  if [ $? != 0 ];then sudo apt install -y python3-pip; fi
+  if ! [ -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
+  sudo pip3 install --upgrade docker-compose
 }
 
 install_docker_compose(){
-  if [ "$1" = "--official" ];then shift ; install_docker_compose_official "$@"; fi
+  if ! [ "$OS" = 'Linux' ];then exit 1; fi
+  if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
+    install_docker_compose_arm "$@"; return 0
+  elif [ $ARCH = 'x86_64' ];then
+    curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+    chmod +x /tmp/docker-compose
+    # 默认不移动
+    if [ "$1" = '-f' ];then install_docker_compose_move; return 0;fi
+    print_info "You MUST exec \n $ sudo mv /tmp/docker-compose /usr/local/bin/"
+  fi
+}
 
-  local i=0
+# 主函数
+
+docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
+    # 取得版本号
     DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
-    # 但是要判断版本是不是最新的
-    if [ ${OS} = 'Linux' ];then
-      if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        # 版本错误
-        if [ "$1" = '-f' ];then
-          # 强制更新
-          if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
-          install_docker_compose
-          i=$(($i+1))
-          if [ "$i" -eq 2 ];then exit 1; fi
-        else
-          # 版本错误提示
-          print_error "`docker-compose --version` NOT installed Correct version, Maybe you should EXEC $ ./lnmp-docker.sh compose -f"
-        fi
+    # 判断是否安装正确
+    if ! [ "$DOCKER_COMPOSE_VERSION_CONTENT" = "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
+      # 安装不正确
+      if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; exec install_docker_compose_official "$@"; fi
+      if [ "$1" = '-f' ];then exec install_docker_compose -f; fi
+      # 判断 OS
+      if [ "$OS" = 'Darwin' ] ;then
+        print_error "`docker-compose --version` NOT installed Correct version, You MUST update Docker for Mac Edge Version\n"
+      elif [ "$OS" = 'Linux' ];then
+        print_error "`docker-compose --version` NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
       else
-        # 版本正确
-        print_info "`docker-compose --version` already installed Correct version"
+        print_error "`docker-compose --version` NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
       fi
-    elif [ ${OS} = 'Darwin' ];then
-      if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        print_error "`docker-compose --version` NOT installed Correct version, Please update you Docker for Mac to latest Edge version"
-      else
-        print_info "`docker-compose --version` already installed Correct version"
-      fi
+    # 安装正确
+    else
+      print_info "`docker-compose --version` already installed Correct version\n"; return 0
     fi
   else
     # 不存在
-    print_error "docker-compose NOT installed, v${DOCKER_COMPOSE_VERSION} is installing ...\n"
-    if [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      #arm
-      print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
-      command -v pip3 >/dev/null 2>&1
-      if [ $? != 0 ];then sudo apt install -y python3-pip; fi
-      # pip 源
-      if ! [ -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
-      sudo pip3 install --upgrade docker-compose
-    elif [ $OS = 'Linux' -o $OS = 'Darwin' ];then
-      curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
-      chmod +x docker-compose
-      if [ -f /etc/os-release ];then
-        # linux
-        . /etc/os-release
-        case $ID in
-          coreos )
-            if ! [ -d /opt/bin ];then sudo mkdir -p /opt/bin; fi
-            sudo cp -a docker-compose /opt/bin/docker-compose
-            ;;
-          * )
-            sudo cp -a docker-compose /usr/local/bin/docker-compose
-            ;;
-        esac
-      else
-          # macOS
-          sudo cp -a docker-compose /usr/local/bin/docker-compose
-      fi
-    else
-      NOTSUPPORT
-    fi
+    if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; exec install_docker_compose_official "$@"; fi
+    install_docker_compose -f
   fi
-  echo
 }
 
 # 克隆示例项目、nginx 配置文件
@@ -630,12 +623,8 @@ php_cli(){
 # 入口文件
 
 main() {
-  logs; print_info "ARCH is ${OS} ${ARCH}\n"
-  print_info `docker --version`
-  echo
-  install_docker_compose
-  local command=$1
-  shift
+  logs; print_info "ARCH is ${OS} ${ARCH}\n"; print_info `docker --version`; echo; docker_compose
+  local command=$1; shift
   case $command in
   init )
     init
@@ -862,7 +851,7 @@ main() {
     ;;
 
   compose )
-    install_docker_compose "$@"
+    docker_compose "$@"
     ;;
 
   new )
