@@ -296,7 +296,7 @@ install_docker_compose(){
     curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
     chmod +x /tmp/docker-compose
     if [ "$1" = '-f' ];then install_docker_compose_move; return 0;fi
-    print_info "You MUST exec \n $ sudo mv /tmp/docker-compose /usr/local/bin/"
+    print_info "You MUST exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin/\n"
   fi
 }
 
