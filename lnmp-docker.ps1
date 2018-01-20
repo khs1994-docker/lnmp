@@ -87,14 +87,14 @@ Commands:
   docs                 Support Documents
   help                 Display this help message
   init                 Init LNMP environment
+  k8s                  Deploy LNMP on k8s
+  k8s-down             Remove k8s LNMP
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx conf
   php                  Run PHP in CLI
-  production           Use LNMP in Production(Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
-  production-pull      Pull LNMP Docker Images in production
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
   ssl                  Issue SSL certificate powered by acme.sh
@@ -117,7 +117,6 @@ Container CLI:
   redis-cli
 
 Tools:
-  commit
   cn-mirror            Push master branch to CN mirror
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
@@ -161,8 +160,10 @@ Function update(){
   git fetch origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   if (${BRANCH} -eq "dev"){
+    git submodule update --init --recursive
     git reset --hard origin/dev
   }elseif(${BRANCH} -eq "master"){
+    git submodule update --init --recursive
     git reset --hard origin/master
   }else{
     git checkout dev
@@ -179,28 +180,24 @@ Function main() {
       init
     }
 
-    commit {
-      ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
-      printInfo "Branch is ${BRANCH}"
-      if (${BRANCH} -eq "dev"){
-        git add .
-        git commit -m "Update [skip ci]"
-        git push origin dev
-      }else{
-        printError "NOT Support ${BRANCH} branch"
-      }
-    }
-
-    config {
-      docker-compose config
-    }
-
     backup {
       backup
     }
 
+    build {
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
+    }
+
+    build-config {
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml config
+    }
+
     cleanup {
       cleanup
+    }
+
+    config {
+      docker-compose config
     }
 
     composer {
@@ -212,17 +209,8 @@ Function main() {
       docker-compose up -d
     }
 
-    build-config{
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml config
-    }
-
-    build{
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
-    }
-
-    push {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml push
+    development-pull {
+      docker-compose pull
     }
 
     down {
@@ -237,12 +225,43 @@ Function main() {
       help_information
     }
 
+    k8s {
+      cd kubernetes
+      # kubectl create -f lnmp-volumes.yaml
+      kubectl create -f lnmp-env.yaml
+      kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
+      kubectl create -f lnmp-mysql.yaml
+      kubectl create -f lnmp-redis.yaml
+      kubectl create -f lnmp-php7.yaml
+      kubectl create -f lnmp-nginx.yaml
+      cd ..
+    }
+
+    k8s-down {
+      cd kubernetes
+      kubectl delete deployment -l app=lnmp
+      kubectl delete service -l app=lnmp
+      kubectl delete pvc -l app=lnmp
+      kubectl delete pv lnmp-mysql-data lnmp-redis-data
+      kubectl delete secret lnmp-mysql-password
+      kubectl delete configmap lnmp-env
+      cd ..
+    }
+
     laravel {
       laravel $args[1]
     }
 
     laravel-artisan {
       laravel-artisan $args[1] $args[2]
+    }
+
+    new {
+      printError "Please Exec this command in git bash on Windows 10 or WSL"
+    }
+
+    nginx-config {
+      printError "Please Exec this command in git bash on Windows 10 or WSL"
     }
 
     php {
@@ -255,13 +274,21 @@ Function main() {
        docker-compose -f docker-compose.yml -f docker-compose.prod.yml config
     }
 
+    push {
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml push
+    }
+
     restore {
        docker-compose exec mysql /backup/restore.sh $args[1]
     }
 
+    ssl {
+      printError "Please Exec this command in git bash on Windows 10 or WSL"
+    }
+
     ssl-self {
-      $DOMAIN=$args[1]
-      docker run -it --rm -v $pwd\config\nginx\ssl-self:/ssl khs1994/tls $DOMAIN
+      docker run -it --rm -v $pwd\config\nginx\ssl-self:/ssl khs1994/tls $args[1] $args[2] $args[3] $args[4] $args[5] $args[6] $args[7] $args[8] $args[9]
       printInfo 'Please set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
 
@@ -279,6 +306,10 @@ Function main() {
 
     swarm-down {
       docker stack rm lnmp
+    }
+
+    apache-cli {
+      docker-compose exec apache sh
     }
 
     memcached-cli {
@@ -313,7 +344,7 @@ Function main() {
       docker-compose exec redis sh
     }
 
-    update{
+    update {
       update
     }
 
@@ -321,10 +352,19 @@ Function main() {
       update
     }
 
+    cn-mirror {
+      printError "Please Exec this command in git bash on Windows 10 or WSL"
+    }
+
     default {
-      help_information
+      if ($args[2].Length -eq 0){
+        help_information
+      }else{
+        printInfo "You Exec docker-compose command"
+        docker-compose $args[1] $args[2] $args[3] $args[4] $args[5]
+      }
     }
   }
 }
 
-main $args[0] $args[1] $args[2] $args[3] $args[4] $args[5]
+main $args[0] $args[1] $args[2] $args[3] $args[4] $args[5] $args[6] $args[7] $args[8] $args[9]
