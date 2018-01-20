@@ -269,8 +269,11 @@ install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
   curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
   chmod +x /tmp/docker-compose
-  if [ "$1" = "-f" ];then exec install_docker_compose_move; fi
-  exec print_info "Please exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin\n"
+  if [ "$1" = "-f" ];then
+    install_docker_compose_move
+  else
+    print_info "Please exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin\n"
+  fi
 }
 
 # 安装 compose arm 版本
@@ -279,18 +282,19 @@ install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
   command -v pip3 >/dev/null 2>&1
   if [ $? != 0 ];then sudo apt install -y python3-pip; fi
-  if ! [ -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
+  if ! [ -d ~/.pip ];then
+    mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
+  fi
   sudo pip3 install --upgrade docker-compose
 }
 
 install_docker_compose(){
   if ! [ "$OS" = 'Linux' ];then exit 1; fi
   if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
-    install_docker_compose_arm "$@"; return 0
+    install_docker_compose_arm "$@"
   elif [ $ARCH = 'x86_64' ];then
     curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
     chmod +x /tmp/docker-compose
-    # 默认不移动
     if [ "$1" = '-f' ];then install_docker_compose_move; return 0;fi
     print_info "You MUST exec \n $ sudo mv /tmp/docker-compose /usr/local/bin/"
   fi
@@ -307,8 +311,8 @@ docker_compose(){
     # 判断是否安装正确
     if ! [ "$DOCKER_COMPOSE_VERSION_CONTENT" = "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
       # 安装不正确
-      if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; exec install_docker_compose_official "$@"; fi
-      if [ "$1" = '-f' ];then exec install_docker_compose -f; fi
+      if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@"; return 0; fi
+      if [ "$1" = '-f' ];then install_docker_compose -f; return 0; fi
       # 判断 OS
       if [ "$OS" = 'Darwin' ] ;then
         print_error "`docker-compose --version` NOT installed Correct version, You MUST update Docker for Mac Edge Version\n"
@@ -577,7 +581,7 @@ start(){
 
   if [ $protocol = 'https' ];then
     # 申请 ssl 证书
-    read -n 1 -t 5 -p "默认申请公网证书，如果要自签名证书请输入 y Self-Signed SSL certificate? [y/N]:" self_signed
+    read -n 1 -t 5 -p "如果要申请自签名证书请输入 y Self-Signed SSL certificate? [y/N]:" self_signed
     if [ "$self_signed" = 'y' ];then
       ssl_self $url
     else
