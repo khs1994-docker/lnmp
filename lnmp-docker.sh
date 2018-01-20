@@ -16,6 +16,7 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
+  apache-config        Generate Apache2 vhost conf
   backup               Backup MySQL databases
   build                Use LNMP With Self Build images (Only Support x86_64)
   build-config         Validate and view the Self Build images Compose file
@@ -34,7 +35,7 @@ Commands:
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
-  nginx-config         Generate nginx conf
+  nginx-config         Generate nginx vhost conf
   php                  Run PHP in CLI
   production           Use LNMP in Production (Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
@@ -47,6 +48,7 @@ Commands:
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
+  tp                   Create a new ThinkPHP application
 
 Container CLI:
   apache-cli
@@ -476,7 +478,10 @@ cn_mirror(){
 
 nginx_http(){
 
-  echo "server {
+  echo "#
+# Generate nginx config By khs1994-docker/lnmp
+#
+server {
   listen        80;
   server_name   $1;
   root          /app/$2;
@@ -494,9 +499,69 @@ nginx_http(){
 
 }
 
+apache_http(){
+  echo "#
+# Generate Apache2 connfig By khs1994-docker/lnmp
+#
+<VirtualHost *:80>
+  DocumentRoot \"/app/$2\"
+  ServerName $1
+  ServerAlias $1
+
+  ErrorLog \"logs/error.log\"
+  CustomLog \"logs/access.log\" common
+
+  <FilesMatch \.php$>
+    SetHandler \"proxy:fcgi://php7:9000\"
+  </FilesMatch>
+
+  <Directory \"/app/$2\" >
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+  </Directory>
+
+</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+}
+
+apache_https(){
+  echo "#
+# Generate Apache2 HTTPS config By khs1994-docker/lnmp
+#
+<VirtualHost *:443>
+  DocumentRoot \"/app/$2\"
+  ServerName $1
+  ServerAlias $1
+
+  ErrorLog \"logs/error.log\"
+  CustomLog \"logs/access.log\" common
+
+  SSLEngine on
+  SSLCertificateFile conf/ssl/$1.crt
+  SSLCertificateKeyFile conf/ssl/$1.key
+
+  # HSTS (mod_headers is required) (15768000 seconds = 6 months)
+  Header always set Strict-Transport-Security \"max-age=15768000\"
+
+  <FilesMatch \.php$>
+    SetHandler \"proxy:fcgi://php7:9000\"
+  </FilesMatch>
+
+  <Directory \"/app/$2\" >
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+  </Directory>
+
+</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+}
+
 nginx_https(){
 
-  echo "server {
+  echo "#
+# Generate nginx HTTPS config By khs1994-docker/lnmp
+#
+server {
   listen                    80;
   server_name               $1;
   return 301                https://\$host\$request_uri;
@@ -508,8 +573,8 @@ server{
   root                       /app/$2;
   index                      index.html index.htm index.php;
 
-  ssl_certificate            conf.d/demo-ssl/$1.crt;
-  ssl_certificate_key        conf.d/demo-ssl/$1.key;
+  ssl_certificate            conf.d/ssl/$1.crt;
+  ssl_certificate_key        conf.d/ssl/$1.key;
 
   ssl_session_cache          shared:SSL:1m;
   ssl_session_timeout        5m;
@@ -548,7 +613,7 @@ ssl(){
 }
 
 ssl_self(){
-  docker run -it --rm -v $PWD/config/nginx/ssl-self:/ssl khs1994/tls "$@"
+  docker run -it --rm -v $PWD/config/nginx/ssl:/ssl khs1994/tls "$@"
 }
 
 # 快捷开始 PHP 项目开发
@@ -617,12 +682,13 @@ php_cli(){
   else
     path=$1
     shift
-    cmd="$@"
+    CMD="$@"
   fi
+  print_info "在 khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} 内 /app/${path} 执行 $ php ${CMD}\n" && print_info "以下为输出内容\n\n"
     exec docker run -it \
       -v $PWD/app/${path}:/app \
       khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
-      php "${cmd}"
+      php ${CMD}
 }
 
 # 入口文件
@@ -754,11 +820,27 @@ main() {
 
   nginx-conf )
      if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-conf {https|http} {PATH} {URL}"; exit 1; fi
-     print_info 'Please set hosts in /etc/hosts in development'
-     print_info 'Maybe you need generate nginx https conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
+     print_info 'Please set hosts in /etc/hosts in development\n'
+     print_info 'Maybe you need generate nginx HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
      if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
      ;;
+
+  apache-conf )
+    if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh apache-conf {https|http} {PATH} {URL}"; exit 1; fi
+    print_info 'Please set hosts in /etc/hosts in development\n'
+    print_info 'Maybe you need generate Apache2 HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
+    if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
+    if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
+    ;;
+
+  apache-delete )
+
+    ;;
+
+  nginx-delete )
+    mv config/nginx/$1.conf config/nginx/$1.conf.delete
+    ;;
 
   php-cli )
     run_docker; docker-compose exec php7 bash
@@ -893,6 +975,19 @@ main() {
   k8s-down )
     cd kubernetes; ./kubernetes.sh cleanup
     ;;
+
+  tp )
+    run_docker
+    if [ -z "$1" ];then
+      print_error "$ ./lnmp-docker.sh tp {PATH} {CMD}"; exit 1
+    else
+      path="$1"
+      shift
+      cmd="$@"
+    fi
+    cli/composer "" "create-project topthink/think=5.0.* ${path} --prefer-dist ${cmd}"
+    ;;
+
 
   * )
   if ! [ -z "$command" ];then

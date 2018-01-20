@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ -f "khs1994-robot.enc" ];then echo -e "\033[32mINFO\033[0m  不允许在 bin 目录中执行"; exit 1; fi
+if [ -f "khs1994-robot.enc" ];then echo -e "\033[32mINFO\033[0m Can't EXEC in cli folder"; exit 1; fi
 
-. .env ; LARAVEL_PATH=$1; cmd="$2" ; ARCH=`uname -m` ; OS=`uname -s`
+. .env; LARAVEL_PATH=$1; shift; CMD="$@"; ARCH=`uname -m`; OS=`uname -s`
 
 # 判断架构
 
@@ -25,13 +25,13 @@ fi
 # if build image
 # DOCKER_IMAGE=lnmp-php
 
-echo -e  "\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/ 执行 $ laravel new ${LARAVEL_PATH} ${cmd}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
+echo -e  "\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/ 执行 $ laravel new ${LARAVEL_PATH} ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
 docker run -it --rm \
   -v $PWD/app:/app \
   -v $PWD/tmp/cache:/tmp/cache \
   ${DOCKER_IMAGE}:${TAG} \
-  laravel new ${LARAVEL_PATH} ${cmd}
+  laravel new ${LARAVEL_PATH} ${CMD}
 
 if [ ${OS} = 'Linux' ] || [ ${OS} = 'Darwin' ];then
   sudo chmod -R 765 app/${LARAVEL_PATH}

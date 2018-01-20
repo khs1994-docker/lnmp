@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m  不允许在 cli 目录中执行"; exit 1; fi
+if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m Can't EXEC in cli folder"; exit 1; fi
 
 # 删除原项目
 
