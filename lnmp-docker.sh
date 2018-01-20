@@ -323,6 +323,7 @@ docker_compose(){
     fi
   else
     # 不存在
+    print_error "docker-compose NOT install, install..."
     if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; exec install_docker_compose_official "$@"; fi
     install_docker_compose -f
   fi
