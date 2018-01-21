@@ -309,9 +309,17 @@ docker_compose(){
   if [ $? = 0 ];then
     # 存在
     # 取得版本号
-    DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
+    DOCKER_COMPOSE_VERSION=`docker-compose --version | cut -d ' ' -f 3 | cut -d , -f 1`
+    local x=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 1`
+    local y=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 2`
+    #local z=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 3`
+    local true_x=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 1`
+    local true_y=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 2`
+    #local true_z=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 3`
+    if [ "$x" != "$true_x" ];then exit 1; fi
     # 判断是否安装正确
-    if ! [ "$DOCKER_COMPOSE_VERSION_CONTENT" = "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
+    # -lt 小于
+    if [ "$y" -lt "$true_y" ];then
       # 安装不正确
       if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@"; return 0; fi
       if [ "$1" = '-f' ];then install_docker_compose -f; return 0; fi
@@ -320,8 +328,10 @@ docker_compose(){
         print_error "`docker-compose --version` NOT installed Correct version, You MUST update Docker for Mac Edge Version\n"
       elif [ "$OS" = 'Linux' ];then
         print_error "`docker-compose --version` NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
-      else
+      elif [ "$OS" = 'MINGW64_NT-10.0' ];then
         print_error "`docker-compose --version` NOT installed Correct version, You MUST update Docker for Windows Edge Version\n"
+      else
+        NOTSUPPORT
       fi
     # 安装正确
     else
@@ -384,13 +394,16 @@ restore(){
 }
 
 network(){
+  if [ "$OS" = 'MINGW64_NT-10.0' ];then return 0; fi
   ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
 }
 
 # 更新项目
 
 set_git_remote_lnmp_url(){
-  network && git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
+  network
+  GIT_SOURCE_URL=`git remote get-url lnmp`
+  git remote get-url lnmp > /dev/null 2>&1
   if [ $? -ne 0 ];then
     # 不存在
     print_error "This git remote lnmp NOT set, seting..."
@@ -425,12 +438,13 @@ update(){
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
+    git submodule update --init --recursive
     git reset --hard lnmp/dev
   elif [ ${BRANCH} = 'master' ];then
+    git submodule update --init --recursive
     git reset --hard lnmp/master
   else
-    print_error "${BRANCH} error，Please checkout to dev or master branch"
-    echo -e "\nPlease exec\n\n$ git checkout dev\n"
+    print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
   fi
   command -v bash > /dev/null 2>&1
   if ! [ $? = 0  ];then sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh; fi
@@ -457,8 +471,7 @@ release_rc(){
     git fetch lnmp
     git reset --hard lnmp/master
   else
-    print_error "${BRANCH} error，Please checkout to  dev branch\n"
-    echo -e "\n $ git checkout dev\n"
+    print_error "${BRANCH} error，Please checkout to  dev branch\n\n$ git checkout dev\n"
   fi
 }
 
