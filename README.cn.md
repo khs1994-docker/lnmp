@@ -38,13 +38,13 @@
 
 ## 安装
 
-* 使用一键安装脚本
+* **使用一键安装脚本**
 
   ```bash
   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
   ```
 
-* 使用 `git clone`
+* **使用 `git clone`**
 
   ```bash
   $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git

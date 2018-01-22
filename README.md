@@ -39,13 +39,13 @@ Please see [Windows 10](docs/windows.md).
 
 ## Install
 
-* using the convenience script
+* **using the convenience script**
 
   ```bash
   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
   ```
 
-* using `git clone` in Devlopment
+* **using `git clone`**
 
   ```bash
   $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
