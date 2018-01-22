@@ -228,4 +228,4 @@ https://doc.lnmp.khs1994.com
 
 # 赞赏我
 
-请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。
+请访问 [https://zan.khs1994.com](https://zan.khs1994.com)

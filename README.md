@@ -219,4 +219,4 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 
 # Donate
 
-Please see [https://zan.khs1994.com](https://zan.khs1994.com)。
+Please see [https://zan.khs1994.com](https://zan.khs1994.com)
