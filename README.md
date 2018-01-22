@@ -39,6 +39,8 @@ Please see [Windows 10](docs/windows.md).
 
 ## Install
 
+Pick one method install LNMP Docker.
+
 * **using the convenience script**
 
   ```bash
