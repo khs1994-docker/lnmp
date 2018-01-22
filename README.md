@@ -37,19 +37,21 @@ To use LNMP Docker, you need:
 
 Please see [Windows 10](docs/windows.md).
 
-## Install using the convenience script
+## Install
 
-```bash
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-```
+* using the convenience script
 
-## Install using `git clone` in Devlopment
+  ```bash
+  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+  ```
 
-```bash
-$ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+* using `git clone` in Devlopment
 
-# $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
-```
+  ```bash
+  $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+
+  # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+  ```
 
 ## Usage
 

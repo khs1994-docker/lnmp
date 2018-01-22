@@ -36,19 +36,21 @@
 
 如果你使用的是 Windows 10 请查看 [支持文档](docs/windows.md)。
 
-## 使用一键安装脚本
+## 安装
 
-```bash
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-```
+* 使用一键安装脚本
 
-## 使用 `git clone`
+  ```bash
+  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+  ```
 
-```bash
-$ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+* 使用 `git clone`
 
-# $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
-```
+  ```bash
+  $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+
+  # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+  ```
 
 ## 启动 LNMP
 
