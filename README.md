@@ -55,7 +55,7 @@ Pick one method install LNMP Docker.
   # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
   ```
 
-## Usage
+## Start
 
 ```bash
 $ cd lnmp
@@ -72,10 +72,14 @@ development
 
 ## Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file in `./config/nginx/yourfilename.conf`.
+Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file in `./config/nginx/yourfilename.conf`.
 
 ```bash
-$ ./lnmp-docker.sh new projectName
+# $ ./lnmp-docker.sh new
+
+$ ./lnmp-docker.sh exec nginx nginx -t
+
+$ ./lnmp-docker.sh restart nginx
 ```
 
 ## Issue SSL certificate

@@ -76,7 +76,11 @@ development
 你也可以使用以下命令快速的新建一个 PHP 项目，并完成后续一系列配置（生成 nginx 配置、申请 SSL 证书）。
 
 ```bash
-$ ./lnmp-docker.sh new projectName
+# $ ./lnmp-docker.sh new
+
+$ ./lnmp-docker.sh exec nginx nginx -t
+
+$ ./lnmp-docker.sh restart nginx
 ```
 
 ## 一键申请 SSL 证书
