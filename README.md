@@ -94,7 +94,7 @@ $ ./lnmp-docker.sh ssl www.khs1994.com
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
 
-## Use Self-build Docker Image
+## Use Self-Build Docker Image
 
 Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker.sh build`.
 
