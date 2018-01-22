@@ -14,7 +14,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 # Changelog
 
-Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
 
@@ -80,7 +80,7 @@ $ ./lnmp-docker.sh new projectName
 
 ## Issue SSL certificate
 
->Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh).
+>Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
 
 ```bash
 $ ./lnmp-docker.sh ssl www.khs1994.com
@@ -170,7 +170,7 @@ $ linuxkit build lnmp.yml
 $ linuxkit run -publish 8080:80/tcp lnmp
 ```
 
-Open your Browers `127.0.0.1:8080`.
+Open your Browers `127.0.0.1:8080`
 
 # Who use in Production?
 
@@ -194,7 +194,7 @@ https://doc.lnmp.khs1994.com
 
 # Contributing
 
-Please see [Contributing](.github/CONTRIBUTING.md).
+Please see [Contributing](.github/CONTRIBUTING.md)
 
 # Thanks
 

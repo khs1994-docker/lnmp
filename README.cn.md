@@ -81,13 +81,13 @@ $ ./lnmp-docker.sh new projectName
 
 ## 一键申请 SSL 证书
 
->由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持。
+>由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持
 
 ```bash
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)
+>一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)。
 
 ## 查看详情
 
@@ -97,7 +97,7 @@ $ docker container ls -a -f label=com.khs1994.lnmp
 
 ## 自行构建 LNMP 镜像
 
-开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要自行构建镜像请查看 [支持文档](docs/development.md)。
+如果要使用自行构建的镜像请查看 [支持文档](docs/development.md)
 
 ## 停止
 
@@ -115,7 +115,7 @@ $ docker-compose down
 
 ## 支持特性
 
-请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)。
+请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)
 
 ## 包含软件
 
@@ -153,11 +153,11 @@ $ docker-compose down
 
 # 命令行工具
 
-为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)。
+为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)
 
 # 生产环境
 
-马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)。
+马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)
 
 # LinuxKit (实验性玩法)
 
