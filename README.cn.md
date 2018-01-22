@@ -36,23 +36,27 @@
 
 如果你使用的是 Windows 10 请查看 [支持文档](docs/windows.md)。
 
-## 使用一键安装脚本
+## 安装
+
+使用以下的任意一种方法来安装本项目。
+
+* **使用一键安装脚本**
+
+  ```bash
+  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+  ```
+
+* **使用 `git clone`**
+
+  ```bash
+  $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+
+  # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+  ```
+
+## 启动 LNMP
 
 ```bash
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-```
-
-## 使用 `git clone`
-
-开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要自行构建镜像请查看 [支持文档](docs/development.md)。
-
-```bash
-$ cd
-
-$ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
-
-# $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
-
 $ cd lnmp
 
 $ ./lnmp-docker.sh devlopment
@@ -72,24 +76,32 @@ development
 你也可以使用以下命令快速的新建一个 PHP 项目，并完成后续一系列配置（生成 nginx 配置、申请 SSL 证书）。
 
 ```bash
-$ ./lnmp-docker.sh new projectName
+# $ ./lnmp-docker.sh new
+
+$ ./lnmp-docker.sh exec nginx nginx -t
+
+$ ./lnmp-docker.sh restart nginx
 ```
 
 ## 一键申请 SSL 证书
 
->由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持。
+>由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持
 
 ```bash
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->仅支持 `dnspod.cn` DNS，使用前请提前设置 DNS 服务商的相关密钥。本项目也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)
+>一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)。
 
 ## 查看详情
 
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
+
+## 自行构建 LNMP 镜像
+
+如果要使用自行构建的镜像请查看 [支持文档](docs/development.md)
 
 ## 停止
 
@@ -107,7 +119,7 @@ $ docker-compose down
 
 ## 支持特性
 
-请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)。
+请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)
 
 ## 包含软件
 
@@ -132,10 +144,10 @@ $ docker-compose down
 |:--|:--|
 |`app`         |项目文件（HTML, PHP, etc）|
 |`backup`      |备份文件|
-|`scripts`     |用户自定义脚本文件|
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
+|`scripts`     |用户自定义脚本文件|
 |`tmp`         |临时文件|
 
 ## 端口暴露
@@ -145,11 +157,11 @@ $ docker-compose down
 
 # 命令行工具
 
-为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)。
+为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)
 
 # 生产环境
 
-马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)。
+马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)
 
 # LinuxKit (实验性玩法)
 
@@ -220,4 +232,4 @@ https://doc.lnmp.khs1994.com
 
 # 赞赏我
 
-请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。
+请访问 [https://zan.khs1994.com](https://zan.khs1994.com)

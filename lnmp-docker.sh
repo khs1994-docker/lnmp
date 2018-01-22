@@ -325,17 +325,17 @@ docker_compose(){
       if [ "$1" = '-f' ];then install_docker_compose -f; return 0; fi
       # 判断 OS
       if [ "$OS" = 'Darwin' ] ;then
-        print_error "`docker-compose --version` NOT installed Correct version, You MUST update Docker for Mac Edge Version\n"
+        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Mac Edge Version\n"
       elif [ "$OS" = 'Linux' ];then
-        print_error "`docker-compose --version` NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
+        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
       elif [ "$OS" = 'MINGW64_NT-10.0' ];then
-        print_error "`docker-compose --version` NOT installed Correct version, You MUST update Docker for Windows Edge Version\n"
+        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows Edge Version\n"
       else
         NOTSUPPORT
       fi
     # 安装正确
     else
-      print_info "`docker-compose --version` already installed Correct version\n"; return 0
+      print_info "docker-compose v$DOCKER_COMPOSE_VERSION already installed Correct version\n"; return 0
     fi
   else
     # 不存在

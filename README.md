@@ -14,7 +14,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 # Changelog
 
-Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
 
@@ -37,21 +37,27 @@ To use LNMP Docker, you need:
 
 Please see [Windows 10](docs/windows.md).
 
-## Install using the convenience script
+## Install
+
+Pick one method install LNMP Docker.
+
+* **using the convenience script**
+
+  ```bash
+  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+  ```
+
+* **using `git clone`**
+
+  ```bash
+  $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+
+  # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+  ```
+
+## Start
 
 ```bash
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-```
-
-## Install using `git clone` in Devlopment
-
-```bash
-$ cd
-
-$ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
-
-# $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
-
 $ cd lnmp
 
 $ ./lnmp-docker.sh devlopment
@@ -66,27 +72,35 @@ development
 
 ## Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file in `./config/nginx/yourfilename.conf`.
+Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file in `./config/nginx/yourfilename.conf`.
 
 ```bash
-$ ./lnmp-docker.sh new projectName
+# $ ./lnmp-docker.sh new
+
+$ ./lnmp-docker.sh exec nginx nginx -t
+
+$ ./lnmp-docker.sh restart nginx
 ```
 
 ## Issue SSL certificate
 
->Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh).
+>Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
 
 ```bash
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->Only Support `dnspod.cn` DNS，Please set API key and id in .env file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
+>Only Support `dnspod.cn` DNS，Please set API key and id in `.env` file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
 
 ## List LNMP Container
 
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
+
+## Use Self-Build Docker Image
+
+Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker.sh build`.
 
 ## Stop
 
@@ -129,10 +143,10 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |:--|:--|
 |`app`         |PHP project (HTML, PHP, etc) |
 |`backup`      |backup database file|
-|`scripts`     |bash shell script|
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
+|`scripts`     |bash shell script |
 |`tmp`         |Composer cache file ,etc |
 
 ## Exposed Ports
@@ -160,7 +174,7 @@ $ linuxkit build lnmp.yml
 $ linuxkit run -publish 8080:80/tcp lnmp
 ```
 
-Open your Browers `127.0.0.1:8080`.
+Open your Browers `127.0.0.1:8080`
 
 # Who use in Production?
 
@@ -184,7 +198,7 @@ https://doc.lnmp.khs1994.com
 
 # Contributing
 
-Please see [Contributing](.github/CONTRIBUTING.md).
+Please see [Contributing](.github/CONTRIBUTING.md)
 
 # Thanks
 
@@ -209,4 +223,4 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 
 # Donate
 
-Please see [https://zan.khs1994.com](https://zan.khs1994.com)。
+Please see [https://zan.khs1994.com](https://zan.khs1994.com)
