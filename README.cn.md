@@ -87,7 +87,7 @@ $ ./lnmp-docker.sh new projectName
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->仅支持 `dnspod.cn` DNS，使用前请提前设置 DNS 服务商的相关密钥。本项目也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)
+>一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)
 
 ## 查看详情
 

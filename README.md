@@ -86,7 +86,7 @@ $ ./lnmp-docker.sh new projectName
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->Only Support `dnspod.cn` DNS，Please set API key and id in .env file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
+>Only Support `dnspod.cn` DNS，Please set API key and id in `.env` file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
 
 ## List LNMP Container
 
