@@ -46,12 +46,14 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 ## Install using `git clone` in Devlopment
 
 ```bash
-$ cd
-
 $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
 
 # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+```
 
+## Usage
+
+```bash
 $ cd lnmp
 
 $ ./lnmp-docker.sh devlopment
@@ -87,6 +89,10 @@ $ ./lnmp-docker.sh ssl www.khs1994.com
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
+
+## Use Self-build Docker Image
+
+Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker.sh build`.
 
 ## Stop
 
@@ -129,10 +135,10 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |:--|:--|
 |`app`         |PHP project (HTML, PHP, etc) |
 |`backup`      |backup database file|
-|`scripts`     |bash shell script|
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
+|`scripts`     |bash shell script |
 |`tmp`         |Composer cache file ,etc |
 
 ## Exposed Ports

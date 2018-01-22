@@ -44,15 +44,15 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 
 ## 使用 `git clone`
 
-开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要自行构建镜像请查看 [支持文档](docs/development.md)。
-
 ```bash
-$ cd
-
 $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
 
 # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+```
 
+## 启动 LNMP
+
+```bash
 $ cd lnmp
 
 $ ./lnmp-docker.sh devlopment
@@ -90,6 +90,10 @@ $ ./lnmp-docker.sh ssl www.khs1994.com
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
+
+## 自行构建 LNMP 镜像
+
+开发环境中，本应该在本机构建所需 Docker 镜像，但为了项目的快速启动，默认为拉取镜像，如果要自行构建镜像请查看 [支持文档](docs/development.md)。
 
 ## 停止
 
@@ -132,10 +136,10 @@ $ docker-compose down
 |:--|:--|
 |`app`         |项目文件（HTML, PHP, etc）|
 |`backup`      |备份文件|
-|`scripts`     |用户自定义脚本文件|
 |`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
+|`scripts`     |用户自定义脚本文件|
 |`tmp`         |临时文件|
 
 ## 端口暴露
