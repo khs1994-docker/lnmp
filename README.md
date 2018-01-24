@@ -77,8 +77,6 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file i
 ```bash
 # $ ./lnmp-docker.sh new
 
-$ ./lnmp-docker.sh exec nginx nginx -t
-
 $ ./lnmp-docker.sh restart nginx
 ```
 
@@ -102,16 +100,25 @@ $ docker container ls -a -f label=com.khs1994.lnmp
 
 Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker.sh build`.
 
+## Restart
+
+```bash
+# Restart all container
+$ ./lnmp-docker.sh restart
+
+$ ./lnmp-docker.sh restart nginx php7
+```
+
 ## Stop
 
 ```bash
-$ docker-compose stop
+$ ./lnmp-docker.sh stop
 ```
 
 ## Stop and remove
 
 ```bash
-$ docker-compose down
+$ ./lnmp-docker.sh down
 ```
 
 # Overview

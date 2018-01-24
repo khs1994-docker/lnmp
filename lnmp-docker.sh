@@ -42,6 +42,7 @@ Commands:
   production-pull      Pull LNMP Docker Images in production
   push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
+  restart              Restart LNMP services
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
   swarm-build          Build Swarm image (nginx php7)
@@ -999,6 +1000,18 @@ main() {
       cmd="$@"
     fi
     cli/composer "" "create-project topthink/think=5.0.* ${path} --prefer-dist ${cmd}"
+    ;;
+
+  restart )
+    if [ -z "$1" ];then docker-compose down --remove-orphans; print_info "Please exec \n\n$ ./lnmp-docker.sh development | production\n"; exit 0; fi
+    if [ "$1" = 'nginx' ];then
+      docker-compose exec nginx nginx -t
+      echo ;print_info "nginx configuration file is OK\n"
+      if [ "$?" = 0 ];then docker-compose $command "$@"; else print_error "nginx configuration file test failed"; exit 1; fi
+    else
+      print_info "You Exec docker-compose commands"; echo
+      exec docker-compose $command "$@"
+    fi
     ;;
 
 
