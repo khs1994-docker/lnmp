@@ -78,8 +78,6 @@ development
 ```bash
 # $ ./lnmp-docker.sh new
 
-$ ./lnmp-docker.sh exec nginx nginx -t
-
 $ ./lnmp-docker.sh restart nginx
 ```
 
@@ -103,16 +101,26 @@ $ docker container ls -a -f label=com.khs1994.lnmp
 
 如果要使用自行构建的镜像请查看 [支持文档](docs/development.md)
 
+## 重启
+
+```bash
+# 全部重启
+$ ./lnmp-docker.sh restart
+
+# 重启指定软件
+$ ./lnmp-docker.sh restart nginx php7
+```
+
 ## 停止
 
 ```bash
-$ docker-compose stop
+$ ./lnmp-docker.sh stop
 ```
 
 ## 销毁
 
 ```bash
-$ docker-compose down
+$ ./lnmp-docker.sh down
 ```
 
 # 项目说明

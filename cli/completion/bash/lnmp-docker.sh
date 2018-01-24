@@ -23,6 +23,7 @@ complete -W "apache-conf \
         production-pull \
         push \
         restore \
+        restart \
         ssl \
         ssl-self \
         swarm-build \
