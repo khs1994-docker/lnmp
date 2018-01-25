@@ -52,7 +52,7 @@ services:
   #   command: ["mysqld", "--character-set-server=utf8mb4"]
   #   net: host
   - name: redis
-    image: khs1994/redis:4.0.6-alpine
+    image: khs1994/redis:4.0.7-alpine
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
