@@ -282,7 +282,7 @@ install_docker_compose_official(){
 # 安装 compose arm 版本
 
 install_docker_compose_arm(){
-  print_info "$OS $ARCH docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
+  print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ...\n"
   command -v pip3 >/dev/null 2>&1
   if [ $? != 0 ];then sudo apt install -y python3-pip; fi
   if ! [ -d ~/.pip ];then
