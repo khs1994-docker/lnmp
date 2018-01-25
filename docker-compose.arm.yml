@@ -51,7 +51,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/memcached/
     #   dockerfile: Dockerfile
     restart: always
-    image: ${ARM_ARCH}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
+    image: "${ARM_ARCH}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}${ARM_BASED_OS}"
     networks:
       - backend
     env_file:
@@ -67,7 +67,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/rabbitmq/
     #   dockerfile: Dockerfile
     restart: always
-    image: ${ARM_ARCH}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
+    image: "${ARM_ARCH}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management${ARM_BASED_OS}"
     networks:
       - backend
     volumes:
@@ -87,7 +87,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/postgresql/
     #   dockerfile: Dockerfile
     restart: always
-    image: ${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
+    image: "${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}${ARM_BASED_OS}"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
