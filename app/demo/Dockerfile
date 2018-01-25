@@ -5,7 +5,7 @@ COPY . /app/demo/
 RUN cd /app/demo \
       && if [ -f composer.json ];then \
            echo "Compose packages installing..."; \
-           composer install; \
+           composer install --no-dev; \
            echo $?; \
            echo "Composer packages install success"; \
          else \

@@ -778,7 +778,14 @@ main() {
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       init
       if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
-      exec docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
+      docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
+      echo; sleep 2; print_info "Test nginx configuration file...\n"
+      docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec nginx nginx -t
+      if [ $? = 0 ];then
+        echo; print_info "nginx configuration file test is successful\n" ; exit 0
+      else
+        echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
+      fi
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
@@ -808,11 +815,21 @@ main() {
     # 判断架构
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
     if [ ${ARCH} = 'x86_64' ];then
-      exec docker-compose up $opt
+      docker-compose up $opt
+      echo; sleep 1; print_info "Test nginx configuration file...\n"
+      docker-compose exec nginx nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      exec docker-compose -f docker-compose.arm.yml up $opt
+      docker-compose -f docker-compose.arm.yml up $opt
+      echo; sleep 1; print_info "Test nginx configuration file...\n"
+      docker-compose -f docker-compose.arm.yml exec nginx nginx -t
     else
       NOTSUPPORT
+    fi
+
+    if [ $? = 0 ];then
+      echo; print_info "nginx configuration file test is successful\n" ; exit 0
+    else
+      echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
     fi
     ;;
 
@@ -1004,10 +1021,20 @@ main() {
 
   restart )
     if [ -z "$1" ];then docker-compose down --remove-orphans; print_info "Please exec \n\n$ ./lnmp-docker.sh development | production\n"; exit 0; fi
-    if [ "$1" = 'nginx' ];then
+
+    for soft in "$@"
+    do
+      if [ $soft = 'nginx' ];then $opt = 'true'; fi
+    done
+
+    if [ "$opt" = 'true' ];then
       docker-compose exec nginx nginx -t
-      echo ;print_info "nginx configuration file is OK\n"
-      if [ "$?" = 0 ];then docker-compose $command "$@"; else print_error "nginx configuration file test failed"; exit 1; fi
+      echo ;print_info "nginx configuration file test is successful\n"
+      if [ "$?" = 0 ];then
+        docker-compose $command "$@"
+      else
+        print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1;
+      fi
     else
       print_info "You Exec docker-compose commands"; echo
       exec docker-compose $command "$@"
