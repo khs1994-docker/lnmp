@@ -6,6 +6,8 @@ sed -i "" "s#^logfile.*#logfile /var/log/redis/redis.log#g" redis/redis.conf
 
 sed -i "" "s/^dir.*/dir \/data/g" redis/redis.conf
 
+sed -i '' 's#^bind.*#bind 127.0.0.1#g' redis/redis.conf
+
 cd php
 
 rm -rf *.ini
