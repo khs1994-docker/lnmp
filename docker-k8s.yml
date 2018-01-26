@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 services:
 
   mysql:
@@ -28,7 +28,7 @@ services:
     #     target: /etc/db_root_password
 
   redis:
-    image: khs1994/redis:4.0.6-alpine
+    image: khs1994/redis:4.0.7-alpine
     env_file: ./cli/timezone.env
     # ports:
     #   - "6379"

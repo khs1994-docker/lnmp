@@ -1,6 +1,7 @@
 #!/bin/bash
 
-complete -W "backup \
+complete -W "apache-conf \
+        backup \
         build \
         build-config \
         cleanup \
@@ -22,12 +23,14 @@ complete -W "backup \
         production-pull \
         push \
         restore \
+        restart \
         ssl \
         ssl-self \
         swarm-build \
         swarm-push \
         swarm-deploy \
         swarm-down \
+        tp \
         apache-cli \
         mariadb-cli \
         memcached-cli \

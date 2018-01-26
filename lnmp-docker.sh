@@ -16,6 +16,7 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
+  apache-config        Generate Apache2 vhost conf
   backup               Backup MySQL databases
   build                Use LNMP With Self Build images (Only Support x86_64)
   build-config         Validate and view the Self Build images Compose file
@@ -34,19 +35,21 @@ Commands:
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
-  nginx-config         Generate nginx conf
+  nginx-config         Generate nginx vhost conf
   php                  Run PHP in CLI
   production           Use LNMP in Production (Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
   production-pull      Pull LNMP Docker Images in production
   push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
+  restart              Restart LNMP services
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
+  tp                   Create a new ThinkPHP application
 
 Container CLI:
   apache-cli
@@ -244,95 +247,103 @@ dockerfile_update(){
   esac
 }
 
-# 是否安装 Docker Compose
+# 将 compose 移入 PATH
+
+install_docker_compose_move(){
+  if [ -f /etc/os-release ];then
+    . /etc/os-release
+    case "$ID" in
+      coreos )
+        if ! [ -d /opt/bin ];then sudo mkdir -p /opt/bin; fi
+        sudo cp -a /tmp/docker-compose /opt/bin/docker-compose
+        ;;
+      * )
+        sudo cp -a /tmp/docker-compose /usr/local/bin/docker-compose
+        ;;
+    esac
+  else
+    NOTSUPPORT
+  fi
+}
+
+# 从 GitHub 安装 compose
 
 install_docker_compose_official(){
-  command -v docker-compose >/dev/null 2>&1
-  if [ $? = 0 ];then print_error "docker-compose already install"; exit 0; fi
-  if [ $ARCH != "x86_64" ];then NOTSUPPORT; fi
-  # 版本在 cli/.env 文件定义
-  # https://api.github.com/repos/docker/compose/releases/latest
-  curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  chmod +x docker-compose
+  if [ "$OS" != 'Linux' ];then exit 1;fi
+  curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+  chmod +x /tmp/docker-compose
   if [ "$1" = "-f" ];then
-    sudo cp docker-compose /usr/local/bin
-    sudo rm docker-compose
-    # in CoreOS you must move to /opt/bin
+    install_docker_compose_move
   else
-    print_info "Please exec\n\n$ sudo mv docker-compose /usr/local/bin\n"
-    # in CoreOS you must move to /opt/bin
+    print_info "Please exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin\n"
   fi
-  exit 0
+}
+
+# 安装 compose arm 版本
+
+install_docker_compose_arm(){
+  print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ...\n"
+  command -v pip3 >/dev/null 2>&1
+  if [ $? != 0 ];then sudo apt install -y python3-pip; fi
+  if ! [ -d ~/.pip ];then
+    mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
+  fi
+  sudo pip3 install --upgrade docker-compose
 }
 
 install_docker_compose(){
-  if [ "$1" = "--official" ];then shift ; install_docker_compose_official "$@"; fi
+  if ! [ "$OS" = 'Linux' ];then exit 1; fi
+  if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
+    install_docker_compose_arm "$@"
+  elif [ $ARCH = 'x86_64' ];then
+    curl -L ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+    chmod +x /tmp/docker-compose
+    if [ "$1" = '-f' ];then install_docker_compose_move; return 0;fi
+    print_info "You MUST exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin/\n"
+  fi
+}
 
-  local i=0
+# 主函数
+
+docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
     # 存在
-    DOCKER_COMPOSE_VERSION_CONTENT=`docker-compose --version`
-    # 但是要判断版本是不是最新的
-    if [ ${OS} = 'Linux' ];then
-      if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        # 版本错误
-        if [ "$1" = '-f' ];then
-          # 强制更新
-          if [ ${ARCH} = "armv7l" -o ${ARCH} = "aarch64" ];then sudo pip3 uninstall docker-compose; else sudo rm -rf `which docker-compose`; fi
-          install_docker_compose
-          i=$(($i+1))
-          if [ "$i" -eq 2 ];then exit 1; fi
-        else
-          # 版本错误提示
-          print_error "`docker-compose --version` NOT installed Correct version, Maybe you should EXEC $ ./lnmp-docker.sh compose -f"
-        fi
+    # 取得版本号
+    DOCKER_COMPOSE_VERSION=`docker-compose --version | cut -d ' ' -f 3 | cut -d , -f 1`
+    local x=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 1`
+    local y=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 2`
+    #local z=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 3`
+    local true_x=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 1`
+    local true_y=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 2`
+    #local true_z=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 3`
+    if [ "$x" != "$true_x" ];then exit 1; fi
+    # 判断是否安装正确
+    # -lt 小于
+    if [ "$y" -lt "$true_y" ];then
+      # 安装不正确
+      if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@"; return 0; fi
+      if [ "$1" = '-f' ];then install_docker_compose -f; return 0; fi
+      # 判断 OS
+      if [ "$OS" = 'Darwin' ] ;then
+        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Mac Edge Version\n"
+      elif [ "$OS" = 'Linux' ];then
+        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
+      elif [ "$OS" = 'MINGW64_NT-10.0' ];then
+        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows Edge Version\n"
       else
-        # 版本正确
-        print_info "`docker-compose --version` already installed Correct version"
+        NOTSUPPORT
       fi
-    elif [ ${OS} = 'Darwin' ];then
-      if [ "$DOCKER_COMPOSE_VERSION_CONTENT" != "$DOCKER_COMPOSE_VERSION_CORRECT_CONTENT" ];then
-        print_error "`docker-compose --version` NOT installed Correct version, Please update you Docker for Mac to latest Edge version"
-      else
-        print_info "`docker-compose --version` already installed Correct version"
-      fi
+    # 安装正确
+    else
+      print_info "docker-compose v$DOCKER_COMPOSE_VERSION already installed Correct version\n"; return 0
     fi
   else
     # 不存在
-    print_error "docker-compose NOT installed, v${DOCKER_COMPOSE_VERSION} is installing ...\n"
-    if [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      #arm
-      print_info "${ARCH} docker-compose v${DOCKER_COMPOSE_VERSION} is installing by pip3 ...\n"
-      command -v pip3 >/dev/null 2>&1
-      if [ $? != 0 ];then sudo apt install -y python3-pip; fi
-      # pip 源
-      if ! [ -d ~/.pip ];then mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf; fi
-      sudo pip3 install --upgrade docker-compose
-    elif [ $OS = 'Linux' -o $OS = 'Darwin' ];then
-      curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o docker-compose
-      chmod +x docker-compose
-      if [ -f /etc/os-release ];then
-        # linux
-        . /etc/os-release
-        case $ID in
-          coreos )
-            if ! [ -d /opt/bin ];then sudo mkdir -p /opt/bin; fi
-            sudo cp -a docker-compose /opt/bin/docker-compose
-            ;;
-          * )
-            sudo cp -a docker-compose /usr/local/bin/docker-compose
-            ;;
-        esac
-      else
-          # macOS
-          sudo cp -a docker-compose /usr/local/bin/docker-compose
-      fi
-    else
-      NOTSUPPORT
-    fi
+    print_error "docker-compose NOT install, install..."
+    if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; exec install_docker_compose_official "$@"; fi
+    install_docker_compose -f
   fi
-  echo
 }
 
 # 克隆示例项目、nginx 配置文件
@@ -384,13 +395,16 @@ restore(){
 }
 
 network(){
+  if [ "$OS" = 'MINGW64_NT-10.0' ];then return 0; fi
   ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
 }
 
 # 更新项目
 
 set_git_remote_lnmp_url(){
-  network && git remote get-url lnmp > /dev/null 2>&1 && GIT_SOURCE_URL=`git remote get-url lnmp`
+  network
+  GIT_SOURCE_URL=`git remote get-url lnmp`
+  git remote get-url lnmp > /dev/null 2>&1
   if [ $? -ne 0 ];then
     # 不存在
     print_error "This git remote lnmp NOT set, seting..."
@@ -425,12 +439,13 @@ update(){
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
+    git submodule update --init --recursive
     git reset --hard lnmp/dev
   elif [ ${BRANCH} = 'master' ];then
+    git submodule update --init --recursive
     git reset --hard lnmp/master
   else
-    print_error "${BRANCH} error，Please checkout to dev or master branch"
-    echo -e "\nPlease exec\n\n$ git checkout dev\n"
+    print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
   fi
   command -v bash > /dev/null 2>&1
   if ! [ $? = 0  ];then sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh; fi
@@ -457,8 +472,7 @@ release_rc(){
     git fetch lnmp
     git reset --hard lnmp/master
   else
-    print_error "${BRANCH} error，Please checkout to  dev branch\n"
-    echo -e "\n $ git checkout dev\n"
+    print_error "${BRANCH} error，Please checkout to  dev branch\n\n$ git checkout dev\n"
   fi
 }
 
@@ -478,7 +492,10 @@ cn_mirror(){
 
 nginx_http(){
 
-  echo "server {
+  echo "#
+# Generate nginx config By khs1994-docker/lnmp
+#
+server {
   listen        80;
   server_name   $1;
   root          /app/$2;
@@ -496,9 +513,69 @@ nginx_http(){
 
 }
 
+apache_http(){
+  echo "#
+# Generate Apache2 connfig By khs1994-docker/lnmp
+#
+<VirtualHost *:80>
+  DocumentRoot \"/app/$2\"
+  ServerName $1
+  ServerAlias $1
+
+  ErrorLog \"logs/error.log\"
+  CustomLog \"logs/access.log\" common
+
+  <FilesMatch \.php$>
+    SetHandler \"proxy:fcgi://php7:9000\"
+  </FilesMatch>
+
+  <Directory \"/app/$2\" >
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+  </Directory>
+
+</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+}
+
+apache_https(){
+  echo "#
+# Generate Apache2 HTTPS config By khs1994-docker/lnmp
+#
+<VirtualHost *:443>
+  DocumentRoot \"/app/$2\"
+  ServerName $1
+  ServerAlias $1
+
+  ErrorLog \"logs/error.log\"
+  CustomLog \"logs/access.log\" common
+
+  SSLEngine on
+  SSLCertificateFile conf/ssl/$1.crt
+  SSLCertificateKeyFile conf/ssl/$1.key
+
+  # HSTS (mod_headers is required) (15768000 seconds = 6 months)
+  Header always set Strict-Transport-Security \"max-age=15768000\"
+
+  <FilesMatch \.php$>
+    SetHandler \"proxy:fcgi://php7:9000\"
+  </FilesMatch>
+
+  <Directory \"/app/$2\" >
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+  </Directory>
+
+</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+}
+
 nginx_https(){
 
-  echo "server {
+  echo "#
+# Generate nginx HTTPS config By khs1994-docker/lnmp
+#
+server {
   listen                    80;
   server_name               $1;
   return 301                https://\$host\$request_uri;
@@ -510,8 +587,8 @@ server{
   root                       /app/$2;
   index                      index.html index.htm index.php;
 
-  ssl_certificate            conf.d/demo-ssl/$1.crt;
-  ssl_certificate_key        conf.d/demo-ssl/$1.key;
+  ssl_certificate            conf.d/ssl/$1.crt;
+  ssl_certificate_key        conf.d/ssl/$1.key;
 
   ssl_session_cache          shared:SSL:1m;
   ssl_session_timeout        5m;
@@ -550,7 +627,7 @@ ssl(){
 }
 
 ssl_self(){
-  docker run -it --rm -v $PWD/config/nginx/ssl-self:/ssl khs1994/tls "$@"
+  docker run -it --rm -v $PWD/config/nginx/ssl:/ssl khs1994/tls "$@"
 }
 
 # 快捷开始 PHP 项目开发
@@ -583,7 +660,7 @@ start(){
 
   if [ $protocol = 'https' ];then
     # 申请 ssl 证书
-    read -n 1 -t 5 -p "默认申请公网证书，如果要自签名证书请输入 y Self-Signed SSL certificate? [y/N]:" self_signed
+    read -n 1 -t 5 -p "如果要申请自签名证书请输入 y Self-Signed SSL certificate? [y/N]:" self_signed
     if [ "$self_signed" = 'y' ];then
       ssl_self $url
     else
@@ -619,23 +696,20 @@ php_cli(){
   else
     path=$1
     shift
-    cmd="$@"
+    CMD="$@"
   fi
+  print_info "在 khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} 内 /app/${path} 执行 $ php ${CMD}\n" && print_info "以下为输出内容\n\n"
     exec docker run -it \
       -v $PWD/app/${path}:/app \
       khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
-      php "${cmd}"
+      php ${CMD}
 }
 
 # 入口文件
 
 main() {
-  logs; print_info "ARCH is ${OS} ${ARCH}\n"
-  print_info `docker --version`
-  echo
-  install_docker_compose
-  local command=$1
-  shift
+  logs; print_info "ARCH is ${OS} ${ARCH}\n"; print_info `docker --version`; echo; docker_compose
+  local command=$1; shift
   case $command in
   init )
     init
@@ -704,7 +778,14 @@ main() {
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       init
       if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
-      exec docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
+      docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
+      echo; sleep 2; print_info "Test nginx configuration file...\n"
+      docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec nginx nginx -t
+      if [ $? = 0 ];then
+        echo; print_info "nginx configuration file test is successful\n" ; exit 0
+      else
+        echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
+      fi
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
@@ -734,11 +815,21 @@ main() {
     # 判断架构
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
     if [ ${ARCH} = 'x86_64' ];then
-      exec docker-compose up $opt
+      docker-compose up $opt
+      echo; sleep 1; print_info "Test nginx configuration file...\n"
+      docker-compose exec nginx nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      exec docker-compose -f docker-compose.arm.yml up $opt
+      docker-compose -f docker-compose.arm.yml up $opt
+      echo; sleep 1; print_info "Test nginx configuration file...\n"
+      docker-compose -f docker-compose.arm.yml exec nginx nginx -t
     else
       NOTSUPPORT
+    fi
+
+    if [ $? = 0 ];then
+      echo; print_info "nginx configuration file test is successful\n" ; exit 0
+    else
+      echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
     fi
     ;;
 
@@ -760,11 +851,27 @@ main() {
 
   nginx-conf )
      if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-conf {https|http} {PATH} {URL}"; exit 1; fi
-     print_info 'Please set hosts in /etc/hosts in development'
-     print_info 'Maybe you need generate nginx https conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
+     print_info 'Please set hosts in /etc/hosts in development\n'
+     print_info 'Maybe you need generate nginx HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
      if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
      ;;
+
+  apache-conf )
+    if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh apache-conf {https|http} {PATH} {URL}"; exit 1; fi
+    print_info 'Please set hosts in /etc/hosts in development\n'
+    print_info 'Maybe you need generate Apache2 HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
+    if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
+    if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
+    ;;
+
+  apache-delete )
+
+    ;;
+
+  nginx-delete )
+    mv config/nginx/$1.conf config/nginx/$1.conf.delete
+    ;;
 
   php-cli )
     run_docker; docker-compose exec php7 bash
@@ -862,7 +969,7 @@ main() {
     ;;
 
   compose )
-    install_docker_compose "$@"
+    docker_compose "$@"
     ;;
 
   new )
@@ -899,6 +1006,41 @@ main() {
   k8s-down )
     cd kubernetes; ./kubernetes.sh cleanup
     ;;
+
+  tp )
+    run_docker
+    if [ -z "$1" ];then
+      print_error "$ ./lnmp-docker.sh tp {PATH} {CMD}"; exit 1
+    else
+      path="$1"
+      shift
+      cmd="$@"
+    fi
+    cli/composer "" "create-project topthink/think=5.0.* ${path} --prefer-dist ${cmd}"
+    ;;
+
+  restart )
+    if [ -z "$1" ];then docker-compose down --remove-orphans; print_info "Please exec \n\n$ ./lnmp-docker.sh development | production\n"; exit 0; fi
+
+    for soft in "$@"
+    do
+      if [ $soft = 'nginx' ];then $opt = 'true'; fi
+    done
+
+    if [ "$opt" = 'true' ];then
+      docker-compose exec nginx nginx -t
+      echo ;print_info "nginx configuration file test is successful\n"
+      if [ "$?" = 0 ];then
+        docker-compose $command "$@"
+      else
+        print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1;
+      fi
+    else
+      print_info "You Exec docker-compose commands"; echo
+      exec docker-compose $command "$@"
+    fi
+    ;;
+
 
   * )
   if ! [ -z "$command" ];then

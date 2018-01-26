@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 services:
 
   # MySQL 暂时没有 arm 镜像
@@ -51,7 +51,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/memcached/
     #   dockerfile: Dockerfile
     restart: always
-    image: ${ARM_ARCH}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}
+    image: "${ARM_ARCH}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}${ARM_BASED_OS}"
     networks:
       - backend
     env_file:
@@ -67,7 +67,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/rabbitmq/
     #   dockerfile: Dockerfile
     restart: always
-    image: ${ARM_ARCH}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management
+    image: "${ARM_ARCH}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management${ARM_BASED_OS}"
     networks:
       - backend
     volumes:
@@ -87,7 +87,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH}/postgresql/
     #   dockerfile: Dockerfile
     restart: always
-    image: ${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}
+    image: "${ARM_ARCH}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}${ARM_BASED_OS}"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -169,7 +169,8 @@ services:
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
-      - ./config/etc/nginx/nginx.conf.default:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro
       - ./logs/nginx:/var/log/nginx
     depends_on:
       - php7

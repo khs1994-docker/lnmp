@@ -14,7 +14,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 # Changelog
 
-Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
 Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
 
@@ -37,28 +37,34 @@ To use LNMP Docker, you need:
 
 Please see [Windows 10](docs/windows.md).
 
-## Install using the convenience script
+## Install
+
+Pick one method install LNMP Docker.
+
+* **using the convenience script**
+
+  ```bash
+  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+  ```
+
+* **using `git clone`**
+
+  ```bash
+  $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+
+  # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+  ```
+
+## Start
 
 ```bash
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-```
-
-## Install using `git clone` in Devlopment
-
-```bash
-$ cd
-
-$ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
-
-# $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
-
 $ cd lnmp
 
-$ ./lnmp-docker.sh devlopment
+$ ./lnmp-docker.sh development
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v17.12 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v18.02 x86_64 With Pull Docker Image
 
 development
 
@@ -66,21 +72,23 @@ development
 
 ## Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx conf file in `./config/nginx/yourfilename.conf`.
+Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file in `./config/nginx/yourfilename.conf`.
 
 ```bash
-$ ./lnmp-docker.sh new projectName
+# $ ./lnmp-docker.sh new
+
+$ ./lnmp-docker.sh restart nginx
 ```
 
 ## Issue SSL certificate
 
->Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh).
+>Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
 
 ```bash
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->Only Support `dnspod.cn` DNS，Please set API key and id in .env file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
+>Only Support `dnspod.cn` DNS，Please set API key and id in `.env` file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
 
 ## List LNMP Container
 
@@ -88,16 +96,29 @@ $ ./lnmp-docker.sh ssl www.khs1994.com
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
 
+## Use Self-Build Docker Image
+
+Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker.sh build`.
+
+## Restart
+
+```bash
+# Restart all container
+$ ./lnmp-docker.sh restart
+
+$ ./lnmp-docker.sh restart nginx php7
+```
+
 ## Stop
 
 ```bash
-$ docker-compose stop
+$ ./lnmp-docker.sh stop
 ```
 
 ## Stop and remove
 
 ```bash
-$ docker-compose down
+$ ./lnmp-docker.sh down
 ```
 
 # Overview
@@ -113,15 +134,15 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[NGINX](https://github.com/docker-library/docs/tree/master/nginx) |`nginx:1.13.8-alpine`     |[![GitHub release](https://img.shields.io/badge/release-v1.13.8-blue.svg)](https://github.com/nginx/nginx)                                                   |`Alpine:3.5`|
 |[Apache](https://github.com/docker-library/docs/tree/master/httpd) |`httpd:2.4.29-alpine`    |[![GitHub release](https://img.shields.io/badge/release-v2.4.29-blue.svg)](https://github.com/apache/httpd)                                                     |`Alpine:3.6`|
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql) |`mysql:8.0.3`             |[![GitHub release](https://img.shields.io/badge/release-v8.0.3-blue.svg)](https://github.com/mysql/mysql-server)                                                |`Debian:jessie`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb) |`mariadb:10.3.3`      |![GitHub release](https://img.shields.io/badge/release-v10.3.3-blue.svg)                                                                             |`Debian:jessie`|
-|[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.6-alpine`       |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)                |`Alpine:3.6`|
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb) |`mariadb:10.3.4`      |![GitHub release](https://img.shields.io/badge/release-v10.3.4-blue.svg)                                                                             |`Debian:jessie`|
+|[Redis](https://github.com/khs1994-docker/redis)         |`khs1994/redis:4.0.7-alpine`       |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/redis.svg)](https://github.com/khs1994-docker/redis/releases)                |`Alpine:3.7`|
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)     |`khs1994/php-fpm:7.2.1-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm/releases)            |`Alpine:3.7`|
 |[Laravel](https://github.com/laravel/laravel)            |`khs1994/php-fpm:7.2.1-alpine3.7`  |[![GitHub release](https://img.shields.io/badge/release-v5.5.0-blue.svg)](https://github.com/laravel/laravel/releases)                               |`Alpine:3.7`|
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.1-alpine3.7`  |[![GitHub release](https://img.shields.io/github/release/composer/composer.svg)](https://github.com/khs1994-docker/composer/composer)                 |`Alpine:3.7`|
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.4-alpine`           |![GitHub release](https://img.shields.io/badge/release-v1.5.4-blue.svg)                                                                             |`Alpine:3.6`|
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.4-alpine`           |![GitHub release](https://img.shields.io/badge/release-v1.5.4-blue.svg)                                                                             |`Alpine:3.7`|
 |[RabbitMQ](https://github.com/khs1994-docker/rabbitmq)   |`khs1994/rabbitmq:3.7.2-management-alpine`         |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/rabbitmq.svg)](https://github.com/khs1994-docker/rabbitmq/releases)        |`Alpine:3.7`|
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.1-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)                    |`Alpine:3.6`|
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.6.1`            |[![GitHub release](https://img.shields.io/badge/release-v3.6.1-blue.svg)](https://github.com/mongodb/mongo)                                                     |`Debian:jessie`|
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.7.1`            |[![GitHub release](https://img.shields.io/badge/release-v3.7.1-blue.svg)](https://github.com/mongodb/mongo)                                                     |`Debian:jessie`|
 
 ## Folder Structure
 
@@ -129,10 +150,10 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |:--|:--|
 |`app`         |PHP project (HTML, PHP, etc) |
 |`backup`      |backup database file|
-|`scripts`     |bash shell script|
 |`config`      |configuration file|               
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
+|`scripts`     |bash shell script |
 |`tmp`         |Composer cache file ,etc |
 
 ## Exposed Ports
@@ -160,7 +181,7 @@ $ linuxkit build lnmp.yml
 $ linuxkit run -publish 8080:80/tcp lnmp
 ```
 
-Open your Browers `127.0.0.1:8080`.
+Open your Browers `127.0.0.1:8080`
 
 # Who use in Production?
 
@@ -184,7 +205,7 @@ https://doc.lnmp.khs1994.com
 
 # Contributing
 
-Please see [Contributing](.github/CONTRIBUTING.md).
+Please see [Contributing](.github/CONTRIBUTING.md)
 
 # Thanks
 
@@ -209,4 +230,4 @@ Please see [Contributing](.github/CONTRIBUTING.md).
 
 # Donate
 
-Please see [https://zan.khs1994.com](https://zan.khs1994.com)。
+Please see [https://zan.khs1994.com](https://zan.khs1994.com)

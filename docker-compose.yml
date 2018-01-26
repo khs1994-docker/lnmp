@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 services:
 
   mysql:
@@ -14,6 +14,7 @@ services:
       - backend
     volumes:
       # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw

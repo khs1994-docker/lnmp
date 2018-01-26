@@ -1,3 +1,4 @@
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a apache-conf       -d    'Generate Apache2 vhost conf'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a backup            -d     'Backup MySQL databases'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build             -d     'Use LNMP With Self Build images(Support x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-config      -d     'Validate and view the Self Build images Compose file'
@@ -14,13 +15,14 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a k8s-down          -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a laravel           -d     'Create a new Laravel application'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a laravel-artisan   -d     'Use Laravel CLI artisan'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a new               -d     'New PHP Project and generate nginx conf and issue SSL certificate'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a nginx-conf        -d     'Generate nginx conf'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a nginx-conf        -d     'Generate nginx vhost conf'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a php               -d     'Run PHP in CLI'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a production        -d     'Use LNMP in Production(Only Support Linux x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a production-config -d     'Validate and view the Production Compose file'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a production-pull   -d     'Pull LNMP Docker Images in production'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a push              -d     'Build and Pushes images to Your Docker Registory'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a restore           -d     'Restore MySQL databases'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a restart           -d     'Restart LNMP services'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a ssl               -d     'Issue SSL certificate powered by acme.sh'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a ssl-self          -d     'Issue Self-signed SSL certificate'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-build       -d     'Build Swarm image (nginx php7)'
@@ -28,6 +30,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-push        -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-deploy      -d     'Deploy LNMP stack TO Swarm mode'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-down        -d     'Remove LNMP stack IN Swarm mode'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a systemd           -d     'Manage Docker LNMP by systemd(Only Support Linux x86_64)'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a tp                -d     'Create a new ThinkPHP application'
 
 ##
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a apache-cli        -d 'Run command in a running apache container'
