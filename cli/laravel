@@ -44,3 +44,9 @@ mv app/${LARAVEL_PATH}/.env app/${LARAVEL_PATH}/.env.backup
 cp app/.env* app/${LARAVEL_PATH}
 
 chmod -R 777 app/${LARAVEL_PATH}/storage
+
+if [ $OS = 'Darwin' ];then
+  sed -i '' 's#predis#phpredis#g' app/${LARAVEL_PATH}/config/database.php
+else
+  sed -i 's#predis#phpredis#g' app/${LARAVEL_PATH}/config/database.php
+fi
