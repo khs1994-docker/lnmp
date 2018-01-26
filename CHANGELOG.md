@@ -9,6 +9,7 @@ Bug fixes:
 * Fix ARM nginx config error #103
 
 Changes:
+* `khs1994-docker/lnmp` v18.01 End Of Life
 * Synchronize `docker-compose` commands, Support exec original `docker-compose` commands in `./lnmp-docker.sh` #79
 * Move `bin` to `cli` #87
 * Update `Apache2` config file #81
