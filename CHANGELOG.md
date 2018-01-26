@@ -3,16 +3,24 @@ Changelog
 
 #### v18.02-rc2
 
+Bug fixes:
+* Fix Redis config error #102
+* Fix ARM nginx config error #103
+
 Changes:
-* Add MySQL init scripts #90
+* Update Compose file format 3.5 #104
 * Update Windows PowerShell script #91
+* Add MySQL init scripts #90
 * Add CLI command `apache-conf`, Support generate apache config file #93
 * Add CLI command `tp`, Support new ThinkPHP project #93
 * Add CLI command `restart`, Support safety restart container #98
+* Add [test nginx configuration file] when start or restart LNMP #99
+* ARM64v8 Redis Memcached RabbitMQ PostgreSQL now based Alpine #101
 
 Updates:
 * `MongoDB` 3.7.1   #96
 * `MariaDB` 10.3.4  #96
+* `Redis`   4.0.7   #100
 
 #### v18.02-rc1
 
