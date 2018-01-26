@@ -270,7 +270,7 @@ install_docker_compose_move(){
 
 install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
-  curl -L ${COMPOSE_LINK_OFFICIAL}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+  curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
   chmod +x /tmp/docker-compose
   if [ "$1" = "-f" ];then
     install_docker_compose_move
@@ -296,7 +296,7 @@ install_docker_compose(){
   if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
     install_docker_compose_arm "$@"
   elif [ $ARCH = 'x86_64' ];then
-    curl -L ${COMPOSE_LINK}/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+    curl -L ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
     chmod +x /tmp/docker-compose
     if [ "$1" = '-f' ];then install_docker_compose_move; return 0;fi
     print_info "You MUST exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin/\n"
