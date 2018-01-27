@@ -1,4 +1,6 @@
-# Docker for Mac 支持 k8s
+# Docker 桌面版支持 k8s
+
+>更多信息请查看：https://www.khs1994.com/docker/docker-win-k8s.html
 
 启用 `k8s` 之后，输入如下命令
 
@@ -10,60 +12,43 @@ $ docker stack services lnmp
 $ kubectl get services
 
 $ kubectl get pod
-
-$ docker stack rm lnmp
-```
-
-# kubernetes
-
-## 创建数据卷
-
-```bash
-$ kubectl create -f lnmp-volumes.yaml
-
-$ kubectl get pv
-```
-
-## 创建 config
-
-```bash
-$ kubectl create -f lnmp-env.yaml
-
-$ kubectl describe configmap lnmp-env
-```
-
-## 创建 secret
-
-```bash
-$ kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
-
-$ kubectl get secrets
-```
-
-## 部署
-
-```bash
-$ kubectl create -f lnmp-mysql.yaml
-
-$ kubectl create -f lnmp-redis.yaml
-
-$ kubectl create -f lnmp-php7.yaml
-
-$ kubectl create -f lnmp-nginx.yaml
 ```
 
 ## 删除
 
 ```bash
-$ kubectl delete deployment -l app=lnmp
-
-$ kubectl delete service -l app=lnmp
-
-$ kubectl delete pvc -l app=lnmp
-
-$ kubectl delete pv lnmp-mysql-data lnmp-redis-data
-
-$ kubectl delete secret lnmp-mysql-password
-
-$ kubectl delete configmap lnmp-env
+$ docker stack rm lnmp
 ```
+
+# kubernetes
+
+> 这里以 Minikube 为例：https://www.khs1994.com/docker/minikube/README.html
+
+## 挂载宿主机目录
+
+```bash
+$ minikube mount ~/lnmp:/data/lnmp
+```
+
+## 部署
+
+```bash
+$ ./kubernetes.sh deploy
+
+$ minikube service nginx --url
+
+http://192.168.64.98:32228
+http://192.168.64.98:30626
+
+$ curl http://192.168.64.98:30626
+```
+
+## 删除
+
+```bash
+$ ./kubernetes.sh cleanup
+```
+
+## 具体命令
+
+请查看 `./kubernetes.sh` 文件内容。

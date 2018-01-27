@@ -47,7 +47,7 @@ spec:
         tier: redis
     spec:
       containers:
-      - image: khs1994/redis:4.0.6-alpine
+      - image: khs1994/redis:4.0.7-alpine
         name: lnmp-redis
         args:
         - redis-server

@@ -121,6 +121,10 @@ $ ./lnmp-docker.sh stop
 $ ./lnmp-docker.sh down
 ```
 
+## Run LNMP On Kubernets
+
+For more information please see [Documents](docs/production/k8s.md)
+
 # Overview
 
 ## Features

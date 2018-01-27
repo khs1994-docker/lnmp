@@ -123,6 +123,10 @@ $ ./lnmp-docker.sh stop
 $ ./lnmp-docker.sh down
 ```
 
+## 支持 Kubernets
+
+请查看 [支持文档](docs/production/k8s.md)
+
 # 项目说明
 
 ## 支持特性
