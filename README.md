@@ -209,7 +209,7 @@ https://doc.lnmp.khs1994.com
 
 ## Contributing
 
-Please see [Contributing](.github/CONTRIBUTING.md)
+Please see [Contributing](CONTRIBUTING.md)
 
 ## Thanks
 
