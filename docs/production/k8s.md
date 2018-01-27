@@ -20,7 +20,7 @@ $ kubectl get pod
 $ docker stack rm lnmp
 ```
 
-# kubernetes
+# Kubernetes
 
 > 这里以 Minikube 为例：https://www.khs1994.com/docker/minikube/README.html
 
