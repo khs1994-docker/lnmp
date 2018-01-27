@@ -12,7 +12,7 @@ Start LNMP within 2 minutes powered by Docker Compose.
 
 LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
-# Changelog
+## Changelog
 
 Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
@@ -23,7 +23,7 @@ Latest commit in dev branch, please switch [dev](https://github.com/khs1994-dock
 
 * ~~[v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12) **EOL**~~
 
-# Prerequisites
+## Prerequisites
 
 To use LNMP Docker, you need:
 
@@ -31,13 +31,13 @@ To use LNMP Docker, you need:
 
 * [Docker Compose](https://github.com/docker/compose) 1.18.0+
 
-# Quick Start
+## Quick Start
 
-## Windows 10
+### Windows 10
 
 Please see [Windows 10](docs/windows.md).
 
-## Install
+### Install
 
 Pick one method install LNMP Docker.
 
@@ -55,7 +55,7 @@ Pick one method install LNMP Docker.
   # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
   ```
 
-## Start
+### Start
 
 ```bash
 $ cd lnmp
@@ -70,7 +70,7 @@ development
 
 ```
 
-## Start PHP Project
+### Start PHP Project
 
 Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file in `./config/nginx/yourfilename.conf`.
 
@@ -80,7 +80,7 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file i
 $ ./lnmp-docker.sh restart nginx
 ```
 
-## Issue SSL certificate
+### Issue SSL certificate
 
 >Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
 
@@ -90,17 +90,17 @@ $ ./lnmp-docker.sh ssl www.khs1994.com
 
 >Only Support `dnspod.cn` DNS，Please set API key and id in `.env` file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
 
-## List LNMP Container
+### List LNMP Container
 
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
 
-## Use Self-Build Docker Image
+### Use Self-Build Docker Image
 
 Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker.sh build`.
 
-## Restart
+### Restart
 
 ```bash
 # Restart all container
@@ -109,29 +109,29 @@ $ ./lnmp-docker.sh restart
 $ ./lnmp-docker.sh restart nginx php7
 ```
 
-## Stop
+### Stop
 
 ```bash
 $ ./lnmp-docker.sh stop
 ```
 
-## Stop and remove
+### Stop and remove
 
 ```bash
 $ ./lnmp-docker.sh down
 ```
 
-## Run LNMP On Kubernets
+### Run LNMP On Kubernets
 
 For more information please see [Documents](docs/production/k8s.md)
 
-# Overview
+## Overview
 
-## Features
+### Features
 
 Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82).
 
-## What's inside
+### What's inside
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
@@ -148,7 +148,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.1-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)                    |`Alpine:3.6`|
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.7.1`            |[![GitHub release](https://img.shields.io/badge/release-v3.7.1-blue.svg)](https://github.com/mongodb/mongo)                                                     |`Debian:jessie`|
 
-## Folder Structure
+### Folder Structure
 
 |Folder|description|
 |:--|:--|
@@ -160,20 +160,20 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |`scripts`     |bash shell script |
 |`tmp`         |Composer cache file ,etc |
 
-## Exposed Ports
+### Exposed Ports
 
 * 80
 * 443
 
-# CLI
+## CLI
 
 Easy to access Laravel, Laravel artisan, composer, PHP-CLI, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
 
-# Run in Production
+## Run in Production
 
 Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/production/README.md).
 
-# LinuxKit
+## LinuxKit
 
 ```bash
 # OS: macOS
@@ -187,31 +187,31 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 Open your Browers `127.0.0.1:8080`
 
-# Who use in Production?
+## Who use in Production?
 
-## [khs1994.com](//khs1994.com)
+### [khs1994.com](//khs1994.com)
 
-# TLSv1.3
+## TLSv1.3
 
 Please see [khs1994-website/tls-1.3](https://github.com/khs1994-website/tls-1.3)
 
-# CI/CD
+## CI/CD
 
 Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
-# Docker Daemon TLS
+## Docker Daemon TLS
 
 Please see [khs1994-docker/dockerd-tls](https://github.com/khs1994-docker/dockerd-tls)
 
-# Documents
+## Documents
 
 https://doc.lnmp.khs1994.com
 
-# Contributing
+## Contributing
 
 Please see [Contributing](.github/CONTRIBUTING.md)
 
-# Thanks
+## Thanks
 
 * LNMP
 * [Docker Cloud](https://cloud.docker.com)
@@ -219,7 +219,7 @@ Please see [Contributing](.github/CONTRIBUTING.md)
 * [Let's Encrypt](https://letsencrypt.org/)
 * [acme.sh](https://github.com/Neilpang/acme.sh)
 
-# More Information
+## More Information
 
 * [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
 * [docker_practice](https://github.com/yeasy/docker_practice)
@@ -232,6 +232,6 @@ Please see [Contributing](.github/CONTRIBUTING.md)
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
 * [yeszao/dnmp](https://github.com/yeszao/dnmp)
 
-# Donate
+## Donate
 
 Please see [https://zan.khs1994.com](https://zan.khs1994.com)
