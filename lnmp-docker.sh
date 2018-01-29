@@ -1024,7 +1024,7 @@ main() {
 
     for soft in "$@"
     do
-      if [ $soft = 'nginx' ];then $opt = 'true'; fi
+      if [ $soft = 'nginx' ];then opt='true'; fi
     done
 
     if [ "$opt" = 'true' ];then
