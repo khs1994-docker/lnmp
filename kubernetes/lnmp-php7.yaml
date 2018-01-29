@@ -54,5 +54,16 @@ spec:
         - containerPort: 9000
           name: lnmp-php7
         resources: {}
+        volumeMounts:
+        - name: lnmp-data
+          mountPath: /app
+      volumes:
+      # - name: lnmp-data
+      #   persistentVolumeClaim:
+      #     claimName: lnmp-data
+      #
+      - name: lnmp-data
+        hostPath:
+          path: /data/lnmp/app
       restartPolicy: Always
 status: {}
