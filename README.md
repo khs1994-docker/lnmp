@@ -16,9 +16,6 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-Latest commit in dev branch, please switch [dev](https://github.com/khs1994-docker/lnmp/tree/dev) branch.
-
-
 * [v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
 
 * ~~[v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12) **EOL**~~
@@ -50,9 +47,9 @@ Pick one method install LNMP Docker.
 * **using `git clone`**
 
   ```bash
-  $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+  $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
 
-  # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+  # $ git clone --recursive git@github.com:khs1994-docker/lnmp.git
   ```
 
 ### Start

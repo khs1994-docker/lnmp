@@ -1,8 +1,7 @@
 #!/bin/bash
 
+#
 #   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-# Use in Production
-#   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
 #
 # CN mirror
 #   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh --mirror aliyun | coding | tgit | gitee
@@ -12,14 +11,18 @@
 # https://doc.lnmp.khs1994.com/
 #
 
-if [ "$1" = help ];then
-echo "Use in Development
+rm -rf lnmp-test
+
+LNMP_GIT_SSH_URL=git@github.com:khs1994-docker/lnmp.git
+
+LNMP_GIT_HTTPS_URL=https://github.com/khs1994-docker/lnmp
+
+LNMP_PATH=lnmp
+
+help(){
+  exec echo "
 
 $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-
-Use in Production
-
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh production
 
 CN mirror
 
@@ -29,54 +32,34 @@ Support Documents
 
 https://doc.lnmp.khs1994.com/
 "
-exit 0
-fi
-
-rm -rf lnmp-test
-
-LNMP_GIT_SSH_URL=git@github.com:khs1994-docker/lnmp.git
-
-LNMP_GIT_HTTPS_URL=https://github.com/khs1994-docker/lnmp
-
-LNMP_PATH=lnmp
-
-BRANCH=dev
-
-echo "Welcome use khs1994-docker/lnmp"
+}
 
 clone_ssh(){
-  echo "Your Branch is ${BRANCH}"
   echo "Clone by SSH way"
-  git clone --recursive -b ${BRANCH} ${LNMP_GIT_SSH_URL} $1 \
-    && (cd $1 ; git remote add lnmp ${LNMP_GIT_SSH_URL} ; git remote -v ; git branch -a)
+  git clone --recursive ${LNMP_GIT_SSH_URL} $LNMP_PATH \
+    && (cd $LNMP_PATH ; git remote add lnmp ${LNMP_GIT_SSH_URL} ; git remote -v )
 }
 
 clone_https(){
-  echo "Your Branch is ${BRANCH}"
   echo "Clone by SSH way is failure, try HTTPS way"
-  git clone --recursive -b ${BRANCH} ${LNMP_GIT_HTTPS_URL} $1 \
-    && (cd $1 ; git remote add lnmp ${LNMP_GIT_HTTPS_URL} ; git remote -v ; git branch -a)
-  cd $1
-  # . /etc/os-release
-  which bash 2>&1 >/dev/null
-  if [ $? != 0 ];then sed -i "s/bin\/bash/bin\/sh/g" lnmp-docker.sh; fi
-  # if [ $ID = "boot2docker" ];then sed -i "s/bin\/bash/bin\/sh/g" lnmp-docker.sh; fi
+  git clone --recursive ${LNMP_GIT_HTTPS_URL} $LNMP_PATH \
+    && (cd $LNMP_PATH ; git remote add lnmp ${LNMP_GIT_HTTPS_URL} ; git remote -v )
 }
 
 wget_git(){
   echo "Download by wget way"
-  wget "${LNMP_GIT_HTTPS_URL}/archive/${BRANCH}.zip" -O $1.zip
-  unzip -o $1.zip -d $1 >/dev/null 2>&1
-  cd $1
-  cp -a lnmp-${BRANCH}/. .
-  rm -rf lnmp-${BRANCH} ../$1.zip
+  wget "${LNMP_GIT_HTTPS_URL}/archive/master.zip" -O $LNMP_PATH.zip
+  unzip -o $LNMP_PATH.zip -d $LNMP_PATH >/dev/null 2>&1
+  cd $LNMP_PATH
+  cp -a lnmp-master/. .
+  rm -rf lnmp-master ../$LNMP_PATH.zip
   success
 }
 
 exist_path() {
   if [ -d "$1" ] || [ -f "$1" ];then
-    echo "$1 exists"
-    echo "==============================="
+    echo "$1 exists
+==============================="
     read -p "Please input path: " LNMP_PATH
     if [ -z "$LNMP_PATH" ];then exit 1; fi
     exist_path $LNMP_PATH
@@ -84,37 +67,34 @@ exist_path() {
 }
 
 success(){
-  echo "=================================="
-  echo "==========  SUCCESS =============="
-  echo "=================================="
-  echo "Success please exec "
-  echo "$ cd ${LNMP_PATH}"
-    if [ $BRANCH = "master" ];then
-      echo "$ ./lnmp-docker.sh production"
-    else
-      echo "$ ./lnmp-docker.sh development"
-    fi
-  exit 0
+  echo "==================================
+==========  SUCCESS ==============
+=================================="
+
+  cd $LNMP_PATH
+  which bash 2>&1 >/dev/null
+  if ! [ $? -eq 0 ];then sed -i "s/bin\/bash/bin\/sh/g" lnmp-docker.sh; fi
+
+  echo "Success please exec
+
+$ cd ${LNMP_PATH}
+"
+exec echo "$ ./lnmp-docker.sh development | production"
 }
 
 error(){
-  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-  echo "!!!!!!!!!!!  ERROR  !!!!!!!!!!!!!!"
-  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-  exit 1
+  exec echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!  ERROR  !!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
 clone(){
-    clone_ssh $LNMP_PATH
-    if [ $? = "0" ];then
+    clone_ssh
+    if [ $? -eq 0 ];then
       success
     else
-      clone_https $LNMP_PATH
-      if [ $? = "0" ];then
-        success
-      else
-        error
-      fi
+      clone_https
+      if [ $? -eq 0 ];then success; else error; fi
     fi
 }
 
@@ -139,35 +119,29 @@ case $1 in
 esac
 }
 
-if [ "$1" = --help ];then
-echo "production                      : Clone master branch"
-echo
-echo "--mirror aliyun                 : Clone dev branch from cn mirror"
-echo "--mirror aliyun production      : Clone master branch from cn mirror"
-echo
-echo "wget                            : Download dev branch by wget"
-echo "wget production                 : Download master branch by wget"
-exit 0
-fi
-
-exist_path $LNMP_PATH
+echo "Welcome use khs1994-docker/lnmp"
 
 case $1 in
-  production )
-    BRANCH=master
-    ;;
   wget )
-    if [ "$2" = production ];then BRANCH=master; fi
-    wget_git $LNMP_PATH
+    exist_path
+    wget_git
     ;;
+
   --mirror )
-    if [ "$3" = production ];then BRANCH=master; fi
+    exist_path
     mirror $2
     ;;
+
+  --help | help | -h )
+     help
+     ;;
+
   * )
   echo > /dev/null 2>&1
     ;;
 esac
+
+exist_path $LNMP_PATH
 
 command -v git >/dev/null 2>&1
 
