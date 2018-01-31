@@ -27,14 +27,16 @@ install(){
     --ecc
 }
 
-echo $1
+if [ "$1" = bash ] || [ "$1" = sh ];then exec /bin/sh; fi
 
-if [ "$1" = bash ];then exec /bin/sh; fi
+# 如果参数大于等于 1
 
-if [ "$#" = 1 ];then exec "$@"; fi
+if [ "$#" -ge 1 ];then exec "$@"; fi
 
-if [ "$#" -gt 1 ];then exec "$@"; fi
+# 如果没有参数，并且存在 $url 环境变量
 
-if [ "$#" = 0 ];then issue; fi
+if [ "$#" = 0 ] && [ ! -z "$url" ];then issue; fi
+
+# 之后转移证书
 
 if [ "$?" = 0 ];then install; fi
