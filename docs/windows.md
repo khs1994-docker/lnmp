@@ -3,7 +3,7 @@
 ```bash
 $ git config --global core.autocrlf input
 
-$ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+$ git clone --recursive git@github.com:khs1994-docker/lnmp.git
 ```
 
 ## 启动 Demo

@@ -14,11 +14,11 @@
 
 ## 更新记录
 
-每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
+每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
 
-* [v18.01 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
+* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
 
-* ~~[v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12) **EOL**~~
+* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
 
 ## 准备
 
@@ -49,9 +49,9 @@
 * **使用 `git clone`**
 
   ```bash
-  $ git clone --recursive -b dev https://github.com/khs1994-docker/lnmp.git
+  $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
 
-  # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
+  # $ git clone --recursive git@github.com:khs1994-docker/lnmp.git
   ```
 
 ### 启动 LNMP
