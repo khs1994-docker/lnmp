@@ -50,6 +50,8 @@ Commands:
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
   tp                   Create a new ThinkPHP application
+  update               Upgrades LNMP
+  upgrade              Upgrades LNMP
 
 Container CLI:
   apache-cli
@@ -64,16 +66,19 @@ Container CLI:
   rabbitmq-cli
   redis-cli
 
-Tools:
+Developer Tools:
   commit               Commit LNMP to Git
   cn-mirror            Push master branch to CN mirror
   dockerfile-update    Update Dockerfile By Script
   rc                   Start new release
   test                 Test LNMP
-  update               Upgrades LNMP
-  upgrade              Upgrades LNMP
 
-Read './docs/*.md' for more information about commands."
+Read './docs/*.md' for more information about commands.
+
+You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
+
+Donate https://zan.khs1994.com
+"
 }
 
 # env
@@ -159,6 +164,7 @@ logs(){
   if ! [ -d logs/nginx ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
 
   if ! [ -d logs/php-fpm ];then
+    if ! [ -d logs/php-fpm/php ];then mkdir -p logs/php-fpm/php; fi
     mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/xdebug-remote.log
@@ -188,18 +194,20 @@ cleanup(){
       && echo > logs/php-fpm/xdebug-remote.log \
       && echo > logs/redis/redis.log \
       && echo > logs/apache2/access.log \
-      && echo > logs/apache2/error.log
+      && echo > logs/apache2/error.log \
+      && echo > logs/php-fpm/php/error.log
       print_info "Clean log files SUCCESS\n"
 }
 
 gitbook(){
   docker rm -f lnmp-docs
-  exec docker run -it --rm \
+  docker run -it --rm \
     -p 4000:4000 \
     --name lnmp-docs \
     -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
+  exit 0
 }
 
 dockerfile_update_sed(){
@@ -614,16 +622,26 @@ server{
 # 申请 ssl 证书
 
 ssl(){
-  if [ -z "$DP_ID" ];then print_error "Please set ENV in .env file"; exit 1; fi
+  if [ -z "$DP_Id" ];then print_error "Please set ENV in .env file"; exit 1; fi
   if [ -z "$1" ];then read -p "Please input domain: 「example www.domain.com 」" url; else url=$1; fi
   if [ -z "$url" ];then echo; print_error 'Please input content'; exit 1; fi
-  docker run -it --rm \
-      -v $PWD/config/nginx/ssl:/ssl \
-      -e DP_Id=$DP_ID \
-      -e DP_Key=$DP_KEY \
-      -e DNS_TYPE=$DNS_TYPE \
-      -e url=$url \
-      khs1994/acme
+  if [ "$1" = 'acme.sh' ];then
+  exec docker run -it --rm \
+         -v $PWD/config/nginx/ssl:/ssl \
+         --mount source=lnmp_ssl-data,target=/home/.acme.sh \
+         --env-file .env \
+         khs1994/acme "$@"
+
+  # ./lnmp-docker.sh ssl acme.sh --issue --dns dns_gd -d example.com -d www.example.com
+
+  fi
+  exec docker run -it --rm \
+         -v $PWD/config/nginx/ssl:/ssl \
+         --mount source=lnmp_ssl-data,target=/home/.acme.sh \
+         --env-file .env \
+         -e DNS_TYPE=$DNS_TYPE \
+         -e url=$url \
+         khs1994/acme
 }
 
 ssl_self(){

@@ -65,6 +65,7 @@ services:
   nginx:
     volumes:
       - ./app:${PRODUCTION_LNMP_PHP_PATH}:rw
+      - ./config/etc/nginx/nginx.production.conf:/etc/nginx/nginx.conf:ro
     labels:
       - "com.khs1994.lnmp.app.env=production"
 

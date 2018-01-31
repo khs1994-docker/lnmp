@@ -1,11 +1,14 @@
 * [LNMP Docker 支持文档](README.md)
 * [项目初衷](why.md)
-* [安装](install.md)
+* [安装配置 Docker](docker.md)
+* 安装
+    * [Linux macOS](install.md)
+    * [Windows 10](windows.md)
 * [项目初始化过程](init.md)
 * [路径说明](path.md)
 * [`lnmp-docker.sh`](cli.md)
 * 开发环境
-    * [构建镜像](development.md)
+    * [使用方法](development.md)
 * NGINX
     * [一键生成配置](nginx-conf.md)
     * [HTTPS 配置](nginx-with-https.md)
@@ -21,7 +24,6 @@
     * [k8s](production/k8s.md)
 * 树莓派3
     * [ARM架构](arm.md)
-* [Windows 10](windows.md)  
 * [systemd](systemd.md)
 * [备份恢复](backup.md)
 * [清理](cleanup.md)
