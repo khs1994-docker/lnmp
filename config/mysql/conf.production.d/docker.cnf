@@ -1,0 +1,8 @@
+[mysqld]
+skip-host-cache
+skip-name-resolve
+log-error=/var/log/mysql/error.log
+
+# https://www.cnblogs.com/beginner-boy/p/7519851.html
+
+log_timestamps=SYSTEM

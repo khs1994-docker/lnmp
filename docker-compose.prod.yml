@@ -6,6 +6,9 @@ services:
       - "${PRO_MYSQL_PORT}:3306"
     environment:
       - MYSQL_DATABASE=laravel_admin
+    volumes:
+      - ./config/mysql/conf.production.d:/etc/mysql/conf.d:ro
+      - ./backup/init.production:/docker-entrypoint-initdb.d:ro
     labels:
       - "com.khs1994.lnmp.app.env=production"
 
@@ -14,12 +17,17 @@ services:
   #     - "${PRO_MYSQL_PORT}:3306"
   #   environment:
   #     - MYSQL_DATABASE=laravel_admin
+  #   volumes:
+  #     - ./config/mariadb/conf.production.d:/etc/mysql/conf.d:ro
+  #     - ./backup/init.production:/docker-entrypoint-initdb.d:ro
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production"
 
   redis:
     # 生产环境默认拉取镜像（可以配置私有仓库）
     image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+    volumes:
+      - ./config/redis/redis.production.conf:/redis.conf:ro
     labels:
       - "com.khs1994.lnmp.app.env=production"
 
@@ -55,7 +63,10 @@ services:
     volumes:
       - ~/.ssh:/root/.ssh:rw
       - ./app:${PRODUCTION_LNMP_PHP_PATH}:rw
-      - ./config/php/php-production.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php/php-fpm.production.conf:/usr/local/etc/php-fpm.conf:ro
+      - ./config/php/php-fpm.production.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./config/php/php-fpm.production.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      - ./config/php/php.production.ini:/usr/local/etc/php/php.ini:ro
     environment:
       - APP_ENV=production
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image
