@@ -16,9 +16,9 @@
 
 每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
 
-* [v18.01 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
+* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
 
-* ~~[v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12) **EOL**~~
+* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
 
 ## 准备
 

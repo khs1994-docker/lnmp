@@ -16,9 +16,9 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-* [v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
+* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
 
-* ~~[v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12) **EOL**~~
+* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
 
 ## Prerequisites
 

@@ -1,7 +1,7 @@
 Changelog
 ==============
 
-#### v18.02 (2018-02-28)
+#### v18.02 (2018-02-01)
 
 Bug fixes:
 * Fix `php.ini` error in development #86
@@ -15,6 +15,9 @@ Changes:
 * Update `Apache2` config file #81
 * Update Compose file format 3.5 #104
 * Update Windows PowerShell script #91
+* Update or Add soft log settings
+* Update support documents
+* Update `acme.sh`
 * Add CLI commands `k8s` `k8s-down` #82
 * Add donate #84
 * Add `MySQL` init scripts #90
@@ -22,6 +25,7 @@ Changes:
 * Add CLI command `tp`, Support new ThinkPHP project #93
 * Add CLI command `restart`, Support safety restart container #98
 * Add [test nginx configuration file] when start or restart LNMP #99
+* Add Production conf
 * ARM64v8 `Redis` `Memcached` `RabbitMQ` `PostgreSQL` now based Alpine #101
 
 Updates:
