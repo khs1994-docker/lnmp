@@ -6,7 +6,7 @@
 
 单机环境中通过 `数据卷` 将 `项目文件` 挂载到容器中。
 
-将 GitHub 上的 PHP 项目克隆到 `./app` 目录下，之后使用`./lnmp-docker.sh composer` 交互式填入路径安装依赖。
+将 GitHub 上的 PHP 项目克隆到 `./app` 目录下，之后使用`./lnmp-docker.sh composer ...` 安装依赖。
 
 在 `./config/nginx/*.conf` 增加 nginx 配置。
 
@@ -28,4 +28,4 @@
 
 Docker 镜像分发可以使用 Docker 私有仓库。
 
->注意这里为了表述方便将 git 统一称为 GitHub，实际项目可能不开源，会推送到私有 git 仓库中，请读者知悉。
+>注意这里为了表述方便将 git 统一称为 GitHub，实际项目可能不开源，会推送到私有 git 仓库中，请读者悉知。

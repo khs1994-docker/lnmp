@@ -27,7 +27,6 @@ $ git remote add tgit git@git.qcloud.com:username/wafer2-quickstart-php.git
 修改 `client/config.js` 中的 `host`。
 
 ```js
-// 此处主机域名修改成腾讯云解决方案分配的域名
 var host = 'https://wechat-mini.t.khs1994.com';
 ```
 

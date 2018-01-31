@@ -18,6 +18,16 @@ $ cd
 $ git clone --recursive -b dev --depth=1 git@github.com:khs1994-docker/lnmp.git
 ```
 
+## 启动 Demo
+
+```bash
+$ cd lnmp
+
+$ ./lnmp-docker.sh development
+```
+
+浏览器打开 `127.0.0.1`，看到页面。
+
 ## 更新
 
 ```bash

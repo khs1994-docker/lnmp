@@ -13,9 +13,13 @@
 执行以下命令构建镜像并运行。
 
 ```bash
+# 在项目根目录构建镜像
+
 $ docker-compose -f docker-stack.yml build
 
 # $ docker-compose push
+
+$ cd linuxkit
 
 $ linuxkit build lnmp.yml
 
