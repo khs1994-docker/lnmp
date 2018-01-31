@@ -40,7 +40,7 @@ services:
   #   networks:
   #     - backend
   #   volumes:
-  #     # - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
+  #     - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
   #     - mariadb-data:/var/lib/mysql:rw
   #     - ./logs/mariadb:/var/log/mysql:rw
   #     - ./backup/mariadb:/backup:rw

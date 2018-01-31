@@ -161,14 +161,17 @@ logs(){
 
   if ! [ -d logs/mysql ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
 
+  if ! [ -d logs/mariadb ];then mkdir -p logs/mariadb && echo > logs/mariadb/error.log; fi
+
   if ! [ -d logs/nginx ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
 
   if ! [ -d logs/php-fpm ];then
-    if ! [ -d logs/php-fpm/php ];then mkdir -p logs/php-fpm/php; fi
     mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/xdebug-remote.log
   fi
+
+  if ! [ -d logs/php-fpm/php ];then mkdir -p logs/php-fpm/php; fi
 
   if ! [ -d logs/redis ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
   chmod -R 777 logs/mongodb \
@@ -187,6 +190,7 @@ cleanup(){
       logs \
       && echo > logs/mongodb/mongo.log \
       && echo > logs/mysql/error.log \
+      && echo > logs/mariadb/error.log \
       && echo > logs/nginx/error.log \
       && echo > logs/nginx/access.log \
       && echo > logs/php-fpm/access.log \

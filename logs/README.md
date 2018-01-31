@@ -8,7 +8,6 @@
 ├── apache2
 │   ├── access.log
 │   └── error.log
-├── mariadb
 ├── mongodb
 │   └── mongo.log
 ├── mysql
@@ -19,6 +18,8 @@
 ├── php-fpm
 │   ├── access.log
 │   ├── error.log
+│   ├── php
+│   │   └── error.log
 │   └── xdebug-remote.log
 └── redis
     └── redis.log
