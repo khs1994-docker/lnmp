@@ -64,7 +64,7 @@ Container CLI:
   rabbitmq-cli
   redis-cli
 
-Tools:
+Developer Tools:
   commit               Commit LNMP to Git
   cn-mirror            Push master branch to CN mirror
   dockerfile-update    Update Dockerfile By Script
@@ -159,6 +159,7 @@ logs(){
   if ! [ -d logs/nginx ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
 
   if ! [ -d logs/php-fpm ];then
+    if ! [ -d logs/php-fpm/php ];then mkdir -p logs/php-fpm/php; fi
     mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/xdebug-remote.log
@@ -188,7 +189,8 @@ cleanup(){
       && echo > logs/php-fpm/xdebug-remote.log \
       && echo > logs/redis/redis.log \
       && echo > logs/apache2/access.log \
-      && echo > logs/apache2/error.log
+      && echo > logs/apache2/error.log \
+      && echo > logs/php-fpm/php/error.log
       print_info "Clean log files SUCCESS\n"
 }
 

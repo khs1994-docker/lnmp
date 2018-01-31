@@ -1,0 +1,19 @@
+{
+  "registry-mirrors": [
+    "https://registry.docker-cn.com"
+  ],
+  "debug": true,
+  "dns": [
+    "114.114.114.114",
+    "8.8.8.8"
+  ],
+  "host": [
+    "unix:///var/run/docker.sock",
+    "tcp://127.0.0.1:2376"
+  ],
+  "tlsverify": true,
+  "tlscert": "/etc/docker/server-cert.pem",
+  "tlskey": "/etc/docker/server-key.pem",
+  "tlscacert": "/etc/docker/ca.pem",
+  "experimental": true
+}

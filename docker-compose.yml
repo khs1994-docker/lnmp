@@ -13,7 +13,7 @@ services:
     networks:
       - backend
     volumes:
-      # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
