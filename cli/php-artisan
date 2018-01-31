@@ -1,8 +1,10 @@
 #!/bin/bash
 
-if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m Can't EXEC in cli folder"; exit 1; fi
+if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[31mERROR\033[0m Can't EXEC in cli folder"; exit 1; fi
 
 . .env; LARAVEL_PATH=$1; shift; CMD="$@"; ARCH=`uname -m`
+
+if ! [ -f $LARAVEL_PATH/arisan ];then echo -e "\n\033[31mERROR\033[0m  ./app/$LARAVEL_PATH NOT Laravel Project"; exit 1; fi
 
 # 判断架构
 
@@ -18,7 +20,7 @@ elif [ ${ARCH} = 'x86_64' ];then
   docker image ls | grep ccr.ccs.tencentyun.com/khs1994/php-fpm > /dev/null 2>&1
   if [ "$?" = 0 ];then DOCKER_IMAGE=ccr.ccs.tencentyun.com/khs1994/php-fpm; else DOCKER_IMAGE=khs1994/php-fpm; fi
 else
-  echo -e "\n\033[32mINFO\033[0m  ${ARCH} 暂不支持"
+  echo -e "\n\033[31mERROR\033[0m  ${ARCH} 暂不支持"
   exit 1
 fi
 
@@ -28,6 +30,6 @@ fi
 echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${LARAVEL_PATH} 执行 $ php artisan ${CMD}" && echo -e  "\n\033[32mINFO\033[0m  以下为输出内容\n\n"
 
 exec docker run -it --rm \
-  -v $PWD/app/${LARAVEL_PATH}:/app \
+  --mount type=bind,src=$PWD/app/${LARAVEL_PATH},target=/app \
   ${DOCKER_IMAGE}:${TAG} \
   php artisan ${CMD}
