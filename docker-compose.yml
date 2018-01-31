@@ -14,6 +14,7 @@ services:
       - backend
     volumes:
       - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      # https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
@@ -41,6 +42,8 @@ services:
   #     - backend
   #   volumes:
   #     - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
+  #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
+  #     - ./backup/init:/docker-entrypoint-initdb.d:ro
   #     - mariadb-data:/var/lib/mysql:rw
   #     - ./logs/mariadb:/var/log/mysql:rw
   #     - ./backup/mariadb:/backup:rw
@@ -63,7 +66,7 @@ services:
     networks:
       - backend
     volumes:
-      # - ./config/redis/redis.conf:/redis.conf:ro
+      - ./config/redis/redis.conf:/redis.conf:ro
       # - redis-data:/data:rw
       - type: volume
         source: redis-data

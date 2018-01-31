@@ -1,3 +1,3 @@
 #!/bin/bash
 
-# echo 0
+echo "This is development init shell script"
