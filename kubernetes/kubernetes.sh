@@ -8,7 +8,7 @@ kubectl delete service -l app=lnmp
 
 kubectl delete pvc -l app=lnmp
 
-kubectl delete pv lnmp-mysql-data lnmp-redis-data
+kubectl delete pv lnmp-mysql-data lnmp-redis-data lnmp-data lnmp-nginx-conf
 
 kubectl delete secret lnmp-mysql-password
 
@@ -16,7 +16,7 @@ kubectl delete configmap lnmp-env
 
 elif [ "$1" = deploy ];then
 
-  # kubectl create -f lnmp-volumes.yaml
+  kubectl create -f lnmp-volumes.yaml
 
   kubectl create -f lnmp-env.yaml
 

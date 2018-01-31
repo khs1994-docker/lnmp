@@ -1,4 +1,4 @@
-$global:KHS1994_LNMP_DOCKER_VERSION="v18.02-rc2"
+$global:KHS1994_LNMP_DOCKER_VERSION="v18.02"
 $global:KHS1994_LNMP_PHP_VERSION="7.2.1"
 
 Function printError(){
@@ -157,17 +157,19 @@ Function laravel-artisan($LARAVEL_PATH,$CMD){
 }
 
 Function update(){
-  git fetch origin
+  git remote rm lnmp
+  git remote add lnmp git@github.com:khs1994-docker/lnmp
+  git fetch lnmp
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   if (${BRANCH} -eq "dev"){
     git submodule update --init --recursive
-    git reset --hard origin/dev
+    git reset --hard lnmp/dev
   }elseif(${BRANCH} -eq "master"){
     git submodule update --init --recursive
-    git reset --hard origin/master
+    git reset --hard lnmp/master
   }else{
     git checkout dev
-    git reset --hard origin/dev
+    git reset --hard lnmp/dev
   }
 }
 

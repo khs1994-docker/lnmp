@@ -12,7 +12,7 @@
 
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
-# 更新记录
+## 更新记录
 
 每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)，查看最新提交请切换到 [dev 分支](https://github.com/khs1994-docker/lnmp/tree/dev)。
 
@@ -20,7 +20,7 @@
 
 * ~~[v17.12 2018-01-01](https://github.com/khs1994-docker/lnmp/releases/tag/v17.12) **EOL**~~
 
-# 准备
+## 准备
 
 本项目需要以下软件：
 
@@ -28,15 +28,15 @@
 
 * [Docker Compose](https://github.com/docker/compose) 1.18.0+
 
-# 快速上手
+## 快速上手
 
 简单而言，搞明白了项目路径，Nginx 配置就行了，遇到任何问题请提出 issue。
 
-## Windows 10
+### Windows 10
 
 如果你使用的是 Windows 10 请查看 [支持文档](docs/windows.md)。
 
-## 安装
+### 安装
 
 使用以下的任意一种方法来安装本项目。
 
@@ -54,7 +54,7 @@
   # $ git clone --recursive -b dev git@github.com:khs1994-docker/lnmp.git
   ```
 
-## 启动 LNMP
+### 启动 LNMP
 
 ```bash
 $ cd lnmp
@@ -69,7 +69,7 @@ development
 
 ```
 
-## PHP 项目开发
+### PHP 项目开发
 
 在 `./app` 目录下开始 PHP 项目开发，在 `./config/nginx/` 新建 nginx 配置文件。
 
@@ -81,7 +81,7 @@ development
 $ ./lnmp-docker.sh restart nginx
 ```
 
-## 一键申请 SSL 证书
+### 一键申请 SSL 证书
 
 >由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持
 
@@ -91,17 +91,17 @@ $ ./lnmp-docker.sh ssl www.khs1994.com
 
 >一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)。
 
-## 查看详情
+### 查看详情
 
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
 
-## 自行构建 LNMP 镜像
+### 自行构建 LNMP 镜像
 
 如果要使用自行构建的镜像请查看 [支持文档](docs/development.md)
 
-## 重启
+### 重启
 
 ```bash
 # 全部重启
@@ -111,25 +111,29 @@ $ ./lnmp-docker.sh restart
 $ ./lnmp-docker.sh restart nginx php7
 ```
 
-## 停止
+### 停止
 
 ```bash
 $ ./lnmp-docker.sh stop
 ```
 
-## 销毁
+### 销毁
 
 ```bash
 $ ./lnmp-docker.sh down
 ```
 
-# 项目说明
+## 支持 Kubernets
 
-## 支持特性
+请查看 [支持文档](docs/production/k8s.md)
+
+## 项目说明
+
+### 支持特性
 
 请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)
 
-## 包含软件
+### 包含软件
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
@@ -146,7 +150,7 @@ $ ./lnmp-docker.sh down
 |[PostgreSQL](https://github.com/khs1994-docker/postgres) |`khs1994/postgres:10.1-alpine`     |[![GitHub release](https://img.shields.io/github/release/khs1994-docker/postgres.svg)](https://github.com/khs1994-docker/postgres/releases)                    |`Alpine:3.6`|
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)|`mongo:3.7.1`            |[![GitHub release](https://img.shields.io/badge/release-v3.7.1-blue.svg)](https://github.com/mongodb/mongo)                                                     |`Debian:jessie`|
 
-## 文件夹结构
+### 文件夹结构
 
 |文件夹|说明|
 |:--|:--|
@@ -158,20 +162,20 @@ $ ./lnmp-docker.sh down
 |`scripts`     |用户自定义脚本文件|
 |`tmp`         |临时文件|
 
-## 端口暴露
+### 端口暴露
 
 * 80
 * 443
 
-# 命令行工具
+## 命令行工具
 
 为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)
 
-# 生产环境
+## 生产环境
 
 马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)
 
-# LinuxKit (实验性玩法)
+## LinuxKit (实验性玩法)
 
 ```bash
 # OS: macOS
@@ -185,38 +189,38 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 浏览器打开 `127.0.0.1:8080`，即可看到网页
 
-# 生产环境用户
+## 生产环境用户
 
-## [khs1994.com](//khs1994.com)
+### [khs1994.com](//khs1994.com)
 
-# 项目国内镜像
+## 项目国内镜像
 
 * TGit：https://git.qcloud.com/khs1994-docker/lnmp.git
 * 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
 * 码云：https://gitee.com/khs1994/lnmp.git
 * Coding：https://git.coding.net/khs1994/lnmp.git
 
-# TLSv1.3
+## TLSv1.3
 
 请查看 [khs1994-website/tls-1.3](https://github.com/khs1994-website/tls-1.3)
 
-# CI/CD
+## CI/CD
 
 请使用 [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
-# Docker Daemon TLS
+## Docker Daemon TLS
 
 请查看 [khs1994-docker/dockerd-tls](https://github.com/khs1994-docker/dockerd-tls)
 
-# 支持文档
+## 支持文档
 
 https://doc.lnmp.khs1994.com
 
-# 贡献项目
+## 贡献项目
 
-请查看：[如何贡献](.github/CONTRIBUTING.md)
+请查看：[如何贡献](CONTRIBUTING.md)
 
-# 感谢
+## 感谢
 
 * LNMP
 * [Docker Cloud](https://cloud.docker.com)
@@ -224,7 +228,7 @@ https://doc.lnmp.khs1994.com
 * [Let's Encrypt](https://letsencrypt.org/)
 * [acme.sh](https://github.com/Neilpang/acme.sh)
 
-# 更多资料
+## 更多资料
 
 * [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
 * [Docker Compose 中国镜像](https://github.com/khs1994-docker/compose-cn-mirror)
@@ -238,6 +242,6 @@ https://doc.lnmp.khs1994.com
 * [bravist/lnmp-docker](https://github.com/bravist/lnmp-docker)
 * [yeszao/dnmp](https://github.com/yeszao/dnmp)
 
-# 赞赏我
+## 赞赏我
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
