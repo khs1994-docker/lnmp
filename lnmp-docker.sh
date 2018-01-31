@@ -161,6 +161,8 @@ logs(){
 
   if ! [ -d logs/mysql ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
 
+  if ! [ -d logs/mariadb ];then mkdir -p logs/mariadb && echo > logs/mariadb/error.log; fi
+
   if ! [ -d logs/nginx ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
 
   if ! [ -d logs/php-fpm ];then
@@ -188,6 +190,7 @@ cleanup(){
       logs \
       && echo > logs/mongodb/mongo.log \
       && echo > logs/mysql/error.log \
+      && echo > logs/mariadb/error.log \
       && echo > logs/nginx/error.log \
       && echo > logs/nginx/access.log \
       && echo > logs/php-fpm/access.log \
