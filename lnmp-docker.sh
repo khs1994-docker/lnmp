@@ -5,6 +5,10 @@
 # git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git
 # git remote add coding git@git.coding.net:khs1994/lnmp.git
 
+if ! [ -z "${LNMP_ROOT_PATH}" ];then cd ${LNMP_ROOT_PATH}; fi
+
+if ! [ -d cli ];then exit 1; fi
+
 if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
 help(){
