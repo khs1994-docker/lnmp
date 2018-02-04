@@ -1,5 +1,7 @@
 # 命令行补全
 
+将 `lnmp-docker.sh` 加入 `PATH`，在 `.env` 文件中设置 `LNMP_ROOT_PATH` 为本项目的绝对路径，这样你就可以在任意目录使用本项目的 CLI (命令中路径必须为相对于 app 的路径)。
+
 ## fish
 
 ```bash

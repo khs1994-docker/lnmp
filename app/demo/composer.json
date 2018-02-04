@@ -1,5 +1,9 @@
 {
   "require": {
-      "php-amqplib/php-amqplib": "2.7.*"
+    "php-amqplib/php-amqplib": "2.7.*",
+    "khs1994/docker": "@dev"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "6.*.*"
   }
 }
