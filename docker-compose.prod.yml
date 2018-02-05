@@ -26,6 +26,8 @@ services:
   redis:
     # 生产环境默认拉取镜像（可以配置私有仓库）
     image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+    ports:
+      - "${PRO_REDIS_PORT}:6379"
     volumes:
       - ./config/redis/redis.production.conf:/redis.conf:ro
     labels:

@@ -5,9 +5,29 @@
 # git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git
 # git remote add coding git@git.coding.net:khs1994/lnmp.git
 
-if ! [ -z "${LNMP_ROOT_PATH}" ];then cd ${LNMP_ROOT_PATH}; fi
+print_info(){
+  echo -e "\033[32mINFO \033[0m  $@"
+}
 
-if ! [ -d cli ];then exit 1; fi
+print_error(){
+  echo -e "\033[31mERROR\033[0m  $@"
+}
+
+NOTSUPPORT(){
+  print_error "Not Support ${OS} ${ARCH}\n"; exit 1
+}
+
+if [ -f cli/khs1994-robot.enc ];then
+    print_info "Use LNMP CLI in LNMP Root $PWD\n"
+else
+    if ! [ -z "${LNMP_ROOT_PATH}" ];then
+      # 存在环境变量，进入
+      print_info "Use LNMP CLI in other Folder\n"
+      cd ${LNMP_ROOT_PATH}
+    else
+      print_error  "在任意目录使用 LNMP CLI 必须设置环境变量，cli/README.md"
+    fi
+fi
 
 if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
 
@@ -86,17 +106,6 @@ Donate https://zan.khs1994.com
 }
 
 # env
-print_info(){
-  echo -e "\033[32mINFO \033[0m  $@"
-}
-
-print_error(){
-  echo -e "\033[31mERROR\033[0m  $@"
-}
-
-NOTSUPPORT(){
-  print_error "Not Support ${OS} ${ARCH}\n"; exit 1
-}
 
 env_status(){
   # cp .env.example to .env

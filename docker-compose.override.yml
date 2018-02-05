@@ -14,6 +14,8 @@ services:
     # 此处镜像名为 docker-compose config 查看到的镜像
     # docker-compose.overrie.yml 覆盖 docker-compose.yml 值
     image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+    ports:
+      - "${DEV_REDIS_PORT}:6379"
 
   # rabbitmq:
   #   image: ${DEVELOPMENT_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
