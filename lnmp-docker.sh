@@ -716,7 +716,6 @@ start(){
 
 php_cli(){
   local MAIN_COMMAND=$1
-  if [ ${MAIN_COMMAND} = 'vendor/bin/phpunit' ];then MAIN_COMMAND=phpunit; fi
   shift
   PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
   if [ $ARCH = 'x86_64' ];then
@@ -729,7 +728,7 @@ php_cli(){
   else
     NOTSUPPORT
   fi
-  if [ -z "$2" ];then
+  if [ $MAIN_COMMAND = 'php' ] && [ -z "$2" ];then
     print_error "$ ./lnmp-docker.sh $MAIN_COMMAND {PATH} {CMD}"
     exit 1
   else
@@ -737,6 +736,9 @@ php_cli(){
     shift
     CMD="$@"
   fi
+
+  if [ -z $path ];then print_error "$ ./lnmp-docker.sh $MAIN_COMMAND {PATH} [CMD]"; exit 1; fi
+
   print_info "在 khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} 内 /app/${path} 执行 $ ${MAIN_COMMAND} ${CMD}\n" && print_info "以下为输出内容\n\n"
     exec docker run -it \
       -v $PWD/app/${path}:/app \
