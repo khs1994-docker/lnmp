@@ -15,7 +15,7 @@
 
    >可以使用 `./lnmp-docker.sh nginx-conf` 便捷的生成 nginx 配置文件。
 
-   >使用 `./lnmp-docker.sh ...`，请务必仔细检查 nginx 文件是否配置正确。 
+   >使用 `./lnmp-docker.sh ...`，请务必仔细检查 nginx 文件是否配置正确。
 
 **5.** 执行 `./lnmp-docker.sh development`
 
@@ -43,3 +43,15 @@ Welcome use khs1994-docker/lnmp v17.11 x86_64 With Build Docker Image
 development
 
 ```
+
+## 其他问题
+
+* 在 IDE 中运行 PHPUnit 测试 Laravel 程序时，提示连接不到 Redis MySQL 怎么办？
+
+  ```bash
+  # 设置 hosts
+
+  $ vi /etc/hosts
+
+  127.0.0.1 redis mysql
+  ```

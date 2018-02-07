@@ -64,6 +64,7 @@ Commands:
   production           Use LNMP in Production (Only Support Linux x86_64)
   production-config    Validate and view the Production Compose file
   production-pull      Pull LNMP Docker Images in production
+  phpunit              Run PHPUnit
   push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
   restart              Restart LNMP services
@@ -714,6 +715,9 @@ start(){
 }
 
 php_cli(){
+  local MAIN_COMMAND=$1
+  if [ ${MAIN_COMMAND} = 'vendor/bin/phpunit' ];then MAIN_COMMAND=phpunit; fi
+  shift
   PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
   if [ $ARCH = 'x86_64' ];then
     PHP_CLI_DOCKER_IMAGE=php-fpm
@@ -726,18 +730,18 @@ php_cli(){
     NOTSUPPORT
   fi
   if [ -z "$2" ];then
-    print_error "$ ./lnmp-docker.sh php {PATH} {CMD}"
+    print_error "$ ./lnmp-docker.sh $MAIN_COMMAND {PATH} {CMD}"
     exit 1
   else
     path=$1
     shift
     CMD="$@"
   fi
-  print_info "在 khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} 内 /app/${path} 执行 $ php ${CMD}\n" && print_info "以下为输出内容\n\n"
+  print_info "在 khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} 内 /app/${path} 执行 $ ${MAIN_COMMAND} ${CMD}\n" && print_info "以下为输出内容\n\n"
     exec docker run -it \
       -v $PWD/app/${path}:/app \
       khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
-      php ${CMD}
+      $MAIN_COMMAND ${CMD}
 }
 
 # 入口文件
@@ -953,7 +957,11 @@ main() {
     ;;
 
   php )
-    run_docker; php_cli "$@"
+    run_docker; php_cli php "$@"
+    ;;
+
+  phpunit )
+    run_docker; php_cli vendor/bin/phpunit "$@"
     ;;
 
   down )
