@@ -48,6 +48,7 @@ Commands:
   config               Validate and view the Development Compose file
   development          Use LNMP in Development
   development-pull     Pull LNMP Docker Images in development
+  daemon-socket        Expose http://0.0.0.0:2375 on macOS (Only Support macOS)
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
   help                 Display this help message
@@ -648,7 +649,7 @@ ssl(){
   if [ "$1" = 'acme.sh' ];then
   exec docker run -it --rm \
          -v $PWD/config/nginx/ssl:/ssl \
-         --mount source=lnmp_ssl-data,target=/home/.acme.sh \
+         --mount source=lnmp_ssl-data,target=/root/.acme.sh \
          --env-file .env \
          khs1994/acme "$@"
 
@@ -657,7 +658,7 @@ ssl(){
   fi
   exec docker run -it --rm \
          -v $PWD/config/nginx/ssl:/ssl \
-         --mount source=lnmp_ssl-data,target=/home/.acme.sh \
+         --mount source=lnmp_ssl-data,target=/root/.acme.sh \
          --env-file .env \
          -e DNS_TYPE=$DNS_TYPE \
          -e url=$url \
@@ -1076,11 +1077,11 @@ main() {
 
     if [ "$opt" = 'true' ];then
       docker-compose exec nginx nginx -t
-      echo ;print_info "nginx configuration file test is successful\n"
       if [ "$?" = 0 ];then
+        echo; print_info "nginx configuration file test is successful\n"
         docker-compose $command "$@"
       else
-        print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1;
+        echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1;
       fi
     else
       print_info "You Exec docker-compose commands"; echo
@@ -1088,6 +1089,14 @@ main() {
     fi
     ;;
 
+ daemon-socket )
+   if [ $OS != 'Darwin' ];then NOTSUPPORT; fi
+   docker run -d --restart=always \
+     -p 2375:2375 \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -e PORT=2375 \
+     shipyard/docker-proxy
+     ;;
 
   * )
   if ! [ -z "$command" ];then
