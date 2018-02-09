@@ -40,13 +40,11 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
-  apache-config        Generate Apache2 vhost conf
   backup               Backup MySQL databases
   build                Use LNMP With Self Build images (Only Support x86_64)
   build-config         Validate and view the Self Build images Compose file
   cleanup              Cleanup log files
   compose              Install docker-compose
-  composer             Use PHP Dependency Manager Composer
   config               Validate and view the Development Compose file
   development          Use LNMP in Development
   development-pull     Pull LNMP Docker Images in development
@@ -56,27 +54,31 @@ Commands:
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
   k8s-down             Remove k8s LNMP
+  production           Use LNMP in Production (Only Support Linux x86_64)
+  production-config    Validate and view the Production Compose file
+  production-pull      Pull LNMP Docker Images in production
+  push                 Build and Pushes images to Docker Registory
+  restore              Restore MySQL databases
+  restart              Restart LNMP services
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-push           Push Swarm image (nginx php7)
+  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-down           Remove LNMP stack IN Swarm mode
+  update               Upgrades LNMP
+  upgrade              Upgrades LNMP
+
+PHP TOOLS:
+  apache-config        Generate Apache2 vhost conf
+  composer             Use PHP Dependency Manager Composer
   laravel              Create a new Laravel application
   laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
   php                  Run PHP in CLI
-  production           Use LNMP in Production (Only Support Linux x86_64)
-  production-config    Validate and view the Production Compose file
-  production-pull      Pull LNMP Docker Images in production
   phpunit              Run PHPUnit
-  push                 Build and Pushes images to Docker Registory
-  restore              Restore MySQL databases
-  restart              Restart LNMP services
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
-  swarm-build          Build Swarm image (nginx php7)
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-deploy         Deploy LNMP stack TO Swarm mode
-  swarm-down           Remove LNMP stack IN Swarm mode
   tp                   Create a new ThinkPHP application
-  update               Upgrades LNMP
-  upgrade              Upgrades LNMP
 
 Container CLI:
   apache-cli
@@ -740,7 +742,7 @@ php_cli(){
   if [ -z $path ];then print_error "$ ./lnmp-docker.sh $MAIN_COMMAND {PATH} [CMD]"; exit 1; fi
 
   print_info "在 khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} 内 /app/${path} 执行 $ ${MAIN_COMMAND} ${CMD}\n" && print_info "以下为输出内容\n\n"
-    exec docker run -it \
+    exec docker run -it --rm \
       -v $PWD/app/${path}:/app \
       khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
       $MAIN_COMMAND ${CMD}
