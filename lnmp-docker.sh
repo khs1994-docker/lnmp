@@ -67,7 +67,7 @@ Commands:
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
 
-PHP TOOLS:
+PHP Tools:
   apache-config        Generate Apache2 vhost conf
   composer             Use PHP Dependency Manager Composer
   laravel              Create a new Laravel application

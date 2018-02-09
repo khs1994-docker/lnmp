@@ -1,4 +1,4 @@
-FROM khs1994/php-fpm:7.2.1-alpine3.7
+FROM khs1994/php-fpm:7.2.2-alpine3.7
 
 COPY . /app/demo/
 
