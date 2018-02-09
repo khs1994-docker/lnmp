@@ -18,6 +18,7 @@ complete -W "apache-conf \
         laravel-artisan \
         new \
         php \
+        phpunit \
         production \
         production-config \
         production-pull \

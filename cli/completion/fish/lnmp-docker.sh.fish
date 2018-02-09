@@ -17,6 +17,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a laravel-artisan   -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a new               -d     'New PHP Project and generate nginx conf and issue SSL certificate'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a nginx-conf        -d     'Generate nginx vhost conf'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a php               -d     'Run PHP in CLI'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a phpunit           -d     'Run PHPUnit'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a production        -d     'Use LNMP in Production(Only Support Linux x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a production-config -d     'Validate and view the Production Compose file'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a production-pull   -d     'Pull LNMP Docker Images in production'
