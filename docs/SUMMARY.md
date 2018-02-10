@@ -17,6 +17,7 @@
     * [xdebug](xdebug.md)
     * [laravel](laravel.md)
     * [Composer](composer.md)
+    * [PHPUnit](phpunit.md)
 * 生产环境(重要)
     * [安装](production/install.md)
     * [配置](production/README.md)

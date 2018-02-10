@@ -7,6 +7,7 @@ complete -W "apache-conf \
         cleanup \
         composer \
         config \
+        daemon-socket \
         development \
         development-pull \
         down \
