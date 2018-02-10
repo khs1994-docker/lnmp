@@ -26,7 +26,7 @@ $ ./lnmp-docker.sh ssl www.khs1994.com
 ### 一次申请多个网站证书
 
 ```bash
-# 网站之间用英文逗号分隔
+# 第一个网址不用加 -d，后边每个网址前必须加 -d 参数
 
 $ ./lnmp-docker.sh ssl www.khs1994.com -d test.khs1994.com
 ```
