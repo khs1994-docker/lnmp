@@ -1,6 +1,6 @@
 FROM alpine
 
-ENV ACME_SH_VERSION=2.7.5
+ENV ACME_SH_VERSION=2.7.6
 
 RUN apk add --no-cache openssl \
                        curl \

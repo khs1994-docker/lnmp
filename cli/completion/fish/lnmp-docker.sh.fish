@@ -1,4 +1,5 @@
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a apache-conf       -d    'Generate Apache2 vhost conf'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a acme.sh           -d     'Run original acme.sh command to issue SSL certificate'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a apache-conf       -d     'Generate Apache2 vhost conf'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a backup            -d     'Backup MySQL databases'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build             -d     'Use LNMP With Self Build images(Support x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-config      -d     'Validate and view the Self Build images Compose file'

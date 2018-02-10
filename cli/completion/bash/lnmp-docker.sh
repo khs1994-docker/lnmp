@@ -1,6 +1,7 @@
 #!/bin/bash
 
-complete -W "apache-conf \
+complete -W "acme.sh \
+        apache-conf \
         backup \
         build \
         build-config \

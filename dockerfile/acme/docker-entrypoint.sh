@@ -8,12 +8,15 @@ alias acme.sh="/root/.acme.sh/acme.sh"
 
 issue(){
   echo "正在申请证书 ..." ; echo
-
+  first=$1
+  shift
   acme.sh --issue \
           --debug \
-          --dns $DNS_TYPE \
-          -d $url \
-          --keylength ec-256
+          --dns dns_dp \
+          --keylength ec-256 \
+          -d $first "$@"
+
+  if [ $? = 0 ];then install $first; fi
 }
 
 install(){
@@ -21,22 +24,20 @@ install(){
 
   acme.sh --install-cert \
     --debug\
-    -d $url \
-    --key-file /ssl/$url.key \
-    --fullchain-file /ssl/$url.crt \
+    -d $1 \
+    --key-file /ssl/$1.key \
+    --fullchain-file /ssl/$1.crt \
     --ecc
 }
 
+# 传入 bash sh
+
 if [ "$1" = bash ] || [ "$1" = sh ];then exec /bin/sh; fi
 
-# 如果参数大于等于 1
+# 传入 acme.sh ...
 
-if [ "$#" -ge 1 ];then exec "$@"; fi
+if [ "$1" = 'acme.sh' ];then exec "$@"; fi
 
-# 如果没有参数，并且存在 $url 环境变量
+# 存在环境变量
 
-if [ "$#" = 0 ] && [ ! -z "$url" ];then issue; fi
-
-# 之后转移证书
-
-if [ "$?" = 0 ];then install; fi
+if [ "$DNS_TYPE" = 'dns_dp' ];then issue "$@"; fi
