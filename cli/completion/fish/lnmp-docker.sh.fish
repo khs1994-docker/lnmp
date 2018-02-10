@@ -5,7 +5,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-config      -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a cleanup           -d     'Cleanup log files'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a composer          -d     'Use PHP Package Management composer'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a config            -d     'Validate and view the Development Compose file'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a daemon-socket     -d     'Expose http://0.0.0.0:2375 on macOS'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a daemon-socket     -d     'Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development       -d     'Use LNMP in Development'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development-pull  -d     'Pull LNMP Docker Images in development'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a down              -d     'Stop and remove LNMP Docker containers, networks'

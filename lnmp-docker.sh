@@ -48,7 +48,7 @@ Commands:
   config               Validate and view the Development Compose file
   development          Use LNMP in Development
   development-pull     Pull LNMP Docker Images in development
-  daemon-socket        Expose http://0.0.0.0:2375 on macOS (Only Support macOS)
+  daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
   help                 Display this help message
