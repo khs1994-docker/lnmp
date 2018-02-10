@@ -3,7 +3,7 @@ services:
 
   acme:
     build: .
-    image: khs1994/acme:latest
+    image: khs1994/acme:${ACME_VERSION}
     env_file:
       - ./.env
     volumes:

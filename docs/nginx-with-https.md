@@ -17,43 +17,60 @@ DP_Id=
 DP_Key=
 ```
 
+### 一次申请一个网站证书
+
 ```bash
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
-## 其他 DNS 服务商
-
-请参照 `acme.sh` [支持文档](https://github.com/Neilpang/acme.sh/tree/master/dnsapi)，设置好相关变量之后，使用 `acme.sh` 原始命令申请 SSL 证书。
-
-申请证书
+### 一次申请多个网站证书
 
 ```bash
-$ ./lnmp-docker.sh ssl acme.sh \
+# 网站之间用英文逗号分隔
+
+$ ./lnmp-docker.sh ssl www.khs1994.com -d test.khs1994.com
+```
+
+## 其他 DNS 服务商
+
+请参照 `acme.sh` [支持文档](https://github.com/Neilpang/acme.sh/tree/master/dnsapi)，在 `.env` 文件中设置好必要的变量之后，使用 `acme.sh` 原始命令申请 SSL 证书。
+
+这里以 `GoDaddy.com` 为例，在 `.env` 文件中增加以下内容
+
+```bash
+GD_Key=sdf...
+GD_Secret=sdf...
+```
+
+执行以下命令，申请证书
+
+```bash
+$ ./lnmp-docker.sh acme.sh \
     --issue \
     --dns dns_gd \
     -d example.com \
     -d www.example.com
 ```
 
-安装 SSL 证书(Nginx)
+执行以下命令，安装 SSL 证书(Nginx)
 
 ```bash
-$ ./lnmp-docker.sh ssl acme.sh \
+$ ./lnmp-docker.sh acme.sh \
     --install-cert \
     -d example.com \
-    --key-file /path/to/keyfile/in/nginx/key.pem  \
-    --fullchain-file /path/to/fullchain/nginx/cert.pem
+    --key-file /ssl/example.com.key  \
+    --fullchain-file /ssl/example.com.cert
 ```
 
-安装 SSL 证书(Apache)
+执行以下命令，安装 SSL 证书(Apache)
 
 ```bash
-$ ./lnmp-docker.sh ssl acme.sh \
+$ ./lnmp-docker.sh acme.sh \
     --install-cert \
     -d example.com \
-    --cert-file      /path/to/certfile/in/apache/cert.pem  \
-    --key-file       /path/to/keyfile/in/apache/key.pem  \
-    --fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem
+    --cert-file      /ssl/example.com.cert \
+    --key-file       /ssl/example.com.key \
+    --fullchain-file /ssl/fullchain.pem
 ```
 
 ## 配置 nginx

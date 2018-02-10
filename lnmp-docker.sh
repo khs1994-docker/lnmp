@@ -5,6 +5,10 @@
 # git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git
 # git remote add coding git@git.coding.net:khs1994/lnmp.git
 
+# 系统环境变量具有最高优先级
+
+env > /tmp/.khs1994.env
+
 print_info(){
   echo -e "\033[32mINFO \033[0m  $@"
 }
@@ -29,8 +33,6 @@ else
     fi
 fi
 
-if [ "$1" = "development" -o "$1" = "production" ];then APP_ENV=$1; fi
-
 help(){
   echo  -e "
 Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
@@ -40,6 +42,7 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
+  acme.sh              Run original acme.sh command to issue SSL certificate
   backup               Backup MySQL databases
   build                Use LNMP With Self Build images (Only Support x86_64)
   build-config         Validate and view the Self Build images Compose file
@@ -105,16 +108,18 @@ Read './docs/*.md' for more information about commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
 
+You must Update .env file when update this project.
+
 Donate https://zan.khs1994.com
 "
 }
-
-# env
 
 env_status(){
   # cp .env.example to .env
   if [ -f .env ];then print_info ".env file existing\n"; else print_error ".env file NOT existing\n"; cp .env.example .env ; fi
 }
+
+# 自动升级软件版本
 
 update_version(){
   . .env.example
@@ -141,6 +146,8 @@ update_version(){
   done
 }
 
+# Docker 是否运行
+
 run_docker(){
   docker info 2>&1 >/dev/null
   if [ $? -ne 0 ];then
@@ -151,23 +158,6 @@ run_docker(){
     exit 1
   fi
 }
-
-env_status ; ARCH=`uname -m` ; OS=`uname -s`
-
-COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
-COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
-
-# 获取正确版本号
-
-. .env ; . cli/.env
-
-if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
-
-if [ ${OS} = "Darwin" ];then
-  sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-else
-  sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
-fi
 
 # 创建日志文件
 
@@ -222,13 +212,12 @@ cleanup(){
 
 gitbook(){
   docker rm -f lnmp-docs
-  docker run -it --rm \
+  exec docker run -it --rm \
     -p 4000:4000 \
     --name lnmp-docs \
     -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
-  exit 0
 }
 
 dockerfile_update_sed(){
@@ -332,8 +321,6 @@ install_docker_compose(){
   fi
 }
 
-# 主函数
-
 docker_compose(){
   command -v docker-compose >/dev/null 2>&1
   if [ $? = 0 ];then
@@ -391,8 +378,6 @@ demo() {
 # 初始化
 
 init() {
-  # 升级软件版本
-  update_version
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
@@ -464,27 +449,31 @@ update(){
   done
 
   GIT_STATUS=`git status -s --ignore-submodules`
-  if [ ! -z "${GIT_STATUS}" ] && [ ! "$force" = 'true' ];then git status -s --ignore-submodules; echo; print_error "Please commit then update"; exit 1; fi
+  if [ ! -z "${GIT_STATUS}" ] && [ ! "$force" = 'true' ];then
+     git status -s --ignore-submodules
+     echo; print_error "Please commit then update"
+     exit 1
+  fi
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
-  if [ ${BRANCH} = 'dev' ];then
+  if [ ${BRANCH} = 'dev' ] || [ ${BRANCH} = 'master' ];then
     git submodule update --init --recursive
-    git reset --hard lnmp/dev
-  elif [ ${BRANCH} = 'master' ];then
-    git submodule update --init --recursive
-    git reset --hard lnmp/master
+    git reset --hard lnmp/${BRANCH}
   else
     print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
   fi
   command -v bash > /dev/null 2>&1
   if ! [ $? = 0  ];then sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh; fi
+  # 升级软件版本
+  update_version
 }
 
 # 提交项目「开发者选项」
 
 commit(){
   # 检查网络连接
-  network && print_info `git remote get-url origin` ${BRANCH}
+  network
+  print_info `git remote get-url origin` ${BRANCH}
   if [ ${BRANCH} = 'dev' ];then
     git add .
     git commit -m "Update [skip ci]"
@@ -642,27 +631,31 @@ server{
 
 # 申请 ssl 证书
 
-ssl(){
-  if [ -z "$DP_Id" ];then print_error "Please set ENV in .env file"; exit 1; fi
-  if [ -z "$1" ];then read -p "Please input domain: 「example www.domain.com 」" url; else url=$1; fi
-  if [ -z "$url" ];then echo; print_error 'Please input content'; exit 1; fi
-  if [ "$1" = 'acme.sh' ];then
+acme(){
   exec docker run -it --rm \
          -v $PWD/config/nginx/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/root/.acme.sh \
          --env-file .env \
-         khs1994/acme "$@"
+         khs1994/acme:${ACME_VERSION} acme.sh "$@"
+}
 
-  # ./lnmp-docker.sh ssl acme.sh --issue --dns dns_gd -d example.com -d www.example.com
+ssl(){
+  if [ -z "$DP_Id" ];then print_error "Please set DNS API ENV in .env file"; exit 1; fi
+  if [ -z "$1" ];then
+    exec echo "command example
 
+$ ./lnmp-docker.sh ssl khs1994.com
+
+$ ./lnmp-docker.sh ssl khs1994.com -d www.khs1994.com -d t.khs1994.com
+"
   fi
   exec docker run -it --rm \
          -v $PWD/config/nginx/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/root/.acme.sh \
          --env-file .env \
-         -e DNS_TYPE=$DNS_TYPE \
-         -e url=$url \
-         khs1994/acme
+         -e DP_Id=${DP_Id} \
+         -e DP_Key=${DP_Key} \
+         khs1994/acme:${ACME_VERSION} "$@"
 }
 
 ssl_self(){
@@ -752,9 +745,13 @@ php_cli(){
 # 入口文件
 
 main() {
-  logs; print_info "ARCH is ${OS} ${ARCH}\n"; print_info `docker --version`; echo; docker_compose
+  logs
   local command=$1; shift
   case $command in
+  acme.sh )
+    run_docker; acme "$@"
+    ;;
+
   init )
     init
     ;;
@@ -1025,7 +1022,7 @@ main() {
     ;;
 
   ssl )
-    ssl "$@"
+    run_docker; ssl "$@"
     ;;
 
   ssl-self )
@@ -1108,7 +1105,31 @@ main() {
   esac
 }
 
-# i=0
+ARCH=`uname -m`
+
+OS=`uname -s`
+
+COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
+
+COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
+
+# 获取正确版本号
+
+env_status
+
+. .env ; . cli/.env ; . /tmp/.khs1994.env > /dev/null 2>&1 ; rm -rf /tmp/.khs1994.env
+
+if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
+
+if [ "$1" = "development" ] || [ "$1" = "production" ];then APP_ENV=$1; fi
+
+# 写入版本号
+
+if [ ${OS} = "Darwin" ];then
+  sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
+else
+  sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
+fi
 
 if [ ${ARCH} = 'armv7l' ];then
     sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm32v7/g" .env
@@ -1118,5 +1139,13 @@ elif [ ${ARCH} = 'aarch64' ];then
     sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm64v8/g" .env
     sed -i "s/^ARM_PHP_BASED_OS.*/ARM_PHP_BASED_OS=alpine3.7/g" .env
 fi
+
+print_info "ARCH is ${OS} ${ARCH}\n"
+
+print_info `docker --version`
+
+echo; docker_compose
+
+if [ $# = 0 ];then help; exit 0; fi
 
 main "$@"
