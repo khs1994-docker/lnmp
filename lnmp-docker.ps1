@@ -4,21 +4,21 @@ $global:KHS1994_LNMP_PHP_VERSION="7.2.2"
 Function printError(){
 Write-Host " "
 Write-Host 'Error   ' -NoNewLine -ForegroundColor Red
-Write-Host $args['0'];
+Write-Host "$args";
 Write-Host " "
 }
 
 Function printInfo(){
 Write-Host " "
 Write-Host 'INFO    ' -NoNewLine -ForegroundColor Green
-Write-Host $args['0'];
+Write-Host "$args";
 Write-Host " "
 }
 
 Function printWarning(){
 Write-Host " "
 Write-Host 'Warning  ' -NoNewLine -ForegroundColor Red
-Write-Host $args['0'];
+Write-Host "$args";
 Write-Host " "
 }
 
@@ -32,6 +32,9 @@ Function env_status(){
 }
 
 Function logs(){
+  if (! (Test-Path logs\apache)){
+    New-Item logs\apache -type directory | Out-Null
+  }
   if (! (Test-Path logs\mongodb)){
     New-Item logs\mongodb -type directory | Out-Null
     New-Item logs\mongodb\mongo.log -type file | Out-Null
@@ -40,6 +43,10 @@ Function logs(){
     New-Item logs\mysql -type directory | Out-Null
     New-Item logs\mysql\error.log -type file | Out-Null
   }
+  if (-not (Test-Path logs\mariadb)){
+    New-Item logs\mariadb -type directory | Out-Null
+    New-Item logs\mariadb\error.log -type file | Out-Null
+  }
   if (! (Test-Path logs\nginx)){
     New-Item logs\nginx -type directory | Out-Null
     New-Item logs\nginx\access.log -type file | Out-Null
@@ -47,6 +54,7 @@ Function logs(){
   }
   if (! (Test-Path logs\php-fpm)){
     New-Item logs\php-fpm -type directory | Out-Null
+    New-Item logs\php-fpm\php -type directory | Out-Null
     New-Item logs\php-fpm\error.log -type file | Out-Null
     New-Item logs\php-fpm\access.log -type file | Out-Null
     New-Item logs\php-fpm\xdebug-remote.log -type file | Out-Null
@@ -88,21 +96,27 @@ Commands:
   help                 Display this help message
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
-  k8s-down             Remove k8s LNMP
-  laravel              Create a new Laravel application
-  laravel-artisan      Use Laravel CLI artisan
-  new                  New PHP Project and generate nginx conf and issue SSL certificate
-  nginx-config         Generate nginx conf
-  php                  Run PHP in CLI
+  k8s-build            Build LNMP on k8s image (nginx php7)
+  k8s-down             Remove LNMP on k8s
+  k8s-push             Push LNMP on k8s image (nginx php7)
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
-  ssl                  Issue SSL certificate powered by acme.sh
+  restart              Restart LNMP services
   ssl-self             Issue Self-signed SSL certificate
-  swarm-build          Build Swarm image (nginx php7)
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-deploy         Deploy LNMP stack TO Swarm mode
-  swarm-down           Remove LNMP stack IN Swarm mode
+
+PHP Tools:
+  apache-config        Generate Apache2 vhost conf
+  composer             Use PHP Dependency Manager Composer
+  laravel              Create a new Laravel application
+  laravel-artisan      Use Laravel CLI artisan
+  new                  New PHP Project and generate nginx conf and issue SSL certificate
+  nginx-config         Generate nginx vhost conf
+  php                  Run PHP in CLI
+  phpunit              Run PHPUnit
+  ssl-self             Issue Self-signed SSL certificate
+  tp                   Create a new ThinkPHP application
+
 
 Container CLI:
   apache-cli
@@ -117,43 +131,50 @@ Container CLI:
   redis-cli
 
 Tools:
-  cn-mirror            Push master branch to CN mirror
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
 
-Read './docs/*.md' for more information about commands."
-}
+Read './docs/*.md' for more information about commands.
 
-Function backup(){
-  docker-compose exec mysql /backup/backup.sh $args[1] $args[2] $args[3]
+You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
+
+You must Update .env file when update this project.
+
+Donate https://zan.khs1994.com"
+exit
 }
 
 Function cleanup(){
   Write-Host " "
+  logs
+  rm logs\apache -Recurse -Force
   rm logs\mongodb -Recurse -Force
   rm logs\mysql -Recurse -Force
+  rm logs\mariadb -Recurse -Force
   rm logs\nginx -Recurse -Force
   rm logs\php-fpm -Recurse -Force
   rm logs\redis -Recurse -Force
   logs
+
+  printInfo "Cleanup logs files Success"
 }
 
 Function composer($COMPOSE_PATH,$CMD){
   printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
   printInfo 'output information'
-  docker run -it --rm -v $pwd\app\${COMPOSE_PATH}:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 composer ${CMD}
+  docker run -it --rm --mount type=bind,src=$pwd/app/${COMPOSE_PATH},target=/app --mount type=bind,src=$pwd/tmp/cache,target=/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 composer ${CMD}
 }
 
 Function laravel($LARAVEL_PATH){
   printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
   printInfo 'output information'
-  docker run -it --rm -v $pwd\app:/app -v $pwd\tmp\cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 laravel new ${LARAVEL_PATH}
+  docker run -it --rm --mount type=bind,src=$pwd/app,target=/app -v $pwd/tmp/cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 laravel new ${LARAVEL_PATH}
 }
 
 Function laravel-artisan($LARAVEL_PATH,$CMD){
   printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${LARAVEL_PATH} EXEC $ php artisan ${CMD}"
   printInfo 'output information'
-  docker run -it --rm -v $pwd\app\${LARAVEL_PATH}:/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php artisan ${CMD}
+  docker run -it --rm --mount type=bind,src=$pwd\app\${LARAVEL_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php artisan ${CMD}
 }
 
 Function update(){
@@ -173,17 +194,24 @@ Function update(){
   }
 }
 
-Function main() {
-  env_status
-  switch($args[0])
-  {
+# main
+
+env_status
+
+if ($args.Count -eq 0){
+  help_information
+}else{
+  $first, $other = $args
+}
+
+switch($first){
 
     init {
       init
     }
 
     backup {
-      backup
+        docker-compose exec mysql /backup/backup.sh $other
     }
 
     build {
@@ -203,7 +231,8 @@ Function main() {
     }
 
     composer {
-      composer $args[1] $args[2]
+      $path,$other=$other
+      composer $path $other
     }
 
     development {
@@ -216,15 +245,11 @@ Function main() {
     }
 
     down {
-      docker-compose down
+      docker-compose down --remove-orphans
     }
 
     docs {
-      docker run -it --rm -p 4000:4000 -v $pwd\docs:/srv/gitbook-src khs1994/gitbook server
-    }
-
-    help {
-      help_information
+      docker run -it --rm -p 4000:4000 --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
     }
 
     k8s {
@@ -250,26 +275,39 @@ Function main() {
       cd ..
     }
 
+    k8s-build {
+      docker-compose -f docker-stack.yml build
+    }
+
+    k8s-push {
+      docker-compose -f docker-stack.yml push nginx php7
+    }
+
     laravel {
-      laravel $args[1]
+      laravel $other
     }
 
     laravel-artisan {
-      laravel-artisan $args[1] $args[2]
+      $path,$other=$other
+      laravel-artisan $path $other
     }
 
     new {
-      printError "Please Exec this command in git bash on Windows 10 or WSL"
+      printError "TODO"
     }
 
     nginx-config {
-      printError "Please Exec this command in git bash on Windows 10 or WSL"
+      printError "TODO"
     }
 
     php {
-      $PHP_PATH=$args[1]
-      $PHP_FILE=$args[2]
-      docker run -it --rm -v $pwd\app\${PHP_PATH}:/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php $PHP_FILE
+      if ($other.Count -lt 2){
+        printError "./lnmp-docker.ps1 php {PATH} {COMMAND}"
+        exit
+      }
+
+      $PHP_PATH,$other=$other
+      docker run -it --rm --mount type=bind,src=$pwd/app/${PHP_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php $other
     }
 
     production-config {
@@ -282,32 +320,16 @@ Function main() {
     }
 
     restore {
-       docker-compose exec mysql /backup/restore.sh $args[1]
+       docker-compose exec mysql /backup/restore.sh $other
     }
 
-    ssl {
-      printError "Please Exec this command in git bash on Windows 10 or WSL"
+    restart {
+      docker-compose restart $other
     }
 
     ssl-self {
-      docker run -it --rm -v $pwd\config\nginx\ssl-self:/ssl khs1994/tls $args[1] $args[2] $args[3] $args[4] $args[5] $args[6] $args[7] $args[8] $args[9]
-      printInfo 'Please set hosts in C:\Windows\System32\drivers\etc\hosts'
-    }
-
-    swarm-build {
-      docker-compose -f docker-stack.yml build
-    }
-
-    swarm-push {
-      docker-compose -f docker-stack.yml push nginx php7
-    }
-
-    swarm-deploy {
-      docker stack deploy -c docker-stack.yml lnmp
-    }
-
-    swarm-down {
-      docker stack rm lnmp
+      docker run -it --rm -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
+      printInfo 'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
 
     apache-cli {
@@ -324,6 +346,10 @@ Function main() {
 
     mysql-cli {
       docker-compose exec mysql bash
+    }
+
+    mariadb-cli {
+      docker-compose exec mariadb bash
     }
 
     nginx-cli {
@@ -346,27 +372,16 @@ Function main() {
       docker-compose exec redis sh
     }
 
-    update {
+    {$_ -in "update","upgrade"} {
       update
     }
 
-    upgrade {
-      update
-    }
-
-    cn-mirror {
-      printError "Please Exec this command in git bash on Windows 10 or WSL"
+    {$_ -in "-h","--help","help"} {
+      help_information
     }
 
     default {
-      if ($args[2].Length -eq 0){
-        help_information
-      }else{
-        printInfo "You Exec docker-compose command"
-        docker-compose $args[1] $args[2] $args[3] $args[4] $args[5]
+        printInfo "You Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
+        docker-compose $other
       }
-    }
-  }
 }
-
-main $args[0] $args[1] $args[2] $args[3] $args[4] $args[5] $args[6] $args[7] $args[8] $args[9]
