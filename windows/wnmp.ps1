@@ -1,6 +1,13 @@
-$source=$pwd
+# ！！！！！！！！！！！！！！！
+# ！！ 务必设置软件目录   ！！
+#！！！！！！！！！！！！！！！
+
 $NGINX_PATH="C:/nginx-1.13.8"
 $PHP_PATH="C:/php"
+
+##########################################
+
+$source=$pwd
 
 Function printInfo(){
   Write-Host "$args" -ForegroundColor Red
