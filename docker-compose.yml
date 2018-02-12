@@ -2,7 +2,7 @@ version: "3.5"
 services:
 
   mysql:
-    restart: always
+    # restart: always
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -58,7 +58,7 @@ services:
   #     - "com.khs1994.lnmp.app.env=development"
 
   redis:
-    restart: always
+    # restart: always
     image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
     # ports:
@@ -153,7 +153,7 @@ services:
   #     - "com.khs1994.lnmp.app.env=development"
 
   php7:
-    restart: always
+    # restart: always
     image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
@@ -178,7 +178,7 @@ services:
       - "com.khs1994.lnmp.app.env=development"
 
   nginx:
-    restart: always
+    # restart: always
     image: "nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     #
     # TLSv1.3

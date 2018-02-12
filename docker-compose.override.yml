@@ -43,7 +43,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    restart: always
+    # restart: always
     networks:
       - backend
     environment:
