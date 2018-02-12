@@ -87,7 +87,6 @@ Commands:
   build                Use LNMP With Build images(Support x86_64)
   build-config         Validate and view the build images Compose file
   cleanup              Cleanup log files
-  composer             Use PHP Package Management composer
   config               Validate and view the Development Compose file
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
   development-pull     Pull LNMP Docker Images in development
@@ -159,13 +158,13 @@ Function cleanup(){
   printInfo "Cleanup logs files Success"
 }
 
-Function composer($COMPOSE_PATH,$CMD){
+Function _composer($COMPOSE_PATH,$CMD){
   printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
   printInfo 'output information'
   docker run -it --rm --mount type=bind,src=$pwd/app/${COMPOSE_PATH},target=/app --mount type=bind,src=$pwd/tmp/cache,target=/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 composer ${CMD}
 }
 
-Function laravel($LARAVEL_PATH){
+Function _laravel($LARAVEL_PATH){
   printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
   printInfo 'output information'
   docker run -it --rm --mount type=bind,src=$pwd/app,target=/app -v $pwd/tmp/cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 laravel new ${LARAVEL_PATH}
@@ -177,7 +176,7 @@ Function laravel-artisan($LARAVEL_PATH,$CMD){
   docker run -it --rm --mount type=bind,src=$pwd\app\${LARAVEL_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php artisan ${CMD}
 }
 
-Function update(){
+Function _update(){
   git remote rm lnmp
   git remote add lnmp git@github.com:khs1994-docker/lnmp
   git fetch lnmp
@@ -210,6 +209,10 @@ switch($first){
       init
     }
 
+    apache-config {
+      printInfo "TODO"
+    }
+
     backup {
         docker-compose exec mysql /backup/backup.sh $other
     }
@@ -232,7 +235,7 @@ switch($first){
 
     composer {
       $path,$other=$other
-      composer $path $other
+      _composer $path $other
     }
 
     development {
@@ -284,7 +287,7 @@ switch($first){
     }
 
     laravel {
-      laravel $other
+      _laravel $other
     }
 
     laravel-artisan {
@@ -293,21 +296,52 @@ switch($first){
     }
 
     new {
-      printError "TODO"
+      printInfo "TODO"
     }
 
     nginx-config {
-      printError "TODO"
+      printInfo "TODO"
     }
 
     php {
       if ($other.Count -lt 2){
-        printError "./lnmp-docker.ps1 php {PATH} {COMMAND}"
+        printError "
+
+Usage:
+
+./lnmp-docker.ps1 php {PATH} [options] [-f] <file> [--] [args...]
+./lnmp-docker.ps1 php {PATH} [options] -r <code> [--] [args...]
+./lnmp-docker.ps1 php {PATH} [options] [-B <begin_code>] -R <code> [-E <end_code>] [--] [args...]
+./lnmp-docker.ps1 php {PATH} [options] [-B <begin_code>] -F <file> [-E <end_code>] [--] [args...]
+./lnmp-docker.ps1 php {PATH} [options] -S <addr>:<port> [-t docroot] [router]
+./lnmp-docker.ps1 php {PATH) [options] -- [args...]
+./lnmp-docker.ps1 php {PATH) [options] -a
+"
         exit
       }
 
       $PHP_PATH,$other=$other
+      printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${PHP_PATH} EXEC $ php $other"
+
+
       docker run -it --rm --mount type=bind,src=$pwd/app/${PHP_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php $other
+    }
+
+    phpunit {
+      if ($other.Count -lt 1){
+        printError "
+
+Usage:
+
+./lnmp-docker.ps1 phpunit {PATH} [options] UnitTest [UnitTest.php]
+./lnmp-docker.ps1 phpunit {PATH} [options] <directory>"
+        exit
+      }
+
+      $PHPUNIT_PATH,$other=$other
+      printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${PHPUNIT_PATH} EXEC $ vendor/bin/phpunit ${other}"
+
+      docker run -it --rm --mount type=bind,src=$pwd/app/${PHPUnit_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 vendor/bin/phpunit $other
     }
 
     production-config {
@@ -330,6 +364,11 @@ switch($first){
     ssl-self {
       docker run -it --rm -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
       printInfo 'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
+    }
+
+    tp {
+      $TP_PATH,$other=$other
+      _composer "" create-project,topthink/think=5.0.*,${TP_PATH},--prefer-dist,$other
     }
 
     apache-cli {
@@ -373,7 +412,7 @@ switch($first){
     }
 
     {$_ -in "update","upgrade"} {
-      update
+      _update
     }
 
     {$_ -in "-h","--help","help"} {

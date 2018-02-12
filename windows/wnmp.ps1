@@ -75,6 +75,11 @@ Function _status(){
   printInfo "Memcached Status (WSL)
   "
   Get-Process | Where-Object { $_ -match "memcached"}
+  Write-Host "
+  "
+  printInfo "Apache Status (WSL)
+  "
+  Get-Process | Where-Object { $_ -match "httpd"}
 }
 
 Function startSingle(){

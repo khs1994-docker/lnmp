@@ -7,7 +7,7 @@
 
 # Don't Run this shell script on git bash Windows, please use ./lnmp-docker.ps1
 
-if [ "uname -s" != 'Darwin' ] || [ "uname -s" != 'Linux' ] ;then echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
+if [ `uname -s` != 'Darwin' ] && [ `uname -s` != 'Linux' ];then echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
 
 # 系统环境变量具有最高优先级
 

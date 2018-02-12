@@ -8,6 +8,8 @@
 
 我将软件都放在了 C 盘根目录，即 `C:\nginx-1.13.8` `C:\php` `C:\mysql` ...
 
+MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
+
 # MySQL
 
 https://dev.mysql.com/downloads/mysql/
@@ -115,7 +117,7 @@ $ nginx -s stop
 
 ## 修改配置
 
-不再赘述
+官方文档：https://www.nginx.com/resources/wiki/start/topics/examples/phpfastcgionwindows/
 
 ## Composer
 
@@ -242,6 +244,10 @@ $ httpd -t
 ```
 
 之后使用 `ApacheMonitor.exe` 启动服务。
+
+## https
+
+Apache https 出现问题，暂时解决不了。
 
 # PowerShell 脚本
 
