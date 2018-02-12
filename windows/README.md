@@ -166,11 +166,17 @@ $ memcached -d
 
 我一般用的 `nginx`，这里记录一下 `apache`。
 
-PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/manual/fa/install.windows.apache2.php) 讲的很清楚了（暂无中文翻译），我这里是 `fcgid.so` 方式，其他 `php7_module` 等方式请自行查阅资料。
+PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/manual/fa/install.windows.apache2.php) 讲的很清楚了（暂无中文翻译）。
+
+我这里是 `Running PHP under FastCGI` 方式
+
+其他的配置文件中加载模块 `LoadModule php5_module "c:/php/php7apache2_4.dll"` 即 `Installing as an Apache handler` 等方式（网上资料较多）请自行查阅资料。
 
 在 [文中](http://httpd.apache.org/docs/current/platform/windows.html) 提到的前两个地方选择一个下载，后几个是集成安装包。
 
-我在 https://www.apachehaus.com/cgi-bin/download.plx 下载，记得同时下载 `Mod FCGID 2.3.9a for Apache 2.4.x` 模块，注意版本对应。
+我在 http://www.apachelounge.com/download/ 下载
+
+同时下载 `mod_fcgid` 模块，注意版本（`win64` `vc15`）对应 (可能不太好找，网页搜索 `mod_fcgid` 来定位)。
 
 ```bash
 # 进入安装目录 bin 目录
@@ -183,21 +189,23 @@ $ httpd.exe -k install
 
 ## fcgid 模块
 
-解压下载后的模块文件夹将 `modules\mod_fcgid.so` 移入 apache 安装目录的 `modules` 文件夹中。
+解压下载后的模块文件夹将 `mod_fcgid-2.3.9\mod_fcgid.so` 移入 apache 安装目录的 `modules` 文件夹中。
 
-将 `conf/extra/httpd-fcgid.conf` 移入 apache 安装目录的 `conf/extra` 文件夹中，并修改 php 路径。
+在 apache 安装目录的 `conf/extra` 文件夹新建 [`httpd-fcgid.conf`](httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
 
 ## http.conf
 
 ```bash
-Define SRVROOT "C:/apache24"
+ServerRoot "c:/apache24"
 
 # 需要启用哪些模块自己去掉注释
 LoadModule rewrite_module modules/mod_rewrite.so
 # 这里引入 fcgid 模块
 LoadModule fcgid_module modules/mod_fcgid.so
 
-DirectoryIndex index.php index.html index.htm
+<IfModule dir_module>
+    DirectoryIndex index.html index.php
+</IfModule>
 
 # Virtual hosts
 # 打开虚拟主机配置，以后多域名均在子配置文件中设置，避免修改 httpd.conf
@@ -252,3 +260,7 @@ $ ./windows/wnmp.ps1 start | stop | restart | status | ps
 * http://blog.csdn.net/nzing/article/details/7617558
 
 * https://www.cnblogs.com/52fhy/p/6059685.html
+
+* https://www.cnblogs.com/chuxuezhe/archive/2012/08/29/2661656.html
+
+* http://nbczw8750.iteye.com/blog/2353989

@@ -5,6 +5,10 @@
 # git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git
 # git remote add coding git@git.coding.net:khs1994/lnmp.git
 
+# Don't Run this shell script on git bash Windows, please use ./lnmp-docker.ps1
+
+if [ "uname -s" != 'Darwin' ] || [ "uname -s" != 'Linux' ] ;then echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
+
 # 系统环境变量具有最高优先级
 
 env > /tmp/.khs1994.env
@@ -409,7 +413,6 @@ restore(){
 }
 
 network(){
-  if [ "$OS" = 'MINGW64_NT-10.0' ];then return 0; fi
   ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
 }
 
