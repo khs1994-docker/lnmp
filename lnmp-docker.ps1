@@ -89,20 +89,28 @@ Commands:
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
   k8s-down             Remove k8s LNMP
-  laravel              Create a new Laravel application
-  laravel-artisan      Use Laravel CLI artisan
-  new                  New PHP Project and generate nginx conf and issue SSL certificate
-  nginx-config         Generate nginx conf
-  php                  Run PHP in CLI
   production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
-  ssl                  Issue SSL certificate powered by acme.sh
+  restart              Restart LNMP services
   ssl-self             Issue Self-signed SSL certificate
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
+
+PHP Tools:
+  apache-config        Generate Apache2 vhost conf
+  composer             Use PHP Dependency Manager Composer
+  laravel              Create a new Laravel application
+  laravel-artisan      Use Laravel CLI artisan
+  new                  New PHP Project and generate nginx conf and issue SSL certificate
+  nginx-config         Generate nginx vhost conf
+  php                  Run PHP in CLI
+  phpunit              Run PHPUnit
+  ssl-self             Issue Self-signed SSL certificate
+  tp                   Create a new ThinkPHP application
+
 
 Container CLI:
   apache-cli
@@ -285,8 +293,8 @@ Function main() {
        docker-compose exec mysql /backup/restore.sh $args[1]
     }
 
-    ssl {
-      printError "Please Exec this command in git bash on Windows 10 or WSL"
+    restart {
+      docker-compose restart $args[1] $args[2] $args[3] $args[4] $args[5] $args[6] $args[7] $args[8] $args[9]
     }
 
     ssl-self {
