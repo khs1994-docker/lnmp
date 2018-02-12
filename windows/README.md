@@ -62,7 +62,7 @@ http://windows.php.net/download/
 
 里面有 `Non Thread Safe` 和 `Thread Safe`，两者区别请查阅资料，我这里的是下载 `NTS` 版。
 
-只有 `TS` 版才包含 `php7apache2_4.dll` （配置 apache 可能会用到，我后边 apache 没有选择这种方式，这里记录一下）
+只有 `TS` 版才包含 `php7apache2_4.dll` （php 以 apache 模块方式运行才会用到，我后边 apache 选择的是 fcgi 方式，这里记录一下）
 
 ## 复制 `php.ini`
 
@@ -170,7 +170,7 @@ PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/ma
 
 我这里是 `Running PHP under FastCGI` 方式
 
-其他的配置文件中加载模块 `LoadModule php5_module "c:/php/php7apache2_4.dll"` 即 `Installing as an Apache handler` 等方式（网上资料较多）请自行查阅资料。
+其他通过在配置文件中加载模块 `LoadModule php5_module "c:/php/php7apache2_4.dll"` 即 `Installing as an Apache handler` 等运行模式（网上资料较多）请自行查阅资料。
 
 在 [文中](http://httpd.apache.org/docs/current/platform/windows.html) 提到的前两个地方选择一个下载，后几个是集成安装包。
 
@@ -191,7 +191,7 @@ $ httpd.exe -k install
 
 解压下载后的模块文件夹将 `mod_fcgid-2.3.9\mod_fcgid.so` 移入 apache 安装目录的 `modules` 文件夹中。
 
-在 apache 安装目录的 `conf/extra` 文件夹新建 [`httpd-fcgid.conf`](httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
+在 apache 安装目录的 `conf/extra` 文件夹新建 [`httpd-fcgid.conf`](apache-fcgi/httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
 
 ## http.conf
 
@@ -220,17 +220,17 @@ Include conf/extra/httpd-fcgid.conf
 <VirtualHost *:80>
     DocumentRoot "C:/Users/90621/lnmp/app/laravel/public"
     ServerName 127.0.0.1
-    ServerAlias 127.0.0.1
-    ErrorLog "C:/logs/apache/127.0.0.1.err"
-    CustomLog "C:/logs/apache/127.0.0.1.access" combined
+    ServerAlias a.com b.com
+    ErrorLog "C:/logs/apache/127.0.0.1.error.log"
+    CustomLog "C:/logs/apache/127.0.0.1.access.log" combined
 
     <Directory "C:/Users/90621/lnmp/app/laravel/public" >
-      AddHandler fcgid-script .php
-      Options Indexes FollowSymLinks ExecCGI
-    	FcgidWrapper "C:/php/php-cgi.exe" .php
-      Options Indexes FollowSymLinks
-      AllowOverride None
-      Require all granted
+        AddHandler fcgid-script .php
+        Options Indexes FollowSymLinks ExecCGI
+        AllowOverride all
+        # php-cgi的路径
+        FcgidWrapper "C:/php/php-cgi.exe" .php
+        Require all granted
     </Directory>
 </VirtualHost>
 ```
