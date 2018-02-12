@@ -115,6 +115,33 @@ $ sudo apt install redis-server
 $ sudo redis-server /etc/redis/redis.conf
 ```
 
+# MongoDB
+
+WSL
+
+```bash
+$ sudo apt install mongodb-server
+
+$ mkdir -p /data/db
+
+$ chmod 777 /data/db
+
+# 后台运行
+$ sudo mongod --fork --logpath=/var/run/mongodb/error.log
+```
+
+# Memcached
+
+WSL
+
+[`memcached`](http://pecl.php.net/package/memcached) 扩展暂不支持 Windows。
+
+```bash
+$ sudo apt install memcached
+
+$ memcached -d
+```
+
 # PowerShell 脚本
 
 为了方便的管理 `WNMP`，这里有一个脚本 `./windows/wnmp.ps1` ，使用之前在该文件开头修改好软件路径

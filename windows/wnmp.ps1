@@ -65,6 +65,16 @@ Function _status(){
   printInfo "Redis Status (WSL)
   "
   Get-Process | Where-Object { $_ -match "redis"}
+  Write-Host "
+  "
+  printInfo "MongoDB Status (WSL)
+  "
+  Get-Process | Where-Object { $_ -match "mongod"}
+  Write-Host "
+  "
+  printInfo "Memcached Status (WSL)
+  "
+  Get-Process | Where-Object { $_ -match "memcached"}
 }
 
 Function startSingle(){

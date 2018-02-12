@@ -52,3 +52,33 @@ $ ./kubernetes.sh cleanup
 ## 具体命令
 
 请查看 `./kubernetes.sh` 文件内容。
+
+# Windows 10
+
+Windows 10 在 Hyper-V 虚拟机中运行 Minikube
+
+## 启动
+
+```bash
+$ ./minikube.ps1
+```
+
+启动之后，手动在 `Hyper-V` 管理界面将 `minikube` 虚拟网络切换到 `默认开关`。
+
+```bash
+$ (( Get-VM minikube ).networkadapters[0]).ipaddresses[0]
+```
+
+此命令在系统自带的 `PowerShell` 中执行，会获取到 `minikube` 虚拟机 IP.
+
+## 关闭
+
+```bash
+$ minikube stop
+```
+
+## 移除
+
+```bash
+$ minikbe delete
+```
