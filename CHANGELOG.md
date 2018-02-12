@@ -3,6 +3,20 @@ Changelog
 
 #### v18.03-rc1
 
+Bug fixes:
+* Fix CLI error #120 #116
+
+Changes:
+* Expose `Redis` port 6379 #116
+* Add CLI command `phpunit` #118
+* Add CLI command `daemon-socket` #120
+
+Updates:
+
+* `php-fpm` 7.2.2 #119
+* `redis` 4.0.8 #119
+* `acme.sh` 2.7.6 #123
+
 #### v18.02 (2018-02-01)
 
 Bug fixes:
