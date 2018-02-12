@@ -27,7 +27,7 @@ $ net start mysql
 
 $ mysql -uroot -p
 
-# 初始密码在 data 目录打开其中 "计算机名.err" 的文件
+# 初始密码在 mysql 安装目录 data/计算机名.err 的文件
 
 [Note] [MY-010454] A temporary password is generated for root@localhost: VgcYZ=Myf4N.
 
@@ -62,9 +62,19 @@ http://windows.php.net/download/
 
 里面有 `Non Thread Safe` 和 `Thread Safe`，两者区别请查阅资料，我这里的是下载 `NTS` 版。
 
-只有 `TS` 版才包含 `php7apache2_4.dll` （配置 apache 可能会用到，我后边 apache 没有选择那种方式，这里记录一下）
+只有 `TS` 版才包含 `php7apache2_4.dll` （配置 apache 可能会用到，我后边 apache 没有选择这种方式，这里记录一下）
 
 ## 复制 `php.ini`
+
+```bash
+extension_dir = "C:/php/ext"
+
+# 开启扩展，自行取消注释
+
+date.timezone = PRC
+
+cgi.fix_pathinfo = 1
+```
 
 ## 查看版本信息
 
@@ -84,22 +94,13 @@ http://blogbuildingu.com/files/RunHiddenConsole.zip
 $ RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c C:/php/php.ini
 ```
 
-## pecl 下载配置扩展
+## pecl 下载扩展
+
+http://pecl.php.net/
 
 注意与 PHP 版本对应。
 
-## php.ini
-
-```bash
-extension_dir = "C:/php/ext"
-
-# 开启扩展，自行取消注释
-
-date.timezone = PRC
-
-
-cgi.fix_pathinfo = 1
-```
+之后在 `php.ini` 中增加配置。
 
 # Nginx
 
@@ -163,7 +164,7 @@ $ memcached -d
 
 # Apache
 
-我一般用的 `nginx`，这里简单记录一下 `apache`。
+我一般用的 `nginx`，这里记录一下 `apache`。
 
 PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/manual/fa/install.windows.apache2.php) 讲的很清楚了（暂无中文翻译），我这里是 `fcgid.so` 方式，其他 `php7_module` 等方式请自行查阅资料。
 
