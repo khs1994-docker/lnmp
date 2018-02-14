@@ -82,7 +82,7 @@ services:
         source: ./logs/redis
         target: /var/log/redis
         read_only: false
-      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo
     command: ["redis-server","/redis.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -96,24 +96,26 @@ services:
   #     - backend
   #   env_file: ./cli/timezone.env
   #   # ports:
-  #   #   - "11211"
+  #   #   - "${DEV_MEMCACHED_PORT}:11211"
   #   labels:
   #     - "com.khs1994.lnmp=true"
   #     - "com.khs1994.lnmp.memcached=true"
   #     - "com.khs1994.lnmp.app.env=development"
+  #   volumes:
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #
   # rabbitmq:
   #   # restart: always
   #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
-  #     - lnmp_zoneinfo-data:/usr/share/zoneinfo
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #   networks:
   #     - backend
   #   env_file: ./cli/timezone.env
   #   # ports:
-  #   #   - "15672"
-  #   #   - "5672"
+  #   #   - "15672:15672"
+  #   #   - "5672:5672"
   #   labels:
   #     - "com.khs1994.lnmp=true"
   #     - "com.khs1994.lnmp.rabbitmq=true"
@@ -126,13 +128,13 @@ services:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
   #   volumes:
-  #     - lnmp_zoneinfo-data:/usr/share/zoneinfo
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
   #   env_file: ./cli/timezone.env
   #   # ports:
-  #   #   - "5432"
+  #   #   - "${DEV_POSTGRESQL_PORT}:5432"
   #   secrets:
   #     # 默认与 mysql 密码一致。
   #     - db_root_password
@@ -152,7 +154,7 @@ services:
   #   networks:
   #     - backend
   #   # ports:
-  #   #   - "27017"
+  #   #   - "${DEV_MONGODB_PORT}27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
   #   labels:
   #     - "com.khs1994.lnmp=true"
@@ -168,7 +170,7 @@ services:
       # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
-      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - frontend
       - backend
@@ -232,7 +234,7 @@ services:
   #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     - ./config/apache2:/usr/local/apache2/conf.d
   #     - ./logs/apache2:/usr/local/apache2/logs
-  #     - lnmp_zoneinfo-data:/usr/share/zoneinfo
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #   working_dir: /app
   #   networks:
   #     - frontend
@@ -254,8 +256,7 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
-  lnmp_zoneinfo-data:
-    external: true
+  zoneinfo-data:
 
 secrets:
   db_root_password:

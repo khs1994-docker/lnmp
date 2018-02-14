@@ -120,17 +120,17 @@ Donate https://zan.khs1994.com
 }
 
 tz(){
-  local image=alpine:3.7
+  local image=nginx:1.13.8-alpine
 
-  if [ `${ARCH}` = `armv7l`  ];then image=arm32v7/alpine:3.7 fi
-  if [ `${ARCH}` = `aarch64` ];then image=arm64v8/alpine:3.7 fi
+  if [ `${ARCH}` = `armv7l`  ];then NOTSUPPORT fi
+  if [ `${ARCH}` = `aarch64` ];then image=arm64v8/nginx:1.13.8-alpine fi
 
   docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1
   if ! [ "$?" = 0 ];then
       docker run -it --rm \
           --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo \
-          $image \
-          apk add --no-cache tzdata
+          $iamge \
+          date
   fi
 }
 

@@ -379,7 +379,7 @@ Usage:
     }
 
     tz {
-      docker run -it --rm --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo alpine:3.7 apk add --no-cache tzdata
+      docker run -it --rm --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 date
     }
 
     apache-cli {

@@ -87,7 +87,7 @@ services:
         source: ./logs/redis
         target: /var/log/redis
         read_only: false
-      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo
     command: ["redis-server","/redis.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -106,13 +106,15 @@ services:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.memcached=true"
       - "com.khs1994.lnmp.app.env=development"
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
 
   rabbitmq:
     # restart: always
     image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq:rw
-      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - backend
     env_file: ./cli/timezone.env
@@ -131,7 +133,7 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
     volumes:
-      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo
       - postgresql-data:/var/lib/postgresql/data:rw
     networks:
       - backend
@@ -172,7 +174,7 @@ services:
       # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
-      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - frontend
       - backend
@@ -238,7 +240,7 @@ services:
       - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
       - ./config/apache2:/usr/local/apache2/conf.d
       - ./logs/apache2:/usr/local/apache2/logs
-      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app
     networks:
       - frontend
@@ -260,8 +262,7 @@ volumes:
   rabbitmq-data:
   postgresql-data:
   mongodb-data:
-  lnmp_zoneinfo-data:
-    external: true
+  zoneinfo-data:
 
 secrets:
   db_root_password:
