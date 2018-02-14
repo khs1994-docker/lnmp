@@ -11,6 +11,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development       -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development-pull  -d     'Pull LNMP Docker Images in development'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a down              -d     'Stop and remove LNMP Docker containers, networks'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a docs              -d     'Support Documents'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a full-up           -d     'Start Soft you inout, all soft available'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a help              -d     'Display this help message'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a k8s               -d     'Deploy LNMP on k8s'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a k8s-down          -d     'Remove k8s LNMP'

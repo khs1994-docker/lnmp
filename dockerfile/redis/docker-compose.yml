@@ -1,6 +1,0 @@
-version: "3.5"
-services:
-
-  redis:
-    build: .
-    image: ${DOCKER_HUB_USERNAME}/redis:${TAG}-alpine

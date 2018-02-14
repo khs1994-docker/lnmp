@@ -10,6 +10,8 @@ services:
       # MYSQL_USER:
       # MYSQL_PASSWORD:
     env_file: ./cli/timezone.env
+    ports:
+      - "${DEV_MYSQL_PORT}:3306"
     networks:
       - backend
     volumes:
@@ -30,7 +32,7 @@ services:
       - "com.khs1994.lnmp.app.env=development"
 
   # mariadb:
-  #   restart: always
+  #   # restart: always
   #   image: "mariadb:${KHS1994_LNMP_MARIADB_VERSION}"
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -40,6 +42,8 @@ services:
   #   env_file: ./cli/timezone.env
   #   networks:
   #     - backend
+  #   ports:
+  #     - "${DEV_MYSQL_PORT}:3306"
   #   volumes:
   #     - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
   #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
@@ -59,10 +63,10 @@ services:
 
   redis:
     # restart: always
-    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    image: "redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
-    # ports:
-    #   - "6379"
+    ports:
+      - "${DEV_REDIS_PORT}:6379"
     networks:
       - backend
     volumes:
@@ -78,6 +82,7 @@ services:
         source: ./logs/redis
         target: /var/log/redis
         read_only: false
+      - zoneinfo-data:/usr/share/zoneinfo
     command: ["redis-server","/redis.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -85,47 +90,51 @@ services:
       - "com.khs1994.lnmp.app.env=development"
 
   # memcached:
-  #   restart: always
+  #   # restart: always
   #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
   #   env_file: ./cli/timezone.env
-  #   # ports:
-  #   #   - "11211"
+  #   ports:
+  #     - "${DEV_MEMCACHED_PORT}:11211"
   #   labels:
   #     - "com.khs1994.lnmp=true"
   #     - "com.khs1994.lnmp.memcached=true"
   #     - "com.khs1994.lnmp.app.env=development"
+  #   volumes:
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #
   # rabbitmq:
-  #   restart: always
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   # restart: always
+  #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #   networks:
   #     - backend
   #   env_file: ./cli/timezone.env
   #   # ports:
-  #   #   - "15672"
-  #   #   - "5672"
+  #   #   - "15672:15672"
+  #   #   - "5672:5672"
   #   labels:
   #     - "com.khs1994.lnmp=true"
   #     - "com.khs1994.lnmp.rabbitmq=true"
   #     - "com.khs1994.lnmp.app.env=development"
   #
   # postgresql:
-  #   restart: always
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   # restart: always
+  #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
   #   volumes:
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
   #   env_file: ./cli/timezone.env
-  #   # ports:
-  #   #   - "5432"
+  #   ports:
+  #     - "${DEV_POSTGRESQL_PORT}:5432"
   #   secrets:
   #     # 默认与 mysql 密码一致。
   #     - db_root_password
@@ -135,7 +144,7 @@ services:
   #     - "com.khs1994.lnmp.app.env=development"
   #
   # mongodb:
-  #   restart: always
+  #   # restart: always
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   env_file: ./cli/timezone.env
   #   volumes:
@@ -144,8 +153,8 @@ services:
   #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
   #   networks:
   #     - backend
-  #   # ports:
-  #   #   - "27017"
+  #   ports:
+  #     - "${DEV_MONGODB_PORT}27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
   #   labels:
   #     - "com.khs1994.lnmp=true"
@@ -161,6 +170,7 @@ services:
       # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
+      - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - frontend
       - backend
@@ -213,7 +223,7 @@ services:
       - "com.khs1994.lnmp.app.env=development"
 
   # apache:
-  #   restart: always
+  #   # restart: always
   #   image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
   #   env_file:
   #     - ./cli/timezone.env
@@ -222,9 +232,9 @@ services:
   #     - "80:80"
   #   volumes:
   #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
-  #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
-  #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
+  #     - ./config/apache2:/usr/local/apache2/conf.d
   #     - ./logs/apache2:/usr/local/apache2/logs
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #   working_dir: /app
   #   networks:
   #     - frontend
@@ -246,6 +256,7 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
+  zoneinfo-data:
 
 secrets:
   db_root_password:

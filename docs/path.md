@@ -8,6 +8,14 @@
 |`access.log`|`./logs/nginx/access.log`      |`/var/log/nginx/access.log`|
 |`app/`      |`./app`                        |`/app`                     |
 
+# Apache
+
+|名称|本机|容器|
+|--|--|--|
+|`httpd.conf` | `./config/etc/apache2/httpd.conf` | `/usr/local/apache2/conf/httpd.conf`|
+|`conf.d/`    | `./config/apache2/`               | `/usr/local/apache2/conf.d`         |
+|`logs/`      | `./logs/apache2`                  | `/usr/local/apache2/logs`           |
+
 # PHP
 
 ## php-fpm

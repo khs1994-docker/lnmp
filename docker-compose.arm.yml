@@ -37,10 +37,9 @@ services:
       - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - redis-data:/data
       - ./logs/redis:/var/log/redis
-    expose:
-      - "6379"
-    # ports:
-    #   - "6379"
+      - zoneinfo-data:/usr/share/zoneinfo
+    ports:
+      - "${DEV_REDIS_PORT}:6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -56,8 +55,10 @@ services:
       - backend
     env_file:
       - ./cli/timezone.env
-    # ports:
-    #   - "11211"
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
+    ports:
+       - "${DEV_MEMCACHED_PORT}:11211"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.memcached=true"
@@ -72,6 +73,7 @@ services:
       - backend
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
+      - zoneinfo-data:/usr/share/zoneinfo
     env_file:
       - ./cli/timezone.env
     # ports:
@@ -97,8 +99,9 @@ services:
       - backend
     volumes:
       - postgresql-data:/var/lib/postgresql
-    # ports:
-    #   - "5432"
+      - zoneinfo-data:/usr/share/zoneinfo
+    ports:
+      - "${DEV_POSTGRESQL_PORT}:5432"
     secrets:
       # 默认与 mysql 密码一致。
       - db_root_password
@@ -116,14 +119,13 @@ services:
   #     - mongodb-data:/data/db
   #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
   #   ports:
-  #     - "27017"
+  #     - "${DEV_MONGODB_PORT}:27017"
   #   env_file:
   #     - ./cli/timezone.env
   #   command: ["mongod","--config","/etc/mongod.conf"]
   #   labels:
   #     - "com.khs1994.lnmp=true"
   #     - "com.khs1994.lnmp.mongodb=true"
-
 
   php7:
     # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
@@ -180,7 +182,7 @@ services:
 
   # apache:
   #   restart: always
-  #   image: "${ARM_ARCH}/httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
+  #   image: "${ARM_ARCH}/httpd:${KHS1994_LNMP_APACHE_VERSION}${ARM_BASED_OS}"
   #   env_file:
   #     - ./cli/timezone.env
   #   ports:
@@ -189,9 +191,9 @@ services:
   #   volumes:
   #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
   #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
-  #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
-  #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
+  #     - ./config/apache2/conf.d:/usr/local/apache2/conf.d
   #     - ./logs/apache2:/usr/local/apache2/logs
+  #     - zoneinfo-data:/usr/share/zoneinfo
   #   working_dir: /app
   #   networks:
   #     - frontend
@@ -211,6 +213,7 @@ volumes:
   rabbitmq-data:
   postgresql-data:
   # mongodb-data:
+  zoneinfo-data:
 
 secrets:
   db_root_password:

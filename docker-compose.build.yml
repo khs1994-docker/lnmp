@@ -2,16 +2,12 @@ version: "3.5"
 services:
 
   mysql:
-    ports:
-      - "${DEV_MYSQL_PORT}:3306"
     labels:
-      - "com.khs1994.lnmp.app.env=development_build"
+      - "com.khs1994.lnmp.app.env=self_build"
 
   # mariadb:
-  #   ports:
-  #     - "${DEV_MYSQL_PORT}:3306"
   #   labels:
-  #     - "com.khs1994.lnmp.app.env=development_build"
+  #     - "com.khs1994.lnmp.app.env=self_build"
 
   redis:
     build:
@@ -20,7 +16,7 @@ services:
       # build 镜像名在 docker-compose.yml 定义
       # build 镜像以用于生产环境
     labels:
-      - "com.khs1994.lnmp.app.env=development_build"
+      - "com.khs1994.lnmp.app.env=self_build"
 
   php7:
     build:
@@ -44,33 +40,33 @@ services:
       - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
     labels:
-      - "com.khs1994.lnmp.app.env=development_build"
+      - "com.khs1994.lnmp.app.env=self_build"
 
   # rabbitmq:
   #   build:
   #     context: ./dockerfile/rabbitmq/
   #     dockerfile: Dockerfile
   #   labels:
-  #     - "com.khs1994.lnmp.app.env=development_build"
+  #     - "com.khs1994.lnmp.app.env=self_build"
   #
   # postgresql:
   #   build:
   #     context: ./dockerfile/postgresql/
   #     dockerfile: Dockerfile
   #   labels:
-  #     - "com.khs1994.lnmp.app.env=development_build"
+  #     - "com.khs1994.lnmp.app.env=self_build"
 
   nginx:
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
     labels:
-      - "com.khs1994.lnmp.app.env=development_build"
+      - "com.khs1994.lnmp.app.env=self_build"
 
   # apache:
   #   volumes:
   #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
   #  labels:
-  #     - "com.khs1994.lnmp.app.env=development_build"
+  #     - "com.khs1994.lnmp.app.env=self_build"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -86,7 +82,7 @@ services:
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.phpmyadmin=true"
-      - "com.khs1994.lnmp.app.env=development_build"
+      - "com.khs1994.lnmp.app.env=self_build"
 
 volumes:
   phpmyadmin-data:

@@ -58,6 +58,7 @@ Commands:
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
+  full-up              Start Soft you inout, all soft available
   help                 Display this help message
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
@@ -116,6 +117,22 @@ You must Update .env file when update this project.
 
 Donate https://zan.khs1994.com
 "
+}
+
+tz(){
+  local image=nginx:1.13.8-alpine
+
+  if [ ${ARCH} = "armv7l" ];then NOTSUPPORT; fi
+  if [ ${ARCH} = "aarch64" ];then local image=khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7; fi
+
+  docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1
+  if ! [ "$?" = 0 ];then
+  print_info "Create TZDATA Volume...\n"
+      docker run -it --rm \
+          --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo \
+          $image \
+          date > /tmp/tzdata.txt 2>&1
+  fi
 }
 
 env_status(){
@@ -260,7 +277,7 @@ dockerfile_update(){
     redis )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' "s/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION=${VERSION}/g" .env.example .env
-      sed -i '' "s#^    image: khs1994/redis.*#    image: khs1994/redis:$VERSION-alpine#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: redis.*#    image: redis:$VERSION-alpine#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
     ;;
     * )
       print_error "Soft is not existing"
@@ -491,6 +508,7 @@ release_rc(){
   print_info "Start new RC \n"; print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
     git fetch lnmp
+    git submodule update --init --recursive
     git reset --hard lnmp/master
   else
     print_error "${BRANCH} error，Please checkout to  dev branch\n\n$ git checkout dev\n"
@@ -543,8 +561,8 @@ apache_http(){
   ServerName $1
   ServerAlias $1
 
-  ErrorLog \"logs/error.log\"
-  CustomLog \"logs/access.log\" common
+  ErrorLog \"logs/$1.error.log\"
+  CustomLog \"logs/$1.access.log\" common
 
   <FilesMatch \.php$>
     SetHandler \"proxy:fcgi://php7:9000\"
@@ -552,11 +570,11 @@ apache_http(){
 
   <Directory \"/app/$2\" >
     Options Indexes FollowSymLinks
-    AllowOverride None
+    AllowOverride All
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+</VirtualHost>" >> config/apache2/$1.conf
 }
 
 apache_https(){
@@ -568,8 +586,8 @@ apache_https(){
   ServerName $1
   ServerAlias $1
 
-  ErrorLog \"logs/error.log\"
-  CustomLog \"logs/access.log\" common
+  ErrorLog \"logs/$1.error.log\"
+  CustomLog \"logs/$1.access.log\" common
 
   SSLEngine on
   SSLCertificateFile conf/ssl/$1.crt
@@ -584,11 +602,11 @@ apache_https(){
 
   <Directory \"/app/$2\" >
     Options Indexes FollowSymLinks
-    AllowOverride None
+    AllowOverride All
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+</VirtualHost>" >> config/apache2/$1.conf
 }
 
 nginx_https(){
@@ -748,6 +766,7 @@ php_cli(){
 # 入口文件
 
 main() {
+  tz
   logs
   local command=$1; shift
   case $command in
@@ -814,6 +833,10 @@ main() {
       cmd="$@"
     fi
     cli/composer ${path} "${cmd}"
+    ;;
+
+  full-up )
+    docker-compose -f docker-full.yml -f docker-compose.override.yml up -d "$@"
     ;;
 
   production )
