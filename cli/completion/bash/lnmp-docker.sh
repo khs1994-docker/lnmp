@@ -13,6 +13,7 @@ complete -W "acme.sh \
         development-pull \
         down \
         docs \
+        full-up \
         help \
         k8s \
         k8s-down \

@@ -58,6 +58,7 @@ Commands:
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
+  full-up              Start Soft you inout, all soft available
   help                 Display this help message
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
@@ -831,6 +832,9 @@ main() {
     fi
     cli/composer ${path} "${cmd}"
     ;;
+
+  full-up )
+    docker-compose -f docker-full.yml -f docker-compose.override.yml up -d "$@"
 
   production )
     run_docker

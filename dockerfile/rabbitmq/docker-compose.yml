@@ -1,6 +1,0 @@
-version: "3.5"
-services:
-
-  rabbitmq:
-    build: .
-    image: ${DOCKER_HUB_USERNAME}/rabbitmq:${TAG}-management-alpine

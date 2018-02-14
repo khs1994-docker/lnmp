@@ -1,3 +1,8 @@
+# Usage
+# ./lnmp-docker.sh/ps1 full-start nginx
+# ./lnmp-docker.sh/ps1 full-start apache
+# 该文件提供了所有服务（软件），使用 full-start 即可方便的启动某个软件
+
 version: "3.5"
 services:
 
@@ -12,6 +17,8 @@ services:
     env_file: ./cli/timezone.env
     networks:
       - backend
+    ports:
+      - "${DEV_MYSQL_PORT}:3306"
     volumes:
       - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       # https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
@@ -38,6 +45,8 @@ services:
       # MYSQL_USER:
       # MYSQL_PASSWORD:
     env_file: ./cli/timezone.env
+    ports:
+      - "${DEV_MYSQL_PORT}:3306"
     networks:
       - backend
     volumes:
@@ -61,8 +70,8 @@ services:
     # restart: always
     image: "redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
-    # ports:
-    #   - "6379"
+    ports:
+       - "${DEV_REDIS_PORT}:6379"
     networks:
       - backend
     volumes:
@@ -91,8 +100,8 @@ services:
     networks:
       - backend
     env_file: ./cli/timezone.env
-    # ports:
-    #   - "11211"
+    ports:
+      - "${DEV_MEMCACHED_PORT}:11211"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.memcached=true"
@@ -127,8 +136,8 @@ services:
     networks:
       - backend
     env_file: ./cli/timezone.env
-    # ports:
-    #   - "5432"
+    ports:
+      - "${DEV_POSTGRESQL_PORT}:5432"
     secrets:
       # 默认与 mysql 密码一致。
       - db_root_password
@@ -147,8 +156,8 @@ services:
       - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
     networks:
       - backend
-    # ports:
-    #   - "27017"
+    ports:
+       - "${DEV_MONGODB_PORT}:27017"
     command: ["mongod","--config","/etc/mongod.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -157,7 +166,6 @@ services:
 
   php7:
     # restart: always
-    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
@@ -200,6 +208,7 @@ services:
         protocol: tcp
         mode: host
     volumes:
+      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
       # - ./config/nginx:/etc/nginx/conf.d:ro
       - type: bind
         source: ./config/nginx
@@ -225,6 +234,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
+      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
       - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
       - ./config/apache2:/usr/local/apache2/conf.d
       - ./logs/apache2:/usr/local/apache2/logs
@@ -245,11 +255,11 @@ networks:
 
 volumes:
   mysql-data:
-  # mariadb-data:
+  mariadb-data:
   redis-data:
-  # rabbitmq-data:
-  # postgresql-data:
-  # mongodb-data:
+  rabbitmq-data:
+  postgresql-data:
+  mongodb-data:
   lnmp_zoneinfo-data:
     external: true
 

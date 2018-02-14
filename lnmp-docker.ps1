@@ -94,6 +94,7 @@ Commands:
   development-pull     Pull LNMP Docker Images in development
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
+  full-up              Start Soft you inout, all soft available
   help                 Display this help message
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
@@ -255,6 +256,10 @@ switch($first){
 
     docs {
       docker run -it --rm -p 4000:4000 --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
+    }
+
+    full-up {
+      docker-compose -f docker-full.yml -f docker-compose.override.yml up -d $other
     }
 
     k8s {

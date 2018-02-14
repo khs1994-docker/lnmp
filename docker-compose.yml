@@ -10,6 +10,8 @@ services:
       # MYSQL_USER:
       # MYSQL_PASSWORD:
     env_file: ./cli/timezone.env
+    ports:
+      - "${DEV_MYSQL_PORT}:3306"
     networks:
       - backend
     volumes:
@@ -40,6 +42,8 @@ services:
   #   env_file: ./cli/timezone.env
   #   networks:
   #     - backend
+  #   ports:
+  #     - "${DEV_MYSQL_PORT}:3306"
   #   volumes:
   #     - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
   #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
@@ -61,8 +65,8 @@ services:
     # restart: always
     image: "redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
-    # ports:
-    #   - "6379"
+    ports:
+      - "${DEV_REDIS_PORT}:6379"
     networks:
       - backend
     volumes:
