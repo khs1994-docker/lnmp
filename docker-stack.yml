@@ -42,7 +42,7 @@ services:
         target: /etc/db_root_password
 
   redis:
-    image: khs1994/redis:4.0.8-alpine
+    image: redis:4.0.8-alpine
     env_file: ./cli/timezone.env
     # ports:
     #   - "6379"
@@ -54,6 +54,9 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+    configs:
+      - source: redis_conf
+        target: /redis.conf
 
   php7:
     build: ./app/demo
@@ -113,3 +116,5 @@ secrets:
 configs:
   nginx_conf:
     file: ./config/etc/nginx/nginx.conf
+  redis_conf:
+    file: ./config/redis/redis.production.conf
