@@ -28,6 +28,8 @@
 
 * [Docker Compose](https://github.com/docker/compose) 1.18.0+
 
+* WSL (**Windows** Only)
+
 ## 快速上手
 
 简单而言，搞明白了项目路径，Nginx 配置就行了，遇到任何问题请提出 issue。

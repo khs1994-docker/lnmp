@@ -28,6 +28,8 @@ To use LNMP Docker, you need:
 
 * [Docker Compose](https://github.com/docker/compose) 1.18.0+
 
+* WSL (**Windows** Only)
+
 ## Quick Start
 
 ### Windows 10

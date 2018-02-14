@@ -58,7 +58,7 @@ Commands:
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
-  full-up              Start Soft you inout, all soft available
+  full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
@@ -225,8 +225,7 @@ cleanup(){
       && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/xdebug-remote.log \
       && echo > logs/redis/redis.log \
-      && echo > logs/apache2/access.log \
-      && echo > logs/apache2/error.log \
+      && rm -rf logs/apache2/* \
       && echo > logs/php-fpm/php/error.log
       print_info "Clean log files SUCCESS\n"
 }
@@ -916,20 +915,24 @@ main() {
     run_docker; docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
     ;;
 
-  nginx-conf )
-     if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-conf {https|http} {PATH} {URL}"; exit 1; fi
+  nginx-config )
+     if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-config {https|http} {PATH} {URL}"; exit 1; fi
      print_info 'Please set hosts in /etc/hosts in development\n'
      print_info 'Maybe you need generate nginx HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
      if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
+     echo
+     print_info "You must checkout ./config/nginx/$2.conf, then restart nginx"
      ;;
 
-  apache-conf )
-    if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh apache-conf {https|http} {PATH} {URL}"; exit 1; fi
+  apache-config )
+    if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh apache-config {https|http} {PATH} {URL}"; exit 1; fi
     print_info 'Please set hosts in /etc/hosts in development\n'
     print_info 'Maybe you need generate Apache2 HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
     if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
+    echo
+    print_info "You must checkout ./config/apache2/$2.conf, then restart apache"
     ;;
 
   apache-delete )

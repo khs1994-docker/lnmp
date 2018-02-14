@@ -94,7 +94,7 @@ Commands:
   development-pull     Pull LNMP Docker Images in development
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
-  full-up              Start Soft you inout, all soft available
+  full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
   k8s                  Deploy LNMP on k8s
@@ -213,7 +213,7 @@ switch($first){
     }
 
     apache-config {
-      printInfo "TODO"
+      bash lnmp-docker.sh apache-config $other
     }
 
     backup {
@@ -303,11 +303,11 @@ switch($first){
     }
 
     new {
-      printInfo "TODO"
+      bash lnmp-docker.sh new $other
     }
 
     nginx-config {
-      printInfo "TODO"
+      bash lnmp-docker.sh nginx-config $other
     }
 
     php {
