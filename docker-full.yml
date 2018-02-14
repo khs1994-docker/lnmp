@@ -1,7 +1,7 @@
 # Usage
-# ./lnmp-docker.sh/ps1 full-start nginx
-# ./lnmp-docker.sh/ps1 full-start apache
-# 该文件提供了所有服务（软件），使用 full-start 即可方便的启动某个软件
+# ./lnmp-docker.sh/ps1 full-up nginx
+# ./lnmp-docker.sh/ps1 full-up apache
+# 该文件包含了所有服务（软件），使用 full-up 即可方便的启动某个软件
 
 version: "3.5"
 services:
