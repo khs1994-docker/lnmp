@@ -119,11 +119,16 @@ Donate https://zan.khs1994.com
 }
 
 tz(){
+  local image=alpine:3.7
+
+  if [ `${ARCH}` = `armv7l`  ];then image=arm32v7/alpine:3.7 fi
+  if [ `${ARCH}` = `aarch64` ];then image=arm64v8/alpine:3.7 fi
+
   docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1
   if ! [ "$?" = 0 ];then
       docker run -it --rm \
           --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo \
-          alpine:3.7 \
+          $image \
           apk add --no-cache tzdata
   fi
 }
@@ -270,7 +275,7 @@ dockerfile_update(){
     redis )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' "s/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION=${VERSION}/g" .env.example .env
-      sed -i '' "s#^    image: khs1994/redis.*#    image: khs1994/redis:$VERSION-alpine#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: redis.*#    image: redis:$VERSION-alpine#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
     ;;
     * )
       print_error "Soft is not existing"
@@ -758,6 +763,7 @@ php_cli(){
 # 入口文件
 
 main() {
+  tz
   logs
   local command=$1; shift
   case $command in
