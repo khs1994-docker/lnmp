@@ -118,6 +118,16 @@ Donate https://zan.khs1994.com
 "
 }
 
+tz(){
+  docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1
+  if ! [ "$?" = 0 ];then
+      docker run -it --rm \
+          --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo \
+          alpine:3.7 \
+          apk add --no-cache tzdata
+  fi
+}
+
 env_status(){
   # cp .env.example to .env
   if [ -f .env ];then print_info ".env file existing\n"; else print_error ".env file NOT existing\n"; cp .env.example .env ; fi
@@ -543,8 +553,8 @@ apache_http(){
   ServerName $1
   ServerAlias $1
 
-  ErrorLog \"logs/error.log\"
-  CustomLog \"logs/access.log\" common
+  ErrorLog \"logs/$1.error.log\"
+  CustomLog \"logs/$1.access.log\" common
 
   <FilesMatch \.php$>
     SetHandler \"proxy:fcgi://php7:9000\"
@@ -552,11 +562,11 @@ apache_http(){
 
   <Directory \"/app/$2\" >
     Options Indexes FollowSymLinks
-    AllowOverride None
+    AllowOverride All
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+</VirtualHost>" >> config/apache2/$1.conf
 }
 
 apache_https(){
@@ -568,8 +578,8 @@ apache_https(){
   ServerName $1
   ServerAlias $1
 
-  ErrorLog \"logs/error.log\"
-  CustomLog \"logs/access.log\" common
+  ErrorLog \"logs/$1.error.log\"
+  CustomLog \"logs/$1.access.log\" common
 
   SSLEngine on
   SSLCertificateFile conf/ssl/$1.crt
@@ -584,11 +594,11 @@ apache_https(){
 
   <Directory \"/app/$2\" >
     Options Indexes FollowSymLinks
-    AllowOverride None
+    AllowOverride All
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/apache2/httpd-vhosts.conf
+</VirtualHost>" >> config/apache2/$1.conf
 }
 
 nginx_https(){
@@ -1097,6 +1107,10 @@ main() {
      -e PORT=2375 \
      shipyard/docker-proxy
      ;;
+
+  tz )
+      tz
+  ;;
 
   * )
   if ! [ -z "$command" ];then

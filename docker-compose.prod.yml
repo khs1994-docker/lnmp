@@ -25,7 +25,7 @@ services:
 
   redis:
     # 生产环境默认拉取镜像（可以配置私有仓库）
-    image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+    # image: redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
     ports:
       - "${PRO_REDIS_PORT}:6379"
     volumes:
@@ -34,12 +34,12 @@ services:
       - "com.khs1994.lnmp.app.env=production"
 
   # rabbitmq:
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   # image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production"
   #
   # postgresql:
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   # image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production"
   #

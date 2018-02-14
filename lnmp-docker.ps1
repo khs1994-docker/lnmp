@@ -32,8 +32,8 @@ Function env_status(){
 }
 
 Function logs(){
-  if (! (Test-Path logs\apache)){
-    New-Item logs\apache -type directory | Out-Null
+  if (! (Test-Path logs\apache2)){
+    New-Item logs\apache2 -type directory | Out-Null
   }
   if (! (Test-Path logs\mongodb)){
     New-Item logs\mongodb -type directory | Out-Null
@@ -54,10 +54,12 @@ Function logs(){
   }
   if (! (Test-Path logs\php-fpm)){
     New-Item logs\php-fpm -type directory | Out-Null
-    New-Item logs\php-fpm\php -type directory | Out-Null
     New-Item logs\php-fpm\error.log -type file | Out-Null
     New-Item logs\php-fpm\access.log -type file | Out-Null
     New-Item logs\php-fpm\xdebug-remote.log -type file | Out-Null
+  }
+  if (! (Test-Path logs\php-fpm\php)){
+    New-Item logs\php-fpm\php -type directory | Out-Null
   }
   if (! (Test-Path logs\redis)){
     New-Item logs\redis -type directory | Out-Null
@@ -146,13 +148,13 @@ exit
 Function cleanup(){
   Write-Host " "
   logs
-  rm logs\apache -Recurse -Force
-  rm logs\mongodb -Recurse -Force
-  rm logs\mysql -Recurse -Force
-  rm logs\mariadb -Recurse -Force
-  rm logs\nginx -Recurse -Force
-  rm logs\php-fpm -Recurse -Force
-  rm logs\redis -Recurse -Force
+  rm logs\apache2 -Recurse -Force | Out-Null
+  rm logs\mongodb -Recurse -Force | Out-Null
+  rm logs\mysql -Recurse -Force | Out-Null
+  rm logs\mariadb -Recurse -Force | Out-Null
+  rm logs\nginx -Recurse -Force | Out-Null
+  rm logs\php-fpm -Recurse -Force | Out-Null
+  rm logs\redis -Recurse -Force | Out-Null
   logs
 
   printInfo "Cleanup logs files Success"
@@ -371,6 +373,10 @@ Usage:
       _composer "" create-project,topthink/think=5.0.*,${TP_PATH},--prefer-dist,$other
     }
 
+    tz {
+      docker run -it --rm --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo alpine:3.7 apk add --no-cache tzdata
+    }
+
     apache-cli {
       docker-compose exec apache sh
     }
@@ -421,6 +427,6 @@ Usage:
 
     default {
         printInfo "You Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
-        docker-compose $other
+        docker-compose $args
       }
 }

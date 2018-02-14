@@ -59,7 +59,7 @@ services:
 
   redis:
     # restart: always
-    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    image: "redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
     # ports:
     #   - "6379"
@@ -78,6 +78,7 @@ services:
         source: ./logs/redis
         target: /var/log/redis
         read_only: false
+      - lnmp_zoneinfo-data:/usr/share/zoneinfo
     command: ["redis-server","/redis.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -99,9 +100,10 @@ services:
   #
   # rabbitmq:
   #   restart: always
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
+  #     - lnmp_zoneinfo-data:/usr/share/zoneinfo
   #   networks:
   #     - backend
   #   env_file: ./cli/timezone.env
@@ -115,11 +117,12 @@ services:
   #
   # postgresql:
   #   restart: always
-  #   image: ${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
   #   volumes:
+  #     - lnmp_zoneinfo-data:/usr/share/zoneinfo
   #     - postgresql-data:/var/lib/postgresql/data:rw
   #   networks:
   #     - backend
@@ -161,6 +164,7 @@ services:
       # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
+      - lnmp_zoneinfo-data:/usr/share/zoneinfo
     networks:
       - frontend
       - backend
@@ -177,54 +181,31 @@ services:
       - "com.khs1994.lnmp.php=true"
       - "com.khs1994.lnmp.app.env=development"
 
-  nginx:
-    # restart: always
-    image: "nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
-    #
-    # TLSv1.3
-    #
-    # image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch"
-    #
-    #
-    #
-    env_file:
-      - ./cli/timezone.env
-    ports:
-      - "443:443"
-      - target: 80
-        published: 80
-        protocol: tcp
-        mode: host
-    volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro
-      - type: bind
-        source: ./config/nginx
-        target: /etc/nginx/conf.d
-      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./logs/nginx:/var/log/nginx:rw
-    working_dir: /app
-    networks:
-      - frontend
-    depends_on:
-      - php7
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.nginx=true"
-      - "com.khs1994.lnmp.app.env=development"
-
-  # apache:
-  #   restart: always
-  #   image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
+  # nginx:
+  #   # restart: always
+  #   image: "nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
+  #   #
+  #   # TLSv1.3
+  #   #
+  #   # image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch"
+  #   #
+  #   #
+  #   #
   #   env_file:
   #     - ./cli/timezone.env
   #   ports:
   #     - "443:443"
-  #     - "80:80"
+  #     - target: 80
+  #       published: 80
+  #       protocol: tcp
+  #       mode: host
   #   volumes:
-  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
-  #     - ./config/apache2/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
-  #     - ./config/nginx/ssl-demo:/usr/local/apache2/conf/ssl
-  #     - ./logs/apache2:/usr/local/apache2/logs
+  #     # - ./config/nginx:/etc/nginx/conf.d:ro
+  #     - type: bind
+  #       source: ./config/nginx
+  #       target: /etc/nginx/conf.d
+  #     - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./logs/nginx:/var/log/nginx:rw
   #   working_dir: /app
   #   networks:
   #     - frontend
@@ -232,8 +213,31 @@ services:
   #     - php7
   #   labels:
   #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.apache=true"
+  #     - "com.khs1994.lnmp.nginx=true"
   #     - "com.khs1994.lnmp.app.env=development"
+
+  apache:
+    # restart: always
+    image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
+    env_file:
+      - ./cli/timezone.env
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./config/apache2:/usr/local/apache2/conf.d
+      - ./logs/apache2:/usr/local/apache2/logs
+      - lnmp_zoneinfo-data:/usr/share/zoneinfo
+    working_dir: /app
+    networks:
+      - frontend
+    depends_on:
+      - php7
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.apache=true"
+      - "com.khs1994.lnmp.app.env=development"
 
 networks:
   frontend:
@@ -246,6 +250,8 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
+  lnmp_zoneinfo-data:
+    external: true
 
 secrets:
   db_root_password:
