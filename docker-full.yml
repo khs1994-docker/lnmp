@@ -251,6 +251,18 @@ services:
       - "com.khs1994.lnmp.apache=true"
       - "com.khs1994.lnmp.app.env=development"
 
+  registry:
+    # restart: always
+    image: registry:${KHS1994_LNMP_REGISTRY_VERSION}
+    networks:
+      - frontend
+      - backend
+    # ports:
+    #   - "5000:5000"
+    volumes:
+      - ./config/etc/docker/registry:/etc/docker/registry
+      - registry-data:/var/lib/registry
+
 networks:
   frontend:
   backend:
@@ -263,6 +275,7 @@ volumes:
   postgresql-data:
   mongodb-data:
   zoneinfo-data:
+  registry-data:
 
 secrets:
   db_root_password:
