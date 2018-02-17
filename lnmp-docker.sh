@@ -143,15 +143,12 @@ _registry(){
     echo; print_info "First start, Please set username and password"
     read -p "username: " username
     if [ -z $username ];then echo; print_error "用户名不能为空"; exit 1; fi
-    read -s -p "password: " password
-    echo
+    read -s -p "password: " password; echo
     if [ -z $password ];then echo; print_error "密码不能为空"; exit 1; fi
-    read -s -p "Please reinput password: " password_verify
-    echo; echo
+    read -s -p "Please reinput password: " password_verify; echo; echo
 
     if ! [ "$password" = "$password_verify" ];then
-      print_error "两次输入的密码不同，请再次执行 ./lnmp-docker.sh registry 完成操作"
-      exit 1
+      print_error "两次输入的密码不同，请再次执行 ./lnmp-docker.sh registry 完成操作"; exit 1
     fi
 
     docker run --rm \
