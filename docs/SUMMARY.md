@@ -23,6 +23,7 @@
     * [配置](production/README.md)
     * [Swarm mode 三节点集群](production/swarm.md)
     * [k8s](production/k8s.md)
+    * [Docker Registry](registry.md)
 * 树莓派3
     * [ARM架构](arm.md)
 * [systemd](systemd.md)

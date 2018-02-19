@@ -69,6 +69,8 @@ Commands:
   push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
   restart              Restart LNMP services
+  registry             Start Docker Registry
+  registry-down        Stop Docker Registry
   swarm-build          Build Swarm image (nginx php7)
   swarm-push           Push Swarm image (nginx php7)
   swarm-deploy         Deploy LNMP stack TO Swarm mode
@@ -117,6 +119,65 @@ You must Update .env file when update this project.
 
 Donate https://zan.khs1994.com
 "
+}
+
+_registry(){
+
+  # SSL 相关
+
+  if [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+    print_error "Docker Registry SSL not found, generating ...."
+    ssl_self $KHS1994_LNMP_REGISTRY_HOST
+  fi
+
+  if [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+    print_error "Docker Registry SSL error"
+    exit 1
+  else
+    print_info "Docker Registry SSL Correct"
+  fi
+
+  # 生成 密码 验证文件
+
+  if ! [ -f config/nginx/auth/docker_registry.htpasswd ];then
+    echo; print_info "First start, Please set username and password"
+    read -p "username: " username
+    if [ -z $username ];then echo; print_error "用户名不能为空"; exit 1; fi
+    read -s -p "password: " password; echo
+    if [ -z $password ];then echo; print_error "密码不能为空"; exit 1; fi
+    read -s -p "Please reinput password: " password_verify; echo; echo
+
+    if ! [ "$password" = "$password_verify" ];then
+      print_error "两次输入的密码不同，请再次执行 ./lnmp-docker.sh registry 完成操作"; exit 1
+    fi
+
+    docker run --rm \
+      --entrypoint htpasswd \
+      registry \
+      -Bbn $username $password > config/nginx/auth/docker_registry.htpasswd
+      # 部分 nginx 可能不能解密，你可以替换为下面的命令
+      # -mbn username password > auth/nginx.htpasswd \
+  fi
+
+  # NGINX 配置文件
+
+  if ! [ -f config/nginx/registry.conf ];then
+    if [ -f config/nginx/registry.conf.backup ];then
+      cp config/nginx/registry.conf.backup config/nginx/registry.conf
+    else
+      cp config/nginx/demo-registry.conf.backup config/nginx/registry.conf
+    fi
+  fi
+
+  sed -i '' "s#KHS1994_DOMAIN#${KHS1994_LNMP_REGISTRY_HOST}#g" config/nginx/registry.conf
+
+  exec docker-compose -f docker-full.yml -f docker-compose.override.yml up -d registry nginx
+}
+
+_registry_down(){
+  docker-compose -f docker-full.yml -f docker-compose.override.yml stop registry
+  docker-compose -f docker-full.yml -f docker-compose.override.yml rm -f registry
+  mv config/nginx/registry.conf config/nginx/registry.conf.backup
 }
 
 tz(){
@@ -802,6 +863,14 @@ main() {
     ;;
   rc )
     release_rc
+    ;;
+
+  registry )
+    _registry
+    ;;
+
+  registry-down )
+    _registry_down
     ;;
 
   laravel )

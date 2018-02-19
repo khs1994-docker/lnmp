@@ -28,6 +28,8 @@ complete -W "acme.sh \
         push \
         restore \
         restart \
+        registry \
+        registry-down \
         ssl \
         ssl-self \
         swarm-build \
