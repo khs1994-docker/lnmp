@@ -56,11 +56,17 @@ case $1 in
 
    status )
         ps aux | grep nginx --color=auto
-        ps aux | grep php --color=auto
+        echo "====>"
+        ps aux | grep php-fpm --color=auto
+        echo "====>"
         ps aux | grep mysql --color=auto
-        ps aux | grep redis --color=auto
+        echo "====>"
+        ps aux | grep redis-server --color=auto
+        echo "====>"
         ps aux | grep memcached --color=auto
+        echo "====>"
         ps aux | grep mongod --color=auto
+        echo "====>"
         ps aux | grep postgres --color=auto
         ;;
 
@@ -72,5 +78,6 @@ $0 {start|stop|restart|reload|force-reload|status}
 $0 mongodb {start|stop|restart|reload|force-reload|status}
 $0 postgresql {start|stop|restart|reload|force-reload|status}
 "
+  ;;
 
-   esac
+esac
