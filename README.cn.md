@@ -139,8 +139,7 @@ $ ./lnmp-docker.sh down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.13.9-alpine`      | **1.13.9**              |`Alpine:3.7`    |
-|[NGINX-TLSv1.3](https://github.com/khs1994-website/tls-1.3)     |`khs1994/nginx:1.13.9-tls1.3-stretch`| **1.13.9**              |`Debian:stretch`|
+|[NGINX](https://github.com/khs1994-website/tls-1.3)             |`khs1994/nginx:1.13.9-tls1.3-stretch`| **1.13.9**              |`Debian:stretch`|
 |[Apache](https://github.com/docker-library/docs/tree/master/httpd)        |`httpd:2.4.29-alpine`      | **2.4.29**              |`Alpine:3.6`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.3`              | **8.0.3**               |`Debian:jessie` |
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.4`           | **10.3.4**              |`Debian:jessie` |

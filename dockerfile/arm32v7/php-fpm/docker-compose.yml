@@ -2,5 +2,8 @@ version: "3.5"
 services:
 
   arm32v7-php-fpm:
-    build: .
+    build:
+      context: .
+      args:
+        SOURCES_LIST: ./sources.list
     image: ${DOCKER_HUB_USERNAME}/arm32v7-php-fpm:${TAG}-stretch

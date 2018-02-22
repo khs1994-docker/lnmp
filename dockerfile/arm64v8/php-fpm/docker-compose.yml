@@ -2,5 +2,8 @@ version: "3.5"
 services:
 
   arm64v8-php-fpm:
-    build: .
+    build:
+      context: .
+      args:
+        ALPINE_URL: mirrors.ustc.edu.cn
     image: ${DOCKER_HUB_USERNAME}/arm64v8-php-fpm:${TAG}-alpine3.7

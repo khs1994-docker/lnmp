@@ -2,36 +2,42 @@ version: "3.5"
 services:
 
   mysql:
+    # build:
+    #   context: ./dockerfile/mysql/
+    #   dockerfile: Dockerfile
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
   # mariadb:
+  #   # build:
+  #   #   context: ./dockerfile/mariadb/
+  #   #   dockerfile: Dockerfile
   #   labels:
   #     - "com.khs1994.lnmp.app.env=self_build"
 
   redis:
-    build:
-      context: ./dockerfile/redis/
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./dockerfile/redis/
+    #   dockerfile: Dockerfile
       # build 镜像名在 docker-compose.yml 定义
       # build 镜像以用于生产环境
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
   php7:
-    build:
-      context: ./dockerfile/php-fpm/
-      # cache_from:
-      #   - khs1994/php-fpm:latest-alpine3.7
-      dockerfile: Dockerfile
-      # build 时的变量，相当于 Dockerfile 中的 ARG
-      # args:
-      #   buildno: 1
-      #   password: secret
-      # labels:
-      #   com.khs1994.description: "Extend Official PHP_FPM Docker Image"
-      #   com.khs1994.department: "Chinese"
-      #   com.khs1994.label-with-empty-value: ""
+    # build:
+    #   context: ./dockerfile/php-fpm/
+    #   cache_from:
+    #     - khs1994/php-fpm:latest-alpine3.7
+    #   dockerfile: Dockerfile
+    #   build 时的变量，相当于 Dockerfile 中的 ARG
+    #   args:
+    #     buildno: 1
+    #     password: secret
+    #   labels:
+    #     com.khs1994.description: "Extend Official PHP_FPM Docker Image"
+    #     com.khs1994.department: "Chinese"
+    #     com.khs1994.label-with-empty-value: ""
     environment:
       - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Build Docker Image
@@ -55,20 +61,36 @@ services:
   #     dockerfile: Dockerfile
   #   labels:
   #     - "com.khs1994.lnmp.app.env=self_build"
+  #
+  # mongodb:
+  #   build:
+  #     context: ./dockerfile/mongodb/
+  #     dockerfile: Dockerfile
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=self_build"
 
   nginx:
+    # build:
+    #   context: ./dockerfile/nginx/
+    #   dockerfile: Dockerfile
     volumes:
       - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
   # apache:
+  #   # build:
+  #   #   context: ./dockerfile/apache/
+  #   #   dockerfile: Dockerfile
   #   volumes:
   #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
   #  labels:
   #     - "com.khs1994.lnmp.app.env=self_build"
 
   phpmyadmin:
+    # build:
+    #   context: ./dockerfile/phpmyadmin/
+    #   dockerfile: Dockerfile
     image: phpmyadmin/phpmyadmin
     restart: always
     networks:
