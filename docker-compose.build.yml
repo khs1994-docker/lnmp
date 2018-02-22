@@ -26,7 +26,7 @@ services:
 
   php7:
     # build:
-    #   context: ./dockerfile/php-fpm/
+    #   context: ./dockerfile/php/
     #   cache_from:
     #     - khs1994/php-fpm:latest-alpine3.7
     #   dockerfile: Dockerfile

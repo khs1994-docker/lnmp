@@ -3,6 +3,10 @@ services:
 
   # MySQL 暂时没有 arm 镜像
   # mysql:
+  #   # build:
+  #   #   context: ./dockerfile/${ARM_ARCH}/mysql
+  #   #   dockerfile: Dockerfile
+  #   # image: lnmp-mysql:latest
   #   restart: always
   #   image: "${ARM_ARCH}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
   #   environment:
@@ -110,6 +114,10 @@ services:
       - "com.khs1994.lnmp.postgresql=true"
 
   # mongodb:
+  #   # build:
+  #   #   context: ./dockerfile/${ARM_ARCH}/mongodb/
+  #   #   dockerfile: Dockerfile
+  #   # image: lnmp-mongodb:lastet
   #   restart: always
   #   image: ${ARM_ARCH}/mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   networks:
@@ -130,8 +138,9 @@ services:
   php7:
     # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
     # build:
-    #   context: ./dockerfile/${ARM_ARCH}/php-fpm/
+    #   context: ./dockerfile/${ARM_ARCH}/php/
     #   dockerfile: Dockerfile
+    # image:lnmp-php:lastet
     restart: always
     image: "khs1994/${ARM_ARCH}-php-fpm:${KHS1994_LNMP_PHP_VERSION}-${ARM_PHP_BASED_OS}"
     networks:
@@ -181,6 +190,10 @@ services:
       - "com.khs1994.lnmp.nginx=true"
 
   # apache:
+  #   # build:
+  #   #   context: ./dockerfile/${ARM_ARCH}/apache
+  #   #   dockerfile: Dockerfile
+  #   # image: lnmp-apache:latest
   #   restart: always
   #   image: "${ARM_ARCH}/httpd:${KHS1994_LNMP_APACHE_VERSION}${ARM_BASED_OS}"
   #   env_file:
