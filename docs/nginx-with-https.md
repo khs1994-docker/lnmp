@@ -169,6 +169,11 @@ $ ./lnmp-docker.sh ssl-self www.t.khs1994.com
 
 * https://zerossl.com/
 
+## TLSv1.3
+
+[原生支持 TLSv1.3](https://github.com/khs1994-website/tls-1.3).
+
+
 # More Information
 
 * https://letsencrypt.org/docs/client-options/

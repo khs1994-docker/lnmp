@@ -134,18 +134,19 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.13.8-alpine`      | **1.13.8**               |`Alpine:3.5`   |
-|[Apache](https://github.com/docker-library/docs/tree/master/httpd)        |`httpd:2.4.29-alpine`      | **2.4.29**               |`Alpine:3.6`   |
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.3`              | **8.0.3**                |`Debian:jessie`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.4`           | **10.3.4**               |`Debian:jessie`|
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:4.0.8-alpine`       | **4.0.8**                |`Alpine:3.7`   |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php-fpm:7.2.2-alpine3.7`  | **7.2.2**        |`Alpine:3.7`   |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.2-alpine3.7`  | **5.5**          |`Alpine:3.7`   |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.2-alpine3.7`  | **1.6.3**        |`Alpine:3.7`   |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.4-alpine`           | **1.5.4**        |`Alpine:3.7`   |
-|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.2-management-alpine` | **3.7.2**        |`Alpine:3.7`   |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.1-alpine`             |**10.1**          |`Alpine:3.6`   |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:3.7.1`                      | **3.7.1**        |`Debian:jessie`|
+|[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.13.9-alpine`      | **1.13.9**              |`Alpine:3.7`    |
+|[NGINX-TLSv1.3](https://github.com/khs1994-website/tls-1.3)     |`khs1994/nginx:1.13.9-tls1.3-stretch`| **1.13.9**              |`Debian:stretch`|
+|[Apache](https://github.com/docker-library/docs/tree/master/httpd)        |`httpd:2.4.29-alpine`      | **2.4.29**              |`Alpine:3.6`    |
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.3`              | **8.0.3**               |`Debian:jessie` |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.4`           | **10.3.4**              |`Debian:jessie` |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:4.0.8-alpine`       | **4.0.8**               |`Alpine:3.7`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php-fpm:7.2.2-alpine3.7`  | **7.2.2**       |`Alpine:3.7`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.2-alpine3.7`  | **5.5**         |`Alpine:3.7`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.2-alpine3.7`  | **1.6.3**       |`Alpine:3.7`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.4-alpine`           | **1.5.4**       |`Alpine:3.7`    |
+|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.2-management-alpine` | **3.7.2**       |`Alpine:3.7`    |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.1-alpine`             |**10.1**         |`Alpine:3.6`    |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:3.7.1`                      | **3.7.1**       |`Debian:jessie` |
 
 ### Folder Structure
 
@@ -192,7 +193,7 @@ Open your Browers `127.0.0.1:8080`
 
 ## TLSv1.3
 
-Please see [khs1994-website/tls-1.3](https://github.com/khs1994-website/tls-1.3)
+[Default Support TLSv1.3](https://github.com/khs1994-website/tls-1.3).
 
 ## CI/CD
 
