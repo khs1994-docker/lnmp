@@ -32,10 +32,10 @@ services:
         # 在管理节点运行
         constraints: [node.role == manager]
       restart_policy:
-        condition: always
+        condition: any
         delay: 5s
         max_attempts: 5
-        windows: 123s
+        window: 123s
     secrets:
       - source: db_root_password
         target: /etc/db_root_password
@@ -57,10 +57,10 @@ services:
       placement:
         constraints: [node.role == manager]
       restart_policy:
-        condition: always
+        condition: any
         delay: 5s
         max_attempts: 5
-        windows: 123s
+        window: 123s
     configs:
       - source: redis_conf
         target: /redis.conf
@@ -69,7 +69,7 @@ services:
 
   php7:
     build: ./app/demo
-    image: khs1994/php-fpm:swarm-7.2.2-alpine3.7
+    image: khs1994/php-fpm:7.2.2-alpine3.7
     volumes:
       - ./app:/app
       - ./config/php/php-fpm.production.conf:/usr/local/etc/php-fpm.conf:ro
@@ -91,10 +91,10 @@ services:
       placement:
         constraints: [node.role == manager]
       restart_policy:
-        condition: always
+        condition: any
         delay: 5s
         max_attempts: 5
-        windows: 123s
+        window: 123s
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
 
@@ -106,6 +106,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
+      - ./app:/app       
       - ./config/nginx:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx:rw
     networks:
@@ -117,10 +118,10 @@ services:
       placement:
         constraints: [node.role == manager]
       restart_policy:
-        condition: always
+        condition: any
         delay: 5s
         max_attempts: 5
-        windows: 123s
+        window: 123s
     configs:
       - source: nginx_conf
         target: /etc/nginx/nginx.conf
@@ -140,7 +141,7 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
-
+  zoneinfo-data:
 secrets:
   db_root_password:
     file: secrets/db_root_password.txt
