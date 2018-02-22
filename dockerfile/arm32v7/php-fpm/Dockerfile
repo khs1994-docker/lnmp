@@ -1,9 +1,10 @@
 FROM arm32v7/php:7.2.2-fpm-stretch
 
 ENV TZ=Asia/Shanghai
-# cn
 
-COPY ./sources.list /etc/apt/sources.list
+ARG SOURCES_LIST=./sources.list.default
+
+COPY $SOURCES_LIST /etc/apt/sources.list
 
 RUN set -xe \
 	      && buildDeps=" \

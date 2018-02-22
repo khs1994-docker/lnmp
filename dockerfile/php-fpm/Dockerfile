@@ -2,9 +2,12 @@ FROM php:7.2.2-fpm-alpine3.7
 
 ENV TZ=Asia/Shanghai
 
-# 替换源
+# 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
+# 国内镜像地址在 docker-compose.yml 中定义
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
+
+RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories
 
 
 RUN set -xe \

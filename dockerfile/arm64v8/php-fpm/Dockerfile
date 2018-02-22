@@ -2,9 +2,9 @@ FROM arm64v8/php:7.2.2-fpm-alpine3.7
 
 ENV TZ=Asia/Shanghai
 
-# 替换源
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories
 
 
 RUN set -xe \
