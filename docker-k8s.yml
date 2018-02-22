@@ -44,7 +44,6 @@ services:
   php7:
     build: ./app/demo
     image: khs1994/php-fpm:swarm-7.2.2-alpine3.7
-    # container_name: khs1994-docker-lnmp-php-fpm
     # volumes:
     #   - ./logs/php-fpm:/var/log/php-fpm:rw
     networks:

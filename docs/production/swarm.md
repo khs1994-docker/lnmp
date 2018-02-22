@@ -93,3 +93,9 @@ $ docker service ps lnmp_mysql
 ```bash
 $ docker stack rm lnmp
 ```
+
+# 服务更新
+
+```bash
+
+```

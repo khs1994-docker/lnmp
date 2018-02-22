@@ -5,6 +5,8 @@ services:
   # khs1994.com 专用
   #
   # 在集群执行
+  # $ docker-compose -f docker-prod.yml build
+  # $ docker-compose -f docker-prod.yml push
   # $ docker stack deploy -c docker-stack.yml lnmp
   # $ docker stack ps lnmp
 
@@ -21,12 +23,14 @@ services:
     # ports:
     #   - "127.0.0.1:3306:3306"
     volumes:
-      - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      # - ./config/mysql/conf.production.d:/etc/mysql/conf.d:ro
       - ./backup/init.production:/docker-entrypoint-initdb.d:ro
-      - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
+      - mysql-data:/var/lib/mysql:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
+    logging:
+      driver: journald
     deploy:
       placement:
         # 在管理节点运行
@@ -36,9 +40,16 @@ services:
         delay: 5s
         max_attempts: 5
         window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
     secrets:
       - source: db_root_password
         target: /etc/db_root_password
+    configs:
+      - source: mysql_cnf
+        target: /etc/mysql/conf.d/docker.cnf
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
 
@@ -61,6 +72,10 @@ services:
         delay: 5s
         max_attempts: 5
         window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
     configs:
       - source: redis_conf
         target: /redis.conf
@@ -86,6 +101,8 @@ services:
     environment:
       - APP_ENV=production
       - KHS1994_LNMP_DOCKER_VERSION=v18.03-rc1 x86_64 Docker Swarm
+    dns:
+      - 114.114.114.114
     deploy:
       # replicas: 2
       placement:
@@ -95,6 +112,10 @@ services:
         delay: 5s
         max_attempts: 5
         window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
 
@@ -106,7 +127,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:/app       
+      - ./app:/app
       - ./config/nginx:/etc/nginx/conf.d
       - ./logs/nginx:/var/log/nginx:rw
     networks:
@@ -122,6 +143,10 @@ services:
         delay: 5s
         max_attempts: 5
         window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
     configs:
       - source: nginx_conf
         target: /etc/nginx/nginx.conf
@@ -147,7 +172,9 @@ secrets:
     file: secrets/db_root_password.txt
 
 configs:
+  mysql_cnf:
+    file: ./config/mysql/conf.production.d/docker.cnf
   nginx_conf:
-    file: ./config/etc/nginx/nginx.conf
+    file: ./config/etc/nginx/nginx.production.conf
   redis_conf:
     file: ./config/redis/redis.production.conf
