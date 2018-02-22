@@ -1,0 +1,152 @@
+version: "3.5"
+services:
+  # 单节点 Swarm mode 集群
+  #
+  # khs1994.com 专用
+  #
+  # 在集群执行
+  # $ docker stack deploy -c docker-stack.yml lnmp
+  # $ docker stack ps lnmp
+
+  mysql:
+    image: mysql:8.0.3
+    env_file:
+      - ./cli/timezone.env
+    environment:
+      # MYSQL_ROOT_PASSWORD: mytest
+      MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
+      MYSQL_DATABASE: test
+    networks:
+      - backend
+    # ports:
+    #   - "127.0.0.1:3306:3306"
+    volumes:
+      - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      - ./backup/init.production:/docker-entrypoint-initdb.d:ro
+      - mysql-data:/var/lib/mysql:rw
+      - ./logs/mysql:/var/log/mysql:rw
+      - ./backup/mysql:/backup:rw
+    command: ["mysqld","--character-set-server=utf8mb4"]
+    deploy:
+      placement:
+        # 在管理节点运行
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: always
+        delay: 5s
+        max_attempts: 5
+        windows: 123s
+    secrets:
+      - source: db_root_password
+        target: /etc/db_root_password
+    labels:
+      - "com.khs1994.lnmp.app.env=production_swarm_mode"
+
+  redis:
+    image: redis:4.0.8-alpine
+    env_file: ./cli/timezone.env
+    # ports:
+    #   - "127.0.0.1:6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./logs/redis:/var/log/redis
+    networks:
+      - backend
+    command: ["redis-server","/redis.conf"]
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: always
+        delay: 5s
+        max_attempts: 5
+        windows: 123s
+    configs:
+      - source: redis_conf
+        target: /redis.conf
+    labels:
+      - "com.khs1994.lnmp.app.env=production_swarm_mode"
+
+  php7:
+    build: ./app/demo
+    image: khs1994/php-fpm:swarm-7.2.2-alpine3.7
+    volumes:
+      - ./app:/app
+      - ./config/php/php-fpm.production.conf:/usr/local/etc/php-fpm.conf:ro
+      - ./config/php/php-fpm.production.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./config/php/php-fpm.production.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      - ./config/php/php.production.ini:/usr/local/etc/php/php.ini:ro
+      - ./logs/php-fpm:/var/log/php-fpm:rw
+      - zoneinfo-data:/usr/share/zoneinfo
+    networks:
+      - frontend
+      - backend
+    command: ["php-fpm","-R"]
+    env_file: ./cli/timezone.env
+    environment:
+      - APP_ENV=production
+      - KHS1994_LNMP_DOCKER_VERSION=v18.03-rc1 x86_64 Docker Swarm
+    deploy:
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: always
+        delay: 5s
+        max_attempts: 5
+        windows: 123s
+    labels:
+      - "com.khs1994.lnmp.app.env=production_swarm_mode"
+
+  nginx:
+    build: ./config/nginx
+    image: khs1994/nginx:1.13.9-tls1.3-stretch
+    env_file: ./cli/timezone.env
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx:rw
+    networks:
+      - frontend
+    depends_on:
+      - php7
+    deploy:
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: always
+        delay: 5s
+        max_attempts: 5
+        windows: 123s
+    configs:
+      - source: nginx_conf
+        target: /etc/nginx/nginx.conf
+        # uid: '103'
+        # gid: '103'
+        # mode: 0440
+    labels:
+      - "com.khs1994.lnmp.app.env=production_swarm_mode"
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  mysql-data:
+  redis-data:
+  # rabbitmq-data:
+  # postgresql-data:
+  # mongodb-data:
+
+secrets:
+  db_root_password:
+    file: secrets/db_root_password.txt
+
+configs:
+  nginx_conf:
+    file: ./config/etc/nginx/nginx.conf
+  redis_conf:
+    file: ./config/redis/redis.production.conf
