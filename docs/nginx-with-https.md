@@ -169,6 +169,12 @@ $ ./lnmp-docker.sh ssl-self www.t.khs1994.com
 
 * https://zerossl.com/
 
+## TLSv1.3
+
+```bash
+$ ./lnmp-docker.sh full-up nginx-tlsv1.3
+```
+
 # More Information
 
 * https://letsencrypt.org/docs/client-options/
