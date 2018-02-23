@@ -30,17 +30,12 @@ before_install:
 # - cd -
 - cp .env.example .env
 - docker-compose --version
-- sed -i 's/^PRODUCTIOM_DOCKER_IMAGE_PREFIX.*/PRODUCTIOM_DOCKER_IMAGE_PREFIX=khs1994/g' .env
-- sed -i 's/^PRO_MYSQL_PORT.*/PRO_MYSQL_PORT=127.0.0.1:3306/g' .env
-- sed -i 's/^PRO_REDIS_PORT.*/PRO_REDIS_PORT=127.0.0.1:6379/g' .env
 - sudo rm /usr/local/bin/docker-compose
 - ./lnmp-docker.sh compose --official -f
 jobs:
   include:
     - stage: development
       script: cli/test development
-    - stage: production
-      script: cli/test production
     - stage: swarm
       script: cli/test swarm
     - stage: k8s
