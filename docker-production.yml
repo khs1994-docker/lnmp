@@ -13,6 +13,9 @@ services:
   #
   # $ docker stack deploy -c docker-production.yml lnmp
   # $ docker stack ps lnmp
+  #
+  # 原则
+  # 尽可能减少 volumes 项
 
   mysql:
     build:
@@ -43,7 +46,10 @@ services:
     logging:
       driver: journald
     deploy:
+      # mode: replicated
       # replicas: 2
+      # endpoint_mode: dnsrr
+      # endpoint_mode: vip
       placement:
         # 在管理节点运行
         constraints: [node.role == manager]
@@ -56,6 +62,15 @@ services:
         parallelism: 2
         delay: 10s
         order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp.mysql=true"
     secrets:
       - source: db_root_password
         target: /etc/db_root_password
@@ -99,6 +114,8 @@ services:
         parallelism: 2
         delay: 10s
         order: stop-first
+      labels:
+        - "com.khs1994.lnmp.redis=true"
     configs:
       - source: redis_conf
         target: /redis.conf
@@ -111,10 +128,16 @@ services:
       # context: ./dockerfile/php/
       context: ./app/demo/
       dockerfile: Dockerfile
+      # args:
+      #   foo: bar
+      # cache_from:
+      #   - alpine:3.7
+      # labels:
+      #   - "com.khs1994.lnmp.php7=true"
     #
-    # image: username/lnmp-mysql:tag
+    # image: username/lnmp-php:tag
     #
-    # image: khs1994/lnmp-mysql:8.0.3
+    # image: khs1994/lnmp-php:7.2.2
     #
     image: khs1994/php-fpm:7.2.2-alpine3.7
     volumes:
@@ -134,6 +157,9 @@ services:
       - KHS1994_LNMP_DOCKER_VERSION=v18.03-rc1 x86_64 Docker Swarm
     dns:
       - 114.114.114.114
+    depends_on:
+      - mysql
+      - redis
     logging:
       driver: journald
     deploy:
@@ -149,6 +175,8 @@ services:
         parallelism: 2
         delay: 10s
         order: stop-first
+      labels:
+        - "com.khs1994.lnmp.php7=true"
     configs:
       - source: php_ini
         target: /usr/local/etc/php/php.ini
@@ -164,13 +192,13 @@ services:
 
   nginx:
     build:
-      # context: ./dockerfile/mysql/
+      # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
     #
-    # image: username/lnmp-mysql:tag
+    # image: username/lnmp-nginx:tag
     #
-    # image: khs1994/lnmp-mysql:8.0.3
+    # image: khs1994/lnmp-nginx:1.13.9
     #
     image: khs1994/nginx:1.13.9-tls1.3-stretch
     env_file: ./cli/timezone.env
@@ -202,6 +230,8 @@ services:
         parallelism: 2
         delay: 10s
         order: stop-first
+      labels:
+        - "com.khs1994.lnmp.nginx=true"
     configs:
       - source: nginx_conf
         target: /etc/nginx/nginx.conf
@@ -241,6 +271,12 @@ services:
       #   target: /etc/nginx/conf.d/ssl/domain.com.crt
       # - source: domain_com_ssl_key
       #   target: /etc/nginx/conf.d/ssl/domain.com.key
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost"]
+    #   interval: 1m30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.nginx=true"
@@ -248,6 +284,12 @@ services:
 networks:
   frontend:
   backend:
+  #
+  # 使用外部 network
+  #
+  # my_other_network:
+  #   external: true
+  #   name: my-lnmp-network
 
 volumes:
   mysql-data:
@@ -256,6 +298,13 @@ volumes:
   # postgresql-data:
   # mongodb-data:
   zoneinfo-data:
+  #
+  # 使用外部 volume
+  #
+  # my_other_volume:
+  #   external: true
+  #   name: my-app-data
+
 secrets:
   db_root_password:
     file: secrets/db_root_password.txt
@@ -280,6 +329,13 @@ secrets:
   # domain_com_ssl_crt:
   #   file: ./config/nginx/ssl/domain.com.crt
   #
+  # 使用外部 secret
+  #
+  # my_other_secret:
+  #   external: true
+  # my_second_secret:
+  #   external:
+  #     name: redis_secret
 
 configs:
   mysql_cnf:
@@ -310,3 +366,11 @@ configs:
     file: ./config/php/php-fpm.production.d/docker.conf
   redis_conf:
     file: ./config/redis/redis.production.conf
+  #
+  # 使用外部 config
+  #
+  # my_other_config:
+  #   external: true
+  # my_second_config:
+  #   external:
+  #     name: redis_config
