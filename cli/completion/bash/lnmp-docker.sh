@@ -31,10 +31,11 @@ complete -W "acme.sh \
         ssl-self \
         swarm-build \
         swarm-config \
-        swarm-push \
-        swarm-pull \
         swarm-deploy \
         swarm-down \
+        swarm-ps \
+        swarm-pull \
+        swarm-push \
         tp \
         apache-cli \
         mariadb-cli \

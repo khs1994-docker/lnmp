@@ -86,14 +86,14 @@ Kubernets:
   k8s                  Deploy LNMP on k8s
   k8s-down             Remove k8s LNMP
 
-
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
   swarm-config         Validate and view the Production Swarm mode Compose file
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-pull           Pull LNMP Docker Images in production Swarm mode
   swarm-deploy         Deploy LNMP stack TO Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
+  swarm-ps             List the LNMP tasks
+  swarm-pull           Pull LNMP Docker Images in production Swarm mode
+  swarm-push           Push Swarm image (nginx php7)
 
 Container CLI:
   apache-cli
@@ -962,6 +962,10 @@ main() {
 
   swarm-down )
     docker stack rm lnmp
+    ;;
+
+  swarm-ps )
+    docker stack ps lnmp
     ;;
 
   build )

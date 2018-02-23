@@ -24,7 +24,6 @@ services:
     #   - "127.0.0.1:3306:3306"
     volumes:
       - ./backup/init.production:/docker-entrypoint-initdb.d:ro
-      - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
       - mysql-data:/var/lib/mysql:rw
       # - ./config/mysql/conf.production.d:/etc/mysql/conf.d:ro
@@ -32,6 +31,7 @@ services:
     logging:
       driver: journald
     deploy:
+      # replicas: 2
       placement:
         # 在管理节点运行
         constraints: [node.role == manager]
@@ -61,13 +61,13 @@ services:
     #   - "127.0.0.1:6379:6379"
     volumes:
       - redis-data:/data
-      # - ./logs/redis:/var/log/redis
     networks:
       - backend
     command: ["redis-server","/redis.conf"]
     logging:
       driver: journald
     deploy:
+      # replicas: 2
       placement:
         constraints: [node.role == manager]
       restart_policy:
@@ -95,7 +95,6 @@ services:
       - ./config/php/php-fpm.production.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.production.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./config/php/php.production.ini:/usr/local/etc/php/php.ini:ro
-      # - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - frontend
