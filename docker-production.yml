@@ -688,9 +688,9 @@ secrets:
   #   external:
   #     name: redis_secret
   ssh_id_rsa:
-    file: ~/.ssh/id_rsa
+    file: /root/.ssh/id_rsa
   ssh_known_hosts:
-    file: ~/.ssh/known_hosts
+    file: /root/.ssh/known_hosts
 
 configs:
   mysql_conf_d_docker_cnf:
