@@ -62,6 +62,7 @@ k8s(){
 # Swarm mode
 
 swarm(){
+  sed -i "s!file: /root/.ssh/id_rsa!file: ./secrets/ssh_config!g" docker-production.yml
   docker node ls > /dev/null 2>&1
   if [ $? != 0 ];then docker swarm init; fi
   docker stack rm lnmp
