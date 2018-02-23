@@ -61,19 +61,11 @@ Commands:
   full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
-  k8s                  Deploy LNMP on k8s
-  k8s-down             Remove k8s LNMP
   push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
   restart              Restart LNMP services
   registry             Start Docker Registry
   registry-down        Stop Docker Registry
-  swarm-build          Build Swarm image (nginx php7)
-  swarm-config         Validate and view the Production Swarm mode Compose file
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-pull           Pull LNMP Docker Images in production Swarm mode
-  swarm-deploy         Deploy LNMP stack TO Swarm mode
-  swarm-down           Remove LNMP stack IN Swarm mode
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
 
@@ -89,6 +81,19 @@ PHP Tools:
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
   tp                   Create a new ThinkPHP application
+
+Kubernets:
+  k8s                  Deploy LNMP on k8s
+  k8s-down             Remove k8s LNMP
+
+
+Swarm mode:
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-config         Validate and view the Production Swarm mode Compose file
+  swarm-push           Push Swarm image (nginx php7)
+  swarm-pull           Pull LNMP Docker Images in production Swarm mode
+  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-down           Remove LNMP stack IN Swarm mode
 
 Container CLI:
   apache-cli
