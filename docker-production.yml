@@ -409,6 +409,11 @@ services:
         target: /usr/local/etc/php-fpm.d/www.conf
       - source: php_fpm_conf_d_docker_conf
         target: /usr/local/etc/php-fpm.d/docker.conf
+    secrets:
+      - source: ssh_id_rsa
+        target: /root/.ssh/id_rsa
+      - source: ssh_known_hosts
+        target: /root/.shh/known_hosts
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.php7=true"
@@ -682,6 +687,10 @@ secrets:
   # my_second_secret:
   #   external:
   #     name: redis_secret
+  ssh_id_rsa:
+    file: ~/.ssh/id_rsa
+  ssh_known_hosts:
+    file: ~/.ssh/known_hosts
 
 configs:
   mysql_conf_d_docker_cnf:

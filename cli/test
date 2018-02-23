@@ -67,6 +67,7 @@ swarm(){
   docker stack rm lnmp
   docker stack deploy -c docker-production.yml lnmp
   until curl 127.0.0.1; do
+    docker stack ps lnmp
     echo "Wait nginx service start"
     sleep 5
   done
