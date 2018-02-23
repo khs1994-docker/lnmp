@@ -23,9 +23,9 @@
 执行以下命令构建镜像并运行。
 
 ```bash
-$ docker-compose -f docker-stack.yml build
+$ docker-compose -f docker-production.yml build [SERVICE_NAME]
 
-$ docker-compose -f docker-stack.yml push php7 nginx
+$ docker-compose -f docker-production.yml push SERVICE_NAME
 ```
 
 # 准备
@@ -63,7 +63,7 @@ $ docker swarm join-token manager
 多个互相关联的服务组成 `服务栈`，在项目根目录执行
 
 ```bash
-$ docker stack deploy -c docker-stack.yml lnmp
+$ docker stack deploy -c docker-production.yml lnmp
 ```
 
 ## 查看

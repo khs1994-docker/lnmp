@@ -319,16 +319,16 @@ dockerfile_update(){
   case $SOFT in
     nginx )
       sed -i '' "s#^KHS1994_LNMP_NGINX_VERSION.*#KHS1994_LNMP_NGINX_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: khs1994/nginx.*#    image: khs1994/nginx:swarm-$VERSION-alpine#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: khs1994/nginx.*#    image: khs1994/nginx:swarm-$VERSION-alpine#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
       ;;
     mysql )
       sed -i '' "s#^KHS1994_LNMP_MYSQL_VERSION.*#KHS1994_LNMP_MYSQL_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: mysql.*#    image: mysql:$VERSION#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: mysql.*#    image: mysql:$VERSION#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
       ;;
     php-fpm )
       dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.7" $VERSION
       sed -i '' "s#^KHS1994_LNMP_PHP_VERSION.*#KHS1994_LNMP_PHP_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: khs1994/php-fpm.*#    image: khs1994/php-fpm:swarm-$VERSION-alpine3.7#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: khs1994/php-fpm.*#    image: khs1994/php-fpm:swarm-$VERSION-alpine3.7#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
     ;;
     postgresql )
       dockerfile_update_sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
@@ -341,7 +341,7 @@ dockerfile_update(){
     redis )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' "s/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION=${VERSION}/g" .env.example .env
-      sed -i '' "s#^    image: redis.*#    image: redis:$VERSION-alpine#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: redis.*#    image: redis:$VERSION-alpine#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
     ;;
     * )
       print_error "Soft is not existing"
@@ -931,31 +931,31 @@ main() {
     ;;
 
   swarm-config )
-    init; exec docker-compose -f docker-production.yml config
+    init; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} config
     ;;
 
   swarm-pull )
     run_docker
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      init; sleep 2; exec docker-compose -f docker-production.yml pull
+      init; sleep 2; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} pull
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
     ;;
 
   swarm-build )
-    docker-compose -f docker-production.yml build
+    docker-compose -f ${PRODUCTION_COMPOSE_FILE} build
     ;;
 
   swarm-push )
-    docker-compose -f docker-production.yml push nginx php7
+    docker-compose -f ${PRODUCTION_COMPOSE_FILE} push nginx php7
     ;;
 
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       run_docker
-      docker stack deploy -c docker-production.yml lnmp
+      docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
 
       if [ $? -eq 0 ];then sleep 2; docker stack ps lnmp; else exit 1; fi
 
@@ -1261,5 +1261,15 @@ print_info `docker --version`
 echo; docker_compose
 
 if [ $# = 0 ];then help; exit 0; fi
+
+# 生产环境 compose 文件
+
+ls docker-production.*.yml > /dev/null 2>&1
+
+if [ $? = '0' ];then
+  PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`
+else
+  PRODUCTION_COMPOSE_FILE='docker-production.yml'
+fi
 
 main "$@"

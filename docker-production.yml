@@ -122,6 +122,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   secrets:
   #     - db_root_password
   #   configs:
@@ -202,6 +204,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
   #     - "com.khs1994.lnmp.memcached=true"
@@ -237,6 +241,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
   #     - "com.khs1994.lnmp.rabbitmq=true"
@@ -274,6 +280,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   secrets:
   #     # 默认与 mysql 密码一致。
   #     - db_root_password
@@ -309,6 +317,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   # ports:
   #   #    - "127.0.0.1:27017:27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
@@ -404,9 +414,6 @@ services:
     volumes:
       - ./app:/app:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
-      #
-      # 生产环境配置文件一个域名一个配置文件(configs)，一个 SSL key，一个 SSL crt(secrets)
-      #
     networks:
       - frontend
     depends_on:
@@ -434,6 +441,9 @@ services:
         # uid: '103'
         # gid: '103'
         # mode: 0440
+      #
+      # 一个域名一个子配置文件
+      #
       # - source: nginx_khs1994_com_conf
       #   target: /etc/nginx/conf.d/khs1994.com.conf
       # - source: nginx_80_conf
@@ -448,6 +458,11 @@ services:
       # - source: nginx_domain_com_conf
       #   target: /etc/nginx/conf.d/domain.com.conf
     # secrets:
+      #
+      # *.khs1994.com 两个证书密钥
+      # *.developer.khs1994.com 两个证书密钥
+      # 以此类推
+      #
       # - source: khs1994_com_ssl_crt
       #   target: /etc/nginx/conf.d/ssl/khs1994.com.crt
       # - source: khs1994_com_ssl_key
@@ -502,6 +517,8 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
+  #   logging:
+  #     driver: journald
   #   deploy:
   #     placement:
   #       constraints: [node.role == manager]
@@ -517,16 +534,33 @@ services:
   #   configs:
   #     - source: httpd_conf
   #       target: /usr/local/apache2/conf/httpd.conf
-  #     - source: vhost_conf
-  #       target: /usr/local/apache2/conf.d/vhost.conf
+  #     - source: vhost_khs1994_com_conf
+  #       target: /usr/local/apache2/conf.d/vhost.khs1994.com.conf
+  #     #
+  #     #
+  #     # Example Don't Edit
+  #     #
+  #     #
+  #     # - source: vhost_domain_com_conf
+  #     #   target: /usr/local/apache2/conf.d/vhost.domain.com.conf
   #   secrets:
   #     - source: khs1994_com_ssl_crt
   #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.crt
   #     - source: khs1994_com_ssl_key
   #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.key
+  #     - source: developer_khs1994_com_ssl_crt
+  #       target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.crt
+  #     - source: developer_khs1994_com_ssl_key
+  #       target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.key
   #     #
-  #     # 更多配置请参考 nginx
   #     #
+  #     # Example Don’t Edit
+  #     #
+  #     #
+  #     # - source: domain_com_ssl_crt
+  #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.crt
+  #     # - source: domain_com_ssl_key
+  #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
   #     - "com.khs1994.lnmp.apache=true"
@@ -563,6 +597,8 @@ services:
   #       order: stop-first
   #     labels:
   #       - "com.khs1994.lnmp.mysql=true"
+  #   logging:
+  #     driver: journald
   #   configs:
   #     - source: registy_yml
   #       target: /etc/docker/registry/config.yml
@@ -643,7 +679,7 @@ configs:
   #   file ./config/nginx/conf.d/khs1994.com.conf
   #
   #
-  # Example Don't Edit
+  # NGINX Example Don't Edit
   #
   #
   # nginx_domain_com_conf:
@@ -651,8 +687,15 @@ configs:
   #
   # httpd_conf:
   #   file: ./config/etc/apache2/httpd.production.conf
-  # vhost_conf:
+  # vhost_khs1994_com_conf:
   #   file: ./config/apache2/khs1994.com.conf
+  #
+  #
+  # Apache Example Don't Edit
+  #
+  #
+  # vhost_domain_com_conf:
+  #   file: ./config/apache2/domain.com.conf
   php_ini:
     file: ./config/php/php.production.ini
   php_fpm_conf:
@@ -663,6 +706,8 @@ configs:
     file: ./config/php/php-fpm.production.d/docker.conf
   redis_conf:
     file: ./config/redis/redis.production.conf
+  # mongod_conf:
+  #   file: ./config/mongodb/mongod.production.conf
   # registy_yml:
   #   file: ./config/etc/docker/registry/config.production.yml
   #

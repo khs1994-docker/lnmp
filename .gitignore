@@ -3,6 +3,7 @@
 docker-compose
 docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
+docker-production.*.yml
 *.stackdump
 .env
 .env.backup
