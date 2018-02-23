@@ -76,7 +76,7 @@ services:
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
-      - redis-data:/data
+      - redis-data:/data:rw
     networks:
       - backend
     command: ["redis-server","/redis.conf"]
@@ -114,12 +114,12 @@ services:
     #
     image: khs1994/php-fpm:7.2.2-alpine3.7
     volumes:
-      - ./app:/app
+      - ./app:/app:rw
       - ./config/php/php-fpm.production.conf:/usr/local/etc/php-fpm.conf:ro
       - ./config/php/php-fpm.production.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.production.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./config/php/php.production.ini:/usr/local/etc/php/php.ini:ro
-      - zoneinfo-data:/usr/share/zoneinfo
+      - zoneinfo-data:/usr/share/zoneinfo:rw
     networks:
       - frontend
       - backend
@@ -165,8 +165,11 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:/app
-      - ./config/nginx:/etc/nginx/conf.d
+      - ./app:/app:rw
+      - ./config/nginx:/etc/nginx/conf.d:ro
+      #
+      # 生产环境配置文件一个域名一个配置文件(configs)，一个 SSL key，一个 SSL crt(secrets)
+      #
     networks:
       - frontend
     depends_on:
@@ -192,6 +195,33 @@ services:
         # uid: '103'
         # gid: '103'
         # mode: 0440
+      - source: nginx_khs1994_com_conf
+        target: /etc/nginx/conf.d/khs1994.com.conf
+      #
+      #
+      # Example Don't Edit
+      #
+      #
+      # - source: nginx_domain_com_conf
+      #   target: /etc/nginx/conf.d/domain.com.conf
+    secrets:
+      - source: khs1994_com_ssl_crt
+        target: /etc/nginx/conf.d/ssl/khs1994.com.crt
+      - source: khs1994_com_ssl_key
+        target: /etc/nginx/conf.d/ssl/khs1994.com.key
+      - source: developer_khs1994_com_ssl_crt
+        target: /etc/nginx/conf.d/ssl/developer.khs1994.com.crt
+      - source: developer_khs1994_com_ssl_key
+        target: /etc/nginx/conf.d/ssl/developer.khs1994.com.key
+      #
+      #
+      # Example Don't Edit
+      #
+      #
+      # - source: domain_com_ssl_crt
+      #   target: /etc/nginx/conf.d/ssl/domain.com.crt
+      # - source: domain_com_ssl_key
+      #   target: /etc/nginx/conf.d/ssl/domain.com.key
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.nginx=true"
@@ -210,11 +240,40 @@ volumes:
 secrets:
   db_root_password:
     file: secrets/db_root_password.txt
+  # khs1994_com_ssl_key:
+  #   file: ./config/nginx/ssl/khs1994.com.key
+  # khs1994_com_ssl_crt:
+  #   file: ./config/nginx/ssl/khs1994.com.crt
+  # developer_khs1994_com_ssl_crt:
+  #   file: ./config/nginx/ssl/developer.khs1994.com.crt
+  # developer_khs1994_com_ssl_key:
+  #   file: ./config/nginx/ssl/developer.khs1994.com.key
+  #
+  #
+  # Example Don't Edit
+  #
+  #
+  # domain_com_ssl_key:
+  #   file: ./config/nginx/ssl/domain.com.key
+  #
+  # domain_com_ssl_crt:
+  #   file: ./config/nginx/ssl/domain.com.crt
+  #
 
 configs:
   mysql_cnf:
     file: ./config/mysql/conf.production.d/docker.cnf
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
+  # nginx_khs1994_com_conf:
+  #   file ./config/nginx/conf.d/khs1994.com.conf
+  #
+  #
+  # Example Don't Edit
+  #
+  #
+  # nginx_domain_com_conf:
+  #   file ./config/nginx/conf.d/domain.com.conf
+  #
   redis_conf:
     file: ./config/redis/redis.production.conf
