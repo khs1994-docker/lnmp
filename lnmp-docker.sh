@@ -61,20 +61,11 @@ Commands:
   full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
-  k8s                  Deploy LNMP on k8s
-  k8s-down             Remove k8s LNMP
-  production           Use LNMP in Production (Only Support Linux x86_64)
-  production-config    Validate and view the Production Compose file
-  production-pull      Pull LNMP Docker Images in production
   push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
   restart              Restart LNMP services
   registry             Start Docker Registry
   registry-down        Stop Docker Registry
-  swarm-build          Build Swarm image (nginx php7)
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-deploy         Deploy LNMP stack TO Swarm mode
-  swarm-down           Remove LNMP stack IN Swarm mode
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
 
@@ -90,6 +81,19 @@ PHP Tools:
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
   tp                   Create a new ThinkPHP application
+
+Kubernets:
+  k8s                  Deploy LNMP on k8s
+  k8s-down             Remove k8s LNMP
+
+Swarm mode:
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-config         Validate and view the Production Swarm mode Compose file
+  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-down           Remove LNMP stack IN Swarm mode
+  swarm-ps             List the LNMP tasks
+  swarm-pull           Pull LNMP Docker Images in production Swarm mode
+  swarm-push           Push Swarm image (nginx php7)
 
 Container CLI:
   apache-cli
@@ -315,16 +319,16 @@ dockerfile_update(){
   case $SOFT in
     nginx )
       sed -i '' "s#^KHS1994_LNMP_NGINX_VERSION.*#KHS1994_LNMP_NGINX_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: khs1994/nginx.*#    image: khs1994/nginx:swarm-$VERSION-alpine#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: khs1994/nginx.*#    image: khs1994/nginx:swarm-$VERSION-alpine#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
       ;;
     mysql )
       sed -i '' "s#^KHS1994_LNMP_MYSQL_VERSION.*#KHS1994_LNMP_MYSQL_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: mysql.*#    image: mysql:$VERSION#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: mysql.*#    image: mysql:$VERSION#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
       ;;
     php-fpm )
       dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.7" $VERSION
       sed -i '' "s#^KHS1994_LNMP_PHP_VERSION.*#KHS1994_LNMP_PHP_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: khs1994/php-fpm.*#    image: khs1994/php-fpm:swarm-$VERSION-alpine3.7#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: khs1994/php-fpm.*#    image: khs1994/php-fpm:swarm-$VERSION-alpine3.7#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
     ;;
     postgresql )
       dockerfile_update_sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
@@ -337,7 +341,7 @@ dockerfile_update(){
     redis )
       dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
       sed -i '' "s/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION=${VERSION}/g" .env.example .env
-      sed -i '' "s#^    image: redis.*#    image: redis:$VERSION-alpine#g" docker-k8s.yml docker-stack.yml linuxkit/lnmp.yml
+      sed -i '' "s#^    image: redis.*#    image: redis:$VERSION-alpine#g" docker-k8s.yml docker-production.yml linuxkit/lnmp.yml
     ;;
     * )
       print_error "Soft is not existing"
@@ -926,18 +930,46 @@ main() {
     fi
     ;;
 
-  production-config )
-    init; exec docker-compose -f docker-compose.yml -f docker-compose.prod.yml config
+  swarm-config )
+    init; exec docker-compose -f docker-production.yml config
     ;;
 
-  production-pull )
+  swarm-pull )
     run_docker
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      init; sleep 2; exec docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+      init; sleep 2; exec docker-compose -f docker-production.yml pull
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
+    ;;
+
+  swarm-build )
+    docker-compose -f docker-production.yml build
+    ;;
+
+  swarm-push )
+    docker-compose -f docker-production.yml push nginx php7
+    ;;
+
+  swarm-deploy )
+    if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
+      run_docker
+      docker stack deploy -c docker-production.yml lnmp
+
+      if [ $? -eq 0 ];then sleep 2; docker stack ps lnmp; else exit 1; fi
+
+    else
+      print_error "Production NOT Support ${OS} ${ARCH}\n"
+    fi
+    ;;
+
+  swarm-down )
+    docker stack rm lnmp
+    ;;
+
+  swarm-ps )
+    docker stack ps lnmp
     ;;
 
   build )
@@ -1074,22 +1106,6 @@ main() {
 
   dockerfile-update )
     dockerfile_update
-    ;;
-
-  swarm-build )
-    docker-compose -f docker-stack.yml build
-    ;;
-
-  swarm-push )
-    docker-compose -f docker-stack.yml push nginx php7
-    ;;
-
-  swarm-deploy )
-    run_docker; docker stack deploy -c docker-stack.yml lnmp; if [ $? -eq 0 ];then docker stack ps lnmp; else exit 1; fi
-    ;;
-
-  swarm-down )
-    docker stack rm lnmp
     ;;
 
   development-pull )

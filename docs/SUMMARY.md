@@ -12,6 +12,7 @@
 * NGINX
     * [一键生成配置](nginx-conf.md)
     * [HTTPS 配置](nginx-with-https.md)
+* [PHPer 常用命令容器化](command.md)   
 * PHP
     * [PHP 扩展列表](php.md)
     * [xdebug](xdebug.md)
@@ -19,10 +20,12 @@
     * [Composer](composer.md)
     * [PHPUnit](phpunit.md)
 * 生产环境(重要)
-    * [安装](production/install.md)
-    * [配置](production/README.md)
-    * [Swarm mode 三节点集群](production/swarm.md)
-    * [k8s](production/k8s.md)
+    * Swarm mode
+        * [安装](production/install.md)
+        * [配置](production/README.md)
+        * [Swarm mode 三节点集群](production/swarm.md)
+    * Kubernetes
+        * [k8s](production/k8s.md)
     * [Docker Registry](registry.md)
 * 树莓派3
     * [ARM架构](arm.md)

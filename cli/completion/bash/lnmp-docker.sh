@@ -22,9 +22,6 @@ complete -W "acme.sh \
         new \
         php \
         phpunit \
-        production \
-        production-config \
-        production-pull \
         push \
         restore \
         restart \
@@ -33,9 +30,12 @@ complete -W "acme.sh \
         ssl \
         ssl-self \
         swarm-build \
-        swarm-push \
+        swarm-config \
         swarm-deploy \
         swarm-down \
+        swarm-ps \
+        swarm-pull \
+        swarm-push \
         tp \
         apache-cli \
         mariadb-cli \

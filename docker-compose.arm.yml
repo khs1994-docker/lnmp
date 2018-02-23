@@ -18,7 +18,7 @@ services:
   #   networks:
   #     - backend
   #   ports:
-  #     - "${DEV_MYSQL_PORT}:3306"
+  #     - "${MYSQL_PORT}:3306"
   #   volumes:
   #     - mysql-data:/var/lib/mysql
   #     - ./logs/mysql:/var/log/mysql
@@ -43,7 +43,7 @@ services:
       - ./logs/redis:/var/log/redis
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
-      - "${DEV_REDIS_PORT}:6379"
+      - "${REDIS_PORT}:6379"
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -62,7 +62,7 @@ services:
     volumes:
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
-       - "${DEV_MEMCACHED_PORT}:11211"
+       - "${MEMCACHED_PORT}:11211"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.memcached=true"
@@ -105,7 +105,7 @@ services:
       - postgresql-data:/var/lib/postgresql
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
-      - "${DEV_POSTGRESQL_PORT}:5432"
+      - "${POSTGRESQL_PORT}:5432"
     secrets:
       # 默认与 mysql 密码一致。
       - db_root_password
@@ -127,7 +127,7 @@ services:
   #     - mongodb-data:/data/db
   #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
   #   ports:
-  #     - "${DEV_MONGODB_PORT}:27017"
+  #     - "${MONGODB_PORT}:27017"
   #   env_file:
   #     - ./cli/timezone.env
   #   command: ["mongod","--config","/etc/mongod.conf"]
@@ -147,7 +147,7 @@ services:
       - frontend
       - backend
     volumes:
-      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+      - ./app:${LNMP_PHP_PATH}:rw
       - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
@@ -178,7 +178,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+      - ./app:${LNMP_PHP_PATH}:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./config/etc/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro
@@ -202,7 +202,7 @@ services:
   #     - "443:443"
   #     - "80:80"
   #   volumes:
-  #     - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+  #     - ./app:${LNMP_PHP_PATH}:rw
   #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     - ./config/apache2/conf.d:/usr/local/apache2/conf.d
   #     - ./logs/apache2:/usr/local/apache2/logs

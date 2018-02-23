@@ -2,4 +2,4 @@
 skip-host-cache
 skip-name-resolve
 
-log-error=/var/log/mysql/error.log
+# log-error=/var/log/mysql/error.log
