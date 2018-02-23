@@ -199,8 +199,12 @@ services:
         # uid: '103'
         # gid: '103'
         # mode: 0440
-      - source: nginx_khs1994_com_conf
-        target: /etc/nginx/conf.d/khs1994.com.conf
+      # - source: nginx_khs1994_com_conf
+      #   target: /etc/nginx/conf.d/khs1994.com.conf
+      # - source: nginx_80_conf
+      #   target: /etc/nginx/conf.d/80.conf
+      # - source: nginx_301_conf
+      #   target: /etc/nginx/conf.d/301.conf
       #
       #
       # Example Don't Edit
@@ -208,15 +212,17 @@ services:
       #
       # - source: nginx_domain_com_conf
       #   target: /etc/nginx/conf.d/domain.com.conf
-    secrets:
-      - source: khs1994_com_ssl_crt
-        target: /etc/nginx/conf.d/ssl/khs1994.com.crt
-      - source: khs1994_com_ssl_key
-        target: /etc/nginx/conf.d/ssl/khs1994.com.key
-      - source: developer_khs1994_com_ssl_crt
-        target: /etc/nginx/conf.d/ssl/developer.khs1994.com.crt
-      - source: developer_khs1994_com_ssl_key
-        target: /etc/nginx/conf.d/ssl/developer.khs1994.com.key
+    # secrets:
+      # - source: khs1994_com_ssl_crt
+      #   target: /etc/nginx/conf.d/ssl/khs1994.com.crt
+      # - source: khs1994_com_ssl_key
+      #   target: /etc/nginx/conf.d/ssl/khs1994.com.key
+      # - source: developer_khs1994_com_ssl_crt
+      #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.crt
+      # - source: developer_khs1994_com_ssl_key
+      #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.key
+      # - source: auth_htpasswd
+      #   target: /etc/nginx/conf.d/auth/nginx.htpasswd
       #
       #
       # Example Don't Edit
@@ -252,6 +258,8 @@ secrets:
   #   file: ./config/nginx/ssl/developer.khs1994.com.crt
   # developer_khs1994_com_ssl_key:
   #   file: ./config/nginx/ssl/developer.khs1994.com.key
+  # auth_htpasswd:
+  #   file: ./config/nginx/auth/nginx.htpasswd
   #
   #
   # Example Don't Edit
@@ -269,6 +277,10 @@ configs:
     file: ./config/mysql/conf.production.d/docker.cnf
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
+  # nginx_80_conf:
+  #   file: ./config/nginx/conf.d/80.conf
+  # nginx_301_conf:
+  #   file: ./config/nginx/conf.d/301.conf
   # nginx_khs1994_com_conf:
   #   file ./config/nginx/conf.d/khs1994.com.conf
   #
