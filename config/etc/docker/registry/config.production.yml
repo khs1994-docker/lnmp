@@ -1,0 +1,47 @@
+version: 0.1
+log:
+  accesslog:
+    disabled: true
+  level: debug
+  formatter: text
+  fields:
+    service: registry
+    environment: production
+storage:
+  delete:
+    enabled: true
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+# auth:
+#   htpasswd:
+#     realm: basic-realm
+#     path: /etc/docker/registry/auth/nginx.htpasswd
+http:
+  addr: :5000
+  # host: https://docker.t.khs1994.com
+  # headers:
+  #   X-Content-Type-Options: [nosniff]
+  # http2:
+  #   disabled: false
+  # tls:
+  #   certificate: /etc/docker/registry/ssl/www.t.khs1994.com.crt
+  #   key: /etc/docker/registry/ssl/www.t.khs1994.com.key
+# 类似 github webhooks ,给特定网址 post 一个 json 数据
+notifications:
+  endpoints:
+    - name: alistener
+      disabled: false
+      url: https://my.listener.com/event
+      # headers: <http.Header>
+      timeout: 500
+      threshold: 5
+      backoff: 1000
+      ignoredmediatypes:
+        - application/octet-stream
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3

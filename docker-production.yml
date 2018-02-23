@@ -75,11 +75,61 @@ services:
       - source: db_root_password
         target: /etc/db_root_password
     configs:
-      - source: mysql_cnf
+      - source: mysql_conf_d_docker_cnf
         target: /etc/mysql/conf.d/docker.cnf
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.mysql=true"
+
+  # mariadb:
+  #   build:
+  #     context: ./dockerfile/mariadb/
+  #     dockerfile: Dockerfile
+  #   #
+  #   # image: username/lnmp-mariadb:tag
+  #   #
+  #   # image: khs1994/lnmp-mariadb:8.0.3
+  #   #
+  #   image: "mariadb:10.3.4"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+  #     MYSQL_DATABASE: test
+  #     # MYSQL_USER:
+  #     # MYSQL_PASSWORD:
+  #   env_file: ./cli/timezone.env
+  #   # ports:
+  #   #   - "127.0.0.1:3306:3306"
+  #   networks:
+  #     - backend
+  #   volumes:
+  #     # - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
+  #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
+  #     - ./backup/init.production:/docker-entrypoint-initdb.d:ro
+  #     - mariadb-data:/var/lib/mysql:rw
+  #     - ./backup/mariadb:/backup:rw
+  #   command:
+  #     - mysqld
+  #     - --character-set-server=utf8mb4
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
+  #     restart_policy:
+  #       condition: any
+  #       delay: 5s
+  #       max_attempts: 5
+  #       window: 123s
+  #     update_config:
+  #       parallelism: 2
+  #       delay: 10s
+  #       order: stop-first
+  #   secrets:
+  #     - db_root_password
+  #   configs:
+  #     - source: mariadb_conf_d_docker_cnf
+  #       target: /etc/mysql/conf.d/docker.cnf
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
+  #     - "com.khs1994.lnmp.mariadb=true"
 
   redis:
     build:
@@ -122,6 +172,152 @@ services:
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.redis=true"
+
+  # memcached:
+  #   build:
+  #     context: ./dockerfile/memcached/
+  #     dockerfile: Dockerfile
+  #   #
+  #   # image: username/lnmp-memcached:tag
+  #   #
+  #   # image: khs1994/lnmp-memcached:1.5.4
+  #   #
+  #   image: memcached:1.5.4-alpine
+  #   networks:
+  #     - backend
+  #   env_file: ./cli/timezone.env
+  #   # ports:
+  #   #   - "127.0.0.1:11211:11211"
+  #   volumes:
+  #     - zoneinfo-data:/usr/share/zoneinfo:rw
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
+  #     restart_policy:
+  #       condition: any
+  #       delay: 5s
+  #       max_attempts: 5
+  #       window: 123s
+  #     update_config:
+  #       parallelism: 2
+  #       delay: 10s
+  #       order: stop-first
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
+  #     - "com.khs1994.lnmp.memcached=true"
+
+  # rabbitmq:
+  #   build:
+  #     context: ./dockerfile/rabbitmq/
+  #     dockerfile: Dockerfile
+  #   #
+  #   # image: username/lnmp-rabbitmq:tag
+  #   #
+  #   # image: khs1994/lnmp-rabbitmq:3.7.2
+  #   #
+  #   image: rabbitmq:3.7.2-management-alpine
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq:rw
+  #     - zoneinfo-data:/usr/share/zoneinfo:rw
+  #   networks:
+  #     - backend
+  #   env_file: ./cli/timezone.env
+  #   # ports:
+  #   #   - "127.0.0.1:15672:15672"
+  #   #   - "127.0.0.1:5672:5672"
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
+  #     restart_policy:
+  #       condition: any
+  #       delay: 5s
+  #       max_attempts: 5
+  #       window: 123s
+  #     update_config:
+  #       parallelism: 2
+  #       delay: 10s
+  #       order: stop-first
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
+  #     - "com.khs1994.lnmp.rabbitmq=true"
+
+  # postgresql:
+  #   build:
+  #     context: ./dockerfile/postgresql/
+  #     dockerfile: Dockerfile
+  #   #
+  #   # image: username/lnmp-postgresql:tag
+  #   #
+  #   # image: khs1994/lnmp-postgresql:10.1
+  #   #
+  #   image: postgres:10.1-alpine
+  #   environment:
+  #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+  #     - POSTGRES_DB=test
+  #   volumes:
+  #     - zoneinfo-data:/usr/share/zoneinfo:rw
+  #     - postgresql-data:/var/lib/postgresql/data:rw
+  #   networks:
+  #     - backend
+  #   env_file: ./cli/timezone.env
+  #   # ports:
+  #   #   - "127.0.0.1:5432:5432"
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
+  #     restart_policy:
+  #       condition: any
+  #       delay: 5s
+  #       max_attempts: 5
+  #       window: 123s
+  #     update_config:
+  #       parallelism: 2
+  #       delay: 10s
+  #       order: stop-first
+  #   secrets:
+  #     # 默认与 mysql 密码一致。
+  #     - db_root_password
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
+  #     - "com.khs1994.lnmp.postgresql=true"
+
+  # mongodb:
+  #   build:
+  #     context: ./dockerfile/mongodb/
+  #     dockerfile: Dockerfile
+  #   #
+  #   # image: username/lnmp-mongodb:tag
+  #   #
+  #   # image: khs1994/lnmp-mongodb:3.7.1
+  #   #
+  #   image: mongo:3.7.1
+  #   env_file: ./cli/timezone.env
+  #   volumes:
+  #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
+  #     - mongodb-data:/data/db:rw
+  #   networks:
+  #     - backend
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
+  #     restart_policy:
+  #       condition: any
+  #       delay: 5s
+  #       max_attempts: 5
+  #       window: 123s
+  #     update_config:
+  #       parallelism: 2
+  #       delay: 10s
+  #       order: stop-first
+  #   # ports:
+  #   #    - "127.0.0.1:27017:27017"
+  #   command: ["mongod","--config","/etc/mongod.conf"]
+  #   configs:
+  #     - source: mongod_conf
+  #       target: /etc/mongod.conf
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
+  #     - "com.khs1994.lnmp.mongodb=true"
 
   php7:
     build:
@@ -281,6 +477,99 @@ services:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.nginx=true"
 
+  # apache:
+  #   build:
+  #     context: ./config/apache
+  #     dockerfile: Dockerfile
+  #   #
+  #   # image: username/lnmp-apache:tag
+  #   #
+  #   # image: khs1994/lnmp-apache:2.4.29
+  #   #
+  #   image: "httpd:2.4.29-alpine"
+  #   env_file:
+  #     - ./cli/timezone.env
+  #   ports:
+  #     - "443:443"
+  #     - "80:80"
+  #   volumes:
+  #     - ./app:/app:rw
+  #     # - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     # - ./config/apache2:/usr/local/apache2/conf.d
+  #     - zoneinfo-data:/usr/share/zoneinfo:rw
+  #   working_dir: /app
+  #   networks:
+  #     - frontend
+  #   depends_on:
+  #     - php7
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
+  #     restart_policy:
+  #       condition: any
+  #       delay: 5s
+  #       max_attempts: 5
+  #       window: 123s
+  #     update_config:
+  #       parallelism: 2
+  #       delay: 10s
+  #       order: stop-first
+  #   configs:
+  #     - source: httpd_conf
+  #       target: /usr/local/apache2/conf/httpd.conf
+  #     - source: vhost_conf
+  #       target: /usr/local/apache2/conf.d/vhost.conf
+  #   secrets:
+  #     - source: khs1994_com_ssl_crt
+  #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.crt
+  #     - source: khs1994_com_ssl_key
+  #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.key
+  #     #
+  #     # 更多配置请参考 nginx
+  #     #
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
+  #     - "com.khs1994.lnmp.apache=true"
+
+  # registry:
+  #   build:
+  #     context: ./config/registry
+  #     dockerfile: Dockerfile
+  #   #
+  #   # image: username/lnmp-registry:tag
+  #   #
+  #   # image: khs1994/lnmp-registry:latest
+  #   #
+  #   image: registry:latest
+  #   networks:
+  #     - frontend
+  #     - backend
+  #   # ports:
+  #   #   - "127.0.0.1:5000:5000"
+  #   volumes:
+  #     # - ./config/etc/docker/registry:/etc/docker/registry
+  #     - registry-data:/var/lib/registry
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
+  #     restart_policy:
+  #       condition: any
+  #       delay: 5s
+  #       max_attempts: 5
+  #       window: 123s
+  #     update_config:
+  #       parallelism: 2
+  #       delay: 10s
+  #       order: stop-first
+  #     labels:
+  #       - "com.khs1994.lnmp.mysql=true"
+  #   configs:
+  #     - source: registy_yml
+  #       target: /etc/docker/registry/config.yml
+  #   labels:
+  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
+  #     - "com.khs1994.lnmp.apache=true"
+
 networks:
   frontend:
   backend:
@@ -293,11 +582,13 @@ networks:
 
 volumes:
   mysql-data:
+  # mariadb-data:
   redis-data:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
   zoneinfo-data:
+  # registry-data:
   #
   # 使用外部 volume
   #
@@ -338,8 +629,10 @@ secrets:
   #     name: redis_secret
 
 configs:
-  mysql_cnf:
+  mysql_conf_d_docker_cnf:
     file: ./config/mysql/conf.production.d/docker.cnf
+  # mariadb_conf_d_docker_cnf:
+  #   file: ./config/mariadb/conf.production.d/docker.cnf
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
   # nginx_80_conf:
@@ -356,6 +649,10 @@ configs:
   # nginx_domain_com_conf:
   #   file ./config/nginx/conf.d/domain.com.conf
   #
+  # httpd_conf:
+  #   file: ./config/etc/apache2/httpd.production.conf
+  # vhost_conf:
+  #   file: ./config/apache2/khs1994.com.conf
   php_ini:
     file: ./config/php/php.production.ini
   php_fpm_conf:
@@ -366,6 +663,8 @@ configs:
     file: ./config/php/php-fpm.production.d/docker.conf
   redis_conf:
     file: ./config/redis/redis.production.conf
+  # registy_yml:
+  #   file: ./config/etc/docker/registry/config.production.yml
   #
   # 使用外部 config
   #
