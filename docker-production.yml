@@ -2,12 +2,16 @@ version: "3.5"
 services:
   # 单节点 Swarm mode 集群
   #
-  # khs1994.com 专用
+  # khs1994.com Docker Swarm mode 最佳实践
   #
-  # 在集群执行
-  # $ docker-compose -f docker-prod.yml build
-  # $ docker-compose -f docker-prod.yml push
-  # $ docker stack deploy -c docker-stack.yml lnmp
+  # 开发环境构建镜像
+  #
+  # $ docker-compose -f docker-production.yml build
+  # $ docker-compose -f docker-production.yml push
+  #
+  # 生产环境在集群部署
+  #
+  # $ docker stack deploy -c docker-production.yml lnmp
   # $ docker stack ps lnmp
 
   mysql:

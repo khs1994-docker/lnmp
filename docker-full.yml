@@ -18,7 +18,7 @@ services:
     networks:
       - backend
     ports:
-      - "${DEV_MYSQL_PORT}:3306"
+      - "${MYSQL_PORT}:3306"
     volumes:
       - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
       # https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
@@ -46,7 +46,7 @@ services:
       # MYSQL_PASSWORD:
     env_file: ./cli/timezone.env
     ports:
-      - "${DEV_MYSQL_PORT}:3306"
+      - "${MYSQL_PORT}:3306"
     networks:
       - backend
     volumes:
@@ -71,7 +71,7 @@ services:
     image: "redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
     ports:
-       - "${DEV_REDIS_PORT}:6379"
+       - "${REDIS_PORT}:6379"
     networks:
       - backend
     volumes:
@@ -101,7 +101,7 @@ services:
       - backend
     env_file: ./cli/timezone.env
     ports:
-      - "${DEV_MEMCACHED_PORT}:11211"
+      - "${MEMCACHED_PORT}:11211"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.memcached=true"
@@ -139,7 +139,7 @@ services:
       - backend
     env_file: ./cli/timezone.env
     ports:
-      - "${DEV_POSTGRESQL_PORT}:5432"
+      - "${POSTGRESQL_PORT}:5432"
     secrets:
       # 默认与 mysql 密码一致。
       - db_root_password
@@ -159,7 +159,7 @@ services:
     networks:
       - backend
     ports:
-       - "${DEV_MONGODB_PORT}:27017"
+       - "${MONGODB_PORT}:27017"
     command: ["mongod","--config","/etc/mongod.conf"]
     labels:
       - "com.khs1994.lnmp=true"
@@ -203,7 +203,7 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+      - ./app:${LNMP_PHP_PATH}:rw
       # - ./config/nginx:/etc/nginx/conf.d:ro
       - type: bind
         source: ./config/nginx
@@ -229,7 +229,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:${DEVELOPMENT_LNMP_PHP_PATH}:rw
+      - ./app:${LNMP_PHP_PATH}:rw
       - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
       - ./config/apache2:/usr/local/apache2/conf.d
       - ./logs/apache2:/usr/local/apache2/logs
