@@ -15,7 +15,24 @@ services:
   # $ docker stack ps lnmp
   #
   # 原则
-  # 尽可能减少 volumes 项
+  #
+  # 1. 尽可能减少 `volumes` 项
+  # 2. 配置文件放到 `configs` 项
+  # 3. 密码、密钥、证书等放到 `secrets` 项
+  # 4. 日志使用日志驱动（journald 等）接管，严禁写入文件
+  #
+  # 注意
+  #
+  # 1. `docker stack deploy` 命令不支持在 compose 文件中使用变量
+  #
+  # 二次修改
+  #
+  # 严禁修改此文件
+  #
+  # $ cp docker-production.yml docker-production.khs1994.yml
+  #
+  # 然后基于 `docker-production.khs1994.yml` 自行调整配置
+  # 本项目 CLI swarm-* 命令优先读取 `docker-production.*.yml` 文件
 
   mysql:
     build:
@@ -443,6 +460,8 @@ services:
         # mode: 0440
       #
       # 一个域名一个子配置文件
+      # 例如 *.khs1994.com *.developer.khs1994.com 均放到一个子配置文件中
+      # *.khs1994.com.cn 放到另外一个子配置文件中
       #
       # - source: nginx_khs1994_com_conf
       #   target: /etc/nginx/conf.d/khs1994.com.conf
