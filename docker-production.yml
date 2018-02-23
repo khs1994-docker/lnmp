@@ -688,8 +688,17 @@ secrets:
   # my_second_secret:
   #   external:
   #     name: redis_secret
+  #
+  #
+  # SSH 相关文件 CI/CD 专用
+  # 务必自行调整 ssh id_rsa 路径（绝对路径）
+  #
+  #
   ssh_id_rsa:
     file: /root/.ssh/id_rsa
+  #
+  # SSH 配置不验证密钥
+  #
   ssh_config:
     file: ./secrets/ssh_config
 
