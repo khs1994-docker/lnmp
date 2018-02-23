@@ -954,7 +954,11 @@ main() {
 
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      run_docker; docker stack deploy -c docker-production.yml lnmp; if [ $? -eq 0 ];then docker stack ps lnmp; else exit 1; fi
+      run_docker
+      docker stack deploy -c docker-production.yml lnmp
+
+      if [ $? -eq 0 ];then sleep 2; docker stack ps lnmp; else exit 1; fi
+
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
