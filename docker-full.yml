@@ -169,9 +169,9 @@ services:
   php7:
     # restart: always
     volumes:
-      # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
-      # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
+      - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
     networks:
