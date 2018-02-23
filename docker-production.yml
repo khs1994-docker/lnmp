@@ -412,8 +412,9 @@ services:
     secrets:
       - source: ssh_id_rsa
         target: /root/.ssh/id_rsa
-      - source: ssh_known_hosts
-        target: /root/.shh/known_hosts
+        mode: 0600
+      - source: ssh_config
+        target: /root/.ssh/config
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.php7=true"
@@ -689,8 +690,8 @@ secrets:
   #     name: redis_secret
   ssh_id_rsa:
     file: /root/.ssh/id_rsa
-  ssh_known_hosts:
-    file: /root/.ssh/known_hosts
+  ssh_config:
+    file: ./secrets/ssh_config
 
 configs:
   mysql_conf_d_docker_cnf:
