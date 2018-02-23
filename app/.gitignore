@@ -6,3 +6,4 @@
 !.env.production
 !.env.staging
 !.env.testing
+!my_second_app
