@@ -35,15 +35,7 @@ development(){
   docker_run "开发境测试完毕"
 }
 
-# 测试生产环境
-
-production(){
-  print_info "生产环境测试开始"
-
-  ./lnmp-docker.sh production
-
-  docker_run "生产环境测试完毕"
-}
+# k8s
 
 k8s(){
   curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && \
@@ -66,6 +58,8 @@ k8s(){
   kubectl get services
   ./kubernetes.sh cleanup
 }
+
+# Swarm mode
 
 swarm(){
   docker node ls > /dev/null 2>&1
@@ -93,4 +87,4 @@ cli/composer demo --version
 print_info "测试 composer 完毕"
 }
 
-if [ ! -z "$1" ];then $1; else development; production; swarm; k8s; fi
+if [ ! -z "$1" ];then $1; else development; swarm; k8s; fi

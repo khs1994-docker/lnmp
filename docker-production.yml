@@ -52,6 +52,7 @@ services:
         target: /etc/mysql/conf.d/docker.cnf
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
+      - "com.khs1994.lnmp.mysql=true"
 
   redis:
     image: redis:4.0.8-alpine
@@ -64,6 +65,8 @@ services:
     networks:
       - backend
     command: ["redis-server","/redis.conf"]
+    logging:
+      driver: journald
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -81,6 +84,7 @@ services:
         target: /redis.conf
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
+      - "com.khs1994.lnmp.redis=true"
 
   php7:
     build: ./app/demo
@@ -103,6 +107,8 @@ services:
       - KHS1994_LNMP_DOCKER_VERSION=v18.03-rc1 x86_64 Docker Swarm
     dns:
       - 114.114.114.114
+    logging:
+      driver: journald
     deploy:
       # replicas: 2
       placement:
@@ -118,6 +124,7 @@ services:
         order: stop-first
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
+      - "com.khs1994.lnmp.php7=true"
 
   nginx:
     build: ./config/nginx
@@ -129,11 +136,12 @@ services:
     volumes:
       - ./app:/app
       - ./config/nginx:/etc/nginx/conf.d
-      - ./logs/nginx:/var/log/nginx:rw
     networks:
       - frontend
     depends_on:
       - php7
+    logging:
+      driver: journald
     deploy:
       # replicas: 2
       placement:
@@ -155,6 +163,7 @@ services:
         # mode: 0440
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
+      - "com.khs1994.lnmp.nginx=true"
 
 networks:
   frontend:
