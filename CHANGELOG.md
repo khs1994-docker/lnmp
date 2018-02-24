@@ -1,6 +1,8 @@
 Changelog
 ==============
 
+#### v18.03-rc2
+
 #### v18.03-rc1
 
 Bug fixes:
