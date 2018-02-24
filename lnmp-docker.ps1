@@ -97,28 +97,27 @@ Commands:
   full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
-  k8s                  Deploy LNMP on k8s
-  k8s-build            Build LNMP on k8s image (nginx php7)
-  k8s-down             Remove LNMP on k8s
-  k8s-push             Push LNMP on k8s image (nginx php7)
-  production-config    Validate and view the Production Compose file
   push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
   restart              Restart LNMP services
-  ssl-self             Issue Self-signed SSL certificate
 
 PHP Tools:
   apache-config        Generate Apache2 vhost conf
-  composer             Use PHP Dependency Manager Composer
-  laravel              Create a new Laravel application
-  laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
-  php                  Run PHP in CLI
-  phpunit              Run PHPUnit
   ssl-self             Issue Self-signed SSL certificate
   tp                   Create a new ThinkPHP application
 
+Kubernets:
+  k8s                  Deploy LNMP on k8s
+  k8s-build            Build LNMP on k8s image (nginx php7)
+  k8s-down             Remove k8s LNMP
+  k8s-push             Push LNMP on k8s image (nginx php7)
+
+Swarm mode:
+  swarm-build          Build Swarm image (nginx php7)
+  swarm-config         Validate and view the Production Swarm mode Compose file
+  swarm-push           Push Swarm image (nginx php7)
 
 Container CLI:
   apache-cli
@@ -293,15 +292,6 @@ switch($first){
       docker-compose -f docker-production.yml push nginx php7
     }
 
-    laravel {
-      _laravel $other
-    }
-
-    laravel-artisan {
-      $path,$other=$other
-      laravel-artisan $path $other
-    }
-
     new {
       bash lnmp-docker.sh new $other
     }
@@ -310,49 +300,16 @@ switch($first){
       bash lnmp-docker.sh nginx-config $other
     }
 
-    php {
-      if ($other.Count -lt 2){
-        printError "
-
-Usage:
-
-./lnmp-docker.ps1 php {PATH} [options] [-f] <file> [--] [args...]
-./lnmp-docker.ps1 php {PATH} [options] -r <code> [--] [args...]
-./lnmp-docker.ps1 php {PATH} [options] [-B <begin_code>] -R <code> [-E <end_code>] [--] [args...]
-./lnmp-docker.ps1 php {PATH} [options] [-B <begin_code>] -F <file> [-E <end_code>] [--] [args...]
-./lnmp-docker.ps1 php {PATH} [options] -S <addr>:<port> [-t docroot] [router]
-./lnmp-docker.ps1 php {PATH) [options] -- [args...]
-./lnmp-docker.ps1 php {PATH) [options] -a
-"
-        exit
-      }
-
-      $PHP_PATH,$other=$other
-      printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${PHP_PATH} EXEC $ php $other"
-
-
-      docker run -it --rm --mount type=bind,src=$pwd/app/${PHP_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php $other
+    swarm-config {
+       docker-compose -f docker-production.yml config
     }
 
-    phpunit {
-      if ($other.Count -lt 1){
-        printError "
-
-Usage:
-
-./lnmp-docker.ps1 phpunit {PATH} [options] UnitTest [UnitTest.php]
-./lnmp-docker.ps1 phpunit {PATH} [options] <directory>"
-        exit
-      }
-
-      $PHPUNIT_PATH,$other=$other
-      printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${PHPUNIT_PATH} EXEC $ vendor/bin/phpunit ${other}"
-
-      docker run -it --rm --mount type=bind,src=$pwd/app/${PHPUnit_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 vendor/bin/phpunit $other
+    swarm-build {
+      docker-compose -f docker-production.yml build $other
     }
 
-    production-config {
-       docker-compose -f docker-compose.yml -f docker-compose.prod.yml config
+    swarm-push {
+      docker-compose -f docker-production.yml push $other
     }
 
     push {

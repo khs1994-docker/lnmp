@@ -89,6 +89,8 @@ $ ./lnmp-docker.sh restart nginx
 
 * `lnmp-phpunit`
 
+* `lnmp-laravel`
+
 * `...`
 
 更多信息请请查看 [支持文档](docs/command.md)

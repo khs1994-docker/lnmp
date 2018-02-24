@@ -85,6 +85,8 @@ $ ./lnmp-docker.sh restart nginx
 
 * `lnmp-phpunit`
 
+* `lnmp-laravel`
+
 * `...`
 
 For more information please see [Documents](docs/command.md)
@@ -185,7 +187,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 
 ## CLI
 
-Easy to access Laravel, Laravel artisan, composer, PHP-CLI, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
+Easy to generate nginx or apache config, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
 
 ## Run in Production
 

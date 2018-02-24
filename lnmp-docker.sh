@@ -868,18 +868,18 @@ main() {
     run_docker
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      init; sleep 2; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} pull
+      init; sleep 2; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} pull "$@"
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
     fi
     ;;
 
   swarm-build )
-    docker-compose -f ${PRODUCTION_COMPOSE_FILE} build
+    docker-compose -f ${PRODUCTION_COMPOSE_FILE} build "$@"
     ;;
 
   swarm-push )
-    docker-compose -f ${PRODUCTION_COMPOSE_FILE} push nginx php7
+    docker-compose -f ${PRODUCTION_COMPOSE_FILE} push "$@"
     ;;
 
   swarm-deploy )
@@ -916,9 +916,9 @@ main() {
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker-compose exec nginx nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      docker-compose -f docker-compose.arm.yml up $opt
+      docker-compose -f docker-arm.yml up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker-compose -f docker-compose.arm.yml exec nginx nginx -t
+      docker-compose -f docker-arm.yml exec nginx nginx -t
     else
       NOTSUPPORT
     fi
@@ -1037,7 +1037,7 @@ main() {
           sleep 2; exec docker-compose pull
           ;;
         aarch64 | armv7l )
-          sleep 2; exec docker-compose -f docker-compose.arm.yml pull
+          sleep 2; exec docker-compose -f docker-arm.yml pull
           ;;
         * )
           NOTSUPPORT

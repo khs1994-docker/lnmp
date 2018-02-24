@@ -24,10 +24,10 @@
 
 |场景|CLI|原始命令|
 |:--|:--|:-|
-|开发环境 拉取镜像  | `$ ./lnmp-docker.sh development` |`docker-compose up -d`|
-|开发环境 构建镜像  | `$ ./lnmp-docker.sh build`       |`docker-compose -f docker-compose.yaml -f docker-compose.build.yml up -d`|
-|ARM             | `$ ./lnmp-docker.sh development` |`docker-compose -f docker-compose.arm.yaml up -d`                        |
-|生产环境         | `$ ./lnmp-docker.sh production`  |`docker-compose -f docker-compose.yaml -f docker-compose.prod.yml up -d`  |
+|开发环境 拉取镜像  | `$ ./lnmp-docker.sh development` |`docker-compose up -d`                                                            |
+|开发环境 构建镜像  | `$ ./lnmp-docker.sh build`       |`docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d`         |
+|ARM             | `$ ./lnmp-docker.sh development` |`docker-compose -f docker-arm.yml up -d`                                         |
+|生产环境         | `$ ./lnmp-docker.sh swarm-deploy` |`docker-compose -f docker-production.yml -f docker-compose.override.yml up -d`  |
 
 >`docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
 
