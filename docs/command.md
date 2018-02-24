@@ -31,9 +31,11 @@ set -gx fish_user_paths $fish_user_paths /data/lnmp/bin
 
 #### Windows 10
 
-设置系统环境变量 `LNMP_PATH` 为本项目实际路径。
+新增变量 `LNMP_PATH` 为本项目实际路径。
 
-将 `$LNMP_PATH\windows` 加入环境变量。
+将 `%LNMP_PATH%\windows` 加入环境变量（PATH）。
+
+> 如果 `PoswerShell` 禁止执行脚本，请以管理员身份执行 `set-ExecutionPolicy RemoteSigned`,之后输入 `Y` 确认。
 
 ### 使用
 
