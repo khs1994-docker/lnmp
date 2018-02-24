@@ -157,24 +157,6 @@ Function cleanup(){
   printInfo "Cleanup logs files Success"
 }
 
-Function _composer($COMPOSE_PATH,$CMD){
-  printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${COMPOSE_PATH} EXEC $ composer ${CMD}"
-  printInfo 'output information'
-  docker run -it --rm --mount type=bind,src=$pwd/app/${COMPOSE_PATH},target=/app --mount type=bind,src=$pwd/tmp/cache,target=/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 composer ${CMD}
-}
-
-Function _laravel($LARAVEL_PATH){
-  printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/ EXEC $ laravel new ${LARAVEL_PATH}"
-  printInfo 'output information'
-  docker run -it --rm --mount type=bind,src=$pwd/app,target=/app -v $pwd/tmp/cache:/tmp/cache khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 laravel new ${LARAVEL_PATH}
-}
-
-Function laravel-artisan($LARAVEL_PATH,$CMD){
-  printInfo "IN khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7  /app/${LARAVEL_PATH} EXEC $ php artisan ${CMD}"
-  printInfo 'output information'
-  docker run -it --rm --mount type=bind,src=$pwd\app\${LARAVEL_PATH},target=/app khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 php artisan ${CMD}
-}
-
 Function _update(){
   git remote rm lnmp
   git remote add lnmp git@github.com:khs1994-docker/lnmp
@@ -230,11 +212,6 @@ switch($first){
 
     config {
       docker-compose config
-    }
-
-    composer {
-      $path,$other=$other
-      _composer $path $other
     }
 
     development {
