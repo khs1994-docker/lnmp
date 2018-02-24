@@ -8,7 +8,7 @@ Bug fixes:
 
 Changes:
 * Add CLI command `daemon-socket` #120
-* Add CLI command `acme.sh` `full-up` `swarm-config` `swarm-ps` `swarm-pull` `swarm-push`
+* Add CLI command `acme.sh` `full-up` `swarm-config` `swarm-ps` `swarm-pull` `swarm-push` `swarm-update`
 * Add `docker registry` #131
 * Add CLI command `registry` `registry-down` #131
 * Add PHPer command exec by docker `lnmp-php` `lnmp-composer` `lnmp-phpunit` `lnmp-laravel` #143

@@ -31,6 +31,7 @@ complete -W "acme.sh \
         swarm-ps \
         swarm-pull \
         swarm-push \
+        swarm-update \
         tp \
         apache-cli \
         mariadb-cli \

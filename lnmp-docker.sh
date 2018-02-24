@@ -89,6 +89,7 @@ Swarm mode:
   swarm-ps             List the LNMP tasks
   swarm-pull           Pull LNMP Docker Images in production Swarm mode
   swarm-push           Push Swarm image (nginx php7)
+  swarm-update         Print service update example
 
 Container CLI:
   apache-cli
@@ -901,6 +902,29 @@ main() {
   swarm-ps )
     docker stack ps lnmp
     ;;
+
+  swarm-update )
+  echo -e "
+Example:
+
+
+$ docker config create nginx_khs1994_com_conf_v2 config/nginx/khs1994.com.conf
+
+$ docker service update \\
+    --config-rm nginx_khs1994_com_conf \\
+    --config-add source=nginx_khs1994_com_conf_v2,target=/etc/nginx/conf.d/khs1994.com.conf \\
+    lnmp_nginx
+
+$ docker secret create khs1994_com_ssl_crt_v2 config/nginx/ssl/khs1994.com.crt
+
+$ docker service update \\
+    --secret-rm khs1994_com_ssl_crt \\
+    --secret-add source=khs1994_com_ssl_crt_v2,target=/etc/nginx/conf.d/ssl/khs1994.com.crt \\
+    lnmp_nginx
+
+
+"
+  ;;
 
   build )
     run_docker; init; if [ ${ARCH} = 'x86_64' ];then exec docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi

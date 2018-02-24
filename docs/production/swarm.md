@@ -97,5 +97,17 @@ $ docker stack rm lnmp
 # 服务更新
 
 ```bash
+$ docker config create nginx_khs1994_com_conf_v2 config/nginx/khs1994.com.conf
 
+$ docker service update \
+    --config-rm nginx_khs1994_com_conf \
+    --config-add source=nginx_khs1994_com_conf_v2,target=/etc/nginx/conf.d/khs1994.com.conf \
+    lnmp_nginx
+
+$ docker secret create khs1994_com_ssl_crt_v2 config/nginx/ssl/khs1994.com.crt
+
+$ docker service update \
+    --secret-rm khs1994_com_ssl_crt \
+    --secret-add source=khs1994_com_ssl_crt_v2,target=/etc/nginx/conf.d/ssl/khs1994.com.crt \
+    lnmp_nginx    
 ```
