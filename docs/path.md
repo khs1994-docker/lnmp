@@ -33,7 +33,7 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`缓存`|`./tmp/cache`|`/tmp/cache`|
+|`缓存`|`lnmp_composer_cache-data`|`/tmp/cache`|
 
 # 缓存
 

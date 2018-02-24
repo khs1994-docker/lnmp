@@ -4,10 +4,12 @@ if ! [ -f vendor/bin/phpunit ];then
   lnmp-composer install
 fi
 
-# -v /tmp/khs1994-docker-lnmp-composer-cache:/tmp/cache \
+DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+
+source $DIR/.arch
 
 docker run -it --rm \
-  --mount type=bind,src=$PWD,target=/app \
+  --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-  khs1994/php-fpm:7.2.2-alpine3.7 \
+  ${DOCKER_IMAGE}:${TAG} \
   vendor/bin/phpunit "$@"

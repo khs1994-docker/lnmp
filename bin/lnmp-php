@@ -6,6 +6,10 @@ else
   COMMAND="$@"
 fi
 
+DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+
+. $DIR/.arch
+
 # -S 参数需要容器暴露端口
 
 S_ERROR(){
@@ -29,15 +33,15 @@ if [ "$1" = '-S' ];then
   shift 2
 
   exec docker run -it --rm \
-    --mount type=bind,src=$PWD,target=/app \
+    --mount type=bind,src=$PWD,target=/app,consistency=cached \
     --mount src=lnmp_composer_cache-data,target=/tmp/cache \
     -p $ADDR:$PORT:$PORT \
-    khs1994/php-fpm:7.2.2-alpine3.7 \
+    ${DOCKER_IMAGE}:${TAG} \
     php -S 0.0.0.0:$PORT "$@"
 fi
 
 exec docker run -it --rm \
-  --mount type=bind,src=$PWD,target=/app \
+  --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-  khs1994/php-fpm:7.2.2-alpine3.7 \
+  ${DOCKER_IMAGE}:${TAG} \
   php $COMMAND

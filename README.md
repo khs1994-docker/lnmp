@@ -77,6 +77,20 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file i
 $ ./lnmp-docker.sh restart nginx
 ```
 
+### PHPer commands
+
+* `lnmp-php`
+
+* `lnmp-composer`
+
+* `lnmp-phpunit`
+
+* `lnmp-laravel`
+
+* `...`
+
+For more information please see [Documents](docs/command.md)
+
 ### Issue SSL certificate
 
 >Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
@@ -173,7 +187,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 
 ## CLI
 
-Easy to access Laravel, Laravel artisan, composer, PHP-CLI, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
+Easy to generate nginx or apache config, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
 
 ## Run in Production
 

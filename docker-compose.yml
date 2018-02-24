@@ -3,7 +3,8 @@ services:
 
   mysql:
     # restart: always
-    image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
+    # 此处定义的是自行构建镜像的前缀
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
@@ -33,7 +34,7 @@ services:
 
   # mariadb:
   #   # restart: always
-  #   image: "mariadb:${KHS1994_LNMP_MARIADB_VERSION}"
+  #   image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/mariadb:${KHS1994_LNMP_MARIADB_VERSION}"
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -63,7 +64,7 @@ services:
 
   redis:
     # restart: always
-    image: "redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
     ports:
       - "${REDIS_PORT}:6379"
@@ -91,7 +92,7 @@ services:
 
   # memcached:
   #   # restart: always
-  #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
   #   networks:
   #     - backend
   #   env_file: ./cli/timezone.env
@@ -106,7 +107,7 @@ services:
   #
   # rabbitmq:
   #   # restart: always
-  #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #     - zoneinfo-data:/usr/share/zoneinfo
@@ -123,7 +124,7 @@ services:
   #
   # postgresql:
   #   # restart: always
-  #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
@@ -145,7 +146,7 @@ services:
   #
   # mongodb:
   #   # restart: always
-  #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
+  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/mongo:${KHS1994_LNMP_MONGODB_VERSION}
   #   env_file: ./cli/timezone.env
   #   volumes:
   #     - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
@@ -163,12 +164,15 @@ services:
 
   php7:
     # restart: always
-    image: "${PRODUCTIOM_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
+      - ./app:${LNMP_PHP_PATH}
       - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
       - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
       - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
+      - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
     networks:
@@ -182,14 +186,33 @@ services:
     env_file:
       - ./cli/timezone.env
       - ./cli/.env
+    environment:
+      - APP_ENV=development
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.php=true"
       - "com.khs1994.lnmp.app.env=development"
 
+  phpmyadmin:
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/phpmyadmin:{KHS1994_LNMP_PHPMYADMIN_VERSION}
+    # restart: always
+    networks:
+      - backend
+    environment:
+      - PMA_HOST=mysql
+    ports:
+      - ${PHPMYADMIN_PORT}:80
+    volumes:
+      - phpmyadmin-data:/sessions
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.phpmyadmin=true"
+      - "com.khs1994.lnmp.app.env=development"
+
   nginx:
     # restart: always
-    image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file:
       - ./cli/timezone.env
     ports:
@@ -203,6 +226,7 @@ services:
       - type: bind
         source: ./config/nginx
         target: /etc/nginx/conf.d
+      - ./app:${LNMP_PHP_PATH}
       - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     working_dir: /app
@@ -217,13 +241,14 @@ services:
 
   # apache:
   #   # restart: always
-  #   image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
+  #   image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
   #   env_file:
   #     - ./cli/timezone.env
   #   ports:
   #     - "443:443"
   #     - "80:80"
   #   volumes:
+  #     - ./app:${LNMP_PHP_PATH}
   #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     - ./config/apache2:/usr/local/apache2/conf.d
   #     - ./logs/apache2:/usr/local/apache2/logs
@@ -249,6 +274,7 @@ volumes:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
+  phpmyadmin-data:
   zoneinfo-data:
 
 secrets:

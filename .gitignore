@@ -10,4 +10,5 @@ docker-production.*.yml
 lnmp-cmdline
 lnmp-kernel
 lnmp-state
+tmp
 *.img

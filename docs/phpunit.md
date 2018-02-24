@@ -1,15 +1,13 @@
-# PHPUnit
+# 本项目使用 PHPUnit 最佳实践
 
-假设想要在 `/app/demo` 中执行 `phpunit` 只需执行以下命令
-
-## 安装
+按照 [步骤](command.md) 将命令加入 `PATH`
 
 ```bash
-$ ./lnmp-docker.sh composer demo require phpunit/phpunit --dev
-```
+$ cd my_php_project
 
-## 执行
+$ lnmp-composer require phpunit/phpunit
 
-```bash
-$ ./lnmp-docker.sh phpunit demo
+# $ lnmp-composer install
+
+$ lnmp-phpunit
 ```

@@ -6,7 +6,6 @@ complete -W "acme.sh \
         build \
         build-config \
         cleanup \
-        composer \
         config \
         daemon-socket \
         development \
@@ -17,11 +16,7 @@ complete -W "acme.sh \
         help \
         k8s \
         k8s-down \
-        laravel \
-        laravel-artisan \
         new \
-        php \
-        phpunit \
         push \
         restore \
         restart \
