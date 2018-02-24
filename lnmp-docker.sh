@@ -695,7 +695,7 @@ server{
 
   ssl_session_cache          shared:SSL:1m;
   ssl_session_timeout        5m;
-  ssl_protocols              TLSv1.2;
+  ssl_protocols              TLSv1.2 TLSv1.3;
   ssl_ciphers                'ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5';
   ssl_prefer_server_ciphers  on;
 
