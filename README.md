@@ -12,14 +12,6 @@ Start LNMP In Less than 2 minutes Powered By Docker Compose.
 
 LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
-## Changelog
-
-Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
-
-* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
-
-* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
-
 ## Prerequisites
 
 To use LNMP Docker, you need:
@@ -52,6 +44,12 @@ Pick one method install LNMP Docker.
   $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
 
   # $ git clone --recursive git@github.com:khs1994-docker/lnmp.git
+
+  # 中国镜像
+
+  $ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
+
+  # $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
   ```
 
 ### Start
@@ -119,6 +117,14 @@ $ ./lnmp-docker.sh stop
 ```bash
 $ ./lnmp-docker.sh down
 ```
+
+## Changelog
+
+Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
+
+* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
+
+* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
 
 ## Run LNMP On Kubernets
 

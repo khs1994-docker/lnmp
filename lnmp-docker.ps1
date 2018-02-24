@@ -286,11 +286,11 @@ switch($first){
     }
 
     k8s-build {
-      docker-compose -f docker-stack.yml build
+      docker-compose -f docker-production.yml build
     }
 
     k8s-push {
-      docker-compose -f docker-stack.yml push nginx php7
+      docker-compose -f docker-production.yml push nginx php7
     }
 
     laravel {

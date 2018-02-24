@@ -15,7 +15,24 @@ services:
   # $ docker stack ps lnmp
   #
   # 原则
-  # 尽可能减少 volumes 项
+  #
+  # 1. 尽可能减少 `volumes` 项
+  # 2. 配置文件放到 `configs` 项
+  # 3. 密码、密钥、证书等放到 `secrets` 项
+  # 4. 日志使用日志驱动（journald 等）接管，严禁写入文件
+  #
+  # 注意
+  #
+  # 1. `docker stack deploy` 命令不支持在 compose 文件中使用变量
+  #
+  # 二次修改
+  #
+  # 严禁修改此文件
+  #
+  # $ cp docker-production.yml docker-production.khs1994.yml
+  #
+  # 然后基于 `docker-production.khs1994.yml` 自行调整配置
+  # 本项目 CLI swarm-* 命令优先读取 `docker-production.*.yml` 文件
 
   mysql:
     build:
@@ -122,6 +139,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   secrets:
   #     - db_root_password
   #   configs:
@@ -202,6 +221,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
   #     - "com.khs1994.lnmp.memcached=true"
@@ -237,6 +258,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
   #     - "com.khs1994.lnmp.rabbitmq=true"
@@ -274,6 +297,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   secrets:
   #     # 默认与 mysql 密码一致。
   #     - db_root_password
@@ -309,6 +334,8 @@ services:
   #       parallelism: 2
   #       delay: 10s
   #       order: stop-first
+  #   logging:
+  #     driver: journald
   #   # ports:
   #   #    - "127.0.0.1:27017:27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
@@ -382,6 +409,12 @@ services:
         target: /usr/local/etc/php-fpm.d/www.conf
       - source: php_fpm_conf_d_docker_conf
         target: /usr/local/etc/php-fpm.d/docker.conf
+    secrets:
+      - source: ssh_id_rsa
+        target: /root/.ssh/id_rsa
+        mode: 0600
+      - source: ssh_config
+        target: /root/.ssh/config
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.php7=true"
@@ -404,9 +437,6 @@ services:
     volumes:
       - ./app:/app:rw
       - ./config/nginx:/etc/nginx/conf.d:ro
-      #
-      # 生产环境配置文件一个域名一个配置文件(configs)，一个 SSL key，一个 SSL crt(secrets)
-      #
     networks:
       - frontend
     depends_on:
@@ -434,6 +464,11 @@ services:
         # uid: '103'
         # gid: '103'
         # mode: 0440
+      #
+      # 一个域名一个子配置文件
+      # 例如 *.khs1994.com *.developer.khs1994.com 均放到一个子配置文件中
+      # *.khs1994.com.cn 放到另外一个子配置文件中
+      #
       # - source: nginx_khs1994_com_conf
       #   target: /etc/nginx/conf.d/khs1994.com.conf
       # - source: nginx_80_conf
@@ -448,6 +483,11 @@ services:
       # - source: nginx_domain_com_conf
       #   target: /etc/nginx/conf.d/domain.com.conf
     # secrets:
+      #
+      # *.khs1994.com 两个证书密钥
+      # *.developer.khs1994.com 两个证书密钥
+      # 以此类推
+      #
       # - source: khs1994_com_ssl_crt
       #   target: /etc/nginx/conf.d/ssl/khs1994.com.crt
       # - source: khs1994_com_ssl_key
@@ -502,6 +542,8 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
+  #   logging:
+  #     driver: journald
   #   deploy:
   #     placement:
   #       constraints: [node.role == manager]
@@ -517,16 +559,33 @@ services:
   #   configs:
   #     - source: httpd_conf
   #       target: /usr/local/apache2/conf/httpd.conf
-  #     - source: vhost_conf
-  #       target: /usr/local/apache2/conf.d/vhost.conf
+  #     - source: vhost_khs1994_com_conf
+  #       target: /usr/local/apache2/conf.d/vhost.khs1994.com.conf
+  #     #
+  #     #
+  #     # Example Don't Edit
+  #     #
+  #     #
+  #     # - source: vhost_domain_com_conf
+  #     #   target: /usr/local/apache2/conf.d/vhost.domain.com.conf
   #   secrets:
   #     - source: khs1994_com_ssl_crt
   #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.crt
   #     - source: khs1994_com_ssl_key
   #       target: /usr/local/apache2/conf.d/ssl/khs1994.com.key
+  #     - source: developer_khs1994_com_ssl_crt
+  #       target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.crt
+  #     - source: developer_khs1994_com_ssl_key
+  #       target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.key
   #     #
-  #     # 更多配置请参考 nginx
   #     #
+  #     # Example Don’t Edit
+  #     #
+  #     #
+  #     # - source: domain_com_ssl_crt
+  #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.crt
+  #     # - source: domain_com_ssl_key
+  #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
   #     - "com.khs1994.lnmp.apache=true"
@@ -563,6 +622,8 @@ services:
   #       order: stop-first
   #     labels:
   #       - "com.khs1994.lnmp.mysql=true"
+  #   logging:
+  #     driver: journald
   #   configs:
   #     - source: registy_yml
   #       target: /etc/docker/registry/config.yml
@@ -627,6 +688,19 @@ secrets:
   # my_second_secret:
   #   external:
   #     name: redis_secret
+  #
+  #
+  # SSH 相关文件 CI/CD 专用
+  # 务必自行调整 ssh id_rsa 路径（绝对路径）
+  #
+  #
+  ssh_id_rsa:
+    file: /root/.ssh/id_rsa
+  #
+  # SSH 配置不验证密钥
+  #
+  ssh_config:
+    file: ./secrets/ssh_config
 
 configs:
   mysql_conf_d_docker_cnf:
@@ -643,7 +717,7 @@ configs:
   #   file ./config/nginx/conf.d/khs1994.com.conf
   #
   #
-  # Example Don't Edit
+  # NGINX Example Don't Edit
   #
   #
   # nginx_domain_com_conf:
@@ -651,8 +725,15 @@ configs:
   #
   # httpd_conf:
   #   file: ./config/etc/apache2/httpd.production.conf
-  # vhost_conf:
+  # vhost_khs1994_com_conf:
   #   file: ./config/apache2/khs1994.com.conf
+  #
+  #
+  # Apache Example Don't Edit
+  #
+  #
+  # vhost_domain_com_conf:
+  #   file: ./config/apache2/domain.com.conf
   php_ini:
     file: ./config/php/php.production.ini
   php_fpm_conf:
@@ -663,6 +744,8 @@ configs:
     file: ./config/php/php-fpm.production.d/docker.conf
   redis_conf:
     file: ./config/redis/redis.production.conf
+  # mongod_conf:
+  #   file: ./config/mongodb/mongod.production.conf
   # registy_yml:
   #   file: ./config/etc/docker/registry/config.production.yml
   #

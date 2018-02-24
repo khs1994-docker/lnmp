@@ -1,7 +1,7 @@
 #!/bin/bash
 
 complete -W "acme.sh \
-        apache-conf \
+        apache-config \
         backup \
         build \
         build-config \
@@ -43,7 +43,7 @@ complete -W "acme.sh \
         mongo-cli \
         mysql-cli \
         nginx-cli \
-        nginx-conf \
+        nginx-config \
         php-cli \
         phpmyadmin-cli \
         postgres-cli \

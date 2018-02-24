@@ -12,14 +12,6 @@
 
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
-## 更新记录
-
-每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
-
-* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
-
-* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
-
 ## 准备
 
 本项目需要以下软件：
@@ -54,6 +46,12 @@
   $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
 
   # $ git clone --recursive git@github.com:khs1994-docker/lnmp.git
+
+  # 中国镜像
+
+  $ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
+
+  # $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
   ```
 
 ### 启动 LNMP
@@ -124,6 +122,14 @@ $ ./lnmp-docker.sh stop
 ```bash
 $ ./lnmp-docker.sh down
 ```
+
+## 更新记录
+
+每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
+
+* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
+
+* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
 
 ## 支持 Kubernets
 
