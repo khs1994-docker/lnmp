@@ -10,7 +10,7 @@
 * 开发环境
     * [使用方法](development.md)
 * NGINX
-    * [一键生成配置](nginx-conf.md)
+    * [一键生成配置](nginx-config.md)
     * [HTTPS 配置](nginx-with-https.md)
 * [PHPer 常用命令容器化](command.md)
 * [软件配置](config.md)
