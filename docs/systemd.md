@@ -36,7 +36,7 @@ $ ln -s /data/lnmp/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/comple
 
 # systemd
 
-适用于 `Linux x86_64` 生产环境。
+适用于 `Linux x86_64` 开发环境。
 
 >务必熟悉 `systemd` 之后再执行此项操作。
 

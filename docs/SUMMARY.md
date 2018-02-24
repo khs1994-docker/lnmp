@@ -12,7 +12,8 @@
 * NGINX
     * [一键生成配置](nginx-conf.md)
     * [HTTPS 配置](nginx-with-https.md)
-* [PHPer 常用命令容器化](command.md)   
+* [PHPer 常用命令容器化](command.md)
+* [软件配置](config.md)
 * PHP
     * [PHP 扩展列表](php.md)
     * [xdebug](xdebug.md)
@@ -21,7 +22,6 @@
     * [PHPUnit](phpunit.md)
 * 生产环境(重要)
     * Swarm mode
-        * [安装](production/install.md)
         * [配置](production/README.md)
         * [Swarm mode 三节点集群](production/swarm.md)
     * Kubernetes

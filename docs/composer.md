@@ -5,5 +5,5 @@
 ```bash
 $ cd my_php_project
 
-$ lnmp-composer 命令
+$ lnmp-composer command
 ```

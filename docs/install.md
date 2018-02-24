@@ -15,7 +15,15 @@ $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 ```bash
 $ cd
 
-$ git clone --recursive --depth=1 git@github.com:khs1994-docker/lnmp.git
+$ git clone --recursive https://github.com/khs1994-docker/lnmp.git
+
+# $ git clone --recursive --depth=1 git@github.com:khs1994-docker/lnmp.git
+
+# 中国镜像
+
+$ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
+
+# $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
 ```
 
 ## 启动 Demo
