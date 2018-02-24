@@ -17,6 +17,10 @@ if ($args -contains '-S' ){
     S_ERROR
   }
 
+  if (!($args[1] -like '*:[2-9]*')){
+    S_ERROR
+  }
+
   $PORT=$args[1].Split(":")[-1]
 
   $first, $other = $args
