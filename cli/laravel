@@ -29,7 +29,7 @@ echo -e  "\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/ 执行 $ lar
 
 docker run -it --rm \
   -v $PWD/app:/app \
-  -v $PWD/tmp/cache:/tmp/cache \
+  --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   ${DOCKER_IMAGE}:${TAG} \
   laravel new ${LARAVEL_PATH} ${CMD}
 

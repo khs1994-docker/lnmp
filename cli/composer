@@ -29,6 +29,6 @@ echo -e  "\n\033[32mINFO\033[0m  在 ${DOCKER_IMAGE}:${TAG} 内 /app/${COMPOSE_P
 
 exec docker run -it --rm \
   --mount type=bind,src=$PWD/app/${COMPOSE_PATH},target=/app \
-  -v $PWD/tmp/cache:/tmp/cache \
+  --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   ${DOCKER_IMAGE}:${TAG} \
   composer ${CMD}

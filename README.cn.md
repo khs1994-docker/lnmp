@@ -170,7 +170,6 @@ $ ./lnmp-docker.sh down
 |`dockerfile`  |自定义 Dockerfile|
 |`logs`        |日志文件|
 |`scripts`     |用户自定义脚本文件|
-|`tmp`         |临时文件|
 
 ### 端口暴露
 

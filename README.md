@@ -165,7 +165,6 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |`dockerfile`  |Dockerfile        |
 |`logs`        |logs file         |
 |`scripts`     |bash shell script |
-|`tmp`         |Composer cache file ,etc |
 
 ### Exposed Ports
 
