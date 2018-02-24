@@ -179,11 +179,12 @@ $ ./lnmp-docker.sh down
 |文件夹|说明|
 |:--|:--|
 |`app`         |项目文件（HTML, PHP, etc）|
-|`backup`      |备份文件|
-|`config`      |配置文件 「nginx 配置文件位于[Git 子模块](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97)」|               
-|`dockerfile`  |自定义 Dockerfile|
-|`logs`        |日志文件|
-|`scripts`     |用户自定义脚本文件|
+|`backup`      |备份文件          |
+|`bin`         |PHPer 常用命令    |
+|`config`      |配置文件          |               
+|`dockerfile`  |自定义 Dockerfile |
+|`logs`        |日志文件          |
+|`scripts`     |用户自定义脚本文件  |
 
 ### 端口暴露
 

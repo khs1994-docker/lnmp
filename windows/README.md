@@ -10,7 +10,7 @@
 
 MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
 
-# MySQL
+## MySQL
 
 https://dev.mysql.com/downloads/mysql/
 
@@ -52,13 +52,13 @@ $ FLUSH PRIVILEGES;
 $ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mytest' WITH GRANT OPTION;
 ```
 
-## 停止服务
+### 停止服务
 
 ```bash
 $ net stop mysql
 ```
 
-# PHP
+## PHP
 
 http://windows.php.net/download/
 
@@ -66,7 +66,7 @@ http://windows.php.net/download/
 
 只有 `TS` 版才包含 `php7apache2_4.dll` （php 以 apache 模块方式运行才会用到，我后边 apache 选择的是 fcgi 方式，这里记录一下）
 
-## 复制 `php.ini`
+### 复制 `php.ini`
 
 ```bash
 extension_dir = "C:/php/ext"
@@ -78,15 +78,15 @@ date.timezone = PRC
 cgi.fix_pathinfo = 1
 ```
 
-## 查看版本信息
+### 查看版本信息
 
 ```bash
 $ php -v
 ```
 
-## 启动
+### 启动
 
-### RunHiddenConsole.zip
+#### RunHiddenConsole.zip
 
 默认的直接运行 `php-cgi.exe` 会占用窗口，这里使用 `RunHiddenConsole` 可以后台运行。
 
@@ -96,7 +96,7 @@ http://blogbuildingu.com/files/RunHiddenConsole.zip
 $ RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c C:/php/php.ini
 ```
 
-## pecl 下载扩展
+### pecl 下载扩展
 
 http://pecl.php.net/
 
@@ -104,7 +104,15 @@ http://pecl.php.net/
 
 之后在 `php.ini` 中增加配置。
 
-# Nginx
+## Composer
+
+https://getcomposer.org/Composer-Setup.exe
+
+```bash
+$ composer -V
+```
+
+## Nginx
 
 http://nginx.org/en/download.html
 
@@ -115,19 +123,11 @@ $ start nginx
 $ nginx -s stop
 ```
 
-## 修改配置
+### 修改配置
 
 官方文档：https://www.nginx.com/resources/wiki/start/topics/examples/phpfastcgionwindows/
 
-## Composer
-
-https://getcomposer.org/Composer-Setup.exe
-
-```bash
-$ composer -V
-```
-
-# Redis
+## Redis
 
 WSL
 
@@ -137,7 +137,7 @@ $ sudo apt install redis-server
 $ sudo redis-server /etc/redis/redis.conf
 ```
 
-# MongoDB
+## MongoDB
 
 WSL
 
@@ -152,7 +152,7 @@ $ chmod 777 /data/db
 $ sudo mongod --fork --logpath=/var/run/mongodb/error.log
 ```
 
-# Memcached
+## Memcached
 
 WSL
 
@@ -164,7 +164,7 @@ $ sudo apt install memcached
 $ memcached -d
 ```
 
-# Apache
+## Apache
 
 我一般用的 `nginx`，这里记录一下 `apache`。
 
@@ -189,13 +189,13 @@ $ httpd.exe -k install
 
 将 bin 目录中的 `ApacheMonitor.exe` 拖到桌面，可以完成 httpd 服务的启动等操作。
 
-## fcgid 模块
+### fcgid 模块
 
 解压下载后的模块文件夹将 `mod_fcgid-2.3.9\mod_fcgid.so` 移入 apache 安装目录的 `modules` 文件夹中。
 
 在 apache 安装目录的 `conf/extra` 文件夹新建 [`httpd-fcgid.conf`](apache-fcgi/httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
 
-## http.conf
+### http.conf
 
 ```bash
 ServerRoot "c:/apache24"
@@ -216,7 +216,7 @@ Include conf/extra/httpd-vhosts.conf
 Include conf/extra/httpd-fcgid.conf
 ```
 
-## httpd-vhosts.conf
+### httpd-vhosts.conf
 
 ```bash
 <VirtualHost *:80>
@@ -245,11 +245,11 @@ $ httpd -t
 
 之后使用 `ApacheMonitor.exe` 启动服务。
 
-## https
+### https
 
 Apache https 出现问题，暂时解决不了。
 
-# PowerShell 脚本
+## PowerShell 脚本
 
 为了方便的管理 `WNMP`，这里有一个脚本 `./windows/wnmp.ps1` ，使用之前在该文件开头修改好软件路径
 
@@ -259,7 +259,7 @@ $ ./windows/wnmp.ps1 start | stop | restart | status | ps
 
 也可以将 `C:\Users\90621\lnmp\windows\wnmp.ps1` 加入 `PATH`,在任意目录执行 `wnmp.ps1 command`
 
-# More Information
+## More Information
 
 * http://www.jb51.net/article/107752.htm
 

@@ -29,6 +29,12 @@ $ vi ~/.config/fish/config.fish
 set -gx fish_user_paths $fish_user_paths /data/lnmp/bin
 ```
 
+#### Windows 10
+
+设置系统环境变量 `LNMP_PATH` 为本项目实际路径。
+
+将 `$LNMP_PATH\windows` 加入环境变量。
+
 ### 使用
 
 ```bash
