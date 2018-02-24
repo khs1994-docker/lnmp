@@ -31,7 +31,7 @@
 
 ## 自行构建镜像
 
-在 `./dockerfile/` 下修改各个软件 `dockerfile` 文件，之后运行如下命令：
+在 `./dockerfile/` 下修改各个软件 `Dockerfile` 文件，之后运行如下命令：
 
 ```bash
 $ ./lnmp-docker.sh build

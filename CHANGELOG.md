@@ -7,47 +7,29 @@ Bug fixes:
 * Fix CLI error #120 #116
 
 Changes:
-* Expose `Redis` port 6379 #116
-* Add CLI command `phpunit` #118
 * Add CLI command `daemon-socket` #120
+* Add CLI command `acme.sh` `full-up` `swarm-config` `swarm-ps` `swarm-pull` `swarm-push` `swarm-update`
+* Add `docker registry` #131
+* Add CLI command `registry` `registry-down` #131
+* Add PHPer command exec by docker `lnmp-php` `lnmp-composer` `lnmp-phpunit` `lnmp-laravel` #143
+* Update `Windows 10` case #126
+* Update `macOS` case #133
+* Update `Apache` #128
+* Update `Dockerfile` #138 #139
+* Update Production `Swarm mode` case (best-practices by khs1994.com) #141
+* Update Support Documents #148
+* Remove `restart:always` in development #124
+* Remove khs1994 docker images #128
+* Remove CLI command `composer` `laravel*` `php` `production*`
+* Expose `Redis` port 6379 #116
+* `NGINX` now based tlsv1.3 #136
 
 Updates:
 
 * `php-fpm` 7.2.2 #119
 * `redis` 4.0.8 #119
 * `acme.sh` 2.7.6 #123
-
-#### v18.02 (2018-02-01)
-
-Bug fixes:
-* Fix `php.ini` error in development #86
-* Fix `Redis` config error #102
-* Fix ARM nginx config error #103
-
-Changes:
-* `khs1994-docker/lnmp` v18.01 End Of Life
-* Synchronize `docker-compose` commands, Support exec original `docker-compose` commands in `./lnmp-docker.sh` #79
-* Move `bin` to `cli` #87
-* Update `Apache2` config file #81
-* Update Compose file format 3.5 #104
-* Update Windows PowerShell script #91
-* Update or Add soft log settings
-* Update support documents
-* Update `acme.sh`
-* Add CLI commands `k8s` `k8s-down` #82
-* Add donate #84
-* Add `MySQL` init scripts #90
-* Add CLI command `apache-conf`, Support generate apache config file #93
-* Add CLI command `tp`, Support new ThinkPHP project #93
-* Add CLI command `restart`, Support safety restart container #98
-* Add [test nginx configuration file] when start or restart LNMP #99
-* Add Production conf
-* ARM64v8 `Redis` `Memcached` `RabbitMQ` `PostgreSQL` now based Alpine #101
-
-Updates:
-* `MongoDB` 3.7.1   #96
-* `MariaDB` 10.3.4  #96
-* `Redis`   4.0.7   #100
+* `nginx` 1.13.9 #134
 
 #### [v18.01 (2018-01-12) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
 
