@@ -12,7 +12,7 @@
 
 单机环境中通过 `数据卷` 将 `项目文件` 挂载到容器中。
 
-将 GitHub 上的 PHP 项目克隆到 `./app` 目录下，之后使用`./lnmp-docker.sh composer ...` 安装依赖。
+将 GitHub 上的 PHP 项目克隆到 `./app` 目录下，之后使用`lnmp-composer ...` 安装依赖。
 
 在 `./config/nginx/*.conf` 增加 nginx 配置。
 

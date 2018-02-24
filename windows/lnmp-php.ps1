@@ -29,7 +29,7 @@ if ($args -contains '-S' ){
 
   $ADDR_PORT=$args[1]
 
-docker run -it --rm --mount type=bind,src=$PWD,target=/app --mount src=lnmp_composer_cache-data,target=/tmp/cache -p "${ADDR_PORT}:${PORT}" khs1994/php-fpm:7.2.2-alpine3.7 php -S 0.0.0.0:$PORT $other
+docker run -it --rm --mount type=bind,src=$PWD,target=/app --mount src=lnmp_composer_cache-data,target=/tmp/cache -p "${ADDR_PORT}:${PORT}" --network lnmp_backend khs1994/php-fpm:7.2.2-alpine3.7 php -S 0.0.0.0:$PORT $other
 exit 0
 }
 

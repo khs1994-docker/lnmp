@@ -4,13 +4,7 @@
 
 * 各种场景和架构中一键启动
 
-* 安装 `Laravel` 项目
-
-* 使用 `Laravel artisan`
-
-* 使用 `PHP` 包管理工具 `Composer`
-
-* 命令行执行 `PHP` 文件
+* 便捷生成 NGINX APACHE 配置文件
 
 ## 原始命令详解
 

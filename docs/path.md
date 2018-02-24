@@ -29,11 +29,11 @@
 |`docker.conf`              |`./config/php/docker.conf`      |`/usr/local/etc/php-fpm.d/docker.conf`               |
 |`app/`                     |`./app`                         |`/app`                                               |
 
-## Composer Laravel
+## Composer
 
 |名称|本机|容器|
 |--|--|--|
-|`缓存`|`lnmp_composer_cache-data`|`/tmp/cache`|
+|`缓存`|`volume:lnmp_composer_cache-data`|`/tmp/cache`|
 
 # 缓存
 
