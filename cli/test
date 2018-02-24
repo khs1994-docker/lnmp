@@ -37,7 +37,7 @@ _command(){
 
   lnmp-composer install
 
-  lnmp-phpunit
+  lnmp-phpunit tests/DemoTest.php
 
   print_info "测试 PHPer command 完毕"
 }

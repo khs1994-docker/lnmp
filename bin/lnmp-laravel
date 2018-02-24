@@ -11,7 +11,7 @@ DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 source $DIR/.arch
 
 docker run -it --rm \
-  --mount type=bind,src=$PWD,target=/app \
+  --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   ${DOCKER_IMAGE}:${TAG} \
   laravel "$@"
@@ -42,9 +42,15 @@ if [ "$1" = 'new' ];then
 
   echo -e "\n\033[32mINFO\033[0m  install laravel-ide-helper ..."
 
+  cd ${LARAVEL_PATH}
+
   $DIR/lnmp-composer require --dev barryvdh/laravel-ide-helper
 
-  echo -e "Must EDIT ./app/Providers/AppServiceProvider.php add this content
+  echo -e "
+
+Must EDIT ./${LARAVEL_PATH}/app/Providers/AppServiceProvider.php add this content
+
+
 
   public function register()
   {
@@ -54,7 +60,9 @@ if [ "$1" = 'new' ];then
       // ...
   }
 
-then exec
+
+
+Then exec
 
 $ lnmp-php artisan ide-helper:generate
 $ lnmp-php artisan ide-helper:meta
@@ -62,6 +70,6 @@ $ lnmp-php artisan optimize
 "
 
   echo -e ".phpstorm.meta.php
-  _ide_helper.php" >> app/${LARAVEL_PATH}/.gitignore
+  _ide_helper.php" >> .gitignore
 
 fi

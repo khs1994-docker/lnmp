@@ -4,8 +4,8 @@ services:
   mysql:
     image: mysql:${KHS1994_LNMP_MYSQL_VERSION}
 
-  mariadb:
-    image: mariadb:${KHS1994_LNMP_MYSQL_VERSION}
+  # mariadb:
+  #   image: mariadb:${KHS1994_LNMP_MYSQL_VERSION}
 
   redis:
     image: redis:${KHS1994_LNMP_REDIS_VERSION}-alpine

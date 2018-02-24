@@ -6,7 +6,6 @@ complete -W "acme.sh \
         build \
         build-config \
         cleanup \
-        composer \
         config \
         daemon-socket \
         development \

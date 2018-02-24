@@ -65,9 +65,6 @@ Function logs(){
     New-Item logs\redis -type directory | Out-Null
     New-Item logs\redis\redis.log -type file | Out-Null
   }
-  if (! (Test-Path tmp\cache)){
-    New-Item tmp\cache -type directory | Out-Null
-  }
 }
 
 Function init(){
