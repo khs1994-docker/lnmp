@@ -23,7 +23,7 @@ export PATH=/data/lnmp/bin:$PATH
 #### fish
 
 ```bash
-$ vi vi ~/.config/fish/config.fish
+$ vi ~/.config/fish/config.fish
 
 set -gx fish_user_paths $fish_user_paths /data/lnmp/bin
 ```

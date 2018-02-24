@@ -81,6 +81,18 @@ development
 $ ./lnmp-docker.sh restart nginx
 ```
 
+### PHPer 常用命令
+
+* `lnmp-php`
+
+* `lnmp-composer`
+
+* `lnmp-phpunit`
+
+* `...`
+
+更多信息请请查看 [支持文档](docs/command.md)
+
 ### 一键申请 SSL 证书
 
 >由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持

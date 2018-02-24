@@ -1,39 +1,35 @@
 version: "3.5"
 services:
 
+  mysql:
+    image: mysql:${KHS1994_LNMP_MYSQL_VERSION}
+
+  mariadb:
+    image: mariadb:${KHS1994_LNMP_MYSQL_VERSION}
+
+  redis:
+    image: redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+
+  # memcached:
+  #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+
+  # rabbitmq:
+  #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+
+  # postgresql:
+  #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+
+  # mongod:
+  #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
+
   php7:
     image: ${LNMP_DOCKER_IMAGE_PREFIX}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7
-    environment:
-      - APP_ENV=development
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image
-    volumes:
-      - ./app:${LNMP_PHP_PATH}:rw
-      - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
-      - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-
-  nginx:
-   volumes:
-      - ./app:${LNMP_PHP_PATH}:rw
-
-  # apache:
-  #  volumes:
-  #     - ./app:${LNMP_PHP_PATH}:rw
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    # restart: always
-    networks:
-      - backend
-    environment:
-      - PMA_HOST=mysql
-    ports:
-      - ${PHPMYADMIN_PORT}:80
-    volumes:
-      - phpmyadmin-data:/sessions
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.phpmyadmin=true"
-      - "com.khs1994.lnmp.app.env=development"
 
-volumes:
-  phpmyadmin-data:
+  nginx:
+    image: ${LNMP_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch
+
+  # apache:
+  #   image: httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine

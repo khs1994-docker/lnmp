@@ -71,13 +71,8 @@ Commands:
 
 PHP Tools:
   apache-config        Generate Apache2 vhost conf
-  composer             Use PHP Dependency Manager Composer
-  laravel              Create a new Laravel application
-  laravel-artisan      Use Laravel CLI artisan
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
-  php                  Run PHP in CLI
-  phpunit              Run PHPUnit
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
   tp                   Create a new ThinkPHP application
@@ -272,9 +267,6 @@ logs(){
                logs/nginx \
                logs/php-fpm \
                logs/redis
-
-  # 不清理 Composer 缓存
-  if ! [ -d tmp/cache ];then mkdir -p tmp/cache && chmod 777 tmp/cache; fi
 }
 
 # 清理日志文件
@@ -795,38 +787,6 @@ start(){
   print_info "Please set hosts in /etc/hosts in development"
 }
 
-php_cli(){
-  local MAIN_COMMAND=$1
-  shift
-  PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-alpine3.7
-  if [ $ARCH = 'x86_64' ];then
-    PHP_CLI_DOCKER_IMAGE=php-fpm
-  elif [ $ARCH = 'armv7l' ];then
-    PHP_CLI_DOCKER_IMAGE=arm32v7-php-fpm
-    PHP_CLI_DOCKER_TAG=${KHS1994_LNMP_PHP_VERSION}-jessie
-  elif [ $ARCH = 'aarch64' ];then
-    PHP_CLI_DOCKER_IMAGE=arm64v8-php-fpm
-  else
-    NOTSUPPORT
-  fi
-  if [ $MAIN_COMMAND = 'php' ] && [ -z "$2" ];then
-    print_error "$ ./lnmp-docker.sh $MAIN_COMMAND {PATH} {CMD}"
-    exit 1
-  else
-    path=$1
-    shift
-    CMD="$@"
-  fi
-
-  if [ -z $path ];then print_error "$ ./lnmp-docker.sh $MAIN_COMMAND {PATH} [CMD]"; exit 1; fi
-
-  print_info "在 khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} 内 /app/${path} 执行 $ ${MAIN_COMMAND} ${CMD}\n" && print_info "以下为输出内容\n\n"
-    exec docker run -it --rm \
-      -v $PWD/app/${path}:/app \
-      khs1994/${PHP_CLI_DOCKER_IMAGE}:${PHP_CLI_DOCKER_TAG} \
-      $MAIN_COMMAND ${CMD}
-}
-
 # 入口文件
 
 main() {
@@ -877,58 +837,28 @@ main() {
     _registry_down
     ;;
 
-  laravel )
-    run_docker; if [ -z "$1" ];then read -p "Please inuput PHP path: ./app/" path; else path="$1"; shift ; cmd="$@"; fi
-    if [ -z "${path}" ];then echo; print_error 'Please input content'; exit 1; fi
-    if [ -z "$cmd" ];then cli/laravel ${path}; else cli/laravel ${path} "${cmd}"; fi
-    ;;
-
-  laravel-artisan )
-    run_docker
-    if [ -z "$2" ];then
-      print_error "$ ./lnmp-docker.sh laravel-artisan {PATH} {CMD}"; exit 1
-    else
-      path="$1"
-      shift
-      cmd="$@"
-    fi
-    cli/php-artisan ${path} "${cmd}"
-    ;;
-
-  composer )
-    run_docker
-    if [ -z "$2" ];then
-      print_error "$ ./lnmp-docker.sh composer {PATH} {CMD}"; exit 1
-    else
-      path="$1"
-      shift
-      cmd="$@"
-    fi
-    cli/composer ${path} "${cmd}"
-    ;;
-
   full-up )
     docker-compose -f docker-full.yml -f docker-compose.override.yml up -d "$@"
     ;;
 
-  production )
-    run_docker
-    # 仅允许运行在 Linux x86_64
-    if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      init
-      if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
-      docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
-      echo; sleep 2; print_info "Test nginx configuration file...\n"
-      docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec nginx nginx -t
-      if [ $? = 0 ];then
-        echo; print_info "nginx configuration file test is successful\n" ; exit 0
-      else
-        echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
-      fi
-    else
-      print_error "Production NOT Support ${OS} ${ARCH}\n"
-    fi
-    ;;
+  # production )
+  #   run_docker
+  #   # 仅允许运行在 Linux x86_64
+  #   if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
+  #     init
+  #     if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
+  #     docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
+  #     echo; sleep 2; print_info "Test nginx configuration file...\n"
+  #     docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec nginx nginx -t
+  #     if [ $? = 0 ];then
+  #       echo; print_info "nginx configuration file test is successful\n" ; exit 0
+  #     else
+  #       echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
+  #     fi
+  #   else
+  #     print_error "Production NOT Support ${OS} ${ARCH}\n"
+  #   fi
+  #   ;;
 
   swarm-config )
     init; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} config
@@ -1088,14 +1018,6 @@ main() {
     run_docker; init; exec docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
     ;;
 
-  php )
-    run_docker; php_cli php "$@"
-    ;;
-
-  phpunit )
-    run_docker; php_cli vendor/bin/phpunit "$@"
-    ;;
-
   down )
     init; docker-compose down --remove-orphans
     ;;
@@ -1175,7 +1097,8 @@ main() {
       shift
       cmd="$@"
     fi
-    cli/composer "" "create-project topthink/think=5.0.* ${path} --prefer-dist ${cmd}"
+    cd app
+    ../bin/lnmp-composer create-project topthink/think=5.0.* ${path} --prefer-dist ${cmd}
     ;;
 
   restart )
