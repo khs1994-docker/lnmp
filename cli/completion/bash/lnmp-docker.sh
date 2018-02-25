@@ -6,6 +6,11 @@ complete -W "acme.sh \
         build \
         build-config \
         cleanup \
+        clusterkit-mysql-up \
+        clusterkit-mysql-down \
+        clusterkit-mysql-exec \
+        clusterkit-mysql-deploy \
+        clusterkit-mysql-remove \
         config \
         daemon-socket \
         development \

@@ -91,6 +91,14 @@ Swarm mode:
   swarm-push           Push Swarm image (nginx php7)
   swarm-update         Print service update example
 
+ClusterKit
+  clusterkit-mysql-up          Up MySQL Cluster
+  clusterkit-mysql-down        Stop MySQL Cluster
+  clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
+
+  clusterkit-mysql-deploy      Deploy MySQL Cluster in Swarm mode
+  clusterkit-mysql-remove      Remove MySQL Cluster in Swarm mode
+
 Container CLI:
   apache-cli
   mariadb-cli
@@ -1154,6 +1162,31 @@ $ docker service update \\
      -v /var/run/docker.sock:/var/run/docker.sock \
      -e PORT=2375 \
      shipyard/docker-proxy
+     ;;
+
+  clusterkit-mysql-up )
+     docker-compose -f docker-cluster.mysql.yml up "$@"
+     ;;
+
+  clusterkit-mysql-down )
+     docker-compose -f docker-cluster.mysql.yml down "$@"
+     ;;
+
+  clusterkit-mysql-exec )
+     NODE=$1
+     shift
+     COMMAND=$@
+     if [ -z $@ ];then
+       print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node1|node2} {COMMAND}'
+     fi
+     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.mysql=${NODE}) $COMMAND
+     ;;
+
+  clusterkit-mysql-deploy )
+    docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
+     ;;
+  clusterkit-mysql-remove )
+    docker stack rm mysql_cluster
      ;;
 
   * )
