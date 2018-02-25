@@ -606,7 +606,7 @@ services:
   #   # ports:
   #   #   - "127.0.0.1:5000:5000"
   #   volumes:
-  #     # - ./config/etc/docker/registry:/etc/docker/registry
+  #     # - ./config/registry:/etc/docker/registry
   #     - registry-data:/var/lib/registry
   #   deploy:
   #     placement:
@@ -747,7 +747,7 @@ configs:
   # mongod_conf:
   #   file: ./config/mongodb/mongod.production.conf
   # registy_yml:
-  #   file: ./config/etc/docker/registry/config.production.yml
+  #   file: ./config/registry/config.production.yml
   #
   # 使用外部 config
   #

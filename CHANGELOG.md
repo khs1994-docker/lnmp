@@ -23,6 +23,7 @@ Changes:
 * Remove `restart:always` in development #124
 * Remove khs1994 docker images #128
 * Remove CLI command `composer` `laravel*` `php` `production*`
+* Remove `tmp` folder
 * Expose `Redis` port 6379 #116
 * `NGINX` now based tlsv1.3 #136
 

@@ -253,7 +253,7 @@ services:
     # ports:
     #   - "5000:5000"
     volumes:
-      - ./config/etc/docker/registry/config.yml:/etc/docker/registry/config.yml
+      - ./config/registry/config.yml:/etc/docker/registry/config.yml
       - registry-data:/var/lib/registry
 
 networks:
