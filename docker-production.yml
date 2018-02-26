@@ -1,6 +1,7 @@
 version: "3.5"
 
 services:
+  #
   # 单节点 Swarm mode 集群
   #
   # khs1994.com Docker Swarm mode 最佳实践
