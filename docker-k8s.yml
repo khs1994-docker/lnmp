@@ -1,6 +1,8 @@
 version: "3.5"
 services:
-
+  #
+  # 该文件用于 Docker 桌面版 k8s
+  #
   mysql:
     image: mysql:8.0.3
     env_file:
