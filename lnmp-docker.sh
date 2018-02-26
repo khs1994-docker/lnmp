@@ -519,11 +519,7 @@ set_git_remote_lnmp_url(){
     # 不能使用 SSH
     git fetch lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp
     print_info `git remote get-url lnmp`
-<<<<<<< HEAD
   elif [ `git remote get-url lnmp` != 'git@github.com:khs1994-docker/lnmp.git' ] && [ `git remote get-url lnmp` != 'https://github.com/khs1994-docker/lnmp' ];then
-=======
-  elif [ `git remote get-url lnmp` != 'git@github.com:khs1994-docker/lnmp.git'] && [ `git remote get-url lnmp` != 'https://github.com/khs1994-docker/lnmp' ];then
->>>>>>> Update
     # 存在但是设置错误
     print_error "This git remote lnmp NOT set Correct, reseting..."
     git remote rm lnmp
