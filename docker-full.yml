@@ -88,7 +88,13 @@ services:
         target: /var/log/redis
         read_only: false
       - zoneinfo-data:/usr/share/zoneinfo
-    command: ["redis-server","/redis.conf"]
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0"
+      ]
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.redis=true"
@@ -181,7 +187,7 @@ services:
       - "9000"
     dns:
       - ${DNS}
-    command: php-fpm -R
+    command: php-fpm -R -d variables_order="EGPCS"
     env_file:
       - ./cli/timezone.env
       - ./cli/.env

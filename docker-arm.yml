@@ -38,13 +38,19 @@ services:
     networks:
       - backend
     volumes:
-      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-      - redis-data:/data
+      - ./config/redis/redis.conf:/redis.conf:ro
       - ./logs/redis:/var/log/redis
+      - redis-data:/data
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
       - "${REDIS_PORT}:6379"
-    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0"
+      ]
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.redis=true"
