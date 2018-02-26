@@ -63,10 +63,6 @@ services:
     logging:
       driver: journald
     deploy:
-      # mode: replicated
-      # replicas: 2
-      # endpoint_mode: dnsrr
-      # endpoint_mode: vip
       placement:
         # 在管理节点运行
         constraints: [node.role == manager]
@@ -634,12 +630,6 @@ services:
 networks:
   frontend:
   backend:
-  #
-  # 使用外部 network
-  #
-  # my_other_network:
-  #   external: true
-  #   name: my-lnmp-network
 
 volumes:
   mysql-data:
@@ -650,12 +640,6 @@ volumes:
   # mongodb-data:
   zoneinfo-data:
   # registry-data:
-  #
-  # 使用外部 volume
-  #
-  # my_other_volume:
-  #   external: true
-  #   name: my-app-data
 
 secrets:
   db_root_password:
@@ -680,14 +664,6 @@ secrets:
   #
   # domain_com_ssl_crt:
   #   file: ./config/nginx/ssl/domain.com.crt
-  #
-  # 使用外部 secret
-  #
-  # my_other_secret:
-  #   external: true
-  # my_second_secret:
-  #   external:
-  #     name: redis_secret
   #
   #
   # SSH 相关文件 CI/CD 专用
@@ -748,11 +724,3 @@ configs:
   #   file: ./config/mongodb/mongod.production.conf
   # registy_yml:
   #   file: ./config/registry/config.production.yml
-  #
-  # 使用外部 config
-  #
-  # my_other_config:
-  #   external: true
-  # my_second_config:
-  #   external:
-  #     name: redis_config
