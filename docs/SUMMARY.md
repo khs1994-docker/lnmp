@@ -27,7 +27,7 @@
     * Kubernetes
         * [k8s](production/k8s.md)
     * [Docker Registry](registry.md)
-* [集群](cluster.md)
+* [集群](clusterkit.md)
 * 树莓派3
     * [ARM架构](arm.md)
 * [systemd](systemd.md)

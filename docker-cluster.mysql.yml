@@ -25,93 +25,93 @@ services:
   # $ docker-compose -f docker-cluster.mysql.yml down -v
   #
   mysql_master:
-    image: mysql:8.0.4
+    image: mysql:8.0.3
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - 13306:3306
     volumes:
-      - mysql-master-data:/var/lib/mysql
+      - cluster_mysql_master-data:/var/lib/mysql
     command:
       - --log-bin=mysql-bin
       - --server-id=1
       - --character-set-server=utf8mb4
     networks:
-      mysql_cluster:
+      cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
         ipv4_address: 172.28.0.100
     secrets:
-      - source: db_root_password
+      - source: cluster_db_root_password
         target: /etc/mysql/db_root_password
-      - source: mysql_cluster_master_sh
+      - source: cluster_mysql_master_sh
         target: /docker-entrypoint-initdb.d/1-master-init.sh
     labels:
       - com.khs1994.lnmp.cluster.mysql=master
 
   mysql_node-1:
-    image: mysql:8.0.4
+    image: mysql:8.0.3
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - "13307:3306"
     volumes:
-      - mysql-node-1-data:/var/lib/mysql
+      - cluster_mysql_node-1-data:/var/lib/mysql
     command:
       - --server-id=10
       - --character-set-server=utf8mb4
     networks:
-      mysql_cluster:
+      cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
         ipv4_address: 172.28.0.101
     secrets:
-      - source: db_root_password
+      - source: cluster_db_root_password
         target: /etc/mysql/db_root_password
-      - source: mysql_cluster_node_sh
+      - source: cluster_mysql_node_sh
         target: /docker-entrypoint-initdb.d/1-node-init.sh
     labels:
       - com.khs1994.lnmp.cluster.mysql=node1
 
   mysql_node-2:
-    image: mysql:8.0.4
+    image: mysql:8.0.3
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - "13308:3306"
     volumes:
-      - mysql-node-2-data:/var/lib/mysql
+      - cluster_mysql_node-2-data:/var/lib/mysql
     command:
       - --server-id=20
       - --character-set-server=utf8mb4
     networks:
-      mysql_cluster:
+      cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
         ipv4_address: 172.28.0.102
     secrets:
-      - source: db_root_password
+      - source: cluster_db_root_password
         target: /etc/mysql/db_root_password
-      - source: mysql_cluster_node_sh
+      - source: cluster_mysql_node_sh
         target: /docker-entrypoint-initdb.d/1-node-init.sh
     labels:
       - com.khs1994.lnmp.cluster.mysql=node2
 
 volumes:
-  mysql-master-data:
-  mysql-node-1-data:
-  mysql-node-2-data:
+  cluster_mysql_master-data:
+  cluster_mysql_node-1-data:
+  cluster_mysql_node-2-data:
 
 secrets:
-  mysql_cluster_master_sh:
+  cluster_mysql_master_sh:
     file: ./cluster/mysql/master/master.sh
-  mysql_cluster_node_sh:
+  cluster_mysql_node_sh:
     file: ./cluster/mysql/node/node.sh
-  db_root_password:
+  cluster_db_root_password:
     file: ./secrets/db_root_password.txt
 
 networks:
-    mysql_cluster:
+    cluster_mysql:
       ipam:
         driver: default
         config:
