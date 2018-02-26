@@ -1,2 +1,4 @@
 /*
+!.env
 !.gitignore
+!Dockerfile.example

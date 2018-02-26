@@ -48,8 +48,9 @@ Usage: ./docker-lnmp.sh COMMAND
 Commands:
   acme.sh              Run original acme.sh command to issue SSL certificate
   backup               Backup MySQL databases
-  build                Use LNMP With Self Build images (Only Support x86_64)
-  build-config         Validate and view the Self Build images Compose file
+  build                Build or rebuild LNMP Self Build images (Only Support x86_64)
+  build-config         Validate and view the LNMP Self Build images Compose file
+  build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose
   config               Validate and view the Development Compose file
@@ -82,14 +83,14 @@ Kubernets:
   k8s-down             Remove k8s LNMP
 
 Swarm mode:
-  swarm-build          Build Swarm image (nginx php7)
-  swarm-config         Validate and view the Production Swarm mode Compose file
-  swarm-deploy         Deploy LNMP stack TO Swarm mode
+  swarm-build          Build Swarm mode LNMP images (nginx php7)
+  swarm-config         Validate and view the Swarm mode Compose file
+  swarm-deploy         Deploy LNMP stack IN Swarm mode
   swarm-down           Remove LNMP stack IN Swarm mode
   swarm-ps             List the LNMP tasks
-  swarm-pull           Pull LNMP Docker Images in production Swarm mode
-  swarm-push           Push Swarm image (nginx php7)
-  swarm-update         Print service update example
+  swarm-pull           Pull LNMP Docker Images IN Swarm mode
+  swarm-push           Push Swarm mode LNMP images (nginx php7)
+  swarm-update         Print update LNMP service example
 
 ClusterKit
   clusterkit-mysql-up          Up MySQL Cluster
@@ -935,7 +936,27 @@ $ docker service update \\
   ;;
 
   build )
-    run_docker; init; if [ ${ARCH} = 'x86_64' ];then exec docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d; else NOTSUPPORT; fi
+    run_docker
+    init
+
+    if [ ${ARCH} = 'x86_64' ];then
+      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml build "$@"
+    else
+      NOTSUPPORT
+    fi
+
+    ;;
+
+  build-up )
+    run_docker
+    init
+
+    if [ ${ARCH} = 'x86_64' ];then
+      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d "$@"
+    else
+      NOTSUPPORT
+    fi
+
     ;;
 
   development )
