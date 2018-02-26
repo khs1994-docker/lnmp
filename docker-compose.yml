@@ -178,6 +178,11 @@ services:
     networks:
       - frontend
       - backend
+      #
+      # Redis MySQL Memcached 集群相关网络
+      #
+      - cluster_mysql
+      - cluster_redis
     expose:
       - "9000"
     dns:
@@ -266,6 +271,8 @@ services:
 networks:
   frontend:
   backend:
+  cluster_mysql:
+  cluster_redis:
 
 volumes:
   mysql-data:

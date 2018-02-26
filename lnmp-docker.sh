@@ -93,6 +93,9 @@ Swarm mode:
   swarm-update         Print update LNMP service example
 
 ClusterKit
+  clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
+  swarm-clusterkit             UP LNMP With Mysql Redis Memcached Cluster IN Swarm mode
+
   clusterkit-mysql-up          Up MySQL Cluster
   clusterkit-mysql-down        Stop MySQL Cluster
   clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
@@ -103,6 +106,7 @@ ClusterKit
   clusterkit-redis-up          Up Redis Cluster
   clusterkit-redis-down        Stop Redis Cluster
   clusterkit-redis-exec        Execute a command in a running Redis Cluster node
+  clusterkit-redis-create      Create Redis Cluster(You must manual create)
 
 Container CLI:
   apache-cli
@@ -1188,6 +1192,16 @@ $ docker service update \\
      shipyard/docker-proxy
      ;;
 
+  clusterkit )
+     docker-compose -f docker-compose.yml \
+       -f docker-compose.override.yml \
+       -f docker-cluster.mysql.yml \
+       -f docker-cluster.redis.yml \
+       up "$@"
+
+     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) /docker-entrypoint.sh
+     ;;
+
   clusterkit-mysql-up )
      docker-compose -f docker-cluster.mysql.yml up "$@"
      ;;
@@ -1205,6 +1219,13 @@ $ docker service update \\
      fi
      docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.mysql=${NODE}) $COMMAND
      ;;
+
+  clusterkit-mysql-deploy )
+       docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
+        ;;
+  clusterkit-mysql-remove )
+       docker stack rm mysql_cluster
+        ;;
 
   clusterkit-redis-up )
         docker-compose -f docker-cluster.redis.yml up "$@"
@@ -1224,12 +1245,13 @@ $ docker service update \\
         docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=${NODE}) $COMMAND
         ;;
 
-  clusterkit-mysql-deploy )
-    docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
-     ;;
-  clusterkit-mysql-remove )
-    docker stack rm mysql_cluster
-     ;;
+  clusterkit-redis-create )
+        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) /docker-entrypoint.sh
+        ;;
+
+  swarm-clusterkit )
+    docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
+        ;;
 
   * )
   if ! [ -z "$command" ];then

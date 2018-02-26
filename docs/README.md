@@ -26,6 +26,18 @@
 
 * 支持 `Swarm mode` `k8s` `生产环境` 部署
 
+* 支持一键启动 `MySQL` `Redis` `Memcached` 集群
+
+# 系列文章
+
+* [完全使用 Docker 开发 PHP 项目 （一）: 安装篇](https://segmentfault.com/a/1190000013364203)
+
+* [完全使用 Docker 开发 PHP 项目 （二）: 配置篇](https://segmentfault.com/a/1190000013364300)
+
+* [完全使用 Docker 开发 PHP 项目 （三）: 命令容器化](https://segmentfault.com/a/1190000013364609)
+
+* [完全使用 Docker 开发 PHP 项目 （四）: CLI](https://segmentfault.com/a/1190000013364774)
+
 # 赞赏我
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。

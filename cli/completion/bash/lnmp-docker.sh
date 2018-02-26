@@ -7,6 +7,8 @@ complete -W "acme.sh \
         build-config \
         build-up \
         cleanup \
+        clusterkit \
+        swarm-clusterkit \
         clusterkit-mysql-up \
         clusterkit-mysql-down \
         clusterkit-mysql-exec \

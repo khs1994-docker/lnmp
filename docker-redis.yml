@@ -1,0 +1,100 @@
+version: "3.5"
+
+services:
+  #
+  # Redis 主从配置
+  #
+  redis_master:
+    # build:
+    #   context: ./dockerfile/redis/
+    #   dockerfile: Dockerfile
+    #
+    # image: username/lnmp-redis:tag
+    #
+    # image: khs1994/lnmp-redis:4.0.8
+    #
+    image: redis:4.0.8-alpine
+    env_file: ./cli/timezone.env
+    ports:
+       - "127.0.0.1:16379:6379"
+    volumes:
+      - redis_master-data:/data:rw
+    networks:
+      - backend
+    command:
+      - redis-server
+    # logging:
+    #   driver: journald
+    deploy:
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      labels:
+        - "com.khs1994.lnmp.redis-master=true"
+    labels:
+      - "com.khs1994.lnmp.app.env=production_swarm_mode"
+      - "com.khs1994.lnmp.redis-master=true"
+
+  redis_node-1:
+    # build:
+    #   context: ./dockerfile/redis/
+    #   dockerfile: Dockerfile
+    #
+    # image: username/lnmp-redis:tag
+    #
+    # image: khs1994/lnmp-redis:4.0.8
+    #
+    image: redis:4.0.8-alpine
+    env_file: ./cli/timezone.env
+    ports:
+      - "127.0.0.1:17000:6379"
+    volumes:
+      - redis_node-1-data:/data:rw
+    networks:
+      - backend
+    command:
+      - redis-server
+      - --slaveof
+      - redis_master
+      - "6379"
+    depends_on:
+      - redis_master
+    # logging:
+    #   driver: journald
+    deploy:
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      labels:
+        - "com.khs1994.lnmp.redis-node=true"
+    configs:
+      - source: redis_conf
+        target: /redis.conf
+    labels:
+      - "com.khs1994.lnmp.app.env=production_swarm_mode"
+      - "com.khs1994.lnmp.redis-node=true"
+
+volumes:
+  redis_master-data:
+  redis_node-1-data:
+
+networks:
+  backend:
