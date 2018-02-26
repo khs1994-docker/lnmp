@@ -100,6 +100,10 @@ ClusterKit
   clusterkit-mysql-deploy      Deploy MySQL Cluster in Swarm mode
   clusterkit-mysql-remove      Remove MySQL Cluster in Swarm mode
 
+  clusterkit-redis-up          Up Redis Cluster
+  clusterkit-redis-down        Stop Redis Cluster
+  clusterkit-redis-exec        Execute a command in a running Redis Cluster node
+
 Container CLI:
   apache-cli
   mariadb-cli
@@ -1202,6 +1206,24 @@ $ docker service update \\
      fi
      docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.mysql=${NODE}) $COMMAND
      ;;
+
+  clusterkit-redis-up )
+        docker-compose -f docker-cluster.redis.yml up "$@"
+        ;;
+
+  clusterkit-redis-down )
+        docker-compose -f docker-cluster.redis.yml down "$@"
+        ;;
+
+  clusterkit-redis-exec )
+        NODE=$1
+        shift
+        COMMAND=$@
+        if [ -z $@ ];then
+          print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master1|slave1} {COMMAND}'
+        fi
+        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=${NODE}) $COMMAND
+        ;;
 
   clusterkit-mysql-deploy )
     docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
