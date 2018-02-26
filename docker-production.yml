@@ -164,7 +164,12 @@ services:
       - redis-data:/data:rw
     networks:
       - backend
-    command: ["redis-server","/redis.conf"]
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--bind 0.0.0.0"
+      ]
     logging:
       driver: journald
     deploy:

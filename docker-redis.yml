@@ -21,8 +21,13 @@ services:
       - redis_master-data:/data:rw
     networks:
       - backend
-    command:
-      - redis-server
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0"
+      ]
     # logging:
     #   driver: journald
     deploy:
@@ -61,11 +66,13 @@ services:
       - redis_node-1-data:/data:rw
     networks:
       - backend
-    command:
-      - redis-server
-      - --slaveof
-      - redis_master
-      - "6379"
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--bind 0.0.0.0",
+      "--slaveof redis_master 6379"
+      ]
     depends_on:
       - redis_master
     # logging:

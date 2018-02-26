@@ -7,10 +7,14 @@ services:
       args:
         REDIS_URL: gitee.com/mirrors/redis/raw
     image: khs1994/redis:4.0.8-cluster
-    command:
-      - redis-server
-      - /redis.conf
-      - --port 6379
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--port 6379"
+      ]
     volumes:
       - cluster_redis_master-1-data:/data
     networks:
@@ -35,10 +39,14 @@ services:
       - "7002"
     ports:
       - "7002:7002"
-    command:
-      - redis-server
-      - /redis.conf
-      - --port 7002
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--port 7002"
+      ]
     volumes:
       - cluster_redis_master-2-data:/data
     secrets:
@@ -58,10 +66,14 @@ services:
       - "7003"
     ports:
       - "7003:7003"
-    command:
-      - redis-server
-      - /redis.conf
-      - --port 7003
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--port 7003"
+      ]
     volumes:
       - cluster_redis_master-3-data:/data
     secrets:
@@ -81,10 +93,14 @@ services:
       - "8001"
     ports:
       - "8001:8001"
-    command:
-      - redis-server
-      - /redis.conf
-      - --port 8001
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--port 8001"
+      ]
     volumes:
       - cluster_redis_slave-1-data:/data
     secrets:
@@ -104,10 +120,14 @@ services:
       - "8002"
     ports:
       - "8002:8002"
-    command:
-      - redis-server
-      - /redis.conf
-      - --port 8002
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--port 8002"
+      ]
     volumes:
       - cluster_redis_slave-2-data:/data
     secrets:
@@ -127,10 +147,14 @@ services:
       - "8003"
     ports:
       - "8003:8003"
-    command:
-      - redis-server
-      - /redis.conf
-      - --port 8003
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--port 8003"
+      ]
     volumes:
       - cluster_redis_slave-3-data:/data
     secrets:

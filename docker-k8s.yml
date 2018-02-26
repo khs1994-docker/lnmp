@@ -36,7 +36,14 @@ services:
       # - redis-data:/data
     networks:
       - backend
-    command: ["redis-server","/redis.conf"]
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--port 6379"
+      ]
     # deploy:
     #   placement:
     #     constraints: [node.role == manager]
