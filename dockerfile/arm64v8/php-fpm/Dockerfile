@@ -4,10 +4,8 @@ ENV TZ=Asia/Shanghai
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories
-
-
-RUN set -xe \
+RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+    && set -xe \
       # 新增的包
       && KHS1994_PHP_FPM_APKS=" \
                             git \

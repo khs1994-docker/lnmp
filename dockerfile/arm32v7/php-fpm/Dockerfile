@@ -2,11 +2,13 @@ FROM arm32v7/php:7.2.2-fpm-stretch
 
 ENV TZ=Asia/Shanghai
 
-ARG SOURCES_LIST=./sources.list.default
+ARG DEB_URL=deb.debian.org
 
-COPY $SOURCES_LIST /etc/apt/sources.list
+ARG DEB_SECURITY_URL=security.debian.org
 
-RUN set -xe \
+RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
+    && sed -i "s!security.debian.org!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
+    && set -xe \
 	      && buildDeps=" \
         libfreetype6-dev \
         libjpeg62-turbo-dev \

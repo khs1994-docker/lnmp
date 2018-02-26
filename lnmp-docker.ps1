@@ -83,8 +83,9 @@ Usage: ./docker-lnmp.sh COMMAND
 
 Commands:
   backup               Backup MySQL databases
-  build                Use LNMP With Build images(Support x86_64)
-  build-config         Validate and view the build images Compose file
+  build                Build or rebuild LNMP Self Build images (Only Support x86_64)
+  build-config         Validate and view the LNMP Self Build images Compose file
+  build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the Development Compose file
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
@@ -199,11 +200,15 @@ switch($first){
     }
 
     build {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml build $other
     }
 
     build-config {
       docker-compose -f docker-compose.yml -f docker-compose.build.yml config
+    }
+
+    build-up {
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d $other
     }
 
     cleanup {

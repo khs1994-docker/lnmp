@@ -5,6 +5,7 @@ complete -W "acme.sh \
         backup \
         build \
         build-config \
+        build-up \
         cleanup \
         clusterkit-mysql-up \
         clusterkit-mysql-down \
