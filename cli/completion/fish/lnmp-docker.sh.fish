@@ -5,6 +5,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build             -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-config      -d     'Validate and view the LNMP Self Build images Compose file'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-up          -d     'Create and start LNMP containers With Self Build images (Only Support x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a cleanup           -d     'Cleanup log files'
+
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-up               -d     'Up MySQL Cluster'
 complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-mysql-up' -s d          -d     'Up MySQL Cluster in the background'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-down             -d     'Stop MySQL Cluster'
@@ -12,6 +13,12 @@ complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-mysql-down
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-exec             -d     'Execute a command in a running MySQL Cluster'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-deploy           -d     'Deploy MySQL Cluster in Swarm mode'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-remove           -d     'Remove MySQL Cluster in Swarm mode'
+
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-up               -d     'Up Redis Cluster'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d          -d     'Up Redis Cluster in the background'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-down             -d     'Stop Redis Cluster'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v        -d     'Stop Redis Cluster AND Remove named volumes declared in the `volumes`'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-exec             -d     'Execute a command in a running Redis Cluster'
 
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a config            -d     'Validate and view the Development Compose file'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a daemon-socket     -d     'Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS'

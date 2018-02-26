@@ -12,6 +12,9 @@ complete -W "acme.sh \
         clusterkit-mysql-exec \
         clusterkit-mysql-deploy \
         clusterkit-mysql-remove \
+        clusterkit-redis-up \
+        clusterkit-redis-down \
+        clusterkit-redis-exec \
         config \
         daemon-socket \
         development \

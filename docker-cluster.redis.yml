@@ -1,0 +1,160 @@
+version: '3.5'
+services:
+
+  redis_master-1:
+    build:
+      context: ./cluster/redis
+      args:
+        REDIS_URL: gitee.com/mirrors/redis/raw
+    image: khs1994/redis:4.0.8-cluster
+    command:
+      - redis-server
+      - /redis.conf
+      - --port 6379
+    volumes:
+      - cluster_redis_master-1-data:/data
+    networks:
+      cluster_redis:
+        ipv4_address: 172.16.0.101
+    ports:
+      - "16379:6379"
+    secrets:
+      - source: cluster_redis_conf
+        target: /redis.conf
+    labels:
+      - com.khs1994.lnmp.cluster.redis=master1
+
+  redis_master-2:
+    image: redis:4.0.8-alpine
+    networks:
+      cluster_redis:
+        ipv4_address: 172.16.0.102
+    depends_on:
+      - redis_master-1
+    expose:
+      - "7002"
+    ports:
+      - "7002:7002"
+    command:
+      - redis-server
+      - /redis.conf
+      - --port 7002
+    volumes:
+      - cluster_redis_master-2-data:/data
+    secrets:
+      - source: cluster_redis_conf
+        target: /redis.conf
+    labels:
+      - com.khs1994.lnmp.cluster.redis=master2
+
+  redis_master-3:
+    image: redis:4.0.8-alpine
+    networks:
+      cluster_redis:
+        ipv4_address: 172.16.0.103
+    depends_on:
+      - redis_master-1
+    expose:
+      - "7003"
+    ports:
+      - "7003:7003"
+    command:
+      - redis-server
+      - /redis.conf
+      - --port 7003
+    volumes:
+      - cluster_redis_master-3-data:/data
+    secrets:
+      - source: cluster_redis_conf
+        target: /redis.conf
+    labels:
+      - com.khs1994.lnmp.cluster.redis=master3
+
+  redis_slave-1:
+    image: redis:4.0.8-alpine
+    networks:
+      cluster_redis:
+        ipv4_address: 172.16.0.201
+    depends_on:
+      - redis_master-1
+    expose:
+      - "8001"
+    ports:
+      - "8001:8001"
+    command:
+      - redis-server
+      - /redis.conf
+      - --port 8001
+    volumes:
+      - cluster_redis_slave-1-data:/data
+    secrets:
+      - source: cluster_redis_conf
+        target: /redis.conf
+    labels:
+      - com.khs1994.lnmp.cluster.redis=slave1
+
+  redis_slave-2:
+    image: redis:4.0.8-alpine
+    networks:
+      cluster_redis:
+        ipv4_address: 172.16.0.202
+    depends_on:
+      - redis_master-1
+    expose:
+      - "8002"
+    ports:
+      - "8002:8002"
+    command:
+      - redis-server
+      - /redis.conf
+      - --port 8002
+    volumes:
+      - cluster_redis_slave-2-data:/data
+    secrets:
+      - source: cluster_redis_conf
+        target: /redis.conf
+    labels:
+      - com.khs1994.lnmp.cluster.redis=slave2
+
+  redis_slave-3:
+    image: redis:4.0.8-alpine
+    networks:
+      cluster_redis:
+        ipv4_address: 172.16.0.203
+    depends_on:
+      - redis_master-1
+    expose:
+      - "8003"
+    ports:
+      - "8003:8003"
+    command:
+      - redis-server
+      - /redis.conf
+      - --port 8003
+    volumes:
+      - cluster_redis_slave-3-data:/data
+    secrets:
+      - source: cluster_redis_conf
+        target: /redis.conf
+    labels:
+      - com.khs1994.lnmp.cluster.redis=slave3
+
+networks:
+  cluster_redis:
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.16.0.0/24
+
+secrets:
+  cluster_redis_conf:
+    file: ./cluster/redis/redis.conf
+
+volumes:
+  cluster_redis_master-1-data:
+  cluster_redis_master-2-data:
+  cluster_redis_master-3-data:
+  cluster_redis_slave-1-data:
+  cluster_redis_slave-2-data:
+  cluster_redis_slave-3-data:
