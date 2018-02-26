@@ -13,11 +13,11 @@ export LNMP_ROOT_PATH=/data/lnmp
 
 # Linux
 
-$ ln -s /data/lnmp/cli/completion/bash/lnmp-docker.sh /etc/bash_completion.d/lnmp-docker.sh
+$ sudo ln -s $PWD/cli/completion/bash/lnmp-docker.sh /etc/bash_completion.d/lnmp-docker.sh
 
 # macOS
 
-$ ln -s /data/lnmp/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_completion.d/lnmp-docker.sh
+$ sudo ln -s $PWD/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_completion.d/lnmp-docker.sh
 ```
 
 ## fish
@@ -29,7 +29,7 @@ set -gx fish_user_paths /data/lnmp
 
 $ set -Ux LNMP_ROOT_PATH /data/lnmp
 
-$ ln -s /data/lnmp/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completions/
+$ ln -s $PWD/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completions/
 ```
 
 > 删除环境变量 `$ set -Ue LNMP_ROOT_PATH`

@@ -1,4 +1,5 @@
 version: "3.5"
+
 services:
   # 单节点 Swarm mode 集群
   #
@@ -369,6 +370,7 @@ services:
     networks:
       - frontend
       - backend
+      - cluster_mysql
     command: ["php-fpm","-R"]
     env_file: ./cli/timezone.env
     environment:
@@ -630,6 +632,7 @@ services:
 networks:
   frontend:
   backend:
+  cluster_mysql:
 
 volumes:
   mysql-data:
