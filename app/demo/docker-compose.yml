@@ -1,0 +1,8 @@
+version: "3.5"
+
+services:
+  php7:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: khs1994/php-fpm:swarm-${PHP_VERSION}-alpine3.7
