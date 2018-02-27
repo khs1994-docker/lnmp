@@ -9,7 +9,7 @@ services:
   #
   ## Start
   #
-  # $ docker-compose -f docker-cluster.mysql.yml up [-d]
+  # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.mysql.yml up [-d]
   #
   # 若首次启动失败，务必移除全部（命令在最后）之后，重新尝试
   #
@@ -25,7 +25,15 @@ services:
   #
   ## Remove All [Include Volumes]
   #
-  # $ docker-compose -f docker-cluster.mysql.yml down [-v]
+  # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.mysql.yml down [-v]
+  #
+  #
+  # Swarm mode (Start LNMP With MySQL Cluster)
+  #
+  #
+  # $ docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
+  #
+  # $ docker stack rm lnmp
   #
   mysql_master:
     image: mysql:8.0.3
@@ -40,6 +48,25 @@ services:
       - --log-bin=mysql-bin
       - --server-id=1
       - --character-set-server=utf8mb4
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     networks:
       cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
@@ -64,6 +91,24 @@ services:
     command:
       - --server-id=10
       - --character-set-server=utf8mb4
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     networks:
       cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
@@ -88,6 +133,24 @@ services:
     command:
       - --server-id=20
       - --character-set-server=utf8mb4
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     networks:
       cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
