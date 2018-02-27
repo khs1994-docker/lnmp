@@ -1,18 +1,18 @@
 <?php
 
 // $redisCluster=new RedisCluster(null,[
-//   '172.16.0.101:6379',
-//   '172.16.0.102:7002',
-//   '172.16.0.103:7003',
-//   '172.16.0.201:8001',
-//   '172.16.0.202:8002',
-//   '172.16.0.203:8003',
+//   '192.168.199.100:7001',
+//   '192.168.199.100:7002',
+//   '192.168.199.100:7003',
+//   '192.168.199.100:8001',
+//   '192.168.199.100:8002',
+//   '192.168.199.100:8003',
 // ]);
 
 // https://github.com/phpredis/phpredis/blob/feature/redis_cluster/cluster.markdown
 
 $redisCluster=new RedisCluster(null,[
-  'redis_master-1:6379',
+  'redis_master-1:7001',
   'redis_master-2:7002',
   'redis_master-3:7003',
   'redis_slave-1:8001',

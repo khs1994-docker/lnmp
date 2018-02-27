@@ -3,6 +3,8 @@ services:
   #
   # Redis 集群
   #
+  # @link https://www.cnblogs.com/lianggp/articles/8136222.html
+  #
   redis_master-1:
     build:
       context: ./cluster/redis
@@ -13,16 +15,23 @@ services:
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--logfile /var/log/redis/redis.log",
-      "--bind 0.0.0.0"
+      "--bind 0.0.0.0",
+      "--port 7001",
+      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-port 7001",
+      "--cluster-announce-bus-port 17001"
       ]
     volumes:
       - cluster_redis_master-1-data:/data
     networks:
       cluster_redis:
-        ipv4_address: 172.16.0.101
+        # ipv4_address: 172.16.0.105
+    expose:
+      - "7001"
+      - "17001"
     ports:
-      - "16379:6379"
+      - "7001:7001"
+      - "17001:17001"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -33,20 +42,24 @@ services:
     image: redis:4.0.8-alpine
     networks:
       cluster_redis:
-        ipv4_address: 172.16.0.102
+        # ipv4_address: 172.16.0.102
     depends_on:
       - redis_master-1
     expose:
       - "7002"
+      - "17002"
     ports:
       - "7002:7002"
+      - "17002:17002"
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
-      "--port 7002"
+      "--port 7002",
+      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-port 7002",
+      "--cluster-announce-bus-port 17002"
       ]
     volumes:
       - cluster_redis_master-2-data:/data
@@ -60,20 +73,24 @@ services:
     image: redis:4.0.8-alpine
     networks:
       cluster_redis:
-        ipv4_address: 172.16.0.103
+        # ipv4_address: 172.16.0.103
     depends_on:
       - redis_master-1
     expose:
       - "7003"
+      - "17003"
     ports:
       - "7003:7003"
+      - "17003:17003"
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
-      "--port 7003"
+      "--port 7003",
+      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-port 7003",
+      "--cluster-announce-bus-port 17003"
       ]
     volumes:
       - cluster_redis_master-3-data:/data
@@ -87,20 +104,23 @@ services:
     image: redis:4.0.8-alpine
     networks:
       cluster_redis:
-        ipv4_address: 172.16.0.201
+        # ipv4_address: 172.16.0.201
     depends_on:
       - redis_master-1
     expose:
       - "8001"
+      - "18001"
     ports:
       - "8001:8001"
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
-      "--port 8001"
+      "--port 8001",
+      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-port 8001",
+      "--cluster-announce-bus-port 18001"
       ]
     volumes:
       - cluster_redis_slave-1-data:/data
@@ -114,20 +134,24 @@ services:
     image: redis:4.0.8-alpine
     networks:
       cluster_redis:
-        ipv4_address: 172.16.0.202
+        # ipv4_address: 172.16.0.202
     depends_on:
       - redis_master-1
     expose:
       - "8002"
+      - "18002"
     ports:
       - "8002:8002"
+      - "18002:18002"
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
-      "--port 8002"
+      "--port 8002",
+      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-port 8002",
+      "--cluster-announce-bus-port 18002"
       ]
     volumes:
       - cluster_redis_slave-2-data:/data
@@ -141,20 +165,24 @@ services:
     image: redis:4.0.8-alpine
     networks:
       cluster_redis:
-        ipv4_address: 172.16.0.203
+        # ipv4_address: 172.16.0.203
     depends_on:
       - redis_master-1
     expose:
       - "8003"
+      - "18003"
     ports:
       - "8003:8003"
+      - "18003:18003"
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
-      "--port 8003"
+      "--port 8003",
+      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-port 8003",
+      "--cluster-announce-bus-port 18003"
       ]
     volumes:
       - cluster_redis_slave-3-data:/data
@@ -169,8 +197,7 @@ networks:
     ipam:
       driver: default
       config:
-      -
-        subnet: 172.16.0.0/24
+        - subnet: 172.16.0.0/24
 
 secrets:
   cluster_redis_conf:

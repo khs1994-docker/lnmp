@@ -521,14 +521,14 @@ services:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.nginx=true"
 
-  # apache:
+  # httpd:
   #   build:
-  #     context: ./config/apache
+  #     context: ./config/httpd
   #     dockerfile: Dockerfile
   #   #
-  #   # image: username/lnmp-apache:tag
+  #   # image: username/lnmp-httpd:tag
   #   #
-  #   # image: khs1994/lnmp-apache:2.4.29
+  #   # image: khs1994/lnmp-httpd:2.4.29
   #   #
   #   image: "httpd:2.4.29-alpine"
   #   env_file:
@@ -538,8 +538,8 @@ services:
   #     - "80:80"
   #   volumes:
   #     - ./app:/app:rw
-  #     # - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
-  #     # - ./config/apache2:/usr/local/apache2/conf.d
+  #     # - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     # - ./config/httpd:/usr/local/apache2/conf.d
   #     - zoneinfo-data:/usr/share/zoneinfo:rw
   #   working_dir: /app
   #   networks:
@@ -592,7 +592,7 @@ services:
   #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.apache=true"
+  #     - "com.khs1994.lnmp.httpd=true"
 
   # registry:
   #   build:
@@ -633,7 +633,7 @@ services:
   #       target: /etc/docker/registry/config.yml
   #   labels:
   #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.apache=true"
+  #     - "com.khs1994.lnmp.httpd=true"
 
 networks:
   frontend:
@@ -709,16 +709,16 @@ configs:
   #   file ./config/nginx/conf.d/domain.com.conf
   #
   # httpd_conf:
-  #   file: ./config/etc/apache2/httpd.production.conf
+  #   file: ./config/etc/httpd/httpd.production.conf
   # vhost_khs1994_com_conf:
-  #   file: ./config/apache2/khs1994.com.conf
+  #   file: ./config/httpd/khs1994.com.conf
   #
   #
   # Apache Example Don't Edit
   #
   #
   # vhost_domain_com_conf:
-  #   file: ./config/apache2/domain.com.conf
+  #   file: ./config/httpd/domain.com.conf
   php_ini:
     file: ./config/php/php.production.ini
   php_fpm_conf:

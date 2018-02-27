@@ -251,7 +251,7 @@ services:
       - "com.khs1994.lnmp.nginx=true"
       - "com.khs1994.lnmp.app.env=development"
 
-  # apache:
+  # httpd:
   #   # restart: always
   #   image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
   #   env_file:
@@ -261,9 +261,9 @@ services:
   #     - "80:80"
   #   volumes:
   #     - ./app:${LNMP_PHP_PATH}
-  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
-  #     - ./config/apache2:/usr/local/apache2/conf.d
-  #     - ./logs/apache2:/usr/local/apache2/logs
+  #     - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./config/httpd:/usr/local/apache2/conf.d
+  #     - ./logs/httpd:/usr/local/apache2/logs
   #     - zoneinfo-data:/usr/share/zoneinfo
   #   working_dir: /app
   #   networks:
@@ -272,7 +272,7 @@ services:
   #     - php7
   #   labels:
   #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.apache=true"
+  #     - "com.khs1994.lnmp.httpd=true"
   #     - "com.khs1994.lnmp.app.env=development"
 
 networks:

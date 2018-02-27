@@ -19,7 +19,7 @@ services:
   # postgresql:
   #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
 
-  # mongod:
+  # mongodb:
   #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
 
   php7:
@@ -31,5 +31,5 @@ services:
   nginx:
     image: ${LNMP_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch
 
-  # apache:
+  # httpd:
   #   image: httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine

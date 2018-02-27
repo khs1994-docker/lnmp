@@ -32,8 +32,8 @@ Function env_status(){
 }
 
 Function logs(){
-  if (! (Test-Path logs\apache2)){
-    New-Item logs\apache2 -type directory | Out-Null
+  if (! (Test-Path logs\httpd)){
+    New-Item logs\htppd -type directory | Out-Null
   }
   if (! (Test-Path logs\mongodb)){
     New-Item logs\mongodb -type directory | Out-Null
@@ -100,7 +100,7 @@ Commands:
   restart              Restart LNMP services
 
 PHP Tools:
-  apache-config        Generate Apache2 vhost conf
+  httpd-config        Generate Apache2 vhost conf
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
   ssl-self             Issue Self-signed SSL certificate
@@ -118,7 +118,7 @@ Swarm mode:
   swarm-push           Push Swarm image (nginx php7)
 
 Container CLI:
-  apache-cli
+  httpd-cli
   mariadb-cli
   memcached-cli
   mongo-cli
@@ -146,7 +146,7 @@ exit
 Function cleanup(){
   Write-Host " "
   logs
-  rm logs\apache2 -Recurse -Force | Out-Null
+  rm logs\httpd -Recurse -Force | Out-Null
   rm logs\mongodb -Recurse -Force | Out-Null
   rm logs\mysql -Recurse -Force | Out-Null
   rm logs\mariadb -Recurse -Force | Out-Null
@@ -191,8 +191,8 @@ switch($first){
       init
     }
 
-    apache-config {
-      bash lnmp-docker.sh apache-config $other
+    httpd-config {
+      bash lnmp-docker.sh httpd-config $other
     }
 
     backup {
@@ -318,8 +318,8 @@ switch($first){
       docker run -it --rm --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 date
     }
 
-    apache-cli {
-      docker-compose exec apache sh
+    httpd-cli {
+      docker-compose exec httpd sh
     }
 
     memcached-cli {

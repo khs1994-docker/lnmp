@@ -16,7 +16,7 @@ services:
     image: redis:4.0.8-alpine
     env_file: ./cli/timezone.env
     ports:
-       - "127.0.0.1:16379:6379"
+       - "127.0.0.1:6000:6000"
     volumes:
       - redis_master-data:/data:rw
     networks:
@@ -25,7 +25,8 @@ services:
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--logfile /var/log/redis/redis.log",
+      "--port 6000",
+      # "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0"
       ]
     # logging:
@@ -45,6 +46,9 @@ services:
         order: stop-first
       labels:
         - "com.khs1994.lnmp.redis-master=true"
+    secrets:
+      - source: redis_conf
+        target: /redis.conf
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.redis-master=true"
@@ -61,7 +65,7 @@ services:
     image: redis:4.0.8-alpine
     env_file: ./cli/timezone.env
     ports:
-      - "127.0.0.1:17000:6379"
+      - "127.0.0.1:6001:6001"
     volumes:
       - redis_node-1-data:/data:rw
     networks:
@@ -71,7 +75,9 @@ services:
       "/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--slaveof redis_master 6379"
+      "--port 6001",
+      # "--logfile /var/log/redis/redis.log",
+      "--slaveof redis_master 6000"
       ]
     depends_on:
       - redis_master
@@ -92,7 +98,7 @@ services:
         order: stop-first
       labels:
         - "com.khs1994.lnmp.redis-node=true"
-    configs:
+    secrets:
       - source: redis_conf
         target: /redis.conf
     labels:
@@ -105,3 +111,7 @@ volumes:
 
 networks:
   backend:
+
+secrets:
+  redis_conf:
+    file: ./config/redis/redis.conf

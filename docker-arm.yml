@@ -197,11 +197,11 @@ services:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.nginx=true"
 
-  # apache:
+  # httpd:
   #   # build:
-  #   #   context: ./dockerfile/${ARM_ARCH}/apache
+  #   #   context: ./dockerfile/${ARM_ARCH}/httpd
   #   #   dockerfile: Dockerfile
-  #   # image: lnmp-apache:latest
+  #   # image: lnmp-httpd:latest
   #   restart: always
   #   image: "${ARM_ARCH}/httpd:${KHS1994_LNMP_APACHE_VERSION}${ARM_BASED_OS}"
   #   env_file:
@@ -211,9 +211,9 @@ services:
   #     - "80:80"
   #   volumes:
   #     - ./app:${LNMP_PHP_PATH}:rw
-  #     - ./config/etc/apache2/httpd.conf:/usr/local/apache2/conf/httpd.conf
-  #     - ./config/apache2/conf.d:/usr/local/apache2/conf.d
-  #     - ./logs/apache2:/usr/local/apache2/logs
+  #     - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./config/httpd/conf.d:/usr/local/apache2/conf.d
+  #     - ./logs/httpd:/usr/local/apache2/logs
   #     - zoneinfo-data:/usr/share/zoneinfo
   #   working_dir: /app
   #   networks:
@@ -222,7 +222,7 @@ services:
   #     - php7
   #   labels:
   #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.apache=true"
+  #     - "com.khs1994.lnmp.httpd=true"
 
 networks:
   frontend:

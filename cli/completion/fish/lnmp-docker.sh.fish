@@ -1,5 +1,5 @@
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a acme.sh           -d     'Run original acme.sh command to issue SSL certificate'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a apache-config     -d     'Generate Apache2 vhost conf'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a httpd-config     -d     'Generate Apache2 vhost conf'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a backup            -d     'Backup MySQL databases'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build             -d     'Build or rebuild LNMP Self Build images (Only Support x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-config      -d     'Validate and view the LNMP Self Build images Compose file'
@@ -22,6 +22,10 @@ complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-up' 
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-down             -d     'Stop Redis Cluster'
 complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v        -d     'Stop Redis Cluster AND Remove named volumes declared in the `volumes`'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-exec             -d     'Execute a command in a running Redis Cluster'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-create           -d     'Create Redis Cluster(You must manual create)'
+
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-deploy           -d     'Deploy Redis Cluster in Swarm mode'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-remove           -d     'Remove Redis Cluster in Swarm mode'
 
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a config            -d     'Validate and view the Development Compose file'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a daemon-socket     -d     'Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS'
@@ -52,19 +56,6 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-push        -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-update      -d     'Print update LNMP service example'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a systemd           -d     'Manage Docker LNMP by systemd(Only Support Linux x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a tp                -d     'Create a new ThinkPHP application'
-
-##
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a apache-cli        -d 'Run command in a running apache container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a mariadb-cli       -d 'Run command in a running mariadb container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a memcached-cli     -d 'Run command in a running memcached container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a mongo-cli         -d 'Run command in a running mongo container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a mysql-cli         -d 'Run command in a running mysql container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a nginx-cli         -d 'Run command in a running nginx container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a php-cli           -d 'Run command in a running php container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a phpmyadmin-cli    -d 'Run command in a running phpmyadmin container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a postgres-cli      -d 'Run command in a running postgres container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a rabbitmq-cli      -d 'Run command in a running rabbitmq container'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a redis-cli         -d 'Run command in a running redis container'
 
 ##
 
