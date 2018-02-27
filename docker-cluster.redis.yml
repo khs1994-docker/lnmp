@@ -5,6 +5,35 @@ services:
   #
   # @link https://www.cnblogs.com/lianggp/articles/8136222.html
   #
+  # 这里列出的是 Docker 原始命令，实际请使用 CLI (./lnmp-docker.sh)
+  #
+  # Start
+  #
+  # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml up [-d]
+  #
+  # Exec
+  #
+  ## Bash
+  #
+  # $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) sh
+  #
+  ## Fish
+  #
+  # $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) sh
+  #
+  # Remove ALL [include Volumes]
+  #
+  # $ docker-compose --f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
+  #
+  #
+  # Swarm mode (Start LNMP With Redis Cluster)
+  #
+  #
+  # $ docker stack deploy -c docker-production.yml -c docker-cluster.redis.yml lnmp
+  #
+  # $ docker stack rm lnmp
+  #
+
   redis_master-1:
     build:
       context: ./cluster/redis
@@ -23,6 +52,25 @@ services:
       ]
     volumes:
       - cluster_redis_master-1-data:/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.105
@@ -63,6 +111,25 @@ services:
       ]
     volumes:
       - cluster_redis_master-2-data:/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -94,6 +161,25 @@ services:
       ]
     volumes:
       - cluster_redis_master-3-data:/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -124,6 +210,24 @@ services:
       ]
     volumes:
       - cluster_redis_slave-1-data:/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -155,6 +259,24 @@ services:
       ]
     volumes:
       - cluster_redis_slave-2-data:/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -186,6 +308,24 @@ services:
       ]
     volumes:
       - cluster_redis_slave-3-data:/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
