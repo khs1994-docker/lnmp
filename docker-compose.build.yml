@@ -93,9 +93,9 @@ services:
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
-  # apache:
+  # httpd:
   #   build:
-  #     context: ./dockerfile/apache/
+  #     context: ./dockerfile/httpd/
   #     dockerfile: Dockerfile
   #     args:
   #       ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org

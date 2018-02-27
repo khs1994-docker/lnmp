@@ -22,7 +22,8 @@ print_error(){
 }
 
 NOTSUPPORT(){
-  print_error "Not Support ${OS} ${ARCH}\n"; exit 1
+  print_error "Not Support ${OS} ${ARCH}\n"
+  exit 1
 }
 
 if [ -f cli/khs1994-robot.enc ];then
@@ -71,7 +72,7 @@ Commands:
   upgrade              Upgrades LNMP
 
 PHP Tools:
-  apache-config        Generate Apache2 vhost conf
+  httpd-config        Generate Apache2 vhost conf
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
@@ -94,6 +95,8 @@ Swarm mode:
 
 ClusterKit
   clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
+  clusterkit-COMMAND           Run docker-compsoe commands(config, pull, etc)
+
   swarm-clusterkit             UP LNMP With Mysql Redis Memcached Cluster IN Swarm mode
 
   clusterkit-mysql-up          Up MySQL Cluster
@@ -108,18 +111,14 @@ ClusterKit
   clusterkit-redis-exec        Execute a command in a running Redis Cluster node
   clusterkit-redis-create      Create Redis Cluster(You must manual create)
 
+  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode
+  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
+
 Container CLI:
-  apache-cli
-  mariadb-cli
-  memcached-cli
-  mongo-cli
-  mysql-cli
-  nginx-cli
-  php-cli
-  phpmyadmin-cli
-  postgres-cli
-  rabbitmq-cli
-  redis-cli
+  SERVICE-cli                        Execute a command in a running LNMP container
+
+LogKit:
+  SERVICE-logs                       Print LNMP containers logs (journald)
 
 Developer Tools:
   commit               Commit LNMP to Git
@@ -261,7 +260,7 @@ run_docker(){
 # 创建日志文件
 
 logs(){
-  if ! [ -d logs/apache2 ];then mkdir -p logs/apache2; fi
+  if ! [ -d logs/httpd ];then mkdir -p logs/httpd; fi
 
   if ! [ -d logs/mongodb ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
 
@@ -300,7 +299,7 @@ cleanup(){
       && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/xdebug-remote.log \
       && echo > logs/redis/redis.log \
-      && rm -rf logs/apache2/* \
+      && rm -rf logs/httpd/* \
       && echo > logs/php-fpm/php/error.log
       print_info "Clean log files SUCCESS\n"
 }
@@ -647,7 +646,7 @@ apache_http(){
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/apache2/$1.conf
+</VirtualHost>" >> config/httpd/$1.conf
 }
 
 apache_https(){
@@ -679,7 +678,7 @@ apache_https(){
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/apache2/$1.conf
+</VirtualHost>" >> config/httpd/$1.conf
 }
 
 nginx_https(){
@@ -1002,10 +1001,6 @@ $ docker service update \\
     update "$@"
     ;;
 
-  mysql-cli )
-    run_docker; docker-compose exec mysql mysql -uroot -p${MYSQL_ROOT_PASSWORD}
-    ;;
-
   nginx-config )
      if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-config {https|http} {PATH} {URL}"; exit 1; fi
      print_info 'Please set hosts in /etc/hosts in development\n'
@@ -1016,62 +1011,43 @@ $ docker service update \\
      print_info "You must checkout ./config/nginx/$2.conf, then restart nginx"
      ;;
 
-  apache-config )
+  httpd-config )
     if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh apache-config {https|http} {PATH} {URL}"; exit 1; fi
     print_info 'Please set hosts in /etc/hosts in development\n'
     print_info 'Maybe you need generate Apache2 HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
     if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
     echo
-    print_info "You must checkout ./config/apache2/$2.conf, then restart apache"
-    ;;
-
-  apache-delete )
-
-    ;;
-
-  nginx-delete )
-    mv config/nginx/$1.conf config/nginx/$1.conf.delete
+    print_info "You must checkout ./config/httpd/$2.conf, then restart httpd"
     ;;
 
   php-cli )
     run_docker; docker-compose exec php7 bash
     ;;
 
-  phpmyadmin-cli )
-    run_docker; docker-compose exec phpmyadmin sh
-    ;;
-
-  redis-cli )
-    run_docker; docker-compose exec redis sh
-    ;;
-
-  memcached-cli )
-    run_docker; docker-compose exec memcached sh
-    ;;
-
-  rabbitmq-cli )
-    run_docker; docker-compose exec rabbitmq sh
-    ;;
-
-  postgres-cli )
-    run_docker; docker-compose exec postgresql sh
-    ;;
-
-  mongo-cli )
+  mongodb-cli | mongo-cli )
     run_docker; docker-compose exec mongodb bash
-    ;;
-
-  nginx-cli )
-    run_docker; docker-compose exec nginx sh
-    ;;
-
-  apache-cli )
-    run_docker; docker-compose exec apache sh
     ;;
 
   mariadb-cli )
     run_docker; docker-compose exec mariadb bash
+    ;;
+
+  mysql-cli )
+    run_docker; docker-compose exec mysql bash
+    ;;
+
+  *-cli )
+    SERVICE=$(echo $command | cut -d '-' -f 1)
+    run_docker; docker-compose exec $SERVICE sh
+    ;;
+
+  *-logs | *-log )
+
+    if ! [ "${OS}" = 'Linux' ];then NOTSUPPORT; fi
+
+    SERVICE=$(echo $command | cut -d '-' -f 1)
+    journalctl -u docker.service CONTAINER_ID=$(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.$SERVICE) "$@"
     ;;
 
   push )
@@ -1193,13 +1169,15 @@ $ docker service update \\
      ;;
 
   clusterkit )
+     if [ -z "${CLUSTERKIT_REDIS_HOST_IP}" ];then
+       print_error "You must set CLUSTERKIT_REDIS_HOST_IP in .env file"
+       exit 1
+     fi
      docker-compose -f docker-compose.yml \
        -f docker-compose.override.yml \
        -f docker-cluster.mysql.yml \
        -f docker-cluster.redis.yml \
        up "$@"
-
-     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) /docker-entrypoint.sh
      ;;
 
   clusterkit-mysql-up )
@@ -1246,7 +1224,21 @@ $ docker service update \\
         ;;
 
   clusterkit-redis-create )
-        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) /docker-entrypoint.sh
+      if [ -z "${CLUSTERKIT_REDIS_HOST_IP}" ];then
+        print_error "You must set CLUSTERKIT_REDIS_HOST_IP in .env file"
+        exit 1
+      fi
+
+      docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) /docker-entrypoint.sh create ${CLUSTERKIT_REDIS_HOST_IP}
+      ;;
+
+  clusterkit-* )
+        command=$(echo $command | cut -d '-' -f 2)
+        exec docker-compose -f docker-compose.yml \
+             -f docker-compose.override.yml \
+             -f docker-cluster.mysql.yml \
+             -f docker-cluster.redis.yml \
+             $command "$@"
         ;;
 
   swarm-clusterkit )

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 complete -W "acme.sh \
-        apache-config \
+        httpd-config \
         backup \
         build \
         build-config \
@@ -17,6 +17,9 @@ complete -W "acme.sh \
         clusterkit-redis-up \
         clusterkit-redis-down \
         clusterkit-redis-exec \
+        clusterkit-redis-create \
+        clusterkit-redis-deploy \
+        clusterkit-redis-remove \
         config \
         daemon-socket \
         development \
@@ -44,18 +47,7 @@ complete -W "acme.sh \
         swarm-push \
         swarm-update \
         tp \
-        apache-cli \
-        mariadb-cli \
-        memcached-cli \
-        mongo-cli \
-        mysql-cli \
-        nginx-cli \
         nginx-config \
-        php-cli \
-        phpmyadmin-cli \
-        postgres-cli \
-        rabbitmq-cli \
-        redis-cli \
         update \
         upgrade \
         init \

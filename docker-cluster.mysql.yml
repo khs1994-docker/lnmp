@@ -3,11 +3,13 @@ services:
   #
   # 部署 MySQL 集群
   #
-  # https://github.com/TomCzHen/mysql-replication-sample
+  # @link https://github.com/TomCzHen/mysql-replication-sample
+  #
+  # 这里列出的是 Docker 原始命令，实际请使用 CLI (./lnmp-docker.sh)
   #
   ## Start
   #
-  # $ docker-compose -f docker-cluster.mysql.yml up
+  # $ docker-compose -f docker-cluster.mysql.yml up [-d]
   #
   # 若首次启动失败，务必移除全部（命令在最后）之后，重新尝试
   #
@@ -21,9 +23,9 @@ services:
   #
   # $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.mysql=master) mysql -uroot -p
   #
-  ## Remove All
+  ## Remove All [Include Volumes]
   #
-  # $ docker-compose -f docker-cluster.mysql.yml down -v
+  # $ docker-compose -f docker-cluster.mysql.yml down [-v]
   #
   mysql_master:
     image: mysql:8.0.3
