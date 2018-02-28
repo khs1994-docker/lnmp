@@ -80,6 +80,8 @@ PHP Tools:
   tp                   Create a new ThinkPHP application
 
 Kubernets:
+  dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
+
   k8s                  Deploy LNMP on k8s
   k8s-down             Remove k8s LNMP
 
@@ -127,7 +129,7 @@ Developer Tools:
   rc                   Start new release
   test                 Test LNMP
 
-Read './docs/*.md' for more information about commands.
+Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
 
@@ -1244,6 +1246,20 @@ $ docker service update \\
   swarm-clusterkit )
     docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
         ;;
+
+  dashboard )
+    echo -e "
+$ cd kubernetes
+
+$ kubectl apply -f kubernetes-dashboard.yaml
+
+$ kubectl proxy
+
+OPEN http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+"
+    print_info "More information please see https://github.com/kubernetes/dashboard"
+
+    ;;
 
   * )
   if ! [ -z "$command" ];then

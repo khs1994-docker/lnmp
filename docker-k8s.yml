@@ -3,39 +3,44 @@ services:
   #
   # 该文件用于 Docker 桌面版 k8s
   #
+  # Docker v18.03-rc1 maybe not support secrets
+  #
   mysql:
     image: mysql:8.0.3
-    env_file:
-      - ./cli/timezone.env
+    # env_file: ./cli/timezone.env
     environment:
-      MYSQL_ROOT_PASSWORD: mytest
-      # MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
+      TZ: Asia/Shanghai
+      # MYSQL_ROOT_PASSWORD: mytest
+      MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
       MYSQL_DATABASE: test
     networks:
       - backend
     ports:
       - "3306:3306"
-    # volumes:
-    #   - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
-    #   - mysql-data:/var/lib/mysql:rw
-    #   - ./logs/mysql:/var/log/mysql:rw
-    #   - ./backup/mysql:/backup:rw
+    volumes:
+      # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      - mysql-data:/var/lib/mysql:rw
+      - ./logs/mysql:/var/log/mysql:rw
+      - ./backup/mysql:/backup:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
-    # deploy:
-    #   placement:
-    #     # 在管理节点运行
-    #     constraints: [node.role == manager]
     # secrets:
-    #   - source: db_root_password
+    #   - source: db-root-password
     #     target: /etc/db_root_password
+    configs:
+    # secrets:
+      - source: db-root-password
+        target: /etc/db_root_password
 
   redis:
     image: redis:4.0.8-alpine
-    env_file: ./cli/timezone.env
+    environment:
+      TZ: Asia/Shanghai
+    # env_file: ./cli/timezone.env
     # ports:
     #   - "6379"
-    # volumes:
-      # - redis-data:/data
+    volumes:
+      - redis-data:/data
+      - ./logs/redis:/var/log/redis:rw
     networks:
       - backend
     command: [
@@ -46,48 +51,76 @@ services:
       "--bind 0.0.0.0",
       "--port 6379"
       ]
-    # deploy:
-    #   placement:
-    #     constraints: [node.role == manager]
+    configs:
+      - source: redis-conf
+        target: /redis.conf
 
   php7:
     build: ./app/demo
-    image: khs1994/php-fpm:swarm-7.2.2-alpine3.7
-    # volumes:
-    #   - ./logs/php-fpm:/var/log/php-fpm:rw
+    image: khs1994/php-fpm:7.2.2-alpine3.7
+    volumes:
+      - ./app:/app
+      # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
+      # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
+      # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      # - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
+      # - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./logs/php-fpm:/var/log/php-fpm:rw
+      - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - frontend
       - backend
-    command: ["php-fpm","-R"]
-    env_file: ./.env
+    command: php-fpm -R -d variables_order="EGPCS"
+    # env_file: ./.env
     environment:
       - APP_ENV=production
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 Docker Swarm
+      - KHS1994_LNMP_DOCKER_VERSION=v18.03-rc2 x86_64 Docker k8s
     deploy:
       replicas: 2
+    configs:
+      - source: xdebug-ini
+        target: /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - source: php-ini
+        target: /usr/local/etc/php/php.ini
+      - source: php-fpm-conf
+        target: /usr/local/etc/php-fpm.conf
+      - source: php-fpm-conf-d-www-conf
+        target: /usr/local/etc/php-fpm.d/www.conf
+      - source: php-fpm-conf-d-docker-conf
+        target: /usr/local/etc/php-fpm.d/docker.conf
 
   nginx:
     build: ./config/nginx
-    image: khs1994/nginx:swarm-1.13.9-alpine
-    env_file: ./cli/timezone.env
+    image: nginx:1.13.9-alpine
+    # env_file: ./cli/timezone.env
     ports:
       - "443:443"
       - "80:80"
-    # volumes:
-    #   - ./logs/nginx:/var/log/nginx:rw
+    volumes:
+      - ./app:/app
+      # - ./config/nginx:/etc/nginx/conf.d:ro
+      # - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx:rw
     networks:
       - frontend
     depends_on:
       - php7
     deploy:
       replicas: 2
-    command: ["/wait-for-php.sh"]
-    # configs:
-    #   - source: nginx_conf
-    #     target: /etc/nginx/nginx.conf
+    # command: ["/wait-for-php.sh"]
+    configs:
+      - source: nginx-conf
+        target: /etc/nginx/nginx.conf
         # uid: '103'
         # gid: '103'
         # mode: 0440
+      - source: nginx-khs1994-com-conf
+        target: /etc/nginx/conf.d/khs1994.com.conf
+    # secrets:
+      - source: khs1994-com-ssl-crt
+        target: /etc/nginx/conf.d/ssl/www.t.khs1994.com.crt
+      - source: khs1994-com-ssl-key
+        target: /etc/nginx/conf.d/ssl/www.t.khs1994.com.key
 
 networks:
   frontend:
@@ -96,14 +129,40 @@ networks:
 volumes:
   mysql-data:
   redis-data:
+  zoneinfo-data:
   # rabbitmq-data:
   # postgresql-data:
   # mongodb-data:
 
+configs:
 # secrets:
-#   db_root_password:
-#     file: secrets/db_root_password.txt
+  db-root-password:
+    file: secrets/db_root_password.txt
+  khs1994-com-ssl-crt:
+    file: ./config/nginx/demo-ssl/www.t.khs1994.com.crt
+  khs1994-com-ssl-key:
+    file: ./config/nginx/demo-ssl/www.t.khs1994.com.key
 
 # configs:
-#   nginx_conf:
-#     file: ./config/etc/nginx/nginx.conf
+  mysql-conf-d-docker-cnf:
+    file: ./config/mysql/conf.d/docker.cnf
+  nginx-conf:
+    file: ./config/etc/nginx/nginx.conf
+  nginx-khs1994-com-conf:
+    # file: ./config/etc/nginx/khs1994.com.one.production.config
+    file: ./config/nginx/khs1994.com.one.development.config
+  redis-conf:
+    file: ./config/redis/redis.conf
+  xdebug-ini:
+    file: ./config/php/php/conf.d/xdebug.ini
+  php-ini:
+    file: ./config/php/php.development.ini
+  php-fpm-conf:
+    # file: ./config/php/php-fpm.production.conf
+    file: ./config/php/php-fpm.conf
+  php-fpm-conf-d-www-conf:
+    # file: ./config/php/php-fpm.production.d/www.conf
+    file: ./config/php/php-fpm.d/www.conf
+  php-fpm-conf-d-docker-conf:
+    # file: ./config/php/php-fpm.production.d/docker.conf
+    file: ./config/php/php-fpm.d/docker.conf

@@ -377,7 +377,7 @@ services:
       - frontend
       - backend
       - cluster_mysql
-    command: ["php-fpm","-R"]
+    command: php-fpm -R -d variables_order="EGPCS"
     env_file: ./cli/timezone.env
     environment:
       - APP_ENV=production

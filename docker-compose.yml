@@ -2,7 +2,7 @@ version: "3.5"
 services:
 
   mysql:
-    # restart: always
+    restart: always
     # 此处定义的是自行构建镜像的前缀
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     environment:
@@ -63,7 +63,7 @@ services:
   #     - "com.khs1994.lnmp.app.env=development"
 
   redis:
-    # restart: always
+    restart: always
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
     env_file: ./cli/timezone.env
     ports:
@@ -170,7 +170,7 @@ services:
   #     - "com.khs1994.lnmp.app.env=development"
 
   php7:
-    # restart: always
+    restart: always
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
@@ -208,7 +208,7 @@ services:
 
   phpmyadmin:
     image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/phpmyadmin:{KHS1994_LNMP_PHPMYADMIN_VERSION}
-    # restart: always
+    restart: always
     networks:
       - backend
     environment:
@@ -223,7 +223,7 @@ services:
       - "com.khs1994.lnmp.app.env=development"
 
   nginx:
-    # restart: always
+    restart: always
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
     env_file:
       - ./cli/timezone.env

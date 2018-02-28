@@ -107,6 +107,8 @@ PHP Tools:
   tp                   Create a new ThinkPHP application
 
 Kubernets:
+  dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
+
   k8s                  Deploy LNMP on k8s
   k8s-build            Build LNMP on k8s image (nginx php7)
   k8s-down             Remove k8s LNMP
@@ -133,7 +135,7 @@ Tools:
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
 
-Read './docs/*.md' for more information about commands.
+Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
 
@@ -238,6 +240,10 @@ switch($first){
 
     full-up {
       docker-compose -f docker-full.yml -f docker-compose.override.yml up -d $other
+    }
+
+    dashboard {
+
     }
 
     k8s {
