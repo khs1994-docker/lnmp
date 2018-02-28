@@ -20,6 +20,16 @@ $ kubectl get pod
 $ docker stack rm lnmp
 ```
 
+## DashBoard
+
+```bash
+$ kubectl apply -f kubernetes-dashboard.yaml
+
+$ kubectl proxy
+```
+
+浏览器打开 http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
 # Kubernetes
 
 > 这里以 Minikube 为例：https://www.khs1994.com/docker/minikube/README.html

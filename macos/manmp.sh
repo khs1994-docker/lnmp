@@ -37,7 +37,7 @@ case $1 in
 
    start )
      sudo nginx
-     # sudo php-fpm -R
+     # php-fpm -R -d variables_order="EGPCS"
      mysql.server start
      php72-fpm start
      sudo redis-server /usr/local/etc/redis.conf

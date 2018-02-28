@@ -1,3 +1,5 @@
+# 所有 MySQL 自定义配置请在这里配置
+
 [mysqld]
 skip-host-cache
 skip-name-resolve

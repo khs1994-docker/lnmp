@@ -22,6 +22,7 @@ complete -W "acme.sh \
         clusterkit-redis-remove \
         config \
         daemon-socket \
+        dashboard \
         development \
         development-pull \
         down \
