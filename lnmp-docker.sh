@@ -742,6 +742,10 @@ ssl(){
 $ ./lnmp-docker.sh ssl khs1994.com
 
 $ ./lnmp-docker.sh ssl khs1994.com -d www.khs1994.com -d t.khs1994.com
+
+通配符证书（测试）
+
+$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d t.khs1994.com -d *.t.khs1994.com
 "
   fi
   exec docker run -it --rm \
@@ -939,7 +943,7 @@ $ docker service update \\
     --secret-add source=khs1994_com_ssl_crt_v2,target=/etc/nginx/conf.d/ssl/khs1994.com.crt \\
     lnmp_nginx
 
-
+$ docker service update --image nginx:1.13.9 lnmp_nginx
 "
   ;;
 
@@ -1100,7 +1104,17 @@ $ docker service update \\
     ;;
 
   ssl-self )
-    if [ -z "$1" ];then print_error '$ ./lnmp-docker.sh ssl-self {IP|DOMAIN}'; exit 1; fi
+    if [ -z "$1" ];then
+      print_error '$ ./lnmp-docker.sh ssl-self {IP|DOMAIN}'
+      echo -e "
+Example:
+
+$ ./lnmp-docker.sh ssl-self khs1994.com 127.0.0.1 192.168.199.100 localhost ...
+
+$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.com 127.0.0.1 192.168.199.100 localhost ...
+"
+    exit 1
+    fi
     ssl_self "$@"
     echo; print_info 'Please set hosts in /etc/hosts'
     ;;

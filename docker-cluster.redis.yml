@@ -23,7 +23,7 @@ services:
   #
   # Remove ALL [include Volumes]
   #
-  # $ docker-compose --f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
+  # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
   #
   #
   # Swarm mode (Start LNMP With Redis Cluster)
