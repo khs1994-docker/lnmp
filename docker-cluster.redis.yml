@@ -70,6 +70,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=ruby"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.105
@@ -115,6 +120,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=master1"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.105
@@ -179,6 +189,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=master2"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -234,6 +249,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=master3"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -288,6 +308,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=slave1"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -342,6 +367,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=slave2"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
@@ -396,6 +426,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=slave3"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf

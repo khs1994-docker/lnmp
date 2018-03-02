@@ -67,6 +67,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.cluster.mysql=master"
+        - "com.khs1994.lnmp.app.env=clusterkit_mysql"
     networks:
       cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
@@ -112,6 +117,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.cluster.mysql=node1"
+        - "com.khs1994.lnmp.app.env=clusterkit_mysql"
     networks:
       cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
@@ -157,6 +167,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.cluster.mysql=node2"
+        - "com.khs1994.lnmp.app.env=clusterkit_mysql"
     networks:
       cluster_mysql:
         # 固定 IP 选项在 Swarm mode 不起作用
