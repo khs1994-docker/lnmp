@@ -51,11 +51,12 @@ Commands:
   backup               Backup MySQL databases
   build                Build or rebuild LNMP Self Build images (Only Support x86_64)
   build-config         Validate and view the LNMP Self Build images Compose file
+  build-push           Build and Pushes images to Docker Registory
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose
-  config               Validate and view the Development Compose file
   development          Use LNMP in Development
+  development-config   Validate and view the Development Compose file
   development-pull     Pull LNMP Docker Images in development
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   down                 Stop and remove LNMP Docker containers, networks
@@ -63,7 +64,6 @@ Commands:
   full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
-  push                 Build and Pushes images to Docker Registory
   restore              Restore MySQL databases
   restart              Restart LNMP services
   registry             Start Docker Registry
@@ -111,7 +111,6 @@ ClusterKit
   clusterkit-redis-up          Up Redis Cluster
   clusterkit-redis-down        Stop Redis Cluster
   clusterkit-redis-exec        Execute a command in a running Redis Cluster node
-  clusterkit-redis-create      Create Redis Cluster(You must manual create)
 
   clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode
   clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
@@ -217,6 +216,7 @@ tz(){
 env_status(){
   # cp .env.example to .env
   if [ -f .env ];then print_info ".env file existing\n"; else print_error ".env file NOT existing\n"; cp .env.example .env ; fi
+  if [ -f cluster/.env ];then print_info "cluster/.env file existing\n"; else print_error "cluster/.env file NOT existing\n"; cp cluster/.env.example cluster/.env ; fi
 }
 
 # 自动升级软件版本
@@ -824,7 +824,7 @@ main() {
     run_docker; backup "$@"
     ;;
 
-  config )
+  development-config )
     exec docker-compose config
     ;;
 
@@ -1052,7 +1052,7 @@ $ docker service update \\
     journalctl -u docker.service CONTAINER_ID=$(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.$SERVICE) "$@"
     ;;
 
-  push )
+  build-push )
     run_docker; init; exec docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
     ;;
 
@@ -1171,10 +1171,6 @@ $ docker service update \\
      ;;
 
   clusterkit )
-     if [ -z "${CLUSTERKIT_REDIS_HOST_IP}" ];then
-       print_error "You must set CLUSTERKIT_REDIS_HOST_IP in .env file"
-       exit 1
-     fi
      docker-compose -f docker-compose.yml \
        -f docker-compose.override.yml \
        -f docker-cluster.mysql.yml \
@@ -1224,15 +1220,6 @@ $ docker service update \\
         fi
         docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=${NODE}) $COMMAND
         ;;
-
-  clusterkit-redis-create )
-      if [ -z "${CLUSTERKIT_REDIS_HOST_IP}" ];then
-        print_error "You must set CLUSTERKIT_REDIS_HOST_IP in .env file"
-        exit 1
-      fi
-
-      docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) /docker-entrypoint.sh create ${CLUSTERKIT_REDIS_HOST_IP}
-      ;;
 
   clusterkit-* )
         command=$(echo $command | cut -d '-' -f 2)

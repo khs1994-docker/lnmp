@@ -376,7 +376,6 @@ services:
     networks:
       - frontend
       - backend
-      - cluster_mysql
     command: php-fpm -R -d variables_order="EGPCS"
     env_file: ./cli/timezone.env
     environment:
@@ -638,7 +637,6 @@ services:
 networks:
   frontend:
   backend:
-  cluster_mysql:
 
 volumes:
   mysql-data:

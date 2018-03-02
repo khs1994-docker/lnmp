@@ -86,16 +86,16 @@ Commands:
   build                Build or rebuild LNMP Self Build images (Only Support x86_64)
   build-config         Validate and view the LNMP Self Build images Compose file
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
+  build-push           Build and Pushes images to Docker Registory
   cleanup              Cleanup log files
-  config               Validate and view the Development Compose file
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
+  development-config   Validate and view the Development Compose file
   development-pull     Pull LNMP Docker Images in development
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
   full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
-  push                 Build and Pushes images to Docker Registory v2
   restore              Restore MySQL databases
   restart              Restart LNMP services
 

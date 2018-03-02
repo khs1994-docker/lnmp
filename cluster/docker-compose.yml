@@ -1,0 +1,10 @@
+version: "3.5"
+
+services:
+
+  redis_ruby:
+    build:
+      context: ./redis
+      args:
+        REDIS_URL: gitee.com/mirrors/redis/raw
+    image: khs1994/redis:clusterkit-4.0.8
