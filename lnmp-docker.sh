@@ -608,6 +608,7 @@ nginx_http(){
   echo "#
 # Generate nginx config By khs1994-docker/lnmp
 #
+
 server {
   listen        80;
   server_name   $1;
@@ -630,6 +631,7 @@ apache_http(){
   echo "#
 # Generate Apache2 connfig By khs1994-docker/lnmp
 #
+
 <VirtualHost *:80>
   DocumentRoot \"/app/$2\"
   ServerName $1
@@ -655,6 +657,7 @@ apache_https(){
   echo "#
 # Generate Apache2 HTTPS config By khs1994-docker/lnmp
 #
+
 <VirtualHost *:443>
   DocumentRoot \"/app/$2\"
   ServerName $1
@@ -688,6 +691,7 @@ nginx_https(){
   echo "#
 # Generate nginx HTTPS config By khs1994-docker/lnmp
 #
+
 server {
   listen                    80;
   server_name               $1;
@@ -742,6 +746,10 @@ ssl(){
 $ ./lnmp-docker.sh ssl khs1994.com
 
 $ ./lnmp-docker.sh ssl khs1994.com -d www.khs1994.com -d t.khs1994.com
+
+通配符证书（测试）
+
+$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d t.khs1994.com -d *.t.khs1994.com
 "
   fi
   exec docker run -it --rm \
@@ -939,7 +947,9 @@ $ docker service update \\
     --secret-add source=khs1994_com_ssl_crt_v2,target=/etc/nginx/conf.d/ssl/khs1994.com.crt \\
     lnmp_nginx
 
+$ docker service update --image nginx:1.13.9 lnmp_nginx
 
+For information please run $ docker service update --help
 "
   ;;
 
@@ -1100,7 +1110,17 @@ $ docker service update \\
     ;;
 
   ssl-self )
-    if [ -z "$1" ];then print_error '$ ./lnmp-docker.sh ssl-self {IP|DOMAIN}'; exit 1; fi
+    if [ -z "$1" ];then
+      print_error '$ ./lnmp-docker.sh ssl-self {IP|DOMAIN}'
+      echo -e "
+Example:
+
+$ ./lnmp-docker.sh ssl-self khs1994.com 127.0.0.1 192.168.199.100 localhost ...
+
+$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.com 127.0.0.1 192.168.199.100 localhost ...
+"
+    exit 1
+    fi
     ssl_self "$@"
     echo; print_info 'Please set hosts in /etc/hosts'
     ;;
@@ -1193,7 +1213,7 @@ $ docker service update \\
      if [ -z $@ ];then
        print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node1|node2} {COMMAND}'
      fi
-     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.mysql=${NODE}) $COMMAND
+     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.mysql=${NODE}) $COMMAND
      ;;
 
   clusterkit-mysql-deploy )
@@ -1218,7 +1238,7 @@ $ docker service update \\
         if [ -z $@ ];then
           print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master1|slave1} {COMMAND}'
         fi
-        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=${NODE}) $COMMAND
+        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=${NODE}) $COMMAND
         ;;
 
   clusterkit-* )

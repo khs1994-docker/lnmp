@@ -19,4 +19,13 @@ foreach ($stmt as $k=>$v){
   var_dump ($v);
 }
 
+// $pdo3=new PDO('mysql:host=192.168.199.100;port=13308;dbname=test','root','mytest');
+//
+// $stmt=$pdo3->query('select * from tb1');
+//
+// foreach ($stmt as $k=>$v){
+//   var_dump ($k);
+//   var_dump ($v);
+// }
+
 // $pdo->exec('delete from tb1 where id=1');

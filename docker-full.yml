@@ -109,12 +109,12 @@ services:
     env_file: ./cli/timezone.env
     ports:
       - "${MEMCACHED_PORT}:11211"
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.memcached=true"
       - "com.khs1994.lnmp.app.env=development"
-    volumes:
-      - zoneinfo-data:/usr/share/zoneinfo
 
   rabbitmq:
     # restart: always
@@ -262,21 +262,69 @@ services:
     volumes:
       - ./config/registry/config.yml:/etc/docker/registry/config.yml
       - registry-data:/var/lib/registry
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.registry=true"
+      - "com.khs1994.lnmp.app.env=development"
 
 networks:
   frontend:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.frontend=true"
+      - "com.khs1994.lnmp.app.env=development"
   backend:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.backend=true"
+      - "com.khs1994.lnmp.app.env=development"
 
 volumes:
   mysql-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.mysql=true"
   mariadb-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.mariadb=true"
   redis-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.redis=true"
   rabbitmq-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.rabbitmq=true"
   postgresql-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=pdevelopment"
+      - "com.khs1994.lnmp.postgresql=true"
   mongodb-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.mongodb=true"
   zoneinfo-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.zoneinfo=true"
   registry-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.registry=true"
 
 secrets:
   db_root_password:
     file: secrets/db_root_password.txt
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.app.env=development"
+      - "com.khs1994.lnmp.mysql=true"

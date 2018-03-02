@@ -245,6 +245,8 @@ configs:
   my_second_config:
     external:
       name: redis_config
+    labels:
+      - "com.khs1994.lnmp=true"
 
 secrets:
   my_secret:
@@ -254,6 +256,8 @@ secrets:
   my_second_secret:
     external:
       name: redis_secret
+    labels:
+      - "com.khs1994.lnmp=true"
 
 networks:
   app_net:

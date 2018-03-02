@@ -94,7 +94,7 @@ $ ./lnmp-docker.sh clusterkit-redis-down [-v]
 
 ## Redis 主从版
 
-在 `docker-redis.yml` 中定义。
+在 `docker-cluster.redis.master.node.yml` 中定义。
 
 主负责写，从负责读。
 

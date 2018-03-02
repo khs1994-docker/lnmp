@@ -15,15 +15,15 @@ services:
   #
   ## Bash
   #
-  # $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) sh
+  # $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
   #
   ## Fish
   #
-  # $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.cluster.redis=master1) sh
+  # $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
   #
   # Remove ALL [include Volumes]
   #
-  # $ docker-compose --f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
+  # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
   #
   #
   # Swarm mode (Start LNMP With Redis Cluster)
@@ -70,11 +70,19 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=ruby"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.105
     labels:
-      - com.khs1994.lnmp.cluster.redis=ruby
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=ruby"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-1:
     image: redis:4.0.8-alpine
@@ -112,6 +120,11 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=master1"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.105
@@ -125,7 +138,10 @@ services:
       - source: cluster_redis_conf
         target: /redis.conf
     labels:
-      - com.khs1994.lnmp.cluster.redis=master1
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=master1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-2:
     image: redis:4.0.8-alpine
@@ -173,11 +189,19 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=master2"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
     labels:
-      - com.khs1994.lnmp.cluster.redis=master2
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=master2"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-3:
     image: redis:4.0.8-alpine
@@ -225,11 +249,19 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=master3"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
     labels:
-      - com.khs1994.lnmp.cluster.redis=master3
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=master3"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-1:
     image: redis:4.0.8-alpine
@@ -276,11 +308,19 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=slave1"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
     labels:
-      - com.khs1994.lnmp.cluster.redis=slave1
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=slave1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-2:
     image: redis:4.0.8-alpine
@@ -327,11 +367,19 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=slave2"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
     labels:
-      - com.khs1994.lnmp.cluster.redis=slave2
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=slave2"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-3:
     image: redis:4.0.8-alpine
@@ -378,11 +426,19 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.redis=slave3"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     secrets:
       - source: cluster_redis_conf
         target: /redis.conf
     labels:
-      - com.khs1994.lnmp.cluster.redis=slave3
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=slave3"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
 networks:
   cluster_redis:
@@ -390,15 +446,55 @@ networks:
       driver: default
       config:
         - subnet: 172.16.0.0/24
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
 secrets:
   cluster_redis_conf:
     file: ./cluster/redis/redis.conf
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
 volumes:
   cluster_redis_master-1-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=master1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
   cluster_redis_master-2-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=master2"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
   cluster_redis_master-3-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=master3"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
   cluster_redis_slave-1-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=slave1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
   cluster_redis_slave-2-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=slave2"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
   cluster_redis_slave-3-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis=slave3"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis"
