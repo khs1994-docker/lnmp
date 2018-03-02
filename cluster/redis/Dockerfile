@@ -1,6 +1,4 @@
-ARG VERSION=4.0.8
-
-FROM redis:${VERSION}-alpine
+FROM alpine:latest
 
 ARG VERSION=4.0.8
 
@@ -15,3 +13,5 @@ RUN wget https://${REDIS_URL}/${VERSION}/src/redis-trib.rb -O /usr/bin/redis-tri
     && gem install redis
 
 COPY docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]

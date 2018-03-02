@@ -33,19 +33,60 @@ services:
   #
   # $ docker stack rm lnmp
   #
+  #
+  # PHP 容器连接集群方式 通过集群 HOST_IP 连接
+  #
+  #
+
+  #
+  # Redis 集群初始化脚本执行容器，官方提供了 Ruby 脚本
+  #
+  redis_ruby:
+    # build:
+    #   context: ./cluster/redis
+    #   args:
+    #     REDIS_URL: gitee.com/mirrors/redis/raw
+    env_file:
+      - ./cluster/.env
+    image: khs1994/redis:clusterkit-4.0.8
+    volumes:
+      - cluster_redis_master-1-data:/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
+    networks:
+      cluster_redis:
+        # ipv4_address: 172.16.0.105
+    labels:
+      - com.khs1994.lnmp.cluster.redis=ruby
 
   redis_master-1:
-    build:
-      context: ./cluster/redis
-      args:
-        REDIS_URL: gitee.com/mirrors/redis/raw
-    image: khs1994/redis:4.0.8-cluster
+    image: redis:4.0.8-alpine
+    env_file:
+      - ./cluster/.env
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 7001",
+      # 将 192.168.199.100 替换为 REdis 集群实际 IP 下同
       "--cluster-announce-ip 192.168.199.100",
       "--cluster-announce-port 7001",
       "--cluster-announce-bus-port 17001"
@@ -88,6 +129,8 @@ services:
 
   redis_master-2:
     image: redis:4.0.8-alpine
+    env_file:
+      - ./cluster/.env
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.102
@@ -138,6 +181,8 @@ services:
 
   redis_master-3:
     image: redis:4.0.8-alpine
+    env_file:
+      - ./cluster/.env
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.103
@@ -188,6 +233,8 @@ services:
 
   redis_slave-1:
     image: redis:4.0.8-alpine
+    env_file:
+      - ./cluster/.env
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.201
@@ -198,6 +245,7 @@ services:
       - "18001"
     ports:
       - "8001:8001"
+      - "18001:18001"
     command: [
       "redis-server",
       "/redis.conf",
@@ -236,6 +284,8 @@ services:
 
   redis_slave-2:
     image: redis:4.0.8-alpine
+    env_file:
+      - ./cluster/.env
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.202
@@ -285,6 +335,8 @@ services:
 
   redis_slave-3:
     image: redis:4.0.8-alpine
+    env_file:
+      - ./cluster/.env
     networks:
       cluster_redis:
         # ipv4_address: 172.16.0.203

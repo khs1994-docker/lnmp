@@ -1,6 +1,6 @@
 <?php
 
-$pdo=new PDO('mysql:host=mysql_master;dbname=test','root','mytest');
+$pdo=new PDO('mysql:host=192.168.199.100;port=13306;dbname=test','root','mytest');
 
 $sql='create table if not exists tb1(id int);';
 
@@ -10,7 +10,7 @@ var_dump($pdo->exec($sql));
 
 var_dump($pdo->exec($sql2));
 
-$pdo2=new PDO('mysql:host=mysql_node-1;dbname=test','root','mytest');
+$pdo2=new PDO('mysql:host=192.168.199.100;port=13307;dbname=test','root','mytest');
 
 $stmt=$pdo2->query('select * from tb1');
 

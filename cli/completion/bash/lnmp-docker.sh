@@ -5,6 +5,7 @@ complete -W "acme.sh \
         backup \
         build \
         build-config \
+        build-push \
         build-up \
         cleanup \
         clusterkit \
@@ -20,10 +21,10 @@ complete -W "acme.sh \
         clusterkit-redis-create \
         clusterkit-redis-deploy \
         clusterkit-redis-remove \
-        config \
         daemon-socket \
         dashboard \
         development \
+        development-config \
         development-pull \
         down \
         docs \
@@ -32,7 +33,6 @@ complete -W "acme.sh \
         k8s \
         k8s-down \
         new \
-        push \
         restore \
         restart \
         registry \

@@ -66,31 +66,24 @@ $ ./lnmp-docker.sh clusterkit-mysql-remove
 
 > Redis 多节点部署包括 集群版 及 主从版，注意不要混淆
 
-在 `.env` 文件中设置 `CLUSTERKIT_REDIS_HOST_IP` `CLUSTERKIT_MYSQL_HOST_IP` 变量为 路由器分配给电脑的 IP
+在 `./cluster/.env` 文件中设置 `REDIS_HOST` `MYSQL_HOST` 变量为 路由器分配给电脑的 IP，或者集群 IP
 
 ```bash
 # 自行调整配置 ./cluster/redis/redis.conf
 
 # 启动，--build 参数表示每次启动前强制构建镜像 -d 表示后台运行
 
-$ ./lnmp-docker.sh clusterkit-redis-up [--build] [-d]
-
-# 手动创建集群
-
-$ ./lnmp-docker.sh clusterkit-redis-create
-
-# 输入 yes
+$ ./lnmp-docker.sh clusterkit-redis-up [-d]
 
 #
 # 提示
 #
-# $ redis-cli -c ... 命令行登录必须加 -c 参数。
+# $ redis-cli -c ... 客户端使用 redis 集群，登录时必须加 -c 参数。
 #
 # 如果你需要进入节点执行命令
 #
 # $ ./lnmp-docker.sh clusterkit-redis-exec master1 sh
 #
-
 
 # 销毁集群
 
@@ -109,23 +102,15 @@ $ ./lnmp-docker.sh clusterkit-redis-down [-v]
 
 # PHP 连接集群
 
-以上启动一个集群是没有任何意义的，我们要让 PHP 连接到并可以使用集群才有意义。
-
 ## 开发环境
 
-在 `.env` 文件中设置 `CLUSTERKIT_REDIS_HOST_IP` `CLUSTERKIT_MYSQL_HOST_IP` 变量为 路由器分配给电脑的 IP
+在 `./cluster/.env` 文件中设置 `REDIS_HOST` `MYSQL_HOST` 变量为 路由器分配给电脑的 IP
 
 ```bash
 $ ./lnmp-docker.sh clusterkit [-d] # 加上 -d 参数后台运行
-
-# Redis 集群需要手动创建
-
-$ ./lnmp-docker.sh clusterkit-redis-create
-
-# 输入 yes
 ```
 
-之后就可以使用 PHP 连接集群了，示例代码位于 `./app/demo/clusterkit-*.php`
+之后就可以使用 PHP 通过 `集群 IP` 连接集群了，示例代码位于 `./app/demo/clusterkit-*.php`
 
 PHP 使用 Redis 集群示例代码请查看 [PHPRedis](https://github.com/khs1994-docker/lnmp/blob/master/app/demo/clusterkit-redis.php)
 
