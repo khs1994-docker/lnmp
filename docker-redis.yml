@@ -50,8 +50,10 @@ services:
       - source: redis_conf
         target: /redis.conf
     labels:
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.redis.master=master"
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis.master=master"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
 
   redis_sentinel_node-1:
     # build:
@@ -102,16 +104,36 @@ services:
       - source: redis_conf
         target: /redis.conf
     labels:
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.redis.node1=node1"
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis.node=node1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
 
 volumes:
   redis_master-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis.master=master"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
   redis_node-1-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis.node=node1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
 
 networks:
   redis_master_node:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
 
 secrets:
   redis_conf:
     file: ./config/redis/redis.conf
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"

@@ -77,7 +77,10 @@ services:
       - source: cluster_mysql_master_sh
         target: /docker-entrypoint-initdb.d/1-master-init.sh
     labels:
-      - com.khs1994.lnmp.cluster.mysql=master
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=master"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
 
   mysql_node-1:
     image: mysql:8.0.3
@@ -119,7 +122,10 @@ services:
       - source: cluster_mysql_node_sh
         target: /docker-entrypoint-initdb.d/1-node-init.sh
     labels:
-      - com.khs1994.lnmp.cluster.mysql=node1
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=node1"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
 
   mysql_node-2:
     image: mysql:8.0.3
@@ -161,20 +167,53 @@ services:
       - source: cluster_mysql_node_sh
         target: /docker-entrypoint-initdb.d/1-node-init.sh
     labels:
-      - com.khs1994.lnmp.cluster.mysql=node2
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=node2"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
 
 volumes:
   cluster_mysql_master-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=master"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
   cluster_mysql_node-1-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=node1"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
   cluster_mysql_node-2-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=node2"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
 
 secrets:
   cluster_mysql_master_sh:
     file: ./cluster/mysql/master/master.sh
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=master"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
   cluster_mysql_node_sh:
     file: ./cluster/mysql/node/node.sh
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=node"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
   cluster_db_root_password:
     file: ./secrets/db_root_password.txt
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"
 
 networks:
     cluster_mysql:
@@ -182,3 +221,8 @@ networks:
         driver: default
         config:
           - subnet: 172.28.0.0/16
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.cluster.mysql=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_mysql"

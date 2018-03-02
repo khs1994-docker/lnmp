@@ -18,6 +18,8 @@ services:
         DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
         DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
     labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.mysql=true"
       - "com.khs1994.lnmp.app.env=self_build"
 
   # mariadb:
@@ -28,6 +30,8 @@ services:
   #       DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
   #       DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
   #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mariadb=true"
   #     - "com.khs1994.lnmp.app.env=self_build"
 
   redis:
@@ -37,6 +41,8 @@ services:
       args:
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
     labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.redis=true"
       - "com.khs1994.lnmp.app.env=self_build"
 
   php7:
@@ -54,6 +60,8 @@ services:
     environment:
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Build Docker Image
     labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.php7=true"
       - "com.khs1994.lnmp.app.env=self_build"
 
   # rabbitmq:
@@ -63,6 +71,8 @@ services:
   #     args:
   #       ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
   #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.rabbitmq=true"
   #     - "com.khs1994.lnmp.app.env=self_build"
   #
   # postgresql:
@@ -72,6 +82,8 @@ services:
   #     args:
   #       ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
   #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.postgresql=true"
   #     - "com.khs1994.lnmp.app.env=self_build"
   #
   # mongodb:
@@ -82,6 +94,8 @@ services:
   #       DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
   #       DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
   #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.mongodb=true"
   #     - "com.khs1994.lnmp.app.env=self_build"
 
   nginx:
@@ -91,6 +105,8 @@ services:
       args:
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
     labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.nginx=true"
       - "com.khs1994.lnmp.app.env=self_build"
 
   # httpd:
@@ -99,7 +115,9 @@ services:
   #     dockerfile: Dockerfile
   #     args:
   #       ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
-  #  labels:
+  #   labels:
+  #     - "com.khs1994.lnmp=true"
+  #     - "com.khs1994.lnmp.httpd=true"
   #     - "com.khs1994.lnmp.app.env=self_build"
 
   phpmyadmin:
@@ -109,7 +127,13 @@ services:
       args:
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
     labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.phpmyadmin=true"
       - "com.khs1994.lnmp.app.env=self_build"
 
 volumes:
   phpmyadmin-data:
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.phpmyadmin=true"
+      - "com.khs1994.lnmp.app.env=self_build"

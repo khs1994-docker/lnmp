@@ -608,6 +608,7 @@ nginx_http(){
   echo "#
 # Generate nginx config By khs1994-docker/lnmp
 #
+
 server {
   listen        80;
   server_name   $1;
@@ -630,6 +631,7 @@ apache_http(){
   echo "#
 # Generate Apache2 connfig By khs1994-docker/lnmp
 #
+
 <VirtualHost *:80>
   DocumentRoot \"/app/$2\"
   ServerName $1
@@ -655,6 +657,7 @@ apache_https(){
   echo "#
 # Generate Apache2 HTTPS config By khs1994-docker/lnmp
 #
+
 <VirtualHost *:443>
   DocumentRoot \"/app/$2\"
   ServerName $1
@@ -688,6 +691,7 @@ nginx_https(){
   echo "#
 # Generate nginx HTTPS config By khs1994-docker/lnmp
 #
+
 server {
   listen                    80;
   server_name               $1;
@@ -944,6 +948,8 @@ $ docker service update \\
     lnmp_nginx
 
 $ docker service update --image nginx:1.13.9 lnmp_nginx
+
+For information please run $ docker service update --help
 "
   ;;
 
