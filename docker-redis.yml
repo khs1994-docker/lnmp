@@ -20,7 +20,7 @@ services:
     volumes:
       - redis_master-data:/data:rw
     networks:
-      - backend
+      - redis_master_node
     command: [
       "redis-server",
       "/redis.conf",
@@ -45,15 +45,15 @@ services:
         delay: 10s
         order: stop-first
       labels:
-        - "com.khs1994.lnmp.redis-master=true"
+        - "com.khs1994.lnmp.redis.master=master"
     secrets:
       - source: redis_conf
         target: /redis.conf
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.redis-master=true"
+      - "com.khs1994.lnmp.redis.master=master"
 
-  redis_node-1:
+  redis_sentinel_node-1:
     # build:
     #   context: ./dockerfile/redis/
     #   dockerfile: Dockerfile
@@ -69,7 +69,7 @@ services:
     volumes:
       - redis_node-1-data:/data:rw
     networks:
-      - backend
+      - redis_master_node
     command: [
       "redis-server",
       "/redis.conf",
@@ -84,9 +84,9 @@ services:
     # logging:
     #   driver: journald
     deploy:
-      # replicas: 2
-      placement:
-        constraints: [node.role == manager]
+      replicas: 1
+      # placement:
+      #   constraints: [node.role == manager]
       restart_policy:
         condition: any
         delay: 5s
@@ -97,20 +97,20 @@ services:
         delay: 10s
         order: stop-first
       labels:
-        - "com.khs1994.lnmp.redis-node=true"
+        - "com.khs1994.lnmp.redis.node1=node1"
     secrets:
       - source: redis_conf
         target: /redis.conf
     labels:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.redis-node=true"
+      - "com.khs1994.lnmp.redis.node1=node1"
 
 volumes:
   redis_master-data:
   redis_node-1-data:
 
 networks:
-  backend:
+  redis_master_node:
 
 secrets:
   redis_conf:
