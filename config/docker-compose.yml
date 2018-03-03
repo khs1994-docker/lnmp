@@ -1,0 +1,17 @@
+version: "3.5"
+services:
+
+  nginx:
+    image: nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine
+
+  httpd:
+    image: httpd:${KHS1994_LNMP_APACHE_VERSION}
+
+  mysql:
+    image: mysql:${KHS1994_LNMP_MYSQL_VERSION}
+
+  mariadb:
+    image: mariadb:${KHS1994_LNMP_MARIADB_VERSION}
+
+  php7:
+    image: khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7

@@ -379,9 +379,7 @@ services:
     image: khs1994/php-fpm:7.2.2-alpine3.7
     volumes:
       - ./app:/app:rw
-      # - ./config/php/php-fpm.production.conf:/usr/local/etc/php-fpm.conf:ro
-      # - ./config/php/php-fpm.production.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      # - ./config/php/php-fpm.production.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      # - ./config/php/php-fpm.production.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       # - ./config/php/php.production.ini:/usr/local/etc/php/php.ini:ro
       - zoneinfo-data:/usr/share/zoneinfo:rw
     networks:
@@ -419,12 +417,8 @@ services:
     configs:
       - source: php_ini
         target: /usr/local/etc/php/php.ini
-      - source: php_fpm_conf
-        target: /usr/local/etc/php-fpm.conf
-      - source: php_fpm_conf_d_www_conf
-        target: /usr/local/etc/php-fpm.d/www.conf
-      - source: php_fpm_conf_d_docker_conf
-        target: /usr/local/etc/php-fpm.d/docker.conf
+      - source: php_fpm_conf_d_zz_docker_conf
+        target: /usr/local/etc/php-fpm.d/zz-docker.conf
     secrets:
       - source: ssh_id_rsa
         target: /root/.ssh/id_rsa
@@ -862,20 +856,8 @@ configs:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.php7=true"
-  php_fpm_conf:
-    file: ./config/php/php-fpm.production.conf
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.php7=true"
-  php_fpm_conf_d_www_conf:
-    file: ./config/php/php-fpm.production.d/www.conf
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.php7=true"
-  php_fpm_conf_d_docker_conf:
-    file: ./config/php/php-fpm.production.d/docker.conf
+  php_fpm_conf_d_zz_docker_conf:
+    file: ./config/php/php-fpm.production.d/zz-docker.conf
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.app.env=production_swarm_mode"

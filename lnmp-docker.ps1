@@ -58,9 +58,6 @@ Function logs(){
     New-Item logs\php-fpm\access.log -type file | Out-Null
     New-Item logs\php-fpm\xdebug-remote.log -type file | Out-Null
   }
-  if (! (Test-Path logs\php-fpm\php)){
-    New-Item logs\php-fpm\php -type directory | Out-Null
-  }
   if (! (Test-Path logs\redis)){
     New-Item logs\redis -type directory | Out-Null
     New-Item logs\redis\redis.log -type file | Out-Null

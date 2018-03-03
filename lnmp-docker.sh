@@ -278,8 +278,6 @@ logs(){
       && echo > logs/php-fpm/xdebug-remote.log
   fi
 
-  if ! [ -d logs/php-fpm/php ];then mkdir -p logs/php-fpm/php; fi
-
   if ! [ -d logs/redis ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
   chmod -R 777 logs/mongodb \
                logs/mysql \
@@ -302,7 +300,6 @@ cleanup(){
       && echo > logs/php-fpm/xdebug-remote.log \
       && echo > logs/redis/redis.log \
       && rm -rf logs/httpd/* \
-      && echo > logs/php-fpm/php/error.log
       print_info "Clean log files SUCCESS\n"
 }
 
