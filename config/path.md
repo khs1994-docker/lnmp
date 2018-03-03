@@ -24,14 +24,9 @@
 ├── httpd
 │   ├── README.md
 │   ├── demo-https.conf
+│   ├── demo-laravel.conf
 │   ├── demo-ssl
-│   │   ├── demo.lnmp.khs1994.com.crt
-│   │   ├── demo.lnmp.khs1994.com.key
 │   │   ├── root-ca.crt
-│   │   ├── wechat-mini.t.khs1994.com.crt
-│   │   ├── wechat-mini.t.khs1994.com.key
-│   │   ├── wechat.t.khs1994.com.crt
-│   │   ├── wechat.t.khs1994.com.key
 │   │   ├── www.t.khs1994.com.crt
 │   │   └── www.t.khs1994.com.key
 │   ├── demo-tls.conf
@@ -137,6 +132,7 @@
 │   │                   └── zz-docker.conf
 │   ├── php
 │   │   └── conf.d
+│   │       ├── error-log.ini
 │   │       └── xdebug.ini
 │   ├── php-fpm.d
 │   │   └── zz-docker.conf
@@ -152,5 +148,5 @@
 │   └── config.yml
 └── update.sh
 
-48 directories, 103 files
+48 directories, 99 files
 ```
