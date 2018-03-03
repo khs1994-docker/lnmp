@@ -194,6 +194,9 @@ services:
     env_file:
       - ./cli/timezone.env
       - ./cli/.env
+    environment:
+      - APP_ENV=development
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With FULL UP Docker Image
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.php=true"
