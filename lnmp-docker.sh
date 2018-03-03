@@ -337,7 +337,6 @@ dockerfile_update(){
       sed -i '' "s#^    image: mysql.*#    image: mysql:$VERSION#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
       ;;
     php-fpm )
-      dockerfile_update_sed $SOFT "FROM php:$VERSION-fpm-alpine3.7" $VERSION
       sed -i '' "s#^KHS1994_LNMP_PHP_VERSION.*#KHS1994_LNMP_PHP_VERSION=${VERSION}#g" .env.example .env
       sed -i '' "s#^    image: khs1994/php-fpm.*#    image: khs1994/php-fpm:swarm-$VERSION-alpine3.7#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
     ;;

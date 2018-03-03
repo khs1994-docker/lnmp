@@ -1,0 +1,30 @@
+language: bash
+sudo: required
+services:
+- docker
+before_install:
+# 升级 Docker 最新 test
+- docker --version
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+- sudo apt-get update
+- sudo apt-get -y install docker-ce
+- docker --version
+# 升级最新 Docker Compose
+- docker-compose --version
+- sudo rm /usr/local/bin/docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv docker-compose /usr/local/bin
+- docker-compose --version
+install:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker-compose build 5_6_X 7_0_X
+  - docker-compose push 5_6_X 7_0_X
+branches:
+  only:
+  - master
+  - dev
+env:
+  global:
+  - DOCKER_COMPOSE_VERSION=1.19.0
