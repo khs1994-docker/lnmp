@@ -57,9 +57,7 @@ services:
     image: khs1994/php-fpm:7.2.2-alpine3.7
     volumes:
       - ./app:/app
-      # - ./config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
-      # - ./config/php/php-fpm.d/docker.conf:/usr/local/etc/php-fpm.d/docker.conf:ro
-      # - ./config/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
+      # - ./config/php/php-fpm.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       # - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
       # - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
@@ -77,14 +75,12 @@ services:
     configs:
       - source: xdebug-ini
         target: /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - source: php-error-log
+        target: /usr/local/etc/php/conf.d/error-log.ini
       - source: php-ini
         target: /usr/local/etc/php/php.ini
-      - source: php-fpm-conf
-        target: /usr/local/etc/php-fpm.conf
-      - source: php-fpm-conf-d-www-conf
-        target: /usr/local/etc/php-fpm.d/www.conf
-      - source: php-fpm-conf-d-docker-conf
-        target: /usr/local/etc/php-fpm.d/docker.conf
+      - source: php-fpm-conf-d-zz-docker-conf
+        target: /usr/local/etc/php-fpm.d/zz-docker.conf
 
   nginx:
     build: ./config/nginx
@@ -152,14 +148,10 @@ configs:
     file: ./config/redis/redis.conf
   xdebug-ini:
     file: ./config/php/php/conf.d/xdebug.ini
+  php-error-log:
+    file: ./config/php/php/conf.d/error-log.ini
   php-ini:
     file: ./config/php/php.development.ini
-  php-fpm-conf:
-    # file: ./config/php/php-fpm.production.conf
-    file: ./config/php/php-fpm.conf
-  php-fpm-conf-d-www-conf:
-    # file: ./config/php/php-fpm.production.d/www.conf
-    file: ./config/php/php-fpm.d/www.conf
-  php-fpm-conf-d-docker-conf:
-    # file: ./config/php/php-fpm.production.d/docker.conf
-    file: ./config/php/php-fpm.d/docker.conf
+  php-fpm-conf-d-zz-docker-conf:
+    # file: ./config/php/php-fpm.production.d/zz-docker.conf
+    file: ./config/php/php-fpm.d/zz-docker.conf

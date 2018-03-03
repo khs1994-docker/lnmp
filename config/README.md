@@ -1,9 +1,5 @@
 # 配置文件
 
-## 原始配置文件
-
-请查看 [khs1994-docker/lnmp-default-config](https://github.com/khs1994-docker/lnmp-default-config)
-
 ## 生产环境配置文件
 
 `*/*.production.*`
