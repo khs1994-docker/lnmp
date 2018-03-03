@@ -1,4 +1,6 @@
-FROM php:7.2.2-fpm-alpine3.7
+ARG PHP_VERSION=7.2.2
+
+FROM php:${PHP_VERSION}-fpm-alpine3.7
 
 ENV TZ=Asia/Shanghai
 

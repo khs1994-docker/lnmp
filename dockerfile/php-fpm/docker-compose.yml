@@ -1,9 +1,36 @@
 version: "3.5"
 services:
 
-  php-fpm:
+  7_2_X:
     build:
-      context: .
+      context: ./7.2/alpine3.7
       args:
-        ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME}/php-fpm:${TAG}-alpine3.7
+        PHP_VERSION: ${PHP_VERSION_7_2_X}
+        # ALPINE_URL: mirrors.ustc.edu.cn
+    image: ${DOCKER_HUB_USERNAME}/php-fpm:${PHP_VERSION_7_2_X}-alpine3.7
+
+  7_1_X:
+    build:
+      context: ./7.1/alpine3.4
+      args:
+        PHP_VERSION: ${PHP_VERSION_7_1_X}
+        # ALPINE_URL: mirrors.ustc.edu.cn
+    image: ${DOCKER_HUB_USERNAME}/php-fpm:${PHP_VERSION_7_1_X}-alpine3.4
+
+  7_0_X:
+    build:
+      context: ./7.0/alpine3.4
+      args:
+        PHP_VERSION: ${PHP_VERSION_7_0_X}
+        # PHP_URL: http://cn2.php.net/get/php-${PHP_VERSION_7_0_X}.tar.xz/from/this/mirror
+        # ALPINE_URL: mirrors.ustc.edu.cn
+    image: ${DOCKER_HUB_USERNAME}/php-fpm:${PHP_VERSION_7_0_X}-alpine3.4
+
+  5_6_X:
+    build:
+      context: ./5.6/alpine3.4
+      args:
+        PHP_VERSION: ${PHP_VERSION_5_6_X}
+        # PHP_URL: http://cn2.php.net/get/php-${PHP_VERSION_5_6_X}.tar.xz/from/this/mirror
+        # ALPINE_URL: mirrors.ustc.edu.cn
+    image: ${DOCKER_HUB_USERNAME}/php-fpm:${PHP_VERSION_5_6_X}-alpine3.4
