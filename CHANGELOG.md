@@ -3,6 +3,33 @@ Changelog
 
 #### v18.03-rc2
 
+Bug fixes:
+* Fix `CLI` error #160
+* Fix `php` conf error #183
+
+Changes:
+* Add `ClusterKit` include `mysql` `redis` cluster redis master-nodeX #151 #152 #156
+* Add LNMP default conf #183
+* Update `self build` LNMP images case #155
+* Update `LinuxKit` #165
+* Update run LNMP in docker for desktop `kubernetes` #172
+* Update `NGINX` main conf,change log format to JSON #182
+* Update `php` conf #183
+* Update `httpd` conf #184
+* Support `PHP-FPM` 5.6.x 7.0.x 7.1.x 7.2.x #178
+* Rename `apache` to `httpd` #163
+* Update CLI commands
+
+Updates:
+
+* `mariadb` 10.3.5 #179
+* `memcached` 1.5.6 #179
+* `rabbitmq` 3.7.3 #179
+* `postgresql` 10.3 #179
+* `mongodb` 3.7.2 #179
+
+
+
 #### v18.03-rc1
 
 Bug fixes:
