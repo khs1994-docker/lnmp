@@ -175,6 +175,9 @@ services:
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ./app:${LNMP_PHP_PATH}
+      #
+      # php-fpm 配置项统一在 zz-docker.conf 一个文件中配置，其作为最后一个配置文件，会重写前边重复的配置
+      #
       - ./config/php/php-fpm.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
       - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
