@@ -1,0 +1,16 @@
+workspace:
+  base: /src
+  path: .
+
+pipeline:
+  test:
+    # image: khs1994/php-fpm:7.2.2-alpine3.7
+    image: ccr.ccs.tencentyun.com/khs1994/php-fpm:7.2.2-alpine3.7
+    commands:
+      - pwd
+      - composer install -q
+      - composer update -q
+      - vendor/bin/phpunit
+    volumes:
+      # - /Users/khs1994/khs1994/khs1994-lnmp/tmp/cache:/tmp/cache
+      - /data/lnmp/tmp/cache:/tmp/cache

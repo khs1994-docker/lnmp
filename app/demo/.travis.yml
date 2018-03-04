@@ -1,0 +1,18 @@
+language: php
+# cache:
+#   directories:
+#   - vendor
+php:
+  # -5.6
+  # - 7.0
+  - 7.1
+  - 7.2
+script:
+- composer self-update
+- composer install -q
+- composer update -q
+- vendor/bin/phpunit
+branches:
+  only:
+  - master
+  - dev
