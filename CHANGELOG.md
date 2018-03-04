@@ -1,13 +1,14 @@
 Changelog
 ==============
 
-#### v18.03-rc2
+#### v18.03
 
 Bug fixes:
-* Fix `CLI` error #160
+* Fix `CLI` error #120 #116 #160
 * Fix `php` conf error #183
 
 Changes:
+* `khs1994-docker/lnmp` v18.02 End Of Life
 * Add `ClusterKit` include `mysql` `redis` cluster redis master-nodeX #151 #152 #156
 * Add LNMP default conf #183
 * Update `self build` LNMP images case #155
@@ -19,23 +20,6 @@ Changes:
 * Support `PHP-FPM` 5.6.x 7.0.x 7.1.x 7.2.x #178
 * Rename `apache` to `httpd` #163
 * Update CLI commands
-
-Updates:
-
-* `mariadb` 10.3.5 #179
-* `memcached` 1.5.6 #179
-* `rabbitmq` 3.7.3 #179
-* `postgresql` 10.3 #179
-* `mongodb` 3.7.2 #179
-
-
-
-#### v18.03-rc1
-
-Bug fixes:
-* Fix CLI error #120 #116
-
-Changes:
 * Add CLI command `daemon-socket` #120
 * Add CLI command `acme.sh` `full-up` `swarm-config` `swarm-ps` `swarm-pull` `swarm-push` `swarm-update`
 * Add `docker registry` #131
@@ -55,11 +39,17 @@ Changes:
 * `NGINX` now based tlsv1.3 #136
 
 Updates:
-
+* `mariadb` 10.3.5 #179
+* `memcached` 1.5.6 #179
+* `rabbitmq` 3.7.3 #179
+* `postgresql` 10.3 #179
+* `mongodb` 3.7.2 #179
 * `php-fpm` 7.2.2 #119
 * `redis` 4.0.8 #119
 * `acme.sh` 2.7.6 #123
 * `nginx` 1.13.9 #134
+
+#### [v18.02 (2018-02-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
 
 #### [v18.01 (2018-01-12) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01)
 
