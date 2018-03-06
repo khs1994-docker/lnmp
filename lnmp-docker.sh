@@ -7,6 +7,8 @@
 
 # Don't Run this shell script on git bash Windows, please use ./lnmp-docker.ps1
 
+set -e
+
 if [ `uname -s` != 'Darwin' ] && [ `uname -s` != 'Linux' ];then echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
 
 # 系统环境变量具有最高优先级
@@ -203,14 +205,13 @@ tz(){
   if [ ${ARCH} = "armv7l" ];then NOTSUPPORT; fi
   if [ ${ARCH} = "aarch64" ];then local image=khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7; fi
 
-  docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1
-  if ! [ "$?" = 0 ];then
-  print_info "Create TZDATA Volume...\n"
-      docker run -it --rm \
+  run_docker
+
+  docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1 || print_info "Create TZDATA Volume...\n"
+  docker run -it --rm \
           --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo \
           $image \
           date > /tmp/tzdata.txt 2>&1
-  fi
 }
 
 env_status(){
@@ -249,14 +250,11 @@ update_version(){
 # Docker 是否运行
 
 run_docker(){
-  docker info 2>&1 >/dev/null
-  if [ $? -ne 0 ];then
-    clear
-    echo "=========================="
-    echo "=== Please Run Docker ===="
-    echo "=========================="
-    exit 1
-  fi
+  docker info > /dev/null 2>&1 || (clear ; \
+    echo "==========================" ;\
+    echo "=== Please Run Docker ====" ;\
+    echo "==========================" ;\
+    exit 1)
 }
 
 # 创建日志文件
@@ -393,8 +391,7 @@ install_docker_compose_official(){
 
 install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ...\n"
-  command -v pip3 >/dev/null 2>&1
-  if [ $? != 0 ];then sudo apt install -y python3-pip; fi
+  command -v pip3 >/dev/null 2>&1 || sudo apt install -y python3-pip
   if ! [ -d ~/.pip ];then
     mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
   fi
@@ -402,10 +399,10 @@ install_docker_compose_arm(){
 }
 
 install_docker_compose(){
-  if ! [ "$OS" = 'Linux' ];then exit 1; fi
-  if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
+  if ! [ "$OS" = 'Linux' ];then echo; print_error "Docker For Mac not Support install docker-compose"; exit 1; fi
+  if [ "${ARCH}" = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
     install_docker_compose_arm "$@"
-  elif [ $ARCH = 'x86_64' ];then
+  elif [ "$ARCH" = 'x86_64' ];then
     curl -L ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
     chmod +x /tmp/docker-compose
     if [ "$1" = '-f' ];then install_docker_compose_move; return 0;fi
@@ -414,8 +411,9 @@ install_docker_compose(){
 }
 
 docker_compose(){
-  command -v docker-compose >/dev/null 2>&1
-  if [ $? = 0 ];then
+  command -v docker-compose >/dev/null 2>&1 || local a=1
+
+  if ! [ "$a" = 1 ];then
     # 存在
     # 取得版本号
     DOCKER_COMPOSE_VERSION=`docker-compose --version | cut -d ' ' -f 3 | cut -d , -f 1`
@@ -449,7 +447,7 @@ docker_compose(){
   else
     # 不存在
     print_error "docker-compose NOT install, install..."
-    if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; exec install_docker_compose_official "$@"; fi
+    if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@"; fi
     install_docker_compose -f
   fi
 }
@@ -508,8 +506,8 @@ network(){
 
 set_git_remote_lnmp_url(){
   network
-  git remote get-url lnmp > /dev/null 2>&1
-  if [ $? -ne 0 ];then
+  git remote get-url lnmp > /dev/null 2>&1 || local a=1
+  if [ "$a" = 1 ];then
     # 不存在
     print_error "This git remote lnmp NOT set, seting..."
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
@@ -552,8 +550,7 @@ update(){
   else
     print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
   fi
-  command -v bash > /dev/null 2>&1
-  if ! [ $? = 0  ];then sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh; fi
+  command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh
   # 升级软件版本
   update_version
 }
@@ -909,7 +906,7 @@ main() {
       run_docker
       docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
 
-      if [ $? -eq 0 ];then sleep 2; docker stack ps lnmp; else exit 1; fi
+      sleep 2; docker stack ps lnmp
 
     else
       print_error "Production NOT Support ${OS} ${ARCH}\n"
@@ -985,15 +982,12 @@ For information please run $ docker service update --help
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
       docker-compose -f docker-arm.yml up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker-compose -f docker-arm.yml exec nginx nginx -t
-    else
-      NOTSUPPORT
-    fi
+      docker-compose -f docker-arm.yml exec nginx nginx -t || \
+        print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
 
-    if [ $? = 0 ];then
       echo; print_info "nginx configuration file test is successful\n" ; exit 0
     else
-      echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
+      NOTSUPPORT
     fi
     ;;
 
@@ -1164,13 +1158,11 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     done
 
     if [ "$opt" = 'true' ];then
-      docker-compose exec nginx nginx -t
-      if [ "$?" = 0 ];then
-        echo; print_info "nginx configuration file test is successful\n"
-        docker-compose $command "$@"
-      else
+      docker-compose exec nginx nginx -t || \
         echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1;
-      fi
+
+      echo; print_info "nginx configuration file test is successful\n"
+      exec docker-compose $command "$@"
     else
       print_info "You Exec docker-compose commands"; echo
       exec docker-compose $command "$@"
@@ -1286,7 +1278,19 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 
 env_status
 
-. .env ; . cli/.env ; . /tmp/.khs1994.env > /dev/null 2>&1 ; rm -rf /tmp/.khs1994.env
+. .env
+
+. cli/.env
+
+if [ "${OS}" = 'Darwin' ];then
+  sed -i "" "s!^COLORFGBG.*!!g" /tmp/.khs1994.env
+else
+  sed -i "s!^COLORFGBG.*!!g" /tmp/.khs1994.env
+fi
+
+. /tmp/.khs1994.env > /dev/null 2>&1 || echo > /dev/null 2>&1
+
+rm -rf /tmp/.khs1994.env
 
 if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 
@@ -1313,18 +1317,22 @@ print_info "ARCH is ${OS} ${ARCH}\n"
 
 print_info `docker --version`
 
-echo; docker_compose
+echo ; docker_compose
 
 if [ $# = 0 ];then help; exit 0; fi
 
 # 生产环境 compose 文件
 
+PRODUCTION_COMPOSE_FILE='docker-production.yml'
+
+set +e
+
 ls docker-production.*.yml > /dev/null 2>&1
 
 if [ $? = '0' ];then
   PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`
-else
-  PRODUCTION_COMPOSE_FILE='docker-production.yml'
 fi
+
+set -e
 
 main "$@"
