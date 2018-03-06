@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.2
+ARG PHP_VERSION=7.2.3
 
 FROM php:${PHP_VERSION}-fpm-alpine3.7
 
@@ -90,6 +90,6 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && ln -sf /dev/stdout /var/log/php-fpm/access.log \
  && ln -sf /dev/stderr /var/log/php-fpm/error.log \
  && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
- && chmod -R 777 ../
+ && chmod -R 777 /var/log/php-fpm
 
 WORKDIR /app

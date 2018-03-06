@@ -42,7 +42,7 @@ $ ./lnmp-docker.sh development
 
 `PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `CLI Interpreter` -> `点击后边三个点`
      -> `左上角添加` -> `From Docker ...` -> `Remote` -> `选择 Docker`
-     -> `Image name` -> `选择 khs1994/php-fpm:7.2.2-alpine3.7`
+     -> `Image name` -> `选择 khs1994/php-fpm:7.2.3-alpine3.7`
      -> `点击 OK 确认`
 
 ### 7.设置 xdebug

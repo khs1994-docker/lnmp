@@ -4,7 +4,7 @@
 # @link https://docs.docker.com/develop/develop-images/multistage-build/
 #
 
-ARG PHP_VERSION=7.2.2-alpine3.7
+ARG PHP_VERSION=7.2.3-alpine3.7
 
 ARG  NGINX_VERSION=1.13.9
 
@@ -39,7 +39,7 @@ COPY --from=composer /app /app
 CMD ["php-fpm", "-R", "-d", "variables_order='EGPCS'"]
 
 #
-# $ docker build -t khs1994/php-fpm:swarm-7.2.2-alpine3.7 --target=php .
+# $ docker build -t khs1994/php-fpm:swarm-7.2.3-alpine3.7 --target=php .
 #
 # @link https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
 #

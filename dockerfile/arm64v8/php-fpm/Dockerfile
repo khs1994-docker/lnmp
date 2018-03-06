@@ -1,4 +1,4 @@
-FROM arm64v8/php:7.2.2-fpm-alpine3.7
+FROM arm64v8/php:7.2.3-fpm-alpine3.7
 
 ENV TZ=Asia/Shanghai
 
@@ -80,14 +80,11 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  # 默认不启用 xdebug
  && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
  # 创建日志文件夹
- && cd /var/log \
- && mkdir php-fpm \
- && cd php-fpm \
- && touch access.log error.log xdebug-remote.log \
- && chmod -R 777 ../ \
- && sed -i 's/www-data/root/g' /usr/local/etc/php-fpm.d/www.conf \
- && sed -i 's/^error_log.*/error_log = \/var\/log\/php-fpm\/error.log/g' /usr/local/etc/php-fpm.d/docker.conf \
- && sed -i 's/^access.log.*/access.log = \/var\/log\/php-fpm\/access.log/g' /usr/local/etc/php-fpm.d/docker.conf
+ && mkdir -p /var/log/php-fpm \
+ && ln -sf /dev/stdout /var/log/php-fpm/access.log \
+ && ln -sf /dev/stderr /var/log/php-fpm/error.log \
+ && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
+ && chmod -R 777 /var/log/php-fpm
 
 # RUN apk add --no-cache vim
 
