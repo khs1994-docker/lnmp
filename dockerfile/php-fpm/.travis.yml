@@ -19,12 +19,16 @@ before_install:
 - docker-compose --version
 install:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - docker-compose build 5_6_X 7_0_X
-  - docker-compose push 5_6_X 7_0_X
+  - docker-compose build ${PHP_VERSION}
+  - docker-compose push ${PHP_VERSION}
 branches:
   only:
   - master
   - dev
 env:
+  matrix:
+  - PHP_VERSION=7_1_X
+  - PHP_VERSION=7_0_X
+  - PHP_VERSION=5_6_X
   global:
   - DOCKER_COMPOSE_VERSION=1.19.0

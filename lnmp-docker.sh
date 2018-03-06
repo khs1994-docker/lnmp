@@ -860,25 +860,6 @@ main() {
     docker-compose -f docker-full.yml -f docker-compose.override.yml up -d "$@"
     ;;
 
-  # production )
-  #   run_docker
-  #   # 仅允许运行在 Linux x86_64
-  #   if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-  #     init
-  #     if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
-  #     docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
-  #     echo; sleep 2; print_info "Test nginx configuration file...\n"
-  #     docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec nginx nginx -t
-  #     if [ $? = 0 ];then
-  #       echo; print_info "nginx configuration file test is successful\n" ; exit 0
-  #     else
-  #       echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
-  #     fi
-  #   else
-  #     print_error "Production NOT Support ${OS} ${ARCH}\n"
-  #   fi
-  #   ;;
-
   swarm-config )
     init; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} config
     ;;
