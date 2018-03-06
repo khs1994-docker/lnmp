@@ -112,16 +112,24 @@ $ git push origin master
 
 ### 2. CI/CD 服务器测试
 
-### 3. CI/CD 服务器构建 Docker 镜像
+## 开发、测试循环
 
-### 4. CI/CD 服务器推送 Docker 镜像到私有 Docker 仓库
+## git 添加 tag
+
+只有添加了 `tag` 的代码才能部署
+
+Docker 镜像名包含 git `tag`
 
 ## 部署 (全自动)
 
 生产环境部署 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) 请查看 https://github.com/khs1994-docker/lnmp/tree/master/docs/production
 
-### 1.Docker 私有仓库通知到指定地址
+### 1. CI/CD 服务器构建 Docker 镜像
 
-### 2.Swarm mode 或 k8s 集群自动更新服务
+### 2. CI/CD 服务器推送 Docker 镜像到私有 Docker 仓库
 
-### 3.完成部署
+### 3.Docker 私有仓库通知到指定地址
+
+### 4.Swarm mode 或 k8s 集群自动更新服务
+
+### 5.完成部署

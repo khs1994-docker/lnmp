@@ -1,16 +1,87 @@
 workspace:
-  base: /src
+  base: /app
   path: .
 
+#
+# khs1994.com PHP CI/CD 由 khs1994-docker/ci 提供。
+#
+# @link https://github.com/khs1994-docker/ci
+#
+
 pipeline:
-  test:
-    # image: khs1994/php-fpm:7.2.2-alpine3.7
-    image: ccr.ccs.tencentyun.com/khs1994/php-fpm:7.2.2-alpine3.7
+  #
+  # 测试 PHP 项目
+  #
+  php:
+    image: khs1994/php-fpm:${PHP_VERSION}
+    # pull: true
     commands:
       - pwd
       - composer install -q
       - composer update -q
+      #
+      # 服务初始化需要时间，这里延迟执行
+      #
+      - sleep 20
       - vendor/bin/phpunit
     volumes:
       # - /Users/khs1994/khs1994/khs1994-lnmp/tmp/cache:/tmp/cache
       - /data/lnmp/tmp/cache:/tmp/cache
+
+  #
+  # CI/CD 构建预上线环境 PHP NGINX 镜像
+  #
+  publish:
+    image: plugins/docker
+    registry: docker.khs1994.com
+    repo: khs1994/php-fpm
+    tags: swarm-7.2.2-alpine3.7-${DRONE_TAG}
+    when:
+      #
+      # 手动在命令行执行以下命令才会执行 publish
+      #
+      # $ drone deploy khs1994-php/demo 24 staging
+      #
+      #
+      event: deployment
+      environment: staging
+    secrets: [ docker_usernmae, docker_password ]
+
+  #
+  # CI/CD 构建生产环境 PHP NGINX 镜像
+  #
+  publish_to_prod:
+    image: plugins/docker
+    registry: docker.khs1994.com
+    repo: khs1994/php-fpm
+    tags: swarm-7.2.2-alpine3.7-${DRONE_TAG}
+    when:
+      #
+      # 手动在命令行执行以下命令才会执行 publish
+      #
+      # $ drone deploy khs1994-php/demo 24 production
+      #
+      #
+      event: deployment
+      environment: production
+    secrets: [ docker_usernmae, docker_password ]
+
+services:
+  mysql:
+    image: mysql:8.0.3
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_ROOT_PASSWORD=mytest
+
+   redis:
+     image: redis:4.0.8-alpine
+
+matrix:
+  PHP_VERSION:
+    - 7.2.2-alpine3.7
+#    - 7.1.0-alpine3.4
+#    - 7.0.0-alpine3.4
+#    - 5.6.0-alpine3.4
+
+branches:
+  include: [ master, dev, feature/* ]
