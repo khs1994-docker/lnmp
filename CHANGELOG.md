@@ -44,7 +44,7 @@ Updates:
 * `rabbitmq` 3.7.3 #179
 * `postgresql` 10.3 #179
 * `mongodb` 3.7.2 #179
-* `php-fpm` 7.2.3 #119
+* `php-fpm` 7.2.3 #192
 * `redis` 4.0.8 #119
 * `acme.sh` 2.7.6 #123
 * `nginx` 1.13.9 #134
