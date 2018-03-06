@@ -16,6 +16,10 @@ services:
       labels:
         com.khs1994.lnmp.description: "Self Build Redis"
       shm_size: '2gb' # 3.5
+      #
+      # Dockerfile 多阶段构建，构建到指定阶段
+      #
+      target: prod
     image: soft:alpine
     cap_add:
       - ALL
@@ -240,24 +244,30 @@ services:
 configs:
   redis_conf:
     file: ./config/redis/redis.conf
-  my_other_config:
-    external: true
-  my_second_config:
-    external:
-      name: redis_config
     labels:
       - "com.khs1994.lnmp=true"
+  #
+  # 3.5
+  #
+  # 使用外部 configs 并且指定名字
+  #
+  my_other_config:
+    external: true
+    name: redis_config
 
 secrets:
   my_secret:
     file: ./secrets/db_root_password
-  my_other_secret:
-    external: true
-  my_second_secret:
-    external:
-      name: redis_secret
     labels:
       - "com.khs1994.lnmp=true"
+  #
+  # 3.5
+  #
+  # 使用外部 secrets 并且指定名字
+  #
+  my_second_secret:
+    external: true
+    name: redis_secret
 
 networks:
   app_net:
@@ -271,10 +281,11 @@ networks:
       # -
         # subnet: 2001:3984:3989::/64
 
-  outside:
-    external: true
-
+  #
   # 3.5
+  #
+  # 使用外部 networks 并且指定名字
+  #
   outside:
     external: true
     name: actual-name-of-network
@@ -295,10 +306,13 @@ volumes:
     driver_opts:
       foo: "bar"
       baz: 1
-    external: true
     labels:
       - "com.khs1994.lnmp=true"
+  #
   # 3.5
+  #
+  # 使用外部 volume 并且指定名字
+  #
   data:
     external: true
     name: actual-name-of-volume
