@@ -35,7 +35,7 @@ pipeline:
     image: plugins/docker
     registry: docker.khs1994.com
     repo: khs1994/php-fpm
-    tags: swarm-7.2.2-alpine3.7-${DRONE_TAG}
+    tags: swarm-7.2.3-alpine3.7-${DRONE_TAG}
     when:
       #
       # 手动在命令行执行以下命令才会执行 publish
@@ -54,7 +54,7 @@ pipeline:
     image: plugins/docker
     registry: docker.khs1994.com
     repo: khs1994/php-fpm
-    tags: swarm-7.2.2-alpine3.7-${DRONE_TAG}
+    tags: swarm-7.2.3-alpine3.7-${DRONE_TAG}
     when:
       #
       # 手动在命令行执行以下命令才会执行 publish
@@ -78,7 +78,7 @@ services:
 
 matrix:
   PHP_VERSION:
-    - 7.2.2-alpine3.7
+    - 7.2.3-alpine3.7
 #    - 7.1.0-alpine3.4
 #    - 7.0.0-alpine3.4
 #    - 5.6.0-alpine3.4

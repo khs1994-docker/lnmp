@@ -24,7 +24,7 @@ services:
   - name: rngd
     image: linuxkit/rngd:v0.2
   - name: php7
-    image: khs1994/php-fpm:swarm-7.2.2-alpine3.7
+    image: khs1994/php-fpm:swarm-7.2.3-alpine3.7
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN

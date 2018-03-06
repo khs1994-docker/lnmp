@@ -978,7 +978,7 @@ For information please run $ docker service update --help
     if [ ${ARCH} = 'x86_64' ];then
       docker-compose up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker-compose exec nginx nginx -t
+      docker exec -it $(docker container ls --format {{.ID}} -f label=com.khs1994.lnmp.nginx) nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
       docker-compose -f docker-arm.yml up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
@@ -1041,7 +1041,8 @@ For information please run $ docker service update --help
 
   *-cli )
     SERVICE=$(echo $command | cut -d '-' -f 1)
-    run_docker; docker-compose exec $SERVICE sh
+    run_docker;
+    exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.${SERVICE}) sh
     ;;
 
   *-logs | *-log )
@@ -1158,7 +1159,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     done
 
     if [ "$opt" = 'true' ];then
-      docker-compose exec nginx nginx -t || \
+      docker exec -it $(docker container ls --format {{.ID}} -f label=com.khs1994.lnmp.nginx) nginx -t || \
         echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1;
 
       echo; print_info "nginx configuration file test is successful\n"
