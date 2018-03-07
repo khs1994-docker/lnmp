@@ -78,6 +78,7 @@ services:
     binds:
      - /etc/resolv.conf:/etc/resolv.conf
      - /etc/hosts:/etc/hosts
+     - /etc/nginx/conf.d/linuxkit.conf:/etc/nginx/conf.d/linuxkit.conf
     net: host
 # 只能挂载单个文件
 files:
@@ -108,10 +109,8 @@ files:
       ff00::0 ip6-mcastprefix
       ff02::1 ip6-allnodes
       ff02::2 ip6-allrouters
-  # - path: etc/logs/nginx
-  #   directory: true
-  # - path: /etc/nginx/conf.d/linuxkit.conf
-  #   source: ./config/nginx/conf.d/linuxkit.conf
+  - path: /etc/nginx/conf.d/linuxkit.conf
+    source: ../config/nginx/linuxkit.config
   # - path: /app/demo/index.php
   #   contents: |
   #     <?php

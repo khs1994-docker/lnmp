@@ -311,50 +311,6 @@ gitbook(){
     server
 }
 
-dockerfile_update_sed(){
-  sed -i '' "s/^FROM.*/${2}/g" dockerfile/$1/Dockerfile
-  sed -i '' "s/^TAG.*/TAG=${3}/g" dockerfile/$1/.env
-  git diff
-}
-
-dockerfile_update(){
-  read -p "Soft is: " SOFT
-  if [ -z "$SOFT" ];then echo; print_error 'Please input content'; exit 1; fi
-  read -p "Version is: " VERSION
-  if [ -z "VERSION" ];then echo; print_error 'Please input content'; exit 1; fi
-  case $SOFT in
-    nginx )
-      sed -i '' "s#^KHS1994_LNMP_NGINX_VERSION.*#KHS1994_LNMP_NGINX_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: khs1994/nginx.*#    image: khs1994/nginx:swarm-$VERSION-alpine#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
-      ;;
-    mysql )
-      sed -i '' "s#^KHS1994_LNMP_MYSQL_VERSION.*#KHS1994_LNMP_MYSQL_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: mysql.*#    image: mysql:$VERSION#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
-      ;;
-    php-fpm )
-      sed -i '' "s#^KHS1994_LNMP_PHP_VERSION.*#KHS1994_LNMP_PHP_VERSION=${VERSION}#g" .env.example .env
-      sed -i '' "s#^    image: khs1994/php-fpm.*#    image: khs1994/php-fpm:swarm-$VERSION-alpine3.7#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
-    ;;
-    postgresql )
-      dockerfile_update_sed $SOFT "FROM postgres:$VERSION-alpine" $VERSIO
-      sed -i '' "s/^KHS1994_LNMP_POSTGRESQL_VERSION.*/KHS1994_LNMP_POSTGRESQL_VERSION=${VERSION}/g" .env.example .env
-    ;;
-    rabbitmq )
-      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-management-alpine" $VERSION
-      sed -i '' "s/^KHS1994_LNMP_RABBITMQ_VERSION.*/KHS1994_LNMP_RABBITMQ_VERSION=${VERSION}/g" .env.example .env
-    ;;
-    redis )
-      dockerfile_update_sed $SOFT "FROM $SOFT:$VERSION-alpine" $VERSION
-      sed -i '' "s/^KHS1994_LNMP_REDIS_VERSION.*/KHS1994_LNMP_REDIS_VERSION=${VERSION}/g" .env.example .env
-      sed -i '' "s#^    image: redis.*#    image: redis:$VERSION-alpine#g" docker-k8s.yml ${PRODUCTION_COMPOSE_FILE} linuxkit/lnmp.yml
-    ;;
-    * )
-      print_error "Soft is not existing"
-      exit 1
-    ;;
-  esac
-}
-
 # 将 compose 移入 PATH
 
 install_docker_compose_move(){
@@ -860,25 +816,6 @@ main() {
     docker-compose -f docker-full.yml -f docker-compose.override.yml up -d "$@"
     ;;
 
-  # production )
-  #   run_docker
-  #   # 仅允许运行在 Linux x86_64
-  #   if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-  #     init
-  #     if ! [ "$1" = "--systemd" ];then opt='-d'; else opt= ; fi
-  #     docker-compose -f docker-compose.yml -f docker-compose.prod.yml up $opt
-  #     echo; sleep 2; print_info "Test nginx configuration file...\n"
-  #     docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec nginx nginx -t
-  #     if [ $? = 0 ];then
-  #       echo; print_info "nginx configuration file test is successful\n" ; exit 0
-  #     else
-  #       echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
-  #     fi
-  #   else
-  #     print_error "Production NOT Support ${OS} ${ARCH}\n"
-  #   fi
-  #   ;;
-
   swarm-config )
     init; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} config
     ;;
@@ -1063,10 +1000,6 @@ For information please run $ docker service update --help
 
   docs )
     run_docker; gitbook
-    ;;
-
-  dockerfile-update )
-    dockerfile_update
     ;;
 
   development-pull )

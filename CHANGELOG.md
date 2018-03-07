@@ -31,7 +31,6 @@ Changes:
 * Update `Dockerfile` #138 #139
 * Update Production `Swarm mode` case (best-practices by khs1994.com) #141
 * Update Support Documents #148
-* Remove `restart:always` in development #124
 * Remove khs1994 docker images #128
 * Remove CLI command `composer` `laravel*` `php` `production*`
 * Remove `tmp` folder
