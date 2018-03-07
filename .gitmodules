@@ -4,3 +4,6 @@
 [submodule "config/httpd"]
 	path = config/httpd
 	url = https://github.com/khs1994-docker/lnmp-httpd-conf-demo.git
+[submodule "app/demo"]
+	path = app/demo
+	url = https://github.com/khs1994-docker/php-demo.git
