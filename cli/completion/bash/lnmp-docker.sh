@@ -54,6 +54,5 @@ complete -W "acme.sh \
         init \
         commit \
         test \
-        dockerfile-update \
         cn-mirror \
         compose" lnmp-docker.sh

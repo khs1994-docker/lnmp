@@ -9,11 +9,15 @@ $ brew install mysql
 
 $ brew install nginx
 
-$ brew install php72
+$ brew install php
 
 # 安装 PHP 扩展
 
-$ brew install php72-*
+$ pecl channel-update pecl.php.net
+
+$ pecl install redis memcached xdebug igbinary yaml
+
+# 注意调整 php.ini 中的扩展路径
 
 $ brew install composer
 
