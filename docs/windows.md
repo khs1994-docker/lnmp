@@ -1,7 +1,7 @@
 # Windows 安装本项目
 
 ```bash
-$ git config --global core.autocrlf input
+# $ git config --global core.autocrlf input
 
 $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
 

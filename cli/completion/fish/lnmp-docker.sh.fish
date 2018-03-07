@@ -67,7 +67,6 @@ complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from upgrade' -s f -f   -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a init              -d      'Init LNMP environment'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a commit            -d      'Commit LNMP to git'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a test              -d      'Test LNMP'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a dockerfile-update -d      'Update Dockerfile By Script'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a cn-mirror         -d      'Push master branch to CN mirror'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a compose           -d      'Install docker-compose'
 complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from compose' -s f -f   -d      'Force Install docker-compose'
