@@ -920,7 +920,7 @@ For information please run $ docker service update --help
       docker-compose -f docker-arm.yml up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker-compose -f docker-arm.yml exec nginx nginx -t || \
-        print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1
+        (print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
 
       echo; print_info "nginx configuration file test is successful\n" ; exit 0
     else
@@ -1093,7 +1093,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
 
     if [ "$opt" = 'true' ];then
       docker exec -it $(docker container ls --format {{.ID}} -f label=com.khs1994.lnmp.nginx) nginx -t || \
-        echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1;
+        (echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
 
       echo; print_info "nginx configuration file test is successful\n"
       exec docker-compose $command "$@"
