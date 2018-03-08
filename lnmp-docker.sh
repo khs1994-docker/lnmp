@@ -23,6 +23,10 @@ print_error(){
   echo -e "\033[31mERROR\033[0m  $@"
 }
 
+print_warning(){
+  echo -e "\033[33mWARNING\033[0m  $@"
+}
+
 NOTSUPPORT(){
   print_error "Not Support ${OS} ${ARCH}\n"
   exit 1
@@ -30,13 +34,15 @@ NOTSUPPORT(){
 
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD\n"
+    LNMP_ROOT_PATH=$PWD
 else
     if ! [ -z "${LNMP_ROOT_PATH}" ];then
       # 存在环境变量，进入
-      print_info "Use LNMP CLI in other Folder\n"
+      print_warning "Use LNMP CLI in $PWD\n"
       cd ${LNMP_ROOT_PATH}
     else
       print_error  "在任意目录使用 LNMP CLI 必须设置环境变量，cli/README.md"
+      exit 1;
     fi
 fi
 
@@ -305,7 +311,7 @@ gitbook(){
   exec docker run -it --rm \
     -p 4000:4000 \
     --name lnmp-docs \
-    -v $PWD/docs:/srv/gitbook-src \
+    -v ${LNMP_ROOT_PATH}/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
 }
@@ -682,7 +688,7 @@ server{
 
 acme(){
   exec docker run -it --rm \
-         -v $PWD/config/nginx/ssl:/ssl \
+         -v ${LNMP_ROOT_PATH}/config/nginx/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/root/.acme.sh \
          --env-file .env \
          khs1994/acme:${ACME_VERSION} acme.sh "$@"
@@ -703,7 +709,7 @@ $ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d t.khs1994.com -d *.t.khs1
 "
   fi
   exec docker run -it --rm \
-         -v $PWD/config/nginx/ssl:/ssl \
+         -v ${LNMP_ROOT_PATH}/config/nginx/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/root/.acme.sh \
          --env-file .env \
          -e DP_Id=${DP_Id} \
@@ -712,7 +718,7 @@ $ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d t.khs1994.com -d *.t.khs1
 }
 
 ssl_self(){
-  docker run -it --rm -v $PWD/config/nginx/ssl:/ssl khs1994/tls "$@"
+  docker run -it --rm -v ${LNMP_ROOT_PATH}/config/nginx/ssl:/ssl khs1994/tls "$@"
 }
 
 # 快捷开始 PHP 项目开发
@@ -1081,7 +1087,9 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
       shift
       cmd="$@"
     fi
-    cd app
+    cd ${LNMP_ROOT_PATH}/app
+    print_info "Create ThinkPHP Application in ${LNMP_ROOT_PATH}/app/${path}"
+    echo
     ../bin/lnmp-composer create-project topthink/think=5.0.* ${path} --prefer-dist ${cmd}
     ;;
 
