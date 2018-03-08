@@ -2,6 +2,8 @@
 
 由于 `Docker For Windows` 不太稳定，这里记录一下 Plan B WNMP 开发环境。
 
+Plan C WSL 请查看 [WSL 快速搭建 LNMP 环境](https://www.khs1994.com/php/development/wsl.html)。
+
 为了在任意目录执行命令，请设置系统环境变量 `PATH`，这里不再赘述。
 
 环境 `Windows 10`，终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也行。

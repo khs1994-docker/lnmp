@@ -126,8 +126,7 @@ LogKit:
 Developer Tools:
   commit               Commit LNMP to Git
   cn-mirror            Push master branch to CN mirror
-  dockerfile-update    Update Dockerfile By Script
-  rc                   Start new release
+  reset-master         Reset master branch in dev branch
   test                 Test LNMP
 
 Read './docs/*.md' for more information about CLI commands.
@@ -526,13 +525,15 @@ commit(){
   fi
 }
 
-release_rc(){
+reset-master(){
   set_git_remote_lnmp_url
   print_info "Start new RC \n"; print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ];then
     git fetch lnmp
     git submodule update --init --recursive
     git reset --hard lnmp/master
+  elif [ ${BRANCH} = 'master' ];then
+    print_error "${BRANCH} branch，Please exec ./lnmp-docker.sh update [-f]"
   else
     print_error "${BRANCH} error，Please checkout to  dev branch\n\n$ git checkout dev\n"
   fi
@@ -800,8 +801,9 @@ main() {
   commit )
     commit
     ;;
-  rc )
-    release_rc
+
+  reset-master )
+    reset-master
     ;;
 
   registry )

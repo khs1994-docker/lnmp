@@ -33,7 +33,7 @@ Function env_status(){
 
 Function logs(){
   if (! (Test-Path logs\httpd)){
-    New-Item logs\htppd -type directory | Out-Null
+    New-Item logs\httpd -type directory | Out-Null
   }
   if (! (Test-Path logs\mongodb)){
     New-Item logs\mongodb -type directory | Out-Null
@@ -117,18 +117,12 @@ Swarm mode:
   swarm-push           Push Swarm image (nginx php7)
 
 Container CLI:
-  httpd-cli
-  mariadb-cli
-  memcached-cli
-  mongo-cli
-  mysql-cli
-  nginx-cli
-  php-cli
-  postgres-cli
-  rabbitmq-cli
-  redis-cli
+  SERVICE-cli          Execute a command in a running LNMP container
 
-Tools:
+LogKit:
+  SERVICE-logs         Print LNMP containers logs (journald)
+
+Developer Tools:
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
 
@@ -322,43 +316,43 @@ switch($first){
     }
 
     httpd-cli {
-      docker-compose exec httpd sh
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.httpd) sh
     }
 
     memcached-cli {
-      docker-compose exec memcached sh
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.memcached) sh
     }
 
-    mongo-cli {
-      docker-compose exec mongodb bash
+    mongodb-cli {
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mongodb) bash
     }
 
     mysql-cli {
-      docker-compose exec mysql bash
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mysql) bash
     }
 
     mariadb-cli {
-      docker-compose exec mariadb bash
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mariadb) bash
     }
 
     nginx-cli {
-      docker-compose exec nginx sh
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.nginx) sh
     }
 
     php-cli {
-      docker-compose exec php7 bash
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.php7) bash
     }
 
     postgres-cli {
-      docker-compose exec postgresql sh
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.postgresql) sh
     }
 
     rabbitmq-cli {
-       docker-compose exec rabbitmq sh
+       docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.rabbitmq) sh
     }
 
     redis-cli {
-      docker-compose exec redis sh
+      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.redis) sh
     }
 
     {$_ -in "update","upgrade"} {
