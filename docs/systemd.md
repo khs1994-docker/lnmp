@@ -1,32 +1,38 @@
 # 命令行补全
 
-将 `lnmp-docker.sh` 加入 `PATH`，并设置环境变量 `LNMP_ROOT_PATH` 为本项目的绝对路径(下面以 `/data/lnmp` 为例，实际请替换为你自己的路径)，这样你就可以在任意目录使用本项目的 CLI (命令中路径必须为相对于 app 的路径)。
+设置环境变量 `LNMP_ROOT_PATH` 为本项目的绝对路径(下面以 `/data/lnmp` 为例，实际请替换为你自己的路径)，这样你就可以在任意目录使用本项目的 CLI (命令中路径必须为相对于 app 的路径)。
+
+首先将本项目 CLI 软链接到 `/usr/local/bin`。
+
+```bash
+$ cd lnmp
+
+$ ln -s $PWD/lnmp-docker.sh /usr/local/bin/
+```
 
 ## Bash
 
 ```bash
 $ vi ~/.bash_profile
 
-export PATH=$PATH:/data/lnmp
-
 export LNMP_ROOT_PATH=/data/lnmp
+```
 
-# Linux
+### Linux
 
+```bash
 $ sudo ln -s $PWD/cli/completion/bash/lnmp-docker.sh /etc/bash_completion.d/lnmp-docker.sh
+```
 
-# macOS
+### macOS
 
+```bash
 $ sudo ln -s $PWD/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_completion.d/lnmp-docker.sh
 ```
 
 ## fish
 
 ```bash
-$ vi ~/.config/fish/config.fish
-
-set -gx fish_user_paths /data/lnmp
-
 $ set -Ux LNMP_ROOT_PATH /data/lnmp
 
 $ ln -s $PWD/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completions/

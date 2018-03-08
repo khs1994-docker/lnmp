@@ -51,6 +51,7 @@ complete -W "acme.sh \
         nginx-config \
         update \
         upgrade \
+        update-version \
         init \
         commit \
         test \

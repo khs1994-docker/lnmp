@@ -11,10 +11,6 @@ set -e
 
 if [ `uname -s` != 'Darwin' ] && [ `uname -s` != 'Linux' ];then echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
 
-# 系统环境变量具有最高优先级
-
-env > /tmp/.khs1994.env
-
 print_info(){
   echo -e "\033[32mINFO \033[0m  $@"
 }
@@ -33,10 +29,11 @@ if [ -f cli/khs1994-robot.enc ];then
 else
     if ! [ -z "${LNMP_ROOT_PATH}" ];then
       # 存在环境变量，进入
-      print_info "Use LNMP CLI in other Folder\n"
+      print_info "Use LNMP CLI in $PWD\n"
       cd ${LNMP_ROOT_PATH}
     else
       print_error  "在任意目录使用 LNMP CLI 必须设置环境变量，cli/README.md"
+      exit 1
     fi
 fi
 
@@ -72,9 +69,10 @@ Commands:
   registry-down        Stop Docker Registry
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
+  update-version       Update LNMP soft to latest vesion
 
 PHP Tools:
-  httpd-config        Generate Apache2 vhost conf
+  httpd-config         Generate Apache2 vhost conf
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
@@ -118,10 +116,10 @@ ClusterKit
   clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
 
 Container CLI:
-  SERVICE-cli                        Execute a command in a running LNMP container
+  SERVICE-cli          Execute a command in a running LNMP container
 
 LogKit:
-  SERVICE-logs                       Print LNMP containers logs (journald)
+  SERVICE-logs         Print LNMP containers logs (journald)
 
 Developer Tools:
   commit               Commit LNMP to Git
@@ -416,6 +414,7 @@ demo() {
     print_info "Import app and nginx conf Demo ...\n"
     # 检查网络连接
     ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
+    echo ;print_info "Update Git Submodule\n"
     git submodule update --init --recursive
   fi
 }
@@ -500,14 +499,13 @@ update(){
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
   if [ ${BRANCH} = 'dev' ] || [ ${BRANCH} = 'master' ];then
-    git submodule update --init --recursive
     git reset --hard lnmp/${BRANCH}
+    echo ;print_info "Update Git Submodule\n"
+    git submodule update --init --recursive
   else
     print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
   fi
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh
-  # 升级软件版本
-  update_version
 }
 
 # 提交项目「开发者选项」
@@ -527,11 +525,13 @@ commit(){
 
 reset-master(){
   set_git_remote_lnmp_url
-  print_info "Start new RC \n"; print_info "Branch is ${BRANCH}\n"
+  print_info "Branch is ${BRANCH}\n"
+  print_info "Reset master branch in dev branch\n"
   if [ ${BRANCH} = 'dev' ];then
     git fetch lnmp
-    git submodule update --init --recursive
     git reset --hard lnmp/master
+    echo ;print_info "Update Git Submodule\n"
+    git submodule update --init --recursive
   elif [ ${BRANCH} = 'master' ];then
     print_error "${BRANCH} branch，Please exec ./lnmp-docker.sh update [-f]"
   else
@@ -1192,6 +1192,10 @@ OPEN http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernet
 
     ;;
 
+    update-version )
+        update_version
+    ;;
+
   * )
   if ! [ -z "$command" ];then
     print_info "You Exec docker-compose commands"; echo
@@ -1217,16 +1221,6 @@ env_status
 . .env
 
 . cli/.env
-
-if [ "${OS}" = 'Darwin' ];then
-  sed -i "" "s!^COLORFGBG.*!!g" /tmp/.khs1994.env
-else
-  sed -i "s!^COLORFGBG.*!!g" /tmp/.khs1994.env
-fi
-
-. /tmp/.khs1994.env > /dev/null 2>&1 || echo > /dev/null 2>&1
-
-rm -rf /tmp/.khs1994.env
 
 if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 

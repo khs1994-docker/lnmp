@@ -64,6 +64,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a update            -d
 complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from update' -s f  -f   -d      'Force update'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a upgrade           -d      'Upgrades LNMP'
 complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from upgrade' -s f -f   -d      'Force update'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a update-version    -d      'Update LNMP soft to latest vesion'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a init              -d      'Init LNMP environment'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a commit            -d      'Commit LNMP to git'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a test              -d      'Test LNMP'
