@@ -1,8 +1,6 @@
-# WNMP 环境搭建
+# WNAMP 环境搭建
 
-由于 `Docker For Windows` 不太稳定，这里记录一下 Plan B WNMP 开发环境。
-
-Plan C WSL 请查看 [WSL 快速搭建 LNMP 环境](https://www.khs1994.com/php/development/wsl.html)。
+由于 `Docker For Windows` 不太稳定，这里记录一下 Plan B `WNAMP` 开发环境。
 
 为了在任意目录执行命令，请设置系统环境变量 `PATH`，这里不再赘述。
 
@@ -11,6 +9,37 @@ Plan C WSL 请查看 [WSL 快速搭建 LNMP 环境](https://www.khs1994.com/php/
 我将软件都放在了 C 盘根目录，即 `C:\nginx-1.13.8` `C:\php` `C:\mysql` ...
 
 MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
+
+**部分软件使用 `WSL` 来安装运行。**
+
+# wsl
+
+> 存在 WSL 打开 PHP 页面缓慢的问题，解决办法请查看下方的文章
+
+Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://www.khs1994.com/php/development/wsl.html)。
+
+## 安装 wsl.sh 脚本
+
+```bash
+# 打开 PowerShell
+$ cd $HOME
+
+$ bash
+
+$ pwd
+
+/mnt/c/Users/90621 # 此值与下方 WSL_HOME 的设置值对应
+
+$ sudo vi /etc/profile
+
+export WSL_HOME=/mnt/c/Users/90621 # 与上方值对应
+
+# 保存重新登录
+
+$ sudo ln -s $WSL_HOME/lnmp/windows/lnmp-wsl.sh /usr/local/bin
+
+$ chmod +x /usr/local/bin/lnmp-wsl.sh
+```
 
 ## MySQL
 
@@ -253,13 +282,13 @@ Apache https 出现问题，暂时解决不了。
 
 ## PowerShell 脚本
 
-为了方便的管理 `WNMP`，这里有一个脚本 `./windows/wnmp.ps1` ，使用之前在该文件开头修改好软件路径
+为了方便的管理 `WNAMP`，这里有一个脚本 `./windows/wnamp.ps1` ，使用之前在该文件开头修改好软件路径
 
 ```bash
-$ ./windows/wnmp.ps1 start | stop | restart | status | ps
+$ ./windows/wnamp.ps1 start | stop | restart | status | ps
 ```
 
-也可以将 `C:\Users\90621\lnmp\windows\wnmp.ps1` 加入 `PATH`,在任意目录执行 `wnmp.ps1 command`
+也可以将 `C:\Users\90621\lnmp\windows\wnamp.ps1` 加入 `PATH`,在任意目录执行 `wnamp.ps1 command`
 
 ## More Information
 
