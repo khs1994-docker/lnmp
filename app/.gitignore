@@ -2,9 +2,6 @@
 !demo/
 !.gitignore
 !README.md
-!.env.development
-!.env.production
-!.env.staging
-!.env.testing
+!.env.*
 !my_second_app
 !my_other_app

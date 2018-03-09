@@ -2,8 +2,6 @@
 
 由于 `Docker For Windows` 不太稳定，这里记录一下 Plan B `WNAMP` 开发环境。
 
-为了在任意目录执行命令，请设置系统环境变量 `PATH`，这里不再赘述。
-
 环境 `Windows 10`，终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也行。
 
 我将软件都放在了 C 盘根目录，即 `C:\nginx-1.13.8` `C:\php` `C:\mysql` ...
@@ -11,6 +9,22 @@
 MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
 
 **部分软件使用 `WSL` 来安装运行。**
+
+## 系统环境变量
+
+* 为了在任意目录执行命令，请将各软件路径加入系统环境变量 `PATH`，这里不再赘述。
+
+* **特别的** 新增变量 `APP_ENV` 值为 `windows`, 之后 `Laravel` 框架就会默认的加载 `.env.windows` 文件。（设置变量之后务必注销登录）
+
+验证
+
+```bash
+$ cd LARAVEL_APP_PATH
+
+$ php artisan env
+
+Current application environment: windows
+```
 
 # wsl
 
@@ -102,11 +116,15 @@ http://windows.php.net/download/
 ```bash
 extension_dir = "C:/php/ext"
 
-# 开启扩展，自行取消注释
+; 开启扩展，自行取消注释
 
 date.timezone = PRC
 
 cgi.fix_pathinfo = 1
+
+; 务必设置此项
+
+variables_order = "EGPCS"
 ```
 
 ### 查看版本信息
