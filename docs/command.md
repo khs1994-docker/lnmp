@@ -7,6 +7,10 @@
 
 > 为避免与原始命令冲突，这里加上了 `lnmp-` 前缀
 
+## APP_ENV
+
+`APP_ENV` 值为 `development`
+
 ## 使用方法
 
 ### 安装

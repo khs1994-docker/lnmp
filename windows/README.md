@@ -121,10 +121,6 @@ extension_dir = "C:/php/ext"
 date.timezone = PRC
 
 cgi.fix_pathinfo = 1
-
-; 务必设置此项
-
-variables_order = "EGPCS"
 ```
 
 ### 查看版本信息
@@ -147,9 +143,7 @@ $ RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c C:/php/php.ini
 
 ### pecl 下载扩展
 
-http://pecl.php.net/
-
-注意与 PHP 版本对应。
+手动在 http://pecl.php.net/ 下载扩展（注意与 PHP 版本对应）。
 
 之后在 `php.ini` 中增加配置。
 
@@ -176,9 +170,7 @@ $ nginx -s stop
 
 官方文档：https://www.nginx.com/resources/wiki/start/topics/examples/phpfastcgionwindows/
 
-## Redis
-
-WSL
+## Redis WSL
 
 ```bash
 $ sudo apt install redis-server
@@ -186,9 +178,7 @@ $ sudo apt install redis-server
 $ sudo redis-server /etc/redis/redis.conf
 ```
 
-## MongoDB
-
-WSL
+## MongoDB WSL
 
 ```bash
 $ sudo apt install mongodb-server
@@ -201,9 +191,7 @@ $ chmod 777 /data/db
 $ sudo mongod --fork --logpath=/var/run/mongodb/error.log
 ```
 
-## Memcached
-
-WSL
+## Memcached WSL
 
 [`memcached`](http://pecl.php.net/package/memcached) 扩展暂不支持 Windows。
 

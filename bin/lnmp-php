@@ -1,5 +1,11 @@
 #!/bin/bash
 
+docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)
+
+if ! [ "${APP_ENV}" = "production" ];then
+  APP_ENV=development
+fi
+
 if [ $# = 0 ];then
   COMMAND=-h
 else
@@ -45,5 +51,10 @@ exec docker run -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --network lnmp_backend \
+  -e APP_ENV=${APP_ENV} \
   ${DOCKER_IMAGE}:${TAG} \
   php $COMMAND
+
+if ! [ -z "$CREATE" ];then
+  docker network rm lnmp_backend
+fi
