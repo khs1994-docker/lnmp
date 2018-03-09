@@ -1,10 +1,26 @@
 # MANMP
 
-```bash
-$ cd lnmp/macos
+## 配置环境变量
 
-$ ln -s $PWD/lnmp-mnamp.sh /usr/local/bin/
+让 `Laravel` 加载 `.env.macos` 文件
+
+### bash
+
+```bash
+$ vi .bash_profile
+
+export APP_ENV=macos
 ```
+
+### fish
+
+```bash
+$ vi .config/fish/config.fish
+
+set -x APP_ENV macos
+```
+
+## 安装
 
 ```bash
 $ brew install mysql
@@ -53,7 +69,11 @@ extension_dir = "/usr/local/lib/php/pecl/20170718"
 ## 使用脚本管理软件
 
 ```bash
-lnmp-mnamp.sh start | restart | stop SOFT_NAME
+$ cd lnmp/macos
 
-lnmp-mnamp.sh start | restart | stop all
+$ ln -s $PWD/lnmp-mnamp.sh /usr/local/bin/
+
+$ lnmp-mnamp.sh start | restart | stop SOFT_NAME
+
+$ lnmp-mnamp.sh start | restart | stop all
 ```
