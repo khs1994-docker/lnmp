@@ -9,28 +9,28 @@ function _start(){
     case "$soft" in
       redis )
           sudo redis-server \
-              /etc/redis/redis.conf \
+              /usr/local/etc/redis.conf \
               --pidfile /run/redis.pid
       ;;
 
       mongodb )
           sudo mongod \
-              --fork --logpath=/var/log/mongodb/.error.log \
-              --pidfilepath /run/mongodb.pid
+              --config /usr/local/etc/mongod.conf \
+              --pidfilepath /usr/local/var/run/mongodb.pid
       ;;
 
       memcached )
           sudo memcached \
               -uroot \
               -d \
-              -P /run/memcached.pid
+              -P /usr/local/var/run/memcached.pid
       ;;
 
       php )
-          sudo php-fpm \
+          php-fpm \
               -D \
               -R \
-              -g /run/php-fpm.pid
+              -g /usr/local/var/run/php-fpm.pid
       ;;
 
       nginx )
@@ -39,12 +39,12 @@ function _start(){
           sudo nginx
       ;;
 
-      postgresql )
-          pg_ctl -D /var/lib/postgres start
+      mysql )
+          mysql.server start
       ;;
 
-      * )
-          sudo service $soft start
+      postgresql )
+          pg_ctl -D /usr/local/var/postgres start
       ;;
 esac
 done
@@ -56,7 +56,7 @@ function _stop(){
     echo -e "\nStop $soft ... \n"
   case "$soft" in
     php )
-        sudo kill $(cat /run/php-fpm.pid)
+        sudo kill $(cat /usr/local/var/run/php-fpm.pid)
     ;;
 
     nginx )
@@ -70,19 +70,19 @@ function _stop(){
     ;;
 
     memcached )
-        sudo kill $(cat /run/memcached.pid)
+        sudo kill $(cat /usr/local/var/run/memcached.pid)
     ;;
 
     mongodb )
-        sudo kill $(cat /run/mongodb.pid)
+        sudo kill $(cat /usr/local/var/run/mongodb.pid)
+    ;;
+
+    mysql )
+        mysql.server stop
     ;;
 
     postgresql )
-        pg_ctl -D /var/lib/postgres stop
-    ;;
-
-    * )
-        sudo service $soft stop
+        pg_ctl -D /usr/local/var/postgres stop
     ;;
   esac
 done
@@ -98,12 +98,13 @@ done
 
 if [ -z "$1" ];then
     echo -e "
-lnmp-wsl.sh start | restart | stop SOFT_NAME
+lnmp-mnamp.sh start | restart | stop SOFT_NAME
 
-lnmp-wsl.sh start | restart | stop all
+lnmp-mnamp.sh start | restart | stop all
 
-lnmp-wsl.sh status
+lnmp-mnamp.sh status
 "
+
 exit 0
 fi
 
@@ -112,7 +113,7 @@ if [ "$1" = stop ];then
   if [ "$1" = 'all' ];then
     set +e
     clear
-    _stop nginx mysql php redis memcached mongodb ssh postgresql
+    _stop nginx mysql php redis memcached mongodb postgresql
     exit 0
   fi
   _stop "$@"
@@ -124,7 +125,7 @@ if [ "$1" = start ];then
   if [ "$1" = 'all' ];then
     set +e
     clear
-    _start nginx mysql php redis memcached mongodb ssh postgresql
+    _start nginx mysql php redis memcached mongodb postgresql
     exit 0
   fi
 
@@ -137,7 +138,7 @@ if [ "$1" = restart ];then
   if [ "$1" = 'all' ];then
     set +e
     clear
-    _restart nginx mysql php redis memcached mongodb ssh postgresql
+    _restart nginx mysql php redis memcached mongodb postgresql
     exit 0
   fi
   _restart "$@"
@@ -158,6 +159,4 @@ if [ "$1" = 'status' ];then
     ps aux | grep mongod --color=auto
     echo "====>"
     ps aux | grep postgres --color=auto
-    echo "====>"
-    ps aux | grep sshd --color=auto
 fi
