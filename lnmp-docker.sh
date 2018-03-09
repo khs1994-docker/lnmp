@@ -962,20 +962,20 @@ For information please run $ docker service update --help
     print_info "You must checkout ./config/httpd/$2.conf, then restart httpd"
     ;;
 
-  php-cli )
-    run_docker; docker-compose exec php7 bash
+  php-cli | php7-cli )
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.php) bash
     ;;
 
   mongodb-cli | mongo-cli )
-    run_docker; docker-compose exec mongodb bash
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mongodb) sh
     ;;
 
   mariadb-cli )
-    run_docker; docker-compose exec mariadb bash
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mariadb) sh
     ;;
 
   mysql-cli )
-    run_docker; docker-compose exec mysql bash
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mysql) sh
     ;;
 
   *-cli )

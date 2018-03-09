@@ -65,10 +65,10 @@ services:
     networks:
       - frontend
       - backend
-    command: php-fpm -R -d variables_order="EGPCS"
+    command: php-fpm -R -F
     # env_file: ./.env
     environment:
-      - APP_ENV=production
+      - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=v18.03 x86_64 Docker for desktop k8s
     deploy:
       replicas: 2

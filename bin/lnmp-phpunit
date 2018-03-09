@@ -4,6 +4,8 @@ if ! [ -f vendor/bin/phpunit ];then
   lnmp-composer install
 fi
 
+docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)
+
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $DIR/.arch
@@ -14,3 +16,7 @@ docker run -it --rm \
   --network lnmp_backend \
   ${DOCKER_IMAGE}:${TAG} \
   vendor/bin/phpunit "$@"
+
+if ! [ -z "$CREATE" ];then
+  docker network rm lnmp_backend
+fi

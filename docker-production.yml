@@ -385,7 +385,7 @@ services:
     networks:
       - frontend
       - backend
-    command: php-fpm -R -d variables_order="EGPCS"
+    command: php-fpm -R -F
     env_file: ./cli/timezone.env
     environment:
       - APP_ENV=production
