@@ -2,7 +2,8 @@ ARG PHP_VERSION=7.1.15
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
-ENV TZ=Asia/Shanghai
+ENV TZ=Asia/Shanghai \
+    APP_ENV=development
 
 # 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
 # 国内镜像地址在 docker-compose.yml 中定义
