@@ -47,12 +47,12 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                   gd \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && pecl install mongodb \
+                        igbinary \
                         redis \
                         memcached \
                         # 安装测试版的扩展，可以在扩展名后加 -beta
                         xdebug \
                         yaml \
-                        igbinary \
                         swoole \
         && docker-php-ext-enable mongodb \
                                  redis \

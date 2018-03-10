@@ -165,7 +165,7 @@ $ ./lnmp-docker.sh down
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.5`           | **10.3.5**              |`Debian:jessie` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:4.0.8-alpine`       | **4.0.8**               |`Alpine:3.7`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php-fpm:7.2.3-alpine3.7`  | **7.2.3**       |`Alpine:3.7`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.3-alpine3.7`  | **5.5**         |`Alpine:3.7`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.3-alpine3.7`  | **5.6.x**         |`Alpine:3.7`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.3-alpine3.7`  | **1.6.3**       |`Alpine:3.7`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.6-alpine`           | **1.5.6**       |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.3-management-alpine` | **3.7.3**       |`Alpine:3.7`    |
