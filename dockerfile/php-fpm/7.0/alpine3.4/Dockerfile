@@ -8,6 +8,8 @@ FROM alpine:3.4
 
 ARG PHP_VERSION=7.0.28
 
+ENV APP_ENV=development
+
 # persistent / runtime deps
 ENV PHPIZE_DEPS \
 		autoconf \

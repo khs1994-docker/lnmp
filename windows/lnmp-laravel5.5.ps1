@@ -49,5 +49,3 @@ $ lnmp-php artisan optimize
   _ide_helper.php" >> .gitignore
 
 cd ..
-
-}
