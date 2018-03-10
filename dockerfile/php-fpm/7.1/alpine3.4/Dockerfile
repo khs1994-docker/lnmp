@@ -11,16 +11,17 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && set -xe \
-      # 新增的包
-      && KHS1994_PHP_FPM_APKS=" \
-                            git \
-                            # subversion \
-                            openssh-client \
-                            # mercurial \
-                            # tini \
-                            bash \
-                            tzdata \
-                            " \
+    # 新增的包
+    && KHS1994_PHP_FPM_APKS=" \
+                          git \
+                          # 以下两个均为版本控制系统
+                          # subversion \
+                          # mercurial \
+                          openssh-client \
+                          bash \
+                          tini \
+                          tzdata \
+                          " \
       # 不要删除
       && KHS1994_PHP_FPM_BUILD_DEPS=" \
                          openssl-dev \
@@ -31,7 +32,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
+                         yaml-dev \
                          " \
+        && apk add --no-cache linux-headers \
         && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
         && apk add --no-cache --virtual .khs1994-php-fpm-build_deps $KHS1994_PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure gd \
@@ -40,7 +43,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && docker-php-ext-install bcmath \
                                   pdo_pgsql \
                                   pdo_mysql \
-                                  opcache \
                                   zip \
                                   gd \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
@@ -49,11 +51,18 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                         memcached \
                         # 安装测试版的扩展，可以在扩展名后加 -beta
                         xdebug \
+                        yaml \
+                        igbinary \
+                        swoole \
         && docker-php-ext-enable mongodb \
                                  redis \
                                  memcached \
                                  xdebug \
-        && apk del .build-deps \
+                                 yaml \
+                                 igbinary \
+                                 opcache \
+                                 swoole \
+        && apk del .build-deps linux-headers \
         && rm -rf /tmp/*
 
 # install composer
@@ -61,6 +70,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
     COMPOSER_VERSION=1.6.3 \
     PS1="[\u@\h \w]# "
+
+# https://github.com/composer/docker
 
 RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
@@ -75,6 +86,8 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && chmod +x /docker-entrypoint.composer.sh \
  # composer 中国镜像
  && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  # laravel 安装程序
