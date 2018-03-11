@@ -3,7 +3,7 @@
   "description": "Start LNMP In less than 2 minutes Powered by Docker Compose.",
   "keywords": [
     "docker",
-    "ci/cd"
+    "cicd"
   ],
   "homepage": "https://github.com/khs1994-docker/lnmp",
   "type": "project",
