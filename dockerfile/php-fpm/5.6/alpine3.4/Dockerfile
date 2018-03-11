@@ -91,7 +91,7 @@ RUN set -xe; \
 	\
 	apk del .fetch-deps
 
-COPY --from php:alpine3.7 /usr/local/bin/docker-php-* /usr/local/bin/
+COPY --from=php:alpine3.7 /usr/local/bin/docker-php-* /usr/local/bin/
 
 RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps \
