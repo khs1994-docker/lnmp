@@ -54,6 +54,12 @@
   # $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
   ```
 
+  * **使用 Composer 创建项目**
+
+    ```bash
+    $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
+    ```
+    
 ### 启动 LNMP
 
 ```bash
