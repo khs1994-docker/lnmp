@@ -1,0 +1,50 @@
+version: "3.5"
+
+services:
+
+  memcached_1:
+    # restart: always
+    image: memcached:1.5.4-alpine
+    networks:
+      - cluster_memcached
+    ports:
+      - "11001:11211"
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.memcached=memcached1"
+      - "com.khs1994.lnmp.app.env=clusterkit_memcached"
+
+  memcached_2:
+    # restart: always
+    image: memcached:1.5.4-alpine
+    networks:
+      - cluster_memcached
+    ports:
+      - "11002:11211"
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.memcached=memcached2"
+      - "com.khs1994.lnmp.app.env=clusterkit_memcached"
+
+  memcached_3:
+    # restart: always
+    image: memcached:1.5.4-alpine
+    networks:
+      - cluster_memcached
+    ports:
+      - "11003:11211"
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.memcached=memcached3"
+      - "com.khs1994.lnmp.app.env=clusterkit_memcached"
+
+networks:
+  cluster_memcached:
+     labels:
+       - "com.khs1994.lnmp=true"
+       - "com.khs1994.lnmp.clusterkit=true"
+       - "com.khs1994.lnmp.clusterkit.memcached=true"
+       - "com.khs1994.lnmp.app.env=clusterkit_memcached"
