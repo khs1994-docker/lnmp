@@ -9,7 +9,7 @@ docker-compose up -d
 rm -rf php/default \
        etc/default \
        mariadb/default \
-       mysql/defautl
+       mysql/default
 
 mkdir -p php/default/usr/local \
          etc/default/nginx \
@@ -27,7 +27,7 @@ docker cp config_httpd_1:/usr/local/apache2/conf/httpd.conf etc/default/apache2/
 
 docker cp config_mariadb_1:/etc/mysql mariadb/default/etc/
 
-docker cp config_mariadb_1:/etc/mysql mysql/default/etc/
+docker cp config_mysql_1:/etc/mysql mysql/default/etc/
 
 docker-compose down
 
