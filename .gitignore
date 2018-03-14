@@ -1,14 +1,28 @@
 .DS_Store
 .idea
+
+# docker-composer
+
 docker-compose
 docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
 docker-production.*.yml
+
+# cache
+
 *.stackdump
+
+# env
 .env
 .env.backup
+
+# LinuxKit
+
 lnmp-cmdline
 lnmp-kernel
 lnmp-state
-tmp
 *.img
+
+# composer
+
+vendor

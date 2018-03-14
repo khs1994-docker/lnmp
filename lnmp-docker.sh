@@ -19,6 +19,10 @@ print_error(){
   echo -e "\033[31mERROR\033[0m  $@"
 }
 
+print_warning(){
+  echo -e "\033[33mWARNING\033[0m  $@"
+}
+
 NOTSUPPORT(){
   print_error "Not Support ${OS} ${ARCH}\n"
   exit 1
@@ -142,7 +146,7 @@ _registry(){
   # SSL 相关
 
   if [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
-    print_error "Docker Registry SSL not found, generating ...."
+    print_warning "Docker Registry SSL not found, generating ...."
     ssl_self $KHS1994_LNMP_REGISTRY_HOST
   fi
 
@@ -213,8 +217,8 @@ tz(){
 
 env_status(){
   # cp .env.example to .env
-  if [ -f .env ];then print_info ".env file existing\n"; else print_error ".env file NOT existing\n"; cp .env.example .env ; fi
-  if [ -f cluster/.env ];then print_info "cluster/.env file existing\n"; else print_error "cluster/.env file NOT existing\n"; cp cluster/.env.example cluster/.env ; fi
+  if [ -f .env ];then print_info ".env file existing\n"; else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
+  if [ -f cluster/.env ];then print_info "cluster/.env file existing\n"; else print_warning "cluster/.env file NOT existing (Maybe First Run)\n"; cp cluster/.env.example cluster/.env ; fi
 }
 
 # 自动升级软件版本
