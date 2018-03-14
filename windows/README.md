@@ -30,7 +30,7 @@ Current application environment: windows
 
 > 存在 WSL 打开 PHP 页面缓慢的问题，解决办法请查看下方的文章
 
-Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://www.khs1994.com/php/development/wsl.html)。
+Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](../wsl)。
 
 ## 安装 wsl.sh 脚本
 

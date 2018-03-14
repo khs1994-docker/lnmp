@@ -1,0 +1,10 @@
+# 所有 MySQL 自定义配置请在这里配置
+
+[mysqld]
+skip-host-cache
+skip-name-resolve
+log-error=/var/log/mysql/error.log
+
+# https://www.cnblogs.com/beginner-boy/p/7519851.html
+
+log_timestamps=SYSTEM
