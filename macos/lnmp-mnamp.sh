@@ -10,7 +10,8 @@ function _start(){
       redis )
           sudo redis-server \
               /usr/local/etc/redis.conf \
-              --pidfile /run/redis.pid
+              --pidfile /usr/local/var/run/redis.pid \
+              --daemonize yes
       ;;
 
       mongodb )

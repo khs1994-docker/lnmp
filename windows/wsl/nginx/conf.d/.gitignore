@@ -1,0 +1,5 @@
+*
+!*.config
+!*.example
+!ssl
+!.gitignore
