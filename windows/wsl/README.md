@@ -41,7 +41,7 @@ $ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/nginx/conf.d /etc/nginx/conf.d
 
 $ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/php/zz-wsl.conf /usr/local/php/etc/php-fpm.d/zz-wsl.conf
 
-$ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/mysql /etc/mysql/conf.d
+$ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/mysql/wsl.cnf /etc/mysql/mysql.conf.d/wsl.cnf
 
 $ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/redis/redis.conf /etc/redis/redis.conf
 ```
