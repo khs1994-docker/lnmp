@@ -1,10 +1,67 @@
+#
 # 所有 MySQL 自定义配置请在这里配置
+# 修改字符集为 utf8mb4
+#
+
+[mysqld_safe]
+
+default-character-set = utf8mb4
 
 [mysqld]
+
 skip-host-cache
 skip-name-resolve
 # log-error=/var/log/mysql/error.log
 
+# 日志存储方式
+
+# log_output = FILE
+
+#
 # https://www.cnblogs.com/beginner-boy/p/7519851.html
+#
 
 log_timestamps=SYSTEM
+
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+init_connect='SET NAMES utf8mb4'
+
+#
+# slow log
+#
+# https://www.cnblogs.com/saneri/p/6656161.html
+#
+
+# 是否开启慢查询日志
+#
+# select sleep(2); 测试慢查询日志
+#
+
+slow_query_log = 1
+
+# slow_launch_time     # default 2
+# 慢查询日志存储路径
+# slow-query-log-file  # 默认为 /var/lib/mysql/host_name-slow.log
+# 慢查询阈值
+long_query_time = 2    # default 10.000000 单位 s
+
+# 未使用索引的查询也被记录到慢查询日志中（可选项）
+
+log_queries_not_using_indexes = 1
+
+# 是否将慢管理语句例如ANALYZE TABLE和ALTER TABLE等记入慢查询日志
+
+log_slow_admin_statements # default off
+
+log_slow_slave_statements # default off
+
+[client]
+
+default-character-set = utf8mb4
+
+[mysql]
+
+default-character-set = utf8mb4
+
+[mysqldump]

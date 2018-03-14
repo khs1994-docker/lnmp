@@ -1,0 +1,21 @@
+[global]
+
+error_log = /var/log/php-fpm/error.log
+
+[www]
+
+access.log = /var/log/php-fpm/access.log
+
+user = nginx
+group = nginx
+
+request_slowlog_timeout = 5
+slowlog = /var/log/php-fpm/slow.log
+
+listen = /run/php-fpm.sock
+
+listen.owner = nginx
+listen.group = nginx
+listen.mode = 0660
+
+env[APP_ENV] = wsl

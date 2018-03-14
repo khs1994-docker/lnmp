@@ -63,25 +63,10 @@
 │   │   └── etc
 │   │       └── mysql
 │   │           ├── conf.d
-│   │           │   ├── docker.cnf
-│   │           │   └── mysqld_safe_syslog.cnf
-│   │           ├── debian-start
-│   │           ├── debian.cnf
-│   │           ├── mariadb.cnf
-│   │           ├── mariadb.conf.d
-│   │           ├── my.cnf
-│   │           └── mysql
-│   │               ├── conf.d
-│   │               │   ├── docker.cnf
-│   │               │   └── mysqld_safe_syslog.cnf
-│   │               ├── debian-start
-│   │               ├── debian.cnf
-│   │               ├── mariadb.cnf
-│   │               ├── mariadb.conf.d
-│   │               └── my.cnf
+│   │           │   └── docker.cnf
+│   │           └── my.cnf
 │   └── my.cnf
 ├── nginx
-│   ├── Dockerfile
 │   ├── README.md
 │   ├── auth
 │   │   ├── README.md
@@ -95,9 +80,9 @@
 │   │   └── www.t.khs1994.com.key
 │   ├── demo-ssl.config
 │   ├── demo-wechat-mini.config
-│   ├── docker-compose.yml
 │   ├── khs1994.com.one.development.config
 │   ├── khs1994.com.one.production.config
+│   ├── linuxkit.config
 │   ├── registry.conf.backup
 │   ├── ssl
 │   │   ├── www.t.khs1994.com.crt
@@ -148,5 +133,5 @@
 │   └── config.yml
 └── update.sh
 
-48 directories, 99 files
+44 directories, 88 files
 ```

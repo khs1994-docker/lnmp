@@ -1,17 +1,16 @@
 version: '3.5'
 services:
   #
-  # 部署 MySQL 集群
+  #  MySQL master node
   #
   # @link https://github.com/TomCzHen/mysql-replication-sample
   #
-  # 这里列出的是 Docker 原始命令，实际请使用 CLI (./lnmp-docker.sh)
+  # There list Docker command，In production please use CLI (./lnmp-docker.sh)
   #
   ## Start
   #
   # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.mysql.yml up [-d]
   #
-  # 若首次启动失败，务必移除全部（命令在最后）之后，重新尝试
   #
   ## Exec
   #
@@ -74,7 +73,7 @@ services:
         - "com.khs1994.lnmp.app.env=clusterkit_mysql"
     networks:
       cluster_mysql:
-        # 固定 IP 选项在 Swarm mode 不起作用
+        # Not work in Swarm mode
         ipv4_address: 172.28.0.100
     secrets:
       - source: cluster_db_root_password
@@ -124,7 +123,6 @@ services:
         - "com.khs1994.lnmp.app.env=clusterkit_mysql"
     networks:
       cluster_mysql:
-        # 固定 IP 选项在 Swarm mode 不起作用
         ipv4_address: 172.28.0.101
     secrets:
       - source: cluster_db_root_password
@@ -174,7 +172,6 @@ services:
         - "com.khs1994.lnmp.app.env=clusterkit_mysql"
     networks:
       cluster_mysql:
-        # 固定 IP 选项在 Swarm mode 不起作用
         ipv4_address: 172.28.0.102
     secrets:
       - source: cluster_db_root_password

@@ -1,11 +1,11 @@
 version: '3.5'
 services:
   #
-  # Redis 集群
+  # Redis Cluster
   #
   # @link https://www.cnblogs.com/lianggp/articles/8136222.html
   #
-  # 这里列出的是 Docker 原始命令，实际请使用 CLI (./lnmp-docker.sh)
+  # There list  Docker command，In production please use CLI (./lnmp-docker.sh)
   #
   # Start
   #
@@ -34,12 +34,12 @@ services:
   # $ docker stack rm lnmp
   #
   #
-  # PHP 容器连接集群方式 通过集群 HOST_IP 连接
+  # PHP connect BY CLUSTER HOST_IP
   #
   #
 
   #
-  # Redis 集群初始化脚本执行容器，官方提供了 Ruby 脚本
+  # Redis cluster by Ruby
   #
   redis_ruby:
     # build:
@@ -94,7 +94,7 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 7001",
-      # 将 192.168.199.100 替换为 REdis 集群实际 IP 下同
+      # Please Change 192.168.199.100 to your REdis cluster IP
       "--cluster-announce-ip 192.168.199.100",
       "--cluster-announce-port 7001",
       "--cluster-announce-bus-port 17001"

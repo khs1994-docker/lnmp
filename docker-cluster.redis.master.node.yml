@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   #
-  # Redis 主从配置
+  # Redis master slaveof
   #
   redis_master:
     # build:

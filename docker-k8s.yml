@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   #
-  # 该文件用于 Docker 桌面版 k8s
+  # Docker Desktop k8s
   #
   # Docker v18.03-rc1 maybe not support secrets
   #

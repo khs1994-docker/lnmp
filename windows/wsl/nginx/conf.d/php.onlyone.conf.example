@@ -1,0 +1,21 @@
+#
+# 80 demo
+#
+server{
+  listen 80;
+  root /app/demo;
+  server_name learn.sudo.cc;
+
+  include conf.d/php-common.config;
+}
+
+#
+# ssl demo
+#
+server{
+  server_name   laravel.t.khs1994.com;
+  root          /app/laravel/public;
+
+  include conf.d/ssl.config;
+  include conf.d/php-common.config;
+}

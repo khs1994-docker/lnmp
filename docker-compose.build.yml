@@ -1,6 +1,6 @@
 version: "3.5"
 services:
-  # 自行构建镜像请使用此 compose 文件
+  # self build image compose file
   #
   # $ cd dockerfile/soft
   #

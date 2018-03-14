@@ -1,9 +1,9 @@
 version: "3.5"
 services:
   #
-  # ARM 镜像 （树莓派）
+  # ARM
   #
-  # MySQL 暂时没有 arm 镜像
+  # MySQL not in arm
   # mysql:
   #   # build:
   #   #   context: ./dockerfile/${ARM_ARCH}/mysql
@@ -115,7 +115,7 @@ services:
     ports:
       - "${POSTGRESQL_PORT}:5432"
     secrets:
-      # 默认与 mysql 密码一致。
+      # default is mysql password
       - db_root_password
     labels:
       - "com.khs1994.lnmp=true"
@@ -144,7 +144,6 @@ services:
   #     - "com.khs1994.lnmp.mongodb=true"
 
   php7:
-    # arm 平台暂时只支持 开发环境，由于树莓派性能问题，镜像由 macOS 构建，默认拉取镜像
     # build:
     #   context: ./dockerfile/${ARM_ARCH}/php/
     #   dockerfile: Dockerfile
