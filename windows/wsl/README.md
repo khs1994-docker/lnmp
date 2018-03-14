@@ -41,10 +41,16 @@ $ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/nginx/conf.d /etc/nginx/conf.d
 
 $ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/php/zz-wsl.conf /usr/local/php/etc/php-fpm.d/zz-wsl.conf
 
-$ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/mysql/wsl.cnf /etc/mysql/mysql.conf.d/wsl.cnf
+$ sudo cp -f $WSL_HOME/lnmp/windows/wsl/mysql/wsl.cnf /etc/mysql/conf.d/wsl.cnf
 
 $ sudo ln -sf $WSL_HOME/lnmp/windows/wsl/redis/redis.conf /etc/redis/redis.conf
 ```
+
+## MySQL 远程登陆
+
+可能会遇到不能从除了 `localhost` 的地址登陆的问题，请查看以下链接解决。
+
+* https://www.khs1994.com/database/mysql/remote.html
 
 ## 快捷启动脚本
 
