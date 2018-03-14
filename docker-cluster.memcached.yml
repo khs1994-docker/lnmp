@@ -9,6 +9,26 @@ services:
       - cluster_memcached
     ports:
       - "11001:11211"
+    deploy:
+      # placement:
+      #   constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.memcached=memcached1"
+        - "com.khs1994.lnmp.app.env=clusterkit_memcached"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -22,6 +42,26 @@ services:
       - cluster_memcached
     ports:
       - "11002:11211"
+    deploy:
+      # placement:
+      #   constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.memcached=memcached1"
+        - "com.khs1994.lnmp.app.env=clusterkit_memcached"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -35,6 +75,26 @@ services:
       - cluster_memcached
     ports:
       - "11003:11211"
+    deploy:
+      # placement:
+      #   constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      # resources:
+      #   limits:
+      #     cpus: '0.50'
+      #     memory: 50M
+      #   reservations:
+      #     cpus: '0.25'
+      #     memory: 20M
+      labels:
+        - "com.khs1994.lnmp=true"
+        - "com.khs1994.lnmp.clusterkit=true"
+        - "com.khs1994.lnmp.clusterkit.memcached=memcached1"
+        - "com.khs1994.lnmp.app.env=clusterkit_memcached"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
