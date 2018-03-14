@@ -36,8 +36,11 @@ services:
   #
   mysql_master:
     image: mysql:8.0.3
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
+      MYSQL_REPLICATION_USER: replication
+      MYSQL_REPLICATION_PASSWORD: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - 13306:3306
@@ -47,6 +50,11 @@ services:
       - --log-bin=mysql-bin
       - --server-id=1
       - --character-set-server=utf8mb4
+      # - --binlog-do-db=dbname
+      # - --binlog-do-db=dbname
+      # - --binlog_ignore_db=dbname
+      # - --binlog_ignore_db=dbname
+      - --skip-character-set-client-handshake
     deploy:
       placement:
         constraints: [node.role == manager]
@@ -88,8 +96,11 @@ services:
 
   mysql_node-1:
     image: mysql:8.0.3
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
+      MYSQL_REPLICATION_USER: replication
+      MYSQL_REPLICATION_PASSWORD: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - "13307:3306"
@@ -98,6 +109,8 @@ services:
     command:
       - --server-id=10
       - --character-set-server=utf8mb4
+      - --slave-skip-errors=all
+      - --skip-character-set-client-handshake
     deploy:
       replicas: 1
       restart_policy:
@@ -137,8 +150,11 @@ services:
 
   mysql_node-2:
     image: mysql:8.0.3
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
+      MYSQL_REPLICATION_USER: replication
+      MYSQL_REPLICATION_PASSWORD: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - "13308:3306"
@@ -147,6 +163,8 @@ services:
     command:
       - --server-id=20
       - --character-set-server=utf8mb4
+      - --slave-skip-errors=all
+      - --skip-character-set-client-handshake
     deploy:
       replicas: 1
       restart_policy:
