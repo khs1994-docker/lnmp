@@ -5,6 +5,8 @@
 
 [mysqld_safe]
 
+default-character-set = utf8mb4
+
 [mysqld]
 
 skip-host-cache
@@ -21,7 +23,6 @@ skip-name-resolve
 
 log_timestamps=SYSTEM
 
-character-set-client-handshake = FALSE
 character-set-server = utf8mb4
 collation-server = utf8mb4_unicode_ci
 init_connect='SET NAMES utf8mb4'
@@ -62,3 +63,5 @@ default-character-set = utf8mb4
 [mysql]
 
 default-character-set = utf8mb4
+
+[mysqldump]

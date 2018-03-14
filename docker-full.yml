@@ -5,7 +5,6 @@ services:
   #
   # ./lnmp-docker.sh/ps1 full-up nginx
   # ./lnmp-docker.sh/ps1 full-up httpd
-  # 该文件包含了所有服务（软件），使用 full-up 即可方便的启动某个软件
   #
   mysql:
     # restart: always
@@ -148,7 +147,7 @@ services:
     ports:
       - "${POSTGRESQL_PORT}:5432"
     secrets:
-      # 默认与 mysql 密码一致。
+      # default is mysql password
       - db_root_password
     labels:
       - "com.khs1994.lnmp=true"
@@ -175,6 +174,7 @@ services:
 
   php7:
     # restart: always
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
     volumes:
       - ./app:${LNMP_PHP_PATH}
       - ./config/php/php-fpm.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro

@@ -2,39 +2,34 @@ version: "3.5"
 
 services:
   #
-  # 单节点 Swarm mode 集群
+  # Swarm mode
   #
-  # khs1994.com Docker Swarm mode 最佳实践
+  # khs1994.com Docker Swarm mode
   #
-  # 开发环境构建镜像
   #
   # $ docker-compose -f docker-production.yml build
   # $ docker-compose -f docker-production.yml push
   #
-  # 生产环境在集群部署
   #
   # $ docker stack deploy -c docker-production.yml lnmp
   # $ docker stack ps lnmp
   #
-  # 原则
   #
-  # 1. 尽可能减少 `volumes` 项
-  # 2. 配置文件放到 `configs` 项
-  # 3. 密码、密钥、证书等放到 `secrets` 项
-  # 4. 日志使用日志驱动（journald 等）接管，严禁写入文件
+  # 1. less `volumes`
+  # 2. config put `configs`
+  # 3. secrets put `secrets`
+  # 4. use log driver journald
   #
-  # 注意
   #
-  # 1. `docker stack deploy` 命令不支持在 compose 文件中使用变量
+  # 1. `docker stack deploy` not support env
   #
-  # 二次修改
   #
-  # 严禁修改此文件
+  # Don't edit this file
   #
   # $ cp docker-production.yml docker-production.khs1994.yml
   #
-  # 然后基于 `docker-production.khs1994.yml` 自行调整配置
-  # 本项目 CLI swarm-* 命令优先读取 `docker-production.*.yml` 文件
+  # Then Edit `docker-production.*.yml`
+  #
 
   mysql:
     build:
@@ -66,7 +61,6 @@ services:
       driver: journald
     deploy:
       placement:
-        # 在管理节点运行
         constraints: [node.role == manager]
       restart_policy:
         condition: any
@@ -312,7 +306,7 @@ services:
   #   logging:
   #     driver: journald
   #   secrets:
-  #     # 默认与 mysql 密码一致。
+  #     # default is mysql password
   #     - db_root_password
   #   labels:
   #     - "com.khs1994.lnmp=true"
@@ -478,9 +472,7 @@ services:
         # gid: '103'
         # mode: 0440
       #
-      # 一个域名一个子配置文件
-      # 例如 *.khs1994.com *.developer.khs1994.com 均放到一个子配置文件中
-      # *.khs1994.com.cn 放到另外一个子配置文件中
+      # one domain one conf file
       #
       # - source: nginx_khs1994_com_conf
       #   target: /etc/nginx/conf.d/khs1994.com.conf
@@ -496,10 +488,6 @@ services:
       # - source: nginx_domain_com_conf
       #   target: /etc/nginx/conf.d/domain.com.conf
     # secrets:
-      #
-      # *.khs1994.com 两个证书密钥
-      # *.developer.khs1994.com 两个证书密钥
-      # 以此类推
       #
       # - source: khs1994_com_ssl_crt
       #   target: /etc/nginx/conf.d/ssl/khs1994.com.crt
@@ -758,8 +746,7 @@ secrets:
   #     - "com.khs1994.lnmp.nginx=true"
   #
   #
-  # SSH 相关文件 CI/CD 专用
-  # 务必自行调整 ssh id_rsa 路径（绝对路径）
+  # SSH use in  CI/CD
   #
   #
   ssh_id_rsa:
@@ -769,7 +756,7 @@ secrets:
       - "com.khs1994.lnmp.app.env=production_swarm_mode"
       - "com.khs1994.lnmp.ssh=true"
   #
-  # SSH 配置不验证密钥
+  # SSH config
   #
   ssh_config:
     file: ./secrets/ssh_config

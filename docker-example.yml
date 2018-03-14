@@ -17,7 +17,7 @@ services:
         com.khs1994.lnmp.description: "Self Build Redis"
       shm_size: '2gb' # 3.5
       #
-      # Dockerfile 多阶段构建，构建到指定阶段
+      # Dockerfile target
       #
       target: prod
     image: soft:alpine
@@ -38,7 +38,7 @@ services:
         mode: '0440'
       - my_other_config
     cgroup_parent: m-executor-abcd
-    container_name: my-web-container # 不建议使用
+    # container_name: my-web-container
     credential_spec:
       file: my-credential-spec.json
     deploy:
@@ -110,10 +110,10 @@ services:
     expose:
       - "3000"
       - "8000"
-    external_links: # 不建议使用
-      - redis_1
-      - project_db_1:mysql
-      - project_db_1:postgresql
+    # external_links:
+    #   - redis_1
+    #   - project_db_1:mysql
+    #   - project_db_1:postgresql
     extra_hosts:
       - "somehost:162.242.195.82"
       - "otherhost:50.31.209.229"
@@ -128,8 +128,8 @@ services:
     isolation: default # windows process hyperv
     labels:
        com.khs1994.lnmp.redis: true
-    links: # 不建议使用
-       - mysql
+    # links:
+    #    - mysql
     logging:
        driver: syslog # json-file none journald
        options:
@@ -249,8 +249,6 @@ configs:
   #
   # 3.5
   #
-  # 使用外部 configs 并且指定名字
-  #
   my_other_config:
     external: true
     name: redis_config
@@ -262,8 +260,6 @@ secrets:
       - "com.khs1994.lnmp=true"
   #
   # 3.5
-  #
-  # 使用外部 secrets 并且指定名字
   #
   my_second_secret:
     external: true
@@ -283,8 +279,6 @@ networks:
 
   #
   # 3.5
-  #
-  # 使用外部 networks 并且指定名字
   #
   outside:
     external: true
@@ -310,8 +304,6 @@ volumes:
       - "com.khs1994.lnmp=true"
   #
   # 3.5
-  #
-  # 使用外部 volume 并且指定名字
   #
   data:
     external: true

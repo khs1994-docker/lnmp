@@ -3,7 +3,6 @@ services:
 
   mysql:
     restart: always
-    # 此处定义的是自行构建镜像的前缀
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/mysql:${KHS1994_LNMP_MYSQL_VERSION}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -84,7 +83,7 @@ services:
         target: /var/log/redis
         read_only: false
       - zoneinfo-data:/usr/share/zoneinfo
-    # 建议将保证不会变的配置项使用命令参数载入
+    # set config by command
     command: [
       "redis-server",
       "/redis.conf",
@@ -144,7 +143,7 @@ services:
   #   ports:
   #     - "${POSTGRESQL_PORT}:5432"
   #   secrets:
-  #     # 默认与 mysql 密码一致。
+  #     # default is mysql password
   #     - db_root_password
   #   labels:
   #     - "com.khs1994.lnmp=true"
@@ -176,7 +175,7 @@ services:
     volumes:
       - ./app:${LNMP_PHP_PATH}
       #
-      # php-fpm 配置项统一在 zz-docker.conf 一个文件中配置，其作为最后一个配置文件，会重写前边重复的配置
+      # php-fpm config set in zz-docker.conf one file
       #
       - ./config/php/php-fpm.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
