@@ -1,4 +1,9 @@
 version: "3.5"
+
+x-labels:
+  &default-labels
+  com.khs1994.lnmp: "true"
+
 services:
   #
   # ARM
@@ -54,8 +59,8 @@ services:
       "--bind 0.0.0.0"
       ]
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.redis=true"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
 
   memcached:
     # build:

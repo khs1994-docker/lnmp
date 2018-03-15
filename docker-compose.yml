@@ -1,4 +1,10 @@
 version: "3.5"
+
+x-labels:
+  &default-labels
+  com.khs1994.lnmp: "true"
+  com.khs1994.lnmp.app.env: development
+
 services:
 
   mysql:
@@ -27,9 +33,8 @@ services:
     secrets:
       - db_root_password
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.mysql=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
 
   # mariadb:
   #   # restart: always
@@ -57,9 +62,8 @@ services:
   #   secrets:
   #     - db_root_password
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.mariadb=true"
-  #     - "com.khs1994.lnmp.app.env=development"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mariadb: "true"
 
   redis:
     restart: always
@@ -92,9 +96,8 @@ services:
       "--bind 0.0.0.0"
       ]
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.redis=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
 
   # memcached:
   #   # restart: always
@@ -107,9 +110,8 @@ services:
   #   volumes:
   #     - zoneinfo-data:/usr/share/zoneinfo
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.memcached=true"
-  #     - "com.khs1994.lnmp.app.env=development"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.memcached: "true"
   #
   # rabbitmq:
   #   # restart: always
@@ -124,9 +126,8 @@ services:
   #   #   - "15672:15672"
   #   #   - "5672:5672"
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.rabbitmq=true"
-  #     - "com.khs1994.lnmp.app.env=development"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.rabbitmq: "true"
   #
   # postgresql:
   #   # restart: always
@@ -146,9 +147,8 @@ services:
   #     # default is mysql password
   #     - db_root_password
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.postgresql=true"
-  #     - "com.khs1994.lnmp.app.env=development"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.postgresql: "true"
   #
   # mongodb:
   #   # restart: always
@@ -164,9 +164,9 @@ services:
   #     - "${MONGODB_PORT}27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.mongodb=true"
-  #     - "com.khs1994.lnmp.app.env=development"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mongodb: "true"
+
 
   php7:
     restart: always
@@ -198,9 +198,8 @@ services:
       - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Pull Docker Image
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.php=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.php: "true"
 
   phpmyadmin:
     image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/phpmyadmin:{KHS1994_LNMP_PHPMYADMIN_VERSION}
@@ -214,9 +213,8 @@ services:
     volumes:
       - phpmyadmin-data:/sessions
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.phpmyadmin=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.phpmyadmin: "true"
 
   nginx:
     restart: always
@@ -243,9 +241,8 @@ services:
     depends_on:
       - php7
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.nginx=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
 
   # httpd:
   #   # restart: always
@@ -267,73 +264,60 @@ services:
   #   depends_on:
   #     - php7
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.httpd=true"
-  #     - "com.khs1994.lnmp.app.env=development"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.httpd=true"
 
 networks:
   frontend:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.frontend=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.frontend: "true"
   backend:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.backend=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.backend: "true"
 
 volumes:
   mysql-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.mysql=true"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
   # mariadb-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=development"
-  #     - "com.khs1994.lnmp.mariadb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mariadb: "true"
   redis-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.redis=true"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
   # rabbitmq-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=development"
-  #     - "com.khs1994.lnmp.rabbitmq=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.rabbitmq: "true"
   # postgresql-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=development"
-  #     - "com.khs1994.lnmp.postgresql=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.postgresql: "true"
   # mongodb-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=development"
-  #     - "com.khs1994.lnmp.mongodb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mongodb: "true"
   zoneinfo-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.zoneinfo=true"
+      << : *default-labels
+      com.khs1994.lnmp.zoneinfo: "true"
   # registry-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=development"
-  #     - "com.khs1994.lnmp.registry=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.registry: "true"
   phpmyadmin-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.phpmyadmin=true"
+      << : *default-labels
+      com.khs1994.lnmp.phpmyadmin: "true"
 
 secrets:
   db_root_password:
     file: secrets/db_root_password.txt
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.mysql=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.app.env: "development"

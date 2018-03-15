@@ -1,5 +1,26 @@
 version: "3.5"
 
+x-logging:
+  &default-logging
+  driver: journald
+
+x-deploy:
+  &default-deploy
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-labels:
+  &default-labels
+  com.khs1994.lnmp: "true"
+  com.khs1994.lnmp.app.env: production_swarm_mode
+
 services:
   #
   # Swarm mode
@@ -57,20 +78,11 @@ services:
       - mysql-data:/var/lib/mysql:rw
       # - ./config/mysql/conf.production.d:/etc/mysql/conf.d:ro
     command: ["mysqld","--character-set-server=utf8mb4"]
-    logging:
-      driver: journald
+    logging: *default-logging
     deploy:
+      << : *default-deploy
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -79,9 +91,8 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
       labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.app.env=production_swarm_mode"
-        - "com.khs1994.lnmp.mysql=true"
+        << : *default-labels
+        com.khs1994.lnmp.mysql: "true"
     secrets:
       - source: db_root_password
         target: /etc/db_root_password
@@ -89,9 +100,8 @@ services:
       - source: mysql_conf_d_docker_cnf
         target: /etc/mysql/conf.d/docker.cnf
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.mysql=true"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
 
   # mariadb:
   #   build:
@@ -123,28 +133,18 @@ services:
   #     - mysqld
   #     - --character-set-server=utf8mb4
   #   deploy:
+  #     << : *default-deploy
   #     placement:
   #       constraints: [node.role == manager]
-  #     restart_policy:
-  #       condition: any
-  #       delay: 5s
-  #       max_attempts: 5
-  #       window: 123s
-  #     update_config:
-  #       parallelism: 2
-  #       delay: 10s
-  #       order: stop-first
-  #   logging:
-  #     driver: journald
+  #   logging: *default-logging
   #   secrets:
   #     - db_root_password
   #   configs:
   #     - source: mariadb_conf_d_docker_cnf
   #       target: /etc/mysql/conf.d/docker.cnf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.mariadb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mariadb: "true"
 
   redis:
     build:
@@ -169,32 +169,21 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0"
       ]
-    logging:
-      driver: journald
+    logging: *default-logging
     deploy:
+      << : *default-deploy
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.app.env=production_swarm_mode"
-        - "com.khs1994.lnmp.redis=true"
+        << : *default-labels
+        com.khs1994.lnmp.redis: "true"
     configs:
       - source: redis_conf
         target: /redis.conf
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.redis=true"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
 
   # memcached:
   #   build:
@@ -214,23 +203,13 @@ services:
   #   volumes:
   #     - zoneinfo-data:/usr/share/zoneinfo:rw
   #   deploy:
+  #     << : *default-deploy
   #     placement:
   #       constraints: [node.role == manager]
-  #     restart_policy:
-  #       condition: any
-  #       delay: 5s
-  #       max_attempts: 5
-  #       window: 123s
-  #     update_config:
-  #       parallelism: 2
-  #       delay: 10s
-  #       order: stop-first
-  #   logging:
-  #     driver: journald
+  #   logging: *default-logging
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.memcached=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.memcached: "true"
 
   # rabbitmq:
   #   build:
@@ -252,23 +231,13 @@ services:
   #   #   - "127.0.0.1:15672:15672"
   #   #   - "127.0.0.1:5672:5672"
   #   deploy:
+  #     << : *default-deploy
   #     placement:
   #       constraints: [node.role == manager]
-  #     restart_policy:
-  #       condition: any
-  #       delay: 5s
-  #       max_attempts: 5
-  #       window: 123s
-  #     update_config:
-  #       parallelism: 2
-  #       delay: 10s
-  #       order: stop-first
-  #   logging:
-  #     driver: journald
+  #   logging: *default-logging
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.rabbitmq=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.rabbitmq: "true"
 
   # postgresql:
   #   build:
@@ -292,26 +261,16 @@ services:
   #   # ports:
   #   #   - "127.0.0.1:5432:5432"
   #   deploy:
+  #     << : *default-deploy
   #     placement:
   #       constraints: [node.role == manager]
-  #     restart_policy:
-  #       condition: any
-  #       delay: 5s
-  #       max_attempts: 5
-  #       window: 123s
-  #     update_config:
-  #       parallelism: 2
-  #       delay: 10s
-  #       order: stop-first
-  #   logging:
-  #     driver: journald
+  #   logging: *default-logging
   #   secrets:
   #     # default is mysql password
   #     - db_root_password
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.postgresql=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.postgresql: "true"
 
   # mongodb:
   #   build:
@@ -330,19 +289,10 @@ services:
   #   networks:
   #     - backend
   #   deploy:
+  #     << : *default-deploy
   #     placement:
   #       constraints: [node.role == manager]
-  #     restart_policy:
-  #       condition: any
-  #       delay: 5s
-  #       max_attempts: 5
-  #       window: 123s
-  #     update_config:
-  #       parallelism: 2
-  #       delay: 10s
-  #       order: stop-first
-  #   logging:
-  #     driver: journald
+  #   logging: *default-logging
   #   # ports:
   #   #    - "127.0.0.1:27017:27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
@@ -350,9 +300,8 @@ services:
   #     - source: mongod_conf
   #       target: /etc/mongod.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.mongodb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mongodb: "true"
 
   php7:
     build:
@@ -389,25 +338,15 @@ services:
     depends_on:
       - mysql
       - redis
-    logging:
-      driver: journald
+    logging: *default-logging
     deploy:
+      << : *default-deploy
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.app.env=production_swarm_mode"
-        - "com.khs1994.lnmp.php7=true"
+        << : *default-labels
+        com.khs1994.lnmp.php7: "true"
     configs:
       - source: php_ini
         target: /usr/local/etc/php/php.ini
@@ -420,9 +359,8 @@ services:
       - source: ssh_config
         target: /root/.ssh/config
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.php7=true"
+      << : *default-labels
+      com.khs1994.lnmp.php7: "true"
 
   nginx:
     build:
@@ -446,25 +384,15 @@ services:
       - frontend
     depends_on:
       - php7
-    logging:
-      driver: journald
+    logging: *default-logging
     deploy:
+      << : *default-deploy
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.app.env=production_swarm_mode"
-        - "com.khs1994.lnmp.nginx=true"
+        << : *default-labels
+        com.khs1994.lnmp.nginx: "true"
     configs:
       - source: nginx_conf
         target: /etc/nginx/nginx.conf
@@ -515,9 +443,8 @@ services:
     #   retries: 3
     #   start_period: 40s
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.nginx=true"
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
 
   # httpd:
   #   build:
@@ -544,20 +471,11 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
-  #   logging:
-  #     driver: journald
+  #   logging: *default-logging
   #   deploy:
+  #     << : *default-deploy
   #     placement:
   #       constraints: [node.role == manager]
-  #     restart_policy:
-  #       condition: any
-  #       delay: 5s
-  #       max_attempts: 5
-  #       window: 123s
-  #     update_config:
-  #       parallelism: 2
-  #       delay: 10s
-  #       order: stop-first
   #   configs:
   #     - source: httpd_conf
   #       target: /usr/local/apache2/conf/httpd.conf
@@ -589,9 +507,8 @@ services:
   #     # - source: domain_com_ssl_key
   #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.httpd=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.httpd: "true"
 
   # registry:
   #   build:
@@ -612,120 +529,95 @@ services:
   #     # - ./config/registry:/etc/docker/registry
   #     - registry-data:/var/lib/registry
   #   deploy:
+  #     << : *default-deploy
   #     placement:
   #       constraints: [node.role == manager]
-  #     restart_policy:
-  #       condition: any
-  #       delay: 5s
-  #       max_attempts: 5
-  #       window: 123s
-  #     update_config:
-  #       parallelism: 2
-  #       delay: 10s
-  #       order: stop-first
   #     labels:
-  #       - "com.khs1994.lnmp.mysql=true"
-  #   logging:
-  #     driver: journald
+  #       << : *default-labels
+  #       com.khs1994.lnmp.mysql: "true"
+  #   logging: *default-logging
   #   configs:
   #     - source: registy_yml
   #       target: /etc/docker/registry/config.yml
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.httpd=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.httpd: "true"
 
 networks:
   frontend:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.frontend=true"
+      << : *default-labels
+      com.khs1994.lnmp.frontend: "true"
   backend:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.backend=true"
+      << : *default-labels
+      com.khs1994.lnmp.backend: "true"
 
 volumes:
   mysql-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.mysql=true"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
   # mariadb-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.mariadb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mariadb: "true"
   redis-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.redis=true"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
   # rabbitmq-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.rabbitmq=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.rabbitmq: "true"
   # postgresql-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.postgresql=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.postgresql: "true"
   # mongodb-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.mongodb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mongodb: "true"
   zoneinfo-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.zoneinfo=true"
+      << : *default-labels
+      com.khs1994.lnmp.zoneinfo: "true"
   # registry-data:
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.registry=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.registry: "true"
 
 secrets:
   db_root_password:
     file: secrets/db_root_password.txt
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.mysql=true"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
   # khs1994_com_ssl_key:
   #   file: ./config/nginx/ssl/khs1994.com.key
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   # khs1994_com_ssl_crt:
   #   file: ./config/nginx/ssl/khs1994.com.crt
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   # developer_khs1994_com_ssl_crt:
   #   file: ./config/nginx/ssl/developer.khs1994.com.crt
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   # developer_khs1994_com_ssl_key:
   #   file: ./config/nginx/ssl/developer.khs1994.com.key
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   # auth_htpasswd:
   #   file: ./config/nginx/auth/nginx.htpasswd
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   #
   #
   # Example Don't Edit
@@ -734,16 +626,14 @@ secrets:
   # domain_com_ssl_key:
   #   file: ./config/nginx/ssl/domain.com.key
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   #
   # domain_com_ssl_crt:
   #   file: ./config/nginx/ssl/domain.com.crt
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   #
   #
   # SSH use in  CI/CD
@@ -752,56 +642,48 @@ secrets:
   ssh_id_rsa:
     file: /root/.ssh/id_rsa
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.ssh=true"
+      << : *default-labels
+      com.khs1994.lnmp.ssh: "true"
   #
   # SSH config
   #
   ssh_config:
     file: ./secrets/ssh_config
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.ssh=true"
+      << : *default-labels
+      com.khs1994.lnmp.ssh: "true"
 
 configs:
   mysql_conf_d_docker_cnf:
     file: ./config/mysql/conf.production.d/docker.cnf
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.mysql=true"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
   # mariadb_conf_d_docker_cnf:
   #   file: ./config/mariadb/conf.production.d/docker.cnf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.mariadb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mariadb: "true"
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.nginx=true"
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
   # nginx_80_conf:
   #   file: ./config/nginx/conf.d/80.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   # nginx_301_conf:
   #   file: ./config/nginx/conf.d/301.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   # nginx_khs1994_com_conf:
   #   file ./config/nginx/conf.d/khs1994.com.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   #
   #
   # NGINX Example Don't Edit
@@ -810,22 +692,22 @@ configs:
   # nginx_domain_com_conf:
   #   file ./config/nginx/conf.d/domain.com.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.nginx=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   #
   # httpd_conf:
   #   file: ./config/etc/httpd/httpd.production.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.httpd=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.httpd: "true"
+  #
+  #
+  #
   # vhost_khs1994_com_conf:
   #   file: ./config/httpd/khs1994.com.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.httpd=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.httpd: "true"
   #
   #
   # Apache Example Don't Edit
@@ -834,36 +716,30 @@ configs:
   # vhost_domain_com_conf:
   #   file: ./config/httpd/domain.com.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.httpd=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.httpd: "true"
   php_ini:
     file: ./config/php/php.production.ini
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.php7=true"
+      << : *default-labels
+      com.khs1994.lnmp.php7: "true"
   php_fpm_conf_d_zz_docker_conf:
     file: ./config/php/php-fpm.production.d/zz-docker.conf
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.php7=true"
+      << : *default-labels
+      com.khs1994.lnmp.php7: "true"
   redis_conf:
     file: ./config/redis/redis.production.conf
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=production_swarm_mode"
-      - "com.khs1994.lnmp.redis=true"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
   # mongod_conf:
   #   file: ./config/mongodb/mongod.production.conf
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.mongodb=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.mongodb: "true"
   # registy_yml:
   #   file: ./config/registry/config.production.yml
   #   labels:
-  #     - "com.khs1994.lnmp=true"
-  #     - "com.khs1994.lnmp.app.env=production_swarm_mode"
-  #     - "com.khs1994.lnmp.registry=true"
+  #     << : *default-labels
+  #     com.khs1994.lnmp.registry: "true"
