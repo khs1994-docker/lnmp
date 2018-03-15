@@ -687,32 +687,56 @@ server{
 acme(){
   exec docker run -it --rm \
          -v $PWD/config/nginx/ssl:/ssl \
-         --mount source=lnmp_ssl-data,target=/root/.acme.sh \
+         --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
          khs1994/acme:${ACME_VERSION} acme.sh "$@"
 }
 
 ssl(){
-  if [ -z "$DP_Id" ];then print_error "Please set DNS API ENV in .env file"; exit 1; fi
   if [ -z "$1" ];then
     exec echo "command example
 
-$ ./lnmp-docker.sh ssl khs1994.com
+$ ./lnmp-docker.sh ssl khs1994.com [--rsa] [--httpd] [--debug] [acme other parameters]
 
-$ ./lnmp-docker.sh ssl khs1994.com -d www.khs1994.com -d t.khs1994.com
-
-通配符证书（测试）
+通配符证书
 
 $ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d t.khs1994.com -d *.t.khs1994.com
+
+RSA 证书（默认 ECC 证书）
+
+$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com --rsa [--httpd] [--debug] [acme other parameters]
+
+HTTPD server
+
+$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com --httpd [--rsa] [--debug] [acme other parameters]
+
+ACME.sh help
+
+$ ./lnmp-docker.sh acme.sh
 "
   fi
+
+  for httpd in "$@"
+  do
+    if [ "${httpd}" = '--httpd' ];then
+      HTTPD=1
+    fi
+    if [ "${httpd}" = '--rsa' ];then
+      RSA=1
+    fi
+  done
+
+  command="$@"
+  command=${command[@]//'--rsa'/}
+  command=${command[@]//'--httpd'/}
+
   exec docker run -it --rm \
          -v $PWD/config/nginx/ssl:/ssl \
-         --mount source=lnmp_ssl-data,target=/root/.acme.sh \
+         --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
-         -e DP_Id=${DP_Id} \
-         -e DP_Key=${DP_Key} \
-         khs1994/acme:${ACME_VERSION} "$@"
+         -e HTTPD=${HTTPD:-0} \
+         -e RSA=${RSA:-0} \
+         khs1994/acme:${ACME_VERSION} "$command"
 }
 
 ssl_self(){
@@ -770,7 +794,6 @@ start(){
 # 入口文件
 
 main() {
-  tz
   logs
   local command=$1; shift
   case $command in

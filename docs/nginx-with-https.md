@@ -6,72 +6,77 @@
 
 你也可以使用以下命令申请（由 [acme.sh](https://github.com/Neilpang/acme.sh) 提供技术支持，感谢 [Let's Encrypt](https://letsencrypt.org/)）。
 
-## `dnspod.cn`
+## 通配符证书
 
->在使用之前，在 `.env` 文件中提前设置好 `dnspod.cn` api 相关变量
+Let's Encrypt 现已支持通过 DNS 验证来申请通配符证书，本例以通配符证书为例。
 
-```bash
-# [DNSPOD]
+## 确定域名的 DNS 服务商
 
-DP_Id=
-DP_Key=
-```
+在 https://github.com/Neilpang/acme.sh/tree/master/dnsapi 找到自己域名的 DNS 服务商代码，例如
 
-### 一次申请一个网站证书
+* `dnspod.cn` 代码为 `dns_dp`
 
-```bash
-$ ./lnmp-docker.sh ssl www.khs1994.com
-```
+* `GoDaddy.com` 代码为 `dns_gd`
 
-### 一次申请多个网站证书
+...
 
-```bash
-# 第一个网址不用加 -d，后边每个网址前必须加 -d 参数
+## 修改 .env 文件
 
-$ ./lnmp-docker.sh ssl www.khs1994.com -d test.khs1994.com
-```
+根据 DNS 服务商的不同，自行设置在 `.env` 文件设置相关变量
 
-## 其他 DNS 服务商
+* dnspod.cn
 
-请参照 `acme.sh` [支持文档](https://github.com/Neilpang/acme.sh/tree/master/dnsapi)，在 `.env` 文件中设置好必要的变量之后，使用 `acme.sh` 原始命令申请 SSL 证书。
+  ```bash
+  # [DNSPOD]
+  DNS_TYPE=dns_dp
 
-这里以 `GoDaddy.com` 为例，在 `.env` 文件中增加以下内容
+  DP_Id=
+  DP_Key=
+  ```
 
-```bash
-GD_Key=sdf...
-GD_Secret=sdf...
-```
+* GoDaddy.com
 
-执行以下命令，申请证书
+  ```bash
+  # DNS 服务商
+  DNS_TYPE=dns_gd
 
-```bash
-$ ./lnmp-docker.sh acme.sh \
-    --issue \
-    --dns dns_gd \
-    -d example.com \
-    -d www.example.com
-```
+  GD_Key=sdf...
+  GD_Secret=sdf...
+  ```
 
-执行以下命令，安装 SSL 证书(Nginx)
+...
 
-```bash
-$ ./lnmp-docker.sh acme.sh \
-    --install-cert \
-    -d example.com \
-    --key-file /ssl/example.com.key  \
-    --fullchain-file /ssl/example.com.cert
-```
+### 申请网站证书
 
-执行以下命令，安装 SSL 证书(Apache)
+除了 `acme.sh` 原始参数外，支持以下参数
+
+* `--httpd`
+
+* `--rsa`
 
 ```bash
-$ ./lnmp-docker.sh acme.sh \
-    --install-cert \
-    -d example.com \
-    --cert-file      /ssl/example.com.cert \
-    --key-file       /ssl/example.com.key \
-    --fullchain-file /ssl/fullchain.pem
+$ ./lnmp-docker.sh ssl example.com -d *.example.com -d t.example.com -d *.t.example.com [--debug]
 ```
+
+> 特别提示，`*.example.com` 的证书不支持 `example.com` 所以一个主域要写两次
+
+> 特别提示，第一个网址不用加 `-d` 参数，后面的需要加 `-d` 参数
+
+若你的网站服务器不是 NGINX 而是 HTTPD，那么请加上 `--httpd` 参数，即
+
+```bash
+$ ./lnmp-docker.sh ssl example.com -d *.example.com --httpd
+```
+
+默认申请 `ECC` 证书，你可以加上 `--rsa` 来申请 RSA 证书，即
+
+```bash
+$ ./lnmp-docker.sh ssl example.com -d *.example.com --rsa
+```
+
+### 生成证书的位置
+
+`./lnmp/config/nginx/ssl/*`
 
 ## 配置 nginx
 
