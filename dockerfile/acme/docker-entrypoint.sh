@@ -1,35 +1,5 @@
 #!/bin/sh
 
-export LE_WORKING_DIR="/root/.acme.sh"
-
-export PATH=/root/.acme.sh:$PATH
-
-alias acme.sh="/root/.acme.sh/acme.sh"
-
-issue(){
-  echo "正在申请证书 ..." ; echo
-  first=$1
-  shift
-  acme.sh --issue \
-          --debug \
-          --dns dns_dp \
-          --keylength ec-256 \
-          -d $first "$@"
-
-  if [ $? = 0 ];then install $first; fi
-}
-
-install(){
-  echo "开始转移证书到 /ssl ..." ; echo
-
-  acme.sh --install-cert \
-    --debug\
-    -d $1 \
-    --key-file /ssl/$1.key \
-    --fullchain-file /ssl/$1.crt \
-    --ecc
-}
-
 # 传入 bash sh
 
 if [ "$1" = bash ] || [ "$1" = sh ];then exec /bin/sh; fi
@@ -38,6 +8,58 @@ if [ "$1" = bash ] || [ "$1" = sh ];then exec /bin/sh; fi
 
 if [ "$1" = 'acme.sh' ];then exec "$@"; fi
 
-# 存在环境变量
+# SELF ENV
 
-if [ "$DNS_TYPE" = 'dns_dp' ];then issue "$@"; fi
+# HTTPD
+
+# RSA
+
+if [ "$RSA" = '0' ];then
+  # 是 ECC 证书
+  echo "ECC"; echo ; echo
+  unset RSA
+  ECC='--ecc'
+else
+  # 不是 ECC 证书
+  echo "RSA"; echo ; echo
+  RSA="--keylength 2048"
+  RSA_FILE='.rsa.'
+fi
+
+set -e
+
+issue(){
+  echo "正在申请证书 ..." ; echo;echo
+  first=$1
+  shift
+  acme.sh --issue \
+          --dns ${DNS_TYPE:-dns_dp} \
+          ${RSA:---keylength ec-256} \
+          -d $first "$@"
+
+  install $first
+}
+
+install(){
+  echo "开始转移证书到 /ssl ..." ; echo;echo
+
+  if [ "${HTTPD}" = '1' ];then
+    echo "HTTPD..."; echo; echo
+    acme.sh --install-cert \
+      -d $1 \
+      --cert-file  /ssl/$1${RSA_FILE:-.}crt  \
+      --key-file   /ssl/$1${RSA_FILE:-.}key  \
+      --fullchain-file /ssl/$1${RSA_FILE:-.}fullchain.crt \
+      ${ECC:- }
+
+  else
+    echo "NGINX..."; echo; echo
+    acme.sh --install-cert \
+      -d $1 \
+      --key-file /ssl/$1${RSA_FILE:-.}key \
+      --fullchain-file /ssl/$1${RSA_FILE:-.}crt \
+      ${ECC:- }
+  fi
+}
+
+issue "$@"
