@@ -1,24 +1,38 @@
 version: "3.5"
+
+#
+# self build image compose file
+#
+# $ cd dockerfile/soft
+#
+# $ cp Dockerfile.example Dockerfile
+#
+# $ cd ../../
+#
+# $ ./lnmp-docker.sh build [soft]
+#
+
+x-build:
+  &default-build
+  args:
+    ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
+
+x-common:
+  &default-common
+  labels:
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}=true"
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=self_build
+
 services:
-  # self build image compose file
-  #
-  # $ cd dockerfile/soft
-  #
-  # $ cp Dockerfile.example Dockerfile
-  #
-  # $ cd ../../
-  #
-  # $ ./lnmp-docker.sh build [soft]
-  #
+
   mysql:
+    << : *default-common
     build:
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
       args:
         DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
         DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
-    labels:
-      - "com.khs1994.lnmp.app.env=self_build"
 
   # mariadb:
   #   build:
@@ -32,45 +46,41 @@ services:
 
   redis:
     build:
+      << : *default-build
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-      args:
-        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
   php7:
     build:
+      << : *default-build
       context: ./dockerfile/php/
       cache_from:
         - khs1994/php-fpm:latest-alpine3.7
       dockerfile: Dockerfile
-      args:
-        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
       labels:
         com.khs1994.description: "Extend Official PHP_FPM Docker Image"
         com.khs1994.department: "Chinese"
         com.khs1994.label-with-empty-value: ""
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With Build Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05} x86_64 With Build Docker Image
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
   # rabbitmq:
   #   build:
+  #     << : *default-build
   #     context: ./dockerfile/rabbitmq/
   #     dockerfile: Dockerfile
-  #     args:
-  #       ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
   #   labels:
   #     - "com.khs1994.lnmp.app.env=self_build"
   #
   # postgresql:
   #   build:
+  #     << : *default-build
   #     context: ./dockerfile/postgresql/
   #     dockerfile: Dockerfile
-  #     args:
-  #       ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
   #   labels:
   #     - "com.khs1994.lnmp.app.env=self_build"
   #
@@ -86,28 +96,25 @@ services:
 
   nginx:
     build:
+      << : *default-build
       context: ./dockerfile/nginx/
       dockerfile: Dockerfile
-      args:
-        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
   # httpd:
   #   build:
+  #     << : *default-build
   #     context: ./dockerfile/httpd/
   #     dockerfile: Dockerfile
-  #     args:
-  #       ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
   #   labels:
   #     - "com.khs1994.lnmp.app.env=self_build"
 
   phpmyadmin:
     build:
+      << : *default-build
       context: ./dockerfile/phpmyadmin/
       dockerfile: Dockerfile
-      args:
-        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 

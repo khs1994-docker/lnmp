@@ -1,36 +1,53 @@
 version: "3.5"
 
+x-common:
+  &default-common
+  labels:
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}=true"
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
 services:
 
   mysql:
-    image: mysql:${KHS1994_LNMP_MYSQL_VERSION}
+    << : *default-common
+    image: mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}
 
   # mariadb:
-  #   image: mariadb:${KHS1994_LNMP_MYSQL_VERSION}
+  #   << : *default-common
+  #   image: mariadb:${KHS1994_LNMP_MYSQL_VERSION:-10.3}
 
   redis:
-    image: redis:${KHS1994_LNMP_REDIS_VERSION}-alpine
+    << : *default-common
+    image: redis:${KHS1994_LNMP_REDIS_VERSION:-4.0}-alpine
 
   # memcached:
-  #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
+  #   << : *default-common
+  #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
 
   # rabbitmq:
-  #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+  #   << : *default-common
+  #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
 
   # postgresql:
-  #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+  #   << : *default-common
+  #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
 
   # mongodb:
-  #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
+  #   << : *default-common
+  #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
 
   php7:
-    image: ${LNMP_DOCKER_IMAGE_PREFIX}/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7
+    << : *default-common
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php-fpm:${KHS1994_LNMP_PHP_VERSION:-7.2.3}-alpine3.7
 
   phpmyadmin:
+    << : *default-common
     image: phpmyadmin/phpmyadmin
 
   nginx:
-    image: ${LNMP_DOCKER_IMAGE_PREFIX}/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch
+    << : *default-common
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13}-tls1.3-stretch
 
   # httpd:
-  #   image: httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine
+  #   << : *default-common
+  #   image: httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine

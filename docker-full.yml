@@ -1,26 +1,40 @@
 version: "3.5"
 
+#
+# Usage
+#
+# ./lnmp-docker.sh/ps1 full-up nginx
+# ./lnmp-docker.sh/ps1 full-up httpd
+#
+
+x-common:
+  &default-common
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - backend
+  dns:
+    - ${DNS:-114.114.114.114}
+
+x-labels:
+  &default-labels
+  com.khs1994.lnmp: "true"
+  com.khs1994.lnmp.app.env: "full"
+
 services:
-  # Usage
-  #
-  # ./lnmp-docker.sh/ps1 full-up nginx
-  # ./lnmp-docker.sh/ps1 full-up httpd
-  #
+
   mysql:
-    # restart: always
-    image: "mysql:${KHS1994_LNMP_MYSQL_VERSION}"
+    << : *default-common
+    image: "mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
       # MYSQL_USER:
       # MYSQL_PASSWORD:
-    env_file: ./cli/timezone.env
-    networks:
-      - backend
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      - ./config/mysql/conf.d/${MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:/var/lib/mysql:rw
@@ -32,25 +46,21 @@ services:
     secrets:
       - db_root_password
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.mysql=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
 
   mariadb:
-    # restart: always
-    image: "mariadb:${KHS1994_LNMP_MARIADB_VERSION}"
+    << : *default-common
+    image: "mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
       # MYSQL_USER:
       # MYSQL_PASSWORD:
-    env_file: ./cli/timezone.env
     ports:
-      - "${MYSQL_PORT}:3306"
-    networks:
-      - backend
+      - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
+      - ./config/mariadb/conf.d/${MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mariadb-data:/var/lib/mysql:rw
@@ -62,20 +72,16 @@ services:
     secrets:
       - db_root_password
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.mariadb=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.mariadb: "true"
 
   redis:
-    # restart: always
-    image: "redis:${KHS1994_LNMP_REDIS_VERSION}-alpine"
-    env_file: ./cli/timezone.env
+    << : *default-common
+    image: "redis:${KHS1994_LNMP_REDIS_VERSION:-4.0}-alpine"
     ports:
-       - "${REDIS_PORT}:6379"
-    networks:
-      - backend
+       - "${REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
-      - ./config/redis/redis.conf:/redis.conf:ro
+      - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro
       # - redis-data:/data:rw
       - type: volume
         source: redis-data
@@ -96,91 +102,74 @@ services:
       "--bind 0.0.0.0"
       ]
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.redis=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
 
   memcached:
-    # restart: always
-    image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION}-alpine
-    networks:
-      - backend
-    env_file: ./cli/timezone.env
+    << : *default-common
+    image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
     ports:
-      - "${MEMCACHED_PORT}:11211"
+      - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
       - zoneinfo-data:/usr/share/zoneinfo
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.memcached=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.memcached: "true"
 
   rabbitmq:
-    # restart: always
-    image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION}-management-alpine
+    << : *default-common
+    image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq:rw
       - zoneinfo-data:/usr/share/zoneinfo
-    networks:
-      - backend
-    env_file: ./cli/timezone.env
     # ports:
     #   - "15672"
     #   - "5672"
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.rabbitmq=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.rabbitmq: "true"
 
   postgresql:
-    # restart: always
-    image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION}-alpine
+    << : *default-common
+    image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
     volumes:
       - zoneinfo-data:/usr/share/zoneinfo
       - postgresql-data:/var/lib/postgresql/data:rw
-    networks:
-      - backend
-    env_file: ./cli/timezone.env
     ports:
-      - "${POSTGRESQL_PORT}:5432"
+      - "${POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
     secrets:
       # default is mysql password
       - db_root_password
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.postgresql=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.postgresql: "true"
 
   mongodb:
-    # restart: always
-    image: mongo:${KHS1994_LNMP_MONGODB_VERSION}
-    env_file: ./cli/timezone.env
+    << : *default-common
+    image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
     volumes:
-      - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
+      - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
       - mongodb-data:/data/db:rw
       - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
-    networks:
-      - backend
     ports:
-       - "${MONGODB_PORT}:27017"
+       - "${MONGODB_PORT:-127.0.0.1:27017}:27017"
     command: ["mongod","--config","/etc/mongod.conf"]
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.mongodb=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.mongodb: "true"
 
   php7:
-    # restart: always
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX}/php:${KHS1994_LNMP_PHP_VERSION}-alpine3.7"
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${KHS1994_LNMP_PHP_VERSION:-7.2.3}-alpine3.7"
     volumes:
-      - ./app:${LNMP_PHP_PATH}
-      - ./config/php/php-fpm.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
-      - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
-      - ./config/php/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-      - ./config/php/php/conf.d/error-log.ini:/usr/local/etc/php/conf.d/error-log.ini:ro
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/php/php-fpm.d/${PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
+      - ./config/php/${PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
+      - ./config/php/php/conf.d/${XDEBUG_INI:-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./config/php/php/conf.d/${PHP_ERROR_INI:-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
     networks:
@@ -188,26 +177,21 @@ services:
       - backend
     expose:
       - "9000"
-    dns:
-      - ${DNS}
     command: php-fpm -R -F
     env_file:
       - ./cli/timezone.env
       - ./cli/.env
     environment:
       - APP_ENV=development
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION} x86_64 With FULL UP Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05} x86_64 With FULL UP Docker Image
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.php=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.php: "true"
 
   nginx:
-    # restart: always
-    # image: "nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine"
-    image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION}-tls1.3-stretch"
-    env_file:
-      - ./cli/timezone.env
+    << : *default-common
+    # image: "nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13}-alpine"
+    image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.9}-tls1.3-stretch"
     ports:
       - "443:443"
       - target: 80
@@ -215,12 +199,12 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - ./app:${LNMP_PHP_PATH}:rw
+      - ./app:${LNMP_PHP_PATH:-/app}:rw
       # - ./config/nginx:/etc/nginx/conf.d:ro
       - type: bind
-        source: ./config/nginx
+        source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
-      - ./config/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     working_dir: /app
     networks:
@@ -228,22 +212,19 @@ services:
     depends_on:
       - php7
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.nginx=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
 
   httpd:
-    # restart: always
-    image: "httpd:${KHS1994_LNMP_APACHE_VERSION}-alpine"
-    env_file:
-      - ./cli/timezone.env
+    << : *default-common
+    image: "httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine"
     ports:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:${LNMP_PHP_PATH}:rw
-      - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
-      - ./config/httpd:/usr/local/apache2/conf.d
+      - ./app:${LNMP_PHP_PATH:-/app}:rw
+      - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
+      - ./config/${HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d
       - ./logs/httpd:/usr/local/apache2/logs
       - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app
@@ -252,84 +233,71 @@ services:
     depends_on:
       - php7
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.httpd=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.httpd: "true"
 
   registry:
-    # restart: always
-    image: registry:${KHS1994_LNMP_REGISTRY_VERSION}
+    << : *default-common
+    image: registry:${KHS1994_LNMP_REGISTRY_VERSION:-latest}
     networks:
       - frontend
       - backend
     # ports:
     #   - "5000:5000"
     volumes:
-      - ./config/registry/config.yml:/etc/docker/registry/config.yml
+      - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml
       - registry-data:/var/lib/registry
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.registry=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.registry: "true"
 
 networks:
   frontend:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.frontend=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.frontend: "true"
   backend:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.backend=true"
-      - "com.khs1994.lnmp.app.env=development"
+      << : *default-labels
+      com.khs1994.lnmp.backend: "true"
 
 volumes:
   mysql-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.mysql=true"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"
   mariadb-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.mariadb=true"
+      << : *default-labels
+      com.khs1994.lnmp.mariadb: "true"
   redis-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.redis=true"
+      << : *default-labels
+      com.khs1994.lnmp.redis: "true"
   rabbitmq-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.rabbitmq=true"
+      << : *default-labels
+      com.khs1994.lnmp.rabbitmq: "true"
   postgresql-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=pdevelopment"
-      - "com.khs1994.lnmp.postgresql=true"
+      << : *default-labels
+      com.khs1994.lnmp.postgresql: "true"
   mongodb-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.mongodb=true"
+      << : *default-labels
+      com.khs1994.lnmp.mongodb: "true"
   zoneinfo-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.zoneinfo=true"
+      << : *default-labels
+      com.khs1994.lnmp.zoneinfo: "true"
   registry-data:
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.registry=true"
+      << : *default-labels
+      com.khs1994.lnmp.registry: "true"
 
 secrets:
   db_root_password:
     file: secrets/db_root_password.txt
     labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.app.env=development"
-      - "com.khs1994.lnmp.mysql=true"
+      << : *default-labels
+      com.khs1994.lnmp.mysql: "true"

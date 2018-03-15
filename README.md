@@ -12,6 +12,8 @@ Start LNMP In Less than 2 minutes Powered By Docker Compose.
 
 LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
+**Warning** Don't Edit Any Files except `.env`， [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
+
 ## Prerequisites
 
 To use LNMP Docker, you need:
