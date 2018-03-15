@@ -1,5 +1,9 @@
 version: "3.5"
 
+x-labels:
+  &default-labels
+  com.khs1994.lnmp: "true"
+
 services:
   #
   # Don't use this compose file
@@ -20,7 +24,7 @@ services:
       # Dockerfile target
       #
       target: prod
-    image: soft:alpine
+    image: soft:${VERSION:-1.0}-alpine
     cap_add:
       - ALL
     cap_drop:
@@ -63,8 +67,7 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-      labels:
-        - "com.khs1994.lnmp.redis=true"
+      labels: << : *default-labels
       resources:
         limits:
           cpus: '0.50'
@@ -244,8 +247,8 @@ services:
 configs:
   redis_conf:
     file: ./config/redis/redis.conf
-    labels:
-      - "com.khs1994.lnmp=true"
+    labels: << : *default-labels
+
   #
   # 3.5
   #
@@ -256,8 +259,7 @@ configs:
 secrets:
   my_secret:
     file: ./secrets/db_root_password
-    labels:
-      - "com.khs1994.lnmp=true"
+    labels: << : *default-labels
   #
   # 3.5
   #
@@ -290,8 +292,7 @@ networks:
       foo: "bar"
       baz: 1
     attachable: true
-    labels:
-      - "com.khs1994.lnmp=true"
+    labels: << : *default-labels
 
 volumes:
   redis-data:
@@ -300,8 +301,7 @@ volumes:
     driver_opts:
       foo: "bar"
       baz: 1
-    labels:
-      - "com.khs1994.lnmp=true"
+    labels: << : *default-labels
   #
   # 3.5
   #

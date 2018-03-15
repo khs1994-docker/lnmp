@@ -4,6 +4,13 @@ x-logging:
   &default-logging
   driver: journald
 
+x-common:
+  &default-common
+  env_file:
+    - ./cli/timezone.env
+  networks:
+    - backend
+
 x-deploy:
   &default-deploy
   restart_policy:
@@ -53,6 +60,7 @@ services:
   #
 
   mysql:
+    << : *default-common
     build:
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
@@ -62,14 +70,10 @@ services:
     # image: khs1994/lnmp-mysql:8.0.3
     #
     image: mysql:8.0.3
-    env_file:
-      - ./cli/timezone.env
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
       MYSQL_DATABASE: test
-    networks:
-      - backend
     # ports:
     #   - "127.0.0.1:3306:3306"
     volumes:
@@ -104,6 +108,7 @@ services:
       com.khs1994.lnmp.mysql: "true"
 
   # mariadb:
+  #   << : *default-common
   #   build:
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
@@ -118,11 +123,8 @@ services:
   #     MYSQL_DATABASE: test
   #     # MYSQL_USER:
   #     # MYSQL_PASSWORD:
-  #   env_file: ./cli/timezone.env
   #   # ports:
   #   #   - "127.0.0.1:3306:3306"
-  #   networks:
-  #     - backend
   #   volumes:
   #     # - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
   #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
@@ -147,6 +149,7 @@ services:
   #     com.khs1994.lnmp.mariadb: "true"
 
   redis:
+    << : *default-common
     build:
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
@@ -156,13 +159,10 @@ services:
     # image: khs1994/lnmp-redis:4.0.8
     #
     image: redis:4.0.8-alpine
-    env_file: ./cli/timezone.env
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
       - redis-data:/data:rw
-    networks:
-      - backend
     command: [
       "redis-server",
       "/redis.conf",
@@ -186,6 +186,7 @@ services:
       com.khs1994.lnmp.redis: "true"
 
   # memcached:
+  #   << : *default-common
   #   build:
   #     context: ./dockerfile/memcached/
   #     dockerfile: Dockerfile
@@ -195,9 +196,6 @@ services:
   #   # image: khs1994/lnmp-memcached:1.5.6
   #   #
   #   image: memcached:1.5.6-alpine
-  #   networks:
-  #     - backend
-  #   env_file: ./cli/timezone.env
   #   # ports:
   #   #   - "127.0.0.1:11211:11211"
   #   volumes:
@@ -212,6 +210,7 @@ services:
   #     com.khs1994.lnmp.memcached: "true"
 
   # rabbitmq:
+  #   << : *default-common
   #   build:
   #     context: ./dockerfile/rabbitmq/
   #     dockerfile: Dockerfile
@@ -224,9 +223,6 @@ services:
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq:rw
   #     - zoneinfo-data:/usr/share/zoneinfo:rw
-  #   networks:
-  #     - backend
-  #   env_file: ./cli/timezone.env
   #   # ports:
   #   #   - "127.0.0.1:15672:15672"
   #   #   - "127.0.0.1:5672:5672"
@@ -240,6 +236,7 @@ services:
   #     com.khs1994.lnmp.rabbitmq: "true"
 
   # postgresql:
+  #   << : *default-common
   #   build:
   #     context: ./dockerfile/postgresql/
   #     dockerfile: Dockerfile
@@ -255,9 +252,6 @@ services:
   #   volumes:
   #     - zoneinfo-data:/usr/share/zoneinfo:rw
   #     - postgresql-data:/var/lib/postgresql/data:rw
-  #   networks:
-  #     - backend
-  #   env_file: ./cli/timezone.env
   #   # ports:
   #   #   - "127.0.0.1:5432:5432"
   #   deploy:
@@ -273,6 +267,7 @@ services:
   #     com.khs1994.lnmp.postgresql: "true"
 
   # mongodb:
+  #   << : *default-common
   #   build:
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
@@ -282,12 +277,9 @@ services:
   #   # image: khs1994/lnmp-mongodb:3.7.2
   #   #
   #   image: mongo:3.7.2
-  #   env_file: ./cli/timezone.env
   #   volumes:
   #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db:rw
-  #   networks:
-  #     - backend
   #   deploy:
   #     << : *default-deploy
   #     placement:
@@ -304,6 +296,7 @@ services:
   #     com.khs1994.lnmp.mongodb: "true"
 
   php7:
+    << : *default-common
     build:
       # context: ./dockerfile/php/
       context: ./app/demo/
@@ -329,7 +322,6 @@ services:
       - frontend
       - backend
     command: php-fpm -R -F
-    env_file: ./cli/timezone.env
     environment:
       - APP_ENV=production
       - KHS1994_LNMP_DOCKER_VERSION=v18.05 x86_64 Docker Swarm
@@ -363,6 +355,7 @@ services:
       com.khs1994.lnmp.php7: "true"
 
   nginx:
+    << : *default-common
     build:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
@@ -373,7 +366,6 @@ services:
     # image: khs1994/lnmp-nginx:1.13.9
     #
     image: khs1994/nginx:1.13.9-tls1.3-stretch
-    env_file: ./cli/timezone.env
     ports:
       - "443:443"
       - "80:80"
@@ -447,6 +439,7 @@ services:
       com.khs1994.lnmp.nginx: "true"
 
   # httpd:
+  #   << : *default-common
   #   build:
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
@@ -456,8 +449,6 @@ services:
   #   # image: khs1994/lnmp-httpd:2.4.29
   #   #
   #   image: "httpd:2.4.29-alpine"
-  #   env_file:
-  #     - ./cli/timezone.env
   #   ports:
   #     - "443:443"
   #     - "80:80"
@@ -511,6 +502,7 @@ services:
   #     com.khs1994.lnmp.httpd: "true"
 
   # registry:
+  #   << : *default-common
   #   build:
   #     context: ./config/registry
   #     dockerfile: Dockerfile

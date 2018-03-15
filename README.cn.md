@@ -12,6 +12,8 @@
 
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
+**警告** 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？]([Why ?](https://github.com/khs1994-docker/lnmp/issues/238))
+
 ## 准备
 
 本项目需要以下软件：

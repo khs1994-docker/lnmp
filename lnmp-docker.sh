@@ -944,7 +944,7 @@ For information please run $ docker service update --help
     if [ ${ARCH} = 'x86_64' ];then
       docker-compose up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker exec -it $(docker container ls --format {{.ID}} -f label=com.khs1994.lnmp.nginx) nginx -t
+      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.nginx) nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
       docker-compose -f docker-arm.yml up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
@@ -990,25 +990,25 @@ For information please run $ docker service update --help
     ;;
 
   php-cli | php7-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.php) bash
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.php) bash
     ;;
 
   mongodb-cli | mongo-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mongodb) sh
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mongodb) sh
     ;;
 
   mariadb-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mariadb) sh
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mariadb) sh
     ;;
 
   mysql-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mysql) sh
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mysql) sh
     ;;
 
   *-cli )
     SERVICE=$(echo $command | cut -d '-' -f 1)
     run_docker;
-    exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.${SERVICE}) sh
+    exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.${SERVICE}) sh
     ;;
 
   *-logs | *-log )
@@ -1016,7 +1016,7 @@ For information please run $ docker service update --help
     if ! [ "${OS}" = 'Linux' ];then NOTSUPPORT; fi
 
     SERVICE=$(echo $command | cut -d '-' -f 1)
-    journalctl -u docker.service CONTAINER_ID=$(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.$SERVICE) "$@"
+    journalctl -u docker.service CONTAINER_ID=$(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.$SERVICE) "$@"
     ;;
 
   build-push )
@@ -1121,7 +1121,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     done
 
     if [ "$opt" = 'true' ];then
-      docker exec -it $(docker container ls --format {{.ID}} -f label=com.khs1994.lnmp.nginx) nginx -t || \
+      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.nginx) nginx -t || \
         (echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
 
       echo; print_info "nginx configuration file test is successful\n"
@@ -1164,7 +1164,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
      if [ -z $@ ];then
        print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node1|node2} {COMMAND}'
      fi
-     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.mysql=${NODE}) $COMMAND
+     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.mysql=${NODE}) $COMMAND
      ;;
 
   clusterkit-mysql-deploy )
@@ -1189,7 +1189,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         if [ -z $@ ];then
           print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master1|slave1} {COMMAND}'
         fi
-        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=${NODE}) $COMMAND
+        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.redis=${NODE}) $COMMAND
         ;;
 
   clusterkit-* )
