@@ -371,7 +371,7 @@ services:
       - "80:80"
     volumes:
       - ./app:/app:rw
-      - ./config/nginx:/etc/nginx/conf.d:ro
+      # - ./config/nginx:/etc/nginx/conf.d:ro
     networks:
       - frontend
     depends_on:
@@ -394,12 +394,14 @@ services:
       #
       # one domain one conf file
       #
-      # - source: nginx_khs1994_com_conf
-      #   target: /etc/nginx/conf.d/khs1994.com.conf
-      # - source: nginx_80_conf
-      #   target: /etc/nginx/conf.d/80.conf
-      # - source: nginx_301_conf
-      #   target: /etc/nginx/conf.d/301.conf
+      - source: nginx_80_conf
+        target: /etc/nginx/conf.d/80.conf
+      - source: nginx_301_conf
+        target: /etc/nginx/conf.d/301.conf
+      - source: nginx_ssl_conf
+        target: /etc/nginx/conf.d/ssl.config
+      - source: nginx_khs1994_com_conf
+        target: /etc/nginx/conf.d/khs1994.com.conf
       #
       #
       # Example Don't Edit
@@ -407,16 +409,30 @@ services:
       #
       # - source: nginx_domain_com_conf
       #   target: /etc/nginx/conf.d/domain.com.conf
-    # secrets:
+    secrets:
       #
-      # - source: khs1994_com_ssl_crt
-      #   target: /etc/nginx/conf.d/ssl/khs1994.com.crt
-      # - source: khs1994_com_ssl_key
-      #   target: /etc/nginx/conf.d/ssl/khs1994.com.key
+      # ECC + RSA
+      #
+      # @link https://github.com/khs1994-docker/lnmp/issues/239
+      #
+      - source: khs1994_com_ssl_crt
+        target: /etc/nginx/conf.d/ssl/khs1994.com.crt
+      - source: khs1994_com_ssl_key
+        target: /etc/nginx/conf.d/ssl/khs1994.com.key
+      - source: khs1994_com_ssl_rsa_crt
+        target: /etc/nginx/conf.d/ssl/khs1994.com.rsa.crt
+      - source: khs1994_com_ssl_rsa_key
+        target: /etc/nginx/conf.d/ssl/khs1994.com.rsa.key
       # - source: developer_khs1994_com_ssl_crt
       #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.crt
       # - source: developer_khs1994_com_ssl_key
       #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.key
+      # - source: developer_khs1994_com_ssl_rsa_crt
+      #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.rsa.crt
+      # - source: developer_khs1994_com_ssl_rsa_key
+      #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.rsa.key
+      #
+      #
       # - source: auth_htpasswd
       #   target: /etc/nginx/conf.d/auth/nginx.htpasswd
       #
@@ -424,10 +440,17 @@ services:
       # Example Don't Edit
       #
       #
+      #  ECC + RSA
+      #
+      #
       # - source: domain_com_ssl_crt
       #   target: /etc/nginx/conf.d/ssl/domain.com.crt
       # - source: domain_com_ssl_key
       #   target: /etc/nginx/conf.d/ssl/domain.com.key
+      # - source: domain_com_ssl_rsa_crt
+      #   target: /etc/nginx/conf.d/ssl/domain.com.rsa.crt
+      # - source: domain_com_ssl_rsa.key
+      #   target: /etc/nginx/conf.d/ssl/domain.com.rsa.key
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost"]
     #   interval: 1m30s
@@ -585,16 +608,35 @@ secrets:
     labels:
       << : *default-labels
       com.khs1994.lnmp.mysql: "true"
-  # khs1994_com_ssl_key:
-  #   file: ./config/nginx/ssl/khs1994.com.key
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
-  # khs1994_com_ssl_crt:
-  #   file: ./config/nginx/ssl/khs1994.com.crt
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+
+  #
+  #
+  # ECC + RSA
+  #
+  #
+
+  khs1994_com_ssl_key:
+    file: ./config/nginx/ssl/khs1994.com.key
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
+  khs1994_com_ssl_crt:
+    file: ./config/nginx/ssl/khs1994.com.crt
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
+  khs1994_com_ssl_rsa_key:
+    file: ./config/nginx/ssl/khs1994.com.rsa.key
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
+  khs1994_com_ssl_rsa_crt:
+    file: ./config/nginx/ssl/khs1994.com.rsa.crt
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
+
+  #
   # developer_khs1994_com_ssl_crt:
   #   file: ./config/nginx/ssl/developer.khs1994.com.crt
   #   labels:
@@ -605,6 +647,19 @@ secrets:
   #   labels:
   #     << : *default-labels
   #     com.khs1994.lnmp.nginx: "true"
+  #
+  # developer_khs1994_com_ssl_rsa_crt:
+  #   file: ./config/nginx/ssl/developer.khs1994.com.rsa.crt
+  #   labels:
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
+  # developer_khs1994_com_ssl_rsa_key:
+  #   file: ./config/nginx/ssl/developer.khs1994.com.rsa.key
+  #   labels:
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
+  #
+  #
   # auth_htpasswd:
   #   file: ./config/nginx/auth/nginx.htpasswd
   #   labels:
@@ -627,6 +682,17 @@ secrets:
   #     << : *default-labels
   #     com.khs1994.lnmp.nginx: "true"
   #
+  # domain_com_ssl_key:
+  #   file: ./config/nginx/ssl/domain.com.key
+  #   labels:
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
+  #
+  # domain_com_ssl_crt:
+  #   file: ./config/nginx/ssl/domain.com.crt
+  #   labels:
+  #     << : *default-labels
+  #     com.khs1994.lnmp.nginx: "true"
   #
   # SSH use in  CI/CD
   #
@@ -661,31 +727,38 @@ configs:
     labels:
       << : *default-labels
       com.khs1994.lnmp.nginx: "true"
-  # nginx_80_conf:
-  #   file: ./config/nginx/conf.d/80.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
-  # nginx_301_conf:
-  #   file: ./config/nginx/conf.d/301.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
-  # nginx_khs1994_com_conf:
-  #   file ./config/nginx/conf.d/khs1994.com.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  nginx_80_conf:
+    file: ./config/nginx/80.conf
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
+  nginx_301_conf:
+    file: ./config/nginx/301.conf
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
+  nginx_ssl_conf:
+    file: ./config/nginx/ssl.config
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
+  nginx_khs1994_com_conf:
+    file: ./config/nginx/khs1994.com.conf
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.nginx: "true"
   #
   #
   # NGINX Example Don't Edit
   #
   #
   # nginx_domain_com_conf:
-  #   file ./config/nginx/conf.d/domain.com.conf
+  #   file ./config/nginx/domain.com.conf
   #   labels:
   #     << : *default-labels
   #     com.khs1994.lnmp.nginx: "true"
+  #
+  #
   #
   # httpd_conf:
   #   file: ./config/etc/httpd/httpd.production.conf
