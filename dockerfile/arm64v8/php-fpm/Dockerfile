@@ -1,6 +1,14 @@
 FROM arm64v8/php:7.2.3-fpm-alpine3.7
 
-ENV TZ=Asia/Shanghai
+ARG PHP_VERSION=7.2.3
+
+FROM php:${PHP_VERSION}-fpm-alpine3.7
+
+ENV TZ=Asia/Shanghai \
+    APP_ENV=development
+
+# 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
+# 国内镜像地址在 docker-compose.yml 中定义
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -9,11 +17,12 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       # 新增的包
       && KHS1994_PHP_FPM_APKS=" \
                             git \
+                            # 以下两个均为版本控制系统
                             # subversion \
-                            openssh-client \
                             # mercurial \
-                            # tini \
+                            openssh-client \
                             bash \
+                            tini \
                             tzdata \
                             " \
       # 不要删除
@@ -26,7 +35,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
+                         yaml-dev \
                          " \
+        && apk add --no-cache linux-headers \
         && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
         && apk add --no-cache --virtual .khs1994-php-fpm-build_deps $KHS1994_PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure zip \
@@ -37,19 +48,28 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && docker-php-ext-install -j"$(nproc)" bcmath \
                                                pdo_pgsql \
                                                pdo_mysql \
-                                               opcache \
                                                zip \
                                                gd \
+                                               pcntl \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && pecl install mongodb \
+                        igbinary \
                         redis \
                         memcached \
+                        # 安装测试版的扩展，可以在扩展名后加 -beta
                         xdebug \
+                        yaml \
+                        swoole \
         && docker-php-ext-enable mongodb \
                                  redis \
                                  memcached \
                                  xdebug \
-        && apk del .build-deps \
+                                 yaml \
+                                 igbinary \
+                                 # opcache 已默认安装，需要自行载入
+                                 opcache \
+                                 swoole \
+        && apk del .build-deps linux-headers \
         && rm -rf /tmp/*
 
 # install composer
@@ -57,6 +77,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
     COMPOSER_VERSION=1.6.3 \
     PS1="[\u@\h \w]# "
+
+# https://github.com/composer/docker
 
 RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
@@ -71,6 +93,8 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && chmod +x /docker-entrypoint.composer.sh \
  # composer 中国镜像
  && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  # laravel 安装程序
@@ -85,7 +109,5 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && ln -sf /dev/stderr /var/log/php-fpm/error.log \
  && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
  && chmod -R 777 /var/log/php-fpm
-
-# RUN apk add --no-cache vim
 
 WORKDIR /app
