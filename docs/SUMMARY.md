@@ -2,8 +2,8 @@
 * [项目初衷](why.md)
 * [安装配置 Docker](docker.md)
 * 安装
-    * [Linux macOS](install.md)
-    * [Windows 10](windows.md)
+    * [Linux macOS](install/linux.md)
+    * [Windows 10](install/windows.md)
 * [项目初始化过程](init.md)
 * [路径说明](path.md)
 * [`lnmp-docker.sh`](cli.md)
@@ -11,6 +11,7 @@
     * [使用方法](development.md)
 * NGINX
     * [一键生成配置](nginx-config.md)
+    * [申请或自签发 SSL 证书](issue-ssl.md)
     * [HTTPS 配置](nginx-with-https.md)
 * [PHPer 常用命令容器化](command.md)
 * [软件配置](config.md)

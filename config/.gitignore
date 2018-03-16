@@ -1,0 +1,16 @@
+/*
+!.gitignore
+!etc
+!httpd
+!mariadb
+!mongodb
+!mysql
+!nginx
+!php
+!redis
+!registry
+!default.sh
+!docker-compose.yml
+!path.md
+!README.md
+!update.sh

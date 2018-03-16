@@ -145,12 +145,12 @@ _registry(){
 
   # SSL 相关
 
-  if [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
     print_warning "Docker Registry SSL not found, generating ...."
     ssl_self $KHS1994_LNMP_REGISTRY_HOST
   fi
 
-  if [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/nginx/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
     print_error "Docker Registry SSL error"
     exit 1
   else
@@ -159,7 +159,7 @@ _registry(){
 
   # 生成 密码 验证文件
 
-  if ! [ -f config/nginx/auth/docker_registry.htpasswd ];then
+  if ! [ -f config/${NGINX_CONF_D:-nginx}/auth/docker_registry.htpasswd ];then
     echo; print_info "First start, Please set username and password"
     read -p "username: " username
     if [ -z $username ];then echo; print_error "用户名不能为空"; exit 1; fi
@@ -174,22 +174,22 @@ _registry(){
     docker run --rm \
       --entrypoint htpasswd \
       registry \
-      -Bbn $username $password > config/nginx/auth/docker_registry.htpasswd
+      -Bbn $username $password > config/${NGINX_CONF_D:-nginx}/auth/docker_registry.htpasswd
       # 部分 nginx 可能不能解密，你可以替换为下面的命令
       # -mbn username password > auth/nginx.htpasswd \
   fi
 
   # NGINX 配置文件
 
-  if ! [ -f config/nginx/registry.conf ];then
-    if [ -f config/nginx/registry.conf.backup ];then
-      cp config/nginx/registry.conf.backup config/nginx/registry.conf
+  if ! [ -f config/${NGINX_CONF_D:-nginx}/${REGISTRY_CONF:-registry.conf} ];then
+    if [ -f config/${NGINX_CONF_D:-nginx}/registry.conf.backup ];then
+      cp config/${NGINX_CONF_D:-nginx}/registry.conf.backup config/${NGINX_CONF_D:-nginx}/registry.conf
     else
-      cp config/nginx/demo-registry.conf.backup config/nginx/registry.conf
+      cp config/${NGINX_CONF_D:-nginx}/demo-registry.conf.backup config/${NGINX_CONF_D:-nginx}/registry.conf
     fi
   fi
 
-  sed -i '' "s#KHS1994_DOMAIN#${KHS1994_LNMP_REGISTRY_HOST}#g" config/nginx/registry.conf
+  sed -i '' "s#KHS1994_DOMAIN#${KHS1994_LNMP_REGISTRY_HOST}#g" config/${NGINX_CONF_D:-nginx}/registry.conf
 
   exec docker-compose -f docker-full.yml -f docker-compose.override.yml up -d registry nginx
 }
@@ -197,7 +197,7 @@ _registry(){
 _registry_down(){
   docker-compose -f docker-full.yml -f docker-compose.override.yml stop registry
   docker-compose -f docker-full.yml -f docker-compose.override.yml rm -f registry
-  mv config/nginx/registry.conf config/nginx/registry.conf.backup
+  mv config/${NGINX_CONF_D:-nginx}/registry.conf config/${NGINX_CONF_D:-nginx}/registry.conf.backup
 }
 
 tz(){
@@ -303,7 +303,7 @@ cleanup(){
 }
 
 gitbook(){
-  docker rm -f lnmp-docs
+  docker rm -f lnmp-docs > /dev/null 2>&1 || echo
   exec docker run -it --rm \
     -p 4000:4000 \
     --name lnmp-docs \
@@ -577,7 +577,7 @@ server {
     fastcgi_pass   php7:9000;
     include        fastcgi.conf;
   }
-}" > config/nginx/$1.conf
+}" > config/${NGINX_CONF_D:-nginx}/$1.conf
 
 }
 
@@ -604,7 +604,7 @@ apache_http(){
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/httpd/$1.conf
+</VirtualHost>" >> config/${HTTPD_CONF_D:-httpd}/$1.conf
 }
 
 apache_https(){
@@ -637,7 +637,7 @@ apache_https(){
     Require all granted
   </Directory>
 
-</VirtualHost>" >> config/httpd/$1.conf
+</VirtualHost>" >> config/${HTTPD_CONF_D:-httpd}/$1.conf
 }
 
 nginx_https(){
@@ -678,7 +678,7 @@ server{
     fastcgi_pass   php7:9000;
     include        fastcgi.conf;
   }
-}" > config/nginx/$1.conf
+}" > config/${NGINX_CONF_D:-nginx}/$1.conf
 
 }
 
@@ -686,7 +686,7 @@ server{
 
 acme(){
   exec docker run -it --rm \
-         -v $PWD/config/nginx/ssl:/ssl \
+         -v $PWD/config/${NGINX_CONF_D:-nginx}/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
          khs1994/acme:${ACME_VERSION} acme.sh "$@"
@@ -731,7 +731,7 @@ $ ./lnmp-docker.sh acme.sh
   command=${command[@]//'--httpd'/}
 
   exec docker run -it --rm \
-         -v $PWD/config/nginx/ssl:/ssl \
+         -v $PWD/config/$(if [ "$HTTPD" = 1 ];then echo ${HTTPD_CONF_D:-httpd}; else echo ${NGINX_CONF_D:-nginx}; fi)/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
          -e HTTPD=${HTTPD:-0} \
@@ -740,7 +740,7 @@ $ ./lnmp-docker.sh acme.sh
 }
 
 ssl_self(){
-  docker run -it --rm -v $PWD/config/nginx/ssl:/ssl khs1994/tls "$@"
+  docker run -it --rm -v $PWD/config/${NGINX_CONF_D:-nginx}/ssl:/ssl khs1994/tls "$@"
 }
 
 # 快捷开始 PHP 项目开发
@@ -892,14 +892,14 @@ main() {
 Example:
 
 
-$ docker config create nginx_khs1994_com_conf_v2 config/nginx/khs1994.com.conf
+$ docker config create nginx_khs1994_com_conf_v2 config/${NGINX_CONF_D:-nginx}/khs1994.com.conf
 
 $ docker service update \\
     --config-rm nginx_khs1994_com_conf \\
     --config-add source=nginx_khs1994_com_conf_v2,target=/etc/nginx/conf.d/khs1994.com.conf \\
     lnmp_nginx
 
-$ docker secret create khs1994_com_ssl_crt_v2 config/nginx/ssl/khs1994.com.crt
+$ docker secret create khs1994_com_ssl_crt_v2 config/${NGINX_CONF_D:-nginx}/ssl/khs1994.com.crt
 
 $ docker service update \\
     --secret-rm khs1994_com_ssl_crt \\
@@ -976,7 +976,7 @@ For information please run $ docker service update --help
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
      if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
      echo
-     print_info "You must checkout ./config/nginx/$2.conf, then restart nginx"
+     print_info "You must checkout ./config/${NGINX_CONF_D:-nginx}/$2.conf, then restart nginx"
      ;;
 
   httpd-config )
@@ -986,7 +986,7 @@ For information please run $ docker service update --help
     if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
     if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
     echo
-    print_info "You must checkout ./config/httpd/$2.conf, then restart httpd"
+    print_info "You must checkout ./config/${HTTPD_CONF_D:-httpd}/$2.conf, then restart httpd"
     ;;
 
   php-cli | php7-cli )
