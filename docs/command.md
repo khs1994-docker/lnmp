@@ -4,6 +4,7 @@
 * `phpunit`  => `lnmp-phpunit`
 * `php CLI`  => `lnmp-php`
 * `laravel`  => `lnmp-laravel`
+* `lnmp-laravel5.5`
 
 > 为避免与原始命令冲突，这里加上了 `lnmp-` 前缀
 
@@ -51,6 +52,10 @@ $ lnmp-composer command
 $ lnmp-phpunit command
 
 $ lnmp-php command
+
+$ lnmp-laravel command # Laravel 5.6
+
+$ lnmp-laravel5.5 command # Laravel 5.5
 ```
 
 ### 最佳实践
@@ -79,10 +84,10 @@ $ cd my_laravel_app
 $ lnmp-php artisan
 ```
 
-#### 升级 `composer` 依赖
+#### 安装/升级 `composer` 依赖
 
 ```bash
 $ cd my_laravel_app
 
-$ lnmp-composer update
+$ lnmp-composer [install | update]
 ```

@@ -18,33 +18,46 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libmemcached-dev \
         libpq-dev \
         libzip-dev \
+        libyaml-dev \
 	" \
   && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
-	       && docker-php-ext-configure zip \
-				                             --with-libzip \
-         && docker-php-ext-configure gd \
-                                     --with-freetype-dir=/usr/include/ \
-                                     --with-jpeg-dir=/usr/include/ \
-    	   && docker-php-ext-install -j"$(nproc)" bcmath \
-				                                        pdo_pgsql \
-																							  pdo_mysql \
-																							  opcache \
-                                                zip \
-                                                gd \
-         && pecl install mongodb \
-				                 redis \
-												 memcached \
-												 xdebug \
-         && docker-php-ext-enable mongodb \
-				                          memcached \
-																	redis \
-																	xdebug \
-         && rm -rf /tmp/*
+        && docker-php-ext-configure zip \
+                                    --with-libzip \
+        && docker-php-ext-configure gd \
+                                    --with-freetype-dir=/usr/include/ \
+                                    --with-jpeg-dir=/usr/include/ \
+        && docker-php-ext-install -j"$(nproc)" bcmath \
+                                               pdo_pgsql \
+                                               pdo_mysql \
+                                               zip \
+                                               gd \
+                                               pcntl \
+        && pecl install mongodb \
+                        igbinary \
+                        redis \
+                        memcached \
+                        # 安装测试版的扩展，可以在扩展名后加 -beta
+                        xdebug \
+                        yaml \
+                        swoole \
+        && docker-php-ext-enable mongodb \
+                                 redis \
+                                 memcached \
+                                 xdebug \
+                                 yaml \
+                                 igbinary \
+                                 # opcache 已默认安装，需要自行载入
+                                 opcache \
+                                 swoole \
+        && rm -rf /tmp/*
 
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.6.3
+    COMPOSER_VERSION=1.6.3 \
+    PS1="[\u@\h \w]# "
+
+# https://github.com/composer/docker
 
 RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
@@ -59,6 +72,8 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && chmod +x /docker-entrypoint.composer.sh \
  # composer 中国镜像
  && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  # laravel 安装程序

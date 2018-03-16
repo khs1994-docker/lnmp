@@ -1,3 +1,11 @@
+# 本地路径和 Docker 内路径对应关系
+
+使用 Docker 新手首先可能遇到的是 `地址解析问题` 和 `路径配置问题`。
+
+* 例如错误的在配置文件中或程序代码中使用 `localhost` `127.0.0.1`
+
+* 错误的将本地地址写到配置文件中
+
 # Nginx
 
 |名称|本机|容器|
@@ -22,12 +30,10 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`php.ini`                  |`./config/php/php.ini`          |`/usr/local/etc/php/php.ini`                         |
-|`docker-php-ext-xdebug.ini`|`./config/php/conf.d/xdebug.ini`|`/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini`|
-|`php-fpm.conf`             |`./config/php/php-fpm.conf`     |`/usr/local/etc/php-fpm.conf`                        |
-|`php-fpm.d/`               |`./config/php/php-fpm.d`        |`/usr/local/etc/php-fpm.d`                           |
-|`docker.conf`              |`./config/php/docker.conf`      |`/usr/local/etc/php-fpm.d/docker.conf`               |
-|`app/`                     |`./app`                         |`/app`                                               |
+|`php.ini`                     |`./config/php/php.ini`                  |`/usr/local/etc/php/php.ini`                         |
+|`docker-php-ext-xdebug.ini`   |`./config/php/conf.d/xdebug.ini`        |`/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini`|
+|`php-fpm.d/zz-docker.conf`    |`./config/php/php-fpm.d/zz-docker.conf` |`/usr/local/etc/php-fpm.d/zz-docker.conf`            |
+|`app/`                        |`./app`                                 |`/app`                                               |
 
 ## Composer
 
@@ -50,8 +56,17 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`error.log`      |`./logs/mysql/error.log`|`/var/log/mysql/error.log`|
-|`/var/lib/mysql/`|`mysql-data`            |`/var/lib/mysql`|
+|`docker.cnf`       |`./config/mysql/conf.d/docker.cnf`|`/etc/mysql/conf.d/docker.cnf` |
+|`error.log`        |`./logs/mysql/error.log`          |`/var/log/mysql/error.log`     |
+|`/var/lib/mysql/`  |`mysql-data`                      |`/var/lib/mysql`               |
+
+## MariaDB
+
+|名称|本机|容器|
+|--|--|--|
+|`docker.cnf`       |`./config/mysql/conf.d/docker.cnf`|`/etc/mysql/conf.d/docker.cnf` |
+|`error.log`        |`./logs/mysql/error.log`          |`/var/log/mysql/error.log`     |
+|`/var/lib/mysql/`  |`mariadb-data`                      |`/var/lib/mysql`               |
 
 ## PostgreSQL
 

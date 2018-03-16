@@ -1,6 +1,8 @@
 # Windows 安装本项目
 
 ```bash
+$ cd $HOME
+
 # $ git config --global core.autocrlf input
 
 $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
@@ -17,6 +19,8 @@ $ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 ## 启动 Demo
 
 ```bash
+$ cd $HOME
+
 $ cd lnmp
 
 $ ./lnmp-docker.ps1 development

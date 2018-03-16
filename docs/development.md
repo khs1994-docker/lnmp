@@ -2,16 +2,15 @@
 
 ## 使用方法
 
-**1.** 在 `docker-compose.yml` 修改需要启用的软件
+**1.** 在 `docker-compose.yml` 修改需要启用的软件(可选项)
 
-**2.** 在 `.env` 修改镜像前缀、PHP 项目路径
+**2.** 在 `.env` 修改镜像前缀、PHP 项目路径(可选项)
 
 **3.** 克隆已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹
 
 **4.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件
 
    >可以使用 `./lnmp-docker.sh new` 交互式的填入 `项目路径` 和 `url` 来新建 PHP 项目文件及 nginx 配置文件。
-
 
    >可以使用 `./lnmp-docker.sh nginx-conf` 便捷的生成 nginx 配置文件。
 
@@ -23,11 +22,15 @@
 
 ### 再新建一个项目
 
-**1.** `./app` 新建项目文件，`./config/nginx/` 新增配置文件
+**1.** `./app` 新建项目文件夹，`./config/nginx/` 新增配置文件
 
 **2.** 执行 `./lnmp-docker.sh restart nginx` 重启 nginx
 
 **3.** `PhpStorm` 打开 `./app/你的又一个新项目` ，开始编写代码
+
+### 如何正确的自定义配置文件
+
+请查看 [这里](config.md)
 
 ## 自行构建镜像
 
