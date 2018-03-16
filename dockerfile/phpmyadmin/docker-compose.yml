@@ -1,9 +1,9 @@
 version: "3.5"
 services:
 
-  arm64v8-php-fpm:
+  phpmyadmin:
     build:
       context: .
       args:
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm64v8-php-fpm:${TAG:-7.2.3}-alpine3.7
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/phpmyadmin:${TAG:-latest}

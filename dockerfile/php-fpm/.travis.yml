@@ -18,6 +18,7 @@ before_install:
 - sudo mv docker-compose /usr/local/bin
 - docker-compose --version
 install:
+  - cp .env.example .env
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker-compose build ${PHP_VERSION}
   - docker-compose push ${PHP_VERSION}

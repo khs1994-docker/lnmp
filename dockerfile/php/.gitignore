@@ -1,3 +1,5 @@
 /*
+!.env.example
 !.gitignore
-!Dockerfile.example
+!docker-compose.yml
+!example.Dockerfile
