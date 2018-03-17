@@ -1008,15 +1008,15 @@ For information please run $ docker service update --help
     ;;
 
   mongodb-cli | mongo-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mongodb) sh
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mongodb) bash
     ;;
 
   mariadb-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mariadb) sh
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mariadb) bash
     ;;
 
   mysql-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mysql) sh
+    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mysql) bash
     ;;
 
   *-cli )

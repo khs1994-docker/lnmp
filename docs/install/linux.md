@@ -34,6 +34,10 @@ $ ./lnmp-docker.sh development
 
 浏览器打开 `127.0.0.1`，看到页面。
 
+## MySQL 默认 ROOT 密码
+
+`mytest`
+
 ## 更新
 
 ```bash

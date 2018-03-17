@@ -30,6 +30,14 @@
 
 > MariaDB 配置差不多，这里不再赘述。
 
+### MySQL 自定义初始的 ROOT 密码
+
+**1.** 在 `./secrets/` 新建 `*.txt` 文件，并写入密码。例如 `db.my.txt`
+
+**2.** 在 `.env` 文件中设置 `DB_ROOT_PASSWORD_PATH` 值为文件名，例如 `DB_ROOT_PASSWORD_PATH=db.my.txt`
+
+> 如果原来启动过，要么销毁（数据卷）之后重新启动，要么手动进入命令行修改密码。
+
 ## NGINX HTTPD
 
 这两个软件的配置文件较多，详细说明一下：

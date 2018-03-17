@@ -85,4 +85,4 @@ volumes:
 secrets:
   db_root_password:
     << : *default-common
-    file: ./secrets/db_root_password.txt
+    file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
