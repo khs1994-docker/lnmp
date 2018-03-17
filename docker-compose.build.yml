@@ -14,8 +14,16 @@ version: "3.5"
 
 x-build:
   &default-build
+  # Dockerfile: my.Dockerfile
   args:
     ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
+
+x-build-debian:
+  &default-build-debian
+  # Dockerfile: my.Dockerfile
+  args:
+    DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
+    DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
 x-common:
   &default-common
@@ -28,25 +36,22 @@ services:
   mysql:
     << : *default-common
     build:
+      << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-      args:
-        DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
-        DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
   # mariadb:
   #   << : *default-common
   #   build:
+  #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #     args:
-  #       DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
-  #       DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
   redis:
     << : *default-common
     build:
       << : *default-build
+      # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
 
@@ -54,6 +59,7 @@ services:
     << : *default-common
     build:
       << : *default-build
+      # << : *default-build-debian
       context: ./dockerfile/php/
       cache_from:
         - khs1994/php-fpm:latest-alpine3.7
@@ -69,6 +75,7 @@ services:
   #   << : *default-common
   #   build:
   #     << : *default-build
+  #     # << : *default-build-debian
   #     context: ./dockerfile/rabbitmq/
   #     dockerfile: Dockerfile
   #
@@ -76,22 +83,22 @@ services:
   #   << : *default-common
   #   build:
   #     << : *default-build
+  #     # << : *default-build-debian
   #     context: ./dockerfile/postgresql/
   #     dockerfile: Dockerfile
   #
   # mongodb:
   #   << : *default-common
   #   build:
+  #     # << : *default-build-debian
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
-  #     args:
-  #       DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
-  #       DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
   nginx:
     << : *default-common
     build:
       << : *default-build
+      # << : *default-build-debian
       context: ./dockerfile/nginx/
       dockerfile: Dockerfile
 
@@ -99,6 +106,7 @@ services:
   #   << : *default-common
   #   build:
   #     << : *default-build
+  #     # << : *default-build-debian
   #     context: ./dockerfile/httpd/
   #     dockerfile: Dockerfile
 
@@ -106,6 +114,7 @@ services:
     << : *default-common
     build:
       << : *default-build
+      # << : *default-build-debian
       context: ./dockerfile/phpmyadmin/
       dockerfile: Dockerfile
     labels:
