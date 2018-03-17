@@ -1,16 +1,23 @@
 Changelog
 ==============
 
-#### v18.05-rc1
+#### v18.05-rc2
 
 Bug fixes:
 
+Changes:
+
+Updates:
+
+#### v18.05-rc1
+
+Bug fixes:
 * Fix `PHP-FPM` Dockerfile #223
 * Fix `opcache` extension enable 7.0+ #219
 * Fix `MySQL` default conf #233
 
 Changes:
-* ADD `yaml` `igbinary` `pcntl` `swoole` extension #219
+* Add `yaml` `igbinary` `pcntl` `swoole` extension #219
 * Add default env `APP_ENV=development` in PHPer commands #222
 * Add `Clusterkit` Memcached #227
 * Add `compose` default value #241 #242
@@ -31,7 +38,6 @@ Changes:
 * Change `ERROR` to `WARNING` when env file not exists(Maybe First Run) #228 #227
 
 Updates:
-
 * `acme.sh` 2.7.7 #237
 
 #### [v18.02 (2018-02-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
