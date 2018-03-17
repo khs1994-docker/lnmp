@@ -36,7 +36,9 @@ x-common:
       # ipv4_address: 172.15.0.105
   secrets:
     - source: cluster_redis_conf
-      target: /redis.conf
+      target: /redis.conf.default
+    - source: cluster_redis_entrypoint
+      target: /docker-entrypoint.redis.sh
 
 x-deploy:
   &default-deploy
@@ -51,13 +53,15 @@ x-deploy:
     order: stop-first
 
 services:
+
   redis_sentinel_master_1:
     << : *default-common
     ports:
       - "10000:10000"
+    entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
-      "/redis.conf",
+      "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10000",
@@ -92,9 +96,10 @@ services:
     << : *default-common
     depends_on:
       - redis_sentinel_master_1
+    entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
-      "/redis.conf",
+      "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10001",
@@ -134,9 +139,10 @@ services:
       - redis_sentinel_master_1
     ports:
       - "10002:10002"
+    entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
-      "/redis.conf",
+      "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10002",
@@ -174,9 +180,10 @@ services:
       - redis_sentinel_master_1
     ports:
       - "10003:10003"
+    entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
-      "/redis.conf",
+      "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10003",
@@ -217,9 +224,9 @@ services:
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
       - SENTINEL_PORT=11000
-      - HOST_IP=192.168.199.100
-      - MASTER_IP=redis_sentinel_master_1
-      - MASTER_PORT=10000
+      - SENTINEL_HOST_IP=192.168.199.100
+      - SENTINEL_MASTER_IP=redis_sentinel_master_1
+      - SENTINEL_MASTER_PORT=10000
       - SENTINEL_NUM=2
     command: [
       "--daemonize no",
@@ -261,9 +268,9 @@ services:
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
       - SENTINEL_PORT=11001
-      - HOST_IP=192.168.199.100
-      - MASTER_IP=redis_sentinel_master_1
-      - MASTER_PORT=10000
+      - SENTINEL_HOST_IP=192.168.199.100
+      - SENTINEL_MASTER_IP=redis_sentinel_master_1
+      - SENTINEL_MASTER_PORT=10000
       - SENTINEL_NUM=2
     command: [
       "--daemonize no",
@@ -319,6 +326,14 @@ secrets:
 
   cluster_redis_sentinel_entrypoint:
     file: ./cluster/redis.sentinel/docker-entrypoint.sentinel.sh
+    labels:
+      - "com.khs1994.lnmp=true"
+      - "com.khs1994.lnmp.clusterkit=true"
+      - "com.khs1994.lnmp.clusterkit.redis.sentinel=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+
+  cluster_redis_entrypoint:
+    file: ./cluster/redis.sentinel/docker-entrypoint.redis.sh
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
