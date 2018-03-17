@@ -26,7 +26,7 @@ services:
     ports:
       - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mysql/conf.d/${MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnfro
+      - ./config/mysql/conf.d/${MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:/var/lib/mysql:rw
