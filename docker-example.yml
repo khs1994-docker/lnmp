@@ -1,14 +1,19 @@
 version: "3.5"
 
+#
+# Don't use this compose file
+# This file Only Example
+#
+#
+# @link https://docs.docker.com/compose/overview/
+#
+
 x-labels:
   &default-labels
   com.khs1994.lnmp: "true"
 
 services:
-  #
-  # Don't use this compose file
-  # This file Only Example
-  #
+
   redis:
     build:
       context: ./dockerfile/redis

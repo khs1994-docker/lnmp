@@ -5,7 +5,9 @@ version: "3.5"
 #
 # $ cd dockerfile/soft
 #
-# $ cp Dockerfile.example Dockerfile
+# $ cp example.Dockerfile Dockerfile
+#
+# $ vi Dockerfile
 #
 # $ cd ../../
 #
@@ -25,8 +27,8 @@ x-build-debian:
     DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
     DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
-x-common:
-  &default-common
+x-labels:
+  &default-labels
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=self_build
@@ -34,119 +36,115 @@ x-common:
 services:
 
   mysql:
-    << : *default-common
+    << : *default-labels
     build:
+      << : *default-labels
       << : *default-build-debian
       context: ./dockerfile/mysql/
-      dockerfile: Dockerfile
 
   # mariadb:
-  #   << : *default-common
+  #   << : *default-labels
   #   build:
+  #     << : *default-labels
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
-  #     dockerfile: Dockerfile
 
   redis:
-    << : *default-common
+    << : *default-labels
     build:
+      << : *default-labels
       << : *default-build
       # << : *default-build-debian
       context: ./dockerfile/redis/
-      dockerfile: Dockerfile
 
   php7:
-    << : *default-common
+    << : *default-labels
     build:
+      << : *default-labels
       << : *default-build
       # << : *default-build-debian
       context: ./dockerfile/php/
       cache_from:
         - khs1994/php-fpm:latest-alpine3.7
-      dockerfile: Dockerfile
-      labels:
-        com.khs1994.description: "Extend Official PHP_FPM Docker Image"
-        com.khs1994.department: "Chinese"
-        com.khs1994.label-with-empty-value: ""
     environment:
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05-rc2} x86_64 With Build Docker Image
 
   # rabbitmq:
-  #   << : *default-common
+  #   << : *default-labels
   #   build:
+  #     << : *default-labels
   #     << : *default-build
   #     # << : *default-build-debian
   #     context: ./dockerfile/rabbitmq/
-  #     dockerfile: Dockerfile
   #
   # postgresql:
-  #   << : *default-common
+  #   << : *default-labels
   #   build:
+  #     << : *default-labels
   #     << : *default-build
   #     # << : *default-build-debian
   #     context: ./dockerfile/postgresql/
-  #     dockerfile: Dockerfile
   #
   # mongodb:
-  #   << : *default-common
+  #   << : *default-labels
   #   build:
-  #     # << : *default-build-debian
+  #     << : *default-labels
+  #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
-  #     dockerfile: Dockerfile
 
   nginx:
-    << : *default-common
+    << : *default-labels
     build:
+      << : *default-labels
       << : *default-build
       # << : *default-build-debian
       context: ./dockerfile/nginx/
-      dockerfile: Dockerfile
 
   # httpd:
-  #   << : *default-common
+  #   << : *default-labels
   #   build:
+  #     << : *default-labels
   #     << : *default-build
   #     # << : *default-build-debian
   #     context: ./dockerfile/httpd/
-  #     dockerfile: Dockerfile
 
   phpmyadmin:
-    << : *default-common
+    << : *default-labels
     build:
+      << : *default-labels
       << : *default-build
       # << : *default-build-debian
       context: ./dockerfile/phpmyadmin/
-      dockerfile: Dockerfile
     labels:
       - "com.khs1994.lnmp.app.env=self_build"
 
 networks:
   frontend:
-    << : *default-common
+    << : *default-labels
   backend:
-    << : *default-common
+    << : *default-labels
 
 volumes:
   mysql-data:
-    << : *default-common
+    << : *default-labels
   # mariadb-data:
-  #   << : *default-common
+  #   << : *default-labels
   redis-data:
-    << : *default-common
+    << : *default-labels
   # rabbitmq-data:
-  #   << : *default-common
+  #   << : *default-labels
   # postgresql-data:
-  #   << : *default-common
+  #   << : *default-labels
   # mongodb-data:
-  #   << : *default-common
+  #   << : *default-labels
   zoneinfo-data:
-    << : *default-common
+    << : *default-labels
   # registry-data:
-  #   << : *default-common
+  #   << : *default-labels
   phpmyadmin-data:
-    << : *default-common
+    << : *default-labels
 
 secrets:
   db_root_password:
-    << : *default-common
+    << : *default-labels
     file: ./secrets/db_root_password.txt
