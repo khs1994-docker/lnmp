@@ -23,6 +23,8 @@ $ docker stack rm lnmp
 ## DashBoard
 
 ```bash
+$ cd kubernetes
+
 $ kubectl apply -f kubernetes-dashboard.yaml
 
 $ kubectl proxy
@@ -43,6 +45,8 @@ $ minikube mount ~/lnmp:/data/lnmp
 ## 部署
 
 ```bash
+$ cd kubernetes
+
 $ ./kubernetes.sh deploy
 
 $ minikube service nginx --url
@@ -61,7 +65,7 @@ $ ./kubernetes.sh cleanup
 
 ## 具体命令
 
-请查看 `./kubernetes.sh` 文件内容。
+请查看 `./kubernetes/kubernetes.sh` 文件内容。
 
 # Windows 10
 

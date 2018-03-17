@@ -1,5 +1,9 @@
 version: "3.5"
 
+#
+# @link https://docs.docker.com/compose/compose-file/#extension-fields
+#
+
 x-common:
   &default-common
   restart: always

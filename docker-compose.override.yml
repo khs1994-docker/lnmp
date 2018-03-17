@@ -1,5 +1,9 @@
 version: "3.5"
 
+#
+# @link https://docs.docker.com/compose/extends/
+#
+
 x-common:
   &default-common
   labels:

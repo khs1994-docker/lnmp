@@ -5,6 +5,10 @@ services:
   #
   # Docker v18.03-rc1 maybe not support secrets
   #
+  # @link https://docs.docker.com/docker-for-mac/kubernetes/
+  #
+  # @link https://docs.docker.com/docker-for-windows/kubernetes/
+  #
   mysql:
     image: mysql:8.0.3
     # env_file: ./cli/timezone.env

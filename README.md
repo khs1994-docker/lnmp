@@ -85,6 +85,10 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file i
 $ ./lnmp-docker.sh restart nginx
 ```
 
+### Docker PHP Best Practice
+
+* https://github.com/khs1994-docker/php-demo
+
 ### PHPer commands
 
 * `lnmp-php`
@@ -107,7 +111,7 @@ For more information please see [Documents](docs/command.md)
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->Only Support `dnspod.cn` DNS，Please set API key and id in `.env` file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx-with-https.md).
+>Only Support `dnspod.cn` DNS，Please set API key and id in `.env` file. Support Self-Signed SSL certificate, for more information, see [Documents](docs/issue-ssl.md).
 
 ### List LNMP Container
 
@@ -194,6 +198,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 
 * 80
 * 443
+* 8080 `PHPMyAdmin` (Development only)
 
 ## CLI
 
