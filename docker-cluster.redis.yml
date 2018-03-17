@@ -1,5 +1,59 @@
 version: '3.5'
 
+#
+# Redis cluster by Ruby
+#
+# 6 node 3 master 3 slave
+#
+# @link https://www.cnblogs.com/lianggp/articles/8136222.html
+#
+# @link https://redis.io/topics/cluster-tutorial
+#
+
+#
+# You Must Find `192.168.199.100` replace your `HOST_IP`
+#
+
+#
+# Example port
+#
+# 7001 7002 7003 17001 17002 17003
+# 8001 8002 8003 18001 18002 18003
+#
+
+# There list  Docker command，In production please use CLI (./lnmp-docker.sh)
+#
+# Start
+#
+# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml up [-d]
+#
+# Exec
+#
+## Bash
+#
+# $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
+#
+## Fish
+#
+# $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
+#
+# Remove ALL [include Volumes]
+#
+# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
+#
+#
+# Swarm mode (Start LNMP With Redis Cluster)
+#
+#
+# $ docker stack deploy -c docker-production.yml -c docker-cluster.redis.yml lnmp
+#
+# $ docker stack rm lnmp
+#
+#
+# PHP connect BY CLUSTER HOST_IP
+#
+#
+
 x-common:
   &default-common
   image: redis:4.0.8-alpine
@@ -26,47 +80,7 @@ x-deploy:
     order: stop-first
 
 services:
-  #
-  # Redis Cluster
-  #
-  # @link https://www.cnblogs.com/lianggp/articles/8136222.html
-  #
-  # There list  Docker command，In production please use CLI (./lnmp-docker.sh)
-  #
-  # Start
-  #
-  # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml up [-d]
-  #
-  # Exec
-  #
-  ## Bash
-  #
-  # $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
-  #
-  ## Fish
-  #
-  # $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
-  #
-  # Remove ALL [include Volumes]
-  #
-  # $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
-  #
-  #
-  # Swarm mode (Start LNMP With Redis Cluster)
-  #
-  #
-  # $ docker stack deploy -c docker-production.yml -c docker-cluster.redis.yml lnmp
-  #
-  # $ docker stack rm lnmp
-  #
-  #
-  # PHP connect BY CLUSTER HOST_IP
-  #
-  #
 
-  #
-  # Redis cluster by Ruby
-  #
   redis_ruby:
     << : *default-common
     # build:
@@ -106,7 +120,6 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 7001",
-      # Please Change 192.168.199.100 to your REdis cluster IP
       "--cluster-announce-ip 192.168.199.100",
       "--cluster-announce-port 7001",
       "--cluster-announce-bus-port 17001"

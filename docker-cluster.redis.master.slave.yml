@@ -1,7 +1,19 @@
 version: "3.5"
 
 #
-# Redis master-slave (M-S)
+# Redis 1master-1slave (M-S)
+#
+
+#
+# You Must Find `192.168.199.100` replace your `HOST_IP`
+#
+
+#
+# Example port
+#
+# master 21000
+#
+# slave 22000
 #
 
 x-deploy:
@@ -41,16 +53,18 @@ services:
     #
     # image: khs1994/lnmp-redis:4.0.8
     ports:
-       - "127.0.0.1:6000:6000"
+       - "127.0.0.1:21000:21000"
     volumes:
       - redis_master-data:/data:rw
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--port 6000",
+      "--port 21000",
       # "--logfile /var/log/redis/redis.log",
-      "--bind 0.0.0.0"
+      "--bind 0.0.0.0",
+      "--slave-announce-ip 192.168.199.100",
+      "--slave-announce-port 21000"
       ]
     deploy:
       << : *default-deploy
@@ -60,12 +74,12 @@ services:
       labels:
         - "com.khs1994.lnmp=true"
         - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.master=master"
+        - "com.khs1994.lnmp.clusterkit.redis.master.slave=master"
         - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master=master"
+      - "com.khs1994.lnmp.clusterkit.redis.master.slave=master"
       - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
   redis_slave-1:
@@ -79,7 +93,7 @@ services:
     # image: khs1994/lnmp-redis:4.0.8
     #
     ports:
-      - "127.0.0.1:6001:6001"
+      - "127.0.0.1:22000:22000"
     volumes:
       - redis_slave-1-data:/data:rw
     command: [
@@ -87,9 +101,11 @@ services:
       "/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 6001",
+      "--port 22000",
       # "--logfile /var/log/redis/redis.log",
-      "--slaveof redis_master 6000"
+      "--slaveof redis_master 21000",
+      "--slave-announce-ip 192.168.199.100",
+      "--slave-announce-port 22000"
       ]
     depends_on:
       - redis_master
@@ -101,12 +117,12 @@ services:
       labels:
         - "com.khs1994.lnmp=true"
         - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.slave=slave1"
+        - "com.khs1994.lnmp.clusterkit.redis.master.slave=slave1"
         - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.slave=slave1"
+      - "com.khs1994.lnmp.clusterkit.redis.master.slave=slave1"
       - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
 volumes:
@@ -114,13 +130,13 @@ volumes:
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master=master"
+      - "com.khs1994.lnmp.clusterkit.redis.master.slave=master"
       - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
   redis_slave-1-data:
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.slave=slave1"
+      - "com.khs1994.lnmp.clusterkit.redis.master.slave=slave1"
       - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
 networks:

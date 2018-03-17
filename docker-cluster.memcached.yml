@@ -1,5 +1,14 @@
 version: "3.5"
 
+#
+# Memcached 3 node
+#
+
+# Example Port
+#
+# 21211 - 21213
+#
+
 x-common:
   &default-common
   image: memcached:1.5.4-alpine
@@ -24,7 +33,7 @@ services:
   memcached_1:
     << : *default-common
     ports:
-      - "11001:11211"
+      - "21211:11211"
     deploy:
       << : *default-deploy
       # placement:
@@ -50,7 +59,7 @@ services:
   memcached_2:
     << : *default-common
     ports:
-      - "11002:11211"
+      - "21212:11211"
     deploy:
       << : *default-deploy
       # placement:
@@ -76,7 +85,7 @@ services:
   memcached_3:
     << : *default-common
     ports:
-      - "11003:11211"
+      - "21213:11211"
     deploy:
       << : *default-deploy
       # placement:

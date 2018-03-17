@@ -28,7 +28,12 @@
     * Kubernetes
         * [k8s](production/k8s.md)
     * [Docker Registry](registry.md)
-* [ClusterKit](clusterkit.md)
+* [ClusterKit](clusterkit/README.md)
+    * [MySQL 一主两从](clusterkit/mysql.md)
+    * [Memcached 集群](clusterkit/memcached.md)
+    * [Redis Cluster By Ruby](clusterkit/redis_cluster.md)
+    * [Redis Master slave](clusterkit/redis_master_slave.md)
+    * [Redis Sentinel](clusterkit/redis_sentinel.md)
 * 树莓派3
     * [ARM架构](arm.md)
 * [systemd](systemd.md)
