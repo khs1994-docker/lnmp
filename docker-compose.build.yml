@@ -69,7 +69,7 @@ services:
         com.khs1994.department: "Chinese"
         com.khs1994.label-with-empty-value: ""
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05} x86_64 With Build Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05-rc1} x86_64 With Build Docker Image
 
   # rabbitmq:
   #   << : *default-common
