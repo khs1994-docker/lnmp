@@ -6,8 +6,8 @@ x-common:
   env_file: ./cli/timezone.env
   networks:
     - backend
-  dns:
-    - ${DNS:-114.114.114.114}
+  # dns:
+  #   - ${DNS:-114.114.114.114}
 
 services:
 

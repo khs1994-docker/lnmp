@@ -6,17 +6,11 @@
 
 **2.** 在 `.env` 修改镜像前缀、PHP 项目路径(可选项)
 
-**3.** 克隆已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹
+**3.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹
 
-**4.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件
+**4.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件(`./config/nginx/*.conf`)
 
-   >可以使用 `./lnmp-docker.sh new` 交互式的填入 `项目路径` 和 `url` 来新建 PHP 项目文件及 nginx 配置文件。
-
-   >可以使用 `./lnmp-docker.sh nginx-conf` 便捷的生成 nginx 配置文件。
-
-   >使用 `./lnmp-docker.sh ...`，请务必仔细检查 nginx 文件是否配置正确。
-
-**5.** 执行 `./lnmp-docker.sh development`
+**5.** 执行 `./lnmp-docker.sh development` 或者 `./lnmp-docker.sh restart nginx`
 
 **6.** `PhpStorm` 打开 `./app/你的项目` ，开始编写代码
 
@@ -28,20 +22,30 @@
 
 **3.** `PhpStorm` 打开 `./app/你的又一个新项目` ，开始编写代码
 
-### 如何正确的自定义配置文件
+## 如何正确的自定义配置文件
 
-请查看 [这里](config.md)
+以上是简单的配置方法，如果你有兴趣持续使用本项目作为你的 LNMP 环境，那么请 **正确** 的修改配置文件。请查看 [这里](config.md)
+
+## 使用 CLI 交互式的创建 PHP 项目
+
+执行 `./lnmp-docker.sh new` 新建项目
+
+### 生成 NGINX 配置文件
+
+`./lnmp-docker.sh nginx-conf` 便捷的生成 nginx 配置文件(包括 HTTP HTTPS)
 
 ## 自行构建镜像
 
-在 `./dockerfile/` 下修改各个软件 `Dockerfile` 文件，之后运行如下命令：
+在 `./dockerfile/` 下修改各个软件的文件夹内复制 `example.Dockerfile` 为 `Dockerfile`，并编写 `Dockerfile` 之后运行如下命令：
 
 ```bash
 $ ./lnmp-docker.sh build
 
+$ ./lnmp-docker.sh build-up
+
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v17.11 x86_64 With Build Docker Image
+Welcome use khs1994-docker/lnmp v18.05 x86_64 With Build Docker Image
 
 development
 
