@@ -28,6 +28,24 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-exe
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-deploy           -d     'Deploy Redis Cluster in Swarm mode'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-remove           -d     'Remove Redis Cluster in Swarm mode'
 
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-up   -d     'Up Redis M-S'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d           -d     'Up Redis M-S in the background'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-down -d     'Stop Redis M-S'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v         -d     'Stop Redis M-S AND Remove named volumes declared in the `volumes`'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-exec -d     'Execute a command in a running Redis M-S'
+
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-deploy    -d     'Deploy Redis M-S in Swarm mode'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-remove    -d     'Remove Redis M-S in Swarm mode'
+
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-sentinel-up      -d     'Up Redis S'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d          -d     'Up Redis S in the background'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-sentinel-down    -d     'Stop Redis S'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v        -d     'Stop Redis S AND Remove named volumes declared in the `volumes`'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-sentinel-exec    -d     'Execute a command in a running Redis S'
+
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-sentinel-deploy  -d     'Deploy Redis S in Swarm mode'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-sentinel-remove  -d     'Remove Redis S in Swarm mode'
+
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a daemon-socket     -d     'Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a dashboard         -d     'Print how run kubernetes dashboard in Dcoekr for Desktop'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development       -d     'Use LNMP in Development'

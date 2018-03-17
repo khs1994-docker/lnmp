@@ -21,6 +21,16 @@ complete -W "acme.sh \
         clusterkit-redis-create \
         clusterkit-redis-deploy \
         clusterkit-redis-remove \
+        clusterkit-redis-master-slave-up \
+        clusterkit-redis-master-slave-down \
+        clusterkit-redis-master-slave-exec \
+        clusterkit-redis-master-slave-deploy \
+        clusterkit-redis-master-slave-remove \
+        clusterkit-redis-sentinel-up \
+        clusterkit-redis-sentinel-down \
+        clusterkit-redis-sentinel-exec \
+        clusterkit-redis-sentinel-deploy \
+        clusterkit-redis-sentinel-remove \
         daemon-socket \
         dashboard \
         development \

@@ -119,7 +119,7 @@ ClusterKit
   clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode
   clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
 
-  clusterkit-redis-master-slave          Up Redis M-S
+  clusterkit-redis-master-slave-up       Up Redis M-S
   clusterkit-redis-master-slave-down     Stop Redis M-S
   clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
 
@@ -1176,7 +1176,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
      shift
      COMMAND=$@
      if [ -z $@ ];then
-       print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node1|node2} {COMMAND}'
+       print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node1|node2} {COMMAND}' ; exit 1
      fi
      docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.mysql=${NODE}) $COMMAND
      ;;
@@ -1184,6 +1184,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
   clusterkit-mysql-deploy )
        docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
         ;;
+
   clusterkit-mysql-remove )
        docker stack rm mysql_cluster
         ;;
@@ -1201,9 +1202,45 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         shift
         COMMAND=$@
         if [ -z $@ ];then
-          print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master1|slave1} {COMMAND}'
+          print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master1|slave1} {COMMAND}' ; exit 1
         fi
         docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.redis=${NODE}) $COMMAND
+        ;;
+
+  clusterkit-redis-master-slave-up )
+        docker-compose -f docker-cluster.redis.master.slave.yml up "$@"
+        ;;
+
+  clusterkit-redis-master-slave-down )
+        docker-compose -f docker-cluster.redis.master.slave.yml down "$@"
+        ;;
+
+  clusterkit-redis-master-slave-exec )
+        NODE=$1
+        shift
+        COMMAND=$@
+        if [ -z $@ ];then
+          print_error '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {NODE_NAME} {COMMAND}' ; exit 1
+        fi
+        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.redis.master.slave=${NODE}) $COMMAND
+        ;;
+
+  clusterkit-redis-sentinel-up )
+        docker-compose -f docker-cluster.redis.sentinel.yml up "$@"
+        ;;
+
+  clusterkit-redis-sentinel-down )
+        docker-compose -f docker-cluster.redis.sentinel.yml down "$@"
+        ;;
+
+  clusterkit-redis-sentinel-exec )
+        NODE=$1
+        shift
+        COMMAND=$@
+        if [ -z $@ ];then
+          print_error '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {masterN|slaveN|sentinelN} {COMMAND}' ; exit 1
+        fi
+          docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.redis.sentinel=${NODE}) $COMMAND
         ;;
 
   clusterkit-* )
@@ -1239,7 +1276,7 @@ OPEN http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernet
 
   * )
   if ! [ -z "$command" ];then
-    print_info "You Exec docker-compose commands"; echo
+    print_warning "command not found, Now Exec docker-compose commands"; echo
     exec docker-compose $command "$@"
   fi
   help
