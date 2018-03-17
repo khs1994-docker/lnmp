@@ -69,7 +69,7 @@ services:
     # env_file: ./.env
     environment:
       - APP_ENV=development
-      - KHS1994_LNMP_DOCKER_VERSION=v18.05 x86_64 Docker for desktop k8s
+      - KHS1994_LNMP_DOCKER_VERSION=v18.05-rc1 x86_64 Docker for desktop k8s
     deploy:
       replicas: 2
     configs:
