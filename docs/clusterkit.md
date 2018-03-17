@@ -62,9 +62,7 @@ $ ./lnmp-docker.sh clusterkit-mysql-deploy
 $ ./lnmp-docker.sh clusterkit-mysql-remove
 ```
 
-## Redis 集群版
-
-> Redis 多节点部署包括 集群版 及 主从版，注意不要混淆
+## Redis 集群版(By Ruby)
 
 在 `./cluster/.env` 文件中设置 `REDIS_HOST` `MYSQL_HOST` 变量为 路由器分配给电脑的 IP，或者集群 IP
 
@@ -92,11 +90,13 @@ $ ./lnmp-docker.sh clusterkit-redis-down [-v]
 
 ### Swarm mode
 
-## Redis 主从版
+## Redis 主从版 (M-S)
 
 在 `docker-cluster.redis.master.node.yml` 中定义。
 
 主负责写，从负责读。
+
+## Redis 哨兵版（S）
 
 ## Memcached
 

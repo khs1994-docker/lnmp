@@ -1,4 +1,22 @@
 version: '3.5'
+
+x-common:
+  &default-common
+  image: mysql:8.0.3
+  restart: always
+
+x-deploy:
+  &default-deploy
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
 services:
   #
   #  MySQL master node
@@ -35,8 +53,7 @@ services:
   # $ docker stack rm lnmp
   #
   mysql_master:
-    image: mysql:8.0.3
-    restart: always
+    << : *default-common
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
@@ -56,17 +73,9 @@ services:
       # - --binlog_ignore_db=dbname
       - --skip-character-set-client-handshake
     deploy:
+      << : *default-deploy
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -95,8 +104,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_mysql"
 
   mysql_node-1:
-    image: mysql:8.0.3
-    restart: always
+    << : *default-common
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
@@ -112,16 +120,8 @@ services:
       - --slave-skip-errors=all
       - --skip-character-set-client-handshake
     deploy:
+      << : *default-deploy
       replicas: 1
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -149,8 +149,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_mysql"
 
   mysql_node-2:
-    image: mysql:8.0.3
-    restart: always
+    << : *default-common
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
@@ -166,16 +165,8 @@ services:
       - --slave-skip-errors=all
       - --skip-character-set-client-handshake
     deploy:
+      << : *default-deploy
       replicas: 1
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
