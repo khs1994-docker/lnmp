@@ -89,6 +89,10 @@ development
 $ ./lnmp-docker.sh restart nginx
 ```
 
+### Docker PHP 最佳实践
+
+* https://github.com/khs1994-docker/php-demo
+
 ### PHPer 常用命令
 
 * `lnmp-php`
@@ -111,7 +115,7 @@ $ ./lnmp-docker.sh restart nginx
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx-with-https.md)。
+>一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/issue-ssl.md)。
 
 ### 查看详情
 
@@ -199,6 +203,7 @@ $ ./lnmp-docker.sh down
 
 * 80
 * 443
+* 8080 `PHPMyAdmin` (仅开发环境)
 
 ## 命令行工具
 
