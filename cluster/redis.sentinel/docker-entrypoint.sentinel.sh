@@ -1,5 +1,12 @@
 #!/bin/sh
 
+until redis-cli -h redis_sentinel_master_1; do
+  echo "Redis master is unavailable - sleeping"
+  sleep 1
+done
+
+echo "Redis master is available"
+
 echo "
 # Example sentinel.conf
 
@@ -23,7 +30,7 @@ echo "
 # The port that this sentinel instance will run on
 port SENTINEL_PORT
 
-sentinel announce-ip HOST_IP
+sentinel announce-ip SENTINEL_HOST_IP
 sentinel announce-port SENTINEL_PORT
 #
 # The above two configuration directives are useful in environments where,
@@ -69,7 +76,7 @@ dir /data
 #
 # Note: master name should not include special characters or spaces.
 # The valid charset is A-z 0-9 and the three characters ".-_".
-sentinel monitor mymaster MASTER_IP MASTER_PORT SENTINEL_NUM
+sentinel monitor mymaster SENTINEL_MASTER_IP SENTINEL_MASTER_PORT SENTINEL_NUM
 
 # sentinel auth-pass <master-name> <password>
 #
@@ -201,13 +208,12 @@ sentinel failover-timeout mymaster 180000
 
 sed -i "s!SENTINEL_PORT!${SENTINEL_PORT}!g" /redis.sentinel.conf
 
-sed -i "s!HOST_IP!${HOST_IP}!g" /redis.sentinel.conf
+sed -i "s!SENTINEL_HOST_IP!${SENTINEL_HOST_IP}!g" /redis.sentinel.conf
 
-sed -i "s!MASTER_IP!${MASTER_IP}!g" /redis.sentinel.conf
+sed -i "s!SENTINEL_MASTER_IP!${SENTINEL_MASTER_IP}!g" /redis.sentinel.conf
 
-sed -i "s!MASTER_PORT!${MASTER_PORT}!g" /redis.sentinel.conf
+sed -i "s!SENTINEL_MASTER_PORT!${SENTINEL_MASTER_PORT}!g" /redis.sentinel.conf
 
 sed -i "s!SENTINEL_NUM!${SENTINEL_NUM}!" /redis.sentinel.conf
 
-
-exec redis-sentinel /redis.sentinel.conf "$@"
+exec docker-entrypoint.sh redis-sentinel /redis.sentinel.conf "$@"

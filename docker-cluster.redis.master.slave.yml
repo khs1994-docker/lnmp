@@ -53,7 +53,7 @@ services:
     #
     # image: khs1994/lnmp-redis:4.0.8
     ports:
-       - "127.0.0.1:21000:21000"
+       - "21000:21000"
     volumes:
       - redis_master-data:/data:rw
     command: [
@@ -93,7 +93,7 @@ services:
     # image: khs1994/lnmp-redis:4.0.8
     #
     ports:
-      - "127.0.0.1:22000:22000"
+      - "22000:22000"
     volumes:
       - redis_slave-1-data:/data:rw
     command: [
