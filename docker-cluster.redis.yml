@@ -1,4 +1,30 @@
 version: '3.5'
+
+x-common:
+  &default-common
+  image: redis:4.0.8-alpine
+  restart: always
+  env_file:
+    - ./cluster/.env
+  networks:
+    cluster_redis:
+      # ipv4_address: 172.16.0.105
+  secrets:
+    - source: cluster_redis_conf
+      target: /redis.conf
+
+x-deploy:
+  &default-deploy
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
 services:
   #
   # Redis Cluster
@@ -42,27 +68,18 @@ services:
   # Redis cluster by Ruby
   #
   redis_ruby:
+    << : *default-common
     # build:
     #   context: ./cluster/redis
     #   args:
     #     REDIS_URL: gitee.com/mirrors/redis/raw
-    env_file:
-      - ./cluster/.env
     image: khs1994/redis:clusterkit-4.0.8
     volumes:
       - cluster_redis_master-1-data:/data
     deploy:
+      << : *default-deploy
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -75,9 +92,6 @@ services:
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis=ruby"
         - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    networks:
-      cluster_redis:
-        # ipv4_address: 172.16.0.105
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -85,9 +99,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-1:
-    image: redis:4.0.8-alpine
-    env_file:
-      - ./cluster/.env
+    << : *default-common
     command: [
       "redis-server",
       "/redis.conf",
@@ -102,17 +114,9 @@ services:
     volumes:
       - cluster_redis_master-1-data:/data
     deploy:
+      << : *default-deploy
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -125,18 +129,12 @@ services:
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis=master1"
         - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    networks:
-      cluster_redis:
-        # ipv4_address: 172.16.0.105
     expose:
       - "7001"
       - "17001"
     ports:
       - "7001:7001"
       - "17001:17001"
-    secrets:
-      - source: cluster_redis_conf
-        target: /redis.conf
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -144,12 +142,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-2:
-    image: redis:4.0.8-alpine
-    env_file:
-      - ./cluster/.env
-    networks:
-      cluster_redis:
-        # ipv4_address: 172.16.0.102
+    << : *default-common
     depends_on:
       - redis_master-1
     expose:
@@ -171,17 +164,9 @@ services:
     volumes:
       - cluster_redis_master-2-data:/data
     deploy:
+      << : *default-deploy
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -194,9 +179,6 @@ services:
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis=master2"
         - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    secrets:
-      - source: cluster_redis_conf
-        target: /redis.conf
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -204,12 +186,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-3:
-    image: redis:4.0.8-alpine
-    env_file:
-      - ./cluster/.env
-    networks:
-      cluster_redis:
-        # ipv4_address: 172.16.0.103
+    << : *default-common
     depends_on:
       - redis_master-1
     expose:
@@ -231,17 +208,9 @@ services:
     volumes:
       - cluster_redis_master-3-data:/data
     deploy:
+      << : *default-deploy
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -254,9 +223,6 @@ services:
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis=master3"
         - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    secrets:
-      - source: cluster_redis_conf
-        target: /redis.conf
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -264,12 +230,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-1:
-    image: redis:4.0.8-alpine
-    env_file:
-      - ./cluster/.env
-    networks:
-      cluster_redis:
-        # ipv4_address: 172.16.0.201
+    << : *default-common
     depends_on:
       - redis_master-1
     expose:
@@ -291,16 +252,8 @@ services:
     volumes:
       - cluster_redis_slave-1-data:/data
     deploy:
+      << : *default-deploy
       replicas: 1
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -313,9 +266,6 @@ services:
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis=slave1"
         - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    secrets:
-      - source: cluster_redis_conf
-        target: /redis.conf
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -323,12 +273,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-2:
-    image: redis:4.0.8-alpine
-    env_file:
-      - ./cluster/.env
-    networks:
-      cluster_redis:
-        # ipv4_address: 172.16.0.202
+    << : *default-common
     depends_on:
       - redis_master-1
     expose:
@@ -350,16 +295,8 @@ services:
     volumes:
       - cluster_redis_slave-2-data:/data
     deploy:
+      << : *default-deploy
       replicas: 1
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -372,9 +309,6 @@ services:
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis=slave2"
         - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    secrets:
-      - source: cluster_redis_conf
-        target: /redis.conf
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
@@ -382,12 +316,7 @@ services:
       - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-3:
-    image: redis:4.0.8-alpine
-    env_file:
-      - ./cluster/.env
-    networks:
-      cluster_redis:
-        # ipv4_address: 172.16.0.203
+    << : *default-common
     depends_on:
       - redis_master-1
     expose:
@@ -409,16 +338,8 @@ services:
     volumes:
       - cluster_redis_slave-3-data:/data
     deploy:
+      << : *default-deploy
       replicas: 1
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -431,9 +352,6 @@ services:
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis=slave3"
         - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    secrets:
-      - source: cluster_redis_conf
-        target: /redis.conf
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"

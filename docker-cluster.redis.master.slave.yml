@@ -1,10 +1,38 @@
 version: "3.5"
 
+#
+# Redis master-slave (M-S)
+#
+
+x-deploy:
+  &default-deploy
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 5
+    window: 123s
+  update_config:
+    parallelism: 2
+    delay: 10s
+    order: stop-first
+
+x-common:
+  &default-common
+  image: redis:4.0.8-alpine
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - redis_master_slave
+  # logging:
+  #   driver: journald
+  secrets:
+    - source: redis_conf
+      target: /redis.conf
+
 services:
-  #
-  # Redis master slaveof
-  #
+
   redis_master:
+    << : *default-common
     # build:
     #   context: ./dockerfile/redis/
     #   dockerfile: Dockerfile
@@ -12,15 +40,10 @@ services:
     # image: username/lnmp-redis:tag
     #
     # image: khs1994/lnmp-redis:4.0.8
-    #
-    image: redis:4.0.8-alpine
-    env_file: ./cli/timezone.env
     ports:
        - "127.0.0.1:6000:6000"
     volumes:
       - redis_master-data:/data:rw
-    networks:
-      - redis_master_node
     command: [
       "redis-server",
       "/redis.conf",
@@ -29,36 +52,24 @@ services:
       # "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0"
       ]
-    # logging:
-    #   driver: journald
     deploy:
+      << : *default-deploy
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       labels:
         - "com.khs1994.lnmp=true"
         - "com.khs1994.lnmp.clusterkit=true"
         - "com.khs1994.lnmp.clusterkit.redis.master=master"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
-    secrets:
-      - source: redis_conf
-        target: /redis.conf
+        - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
       - "com.khs1994.lnmp.clusterkit.redis.master=master"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
-  redis_sentinel_node-1:
+  redis_slave-1:
+    << : *default-common
     # build:
     #   context: ./dockerfile/redis/
     #   dockerfile: Dockerfile
@@ -67,14 +78,10 @@ services:
     #
     # image: khs1994/lnmp-redis:4.0.8
     #
-    image: redis:4.0.8-alpine
-    env_file: ./cli/timezone.env
     ports:
       - "127.0.0.1:6001:6001"
     volumes:
-      - redis_node-1-data:/data:rw
-    networks:
-      - redis_master_node
+      - redis_slave-1-data:/data:rw
     command: [
       "redis-server",
       "/redis.conf",
@@ -86,34 +93,21 @@ services:
       ]
     depends_on:
       - redis_master
-    # logging:
-    #   driver: journald
     deploy:
+      << : *default-deploy
       replicas: 1
       # placement:
       #   constraints: [node.role == manager]
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 5
-        window: 123s
-      update_config:
-        parallelism: 2
-        delay: 10s
-        order: stop-first
       labels:
         - "com.khs1994.lnmp=true"
         - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.node=node1"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
-    secrets:
-      - source: redis_conf
-        target: /redis.conf
+        - "com.khs1994.lnmp.clusterkit.redis.slave=slave1"
+        - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.node=node1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
+      - "com.khs1994.lnmp.clusterkit.redis.slave=slave1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
 volumes:
   redis_master-data:
@@ -121,21 +115,21 @@ volumes:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
       - "com.khs1994.lnmp.clusterkit.redis.master=master"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
-  redis_node-1-data:
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
+  redis_slave-1-data:
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.node=node1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
+      - "com.khs1994.lnmp.clusterkit.redis.slave=slave1"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
 networks:
-  redis_master_node:
+  redis_master_slave:
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.node=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
+      - "com.khs1994.lnmp.clusterkit.redis.master.slave=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
 secrets:
   redis_conf:
@@ -143,5 +137,5 @@ secrets:
     labels:
       - "com.khs1994.lnmp=true"
       - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.node=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_node"
+      - "com.khs1994.lnmp.clusterkit.redis.master.slave=true"
+      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"

@@ -119,6 +119,20 @@ ClusterKit
   clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode
   clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
 
+  clusterkit-redis-master-slave          Up Redis M-S
+  clusterkit-redis-master-slave-down     Stop Redis M-S
+  clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
+
+  clusterkit-redis-master-slave-deploy   Deploy Redis M-S in Swarm mode
+  clusterkit-redis-master-slave-remove   Remove Redis M-S in Swarm mode
+
+  clusterkit-redis-sentinel-up           Up Redis S
+  clusterkit-redis-sentinel-down         Stop Redis S
+  clusterkit-redis-sentinel-exec         Execute a command in a running Redis S node
+
+  clusterkit-redis-sentinel-deploy       Deploy Redis S in Swarm mode
+  clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
+
 Container CLI:
   SERVICE-cli          Execute a command in a running LNMP container
 
