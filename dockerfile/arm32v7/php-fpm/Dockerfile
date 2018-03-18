@@ -20,6 +20,16 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libzip-dev \
         libyaml-dev \
 	" \
+  && runDeps=" \
+       libfreetype6 \
+       libjpeg62-turbo \
+       libpng \
+       libssl \
+       libmemcached \
+       libpq \
+       libzip \
+       libyaml \
+  " \
   && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
         && docker-php-ext-configure zip \
                                     --with-libzip \
@@ -49,6 +59,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                                  # opcache 已默认安装，需要自行载入
                                  opcache \
                                  swoole \
+        && apt-get purge -y --auto-remove  $buildDeps \
         && rm -rf /tmp/*
 
 # install composer
