@@ -353,6 +353,7 @@ services:
     networks:
       - frontend
       - backend
+    entrypoint: /docker-entrypoint.crond.sh
     command: php-fpm -R -F
     environment:
       - APP_ENV=production
@@ -380,6 +381,10 @@ services:
         mode: 0600
       - source: ssh_config
         target: /root/.ssh/config
+      - source: php_with_crond_entrypoint
+        target: /docker-entrypoint.crond.sh
+      - source: php_with_crond
+        target: /var/spool/cron/crontabs/root
     labels:
       << : *default-labels
       com.khs1994.lnmp.php7: "true"
@@ -819,6 +824,7 @@ configs:
   #   labels:
   #     << : *default-labels
   #     com.khs1994.lnmp.httpd: "true"
+
   php_ini:
     file: ./config/php/php.production.ini
     labels:
@@ -829,16 +835,30 @@ configs:
     labels:
       << : *default-labels
       com.khs1994.lnmp.php7: "true"
+  php_with_crond_entrypoint:
+    file: ./config/php/docker-entrypoint.crond.sh
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.php7: "true"
+
+  php_with_crond:
+    file: ./scripts/crontab/root
+    labels:
+      << : *default-labels
+      com.khs1994.lnmp.php7: "true"
+
   redis_conf:
     file: ./config/redis/redis.production.conf
     labels:
       << : *default-labels
       com.khs1994.lnmp.redis: "true"
+
   # mongod_conf:
   #   file: ./config/mongodb/mongod.production.conf
   #   labels:
   #     << : *default-labels
   #     com.khs1994.lnmp.mongodb: "true"
+  #
   # registy_yml:
   #   file: ./config/registry/config.production.yml
   #   labels:
