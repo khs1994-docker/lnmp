@@ -31,6 +31,15 @@ Function env_status(){
   }
 }
 
+Function _crontab(){
+  if (Test-Path scripts/crontab/root){
+    printInfo 'scripts/crontab/root file existing'
+  }else{
+    printWarning 'scripts/crontab/root file NOT existing'
+    cp scripts/crontab/root.example scripts/crontab/root
+  }
+}
+
 Function logs(){
   if (! (Test-Path logs\httpd)){
     New-Item logs\httpd -type directory | Out-Null
@@ -171,6 +180,8 @@ Function _update(){
 # main
 
 env_status
+
+_crontab
 
 if ($args.Count -eq 0){
   help_information
