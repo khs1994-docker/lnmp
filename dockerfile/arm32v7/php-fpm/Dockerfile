@@ -23,14 +23,14 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
   && runDeps=" \
        libfreetype6 \
        libjpeg62-turbo \
-       libpng \
-       libssl \
-       libmemcached \
-       libpq \
-       libzip \
-       libyaml \
+       libpng16-16 \
+       libssl1.1 \
+       libmemcachedutil2 \
+       libpq5 \
+       libzip4 \
+       libyaml-0-2 \
   " \
-  && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
+  && apt-get update && apt-get install -y $buildDeps $runDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-configure gd \

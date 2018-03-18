@@ -12,6 +12,8 @@
 
 * [反馈](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ffeedback)
 
+* [计划支持特性](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ftodo)
+
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
 **警告** 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？]([Why ?](https://github.com/khs1994-docker/lnmp/issues/238))
@@ -155,9 +157,9 @@ $ ./lnmp-docker.sh down
 
 每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
 
-* [v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
+* [v18.03 2018-03-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03)
 
-* ~~[v18.01 2018-01-12](https://github.com/khs1994-docker/lnmp/releases/tag/v18.01) **EOL**~~
+* ~~[v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02) **EOL**~~
 
 ## 支持 Kubernets
 
