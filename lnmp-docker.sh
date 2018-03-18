@@ -1329,7 +1329,10 @@ echo ; docker_compose
 
 # crontab
 
-if ! [ -f scripts/crontab/root ];then
+if [ -f scripts/crontab/root ];then
+  print_info "crontab_file existing"
+else
+  print_warning "crontab_file not existing"
   cp scripts/crontab/root.example scripts/crontab/root
 fi
 
