@@ -6,3 +6,4 @@
 !php-fpm.production.d
 !php.development.ini
 !php.production.ini
+!docker-entrypoint.crond.sh

@@ -15,6 +15,7 @@
     * [HTTPS 配置](nginx-with-https.md)
 * [PHPer 常用命令容器化](command.md)
 * [软件配置](config.md)
+* [Crontab](crontab.md)
 * PHP
     * [PHP 扩展列表](php.md)
     * [xdebug](xdebug.md)

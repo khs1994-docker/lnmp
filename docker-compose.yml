@@ -167,11 +167,13 @@ services:
       - ./config/php/php/conf.d/${PHP_ERROR_INI:-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
+      - ./scripts/crontab/root:/var/spool/cron/crontabs/root:ro
     networks:
       - frontend
       - backend
     expose:
       - "9000"
+    entrypoint: /docker-entrypoint.crond.sh
     command: php-fpm -R -F
     env_file:
       - ./cli/timezone.env
@@ -181,6 +183,9 @@ services:
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05-rc2} x86_64 With Pull Docker Image
     labels:
       - ${LNMP_DOMAIN:-com.khs1994.lnmp}.php=true
+    secrets:
+      - source: php_with_crond_entrypoint
+        target: /docker-entrypoint.crond.sh
 
   phpmyadmin:
     << : *default-common

@@ -1327,6 +1327,14 @@ print_info `docker --version`
 
 echo ; docker_compose
 
+# crontab
+
+if ! [ -f scripts/crontab/root ];then
+  cp scripts/crontab/root.example scripts/crontab/root
+fi
+
+# output help
+
 if [ $# = 0 ];then help; exit 0; fi
 
 # 生产环境 compose 文件
