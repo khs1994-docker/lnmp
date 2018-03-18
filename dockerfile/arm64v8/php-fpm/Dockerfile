@@ -24,6 +24,16 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                             tzdata \
                             " \
       # 不要删除
+      && KHS1994_PHP_FPM_RUN_DEPS=" \
+                         libmemcached \
+                         libpq \
+                         libzip \
+                         libpng \
+                         freetype \
+                         libjpeg-turbo \
+                         yaml \
+                         " \
+      # *-dev 编译之后删除
       && KHS1994_PHP_FPM_BUILD_DEPS=" \
                          libressl-dev \
                          libmemcached-dev \
@@ -35,9 +45,10 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo-dev \
                          yaml-dev \
                          " \
+        && apk add --no-cache --virtual .khs1994-php-fpm-run-deps $KHS1994_PHP_FPM_RUN_DEPS \
         && apk add --no-cache linux-headers \
         && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
-        && apk add --no-cache --virtual .khs1994-php-fpm-build_deps $KHS1994_PHP_FPM_BUILD_DEPS \
+        && apk add --no-cache --virtual .khs1994-php-fpm-build-deps $KHS1994_PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-configure gd \
@@ -67,7 +78,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                  # opcache 已默认安装，需要自行载入
                                  opcache \
                                  swoole \
-        && apk del .build-deps linux-headers \
+        && apk del .build-deps linux-headers .khs1994-php-fpm-build-deps \
         && rm -rf /tmp/*
 
 # install composer

@@ -220,6 +220,16 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                             tzdata \
                             " \
       # 不要删除
+      && KHS1994_PHP_FPM_RUN_DEPS=" \
+                         libmemcached \
+                         libpq \
+                         zlib \
+                         libpng \
+                         freetype \
+                         libjpeg-turbo \
+                         yaml \
+                         " \
+      # *-dev 编译之后删除
       && KHS1994_PHP_FPM_BUILD_DEPS=" \
                          openssl-dev \
                          libmemcached-dev \
@@ -231,8 +241,10 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo-dev \
                          yaml-dev \
                          " \
+        && apk add --no-cache --virtual .khs1994-php-fpm-run-deps $KHS1994_PHP_FPM_RUN_DEPS \
+        && apk add --no-cache linux-headers \
         && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
-        && apk add --no-cache --virtual .khs1994-php-fpm-build_deps $KHS1994_PHP_FPM_BUILD_DEPS \
+        && apk add --no-cache --virtual .khs1994-php-fpm-build-deps $KHS1994_PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure gd \
                                     --with-freetype-dir=/usr/include/ \
                                     --with-jpeg-dir=/usr/include/ \
@@ -247,9 +259,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                         igbinary \
                         redis \
                         memcached-2.2.0 \
-                        yaml-1.3.1 \
                         # 安装测试版的扩展，可以在扩展名后加 -beta
                         xdebug-2.5.5 \
+                        yaml-1.3.1 \
         && docker-php-ext-enable mongodb \
                                  redis \
                                  memcached \
@@ -257,7 +269,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                  yaml \
                                  igbinary \
                                  opcache \
-        && apk del .build-deps \
+        && apk del .build-deps linux-headers .khs1994-php-fpm-build-deps \
         && rm -rf /tmp/*
 
 # install composer
