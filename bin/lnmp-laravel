@@ -13,8 +13,9 @@ source $DIR/.arch
 docker run -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
+  --entrypoint laravel \
   ${DOCKER_IMAGE}:${TAG} \
-  laravel "$@"
+  "$@"
 
 if [ "$1" = 'new' ];then
   LARAVEL_PATH="$2"

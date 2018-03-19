@@ -185,7 +185,7 @@ _registry(){
       print_error "两次输入的密码不同，请再次执行 ./lnmp-docker.sh registry 完成操作"; exit 1
     fi
 
-    docker run --rm \
+    docker run --init --rm \
       --entrypoint htpasswd \
       registry \
       -Bbn $username $password > config/${NGINX_CONF_D:-nginx}/auth/docker_registry.htpasswd
@@ -223,7 +223,7 @@ tz(){
   run_docker
 
   docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1 || print_info "Create TZDATA Volume...\n"
-  docker run -it --rm \
+  docker run --init -it --rm \
           --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo \
           $image \
           date > /tmp/tzdata.txt 2>&1
@@ -318,7 +318,7 @@ cleanup(){
 
 gitbook(){
   docker rm -f lnmp-docs > /dev/null 2>&1 || echo
-  exec docker run -it --rm \
+  exec docker run --init -it --rm \
     -p 4000:4000 \
     --name lnmp-docs \
     -v $PWD/docs:/srv/gitbook-src \
@@ -699,7 +699,7 @@ server{
 # 申请 ssl 证书
 
 acme(){
-  exec docker run -it --rm \
+  exec docker run --init -it --rm \
          -v $PWD/config/${NGINX_CONF_D:-nginx}/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
@@ -744,7 +744,7 @@ $ ./lnmp-docker.sh acme.sh
   command=${command[@]//'--rsa'/}
   command=${command[@]//'--httpd'/}
 
-  exec docker run -it --rm \
+  exec docker run --init -it --rm \
          -v $PWD/config/$(if [ "$HTTPD" = 1 ];then echo ${HTTPD_CONF_D:-httpd}; else echo ${NGINX_CONF_D:-nginx}; fi)/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
@@ -754,7 +754,7 @@ $ ./lnmp-docker.sh acme.sh
 }
 
 ssl_self(){
-  docker run -it --rm -v $PWD/config/${NGINX_CONF_D:-nginx}/ssl:/ssl khs1994/tls "$@"
+  docker run --init -it --rm -v $PWD/config/${NGINX_CONF_D:-nginx}/ssl:/ssl khs1994/tls "$@"
 }
 
 # 快捷开始 PHP 项目开发

@@ -16,15 +16,16 @@ source $DIR/.arch
 
 . $DIR/../.env
 
-docker run -it --rm \
+docker run --init -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
   --mount type=bind,src=$DIR/../logs/php-fpm/cli_error.log,target=/var/log/php-fpm/php_errors.log \
   --network lnmp_backend \
+  --entrypoint vendor/bin/phpunit \
   -e APP_ENV=testing \
   ${DOCKER_IMAGE}:${TAG} \
-  vendor/bin/phpunit -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log "$@"
+  -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log "$@"
 
 if ! [ -z "$CREATE" ];then
   docker network rm lnmp_backend
