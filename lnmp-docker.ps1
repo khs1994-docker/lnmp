@@ -237,7 +237,7 @@ switch($first){
     }
 
     docs {
-      docker run -it --rm -p 4000:4000 --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
+      docker run --init -it --rm -p 4000:4000 --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
     }
 
     full-up {
@@ -313,7 +313,7 @@ switch($first){
     }
 
     ssl-self {
-      docker run -it --rm -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
+      docker run --init -it --rm -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
       printInfo 'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
 
@@ -323,7 +323,7 @@ switch($first){
     }
 
     tz {
-      docker run -it --rm --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 date
+      docker run --init -it --rm --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 date
     }
 
     httpd-cli {
