@@ -2,6 +2,8 @@ ARG PHP_VERSION=7.1.15
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
+LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
+
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 

@@ -11,25 +11,25 @@ version: "3.5"
 x-common:
   &default-common
   labels:
-    com.khs1994.lnmp: "true"
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
 
 x-labels:
   &default-labels
-  com.khs1994.lnmp: "true"
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
 
 services:
 
   redis:
     << : *default-common
     build:
+      << : *default-labels
       context: ./dockerfile/redis
       cache_from:
         - alpine:latest
       dockerfile: Dockerfile
       args:
         VAR: 1
-      labels:
-        com.khs1994.lnmp.description: "Self Build Redis"
       shm_size: '2gb' # 3.5
       #
       # Dockerfile target

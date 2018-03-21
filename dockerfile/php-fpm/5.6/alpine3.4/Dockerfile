@@ -6,6 +6,8 @@
 
 FROM alpine:3.4
 
+LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
+
 ARG PHP_VERSION=5.6.34
 
 ENV APP_ENV=development

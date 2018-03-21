@@ -55,9 +55,9 @@ x-deploy:
 x-labels:
   &default-labels
   labels:
-    - "com.khs1994.lnmp=true"
-    - "com.khs1994.lnmp.clusterkit=true"
-    - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}=true"
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit=true"
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=clusterkit_redis_sentinel"
 
 services:
 

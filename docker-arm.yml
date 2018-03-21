@@ -12,7 +12,8 @@ x-common:
 
 x-labels:
   &default-labels
-  com.khs1994.lnmp: "true"
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
 
 x-build:
   &default-build
@@ -33,7 +34,8 @@ services:
   #
   # MySQL not in arm
   # mysql:
-  #   << : *default-common:
+  #   << : *default-common
+  #   << : *default-labels
   #   # build:
   #   #   << : *default-build-debian
   #   #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mysql
@@ -50,12 +52,10 @@ services:
   #   volumes:
   #     - mysql-data:/var/lib/mysql
   #     - ./logs/mysql:/var/log/mysql
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mysql: "true"
 
   redis:
     << : *default-common
+    << : *default-labels
     # build:
     #   << : *default-build
     #   << : *default-build-debian
@@ -77,12 +77,10 @@ services:
       "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0"
       ]
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.redis: "true"
 
   memcached:
     << : *default-common
+    << : *default-labels
     # build:
     #   << : *default-build-debian
     #   << : *default-build
@@ -95,12 +93,10 @@ services:
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
        - "${MEMCACHED_PORT}:11211"
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.memcached: "true"
 
   rabbitmq:
     << : *default-common
+    << : *default-labels
     # build:
     #   << : *default-build-debian
     #   << : *default-build
@@ -115,13 +111,10 @@ services:
     # ports:
     #   - "15672"
     #   - "5672"
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.rabbitmq: "true"
-
 
   postgresql:
     << : *default-common
+    << : *default-labels
     # build:
     #   << : *default-build-debian
     #   << : *default-build
@@ -139,12 +132,10 @@ services:
     secrets:
       # default is mysql password
       - db_root_password
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.postgresql: "true"
 
   # mongodb:
   #   << : *default-common
+  #   << : *default-labels
   #   # build:
   #   #   << : *default-build-debian
   #   #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mongodb/
@@ -160,12 +151,10 @@ services:
   #   env_file:
   #     - ./cli/timezone.env
   #   command: ["mongod","--config","/etc/mongod.conf"]
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mongodb: "true"
 
   php7:
     << : *default-common
+    << : *default-labels
     # build:
     #   << : *default-build-debian
     #   << : *default-build
@@ -192,12 +181,10 @@ services:
     secrets:
       - source: php_with_crond_entrypoint
         target: /docker-entrypoint.crond.sh
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php: "true"
 
   nginx:
     << : *default-common
+    << : *default-labels
     # build:
     #   << : *default-build-debian
     #   << : *default-build
@@ -218,12 +205,10 @@ services:
       - ./logs/nginx:/var/log/nginx
     depends_on:
       - php7
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
 
   # httpd:
   #   << : *default-common
+  #   << : *default-labels
   #   # build:
   #   #   << : *default-build-debian
   #   #   << : *default-build
@@ -245,25 +230,32 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.httpd: "true"
 
 networks:
   frontend:
+    << : *default-labels
   backend:
+    << : *default-labels
 
 volumes:
   # mysql-data:
+  #   << : *default-labels
   redis-data:
+    << : *default-labels
   rabbitmq-data:
+    << : *default-labels
   postgresql-data:
+    << : *default-labels
   # mongodb-data:
+  #   << : *default-labels
   zoneinfo-data:
+    << : *default-labels
 
 secrets:
   db_root_password:
+    << : *default-labels
     file: secrets/db_root_password.txt
 
   php_with_crond_entrypoint:
+    << : *default-labels
     file: config/php/docker-entrypoint.crond.sh

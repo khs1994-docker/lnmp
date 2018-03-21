@@ -1,5 +1,7 @@
 FROM mongo:3.7.2
 
+LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
+
 ARG DEB_URL=deb.debian.org
 
 ARG DEB_SECURITY_URL=security.debian.org

@@ -32,8 +32,8 @@ x-deploy:
 x-labels:
   &default-labels
   labels:
-    - com.khs1994.lnmp=true
-    - com.khs1994.lnmp.app.env=production_swarm_mode
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=production_swarm_mode
 
 x-build:
   &default-build
