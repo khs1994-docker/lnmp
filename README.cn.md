@@ -14,6 +14,8 @@
 
 * [计划支持特性](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ftodo)
 
+* [最佳实践](https://github.com/khs1994-docker/php-demo)
+
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
 **警告** 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？]([Why ?](https://github.com/khs1994-docker/lnmp/issues/238))

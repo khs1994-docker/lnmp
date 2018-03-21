@@ -31,8 +31,9 @@ x-deploy:
 
 x-labels:
   &default-labels
-  com.khs1994.lnmp: "true"
-  com.khs1994.lnmp.app.env: production_swarm_mode
+  labels:
+    - com.khs1994.lnmp=true
+    - com.khs1994.lnmp.app.env=production_swarm_mode
 
 x-build:
   &default-build
@@ -80,6 +81,7 @@ services:
 
   mysql:
     << : *default-common
+    << : *default-labels
     build:
       << : *default-build-debian
       context: ./dockerfile/mysql/
@@ -105,6 +107,7 @@ services:
     logging: *default-logging
     deploy:
       << : *default-deploy
+      << : *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -114,21 +117,16 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        << : *default-labels
-        com.khs1994.lnmp.mysql: "true"
     secrets:
       - source: db_root_password
         target: /etc/db_root_password
     configs:
       - source: mysql_conf_d_docker_cnf
         target: /etc/mysql/conf.d/docker.cnf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mysql: "true"
 
   # mariadb:
   #   << : *default-common
+  #   << : *default-labels
   #   build:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
@@ -157,6 +155,7 @@ services:
   #     - --character-set-server=utf8mb4
   #   deploy:
   #     << : *default-deploy
+  #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
   #   logging: *default-logging
@@ -165,12 +164,10 @@ services:
   #   configs:
   #     - source: mariadb_conf_d_docker_cnf
   #       target: /etc/mysql/conf.d/docker.cnf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mariadb: "true"
 
   redis:
     << : *default-common
+    << : *default-labels
     build:
       << : *default-build
       # << : *default-build-debian
@@ -195,21 +192,17 @@ services:
     logging: *default-logging
     deploy:
       << : *default-deploy
+      << : *default-labels
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      labels:
-        << : *default-labels
-        com.khs1994.lnmp.redis: "true"
     configs:
       - source: redis_conf
         target: /redis.conf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.redis: "true"
 
   # memcached:
   #   << : *default-common
+  #   << : *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -227,15 +220,14 @@ services:
   #     - zoneinfo-data:/usr/share/zoneinfo:rw
   #   deploy:
   #     << : *default-deploy
+  #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
   #   logging: *default-logging
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.memcached: "true"
 
   # rabbitmq:
   #   << : *default-common
+  #   << : *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -255,15 +247,14 @@ services:
   #   #   - "127.0.0.1:5672:5672"
   #   deploy:
   #     << : *default-deploy
+  #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
   #   logging: *default-logging
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.rabbitmq: "true"
 
   # postgresql:
   #   << : *default-common
+  #   << : *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -285,18 +276,17 @@ services:
   #   #   - "127.0.0.1:5432:5432"
   #   deploy:
   #     << : *default-deploy
+  #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
   #   logging: *default-logging
   #   secrets:
   #     # default is mysql password
   #     - db_root_password
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.postgresql: "true"
 
   # mongodb:
   #   << : *default-common
+  #   << : *default-labels
   #   build:
   #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
@@ -312,6 +302,7 @@ services:
   #     - mongodb-data:/data/db:rw
   #   deploy:
   #     << : *default-deploy
+  #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
   #   logging: *default-logging
@@ -321,12 +312,10 @@ services:
   #   configs:
   #     - source: mongod_conf
   #       target: /etc/mongod.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mongodb: "true"
 
   php7:
     << : *default-common
+    << : *default-labels
     build:
       << : *default-build
       # << : *default-build-debian
@@ -337,8 +326,6 @@ services:
       #   foo: bar
       # cache_from:
       #   - alpine:3.7
-      # labels:
-      #   - "com.khs1994.lnmp.php7=true"
     #
     # image: username/lnmp-php:tag
     #
@@ -364,12 +351,10 @@ services:
     logging: *default-logging
     deploy:
       << : *default-deploy
+      << : *default-labels
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      labels:
-        << : *default-labels
-        com.khs1994.lnmp.php7: "true"
     configs:
       - source: php_ini
         target: /usr/local/etc/php/php.ini
@@ -385,12 +370,10 @@ services:
         target: /docker-entrypoint.crond.sh
       - source: php_with_crond
         target: /var/spool/cron/crontabs/root
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php7: "true"
 
   nginx:
     << : *default-common
+    << : *default-labels
     build:
       << : *default-build
       # << : *default-build-debian
@@ -416,12 +399,10 @@ services:
     logging: *default-logging
     deploy:
       << : *default-deploy
+      << : *default-labels
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      labels:
-        << : *default-labels
-        com.khs1994.lnmp.nginx: "true"
     configs:
       - source: nginx_conf
         target: /etc/nginx/nginx.conf
@@ -494,12 +475,10 @@ services:
     #   timeout: 10s
     #   retries: 3
     #   start_period: 40s
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
 
   # httpd:
   #   << : *default-common
+  #   << : *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -527,6 +506,7 @@ services:
   #   logging: *default-logging
   #   deploy:
   #     << : *default-deploy
+  #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
   #   configs:
@@ -559,12 +539,10 @@ services:
   #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.crt
   #     # - source: domain_com_ssl_key
   #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.key
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.httpd: "true"
 
   # registry:
   #   << : *default-common
+  #   << : *default-labels
   #   build:
   #     << : *default-build
   #     # << : *default-build-debian
@@ -586,69 +564,52 @@ services:
   #     - registry-data:/var/lib/registry
   #   deploy:
   #     << : *default-deploy
+  #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
-  #     labels:
-  #       << : *default-labels
-  #       com.khs1994.lnmp.mysql: "true"
   #   logging: *default-logging
   #   configs:
   #     - source: registy_yml
   #       target: /etc/docker/registry/config.yml
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.httpd: "true"
+
 
 networks:
   frontend:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.frontend: "true"
+    << : *default-labels
+
   backend:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.backend: "true"
+    << : *default-labels
+
 
 volumes:
   mysql-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mysql: "true"
+    << : *default-labels
+
   # mariadb-data:
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mariadb: "true"
+  #   << : *default-labels
+
   redis-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.redis: "true"
+    << : *default-labels
+
   # rabbitmq-data:
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.rabbitmq: "true"
+  #   << : *default-labels
+  #
   # postgresql-data:
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.postgresql: "true"
+  #   << : *default-labels
+  #
   # mongodb-data:
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mongodb: "true"
+  #   << : *default-labels
+
   zoneinfo-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.zoneinfo: "true"
+    << : *default-labels
   # registry-data:
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.registry: "true"
+  #   << : *default-labels
+
 
 secrets:
   db_root_password:
+    << : *default-labels
     file: secrets/db_root_password.txt
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mysql: "true"
 
   #
   #
@@ -657,55 +618,42 @@ secrets:
   #
 
   khs1994_com_ssl_key:
+    << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.key
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+
   khs1994_com_ssl_crt:
+    << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.crt
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+
   khs1994_com_ssl_rsa_key:
+    << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.rsa.key
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+
   khs1994_com_ssl_rsa_crt:
+    << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.rsa.crt
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
 
   #
   # developer_khs1994_com_ssl_crt:
   #   file: ./config/nginx/ssl/developer.khs1994.com.crt
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
+  #
   # developer_khs1994_com_ssl_key:
   #   file: ./config/nginx/ssl/developer.khs1994.com.key
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   # developer_khs1994_com_ssl_rsa_crt:
   #   file: ./config/nginx/ssl/developer.khs1994.com.rsa.crt
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
+  #
   # developer_khs1994_com_ssl_rsa_key:
   #   file: ./config/nginx/ssl/developer.khs1994.com.rsa.key
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   #
   # auth_htpasswd:
   #   file: ./config/nginx/auth/nginx.htpasswd
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   #
   # Example Don't Edit
@@ -713,81 +661,63 @@ secrets:
   #
   # domain_com_ssl_key:
   #   file: ./config/nginx/ssl/domain.com.key
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   # domain_com_ssl_crt:
   #   file: ./config/nginx/ssl/domain.com.crt
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   # domain_com_ssl_key:
   #   file: ./config/nginx/ssl/domain.com.key
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   # domain_com_ssl_crt:
   #   file: ./config/nginx/ssl/domain.com.crt
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   # SSH use in  CI/CD
   #
   #
   ssh_id_rsa:
     file: /root/.ssh/id_rsa
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.ssh: "true"
+    << : *default-labels
+
   #
   # SSH config
   #
   ssh_config:
     file: ./secrets/ssh_config
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.ssh: "true"
+    << : *default-labels
+
 
 configs:
   mysql_conf_d_docker_cnf:
     file: ./config/mysql/conf.production.d/docker.cnf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mysql: "true"
+    << : *default-labels
+
   # mariadb_conf_d_docker_cnf:
   #   file: ./config/mariadb/conf.production.d/docker.cnf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mariadb: "true"
+  #   << : *default-labels
+
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+    << : *default-labels
+
   nginx_80_conf:
     file: ./config/nginx/80.conf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+    << : *default-labels
+
   nginx_301_conf:
     file: ./config/nginx/301.conf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+    << : *default-labels
+
   nginx_ssl_conf:
     file: ./config/nginx/ssl.config
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+    << : *default-labels
+
   nginx_khs1994_com_conf:
     file: ./config/nginx/khs1994.com.conf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
+    << : *default-labels
   #
   #
   # NGINX Example Don't Edit
@@ -795,25 +725,19 @@ configs:
   #
   # nginx_domain_com_conf:
   #   file ./config/nginx/domain.com.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.nginx: "true"
+  #   << : *default-labels
   #
   #
   #
   # httpd_conf:
   #   file: ./config/etc/httpd/httpd.production.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.httpd: "true"
+  #   << : *default-labels
   #
   #
   #
   # vhost_khs1994_com_conf:
   #   file: ./config/httpd/khs1994.com.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.httpd: "true"
+  #   << : *default-labels
   #
   #
   # Apache Example Don't Edit
@@ -821,46 +745,33 @@ configs:
   #
   # vhost_domain_com_conf:
   #   file: ./config/httpd/domain.com.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.httpd: "true"
+  #   << : *default-labels
+
 
   php_ini:
     file: ./config/php/php.production.ini
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php7: "true"
+    << : *default-labels
+
   php_fpm_conf_d_zz_docker_conf:
     file: ./config/php/php-fpm.production.d/zz-docker.conf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php7: "true"
+    << : *default-labels
+
   php_with_crond_entrypoint:
     file: ./config/php/docker-entrypoint.crond.sh
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php7: "true"
+    << : *default-labels
 
   php_with_crond:
     file: ./scripts/crontab/root
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php7: "true"
+    << : *default-labels
 
   redis_conf:
     file: ./config/redis/redis.production.conf
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.redis: "true"
+    << : *default-labels
 
   # mongod_conf:
   #   file: ./config/mongodb/mongod.production.conf
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mongodb: "true"
+  #   << : *default-labels
   #
   # registy_yml:
   #   file: ./config/registry/config.production.yml
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.registry: "true"
+  #   << : *default-labels

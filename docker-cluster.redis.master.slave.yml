@@ -41,10 +41,18 @@ x-common:
     - source: redis_conf
       target: /redis.conf
 
+x-labels:
+  &default-labels
+  labels:
+    - "com.khs1994.lnmp=true"
+    - "com.khs1994.lnmp.clusterkit=true"
+    - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
+
 services:
 
   redis_master:
     << : *default-common
+    << : *default-labels
     # build:
     #   context: ./dockerfile/redis/
     #   dockerfile: Dockerfile
@@ -68,22 +76,14 @@ services:
       ]
     deploy:
       << : *default-deploy
+      << : *default-labels
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.master.slave=master"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.slave=master"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
   redis_slave-1:
     << : *default-common
+    << : *default-labels
     # build:
     #   context: ./dockerfile/redis/
     #   dockerfile: Dockerfile
@@ -111,47 +111,23 @@ services:
       - redis_master
     deploy:
       << : *default-deploy
+      << : *default-labels
       replicas: 1
       # placement:
       #   constraints: [node.role == manager]
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.master.slave=slave1"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.slave=slave1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
 
 volumes:
   redis_master-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.slave=master"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
+    << : *default-labels
+
   redis_slave-1-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.slave=slave1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
+    << : *default-labels
 
 networks:
   redis_master_slave:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.slave=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"
+    << : *default-labels
 
 secrets:
   redis_conf:
+    << : *default-labels
     file: ./config/redis/redis.conf
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.master.slave=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_master_slave"

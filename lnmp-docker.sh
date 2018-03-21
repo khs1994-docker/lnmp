@@ -805,6 +805,48 @@ start(){
   print_info "Please set hosts in /etc/hosts in development"
 }
 
+#
+# $1 compose name
+# $2 Swarm mode name
+# $3 bash or sh
+#
+
+bash_cli(){
+  run_docker
+  docker exec -it \
+      $(docker container ls \
+          --format "{{.ID}}" \
+          -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+          -f label=com.docker.compose.service=$1 ) \
+          $3 2> /dev/null || \
+      docker exec -it \
+      $(docker container ls \
+          --format "{{.ID}}" \
+          -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+          -f label=com.docker.swarm.service.name=lnmp_$2 ) $3
+
+  exit $?
+}
+
+clusterkit_bash_cli(){
+  docker exec -it \
+    $(docker container ls \
+        --format "{{.ID}}" \
+        --filter \
+        label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+        label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
+        label=com.docker.compose.service=$2 ) $3 || \
+  docker exec -it \
+    $(docker container ls \
+        --format "{{.ID}}" \
+        --filter \
+        label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+        label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
+        label=com.docker.swarm.service.name=lnmp_$2 ) $3
+
+  exit $?
+}
+
 # 入口文件
 
 main() {
@@ -958,7 +1000,7 @@ For information please run $ docker service update --help
     if [ ${ARCH} = 'x86_64' ];then
       docker-compose up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.nginx) nginx -t
+      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx ) nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
       docker-compose -f docker-arm.yml up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
@@ -1004,25 +1046,25 @@ For information please run $ docker service update --help
     ;;
 
   php-cli | php7-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.php) bash
+      bash_cli php7 lnmp_php7 bash
     ;;
 
   mongodb-cli | mongo-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mongodb) bash
+    bash_cli mongodb lnmp_php7 bash
     ;;
 
   mariadb-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mariadb) bash
+    bash_cli mariadb lnmp_php7 bash
     ;;
 
   mysql-cli )
-    run_docker; exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.mysql) bash
+    bash_cli mysql lnmp_php7 bash
     ;;
 
   *-cli )
     SERVICE=$(echo $command | cut -d '-' -f 1)
     run_docker;
-    exec docker exec -it $(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.${SERVICE}) sh
+    bash_cli $SERVICE lnmp_$SERVICE sh
     ;;
 
   *-logs | *-log )
@@ -1030,7 +1072,7 @@ For information please run $ docker service update --help
     if ! [ "${OS}" = 'Linux' ];then NOTSUPPORT; fi
 
     SERVICE=$(echo $command | cut -d '-' -f 1)
-    journalctl -u docker.service CONTAINER_ID=$(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.$SERVICE) "$@"
+    journalctl -u docker.service CONTAINER_ID=$(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.swarm.service.name=lnmp_${SERVICE} ) "$@"
     ;;
 
   build-push )
@@ -1135,7 +1177,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     done
 
     if [ "$opt" = 'true' ];then
-      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp}.nginx) nginx -t || \
+      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx ) nginx -t || \
         (echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
 
       echo; print_info "nginx configuration file test is successful\n"
@@ -1178,7 +1220,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
      if [ -z $@ ];then
        print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node1|node2} {COMMAND}' ; exit 1
      fi
-     docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.mysql=${NODE}) $COMMAND
+       clusterkit_bash_cli clusterkit_mysql $NODE ${COMMAND:-bash}
      ;;
 
   clusterkit-mysql-deploy )
@@ -1204,7 +1246,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         if [ -z $@ ];then
           print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master1|slave1} {COMMAND}' ; exit 1
         fi
-        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.redis=${NODE}) $COMMAND
+          clusterkit_bash_cli clusterkit_redis $NODE ${COMMAND:-bash}
         ;;
 
   clusterkit-redis-master-slave-up )
@@ -1222,7 +1264,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         if [ -z $@ ];then
           print_error '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {NODE_NAME} {COMMAND}' ; exit 1
         fi
-        docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.redis.master.slave=${NODE}) $COMMAND
+          clusterkit_bash_cli clusterkit_redis_master_slave $NODE ${COMMAND:-bash}
         ;;
 
   clusterkit-redis-sentinel-up )
@@ -1240,7 +1282,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         if [ -z $@ ];then
           print_error '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {masterN|slaveN|sentinelN} {COMMAND}' ; exit 1
         fi
-          docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.redis.sentinel=${NODE}) $COMMAND
+          clusterkit_bash_cli clusterkit_redis_sentinel $NODE ${COMMAND:-bash}
         ;;
 
   clusterkit-* )
@@ -1330,9 +1372,9 @@ echo ; docker_compose
 # crontab
 
 if [ -f scripts/crontab/root ];then
-  print_info "crontab_file existing"
+  print_info "crontab_file existing\n"
 else
-  print_warning "crontab_file not existing"
+  print_warning "crontab_file not existing\n"
   cp scripts/crontab/root.example scripts/crontab/root
 fi
 
