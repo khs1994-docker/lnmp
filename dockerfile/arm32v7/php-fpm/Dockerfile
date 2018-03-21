@@ -1,5 +1,7 @@
 FROM arm32v7/php:7.2.3-fpm-stretch
 
+LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
+
 ENV TZ=Asia/Shanghai
 
 ARG DEB_URL=deb.debian.org

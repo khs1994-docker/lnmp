@@ -115,8 +115,6 @@ services:
       << : *default-build
       # << : *default-build-debian
       context: ./dockerfile/phpmyadmin/
-    labels:
-      - "com.khs1994.lnmp.app.env=self_build"
 
 networks:
   frontend:

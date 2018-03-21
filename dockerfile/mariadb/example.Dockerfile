@@ -1,5 +1,7 @@
 FROM mariadb:10.3.4
 
+LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
+
 ARG DEB_URL=deb.debian.org
 
 ARG DEB_SECURITY_URL=security.debian.org

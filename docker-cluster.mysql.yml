@@ -25,11 +25,11 @@ version: '3.5'
 #
 ### bash
 #
-# $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.mysql=master) mysql -uroot -p
+# $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.mysql=master) mysql -uroot -p
 #
 ### fish
 #
-# $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.mysql=master) mysql -uroot -p
+# $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.mysql=master) mysql -uroot -p
 #
 ## Remove All [Include Volumes]
 #
@@ -64,9 +64,9 @@ x-deploy:
 x-labels:
   &default-labels
   labels:
-    - "com.khs1994.lnmp=true"
-    - "com.khs1994.lnmp.clusterkit=true"
-    - "com.khs1994.lnmp.app.env=clusterkit_mysql"
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}=true"
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit=true"
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=clusterkit_mysql"
 
 services:
   mysql_master:
