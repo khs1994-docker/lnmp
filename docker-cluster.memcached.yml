@@ -28,14 +28,23 @@ x-deploy:
     delay: 10s
     order: stop-first
 
+x-labels:
+  &default-labels
+  labels:
+    - "com.khs1994.lnmp=true"
+    - "com.khs1994.lnmp.clusterkit=true"
+    - "com.khs1994.lnmp.app.env=clusterkit_memcached"
+
 services:
 
   memcached_1:
     << : *default-common
+    << : *default-labels
     ports:
       - "21211:11211"
     deploy:
       << : *default-deploy
+      << : *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:
@@ -45,23 +54,15 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.memcached=memcached1"
-        - "com.khs1994.lnmp.app.env=clusterkit_memcached"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.memcached=memcached1"
-      - "com.khs1994.lnmp.app.env=clusterkit_memcached"
 
   memcached_2:
     << : *default-common
+    << : *default-labels
     ports:
       - "21212:11211"
     deploy:
       << : *default-deploy
+      << : *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:
@@ -71,23 +72,15 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.memcached=memcached2"
-        - "com.khs1994.lnmp.app.env=clusterkit_memcached"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.memcached=memcached2"
-      - "com.khs1994.lnmp.app.env=clusterkit_memcached"
 
   memcached_3:
     << : *default-common
+    << : *default-labels
     ports:
       - "21213:11211"
     deploy:
       << : *default-deploy
+      << : *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:
@@ -97,21 +90,7 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.memcached=memcached3"
-        - "com.khs1994.lnmp.app.env=clusterkit_memcached"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.memcached=memcached3"
-      - "com.khs1994.lnmp.app.env=clusterkit_memcached"
 
 networks:
   cluster_memcached:
-     labels:
-       - "com.khs1994.lnmp=true"
-       - "com.khs1994.lnmp.clusterkit=true"
-       - "com.khs1994.lnmp.clusterkit.memcached=true"
-       - "com.khs1994.lnmp.app.env=clusterkit_memcached"
+    << : *default-labels

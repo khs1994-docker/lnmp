@@ -79,10 +79,18 @@ x-deploy:
     delay: 10s
     order: stop-first
 
+x-labels:
+  &default-labels
+  labels:
+    - "com.khs1994.lnmp=true"
+    - "com.khs1994.lnmp.clusterkit=true"
+    - "com.khs1994.lnmp.app.env=clusterkit_redis"
+
 services:
 
   redis_ruby:
     << : *default-common
+    << : *default-labels
     # build:
     #   context: ./cluster/redis
     #   args:
@@ -101,16 +109,6 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis=ruby"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=ruby"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-1:
     << : *default-common
@@ -128,6 +126,7 @@ services:
       - cluster_redis_master-1-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -137,25 +136,16 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis=master1"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis"
     expose:
       - "7001"
       - "17001"
     ports:
       - "7001:7001"
       - "17001:17001"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=master1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-2:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_master-1
     expose:
@@ -178,6 +168,7 @@ services:
       - cluster_redis_master-2-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -187,19 +178,10 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis=master2"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=master2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_master-3:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_master-1
     expose:
@@ -222,6 +204,7 @@ services:
       - cluster_redis_master-3-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -231,19 +214,10 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis=master3"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=master3"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-1:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_master-1
     expose:
@@ -266,6 +240,7 @@ services:
       - cluster_redis_slave-1-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       replicas: 1
       # resources:
       #   limits:
@@ -274,19 +249,10 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis=slave1"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=slave1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-2:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_master-1
     expose:
@@ -309,6 +275,7 @@ services:
       - cluster_redis_slave-2-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       replicas: 1
       # resources:
       #   limits:
@@ -317,19 +284,10 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis=slave2"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=slave2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
   redis_slave-3:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_master-1
     expose:
@@ -352,6 +310,7 @@ services:
       - cluster_redis_slave-3-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       replicas: 1
       # resources:
       #   limits:
@@ -360,72 +319,35 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis=slave3"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=slave3"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
 networks:
   cluster_redis:
+    << : *default-labels
     ipam:
       driver: default
       config:
         - subnet: 172.16.0.0/24
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
 secrets:
   cluster_redis_conf:
+    << : *default-labels
     file: ./cluster/redis/redis.conf
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
 
 volumes:
   cluster_redis_master-1-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=master1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
+    << : *default-labels
+
   cluster_redis_master-2-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=master2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
+    << : *default-labels
+
   cluster_redis_master-3-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=master3"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
+    << : *default-labels
+
   cluster_redis_slave-1-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=slave1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
+    << : *default-labels
+
   cluster_redis_slave-2-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=slave2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
+    << : *default-labels
+
   cluster_redis_slave-3-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis=slave3"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis"
+    << : *default-labels

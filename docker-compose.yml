@@ -37,8 +37,6 @@ services:
       - --character-set-server=utf8mb4
     secrets:
       - db_root_password
-    labels:
-      - ${LNMP_DOMAIN:-com.khs1994.lnmp}.mysql=true
 
   # mariadb:
   #   << : *default-common
@@ -62,8 +60,6 @@ services:
   #     - --character-set-server=utf8mb4
   #   secrets:
   #     - db_root_password
-  #   labels:
-  #     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.mariadb=true
 
   redis:
     << : *default-common
@@ -92,8 +88,6 @@ services:
       "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0"
       ]
-    labels:
-      - ${LNMP_DOMAIN:-com.khs1994.lnmp}.redis=true
 
   # memcached:
   #   << : *default-common
@@ -102,9 +96,6 @@ services:
   #     - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
   #   volumes:
   #     - zoneinfo-data:/usr/share/zoneinfo
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.memcached: "true"
   #
   # rabbitmq:
   #   << : *default-common
@@ -115,9 +106,6 @@ services:
   #   # ports:
   #   #   - "${RABBITMQ_PORT_1000:-127.0.0.1:15672}:15672"
   #   #   - "${RABBITMQ_PORT:-127.0.0.1:5672}:5672"
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.rabbitmq: "true"
   #
   # postgresql:
   #   << : *default-common
@@ -133,9 +121,6 @@ services:
   #   secrets:
   #     # default is mysql password
   #     - db_root_password
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.postgresql: "true"
   #
   # mongodb:
   #   << : *default-common
@@ -147,9 +132,6 @@ services:
   #   ports:
   #     - "${MONGODB_PORT:-127.0.0.1:27017}27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
-  #   labels:
-  #     << : *default-labels
-  #     com.khs1994.lnmp.mongodb: "true"
 
 
   php7:
@@ -181,8 +163,6 @@ services:
     environment:
       - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05-rc2} x86_64 With Pull Docker Image
-    labels:
-      - ${LNMP_DOMAIN:-com.khs1994.lnmp}.php=true
     secrets:
       - source: php_with_crond_entrypoint
         target: /docker-entrypoint.crond.sh
@@ -196,8 +176,6 @@ services:
       - ${PHPMYADMIN_PORT:-127.0.0.1:8080}:80
     volumes:
       - phpmyadmin-data:/sessions
-    labels:
-      - ${LNMP_DOMAIN:-com.khs1994.lnmp}.phpmyadmin=true
 
   nginx:
     << : *default-common
@@ -218,8 +196,6 @@ services:
       - frontend
     depends_on:
       - php7
-    labels:
-      - ${LNMP_DOMAIN:-com.khs1994.lnmp}.nginx=true
 
   # httpd:
   #   << : *default-common
@@ -238,5 +214,3 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
-  #   labels:
-  #     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.httpd=true

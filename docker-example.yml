@@ -8,6 +8,11 @@ version: "3.5"
 # @link https://docs.docker.com/compose/overview/
 #
 
+x-common:
+  &default-common
+  labels:
+    com.khs1994.lnmp: "true"
+
 x-labels:
   &default-labels
   com.khs1994.lnmp: "true"
@@ -15,6 +20,7 @@ x-labels:
 services:
 
   redis:
+    << : *default-common
     build:
       context: ./dockerfile/redis
       cache_from:
@@ -72,7 +78,8 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-      labels: << : *default-labels
+      labels:
+        << : *default-labels
       resources:
         limits:
           cpus: '0.50'
@@ -134,8 +141,6 @@ services:
     # healthcheck:
     #   disable: true
     isolation: default # windows process hyperv
-    labels:
-       com.khs1994.lnmp.redis: true
     # links:
     #    - mysql
     logging:
@@ -252,7 +257,8 @@ services:
 configs:
   redis_conf:
     file: ./config/redis/redis.conf
-    labels: << : *default-labels
+    labels:
+      << : *default-labels
 
   #
   # 3.5
@@ -264,7 +270,8 @@ configs:
 secrets:
   my_secret:
     file: ./secrets/db_root_password
-    labels: << : *default-labels
+    labels:
+      << : *default-labels
   #
   # 3.5
   #
@@ -297,7 +304,8 @@ networks:
       foo: "bar"
       baz: 1
     attachable: true
-    labels: << : *default-labels
+    labels:
+      << : *default-labels
 
 volumes:
   redis-data:
@@ -306,7 +314,8 @@ volumes:
     driver_opts:
       foo: "bar"
       baz: 1
-    labels: << : *default-labels
+    labels:
+      << : *default-labels
   #
   # 3.5
   #

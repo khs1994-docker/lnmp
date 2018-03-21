@@ -52,10 +52,18 @@ x-deploy:
     delay: 10s
     order: stop-first
 
+x-labels:
+  &default-labels
+  labels:
+    - "com.khs1994.lnmp=true"
+    - "com.khs1994.lnmp.clusterkit=true"
+    - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+
 services:
 
   redis_sentinel_master_1:
     << : *default-common
+    << : *default-labels
     ports:
       - "10000:10000"
     entrypoint: /docker-entrypoint.redis.sh
@@ -72,6 +80,7 @@ services:
       - cluster_redis_sentinel_master_1-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       placement:
         constraints: [node.role == manager]
       # resources:
@@ -81,19 +90,10 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.sentinel=master1"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=master1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
   redis_sentinel_slave_1:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_sentinel_master_1
     entrypoint: /docker-entrypoint.redis.sh
@@ -111,6 +111,7 @@ services:
       - cluster_redis_sentinel_slave_1-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:
@@ -120,21 +121,12 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave1"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
     ports:
       - "10001:10001"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
   redis_sentinel_slave_2:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_sentinel_master_1
     ports:
@@ -154,6 +146,7 @@ services:
       - cluster_redis_sentinel_slave_2-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:
@@ -163,19 +156,10 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave2"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
   redis_sentinel_slave_3:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_sentinel_master_1
     ports:
@@ -195,6 +179,7 @@ services:
       - cluster_redis_sentinel_slave_3-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       # placement:
       #   constraints: [node.role == manager]
       # resources:
@@ -204,19 +189,10 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave3"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave3"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
   redis_sentinel_1:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_sentinel_master_1
     ports:
@@ -237,6 +213,7 @@ services:
       - cluster_redis_sentinel_1-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       replicas: 1
       # resources:
       #   limits:
@@ -245,22 +222,13 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.sentinel=sentinel1"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=sentinel1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
     secrets:
       - source: cluster_redis_sentinel_entrypoint
         target: /docker-entrypoint.sentinel.sh
 
   redis_sentinel_2:
     << : *default-common
+    << : *default-labels
     depends_on:
       - redis_sentinel_master_1
     ports:
@@ -281,6 +249,7 @@ services:
       - cluster_redis_sentinel_2-data:/data
     deploy:
       << : *default-deploy
+      << : *default-labels
       replicas: 1
       # resources:
       #   limits:
@@ -289,91 +258,46 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-      labels:
-        - "com.khs1994.lnmp=true"
-        - "com.khs1994.lnmp.clusterkit=true"
-        - "com.khs1994.lnmp.clusterkit.redis.sentinel=sentinel2"
-        - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=sentinel2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
     secrets:
       - source: cluster_redis_sentinel_entrypoint
         target: /docker-entrypoint.sentinel.sh
 
 networks:
   cluster_redis_sentinel:
+    << : *default-labels
     ipam:
       driver: default
       config:
         - subnet: 172.15.0.0/24
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
 secrets:
   cluster_redis_conf:
+    << : *default-labels
     file: ./config/redis/redis.conf
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
   cluster_redis_sentinel_entrypoint:
+    << : *default-labels
     file: ./cluster/redis.sentinel/docker-entrypoint.sentinel.sh
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
   cluster_redis_entrypoint:
+    << : *default-labels
     file: ./cluster/redis.sentinel/docker-entrypoint.redis.sh
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=true"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
 
 volumes:
   cluster_redis_sentinel_master_1-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=master1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+    << : *default-labels
+
   cluster_redis_sentinel_slave_1-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+    << : *default-labels
+
   cluster_redis_sentinel_slave_2-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+    << : *default-labels
+
   cluster_redis_sentinel_slave_3-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=slave3"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+    << : *default-labels
+
   cluster_redis_sentinel_1-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=sentinel1"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+    << : *default-labels
+
   cluster_redis_sentinel_2-data:
-    labels:
-      - "com.khs1994.lnmp=true"
-      - "com.khs1994.lnmp.clusterkit=true"
-      - "com.khs1994.lnmp.clusterkit.redis.sentinel=sentinel2"
-      - "com.khs1994.lnmp.app.env=clusterkit_redis_sentinel"
+    << : *default-labels

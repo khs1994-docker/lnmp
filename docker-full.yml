@@ -18,13 +18,15 @@ x-common:
 
 x-labels:
   &default-labels
-  com.khs1994.lnmp: "true"
-  com.khs1994.lnmp.app.env: "full"
+  labels:
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}=true"
+    - "${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=full"
 
 services:
 
   mysql:
     << : *default-common
+    << : *default-labels
     image: "mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -45,12 +47,10 @@ services:
       - --character-set-server=utf8mb4
     secrets:
       - db_root_password
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mysql: "true"
 
   mariadb:
     << : *default-common
+    << : *default-labels
     image: "mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -71,12 +71,10 @@ services:
       - --character-set-server=utf8mb4
     secrets:
       - db_root_password
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mariadb: "true"
 
   redis:
     << : *default-common
+    << : *default-labels
     image: "redis:${KHS1994_LNMP_REDIS_VERSION:-4.0}-alpine"
     ports:
        - "${REDIS_PORT:-127.0.0.1:6379}:6379"
@@ -101,20 +99,15 @@ services:
       "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0"
       ]
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.redis: "true"
 
   memcached:
     << : *default-common
+    << : *default-labels
     image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
     ports:
       - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
       - zoneinfo-data:/usr/share/zoneinfo
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.memcached: "true"
 
   rabbitmq:
     << : *default-common
@@ -125,12 +118,10 @@ services:
     # ports:
     #   - "15672"
     #   - "5672"
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.rabbitmq: "true"
 
   postgresql:
     << : *default-common
+    << : *default-labels
     image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
@@ -143,12 +134,10 @@ services:
     secrets:
       # default is mysql password
       - db_root_password
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.postgresql: "true"
 
   mongodb:
     << : *default-common
+    << : *default-labels
     image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
@@ -157,12 +146,10 @@ services:
     ports:
        - "${MONGODB_PORT:-127.0.0.1:27017}:27017"
     command: ["mongod","--config","/etc/mongod.conf"]
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mongodb: "true"
 
   php7:
     << : *default-common
+    << : *default-labels
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${KHS1994_LNMP_PHP_VERSION:-7.2.3}-alpine3.7"
     volumes:
       - ./app:${LNMP_PHP_PATH:-/app}
@@ -189,12 +176,10 @@ services:
     secrets:
       - source: php_with_crond_entrypoint
         target: /docker-entrypoint.crond.sh
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php: "true"
 
   nginx:
     << : *default-common
+    << : *default-labels
     # image: "nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13}-alpine"
     image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.9}-tls1.3-stretch"
     ports:
@@ -216,12 +201,10 @@ services:
       - frontend
     depends_on:
       - php7
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.nginx: "true"
 
   httpd:
     << : *default-common
+    << : *default-labels
     image: "httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine"
     ports:
       - "443:443"
@@ -237,12 +220,10 @@ services:
       - frontend
     depends_on:
       - php7
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.httpd: "true"
 
   registry:
     << : *default-common
+    << : *default-labels
     image: registry:${KHS1994_LNMP_REGISTRY_VERSION:-latest}
     networks:
       - frontend
@@ -252,64 +233,44 @@ services:
     volumes:
       - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml
       - registry-data:/var/lib/registry
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.registry: "true"
 
 networks:
   frontend:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.frontend: "true"
+    << : *default-labels
+
   backend:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.backend: "true"
+    << : *default-labels
 
 volumes:
   mysql-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mysql: "true"
+    << : *default-labels
+
   mariadb-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mariadb: "true"
+    << : *default-labels
+
   redis-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.redis: "true"
+    << : *default-labels
+
   rabbitmq-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.rabbitmq: "true"
+    << : *default-labels
+
   postgresql-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.postgresql: "true"
+    << : *default-labels
+
   mongodb-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mongodb: "true"
+    << : *default-labels
+
   zoneinfo-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.zoneinfo: "true"
+    << : *default-labels
+
   registry-data:
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.registry: "true"
+    << : *default-labels
 
 secrets:
   db_root_password:
+    << : *default-labels
     file: secrets/db_root_password.txt
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.mysql: "true"
 
   php_with_crond_entrypoint:
-    << : *default-common
+    << : *default-labels
     file: ./config/php/docker-entrypoint.crond.sh
-    labels:
-      << : *default-labels
-      com.khs1994.lnmp.php: "true"
