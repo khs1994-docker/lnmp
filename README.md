@@ -63,7 +63,7 @@ Pick one method install LNMP Docker.
 * **Use Composer create project**
 
   ```bash
-  $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
+  $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev 
   ```
 
 ### Start

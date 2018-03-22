@@ -488,7 +488,7 @@ set_git_remote_lnmp_url(){
     print_info `git remote get-url lnmp`
   elif [ `git remote get-url lnmp` != 'git@github.com:khs1994-docker/lnmp.git' ] && [ `git remote get-url lnmp` != 'https://github.com/khs1994-docker/lnmp' ];then
     # 存在但是设置错误
-    print_error "This git remote lnmp NOT set Correct, reseting..."
+    print_error "This git remote lnmp NOT set Correct, reseting...\n"
     git remote rm lnmp
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
@@ -498,8 +498,7 @@ set_git_remote_lnmp_url(){
 }
 
 update(){
-  # 不存在 .git 退出
-  if ! [ -d .git ];then exit 1; fi
+  if ! [ -d .git ];then git init; BRANCH=master; fi
 
   set_git_remote_lnmp_url
 
@@ -516,7 +515,7 @@ update(){
   fi
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
-  if [ ${BRANCH} = 'dev' ] || [ ${BRANCH} = 'master' ];then
+  if [ "${BRANCH}" = 'dev' ] || [ ${BRANCH} = 'master' ];then
     git reset --hard lnmp/${BRANCH}
     echo ;print_info "Update Git Submodule\n"
     git submodule update --init --recursive
