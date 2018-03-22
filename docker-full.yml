@@ -181,7 +181,7 @@ services:
     << : *default-common
     << : *default-labels
     # image: "nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13}-alpine"
-    image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.9}-tls1.3-stretch"
+    image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.10}-tls1.3-stretch"
     ports:
       - "443:443"
       - target: 80
