@@ -4,7 +4,11 @@ if ($args -contains 'new' ){
   }
 }
 
-docker run --init -it --rm --mount type=bind,src=$PWD,target=/app --mount src=lnmp_composer_cache-data,target=/tmp/cache khs1994/php-fpm:7.2.3-alpine3.7 laravel $args
+docker run --init -it --rm `
+    --mount type=bind,src=$PWD,target=/app `
+    --mount src=lnmp_composer_cache-data,target=/tmp/cache `
+    khs1994/php-fpm:7.2.3-alpine3.7 `
+    laravel $args
 
 if ($args -contains 'new' ){
   $global:LARAVEL_PATH=$args[1]

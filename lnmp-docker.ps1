@@ -177,6 +177,15 @@ Function _update(){
   }
 }
 
+Function _bash_cli($service, $command){
+  docker exec -it `
+      $(docker container ls `
+          --format "{{.ID}}" `
+          -f label=com.khs1994.lnmp `
+          -f label=com.docker.compose.service=$service ) `
+          $command
+}
+
 # main
 
 env_status
@@ -322,48 +331,44 @@ switch($first){
       _composer "" create-project,topthink/think=5.0.*,${TP_PATH},--prefer-dist,$other
     }
 
-    tz {
-      docker run --init -it --rm --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7 date
-    }
-
     httpd-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.httpd) sh
+      _bash_cli httpd sh
     }
 
     memcached-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.memcached) sh
+      _bash_cli memcached sh
     }
 
     mongodb-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mongodb) bash
+      _bash_cli mongodb bash
     }
 
     mysql-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mysql) bash
+      _bash_cli mysql bash
     }
 
     mariadb-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.mariadb) bash
+      _bash_cli mariadb bash
     }
 
     nginx-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.nginx) sh
+      _bash_cli nginx sh
     }
 
     php-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.php7) bash
+      _bash_cli php7 bash
     }
 
-    postgres-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.postgresql) sh
+    postgresql-cli {
+      _bash_cli postgresql sh
     }
 
     rabbitmq-cli {
-       docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.rabbitmq) sh
+       _bash_cli rabbitmq sh
     }
 
     redis-cli {
-      docker exec -it $(docker container ls --format "{{.ID}}" -f label=com.khs1994.lnmp.redis) sh
+      _bash_cli redis sh
     }
 
     {$_ -in "update","upgrade"} {

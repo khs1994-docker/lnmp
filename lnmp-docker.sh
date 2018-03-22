@@ -214,21 +214,6 @@ _registry_down(){
   mv config/${NGINX_CONF_D:-nginx}/registry.conf config/${NGINX_CONF_D:-nginx}/registry.conf.backup
 }
 
-tz(){
-  local image=nginx:1.13.8-alpine
-
-  if [ ${ARCH} = "armv7l" ];then NOTSUPPORT; fi
-  if [ ${ARCH} = "aarch64" ];then local image=khs1994/arm64v8-php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7; fi
-
-  run_docker
-
-  docker volume inspect lnmp_zoneinfo-data > /dev/null 2>&1 || print_info "Create TZDATA Volume...\n"
-  docker run --init -it --rm \
-          --mount src=lnmp_zoneinfo-data,target=/usr/share/zoneinfo \
-          $image \
-          date > /tmp/tzdata.txt 2>&1
-}
-
 env_status(){
   # cp .env.example to .env
   if [ -f .env ];then print_info ".env file existing\n"; else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
@@ -515,7 +500,7 @@ update(){
   fi
   git fetch lnmp
   print_info "Branch is ${BRANCH}\n"
-  if [ "${BRANCH}" = 'dev' ] || [ ${BRANCH} = 'master' ];then
+  if [ "${BRANCH}" = 'dev' ] || [ "${BRANCH}" = 'master' ];then
     git reset --hard lnmp/${BRANCH}
     echo ;print_info "Update Git Submodule\n"
     git submodule update --init --recursive

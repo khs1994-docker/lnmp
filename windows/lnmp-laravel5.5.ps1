@@ -8,7 +8,12 @@ if ($args.Count -lt 2 ){
 
 $global:LARAVEL_PATH=$args[1]
 
-docker run -it --rm --mount type=bind,src=$PWD,target=/app --mount src=lnmp_composer_cache-data,target=/tmp/cache --entrypoint /docker-entrypoint.composer.sh khs1994/php-fpm:7.2.3-alpine3.7 composer create-project --prefer-dist laravel/laravel=5.5.* "$LARAVEL_PATH"
+docker run -it --rm `
+    --mount type=bind,src=$PWD,target=/app `
+    --mount src=lnmp_composer_cache-data,target=/tmp/cache `
+    --entrypoint /docker-entrypoint.composer.sh `
+    khs1994/php-fpm:7.2.3-alpine3.7 `
+    composer create-project --prefer-dist laravel/laravel=5.5.* "$LARAVEL_PATH"
 
 echo "create new env file ..."
 
