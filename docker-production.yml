@@ -360,16 +360,16 @@ services:
         target: /usr/local/etc/php/php.ini
       - source: php_fpm_conf_d_zz_docker_conf
         target: /usr/local/etc/php-fpm.d/zz-docker.conf
+      - source: php_with_crond_entrypoint
+        target: /docker-entrypoint.crond.sh
+        mode: 0555
+      - source: php_with_crond
+        target: /var/spool/cron/crontabs/root
     secrets:
       - source: ssh_id_rsa
         target: /root/.ssh/id_rsa
-        mode: 0600
       - source: ssh_config
         target: /root/.ssh/config
-      - source: php_with_crond_entrypoint
-        target: /docker-entrypoint.crond.sh
-      - source: php_with_crond
-        target: /var/spool/cron/crontabs/root
 
   nginx:
     << : *default-common
