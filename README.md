@@ -60,10 +60,10 @@ Pick one method install LNMP Docker.
   # $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
   ```
 
-* **Use Composer create project**
+* **Using Composer create project**
 
   ```bash
-  $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev 
+  $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
   ```
 
 ### Start
