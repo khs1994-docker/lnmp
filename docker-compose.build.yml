@@ -146,7 +146,3 @@ secrets:
   db_root_password:
     << : *default-labels
     file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
-
-  php_with_crond_entrypoint:
-    << : *default-labels
-    file: ./config/php/docker-entrypoint.crond.sh

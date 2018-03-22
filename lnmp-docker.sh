@@ -801,13 +801,13 @@ bash_cli(){
       $(docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.compose.service=$1 ) \
+          -f label=com.docker.compose.service=$1 -n 1 ) \
           $2 2> /dev/null || \
       docker exec -it \
       $(docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$1 ) $2
+          -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$1 -n 1 ) $2
   exit $?
 }
 
@@ -818,14 +818,14 @@ clusterkit_bash_cli(){
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.compose.service=$2 ) $3 2> /dev/null || \
+        label=com.docker.compose.service=$2 -n 1 ) $3 2> /dev/null || \
   docker exec -it \
     $(docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 ) $3
+        label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 -n 1 ) $3
 
   exit $?
 }
@@ -983,7 +983,7 @@ For information please run $ docker service update --help
     if [ ${ARCH} = 'x86_64' ];then
       docker-compose up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx ) nginx -t
+      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
       docker-compose -f docker-arm.yml up $opt
       echo; sleep 1; print_info "Test nginx configuration file...\n"
@@ -1160,7 +1160,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     done
 
     if [ "$opt" = 'true' ];then
-      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx ) nginx -t || \
+      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx -n 1 ) nginx -t || \
         (echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
 
       echo; print_info "nginx configuration file test is successful\n"
@@ -1290,6 +1290,8 @@ $ kubectl apply -f kubernetes-dashboard.yaml
 $ kubectl proxy
 
 OPEN http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+First Run? Maybe you wait 60s then open url.
 "
     print_info "More information please see https://github.com/kubernetes/dashboard"
 
@@ -1351,15 +1353,6 @@ print_info "ARCH is ${OS} ${ARCH}\n"
 print_info `docker --version`
 
 echo ; docker_compose
-
-# crontab
-
-if [ -f scripts/crontab/root ];then
-  print_info "crontab_file existing\n"
-else
-  print_warning "crontab_file not existing\n"
-  cp scripts/crontab/root.example scripts/crontab/root
-fi
 
 # output help
 

@@ -1,21 +1,9 @@
 # Crontab 计划任务
 
-## 编辑配置文件
+## 编辑宿主机配置文件
 
 ```bash
-$ cd scripts/crontab
+* * * * * /usr/local/bin/docker exec -it $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.compose.service=php7 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
 
-# 只能写入到 root 文件中，其他文件不可以
-
-$ vi root
-
-# 这里以 Laravel 配置计划任务为例
-
-* * * * * php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1
-```
-
-## 重启 PHP 容器
-
-```bash
-$ ./lnmp-docker.sh restart php7
+* * * * * /usr/local/bin/docker exec -it $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.swarm.service.name=lnmp_php7 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
 ```
