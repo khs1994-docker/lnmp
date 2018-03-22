@@ -176,6 +176,7 @@ services:
     secrets:
       - source: php_with_crond_entrypoint
         target: /docker-entrypoint.crond.sh
+        mode: 0555
 
   nginx:
     << : *default-common

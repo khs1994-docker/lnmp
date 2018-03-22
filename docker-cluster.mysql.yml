@@ -111,6 +111,7 @@ services:
         target: /etc/mysql/db_root_password
       - source: cluster_mysql_master_sh
         target: /docker-entrypoint-initdb.d/1-master-init.sh
+        mode: 0555
 
   mysql_node-1:
     << : *default-common
@@ -148,6 +149,7 @@ services:
         target: /etc/mysql/db_root_password
       - source: cluster_mysql_node_sh
         target: /docker-entrypoint-initdb.d/1-node-init.sh
+        mode: 0555
 
   mysql_node-2:
     << : *default-common
@@ -185,6 +187,7 @@ services:
         target: /etc/mysql/db_root_password
       - source: cluster_mysql_node_sh
         target: /docker-entrypoint-initdb.d/1-node-init.sh
+        mode: 0555
 
 volumes:
   cluster_mysql_master-data:

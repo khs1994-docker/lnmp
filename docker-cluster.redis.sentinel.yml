@@ -39,6 +39,7 @@ x-common:
       target: /redis.conf.default
     - source: cluster_redis_entrypoint
       target: /docker-entrypoint.redis.sh
+      mode: 0555
 
 x-deploy:
   &default-deploy
@@ -225,6 +226,7 @@ services:
     secrets:
       - source: cluster_redis_sentinel_entrypoint
         target: /docker-entrypoint.sentinel.sh
+        mode: 0555
 
   redis_sentinel_2:
     << : *default-common
@@ -261,6 +263,7 @@ services:
     secrets:
       - source: cluster_redis_sentinel_entrypoint
         target: /docker-entrypoint.sentinel.sh
+        mode: 0555
 
 networks:
   cluster_redis_sentinel:

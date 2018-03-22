@@ -818,13 +818,12 @@ bash_cli(){
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.compose.service=$1 ) \
-          $3 2> /dev/null || \
+          $2 2> /dev/null || \
       docker exec -it \
       $(docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.swarm.service.name=lnmp_$2 ) $3
-
+          -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$1 ) $2
   exit $?
 }
 
@@ -835,14 +834,14 @@ clusterkit_bash_cli(){
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.compose.service=$2 ) $3 || \
+        label=com.docker.compose.service=$2 ) $3 2> /dev/null || \
   docker exec -it \
     $(docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.swarm.service.name=lnmp_$2 ) $3
+        label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 ) $3
 
   exit $?
 }
@@ -1046,25 +1045,25 @@ For information please run $ docker service update --help
     ;;
 
   php-cli | php7-cli )
-      bash_cli php7 lnmp_php7 bash
+      bash_cli php7 bash
     ;;
 
   mongodb-cli | mongo-cli )
-    bash_cli mongodb lnmp_php7 bash
+    bash_cli mongodb bash
     ;;
 
   mariadb-cli )
-    bash_cli mariadb lnmp_php7 bash
+    bash_cli mariadb bash
     ;;
 
   mysql-cli )
-    bash_cli mysql lnmp_php7 bash
+    bash_cli mysql bash
     ;;
 
   *-cli )
     SERVICE=$(echo $command | cut -d '-' -f 1)
     run_docker;
-    bash_cli $SERVICE lnmp_$SERVICE sh
+    bash_cli $SERVICE sh
     ;;
 
   *-logs | *-log )
