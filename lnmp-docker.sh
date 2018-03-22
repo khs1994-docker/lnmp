@@ -242,7 +242,7 @@ update_version(){
 
   local softs='PHP \
               NGINX \
-              APACHE \
+              HTTPD \
               MYSQL \
               MARIADB \
               REDIS \
@@ -962,7 +962,7 @@ $ docker service update \\
     --secret-add source=khs1994_com_ssl_crt_v2,target=/etc/nginx/conf.d/ssl/khs1994.com.crt \\
     lnmp_nginx
 
-$ docker service update --image nginx:1.13.9 lnmp_nginx
+$ docker service update --image nginx:1.13.10 lnmp_nginx
 
 For information please run $ docker service update --help
 "
