@@ -340,7 +340,6 @@ services:
     networks:
       - frontend
       - backend
-    entrypoint: /docker-entrypoint.crond.sh
     command: php-fpm -R -F
     environment:
       - APP_ENV=production
@@ -360,11 +359,6 @@ services:
         target: /usr/local/etc/php/php.ini
       - source: php_fpm_conf_d_zz_docker_conf
         target: /usr/local/etc/php-fpm.d/zz-docker.conf
-      - source: php_with_crond_entrypoint
-        target: /docker-entrypoint.crond.sh
-        mode: 0555
-      - source: php_with_crond
-        target: /var/spool/cron/crontabs/root
     secrets:
       - source: ssh_id_rsa
         target: /root/.ssh/id_rsa
@@ -755,14 +749,6 @@ configs:
 
   php_fpm_conf_d_zz_docker_conf:
     file: ./config/php/php-fpm.production.d/zz-docker.conf
-    << : *default-labels
-
-  php_with_crond_entrypoint:
-    file: ./config/php/docker-entrypoint.crond.sh
-    << : *default-labels
-
-  php_with_crond:
-    file: ./scripts/crontab/root
     << : *default-labels
 
   redis_conf:

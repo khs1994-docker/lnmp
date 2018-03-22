@@ -31,15 +31,6 @@ Function env_status(){
   }
 }
 
-Function _crontab(){
-  if (Test-Path scripts/crontab/root){
-    printInfo 'scripts/crontab/root file existing'
-  }else{
-    printWarning 'scripts/crontab/root file NOT existing'
-    cp scripts/crontab/root.example scripts/crontab/root
-  }
-}
-
 Function logs(){
   if (! (Test-Path logs\httpd)){
     New-Item logs\httpd -type directory | Out-Null
@@ -182,15 +173,13 @@ Function _bash_cli($service, $command){
       $(docker container ls `
           --format "{{.ID}}" `
           -f label=com.khs1994.lnmp `
-          -f label=com.docker.compose.service=$service ) `
+          -f label=com.docker.compose.service=$service -n 1 ) `
           $command
 }
 
 # main
 
 env_status
-
-_crontab
 
 if ($args.Count -eq 0){
   help_information
@@ -254,7 +243,7 @@ switch($first){
     }
 
     dashboard {
-
+      bash lnmp-docker.sh dashboard
     }
 
     k8s {
