@@ -20,6 +20,10 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 **Warning** Don't Edit Any Files except `.env`， [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
 
+## Try k8s ?
+
+请查看：https://github.com/khs1994-docker/lnmp-k8s
+
 ## Prerequisites
 
 To use LNMP Docker, you need:
@@ -157,10 +161,6 @@ Updates every month, Version name is `YY.MM`. For more release information about
 * [v18.03 2018-03-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03)
 
 * ~~[v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02) **EOL**~~
-
-## Run LNMP On Kubernets
-
-For more information please see [Documents](docs/production/k8s.md)
 
 ## Overview
 
