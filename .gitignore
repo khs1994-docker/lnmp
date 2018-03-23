@@ -26,6 +26,7 @@ lnmp-state
 # composer
 
 vendor
+composer.lock
 
 # example test
 
