@@ -106,11 +106,6 @@ PHP Tools:
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
 
-  k8s                  Deploy LNMP on k8s
-  k8s-build            Build LNMP on k8s image (nginx php7)
-  k8s-down             Remove k8s LNMP
-  k8s-push             Push LNMP on k8s image (nginx php7)
-
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
   swarm-config         Validate and view the Production Swarm mode Compose file
@@ -244,37 +239,6 @@ switch($first){
 
     dashboard {
       bash lnmp-docker.sh dashboard
-    }
-
-    k8s {
-      cd kubernetes
-      # kubectl create -f lnmp-volumes.yaml
-      kubectl create -f lnmp-env.yaml
-      kubectl create secret generic lnmp-mysql-password --from-literal=password=mytest
-      kubectl create -f lnmp-mysql.yaml
-      kubectl create -f lnmp-redis.yaml
-      kubectl create -f lnmp-php7.yaml
-      kubectl create -f lnmp-nginx.yaml
-      cd ..
-    }
-
-    k8s-down {
-      cd kubernetes
-      kubectl delete deployment -l app=lnmp
-      kubectl delete service -l app=lnmp
-      kubectl delete pvc -l app=lnmp
-      kubectl delete pv lnmp-mysql-data lnmp-redis-data
-      kubectl delete secret lnmp-mysql-password
-      kubectl delete configmap lnmp-env
-      cd ..
-    }
-
-    k8s-build {
-      docker-compose -f docker-production.yml build
-    }
-
-    k8s-push {
-      docker-compose -f docker-production.yml push nginx php7
     }
 
     new {
