@@ -159,7 +159,6 @@ services:
       - ./config/php/php/conf.d/${PHP_ERROR_INI:-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
-      - ./scripts/crontab/root:/var/spool/cron/crontabs/root
     networks:
       - frontend
       - backend

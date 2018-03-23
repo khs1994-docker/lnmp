@@ -20,6 +20,10 @@
 
 **警告** 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？]([Why ?](https://github.com/khs1994-docker/lnmp/issues/238))
 
+## 使用 k8s ?
+
+请查看：https://github.com/khs1994-docker/lnmp-k8s
+
 ## 准备
 
 本项目需要以下软件：
@@ -162,10 +166,6 @@ $ ./lnmp-docker.sh down
 * [v18.03 2018-03-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03)
 
 * ~~[v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02) **EOL**~~
-
-## 支持 Kubernets
-
-请查看 [支持文档](docs/production/k8s.md)
 
 ## 项目说明
 

@@ -1,1 +1,0 @@
-../docs/production/k8s.md

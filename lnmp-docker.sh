@@ -86,9 +86,6 @@ PHP Tools:
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
 
-  k8s                  Deploy LNMP on k8s
-  k8s-down             Remove k8s LNMP
-
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
   swarm-config         Validate and view the Swarm mode Compose file
@@ -1129,14 +1126,6 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
   -h | --help | help )
    help
    ;;
-
-  k8s )
-    cd kubernetes; ./kubernetes.sh deploy
-    ;;
-
-  k8s-down )
-    cd kubernetes; ./kubernetes.sh cleanup
-    ;;
 
   tp )
     run_docker
