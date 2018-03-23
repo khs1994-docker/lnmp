@@ -463,11 +463,12 @@ set_git_remote_lnmp_url(){
   git remote get-url lnmp > /dev/null 2>&1 || local a=1
   if [ "$a" = 1 ];then
     # 不存在
-    print_error "This git remote lnmp NOT set, seting..."
+    print_error "This git remote lnmp NOT set, seting...\n"
     git remote add lnmp git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
     git fetch lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp
     print_info `git remote get-url lnmp`
+    echo
   elif [ `git remote get-url lnmp` != 'git@github.com:khs1994-docker/lnmp.git' ] && [ `git remote get-url lnmp` != 'https://github.com/khs1994-docker/lnmp' ];then
     # 存在但是设置错误
     print_error "This git remote lnmp NOT set Correct, reseting...\n"
@@ -480,7 +481,7 @@ set_git_remote_lnmp_url(){
 }
 
 update(){
-  if ! [ -d .git ];then git init; BRANCH=master; fi
+  if ! [ -d .git ];then git init > /dev/null 2>&1; BRANCH=master; fi
 
   set_git_remote_lnmp_url
 
