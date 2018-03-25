@@ -1,7 +1,10 @@
 #!/bin/bash
 
+set -e
+
 docker run -it --rm \
-    --mount type=bind,src=$pwd,target=/app \
+    --mount type=bind,src=$PWD,target=/app \
     --workdir /app \
+    --entrypoint npm \
     node:alpine \
     "$@"

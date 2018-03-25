@@ -1,22 +1,22 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 if [ "$1" != 'new' ];then
   exit 1
 fi
 
-if [ -z "$2" ];then
+if ! [ -z "$2" ];then
   exit 1
 fi
 
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
+source $DIR/.arch
+
 if [ -d "$2" ];then
 
 echo "$2 not existing"
-
-source $DIR/.arch
 
 docker run -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
@@ -83,5 +83,7 @@ $ lnmp-php artisan ide-helper:meta
 $ lnmp-php artisan optimize
 "
 
+set +x
+
   echo -e ".phpstorm.meta.php
-  _ide_helper.php" >> .gitignore
+_ide_helper.php" >> .gitignore
