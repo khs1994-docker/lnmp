@@ -1,3 +1,5 @@
+docker network create lnmp_backend | Out-Null
+
 if ($args.Count -eq 0){
   $COMMAND="-h"
 } else {

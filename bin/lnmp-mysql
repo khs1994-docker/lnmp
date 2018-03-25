@@ -1,0 +1,12 @@
+#!/bin/bash
+
+docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)
+
+docker run -it --rm \
+    --network lnmp_backend \
+    mysql:8.0.3 \
+    "$@"
+
+if ! [ -z "$CREATE" ];then
+    docker network rm lnmp_backend > /dev/null 2>&1
+fi
