@@ -147,19 +147,19 @@ Function cleanup(){
 }
 
 Function _update(){
-  git remote rm lnmp
-  git remote add lnmp git@github.com:khs1994-docker/lnmp
-  git fetch lnmp
+  git remote rm origin
+  git remote add origin git@github.com:khs1994-docker/lnmp
+  git fetch origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   if (${BRANCH} -eq "dev"){
     git submodule update --init --recursive
-    git reset --hard lnmp/dev
+    git reset --hard origin/dev
   }elseif(${BRANCH} -eq "master"){
     git submodule update --init --recursive
-    git reset --hard lnmp/master
+    git reset --hard origin/master
   }else{
     git checkout dev
-    git reset --hard lnmp/dev
+    git reset --hard origin/dev
   }
 }
 
