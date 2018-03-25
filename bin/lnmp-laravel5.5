@@ -12,6 +12,10 @@ fi
 
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
+if [ -d "$2" ];then
+
+echo "$2 not existing"
+
 source $DIR/.arch
 
 docker run -it --rm \
@@ -20,6 +24,11 @@ docker run -it --rm \
   --entrypoint /docker-entrypoint.composer.sh \
   ${DOCKER_IMAGE}:${TAG} \
   composer create-project --prefer-dist laravel/laravel=5.5.* "$2"
+
+else
+
+  echo "$2 existing"
+fi
 
 LARAVEL_PATH="$2"
 
