@@ -9,7 +9,6 @@ function _start(){
     case "$soft" in
       redis )
           sudo redis-server \
-              /usr/local/etc/redis.conf \
               --pidfile /usr/local/var/run/redis.pid \
               --daemonize yes
       ;;
