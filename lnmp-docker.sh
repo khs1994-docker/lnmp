@@ -331,6 +331,7 @@ install_docker_compose_move(){
 
 install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
+  print_info "install $LNMP_DOCKER_COMPOSE_VERSION from GitHub ...\n"
   curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
   chmod +x /tmp/docker-compose
   if [ "$1" = "-f" ];then

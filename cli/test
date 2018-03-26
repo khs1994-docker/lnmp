@@ -70,8 +70,25 @@ swarm(){
         ssl/khs1994.com.rsa.crt \
         80.conf \
         301.conf \
-        ssl.config \
-        khs1994.com.conf
+        ssl.config
+
+echo "
+server {
+  server_name  127.0.0.1;
+  listen       80 default_server;
+  root         /app/demo;
+  index        index.html index.htm index.php;
+
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  location ~ .*\.php(\/.*)*$ {
+    fastcgi_pass   php7:9000;
+    include        fastcgi.conf;
+  }
+}
+" > khs1994.com.conf
 
   sed -i "s!file: /root/.ssh/id_rsa!file: ./secrets/ssh_config!g" docker-production.yml
 
