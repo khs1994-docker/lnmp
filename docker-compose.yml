@@ -160,7 +160,7 @@ services:
       - ./cli/.env
     environment:
       - APP_ENV=development
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05-rc2} x86_64 With Pull Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05} x86_64 With Pull Docker Image
 
   phpmyadmin:
     << : *default-common

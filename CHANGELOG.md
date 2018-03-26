@@ -1,18 +1,25 @@
 Changelog
 ==============
 
-#### v18.05-rc2
+#### v18.05
 
 Bug fixes:
-* Fix `compose` error #254 #309
+* Fix `compose` error #254
 * Fix `PHP` Dockerfile #268
 * Fix ARM `PHP` Dockerfile #272
 * Fix PHPer `command` lnmp-php can't stop by `ctrl + c` #280
 * Fix `khs1994.com` case
+* Fix `PHP-FPM` Dockerfile #223
+* Fix `opcache` extension enable 7.0+ #219
+* Fix `MySQL` default conf #233
 
 Changes:
 * Add `ClusterKit` Redis Sentinel
 * Add `editorconfig` #283
+* Add `yaml` `igbinary` `pcntl` `swoole` extension #219
+* Add default env `APP_ENV=development` in PHPer commands #222
+* Add `Clusterkit` Memcached #227
+* Add `compose` default value #241 #242
 * Update `docs`
 * Update `compose file` #252
 * Update `mysql` case #255
@@ -20,27 +27,7 @@ Changes:
 * Update `windows` case #274 #303 #253 #304
 * Update `labels` #292 #294
 * Update `app/demo` #296
-* Update start lnmp by `composer` #270 #300
-* Remove `kubernetes` to `khs1994-docker/lnmp-k8s`
-
-Updates:
-* nginx `1.13.10` #297
-* httpd `2.4.32` #297
-* mongodb `3.7.3` #297
-
-#### v18.05-rc1
-
-Bug fixes:
-* Fix `PHP-FPM` Dockerfile #223
-* Fix `opcache` extension enable 7.0+ #219
-* Fix `MySQL` default conf #233
-
-Changes:
-* Add `yaml` `igbinary` `pcntl` `swoole` extension #219
-* Add default env `APP_ENV=development` in PHPer commands #222
-* Add `Clusterkit` Memcached #227
-* Add `compose` default value #241 #242
-* Enable `MySQL` slow log #233
+* Update start lnmp by `composer` #270 #300 #309
 * Update `PHP-FPM` #221
 * Update `Clusterkit` MySQL #234
 * Update `ClusterKit` #248
@@ -53,11 +40,16 @@ Changes:
 * Update `arm` Dockerfile #244
 * Update `config` case #244
 * Update `Dockerfile` #245
+* Enable `MySQL` slow log #233
 * Remove Chinese in `compose` file #233
+* Remove `kubernetes` to `khs1994-docker/lnmp-k8s`
 * Change `ERROR` to `WARNING` when env file not exists(Maybe First Run) #228 #227
 
 Updates:
-* `acme.sh` 2.7.7 #237
+* acme.sh `2.7.7` #237
+* nginx `1.13.10` #297
+* httpd `2.4.32` #297
+* mongodb `3.7.3` #297
 
 #### [v18.02 (2018-02-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
 
