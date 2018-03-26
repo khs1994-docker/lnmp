@@ -458,32 +458,32 @@ network(){
 
 # 更新项目
 
-set_git_remote_lnmp_url(){
+set_git_remote_origin_url(){
   network
-  git remote get-url lnmp > /dev/null 2>&1 || local a=1
+  git remote get-url origin > /dev/null 2>&1 || local a=1
   if [ "$a" = 1 ];then
     # 不存在
-    print_error "This git remote lnmp NOT set, seting...\n"
-    git remote add lnmp git@github.com:khs1994-docker/lnmp.git
+    print_error "This git remote origin NOT set, seting...\n"
+    git remote add origin git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp
-    print_info `git remote get-url lnmp`
+    git fetch origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
+    print_info `git remote get-url origin`
     echo
-  elif [ `git remote get-url lnmp` != 'git@github.com:khs1994-docker/lnmp.git' ] && [ `git remote get-url lnmp` != 'https://github.com/khs1994-docker/lnmp' ];then
+  elif [ `git remote get-url origin` != 'git@github.com:khs1994-docker/lnmp.git' ] && [ `git remote get-url origin` != 'https://github.com/khs1994-docker/lnmp' ];then
     # 存在但是设置错误
-    print_error "This git remote lnmp NOT set Correct, reseting...\n"
-    git remote rm lnmp
-    git remote add lnmp git@github.com:khs1994-docker/lnmp.git
+    print_error "This git remote origin NOT set Correct, reseting...\n"
+    git remote rm origin
+    git remote add origin git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch  lnmp > /dev/null 2>&1 || git remote set-url lnmp https://github.com/khs1994-docker/lnmp
-    print_info `git remote get-url lnmp`
+    git fetch origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
+    print_info `git remote get-url origin`
   fi
 }
 
 update(){
   if ! [ -d .git ];then git init > /dev/null 2>&1; BRANCH=master; fi
 
-  set_git_remote_lnmp_url
+  set_git_remote_origin_url
 
   for force in "$@"
   do
@@ -496,10 +496,10 @@ update(){
      echo; print_error "Please commit then update"
      exit 1
   fi
-  git fetch lnmp
+  git fetch origin
   print_info "Branch is ${BRANCH}\n"
   if [ "${BRANCH}" = 'dev' ] || [ "${BRANCH}" = 'master' ];then
-    git reset --hard lnmp/${BRANCH}
+    git reset --hard origin/${BRANCH}
     echo ;print_info "Update Git Submodule\n"
     git submodule update --init --recursive
   else
@@ -524,12 +524,12 @@ commit(){
 }
 
 reset-master(){
-  set_git_remote_lnmp_url
+  set_git_remote_origin_url
   print_info "Branch is ${BRANCH}\n"
   print_info "Reset master branch in dev branch\n"
   if [ ${BRANCH} = 'dev' ];then
-    git fetch lnmp
-    git reset --hard lnmp/master
+    git fetch origin
+    git reset --hard origin/master
     echo ;print_info "Update Git Submodule\n"
     git submodule update --init --recursive
   elif [ ${BRANCH} = 'master' ];then
@@ -540,16 +540,16 @@ reset-master(){
 }
 
 cn_mirror(){
-  set_git_remote_lnmp_url
-  git fetch lnmp
-  git push -f aliyun remotes/lnmp/dev:dev
-  git push -f aliyun remotes/lnmp/master:master
+  set_git_remote_origin_url
+  git fetch origin
+  git push -f aliyun remotes/origin/dev:dev
+  git push -f aliyun remotes/origin/master:master
   git push -f aliyun --tags
-  git push -f tgit remotes/lnmp/dev:dev
-  git push -f tgit remotes/lnmp/master:master
+  git push -f tgit remotes/origin/dev:dev
+  git push -f tgit remotes/origin/master:master
   git push -f tgit --tags
-  git push -f coding remotes/lnmp/dev:dev
-  git push -f coding remotes/lnmp/master:master
+  git push -f coding remotes/origin/dev:dev
+  git push -f coding remotes/origin/master:master
   git push -f coding --tags
 }
 

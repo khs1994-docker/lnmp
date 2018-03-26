@@ -1,3 +1,5 @@
+docker network create lnmp_backend | Out-Null
+
 if (! (Test-Path vendor\bin\phpunit)){
   echo "
 PHPUnit not found, You Must EXEC

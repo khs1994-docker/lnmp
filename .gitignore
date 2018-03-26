@@ -31,3 +31,7 @@ composer.lock
 # example test
 
 *.example.test.yml
+
+# tmp
+
+tmp
