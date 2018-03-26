@@ -113,10 +113,12 @@ server {
 
   docker stack rm lnmp > /dev/null 2>&1 || echo
 
+  sleep 10
+
   docker stack deploy -c docker-production.yml lnmp
 
   until curl 127.0.0.1; do
-    docker stack ps lnmp
+    docker stack ps lnmp --no-trunc
     docker ps -a
     echo "Wait nginx service start"
     sleep 5
