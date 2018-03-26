@@ -6,7 +6,7 @@ if [ "$1" != 'new' ];then
   exit 1
 fi
 
-if ! [ -z "$2" ];then
+if [ -z "$2" ];then
   exit 1
 fi
 
@@ -14,7 +14,7 @@ DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $DIR/.arch
 
-if [ -d "$2" ];then
+if ! [ -d "$2" ];then
 
 echo "$2 not existing"
 
@@ -26,7 +26,6 @@ docker run -it --rm \
   composer create-project --prefer-dist laravel/laravel=5.5.* "$2"
 
 else
-
   echo "$2 existing"
 fi
 
@@ -68,8 +67,8 @@ Must EDIT ./${LARAVEL_PATH}/app/Providers/AppServiceProvider.php add this conten
 
   public function register()
   {
-      if ($this->app->environment() !== 'production') {
-          $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+      if (\$this->app->environment() !== 'production') {
+          \$this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
       }
       // ...
   }

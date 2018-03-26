@@ -333,11 +333,7 @@ install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
   curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
   chmod +x /tmp/docker-compose
-  if [ "$1" = "-f" ];then
-    install_docker_compose_move
-  else
-    print_info "Please exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin\n"
-  fi
+  install_docker_compose_move
 }
 
 # 安装 compose arm 版本
@@ -358,8 +354,7 @@ install_docker_compose(){
   elif [ "$ARCH" = 'x86_64' ];then
     curl -L ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
     chmod +x /tmp/docker-compose
-    if [ "$1" = '-f' ];then install_docker_compose_move; return 0;fi
-    print_info "You MUST exec\n\n$ sudo mv /tmp/docker-compose /usr/local/bin/\n"
+    install_docker_compose_move
   fi
 }
 
@@ -399,9 +394,9 @@ docker_compose(){
     fi
   else
     # 不存在
-    print_error "docker-compose NOT install, install..."
-    if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@"; fi
-    install_docker_compose -f
+    print_error "docker-compose NOT install, install...\n"
+    if [[ "$1" = '--official' || "$2" = '--official' ]];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@" && return 0; fi
+    install_docker_compose
   fi
 }
 
@@ -1342,7 +1337,7 @@ print_info "ARCH is ${OS} ${ARCH}\n"
 
 print_info `docker --version`
 
-echo ; docker_compose
+echo ; docker_compose "$@"
 
 # output help
 
