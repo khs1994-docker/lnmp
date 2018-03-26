@@ -4,10 +4,29 @@ Changelog
 #### v18.05-rc2
 
 Bug fixes:
+* Fix `compose` error #254 #309
+* Fix `PHP` Dockerfile #268
+* Fix ARM `PHP` Dockerfile #272
+* Fix PHPer `command` lnmp-php can't stop by `ctrl + c` #280
+* Fix `khs1994.com` case
 
 Changes:
+* Add `ClusterKit` Redis Sentinel
+* Add `editorconfig` #283
+* Update `docs`
+* Update `compose file` #252
+* Update `mysql` case #255
+* Update `xdebug` case #264
+* Update `windows` case #274 #303 #253 #304
+* Update `labels` #292 #294
+* Update `app/demo` #296
+* Update start lnmp by `composer` #270 #300
+* Remove `kubernetes` to `khs1994-docker/lnmp-k8s`
 
 Updates:
+* nginx `1.13.10` #297
+* httpd `2.4.32` #297
+* mongodb `3.7.3` #297
 
 #### v18.05-rc1
 
