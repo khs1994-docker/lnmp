@@ -71,7 +71,7 @@ development(){
 _echo(){
   for file in "$@"
   do
-    echo "# ONLY EXAMPLE" > /config/nginx/$file
+    echo "# ONLY EXAMPLE" > config/nginx/$file
   done
 }
 
@@ -100,7 +100,7 @@ server {
     include        fastcgi.conf;
   }
 }
-" > khs1994.com.conf
+" > config/nginx/khs1994.com.conf
 
   sed -i "s!file: /root/.ssh/id_rsa!file: ./secrets/ssh_config!g" docker-production.yml
 
