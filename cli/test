@@ -79,6 +79,8 @@ _echo(){
 }
 
 swarm(){
+  if ! [ -d config/nginx/ssl ];then mkdir -p config/nginx/ssl; fi
+
   _echo ssl/khs1994.com.key \
         ssl/khs1994.com.crt \
         ssl/khs1994.com.rsa.key \
