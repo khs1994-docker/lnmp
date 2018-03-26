@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m Can't EXEC in cli folder"; exit 1; fi
 
 # 删除原项目
@@ -9,7 +11,7 @@ print_info(){
 }
 
 delete(){
-  docker-compose down -v
+  docker-compose down -v > /dev/null 2>&1 || echo
   print_info "删除原有项目成功"
 }
 
@@ -52,44 +54,40 @@ development(){
   _command
 }
 
-# k8s
-
-k8s(){
-  curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.7.0/bin/linux/amd64/kubectl && \
-  chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-
-  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && \
-  chmod +x minikube && sudo mv minikube /usr/local/bin/
-
-  sudo minikube start --vm-driver=none --kubernetes-version=v1.8.0
-
-  minikube update-context
-  JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; \
-    until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
-
-  kubectl cluster-info
-
-  cd kubernetes
-  ./kubernetes.sh deploy
-  kubectl get deployment
-  kubectl get services
-  ./kubernetes.sh cleanup
-}
-
 # Swarm mode
 
+_echo(){
+  for file in "$@"
+  do
+    echo "# ONLY EXAMPLE" > /config/nginx/$file
+  done
+}
+
 swarm(){
+  _echo ssl/khs1994.com.key \
+        ssl/khs1994.com.crt \
+        ssl/khs1994.com.rsa.key \
+        ssl/khs1994.com.rsa.crt \
+        80.conf \
+        301.conf \
+        ssl.config \
+        khs1994.com.conf
+
   sed -i "s!file: /root/.ssh/id_rsa!file: ./secrets/ssh_config!g" docker-production.yml
-  docker node ls > /dev/null 2>&1
-  if [ $? != 0 ];then docker swarm init; fi
-  docker stack rm lnmp
+
+  docker node ls > /dev/null 2>&1 || docker swarm init
+
+  docker stack rm lnmp > /dev/null 2>&1 || echo
+
   docker stack deploy -c docker-production.yml lnmp
+
   until curl 127.0.0.1; do
     docker stack ps lnmp
     docker ps -a
     echo "Wait nginx service start"
     sleep 5
   done
+
   sleep 120
   docker ps -a
   docker stack ls
@@ -98,4 +96,4 @@ swarm(){
   docker stack rm lnmp
 }
 
-if [ ! -z "$1" ];then $1; else development; swarm; k8s; fi
+if [ ! -z "$1" ];then $1; else development; swarm; fi

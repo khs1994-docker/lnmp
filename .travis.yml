@@ -28,19 +28,26 @@ before_install:
 # - rm -rf sources.list
 # - cp sources.list.default sources.list
 # - cd -
-- cp .env.example .env
+# - cp .env.example .env
 - docker-compose --version
 - sudo rm /usr/local/bin/docker-compose
 - ./lnmp-docker.sh compose --official -f
-- sed -i "s!file: /root/.ssh/id_rsa!file: ./secrets/ssh_config!g" docker-production.yml
 jobs:
   include:
     - stage: development
       script: cli/test development
     - stage: swarm
       script: cli/test swarm
-    - stage: k8s
-      script: cli/test k8s
+    # - stage: memcached
+    #   script:
+    # - stage: mysql
+    #   script:
+    # - stage: redis-master-slave
+    #   script:
+    # - stage: redis-sentinel
+    #   script:
+    # - stage: redis-cluster-by-ruby
+    #   script:
 branches:
   only:
   - master
@@ -49,4 +56,3 @@ env:
   global:
   # - DOCKER_COMPOSE_VERSION: 1.17.1
   - TZ: Asia/Shanghai
-  - CHANGE_MINIKUBE_NONE_USER: true
