@@ -37,9 +37,21 @@ _command(){
 
   lnmp-php
 
+  lnmp-php -v
+
   lnmp-composer install
 
-  lnmp-phpunit tests/DemoTest.php
+  lnmp-phpunit
+
+  cd ..
+
+  lnmp-laravel new laravel
+
+  lnmp-laravel5.5 new laravel5.5
+
+  lnmp-mysql mysql -V
+
+  lnmp-npm -v
 
   print_info "测试 PHPer command 完毕"
 }
