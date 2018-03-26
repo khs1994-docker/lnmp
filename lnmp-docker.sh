@@ -395,7 +395,7 @@ docker_compose(){
   else
     # 不存在
     print_error "docker-compose NOT install, install...\n"
-    if [[ "$1" = '--official' || "$2" = '--official' ]];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@"; fi
+    if [[ "$1" = '--official' || "$2" = '--official' ]];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@" && return 0; fi
     install_docker_compose
   fi
 }
