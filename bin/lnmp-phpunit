@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 if ! [ -f vendor/bin/phpunit ];then
   lnmp-composer install
