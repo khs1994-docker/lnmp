@@ -29,8 +29,8 @@ x-common:
   &default-common
   image: redis:4.0.8-alpine
   # restart: always
-  env_file:
-    - ./cluster/.env
+  environment:
+    - REDIS_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
   networks:
     cluster_redis_sentinel:
       # ipv4_address: 172.15.0.105
@@ -62,7 +62,7 @@ x-labels:
 
 services:
 
-  redis_sentinel_master_1:
+  redis_sentinel_master-1:
     << : *default-common
     << : *default-labels
     ports:
@@ -74,11 +74,11 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10000",
-      "--slave-announce-ip 192.168.199.100",
+      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 10000"
       ]
     volumes:
-      - cluster_redis_sentinel_master_1-data:/data
+      - cluster_redis_sentinel_master-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -92,11 +92,11 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  redis_sentinel_slave_1:
+  redis_sentinel_slave-1:
     << : *default-common
     << : *default-labels
     depends_on:
-      - redis_sentinel_master_1
+      - redis_sentinel_master-1
     entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
@@ -104,12 +104,12 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10001",
-      "--slaveof redis_sentinel_master_1 10000",
-      "--slave-announce-ip 192.168.199.100",
+      "--slaveof redis_sentinel_master-1 10000",
+      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 10001"
       ]
     volumes:
-      - cluster_redis_sentinel_slave_1-data:/data
+      - cluster_redis_sentinel_slave-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -125,11 +125,11 @@ services:
     ports:
       - "10001:10001"
 
-  redis_sentinel_slave_2:
+  redis_sentinel_slave-2:
     << : *default-common
     << : *default-labels
     depends_on:
-      - redis_sentinel_master_1
+      - redis_sentinel_master-1
     ports:
       - "10002:10002"
     entrypoint: /docker-entrypoint.redis.sh
@@ -139,12 +139,12 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10002",
-      "--slaveof redis_sentinel_master_1 10000",
-      "--slave-announce-ip 192.168.199.100",
+      "--slaveof redis_sentinel_master-1 10000",
+      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 10002"
       ]
     volumes:
-      - cluster_redis_sentinel_slave_2-data:/data
+      - cluster_redis_sentinel_slave-2-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -158,11 +158,11 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  redis_sentinel_slave_3:
+  redis_sentinel_slave-3:
     << : *default-common
     << : *default-labels
     depends_on:
-      - redis_sentinel_master_1
+      - redis_sentinel_master-1
     ports:
       - "10003:10003"
     entrypoint: /docker-entrypoint.redis.sh
@@ -172,12 +172,12 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 10003",
-      "--slaveof redis_sentinel_master_1 10000",
-      "--slave-announce-ip 192.168.199.100",
+      "--slaveof redis_sentinel_master-1 10000",
+      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 10003"
       ]
     volumes:
-      - cluster_redis_sentinel_slave_3-data:/data
+      - cluster_redis_sentinel_slave-3-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -191,18 +191,18 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  redis_sentinel_1:
+  redis_sentinel-1:
     << : *default-common
     << : *default-labels
     depends_on:
-      - redis_sentinel_master_1
+      - redis_sentinel_master-1
     ports:
       - "11000:11000"
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
       - SENTINEL_PORT=11000
-      - SENTINEL_HOST_IP=192.168.199.100
-      - SENTINEL_MASTER_IP=redis_sentinel_master_1
+      - SENTINEL_HOST_IP=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
+      - SENTINEL_MASTER_IP=redis_sentinel_master-1
       - SENTINEL_MASTER_PORT=10000
       - SENTINEL_NUM=2
     command: [
@@ -211,7 +211,7 @@ services:
       "--port 11000"
       ]
     volumes:
-      - cluster_redis_sentinel_1-data:/data
+      - cluster_redis_sentinel-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -228,18 +228,18 @@ services:
         target: /docker-entrypoint.sentinel.sh
         mode: 0555
 
-  redis_sentinel_2:
+  redis_sentinel-2:
     << : *default-common
     << : *default-labels
     depends_on:
-      - redis_sentinel_master_1
+      - redis_sentinel_master-1
     ports:
       - "11001:11001"
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
       - SENTINEL_PORT=11001
-      - SENTINEL_HOST_IP=192.168.199.100
-      - SENTINEL_MASTER_IP=redis_sentinel_master_1
+      - SENTINEL_HOST_IP=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
+      - SENTINEL_MASTER_IP=redis_sentinel_master-1
       - SENTINEL_MASTER_PORT=10000
       - SENTINEL_NUM=2
     command: [
@@ -248,7 +248,7 @@ services:
       "--port 11001"
       ]
     volumes:
-      - cluster_redis_sentinel_2-data:/data
+      - cluster_redis_sentinel-2-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -287,20 +287,20 @@ secrets:
     file: ./cluster/redis.sentinel/docker-entrypoint.redis.sh
 
 volumes:
-  cluster_redis_sentinel_master_1-data:
+  cluster_redis_sentinel_master-1-data:
     << : *default-labels
 
-  cluster_redis_sentinel_slave_1-data:
+  cluster_redis_sentinel_slave-1-data:
     << : *default-labels
 
-  cluster_redis_sentinel_slave_2-data:
+  cluster_redis_sentinel_slave-2-data:
     << : *default-labels
 
-  cluster_redis_sentinel_slave_3-data:
+  cluster_redis_sentinel_slave-3-data:
     << : *default-labels
 
-  cluster_redis_sentinel_1-data:
+  cluster_redis_sentinel-1-data:
     << : *default-labels
 
-  cluster_redis_sentinel_2-data:
+  cluster_redis_sentinel-2-data:
     << : *default-labels

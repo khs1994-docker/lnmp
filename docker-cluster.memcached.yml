@@ -37,7 +37,7 @@ x-labels:
 
 services:
 
-  memcached_1:
+  memcached-1:
     << : *default-common
     << : *default-labels
     ports:
@@ -55,7 +55,7 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  memcached_2:
+  memcached-2:
     << : *default-common
     << : *default-labels
     ports:
@@ -73,7 +73,7 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  memcached_3:
+  memcached-3:
     << : *default-common
     << : *default-labels
     ports:

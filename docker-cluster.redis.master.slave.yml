@@ -32,7 +32,8 @@ x-common:
   &default-common
   image: redis:4.0.8-alpine
   restart: always
-  env_file: ./cli/timezone.env
+  environment:
+    - REDIS_HOST=${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}
   networks:
     - redis_master_slave
   # logging:
@@ -50,16 +51,9 @@ x-labels:
 
 services:
 
-  redis_master:
+  redis_m_s_master:
     << : *default-common
     << : *default-labels
-    # build:
-    #   context: ./dockerfile/redis/
-    #   dockerfile: Dockerfile
-    #
-    # image: username/lnmp-redis:tag
-    #
-    # image: khs1994/lnmp-redis:4.0.8
     ports:
        - "21000:21000"
     volumes:
@@ -71,7 +65,7 @@ services:
       "--port 21000",
       # "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
-      "--slave-announce-ip 192.168.199.100",
+      "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
       "--slave-announce-port 21000"
       ]
     deploy:
@@ -81,17 +75,9 @@ services:
       placement:
         constraints: [node.role == manager]
 
-  redis_slave-1:
+  redis_m_s_slave-1:
     << : *default-common
     << : *default-labels
-    # build:
-    #   context: ./dockerfile/redis/
-    #   dockerfile: Dockerfile
-    #
-    # image: username/lnmp-redis:tag
-    #
-    # image: khs1994/lnmp-redis:4.0.8
-    #
     ports:
       - "22000:22000"
     volumes:
@@ -104,11 +90,11 @@ services:
       "--port 22000",
       # "--logfile /var/log/redis/redis.log",
       "--slaveof redis_master 21000",
-      "--slave-announce-ip 192.168.199.100",
+      "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
       "--slave-announce-port 22000"
       ]
     depends_on:
-      - redis_master
+      - redis_m_s_master
     deploy:
       << : *default-deploy
       << : *default-labels

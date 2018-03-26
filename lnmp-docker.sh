@@ -214,7 +214,6 @@ _registry_down(){
 env_status(){
   # cp .env.example to .env
   if [ -f .env ];then print_info ".env file existing\n"; else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
-  if [ -f cluster/.env ];then print_info "cluster/.env file existing\n"; else print_warning "cluster/.env file NOT existing (Maybe First Run)\n"; cp cluster/.env.example cluster/.env ; fi
 }
 
 # 自动升级软件版本
@@ -791,13 +790,13 @@ start(){
 bash_cli(){
   run_docker
   docker exec -it \
-      $(docker container ls \
+      $( docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.compose.service=$1 -n 1 ) \
           $2 2> /dev/null || \
       docker exec -it \
-      $(docker container ls \
+      $( docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$1 -n 1 ) $2
@@ -806,19 +805,19 @@ bash_cli(){
 
 clusterkit_bash_cli(){
   docker exec -it \
-    $(docker container ls \
+    $( docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.compose.service=$2 -n 1 ) $3 2> /dev/null || \
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
+        --filter label=com.docker.compose.service=$2 -n 1 ) $3 2> /dev/null || \
   docker exec -it \
-    $(docker container ls \
+    $( docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 -n 1 ) $3
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
+        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 -n 1 ) $3
 
   exit $?
 }
