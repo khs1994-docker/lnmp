@@ -6,7 +6,7 @@ if [ "$1" != 'new' ];then
   exit 1
 fi
 
-if ! [ -z "$2" ];then
+if [ -z "$2" ];then
   exit 1
 fi
 
@@ -68,8 +68,8 @@ Must EDIT ./${LARAVEL_PATH}/app/Providers/AppServiceProvider.php add this conten
 
   public function register()
   {
-      if ($this->app->environment() !== 'production') {
-          $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+      if (\$this->app->environment() !== 'production') {
+          \$this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
       }
       // ...
   }

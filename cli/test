@@ -45,9 +45,12 @@ _command(){
 
   cd ..
 
-  lnmp-laravel new laravel
+  date
+  lnmp-laravel5.5 new laravel5_5
+  date
 
-  lnmp-laravel5.5 new laravel5.5
+  lnmp-laravel new laravel
+  data
 
   lnmp-mysql mysql -V
 
