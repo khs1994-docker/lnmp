@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.6"
 
 #
 # Don't use this compose file
@@ -78,8 +78,7 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-      labels:
-        << : *default-labels
+      << : *default-labels
       resources:
         limits:
           cpus: '0.50'
@@ -99,10 +98,6 @@ services:
     dns_search:
       - dc1.example.com
       - dc2.example.com
-    # tmpfs: /run
-    tmpfs:
-      - /run
-      - /tmp
     entrypoint: /code/entrypoint.sh
     entrypoint:
       - php
@@ -196,10 +191,10 @@ services:
         target: /app
         bind:
           propagation: cached
-      # - type: tmpfs
-      #   target: /app
-      #   tmpfs:
-      #     size: 1000
+      - type: tmpfs
+        target: /app
+        tmpfs:
+          size: 1000
     restart: "no" # always on-failure unless-stopped
     user: postgresql
     working_dir: /code
@@ -257,8 +252,7 @@ services:
 configs:
   redis_conf:
     file: ./config/redis/redis.conf
-    labels:
-      << : *default-labels
+    << : *default-labels
 
   #
   # 3.5
@@ -270,8 +264,7 @@ configs:
 secrets:
   my_secret:
     file: ./secrets/db_root_password
-    labels:
-      << : *default-labels
+    << : *default-labels
   #
   # 3.5
   #
@@ -304,8 +297,7 @@ networks:
       foo: "bar"
       baz: 1
     attachable: true
-    labels:
-      << : *default-labels
+    << : *default-labels
 
 volumes:
   redis-data:
@@ -314,8 +306,7 @@ volumes:
     driver_opts:
       foo: "bar"
       baz: 1
-    labels:
-      << : *default-labels
+    << : *default-labels
   #
   # 3.5
   #
