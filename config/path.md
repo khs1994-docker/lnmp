@@ -32,11 +32,14 @@
 │   ├── demo-tls.conf
 │   ├── demo-vhost.conf
 │   ├── khs194.com.one.production.config
-│   └── khs1940.com.one.development.config
+│   ├── khs1940.com.one.development.config
+│   └── ssl
+│       ├── khs1994.com.crt
+│       ├── khs1994.com.fullchain.crt
+│       └── khs1994.com.key
 ├── mariadb
 │   ├── conf.d
-│   │   ├── docker.cnf
-│   │   └── mysqld_safe_syslog.cnf
+│   │   └── docker.cnf
 │   ├── conf.production.d
 │   │   ├── docker.cnf
 │   │   └── mysqld_safe_syslog.cnf
@@ -85,8 +88,10 @@
 │   ├── linuxkit.config
 │   ├── registry.conf.backup
 │   ├── ssl
-│   │   ├── www.t.khs1994.com.crt
-│   │   └── www.t.khs1994.com.key
+│   │   ├── khs1994.com.rsa.crt
+│   │   ├── khs1994.com.rsa.key
+│   │   └── root-ca.crt
+│   ├── ssl-self
 │   └── wait-for-php.sh
 ├── path.md
 ├── php
@@ -99,13 +104,17 @@
 │   │               │       ├── date_timezone.ini
 │   │               │       ├── docker-php-ext-bcmath.ini
 │   │               │       ├── docker-php-ext-gd.ini
+│   │               │       ├── docker-php-ext-igbinary.ini
 │   │               │       ├── docker-php-ext-memcached.ini
 │   │               │       ├── docker-php-ext-mongodb.ini
 │   │               │       ├── docker-php-ext-opcache.ini
+│   │               │       ├── docker-php-ext-pcntl.ini
 │   │               │       ├── docker-php-ext-pdo_mysql.ini
 │   │               │       ├── docker-php-ext-pdo_pgsql.ini
 │   │               │       ├── docker-php-ext-redis.ini
+│   │               │       ├── docker-php-ext-swoole.ini
 │   │               │       ├── docker-php-ext-xdebug.ini.default
+│   │               │       ├── docker-php-ext-yaml.ini
 │   │               │       ├── docker-php-ext-zip.ini
 │   │               │       └── memory-limit.ini
 │   │               ├── php-fpm.conf
@@ -115,6 +124,7 @@
 │   │                   ├── www.conf
 │   │                   ├── www.conf.default
 │   │                   └── zz-docker.conf
+│   ├── docker-entrypoint.crond.sh
 │   ├── php
 │   │   └── conf.d
 │   │       ├── error-log.ini
@@ -133,5 +143,5 @@
 │   └── config.yml
 └── update.sh
 
-44 directories, 88 files
+47 directories, 95 files
 ```
