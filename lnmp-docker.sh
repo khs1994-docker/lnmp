@@ -1188,13 +1188,16 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
      ;;
 
   clusterkit-mysql-exec )
+
+  if [ "$#" -lt 2 ];then
+     print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node-N} {COMMAND}' ; exit 1
+  fi
+
      NODE=$1
      shift
      COMMAND=$@
-     if [ -z $@ ];then
-       print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node1|node2} {COMMAND}' ; exit 1
-     fi
-       clusterkit_bash_cli clusterkit_mysql $NODE ${COMMAND:-bash}
+
+       clusterkit_bash_cli clusterkit_mysql mysql_$NODE ${COMMAND:-bash}
      ;;
 
   clusterkit-mysql-deploy )
@@ -1214,13 +1217,16 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     ;;
 
   clusterkit-memcached-exec )
+
+  if [ "$#" -lt 2 ];then
+     print_error '$ ./lnmp-docker.sh clusterkit-memcached-exec {N} {COMMAND}' ; exit 1
+  fi
+
     NODE=$1
     shift
     COMMAND=$@
-    if [ -z $@ ];then
-      print_error '$ ./lnmp-docker.sh clusterkit-memcached-exec {memcached-N} {COMMAND}' ; exit 1
-    fi
-    clusterkit_bash_cli clusterkit_memcached $NODE ${COMMAND:-bash}
+
+    clusterkit_bash_cli clusterkit_memcached memcached-$NODE ${COMMAND:-bash}
     ;;
 
   clusterkit-memcached-deploy )
@@ -1240,13 +1246,15 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         ;;
 
   clusterkit-redis-exec )
+
+  if [ "$#" -lt 2 ];then
+     print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master-N|slave-N} {COMMAND}' ; exit 1
+  fi
         NODE=$1
         shift
         COMMAND=$@
-        if [ -z $@ ];then
-          print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master1|slave1} {COMMAND}' ; exit 1
-        fi
-          clusterkit_bash_cli clusterkit_redis $NODE ${COMMAND:-bash}
+
+          clusterkit_bash_cli clusterkit_redis redis_$NODE ${COMMAND:-bash}
         ;;
 
   clusterkit-redis-deploy )
@@ -1266,13 +1274,14 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         ;;
 
   clusterkit-redis-master-slave-exec )
-        NODE=$1
+    if [ "$#" -lt 2 ];then
+       print_error '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {master | slave-N} {COMMAND}' ; exit 1
+    fi
+
+        NODE="$1"
         shift
-        COMMAND=$@
-        if [ -z $@ ];then
-          print_error '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {redis_m_s_master | redis_m_s_slave-N} {COMMAND}' ; exit 1
-        fi
-          clusterkit_bash_cli clusterkit_redis_master_slave $NODE ${COMMAND:-bash}
+        COMMAND="$@"
+        clusterkit_bash_cli clusterkit_redis_master_slave redis_m_s_$NODE ${COMMAND:-bash}
         ;;
 
   clusterkit-redis-master-slave-deploy )
@@ -1292,13 +1301,15 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         ;;
 
   clusterkit-redis-sentinel-exec )
+
+  if [ "$#" -lt 2 ];then
+     print_error '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1
+  fi
+
         NODE=$1
         shift
         COMMAND=$@
-        if [ -z $@ ];then
-          print_error '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {redis_sentinel_master-1|redis_sentinel_slave-N|redis_sentinel-N} {COMMAND}' ; exit 1
-        fi
-          clusterkit_bash_cli clusterkit_redis_sentinel $NODE ${COMMAND:-bash}
+          clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$NODE ${COMMAND:-bash}
         ;;
 
   clusterkit-redis-sentinel-deploy )

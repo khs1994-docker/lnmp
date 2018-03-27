@@ -111,6 +111,29 @@ Swarm mode:
   swarm-config         Validate and view the Production Swarm mode Compose file
   swarm-push           Push Swarm image (nginx php7)
 
+ClusterKit
+  clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
+
+  clusterkit-mysql-up          Up MySQL Cluster
+  clusterkit-mysql-down        Stop MySQL Cluster
+  clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
+
+  clusterkit-memcached-up      Up memcached Cluster
+  clusterkit-memcached-down    Stop memcached Cluster
+  clusterkit-memcached-exec    Execute a command in a running memcached Cluster node
+
+  clusterkit-redis-up          Up Redis Cluster
+  clusterkit-redis-down        Stop Redis Cluster
+  clusterkit-redis-exec        Execute a command in a running Redis Cluster node
+
+  clusterkit-redis-master-slave-up       Up Redis M-S
+  clusterkit-redis-master-slave-down     Stop Redis M-S
+  clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
+
+  clusterkit-redis-sentinel-up           Up Redis S
+  clusterkit-redis-sentinel-down         Stop Redis S
+  clusterkit-redis-sentinel-exec         Execute a command in a running Redis S node
+
 Container CLI:
   SERVICE-cli          Execute a command in a running LNMP container
 
@@ -170,6 +193,16 @@ Function _bash_cli($service, $command){
           -f label=com.khs1994.lnmp `
           -f label=com.docker.compose.service=$service -n 1 ) `
           $command
+}
+
+Function clusterkit_bash_cli($env, $service, $command){
+  docker exec -it `
+    $( docker container ls `
+        --format "{{.ID}}" `
+        -f label=com.khs1994.lnmp `
+        -f label=com.khs1994.lnmp.app.env=$env `
+        -f label=com.docker.compose.service=$service -n 1 ) `
+        $command
 }
 
 # main
@@ -322,6 +355,99 @@ switch($first){
 
     redis-cli {
       _bash_cli redis sh
+    }
+
+    clusterkit {
+       docker-compose -f docker-compose.yml \
+         -f docker-compose.override.yml \
+         -f docker-cluster.mysql.yml \
+         -f docker-cluster.redis.yml \
+         up $other
+    }
+
+    clusterkit-mysql-up {
+       docker-compose -f docker-cluster.mysql.yml up $other
+    }
+
+    clusterkit-mysql-down {
+       docker-compose -f docker-cluster.mysql.yml down $other
+    }
+
+    clusterkit-mysql-exec {
+         $service,$cmd=$other
+         if ($cmd.Count -eq 0){
+           echo '$ ./lnmp-docker.ps1 clusterkit-mysql-exec {master|node-N} {COMMAND}'
+           exit 1
+         }
+         clusterkit_bash_cli clusterkit_mysql mysql_$service $cmd
+    }
+
+    clusterkit-memcached-up {
+      docker-compose -f docker-cluster.memcached.yml up $other
+    }
+
+    clusterkit-memcached-down {
+      docker-compose -f docker-cluster.memcached.yml down $other
+    }
+
+    clusterkit-memcached-exec {
+      $service,$cmd=$other
+      if ($cmd.Count -eq 0){
+        echo '$ ./lnmp-docker.ps1 clusterkit-memcached-exec {N} {COMMAND}'
+        exit 1
+      }
+      clusterkit_bash_cli clusterkit_memcached memcached-$service $cmd
+    }
+
+    clusterkit-redis-up {
+          docker-compose -f docker-cluster.redis.yml up $other
+    }
+
+    clusterkit-redis-down {
+          docker-compose -f docker-cluster.redis.yml down $other
+    }
+
+    clusterkit-redis-exec {
+      $service,$cmd=$other
+      if ($cmd.Count -eq 0){
+        echo '$ ./lnmp-docker.ps1 clusterkit-redis-exec {master-N|slave-N} {COMMAND}'
+        exit 1
+      }
+      clusterkit_bash_cli clusterkit_redis redis_$service $cmd
+    }
+
+    clusterkit-redis-master-slave-up {
+          docker-compose -f docker-cluster.redis.master.slave.yml up $other
+    }
+
+    clusterkit-redis-master-slave-down {
+          docker-compose -f docker-cluster.redis.master.slave.yml down $other
+    }
+
+    clusterkit-redis-master-slave-exec {
+      $service,$cmd=$other
+      if ($cmd.Count -eq 0){
+        echo '$ ./lnmp-docker.ps1 clusterkit-redis-master-slave-exec {master|slave-N} {COMMAND}'
+        exit 1
+      }
+      clusterkit_bash_cli clusterkit_redis_master_slave redis_m_s_$service $cmd
+    }
+
+    clusterkit-redis-sentinel-up {
+          docker-compose -f docker-cluster.redis.sentinel.yml up $other
+    }
+
+    clusterkit-redis-sentinel-down {
+          docker-compose -f docker-cluster.redis.sentinel.yml down $other
+    }
+
+    clusterkit-redis-sentinel-exec {
+      $service,$cmd=$other
+      if ($cmd.Count -eq 0){
+        echo '$ ./lnmp-docker.ps1 clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}'
+        exit 1
+      }
+      clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$service $cmd
     }
 
     {$_ -in "update","upgrade"} {
