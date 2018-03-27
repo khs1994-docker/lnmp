@@ -67,6 +67,11 @@ services:
       << : *default-deploy
       placement:
         constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 123s
       # resources:
       #   limits:
       #     cpus: '0.50'
