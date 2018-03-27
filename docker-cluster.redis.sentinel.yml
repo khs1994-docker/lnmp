@@ -28,12 +28,12 @@ x-common:
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
   networks:
-    cluster_redis_sentinel:
+    cluster_redis_s:
       # ipv4_address: 172.15.0.105
   secrets:
-    - source: cluster_redis_conf
+    - source: cluster_redis_s_redis_conf
       target: /redis.conf.default
-    - source: cluster_redis_entrypoint
+    - source: cluster_redis_s_entrypoint
       target: /docker-entrypoint.redis.sh
       mode: 0555
 
@@ -74,7 +74,7 @@ services:
       "--slave-announce-port 10000"
       ]
     volumes:
-      - cluster_redis_sentinel_master-1-data:/data
+      - cluster_redis_s_master-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -105,7 +105,7 @@ services:
       "--slave-announce-port 10001"
       ]
     volumes:
-      - cluster_redis_sentinel_slave-1-data:/data
+      - cluster_redis_s_slave-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -140,7 +140,7 @@ services:
       "--slave-announce-port 10002"
       ]
     volumes:
-      - cluster_redis_sentinel_slave-2-data:/data
+      - cluster_redis_s_slave-2-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -173,7 +173,7 @@ services:
       "--slave-announce-port 10003"
       ]
     volumes:
-      - cluster_redis_sentinel_slave-3-data:/data
+      - cluster_redis_s_slave-3-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -207,7 +207,7 @@ services:
       "--port 11000"
       ]
     volumes:
-      - cluster_redis_sentinel-1-data:/data
+      - cluster_redis_s_sentinel-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -220,7 +220,7 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
     secrets:
-      - source: cluster_redis_sentinel_entrypoint
+      - source: cluster_redis_s_sentinel_entrypoint
         target: /docker-entrypoint.sentinel.sh
         mode: 0555
 
@@ -244,7 +244,7 @@ services:
       "--port 11001"
       ]
     volumes:
-      - cluster_redis_sentinel-2-data:/data
+      - cluster_redis_s_sentinel-2-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -257,12 +257,12 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
     secrets:
-      - source: cluster_redis_sentinel_entrypoint
+      - source: cluster_redis_s_sentinel_entrypoint
         target: /docker-entrypoint.sentinel.sh
         mode: 0555
 
 networks:
-  cluster_redis_sentinel:
+  cluster_redis_s:
     << : *default-labels
     ipam:
       driver: default
@@ -270,33 +270,33 @@ networks:
         - subnet: 172.15.0.0/24
 
 secrets:
-  cluster_redis_conf:
+  cluster_redis_s_redis_conf:
     << : *default-labels
     file: ./config/redis/redis.conf
 
-  cluster_redis_sentinel_entrypoint:
+  cluster_redis_s_sentinel_entrypoint:
     << : *default-labels
     file: ./cluster/redis.sentinel/docker-entrypoint.sentinel.sh
 
-  cluster_redis_entrypoint:
+  cluster_redis_s_entrypoint:
     << : *default-labels
     file: ./cluster/redis.sentinel/docker-entrypoint.redis.sh
 
 volumes:
-  cluster_redis_sentinel_master-1-data:
+  cluster_redis_s_master-1-data:
     << : *default-labels
 
-  cluster_redis_sentinel_slave-1-data:
+  cluster_redis_s_slave-1-data:
     << : *default-labels
 
-  cluster_redis_sentinel_slave-2-data:
+  cluster_redis_s_slave-2-data:
     << : *default-labels
 
-  cluster_redis_sentinel_slave-3-data:
+  cluster_redis_s_slave-3-data:
     << : *default-labels
 
-  cluster_redis_sentinel-1-data:
+  cluster_redis_s_sentinel-1-data:
     << : *default-labels
 
-  cluster_redis_sentinel-2-data:
+  cluster_redis_s_sentinel-2-data:
     << : *default-labels
