@@ -5,7 +5,7 @@ services:
     image: nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine
 
   httpd:
-    image: httpd:${KHS1994_LNMP_APACHE_VERSION}
+    image: httpd:${KHS1994_LNMP_HTTPD_VERSION}-alpine
 
   mysql:
     image: mysql:${KHS1994_LNMP_MYSQL_VERSION}
