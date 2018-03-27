@@ -1,5 +1,14 @@
 # Redis 集群版(By Ruby)
 
+销毁之后，不能恢复。
+
+每个节点数据必须为空，才能建立集群。
+
+```bash
+>>> Creating cluster
+[ERR] Node 192.168.57.110:7001 is not empty. Either the node already knows other nodes (check with CLUSTER NODES) or contains some key in database 0.
+```
+
 ## 开发环境
 
 在 `.env` 文件中设置 `CLUSTERKIT_REDIS_HOST` 变量为路由器分配给电脑的 IP，或者集群 IP

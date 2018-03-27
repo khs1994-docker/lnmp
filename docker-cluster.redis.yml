@@ -107,9 +107,6 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-    expose:
-      - "7001"
-      - "17001"
     ports:
       - "7001:7001"
       - "17001:17001"
@@ -119,9 +116,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "7002"
-      - "17002"
     ports:
       - "7002:7002"
       - "17002:17002"
@@ -155,9 +149,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "7003"
-      - "17003"
     ports:
       - "7003:7003"
       - "17003:17003"
@@ -191,9 +182,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "8001"
-      - "18001"
     ports:
       - "8001:8001"
       - "18001:18001"
@@ -226,9 +214,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "8002"
-      - "18002"
     ports:
       - "8002:8002"
       - "18002:18002"
@@ -261,9 +246,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "8003"
-      - "18003"
     ports:
       - "8003:8003"
       - "18003:18003"
