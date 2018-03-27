@@ -14,36 +14,6 @@ version: '3.6'
 # node 13307 13308
 #
 
-# There list Docker command，In production please use CLI (./lnmp-docker.sh)
-#
-## Start
-#
-# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.mysql.yml up [-d]
-#
-#
-## Exec
-#
-### bash
-#
-# $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.mysql=master) mysql -uroot -p
-#
-### fish
-#
-# $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.clusterkit.mysql=master) mysql -uroot -p
-#
-## Remove All [Include Volumes]
-#
-# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.mysql.yml down [-v]
-#
-#
-# Swarm mode (Start LNMP With MySQL Cluster)
-#
-#
-# $ docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
-#
-# $ docker stack rm lnmp
-#
-
 x-common:
   &default-common
   image: mysql:8.0.3

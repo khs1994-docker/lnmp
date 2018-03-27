@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 # MySQL Docker 8.0.4 based stretch(Debian 9) Remove ip ping etc command
 
@@ -33,7 +33,7 @@ mysql -u root \
 
 mysql -uroot -h mysql_master -e "FLUSH TABLES WITH READ LOCK"
 
-# 备份数据库
+# lock database
 
 # mysqldump -u root -p${DB_ROOT_PASSWORD} --all-databases  --lock-tables=false  -- > /root/all.sql
 
@@ -41,7 +41,7 @@ mysql -uroot -h mysql_master -e "FLUSH TABLES WITH READ LOCK"
 
 master_status_info=$(mysql -u root -h mysql_master -e "show master status\G")
 
-# 解锁数据库
+# unlock database
 
 mysql -uroot -h mysql_master -e "UNLOCK TABLES"
 
@@ -65,10 +65,12 @@ MASTER_LOG_POS=${LOG_POS}"
 
 mysql -u root -e "START SLAVE;show slave status\G"
 
-# 主节点新建数据库
+# verify
+
+# master new database
 
 mysql -umaster -h mysql_master -e 'create database if not exists test'
 
-# 从节点验证
+# node see database
 
 mysql -unode -e 'show databases;'

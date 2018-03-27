@@ -1,1 +1,0 @@
-../../../lnmp-docker.sh

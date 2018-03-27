@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 DB_ROOT_PASSWORD=$(cat /etc/mysql/db_root_password)
 

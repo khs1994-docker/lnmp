@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -ex
+
 if [ "$1" = 'sh' ] || [ "$1" = 'bash' ];then
   exec sh
 fi

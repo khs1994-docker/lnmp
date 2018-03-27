@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 COMMIT=`date "+%F %T"`
 
 push(){

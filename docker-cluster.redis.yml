@@ -17,39 +17,6 @@ version: '3.6'
 # 8001 8002 8003 18001 18002 18003
 #
 
-# There list  Docker command，In production please use CLI (./lnmp-docker.sh)
-#
-# Start
-#
-# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml up [-d]
-#
-# Exec
-#
-## Bash
-#
-# $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
-#
-## Fish
-#
-# $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
-#
-# Remove ALL [include Volumes]
-#
-# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
-#
-#
-# Swarm mode (Start LNMP With Redis Cluster)
-#
-#
-# $ docker stack deploy -c docker-production.yml -c docker-cluster.redis.yml lnmp
-#
-# $ docker stack rm lnmp
-#
-#
-# PHP connect BY CLUSTER HOST_IP
-#
-#
-
 x-common:
   &default-common
   image: redis:4.0.8-alpine

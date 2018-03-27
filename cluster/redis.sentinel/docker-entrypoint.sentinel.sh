@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -ex
+
 until redis-cli -h redis_sentinel_master_1; do
   echo "Redis master is unavailable - sleeping"
   sleep 1

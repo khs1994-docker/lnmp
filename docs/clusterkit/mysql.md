@@ -25,3 +25,7 @@ $ ./lnmp-docker.sh clusterkit-mysql-remove
 ```
 
 # PHP 连接集群
+
+主服务器 `root` 账号
+
+从服务器 `node` 账号（拥有只读权限）
