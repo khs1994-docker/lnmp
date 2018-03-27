@@ -2,7 +2,7 @@
 
 set -ex
 
-until redis-cli -h redis_sentinel_master_1; do
+until redis-cli -h redis_sentinel_master_1 -p ${SENTINEL_MASTER_PORT} ; do
   echo "Redis master is unavailable - sleeping"
   sleep 1
 done
