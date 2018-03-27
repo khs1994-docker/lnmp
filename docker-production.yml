@@ -187,7 +187,9 @@ services:
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--bind 0.0.0.0"
+      "--bind 0.0.0.0",
+      "--appendonly yes",
+      "--aof-use-rdb-preamble yes"
       ]
     logging: *default-logging
     deploy:

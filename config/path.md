@@ -138,10 +138,9 @@
 ├── redis
 │   ├── redis.conf
 │   └── redis.production.conf
-├── registry
-│   ├── config.production.yml
-│   └── config.yml
-└── update.sh
+└── registry
+    ├── config.production.yml
+    └── config.yml
 
-47 directories, 95 files
+47 directories, 94 files
 ```

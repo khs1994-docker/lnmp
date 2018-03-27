@@ -86,7 +86,9 @@ services:
       "/redis.conf",
       "--daemonize no",
       "--logfile /var/log/redis/redis.log",
-      "--bind 0.0.0.0"
+      "--bind 0.0.0.0",
+      "--appendonly yes",
+      "--aof-use-rdb-preamble yes"
       ]
 
   # memcached:
