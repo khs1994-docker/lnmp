@@ -28,6 +28,15 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-exe
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-deploy           -d     'Deploy Redis Cluster in Swarm mode'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-remove           -d     'Remove Redis Cluster in Swarm mode'
 
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-memcached-up               -d     'Up memcached Cluster'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-memcached-up' -s d          -d     'Up memcached Cluster in the background'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-memcached-down             -d     'Stop memcached Cluster'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-memcached-down' -s v        -d     'Stop memcached Cluster AND Remove named volumes declared in the `volumes`'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-memcached-exec             -d     'Execute a command in a running memcached Cluster'
+
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-memcached-deploy           -d     'Deploy memcached Cluster in Swarm mode'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-memcached-remove           -d     'Remove memcached Cluster in Swarm mode'
+
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-up   -d     'Up Redis M-S'
 complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d           -d     'Up Redis M-S in the background'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-down -d     'Stop Redis M-S'

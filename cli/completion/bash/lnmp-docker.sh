@@ -15,6 +15,12 @@ complete -W "acme.sh \
         clusterkit-mysql-exec \
         clusterkit-mysql-deploy \
         clusterkit-mysql-remove \
+        clusterkit-memcached-up \
+        clusterkit-memcached-down \
+        clusterkit-memcached-exec \
+        clusterkit-memcached-create \
+        clusterkit-memcached-deploy \
+        clusterkit-memcached-remove \
         clusterkit-redis-up \
         clusterkit-redis-down \
         clusterkit-redis-exec \

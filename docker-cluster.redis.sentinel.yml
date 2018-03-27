@@ -12,10 +12,6 @@ version: "3.6"
 #
 
 #
-# You Must Find `192.168.199.100` replace your `HOST_IP`
-#
-
-#
 # Example Port
 #
 # Master 10000
