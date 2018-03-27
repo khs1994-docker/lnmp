@@ -1,1 +1,1 @@
-../docs/clusterkit.md
+../docs/clusterkit/README.md
