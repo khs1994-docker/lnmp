@@ -197,8 +197,8 @@ services:
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
       - SENTINEL_PORT=11000
-      - SENTINEL_HOST_IP=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
-      - SENTINEL_MASTER_IP=redis_sentinel_master-1
+      - SENTINEL_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
+      - SENTINEL_MASTER_HOST=redis_sentinel_master-1
       - SENTINEL_MASTER_PORT=10000
       - SENTINEL_NUM=2
     command: [
@@ -234,8 +234,8 @@ services:
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
       - SENTINEL_PORT=11001
-      - SENTINEL_HOST_IP=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
-      - SENTINEL_MASTER_IP=redis_sentinel_master-1
+      - SENTINEL_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
+      - SENTINEL_MASTER_HOST=redis_sentinel_master-1
       - SENTINEL_MASTER_PORT=10000
       - SENTINEL_NUM=2
     command: [
