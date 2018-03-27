@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 if [ ! -n "$1" ] ;then
   echo -e "请传入参数
 database [tables]

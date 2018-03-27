@@ -11,55 +11,18 @@ version: '3.6'
 #
 
 #
-# You Must Find `192.168.199.100` replace your `HOST_IP`
-#
-
-#
 # Example port
 #
 # 7001 7002 7003 17001 17002 17003
 # 8001 8002 8003 18001 18002 18003
 #
 
-# There list  Docker command，In production please use CLI (./lnmp-docker.sh)
-#
-# Start
-#
-# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml up [-d]
-#
-# Exec
-#
-## Bash
-#
-# $ docker exec -it $(docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
-#
-## Fish
-#
-# $ docker exec -it (docker container ls --format "{{.ID}}" --filter label=com.khs1994.lnmp.clusterkit.redis=master1) sh
-#
-# Remove ALL [include Volumes]
-#
-# $ docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-cluster.redis.yml down [-v]
-#
-#
-# Swarm mode (Start LNMP With Redis Cluster)
-#
-#
-# $ docker stack deploy -c docker-production.yml -c docker-cluster.redis.yml lnmp
-#
-# $ docker stack rm lnmp
-#
-#
-# PHP connect BY CLUSTER HOST_IP
-#
-#
-
 x-common:
   &default-common
   image: redis:4.0.8-alpine
   restart: always
-  env_file:
-    - ./cluster/.env
+  environment:
+    - REDIS_HOST=${CLUSTERKIT_REDIS_HOST:-192.168.199.100}
   networks:
     cluster_redis:
       # ipv4_address: 172.16.0.105
@@ -91,17 +54,24 @@ services:
   redis_ruby:
     << : *default-common
     << : *default-labels
-    # build:
-    #   context: ./cluster/redis
-    #   args:
-    #     REDIS_URL: gitee.com/mirrors/redis/raw
+    restart: "on-failure"
+    build:
+      context: ./cluster/redis
+      args:
+        REDIS_URL: gitee.com/mirrors/redis/raw
     image: khs1994/redis:clusterkit-4.0.8
     volumes:
       - cluster_redis_master-1-data:/data
+    entrypoint: /docker-entrypoint.sh
     deploy:
       << : *default-deploy
       placement:
         constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 123s
       # resources:
       #   limits:
       #     cpus: '0.50'
@@ -112,15 +82,16 @@ services:
 
   redis_master-1:
     << : *default-common
+    << : *default-labels
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 7001",
-      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 7001",
-      "--cluster-announce-bus-port 17001"
+      "--cluster-announce-bus-port 17001",
       ]
     volumes:
       - cluster_redis_master-1-data:/data
@@ -136,9 +107,6 @@ services:
       #   reservations:
       #     cpus: '0.25'
       #     memory: 20M
-    expose:
-      - "7001"
-      - "17001"
     ports:
       - "7001:7001"
       - "17001:17001"
@@ -148,9 +116,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "7002"
-      - "17002"
     ports:
       - "7002:7002"
       - "17002:17002"
@@ -160,7 +125,7 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 7002",
-      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 7002",
       "--cluster-announce-bus-port 17002"
       ]
@@ -184,9 +149,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "7003"
-      - "17003"
     ports:
       - "7003:7003"
       - "17003:17003"
@@ -196,7 +158,7 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 7003",
-      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 7003",
       "--cluster-announce-bus-port 17003"
       ]
@@ -220,9 +182,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "8001"
-      - "18001"
     ports:
       - "8001:8001"
       - "18001:18001"
@@ -232,7 +191,7 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 8001",
-      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8001",
       "--cluster-announce-bus-port 18001"
       ]
@@ -255,9 +214,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "8002"
-      - "18002"
     ports:
       - "8002:8002"
       - "18002:18002"
@@ -267,7 +223,7 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 8002",
-      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8002",
       "--cluster-announce-bus-port 18002"
       ]
@@ -290,9 +246,6 @@ services:
     << : *default-labels
     depends_on:
       - redis_master-1
-    expose:
-      - "8003"
-      - "18003"
     ports:
       - "8003:8003"
       - "18003:18003"
@@ -302,7 +255,7 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 8003",
-      "--cluster-announce-ip 192.168.199.100",
+      "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8003",
       "--cluster-announce-bus-port 18003"
       ]

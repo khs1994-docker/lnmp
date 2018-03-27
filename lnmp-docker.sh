@@ -109,6 +109,13 @@ ClusterKit
   clusterkit-mysql-deploy      Deploy MySQL Cluster in Swarm mode
   clusterkit-mysql-remove      Remove MySQL Cluster in Swarm mode
 
+  clusterkit-memcached-up      Up memcached Cluster
+  clusterkit-memcached-down    Stop memcached Cluster
+  clusterkit-memcached-exec    Execute a command in a running memcached Cluster node
+
+  clusterkit-memcached-deploy  Deploy memcached Cluster in Swarm mode
+  clusterkit-memcached-remove  Remove memcached Cluster in Swarm mode
+
   clusterkit-redis-up          Up Redis Cluster
   clusterkit-redis-down        Stop Redis Cluster
   clusterkit-redis-exec        Execute a command in a running Redis Cluster node
@@ -214,7 +221,6 @@ _registry_down(){
 env_status(){
   # cp .env.example to .env
   if [ -f .env ];then print_info ".env file existing\n"; else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
-  if [ -f cluster/.env ];then print_info "cluster/.env file existing\n"; else print_warning "cluster/.env file NOT existing (Maybe First Run)\n"; cp cluster/.env.example cluster/.env ; fi
 }
 
 # 自动升级软件版本
@@ -791,13 +797,13 @@ start(){
 bash_cli(){
   run_docker
   docker exec -it \
-      $(docker container ls \
+      $( docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.compose.service=$1 -n 1 ) \
           $2 2> /dev/null || \
       docker exec -it \
-      $(docker container ls \
+      $( docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$1 -n 1 ) $2
@@ -806,19 +812,19 @@ bash_cli(){
 
 clusterkit_bash_cli(){
   docker exec -it \
-    $(docker container ls \
+    $( docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.compose.service=$2 -n 1 ) $3 2> /dev/null || \
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
+        --filter label=com.docker.compose.service=$2 -n 1 ) $3 2> /dev/null || \
   docker exec -it \
-    $(docker container ls \
+    $( docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 -n 1 ) $3
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
+        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 -n 1 ) $3
 
   exit $?
 }
@@ -1199,6 +1205,32 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
        docker stack rm mysql_cluster
         ;;
 
+  clusterkit-memcached-up )
+    docker-compose -f docker-cluster.memcached.yml up "$@"
+    ;;
+
+  clusterkit-memcached-down )
+    docker-compose -f docker-cluster.memcached.yml down "$@"
+    ;;
+
+  clusterkit-memcached-exec )
+    NODE=$1
+    shift
+    COMMAND=$@
+    if [ -z $@ ];then
+      print_error '$ ./lnmp-docker.sh clusterkit-memcached-exec {memcached-N} {COMMAND}' ; exit 1
+    fi
+    clusterkit_bash_cli clusterkit_memcached $NODE ${COMMAND:-bash}
+    ;;
+
+  clusterkit-memcached-deploy )
+    docker stack deploy -c docker-cluster.memcached.yml memcached_cluster
+    ;;
+
+  clusterkit-memcached-remove )
+    docker stack rm memcached_cluster
+    ;;
+
   clusterkit-redis-up )
         docker-compose -f docker-cluster.redis.yml up "$@"
         ;;
@@ -1217,6 +1249,14 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
           clusterkit_bash_cli clusterkit_redis $NODE ${COMMAND:-bash}
         ;;
 
+  clusterkit-redis-deploy )
+    docker stack deploy -c docker-cluster.redis.yml redis_cluster
+    ;;
+
+  clusterkit-redis-remove )
+    docker stack rm redis_cluster
+    ;;
+
   clusterkit-redis-master-slave-up )
         docker-compose -f docker-cluster.redis.master.slave.yml up "$@"
         ;;
@@ -1230,10 +1270,18 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         shift
         COMMAND=$@
         if [ -z $@ ];then
-          print_error '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {NODE_NAME} {COMMAND}' ; exit 1
+          print_error '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {redis_m_s_master | redis_m_s_slave-N} {COMMAND}' ; exit 1
         fi
           clusterkit_bash_cli clusterkit_redis_master_slave $NODE ${COMMAND:-bash}
         ;;
+
+  clusterkit-redis-master-slave-deploy )
+    docker stack deploy -c docker-cluster.redis.master.slave.yml redis_m_s_cluster
+    ;;
+
+  clusterkit-redis-master-slave-remove )
+    docker stack rm redis_m_s_cluster
+    ;;
 
   clusterkit-redis-sentinel-up )
         docker-compose -f docker-cluster.redis.sentinel.yml up "$@"
@@ -1248,10 +1296,18 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         shift
         COMMAND=$@
         if [ -z $@ ];then
-          print_error '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {masterN|slaveN|sentinelN} {COMMAND}' ; exit 1
+          print_error '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {redis_sentinel_master-1|redis_sentinel_slave-N|redis_sentinel-N} {COMMAND}' ; exit 1
         fi
           clusterkit_bash_cli clusterkit_redis_sentinel $NODE ${COMMAND:-bash}
         ;;
+
+  clusterkit-redis-sentinel-deploy )
+    docker stack deploy -c docker-cluster.redis.sentinel.yml redis_s_cluster
+    ;;
+
+  clusterkit-redis-sentinel-remove )
+    docker stack rm redis_s_cluster
+    ;;
 
   clusterkit-* )
         command=$(echo $command | cut -d '-' -f 2)

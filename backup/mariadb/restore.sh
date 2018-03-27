@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 if [ ! -n "$1" ] ;then
   echo "请传入 SQL 文件名"
   cd /backup

@@ -22,7 +22,7 @@ services:
 
   redis:
     << : *default-common
-    build:
+    build: # no Swarm mode
       << : *default-labels
       context: ./dockerfile/redis
       cache_from:
@@ -45,20 +45,24 @@ services:
     command:
       - redis-server
       - /redis.conf
-    configs:
+    command: ["redis-server", "/redis.conf"]
+    configs: # no compose
       - source: redis_conf
         target: /redis.conf
         uid: '103'
         gid: '103'
         mode: '0440'
-      - my_other_config
-    cgroup_parent: m-executor-abcd
-    # container_name: my-web-container
-    credential_spec:
+      - my_other_config # /run/configs/my_other_config
+    cgroup_parent: m-executor-abcd # no Swarm mode
+    # container_name: my-web-container # no Swarm mode
+    credential_spec: # no compose
       file: my-credential-spec.json
-    deploy:
-      mode: replicated
-      # mode: global
+    deploy: # no compose
+      mode: global
+
+      replicas: 6
+
+      mode: replicated # this is default
       replicas: 6
 
       placement:
@@ -68,17 +72,26 @@ services:
         preferences:
           - spread: node.labels.zone
 
-      endpoint_mode: vip # dnsrr
+      endpoint_mode: vip # this is default
+
+      endpoint_mode: dnsrr
+
       update_config:
         parallelism: 2
         delay: 10s
-        order: stop-first
+        # failure_action: continue rollback pause (default: pause)
+        # monitor:
+        # max_failure_ratio:
+        order: stop-first # start-first
+
       restart_policy:
-        condition: on-failure
+        condition: any # none | on-failure | any(default)
         delay: 5s
         max_attempts: 3
         window: 120s
+
       << : *default-labels
+
       resources:
         limits:
           cpus: '0.50'
@@ -86,7 +99,7 @@ services:
         reservations:
           cpus: '0.25'
           memory: 20M
-    devices:
+    devices: # no Swarm mode
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     depends_on:
       - mysql
@@ -106,7 +119,7 @@ services:
       - -d
       - memory_limit=-1
       - vendor/bin/phpunit
-    # env_file: .env
+    env_file: .env
     env_file:
       - ./.env
     environment:
@@ -120,7 +133,7 @@ services:
     expose:
       - "3000"
       - "8000"
-    # external_links:
+    # external_links: # no Swarm mode
     #   - redis_1
     #   - project_db_1:mysql
     #   - project_db_1:postgresql
@@ -136,7 +149,7 @@ services:
     # healthcheck:
     #   disable: true
     isolation: default # windows process hyperv
-    # links:
+    # links: # no Swarm mode
     #    - mysql
     logging:
        driver: syslog # json-file none journald
@@ -144,7 +157,7 @@ services:
          syslog-address: "tcp://192.168.0.42:123"
          max-size: "200k"
          max-file: "10"
-    # network_mode: "host" # bridge \ none \ service:service name \ container: container name
+    # network_mode: "host" # bridge \ none \ service:service name \ container: container name # no Swarm mode
     networks:
        app_net:
          aliases:
@@ -162,14 +175,14 @@ services:
         mode: host
     secrets:
       - my_secret
-      - my_other_secret
-    security_opt:
+      - my_other_secret # /run/secrets/my_other_secret
+    security_opt: # no Swarm mode
       - label:user:USER
       - label:role:ROLE
     stop_grace_period: 1s
     stop_grace_period: 1m30s
-    stop_signal: SIGUSR1
-    sysctls:
+    stop_signal: SIGUSR1 # no Swarm mode
+    sysctls: # no Swarm mode
       net.core.somaxconn: 1024
       net.ipv4.tcp_syncookies: 0
     ulimits:
@@ -177,7 +190,7 @@ services:
       nofile:
         soft: 20000
         hard: 40000
-    userns_mode: "host"
+    userns_mode: "host" # no Swarm mode
     volumes:
       - redis-data:/data
       - type: volume
@@ -195,7 +208,7 @@ services:
         target: /app
         tmpfs:
           size: 1000
-    restart: "no" # always on-failure unless-stopped
+    restart: "no" # always | on-failure | unless-stopped # no Swarm mode
     user: postgresql
     working_dir: /code
     domainname: foo.com
