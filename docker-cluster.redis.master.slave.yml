@@ -12,6 +12,11 @@ version: "3.6"
 # slave 22000
 #
 
+#
+# master aof
+# slave rdb
+#
+
 x-deploy:
   &default-deploy
   restart_policy:
@@ -62,7 +67,10 @@ services:
       # "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 21000"
+      "--slave-announce-port 21000",
+      "--appendonly yes",
+      "--save \"\""
+      # "--aof-use-rdb-preamble yes"
       ]
     deploy:
       << : *default-deploy
@@ -88,6 +96,9 @@ services:
       "--slaveof redis_m_s_master 21000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
       "--slave-announce-port 22000"
+      # "--appendonly yes",
+      # "--save \"\"",
+      # "--aof-use-rdb-preamble yes"
       ]
     depends_on:
       - redis_m_s_master
