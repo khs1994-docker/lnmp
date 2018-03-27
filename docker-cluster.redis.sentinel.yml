@@ -21,6 +21,11 @@ version: "3.6"
 # Sentinel 11000 11001
 #
 
+#
+# master aof
+# slave rdb
+#
+
 x-common:
   &default-common
   image: redis:4.0.8-alpine
@@ -71,7 +76,10 @@ services:
       "--bind 0.0.0.0",
       "--port 10000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 10000"
+      "--slave-announce-port 10000",
+      "--appendonly yes",
+      "--save \"\""
+      # "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_master-1-data:/data
@@ -103,6 +111,9 @@ services:
       "--slaveof redis_sentinel_master-1 10000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 10001"
+      # "--appendonly yes",
+      # "--save \"\"",
+      # "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_slave-1-data:/data
@@ -138,6 +149,9 @@ services:
       "--slaveof redis_sentinel_master-1 10000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 10002"
+      # "--appendonly yes",
+      # "--save \"\"",
+      # "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_slave-2-data:/data
@@ -171,6 +185,9 @@ services:
       "--slaveof redis_sentinel_master-1 10000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 10003"
+      # "--appendonly yes",
+      # "--save \"\"",
+      # "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_slave-3-data:/data
