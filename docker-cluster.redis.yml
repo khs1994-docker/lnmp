@@ -58,6 +58,7 @@ services:
     build:
       context: ./cluster/redis
       args:
+        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
         REDIS_URL: gitee.com/mirrors/redis/raw
     image: khs1994/redis:clusterkit-4.0.8
     volumes:

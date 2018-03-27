@@ -187,7 +187,7 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  redis_sentinel-1:
+  redis_sentinel_sentinel-1:
     << : *default-common
     << : *default-labels
     depends_on:
@@ -224,7 +224,7 @@ services:
         target: /docker-entrypoint.sentinel.sh
         mode: 0555
 
-  redis_sentinel-2:
+  redis_sentinel_sentinel-2:
     << : *default-common
     << : *default-labels
     depends_on:

@@ -189,6 +189,7 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--appendonly yes",
+      # "--save \"\"",
       "--aof-use-rdb-preamble yes"
       ]
     logging: *default-logging
