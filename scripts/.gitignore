@@ -1,7 +1,6 @@
 /*
-!*.example.sh
 !.gitignore
 !README.md
-!crontab.example.txt
+!*.example.sh
+!*.example.txt
 !production-init
-!crontab
