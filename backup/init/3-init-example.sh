@@ -2,4 +2,4 @@
 
 set -ex
 
-echo "This is development init shell script"
+echo -e "This is development init shell script"

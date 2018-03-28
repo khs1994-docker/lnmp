@@ -9,6 +9,8 @@ default-character-set = utf8mb4
 
 [mysqld]
 
+# datadir         = /var/lib/mysql-my
+
 skip-host-cache
 skip-name-resolve
 log-error=/var/log/mysql/error.log

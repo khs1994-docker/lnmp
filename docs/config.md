@@ -8,11 +8,11 @@
 
 * 一般情况下使用默认配置即可，如果你需要修改某些配置，方便的话首先请在本项目 GitHub 提出 `issue`，提出优化配置的建议，之后按照本教程正确的自定义配置。
 
-* 以追加方式配置文件
+* 以追加(子配置文件 **重写** 主配置文件)方式配置文件
 
-* 一个软件一个配置文件
+* 尽量一个软件一个配置文件
 
-## 总体步骤
+## 总体步骤（三步）
 
 **1.** 进入配置文件所在目录 `./config/SOFT_NAME/`
 
@@ -22,11 +22,25 @@
 
 ## MySQL
 
-**1.** 示例配置文件：`./config/mysql/conf.d/docker.cnf`
+**1.** 示例配置文件：`./config/mysql/docker.cnf`
 
-**2.** 在示例配置文件夹内 `./config/mysql/conf.d/` 复制 `docker.cnf` 为 `docker.my.cnf`
+**2.** 在示例配置文件夹内 `./config/mysql/` 复制 `docker.cnf` 为 `docker.my.cnf`
 
-**3.** 在 `.env` 文件内修改 `MYSQL_CONF` 变量值为 `docker.my.cnf`(默认是注释掉的，如果你按照本文方法操作，直接取消注释即可，或者修改为你自己认为合适的文件名)。
+**3.** 在 `.env` 文件内修改 `LNMP_MYSQL_CONF` 变量值为 `docker.my.cnf`(默认是注释掉的，如果你按照本文方法操作，直接取消注释即可，或者修改为你自己认为合适的文件名)。
+
+### 修改默认数据文件夹
+
+假设自定义文件夹为 `/var/lib/mysql-my` (必须为绝对路径)
+
+在 `docker.my.cnf` 中增加如下配置
+
+```bash
+[mysqld]
+
+datadir         = /var/lib/mysql-my
+```
+
+在 `.env` 文件中修改 `LNMP_MYSQL_DATA=/var/lib/mysql-my`,之后启动即可。
 
 > MariaDB 配置差不多，这里不再赘述。
 

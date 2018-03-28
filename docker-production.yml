@@ -101,8 +101,7 @@ services:
     volumes:
       - ./backup/init.production:/docker-entrypoint-initdb.d:ro
       - ./backup/mysql:/backup:rw
-      - mysql-data:/var/lib/mysql:rw
-      # - ./config/mysql/conf.production.d:/etc/mysql/conf.d:ro
+      - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}:rw
     command: ["mysqld","--character-set-server=utf8mb4"]
     logging: *default-logging
     deploy:
@@ -145,7 +144,6 @@ services:
   #   # ports:
   #   #   - "127.0.0.1:3306:3306"
   #   volumes:
-  #     # - ./config/mariadb/conf.d:/etc/mysql/conf.d:ro
   #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
   #     - ./backup/init.production:/docker-entrypoint-initdb.d:ro
   #     - mariadb-data:/var/lib/mysql:rw
@@ -690,11 +688,11 @@ secrets:
 
 configs:
   mysql_conf_d_docker_cnf:
-    file: ./config/mysql/conf.production.d/docker.cnf
+    file: ./config/mysql/docker.production.cnf
     << : *default-labels
 
   # mariadb_conf_d_docker_cnf:
-  #   file: ./config/mariadb/conf.production.d/docker.cnf
+  #   file: ./config/mariadb/docker.production.cnf
   #   << : *default-labels
 
   nginx_conf:
