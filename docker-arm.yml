@@ -50,8 +50,11 @@ services:
   #   ports:
   #     - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
   #   volumes:
-  #     - mysql-data:/var/lib/mysql
+  #     - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+  #     - ./backup/init:/docker-entrypoint-initdb.d:ro
+  #     - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}
   #     - ./logs/mysql:/var/log/mysql
+  #     - ./backup/mysql:/backup:rw
 
   redis:
     << : *default-common

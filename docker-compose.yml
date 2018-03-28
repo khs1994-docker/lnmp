@@ -26,10 +26,10 @@ services:
     ports:
       - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mysql/conf.d/${MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
-      - mysql-data:/var/lib/mysql:rw
+      - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
     command:
@@ -49,10 +49,10 @@ services:
   #   ports:
   #     - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
   #   volumes:
-  #     - ./config/mariadb/conf.d/{MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+  #     - ./config/mariadb/{LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
   #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
   #     - ./backup/init:/docker-entrypoint-initdb.d:ro
-  #     - mariadb-data:/var/lib/mysql:rw
+  #     - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}:rw
   #     - ./logs/mariadb:/var/log/mysql:rw
   #     - ./backup/mariadb:/backup:rw
   #   command:

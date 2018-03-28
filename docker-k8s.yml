@@ -22,7 +22,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      # - ./config/mysql/conf.d:/etc/mysql/conf.d:ro
+      # - ./config/mysql/docker.cnf:/etc/mysql/conf.d/docker.cnf:ro
       - mysql-data:/var/lib/mysql:rw
       - ./logs/mysql:/var/log/mysql:rw
       - ./backup/mysql:/backup:rw
