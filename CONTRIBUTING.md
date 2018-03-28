@@ -11,7 +11,7 @@
 
   # 将项目与上游关联
 
-  $ git remote add lnmp git@github.com:khs1994-docker/lnmp.git
+  $ git remote add upstream git@github.com:khs1994-docker/lnmp.git
   ```
 
 * 增加内容或者修复错误后提交，并推送到自己的仓库。
@@ -29,9 +29,9 @@
 * 请定期更新自己仓库。
 
   ```bash
-  $ git fetch lnmp
+  $ git fetch upstream
 
-  $ git rebase lnmp/dev
+  $ git rebase upstream/dev
 
   $ git push -f origin dev
   ```

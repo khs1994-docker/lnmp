@@ -244,7 +244,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          yaml-dev \
                          " \
         && apk add --no-cache --virtual .khs1994-php-fpm-run-deps $KHS1994_PHP_FPM_RUN_DEPS \
-        && apk add --no-cache linux-headers \
         && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
         && apk add --no-cache --virtual .khs1994-php-fpm-build-deps $KHS1994_PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure gd \
@@ -271,7 +270,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                  yaml \
                                  igbinary \
                                  opcache \
-        && apk del .build-deps linux-headers .khs1994-php-fpm-build-deps \
+        && apk del .build-deps .khs1994-php-fpm-build-deps \
         && rm -rf /tmp/*
 
 # install composer

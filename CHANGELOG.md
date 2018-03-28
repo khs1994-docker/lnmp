@@ -48,8 +48,9 @@ Changes:
 Updates:
 * acme.sh `2.7.7` #237
 * nginx `1.13.10` #297
-* httpd `2.4.32` #297
+* httpd `2.4.33` #297 #330
 * mongodb `3.7.3` #297
+* Redis `4.0.9` #330
 
 #### [v18.02 (2018-02-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
 
