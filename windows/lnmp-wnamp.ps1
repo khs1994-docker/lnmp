@@ -4,8 +4,9 @@
 
 $NGINX_PATH="C:/nginx-1.13.8"
 $PHP_PATH="C:/php"
+$LNMP_PATH="$HOME/lnmp"
 
-##########################################
+################################################################################
 
 $source=$pwd
 
@@ -13,38 +14,129 @@ Function printInfo(){
   Write-Host "$args" -ForegroundColor Red
 }
 
-Function _stop(){
-  printInfo "Stop nginx..."
+Function _stop($soft){
+  switch ($soft){
+    "nginx" {
+      printInfo "Stop nginx..."
+      taskkill /F /IM nginx.exe
+      Write-Host "
+      "
+    }
 
-  taskkill /F /IM nginx.exe
+    "php" {
+       printInfo "Stop php-cgi..."
+       taskkill /F /IM php-cgi.exe
+       Write-Host "
+       "
+    }
 
-  Write-Host "
-  "
-  # nginx -s stop
-  printInfo "Stop MySQL..."
+    "mysql" {
+      printInfo "Stop MySQL..."
+      net stop mysql
+      Write-Host "
+      "
+    }
 
-  net stop mysql
-
-  Write-Host "
-  "
-  printInfo "Stop php-cgi..."
-
-  taskkill /F /IM php-cgi.exe
+    Default {
+      bash lnmp-wsl.sh stop $soft
+    }
+  }
 }
 
-Function _start(){
-  cd $NGINX_PATH
-  printInfo "Start nginx..."
-  start nginx
-  cd $source
+Function _stop_wsl($soft){
+  switch ($soft){
+    "wsl_php" {
+      bash lnmp-wsl.sh stop php
+    }
 
-  printInfo "Start MySQL..."
-  net start mysql
+    "wsl_nginx" {
+      bash lnmp-wsl.sh stop nginx
+    }
 
-  printInfo "Start php-cgi..."
-  RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
-  cd $source
+    "wsl_mysql" {
+      bash lnmp-wsl.sh stop mysql
+    }
+
+    "wsl_httpd" {
+      bash lnmp-wsl.sh stop httpd
+    }
+  }
 }
+
+Function _stop_all(){
+  _stop php
+  _stop mysql
+  _stop nginx
+  _stop redis
+  _stop memcached
+  _stop mongodb
+  _stop postgresql
+}
+
+################################################################################
+
+Function _start($soft){
+  switch ($soft) {
+    "nginx" {
+      cd $NGINX_PATH
+      printInfo "Start nginx..."
+      start nginx
+      cd $source
+      Write-Host "
+      "
+    }
+
+    "mysql" {
+      printInfo "Start MySQL..."
+      net start mysql
+      Write-Host "
+      "
+    }
+
+     "php" {
+       printInfo "Start php-cgi..."
+       RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
+       Write-Host "
+       "
+     }
+
+     Default {
+       bash lnmp-wsl.sh start $soft
+     }
+  }
+}
+
+Function _start_wsl($soft){
+  switch ($soft){
+    "wsl_php" {
+      bash lnmp-wsl.sh start php
+    }
+
+    "wsl_nginx" {
+      bash lnmp-wsl.sh start nginx
+    }
+
+    "wsl_mysql" {
+      bash lnmp-wsl.sh start mysql
+    }
+
+    "wsl_httpd" {
+      bash lnmp-wsl.sh start httpd
+    }
+  }
+}
+
+Function _start_all(){
+  _start php
+  _start mysql
+  _start nginx
+  _start redis
+  _start memcached
+  _start mongodb
+  _start postgresql
+}
+
+################################################################################
 
 Function _status(){
   printInfo "nginx Status
@@ -82,95 +174,44 @@ Function _status(){
   Get-Process | Where-Object { $_ -match "httpd"}
 }
 
-Function startSingle(){
-  switch ($args[0])
-  {
-    "nginx" {
-      cd $NGINX_PATH ; printInfo "Start nginx..."
-
-      start nginx
-
-      cd $source
-      break
-    }
-    "php" {
-      printInfo "Start php-cgi..."
-
-      RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
-
-      break
-    }
-    "mysql" {
-      printInfo "Start MySQL..."
-
-      net start mysql
-
-      break
-    }
-  }
-}
-
-Function stopSingle(){
-  switch ($args[0])
-  {
-    "nginx" {
-      cd $NGINX_PATH ; printInfo "Stop nginx..."
-
-      taskkill /F /IM nginx.exe
-
-      cd $source
-      break
-    }
-    "php" {
-      printInfo "Stop php-cgi..."
-
-        taskkill /F /IM php-cgi.exe
-
-      break
-    }
-    "mysql" {
-      printInfo "Stop MySQL..."
-
-      net stop mysql
-
-      break
-    }
-  }
-}
-
-Function restartSingle(){
-  switch ($args[0])
-  {
-    {$_ -in "nginx","php","mysql"} {
-      stopSingle $args[0]
-      startSingle $args[0]
-    }
-  }
-}
+################################################################################
 
 switch ($args[0])
 {
   "stop" {
     switch ($args[1])
     {
-      {$_ -in "nginx","php","mysql"} {
-        stopSingle $args[1]
+      {$_ -in "nginx","php","mysql","redis","memcached","mongodb","postgresql"} {
+        _stop $args[1]
         break
       }
+
+      {$_ -in "wsl_nginx","wsl_php","wsl_httpd","wsl_mysql"}{
+        _stop_wsl $args[1]
+        break
+      }
+
       Default {
-        _stop
+        _stop_all
       }
     }
   }
+
   "start" {
     switch ($args[1])
     {
-      {$_ -in "nginx","php","mysql"} {
-        startSingle $args[1]
+      {$_ -in "nginx","php","mysql","redis","memcached","mongodb","postgresql"} {
+        _start $args[1]
         break
       }
+
+      {$_ -in "wsl_nginx","wsl_php","wsl_httpd","wsl_mysql"}{
+        _start_wsl $args[1]
+        break
+      }
+
       Default {
-        _start
+        _start_all
       }
     }
   }
@@ -178,13 +219,21 @@ switch ($args[0])
   "restart" {
     switch ($args[1])
     {
-      {$_ -in "nginx","php","mysql"} {
-        restartSingle $args[1]
+      {$_ -in "nginx","php","mysql","redis","memcached","mongodb","postgresql"} {
+        _stop $args[1]
+        _restart $args[1]
         break
       }
+
+      {$_ -in "wsl_nginx","wsl_php","wsl_httpd","wsl_mysql"}{
+        _stop_wsl $args[1]
+        _restart_wsl $args[1]
+        break
+      }
+
       Default {
-        _stop
-        _start
+        _stop_all
+        _start_all
       }
     }
   }

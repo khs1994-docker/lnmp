@@ -56,6 +56,8 @@ _command(){
 
   lnmp-npm -v
 
+  lnmp-composer create-project --prefer-dist khs1994/lnmp lnmp2 @dev
+
   print_info "测试 PHPer command 完毕"
 }
 
