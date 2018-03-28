@@ -335,8 +335,6 @@ services:
     image: khs1994/php-fpm:7.2.3-alpine3.7
     volumes:
       - ./app:/app:rw
-      # - ./config/php/php-fpm.production.d/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
-      # - ./config/php/php.production.ini:/usr/local/etc/php/php.ini:ro
       - zoneinfo-data:/usr/share/zoneinfo:rw
     networks:
       - frontend
@@ -749,7 +747,7 @@ configs:
     << : *default-labels
 
   php_fpm_conf_d_zz_docker_conf:
-    file: ./config/php/php-fpm.production.d/zz-docker.conf
+    file: ./config/php/zz-docker.production.conf
     << : *default-labels
 
   redis_conf:
