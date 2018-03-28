@@ -174,9 +174,9 @@ services:
     #
     # image: username/lnmp-redis:tag
     #
-    # image: khs1994/lnmp-redis:4.0.8
+    # image: khs1994/lnmp-redis:4.0.9
     #
-    image: redis:4.0.8-alpine
+    image: redis:4.0.9-alpine
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -481,9 +481,9 @@ services:
   #   #
   #   # image: username/lnmp-httpd:tag
   #   #
-  #   # image: khs1994/lnmp-httpd:2.4.29
+  #   # image: khs1994/lnmp-httpd:2.4.33
   #   #
-  #   image: "httpd:2.4.29-alpine"
+  #   image: "httpd:2.4.33-alpine"
   #   ports:
   #     - "443:443"
   #     - "80:80"

@@ -32,9 +32,15 @@ export APP_ENV=wsl
 
 ## 建立文件链接
 
+**设置环境变量**
+
 ```bash
-# 设置 WSL_HOME 变量为 /mnt/c/Users/90621 注意替换为自己的实际路径
-#
+$ vi ~/.bash_profile
+
+export WSL_HOME=/mnt/c/Users/90621 # 注意替换为自己的实际路径
+```
+
+```bash
 # 本例假设将 LNMP 放到了用户主目录
 
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /etc/nginx/conf.d
