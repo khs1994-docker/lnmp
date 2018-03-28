@@ -31,8 +31,8 @@
 |名称|本机|容器|
 |--|--|--|
 |`php.ini`                     |`./config/php/php.ini`                  |`/usr/local/etc/php/php.ini`                         |
-|`docker-php-ext-xdebug.ini`   |`./config/php/conf.d/xdebug.ini`        |`/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini`|
-|`php-fpm.d/zz-docker.conf`    |`./config/php/php-fpm.d/zz-docker.conf` |`/usr/local/etc/php-fpm.d/zz-docker.conf`            |
+|`docker-php-ext-xdebug.ini`   |`./config/php/docker-xdebug.ini`        |`/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini`|
+|`php-fpm.d/zz-docker.conf`    |`./config/php/zz-docker.conf`           |`/usr/local/etc/php-fpm.d/zz-docker.conf`            |
 |`app/`                        |`./app`                                 |`/app`                                               |
 
 ## Composer
@@ -56,7 +56,7 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`docker.cnf`       |`./config/mysql/conf.d/docker.cnf`|`/etc/mysql/conf.d/docker.cnf` |
+|`docker.cnf`       |`./config/mysql/docker.cnf`       |`/etc/mysql/conf.d/docker.cnf` |
 |`error.log`        |`./logs/mysql/error.log`          |`/var/log/mysql/error.log`     |
 |`/var/lib/mysql/`  |`mysql-data`                      |`/var/lib/mysql`               |
 
@@ -64,9 +64,9 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`docker.cnf`       |`./config/mysql/conf.d/docker.cnf`|`/etc/mysql/conf.d/docker.cnf` |
+|`docker.cnf`       |`./config/mysql/docker.cnf`       |`/etc/mysql/conf.d/docker.cnf` |
 |`error.log`        |`./logs/mysql/error.log`          |`/var/log/mysql/error.log`     |
-|`/var/lib/mysql/`  |`mariadb-data`                      |`/var/lib/mysql`               |
+|`/var/lib/mysql/`  |`mariadb-data`                    |`/var/lib/mysql`               |
 
 ## PostgreSQL
 

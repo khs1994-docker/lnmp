@@ -1,9 +1,9 @@
 /*
 !.gitignore
 !default
-!php
-!php-fpm.d
-!php-fpm.production.d
+!docker-error-log.ini
+!docker-xdebug.ini
 !php.development.ini
 !php.production.ini
-!docker-entrypoint.crond.sh
+!zz-docker.conf
+!zz-docker.production.conf
