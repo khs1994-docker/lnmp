@@ -8,7 +8,11 @@ function _start(){
     echo -e "\033[31mStart $soft\033[0m...\n"
     case "$soft" in
       redis )
+          if ! [ -f /run/redis.log ];then sudo touch /run/redis.log; fi
           sudo redis-server \
+              --logfile /run/redis.log \
+              --dir /tmp \
+              --appendonly yes \
               --pidfile /run/redis.pid \
               --daemonize yes
 
@@ -16,7 +20,7 @@ function _start(){
 
       mongodb )
           sudo mongod \
-              --fork --logpath=/var/log/mongodb/.error.log \
+              --fork --logpath=/run/mongodb.error.log \
               --pidfilepath /run/mongodb.pid
       ;;
 

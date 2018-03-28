@@ -221,13 +221,13 @@ switch ($args[0])
     {
       {$_ -in "nginx","php","mysql","redis","memcached","mongodb","postgresql"} {
         _stop $args[1]
-        _restart $args[1]
+        _start $args[1]
         break
       }
 
       {$_ -in "wsl_nginx","wsl_php","wsl_httpd","wsl_mysql"}{
         _stop_wsl $args[1]
-        _restart_wsl $args[1]
+        _start_wsl $args[1]
         break
       }
 

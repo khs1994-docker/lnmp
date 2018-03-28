@@ -8,7 +8,11 @@ function _start(){
     echo -e "\nStart $soft ...\n"
     case "$soft" in
       redis )
+          if ! [ -f /usr/local/var/run/redis.log ];then sudo touch /usr/local/var/run/redis.log; fi
           sudo redis-server \
+              --logfile /usr/local/var/run/redis.log \
+              --dir /tmp \
+              --appendonly yes \
               --pidfile /usr/local/var/run/redis.pid \
               --daemonize yes
       ;;
