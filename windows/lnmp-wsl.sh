@@ -5,10 +5,14 @@ set -ex
 function _start(){
     for soft in "$@"
     do
-    echo -e "\nStart $soft ...\n"
+    echo -e "\033[31mStart $soft\033[0m...\n"
     case "$soft" in
       redis )
+          if ! [ -f /run/redis.log ];then sudo touch /run/redis.log; fi
           sudo redis-server \
+              --logfile /run/redis.log \
+              --dir /tmp \
+              --appendonly yes \
               --pidfile /run/redis.pid \
               --daemonize yes
 
@@ -16,7 +20,7 @@ function _start(){
 
       mongodb )
           sudo mongod \
-              --fork --logpath=/var/log/mongodb/.error.log \
+              --fork --logpath=/run/mongodb.error.log \
               --pidfilepath /run/mongodb.pid
       ;;
 
@@ -54,7 +58,7 @@ done
 function _stop(){
   for soft in "$@"
   do
-    echo -e "\nStop $soft ... \n"
+    echo -e "\033[31mStop $soft\033[0m...\n"
   case "$soft" in
     php )
         sudo kill $(cat /run/php-fpm.pid)
@@ -98,14 +102,13 @@ done
 }
 
 if [ -z "$1" ];then
-    echo -e "
+    exec echo -e "
 lnmp-wsl.sh start | restart | stop SOFT_NAME
 
 lnmp-wsl.sh start | restart | stop all
 
 lnmp-wsl.sh status
 "
-exit 0
 fi
 
 if [ "$1" = stop ];then
