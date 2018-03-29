@@ -171,7 +171,7 @@ RUN set -eux; \
 	make install
 
 RUN rm -rf /usr/local/bin \
-  && ln -s /usr/local/bin /usr/local/php72/bin \
+  && ln -s /usr/local/php72/bin /usr/local/bin \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
   && set -ex \
