@@ -10,6 +10,15 @@ CONTAINER_NAME=$( date +%s )
 
 _nginx(){
   # apt
+  if ! [ -f /etc/apt/sources.list.d/nginx.list ];then
+    echo "deb http://nginx.org/packages/mainline/debian stretch nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+  fi
+
+  apt-key list | grep nginx || curl -fsSL http://nginx.org/packages/keys/nginx_signing.key | sudo apt-key add -
+
+  sudo apt update
+
+  sudo apt install nginx
 }
 
 _php(){
@@ -36,4 +45,11 @@ docker rmi ${CONTAINER_NAME}
 
 _postgresql(){
   # apt
+  echo
 }
+
+if ! [ -z "$1" ];then
+
+_$1
+
+fi

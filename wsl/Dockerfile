@@ -1,7 +1,5 @@
 FROM debian:stretch-slim
 
-LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
-
 ARG DEB_URL=deb.debian.org
 
 # mirrors.ustc.edu.cn
@@ -49,7 +47,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libpq-dev \
     libzip-dev \
     libyaml-dev \
-    libxslt1.1 \
 		${PHP_EXTRA_BUILD_DEPS:-} \
     #
     $PHPIZE_DEPS \
@@ -65,6 +62,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libpq5 \
     libzip4 \
     libyaml-0-2 \
+    libxslt1.1 \
     tar \
     wget
 
@@ -175,6 +173,7 @@ RUN set -eux; \
 	rm -rf /tmp/pear ~/.pearrc
 
 RUN set -ex \
+  && cp -a /usr/local/php72/bin/* /usr/locla/bin \
 	&& cd /usr/local/php72/etc \
 	&& if [ -d php-fpm.d ]; then \
 		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
@@ -235,5 +234,7 @@ COPY --from=memcached:${MEMCACHED_VERSION} /usr/local/bin/memcached /usr/local/p
 RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz /usr/local/php72
 
 FROM alpine
+
+LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 COPY --from=0 /usr/local/wsl-php72.tar.gz /
