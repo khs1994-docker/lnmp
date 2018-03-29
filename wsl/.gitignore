@@ -3,4 +3,7 @@
 !README.md
 !nginx
 !httpd
+!lnmp-docker-cli.sh
+!lnmp-wsl-init.sh
+!lnmp-wsl.sh
 !*.example

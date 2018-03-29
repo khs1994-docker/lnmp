@@ -12,6 +12,8 @@ MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将�
 
 ## 系统环境变量
 
+**务必知道 Windows Linux 环境变量的作用及设置方法，如果你不知道，就不用往下看了**
+
 * 为了在任意目录执行命令，请将各软件路径加入系统环境变量 `PATH`，这里不再赘述。
 
 * **特别的** 新增变量 `APP_ENV` 值为 `windows`, 之后 `Laravel` 框架就会默认的加载 `.env.windows` 文件。（设置变量之后务必注销登录）
@@ -26,33 +28,42 @@ $ php artisan env
 Current application environment: windows
 ```
 
+## PowerShell 脚本
+
+为了方便的管理 `WNAMP`，这里有一个脚本 `./windows/lnmp-wnamp.ps1` ，使用之前在该文件开头修改好软件路径。
+
+将 `C:\Users\90621\lnmp\windows\wnamp.ps1` （自行替换为自己的路径） 加入 Windows 环境变量 `PATH`
+
+```bash
+$ lnmp-wnamp.ps1 start | stop | restart | status | ps
+```
+
 # wsl
 
 > 存在 WSL 打开 PHP 页面缓慢的问题，解决办法请查看下方的文章
 
-Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://github.com/khs1994-docker/lnmp/tree/master/windows/wsl)。
+Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://github.com/khs1994-docker/lnmp/tree/master/wsl)。
 
-## 安装 wsl.sh 脚本
+## 安装 lnmp-wsl.sh 脚本
+
+打开 PowerShell
 
 ```bash
-# 打开 PowerShell
 $ cd $HOME
 
 $ bash
 
 $ pwd
 
-/mnt/c/Users/90621 # 此值与下方 WSL_HOME 的设置值对应
+/mnt/c/Users/90621 # 记住这个值，此值与下方 WSL_HOME 的设置值对应
 
 $ sudo vi /etc/profile
 
 export WSL_HOME=/mnt/c/Users/90621 # 与上方值对应
 
+export PATH=$WSL_HOME/lnmp/wsl:$PATH
+
 # 保存重新登录
-
-$ sudo ln -s $WSL_HOME/lnmp/windows/lnmp-wsl.sh /usr/local/bin
-
-$ chmod +x /usr/local/bin/lnmp-wsl.sh
 ```
 
 ## MySQL
@@ -283,18 +294,6 @@ $ httpd -t
 之后使用 `ApacheMonitor.exe` 启动服务。
 
 ### https
-
-Apache https 出现问题，暂时解决不了。
-
-## PowerShell 脚本
-
-为了方便的管理 `WNAMP`，这里有一个脚本 `./windows/wnamp.ps1` ，使用之前在该文件开头修改好软件路径
-
-```bash
-$ ./windows/wnamp.ps1 start | stop | restart | status | ps
-```
-
-也可以将 `C:\Users\90621\lnmp\windows\wnamp.ps1` 加入 `PATH`,在任意目录执行 `wnamp.ps1 command`
 
 ## More Information
 
