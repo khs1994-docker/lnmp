@@ -175,7 +175,7 @@ RUN set -eux; \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
   && set -ex \
-	&& cd /usr/local/php72/etc \
+	&& cd ${PHP_INI_DIR} \
 	&& if [ -d php-fpm.d ]; then \
 		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
 		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
@@ -197,6 +197,8 @@ RUN set -eux; \
                   xdebug \
                   yaml \
                   swoole \
+  && mkdir -p /usr/local/etc/php \
+  && ln -s ${PHP_INI_DIR}/conf.d /usr/local/etc/php/conf.d \
   && docker-php-ext-enable mongodb \
                            redis \
                            memcached \
@@ -206,7 +208,7 @@ RUN set -eux; \
                            # opcache 已默认安装，需要自行载入
                            opcache \
                            swoole \
-      && rm -rf /tmp/*
+  && rm -rf /tmp/*
 
       # nginx apt
 
