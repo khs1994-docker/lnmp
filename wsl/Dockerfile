@@ -168,12 +168,13 @@ RUN set -eux; \
 		${PHP_EXTRA_CONFIGURE_ARGS:-} \
 	; \
 	make -j "$(nproc)"; \
-	make install; \
-	pecl update-channels; \
-	rm -rf /tmp/pear ~/.pearrc
+	make install
 
-RUN set -ex \
-  && cp -a /usr/local/php72/bin/* /usr/locla/bin \
+RUN rm -rf /usr/local/bin \
+  && ln -s /usr/local/bin /usr/locla/php72/bin \
+	&& pecl update-channels \
+	&& rm -rf /tmp/pear ~/.pearrc \
+  && set -ex \
 	&& cd /usr/local/php72/etc \
 	&& if [ -d php-fpm.d ]; then \
 		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
