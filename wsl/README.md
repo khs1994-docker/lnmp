@@ -75,3 +75,9 @@ $ lnmp-wsl.sh start | restart | stop [SOFT_NAME or all]
 ```bash
 $ sh $WSL_HOME/lnmp/wsl/lnmp-docker-cli.sh
 ```
+
+## PHP 扩展列表
+
+```bash
+$ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+```

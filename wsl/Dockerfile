@@ -88,10 +88,10 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 ENV PHP_URL="https://secure.php.net/get/php-${PHP_VERSION}.tar.xz/from/this/mirror"
 
-RUN mkdir -p $PHP_INI_DIR/conf.d \
-  && mkdir -p /usr/src; \
-	cd /usr/src; \
-	wget -O php.tar.xz "$PHP_URL"
+RUN mkdir -p $PHP_INI_DIR/conf.d; \
+      mkdir -p /usr/src; \
+	    cd /usr/src; \
+	    wget -O php.tar.xz "$PHP_URL"
 
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
@@ -99,12 +99,11 @@ RUN set -eux; \
 		CFLAGS="$PHP_CFLAGS" \
 		CPPFLAGS="$PHP_CPPFLAGS" \
 		LDFLAGS="$PHP_LDFLAGS" \
-  #
 	&& docker-php-source extract; \
 	cd /usr/src/php; \
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
-# https://bugs.php.net/bug.php?id=74125
+  # https://bugs.php.net/bug.php?id=74125
 	if [ ! -d /usr/include/curl ]; then \
 		ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
 	fi; \
@@ -117,11 +116,14 @@ RUN set -eux; \
 		\
 		--disable-cgi \
 		\
-# --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically (see https://github.com/docker-library/php/issues/236)
+# --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically
+# (see https://github.com/docker-library/php/issues/236)
 		--enable-ftp \
-# --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
+# --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly
+# (see https://github.com/docker-library/php/issues/195)
 		--enable-mbstring \
-# --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
+# --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are
+# (since it's a plugin for several extensions, not an extension in itself)
 		--enable-mysqlnd \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
 		--with-password-argon2 \
@@ -160,18 +162,16 @@ RUN set -eux; \
     --enable-intl \
     --with-libzip \
 		\
-# bundled pcre does not support JIT on s390x
-# https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
+  # bundled pcre does not support JIT on s390x
+  # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
 		$(test "$gnuArch" = 's390x-linux-gnu' && echo '--without-pcre-jit') \
 		--with-libdir="lib/$debMultiarch" \
 		\
-		${PHP_EXTRA_CONFIGURE_ARGS:-} \
-	; \
+		${PHP_EXTRA_CONFIGURE_ARGS:-} ; \
 	make -j "$(nproc)"; \
-	make install
-
-RUN rm -rf /usr/local/bin \
-  && ln -s /usr/local/php72/bin /usr/local/bin \
+	make install \
+  && rm -rf /usr/local/sbin \
+  && ln -s /usr/local/php72/bin /usr/local/sbin \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
   && set -ex \
@@ -189,23 +189,23 @@ RUN rm -rf /usr/local/bin \
 			echo 'include=etc/php-fpm.d/*.conf'; \
 		} | tee php-fpm.conf; \
 	fi \
-    && pecl install mongodb \
-                          igbinary \
-                          redis \
-                          memcached \
-                          # 安装测试版的扩展，可以在扩展名后加 -beta
-                          xdebug \
-                          yaml \
-                          swoole \
-    && docker-php-ext-enable mongodb \
-                                   redis \
-                                   memcached \
-                                   xdebug \
-                                   yaml \
-                                   igbinary \
-                                   # opcache 已默认安装，需要自行载入
-                                   opcache \
-                                   swoole \
+  && pecl install mongodb \
+                  igbinary \
+                  redis \
+                  memcached \
+                  # 安装测试版的扩展，可以在扩展名后加 -beta
+                  xdebug \
+                  yaml \
+                  swoole \
+  && docker-php-ext-enable mongodb \
+                           redis \
+                           memcached \
+                           xdebug \
+                           yaml \
+                           igbinary \
+                           # opcache 已默认安装，需要自行载入
+                           opcache \
+                           swoole \
       && rm -rf /tmp/*
 
       # nginx apt
