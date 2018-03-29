@@ -17,7 +17,10 @@ default-character-set = utf8mb4
 
 # bind-address=0.0.0.0
 
-# 以下两项配置必须注释掉
+# 首次使用时，以下两项配置必须注释掉，配置好允许登陆 IP 之后，再取消注释。
+# 原因：首次只允许 localhost 登录，不注释掉的话无法解析，所以登陆不了。
+# 不注释该选项会影响 MySQL 性能。
+
 #skip-host-cache
 #skip-name-resolve
 
