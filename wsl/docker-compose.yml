@@ -1,0 +1,7 @@
+version: "3.6"
+
+services:
+
+  wsl:
+    build: .
+    image: khs1994/wsl

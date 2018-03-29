@@ -26,7 +26,7 @@ fi
 sudo cp docker/docker /usr/local/bin/docker
 
 if [ -z $DOCKER_HOST ];then
-  echo DOCKER_HOST=tcp://127.0.0.1:2375 >> ~/.bash_profile
+  echo "export DOCKER_HOST=tcp://127.0.0.1:2375" >> ~/.bash_profile
 fi
 
 # 命令行补全
