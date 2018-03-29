@@ -18,7 +18,7 @@ _nginx(){
 
   sudo apt update
 
-  sudo apt install nginx
+  sudo apt install -y nginx
 }
 
 _php(){
@@ -29,21 +29,46 @@ sudo rm -rf /usr/local/php72
 
 sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/usr/local/php72 /usr/local/php72/
 
-docker rmi ${CONTAINER_NAME}
+docker rm -f ${CONTAINER_NAME}
 }
 
-_httpd(){
-
-docker run -dit --name=${CONTAINER_NAME} httpd:2.4.33
-
-rm -rf /usr/local/apache2
-
-sudo cp ${CONTAINER_NAME}:/usr/local/apache2 /usr/local/apache2
-
-docker rmi ${CONTAINER_NAME}
-}
+# _httpd(){
+#
+# NGHTTP2_VERSION=1.18.1-1
+# OPENSSL_VERSION=1.0.2l-1~bpo8+1
+#
+# sudo apt install -y --no-install-recommends \
+# 		libapr1 \
+# 		libaprutil1 \
+# 		libaprutil1-ldap \
+# 		libapr1-dev \
+# 		libaprutil1-dev \
+# 		liblua5.2-0 \
+# 		libnghttp2-14=$NGHTTP2_VERSION \
+# 		libpcre++0 \
+# 		libssl1.0.0=$OPENSSL_VERSION \
+#     libxml2
+#
+# docker run -dit --name=${CONTAINER_NAME} httpd:2.4.33
+#
+# sudo rm -rf /usr/local/apache2
+#
+# sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/usr/local/apache2 /usr/local/apache2
+#
+# docker rm -f ${CONTAINER_NAME}
+# }
 
 _postgresql(){
+  # apt
+  echo
+}
+
+_rabbitmq(){
+  # apt
+  echo
+}
+
+_mongodb(){
   # apt
   echo
 }

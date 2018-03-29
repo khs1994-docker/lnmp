@@ -70,10 +70,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
 ARG PHP_VERSION=7.2.4
 
-ARG MEMCACHED_VERSION=1.5.6
-
-ARG REDIS_VERSION=4.0.9
-
 ################################################################################
 
 ARG PHP_INI_DIR=/usr/local/php72/etc
@@ -220,11 +216,11 @@ RUN set -eux; \
 
       # redis
 
-COPY --from=redis:${REDIS_VERSION} /usr/local/bin/redis-* /usr/local/php72/bin
+COPY --from=redis:4.0.9 /usr/local/bin/redis-* /usr/local/php72/bin
 
       # memcached
 
-COPY --from=memcached:${MEMCACHED_VERSION} /usr/local/bin/memcached /usr/local/php72/bin
+COPY --from=memcached:1.5.6 /usr/local/bin/memcached /usr/local/php72/bin
 
       # rabbitmq apt
 

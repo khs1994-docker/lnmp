@@ -6,7 +6,7 @@
 !lnmp-docker-cli.sh
 !lnmp-wsl-init.sh
 !lnmp-wsl.sh
-!lnmp-wsl-cp.sh
+!lnmp-wsl-install.sh
 !Dockerfile
 !docker-compose.yml
 !*.example
