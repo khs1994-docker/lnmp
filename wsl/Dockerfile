@@ -38,6 +38,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 		libssl-dev \
 		libxml2-dev \
 		zlib1g-dev \
+    libxslt1-dev \
     #
     libfreetype6-dev \
     libjpeg62-turbo-dev \
@@ -48,6 +49,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libpq-dev \
     libzip-dev \
     libyaml-dev \
+    libxslt1.1 \
 		${PHP_EXTRA_BUILD_DEPS:-} \
     #
     $PHPIZE_DEPS \

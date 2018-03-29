@@ -30,6 +30,8 @@ docker run -dit --name=${CONTAINER_NAME} httpd:2.4.33
 rm -rf /usr/local/apache2
 
 sudo cp ${CONTAINER_NAME}:/usr/local/apache2 /usr/local/apache2
+
+docker rmi ${CONTAINER_NAME}
 }
 
 _postgresql(){
