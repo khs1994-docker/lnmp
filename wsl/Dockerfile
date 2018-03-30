@@ -216,11 +216,11 @@ RUN set -eux; \
 
       # redis
 
-COPY --from=redis:4.0.9 /usr/local/bin/redis-* /usr/local/php72/bin
+COPY --from=redis:4.0.9 /usr/local/bin/redis-* /usr/local/php72/bin/
 
       # memcached
 
-COPY --from=memcached:1.5.6 /usr/local/bin/memcached /usr/local/php72/bin
+COPY --from=memcached:1.5.6 /usr/local/bin/memcached /usr/local/php72/bin/
 
       # rabbitmq apt
 
