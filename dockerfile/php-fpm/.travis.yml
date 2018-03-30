@@ -19,7 +19,7 @@ before_install:
 - docker-compose --version
 install:
   - cp .env.example .env
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker-compose build ${PHP_VERSION}
   - docker-compose push ${PHP_VERSION}
 branches:

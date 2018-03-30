@@ -26,6 +26,10 @@ log_timestamps=SYSTEM
 #
 # 忽略客户端字符集的设置，强制使用服务端 character-set-server 的设置
 #
+# mysql --default-character-set=utf8 -uroot -p
+#
+# SHOW VARIABLES LIKE 'char%';
+#
 # @link https://dev.mysql.com/doc/refman/8.0/en/faqs-cjk.html#faq-cjk-how-use-4-0-charset
 #
 

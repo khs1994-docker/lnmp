@@ -4,6 +4,8 @@
 
 使用 Docker Compose 快速搭建 LNMP 环境。
 
+More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
+
 * [项目初衷](docs/why.md)
 
 * [支持文档](docs)

@@ -2,6 +2,12 @@
 
 set -ex
 
+################################################################################
+
+PGDATA=${PGDATA:-/pgdata}
+
+################################################################################
+
 function _start(){
     for soft in "$@"
     do
@@ -19,6 +25,8 @@ function _start(){
       ;;
 
       mongodb )
+         if ! [ -d /data/db ];then sudo mkdir -p /data/db ; fi
+
           sudo mongod \
               --fork --logpath=/run/mongodb.error.log \
               --pidfilepath /run/mongodb.pid
@@ -39,13 +47,25 @@ function _start(){
       ;;
 
       nginx )
+          if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf ; fi
+
           sudo nginx -t
           # sudo nginx -g "pid /run/nginx.pid;"
           sudo nginx
       ;;
 
       postgresql )
-          pg_ctl -D /var/lib/postgres start
+
+      sudo mkdir -p "$PGDATA" || echo
+      sudo chown -R "$(id -u)" "$PGDATA"
+      sudo chmod 700 "$PGDATA"
+
+      sudo mkdir -p /var/run/postgresql
+      sudo chown -R "$(id -u)" /var/run/postgresql
+      sudo chmod 777 /var/run/postgresql
+
+      /usr/lib/postgresql/10/bin/pg_ctl -D "$PGDATA" \
+                                        start
       ;;
 
       * )
@@ -83,7 +103,7 @@ function _stop(){
     ;;
 
     postgresql )
-        pg_ctl -D /var/lib/postgres stop
+        /usr/lib/postgresql/10/bin/pg_ctl -D "$PGDATA" stop
     ;;
 
     * )
