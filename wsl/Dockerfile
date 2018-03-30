@@ -75,7 +75,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libbz2-1.0 \
     libbz2-dev \
     libexif12 \
-    libexif-dev
+    libexif-dev \
+    libgmp3-dev
 
 ################################################################################
 
@@ -169,12 +170,12 @@ RUN set -eux; \
     --enable-intl \
     --with-libzip \
 		\
+    --enable-exif \
     --with-bz2=shared \
     --with-tidy=shared \
-    --enable-exif \
     --with-gmp=shared \
     --with-imap=shared \
-    --with-xmlrpc \
+    --with-xmlrpc=shared \
     \
   # bundled pcre does not support JIT on s390x
   # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
@@ -222,6 +223,13 @@ RUN set -eux; \
                            # opcache 已默认安装，需要自行载入
                            opcache \
                            swoole \
+                           \
+                           bz2 \
+                           tidy \
+                           exif \
+                           gmp \
+                           imap \
+                           xmlrpc \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/php.fpm.zz-wsl.conf.example \
        > ${PHP_INI_DIR}/php-fpm.d/zz-wsl.conf \
   && rm -rf /tmp/*
