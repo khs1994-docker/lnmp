@@ -1,8 +1,10 @@
 # Use WSL As PHP Development Environment
 
+* 建议使用 `Debian` 版本，在商店搜索 `Debian` 安装即可。
+
 * https://www.khs1994.com/php/development/wsl.html
 
-安装软件请查看上面的链接，为方便修改，文件夹内的配置文件均为示例 `*.example`,使用时请去掉 `.example` 后缀。
+编译安装软件请查看上面的链接，为方便修改，文件夹内的配置文件均为示例 `*.example`,使用时请去掉 `.example` 后缀。
 
 **注意备份原来的配置文件**
 
@@ -19,6 +21,10 @@ export PATH=$WSL_HOME/lnmp/wsl:$PATH
 
 export APP_ENV=wsl
 
+export PHP_ROOT=/usr/local/php72
+
+export PATH=$PHP_ROOT/bin:$PHP_ROOT/sbin:$PATH
+
 # 保存
 
 $ vi ~/.bash_profile
@@ -26,6 +32,12 @@ $ vi ~/.bash_profile
 # 两个文件必须都设置 APP_ENV
 
 export APP_ENV=wsl
+```
+
+## 脚本安装
+
+```bash
+$ lnmp-wsl-install.sh nginx | php | mysql ...
 ```
 
 ## 特别注意 NGINX
@@ -49,7 +61,7 @@ http {
 ```bash
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /etc/nginx/conf.d
 
-$ sudo ln -sf $WSL_HOME/lnmp/wsl/php.fpm.zz-wsl.conf /usr/local/php/etc/php-fpm.d/zz-wsl.conf
+$ sudo ln -sf $WSL_HOME/lnmp/wsl/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fpm.d/zz-wsl.conf
 
 $ sudo cp -f $WSL_HOME/lnmp/wsl/mysql.wsl.cnf /etc/mysql/conf.d/wsl.cnf
 ```

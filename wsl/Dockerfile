@@ -179,7 +179,7 @@ RUN set -eux; \
     --with-bz2=shared \
     --with-tidy=shared \
     --with-gmp=shared \
-    --with-imap=shared \
+    --with-imap \
     --with-imap-ssl \
     --with-xmlrpc=shared \
     \

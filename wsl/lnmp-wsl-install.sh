@@ -23,10 +23,15 @@ _nginx(){
   sudo apt update
 
   sudo apt install -y nginx
+
+  if ! [ -h /etc/nginx/conf.d ];then rm -rf /etc/nginx/conf.d; then ln -s $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+
 }
 
 _php(){
   # include redis memcached
+docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
+
 docker run -dit --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
 sudo rm -rf /usr/local/php72
@@ -105,6 +110,6 @@ _list(){
 
 if ! [ -z "$1" ];then
 
-_$1
+for c in "$@"; do _$c; done
 
 fi
