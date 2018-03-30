@@ -45,7 +45,19 @@ function _start(){
       ;;
 
       postgresql )
-          pg_ctl -D /var/lib/postgres start
+      PGDATA=/pgdata
+
+      sudo mkdir -p "$PGDATA" || echo
+      sudo chown -R "$(id -u)" "$PGDATA"
+      sudo chmod 700 "$PGDATA"
+
+      sudo mkdir -p /var/run/postgresql
+      sudo chown -R "$(id -u)" /var/run/postgresql
+      sudo chmod 775 /var/run/postgresql
+
+      /usr/lib/postgresql/10/bin/pg_ctl -D "$PGDATA" \
+                                        -l logfile \
+                                        start
       ;;
 
       * )

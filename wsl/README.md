@@ -99,7 +99,7 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 ```
 
 * [x] bcmath
-* [ ] bz2
+* [x] bz2
 * [x] calendar
 * [ ] com_dotnet
 * [x] ctype
@@ -108,7 +108,7 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [ ] dba
 * [x] dom
 * [ ] enchant
-* [ ] exif
+* [x] exif
 * [ ] ext_skel
 * [ ] ext_skel_win32.php
 * [x] fileinfo
@@ -116,10 +116,10 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [x] ftp
 * [x] gd
 * [x] gettext
-* [ ] gmp
+* [x] gmp
 * [x] hash
 * [x] iconv
-* [ ] imap
+* [x] imap
 * [ ] interbase
 * [x] intl
 * [x] json
@@ -163,12 +163,12 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [ ] sysvmsg
 * [x] sysvsem
 * [ ] sysvshm
-* [ ] tidy
+* [x] tidy
 * [x] tokenizer
 * [ ] wddx
 * [x] xml
 * [x] xmlreader
-* [ ] xmlrpc
+* [x] xmlrpc
 * [x] xmlwriter
 * [x] xsl
 * [ ] zend_test

@@ -235,7 +235,7 @@ RUN set -eux; \
                            exif \
                            gmp \
                            xmlrpc \
-  && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/php.fpm.zz-wsl.conf.example \
+  && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
        > ${PHP_INI_DIR}/php-fpm.d/zz-wsl.conf \
   && rm -rf /tmp/*
 

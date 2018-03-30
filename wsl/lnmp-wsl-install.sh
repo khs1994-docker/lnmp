@@ -24,7 +24,7 @@ _nginx(){
 
   sudo apt install -y nginx
 
-  if ! [ -h /etc/nginx/conf.d ];then rm -rf /etc/nginx/conf.d; then ln -s $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+  if ! [ -h /etc/nginx/conf.d ];then rm -rf /etc/nginx/conf.d; ln -s $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
 
 }
 
@@ -42,7 +42,7 @@ docker rm -f ${CONTAINER_NAME}
 
 cd /usr/local
 
-sudo -zxvf wsl-php72.tar.gz
+sudo tar -zxvf wsl-php72.tar.gz
 
 cd /var/log
 
@@ -52,7 +52,7 @@ if ! [ -f php72-fpm.slow.log ];then sudo touch php72-fpm.slow.log; fi
 
 sudo chmod 777 php72-*
 
-cp $WSL_HOME/lnmp/config/php/php.development.ini /usr/local/php72/etc/
+sudo cp $WSL_HOME/lnmp/config/php/php.development.ini /usr/local/php72/etc/php.ini
 
 php -v
 
@@ -88,7 +88,18 @@ php-fpm -v
 
 _postgresql(){
   # apt
-  echo
+  #
+  # @link https://www.postgresql.org/download/linux/debian/
+
+ if ! [ -f /etc/apt/sources.list.d/postgresql.list ];then
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql.list
+  fi
+
+  apt-key list | grep PostgreSQL || wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+  sudo apt-get update
+
+  sudo apt-get -y install postgresql
 }
 
 _rabbitmq(){
@@ -98,6 +109,8 @@ _rabbitmq(){
 
 _mongodb(){
   # apt
+  #
+  # @link https://docs.mongodb.com/master/tutorial/install-mongodb-on-debian/
   echo
 }
 
@@ -110,6 +123,6 @@ _list(){
 
 if ! [ -z "$1" ];then
 
-for c in "$@"; do _$c; done
+for c in "$@"; do _$c; done;
 
 fi
