@@ -54,6 +54,10 @@ sudo chmod 777 php72-*
 
 sudo cp $WSL_HOME/lnmp/config/php/php.development.ini /usr/local/php72/etc/php.ini
 
+for file in $( ls /usr/local/php72/bin ); do sudo ln -sf /usr/local/php72/bin/$file /usr/local/bin/ ; done
+
+sudo ln -s /usr/local/php72/sbin/php-fpm /usr/local/sbin
+
 php -v
 
 php-fpm -v
@@ -111,7 +115,7 @@ _mongodb(){
   # apt
   #
   # @link https://docs.mongodb.com/master/tutorial/install-mongodb-on-debian/
-  echo
+  sudo apt install mongodb
 }
 
 _list(){

@@ -21,10 +21,6 @@ export PATH=$WSL_HOME/lnmp/wsl:$PATH
 
 export APP_ENV=wsl
 
-export PHP_ROOT=/usr/local/php72
-
-export PATH=$PHP_ROOT/bin:$PHP_ROOT/sbin:$PATH
-
 # 保存
 
 $ vi ~/.bash_profile
