@@ -76,7 +76,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libbz2-dev \
     libexif12 \
     libexif-dev \
-    libgmp3-dev
+    libgmp3-dev \
+    libc-client-dev
 
 ################################################################################
 
