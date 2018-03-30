@@ -175,7 +175,7 @@ RUN set -eux; \
     --enable-intl \
     --with-libzip \
 		\
-    --enable-exif \
+    --enable-exif=shared \
     --with-bz2=shared \
     --with-tidy=shared \
     --with-gmp=shared \

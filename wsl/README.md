@@ -72,6 +72,10 @@ $ sudo cp -f $WSL_HOME/lnmp/wsl/mysql.wsl.cnf /etc/mysql/conf.d/wsl.cnf
 
 * https://www.khs1994.com/database/mysql/remote.html
 
+Debian MySQL 初始化请查看：
+
+* https://www.khs1994.com/raspberry-pi3/mysql.html
+
 ## 快捷启动脚本
 
 > 必须用下面的脚本来控制软件的 启动、重启、停止
