@@ -8,6 +8,8 @@ ARG DEB_SECURITY_URL=security.debian.org
 
 # mirrors.ustc.edu.cn/debian-security/
 
+ENV TZ Asia/Shanghai
+
 ENV PHPIZE_DEPS \
 		autoconf \
 		dpkg-dev \
@@ -64,7 +66,16 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libyaml-0-2 \
     libxslt1.1 \
     tar \
-    wget
+    wget \
+    \
+    libtidy5 \
+    libtidy-dev \
+    libxmlrpc-epi0 \
+    libxmlrpc-epi-dev \
+    libbz2-1.0 \
+    libbz2-dev \
+    libexif12 \
+    libexif-dev
 
 ################################################################################
 
@@ -158,6 +169,13 @@ RUN set -eux; \
     --enable-intl \
     --with-libzip \
 		\
+    --with-bz2=shared \
+    --with-tidy=shared \
+    --enable-exif \
+    --with-gmp=shared \
+    --with-imap=shared \
+    --with-xmlrpc \
+    \
   # bundled pcre does not support JIT on s390x
   # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
 		$(test "$gnuArch" = 's390x-linux-gnu' && echo '--without-pcre-jit') \
@@ -204,6 +222,8 @@ RUN set -eux; \
                            # opcache 已默认安装，需要自行载入
                            opcache \
                            swoole \
+  && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/php.fpm.zz-wsl.conf.example \
+       > ${PHP_INI_DIR}/php-fpm.d/zz-wsl.conf \
   && rm -rf /tmp/*
 
       # nginx apt
@@ -230,7 +250,7 @@ COPY --from=memcached:1.5.6 /usr/local/bin/memcached /usr/local/php72/bin/
 
       # phpmyadmin
 
-RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz /usr/local/php72
+RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72
 
 FROM alpine
 

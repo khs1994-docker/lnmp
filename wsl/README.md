@@ -81,3 +81,80 @@ $ sh $WSL_HOME/lnmp/wsl/lnmp-docker-cli.sh
 ```bash
 $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
 ```
+
+* [x] bcmath
+* [ ] bz2
+* [x] calendar
+* [ ] com_dotnet
+* [x] ctype
+* [x] curl
+* [x] date
+* [ ] dba
+* [x] dom
+* [ ] enchant
+* [ ] exif
+* [ ] ext_skel
+* [ ] ext_skel_win32.php
+* [x] fileinfo
+* [x] filter
+* [x] ftp
+* [x] gd
+* [x] gettext
+* [ ] gmp
+* [x] hash
+* [x] iconv
+* [ ] imap
+* [ ] interbase
+* [x] intl
+* [x] json
+* [ ] ldap
+* [x] libxml
+* [x] mbstring
+* [ ] mysqli
+* [x] mysqlnd
+* [ ] oci8
+* [ ] odbc
+* [ ] opcache
+* [x] openssl
+* [x] pcntl
+* [x] pcre
+* [x] pdo
+* [ ] pdo_dblib
+* [ ] pdo_firebird
+* [x] pdo_mysql
+* [ ] pdo_oci
+* [ ] pdo_odbc
+* [x] pdo_pgsql
+* [x] pdo_sqlite
+* [ ] pgsql
+* [x] phar
+* [x] posix
+* [ ] pspell
+* [x] readline
+* [ ] recode
+* [x] reflection
+* [x] session
+* [x] shmop
+* [x] simplexml
+* [ ] skeleton
+* [ ] snmp
+* [x] soap
+* [x] sockets
+* [x] sodium
+* [x] spl
+* [x] sqlite3
+* [x] standard
+* [ ] sysvmsg
+* [x] sysvsem
+* [ ] sysvshm
+* [ ] tidy
+* [x] tokenizer
+* [ ] wddx
+* [x] xml
+* [x] xmlreader
+* [ ] xmlrpc
+* [x] xmlwriter
+* [x] xsl
+* [ ] zend_test
+* [x] zip
+* [x] zlib

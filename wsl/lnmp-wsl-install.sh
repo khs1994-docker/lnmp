@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# 从 Docker 复制二进制文件安装 PHP Redis Memcached 软件
+#
+
 set -ex
 
 . /etc/os-release
@@ -23,13 +27,32 @@ _nginx(){
 
 _php(){
   # include redis memcached
-docker run -dit --name=${CONTAINER_NAME} khs1994/php-fpm:wsl
+docker run -dit --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
 sudo rm -rf /usr/local/php72
 
-sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/usr/local/php72 /usr/local/php72/
+sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php72.tar.gz /usr/local/
 
 docker rm -f ${CONTAINER_NAME}
+
+cd /usr/local
+
+sudo -zxvf wsl-php72.tar.gz
+
+cd /var/log
+
+if ! [ -f php72-fpm.error.log ];then sudo touch php72-fpm.error.log ; fi
+if ! [ -f php72-fpm.access.log ];then sudo touch php72-fpm.access.log ; fi
+if ! [ -f php72-fpm.slow.log ];then sudo touch php72-fpm.slow.log; fi
+
+sudo chmod 777 php72-*
+
+cp $WSL_HOME/lnmp/config/php/php.development.ini /usr/local/php72/etc/
+
+php -v
+
+php-fpm -v
+
 }
 
 # _httpd(){
@@ -71,6 +94,13 @@ _rabbitmq(){
 _mongodb(){
   # apt
   echo
+}
+
+_list(){
+  # list php extension
+  cd /usr/local/src/php-7.2.4/ext
+  set +x
+  for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
 }
 
 if ! [ -z "$1" ];then

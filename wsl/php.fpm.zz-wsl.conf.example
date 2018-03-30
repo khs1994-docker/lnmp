@@ -1,16 +1,16 @@
 [global]
 
-error_log = /var/log/php-fpm/error.log
+error_log = /var/log/php72-fpm.error.log
 
 [www]
 
-access.log = /var/log/php-fpm/access.log
+access.log = /var/log/php72-fpm.access.log
 
 user = nginx
 group = nginx
 
 request_slowlog_timeout = 5
-slowlog = /var/log/php-fpm/slow.log
+slowlog = /var/log/php72-fpm.slow.log
 
 listen = /run/php-fpm.sock
 
