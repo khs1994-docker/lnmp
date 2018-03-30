@@ -77,6 +77,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libexif12 \
     libexif-dev \
     libgmp3-dev \
+    libc-client2007e \
     libc-client2007e-dev \
     libkrb5-dev
 
@@ -117,6 +118,8 @@ RUN set -eux; \
 	if [ ! -d /usr/include/curl ]; then \
 		ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
 	fi; \
+  # https://www.howtoforge.com/tutorial/how-to-install-php-7-on-debian/
+  ln -s /usr/lib/libc-client.a /usr/lib/x86_64-linux-gnu/libc-client.a; \
 	./configure \
     --prefix=/usr/local/php72 \
 		--build="$gnuArch" \
@@ -177,6 +180,7 @@ RUN set -eux; \
     --with-tidy=shared \
     --with-gmp=shared \
     --with-imap=shared \
+    --with-imap-ssl \
     --with-xmlrpc=shared \
     \
   # bundled pcre does not support JIT on s390x
