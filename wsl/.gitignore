@@ -7,6 +7,8 @@
 !lnmp-wsl-init.sh
 !lnmp-wsl.sh
 !lnmp-wsl-install.sh
+!lnmp-wsl-php-builder.sh
+!lnmp-wsl-php-builder-rhel.sh
 !Dockerfile
 !docker-compose.yml
 !*.example
