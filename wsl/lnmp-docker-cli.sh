@@ -2,6 +2,10 @@
 
 set -ex
 
+#
+# install docker cli binary
+#
+
 command -v curl || sudo apt install curl tar
 
 DOCKER_VERSION=18.03.0-ce

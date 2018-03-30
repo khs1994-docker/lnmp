@@ -30,7 +30,9 @@ $ vi ~/.bash_profile
 export APP_ENV=wsl
 ```
 
-## 脚本安装
+## 脚本安装软件
+
+如果你不想编译安装，那么我写了一个脚本，从 Docker 复制编译好的软件到 WSL。
 
 ```bash
 $ lnmp-wsl-install.sh nginx | php | mysql ...
@@ -85,7 +87,7 @@ $ lnmp-wsl.sh start | restart | stop [SOFT_NAME or all]
 * https://www.khs1994.com/docker/wsl-run-docker-cli.html
 
 ```bash
-$ sh $WSL_HOME/lnmp/wsl/lnmp-docker-cli.sh
+$ lnmp-docker-cli.sh
 ```
 
 ## PHP 扩展列表

@@ -2,6 +2,10 @@
 
 set -ex
 
+#
+# Control soft START STOP RESTART
+#
+
 ################################################################################
 
 PGDATA=${PGDATA:-/pgdata}

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# 从 Docker 复制二进制文件安装 PHP Redis Memcached 软件
+# 从 Docker 复制二进制文件，安装 PHP Redis Memcached
 #
 
 set -ex
