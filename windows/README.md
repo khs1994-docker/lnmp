@@ -86,6 +86,8 @@ https://dev.mysql.com/downloads/mysql/
 
 这里下载的是 `zip` 版，需要以管理员权限运行 `PowerShell` 执行一些命令完成初始化。（不建议使用 8.0.x 版本）
 
+在 `C` 盘根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `my.cnf.example`.
+
 ```bash
 # 这条命令会产生一个随机密码，--initialize-insecure 初始化默认密码为空（不建议使用，后边会出现设置不了密码的情况）
 
