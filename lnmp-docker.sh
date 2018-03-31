@@ -31,15 +31,19 @@ NOTSUPPORT(){
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD\n"
 else
-    if ! [ -z "${LNMP_ROOT_PATH}" ];then
+    if ! [ -z "${LNMP_PATH}" ];then
       # 存在环境变量，进入
       print_info "Use LNMP CLI in $PWD\n"
-      cd ${LNMP_ROOT_PATH}
+      cd ${LNMP_PATH}
     else
       print_error  "在任意目录使用 LNMP CLI 必须设置环境变量，cli/README.md"
       exit 1
     fi
 fi
+
+# PHPer command
+
+if [ -z "$LNMP_PATH" ];then print_warning "Try lnmp-* commands? Please see cli/README.md\n"; fi
 
 help(){
   echo  -e "
