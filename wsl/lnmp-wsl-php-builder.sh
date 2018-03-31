@@ -66,7 +66,7 @@ if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
   cd /usr/local/src
 
-  sudo chmod -R 777 /usr/local/src
+  sudo chmod 777 /usr/local/src
 
   wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz
 
@@ -233,18 +233,24 @@ sudo make install
 
 # 7. install extension
 
-${PHP_ROOT}/bin/php -v
-
-${PHP_ROOT}/sbin/php-fpm -v
-
-sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-developmen /usr/local/etc/php${PHP_NUM}/php.ini
-sudo cp /usr/local/etc/php${PHP_NUM}/php-fpm.d/www.conf.default /usr/local/etc/php${PHP_NUM}/php-fpm.d/www.conf
-sudo cp /usr/local/etc/php${PHP_NUM}/php-fpm.conf.default /usr/local/etc/php${PHP_NUM}/php-fpm.conf
+if [ -d /usr/local/etc/php${PHP_NUM} ];then
+    sudo mv /usr/local/etc/php${PHP_NUM} /usr/local/etc/php${PHP_NUM}.$( date +%s ).backup
+fi
 
 sudo mkdir -p /usr/local/etc/php${PHP_NUM}/conf.d
 
-sudo ${PHP_ROOT}/bin/pear config-set php_ini /usr/local/etc/${PHP_NUM}/php.ini
-sudo ${PHP_ROOT}/bin/pecl config-set php_ini /usr/local/etc/${PHP_NUM}/php.ini
+sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development /usr/local/etc/php${PHP_NUM}/php.ini
+sudo cp /usr/local/php${PHP_NUM}/etc/php-fpm.d/www.conf.default /usr/local/php${PHP_NUM}/etc/php-fpm.d/www.conf
+sudo cp /usr/local/php${PHP_NUM}/etc/php-fpm.conf.default /usr/local/php${PHP_NUM}/etc/php-fpm.conf
+
+${PHP_ROOT}/bin/php -v
+
+${PHP_ROOT}/bin/php -i | grep ".ini"
+
+${PHP_ROOT}/sbin/php-fpm -v
+
+sudo ${PHP_ROOT}/bin/pear config-set php_ini /usr/local/etc/php${PHP_NUM}/php.ini
+sudo ${PHP_ROOT}/bin/pecl config-set php_ini /usr/local/etc/php${PHP_NUM}/php.ini
 
 sudo ${PHP_ROOT}/bin/pecl update-channels
 
@@ -270,11 +276,7 @@ sudo ${PHP_ROOT}/bin/pecl install ${PHP_EXTENSION}
 
 # 8. enable extension
 
-echo "zend_extension=opcache" | sudo tee /usr/local/etc/${PHP_NUM}/conf.d/extension-opcache.ini
-
-if ! [ -d  /var/log/php-fpm${PHP_NUM} ];then
-    sudo mkdir -p /var/log/php-fpm${PHP_NUM}
-fi
+echo "zend_extension=opcache" | sudo tee /usr/local/etc/php${PHP_NUM}/conf.d/extension-opcache.ini
 
 echo "
 [global]
@@ -307,3 +309,15 @@ listen 9000
 
 env[APP_ENV] = development
 " | sudo tee ${PHP_ROOT}/etc/php-fpm.d/zz-$( . /etc/os-release ; echo $ID ).conf
+
+cd /var/log
+
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+
+sudo chmod 777 php${PHP_NUM}-*
+
+# Change php ini
+
+sudo sed -i 's#^extension="xdebug".*#zend_extension=xdebug#g' /usr/local/etc/php${PHP_NUM}/php.ini

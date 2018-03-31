@@ -1,5 +1,7 @@
 # Windows 安装本项目
 
+打开 `PowerShell`
+
 ```bash
 $ cd $HOME
 
@@ -14,6 +16,12 @@ $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
 $ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 
 # $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+```
+
+## 设置环境变量
+
+```bash
+$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$env:HOME/lnmp", "User");
 ```
 
 ## 启动 Demo

@@ -1,5 +1,17 @@
 FROM debian:stretch-slim
 
+################################################################################
+
+ARG PHP_VERSION=7.2.4
+
+ARG PHP_PREFIX=/usr/local/php72
+
+ARG PHP_INI_DIR=/usr/local/etc/php72
+
+ARG COMPOSER_VERSION=1.6.3
+
+################################################################################
+
 ARG DEB_URL=deb.debian.org
 
 # mirrors.ustc.edu.cn
@@ -81,14 +93,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libc-client2007e-dev \
     libkrb5-dev
 
-################################################################################
-
-ARG PHP_VERSION=7.2.4
-
-################################################################################
-
-ARG PHP_INI_DIR=/usr/local/php72/etc
-
 COPY --from=php /usr/local/bin/docker-php-source /usr/local/bin/
 
 COPY --from=php /usr/local/bin/docker-php-ext-* /usr/local/bin/docker-php-entrypoint /usr/local/bin/
@@ -119,9 +123,9 @@ RUN set -eux; \
 		ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
 	fi; \
   # https://www.howtoforge.com/tutorial/how-to-install-php-7-on-debian/
-  ln -s /usr/lib/libc-client.a /usr/lib/x86_64-linux-gnu/libc-client.a; \
+  ln -sf /usr/lib/libc-client.a /usr/lib/x86_64-linux-gnu/libc-client.a; \
 	./configure \
-    --prefix=/usr/local/php72 \
+    --prefix=${PHP_PREFIX} \
 		--build="$gnuArch" \
 		--with-config-file-path="$PHP_INI_DIR" \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
@@ -192,11 +196,11 @@ RUN set -eux; \
 	make -j "$(nproc)"; \
 	make install \
   && rm -rf /usr/local/sbin \
-  && ln -s /usr/local/php72/bin /usr/local/sbin \
+  && ln -s ${PHP_PREFIX}/bin /usr/local/sbin \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
   && set -ex \
-	&& cd ${PHP_INI_DIR} \
+	&& cd ${PHP_PREFIX}/etc \
 	&& if [ -d php-fpm.d ]; then \
 		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
 		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
@@ -210,6 +214,8 @@ RUN set -eux; \
 			echo 'include=etc/php-fpm.d/*.conf'; \
 		} | tee php-fpm.conf; \
 	fi \
+  && cp /usr/src/php/php.ini-* ${PHP_INI_DIR} \
+  && cp ${PHP_INI_DIR}/php.ini-development ${PHP_INI_DIR}/php.ini \
   && pecl install mongodb \
                   igbinary \
                   redis \
@@ -236,7 +242,19 @@ RUN set -eux; \
                            gmp \
                            xmlrpc \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
-       > ${PHP_INI_DIR}/php-fpm.d/zz-wsl.conf \
+       > ${PHP_PREFIX}/etc/php-fpm.d/zz-wsl.conf \
+  && curl -s -f -L -o /tmp/installer.php \
+         https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
+  && php -r " \
+          \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
+          \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
+          if (!hash_equals(\$signature, \$hash)) { \
+              unlink('/tmp/installer.php'); \
+              echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
+              exit(1); \
+          }" \
+  && php /tmp/installer.php --no-ansi --install-dir=/usr/local/php72/bin --filename=composer --version=${COMPOSER_VERSION} \
+  && composer --ansi --version --no-interaction \
   && rm -rf /tmp/*
 
       # nginx apt
@@ -249,11 +267,11 @@ RUN set -eux; \
 
       # redis
 
-COPY --from=redis:4.0.9 /usr/local/bin/redis-* /usr/local/php72/bin/
+COPY --from=redis:4.0.9 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 
-COPY --from=memcached:1.5.6 /usr/local/bin/memcached /usr/local/php72/bin/
+COPY --from=memcached:1.5.6 /usr/local/bin/memcached ${PHP_PREFIX}/bin/
 
       # rabbitmq apt
 
@@ -263,10 +281,12 @@ COPY --from=memcached:1.5.6 /usr/local/bin/memcached /usr/local/php72/bin/
 
       # phpmyadmin
 
-RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72
+RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72 ; cd etc ; tar -zcvf wsl-php72-etc.tar.gz php72
 
 FROM alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 COPY --from=0 /usr/local/wsl-php72.tar.gz /
+
+COPY --from=0 /usr/local/etc/wsl-php72-etc.tar.gz /

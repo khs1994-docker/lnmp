@@ -4,11 +4,23 @@
 
 * https://www.khs1994.com/php/development/wsl.html
 
-编译安装软件请查看上面的链接，为方便修改，文件夹内的配置文件均为示例 `*.example`,使用时请去掉 `.example` 后缀。
+编译安装软件请查看上面的链接，为方便修改，文件夹内的配置文件（`*.example`）均为示例，使用时请去掉 `.example` 后缀。
 
 **注意备份原来的配置文件**
 
 ## 设置环境变量
+
+部分设置项可能与 `windows/README.md` 重复，保证设置过即可，建议操作之前先大概明白每条指令的意义，不要无脑复制！
+
+**Windows Path 变量会默认传递到 WSL**
+
+打开 PowerShell
+
+```bash
+$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$env:HOME/lnmp", "User");
+
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
+```
 
 ```bash
 $ sudo vi /etc/profile
@@ -16,8 +28,6 @@ $ sudo vi /etc/profile
 # 在文件末尾添加如下内容
 
 export WSL_HOME=/mnt/c/Users/90621 # 注意替换为自己的实际路径
-
-export PATH=$WSL_HOME/lnmp/wsl:$PATH
 
 export APP_ENV=wsl
 
@@ -32,7 +42,7 @@ export APP_ENV=wsl
 
 ## 脚本安装软件
 
-如果你不想编译安装，那么我写了一个脚本，从 Docker 复制编译好的软件到 WSL。
+如果你不想编译安装，那么我写了一个脚本 （**脚本** 从 Docker 复制编译好的软件到 WSL ，或设置 apt 从软件源安装）。
 
 ```bash
 $ lnmp-wsl-install.sh nginx | php | mysql ...
@@ -64,7 +74,13 @@ $ sudo ln -sf $WSL_HOME/lnmp/wsl/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fp
 $ sudo cp -f $WSL_HOME/lnmp/wsl/mysql.wsl.cnf /etc/mysql/conf.d/wsl.cnf
 ```
 
-## MySQL 远程登陆
+## MySQL
+
+手动设置 `APT` 之后安装，不建议直接使用 `apt install mysql-server`(直接安装的是 MariaDB)。
+
+* https://dev.mysql.com/downloads/repo/apt/
+
+### MySQL 远程登陆
 
 可能会遇到不能从除了 `localhost` 的地址登陆的问题，请查看以下链接解决。
 
