@@ -26,3 +26,7 @@ sudo apt update && sudo apt install \
                             curl \
                             wget \
                             lsb-release
+
+# composer cn mirror
+
+command -v composer && composer config -g repo.packagist composer https://packagist.phpcomposer.com
