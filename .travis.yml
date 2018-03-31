@@ -59,6 +59,14 @@ jobs:
       script: cli/test development
     - stage: swarm
       script: cli/test swarm
+    - stage: wsl-php-builder-56
+      script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=5.6.35 .
+    # - stage: wsl-php-builder-70
+    #   script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.0.29 .
+    # - stage: wsl-php-builder-71
+    #   script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.1.16 .
+    # - stage: wsl-php-builder-72
+    #   script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.4 .
     # - stage: memcached
     #   script:
     # - stage: mysql

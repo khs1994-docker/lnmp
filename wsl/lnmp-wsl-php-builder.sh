@@ -6,6 +6,8 @@ set -ex
 # Build php in WSL(Debian Ubuntu)
 #
 
+command -v wget || ( sudo apt update && sudo apt install wget -y)
+
 PHP_URL=http://cn2.php.net/distributions
 
 mkdir -p /tmp/php-builder || echo
@@ -137,6 +139,8 @@ do
     sudo echo $soft >> ${PHP_INSTALL_LOG}
 done
 
+sudo apt update
+
 sudo apt install -y --no-install-recommends ${DEP_SOFTS}
 }
 
@@ -153,6 +157,12 @@ if [ ! -d /usr/include/curl ]; then
 fi
 
 sudo ln -sf /usr/lib/libc-client.a /usr/lib/x86_64-linux-gnu/libc-client.a
+
+#
+# debian 9 php56 configure: error: Unable to locate gmp.h
+#
+
+sudo ln -sf /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
 # 4. configure
 
