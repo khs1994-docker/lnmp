@@ -1,44 +1,38 @@
 # 命令行补全
 
-设置环境变量 `LNMP_ROOT_PATH` 为本项目的绝对路径(下面以 `/data/lnmp` 为例，实际请替换为你自己的路径)，这样你就可以在任意目录使用本项目的 CLI (命令中路径必须为相对于 app 的路径)。
-
-首先将本项目 CLI 软链接到 `/usr/local/bin`。
-
-```bash
-$ cd lnmp
-
-$ ln -s $PWD/lnmp-docker.sh /usr/local/bin/
-```
+设置环境变量 `LNMP_PATH` 为本项目的绝对路径(下面以 `/data/lnmp` 为例，实际请替换为你自己的路径)，这样你就可以在任意目录使用本项目的 CLI。
 
 ## Bash
 
 ```bash
 $ vi ~/.bash_profile
 
-export LNMP_ROOT_PATH=/data/lnmp
+export LNMP_PATH=/data/lnmp
+
+export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
 ```
 
 ### Linux
 
 ```bash
-$ sudo ln -s $PWD/cli/completion/bash/lnmp-docker.sh /etc/bash_completion.d/lnmp-docker.sh
+$ sudo ln -s $LNMP_PATH/cli/completion/bash/lnmp-docker.sh /etc/bash_completion.d/lnmp-docker.sh
 ```
 
 ### macOS
 
 ```bash
-$ sudo ln -s $PWD/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_completion.d/lnmp-docker.sh
+$ sudo ln -s $LNMP_PATH/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_completion.d/lnmp-docker.sh
 ```
 
 ## fish
 
 ```bash
-$ set -Ux LNMP_ROOT_PATH /data/lnmp
+$ set -Ux LNMP_PATH /data/lnmp
 
-$ ln -s $PWD/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completions/
+$ ln -s $LNMP_PATH/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completions/
 ```
 
-> 删除环境变量 `$ set -Ue LNMP_ROOT_PATH`
+> 删除环境变量 `$ set -Ue LNMP_PATH`
 
 # systemd
 
@@ -47,7 +41,7 @@ $ ln -s $PWD/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completions/
 >务必熟悉 `systemd` 之后再执行此项操作。
 
 ```bash
-$ sudo cp ./cli/systemd/lnmp-docker.service /etc/systemd/system/
+$ sudo cp $LNMP_PATH/cli/systemd/lnmp-docker.service /etc/systemd/system/
 
 $ sudo vi /etc/systemd/system/lnmp-docker.service
 
@@ -69,7 +63,7 @@ $ sudo journalctl -u lnmp-docker
 为了一次性补全 `lnmp-docker.service` 这里将计划任务前缀设置为 `cleanup-*`。
 
 ```bash
-$ sudo cp -a ./cli/systemd/cleanup-* /etc/systemd/system/
+$ sudo cp -a $LNMP_PATH/cli/systemd/cleanup-* /etc/systemd/system/
 
 $ sudo vi /etc/systemd/system/cleanup-lnmp-docker.service
 

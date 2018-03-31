@@ -14,9 +14,19 @@ MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将�
 
 **务必知道 Windows Linux 环境变量的作用及设置方法，如果你不知道，就不用往下看了**
 
-* 为了在任意目录执行命令，请将各软件路径加入系统环境变量 `PATH`，这里不再赘述。
+* 为了在任意目录执行命令，请将各软件路径加入系统环境变量 `PATH`
 
-* **特别的** 新增变量 `APP_ENV` 值为 `windows`, 之后 `Laravel` 框架就会默认的加载 `.env.windows` 文件。（设置变量之后务必注销登录）
+* **特别的** 新增变量 `APP_ENV` 值为 `windows`, 之后 `Laravel` 框架就会默认的加载 `.env.windows` 文件。
+
+打开 `PowerShell` 执行以下命令设置环境变量
+
+```bash
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx-1.13.8;c:\apache24\bin", "User")
+
+$ [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
+```
+
+注销之后重新登录
 
 验证
 

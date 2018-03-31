@@ -21,9 +21,11 @@
 #### Bash
 
 ```bash
-$ vi /etc/profile
+$ vi ~/.bash_profile
 
-export PATH=/data/lnmp/bin:$PATH
+export LNMP_PATH=/data/lnmp
+
+export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
 ```
 
 #### fish
@@ -31,14 +33,20 @@ export PATH=/data/lnmp/bin:$PATH
 ```bash
 $ vi ~/.config/fish/config.fish
 
-set -gx fish_user_paths $fish_user_paths /data/lnmp/bin
+set -gx LNMP_PATH /data/lnmp
+
+set -gx fish_user_paths $fish_user_paths $LNMP_PATH $LNMP_PATH/bin
 ```
 
 #### Windows 10
 
-新增环境变量 `LNMP_PATH` 为本项目实际路径。
+打开 `PowerShell`
 
-然后将 `%LNMP_PATH%\windows` 加入环境变量 `PATH`。
+```bash
+$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User")
+
+$ [environment]::SetEnvironmentvariable("Path", "$env:path;$env:LNMP_PATH;$env:LNMP_PATH\windows", "User")
+```
 
 > 如果 `PoswerShell` 禁止执行脚本，请以管理员身份执行 `set-ExecutionPolicy RemoteSigned`,之后输入 `Y` 确认。
 

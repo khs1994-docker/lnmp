@@ -1,6 +1,8 @@
 $global:KHS1994_LNMP_DOCKER_VERSION="v18.05"
 $global:KHS1994_LNMP_PHP_VERSION="7.2.3"
 
+$source=$pwd
+
 Function printError(){
 Write-Host " "
 Write-Host 'Error   ' -NoNewLine -ForegroundColor Red
@@ -20,6 +22,25 @@ Write-Host " "
 Write-Host 'Warning  ' -NoNewLine -ForegroundColor Red
 Write-Host "$args";
 Write-Host " "
+}
+
+if (!(Test-Path cli/khs1994-robot.enc )){
+
+  # 在项目目录外
+  if ($env:LNMP_PATH.Length -eq 0){
+  # 没有设置系统环境变量，则退出
+    printWarning "Please set system environment, more information please see bin/README.md"
+
+    exit 1
+  }else{
+    # 设置了系统环境变量
+
+    printInfo "Use LNMP CLI in $PWD"
+    cd $env:LNMP_PATH
+  }
+
+}else {
+  printInfo "Use LNMP CLI in LNMP Root $pwd"
 }
 
 Function env_status(){
@@ -151,6 +172,9 @@ You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you
 You must Update .env file when update this project.
 
 Donate https://zan.khs1994.com"
+
+cd $source
+
 exit
 }
 
@@ -377,6 +401,9 @@ switch($first){
          $service,$cmd=$other
          if ($cmd.Count -eq 0){
            echo '$ ./lnmp-docker.ps1 clusterkit-mysql-exec {master|node-N} {COMMAND}'
+
+           cd $source
+
            exit 1
          }
          clusterkit_bash_cli clusterkit_mysql mysql_$service $cmd
@@ -394,6 +421,9 @@ switch($first){
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
         echo '$ ./lnmp-docker.ps1 clusterkit-memcached-exec {N} {COMMAND}'
+
+        cd $source
+
         exit 1
       }
       clusterkit_bash_cli clusterkit_memcached memcached-$service $cmd
@@ -411,6 +441,9 @@ switch($first){
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
         echo '$ ./lnmp-docker.ps1 clusterkit-redis-exec {master-N|slave-N} {COMMAND}'
+
+        cd $source
+
         exit 1
       }
       clusterkit_bash_cli clusterkit_redis redis_$service $cmd
@@ -428,6 +461,9 @@ switch($first){
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
         echo '$ ./lnmp-docker.ps1 clusterkit-redis-master-slave-exec {master|slave-N} {COMMAND}'
+
+        cd $source
+
         exit 1
       }
       clusterkit_bash_cli clusterkit_redis_master_slave redis_m_s_$service $cmd
@@ -445,6 +481,9 @@ switch($first){
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
         echo '$ ./lnmp-docker.ps1 clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}'
+
+        cd $source
+
         exit 1
       }
       clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$service $cmd
@@ -463,3 +502,5 @@ switch($first){
         docker-compose $args
       }
 }
+
+cd $source
