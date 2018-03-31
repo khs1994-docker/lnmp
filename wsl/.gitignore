@@ -10,6 +10,7 @@
 !lnmp-wsl-php-builder.sh
 !lnmp-wsl-php-builder-rhel.sh
 !Dockerfile
+!wsl.phpbuilder.Dockerfile
 !docker-compose.yml
 !nginx.wsl.conf
 !*.example
