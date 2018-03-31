@@ -11,4 +11,5 @@
 !lnmp-wsl-php-builder-rhel.sh
 !Dockerfile
 !docker-compose.yml
+!nginx.wsl.conf
 !*.example

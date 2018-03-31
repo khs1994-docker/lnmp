@@ -74,7 +74,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
   $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
   ```
 
-### 启动 LNMP
+### 启动 LNMP Demo
 
 ```bash
 $ cd lnmp
@@ -88,6 +88,8 @@ Welcome use khs1994-docker/lnmp v18.03 x86_64 With Pull Docker Image
 development
 
 ```
+
+MySQL 默认 ROOT 密码为 `mytest`
 
 ### PHP 项目开发
 

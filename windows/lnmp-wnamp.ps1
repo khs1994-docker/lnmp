@@ -45,19 +45,19 @@ Function _stop($soft){
 
 Function _stop_wsl($soft){
   switch ($soft){
-    "wsl_php" {
+    "wsl-php" {
       bash lnmp-wsl.sh stop php
     }
 
-    "wsl_nginx" {
+    "wsl-nginx" {
       bash lnmp-wsl.sh stop nginx
     }
 
-    "wsl_mysql" {
+    "wsl-mysql" {
       bash lnmp-wsl.sh stop mysql
     }
 
-    "wsl_httpd" {
+    "wsl-httpd" {
       bash lnmp-wsl.sh stop httpd
     }
   }
@@ -108,19 +108,19 @@ Function _start($soft){
 
 Function _start_wsl($soft){
   switch ($soft){
-    "wsl_php" {
+    "wsl-php" {
       bash lnmp-wsl.sh start php
     }
 
-    "wsl_nginx" {
+    "wsl-nginx" {
       bash lnmp-wsl.sh start nginx
     }
 
-    "wsl_mysql" {
+    "wsl-mysql" {
       bash lnmp-wsl.sh start mysql
     }
 
-    "wsl_httpd" {
+    "wsl-httpd" {
       bash lnmp-wsl.sh start httpd
     }
   }
@@ -186,7 +186,7 @@ switch ($args[0])
         break
       }
 
-      {$_ -in "wsl_nginx","wsl_php","wsl_httpd","wsl_mysql"}{
+      {$_ -in "wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"}{
         _stop_wsl $args[1]
         break
       }
@@ -205,7 +205,7 @@ switch ($args[0])
         break
       }
 
-      {$_ -in "wsl_nginx","wsl_php","wsl_httpd","wsl_mysql"}{
+      {$_ -in "wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"}{
         _start_wsl $args[1]
         break
       }
@@ -225,7 +225,7 @@ switch ($args[0])
         break
       }
 
-      {$_ -in "wsl_nginx","wsl_php","wsl_httpd","wsl_mysql"}{
+      {$_ -in "wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"}{
         _stop_wsl $args[1]
         _start_wsl $args[1]
         break

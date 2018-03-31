@@ -72,7 +72,7 @@ Pick one method install LNMP Docker.
   $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
   ```
 
-### Start
+### Start LNMP Demo
 
 ```bash
 $ cd lnmp
@@ -86,6 +86,8 @@ Welcome use khs1994-docker/lnmp v18.03 x86_64 With Pull Docker Image
 development
 
 ```
+
+MySQL default root password `mytest`
 
 ### Start PHP Project
 

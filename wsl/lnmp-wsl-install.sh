@@ -3,12 +3,22 @@
 #
 # 从 Docker 复制二进制文件，安装 PHP Redis Memcached
 #
+# Only Support WSL Debian
+#
 
 set -ex
 
 . /etc/os-release
 
+. ~/.bash_profile
+
+################################################################################
+
+if [ -z $WSL_HOME ];then exit 1 ; fi
+
 if ! [ $ID = debian ];then exit 1; fi
+
+################################################################################
 
 CONTAINER_NAME=$( date +%s )
 
@@ -24,43 +34,71 @@ _nginx(){
 
   sudo apt install -y nginx
 
-  if ! [ -h /etc/nginx/conf.d ];then rm -rf /etc/nginx/conf.d; ln -s $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+  if ! [ -h /etc/nginx/conf.d ];then sudo rm -rf /etc/nginx/conf.d; sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+
+  if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf ; fi
+
+  sudo nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/nginx.wsl.conf /etc/nginx/nginx.conf
+
+  sudo nginx -t
 
 }
 
 _php(){
   # include redis memcached
+  # default install latest php version
+  # current version is php 7.2.4
+  PHP_NUM=72
 docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
 docker run -dit --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
-sudo rm -rf /usr/local/php72
+sudo rm -rf /usr/local/php${PHP_NUM}
 
-sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php72.tar.gz /usr/local/
+if [ -d /usr/local/etc/php${PHP_NUM} ];then
+  sudo mv /usr/local/etc/php${PHP_NUM} /usr/local/etc/php${PHP_NUM}.$( date +%s ).backup
+fi
+
+sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}.tar.gz /usr/local/
+sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}-etc.tar.gz /usr/local/etc/
 
 docker rm -f ${CONTAINER_NAME}
 
 cd /usr/local
 
-sudo tar -zxvf wsl-php72.tar.gz
+sudo tar -zxvf wsl-php${PHP_NUM}.tar.gz
+
+sudo rm -rf wsl-php${PHP_NUM}.tar.gz
+
+cd /usr/local/etc
+
+sudo tar -zxvf wsl-php${PHP_NUM}-etc.tar.gz
+
+sudo rm -rf wsl-php${PHP_NUM}-etc.tar.gz
 
 cd /var/log
 
-if ! [ -f php72-fpm.error.log ];then sudo touch php72-fpm.error.log ; fi
-if ! [ -f php72-fpm.access.log ];then sudo touch php72-fpm.access.log ; fi
-if ! [ -f php72-fpm.slow.log ];then sudo touch php72-fpm.slow.log; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}2-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
 
-sudo chmod 777 php72-*
+sudo chmod 777 php${PHP_NUM}-*
 
-sudo cp $WSL_HOME/lnmp/config/php/php.development.ini /usr/local/php72/etc/php.ini
+for file in $( ls /usr/local/php${PHP_NUM}/bin ); do sudo ln -sf /usr/local/php${PHP_NUM}/bin/$file /usr/local/bin/ ; done
 
-for file in $( ls /usr/local/php72/bin ); do sudo ln -sf /usr/local/php72/bin/$file /usr/local/bin/ ; done
+sudo ln -sf /usr/local/php${PHP_NUM}/sbin/php-fpm /usr/local/sbin
 
-sudo ln -sf /usr/local/php72/sbin/php-fpm /usr/local/sbin
+lnmp-wsl-php-builder.sh apt
+
+echo "##########################################################################"
 
 php -v
 
 php-fpm -v
+
+echo "##########################################################################"
+
+php -i | grep .ini
 
 }
 
@@ -116,6 +154,18 @@ _mongodb(){
   #
   # @link https://docs.mongodb.com/master/tutorial/install-mongodb-on-debian/
   sudo apt install mongodb
+}
+
+_mysql(){
+  # apt
+  if ! [ -f mysql-apt-config_0.8.9-1_all.deb ];then
+      wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
+  fi
+
+  sudo dpkg -i mysql-apt-config_0.8.9-1_all.deb
+  sudo apt install -f
+  sudo apt update
+  sudo apt install mysql-server
 }
 
 _list(){
