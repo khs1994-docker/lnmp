@@ -203,7 +203,7 @@ _registry(){
     if [ -f config/${NGINX_CONF_D:-nginx}/registry.conf.backup ];then
       cp config/${NGINX_CONF_D:-nginx}/registry.conf.backup config/${NGINX_CONF_D:-nginx}/registry.conf
     else
-      cp config/${NGINX_CONF_D:-nginx}/demo-registry.conf.backup config/${NGINX_CONF_D:-nginx}/registry.conf
+      cp config/${NGINX_CONF_D:-nginx}/demo-registry.config config/${NGINX_CONF_D:-nginx}/registry.conf
     fi
   fi
 
