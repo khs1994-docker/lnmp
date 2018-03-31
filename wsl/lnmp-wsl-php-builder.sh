@@ -270,13 +270,20 @@ PHP_EXTENSION="igbinary \
 for extension in ${PHP_EXTENSION}
 do
   echo $extension >> ${PHP_INSTALL_LOG}
+  sudo ${PHP_ROOT}/bin/pecl install $extension || echo
 done
-
-sudo ${PHP_ROOT}/bin/pecl install ${PHP_EXTENSION}
 
 # 8. enable extension
 
+if [ ${PHP_NUM} -ge 72 ];then
+
 echo "zend_extension=opcache" | sudo tee /usr/local/etc/php${PHP_NUM}/conf.d/extension-opcache.ini
+
+else
+
+echo "zend_extension=opcache.so" | sudo tee /usr/local/etc/php${PHP_NUM}/conf.d/extension-opcache.ini
+
+fi
 
 echo "
 [global]
@@ -320,4 +327,6 @@ sudo chmod 777 php${PHP_NUM}-*
 
 # Change php ini
 
-sudo sed -i 's#^extension="xdebug".*#zend_extension=xdebug#g' /usr/local/etc/php${PHP_NUM}/php.ini
+sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' /usr/local/etc/php${PHP_NUM}/php.ini
+
+${PHP_ROOT}/bin/php -v
