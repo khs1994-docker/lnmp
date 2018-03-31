@@ -10,7 +10,7 @@ MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将�
 
 **部分软件使用 `WSL` 来安装运行。**
 
-## 系统环境变量
+## 系统环境变量说明
 
 **务必知道 Windows Linux 环境变量的作用及设置方法，如果你不知道，就不用往下看了**
 
@@ -21,9 +21,23 @@ MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将�
 打开 `PowerShell` 执行以下命令设置环境变量
 
 ```bash
+$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$env:HOME/lnmp", "User");
+
 $ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx-1.13.8;c:\apache24\bin", "User")
 
 $ [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
+```
+
+**退出，重新打开**
+
+为了方便的管理 `WNAMP`，这里有一个脚本 `./windows/lnmp-wnamp.ps1` ，**使用之前** 在该文件开头修改好软件路径。
+
+```bash
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
+
+# 退出，重新打开
+
+$ lnmp-wnamp.ps1 start | stop | restart | status | ps
 ```
 
 注销之后重新登录
@@ -36,16 +50,6 @@ $ cd LARAVEL_APP_PATH
 $ php artisan env
 
 Current application environment: windows
-```
-
-## PowerShell 脚本
-
-为了方便的管理 `WNAMP`，这里有一个脚本 `./windows/lnmp-wnamp.ps1` ，使用之前在该文件开头修改好软件路径。
-
-将 `C:\Users\90621\lnmp\windows\wnamp.ps1` （自行替换为自己的路径） 加入 Windows 环境变量 `PATH`
-
-```bash
-$ lnmp-wnamp.ps1 start | stop | restart | status | ps
 ```
 
 # wsl

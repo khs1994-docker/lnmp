@@ -3,12 +3,22 @@
 #
 # 从 Docker 复制二进制文件，安装 PHP Redis Memcached
 #
+# Only Support WSL Debian
+#
 
 set -ex
 
 . /etc/os-release
 
+. ~/.bash_profile
+
+################################################################################
+
+if [ -z $WSL_HOME ];then exit 1 ; fi
+
 if ! [ $ID = debian ];then exit 1; fi
+
+################################################################################
 
 CONTAINER_NAME=$( date +%s )
 
@@ -24,7 +34,13 @@ _nginx(){
 
   sudo apt install -y nginx
 
-  if ! [ -h /etc/nginx/conf.d ];then rm -rf /etc/nginx/conf.d; ln -s $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+  if ! [ -h /etc/nginx/conf.d ];then sudo rm -rf /etc/nginx/conf.d; sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+
+  if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf ; fi
+
+  sudo nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/nginx.wsl.conf /etc/nginx/nginx.conf
+
+  sudo nginx -t
 
 }
 
@@ -57,6 +73,8 @@ sudo cp $WSL_HOME/lnmp/config/php/php.development.ini /usr/local/php72/etc/php.i
 for file in $( ls /usr/local/php72/bin ); do sudo ln -sf /usr/local/php72/bin/$file /usr/local/bin/ ; done
 
 sudo ln -sf /usr/local/php72/sbin/php-fpm /usr/local/sbin
+
+lnmp-wsl-php-builder.sh apt
 
 php -v
 
@@ -116,6 +134,18 @@ _mongodb(){
   #
   # @link https://docs.mongodb.com/master/tutorial/install-mongodb-on-debian/
   sudo apt install mongodb
+}
+
+_mysql(){
+  # apt
+  if ! [ -f mysql-apt-config_0.8.9-1_all.deb ];then
+      wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
+  fi
+
+  sudo dpkg -i mysql-apt-config_0.8.9-1_all.deb
+  sudo apt install -f
+  sudo apt update
+  sudo apt install mysql-server
 }
 
 _list(){
