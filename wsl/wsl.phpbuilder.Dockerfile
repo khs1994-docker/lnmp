@@ -2,7 +2,7 @@ ARG OS_TYPE=debian:stretch-slim
 
 FROM ${OS_TYPE}
 
-ARG PHP_VERSION=5.6.35
+ARG PHP_VERSION=7.2.4
 
 COPY lnmp-wsl-php-builder.sh /lnmp-wsl-php-builder.sh
 
