@@ -6,6 +6,8 @@ set -ex
 # Build php in WSL(Debian Ubuntu)
 #
 
+PHP_TIMEZONE=PRC
+
 command -v wget || ( sudo apt update && sudo apt install wget -y)
 
 PHP_URL=http://cn2.php.net/distributions
@@ -325,10 +327,12 @@ done
 if [ ${PHP_NUM} -ge 72 ];then
 
 echo "zend_extension=opcache" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 else
 
 echo "zend_extension=opcache.so" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 fi
 

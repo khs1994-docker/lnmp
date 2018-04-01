@@ -50,6 +50,8 @@ export APP_ENV=wsl
 $ lnmp-wsl-install.sh nginx | php | mysql ...
 ```
 
+* PHP 版本问题：https://github.com/khs1994-docker/lnmp/issues/348
+
 ## 特别注意 NGINX
 
 `/etc/nginx/nginx.conf` 主配置文件必须添加下面的配置项，否则 PHP 页面打开非常缓慢
