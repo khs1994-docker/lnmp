@@ -46,7 +46,7 @@ services:
 
   phpmyadmin:
     << : *default-common
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest@sha256:065e1c3c82bdbbf3a00168b3dcca7ecb2590dff587ac17ce14177816cdedf5ce
 
   nginx:
     << : *default-common
