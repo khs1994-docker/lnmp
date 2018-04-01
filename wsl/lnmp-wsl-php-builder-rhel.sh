@@ -64,6 +64,8 @@ esac
 
 export PHP_ROOT=/usr/local/php${PHP_NUM}
 
+sudo rm -rf ${PHP_ROOT} || echo
+
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 # verify os
@@ -156,7 +158,7 @@ export DEP_SOFTS="autoconf \
 
 for soft in ${DEP_SOFTS}
 do
-    sudo echo $soft >> ${PHP_INSTALL_LOG}
+    echo $soft >> ${PHP_INSTALL_LOG}
 done
 
 sudo yum update
@@ -241,7 +243,7 @@ CONFIGURE="--prefix=${PHP_ROOT} \
 
 for a in ${CONFIGURE}
 do
-  sudo echo $a >> ${PHP_INSTALL_LOG}
+  echo $a >> ${PHP_INSTALL_LOG}
 done
 
 ./configure ${CONFIGURE}
@@ -294,10 +296,10 @@ sudo ${PHP_ROOT}/bin/pecl config-set php_ini ${PHP_INI_DIR}/php.ini
 
 sudo ${PHP_ROOT}/bin/pecl update-channels
 
-sudo ${PHP_ROOT}/bin/pear config-show >> ${PHP_INSTALL_LOG}
-sudo ${PHP_ROOT}/bin/pecl config-show >> ${PHP_INSTALL_LOG}
+${PHP_ROOT}/bin/pear config-show >> ${PHP_INSTALL_LOG}
+${PHP_ROOT}/bin/pecl config-show >> ${PHP_INSTALL_LOG}
 
-sudo ${PHP_ROOT}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+${PHP_ROOT}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
 PHP_EXTENSION="igbinary \
                redis \
@@ -373,8 +375,49 @@ ${PHP_ROOT}/bin/php -v
 
 ${PHP_ROOT}/bin/php -i | grep .ini
 
-${PHP_ROOT}/bin/php-fpm -v
+${PHP_ROOT}/sbin/php-fpm -v
 
-set +e
+set +x
 
-for ext in `ls /usr/local/src/php-${PHP_VERSION}`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
+do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+
+################################################################################
+
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+${PHP_ROOT}/bin/php -v | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+${PHP_ROOT}/bin/php -i | grep .ini | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+${PHP_ROOT}/sbin/php-fpm -v | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
+for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
+do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_ROOT}/README.md ; done
+
+set -x
+
+if [ "$2" = 'tar' ];then
+  cd /usr/local
+
+  sudo tar -zxvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+
+  cd etc
+
+  sudo tar -zxvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+
+sudo mv /usr/local/php${PHP_NUM}.tar.gz /
+
+sudo mv /usr/local/etc/php${PHP_NUM}-etc.tar.gz /
+
+fi

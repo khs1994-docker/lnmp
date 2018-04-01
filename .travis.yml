@@ -46,6 +46,10 @@ before_install:
 - docker --version
 - docker-compose --version
 
+# docker login
+
+- echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+
 #
 # common end
 #
@@ -66,26 +70,66 @@ jobs:
     # Debian9 not support php56
     # use ubuntu 16.04
     - stage: wsl-php-builder-56
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=5.6.35 --build-arg OS_TYPE=ubuntu:16.04 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=5.6.35 --build-arg OS_TYPE=ubuntu:16.04 .
+        - docker-compose build wsl-php-builder-56
+        - docker-compose push wsl-php-builder-56
     - stage: wsl-php-builder-70
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.0.29 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.0.29 .
+        - docker-compose build wsl-php-builder-70
+        - docker-compose push wsl-php-builder-70
     - stage: wsl-php-builder-71
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.1.16 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.1.16 .
+        - docker-compose build wsl-php-builder-71
+        - docker-compose push wsl-php-builder-71
     - stage: wsl-php-builder-72
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.4 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.4 .
+        - docker-compose build wsl-php-builder-72
+        - docker-compose push wsl-php-builder-72
 
     #
     # wsl-rhel
     #
 
     - stage: wsl-php-builder-rhel-56
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=5.6.35 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=5.6.35 .
+        - docker-compose build wsl-php-builder-rhel-56
+        - docker-compose push wsl-php-builder-rhel-56
     - stage: wsl-php-builder-rhel-70
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.0.29 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.0.29 .
+        - docker-compose build wsl-php-builder-rhel-70
+        - docker-compose push wsl-php-builder-rhel-70
     - stage: wsl-php-builder-rhel-71
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.1.16 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.1.16 .
+        - docker-compose build wsl-php-builder-rhel-71
+        - docker-compose push wsl-php-builder-rhel-71
     - stage: wsl-php-builder-rhel-72
-      script: cd wsl ; docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.4 .
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.4 .
+        - docker-compose build wsl-php-builder-rhel-72
+        - docker-compose push wsl-php-builder-rhel-72
 
     #
     # clusterkit

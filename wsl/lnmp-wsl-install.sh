@@ -51,7 +51,7 @@ _php(){
   PHP_NUM=72
 docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
-docker run -dit --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
+docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
 sudo rm -rf /usr/local/php${PHP_NUM}
 
@@ -123,7 +123,7 @@ composer config -g repo.packagist composer https://packagist.phpcomposer.com
 # 		libssl1.0.0=$OPENSSL_VERSION \
 #     libxml2
 #
-# docker run -dit --name=${CONTAINER_NAME} httpd:2.4.33
+# docker create --name=${CONTAINER_NAME} httpd:2.4.33
 #
 # sudo rm -rf /usr/local/apache2
 #
