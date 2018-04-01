@@ -6,15 +6,19 @@ set -ex
 # Build php in WSL(Debian Ubuntu)
 #
 
-PHP_TIMEZONE=PRC
+################################################################################
 
-command -v wget || ( sudo apt update && sudo apt install wget -y)
+PHP_TIMEZONE=PRC
 
 PHP_URL=http://cn2.php.net/distributions
 
-mkdir -p /tmp/php-builder || echo
-
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
+
+################################################################################
+
+command -v wget || ( sudo apt update && sudo apt install wget -y)
+
+mkdir -p /tmp/php-builder || echo
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"

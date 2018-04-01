@@ -6,23 +6,31 @@ set -ex
 # Build php in WSL(RHEL)
 #
 
+################################################################################
+
 PHP_TIMEZONE=PRC
+
+PHP_URL=http://cn2.php.net/distributions
+
+PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
+
+################################################################################
 
 command -v wget || ( sudo yum -y update && sudo yum install wget -y)
 
 # epel
 
-sudo wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+cd /tmp
+
+sudo wget -N http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 sudo rpm -Uvh epel-release*rpm
 
+cd -
+
 #
 
-PHP_URL=http://cn2.php.net/distributions
-
 mkdir -p /tmp/php-builder || echo
-
-PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
@@ -112,11 +120,15 @@ _libzip(){
 # checking for libzip... configure: error: system libzip must be upgraded to version >= 0.11
 #
 
-wget http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el7.psychotic.x86_64.rpm
+cd /tmp
 
-wget http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el7.psychotic.x86_64.rpm
+sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el7.psychotic.x86_64.rpm
+
+sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el7.psychotic.x86_64.rpm
 
 sudo rpm -Uvh libzip*rpm
+
+cd -
 
 }
 
