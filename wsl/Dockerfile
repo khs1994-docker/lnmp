@@ -283,7 +283,7 @@ COPY --from=memcached:1.5.6 /usr/local/bin/memcached ${PHP_PREFIX}/bin/
 
 RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72 ; cd etc ; tar -zcvf wsl-php72-etc.tar.gz php72
 
-FROM hello-world
+FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1
 
 # scratch
 
