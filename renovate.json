@@ -8,5 +8,9 @@
   "extends": [
     "config:base",
     "docker:enableMajor"
+  ],
+  "ignorePaths": [
+    "dockerfile/php-fpm/5.6",
+    "dockerfile/php-fpm/7.0"
   ]
 }
