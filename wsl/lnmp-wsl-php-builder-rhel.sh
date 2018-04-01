@@ -6,6 +6,8 @@ set -ex
 # Build php in WSL(Debian Ubuntu)
 #
 
+PHP_TIMEZONE=PRC
+
 command -v wget || ( sudo yum -y update && sudo yum install wget -y)
 
 # epel
@@ -320,10 +322,12 @@ done
 if [ ${PHP_NUM} -ge 72 ];then
 
 echo "zend_extension=opcache" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 else
 
 echo "zend_extension=opcache.so" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 fi
 
@@ -402,19 +406,27 @@ ${PHP_ROOT}/sbin/php-fpm -v | sudo tee -a ${PHP_ROOT}/README.md
 
 echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
 
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_ROOT}/README.md ; done
 
 set -x
 
+cat ${PHP_ROOT}/README.md
+
 if [ "$2" = 'tar' ];then
   cd /usr/local
 
-  sudo tar -zxvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
 
   cd etc
 
-  sudo tar -zxvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+  sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
 sudo mv /usr/local/php${PHP_NUM}.tar.gz /
 
