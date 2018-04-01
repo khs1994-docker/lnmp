@@ -56,6 +56,8 @@ esac
 
 export PHP_ROOT=/usr/local/php${PHP_NUM}
 
+sudo rm -rf ${PHP_ROOT} || echo
+
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 # verify os
@@ -378,8 +380,49 @@ ${PHP_ROOT}/bin/php -v
 
 ${PHP_ROOT}/bin/php -i | grep .ini
 
-${PHP_ROOT}/bin/php-fpm -v
+${PHP_ROOT}/sbin/php-fpm -v
 
-set +e
+set +x
 
-for ext in `ls /usr/local/src/php-${PHP_VERSION}`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
+do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+
+################################################################################
+
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+${PHP_ROOT}/bin/php -v | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+${PHP_ROOT}/bin/php -i | grep .ini | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+${PHP_ROOT}/sbin/php-fpm -v | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
+for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
+do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_ROOT}/README.md ; done
+
+set -x
+
+if [ "$2" = 'tar' ];then
+  cd /usr/local
+
+  sudo tar -zxvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+
+  cd etc
+
+  sudo tar -zxvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+
+sudo mv /usr/local/php${PHP_NUM}.tar.gz /
+
+sudo mv /usr/local/etc/php${PHP_NUM}-etc.tar.gz /
+
+fi

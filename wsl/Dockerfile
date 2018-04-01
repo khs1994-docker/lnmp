@@ -283,7 +283,9 @@ COPY --from=memcached:1.5.6 /usr/local/bin/memcached ${PHP_PREFIX}/bin/
 
 RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72 ; cd etc ; tar -zcvf wsl-php72-etc.tar.gz php72
 
-FROM alpine:latest@sha256:7df6db5aa61ae9480f52f0b3a06a140ab98d427f86d8d5de0bedab9b8df6b1c0
+FROM hello-world
+
+# scratch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

@@ -5,3 +5,68 @@ services:
   wsl:
     build: .
     image: khs1994/wsl:latest@sha256:d8c465d9e60070358d68002d25694e0734b10c6b6c26619f7295756318634a64
+
+  wsl-php-builder-56:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - OS_TYPE=ubuntu:16.04
+        - PHP_VERSION=${PHP_VERSION_56:-5.6.35}
+    image: khs1994/wsl:php-builder-56-${PHP_VERSION_56:-5.6.35}
+
+  wsl-php-builder-70:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_70:-7.0.29}
+    image: khs1994/wsl:php-builder-70-${PHP_VERSION_70:-7.0.29}
+
+  wsl-php-builder-71:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_71:-7.1.16}
+    image: khs1994/wsl:php-builder-71-${PHP_VERSION_71:-7.1.16}
+
+  wsl-php-builder-72:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.4}
+    image: khs1994/wsl:php-builder-72-${PHP_VERSION_72:-7.2.4}
+
+  wsl-php-builder-rhel-56:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_56:-5.6.35}
+    image: khs1994/wsl:php-builder-rhel-56-${PHP_VERSION_56:-5.6.35}
+
+  wsl-php-builder-rhel-70:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_70:-7.0.29}
+    image: khs1994/wsl:php-builder-rhel-70-${PHP_VERSION_70:-7.0.29}
+
+  wsl-php-builder-rhel-71:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_71:-7.1.16}
+    image: khs1994/wsl:php-builder-rhel-71-${PHP_VERSION_71:-7.1.16}
+
+  wsl-php-builder-rhel-72:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.4}
+    image: khs1994/wsl:php-builder-rhel-72-${PHP_VERSION_72:-7.2.4}
