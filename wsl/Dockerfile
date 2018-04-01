@@ -4,6 +4,8 @@ FROM debian:stretch-slim@sha256:613efd414e9818dcef858201484a94603a548a0e04fd4356
 
 ARG PHP_VERSION=7.2.4
 
+ARG PHP_NUM=72
+
 ARG PHP_PREFIX=/usr/local/php72
 
 ARG PHP_INI_DIR=/usr/local/etc/php72
@@ -255,7 +257,9 @@ RUN set -eux; \
           }" \
   && php /tmp/installer.php --no-ansi --install-dir=/usr/local/php72/bin --filename=composer --version=${COMPOSER_VERSION} \
   && composer --ansi --version --no-interaction \
-  && rm -rf /tmp/*
+  && rm -rf /tmp/* \
+  && echo "date.timezone=${PHP_TIMEZONE:-PRC}" | tee ${PHP_INI_DIR}/conf.d/date_timezone.ini \
+  && echo "error_log=/var/log/php${PHP_NUM}.error.log" | tee ${PHP_INI_DIR}/conf.d/error_log.ini
 
       # nginx apt
 

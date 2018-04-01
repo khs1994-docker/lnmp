@@ -58,8 +58,6 @@ esac
 
 export PHP_ROOT=/usr/local/php${PHP_NUM}
 
-sudo rm -rf ${PHP_ROOT} || echo
-
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 # verify os
@@ -261,6 +259,8 @@ make -j "$(nproc)"
 
 # 6. make install
 
+sudo rm -rf ${PHP_ROOT} || echo
+
 sudo make install
 
 # 7. install extension
@@ -327,14 +327,15 @@ done
 if [ ${PHP_NUM} -ge 72 ];then
 
 echo "zend_extension=opcache" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
-echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 else
 
 echo "zend_extension=opcache.so" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
-echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 fi
+
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
+echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 
 echo "
 [global]

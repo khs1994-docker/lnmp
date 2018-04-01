@@ -3,7 +3,7 @@
 set -ex
 
 #
-# Build php in WSL(Debian Ubuntu)
+# Build php in WSL(RHEL)
 #
 
 PHP_TIMEZONE=PRC
@@ -66,8 +66,6 @@ esac
 
 export PHP_ROOT=/usr/local/php${PHP_NUM}
 
-sudo rm -rf ${PHP_ROOT} || echo
-
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 # verify os
@@ -107,6 +105,25 @@ cd /usr/local/src/php-${PHP_VERSION}
 
 # sudo yum update
 
+_libzip(){
+
+# libzip php7.2
+#
+# checking for libzip... configure: error: system libzip must be upgraded to version >= 0.11
+#
+
+wget http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el7.psychotic.x86_64.rpm
+
+wget http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el7.psychotic.x86_64.rpm
+
+sudo rpm -Uvh libzip*rpm
+
+}
+
+if [ ${PHP_NUM} = '72' ];then
+  _libzip
+fi
+
 _yum(){
 
 sudo yum info libargon2-devel > /dev/null 2>&1 || export ARGON2=false
@@ -140,7 +157,7 @@ export DEP_SOFTS="autoconf \
                         echo $( if ! [ "${ARGON2}" = 'false' ];then \
                                   echo "libargon2-devel";
                                 fi ); \
-                        echo "libsodium-devel libzip-devel"; \
+                        echo "libsodium-devel"; \
                       fi ) \
                       \
                    libyaml-devel \
@@ -179,7 +196,7 @@ _yum
 # https://blog.csdn.net/alexdream/article/details/7408453
 #
 
-sudo ln -sf /usr/lib64/libc-client.so /usr/lib/libc-client.so
+sudo ln -sf /usr/lib64/libc-client.so.2007 /usr/lib/libc-client.so
 
 # 4. configure
 
@@ -256,6 +273,8 @@ make -j "$(nproc)"
 
 # 6. make install
 
+sudo rm -rf ${PHP_ROOT} || echo
+
 sudo make install
 
 # 7. install extension
@@ -322,14 +341,15 @@ done
 if [ ${PHP_NUM} -ge 72 ];then
 
 echo "zend_extension=opcache" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
-echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 else
 
 echo "zend_extension=opcache.so" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
-echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 
 fi
+
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
+echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 
 echo "
 [global]

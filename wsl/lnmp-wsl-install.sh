@@ -49,6 +49,7 @@ _php(){
   # default install latest php version
   # current version is php 7.2.4
   PHP_NUM=72
+
 docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
 docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
@@ -78,11 +79,12 @@ sudo rm -rf wsl-php${PHP_NUM}-etc.tar.gz
 
 cd /var/log
 
+if ! [ -f php${PHP_NUM}.error.log ];then sudo touch php${PHP_NUM}.error.log ; fi
 if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}2-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
 if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
 
-sudo chmod 777 php${PHP_NUM}-*
+sudo chmod 777 php${PHP_NUM}*
 
 for file in $( ls /usr/local/php${PHP_NUM}/bin ); do sudo ln -sf /usr/local/php${PHP_NUM}/bin/$file /usr/local/bin/ ; done
 
