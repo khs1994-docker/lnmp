@@ -1,4 +1,6 @@
-FROM debian:stretch-slim
+ARG OS_TYPE=debian:stretch-slim
+
+FROM ${OS_TYPE}
 
 ARG PHP_VERSION=5.6.35
 

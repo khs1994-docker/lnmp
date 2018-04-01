@@ -58,6 +58,24 @@ case ${PHP_VERSION} in
     exit 1
 esac
 
+# verify os
+
+. /etc/os-release
+
+#
+# ID=debian
+# VERSION_ID="9"
+#
+# ID=ubuntu
+# VERSION_ID="16.04"
+#
+
+OS="$ID"
+
+if [ "$OS" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then
+  exit 1;
+fi
+
 # 1. download
 
 sudo mkdir -p /usr/local/src || echo
@@ -120,7 +138,6 @@ export DEP_SOFTS="autoconf \
                       fi ) \
                       \
                    libyaml-dev \
-                   libtidy5 \
                    libtidy-dev \
                    libxmlrpc-epi0 \
                    libxmlrpc-epi-dev \
@@ -156,7 +173,8 @@ if [ ! -d /usr/include/curl ]; then
     sudo ln -sTf "/usr/include/$debMultiarch/curl" /usr/local/include/curl
 fi
 
-sudo ln -sf /usr/lib/libc-client.a /usr/lib/x86_64-linux-gnu/libc-client.a
+# https://stackoverflow.com/questions/34272444/compiling-php7-error
+sudo ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/x86_64-linux-gnu/libc-client.a
 
 #
 # debian 9 php56 configure: error: Unable to locate gmp.h
