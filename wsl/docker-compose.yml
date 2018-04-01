@@ -4,7 +4,7 @@ services:
 
   wsl:
     build: .
-    image: khs1994/wsl:latest@sha256:d8c465d9e60070358d68002d25694e0734b10c6b6c26619f7295756318634a64
+    image: khs1994/wsl:latest@sha256:58213378f36a3764a03450629adfaa8167f71516ce9e0b6e9c1f402177308c2e
 
   wsl-php-builder-56:
     build:
