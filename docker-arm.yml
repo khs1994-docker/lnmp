@@ -176,7 +176,7 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05} ${ARM_ARCH:-arm64v8} With Pull Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.06-rc1} ${ARM_ARCH:-arm64v8} With Pull Docker Image
       - APP_ENV=development
     command: ["php-fpm","-R"]
 
