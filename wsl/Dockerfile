@@ -255,7 +255,9 @@ RUN set -eux; \
           }" \
   && php /tmp/installer.php --no-ansi --install-dir=/usr/local/php72/bin --filename=composer --version=${COMPOSER_VERSION} \
   && composer --ansi --version --no-interaction \
-  && rm -rf /tmp/*
+  && rm -rf /tmp/* \
+  && echo "date.timezone=${PHP_TIMEZONE:-PRC}" | tee ${PHP_INI_DIR}/conf.d/date_timezone.ini \
+  && echo "error_log=/var/log/php${PHP_NUM}.error.log" | tee ${PHP_INI_DIR}/conf.d/error_log.ini
 
       # nginx apt
 
