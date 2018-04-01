@@ -407,6 +407,12 @@ ${PHP_ROOT}/sbin/php-fpm -v | sudo tee -a ${PHP_ROOT}/README.md
 
 echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
 
+echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+
+cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_ROOT}/README.md
+
+echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_ROOT}/README.md ; done
 
