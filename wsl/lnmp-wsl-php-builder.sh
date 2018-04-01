@@ -410,16 +410,18 @@ echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_ROOT}/README.md ; done
 
+cat ${PHP_ROOT}/README.md
+
 set -x
 
 if [ "$2" = 'tar' ];then
   cd /usr/local
 
-  sudo tar -zxvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
 
   cd etc
 
-  sudo tar -zxvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+  sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
 sudo mv /usr/local/php${PHP_NUM}.tar.gz /
 

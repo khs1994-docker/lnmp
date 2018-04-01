@@ -25,7 +25,7 @@ Changes:
 * Add `compose` default value #241 #242
 * Add disable `redis` rdb command
 * Add Windows `mysql` conf #334 #335 #336
-* Add `WSL` php-builder script #340 #346 #347 #358
+* Add `WSL` php-builder script #340 #346 #347 #358 #359
 * Update Docker CE 18.03 Stable + Docker Compose 1.20.1 #313
 * Update `docs`
 * Update `compose file` #252
@@ -62,6 +62,8 @@ Updates:
 * httpd `2.4.33` #297 #330
 * mongodb `3.7.3` #297
 * Redis `4.0.9` #330
+
+#### [v18.03 (2018-03-11) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03)
 
 #### [v18.02 (2018-02-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02)
 

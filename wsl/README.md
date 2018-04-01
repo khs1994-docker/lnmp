@@ -44,6 +44,8 @@ export APP_ENV=wsl
 
 如果你不想编译安装，那么我写了一个脚本 （**脚本** 从 Docker 复制编译好的软件到 WSL ，或设置 apt 从软件源安装）。
 
+* https://store.docker.com/community/images/khs1994/wsl/tags
+
 ```bash
 $ lnmp-wsl-install.sh nginx | php | mysql ...
 ```
