@@ -4,4 +4,4 @@ services:
 
   wsl:
     build: .
-    image: khs1994/wsl
+    image: khs1994/wsl:latest@sha256:d8c465d9e60070358d68002d25694e0734b10c6b6c26619f7295756318634a64
