@@ -66,8 +66,6 @@ esac
 
 export PHP_ROOT=/usr/local/php${PHP_NUM}
 
-sudo rm -rf ${PHP_ROOT} || echo
-
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 # verify os
@@ -274,6 +272,8 @@ done
 make -j "$(nproc)"
 
 # 6. make install
+
+sudo rm -rf ${PHP_ROOT} || echo
 
 sudo make install
 
