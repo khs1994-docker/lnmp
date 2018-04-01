@@ -410,11 +410,11 @@ set -x
 if [ "$2" = 'tar' ];then
   cd /usr/local
 
-  sudo tar -zxvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
 
   cd etc
 
-  sudo tar -zxvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+  sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
 sudo mv /usr/local/php${PHP_NUM}.tar.gz /
 

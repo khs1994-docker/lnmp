@@ -81,7 +81,7 @@ $ ./lnmp-docker.sh development
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v18.03 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v18.05 x86_64 With Pull Docker Image
 
 development
 
@@ -162,9 +162,9 @@ $ ./lnmp-docker.sh down
 
 Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-* [v18.03 2018-03-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03)
+* [v18.05 2018-04-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.05)
 
-* ~~[v18.02 2018-02-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.02) **EOL**~~
+* ~~[v18.03 2018-03-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03) **EOL**~~
 
 ## Overview
 
