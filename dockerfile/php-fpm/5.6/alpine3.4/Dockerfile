@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM alpine:3.4
+FROM alpine:3.4@sha256:2532609239f3a96fbc30670716d87c8861b8a1974564211325633ca093b11c0b
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
