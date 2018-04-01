@@ -43,28 +43,28 @@ if [ $PHP_VERSION = 'yum' ];then PHP_VERSION=7.2.4; fi
 case ${PHP_VERSION} in
   5.6.* )
     export PHP_NUM=56
-    export PHP_ROOT=/usr/local/php56
     ;;
 
   7.0.* )
     export PHP_NUM=70
-    export PHP_ROOT=/usr/local/php70
     ;;
 
   7.1.* )
     export PHP_NUM=71
-    export PHP_ROOT=/usr/local/php71
     ;;
 
   7.2.* )
     export PHP_NUM=72
-    export PHP_ROOT=/usr/local/php72
     ;;
 
   * )
     echo "ONLY SUPPORT 5.6 +"
     exit 1
 esac
+
+export PHP_ROOT=/usr/local/php${PHP_NUM}
+
+export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 # verify os
 
@@ -151,6 +151,7 @@ export DEP_SOFTS="autoconf \
                    libc-client \
                    libc-client-devel \
                    readline readline-devel \
+                   libicu-devel
                    "
 
 for soft in ${DEP_SOFTS}
@@ -169,15 +170,18 @@ _yum
 
 # 3. bug
 
+# configure: error: Cannot find imap library (libc-client.a). Please check your c-client installation.
+#
 # https://blog.csdn.net/alexdream/article/details/7408453
+#
 
 sudo ln -sf /usr/lib64/libc-client.so /usr/lib/libc-client.so
 
 # 4. configure
 
 CONFIGURE="--prefix=${PHP_ROOT} \
-    --with-config-file-path=/usr/local/etc/php${PHP_NUM} \
-    --with-config-file-scan-dir=/usr/local/etc/php${PHP_NUM}/conf.d \
+    --with-config-file-path=${PHP_INI_DIR} \
+    --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
     --disable-cgi \
     --enable-fpm \
     --with-fpm-user=nginx \
@@ -244,7 +248,7 @@ done
 
 # 5. make
 
-make
+make -j "$(nproc)"
 
 # 6. make install
 
@@ -252,15 +256,32 @@ sudo make install
 
 # 7. install extension
 
-if [ -d /usr/local/etc/php${PHP_NUM} ];then
-    sudo mv /usr/local/etc/php${PHP_NUM} /usr/local/etc/php${PHP_NUM}.$( date +%s ).backup
+if [ -d ${PHP_INI_DIR} ];then
+    sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
 fi
 
-sudo mkdir -p /usr/local/etc/php${PHP_NUM}/conf.d
+sudo mkdir -p ${PHP_INI_DIR}/conf.d
 
-sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development /usr/local/etc/php${PHP_NUM}/php.ini
-sudo cp /usr/local/php${PHP_NUM}/etc/php-fpm.d/www.conf.default /usr/local/php${PHP_NUM}/etc/php-fpm.d/www.conf
-sudo cp /usr/local/php${PHP_NUM}/etc/php-fpm.conf.default /usr/local/php${PHP_NUM}/etc/php-fpm.conf
+sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
+
+# php5 not have php-fpm.d
+
+cd /usr/local/php${PHP_NUM}/etc/
+
+if ! [ -d php-fpm.d ]; then
+  # php5
+  sudo mkdir php-fpm.d
+  sudo cp php-fpm.conf.default php-fpm.d/www.conf
+
+  { \
+    echo '[global]'; \
+    echo "include=${PHP_ROOT}/etc/php-fpm.d/*.conf"; \
+  } | sudo tee php-fpm.conf
+
+else
+  sudo cp php-fpm.d/www.conf.default php-fpm.d/www.conf
+  sudo cp php-fpm.conf.default php-fpm.conf
+fi
 
 ${PHP_ROOT}/bin/php -v
 
@@ -268,8 +289,8 @@ ${PHP_ROOT}/bin/php -i | grep ".ini"
 
 ${PHP_ROOT}/sbin/php-fpm -v
 
-sudo ${PHP_ROOT}/bin/pear config-set php_ini /usr/local/etc/php${PHP_NUM}/php.ini
-sudo ${PHP_ROOT}/bin/pecl config-set php_ini /usr/local/etc/php${PHP_NUM}/php.ini
+sudo ${PHP_ROOT}/bin/pear config-set php_ini ${PHP_INI_DIR}/php.ini
+sudo ${PHP_ROOT}/bin/pecl config-set php_ini ${PHP_INI_DIR}/php.ini
 
 sudo ${PHP_ROOT}/bin/pecl update-channels
 
@@ -296,11 +317,11 @@ done
 
 if [ ${PHP_NUM} -ge 72 ];then
 
-echo "zend_extension=opcache" | sudo tee /usr/local/etc/php${PHP_NUM}/conf.d/extension-opcache.ini
+echo "zend_extension=opcache" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
 
 else
 
-echo "zend_extension=opcache.so" | sudo tee /usr/local/etc/php${PHP_NUM}/conf.d/extension-opcache.ini
+echo "zend_extension=opcache.so" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
 
 fi
 
@@ -346,6 +367,14 @@ sudo chmod 777 php${PHP_NUM}-*
 
 # Change php ini
 
-sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' /usr/local/etc/php${PHP_NUM}/php.ini
+sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' ${PHP_INI_DIR}/php.ini
 
 ${PHP_ROOT}/bin/php -v
+
+${PHP_ROOT}/bin/php -i | grep .ini
+
+${PHP_ROOT}/bin/php-fpm -v
+
+set +e
+
+for ext in `ls /usr/local/src/php-${PHP_VERSION}`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
