@@ -1,12 +1,31 @@
 #！/bin/bash
 
-set -ex
-
 #
 # Build php in WSL(RHEL)
 #
 # $ lnmp-wsl-php-builder.rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
 #
+
+if [ -z "$1" ];then
+  set +x
+exec echo "
+
+Build php in WSL RHEL by shell script
+
+Usage:
+
+$ lnmp-wsl-php-builder-rhel.sh 7.2.4
+
+$ lnmp-wsl-php-builder-rhel.sh 5.6.35 --skipbuild tar deb
+
+"
+else
+
+PHP_VERSION=$1
+
+fi
+
+set -ex
 
 ################################################################################
 
@@ -39,12 +58,6 @@ sudo rpm -Uvh epel-release*rpm ; cd -
 #
 
 mkdir -p /tmp/php-builder || echo
-
-if ! [ -z "$1" ];then export PHP_VERSION=$1; else \
-  read -p "Please input php version: [7.2.4] " PHP_VERSION ;
-fi
-
-PHP_VERSION=${PHP_VERSION:-7.2.4}
 
 if [ $PHP_VERSION = 'yum' ];then PHP_VERSION=7.2.4; fi
 

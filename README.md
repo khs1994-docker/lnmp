@@ -46,12 +46,6 @@ Please see [Windows 10](docs/install/windows.md).
 
 Pick one method install LNMP Docker.
 
-* **using the convenience script**
-
-  ```bash
-  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-  ```
-
 * **using `git clone`**
 
   ```bash
@@ -70,6 +64,28 @@ Pick one method install LNMP Docker.
 
   ```bash
   $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
+  ```
+
+* **Using dpkg in Debian**
+
+  ```bash
+  $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp_18.05_amd64.deb
+
+  $ sudo dpkg -i khs1994-docker-lnmp*.deb
+  ```
+
+* **using rpm in RHEL**
+
+ ```bash
+ $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp_18.05_amd64.rpm
+
+ $ sudo rpm -Uvh khs1994-docker-lnmp*.rpm
+ ```
+
+* **using the convenience script**
+
+  ```bash
+  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
   ```
 
 ### Start LNMP Demo

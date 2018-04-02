@@ -52,6 +52,14 @@ $ lnmp-wsl-install.sh nginx | php | mysql ...
 
 * PHP 版本问题：https://github.com/khs1994-docker/lnmp/issues/348
 
+* PHP 多版本共存
+
+主版本所有执行文件放到 `/usr/local/bin`，其他版本请使用绝对路径。
+
+```bash
+$ lnmp-wsl-install.sh enable php72 | php71 | php70 | php56
+```
+
 ## 特别注意 NGINX
 
 `/etc/nginx/nginx.conf` 主配置文件必须添加下面的配置项，否则 PHP 页面打开非常缓慢

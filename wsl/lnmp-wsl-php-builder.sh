@@ -1,12 +1,30 @@
 #！/bin/bash
 
-set -ex
-
 #
 # Build php in WSL(Debian Ubuntu)
 #
 # $ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb]
 #
+
+if [ -z "$1" ];then
+  exec echo "
+
+Build php in WSL Debian by shell script
+
+Usage:
+
+$ lnmp-wsl-php-builder.sh 7.2.4
+
+$ lnmp-wsl-php-builder.sh 5.6.35 --skipbuild tar deb
+
+"
+else
+
+PHP_VERSION=$1
+
+fi
+
+set -ex
 
 ################################################################################
 
@@ -31,12 +49,6 @@ export LDFLAGS="$PHP_LDFLAGS"
 command -v wget || ( sudo apt update && sudo apt install wget -y)
 
 mkdir -p /tmp/php-builder || echo
-
-if ! [ -z "$1" ];then export PHP_VERSION=$1; else \
-  read -p "Please input php version: [7.2.4] " PHP_VERSION ; \
-fi
-
-PHP_VERSION=${PHP_VERSION:-7.2.4}
 
 test $PHP_VERSION = 'apt' && PHP_VERSION=7.2.4
 
@@ -547,6 +559,11 @@ echo
 " > DEBIAN/postrm
 
 echo "#!/bin/bash
+
+if [ -d ${PHP_INI_DIR} ];then
+  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
+fi
+
 echo
 echo \"Welcome to use khs1994-wsl-php\"
 echo

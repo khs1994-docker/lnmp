@@ -161,7 +161,9 @@ jobs:
         - sh cli/build.sh deb ${TAG}
         - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
         - export DEB_NAME=khs1994-docker-lnmp_${VERSION}_amd64.deb
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "cli/${DEB_NAME}"
+        - ls -la cli
+        - sudo dpkg -i cli/${DEB_NAME}
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "cli/${DEB_NAME}" -R
 
     #
     # yum
@@ -176,7 +178,8 @@ jobs:
         - sh cli/build.sh rpm ${TAG}
         - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
         - export RPM_NAME=khs1994-docker-lnmp_${VERSION}_amd64.rpm
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "cli/${RPM_NAME}"
+        - ls -la cli
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "cli/${RPM_NAME}" -R
 
 # stages:
 #   - test
