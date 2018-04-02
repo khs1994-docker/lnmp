@@ -301,7 +301,7 @@ sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php
 
 # php5 not have php-fpm.d
 
-cd /usr/local/php${PHP_NUM}/etc/
+cd ${PHP_ROOT}/etc/
 
 if ! [ -d php-fpm.d ]; then
   # php5
@@ -460,8 +460,8 @@ if [ "$2" = 'tar' ];then
 
   sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
-sudo mv /usr/local/php${PHP_NUM}.tar.gz /
+sudo mv ${PHP_ROOT}.tar.gz /
 
-sudo mv /usr/local/etc/php${PHP_NUM}-etc.tar.gz /
+sudo mv ${PHP_INI_DIR}-etc.tar.gz /
 
 fi

@@ -107,11 +107,42 @@ cd /usr/local/src/php-${PHP_VERSION}
 
 # sudo apt update
 
-_apt(){
-
 sudo apt show libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
+export PHP_DEP="libedit2 \
+                zlib1g \
+                libxml2 \
+                openssl \
+                libsqlite3-0 \
+                libxslt1.1 \
+                libpq5 \
+                libmemcached11 \
+                libsasl2-2 \
+                libfreetype6 \
+                libpng16-16 \
+                libjpeg-turbo-progs \
+                $( if [ $PHP_NUM = "72" ];then \
+                     echo $( if ! [ "${ARGON2}" = 'false' ];then \
+                               echo "libargon2-0";
+                             fi ); \
+                     echo "libsodium18 libzip4"; \
+                   fi ) \
+                libyaml-0-2 \
+                libxmlrpc-epi0 \
+                libbz2-1.0 \
+                libexif12 \
+                libgmp10 \
+                libc-client2007e \
+                libkrb5-3 \
+
+"
+
+sudo apt install $PHP_DEP
+
+_apt(){
+
 export DEP_SOFTS="autoconf \
+                   lsb-release \
                    dpkg-dev \
                    file \
                    libc6-dev \
@@ -144,15 +175,12 @@ export DEP_SOFTS="autoconf \
                       fi ) \
                       \
                    libyaml-dev \
-                   libtidy-dev \
-                   libxmlrpc-epi0 \
+                   $( apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+                   $( apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
                    libxmlrpc-epi-dev \
-                   libbz2-1.0 \
                    libbz2-dev \
-                   libexif12 \
                    libexif-dev \
                    libgmp3-dev \
-                   libc-client2007e \
                    libc-client2007e-dev \
                    libkrb5-dev \
                    "
@@ -279,7 +307,7 @@ sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php
 
 # php5 not have php-fpm.d
 
-cd /usr/local/php${PHP_NUM}/etc/
+cd ${PHP_ROOT}/etc/
 
 if ! [ -d php-fpm.d ]; then
   # php5
@@ -438,8 +466,69 @@ if [ "$2" = 'tar' ];then
 
   sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
-sudo mv /usr/local/php${PHP_NUM}.tar.gz /
+sudo mv ${PHP_ROOT}.tar.gz /
 
-sudo mv /usr/local/etc/php${PHP_NUM}-etc.tar.gz /
+sudo mv ${PHP_INI_DIR}-etc.tar.gz /
 
 fi
+
+_deb(){
+
+rm -rf ${PHP_ROOT}
+
+cd /tmp; rm -rf khs1994-wsl-php-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php-${PHP_VERSION}
+
+echo "Package: khs1994-wsl-php
+Version: ${PHP_VERSION}
+Prioritt: optional
+Section: php
+Architecture: amd64
+Maintainer: khs1994 <khs1994@khs1994.com>
+Bugs: https://github.com/khs1994-docker/lnmp/issues
+Depends: ${PHP_DEP}
+Homepage: https://lnmp.khs1994.com
+Description: server-side, HTML-embedded scripting language (default)
+ PHP (recursive acronym for PHP: Hypertext Preprocessor) is a widely-used
+ open source general-purpose scripting language that is especially suited
+ for web development and can be embedded into HTML.
+
+" > DEBIAN/contro
+
+echo "#!/bin/bash
+
+cd /var/log
+
+if ! [ -f php${PHP_NUM}.error.log ];then sudo touch php${PHP_NUM}.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+
+sudo chmod 777 php${PHP_NUM}*
+
+for file in \$( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
+
+sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin/
+" > DEBIAN/postinstall
+
+echo "#!/bin/bash
+
+echo \"Meet issue? Please see https://github.com/khs1994-docker/lnmp/issues \"
+" > DEBIAN/postrm
+
+chmod -R 755 DEBIAN
+
+mkdir -p usr/local/etc
+
+mv ${PHP_ROOT} usr/local/php${PHP_NUM}
+
+mv ${PHP_INI_DIR} usr/local/etc/
+
+cd ..
+
+sudo dpkg-deb -b khs1994-wsl-php-${PHP_VERSION} khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
+
+echo "$ sudo dpkg -i /tmp/khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb"
+
+}
+
+if [ "$2" = 'deb' ];then _deb; fi
