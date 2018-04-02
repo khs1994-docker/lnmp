@@ -5,20 +5,36 @@
 #
 # Only Support WSL Debian
 #
-# $ lnmp-wsl-install.sh php [deb] [tar]
+# $ lnmp-wsl-install.sh php [deb | tar] [7.2.4]
 #
+
+if [ -z "$1" ];then
+  set +x
+  exec echo "
+
+Install WSL soft by shell script
+
+
+Usage:
+
+$ lnmp-wsl-install.sh php 7.2.4 [ tar | deb ]
+
+$ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
+
+$ lnmp-wsl-install.sh nginx php postgresql mysql mongodb ...
+
+"
+fi
 
 set -ex
 
 . /etc/os-release
 
-. ~/.bash_profile
+. ~/.bash_profile || echo
 
 ################################################################################
 
 if [ -z $WSL_HOME ];then exit 1 ; fi
-
-if ! [ $ID = debian ];then exit 1; fi
 
 ################################################################################
 
@@ -27,7 +43,7 @@ CONTAINER_NAME=$( date +%s )
 _nginx(){
   # apt
   if ! [ -f /etc/apt/sources.list.d/nginx.list ];then
-    echo "deb http://nginx.org/packages/mainline/debian stretch nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+    echo "deb http://nginx.org/packages/mainline/$(ID) $(lsb_release -cs) nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
   fi
 
   apt-key list | grep nginx || curl -fsSL http://nginx.org/packages/keys/nginx_signing.key | sudo apt-key add -
@@ -50,19 +66,46 @@ _php(){
   # include redis memcached
   # default install latest php version
   # current version is php 7.2.4
-  PHP_VERSION=7.2.4
-  PHP_NUM=72
+  PHP_VERSION=${1:-7.2.4}
+
+################################################################################
+
+  case ${PHP_VERSION} in
+    5.6.* )
+      export PHP_NUM=56
+      ;;
+
+    7.0.* )
+      if ! [ $ID = debian ];then exit 1; fi
+      export PHP_NUM=70
+      ;;
+
+    7.1.* )
+      if ! [ $ID = debian ];then exit 1; fi
+      export PHP_NUM=71
+      ;;
+
+    7.2.* )
+      if ! [ $ID = debian ];then exit 1; fi
+      export PHP_NUM=72
+      ;;
+
+    * )
+      echo "ONLY SUPPORT 5.6 +"
+      exit 1
+  esac
+
+################################################################################
+
+  PHP_ROOT=/usr/local/php${PHP_NUM}
+  PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 _tar(){
 docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
 docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
-sudo rm -rf /usr/local/php${PHP_NUM}
-
-if [ -d /usr/local/etc/php${PHP_NUM} ];then
-  sudo mv /usr/local/etc/php${PHP_NUM} /usr/local/etc/php${PHP_NUM}.$( date +%s ).backup
-fi
+sudo rm -rf ${PHP_ROOT}
 
 sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}.tar.gz /usr/local/
 sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}-etc.tar.gz /usr/local/etc/
@@ -77,6 +120,10 @@ sudo rm -rf wsl-php${PHP_NUM}.tar.gz
 
 cd /usr/local/etc
 
+if [ -d ${PHP_INI_DIR} ];then
+  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
+fi
+
 sudo tar -zxvf wsl-php${PHP_NUM}-etc.tar.gz
 
 sudo rm -rf wsl-php${PHP_NUM}-etc.tar.gz
@@ -90,9 +137,9 @@ if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.lo
 
 sudo chmod 777 php${PHP_NUM}*
 
-for file in $( ls /usr/local/php${PHP_NUM}/bin ); do sudo ln -sf /usr/local/php${PHP_NUM}/bin/$file /usr/local/bin/ ; done
+for file in $( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
 
-sudo ln -sf /usr/local/php${PHP_NUM}/sbin/php-fpm /usr/local/sbin
+sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin
 
 lnmp-wsl-php-builder.sh apt
 }
@@ -106,20 +153,20 @@ _deb(){
 
     docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME}
 
-    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb
+    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
 
     docker rm -f ${CONTAINER_NAME}
 
-    sudo dpkg -i ${DEB_NAME}
+    sudo dpkg -i ${DEB_NAME}.deb
 }
 
-if [ -z "$1" ];then
+if [ -z "$2" ];then
 
 _tar
 
 else
 
-_"$1"
+_"$2"
 
 fi
 
@@ -171,7 +218,7 @@ _postgresql(){
   # @link https://www.postgresql.org/download/linux/debian/
 
  if ! [ -f /etc/apt/sources.list.d/postgresql.list ];then
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql.list
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $( lsb_release -cs )-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql.list
   fi
 
   apt-key list | grep PostgreSQL || wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -211,6 +258,20 @@ _list(){
   set +x
   for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
 }
+
+_enable(){
+  PHP_ROOT=/usr/local/$1
+
+  if ! [ -d ${PHP_ROOT} ];then exit 1; fi
+
+  for file in $( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
+
+  sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin
+}
+
+if [ "$1" = 'enable' ];then shift ; _enable "$@"; exit $?; fi
+
+if [ "$1" = "php" ];then shift ; _php "$@"; exit $?; fi
 
 if ! [ -z "$1" ];then
 

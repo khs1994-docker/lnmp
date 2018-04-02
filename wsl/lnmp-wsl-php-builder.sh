@@ -1,12 +1,30 @@
 #！/bin/bash
 
-set -ex
-
 #
 # Build php in WSL(Debian Ubuntu)
 #
 # $ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb]
 #
+
+if [ -z "$1" ];then
+  exec echo "
+
+Build php in WSL Debian by shell script
+
+Usage:
+
+$ lnmp-wsl-php-builder.sh 7.2.4
+
+$ lnmp-wsl-php-builder.sh 5.6.35 --skipbuild tar deb
+
+"
+else
+
+PHP_VERSION=$1
+
+fi
+
+set -ex
 
 ################################################################################
 
@@ -31,12 +49,6 @@ export LDFLAGS="$PHP_LDFLAGS"
 command -v wget || ( sudo apt update && sudo apt install wget -y)
 
 mkdir -p /tmp/php-builder || echo
-
-if ! [ -z "$1" ];then export PHP_VERSION=$1; else \
-  read -p "Please input php version: [7.2.4] " PHP_VERSION ; \
-fi
-
-PHP_VERSION=${PHP_VERSION:-7.2.4}
 
 test $PHP_VERSION = 'apt' && PHP_VERSION=7.2.4
 
@@ -114,7 +126,7 @@ cd /usr/local/src/php-${PHP_VERSION}
 
 # sudo apt update
 
-sudo apt show libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
+sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 export PHP_DEP="libedit2 \
 zlib1g \
@@ -135,6 +147,8 @@ echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libsodium18 libzip4"; \
    fi ) \
 libyaml-0-2 \
+$( sudo apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+$( sudo apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -180,8 +194,7 @@ export DEP_SOFTS="autoconf \
                       fi ) \
                       \
                    libyaml-dev \
-                   $( apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
-                   $( apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+                   libtidy-dev \
                    libxmlrpc-epi-dev \
                    libbz2-dev \
                    libexif-dev \
@@ -440,7 +453,7 @@ do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $e
 
 ################################################################################
 
-write_version(){
+_write_version(){
 echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
 
 ${PHP_ROOT}/bin/php -v | sudo tee -a ${PHP_ROOT}/README.md
@@ -473,6 +486,8 @@ cat ${PHP_ROOT}/README.md
 set -x
 
 }
+
+################################################################################
 
 for command in "$@"
 do
@@ -544,6 +559,11 @@ echo
 " > DEBIAN/postrm
 
 echo "#!/bin/bash
+
+if [ -d ${PHP_INI_DIR} ];then
+  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
+fi
+
 echo
 echo \"Welcome to use khs1994-wsl-php\"
 echo

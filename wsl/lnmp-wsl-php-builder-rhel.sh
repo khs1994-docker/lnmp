@@ -1,12 +1,31 @@
 #！/bin/bash
 
-set -ex
-
 #
 # Build php in WSL(RHEL)
 #
 # $ lnmp-wsl-php-builder.rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
 #
+
+if [ -z "$1" ];then
+  set +x
+exec echo "
+
+Build php in WSL RHEL by shell script
+
+Usage:
+
+$ lnmp-wsl-php-builder-rhel.sh 7.2.4
+
+$ lnmp-wsl-php-builder-rhel.sh 5.6.35 --skipbuild tar deb
+
+"
+else
+
+PHP_VERSION=$1
+
+fi
+
+set -ex
 
 ################################################################################
 
@@ -39,12 +58,6 @@ sudo rpm -Uvh epel-release*rpm ; cd -
 #
 
 mkdir -p /tmp/php-builder || echo
-
-if ! [ -z "$1" ];then export PHP_VERSION=$1; else \
-  read -p "Please input php version: [7.2.4] " PHP_VERSION ;
-fi
-
-PHP_VERSION=${PHP_VERSION:-7.2.4}
 
 if [ $PHP_VERSION = 'yum' ];then PHP_VERSION=7.2.4; fi
 
@@ -135,7 +148,7 @@ sudo rpm -Uvh libzip*rpm ; cd -
 
 test ${PHP_NUM} = '72' && _libzip
 
-sudo yum info libargon2-devel > /dev/null 2>&1 || export ARGON2=false
+sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 export PHP_DEP="libedit \
 zlib \
@@ -169,8 +182,6 @@ libicu"
 sudo yum install -y ${PHP_DEP}
 
 _yum(){
-
-sudo yum info libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 export DEP_SOFTS="autoconf \
                    dpkg-dev \
@@ -438,6 +449,8 @@ sudo chmod 777 php${PHP_NUM}-*
 
 sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' ${PHP_INI_DIR}/php.ini
 
+_test(){
+
 ${PHP_ROOT}/bin/php -v
 
 ${PHP_ROOT}/bin/php -i | grep .ini
@@ -448,8 +461,10 @@ set +x
 
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
-
+}
 ################################################################################
+
+_write_version(){
 
 echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
 
@@ -491,7 +506,7 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test ${SKIP_BUILD} != 1 &&  _builder
+test ${SKIP_BUILD} != 1 && ( _builder ; _test ; _write_version )
 
 ################################################################################
 
