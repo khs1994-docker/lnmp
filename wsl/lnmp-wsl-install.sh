@@ -48,8 +48,10 @@ _php(){
   # include redis memcached
   # default install latest php version
   # current version is php 7.2.4
+  PHP_VERSION=7.2.4
   PHP_NUM=72
 
+_tar(){
 docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
 docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
@@ -91,6 +93,27 @@ for file in $( ls /usr/local/php${PHP_NUM}/bin ); do sudo ln -sf /usr/local/php$
 sudo ln -sf /usr/local/php${PHP_NUM}/sbin/php-fpm /usr/local/sbin
 
 lnmp-wsl-php-builder.sh apt
+}
+
+_deb(){
+    DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-$( . /etc/os-release ; echo $ID )-$( lsb_release -cs )_amd64
+
+    docker pull khs1994/wsl:${DEB_NAME}
+
+    docker create --name=${CONTAINER_NAME}
+
+    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb
+}
+
+if [ -z "$1" ];then
+
+_tar
+
+else
+
+_"$1"
+
+fi
 
 echo "##########################################################################"
 

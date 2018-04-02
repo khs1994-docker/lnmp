@@ -16,10 +16,6 @@ PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
 ################################################################################
 
-command -v wget || ( sudo apt update && sudo apt install wget -y)
-
-mkdir -p /tmp/php-builder || echo
-
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
 PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
@@ -28,15 +24,21 @@ export CFLAGS="$PHP_CFLAGS"
 export CPPFLAGS="$PHP_CPPFLAGS"
 export LDFLAGS="$PHP_LDFLAGS"
 
-if ! [ -z "$1" ];then
-  export PHP_VERSION=$1
-else
-  read -p "Please input php version: [7.2.4] " PHP_VERSION
+################################################################################
+
+command -v wget || ( sudo apt update && sudo apt install wget -y)
+
+mkdir -p /tmp/php-builder || echo
+
+if ! [ -z "$1" ];then export PHP_VERSION=$1; else \
+  read -p "Please input php version: [7.2.4] " PHP_VERSION ; \
 fi
 
 PHP_VERSION=${PHP_VERSION:-7.2.4}
 
-if [ $PHP_VERSION = 'apt' ];then PHP_VERSION=7.2.4; fi
+test $PHP_VERSION = 'apt' && PHP_VERSION=7.2.4
+
+################################################################################
 
 case ${PHP_VERSION} in
   5.6.* )
@@ -64,6 +66,8 @@ export PHP_ROOT=/usr/local/php${PHP_NUM}
 
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
+################################################################################
+
 # verify os
 
 . /etc/os-release
@@ -76,11 +80,12 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 # VERSION_ID="16.04"
 #
 
-OS="$ID"
-
-if [ "$OS" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then
+if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then
+  echo "debian9 notsupport php56"
   exit 1;
 fi
+
+################################################################################
 
 # 1. download
 
@@ -90,9 +95,7 @@ if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
   echo -e "Download php src ...\n\n"
 
-  cd /usr/local/src
-
-  sudo chmod 777 /usr/local/src
+  cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
   wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz
 
@@ -103,15 +106,46 @@ fi
 
 cd /usr/local/src/php-${PHP_VERSION}
 
+################################################################################
+
 # 2. install packages
 
 # sudo apt update
 
-_apt(){
-
 sudo apt show libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
+export PHP_DEP="libedit2 \
+zlib1g \
+libxml2 \
+openssl \
+libsqlite3-0 \
+libxslt1.1 \
+libpq5 \
+libmemcached11 \
+libsasl2-2 \
+libfreetype6 \
+libpng16-16 \
+libjpeg-turbo-progs \
+$( if [ $PHP_NUM = "72" ];then \
+echo $( if ! [ "${ARGON2}" = 'false' ];then \
+          echo "libargon2-0";
+          fi ); \
+echo "libsodium18 libzip4"; \
+   fi ) \
+libyaml-0-2 \
+libxmlrpc-epi0 \
+libbz2-1.0 \
+libexif12 \
+libgmp10 \
+libc-client2007e \
+libkrb5-3"
+
+sudo apt install -y $PHP_DEP
+
+_apt(){
+
 export DEP_SOFTS="autoconf \
+                   lsb-release \
                    dpkg-dev \
                    file \
                    libc6-dev \
@@ -144,15 +178,12 @@ export DEP_SOFTS="autoconf \
                       fi ) \
                       \
                    libyaml-dev \
-                   libtidy-dev \
-                   libxmlrpc-epi0 \
+                   $( apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+                   $( apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
                    libxmlrpc-epi-dev \
-                   libbz2-1.0 \
                    libbz2-dev \
-                   libexif12 \
                    libexif-dev \
                    libgmp3-dev \
-                   libc-client2007e \
                    libc-client2007e-dev \
                    libkrb5-dev \
                    "
@@ -162,18 +193,22 @@ do
     sudo echo $soft >> ${PHP_INSTALL_LOG}
 done
 
-sudo apt update
-
-sudo apt install -y --no-install-recommends ${DEP_SOFTS}
+sudo apt update ; sudo apt install -y --no-install-recommends ${DEP_SOFTS}
 }
 
 if [ "$1" = apt ];then _apt ; exit $?; fi
 
 _apt
 
+################################################################################
+
+
+_builder(){
+
 # 3. bug
 
 debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"
+
 # https://bugs.php.net/bug.php?id=74125
 if [ ! -d /usr/include/curl ]; then
     sudo ln -sTf "/usr/include/$debMultiarch/curl" /usr/local/include/curl
@@ -187,6 +222,8 @@ sudo ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/x86_64-linux-gnu/libc-clien
 #
 
 sudo ln -sf /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
+
+################################################################################
 
 # 4. configure
 
@@ -250,10 +287,9 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-xmlrpc \
     "
 
-for a in ${CONFIGURE}
-do
-  sudo echo $a >> ${PHP_INSTALL_LOG}
-done
+for a in ${CONFIGURE}; do sudo echo $a >> ${PHP_INSTALL_LOG}; done
+
+################################################################################
 
 ./configure ${CONFIGURE}
 
@@ -269,9 +305,7 @@ sudo make install
 
 # 7. install extension
 
-if [ -d ${PHP_INI_DIR} ];then
-    sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
-fi
+if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
 sudo mkdir -p ${PHP_INI_DIR}/conf.d
 
@@ -279,7 +313,7 @@ sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php
 
 # php5 not have php-fpm.d
 
-cd /usr/local/php${PHP_NUM}/etc/
+cd ${PHP_ROOT}/etc/
 
 if ! [ -d php-fpm.d ]; then
   # php5
@@ -358,19 +392,19 @@ group = nginx
 request_slowlog_timeout = 5
 slowlog = /var/log/php${PHP_NUM}-fpm.slow.log
 
-listen 9000
+; listen 9000
+env[APP_ENV] = development
 
 ;
 ; wsl
 ;
-; listen = /var/run/php-fpm${PHP_NUM}.sock
-;
-; listen.owner = nginx
-; listen.group = nginx
-; listen.mode = 0660
-; env[APP_ENV] = wsl
 
-env[APP_ENV] = development
+listen = /var/run/php-fpm${PHP_NUM}.sock
+listen.owner = nginx
+listen.group = nginx
+listen.mode = 0660
+env[APP_ENV] = wsl
+
 " | sudo tee ${PHP_ROOT}/etc/php-fpm.d/zz-$( . /etc/os-release ; echo $ID ).conf
 
 cd /var/log
@@ -384,6 +418,11 @@ sudo chmod 777 php${PHP_NUM}-*
 # Change php ini
 
 sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' ${PHP_INI_DIR}/php.ini
+}
+
+################################################################################
+
+_test(){
 
 ${PHP_ROOT}/bin/php -v
 
@@ -395,9 +434,11 @@ set +x
 
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+}
 
 ################################################################################
 
+write_version(){
 echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
 
 ${PHP_ROOT}/bin/php -v | sudo tee -a ${PHP_ROOT}/README.md
@@ -429,17 +470,108 @@ cat ${PHP_ROOT}/README.md
 
 set -x
 
-if [ "$2" = 'tar' ];then
-  cd /usr/local
+}
 
-  sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+for command in "$@"
+do
+  test $command = '--skipbuild' && export SKIP_BUILD=1
+done
 
-  cd etc
+test "${SKIP_BUILD}" != 1 &&  ( _builder ; _test ; _write_version )
 
-  sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+################################################################################
 
-sudo mv /usr/local/php${PHP_NUM}.tar.gz /
+_tar(){
+  cd /usr/local ; sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
 
-sudo mv /usr/local/etc/php${PHP_NUM}-etc.tar.gz /
+  cd etc ; sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
-fi
+  sudo mv ${PHP_ROOT}.tar.gz /
+
+  sudo mv ${PHP_INI_DIR}-etc.tar.gz /
+}
+
+################################################################################
+
+_deb(){
+
+cd /tmp; rm -rf khs1994-wsl-php-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php-${PHP_VERSION}
+
+echo "Package: khs1994-wsl-php
+Version: ${PHP_VERSION}
+Prioritt: optional
+Section: php
+Architecture: amd64
+Maintainer: khs1994 <khs1994@khs1994.com>
+Bugs: https://github.com/khs1994-docker/lnmp/issues
+Depends: $( echo ${PHP_DEP} | sed "s# #, #g" )
+Homepage: https://lnmp.khs1994.com
+Description: server-side, HTML-embedded scripting language (default)
+ PHP (recursive acronym for PHP: Hypertext Preprocessor) is a widely-used
+ open source general-purpose scripting language that is especially suited
+ for web development and can be embedded into HTML.
+
+" > DEBIAN/control
+
+echo "#!/bin/bash
+
+cd /var/log
+
+if ! [ -f php${PHP_NUM}.error.log ];then sudo touch php${PHP_NUM}.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+
+sudo chmod 777 php${PHP_NUM}*
+
+for file in \$( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
+
+sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin/
+" > DEBIAN/postinst
+
+echo "#!/bin/bash
+
+echo \"Meet issue? Please see https://github.com/khs1994-docker/lnmp/issues \"
+" > DEBIAN/postrm
+
+chmod -R 755 DEBIAN
+
+mkdir -p usr/local/etc
+
+sudo cp -a ${PHP_ROOT} usr/local/php${PHP_NUM}
+
+sudo cp -a ${PHP_INI_DIR} usr/local/etc/
+
+cd ..
+
+DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
+
+sudo dpkg-deb -b khs1994-wsl-php-${PHP_VERSION} $DEB_NAME
+
+sudo cp -a /tmp/${DEB_NAME} /
+
+echo "$ sudo dpkg -i ${DEB_NAME}"
+
+sudo rm -rf $PHP_ROOT
+
+sudo rm -rf $PHP_INI_DIR
+
+sudo dpkg -i /${DEB_NAME}
+
+# test
+
+_test
+
+}
+
+################################################################################
+
+for command in "$@"
+do
+  test $command = 'tar' && _tar
+  test $command = 'deb' && _deb
+done
+
+ls -la /*.tar.gz
+
+ls -la /*.deb

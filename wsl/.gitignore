@@ -3,6 +3,8 @@
 !README.md
 !nginx
 !httpd
+!deb
+!yum
 !lnmp-docker-cli.sh
 !lnmp-wsl-init.sh
 !lnmp-wsl.sh

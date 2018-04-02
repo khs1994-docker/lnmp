@@ -278,7 +278,6 @@ https://doc.lnmp.khs1994.com
 
 ## 更多资料
 
-* [LNMP 容器默认配置](https://github.com/khs1994-docker/lnmp-default-config)
 * [Docker Compose 中国镜像](https://github.com/khs1994-docker/compose-cn-mirror)
 * [Docker 从入门到实践](https://github.com/yeasy/docker_practice)
 * [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
