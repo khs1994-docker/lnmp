@@ -146,12 +146,36 @@ jobs:
     # - stage: redis-cluster-by-ruby
     #   script:
 
+    #
+    # deg
+    #
+
+    - stage: deb
+      script:
+        - apt update ; apt install
+        - sh cli/build.sh deb v18.05 # ${TRAVIS_TAG}
+
+    #
+    # yum
+    #
+
+    - stage: yum
+      script:
+        - sudo apt update ; sudo apt install rpm
+        - sh cli/build.sh rpm v18.05 # ${TRAVIS_TAG}
+
 # stages:
 #   - test
 #   # - name: deploy
 #   #   if: tag =~ ^[0-9.]+$
 #   #   if: branch = master
 #   #   if: type IN (push, pull_request, api, cron)
+
+stages:
+  - name: deb
+    if: tag =~ ^v
+  - name: yum
+    if: tag =~ ^v
 
 branches:
   only:

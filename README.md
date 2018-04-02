@@ -266,7 +266,6 @@ Please see [Contributing](CONTRIBUTING.md)
 
 ## More Information
 
-* [LNMP Docker Containers default configuration file](https://github.com/khs1994-docker/lnmp-default-config)
 * [docker_practice](https://github.com/yeasy/docker_practice)
 * [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/)
 * [Share Compose configurations between files and projects](https://docs.docker.com/compose/extends/)
