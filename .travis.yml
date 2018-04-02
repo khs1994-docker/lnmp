@@ -172,10 +172,10 @@ jobs:
 #   #   if: type IN (push, pull_request, api, cron)
 
 stages:
-  - deb
-    # if: tag =~ ^v
-  - yum
-    # if: tag =~ ^v
+  - name: deb
+    if: tag =~ ^v
+  - name: yum
+    if: tag =~ ^v
 
 branches:
   only:

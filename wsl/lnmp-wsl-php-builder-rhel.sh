@@ -5,6 +5,8 @@ set -ex
 #
 # Build php in WSL(RHEL)
 #
+# $ lnmp-wsl-php-builder.rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
+#
 
 ################################################################################
 
@@ -100,7 +102,7 @@ if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
   cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz
+  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 
   echo -e "Untar ...\n\n"
 

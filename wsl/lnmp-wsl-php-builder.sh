@@ -5,6 +5,8 @@ set -ex
 #
 # Build php in WSL(Debian Ubuntu)
 #
+# $ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb]
+#
 
 ################################################################################
 
@@ -97,7 +99,7 @@ if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
   cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz
+  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 
   echo -e "Untar ...\n\n"
 
@@ -495,7 +497,9 @@ _tar(){
 
 _deb(){
 
-cd /tmp; rm -rf khs1994-wsl-php-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php-${PHP_VERSION}
+cd /tmp; sudo rm -rf khs1994-wsl-php-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php-${PHP_VERSION}
+
+################################################################################
 
 echo "Package: khs1994-wsl-php
 Version: ${PHP_VERSION}
@@ -515,6 +519,8 @@ Description: server-side, HTML-embedded scripting language (default)
 
 echo "#!/bin/bash
 
+# log
+
 cd /var/log
 
 if ! [ -f php${PHP_NUM}.error.log ];then sudo touch php${PHP_NUM}.error.log ; fi
@@ -524,15 +530,26 @@ if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.lo
 
 sudo chmod 777 php${PHP_NUM}*
 
-for file in \$( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
+# bin sbin
+
+for file in \$( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/\$file /usr/local/bin/ ; done
 
 sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin/
 " > DEBIAN/postinst
 
 echo "#!/bin/bash
-
+echo
 echo \"Meet issue? Please see https://github.com/khs1994-docker/lnmp/issues \"
+echo
 " > DEBIAN/postrm
+
+echo "#!/bin/bash
+echo
+echo \"Welcome to use khs1994-wsl-php\"
+echo
+" > DEBIAN/preinst
+
+################################################################################
 
 chmod -R 755 DEBIAN
 

@@ -5,6 +5,8 @@
 #
 # Only Support WSL Debian
 #
+# $ lnmp-wsl-install.sh php [deb] [tar]
+#
 
 set -ex
 
@@ -96,13 +98,19 @@ lnmp-wsl-php-builder.sh apt
 }
 
 _deb(){
+    cd /tmp
+
     DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-$( . /etc/os-release ; echo $ID )-$( lsb_release -cs )_amd64
 
     docker pull khs1994/wsl:${DEB_NAME}
 
-    docker create --name=${CONTAINER_NAME}
+    docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME}
 
     docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb
+
+    docker rm -f ${CONTAINER_NAME}
+
+    sudo dpkg -i ${DEB_NAME}
 }
 
 if [ -z "$1" ];then
