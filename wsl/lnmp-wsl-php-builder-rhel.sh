@@ -5,6 +5,8 @@ set -ex
 #
 # Build php in WSL(RHEL)
 #
+# $ lnmp-wsl-php-builder.rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
+#
 
 ################################################################################
 
