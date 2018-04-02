@@ -2,10 +2,13 @@ Package: khs1994-docker-lnmp
 Version: KHS1994_DOCKER_VERSION
 Prioritt: optional
 Section: admin
-Architecture: amd64
+Architecture: all
 Maintainer: khs1994 <khs1994@khs1994.com>
+Documents: https://github.com/khs1994-docker/lnmp/tree/master/docs
 Bugs: https://github.com/khs1994-docker/lnmp/issues
 Depends: git, curl
 Suggests: docker-ce
 Homepage: https://lnmp.khs1994.com
+Vcs-Git: https://github.com/khs1994-docker/lnmp
+Vcs-Browser: https://github.com/khs1994-docker/lnmp
 Description: khs1994-docker/lnmp: Start LNMP In less than 2 minutes Powered by Docker Compose.

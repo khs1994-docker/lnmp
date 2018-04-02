@@ -139,7 +139,8 @@ libmemcached11 \
 libsasl2-2 \
 libfreetype6 \
 libpng16-16 \
-libjpeg-turbo-progs \
+$( sudo apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
+$( sudo apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
 $( if [ $PHP_NUM = "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
           echo "libargon2-0";
@@ -154,7 +155,11 @@ libbz2-1.0 \
 libexif12 \
 libgmp10 \
 libc-client2007e \
-libkrb5-3"
+libkrb5-3 \
+libxpm4 \
+libwebp6 \
+libenchant1c2a \
+libldap-2.4-2"
 
 sudo apt install -y $PHP_DEP
 
@@ -181,7 +186,8 @@ export DEP_SOFTS="autoconf \
                    libsasl2-dev \
                    libfreetype6-dev \
                    libpng-dev \
-                   libjpeg-dev \
+                   $( sudo apt install -y libjpeg62-turbo-dev > /dev/null 2>&1 && echo libjpeg62-turbo-dev ) \
+                   $( sudo apt install -y libjpeg-turbo8-dev > /dev/null 2>&1 && echo libjpeg-turbo8-dev ) \
                    \
                    $( test $PHP_NUM = "56" && echo "" ) \
                    $( test $PHP_NUM = "70" && echo "" ) \
@@ -201,6 +207,13 @@ export DEP_SOFTS="autoconf \
                    libgmp3-dev \
                    libc-client2007e-dev \
                    libkrb5-dev \
+                   \
+                   libxpm-dev \
+                   libwebp-dev \
+                   libenchant-dev \
+                   libldap2-dev \
+                   libpspell-dev \
+                   libsnmp-dev \
                    "
 
 for soft in ${DEP_SOFTS}
@@ -238,6 +251,12 @@ sudo ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/x86_64-linux-gnu/libc-clien
 
 sudo ln -sf /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
+#
+# https://stackoverflow.com/questions/43617752/docker-php-and-freetds-cannot-find-freetds-in-know-installation-directories
+#
+
+# sudo ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/
+
 ################################################################################
 
 # 4. configure
@@ -250,21 +269,26 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-fpm-user=nginx \
     --with-fpm-group=nginx \
     --with-curl \
-    --with-gd \
     --with-gettext \
     --with-iconv-dir \
     --with-kerberos \
     --with-libedit \
     --with-openssl \
+        --with-system-ciphers \
     --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
+    --with-pdo-dblib=shared \
     --with-xsl \
     --with-zlib \
     --with-mhash \
-    --with-png-dir=/usr/lib \
-    --with-jpeg-dir=/usr/lib\
-    --with-freetype-dir=/usr/lib \
+    --with-gd \
+        --with-freetype-dir=/usr/lib \
+        --disable-gd-jis-conv \
+        --with-jpeg-dir=/usr/lib \
+        --with-png-dir=/usr/lib \
+        --with-webp-dir=/usr/lib \
+        --with-xpm-dir=/usr/lib \
     --enable-ftp \
     --enable-mysqlnd \
     --enable-bcmath \
@@ -277,7 +301,9 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --enable-shmop \
     --enable-soap \
     --enable-sockets \
-    --enable-sysvsem \
+    --enable-sysvmsg=shared \
+    --enable-sysvsem=shared \
+    --enable-sysvshm=shared \
     --enable-xml \
     --enable-zip \
     --enable-calendar \
@@ -297,9 +323,21 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-bz2 \
     --with-tidy \
     --with-gmp \
-    --with-imap \
-    --with-imap-ssl \
+    --with-imap=shared \
+        --with-imap-ssl \
     --with-xmlrpc \
+    \
+    --with-pic \
+    --with-enchant \
+    --enable-fileinfo \
+    --with-ldap \
+        --with-ldap-sasl \
+    --enable-phar \
+    --enable-posix \
+    --with-pspell \
+    --enable-shmop \
+    --with-snmp \
+    --enable-wddx \
     "
 
 for a in ${CONFIGURE}; do sudo echo $a >> ${PHP_INSTALL_LOG}; done
@@ -389,6 +427,15 @@ fi
 
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
+
+exts="sysvmsg sysvsem sysvshm imap pdo_dblib"
+
+for ext in $exts
+do
+
+echo "extension=${ext}.so" | sudo tee ${PHP_INI_DIR}/conf.d/wsl-php-ext-${ext}.ini
+
+done
 
 echo "
 [global]
@@ -561,12 +608,24 @@ echo
 echo "#!/bin/bash
 
 if [ -d ${PHP_INI_DIR} ];then
-  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
+  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup
 fi
 
-echo
-echo \"Welcome to use khs1994-wsl-php\"
-echo
+echo -e \"
+
+----------------------------------------------------------------------
+
+Thanks for using khs1994-wsl-php !
+
+Please find the official documentation for khs1994-wsl-php here:
+* https://github.com/khs1994-docker/lnmp/tree/master/wsl
+
+Meet issue? please see:
+* https://github.com/khs1994-docker/lnmp/issues
+
+----------------------------------------------------------------------
+
+\"
 " > DEBIAN/preinst
 
 ################################################################################
