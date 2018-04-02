@@ -135,6 +135,8 @@ echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libsodium18 libzip4"; \
    fi ) \
 libyaml-0-2 \
+$( apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+$( apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -180,8 +182,7 @@ export DEP_SOFTS="autoconf \
                       fi ) \
                       \
                    libyaml-dev \
-                   $( apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
-                   $( apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+                   libtidy-dev \
                    libxmlrpc-epi-dev \
                    libbz2-dev \
                    libexif-dev \

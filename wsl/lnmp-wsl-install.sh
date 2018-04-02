@@ -50,18 +50,20 @@ _php(){
   # include redis memcached
   # default install latest php version
   # current version is php 7.2.4
-  PHP_VERSION=7.2.4
+  PHP_VERSION=${3:-7.2.4}
   PHP_NUM=72
+  PHP_ROOT=/usr/local/php${PHP_NUM}
+  PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 _tar(){
 docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
 docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
-sudo rm -rf /usr/local/php${PHP_NUM}
+sudo rm -rf ${PHP_ROOT}
 
-if [ -d /usr/local/etc/php${PHP_NUM} ];then
-  sudo mv /usr/local/etc/php${PHP_NUM} /usr/local/etc/php${PHP_NUM}.$( date +%s ).backup
+if [ -d ${PHP_INI_DIR} ];then
+  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
 fi
 
 sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}.tar.gz /usr/local/
@@ -90,9 +92,9 @@ if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.lo
 
 sudo chmod 777 php${PHP_NUM}*
 
-for file in $( ls /usr/local/php${PHP_NUM}/bin ); do sudo ln -sf /usr/local/php${PHP_NUM}/bin/$file /usr/local/bin/ ; done
+for file in $( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
 
-sudo ln -sf /usr/local/php${PHP_NUM}/sbin/php-fpm /usr/local/sbin
+sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin
 
 lnmp-wsl-php-builder.sh apt
 }
