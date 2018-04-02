@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo
+echo "Welcome to use khs1994-docker/lnmp"
+echo

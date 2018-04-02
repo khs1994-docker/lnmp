@@ -135,7 +135,7 @@ sudo rpm -Uvh libzip*rpm ; cd -
 
 test ${PHP_NUM} = '72' && _libzip
 
-sudo yum info libargon2-devel > /dev/null 2>&1 || export ARGON2=false
+sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 export PHP_DEP="libedit \
 zlib \
@@ -169,8 +169,6 @@ libicu"
 sudo yum install -y ${PHP_DEP}
 
 _yum(){
-
-sudo yum info libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 export DEP_SOFTS="autoconf \
                    dpkg-dev \
@@ -438,6 +436,8 @@ sudo chmod 777 php${PHP_NUM}-*
 
 sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' ${PHP_INI_DIR}/php.ini
 
+_test(){
+
 ${PHP_ROOT}/bin/php -v
 
 ${PHP_ROOT}/bin/php -i | grep .ini
@@ -448,8 +448,10 @@ set +x
 
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
-
+}
 ################################################################################
+
+_write_version(){
 
 echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
 
@@ -491,7 +493,7 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test ${SKIP_BUILD} != 1 &&  _builder
+test ${SKIP_BUILD} != 1 && ( _builder ; _test ; _write_version )
 
 ################################################################################
 

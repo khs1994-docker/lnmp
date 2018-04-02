@@ -114,7 +114,7 @@ cd /usr/local/src/php-${PHP_VERSION}
 
 # sudo apt update
 
-sudo apt show libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
+sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 export PHP_DEP="libedit2 \
 zlib1g \
@@ -135,8 +135,8 @@ echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libsodium18 libzip4"; \
    fi ) \
 libyaml-0-2 \
-$( apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
-$( apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+$( sudo apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+$( sudo apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -441,7 +441,7 @@ do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $e
 
 ################################################################################
 
-write_version(){
+_write_version(){
 echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
 
 ${PHP_ROOT}/bin/php -v | sudo tee -a ${PHP_ROOT}/README.md
@@ -474,6 +474,8 @@ cat ${PHP_ROOT}/README.md
 set -x
 
 }
+
+################################################################################
 
 for command in "$@"
 do
