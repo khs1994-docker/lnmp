@@ -36,6 +36,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-configure gd \
+                                    --disable-gd-jis-conv \
                                     --with-freetype-dir=/usr/include/ \
                                     --with-jpeg-dir=/usr/include/ \
         && docker-php-ext-install -j"$(nproc)" bcmath \
