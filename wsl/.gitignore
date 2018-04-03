@@ -4,7 +4,7 @@
 !nginx
 !httpd
 !deb
-!yum
+!rpm
 !lnmp-docker-cli.sh
 !lnmp-wsl-init.sh
 !lnmp-wsl.sh

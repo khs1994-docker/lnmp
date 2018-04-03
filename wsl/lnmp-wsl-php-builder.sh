@@ -50,11 +50,11 @@ command -v wget || ( sudo apt update && sudo apt install wget -y)
 
 mkdir -p /tmp/php-builder || echo
 
-test $PHP_VERSION = 'apt' && PHP_VERSION=7.2.4
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.4
 
 ################################################################################
 
-case ${PHP_VERSION} in
+case "${PHP_VERSION}" in
   5.6.* )
     export PHP_NUM=56
     ;;
@@ -159,7 +159,8 @@ libkrb5-3 \
 libxpm4 \
 libwebp6 \
 libenchant1c2a \
-libldap-2.4-2"
+libldap-2.4-2 \
+libsnmp30"
 
 sudo apt install -y $PHP_DEP
 
@@ -278,7 +279,6 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
-    --with-pdo-dblib=shared \
     --with-xsl \
     --with-zlib \
     --with-mhash \
@@ -287,7 +287,6 @@ CONFIGURE="--prefix=${PHP_ROOT} \
         --disable-gd-jis-conv \
         --with-jpeg-dir=/usr/lib \
         --with-png-dir=/usr/lib \
-        --with-webp-dir=/usr/lib \
         --with-xpm-dir=/usr/lib \
     --enable-ftp \
     --enable-mysqlnd \
@@ -310,14 +309,14 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --enable-intl \
     \
     $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
-    $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf" ) \
-    $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf" ) \
+    $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
+    $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
     \
     $( if [ $PHP_NUM = "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2";
                  fi ); \
-         echo "--with-sodium --with-libzip"; \
+         echo "--with-sodium --with-libzip --with-webp-dir=/usr/lib --with-pcre-jit"; \
        fi ) \
     --enable-exif \
     --with-bz2 \
@@ -336,7 +335,7 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --enable-posix \
     --with-pspell \
     --enable-shmop \
-    --with-snmp \
+    --with-snmp=shared \
     --enable-wddx \
     "
 
@@ -428,7 +427,7 @@ fi
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 
-exts="sysvmsg sysvsem sysvshm imap pdo_dblib"
+exts="sysvmsg sysvsem sysvshm imap snmp"
 
 for ext in $exts
 do
@@ -455,7 +454,7 @@ request_slowlog_timeout = 5
 slowlog = /var/log/php${PHP_NUM}-fpm.slow.log
 
 ; listen 9000
-env[APP_ENV] = development
+; env[APP_ENV] = development
 
 ;
 ; wsl

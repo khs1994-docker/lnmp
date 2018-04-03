@@ -59,11 +59,11 @@ sudo rpm -Uvh epel-release*rpm ; cd -
 
 mkdir -p /tmp/php-builder || echo
 
-if [ $PHP_VERSION = 'yum' ];then PHP_VERSION=7.2.4; fi
+if [ "$PHP_VERSION" = 'yum' ];then PHP_VERSION=7.2.4; fi
 
 ################################################################################
 
-case ${PHP_VERSION} in
+case "${PHP_VERSION}" in
   5.6.* )
     export PHP_NUM=56
     ;;
@@ -178,17 +178,16 @@ gmp \
 libc-client \
 readline \
 libicu \
-libxpm \
+libXpm \
 libwebp \
 enchant \
-openldap"
-
+openldap \
+net-snmp-libs"
 sudo yum install -y ${PHP_DEP}
 
 _yum(){
 
 export DEP_SOFTS="autoconf \
-                   dpkg-dev \
                    \
                    \
                    make \
@@ -228,10 +227,12 @@ export DEP_SOFTS="autoconf \
                    libc-client-devel \
                    readline-devel \
                    libicu-devel \
-                   libxpm-devel \
+                   libXpm-devel \
+                   \
                    libwebp-devel \
                    enchant-devel \
                    openldap-devel \
+                   net-snmp-devel \
                    "
 
 for soft in ${DEP_SOFTS}
@@ -280,7 +281,6 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
-    --with-pdo-dblib=shared \
     --with-xsl \
     --with-zlib \
     --with-mhash \
@@ -289,7 +289,6 @@ CONFIGURE="--prefix=${PHP_ROOT} \
         --disable-gd-jis-conv \
         --with-jpeg-dir=/usr/lib \
         --with-png-dir=/usr/lib \
-        --with-webp-dir=/usr/lib \
         --with-xpm-dir=/usr/lib \
     --enable-ftp \
     --enable-mysqlnd \
@@ -312,14 +311,14 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --enable-intl \
     \
     $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
-    $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf" ) \
-    $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf" ) \
+    $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
+    $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
     \
     $( if [ $PHP_NUM = "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2";
                  fi ); \
-         echo "--with-sodium --with-libzip"; \
+         echo "--with-sodium --with-libzip --with-webp-dir=/usr/lib --with-pcre-jit"; \
        fi ) \
     --enable-exif \
     --with-bz2 \
@@ -432,7 +431,7 @@ fi
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 
-exts="sysvmsg sysvsem sysvshm imap pdo_dblib"
+exts="sysvmsg sysvsem sysvshm imap snmp"
 
 for ext in $exts
 do
@@ -484,6 +483,8 @@ sudo chmod 777 php${PHP_NUM}-*
 # Change php ini
 
 sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' ${PHP_INI_DIR}/php.ini
+
+}
 
 _test(){
 
@@ -542,7 +543,7 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test ${SKIP_BUILD} != 1 && ( _builder ; _test ; _write_version )
+test "${SKIP_BUILD}" != 1 && ( _builder ; _test ; _write_version )
 
 ################################################################################
 
