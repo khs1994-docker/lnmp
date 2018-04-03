@@ -102,8 +102,9 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libenchant1c2a \
     libldap2-dev \
     libldap-2.4-2 \
-    libpspell-dev
-
+    libpspell-dev \
+    libsnmp30 \
+    libsnmp-dev
 
 COPY --from=php /usr/local/bin/docker-php-source /usr/local/bin/
 
@@ -134,8 +135,9 @@ RUN set -eux; \
 	if [ ! -d /usr/include/curl ]; then \
 		ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
 	fi; \
-  # https://www.howtoforge.com/tutorial/how-to-install-php-7-on-debian/
-  ln -sf /usr/lib/libc-client.a /usr/lib/x86_64-linux-gnu/libc-client.a; \
+  # X https://www.howtoforge.com/tutorial/how-to-install-php-7-on-debian/
+  # https://stackoverflow.com/questions/34272444/compiling-php7-error
+  ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/x86_64-linux-gnu/libc-client.a; \
   # https://stackoverflow.com/questions/43617752/docker-php-and-freetds-cannot-find-freetds-in-know-installation-directories
   # ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ ; \
 	./configure \
@@ -177,7 +179,6 @@ RUN set -eux; \
     --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
-    --with-pdo-dblib \
     --with-xsl \
     --with-zlib \
     --with-mhash \
@@ -205,6 +206,7 @@ RUN set -eux; \
     --with-imap=shared \
         --with-imap-ssl \
     --with-xmlrpc=shared \
+    \
     --with-pic \
     --with-enchant \
     --enable-fileinfo \
@@ -214,7 +216,7 @@ RUN set -eux; \
     --enable-posix \
     --with-pspell \
     --enable-shmop \
-    --with-snmp \
+    --with-snmp=shared \
     --enable-wddx \
     \
   # bundled pcre does not support JIT on s390x
@@ -271,6 +273,7 @@ RUN set -eux; \
                            exif \
                            gmp \
                            xmlrpc \
+                           snmp \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
        > ${PHP_PREFIX}/etc/php-fpm.d/zz-wsl.conf \
   && curl -s -f -L -o /tmp/installer.php \
