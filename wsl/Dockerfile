@@ -104,11 +104,14 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libldap-2.4-2 \
     libpspell-dev \
     libsnmp30 \
-    libsnmp-dev
+    libsnmp-dev \
+    snmp
 
 COPY --from=php /usr/local/bin/docker-php-source /usr/local/bin/
 
 COPY --from=php /usr/local/bin/docker-php-ext-* /usr/local/bin/docker-php-entrypoint /usr/local/bin/
+
+COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
 
 ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
@@ -161,9 +164,10 @@ RUN set -eux; \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
 		--with-password-argon2 \
 # https://wiki.php.net/rfc/libsodium
-		--with-sodium \
+		--with-sodium=shared \
 		\
     --with-curl \
+    --with-gettext \
     --with-gd \
         --with-freetype-dir=/usr/lib \
         --disable-gd-jis-conv \
@@ -171,53 +175,52 @@ RUN set -eux; \
         --with-png-dir=/usr/lib \
         --with-webp-dir=/usr/lib \
         --with-xpm-dir=/usr/lib \
-    --with-gettext \
     --with-kerberos \
     --with-libedit \
     --with-openssl \
         --with-system-ciphers \
     --with-pcre-regex \
     --with-pdo-mysql \
-    --with-pdo-pgsql \
-    --with-xsl \
+    --with-pdo-pgsql=shared \
+    --with-xsl=shared \
     --with-zlib \
     --with-mhash \
     --enable-bcmath \
     --enable-libxml \
     --enable-inline-optimization \
     --enable-mbregex \
-    --enable-pcntl \
-    --enable-shmop \
-    --enable-soap \
-    --enable-sockets \
+    --enable-pcntl=shared \
+    --enable-shmop=shared \
+    --enable-soap=shared \
+    --enable-sockets=shared \
     --enable-sysvmsg=shared \
     --enable-sysvsem=shared \
     --enable-sysvshm=shared \
     --enable-xml \
     --enable-zip \
         --with-libzip \
-    --enable-calendar \
-    --enable-intl \
+    --enable-calendar=shared \
+    --enable-intl=shared \
 		\
-    --enable-exif=shared \
-    --with-bz2=shared \
-    --with-tidy=shared \
-    --with-gmp=shared \
+    --enable-exif \
+    --with-bz2 \
+    --with-tidy \
+    --with-gmp \
     --with-imap=shared \
         --with-imap-ssl \
-    --with-xmlrpc=shared \
+    --with-xmlrpc \
     \
     --with-pic \
-    --with-enchant \
-    --enable-fileinfo \
-    --with-ldap \
+    --with-enchant=shared \
+    --enable-fileinfo=shared \
+    --with-ldap=shared \
         --with-ldap-sasl \
     --enable-phar \
-    --enable-posix \
-    --with-pspell \
-    --enable-shmop \
+    --enable-posix=shared \
+    --with-pspell=shared \
+    --enable-shmop=shared \
     --with-snmp=shared \
-    --enable-wddx \
+    --enable-wddx=shared \
     \
   # bundled pcre does not support JIT on s390x
   # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
@@ -228,7 +231,7 @@ RUN set -eux; \
 	make -j "$(nproc)"; \
 	make install \
   && rm -rf /usr/local/sbin \
-  && ln -s ${PHP_PREFIX}/bin /usr/local/sbin \
+  && for file in $( ls ${PHP_PREFIX}/bin ); do ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
   && set -ex \
@@ -258,6 +261,7 @@ RUN set -eux; \
                   swoole \
   && mkdir -p /usr/local/etc/php \
   && ln -s ${PHP_INI_DIR}/conf.d /usr/local/etc/php/conf.d \
+  && chmod +x /usr/local/bin/wsl-php-ext-enable.sh \
   && docker-php-ext-enable mongodb \
                            redis \
                            memcached \
@@ -268,12 +272,26 @@ RUN set -eux; \
                            opcache \
                            swoole \
                            \
-                           bz2 \
-                           tidy \
-                           exif \
-                           gmp \
-                           xmlrpc \
+                           pdo_pgsql \
+                           xsl \
+                           pcntl \
+                           shmop \
+                           soap \
+                           sockets \
+                           sysvmsg \
+                           sysvsem \
+                           sysvshm \
+                           calendar \
+                           intl \
+                           imap \
+                           enchant \
+                           fileinfo \
+                           ldap \
+                           posix \
+                           pspell \
+                           shmop \
                            snmp \
+                           wddx \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
        > ${PHP_PREFIX}/etc/php-fpm.d/zz-wsl.conf \
   && curl -s -f -L -o /tmp/installer.php \
@@ -286,8 +304,8 @@ RUN set -eux; \
               echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
               exit(1); \
           }" \
-  && php /tmp/installer.php --no-ansi --install-dir=/usr/local/php72/bin --filename=composer --version=${COMPOSER_VERSION} \
-  && composer --ansi --version --no-interaction \
+  && php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
+  && ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction \
   && rm -rf /tmp/* \
   && echo "date.timezone=${PHP_TIMEZONE:-PRC}" | tee ${PHP_INI_DIR}/conf.d/date_timezone.ini \
   && echo "error_log=/var/log/php${PHP_NUM}.error.log" | tee ${PHP_INI_DIR}/conf.d/error_log.ini
@@ -316,7 +334,13 @@ COPY --from=memcached:1.5.6 /usr/local/bin/memcached ${PHP_PREFIX}/bin/
 
       # phpmyadmin
 
-RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72 ; cd etc ; tar -zcvf wsl-php72-etc.tar.gz php72
+RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72 ; cd etc ; tar -zcvf wsl-php72-etc.tar.gz php72 \
+    && for ext in $( ls /usr/src/php/ext ); \
+        do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done \
+    && php -v \
+    && php -i | grep ".ini" \
+    && ${PHP_PREFIX}/sbin/php-fpm -v
+
 
 FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1
 

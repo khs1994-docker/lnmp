@@ -115,7 +115,7 @@ $ lnmp-wsl.sh start | restart | stop [SOFT_NAME or all]
 * https://www.khs1994.com/docker/wsl-run-docker-cli.html
 
 ```bash
-$ lnmp-docker-cli.sh
+$ lnmp-wsl-docker-cli.sh
 ```
 
 ## PHP 扩展列表

@@ -1,16 +1,23 @@
 #!/usr/bin/env bash
 
-set -ex
-
 #
 # install docker cli binary
 #
 
-command -v curl || sudo apt install curl tar
+################################################################################
 
-DOCKER_VERSION=18.03.0-ce
+DOCKER_VERSION=${1:-18.03.0-ce}
 
 # DOCKER_VERSION=18.03.0-ce-rc1
+
+################################################################################
+
+set -ex
+
+command -v curl || sudo apt install curl tar
+
+command -v docker && DOCKER_CURRENT_VERSION=$( docker --version | cut -d ' ' -f 3 ) \
+                  && test "${DOCKER_CURRENT_VERSION}" = "$DOCKER_VERSION," && exit 0;
 
 download_docker(){
   curl -SL http://mirrors.ustc.edu.cn/docker-ce/linux/static/test/x86_64/docker-${DOCKER_VERSION}.tgz | tar -zxvf -

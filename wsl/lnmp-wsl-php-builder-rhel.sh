@@ -85,7 +85,7 @@ case "${PHP_VERSION}" in
     exit 1
 esac
 
-export PHP_ROOT=/usr/local/php${PHP_NUM}
+export PHP_PREFIX=/usr/local/php${PHP_NUM}
 
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
@@ -182,7 +182,10 @@ libXpm \
 libwebp \
 enchant \
 openldap \
-net-snmp-libs"
+net-snmp-libs \
+aspell"
+
+
 sudo yum install -y ${PHP_DEP}
 
 _yum(){
@@ -233,6 +236,7 @@ export DEP_SOFTS="autoconf \
                    enchant-devel \
                    openldap-devel \
                    net-snmp-devel \
+                   aspell-devel \
                    "
 
 for soft in ${DEP_SOFTS}
@@ -251,6 +255,8 @@ _yum
 
 ################################################################################
 
+_builder(){
+
 # 3. bug
 
 # configure: error: Cannot find imap library (libc-client.a). Please check your c-client installation.
@@ -258,30 +264,32 @@ _yum
 # https://blog.csdn.net/alexdream/article/details/7408453
 #
 
-_builder(){
-
 sudo ln -sf /usr/lib64/libc-client.so.2007 /usr/lib/libc-client.so
+
+#
+# configure: error: Cannot find ldap libraries in /usr/lib.
+#
+# @link https://blog.csdn.net/ei__nino/article/details/8598490
+
+sudo cp -frp /usr/lib64/libldap* /usr/lib/
 
 # 4. configure
 
-CONFIGURE="--prefix=${PHP_ROOT} \
+CONFIGURE="--prefix=${PHP_PREFIX} \
     --with-config-file-path=${PHP_INI_DIR} \
     --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
-    --disable-cgi \
-    --enable-fpm \
-    --with-fpm-user=nginx \
-    --with-fpm-group=nginx \
+    --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
+    \
     --with-curl \
     --with-gettext \
-    --with-iconv-dir \
     --with-kerberos \
     --with-libedit \
     --with-openssl \
         --with-system-ciphers \
     --with-pcre-regex \
     --with-pdo-mysql \
-    --with-pdo-pgsql \
-    --with-xsl \
+    --with-pdo-pgsql=shared \
+    --with-xsl=shared \
     --with-zlib \
     --with-mhash \
     --with-gd \
@@ -295,20 +303,19 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --enable-bcmath \
     --enable-libxml \
     --enable-inline-optimization \
-    --enable-gd-jis-conv \
     --enable-mbregex \
     --enable-mbstring \
-    --enable-pcntl \
-    --enable-shmop \
-    --enable-soap \
-    --enable-sockets \
+    --enable-pcntl=shared \
+    --enable-shmop=shared \
+    --enable-soap=shared \
+    --enable-sockets=shared \
     --enable-sysvmsg=shared \
     --enable-sysvsem=shared \
     --enable-sysvshm=shared \
     --enable-xml \
     --enable-zip \
-    --enable-calendar \
-    --enable-intl \
+    --enable-calendar=shared \
+    --enable-intl=shared \
     \
     $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
     $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
@@ -324,21 +331,21 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-bz2 \
     --with-tidy \
     --with-gmp \
-    --with-imap \
+    --with-imap=shared \
          --with-imap-ssl \
     --with-xmlrpc \
     \
     --with-pic \
-    --with-enchant \
-    --enable-fileinfo \
-    --with-ldap \
+    --with-enchant=shared \
+    --enable-fileinfo=shared \
+    --with-ldap=shared \
         --with-ldap-sasl \
     --enable-phar \
-    --enable-posix \
-    --with-pspell \
-    --enable-shmop \
-    --with-snmp \
-    --enable-wddx \
+    --enable-posix=shared \
+    --with-pspell=shared \
+    --enable-shmop=shared \
+    --with-snmp=shared \
+    --enable-wddx=shared \
     "
 
 for a in ${CONFIGURE} ; do echo $a >> ${PHP_INSTALL_LOG}; done
@@ -351,7 +358,7 @@ make -j "$(nproc)"
 
 # 6. make install
 
-sudo rm -rf ${PHP_ROOT} || echo
+sudo rm -rf ${PHP_PREFIX} || echo
 
 sudo make install
 
@@ -369,7 +376,7 @@ sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php
 
 # php5 not have php-fpm.d
 
-cd ${PHP_ROOT}/etc/
+cd ${PHP_PREFIX}/etc/
 
 if ! [ -d php-fpm.d ]; then
   # php5
@@ -378,7 +385,7 @@ if ! [ -d php-fpm.d ]; then
 
   { \
     echo '[global]'; \
-    echo "include=${PHP_ROOT}/etc/php-fpm.d/*.conf"; \
+    echo "include=${PHP_PREFIX}/etc/php-fpm.d/*.conf"; \
   } | sudo tee php-fpm.conf
 
 else
@@ -386,21 +393,21 @@ else
   sudo cp php-fpm.conf.default php-fpm.conf
 fi
 
-${PHP_ROOT}/bin/php -v
+${PHP_PREFIX}/bin/php -v
 
-${PHP_ROOT}/bin/php -i | grep ".ini"
+${PHP_PREFIX}/bin/php -i | grep ".ini"
 
-${PHP_ROOT}/sbin/php-fpm -v
+${PHP_PREFIX}/sbin/php-fpm -v
 
-sudo ${PHP_ROOT}/bin/pear config-set php_ini ${PHP_INI_DIR}/php.ini
-sudo ${PHP_ROOT}/bin/pecl config-set php_ini ${PHP_INI_DIR}/php.ini
+# sudo ${PHP_PREFIX}/bin/pear config-set php_ini ${PHP_INI_DIR}/php.ini
+# sudo ${PHP_PREFIX}/bin/pecl config-set php_ini ${PHP_INI_DIR}/php.ini
 
-sudo ${PHP_ROOT}/bin/pecl update-channels
+sudo ${PHP_PREFIX}/bin/pecl update-channels
 
-${PHP_ROOT}/bin/pear config-show >> ${PHP_INSTALL_LOG}
-${PHP_ROOT}/bin/pecl config-show >> ${PHP_INSTALL_LOG}
+# ${PHP_PREFIX}/bin/pear config-show >> ${PHP_INSTALL_LOG}
+# ${PHP_PREFIX}/bin/pecl config-show >> ${PHP_INSTALL_LOG}
 
-${PHP_ROOT}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
 PHP_EXTENSION="igbinary \
                redis \
@@ -413,32 +420,42 @@ PHP_EXTENSION="igbinary \
 for extension in ${PHP_EXTENSION}
 do
   echo $extension >> ${PHP_INSTALL_LOG}
-  sudo ${PHP_ROOT}/bin/pecl install $extension || echo
+  sudo ${PHP_PREFIX}/bin/pecl install $extension || echo
 done
 
 # 8. enable extension
 
-if [ ${PHP_NUM} -ge 72 ];then
-
-echo "zend_extension=opcache" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
-
-else
-
-echo "zend_extension=opcache.so" | sudo tee ${PHP_INI_DIR}/conf.d/extension-opcache.ini
-
-fi
-
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 
-exts="sysvmsg sysvsem sysvshm imap snmp"
-
-for ext in $exts
-do
-
-echo "extension=${ext}.so" | sudo tee ${PHP_INI_DIR}/conf.d/wsl-php-ext-${ext}.ini
-
-done
+wsl-php-ext-enable.sh pdo_pgsql \
+                      xsl \
+                      pcntl \
+                      shmop \
+                      soap \
+                      sockets \
+                      sysvmsg \
+                      sysvsem \
+                      sysvshm \
+                      calendar \
+                      intl \
+                      imap \
+                      enchant \
+                      fileinfo \
+                      ldap \
+                      posix \
+                      pspell \
+                      shmop \
+                      snmp \
+                      wddx \
+                      \
+                      mongodb \
+                      igbinary \
+                      redis \
+                      memcached \
+                      xdebug \
+                      $( test $PHP_NUM != "56" && echo "swoole" ) \
+                      yaml
 
 echo "
 [global]
@@ -470,7 +487,7 @@ listen.group = nginx
 listen.mode = 0660
 env[APP_ENV] = wsl
 
-" | sudo tee ${PHP_ROOT}/etc/php-fpm.d/zz-$( . /etc/os-release ; echo $ID ).conf
+" | sudo tee ${PHP_PREFIX}/etc/php-fpm.d/zz-$( . /etc/os-release ; echo $ID ).conf
 
 cd /var/log
 
@@ -488,51 +505,51 @@ sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' ${PHP_INI_DIR}/
 
 _test(){
 
-${PHP_ROOT}/bin/php -v
+${PHP_PREFIX}/bin/php -v
 
-${PHP_ROOT}/bin/php -i | grep .ini
+${PHP_PREFIX}/bin/php -i | grep .ini
 
-${PHP_ROOT}/sbin/php-fpm -v
+${PHP_PREFIX}/sbin/php-fpm -v
 
 set +x
 
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
-do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
 }
 ################################################################################
 
 _write_version(){
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
 
-${PHP_ROOT}/bin/php -v | sudo tee -a ${PHP_ROOT}/README.md
+${PHP_PREFIX}/bin/php -v | sudo tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
 
-${PHP_ROOT}/bin/php -i | grep .ini | sudo tee -a ${PHP_ROOT}/README.md
+${PHP_PREFIX}/bin/php -i | grep .ini | sudo tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
 
-${PHP_ROOT}/sbin/php-fpm -v | sudo tee -a ${PHP_ROOT}/README.md
+${PHP_PREFIX}/sbin/php-fpm -v | sudo tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
 
-cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_ROOT}/README.md
+cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_ROOT}/README.md
+echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
 
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
-do echo '*' $( ${PHP_ROOT}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_ROOT}/README.md ; done
+do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_PREFIX}/README.md ; done
 
 set -x
 
-cat ${PHP_ROOT}/README.md
+cat ${PHP_PREFIX}/README.md
 
 }
 
@@ -552,7 +569,7 @@ _tar(){
 
   cd etc ; sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
-  sudo mv ${PHP_ROOT}.tar.gz /
+  sudo mv ${PHP_PREFIX}.tar.gz /
 
   sudo mv ${PHP_INI_DIR}-etc.tar.gz /
 }
