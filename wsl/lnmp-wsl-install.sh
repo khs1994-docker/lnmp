@@ -108,6 +108,7 @@ docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
 docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
+# rm
 sudo rm -rf ${PHP_PREFIX}
 
 sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}.tar.gz /usr/local/
@@ -123,6 +124,7 @@ sudo rm -rf wsl-php${PHP_NUM}.tar.gz
 
 cd /usr/local/etc
 
+# backup
 if [ -d ${PHP_INI_DIR} ];then
   sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
 fi
@@ -131,6 +133,7 @@ sudo tar -zxvf wsl-php${PHP_NUM}-etc.tar.gz
 
 sudo rm -rf wsl-php${PHP_NUM}-etc.tar.gz
 
+# log
 cd /var/log
 
 if ! [ -f php${PHP_NUM}.error.log ];then sudo touch php${PHP_NUM}.error.log ; fi
@@ -140,6 +143,7 @@ if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.lo
 
 sudo chmod 777 php${PHP_NUM}*
 
+# ln
 for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
 sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
@@ -158,7 +162,7 @@ _deb(){
 
     docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME}
 
-    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
+    sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
 
     docker rm -f ${CONTAINER_NAME}
 

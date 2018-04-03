@@ -177,9 +177,9 @@ jobs:
         - export TAG=v18.05 # ${TRAVIS_TAG}
         - sh cli/build.sh rpm ${TAG}
         - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
-        - export RPM_NAME=khs1994-docker-lnmp_${VERSION}_amd64.rpm
-        - ls -la cli
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "cli/${RPM_NAME}" -R
+        - ls -la ~/*.rpm
+        - export RPM_NAME=$( ls ~/*.rpm )
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${HOME}/${RPM_NAME}" -R
 
 # stages:
 #   - test

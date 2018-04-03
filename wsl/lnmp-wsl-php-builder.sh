@@ -436,7 +436,6 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       shmop \
                       snmp \
                       wddx \
-                      opcache \
                       \
                       mongodb \
                       igbinary \
@@ -444,7 +443,8 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       memcached \
                       xdebug \
                       $( test $PHP_NUM != "56" && echo "swoole" ) \
-                      yaml
+                      yaml \
+                      opcache
 
 
 echo "
