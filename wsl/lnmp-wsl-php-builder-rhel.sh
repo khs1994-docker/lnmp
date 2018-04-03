@@ -16,7 +16,7 @@ Usage:
 
 $ lnmp-wsl-php-builder-rhel.sh 7.2.4
 
-$ lnmp-wsl-php-builder-rhel.sh 5.6.35 --skipbuild tar deb
+$ lnmp-wsl-php-builder-rhel.sh 5.6.35 --skipbuild tar rpm
 
 "
 else
@@ -455,7 +455,8 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       memcached \
                       xdebug \
                       $( test $PHP_NUM != "56" && echo "swoole" ) \
-                      yaml
+                      yaml \
+                      opcache
 
 echo "
 [global]
@@ -578,10 +579,84 @@ _tar(){
 
 _rpm(){
 
-  $( echo ${PHP_DEP} | sed "s# #, #g" )
+cd /tmp
 
-  RPM_NAME=khs1994-wsl-php_${PHP_VERSION}-centos-7_amd64
+echo "Name:       khs1994-wsl-php
+Version:    ${PHP_VERSION}
+Release:    0.el7_0.0
+Summary:    PHP scripting language for creating dynamic web sites
 
+License:    PHP and Zend and BSD
+URL:        https://github.com/khs1994-docker/lnmp/tree/master/wsl
+
+# BuildRequires:
+Requires:   ${PHP_DEP}
+
+%description
+PHP is an HTML-embedded scripting language. PHP attempts to make it
+easy for developers to write dynamically generated web pages. PHP also
+offers built-in database integration for several commercial and
+non-commercial database management systems, so writing a
+database-enabled webpage with PHP is fairly simple. The most common
+use of PHP coding is probably as a replacement for CGI scripts.
+The php package contains the module (often referred to as mod_php)
+which adds support for the PHP language to Apache HTTP Server.
+
+%pre
+if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup; fi
+echo -e \"----------------------------------------------------------------------
+\n
+\n
+Thanks for using khs1994-wsl-php !\n
+Please find the official documentation for khs1994-wsl-php here:
+* https://github.com/khs1994-docker/lnmp/tree/master/wsl\n
+Meet issue? please see:
+* https://github.com/khs1994-docker/lnmp/issues
+\n
+\n
+----------------------------------------------------------------------
+\n\n\"
+%post
+for file in \$( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
+ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
+%preun
+echo
+echo \"Meet issue? Please see https://github.com/khs1994-docker/lnmp/issues \"
+echo
+%build
+%install
+rm -rf %{buildroot}
+cp ${PHP_PREFIX} %{buildroot}${PHP_PREFIX}
+cp ${PHP_INI_DIR} %{buildroot}${PHP_INI_DIR}
+%files
+%defattr (-,root,root,-)
+${PHP_PREFIX}
+${PHP_INI_DIR}
+%changelog
+%clean
+RPM_NAME=khs1994-wsl-php-%{version}-%{release}.x86_64.rpm
+cp -a %{buildroot}/../../RPMS/x86_64/\${RPM_NAME} ~
+" > khs1994-wsl-php.spec
+
+cat /tmp/khs1994-wsl-php.spec
+
+rpmbuild -bb /tmp/khs1994-wsl-php.spec
+
+RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-0.el7_0.0.x86_64.rpm
+
+echo "$ rpm -Uvh ${RPM_NAME}"
+
+cp ~/${RPM_NAME} /
+
+sudo rm -rf $PHP_PREFIX
+
+sudo rm -rf $PHP_INI_DIR
+
+sudo rpm -Uvh ${RPM_NAME}
+
+# test
+
+_test
 }
 
 ################################################################################

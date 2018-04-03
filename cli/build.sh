@@ -54,17 +54,10 @@ _deb(){
 }
 
 _rpm(){
-  cd cli/rpm
 
-  sed -i "s#KHS1994_DOCKER_VERSION#${VERSION}#g" DEBIAN/control
+  sed -i "s#KHS1994_DOCKER_VERSION#${VERSION}#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
 
-  rm -rf data/.gitignore data/* README.md
-
-  # wget -O lnmp.tar.gz https://github.com/khs1994-docker/lnmp/archive/v${VERSION}.tar.gz
-
-  # tar -zxvf lnmp.tar.gz ; mv lnmp-${VERSION} data/lnmp
-
-  cd .. ; rpmbuild -bb --target=amd64 SPECS/codeblocks.spec
+  rpmbuild -bb cli/rpm/SPECS/khs1994-docker-lnmp.spec
 }
 
 command=$1
