@@ -177,7 +177,11 @@ libexif \
 gmp \
 libc-client \
 readline \
-libicu"
+libicu \
+libxpm \
+libwebp \
+enchant \
+openldap"
 
 sudo yum install -y ${PHP_DEP}
 
@@ -223,7 +227,11 @@ export DEP_SOFTS="autoconf \
                    gmp-devel \
                    libc-client-devel \
                    readline-devel \
-                   libicu-devel
+                   libicu-devel \
+                   libxpm-devel \
+                   libwebp-devel \
+                   enchant-devel \
+                   openldap-devel \
                    "
 
 for soft in ${DEP_SOFTS}
@@ -263,21 +271,26 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-fpm-user=nginx \
     --with-fpm-group=nginx \
     --with-curl \
-    --with-gd \
     --with-gettext \
     --with-iconv-dir \
     --with-kerberos \
     --with-libedit \
     --with-openssl \
+        --with-system-ciphers \
     --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
+    --with-pdo-dblib=shared \
     --with-xsl \
     --with-zlib \
     --with-mhash \
-    --with-png-dir=/usr/lib \
-    --with-jpeg-dir=/usr/lib\
-    --with-freetype-dir=/usr/lib \
+    --with-gd \
+        --with-freetype-dir=/usr/lib \
+        --disable-gd-jis-conv \
+        --with-jpeg-dir=/usr/lib \
+        --with-png-dir=/usr/lib \
+        --with-webp-dir=/usr/lib \
+        --with-xpm-dir=/usr/lib \
     --enable-ftp \
     --enable-mysqlnd \
     --enable-bcmath \
@@ -290,7 +303,9 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --enable-shmop \
     --enable-soap \
     --enable-sockets \
-    --enable-sysvsem \
+    --enable-sysvmsg=shared \
+    --enable-sysvsem=shared \
+    --enable-sysvshm=shared \
     --enable-xml \
     --enable-zip \
     --enable-calendar \
@@ -311,8 +326,20 @@ CONFIGURE="--prefix=${PHP_ROOT} \
     --with-tidy \
     --with-gmp \
     --with-imap \
-    --with-imap-ssl \
+         --with-imap-ssl \
     --with-xmlrpc \
+    \
+    --with-pic \
+    --with-enchant \
+    --enable-fileinfo \
+    --with-ldap \
+        --with-ldap-sasl \
+    --enable-phar \
+    --enable-posix \
+    --with-pspell \
+    --enable-shmop \
+    --with-snmp \
+    --enable-wddx \
     "
 
 for a in ${CONFIGURE} ; do echo $a >> ${PHP_INSTALL_LOG}; done
@@ -404,6 +431,15 @@ fi
 
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
+
+exts="sysvmsg sysvsem sysvshm imap pdo_dblib"
+
+for ext in $exts
+do
+
+echo "extension=${ext}.so" | sudo tee ${PHP_INI_DIR}/conf.d/wsl-php-ext-${ext}.ini
+
+done
 
 echo "
 [global]

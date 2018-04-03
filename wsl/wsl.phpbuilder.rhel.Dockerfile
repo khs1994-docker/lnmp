@@ -2,6 +2,8 @@ ARG OS_TYPE=centos:7.4.1708
 
 FROM ${OS_TYPE} as builder
 
+ENV TZ Asia/Shanghai
+
 ARG PHP_VERSION=7.2.4
 
 COPY lnmp-wsl-php-builder-rhel.sh /lnmp-wsl-php-builder-rhel.sh

@@ -12,6 +12,8 @@ ARG PHP_INI_DIR=/usr/local/etc/php72
 
 ARG COMPOSER_VERSION=1.6.3
 
+ENV TZ Asia/Shanghai
+
 ################################################################################
 
 ARG DEB_URL=deb.debian.org
@@ -21,8 +23,6 @@ ARG DEB_URL=deb.debian.org
 ARG DEB_SECURITY_URL=security.debian.org
 
 # mirrors.ustc.edu.cn/debian-security/
-
-ENV TZ Asia/Shanghai
 
 ENV PHPIZE_DEPS \
 		autoconf \
@@ -93,7 +93,17 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libgmp3-dev \
     libc-client2007e \
     libc-client2007e-dev \
-    libkrb5-dev
+    libkrb5-dev \
+    libxpm4 \
+    libxpm-dev \
+    libwebp-dev \
+    libwebp6 \
+    libenchant-dev \
+    libenchant1c2a \
+    libldap2-dev \
+    libldap-2.4-2 \
+    libpspell-dev
+
 
 COPY --from=php /usr/local/bin/docker-php-source /usr/local/bin/
 
@@ -126,6 +136,8 @@ RUN set -eux; \
 	fi; \
   # https://www.howtoforge.com/tutorial/how-to-install-php-7-on-debian/
   ln -sf /usr/lib/libc-client.a /usr/lib/x86_64-linux-gnu/libc-client.a; \
+  # https://stackoverflow.com/questions/43617752/docker-php-and-freetds-cannot-find-freetds-in-know-installation-directories
+  # ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ ; \
 	./configure \
     --prefix=${PHP_PREFIX} \
 		--build="$gnuArch" \
@@ -151,43 +163,59 @@ RUN set -eux; \
 		\
     --with-curl \
     --with-gd \
+        --with-freetype-dir=/usr/lib \
+        --disable-gd-jis-conv \
+        --with-jpeg-dir=/usr/lib \
+        --with-png-dir=/usr/lib \
+        --with-webp-dir=/usr/lib \
+        --with-xpm-dir=/usr/lib \
     --with-gettext \
-    --with-iconv-dir \
     --with-kerberos \
     --with-libedit \
     --with-openssl \
+        --with-system-ciphers \
     --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
+    --with-pdo-dblib \
     --with-xsl \
     --with-zlib \
     --with-mhash \
-    --with-png-dir=/usr/lib \
-    --with-jpeg-dir=/usr/lib\
-    --with-freetype-dir=/usr/lib \
     --enable-bcmath \
     --enable-libxml \
     --enable-inline-optimization \
-    --enable-gd-jis-conv \
     --enable-mbregex \
     --enable-pcntl \
     --enable-shmop \
     --enable-soap \
     --enable-sockets \
-    --enable-sysvsem \
+    --enable-sysvmsg=shared \
+    --enable-sysvsem=shared \
+    --enable-sysvshm=shared \
     --enable-xml \
     --enable-zip \
+        --with-libzip \
     --enable-calendar \
     --enable-intl \
-    --with-libzip \
 		\
     --enable-exif=shared \
     --with-bz2=shared \
     --with-tidy=shared \
     --with-gmp=shared \
-    --with-imap \
-    --with-imap-ssl \
+    --with-imap=shared \
+        --with-imap-ssl \
     --with-xmlrpc=shared \
+    --with-pic \
+    --with-enchant \
+    --enable-fileinfo \
+    --with-ldap \
+        --with-ldap-sasl \
+    --enable-phar \
+    --enable-posix \
+    --with-pspell \
+    --enable-shmop \
+    --with-snmp \
+    --enable-wddx \
     \
   # bundled pcre does not support JIT on s390x
   # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT

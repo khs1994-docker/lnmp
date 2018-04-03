@@ -26,6 +26,10 @@ $ lnmp-wsl-install.sh nginx php postgresql mysql mongodb ...
 "
 fi
 
+command -v docker || echo -e "Docker cli not install, you can exec $ lnmp-docker-cli.sh "
+
+command -v docker || exit 1
+
 set -ex
 
 . /etc/os-release
@@ -43,7 +47,7 @@ CONTAINER_NAME=$( date +%s )
 _nginx(){
   # apt
   if ! [ -f /etc/apt/sources.list.d/nginx.list ];then
-    echo "deb http://nginx.org/packages/mainline/$(ID) $(lsb_release -cs) nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+    echo "deb http://nginx.org/packages/mainline/${ID} $(lsb_release -cs) nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
   fi
 
   apt-key list | grep nginx || curl -fsSL http://nginx.org/packages/keys/nginx_signing.key | sudo apt-key add -
@@ -73,20 +77,21 @@ _php(){
   case ${PHP_VERSION} in
     5.6.* )
       export PHP_NUM=56
+      if [ $ID = debian ];then set +x ; echo -e   "\n\nkhs1994-wsl-php only support php56 on Ubuntu, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; exit 1; fi
       ;;
 
     7.0.* )
-      if ! [ $ID = debian ];then exit 1; fi
+      if ! [ $ID = debian ];then set +x ; echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh \n\n" ; exit 1; fi
       export PHP_NUM=70
       ;;
 
     7.1.* )
-      if ! [ $ID = debian ];then exit 1; fi
+      if ! [ $ID = debian ];then set +x ; echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; exit 1; fi
       export PHP_NUM=71
       ;;
 
     7.2.* )
-      if ! [ $ID = debian ];then exit 1; fi
+      if ! [ $ID = debian ];then set +x ; echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; exit 1; fi
       export PHP_NUM=72
       ;;
 
@@ -149,6 +154,8 @@ _deb(){
 
     DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-$( . /etc/os-release ; echo $ID )-$( lsb_release -cs )_amd64
 
+    sudo rm -rf ${DEB_NAME}.deb
+
     docker pull khs1994/wsl:${DEB_NAME}
 
     docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME}
@@ -157,14 +164,18 @@ _deb(){
 
     docker rm -f ${CONTAINER_NAME}
 
-    sudo dpkg -i ${DEB_NAME}.deb
+    sudo dpkg -i ${DEB_NAME}.deb || ( sudo apt install -f && sudo dpkg -i ${DEB_NAME}.deb )
 }
 
 if [ -z "$2" ];then
 
-_tar
+echo -e "install by tar"
+
+_tar || set +x echo -e "\n\nInstall by Tar only support php72 and latest\n\n"
 
 else
+
+echo -e "install by $2"
 
 _"$2"
 
