@@ -5,7 +5,7 @@
 !httpd
 !deb
 !rpm
-!lnmp-docker-cli.sh
+!lnmp-wsl-docker-cli.sh
 !lnmp-wsl-init.sh
 !lnmp-wsl.sh
 !lnmp-wsl-install.sh
@@ -17,3 +17,4 @@
 !docker-compose.yml
 !nginx.wsl.conf
 !*.example
+!wsl-php-ext-enable.sh

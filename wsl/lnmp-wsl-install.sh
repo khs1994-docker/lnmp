@@ -9,7 +9,6 @@
 #
 
 if [ -z "$1" ];then
-  set +x
   exec echo "
 
 Install WSL soft by shell script
@@ -25,10 +24,6 @@ $ lnmp-wsl-install.sh nginx php postgresql mysql mongodb ...
 
 "
 fi
-
-command -v docker || echo -e "Docker cli not install, you can exec $ lnmp-docker-cli.sh "
-
-command -v docker || exit 1
 
 set -ex
 
@@ -67,6 +62,9 @@ _nginx(){
 }
 
 _php(){
+  command -v docker || echo -e "Docker cli not install, you can exec $ lnmp-wsl-docker-cli.sh "
+
+  command -v docker || exit 1
   # include redis memcached
   # default install latest php version
   # current version is php 7.2.4
@@ -102,7 +100,7 @@ _php(){
 
 ################################################################################
 
-  PHP_ROOT=/usr/local/php${PHP_NUM}
+  PHP_PREFIX=/usr/local/php${PHP_NUM}
   PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 _tar(){
@@ -110,7 +108,7 @@ docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
 docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
 
-sudo rm -rf ${PHP_ROOT}
+sudo rm -rf ${PHP_PREFIX}
 
 sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}.tar.gz /usr/local/
 sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}-etc.tar.gz /usr/local/etc/
@@ -142,9 +140,9 @@ if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.lo
 
 sudo chmod 777 php${PHP_NUM}*
 
-for file in $( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
+for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
-sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin
+sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
 
 lnmp-wsl-php-builder.sh apt
 }
@@ -271,13 +269,13 @@ _list(){
 }
 
 _enable(){
-  PHP_ROOT=/usr/local/$1
+  PHP_PREFIX=/usr/local/$1
 
-  if ! [ -d ${PHP_ROOT} ];then exit 1; fi
+  if ! [ -d ${PHP_PREFIX} ];then exit 1; fi
 
-  for file in $( ls ${PHP_ROOT}/bin ); do sudo ln -sf ${PHP_ROOT}/bin/$file /usr/local/bin/ ; done
+  for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
-  sudo ln -sf ${PHP_ROOT}/sbin/php-fpm /usr/local/sbin
+  sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
 }
 
 if [ "$1" = 'enable' ];then shift ; _enable "$@"; exit $?; fi

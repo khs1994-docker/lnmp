@@ -29,4 +29,4 @@ sudo apt update && sudo apt install \
 
 # composer cn mirror
 
-command -v composer && composer config -g repo.packagist composer https://packagist.phpcomposer.com
+# command -v composer && composer config -g repo.packagist composer https://packagist.phpcomposer.com
