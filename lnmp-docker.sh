@@ -7,6 +7,10 @@
 
 # Don't Run this shell script on git bash Windows, please use ./lnmp-docker.ps1
 
+#
+# sudo ? only need by install docker-compose
+#
+
 set -e
 
 if [ `uname -s` != 'Darwin' ] && [ `uname -s` != 'Linux' ];then echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
@@ -329,7 +333,7 @@ install_docker_compose_move(){
         sudo cp -a /tmp/docker-compose /opt/bin/docker-compose
         ;;
       * )
-        sudo cp -a /tmp/docker-compose /usr/local/bin/docker-compose
+        sudo cp -a /tmp/docker-compose /usr/local/bin/docker-compose || cp -a /tmp/docker-compose /usr/local/bin/docker-compose
         ;;
     esac
   else
@@ -1406,7 +1410,9 @@ fi
 
 print_info "ARCH is ${OS} ${ARCH}\n"
 
-print_info `docker --version`
+command -v docker && print_info `docker --version`
+
+command -v || print_warning "docker cli is not install"
 
 echo ; docker_compose "$@"
 

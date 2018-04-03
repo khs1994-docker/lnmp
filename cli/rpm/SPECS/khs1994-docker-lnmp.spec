@@ -1,5 +1,5 @@
 Name:       khs1994-docker-lnmp
-Version:    18.05
+Version:    KHS1994_DOCKER_LNMP_VERSION
 Release:    0.el7_0.0
 Summary:    Start LNMP In less than 2 minutes Powered by Docker Compose.
 

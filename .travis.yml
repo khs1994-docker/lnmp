@@ -178,7 +178,7 @@ jobs:
         - sh cli/build.sh rpm ${TAG}
         - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
         - ls -la ~/*.rpm
-        - export RPM_NAME=$( ls ~/*.rpm )
+        - export RPM_NAME=$( cd $HOME; ls *.rpm )
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${HOME}/${RPM_NAME}" -R
 
 # stages:

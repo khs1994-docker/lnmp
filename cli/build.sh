@@ -27,7 +27,7 @@ if [ -f khs1994-robot.enc ];then exit 1; fi
 _deb(){
   cd cli/deb
 
-  sed -i "s#KHS1994_DOCKER_VERSION#${VERSION}#g" DEBIAN/control
+  sed -i "s#KHS1994_DOCKER_LNMP_VERSION#${VERSION}#g" DEBIAN/control
 
   rm -rf data/.gitignore data/* README.md
 
@@ -55,9 +55,11 @@ _deb(){
 
 _rpm(){
 
-  sed -i "s#KHS1994_DOCKER_VERSION#${VERSION}#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
+  sed -i "s#KHS1994_DOCKER_LNMP_VERSION#${VERSION}#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
 
-  rpmbuild -bb cli/rpm/SPECS/khs1994-docker-lnmp.spec
+  rpmbuild -bb cli/rpm/SPECS/khs1994-docker-lnmp.spec || sed -i "s#${VERSION}#KHS1994_DOCKER_LNMP_VERSION#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
+
+  sed -i "s#${VERSION}#KHS1994_DOCKER_LNMP_VERSION#g" cli/rpm/SPECS/khs1994-docker-lnmp.spec
 }
 
 command=$1

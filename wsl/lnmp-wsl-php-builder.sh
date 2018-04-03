@@ -157,7 +157,8 @@ libgmp10 \
 libc-client2007e \
 libkrb5-3 \
 libxpm4 \
-libwebp6 \
+$( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
+$( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
 libldap-2.4-2 \
 libsnmp30 \
@@ -258,6 +259,13 @@ sudo ln -sf /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 #
 
 # sudo ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/
+
+#
+# configure: error: Cannot find ldap libraries in /usr/lib.
+#
+# @link https://blog.csdn.net/ei__nino/article/details/8598490
+
+sudo cp -frp /usr/lib/x86_64-linux-gnu/libldap* /usr/lib/
 
 ################################################################################
 
