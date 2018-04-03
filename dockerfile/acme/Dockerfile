@@ -2,7 +2,7 @@ FROM alpine:3.7@sha256:7df6db5aa61ae9480f52f0b3a06a140ab98d427f86d8d5de0bedab9b8
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV ACME_SH_VERSION=2.7.7 \
+ENV ACME_SH_VERSION=2.7.8 \
     AUTO_UPGRADE=1 \
     LE_CONFIG_HOME=/acme.sh
 

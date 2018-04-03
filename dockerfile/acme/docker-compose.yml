@@ -1,9 +1,9 @@
-version: "3.5"
+version: "3.6"
 services:
 
   acme:
     build: .
-    image: khs1994/acme:${ACME_VERSION:-2.7.7}
+    image: khs1994/acme:${ACME_VERSION:-2.7.8}
     env_file:
       - ./.env
     volumes:

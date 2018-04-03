@@ -8,6 +8,12 @@ if [ "$1" = bash ] || [ "$1" = sh ];then exec /bin/sh; fi
 
 if [ "$1" = 'acme.sh' ];then exec "$@"; fi
 
+echo ; echo ; echo "DNS_TYPE: ${DNS_TYPE}" ; echo ; echo
+
+acme.sh -v
+
+echo
+
 # SELF ENV
 
 # HTTPD
@@ -29,7 +35,7 @@ fi
 set -e
 
 issue(){
-  echo "正在申请证书 ..." ; echo;echo
+  echo "正在申请证书 ..." ; echo ; echo
   first=$1
   shift
   acme.sh --issue \
@@ -41,7 +47,7 @@ issue(){
 }
 
 install(){
-  echo "开始转移证书到 /ssl ..." ; echo;echo
+  echo "开始转移证书到 /ssl ..." ; echo ; echo
 
   if [ "${HTTPD}" = '1' ];then
     echo "HTTPD..."; echo; echo
@@ -53,7 +59,7 @@ install(){
       ${ECC:- }
 
   else
-    echo "NGINX..."; echo; echo
+    echo "NGINX..."; echo ; echo
     acme.sh --install-cert \
       -d $1 \
       --key-file /ssl/$1${RSA_FILE:-.}key \
