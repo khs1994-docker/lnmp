@@ -223,6 +223,7 @@ jobs:
 
     - stage: rpm
       script:
+        - sudo apt install -y rpm
         - sh cli/build.sh rpm ${TAG}
         - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
         - export RPM_NAME=$( cd $HOME; ls *.rpm )

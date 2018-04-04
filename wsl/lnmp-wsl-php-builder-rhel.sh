@@ -43,6 +43,10 @@ export COMPOSER_HOME=/tmp
 
 export TZ=Asia/Shanghai
 
+export CC=clang CXX=clang
+
+# export CC=gcc CXX=g++
+
 ################################################################################
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
@@ -123,7 +127,7 @@ if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
   cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
+  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 
   echo -e "Untar ...\n\n"
 
@@ -194,7 +198,7 @@ net-snmp-libs \
 aspell"
 
 
-sudo yum install -y ${PHP_DEP} rpm-build
+sudo yum install -y ${PHP_DEP} rpm-build > /dev/null
 
 _yum(){
 
@@ -204,7 +208,8 @@ export DEP_SOFTS="autoconf \
                    make \
                    \
                    re2c \
-                   gcc gcc-c++ \
+                   $( test $CC = 'gcc' && echo "gcc gcc-c++ libgcc" ) \
+                   $( test $CC = 'clang' && echo "clang" ) \
                    libedit-devel \
                    zlib-devel \
                    libxml2-devel \
@@ -254,7 +259,7 @@ done
 
 sudo yum update
 
-sudo yum install -y ${DEP_SOFTS}
+sudo yum install -y ${DEP_SOFTS} > /dev/null
 }
 
 if [ "$1" = yum ];then _yum ; exit $?; fi
@@ -284,6 +289,7 @@ sudo cp -frp /usr/lib64/libldap* /usr/lib/
 # 4. configure
 
 CONFIGURE="--prefix=${PHP_PREFIX} \
+    --build=x86_64-linux-gnu \
     --with-config-file-path=${PHP_INI_DIR} \
     --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
     --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
@@ -486,7 +492,11 @@ group = nginx
 request_slowlog_timeout = 5
 slowlog = /var/log/php${PHP_NUM}-fpm.slow.log
 
-; listen 9000
+clear_env = no
+
+catch_workers_output = yes
+
+; listen = 9000
 ; env[APP_ENV] = development
 
 ;

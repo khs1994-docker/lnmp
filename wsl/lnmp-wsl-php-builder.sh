@@ -42,6 +42,10 @@ export COMPOSER_HOME=/tmp
 
 export TZ=Asia/Shanghai
 
+export CC=clang CXX=clang
+
+# export CC=gcc CXX=g++
+
 ################################################################################
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
@@ -119,7 +123,7 @@ if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
   cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
+  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 
   echo -e "Untar ...\n\n"
 
@@ -172,7 +176,7 @@ libldap-2.4-2 \
 libsnmp30 \
 snmp"
 
-sudo apt install -y $PHP_DEP
+sudo apt install -y $PHP_DEP > /dev/null
 
 _apt(){
 
@@ -181,11 +185,11 @@ export DEP_SOFTS="autoconf \
                    lsb-release \
                    dpkg-dev \
                    file \
-                   libc6-dev \
+                   $( test $CC = 'gcc' && echo "gcc g++ libc6-dev" ) \
+                   $( test $CC = 'clang' && echo "clang" ) \
                    make \
                    pkg-config \
                    re2c \
-                   gcc g++ \
                    libedit-dev \
                    zlib1g-dev \
                    libxml2-dev \
@@ -233,7 +237,7 @@ do
     sudo echo $soft >> ${PHP_INSTALL_LOG}
 done
 
-sudo apt update ; sudo apt install -y --no-install-recommends ${DEP_SOFTS}
+sudo apt update ; sudo apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
 }
 
 if [ "$1" = apt ];then _apt ; exit $?; fi
@@ -247,6 +251,7 @@ _builder(){
 
 # 3. bug
 
+export gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
 debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"
 
 # https://bugs.php.net/bug.php?id=74125
@@ -255,13 +260,13 @@ if [ ! -d /usr/include/curl ]; then
 fi
 
 # https://stackoverflow.com/questions/34272444/compiling-php7-error
-sudo ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/x86_64-linux-gnu/libc-client.a
+sudo ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/$debMultiarch/libc-client.a
 
 #
 # debian 9 php56 configure: error: Unable to locate gmp.h
 #
 
-sudo ln -sf /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
+sudo ln -sf /usr/include/$debMultiarch/gmp.h /usr/include/gmp.h
 
 #
 # https://stackoverflow.com/questions/43617752/docker-php-and-freetds-cannot-find-freetds-in-know-installation-directories
@@ -274,13 +279,14 @@ sudo ln -sf /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 #
 # @link https://blog.csdn.net/ei__nino/article/details/8598490
 
-sudo cp -frp /usr/lib/x86_64-linux-gnu/libldap* /usr/lib/
+sudo cp -frp /usr/lib/$debMultiarch/libldap* /usr/lib/
 
 ################################################################################
 
 # 4. configure
 
 CONFIGURE="--prefix=${PHP_PREFIX} \
+    --build="$gnuArch" \
     --with-config-file-path=${PHP_INI_DIR} \
     --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
     --disable-cgi \
@@ -484,7 +490,11 @@ group = nginx
 request_slowlog_timeout = 5
 slowlog = /var/log/php${PHP_NUM}-fpm.slow.log
 
-; listen 9000
+clear_env = no
+
+catch_workers_output = yes
+
+; listen = 9000
 ; env[APP_ENV] = development
 
 ;
