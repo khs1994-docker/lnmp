@@ -18,3 +18,4 @@
 !nginx.wsl.conf
 !*.example
 !wsl-php-ext-enable.sh
+!.env

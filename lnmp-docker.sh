@@ -1410,9 +1410,9 @@ fi
 
 print_info "ARCH is ${OS} ${ARCH}\n"
 
-command -v docker && print_info `docker --version`
+command -v docker > /dev/null 2>&1 && print_info `docker --version`
 
-command -v || print_warning "docker cli is not install"
+command -v > /dev/null 2>&1 || print_warning "docker cli is not install"
 
 echo ; docker_compose "$@"
 
