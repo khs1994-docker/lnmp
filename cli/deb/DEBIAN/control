@@ -1,5 +1,5 @@
 Package: khs1994-docker-lnmp
-Version: KHS1994_DOCKER_VERSION
+Version: KHS1994_DOCKER_LNMP_VERSION
 Prioritt: optional
 Section: admin
 Architecture: all

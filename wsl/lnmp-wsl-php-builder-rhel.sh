@@ -186,7 +186,7 @@ net-snmp-libs \
 aspell"
 
 
-sudo yum install -y ${PHP_DEP}
+sudo yum install -y ${PHP_DEP} rpm-build
 
 _yum(){
 
@@ -619,6 +619,13 @@ Meet issue? please see:
 %post
 for file in \$( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
 ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
+echo > /dev/null
+cd /var/log
+if ! [ -f php${PHP_NUM}.error.log ];then touch php${PHP_NUM}.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then touch php${PHP_NUM}-fpm.slow.log; fi
+chmod 777 php${PHP_NUM}*
 %preun
 echo
 echo \"Meet issue? Please see https://github.com/khs1994-docker/lnmp/issues \"
@@ -626,8 +633,10 @@ echo
 %build
 %install
 rm -rf %{buildroot}
-cp ${PHP_PREFIX} %{buildroot}${PHP_PREFIX}
-cp ${PHP_INI_DIR} %{buildroot}${PHP_INI_DIR}
+ls -la ${buildroot}/../ || echo
+mkdir -p %{buildroot} || echo
+cp -a ${PHP_PREFIX} %{buildroot}${PHP_PREFIX}
+cp -a ${PHP_INI_DIR} %{buildroot}${PHP_INI_DIR}
 %files
 %defattr (-,root,root,-)
 ${PHP_PREFIX}
@@ -652,7 +661,7 @@ sudo rm -rf $PHP_PREFIX
 
 sudo rm -rf $PHP_INI_DIR
 
-sudo rpm -Uvh ${RPM_NAME}
+sudo yum install ${RPM_NAME}
 
 # test
 
