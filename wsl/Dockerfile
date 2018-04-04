@@ -12,6 +12,10 @@ ARG PHP_INI_DIR=/usr/local/etc/php72
 
 ARG COMPOSER_VERSION=1.6.3
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+ENV COMPOSER_HOME=/tmp
+
 ENV TZ Asia/Shanghai
 
 ################################################################################

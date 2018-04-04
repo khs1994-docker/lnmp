@@ -195,7 +195,7 @@ php -i | grep .ini
 
 # composer cn mirror
 
-composer config -g repo.packagist composer https://packagist.phpcomposer.com
+command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 }
 
