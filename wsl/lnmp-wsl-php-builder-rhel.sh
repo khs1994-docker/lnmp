@@ -41,6 +41,8 @@ export COMPOSER_ALLOW_SUPERUSER=1
 
 export COMPOSER_HOME=/tmp
 
+export TZ=Asia/Shanghai
+
 ################################################################################
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"

@@ -1,6 +1,8 @@
 # Use WSL As PHP Development Environment
 
-* 建议使用 `Debian` 版本，在商店搜索 `Debian` 安装即可。
+* 可选版本 `Ubuntu 16.04` `Debian 9`
+
+* 建议使用 `Debian 9` 版本，在商店搜索 `Linux` 选择 `Debian` 安装即可。
 
 * https://www.khs1994.com/php/development/wsl.html
 
@@ -51,6 +53,8 @@ $ lnmp-wsl-install.sh # 输出帮助信息
 
 $ lnmp-wsl-install.sh nginx | php | mysql ...
 ```
+
+* 安装路径 `/usr/local/phpXX` `/usr/local/etc/phpXX` `/var/log/phpXX`
 
 * PHP 版本问题：https://github.com/khs1994-docker/lnmp/issues/348
 
