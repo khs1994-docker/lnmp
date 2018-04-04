@@ -42,11 +42,13 @@ export APP_ENV=wsl
 
 ## 脚本安装软件
 
-如果你不想编译安装，那么我写了一个脚本 （**脚本** 从 Docker 复制编译好的软件到 WSL ，或设置 apt 从软件源安装）。
+如果你不想编译安装，那么我写了一个脚本 （**脚本** 从 Docker 复制编译好的软件 [PHP 最新版] 到 WSL ，或设置 apt 从软件源 [或本人打包的 deb 包] 安装）。
 
 * https://store.docker.com/community/images/khs1994/wsl/tags
 
 ```bash
+$ lnmp-wsl-install.sh # 输出帮助信息
+
 $ lnmp-wsl-install.sh nginx | php | mysql ...
 ```
 
@@ -133,7 +135,7 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [x] date
 * [ ] dba
 * [x] dom
-* [ ] enchant
+* [x] enchant
 * [x] exif
 * [ ] ext_skel
 * [ ] ext_skel_win32.php
@@ -149,14 +151,14 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [ ] interbase
 * [x] intl
 * [x] json
-* [ ] ldap
+* [x] ldap
 * [x] libxml
 * [x] mbstring
 * [ ] mysqli
 * [x] mysqlnd
 * [ ] oci8
 * [ ] odbc
-* [ ] opcache
+* [x] opcache
 * [x] openssl
 * [x] pcntl
 * [x] pcre
@@ -171,7 +173,7 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [ ] pgsql
 * [x] phar
 * [x] posix
-* [ ] pspell
+* [x] pspell
 * [x] readline
 * [ ] recode
 * [x] reflection
@@ -179,19 +181,19 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [x] shmop
 * [x] simplexml
 * [ ] skeleton
-* [ ] snmp
+* [x] snmp
 * [x] soap
 * [x] sockets
 * [x] sodium
 * [x] spl
 * [x] sqlite3
 * [x] standard
-* [ ] sysvmsg
+* [x] sysvmsg
 * [x] sysvsem
-* [ ] sysvshm
+* [x] sysvshm
 * [x] tidy
 * [x] tokenizer
-* [ ] wddx
+* [x] wddx
 * [x] xml
 * [x] xmlreader
 * [x] xmlrpc

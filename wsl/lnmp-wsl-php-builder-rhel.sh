@@ -35,6 +35,12 @@ PHP_URL=http://cn2.php.net/distributions
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
+export COMPOSER_VERSION=1.6.3
+
+export COMPOSER_ALLOW_SUPERUSER=1
+
+export COMPOSER_HOME=/tmp
+
 ################################################################################
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
@@ -498,9 +504,23 @@ if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.lo
 
 sudo chmod 777 php${PHP_NUM}-*
 
-# Change php ini
+_composer(){
+   curl -sfL -o /tmp/installer.php \
+       https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer
 
-sudo sed -i 's#^extension="xdebug.so".*#zend_extension=xdebug#g' ${PHP_INI_DIR}/php.ini
+   ${PHP_PREFIX}/bin/php -r " \
+        \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
+        \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
+        if (!hash_equals(\$signature, \$hash)) { \
+            unlink('/tmp/installer.php'); \
+            echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
+            exit(1); \
+        }" \
+&& ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
+&& ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction
+}
+
+_composer
 
 }
 
@@ -633,10 +653,11 @@ echo
 %build
 %install
 rm -rf %{buildroot}
-ls -la ${buildroot}/../ || echo
+ls -la %{buildroot}/../ || echo
 mkdir -p %{buildroot} || echo
-cp -a ${PHP_PREFIX} %{buildroot}${PHP_PREFIX}
-cp -a ${PHP_INI_DIR} %{buildroot}${PHP_INI_DIR}
+mkdir -p %{buildroot}/usr/local/etc || echo
+cp -a ${PHP_PREFIX} %{buildroot}/${PHP_PREFIX}
+cp -a ${PHP_INI_DIR} %{buildroot}/${PHP_INI_DIR}
 %files
 %defattr (-,root,root,-)
 ${PHP_PREFIX}
