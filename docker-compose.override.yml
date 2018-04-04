@@ -50,7 +50,7 @@ services:
 
   nginx:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.10}-tls1.3-stretch
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.11}-tls1.3-stretch
 
   # httpd:
   #   << : *default-common
