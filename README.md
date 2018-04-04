@@ -79,7 +79,7 @@ Pick one method install LNMP Docker.
    ```bash
    $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-0.el7_0.0.x86_64.rpm
 
-   $ sudo yum install khs1994-docker-lnmp*.rpm
+   $ sudo yum install khs1994-docker-lnmp*.rpm [-y]
    ```
 
 * **Using the convenience script**

@@ -149,7 +149,7 @@ $( sudo apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo 
 $( sudo apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
 $( if [ $PHP_NUM = "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
-          echo "libargon2-0";
+echo "libargon2-0";
           fi ); \
 echo "libsodium18 libzip4"; \
    fi ) \
@@ -175,6 +175,7 @@ sudo apt install -y $PHP_DEP
 _apt(){
 
 export DEP_SOFTS="autoconf \
+                   curl \
                    lsb-release \
                    dpkg-dev \
                    file \
@@ -376,6 +377,8 @@ if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s 
 sudo mkdir -p ${PHP_INI_DIR}/conf.d
 
 sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
+sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
+sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
 
 # php5 not have php-fpm.d
 
@@ -514,7 +517,8 @@ _composer(){
             exit(1); \
         }" \
 && ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
-&& ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction
+&& sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php \
+; ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
 }
 
 _composer

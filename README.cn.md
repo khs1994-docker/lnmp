@@ -81,7 +81,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
   ```bash
   $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-0.el7_0.0.x86_64.rpm
 
-  $ sudo yum install khs1994-docker-lnmp*.rpm
+  $ sudo yum install khs1994-docker-lnmp*.rpm [-y]
   ```
 
 * **使用一键安装脚本**

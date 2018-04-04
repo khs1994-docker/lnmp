@@ -154,7 +154,7 @@ lnmp-wsl-php-builder.sh apt
 _deb(){
     cd /tmp
 
-    DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-$( . /etc/os-release ; echo $ID )-$( lsb_release -cs )_amd64
+    DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64
 
     sudo rm -rf ${DEB_NAME}.deb
 
@@ -167,6 +167,26 @@ _deb(){
     docker rm -f ${CONTAINER_NAME}
 
     sudo dpkg -i ${DEB_NAME}.deb || ( sudo apt install -f && sudo dpkg -i ${DEB_NAME}.deb )
+}
+
+rpm(){
+  cd /tmp
+
+  RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-0.el7_0.0.x86_64.rpm
+
+  DOCKER_IMAGE_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
+
+  sudo rm -rf ${RPM_NAME}
+
+  docker pull khs1994/wsl:${DOCKER_IMAGE_NAME}
+
+  docker create --name=${CONTAINER_NAME} khs1994/wsl:${DOCKER_IMAGE_NAME}
+
+  sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${RPM_NAME} .
+
+  docker rm -f ${CONTAINER_NAME}
+
+  sudo yum install -y ${RPM_NAME}
 }
 
 if [ -z "$2" ];then
@@ -273,13 +293,18 @@ _list(){
 }
 
 _enable(){
+
   PHP_PREFIX=/usr/local/$1
 
-  if ! [ -d ${PHP_PREFIX} ];then exit 1; fi
+  php_num=$( echo $1 | cut -d 'p' -f 3 )
+
+  if ! [ -d ${PHP_PREFIX} ];then echo -e "\n\n$1 is not install\n\n"; exit 1; fi
 
   for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
   sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
+
+  sudo sed -i "s#/var/run/php-fpm${php_num}.sock#/var/run/php-fpm.sock#g" /usr/local/php${php_num}/etc/php-fpm.d/zz-${ID}.conf
 }
 
 if [ "$1" = 'enable' ];then shift ; _enable "$@"; exit $?; fi

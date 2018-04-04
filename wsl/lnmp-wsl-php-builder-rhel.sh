@@ -53,7 +53,7 @@ export LDFLAGS="$PHP_LDFLAGS"
 
 ################################################################################
 
-command -v wget || ( sudo yum -y update && sudo yum install wget -y)
+command -v wget || ( sudo yum -y update && sudo yum install -y wget )
 
 # epel
 
@@ -171,7 +171,7 @@ libpng \
 libjpeg \
                 $( if [ $PHP_NUM = "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
-                               echo "libargon2";
+echo "libargon2";
                              fi ); \
 echo "libsodium"; \
                    fi ) \
@@ -379,6 +379,8 @@ fi
 sudo mkdir -p ${PHP_INI_DIR}/conf.d
 
 sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
+sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
+sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
 
 # php5 not have php-fpm.d
 
@@ -517,7 +519,8 @@ _composer(){
             exit(1); \
         }" \
 && ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
-&& ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction
+&& sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php \
+; ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
 }
 
 _composer
@@ -610,7 +613,7 @@ License:    PHP and Zend and BSD
 URL:        https://github.com/khs1994-docker/lnmp/tree/master/wsl
 
 # BuildRequires:
-Requires:   ${PHP_DEP}
+Requires:   $( echo ${PHP_DEP} | sed "s# #, #g" )
 
 %description
 PHP is an HTML-embedded scripting language. PHP attempts to make it
@@ -674,7 +677,7 @@ rpmbuild -bb /tmp/khs1994-wsl-php.spec
 
 RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-0.el7_0.0.x86_64.rpm
 
-echo "$ rpm -Uvh ${RPM_NAME}"
+echo "$ sudo yum install -y ${RPM_NAME}"
 
 cp ~/${RPM_NAME} /
 
@@ -682,7 +685,7 @@ sudo rm -rf $PHP_PREFIX
 
 sudo rm -rf $PHP_INI_DIR
 
-sudo yum install ${RPM_NAME}
+sudo yum install -y /${RPM_NAME}
 
 # test
 
