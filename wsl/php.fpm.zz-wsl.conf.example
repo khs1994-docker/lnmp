@@ -1,5 +1,6 @@
 [global]
 
+pid = /var/run/php-fpm.pid
 error_log = /var/log/php72-fpm.error.log
 
 [www]

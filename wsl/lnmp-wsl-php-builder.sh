@@ -435,6 +435,7 @@ done
 
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
+echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
 
 wsl-php-ext-enable.sh pdo_pgsql \
                       xsl \
@@ -490,7 +491,7 @@ slowlog = /var/log/php${PHP_NUM}-fpm.slow.log
 ; wsl
 ;
 
-listen = /var/run/php-fpm${PHP_NUM}.sock
+listen = /var/run/php${PHP_NUM}-fpm.sock
 listen.owner = nginx
 listen.group = nginx
 listen.mode = 0660
