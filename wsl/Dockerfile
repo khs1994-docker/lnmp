@@ -251,7 +251,7 @@ RUN set -eux; \
 		cp php-fpm.conf.default php-fpm.d/www.conf; \
 		{ \
 			echo '[global]'; \
-			echo 'include=etc/php-fpm.d/*.conf'; \
+			echo 'include=${PHP_INI_DIR}/php-fpm.d/*.conf'; \
 		} | tee php-fpm.conf; \
 	fi \
   && cp /usr/src/php/php.ini-* ${PHP_INI_DIR} \

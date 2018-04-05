@@ -139,7 +139,7 @@ services:
 
   php7:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${KHS1994_LNMP_PHP_VERSION:-7.2.3}-alpine3.7"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${KHS1994_LNMP_PHP_VERSION:-7.2.4}-alpine3.7"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ./app:${LNMP_PHP_PATH:-/app}

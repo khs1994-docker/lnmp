@@ -14,12 +14,12 @@
 * [xdebug (生产环境不启用)](https://pecl.php.net/package/xdebug)
 * [yaml](http://pecl.php.net/package/yaml)
 
-## 官方扩展 (7.2.3)
+## 官方扩展 (7.2.4)
 
 ```bash
 $ 进入 PHP 源码目录 ext 目录
 
-$ docker run -it -d khs1994/php-fpm:7.2.3-alpine3.7
+$ docker run -it -d khs1994/php-fpm:7.2.4-alpine3.7
 
 # 记住 container id ,并替换下边命令的 CONTAINER_ID
 
