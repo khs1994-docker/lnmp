@@ -149,6 +149,7 @@ RUN set -eux; \
   # ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ ; \
 	./configure \
     --prefix=${PHP_PREFIX} \
+    --sysconfdir=${PHP_INI_DIR} \
 		--build="$gnuArch" \
 		--with-config-file-path="$PHP_INI_DIR" \
 		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
@@ -239,7 +240,7 @@ RUN set -eux; \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
   && set -ex \
-	&& cd ${PHP_PREFIX}/etc \
+	&& cd ${PHP_INI_DIR} \
 	&& if [ -d php-fpm.d ]; then \
 		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
 		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
@@ -297,7 +298,7 @@ RUN set -eux; \
                            snmp \
                            wddx \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
-       > ${PHP_PREFIX}/etc/php-fpm.d/zz-wsl.conf \
+       > ${PHP_INI_DIR}/php-fpm.d/zz-wsl.conf \
   && curl -s -f -L -o /tmp/installer.php \
          https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
   && php -r " \

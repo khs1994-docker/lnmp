@@ -286,6 +286,7 @@ sudo cp -frp /usr/lib/$debMultiarch/libldap* /usr/lib/
 # 4. configure
 
 CONFIGURE="--prefix=${PHP_PREFIX} \
+    --sysconfdir=${PHP_INI_DIR} \
     --build="$gnuArch" \
     --with-config-file-path=${PHP_INI_DIR} \
     --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
@@ -376,11 +377,11 @@ make -j "$(nproc)"
 
 sudo rm -rf ${PHP_PREFIX} || echo
 
+if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
+
 sudo make install
 
 # 7. install extension
-
-if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
 sudo mkdir -p ${PHP_INI_DIR}/conf.d
 
@@ -390,7 +391,7 @@ sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php
 
 # php5 not have php-fpm.d
 
-cd ${PHP_PREFIX}/etc/
+cd ${PHP_INI_DIR}
 
 if ! [ -d php-fpm.d ]; then
   # php5
@@ -507,7 +508,7 @@ listen.group = nginx
 listen.mode = 0660
 env[APP_ENV] = wsl
 
-" | sudo tee ${PHP_PREFIX}/etc/php-fpm.d/zz-${ID}.conf
+" | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
 cd /var/log
 

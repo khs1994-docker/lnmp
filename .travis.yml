@@ -147,7 +147,7 @@ jobs:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_56}-0.el7_0.0.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_56}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     - stage: wsl-php-builder-rhel-70
@@ -160,7 +160,7 @@ jobs:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_70}-0.el7_0.0.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_70}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     - stage: wsl-php-builder-rhel-71
@@ -173,7 +173,7 @@ jobs:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_71}-0.el7_0.0.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_71}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     - stage: wsl-php-builder-rhel-72
@@ -186,7 +186,7 @@ jobs:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_72}-0.el7_0.0.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_72}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     #
