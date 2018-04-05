@@ -58,7 +58,9 @@ export LDFLAGS="$PHP_LDFLAGS"
 
 ################################################################################
 
-command -v wget || ( sudo apt update && sudo apt install wget -y)
+sudo apt update
+
+command -v wget || sudo apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
@@ -136,8 +138,6 @@ cd /usr/local/src/php-${PHP_VERSION}
 
 # 2. install packages
 
-# sudo apt update
-
 sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 export PHP_DEP="libedit2 \
@@ -185,7 +185,7 @@ export DEP_SOFTS="autoconf \
                    lsb-release \
                    dpkg-dev \
                    file \
-                   $( test $CC = 'gcc' && echo "gcc g++ libc6-dev" ) \
+                   $( test ${CC:-gcc} = 'gcc' && echo "gcc g++ libc6-dev" ) \
                    $( test $CC = 'clang' && echo "clang" ) \
                    make \
                    pkg-config \
@@ -237,7 +237,7 @@ do
     sudo echo $soft >> ${PHP_INSTALL_LOG}
 done
 
-sudo apt update ; sudo apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
+sudo apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
 }
 
 if [ "$1" = apt ];then _apt ; exit $?; fi
@@ -434,7 +434,7 @@ PHP_EXTENSION="igbinary \
 for extension in ${PHP_EXTENSION}
 do
   echo $extension >> ${PHP_INSTALL_LOG}
-  sudo ${PHP_PREFIX}/bin/pecl install $extension || echo
+  sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
 done
 
 # 8. enable extension
