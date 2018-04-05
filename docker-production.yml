@@ -330,9 +330,9 @@ services:
     #
     # image: username/lnmp-php:tag
     #
-    # image: khs1994/lnmp-php:7.2.3
+    # image: khs1994/lnmp-php:7.2.4
     #
-    image: khs1994/php-fpm:7.2.3-alpine3.7
+    image: khs1994/php-fpm:7.2.4-alpine3.7
     volumes:
       - ./app:/app:rw
       - zoneinfo-data:/usr/share/zoneinfo:rw
