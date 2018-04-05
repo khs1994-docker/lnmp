@@ -396,7 +396,7 @@ if ! [ -d php-fpm.d ]; then
 
   { \
     echo '[global]'; \
-    echo "include=${PHP_PREFIX}/etc/php-fpm.d/*.conf"; \
+    echo "include=${PHP_INI_DIR}/php-fpm.d/*.conf"; \
   } | sudo tee php-fpm.conf
 
 else
