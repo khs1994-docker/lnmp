@@ -42,6 +42,10 @@ To use LNMP Docker, you need:
 
 Please see [Windows 10](docs/install/windows.md).
 
+#### Try WSL ?
+
+Please see https://github.com/khs1994-docker/lnmp/tree/master/wsl
+
 ### Install
 
 Pick one method install LNMP Docker.
@@ -77,7 +81,7 @@ Pick one method install LNMP Docker.
 * **Using rpm in RHEL**
 
    ```bash
-   $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-0.el7_0.0.x86_64.rpm
+   $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-1.el7.centos.x86_64.rpm
 
    $ sudo yum install khs1994-docker-lnmp*.rpm [-y]
    ```

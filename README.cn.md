@@ -44,6 +44,10 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 如果你使用的是 Windows 10 请查看 [支持文档](docs/install/windows.md)。
 
+#### 使用 WSL ?
+
+请查看：https://github.com/khs1994-docker/lnmp/tree/master/wsl
+
 ### 安装
 
 使用以下的任意一种方法来安装本项目。
@@ -79,7 +83,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 * **在 RHEL 系使用 rpm 安装**
 
   ```bash
-  $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-0.el7_0.0.x86_64.rpm
+  $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-1.el7.centos.x86_64.rpm
 
   $ sudo yum install khs1994-docker-lnmp*.rpm [-y]
   ```

@@ -1,6 +1,6 @@
 Name:       khs1994-docker-lnmp
 Version:    KHS1994_DOCKER_LNMP_VERSION
-Release:    0.el7_0.0
+Release:    1.el7.centos
 Summary:    Start LNMP In less than 2 minutes Powered by Docker Compose.
 
 License:    Apache-2.0

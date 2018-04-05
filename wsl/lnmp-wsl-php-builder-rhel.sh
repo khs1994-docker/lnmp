@@ -105,14 +105,14 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 # verify os
 
-# . /etc/os-release
+. /etc/os-release
 
 #
-# ID=debian
-# VERSION_ID="9"
+# ID="centos"
+# VERSION_ID="7"
 #
-# ID=ubuntu
-# VERSION_ID="16.04"
+# ID=fedora
+# VERSION_ID=27
 #
 
 ################################################################################
@@ -149,9 +149,9 @@ _libzip(){
 
 cd /tmp
 
-sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el7.psychotic.x86_64.rpm
+sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
-sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el7.psychotic.x86_64.rpm
+sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
 sudo rpm -Uvh libzip*rpm ; cd -
 }
@@ -285,6 +285,7 @@ sudo cp -frp /usr/lib64/libldap* /usr/lib/
 # 4. configure
 
 CONFIGURE="--prefix=${PHP_PREFIX} \
+    --sysconfdir=${PHP_INI_DIR} \
     --build=x86_64-linux-gnu \
     --with-config-file-path=${PHP_INI_DIR} \
     --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
@@ -370,15 +371,13 @@ make -j "$(nproc)"
 
 sudo rm -rf ${PHP_PREFIX} || echo
 
+if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
+
 sudo make install
 
 ################################################################################
 
 # 7. install extension
-
-if [ -d ${PHP_INI_DIR} ];then
-    sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
-fi
 
 sudo mkdir -p ${PHP_INI_DIR}/conf.d
 
@@ -388,7 +387,7 @@ sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php
 
 # php5 not have php-fpm.d
 
-cd ${PHP_PREFIX}/etc/
+cd ${PHP_INI_DIR}
 
 if ! [ -d php-fpm.d ]; then
   # php5
@@ -505,7 +504,7 @@ listen.group = nginx
 listen.mode = 0660
 env[APP_ENV] = wsl
 
-" | sudo tee ${PHP_PREFIX}/etc/php-fpm.d/zz-$( . /etc/os-release ; echo $ID ).conf
+" | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
 cd /var/log
 
@@ -615,7 +614,7 @@ cd /tmp
 
 echo "Name:       khs1994-wsl-php
 Version:    ${PHP_VERSION}
-Release:    0.el7_0.0
+Release:    1.el${VERSION_ID}.centos
 Summary:    PHP scripting language for creating dynamic web sites
 
 License:    PHP and Zend and BSD
@@ -684,7 +683,7 @@ cat /tmp/khs1994-wsl-php.spec
 
 rpmbuild -bb /tmp/khs1994-wsl-php.spec
 
-RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-0.el7_0.0.x86_64.rpm
+RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
 
 echo "$ sudo yum install -y ${RPM_NAME}"
 

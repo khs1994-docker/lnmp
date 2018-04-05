@@ -172,7 +172,7 @@ _deb(){
 rpm(){
   cd /tmp
 
-  RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-0.el7_0.0.x86_64.rpm
+  RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
 
   DOCKER_IMAGE_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 
@@ -304,9 +304,9 @@ _enable(){
 
   sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
 
-  sudo sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" /usr/local/php${php_num}/etc/php-fpm.d/zz-${ID}.conf
+  sudo sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
-  sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" /usr/local/php${php_num}/etc/php-fpm.d/zz-${ID}.conf
+  sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 }
 
 if [ "$1" = 'enable' ];then shift ; _enable "$@"; exit $?; fi
