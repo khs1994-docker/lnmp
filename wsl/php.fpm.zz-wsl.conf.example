@@ -1,5 +1,7 @@
 [global]
 
+pid = /var/run/php-fpm.pid
+
 error_log = /var/log/php72-fpm.error.log
 
 [www]
@@ -11,6 +13,13 @@ group = nginx
 
 request_slowlog_timeout = 5
 slowlog = /var/log/php72-fpm.slow.log
+
+clear_env = no
+
+catch_workers_output = yes
+
+; listen = 9000
+; env[APP_ENV] = development
 
 listen = /run/php-fpm.sock
 
