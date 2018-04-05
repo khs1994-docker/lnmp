@@ -42,6 +42,10 @@ To use LNMP Docker, you need:
 
 Please see [Windows 10](docs/install/windows.md).
 
+#### Try WSL ?
+
+Please see https://github.com/khs1994-docker/lnmp/tree/master/wsl
+
 ### Install
 
 Pick one method install LNMP Docker.

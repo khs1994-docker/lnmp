@@ -44,6 +44,10 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 如果你使用的是 Windows 10 请查看 [支持文档](docs/install/windows.md)。
 
+#### 使用 WSL ?
+
+请查看：https://github.com/khs1994-docker/lnmp/tree/master/wsl
+
 ### 安装
 
 使用以下的任意一种方法来安装本项目。
