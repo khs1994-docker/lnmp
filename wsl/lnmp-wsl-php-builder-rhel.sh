@@ -43,7 +43,7 @@ export COMPOSER_HOME=/tmp
 
 export TZ=Asia/Shanghai
 
-export CC=clang CXX=clang
+# export CC=clang CXX=clang
 
 # export CC=gcc CXX=g++
 
@@ -140,8 +140,6 @@ cd /usr/local/src/php-${PHP_VERSION}
 
 # 2. install packages
 
-# sudo yum update
-
 _libzip(){
 
 # libzip php7.2
@@ -208,7 +206,7 @@ export DEP_SOFTS="autoconf \
                    make \
                    \
                    re2c \
-                   $( test $CC = 'gcc' && echo "gcc gcc-c++ libgcc" ) \
+                   $( test ${CC:-gcc} = 'gcc' && echo "gcc gcc-c++ libgcc" ) \
                    $( test $CC = 'clang' && echo "clang" ) \
                    libedit-devel \
                    zlib-devel \
@@ -256,8 +254,6 @@ for soft in ${DEP_SOFTS}
 do
     echo $soft >> ${PHP_INSTALL_LOG}
 done
-
-sudo yum update
 
 sudo yum install -y ${DEP_SOFTS} > /dev/null
 }
@@ -436,7 +432,7 @@ PHP_EXTENSION="igbinary \
 for extension in ${PHP_EXTENSION}
 do
   echo $extension >> ${PHP_INSTALL_LOG}
-  sudo ${PHP_PREFIX}/bin/pecl install $extension || echo
+  sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
 done
 
 # 8. enable extension
