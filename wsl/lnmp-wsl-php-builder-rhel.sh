@@ -1,4 +1,4 @@
-#！/bin/bash
+#!/bin/bash
 
 #
 # Build php in WSL(RHEL)
@@ -6,9 +6,9 @@
 # $ lnmp-wsl-php-builder.rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
 #
 
-if [ -z "$1" ];then
-  set +x
-exec echo "
+_print_help_info(){
+
+    echo "
 
 Build php in WSL RHEL by shell script
 
@@ -19,13 +19,10 @@ $ lnmp-wsl-php-builder-rhel.sh 7.2.4
 $ lnmp-wsl-php-builder-rhel.sh 5.6.35 --skipbuild tar rpm
 
 "
-else
 
-PHP_VERSION=$1
+exit 0
 
-fi
-
-set -ex
+}
 
 ################################################################################
 
@@ -59,23 +56,9 @@ export LDFLAGS="$PHP_LDFLAGS"
 
 ################################################################################
 
-command -v wget || ( sudo yum -y update && sudo yum install -y wget )
+_get_phpnum(){
 
-# epel
-
-cd /tmp ; sudo wget -N http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-
-sudo rpm -Uvh epel-release*rpm ; cd -
-
-#
-
-mkdir -p /tmp/php-builder || echo
-
-if [ "$PHP_VERSION" = 'yum' ];then PHP_VERSION=7.2.4; fi
-
-################################################################################
-
-case "${PHP_VERSION}" in
+case "$1" in
   5.6.* )
     export PHP_NUM=56
     ;;
@@ -96,49 +79,37 @@ case "${PHP_VERSION}" in
     echo "ONLY SUPPORT 5.6 +"
     exit 1
 esac
-
-export PHP_PREFIX=/usr/local/php${PHP_NUM}
-
-export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
+}
 
 ################################################################################
 
-# verify os
+_download_src(){
 
-. /etc/os-release
+    sudo mkdir -p /usr/local/src || echo
 
-#
-# ID="centos"
-# VERSION_ID="7"
-#
-# ID=fedora
-# VERSION_ID=27
-#
+    if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
-################################################################################
+      echo -e "Download php src ...\n\n"
 
-# 1. download
+      cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-sudo mkdir -p /usr/local/src || echo
+      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
 
-if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
+      echo -e "Untar ...\n\n"
 
-  echo -e "Download php src ...\n\n"
-
-  cd /usr/local/src ; sudo chmod 777 /usr/local/src
-
-  wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
-
-  echo -e "Untar ...\n\n"
-
-  tar -zxvf php-${PHP_VERSION}.tar.gz > /dev/null 2>&1
-fi
-
-cd /usr/local/src/php-${PHP_VERSION}
+      tar -zxvf php-${PHP_VERSION}.tar.gz > /dev/null 2>&1
+    fi
+}
 
 ################################################################################
 
 # 2. install packages
+
+_install_php_run_dep(){
+
+    cd /tmp ; sudo wget -N http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+    sudo rpm -Uvh epel-release*rpm
 
 _libzip(){
 
@@ -147,20 +118,20 @@ _libzip(){
 # checking for libzip... configure: error: system libzip must be upgraded to version >= 0.11
 #
 
-cd /tmp
+    cd /tmp
 
-sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
+    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
-sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
+    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
-sudo rpm -Uvh libzip*rpm ; cd -
+    sudo rpm -Uvh libzip*rpm ; cd -
 }
 
-test ${PHP_NUM} = '72' && _libzip
+    test ${PHP_NUM} = '72' && _libzip
 
-sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
+    sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
-export PHP_DEP="libedit \
+    export PHP_DEP="libedit \
 zlib \
 libxml2 \
 openssl \
@@ -197,10 +168,11 @@ aspell"
 
 
 sudo yum install -y ${PHP_DEP} rpm-build > /dev/null
+}
 
-_yum(){
+_install_php_build_dep(){
 
-export DEP_SOFTS="autoconf \
+     export DEP_SOFTS="autoconf \
                    \
                    \
                    make \
@@ -258,9 +230,22 @@ done
 sudo yum install -y ${DEP_SOFTS} > /dev/null
 }
 
-if [ "$1" = yum ];then _yum ; exit $?; fi
+################################################################################
 
-_yum
+_test(){
+    ${PHP_PREFIX}/bin/php -v
+
+    ${PHP_PREFIX}/bin/php -i | grep .ini
+
+    ${PHP_PREFIX}/sbin/php-fpm -v
+
+    sudo ${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+
+    set +x
+
+    for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
+    do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+}
 
 ################################################################################
 
@@ -273,202 +258,137 @@ _builder(){
 # https://blog.csdn.net/alexdream/article/details/7408453
 #
 
-sudo ln -sf /usr/lib64/libc-client.so.2007 /usr/lib/libc-client.so
+     sudo ln -sf /usr/lib64/libc-client.so.2007 /usr/lib/libc-client.so
 
 #
 # configure: error: Cannot find ldap libraries in /usr/lib.
 #
 # @link https://blog.csdn.net/ei__nino/article/details/8598490
 
-sudo cp -frp /usr/lib64/libldap* /usr/lib/
+     sudo cp -frp /usr/lib64/libldap* /usr/lib/
 
 # 4. configure
 
-CONFIGURE="--prefix=${PHP_PREFIX} \
-    --sysconfdir=${PHP_INI_DIR} \
-    --build=x86_64-linux-gnu \
-    --with-config-file-path=${PHP_INI_DIR} \
-    --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
-    --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
-    \
-    --with-curl \
-    --with-gettext \
-    --with-kerberos \
-    --with-libedit \
-    --with-openssl \
-        --with-system-ciphers \
-    --with-pcre-regex \
-    --with-pdo-mysql \
-    --with-pdo-pgsql=shared \
-    --with-xsl=shared \
-    --with-zlib \
-    --with-mhash \
-    --with-gd \
-        --with-freetype-dir=/usr/lib \
-        --disable-gd-jis-conv \
-        --with-jpeg-dir=/usr/lib \
-        --with-png-dir=/usr/lib \
-        --with-xpm-dir=/usr/lib \
-    --enable-ftp \
-    --enable-mysqlnd \
-    --enable-bcmath \
-    --enable-libxml \
-    --enable-inline-optimization \
-    --enable-mbregex \
-    --enable-mbstring \
-    --enable-pcntl=shared \
-    --enable-shmop=shared \
-    --enable-soap=shared \
-    --enable-sockets=shared \
-    --enable-sysvmsg=shared \
-    --enable-sysvsem=shared \
-    --enable-sysvshm=shared \
-    --enable-xml \
-    --enable-zip \
-    --enable-calendar=shared \
-    --enable-intl=shared \
-    \
-    $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
-    $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
-    $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
-    \
-    $( if [ $PHP_NUM = "72" ];then \
+    CONFIGURE="--prefix=${PHP_PREFIX} \
+        --sysconfdir=${PHP_INI_DIR} \
+        --build=x86_64-linux-gnu \
+        --with-config-file-path=${PHP_INI_DIR} \
+        --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
+        --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
+        \
+        --with-curl \
+        --with-gettext \
+        --with-kerberos \
+        --with-libedit \
+        --with-openssl \
+            --with-system-ciphers \
+        --with-pcre-regex \
+        --with-pdo-mysql \
+        --with-pdo-pgsql=shared \
+        --with-xsl=shared \
+        --with-zlib \
+        --with-mhash \
+        --with-gd \
+            --with-freetype-dir=/usr/lib \
+            --disable-gd-jis-conv \
+            --with-jpeg-dir=/usr/lib \
+            --with-png-dir=/usr/lib \
+            --with-xpm-dir=/usr/lib \
+        --enable-ftp \
+        --enable-mysqlnd \
+        --enable-bcmath \
+        --enable-libxml \
+        --enable-inline-optimization \
+        --enable-mbregex \
+        --enable-mbstring \
+        --enable-pcntl=shared \
+        --enable-shmop=shared \
+        --enable-soap=shared \
+        --enable-sockets=shared \
+        --enable-sysvmsg=shared \
+        --enable-sysvsem=shared \
+        --enable-sysvshm=shared \
+        --enable-xml \
+        --enable-zip \
+        --enable-calendar=shared \
+        --enable-intl=shared \
+        \
+        $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
+        $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
+        $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
+       \
+       $( if [ $PHP_NUM = "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2";
                  fi ); \
          echo "--with-sodium --with-libzip --with-webp-dir=/usr/lib --with-pcre-jit"; \
        fi ) \
-    --enable-exif \
-    --with-bz2 \
-    --with-tidy \
-    --with-gmp \
-    --with-imap=shared \
-         --with-imap-ssl \
-    --with-xmlrpc \
-    \
-    --with-pic \
-    --with-enchant=shared \
-    --enable-fileinfo=shared \
-    --with-ldap=shared \
-        --with-ldap-sasl \
-    --enable-phar \
-    --enable-posix=shared \
-    --with-pspell=shared \
-    --enable-shmop=shared \
-    --with-snmp=shared \
-    --enable-wddx=shared \
-    "
+        --enable-exif \
+        --with-bz2 \
+        --with-tidy \
+        --with-gmp \
+        --with-imap=shared \
+            --with-imap-ssl \
+        --with-xmlrpc \
+        \
+        --with-pic \
+        --with-enchant=shared \
+        --enable-fileinfo=shared \
+        --with-ldap=shared \
+            --with-ldap-sasl \
+        --enable-phar \
+        --enable-posix=shared \
+        --with-pspell=shared \
+        --enable-shmop=shared \
+        --with-snmp=shared \
+        --enable-wddx=shared \
+        "
 
-for a in ${CONFIGURE} ; do echo $a >> ${PHP_INSTALL_LOG}; done
+    for a in ${CONFIGURE} ; do echo $a >> ${PHP_INSTALL_LOG}; done
 
-./configure ${CONFIGURE}
+    cd /usr/local/src/php-${PHP_VERSION}
+
+    ./configure ${CONFIGURE}
 
 # 5. make
 
-make -j "$(nproc)"
+    make -j "$(nproc)"
 
 # 6. make install
 
-sudo rm -rf ${PHP_PREFIX} || echo
+    sudo rm -rf ${PHP_PREFIX} || echo
 
-if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
+    if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
-sudo make install
+    sudo make install
 
 ################################################################################
 
-# 7. install extension
+    sudo mkdir -p ${PHP_INI_DIR}/conf.d
 
-sudo mkdir -p ${PHP_INI_DIR}/conf.d
+    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
+    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
+    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
 
-sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
-sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
-sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
 
 # php5 not have php-fpm.d
 
-cd ${PHP_INI_DIR}
+    cd ${PHP_INI_DIR}
 
-if ! [ -d php-fpm.d ]; then
-  # php5
-  sudo mkdir php-fpm.d
-  sudo cp php-fpm.conf.default php-fpm.d/www.conf
+    if ! [ -d php-fpm.d ]; then
+    # php5
+        sudo mkdir php-fpm.d
+        sudo cp php-fpm.conf.default php-fpm.d/www.conf
 
-  { \
-    echo '[global]'; \
-    echo "include=${PHP_INI_DIR}/php-fpm.d/*.conf"; \
-  } | sudo tee php-fpm.conf
+    { \
+        echo '[global]'; \
+        echo "include=${PHP_INI_DIR}/php-fpm.d/*.conf"; \
+    } | sudo tee php-fpm.conf
 
-else
-  sudo cp php-fpm.d/www.conf.default php-fpm.d/www.conf
-  sudo cp php-fpm.conf.default php-fpm.conf
-fi
-
-${PHP_PREFIX}/bin/php -v
-
-${PHP_PREFIX}/bin/php -i | grep ".ini"
-
-${PHP_PREFIX}/sbin/php-fpm -v
-
-# sudo ${PHP_PREFIX}/bin/pear config-set php_ini ${PHP_INI_DIR}/php.ini
-# sudo ${PHP_PREFIX}/bin/pecl config-set php_ini ${PHP_INI_DIR}/php.ini
-
-sudo ${PHP_PREFIX}/bin/pecl update-channels
-
-# ${PHP_PREFIX}/bin/pear config-show >> ${PHP_INSTALL_LOG}
-# ${PHP_PREFIX}/bin/pecl config-show >> ${PHP_INSTALL_LOG}
-
-${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
-
-PHP_EXTENSION="igbinary \
-               redis \
-               $( if [ $PHP_NUM = "56" ];then echo "memcached-2.2.0"; else echo "memcached"; fi ) \
-               $( if [ $PHP_NUM = "56" ];then echo "xdebug-2.5.5"; else echo "xdebug"; fi ) \
-               $( if [ $PHP_NUM = "56" ];then echo "yaml-1.3.1"; else echo "yaml"; fi ) \
-               $( if ! [ $PHP_NUM = "56" ];then echo "swoole"; else echo ""; fi ) \
-               mongodb"
-
-for extension in ${PHP_EXTENSION}
-do
-  echo $extension >> ${PHP_INSTALL_LOG}
-  sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
-done
-
-# 8. enable extension
-
-echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
-echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
-echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
-
-wsl-php-ext-enable.sh pdo_pgsql \
-                      xsl \
-                      pcntl \
-                      shmop \
-                      soap \
-                      sockets \
-                      sysvmsg \
-                      sysvsem \
-                      sysvshm \
-                      calendar \
-                      intl \
-                      imap \
-                      enchant \
-                      fileinfo \
-                      ldap \
-                      posix \
-                      pspell \
-                      shmop \
-                      snmp \
-                      wddx \
-                      \
-                      mongodb \
-                      igbinary \
-                      redis \
-                      memcached \
-                      xdebug \
-                      $( test $PHP_NUM != "56" && echo "swoole" ) \
-                      yaml \
-                      opcache
+    else
+        sudo cp php-fpm.d/www.conf.default php-fpm.d/www.conf
+        sudo cp php-fpm.conf.default php-fpm.conf
+    fi
 
 echo "
 [global]
@@ -506,13 +426,74 @@ env[APP_ENV] = wsl
 
 " | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
-cd /var/log
+_install_pecl_ext(){
 
-if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+    sudo ${PHP_PREFIX}/bin/pecl update-channels
 
-sudo chmod 777 php${PHP_NUM}-*
+    ${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+
+    PHP_EXTENSION="igbinary \
+               redis \
+               $( if [ $PHP_NUM = "56" ];then echo "memcached-2.2.0"; else echo "memcached"; fi ) \
+               $( if [ $PHP_NUM = "56" ];then echo "xdebug-2.5.5"; else echo "xdebug"; fi ) \
+               $( if [ $PHP_NUM = "56" ];then echo "yaml-1.3.1"; else echo "yaml"; fi ) \
+               $( if ! [ $PHP_NUM = "56" ];then echo "swoole"; else echo ""; fi ) \
+               mongodb"
+
+    for extension in ${PHP_EXTENSION}
+    do
+        echo $extension >> ${PHP_INSTALL_LOG}
+        sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
+    done
+}
+
+_php_ext_enable(){
+
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
+echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
+echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
+
+wsl-php-ext-enable.sh pdo_pgsql \
+                      xsl \
+                      pcntl \
+                      shmop \
+                      soap \
+                      sockets \
+                      sysvmsg \
+                      sysvsem \
+                      sysvshm \
+                      calendar \
+                      intl \
+                      imap \
+                      enchant \
+                      fileinfo \
+                      ldap \
+                      posix \
+                      pspell \
+                      shmop \
+                      snmp \
+                      wddx \
+                      \
+                      mongodb \
+                      igbinary \
+                      redis \
+                      memcached \
+                      xdebug \
+                      $( test $PHP_NUM != "56" && echo "swoole" ) \
+                      yaml \
+                      opcache
+}
+
+
+_create_log_file(){
+    cd /var/log
+
+    if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
+    if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
+    if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+
+    sudo chmod 777 php${PHP_NUM}-*
+}
 
 _composer(){
    curl -sfL -o /tmp/installer.php \
@@ -526,31 +507,26 @@ _composer(){
             echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
             exit(1); \
         }" \
-&& ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
-&& sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php \
-; ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
+    && ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
+    && sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php \
+    ; ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
 }
+
+_test
+
+_install_pecl_ext
+
+_php_ext_enable
+
+_create_log_file
 
 _composer
 
 }
 
-_test(){
-
-${PHP_PREFIX}/bin/php -v
-
-${PHP_PREFIX}/bin/php -i | grep .ini
-
-${PHP_PREFIX}/sbin/php-fpm -v
-
-set +x
-
-for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
-do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
-}
 ################################################################################
 
-_write_version(){
+_write_version_to_file(){
 
 echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
 
@@ -584,15 +560,6 @@ set -x
 cat ${PHP_PREFIX}/README.md
 
 }
-
-################################################################################
-
-for command in "$@"
-do
-  test $command = '--skipbuild' && export SKIP_BUILD=1
-done
-
-test "${SKIP_BUILD}" != 1 && ( _builder ; _test ; _write_version )
 
 ################################################################################
 
@@ -701,6 +668,49 @@ _test
 }
 
 ################################################################################
+
+if [ -z "$1" ];then _print_help_info ; else PHP_VERSION="$1" ; fi
+
+set -ex
+
+command -v wget || sudo yum install -y wget
+
+mkdir -p /tmp/php-builder || echo
+
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.4 ; fi
+
+_get_phpnum $PHP_VERSION
+
+export PHP_PREFIX=/usr/local/php${PHP_NUM}
+
+export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
+
+# verify os
+
+. /etc/os-release
+
+#
+# ID="centos"
+# VERSION_ID="7"
+#
+# ID=fedora
+# VERSION_ID=27
+#
+
+_download_src
+
+_install_php_run_dep
+
+if [ "$1" = rpm ];then _install_php_build_dep ; exit $?; fi
+
+_install_php_build_dep
+
+for command in "$@"
+do
+  test $command = '--skipbuild' && export SKIP_BUILD=1
+done
+
+test "${SKIP_BUILD}" != 1 && ( _builder ; _test ; _write_version_to_file )
 
 for command in "$@"
 do

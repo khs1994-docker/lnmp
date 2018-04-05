@@ -8,8 +8,8 @@
 # $ lnmp-wsl-install.sh php [deb | tar] [7.2.4]
 #
 
-if [ -z "$1" ];then
-  exec echo "
+_print_help_info(){
+    echo "
 
 Install WSL soft by shell script
 
@@ -23,21 +23,10 @@ $ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
 $ lnmp-wsl-install.sh nginx php postgresql mysql mongodb ...
 
 "
-fi
 
-set -ex
+exit 0
 
-. /etc/os-release
-
-. ~/.bash_profile || echo
-
-################################################################################
-
-if [ -z $WSL_HOME ];then exit 1 ; fi
-
-################################################################################
-
-CONTAINER_NAME=$( date +%s )
+}
 
 _nginx(){
   # apt
@@ -65,12 +54,12 @@ _php(){
   command -v docker || echo -e "Docker cli not install, you can exec $ lnmp-wsl-docker-cli.sh "
 
   command -v docker || exit 1
+
   # include redis memcached
   # default install latest php version
   # current version is php 7.2.4
-  PHP_VERSION=${1:-7.2.4}
 
-################################################################################
+  PHP_VERSION=${1:-7.2.4}
 
   case ${PHP_VERSION} in
     5.6.* )
@@ -219,31 +208,31 @@ command -v /usr/local/bin/composer && composer config -g repo.packagist composer
 
 }
 
-# _httpd(){
-#
-# NGHTTP2_VERSION=1.18.1-1
-# OPENSSL_VERSION=1.0.2l-1~bpo8+1
-#
-# sudo apt install -y --no-install-recommends \
-# 		libapr1 \
-# 		libaprutil1 \
-# 		libaprutil1-ldap \
-# 		libapr1-dev \
-# 		libaprutil1-dev \
-# 		liblua5.2-0 \
-# 		libnghttp2-14=$NGHTTP2_VERSION \
-# 		libpcre++0 \
-# 		libssl1.0.0=$OPENSSL_VERSION \
-#     libxml2
-#
-# docker create --name=${CONTAINER_NAME} httpd:2.4.33
-#
-# sudo rm -rf /usr/local/apache2
-#
-# sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/usr/local/apache2 /usr/local/apache2
-#
-# docker rm -f ${CONTAINER_NAME}
-# }
+_httpd(){
+
+NGHTTP2_VERSION=1.18.1-1
+OPENSSL_VERSION=1.0.2l-1~bpo8+1
+
+sudo apt install -y --no-install-recommends \
+		libapr1 \
+		libaprutil1 \
+		libaprutil1-ldap \
+		libapr1-dev \
+		libaprutil1-dev \
+		liblua5.2-0 \
+		libnghttp2-14=$NGHTTP2_VERSION \
+		libpcre++0 \
+		libssl1.0.0=$OPENSSL_VERSION \
+    libxml2
+
+docker create --name=${CONTAINER_NAME} httpd:2.4.33
+
+sudo rm -rf /usr/local/apache2
+
+sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/usr/local/apache2 /usr/local/apache2
+
+docker rm -f ${CONTAINER_NAME}
+}
 
 _postgresql(){
   # apt
@@ -309,12 +298,22 @@ _enable(){
   sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
 }
 
-if [ "$1" = 'enable' ];then shift ; _enable "$@"; exit $?; fi
+################################################################################
 
-if [ "$1" = "php" ];then shift ; _php "$@"; exit $?; fi
+if [ -z "$1" ];then _print_help_info ; fi
 
-if ! [ -z "$1" ];then
+set -ex
 
-for c in "$@"; do _$c; done;
+if [ -z $WSL_HOME ];then exit 1 ; fi
 
-fi
+. /etc/os-release
+
+. ~/.bash_profile || echo
+
+if [ "$1" = 'enable' ];then shift ; _enable "$@" ; exit $? ; fi
+
+CONTAINER_NAME=$( date +%s )
+
+if [ "$1" = "php" ];then shift ; _php "$@" ; exit $? ; fi
+
+for c in "$@"; do _$c; done
