@@ -81,7 +81,7 @@ Pick one method install LNMP Docker.
 * **Using rpm in RHEL**
 
    ```bash
-   $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-0.el7_0.0.x86_64.rpm
+   $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.05/khs1994-docker-lnmp-18.05-1.el7.centos.x86_64.rpm
 
    $ sudo yum install khs1994-docker-lnmp*.rpm [-y]
    ```

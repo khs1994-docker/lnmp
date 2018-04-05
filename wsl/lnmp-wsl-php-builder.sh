@@ -507,7 +507,7 @@ listen.group = nginx
 listen.mode = 0660
 env[APP_ENV] = wsl
 
-" | sudo tee ${PHP_PREFIX}/etc/php-fpm.d/zz-$( . /etc/os-release ; echo $ID ).conf
+" | sudo tee ${PHP_PREFIX}/etc/php-fpm.d/zz-${ID}.conf
 
 cd /var/log
 
