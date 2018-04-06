@@ -59,10 +59,6 @@ PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
 PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
-export CFLAGS="$PHP_CFLAGS"
-export CPPFLAGS="$PHP_CPPFLAGS"
-export LDFLAGS="$PHP_LDFLAGS"
-
 ################################################################################
 
 _get_phpnum(){
@@ -187,8 +183,8 @@ _install_php_build_dep(){
                    make \
                    \
                    re2c \
-                   $( test ${CC:-gcc} = 'gcc' && echo "gcc gcc-c++ libgcc" ) \
-                   $( test $CC = 'clang' && echo "clang" ) \
+                   $( test ${CC:-gcc} = 'gcc'  && echo "gcc gcc-c++ libgcc" ) \
+                   $( test $CC = 'clang'       && echo "clang" ) \
                    libedit-devel \
                    zlib-devel \
                    libxml2-devel \
@@ -280,7 +276,10 @@ _builder(){
 
     CONFIGURE="--prefix=${PHP_PREFIX} \
         --sysconfdir=${PHP_INI_DIR} \
-        --build=x86_64-linux-gnu \
+        \
+        --build=${build:-x86_64-linux-gnu} \
+        --host=${host:-x86_64-linux-gnu} \
+        \
         --with-config-file-path=${PHP_INI_DIR} \
         --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
         --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
@@ -356,6 +355,10 @@ _builder(){
     for a in ${CONFIGURE} ; do echo $a >> ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
+
+    export CFLAGS="$PHP_CFLAGS"
+    export CPPFLAGS="$PHP_CPPFLAGS"
+    export LDFLAGS="$PHP_LDFLAGS"
 
     ./configure ${CONFIGURE}
 

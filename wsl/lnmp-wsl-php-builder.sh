@@ -3,7 +3,7 @@
 #
 # Build php in WSL(Debian Ubuntu)
 #
-# $ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb] [travis]
+# $ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb] [travis] [arm64] [arm32]
 #
 
 # help info
@@ -20,6 +20,10 @@ $ lnmp-wsl-php-builder.sh 7.2.4
 
 $ lnmp-wsl-php-builder.sh 5.6.35 --skipbuild tar deb
 
+$ lnmp-wsl-php-builder.sh 7.2.3 arm64 tar [TODO]
+
+$ lnmp-wsl-php-builder.sh 7.2.3 arm32 tar [TODO]
+
 "
 
 exit 0
@@ -32,9 +36,13 @@ PHP_TIMEZONE=PRC
 
 PHP_URL=http://cn2.php.net/distributions
 
+host=x86_64-linux-gnu
+
 for command in "$@"
 do
 test $command = 'travis' && PHP_URL=https://secure.php.net/distributions
+test $command = 'arm64' && host=aarch64-linux-gnu
+test $command = 'arm32' && host=arm-linux-gnueabihf
 done
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
@@ -51,6 +59,16 @@ export CC=clang CXX=clang
 
 # export CC=gcc CXX=g++
 
+test $host = 'aarch64-linux-gnu' && \
+              export CC=aarch64-linux-gnu-gcc \
+                     CXX=aarch64-linux-gnu-g++ \
+                     armMake="ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-"
+
+test $host = 'arm-linux-gnueabihf' && \
+              export CC=arm-linux-gnueabihf-gcc \
+                     CXX=arm-linux-gnueabihf-g++ \
+                     armMake="ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-"
+
 ################################################################################
 
 #
@@ -60,10 +78,6 @@ export CC=clang CXX=clang
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
 PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
-
-export CFLAGS="$PHP_CFLAGS"
-export CPPFLAGS="$PHP_CPPFLAGS"
-export LDFLAGS="$PHP_LDFLAGS"
 
 ################################################################################
 
@@ -118,7 +132,63 @@ _download_src(){
 
 # install packages
 
+_build_arm_php_build_dep(){
+################################################################################
+
+  DEP_PREFIX=/opt/${host}
+
+  ZLIB_VERSION=1.2.11
+  LIBXML2_VERSION=2.9.8
+
+################################################################################
+
+_buildlib(){
+  if [ -f /opt/${host}/$LIB_NAME ];then return 0 ; fi
+
+  cd /tmp ; test ! -d $TAR_FILE && ( wget $URL ; tar -zxvf $TAR )
+
+  cd $TAR_FILE && ./configure $CONFIGURES && make && sudo make install
+}
+
+################################################################################
+
+LIB_NAME=
+URL=
+TAR=
+TAR_FILE=
+CONFIGURES="--prefix=${DEP_PREFIX}/zlib"
+# _buildlib
+
+################################################################################
+
+LIB_NAME=zlib/lib/libz.so.${ZLIB_VERSION}
+URL=http://www.zlib.net/zlib-${ZLIB_VERSION}.tar.gz
+TAR=zlib-${ZLIB_VERSION}.tar.gz
+TAR_FILE=zlib-${ZLIB_VERSION}
+CONFIGURES="--prefix=${DEP_PREFIX}/zlib"
+_buildlib
+
+################################################################################
+
+command -v python-config || pip install python-config
+
+LIB_NAME=libxm2/lib/libxml2.so.${LIBXML2_VERSION}
+URL=ftp://xmlsoft.org/libxml2/libxml2-${LIBXML2_VERSION}.tar.gz
+TAR=libxml2-${LIBXML2_VERSION}.tar.gz
+TAR_FILE=libxml2-${LIBXML2_VERSION}
+CONFIGURES="--prefix=${DEP_PREFIX}/libxm2 \
+                        --host=${host} \
+                        --with-zlib=${DEP_PREFIX}/zlib \
+                        --with-python=/tmp/$TAR_FILE/python"
+_buildlib
+
+################################################################################
+
+}
+
 _install_php_run_dep(){
+
+    test $host != 'x86_64-linux-gnu' && _build_arm_php_build_dep ; return 0
 
     sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
@@ -170,8 +240,10 @@ _install_php_build_dep(){
                    lsb-release \
                    dpkg-dev \
                    file \
-                   $( test ${CC:-gcc} = 'gcc' && echo "gcc g++ libc6-dev" ) \
-                   $( test $CC = 'clang' && echo "clang" ) \
+                   $( test ${CC:-gcc} = 'gcc'  && echo "gcc g++ libc6-dev" ) \
+                   $( test $CC = 'clang'       && echo "clang" ) \
+                   $( test $host = 'aarch64-linux-gnu'    && echo "gcc-aarch64-linux-gnu g++-aarch64-linux-gnu" ) \
+                   $( test $host = 'arm-linux-gnueabihf'  && echo "gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf" ) \
                    make \
                    pkg-config \
                    re2c \
@@ -227,6 +299,10 @@ _install_php_build_dep(){
 _test(){
     ${PHP_PREFIX}/bin/php -v
 
+    sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
+
+    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
+
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
     ${PHP_PREFIX}/sbin/php-fpm -v
@@ -249,6 +325,7 @@ _builder(){
    export gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"
    debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"
 
+_fix_bug(){
 #
 # https://bugs.php.net/bug.php?id=74125
 #
@@ -281,6 +358,9 @@ _builder(){
 # @link https://blog.csdn.net/ei__nino/article/details/8598490
 
     sudo cp -frp /usr/lib/$debMultiarch/libldap* /usr/lib/
+}
+
+test $host = 'x86_64-linux-gnu'  && _fix_bug
 
 ################################################################################
 
@@ -288,7 +368,10 @@ _builder(){
 
     CONFIGURE="--prefix=${PHP_PREFIX} \
       --sysconfdir=${PHP_INI_DIR} \
+      \
       --build="$gnuArch" \
+      --host=${host:-x86_64-linux-gnu} \
+      \
       --with-config-file-path=${PHP_INI_DIR} \
       --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
       --disable-cgi \
@@ -362,11 +445,17 @@ _builder(){
       --enable-shmop=shared \
       --with-snmp=shared \
       --enable-wddx=shared \
+      $( test $host != 'x86_64-linux-gnu' && echo --with-libxml-dir=/opt/${host}/libxml2 " \
+                                                   --with-zlib-dir=/opt/${host}/zlib" ) \
       "
 
     for a in ${CONFIGURE}; do sudo echo $a >> ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
+
+    export CFLAGS="$PHP_CFLAGS"
+    export CPPFLAGS="$PHP_CPPFLAGS"
+    export LDFLAGS="$PHP_LDFLAGS"
 
     ./configure ${CONFIGURE}
 
@@ -526,12 +615,10 @@ _composer(){
             echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
             exit(1); \
         }" \
-&& ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
-&& sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php \
-; ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
+&& ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
 }
 
-_test
+test $host = 'x86_64-linux-gnu'  && _test
 
 _install_pecl_ext
 
@@ -580,7 +667,11 @@ cat ${PHP_PREFIX}/README.md
 ################################################################################
 
 _tar(){
-  cd /usr/local ; sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  cd /usr/local
+
+  test $host = 'aarch64-linux-gnu' && cd arm64
+
+  sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
 
   cd etc ; sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
@@ -684,7 +775,7 @@ sudo dpkg -i /${DEB_NAME}
 
 # test
 
-_test
+test $host = 'x86_64-linux-gnu'  && _test
 
 }
 
@@ -707,6 +798,14 @@ _get_phpnum $PHP_VERSION
 export PHP_PREFIX=/usr/local/php${PHP_NUM}
 
 export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
+
+test $host = 'aarch64-linux-gnu' && \
+              export PHP_PREFIX=/usr/local/arm64/php${PHP_NUM} \
+                     PHP_INI_DIR=/usr/local/arm64/etc/php${PHP_NUM}
+
+test $host = 'arm-linux-gnueabihf' && \
+              export PHP_PREFIX=/usr/local/arm32/php${PHP_NUM} \
+                     PHP_INI_DIR=/usr/local/arm32/etc/php${PHP_NUM}
 
 # verify os
 
@@ -736,7 +835,7 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test "${SKIP_BUILD}" != 1 &&  ( _download_src ; _builder ; _test ; _write_version_to_file )
+test "${SKIP_BUILD}" != 1 &&  ( _download_src ; _builder ; ( test $host = 'x86_64-linux-gnu'  && _test ) ; _write_version_to_file )
 
 for command in "$@"
 do
