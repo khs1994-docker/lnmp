@@ -12,7 +12,7 @@ COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
 
 RUN sed -i "s#sudo##g" /lnmp-wsl-php-builder.sh \
       && chmod +x /usr/local/bin/wsl-php-ext-enable.sh \
-      && sh /lnmp-wsl-php-builder.sh ${PHP_VERSION} tar deb
+      && sh /lnmp-wsl-php-builder.sh ${PHP_VERSION} tar deb travis
 
 # scratch
 
