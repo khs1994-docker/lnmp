@@ -30,6 +30,11 @@ PHP_TIMEZONE=PRC
 
 PHP_URL=http://cn2.php.net/distributions
 
+for command in "$@"
+do
+test $command = 'travis' && PHP_URL=https://secure.php.net/distributions
+done
+
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
 export COMPOSER_VERSION=1.6.3
@@ -93,7 +98,7 @@ _download_src(){
 
       cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || wget http://php.net/distributions/php-${PHP_VERSION}.tar.gz
+      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null
 
       echo -e "Untar ...\n\n"
 
