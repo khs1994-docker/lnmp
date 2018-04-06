@@ -3,7 +3,7 @@
 #
 # Build php in WSL(RHEL)
 #
-# $ lnmp-wsl-php-builder.rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
+# $ lnmp-wsl-php-builder.rhel.sh 5.6.35 [--skipbuild] [tar] [rpm] [travis]
 #
 
 _print_help_info(){
@@ -51,13 +51,13 @@ export TZ=Asia/Shanghai
 
 ################################################################################
 
+#
+# https://github.com/docker-library/php/issues/272
+#
+
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
 PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
-
-export CFLAGS="$PHP_CFLAGS"
-export CPPFLAGS="$PHP_CPPFLAGS"
-export LDFLAGS="$PHP_LDFLAGS"
 
 ################################################################################
 
@@ -183,8 +183,8 @@ _install_php_build_dep(){
                    make \
                    \
                    re2c \
-                   $( test ${CC:-gcc} = 'gcc' && echo "gcc gcc-c++ libgcc" ) \
-                   $( test $CC = 'clang' && echo "clang" ) \
+                   $( test ${CC:-gcc} = 'gcc'  && echo "gcc gcc-c++ libgcc" ) \
+                   $( test $CC = 'clang'       && echo "clang" ) \
                    libedit-devel \
                    zlib-devel \
                    libxml2-devel \
@@ -276,7 +276,10 @@ _builder(){
 
     CONFIGURE="--prefix=${PHP_PREFIX} \
         --sysconfdir=${PHP_INI_DIR} \
-        --build=x86_64-linux-gnu \
+        \
+        --build=${build:-x86_64-linux-gnu} \
+        --host=${host:-x86_64-linux-gnu} \
+        \
         --with-config-file-path=${PHP_INI_DIR} \
         --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
         --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
@@ -352,6 +355,10 @@ _builder(){
     for a in ${CONFIGURE} ; do echo $a >> ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
+
+    export CFLAGS="$PHP_CFLAGS"
+    export CPPFLAGS="$PHP_CPPFLAGS"
+    export LDFLAGS="$PHP_LDFLAGS"
 
     ./configure ${CONFIGURE}
 
@@ -432,6 +439,10 @@ env[APP_ENV] = wsl
 " | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
 _install_pecl_ext(){
+
+    #
+    # https://github.com/docker-library/php/issues/443
+    #
 
     sudo ${PHP_PREFIX}/bin/pecl update-channels
 
@@ -702,11 +713,9 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 # VERSION_ID=27
 #
 
-_download_src
-
 _install_php_run_dep
 
-if [ "$1" = rpm ];then _install_php_build_dep ; exit $?; fi
+if [ "$1" = rpm ];then _install_php_build_dep ; exit $? ; fi
 
 _install_php_build_dep
 
@@ -715,7 +724,7 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test "${SKIP_BUILD}" != 1 && ( _builder ; _test ; _write_version_to_file )
+test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test ; _write_version_to_file )
 
 for command in "$@"
 do

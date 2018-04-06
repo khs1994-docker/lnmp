@@ -54,8 +54,6 @@ $ lnmp-wsl-install.sh # 输出帮助信息
 $ lnmp-wsl-install.sh nginx | php | mysql ...
 ```
 
-* 安装路径 `/usr/local/phpXX` `/usr/local/etc/phpXX` `/var/log/phpXX`
-
 * PHP 版本问题：https://github.com/khs1994-docker/lnmp/issues/348
 
 * PHP 多版本共存
@@ -65,6 +63,8 @@ $ lnmp-wsl-install.sh nginx | php | mysql ...
 ```bash
 $ lnmp-wsl-install.sh enable php72 | php71 | php70 | php56
 ```
+
+### PHP 安装路径 `/usr/local/phpXX` `/usr/local/etc/phpXX``/var/log/phpXX`
 
 ## 特别注意 NGINX
 
