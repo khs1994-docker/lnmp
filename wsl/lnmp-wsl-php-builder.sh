@@ -3,7 +3,7 @@
 #
 # Build php in WSL(Debian Ubuntu)
 #
-# $ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb]
+# $ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb] [travis]
 #
 
 # help info
@@ -52,6 +52,10 @@ export CC=clang CXX=clang
 # export CC=gcc CXX=g++
 
 ################################################################################
+
+#
+# https://github.com/docker-library/php/issues/272
+#
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
@@ -441,9 +445,14 @@ env[APP_ENV] = wsl
 
 _install_pecl_ext(){
 
-sudo ${PHP_PREFIX}/bin/pecl update-channels
+    #
+    # https://github.com/docker-library/php/issues/443
+    #
 
-PHP_EXTENSION="igbinary \
+
+    sudo ${PHP_PREFIX}/bin/pecl update-channels
+
+    PHP_EXTENSION="igbinary \
                redis \
                $( if [ $PHP_NUM = "56" ];then echo "memcached-2.2.0"; else echo "memcached"; fi ) \
                $( if [ $PHP_NUM = "56" ];then echo "xdebug-2.5.5"; else echo "xdebug"; fi ) \
@@ -451,11 +460,11 @@ PHP_EXTENSION="igbinary \
                $( if ! [ $PHP_NUM = "56" ];then echo "swoole"; else echo ""; fi ) \
                mongodb"
 
-for extension in ${PHP_EXTENSION}
-do
-  echo $extension >> ${PHP_INSTALL_LOG}
-  sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
-done
+    for extension in ${PHP_EXTENSION}
+    do
+        echo $extension >> ${PHP_INSTALL_LOG}
+        sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
+    done
 }
 
 _php_ext_enable(){
@@ -716,11 +725,9 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
   echo "debian9 notsupport php56" ; exit 1 ; fi
 
-_download_src
-
 _install_php_run_dep
 
-if [ "$1" = apt ];then _install_php_build_dep ; exit $? ; fi
+if [ "$1" = 'apt' ];then _install_php_build_dep ; exit $? ; fi
 
 _install_php_build_dep
 
@@ -729,7 +736,7 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test "${SKIP_BUILD}" != 1 &&  ( _builder ; _test ; _write_version_to_file )
+test "${SKIP_BUILD}" != 1 &&  ( _download_src ; _builder ; _test ; _write_version_to_file )
 
 for command in "$@"
 do
