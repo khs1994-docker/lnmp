@@ -15,7 +15,7 @@ $ {script} {example_version} root
   '''.format(script=script, soft=soft, example_version=example_version))
 
 
-def download_src(url, version, tar_gz_file, file):
+def download_src(url, tar_gz_file, file):
     os.chdir('/tmp')
 
     if os.path.exists(file):
@@ -25,7 +25,8 @@ def download_src(url, version, tar_gz_file, file):
         return 0
 
     cmd = 'wget ' + url
-    return os.system(cmd)
+    os.system(cmd)
+    download_src(url, tar_gz_file, file)
 
 
 def install_dep(cmd):

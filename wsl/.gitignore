@@ -13,7 +13,7 @@
 !lnmp-wsl-php-builder.sh
 !lnmp-wsl-php-builder-rhel.sh
 !lnmp-wsl-httpd-builder.py
-!lnmp_wsl_nginx_builder.py
+!lnmp-wsl-nginx-builder.py
 !Dockerfile
 !wsl.phpbuilder.Dockerfile
 !wsl.phpbuilder.rhel.Dockerfile
