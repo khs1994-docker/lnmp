@@ -69,6 +69,9 @@ def builder(version):
     cmd = '''./configure \
         --build=$( dpkg-architecture --query DEB_BUILD_GNU_TYPE ) \
         --prefix="/usr/local/httpd" \
+        --bindir="/usr/local/bin" \
+        --sbindir="/usr/local/sbin" \
+        --sysconfdir="/usr/local/etc/httpd" \
         --enable-mods-shared=reallyall \
         --enable-mpms-shared=all
         '''
@@ -78,9 +81,10 @@ def builder(version):
     cmd = '''sed -ri \
         -e 's!^(\s*CustomLog)\s+\S+!\1 /proc/self/fd/1!g' \
         -e 's!^(\s*ErrorLog)\s+\S+!\1 /proc/self/fd/2!g' \
-        "/usr/local/httpd/conf/httpd.conf"; '''
+        "/usr/local/etc/httpd/httpd.conf";
+        '''
     os.system(sudo_cmd + cmd)
-    cmd = 'ln -sf /usr/local/httpd/bin/* /usr/local/bin'
+    # cmd = 'ln -sf /usr/local/httpd/bin/* /usr/local/bin'
     os.system(sudo_cmd + cmd)
     pass
 
@@ -90,6 +94,10 @@ def test():
     os.system(cmd)
     pass
 
+
+'''
+
+'''
 
 input_sudo = ''
 input_version = ''
@@ -108,6 +116,10 @@ ret = os.system(sudo_cmd + 'ls > /dev/null 2>&1')
 if ret != 0:
     print('\nsudo password is not correct\n')
     exit(1)
+
+'''
+
+'''
 
 download_src(input_version)
 
