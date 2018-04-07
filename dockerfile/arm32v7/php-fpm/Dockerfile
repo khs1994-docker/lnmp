@@ -1,4 +1,4 @@
-FROM arm32v7/php:7.2.4-fpm-stretch@sha256:19fbcb6a003ebe662e8fe6248c16ae290eb09fcea8445b8ca2d964a27db1604b
+FROM arm32v7/php:7.2.4-fpm-stretch@sha256:92d01f30b5bc5c22a9146f689129402c5665eb96718c1b3cba89ab9ba7dff2a5
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
