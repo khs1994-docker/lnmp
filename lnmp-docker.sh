@@ -330,10 +330,10 @@ install_docker_compose_move(){
     case "$ID" in
       coreos )
         if ! [ -d /opt/bin ];then sudo mkdir -p /opt/bin; fi
-        sudo cp -a /tmp/docker-compose /opt/bin/docker-compose
+        sudo install -m755 /tmp/docker-compose /opt/bin/docker-compose
         ;;
       * )
-        sudo cp -a /tmp/docker-compose /usr/local/bin/docker-compose || cp -a /tmp/docker-compose /usr/local/bin/docker-compose
+        sudo install -m755 /tmp/docker-compose /usr/local/bin/docker-compose || install -m755 /tmp/docker-compose /usr/local/bin/docker-compose
         ;;
     esac
   else
@@ -346,7 +346,6 @@ install_docker_compose_move(){
 install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
   curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
-  chmod +x /tmp/docker-compose
   install_docker_compose_move
 }
 
@@ -367,7 +366,6 @@ install_docker_compose(){
     install_docker_compose_arm "$@"
   elif [ "$ARCH" = 'x86_64' ];then
     curl -L ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
-    chmod +x /tmp/docker-compose
     install_docker_compose_move
   fi
 }
