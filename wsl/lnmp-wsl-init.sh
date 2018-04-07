@@ -25,7 +25,10 @@ sudo apt update && sudo apt install \
                             git \
                             curl \
                             wget \
-                            lsb-release
+                            lsb-release \
+                            python3 \
+                            openssh-server
+
 
 # composer cn mirror
 
