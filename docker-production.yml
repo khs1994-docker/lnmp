@@ -379,7 +379,7 @@ services:
     #
     # image: khs1994/lnmp-nginx:1.13.11
     #
-    image: khs1994/nginx:1.13.11-tls1.3-stretch
+    image: nginx:1.13.11-alpine
     ports:
       - "443:443"
       - "80:80"

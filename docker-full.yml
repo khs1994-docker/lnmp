@@ -63,7 +63,7 @@ services:
       - ./config/mariadb/${MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
-      - mariadb-data:${LNMP_MARIADB_DATA:/var/lib/mysql}:rw
+      - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}:rw
       - ./logs/mariadb:/var/log/mysql:rw
       - ./backup/mariadb:/backup:rw
     command:
@@ -171,11 +171,11 @@ services:
     environment:
       - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.05} x86_64 With FULL UP Docker Image
+
   nginx:
     << : *default-common
     << : *default-labels
-    # image: "nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.10}-alpine"
-    image: "khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.10}-tls1.3-stretch"
+    image: "nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.11}-alpine"
     ports:
       - "443:443"
       - target: 80
