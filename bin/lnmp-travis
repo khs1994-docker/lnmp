@@ -4,6 +4,11 @@
 # https://github.com/travis-ci/travis.rb#readme
 #
 
+if [ -z "$GITHUB_TOKEN" ];then
+  echo "\nYou must set [ GITHUB_TOKEN ] env\n"
+  exit 1
+fi
+
 docker run -it --rm \
     --mount type=bind,source=$PWD,target=/app \
     --mount source=lnmp_travis-data,target=/root/.travis \
