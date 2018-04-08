@@ -199,14 +199,15 @@ Function _update(){
   git fetch origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   if (${BRANCH} -eq "dev"){
-    git submodule update --init --recursive
     git reset --hard origin/dev
-  }elseif(${BRANCH} -eq "master"){
     git submodule update --init --recursive
+  }elseif(${BRANCH} -eq "master"){
     git reset --hard origin/master
+    git submodule update --init --recursive
   }else{
     git checkout dev
     git reset --hard origin/dev
+    git submodule update --init --recursive
   }
 }
 
