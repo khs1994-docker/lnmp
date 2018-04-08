@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# https://github.com/FriendsOfPHP/PHP-CS-Fixer
+#
+
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $DIR/.arch

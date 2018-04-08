@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+
+  travis:
+    build:
+      context: .
+      args:
+        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
+    image: khs1994/travis:cli

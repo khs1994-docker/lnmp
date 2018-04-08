@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# https://github.com/composer/composer
+#
+
 set -ex
 
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"

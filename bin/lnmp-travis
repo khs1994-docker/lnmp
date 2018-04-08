@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+#
+# https://github.com/travis-ci/travis.rb#readme
+#
+
+docker run -it --rm \
+    --mount type=bind,source=$PWD,target=/app \
+    --mount source=lnmp_travis-data,target=/root/.travis \
+    -e GITHUB_TOKEN=$GITHUB_TOKEN \
+    khs1994/travis:cli \
+    "$@"

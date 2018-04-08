@@ -66,5 +66,7 @@ development
 ## 容器数量伸缩
 
 ```bash
-$ ./lnmp-docker.sh scale php7=2
+$ ./lnmp-docker.sh scale php7=3
+
+$ ./lnmp-docker.sh scale php7=1
 ```

@@ -1,3 +1,7 @@
+#
+# https://github.com/laravel/laravel
+#
+
 if (!($args -contains 'new')){
   exit 1
 }

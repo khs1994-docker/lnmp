@@ -1,18 +1,11 @@
-FROM alpine:latest@sha256:7df6db5aa61ae9480f52f0b3a06a140ab98d427f86d8d5de0bedab9b8df6b1c0
+FROM khs1994/builder:ruby
 
 ARG VERSION=4.0.8
 
 ARG REDIS_URL=raw.githubusercontent.com/antirez/redis
 
-ARG ALPINE_URL=dl-cdn.alpinelinux.org
-
-RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-    && wget https://${REDIS_URL}/${VERSION}/src/redis-trib.rb -O /usr/bin/redis-trib.rb \
+RUN wget https://${REDIS_URL}/${VERSION}/src/redis-trib.rb -O /usr/bin/redis-trib.rb \
     && chmod +x /usr/bin/redis-trib.rb \
-    && apk add --no-cache \
-            ruby \
-            ruby-rdoc \
-            ruby-irb \
     && gem install redis
 
 COPY docker-entrypoint.sh /
