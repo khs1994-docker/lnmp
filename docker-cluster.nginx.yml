@@ -1,0 +1,78 @@
+version: "3.6"
+
+#
+# NGINX 负载均衡
+#
+# $ docker-compose -f docker-cluster.nginx.yml -f docker-compose.yml  -f docker-compose.override.yml up nginx_main nginx-1 nginx-2 nginx-3 php7
+#
+
+x-common:
+  &default-common
+  image: "${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.11}-tls1.3-stretch"
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - frontend
+  working_dir: /app
+  depends_on:
+    - php7
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+services:
+
+  nginx_main:
+    << : *default-common
+    ports:
+      - "${NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
+      - "${NGINX_HTTP_PORT:-0.0.0.0:80}:80"
+    volumes:
+      - ./config/nginx/demo-include-php.config:/etc/nginx/conf.d/demo-include-php.config:ro
+      - ./config/nginx/demo-include-ssl.config:/etc/nginx/conf.d/demo-include-ssl.config:ro
+      - type: bind
+        source: ./config/${NGINX_CONF_D:-nginx}/demo-ssl
+        target: /etc/nginx/conf.d/demo-ssl
+      - type: bind
+        source: ./config/${NGINX_CONF_D:-nginx}/demo-fzjh.config
+        target: /etc/nginx/conf.d/fzjh.conf
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx:rw
+    depends_on:
+      - php7
+      - nginx-1
+      - nginx-2
+      - nginx-3
+
+  nginx-1:
+    << : *default-common
+    volumes:
+      - type: bind
+        source: ./config/${NGINX_CONF_D:-nginx}
+        target: /etc/nginx/conf.d
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx:rw
+
+  nginx-2:
+    << : *default-common
+    volumes:
+      # - ./config/nginx:/etc/nginx/conf.d:ro
+      - type: bind
+        source: ./config/${NGINX_CONF_D:-nginx}
+        target: /etc/nginx/conf.d
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx:rw
+
+  nginx-3:
+    << : *default-common
+    volumes:
+      # - ./config/nginx:/etc/nginx/conf.d:ro
+      - type: bind
+        source: ./config/${NGINX_CONF_D:-nginx}
+        target: /etc/nginx/conf.d
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx:rw
