@@ -28,6 +28,18 @@ ARG DEB_SECURITY_URL=security.debian.org
 
 # mirrors.ustc.edu.cn/debian-security/
 
+COPY --from=php /usr/local/bin/docker-php-source /usr/local/bin/
+
+COPY --from=php /usr/local/bin/docker-php-ext-* /usr/local/bin/docker-php-entrypoint /usr/local/bin/
+
+COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
+
+ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
+ENV PHP_CPPFLAGS="$PHP_CFLAGS"
+ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
+
+ENV PHP_URL="https://secure.php.net/get/php-${PHP_VERSION}.tar.xz/from/this/mirror"
+
 ENV PHPIZE_DEPS \
 		autoconf \
 		dpkg-dev \
@@ -109,26 +121,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libpspell-dev \
     libsnmp30 \
     libsnmp-dev \
-    snmp
-
-COPY --from=php /usr/local/bin/docker-php-source /usr/local/bin/
-
-COPY --from=php /usr/local/bin/docker-php-ext-* /usr/local/bin/docker-php-entrypoint /usr/local/bin/
-
-COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
-
-ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
-ENV PHP_CPPFLAGS="$PHP_CFLAGS"
-ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
-
-ENV PHP_URL="https://secure.php.net/get/php-${PHP_VERSION}.tar.xz/from/this/mirror"
-
-RUN mkdir -p $PHP_INI_DIR/conf.d; \
+    snmp \
+  && mkdir -p $PHP_INI_DIR/conf.d; \
       mkdir -p /usr/src; \
 	    cd /usr/src; \
-	    wget -O php.tar.xz "$PHP_URL"
-
-RUN set -eux; \
+	    wget -O php.tar.xz "$PHP_URL" \
+  && set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	export \
 		CFLAGS="$PHP_CFLAGS" \
