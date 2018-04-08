@@ -292,7 +292,11 @@ logs(){
                logs/mysql \
                logs/nginx \
                logs/php-fpm \
-               logs/redis
+               logs/redis || sudo chmod -R 777 logs/mongodb \
+                                          logs/mysql \
+                                          logs/nginx \
+                                          logs/php-fpm \
+                                          logs/redis
 }
 
 # 清理日志文件

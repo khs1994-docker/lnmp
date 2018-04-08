@@ -62,3 +62,9 @@ development
 
   127.0.0.1 redis mysql
   ```
+
+## 容器数量伸缩
+
+```bash
+$ ./lnmp-docker.sh scale php7=2
+```
