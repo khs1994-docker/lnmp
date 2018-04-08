@@ -5,6 +5,7 @@
 * `php CLI`  => `lnmp-php`
 * `laravel`  => `lnmp-laravel`
 * `lnmp-laravel5.5`
+* `php-cs-fixer` => `lnmp-php-cs-fixer`
 
 > 为避免与原始命令冲突，这里加上了 `lnmp-` 前缀
 
