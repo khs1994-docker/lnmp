@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# https://github.com/mysql/mysql-server
+#
+
 set -e
 
 docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)

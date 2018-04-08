@@ -1,3 +1,7 @@
+#
+# https://github.com/laravel/laravel
+#
+
 if ($args -contains 'new' ){
   if ($args.Count -lt 2 ){
     exit 1
