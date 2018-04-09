@@ -45,7 +45,7 @@ $ ./lnmp-docker.sh build-up
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v18.05 x86_64 With Build Docker Image
+Welcome use khs1994-docker/lnmp v18.06 x86_64 With Build Docker Image
 
 development
 
