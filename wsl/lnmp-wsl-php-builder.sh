@@ -301,7 +301,7 @@ _test(){
 
     sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
 
-    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
+    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || echo ; sudo rm -rf /usr/local/sbin/php
 
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
@@ -310,9 +310,9 @@ _test(){
     sudo ${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
     set +x
-
     for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
     do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+    set -x
 }
 
 
@@ -657,9 +657,10 @@ cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_PREFIX}/README.md
 
 echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
 
+set +x
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_PREFIX}/README.md ; done
-
+set -x
 cat ${PHP_PREFIX}/README.md
 
 }
