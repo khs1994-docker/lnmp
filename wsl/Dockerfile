@@ -296,7 +296,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            snmp \
                            wddx \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
-       > ${PHP_INI_DIR}/php-fpm.d/zz-wsl.conf \
+       > ${PHP_INI_DIR}/php-fpm.d/zz-debian.conf \
   && curl -s -f -L -o /tmp/installer.php \
          https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
   && php -r " \
@@ -351,6 +351,6 @@ FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e9
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-COPY --from=0 ${PHP_PREFIX}.tar.gz /
+COPY --from=0 /usr/local/php72.tar.gz /
 
-COPY --from=0 ${PHP_INI_DIR}-etc.tar.gz /
+COPY --from=0 /usr/local/etc/php72-etc.tar.gz /

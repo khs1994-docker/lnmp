@@ -22,6 +22,23 @@ $ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
 
 $ lnmp-wsl-install.sh nginx php postgresql mysql mongodb ...
 
+Example:
+
+$ lnmp-wsl-install.sh php 7.2.4 tar
+
+$ lnmp-wsl-install.sh php 7.2.4 deb
+
+[ deb 方法一个系统只能存在一个 PHP 版本，若想多版本共存，主版本使用 deb 方法，其他版本使用 tar 方法 ]
+
+$ lnmp-wsl-install.sh php 7.1.16
+
+$ lnmp-wsl-install.sh php 7.0.29
+
+$ lnmp-wsl-install.sh php 5.6.35
+
+[ php56 只支持 ubuntu ]
+
+$ lnmp-wsl-install.sh enable php70
 "
 
 exit 0
@@ -31,7 +48,8 @@ exit 0
 _nginx(){
   # apt
   if ! [ -f /etc/apt/sources.list.d/nginx.list ];then
-    echo "deb http://nginx.org/packages/mainline/${ID} $(lsb_release -cs) nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+    echo "deb http://nginx.org/packages/mainline/${ID} $(lsb_release -cs) nginx" | \
+        sudo tee /etc/apt/sources.list.d/nginx.list
   fi
 
   apt-key list | grep nginx || curl -fsSL http://nginx.org/packages/keys/nginx_signing.key | sudo apt-key add -
@@ -40,9 +58,11 @@ _nginx(){
 
   sudo apt install -y nginx
 
-  if ! [ -h /etc/nginx/conf.d ];then sudo rm -rf /etc/nginx/conf.d; sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+  if ! [ -h /etc/nginx/conf.d ];then sudo rm -rf /etc/nginx/conf.d; \
+      sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
 
-  if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf ; fi
+  if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf \
+      /etc/nginx/fastcgi.conf ; fi
 
   sudo nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/nginx.wsl.conf /etc/nginx/nginx.conf
 
@@ -64,21 +84,29 @@ _php(){
   case ${PHP_VERSION} in
     5.6.* )
       export PHP_NUM=56
-      if [ $ID = debian ];then set +x ; echo -e   "\n\nkhs1994-wsl-php only support php56 on Ubuntu, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; exit 1; fi
+      if [ $ID = 'debian' ];then set +x ; \
+       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; \
+       exit 1; fi
       ;;
 
     7.0.* )
-      if ! [ $ID = debian ];then set +x ; echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh \n\n" ; exit 1; fi
+      if [ $ID = 'ubuntu' ];then set +x ; \
+       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh \n\n" \
+       ; exit 1; fi
       export PHP_NUM=70
       ;;
 
     7.1.* )
-      if ! [ $ID = debian ];then set +x ; echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; exit 1; fi
+      if [ $ID = 'ubuntu' ];then set +x ; \
+       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" \
+       ; exit 1; fi
       export PHP_NUM=71
       ;;
 
     7.2.* )
-      if ! [ $ID = debian ];then set +x ; echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; exit 1; fi
+      if [ $ID = 'ubuntu' ];then set +x ; \
+       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" \
+       ; exit 1; fi
       export PHP_NUM=72
       ;;
 
@@ -93,11 +121,17 @@ _php(){
   PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 _tar(){
+# debian ubuntu
+TAR_IMAGE=khs1994/wsl:khs1994-wsl-php_${PHP_VERSION}-${ID}-"$( lsb_release -cs )"_amd64
 
-TAR_IMAGE=khs1994/wsl:khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64
-
-if [ $PHP_NUM = '72' ];then
+if [[ $PHP_NUM = '72' && "$ID" = 'debian' ]];then
+  # debian php latest version
   TAR_IMAGE=registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
+fi
+
+if [ "$ID" = 'centos' ];then
+  # rhel
+  TAR_IMAGE=khs1994/wsl:khs1994-wsl-php_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 fi
 
 docker pull ${TAR_IMAGE}
@@ -142,7 +176,7 @@ sudo chmod 777 php${PHP_NUM}*
 # ln
 for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
-sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
+sudo ln -sf ${PHP_PREFIX}/sbin/* /usr/local/sbin
 
 lnmp-wsl-php-builder.sh apt
 }
@@ -247,10 +281,12 @@ _postgresql(){
   # @link https://www.postgresql.org/download/linux/debian/
 
  if ! [ -f /etc/apt/sources.list.d/postgresql.list ];then
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ $( lsb_release -cs )-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql.list
-  fi
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $( lsb_release -cs )-pgdg main" | \
+      sudo tee /etc/apt/sources.list.d/postgresql.list
+ fi
 
-  apt-key list | grep PostgreSQL || wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+  apt-key list | grep PostgreSQL || \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
   sudo apt-get update
 
@@ -300,9 +336,11 @@ _enable(){
 
   sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
 
-  sudo sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
+  sudo sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" \
+      /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
 
-  sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
+  sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" \
+      /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
 }
 
 ################################################################################

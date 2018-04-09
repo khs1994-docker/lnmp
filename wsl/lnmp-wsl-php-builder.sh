@@ -18,7 +18,7 @@ Usage:
 
 $ lnmp-wsl-php-builder.sh 7.2.4
 
-$ lnmp-wsl-php-builder.sh 5.6.35 --skipbuild tar deb
+$ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb]
 
 $ lnmp-wsl-php-builder.sh 7.2.3 arm64 tar [TODO]
 
@@ -267,7 +267,7 @@ _install_php_build_dep(){
                    $( test $PHP_NUM = "71" && echo "" ) \
                    $( if [ $PHP_NUM = "72" ];then \
                         echo $( if ! [ "${ARGON2}" = 'false' ];then \
-                                  echo "libargon2-0-dev";
+                                  echo "libargon2-0-dev"; \
                                 fi ); \
                         echo "libsodium-dev libzip-dev"; \
                       fi ) \
@@ -301,7 +301,7 @@ _test(){
 
     sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
 
-    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
+    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || echo ; sudo rm -rf /usr/local/sbin/php
 
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
@@ -310,9 +310,9 @@ _test(){
     sudo ${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
     set +x
-
     for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
     do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+    set -x
 }
 
 
@@ -365,7 +365,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
 ################################################################################
 
 # configure
-
+    set +e
     CONFIGURE="--prefix=${PHP_PREFIX} \
       --sysconfdir=${PHP_INI_DIR} \
       \
@@ -422,7 +422,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
     \
     $( if [ $PHP_NUM = "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
-                   echo "--with-password-argon2";
+                   echo "--with-password-argon2"; \
                  fi ); \
          echo "--with-sodium --with-libzip --with-webp-dir=/usr/lib --with-pcre-jit"; \
        fi ) \
@@ -445,10 +445,10 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-shmop=shared \
       --with-snmp=shared \
       --enable-wddx=shared \
-      $( test $host != 'x86_64-linux-gnu' && echo --with-libxml-dir=/opt/${host}/libxml2 " \
-                                                   --with-zlib-dir=/opt/${host}/zlib" ) \
+      $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
+                                                     --with-zlib-dir=/opt/${host}/zlib" ) \
       "
-
+    set -e
     for a in ${CONFIGURE}; do sudo echo $a >> ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
@@ -657,9 +657,10 @@ cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_PREFIX}/README.md
 
 echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
 
+set +x
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
 do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_PREFIX}/README.md ; done
-
+set -x
 cat ${PHP_PREFIX}/README.md
 
 }
