@@ -337,7 +337,7 @@ COPY --from=memcached:1.5.6 /usr/local/bin/memcached ${PHP_PREFIX}/bin/
 
       # phpmyadmin
 
-RUN cd /usr/local ; tar -zcvf wsl-php72.tar.gz php72 ; cd etc ; tar -zcvf wsl-php72-etc.tar.gz php72 \
+RUN cd /usr/local ; tar -zcvf php72.tar.gz php72 ; cd etc ; tar -zcvf php72-etc.tar.gz php72 \
     && for ext in $( ls /usr/src/php/ext ); \
         do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done \
     && php -v \
@@ -351,6 +351,6 @@ FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e9
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-COPY --from=0 /usr/local/wsl-php72.tar.gz /
+COPY --from=0 ${PHP_PREFIX}.tar.gz /
 
-COPY --from=0 /usr/local/etc/wsl-php72-etc.tar.gz /
+COPY --from=0 ${PHP_INI_DIR}-etc.tar.gz /

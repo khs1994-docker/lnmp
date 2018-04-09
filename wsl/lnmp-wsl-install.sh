@@ -93,23 +93,30 @@ _php(){
   PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 _tar(){
-docker pull registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 
-docker create --name=${CONTAINER_NAME} registry.cn-hangzhou.aliyuncs.com/khs1994/wsl #khs1994/php-fpm:wsl
+TAR_IMAGE=khs1994/wsl:khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64
+
+if [ $PHP_NUM = '72' ];then
+  TAR_IMAGE=registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
+fi
+
+docker pull ${TAR_IMAGE}
+
+docker create --name=${CONTAINER_NAME} ${TAR_IMAGE} #khs1994/php-fpm:wsl
 
 # rm
 sudo rm -rf ${PHP_PREFIX}
 
-sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}.tar.gz /usr/local/
-sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/wsl-php${PHP_NUM}-etc.tar.gz /usr/local/etc/
+sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}.tar.gz /usr/local/
+sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}-etc.tar.gz /usr/local/etc/
 
 docker rm -f ${CONTAINER_NAME}
 
 cd /usr/local
 
-sudo tar -zxvf wsl-php${PHP_NUM}.tar.gz
+sudo tar -zxvf php${PHP_NUM}.tar.gz
 
-sudo rm -rf wsl-php${PHP_NUM}.tar.gz
+sudo rm -rf php${PHP_NUM}.tar.gz
 
 cd /usr/local/etc
 
@@ -118,9 +125,9 @@ if [ -d ${PHP_INI_DIR} ];then
   sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
 fi
 
-sudo tar -zxvf wsl-php${PHP_NUM}-etc.tar.gz
+sudo tar -zxvf php${PHP_NUM}-etc.tar.gz
 
-sudo rm -rf wsl-php${PHP_NUM}-etc.tar.gz
+sudo rm -rf php${PHP_NUM}-etc.tar.gz
 
 # log
 cd /var/log

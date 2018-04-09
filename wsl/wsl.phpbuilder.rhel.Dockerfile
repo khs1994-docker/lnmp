@@ -16,7 +16,7 @@ RUN sed -i "s#sudo##g" /lnmp-wsl-php-builder-rhel.sh \
 
 # scratch
 
-FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1 as tar
+FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -24,8 +24,8 @@ COPY --from=builder /*.tar.gz /
 
 ################################################################################
 
-FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1 as rpm
-
-LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
+# FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1 as rpm
+#
+# LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 COPY --from=builder /*.rpm /
