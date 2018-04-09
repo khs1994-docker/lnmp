@@ -16,7 +16,7 @@ Usage:
 
 $ lnmp-wsl-php-builder-rhel.sh 7.2.4
 
-$ lnmp-wsl-php-builder-rhel.sh 5.6.35 --skipbuild tar rpm
+$ lnmp-wsl-php-builder-rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
 
 "
 

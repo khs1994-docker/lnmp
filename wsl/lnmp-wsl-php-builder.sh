@@ -18,7 +18,7 @@ Usage:
 
 $ lnmp-wsl-php-builder.sh 7.2.4
 
-$ lnmp-wsl-php-builder.sh 5.6.35 --skipbuild tar deb
+$ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb]
 
 $ lnmp-wsl-php-builder.sh 7.2.3 arm64 tar [TODO]
 
@@ -445,7 +445,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-shmop=shared \
       --with-snmp=shared \
       --enable-wddx=shared \
-      $( test $host != 'x86_64-linux-gnu' && echo --with-libxml-dir=/opt/${host}/libxml2 " \
+      $( test $host != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
                                                    --with-zlib-dir=/opt/${host}/zlib" ) \
       "
 
