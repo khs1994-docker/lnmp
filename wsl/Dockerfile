@@ -351,6 +351,6 @@ FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e9
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-COPY --from=0 ${PHP_PREFIX}.tar.gz /
+COPY --from=0 /usr/local/php72.tar.gz /
 
-COPY --from=0 ${PHP_INI_DIR}-etc.tar.gz /
+COPY --from=0 /usr/local/etc/php72-etc.tar.gz /
