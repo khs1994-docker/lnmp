@@ -204,7 +204,7 @@ _install_php_build_dep(){
                    $( test $PHP_NUM = "71" && echo "" ) \
                    $( if [ $PHP_NUM = "72" ];then \
                         echo $( if ! [ "${ARGON2}" = 'false' ];then \
-                                  echo "libargon2-devel";
+                                  echo "libargon2-devel"; \
                                 fi ); \
                         echo "libsodium-devel"; \
                       fi ) \
@@ -327,7 +327,7 @@ _builder(){
        \
        $( if [ $PHP_NUM = "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
-                   echo "--with-password-argon2";
+                   echo "--with-password-argon2"; \
                  fi ); \
          echo "--with-sodium --with-libzip --with-webp-dir=/usr/lib --with-pcre-jit"; \
        fi ) \
