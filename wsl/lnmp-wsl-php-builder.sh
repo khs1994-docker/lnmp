@@ -365,7 +365,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
 ################################################################################
 
 # configure
-
+    set +e
     CONFIGURE="--prefix=${PHP_PREFIX} \
       --sysconfdir=${PHP_INI_DIR} \
       \
@@ -445,10 +445,10 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-shmop=shared \
       --with-snmp=shared \
       --enable-wddx=shared \
-      $( test $host != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
-                                                   --with-zlib-dir=/opt/${host}/zlib" ) \
+      $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
+                                                     --with-zlib-dir=/opt/${host}/zlib" ) \
       "
-
+    set -e
     for a in ${CONFIGURE}; do sudo echo $a >> ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
