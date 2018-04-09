@@ -4,10 +4,26 @@ Changelog
 #### v18.06-rc1
 
 Bug fixes:
+* Fix #360
+* Fix –enable-gd-jis-conv #372
 
 Changes:
+* Add Installer deb and rpm
+* Add WSL-PHP-DEB WSL-PHP-RPM
+* Add more PHPer command
+* Add `Python3` WSL builder
+* Add `NGINX` Cluster
+* Update `WSL` case
+* Update WSL php conf
+* Use nginx official image #405
+* Use Clang build WSL php
+* Include tar and deb in `khs1994/wsl` image
 
 Updates:
+
+* `acme.sh` 2.7.8
+* `NGINX` 1.13.11
+* `PHP` 7.2.4 7.1.16 7.0.29 5.6.35
 
 
 #### [v18.03 (2018-03-11) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03)

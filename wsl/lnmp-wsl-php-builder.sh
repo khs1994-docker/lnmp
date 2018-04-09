@@ -578,7 +578,6 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       ldap \
                       posix \
                       pspell \
-                      shmop \
                       snmp \
                       wddx \
                       \

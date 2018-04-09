@@ -292,7 +292,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            ldap \
                            posix \
                            pspell \
-                           shmop \
                            snmp \
                            wddx \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
