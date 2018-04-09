@@ -176,7 +176,7 @@ sudo chmod 777 php${PHP_NUM}*
 # ln
 for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
-sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
+sudo ln -sf ${PHP_PREFIX}/sbin/* /usr/local/sbin
 
 lnmp-wsl-php-builder.sh apt
 }
