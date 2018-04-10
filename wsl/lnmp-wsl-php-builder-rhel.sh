@@ -168,7 +168,6 @@ libXpm \
 libwebp \
 enchant \
 openldap \
-net-snmp-libs \
 aspell"
 
 
@@ -223,7 +222,6 @@ _install_php_build_dep(){
                    libwebp-devel \
                    enchant-devel \
                    openldap-devel \
-                   net-snmp-devel \
                    aspell-devel \
                    "
 
@@ -348,7 +346,6 @@ _builder(){
         --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
-        --with-snmp=shared \
         --enable-wddx=shared \
         "
 
@@ -486,7 +483,6 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       ldap \
                       posix \
                       pspell \
-                      snmp \
                       wddx \
                       \
                       mongodb \

@@ -224,9 +224,7 @@ libxpm4 \
 $( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
-libldap-2.4-2 \
-libsnmp30 \
-snmp"
+libldap-2.4-2"
 
     sudo apt install -y $PHP_RUN_DEP > /dev/null
 }
@@ -443,7 +441,6 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-posix=shared \
       --with-pspell=shared \
       --enable-shmop=shared \
-      --with-snmp=shared \
       --enable-wddx=shared \
       $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
                                                      --with-zlib-dir=/opt/${host}/zlib" ) \
@@ -578,7 +575,6 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       ldap \
                       posix \
                       pspell \
-                      snmp \
                       wddx \
                       \
                       mongodb \

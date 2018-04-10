@@ -121,7 +121,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libpspell-dev \
     libsnmp30 \
     libsnmp-dev \
-    snmp \
+    # snmp \
   && mkdir -p $PHP_INI_DIR/conf.d; \
       mkdir -p /usr/src; \
 	    cd /usr/src; \
@@ -222,7 +222,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --enable-posix=shared \
     --with-pspell=shared \
     --enable-shmop=shared \
-    --with-snmp=shared \
+    # --with-snmp=shared \
     --enable-wddx=shared \
     \
   # bundled pcre does not support JIT on s390x
@@ -292,7 +292,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            ldap \
                            posix \
                            pspell \
-                           snmp \
+                           # snmp \
                            wddx \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
        > ${PHP_INI_DIR}/php-fpm.d/zz-debian.conf \
