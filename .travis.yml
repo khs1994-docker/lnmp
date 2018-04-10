@@ -223,6 +223,8 @@ jobs:
 
     - stage: rpm
       script:
+        # Don't build rc rpm
+        - test $( echo "${TAG}" | grep rc ) && exit 1
         - sudo apt install -y rpm
         - sh cli/build.sh rpm ${TAG}
         - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
