@@ -38,28 +38,28 @@ services:
     secrets:
       - db_root_password
 
-  # mariadb:
-  #   << : *default-common
-  #   image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3}"
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-  #     MYSQL_DATABASE: test
-  #     # MYSQL_USER:
-  #     # MYSQL_PASSWORD:
-  #   ports:
-  #     - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
-  #   volumes:
-  #     - ./config/mariadb/{LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
-  #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-  #     - ./backup/init:/docker-entrypoint-initdb.d:ro
-  #     - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}:rw
-  #     - ./logs/mariadb:/var/log/mysql:rw
-  #     - ./backup/mariadb:/backup:rw
-  #   command:
-  #     - mysqld
-  #     - --character-set-server=utf8mb4
-  #   secrets:
-  #     - db_root_password
+  mariadb:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3}"
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: test
+      # MYSQL_USER:
+      # MYSQL_PASSWORD:
+    ports:
+      - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
+    volumes:
+      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+      # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
+      - ./backup/init:/docker-entrypoint-initdb.d:ro
+      - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}:rw
+      - ./logs/mariadb:/var/log/mysql:rw
+      - ./backup/mariadb:/backup:rw
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+    secrets:
+      - db_root_password
 
   redis:
     << : *default-common
@@ -92,49 +92,49 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
 
-  # memcached:
-  #   << : *default-common
-  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
-  #   ports:
-  #     - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
-  #   volumes:
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #
-  # rabbitmq:
-  #   << : *default-common
-  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
-  #   volumes:
-  #     - rabbitmq-data:/var/lib/rabbitmq:rw
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #   # ports:
-  #   #   - "${RABBITMQ_PORT_1000:-127.0.0.1:15672}:15672"
-  #   #   - "${RABBITMQ_PORT:-127.0.0.1:5672}:5672"
-  #
-  # postgresql:
-  #   << : *default-common
-  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:10}-alpine
-  #   environment:
-  #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
-  #     - POSTGRES_DB=test
-  #   volumes:
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #     - postgresql-data:/var/lib/postgresql/data:rw
-  #   ports:
-  #     - "${POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
-  #   secrets:
-  #     # default is mysql password
-  #     - db_root_password
-  #
-  # mongodb:
-  #   << : *default-common
-  #   image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
-  #   volumes:
-  #     - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
-  #     - mongodb-data:/data/db:rw
-  #     - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
-  #   ports:
-  #     - "${MONGODB_PORT:-127.0.0.1:27017}27017"
-  #   command: ["mongod","--config","/etc/mongod.conf"]
+  memcached:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
+    ports:
+      - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
+
+  rabbitmq:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq:rw
+      - zoneinfo-data:/usr/share/zoneinfo
+    ports:
+      - "${RABBITMQ_PORT_1000:-127.0.0.1:15672}:15672"
+      - "${RABBITMQ_PORT:-127.0.0.1:5672}:5672"
+
+  postgresql:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+      - POSTGRES_DB=test
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
+      - postgresql-data:/var/lib/postgresql/data:rw
+    ports:
+      - "${POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
+    secrets:
+      # default is mysql password
+      - db_root_password
+
+  mongodb:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
+    volumes:
+      - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
+      - mongodb-data:/data/db:rw
+      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
+    ports:
+      - "${MONGODB_PORT:-127.0.0.1:27017}:27017"
+    command: ["mongod","--config","/etc/mongod.conf"]
 
 
   php7:
@@ -167,7 +167,7 @@ services:
       - ./cli/.env
     environment:
       - APP_ENV=development
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.06-rc1} x86_64 With Pull Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.06} x86_64 With Pull Docker Image
 
   phpmyadmin:
     << : *default-common
@@ -199,20 +199,32 @@ services:
     depends_on:
       - php7
 
-  # httpd:
-  #   << : *default-common
-  #   image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine"
-  #   ports:
-  #     - "${HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
-  #     - "${HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
-  #   volumes:
-  #     - ./app:${LNMP_PHP_PATH:-/app}
-  #     - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
-  #     - ./config/${HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d
-  #     - ./logs/httpd:/usr/local/apache2/logs
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #   working_dir: /app
-  #   networks:
-  #     - frontend
-  #   depends_on:
-  #     - php7
+  httpd:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine"
+    ports:
+      - "${HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
+      - "${HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
+    volumes:
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
+      - ./config/${HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d
+      - ./logs/httpd:/usr/local/apache2/logs
+      - zoneinfo-data:/usr/share/zoneinfo
+    working_dir: /app
+    networks:
+      - frontend
+    depends_on:
+      - php7
+
+  registry:
+    << : *default-common
+    image: registry:${KHS1994_LNMP_REGISTRY_VERSION:-latest}
+    networks:
+      - frontend
+      - backend
+    # ports:
+    #   - "5000:5000"
+    volumes:
+      - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml
+      - registry-data:/var/lib/registry

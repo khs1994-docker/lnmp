@@ -342,7 +342,7 @@ services:
     command: php-fpm -R -F
     environment:
       - APP_ENV=production
-      - KHS1994_LNMP_DOCKER_VERSION=v18.05 x86_64 Docker Swarm
+      - KHS1994_LNMP_DOCKER_VERSION=v18.06 x86_64 Docker Swarm
     depends_on:
       - mysql
       - redis

@@ -16,29 +16,29 @@ services:
     << : *default-common
     image: mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}
 
-  # mariadb:
-  #   << : *default-common
-  #   image: mariadb:${KHS1994_LNMP_MYSQL_VERSION:-10.3}
+  mariadb:
+    << : *default-common
+    image: mariadb:${KHS1994_LNMP_MYSQL_VERSION:-10.3}
 
   redis:
     << : *default-common
     image: redis:${KHS1994_LNMP_REDIS_VERSION:-4.0}-alpine
 
-  # memcached:
-  #   << : *default-common
-  #   image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
+  memcached:
+    << : *default-common
+    image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
 
-  # rabbitmq:
-  #   << : *default-common
-  #   image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
+  rabbitmq:
+    << : *default-common
+    image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
 
-  # postgresql:
-  #   << : *default-common
-  #   image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
+  postgresql:
+    << : *default-common
+    image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
 
-  # mongodb:
-  #   << : *default-common
-  #   image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
+  mongodb:
+    << : *default-common
+    image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
 
   php7:
     << : *default-common
@@ -52,9 +52,9 @@ services:
     << : *default-common
     image: nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.11}-alpine
 
-  # httpd:
-  #   << : *default-common
-  #   image: httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine
+  httpd:
+    << : *default-common
+    image: httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine
 
 networks:
   frontend:
@@ -65,20 +65,20 @@ networks:
 volumes:
   mysql-data:
     << : *default-common
-  # mariadb-data:
-  #   << : *default-common
+  mariadb-data:
+    << : *default-common
   redis-data:
     << : *default-common
-  # rabbitmq-data:
-  #   << : *default-common
-  # postgresql-data:
-  #   << : *default-common
-  # mongodb-data:
-  #   << : *default-common
+  rabbitmq-data:
+    << : *default-common
+  postgresql-data:
+    << : *default-common
+  mongodb-data:
+    << : *default-common
   zoneinfo-data:
     << : *default-common
-  # registry-data:
-  #   << : *default-common
+  registry-data:
+    << : *default-common
   phpmyadmin-data:
     << : *default-common
 

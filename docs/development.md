@@ -45,7 +45,7 @@ $ ./lnmp-docker.sh build-up
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v18.05 x86_64 With Build Docker Image
+Welcome use khs1994-docker/lnmp v18.06 x86_64 With Build Docker Image
 
 development
 
@@ -69,4 +69,28 @@ development
 $ ./lnmp-docker.sh scale php7=3
 
 $ ./lnmp-docker.sh scale php7=1
+```
+
+## 一次启动更多软件 ？
+
+编辑 `.env` 文件，在 `DEVELOPMENT_INCLUDE` 变量中增加软件名
+
+```bash
+DEVELOPMENT_INCLUDE="nginx mysql php7 redis phpmyadmin" # 默认配置
+
+DEVELOPMENT_INCLUDE="httpd mysql php7 redis" # 使用 httpd 代替 nginx
+
+DEVELOPMENT_INCLUDE="httpd mysql php7 redis mongodb" # 增加 mongodb
+```
+
+### Windows
+
+编辑 `lnmp-docker.ps1`
+
+```bash
+$global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin' # 默认配置
+
+$global:DEVELOPMENT_INCLUDE='httpd','mysql','php7','redis' # 使用 httpd 代替 nginx
+
+$global:DEVELOPMENT_INCLUDE='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 ```

@@ -42,12 +42,12 @@ services:
       << : *default-build-debian
       context: ./dockerfile/mysql/
 
-  # mariadb:
-  #   << : *default-labels
-  #   build:
-  #     << : *default-labels
-  #     << : *default-build-debian
-  #     context: ./dockerfile/mariadb/
+  mariadb:
+    << : *default-labels
+    build:
+      << : *default-labels
+      << : *default-build-debian
+      context: ./dockerfile/mariadb/
 
   redis:
     << : *default-labels
@@ -67,30 +67,30 @@ services:
       cache_from:
         - khs1994/php-fpm:latest-alpine3.7
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.06-rc1} x86_64 With Build Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.06} x86_64 With Build Docker Image
 
-  # rabbitmq:
-  #   << : *default-labels
-  #   build:
-  #     << : *default-labels
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./dockerfile/rabbitmq/
-  #
-  # postgresql:
-  #   << : *default-labels
-  #   build:
-  #     << : *default-labels
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./dockerfile/postgresql/
-  #
-  # mongodb:
-  #   << : *default-labels
-  #   build:
-  #     << : *default-labels
-  #     << : *default-build-debian
-  #     context: ./dockerfile/mongodb/
+  rabbitmq:
+    << : *default-labels
+    build:
+      << : *default-labels
+      << : *default-build
+      # << : *default-build-debian
+      context: ./dockerfile/rabbitmq/
+
+  postgresql:
+    << : *default-labels
+    build:
+      << : *default-labels
+      << : *default-build
+      # << : *default-build-debian
+      context: ./dockerfile/postgresql/
+
+  mongodb:
+    << : *default-labels
+    build:
+      << : *default-labels
+      << : *default-build-debian
+      context: ./dockerfile/mongodb/
 
   nginx:
     << : *default-labels
@@ -100,13 +100,13 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/nginx/
 
-  # httpd:
-  #   << : *default-labels
-  #   build:
-  #     << : *default-labels
-  #     << : *default-build
-  #     # << : *default-build-debian
-  #     context: ./dockerfile/httpd/
+  httpd:
+    << : *default-labels
+    build:
+      << : *default-labels
+      << : *default-build
+      # << : *default-build-debian
+      context: ./dockerfile/httpd/
 
   phpmyadmin:
     << : *default-labels
@@ -125,20 +125,20 @@ networks:
 volumes:
   mysql-data:
     << : *default-labels
-  # mariadb-data:
-  #   << : *default-labels
+  mariadb-data:
+    << : *default-labels
   redis-data:
     << : *default-labels
-  # rabbitmq-data:
-  #   << : *default-labels
-  # postgresql-data:
-  #   << : *default-labels
-  # mongodb-data:
-  #   << : *default-labels
+  rabbitmq-data:
+    << : *default-labels
+  postgresql-data:
+    << : *default-labels
+  mongodb-data:
+    << : *default-labels
   zoneinfo-data:
     << : *default-labels
-  # registry-data:
-  #   << : *default-labels
+  registry-data:
+    << : *default-labels
   phpmyadmin-data:
     << : *default-labels
 

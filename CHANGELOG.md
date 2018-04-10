@@ -1,7 +1,7 @@
 Changelog
 ==============
 
-#### v18.06-rc1
+#### v18.06
 
 Bug fixes:
 * Fix #360

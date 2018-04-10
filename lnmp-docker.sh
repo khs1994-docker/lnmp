@@ -72,7 +72,6 @@ Commands:
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
-  full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
   restore              Restore MySQL databases
@@ -217,12 +216,12 @@ _registry(){
 
   sed -i '' "s#KHS1994_DOMAIN#${KHS1994_LNMP_REGISTRY_HOST}#g" config/${NGINX_CONF_D:-nginx}/registry.conf
 
-  exec docker-compose -f docker-full.yml -f docker-compose.override.yml up -d registry nginx
+  exec docker-compose up -d registry nginx
 }
 
 _registry_down(){
-  docker-compose -f docker-full.yml -f docker-compose.override.yml stop registry
-  docker-compose -f docker-full.yml -f docker-compose.override.yml rm -f registry
+  docker-compose stop registry
+  docker-compose rm -f registry
   mv config/${NGINX_CONF_D:-nginx}/registry.conf config/${NGINX_CONF_D:-nginx}/registry.conf.backup
 }
 
@@ -889,10 +888,6 @@ main() {
     _registry_down
     ;;
 
-  full-up )
-    docker-compose -f docker-full.yml -f docker-compose.override.yml up -d "$@"
-    ;;
-
   swarm-config )
     init; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} config
     ;;
@@ -990,11 +985,11 @@ For information please run $ docker service update --help
     # 判断架构
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
     if [ ${ARCH} = 'x86_64' ];then
-      docker-compose up $opt
+      docker-compose up $opt ${DEVELOPMENT_INCLUDE}
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      docker-compose -f docker-arm.yml up $opt
+      docker-compose -f docker-arm.yml up $opt ${DEVELOPMENT_INCLUDE}
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker-compose -f docker-arm.yml exec nginx nginx -t || \
         (print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
@@ -1083,10 +1078,10 @@ For information please run $ docker service update --help
     run_docker; init
     case "${ARCH}" in
         x86_64 )
-          sleep 2; exec docker-compose pull
+          sleep 2; exec docker-compose pull ${DEVELOPMENT_INCLUDE}
           ;;
         aarch64 | armv7l )
-          sleep 2; exec docker-compose -f docker-arm.yml pull
+          sleep 2; exec docker-compose -f docker-arm.yml pull ${DEVELOPMENT_INCLUDE}
           ;;
         * )
           NOTSUPPORT
