@@ -11,6 +11,7 @@
   ],
   "ignorePaths": [
     "dockerfile/builder/docker-compose.yml",
-    "wsl/docker-compose.yml"
+    "wsl/docker-compose.yml",
+    "dockerfile/travis/docker-compose.yml"
   ]
 }
