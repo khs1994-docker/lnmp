@@ -10,10 +10,10 @@
 !lnmp-wsl-init.sh
 !lnmp-wsl.sh
 !lnmp-wsl-install.sh
-!lnmp-wsl-php-builder.sh
-!lnmp-wsl-php-builder-rhel.sh
-!lnmp-wsl-httpd-builder.py
-!lnmp-wsl-nginx-builder.py
+!lnmp-wsl-builder-php.sh
+!lnmp-wsl-builder-php-rhel.sh
+!lnmp-wsl-builder-nginx.py
+!lnmp-wsl-builder-httpd.py
 !Dockerfile
 !wsl.phpbuilder.Dockerfile
 !wsl.phpbuilder.rhel.Dockerfile

@@ -14,9 +14,9 @@ Build php in WSL RHEL by shell script
 
 Usage:
 
-$ lnmp-wsl-php-builder-rhel.sh 7.2.4
+$ lnmp-wsl-builder-php-rhel.sh 7.2.4
 
-$ lnmp-wsl-php-builder-rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
+$ lnmp-wsl-builder-php-rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
 
 "
 
@@ -133,8 +133,6 @@ _libzip(){
 }
 
     test ${PHP_NUM} = '72' && _libzip
-
-    sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
     export PHP_DEP="libedit \
 zlib \
@@ -709,6 +707,8 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 # ID=fedora
 # VERSION_ID=27
 #
+
+sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 _install_php_run_dep
 

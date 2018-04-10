@@ -16,13 +16,13 @@ Build php in WSL Debian by shell script
 
 Usage:
 
-$ lnmp-wsl-php-builder.sh 7.2.4
+$ lnmp-wsl-builder-php.sh 7.2.4
 
-$ lnmp-wsl-php-builder.sh 5.6.35 [--skipbuild] [tar] [deb]
+$ lnmp-wsl-builder-php.sh 5.6.35 [--skipbuild] [tar] [deb]
 
-$ lnmp-wsl-php-builder.sh 7.2.3 arm64 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.3 arm64 tar [TODO]
 
-$ lnmp-wsl-php-builder.sh 7.2.3 arm32 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.3 arm32 tar [TODO]
 
 "
 
@@ -189,8 +189,6 @@ _buildlib
 _install_php_run_dep(){
 
     test $host != 'x86_64-linux-gnu' && _build_arm_php_build_dep ; return 0
-
-    sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
     export PHP_RUN_DEP="libedit2 \
 zlib1g \
@@ -819,6 +817,8 @@ test $host = 'arm-linux-gnueabihf' && \
 
 if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
   echo "debian9 notsupport php56" ; exit 1 ; fi
+
+sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 _install_php_run_dep
 
