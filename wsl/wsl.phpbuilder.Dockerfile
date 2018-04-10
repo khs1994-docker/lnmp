@@ -6,13 +6,13 @@ ENV TZ Asia/Shanghai
 
 ARG PHP_VERSION=7.2.4
 
-COPY lnmp-wsl-php-builder.sh /lnmp-wsl-php-builder.sh
+COPY lnmp-wsl-builder-php.sh /lnmp-wsl-builder-php.sh
 
 COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
 
-RUN sed -i "s#sudo##g" /lnmp-wsl-php-builder.sh \
+RUN sed -i "s#sudo##g" /lnmp-wsl-builder-php.sh \
       && chmod +x /usr/local/bin/wsl-php-ext-enable.sh \
-      && sh /lnmp-wsl-php-builder.sh ${PHP_VERSION} tar deb travis
+      && sh /lnmp-wsl-builder-php.sh ${PHP_VERSION} tar deb travis
 
 # scratch
 

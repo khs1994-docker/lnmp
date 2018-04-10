@@ -20,7 +20,21 @@ $ lnmp-wsl-install.sh php 7.2.4 [ tar | deb ]
 
 $ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
 
-$ lnmp-wsl-install.sh nginx php postgresql mysql mongodb ...
+$ lnmp-wsl-install.sh enable nginx [httpd]
+
+$ lnmp-wsl-install.sh
+
+* nginx
+
+* php
+
+* postgresql
+
+* mysql
+
+* mongodb
+
+* swift ...
 
 Example:
 
@@ -30,20 +44,20 @@ $ lnmp-wsl-install.sh php 7.2.4 deb
 
 [ deb 方法一个系统只能存在一个 PHP 版本，若想多版本共存，主版本使用 deb 方法，其他版本使用 tar 方法 ]
 
-$ lnmp-wsl-install.sh php 7.1.16
-
-$ lnmp-wsl-install.sh php 7.0.29
-
-$ lnmp-wsl-install.sh php 5.6.35
+$ lnmp-wsl-install.sh php 7.1.16 [7.0.29] [5.6.35]
 
 [ php56 只支持 ubuntu ]
-
-$ lnmp-wsl-install.sh enable php70
 "
 
 exit 0
 
 }
+
+################################################################################
+
+SWIFT_PREFIX=/usr/local/swift
+
+################################################################################
 
 _nginx(){
   # apt
@@ -61,6 +75,7 @@ _nginx(){
   if ! [ -h /etc/nginx/conf.d ];then sudo rm -rf /etc/nginx/conf.d; \
       sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
 
+  # apt install nginx notinclude fastcgi.conf
   if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf \
       /etc/nginx/fastcgi.conf ; fi
 
@@ -249,32 +264,6 @@ command -v /usr/local/bin/composer && composer config -g repo.packagist composer
 
 }
 
-_httpd(){
-
-NGHTTP2_VERSION=1.18.1-1
-OPENSSL_VERSION=1.0.2l-1~bpo8+1
-
-sudo apt install -y --no-install-recommends \
-		libapr1 \
-		libaprutil1 \
-		libaprutil1-ldap \
-		libapr1-dev \
-		libaprutil1-dev \
-		liblua5.2-0 \
-		libnghttp2-14=$NGHTTP2_VERSION \
-		libpcre++0 \
-		libssl1.0.0=$OPENSSL_VERSION \
-    libxml2
-
-docker create --name=${CONTAINER_NAME} httpd:2.4.33
-
-sudo rm -rf /usr/local/apache2
-
-sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/usr/local/apache2 /usr/local/apache2
-
-docker rm -f ${CONTAINER_NAME}
-}
-
 _postgresql(){
   # apt
   #
@@ -326,6 +315,19 @@ _list(){
 
 _enable(){
 
+  if [ "$1" = nginx ];then
+    # /usr/local/nginx self build nginx
+
+    if [ -d /usr/local/nginx ];then
+      if ! [ -h /usr/local/etc/nginx/conf.d ];then sudo rm -rf /usr/local/etc/nginx/conf.d; \
+          sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /usr/local/etc/nginx/conf.d; fi
+      # test main conf
+      sudo /usr/local/sbin/nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/nginx.wsl.conf /usr/local/etc/nginx/nginx.conf
+      sudo /usr/local/sbin/nginx -t
+    fi
+    exit $?
+  fi
+
   PHP_PREFIX=/usr/local/$1
 
   php_num=$( echo $1 | cut -d 'p' -f 3 )
@@ -341,6 +343,21 @@ _enable(){
 
   sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" \
       /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
+}
+
+_swift(){
+  if [ `lsb_release -cs` != 'xenial' ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04\n"; exit 1; fi
+
+  sudo apt install -y clang libicu-dev
+
+  cd /tmp
+  test -f swift-4.1-RELEASE-ubuntu16.04.tar.gz || \
+      wget https://swift.org/builds/swift-4.1-release/ubuntu1604/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu16.04.tar.gz
+  sudo rm -rf $SWIFT_PREFIX ; sudo mkdir -p $SWIFT_PREFIX
+  sudo tar -zxvf swift-4.1-RELEASE-ubuntu16.04.tar.gz -C $SWIFT_PREFIX
+  sudo ln -sf $SWIFT_PREFIX/swift-4.1-RELEASE-ubuntu16.04/usr/bin/* /usr/local/bin
+
+  swift --version
 }
 
 ################################################################################

@@ -6,15 +6,15 @@ import sys
 
 def print_help_info():
     print('''
-  
+
 Usage:
 
-$ lnmp-wsl-httpd-builder.py [HTTPD_VERSION] [SUDO_PASSWORD]
-  
+$ lnmp-wsl-builder-httpd.py [HTTPD_VERSION] [SUDO_PASSWORD]
+
 Example:
-  
-$ lnmp-wsl-httpd-builder.py 2.4.33 root
-  
+
+$ lnmp-wsl-builder-httpd.py 2.4.33 root
+
   ''')
 
 
