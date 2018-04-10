@@ -1,5 +1,6 @@
 $global:KHS1994_LNMP_DOCKER_VERSION="v18.06"
 $global:KHS1994_LNMP_PHP_VERSION="7.2.4"
+$global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 
 $source=$pwd
 
@@ -111,7 +112,6 @@ Commands:
   development-pull     Pull LNMP Docker Images in development
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
-  full-up              Start Soft you input, all soft available
   help                 Display this help message
   init                 Init LNMP environment
   restore              Restore MySQL databases
@@ -276,11 +276,11 @@ switch($first){
 
     development {
       init
-      docker-compose up -d
+      docker-compose up -d ${DEVELOPMENT_INCLUDE}
     }
 
     development-pull {
-      docker-compose pull
+      docker-compose pull ${DEVELOPMENT_INCLUDE}
     }
 
     down {
@@ -289,10 +289,6 @@ switch($first){
 
     docs {
       docker run --init -it --rm -p 4000:4000 --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
-    }
-
-    full-up {
-      docker-compose -f docker-full.yml -f docker-compose.override.yml up -d $other
     }
 
     dashboard {
