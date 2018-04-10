@@ -22,19 +22,7 @@ $ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
 
 $ lnmp-wsl-install.sh enable nginx [httpd]
 
-$ lnmp-wsl-install.sh
-
-* nginx
-
-* php
-
-* postgresql
-
-* mysql
-
-* mongodb
-
-* swift ...
+$ lnmp-wsl-install.sh mysql nginx php postgresql mongodb swift ...
 
 Example:
 

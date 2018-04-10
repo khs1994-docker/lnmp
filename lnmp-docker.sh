@@ -985,11 +985,11 @@ For information please run $ docker service update --help
     # 判断架构
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
     if [ ${ARCH} = 'x86_64' ];then
-      docker-compose up $opt ${DEVELOPMENT_INCLUDE}
+      docker-compose up $opt ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      docker-compose -f docker-arm.yml up $opt ${DEVELOPMENT_INCLUDE}
+      docker-compose -f docker-arm.yml up $opt ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker-compose -f docker-arm.yml exec nginx nginx -t || \
         (print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
@@ -1078,10 +1078,10 @@ For information please run $ docker service update --help
     run_docker; init
     case "${ARCH}" in
         x86_64 )
-          sleep 2; exec docker-compose pull ${DEVELOPMENT_INCLUDE}
+          sleep 2; exec docker-compose pull ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
           ;;
         aarch64 | armv7l )
-          sleep 2; exec docker-compose -f docker-arm.yml pull ${DEVELOPMENT_INCLUDE}
+          sleep 2; exec docker-compose -f docker-arm.yml pull ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
           ;;
         * )
           NOTSUPPORT
