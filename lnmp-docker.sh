@@ -40,7 +40,7 @@ else
       print_info "Use LNMP CLI in $PWD\n"
       cd ${LNMP_PATH}
     else
-      print_error  "在任意目录使用 LNMP CLI 必须设置环境变量，cli/README.md"
+      print_error  "在任意目录使用 LNMP CLI 必须设置环境变量 LNMP_PATH ，cli/README.md"
       exit 1
     fi
 fi

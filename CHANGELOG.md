@@ -22,7 +22,7 @@ Changes:
 Updates:
 
 * `acme.sh` 2.7.8
-* `NGINX` 1.13.11
+* `NGINX` 1.13.12
 * `PHP` 7.2.4 7.1.16 7.0.29 5.6.35
 
 
