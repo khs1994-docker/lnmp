@@ -95,7 +95,7 @@ services:
     volumes:
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
-       - "${MEMCACHED_PORT}:11211"
+       - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
 
   rabbitmq:
     << : *default-common
@@ -204,30 +204,30 @@ services:
     depends_on:
       - php7
 
-  # httpd:
-  #   << : *default-common
-  #   << : *default-labels
-  #   # build:
-  #   #   << : *default-build-debian
-  #   #   << : *default-build
-  #   #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
-  #   #   dockerfile: Dockerfile
-  #   # image: lnmp-httpd:latest
-  #   image: "${ARM_ARCH:-arm64v8}/httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}${ARM_BASED_OS}"
-  #   ports:
-  #     - "443:443"
-  #     - "80:80"
-  #   volumes:
-  #     - ./app:${LNMP_PHP_PATH:-/app}:rw
-  #     - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
-  #     - ./config/httpd/${HTTPD_CONF_D:-conf.d}:/usr/local/apache2/conf.d
-  #     - ./logs/httpd:/usr/local/apache2/logs
-  #     - zoneinfo-data:/usr/share/zoneinfo
-  #   working_dir: /app
-  #   networks:
-  #     - frontend
-  #   depends_on:
-  #     - php7
+  httpd:
+    << : *default-common
+    << : *default-labels
+    # build:
+    #   << : *default-build-debian
+    #   << : *default-build
+    #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
+    #   dockerfile: Dockerfile
+    # image: lnmp-httpd:latest
+    image: "${ARM_ARCH:-arm64v8}/httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}${ARM_BASED_OS}"
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./app:${LNMP_PHP_PATH:-/app}:rw
+      - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
+      - ./config/httpd/${HTTPD_CONF_D:-conf.d}:/usr/local/apache2/conf.d
+      - ./logs/httpd:/usr/local/apache2/logs
+      - zoneinfo-data:/usr/share/zoneinfo
+    working_dir: /app
+    networks:
+      - frontend
+    depends_on:
+      - php7
 
 networks:
   frontend:
