@@ -23,71 +23,68 @@
 │       └── nginx.production.conf
 ├── httpd
 │   ├── README.md
-│   ├── demo-https.conf
-│   ├── demo-laravel.conf
+│   ├── demo-https.config
+│   ├── demo-laravel.config
 │   ├── demo-ssl
 │   │   ├── root-ca.crt
 │   │   ├── www.t.khs1994.com.crt
 │   │   └── www.t.khs1994.com.key
-│   ├── demo-tls.conf
 │   ├── demo-vhost.conf
-│   ├── khs194.com.one.production.config
-│   ├── khs1940.com.one.development.config
 │   └── ssl
 │       ├── khs1994.com.crt
 │       ├── khs1994.com.fullchain.crt
 │       └── khs1994.com.key
 ├── mariadb
-│   ├── conf.d
-│   │   └── docker.cnf
-│   ├── conf.production.d
-│   │   ├── docker.cnf
-│   │   └── mysqld_safe_syslog.cnf
-│   └── default
-│       └── etc
-│           └── mysql
-│               ├── conf.d
-│               │   ├── docker.cnf
-│               │   └── mysqld_safe_syslog.cnf
-│               ├── debian-start
-│               ├── debian.cnf
-│               ├── mariadb.cnf
-│               ├── mariadb.conf.d
-│               └── my.cnf
+│   ├── default
+│   │   └── etc
+│   │       └── mysql
+│   │           ├── conf.d
+│   │           │   ├── docker.cnf
+│   │           │   └── mysqld_safe_syslog.cnf
+│   │           ├── debian-start
+│   │           ├── debian.cnf
+│   │           ├── mariadb.cnf
+│   │           ├── mariadb.conf.d
+│   │           └── my.cnf
+│   ├── docker.cnf
+│   └── docker.production.cnf
 ├── mongodb
 │   ├── mongod.conf
 │   └── mongod.production.conf
 ├── mysql
-│   ├── conf.d
-│   │   └── docker.cnf
-│   ├── conf.production.d
-│   │   └── docker.cnf
 │   ├── default
 │   │   └── etc
 │   │       └── mysql
 │   │           ├── conf.d
 │   │           │   └── docker.cnf
 │   │           └── my.cnf
-│   └── my.cnf
+│   ├── docker.cnf
+│   └── docker.production.cnf
 ├── nginx
 │   ├── README.md
 │   ├── auth
 │   │   ├── README.md
 │   │   └── docker_registry.htpasswd
-│   ├── demo-laravel.conf
-│   ├── demo-php.conf
-│   ├── demo-registry.conf.backup
+│   ├── demo-fzjh-80.config
+│   ├── demo-fzjh.config
+│   ├── demo-include-php.config
+│   ├── demo-include-ssl.config
+│   ├── demo-linuxkit.config
+│   ├── demo-registry.config
 │   ├── demo-ssl
 │   │   ├── root-ca.crt
 │   │   ├── www.t.khs1994.com.crt
 │   │   └── www.t.khs1994.com.key
 │   ├── demo-ssl.config
 │   ├── demo-wechat-mini.config
-│   ├── khs1994.com.one.development.config
-│   ├── khs1994.com.one.production.config
-│   ├── linuxkit.config
+│   ├── demo-www.conf
+│   ├── demo-www.config
+│   ├── fzjh.conf
+│   ├── registry.conf
 │   ├── registry.conf.backup
 │   ├── ssl
+│   │   ├── docker.t.khs1994.com.crt
+│   │   ├── docker.t.khs1994.com.key
 │   │   ├── khs1994.com.rsa.crt
 │   │   ├── khs1994.com.rsa.key
 │   │   └── root-ca.crt
@@ -112,6 +109,7 @@
 │   │               │       ├── docker-php-ext-pdo_mysql.ini
 │   │               │       ├── docker-php-ext-pdo_pgsql.ini
 │   │               │       ├── docker-php-ext-redis.ini
+│   │               │       ├── docker-php-ext-sodium.ini
 │   │               │       ├── docker-php-ext-swoole.ini
 │   │               │       ├── docker-php-ext-xdebug.ini.default
 │   │               │       ├── docker-php-ext-yaml.ini
@@ -124,17 +122,12 @@
 │   │                   ├── www.conf
 │   │                   ├── www.conf.default
 │   │                   └── zz-docker.conf
-│   ├── docker-entrypoint.crond.sh
-│   ├── php
-│   │   └── conf.d
-│   │       ├── error-log.ini
-│   │       └── xdebug.ini
-│   ├── php-fpm.d
-│   │   └── zz-docker.conf
-│   ├── php-fpm.production.d
-│   │   └── zz-docker.conf
+│   ├── docker-error-log.ini
+│   ├── docker-xdebug.ini
 │   ├── php.development.ini
-│   └── php.production.ini
+│   ├── php.production.ini
+│   ├── zz-docker.conf
+│   └── zz-docker.production.conf
 ├── redis
 │   ├── redis.conf
 │   └── redis.production.conf
@@ -142,5 +135,5 @@
     ├── config.production.yml
     └── config.yml
 
-47 directories, 94 files
+38 directories, 96 files
 ```
