@@ -583,6 +583,11 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       $( test $PHP_NUM != "56" && echo "swoole" ) \
                       yaml \
                       opcache
+
+# config opcache
+
+echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 }
 
 _create_log_file(){
