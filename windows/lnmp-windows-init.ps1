@@ -12,6 +12,8 @@ $global:NODE_VEERSION="9.9.0"
 $global:GIT_VERSION="2.16.2"
 $global:PYTHON_VERSION="3.6.5"
 $global:GOLANG_VERSION="1.10.1"
+$global:HTTPD_MOD_FCGID_VERSION="2.3.9"
+$global:ZEAL_VERSION="0.5.0"
 
 Function _wget($src,$des){
   Invoke-WebRequest -uri $src -OutFile $des
@@ -122,9 +124,9 @@ _downloader `
     HTTPD ${HTTPD_VERSION}
 
 _downloader `
-  http://www.apachelounge.com/download/VC15/modules/mod_fcgid-2.3.9-win64-VC15.zip `
-  mod_fcgid-2.3.9-win64-VC15.zip `
-  mod_fcgid-2.3.9-win64-VC15
+  http://www.apachelounge.com/download/VC15/modules/mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip `
+  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip `
+  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15
 
 #
 # PHP
@@ -181,6 +183,11 @@ _downloader `
   https://windows.php.net/downloads/pecl/releases/igbinary/2.0.6RC1/php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip `
   C:\php-ext\php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip `
   php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip
+
+_downloader `
+  https://curl.haxx.se/ca/cacert-2018-03-07.pem `
+  C:\cacert-2018-03-07.pem `
+  C:\cacert-2018-03-07.pem
 
 Function _pecl($zip,$file){
   if (!(Test-Path C:\php-ext\$file)){
@@ -258,8 +265,8 @@ _downloader `
 #
 
 _downloader `
-  https://dl.bintray.com/zealdocs/windows/zeal-0.5.0-windows-x64.msi `
-  zeal-0.5.0-windows-x64.msi `
+  https://dl.bintray.com/zealdocs/windows/zeal-${ZEAL_VERSION}-windows-x64.msi `
+  zeal-${ZEAL_VERSION}-windows-x64.msi `
   Zeal
 
 ################################################################################
@@ -273,7 +280,7 @@ _installer php-${PHP_VERSION}-nts-Win32-VC15-x64.zip  C:\php  C:\php            
 _installer httpd-${HTTPD_VERSION}-win64-VC15.zip      C:\     C:\Apache24                       C:\Apache24
 
 if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
-  _installer mod_fcgid-2.3.9-win64-VC15.zip           C:\Apache24\modules C:\Apache24\modules\mod_fcgid-2.3.9 C:\Apache24\modules\mod_fcgid
+  _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip           C:\Apache24\modules C:\Apache24\modules\mod_fcgid-${HTTPD_MOD_FCGID_VERSION} C:\Apache24\modules\mod_fcgid
   mv C:\Apache24\modules\mod_fcgid\mod_fcgid.so C:\Apache24\modules\mod_fcgid.so
 }
 
@@ -347,7 +354,11 @@ cd $source
 
 ################################################################################
 
-$items='yaml','xdebug','Zend Opcache','redis', 'mongodb', 'igbinary'
+if (!(Test-Path C:\php\php.ini)){
+  mv C:\php\php.ini-development C:\php\php.ini
+}
+
+$items='yaml','xdebug','Zend Opcache','redis', 'mongodb', 'igbinary','curl'
 
 Foreach ($item in $items)
 {
@@ -356,28 +367,61 @@ Foreach ($item in $items)
   if (!($a -eq 1)){
 
     if ($item -eq 'Zend Opcache'){
+      echo ' ' >> C:\php\php.ini
       echo "zend_extension=opcache" >> C:\php\php.ini
       continue
     }
 
     if (!(Test-Path C:\php-ext\php_$item.dll)){
+      if ((Test-Path C:\php\ext\php_$item.dll)){
+        echo ' ' >> C:\php\php.ini
+        echo "extension=curl" >> C:\php\php.ini
+      }else{
+        continue
+      }
       continue
     }
 
     if ($item -eq 'xdebug'){
+      echo ' ' >> C:\php\php.ini
       echo "zend_extension=C:\php-ext\php_$item" >> C:\php\php.ini
       continue
     }
-
+    echo ' ' >> C:\php\php.ini
     echo "extension=C:\php-ext\php_$item" >> C:\php\php.ini
   }
 }
+
+#
+# Windows php curl ssl
+#
+# @link https://github.com/khs1994-docker/lnmp/issues/339
+#
+
+$a = php -r "echo ini_get('curl.cainfo');"
+
+if ($a.Length -eq 0){
+  echo "curl.cainfo=C:\cacert-2018-03-07.pem" >> C:\php\php.ini
+}
+
+php -r "echo ini_get('curl.cainfo');"
+
+Write-Host ' '
 
 php -m
 
 ################################################################################
 
 httpd.exe -k install
+
+$a=Select-String 'include conf.d/' C:\Apache24\conf\httpd.conf
+
+if ($a.Length -eq 0){
+  echo "Add config in C:\Apache24\conf\httpd.conf"
+
+  echo ' ' >> C:\Apache24\conf\httpd.conf
+  echo "include conf.d/*.conf" >> C:\Apache24\conf\httpd.conf
+}
 
 ################################################################################
 
@@ -416,9 +460,9 @@ Write-Host "####################################################################
 
 _mkdir $home\lnmp\windows\logs
 
-_mkdir C:\nginx\conf.d
+_mkdir C:\nginx\conf\conf.d
 
-_ln C:\nginx\conf.d $home\lnmp\windows\nginx
+_ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
 
 _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 

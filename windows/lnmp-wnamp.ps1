@@ -80,6 +80,7 @@ Function _start($soft){
     "nginx" {
       # cd $NGINX_PATH
       printInfo "Start nginx..."
+      nginx -p C:/nginx -t
       RunHiddenConsole nginx -p C:/nginx
       cd $source
       Write-Host "
