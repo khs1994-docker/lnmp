@@ -21,7 +21,7 @@ MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将�
 打开 `PowerShell` 执行以下命令设置环境变量
 
 ```bash
-$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$env:HOME/lnmp", "User");
+$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User");
 
 $ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx-1.13.8;c:\apache24\bin", "User")
 
