@@ -18,6 +18,8 @@ Usage:
 
 $ lnmp-wsl-builder-php.sh 7.2.4
 
+$ lnmp-wsl-builder-php.sh apt
+
 $ lnmp-wsl-builder-php.sh 5.6.35 [--skipbuild] [tar] [deb]
 
 $ lnmp-wsl-builder-php.sh 7.2.3 arm64 tar [TODO]
@@ -282,7 +284,6 @@ _install_php_build_dep(){
                    libenchant-dev \
                    libldap2-dev \
                    libpspell-dev \
-                   libsnmp-dev \
                    "
 
     for soft in ${DEP_SOFTS} ; do sudo echo $soft >> ${PHP_INSTALL_LOG} ; done

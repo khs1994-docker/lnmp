@@ -16,6 +16,8 @@ Usage:
 
 $ lnmp-wsl-builder-php-rhel.sh 7.2.4
 
+$ lnmp-wsl-builder-php-rhel.sh yum
+
 $ lnmp-wsl-builder-php-rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
 
 "
@@ -717,7 +719,7 @@ sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 _install_php_run_dep
 
-if [ "$1" = rpm ];then _install_php_build_dep ; exit $? ; fi
+if [ "$1" = yum ];then _install_php_build_dep ; exit $? ; fi
 
 _install_php_build_dep
 
