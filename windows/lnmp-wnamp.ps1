@@ -37,6 +37,13 @@ Function _stop($soft){
       "
     }
 
+    "httpd" {
+      printInfo "Stop HTTPD..."
+      httpd -d C:/Apache24 -k stop
+      Write-Host "
+      "
+    }
+
     Default {
       bash lnmp-wsl.sh stop $soft
     }
@@ -71,6 +78,7 @@ Function _stop_all(){
   _stop memcached
   _stop mongodb
   _stop postgresql
+  _stop httpd
 }
 
 ################################################################################
@@ -97,6 +105,14 @@ Function _start($soft){
      "php" {
        printInfo "Start php-cgi..."
        RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
+       Write-Host "
+       "
+     }
+
+     "httpd" {
+       printInfo "Start HTTPD..."
+       httpd -t
+       httpd -d C:/Apache24 -k start
        Write-Host "
        "
      }
@@ -135,6 +151,7 @@ Function _start_all(){
   _start memcached
   _start mongodb
   _start postgresql
+  _start httpd
 }
 
 ################################################################################
@@ -170,24 +187,27 @@ Function _status(){
   Get-Process | Where-Object { $_ -match "memcached"}
   Write-Host "
   "
-  printInfo "Apache Status (WSL)
+  printInfo "Apache Status
   "
   Get-Process | Where-Object { $_ -match "httpd"}
 }
 
 ################################################################################
 
+$global:WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgresql","httpd"
+$global:WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"
+
 switch ($args[0])
 {
   "stop" {
     switch ($args[1])
     {
-      {$_ -in "nginx","php","mysql","redis","memcached","mongodb","postgresql"} {
+      {$_ -in $WINDOWS_SOFT} {
         _stop $args[1]
         break
       }
 
-      {$_ -in "wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"}{
+      {$_ -in $WSL_SOFT}{
         _stop_wsl $args[1]
         break
       }
@@ -201,12 +221,12 @@ switch ($args[0])
   "start" {
     switch ($args[1])
     {
-      {$_ -in "nginx","php","mysql","redis","memcached","mongodb","postgresql"} {
+      {$_ -in $WINDOWS_SOFT} {
         _start $args[1]
         break
       }
 
-      {$_ -in "wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"}{
+      {$_ -in $WSL_SOFT}{
         _start_wsl $args[1]
         break
       }
@@ -220,13 +240,13 @@ switch ($args[0])
   "restart" {
     switch ($args[1])
     {
-      {$_ -in "nginx","php","mysql","redis","memcached","mongodb","postgresql"} {
+      {$_ -in $WINDOWS_SOFT} {
         _stop $args[1]
         _start $args[1]
         break
       }
 
-      {$_ -in "wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"}{
+      {$_ -in $WSL_SOFT}{
         _stop_wsl $args[1]
         _start_wsl $args[1]
         break
