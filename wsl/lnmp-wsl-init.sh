@@ -19,14 +19,17 @@ if [ -z $COMPOSER_HOME ];then
   echo "export COMPOSER_HOME=/tmp" >> ~/.bash_profile
 fi
 
-sudo apt update && sudo apt install \
+sudo apt update && sudo apt -y install \
                             bash-completion \
                             vim \
                             git \
                             curl \
                             wget \
                             lsb-release \
+                            python \
+                            python-pip \
                             python3 \
+                            python3-pip \
                             openssh-server
 
 
