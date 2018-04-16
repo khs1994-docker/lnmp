@@ -88,27 +88,27 @@ _php(){
     5.6.* )
       export PHP_NUM=56
       if [ $ID = 'debian' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, you can self build use $ lnmp-wsl-php-builder.sh\n\n" ; \
+       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, you can self build use $ lnmp-wsl-builder-php.sh\n\n" ; \
        exit 1; fi
       ;;
 
     7.0.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh \n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, you can self build use $ lnmp-wsl-builder-php.sh \n\n" \
        ; exit 1; fi
       export PHP_NUM=70
       ;;
 
     7.1.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, you can self build use $ lnmp-wsl-builder-php.sh\n\n" \
        ; exit 1; fi
       export PHP_NUM=71
       ;;
 
     7.2.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, you can self build use $ lnmp-wsl-php-builder.sh\n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, you can self build use $ lnmp-wsl-builder-php.sh\n\n" \
        ; exit 1; fi
       export PHP_NUM=72
       ;;
@@ -181,7 +181,7 @@ for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /u
 
 sudo ln -sf ${PHP_PREFIX}/sbin/* /usr/local/sbin
 
-lnmp-wsl-php-builder.sh apt
+lnmp-wsl-builder-php.sh apt
 }
 
 _deb(){

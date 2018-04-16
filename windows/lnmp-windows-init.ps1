@@ -22,14 +22,20 @@ Function _unzip($zip, $folder){
   Expand-Archive -Path $zip -DestinationPath $folder -Force
 }
 
-Function _export($k,$v){
-
-}
-
-Function _mv($src,$target){
+Function _rename($src,$target){
   if (!(Test-Path $target)){
   Rename-Item $src $target
   }
+}
+
+Function _mkdir($dir_path){
+  if (!(Test-Path $dir_path )){
+    New-Item $dir_path -type directory
+  }
+}
+
+Function _ln($src,$target){
+  New-Item -Path $target -ItemType SymbolicLink -Value $src
 }
 
 Function _echo_line(){
@@ -52,20 +58,16 @@ Function _installer($zip, $unzip_path, $unzip_folder_name = 'null', $soft_path =
   }
 
   if (!($soft_path -eq 'null')){
-    _mv $unzip_folder_name $soft_path
+    _rename $unzip_folder_name $soft_path
   }
 
 }
 
 ################################################################################
 
-if (!(Test-Path C:\php-ext )){
-  New-Item C:\php-ext -type directory
-}
+_mkdir C:\php-ext
 
-if (!(Test-Path C:\php-ext )){
-  New-Item C:\bin -type directory
-}
+_mkdir C:\bin
 
 cd $home\Downloads
 
@@ -285,14 +287,9 @@ _installer RunHiddenConsole.zip                       C:\bin  C:\bin\RunHiddenCo
 
 # [environment]::SetEnvironmentvariable("Path", "", "User");
 
-# $env:Path = [environment]::GetEnvironmentvariable("Path", "Machine")
+$env:Path = [environment]::GetEnvironmentvariable("Path", "Machine")
 
-[environment]::SetEnvironmentvariable("Path", `
-  "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl;`
-C:\php;C:\mysql\bin;C:\nginx;C:\Apache24\bin;C:\node;`
-$home\AppData\Local\Programs\Python\Python36;`
-C:\bin;`
-$home\AppData\Roaming\Composer\vendor\bin", "User")
+[environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl;C:\php;C:\mysql\bin;C:\nginx;C:\Apache24\bin;C:\node;$home\AppData\Local\Programs\Python\Python36;C:\bin;$home\AppData\Roaming\Composer\vendor\bin", "User")
 
 [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
 
@@ -395,6 +392,7 @@ if(!(Test-Path C:\mysql\data)){
 
 _echo_line
 Write-Host "####################################################################"
+Write-Host
 Write-Host "Mysql temporary password is"
 _echo_line
 select-string "A temporary password is generated for" C:\mysql\data\*.err
@@ -413,3 +411,27 @@ $ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mytest' WITH GRANT OP
 "
 _echo_line
 Write-Host "####################################################################"
+
+################################################################################
+
+_mkdir $home\lnmp\windows\logs
+
+_mkdir C:\nginx\conf.d
+
+_ln C:\nginx\conf.d $home\lnmp\windows\nginx
+
+_ln C:\nginx\logs $home\lnmp\windows\logs\nginx
+
+echo ' ' >> $home\lnmp\windows\logs\nginx\access.log
+
+echo ' ' >> $home\lnmp\windows\logs\nginx\error.log
+
+################################################################################
+
+_mkdir C:\Apache24\conf.d
+
+_ln C:\Apache24\conf.d $home\lnmp\windows\httpd
+
+_ln C:\Apache24\logs $home\lnmp\windows\logs\httpd
+
+################################################################################

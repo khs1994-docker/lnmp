@@ -2,7 +2,7 @@
 # ！！ 务必设置软件目录   ！！
 #！！！！！！！！！！！！！！！
 
-$NGINX_PATH="C:/nginx-1.13.8"
+# $NGINX_PATH="C:/nginx-1.13.8"
 $PHP_PATH="C:/php"
 $LNMP_PATH="$HOME/lnmp"
 
@@ -78,9 +78,9 @@ Function _stop_all(){
 Function _start($soft){
   switch ($soft) {
     "nginx" {
-      cd $NGINX_PATH
+      # cd $NGINX_PATH
       printInfo "Start nginx..."
-      start nginx
+      RunHiddenConsole nginx -p C:/nginx
       cd $source
       Write-Host "
       "

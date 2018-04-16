@@ -119,8 +119,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libldap2-dev \
     libldap-2.4-2 \
     libpspell-dev \
-    libsnmp30 \
-    libsnmp-dev \
+    # libsnmp30 \
+    # libsnmp-dev \
     # snmp \
   && mkdir -p $PHP_INI_DIR/conf.d; \
       mkdir -p /usr/src; \

@@ -7,6 +7,9 @@
 sudo sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 sudo sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
+sudo sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+sudo sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+
 if [ -z $APP_ENV ];then
   echo "export APP_ENV=wsl" >> ~/.bash_profile
 fi
@@ -36,3 +39,5 @@ sudo apt update && sudo apt -y install \
 # composer cn mirror
 
 command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.phpcomposer.com
+
+lnmp-wsl-docker-cli.sh
