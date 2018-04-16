@@ -257,49 +257,26 @@ $ httpd.exe -k install
 
 解压下载后的模块文件夹将 `mod_fcgid-2.3.9\mod_fcgid.so` 移入 apache 安装目录的 `modules` 文件夹中。
 
-在 apache 安装目录的 `conf/extra` 文件夹新建 [`httpd-fcgid.conf`](apache-fcgi/httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
+在 apache 安装目录的 `conf.d` 文件夹中新建 [`httpd-fcgid.conf`](config/apache-fcgi/httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
 
 ### http.conf
 
 ```bash
-ServerRoot "c:/apache24"
+ServerRoot "c:/Apache24"
 
 # 需要启用哪些模块自己去掉注释
 LoadModule rewrite_module modules/mod_rewrite.so
-# 这里引入 fcgid 模块
-LoadModule fcgid_module modules/mod_fcgid.so
 
 <IfModule dir_module>
     DirectoryIndex index.html index.php
 </IfModule>
 
-# Virtual hosts
-# 打开虚拟主机配置，以后多域名均在子配置文件中设置，避免修改 httpd.conf
-Include conf/extra/httpd-vhosts.conf
+# 包含子配置文件夹，以后多域名均在子配置文件夹 C:/Apache24/conf.d 中设置，避免修改 httpd.conf
 
-Include conf/extra/httpd-fcgid.conf
+Include conf.d/*.conf
 ```
 
-### httpd-vhosts.conf
-
-```bash
-<VirtualHost *:80>
-    DocumentRoot "C:/Users/90621/lnmp/app/laravel/public"
-    ServerName 127.0.0.1
-    ServerAlias a.com b.com
-    ErrorLog "C:/logs/apache/127.0.0.1.error.log"
-    CustomLog "C:/logs/apache/127.0.0.1.access.log" combined
-
-    <Directory "C:/Users/90621/lnmp/app/laravel/public" >
-        AddHandler fcgid-script .php
-        Options Indexes FollowSymLinks ExecCGI
-        AllowOverride all
-        # php-cgi的路径
-        FcgidWrapper "C:/php/php-cgi.exe" .php
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
+其他配置文件（示例配置）请到 [这里](config/apache-fcgi) 查看。
 
 测试配置
 
