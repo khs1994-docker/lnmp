@@ -9,7 +9,7 @@ $global:MYSQL_VERSION="8.0.3-rc"
 $global:HTTPD_VERSION="2.4.33"
 $global:IDEA_VERSION="1.8.3678"
 $global:NODE_VEERSION="9.9.0"
-$global:GIT_VERSION="2.16.2"
+$global:GIT_VERSION="2.17.0"
 $global:PYTHON_VERSION="3.6.5"
 $global:GOLANG_VERSION="1.10.1"
 $global:HTTPD_MOD_FCGID_VERSION="2.3.9"
@@ -296,8 +296,9 @@ _installer RunHiddenConsole.zip                       C:\bin  C:\bin\RunHiddenCo
 # [environment]::SetEnvironmentvariable("Path", "", "User");
 
 $env:Path = [environment]::GetEnvironmentvariable("Path", "Machine")
+$env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
-[environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl;C:\php;C:\mysql\bin;C:\nginx;C:\Apache24\bin;C:\node;$home\AppData\Local\Programs\Python\Python36;C:\bin;$home\AppData\Roaming\Composer\vendor\bin", "User")
+[environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl;C:\php;C:\mysql\bin;C:\nginx;C:\Apache24\bin;C:\node;$home\AppData\Local\Programs\Python\Python36\;$home\AppData\Local\Programs\Python\Python36\Scripts\;C:\bin;$home\AppData\Roaming\Composer\vendor\bin", "User")
 
 [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
 
