@@ -238,6 +238,10 @@ sudo yum install -y ${DEP_SOFTS} > /dev/null
 _test(){
     ${PHP_PREFIX}/bin/php -v
 
+    sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
+
+    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || echo ; sudo rm -rf /usr/local/sbin/php
+
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
     ${PHP_PREFIX}/sbin/php-fpm -v
@@ -318,6 +322,7 @@ _builder(){
         --enable-zip \
         --enable-calendar=shared \
         --enable-intl=shared \
+        --enable-embed=shared \
         \
         $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
         $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
@@ -523,9 +528,7 @@ _composer(){
             echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
             exit(1); \
         }" \
-    && ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php \
-    ; ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction ; sudo rm -rf /usr/local/sbin/php
+    && ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
 }
 
 _test

@@ -4,7 +4,7 @@
 
 环境 `Windows 10`，终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也行。
 
-我将软件都放在了 C 盘根目录，即 `C:\nginx-1.13.8` `C:\php` `C:\mysql` ...
+我将软件都放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` ...
 
 MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
 
@@ -23,7 +23,7 @@ MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将�
 ```bash
 $ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User");
 
-$ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx-1.13.8;c:\apache24\bin", "User")
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx;c:\apache24\bin", "User")
 
 $ [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
 ```
@@ -257,16 +257,6 @@ PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/ma
 
 同时下载 `mod_fcgid` 模块，注意版本（`win64` `vc15`）对应 (可能不太好找，网页搜索 `mod_fcgid` 来定位)。
 
-```bash
-$ httpd -k install
-
-# $ httpd -k uninstall
-
-$ httpd -d C:/Apache24 -k start
-
-$ httpd -d C:/Apache24 -k stop
-```
-
 ### fcgid 模块
 
 解压下载后的模块文件夹将 `mod_fcgid-2.3.9\mod_fcgid.so` 移入 Apache 安装目录( `C:\Apache24` )的 `modules` 文件夹中。
@@ -274,6 +264,8 @@ $ httpd -d C:/Apache24 -k stop
 在 Apache 安装目录( `C:\Apache24` )的 `conf.d` 文件夹中新建 [`httpd-fcgid.conf`](config/apache-fcgi/httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
 
 ### http.conf
+
+* [示例配置](config/apache-fcgi)
 
 ```bash
 ServerRoot "c:/Apache24"
@@ -293,19 +285,29 @@ LoadModule ssl_module modules/mod_ssl.so
 Include conf.d/*.conf
 ```
 
-其他配置文件（示例配置）请到 [这里](config/apache-fcgi) 查看。
+首次安装，必须先安装服务。
 
-测试配置
+```bash
+$ httpd -k install
+
+# $ httpd -k uninstall
+```
+
+测试配置文件通过之后，启动服务。
 
 ```bash
 $ httpd -t
-```
 
-之后使用 `ApacheMonitor.exe` 启动服务。
+$ httpd -d C:/Apache24 -k start
+
+# $ httpd -d C:/Apache24 -k stop
+```
 
 ### https
 
 * https://www.khs1994.com/php/development/apache/config.html
+
+* https://github.com/khs1994-website/server-side-tls
 
 请查看示例配置。
 
