@@ -75,7 +75,7 @@ $ sudo vi /etc/profile
 
 export WSL_HOME=/mnt/c/Users/90621 # 与上方值对应
 
-export PATH=$WSL_HOME/lnmp/wsl:$PATH
+# 再次提示 Windows Path 变量会传递到 WSL 的 PATH 变量，所以我们只需在 Windows 设置即可。
 
 # 保存重新登录
 ```
@@ -84,7 +84,9 @@ export PATH=$WSL_HOME/lnmp/wsl:$PATH
 
 https://dev.mysql.com/downloads/mysql/
 
-这里下载的是 `zip` 版，需要以管理员权限运行 `PowerShell` 执行一些命令完成初始化。（不建议使用 8.0.x 版本）
+这里下载的是 `zip` 版，需要以管理员权限运行 `PowerShell` 执行一些命令完成初始化。
+
+不建议使用 8.0.4 版本，因为该版本启用新的密码验证机制，目前主流的客户端不支持该方式。
 
 在 `C` 盘根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `my.cnf.example`.
 
@@ -101,7 +103,9 @@ $ net start mysql
 
 $ mysql -uroot -p
 
-# 初始密码在 mysql 安装目录 data/计算机名.err 的文件
+# 初始密码在 mysql 安装目录（C:\mysql） data/计算机名.err 的文件，或者使用以下命令查看密码
+
+$ select-string "A temporary password is generated for" C:\mysql\data\*.err
 
 [Note] [MY-010454] A temporary password is generated for root@localhost: VgcYZ=Myf4N.
 
@@ -141,9 +145,11 @@ http://windows.php.net/download/
 ### 复制 `php.ini`
 
 ```bash
-extension_dir = "C:/php/ext"
 
 ; 开启扩展，自行取消注释
+
+;extension=bz2
+extension=curl
 
 date.timezone = PRC
 
@@ -172,7 +178,13 @@ $ RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c C:/php/php.ini
 
 手动在 http://pecl.php.net/ 下载扩展（注意与 PHP 版本对应）。
 
-之后在 `php.ini` 中增加配置。
+之后在 `php.ini` 中增加配置(为了后续升级方便将 pecl 下载的扩展放到 `C:\php-ext`)。
+
+```bash
+extension=C:\php-ext\php_yaml
+
+zend_extension=C:\php-ext\php_xdebug
+```
 
 ## Composer
 
@@ -187,10 +199,11 @@ $ composer -V
 http://nginx.org/en/download.html
 
 ```bash
-# 必须在 nginx 安装目录执行
-$ start nginx
+$ nginx -p C:/nginx -t
 
-$ nginx -s stop
+$ nginx -p C:/nginx
+
+$ nginx -p C:/nginx -s stop
 ```
 
 ### 修改配置
@@ -245,19 +258,20 @@ PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/ma
 同时下载 `mod_fcgid` 模块，注意版本（`win64` `vc15`）对应 (可能不太好找，网页搜索 `mod_fcgid` 来定位)。
 
 ```bash
-# 进入安装目录 bin 目录
-# 安装为系统服务
+$ httpd -k install
 
-$ httpd.exe -k install
+# $ httpd -k uninstall
+
+$ httpd -d C:/Apache24 -k start
+
+$ httpd -d C:/Apache24 -k stop
 ```
-
-将 bin 目录中的 `ApacheMonitor.exe` 拖到桌面，可以完成 httpd 服务的启动等操作。
 
 ### fcgid 模块
 
-解压下载后的模块文件夹将 `mod_fcgid-2.3.9\mod_fcgid.so` 移入 apache 安装目录的 `modules` 文件夹中。
+解压下载后的模块文件夹将 `mod_fcgid-2.3.9\mod_fcgid.so` 移入 Apache 安装目录( `C:\Apache24` )的 `modules` 文件夹中。
 
-在 apache 安装目录的 `conf.d` 文件夹中新建 [`httpd-fcgid.conf`](config/apache-fcgi/httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
+在 Apache 安装目录( `C:\Apache24` )的 `conf.d` 文件夹中新建 [`httpd-fcgid.conf`](config/apache-fcgi/httpd-fcgid.conf) 文件，文件内容从 github 本项目目录中获取，注意修改 php 路径。
 
 ### http.conf
 
@@ -265,7 +279,10 @@ $ httpd.exe -k install
 ServerRoot "c:/Apache24"
 
 # 需要启用哪些模块自己去掉注释
+LoadModule headers_module modules/mod_headers.so
 LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
+LoadModule ssl_module modules/mod_ssl.so
 
 <IfModule dir_module>
     DirectoryIndex index.html index.php
@@ -287,6 +304,10 @@ $ httpd -t
 之后使用 `ApacheMonitor.exe` 启动服务。
 
 ### https
+
+* https://www.khs1994.com/php/development/apache/config.html
+
+请查看示例配置。
 
 ## More Information
 
