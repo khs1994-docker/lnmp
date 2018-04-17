@@ -130,6 +130,77 @@ $ lnmp-wsl-docker-cli.sh
 $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
 ```
 
+## Try NGINX Unit?
+
+本文使用源码编译安装。
+
+* [官方文档](https://unit.nginx.org/)
+
+* [第三方中文文档](https://github.com/khs1994-php/unit/blob/master/README_zh-Hans.md)
+
+```bash
+# 克隆源码
+$ git clone --depth=1 https://github.com/nginx/unit
+
+$ cd unit
+
+$ ./configure --prefix=/usr/local/nginx_unit
+
+# PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文默认使用 $ lnmp-wsl-install.sh php 7.2.4 安装 PHP
+
+$ ./configure php \
+      --module=php72 \
+      --lib-path=/usr/local/php72/lib \
+      --config=/usr/local/php72/bin/php-config
+
+      # --lib-static
+
+$ make
+
+$ sudo make install
+
+$ cd /usr/local/nginx_unit
+
+$ sudo ./sbin/unitd
+
+# 通过向 Linux Socket 发送 json 文件来配置 Unit
+
+{
+    "listeners": {
+        "*:8300": {
+            "application": "test"
+        }
+    },
+
+    "applications": {
+        "test": {
+            "type": "php",
+            "processes": 20,
+            "root": "/app/test",
+            "index": "index.php"
+        }
+    }
+}
+
+# root 路径必须填绝对路径，将以上内容保存为 start.json 本文保存到 /usr/local/nginx_unit/start.json
+
+$ cd /app/test
+
+$ vi index.php
+
+<?php
+
+phpinfo();
+
+$ curl -X PUT -d @/usr/local/nginx_unit/start.json  \
+       --unix-socket /usr/local/nginx_unit/control.unit.sock \
+       http://localhost/
+
+# 浏览器打开 127.0.0.1:8300 看到 phpinfo 页面，完成部署    
+```
+
+其他语言使用方法，或更多使用详情自行查看文档。
+
 * [x] bcmath
 * [x] bz2
 * [x] calendar
