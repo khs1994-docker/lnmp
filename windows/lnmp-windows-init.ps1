@@ -41,9 +41,10 @@ Function _ln($src,$target){
 }
 
 Function _echo_line(){
-  Write-Host '  '
-  Write-Host '  '
-  Write-Host '  '
+  Write-Host "
+
+
+"
 }
 
 Function _installer($zip, $unzip_path, $unzip_folder_name = 'null', $soft_path = 'null'){
@@ -304,47 +305,20 @@ $env:Path = [environment]::GetEnvironmentvariable("Path", "Machine")
 
 $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
 
-_echo_line
+$SOFT_TEST_COMMAND="git --version","docker --version","nginx -v","httpd -v", `
+                   "mysql --version", `
+                   "node -v", `
+                   "npm -v", `
+                   "python --version", `
+                   "go version"
 
-git --version
-
-_echo_line
-
-docker --version
-
-_echo_line
-
-nginx -v
-
-_echo_line
-
-httpd -v
-
-_echo_line
-
-mysql --version
-
-_echo_line
-
-node -v
-
-_echo_line
-
-npm -v
-
-_echo_line
-
-python --version
-
-_echo_line
-
-go version
-
-_echo_line
+Foreach ($item in $SOFT_TEST_COMMAND)
+{
+  powershell -Command $item
+  _echo_line
+}
 
 $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
-
-echo $env:Path > lnmp-init.log
 
 cd $source
 
@@ -406,7 +380,10 @@ if ($a.Length -eq 0){
 
 php -r "echo ini_get('curl.cainfo');"
 
-Write-Host ' '
+Write-Host "
+
+
+"
 
 php -m
 

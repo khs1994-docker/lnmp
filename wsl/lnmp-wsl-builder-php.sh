@@ -412,6 +412,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-zip \
       --enable-calendar=shared \
       --enable-intl=shared \
+      --enable-embed=shared \
     \
     $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
     $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \

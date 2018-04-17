@@ -224,6 +224,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --enable-shmop=shared \
     # --with-snmp=shared \
     --enable-wddx=shared \
+    --enable-embed=shared \
     \
   # bundled pcre does not support JIT on s390x
   # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT

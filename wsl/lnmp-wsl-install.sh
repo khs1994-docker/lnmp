@@ -226,7 +226,7 @@ if [ -z "$2" ];then
 
 echo -e "install by tar"
 
-_tar || set +x echo -e "\n\nInstall by Tar only support php72 and latest\n\n"
+_tar
 
 else
 
