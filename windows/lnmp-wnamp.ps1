@@ -8,6 +8,16 @@ $LNMP_PATH="$HOME/lnmp"
 
 ################################################################################
 
+Function print_help_info(){
+  Write-Host "
+start     Start WNMP        [SOFT_NAME] [all]
+restart   Restart WNMP      [SOFT_NAME] [all]
+stop      Stop WNMP         [SOFT_NAME] [all]
+status    Show WNMP status
+ps        Show WNMP status
+"
+}
+
 $source=$pwd
 
 Function printInfo(){
@@ -40,6 +50,13 @@ Function _stop($soft){
     "httpd" {
       printInfo "Stop HTTPD..."
       httpd -d C:/Apache24 -k stop
+      Write-Host "
+      "
+    }
+
+    "sshd" {
+      printInfo "Stop sshd ..."
+      Stop-Service sshd
       Write-Host "
       "
     }
@@ -117,6 +134,13 @@ Function _start($soft){
        "
      }
 
+     "sshd" {
+       printInfo "Start SSHD..."
+       Start-Service sshd
+       Write-Host "
+       "
+     }
+
      Default {
        bash lnmp-wsl.sh start $soft
      }
@@ -190,11 +214,16 @@ Function _status(){
   printInfo "Apache Status
   "
   Get-Process | Where-Object { $_ -match "httpd"}
+  Write-Host "
+  "
+  printInfo "SSHD Status
+  "
+  Get-Process | Where-Object { $_ -match "sshd"}
 }
 
 ################################################################################
 
-$global:WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgresql","httpd"
+$global:WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgresql","httpd","sshd"
 $global:WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"
 
 switch ($args[0])
@@ -212,8 +241,12 @@ switch ($args[0])
         break
       }
 
-      Default {
+      "all" {
         _stop_all
+      }
+
+      Default {
+       print_help_info
       }
     }
   }
@@ -231,8 +264,12 @@ switch ($args[0])
         break
       }
 
-      Default {
+      "all" {
         _start_all
+      }
+
+      Default {
+        print_help_info
       }
     }
   }
@@ -252,9 +289,13 @@ switch ($args[0])
         break
       }
 
-      Default {
+      "all" {
         _stop_all
         _start_all
+      }
+
+      Default {
+        print_help_info
       }
     }
   }
@@ -265,11 +306,6 @@ switch ($args[0])
   }
 
   Default {
-     Write-Host "start     Start WNMP
-restart   Restart WNMP
-stop      Stop WNMP
-status    Show WNMP status
-ps        Show WNMP status
-"
+    print_help_info
   }
 }
