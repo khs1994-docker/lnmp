@@ -37,7 +37,7 @@ $ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\window
 
 # 退出，重新打开
 
-$ lnmp-wnamp.ps1 start | stop | restart | status | ps
+$ lnmp-wnamp.ps1 start | stop | restart | status | ps SOFT_NAME
 ```
 
 注销之后重新登录
@@ -86,7 +86,7 @@ https://dev.mysql.com/downloads/mysql/
 
 这里下载的是 `zip` 版，需要以管理员权限运行 `PowerShell` 执行一些命令完成初始化。
 
-不建议使用 8.0.4 版本，因为该版本启用新的密码验证机制，目前主流的客户端不支持该方式。
+8.0.4-rc+ ，默认使用新的密码验证机制 `caching_sha2_password` ，目前主流的客户端不支持该方式，所以我们仍然采用旧的密码验证机制。
 
 在 `C` 盘根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `my.cnf.example`.
 
@@ -113,7 +113,7 @@ $ select-string "A temporary password is generated for" C:\mysql\data\*.err
 
 # 修改密码，将 mytest 改为自己的密码，其他的原样输入
 
-$ ALTER USER 'root'@'localhost' IDENTIFIED BY 'mytest';
+$ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 
 # 否则会报错
 
@@ -125,7 +125,12 @@ $ FLUSH PRIVILEGES;
 
 # 新增 root 用户远程登陆权限
 
-$ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mytest' WITH GRANT OPTION;
+# $ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mytest' WITH GRANT OPTION;
+# 8.0.11 报错
+
+$ CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'mytest' ;
+
+$ GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
 ```
 
 ### 停止服务

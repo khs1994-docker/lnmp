@@ -89,7 +89,7 @@ $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /etc/nginx/conf.d
 
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fpm.d/zz-wsl.conf
 
-$ sudo cp -f $WSL_HOME/lnmp/wsl/mysql.wsl.cnf /etc/mysql/conf.d/wsl.cnf
+$ cat $WSL_HOME/lnmp/wsl/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.cnf
 ```
 
 ## MySQL

@@ -41,3 +41,19 @@ $ ./lnmp-docker.ps1 development
 ## MySQL 默认 ROOT 密码
 
 `mytest`
+
+## Use WSL
+
+```bash
+$ bash
+
+# Windows PATH 变量为 %LNMP_PATH%\windows; %LNMP_PATH%\wsl; %LNMP_PATH\bin 
+
+$ lnmp-wsl-docker-cli.sh
+
+$ sudo ln -sf /mnt/c /C
+
+$ cd /C/Users/YOUR_USERNAME/lnmp
+
+$ ./lnmp-docker.sh
+```

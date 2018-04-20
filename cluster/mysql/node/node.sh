@@ -22,12 +22,14 @@ echo "MySQL master is available"
 # new only read user
 
 mysql -u root \
--e "GRANT SELECT ON *.* TO 'node'@'%' IDENTIFIED BY '${DB_ROOT_PASSWORD}';"
+-e "CREATE USER 'node'@'%' IDENTIFIED WITH mysql_native_password BY '${DB_ROOT_PASSWORD}'; \
+GRANT SELECT ON *.* TO 'node'@'%';"
 
 # new REPLICATION user
 
 mysql -u root \
--e "GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'172.28.0.%' IDENTIFIED BY '${DB_ROOT_PASSWORD}';"
+-e "CREATE USER '${MYSQL_REPLICATION_USER}'@'172.28.0.%' WITH mysql_native_password BY '${DB_ROOT_PASSWORD}'; \
+GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'172.28.0.%';"
 
 # 锁定数据库
 

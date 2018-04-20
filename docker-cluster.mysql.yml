@@ -16,7 +16,7 @@ version: '3.6'
 
 x-common:
   &default-common
-  image: mysql:8.0.3
+  image: mysql:8.0.11
   restart: always
 
 x-deploy:
