@@ -333,7 +333,7 @@ if (!(Test-Path C:\php\php.ini)){
   mv C:\php\php.ini-development C:\php\php.ini
 }
 
-$items='yaml','xdebug','Zend Opcache','redis', 'mongodb', 'igbinary','curl'
+$items='yaml','xdebug','Zend Opcache','redis', 'mongodb', 'igbinary','curl','pdo_mysql'
 
 Foreach ($item in $items)
 {

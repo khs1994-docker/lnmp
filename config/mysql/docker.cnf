@@ -9,6 +9,16 @@ default-character-set = utf8mb4
 
 [mysqld]
 
+#
+# 8.0.4-rc add
+#
+# https://github.com/khs1994-docker/lnmp/issues/154
+#
+
+# default_authentication_plugin = mysql_native_password
+
+# default_authentication_plugin = caching_sha2_password
+
 # datadir         = /var/lib/mysql-my
 
 skip-host-cache
