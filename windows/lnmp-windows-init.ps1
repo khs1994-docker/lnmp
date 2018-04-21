@@ -5,7 +5,7 @@
 $global:source=$PWD
 $global:NGINX_VERSION="1.13.12"
 $global:PHP_VERSION="7.2.4"
-$global:MYSQL_VERSION="8.0.3-rc"
+$global:MYSQL_VERSION="8.0.11"
 $global:HTTPD_VERSION="2.4.33"
 $global:IDEA_VERSION="1.8.3678"
 $global:NODE_VEERSION="9.9.0"
@@ -333,7 +333,7 @@ if (!(Test-Path C:\php\php.ini)){
   mv C:\php\php.ini-development C:\php\php.ini
 }
 
-$items='yaml','xdebug','Zend Opcache','redis', 'mongodb', 'igbinary','curl'
+$items='yaml','xdebug','Zend Opcache','redis', 'mongodb', 'igbinary','curl','pdo_mysql'
 
 Foreach ($item in $items)
 {
@@ -424,11 +424,11 @@ $ net start mysql
 
 $ mysql -uroot -p TEMP_PASSWORD
 
-$ ALTER USER 'root'@'localhost' IDENTIFIED BY 'mytest';
+$ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 
 $ FLUSH PRIVILEGES;
 
-$ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mytest' WITH GRANT OPTION;
+$ GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
 
 "
 _echo_line
