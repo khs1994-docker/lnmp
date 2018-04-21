@@ -1,1 +1,1 @@
-FROM python:alpine3.7@sha256:b86837cba03ffd32a332389696a19ba3d230b5f5ff642d2d2f05b63f6c0bd741
+FROM python:alpine3.7@sha256:bfac58481666aeb60ff6354e81afe888cc8c7b1effb1039870377fc7fa86ef43
