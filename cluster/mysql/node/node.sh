@@ -6,7 +6,9 @@ set -ex
 
 # mysql_net=$(ip route | awk '$1=="default" {print $3}' | sed "s/\.[0-9]\+$/.%/g")
 
-DB_ROOT_PASSWORD=$(cat /etc/mysql/db_root_password)
+MYSQL_ROOT_PASSWORD=$(cat ${MYSQL_ROOT_PASSWORD_FILE})
+
+MYSQL_REPLICATION_PASSWORD=$(cat ${MYSQL_REPLICATION_PASSWORD_FILE})
 
 export MYSQL_PWD=${DB_ROOT_PASSWORD}
 
@@ -22,20 +24,20 @@ echo "MySQL master is available"
 # new only read user
 
 mysql -u root \
--e "CREATE USER 'node'@'%' IDENTIFIED WITH mysql_native_password BY '${DB_ROOT_PASSWORD}'; \
+-e "CREATE USER 'node'@'%' IDENTIFIED WITH mysql_native_password BY '${MYSQL_ROOT_PASSWORD}'; \
 GRANT SELECT ON *.* TO 'node'@'%';"
 
 # new REPLICATION user
 
-mysql -u root \
--e "CREATE USER '${MYSQL_REPLICATION_USER}'@'172.28.0.%' WITH mysql_native_password BY '${DB_ROOT_PASSWORD}'; \
-GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'172.28.0.%';"
+# mysql -u root \
+# -e "CREATE USER '${MYSQL_REPLICATION_USER}'@'172.28.0.%' WITH mysql_native_password BY '${DB_ROOT_PASSWORD}'; \
+# GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'172.28.0.%';"
 
-# 锁定数据库
+# lock database
 
 mysql -uroot -h mysql_master -e "FLUSH TABLES WITH READ LOCK"
 
-# lock database
+# backup database
 
 # mysqldump -u root -p${DB_ROOT_PASSWORD} --all-databases  --lock-tables=false  -- > /root/all.sql
 

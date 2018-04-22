@@ -2,6 +2,8 @@
 # 所有 MySQL 自定义配置请在这里配置
 # 修改字符集为 utf8mb4
 #
+# @link https://dev.mysql.com/doc/refman/8.0/en/mysqld-option-tables.html
+#
 
 [mysqld_safe]
 
