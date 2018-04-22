@@ -91,7 +91,7 @@ https://dev.mysql.com/downloads/mysql/
 在 `C` 盘根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `my.cnf.example`.
 
 ```bash
-# 这条命令会产生一个随机密码，--initialize-insecure 初始化默认密码为空（不建议使用，后边会出现设置不了密码的情况）
+# 这条命令会产生一个随机密码，--initialize-insecure 初始化默认密码为空
 
 $ mysqld --initialize
 

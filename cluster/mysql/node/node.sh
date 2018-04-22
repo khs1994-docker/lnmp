@@ -10,6 +10,8 @@ MYSQL_ROOT_PASSWORD=$(cat ${MYSQL_ROOT_PASSWORD_FILE})
 
 MYSQL_REPLICATION_PASSWORD=$(cat ${MYSQL_REPLICATION_PASSWORD_FILE})
 
+# @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
+
 export MYSQL_PWD=${MYSQL_ROOT_PASSWORD}
 
 # check mysql master status
@@ -61,7 +63,7 @@ mysql -u root \
 -e "CHANGE MASTER TO MASTER_HOST='mysql_master', \
 MASTER_PORT=3306, \
 MASTER_USER='${MYSQL_REPLICATION_USER}', \
-MASTER_PASSWORD='${MYSQL_ROOT_PASSWORD}', \
+MASTER_PASSWORD='${MYSQL_REPLICATION_PASSWORD}', \
 MASTER_LOG_FILE='${LOG_FILE}', \
 MASTER_LOG_POS=${LOG_POS}"
 
