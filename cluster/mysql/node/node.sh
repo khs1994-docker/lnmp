@@ -6,9 +6,11 @@ set -ex
 
 # mysql_net=$(ip route | awk '$1=="default" {print $3}' | sed "s/\.[0-9]\+$/.%/g")
 
-DB_ROOT_PASSWORD=$(cat /etc/mysql/db_root_password)
+MYSQL_ROOT_PASSWORD=$(cat ${MYSQL_ROOT_PASSWORD_FILE})
 
-export MYSQL_PWD=${DB_ROOT_PASSWORD}
+MYSQL_REPLICATION_PASSWORD=$(cat ${MYSQL_REPLICATION_PASSWORD_FILE})
+
+export MYSQL_PWD=${MYSQL_ROOT_PASSWORD}
 
 # check mysql master status
 
@@ -22,22 +24,22 @@ echo "MySQL master is available"
 # new only read user
 
 mysql -u root \
--e "CREATE USER 'node'@'%' IDENTIFIED WITH mysql_native_password BY '${DB_ROOT_PASSWORD}'; \
+-e "CREATE USER 'node'@'%' IDENTIFIED WITH mysql_native_password BY '${MYSQL_ROOT_PASSWORD}'; \
 GRANT SELECT ON *.* TO 'node'@'%';"
 
 # new REPLICATION user
 
-mysql -u root \
--e "CREATE USER '${MYSQL_REPLICATION_USER}'@'172.28.0.%' WITH mysql_native_password BY '${DB_ROOT_PASSWORD}'; \
-GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'172.28.0.%';"
-
-# 锁定数据库
-
-mysql -uroot -h mysql_master -e "FLUSH TABLES WITH READ LOCK"
+# mysql -u root \
+# -e "CREATE USER '${MYSQL_REPLICATION_USER}'@'172.28.0.%' WITH mysql_native_password BY '${MYSQL_ROOT_PASSWORD}'; \
+# GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'172.28.0.%';"
 
 # lock database
 
-# mysqldump -u root -p${DB_ROOT_PASSWORD} --all-databases  --lock-tables=false  -- > /root/all.sql
+mysql -uroot -h mysql_master -e "FLUSH TABLES WITH READ LOCK"
+
+# backup database
+
+# mysqldump -u root -p${MYSQL_ROOT_PASSWORD} --all-databases  --lock-tables=false  -- > /root/all.sql
 
 # get master log File & Position
 
@@ -59,7 +61,7 @@ mysql -u root \
 -e "CHANGE MASTER TO MASTER_HOST='mysql_master', \
 MASTER_PORT=3306, \
 MASTER_USER='${MYSQL_REPLICATION_USER}', \
-MASTER_PASSWORD='${DB_ROOT_PASSWORD}', \
+MASTER_PASSWORD='${MYSQL_ROOT_PASSWORD}', \
 MASTER_LOG_FILE='${LOG_FILE}', \
 MASTER_LOG_POS=${LOG_POS}"
 

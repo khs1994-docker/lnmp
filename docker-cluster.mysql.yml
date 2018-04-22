@@ -14,6 +14,13 @@ version: '3.6'
 # node 13307 13308
 #
 
+#
+# User
+#
+# master User master
+#
+# node User node
+
 x-common:
   &default-common
   image: mysql:8.0.11
@@ -45,7 +52,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
-      MYSQL_REPLICATION_PASSWORD: /etc/mysql/db_root_password
+      MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - 13306:3306
@@ -89,7 +96,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
-      MYSQL_REPLICATION_PASSWORD: /etc/mysql/db_root_password
+      MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - "13307:3306"
@@ -127,7 +134,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
       MYSQL_REPLICATION_USER: replication
-      MYSQL_REPLICATION_PASSWORD: /etc/mysql/db_root_password
+      MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
       - "13308:3306"

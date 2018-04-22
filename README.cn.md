@@ -149,7 +149,7 @@ $ ./lnmp-docker.sh restart nginx
 $ ./lnmp-docker.sh ssl www.khs1994.com
 ```
 
->一键申请证书仅支持 `dnspod.cn` DNS，使用前请提前在 `.env` 文件中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/issue-ssl.md)。
+>使用前请提前在 `.env` 文件或系统环境变量中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/issue-ssl.md)。
 
 ### 查看详情
 
@@ -204,7 +204,7 @@ $ ./lnmp-docker.sh down
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                  |`khs1994/acme:2.7.8`                  | **2.7.8**              |`Alpine:3.7`    |
 |[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.13.11-alpine`      | **1.13.11**            |`Alpine:3.7`|
 |[Apache](https://github.com/docker-library/docs/tree/master/httpd)        |`httpd:2.4.33-alpine`       | **2.4.33**             |`Alpine:3.6`    |
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.3`               | **8.0.3**              |`Debian:jessie` |
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`               | **8.0.11**              |`Debian:jessie` |
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.5`            | **10.3.5**             |`Debian:jessie` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:4.0.9-alpine`        | **4.0.9**              |`Alpine:3.7`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php-fpm:7.2.4-alpine3.7`  | **7.2.4**       |`Alpine:3.7`    |
