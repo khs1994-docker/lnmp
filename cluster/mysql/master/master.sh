@@ -6,6 +6,8 @@ MYSQL_ROOT_PASSWORD=$(cat ${MYSQL_ROOT_PASSWORD_FILE})
 
 MYSQL_REPLICATION_PASSWORD=$(cat ${MYSQL_REPLICATION_PASSWORD_FILE})
 
+# @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
+
 export MYSQL_PWD=${MYSQL_ROOT_PASSWORD}
 
 # MySQL Docker 8.0.4 based stretch(Debian 9) Remove ip ping etc command

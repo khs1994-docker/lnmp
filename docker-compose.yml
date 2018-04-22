@@ -3,6 +3,7 @@ version: "3.6"
 #
 # @link https://docs.docker.com/compose/overview/
 # @link https://docs.docker.com/compose/compose-file/#extension-fields
+# @link https://github.com/docker-library/docs
 #
 
 x-common:
@@ -20,6 +21,8 @@ services:
     << : *default-common
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}"
     environment:
+      # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
+      # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
       # MYSQL_USER:
@@ -28,7 +31,7 @@ services:
       - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
       - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
-      # https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
+      # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}:rw
       - ./logs/mysql:/var/log/mysql:rw
@@ -43,6 +46,7 @@ services:
     << : *default-common
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3}"
     environment:
+      # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
       # MYSQL_USER:
@@ -51,7 +55,7 @@ services:
       - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
       - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
-      # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
+      # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}:rw
       - ./logs/mariadb:/var/log/mysql:rw
