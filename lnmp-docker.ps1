@@ -178,12 +178,12 @@ ClusterKit:
   clusterkit-memcached-deploy  Deploy memcached Cluster in Swarm mode
   clusterkit-memcached-remove  Remove memcached Cluster in Swarm mode
 
-  clusterkit-redis-up          Up Redis Cluster
-  clusterkit-redis-down        Stop Redis Cluster
-  clusterkit-redis-exec        Execute a command in a running Redis Cluster node
+  clusterkit-redis-up          Up Redis Cluster(By Ruby)
+  clusterkit-redis-down        Stop Redis Cluster(By Ruby)
+  clusterkit-redis-exec        Execute a command in a running Redis Cluster node(By Ruby)
 
-  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode
-  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
+  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
+  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
 
   clusterkit-redis-master-slave-up       Up Redis M-S
   clusterkit-redis-master-slave-down     Stop Redis M-S

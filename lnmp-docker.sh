@@ -67,6 +67,7 @@ Commands:
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose
+  completion           Move fish shell completion code (Only Support fish)
   development          Use LNMP in Development
   development-config   Validate and view the Development Compose file
   development-pull     Pull LNMP Docker Images in development
@@ -109,7 +110,8 @@ Container CLI:
 LogKit:
   SERVICE-logs         Print LNMP containers logs (journald)
 
-clusterkit-help        Print ClusterKit help info
+ClusterKit:
+  clusterkit-help        Print ClusterKit help info
 
 Developer Tools:
   commit               Commit LNMP to Git
@@ -149,12 +151,12 @@ ClusterKit:
   clusterkit-memcached-deploy  Deploy memcached Cluster in Swarm mode
   clusterkit-memcached-remove  Remove memcached Cluster in Swarm mode
 
-  clusterkit-redis-up          Up Redis Cluster
-  clusterkit-redis-down        Stop Redis Cluster
-  clusterkit-redis-exec        Execute a command in a running Redis Cluster node
+  clusterkit-redis-up          Up Redis Cluster(By Ruby)
+  clusterkit-redis-down        Stop Redis Cluster(by Ruby)
+  clusterkit-redis-exec        Execute a command in a running Redis Cluster node(By Ruby)
 
-  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode
-  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
+  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
+  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
 
   clusterkit-redis-master-slave-up       Up Redis M-S
   clusterkit-redis-master-slave-down     Stop Redis M-S
@@ -891,6 +893,13 @@ main() {
     commit
     ;;
 
+  completion )
+    ROOT_PATH=$HOME/.config/fish/completions
+    if ! [ -d $ROOT_PATH ];then mkdir -p $ROOT_PATH ; fi
+    ln -sf $PWD/cli/completion/fish/* $ROOT_PATH
+    ls -la $ROOT_PATH
+    ;;
+
   reset-master )
     reset-master
     ;;
@@ -1266,6 +1275,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     ;;
 
   clusterkit-redis-up )
+        if [ -z "$CLUSTERKIT_REDIS_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_HOST in .env file" ; exit 1 ; fi
         docker-compose -f docker-cluster.redis.yml up "$@"
         ;;
 
@@ -1294,6 +1304,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     ;;
 
   clusterkit-redis-master-slave-up )
+        if [ -z "$CLUSTERKIT_REDIS_M_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_M_S_HOST in .env file" ; exit 1 ; fi
         docker-compose -f docker-cluster.redis.master.slave.yml up "$@"
         ;;
 
@@ -1321,6 +1332,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     ;;
 
   clusterkit-redis-sentinel-up )
+        if [ -z "$CLUSTERKIT_REDIS_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_S_HOST in .env file" ; exit 1 ; fi
         docker-compose -f docker-cluster.redis.sentinel.yml up "$@"
         ;;
 

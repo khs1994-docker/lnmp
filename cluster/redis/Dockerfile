@@ -1,6 +1,6 @@
 FROM khs1994/builder:ruby@sha256:d8cd3d80bb100b7bd747a1d1b42f20db0d4e00a507e15b39d82bb3aa3e7bb742
 
-ARG VERSION=4.0.8
+ARG VERSION=4.0.9
 
 ARG REDIS_URL=raw.githubusercontent.com/antirez/redis
 

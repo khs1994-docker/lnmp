@@ -6,6 +6,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-config      -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-push        -d     'Build and Pushes images to Your Docker Registory'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-up          -d     'Create and start LNMP containers With Self Build images (Only Support x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a cleanup           -d     'Cleanup log files'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a completion         -d    'Move fish shell completion code (Only Support fish)'
 
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-help   -d     'Print ClusterKit help info'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit        -d     'UP LNMP With Mysql Redis Memcached Cluster [Background]'
@@ -20,14 +21,14 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-exe
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-deploy           -d     'Deploy MySQL Cluster in Swarm mode'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-mysql-remove           -d     'Remove MySQL Cluster in Swarm mode'
 
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-up               -d     'Up Redis Cluster'
-complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d          -d     'Up Redis Cluster in the background'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-down             -d     'Stop Redis Cluster'
-complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v        -d     'Stop Redis Cluster AND Remove named volumes declared in the `volumes`'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-exec             -d     'Execute a command in a running Redis Cluster'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-up               -d     'Up Redis Cluster(By Ruby)'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d          -d     'Up Redis Cluster in the background(By Ruby)'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-down             -d     'Stop Redis Cluster(By Ruby)'
+complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v        -d     'Stop Redis Cluster AND Remove named volumes declared in the `volumes`(By Ruby)'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-exec             -d     'Execute a command in a running Redis Cluster(By Ruby)'
 
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-deploy           -d     'Deploy Redis Cluster in Swarm mode'
-complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-remove           -d     'Remove Redis Cluster in Swarm mode'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-deploy           -d     'Deploy Redis Cluster in Swarm mode(By Ruby)'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-remove           -d     'Remove Redis Cluster in Swarm mode(By Ruby)'
 
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-memcached-up               -d     'Up memcached Cluster'
 complete -c lnmp-docker.sh -n '__fish_seen_subcommand_from clusterkit-memcached-up' -s d          -d     'Up memcached Cluster in the background'
