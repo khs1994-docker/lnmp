@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -ex
+
+DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+
+source $DIR/.arch
+
+if [ -z $1 ];then exit 1 ; fi
+
+tp_path=$1
+
+shift
+
+docker run -it --rm \
+  --mount type=bind,src=$PWD,target=/app,consistency=cached \
+  --mount src=lnmp_composer_cache-data,target=/tmp/cache \
+  --entrypoint /docker-entrypoint.composer.sh \
+  ${DOCKER_IMAGE}:${TAG} \
+  composer create-project topthink/think=5.0.* ${tp_path} --prefer-dist "$@"

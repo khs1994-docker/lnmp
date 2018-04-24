@@ -62,7 +62,6 @@ complete -W "acme.sh \
         swarm-pull \
         swarm-push \
         swarm-update \
-        tp \
         nginx-config \
         update \
         upgrade \
