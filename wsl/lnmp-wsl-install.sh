@@ -22,7 +22,7 @@ $ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
 
 $ lnmp-wsl-install.sh enable nginx [httpd]
 
-$ lnmp-wsl-install.sh mysql nginx php postgresql mongodb swift ...
+$ lnmp-wsl-install.sh mysql nginx php postgresql mongodb swift
 
 Example:
 
@@ -44,6 +44,8 @@ exit 0
 ################################################################################
 
 SWIFT_PREFIX=/usr/local/swift
+
+PG_MAJOR=10
 
 ################################################################################
 
@@ -258,7 +260,8 @@ _postgresql(){
   # @link https://www.postgresql.org/download/linux/debian/
 
  if ! [ -f /etc/apt/sources.list.d/postgresql.list ];then
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ $( lsb_release -cs )-pgdg main" | \
+    # echo "deb http://apt.postgresql.org/pub/repos/apt/ $( lsb_release -cs )-pgdg main" | \
+    echo "deb http://mirrors.ustc.edu.cn/postgresql/repos/apt/ $( lsb_release -cs )-pgdg main" | \
       sudo tee /etc/apt/sources.list.d/postgresql.list
  fi
 
@@ -268,6 +271,17 @@ _postgresql(){
   sudo apt-get update
 
   sudo apt-get -y install postgresql
+
+  if ! [ -f /usr/share/postgresql/postgresql.conf.sample  ];then
+    sudo mv -v "/usr/share/postgresql/$PG_MAJOR/postgresql.conf.sample" /usr/share/postgresql/
+
+    sudo ln -sv /usr/share/postgresql/postgresql.conf.sample "/usr/share/postgresql/$PG_MAJOR/"
+
+    sudo sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample
+  fi
+
+  env | grep /usr/lib/postgresql/$PG_MAJOR/bin || echo "PATH=\$PATH:/usr/lib/postgresql/$PG_MAJOR/bin" | sudo tee -a /etc/profile
+
 }
 
 _rabbitmq(){
