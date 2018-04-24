@@ -24,7 +24,7 @@ version: '3.6'
 
 x-common:
   &default-common
-  image: redis:4.0.8-alpine
+  image: redis:4.0.9-alpine
   restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_HOST:-192.168.199.100}
@@ -65,7 +65,7 @@ services:
       args:
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
         REDIS_URL: gitee.com/mirrors/redis/raw
-    image: khs1994/redis:clusterkit-4.0.8
+    image: khs1994/redis:clusterkit-4.0.9
     volumes:
       - cluster_redis_master-1-data:/data
     entrypoint: /docker-entrypoint.sh

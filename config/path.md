@@ -23,17 +23,14 @@
 │       └── nginx.production.conf
 ├── httpd
 │   ├── README.md
+│   ├── demo-ajax-header.config
 │   ├── demo-https.config
 │   ├── demo-laravel.config
 │   ├── demo-ssl
 │   │   ├── root-ca.crt
 │   │   ├── www.t.khs1994.com.crt
 │   │   └── www.t.khs1994.com.key
-│   ├── demo-vhost.conf
-│   └── ssl
-│       ├── khs1994.com.crt
-│       ├── khs1994.com.fullchain.crt
-│       └── khs1994.com.key
+│   └── demo-vhost.conf
 ├── mariadb
 │   ├── default
 │   │   └── etc
@@ -63,8 +60,8 @@
 ├── nginx
 │   ├── README.md
 │   ├── auth
-│   │   ├── README.md
-│   │   └── docker_registry.htpasswd
+│   │   └── README.md
+│   ├── demo-ajax-header.config
 │   ├── demo-fzjh-80.config
 │   ├── demo-fzjh.config
 │   ├── demo-include-php.config
@@ -80,16 +77,40 @@
 │   ├── demo-www.conf
 │   ├── demo-www.config
 │   ├── fzjh.conf
-│   ├── registry.conf
-│   ├── registry.conf.backup
 │   ├── ssl
-│   │   ├── docker.t.khs1994.com.crt
-│   │   ├── docker.t.khs1994.com.key
-│   │   ├── khs1994.com.rsa.crt
-│   │   ├── khs1994.com.rsa.key
-│   │   └── root-ca.crt
 │   ├── ssl-self
 │   └── wait-for-php.sh
+├── nginx.my
+│   ├── 301.conf
+│   ├── 80.conf
+│   ├── README.md
+│   ├── auth
+│   │   ├── README.md
+│   │   └── nginx.htpasswd
+│   ├── docker-registry.conf
+│   ├── drone.conf
+│   ├── gogs.conf
+│   ├── nexus.conf.back
+│   ├── php.conf
+│   ├── php.config
+│   ├── py-django.conf
+│   ├── ssl
+│   │   ├── docker.domain.com.crt
+│   │   ├── docker.domain.com.key
+│   │   ├── docker.t.khs1994.com.cer
+│   │   ├── docker.t.khs1994.com.key
+│   │   ├── drone.t.khs1994.com.cer
+│   │   ├── drone.t.khs1994.com.key
+│   │   ├── git.t.khs1994.com.crt
+│   │   ├── git.t.khs1994.com.key
+│   │   ├── khs1994.com.crt
+│   │   └── khs1994.com.key
+│   ├── ssl-self
+│   │   ├── root-ca.crt
+│   │   ├── t.khs1994.com.crt
+│   │   └── t.khs1994.com.key
+│   ├── ssl.config
+│   └── t.khs1994.conf
 ├── path.md
 ├── php
 │   ├── default
@@ -135,5 +156,5 @@
     ├── config.production.yml
     └── config.yml
 
-38 directories, 96 files
+41 directories, 114 files
 ```

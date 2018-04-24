@@ -20,6 +20,8 @@ openssl \
 openssl@1.1 \
 coreos-ct \
 gnu-sed \
+tree \
+wget \
 "
 
 PECL=" igbinary \

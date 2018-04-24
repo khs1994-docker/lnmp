@@ -28,7 +28,7 @@ version: "3.6"
 
 x-common:
   &default-common
-  image: redis:4.0.8-alpine
+  image: redis:4.0.9-alpine
   # restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
