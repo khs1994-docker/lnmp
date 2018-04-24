@@ -89,7 +89,6 @@ PHP Tools:
   nginx-config         Generate nginx vhost conf
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
-  tp                   Create a new ThinkPHP application
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
@@ -1155,19 +1154,6 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
   -h | --help | help )
    help
    ;;
-
-  tp )
-    run_docker
-    if [ -z "$1" ];then
-      print_error "$ ./lnmp-docker.sh tp {PATH} {CMD}"; exit 1
-    else
-      path="$1"
-      shift
-      cmd="$@"
-    fi
-    cd app
-    ../bin/lnmp-composer create-project topthink/think=5.0.* ${path} --prefer-dist ${cmd}
-    ;;
 
   restart )
     if [ -z "$1" ];then docker-compose down --remove-orphans; \
