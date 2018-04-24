@@ -114,8 +114,14 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  # laravel 安装程序
  && composer global require "laravel/installer" \
+ # php-cs-fixer
+ # https://github.com/FriendsOfPHP/PHP-CS-Fixer
  && composer global require "friendsofphp/php-cs-fixer" \
+ # Sami an API documentation generator
+ # https://github.com/FriendsOfPHP/Sami
+ && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
+ && chmod +x /usr/local/bin/*
  && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
  # 默认不启用 xdebug
  && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
