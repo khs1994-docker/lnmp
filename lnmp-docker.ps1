@@ -122,7 +122,6 @@ PHP Tools:
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
   ssl-self             Issue Self-signed SSL certificate
-  tp                   Create a new ThinkPHP application
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
@@ -132,34 +131,13 @@ Swarm mode:
   swarm-config         Validate and view the Production Swarm mode Compose file
   swarm-push           Push Swarm image (nginx php7)
 
-ClusterKit
-  clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
-
-  clusterkit-mysql-up          Up MySQL Cluster
-  clusterkit-mysql-down        Stop MySQL Cluster
-  clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
-
-  clusterkit-memcached-up      Up memcached Cluster
-  clusterkit-memcached-down    Stop memcached Cluster
-  clusterkit-memcached-exec    Execute a command in a running memcached Cluster node
-
-  clusterkit-redis-up          Up Redis Cluster
-  clusterkit-redis-down        Stop Redis Cluster
-  clusterkit-redis-exec        Execute a command in a running Redis Cluster node
-
-  clusterkit-redis-master-slave-up       Up Redis M-S
-  clusterkit-redis-master-slave-down     Stop Redis M-S
-  clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
-
-  clusterkit-redis-sentinel-up           Up Redis S
-  clusterkit-redis-sentinel-down         Stop Redis S
-  clusterkit-redis-sentinel-exec         Execute a command in a running Redis S node
-
 Container CLI:
   SERVICE-cli          Execute a command in a running LNMP container
 
 LogKit:
   SERVICE-logs         Print LNMP containers logs (journald)
+
+clusterkit-help        Print ClusterKit help info
 
 Developer Tools:
   update               Upgrades LNMP
@@ -175,6 +153,53 @@ Donate https://zan.khs1994.com"
 
 cd $source
 
+exit
+}
+
+Function clusterkit_help(){
+echo "
+ClusterKit:
+  clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
+  clusterkit-COMMAND           Run docker-compsoe commands(config, pull, etc)
+
+  swarm-clusterkit             UP LNMP With Mysql Redis Memcached Cluster IN Swarm mode
+
+  clusterkit-mysql-up          Up MySQL Cluster
+  clusterkit-mysql-down        Stop MySQL Cluster
+  clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
+
+  clusterkit-mysql-deploy      Deploy MySQL Cluster in Swarm mode
+  clusterkit-mysql-remove      Remove MySQL Cluster in Swarm mode
+
+  clusterkit-memcached-up      Up memcached Cluster
+  clusterkit-memcached-down    Stop memcached Cluster
+  clusterkit-memcached-exec    Execute a command in a running memcached Cluster node
+
+  clusterkit-memcached-deploy  Deploy memcached Cluster in Swarm mode
+  clusterkit-memcached-remove  Remove memcached Cluster in Swarm mode
+
+  clusterkit-redis-up          Up Redis Cluster
+  clusterkit-redis-down        Stop Redis Cluster
+  clusterkit-redis-exec        Execute a command in a running Redis Cluster node
+
+  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode
+  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode
+
+  clusterkit-redis-master-slave-up       Up Redis M-S
+  clusterkit-redis-master-slave-down     Stop Redis M-S
+  clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
+
+  clusterkit-redis-master-slave-deploy   Deploy Redis M-S in Swarm mode
+  clusterkit-redis-master-slave-remove   Remove Redis M-S in Swarm mode
+
+  clusterkit-redis-sentinel-up           Up Redis S
+  clusterkit-redis-sentinel-down         Stop Redis S
+  clusterkit-redis-sentinel-exec         Execute a command in a running Redis S node
+
+  clusterkit-redis-sentinel-deploy       Deploy Redis S in Swarm mode
+  clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
+
+"
 exit
 }
 
@@ -333,11 +358,6 @@ switch($first){
       printInfo 'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
 
-    tp {
-      $TP_PATH,$other=$other
-      _composer "" create-project,topthink/think=5.0.*,${TP_PATH},--prefer-dist,$other
-    }
-
     httpd-cli {
       _bash_cli httpd sh
     }
@@ -492,6 +512,10 @@ switch($first){
 
     {$_ -in "-h","--help","help"} {
       help_information
+    }
+
+    clusterkit-help {
+      clusterkit_help
     }
 
     default {
