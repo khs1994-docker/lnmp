@@ -13,7 +13,8 @@
 
 set -e
 
-if [ `uname -s` != 'Darwin' ] && [ `uname -s` != 'Linux' ];then echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
+if [ `uname -s` != 'Darwin' ] && [ `uname -s` != 'Linux' ];then \
+    echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
 
 print_info(){
   echo -e "\033[32mINFO \033[0m  $@"
@@ -40,7 +41,7 @@ else
       print_info "Use LNMP CLI in $PWD\n"
       cd ${LNMP_PATH}
     else
-      print_error  "在任意目录使用 LNMP CLI 必须设置环境变量 LNMP_PATH ，cli/README.md"
+      print_error  "You must set system env LNMP_PATH, please see cli/README.md"
       exit 1
     fi
 fi
@@ -170,14 +171,15 @@ _registry(){
 
   # SSL 相关
 
-  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] \
+      || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
     print_warning "Docker Registry SSL not found, generating ...."
     ssl_self $KHS1994_LNMP_REGISTRY_HOST
   fi
 
-  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
-    print_error "Docker Registry SSL error"
-    exit 1
+  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] \
+      || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+    print_error "Docker Registry SSL error" ; exit 1
   else
     print_info "Docker Registry SSL Correct"
   fi
@@ -227,7 +229,9 @@ _registry_down(){
 
 env_status(){
   # cp .env.example to .env
-  if [ -f .env ];then print_info ".env file existing\n"; else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
+  if [ -f .env ];then \
+      print_info ".env file existing\n"; \
+  else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
 }
 
 # 自动升级软件版本
@@ -271,21 +275,15 @@ run_docker(){
 
 logs(){
   if ! [ -d logs/httpd ];then mkdir -p logs/httpd; fi
-
   if ! [ -d logs/mongodb ];then mkdir -p logs/mongodb && echo > logs/mongodb/mongo.log; fi
-
   if ! [ -d logs/mysql ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
-
   if ! [ -d logs/mariadb ];then mkdir -p logs/mariadb && echo > logs/mariadb/error.log; fi
-
   if ! [ -d logs/nginx ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
-
   if ! [ -d logs/php-fpm ];then
     mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/access.log \
       && echo > logs/php-fpm/xdebug-remote.log
   fi
-
   if ! [ -d logs/redis ];then mkdir -p logs/redis && echo > logs/redis/redis.log ; fi
   chmod -R 777 logs/mongodb \
                logs/mysql \
@@ -317,10 +315,7 @@ cleanup(){
 
 gitbook(){
   docker rm -f lnmp-docs > /dev/null 2>&1 || echo
-  exec docker run --init -it --rm \
-    -p 4000:4000 \
-    --name lnmp-docs \
-    -v $PWD/docs:/srv/gitbook-src \
+  exec docker run --init -it --rm -p 4000:4000 --name lnmp-docs -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
 }
@@ -336,7 +331,8 @@ install_docker_compose_move(){
         sudo install -m755 /tmp/docker-compose /opt/bin/docker-compose
         ;;
       * )
-        sudo install -m755 /tmp/docker-compose /usr/local/bin/docker-compose || install -m755 /tmp/docker-compose /usr/local/bin/docker-compose
+        sudo install -m755 /tmp/docker-compose /usr/local/bin/docker-compose \
+            || install -m755 /tmp/docker-compose /usr/local/bin/docker-compose
         ;;
     esac
   else
@@ -348,7 +344,8 @@ install_docker_compose_move(){
 
 install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
-  curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+  curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
+      > /tmp/docker-compose
   install_docker_compose_move
 }
 
@@ -358,7 +355,8 @@ install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ...\n"
   command -v pip3 >/dev/null 2>&1 || sudo apt install -y python3-pip
   if ! [ -d ~/.pip ];then
-    mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" > ~/.pip/pip.conf
+    mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" \
+        > ~/.pip/pip.conf
   fi
   sudo pip3 install --upgrade docker-compose
 }
@@ -391,15 +389,19 @@ docker_compose(){
     # -lt 小于
     if [ "$y" -lt "$true_y" ];then
       # 安装不正确
-      if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@"; return 0; fi
+      if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; \
+          install_docker_compose_official "$@"; return 0; fi
       if [ "$1" = '-f' ];then install_docker_compose -f; return 0; fi
       # 判断 OS
       if [ "$OS" = 'Darwin' ] ;then
-        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Mac Edge Version\n"
+        print_error \
+"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Mac\n"
       elif [ "$OS" = 'Linux' ];then
-        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
+        print_error \
+"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
       elif [ "$OS" = 'MINGW64_NT-10.0' ];then
-        print_error "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows Edge Version\n"
+        print_error \
+"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows\n"
       else
         NOTSUPPORT
       fi
@@ -410,7 +412,8 @@ docker_compose(){
   else
     # 不存在
     print_error "docker-compose NOT install, install...\n"
-    if [[ "$1" = '--official' || "$2" = '--official' ]];then shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@" && return 0; fi
+    if [[ "$1" = '--official' || "$2" = '--official' ]];then \
+        shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@" && return 0; fi
     install_docker_compose
   fi
 }
@@ -479,7 +482,8 @@ set_git_remote_origin_url(){
     git fetch origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
     print_info `git remote get-url origin`
     echo
-  elif [ `git remote get-url origin` != 'git@github.com:khs1994-docker/lnmp.git' ] && [ `git remote get-url origin` != 'https://github.com/khs1994-docker/lnmp' ];then
+  elif [ `git remote get-url origin` != 'git@github.com:khs1994-docker/lnmp.git' ] \
+      && [ `git remote get-url origin` != 'https://github.com/khs1994-docker/lnmp' ];then
     # 存在但是设置错误
     print_error "This git remote origin NOT set Correct, reseting...\n"
     git remote rm origin
@@ -575,6 +579,8 @@ server {
   root          /app/$2;
   index         index.html index.htm index.php;
 
+  # include demo-include-php.config
+
   location / {
     try_files \$uri \$uri/ /index.php?\$query_string;
   }
@@ -664,6 +670,8 @@ server{
   root                       /app/$2;
   index                      index.html index.htm index.php;
 
+  # include demo-include-ssl.config
+
   ssl_certificate            conf.d/ssl/$1.crt;
   ssl_certificate_key        conf.d/ssl/$1.key;
 
@@ -675,6 +683,8 @@ server{
 
   ssl_stapling               on;
   ssl_stapling_verify        on;
+
+  # include demo-include-php.config
 
   location / {
     try_files \$uri \$uri/ /index.php?\$query_string;
@@ -737,7 +747,8 @@ $ ./lnmp-docker.sh acme.sh
   command=${command[@]//'--httpd'/}
 
   exec docker run --init -it --rm \
-         -v $PWD/config/$(if [ "$HTTPD" = 1 ];then echo ${HTTPD_CONF_D:-httpd}; else echo ${NGINX_CONF_D:-nginx}; fi)/ssl:/ssl \
+         -v $PWD/config/$(if [ "$HTTPD" = 1 ];then \
+             echo ${HTTPD_CONF_D:-httpd}; else echo ${NGINX_CONF_D:-nginx}; fi)/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
          -e HTTPD=${HTTPD:-0} \
@@ -751,11 +762,8 @@ ssl_self(){
 
 # 快捷开始 PHP 项目开发
 
-start(){
-  for arg in "$@"
-  do
-    if [ $arg = '-f' ];then rm -rf app/$1; fi
-  done
+new(){
+  for arg in "$@"; do if [ $arg = '-f' ];then rm -rf app/$1; fi; done
 
   if [ -z "$1" ];then read -p "Please input project name: /app/" name; else name=$1; fi
 
@@ -763,7 +771,8 @@ start(){
 
   if [ -d app/$name ];then print_error "This folder existing"; exit 1; fi
 
-  if [ -z "$2" -o "$2" = '-f' ];then read -p "Please input domain:「example http[s]://$name.domain.com 」" input_url; else input_url=$2; fi
+  if [ -z "$2" -o "$2" = '-f' ];then read -p \
+      "Please input domain:{ example http[s]://$name.domain.com }" input_url; else input_url=$2; fi
 
   if [ -z "$input_url" ]; then echo; print_error 'Please input content'; exit 1; fi
 
@@ -775,11 +784,11 @@ start(){
 
   echo; print_info "PROTOCOL IS $protocol\n"
 
-  print_info "URL IS $url"
+  print_info "URL IS $protocol://$url\n"
 
   if [ $protocol = 'https' ];then
     # 申请 ssl 证书
-    read -n 1 -t 5 -p "如果要申请自签名证书请输入 y Self-Signed SSL certificate? [y/N]:" self_signed
+    read -n 1 -p "Self-Signed SSL certificate? [y/N]:" self_signed
     if [ "$self_signed" = 'y' ];then
       ssl_self $url
     else
@@ -793,8 +802,8 @@ start(){
 
   mkdir -p app/$name
 
-  print_info "Now you can start PHP project in /app/$name"
-  print_info "Please set hosts in /etc/hosts in development"
+  print_info "Now you can start PHP project in /app/$name\n"
+  print_info "Please set hosts in /etc/hosts in development\n"
 }
 
 #
@@ -987,7 +996,10 @@ For information please run $ docker service update --help
     if [ ${ARCH} = 'x86_64' ];then
       docker-compose up $opt ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
       echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
+      docker exec -it \
+          $(docker container ls --format {{.ID}} \
+          -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+          -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
     elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
       docker-compose -f docker-arm.yml up $opt ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
       echo; sleep 1; print_info "Test nginx configuration file...\n"
@@ -1001,7 +1013,8 @@ For information please run $ docker service update --help
     ;;
 
   build-config )
-    init; if [ ${ARCH} = 'x86_64' ];then exec docker-compose -f docker-compose.yml -f docker-compose.build.yml config; else NOTSUPPORT; fi
+    init; if [ ${ARCH} = 'x86_64' ];then \
+        exec docker-compose -f docker-compose.yml -f docker-compose.build.yml config; else NOTSUPPORT; fi
     ;;
 
   restore )
@@ -1015,7 +1028,9 @@ For information please run $ docker service update --help
   nginx-config )
      if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-config {https|http} {PATH} {URL}"; exit 1; fi
      print_info 'Please set hosts in /etc/hosts in development\n'
-     print_info 'Maybe you need generate nginx HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
+     print_info \
+'Maybe you need generate nginx HTTPS conf in website \
+https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
      if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
      echo
@@ -1025,7 +1040,9 @@ For information please run $ docker service update --help
   httpd-config )
     if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh apache-config {https|http} {PATH} {URL}"; exit 1; fi
     print_info 'Please set hosts in /etc/hosts in development\n'
-    print_info 'Maybe you need generate Apache2 HTTPS conf in website https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
+    print_info \
+'Maybe you need generate Apache2 HTTPS conf in website \
+https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
     if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
     echo
@@ -1059,11 +1076,16 @@ For information please run $ docker service update --help
     if ! [ "${OS}" = 'Linux' ];then NOTSUPPORT; fi
 
     SERVICE=$(echo $command | cut -d '-' -f 1)
-    journalctl -u docker.service CONTAINER_ID=$(docker container ls --format "{{.ID}}" -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.swarm.service.name=lnmp_${SERVICE} ) "$@"
+    journalctl -u \
+    docker.service \
+    CONTAINER_ID=$(docker container ls --format "{{.ID}}" \
+                              -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+                              -f label=com.docker.swarm.service.name=lnmp_${SERVICE} ) "$@"
     ;;
 
   build-push )
-    run_docker; init; exec docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
+    run_docker; init; exec \
+        docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
     ;;
 
   down )
@@ -1098,7 +1120,7 @@ For information please run $ docker service update --help
     ;;
 
   new )
-    start "$@"
+    new "$@"
     ;;
 
   ssl )
@@ -1113,7 +1135,7 @@ Example:
 
 $ ./lnmp-docker.sh ssl-self khs1994.com 127.0.0.1 192.168.199.100 localhost ...
 
-$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.com 127.0.0.1 192.168.199.100 localhost ...
+$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 "
     exit 1
     fi
@@ -1148,7 +1170,8 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     ;;
 
   restart )
-    if [ -z "$1" ];then docker-compose down --remove-orphans; print_info "Please exec \n\n$ ./lnmp-docker.sh development | production\n"; exit 0; fi
+    if [ -z "$1" ];then docker-compose down --remove-orphans; \
+        print_info "Please exec \n\n$ ./lnmp-docker.sh development | production\n"; exit 0; fi
 
     for soft in "$@"
     do
@@ -1156,7 +1179,10 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     done
 
     if [ "$opt" = 'true' ];then
-      docker exec -it $(docker container ls --format {{.ID}} -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} -f label=com.docker.compose.service=nginx -n 1 ) nginx -t || \
+      docker exec -it $(docker container ls \
+                            --format {{.ID}} \
+                            -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+                            -f label=com.docker.compose.service=nginx -n 1 ) nginx -t || \
         (echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
 
       echo; print_info "nginx configuration file test is successful\n"
@@ -1279,9 +1305,9 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         ;;
 
   clusterkit-redis-master-slave-exec )
-    if [ "$#" -lt 2 ];then
-       print_error '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {master | slave-N} {COMMAND}' ; exit 1
-    fi
+    if [ "$#" -lt 2 ];then \
+       print_error \
+       '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
 
         NODE="$1"
         shift
@@ -1306,10 +1332,9 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
         ;;
 
   clusterkit-redis-sentinel-exec )
-
-  if [ "$#" -lt 2 ];then
-     print_error '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1
-  fi
+  if [ "$#" -lt 2 ];then \
+      print_error \
+        '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1 ; fi
 
         NODE=$1
         shift
@@ -1368,9 +1393,7 @@ First Run? Maybe you wait 60s then open url.
   esac
 }
 
-ARCH=`uname -m`
-
-OS=`uname -s`
+ARCH=`uname -m` && OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 
@@ -1378,11 +1401,7 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
-env_status
-
-. .env
-
-. cli/.env
+env_status && . .env && . cli/.env
 
 if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 
@@ -1425,10 +1444,10 @@ set +e
 
 ls docker-production.*.yml > /dev/null 2>&1
 
-if [ $? = '0' ];then
-  PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`
-fi
+if [ $? = '0' ];then PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`; fi
 
 set -e
+
+if [ "$DEBUG" = 'TRUE' ];then set -x; fi
 
 main "$@"
