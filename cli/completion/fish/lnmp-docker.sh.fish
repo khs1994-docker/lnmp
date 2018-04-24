@@ -7,6 +7,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-push        -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a build-up          -d     'Create and start LNMP containers With Self Build images (Only Support x86_64)'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a cleanup           -d     'Cleanup log files'
 
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-help   -d     'Print ClusterKit help info'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit        -d     'UP LNMP With Mysql Redis Memcached Cluster [Background]'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-clusterkit  -d     'UP LNMP With Mysql Memcached Cluster IN Swarm mode'
 

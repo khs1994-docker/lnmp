@@ -21,9 +21,16 @@ default_authentication_plugin = mysql_native_password
 
 # default_authentication_plugin = caching_sha2_password
 
+# basedir=/tmp/mysql
+# datadir=/tmp/mysql/data
+# socket=/tmp/mysql.sock
+# pid-file=/tmp/mysql.pid
+# bind-address=0.0.0.0
+
+log-error=/var/log/mysql/error.log
+
 skip-host-cache
 skip-name-resolve
-log-error=/var/log/mysql/error.log
 
 # 日志存储方式
 

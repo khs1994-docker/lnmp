@@ -103,7 +103,33 @@ Swarm mode:
   swarm-push           Push Swarm mode LNMP images (nginx php7)
   swarm-update         Print update LNMP service example
 
-ClusterKit
+Container CLI:
+  SERVICE-cli          Execute a command in a running LNMP container
+
+LogKit:
+  SERVICE-logs         Print LNMP containers logs (journald)
+
+clusterkit-help        Print ClusterKit help info
+
+Developer Tools:
+  commit               Commit LNMP to Git
+  cn-mirror            Push master branch to CN mirror
+  reset-master         Reset master branch in dev branch
+  test                 Test LNMP
+
+Read './docs/*.md' for more information about CLI commands.
+
+You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
+
+You must Update .env file when update this project.
+
+Donate https://zan.khs1994.com
+"
+}
+
+clusterkit_help(){
+exec echo "
+ClusterKit:
   clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
   clusterkit-COMMAND           Run docker-compsoe commands(config, pull, etc)
 
@@ -144,25 +170,6 @@ ClusterKit
   clusterkit-redis-sentinel-deploy       Deploy Redis S in Swarm mode
   clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
 
-Container CLI:
-  SERVICE-cli          Execute a command in a running LNMP container
-
-LogKit:
-  SERVICE-logs         Print LNMP containers logs (journald)
-
-Developer Tools:
-  commit               Commit LNMP to Git
-  cn-mirror            Push master branch to CN mirror
-  reset-master         Reset master branch in dev branch
-  test                 Test LNMP
-
-Read './docs/*.md' for more information about CLI commands.
-
-You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
-
-You must Update .env file when update this project.
-
-Donate https://zan.khs1994.com
 "
 }
 
@@ -1154,6 +1161,10 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
   -h | --help | help )
    help
    ;;
+
+  clusterkit-help )
+    clusterkit_help
+    ;;
 
   restart )
     if [ -z "$1" ];then docker-compose down --remove-orphans; \
