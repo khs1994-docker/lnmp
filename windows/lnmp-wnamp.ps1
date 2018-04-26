@@ -84,6 +84,14 @@ Function _stop_wsl($soft){
     "wsl-httpd" {
       bash lnmp-wsl.sh stop httpd
     }
+
+    "wsl-redis" {
+      bash lnmp-wsl.sh stop redis
+    }
+
+    "wsl-memcached" {
+      bash lnmp-wsl.sh stop memcached
+    }
   }
 }
 
@@ -164,6 +172,14 @@ Function _start_wsl($soft){
     "wsl-httpd" {
       bash lnmp-wsl.sh start httpd
     }
+
+    "wsl-redis" {
+      bash lnmp-wsl.sh start redis
+    }
+
+    "wsl-memcached" {
+      bash lnmp-wsl.sh start memcached
+    }
   }
 }
 
@@ -224,7 +240,7 @@ Function _status(){
 ################################################################################
 
 $global:WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgresql","httpd","sshd"
-$global:WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql"
+$global:WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql","wsl-redis","wsl-memcached"
 
 switch ($args[0])
 {
