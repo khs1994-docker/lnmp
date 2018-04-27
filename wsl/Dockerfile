@@ -311,7 +311,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
   && ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction \
   && rm -rf /tmp/* \
   # config opcache
-  && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini \
+  # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini \
   && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini \
   && echo "date.timezone=${PHP_TIMEZONE:-PRC}" | tee ${PHP_INI_DIR}/conf.d/date_timezone.ini \
   && echo "error_log=/var/log/php${PHP_NUM}.error.log" | tee ${PHP_INI_DIR}/conf.d/error_log.ini

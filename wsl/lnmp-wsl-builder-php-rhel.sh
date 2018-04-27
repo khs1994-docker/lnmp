@@ -501,7 +501,7 @@ wsl-php-ext-enable.sh pdo_pgsql \
 
 # config opcache
 
-echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+# echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 }
 
