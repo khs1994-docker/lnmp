@@ -16,7 +16,7 @@ Build php in WSL Debian by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php.sh 7.2.4
+$ lnmp-wsl-builder-php.sh 7.2.5
 
 $ lnmp-wsl-builder-php.sh apt
 
@@ -792,7 +792,7 @@ command -v wget || sudo apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.4
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.5
 
 _get_phpnum $PHP_VERSION
 

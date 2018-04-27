@@ -4,7 +4,7 @@
 
 $global:source=$PWD
 $global:NGINX_VERSION="1.13.12"
-$global:PHP_VERSION="7.2.4"
+$global:PHP_VERSION="7.2.5"
 $global:MYSQL_VERSION="8.0.11"
 $global:HTTPD_VERSION="2.4.33"
 $global:IDEA_VERSION="1.8.3678"

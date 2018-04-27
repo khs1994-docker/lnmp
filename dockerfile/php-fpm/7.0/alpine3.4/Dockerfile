@@ -8,7 +8,7 @@ FROM alpine:3.4@sha256:2532609239f3a96fbc30670716d87c8861b8a1974564211325633ca09
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG PHP_VERSION=7.0.29
+ARG PHP_VERSION=7.0.30
 
 ENV APP_ENV=development
 
