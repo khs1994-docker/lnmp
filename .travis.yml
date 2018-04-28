@@ -123,7 +123,7 @@ jobs:
       script:
         - ./lnmp-docker.sh compose --official -f
         - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.4 .
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-72
         - docker-compose build ${DOCKER_SERVICE_NAME}
         - docker-compose push ${DOCKER_SERVICE_NAME}
@@ -180,7 +180,7 @@ jobs:
       script:
         - ./lnmp-docker.sh compose --official -f
         - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.4 .
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-72
         - docker-compose build ${DOCKER_SERVICE_NAME}
         - docker-compose push ${DOCKER_SERVICE_NAME}

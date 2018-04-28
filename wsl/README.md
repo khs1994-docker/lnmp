@@ -146,7 +146,7 @@ $ cd unit
 
 $ ./configure --prefix=/usr/local/nginx_unit
 
-# PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文默认使用 $ lnmp-wsl-install.sh php 7.2.4 安装 PHP
+# PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文默认使用 $ lnmp-wsl-install.sh php 7.2.5 安装 PHP
 
 $ ./configure php \
       --module=php72 \

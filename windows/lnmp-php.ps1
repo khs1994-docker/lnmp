@@ -35,7 +35,7 @@ docker run --init -it --rm `
    --mount type=bind,src=$PWD,target=/app `
    --mount src=lnmp_composer_cache-data,target=/tmp/cache `
    -p "${ADDR_PORT}:${PORT}" `
-   --network lnmp_backend khs1994/php-fpm:7.2.4-alpine3.7 `
+   --network lnmp_backend khs1994/php-fpm:7.2.5-alpine3.7 `
    php -S 0.0.0.0:$PORT $other
 exit 0
 }
@@ -44,5 +44,5 @@ docker run --init -it --rm `
   --mount type=bind,src=$PWD,target=/app `
   --mount src=lnmp_composer_cache-data,target=/tmp/cache `
   -e APP_ENV=development `
-  khs1994/php-fpm:7.2.4-alpine3.7 `
+  khs1994/php-fpm:7.2.5-alpine3.7 `
   php $COMMAND

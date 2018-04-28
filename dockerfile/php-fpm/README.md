@@ -6,7 +6,7 @@
 
 * [`7.2.5-alpine3.7`, `alpine`, `latest` (7.2/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.2.5/7.2/alpine3.7/Dockerfile)
 
-* [`7.2.4-alpine3.7` (7.2/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.2.4/7.2/alpine3.7/Dockerfile)
+* [`7.2.5-alpine3.7` (7.2/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.2.5/7.2/alpine3.7/Dockerfile)
 
 # Overview
 
