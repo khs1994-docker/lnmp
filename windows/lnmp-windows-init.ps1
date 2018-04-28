@@ -151,10 +151,17 @@ _downloader `
 # RunHiddenConsole
 #
 
+# http://blogbuildingu.com/files/RunHiddenConsole.zip
+
 _downloader `
-  http://blogbuildingu.com/files/RunHiddenConsole.zip `
+  http://redmine.lighttpd.net/attachments/download/660/RunHiddenConsole.zip `
   RunHiddenConsole.zip `
   RunHiddenConsole
+
+_downloader `
+  https://github.com/deemru/php-cgi-spawner/releases/download/1.1.23/php-cgi-spawner.exe `
+  php-cgi-spawner.exe `
+  php-cgi-spawner
 
 #
 # pecl
@@ -277,6 +284,8 @@ _installer nginx-${NGINX_VERSION}.zip                 C:\     C:\nginx-${NGINX_V
 _installer mysql-${MYSQL_VERSION}-winx64.zip          C:\     C:\mysql-${MYSQL_VERSION}-winx64  C:\mysql
 
 _installer php-${PHP_VERSION}-nts-Win32-VC15-x64.zip  C:\php  C:\php                            C:\php
+
+cp php-cgi-spawner.exe C:\php
 
 _installer httpd-${HTTPD_VERSION}-win64-VC15.zip      C:\     C:\Apache24                       C:\Apache24
 

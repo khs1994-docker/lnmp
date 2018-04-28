@@ -35,6 +35,7 @@ Function _stop($soft){
 
     "php" {
        printInfo "Stop php-cgi..."
+       taskkill /F /IM php-cgi-spawner.exe
        taskkill /F /IM php-cgi.exe
        Write-Host "
        "
@@ -129,7 +130,15 @@ Function _start($soft){
 
      "php" {
        printInfo "Start php-cgi..."
-       RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
+       # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
+       # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9100 -c "$PHP_PATH"
+       # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9200 -c "$PHP_PATH"
+       php-cgi-spawner.exe "php-cgi.exe -c php.ini" 9000 1
+       php-cgi-spawner.exe "php-cgi.exe -c php.ini" 9100 1
+       php-cgi-spawner.exe "php-cgi.exe -c php.ini" 9200 1
+       php-cgi-spawner.exe "php-cgi.exe -c php.ini" 9300 1
+       php-cgi-spawner.exe "php-cgi.exe -c php.ini" 9400 1
+       php-cgi-spawner.exe "php-cgi.exe -c php.ini" 9500 1
        Write-Host "
        "
      }
