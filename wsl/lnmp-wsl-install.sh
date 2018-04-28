@@ -52,8 +52,10 @@ PG_MAJOR=10
 _nginx(){
   # apt
   if ! [ -f /etc/apt/sources.list.d/nginx.list ];then
+    set +x
     echo "deb http://nginx.org/packages/mainline/${ID} $(lsb_release -cs) nginx" | \
         sudo tee /etc/apt/sources.list.d/nginx.list
+    set -x
   fi
 
   apt-key list | grep nginx || curl -fsSL http://nginx.org/packages/keys/nginx_signing.key | sudo apt-key add -

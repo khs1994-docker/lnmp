@@ -29,8 +29,8 @@ def download_src(version):
 
     url = 'http://mirrors.shu.edu.cn/apache/httpd/httpd-' + version + '.tar.gz'
     cmd = 'wget ' + url
-    return os.system(cmd)
-
+    os.system(cmd)
+    download_src(version)
 
 def install_dep():
     cmd = sudo_cmd + '''apt-get install -y --no-install-recommends \

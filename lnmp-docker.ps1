@@ -1,4 +1,4 @@
-$global:KHS1994_LNMP_DOCKER_VERSION="v18.06"
+$global:KHS1994_LNMP_DOCKER_VERSION="v18.07"
 $global:KHS1994_LNMP_PHP_VERSION="7.2.4"
 $global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 

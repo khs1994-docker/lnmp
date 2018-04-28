@@ -11,7 +11,7 @@ env:
   - TZ=Asia/Shanghai
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
-  - TAG=v18.06-rc1
+  - TAG=v18.06
 
 before_install:
 - date
@@ -224,7 +224,7 @@ jobs:
     - stage: rpm
       install:
         # Don't build rc rpm
-        - test $( echo "${TAG}" | grep rc ) && exit 0
+        - test $( echo "${TAG}" | grep rc ) && exit 0 || echo
       script:
         - sudo apt install -y rpm
         - sh cli/build.sh rpm ${TAG}
