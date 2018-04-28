@@ -187,9 +187,9 @@ $ ./lnmp-docker.sh down
 
 每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
 
-* [v18.05 2018-04-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.05)
+* [v18.06 2018-04-28](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 
-* ~~[v18.03 2018-03-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.03) **EOL**~~
+* ~~[v18.05 2018-04-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.05) **EOL**~~
 
 ## 项目说明
 
