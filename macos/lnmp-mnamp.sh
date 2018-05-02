@@ -12,6 +12,7 @@ function _start(){
           sudo redis-server \
               --logfile /usr/local/var/run/redis.log \
               --dir /tmp \
+              --bind 127.0.0.1 \
               --appendonly yes \
               --pidfile /usr/local/var/run/redis.pid \
               --daemonize yes

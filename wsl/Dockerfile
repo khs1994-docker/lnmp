@@ -1,4 +1,4 @@
-FROM debian:stretch-slim@sha256:613efd414e9818dcef858201484a94603a548a0e04fd4356e77eb758aeb16124
+FROM debian:stretch-slim@sha256:aa33563fd6dc2b14e8cae20cc74f4581d4cb89a3952d87b4cab323707040f035
 
 ################################################################################
 
