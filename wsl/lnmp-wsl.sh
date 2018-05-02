@@ -21,6 +21,7 @@ function _start(){
           if ! [ -f /run/redis.log ];then sudo touch /run/redis.log; fi
           sudo redis-server \
               --logfile /run/redis.log \
+              --bind 127.0.0.1 \
               --dir /tmp \
               --appendonly yes \
               --pidfile /run/redis.pid \
