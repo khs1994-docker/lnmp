@@ -1,3 +1,9 @@
+---
+name: Bug report
+about: Create a report to help us improve
+
+---
+
 <!--请遵守该模板，不符合规范的问题直接关闭，不予解答-->
 
 ### 操作系统

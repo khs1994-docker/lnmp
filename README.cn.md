@@ -123,6 +123,20 @@ MySQL 默认 ROOT 密码为 `mytest`
 $ ./lnmp-docker.sh restart nginx
 ```
 
+### 如何连接服务
+
+~~`$redis->connect('127.0.0.1',6379);`~~
+
+~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
+
+```php
+$redis = new \Redis();
+
+$redis->connect('redis', 6379);
+
+$pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
+```
+
 ### Docker PHP 最佳实践
 
 * https://github.com/khs1994-docker/php-demo

@@ -119,6 +119,20 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file i
 $ ./lnmp-docker.sh restart nginx
 ```
 
+### How to connect Services
+
+~~`$redis->connect('127.0.0.1',6379);`~~
+
+~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
+
+```php
+$redis = new \Redis();
+
+$redis->connect('redis', 6379);
+
+$pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
+```
+
 ### Docker PHP Best Practice
 
 * https://github.com/khs1994-docker/php-demo
