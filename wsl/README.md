@@ -256,7 +256,7 @@ $ curl -X PUT -d @/usr/local/nginx_unit/start.json  \
 * [x] shmop
 * [x] simplexml
 * [ ] skeleton
-* [x] snmp
+* [ ] snmp
 * [x] soap
 * [x] sockets
 * [x] sodium
