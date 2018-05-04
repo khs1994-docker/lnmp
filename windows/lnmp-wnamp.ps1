@@ -10,9 +10,9 @@ $LNMP_PATH="$HOME/lnmp"
 
 Function print_help_info(){
   Write-Host "
-start     Start WNMP        [SOFT_NAME] [all]
-restart   Restart WNMP      [SOFT_NAME] [all]
-stop      Stop WNMP         [SOFT_NAME] [all]
+start     Start WNMP        [SOFT_NAME] [SOFT_NAME] ... [all]
+restart   Restart WNMP      [SOFT_NAME] [SOFT_NAME] ... [all]
+stop      Stop WNMP         [SOFT_NAME] [SOFT_NAME] ... [all]
 status    Show WNMP status
 ps        Show WNMP status
 "
@@ -251,18 +251,31 @@ Function _status(){
 $global:WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgresql","httpd","sshd"
 $global:WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql","wsl-redis","wsl-memcached"
 
-switch ($args[0])
-{
+if ($args.length -eq 1){
+  if ($args[0] -eq 'status'){
+    _status
+	exit
+  }
+}elseif($args.length -lt 2){
+  print_help_info
+  exit
+}
+
+$control, $other = $args
+
+foreach ($soft in $other){
+  switch ($control)
+  {
   "stop" {
-    switch ($args[1])
+    switch ($soft)
     {
       {$_ -in $WINDOWS_SOFT} {
-        _stop $args[1]
+        _stop $soft
         break
       }
 
       {$_ -in $WSL_SOFT}{
-        _stop_wsl $args[1]
+        _stop_wsl $soft
         break
       }
 
@@ -277,15 +290,15 @@ switch ($args[0])
   }
 
   "start" {
-    switch ($args[1])
+    switch ($soft)
     {
       {$_ -in $WINDOWS_SOFT} {
-        _start $args[1]
+        _start $soft
         break
       }
 
       {$_ -in $WSL_SOFT}{
-        _start_wsl $args[1]
+        _start_wsl $soft
         break
       }
 
@@ -300,17 +313,17 @@ switch ($args[0])
   }
 
   "restart" {
-    switch ($args[1])
+    switch ($soft)
     {
       {$_ -in $WINDOWS_SOFT} {
-        _stop $args[1]
-        _start $args[1]
+        _stop $soft
+        _start $soft
         break
       }
 
       {$_ -in $WSL_SOFT}{
-        _stop_wsl $args[1]
-        _start_wsl $args[1]
+        _stop_wsl $soft
+        _start_wsl $soft
         break
       }
 
@@ -325,12 +338,8 @@ switch ($args[0])
     }
   }
 
-  {$_ -in "status","ps"} {
-     _status
-     break
-  }
-
   Default {
     print_help_info
   }
+ }
 }

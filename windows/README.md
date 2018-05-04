@@ -6,13 +6,15 @@
 
 环境 `Windows 10`，终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也行。
 
-我将软件都放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` ...
+我将软件都放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` `C:\Apache24`...
 
 MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
 
 **部分软件使用 `WSL` 来安装运行。**
 
 ## 系统环境变量说明
+
+**务必执行此项操作**
 
 **务必知道 Windows Linux 环境变量的作用及设置方法，如果你不知道，就不用往下看了**
 
@@ -25,26 +27,12 @@ MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将�
 ```bash
 $ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User");
 
-$ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx;c:\apache24\bin", "User")
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx;c:\Apache24\bin", "User")
 
 $ [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
 ```
 
-**退出，重新打开**
-
-为了方便的管理 `WNAMP`，这里有一个脚本 `./windows/lnmp-wnamp.ps1` ，**使用之前** 在该文件开头修改好软件路径。
-
-```bash
-$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
-
-# 退出，重新打开
-
-$ lnmp-wnamp.ps1 start | stop | restart | status | ps SOFT_NAME
-```
-
-注销之后重新登录
-
-验证
+**退出 PowerShell，重新打开，若以下命令不生效的话那就注销登陆**
 
 ```bash
 $ cd LARAVEL_APP_PATH
@@ -52,34 +40,22 @@ $ cd LARAVEL_APP_PATH
 $ php artisan env
 
 Current application environment: windows
+
+# 输出 windows 说明设置成功
 ```
 
-# wsl
+## 使用 PS1 脚本控制软件
 
-> 存在 WSL 打开 PHP 页面缓慢的问题，解决办法请查看下方的文章
+为了方便的管理 `WNAMP`，你可以使用本项目 windows 目录下的脚本 `lnmp-wnamp.ps1`
 
-Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://github.com/khs1994-docker/lnmp/tree/master/wsl)。
-
-## 安装 lnmp-wsl.sh 脚本
-
-打开 PowerShell
+**使用之前** 在该文件开头修改好软件路径
 
 ```bash
-$ cd $HOME
+# 首次运行，务必通过以下命令设置环境变量
 
-$ bash
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
 
-$ pwd
-
-/mnt/c/Users/90621 # 记住这个值，此值与下方 WSL_HOME 的设置值对应
-
-$ sudo vi /etc/profile
-
-export WSL_HOME=/mnt/c/Users/90621 # 与上方值对应
-
-# 再次提示 Windows Path 变量会传递到 WSL 的 PATH 变量，所以我们只需在 Windows 设置即可。
-
-# 保存重新登录
+$ lnmp-wnamp.ps1 start | stop | restart | status | ps [SOFT_NAME] [SOFT_NAME_2]
 ```
 
 ## MySQL
@@ -128,7 +104,7 @@ $ FLUSH PRIVILEGES;
 # 新增 root 用户远程登陆权限
 
 # $ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mytest' WITH GRANT OPTION;
-# 8.0.11 报错
+# 8.0.11 报错，原因相关功能已废弃
 
 $ CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'mytest' ;
 
@@ -170,6 +146,8 @@ $ php -v
 ```
 
 ### 启动
+
+其他启动方式，请在最上方 `问题反馈` 中的链接查看
 
 #### RunHiddenConsole.zip
 
@@ -216,37 +194,6 @@ $ nginx -p C:/nginx -s stop
 ### 修改配置
 
 官方文档：https://www.nginx.com/resources/wiki/start/topics/examples/phpfastcgionwindows/
-
-## Redis WSL
-
-```bash
-$ sudo apt install redis-server
-
-$ sudo redis-server /etc/redis/redis.conf
-```
-
-## MongoDB WSL
-
-```bash
-$ sudo apt install mongodb-server
-
-$ mkdir -p /data/db
-
-$ chmod 777 /data/db
-
-# 后台运行
-$ sudo mongod --fork --logpath=/var/run/mongodb/error.log
-```
-
-## Memcached WSL
-
-[`memcached`](http://pecl.php.net/package/memcached) 扩展暂不支持 Windows。
-
-```bash
-$ sudo apt install memcached
-
-$ memcached -d
-```
 
 ## Apache
 
@@ -317,6 +264,67 @@ $ httpd -d C:/Apache24 -k start
 * https://github.com/khs1994-website/server-side-tls
 
 请查看示例配置。
+
+## WSL
+
+> 存在 WSL 打开 PHP 页面缓慢的问题，解决办法请查看下方的文章
+
+Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://github.com/khs1994-docker/lnmp/tree/master/wsl)。
+
+## 使用 lnmp-wsl.sh 脚本控制 WSL 软件
+
+由于部分软件运行于 WSL ,你可以使用本项目 `wsl` 目录下的 `lnmp-wsl.sh` 脚本控制它们。
+
+打开 PowerShell
+
+```bash
+$ cd $HOME
+
+$ bash
+
+$ pwd
+
+/mnt/c/Users/90621 # 记住这个值，此值与下方 WSL_HOME 的设置值对应
+
+$ sudo vi /etc/profile
+
+export WSL_HOME=/mnt/c/Users/90621 # 与上方值对应
+
+# 再次提示 Windows Path 变量会传递到 WSL 的 PATH 变量，所以我们只需在 Windows 设置即可。
+
+# 保存重新登录
+```
+
+## Redis WSL
+
+```bash
+$ sudo apt install redis-server
+
+$ sudo redis-server /etc/redis/redis.conf
+```
+
+## MongoDB WSL
+
+```bash
+$ sudo apt install mongodb-server
+
+$ mkdir -p /data/db
+
+$ chmod 777 /data/db
+
+# 后台运行
+$ sudo mongod --fork --logpath=/var/run/mongodb/error.log
+```
+
+## Memcached WSL
+
+[`memcached`](http://pecl.php.net/package/memcached) 扩展暂不支持 Windows。
+
+```bash
+$ sudo apt install memcached
+
+$ memcached -d
+```
 
 ## More Information
 
