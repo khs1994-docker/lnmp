@@ -2,6 +2,24 @@
 
 set -ex
 
+print_help_info(){
+  exec echo -e "
+Usage:
+
+lnmp-mnamp.sh start | restart | stop SOFT_NAME
+
+lnmp-mnamp.sh start | restart | stop all
+
+lnmp-mnamp.sh status
+
+Example:
+
+lnmp-mnamp.sh start php nginx mysql
+
+lnmp-mnamp.sh stop nginx
+"
+}
+
 function _start(){
     for soft in "$@"
     do
@@ -102,15 +120,7 @@ done
 }
 
 if [ -z "$1" ];then
-    echo -e "
-lnmp-mnamp.sh start | restart | stop SOFT_NAME
-
-lnmp-mnamp.sh start | restart | stop all
-
-lnmp-mnamp.sh status
-"
-
-exit 0
+    print_help_info
 fi
 
 if [ "$1" = stop ];then

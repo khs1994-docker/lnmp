@@ -10,11 +10,21 @@ $LNMP_PATH="$HOME/lnmp"
 
 Function print_help_info(){
   Write-Host "
+Usage:
+
 start     Start WNMP        [SOFT_NAME] [SOFT_NAME] ... [all]
 restart   Restart WNMP      [SOFT_NAME] [SOFT_NAME] ... [all]
 stop      Stop WNMP         [SOFT_NAME] [SOFT_NAME] ... [all]
 status    Show WNMP status
 ps        Show WNMP status
+
+Example
+
+lnmp-wnamp.ps1 start php nginx mysql
+
+lnmp-wnamp.ps1 stop all
+
+lnmp-wnamp.ps1 restart nginx
 "
 }
 
