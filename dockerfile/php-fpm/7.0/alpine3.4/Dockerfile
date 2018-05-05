@@ -132,6 +132,7 @@ RUN set -xe \
 		--with-zlib \
     # https://github.com/docker-library/php/issues/439
     --with-mhash \
+    --enable-option-checking=fatal \
 		\
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
@@ -267,7 +268,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                         # 安装测试版的扩展，可以在扩展名后加 -beta
                         xdebug \
                         yaml \
-                        swoole \
+                        # swoole \
         && docker-php-ext-enable mongodb \
                                  redis \
                                  memcached \
@@ -275,7 +276,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                  yaml \
                                  igbinary \
                                  opcache \
-                                 swoole \
+                                 # swoole \
         && apk del .build-deps linux-headers .khs1994-php-fpm-build-deps \
         && rm -rf /tmp/*
 

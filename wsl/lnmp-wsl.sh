@@ -12,6 +12,24 @@ PGDATA=${PGDATA:-/pgdata}
 
 ################################################################################
 
+print_help_info(){
+  exec echo -e "
+Usage:
+
+lnmp-wsl.sh start | restart | stop SOFT_NAME
+
+lnmp-wsl.sh start | restart | stop all
+
+lnmp-wsl.sh status
+
+Example:
+
+lnmp-wsl.sh start php nginx mysql
+
+lnmp-wsl.sh stop nginx
+"
+}
+
 function _start(){
     for soft in "$@"
     do
@@ -127,13 +145,7 @@ done
 }
 
 if [ -z "$1" ];then
-    exec echo -e "
-lnmp-wsl.sh start | restart | stop SOFT_NAME
-
-lnmp-wsl.sh start | restart | stop all
-
-lnmp-wsl.sh status
-"
+    print_help_info
 fi
 
 if [ "$1" = stop ];then

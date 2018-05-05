@@ -132,6 +132,7 @@ RUN set -xe \
 		--with-zlib \
     # https://github.com/docker-library/php/issues/439
     --with-mhash \
+    --enable-option-checking=fatal \
 		\
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
