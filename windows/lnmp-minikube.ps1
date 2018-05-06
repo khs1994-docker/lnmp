@@ -12,7 +12,7 @@ $global:HYPERV_VIRTUAL_SWITCH='zy'
 #
 
 minikube.exe start `
-    --nfs-share=$HOME `
+    --mount-string `
     -v 10 `
     --registry-mirror=https://registry.docker-cn.com `
     --vm-driver="hyperv" `
