@@ -276,6 +276,8 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 ### [khs1994.com](//khs1994.com)
 
+### [KhsCI](https://github.com/khs1994-php/khsci)
+
 ## 项目国内镜像
 
 * TGit：https://git.qcloud.com/khs1994-docker/lnmp.git

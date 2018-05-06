@@ -1,6 +1,6 @@
 ARG PHP_VERSION=7.2.5
 
-FROM arm64v8/php:7.2.5-fpm-alpine3.7@sha256:d9a093f30b633abdc5544ada15be227b82a84dd37142eed62ed4a2949b0a3bbf
+FROM arm64v8/php:7.2.5-fpm-alpine3.7@sha256:77f7d021632c1246e3352d5b4d10a3a232f6e23567e8a4a17f946621573686c6
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
