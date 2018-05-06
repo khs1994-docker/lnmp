@@ -271,6 +271,8 @@ Open your Browers `127.0.0.1:8080`
 
 ### [khs1994.com](//khs1994.com)
 
+### [KhsCI](https://github.com/khs1994-php/khsci)
+
 ## CI/CD
 
 Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
