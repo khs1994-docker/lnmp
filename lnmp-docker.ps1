@@ -124,7 +124,7 @@ PHP Tools:
   ssl-self             Issue Self-signed SSL certificate
 
 Kubernets:
-  dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
+  dashboard            Print how run kubernetes dashboard in Docker for Desktop
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)

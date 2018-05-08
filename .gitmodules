@@ -10,3 +10,12 @@
 [submodule "kubernetes"]
 	path = kubernetes
 	url = http://github.com/khs1994-docker/lnmp-k8s
+[submodule "tookit/dockerd-tls"]
+	path = tookit/dockerd-tls
+	url = https://github.com/khs1994-docker/dockerd-tls.git
+[submodule "toolkit/dockerd-tls"]
+	path = toolkit/dockerd-tls
+	url = https://github.com/khs1994-docker/dockerd-tls.git
+[submodule "toolkit/tls"]
+	path = toolkit/tls
+	url = https://github.com/khs1994-docker/tls.git
