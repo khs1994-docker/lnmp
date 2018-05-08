@@ -308,7 +308,7 @@ _installer node-v${NODE_VEERSION}-win-x64.zip         C:\     C:\node-v${NODE_VE
 
 _installer RunHiddenConsole.zip                       C:\bin  C:\bin\RunHiddenConsole.exe       C:\bin\RunHiddenConsole.exe
 
-cp minikube-windows-amd64.exe C:\bin\minikube
+cp minikube-windows-amd64.exe C:\bin\minikube.exe
 
 ################################################################################
 

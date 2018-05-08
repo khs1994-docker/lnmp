@@ -72,6 +72,8 @@ Commands:
   development-config   Validate and view the Development Compose file
   development-pull     Pull LNMP Docker Images in development
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
+  daemon-tls           Display how to enable Docker TLS Daemon
+  daemon-tls-cert      Generate Docker Daemon TLS cert
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
   help                 Display this help message
@@ -92,7 +94,7 @@ PHP Tools:
   ssl-self             Issue Self-signed SSL certificate
 
 Kubernets:
-  dashboard            Print how run kubernetes dashboard in Dcoekr for Desktop
+  dashboard            Print how run kubernetes dashboard in Docker for Desktop
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -899,6 +901,16 @@ main() {
     ln -sf $PWD/cli/completion/fish/* $ROOT_PATH
     ls -la $ROOT_PATH
     ;;
+
+  daemon-tls )
+    echo
+    echo https://github.com/khs1994-website/docs/blob/master/docker/dockerd.md
+    echo
+  ;;
+
+  daemon-tls-cert )
+
+  ;;
 
   reset-master )
     reset-master
