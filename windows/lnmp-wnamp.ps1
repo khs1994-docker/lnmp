@@ -2,7 +2,7 @@
 # ！！ 务必设置软件目录   ！！
 #！！！！！！！！！！！！！！！
 
-# $NGINX_PATH="C:/nginx-1.13.8"
+$NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
 $LNMP_PATH="$HOME/lnmp"
 $DistributionName="debian"
@@ -125,8 +125,8 @@ Function _start($soft){
     "nginx" {
       # cd $NGINX_PATH
       printInfo "Start nginx..."
-      nginx -p C:/nginx -t
-      RunHiddenConsole nginx -p C:/nginx
+      nginx -p ${NGINX_PATH} -t
+      RunHiddenConsole nginx -p ${NGINX_PATH}
       cd $source
       Write-Host "
       "
