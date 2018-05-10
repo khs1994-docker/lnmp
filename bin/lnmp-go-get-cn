@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#
+# go get golang.org/x/x ZH-CN 优化
+#
+
+#
+# Go 相关环境变量
+#
+# $GOROOT go 安装路径
+#
+# $GOPATH 路径列表，可以同时指定多个目录
+#
+#
+#
+
+#
+# go get golang.org/x/tools/cover
+#
+#
+
+git clone --depth=1 https://github.com/golang/tools.git $GOPATH/src/golang.org/x/tools
+
+git clone --depth=1 https://github.com/golang/net.git $GOPATH/src/golang.org/x/net
+
+git clone --depth=1 https://github.com/golang/sys.git $GOPATH/src/golang.org/x/sys
+
+git clone --depth=1 https://github.com/golang/crypto.git $GOPATH/src/golang.org/x/crypto
+
+git clone --depth=1 https://github.com/golang/perf.git $GOPATH/src/golang.org/x/perf
+
+git clone --depth=1 https://github.com/golang/text.git $GOPATH/src/golang.org/x/text
+
+git clone --depth=1 https://github.com/golang/image $GOPATH/src/golang.org/x/image

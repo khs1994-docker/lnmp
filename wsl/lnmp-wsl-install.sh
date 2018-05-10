@@ -47,6 +47,10 @@ SWIFT_PREFIX=/usr/local/swift
 
 PG_MAJOR=10
 
+GO_PREFIX=/usr/local
+
+GO_VERSION=1.10.2
+
 ################################################################################
 
 _nginx(){
@@ -362,6 +366,30 @@ _swift(){
   sudo ln -sf $SWIFT_PREFIX/swift-4.1-RELEASE-ubuntu16.04/usr/bin/* /usr/local/bin
 
   swift --version
+}
+
+_go(){
+
+  if ! [ -d ${GO_PREFIX}/go ];then
+
+    if ! [ -f /tmp/go${GO_VERSION}.linux-amd64.tar.gz ];then
+      cd /tmp
+
+      wget https://studygolang.com/dl/golang/go${GO_VERSION}.linux-amd64.tar.gz
+    fi
+
+    sudo tar -zxvf /tmp/go${GO_VERSION}.linux-amd64.tar.gz -C $GO_PREFIX
+fi
+  echo "
+
+vi ~/.bash_profile
+
+export GOROOT=${GO_PREFIX}/go
+
+export PATH=${GO_PREFIX}/go/bin:\$PATH
+
+"
+
 }
 
 ################################################################################
