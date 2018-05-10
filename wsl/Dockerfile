@@ -348,7 +348,7 @@ RUN cd /usr/local ; tar -zcvf php72.tar.gz php72 ; cd etc ; tar -zcvf php72-etc.
     && ${PHP_PREFIX}/sbin/php-fpm -v
 
 
-FROM hello-world:latest@sha256:6c88d0eedd6a5e71f0affaf150f8b7b286c7bdc679f23d726d12781803e727d3
+FROM hello-world:latest@sha256:c03a1b4da71a6c81114abdc669525373f56be877ba55ad3c0ab092a816b6e92e
 
 # scratch
 
