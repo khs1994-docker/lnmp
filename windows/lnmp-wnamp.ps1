@@ -5,6 +5,7 @@
 # $NGINX_PATH="C:/nginx-1.13.8"
 $PHP_PATH="C:/php"
 $LNMP_PATH="$HOME/lnmp"
+$DistributionName="debian"
 
 ################################################################################
 
@@ -20,11 +21,11 @@ ps        Show WNMP status
 
 Example
 
-lnmp-wnamp.ps1 start php nginx mysql
+lnmp-wnamp.ps1 start php nginx mysql wsl-redis
 
 lnmp-wnamp.ps1 stop all
 
-lnmp-wnamp.ps1 restart nginx
+lnmp-wnamp.ps1 restart nginx wsl-memcached
 "
 }
 
@@ -73,7 +74,7 @@ Function _stop($soft){
     }
 
     Default {
-      bash lnmp-wsl.sh stop $soft
+      wsl -d ${DistributionName} lnmp-wsl.sh stop $soft
     }
   }
 }
@@ -81,27 +82,27 @@ Function _stop($soft){
 Function _stop_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      bash lnmp-wsl.sh stop php
+      wsl -d ${DistributionName} lnmp-wsl.sh stop php
     }
 
     "wsl-nginx" {
-      bash lnmp-wsl.sh stop nginx
+      wsl -d ${DistributionName} lnmp-wsl.sh stop nginx
     }
 
     "wsl-mysql" {
-      bash lnmp-wsl.sh stop mysql
+      wsl -d ${DistributionName} lnmp-wsl.sh stop mysql
     }
 
     "wsl-httpd" {
-      bash lnmp-wsl.sh stop httpd
+      wsl -d ${DistributionName} lnmp-wsl.sh stop httpd
     }
 
     "wsl-redis" {
-      bash lnmp-wsl.sh stop redis
+      wsl -d ${DistributionName} lnmp-wsl.sh stop redis
     }
 
     "wsl-memcached" {
-      bash lnmp-wsl.sh stop memcached
+      wsl -d ${DistributionName} lnmp-wsl.sh stop memcached
     }
   }
 }
@@ -169,7 +170,7 @@ Function _start($soft){
      }
 
      Default {
-       bash lnmp-wsl.sh start $soft
+       wsl -d ${DistributionName} lnmp-wsl.sh start $soft
      }
   }
 }
@@ -177,27 +178,27 @@ Function _start($soft){
 Function _start_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      bash lnmp-wsl.sh start php
+      wsl -d ${DistributionName} lnmp-wsl.sh start php
     }
 
     "wsl-nginx" {
-      bash lnmp-wsl.sh start nginx
+      wsl -d ${DistributionName} lnmp-wsl.sh start nginx
     }
 
     "wsl-mysql" {
-      bash lnmp-wsl.sh start mysql
+      wsl -d ${DistributionName} lnmp-wsl.sh start mysql
     }
 
     "wsl-httpd" {
-      bash lnmp-wsl.sh start httpd
+      wsl -d ${DistributionName} lnmp-wsl.sh start httpd
     }
 
     "wsl-redis" {
-      bash lnmp-wsl.sh start redis
+      wsl -d ${DistributionName} lnmp-wsl.sh start redis
     }
 
     "wsl-memcached" {
-      bash lnmp-wsl.sh start memcached
+      wsl -d ${DistributionName} lnmp-wsl.sh start memcached
     }
   }
 }
