@@ -10,7 +10,7 @@ docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create l
 
 docker run -it --rm \
     --network lnmp_backend \
-    mysql:8.0.3 \
+    mysql:8.0.11 \
     "$@"
 
 if ! [ -z "$CREATE" ];then

@@ -5,5 +5,5 @@
 docker network create lnmp_backend | Out-Null
 
 docker run -it --rm `
-    mysql:8.0.3 `
+    mysql:8.0.11 `
     $args
