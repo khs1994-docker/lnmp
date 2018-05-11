@@ -20,6 +20,12 @@ lnmp-mnamp.sh stop nginx
 "
 }
 
+################################################################################
+
+COMMON_SOFT="nginx php mysql redis"
+
+################################################################################
+
 function _start(){
     for soft in "$@"
     do
@@ -130,6 +136,14 @@ if [ "$1" = stop ];then
     clear
     _stop nginx mysql php redis memcached mongodb postgresql
     exit 0
+  elif [ "$1" = 'common' ];then
+    set +e
+    clear
+    for soft in $COMMON_SOFT
+      do
+      _stop $soft
+      done
+    exit 0
   fi
   _stop "$@"
   exit 0
@@ -141,6 +155,14 @@ if [ "$1" = start ];then
     set +e
     clear
     _start nginx mysql php redis memcached mongodb postgresql
+    exit 0
+  elif [ "$1" = 'common' ];then
+    set +e
+    clear
+    for soft in $COMMON_SOFT
+      do
+      _start $soft
+      done
     exit 0
   fi
 
@@ -154,6 +176,14 @@ if [ "$1" = restart ];then
     set +e
     clear
     _restart nginx mysql php redis memcached mongodb postgresql
+    exit 0
+  elif [ "$1" = 'common' ];then
+    set +e
+    clear
+    for soft in $COMMON_SOFT
+      do
+      _restart $soft
+      done
     exit 0
   fi
   _restart "$@"
