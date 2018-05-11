@@ -18,17 +18,15 @@ print_help_info(){
   exec echo -e "
 Usage:
 
-lnmp-wsl.sh start | restart | stop SOFT_NAME
-
-lnmp-wsl.sh start | restart | stop all
+lnmp-wsl.sh {start | restart | stop} {SOFT_NAME | all | common}
 
 lnmp-wsl.sh status
 
 Example:
 
-lnmp-wsl.sh start php nginx mysql
+lnmp-wsl.sh start php nginx mysql redis
 
-lnmp-wsl.sh stop nginx
+lnmp-wsl.sh stop common
 "
 }
 

@@ -6,17 +6,15 @@ print_help_info(){
   exec echo -e "
 Usage:
 
-lnmp-mnamp.sh start | restart | stop SOFT_NAME
-
-lnmp-mnamp.sh start | restart | stop all
+lnmp-mnamp.sh {start | restart | stop} {SOFT_NAME | all | common}
 
 lnmp-mnamp.sh status
 
 Example:
 
-lnmp-mnamp.sh start php nginx mysql
+lnmp-mnamp.sh start php nginx mysql redis
 
-lnmp-mnamp.sh stop nginx
+lnmp-mnamp.sh stop common
 "
 }
 
