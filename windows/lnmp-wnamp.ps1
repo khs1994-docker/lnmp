@@ -6,6 +6,7 @@ $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
 $LNMP_PATH="$HOME/lnmp"
 $DistributionName="debian"
+$COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 ################################################################################
 
@@ -22,6 +23,8 @@ ps        Show WNMP status
 Example
 
 lnmp-wnamp.ps1 start php nginx mysql wsl-redis
+
+lnmp-wnamp.ps1 start common
 
 lnmp-wnamp.ps1 stop all
 
@@ -273,6 +276,10 @@ if ($args.length -eq 1){
 }
 
 $control, $other = $args
+
+if ($other -eq 'common'){
+  $other = $COMMON_SOFT
+}
 
 foreach ($soft in $other){
   switch ($control)

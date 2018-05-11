@@ -10,6 +10,8 @@ set -ex
 
 PGDATA=${PGDATA:-/pgdata}
 
+COMMON_SOFT="nginx php mysql redis"
+
 ################################################################################
 
 print_help_info(){
@@ -155,6 +157,14 @@ if [ "$1" = stop ];then
     clear
     _stop nginx mysql php redis memcached mongodb ssh postgresql
     exit 0
+  elif [ "$1" = 'common' ];then
+    set +e
+    clear
+    for soft in $COMMON_SOFT
+      do
+      _stop $soft
+      done
+    exit 0
   fi
   _stop "$@"
   exit 0
@@ -167,8 +177,15 @@ if [ "$1" = start ];then
     clear
     _start nginx mysql php redis memcached mongodb ssh postgresql
     exit 0
+  elif [ "$1" = 'common' ];then
+    set +e
+    clear
+    for soft in $COMMON_SOFT
+      do
+      _start $soft
+      done
+    exit 0
   fi
-
   _start "$@"
   exit 0
 fi
@@ -179,6 +196,14 @@ if [ "$1" = restart ];then
     set +e
     clear
     _restart nginx mysql php redis memcached mongodb ssh postgresql
+    exit 0
+  elif [ "$1" = 'common' ];then
+    set +e
+    clear
+    for soft in $COMMON_SOFT
+      do
+      _restart $soft
+      done
     exit 0
   fi
   _restart "$@"
