@@ -51,6 +51,10 @@ GO_PREFIX=/usr/local
 
 GO_VERSION=1.10.2
 
+NODE_VERSION=10.1.0
+
+NODE_PREFIX=/usr/local
+
 ################################################################################
 
 _nginx(){
@@ -368,18 +372,33 @@ _swift(){
   swift --version
 }
 
-_go(){
+_downloader(){
+  path=$1
+  install_file=$2
+  url=$3
+  target_path=$4
 
-  if ! [ -d ${GO_PREFIX}/go ];then
+  if ! [ -d $path ];then
 
-    if ! [ -f /tmp/go${GO_VERSION}.linux-amd64.tar.gz ];then
+    if ! [ -f /tmp/$install_file ];then
       cd /tmp
 
-      wget https://studygolang.com/dl/golang/go${GO_VERSION}.linux-amd64.tar.gz
+      wget $url
     fi
 
-    sudo tar -zxvf /tmp/go${GO_VERSION}.linux-amd64.tar.gz -C $GO_PREFIX
+    sudo tar -zxvf /tmp/$install_file -C $target_path
+
+    shift 4
+
+    "$@"
 fi
+}
+
+_go(){
+  _downloader ${GO_PREFIX}/go go${GO_VERSION}.linux-amd64.tar.gz \
+      https://studygolang.com/dl/golang/go${GO_VERSION}.linux-amd64.tar.gz \
+      $GO_PREFIX
+
   echo "
 
 vi ~/.bash_profile
@@ -389,6 +408,24 @@ export GOROOT=${GO_PREFIX}/go
 export PATH=${GO_PREFIX}/go/bin:\$PATH
 
 "
+
+}
+
+_node(){
+  _downloader ${NODE_PREFIX}/node node-v${NODE_VERSION}-linux-x64.tar.gz \
+      http://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz \
+      ${NODE_PREFIX} \
+      "sudo mv ${NODE_PREFIX}/node-v${NODE_VERSION}-linux-x64  ${NODE_PREFIX}/node"
+
+  sudo chown -R 1000:1000 ${NODE_PREFIX}/node
+
+  . ~/.bash_profile
+
+  node -v || echo "export PATH=${NODE_PREFIX}/node/bin:\$PATH" >> ~/.bash_profile
+
+  if ! [ -f $HOME/.npmrc ];then
+    echo "registry=https://registry.npm.taobao.org" > ~/.npmrc
+  fi
 
 }
 
