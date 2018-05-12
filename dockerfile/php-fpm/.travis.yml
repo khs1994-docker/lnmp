@@ -29,7 +29,5 @@ branches:
 env:
   matrix:
   - PHP_VERSION=7_1_X
-  - PHP_VERSION=7_0_X
-  - PHP_VERSION=5_6_X
   global:
   - DOCKER_COMPOSE_VERSION=1.19.0
