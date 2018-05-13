@@ -58,6 +58,10 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp.sh COMMAND
 
+KhsCI:
+  khsci-init           Init KhsCI
+  khsci-up             Up(Run) KhsCI https://github.com/khs1994-php/khsci
+
 Commands:
   acme.sh              Run original acme.sh command to issue SSL certificate
   backup               Backup MySQL databases
@@ -1402,6 +1406,14 @@ First Run? Maybe you wait 60s then open url.
 
     update-version )
         update_version
+    ;;
+
+    khsci-init )
+
+    ;;
+
+    khsci-up )
+
     ;;
 
   * )

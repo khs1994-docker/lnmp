@@ -1,6 +1,7 @@
 $global:KHS1994_LNMP_DOCKER_VERSION="v18.07"
 $global:KHS1994_LNMP_PHP_VERSION="7.2.4"
 $global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
+$global:CI_HOST="ci2.khs1994.com:10000"
 
 $source=$pwd
 
@@ -99,6 +100,10 @@ Function help_information(){
 Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp.sh COMMAND
+
+KhsCI:
+  khsci-init           Init KhsCI
+  khsci-up             Up(Run) KhsCI https://github.com/khs1994-php/khsci
 
 Commands:
   backup               Backup MySQL databases
@@ -313,7 +318,8 @@ switch($first){
     }
 
     docs {
-      docker run --init -it --rm -p 4000:4000 --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
+      docker run --init -it --rm -p 4000:4000 `
+          --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
     }
 
     dashboard {
@@ -355,7 +361,8 @@ switch($first){
 
     ssl-self {
       docker run --init -it --rm -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
-      printInfo 'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
+      printInfo `
+'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
 
     httpd-cli {
@@ -518,8 +525,39 @@ switch($first){
       clusterkit_help
     }
 
+    khsci-init {
+      # 判断 app/khsci 是否存在
+
+      if (!(Test-Path app/khsci)){
+        composer create-roject --prefer-source khs1994/khsci app/khsci @dev
+      }
+
+      if (!(Test-Path app/khsci/public/.env.produnction)){
+        cp app/khsci/public/.env.example app/khsci/public/.env.production
+      }
+
+      if (!(Test-Path app/khsci/public/.env.development)){
+        cp app/khsci/public/.env.example app/khsci/public/.env.development
+      }
+
+      # 判断 nginx 配置文件是否存在
+
+      if(!(Test-Path config/nginx/khsci.conf)){
+        cp config/nginx/demo-khsci.config config/nginx/khsci.conf;
+      }
+    }
+
+    khsci-up {
+      # 启动
+
+      docker-compose -f docker-compose.yml -f docker-compose.override.yml `
+          -f docker-khsci.include.yml up -d `
+          ${DEVELOPMENT_INCLUDE} khsci
+    }
+
     default {
-        printInfo "You Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
+        printInfo `
+"You Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
         docker-compose $args
       }
 }
