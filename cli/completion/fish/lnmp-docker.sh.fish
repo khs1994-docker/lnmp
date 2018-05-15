@@ -60,6 +60,7 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a clusterkit-redis-sen
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a daemon-socket     -d     'Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a dashboard         -d     'Print how run kubernetes dashboard in Docker for Desktop'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development       -d     'Use LNMP in Development'
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a debug             -d     'Generate Debug information, then copy it to GitHub Issues'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development-config -d    'Validate and view the Development Compose file'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a development-pull  -d     'Pull LNMP Docker Images in development'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a down              -d     'Stop and remove LNMP Docker containers, networks'

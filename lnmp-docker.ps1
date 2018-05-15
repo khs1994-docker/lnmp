@@ -112,7 +112,7 @@ Commands:
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   build-push           Build and Pushes images to Docker Registory
   cleanup              Cleanup log files
-  debug                Generate Debug information, then copy it to GitHub Issus
+  debug                Generate Debug information, then copy it to GitHub Issues
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
   development-config   Validate and view the Development Compose file
   development-pull     Pull LNMP Docker Images in development

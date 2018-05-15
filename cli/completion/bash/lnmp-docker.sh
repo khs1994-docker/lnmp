@@ -43,6 +43,7 @@ complete -W "acme.sh \
         development \
         development-config \
         development-pull \
+        debug \
         down \
         docs \
         help \
