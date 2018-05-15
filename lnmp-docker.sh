@@ -581,6 +581,55 @@ cn_mirror(){
   git push -f coding --tags
 }
 
+_lnmp_debug(){
+  docker_version=$(docker --version)
+  compose_version=$(docker-compose --version)
+  echo "
+<details>
+
+<summary>OS Environment Info</summary>
+
+<code>
+" > debug.md
+
+cat /etc/os-release >> debug.md
+
+echo "
+</code>
+
+<code>$docker_version</code>
+
+<code>$compose_version</code>
+
+</details>
+
+<details>
+
+<summary>Console output</summary>
+
+<!--Don't Edit it-->
+<!--不要手动编辑以上内容,将终端输出内容贴到下面-->
+
+<pre>
+
+
+
+</pre>
+
+</details>
+
+## My Issue is
+
+<!--在这里描述你的问题-->
+
+XXX
+
+XXX
+
+<!--提交问题之前务必点击预览（Preview）标签-->
+" >> debug.md
+}
+
 nginx_http(){
 
   echo "#
@@ -913,6 +962,12 @@ main() {
   ;;
 
   daemon-tls-cert )
+
+  ;;
+
+  debug )
+
+  _lnmp_debug
 
   ;;
 

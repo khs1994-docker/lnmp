@@ -26,7 +26,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 请查看：https://github.com/khs1994-docker/lnmp-k8s
 
-## 需要 7.1 以下版本 ?
+## 需要 PHP 7.1 以下版本 ?
 
 请查看：https://github.com/khs1994-docker/lnmp/issues/354
 

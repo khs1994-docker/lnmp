@@ -112,6 +112,7 @@ Commands:
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   build-push           Build and Pushes images to Docker Registory
   cleanup              Cleanup log files
+  debug                Generate Debug information, then copy it to GitHub Issus
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
   development-config   Validate and view the Development Compose file
   development-pull     Pull LNMP Docker Images in development
@@ -523,6 +524,50 @@ switch($first){
 
     clusterkit-help {
       clusterkit_help
+    }
+
+    debug {
+      $os_info=$($psversiontable.os)
+      $docker_version=$(docker --version)
+      $compose_version=$(docker-compose --version)
+      echo "
+<details>
+
+<summary>OS Environment Info</summary>
+
+<code>$os_info</code>
+
+<code>$docker_version</code>
+
+<code>$compose_version</code>
+
+</details>
+
+<details>
+
+<summary>Console output</summary>
+
+<!--Don't Edit it-->
+<!--不要手动编辑以上内容,将终端输出内容贴到下面-->
+
+<pre>
+
+
+
+</pre>
+
+</details>
+
+## My Issue is
+
+<!--在这里描述你的问题-->
+
+XXX
+
+XXX
+
+<!--提交问题之前务必点击预览（Preview）标签-->
+" > debug.md
     }
 
     khsci-init {
