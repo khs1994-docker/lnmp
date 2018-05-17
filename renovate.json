@@ -11,6 +11,7 @@
   ],
   "ignorePaths": [
     "wsl/docker-compose.yml",
+    "wsl/Dockerfile",
     "dockerfile/php-fpm/5.6/alpine3.4/Dockerfile",
     "dockerfile/php-fpm/7.0/alpine3.4/Dockerfile"
   ]
