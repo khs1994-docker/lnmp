@@ -286,7 +286,7 @@ _install_php_build_dep(){
                    libpspell-dev \
                    "
 
-    for soft in ${DEP_SOFTS} ; do sudo echo $soft >> ${PHP_INSTALL_LOG} ; done
+    for soft in ${DEP_SOFTS} ; do echo $soft | tee -a ${PHP_INSTALL_LOG} ; done
 
     sudo apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
 }
@@ -304,7 +304,7 @@ _test(){
 
     ${PHP_PREFIX}/sbin/php-fpm -v
 
-    sudo ${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
     set +x
     for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
@@ -447,7 +447,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
                                                      --with-zlib-dir=/opt/${host}/zlib" ) \
       "
     set -e
-    for a in ${CONFIGURE}; do sudo echo $a >> ${PHP_INSTALL_LOG}; done
+    for a in ${CONFIGURE}; do echo $a | tee -a ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
 
@@ -549,7 +549,7 @@ _install_pecl_ext(){
 
     for extension in ${PHP_EXTENSION}
     do
-        echo $extension >> ${PHP_INSTALL_LOG}
+        echo $extension | tee -a ${PHP_INSTALL_LOG}
         sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
     done
 }
@@ -589,8 +589,8 @@ wsl-php-ext-enable.sh pdo_pgsql \
 
 # config opcache
 
-# echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
-echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+# echo 'opcache.enable_cli=1' | tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+echo 'opcache.file_cache=/tmp' | tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 }
 
 _create_log_file(){

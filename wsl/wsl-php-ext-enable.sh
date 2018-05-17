@@ -98,7 +98,7 @@ for module in $modules; do
 
 	ini="${PHP_INI_DIR:-/usr/local/etc/php}/conf.d/${iniName:-"wsl-php-ext-$ext.ini"}"
 	if ! grep -q "$line" "$ini" 2>/dev/null; then
-		echo "$line" >> "$ini"
+		echo "$line" | sudo tee -a "$ini" || echo "$line" | tee -a "$ini"
 	fi
 done
 

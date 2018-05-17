@@ -227,7 +227,7 @@ _install_php_build_dep(){
 
 for soft in ${DEP_SOFTS}
 do
-    echo $soft >> ${PHP_INSTALL_LOG}
+    echo $soft | sudo tee -a ${PHP_INSTALL_LOG}
 done
 
 sudo yum install -y ${DEP_SOFTS} > /dev/null
@@ -246,7 +246,7 @@ _test(){
 
     ${PHP_PREFIX}/sbin/php-fpm -v
 
-    sudo ${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+    sudo ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
     set +x
     for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
@@ -355,7 +355,7 @@ _builder(){
         --enable-wddx=shared \
         "
 
-    for a in ${CONFIGURE} ; do echo $a >> ${PHP_INSTALL_LOG}; done
+    for a in ${CONFIGURE} ; do echo $a | sudo tee -a ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
 
@@ -449,7 +449,7 @@ _install_pecl_ext(){
 
     sudo ${PHP_PREFIX}/bin/pecl update-channels
 
-    ${PHP_PREFIX}/bin/php-config >> ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
     PHP_EXTENSION="igbinary \
                redis \
@@ -461,7 +461,7 @@ _install_pecl_ext(){
 
     for extension in ${PHP_EXTENSION}
     do
-        echo $extension >> ${PHP_INSTALL_LOG}
+        echo $extension | sudo tee -a ${PHP_INSTALL_LOG}
         sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
     done
 }
@@ -502,8 +502,8 @@ wsl-php-ext-enable.sh pdo_pgsql \
 
 # config opcache
 
-# echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
-echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+# echo 'opcache.enable_cli=1' | sudo tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+echo 'opcache.file_cache=/tmp' | sudo tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 }
 
 

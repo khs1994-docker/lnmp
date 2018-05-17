@@ -75,6 +75,7 @@ Commands:
   development          Use LNMP in Development
   development-config   Validate and view the Development Compose file
   development-pull     Pull LNMP Docker Images in development
+  debug                Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   daemon-tls           Display how to enable Docker TLS Daemon
   daemon-tls-cert      Generate Docker Daemon TLS cert

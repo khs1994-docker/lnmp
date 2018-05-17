@@ -326,7 +326,6 @@ _list(){
 }
 
 _enable(){
-
   if [ "$1" = nginx ];then
     # /usr/local/nginx self build nginx
 
@@ -435,11 +434,11 @@ if [ -z "$1" ];then _print_help_info ; fi
 
 set -ex
 
-if [ -z $WSL_HOME ];then exit 1 ; fi
-
 . /etc/os-release
 
 . ~/.bash_profile || echo
+
+if [ -z $WSL_HOME ];then exit 1 ; fi
 
 if [ "$1" = 'enable' ];then shift ; _enable "$@" ; exit $? ; fi
 
