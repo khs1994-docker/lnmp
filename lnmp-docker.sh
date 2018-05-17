@@ -59,7 +59,6 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 KhsCI:
-  khsci-init           Init KhsCI
   khsci-up             Up(Run) KhsCI https://github.com/khs1994-php/khsci
 
 Commands:
@@ -118,7 +117,7 @@ LogKit:
   SERVICE-logs         Print LNMP containers logs (journald)
 
 ClusterKit:
-  clusterkit-help        Print ClusterKit help info
+  clusterkit-help      Print ClusterKit help info
 
 Developer Tools:
   commit               Commit LNMP to Git
