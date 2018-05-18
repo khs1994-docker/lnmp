@@ -86,6 +86,8 @@ complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-push        -d
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a swarm-update      -d     'Print update LNMP service example'
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a systemd           -d     'Manage Docker LNMP by systemd(Only Support Linux x86_64)'
 
+complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a toolkit-docs      -d     'Up local docs Server'
+
 ##
 
 complete -c lnmp-docker.sh -n "__fish_use_subcommand" -f -a update            -d      'Upgrades LNMP'

@@ -148,6 +148,9 @@ Developer Tools:
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
 
+ToolKit:
+  toolkit-docs         Up local docs Server
+
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
@@ -611,6 +614,29 @@ XXX
       docker-compose -f docker-compose.yml -f docker-compose.override.yml `
           -f docker-khsci.include.yml up -d `
           ${DEVELOPMENT_INCLUDE} khsci
+    }
+
+    "toolkit-docs" {
+      if(!(Test-Path app/khsdocs/k8s)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git app/khsdocs/k8s
+      }
+
+      if(!(Test-Path app/khsdocs/docker)){
+        git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git app/khsdocs/docker
+      }
+
+      if(!(Test-Path app/khsdocs/laravel)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git app/khsdocs/laravel
+      }
+
+      if(!(Test-Path app/khsdocs/laravel-en)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git app/khsdocs/laravel-en
+      }
+
+      if(!(Test-Path app/khsdocs/nginx)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git app/khsdocs/nginx
+      }
+
     }
 
     default {

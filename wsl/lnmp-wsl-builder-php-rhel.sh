@@ -462,7 +462,7 @@ _install_pecl_ext(){
     for extension in ${PHP_EXTENSION}
     do
         echo $extension | sudo tee -a ${PHP_INSTALL_LOG}
-        sudo ${PHP_PREFIX}/bin/pecl install $extension > /dev/null || echo
+        sudo ${PHP_PREFIX}/bin/pecl install $extension || echo
     done
 }
 

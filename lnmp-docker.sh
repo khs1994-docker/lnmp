@@ -125,6 +125,9 @@ Developer Tools:
   reset-master         Reset master branch in dev branch
   test                 Test LNMP
 
+ToolKit:
+  toolkit-docs         Up local docs Server
+
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
@@ -179,6 +182,28 @@ ClusterKit:
   clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
 
 "
+}
+
+_local_docs_server(){
+  if ! [ -d app/khsdocs/k8s ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git app/khsdocs/k8s
+  fi
+
+  if ! [ app/khsdocs/docker ];then
+    git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git app/khsdocs/docker
+  fi
+
+  if ! [ -d app/khsdocs/laravel ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git app/khsdocs/laravel
+  fi
+
+  if ! [ -d app/khsdocs/laravel-en ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git app/khsdocs/laravel-en
+  fi
+
+  if ! [ -d app/khsdocs/nginx ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git app/khsdocs/nginx
+  fi
 }
 
 _registry(){
