@@ -569,6 +569,10 @@ reset-master(){
 
 cn_mirror(){
   set_git_remote_origin_url
+  git remote add origin git@github.com:khs1994-docker/lnmp.git || echo
+  git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git || echo
+  git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git || echo
+  git remote add coding git@git.coding.net:khs1994/lnmp.git || echo
   git fetch origin
   git push -f aliyun remotes/origin/dev:dev
   git push -f aliyun remotes/origin/master:master
