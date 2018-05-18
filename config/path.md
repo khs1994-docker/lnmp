@@ -1,6 +1,5 @@
 ```bash
 .
-├── README.md
 ├── default.sh
 ├── docker-compose.yml
 ├── etc
@@ -22,7 +21,6 @@
 │       ├── nginx.conf
 │       └── nginx.production.conf
 ├── httpd
-│   ├── README.md
 │   ├── demo-ajax-header.config
 │   ├── demo-https.config
 │   ├── demo-laravel.config
@@ -30,7 +28,8 @@
 │   │   ├── root-ca.crt
 │   │   ├── www.t.khs1994.com.crt
 │   │   └── www.t.khs1994.com.key
-│   └── demo-vhost.conf
+│   ├── demo-vhost.conf
+│   └── README.md
 ├── mariadb
 │   ├── default
 │   │   └── etc
@@ -38,8 +37,8 @@
 │   │           ├── conf.d
 │   │           │   ├── docker.cnf
 │   │           │   └── mysqld_safe_syslog.cnf
-│   │           ├── debian-start
 │   │           ├── debian.cnf
+│   │           ├── debian-start
 │   │           ├── mariadb.cnf
 │   │           ├── mariadb.conf.d
 │   │           └── my.cnf
@@ -58,14 +57,15 @@
 │   ├── docker.cnf
 │   └── docker.production.cnf
 ├── nginx
-│   ├── README.md
 │   ├── auth
 │   │   └── README.md
 │   ├── demo-ajax-header.config
 │   ├── demo-fzjh-80.config
 │   ├── demo-fzjh.config
 │   ├── demo-include-php.config
+│   ├── demo-include-ssl-common.config
 │   ├── demo-include-ssl.config
+│   ├── demo-khsci.config
 │   ├── demo-linuxkit.config
 │   ├── demo-registry.config
 │   ├── demo-ssl
@@ -77,40 +77,15 @@
 │   ├── demo-www.conf
 │   ├── demo-www.config
 │   ├── fzjh.conf
+│   ├── khsci.conf
+│   ├── README.md
 │   ├── ssl
+│   │   ├── ci.crt
+│   │   ├── home.khs1994.com.crt
+│   │   ├── home.khs1994.com.key
+│   │   └── www.khs1994.com.crt
 │   ├── ssl-self
 │   └── wait-for-php.sh
-├── nginx.my
-│   ├── 301.conf
-│   ├── 80.conf
-│   ├── README.md
-│   ├── auth
-│   │   ├── README.md
-│   │   └── nginx.htpasswd
-│   ├── docker-registry.conf
-│   ├── drone.conf
-│   ├── gogs.conf
-│   ├── nexus.conf.back
-│   ├── php.conf
-│   ├── php.config
-│   ├── py-django.conf
-│   ├── ssl
-│   │   ├── docker.domain.com.crt
-│   │   ├── docker.domain.com.key
-│   │   ├── docker.t.khs1994.com.cer
-│   │   ├── docker.t.khs1994.com.key
-│   │   ├── drone.t.khs1994.com.cer
-│   │   ├── drone.t.khs1994.com.key
-│   │   ├── git.t.khs1994.com.crt
-│   │   ├── git.t.khs1994.com.key
-│   │   ├── khs1994.com.crt
-│   │   └── khs1994.com.key
-│   ├── ssl-self
-│   │   ├── root-ca.crt
-│   │   ├── t.khs1994.com.crt
-│   │   └── t.khs1994.com.key
-│   ├── ssl.config
-│   └── t.khs1994.conf
 ├── path.md
 ├── php
 │   ├── default
@@ -149,6 +124,7 @@
 │   ├── php.production.ini
 │   ├── zz-docker.conf
 │   └── zz-docker.production.conf
+├── README.md
 ├── redis
 │   ├── redis.conf
 │   └── redis.production.conf
@@ -156,5 +132,5 @@
     ├── config.production.yml
     └── config.yml
 
-41 directories, 114 files
+37 directories, 94 files
 ```

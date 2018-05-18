@@ -59,7 +59,6 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 KhsCI:
-  khsci-init           Init KhsCI
   khsci-up             Up(Run) KhsCI https://github.com/khs1994-php/khsci
 
 Commands:
@@ -118,7 +117,7 @@ LogKit:
   SERVICE-logs         Print LNMP containers logs (journald)
 
 ClusterKit:
-  clusterkit-help        Print ClusterKit help info
+  clusterkit-help      Print ClusterKit help info
 
 Developer Tools:
   commit               Commit LNMP to Git
@@ -570,6 +569,10 @@ reset-master(){
 
 cn_mirror(){
   set_git_remote_origin_url
+  git remote add origin git@github.com:khs1994-docker/lnmp.git || echo
+  git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git || echo
+  git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git || echo
+  git remote add coding git@git.coding.net:khs1994/lnmp.git || echo
   git fetch origin
   git push -f aliyun remotes/origin/dev:dev
   git push -f aliyun remotes/origin/master:master

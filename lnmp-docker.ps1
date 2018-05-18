@@ -102,7 +102,6 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 KhsCI:
-  khsci-init           Init KhsCI
   khsci-up             Up(Run) KhsCI https://github.com/khs1994-php/khsci
 
 Commands:
@@ -570,11 +569,11 @@ XXX
 " > debug.md
     }
 
-    khsci-init {
+    khsci-up {
       # 判断 app/khsci 是否存在
 
       if (!(Test-Path app/khsci)){
-        composer create-roject --prefer-source khs1994/khsci app/khsci @dev
+        git clone --depth=1 https://github.com/khs1994-php/khsci app/khsci
       }
 
       if (!(Test-Path app/khsci/public/.env.produnction)){
@@ -587,12 +586,26 @@ XXX
 
       # 判断 nginx 配置文件是否存在
 
-      if(!(Test-Path config/nginx/khsci.conf)){
-        cp config/nginx/demo-khsci.config config/nginx/khsci.conf;
+      if(!(Test-Path khsci/conf/khsci.conf)){
+        cp khsci/conf/khsci.config khsci/conf/khsci.conf
       }
-    }
 
-    khsci-up {
+      $a=Select-String 'demo.ci.khs1994.com' khsci/conf/khsci.conf
+
+      if ($a.Length -ne 0){
+        echo "CI conf error, please see khsci/README.md"
+        exit
+      }
+
+      if(!(Test-Path khsci/ssl/ci.crt)){
+        echo "CI Website SSL key not found, please see khsci/README.md"
+        exit
+      }
+
+      cp khsci/ssl/ci.crt config/nginx/ssl/ci.crt
+
+      cp khsci/conf/khsci.conf config/nginx/khsci.conf
+
       # 启动
 
       docker-compose -f docker-compose.yml -f docker-compose.override.yml `
