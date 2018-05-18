@@ -16,3 +16,6 @@
 [submodule "toolkit/tls"]
 	path = toolkit/tls
 	url = https://github.com/khs1994-docker/tls.git
+[submodule "toolkit/khskit"]
+	path = toolkit/khskit
+	url = https://github.com/khs1994-website/khskit.git
