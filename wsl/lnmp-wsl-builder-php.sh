@@ -616,7 +616,7 @@ _composer(){
             echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
             exit(1); \
         }" \
-&& ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
+&& sudo ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
 }
 
 test $host = 'x86_64-linux-gnu'  && _test

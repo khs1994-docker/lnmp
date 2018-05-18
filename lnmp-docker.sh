@@ -189,7 +189,7 @@ _local_docs_server(){
     git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git app/khsdocs/k8s
   fi
 
-  if ! [ app/khsdocs/docker ];then
+  if ! [ -d app/khsdocs/docker ];then
     git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git app/khsdocs/docker
   fi
 
@@ -1229,6 +1229,11 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
   cn-mirror )
     cn_mirror
     ;;
+
+  toolkit-docs )
+
+    _local_docs_server
+  ;;
 
   compose )
     docker_compose "$@"

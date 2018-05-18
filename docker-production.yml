@@ -325,10 +325,10 @@ services:
       - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - backend
-    working_dir: /app/khsci/cli
+    working_dir: /app/khsci/bin
     command:
-      - php
-      - khsci.php
+      - /bin/sh
+      - khscid.sh
       - up
     environment:
       - APP_ENV=production
