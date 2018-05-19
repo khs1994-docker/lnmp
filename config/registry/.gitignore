@@ -2,3 +2,5 @@
 !.gitignore
 !config.production.yml
 !config.yml
+!gcr.io*
+!config.gcr.io.yml

@@ -2,6 +2,12 @@
 # https://github.com/travis-ci/travis.rb#readme
 #
 
+. "$PSScriptRoot/.env.example.ps1"
+
+if (Test-Path "$PSScript/.env.ps1"){
+  . "$PSScriptRoot/.env.ps1"
+}
+
 if ( $env:GITHUB_TOKEN.length -eq 0 ){
   echo "You must set [ GITHUB_TOKEN ] env"
   write-host

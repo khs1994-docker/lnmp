@@ -2,6 +2,12 @@
 # https://github.com/laravel/laravel
 #
 
+. "$PSScriptRoot/.env.example.ps1"
+
+if (Test-Path "$PSScriptRoot/.env.ps1"){
+  . "$PSScriptRoot/.env.ps1"
+}
+
 if (!($args -contains 'new')){
   exit 1
 }
@@ -23,7 +29,7 @@ if (!(Test-Path ${LARAVEL_PATH})){
 #     --entrypoint /docker-entrypoint.laravel.sh `
 #     --workdir /tmp `
 #     -e LARAVEL_PATH=${LARAVEL_PATH} `
-#     khs1994/php-fpm:7.2.5-alpine3.7 `
+#     ${LNMP_PHP_IMAGE} `
     composer create-project --prefer-dist laravel/laravel=5.5.* "$LARAVEL_PATH"
 
 # tar -zxvf .\${LARAVEL_PATH}.tar.gz

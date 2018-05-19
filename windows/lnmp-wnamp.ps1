@@ -1,12 +1,8 @@
-# ！！！！！！！！！！！！！！！
-# ！！ 务必设置软件目录   ！！
-#！！！！！！！！！！！！！！！
+. "$PSScriptRoot/.env.example.ps1"
 
-$NGINX_PATH="C:/nginx"
-$PHP_PATH="C:/php"
-$LNMP_PATH="$HOME/lnmp"
-$DistributionName="debian"
-$COMMON_SOFT="nginx","php","mysql","wsl-redis"
+if (Test-Path "$PSScript/.env.ps1"){
+  . "$PSScriptRoot/.env.ps1"
+}
 
 ################################################################################
 

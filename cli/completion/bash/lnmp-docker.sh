@@ -46,6 +46,7 @@ complete -W "acme.sh \
         debug \
         down \
         docs \
+        gcr.io \
         help \
         k8s \
         k8s-down \

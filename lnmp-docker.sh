@@ -118,6 +118,7 @@ LogKit:
 
 ClusterKit:
   clusterkit-help      Print ClusterKit help info
+  gcr.io               Up Local gcr.io Server To Use Docker Desktop Kubernetes
 
 Developer Tools:
   commit               Commit LNMP to Git
@@ -182,6 +183,48 @@ ClusterKit:
   clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
 
 "
+}
+
+_gcr_io(){
+
+   echo "
+This local server support Docker Desktop v18.05
+
+"
+
+    docker run -it -d \
+      -p 443:443 \
+      -v $PWD/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml \
+      -v $PWD/config/registry:/etc/docker/registry/ssl \
+      -v gcr_local_server:/var/lib/registry \
+      registry || echo
+
+    images="kube-controller-manager-amd64:v1.9.6 \
+    kube-apiserver-amd64:v1.9.6 \
+    kube-scheduler-amd64:v1.9.6 \
+    kube-proxy-amd64:v1.9.6 \
+    etcd-amd64:3.1.11 \
+    k8s-dns-sidecar-amd64:1.14.7 \
+    k8s-dns-kube-dns-amd64:1.14.7 \
+    k8s-dns-dnsmasq-nanny-amd64:1.14.7 \
+    pause-amd64:3.0"
+
+    for image in $images
+    do
+       docker pull anjia0532/$image
+       docker tag anjia0532/$image gcr.io/google_containers/$image
+       docker push gcr.io/google_containers/$image
+       docker rmi anjia0532/$image
+    done
+
+    echo "
+Warning
+
+this command up a Local Server on port 443.
+
+When Docker Desktop Start Kubernetes Success, you must remove this local server.
+
+    "
 }
 
 _local_docs_server(){
@@ -998,6 +1041,10 @@ main() {
 
   _lnmp_debug
 
+  ;;
+
+  gcr.io )
+    _gcr_io
   ;;
 
   reset-master )

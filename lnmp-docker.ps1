@@ -38,7 +38,8 @@ if (!(Test-Path cli/khs1994-robot.enc )){
     # 设置了系统环境变量
 
     printInfo "Use LNMP CLI in $PWD"
-    cd $env:LNMP_PATH
+    # cd $env:LNMP_PATH
+    cd $PSScriptRoot
   }
 
 }else {
@@ -130,6 +131,7 @@ PHP Tools:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
+  gcr.io               Up Local gcr.io Server To Use Docker Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -637,6 +639,45 @@ XXX
         git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git app/khsdocs/nginx
       }
 
+    }
+
+    gcr.io {
+echo "
+This local server support Docker Desktop v18.05
+
+"
+      docker run -it -d `
+        -p 443:443 `
+        -v $pwd/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml `
+        -v $pwd/config/registry:/etc/docker/registry/ssl `
+        -v gcr_local_server:/var/lib/registry `
+        registry
+
+      $images="kube-controller-manager-amd64:v1.9.6", `
+      "kube-apiserver-amd64:v1.9.6", `
+      "kube-scheduler-amd64:v1.9.6", `
+      "kube-proxy-amd64:v1.9.6", `
+      "etcd-amd64:3.1.11", `
+      "k8s-dns-sidecar-amd64:1.14.7", `
+      "k8s-dns-kube-dns-amd64:1.14.7", `
+      "k8s-dns-dnsmasq-nanny-amd64:1.14.7", `
+      "pause-amd64:3.0"
+
+      foreach ($image in $images){
+         docker pull anjia0532/$image
+         docker tag anjia0532/$image gcr.io/google_containers/$image
+         docker push gcr.io/google_containers/$image
+         docker rmi anjia0532/$image
+      }
+
+      echo "
+Warning
+
+this command up a Local Server on port 443.
+
+When Docker Desktop Start Kubernetes Success, you must remove this local server.
+
+      "
     }
 
     default {

@@ -2,6 +2,12 @@
 # https://github.com/laravel/laravel
 #
 
+. "$PSScriptRoot/.env.example.ps1"
+
+if (Test-Path "$PSScriptRoot/.env.ps1"){
+  . "$PSScriptRoot/.env.ps1"
+}
+
 if ($args -contains 'new' ){
   if ($args.Count -lt 2 ){
     exit 1
@@ -15,7 +21,7 @@ if (!(Test-Path ${LARAVEL_PATH})){
 # docker run --init -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `
 #     --mount src=lnmp_composer_cache-data,target=/tmp/cache `
-#     khs1994/php-fpm:7.2.5-alpine3.7 `
+#     $LNMP_PHP_IMAGE `
 #     laravel $args
 
 composer create-project --prefer-dist laravel/laravel=5.6.* "$LARAVEL_PATH"

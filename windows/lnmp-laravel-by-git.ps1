@@ -44,7 +44,8 @@ Local Temp $temp_path not found
 
 Now Clone from git then clone from local
 "
-    git clone -b $version --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git "$env:LNMP_PATH\app\temp\laravel$version"
+    git clone -b $version `
+        --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git "$env:LNMP_PATH\app\temp\laravel$version"
     _clone $version
   }
 }

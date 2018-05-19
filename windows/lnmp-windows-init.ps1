@@ -2,6 +2,12 @@
 # $ set-ExecutionPolicy RemoteSigned
 #
 
+. "$PSScriptRoot/.env.example.ps1"
+
+if (Test-Path "$PSScript/.env.ps1"){
+  . "$PSScriptRoot/.env.ps1"
+}
+
 $global:source=$PWD
 $global:NGINX_VERSION="1.13.12"
 $global:PHP_VERSION="7.2.5"
@@ -14,7 +20,6 @@ $global:PYTHON_VERSION="3.6.5"
 $global:GOLANG_VERSION="1.10.2"
 $global:HTTPD_MOD_FCGID_VERSION="2.3.9"
 $global:ZEAL_VERSION="0.5.0"
-$global:MINIKUBE_VERSION="0.26.1"
 
 Function _wget($src,$des){
   Invoke-WebRequest -uri $src -OutFile $des
@@ -138,15 +143,6 @@ _downloader `
   http://windows.php.net/downloads/releases/php-${PHP_VERSION}-nts-Win32-VC15-x64.zip `
   php-${PHP_VERSION}-nts-Win32-VC15-x64.zip `
   PHP ${PHP_VERSION}
-
-#
-# MiniKube RUN in ZH-CN Powered By Aliyun
-#
-
-_downloader `
-  http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-windows-amd64.exe `
-  minikube-windows-amd64.exe `
-  Minikube ${MINIKUBE_VERSION}
 
 #
 # Composer
@@ -307,8 +303,6 @@ if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
 _installer node-v${NODE_VEERSION}-win-x64.zip         C:\     C:\node-v${NODE_VEERSION}-win-x64 C:\node
 
 _installer RunHiddenConsole.zip                       C:\bin  C:\bin\RunHiddenConsole.exe       C:\bin\RunHiddenConsole.exe
-
-cp minikube-windows-amd64.exe C:\bin\minikube.exe
 
 ################################################################################
 

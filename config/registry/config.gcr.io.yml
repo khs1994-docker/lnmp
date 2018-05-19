@@ -1,0 +1,37 @@
+version: 0.1
+log:
+  accesslog:
+    disabled: true
+  level: debug
+  formatter: text
+  fields:
+    service: registry
+    environment: production
+storage:
+  delete:
+    enabled: true
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+# auth:
+#   htpasswd:
+#     realm: basic-realm
+#     path: /etc/docker/registry/auth/nginx.htpasswd
+http:
+  addr: :443
+  # host: https://docker.t.khs1994.com
+  # headers:
+  #   X-Content-Type-Options: [nosniff]
+  # http2:
+  #   disabled: false
+  tls:
+     certificate: /etc/docker/registry/ssl/gcr.io.crt
+     key: /etc/docker/registry/ssl/gcr.io.key
+# 类似 github webhooks ,给特定网址 post 一个 json 数据
+
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3

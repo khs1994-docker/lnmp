@@ -2,6 +2,12 @@
 # https://github.com/sebastianbergmann/phpunit
 #
 
+. "$PSScriptRoot/.env.example.ps1"
+
+if (Test-Path "$PSScript/.env.ps1"){
+  . "$PSScriptRoot/.env.ps1"
+}
+
 docker network create lnmp_backend | Out-Null
 
 if (! (Test-Path vendor\bin\phpunit)){
@@ -23,5 +29,5 @@ docker run -it --init --rm `
     --mount type=bind,src=$PWD,target=/app `
     --mount src=lnmp_composer_cache-data,target=/tmp/cache `
     --network lnmp_backend `
-    khs1994/php-fpm:7.2.5-alpine3.7 `
+    ${LNMP_PHP_IMAGE} `
     vendor/bin/phpunit $args

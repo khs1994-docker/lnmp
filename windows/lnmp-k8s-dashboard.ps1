@@ -1,3 +1,3 @@
-cd $LNMP_PATH/kubernetes
+cd $PSScriptRoot/../kubernetes
 
 kubectl apply -f kubernetes-dashboard.yaml
