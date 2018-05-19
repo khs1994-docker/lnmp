@@ -1,7 +1,8 @@
-$global:KHS1994_LNMP_DOCKER_VERSION="v18.07"
-$global:KHS1994_LNMP_PHP_VERSION="7.2.4"
-$global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
-$global:CI_HOST="ci2.khs1994.com:10000"
+. "$PSScriptRoot/.env.example.ps1"
+
+if (Test-Path "$PSScriptRoot/.env.ps1"){
+  . "$PSScriptRoot/.env.ps1"
+}
 
 $source=$pwd
 
@@ -642,6 +643,7 @@ XXX
     }
 
     gcr.io {
+      # https://github.com/anjia0532/gcr.io_mirror
 echo "
 This local server support Docker Desktop v18.05
 

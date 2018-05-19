@@ -20,6 +20,8 @@ Example
 
 lnmp-wnamp.ps1 start php nginx mysql wsl-redis
 
+You can set common soft include in `windows/.env.ps1` file like `windows/.env.example.ps1`
+
 lnmp-wnamp.ps1 start common
 
 lnmp-wnamp.ps1 stop all

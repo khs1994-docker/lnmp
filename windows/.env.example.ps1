@@ -8,6 +8,9 @@ $global:HYPERV_VIRTUAL_SWITCH='zy'
 
 $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
+
 $LNMP_PATH="$HOME/lnmp"
+
 $DistributionName="debian"
+
 $COMMON_SOFT="nginx","php","mysql","wsl-redis"

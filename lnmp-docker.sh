@@ -186,7 +186,7 @@ ClusterKit:
 }
 
 _gcr_io(){
-
+   # https://github.com/anjia0532/gcr.io_mirror
    echo "
 This local server support Docker Desktop v18.05
 
