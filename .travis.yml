@@ -132,8 +132,19 @@ jobs:
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
-
-    #
+    - stage: wsl-php-builder-73
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - export DOCKER_SERVICE_NAME=wsl-php-builder-73
+        - docker-compose build ${DOCKER_SERVICE_NAME}
+        - docker-compose push ${DOCKER_SERVICE_NAME}
+        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - . .env
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-stretch_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
     # wsl-rhel
     #
 

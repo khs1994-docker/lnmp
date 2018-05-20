@@ -9,19 +9,16 @@ if (Test-Path "$PSScript/.env.ps1"){
 }
 
 $global:source=$PWD
-$global:NGINX_VERSION="1.13.12"
-$global:PHP_VERSION="7.2.5"
-$global:MYSQL_VERSION="8.0.11"
-$global:HTTPD_VERSION="2.4.33"
-$global:IDEA_VERSION="1.8.3678"
-$global:NODE_VEERSION="10.1.0"
-$global:GIT_VERSION="2.17.0"
-$global:PYTHON_VERSION="3.6.5"
-$global:GOLANG_VERSION="1.10.2"
-$global:HTTPD_MOD_FCGID_VERSION="2.3.9"
-$global:ZEAL_VERSION="0.5.0"
 
 Function _wget($src,$des){
+  get-command wsl -ErrorAction "SilentlyContinue"
+
+  if ($?){
+    wsl curl $src -o $des
+
+    return
+  }
+
   Invoke-WebRequest -uri $src -OutFile $des
   Unblock-File $des
 }
@@ -43,7 +40,7 @@ Function _mkdir($dir_path){
 }
 
 Function _ln($src,$target){
-  New-Item -Path $target -ItemType SymbolicLink -Value $src
+  New-Item -Path $target -ItemType SymbolicLink -Value $src -ErrorAction "SilentlyContinue"
 }
 
 Function _echo_line(){
@@ -282,6 +279,15 @@ _downloader `
   https://dl.bintray.com/zealdocs/windows/zeal-${ZEAL_VERSION}-windows-x64.msi `
   zeal-${ZEAL_VERSION}-windows-x64.msi `
   Zeal
+
+#
+# vim
+#
+
+_downloader `
+  https://github.com/vim/vim-win32-installer/releases/download/v8.1.0005/gvim_8.1.0005_x86.exe `
+  gvim_8.1.0005_x86.exe `
+  gvim_8.1.0005_x86.exe
 
 ################################################################################
 
