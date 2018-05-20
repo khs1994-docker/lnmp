@@ -66,7 +66,7 @@ Commands:
   backup               Backup MySQL databases
   build                Build or rebuild LNMP Self Build images (Only Support x86_64)
   build-config         Validate and view the LNMP Self Build images Compose file
-  build-push           Build and Pushes images to Docker Registory
+  build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose
@@ -118,7 +118,7 @@ LogKit:
 
 ClusterKit:
   clusterkit-help      Print ClusterKit help info
-  gcr.io               Up Local gcr.io Server To Use Docker Desktop Kubernetes
+  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes
 
 Developer Tools:
   commit               Commit LNMP to Git
@@ -191,7 +191,6 @@ _gcr_io(){
 This local server support Docker Desktop v18.05
 
 "
-
     docker run -it -d \
       -p 443:443 \
       -v $PWD/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml \
@@ -222,7 +221,7 @@ Warning
 
 this command up a Local Server on port 443.
 
-When Docker Desktop Start Kubernetes Success, you must remove this local server.
+When Docker for Desktop Start Kubernetes Success, you must remove this local server.
 
     "
 }
@@ -271,9 +270,9 @@ _registry(){
   if ! [ -f config/${NGINX_CONF_D:-nginx}/auth/docker_registry.htpasswd ];then
     echo; print_info "First start, Please set username and password"
     read -p "username: " username
-    if [ -z $username ];then echo; print_error "用户名不能为空"; exit 1; fi
+    if [ -z $username ];then echo; print_error "Please input username"; exit 1; fi
     read -s -p "password: " password; echo
-    if [ -z $password ];then echo; print_error "密码不能为空"; exit 1; fi
+    if [ -z $password ];then echo; print_error "Please input password"; exit 1; fi
     read -s -p "Please reinput password: " password_verify; echo; echo
 
     if ! [ "$password" = "$password_verify" ];then
@@ -500,6 +499,10 @@ docker_compose(){
   fi
 }
 
+network(){
+  ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
+}
+
 # 克隆示例项目、nginx 配置文件
 
 demo() {
@@ -508,7 +511,7 @@ demo() {
   else
     print_info "Import app and nginx conf Demo ...\n"
     # 检查网络连接
-    ping -c 3 -i 0.2 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
+    network
     echo ;print_info "Update Git Submodule\n"
     git submodule update --init --recursive
   fi
@@ -545,10 +548,6 @@ backup(){
 
 restore(){
   docker-compose exec mysql /backup/restore.sh $1
-}
-
-network(){
-  ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
 }
 
 # 更新项目

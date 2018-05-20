@@ -1,10 +1,12 @@
 . "$PSScriptRoot/.env.example.ps1"
 
+. "$PSScriptRoot/cli/.env.ps1"
+
 if (Test-Path "$PSScriptRoot/.env.ps1"){
   . "$PSScriptRoot/.env.ps1"
 }
 
-$source=$pwd
+$source=$PWD
 
 Function printError(){
 Write-Host " "
@@ -111,7 +113,7 @@ Commands:
   build                Build or rebuild LNMP Self Build images (Only Support x86_64)
   build-config         Validate and view the LNMP Self Build images Compose file
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
-  build-push           Build and Pushes images to Docker Registory
+  build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   debug                Generate Debug information, then copy it to GitHub Issues
   development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
@@ -125,14 +127,14 @@ Commands:
   restart              Restart LNMP services
 
 PHP Tools:
-  httpd-config        Generate Apache2 vhost conf
+  httpd-config         Generate Apache2 vhost conf
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
   ssl-self             Issue Self-signed SSL certificate
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up Local gcr.io Server To Use Docker Desktop Kubernetes
+  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)

@@ -224,7 +224,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.5-alpine3.7`  | **5.6.x**       |`Alpine:3.7`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.5-alpine3.7`  | **1.6.5**       |`Alpine:3.7`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-fpm:7.2.5-alpine3.7`  | **2.11.1**      |`Alpine:3.7`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.6-alpine`           | **.5.6**        |`Alpine:3.7`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.6-alpine`           | **1.5.6**        |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.5-management-alpine` | **3.7.5**       |`Alpine:3.7`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.7`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:3.7.9`                      | **3.7.9**       |`Debian:jessie` |
