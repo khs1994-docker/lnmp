@@ -22,11 +22,11 @@ $ lnmp-wsl-builder-php.sh apt
 
 $ lnmp-wsl-builder-php.sh 7.3.0
 
-$ lnmp-wsl-builder-php.sh 5.6.35 [--skipbuild] [tar] [deb]
+$ lnmp-wsl-builder-php.sh 7.2.5 [--skipbuild] [tar] [deb]
 
-$ lnmp-wsl-builder-php.sh 7.2.3 arm64 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.5 arm64 tar [TODO]
 
-$ lnmp-wsl-builder-php.sh 7.2.3 arm32 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.5 arm32 tar [TODO]
 
 "
 
