@@ -107,7 +107,7 @@ $ ./lnmp-docker.sh development
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v18.06 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v18.07 x86_64 With Pull Docker Image
 
 development
 
@@ -205,9 +205,9 @@ $ ./lnmp-docker.sh down
 
 每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
 
-* [v18.06 2018-04-28](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
+* [v18.07 2018-05-20](https://github.com/khs1994-docker/lnmp/releases/tag/v18.07)
 
-* ~~[v18.05 2018-04-01](https://github.com/khs1994-docker/lnmp/releases/tag/v18.05) **EOL**~~
+* ~~[v18.06 2018-04-28](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06) **EOL**~~
 
 ## 项目说明
 
