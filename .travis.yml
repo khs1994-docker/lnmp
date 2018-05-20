@@ -11,7 +11,7 @@ env:
   - TZ=Asia/Shanghai
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
-  - TAG=v18.06
+  - TAG=v18.07
 
 before_install:
 - date
