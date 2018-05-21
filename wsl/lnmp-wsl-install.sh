@@ -309,10 +309,10 @@ _mongodb(){
 _mysql(){
   # apt
   if ! [ -f mysql-apt-config_0.8.9-1_all.deb ];then
-      wget https://dev.mysql.com/get/mysql-apt-config_0.8.9-1_all.deb
+      wget https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
   fi
 
-  sudo dpkg -i mysql-apt-config_0.8.9-1_all.deb
+  sudo dpkg -i mysql-apt-config_0.8.10-1_all.deb
   sudo apt install -f
   sudo apt update
   sudo apt install mysql-server

@@ -32,7 +32,7 @@ Please see https://github.com/khs1994-docker/lnmp/issues/354
 
 ## Meet issues With MySQL 8.0 ?
 
-Please see：https://github.com/khs1994-docker/lnmp/issues/450
+Please see https://github.com/khs1994-docker/lnmp/issues/450
 
 ## Prerequisites
 

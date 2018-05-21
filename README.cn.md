@@ -24,15 +24,15 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 ## 使用 k8s ?
 
-请查看：https://github.com/khs1994-docker/lnmp-k8s
+请查看 https://github.com/khs1994-docker/lnmp-k8s
 
 ## 需要 PHP 7.1 以下版本 ?
 
-请查看：https://github.com/khs1994-docker/lnmp/issues/354
+请查看 https://github.com/khs1994-docker/lnmp/issues/354
 
 ## 使用 MySQL 8.0 遇到问题 ?
 
-请查看：https://github.com/khs1994-docker/lnmp/issues/450
+请查看 https://github.com/khs1994-docker/lnmp/issues/450
 
 ## 准备
 
@@ -54,7 +54,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 #### 使用 WSL ?
 
-请查看：https://github.com/khs1994-docker/lnmp/tree/master/wsl
+请查看 https://github.com/khs1994-docker/lnmp/tree/master/wsl
 
 ### 安装
 
