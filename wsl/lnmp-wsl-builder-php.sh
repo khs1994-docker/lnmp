@@ -205,7 +205,7 @@ _buildlib
 _install_php_run_dep(){
 
     test $host != 'x86_64-linux-gnu' && _build_arm_php_build_dep ; return 0
-
+    set +e
     export PHP_RUN_DEP="libedit2 \
 zlib1g \
 libxml2 \
@@ -219,7 +219,7 @@ libfreetype6 \
 libpng16-16 \
 $( sudo apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
 $( sudo apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
-$( if [ $PHP_NUM = "72" ];then \
+$( if [ $PHP_NUM -ge "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libargon2-0";
           fi ); \
@@ -239,14 +239,14 @@ $( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
 libldap-2.4-2"
-
+    set -e
     sudo apt install -y $PHP_RUN_DEP > /dev/null
 }
 
 ################################################################################
 
 _install_php_build_dep(){
-
+    set +e
     export DEP_SOFTS="autoconf \
                    curl \
                    lsb-release \
@@ -277,7 +277,7 @@ _install_php_build_dep(){
                    $( test $PHP_NUM = "56" && echo "" ) \
                    $( test $PHP_NUM = "70" && echo "" ) \
                    $( test $PHP_NUM = "71" && echo "" ) \
-                   $( if [ $PHP_NUM = "72" ];then \
+                   $( if [ $PHP_NUM -ge "72" ];then \
                         echo $( if ! [ "${ARGON2}" = 'false' ];then \
                                   echo "libargon2-0-dev"; \
                                 fi ); \
@@ -299,7 +299,7 @@ _install_php_build_dep(){
                    libldap2-dev \
                    libpspell-dev \
                    "
-
+    set -e
     for soft in ${DEP_SOFTS} ; do echo $soft | tee -a ${PHP_INSTALL_LOG} ; done
 
     sudo apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
@@ -317,8 +317,6 @@ _test(){
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
     ${PHP_PREFIX}/sbin/php-fpm -v
-
-    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
 
     set +x
     for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
@@ -433,7 +431,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
     $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
     $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
     \
-    $( if [ $PHP_NUM = "72" ];then \
+    $( if [ $PHP_NUM -ge "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2"; \
                  fi ); \
@@ -577,7 +575,7 @@ _php_ext_enable(){
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
-
+set +e
 exts=" pdo_pgsql \
                       xsl \
                       pcntl \
@@ -604,7 +602,7 @@ exts=" pdo_pgsql \
                       $( test $PHP_NUM != '56' && echo 'swoole' ) \
                       yaml \
                       opcache"
-
+set -e
 for ext in $exts
 do
   wsl-php-ext-enable.sh $ext || echo "$ext install error"
@@ -862,7 +860,11 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test "${SKIP_BUILD}" != 1 &&  ( _download_src ; _builder ; ( test $host = 'x86_64-linux-gnu'  && _test ) ; _write_version_to_file )
+test "${SKIP_BUILD}" != 1 &&  \
+    ( _download_src ; _builder ; ( test $host = 'x86_64-linux-gnu'  && \
+    _test \
+    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+    ) ; _write_version_to_file )
 
 for command in "$@"
 do

@@ -3,7 +3,7 @@
 set -ex
 
 if [ ! -n "$1" ] ;then
-  echo -e "请传入参数
+  echo -e "command is empty, please input something
 database [tables]
 --databases [OPTIONS] DB1 [DB2 DB3...]
 --all-databases [OPTIONS]

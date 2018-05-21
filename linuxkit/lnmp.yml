@@ -38,7 +38,7 @@ services:
     net: host
   # 暂时不支持 MySQL
   # - name: mysql
-  #   image: mysql:5.7.20
+  #   image: mysql:8.0.11
   #   env:
   #    - TZ=Asia/Shanghai
   #    - MYSQL_ROOT_PASSWORD=mytest
@@ -49,7 +49,7 @@ services:
   #    - CAP_SETUID
   #    - CAP_SETGID
   #    - CAP_DAC_OVERRIDE
-  #   command: ["mysqld", "--character-set-server=utf8mb4"]
+  #   command: ["mysqld", "--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
   #   net: host
   - name: redis
     image: redis:4.0.8-alpine

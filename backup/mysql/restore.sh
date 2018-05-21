@@ -3,7 +3,7 @@
 set -ex
 
 if [ ! -n "$1" ] ;then
-  echo "请传入 SQL 文件名"
+  echo "please input SQL filename"
   cd /backup
   echo `ls *.sql`
 else
