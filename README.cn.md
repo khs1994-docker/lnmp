@@ -30,6 +30,10 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 请查看：https://github.com/khs1994-docker/lnmp/issues/354
 
+## 使用 MySQL 8.0 遇到问题 ?
+
+请查看：https://github.com/khs1994-docker/lnmp/issues/450
+
 ## 准备
 
 本项目需要以下软件：

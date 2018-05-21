@@ -30,6 +30,10 @@ Please see https://github.com/khs1994-docker/lnmp-k8s
 
 Please see https://github.com/khs1994-docker/lnmp/issues/354
 
+## Meet issues With MySQL 8.0 ?
+
+Please see：https://github.com/khs1994-docker/lnmp/issues/450
+
 ## Prerequisites
 
 To use LNMP Docker, you need:
