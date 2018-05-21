@@ -149,7 +149,7 @@ cyrus-sasl \
 freetype \
 libpng \
 libjpeg \
-                $( if [ $PHP_NUM = "72" ];then \
+                $( if [ $PHP_NUM -ge "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libargon2";
                              fi ); \
@@ -201,7 +201,7 @@ _install_php_build_dep(){
                    $( test $PHP_NUM = "56" && echo "" ) \
                    $( test $PHP_NUM = "70" && echo "" ) \
                    $( test $PHP_NUM = "71" && echo "" ) \
-                   $( if [ $PHP_NUM = "72" ];then \
+                   $( if [ $PHP_NUM -ge "72" ];then \
                         echo $( if ! [ "${ARGON2}" = 'false' ];then \
                                   echo "libargon2-devel"; \
                                 fi ); \
@@ -329,7 +329,7 @@ _builder(){
         $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
         $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
        \
-       $( if [ $PHP_NUM = "72" ];then \
+       $( if [ $PHP_NUM -ge "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2"; \
                  fi ); \

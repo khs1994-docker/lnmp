@@ -219,7 +219,7 @@ libfreetype6 \
 libpng16-16 \
 $( sudo apt show libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
 $( sudo apt show libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
-$( if [ $PHP_NUM = "72" ];then \
+$( if [ $PHP_NUM -ge "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libargon2-0";
           fi ); \
@@ -277,7 +277,7 @@ _install_php_build_dep(){
                    $( test $PHP_NUM = "56" && echo "" ) \
                    $( test $PHP_NUM = "70" && echo "" ) \
                    $( test $PHP_NUM = "71" && echo "" ) \
-                   $( if [ $PHP_NUM = "72" ];then \
+                   $( if [ $PHP_NUM -ge "72" ];then \
                         echo $( if ! [ "${ARGON2}" = 'false' ];then \
                                   echo "libargon2-0-dev"; \
                                 fi ); \
@@ -433,7 +433,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
     $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
     $( test $PHP_NUM = "71" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
     \
-    $( if [ $PHP_NUM = "72" ];then \
+    $( if [ $PHP_NUM -ge "72" ];then \
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2"; \
                  fi ); \
