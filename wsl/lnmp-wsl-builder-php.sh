@@ -318,8 +318,6 @@ _test(){
 
     ${PHP_PREFIX}/sbin/php-fpm -v
 
-    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
-
     set +x
     for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
     do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
@@ -862,7 +860,11 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test "${SKIP_BUILD}" != 1 &&  ( _download_src ; _builder ; ( test $host = 'x86_64-linux-gnu'  && _test ) ; _write_version_to_file )
+test "${SKIP_BUILD}" != 1 &&  \
+    ( _download_src ; _builder ; ( test $host = 'x86_64-linux-gnu'  && \
+    _test \
+    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+    ) ; _write_version_to_file )
 
 for command in "$@"
 do
