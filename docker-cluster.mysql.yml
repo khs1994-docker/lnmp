@@ -67,6 +67,7 @@ services:
       # - --binlog_ignore_db=dbname
       # - --binlog_ignore_db=dbname
       - --skip-character-set-client-handshake
+      - --default-authentication-plugin=mysql_native_password
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -107,6 +108,7 @@ services:
       - --character-set-server=utf8mb4
       - --slave-skip-errors=all
       - --skip-character-set-client-handshake
+      - --default-authentication-plugin=mysql_native_password
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -145,6 +147,7 @@ services:
       - --character-set-server=utf8mb4
       - --slave-skip-errors=all
       - --skip-character-set-client-handshake
+      - --default-authentication-plugin=mysql_native_password
     deploy:
       << : *default-deploy
       << : *default-labels

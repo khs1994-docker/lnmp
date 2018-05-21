@@ -39,6 +39,7 @@ services:
     command:
       - mysqld
       - --character-set-server=utf8mb4
+      - --default-authentication-plugin=mysql_native_password
     secrets:
       - db_root_password
 
