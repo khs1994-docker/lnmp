@@ -217,8 +217,8 @@ libmemcached11 \
 libsasl2-2 \
 libfreetype6 \
 libpng16-16 \
-$( sudo apt show libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
-$( sudo apt show libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
+$( sudo apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
+$( sudo apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
 $( if [ $PHP_NUM -ge "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libargon2-0";
@@ -226,8 +226,8 @@ echo "libargon2-0";
 echo "libsodium18 libzip4"; \
    fi ) \
 libyaml-0-2 \
-$( sudo apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
-$( sudo apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+$( sudo apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+$( sudo apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -235,8 +235,8 @@ libgmp10 \
 libc-client2007e \
 libkrb5-3 \
 libxpm4 \
-$( sudo apt show libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
-$( sudo apt show libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
+$( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
+$( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
 libldap-2.4-2"
     set -e
@@ -271,8 +271,8 @@ _install_php_build_dep(){
                    libsasl2-dev \
                    libfreetype6-dev \
                    libpng-dev \
-                   $( sudo apt show libjpeg62-turbo-dev > /dev/null 2>&1 && echo libjpeg62-turbo-dev ) \
-                   $( sudo apt show libjpeg-turbo8-dev > /dev/null 2>&1 && echo libjpeg-turbo8-dev ) \
+                   $( sudo apt install -y libjpeg62-turbo-dev > /dev/null 2>&1 && echo libjpeg62-turbo-dev ) \
+                   $( sudo apt install -y libjpeg-turbo8-dev > /dev/null 2>&1 && echo libjpeg-turbo8-dev ) \
                    \
                    $( test $PHP_NUM = "56" && echo "" ) \
                    $( test $PHP_NUM = "70" && echo "" ) \
@@ -847,7 +847,7 @@ test $host = 'arm-linux-gnueabihf' && \
 if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
   echo "debian9 notsupport php56" ; exit 1 ; fi
 
-sudo apt show libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
+sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 _install_php_run_dep
 
