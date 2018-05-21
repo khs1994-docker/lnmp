@@ -411,7 +411,11 @@ php -m
 
 ################################################################################
 
-httpd.exe -k install
+get-service Apache2.4 | out-null
+
+if ($?){
+    httpd.exe -k install
+}
 
 $a=Select-String 'include conf.d/' C:\Apache24\conf\httpd.conf
 
@@ -433,14 +437,22 @@ if(!(Test-Path C:\mysql\data)){
   mysqld --install
 }
 
-_echo_line
-Write-Host "####################################################################"
-Write-Host
-Write-Host "Mysql temporary password is"
-_echo_line
-select-string "A temporary password is generated for" C:\mysql\data\*.err
+$mysql_password=$(select-string "A temporary password is generated for" C:\mysql\data\*.err)
 
-Write-Host "
+$mysql_password=$($mysql_password -split " ")[12]
+
+Write-Warning "
+
+Mysql temporary password is
+
+$mysql_password
+
+"
+
+Write-host "
+
+Please exec command start mysql
+
 $ net start mysql
 
 $ mysql -uroot -p TEMP_PASSWORD
@@ -450,10 +462,7 @@ $ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest
 $ FLUSH PRIVILEGES;
 
 $ GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
-
 "
-_echo_line
-Write-Host "####################################################################"
 
 ################################################################################
 
@@ -465,9 +474,9 @@ _ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
 
 _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 
-echo ' ' >> $home\lnmp\windows\logs\nginx\access.log
+echo ' ' >> $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
 
-echo ' ' >> $home\lnmp\windows\logs\nginx\error.log
+echo ' ' >> $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
 
 ################################################################################
 

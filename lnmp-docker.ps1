@@ -34,9 +34,8 @@ if (!(Test-Path cli/khs1994-robot.enc )){
   # 在项目目录外
   if ($env:LNMP_PATH.Length -eq 0){
   # 没有设置系统环境变量，则退出
-    printWarning "Please set system environment, more information please see bin/README.md"
+    throw "Please set system environment, more information please see bin/README.md"
 
-    exit 1
   }else{
     # 设置了系统环境变量
 
@@ -53,7 +52,7 @@ Function env_status(){
   if (Test-Path .env){
     printInfo '.env file existing'
   }else{
-    printWarning '.env file NOT existing'
+    Write-Warning '.env file NOT existing'
     cp .env.example .env
   }
 }
@@ -601,13 +600,11 @@ XXX
       $a=Select-String 'demo.ci.khs1994.com' khsci/conf/khsci.conf
 
       if ($a.Length -ne 0){
-        echo "CI conf error, please see khsci/README.md"
-        exit
+        throw "CI conf error, please see khsci/README.md"
       }
 
       if(!(Test-Path khsci/ssl/ci.crt)){
-        echo "CI Website SSL key not found, please see khsci/README.md"
-        exit
+        throw "CI Website SSL key not found, please see khsci/README.md"
       }
 
       cp khsci/ssl/ci.crt config/nginx/ssl/ci.crt
@@ -674,7 +671,7 @@ This local server support Docker Desktop v18.05
          docker rmi anjia0532/$image
       }
 
-      echo "
+       Write-Warning "
 Warning
 
 this command up a Local Server on port 443.
