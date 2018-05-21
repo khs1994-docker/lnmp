@@ -212,9 +212,9 @@ services:
   #   #
   #   # image: username/lnmp-memcached:tag
   #   #
-  #   # image: khs1994/lnmp-memcached:1.5.6
+  #   # image: khs1994/lnmp-memcached:1.5.7
   #   #
-  #   image: memcached:1.5.6-alpine
+  #   image: memcached:1.5.7-alpine
   #   # ports:
   #   #   - "127.0.0.1:11211:11211"
   #   volumes:

@@ -5,25 +5,15 @@ Changelog
 
 Bug fixes:
 
-* Fix Redis port open
+* 
 
 Changes:
 
-* Remove php56 php70 #354
-* khs1994-docker/lnmp Powered khs1994-php/khsci
-* Merge lnmp-k8s to lnmp
-* Add ToolKit
-* Add Toolkit docs local server
-* Add lnmp-docker.sh debug command
-* Move macOS file to bin
+*
 
 Updates:
 
-* Update Composer 1.6.5 fixed #488
-* MariaDB 10.3.6 #517
-* RabbitMQ 3.7.5 #517
-* PostgreSQL 10.4 #517
-* MongoDB 3.7.9 #517
+* Update Memcached 1.5.7
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 
