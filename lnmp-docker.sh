@@ -540,18 +540,6 @@ init() {
   print_info "Init is SUCCESS\n"
 }
 
-# 备份数据库
-
-backup(){
-  docker-compose exec mysql /backup/backup.sh $@
-}
-
-# 恢复数据库
-
-restore(){
-  docker-compose exec mysql /backup/restore.sh $1
-}
-
 # 更新项目
 
 set_git_remote_origin_url(){
@@ -954,38 +942,56 @@ new(){
 
 bash_cli(){
   run_docker
+  SERVICE_NAME=$1
+  shift
   docker exec -it \
       $( docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.compose.service=$1 -n 1 ) \
-          $2 2> /dev/null || \
+          -f label=com.docker.compose.service=$SERVICE_NAME -n 1 ) \
+          $@ 2> /dev/null || \
       docker exec -it \
       $( docker container ls \
           --format "{{.ID}}" \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$1 -n 1 ) $2
+          -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1 ) $@
   exit $?
 }
 
 clusterkit_bash_cli(){
+  ENV_NAME=$1
+  SERVICE_NAME=$2
+  shift 2
   docker exec -it \
     $( docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        --filter label=com.docker.compose.service=$2 -n 1 ) $3 2> /dev/null || \
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
+        --filter label=com.docker.compose.service=$SERVICE_NAME -n 1 ) $@ 2> /dev/null || \
   docker exec -it \
     $( docker container ls \
         --format "{{.ID}}" \
         --filter \
         label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$1 \
-        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$2 -n 1 ) $3
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
+        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1 ) $@
 
   exit $?
 }
+
+# 备份数据库
+
+backup(){
+  bash_cli mysql /backup/backup.sh $@
+}
+
+# 恢复数据库
+
+restore(){
+  bash_cli mysql /backup/restore.sh $1
+}
+
 
 # 入口文件
 
