@@ -18,7 +18,7 @@ $ lnmp-wsl-builder-php-rhel.sh 7.2.5
 
 $ lnmp-wsl-builder-php-rhel.sh yum
 
-$ lnmp-wsl-builder-php-rhel.sh 5.6.35 [--skipbuild] [tar] [rpm]
+$ lnmp-wsl-builder-php-rhel.sh 7.2.5 [--skipbuild] [tar] [rpm]
 
 "
 

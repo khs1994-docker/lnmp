@@ -33,7 +33,8 @@ sudo apt update && sudo apt -y install \
                             python-pip \
                             python3 \
                             python3-pip \
-                            openssh-server
+                            openssh-server \
+                            apt-file
 
 
 # composer cn mirror

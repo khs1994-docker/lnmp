@@ -11,7 +11,7 @@ env:
   - TZ=Asia/Shanghai
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
-  - TAG=v18.06
+  - TAG=v18.07
 
 before_install:
 - date
@@ -80,32 +80,6 @@ jobs:
 
     # Debian9 not support php56
     # use ubuntu 16.04
-    - stage: wsl-php-builder-56
-      script:
-        - ./lnmp-docker.sh compose --official -f
-        - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=5.6.35 --build-arg OS_TYPE=ubuntu:16.04 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-56
-        - docker-compose build ${DOCKER_SERVICE_NAME}
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
-        - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_56}-ubuntu-xenial_amd64.deb
-        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
-    - stage: wsl-php-builder-70
-      script:
-        - ./lnmp-docker.sh compose --official -f
-        - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.0.29 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-70
-        - docker-compose build ${DOCKER_SERVICE_NAME}
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
-        - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_70}-debian-stretch_amd64.deb
-        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
     - stage: wsl-php-builder-71
       script:
         - ./lnmp-docker.sh compose --official -f
@@ -132,37 +106,22 @@ jobs:
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
-
-    #
+    - stage: wsl-php-builder-73
+      script:
+        - ./lnmp-docker.sh compose --official -f
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - export DOCKER_SERVICE_NAME=wsl-php-builder-73
+        - docker-compose build ${DOCKER_SERVICE_NAME}
+        - docker-compose push ${DOCKER_SERVICE_NAME}
+        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - . .env
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-stretch_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
     # wsl-rhel
     #
 
-    - stage: wsl-php-builder-rhel-56
-      script:
-        - ./lnmp-docker.sh compose --official -f
-        - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=5.6.35 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-56
-        - docker-compose build ${DOCKER_SERVICE_NAME}
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
-        - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_56}-1.el7.centos.x86_64.rpm
-        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
-    - stage: wsl-php-builder-rhel-70
-      script:
-        - ./lnmp-docker.sh compose --official -f
-        - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.0.29 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-70
-        - docker-compose build ${DOCKER_SERVICE_NAME}
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
-        - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_70}-1.el7.centos.x86_64.rpm
-        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     - stage: wsl-php-builder-rhel-71
       script:
         - ./lnmp-docker.sh compose --official -f

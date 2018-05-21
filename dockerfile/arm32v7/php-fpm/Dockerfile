@@ -6,10 +6,10 @@ ENV TZ=Asia/Shanghai
 
 ARG DEB_URL=deb.debian.org
 
-ARG DEB_SECURITY_URL=security.debian.org
+ARG DEB_SECURITY_URL=security.debian.org/debian-security
 
 RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
-    && sed -i "s!security.debian.org!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
+    && sed -i "s!security.debian.org/debian-security!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
     && set -xe \
 	      && buildDeps=" \
         libfreetype6-dev \

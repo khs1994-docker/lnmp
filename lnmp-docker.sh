@@ -99,6 +99,7 @@ PHP Tools:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
+  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -118,7 +119,6 @@ LogKit:
 
 ClusterKit:
   clusterkit-help      Print ClusterKit help info
-  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes
 
 Developer Tools:
   commit               Commit LNMP to Git

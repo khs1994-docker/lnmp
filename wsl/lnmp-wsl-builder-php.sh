@@ -20,11 +20,13 @@ $ lnmp-wsl-builder-php.sh 7.2.5
 
 $ lnmp-wsl-builder-php.sh apt
 
-$ lnmp-wsl-builder-php.sh 5.6.35 [--skipbuild] [tar] [deb]
+$ lnmp-wsl-builder-php.sh 7.3.0
 
-$ lnmp-wsl-builder-php.sh 7.2.3 arm64 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.5 [--skipbuild] [tar] [deb]
 
-$ lnmp-wsl-builder-php.sh 7.2.3 arm32 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.5 arm64 tar [TODO]
+
+$ lnmp-wsl-builder-php.sh 7.2.5 arm32 tar [TODO]
 
 "
 
@@ -102,6 +104,11 @@ case "$1" in
     export PHP_NUM=72
     ;;
 
+  7.3.* )
+     sudo apt install bison git -y
+     export PHP_NUM=73
+    ;;
+
   * )
     echo "ONLY SUPPORT 5.6 +"
     exit 1
@@ -121,6 +128,13 @@ _download_src(){
         echo -e "Download php src ...\n\n"
 
         cd /usr/local/src ; sudo chmod 777 /usr/local/src
+
+        if [ $PHP_NUM = 73 ];then
+
+          git clone --depth=1 https://github.com/php/php-src.git /usr/local/src/php-7.3.0
+
+          return
+        fi
 
         wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null
 
@@ -455,6 +469,10 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
 
+    if ! [ -f configure ];then
+      ./buildconf --force
+    fi
+
     ./configure ${CONFIGURE}
 
 # make
@@ -560,7 +578,7 @@ echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
 
-wsl-php-ext-enable.sh pdo_pgsql \
+exts=" pdo_pgsql \
                       xsl \
                       pcntl \
                       shmop \
@@ -583,9 +601,14 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       redis \
                       memcached \
                       xdebug \
-                      $( test $PHP_NUM != "56" && echo "swoole" ) \
+                      $( test $PHP_NUM != '56' && echo 'swoole' ) \
                       yaml \
-                      opcache
+                      opcache"
+
+for ext in $exts
+do
+  wsl-php-ext-enable.sh $ext || echo "$ext install error"
+done
 
 # config opcache
 

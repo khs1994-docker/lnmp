@@ -9,19 +9,16 @@ if (Test-Path "$PSScript/.env.ps1"){
 }
 
 $global:source=$PWD
-$global:NGINX_VERSION="1.13.12"
-$global:PHP_VERSION="7.2.5"
-$global:MYSQL_VERSION="8.0.11"
-$global:HTTPD_VERSION="2.4.33"
-$global:IDEA_VERSION="1.8.3678"
-$global:NODE_VEERSION="10.1.0"
-$global:GIT_VERSION="2.17.0"
-$global:PYTHON_VERSION="3.6.5"
-$global:GOLANG_VERSION="1.10.2"
-$global:HTTPD_MOD_FCGID_VERSION="2.3.9"
-$global:ZEAL_VERSION="0.5.0"
 
 Function _wget($src,$des){
+  get-command wsl -ErrorAction "SilentlyContinue"
+
+  if ($?){
+    wsl curl $src -o $des
+
+    return
+  }
+
   Invoke-WebRequest -uri $src -OutFile $des
   Unblock-File $des
 }
@@ -43,7 +40,7 @@ Function _mkdir($dir_path){
 }
 
 Function _ln($src,$target){
-  New-Item -Path $target -ItemType SymbolicLink -Value $src
+  New-Item -Path $target -ItemType SymbolicLink -Value $src -ErrorAction "SilentlyContinue"
 }
 
 Function _echo_line(){
@@ -283,6 +280,15 @@ _downloader `
   zeal-${ZEAL_VERSION}-windows-x64.msi `
   Zeal
 
+#
+# vim
+#
+
+_downloader `
+  https://github.com/vim/vim-win32-installer/releases/download/v8.1.0005/gvim_8.1.0005_x86.exe `
+  gvim_8.1.0005_x86.exe `
+  gvim_8.1.0005_x86.exe
+
 ################################################################################
 
 _installer nginx-${NGINX_VERSION}.zip                 C:\     C:\nginx-${NGINX_VERSION}         C:\nginx
@@ -405,7 +411,11 @@ php -m
 
 ################################################################################
 
-httpd.exe -k install
+get-service Apache2.4 | out-null
+
+if ($?){
+    httpd.exe -k install
+}
 
 $a=Select-String 'include conf.d/' C:\Apache24\conf\httpd.conf
 
@@ -427,14 +437,22 @@ if(!(Test-Path C:\mysql\data)){
   mysqld --install
 }
 
-_echo_line
-Write-Host "####################################################################"
-Write-Host
-Write-Host "Mysql temporary password is"
-_echo_line
-select-string "A temporary password is generated for" C:\mysql\data\*.err
+$mysql_password=$(select-string "A temporary password is generated for" C:\mysql\data\*.err)
 
-Write-Host "
+$mysql_password=$($mysql_password -split " ")[12]
+
+Write-Warning "
+
+Mysql temporary password is
+
+$mysql_password
+
+"
+
+Write-host "
+
+Please exec command start mysql
+
 $ net start mysql
 
 $ mysql -uroot -p TEMP_PASSWORD
@@ -444,10 +462,7 @@ $ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest
 $ FLUSH PRIVILEGES;
 
 $ GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
-
 "
-_echo_line
-Write-Host "####################################################################"
 
 ################################################################################
 
@@ -459,9 +474,9 @@ _ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
 
 _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 
-echo ' ' >> $home\lnmp\windows\logs\nginx\access.log
+echo ' ' >> $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
 
-echo ' ' >> $home\lnmp\windows\logs\nginx\error.log
+echo ' ' >> $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
 
 ################################################################################
 
