@@ -513,7 +513,9 @@ demo() {
     # 检查网络连接
     network
     echo ;print_info "Update Git Submodule\n"
+    set +e
     git submodule update --init --recursive
+    set -e
   fi
 }
 
@@ -596,7 +598,9 @@ update(){
   if [ "${BRANCH}" = 'dev' ] || [ "${BRANCH}" = 'master' ];then
     git reset --hard origin/${BRANCH}
     echo ;print_info "Update Git Submodule\n"
+    set +e
     git submodule update --init --recursive
+    set -e
   else
     print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
   fi
@@ -626,7 +630,9 @@ reset-master(){
     git fetch origin
     git reset --hard origin/master
     echo ;print_info "Update Git Submodule\n"
+    set +e
     git submodule update --init --recursive
+    set -e
   elif [ ${BRANCH} = 'master' ];then
     print_error "${BRANCH} branch，Please exec ./lnmp-docker.sh update [-f]"
   else
