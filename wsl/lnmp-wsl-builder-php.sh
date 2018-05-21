@@ -205,7 +205,7 @@ _buildlib
 _install_php_run_dep(){
 
     test $host != 'x86_64-linux-gnu' && _build_arm_php_build_dep ; return 0
-
+    set +e
     export PHP_RUN_DEP="libedit2 \
 zlib1g \
 libxml2 \
@@ -217,8 +217,8 @@ libmemcached11 \
 libsasl2-2 \
 libfreetype6 \
 libpng16-16 \
-$( sudo apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
-$( sudo apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
+$( sudo apt show libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
+$( sudo apt show libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
 $( if [ $PHP_NUM = "72" ];then \
 echo $( if ! [ "${ARGON2}" = 'false' ];then \
 echo "libargon2-0";
@@ -226,8 +226,8 @@ echo "libargon2-0";
 echo "libsodium18 libzip4"; \
    fi ) \
 libyaml-0-2 \
-$( sudo apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
-$( sudo apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+$( sudo apt show libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+$( sudo apt show libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -235,18 +235,18 @@ libgmp10 \
 libc-client2007e \
 libkrb5-3 \
 libxpm4 \
-$( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
-$( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
+$( sudo apt show libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
+$( sudo apt show libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
 libldap-2.4-2"
-
+    set -e
     sudo apt install -y $PHP_RUN_DEP > /dev/null
 }
 
 ################################################################################
 
 _install_php_build_dep(){
-
+    set +e
     export DEP_SOFTS="autoconf \
                    curl \
                    lsb-release \
@@ -271,8 +271,8 @@ _install_php_build_dep(){
                    libsasl2-dev \
                    libfreetype6-dev \
                    libpng-dev \
-                   $( sudo apt install -y libjpeg62-turbo-dev > /dev/null 2>&1 && echo libjpeg62-turbo-dev ) \
-                   $( sudo apt install -y libjpeg-turbo8-dev > /dev/null 2>&1 && echo libjpeg-turbo8-dev ) \
+                   $( sudo apt show libjpeg62-turbo-dev > /dev/null 2>&1 && echo libjpeg62-turbo-dev ) \
+                   $( sudo apt show libjpeg-turbo8-dev > /dev/null 2>&1 && echo libjpeg-turbo8-dev ) \
                    \
                    $( test $PHP_NUM = "56" && echo "" ) \
                    $( test $PHP_NUM = "70" && echo "" ) \
@@ -299,7 +299,7 @@ _install_php_build_dep(){
                    libldap2-dev \
                    libpspell-dev \
                    "
-
+    set -e
     for soft in ${DEP_SOFTS} ; do echo $soft | tee -a ${PHP_INSTALL_LOG} ; done
 
     sudo apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
@@ -577,7 +577,7 @@ _php_ext_enable(){
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
 echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
-
+set +e
 exts=" pdo_pgsql \
                       xsl \
                       pcntl \
@@ -604,7 +604,7 @@ exts=" pdo_pgsql \
                       $( test $PHP_NUM != '56' && echo 'swoole' ) \
                       yaml \
                       opcache"
-
+set -e
 for ext in $exts
 do
   wsl-php-ext-enable.sh $ext || echo "$ext install error"
@@ -849,7 +849,7 @@ test $host = 'arm-linux-gnueabihf' && \
 if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
   echo "debian9 notsupport php56" ; exit 1 ; fi
 
-sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
+sudo apt show libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 _install_php_run_dep
 
