@@ -40,9 +40,9 @@ complete -W "acme.sh \
         clusterkit-redis-sentinel-remove \
         daemon-socket \
         dashboard \
-        development \
-        development-config \
-        development-pull \
+        up \
+        config \
+        pull \
         debug \
         down \
         docs \

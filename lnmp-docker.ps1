@@ -115,9 +115,9 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   debug                Generate Debug information, then copy it to GitHub Issues
-  development          Use LNMP in Development(Support x86_64 arm32v7 arm64v8)
-  development-config   Validate and view the Development Compose file
-  development-pull     Pull LNMP Docker Images in development
+  up                   Up LNMP (Support x86_64 arm32v7 arm64v8)
+  config               Validate and view the LNMP Compose file
+  pull                 Pull LNMP Docker Images
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
   help                 Display this help message
@@ -311,12 +311,12 @@ switch($first){
       docker-compose config
     }
 
-    development {
+    up {
       init
       docker-compose up -d ${DEVELOPMENT_INCLUDE}
     }
 
-    development-pull {
+    pull {
       docker-compose pull ${DEVELOPMENT_INCLUDE}
     }
 

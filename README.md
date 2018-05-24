@@ -105,7 +105,7 @@ Pick one method install LNMP Docker.
 ```bash
 $ cd lnmp
 
-$ ./lnmp-docker.sh development
+$ ./lnmp-docker.sh up
 
 $ curl 127.0.0.1
 

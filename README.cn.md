@@ -107,7 +107,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 ```bash
 $ cd lnmp
 
-$ ./lnmp-docker.sh development
+$ ./lnmp-docker.sh up
 
 $ curl 127.0.0.1
 

@@ -71,9 +71,9 @@ Commands:
   cleanup              Cleanup log files
   compose              Install docker-compose
   completion           Move fish shell completion code (Only Support fish)
-  development          Use LNMP in Development
-  development-config   Validate and view the Development Compose file
-  development-pull     Pull LNMP Docker Images in development
+  up                   Up LNMP
+  config               Validate and view the LNMP Compose file
+  pull                 Pull LNMP Docker Images
   debug                Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   daemon-tls           Display how to enable Docker TLS Daemon
@@ -1011,7 +1011,7 @@ main() {
     run_docker; backup "$@"
     ;;
 
-  development-config )
+  config )
     exec docker-compose config
     ;;
 
@@ -1161,7 +1161,7 @@ For information please run $ docker service update --help
 
     ;;
 
-  development )
+  up )
     run_docker
     init
     # 判断架构
@@ -1269,7 +1269,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     run_docker; gitbook
     ;;
 
-  development-pull )
+  pull )
     run_docker; init
     case "${ARCH}" in
         x86_64 )

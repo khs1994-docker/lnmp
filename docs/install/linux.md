@@ -29,7 +29,7 @@ $ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 ```bash
 $ cd lnmp
 
-$ ./lnmp-docker.sh development
+$ ./lnmp-docker.sh up
 ```
 
 浏览器打开 `127.0.0.1`，看到页面。
