@@ -707,7 +707,7 @@ server {
   root          /app/$2;
   index         index.html index.htm index.php;
 
-  # include demo-include-php.config
+  # include conf.d/demo-include-php.config
 
   location / {
     try_files \$uri \$uri/ /index.php?\$query_string;
@@ -798,7 +798,7 @@ server{
   root                       /app/$2;
   index                      index.html index.htm index.php;
 
-  # include demo-include-ssl.config
+  # include conf.d/demo-include-ssl.config
 
   ssl_certificate            conf.d/ssl/$1.crt;
   ssl_certificate_key        conf.d/ssl/$1.key;
@@ -812,7 +812,7 @@ server{
   ssl_stapling               on;
   ssl_stapling_verify        on;
 
-  # include demo-include-php.config
+  # include conf.d/demo-include-php.config
 
   location / {
     try_files \$uri \$uri/ /index.php?\$query_string;
@@ -1560,7 +1560,42 @@ First Run? Maybe you wait 60s then open url.
     ;;
 
     khsci-up )
+    # 判断 app/khsci 是否存在
 
+    if ! [ -d app/khsci ];then
+      git clone --depth=1 https://github.com/khs1994-php/khsci app/khsci
+    fi
+
+    if ! [ -f app/khsci/public/.env.produnction ];then
+      cp app/khsci/public/.env.example app/khsci/public/.env.production
+    }
+
+    if ! [ -f app/khsci/public/.env.development ];then
+      cp app/khsci/public/.env.example app/khsci/public/.env.development
+    fi
+
+    # 判断 nginx 配置文件是否存在
+
+    if ! [ -f khsci/conf/khsci.conf ];then
+      cp khsci/conf/khsci.config khsci/conf/khsci.conf
+    fi
+
+    cat khsci/conf/khsci.conf | grep demo.ci.khs1994.com || print_error "CI conf error, please see khsci/README.md"
+
+    if [ -f Test-Path khsci/ssl/ci.crt ];then
+      print_error "CI Website SSL key not found, please see khsci/README.md"
+      exit 1
+    fi
+
+    cp khsci/ssl/ci.crt config/nginx/ssl/ci.crt
+
+    cp khsci/conf/khsci.conf config/nginx/khsci.conf
+
+    # 启动
+
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml `
+        -f docker-khsci.include.yml up -d `
+        ${DEVELOPMENT_INCLUDE} khsci
     ;;
 
   * )
