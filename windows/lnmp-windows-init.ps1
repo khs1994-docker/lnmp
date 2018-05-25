@@ -14,7 +14,7 @@ Function _wget($src,$des){
   get-command wsl -ErrorAction "SilentlyContinue"
 
   if ($?){
-    wsl curl $src -o $des
+    wsl curl -L $src -o $des
 
     return
   }
@@ -207,6 +207,11 @@ Function _pecl($zip,$file){
   }
 }
 
+
+Function backup_php_ini(){
+  cp -Force C:\php\php.ini C:\php-ext\php.ini
+}
+
 _pecl php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip php_igbinary.dll
 
 _pecl php_mongodb-1.4.2-7.2-nts-vc15-x64.zip php_mongodb.dll
@@ -216,6 +221,8 @@ _pecl php_redis-4.0.0-7.2-nts-vc15-x64.zip php_redis.dll
 _pecl php_xdebug-2.7.0alpha1-7.2-nts-vc15-x64.zip php_xdebug.dll
 
 _pecl php_yaml-2.0.2-7.2-nts-vc15-x64.zip php_yaml.dll
+
+backup_php_ini
 
 #
 # MySQL
@@ -413,7 +420,7 @@ php -m
 
 get-service Apache2.4 | out-null
 
-if ($?){
+if (!($?)){
     httpd.exe -k install
 }
 

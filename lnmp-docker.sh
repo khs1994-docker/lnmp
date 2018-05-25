@@ -1587,9 +1587,9 @@ First Run? Maybe you wait 60s then open url.
       exit 1
     fi
 
-    cp khsci/ssl/ci.crt config/nginx/ssl/ci.crt
+    cp khsci/ssl/ci.crt config/${NGINX_CONF_D:-nginx}/ssl/ci.crt
 
-    cp khsci/conf/khsci.conf config/nginx/khsci.conf
+    cp khsci/conf/khsci.conf config/${NGINX_CONF_D:-nginx}/khsci.conf
 
     # 启动
 
