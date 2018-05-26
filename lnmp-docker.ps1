@@ -284,7 +284,7 @@ switch($first){
     }
 
     httpd-config {
-      bash lnmp-docker.sh httpd-config $other
+      wsl -d $DistributionName lnmp-docker.sh httpd-config $other
     }
 
     backup {
@@ -330,15 +330,15 @@ switch($first){
     }
 
     dashboard {
-      bash lnmp-docker.sh dashboard
+      wsl -d $DistributionName lnmp-docker.sh dashboard
     }
 
     new {
-      bash lnmp-docker.sh new $other
+      wsl -d $DistributionName lnmp-docker.sh new $other
     }
 
     nginx-config {
-      bash lnmp-docker.sh nginx-config $other
+      wsl -d $DistributionName lnmp-docker.sh nginx-config $other
     }
 
     swarm-config {

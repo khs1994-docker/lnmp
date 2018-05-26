@@ -1539,7 +1539,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.
     echo -e "
 $ cd kubernetes
 
-$ kubectl apply -f kubernetes-dashboard.yaml
+$ kubectl apply -f deployment/kubernetes-dashboard.yaml
 
 $ kubectl proxy
 
