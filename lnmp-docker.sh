@@ -1568,7 +1568,7 @@ First Run? Maybe you wait 60s then open url.
 
     if ! [ -f app/khsci/public/.env.produnction ];then
       cp app/khsci/public/.env.example app/khsci/public/.env.production
-    }
+    fi
 
     if ! [ -f app/khsci/public/.env.development ];then
       cp app/khsci/public/.env.example app/khsci/public/.env.development
