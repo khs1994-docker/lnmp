@@ -104,8 +104,8 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp.sh COMMAND
 
-KhsCI:
-  khsci-up             Up(Run) KhsCI https://github.com/khs1994-php/khsci
+KhsCI EE:
+  khsci-up             Up(Run) KhsCI EE https://github.com/khs1994-php/khsci
 
 Commands:
   backup               Backup MySQL databases
