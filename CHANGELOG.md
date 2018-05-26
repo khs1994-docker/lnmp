@@ -14,6 +14,7 @@ Changes:
 Updates:
 
 * Update Memcached 1.5.7
+* Update PHP 7.2.6 7.1.18
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 

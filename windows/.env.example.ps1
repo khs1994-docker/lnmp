@@ -2,7 +2,7 @@
 # You can overwrite this file in .env.ps1
 #
 
-$global:LNMP_PHP_IMAGE="khs1994/php-fpm:7.2.5-alpine3.7"
+$global:LNMP_PHP_IMAGE="khs1994/php-fpm:7.2.6-alpine3.7"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 
@@ -21,7 +21,7 @@ $global:PHP_VERSION="7.2.6"
 $global:MYSQL_VERSION="8.0.11"
 $global:HTTPD_VERSION="2.4.33"
 $global:IDEA_VERSION="1.8.3678"
-$global:NODE_VEERSION="10.2.0"
+$global:NODE_VEERSION="10.2.1"
 $global:GIT_VERSION="2.17.0"
 $global:PYTHON_VERSION="3.6.5"
 $global:GOLANG_VERSION="1.10.2"

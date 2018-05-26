@@ -124,6 +124,9 @@ Commands:
   init                 Init LNMP environment
   restore              Restore MySQL databases
   restart              Restart LNMP services
+  update               Upgrades LNMP
+  upgrade              Upgrades LNMP
+  update-version       Update LNMP soft to latest vesion
 
 PHP Tools:
   httpd-config         Generate Apache2 vhost conf
@@ -146,11 +149,8 @@ Container CLI:
 LogKit:
   SERVICE-logs         Print LNMP containers logs (journald)
 
-clusterkit-help        Print ClusterKit help info
-
-Developer Tools:
-  update               Upgrades LNMP
-  upgrade              Upgrades LNMP
+ClusterKit:
+  clusterkit-help      Print ClusterKit help info
 
 ToolKit:
   toolkit-docs         Up local docs Server
@@ -530,6 +530,10 @@ switch($first){
 
     clusterkit-help {
       clusterkit_help
+    }
+
+    update-version {
+      wsl -d $DistributionName lnmp-docker.sh update-version
     }
 
     debug {
