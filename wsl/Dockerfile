@@ -2,7 +2,7 @@ FROM debian:stretch-slim@sha256:47deb9c70213403e923bd46a17591933facb263a1455908f
 
 ################################################################################
 
-ARG PHP_VERSION=7.2.5
+ARG PHP_VERSION=7.2.6
 
 ARG PHP_NUM=72
 
