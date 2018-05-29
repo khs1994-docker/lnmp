@@ -86,6 +86,7 @@ Commands:
   restart              Restart LNMP services
   registry             Start Docker Registry
   registry-down        Stop Docker Registry
+  satis                Build Satis
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
   update-version       Update LNMP soft to latest vesion
@@ -224,6 +225,15 @@ this command up a Local Server on port 443.
 When Docker for Desktop Start Kubernetes Success, you must remove this local server.
 
     "
+}
+
+_satis(){
+  if ! [ -d app/satis ];then
+    cp -r app/satis-demo app/satis
+    print_warning "Please modify app/satis/satis.json\n"
+  fi
+
+  docker run --rm -it -v $PWD/app/satis:/build -v lnmp_composer_cache-data:/composer composer/satis
 }
 
 _local_docs_server(){
@@ -1135,6 +1145,11 @@ $ docker service update --image nginx:1.13.10 lnmp_nginx
 
 For information please run $ docker service update --help
 "
+  ;;
+
+  satis )
+    _satis
+
   ;;
 
   build )

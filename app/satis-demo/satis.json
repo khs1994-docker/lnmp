@@ -1,0 +1,23 @@
+{
+  "name": "My Composer",
+  "homepage": "http://packagist.example.com",
+  "repositories": [{
+      "type": "vcs",
+      "url": "https://github.com/khs1994-docker/libdocker"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/khs1994-docker/libregistry"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/khs1994-php/tencent-ai"
+    }
+  ],
+  "require-all": true,
+  "archive": {
+    "directory": "dist",
+    "format": "tar",
+    "skip-dev": false
+  }
+}

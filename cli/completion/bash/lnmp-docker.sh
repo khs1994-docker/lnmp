@@ -55,6 +55,7 @@ complete -W "acme.sh \
         restart \
         registry \
         registry-down \
+        satis \
         ssl \
         ssl-self \
         swarm-build \
