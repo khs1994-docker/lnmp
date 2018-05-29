@@ -2,7 +2,7 @@ workspace:
   base: /data/lnmp
 
 pipeline:
-  test:
+  test_cli:
     image: khs1994/php-fpm:7.2.6-alpine3.7
-    command:
+    commands:
       - ./lnmp-docker.sh
