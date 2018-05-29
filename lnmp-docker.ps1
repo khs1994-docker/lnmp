@@ -124,6 +124,7 @@ Commands:
   init                 Init LNMP environment
   restore              Restore MySQL databases
   restart              Restart LNMP services
+  satis                Build Satis
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
   update-version       Update LNMP soft to latest vesion
@@ -267,6 +268,15 @@ Function clusterkit_bash_cli($env, $service, $command){
         $command
 }
 
+Function satis(){
+  if(!(Test-Path app/satis)){
+    cp -Recurse app/satis-demo app/satis
+    Write-Warning "Please modify app/satis/satis.json"
+  }
+
+  docker run --rm -it -v $PWD/app/satis:/build -v lnmp_composer_cache-data:/composer composer/satis
+}
+
 # main
 
 env_status
@@ -370,6 +380,10 @@ switch($first){
       docker run --init -it --rm -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
       printInfo `
 'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
+    }
+
+    satis {
+      satis
     }
 
     httpd-cli {
