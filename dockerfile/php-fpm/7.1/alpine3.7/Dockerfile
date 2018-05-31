@@ -37,7 +37,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          " \
       # *-dev 编译之后删除
       && KHS1994_PHP_FPM_BUILD_DEPS=" \
-                         openssl-dev \
+                         libressl-dev \
                          libmemcached-dev \
                          cyrus-sasl-dev \
                          postgresql-dev \

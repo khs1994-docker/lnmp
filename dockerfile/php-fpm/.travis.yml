@@ -30,4 +30,4 @@ env:
   matrix:
   - PHP_VERSION=7_1_X
   global:
-  - DOCKER_COMPOSE_VERSION=1.19.0
+  - DOCKER_COMPOSE_VERSION=1.21.2

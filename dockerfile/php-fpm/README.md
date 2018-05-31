@@ -12,6 +12,10 @@
 
 * [`7.2.5-alpine3.7` (7.2/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.2.5/7.2/alpine3.7/Dockerfile)
 
+* [`7.1.18-alpine` (7.1/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.1.18/7.1/alpine3.7/Dockerfile)
+
+* [`7.1.17-alpine3.7` (7.1/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.1.17/7.1/alpine3.7/Dockerfile)
+
 ## Overview
 
 基于官方 [PHP-FPM](https://github.com/docker-library/docs/tree/master/php) 修改的 Docker 镜像，添加了一些常用 [PHP 扩展](https://github.com/khs1994-docker/lnmp/blob/master/docs/php.md)、Composer 和 Laravel 安装程序。
