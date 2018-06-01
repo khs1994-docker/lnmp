@@ -5,5 +5,5 @@
 !docker-xdebug.ini
 !php.development.ini
 !php.production.ini
-!zz-docker.conf
+!zz-docker*.conf
 !zz-docker.production.conf

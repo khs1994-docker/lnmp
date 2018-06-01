@@ -1,7 +1,7 @@
 version: '3.6'
 
 #
-# Redis cluster by Ruby
+# Redis cluster (by Ruby 5.0 under, 5.0 + please see $ redis-cli --cluster help)
 #
 # 6 node 3 master 3 slave
 #
