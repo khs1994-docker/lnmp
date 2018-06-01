@@ -1,4 +1,8 @@
-# Redis 集群版(By Ruby)
+# Redis 集群版 (redis-cli --cluster)
+
+5.0 move `ruby` to `redis-cli --cluster`
+
+More information please exec `$ redis-cli --cluster help`
 
 销毁之后，不能恢复。
 
@@ -48,3 +52,9 @@ $ ./lnmp-docker.sh clusterkit-redis-remove
 ```
 
 ## PHP 连接集群
+
+* https://github.com/phpredis/phpredis/blob/develop/cluster.markdown
+
+```php
+$obj_cluster = new RedisCluster(NULL, Array('host:7000', 'host:7001', 'host:7003'));
+```

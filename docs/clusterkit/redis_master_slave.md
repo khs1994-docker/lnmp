@@ -31,5 +31,3 @@ $ ./lnmp-docker.sh clusterkit-redis-master-slave-remove
 ```
 
 ## PHP 连接集群
-
-PHP 使用 Redis 集群示例代码请查看 [PHPRedis](https://github.com/khs1994-docker/lnmp/blob/master/app/demo/clusterkit-redis.php)

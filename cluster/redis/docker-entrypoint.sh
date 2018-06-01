@@ -21,7 +21,7 @@ until nc -z -w 1 ${REDIS_HOST}:7001 \
   sleep 0.5
 done
 
-exec echo yes | redis-trib.rb create --replicas 1 \
+exec echo yes | redis-cli --cluster create --cluster-replicas 1 \
       ${REDIS_HOST}:7001 \
       ${REDIS_HOST}:7002 \
       ${REDIS_HOST}:7003 \
