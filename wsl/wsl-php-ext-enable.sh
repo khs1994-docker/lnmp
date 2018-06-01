@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 set -e
 
 cd "$( ${PHP_PREFIX:-/usr/local}/bin/php -r 'echo ini_get("extension_dir");' )"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # git remote add origin git@github.com:khs1994-docker/lnmp.git
 # git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git
@@ -620,7 +620,7 @@ commit(){
   fi
 }
 
-reset-master(){
+reset_master(){
   set_git_remote_origin_url
   print_info "Branch is ${BRANCH}\n"
   print_info "Reset master branch in dev branch\n"
@@ -1069,7 +1069,7 @@ main() {
   ;;
 
   reset-master )
-    reset-master
+    reset_master
     ;;
 
   registry-up )

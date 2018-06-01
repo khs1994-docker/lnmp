@@ -328,7 +328,7 @@ services:
     working_dir: /app/khsci/bin
     command:
       - /bin/sh
-      - khscid.sh
+      - khscid
       - up
     environment:
       - APP_ENV=production

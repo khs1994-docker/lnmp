@@ -5,4 +5,5 @@ pipeline:
   test_cli:
     image: khs1994/php-fpm:7.2.6-alpine3.7
     commands:
-      - ./lnmp-docker.sh
+      - pwd
+      - bash lnmp-docker.sh
