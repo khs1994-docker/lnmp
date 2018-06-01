@@ -53,7 +53,7 @@ complete -W "acme.sh \
         new \
         restore \
         restart \
-        registry \
+        registry-up \
         registry-down \
         satis \
         ssl \

@@ -84,7 +84,7 @@ Commands:
   init                 Init LNMP environment
   restore              Restore MySQL databases
   restart              Restart LNMP services
-  registry             Start Docker Registry
+  registry-up          Up Docker Registry
   registry-down        Stop Docker Registry
   satis                Build Satis
   update               Upgrades LNMP
@@ -1072,7 +1072,7 @@ main() {
     reset-master
     ;;
 
-  registry )
+  registry-up )
     _registry
     ;;
 

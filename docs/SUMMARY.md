@@ -22,17 +22,15 @@
     * [laravel](laravel.md)
     * [Composer](composer.md)
     * [PHPUnit](phpunit.md)
-* 生产环境(重要)
-    * Swarm mode
-        * [配置](production/README.md)
-        * [Swarm mode 三节点集群](production/swarm.md)
-    * Kubernetes
-        * [k8s](production/k8s.md)
+* [生产环境(重要)](production.md)
+    * [Swarm mode](swarm/README.md)
+    * [Kubernetes](kubernetes/README.md)
+        * [k8s on Docker for Desktop](kubernetes/docker-desktop.md)
     * [Docker Registry](registry.md)
 * [ClusterKit](clusterkit/README.md)
     * [MySQL 一主两从](clusterkit/mysql.md)
     * [Memcached 集群](clusterkit/memcached.md)
-    * [Redis Cluster By Ruby](clusterkit/redis_cluster.md)
+    * [Redis Cluster ](clusterkit/redis_cluster.md)
     * [Redis Master slave](clusterkit/redis_master_slave.md)
     * [Redis Sentinel](clusterkit/redis_sentinel.md)
 * 树莓派3
