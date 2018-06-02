@@ -12,7 +12,7 @@ if len(sys.argv) == 3:
     input_version = sys.argv[1]
     input_sudo = sys.argv[2]
 else:
-    wsl.print_help_info('lnmp-wsl-builder-nginx.py', 'NGINX', '1.13.11')
+    wsl.print_help_info('lnmp-wsl-builder-nginx.py', 'NGINX', '1.13.12')
     exit(0)
 
 sudo_cmd = 'echo ' + input_sudo + ' | sudo -S '
@@ -58,7 +58,7 @@ def nginx_conf_d():
 
 url = 'http://nginx.org/download/nginx-' + input_version + '.tar.gz'
 
-wsl.download_src(url, 'nginx-1.13.11.tar.gz', 'nginx-1.13.11')
+wsl.download_src(url, 'nginx-' + input_version + '.tar.gz', 'nginx-' + input_version)
 
 os.system(sudo_cmd + 'apt update')
 
@@ -122,7 +122,7 @@ configure_cmd = '''./configure --prefix={nginx_prefix} \
 
 bin_cmd = 'echo "do nothing"'
 
-wsl.builder('nginx-1.13.11', configure_cmd, sudo_cmd, bin_cmd)
+wsl.builder('nginx-' + input_version, configure_cmd, sudo_cmd, bin_cmd)
 
 nginx_conf()
 nginx_conf_d()

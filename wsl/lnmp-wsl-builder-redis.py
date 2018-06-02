@@ -31,7 +31,7 @@ redis_prefix='/usr/local/redis'
 
 url = 'https://github.com/antirez/redis/archive/' + input_version + '.tar.gz'
 
-wsl.download_src(url, '5.0-rc1.tar.gz', 'redis-5.0-rc1')
+wsl.download_src(url, input_version + '.tar.gz', 'redis-' + input_version)
 
 os.system(sudo_cmd + 'apt update')
 
@@ -46,6 +46,6 @@ bin_cmd = 'echo "do nothing"'
 
 configure_cmd = 'echo "do nothing"'
 
-wsl.builder('redis-5.0-rc1', configure_cmd, sudo_cmd, bin_cmd)
+wsl.builder('redis-' + input_version, configure_cmd, sudo_cmd, bin_cmd)
 
 test('redis-server -v')
