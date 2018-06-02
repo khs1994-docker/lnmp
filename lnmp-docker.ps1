@@ -554,7 +554,7 @@ switch($first){
       $os_info=$($psversiontable.os)
       $docker_version=$(docker --version)
       $compose_version=$(docker-compose --version)
-      echo "
+      Write-Output "
 <details>
 
 <summary>OS Environment Info</summary>
@@ -572,7 +572,7 @@ switch($first){
 <summary>Console output</summary>
 
 <!--Don't Edit it-->
-<!--不要手动编辑以上内容,将终端输出内容贴到下面-->
+<!--Do not manually edit the above, pleae paste the terminal output to the following-->
 
 <pre>
 
@@ -584,14 +584,14 @@ switch($first){
 
 ## My Issue is
 
-<!--在这里描述你的问题-->
+<!--Describe your problem here-->
 
 XXX
 
 XXX
 
-<!--提交问题之前务必点击预览（Preview）标签-->
-" > debug.md
+<!--Be sure to click < Preview > Tab before submitting questions-->
+" | Out-File debug.md -encoding utf8
     }
 
     khsci-up {
