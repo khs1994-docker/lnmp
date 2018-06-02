@@ -69,7 +69,7 @@ cmd = sudo_cmd + '''apt install -y libpcre3 \
 
 wsl.install_dep(cmd)
 
-cmd = sudo_cmd + '''apt install gcc \
+cmd = sudo_cmd + '''apt install -y gcc \
                                 g++ \
                                 libc6-dev \
                                 zlib1g-dev \

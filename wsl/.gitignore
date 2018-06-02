@@ -14,6 +14,7 @@
 !lnmp-wsl-builder-php-rhel.sh
 !lnmp-wsl-builder-nginx.py
 !lnmp-wsl-builder-httpd.py
+!lnmp-wsl-builder-redis.py
 !Dockerfile
 !wsl.phpbuilder.Dockerfile
 !wsl.phpbuilder.rhel.Dockerfile

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 #   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
