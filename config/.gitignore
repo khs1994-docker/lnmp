@@ -9,6 +9,7 @@
 !php
 !redis
 !registry
+!gogs
 !default.sh
 !docker-compose.yml
 !path.md

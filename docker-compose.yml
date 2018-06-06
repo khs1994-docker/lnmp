@@ -142,6 +142,20 @@ services:
       - "${MONGODB_PORT:-127.0.0.1:27017}:27017"
     command: ["mongod","--config","/etc/mongod.conf"]
 
+  gogs:
+    << : *default-common
+    image: gogs/gogs:latest@sha256:e63c53931539b1869ac36e1262fe6564274abeb8e577ca9962187368f242022c
+    ports:
+      - "${LNMP_GOGS_SSH_PORT:-8022}:8022"
+      # - "${LNMP_GOGS_HTTP_PORT:-3000}:3000"
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - gogs-data:/data:rw
+      - ./${LNMP_GOGS_SSL_PATH:-config/nginx/demo-ssl}:/etc/nginx/conf.d/ssl:rw
+      - ./config/gogs/app.ini:/data/gogs/conf/app.ini:rw
+      - ./logs/gogs:/app/gogs/log:rw
 
   php7:
     << : *default-common
