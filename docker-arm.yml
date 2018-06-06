@@ -192,7 +192,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
-    image: "${ARM_ARCH:-arm64v8}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13}"
+    image: "${ARM_ARCH:-arm64v8}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.15}"
     networks:
       - frontend
     ports:

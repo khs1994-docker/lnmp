@@ -42,7 +42,7 @@ services:
 
   php7:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php-fpm:${KHS1994_LNMP_PHP_VERSION:-7.2.5}-alpine3.7
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php-fpm:${KHS1994_LNMP_PHP_VERSION:-7.2.6}-alpine3.7
 
   phpmyadmin:
     << : *default-common
@@ -50,7 +50,7 @@ services:
 
   nginx:
     << : *default-common
-    image: nginx:${KHS1994_LNMP_NGINX_VERSION:-1.13.11}-alpine
+    image: nginx:${KHS1994_LNMP_NGINX_VERSION:-1.15.0}-alpine
 
   httpd:
     << : *default-common
