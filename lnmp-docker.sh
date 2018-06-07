@@ -854,7 +854,7 @@ $ ./lnmp-docker.sh ssl khs1994.com [--rsa] [--httpd] [--debug] [acme other param
 
 通配符证书
 
-$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d t.khs1994.com -d *.t.khs1994.com
+$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d *.t.khs1994.com
 
 RSA 证书（默认 ECC 证书）
 
@@ -1328,7 +1328,7 @@ Example:
 
 $ ./lnmp-docker.sh ssl-self khs1994.com 127.0.0.1 192.168.199.100 localhost ...
 
-$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com t.khs1994.com *.t.khs1994.com 127.0.0.1 ...
+$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 "
     exit 1
     fi
