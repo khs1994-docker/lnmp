@@ -22,6 +22,7 @@ services:
 
   redis:
     << : *default-common
+    # build: ./dir
     build: # no Swarm mode
       << : *default-labels
       context: ./dockerfile/redis
@@ -30,6 +31,8 @@ services:
       dockerfile: Dockerfile
       args:
         VAR: 1
+      args:
+        - a=1
       shm_size: '2gb' # 3.5
       #
       # Dockerfile target
@@ -55,7 +58,7 @@ services:
       - my_other_config # /run/configs/my_other_config
     cgroup_parent: m-executor-abcd # no Swarm mode
     # container_name: my-web-container # no Swarm mode
-    credential_spec: # no compose
+    credential_spec: # no compose v3.3
       file: my-credential-spec.json
     deploy: # no compose
       mode: global
@@ -72,9 +75,9 @@ services:
         preferences:
           - spread: node.labels.zone
 
-      endpoint_mode: vip # this is default
+      endpoint_mode: vip # this is default v3.3
 
-      endpoint_mode: dnsrr
+      # endpoint_mode: dnsrr
 
       update_config:
         parallelism: 2
