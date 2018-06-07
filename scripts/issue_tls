@@ -1,0 +1,5 @@
+#!/bin/bash
+
+lnmp-docker.sh ssl khs1994.com -d *.khs1994.com \
+                   -d developer.khs1994.com -d *.developer.khs1994.com \
+                   -d home.khs1994.com -d *.home.khs1994.com
