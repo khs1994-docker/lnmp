@@ -320,7 +320,6 @@ services:
     image: khs1994/php-fpm:7.2.6-alpine3.7
     volumes:
       - ./app/khsci:/app/khsci
-      - ./config/php/php.development.ini:/usr/local/etc/php/php.ini:ro
       - khsci-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
     networks:
@@ -349,6 +348,11 @@ services:
     depends_on:
       - mysql
       - redis
+    configs:
+      - source: php_development_ini
+        target: /usr/local/etc/php/php.ini
+      - source: php_ini_error_log
+        target: /usr/local/etc/php/conf.d/docker-php-error-log.ini
 
   php7:
     << : *default-common
@@ -782,6 +786,14 @@ configs:
 
   php_ini:
     file: ./config/php/php.production.ini
+    << : *default-labels
+
+  php_development_ini:
+    file: ./config/php/php.development.ini
+    << : *default-labels
+
+  php_ini_error_log:
+    file: ./config/php/docker-error-log.ini
     << : *default-labels
 
   php_fpm_conf_d_zz_docker_conf:
