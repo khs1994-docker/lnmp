@@ -2,7 +2,7 @@ version: 0.1
 log:
   accesslog:
     disabled: true
-  level: debug
+  level: error
   formatter: text
   fields:
     service: registry

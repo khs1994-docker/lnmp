@@ -186,10 +186,28 @@ ClusterKit:
 "
 }
 
+_gcr_io_down(){
+  docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1|| echo
+}
+
 _gcr_io(){
+
+  if [ "$1" = down ];then
+    _gcr_io_down
+    printInfo "Stop k8s.gcr.io local server success"
+    echo
+    exit
+  fi
+
+  if [ "$1" = logs ];then
+    exec docker container logs $(docker container ls -f label=com.khs1994.lnmp.gcr.io -q) -f
+  fi
+
+  _gcr_io_down
+
    # https://github.com/anjia0532/gcr.io_mirror
    echo "
-This local server support Docker Desktop v18.05
+This local server support Docker Desktop v18.05-EDGE-67
 
 "
     docker run -it -d \
@@ -197,23 +215,31 @@ This local server support Docker Desktop v18.05
       -v $PWD/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml \
       -v $PWD/config/registry:/etc/docker/registry/ssl \
       -v gcr_local_server:/var/lib/registry \
-      registry || echo
+      --label com.khs1994.lnmp.gcr.io \
+      registry || quit=1
 
-    images="kube-controller-manager-amd64:v1.9.6 \
-    kube-apiserver-amd64:v1.9.6 \
-    kube-scheduler-amd64:v1.9.6 \
-    kube-proxy-amd64:v1.9.6 \
-    etcd-amd64:3.1.11 \
-    k8s-dns-sidecar-amd64:1.14.7 \
-    k8s-dns-kube-dns-amd64:1.14.7 \
-    k8s-dns-dnsmasq-nanny-amd64:1.14.7 \
-    pause-amd64:3.0"
+      if [ "$quit" = 1 ];then
+        echo
+        print_error "Please stop soft who bind 443 port first"
+        echo
+        exit
+      fi
+
+    images="kube-controller-manager-amd64:v1.10.3 \
+    kube-apiserver-amd64:v1.10.3 \
+    kube-scheduler-amd64:v1.10.3 \
+    kube-proxy-amd64:v1.10.3 \
+    etcd-amd64:3.1.12 \
+    k8s-dns-sidecar-amd64:1.14.8 \
+    k8s-dns-kube-dns-amd64:1.14.8 \
+    k8s-dns-dnsmasq-nanny-amd64:1.14.8 \
+    pause-amd64:3.1"
 
     for image in $images
     do
        docker pull anjia0532/$image
-       docker tag anjia0532/$image gcr.io/google_containers/$image
-       docker push gcr.io/google_containers/$image
+       docker tag anjia0532/$image k8s.gcr.io/$image
+       docker push k8s.gcr.io/$image
        docker rmi anjia0532/$image
     done
 
@@ -223,6 +249,8 @@ Warning
 this command up a Local Server on port 443.
 
 When Docker for Desktop Start Kubernetes Success, you must remove this local server.
+
+$ lnmp-docker.sh gcr.io down
 
     "
 }
@@ -1065,7 +1093,7 @@ main() {
   ;;
 
   gcr.io )
-    _gcr_io
+    _gcr_io "$@"
   ;;
 
   reset-master )

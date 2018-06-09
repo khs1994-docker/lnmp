@@ -660,42 +660,55 @@ XXX
     }
 
     gcr.io {
+
+      if ('logs' -eq $args[1]){
+        docker logs $(docker container ls -f label=com.khs1994.lnmp.gcr.io -q) -f
+        exit
+      }
+
+      docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q)
+
       # https://github.com/anjia0532/gcr.io_mirror
 echo "
-This local server support Docker Desktop v18.05
+This local server support Docker Desktop v18.05-EDGE-67
 
 "
+      if ('down' -eq $args[1]){
+        Write-Warning "Stop k8s.gcr.io local server success"
+        exit
+      }
+
       docker run -it -d `
         -p 443:443 `
         -v $pwd/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml `
         -v $pwd/config/registry:/etc/docker/registry/ssl `
         -v gcr_local_server:/var/lib/registry `
+        --label com.khs1994.lnmp.gcr.io `
         registry
 
-      $images="kube-controller-manager-amd64:v1.9.6", `
-      "kube-apiserver-amd64:v1.9.6", `
-      "kube-scheduler-amd64:v1.9.6", `
-      "kube-proxy-amd64:v1.9.6", `
-      "etcd-amd64:3.1.11", `
-      "k8s-dns-sidecar-amd64:1.14.7", `
-      "k8s-dns-kube-dns-amd64:1.14.7", `
-      "k8s-dns-dnsmasq-nanny-amd64:1.14.7", `
-      "pause-amd64:3.0"
+      $images="kube-controller-manager-amd64:v1.10.3", `
+      "kube-apiserver-amd64:v1.10.3", `
+      "kube-scheduler-amd64:v1.10.3", `
+      "kube-proxy-amd64:v1.10.3", `
+      "etcd-amd64:3.1.12", `
+      "k8s-dns-sidecar-amd64:1.14.8", `
+      "k8s-dns-kube-dns-amd64:1.14.8", `
+      "k8s-dns-dnsmasq-nanny-amd64:1.14.8", `
+      "pause-amd64:3.1"
 
       foreach ($image in $images){
          docker pull anjia0532/$image
-         docker tag anjia0532/$image gcr.io/google_containers/$image
-         docker push gcr.io/google_containers/$image
+         docker tag anjia0532/$image k8s.gcr.io/$image
+         docker push k8s.gcr.io/$image
          docker rmi anjia0532/$image
       }
 
        Write-Warning "
-Warning
-
 this command up a Local Server on port 443.
 
 When Docker Desktop Start Kubernetes Success, you must remove this local server.
 
+$ lnmp-docker.ps1 gcr.io down
       "
     }
 

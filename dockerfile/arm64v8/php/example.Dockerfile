@@ -1,4 +1,4 @@
-FROM php:7.2.5-fpm-alpine3.7
+FROM arm64v8/php:7.2.6-fpm-alpine3.7
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
