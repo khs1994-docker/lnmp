@@ -131,7 +131,10 @@ _download_src(){
 
         if [ $PHP_NUM = 73 ];then
 
-          git clone --depth=1 https://github.com/php/php-src.git /usr/local/src/php-7.3.0
+          git clone --depth=1 https://github.com/php/php-src.git /usr/local/src/php-7.3.0 || \
+            ( git -C /usr/local/src/php-7.3.0 fetch --depth=1 origin master ; \
+              git -C /usr/local/src/php-7.3.0 fetch reset --hard origin/master ;
+            )
 
           return
         fi

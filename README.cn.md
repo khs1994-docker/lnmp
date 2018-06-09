@@ -22,6 +22,8 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 **警告** 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
 
+**警告** Windows Docker 非常不稳定。建议使用 WSL
+
 ## 使用 k8s ?
 
 请查看 https://github.com/khs1994-docker/lnmp-k8s
