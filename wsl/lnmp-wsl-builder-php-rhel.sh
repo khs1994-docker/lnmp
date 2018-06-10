@@ -18,7 +18,7 @@ $ lnmp-wsl-builder-php-rhel.sh 7.2.6
 
 $ lnmp-wsl-builder-php-rhel.sh yum
 
-$ lnmp-wsl-builder-php-rhel.sh 7.2.6 [--skipbuild] [tar] [rpm]
+$ lnmp-wsl-builder-php-rhel.sh 7.2.6 [--skipbuild] [tar] [rpm] [enable-ext]
 
 "
 
@@ -439,6 +439,8 @@ env[APP_ENV] = wsl
 
 " | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
+}
+
 _install_pecl_ext(){
 
     #
@@ -528,18 +530,6 @@ _composer(){
             exit(1); \
         }" \
     && sudo ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
-}
-
-_test
-
-_install_pecl_ext
-
-_php_ext_enable
-
-_create_log_file
-
-_composer
-
 }
 
 ################################################################################
@@ -719,6 +709,11 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
+if [ "$2" = 'enable-ext' ];then
+   _test ; \
+   _install_pecl_ext ; _php_ext_enable ; _create_log_file ; _composer
+fi
+
 _install_php_run_dep
 
 if [ "$1" = yum ];then _install_php_build_dep ; exit $? ; fi
@@ -730,7 +725,8 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test \
+test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test ; \
+  _install_pecl_ext ; _php_ext_enable ; _create_log_file ; _composer ; \
     ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
     ; _write_version_to_file )
 

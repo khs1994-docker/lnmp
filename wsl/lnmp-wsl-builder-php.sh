@@ -22,7 +22,7 @@ $ lnmp-wsl-builder-php.sh apt
 
 $ lnmp-wsl-builder-php.sh 7.3.0
 
-$ lnmp-wsl-builder-php.sh 7.2.6 [--skipbuild] [tar] [deb]
+$ lnmp-wsl-builder-php.sh 7.2.6 [--skipbuild] [tar] [deb] [enable-ext]
 
 $ lnmp-wsl-builder-php.sh 7.2.6 arm64 tar [TODO]
 
@@ -549,6 +549,8 @@ env[APP_ENV] = wsl
 
 " | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
+}
+
 _install_pecl_ext(){
 
     #
@@ -641,18 +643,6 @@ _composer(){
             exit(1); \
         }" \
 && sudo ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
-}
-
-test $host = 'x86_64-linux-gnu'  && _test
-
-_install_pecl_ext
-
-_php_ext_enable
-
-_create_log_file
-
-_composer
-
 }
 
 ################################################################################
@@ -852,6 +842,18 @@ if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
 
 sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
+echo $2
+
+if [ "$2" = 'enable-ext' ];then
+  ( _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
+  _composer ; ( test $host = 'x86_64-linux-gnu'  && \
+  _test \
+  ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+  ) ; _write_version_to_file )
+
+  exit
+fi
+
 _install_php_run_dep
 
 if [ "$1" = 'apt' ];then _install_php_build_dep ; exit $? ; fi
@@ -864,7 +866,8 @@ do
 done
 
 test "${SKIP_BUILD}" != 1 &&  \
-    ( _download_src ; _builder ; ( test $host = 'x86_64-linux-gnu'  && \
+    ( _download_src ; _builder ; _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
+    _composer ; ( test $host = 'x86_64-linux-gnu'  && \
     _test \
     ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
     ) ; _write_version_to_file )
