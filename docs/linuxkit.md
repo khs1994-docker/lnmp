@@ -23,7 +23,9 @@ $ cd ../../config/nginx
 
 $ docker-compose build
 
-$ cd ../../linuxkit
+$ cd ~/lnmp
+
+$ cd toolkit/linuxkit
 
 $ linuxkit build lnmp.yml
 

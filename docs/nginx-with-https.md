@@ -11,18 +11,13 @@ NGINX 主配置文件位于 `./config/etc/nginx/nginx.conf` （一般情况无�
 
 server {
   listen      80;
-
-  # 域名
-
   server_name www.t.khs1994.com;
+
   return 301  https://$host$request_uri;
 }
 
 server{
   listen                     443 ssl http2;
-
-  # 域名
-
   server_name                www.t.khs1994.com;
 
   # 「重要」 此处为容器内路径（注意不是本机路径）！ 本机 ./app/ 对应容器内 /app/
@@ -43,12 +38,10 @@ server{
 
   ssl_session_cache          shared:SSL:1m;
   ssl_session_timeout        5m;
-  ssl_protocols              TLSv1.2; # TLSv1.3;
+  ssl_protocols              TLSv1.2 TLSv1.3;
 
   # TLSv1.3
-  # ssl_ciphers              TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-256-GCM-SHA384:EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
-
-  ssl_ciphers                'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
+  ssl_ciphers                'TLS13+AESGCM+AES128:TLS13+AESGCM+AES256:TLS13+CHACHA20:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
 
   ssl_prefer_server_ciphers  on;
 

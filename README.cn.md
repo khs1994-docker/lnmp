@@ -273,7 +273,7 @@ $ ./lnmp-docker.sh down
 ```bash
 # OS: macOS
 
-$ cd linuxkit
+$ cd toolkit/linuxkit
 
 $ linuxkit build lnmp.yml
 

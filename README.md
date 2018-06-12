@@ -266,7 +266,7 @@ Start `Containers as a Service(CaaS)`. For more information, see [Documents](doc
 ```bash
 # OS: macOS
 
-$ cd linuxkit
+$ cd toolkit/linuxkit
 
 $ linuxkit build lnmp.yml
 
