@@ -83,6 +83,8 @@ volumes:
     << : *default-common
   gogs-data:
     << : *default-common
+  gitlab-data:
+    << : *default-common
 
 secrets:
   db_root_password:

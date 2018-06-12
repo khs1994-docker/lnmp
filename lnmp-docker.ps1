@@ -55,6 +55,13 @@ Function env_status(){
     Write-Warning '.env file NOT existing'
     cp .env.example .env
   }
+
+  if (Test-Path .env.ps1){
+    printInfo '.env.ps1 file existing'
+  }else{
+    Write-Warning '.env.ps1 file NOT existing'
+    cp .env.example.ps1 .env.ps1
+  }
 }
 
 Function logs(){

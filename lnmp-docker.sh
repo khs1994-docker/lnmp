@@ -22,6 +22,7 @@ print_info(){
 
 print_error(){
   echo -e "\033[31mERROR\033[0m  $@"
+  export exit_by_error=1
 }
 
 print_warning(){
@@ -31,6 +32,22 @@ print_warning(){
 NOTSUPPORT(){
   print_error "Not Support ${OS} ${ARCH}\n"
   exit 1
+}
+
+check_docker_version(){
+  docker --version | grep 'ce' >/dev/null 2>&1 || print_error "Your Docker Version is too old, Please install Docker CE https://github.com/yeasy/docker_practice/tree/master/install"
+}
+
+check_nginx_conf(){
+  set +e
+  echo "$DEVELOPMENT_INCLUDE" | grep 'gogs' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gogs.conf > /dev/null 2>&1 \
+    && ( print_error "your env not include gogs, but nginx conf.d folder include gogs.conf"))
+
+  echo "$DEVELOPMENT_INCLUDE" | grep 'gitlab' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gitlab.conf > /dev/null 2>&1 \
+    && ( print_error "your env not include gitlab, but nginx conf.d folder include gitlab.conf "))
+
+  echo
+  set -e
 }
 
 if [ -f cli/khs1994-robot.enc ];then
@@ -1651,6 +1668,10 @@ First Run? Maybe you wait 60s then open url.
   esac
 }
 
+# if docker version info not include ce, example 1.13.1, maybe install method is error
+
+check_docker_version
+
 ARCH=`uname -m` && OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
@@ -1660,6 +1681,8 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 # 获取正确版本号
 
 env_status && . .env && . cli/.env
+
+check_nginx_conf
 
 if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
 
