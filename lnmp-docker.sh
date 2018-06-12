@@ -1670,8 +1670,6 @@ First Run? Maybe you wait 60s then open url.
 
 # if docker version info not include ce, example 1.13.1, maybe install method is error
 
-check_docker_version
-
 ARCH=`uname -m` && OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
@@ -1707,7 +1705,7 @@ fi
 
 print_info "ARCH is ${OS} ${ARCH}\n"
 
-command -v docker > /dev/null 2>&1 && print_info `docker --version`
+command -v docker > /dev/null 2>&1 && ( print_info `docker --version` ; check_docker_version )
 
 command -v > /dev/null 2>&1 || print_warning "docker cli is not install"
 
