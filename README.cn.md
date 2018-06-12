@@ -226,7 +226,7 @@ $ ./lnmp-docker.sh down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.7.8`        | **2.7.8**              |`Alpine:3.7`    |
-|[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`nginx:1.15.0-alpine`      | **1.15.0**            |`Alpine:3.7`    |
+|[NGINX](https://github.com/docker-library/docs/tree/master/nginx)         |`khs1994/nginx:1.15.0-alpine`      | **1.15.0**            |`Alpine:3.7`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.33-alpine`       | **2.4.33**             |`Alpine:3.7`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`              | **8.0.11**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.7`            | **10.3.7**             |`Debian:jessie` |
@@ -294,6 +294,10 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 * 阿里云 CODE：https://code.aliyun.com/khs1994-docker/lnmp.git
 * 码云：https://gitee.com/khs1994/lnmp.git
 * Coding：https://git.coding.net/khs1994/lnmp.git
+
+## TLS1.3
+
+请查看 https://github.com/khs1994-docker/lnmp/issues/137
 
 ## CI/CD
 

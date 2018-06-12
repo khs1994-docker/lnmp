@@ -89,7 +89,7 @@ services:
 
   nginx:
     build: ./config/nginx
-    image: nginx:1.15.0-alpine
+    image: khs1994/nginx:1.15.0-alpine
     # env_file: ./cli/timezone.env
     ports:
       - "443:443"

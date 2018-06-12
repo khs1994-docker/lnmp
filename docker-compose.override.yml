@@ -50,7 +50,7 @@ services:
 
   nginx:
     << : *default-common
-    image: nginx:${KHS1994_LNMP_NGINX_VERSION:-1.15.0}-alpine
+    image: khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.15.0}-alpine
 
   httpd:
     << : *default-common

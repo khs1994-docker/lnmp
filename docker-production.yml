@@ -419,7 +419,7 @@ services:
     #
     # image: khs1994/lnmp-nginx:1.15.0
     #
-    image: nginx:1.15.0-alpine
+    image: khs1994/nginx:1.15.0-alpine
     ports:
       - "443:443"
       - "80:80"
