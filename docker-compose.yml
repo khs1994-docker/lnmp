@@ -159,7 +159,7 @@ services:
 
   gitlab:
     << : *default-common
-    image: gitlab/gitlab-ce
+    image: gitlab/gitlab-ce:latest@sha256:a839b38e07140543858193fa4ad93160666d0b6500a417607bd0112c19eb7f05
     ports:
       - "${LNMP_GITLAB_SSH_PORT:-8022}:22"
       # - "${LNMP_GITLAB_HTTPS_PORT:-8443}:7000"
