@@ -49,6 +49,7 @@ services:
       - redis-server
       - /redis.conf
     command: ["redis-server", "/redis.conf"]
+    command: ["sh", "-c", "echo $$HOME"] # sh -c echo $HOME
     configs: # no compose
       - source: redis_conf
         target: /redis.conf
