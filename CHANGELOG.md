@@ -1,20 +1,29 @@
 Changelog
 ==============
 
-#### v18.07
+#### v18.08
 
 Bug fixes:
 
-*
+* Fix php dockerfile error
 
 Changes:
 
+* Change CLI `development` to `up` command
+* Change WSL C mount `/mnt/c` to `/c`
 * All PHP Image now based Alpine3.7, Because Alpine3.4 EOL
+* Support `satis`
+* Support `Gogs` `GitLab` #540
+* Resupport tlsv1.3 by `khs1994/nginx:version-alpine` #137
+* Update `k8s.gcr.io` local server `v18.05-edge-67`
 
 Updates:
 
-* Update Memcached 1.5.7
-* Update PHP 7.2.6 7.1.18
+* Update `MariaDB` 10.3.7
+* Update `Memcached` 1.5.7
+* Update `PHP` 7.2.6 7.1.18
+* Update `Redis` 5.0-rc
+* Update `NGINX` 1.15.0
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 

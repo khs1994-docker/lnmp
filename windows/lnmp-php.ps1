@@ -1,5 +1,11 @@
 docker network create lnmp_backend | Out-Null
 
+. "$PSScriptROOT/../.env.example.ps1"
+
+if (Test-Path "$PSScriptROOT/../.env.ps1"){
+  . "$PSScriptROOT/../.env.ps1"
+}
+
 . "$PSScriptRoot/.env.example.ps1"
 
 if (Test-Path "$PSScript/.env.ps1"){
@@ -41,6 +47,7 @@ docker run --init -it --rm `
    --mount type=bind,src=$PWD,target=/app `
    --mount src=lnmp_composer_cache-data,target=/tmp/cache `
    -p "${ADDR_PORT}:${PORT}" `
+   -e TZ=${TZ} `
    --network lnmp_backend ${LNMP_PHP_IMAGE} `
    php -S 0.0.0.0:$PORT $other
 exit 0
@@ -50,5 +57,6 @@ docker run --init -it --rm `
   --mount type=bind,src=$PWD,target=/app `
   --mount src=lnmp_composer_cache-data,target=/tmp/cache `
   -e APP_ENV=development `
+  -e TZ=${TZ} `
   ${LNMP_PHP_IMAGE} `
   php $COMMAND

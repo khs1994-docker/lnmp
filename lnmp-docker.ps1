@@ -421,6 +421,10 @@ switch($first){
       _bash_cli php7 bash
     }
 
+    phpmyadmin-cli {
+      _bash_cli phpmyadmin sh
+    }
+
     postgresql-cli {
       _bash_cli postgresql sh
     }
