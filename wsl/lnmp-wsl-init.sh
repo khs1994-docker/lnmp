@@ -10,12 +10,16 @@ sudo sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 sudo sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 sudo sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
+# conf wsl
+curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/wsl.conf \
+  | sudo tee /etc/wsl.conf
+
 if [ -z $APP_ENV ];then
   echo "export APP_ENV=wsl" >> ~/.bash_profile
 fi
 
 if [ -z $WSL_HOME ];then
-  echo "export WSL_HOME=/mnt/c/Users/90621" >> ~/.bash_profile
+  echo "export WSL_HOME=/c/Users/90621" >> ~/.bash_profile
 fi
 
 if [ -z $COMPOSER_HOME ];then

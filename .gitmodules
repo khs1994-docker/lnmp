@@ -9,7 +9,7 @@
 	url = https://github.com/khs1994-docker/php-demo.git
 [submodule "kubernetes"]
 	path = kubernetes
-	url = http://github.com/khs1994-docker/lnmp-k8s.git
+	url = https://github.com/khs1994-docker/lnmp-k8s.git
 [submodule "toolkit/dockerd-tls"]
 	path = toolkit/dockerd-tls
 	url = https://github.com/khs1994-docker/dockerd-tls.git

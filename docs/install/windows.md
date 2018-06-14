@@ -44,16 +44,23 @@ $ ./lnmp-docker.ps1 up
 
 ## Use WSL
 
+* https://github.com/khs1994-docker/lnmp/blob/master/wsl/wsl.conf
+
+默认的 WSL 将 C 盘挂载到了 `/mnt/c`
+
+这里我们修改配置，将 C 盘挂载到 `/c`
+
 ```bash
-$ bash
+$ wsl
 
 # Windows PATH 变量为 %LNMP_PATH%\windows; %LNMP_PATH%\wsl; %LNMP_PATH\bin
 
 $ lnmp-wsl-docker-cli.sh
 
-$ sudo ln -sf /mnt/c /C
+$ curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/wsl.conf \
+  | sudo tee /etc/wsl.conf
 
-$ cd /C/Users/YOUR_USERNAME/lnmp
+# 打开 PowerShell
 
-$ ./lnmp-docker.sh
+$ wsl ./lnmp-docker.sh
 ```

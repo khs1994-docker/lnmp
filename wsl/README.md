@@ -29,7 +29,7 @@ $ sudo vi /etc/profile
 
 # 在文件末尾添加如下内容
 
-export WSL_HOME=/mnt/c/Users/90621 # 注意替换为自己的实际路径
+export WSL_HOME=/c/Users/90621 # 注意替换为自己的实际路径
 
 export APP_ENV=wsl
 
