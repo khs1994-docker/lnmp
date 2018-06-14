@@ -22,7 +22,7 @@ Updates:
 * Update `MariaDB` 10.3.7
 * Update `Memcached` 1.5.7
 * Update `PHP` 7.2.6 7.1.18
-* Update `Redis` 5.0-rc
+* Update `Redis` Cluster 5.0-rc
 * Update `NGINX` 1.15.0
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)

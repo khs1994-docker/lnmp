@@ -6,12 +6,15 @@ RUN addgroup -S redis && adduser -S -G redis redis
 # grab su-exec for easy step-down from root
 RUN apk add --no-cache 'su-exec>=0.2'
 
-ENV REDIS_VERSION 5.0-rc1
-ENV REDIS_DOWNLOAD_URL https://github.com/antirez/redis/archive/5.0-rc1.tar.gz
+ENV REDIS_VERSION 5.0-rc3
+ENV REDIS_DOWNLOAD_URL https://github.com/antirez/redis/archive/5.0-rc3.tar.gz
 # ENV REDIS_DOWNLOAD_SHA df4f73bc318e2f9ffb2d169a922dec57ec7c73dd07bccf875695dbeecd5ec510
 
 # for redis-sentinel see: http://redis.io/topics/sentinel
-RUN set -ex; \
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
+
+RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+  && set -ex; \
 	\
 	apk add --no-cache --virtual .build-deps \
 		coreutils \

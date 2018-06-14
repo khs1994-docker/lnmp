@@ -706,31 +706,30 @@ _lnmp_debug(){
   compose_version=$(docker-compose --version)
   echo "
 <details>
-
 <summary>OS Environment Info</summary>
-
 <code>
 " > debug.md
 
-cat /etc/os-release >> debug.md
+cat /etc/os-release >> debug.md > /dev/null 2>&1 || uname -s >> debug.md
 
 echo "
 </code>
-
 <code>$docker_version</code>
-
 <code>$compose_version</code>
-
 </details>
-
 <details>
-
 <summary>Console output</summary>
 
 <!--Don't Edit it-->
 <!--不要手动编辑以上内容,将终端输出内容贴到下面-->
 
 <pre>
+
+
+
+
+
+
 
 
 
@@ -745,6 +744,10 @@ echo "
 XXX
 
 XXX
+
+
+
+
 
 <!--提交问题之前务必点击预览（Preview）标签-->
 " >> debug.md
