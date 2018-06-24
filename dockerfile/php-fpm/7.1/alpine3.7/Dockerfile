@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.1.18
+ARG PHP_VERSION=7.1.19
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
@@ -61,6 +61,23 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                   zip \
                                   gd \
                                   pcntl \
+                                  mysqli \
+                                  pgsql \
+                                  bz2 \
+                                  calendar \
+                                  enchant \
+                                  exif \
+                                  gettext \
+                                  gmp \
+                                  imap \
+                                  intl \
+                                  sockets \
+                                  sysvmsg \
+                                  sysvsem \
+                                  sysvshm \
+                                  tidy \
+                                  xmlrpc \
+                                  xsl \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && pecl install mongodb \
                         igbinary \

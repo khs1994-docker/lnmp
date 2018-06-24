@@ -2,7 +2,7 @@ FROM debian:stretch-slim@sha256:47deb9c70213403e923bd46a17591933facb263a1455908f
 
 ################################################################################
 
-ARG PHP_VERSION=7.2.6
+ARG PHP_VERSION=7.2.7
 
 ARG PHP_NUM=72
 
@@ -225,6 +225,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     # --with-snmp=shared \
     --enable-wddx=shared \
     --enable-embed=shared \
+    --with-mysqli=shared \
+    --with-pgsql=shared \
     \
   # bundled pcre does not support JIT on s390x
   # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
@@ -295,6 +297,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            pspell \
                            # snmp \
                            wddx \
+                           mysqli \
+                           pgsql \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
        > ${PHP_INI_DIR}/php-fpm.d/zz-debian.conf \
   && curl -s -f -L -o /tmp/installer.php \

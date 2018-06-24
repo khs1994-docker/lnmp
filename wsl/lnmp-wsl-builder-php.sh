@@ -16,17 +16,17 @@ Build php in WSL Debian by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php.sh 7.2.6
+$ lnmp-wsl-builder-php.sh 7.2.7
 
 $ lnmp-wsl-builder-php.sh apt
 
 $ lnmp-wsl-builder-php.sh 7.3.0
 
-$ lnmp-wsl-builder-php.sh 7.2.6 [--skipbuild] [tar] [deb] [enable-ext]
+$ lnmp-wsl-builder-php.sh 7.2.7 [--skipbuild] [tar] [deb] [enable-ext]
 
-$ lnmp-wsl-builder-php.sh 7.2.6 arm64 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.7 arm64 tar [TODO]
 
-$ lnmp-wsl-builder-php.sh 7.2.6 arm32 tar [TODO]
+$ lnmp-wsl-builder-php.sh 7.2.7 arm32 tar [TODO]
 
 "
 
@@ -429,6 +429,8 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-intl=shared \
       --enable-embed=shared \
       --enable-option-checking=fatal \
+      --with-mysqli=shared \
+      --with-pgsql=shared \
     \
     $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
     $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
@@ -606,7 +608,9 @@ exts=" pdo_pgsql \
                       xdebug \
                       $( test $PHP_NUM != '56' && echo 'swoole' ) \
                       yaml \
-                      opcache"
+                      opcache \
+                      mysqli \
+                      pgsql "
 set -e
 for ext in $exts
 do
@@ -807,7 +811,7 @@ command -v wget || sudo apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.6
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.7
 
 _get_phpnum $PHP_VERSION
 

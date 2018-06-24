@@ -5,9 +5,9 @@ services:
     build:
       context: ./7.2/alpine3.7
       args:
-        PHP_VERSION: ${PHP_VERSION_72:-7.2.6}
+        PHP_VERSION: ${PHP_VERSION_72:-7.2.7}
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php-fpm:${PHP_VERSION_72:-7.2.6}-alpine3.7
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php-fpm:${PHP_VERSION_72:-7.2.7}-alpine3.7
 
   7_1_X:
     build:

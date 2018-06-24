@@ -14,11 +14,11 @@ Build php in WSL RHEL by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php-rhel.sh 7.2.6
+$ lnmp-wsl-builder-php-rhel.sh 7.2.7
 
 $ lnmp-wsl-builder-php-rhel.sh yum
 
-$ lnmp-wsl-builder-php-rhel.sh 7.2.6 [--skipbuild] [tar] [rpm] [enable-ext]
+$ lnmp-wsl-builder-php-rhel.sh 7.2.7 [--skipbuild] [tar] [rpm] [enable-ext]
 
 "
 
@@ -322,6 +322,8 @@ _builder(){
         --enable-intl=shared \
         --enable-embed=shared \
         --enable-option-checking=fatal \
+        --with-mysqli=shared \
+        --with-pgsql=shared \
         \
         $( test $PHP_NUM = "56" && echo "--enable-opcache --enable-gd-native-ttf" ) \
         $( test $PHP_NUM = "70" && echo "--enable-gd-native-ttf --with-webp-dir=/usr/lib" ) \
@@ -498,7 +500,9 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       xdebug \
                       $( test $PHP_NUM != "56" && echo "swoole" ) \
                       yaml \
-                      opcache
+                      opcache \
+                      mysqli \
+                      pgsql
 
 # config opcache
 
@@ -687,7 +691,7 @@ command -v wget || sudo yum install -y wget
 
 mkdir -p /tmp/php-builder || echo
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.6 ; fi
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.7 ; fi
 
 _get_phpnum $PHP_VERSION
 

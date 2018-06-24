@@ -231,10 +231,10 @@ $ ./lnmp-docker.sh down
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`              | **8.0.11**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.7`            | **10.3.7**             |`Debian:jessie` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:4.0.9-alpine`        | **4.0.9**              |`Alpine:3.7`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php-fpm:7.2.6-alpine3.7`  | **7.2.6**       |`Alpine:3.7`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.6-alpine3.7`  | **5.6.x**       |`Alpine:3.7`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.6-alpine3.7`  | **1.6.5**       |`Alpine:3.7`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-fpm:7.2.6-alpine3.7`  | **2.12.0**      |`Alpine:3.7`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php-fpm:7.2.7-alpine3.7`  | **7.2.7**       |`Alpine:3.7`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.7-alpine3.7`  | **5.6.x**       |`Alpine:3.7`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.7-alpine3.7`  | **1.6.5**       |`Alpine:3.7`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-fpm:7.2.7-alpine3.7`  | **2.12.0**      |`Alpine:3.7`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.8-alpine`           | **1.5.8**        |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.5-management-alpine` | **3.7.5**       |`Alpine:3.7`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.7`    |
