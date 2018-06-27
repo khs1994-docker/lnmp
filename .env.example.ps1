@@ -6,6 +6,7 @@ $global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 
 $global:CI_HOST="ci2.khs1994.com:10000"
 
+# wsl name
 $global:DistributionName="debian"
 
 $global:TZ='Asia/Shanghai'
