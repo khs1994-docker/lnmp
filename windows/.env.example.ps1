@@ -2,7 +2,7 @@
 # You can overwrite this file in .env.ps1
 #
 
-$global:LNMP_PHP_IMAGE="khs1994/php-fpm:7.2.6-alpine3.7"
+$global:LNMP_PHP_IMAGE="khs1994/php-fpm:7.2.7-alpine3.7"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 
@@ -17,7 +17,7 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 $global:NGINX_VERSION="1.15.0"
 # https://windows.php.net/download/
-$global:PHP_VERSION="7.2.6"
+$global:PHP_VERSION="7.2.7"
 $global:MYSQL_VERSION="8.0.11"
 $global:HTTPD_VERSION="2.4.33"
 $global:IDEA_VERSION="1.8.3678"

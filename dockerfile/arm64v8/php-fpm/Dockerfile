@@ -1,6 +1,8 @@
-ARG PHP_VERSION=7.2.6
+# https://git.alpinelinux.org/cgit/aports/tree/community/php7/APKBUILD
 
-FROM arm64v8/php:7.2.6-fpm-alpine3.7@sha256:f5bcdbfae1b3565c5deb74a6d76c59c4fd716bc6e9690572652e715a6f0daff1
+ARG PHP_VERSION=7.2.7
+
+FROM arm64v8/php:7.2.7-fpm-alpine3.7
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -34,7 +36,17 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          freetype \
                          libjpeg-turbo \
                          yaml \
+                         libbz2 \
+                         libexif \
+                         libxslt \
+                         gmp \
+                         xmlrpc-c \
+                         enchant \
+                         c-client \
+                         libwebp \
+                         icu-libs \
                          " \
+                         # tidyhtml-libs \
       # *-dev 编译之后删除
       && KHS1994_PHP_FPM_BUILD_DEPS=" \
                          libressl-dev \
@@ -46,7 +58,18 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          freetype-dev \
                          libjpeg-turbo-dev \
                          yaml-dev \
+                         libexif-dev \
+                         libxslt-dev \
+                         gmp-dev \
+                         xmlrpc-c-dev \
+                         bzip2-dev \
+                         enchant-dev \
+                         imap-dev \
+                         gettext-dev \
+                         libwebp-dev \
+                         icu-dev \
                          " \
+                         # tidyhtml-dev \
         && apk add --no-cache --virtual .khs1994-php-fpm-run-deps $KHS1994_PHP_FPM_RUN_DEPS \
         && apk add --no-cache linux-headers \
         && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
@@ -63,6 +86,23 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                                zip \
                                                gd \
                                                pcntl \
+                                               mysqli \
+                                               pgsql \
+                                               bz2 \
+                                               calendar \
+                                               enchant \
+                                               exif \
+                                               gettext \
+                                               gmp \
+                                               imap \
+                                               intl \
+                                               sockets \
+                                               sysvmsg \
+                                               sysvsem \
+                                               sysvshm \
+                                               # tidy \
+                                               xmlrpc \
+                                               xsl \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && pecl install mongodb \
                         igbinary \

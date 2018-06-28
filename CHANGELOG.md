@@ -21,7 +21,7 @@ Updates:
 
 * Update `MariaDB` 10.3.7
 * Update `Memcached` 1.5.7
-* Update `PHP` 7.2.6 7.1.18
+* Update `PHP` 7.2.7 7.1.19
 * Update `Redis` Cluster 5.0-rc
 * Update `NGINX` 1.15.0
 

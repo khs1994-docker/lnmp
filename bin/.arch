@@ -3,7 +3,7 @@
 ARCH=`uname -m`
 OS=`uname -s`
 
-VERSION=7.2.6
+VERSION=7.2.7
 export TAG=${VERSION}-alpine3.7
 
 if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then

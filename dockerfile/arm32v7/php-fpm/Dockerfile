@@ -1,4 +1,6 @@
-FROM arm32v7/php:7.2.6-fpm-stretch@sha256:c481aee0899e021a1f0b2904addc52588353d247261522ad2bb6d46b8ea0488a
+# https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
+
+FROM arm32v7/php:7.2.7-fpm-stretch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -21,17 +23,31 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libpq-dev \
         libzip-dev \
         libyaml-dev \
+        libxmlrpc-epi-dev \
+        libbz2-1.0 \
+        libexif12 \
+        libgmp10 \
+        libicu57 \
 	" \
+  # libtidy-dev \
   && runDeps=" \
        libfreetype6 \
        libjpeg62-turbo \
        libpng16-16 \
        libssl1.1 \
+       libmemcached11 \
        libmemcachedutil2 \
        libpq5 \
        libzip4 \
        libyaml-0-2 \
+       libxslt1.1 \
+       libxmlrpc-epi0 \
+       libbz2-dev \
+       libexif-dev \
+       libgmp-dev \
+       libicu-dev \
   " \
+  # libtidy5 \
   && apt-get update && apt-get install -y $buildDeps $runDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
         && docker-php-ext-configure zip \
                                     --with-libzip \
@@ -45,6 +61,23 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                                                zip \
                                                gd \
                                                pcntl \
+                                               mysqli \
+                                               pgsql \
+                                               bz2 \
+                                               calendar \
+                                               enchant \
+                                               exif \
+                                               gettext \
+                                               gmp \
+                                               imap \
+                                               intl \
+                                               sockets \
+                                               sysvmsg \
+                                               sysvsem \
+                                               sysvshm \
+                                               # tidy \
+                                               xmlrpc \
+                                               xsl \
         && pecl install mongodb \
                         igbinary \
                         redis \

@@ -144,7 +144,7 @@ services:
 
   gogs:
     << : *default-common
-    image: gogs/gogs:latest@sha256:f4012f0e57051ae776f65dcd76a8ba604abd538200c835d3e039321b112785d3
+    image: gogs/gogs:latest@sha256:f9ec20c83a2cce53028455004a87888dc576dc4b0e0da10ceef434c13651b2bf
     ports:
       - "${LNMP_GOGS_SSH_PORT:-8022}:8022"
       # - "${LNMP_GOGS_HTTP_PORT:-3000}:3000"
@@ -159,7 +159,7 @@ services:
 
   gitlab:
     << : *default-common
-    image: gitlab/gitlab-ce:latest@sha256:a839b38e07140543858193fa4ad93160666d0b6500a417607bd0112c19eb7f05
+    image: gitlab/gitlab-ce:latest@sha256:37b2135c93a6f232104fce4b4fc80323c37b2495ce9d921cf517710d1e424fc7
     ports:
       - "${LNMP_GITLAB_SSH_PORT:-8022}:22"
       # - "${LNMP_GITLAB_HTTPS_PORT:-8443}:7000"
