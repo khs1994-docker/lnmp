@@ -33,7 +33,7 @@ services:
         target: /etc/db_root_password
 
   redis:
-    image: redis:4.0.9-alpine
+    image: redis:5.0-rc3-alpine
     environment:
       TZ: Asia/Shanghai
     # env_file: ./cli/timezone.env

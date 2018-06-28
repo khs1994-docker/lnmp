@@ -176,7 +176,7 @@ services:
     #
     # image: khs1994/lnmp-redis:4.0.9
     #
-    image: redis:4.0.9-alpine
+    image: redis:5.0-rc3-alpine
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
