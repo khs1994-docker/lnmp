@@ -217,6 +217,7 @@ libsqlite3-0 \
 libxslt1.1 \
 libpq5 \
 libmemcached11 \
+libmemcachedutil2 \
 libsasl2-2 \
 libfreetype6 \
 libpng16-16 \
@@ -241,6 +242,8 @@ libxpm4 \
 $( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
+libssl1.1 \
+libicu57 \
 libldap-2.4-2"
     set -e
     sudo apt install -y $PHP_RUN_DEP > /dev/null
@@ -292,7 +295,7 @@ _install_php_build_dep(){
                    libxmlrpc-epi-dev \
                    libbz2-dev \
                    libexif-dev \
-                   libgmp3-dev \
+                   libgmp-dev \
                    libc-client2007e-dev \
                    libkrb5-dev \
                    \
@@ -301,6 +304,7 @@ _install_php_build_dep(){
                    libenchant-dev \
                    libldap2-dev \
                    libpspell-dev \
+                   libicu-dev \
                    "
     set -e
     for soft in ${DEP_SOFTS} ; do echo $soft | tee -a ${PHP_INSTALL_LOG} ; done

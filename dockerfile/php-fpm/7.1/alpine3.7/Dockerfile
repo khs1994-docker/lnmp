@@ -34,7 +34,17 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          freetype \
                          libjpeg-turbo \
                          yaml \
+                         libbz2 \
+                         libexif \
+                         libxslt \
+                         gmp \
+                         xmlrpc-c \
+                         enchant \
+                         c-client \
+                         libwebp \
+                         icu-libs \
                          " \
+                         # tidyhtml-libs \
       # *-dev 编译之后删除
       && KHS1994_PHP_FPM_BUILD_DEPS=" \
                          libressl-dev \
@@ -46,7 +56,18 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          freetype-dev \
                          libjpeg-turbo-dev \
                          yaml-dev \
+                         libexif-dev \
+                         libxslt-dev \
+                         gmp-dev \
+                         xmlrpc-c-dev \
+                         bzip2-dev \
+                         enchant-dev \
+                         imap-dev \
+                         gettext-dev \
+                         libwebp-dev \
+                         icu-dev \
                          " \
+                         # tidyhtml-dev \
         && apk add --no-cache --virtual .khs1994-php-fpm-run-deps $KHS1994_PHP_FPM_RUN_DEPS \
         && apk add --no-cache linux-headers \
         && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
@@ -75,7 +96,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                   sysvmsg \
                                   sysvsem \
                                   sysvshm \
-                                  tidy \
+                                  # tidy \
                                   xmlrpc \
                                   xsl \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \

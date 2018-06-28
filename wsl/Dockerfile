@@ -60,68 +60,79 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     		echo 'Pin-Priority: -1'; \
     	} > /etc/apt/preferences.d/no-debian-php \
 	&& apt update && apt-get install -y --no-install-recommends \
+    libargon2-0 \
 		libargon2-0-dev \
+    libbz2-1.0 \
+    libbz2-dev \
+    libc-client2007e \
+    libc-client2007e-dev \
 		libcurl4-openssl-dev \
+    libedit2 \
 		libedit-dev \
+    libenchant1c2a \
+    libenchant-dev \
+    libsodium18 \
 		libsodium-dev \
+    libsqlite3-0 \
 		libsqlite3-dev \
+    libssl1.1 \
 		libssl-dev \
+    libxml2 \
 		libxml2-dev \
+    zlib1g \
 		zlib1g-dev \
+    libxslt1.1 \
     libxslt1-dev \
-    #
+    libfreetype6 \
     libfreetype6-dev \
+    libjpeg62-turbo \
     libjpeg62-turbo-dev \
+    libpng16-16 \
     libpng-dev \
+    libsasl2-2 \
     libsasl2-dev \
-    libssl-dev \
+    libmemcached11 \
+    libmemcachedutil2 \
     libmemcached-dev \
+    libpq5 \
     libpq-dev \
+    libzip4 \
     libzip-dev \
+    libyaml-0-2 \
     libyaml-dev \
 		${PHP_EXTRA_BUILD_DEPS:-} \
-    #
     $PHPIZE_DEPS \
 		ca-certificates \
 		curl \
-		xz-utils \
-    libfreetype6 \
-    libjpeg62-turbo \
-    libpng16-16 \
-    libsasl2-2 \
-    libssl1.1 \
-    libmemcachedutil2 \
-    libpq5 \
-    libzip4 \
-    libyaml-0-2 \
-    libxslt1.1 \
     tar \
     wget \
-    \
+		xz-utils \
     libtidy5 \
     libtidy-dev \
     libxmlrpc-epi0 \
     libxmlrpc-epi-dev \
-    libbz2-1.0 \
-    libbz2-dev \
     libexif12 \
     libexif-dev \
-    libgmp3-dev \
-    libc-client2007e \
-    libc-client2007e-dev \
+    libgmp10 \
+    libgmp-dev \
+    libkrb5-3 \
     libkrb5-dev \
     libxpm4 \
     libxpm-dev \
-    libwebp-dev \
     libwebp6 \
-    libenchant-dev \
-    libenchant1c2a \
-    libldap2-dev \
+    libwebp-dev \
     libldap-2.4-2 \
+    libldap2-dev \
     libpspell-dev \
     # libsnmp30 \
     # libsnmp-dev \
     # snmp \
+    libmhash2 \
+    libmhash-dev \
+    libpcre3 \
+    libpcre3-dev \
+    libicu57 \
+    libicu-dev \
   && mkdir -p $PHP_INI_DIR/conf.d; \
       mkdir -p /usr/src; \
 	    cd /usr/src; \
