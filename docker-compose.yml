@@ -133,7 +133,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-3.7}
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.0}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
       - mongodb-data:/data/db:rw
