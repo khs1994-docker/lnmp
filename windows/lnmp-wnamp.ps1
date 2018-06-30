@@ -75,7 +75,7 @@ Function _stop($soft){
     }
 
     Default {
-      wsl -d ${DistributionName} lnmp-wsl.sh stop $soft
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh stop $soft
     }
   }
 }
@@ -83,27 +83,27 @@ Function _stop($soft){
 Function _stop_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      wsl -d ${DistributionName} lnmp-wsl.sh stop php
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh stop php
     }
 
     "wsl-nginx" {
-      wsl -d ${DistributionName} lnmp-wsl.sh stop nginx
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh stop nginx
     }
 
     "wsl-mysql" {
-      wsl -d ${DistributionName} lnmp-wsl.sh stop mysql
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh stop mysql
     }
 
     "wsl-httpd" {
-      wsl -d ${DistributionName} lnmp-wsl.sh stop httpd
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh stop httpd
     }
 
     "wsl-redis" {
-      wsl -d ${DistributionName} lnmp-wsl.sh stop redis
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh stop redis
     }
 
     "wsl-memcached" {
-      wsl -d ${DistributionName} lnmp-wsl.sh stop memcached
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh stop memcached
     }
   }
 }
@@ -171,7 +171,7 @@ Function _start($soft){
      }
 
      Default {
-       wsl -d ${DistributionName} lnmp-wsl.sh start $soft
+       wsl -d ${DistributionName} -u root lnmp-wsl.sh start $soft
      }
   }
 }
@@ -179,27 +179,27 @@ Function _start($soft){
 Function _start_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      wsl -d ${DistributionName} lnmp-wsl.sh start php
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh start php
     }
 
     "wsl-nginx" {
-      wsl -d ${DistributionName} lnmp-wsl.sh start nginx
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh start nginx
     }
 
     "wsl-mysql" {
-      wsl -d ${DistributionName} lnmp-wsl.sh start mysql
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh start mysql
     }
 
     "wsl-httpd" {
-      wsl -d ${DistributionName} lnmp-wsl.sh start httpd
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh start httpd
     }
 
     "wsl-redis" {
-      wsl -d ${DistributionName} lnmp-wsl.sh start redis
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh start redis
     }
 
     "wsl-memcached" {
-      wsl -d ${DistributionName} lnmp-wsl.sh start memcached
+      wsl -d ${DistributionName} -u root lnmp-wsl.sh start memcached
     }
   }
 }
