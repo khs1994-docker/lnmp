@@ -10,10 +10,22 @@ if (Test-Path "$PSScript/.env.ps1"){
 
 $global:source=$PWD
 
-Function _wget($src,$des){
-  get-command wsl -ErrorAction "SilentlyContinue"
+Function _command($command){
+  get-command $command -ErrorAction "SilentlyContinue"
 
-  if ($?){
+  if($?){
+    return $true
+  }
+
+  return $false
+}
+
+Function _wget($src,$des){
+  if ($( _command wsl)){
+    echo
+    Write-host "use WSL curl download file ..."
+    echo
+
     wsl curl -L $src -o $des
 
     return
@@ -334,6 +346,17 @@ $env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
 $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
 
+if($(_command php)){
+  $PHP_CURRENT_VERSION=$( php -r "echo PHP_VERSION;" )
+
+  if ($PHP_CURRENT_VERSION -ne $PHP_VERSION){
+      echo "installing PHP $PHP_VERSION ..."
+      _unzip $HOME/Downloads/php-$PHP_VERSION-nts-Win32-VC15-x64.zip C:/php-$PHP_VERSION
+      cp -rec -Force C:\php-$PHP_VERSION C:\php
+      rm -Confirm -Force C:\php-$PHP_VERSION
+  }
+}
+
 $SOFT_TEST_COMMAND="git --version","docker --version","nginx -v","httpd -v", `
                    "mysql --version", `
                    "node -v", `
@@ -346,8 +369,6 @@ Foreach ($item in $SOFT_TEST_COMMAND)
   powershell -Command $item
   _echo_line
 }
-
-$env:Path = [environment]::GetEnvironmentvariable("Path", "User")
 
 cd $source
 
