@@ -159,7 +159,7 @@ services:
 
   gitlab:
     << : *default-common
-    image: gitlab/gitlab-ce:latest@sha256:37b2135c93a6f232104fce4b4fc80323c37b2495ce9d921cf517710d1e424fc7
+    image: gitlab/gitlab-ce:latest@sha256:f54ce2fd5011331b42ecc0b018caae700d36c9c9b5811eef9982d4d1b21c719c
     ports:
       - "${LNMP_GITLAB_SSH_PORT:-8022}:22"
       # - "${LNMP_GITLAB_HTTPS_PORT:-8443}:7000"
@@ -273,3 +273,26 @@ services:
     volumes:
       - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml
       - registry-data:/var/lib/registry
+
+  nfs:
+    << : *default-common
+    image: erichough/nfs-server
+    environment:
+      - "NFS_EXPORT_0=/nfs *(ro,insecure,no_subtree_check,no_root_squash,fsid=1)"
+    volumes:
+      - ./data/nfs:/nfs
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor=erichough-nfs
+    ports:
+      - "111:111"
+      - "111:111/udp"
+      - "2049:2049"
+      - "2049:2049/udp"
+      - "32765:32765"
+      - "32765:32765/udp"
+      - "32766:32766"
+      - "32766:32766/udp"
+      - "32767:32767"
+      - "32767:32767/udp"

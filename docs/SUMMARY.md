@@ -51,6 +51,10 @@
     * [LinuxKit](linuxkit.md)
 * [微信小程序 PHP 后端部署](wechat.md)
 
+## Volumes
+
+* [NFS](nfs.md)
+
 ## 测试
 
 * [ab command](ab.md)
