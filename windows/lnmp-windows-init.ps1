@@ -22,9 +22,11 @@ Function _command($command){
 
 Function _wget($src,$des){
   if ($( _command wsl)){
-    echo
-    Write-host "use WSL curl download file ..."
-    echo
+
+    Write-host "
+
+use WSL curl download file ...
+"
 
     wsl curl -L $src -o $des
 
@@ -333,12 +335,26 @@ _installer RunHiddenConsole.zip                       C:\bin  C:\bin\RunHiddenCo
 
 [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User");
 
-# [environment]::SetEnvironmentvariable("Path", "", "User");
-
-$env:Path = [environment]::GetEnvironmentvariable("Path", "Machine")
+$env:Path = [environment]::GetEnvironmentvariable("Path", "User")
 $env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
-[environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl;C:\php;C:\mysql\bin;C:\nginx;C:\Apache24\bin;C:\node;$home\AppData\Local\Programs\Python\Python36\;$home\AppData\Local\Programs\Python\Python36\Scripts\;C:\bin;$home\AppData\Roaming\Composer\vendor\bin", "User")
+$items="$env:LNMP_PATH","$env:LNMP_PATH\windows","$env:LNMP_PATH\wsl", `
+       "C:\php","C:\mysql\bin","C:\nginx","C:\Apache24\bin", `
+       "C:\node","C:\bin" `
+
+Foreach ($item in $items)
+{
+  $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
+
+  $string=$(echo $env:path | select-string ("$item;").replace('\','\\'))
+
+  if($string.Length -eq 0){
+    write-host "
+set system env $item ...
+    "
+    [environment]::SetEnvironmentvariable("Path", "$env:Path;$item;","User")
+  }
+}
 
 [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
 
