@@ -22,6 +22,6 @@
 [submodule "toolkit/ci"]
 	path = toolkit/ci
 	url = https://github.com/khs1994-docker/ci.git
-[submodule "toolkit/coreos"]
-	path = toolkit/coreos
-	url = https://github.com/khs1994-docker/coreos.git
+[submodule "toolkit/coreos-kubernetes"]
+	path = toolkit/coreos-kubernetes
+	url = https://github.com/khs1994-docker/coreos-kubernetes.git
