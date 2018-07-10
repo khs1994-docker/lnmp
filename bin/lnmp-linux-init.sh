@@ -10,7 +10,7 @@ set -x
 
 print_help_info(){
   echo "
-  
+
 Usage:
 
 dockerd  Config Docker Daemon
@@ -37,7 +37,7 @@ if [ $NAME = Fedora ];then
     sudo dnf config-manager \
     --add-repo \
     https://mirrors.ustc.edu.cn/docker-ce/linux/fedora/docker-ce.repo
-    
+
     sudo dnf config-manager --set-enabled docker-ce-test
 
     sudo dnf install docker-ce
@@ -97,6 +97,14 @@ if [ $NAME = Fedora ];then
   sudo dnf install -y tilix \
     kernel-devel elfutils-libelf-devel libefp-devel
 fi
+
+cd /tmp
+
+# atom
+
+curl -O https://github.com/atom/atom/releases/download/v1.29.0-beta1/atom.x86_64.rpm
+
+cd -
 
 if [ "$1" = '--help' ];then print_help_info; fi
 if [ "$1" = 'dockerd' ];then _docker_daemon; fi

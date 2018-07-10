@@ -4,3 +4,4 @@
 !config.yml
 !gcr.io*
 !config.gcr.io.yml
+!ca.crt

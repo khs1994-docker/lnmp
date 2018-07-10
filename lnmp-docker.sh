@@ -46,7 +46,6 @@ check_nginx_conf(){
   echo "$DEVELOPMENT_INCLUDE" | grep 'gitlab' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gitlab.conf > /dev/null 2>&1 \
     && ( print_error "your env not include gitlab, but nginx conf.d folder include gitlab.conf "))
 
-  echo
   set -e
 }
 
@@ -117,7 +116,7 @@ PHP Tools:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes
+  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes [--no-pull]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -208,7 +207,6 @@ _gcr_io_down(){
 }
 
 _gcr_io(){
-
   if [ "$1" = down ];then
     _gcr_io_down
     printInfo "Stop k8s.gcr.io local server success"
@@ -241,6 +239,10 @@ This local server support Docker Desktop v18.05-EDGE-67
         echo
         exit
       fi
+
+    if [ "$1" = '--no-pull' ];then
+      return
+    fi
 
     images="kube-controller-manager-amd64:v1.10.3 \
     kube-apiserver-amd64:v1.10.3 \
@@ -751,6 +753,9 @@ XXX
 
 <!--提交问题之前务必点击预览（Preview）标签-->
 " >> debug.md
+
+  echo "Please Edit debug.md, then new issue in https://github.com/khs1994-docker/lnmp/issues/new/choose with copy debug.md"
+
 }
 
 nginx_http(){
@@ -1113,7 +1118,12 @@ main() {
   ;;
 
   gcr.io )
-    _gcr_io "$@"
+   cat /etc/hosts | grep 'gcr.io' > /dev/null || (printInfo "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io gcr.io' | sudo tee -a /etc/hosts )
+   sudo mkdir -p /etc/docker/certs.d/gcr.io
+   sudo mkdir -p /etc/docker/certs.d/k8s.gcr.io
+   cat config/registry/ca.crt | sudo tee /etc/docker/certs.d/gcr.io/ca.crt
+   cat config/registry/ca.crt | sudo tee /etc/docker/certs.d/k8s.gcr.io/ca.crt
+   _gcr_io "$@"
   ;;
 
   reset-master )
