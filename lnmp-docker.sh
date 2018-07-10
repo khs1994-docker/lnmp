@@ -41,10 +41,10 @@ check_docker_version(){
 check_nginx_conf(){
   set +e
   echo "$DEVELOPMENT_INCLUDE" | grep 'gogs' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gogs.conf > /dev/null 2>&1 \
-    && ( print_error "your env not include gogs, but nginx conf.d folder include gogs.conf"))
+    && ( print_error "your env not include gogs, but nginx conf.d folder include gogs.conf" ; echo))
 
   echo "$DEVELOPMENT_INCLUDE" | grep 'gitlab' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gitlab.conf > /dev/null 2>&1 \
-    && ( print_error "your env not include gitlab, but nginx conf.d folder include gitlab.conf "))
+    && ( print_error "your env not include gitlab, but nginx conf.d folder include gitlab.conf "; echo))
 
   set -e
 }
@@ -85,7 +85,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
-  compose              Install docker-compose
+  compose              Install docker-compose [ --official | ]
   completion           Move fish shell completion code (Only Support fish)
   up                   Up LNMP
   config               Validate and view the LNMP Compose file
@@ -97,14 +97,15 @@ Commands:
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
   help                 Display this help message
+  nfs                  Up NFS Server [ down | ]
   init                 Init LNMP environment
   restore              Restore MySQL databases
   restart              Restart LNMP services
   registry-up          Up Docker Registry
   registry-down        Stop Docker Registry
   satis                Build Satis
-  update               Upgrades LNMP
-  upgrade              Upgrades LNMP
+  update               Upgrades LNMP [ -f | ]
+  upgrade              Upgrades LNMP [ -f | ]
   update-version       Update LNMP soft to latest vesion
 
 PHP Tools:
@@ -116,7 +117,7 @@ PHP Tools:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes [--no-pull]
+  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -482,7 +483,7 @@ install_docker_compose_move(){
 
 install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
-  curl -L ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
+  curl -sL ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
       > /tmp/docker-compose
   install_docker_compose_move
 }
@@ -504,7 +505,7 @@ install_docker_compose(){
   if [ "${ARCH}" = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
     install_docker_compose_arm "$@"
   elif [ "$ARCH" = 'x86_64' ];then
-    curl -L ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+    curl -sL ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
     install_docker_compose_move
   fi
 }
@@ -1669,6 +1670,19 @@ First Run? Maybe you wait 60s then open url.
     docker-compose -f docker-compose.yml -f docker-compose.override.yml `
         -f docker-khsci.include.yml up -d `
         ${DEVELOPMENT_INCLUDE} khsci
+    ;;
+
+    nfs )
+    modprobe {nfs,nfsd,rpcsec_gss_krb5}
+
+    if [ "$1" = 'down' ];then
+      docker-compose stop nfs
+
+      exit
+    fi
+
+    docker-compose up -d nfs
+
     ;;
 
   * )

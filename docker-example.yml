@@ -266,6 +266,11 @@ services:
       POSTGRES_USER_FILE: /run/secrets/postgres-passwd
       POSTGRES_DB_FILE: /run/secrets/postgres-passwd
 
+  nfs-demo:
+    image: nginx
+    volumes:
+      - nfs-demo:/data
+
 configs:
   redis_conf:
     file: ./config/redis/redis.conf
@@ -318,12 +323,14 @@ networks:
 
 volumes:
   redis-data:
-  mydata:
-    driver: foobar
-    driver_opts:
-      foo: "bar"
-      baz: 1
     << : *default-labels
+
+  nfs-demo:
+    driver: local
+    driver_opts:
+      type: nfs
+      device: "${NFS_DEVICE:-192.168.199.100:/nfs}"
+      o: "${NFS_O:-addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw}"
   #
   # 3.5
   #

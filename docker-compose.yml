@@ -159,7 +159,7 @@ services:
 
   gitlab:
     << : *default-common
-    image: gitlab/gitlab-ce:latest@sha256:37b2135c93a6f232104fce4b4fc80323c37b2495ce9d921cf517710d1e424fc7
+    image: gitlab/gitlab-ce:latest@sha256:f54ce2fd5011331b42ecc0b018caae700d36c9c9b5811eef9982d4d1b21c719c
     ports:
       - "${LNMP_GITLAB_SSH_PORT:-8022}:22"
       # - "${LNMP_GITLAB_HTTPS_PORT:-8443}:7000"
@@ -208,10 +208,11 @@ services:
       - "9000"
     command: php-fpm -R -F
     env_file:
+      - ./.env.example
+      - ./.env
       - ./cli/timezone.env
       - ./cli/.env
     environment:
-      - APP_ENV=development
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.07} x86_64 With Pull Docker Image
 
   phpmyadmin:
@@ -273,3 +274,25 @@ services:
     volumes:
       - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml
       - registry-data:/var/lib/registry
+
+  nfs:
+    << : *default-common
+    restart: "no"
+    image: erichough/nfs-server
+    volumes:
+      - ./data/nfs:/nfs
+    env_file:
+      - ./cli/timezone.env
+      - ./.env.example
+      - ./.env
+    # cap_add:
+    #  - SYS_ADMIN
+    privileged: true
+    ports:
+      # - "111:111"
+      # - "111:111/udp"
+      # nfs4 only need open 2049 port
+      - "2049:2049"
+      - "2049:2049/udp"
+      # - “20048：20048”
+      # - “20048：20048/udp”
