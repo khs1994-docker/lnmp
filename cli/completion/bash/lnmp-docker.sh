@@ -75,4 +75,5 @@ complete -W "acme.sh \
         commit \
         test \
         cn-mirror \
-        compose" lnmp-docker.sh
+        compose \
+        nfs" lnmp-docker.sh
