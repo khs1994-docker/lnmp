@@ -20,7 +20,7 @@ Changes:
 Updates:
 
 * Update `MariaDB` 10.3.7
-* Update `Memcached` 1.5.7
+* Update `Memcached` 1.5.9
 * Update `PHP` 7.2.7 7.1.19
 * Update `Redis` 5.0-rc3
 * Update `NGINX` 1.15.1
