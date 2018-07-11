@@ -109,7 +109,7 @@ $ ./lnmp-docker.sh up
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v18.07 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v18.08 x86_64 With Pull Docker Image
 
 development
 

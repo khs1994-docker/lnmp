@@ -213,7 +213,8 @@ services:
       - ./cli/timezone.env
       - ./cli/.env
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.07} x86_64 With Pull Docker Image
+
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.08} x86_64 With Pull Docker Image
 
   phpmyadmin:
     << : *default-common
@@ -296,3 +297,4 @@ services:
       - "2049:2049/udp"
       # - “20048：20048”
       # - “20048：20048/udp”
+
