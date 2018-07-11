@@ -9,13 +9,15 @@ Bug fixes:
 
 Changes:
 
-* Change CLI `development` to `up` command
+* Change CLI command `development` to `up`
 * Change WSL C mount `/mnt/c` to `/c`
 * All PHP Image now based Alpine3.7, Alpine3.4 EOL
 * Support `satis`
 * Support `Gogs` `GitLab` #540
 * Resupport tlsv1.3 by `khs1994/nginx:version-alpine` #137
 * Update `k8s.gcr.io` local server `v18.05-edge-67`
+* Add NFS Volume
+* Add Fedora init script
 
 Updates:
 

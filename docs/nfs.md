@@ -15,9 +15,9 @@
 部分设置项解释
 
 ```bash
-/home/work 192.168.0.*(rw,insecure,fsid=0,sync,root_squash)
-# /home/work 192.168.1.0/24(rw,insecure,fsid=0,sync,root_squash)  
-# /home/work *(rw,insecure,fsid=0,sync,root_squash)
+/home/work 192.168.0.*(rw,fsid=0,insecure,sync,no_root_squash)
+# /home/work 192.168.1.0/24(rw,fsid=0,insecure,sync,no_root_squash)  
+# /home/work *(rw,fsid=0,insecure,sync,no_root_squash)
 
 # 同一目录的访问规则请写在同一行，上边只是列出规则的写法
 
@@ -34,8 +34,8 @@ all_squash：不论 NFS 客户端连接服务端时使用什么用户，对服�
 anonuid：匿名用户的 UID 值，通常是 nobody 或 nfsnobody，可以在此处自行设定；  
 anongid：匿名用户的 GID 值。
 
-no_subtree_check
-insecure
+no_subtree_check:
+insecure: 
 ```
 
 ### `fsid=0`
@@ -43,11 +43,11 @@ insecure
 `NFSv4` 文件系统的命令空间发生了变化，服务器端必须设置一个根文件系统(fsid=0)，其他文件系统挂载在根文件系统上导出。
 
 ```bash
-/home  192.168.78.0/24(rw,fsid=0,sync,all_squash)  #导出虚拟根目录
+/home  192.168.78.0/24(rw,fsid=0,insecure,sync,no_root_squash)  #导出虚拟根目录
 
-/home/nfs  192.168.78.0/24(rw,sync,all_squash)    #导出虚拟根下的子目录1
+/home/nfs  192.168.78.0/24(rw,insecure,sync,no_root_squash)    #导出虚拟根下的子目录1
 
-/home/data  192.168.78.0/24(rw,sync,all_squash)   #导出虚拟根下的子目录2
+/home/data  192.168.78.0/24(rw,insecure,sync,no_root_squash)   #导出虚拟根下的子目录2
 
 # 客户端对应的挂载命令如下
 
@@ -74,8 +74,8 @@ $ docker-compose up nfs # or $ lnmp-docker.sh nfs [down]
 $ docker run -it \
     -v /nfs:/nfs:rw \
     -p 2049:2049 \
-    -e NFS_EXPORT_0='/nfs *(rw,fsid=0,no_subtree_check)'  \
-    -e NFS_EXPORT_1='/nfs/data *(rw,no_subtree_check)'  \
+    -e NFS_EXPORT_0='/nfs *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'  \
+    -e NFS_EXPORT_1='/nfs/data *(rw,insecure,no_root_squash,no_subtree_check)'  \
     -e NFS_DISABLE_VERSION_3=1 \
     --cap-add SYS_ADMIN \
     --privileged \
