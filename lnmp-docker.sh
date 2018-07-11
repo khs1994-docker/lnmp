@@ -1673,7 +1673,7 @@ First Run? Maybe you wait 60s then open url.
     ;;
 
     nfs )
-    modprobe {nfs,nfsd,rpcsec_gss_krb5}
+    sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
 
     if [ "$1" = 'down' ];then
       docker-compose stop nfs
@@ -1681,7 +1681,7 @@ First Run? Maybe you wait 60s then open url.
       exit
     fi
 
-    docker-compose up nfs -d
+    docker-compose up -d nfs
 
     ;;
 
