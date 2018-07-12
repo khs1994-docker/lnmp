@@ -6,7 +6,7 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
   . "$PSScriptRoot/.env.ps1"
 }
 
-[environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
+# [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
 
 $env:DOCKER_DEFAULT_PLATFORM="linux"
 

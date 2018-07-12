@@ -288,8 +288,8 @@ _downloader `
 #
 
 _downloader `
-  https://studygolang.com/dl/golang/go${GOLANG_VERSION}.windows-amd64.msi `
-  go${GOLANG_VERSION}.windows-amd64.msi `
+  https://studygolang.com/dl/golang/go${GOLANG_VERSION}.windows-amd64.zip `
+  go${GOLANG_VERSION}.windows-amd64.zip `
   Golang ${GOLANG_VERSION}
 
 #
@@ -312,24 +312,30 @@ _downloader `
 
 ################################################################################
 
-_installer nginx-${NGINX_VERSION}.zip                 C:\     C:\nginx-${NGINX_VERSION}         C:\nginx
+_installer nginx-${NGINX_VERSION}.zip C:\ C:\nginx-${NGINX_VERSION} C:\nginx
 
-_installer mysql-${MYSQL_VERSION}-winx64.zip          C:\     C:\mysql-${MYSQL_VERSION}-winx64  C:\mysql
+_installer mysql-${MYSQL_VERSION}-winx64.zip C:\ C:\mysql-${MYSQL_VERSION}-winx64 C:\mysql
 
-_installer php-${PHP_VERSION}-nts-Win32-VC15-x64.zip  C:\php  C:\php                            C:\php
+_installer php-${PHP_VERSION}-nts-Win32-VC15-x64.zip C:\php C:\php C:\php
 
 cp php-cgi-spawner.exe C:\php
 
-_installer httpd-${HTTPD_VERSION}-win64-VC15.zip      C:\     C:\Apache24                       C:\Apache24
+_installer httpd-${HTTPD_VERSION}-win64-VC15.zip C:\ C:\Apache24 C:\Apache24
 
 if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
-  _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip           C:\Apache24\modules C:\Apache24\modules\mod_fcgid-${HTTPD_MOD_FCGID_VERSION} C:\Apache24\modules\mod_fcgid
+  _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip C:\Apache24\modules `
+  C:\Apache24\modules\mod_fcgid-${HTTPD_MOD_FCGID_VERSION} C:\Apache24\modules\mod_fcgid
+
   mv C:\Apache24\modules\mod_fcgid\mod_fcgid.so C:\Apache24\modules\mod_fcgid.so
 }
 
-_installer node-v${NODE_VEERSION}-win-x64.zip         C:\     C:\node-v${NODE_VEERSION}-win-x64 C:\node
+_installer node-v${NODE_VEERSION}-win-x64.zip C:\ C:\node-v${NODE_VEERSION}-win-x64 C:\node
 
-_installer RunHiddenConsole.zip                       C:\bin  C:\bin\RunHiddenConsole.exe       C:\bin\RunHiddenConsole.exe
+_installer RunHiddenConsole.zip C:\bin C:\bin\RunHiddenConsole.exe C:\bin\RunHiddenConsole.exe
+
+_installer go${GOLANG_VERSION}.windows-amd64.zip C:\ C:\go C:\go
+
+[environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User");
 
 ################################################################################
 
