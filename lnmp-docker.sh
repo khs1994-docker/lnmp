@@ -371,6 +371,10 @@ env_status(){
   if [ -f .env ];then \
       print_info ".env file existing\n"; \
   else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
+
+  if [ -f volumes/.env ];then
+    cp volumes/.env.example volumes/.env
+  fi
 }
 
 # 自动升级软件版本
@@ -1674,13 +1678,12 @@ First Run? Maybe you wait 60s then open url.
 
     nfs )
     sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
-
+    cd volumes
     if [ "$1" = 'down' ];then
       docker-compose stop nfs
 
       exit
     fi
-
     docker-compose up -d nfs
 
     ;;

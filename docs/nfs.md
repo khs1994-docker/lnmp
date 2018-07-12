@@ -8,7 +8,9 @@
 
 本文以 `NFSv4` 版本为例，无需 RPC `111` 端口, 只需监听 `2049` 端口即可。
 
-## .env 配置 IP 段
+## 配置 IP 段
+
+在 `volumes/.env` 文件中配置
 
 `NFS_EXPORT_N` 变量值为容器中 `/etc/exports` 中的每一行
 
@@ -35,7 +37,7 @@ anonuid：匿名用户的 UID 值，通常是 nobody 或 nfsnobody，可以在�
 anongid：匿名用户的 GID 值。
 
 no_subtree_check:
-insecure: 
+insecure:
 ```
 
 ### `fsid=0`
@@ -65,7 +67,9 @@ $ sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
 ## 容器运行 NFS 服务端
 
 ```bash
-$ docker-compose up nfs # or $ lnmp-docker.sh nfs [down]
+$ cd volumes
+
+$ docker-compose up [-d] nfs # or $ lnmp-docker.sh nfs [down]
 ```
 
 * https://github.com/ehough/docker-nfs-server
@@ -98,6 +102,8 @@ $ sudo yum install nfs-utils rpcbind
 
 $ sudo systemctl start nfs
 ```
+
+自行编辑 `/etc/exports` 文件
 
 ## NFS 客户端尝试挂载
 

@@ -57,6 +57,7 @@ Function env_status(){
     printInfo '.env file existing'
   }else{
     Write-Warning '.env file NOT existing'
+    Write-Host ''
     cp .env.example .env
   }
 
@@ -64,7 +65,16 @@ Function env_status(){
     printInfo '.env.ps1 file existing'
   }else{
     Write-Warning '.env.ps1 file NOT existing'
+    Write-Host ''
     cp .env.example.ps1 .env.ps1
+  }
+
+  if (Test-Path volumes/.env){
+    printInfo 'volumes/.env file existing'
+  }else{
+    Write-Warning 'volumes/.env file NOT existing'
+    Write-Host ''
+    Copy-Item volumes/.env.example volumes/.env
   }
 }
 
