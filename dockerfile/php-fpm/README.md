@@ -1,6 +1,6 @@
 # PHP-FPM
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php-fpm.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php-fpm) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/php-fpm.svg)](https://store.docker.com/community/images/khs1994/php-fpm) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/php-fpm.svg)](https://store.docker.com/community/images/khs1994/php-fpm)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php)
 
 ## Supported Versions
 
@@ -8,22 +8,22 @@
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`7.2.7-alpine3.7`, `alpine`, `latest` (7.2/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.2.7/7.2/alpine3.7/Dockerfile)
+* [`7.2.7-fpm-alpine`, `7.2-fpm-alpine`, `7-fpm-alpine`, `fpm-alpine`, `latest` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.2.7/7.2/alpine/Dockerfile)
 
-* [`7.2.6-alpine3.7` (7.2/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/7.2.6/7.2/alpine3.7/Dockerfile)
+* [`7.2.6-fpm-alpine` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.2.6/7.2/alpine3.7/Dockerfile)
 
-* [`7.1.19-alpine` (7.1/alpine3.7/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/c88a36862bf49c04fc5f2db2d4a7c25146599907/7.1/alpine3.7/Dockerfile)
+* [`7.1.19-fpm-alpine` `7.1-fpm-alpine` (7.1/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/f00e2ad63c2ae6067eb0686bb6ce618f1edc3016/7.1/alpine/Dockerfile)
 
-* [`7.1.17-alpine3.4` (7.1/alpine3.4/Dockerfile)](https://github.com/khs1994-docker/php-fpm/blob/a335e759384086ee710a2b204f02e3ffae8b6149/7.1/alpine3.4/Dockerfile)
+* [`7.1.17-alpine3.4` (7.1/alpine3.4/Dockerfile)](https://github.com/khs1994-docker/php/blob/a335e759384086ee710a2b204f02e3ffae8b6149/7.1/alpine3.4/Dockerfile)
 
 ## Overview
 
-基于官方 [PHP-FPM](https://github.com/docker-library/docs/tree/master/php) 修改的 Docker 镜像，添加了一些常用 [PHP 扩展](https://github.com/khs1994-docker/lnmp/blob/master/docs/php.md)、Composer 和 Laravel 安装程序。
+基于官方 [PHP](https://github.com/docker-library/docs/tree/master/php) 修改的 Docker 镜像，添加了一些常用 [PHP 扩展](https://github.com/khs1994-docker/lnmp/blob/master/docs/php.md)、Composer 和 Laravel 安装程序。
 
 ## Pull
 
 ```bash
-$ docker pull khs1994/php-fpm:alpine
+$ docker pull khs1994/php:fpm-alpine
 ```
 
 ## RUN
@@ -34,8 +34,99 @@ Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.co
 
 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) use this Docker Image.
 
+## Extension
+
+```bash
+$ docker-php-source extract
+
+$ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
+```
+
+* [x] bcmath
+* [x] bz2
+* [x] calendar
+* [ ] com_dotnet
+* [x] ctype
+* [x] curl
+* [x] date
+* [ ] dba
+* [x] dom
+* [x] enchant
+* [x] exif
+* [ ] ext_skel
+* [ ] ext_skel_win32.php
+* [x] fileinfo
+* [x] filter
+* [x] ftp
+* [x] gd
+* [x] gettext
+* [x] gmp
+* [x] hash
+* [x] iconv
+* [x] imap
+* [ ] interbase
+* [x] intl
+* [x] json
+* [ ] ldap
+* [x] libxml
+* [x] mbstring
+* [x] mysqli
+* [x] mysqlnd
+* [ ] oci8
+* [ ] odbc
+* [x] opcache
+* [x] openssl
+* [x] pcntl
+* [x] pcre
+* [x] pdo
+* [ ] pdo_dblib
+* [ ] pdo_firebird
+* [x] pdo_mysql
+* [ ] pdo_oci
+* [ ] pdo_odbc
+* [x] pdo_pgsql
+* [x] pdo_sqlite
+* [x] pgsql
+* [x] phar
+* [x] posix
+* [ ] pspell
+* [x] readline
+* [ ] recode
+* [x] reflection
+* [x] session
+* [ ] shmop
+* [x] simplexml
+* [ ] skeleton
+* [ ] snmp
+* [ ] soap
+* [x] sockets
+* [x] sodium
+* [x] spl
+* [x] sqlite3
+* [x] standard
+* [x] sysvmsg
+* [x] sysvsem
+* [x] sysvshm
+* [ ] tidy
+* [x] tokenizer
+* [ ] wddx
+* [x] xml
+* [x] xmlreader
+* [x] xmlrpc
+* [x] xmlwriter
+* [x] xsl
+* [ ] zend_test
+* [x] zip
+* [x] zlib
+
 ## More Information
 
 * [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)
 
 * [Official PHP Dockerfiles](https://github.com/docker-library/php)
+
+* https://git.alpinelinux.org/cgit/aports/tree/community/php7/APKBUILD
+
+* https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
+
+* https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html

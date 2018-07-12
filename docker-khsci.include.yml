@@ -3,7 +3,7 @@ version: "3.6"
 services:
   khsci:
     # restart: always
-    image: khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION:-7.2.7}-alpine3.7
+    image: khs1994/php:${KHS1994_LNMP_PHP_VERSION:-7.2.7}-fpm-alpine
     volumes:
       - ./app/khsci:/app/khsci
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro

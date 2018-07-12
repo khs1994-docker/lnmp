@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -x
+
+KERNEL_VERSION=4.17.5
+
+ARCH=`uname -m`
+OS=`uname -s`
+
+if ! [ 'Linux' = $OS ];then
+  exit
+fi
+
+if [ 'aarch64' = $ARCH ];then
+  ARCH=64
+else
+  ARCH=32
+fi
+
+_write_hosts(){
+  cat /etc/hosts | grep github-production-release-asset-2e65be.s3.amazonaws.com || \
+    echo 52.216.131.35    github-production-release-asset-2e65be.s3.amazonaws.com \
+    | sudo tee -a /etc/hosts
+}
+
+_download_src(){
+
+cd /tmp
+
+if ! [ -d /tmp/pi${ARCH}-${KERNEL_VERSION} ];then
+  if ! [ -f /tmp/pi${ARCH}-${KERNEL_VERSION}.tar.gz ];then
+    curl -LO \
+    https://github.com/khs1994/kernel/releases/download/arm${ARCH}-${KERNEL_VERSION}/pi${ARCH}-${KERNEL_VERSION}.tar.gz
+    _download_src
+  else
+    tar -zxvf pi${ARCH}-${KERNEL_VERSION}.tar.gz
+    return
+  fi
+fi
+
+}
+
+_write_hosts
+
+_download_src
+
+sudo cp -r /tmp/pi${ARCH}-${KERNEL_VERSION}/lib/modules/*  /lib/modules/
+sudo cp -r /tmp/pi${ARCH}-${KERNEL_VERSION}/usr/include/*  /usr/include/
+sudo cp -r /tmp/pi${ARCH}-${KERNEL_VERSION}/usr/src/*      /usr/src/
+sudo cp -r /tmp/pi${ARCH}-${KERNEL_VERSION}/boot/*         /boot/

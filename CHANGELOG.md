@@ -1,33 +1,16 @@
 Changelog
 ==============
 
-#### v18.08
+#### v18.09
 
 Bug fixes:
 
-* Fix php dockerfile error
-
 Changes:
 
-* Change CLI command `development` to `up`
-* Change WSL C mount `/mnt/c` to `/c`
-* All PHP Image now based Alpine3.7, Alpine3.4 EOL
-* Support `satis`
-* Support `Gogs` `GitLab` #540
-* Resupport tlsv1.3 by `khs1994/nginx:version-alpine` #137
-* Update `k8s.gcr.io` local server `v18.05-edge-67`
-* Add NFS Volume
-* Add Fedora init script
+* Update PHP Tag `khs1994/php:VERSION-fpm-alpine`
+* Add PHP73 Based `alpine:3.8`
 
 Updates:
-
-* Update `MariaDB` 10.3.7
-* Update `Memcached` 1.5.9
-* Update `PHP` 7.2.7 7.1.19
-* Update `Redis` 5.0-rc3
-* Update `NGINX` 1.15.1
-* Update `MongoDB` 4.0.0
-* Update `RabbitMQ` 3.7.6
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 

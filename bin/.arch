@@ -4,18 +4,18 @@ ARCH=`uname -m`
 OS=`uname -s`
 
 VERSION=7.2.7
-export TAG=${VERSION}-alpine3.7
+export TAG=${VERSION}-fpm-alpine
 
 if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
-  export DOCKER_IMAGE=khs1994/arm64v8-php-fpm
+  export DOCKER_IMAGE=khs1994/arm64v8-php
 
   if [ ${ARCH} = 'armv7l' ];then
-    export DOCKER_IMAGE=khs1994/arm32v7-php-fpm
-    export TAG=${VERSION}-stretch
+    export DOCKER_IMAGE=khs1994/arm32v7-php
+    export TAG=${VERSION}-fpm-stretch
   fi
 
 elif [ ${ARCH} = 'x86_64' ];then
-  export DOCKER_IMAGE=khs1994/php-fpm
+  export DOCKER_IMAGE=khs1994/php
 else
   echo -e "\n\033[31mERROR\033[0m  ${ARCH} 暂不支持"
   exit 1

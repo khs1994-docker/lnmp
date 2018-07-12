@@ -24,10 +24,16 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libzip-dev \
         libyaml-dev \
         libxmlrpc-epi-dev \
-        libbz2-1.0 \
-        libexif12 \
-        libgmp10 \
-        libicu57 \
+        libbz2-dev \
+        libexif-dev \
+        libgmp-dev \
+        libicu-dev \
+        libwebp-dev \
+        libxpm-dev \
+        libenchant-dev \
+        libxslt1-dev \
+        libc-client2007e-dev \
+        libkrb5-dev \
 	" \
   # libtidy-dev \
   && runDeps=" \
@@ -42,10 +48,15 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libyaml-0-2 \
        libxslt1.1 \
        libxmlrpc-epi0 \
-       libbz2-dev \
-       libexif-dev \
-       libgmp-dev \
-       libicu-dev \
+       libbz2-1.0 \
+       libexif12 \
+       libgmp10 \
+       libicu57 \
+       libxpm4 \
+       libwebp6 \
+       libenchant1c2a \
+       libc-client2007e \
+       libkrb5-3 \
   " \
   # libtidy5 \
   && apt-get update && apt-get install -y $buildDeps $runDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
@@ -53,31 +64,40 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                                     --with-libzip \
         && docker-php-ext-configure gd \
                                     --disable-gd-jis-conv \
-                                    --with-freetype-dir=/usr/include/ \
-                                    --with-jpeg-dir=/usr/include/ \
-        && docker-php-ext-install -j"$(nproc)" bcmath \
-                                               pdo_pgsql \
-                                               pdo_mysql \
-                                               zip \
-                                               gd \
-                                               pcntl \
-                                               mysqli \
-                                               pgsql \
-                                               bz2 \
-                                               calendar \
-                                               enchant \
-                                               exif \
-                                               gettext \
-                                               gmp \
-                                               imap \
-                                               intl \
-                                               sockets \
-                                               sysvmsg \
-                                               sysvsem \
-                                               sysvshm \
-                                               # tidy \
-                                               xmlrpc \
-                                               xsl \
+                                    --with-freetype-dir=/usr \
+                                    --with-jpeg-dir=/usr \
+                                    --with-png-dir=/usr \
+                                    --with-webp-dir=/usr \
+                                    --with-xpm-dir=/usr \
+        # https://stackoverflow.com/questions/13436356/configure-error-utf8-mime2text-has-new-signature-but-u8t-canonical-is-missi
+        && docker-php-ext-configure imap \
+                                    --with-kerberos \
+                                    --with-imap-ssl \
+        && docker-php-ext-install bcmath \
+                                          bz2 \
+                                          calendar \
+                                          enchant \
+                                          exif \
+                                          gd \
+                                          gettext \
+                                          gmp \
+                                          imap \
+                                          intl \
+                                          mysqli \
+                                          pcntl \
+                                          pdo_pgsql \
+                                          pdo_mysql \
+                                          pgsql \
+                                          sockets \
+                                          sysvmsg \
+                                          sysvsem \
+                                          sysvshm \
+                                          # tidy \
+                                          xmlrpc \
+                                          xsl \
+                                          zip \
+                                          # opcache 已默认安装，需要自行载入
+                                          opcache \
         && pecl install mongodb \
                         igbinary \
                         redis \
@@ -92,14 +112,14 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                                  xdebug \
                                  yaml \
                                  igbinary \
-                                 # opcache 已默认安装，需要自行载入
-                                 opcache \
                                  swoole \
         && apt-get purge -y --auto-remove  $buildDeps \
         && rm -rf /tmp/* \
         # config opcache
         # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-        && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
+        # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
+        # 默认不启用 xdebug
+        && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default
 
 # install composer
 
@@ -128,11 +148,15 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  # laravel 安装程序
  && composer global require --prefer-dist "laravel/installer" \
+ # php-cs-fixer
+ # https://github.com/FriendsOfPHP/PHP-CS-Fixer
  && composer global require --prefer-dist "friendsofphp/php-cs-fixer" \
+ # Sami an API documentation generator
+ # https://github.com/FriendsOfPHP/Sami
+ && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
+ && chmod +x /usr/local/bin/sami \
  && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
- # 默认不启用 xdebug
- && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
  # 创建日志文件夹
  && mkdir -p /var/log/php-fpm \
  && ln -sf /dev/stdout /var/log/php-fpm/access.log \

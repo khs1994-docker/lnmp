@@ -115,6 +115,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libexif-dev \
     libgmp10 \
     libgmp-dev \
+    libc-client2007e-dev \
+    libc-client2007e \
     libkrb5-3 \
     libkrb5-dev \
     libxpm4 \
@@ -189,7 +191,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         --with-png-dir=/usr/lib \
         --with-webp-dir=/usr/lib \
         --with-xpm-dir=/usr/lib \
-    --with-kerberos \
     --with-libedit \
     --with-openssl \
         --with-system-ciphers \
@@ -215,15 +216,14 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         --with-libzip \
     --enable-calendar=shared \
     --enable-intl=shared \
-		\
     --enable-exif \
     --with-bz2 \
     --with-tidy \
     --with-gmp \
     --with-imap=shared \
         --with-imap-ssl \
+        --with-kerberos \
     --with-xmlrpc \
-    \
     --with-pic \
     --with-enchant=shared \
     --enable-fileinfo=shared \

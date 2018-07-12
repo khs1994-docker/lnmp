@@ -1,4 +1,5 @@
 version: "3.5"
+
 services:
 
   arm32v7-php-fpm:
@@ -7,4 +8,4 @@ services:
       args:
         DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
         DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm32v7-php-fpm:${TAG:-7.2.7}-stretch
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm32v7-php:${TAG:-7.2.7}-fpm-stretch

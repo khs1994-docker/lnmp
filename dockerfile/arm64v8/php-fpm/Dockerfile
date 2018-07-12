@@ -17,7 +17,7 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && set -xe \
       # 新增的包
-      && KHS1994_PHP_FPM_APKS=" \
+      && PHP_FPM_APKS=" \
                             git \
                             # 以下两个均为版本控制系统
                             # subversion \
@@ -28,7 +28,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                             tzdata \
                             " \
       # 不要删除
-      && KHS1994_PHP_FPM_RUN_DEPS=" \
+      && PHP_FPM_RUN_DEPS=" \
                          libmemcached \
                          libpq \
                          libzip \
@@ -45,10 +45,12 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          c-client \
                          libwebp \
                          icu-libs \
+                         libxpm \
+                         libwebp \
                          " \
                          # tidyhtml-libs \
       # *-dev 编译之后删除
-      && KHS1994_PHP_FPM_BUILD_DEPS=" \
+      && PHP_FPM_BUILD_DEPS=" \
                          libressl-dev \
                          libmemcached-dev \
                          cyrus-sasl-dev \
@@ -68,42 +70,48 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
+                         libxpm-dev \
+                         libwebp-dev \
                          " \
                          # tidyhtml-dev \
-        && apk add --no-cache --virtual .khs1994-php-fpm-run-deps $KHS1994_PHP_FPM_RUN_DEPS \
-        && apk add --no-cache linux-headers \
-        && apk add --no-cache --virtual .khs1994-php-fpm-apks $KHS1994_PHP_FPM_APKS \
-        && apk add --no-cache --virtual .khs1994-php-fpm-build-deps $KHS1994_PHP_FPM_BUILD_DEPS \
+        && apk add --no-cache --virtual .php-fpm-apks $PHP_FPM_APKS \
+        && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
+        && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-configure gd \
-                                    --disable-gd-jis-conv \
-                                    --with-freetype-dir=/usr/include/ \
-                                    --with-jpeg-dir=/usr/include/ \
-        && docker-php-ext-install -j"$(nproc)" bcmath \
-                                               pdo_pgsql \
-                                               pdo_mysql \
-                                               zip \
-                                               gd \
-                                               pcntl \
-                                               mysqli \
-                                               pgsql \
-                                               bz2 \
-                                               calendar \
-                                               enchant \
-                                               exif \
-                                               gettext \
-                                               gmp \
-                                               imap \
-                                               intl \
-                                               sockets \
-                                               sysvmsg \
-                                               sysvsem \
-                                               sysvshm \
-                                               # tidy \
-                                               xmlrpc \
-                                               xsl \
-        && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+                                        --disable-gd-jis-conv \
+                                        --with-freetype-dir=/usr \
+                                        --with-jpeg-dir=/usr \
+                                        --with-png-dir=/usr \
+                                        --with-webp-dir=/usr \
+                                        --with-xpm-dir=/usr \
+        && docker-php-ext-install bcmath \
+                                          bz2 \
+                                          calendar \
+                                          enchant \
+                                          exif \
+                                          gd \
+                                          gettext \
+                                          gmp \
+                                          imap \
+                                          intl \
+                                          mysqli \
+                                          pcntl \
+                                          pdo_pgsql \
+                                          pdo_mysql \
+                                          pgsql \
+                                          sockets \
+                                          sysvmsg \
+                                          sysvsem \
+                                          sysvshm \
+                                          # tidy \
+                                          xmlrpc \
+                                          xsl \
+                                          zip \
+                                          # opcache 已默认安装，需要自行载入
+                                          opcache \
+        && apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS \
         && pecl install mongodb \
                         igbinary \
                         redis \
@@ -118,14 +126,14 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                  xdebug \
                                  yaml \
                                  igbinary \
-                                 # opcache 已默认安装，需要自行载入
-                                 opcache \
                                  swoole \
-        && apk del .build-deps linux-headers .khs1994-php-fpm-build-deps \
+        && apk del .build-deps .php-fpm-build-deps \
         && rm -rf /tmp/* \
+        # 默认不启用 xdebug
+        && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default
         # config opcache
         # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-        && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
+        # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
 
 # install composer
 
@@ -154,11 +162,15 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
  # laravel 安装程序
  && composer global require --prefer-dist "laravel/installer" \
+ # php-cs-fixer
+ # https://github.com/FriendsOfPHP/PHP-CS-Fixer
  && composer global require --prefer-dist "friendsofphp/php-cs-fixer" \
+ # Sami an API documentation generator
+ # https://github.com/FriendsOfPHP/Sami
+ && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
+ && chmod +x /usr/local/bin/sami \
  && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
- # 默认不启用 xdebug
- && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
  # 创建日志文件夹
  && mkdir -p /var/log/php-fpm \
  && ln -sf /dev/stdout /var/log/php-fpm/access.log \

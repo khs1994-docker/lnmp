@@ -1,18 +1,27 @@
-version: "3.5"
+version: "3.6"
+
 services:
+
+  7_3_X:
+    build:
+      context: ./7.3/alpine
+      args:
+        PHP_VERSION: ${PHP_VERSION_73:-7.3.0}
+        ALPINE_URL: mirrors.ustc.edu.cn
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.0}-fpm-alpine
 
   7_2_X:
     build:
-      context: ./7.2/alpine3.7
+      context: ./7.2/alpine
       args:
         PHP_VERSION: ${PHP_VERSION_72:-7.2.7}
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php-fpm:${PHP_VERSION_72:-7.2.7}-alpine3.7
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.7}-fpm-alpine
 
   7_1_X:
     build:
-      context: ./7.1/alpine3.7
+      context: ./7.1/alpine
       args:
         PHP_VERSION: ${PHP_VERSION_71:-7.1.19}
         # ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php-fpm:${PHP_VERSION_71:-7.1.19}-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_71:-7.1.19}-fpm-alpine

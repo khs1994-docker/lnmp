@@ -164,7 +164,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/php/
     #   dockerfile: Dockerfile
     # image:lnmp-php:lastet
-    image: "khs1994/${ARM_ARCH:-arm64v8}-php-fpm:${KHS1994_LNMP_PHP_VERSION:-7.2.5}-${ARM_PHP_BASED_OS}"
+    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${KHS1994_LNMP_PHP_VERSION:-7.2.5}-fpm-${ARM_PHP_BASED_OS}"
     networks:
       - frontend
       - backend
@@ -179,7 +179,7 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.08} ${ARM_ARCH:-arm64v8} With Pull Docker Image
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.09} ${ARM_ARCH:-arm64v8} With Pull Docker Image
       - APP_ENV=development
     command: ["php-fpm","-R"]
 

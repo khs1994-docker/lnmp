@@ -2,7 +2,7 @@
 # You can overwrite this file in .env.ps1
 #
 
-$global:LNMP_PHP_IMAGE="khs1994/php-fpm:7.2.7-alpine3.7"
+$global:LNMP_PHP_IMAGE="khs1994/php:7.2.7-fpm-alpine"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 

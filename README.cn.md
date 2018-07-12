@@ -113,7 +113,7 @@ $ ./lnmp-docker.sh up
 
 $ curl 127.0.0.1
 
-Welcome use khs1994-docker/lnmp v18.08 x86_64 With Pull Docker Image
+Welcome use khs1994-docker/lnmp v18.09 x86_64 With Pull Docker Image
 
 development
 
@@ -211,9 +211,9 @@ $ ./lnmp-docker.sh down
 
 每月更新版本，版本命名方式为 `YY.MM`，更新记录请查看 [Releases](https://github.com/khs1994-docker/lnmp/releases)。
 
-* [v18.07 2018-05-20](https://github.com/khs1994-docker/lnmp/releases/tag/v18.07)
+* [v18.08 2018-07-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08)
 
-* ~~[v18.06 2018-04-28](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06) **EOL**~~
+* ~~[v18.07 2018-05-20](https://github.com/khs1994-docker/lnmp/releases/tag/v18.07) **EOL**~~
 
 ## 项目说明
 
@@ -231,10 +231,10 @@ $ ./lnmp-docker.sh down
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`              | **8.0.11**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.7`            | **10.3.7**             |`Debian:jessie` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc3-alpine`        | **5.0-rc3**            |`Alpine:3.8`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php-fpm:7.2.7-alpine3.7`  | **7.2.7**       |`Alpine:3.7`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php-fpm:7.2.7-alpine3.7`  | **5.6.x**       |`Alpine:3.7`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php-fpm:7.2.7-alpine3.7`  | **1.6.5**       |`Alpine:3.7`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-fpm:7.2.7-alpine3.7`  | **2.12.1**      |`Alpine:3.7`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.7-fpm-alpine`  | **7.2.7**       |`Alpine:3.7`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.7-fpm-alpine`  | **5.6.x**       |`Alpine:3.7`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.7-fpm-alpine`  | **1.6.5**       |`Alpine:3.7`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.7-fpm-alpine`  | **2.12.1**      |`Alpine:3.7`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.9-alpine`           | **1.5.9**       |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.6-management-alpine` | **3.7.6**       |`Alpine:3.7`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.8`    |
