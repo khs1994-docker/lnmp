@@ -1730,7 +1730,7 @@ if [ ${ARCH} = 'armv7l' ];then
     sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=/g" .env
 elif [ ${ARCH} = 'aarch64' ];then
     sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm64v8/g" .env
-    sed -i "s/^ARM_PHP_BASED_OS.*/ARM_PHP_BASED_OS=alpine3.7/g" .env
+    sed -i "s/^ARM_PHP_BASED_OS.*/ARM_PHP_BASED_OS=alpine/g" .env
 fi
 
 print_info "ARCH is ${OS} ${ARCH}\n"
