@@ -664,24 +664,38 @@ XXX
     "toolkit-docs" {
       if(!(Test-Path app/khsdocs/k8s)){
         git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git app/khsdocs/k8s
+      }else{
+        git -C app/khsdocs/k8s fetch --depth=1 origin gh-pages
+        git -C app/khsdocs/k8s reset --hard origin/gh-pages
       }
 
       if(!(Test-Path app/khsdocs/docker)){
         git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git app/khsdocs/docker
+      }else{
+        git -C app/khsdocs/docker fetch --depth=1 origin pages
+        git -C app/khsdocs/docker reset --hard origin/pages
       }
 
       if(!(Test-Path app/khsdocs/laravel)){
         git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git app/khsdocs/laravel
+      }else{
+        git -C app/khsdocs/laravel fetch --depth=1 origin gh-pages
+        git -C app/khsdocs/laravel reset --hard origin/gh-pages
       }
 
       if(!(Test-Path app/khsdocs/laravel-en)){
         git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git app/khsdocs/laravel-en
+      }else{
+        git -C app/khsdocs/laravel-en fetch --depth=1 origin gh-pages
+        git -C app/khsdocs/laravel-en reset --hard origin/gh-pages
       }
 
       if(!(Test-Path app/khsdocs/nginx)){
         git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git app/khsdocs/nginx
+      }else{
+        git -C app/khsdocs/nginx fetch --depth=1 origin gh-pages
+        git -C app/khsdocs/nginx reset --hard origin/gh-pages
       }
-
     }
 
     gcr.io {

@@ -287,22 +287,37 @@ _satis(){
 _local_docs_server(){
   if ! [ -d app/khsdocs/k8s ];then
     git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git app/khsdocs/k8s
+  else
+    git -C app/khsdocs/k8s fetch --depth=1 origin gh-pages
+    git -C app/khsdocs/k8s reset --hard origin/gh-pages
   fi
 
   if ! [ -d app/khsdocs/docker ];then
     git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git app/khsdocs/docker
+  else
+    git -C app/khsdocs/docker fetch --depth=1 origin pages
+    git -C app/khsdocs/docker reset --hard origin/pages
   fi
 
   if ! [ -d app/khsdocs/laravel ];then
     git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git app/khsdocs/laravel
+  else
+    git -C app/khsdocs/laravel fetch --depth=1 origin gh-pages
+    git -C app/khsdocs/laravel reset --hard origin/gh-pages
   fi
 
   if ! [ -d app/khsdocs/laravel-en ];then
     git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git app/khsdocs/laravel-en
+  else
+    git -C app/khsdocs/laravel-en fetch --depth=1 origin gh-pages
+    git -C app/khsdocs/laravel-en reset --hard origin/gh-pages
   fi
 
   if ! [ -d app/khsdocs/nginx ];then
     git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git app/khsdocs/nginx
+  else
+    git -C app/khsdocs/nginx fetch --depth=1 origin gh-pages
+    git -C app/khsdocs/nginx reset --hard origin/gh-pages
   fi
 }
 
