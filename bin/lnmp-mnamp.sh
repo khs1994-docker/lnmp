@@ -33,11 +33,15 @@ function _start(){
           if ! [ -f /usr/local/var/run/redis.log ];then sudo touch /usr/local/var/run/redis.log; fi
           sudo redis-server \
               --logfile /usr/local/var/run/redis.log \
+              --save 900 1 \
+              --save 300 10 \
+              --save 60 10000 \
               --dir /tmp \
               --bind 127.0.0.1 \
               --appendonly yes \
               --pidfile /usr/local/var/run/redis.pid \
-              --daemonize yes
+              --daemonize yes \
+              --aof-use-rdb-preamble yes
       ;;
 
       mongodb )

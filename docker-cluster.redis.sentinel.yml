@@ -14,11 +14,11 @@ version: "3.6"
 #
 # Example Port
 #
-# Master 10000
+# Master 20000
 #
-# Slave 10001 10002 10003
+# Slave 20001 20002 20003
 #
-# Sentinel 11000 11001
+# Sentinel 21000 21001
 #
 
 #
@@ -67,16 +67,16 @@ services:
     << : *default-common
     << : *default-labels
     ports:
-      - "10000:10000"
+      - "20000:20000"
     entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
       "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 10000",
+      "--port 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 10000",
+      "--slave-announce-port 20000",
       "--appendonly yes",
       "--save \"\""
       # "--aof-use-rdb-preamble yes"
@@ -107,10 +107,10 @@ services:
       "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 10001",
-      "--slaveof redis_sentinel_master-1 10000",
+      "--port 20001",
+      "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 10001"
+      "--slave-announce-port 20001"
       # "--appendonly yes",
       # "--save \"\"",
       # "--aof-use-rdb-preamble yes"
@@ -130,7 +130,7 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
     ports:
-      - "10001:10001"
+      - "20001:20001"
 
   redis_sentinel_slave-2:
     << : *default-common
@@ -138,17 +138,17 @@ services:
     depends_on:
       - redis_sentinel_master-1
     ports:
-      - "10002:10002"
+      - "20002:20002"
     entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
       "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 10002",
-      "--slaveof redis_sentinel_master-1 10000",
+      "--port 20002",
+      "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 10002"
+      "--slave-announce-port 20002"
       # "--appendonly yes",
       # "--save \"\"",
       # "--aof-use-rdb-preamble yes"
@@ -174,17 +174,17 @@ services:
     depends_on:
       - redis_sentinel_master-1
     ports:
-      - "10003:10003"
+      - "20003:20003"
     entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
       "/data/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 10003",
-      "--slaveof redis_sentinel_master-1 10000",
+      "--port 20003",
+      "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 10003"
+      "--slave-announce-port 20003"
       # "--appendonly yes",
       # "--save \"\"",
       # "--aof-use-rdb-preamble yes"
@@ -210,18 +210,18 @@ services:
     depends_on:
       - redis_sentinel_master-1
     ports:
-      - "11000:11000"
+      - "21000:21000"
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
-      - SENTINEL_PORT=11000
+      - SENTINEL_PORT=21000
       - SENTINEL_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
       - SENTINEL_MASTER_HOST=redis_sentinel_master-1
-      - SENTINEL_MASTER_PORT=10000
+      - SENTINEL_MASTER_PORT=20000
       - SENTINEL_NUM=2
     command: [
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 11000"
+      "--port 21000"
       ]
     volumes:
       - cluster_redis_s_sentinel-1-data:/data
@@ -247,18 +247,18 @@ services:
     depends_on:
       - redis_sentinel_master-1
     ports:
-      - "11001:11001"
+      - "21001:21001"
     entrypoint: /docker-entrypoint.sentinel.sh
     environment:
-      - SENTINEL_PORT=11001
+      - SENTINEL_PORT=21001
       - SENTINEL_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
       - SENTINEL_MASTER_HOST=redis_sentinel_master-1
-      - SENTINEL_MASTER_PORT=10000
+      - SENTINEL_MASTER_PORT=20000
       - SENTINEL_NUM=2
     command: [
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 11001"
+      "--port 21001"
       ]
     volumes:
       - cluster_redis_s_sentinel-2-data:/data

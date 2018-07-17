@@ -31,3 +31,30 @@ $ ./lnmp-docker.sh clusterkit-mysql-remove
 主服务器 `root` 账号
 
 从服务器 `node` 账号（拥有只读权限）
+
+## Laravel
+
+```php
+'mysql' => [
+    'read' => [
+        'host' => '192.168.1.1',
+        'port' => '3306',
+    ],
+    'write' => [
+        'host' => '196.168.1.2',
+        'port' => '3306'
+    ],
+    'sticky'    => true,
+    'driver'    => 'mysql',
+    'database'  => 'database',
+    'username'  => 'root',
+    'password'  => '',
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix'    => '',
+],
+```
+
+```php
+$users = DB::connection('foo')->select(...);
+```

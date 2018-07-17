@@ -40,10 +40,14 @@ function _start(){
           sudo redis-server \
               --logfile /run/redis.log \
               --bind 127.0.0.1 \
+              --save 900 1 \
+              --save 300 10 \
+              --save 60 10000 \
               --dir /tmp \
               --appendonly yes \
               --pidfile /run/redis.pid \
-              --daemonize yes
+              --daemonize yes \
+              --aof-use-rdb-preamble yes
 
       ;;
 

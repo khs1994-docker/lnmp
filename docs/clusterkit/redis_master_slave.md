@@ -31,3 +31,55 @@ $ ./lnmp-docker.sh clusterkit-redis-master-slave-remove
 ```
 
 ## PHP 连接集群
+
+### predis
+
+* https://github.com/nrk/predis#replication
+
+```php
+$parameters = [
+  'tcp://192.168.199.100:22000?alias=master',
+  'tcp://10.0.0.2:23000',
+  ];
+
+$options = ['replication' => true];
+
+$client = new Predis\Client($parameters, $options);
+```
+
+### Laravel
+
+```bash
+'redis' => [
+
+    'client' => 'phpredis',
+
+    'default' => [
+        'host' => env('REDIS_HOST', 'localhost'),
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => env('REDIS_PORT', 6379),
+        'database' => 0,
+    ],
+
+    'write' => [
+        'host' => '192.168.199.100',
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => 22000,
+        'database' => 0,
+    ],
+    'read' => [
+        'host' => '192.168.199.100',
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => 23000,
+        'database' => 0,
+    ],
+],
+```
+
+```php
+$redis = Redis::connection('write');
+$redis->set('foo','bar');
+
+$redis = Redis::connection('read');
+echo $redis->get('foo');
+```

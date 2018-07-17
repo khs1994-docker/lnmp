@@ -31,3 +31,20 @@ $m->addServers([
 ]);
 
 ```
+
+### Laravel
+
+```php
+'memcached' => [
+    [
+        'host' => '127.0.0.1',
+        'port' => 11211,
+        'weight' => 50
+    ],
+    [
+        'host' => '127.0.0.2',
+        'port' => 11211,
+        'weight' => 50
+    ]
+],
+```

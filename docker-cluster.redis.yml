@@ -28,7 +28,7 @@ version: '3.6'
 
 x-common:
   &default-common
-  image: khs1994/redis:5.0-rc3-alpine
+  image: redis:5.0-rc3-alpine
   restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_HOST:-192.168.199.100}
@@ -69,7 +69,7 @@ services:
       args:
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
         REDIS_URL: gitee.com/mirrors/redis/raw
-    image: khs1994/redis:cluster-5.0-rc1-alpine
+    image: khs1994/redis:cluster-5.0-rc3-alpine
     volumes:
       - cluster_redis_master-1-data:/data
     deploy:

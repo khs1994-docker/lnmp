@@ -1,4 +1,4 @@
-# Redis 哨兵版（S）
+# Redis 哨兵版 Sentinel
 
 在 `docker-cluster.redis.sentinel.yml` 中定义。
 
@@ -45,3 +45,109 @@ $ ./lnmp-docker.sh clusterkit-redis-sentinel-remove
 ```
 
 ## PHP 连接集群
+
+### phpredis
+
+* https://segmentfault.com/a/1190000011185598
+
+```php
+//初始化 redis 对象
+$redis = new Redis();
+//连接 sentinel 服务 host 为 ip，port 为端口
+$redis->connect($host, $port);
+
+//可能用到的部分命令，其他可以去官方文档查看
+
+//获取主库列表及其状态信息
+$result = $redis->rawCommand('SENTINEL', 'masters');
+
+//根据所配置的主库redis名称获取对应的信息
+//master_name应该由运维告知（也可以由上一步的信息中获取）
+$result = $redis->rawCommand('SENTINEL', 'master', $master_name);
+
+//根据所配置的主库redis名称获取其对应从库列表及其信息
+$result = $redis->rawCommand('SENTINEL', 'slaves', $master_name);
+
+//获取特定名称的redis主库地址
+$result = $redis->rawCommand('SENTINEL', 'get-master-addr-by-name', $master_name)
+
+//这个方法可以将以上sentinel返回的信息解析为数组
+function parseArrayResult(array $data)
+{
+    $result = array();
+    $count = count($data);
+    for ($i = 0; $i < $count;) {
+        $record = $data[$i];
+        if (is_array($record)) {
+            $result[] = parseArrayResult($record);
+            $i++;
+        } else {
+            $result[$record] = $data[$i + 1];
+            $i += 2;
+        }
+    }
+    return $result;
+}
+```
+
+### predis
+
+* https://github.com/nrk/predis
+
+* https://github.com/nrk/predis/issues/503
+
+```php
+<?php
+
+use Predis\Client;
+use Predis\Session\Handler;
+
+$options = [
+    'prefix' => 'session:',
+    'replication' => 'sentinel',
+    'service' => 'sessions',
+    'connections' => [
+        'tcp'  => 'Predis\Connection\PhpiredisStreamConnection',
+        'unix' => 'Predis\Connection\PhpiredisSocketConnection',
+    ],
+];
+
+$sentinels = [
+    'tcp://192.168.0.1:26379',
+    'tcp://192.168.0.2:26379',
+    'tcp://192.168.0.3:26379',
+];
+
+$client  = new Client($sentinels, $options);
+$handler = new Handler($client, ['gc_maxlifetime' => ini_get('session.gc_maxlifetime')]);
+$handler->register();
+```
+
+### Laravel
+
+* https://github.com/laravel/framework/pull/18850
+
+> 必须使用 predis 包，不能使用 pecl 的 redis 扩展。使用之前先在 php.ini 中注释掉加载 redis 的配置项。
+
+```bash
+$ composer require predis/predis
+```
+
+```php
+'redis' => [
+    'client' => 'predis',
+
+    'sentinel' => [
+        'tcp://192.168.199.100:21000?timeout=0.100',
+        'tcp://192.168.199.100:21001?timeout=0.100',
+        'options' => [
+            'replication' => 'sentinel',
+            'service' => env('REDIS_SENTINEL_SERVICE', 'mymaster'),
+            'parameters' => [
+                'password' => env('REDIS_PASSWORD', null),
+                'database' => 0,
+            ],
+        ],
+    ],
+],
+```

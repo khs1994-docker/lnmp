@@ -7,9 +7,9 @@ version: "3.6"
 #
 # Example port
 #
-# master 21000
+# master 22000
 #
-# slave 22000
+# slave 23000
 #
 
 #
@@ -56,14 +56,14 @@ services:
     << : *default-common
     << : *default-labels
     ports:
-       - "21000:21000"
+       - "22000:22000"
     volumes:
       - cluster_redis_m_s_master-data:/data:rw
     command: [
       "redis-server",
       "/redis.conf",
       "--daemonize no",
-      "--port 21000",
+      "--port 22000",
       # "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
@@ -83,7 +83,7 @@ services:
     << : *default-common
     << : *default-labels
     ports:
-      - "22000:22000"
+      - "23000:23000"
     volumes:
       - cluster_redis_m_s_slave-1-data:/data:rw
     command: [
@@ -91,11 +91,11 @@ services:
       "/redis.conf",
       "--daemonize no",
       "--bind 0.0.0.0",
-      "--port 22000",
+      "--port 23000",
       # "--logfile /var/log/redis/redis.log",
       "--slaveof redis_m_s_master 21000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 22000"
+      "--slave-announce-port 23000"
       # "--appendonly yes",
       # "--save \"\"",
       # "--aof-use-rdb-preamble yes"
