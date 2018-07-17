@@ -151,3 +151,10 @@ $ composer require predis/predis
     ],
 ],
 ```
+
+```php
+$redis = Redis::connection('sentinel');
+$redis->set('foo','bar');
+
+echo $redis->get('foo');
+```

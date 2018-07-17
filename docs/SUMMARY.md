@@ -35,6 +35,9 @@
     * [Kubernetes](kubernetes/README.md)
         * [k8s on Docker for Desktop](kubernetes/docker-desktop.md)
     * [Docker Registry](registry.md)
+
+## ClusterKit
+
 * [ClusterKit](clusterkit/README.md)
     * [MySQL 一主两从](clusterkit/mysql.md)
     * [Memcached 集群](clusterkit/memcached.md)
@@ -59,10 +62,7 @@
 
 * [ab command](ab.md)
 
-## Gogs
+## Git
 
 * [Gogs](gogs.md)
-
-## GitLab
-
 * [GitLab](gitlab.md)

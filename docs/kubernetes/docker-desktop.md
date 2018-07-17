@@ -2,15 +2,6 @@
 
 本 Local Server 紧跟最新 Docker EDGE 版本。
 
-## 将 gcr.io k8s.gcr.io 添加到非安全 registry
-
-`Docker 设置` -> `Daemon` -> `Basic` -> `insecure registries`
-
-```bash
-gcr.io
-k8s.gcr.io
-```
-
 ## k8s.gcr.io Local Server
 
 > `18.05-EDGE-67` 启动 k8s 所需镜像为 k8s.gcr.io/* 之前为 gcr.io/*
