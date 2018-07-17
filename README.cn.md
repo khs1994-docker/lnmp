@@ -227,7 +227,7 @@ $ ./lnmp-docker.sh down
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.7.8`        | **2.7.8**              |`Alpine:3.7`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`khs1994/nginx:1.15.1-alpine`| **1.15.1**             |`Alpine:3.7`    |
-|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.33-alpine`       | **2.4.33**             |`Alpine:3.7`    |
+|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.34-alpine`       | **2.4.34**             |`Alpine:3.7`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`              | **8.0.11**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.7`            | **10.3.7**             |`Debian:jessie` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc3-alpine`        | **5.0-rc3**            |`Alpine:3.8`    |
@@ -249,7 +249,7 @@ $ ./lnmp-docker.sh down
 |`app`         |项目文件（HTML, PHP, etc）|
 |`backup`      |备份文件          |
 |`bin`         |PHPer 常用命令    |
-|`config`      |配置文件          |               
+|`config`      |配置文件          |
 |`dockerfile`  |自定义 Dockerfile |
 |`logs`        |日志文件          |
 |`scripts`     |用户自定义脚本文件  |

@@ -39,7 +39,7 @@ $ ./lnmp-docker.sh clusterkit-redis-master-slave-remove
 ```php
 $parameters = [
   'tcp://192.168.199.100:22000?alias=master',
-  'tcp://10.0.0.2:23000',
+  'tcp://192.168.199.100:23000',
   ];
 
 $options = ['replication' => true];

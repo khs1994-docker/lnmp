@@ -20,6 +20,11 @@
 │       ├── fastcgi.conf
 │       ├── nginx.conf
 │       └── nginx.production.conf
+├── gitlab
+│   └── default
+│       └── gitlab.rb.example
+├── gogs
+│   └── app.ini.example
 ├── httpd
 │   ├── demo-ajax-header.config
 │   ├── demo-https.config
@@ -62,28 +67,26 @@
 │   ├── demo-ajax-header.config
 │   ├── demo-fzjh-80.config
 │   ├── demo-fzjh.config
+│   ├── demo-gitlab.config
 │   ├── demo-include-php.config
 │   ├── demo-include-ssl-common.config
 │   ├── demo-include-ssl.config
 │   ├── demo-khsci.config
 │   ├── demo-linuxkit.config
 │   ├── demo-registry.config
+│   ├── demo-satis.conf
 │   ├── demo-ssl
 │   │   ├── root-ca.crt
 │   │   ├── www.t.khs1994.com.crt
 │   │   └── www.t.khs1994.com.key
 │   ├── demo-ssl.config
+│   ├── demo-toolkit-docs.conf
 │   ├── demo-wechat-mini.config
 │   ├── demo-www.conf
 │   ├── demo-www.config
 │   ├── fzjh.conf
-│   ├── khsci.conf
+│   ├── gogs.config
 │   ├── README.md
-│   ├── ssl
-│   │   ├── ci.crt
-│   │   ├── home.khs1994.com.crt
-│   │   ├── home.khs1994.com.key
-│   │   └── www.khs1994.com.crt
 │   ├── ssl-self
 │   └── wait-for-php.sh
 ├── path.md
@@ -96,18 +99,34 @@
 │   │               │   └── conf.d
 │   │               │       ├── date_timezone.ini
 │   │               │       ├── docker-php-ext-bcmath.ini
+│   │               │       ├── docker-php-ext-bz2.ini
+│   │               │       ├── docker-php-ext-calendar.ini
+│   │               │       ├── docker-php-ext-enchant.ini
+│   │               │       ├── docker-php-ext-exif.ini
 │   │               │       ├── docker-php-ext-gd.ini
+│   │               │       ├── docker-php-ext-gettext.ini
+│   │               │       ├── docker-php-ext-gmp.ini
 │   │               │       ├── docker-php-ext-igbinary.ini
+│   │               │       ├── docker-php-ext-imap.ini
+│   │               │       ├── docker-php-ext-intl.ini
 │   │               │       ├── docker-php-ext-memcached.ini
 │   │               │       ├── docker-php-ext-mongodb.ini
+│   │               │       ├── docker-php-ext-mysqli.ini
 │   │               │       ├── docker-php-ext-opcache.ini
 │   │               │       ├── docker-php-ext-pcntl.ini
 │   │               │       ├── docker-php-ext-pdo_mysql.ini
 │   │               │       ├── docker-php-ext-pdo_pgsql.ini
+│   │               │       ├── docker-php-ext-pgsql.ini
 │   │               │       ├── docker-php-ext-redis.ini
+│   │               │       ├── docker-php-ext-sockets.ini
 │   │               │       ├── docker-php-ext-sodium.ini
 │   │               │       ├── docker-php-ext-swoole.ini
+│   │               │       ├── docker-php-ext-sysvmsg.ini
+│   │               │       ├── docker-php-ext-sysvsem.ini
+│   │               │       ├── docker-php-ext-sysvshm.ini
 │   │               │       ├── docker-php-ext-xdebug.ini.default
+│   │               │       ├── docker-php-ext-xmlrpc.ini
+│   │               │       ├── docker-php-ext-xsl.ini
 │   │               │       ├── docker-php-ext-yaml.ini
 │   │               │       ├── docker-php-ext-zip.ini
 │   │               │       └── memory-limit.ini
@@ -123,14 +142,21 @@
 │   ├── php.development.ini
 │   ├── php.production.ini
 │   ├── zz-docker.conf
-│   └── zz-docker.production.conf
+│   ├── zz-docker-log.conf
+│   ├── zz-docker-pm.conf
+│   ├── zz-docker.production.conf
+│   └── zz-docker-slow-log.conf
 ├── README.md
 ├── redis
 │   ├── redis.conf
 │   └── redis.production.conf
 └── registry
+    ├── ca.crt
+    ├── config.gcr.io.yml
     ├── config.production.yml
-    └── config.yml
+    ├── config.yml
+    ├── gcr.io.crt
+    └── gcr.io.key
 
-37 directories, 94 files
+39 directories, 118 files
 ```

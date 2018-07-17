@@ -49,6 +49,8 @@ function _start(){
               --daemonize yes \
               --aof-use-rdb-preamble yes
 
+          # 禁用 RDB
+          # --save ""
       ;;
 
       mongodb )

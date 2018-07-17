@@ -19,7 +19,7 @@ $global:NGINX_VERSION="1.15.1"
 # https://windows.php.net/download/
 $global:PHP_VERSION="7.2.7"
 $global:MYSQL_VERSION="8.0.11"
-$global:HTTPD_VERSION="2.4.33"
+$global:HTTPD_VERSION="2.4.34"
 $global:IDEA_VERSION="1.9.3935"
 $global:NODE_VEERSION="10.6.0"
 $global:GIT_VERSION="2.18.0"

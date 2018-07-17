@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 cp ../.env.example .env
 
 echo COMPOSE_PROJECT_NAME=config >> .env
@@ -39,7 +41,7 @@ tree . >> path.md
 
 echo "\`\`\`" >> path.md
 
-. .env
+source ./.env
 
 wget https://gitee.com/mirrors/redis/raw/${KHS1994_LNMP_REDIS_VERSION}/redis.conf -O redis/redis.conf
 

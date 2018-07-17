@@ -13,6 +13,8 @@ Changes:
 
 Updates:
 
+* `HTTPD` 2.4.34
+
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 
 #### [v18.05 (2018-04-01) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.05)
