@@ -27,3 +27,5 @@ $global:PYTHON_VERSION="3.7.0"
 $global:GOLANG_VERSION="1.10.3"
 $global:HTTPD_MOD_FCGID_VERSION="2.3.9"
 $global:ZEAL_VERSION="0.5.0"
+
+$global:APP_ENV="windows"

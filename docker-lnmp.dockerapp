@@ -1,0 +1,363 @@
+version: 18.09
+name: docker-lnmp
+description: Start LNMP(LEMP) In less than 2 minutes Powered by Docker Compose.
+namespace: khs1994
+maintainers:
+  - name: khs1994.com
+    email: khs1994@khs1994.com
+targets:
+  swarm: true
+  kubernetes: true
+
+--
+version: "3.6"
+
+#
+# @link https://docs.docker.com/compose/overview/
+# @link https://docs.docker.com/compose/compose-file/#extension-fields
+# @link https://github.com/docker-library/docs
+#
+
+x-common:
+  &default-common
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - backend
+  # dns:
+  #   - ${DNS:-114.114.114.114}
+
+services:
+
+  mysql:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}"
+    environment:
+      # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
+      # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: test
+      # MYSQL_USER:
+      # MYSQL_PASSWORD:
+    ports:
+      - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
+    volumes:
+      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+      # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
+      - ./backup/init:/docker-entrypoint-initdb.d:ro
+      - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}:rw
+      - ./logs/mysql:/var/log/mysql:rw
+      - ./backup/mysql:/backup:rw
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --default-authentication-plugin=mysql_native_password
+    secrets:
+      - db_root_password
+
+  mariadb:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3}"
+    environment:
+      # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: test
+      # MYSQL_USER:
+      # MYSQL_PASSWORD:
+    ports:
+      - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
+    volumes:
+      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+      # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
+      - ./backup/init:/docker-entrypoint-initdb.d:ro
+      - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}:rw
+      - ./logs/mariadb:/var/log/mysql:rw
+      - ./backup/mariadb:/backup:rw
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+    secrets:
+      - db_root_password
+
+  redis:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${KHS1994_LNMP_REDIS_VERSION:-4.0}-alpine"
+    ports:
+      - "${REDIS_PORT:-127.0.0.1:6379}:6379"
+    volumes:
+      - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro
+      # - redis-data:/data:rw
+      - type: volume
+        source: redis-data
+        target: /data
+        volume:
+          nocopy: true
+      # - ./logs/redis:/var/log/redis:rw
+      - type: bind
+        source: ./logs/redis
+        target: /var/log/redis
+        read_only: false
+      - zoneinfo-data:/usr/share/zoneinfo
+    # set config by command
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--logfile /var/log/redis/redis.log",
+      "--bind 0.0.0.0",
+      "--appendonly yes",
+      # "--save \"\"",
+      "--aof-use-rdb-preamble yes"
+      ]
+
+  memcached:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
+    ports:
+      - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
+
+  rabbitmq:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq:rw
+      - zoneinfo-data:/usr/share/zoneinfo
+    ports:
+      - "${RABBITMQ_PORT_1000:-127.0.0.1:15672}:15672"
+      - "${RABBITMQ_PORT:-127.0.0.1:5672}:5672"
+
+  postgresql:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+      - POSTGRES_DB=test
+    volumes:
+      - zoneinfo-data:/usr/share/zoneinfo
+      - postgresql-data:/var/lib/postgresql/data:rw
+    ports:
+      - "${POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
+    secrets:
+      # default is mysql password
+      - db_root_password
+
+  mongodb:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.0}
+    volumes:
+      - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
+      - mongodb-data:/data/db:rw
+      - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log:rw
+    ports:
+      - "${MONGODB_PORT:-127.0.0.1:27017}:27017"
+    command: ["mongod","--config","/etc/mongod.conf"]
+
+  gogs:
+    << : *default-common
+    image: gogs/gogs:latest@sha256:f9ec20c83a2cce53028455004a87888dc576dc4b0e0da10ceef434c13651b2bf
+    ports:
+      - "${LNMP_GOGS_SSH_PORT:-8022}:8022"
+      # - "${LNMP_GOGS_HTTP_PORT:-3000}:3000"
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - gogs-data:/data:rw
+      - ./${LNMP_GOGS_SSL_PATH:-config/nginx/demo-ssl}:/etc/nginx/conf.d/ssl:rw
+      - ./config/gogs/app.ini:/data/gogs/conf/app.ini:rw
+      - ./logs/gogs:/app/gogs/log:rw
+
+  gitlab:
+    << : *default-common
+    image: gitlab/gitlab-ce:latest@sha256:f56564818d3a88479430d956e82ce3581ef55d784f9091dfd0394ce7ae8112d8
+    ports:
+      - "${LNMP_GITLAB_SSH_PORT:-8022}:22"
+      # - "${LNMP_GITLAB_HTTPS_PORT:-8443}:7000"
+      # - "${LNMP_GITLAB_HTTP_PORT:-8000}:8000"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url '${LNMP_GITLAB_HOST:-https://git.t.khs1994.com}'
+        gitlab_rails['gitlab_shell_ssh_port'] = ${LNMP_GITLAB_SSH_PORT:-8022}
+        nginx['listen_port'] = 7000
+        gitlab_rails['redis_host'] = 'redis'
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - ./config/${NGINX_CONF_D:-nginx}/ssl:/etc/gitlab/ssl
+      - ./config/gitlab:/etc/gitlab
+      - ./logs/gitlab:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+
+  php7:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${KHS1994_LNMP_PHP_VERSION:-7.2.5}-fpm-alpine"
+    # container_name: khs1994-docker-lnmp-php-fpm
+    volumes:
+      - ./app:${LNMP_PHP_PATH:-/app}
+      #
+      # php-fpm config set in zz-docker.conf one file
+      #
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-log.conf:ro
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
+      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
+      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
+      - ./logs/php-fpm:/var/log/php-fpm:rw
+      - zoneinfo-data:/usr/share/zoneinfo
+      - type: tmpfs
+        target: /temp
+        tmpfs:
+          size: 1000
+    networks:
+      - frontend
+      - backend
+    expose:
+      - "9000"
+    command: php-fpm -R -F
+    env_file:
+      - ./.env.example
+      - ./.env
+      - ./cli/timezone.env
+      - ./cli/.env
+    environment:
+
+      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.09} x86_64 With Pull Docker Image
+
+  phpmyadmin:
+    << : *default-common
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${KHS1994_LNMP_PHPMYADMIN_VERSION:-latest}
+    environment:
+      - PMA_HOST=mysql
+    ports:
+      - ${PHPMYADMIN_PORT:-127.0.0.1:8080}:80
+    volumes:
+      - phpmyadmin-data:/sessions
+
+  nginx:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.15.1}-alpine"
+    ports:
+      - "${NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
+      - "${NGINX_HTTP_PORT:-0.0.0.0:80}:80"
+    volumes:
+      # - ./config/nginx:/etc/nginx/conf.d:ro
+      - type: bind
+        source: ./config/${NGINX_CONF_D:-nginx}
+        target: /etc/nginx/conf.d
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx:rw
+    working_dir: /app
+    networks:
+      - frontend
+    depends_on:
+      - php7
+
+  httpd:
+    << : *default-common
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine"
+    ports:
+      - "${HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
+      - "${HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
+    volumes:
+      - ./app:${LNMP_PHP_PATH:-/app}
+      - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
+      - ./config/${HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d
+      - ./logs/httpd:/usr/local/apache2/logs
+      - zoneinfo-data:/usr/share/zoneinfo
+    working_dir: /app
+    networks:
+      - frontend
+    depends_on:
+      - php7
+
+  registry:
+    << : *default-common
+    image: registry:${KHS1994_LNMP_REGISTRY_VERSION:-latest}
+    networks:
+      - frontend
+      - backend
+    # ports:
+    #   - "5000:5000"
+    volumes:
+      - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml
+      - registry-data:/var/lib/registry
+
+--
+ARM_ARCH: ""
+ARM_BASED_OS: -alpine
+ARM_PHP_BASED_OS: ""
+CI_HOST: ""
+CLUSTERKIT_MYSQL_HOST: ""
+CLUSTERKIT_REDIS_HOST: ""
+CLUSTERKIT_REDIS_M_S_HOST: ""
+CLUSTERKIT_REDIS_S_HOST: ""
+COMPOSE_PROJECT_NAME: lnmp
+DEVELOPMENT_INCLUDE: '"nginx mysql php7 redis phpmyadmin"'
+DNS: 114.114.114.114
+DNS_TYPE: dns_dp
+DP_Id: ""
+DP_Key: ""
+HTTPD_CONF: FILL ME
+HTTPD_CONF_D: FILL ME
+HTTPD_CONF_GIT: '"-b master https://github.com/khs1994-docker/lnmp-httpd-conf-demo.git"'
+HTTPD_HTTP_PORT: 0.0.0.0:80
+HTTPD_HTTPS_PORT: 0.0.0.0:443
+KHS1994_LNMP_DOCKER_VERSION: v18.09
+KHS1994_LNMP_HTTPD_VERSION: 2.4.33
+KHS1994_LNMP_MARIADB_VERSION: 10.3.7
+KHS1994_LNMP_MEMCACHED_VERSION: 1.5.8
+KHS1994_LNMP_MONGODB_VERSION: 4.0.0
+KHS1994_LNMP_MYSQL_VERSION: 8.0.11
+KHS1994_LNMP_NGINX_VERSION: 1.15.1
+KHS1994_LNMP_PHP_VERSION: 7.2.7
+KHS1994_LNMP_PHPMYADMIN_VERSION: latest
+KHS1994_LNMP_POSTGRESQL_VERSION: "10.4"
+KHS1994_LNMP_RABBITMQ_VERSION: 3.7.6
+KHS1994_LNMP_REDIS_VERSION: 5.0-rc3
+KHS1994_LNMP_REGISTRY_HOST: docker.t.khs1994.com
+KHS1994_LNMP_REGISTRY_VERSION: latest
+LNMP_DOCKER_IMAGE_PREFIX: khs1994
+LNMP_DOMAIN: com.khs1994.lnmp
+LNMP_GITLAB_HOST: ""
+LNMP_GITLAB_SSH_PORT: "8022"
+LNMP_GOGS_HTTP_PORT: "3000"
+LNMP_GOGS_SSH_PORT: "8022"
+LNMP_GOGS_SSL_PATH: config/nginx/demo-ssl
+LNMP_MARIADB_CONF: FILL ME
+LNMP_MARIADB_DATA: FILL ME
+LNMP_MYSQL_CONF: FILL ME
+LNMP_MYSQL_DATA: FILL ME
+LNMP_PATH: ""
+LNMP_PHP_ERROR_INI: FILL ME
+LNMP_PHP_FPM_CONF: FILL ME
+LNMP_PHP_INI: FILL ME
+LNMP_PHP_PATH: /app
+LNMP_PHP_XDEBUG_INI: FILL ME
+LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX: khs1994
+MACOS_HTTPD_CONF_GIT: ""
+MACOS_NGINX_CONF_GIT: ""
+MEMCACHED_PORT: 127.0.0.1:11211
+MONGODB_CONF: FILL ME
+MONGODB_PORT: 127.0.0.1:27017
+MYSQL_PORT: 127.0.0.1:3306
+NGINX_CONF: FILL ME
+NGINX_CONF_D: FILL ME
+NGINX_CONF_GIT: '"-b master https://github.com/khs1994-docker/lnmp-nginx-conf-demo.git"'
+NGINX_HTTP_PORT: 0.0.0.0:80
+NGINX_HTTPS_PORT: 0.0.0.0:443
+PHPMYADMIN_PORT: 127.0.0.1:8080
+POSTGRESQL_PORT: 127.0.0.1:5432
+RABBITMQ_PORT: 127.0.0.1:5672
+RABBITMQ_PORT_1000: 127.0.0.1:15672
+REDIS_CONF: FILL ME
+REDIS_PORT: 127.0.0.1:6379
+REGISTRY_CONF: FILL ME
+TZ: Asia/Shanghai
+WINDOWS_HTTPD_CONF_GIT: ""
+WINDOWS_NGINX_CONF_GIT: ""

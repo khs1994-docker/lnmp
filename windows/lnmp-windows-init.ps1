@@ -2,6 +2,15 @@
 # $ set-ExecutionPolicy RemoteSigned
 #
 
+# 大于 -gt (greater than)
+# 小于 -lt (less than)
+# 大于或等于 -ge (greater than or equal)
+# 小于或等于 -le (less than or equal)
+# 不相等 -ne （not equal）
+# 等于 -eq
+
+$ErrorAction="SilentlyContinue"
+
 . "$PSScriptRoot/.env.example.ps1"
 
 if (Test-Path "$PSScript/.env.ps1"){
@@ -66,12 +75,12 @@ Function _echo_line(){
 
 Function _installer($zip, $unzip_path, $unzip_folder_name = 'null', $soft_path = 'null'){
   if (Test-Path $soft_path){
-    Write-Host "$unzip_folder_name already installed" -ForegroundColor Green
+    Write-Host "===> $unzip_folder_name already installed" -ForegroundColor Green
     _echo_line
     return
   }
 
-  Write-Host "$unzip_folder_name installing ..." -ForegroundColor Red
+  Write-Host "===> $unzip_folder_name installing ..." -ForegroundColor Red
 
   if (!(Test-Path $unzip_folder_name)){
     _unzip $zip $unzip_path
@@ -93,11 +102,11 @@ cd $home\Downloads
 
 Function _downloader($url, $path, $soft, $version = 'null version'){
   if (!(Test-Path $path)){
-    Write-Host "download $soft $version..." -NoNewLine -ForegroundColor Green
+    Write-Host "===> download $soft $version..." -NoNewLine -ForegroundColor Green
     _wget $url $path
     _echo_line
   }else{
-     Write-Host "skip $soft $version" -NoNewLine -ForegroundColor Red
+     Write-Host "===> skip $soft $version" -NoNewLine -ForegroundColor Red
      _echo_line
   }
 }
@@ -312,30 +321,93 @@ _downloader `
 
 ################################################################################
 
-_installer nginx-${NGINX_VERSION}.zip C:\ C:\nginx-${NGINX_VERSION} C:\nginx
-
-_installer mysql-${MYSQL_VERSION}-winx64.zip C:\ C:\mysql-${MYSQL_VERSION}-winx64 C:\mysql
-
-_installer php-${PHP_VERSION}-nts-Win32-VC15-x64.zip C:\php C:\php C:\php
-
-cp php-cgi-spawner.exe C:\php
-
-_installer httpd-${HTTPD_VERSION}-win64-VC15.zip C:\ C:\Apache24 C:\Apache24
-
-if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
-  _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip C:\Apache24\modules `
-  C:\Apache24\modules\mod_fcgid-${HTTPD_MOD_FCGID_VERSION} C:\Apache24\modules\mod_fcgid
-
-  mv C:\Apache24\modules\mod_fcgid\mod_fcgid.so C:\Apache24\modules\mod_fcgid.so
+Function _nginx(){
+  _installer nginx-${NGINX_VERSION}.zip C:\ C:\nginx-${NGINX_VERSION} C:\nginx
 }
 
-_installer node-v${NODE_VEERSION}-win-x64.zip C:\ C:\node-v${NODE_VEERSION}-win-x64 C:\node
+Function _mysql(){
+  _installer mysql-${MYSQL_VERSION}-winx64.zip C:\ C:\mysql-${MYSQL_VERSION}-winx64 C:\mysql
+}
 
-_installer RunHiddenConsole.zip C:\bin C:\bin\RunHiddenConsole.exe C:\bin\RunHiddenConsole.exe
+Function _php(){
+  _installer php-${PHP_VERSION}-nts-Win32-VC15-x64.zip C:\php C:\php C:\php
 
-_installer go${GOLANG_VERSION}.windows-amd64.zip C:\ C:\go C:\go
+  Get-Process php-cgi-spawner | out-null
 
-[environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User");
+  if(!($?)){
+    cp php-cgi-spawner.exe C:\php
+  }
+
+  _installer RunHiddenConsole.zip C:\bin C:\bin\RunHiddenConsole.exe C:\bin\RunHiddenConsole.exe
+}
+
+Function _httpd(){
+  _installer httpd-${HTTPD_VERSION}-win64-VC15.zip C:\ C:\Apache24 C:\Apache24
+
+  if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
+    _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip C:\Apache24\modules `
+      C:\Apache24\modules\mod_fcgid-${HTTPD_MOD_FCGID_VERSION} C:\Apache24\modules\mod_fcgid
+
+    mv C:\Apache24\modules\mod_fcgid\mod_fcgid.so C:\Apache24\modules\mod_fcgid.so
+  }
+}
+
+Function _node(){
+  _installer node-v${NODE_VEERSION}-win-x64.zip C:\ C:\node-v${NODE_VEERSION}-win-x64 C:\node
+}
+
+Function _go(){
+  $GOLANG_CURRENT_VERSION=($(go version) -split " ")[2]
+
+  if($GOLANG_CURRENT_VERSION.length -eq 0){
+    _installer go${GOLANG_VERSION}.windows-amd64.zip C:\ C:\go C:\go
+    return
+  }
+
+  if ($GOLANG_CURRENT_VERSION -ne "go$GOLANG_VERSION"){
+    Write-Host "===> Upgrade go"
+    Write-Host "Remove old go folder"
+    Remove-Item -Recurse -Force C:\go
+    Write-Host "Installing go..."
+    _unzip go${GOLANG_VERSION}.windows-amd64.zip C:\
+  }
+
+  [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User");
+}
+
+Function _python(){
+  $PYTHON_CURRENT_VERSION=($(python --version) -split " ")[1]
+  if ($PYTHON_CURRENT_VERSION -eq $PYTHON_VERSION){
+      return
+  }
+
+# https://docs.python.org/3.5/using/windows.html#installing-without-ui
+	Start-Process python-${PYTHON_VERSION}-amd64.exe -Wait `
+		-ArgumentList @( `
+			'/quiet', `
+			'InstallAllUsers=1', `
+			'TargetDir=C:\Python', `
+			'PrependPath=1', `
+			'Shortcuts=0', `
+			'Include_doc=0', `
+			'Include_pip=0', `
+			'Include_test=0' `
+    );
+}
+
+_nginx
+
+_httpd
+
+_mysql
+
+_php
+
+_node
+
+_go
+
+_python
 
 ################################################################################
 
@@ -362,7 +434,7 @@ set system env $item ...
   }
 }
 
-[environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
+[environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User");
 
 ################################################################################
 
@@ -379,7 +451,10 @@ if($(_command php)){
   }
 }
 
-$SOFT_TEST_COMMAND="git --version","docker --version","nginx -v","httpd -v", `
+$SOFT_TEST_COMMAND="git --version", `
+                   "docker --version", `
+                   "nginx -v", `
+                   "httpd -v", `
                    "mysql --version", `
                    "node -v", `
                    "npm -v", `
@@ -388,6 +463,9 @@ $SOFT_TEST_COMMAND="git --version","docker --version","nginx -v","httpd -v", `
 
 Foreach ($item in $SOFT_TEST_COMMAND)
 {
+  write-host "===> $item
+
+  "
   powershell -Command $item
   _echo_line
 }
@@ -413,15 +491,15 @@ Foreach ($item in $items)
   if (!($a -eq 1)){
 
     if ($item -eq 'Zend Opcache'){
-      echo ' ' >> C:\php\php.ini
-      echo "zend_extension=opcache" >> C:\php\php.ini
+      wsl echo ' ' >> /c/php/php.ini
+      wsl echo "zend_extension=opcache" >> /c/php/php.ini
       continue
     }
 
     if (!(Test-Path C:\php-ext\php_$item.dll)){
       if ((Test-Path C:\php\ext\php_$item.dll)){
-        echo ' ' >> C:\php\php.ini
-        echo "extension=curl" >> C:\php\php.ini
+        wsl echo ' ' >> /c/php/php.ini
+        wsl echo "extension=curl" >> /c/php/php.ini
       }else{
         continue
       }
@@ -429,12 +507,12 @@ Foreach ($item in $items)
     }
 
     if ($item -eq 'xdebug'){
-      echo ' ' >> C:\php\php.ini
-      echo "zend_extension=C:\php-ext\php_$item" >> C:\php\php.ini
+      wsl echo ' ' >> /c/php/php.ini
+      wsl echo "zend_extension=C:\php-ext\php_$item" >> /c/php/php.ini
       continue
     }
-    echo ' ' >> C:\php\php.ini
-    echo "extension=C:\php-ext\php_$item" >> C:\php\php.ini
+    wsl echo ' ' >> /c/php/php.ini
+    wsl echo "extension=C:\php-ext\php_$item" >> /c/php/php.ini
   }
 }
 
@@ -447,7 +525,7 @@ Foreach ($item in $items)
 $a = php -r "echo ini_get('curl.cainfo');"
 
 if ($a.Length -eq 0){
-  echo "curl.cainfo=C:\cacert-2018-03-07.pem" >> C:\php\php.ini
+  wsl echo "curl.cainfo=C:\cacert-2018-03-07.pem" >> /c/php/php.ini
 }
 
 php -r "echo ini_get('curl.cainfo');"
@@ -461,10 +539,13 @@ php -m
 
 ################################################################################
 
+$HTTP_IS_RUN=0
+
 get-service Apache2.4 | out-null
 
 if (!($?)){
     httpd.exe -k install
+    $HTTP_IS_RUN=1
 }
 
 $a=Select-String 'include conf.d/' C:\Apache24\conf\httpd.conf
@@ -487,31 +568,22 @@ if(!(Test-Path C:\mysql\data)){
   mysqld --install
 }
 
-$mysql_password=$(select-string "A temporary password is generated for" C:\mysql\data\*.err)
-
-$mysql_password=$($mysql_password -split " ")[12]
-
-Write-Warning "
-
-Mysql temporary password is
-
-$mysql_password
-
-"
+$mysql_password=($(select-string `
+  "A temporary password is generated for" C:\mysql\data\*.err) -split " ")[12]
 
 Write-host "
 
-Please exec command start mysql
+Please exec command start(or init) mysql
 
 $ net start mysql
 
-$ mysql -uroot -p TEMP_PASSWORD
+$ mysql -uroot -p $mysql_password
 
-$ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 
-$ FLUSH PRIVILEGES;
+mysql> FLUSH PRIVILEGES;
 
-$ GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
+mysql> GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
 "
 
 ################################################################################
@@ -524,9 +596,12 @@ _ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
 
 _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 
-echo ' ' >> $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
+Get-Process nginx | out-null
 
-echo ' ' >> $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
+if (!($?)){
+  echo ' ' >> $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
+  echo ' ' >> $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
+}
 
 ################################################################################
 
