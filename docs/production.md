@@ -16,7 +16,7 @@
 
 在 `./config/nginx/*.conf` 增加 nginx 配置。
 
-执行 `./lnmp-docker.sh swarm-deploy`。
+执行 `./lnmp-docker swarm-deploy`。
 
 ## 集群
 

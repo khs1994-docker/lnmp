@@ -6,4 +6,4 @@ pipeline:
     image: khs1994/php:7.2.7-fpm-alpine
     commands:
       - pwd
-      - bash lnmp-docker.sh
+      - bash lnmp-docker

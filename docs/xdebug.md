@@ -41,7 +41,7 @@
 ## 重启容器
 
 ```bash
-$ ./lnmp-docker.sh restart php7
+$ ./lnmp-docker restart php7
 ```
 
 ## 在 `IDE` 设置中配置 `Xdebug`

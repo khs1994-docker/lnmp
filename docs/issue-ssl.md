@@ -53,7 +53,7 @@ Let's Encrypt 现已支持通过 DNS 验证来申请通配符证书，本例以�
 * `--rsa`
 
 ```bash
-$ ./lnmp-docker.sh ssl example.com -d *.example.com -d t.example.com -d *.t.example.com [--debug]
+$ ./lnmp-docker ssl example.com -d *.example.com -d t.example.com -d *.t.example.com [--debug]
 ```
 
 > 特别提示，`*.example.com` 的证书不支持 `example.com` 所以一个主域要写两次
@@ -63,13 +63,13 @@ $ ./lnmp-docker.sh ssl example.com -d *.example.com -d t.example.com -d *.t.exam
 若你的网站服务器不是 NGINX 而是 HTTPD，那么请加上 `--httpd` 参数，即
 
 ```bash
-$ ./lnmp-docker.sh ssl example.com -d *.example.com --httpd
+$ ./lnmp-docker ssl example.com -d *.example.com --httpd
 ```
 
 默认申请 `ECC` 证书，你可以加上 `--rsa` 来申请 RSA 证书，即
 
 ```bash
-$ ./lnmp-docker.sh ssl example.com -d *.example.com --rsa
+$ ./lnmp-docker ssl example.com -d *.example.com --rsa
 ```
 
 ### 生成证书的位置
@@ -81,7 +81,7 @@ $ ./lnmp-docker.sh ssl example.com -d *.example.com --rsa
 ### 签发自签名证书
 
 ```bash
-$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com 127.0.0.1 localhost
+$ ./lnmp-docker ssl-self khs1994.com *.khs1994.com 127.0.0.1 localhost
 ```
 
 生成的 ssl 文件位于 `./config/nginx/ssl-self`。

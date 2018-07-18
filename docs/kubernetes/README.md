@@ -1,3 +1,7 @@
+# 手动在 CoreOS 部署 Kubernetes 集群
+
+* https://github.com/khs1994-docker/coreos-kubernetes
+
 # Docker 桌面版支持 k8s
 
 ## 切换
@@ -17,24 +21,6 @@ $ kubectl config use-context minikube
 ```
 
 >更多信息请查看：https://www.khs1994.com/docker/docker-win-k8s.html
-
-启用 `k8s` 之后，输入如下命令
-
-```bash
-$ docker stack deploy -c docker-k8s.yml lnmp
-
-$ docker stack services lnmp
-
-$ kubectl get services
-
-$ kubectl get pod
-```
-
-## 删除
-
-```bash
-$ docker stack rm lnmp
-```
 
 ## DashBoard
 

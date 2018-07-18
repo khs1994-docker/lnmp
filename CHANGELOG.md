@@ -7,6 +7,7 @@ Bug fixes:
 
 Changes:
 
+* Rename `lnmp-docker.sh` to `lnmp-docker`
 * Update PHP Tag `khs1994/php:VERSION-fpm-alpine`
 * Add PHP73 Based `alpine:3.8`
 * Support Windows Container

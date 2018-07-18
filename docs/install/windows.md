@@ -62,5 +62,5 @@ $ curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/wsl.conf
 
 # 打开 PowerShell
 
-$ wsl ./lnmp-docker.sh
+$ wsl ./lnmp-docker
 ```

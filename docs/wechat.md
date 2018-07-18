@@ -63,7 +63,7 @@ USE test;
 ```
 
 ```bash
-$ ./lnmp-docker.sh restore wechat.sql
+$ ./lnmp-docker restore wechat.sql
 ```
 
 * `微信开发者工具` 左侧预览区点击登录。

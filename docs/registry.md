@@ -7,7 +7,7 @@
 ## 启动
 
 ```bash
-$ ./lnmp-docker.sh registry-up
+$ ./lnmp-docker registry-up
 ```
 
 第一次执行时，需要输入用户名，密码（**输入两次**）完成初始化设置。
@@ -15,5 +15,5 @@ $ ./lnmp-docker.sh registry-up
 ## 停止
 
 ```bash
-$ ./lnmp-docker.sh registry-down
+$ ./lnmp-docker registry-down
 ```

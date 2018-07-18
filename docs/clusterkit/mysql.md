@@ -7,11 +7,11 @@
 ```bash
 # 创建集群，若加上 -d 参数表示后台运行。
 
-$ ./lnmp-docker.sh clusterkit-mysql-up [-d]
+$ ./lnmp-docker clusterkit-mysql-up [-d]
 
 # 销毁集群，若加上 -v 参数会销毁数据卷。
 
-$ ./lnmp-docker.sh clusterkit-mysql-down [-v]
+$ ./lnmp-docker clusterkit-mysql-down [-v]
 ```
 
 ### Swarm mode
@@ -19,11 +19,11 @@ $ ./lnmp-docker.sh clusterkit-mysql-down [-v]
 ```bash
 # 创建集群
 
-$ ./lnmp-docker.sh clusterkit-mysql-deploy
+$ ./lnmp-docker clusterkit-mysql-deploy
 
 # 销毁集群
 
-$ ./lnmp-docker.sh clusterkit-mysql-remove
+$ ./lnmp-docker clusterkit-mysql-remove
 ```
 
 # PHP 连接集群
