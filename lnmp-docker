@@ -387,7 +387,7 @@ env_status(){
       print_info ".env file existing\n"; \
   else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
 
-  if [ -f volumes/.env ];then
+  if ! [ -f volumes/.env ];then
     cp volumes/.env.example volumes/.env
   fi
 }
