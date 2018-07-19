@@ -125,9 +125,21 @@ $ mount
 
 ## 容器挂载 NFS Volume
 
+* https://docs.docker.com/storage/volumes/#choose-the--v-or---mount-flag
+
 ```bash
+$ docker volume create volume-nfs \
+    -d local \
+    -o type=nfs \
+    -o device=192.168.199.100:/ \
+    -o o=addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw
+
 $ docker container run -it --rm \
---mount 'type=volume,src=volume-nfs,dst=/data,volume-driver=local,volume-opt=type=nfs,volume-opt=device=192.168.199.100:/,"volume-opt=o=addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw"' busybox sh
+    --mount "type=volume,src=volume-nfs,dst=/data" \
+    busybox sh
+
+# $ docker container run -it --rm \
+# --mount 'type=volume,src=volume-nfs,dst=/data,volume-driver=local,volume-opt=type=nfs,volume-opt=device=192.168.199.100:/,"volume-opt=o=addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw"' busybox sh
 ```
 
 ## Compose 中使用 NFS volume
