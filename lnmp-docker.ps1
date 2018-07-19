@@ -342,6 +342,10 @@ switch($first){
       docker-compose config
     }
 
+    cn-mirror {
+      wsl -d $DistributionName lnmp-docker cn-mirror
+    }
+
     up {
       init
       docker-compose up -d ${DEVELOPMENT_INCLUDE}

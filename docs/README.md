@@ -12,7 +12,7 @@
 
 或在命令行执行 `./lnmp-docker.sh docs` 在本地阅读。
 
-# 为什么选择 Caas
+# 为什么选择 CaaS
 
 * 分钟级上线
 
