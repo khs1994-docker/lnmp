@@ -10,7 +10,7 @@ targets:
   kubernetes: true
 
 --
-version: "3.6"
+version: "3.7"
 
 #
 # @link https://docs.docker.com/compose/overview/

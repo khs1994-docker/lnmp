@@ -7,6 +7,7 @@ Bug fixes:
 
 Changes:
 
+* Need Docker CE 18.06+ AND Docker Compose 1.22.0+
 * Rename `lnmp-docker.sh` to `lnmp-docker`
 * Update PHP Tag `khs1994/php:VERSION-fpm-alpine`
 * Add PHP73 Based `alpine:3.8`

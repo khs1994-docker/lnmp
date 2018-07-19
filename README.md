@@ -38,9 +38,9 @@ Please see https://github.com/khs1994-docker/lnmp/issues/450
 
 To use LNMP Docker, you need:
 
-* [Docker CE](https://github.com/docker/docker-ce) 18.03 Stable +
+* [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
 
-* [Docker Compose](https://github.com/docker/compose) 1.20.1+
+* [Docker Compose](https://github.com/docker/compose) 1.22.0+
 
 * WSL (**Windows** Only)
 

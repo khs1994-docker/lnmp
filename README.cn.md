@@ -40,9 +40,9 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 本项目需要以下软件：
 
-* [Docker CE](https://github.com/docker/docker-ce) 18.03 Stable +
+* [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
 
-* [Docker Compose](https://github.com/docker/compose) 1.20.1+
+* [Docker Compose](https://github.com/docker/compose) 1.22.0+
 
 * WSL (**Windows** Only)
 

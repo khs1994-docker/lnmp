@@ -9,7 +9,7 @@ services:
 
 env:
   global:
-  # - DOCKER_COMPOSE_VERSION=1.17.1
+  # - DOCKER_COMPOSE_VERSION=1.22.0
   - TZ=Asia/Shanghai
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
