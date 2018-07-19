@@ -72,7 +72,7 @@ Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
 
 Official WebSite https://lnmp.khs1994.com
 
-Usage: ./docker-lnmp.sh COMMAND
+Usage: ./docker-lnmp COMMAND
 
 KhsCI EE:
   khsci-up             Up(Run) KhsCI EE https://github.com/khs1994-php/khsci
@@ -270,7 +270,7 @@ this command up a Local Server on port 443.
 
 When Docker for Desktop Start Kubernetes Success, you must remove this local server.
 
-$ lnmp-docker.sh gcr.io down
+$ lnmp-docker gcr.io down
 
     "
 }
@@ -349,7 +349,7 @@ _registry(){
     read -s -p "Please reinput password: " password_verify; echo; echo
 
     if ! [ "$password" = "$password_verify" ];then
-      print_error "两次输入的密码不同，请再次执行 ./lnmp-docker.sh registry 完成操作"; exit 1
+      print_error "两次输入的密码不同，请再次执行 ./lnmp-docker registry 完成操作"; exit 1
     fi
 
     docker run --init --rm \
@@ -387,7 +387,7 @@ env_status(){
       print_info ".env file existing\n"; \
   else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
 
-  if [ -f volumes/.env ];then
+  if ! [ -f volumes/.env ];then
     cp volumes/.env.example volumes/.env
   fi
 }
@@ -556,7 +556,7 @@ docker_compose(){
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Mac\n"
       elif [ "$OS" = 'Linux' ];then
         print_error \
-"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker.sh compose -f\n"
+"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker compose -f\n"
       elif [ "$OS" = 'MINGW64_NT-10.0' ];then
         print_error \
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows\n"
@@ -669,7 +669,7 @@ update(){
   else
     print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
   fi
-  command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker.sh
+  command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker
 }
 
 # 提交项目「开发者选项」
@@ -699,7 +699,7 @@ reset_master(){
     git submodule update --init --recursive
     set -e
   elif [ ${BRANCH} = 'master' ];then
-    print_error "${BRANCH} branch，Please exec ./lnmp-docker.sh update [-f]"
+    print_error "${BRANCH} branch，Please exec ./lnmp-docker update [-f]"
   else
     print_error "${BRANCH} error，Please checkout to  dev branch\n\n$ git checkout dev\n"
   fi
@@ -707,10 +707,10 @@ reset_master(){
 
 cn_mirror(){
   set_git_remote_origin_url
-  git remote add origin git@github.com:khs1994-docker/lnmp.git || echo
-  git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git || echo
-  git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git || echo
-  git remote add coding git@git.coding.net:khs1994/lnmp.git || echo
+  git remote add origin git@github.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || echo > /dev/null
+  git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || echo > /dev/null
+  git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || echo > /dev/null
+  git remote add coding git@git.coding.net:khs1994/lnmp.git > /dev/null 2>&1 || echo > /dev/null
   git fetch origin
   git push -f aliyun remotes/origin/dev:dev
   git push -f aliyun remotes/origin/master:master
@@ -923,23 +923,23 @@ ssl(){
   if [ -z "$1" ];then
     exec echo "command example
 
-$ ./lnmp-docker.sh ssl khs1994.com [--rsa] [--httpd] [--debug] [acme other parameters]
+$ ./lnmp-docker ssl khs1994.com [--rsa] [--httpd] [--debug] [acme other parameters]
 
 通配符证书
 
-$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com -d *.t.khs1994.com
+$ ./lnmp-docker ssl khs1994.com -d *.khs1994.com -d *.t.khs1994.com
 
 RSA 证书（默认 ECC 证书）
 
-$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com --rsa [--httpd] [--debug] [acme other parameters]
+$ ./lnmp-docker ssl khs1994.com -d *.khs1994.com --rsa [--httpd] [--debug] [acme other parameters]
 
 HTTPD server
 
-$ ./lnmp-docker.sh ssl khs1994.com -d *.khs1994.com --httpd [--rsa] [--debug] [acme other parameters]
+$ ./lnmp-docker ssl khs1994.com -d *.khs1994.com --httpd [--rsa] [--debug] [acme other parameters]
 
 ACME.sh help
 
-$ ./lnmp-docker.sh acme.sh
+$ ./lnmp-docker acme.sh
 "
   fi
 
@@ -1292,7 +1292,7 @@ For information please run $ docker service update --help
     ;;
 
   nginx-config )
-     if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh nginx-config {https|http} {PATH} {URL}"; exit 1; fi
+     if [ -z "$3" ];then print_error "$ ./lnmp-docker nginx-config {https|http} {PATH} {URL}"; exit 1; fi
      print_info 'Please set hosts in /etc/hosts in development\n'
      print_info \
 'Maybe you need generate nginx HTTPS conf in website \
@@ -1300,11 +1300,11 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
      if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
      echo
-     print_info "You must checkout ./config/${NGINX_CONF_D:-nginx}/$2.conf, then restart nginx"
+     print_info "You must checkout ./config/${NGINX_CONF_D:-nginx}/$2.conf, then restart nginx $ lnmp-docker restart nginx"
      ;;
 
   httpd-config )
-    if [ -z "$3" ];then print_error "$ ./lnmp-docker.sh apache-config {https|http} {PATH} {URL}"; exit 1; fi
+    if [ -z "$3" ];then print_error "$ ./lnmp-docker apache-config {https|http} {PATH} {URL}"; exit 1; fi
     print_info 'Please set hosts in /etc/hosts in development\n'
     print_info \
 'Maybe you need generate Apache2 HTTPS conf in website \
@@ -1312,7 +1312,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
     if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
     echo
-    print_info "You must checkout ./config/${HTTPD_CONF_D:-httpd}/$2.conf, then restart httpd"
+    print_info "You must checkout ./config/${HTTPD_CONF_D:-httpd}/$2.conf, then restart httpd $ lnmp-docker restart httpd"
     ;;
 
   php-cli | php7-cli )
@@ -1400,13 +1400,13 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   ssl-self )
     if [ -z "$1" ];then
-      print_error '$ ./lnmp-docker.sh ssl-self {IP|DOMAIN}'
+      print_error '$ ./lnmp-docker ssl-self {IP|DOMAIN}'
       echo -e "
 Example:
 
-$ ./lnmp-docker.sh ssl-self khs1994.com 127.0.0.1 192.168.199.100 localhost ...
+$ ./lnmp-docker ssl-self khs1994.com 127.0.0.1 192.168.199.100 localhost ...
 
-$ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
+$ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 "
     exit 1
     fi
@@ -1433,7 +1433,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 
 
   restart )
     if [ -z "$1" ];then docker-compose down --remove-orphans; \
-        print_info "Please exec \n\n$ ./lnmp-docker.sh development | production\n"; exit 0; fi
+        print_info "Please exec \n\n$ ./lnmp-docker development | production\n"; exit 0; fi
 
     for soft in "$@"
     do
@@ -1483,7 +1483,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 
   clusterkit-mysql-exec )
 
   if [ "$#" -lt 2 ];then
-     print_error '$ ./lnmp-docker.sh clusterkit-mysql-exec {master|node-N} {COMMAND}' ; exit 1
+     print_error '$ ./lnmp-docker clusterkit-mysql-exec {master|node-N} {COMMAND}' ; exit 1
   fi
 
      NODE=$1
@@ -1512,7 +1512,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 
   clusterkit-memcached-exec )
 
   if [ "$#" -lt 2 ];then
-     print_error '$ ./lnmp-docker.sh clusterkit-memcached-exec {N} {COMMAND}' ; exit 1
+     print_error '$ ./lnmp-docker clusterkit-memcached-exec {N} {COMMAND}' ; exit 1
   fi
 
     NODE=$1
@@ -1542,7 +1542,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 
   clusterkit-redis-exec )
 
   if [ "$#" -lt 2 ];then
-     print_error '$ ./lnmp-docker.sh clusterkit-redis-exec {master-N|slave-N} {COMMAND}' ; exit 1
+     print_error '$ ./lnmp-docker clusterkit-redis-exec {master-N|slave-N} {COMMAND}' ; exit 1
   fi
         NODE=$1
         shift
@@ -1571,7 +1571,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 
   clusterkit-redis-master-slave-exec )
     if [ "$#" -lt 2 ];then \
        print_error \
-       '$ ./lnmp-docker.sh clusterkit-redis-master-slave-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
+       '$ ./lnmp-docker clusterkit-redis-master-slave-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
 
         NODE="$1"
         shift
@@ -1599,7 +1599,7 @@ $ ./lnmp-docker.sh ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 
   clusterkit-redis-sentinel-exec )
   if [ "$#" -lt 2 ];then \
       print_error \
-        '$ ./lnmp-docker.sh clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1 ; fi
+        '$ ./lnmp-docker clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1 ; fi
 
         NODE=$1
         shift

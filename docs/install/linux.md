@@ -29,7 +29,7 @@ $ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 ```bash
 $ cd lnmp
 
-$ ./lnmp-docker.sh up
+$ ./lnmp-docker up
 ```
 
 浏览器打开 `127.0.0.1`，看到页面。
@@ -41,9 +41,9 @@ $ ./lnmp-docker.sh up
 ## 更新
 
 ```bash
-$ ./lnmp-docker.sh update
+$ ./lnmp-docker update
 
 # 强制与上游保持一致
 
-$ ./lnmp-docker.sh update -f
+$ ./lnmp-docker update -f
 ```

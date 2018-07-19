@@ -2,15 +2,6 @@
 
 本 Local Server 紧跟最新 Docker EDGE 版本。
 
-## 将 gcr.io k8s.gcr.io 添加到非安全 registry
-
-`Docker 设置` -> `Daemon` -> `Basic` -> `insecure registries`
-
-```bash
-gcr.io
-k8s.gcr.io
-```
-
 ## k8s.gcr.io Local Server
 
 > `18.05-EDGE-67` 启动 k8s 所需镜像为 k8s.gcr.io/* 之前为 gcr.io/*
@@ -26,13 +17,13 @@ ip k8s.gcr.io gcr.io
 Windows 系统每次升级之后，k8s 可能一直处于启动状态中，请首先开启 Local Server，然后在设置中重置 Kubernetes。
 
 ```bash
-$ lnmp-docker.sh gcr.io
+$ lnmp-docker gcr.io
 
 # see local server logs (only suport macOS)
 
-$ lnmp-docker.sh gcr.io logs
+$ lnmp-docker gcr.io logs
 
 # when start k8s success,please stop k8s.gcr.io
 
-$ lnmp-docker.sh gcr.io down
+$ lnmp-docker gcr.io down
 ```

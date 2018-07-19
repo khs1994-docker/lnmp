@@ -3,7 +3,7 @@
 如果你手上有一个树莓派，那也可以很轻松的使用本项目，你只需执行以下命令。
 
 ```bash
-$ ./lnmp-docker.sh development
+$ ./lnmp-docker up
 ```
 
 该脚本会识别出您使用的是树莓派，并拉取专用的 Docker 镜像。

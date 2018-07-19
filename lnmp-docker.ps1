@@ -315,7 +315,7 @@ switch($first){
     }
 
     httpd-config {
-      wsl -d $DistributionName lnmp-docker.sh httpd-config $other
+      wsl -d $DistributionName lnmp-docker httpd-config $other
     }
 
     backup {
@@ -342,6 +342,10 @@ switch($first){
       docker-compose config
     }
 
+    cn-mirror {
+      wsl -d $DistributionName lnmp-docker cn-mirror
+    }
+
     up {
       init
       docker-compose up -d ${DEVELOPMENT_INCLUDE}
@@ -361,15 +365,15 @@ switch($first){
     }
 
     dashboard {
-      wsl -d $DistributionName lnmp-docker.sh dashboard
+      wsl -d $DistributionName lnmp-docker dashboard
     }
 
     new {
-      wsl -d $DistributionName lnmp-docker.sh new $other
+      wsl -d $DistributionName lnmp-docker new $other
     }
 
     nginx-config {
-      wsl -d $DistributionName lnmp-docker.sh nginx-config $other
+      wsl -d $DistributionName lnmp-docker nginx-config $other
     }
 
     swarm-config {
@@ -572,7 +576,7 @@ switch($first){
     }
 
     update-version {
-      wsl -d $DistributionName lnmp-docker.sh update-version
+      wsl -d $DistributionName lnmp-docker update-version
     }
 
     debug {

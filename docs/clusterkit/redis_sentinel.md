@@ -27,9 +27,9 @@ SENTINEL get-master-addr-by-name $master_name(mymaster)
 在 `.env` 文件中设置 `CLUSTERKIT_REDIS_S_HOST` 变量为路由器分配给电脑的 IP，或者集群 IP
 
 ```bash
-$ ./lnmp-docker.sh clusterkit-redis-sentinel-up [-d]
+$ ./lnmp-docker clusterkit-redis-sentinel-up [-d]
 
-$ ./lnmp-docker.sh clusterkit-redis-sentinel-down [-v]
+$ ./lnmp-docker clusterkit-redis-sentinel-down [-v]
 ```
 
 ## Swarm mode
@@ -39,9 +39,9 @@ $ ./lnmp-docker.sh clusterkit-redis-sentinel-down [-v]
 
 $ export CLUSTERKIT_REDIS_S_HOST=192.168.199.100 # 自行替换为自己的 IP
 
-$ ./lnmp-docker.sh clusterkit-redis-sentinel-deply
+$ ./lnmp-docker clusterkit-redis-sentinel-deply
 
-$ ./lnmp-docker.sh clusterkit-redis-sentinel-remove
+$ ./lnmp-docker clusterkit-redis-sentinel-remove
 ```
 
 ## PHP 连接集群
@@ -150,4 +150,11 @@ $ composer require predis/predis
         ],
     ],
 ],
+```
+
+```php
+$redis = Redis::connection('sentinel');
+$redis->set('foo','bar');
+
+echo $redis->get('foo');
 ```

@@ -72,7 +72,7 @@ jobs:
     - stage: development
       install:
         - sudo rm /usr/local/bin/docker-compose
-        - ./lnmp-docker.sh compose --official -f
+        - ./lnmp-docker compose --official -f
       script: cli/test development
     - stage: swarm
       script: cli/test swarm
@@ -84,7 +84,7 @@ jobs:
     # use ubuntu 16.04
     - stage: wsl-php-builder-71
       script:
-        - ./lnmp-docker.sh compose --official -f
+        - ./lnmp-docker compose --official -f
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.1.16 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-71
@@ -97,7 +97,7 @@ jobs:
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
     - stage: wsl-php-builder-72
       script:
-        - ./lnmp-docker.sh compose --official -f
+        - ./lnmp-docker compose --official -f
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-72
@@ -113,7 +113,7 @@ jobs:
 
     - stage: wsl-php-builder-rhel-71
       script:
-        - ./lnmp-docker.sh compose --official -f
+        - ./lnmp-docker compose --official -f
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.1.16 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-71
@@ -126,7 +126,7 @@ jobs:
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     - stage: wsl-php-builder-rhel-72
       script:
-        - ./lnmp-docker.sh compose --official -f
+        - ./lnmp-docker compose --official -f
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-72

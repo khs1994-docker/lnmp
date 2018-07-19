@@ -10,7 +10,7 @@
 
 **4.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件(`./config/nginx/*.conf`)
 
-**5.** 执行 `./lnmp-docker.sh development` 或者 `./lnmp-docker.sh restart nginx`
+**5.** 执行 `./lnmp-docker up` 或者 `./lnmp-docker restart nginx`
 
 **6.** `PhpStorm` 打开 `./app/你的项目` ，开始编写代码
 
@@ -18,7 +18,7 @@
 
 **1.** `./app` 新建项目文件夹，`./config/nginx/` 新增配置文件
 
-**2.** 执行 `./lnmp-docker.sh restart nginx` 重启 nginx
+**2.** 执行 `./lnmp-docker restart nginx` 重启 nginx
 
 **3.** `PhpStorm` 打开 `./app/你的又一个新项目` ，开始编写代码
 
@@ -28,20 +28,20 @@
 
 ## 使用 CLI 交互式的创建 PHP 项目
 
-执行 `./lnmp-docker.sh new` 新建项目
+执行 `./lnmp-docker new` 新建项目
 
 ### 生成 NGINX 配置文件
 
-`./lnmp-docker.sh nginx-conf` 便捷的生成 nginx 配置文件(包括 HTTP HTTPS)
+`./lnmp-docker nginx-conf` 便捷的生成 nginx 配置文件(包括 HTTP HTTPS)
 
 ## 自行构建镜像
 
 在 `./dockerfile/` 下修改各个软件的文件夹内复制 `example.Dockerfile` 为 `Dockerfile`，并编写 `Dockerfile` 之后运行如下命令：
 
 ```bash
-$ ./lnmp-docker.sh build
+$ ./lnmp-docker build
 
-$ ./lnmp-docker.sh build-up
+$ ./lnmp-docker build-up
 
 $ curl 127.0.0.1
 
@@ -66,9 +66,9 @@ development
 ## 容器数量伸缩
 
 ```bash
-$ ./lnmp-docker.sh scale php7=3
+$ ./lnmp-docker scale php7=3
 
-$ ./lnmp-docker.sh scale php7=1
+$ ./lnmp-docker scale php7=1
 ```
 
 ## 一次启动更多软件 ？

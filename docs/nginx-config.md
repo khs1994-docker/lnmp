@@ -5,16 +5,16 @@
 命令格式为
 
 ```bash
-$ ./lnmp-docker.sh nginx-config http 路径 url
+$ ./lnmp-docker nginx-config http 路径 url
 ```
 
 示例如下
 
 ```bash
-$ ./lnmp-docker.sh nginx-config http test www.khs1994.com
+$ ./lnmp-docker nginx-config http test www.khs1994.com
 ```
 
->注意，执行命令之后请到 `config/nginx/url.conf` 检查配置文件，之后再执行 `./lnmp-docker.sh restart nginx` 重启 `NGINX`。
+>注意，执行命令之后请到 `config/nginx/url.conf` 检查配置文件，之后再执行 `./lnmp-docker restart nginx` 重启 `NGINX`。
 
 开发、测试环境可能需要修改 `/etc/hosts`。
 
@@ -25,15 +25,15 @@ $ ./lnmp-docker.sh nginx-config http test www.khs1994.com
 命令格式为
 
 ```bash
-$ ./lnmp-docker.sh nginx-config https 路径 url
+$ ./lnmp-docker nginx-config https 路径 url
 ```
 
 示例如下
 
 ```bash
-$ ./lnmp-docker.sh nginx-config https test www.khs1994.com
+$ ./lnmp-docker nginx-config https test www.khs1994.com
 ```
 
->注意，执行命令之后请到 `config/nginx/url.conf` 检查配置文件，之后再执行 `./lnmp-docker.sh restart nginx` 重启 `NGINX`。
+>注意，执行命令之后请到 `config/nginx/url.conf` 检查配置文件，之后再执行 `./lnmp-docker restart nginx` 重启 `NGINX`。
 
 开发、测试环境可能需要修改 `/etc/hosts`。

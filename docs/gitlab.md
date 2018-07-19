@@ -65,7 +65,7 @@ $ vi config/nginx/gitlab.conf
 # 启动
 
 ```bash
-$ lnmp-docker.sh up
+$ lnmp-docker up
 ```
 
 # 不再使用

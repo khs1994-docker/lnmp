@@ -15,13 +15,13 @@ export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
 ### Linux
 
 ```bash
-$ sudo ln -s $LNMP_PATH/cli/completion/bash/lnmp-docker.sh /etc/bash_completion.d/lnmp-docker.sh
+$ sudo ln -s $LNMP_PATH/cli/completion/bash/lnmp-docker /etc/bash_completion.d/lnmp-docker
 ```
 
 ### macOS
 
 ```bash
-$ sudo ln -s $LNMP_PATH/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_completion.d/lnmp-docker.sh
+$ sudo ln -s $LNMP_PATH/cli/completion/bash/lnmp-docker /usr/local/etc/bash_completion.d/lnmp-docker
 ```
 
 ## fish
@@ -29,7 +29,7 @@ $ sudo ln -s $LNMP_PATH/cli/completion/bash/lnmp-docker.sh /usr/local/etc/bash_c
 ```bash
 $ set -Ux LNMP_PATH /data/lnmp
 
-$ ln -s $LNMP_PATH/cli/completion/fish/lnmp-docker.sh.fish ~/.config/fish/completions/
+$ ln -s $LNMP_PATH/cli/completion/fish/lnmp-docker.fish ~/.config/fish/completions/
 ```
 
 > 删除环境变量 `$ set -Ue LNMP_PATH`

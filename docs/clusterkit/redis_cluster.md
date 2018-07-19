@@ -32,7 +32,7 @@ More information please exec `$ redis-cli --cluster help`
 
 # 启动，--build 参数表示每次启动前强制构建镜像 -d 表示后台运行
 
-$ ./lnmp-docker.sh clusterkit-redis-up [--build] [-d]
+$ ./lnmp-docker clusterkit-redis-up [--build] [-d]
 
 #
 # 提示
@@ -41,12 +41,12 @@ $ ./lnmp-docker.sh clusterkit-redis-up [--build] [-d]
 #
 # 如果你需要进入节点执行命令
 #
-# $ ./lnmp-docker.sh clusterkit-redis-exec redis_master-1 sh
+# $ ./lnmp-docker clusterkit-redis-exec redis_master-1 sh
 #
 
 # 销毁集群
 
-$ ./lnmp-docker.sh clusterkit-redis-down [-v]
+$ ./lnmp-docker clusterkit-redis-down [-v]
 ```
 
 ## Swarm mode
@@ -56,9 +56,9 @@ $ ./lnmp-docker.sh clusterkit-redis-down [-v]
 
 $ export CLUSTERKIT_REDIS_HOST=192.168.199.100 # 自行替换为自己的 IP
 
-$ ./lnmp-docker.sh clusterkit-redis-deploy
+$ ./lnmp-docker clusterkit-redis-deploy
 
-$ ./lnmp-docker.sh clusterkit-redis-remove
+$ ./lnmp-docker clusterkit-redis-remove
 ```
 
 ## PHP 连接集群
