@@ -41,10 +41,10 @@ check_docker_version(){
 check_nginx_conf(){
   set +e
   echo "$DEVELOPMENT_INCLUDE" | grep 'gogs' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gogs.conf > /dev/null 2>&1 \
-    && ( print_error "your env not include gogs, but nginx conf.d folder include gogs.conf" ; echo))
+    && ( print_error "your .env file not include gogs, but nginx conf.d folder include gogs.conf" ; echo))
 
   echo "$DEVELOPMENT_INCLUDE" | grep 'gitlab' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gitlab.conf > /dev/null 2>&1 \
-    && ( print_error "your env not include gitlab, but nginx conf.d folder include gitlab.conf "; echo))
+    && ( print_error "your .env file not include gitlab, but nginx conf.d folder include gitlab.conf "; echo))
 
   set -e
 }
@@ -204,13 +204,13 @@ ClusterKit:
 }
 
 _gcr_io_down(){
-  docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1|| echo
+  docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1 || echo > /dev/null
 }
 
 _gcr_io(){
   if [ "$1" = down ];then
     _gcr_io_down
-    printInfo "Stop k8s.gcr.io local server success"
+    print_info "Stop k8s.gcr.io local server success"
     echo
     exit
   fi
@@ -243,6 +243,15 @@ This local server support Docker Desktop v18.05-EDGE-67
 
     if [ "$1" = '--no-pull' ];then
       return
+    fi
+
+    if [ "$OS" = 'Darwin' ];then
+      cat ~/.docker/daemon.json | grep gcr.io > /dev/null || please_set=1
+
+      if [ "$please_set" = 1 ];then echo; \
+          print_error \
+          "Please add gcr.io k8s.gcr.io as Insecure registries In [ Docker Menu -> preferences -> Daemon -> Basic -> Insecure registries ]"; \
+          echo; exit; fi
     fi
 
     images="kube-controller-manager-amd64:v1.10.3 \
@@ -1138,11 +1147,16 @@ main() {
   ;;
 
   gcr.io )
-   cat /etc/hosts | grep 'gcr.io' > /dev/null || (printInfo "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io gcr.io' | sudo tee -a /etc/hosts )
-   sudo mkdir -p /etc/docker/certs.d/gcr.io
-   sudo mkdir -p /etc/docker/certs.d/k8s.gcr.io
-   cat config/registry/ca.crt | sudo tee /etc/docker/certs.d/gcr.io/ca.crt
-   cat config/registry/ca.crt | sudo tee /etc/docker/certs.d/k8s.gcr.io/ca.crt
+   cat /etc/hosts | grep 'gcr.io' > /dev/null || \
+       (print_info "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io gcr.io' | sudo tee -a /etc/hosts )
+
+   if ! [ "$OS" = 'Darwin' ];then
+     sudo mkdir -p /etc/docker/certs.d/gcr.io
+     sudo mkdir -p /etc/docker/certs.d/k8s.gcr.io
+     sudo bash -c "cat config/registry/ca.crt > /etc/docker/certs.d/gcr.io/ca.crt"
+     sudo bash -c "cat config/registry/ca.crt > /etc/docker/certs.d/k8s.gcr.io/ca.crt"
+   fi
+
    _gcr_io "$@"
   ;;
 
