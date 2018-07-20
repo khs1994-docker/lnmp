@@ -11,6 +11,7 @@ Changes:
 * Rename `lnmp-docker.sh` to `lnmp-docker`
 * Update PHP Tag `khs1994/php:VERSION-fpm-alpine`
 * Add PHP73 Based `alpine:3.8`
+* Add `NGINX Unit` 1.3
 * Support Windows Container
 
 Updates:

@@ -100,6 +100,13 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/nginx/
 
+  nginx-unit:
+    << : *default-labels
+    build:
+      << : *default-labels
+      << : *default-build
+      context: ./dockerfile/nginx-unit
+
   httpd:
     << : *default-labels
     build:

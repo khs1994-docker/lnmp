@@ -1,0 +1,70 @@
+{
+  "listeners": {
+    "*:8300": {
+      "application": "blogs"
+    },
+
+    "*:8400": {
+      "application": "wiki"
+    },
+
+    "*:8500": {
+      "application": "go_chat_app"
+    },
+
+    "127.0.0.1:8600": {
+      "application": "bugtracker"
+    },
+
+    "127.0.0.1:8601": {
+      "application": "cms"
+    }
+  },
+
+  "applications": {
+    "blogs": {
+      "type": "php",
+      "processes": 20,
+      "root": "/www/blogs/scripts",
+      "user": "www-blogs",
+      "group": "www-blogs",
+      "index": "index.php"
+    },
+
+    "wiki": {
+      "type": "python",
+      "processes": 10,
+      "user": "www-wiki",
+      "group": "www-wiki",
+      "path": "/www/wiki",
+      "module": "wsgi"
+    },
+
+    "go_chat_app": {
+      "type": "go",
+      "user": "www-chat",
+      "group": "www-chat",
+      "working_directory": "/www/chat",
+      "executable": "bin/chat_app"
+    },
+
+    "bugtracker": {
+      "type": "perl",
+      "processes": 3,
+      "user": "www",
+      "group": "www",
+      "working_directory": "/www/bugtracker",
+      "script": "app.psgi"
+    },
+
+    "cms": {
+      "type": "ruby",
+      "processes": 5,
+      "user": "www",
+      "group": "www",
+      "script": "/www/cms/config.ru"
+    }
+  },
+
+  "access_log": "/var/log/access.log"
+}

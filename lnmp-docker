@@ -446,6 +446,7 @@ logs(){
   if ! [ -d logs/mysql ];then mkdir -p logs/mysql && echo > logs/mysql/error.log; fi
   if ! [ -d logs/mariadb ];then mkdir -p logs/mariadb && echo > logs/mariadb/error.log; fi
   if ! [ -d logs/nginx ];then mkdir -p logs/nginx && echo > logs/nginx/error.log && echo > logs/nginx/access.log; fi
+  if ! [ -d logs/nginx-unit ];then mkdir -p logs/nginx-unit; fi
   if ! [ -d logs/php-fpm ];then
     mkdir -p logs/php-fpm && echo > logs/php-fpm/error.log \
       && echo > logs/php-fpm/access.log \
@@ -1343,6 +1344,10 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   mysql-cli )
     bash_cli mysql bash
+    ;;
+
+  nginx-unit-cli )
+    bash_cli nginx-unit bash
     ;;
 
   *-cli )

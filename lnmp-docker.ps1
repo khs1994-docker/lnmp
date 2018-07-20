@@ -99,6 +99,9 @@ Function logs(){
     New-Item logs\nginx\access.log -type file | Out-Null
     New-Item logs\nginx\error.log -type file | Out-Null
   }
+  if (! (Test-Path logs\nginx-unit)){
+    New-Item logs\nginx-unit -type directory | Out-Null
+  }
   if (! (Test-Path logs\php-fpm)){
     New-Item logs\php-fpm -type directory | Out-Null
     New-Item logs\php-fpm\error.log -type file | Out-Null
@@ -433,6 +436,10 @@ switch($first){
 
     nginx-cli {
       _bash_cli nginx sh
+    }
+
+    nginx-unit-cli {
+      _bash_cli nginx-unit bash
     }
 
     php-cli {

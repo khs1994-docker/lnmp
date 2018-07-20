@@ -1,0 +1,18 @@
+{
+  "listeners": {
+    "*:80": {
+      "application": "demo"
+    }
+  },
+  "applications": {
+    "demo": {
+      "type": "php",
+      "processes": 10,
+      "root": "/app/demo/public",
+      "index": "index.php",
+      "user": "root",
+      "group": "root",
+    }
+  },
+  "access_log": "/var/log/nginx-unit/access.log"
+}
