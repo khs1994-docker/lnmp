@@ -1,10 +1,47 @@
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-FROM arm32v7/php:7.2.7-fpm-stretch
+ARG PHP_VERSION=7.2.7
+
+FROM arm32v7/php:${PHP_VERSION}-fpm-stretch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai
+
+ENV PHP_EXTENSION \
+      bcmath \
+      bz2 \
+      calendar \
+      enchant \
+      exif \
+      gd \
+      gettext \
+      gmp \
+      imap \
+      intl \
+      mysqli \
+      pcntl \
+      pdo_pgsql \
+      pdo_mysql \
+      pgsql \
+      sockets \
+      sysvmsg \
+      sysvsem \
+      sysvshm \
+# tidy \
+      xmlrpc \
+      xsl \
+      zip
+
+ENV PECL_EXTENSION \
+      mongodb \
+      igbinary \
+      redis \
+      memcached \
+# 安装测试版的扩展，可以在扩展名后加 -beta
+      xdebug \
+      yaml \
+      swoole
 
 ARG DEB_URL=deb.debian.org
 
@@ -73,53 +110,23 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         && docker-php-ext-configure imap \
                                     --with-kerberos \
                                     --with-imap-ssl \
-        && docker-php-ext-install bcmath \
-                                          bz2 \
-                                          calendar \
-                                          enchant \
-                                          exif \
-                                          gd \
-                                          gettext \
-                                          gmp \
-                                          imap \
-                                          intl \
-                                          mysqli \
-                                          pcntl \
-                                          pdo_pgsql \
-                                          pdo_mysql \
-                                          pgsql \
-                                          sockets \
-                                          sysvmsg \
-                                          sysvsem \
-                                          sysvshm \
-                                          # tidy \
-                                          xmlrpc \
-                                          xsl \
-                                          zip \
-                                          # opcache 已默认安装，需要自行载入
-                                          opcache \
-        && pecl install mongodb \
-                        igbinary \
-                        redis \
-                        memcached \
-                        # 安装测试版的扩展，可以在扩展名后加 -beta
-                        xdebug \
-                        yaml \
-                        swoole \
-        && docker-php-ext-enable mongodb \
-                                 redis \
-                                 memcached \
-                                 xdebug \
-                                 yaml \
-                                 igbinary \
-                                 swoole \
+        && docker-php-ext-install $PHP_EXTENSION \
+        && for extension in $PECL_EXTENSION;do pecl install $extension; done \
+        && docker-php-ext-enable $PECL_EXTENSION opcache \
         && apt-get purge -y --auto-remove  $buildDeps \
         && rm -rf /tmp/* \
         # config opcache
         # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
         # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
         # 默认不启用 xdebug
-        && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default
+        && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+        /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
+        # 创建日志文件夹
+        && mkdir -p /var/log/php-fpm \
+        && ln -sf /dev/stdout /var/log/php-fpm/access.log \
+        && ln -sf /dev/stderr /var/log/php-fpm/error.log \
+        && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
+        && chmod -R 777 /var/log/php-fpm
 
 # install composer
 
@@ -156,12 +163,6 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
  && chmod +x /usr/local/bin/sami \
- && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
- # 创建日志文件夹
- && mkdir -p /var/log/php-fpm \
- && ln -sf /dev/stdout /var/log/php-fpm/access.log \
- && ln -sf /dev/stderr /var/log/php-fpm/error.log \
- && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
- && chmod -R 777 /var/log/php-fpm
+ && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub
 
 WORKDIR /app

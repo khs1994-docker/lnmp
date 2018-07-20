@@ -7,6 +7,41 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
+ENV PHP_EXTENSION \
+      bcmath \
+      bz2 \
+      calendar \
+      enchant \
+      exif \
+      gd \
+      gettext \
+      gmp \
+      imap \
+      intl \
+      mysqli \
+      pcntl \
+      pdo_pgsql \
+      pdo_mysql \
+      pgsql \
+      sockets \
+      sysvmsg \
+      sysvsem \
+      sysvshm \
+# tidy \
+      xmlrpc \
+      xsl \
+      zip
+
+ENV PECL_EXTENSION \
+      mongodb \
+      igbinary \
+      redis \
+      memcached \
+# 安装测试版的扩展，可以在扩展名后加 -beta
+      xdebug \
+      yaml \
+      swoole
+
 # 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
 # 国内镜像地址在 docker-compose.yml 中定义
 
@@ -84,54 +119,24 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                         --with-png-dir=/usr \
                                         --with-webp-dir=/usr \
                                         --with-xpm-dir=/usr \
-        && docker-php-ext-install bcmath \
-                                          bz2 \
-                                          calendar \
-                                          enchant \
-                                          exif \
-                                          gd \
-                                          gettext \
-                                          gmp \
-                                          imap \
-                                          intl \
-                                          mysqli \
-                                          pcntl \
-                                          pdo_pgsql \
-                                          pdo_mysql \
-                                          pgsql \
-                                          sockets \
-                                          sysvmsg \
-                                          sysvsem \
-                                          sysvshm \
-                                          # tidy \
-                                          xmlrpc \
-                                          xsl \
-                                          zip \
-                                          # opcache 已默认安装，需要自行载入
-                                          opcache \
+        && docker-php-ext-install $PHP_EXTENSION \
         && apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS \
-        && pecl install mongodb \
-                        igbinary \
-                        redis \
-                        memcached \
-                        # 安装测试版的扩展，可以在扩展名后加 -beta
-                        xdebug \
-                        yaml \
-                        swoole \
-        && docker-php-ext-enable mongodb \
-                                 redis \
-                                 memcached \
-                                 xdebug \
-                                 yaml \
-                                 igbinary \
-                                 swoole \
+        && for extension in $PECL_EXTENSION;do pecl install $extension; done \
+        && docker-php-ext-enable $PECL_EXTENSION opcache \
         && apk del .build-deps .php-fpm-build-deps \
         && rm -rf /tmp/* \
         # 默认不启用 xdebug
-        && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default
+        && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+          /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
         # config opcache
         # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-        # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
+        # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
+        # 创建日志文件夹
+        && mkdir -p /var/log/php-fpm \
+        && ln -sf /dev/stdout /var/log/php-fpm/access.log \
+        && ln -sf /dev/stderr /var/log/php-fpm/error.log \
+        && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
+        && chmod -R 777 /var/log/php-fpm
 
 # install composer
 
@@ -168,12 +173,6 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
  && chmod +x /usr/local/bin/sami \
- && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
- # 创建日志文件夹
- && mkdir -p /var/log/php-fpm \
- && ln -sf /dev/stdout /var/log/php-fpm/access.log \
- && ln -sf /dev/stderr /var/log/php-fpm/error.log \
- && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
- && chmod -R 777 /var/log/php-fpm
+ && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub
 
 WORKDIR /app

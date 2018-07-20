@@ -5,30 +5,30 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-# ARG PHP_VERSION=7.2.7
+# ARG PHP_VERSION=7.3.0alpha4
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
 ENV PHPIZE_DEPS \
-		autoconf \
-		dpkg-dev dpkg \
-		file \
-		g++ \
-		gcc \
-		libc-dev \
-		make \
-		pkgconf \
-		re2c
+      autoconf \
+      dpkg-dev dpkg \
+      file \
+      g++ \
+      gcc \
+      libc-dev \
+      make \
+      pkgconf \
+      re2c
 
 # persistent / runtime deps
 RUN set -ex \
-    && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-    && apk add --no-cache --virtual .persistent-deps \
+      && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+      && apk add --no-cache --virtual .persistent-deps \
                  curl \
                  tar \
-		             xz \
+                 xz \
 # https://github.com/docker-library/php/issues/494
                  libressl \
                  git \
@@ -41,8 +41,8 @@ RUN set -ex \
                  tzdata \
 # ensure www-data user exists
 # RUN set -x \
-	&& addgroup -g 82 -S www-data \
-	&& adduser -u 82 -D -S -G www-data www-data
+      && addgroup -g 82 -S www-data \
+      && adduser -u 82 -D -S -G www-data www-data
 # 82 is the standard uid/gid for "www-data" in Alpine
 # http://git.alpinelinux.org/cgit/aports/tree/main/apache2/apache2.pre-install?h=v3.3.2
 # http://git.alpinelinux.org/cgit/aports/tree/main/lighttpd/lighttpd.pre-install?h=v3.3.2
@@ -126,21 +126,19 @@ ENV PHP_VERSION 7.3.0alpha4
 ENV PHP_URL="https://downloads.php.net/~cmb/php-7.3.0alpha4.tar.xz" PHP_ASC_URL="https://downloads.php.net/~cmb/php-7.3.0alpha4.tar.xz.asc"
 ENV PHP_SHA256="32670f40aecce130727d841e3191d30237caff643a239d3c16cd579e762bc4c6" PHP_MD5=""
 
-COPY --from=php:alpine /usr/local/bin/docker-php-source /usr/local/bin/
-COPY --from=php:alpine /usr/local/bin/docker-php-entrypoint /usr/local/bin/
-COPY --from=php:alpine /usr/local/bin/docker-php-ext-configure /usr/local/bin/
-COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
-COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
+COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
+
+# COPY --from=php:alpine /usr/local/bin/docker-php-source /usr/local/bin/
+# COPY --from=php:alpine /usr/local/bin/docker-php-entrypoint /usr/local/bin/
+# COPY --from=php:alpine /usr/local/bin/docker-php-ext-configure /usr/local/bin/
+# COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
+# COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
 RUN set -xe; \
-  mkdir -p $PHP_INI_DIR/conf.d; \
-	\
-	apk add --no-cache --virtual .fetch-deps \
-		gnupg \
-	; \
-	\
-	mkdir -p /usr/src; \
-	cd /usr/src; \
+  mkdir -p $PHP_INI_DIR/conf.d \
+  && apk add --no-cache --virtual .fetch-deps gnupg \
+	&& mkdir -p /usr/src \
+	&& cd /usr/src; \
   # git clone --depth=1 https://github.com/php/php-src.git php; \
 	\
 	wget -O php.tar.xz "$PHP_URL"; \
@@ -334,53 +332,15 @@ RUN set -xe; \
 		echo; \
 		echo '[www]'; \
 		echo 'listen = 9000'; \
-	} | tee php-fpm.d/zz-docker.conf
+	} | tee php-fpm.d/zz-docker.conf \
+  # 创建日志文件夹
+  && mkdir -p /var/log/php-fpm \
+  && ln -sf /dev/stdout /var/log/php-fpm/access.log \
+  && ln -sf /dev/stderr /var/log/php-fpm/error.log \
+  && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
+  && chmod -R 777 /var/log/php-fpm
 
 ENTRYPOINT ["docker-php-entrypoint"]
-
-# install composer
-
-ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.6.5 \
-    PS1="[\u@\h \w]# "
-
-# https://github.com/composer/docker
-
-RUN set -ex \
-    && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
-    && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
-    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
-    && php -r " \
-    \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
-    \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
-    if (!hash_equals(\$signature, \$hash)) { \
-        unlink('/tmp/installer.php'); \
-        echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
-        exit(1); \
-    }" \
- && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
- && composer --ansi --version --no-interaction \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
- && chmod +x /docker-entrypoint.composer.sh \
-# composer 中国镜像
- && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
-# # laravel 安装程序
-#  && composer global require --prefer-dist "laravel/installer" \
-# # php-cs-fixer
-# # https://github.com/FriendsOfPHP/PHP-CS-Fixer
-#  && composer global require --prefer-dist "friendsofphp/php-cs-fixer" \
-# # Sami an API documentation generator
-# # https://github.com/FriendsOfPHP/Sami
-#  && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
-#  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
-#  && chmod +x /usr/local/bin/sami \
- && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
-# 创建日志文件夹
- && mkdir -p /var/log/php-fpm \
- && ln -sf /dev/stdout /var/log/php-fpm/access.log \
- && ln -sf /dev/stderr /var/log/php-fpm/error.log \
- && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
- && chmod -R 777 /var/log/php-fpm
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
@@ -392,29 +352,62 @@ ENV PECL_RUN_DEPS \
       libmemcached \
       yaml
 
-RUN set -ex \
-    && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
-    && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-    && pecl install mongodb-beta \
-                  igbinary-beta \
-                  redis-beta \
-                  # memcached-beta \
-                  # 安装测试版的扩展，可以在扩展名后加 -beta
-                  # xdebug-beta \
-                  # yaml-beta \
-                  # swoole-beta \
-  && docker-php-ext-enable mongodb \
-                               redis \
-                               # memcached \
-                               # xdebug \
-                               # yaml \
-                               # igbinary \
-                               # swoole \
-  && apk del .pecl_build_deps \
-  \
+ENV PECL_EXTENSION \
+      mongodb \
+      igbinary \
+      redis \
+      memcached \
+      xdebug \
+      yaml \
+      swoole
+
+RUN set -x \
+      && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
+      && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
+      && for extension in $PECL_EXTENSION; do pecl install ${extension}-beta; done \
+      && docker-php-ext-enable $PECL_EXTENSION; \
+      apk del .pecl_build_deps \
 # 默认不启用 xdebug
-  # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
-  && rm -rf /tmp/*
+# && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
+      && rm -rf /tmp/*
+
+# install composer
+
+ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
+    COMPOSER_VERSION=1.6.5 \
+    PS1="[\u@\h \w]# "
+
+# https://github.com/composer/docker
+
+RUN set -ex \
+      && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
+      && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
+      && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
+      && php -r " \
+        \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
+        \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
+        if (!hash_equals(\$signature, \$hash)) { \
+          unlink('/tmp/installer.php'); \
+          echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
+          exit(1); \
+        }" \
+      && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
+      && composer --ansi --version --no-interaction \
+      && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+      && chmod +x /docker-entrypoint.composer.sh \
+# composer 中国镜像
+      && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
+# # laravel 安装程序
+#  && composer global require --prefer-dist "laravel/installer" \
+# # php-cs-fixer
+# # https://github.com/FriendsOfPHP/PHP-CS-Fixer
+#  && composer global require --prefer-dist "friendsofphp/php-cs-fixer" \
+# # Sami an API documentation generator
+# # https://github.com/FriendsOfPHP/Sami
+#  && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
+#  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
+#  && chmod +x /usr/local/bin/sami \
+      && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub \
 
 EXPOSE 9000
 CMD ["php-fpm"]

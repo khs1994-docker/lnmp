@@ -29,4 +29,10 @@ $ curl -X PUT -d '"/www/blogs-dev/scripts"'  \
 
 $ curl -X DELETE --unix-socket /path/to/control.unit.sock  \
        'http://localhost/config/listeners/*:8400'
+
+# Access Log
+
+$ curl -X PUT -d '"/var/log/access.log"'  \
+       --unix-socket /path/to/control.unit.sock  \
+       http://localhost/config/access_log
 ```
