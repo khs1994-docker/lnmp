@@ -92,6 +92,8 @@ volumes:
   composer_cache-data:
     external: true
     name: lnmp_composer_cache-data
+  nginx-unit-state-data:
+    << : *default-common
 
 secrets:
   db_root_password:
