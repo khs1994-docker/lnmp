@@ -89,6 +89,9 @@ volumes:
     << : *default-common
   gitlab-data:
     << : *default-common
+  composer_cache-data:
+    external: true
+    name: lnmp_composer_cache-data
 
 secrets:
   db_root_password:

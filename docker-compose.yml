@@ -197,6 +197,7 @@ services:
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
+      - composer_cache-data:/tmp/cache
       - type: tmpfs
         target: /temp
         tmpfs:
@@ -261,6 +262,7 @@ services:
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - zoneinfo-data:/usr/share/zoneinfo
+      - composer_cache-data:/tmp/cache
     networks:
       - backend
       - frontend

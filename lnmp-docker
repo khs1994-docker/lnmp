@@ -609,6 +609,8 @@ demo() {
 # 初始化
 
 init() {
+  docker volume create lnmp_composer_cache-data > /dev/null 2>&1 | echo > /dev/null
+
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )

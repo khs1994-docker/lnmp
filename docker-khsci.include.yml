@@ -9,6 +9,7 @@ services:
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       - khsci-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
+      - composer_cache-data:/tmp/cache
     networks:
       - backend
     working_dir: /app/khsci/bin

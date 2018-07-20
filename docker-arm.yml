@@ -178,6 +178,7 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
       - ./logs/php-fpm:/var/log/php-fpm:rw
+      - composer_cache-data:/tmp/cache
     environment:
       - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.09} ${ARM_ARCH:-arm64v8} With Pull Docker Image
       - APP_ENV=development
@@ -251,6 +252,9 @@ volumes:
   #   << : *default-labels
   zoneinfo-data:
     << : *default-labels
+  composer_cache-data:
+    external: true
+    name: lnmp_composer_cache-data
 
 secrets:
   db_root_password:

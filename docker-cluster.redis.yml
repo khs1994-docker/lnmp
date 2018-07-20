@@ -30,8 +30,6 @@ x-common:
   &default-common
   image: redis:5.0-rc3-alpine
   restart: always
-  environment:
-    - REDIS_HOST=${CLUSTERKIT_REDIS_HOST:-192.168.199.100}
   networks:
     cluster_redis:
       # ipv4_address: 172.16.0.105
@@ -69,9 +67,15 @@ services:
       args:
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
         REDIS_URL: gitee.com/mirrors/redis/raw
-    image: khs1994/redis:cluster-5.0-rc3-alpine
     volumes:
-      - cluster_redis_master-1-data:/data
+      - ./cluster/redis/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+    command:
+      - /usr/local/bin/docker-entrypoint.sh
+    environment:
+      CLUSTERKIT_REDIS_NODES: ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}:7001 ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}:7002 ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}:7003 ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}:8001 ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}:8002 ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}:8003
+    env_file:
+      - ./.env.example
+      - ./.env
     deploy:
       << : *default-deploy
       placement:

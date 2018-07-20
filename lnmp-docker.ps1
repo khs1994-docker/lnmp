@@ -116,6 +116,7 @@ Function logs(){
 
 Function init(){
   docker-compose --version
+  docker volume create lnmp_composer_cache-data | out-null
   logs
   git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
