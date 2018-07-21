@@ -1,6 +1,6 @@
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-FROM arm32v7/php:7.2.7-fpm-stretch
+FROM arm32v7/php:7.2.8-fpm-stretch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
