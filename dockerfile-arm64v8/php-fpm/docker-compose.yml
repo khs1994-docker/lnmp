@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.7"
 
 services:
 
@@ -7,4 +7,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm64v8-php:${TAG:-7.2.7}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm64v8-php:${TAG:-7.2.8}-fpm-alpine

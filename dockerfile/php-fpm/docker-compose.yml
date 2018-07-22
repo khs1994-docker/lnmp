@@ -1,4 +1,4 @@
-version: "3.6"
+version: "3.7"
 
 services:
 
@@ -14,14 +14,14 @@ services:
     build:
       context: ./7.2/alpine
       args:
-        PHP_VERSION: ${PHP_VERSION_72:-7.2.7}
+        PHP_VERSION: ${PHP_VERSION_72:-7.2.8}
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.7}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.8}-fpm-alpine
 
   7_1_X:
     build:
       context: ./7.1/alpine
       args:
-        PHP_VERSION: ${PHP_VERSION_71:-7.1.19}
+        PHP_VERSION: ${PHP_VERSION_71:-7.1.20}
         # ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_71:-7.1.19}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_71:-7.1.20}-fpm-alpine

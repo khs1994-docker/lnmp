@@ -109,7 +109,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 ```bash
 $ cd lnmp
 
-$ ./lnmp-docker.sh up
+$ ./lnmp-docker up
 
 $ curl 127.0.0.1
 
@@ -128,9 +128,9 @@ MySQL 默认 ROOT 密码为 `mytest`
 你也可以使用以下命令快速的新建一个 PHP 项目，并完成后续一系列配置（生成 nginx 配置、申请 SSL 证书）。
 
 ```bash
-# $ ./lnmp-docker.sh new
+# $ ./lnmp-docker new
 
-$ ./lnmp-docker.sh restart nginx
+$ ./lnmp-docker restart nginx
 ```
 
 ### 如何连接服务
@@ -170,7 +170,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 >由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持
 
 ```bash
-$ ./lnmp-docker.sh ssl www.khs1994.com
+$ ./lnmp-docker ssl www.khs1994.com
 ```
 
 >使用前请提前在 `.env` 文件或系统环境变量中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/issue-ssl.md)。
@@ -189,22 +189,22 @@ $ docker container ls -a -f label=com.khs1994.lnmp
 
 ```bash
 # 全部重启
-$ ./lnmp-docker.sh restart
+$ ./lnmp-docker restart
 
 # 重启指定软件
-$ ./lnmp-docker.sh restart nginx php7
+$ ./lnmp-docker restart nginx php7
 ```
 
 ### 停止
 
 ```bash
-$ ./lnmp-docker.sh stop
+$ ./lnmp-docker stop
 ```
 
 ### 销毁
 
 ```bash
-$ ./lnmp-docker.sh down
+$ ./lnmp-docker down
 ```
 
 ## 更新记录
@@ -232,10 +232,10 @@ $ ./lnmp-docker.sh down
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`              | **8.0.11**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.7`            | **10.3.7**             |`Debian:jessie` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc3-alpine`        | **5.0-rc3**            |`Alpine:3.8`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.7-fpm-alpine`  | **7.2.7**       |`Alpine:3.7`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.7-fpm-alpine`  | **5.6.x**       |`Alpine:3.7`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.7-fpm-alpine`  | **1.6.5**       |`Alpine:3.7`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.7-fpm-alpine`  | **2.12.2**      |`Alpine:3.7`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.8-fpm-alpine`  | **7.2.8**       |`Alpine:3.7`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.8-fpm-alpine`  | **5.6.x**       |`Alpine:3.7`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.8-fpm-alpine`  | **1.6.5**       |`Alpine:3.7`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.8-fpm-alpine`  | **2.12.2**      |`Alpine:3.7`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.9-alpine`           | **1.5.9**       |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.6-management-alpine` | **3.7.6**       |`Alpine:3.7`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.8`    |
@@ -263,7 +263,7 @@ $ ./lnmp-docker.sh down
 
 ## 命令行工具
 
-为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker.sh`](docs/cli.md)
+为简化操作方式，本项目提供了 `交互式` 的命令行工具 [`./lnmp-docker`](docs/cli.md)
 
 ## 生产环境
 

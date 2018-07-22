@@ -317,7 +317,7 @@ services:
   khsci:
     << : *default-common
     << : *default-labels
-    image: khs1994/php:7.2.7-fpm-alpine
+    image: khs1994/php:7.2.8-fpm-alpine
     volumes:
       - ./app/khsci:/app/khsci
       - khsci-tmp:/tmp

@@ -63,7 +63,7 @@ services:
       << : *default-labels
       << : *default-build
       # << : *default-build-debian
-      context: ./dockerfile/php/
+      context: ./dockerfile/php-fpm/
       cache_from:
         - khs1994/php:fpm-alpine
     environment:

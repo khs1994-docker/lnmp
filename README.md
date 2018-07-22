@@ -105,7 +105,7 @@ Pick one method install LNMP Docker.
 ```bash
 $ cd lnmp
 
-$ ./lnmp-docker.sh up
+$ ./lnmp-docker up
 
 $ curl 127.0.0.1
 
@@ -122,9 +122,9 @@ MySQL default root password `mytest`
 Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file in `./config/nginx/yourfilename.conf`.
 
 ```bash
-# $ ./lnmp-docker.sh new
+# $ ./lnmp-docker new
 
-$ ./lnmp-docker.sh restart nginx
+$ ./lnmp-docker restart nginx
 ```
 
 ### How to connect Services
@@ -164,7 +164,7 @@ For more information please see [Documents](docs/command.md)
 >Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
 
 ```bash
-$ ./lnmp-docker.sh ssl www.khs1994.com
+$ ./lnmp-docker ssl www.khs1994.com
 ```
 
 >Please set API key and id in `.env` file or System ENV. Support Self-Signed SSL certificate, for more information, see [Documents](docs/issue-ssl.md).
@@ -177,27 +177,27 @@ $ docker container ls -a -f label=com.khs1994.lnmp
 
 ### Use Self-Build Docker Image
 
-Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker.sh build`.
+Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker build`.
 
 ### Restart
 
 ```bash
 # Restart all container
-$ ./lnmp-docker.sh restart
+$ ./lnmp-docker restart
 
-$ ./lnmp-docker.sh restart nginx php7
+$ ./lnmp-docker restart nginx php7
 ```
 
 ### Stop
 
 ```bash
-$ ./lnmp-docker.sh stop
+$ ./lnmp-docker stop
 ```
 
 ### Stop and remove
 
 ```bash
-$ ./lnmp-docker.sh down
+$ ./lnmp-docker down
 ```
 
 ## Changelog
@@ -225,10 +225,10 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`              | **8.0.11**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.7`            | **10.3.7**             |`Debian:jessie` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc3-alpine`        | **5.0-rc3**            |`Alpine:3.8`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.7-fpm-alpine`  | **7.2.7**       |`Alpine:3.7`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.7-fpm-alpine`  | **5.6.x**       |`Alpine:3.7`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.7-fpm-alpine`  | **1.6.5**       |`Alpine:3.7`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.7-fpm-alpine`  | **2.12.2**      |`Alpine:3.7`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.8-fpm-alpine`  | **7.2.8**       |`Alpine:3.7`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.8-fpm-alpine`  | **5.6.x**       |`Alpine:3.7`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.8-fpm-alpine`  | **1.6.5**       |`Alpine:3.7`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.8-fpm-alpine`  | **2.12.2**      |`Alpine:3.7`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.9-alpine`           | **1.5.9**       |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.6-management-alpine` | **3.7.6**       |`Alpine:3.7`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.8`    |
@@ -256,7 +256,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 
 ## CLI
 
-Easy to generate nginx or apache config, etc. Please use [`./lnmp-docker.sh`](docs/cli.md).
+Easy to generate nginx or apache config, etc. Please use [`./lnmp-docker`](docs/cli.md).
 
 ## Run in Production
 
