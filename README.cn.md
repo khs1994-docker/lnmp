@@ -82,22 +82,6 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
   $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
   ```
 
-* **在 Debian 系使用 dpkg 安装**
-
-  ```bash
-  $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.08/khs1994-docker-lnmp_18.08_amd64.deb
-
-  $ sudo dpkg -i khs1994-docker-lnmp*.deb
-  ```
-
-* **在 RHEL 系使用 rpm 安装**
-
-  ```bash
-  $ wget https://github.com/khs1994-docker/lnmp/releases/download/v18.08/khs1994-docker-lnmp-18.08-1.el7.centos.x86_64.rpm
-
-  $ sudo yum install khs1994-docker-lnmp*.rpm [-y]
-  ```
-
 * **使用一键安装脚本**
 
   ```bash
