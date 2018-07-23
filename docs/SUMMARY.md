@@ -14,14 +14,20 @@
 * [`lnmp-docker`](cli.md)
 * 开发环境
     * [使用方法](development.md)
-* NGINX
-    * [一键生成配置](nginx-config.md)
-    * [申请或自签发 SSL 证书](issue-ssl.md)
-    * [HTTPS 配置](nginx-with-https.md)
-* [NGINX Unit](nginx-unit.md)
+
+## NGINX
+
+* [NGINX](nginx/README.md)
+    * [一键生成配置](nginx/config.md)
+    * [申请或自签发 SSL 证书](nginx/issue-ssl.md)
+    * [HTTPS 配置](nginx/https.md)
+    * [NGINX Unit](nginx/unit.md)
 * [PHPer 常用命令容器化](command.md)
 * [软件配置](config.md)
 * [Crontab](crontab.md)
+
+## PHP
+
 * PHP
     * [PHP 扩展列表](php.md)
     * [xdebug](xdebug.md)
@@ -57,13 +63,15 @@
 
 ## Volumes
 
-* [NFS](nfs.md)
+* Volumes
+    * [NFS](volumes/nfs.md)
 
 ## 测试
 
 * [ab command](ab.md)
 
-## Git
+## Git Self Host
 
-* [Gogs](gogs.md)
-* [GitLab](gitlab.md)
+* Git Self Host
+    * [Gogs](git-self-host/gogs.md)
+    * [GitLab](git-self-host/gitlab.md)
