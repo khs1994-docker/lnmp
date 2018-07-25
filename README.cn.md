@@ -210,7 +210,7 @@ $ ./lnmp-docker down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.7.8`        | **2.7.8**              |`Alpine:3.7`    |
-|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`khs1994/nginx:1.15.1-alpine`| **1.15.1**             |`Alpine:3.7`    |
+|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`khs1994/nginx:1.15.2-alpine`| **1.15.2**             |`Alpine:3.7`    |
 |[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/nginx-unit:1.3-alpine`| **1.3**             |`Alpine:3.8`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.34-alpine`       | **2.4.34**             |`Alpine:3.7`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.11`              | **8.0.11**             |`Debian:stretch`|
