@@ -332,7 +332,7 @@ Function _mysql(){
 Function _php(){
   _installer php-${PHP_VERSION}-nts-Win32-VC15-x64.zip C:\php C:\php C:\php
 
-  Get-Process php-cgi-spawner | out-null
+  Get-Process php-cgi-spawner -ErrorAction "SilentlyContinue" | out-null
 
   if(!($?)){
     cp php-cgi-spawner.exe C:\php
@@ -446,8 +446,8 @@ if($(_command php)){
   if ($PHP_CURRENT_VERSION -ne $PHP_VERSION){
       echo "installing PHP $PHP_VERSION ..."
       _unzip $HOME/Downloads/php-$PHP_VERSION-nts-Win32-VC15-x64.zip C:/php-$PHP_VERSION
-      cp -rec -Force C:\php-$PHP_VERSION C:\php
-      rm -Confirm -Force C:\php-$PHP_VERSION
+      Copy-Item -Force -Recurse "C:/php-$PHP_VERSION/*" "C:/php/"
+      rm -Force -Recurse C:\php-$PHP_VERSION
   }
 }
 
@@ -482,7 +482,14 @@ if (!(Test-Path C:\php\php.ini)){
   mv C:\php\php.ini-development C:\php\php.ini
 }
 
-$items='yaml','xdebug','Zend Opcache','redis', 'mongodb', 'igbinary','curl','pdo_mysql'
+$items='yaml',`
+       'xdebug',`
+       'Zend Opcache',`
+       'redis',`
+       'mongodb',`
+       'igbinary',`
+       'curl',`
+       'pdo_mysql'
 
 Foreach ($item in $items)
 {
@@ -491,15 +498,15 @@ Foreach ($item in $items)
   if (!($a -eq 1)){
 
     if ($item -eq 'Zend Opcache'){
-      wsl echo ' ' >> /c/php/php.ini
-      wsl echo "zend_extension=opcache" >> /c/php/php.ini
+      echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
+      echo "zend_extension=opcache" | out-file -Append C:/php/php.ini -encoding utf8
       continue
     }
 
     if (!(Test-Path C:\php-ext\php_$item.dll)){
       if ((Test-Path C:\php\ext\php_$item.dll)){
-        wsl echo ' ' >> /c/php/php.ini
-        wsl echo "extension=curl" >> /c/php/php.ini
+        echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
+        echo "extension=$item" | out-file -Append C:/php/php.ini -encoding utf8
       }else{
         continue
       }
@@ -507,12 +514,12 @@ Foreach ($item in $items)
     }
 
     if ($item -eq 'xdebug'){
-      wsl echo ' ' >> /c/php/php.ini
-      wsl echo "zend_extension=C:\php-ext\php_$item" >> /c/php/php.ini
+      echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
+      echo "zend_extension=C:\php-ext\php_$item" | out-file -Append C:/php/php.ini -encoding utf8
       continue
     }
-    wsl echo ' ' >> /c/php/php.ini
-    wsl echo "extension=C:\php-ext\php_$item" >> /c/php/php.ini
+    echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
+    echo "extension=C:\php-ext\php_$item" | out-file -Append C:/php/php.ini -encoding utf8
   }
 }
 
@@ -525,7 +532,7 @@ Foreach ($item in $items)
 $a = php -r "echo ini_get('curl.cainfo');"
 
 if ($a.Length -eq 0){
-  wsl echo "curl.cainfo=C:\cacert-2018-03-07.pem" >> /c/php/php.ini
+  echo "curl.cainfo=C:\cacert-2018-03-07.pem" | out-file -Append C:/php/php.ini -encoding utf8
 }
 
 php -r "echo ini_get('curl.cainfo');"
@@ -553,8 +560,8 @@ $a=Select-String 'include conf.d/' C:\Apache24\conf\httpd.conf
 if ($a.Length -eq 0){
   echo "Add config in C:\Apache24\conf\httpd.conf"
 
-  echo ' ' >> C:\Apache24\conf\httpd.conf
-  echo "include conf.d/*.conf" >> C:\Apache24\conf\httpd.conf
+  echo ' ' | out-file -Append C:\Apache24\conf\httpd.conf
+  echo "include conf.d/*.conf" | out-file -Append C:\Apache24\conf\httpd.conf
 }
 
 ################################################################################
@@ -596,11 +603,11 @@ _ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
 
 _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 
-Get-Process nginx | out-null
+Get-Process nginx -ErrorAction "SilentlyContinue" | out-null
 
 if (!($?)){
-  echo ' ' >> $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
-  echo ' ' >> $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
+  echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
+  echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
 }
 
 ################################################################################
