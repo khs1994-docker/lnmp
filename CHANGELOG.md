@@ -19,6 +19,7 @@ Updates:
 * `HTTPD` 2.4.34
 * `PHP` 7.2.8 7.1.20
 * `NGINX` 1.15.2
+* `ACME` 2.7.9
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 

@@ -29,8 +29,8 @@ Function _command($command){
   return $false
 }
 
-Function _wget($src,$des){
-  if ($( _command wsl)){
+Function _wget($src,$des,$wsl=$true){
+  if ($( _command wsl) -and $wsl){
 
     Write-host "
 
@@ -100,13 +100,13 @@ _mkdir C:\bin
 
 cd $home\Downloads
 
-Function _downloader($url, $path, $soft, $version = 'null version'){
+Function _downloader($url, $path, $soft, $version = 'null version',$wsl = $true){
   if (!(Test-Path $path)){
-    Write-Host "===> download $soft $version..." -NoNewLine -ForegroundColor Green
-    _wget $url $path
+    Write-Host "===> Downloading $soft $version..." -NoNewLine -ForegroundColor Green
+    _wget $url $path $wsl
     _echo_line
   }else{
-     Write-Host "===> skip $soft $version" -NoNewLine -ForegroundColor Red
+     Write-Host "===> Skip $soft $version" -NoNewLine -ForegroundColor Red
      _echo_line
   }
 }
@@ -146,7 +146,7 @@ _downloader `
 #
 
 _downloader `
-    http://www.apachelounge.com/download/VC15/binaries/httpd-${HTTPD_VERSION}-win64-VC15.zip `
+    http://home.apache.org/~steffenal/VC15/binaries/httpd-${HTTPD_VERSION}-win64-VC15.zip `
     httpd-${HTTPD_VERSION}-win64-VC15.zip `
     HTTPD ${HTTPD_VERSION}
 
@@ -193,35 +193,37 @@ _downloader `
 # pecl
 #
 
+# http://pecl.php.net/package/yaml
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/yaml/2.0.2/php_yaml-2.0.2-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_yaml-2.0.2-7.2-nts-vc15-x64.zip `
-  php_yaml-2.0.2-7.2-nts-vc15-x64
-
+  https://windows.php.net/downloads/pecl/releases/yaml/$PHP_YAML_EXTENSION_VERSION/php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  C:\php-ext\php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64 null $false
+# http://pecl.php.net/package/xdebug
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/xdebug/2.7.0alpha1/php_xdebug-2.7.0alpha1-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_xdebug-2.7.0alpha1-7.2-nts-vc15-x64.zip `
-  php_xdebug-2.7.0alpha1-7.2-nts-vc15-x64.zip
-
+  https://windows.php.net/downloads/pecl/releases/xdebug/$PHP_XDEBUG_EXTENSION_VERSION/php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  C:\php-ext\php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+# http://pecl.php.net/package/redis
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/redis/4.0.0/php_redis-4.0.0-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_redis-4.0.0-7.2-nts-vc15-x64.zip `
-  php_redis-4.0.0-7.2-nts-vc15-x64.zip
-
+  https://windows.php.net/downloads/pecl/releases/redis/$PHP_REDIS_EXTENSION_VERSION/php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  C:\php-ext\php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+# http://pecl.php.net/package/mongodb
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/mongodb/1.4.2/php_mongodb-1.4.2-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_mongodb-1.4.2-7.2-nts-vc15-x64.zip `
-  php_mongodb-1.4.2-7.2-nts-vc15-x64.zip
-
+  https://windows.php.net/downloads/pecl/releases/mongodb/$PHP_MONGODB_EXTENSION_VERSION/php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  C:\php-ext\php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+# http://pecl.php.net/package/igbinary
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/igbinary/2.0.6RC1/php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip `
-  php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip
-
+  https://windows.php.net/downloads/pecl/releases/igbinary/$PHP_IGBINARY_EXTENSION_VERSION/php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  C:\php-ext\php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
+  php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+# https://curl.haxx.se/docs/caextract.html
+# https://github.com/khs1994-docker/lnmp/issues/339
 _downloader `
-  https://curl.haxx.se/ca/cacert-2018-03-07.pem `
-  C:\cacert-2018-03-07.pem `
-  C:\cacert-2018-03-07.pem
+  https://curl.haxx.se/ca/cacert-${PHP_CACERT_DATA}.pem `
+  C:\php-ext\cacert-${PHP_CACERT_DATA}.pem `
+  C:\php-ext\cacert-${PHP_CACERT_DATA}.pem null $false
 
 Function _pecl($zip,$file){
   if (!(Test-Path C:\php-ext\$file)){
@@ -230,22 +232,17 @@ Function _pecl($zip,$file){
   }
 }
 
+_pecl php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_igbinary.dll
 
-Function backup_php_ini(){
-  cp -Force C:\php\php.ini C:\php-ext\php.ini
-}
+_pecl php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_mongodb.dll
 
-_pecl php_igbinary-2.0.6rc1-7.2-nts-vc15-x64.zip php_igbinary.dll
+_pecl php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_redis.dll
 
-_pecl php_mongodb-1.4.2-7.2-nts-vc15-x64.zip php_mongodb.dll
+_pecl php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_xdebug.dll
 
-_pecl php_redis-4.0.0-7.2-nts-vc15-x64.zip php_redis.dll
+_pecl php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_yaml.dll
 
-_pecl php_xdebug-2.7.0alpha1-7.2-nts-vc15-x64.zip php_xdebug.dll
-
-_pecl php_yaml-2.0.2-7.2-nts-vc15-x64.zip php_yaml.dll
-
-backup_php_ini
+cp -Force C:\php\php.ini C:\php-ext\php.ini
 
 #
 # MySQL
@@ -279,7 +276,7 @@ _downloader `
 #
 
 _downloader `
-  https://nodejs.org/dist/v${NODE_VEERSION}/node-v${NODE_VEERSION}-win-x64.zip `
+  http://mirrors.ustc.edu.cn/node/v${NODE_VEERSION}/node-v${NODE_VEERSION}-win-x64.zip `
   node-v${NODE_VEERSION}-win-x64.zip `
   Node.js ${NODE_VEERSION}
 
@@ -342,7 +339,16 @@ Function _php(){
 }
 
 Function _httpd(){
-  _installer httpd-${HTTPD_VERSION}-win64-VC15.zip C:\ C:\Apache24 C:\Apache24
+  $HTTPD_CURRENT_VERSION=($(httpd -v) -split " ")[2]
+
+  if ($HTTPD_CURRENT_VERSION.length -eq 0){
+    _installer httpd-${HTTPD_VERSION}-win64-VC15.zip C:\ C:\Apache24 C:\Apache24
+  }
+
+  if ($HTTPD_CURRENT_VERSION -ne "Apache/${HTTPD_VERSION}"){
+    _unzip httpd-${HTTPD_VERSION}-win64-VC15.zip $HOME\Downloads
+    Copy-Item -Recurse -Force "$HOME\Downloads\Apache24\*" "C:\Apache24\"
+  }
 
   if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
     _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip C:\Apache24\modules `
@@ -353,7 +359,19 @@ Function _httpd(){
 }
 
 Function _node(){
-  _installer node-v${NODE_VEERSION}-win-x64.zip C:\ C:\node-v${NODE_VEERSION}-win-x64 C:\node
+  $NODE_CURRENT_VERSION=$(node -v)
+
+  if ($NODE_CURRENT_VERSION.length -eq 0){
+    _installer node-v${NODE_VEERSION}-win-x64.zip C:\ C:\node-v${NODE_VEERSION}-win-x64 C:\node
+    return
+  }
+
+  if($NODE_CURRENT_VERSION -ne "v$NODE_VEERSION"){
+    echo "===> Installing node ${NODE_VEERSION} ..."
+    _unzip node-v${NODE_VEERSION}-win-x64.zip C:\
+    Copy-Item -Recurse -Force "C:/node-v${NODE_VEERSION}-win-x64/*" "C:/node/"
+    Remove-Item -Force -Recurse "C:/node-v${NODE_VEERSION}-win-x64"
+  }
 }
 
 Function _go(){
@@ -377,6 +395,7 @@ Function _go(){
 
 Function _python(){
   $PYTHON_CURRENT_VERSION=($(python --version) -split " ")[1]
+
   if ($PYTHON_CURRENT_VERSION -eq $PYTHON_VERSION){
       return
   }
@@ -444,7 +463,7 @@ if($(_command php)){
   $PHP_CURRENT_VERSION=$( php -r "echo PHP_VERSION;" )
 
   if ($PHP_CURRENT_VERSION -ne $PHP_VERSION){
-      echo "installing PHP $PHP_VERSION ..."
+      echo "===> Installing PHP $PHP_VERSION ..."
       _unzip $HOME/Downloads/php-$PHP_VERSION-nts-Win32-VC15-x64.zip C:/php-$PHP_VERSION
       Copy-Item -Force -Recurse "C:/php-$PHP_VERSION/*" "C:/php/"
       rm -Force -Recurse C:\php-$PHP_VERSION
@@ -531,8 +550,8 @@ Foreach ($item in $items)
 
 $a = php -r "echo ini_get('curl.cainfo');"
 
-if ($a.Length -eq 0){
-  echo "curl.cainfo=C:\cacert-2018-03-07.pem" | out-file -Append C:/php/php.ini -encoding utf8
+if ($a -ne "C:\php-ext\cacert-${PHP_CACERT_DATA}.pem"){
+  echo "curl.cainfo=C:\php-ext\cacert-${PHP_CACERT_DATA}.pem" | out-file -Append C:/php/php.ini -encoding utf8
 }
 
 php -r "echo ini_get('curl.cainfo');"

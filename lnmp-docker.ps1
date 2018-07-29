@@ -588,7 +588,12 @@ switch($first){
     }
 
     debug {
-      $os_info=$($psversiontable.os)
+      $os_info=$($psversiontable.BuildVersion)
+
+      if ($os_info.length -eq 0){
+        $os_info=$($psversiontable.os)
+      }
+
       $docker_version=$(docker --version)
       $compose_version=$(docker-compose --version)
       Write-Output "
@@ -717,7 +722,8 @@ XXX
         exit
       }
 
-      docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q)
+      docker container rm -f `
+          $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
 
       # https://github.com/anjia0532/gcr.io_mirror
 echo "
