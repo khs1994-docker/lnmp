@@ -106,8 +106,8 @@ services:
       "--cluster-announce-port 7001",
       "--cluster-announce-bus-port 17001",
       "--appendonly yes",
-      "--save \"\""
-      # "--aof-use-rdb-preamble yes"
+      # "--save \"\""
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_master-1-data:/data
@@ -145,8 +145,8 @@ services:
       "--cluster-announce-port 7002",
       "--cluster-announce-bus-port 17002",
       "--appendonly yes",
-      "--save \"\""
-      # "--aof-use-rdb-preamble yes"
+      # "--save \"\""
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_master-2-data:/data
@@ -181,8 +181,8 @@ services:
       "--cluster-announce-port 7003",
       "--cluster-announce-bus-port 17003",
       "--appendonly yes",
-      "--save \"\""
-      # "--aof-use-rdb-preamble yes"
+      # "--save \"\""
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_master-3-data:/data
@@ -216,9 +216,9 @@ services:
       "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8001",
       "--cluster-announce-bus-port 18001"
-      # "--appendonly yes",
+      "--appendonly yes",
       # "--save \"\"",
-      # "--aof-use-rdb-preamble yes"
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_slave-1-data:/data
@@ -251,9 +251,9 @@ services:
       "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8002",
       "--cluster-announce-bus-port 18002"
-      # "--appendonly yes",
+      "--appendonly yes",
       # "--save \"\"",
-      # "--aof-use-rdb-preamble yes"
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_slave-2-data:/data
@@ -286,9 +286,9 @@ services:
       "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8003",
       "--cluster-announce-bus-port 18003"
-      # "--appendonly yes",
+      "--appendonly yes",
       # "--save \"\"",
-      # "--aof-use-rdb-preamble yes"
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_slave-3-data:/data

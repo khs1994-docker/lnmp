@@ -6,7 +6,7 @@
 
 . ~/.bash_profile
 
-set -x
+set -ex
 
 print_help_info(){
   echo "

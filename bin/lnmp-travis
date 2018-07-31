@@ -4,6 +4,8 @@
 # https://github.com/travis-ci/travis.rb#readme
 #
 
+set -ex
+
 if [ -z "$GITHUB_TOKEN" ];then
   echo "\nYou must set [ GITHUB_TOKEN ] env\n"
   exit 1

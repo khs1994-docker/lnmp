@@ -8,7 +8,13 @@ if (Test-Path "$PSScript/.env.ps1"){
   . "$PSScriptRoot/.env.ps1"
 }
 
+$create=$false
+
 docker network create lnmp_backend | Out-Null
+
+if ($?){
+  $create=$true
+}
 
 if (! (Test-Path vendor\bin\phpunit)){
   echo "
@@ -31,3 +37,7 @@ docker run -it --init --rm `
     --network lnmp_backend `
     ${LNMP_PHP_IMAGE} `
     vendor/bin/phpunit $args
+
+if($create){
+  docker network rm lnmp_backend
+}

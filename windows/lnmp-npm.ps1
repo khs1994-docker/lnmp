@@ -1,11 +1,3 @@
-#!/usr/bin/env bash
-
-#
-# https://github.com/npm/npm
-#
-
-set -ex
-
 docker run -it --rm \
     --mount type=bind,src=$PWD,target=/app \
     --mount type=volume,src=lnmp_npm-data,target=/tmp/node/.npm \

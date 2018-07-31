@@ -78,8 +78,8 @@ services:
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 20000",
       "--appendonly yes",
-      "--save \"\""
-      # "--aof-use-rdb-preamble yes"
+      # "--save \"\""
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_master-1-data:/data
@@ -111,9 +111,9 @@ services:
       "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 20001"
-      # "--appendonly yes",
+      "--appendonly yes",
       # "--save \"\"",
-      # "--aof-use-rdb-preamble yes"
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_slave-1-data:/data
@@ -149,9 +149,9 @@ services:
       "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 20002"
-      # "--appendonly yes",
+      "--appendonly yes",
       # "--save \"\"",
-      # "--aof-use-rdb-preamble yes"
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_slave-2-data:/data
@@ -185,9 +185,9 @@ services:
       "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
       "--slave-announce-port 20003"
-      # "--appendonly yes",
+      "--appendonly yes",
       # "--save \"\"",
-      # "--aof-use-rdb-preamble yes"
+      "--aof-use-rdb-preamble yes"
       ]
     volumes:
       - cluster_redis_s_slave-3-data:/data

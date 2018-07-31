@@ -25,6 +25,8 @@ docker run -it --rm \
   ${DOCKER_IMAGE}:${TAG} \
   "$@"
 
+#   --user `id -u`:`id -g` \
+
 else
   echo "$2 existing"
 fi

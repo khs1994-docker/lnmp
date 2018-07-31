@@ -4,6 +4,8 @@
 # https://github.com/FriendsOfPHP/Sami
 #
 
+set -ex
+
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $DIR/.arch

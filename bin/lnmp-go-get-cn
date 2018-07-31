@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -ex
+
 #
 # go get golang.org/x/x ZH-CN 优化
 #
@@ -19,16 +21,39 @@
 #
 #
 
-git clone --depth=1 https://github.com/golang/tools.git $GOPATH/src/golang.org/x/tools
+_tools(){
+  git clone --depth=1 https://github.com/golang/tools.git \
+      $GOPATH/src/golang.org/x/tools
+}
 
-git clone --depth=1 https://github.com/golang/net.git $GOPATH/src/golang.org/x/net
+_net(){
+  git clone --depth=1 https://github.com/golang/net.git \
+      $GOPATH/src/golang.org/x/net
+}
 
-git clone --depth=1 https://github.com/golang/sys.git $GOPATH/src/golang.org/x/sys
+_sys(){
+  git clone --depth=1 https://github.com/golang/sys.git \
+      $GOPATH/src/golang.org/x/sys
+}
 
-git clone --depth=1 https://github.com/golang/crypto.git $GOPATH/src/golang.org/x/crypto
+_crypto(){
+  git clone --depth=1 https://github.com/golang/crypto.git \
+      $GOPATH/src/golang.org/x/crypto
+}
 
-git clone --depth=1 https://github.com/golang/perf.git $GOPATH/src/golang.org/x/perf
+_perf(){
+  git clone --depth=1 https://github.com/golang/perf.git \
+      $GOPATH/src/golang.org/x/perf
+}
 
-git clone --depth=1 https://github.com/golang/text.git $GOPATH/src/golang.org/x/text
+_text(){
+  git clone --depth=1 https://github.com/golang/text.git \
+      $GOPATH/src/golang.org/x/text
+}
 
-git clone --depth=1 https://github.com/golang/image $GOPATH/src/golang.org/x/image
+_image(){
+  git clone --depth=1 https://github.com/golang/image \
+      $GOPATH/src/golang.org/x/image
+}
+
+# golang.org/x/tools/cover

@@ -1,4 +1,10 @@
+$create=$false
+
 docker network create lnmp_backend | Out-Null
+
+if ($?){
+  $create=$true
+}
 
 . "$PSScriptROOT/../.env.example.ps1"
 
@@ -60,3 +66,7 @@ docker run --init -it --rm `
   -e TZ=${TZ} `
   ${LNMP_PHP_IMAGE} `
   php $COMMAND
+
+if($create){
+  docker network rm lnmp_backend
+}
