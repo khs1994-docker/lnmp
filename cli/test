@@ -62,7 +62,7 @@ _command(){
 development(){
   print_info "开发测试开始"
 
-  ./lnmp-docker.sh up
+  ./lnmp-docker up
 
   docker_run "开发境测试完毕"
 

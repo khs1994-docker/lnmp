@@ -148,10 +148,10 @@ For more information please see [Documents](docs/command.md)
 >Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
 
 ```bash
-$ ./lnmp-docker ssl www.khs1994.com
+$ ./lnmp-docker ssl khs1994.com *.khs1994.com
 ```
 
->Please set API key and id in `.env` file or System ENV. Support Self-Signed SSL certificate, for more information, see [Documents](docs/issue-ssl.md).
+>Please set API key and id in `.env` file or System ENV. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx/issue-ssl.md).
 
 ### List LNMP Container
 
