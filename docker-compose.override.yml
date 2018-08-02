@@ -18,11 +18,11 @@ services:
 
   mariadb:
     << : *default-common
-    image: mariadb:${KHS1994_LNMP_MYSQL_VERSION:-10.3}
+    image: mariadb:${KHS1994_LNMP_MYSQL_VERSION:-10.3.8}
 
   redis:
     << : *default-common
-    image: redis:${KHS1994_LNMP_REDIS_VERSION:-4.0}-alpine
+    image: redis:${KHS1994_LNMP_REDIS_VERSION:-5.0-rc3}-alpine
 
   memcached:
     << : *default-common
@@ -38,7 +38,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.0}
+    image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.1.1}
 
   php7:
     << : *default-common
@@ -58,7 +58,7 @@ services:
 
   httpd:
     << : *default-common
-    image: httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}-alpine
+    image: httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4.34}-alpine
 
 networks:
   frontend:

@@ -57,7 +57,7 @@ services:
 
   mariadb:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3}"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3.8}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -81,7 +81,7 @@ services:
 
   redis:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${KHS1994_LNMP_REDIS_VERSION:-4.0}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${KHS1994_LNMP_REDIS_VERSION:-5.0-rc3}-alpine"
     ports:
       - "${REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
@@ -145,7 +145,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.0}
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.1.1}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
       - mongodb-data:/data/db:rw
@@ -310,9 +310,9 @@ HTTPD_HTTP_PORT: 0.0.0.0:80
 HTTPD_HTTPS_PORT: 0.0.0.0:443
 KHS1994_LNMP_DOCKER_VERSION: v18.09
 KHS1994_LNMP_HTTPD_VERSION: 2.4.33
-KHS1994_LNMP_MARIADB_VERSION: 10.3.7
+KHS1994_LNMP_MARIADB_VERSION: 10.3.8
 KHS1994_LNMP_MEMCACHED_VERSION: 1.5.8
-KHS1994_LNMP_MONGODB_VERSION: 4.0.0
+KHS1994_LNMP_MONGODB_VERSION: 4.1.1
 KHS1994_LNMP_MYSQL_VERSION: 8.0.12
 KHS1994_LNMP_NGINX_VERSION: 1.15.2
 KHS1994_LNMP_PHP_VERSION: 7.2.8

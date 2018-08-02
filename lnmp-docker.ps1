@@ -299,7 +299,9 @@ Function satis(){
     Write-Warning "Please modify app/satis/satis.json"
   }
 
-  docker run --rm -it -v $PWD/app/satis:/build -v lnmp_composer_cache-data:/composer composer/satis
+  docker run --rm -it `
+      -v $PWD/app/satis:/build `
+      -v lnmp_composer_cache-data:/composer composer/satis
 }
 
 # main

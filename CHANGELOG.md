@@ -21,6 +21,12 @@ Updates:
 * `NGINX` 1.15.2
 * `ACME.sh` 2.7.9
 * `MySQL` 8.0.12
+* `MongoDB` 4.1.1
+* `MariaDB` 10.3.8
+
+#### [v18.08 (2018-07-11) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08)
+
+#### [v18.07 (2018-05-21) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.07)
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 

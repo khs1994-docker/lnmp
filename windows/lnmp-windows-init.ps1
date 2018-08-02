@@ -248,10 +248,12 @@ cp -Force C:\php\php.ini C:\php-ext\php.ini
 # MySQL
 #
 
+# https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${MYSQL_VERSION}-winx64.zip `
+
 _downloader `
-  https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${MYSQL_VERSION}-winx64.zip `
+  http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-8.0/mysql-${MYSQL_VERSION}-winx64.zip `
   mysql-${MYSQL_VERSION}-winx64.zip `
-  MYSQL ${MYSQL_VERSION}
+  MySQL ${MYSQL_VERSION}
 
 #
 # Docker
