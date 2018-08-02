@@ -20,6 +20,7 @@ Updates:
 * `PHP` 7.2.8 7.1.20
 * `NGINX` 1.15.2
 * `ACME.sh` 2.7.9
+* `MySQL` 8.0.12
 
 #### [v18.06 (2018-04-28) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.06)
 

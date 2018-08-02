@@ -229,7 +229,7 @@ services:
       - net.ipv4.tcp_syncookies=0
 
   mysql:
-    image: mysql:8.0.4
+    image: mysql:8.0.12
     environment:
       # https://github.com/docker-library/docs/tree/master/mysql
       MYSQL_ROOT_PASSWORD: mytest

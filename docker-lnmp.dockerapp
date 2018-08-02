@@ -31,7 +31,7 @@ services:
 
   mysql:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.12}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
@@ -313,7 +313,7 @@ KHS1994_LNMP_HTTPD_VERSION: 2.4.33
 KHS1994_LNMP_MARIADB_VERSION: 10.3.7
 KHS1994_LNMP_MEMCACHED_VERSION: 1.5.8
 KHS1994_LNMP_MONGODB_VERSION: 4.0.0
-KHS1994_LNMP_MYSQL_VERSION: 8.0.11
+KHS1994_LNMP_MYSQL_VERSION: 8.0.12
 KHS1994_LNMP_NGINX_VERSION: 1.15.2
 KHS1994_LNMP_PHP_VERSION: 7.2.8
 KHS1994_LNMP_PHPMYADMIN_VERSION: latest

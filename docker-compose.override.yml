@@ -14,7 +14,7 @@ services:
 
   mysql:
     << : *default-common
-    image: mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.3}
+    image: mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.12}
 
   mariadb:
     << : *default-common
