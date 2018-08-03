@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.7"
 services:
 
   postgresql:
@@ -6,4 +6,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/postgres:${TAG:-10.3}-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/postgres:${TAG:-10.4}-alpine

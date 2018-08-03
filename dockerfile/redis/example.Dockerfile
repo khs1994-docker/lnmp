@@ -1,4 +1,4 @@
-FROM redis:4.0.9-alpine
+FROM redis:5.0-rc3-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

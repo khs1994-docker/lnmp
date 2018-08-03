@@ -23,5 +23,5 @@ GRANT ALL ON *.* TO 'master'@'%' WITH GRANT OPTION;"
 # mysql_net=$(ip route | awk '$1=="default" {print $3}' | sed "s/\.[0-9]\+$/.%/g")
 
 mysql -u root \
--e "CREATE USER '${MYSQL_REPLICATION_USER}'@'172.28.0.%' WITH mysql_native_password BY '${MYSQL_REPLICATION_PASSWORD}'; \
-GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER}'@'172.28.0.%'; "
+-e "CREATE USER '${MYSQL_REPLICATION_USER:-replication}'@'172.28.0.%' WITH mysql_native_password BY '${MYSQL_REPLICATION_PASSWORD}'; \
+GRANT REPLICATION SLAVE ON *.* TO '${MYSQL_REPLICATION_USER:-replication}'@'172.28.0.%'; "

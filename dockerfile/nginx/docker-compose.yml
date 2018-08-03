@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.7"
 services:
 
   nginx:
@@ -6,4 +6,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/nginx:${TAG:-1.13.12}-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/nginx:${TAG:-1.15.2}-alpine

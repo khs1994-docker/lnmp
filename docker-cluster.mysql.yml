@@ -2,6 +2,7 @@ version: '3.7'
 
 #
 #  MySQL 1 master 2 node
+#  MySQL 2 master 2 node
 #
 # @link https://github.com/TomCzHen/mysql-replication-sample
 #
@@ -9,9 +10,9 @@ version: '3.7'
 #
 # Example Port
 #
-# master 13306
+# master 13306 13007
 #
-# node 13307 13308
+# node 13316 13317
 #
 
 #
@@ -46,7 +47,7 @@ x-labels:
     - "${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=clusterkit_mysql"
 
 services:
-  mysql_master:
+  mysql_master-1:
     << : *default-common
     << : *default-labels
     environment:
@@ -55,11 +56,12 @@ services:
       MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
-      - 13306:3306
+      - "13306:3306"
     volumes:
       - cluster_mysql_master-data:/var/lib/mysql
     command:
       - --log-bin=mysql-bin
+      # - --binlog-format=mixed # Statement、Mixed、Row，默认设置为mixed
       - --server-id=1
       - --character-set-server=utf8mb4
       # - --binlog-do-db=dbname
@@ -68,6 +70,13 @@ services:
       # - --binlog_ignore_db=dbname
       - --skip-character-set-client-handshake
       - --default-authentication-plugin=mysql_native_password
+      # --sync_binlog=1
+      # --auto_increment_increment=2
+      # --auto_increment_offset=1
+      # --sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+      # GTID
+      # --gtid-mode=on
+      # --enforce-gtid-consistency
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -91,7 +100,7 @@ services:
         target: /docker-entrypoint-initdb.d/1-master-init.sh
         mode: 0555
 
-  mysql_node-1:
+  mysql_master-2:
     << : *default-common
     << : *default-labels
     environment:
@@ -102,27 +111,65 @@ services:
     ports:
       - "13307:3306"
     volumes:
+      - cluster_mysql_master-data:/var/lib/mysql
+    command:
+      - --log-bin=mysql-bin
+      - --server-id=2
+      - --character-set-server=utf8mb4
+      - --skip-character-set-client-handshake
+      - --default-authentication-plugin=mysql_native_password
+      # --sync_binlog=1
+      # GTID
+      # --gtid-mode=on
+      # --enforce-gtid-consistency
+    deploy:
+      << : *default-deploy
+      << : *default-labels
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      cluster_mysql:
+        # Not work in Swarm mode
+        ipv4_address: 172.28.0.101
+    secrets:
+      - source: cluster_db_root_password
+        target: /etc/mysql/db_root_password
+      - source: cluster_mysql_master_sh
+        target: /docker-entrypoint-initdb.d/1-master-init.sh
+        mode: 0555
+
+  mysql_node-1:
+    << : *default-common
+    << : *default-labels
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
+      MYSQL_REPLICATION_USER: replication
+      MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
+      TZ: Asia/Shanghai
+    ports:
+      - "13316:3306"
+    volumes:
       - cluster_mysql_node-1-data:/var/lib/mysql
     command:
       - --server-id=10
       - --character-set-server=utf8mb4
       - --slave-skip-errors=all
+      # - --slave-skip-errors=1062,1053,1146,1213,1264,1205,1396
       - --skip-character-set-client-handshake
       - --default-authentication-plugin=mysql_native_password
+      - --sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+      # --master_info_repository=TABLE
+      # --relay_log_info_repository=TABLE
+      # GTID
+      # - --gtid-mode=on
+      # --enforce-gtid-consistency
     deploy:
       << : *default-deploy
       << : *default-labels
       replicas: 1
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
     networks:
       cluster_mysql:
-        ipv4_address: 172.28.0.101
+        ipv4_address: 172.28.0.110
     secrets:
       - source: cluster_db_root_password
         target: /etc/mysql/db_root_password
@@ -139,29 +186,29 @@ services:
       MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
       TZ: Asia/Shanghai
     ports:
-      - "13308:3306"
+      - "13317:3306"
     volumes:
       - cluster_mysql_node-2-data:/var/lib/mysql
     command:
       - --server-id=20
       - --character-set-server=utf8mb4
       - --slave-skip-errors=all
+      # - --slave-skip-errors=1062,1053,1146,1213,1264,1205,1396
       - --skip-character-set-client-handshake
       - --default-authentication-plugin=mysql_native_password
+      - --sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+      # --master_info_repository=TABLE
+      # --relay_log_info_repository=TABLE
+      # GTID
+      # - --gtid-mode=on
+      # --enforce-gtid-consistency
     deploy:
       << : *default-deploy
       << : *default-labels
       replicas: 1
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
     networks:
       cluster_mysql:
-        ipv4_address: 172.28.0.102
+        ipv4_address: 172.28.0.111
     secrets:
       - source: cluster_db_root_password
         target: /etc/mysql/db_root_password
