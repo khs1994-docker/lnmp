@@ -12,6 +12,7 @@ Changes:
 * Update PHP Tag `khs1994/php:VERSION-fpm-alpine`
 * Add PHP73 Based `alpine:3.8`
 * Add `NGINX Unit` 1.3
+* Add `etcd` 3.3.9
 * Support Windows Container
 
 Updates:
@@ -23,6 +24,8 @@ Updates:
 * `MySQL` 8.0.12
 * `MongoDB` 4.1.1
 * `MariaDB` 10.3.8
+* `Redis` 5.0-rc4
+* `Composer` 1.7.0
 
 #### [v18.08 (2018-07-11) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08)
 

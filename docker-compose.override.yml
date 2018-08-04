@@ -22,7 +22,7 @@ services:
 
   redis:
     << : *default-common
-    image: redis:${KHS1994_LNMP_REDIS_VERSION:-5.0-rc3}-alpine
+    image: redis:${KHS1994_LNMP_REDIS_VERSION:-5.0-rc4}-alpine
 
   memcached:
     << : *default-common
@@ -93,6 +93,8 @@ volumes:
     external: true
     name: lnmp_composer_cache-data
   nginx-unit-state-data:
+    << : *default-common
+  etcd-data:
     << : *default-common
 
 secrets:

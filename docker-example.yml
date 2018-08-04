@@ -93,6 +93,8 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+      # 3.7 options same as update_config
+      # rollback_config:
 
       << : *default-labels
 
@@ -155,6 +157,9 @@ services:
     isolation: default # windows process hyperv
     # links: # no Swarm mode
     #    - mysql
+    # 3.7
+    init: true
+    # init: /usr/libexec/docker-init
     logging:
        driver: syslog # json-file none journald
        options:

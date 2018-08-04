@@ -47,6 +47,7 @@ x-labels:
     - "${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=clusterkit_mysql"
 
 services:
+
   mysql_master-1:
     << : *default-common
     << : *default-labels
@@ -219,10 +220,8 @@ services:
 volumes:
   cluster_mysql_master-data:
     << : *default-labels
-
   cluster_mysql_node-1-data:
     << : *default-labels
-
   cluster_mysql_node-2-data:
     << : *default-labels
 
@@ -230,11 +229,9 @@ secrets:
   cluster_mysql_master_sh:
     << : *default-labels
     file: ./cluster/mysql/master/master.sh
-
   cluster_mysql_node_sh:
     << : *default-labels
     file: ./cluster/mysql/node/node.sh
-
   cluster_db_root_password:
     << : *default-labels
     file: ./secrets/db_root_password.txt

@@ -136,7 +136,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.6.5 \
+    COMPOSER_VERSION=1.7.0 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
