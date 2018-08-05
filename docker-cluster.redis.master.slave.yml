@@ -95,7 +95,7 @@ services:
       # "--logfile /var/log/redis/redis.log",
       "--slaveof redis_m_s_master 21000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 23000"
+      "--slave-announce-port 23000",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"

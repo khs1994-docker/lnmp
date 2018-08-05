@@ -598,16 +598,26 @@ switch($first){
 
       $docker_version=$(docker --version)
       $compose_version=$(docker-compose --version)
+      $container_status=$( docker container ls -f label=com.khs1994.lnmp )
       Write-Output "
 <details>
 
 <summary>OS Environment Info</summary>
 
 <code>$os_info</code>
-
 <code>$docker_version</code>
-
 <code>$compose_version</code>
+
+</details>
+
+<details>
+<summary>Docker Container Status</summary>
+
+<pre>
+
+$container_status
+
+</pre>
 
 </details>
 

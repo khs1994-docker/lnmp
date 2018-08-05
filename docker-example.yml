@@ -32,7 +32,7 @@ services:
       args:
         VAR: 1
       args:
-        - a=1
+         - a=1
       shm_size: '2gb' # 3.5
       #
       # Dockerfile target

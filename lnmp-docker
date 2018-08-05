@@ -741,15 +741,30 @@ _lnmp_debug(){
   echo "
 <details>
 <summary>OS Environment Info</summary>
-<code>
+
+<pre>
 " > debug.md
 
 cat /etc/os-release >> debug.md > /dev/null 2>&1 || uname -s >> debug.md
 
+container_status=$( docker container ls -f label=com.khs1994.lnmp )
+
 echo "
-</code>
+</pre>
+
 <code>$docker_version</code>
 <code>$compose_version</code>
+
+</details>
+<details>
+<summary>Docker Container Status</summary>
+
+<pre>
+
+$container_status
+
+</pre>
+
 </details>
 <details>
 <summary>Console output</summary>
