@@ -39,14 +39,14 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mysql
     #   dockerfile: Dockerfile
     # image: lnmp-mysql:latest
-    image: "${ARM_ARCH:-arm64v8}/mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.12}"
+    image: "${ARM_ARCH:-arm64v8}/mysql:${LNMP_MYSQL_VERSION:-8.0.12}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
       # MYSQL_USER:
       # MYSQL_PASSWORD:
     ports:
-      - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
+      - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
       - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       - ./backup/init:/docker-entrypoint-initdb.d:ro
@@ -56,7 +56,7 @@ services:
 
   mysql:
     << : *default-common
-    image: "${ARM_ARCH:-arm64v8}/mariadb:${KHS1994_LNMP_MARIADB_VERSION:-10.3.8}"
+    image: "${ARM_ARCH:-arm64v8}/mariadb:${LNMP_MARIADB_VERSION:-10.3.8}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -64,7 +64,7 @@ services:
       # MYSQL_USER:
       # MYSQL_PASSWORD:
     ports:
-      - "${MYSQL_PORT:-127.0.0.1:3306}:3306"
+      - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
       - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
@@ -87,14 +87,14 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/redis/
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
-    image: "${ARM_ARCH:-arm64v8}/redis:${KHS1994_LNMP_REDIS_VERSION:-5.0-rc4}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/redis:${LNMP_REDIS_VERSION:-5.0-rc4}${ARM_BASED_OS}"
     volumes:
       - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro
       - ./logs/redis:/var/log/redis
       - redis-data:/data
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
-      - "${REDIS_PORT:-127.0.0.1:6379}:6379"
+      - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     command: [
       "redis-server",
       "/redis.conf",
@@ -111,13 +111,13 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/memcached/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/memcached:${LNMP_MEMCACHED_VERSION:-1.5}${ARM_BASED_OS}"
     env_file:
       - ./cli/timezone.env
     volumes:
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
-       - "${MEMCACHED_PORT:-127.0.0.1:11211}:11211"
+       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
 
   rabbitmq:
     << : *default-common
@@ -127,7 +127,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/rabbitmq/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7}-management${ARM_BASED_OS}"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
       - zoneinfo-data:/usr/share/zoneinfo
@@ -145,7 +145,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/postgresql/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-10}${ARM_BASED_OS}"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -153,7 +153,7 @@ services:
       - postgresql-data:/var/lib/postgresql
       - zoneinfo-data:/usr/share/zoneinfo
     ports:
-      - "${POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
+      - "${LNMP_POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
     secrets:
       # default is mysql password
       - db_root_password
@@ -166,13 +166,13 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mongodb/
     #   dockerfile: Dockerfile
     # image: lnmp-mongodb:lastet
-    image: ${ARM_ARCH:-arm64v8}/mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.1.1}
+    image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.1}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf
       - mongodb-data:/data/db
       - ./logs/mongodb/mongo.log:/var/log/mongodb/mongo.log
     ports:
-      - "${MONGODB_PORT:-127.0.0.1:27017}:27017"
+      - "${LNMP_MONGODB_PORT:-127.0.0.1:27017}:27017"
     env_file:
       - ./cli/timezone.env
     command: ["mongod","--config","/etc/mongod.conf"]
@@ -186,7 +186,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/php/
     #   dockerfile: Dockerfile
     # image:lnmp-php:lastet
-    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${KHS1994_LNMP_PHP_VERSION:-7.2.8}-fpm-${ARM_PHP_BASED_OS}"
+    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.8}-fpm-${ARM_PHP_BASED_OS}"
     networks:
       - frontend
       - backend
@@ -202,7 +202,7 @@ services:
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - composer_cache-data:/tmp/cache
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.09} ${ARM_ARCH:-arm64v8} With Pull Docker Image
+      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.09} ${ARM_ARCH:-arm64v8} With Pull Docker Image
       - APP_ENV=development
     command: ["php-fpm","-R"]
 
@@ -215,7 +215,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
-    image: "${ARM_ARCH:-arm64v8}/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.15}"
+    image: "${ARM_ARCH:-arm64v8}/nginx:${LNMP_NGINX_VERSION:-1.15}"
     networks:
       - frontend
     ports:
@@ -239,7 +239,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
     #   dockerfile: Dockerfile
     # image: lnmp-httpd:latest
-    image: "${ARM_ARCH:-arm64v8}/httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4}${ARM_BASED_OS}"
     ports:
       - "443:443"
       - "80:80"

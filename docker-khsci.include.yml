@@ -3,7 +3,7 @@ version: "3.7"
 services:
   khsci:
     # restart: always
-    image: khs1994/php:${KHS1994_LNMP_PHP_VERSION:-7.2.8}-fpm-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.2.8}-fpm-alpine
     volumes:
       - ./app/khsci:/app/khsci
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
@@ -22,9 +22,9 @@ services:
 
   nginx:
     ports:
-      - "${NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
-      - "${NGINX_HTTP_PORT:-0.0.0.0:80}:80"
-      - "${NGINX_HTTP_PORT:-0.0.0.0:10000}:10000"
+      - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
+      - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
+      - "${LNMP_KHSCI_PORT:-0.0.0.0:10000}:10000"
 
 volumes:
   khsci-tmp:

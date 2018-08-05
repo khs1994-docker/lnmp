@@ -14,35 +14,35 @@ services:
 
   mysql:
     << : *default-common
-    image: mysql:${KHS1994_LNMP_MYSQL_VERSION:-8.0.12}
+    image: mysql:${LNMP_MYSQL_VERSION:-8.0.12}
 
   mariadb:
     << : *default-common
-    image: mariadb:${KHS1994_LNMP_MYSQL_VERSION:-10.3.8}
+    image: mariadb:${LNMP_MYSQL_VERSION:-10.3.8}
 
   redis:
     << : *default-common
-    image: redis:${KHS1994_LNMP_REDIS_VERSION:-5.0-rc4}-alpine
+    image: redis:${LNMP_REDIS_VERSION:-5.0-rc4}-alpine
 
   memcached:
     << : *default-common
-    image: memcached:${KHS1994_LNMP_MEMCACHED_VERSION:-1.5}-alpine
+    image: memcached:${LNMP_MEMCACHED_VERSION:-1.5}-alpine
 
   rabbitmq:
     << : *default-common
-    image: rabbitmq:${KHS1994_LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
+    image: rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
 
   postgresql:
     << : *default-common
-    image: postgres:${KHS1994_LNMP_POSTGRESQL_VERSION:-10}-alpine
+    image: postgres:${LNMP_POSTGRESQL_VERSION:-10}-alpine
 
   mongodb:
     << : *default-common
-    image: mongo:${KHS1994_LNMP_MONGODB_VERSION:-4.1.1}
+    image: mongo:${LNMP_MONGODB_VERSION:-4.1.1}
 
   php7:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${KHS1994_LNMP_PHP_VERSION:-7.2.8}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.8}-fpm-alpine
 
   phpmyadmin:
     << : *default-common
@@ -50,15 +50,15 @@ services:
 
   nginx:
     << : *default-common
-    image: khs1994/nginx:${KHS1994_LNMP_NGINX_VERSION:-1.15.2}-alpine
+    image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.15.2}-alpine
 
   nginx-unit:
     << : *default-common
-    image: khs1994/nginx-unit:${KHS1994_LNMP_NGINX_UNIT_VERSION:-1.3}-alpine
+    image: khs1994/nginx-unit:${LNMP_NGINX_UNIT_VERSION:-1.3}-alpine
 
   httpd:
     << : *default-common
-    image: httpd:${KHS1994_LNMP_HTTPD_VERSION:-2.4.34}-alpine
+    image: httpd:${LNMP_HTTPD_VERSION:-2.4.34}-alpine
 
 networks:
   frontend:

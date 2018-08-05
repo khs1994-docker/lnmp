@@ -123,7 +123,7 @@ Function init(){
 }
 
 Function help_information(){
-  echo "Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
+  echo "Docker-LNMP CLI ${LNMP_DOCKER_VERSION}
 
 Official WebSite https://lnmp.khs1994.com
 

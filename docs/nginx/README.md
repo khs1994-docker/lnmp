@@ -18,6 +18,8 @@ http {
 }
 
 upstream myapp1 {
+    # 随机 1.15.1 +
+    random;
     # 最少连接负载均衡
     least_conn;
     # 会话持久性
@@ -95,5 +97,4 @@ server {
   }
 
 }
-
 ```

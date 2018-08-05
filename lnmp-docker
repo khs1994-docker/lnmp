@@ -68,7 +68,7 @@ if [ -z "$LNMP_PATH" ];then print_warning "Try lnmp-* commands? Please see cli/R
 
 help(){
   echo  -e "
-Docker-LNMP CLI ${KHS1994_LNMP_DOCKER_VERSION}
+Docker-LNMP CLI ${LNMP_DOCKER_VERSION}
 
 Official WebSite https://lnmp.khs1994.com
 
@@ -334,14 +334,14 @@ _registry(){
 
   # SSL 相关
 
-  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] \
-      || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.crt ] \
+      || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.key ];then
     print_warning "Docker Registry SSL not found, generating ...."
-    ssl_self $KHS1994_LNMP_REGISTRY_HOST
+    ssl_self $LNMP_REGISTRY_HOST
   fi
 
-  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.crt ] \
-      || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${KHS1994_LNMP_REGISTRY_HOST}.key ];then
+  if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.crt ] \
+      || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.key ];then
     print_error "Docker Registry SSL error" ; exit 1
   else
     print_info "Docker Registry SSL Correct"
@@ -379,7 +379,7 @@ _registry(){
     fi
   fi
 
-  sed -i '' "s#KHS1994_DOMAIN#${KHS1994_LNMP_REGISTRY_HOST}#g" config/${NGINX_CONF_D:-nginx}/registry.conf
+  sed -i '' "s#DOMAIN#${LNMP_REGISTRY_HOST}#g" config/${NGINX_CONF_D:-nginx}/registry.conf
 
   exec docker-compose up -d registry nginx
 }
@@ -418,12 +418,12 @@ update_version(){
               MONGODB \
               '
   for soft in $softs; do
-    version="KHS1994_LNMP_${soft}_VERSION"
+    version="LNMP_${soft}_VERSION"
     eval version=$(echo \$$version)
     if [ $OS = "Darwin" ];then
-      sed -i '' 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
+      sed -i '' 's/^LNMP_'"${soft}"'_VERSION.*/LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
     else
-      sed -i 's/^KHS1994_LNMP_'"${soft}"'_VERSION.*/KHS1994_LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
+      sed -i 's/^LNMP_'"${soft}"'_VERSION.*/LNMP_'"${soft}"'_VERSION='"${version}"'/g' .env
     fi
   done
 }
@@ -799,7 +799,7 @@ nginx_http(){
 server {
   listen        80;
   server_name   $1;
-  root          /app/$2;
+  root          ${LNMP_PHP_PATH:-/app}/$2;
   index         index.html index.htm index.php;
 
   # include conf.d/demo-include-php.config
@@ -822,7 +822,7 @@ apache_http(){
 #
 
 <VirtualHost *:80>
-  DocumentRoot \"/app/$2\"
+  DocumentRoot \"${LNMP_PHP_PATH:-/app}/$2\"
   ServerName $1
   ServerAlias $1
 
@@ -848,7 +848,7 @@ apache_https(){
 #
 
 <VirtualHost *:443>
-  DocumentRoot \"/app/$2\"
+  DocumentRoot \"${LNMP_PHP_PATH:-/app}/$2\"
   ServerName $1
   ServerAlias $1
 
@@ -890,7 +890,7 @@ server {
 server{
   listen                     443 ssl http2;
   server_name                $1;
-  root                       /app/$2;
+  root                       ${LNMP_PHP_PATH:-/app}/$2;
   index                      index.html index.htm index.php;
 
   # include conf.d/demo-include-ssl.config
@@ -1441,7 +1441,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   version )
-    echo Docker-LNMP ${KHS1994_LNMP_DOCKER_VERSION}
+    echo Docker-LNMP ${LNMP_DOCKER_VERSION}
     ;;
 
   -h | --help | help )
@@ -1755,9 +1755,9 @@ if [ "$1" = "development" ] || [ "$1" = "production" ];then APP_ENV=$1; fi
 # 写入版本号
 
 if [ ${OS} = "Darwin" ];then
-  sed -i "" "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
+  sed -i "" "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
 else
-  sed -i "s/^KHS1994_LNMP_DOCKER_VERSION.*/KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION}/g" .env
+  sed -i "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
 fi
 
 if [ ${ARCH} = 'armv7l' ];then

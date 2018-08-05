@@ -67,7 +67,7 @@ services:
       cache_from:
         - khs1994/php:fpm-alpine
     environment:
-      - KHS1994_LNMP_DOCKER_VERSION=${KHS1994_LNMP_DOCKER_VERSION:-v18.09} x86_64 With Build Docker Image
+      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.09} x86_64 With Build Docker Image
 
   rabbitmq:
     << : *default-labels
