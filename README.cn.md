@@ -288,10 +288,6 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 请使用 [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
-## Docker Daemon TLS
-
-请查看 [khs1994-docker/dockerd-tls](https://github.com/khs1994-docker/dockerd-tls)
-
 ## 支持文档
 
 https://doc.lnmp.khs1994.com

@@ -596,6 +596,10 @@ if(!(Test-Path C:\mysql\data)){
   mysqld --install
 }
 
+if (!(Test-Path C:/mysql/my.cnf)){
+  Copy-Item $PSScriptRoot/config/my.cnf C:/mysql/my.cnf
+}
+
 $mysql_password=($(select-string `
   "A temporary password is generated for" C:\mysql\data\*.err) -split " ")[12]
 
@@ -610,6 +614,12 @@ $ mysql -uroot -p $mysql_password
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 
 mysql> FLUSH PRIVILEGES;
+
+mysql> GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+
+# add remote login user
+
+mysql> CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
 
 mysql> GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
 "

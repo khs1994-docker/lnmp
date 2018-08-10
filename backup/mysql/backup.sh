@@ -4,7 +4,8 @@ set -ex
 
 if [ ! -n "$1" ] ;then
   echo -e "command is empty, please input something
-database [tables]
+
+DATABASE_NAME [tables]
 --databases [OPTIONS] DB1 [DB2 DB3...]
 --all-databases [OPTIONS]
 "
