@@ -1,5 +1,7 @@
 # Satis
 
+* https://github.com/khs1994-docker/lnmp/tree/master/app/satis-demo
+
 * https://github.com/khs1994-docker/lnmp/issues/479
 
 * https://github.com/composer/satis
@@ -14,9 +16,23 @@ $ lnmp-docker satis
 
 ## Usage
 
+`repositories options ssl` 用来配置自签名证书的信息，如果是正规证书，请忽略此项。
+
+* http://www.php.net/manual/en/context.ssl.php
+
 ```json
 {
-    "repositories": [ { "type": "composer", "url": "http://packages.example.org/" } ],
+    "repositories": [
+      {
+        "type": "composer",
+        "url": "http://packages.t.khs1994.com/",
+        "options": {
+          "ssl": {
+                    "cafile": "/home/path/my-root-ca.crt"
+          }
+        }
+      }
+    ],
     "require": {
         "company/package": "1.2.0",
         "company/package2": "1.5.2",

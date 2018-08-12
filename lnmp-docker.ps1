@@ -149,7 +149,6 @@ Commands:
   init                 Init LNMP environment
   restore              Restore MySQL databases
   restart              Restart LNMP services
-  satis                Build Satis
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
   update-version       Update LNMP soft to latest vesion
@@ -159,6 +158,9 @@ PHP Tools:
   new                  New PHP Project and generate nginx conf and issue SSL certificate
   nginx-config         Generate nginx vhost conf
   ssl-self             Issue Self-signed SSL certificate
+
+Composer:
+  satis                Build Satis
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop

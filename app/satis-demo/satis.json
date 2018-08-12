@@ -1,6 +1,6 @@
 {
   "name": "My Composer",
-  "homepage": "http://packagist.example.com",
+  "homepage": "https://packagist.t.khs1994.com",
   "repositories": [{
       "type": "vcs",
       "url": "https://github.com/khs1994-docker/libdocker"

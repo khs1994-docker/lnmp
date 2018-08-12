@@ -103,7 +103,6 @@ Commands:
   restart              Restart LNMP services
   registry-up          Up Docker Registry
   registry-down        Stop Docker Registry
-  satis                Build Satis
   update               Upgrades LNMP [ -f | ]
   upgrade              Upgrades LNMP [ -f | ]
   update-version       Update LNMP soft to latest vesion
@@ -114,6 +113,9 @@ PHP Tools:
   nginx-config         Generate nginx vhost conf
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
+
+Composer:
+ satis                Build Satis
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop

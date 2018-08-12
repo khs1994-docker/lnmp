@@ -12,6 +12,16 @@ $ nginx -s reopen # 重新打开日志文件
 
 ```nginx
 http {
+  keepalive_timeout  100;
+
+  fastcgi_connect_timeout 6000;
+  fastcgi_send_timeout 6000;
+  fastcgi_read_timeout 6000;
+
+  client_header_timeout 120s
+  client_body_timeout 120s;
+  client_max_body_size 100m;         #主要是这个参数，限制了上传文件大大小
+
   server {
 
   }
@@ -50,6 +60,25 @@ server {
     autoindex_exact_size on;
     autoindex_format html;
     autoindex_localtime off;
+
+    # 防盗链
+    valid_referers none blocked *.hugao8.com www.hugao8.com m.hugao8.com *.baidu.com *.google.com;
+    if ($invalid_referer) {
+    rewrite ^/ http://ww4.sinaimg.cn/bmiddle/051bbed1gw1egjc4xl7srj20cm08aaa6.jpg;
+    # none : 允许没有 http_refer 的请求访问资源
+    # blocked : 允许不是 http:// 开头的，不带协议的请求访问资源
+
+    # auth
+    auth_basic           "closed site";
+    auth_basic_user_file conf/htpasswd;
+
+    # 访问控制
+
+    deny  192.168.1.1;
+    allow 192.168.1.0/24;
+    allow 10.1.1.0/16;
+    allow 2001:0db8::/32;
+    deny  all;
   }
 
   # nginx 将选择具有最长前缀的 location 块
@@ -61,6 +90,10 @@ server {
   # 代理配置
   location /test/ {
     proxy_pass http://localhost:8080;
+    proxy_connect_timeout   300;         #这三个超时时间适量调大点
+    proxy_send_timeout      600;
+    proxy_read_timeout      600;
+    proxy_set_header X-Real-IP $remote_addr;    # 获取客户端真实IP
   }
 
   # /i/top.gif 的请求，将发送 /data/w3/images/top.gif 文件
@@ -68,10 +101,10 @@ server {
     alias /data/w3/images/;
   }
 
-  # 指定给定的 location 只能用于内部请求。对于外部请求，返回客户端错误 404（未找到）。
   error_page 404 /404.html;
 
   location /404.html {
+    # 指定给定的 location 只能用于内部请求。对于外部请求，返回客户端错误 404（未找到）。
     internal;
   }
 
@@ -79,22 +112,5 @@ server {
   location / {
     try_files $uri $uri/ /index.php?$query_string;
   }
-
-  # 访问控制
-  location / {
-    deny  192.168.1.1;
-    allow 192.168.1.0/24;
-    allow 10.1.1.0/16;
-    allow 2001:0db8::/32;
-    deny  all;
-  }
-
-  # auth
-
-  location / {
-    auth_basic           "closed site";
-    auth_basic_user_file conf/htpasswd;
-  }
-
 }
 ```

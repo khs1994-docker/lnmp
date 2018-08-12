@@ -439,7 +439,9 @@ $env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
 $items="$env:LNMP_PATH","$env:LNMP_PATH\windows","$env:LNMP_PATH\wsl", `
        "C:\php","C:\mysql\bin","C:\nginx","C:\Apache24\bin", `
-       "C:\node","C:\bin" `
+       "C:\node","C:\bin", `
+       "C:\Users\$env:username\go\bin", `
+       "C:\go\bin"
 
 Foreach ($item in $items)
 {
