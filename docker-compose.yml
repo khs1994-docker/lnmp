@@ -144,7 +144,7 @@ services:
 
   gogs:
     << : *default-common
-    image: gogs/gogs:latest@sha256:f9ec20c83a2cce53028455004a87888dc576dc4b0e0da10ceef434c13651b2bf
+    image: gogs/gogs:latest@sha256:af29ae1cc065be6e520cf52765b097ac229f0c864eaf86d35289daa6d13f18b9
     ports:
       - "${LNMP_GOGS_SSH_PORT:-8022}:8022"
       # - "${LNMP_GOGS_HTTP_PORT:-3000}:3000"
