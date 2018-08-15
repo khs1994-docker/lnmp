@@ -6,7 +6,7 @@
 
 * https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#satis
 
-## GitGub API 等的频率限制
+## GitHub API 等的频率限制
 
 ```bash
 Could not fetch https://api.github.com/repos/khs1994-docker/libdocker, please create a GitHub OAuth token to go over the API rate limit
