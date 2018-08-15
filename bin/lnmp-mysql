@@ -12,6 +12,9 @@ docker run -it --rm \
     --network lnmp_backend \
     -e TZ=${TZ} \
     mysql:8.0.11 \
+    "$@" || docker run -it --rm \
+    -e TZ=${TZ} \
+    mysql:8.0.11 \
     "$@"
 
 if ! [ -z "$CREATE" ];then

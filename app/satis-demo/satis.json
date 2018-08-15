@@ -1,7 +1,8 @@
 {
   "name": "My Composer",
   "homepage": "https://packagist.t.khs1994.com",
-  "repositories": [{
+  "repositories": [
+    {
       "type": "vcs",
       "url": "https://github.com/khs1994-docker/libdocker"
     },
@@ -14,7 +15,13 @@
       "url": "https://github.com/khs1994-php/tencent-ai"
     }
   ],
-  "require-all": true,
+  "require": {
+    "khs1994/tencent-ai": "18.06.0",
+    "khs1994/docker": "18.06.0",
+    "khs1994/registry": "*"
+  },
+  "require-dependencies": true,
+  "require-dev-dependencies": true,
   "archive": {
     "directory": "dist",
     "format": "tar",
