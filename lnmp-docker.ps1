@@ -76,6 +76,11 @@ Function env_status(){
     Write-Host ''
     Copy-Item volumes/.env.example volumes/.env
   }
+
+  if (!(Test-Path config/composer/config.json)){
+    Copy-Item config/composer/config.example.json config/composer/config.json
+  }
+
 }
 
 Function logs(){

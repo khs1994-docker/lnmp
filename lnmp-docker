@@ -62,6 +62,8 @@ else
     fi
 fi
 
+if ! [ -f config/composer/config.json ];then cp config/composer/config.example.json config/composer/config.json ; fi
+
 # PHPer command
 
 if [ -z "$LNMP_PATH" ];then print_warning "Try lnmp-* commands? Please see cli/README.md\n"; fi
