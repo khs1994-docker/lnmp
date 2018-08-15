@@ -28,25 +28,26 @@ if ($args -eq 'get-version'){
   exit
 }
 
-Function _clone($version){
+Function _clone($version,$desc){
   $temp_path = "$env:LNMP_PATH\app\temp\laravel${version}"
   if (Test-Path $temp_path){
     Write-Host "
-Found Temp $temp_path
+==> Found Temp $temp_path
 
-Now Clone laravel from $temp_path
+==> Now Clone laravel from $temp_path
 "
-    git clone $temp_path $args[1]
+    git clone $temp_path $desc
     exit
   }else{
     Write-Host "
-Local Temp $temp_path not found
+==> Local Temp $temp_path not found
 
-Now Clone from git then clone from local
+==> Now Clone from git then clone from local
 "
     git clone -b $version `
         --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git "$env:LNMP_PATH\app\temp\laravel$version"
-    _clone $version
+
+    _clone $version $desc
   }
 }
 
