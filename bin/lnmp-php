@@ -57,7 +57,20 @@ if [ "$1" = '-S' ];then
     -e TZ=${TZ} \
     -p $ADDR:$PORT:$PORT \
     ${DOCKER_IMAGE}:${TAG} \
-    -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log -S 0.0.0.0:$PORT "$@"
+    -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log -S 0.0.0.0:$PORT "$@" || \
+    docker run --init -it --rm \
+      --mount type=bind,src=$PWD,target=/app,consistency=cached \
+      --mount src=lnmp_composer_cache-data,target=/tmp/cache \
+      --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+      --mount type=bind,src=$DIR/../logs/php-fpm/cli_error.log,target=/var/log/php-fpm/php_errors.log \
+      --network lnmp_backend \
+      --entrypoint php \
+      -e APP_ENV=${APP_ENV} \
+      -e TZ=${TZ} \
+      -p $ADDR:$PORT:$PORT \
+      ${DOCKER_IMAGE}:${TAG} \
+      -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log -S 0.0.0.0:$PORT "$@"
+
 fi
 
 #
@@ -66,7 +79,7 @@ fi
 # @link https://github.com/moby/moby/issues/2838#issuecomment-29205965
 #
 
-exec docker run --init -it --rm \
+docker run --init -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
@@ -76,7 +89,18 @@ exec docker run --init -it --rm \
   -e TZ=${TZ} \
   -e APP_ENV=${APP_ENV} \
   ${DOCKER_IMAGE}:${TAG} \
-  -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log $COMMAND
+  -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log $COMMAND || \
+  docker run --init -it --rm \
+    --mount type=bind,src=$PWD,target=/app,consistency=cached \
+    --mount src=lnmp_composer_cache-data,target=/tmp/cache \
+    --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+    --mount type=bind,src=$DIR/../logs/php-fpm/cli_error.log,target=/var/log/php-fpm/php_errors.log \
+    --entrypoint php \
+    -e TZ=${TZ} \
+    -e APP_ENV=${APP_ENV} \
+    ${DOCKER_IMAGE}:${TAG} \
+    -d zend_extension=xdebug -d error_log=/var/log/php-fpm/php_errors.log $COMMAND
+
 
 if ! [ -z "$CREATE" ];then
   docker network rm lnmp_backend > /dev/null 2>&1
