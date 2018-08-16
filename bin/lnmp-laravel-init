@@ -13,6 +13,8 @@ echo -e "\n\033[32mINFO\033[0m  create new env file ..."
 if [ -f .env ];then mv ${LARAVEL_PATH}/.env ${LARAVEL_PATH}/.env.backup; fi
 
 cp $DIR/../app/.env* ${LARAVEL_PATH}
+cp $DIR/../app/demo/.editorconfig ${LARAVEL_PATH}
+cp $DIR/../app/demo/.php_cs ${LARAVEL_PATH}
 
 echo -e "\n\033[32mINFO\033[0m  change Redis config ..."
 
@@ -55,4 +57,7 @@ $ lnmp-php artisan ide-helper:models
 set +x
 
 echo -e ".phpstorm.meta.php
-_ide_helper.php" >> .gitignore
+_ide_helper.php
+
+.php_cs.cache
+" >> .gitignore

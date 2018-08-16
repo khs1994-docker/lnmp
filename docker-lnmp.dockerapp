@@ -112,7 +112,7 @@ services:
 
   memcached:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5}-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.9}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
@@ -120,7 +120,7 @@ services:
 
   rabbitmq:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7}-management-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.6}-management-alpine
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq:rw
       - zoneinfo-data:/usr/share/zoneinfo
@@ -130,7 +130,7 @@ services:
 
   postgresql:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-10}-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-10.4}-alpine
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -260,7 +260,7 @@ services:
 
   httpd:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${LNMP_HTTPD_VERSION:-2.4}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${LNMP_HTTPD_VERSION:-2.4.34}-alpine"
     ports:
       - "${LNMP_HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
@@ -309,9 +309,9 @@ HTTPD_CONF_GIT: '"-b master https://github.com/khs1994-docker/lnmp-httpd-conf-de
 LNMP_HTTPD_HTTP_PORT: 0.0.0.0:80
 LNMP_HTTPD_HTTPS_PORT: 0.0.0.0:443
 LNMP_DOCKER_VERSION: v18.09
-LNMP_HTTPD_VERSION: 2.4.33
+LNMP_HTTPD_VERSION: 2.4.34
 LNMP_MARIADB_VERSION: 10.3.8
-LNMP_MEMCACHED_VERSION: 1.5.8
+LNMP_MEMCACHED_VERSION: 1.5.9
 LNMP_MONGODB_VERSION: 4.1.1
 LNMP_MYSQL_VERSION: 8.0.12
 LNMP_NGINX_VERSION: 1.15.2

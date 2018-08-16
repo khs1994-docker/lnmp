@@ -6,6 +6,9 @@ if (Test-Path .env){
 
 cp $env:LNMP_PATH/app/.env* .
 
+cp $env:LNMP_PATH/app/demo/.editorconfig .
+cp $env:LNMP_PATH/app/demo/.php_cs .
+
 echo "==> install laravel-ide-helper ..."
 
 composer require --dev barryvdh/laravel-ide-helper
@@ -35,4 +38,7 @@ $ lnmp-php artisan ide-helper:models
 '
 
 echo ".phpstorm.meta.php
-_ide_helper.php" >> .gitignore
+_ide_helper.php
+
+.php_cs.cache
+" >> .gitignore

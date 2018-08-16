@@ -220,7 +220,7 @@ $ ./lnmp-docker down
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.8-fpm-alpine`  | **5.6.x**       |`Alpine:3.7`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.8-fpm-alpine`  | **1.7.1**       |`Alpine:3.7`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.8-fpm-alpine`  | **2.12.2**      |`Alpine:3.7`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.9-alpine`           | **1.5.9**       |`Alpine:3.7`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.10-alpine`           | **1.5.10**       |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.6-management-alpine` | **3.7.6**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.8`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.0.0`                      | **4.0.0**       |`Ubuntu:xenial` |

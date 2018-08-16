@@ -111,7 +111,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/memcached/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/memcached:${LNMP_MEMCACHED_VERSION:-1.5}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.10}${ARM_BASED_OS}"
     env_file:
       - ./cli/timezone.env
     volumes:
@@ -127,7 +127,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/rabbitmq/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7}-management${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.6}-management${ARM_BASED_OS}"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
       - zoneinfo-data:/usr/share/zoneinfo
@@ -145,7 +145,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/postgresql/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-10}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-10.4}${ARM_BASED_OS}"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -215,7 +215,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
-    image: "${ARM_ARCH:-arm64v8}/nginx:${LNMP_NGINX_VERSION:-1.15}"
+    image: "${ARM_ARCH:-arm64v8}/nginx:${LNMP_NGINX_VERSION:-1.15.2}"
     networks:
       - frontend
     ports:
@@ -239,7 +239,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
     #   dockerfile: Dockerfile
     # image: lnmp-httpd:latest
-    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.34}${ARM_BASED_OS}"
     ports:
       - "443:443"
       - "80:80"
