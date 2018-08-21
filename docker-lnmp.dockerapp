@@ -1,4 +1,4 @@
-version: 18.09
+version: 18.10
 name: docker-lnmp
 description: Start LNMP(LEMP) In less than 2 minutes Powered by Docker Compose.
 namespace: khs1994
@@ -226,7 +226,7 @@ services:
       - ./cli/.env
     environment:
 
-      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.09} x86_64 With Pull Docker Image
+      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} x86_64 With Pull Docker Image
 
   phpmyadmin:
     << : *default-common
@@ -308,7 +308,7 @@ HTTPD_CONF_D: FILL ME
 HTTPD_CONF_GIT: '"-b master https://github.com/khs1994-docker/lnmp-httpd-conf-demo.git"'
 LNMP_HTTPD_HTTP_PORT: 0.0.0.0:80
 LNMP_HTTPD_HTTPS_PORT: 0.0.0.0:443
-LNMP_DOCKER_VERSION: v18.09
+LNMP_DOCKER_VERSION: v18.10
 LNMP_HTTPD_VERSION: 2.4.34
 LNMP_MARIADB_VERSION: 10.3.9
 LNMP_MEMCACHED_VERSION: 1.5.9
