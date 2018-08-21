@@ -133,9 +133,9 @@ services:
   #   #
   #   # image: username/lnmp-mariadb:tag
   #   #
-  #   # image: khs1994/lnmp-mariadb:10.3.8
+  #   # image: khs1994/lnmp-mariadb:10.3.9
   #   #
-  #   image: "mariadb:10.3.8"
+  #   image: "mariadb:10.3.9"
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test

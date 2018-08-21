@@ -110,7 +110,7 @@ services:
       "--port 20001",
       "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 20001"
+      "--slave-announce-port 20001",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
@@ -148,7 +148,7 @@ services:
       "--port 20002",
       "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 20002"
+      "--slave-announce-port 20002",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
@@ -184,7 +184,7 @@ services:
       "--port 20003",
       "--slaveof redis_sentinel_master-1 20000",
       "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 20003"
+      "--slave-announce-port 20003",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"

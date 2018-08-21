@@ -2,7 +2,7 @@
 
 set -ex
 
-KERNEL_VERSION=4.17.5
+KERNEL_VERSION=4.18.0
 
 ARCH=`uname -m`
 OS=`uname -s`
