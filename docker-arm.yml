@@ -47,6 +47,7 @@ services:
       # MYSQL_PASSWORD:
     ports:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
+      - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     volumes:
       - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       - ./backup/init:/docker-entrypoint-initdb.d:ro
@@ -56,7 +57,7 @@ services:
 
   mysql:
     << : *default-common
-    image: "${ARM_ARCH:-arm64v8}/mariadb:${LNMP_MARIADB_VERSION:-10.3.8}"
+    image: "${ARM_ARCH:-arm64v8}/mariadb:${LNMP_MARIADB_VERSION:-10.3.9}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -166,7 +167,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mongodb/
     #   dockerfile: Dockerfile
     # image: lnmp-mongodb:lastet
-    image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.1}
+    image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.2}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf
       - mongodb-data:/data/db

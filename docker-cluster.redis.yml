@@ -215,7 +215,7 @@ services:
       "--port 8001",
       "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8001",
-      "--cluster-announce-bus-port 18001"
+      "--cluster-announce-bus-port 18001",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
@@ -250,7 +250,7 @@ services:
       "--port 8002",
       "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8002",
-      "--cluster-announce-bus-port 18002"
+      "--cluster-announce-bus-port 18002",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
@@ -285,7 +285,7 @@ services:
       "--port 8003",
       "--cluster-announce-ip ${CLUSTERKIT_REDIS_HOST:-192.168.199.100}",
       "--cluster-announce-port 8003",
-      "--cluster-announce-bus-port 18003"
+      "--cluster-announce-bus-port 18003",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"

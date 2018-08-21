@@ -22,10 +22,10 @@ Updates:
 * `NGINX` 1.15.2
 * `ACME.sh` 2.7.9
 * `MySQL` 8.0.12
-* `MongoDB` 4.1.1
-* `MariaDB` 10.3.8
+* `MongoDB` 4.1.2
+* `MariaDB` 10.3.9
 * `Redis` 5.0-rc4
-* `Composer` 1.7.0
+* `Composer` 1.7.1
 * `Memcached` 1.5.10
 
 #### [v18.08 (2018-07-11) EOL](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08)

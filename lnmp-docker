@@ -87,7 +87,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
-  compose              Install docker-compose [ --official | ]
+  compose              Install docker-compose [ --official | -f ]
   completion           Move fish shell completion code (Only Support fish)
   up                   Up LNMP
   config               Validate and view the LNMP Compose file

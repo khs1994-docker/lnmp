@@ -2,7 +2,9 @@
 
 set -ex
 
-KERNEL_VERSION=4.17.5
+CURRENT_KERNEL_VERSION=`uname -r | cut -d '-' -f 1`
+
+KERNEL_VERSION=4.18.0
 
 ARCH=`uname -m`
 OS=`uname -s`
@@ -10,6 +12,8 @@ OS=`uname -s`
 if ! [ 'Linux' = $OS ];then
   exit
 fi
+
+if [ $CURRENT_KERNEL_VERSION -eq $KERNEL_VERSION ];then echo -e "\n\nKernel $CURRENT_KERNEL_VERSION is latest version\n\n"; exit; fi
 
 if [ 'aarch64' = $ARCH ];then
   ARCH=64

@@ -188,9 +188,9 @@ $ ./lnmp-docker down
 
 Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-* [v18.08 2018-07-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08)
+* [v18.09 2018-08-21](https://github.com/khs1994-docker/lnmp/releases/tag/v18.09)
 
-* ~~[v18.07 2018-05-20](https://github.com/khs1994-docker/lnmp/releases/tag/v18.07) **EOL**~~
+* ~~[v18.08 2018-07-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08) **EOL**~~
 
 ## Overview
 
@@ -207,7 +207,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/nginx-unit:1.3-alpine`| **1.3**             |`Alpine:3.8`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.34-alpine`       | **2.4.34**             |`Alpine:3.7`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.12`              | **8.0.12**             |`Debian:stretch`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.8`            | **10.3.8**             |`Ubuntu:bionic` |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.9`            | **10.3.9**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc4-alpine`        | **5.0-rc4**            |`Alpine:3.8`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.8-fpm-alpine`  | **7.2.8**       |`Alpine:3.7`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.8-fpm-alpine`  | **5.6.x**       |`Alpine:3.7`    |
@@ -216,7 +216,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.10-alpine`           | **1.5.10**       |`Alpine:3.7`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.6-management-alpine` | **3.7.6**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.8`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.1`                      | **4.1.1**       |`Ubuntu:xenial` |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.2`                      | **4.1.2**       |`Ubuntu:xenial` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.7`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.4`    |
 
