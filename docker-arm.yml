@@ -203,7 +203,7 @@ services:
       - ./logs/php-fpm:/var/log/php-fpm:rw
       - composer_cache-data:/tmp/cache
     environment:
-      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.09} ${ARM_ARCH:-arm64v8} With Pull Docker Image
+      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} ${ARM_ARCH:-arm64v8} With Pull Docker Image
       - APP_ENV=development
     command: ["php-fpm","-R"]
 
