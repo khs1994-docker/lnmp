@@ -145,7 +145,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.1}
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.2}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
       - mongodb-data:/data/db:rw
@@ -312,7 +312,7 @@ LNMP_DOCKER_VERSION: v18.09
 LNMP_HTTPD_VERSION: 2.4.34
 LNMP_MARIADB_VERSION: 10.3.9
 LNMP_MEMCACHED_VERSION: 1.5.9
-LNMP_MONGODB_VERSION: 4.1.1
+LNMP_MONGODB_VERSION: 4.1.2
 LNMP_MYSQL_VERSION: 8.0.12
 LNMP_NGINX_VERSION: 1.15.2
 LNMP_PHP_VERSION: 7.2.8

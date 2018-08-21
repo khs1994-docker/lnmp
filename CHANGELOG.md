@@ -22,7 +22,7 @@ Updates:
 * `NGINX` 1.15.2
 * `ACME.sh` 2.7.9
 * `MySQL` 8.0.12
-* `MongoDB` 4.1.1
+* `MongoDB` 4.1.2
 * `MariaDB` 10.3.9
 * `Redis` 5.0-rc4
 * `Composer` 1.7.0
