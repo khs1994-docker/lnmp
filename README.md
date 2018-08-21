@@ -188,9 +188,9 @@ $ ./lnmp-docker down
 
 Updates every month, Version name is `YY.MM`. For more release information about LNMP Docker Version, see [Releases](https://github.com/khs1994-docker/lnmp/releases).
 
-* [v18.08 2018-07-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08)
+* [v18.09 2018-08-21](https://github.com/khs1994-docker/lnmp/releases/tag/v18.09)
 
-* ~~[v18.07 2018-05-20](https://github.com/khs1994-docker/lnmp/releases/tag/v18.07) **EOL**~~
+* ~~[v18.08 2018-07-11](https://github.com/khs1994-docker/lnmp/releases/tag/v18.08) **EOL**~~
 
 ## Overview
 
