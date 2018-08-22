@@ -136,9 +136,7 @@ Swarm mode:
 Container Tools:
   SERVICE-cli          Execute a command in a running LNMP container
   SERVICE-container-id Display SERVICE container id
-
-LogKit:
-  SERVICE-logs         Print LNMP containers logs (journald)
+  SERVICE-logs         Print LNMP containers logs (journald) [-f | ]
 
 ClusterKit:
   clusterkit-help      Print ClusterKit help info
@@ -569,12 +567,15 @@ docker_compose(){
       if [ "$OS" = 'Darwin' ] ;then
         print_error \
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Mac\n"
+      exit
       elif [ "$OS" = 'Linux' ];then
         print_error \
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker compose -f\n"
+      exit
       elif [ "$OS" = 'MINGW64_NT-10.0' ];then
         print_error \
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows\n"
+      exit
       else
         NOTSUPPORT
       fi

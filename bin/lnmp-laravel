@@ -40,6 +40,6 @@ if [ "$1" = 'new' ];then
     sudo chown -R `id -u`:`id -g` ${LARAVEL_PATH}
     chmod -R 777 ${LARAVEL_PATH}/storage
   fi
-
-  . $DIR/lnmp-laravel-init
+  cd $LARAVEL_PATH
+  $DIR/lnmp-laravel-init
 fi

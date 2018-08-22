@@ -178,8 +178,6 @@ Swarm mode:
 
 Container Tools:
   SERVICE-cli          Execute a command in a running LNMP container
-
-LogKit:
   SERVICE-logs         Print LNMP containers logs (journald)
 
 ClusterKit:

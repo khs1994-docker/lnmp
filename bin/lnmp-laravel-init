@@ -8,6 +8,8 @@ fi
 
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
+source $DIR/.arch
+
 echo -e "\n\033[32mINFO\033[0m  create new env file ..."
 
 if [ -f .env ];then mv ${LARAVEL_PATH}/.env ${LARAVEL_PATH}/.env.backup; fi

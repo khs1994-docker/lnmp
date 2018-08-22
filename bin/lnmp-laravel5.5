@@ -6,10 +6,12 @@
 set -ex
 
 if [ "$1" != 'new' ];then
+  echo "Only support new command"
   exit 1
 fi
 
 if [ -z "$2" ];then
+  echo "Please input path"
   exit 1
 fi
 
@@ -42,4 +44,5 @@ if [ ${OS} = 'Linux' ] || [ ${OS} = 'Darwin' ];then
   chmod -R 777 ${LARAVEL_PATH}/storage
 fi
 
-. $DIR/lnmp-laravel-init
+cd $LARAVEL_PATH
+$DIR/lnmp-laravel-init
