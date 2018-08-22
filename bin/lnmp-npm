@@ -4,7 +4,7 @@
 # https://github.com/npm/npm
 #
 
-set -ex
+set -e
 
 docker run -it --rm \
     --mount type=bind,src=$PWD,target=/app \

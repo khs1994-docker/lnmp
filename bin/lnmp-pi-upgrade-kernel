@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 
 CURRENT_KERNEL_VERSION=`uname -r | cut -d '-' -f 1`
 
@@ -13,12 +13,15 @@ if ! [ 'Linux' = $OS ];then
   exit
 fi
 
-if [ $CURRENT_KERNEL_VERSION -eq $KERNEL_VERSION ];then echo -e "\n\nKernel $CURRENT_KERNEL_VERSION is latest version\n\n"; exit; fi
+if [ $CURRENT_KERNEL_VERSION = $KERNEL_VERSION ];then echo -e "\n\nKernel $CURRENT_KERNEL_VERSION is latest version\n\n"; exit; fi
 
 if [ 'aarch64' = $ARCH ];then
   ARCH=64
-else
+elif [ 'armv7l' = $ARCH ];then
   ARCH=32
+else
+  echo "This os is not pi, skip"
+  exit
 fi
 
 _write_hosts(){

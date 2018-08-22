@@ -6,6 +6,8 @@ if ! [ -z $1 ];then
   LARAVEL_PATH=$1
 fi
 
+if ! [ -f $LARAVEL_PATH/artisan ];then echo "This path is not Laravel path"; exit; fi
+
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $DIR/.arch

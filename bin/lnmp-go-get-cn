@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 
 #
 # go get golang.org/x/x ZH-CN 优化

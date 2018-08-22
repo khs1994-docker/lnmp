@@ -3,7 +3,7 @@
 # https://github.com/laravel/laravel
 #
 
-set -ex
+set -e
 
 if [ "$1" != 'new' ];then
   echo "Only support new command"
@@ -21,8 +21,6 @@ source $DIR/.arch
 
 if ! [ -d "$2" ];then
 
-echo "$2 not existing"
-
 docker run -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
@@ -31,7 +29,8 @@ docker run -it --rm \
   composer create-project --prefer-dist laravel/laravel=5.5.* "$2"
 
 else
-  echo "$2 existing"
+  echo "Path $2 existing"
+  exit
 fi
 
 LARAVEL_PATH="$2"
