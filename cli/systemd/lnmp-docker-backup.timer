@@ -1,8 +1,9 @@
 [Unit]
-Description=Cleanup LNMP Docker logs Weekly
+Description=LNMP Docker backup databases weekly
 Documentation=https://doc.lnmp.khs1994.com
 
 [Timer]
+# http://www.jinbuguo.com/systemd/systemd.time.html#
 OnCalendar=Mon *-*-* 01:00:00
 RandomizedDelaySec=2min
 

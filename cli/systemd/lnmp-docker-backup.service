@@ -1,0 +1,19 @@
+[Unit]
+Description=LNMP Docker backup databases weekly
+Documentation=https://doc.lnmp.khs1994.com
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+
+WorkingDirectory=/data/lnmp
+# WorkingDirectory=/home/core/lnmp
+
+Environment=LNMP_PATH=/data/lnmp
+# Environment=LNMP_PATH=/home/core/lnmp
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
+
+EnvironmentFile=/data/lnmp/.env
+
+ExecStart=/data/lnmp/lnmp-docker backup ${LNMP_BACKUP_COMMANDS}

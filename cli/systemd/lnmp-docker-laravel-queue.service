@@ -1,0 +1,22 @@
+[Unit]
+Description=Run Laravel Queue
+Documentation=https://doc.lnmp.khs1994.com
+
+[Service]
+
+Restart=always
+RestartSec=10s
+
+WorkingDirectory=/data/lnmp
+
+Environment=LNMP_PATH=/data/lnmp
+Environment=PATH=/data/lnmp:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
+EnvironmentFile=/data/lnmp/.env
+
+ExecStartPre=/usr/bin/docker info
+ExecStart=/data/lnmp/lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/data/lnmp/lnmp-docker php7-cli php /app/laravel/artisan queue:restart
+
+[Install]
+WantedBy=multi-user.target

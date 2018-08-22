@@ -48,6 +48,31 @@ x-build-debian:
     DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
     DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
+x-php-common:
+  &default-php:
+  image: khs1994/php:7.2.8-fpm-alpine
+  volumes:
+    - ./app:/app:rw
+    - zoneinfo-data:/usr/share/zoneinfo:rw
+  environment:
+    - APP_ENV=production
+  configs:
+    - source: php_ini
+      target: /usr/local/etc/php/php.ini
+    - source: php_fpm_conf_d_zz_docker_conf
+      target: /usr/local/etc/php-fpm.d/zz-docker.conf
+  secrets:
+    - source: ssh_id_rsa
+      target: /root/.ssh/id_rsa
+      mode: 0600
+    - source: ssh_config
+      target: /root/.ssh/config
+  depends_on:
+    - mysql
+    - redis
+  networks:
+    - backend
+
 services:
   #
   # Swarm mode
@@ -317,20 +342,16 @@ services:
   khsci:
     << : *default-common
     << : *default-labels
-    image: khs1994/php:7.2.8-fpm-alpine
+    << : *default-php
     volumes:
       - ./app/khsci:/app/khsci
       - khsci-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
-    networks:
-      - backend
     working_dir: /app/khsci/bin
     command:
       - /bin/sh
       - khscid
       - up
-    environment:
-      - APP_ENV=production
     logging: *default-logging
     deploy:
       << : *default-deploy
@@ -345,18 +366,11 @@ services:
         reservations:
           cpus: '0.25'
           memory: 20M
-    depends_on:
-      - mysql
-      - redis
-    configs:
-      - source: php_development_ini
-        target: /usr/local/etc/php/php.ini
-      - source: php_ini_error_log
-        target: /usr/local/etc/php/conf.d/docker-php-error-log.ini
 
   php7:
     << : *default-common
     << : *default-labels
+    << : *default-php
     build:
       << : *default-build
       # << : *default-build-debian
@@ -367,20 +381,10 @@ services:
       #   foo: bar
       # cache_from:
       #   - alpine:3.7
-    image: khs1994/php:7.2.8-fpm-alpine
-    volumes:
-      - ./app:/app:rw
-      - zoneinfo-data:/usr/share/zoneinfo:rw
-    networks:
-      - frontend
-      - backend
     command: php-fpm -R -F
     environment:
       - APP_ENV=production
       - LNMP_DOCKER_VERSION=v18.10 x86_64 Docker Swarm
-    depends_on:
-      - mysql
-      - redis
     logging: *default-logging
     deploy:
       << : *default-deploy
@@ -388,17 +392,23 @@ services:
       # replicas: 2
       placement:
         constraints: [node.role == manager]
-    configs:
-      - source: php_ini
-        target: /usr/local/etc/php/php.ini
-      - source: php_fpm_conf_d_zz_docker_conf
-        target: /usr/local/etc/php-fpm.d/zz-docker.conf
-    secrets:
-      - source: ssh_id_rsa
-        target: /root/.ssh/id_rsa
-        mode: 0600
-      - source: ssh_config
-        target: /root/.ssh/config
+
+  # php7-laravel-queue:
+  #   << : *default-common
+  #   << : *default-labels
+  #   << : *default-php
+  #   command:
+  #     - php
+  #     - /app/laravel/artisan
+  #     - queue:work
+  #     - --tries=3
+  #   logging: *default-logging
+  #   deploy:
+  #     << : *default-deploy
+  #     << : *default-labels
+  #     replicas: 1
+  #     placement:
+  #       constraints: [node.role == manager]
 
   nginx:
     << : *default-common
