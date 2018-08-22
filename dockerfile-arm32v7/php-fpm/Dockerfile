@@ -1,6 +1,6 @@
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.8
+ARG PHP_VERSION=7.2.9
 
 FROM arm32v7/php:${PHP_VERSION}-fpm-stretch
 
