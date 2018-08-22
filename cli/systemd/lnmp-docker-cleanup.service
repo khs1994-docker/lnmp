@@ -1,12 +1,15 @@
 [Unit]
-Description=Cleanup LNMP Docker logs Weekly
+Description=LNMP Docker cleanup logs weekly
 Documentation=https://doc.lnmp.khs1994.com
 
 [Service]
+Type=simple
+
 WorkingDirectory=/data/lnmp
 # WorkingDirectory=/home/core/lnmp
+
 Environment=LNMP_PATH=/data/lnmp
 # Environment=LNMP_PATH=/home/core/lnmp
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
-Type=simple
-ExecStart=/usr/bin/env ${LNMP_PATH}/lnmp-docker.sh backup --databases test
+
+ExecStart=/data/lnmp/lnmp-docker cleanup

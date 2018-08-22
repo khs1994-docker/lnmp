@@ -1,12 +1,19 @@
 [Unit]
-Description=Cleanup LNMP Docker logs Weekly
+Description=Run Laravel Schedule
 Documentation=https://doc.lnmp.khs1994.com
+Requires=docker.service
+After=docker.service
 
 [Service]
+Type=oneshot
+
 WorkingDirectory=/data/lnmp
 # WorkingDirectory=/home/core/lnmp
+
 Environment=LNMP_PATH=/data/lnmp
 # Environment=LNMP_PATH=/home/core/lnmp
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
-Type=simple
-ExecStart=/usr/bin/env ${LNMP_PATH}/lnmp-docker.sh cleanup
+
+EnvironmentFile=/data/lnmp/.env
+
+ExecStart=/data/lnmp/lnmp-docker php7-cli php /app/laravel/artisan schedule:run

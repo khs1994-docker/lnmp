@@ -1,5 +1,5 @@
 [Unit]
-Description=Cleanup LNMP Docker logs Weekly
+Description=LNMP Docker cleanup logs weekly
 Documentation=https://doc.lnmp.khs1994.com
 
 [Timer]

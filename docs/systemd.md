@@ -60,12 +60,10 @@ $ sudo journalctl -u lnmp-docker
 
 ## 每周清理日志
 
-为了一次性补全 `lnmp-docker.service` 这里将计划任务前缀设置为 `cleanup-*`。
-
 ```bash
-$ sudo cp -a $LNMP_PATH/cli/systemd/cleanup-* /etc/systemd/system/
+$ sudo cp -a $LNMP_PATH/cli/systemd/*-cleanup /etc/systemd/system/
 
-$ sudo vi /etc/systemd/system/cleanup-lnmp-docker.service
+$ sudo vi /etc/systemd/system/lnmp-docker-cleanup.service
 
 # 务必自行修改路径为本项目实际路径
 
@@ -83,6 +81,18 @@ $ sudo journalctl -u cleanup-lnmp-docker
 ## 定时备份数据文件
 
 与上方内容类似，这里不再赘述。
+
+## Laravel 队列(Queue)
+
+原理就是执行 `$ docker exec -it PHP_CONTAINER_ID COMMAND`
+
+由 `systemd` 管理
+
+## Laravel 调度器(Schedule)
+
+原理就是执行 `$ docker exec -it PHP_CONTAINER_ID COMMAND`
+
+由 `systemd` 管理
 
 # More Information
 

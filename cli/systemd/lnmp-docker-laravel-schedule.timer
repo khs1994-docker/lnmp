@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Laravel Schedule
+Documentation=https://doc.lnmp.khs1994.com
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+RandomizedDelaySec=1s
+
+[Install]
+WantedBy=multi-user.target

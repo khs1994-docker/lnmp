@@ -176,7 +176,7 @@ Swarm mode:
   swarm-config         Validate and view the Production Swarm mode Compose file
   swarm-push           Push Swarm image (nginx php7)
 
-Container CLI:
+Container Tools:
   SERVICE-cli          Execute a command in a running LNMP container
 
 LogKit:
@@ -281,13 +281,18 @@ Function _update(){
   }
 }
 
+Function _get_container_id($service){
+  $container_id = docker container ls `
+      --format "{{.ID}}" `
+      -f label=com.khs1994.lnmp `
+      -f label=com.docker.compose.service=$service -n 1
+
+  return $container_id
+}
+
 Function _bash_cli($service, $command){
-  docker exec -it `
-      $(docker container ls `
-          --format "{{.ID}}" `
-          -f label=com.khs1994.lnmp `
-          -f label=com.docker.compose.service=$service -n 1 ) `
-          $command
+  $container_id = _get_container_id $service
+  docker exec -it $container_id $command
 }
 
 Function clusterkit_bash_cli($env, $service, $command){
@@ -425,50 +430,110 @@ switch($first){
     }
 
     httpd-cli {
+      if ($other){
+        _bash_cli httpd $other
+        exit
+      }
+
       _bash_cli httpd sh
     }
 
     memcached-cli {
+      if ($other){
+        _bash_cli memcached $other
+        exit
+      }
+
       _bash_cli memcached sh
     }
 
     mongodb-cli {
+      if ($other){
+        _bash_cli mongodb $other
+        exit
+      }
+
       _bash_cli mongodb bash
     }
 
     mysql-cli {
+      if ($other){
+        _bash_cli mysql $other
+        exit
+      }
+
       _bash_cli mysql bash
     }
 
     mariadb-cli {
+      if ($other){
+        _bash_cli mariadb $other
+        exit
+      }
+
       _bash_cli mariadb bash
     }
 
     nginx-cli {
+      if ($other){
+        _bash_cli nginx $other
+        exit
+      }
+
       _bash_cli nginx sh
     }
 
     nginx-unit-cli {
+      if ($other){
+        _bash_cli nginx-unit $other
+        exit
+      }
+
       _bash_cli nginx-unit bash
     }
 
-    php-cli {
+    php7-cli {
+      if ($other){
+        _bash_cli php7 $other
+        exit
+      }
+
       _bash_cli php7 bash
     }
 
     phpmyadmin-cli {
+      if ($other){
+        _bash_cli phpmyadmin $other
+        exit
+      }
+
       _bash_cli phpmyadmin sh
     }
 
     postgresql-cli {
+      if ($other){
+        _bash_cli postgresql $other
+        exit
+      }
+
       _bash_cli postgresql sh
     }
 
     rabbitmq-cli {
+      if ($other){
+        _bash_cli rabbitmq $other
+        exit
+      }
+
        _bash_cli rabbitmq sh
     }
 
     redis-cli {
+      if ($other){
+        _bash_cli redis $other
+        exit
+      }
+
       _bash_cli redis sh
     }
 

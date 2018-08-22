@@ -133,8 +133,9 @@ Swarm mode:
   swarm-push           Push Swarm mode LNMP images (nginx php7)
   swarm-update         Print update LNMP service example
 
-Container CLI:
+Container Tools:
   SERVICE-cli          Execute a command in a running LNMP container
+  SERVICE-container-id Display SERVICE container id
 
 LogKit:
   SERVICE-logs         Print LNMP containers logs (journald)
@@ -1039,42 +1040,63 @@ new(){
 # $3 bash or sh
 #
 
+get_service_container_id(){
+  local SERVICE_NAME=$1
+
+  container_id=`docker container ls \
+      --format "{{.ID}}" \
+      -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+      -f label=com.docker.compose.service=$SERVICE_NAME -n 1`
+
+  if [ -z "$container_id" ];then
+    container_id=`docker container ls \
+        --format "{{.ID}}" \
+        -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+        -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1`
+  fi
+
+  if [ -z "$container_id" ];then print_error "This Service No Container Running"; exit ; fi
+}
+
 bash_cli(){
   run_docker
-  SERVICE_NAME=$1
+  local SERVICE_NAME=$1
+  get_service_container_id $SERVICE_NAME
   shift
-  docker exec -it \
-      $( docker container ls \
-          --format "{{.ID}}" \
-          -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.compose.service=$SERVICE_NAME -n 1 ) \
-          $@ 2> /dev/null || \
-      docker exec -it \
-      $( docker container ls \
-          --format "{{.ID}}" \
-          -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1 ) $@
+  # avoid systemd error the input device is not a TTY
+  docker exec -it $container_id $@ || docker exec -i $container_id $@
   exit $?
 }
 
+get_clusterkit_service_container_id(){
+  local ENV_NAME=$1
+  local SERVICE_NAME=$2
+
+  container_id=`docker container ls \
+      --format "{{.ID}}" \
+      --filter \
+      label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+      --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
+      --filter label=com.docker.compose.service=$SERVICE_NAME -n 1`
+
+  if [ -z "$container_id" ];then
+    container_id=`docker container ls \
+        --format "{{.ID}}" \
+        --filter \
+        label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
+        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
+        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1`
+  fi
+
+  if [ -z "$container_id" ];then print_error "This Service No Container Running"; exit; fi
+}
+
 clusterkit_bash_cli(){
-  ENV_NAME=$1
-  SERVICE_NAME=$2
+  local ENV_NAME=$1
+  local SERVICE_NAME=$2
+  get_clusterkit_service_container_id $ENV_NAME $SERVICE_NAME
   shift 2
-  docker exec -it \
-    $( docker container ls \
-        --format "{{.ID}}" \
-        --filter \
-        label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
-        --filter label=com.docker.compose.service=$SERVICE_NAME -n 1 ) $@ 2> /dev/null || \
-  docker exec -it \
-    $( docker container ls \
-        --format "{{.ID}}" \
-        --filter \
-        label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-        --filter label=${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=$ENV_NAME \
-        --filter label=com.docker.swarm.service.name=${COMPOSE_PROJECT_NAME:-lnmp}_$SERVICE_NAME -n 1 ) $@
+  docker exec -it $container_id $@ || docker exec -i $container_id $@
 
   exit $?
 }
@@ -1337,29 +1359,47 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   php-cli | php7-cli )
-      bash_cli php7 bash
+      local cli_command
+      if [ -z "$1" ];then cli_command=bash; else cli_command="$@"; fi
+      bash_cli php7 $cli_command
     ;;
 
   mongodb-cli | mongo-cli )
-    bash_cli mongodb bash
+     local cli_command
+     if [ -z "$1" ];then cli_command=bash; else cli_command="$@"; fi
+    bash_cli mongodb $cli_command
     ;;
 
   mariadb-cli )
-    bash_cli mariadb bash
+    local cli_command
+    if [ -z "$1" ];then cli_command=bash; else cli_command="$@"; fi
+    bash_cli mariadb $cli_command
     ;;
 
   mysql-cli )
-    bash_cli mysql bash
+    local cli_command
+    if [ -z "$1" ];then cli_command=bash; else cli_command="$@"; fi
+    bash_cli mysql $cli_command
     ;;
 
   nginx-unit-cli )
-    bash_cli nginx-unit bash
+    local cli_command
+    if [ -z "$1" ];then cli_command=bash; else cli_command="$@"; fi
+    bash_cli nginx-unit $cli_command
     ;;
 
   *-cli )
-    SERVICE=$(echo $command | cut -d '-' -f 1)
-    run_docker;
-    bash_cli $SERVICE sh
+    local SERVICE=$(echo $command | cut -d '-' -f 1)
+    local cli_command
+    if [ -z "$1" ];then cli_command=sh; else cli_command="$@"; fi
+    run_docker
+    bash_cli $SERVICE $cli_command
+    ;;
+
+  *-container-id )
+    local SERVICE=$(echo $command | cut -d '-' -f 1)
+    get_service_container_id $SERVICE
+    echo $container_id
     ;;
 
   *-logs | *-log )
