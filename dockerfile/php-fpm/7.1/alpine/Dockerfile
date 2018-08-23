@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.1.20
+ARG PHP_VERSION=7.1.21
 
 FROM php:${PHP_VERSION}-fpm-alpine
 
@@ -33,7 +33,7 @@ ENV PHP_EXTENSION \
       zip
 
 ENV PECL_EXTENSION \
-      mongodb \
+      # mongodb \
       igbinary \
       redis \
       memcached \

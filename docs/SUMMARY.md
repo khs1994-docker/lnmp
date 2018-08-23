@@ -30,8 +30,8 @@
 
 * PHP
     * [PHP 扩展列表](php.md)
-    * [xdebug](xdebug.md)
-    * [laravel](laravel.md)
+    * [Xdebug](xdebug.md)
+    * [Laravel](laravel.md)
     * [Composer](composer.md)
     * [PHPUnit](phpunit.md)
 

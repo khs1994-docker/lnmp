@@ -50,7 +50,7 @@ x-build-debian:
 
 x-php-common:
   &default-php:
-  image: khs1994/php:7.2.8-fpm-alpine
+  image: khs1994/php:7.2.9-fpm-alpine
   volumes:
     - ./app:/app:rw
     - zoneinfo-data:/usr/share/zoneinfo:rw

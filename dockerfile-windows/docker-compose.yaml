@@ -5,7 +5,7 @@ services:
     image: khs1994/nginx:1.15.2-windowsservercore-1803
 
   mysql:
-    image: khs1994/mysql:8.0.11-windowsservercore-1803
+    image: khs1994/mysql:8.0.12-windowsservercore-1803
 
   php:
-    image: khs1994/php:7.2.8-windowsservercore-1803
+    image: khs1994/php:7.2.9-windowsservercore-1803

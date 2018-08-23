@@ -3,7 +3,14 @@
 ARCH=`uname -m`
 OS=`uname -s`
 
-VERSION=7.2.8
+if [ -z "$LNMP_PATH" ];then echo "Please set system env LNMP_PATH"; exit ; fi
+
+source $LNMP_PATH/.env.example
+
+if [ -f "$LNMP_PATH/.env" ];then source $LNMP_PATH/.env; fi
+
+VERSION=$LNMP_PHP_VERSION
+
 export TAG=${VERSION}-fpm-alpine
 
 if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then

@@ -374,7 +374,7 @@ RUN set -x \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.7.1 \
+    COMPOSER_VERSION=1.7.2 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker

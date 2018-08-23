@@ -1,6 +1,6 @@
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.8
+ARG PHP_VERSION=7.2.9
 
 FROM arm32v7/php:${PHP_VERSION}-fpm-stretch
 
@@ -34,7 +34,7 @@ ENV PHP_EXTENSION \
       zip
 
 ENV PECL_EXTENSION \
-      mongodb \
+      # mongodb \
       igbinary \
       redis \
       memcached \
@@ -131,7 +131,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.7.1 \
+    COMPOSER_VERSION=1.7.2 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
