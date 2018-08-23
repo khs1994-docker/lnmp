@@ -121,7 +121,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
         && for extension in $PECL_EXTENSION;do pecl install $extension; done \
         && docker-php-ext-enable $PECL_EXTENSION opcache \
-        && apk del .build-deps .php-fpm-build-deps \
+        && apk del --no-cache .build-deps .php-fpm-build-deps \
         # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \

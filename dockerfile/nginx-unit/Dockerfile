@@ -18,7 +18,7 @@ RUN git clone --depth=1 -b ${NGINX_UNIT_VERSION} https://github.com/nginx/unit /
       && make \
       && make install \
       && ln -sf /usr/local/nginx-unit/sbin/unitd /usr/local/sbin \
-      && apk del .build-deps \
+      && apk del --no-cache .build-deps \
       && rm -rf /usr/src/unit \
       && mkdir -p /var/log/nginx-unit \
       && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log

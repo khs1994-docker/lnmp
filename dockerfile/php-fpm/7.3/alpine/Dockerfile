@@ -161,7 +161,7 @@ RUN set -xe; \
 	# 	rm -rf "$GNUPGHOME"; \
 	# fi; \
 	\
-	apk del .fetch-deps \
+	apk del --no-cache .fetch-deps \
 	&& apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
@@ -284,7 +284,7 @@ RUN set -xe; \
 	)" \
 	&& apk add --no-cache --virtual .php-rundeps $runDeps \
   \
-  && apk del .build-deps \
+  && apk del --no-cache .build-deps \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
@@ -366,7 +366,7 @@ RUN set -x \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && for extension in $PECL_EXTENSION; do pecl install ${extension}-beta; done \
       && docker-php-ext-enable $PECL_EXTENSION; \
-      apk del .pecl_build_deps \
+      apk del --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
 # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
       && rm -rf /tmp/*
