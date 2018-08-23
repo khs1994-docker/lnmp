@@ -5,7 +5,7 @@
 #
 # Only Support WSL Debian
 #
-# $ lnmp-wsl-install.sh php [deb | tar] [7.2.5]
+# $ lnmp-wsl-install.sh php [deb | tar] [7.2.9]
 #
 
 _print_help_info(){
@@ -16,7 +16,7 @@ Install WSL soft by shell script
 
 Usage:
 
-$ lnmp-wsl-install.sh php 7.2.5 [ tar | deb ]
+$ lnmp-wsl-install.sh php 7.2.9 [ tar | deb ]
 
 $ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
 
@@ -26,9 +26,9 @@ $ lnmp-wsl-install.sh mysql nginx php postgresql mongodb swift
 
 Example:
 
-$ lnmp-wsl-install.sh php 7.2.5 tar
+$ lnmp-wsl-install.sh php 7.2.9 tar
 
-$ lnmp-wsl-install.sh php 7.2.5 deb
+$ lnmp-wsl-install.sh php 7.2.9 deb
 
 [ deb 方法一个系统只能存在一个 PHP 版本，若想多版本共存，主版本使用 deb 方法，其他版本使用 tar 方法 ]
 
@@ -92,9 +92,9 @@ _php(){
 
   # include redis memcached
   # default install latest php version
-  # current version is php 7.2.5
+  # current version is php 7.2.9
 
-  PHP_VERSION=${1:-7.2.5}
+  PHP_VERSION=${1:-7.2.9}
 
   case ${PHP_VERSION} in
     5.6.* )
@@ -320,7 +320,7 @@ _mysql(){
 
 _list(){
   # list php extension
-  cd /usr/local/src/php-7.2.5/ext
+  cd /usr/local/src/php-7.2.9/ext
   set +x
   for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
 }

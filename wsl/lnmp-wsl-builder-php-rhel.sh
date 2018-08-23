@@ -39,7 +39,7 @@ done
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.6.5
+export COMPOSER_VERSION=1.7.2
 
 export COMPOSER_ALLOW_SUPERUSER=1
 
