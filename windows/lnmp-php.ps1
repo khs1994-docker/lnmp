@@ -6,17 +6,7 @@ if ($?){
   $create=$true
 }
 
-. "$PSScriptROOT/../.env.example.ps1"
-
-if (Test-Path "$PSScriptROOT/../.env.ps1"){
-  . "$PSScriptROOT/../.env.ps1"
-}
-
-. "$PSScriptRoot/.env.example.ps1"
-
-if (Test-Path "$PSScript/.env.ps1"){
-  . "$PSScriptRoot/.env.ps1"
-}
+. "$PSScriptRoot/common.ps1"
 
 if ($args.Count -eq 0){
   $COMMAND="-h"

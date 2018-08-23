@@ -48,7 +48,7 @@ Current application environment: windows
 
 为了方便的管理 `WNAMP`，你可以使用本项目 windows 目录下的脚本 `lnmp-wnamp.ps1`
 
-**使用之前** 在 `windows/.env.ps1` 文件中参照 `.env.example.ps1` 设置好相关变量
+**使用之前** 在 `.env.ps1` 文件中参照 `.env.example.ps1` 设置好相关变量
 
 ```bash
 # 首次运行，务必通过以下命令设置环境变量

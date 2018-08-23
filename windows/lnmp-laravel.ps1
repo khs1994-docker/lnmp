@@ -2,11 +2,7 @@
 # https://github.com/laravel/laravel
 #
 
-. "$PSScriptRoot/.env.example.ps1"
-
-if (Test-Path "$PSScriptRoot/.env.ps1"){
-  . "$PSScriptRoot/.env.ps1"
-}
+. "$PSScriptRoot/common.ps1"
 
 if ($args -contains 'new' ){
   if ($args.Count -lt 2 ){

@@ -2,11 +2,7 @@
 # https://github.com/mysql/mysql-server
 #
 
-. "$PSScriptROOT/../.env.example.ps1"
-
-if (Test-Path "$PSScriptROOT/../.env.ps1"){
-  . "$PSScriptROOT/../.env.ps1"
-}
+. "$PSScriptRoot/common.ps1"
 
 $create=$false
 

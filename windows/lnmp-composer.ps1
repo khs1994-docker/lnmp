@@ -2,11 +2,7 @@
 # https://github.com/composer/composer
 #
 
-. "$PSScriptRoot/.env.example.ps1"
-
-if (Test-Path "$PSScriptRoot/.env.ps1"){
-  . "$PSScriptRoot/.env.ps1"
-}
+. "$PSScriptRoot/common.ps1"
 
 # docker run -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `

@@ -2,11 +2,7 @@
 # https://github.com/FriendsOfPHP/PHP-CS-Fixer
 #
 
-. "$PSScriptRoot/.env.example.ps1"
-
-if (Test-Path "$PSScript/.env.ps1"){
-  . "$PSScriptRoot/.env.ps1"
-}
+. "$PSScriptRoot/common.ps1"
 
 docker run -it --rm `
   --mount type=bind,src=$PWD,target=/app,consistency=cached `
