@@ -142,7 +142,6 @@ ClusterKit:
   clusterkit-help      Print ClusterKit help info
 
 Developer Tools:
-  commit               Commit LNMP to Git
   cn-mirror            Push master branch to CN mirror
   reset-master         Reset master branch in dev branch
   test                 Test LNMP
@@ -645,7 +644,7 @@ set_git_remote_origin_url(){
     print_error "This git remote origin NOT set, seting...\n"
     git remote add origin git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
+    git fetch --depth=1 origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
     print_info `git remote get-url origin`
     echo
   elif [ `git remote get-url origin` != 'git@github.com:khs1994-docker/lnmp.git' ] \
@@ -655,7 +654,7 @@ set_git_remote_origin_url(){
     git remote rm origin
     git remote add origin git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
-    git fetch origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
+    git fetch --depth=1 origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
     print_info `git remote get-url origin`
   fi
 }
@@ -676,7 +675,7 @@ update(){
      echo; print_error "Please commit then update"
      exit 1
   fi
-  git fetch origin
+  git fetch --depth=1 origin
   print_info "Branch is ${BRANCH}\n"
   if [ "${BRANCH}" = 'dev' ] || [ "${BRANCH}" = 'master' ];then
     git reset --hard origin/${BRANCH}
@@ -692,25 +691,12 @@ update(){
 
 # 提交项目「开发者选项」
 
-commit(){
-  # 检查网络连接
-  network
-  print_info `git remote get-url origin` ${BRANCH}
-  if [ ${BRANCH} = 'dev' ];then
-    git add .
-    git commit -m "Update [skip ci]"
-    git push origin dev
-  else
-    print_error "${BRANCH} error\n"
-  fi
-}
-
 reset_master(){
   set_git_remote_origin_url
   print_info "Branch is ${BRANCH}\n"
   print_info "Reset master branch in dev branch\n"
   if [ ${BRANCH} = 'dev' ];then
-    git fetch origin
+    git fetch --depth=1 origin
     git reset --hard origin/master
     echo ;print_info "Update Git Submodule\n"
     set +e
@@ -1147,10 +1133,6 @@ main() {
 
   test )
     run_docker; cli/test
-    ;;
-
-  commit )
-    commit
     ;;
 
   completion )

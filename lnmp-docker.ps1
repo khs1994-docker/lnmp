@@ -264,7 +264,7 @@ Function cleanup(){
 Function _update(){
   git remote rm origin
   git remote add origin git@github.com:khs1994-docker/lnmp
-  git fetch origin
+  git fetch --depth=1 origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   if (${BRANCH} -eq "dev"){
     git reset --hard origin/dev
