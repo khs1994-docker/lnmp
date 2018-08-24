@@ -4,8 +4,6 @@
 # https://github.com/composer/composer
 #
 
-set -e
-
 DIR="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $DIR/.arch

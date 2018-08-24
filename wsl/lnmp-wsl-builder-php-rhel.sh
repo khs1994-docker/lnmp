@@ -28,6 +28,10 @@ exit 0
 
 ################################################################################
 
+command -v yum
+
+if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
+
 PHP_TIMEZONE=PRC
 
 PHP_URL=http://cn2.php.net/distributions

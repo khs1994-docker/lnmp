@@ -49,7 +49,7 @@ x-build-debian:
     DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
 x-php-common:
-  &default-php:
+  &default-php
   image: khs1994/php:7.2.9-fpm-alpine
   volumes:
     - ./app:/app:rw

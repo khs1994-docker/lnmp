@@ -542,6 +542,8 @@ install_docker_compose(){
 }
 
 docker_compose(){
+  if [ "$1" = 'compose' ];then shift ; fi
+
   command -v docker-compose >/dev/null 2>&1 || local a=1
 
   if ! [ "$a" = 1 ];then
@@ -1761,6 +1763,8 @@ First Run? Maybe you wait 60s then open url.
   esac
 }
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 # if docker version info not include ce, example 1.13.1, maybe install method is error
 
 ARCH=`uname -m` && OS=`uname -s`
@@ -1819,7 +1823,5 @@ ls docker-production.*.yml > /dev/null 2>&1
 if [ $? = '0' ];then PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`; fi
 
 set -e
-
-if [ "$DEBUG" = 'TRUE' ];then set -x; fi
 
 main "$@"

@@ -116,6 +116,10 @@ server {
 
   sleep 10
 
+  if ! [ -d app/khsci ];then \
+    git clone --depth=1 https://github.com/khs1994-php/khsci app/khsci; \
+  fi
+
   docker stack deploy -c docker-production.yml lnmp
 
   until curl 127.0.0.1; do

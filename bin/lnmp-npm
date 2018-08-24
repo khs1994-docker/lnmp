@@ -6,6 +6,8 @@
 
 set -e
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 docker run -it --rm \
     --mount type=bind,src=$PWD,target=/app \
     --mount type=volume,src=lnmp_npm-data,target=/tmp/node/.npm \

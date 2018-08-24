@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 . /etc/os-release
 
 . ~/.bashrc

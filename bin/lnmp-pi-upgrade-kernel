@@ -2,6 +2,8 @@
 
 set -e
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 CURRENT_KERNEL_VERSION=`uname -r | cut -d '-' -f 1`
 
 KERNEL_VERSION=4.18.0

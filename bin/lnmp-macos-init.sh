@@ -2,6 +2,8 @@
 
 set -e
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 SOFT=" php \
 composer \
 php-cs-fixer \

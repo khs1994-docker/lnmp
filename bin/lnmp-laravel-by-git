@@ -2,6 +2,8 @@
 
 set -e
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 print_help_info(){
 echo "
 get-version

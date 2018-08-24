@@ -36,6 +36,10 @@ exit 0
 
 ################################################################################
 
+command -v apt
+
+if ! [ 0 -eq $? ];then echo "Only Support Debian"; exit ; fi
+
 PHP_TIMEZONE=PRC
 
 PHP_URL=http://cn2.php.net/distributions

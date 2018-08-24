@@ -8,13 +8,17 @@ set -e
 
 docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)
 
+DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+
+source $DIR/.arch
+
 docker run -it --rm \
     --network lnmp_backend \
     -e TZ=${TZ} \
-    mysql:8.0.11 \
+    mysql:${LNMP_MYSQL_VERSION:-8.0.12} \
     "$@" || docker run -it --rm \
     -e TZ=${TZ} \
-    mysql:8.0.11 \
+    mysql:${LNMP_MYSQL_VERSION:-8.0.12} \
     "$@"
 
 if ! [ -z "$CREATE" ];then
