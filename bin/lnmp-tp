@@ -16,5 +16,6 @@ docker run -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --entrypoint /docker-entrypoint.composer.sh \
+  --mount type=bind,src=$DIR/../config/composer/config.json,target=/tmp/config.json \
   ${DOCKER_IMAGE}:${TAG} \
   composer create-project topthink/think=5.0.* ${tp_path} --prefer-dist "$@"
