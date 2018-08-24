@@ -2,17 +2,19 @@
 
 ## 使用方法
 
-**1.** 在 `docker-compose.yml` 修改需要启用的软件(可选项)
+**1.** 在 `.env` 文件中通过 `DEVELOPMENT_INCLUDE` 变量修改需要启用的软件，详细说明在本文最后(可选项)
 
-**2.** 在 `.env` 修改镜像前缀、PHP 项目路径(可选项)
+**2.** 在 `.env` 文件中通过 `LNMP_DOCKER_IMAGE_PREFIX` 变量修改镜像前缀，默认为 khs1994，你可以自由的定义镜像前缀来使用你自己的镜像(可选项)
 
-**3.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹
+**3.** 在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app` (可选项)
 
-**4.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件(`./config/nginx/*.conf`)
+**4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹
 
-**5.** 执行 `./lnmp-docker up` 或者 `./lnmp-docker restart nginx`
+**5.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件(`./config/nginx/*.conf`)
 
-**6.** `PhpStorm` 打开 `./app/你的项目` ，开始编写代码
+**6.** 执行 `./lnmp-docker up` 或者 `./lnmp-docker restart nginx`
+
+**7.** `PhpStorm` 打开 `./app/project` ，开始编写代码
 
 ### 再新建一个项目
 
@@ -20,7 +22,7 @@
 
 **2.** 执行 `./lnmp-docker restart nginx` 重启 nginx
 
-**3.** `PhpStorm` 打开 `./app/你的又一个新项目` ，开始编写代码
+**3.** `PhpStorm` 打开 `./app/new-project` ，开始编写代码
 
 ## 如何正确的自定义配置文件
 
@@ -36,7 +38,7 @@
 
 ## 自行构建镜像
 
-在 `./dockerfile/` 下修改各个软件的文件夹内复制 `example.Dockerfile` 为 `Dockerfile`，并编写 `Dockerfile` 之后运行如下命令：
+在 `./dockerfile/` 下各个软件的文件夹内复制 `example.Dockerfile` 为 `Dockerfile`，并编写 `Dockerfile` 之后运行如下命令：
 
 ```bash
 $ ./lnmp-docker build
@@ -71,7 +73,7 @@ $ ./lnmp-docker scale php7=3
 $ ./lnmp-docker scale php7=1
 ```
 
-## 一次启动更多软件 ？
+## 自定义启动软件
 
 编辑 `.env` 文件，在 `DEVELOPMENT_INCLUDE` 变量中增加软件名
 

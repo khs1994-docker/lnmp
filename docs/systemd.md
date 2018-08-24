@@ -36,6 +36,8 @@ $ ln -s $LNMP_PATH/cli/completion/fish/lnmp-docker.fish ~/.config/fish/completio
 
 # systemd
 
+systemd 文件位于 `cli/systemd/*`
+
 适用于 `Linux x86_64` 开发环境。
 
 >务必熟悉 `systemd` 之后再执行此项操作。

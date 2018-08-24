@@ -1,5 +1,7 @@
 # PHPer 常用命令容器化
 
+> 警告 某些命令（例如 lnmp-phpunit）在 Swarm mode 下运行有问题，原因是不能人工的连接 Swarm mode 下的网络。
+
 * `composer` => `lnmp-composer`
 * `phpunit`  => `lnmp-phpunit`
 * `php CLI`  => `lnmp-php`
@@ -65,6 +67,12 @@ $ lnmp-php command
 $ lnmp-laravel command # Laravel 5.6
 
 $ lnmp-laravel5.5 command # Laravel 5.5
+```
+
+当你遇到错误时，可以在前边加上 `$ debug=true lnmp-*`来进行调试，例如
+
+```bash
+$ debug=true lnmp-composer
 ```
 
 ### 最佳实践

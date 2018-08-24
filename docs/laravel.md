@@ -14,6 +14,8 @@
 $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 ```
 
+生产环境中使用系统级的守护程序（systemd）来保证上边的命令运行。具体请查看 [systemd](systemd.md)
+
 ## 运行 Laravel 调度器(Schedule)
 
 使用系统级的计划任务（systemd、crontab,etc）执行以下命令即可

@@ -18,7 +18,7 @@
 
 **2.** 复制示例配置文件，并改名为 `*.my.*`。（`my` 只是标识符，你可以使用任意字符，例如 `self` `username` 等等）。
 
-**3.** 修改 `.env` 文件 `SOFT_NAME_CONF` 值为文件名或目录名（适用于 NGINX HTTPD）
+**3.** 修改 `.env` 文件 `SOFT_NAME_CONF` 值为文件名或目录名
 
 ## MySQL
 

@@ -7,15 +7,15 @@ $ cd $HOME
 
 # $ git config --global core.autocrlf input
 
-$ git clone --recursive https://github.com/khs1994-docker/lnmp.git
+$ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
 
-# $ git clone --recursive --depth=1 git@github.com:khs1994-docker/lnmp.git
+# $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
 
 # 中国镜像
 
-$ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
+$ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 
-# $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+# $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
 ```
 
 ## 设置环境变量

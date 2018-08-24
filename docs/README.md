@@ -56,6 +56,6 @@
 
 * [完全使用 Docker 开发 PHP 项目 （九）: Mysql 一主两从集群](https://segmentfault.com/a/)
 
-# 赞赏我
+# 捐赠
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。

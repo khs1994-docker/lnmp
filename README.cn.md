@@ -65,21 +65,21 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 * **使用 `git clone`**
 
   ```bash
-  $ git clone --recursive https://github.com/khs1994-docker/lnmp.git
+  $ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
 
-  # $ git clone --recursive git@github.com:khs1994-docker/lnmp.git
+  # $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
 
   # 中国镜像
 
-  $ git clone --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
+  $ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 
-  # $ git clone --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+  # $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
   ```
 
 * **使用 Composer 创建项目**
 
   ```bash
-  $ composer create-project --prefer-dist khs1994/lnmp ~/lnmp @dev
+  $ composer create-project --prefer-dist khs1994/lnmp:dev-master ~/lnmp
   ```
 
 * **使用一键安装脚本**

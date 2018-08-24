@@ -49,7 +49,7 @@ $ minikube mount ~/lnmp:/data/lnmp
 ```bash
 $ cd kubernetes
 
-$ ./kubernetes.sh deploy
+$ ./kubernetes deploy
 
 $ minikube service nginx --url
 
@@ -62,12 +62,12 @@ $ curl http://192.168.64.98:30626
 ## 删除
 
 ```bash
-$ ./kubernetes.sh cleanup
+$ ./kubernetes cleanup
 ```
 
 ## 具体命令
 
-请查看 `./kubernetes/kubernetes.sh` 文件内容。
+请查看 `./kubernetes/kubernetes` 文件内容。
 
 # Windows 10
 

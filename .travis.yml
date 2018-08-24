@@ -74,8 +74,9 @@ jobs:
         - sudo rm /usr/local/bin/docker-compose
         - ./lnmp-docker compose --official -f
       script: cli/test development
-    - stage: swarm
-      script: cli/test swarm
+    # - stage: swarm
+    #   script: cli/test swarm
+
     #
     # wsl-debian
     #
