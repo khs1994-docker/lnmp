@@ -58,7 +58,7 @@ NODE_PREFIX=/usr/local
 ################################################################################
 
 _nginx(){
-  echo "Install NGINX by apt already remove. Please exec $ lnmp-wsl-builder-nginx"
+  echo "Install NGINX by apt already remove. Please exec $ lnmp-wsl-builder-nginx.py"
   echo
   return
   # apt
@@ -352,11 +352,11 @@ _enable(){
 
   sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
 
-  sudo sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" \
-      /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
-
-  sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" \
-      /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
+  # sudo sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" \
+  #     /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
+  #
+  # sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" \
+  #     /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
 }
 
 _swift(){

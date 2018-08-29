@@ -64,11 +64,17 @@ $ lnmp-wsl-install.sh nginx | php | mysql ...
 $ lnmp-wsl-install.sh enable php72 | php71 | php70 | php56
 ```
 
-### PHP 安装路径 `/usr/local/phpXX` `/usr/local/etc/phpXX` `/var/log/phpXX`
+### PHP 安装路径
+
+* `/usr/local/phpXX`
+* `/usr/local/etc/phpXX`
+* `/var/log/phpXX`
 
 ## 特别注意 NGINX
 
-`/etc/nginx/nginx.conf` 主配置文件必须添加下面的配置项，否则 PHP 页面打开非常缓慢
+NGINX 需要自己编译安装 `$ lnmp-wsl-builder-nginx.py 1.15.3 ROOT_PASSWORD`
+
+`/usr/local/etc/nginx/nginx.conf` 主配置文件必须添加下面的配置项，否则 PHP 页面打开非常缓慢
 
 ```nginx
 http {
@@ -85,7 +91,7 @@ http {
 **本例假设将 LNMP 放到了用户主目录**
 
 ```bash
-$ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /etc/nginx/conf.d
+$ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /usr/local/etc/nginx/conf.d
 
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fpm.d/zz-wsl.conf
 
@@ -196,7 +202,7 @@ $ curl -X PUT -d @/usr/local/nginx_unit/start.json  \
        --unix-socket /usr/local/nginx_unit/control.unit.sock \
        http://localhost/
 
-# 浏览器打开 127.0.0.1:8300 看到 phpinfo 页面，完成部署    
+# 浏览器打开 127.0.0.1:8300 看到 phpinfo 页面，完成部署
 ```
 
 其他语言使用方法，或更多使用详情自行查看文档。
