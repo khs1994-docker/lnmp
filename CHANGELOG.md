@@ -12,6 +12,7 @@ Changes:
 Updates:
 
 * PHP `7.2.9`
+* NGINX `1.15.3`
 
 #### [v18.09 (2018-08-21)](https://github.com/khs1994-docker/lnmp/releases/tag/v18.09)
 

@@ -12,7 +12,7 @@ if len(sys.argv) == 3:
     input_version = sys.argv[1]
     input_sudo = sys.argv[2]
 else:
-    wsl.print_help_info('lnmp-wsl-builder-nginx.py', 'NGINX', '1.15.2')
+    wsl.print_help_info('lnmp-wsl-builder-nginx.py', 'NGINX', '1.15.3')
     exit(0)
 
 sudo_cmd = 'echo ' + input_sudo + ' | sudo -S '

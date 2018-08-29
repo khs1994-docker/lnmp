@@ -373,6 +373,7 @@ Function _node(){
 }
 
 Function _go(){
+
   $GOLANG_CURRENT_VERSION=($(go version) -split " ")[2]
 
   if($GOLANG_CURRENT_VERSION.length -eq 0){
@@ -434,6 +435,7 @@ $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
 $env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
 $items="$env:LNMP_PATH","$env:LNMP_PATH\windows","$env:LNMP_PATH\wsl", `
+       "$env:LNMP_PATH\kubernetes","$env:LNMP_PATH\kubernetes\coreos-kubernetes",`
        "C:\php","C:\mysql\bin","C:\nginx","C:\Apache24\bin", `
        "C:\node","C:\bin", `
        "C:\Users\$env:username\go\bin", `

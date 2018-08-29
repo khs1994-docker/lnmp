@@ -6,16 +6,13 @@ root = true
 
 indent_style = space
 
-indent_size = 2
-
-end_of_line = lf
-
 charset = utf-8
 
 trim_trailing_whitespace = true
 
 insert_final_newline = true
 
+end_of_line = lf
 
 [*.md]
 
@@ -32,3 +29,11 @@ indent_size = 4
 [Makefile]
 
 indent_style = tab
+
+[{package.json,.travis.yml,.khsci.yml,.drone.yml}]
+
+indent_size = 2
+
+[*.js]
+
+indent_size = 2
