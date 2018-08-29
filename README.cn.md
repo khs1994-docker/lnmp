@@ -24,9 +24,11 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 **警告** Windows Docker 非常不稳定。建议使用 WSL
 
-## 使用 k8s ?
+## 进阶
 
-请查看 https://github.com/khs1994-docker/lnmp-k8s
+* [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
+
+* [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
 ## 需要 PHP 7.1 以下版本 ?
 
@@ -48,7 +50,7 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 ## 快速上手
 
-简单而言，搞明白了项目路径，Nginx 配置就行了，遇到任何问题请提出 issue。
+简单而言，搞明白了项目路径，NGINX 配置就行了，遇到任何问题请提出 issue。
 
 ### Windows 10
 

@@ -22,9 +22,11 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 **Warning** Don't Edit Any Files except `.env`， [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
 
-## Try k8s ?
+## Advanced
 
-Please see https://github.com/khs1994-docker/lnmp-k8s
+* [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
+
+* [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
 ## Need PHP Under 7.1?
 
