@@ -21,8 +21,8 @@ x-deploy:
   &default-deploy
   restart_policy:
     condition: any
-    delay: 5s
-    max_attempts: 5
+    delay: 10s
+    max_attempts: 2
     window: 123s
   update_config:
     parallelism: 2
@@ -382,6 +382,9 @@ services:
       # cache_from:
       #   - alpine:3.7
     command: php-fpm -R -F
+    networks:
+      - frontend
+      - backend
     environment:
       - APP_ENV=production
       - LNMP_DOCKER_VERSION=v18.10 x86_64 Docker Swarm
