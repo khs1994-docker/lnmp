@@ -30,42 +30,14 @@ if ret != 0:
 nginx_prefix = '/usr/local/nginx'
 nginx_conf_dir = '/usr/local/etc/nginx'
 
-
-def nginx_conf():
-    cmd = sudo_cmd + '''nginx -T | grep "fastcgi_buffering off;" \
-|| curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/nginx.wsl.conf \
-> /tmp/nginx.conf
-'''
-
-    os.system(cmd)
-    cmd = 'sudo cp /tmp/nginx.conf {nginx_conf_dir}/nginx.conf'.format(nginx_conf_dir=nginx_conf_dir)
-    os.system(cmd)
-
-
-def nginx_conf_d():
-    nginx_conf_d_dir = '{nginx_conf_dir}/conf.d'.format(nginx_conf_dir=nginx_conf_dir)
-
-    if os.path.exists(nginx_conf_d_dir):
-        pass
-    else:
-        cmd = 'mkdir -p {nginx_conf_d_dir}'.format(nginx_conf_d_dir=nginx_conf_d_dir)
-        os.system(sudo_cmd + cmd)
-
-
-'''
-
-'''
-
 url = 'http://nginx.org/download/nginx-' + input_version + '.tar.gz'
 
 wsl.download_src(url, 'nginx-' + input_version + '.tar.gz', 'nginx-' + input_version)
 
-os.system(sudo_cmd + 'apt update')
-
-cmd = sudo_cmd + '''apt install -y libpcre3 \
+cmd = '''{sudo_cmd} apt update; {sudo_cmd} apt install -y libpcre3 \
                                    openssl \
                                    zlib1g
-'''
+'''.format(sudo_cmd=sudo_cmd)
 
 wsl.install_dep(cmd)
 
@@ -78,6 +50,17 @@ cmd = sudo_cmd + '''apt install -y gcc \
 '''
 
 wsl.install_build_dep(cmd)
+
+cmd = '''git clone -b master --depth=1 https://gitee.com/mirrors/openssl.git /tmp/openssl \
+; cd /tmp/openssl \
+&& curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-pre10_ciphers.patch \
+&& patch -p1 < openssl-equal-pre10_ciphers.patch \
+&& cd /tmp/nginx-''' + input_version + ''' \
+&& curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/nginx_hpack_push_1.15.3.patch \
+&& patch -p1 < nginx_hpack_push_1.15.3.patch
+'''
+
+wsl.builder_pre(cmd)
 
 configure_cmd = '''./configure --prefix={nginx_prefix} \
                        --conf-path={nginx_conf_dir}/nginx.conf \
@@ -117,12 +100,28 @@ configure_cmd = '''./configure --prefix={nginx_prefix} \
                        --with-stream \
                        --with-stream_realip_module \
                        --with-stream_ssl_module \
-                       --with-stream_ssl_preread_module
+                       --with-stream_ssl_preread_module \
+                       --with-http_v2_hpack_enc
 '''.format(nginx_prefix=nginx_prefix, nginx_conf_dir=nginx_conf_dir)
 
-bin_cmd = 'echo "do nothing"'
+wsl.builder('nginx-' + input_version, configure_cmd, sudo_cmd)
 
-wsl.builder('nginx-' + input_version, configure_cmd, sudo_cmd, bin_cmd)
+def nginx_conf():
+    cmd = sudo_cmd + '''nginx -T | grep "fastcgi_buffering off;" \
+|| ( curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/nginx.wsl.conf \
+> /tmp/nginx.conf; sudo cp /tmp/nginx.conf {nginx_conf_dir}/nginx.conf )'''.format(nginx_conf_dir=nginx_conf_dir)
+
+    os.system(cmd)
+
+
+def nginx_conf_d():
+    nginx_conf_d_dir = '{nginx_conf_dir}/conf.d'.format(nginx_conf_dir=nginx_conf_dir)
+
+    if os.path.exists(nginx_conf_d_dir):
+        pass
+    else:
+        cmd = 'mkdir -p {nginx_conf_d_dir}'.format(nginx_conf_d_dir=nginx_conf_d_dir)
+        os.system(sudo_cmd + cmd)
 
 nginx_conf()
 nginx_conf_d()

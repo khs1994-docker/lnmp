@@ -20,9 +20,9 @@ $ lnmp-wsl-install.sh php 7.2.9 [ tar | deb ]
 
 $ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
 
-$ lnmp-wsl-install.sh enable nginx [httpd]
+$ lnmp-wsl-install.sh mysql php go node postgresql mongodb swift
 
-$ lnmp-wsl-install.sh mysql nginx php postgresql mongodb swift
+$ lnmp-wsl-install.sh enable nginx httpd
 
 Example:
 
@@ -49,7 +49,7 @@ PG_MAJOR=10
 
 GO_PREFIX=/usr/local
 
-GO_VERSION=1.10.2
+GO_VERSION=1.11
 
 NODE_VERSION=10.1.0
 
@@ -58,6 +58,9 @@ NODE_PREFIX=/usr/local
 ################################################################################
 
 _nginx(){
+  echo "Install NGINX by apt already remove. Please exec $ lnmp-wsl-builder-nginx"
+  echo
+  return
   # apt
   if ! [ -f /etc/apt/sources.list.d/nginx.list ];then
     set +x

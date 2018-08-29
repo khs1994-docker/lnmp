@@ -39,15 +39,22 @@ def install_build_dep(cmd):
     pass
 
 
-def builder(file, configure_cmd, sudo_cmd, bin_cmd):
+def builder_pre(cmd):
+    os.system(cmd)
+
+
+def builder(file, configure_cmd, sudo_cmd):
     os.chdir('/tmp/' + file)
     os.system(configure_cmd)
     os.system('make -j $( nproc )')
     os.system(sudo_cmd + 'make install')
-    os.system(sudo_cmd + bin_cmd)
     pass
 
 
-def test(test_cmd):
-    os.system(test_cmd)
+def builder_post(cmd):
+    os.system(cmd)
+
+
+def test(cmd):
+    os.system(cmd)
     pass
