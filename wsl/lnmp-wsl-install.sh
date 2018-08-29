@@ -56,6 +56,9 @@ NODE_VERSION=10.1.0
 NODE_PREFIX=/usr/local
 
 ################################################################################
+_httpd(){
+  echo "Please exec $ lnmp-wsl-builder-httpd.py"
+}
 
 _nginx(){
   echo "Install NGINX by apt already remove. Please exec $ lnmp-wsl-builder-nginx.py"
@@ -435,7 +438,9 @@ _node(){
 
 if [ -z "$1" ];then _print_help_info ; fi
 
-set -ex
+if [ "$debug" = 'true' ];then set -x; fi
+
+set -e
 
 . /etc/os-release
 
@@ -449,4 +454,4 @@ CONTAINER_NAME=$( date +%s )
 
 if [ "$1" = "php" ];then shift ; _php "$@" ; exit $? ; fi
 
-for c in "$@"; do _$c; done
+for c in "$@"; do _$c || (clear; echo "not support $c"); done

@@ -2,9 +2,11 @@
 
 * 可选版本 `Ubuntu 16.04` `Debian 9`
 
-* 建议使用 `Debian 9` 版本，在商店搜索 `Linux` 选择 `Debian` 安装即可。
+* 建议使用 `Debian 9` 版本，在商店搜索 `Linux` 选择 `Debian` 安装即可
 
 * https://www.khs1994.com/php/development/wsl.html
+
+* **NGINX** **PHP** 均为编译安装，配置目录为 `/usr/local/etc/*`。本项目提供了一键编译脚本，可以很方便的进行一键编译安装
 
 编译安装软件请查看上面的链接，为方便修改，文件夹内的配置文件（`*.example`）均为示例，使用时请去掉 `.example` 后缀。
 
@@ -51,7 +53,7 @@ export APP_ENV=wsl
 ```bash
 $ lnmp-wsl-install.sh # 输出帮助信息
 
-$ lnmp-wsl-install.sh nginx | php | mysql ...
+$ lnmp-wsl-install.sh php | mysql ...
 ```
 
 * PHP 版本问题：https://github.com/khs1994-docker/lnmp/issues/348
@@ -88,7 +90,9 @@ http {
 
 ## 建立文件链接
 
-**本例假设将 LNMP 放到了用户主目录**
+**本例假设将本项目放到了用户家目录**
+
+为了方便配置，NGINX 的子配置文件目录在本项目 `wsl/nginx` 文件夹中，之后在 WSL 中通过 **软链接** 链接到软件配置目录。所以你要配置 WSL 中的 NGINX，直接编辑 `wsl/nginx/*.conf` 即可。
 
 ```bash
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /usr/local/etc/nginx/conf.d
