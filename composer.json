@@ -27,7 +27,7 @@
       "@php -r \"echo PHP_EOL.PHP_EOL.'$ composer config -g repo.packagist composer https://packagist.phpcomposer.com'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
     "post-create-project-cmd": [
-      "bash lnmp-docker.sh update -f"
+      "lnmp-docker update -f"
     ]
   }
 }
