@@ -2,4 +2,4 @@
 
 cd /data/lnmp
 
-./lnmp-docker.sh
+./lnmp-docker

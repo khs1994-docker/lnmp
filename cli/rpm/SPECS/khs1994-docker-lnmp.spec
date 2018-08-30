@@ -15,7 +15,7 @@ Start LNMP In less than 2 minutes Powered by Docker Compose.
 %pre
 %post
 cd /data/lnmp
-bash lnmp-docker.sh
+bash lnmp-docker
 %preun
 %build
 %install
