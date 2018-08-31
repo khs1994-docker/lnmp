@@ -113,6 +113,8 @@ Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file i
 $ ./lnmp-docker restart nginx
 ```
 
+> You can set `APP_ROOT` to change PHP project folder.
+
 ### How to connect Services
 
 ~~`$redis->connect('127.0.0.1',6379);`~~

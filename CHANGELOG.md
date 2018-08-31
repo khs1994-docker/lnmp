@@ -8,6 +8,7 @@ Bug fixes:
 Changes:
 
 * Add Laravel Queue and Schedule Demo with systemd on Linux
+* Add `APP_ROOT` env, support set PHP Project folder
 
 Updates:
 

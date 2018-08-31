@@ -196,7 +196,7 @@ services:
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.9}-fpm-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
-      - ./app:${LNMP_PHP_PATH:-/app}
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       #
       # php-fpm config set in zz-docker.conf one file
       #
@@ -249,7 +249,7 @@ services:
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
-      - ./app:${LNMP_PHP_PATH:-/app}
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     working_dir: /app
@@ -265,7 +265,7 @@ services:
       - "${LNMP_HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
-      - ./app:${LNMP_PHP_PATH:-/app}
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
       - ./config/${HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d
       - ./logs/httpd:/usr/local/apache2/logs

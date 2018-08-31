@@ -119,6 +119,8 @@ MySQL 默认 ROOT 密码为 `mytest`
 $ ./lnmp-docker restart nginx
 ```
 
+> 你可以通过设置 `APP_ROOT` 来改变 PHP 项目文件夹所在位置。
+
 ### 如何连接服务
 
 ~~`$redis->connect('127.0.0.1',6379);`~~

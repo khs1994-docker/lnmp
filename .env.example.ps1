@@ -48,6 +48,8 @@ $global:HTTPD_MOD_FCGID_VERSION="2.3.9"
 $global:ZEAL_VERSION="0.5.0"
 
 $global:APP_ENV="windows"
+$global:APP_ROOT="./app"
+# $global:APP_ROOT="../app"
 
 $global:PHP_REDIS_EXTENSION_VERSION="4.1.0"
 $global:PHP_MONGODB_EXTENSION_VERSION="1.5.1"

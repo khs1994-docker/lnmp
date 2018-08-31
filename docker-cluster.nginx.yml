@@ -36,7 +36,7 @@ services:
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}/demo-fzjh.config
         target: /etc/nginx/conf.d/fzjh.conf
-      - ./app:${LNMP_PHP_PATH:-/app}
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
     depends_on:
@@ -51,7 +51,7 @@ services:
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
-      - ./app:${LNMP_PHP_PATH:-/app}
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
 
@@ -62,7 +62,7 @@ services:
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
-      - ./app:${LNMP_PHP_PATH:-/app}
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw
 
@@ -73,6 +73,6 @@ services:
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
-      - ./app:${LNMP_PHP_PATH:-/app}
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./logs/nginx:/var/log/nginx:rw

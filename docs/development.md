@@ -8,7 +8,7 @@
 
 **3.** 在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app` (可选项)
 
-**4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/` 目录下，或新建 PHP 项目文件夹
+**4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/` 目录下(可自定义，请查看下方 `APP_ROOT` 一节)，或新建 PHP 项目文件夹
 
 **5.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件(`./config/nginx/*.conf`)
 
@@ -23,6 +23,26 @@
 **2.** 执行 `./lnmp-docker restart nginx` 重启 nginx
 
 **3.** `PhpStorm` 打开 `./app/new-project` ，开始编写代码
+
+## APP_ROOT
+
+默认的 PHP 项目目录位于 `./app/*`，你可以通过在 `.env` 文件中设置 `APP_ROOT` 变量来更改 PHP 项目目录。
+
+例如你想要将 PHP 项目目录 `app` 与本项目并列
+
+```bash
+# APP_ROOT=./app
+APP_ROOT=../app
+```
+
+### Windows
+
+Windows 除了在 `.env` 文件中设置 `APP_ROOT` 变量外，还需在 `.env.ps1` 中进行如下设置
+
+```bash
+# $global:APP_ROOT="./app"
+$global:APP_ROOT="../app"
+```
 
 ## 如何正确的自定义配置文件
 

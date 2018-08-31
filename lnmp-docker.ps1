@@ -46,11 +46,19 @@ if (!(Test-Path cli/khs1994-robot.enc )){
     printInfo "Use LNMP CLI in $PWD"
     # cd $env:LNMP_PATH
     cd $PSScriptRoot
+    cd $APP_ROOT
+    $APP_ROOT=$PWD
+    cd $PSScriptRoot
   }
 
 }else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
+  cd $APP_ROOT
+  $APP_ROOT=$PWD
+  cd $source
 }
+
+printInfo "APP_ROOT is $APP_ROOT"
 
 Function env_status(){
   if (Test-Path .env){
@@ -304,13 +312,13 @@ Function clusterkit_bash_cli($env, $service, $command){
 }
 
 Function satis(){
-  if(!(Test-Path app/satis)){
-    cp -Recurse app/satis-demo app/satis
-    Write-Warning "Please modify app/satis/satis.json"
+  if(!(Test-Path ${APP_ROOT}/satis)){
+    cp -Recurse app/satis-demo ${APP_ROOT}/satis
+    Write-Warning "Please modify ${APP_ROOT}/satis/satis.json"
   }
 
   docker run --rm -it `
-      -v $PWD/app/satis:/build `
+      -v ${APP_ROOT}/satis:/build `
       -v lnmp_composer_cache-data:/composer composer/satis
 }
 
@@ -711,16 +719,16 @@ XXX
     khsci-up {
       # 判断 app/khsci 是否存在
 
-      if (!(Test-Path app/khsci)){
-        git clone --depth=1 https://github.com/khs1994-php/khsci app/khsci
+      if (!(Test-Path ${APP_ROOT}/khsci)){
+        git clone --depth=1 https://github.com/khs1994-php/khsci ${APP_ROOT}/khsci
       }
 
-      if (!(Test-Path app/khsci/public/.env.produnction)){
-        cp app/khsci/public/.env.example app/khsci/public/.env.production
+      if (!(Test-Path ${APP_ROOT}/khsci/public/.env.produnction)){
+        cp ${APP_ROOT}/khsci/public/.env.example ${APP_ROOT}/khsci/public/.env.production
       }
 
-      if (!(Test-Path app/khsci/public/.env.development)){
-        cp app/khsci/public/.env.example app/khsci/public/.env.development
+      if (!(Test-Path ${APP_ROOT}/khsci/public/.env.development)){
+        cp ${APP_ROOT}/khsci/public/.env.example ${APP_ROOT}/khsci/public/.env.development
       }
 
       # 判断 nginx 配置文件是否存在
@@ -751,39 +759,39 @@ XXX
     }
 
     "toolkit-docs" {
-      if(!(Test-Path app/khsdocs/k8s)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git app/khsdocs/k8s
+      if(!(Test-Path ${APP_ROOT}/khsdocs/k8s)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/khsdocs/k8s
       }else{
-        git -C app/khsdocs/k8s fetch --depth=1 origin gh-pages
-        git -C app/khsdocs/k8s reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/khsdocs/k8s fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/khsdocs/k8s reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path app/khsdocs/docker)){
-        git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git app/khsdocs/docker
+      if(!(Test-Path ${APP_ROOT}/khsdocs/docker)){
+        git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git ${APP_ROOT}/khsdocs/docker
       }else{
-        git -C app/khsdocs/docker fetch --depth=1 origin pages
-        git -C app/khsdocs/docker reset --hard origin/pages
+        git -C ${APP_ROOT}/khsdocs/docker fetch --depth=1 origin pages
+        git -C ${APP_ROOT}/khsdocs/docker reset --hard origin/pages
       }
 
-      if(!(Test-Path app/khsdocs/laravel)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git app/khsdocs/laravel
+      if(!(Test-Path ${APP_ROOT}/khsdocs/laravel)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/khsdocs/laravel
       }else{
-        git -C app/khsdocs/laravel fetch --depth=1 origin gh-pages
-        git -C app/khsdocs/laravel reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/khsdocs/laravel fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/khsdocs/laravel reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path app/khsdocs/laravel-en)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git app/khsdocs/laravel-en
+      if(!(Test-Path ${APP_ROOT}/khsdocs/laravel-en)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git ${APP_ROOT}/khsdocs/laravel-en
       }else{
-        git -C app/khsdocs/laravel-en fetch --depth=1 origin gh-pages
-        git -C app/khsdocs/laravel-en reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/khsdocs/laravel-en fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/khsdocs/laravel-en reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path app/khsdocs/nginx)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git app/khsdocs/nginx
+      if(!(Test-Path ${APP_ROOT}/khsdocs/nginx)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/khsdocs/nginx
       }else{
-        git -C app/khsdocs/nginx fetch --depth=1 origin gh-pages
-        git -C app/khsdocs/nginx reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/khsdocs/nginx fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/khsdocs/nginx reset --hard origin/gh-pages
       }
     }
 

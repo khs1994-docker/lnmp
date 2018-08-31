@@ -192,7 +192,7 @@ services:
       - frontend
       - backend
     volumes:
-      - ./app:${LNMP_PHP_PATH:-/app}:rw
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:rw
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
@@ -223,7 +223,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:${LNMP_PHP_PATH:-/app}:rw
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:rw
       - ./config/${NGINX_CONF_D:-nginx}:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./config/etc/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro
@@ -245,7 +245,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:${LNMP_PHP_PATH:-/app}:rw
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:rw
       - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
       - ./config/httpd/${HTTPD_CONF_D:-conf.d}:/usr/local/apache2/conf.d
       - ./logs/httpd:/usr/local/apache2/logs

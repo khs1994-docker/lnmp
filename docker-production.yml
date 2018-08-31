@@ -52,7 +52,7 @@ x-php-common:
   &default-php
   image: khs1994/php:7.2.9-fpm-alpine
   volumes:
-    - ./app:/app:rw
+    - ${APP_ROOT:-./app}:/app:rw
     - zoneinfo-data:/usr/share/zoneinfo:rw
   environment:
     - APP_ENV=production
@@ -344,7 +344,7 @@ services:
     << : *default-labels
     << : *default-php
     volumes:
-      - ./app/khsci:/app/khsci
+      - ${APP_ROOT:-./app}/khsci:/app/khsci
       - khsci-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app/khsci/bin
@@ -375,7 +375,7 @@ services:
       << : *default-build
       # << : *default-build-debian
       # context: ./dockerfile/php/
-      context: ./app/demo/
+      context: ${APP_ROOT:-./app}/demo/
       dockerfile: Dockerfile
       # args:
       #   foo: bar
@@ -432,7 +432,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./app:/app:rw
+      - ${APP_ROOT:-./app}:/app:rw
       # - ./config/nginx:/etc/nginx/conf.d:ro
     networks:
       - frontend
@@ -536,7 +536,7 @@ services:
   #     - "443:443"
   #     - "80:80"
   #   volumes:
-  #     - ./app:/app:rw
+  #     - ${APP_ROOT:-./app}:/app:rw
   #     # - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     # - ./config/httpd:/usr/local/apache2/conf.d
   #     - zoneinfo-data:/usr/share/zoneinfo:rw

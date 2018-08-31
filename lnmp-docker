@@ -287,48 +287,48 @@ $ lnmp-docker gcr.io down
 }
 
 _satis(){
-  if ! [ -d app/satis ];then
-    cp -r app/satis-demo app/satis
+  if ! [ -d ${APP_ROOT}/satis ];then
+    cp -r app/satis-demo ${APP_ROOT}/satis
     print_warning "Please modify app/satis/satis.json\n"
   fi
 
-  docker run --rm -it -v $PWD/app/satis:/build -v lnmp_composer_cache-data:/composer composer/satis
+  docker run --rm -it -v ${APP_ROOT}/satis:/build -v lnmp_composer_cache-data:/composer composer/satis
 }
 
 _local_docs_server(){
-  if ! [ -d app/khsdocs/k8s ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git app/khsdocs/k8s
+  if ! [ -d ${APP_ROOT}/khsdocs/k8s ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/khsdocs/k8s
   else
-    git -C app/khsdocs/k8s fetch --depth=1 origin gh-pages
-    git -C app/khsdocs/k8s reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/khsdocs/k8s fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/khsdocs/k8s reset --hard origin/gh-pages
   fi
 
-  if ! [ -d app/khsdocs/docker ];then
-    git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git app/khsdocs/docker
+  if ! [ -d ${APP_ROOT}/khsdocs/docker ];then
+    git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git ${APP_ROOT}/khsdocs/docker
   else
-    git -C app/khsdocs/docker fetch --depth=1 origin pages
-    git -C app/khsdocs/docker reset --hard origin/pages
+    git -C ${APP_ROOT}/khsdocs/docker fetch --depth=1 origin pages
+    git -C ${APP_ROOT}/khsdocs/docker reset --hard origin/pages
   fi
 
-  if ! [ -d app/khsdocs/laravel ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git app/khsdocs/laravel
+  if ! [ -d ${APP_ROOT}/khsdocs/laravel ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/khsdocs/laravel
   else
-    git -C app/khsdocs/laravel fetch --depth=1 origin gh-pages
-    git -C app/khsdocs/laravel reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/khsdocs/laravel fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/khsdocs/laravel reset --hard origin/gh-pages
   fi
 
-  if ! [ -d app/khsdocs/laravel-en ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git app/khsdocs/laravel-en
+  if ! [ -d ${APP_ROOT}/khsdocs/laravel-en ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git ${APP_ROOT}/khsdocs/laravel-en
   else
-    git -C app/khsdocs/laravel-en fetch --depth=1 origin gh-pages
-    git -C app/khsdocs/laravel-en reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/khsdocs/laravel-en fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/khsdocs/laravel-en reset --hard origin/gh-pages
   fi
 
-  if ! [ -d app/khsdocs/nginx ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git app/khsdocs/nginx
+  if ! [ -d ${APP_ROOT}/khsdocs/nginx ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/khsdocs/nginx
   else
-    git -C app/khsdocs/nginx fetch --depth=1 origin gh-pages
-    git -C app/khsdocs/nginx reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/khsdocs/nginx fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/khsdocs/nginx reset --hard origin/gh-pages
   fi
 }
 
@@ -406,7 +406,7 @@ env_status(){
 # 自动升级软件版本
 
 update_version(){
-  . .env.example
+  . ./.env.example
 
   local softs='PHP \
               NGINX \
@@ -980,13 +980,13 @@ ssl_self(){
 # 快捷开始 PHP 项目开发
 
 new(){
-  for arg in "$@"; do if [ $arg = '-f' ];then rm -rf app/$1; fi; done
+  for arg in "$@"; do if [ $arg = '-f' ];then rm -rf ${APP_ROOT}/$1; fi; done
 
   if [ -z "$1" ];then read -p "Please input project name: /app/" name; else name=$1; fi
 
   if [ -z "$name" ];then echo; print_error 'Please input content'; exit 1; fi
 
-  if [ -d app/$name ];then print_error "This folder existing"; exit 1; fi
+  if [ -d ${APP_ROOT}/$name ];then print_error "This folder existing"; exit 1; fi
 
   if [ -z "$2" -o "$2" = '-f' ];then read -p \
       "Please input domain:{ example http[s]://$name.domain.com }" input_url; else input_url=$2; fi
@@ -1017,9 +1017,9 @@ new(){
     nginx_http $url $name
   fi
 
-  mkdir -p app/$name
+  mkdir -p ${APP_ROOT}/$name
 
-  print_info "Now you can start PHP project in /app/$name\n"
+  print_info "Now you can start PHP project in /${APP_ROOT}/$name\n"
   print_info "Please set hosts in /etc/hosts in development\n"
 }
 
@@ -1705,16 +1705,16 @@ First Run? Maybe you wait 60s then open url.
     khsci-up )
     # 判断 app/khsci 是否存在
 
-    if ! [ -d app/khsci ];then
-      git clone --depth=1 https://github.com/khs1994-php/khsci app/khsci
+    if ! [ -d ${APP_ROOT}/khsci ];then
+      git clone --depth=1 https://github.com/khs1994-php/khsci ${APP_ROOT}/khsci
     fi
 
-    if ! [ -f app/khsci/public/.env.produnction ];then
-      cp app/khsci/public/.env.example app/khsci/public/.env.production
+    if ! [ -f ${APP_ROOT}/khsci/public/.env.produnction ];then
+      cp ${APP_ROOT}/khsci/public/.env.example ${APP_ROOT}/khsci/public/.env.production
     fi
 
-    if ! [ -f app/khsci/public/.env.development ];then
-      cp app/khsci/public/.env.example app/khsci/public/.env.development
+    if ! [ -f ${APP_ROOT}/khsci/public/.env.development ];then
+      cp ${APP_ROOT}/khsci/public/.env.example ${APP_ROOT}/khsci/public/.env.development
     fi
 
     # 判断 nginx 配置文件是否存在
@@ -1776,7 +1776,11 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
-env_status && . .env && . cli/.env
+env_status && . ./.env && . cli/.env
+
+APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
+
+print_info "APP_ROOT is $APP_ROOT\n"
 
 check_nginx_conf
 
