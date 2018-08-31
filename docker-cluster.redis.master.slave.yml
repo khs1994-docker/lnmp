@@ -58,7 +58,7 @@ services:
     ports:
        - "22000:22000"
     volumes:
-      - cluster_redis_m_s_master-data:/data:rw
+      - cluster_redis_m_s_master-data:/data
     command: [
       "redis-server",
       "/redis.conf",
@@ -85,7 +85,7 @@ services:
     ports:
       - "23000:23000"
     volumes:
-      - cluster_redis_m_s_slave-1-data:/data:rw
+      - cluster_redis_m_s_slave-1-data:/data
     command: [
       "redis-server",
       "/redis.conf",

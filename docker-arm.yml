@@ -53,7 +53,7 @@ services:
       - ./backup/init:/docker-entrypoint-initdb.d:ro
       - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./logs/mysql:/var/log/mysql
-      - ./backup/mysql:/backup:rw
+      - ./backup/mysql:/backup
 
   mysql:
     << : *default-common
@@ -70,9 +70,9 @@ services:
       - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
       - ./backup/init:/docker-entrypoint-initdb.d:ro
-      - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}:rw
-      - ./logs/mariadb:/var/log/mysql:rw
-      - ./backup/mariadb:/backup:rw
+      - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}
+      - ./logs/mariadb:/var/log/mysql
+      - ./backup/mariadb:/backup
     command:
       - mysqld
       - --character-set-server=utf8mb4
@@ -192,7 +192,7 @@ services:
       - frontend
       - backend
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:rw
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
@@ -200,7 +200,7 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-log.conf:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
-      - ./logs/php-fpm:/var/log/php-fpm:rw
+      - ./logs/php-fpm:/var/log/php-fpm
       - composer_cache-data:/tmp/cache
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} ${ARM_ARCH:-arm64v8} With Pull Docker Image
@@ -223,7 +223,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:rw
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/${NGINX_CONF_D:-nginx}:/etc/nginx/conf.d:ro
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./config/etc/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro
@@ -245,7 +245,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:rw
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
       - ./config/httpd/${HTTPD_CONF_D:-conf.d}:/usr/local/apache2/conf.d
       - ./logs/httpd:/usr/local/apache2/logs

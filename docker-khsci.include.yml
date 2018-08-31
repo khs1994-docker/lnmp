@@ -5,7 +5,7 @@ services:
     # restart: always
     image: khs1994/php:${LNMP_PHP_VERSION:-7.2.9}-fpm-alpine
     volumes:
-      - ${APP_ROOT:-./app}/khsci:/app/khsci
+      - ${APP_ROOT:-./app}/khsci:/app/khsci:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       - khsci-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo

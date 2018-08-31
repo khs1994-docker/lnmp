@@ -201,6 +201,7 @@ services:
         hard: 40000
     userns_mode: "host" # no Swarm mode
     volumes:
+      - ./config:/config:cached
       - redis-data:/data
       - type: volume
         source: mydata
@@ -211,8 +212,6 @@ services:
       - type: bind
         source: ${APP_ROOT:-./app}
         target: /app
-        bind:
-          propagation: cached
       - type: tmpfs
         target: /app
         tmpfs:
