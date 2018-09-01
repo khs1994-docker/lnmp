@@ -22,6 +22,8 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 **Warning** Don't Edit Any Files except `.env`， [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
 
+**Warning** Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
+
 ## Advanced
 
 * [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)

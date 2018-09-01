@@ -6,7 +6,7 @@ services:
     image: erichough/nfs-server
     volumes:
       - ../data/nfs:/nfs
-      - ../app:/nfs/lnmp/app
+      - ${APP_ROOT:-../app}:/nfs/lnmp/app
       - ../data/nfs/lnmp/mysql:/nfs/lnmp/mysql
       - ../data/nfs/lnmp/redis:/nfs/lnmp/redis
       - ../data/nfs/lnmp/registry:/nfs/lnmp/registry
