@@ -73,18 +73,6 @@ development
 
 ```
 
-## 其他问题
-
-* 在 IDE 中运行 PHPUnit 测试 Laravel 程序时，提示连接不到 Redis MySQL 怎么办？
-
-  ```bash
-  # 设置 hosts
-
-  $ vi /etc/hosts
-
-  127.0.0.1 redis mysql
-  ```
-
 ## 容器数量伸缩
 
 ```bash
