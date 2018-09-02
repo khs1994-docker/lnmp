@@ -1,5 +1,7 @@
 # 本项目使用 Xdebug in Docker + PhpStorm 最佳实践
 
+* https://xdebug.org/docs/all_settings
+
 ## 准备 PHP 项目
 
 * PHP 项目
@@ -10,17 +12,15 @@
 
 ## 设置 Xdebug
 
-配置文件路径 `./config/php/php/conf.d/xdebug.ini`
+配置文件路径 `./config/php/docker-xdebug.ini`
 
 > 这里仍以示例配置为例，如何正确的自定义配置请查看 [这里](config.md)
 
 ### 调试 HOST (必选项)
 
-`xdebug.remote_host=192.168.199.100` 将 `192.168.199.100` 替换为你自己的 IP。这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改配置文件。
+* `xdebug.remote_host=192.168.199.100` 将 `192.168.199.100` 替换为你自己的 IP。这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改配置文件。
 
-在 Docker 没有配置 DNS 的情况下可以使用下面的配置
-
-`xdebug.remote_host=host.docker.internal`
+* 在 Docker 没有配置 DNS 的情况下可以使用 `xdebug.remote_host=host.docker.internal`
 
 所以有以下几种情况
 
@@ -48,7 +48,7 @@ $ ./lnmp-docker restart php7
 
 `Preferenences` -> `Languages & ...`-> `PHP` -> `Debug`-> `xdebug`-> `Debug port 9001`(默认为 `9000`，这里改为 `9001`)
 
-> `9001` 端口务必与 `./config/php/php/conf.d/xdebug.ini` 一致。
+> `9001` 端口务必与 `./config/php/docker-xdebug.ini` 一致。
 
 该设置页 `Pre-configuration` 有简要的步骤。
 
