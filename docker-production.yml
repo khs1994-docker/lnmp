@@ -15,7 +15,7 @@ x-common:
   networks:
     - backend
   # dns:
-  #   - ${DNS:-114.114.114.114}
+  #   - 114.114.114.114
 
 x-deploy:
   &default-deploy
@@ -32,8 +32,8 @@ x-deploy:
 x-labels:
   &default-labels
   labels:
-    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
-    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=production_swarm_mode
+    - com.khs1994.lnmp=true
+    - com.khs1994.lnmp.app.env=production_swarm_mode
 
 x-build:
   &default-build
@@ -52,7 +52,7 @@ x-php-common:
   &default-php
   image: khs1994/php:7.2.9-fpm-alpine
   volumes:
-    - ${APP_ROOT:-./app}:/app
+    - ./app:/app
     - zoneinfo-data:/usr/share/zoneinfo
   environment:
     - APP_ENV=production
@@ -126,7 +126,7 @@ services:
     volumes:
       - ./backup/init.production:/docker-entrypoint-initdb.d:ro
       - ./backup/mysql:/backup
-      - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}
+      - mysql-data:/var/lib/mysql
     command: ["mysqld","--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
     logging: *default-logging
     deploy:
@@ -344,7 +344,7 @@ services:
     << : *default-labels
     << : *default-php
     volumes:
-      - ${APP_ROOT:-./app}/khsci:/app/khsci
+      - ./app/khsci:/app/khsci
       - khsci-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app/khsci/bin
@@ -375,7 +375,7 @@ services:
       << : *default-build
       # << : *default-build-debian
       # context: ./dockerfile/php/
-      context: ${APP_ROOT:-./app}/demo/
+      context: ./app/demo/
       dockerfile: Dockerfile
       # args:
       #   foo: bar
@@ -432,7 +432,7 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ${APP_ROOT:-./app}:/app
+      - ./app:/app
       # - ./config/nginx:/etc/nginx/conf.d:ro
     networks:
       - frontend
@@ -537,7 +537,7 @@ services:
   #     - "443:443"
   #     - "80:80"
   #   volumes:
-  #     - ${APP_ROOT:-./app}:/app
+  #     - ./app:/app
   #     # - ./config/etc/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
   #     # - ./config/httpd:/usr/local/apache2/conf.d
   #     - zoneinfo-data:/usr/share/zoneinfo
