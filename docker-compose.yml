@@ -290,7 +290,7 @@ services:
       ]
 
   minio:
-    < : *default-common
+    << : *default-common
     image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-09-01T00-38-25Z}
     volumes:
       - minio-data:/data
