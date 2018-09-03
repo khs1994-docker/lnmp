@@ -7,7 +7,8 @@ $global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 # DEVELOPMENT_INCLUDE="nginx mysql mariadb php7 redis phpmyadmin \
 #                      memcached postgresql mongodb \
 #                      rabbitmq httpd registry \
-#                      gogs gitlab etcd \
+#                      etcd \
+#                      minio \
 #                      "
 
 $global:CI_HOST="ci.khs1994.com:10000"

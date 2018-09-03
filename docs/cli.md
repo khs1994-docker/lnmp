@@ -6,6 +6,12 @@
 
 * 便捷生成 NGINX APACHE 配置文件
 
+## 尽量兼容原始命令
+
+例如 `lnmp-docker up | down` 对应着 `docker-compose up | down`
+
+`lnmp-k8s create | delete ` 对应着 `kubectl create | delete`
+
 ## 原始命令详解
 
 ### 初始化

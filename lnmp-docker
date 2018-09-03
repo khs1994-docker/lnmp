@@ -40,12 +40,8 @@ check_docker_version(){
 
 check_nginx_conf(){
   set +e
-  echo "$DEVELOPMENT_INCLUDE" | grep 'gogs' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gogs.conf > /dev/null 2>&1 \
-    && ( print_error "your .env file not include gogs, but nginx conf.d folder include gogs.conf" ; echo))
-
-  echo "$DEVELOPMENT_INCLUDE" | grep 'gitlab' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/gitlab.conf > /dev/null 2>&1 \
-    && ( print_error "your .env file not include gitlab, but nginx conf.d folder include gitlab.conf "; echo))
-
+  echo "$DEVELOPMENT_INCLUDE" | grep 'minio' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
+    && ( print_error "your .env file not include minio, but nginx conf.d folder include minio.conf" ; echo))
   set -e
 }
 
@@ -400,6 +396,11 @@ env_status(){
 
   if ! [ -f volumes/.env ];then
     cp volumes/.env.example volumes/.env
+  fi
+
+  if ! [ -f secrets/minio/key.txt ];then
+    cp secrets/minio/key.example.txt secrets/minio/key.txt
+    cp secrets/minio/secret.example.txt secrets/minio/secret.txt
   fi
 }
 

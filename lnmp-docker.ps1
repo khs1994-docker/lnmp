@@ -89,6 +89,10 @@ Function env_status(){
     Copy-Item config/composer/config.example.json config/composer/config.json
   }
 
+  if (!(Test-Path secrets/minio/key.txt)){
+    Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
+    Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
+  }
 }
 
 Function logs(){

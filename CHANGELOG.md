@@ -9,6 +9,8 @@ Changes:
 
 * Add Laravel Queue and Schedule Demo with systemd on Linux
 * Add `APP_ROOT` env, support set PHP Project folder
+* Support `Minio`
+* Remove `gitlab` `gogs`, please see `khs1994-docker/ci`
 
 Updates:
 

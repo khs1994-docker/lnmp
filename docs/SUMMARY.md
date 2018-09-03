@@ -69,12 +69,10 @@
 * Volumes
     * [NFS](volumes/nfs.md)
 
+## 对象存储
+
+* [Minio](minio.md)
+
 ## 测试
 
 * [ab command](ab.md)
-
-## Git Self Host
-
-* Git Self Host
-    * [Gogs](git-self-host/gogs.md)
-    * [GitLab](git-self-host/gitlab.md)

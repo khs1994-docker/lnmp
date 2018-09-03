@@ -36,6 +36,8 @@
 
 * 支持一键启动 `MySQL` `Redis` `Memcached` 集群
 
+* 所有软件尽可能启用了 **TLS** **HTTPS**，为推动 **HTTPS** 普及贡献自己的力量
+
 # 系列文章
 
 * [完全使用 Docker 开发 PHP 项目 （一）: 安装篇](https://segmentfault.com/a/1190000013364203)

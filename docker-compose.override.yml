@@ -85,16 +85,14 @@ volumes:
     << : *default-common
   phpmyadmin-data:
     << : *default-common
-  gogs-data:
-    << : *default-common
-  gitlab-data:
-    << : *default-common
   composer_cache-data:
     external: true
     name: lnmp_composer_cache-data
   nginx-unit-state-data:
     << : *default-common
   etcd-data:
+    << : *default-common
+  minio-data:
     << : *default-common
 
 secrets:
