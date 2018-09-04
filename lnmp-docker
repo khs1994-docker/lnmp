@@ -450,20 +450,23 @@ logs(){
   if ! [ -d log/mariadb ];then mkdir -p log/mariadb && echo > log/mariadb/error.log; fi
   if ! [ -d log/nginx ];then mkdir -p log/nginx && echo > log/nginx/error.log && echo > log/nginx/access.log; fi
   if ! [ -d log/nginx-unit ];then mkdir -p log/nginx-unit; fi
-  if ! [ -d log/php-fpm ];then
-    mkdir -p log/php-fpm && echo > log/php-fpm/error.log \
-      && echo > log/php-fpm/access.log \
-      && echo > log/php-fpm/xdebug-remote.log
+  if ! [ -d log/php ];then
+    mkdir -p log/php \
+      && echo > log/php/error.log \
+      && echo > log/php/slow.log \
+      && echo > log/php/php-fpm-access.log \
+      && echo > log/php/php-fpm-error.log \
+      && echo > log/php/xdebug-remote.log
   fi
   if ! [ -d log/redis ];then mkdir -p log/redis && echo > log/redis/redis.log ; fi
   chmod -R 777 log/mongodb \
                log/mysql \
                log/nginx \
-               log/php-fpm \
+               log/php \
                log/redis || sudo chmod -R 777 log/mongodb \
                                           log/mysql \
                                           log/nginx \
-                                          log/php-fpm \
+                                          log/php \
                                           log/redis
 }
 
@@ -476,9 +479,11 @@ cleanup(){
       && echo > log/mariadb/error.log \
       && echo > log/nginx/error.log \
       && echo > log/nginx/access.log \
-      && echo > log/php-fpm/access.log \
-      && echo > log/php-fpm/error.log \
-      && echo > log/php-fpm/xdebug-remote.log \
+      && echo > log/php/php-fpm-access.log \
+      && echo > log/php/php-fpm-error.log \
+      && echo > log/php/error.log \
+      && echo > log/php/slow.log \
+      && echo > log/php/xdebug-remote.log \
       && echo > log/redis/redis.log \
       && rm -rf log/httpd/* \
       print_info "Clean log files SUCCESS\n"

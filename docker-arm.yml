@@ -200,7 +200,7 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-log.conf:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
-      - ./log/php-fpm:/var/log/php-fpm
+      - ./log/php:/var/log/php
       - composer_cache-data:/tmp/cache
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} ${ARM_ARCH:-arm64v8} With Pull Docker Image

@@ -119,11 +119,13 @@ Function logs(){
   if (! (Test-Path log\nginx-unit)){
     New-Item log\nginx-unit -type directory | Out-Null
   }
-  if (! (Test-Path log\php-fpm)){
-    New-Item log\php-fpm -type directory | Out-Null
-    New-Item log\php-fpm\error.log -type file | Out-Null
-    New-Item log\php-fpm\access.log -type file | Out-Null
-    New-Item log\php-fpm\xdebug-remote.log -type file | Out-Null
+  if (! (Test-Path log\php)){
+    New-Item log\php -type directory | Out-Null
+    New-Item log\php\error.log -type file | Out-Null
+    New-Item log\php\slow.log -type file | Out-Null
+    New-Item log\php\php-fpm-error.log -type file | Out-Null
+    New-Item log\php\php-fpm-access.log -type file | Out-Null
+    New-Item log\php\xdebug-remote.log -type file | Out-Null
   }
   if (! (Test-Path log\redis)){
     New-Item log\redis -type directory | Out-Null
@@ -266,7 +268,7 @@ Function cleanup(){
   rm log\mysql -Recurse -Force | Out-Null
   rm log\mariadb -Recurse -Force | Out-Null
   rm log\nginx -Recurse -Force | Out-Null
-  rm log\php-fpm -Recurse -Force | Out-Null
+  rm log\php -Recurse -Force | Out-Null
   rm log\redis -Recurse -Force | Out-Null
   logs
 

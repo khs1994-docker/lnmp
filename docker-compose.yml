@@ -155,7 +155,7 @@ services:
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
-      - ./log/php-fpm:/var/log/php-fpm:cached
+      - ./log/php:/var/log/php:cached
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
       - type: tmpfs
@@ -213,7 +213,7 @@ services:
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       # - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
-      - ./log/php-fpm:/var/log/php-fpm:cached
+      - ./log/php:/var/log/php:cached
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
       - nginx-unit-state-data:/usr/local/nginx-unit/state
