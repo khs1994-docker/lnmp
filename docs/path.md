@@ -12,8 +12,8 @@
 |--|--|--|
 |`nginx.conf`|`./config/etc/nginx/nginx.conf`|`/etc/nginx/nginx.conf`    |
 |`conf.d/`   |`./config/nginx`               |`/etc/nginx/conf.d`        |
-|`error.log` |`./logs/nginx/error.log`       |`/var/log/nginx/error.log` |
-|`access.log`|`./logs/nginx/access.log`      |`/var/log/nginx/access.log`|
+|`error.log` |`./log/nginx/error.log`       |`/var/log/nginx/error.log` |
+|`access.log`|`./log/nginx/access.log`      |`/var/log/nginx/access.log`|
 |`app/`      |`./app`                        |`/app`                     |
 
 # Apache
@@ -22,7 +22,7 @@
 |--|--|--|
 |`httpd.conf` | `./config/etc/apache2/httpd.conf` | `/usr/local/apache2/conf/httpd.conf`|
 |`conf.d/`    | `./config/apache2/`               | `/usr/local/apache2/conf.d`         |
-|`logs/`      | `./logs/apache2`                  | `/usr/local/apache2/logs`           |
+|`logs/`      | `./log/apache2`                  | `/usr/local/apache2/logs`           |
 
 # PHP
 
@@ -57,7 +57,7 @@
 |名称|本机|容器|
 |--|--|--|
 |`docker.cnf`       |`./config/mysql/docker.cnf`       |`/etc/mysql/conf.d/docker.cnf` |
-|`error.log`        |`./logs/mysql/error.log`          |`/var/log/mysql/error.log`     |
+|`error.log`        |`./log/mysql/error.log`          |`/var/log/mysql/error.log`     |
 |`/var/lib/mysql/`  |`mysql-data`                      |`/var/lib/mysql`               |
 
 ## MariaDB
@@ -65,7 +65,7 @@
 |名称|本机|容器|
 |--|--|--|
 |`docker.cnf`       |`./config/mysql/docker.cnf`       |`/etc/mysql/conf.d/docker.cnf` |
-|`error.log`        |`./logs/mysql/error.log`          |`/var/log/mysql/error.log`     |
+|`error.log`        |`./log/mysql/error.log`          |`/var/log/mysql/error.log`     |
 |`/var/lib/mysql/`  |`mariadb-data`                    |`/var/lib/mysql`               |
 
 ## PostgreSQL
@@ -80,4 +80,4 @@
 |--|--|--|
 |`/data/db/`  |`mongodb-data`                 |`/data/db/`                 |
 |`mongod.conf`|`./config/mongodb/mongod.conf` |`/etc/mongod.conf`          |
-|`mongo.log`  |`./logs/mongodb/mongo.log`     |`/var/log/mongodb/mongo.log`|
+|`mongo.log`  |`./log/mongodb/mongo.log`     |`/var/log/mongodb/mongo.log`|

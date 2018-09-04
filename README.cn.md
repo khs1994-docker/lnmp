@@ -240,7 +240,7 @@ $ ./lnmp-docker down
 |`bin`         |PHPer 常用命令    |
 |`config`      |配置文件          |
 |`dockerfile`  |自定义 Dockerfile |
-|`logs`        |日志文件          |
+|`log`         |日志文件          |
 |`scripts`     |用户自定义脚本文件  |
 
 ### 端口暴露

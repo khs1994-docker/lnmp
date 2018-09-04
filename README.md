@@ -235,7 +235,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |`bin`         |PHPer Commands    |
 |`config`      |configuration file|
 |`dockerfile`  |Dockerfile        |
-|`logs`        |logs file         |
+|`log`         |log file          |
 |`scripts`     |bash shell script |
 
 ### Exposed Ports

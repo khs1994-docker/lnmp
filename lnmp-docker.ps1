@@ -96,38 +96,38 @@ Function env_status(){
 }
 
 Function logs(){
-  if (! (Test-Path logs\httpd)){
-    New-Item logs\httpd -type directory | Out-Null
+  if (! (Test-Path log\httpd)){
+    New-Item log\httpd -type directory | Out-Null
   }
-  if (! (Test-Path logs\mongodb)){
-    New-Item logs\mongodb -type directory | Out-Null
-    New-Item logs\mongodb\mongo.log -type file | Out-Null
+  if (! (Test-Path log\mongodb)){
+    New-Item log\mongodb -type directory | Out-Null
+    New-Item log\mongodb\mongo.log -type file | Out-Null
   }
-  if (-not (Test-Path logs\mysql)){
-    New-Item logs\mysql -type directory | Out-Null
-    New-Item logs\mysql\error.log -type file | Out-Null
+  if (-not (Test-Path log\mysql)){
+    New-Item log\mysql -type directory | Out-Null
+    New-Item log\mysql\error.log -type file | Out-Null
   }
-  if (-not (Test-Path logs\mariadb)){
-    New-Item logs\mariadb -type directory | Out-Null
-    New-Item logs\mariadb\error.log -type file | Out-Null
+  if (-not (Test-Path log\mariadb)){
+    New-Item log\mariadb -type directory | Out-Null
+    New-Item log\mariadb\error.log -type file | Out-Null
   }
-  if (! (Test-Path logs\nginx)){
-    New-Item logs\nginx -type directory | Out-Null
-    New-Item logs\nginx\access.log -type file | Out-Null
-    New-Item logs\nginx\error.log -type file | Out-Null
+  if (! (Test-Path log\nginx)){
+    New-Item log\nginx -type directory | Out-Null
+    New-Item log\nginx\access.log -type file | Out-Null
+    New-Item log\nginx\error.log -type file | Out-Null
   }
-  if (! (Test-Path logs\nginx-unit)){
-    New-Item logs\nginx-unit -type directory | Out-Null
+  if (! (Test-Path log\nginx-unit)){
+    New-Item log\nginx-unit -type directory | Out-Null
   }
-  if (! (Test-Path logs\php-fpm)){
-    New-Item logs\php-fpm -type directory | Out-Null
-    New-Item logs\php-fpm\error.log -type file | Out-Null
-    New-Item logs\php-fpm\access.log -type file | Out-Null
-    New-Item logs\php-fpm\xdebug-remote.log -type file | Out-Null
+  if (! (Test-Path log\php-fpm)){
+    New-Item log\php-fpm -type directory | Out-Null
+    New-Item log\php-fpm\error.log -type file | Out-Null
+    New-Item log\php-fpm\access.log -type file | Out-Null
+    New-Item log\php-fpm\xdebug-remote.log -type file | Out-Null
   }
-  if (! (Test-Path logs\redis)){
-    New-Item logs\redis -type directory | Out-Null
-    New-Item logs\redis\redis.log -type file | Out-Null
+  if (! (Test-Path log\redis)){
+    New-Item log\redis -type directory | Out-Null
+    New-Item log\redis\redis.log -type file | Out-Null
   }
 }
 
@@ -261,13 +261,13 @@ exit
 Function cleanup(){
   Write-Host " "
   logs
-  rm logs\httpd -Recurse -Force | Out-Null
-  rm logs\mongodb -Recurse -Force | Out-Null
-  rm logs\mysql -Recurse -Force | Out-Null
-  rm logs\mariadb -Recurse -Force | Out-Null
-  rm logs\nginx -Recurse -Force | Out-Null
-  rm logs\php-fpm -Recurse -Force | Out-Null
-  rm logs\redis -Recurse -Force | Out-Null
+  rm log\httpd -Recurse -Force | Out-Null
+  rm log\mongodb -Recurse -Force | Out-Null
+  rm log\mysql -Recurse -Force | Out-Null
+  rm log\mariadb -Recurse -Force | Out-Null
+  rm log\nginx -Recurse -Force | Out-Null
+  rm log\php-fpm -Recurse -Force | Out-Null
+  rm log\redis -Recurse -Force | Out-Null
   logs
 
   printInfo "Cleanup logs files Success"
