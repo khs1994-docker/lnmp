@@ -2,16 +2,16 @@ version: "3.7"
 services:
 
   nginx:
-    image: nginx:${KHS1994_LNMP_NGINX_VERSION}-alpine
+    image: nginx:${LNMP_NGINX_VERSION}-alpine
 
   httpd:
-    image: httpd:${KHS1994_LNMP_HTTPD_VERSION}-alpine
+    image: httpd:${LNMP_HTTPD_VERSION}-alpine
 
   mysql:
-    image: mysql:${KHS1994_LNMP_MYSQL_VERSION}
+    image: mysql:${LNMP_MYSQL_VERSION}
 
   mariadb:
-    image: mariadb:${KHS1994_LNMP_MARIADB_VERSION}
+    image: mariadb:${LNMP_MARIADB_VERSION}
 
   php7:
-    image: khs1994/php-fpm:${KHS1994_LNMP_PHP_VERSION}-alpine3.7
+    image: khs1994/php:${LNMP_PHP_VERSION}-fpm-alpine
