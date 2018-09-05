@@ -56,6 +56,12 @@ $global:APP_ROOT="../app"
 
 `./lnmp-docker nginx-conf` 便捷的生成 nginx 配置文件(包括 HTTP HTTPS)
 
+## PHPStorm
+
+想要在 PHPStorm 中实现右键点击运行脚本必须进行额外的设置
+
+具体请查看 PHP 容器化最佳实践 https://github.com/khs1994-docker/php-demo#6-cli-settings
+
 ## 自行构建镜像
 
 在 `./dockerfile/` 下各个软件的文件夹内复制 `example.Dockerfile` 为 `Dockerfile`，并编写 `Dockerfile` 之后运行如下命令：

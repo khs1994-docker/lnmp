@@ -20,6 +20,8 @@
 
 * `xdebug.remote_host=192.168.199.100` 将 `192.168.199.100` 替换为你自己的 IP。这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改配置文件。
 
+#### Docker 桌面版特殊说明
+
 * 在 Docker 没有配置 DNS 的情况下可以使用 `xdebug.remote_host=host.docker.internal`
 
 所以有以下几种情况
@@ -29,6 +31,10 @@
 * 电脑拥有固定 IP，采用第一种方法，但由于网络环境（家、公司）不定，每次还是得修改 Xdebug 设置里的 IP
 
 * 电脑 IP 不定，又想自定义 Docker DNS 配置，那就只能每次 IP 变化时重新修改 xdebug 设置里的 IP
+
+#### Docker Linux
+
+要么电脑固定 IP，要么 IP 变化时必须修改 xdebug 配置
 
 ### 调试端口（可选项）
 
