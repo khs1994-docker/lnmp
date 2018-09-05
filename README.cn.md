@@ -121,6 +121,8 @@ $ ./lnmp-docker restart nginx
 
 > 你可以通过设置 `APP_ROOT` 来改变 PHP 项目文件夹所在位置。
 
+更多信息请查看 LNMP 容器化最佳实践 https://github.com/khs1994-docker/php-demo
+
 ### 如何连接服务
 
 ~~`$redis->connect('127.0.0.1',6379);`~~
@@ -134,10 +136,6 @@ $redis->connect('redis', 6379);
 
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
-
-### Docker PHP 最佳实践
-
-* https://github.com/khs1994-docker/php-demo
 
 ### PHPer 常用命令
 

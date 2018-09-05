@@ -117,6 +117,8 @@ $ ./lnmp-docker restart nginx
 
 > You can set `APP_ROOT` to change PHP project folder.
 
+More information please see Docker PHP Best Practice https://github.com/khs1994-docker/php-demo
+
 ### How to connect Services
 
 ~~`$redis->connect('127.0.0.1',6379);`~~
@@ -130,10 +132,6 @@ $redis->connect('redis', 6379);
 
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
-
-### Docker PHP Best Practice
-
-* https://github.com/khs1994-docker/php-demo
 
 ### PHPer commands
 
