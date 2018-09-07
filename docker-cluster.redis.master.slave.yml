@@ -35,6 +35,8 @@ x-common:
   restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}
+  env_file:
+    - ./cli/timezone.env
   networks:
     - cluster_redis_m_s
   # logging:

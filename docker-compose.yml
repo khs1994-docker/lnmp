@@ -82,7 +82,6 @@ services:
         volume:
           nocopy: true
       - ./log/redis:/var/log/redis:cached
-      - zoneinfo-data:/usr/share/zoneinfo
     # set config by command
     command: [
       "redis-server",
@@ -170,7 +169,6 @@ services:
     command: php-fpm -R -F
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} x86_64 With Pull Docker Image
-      - TZ=${TZ:-Asia/Shanghai}
       - APP_ENV=${APP_ENV:-development}
 
   phpmyadmin:
@@ -182,6 +180,7 @@ services:
       - ${LNMP_PHPMYADMIN_PORT:-127.0.0.1:8080}:80
     volumes:
       - phpmyadmin-data:/sessions
+      - zoneinfo-data:/usr/share/zoneinfo
 
   nginx:
     << : *default-common
@@ -261,6 +260,7 @@ services:
     volumes:
       - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro
       - registry-data:/var/lib/registry
+      - zoneinfo-data:/usr/share/zoneinfo
 
   etcd:
     << : *default-common

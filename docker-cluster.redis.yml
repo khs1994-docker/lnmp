@@ -30,6 +30,8 @@ x-common:
   &default-common
   image: redis:5.0-rc4-alpine
   restart: always
+  env_file:
+    - ./cli/timezone.env
   networks:
     cluster_redis:
       # ipv4_address: 172.16.0.105

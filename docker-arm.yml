@@ -93,7 +93,6 @@ services:
       - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro
       - ./log/redis:/var/log/redis
       - redis-data:/data
-      - zoneinfo-data:/usr/share/zoneinfo
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     command: [
