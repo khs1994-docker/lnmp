@@ -31,9 +31,9 @@ services:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
       - "${LNMP_MYSQL_PORT_X:-127.0.0.1:33060}:33060"
     volumes:
-      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+      - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
-      - ./backup/init:/docker-entrypoint-initdb.d:ro
+      - ./backup/init:/docker-entrypoint-initdb.d:ro,cached
       - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:cached
       - ./backup/mysql:/backup:cached
@@ -56,9 +56,9 @@ services:
     ports:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro
+      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-      - ./backup/init:/docker-entrypoint-initdb.d:ro
+      - ./backup/init:/docker-entrypoint-initdb.d:ro,cached
       - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}
       - ./log/mariadb:/var/log/mysql:cached
       - ./backup/mariadb:/backup:cached
@@ -74,7 +74,7 @@ services:
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
-      - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro
+      - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro,cached
       # - redis-data:/data:cached
       - type: volume
         source: redis-data
@@ -131,7 +131,7 @@ services:
     << : *default-common
     image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.2}
     volumes:
-      - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro
+      - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
       - mongodb-data:/data/db
       - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log:cached
     ports:
@@ -147,13 +147,13 @@ services:
       #
       # php-fpm config set in zz-docker.conf one file
       #
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-log.conf:ro
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
-      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-      - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-log.conf:ro,cached
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro,cached
+      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro,cached
+      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro,cached
+      - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro,cached
       - ./log/php:/var/log/php:cached
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
@@ -189,12 +189,12 @@ services:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro
+      # - ./config/nginx:/etc/nginx/conf.d:ro,cached
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:cached
     working_dir: /app
     networks:
@@ -209,9 +209,9 @@ services:
       - ./config/${NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./log/nginx-unit:/var/log/nginx-unit:cached
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
-      # - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
-      - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
+      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      # - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro,cached
+      - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro,cached
       - ./log/php:/var/log/php:cached
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
@@ -258,7 +258,7 @@ services:
     # ports:
     #   - "5000:5000"
     volumes:
-      - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro
+      - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro,cached
       - registry-data:/var/lib/registry
       - zoneinfo-data:/usr/share/zoneinfo
 

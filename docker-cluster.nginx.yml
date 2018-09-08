@@ -28,8 +28,8 @@ services:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
-      - ./config/nginx/demo-include-php.config:/etc/nginx/conf.d/demo-include-php.config:ro
-      - ./config/nginx/demo-include-ssl.config:/etc/nginx/conf.d/demo-include-ssl.config:ro
+      - ./config/nginx/demo-include-php.config:/etc/nginx/conf.d/demo-include-php.config:ro,cached
+      - ./config/nginx/demo-include-ssl.config:/etc/nginx/conf.d/demo-include-ssl.config:ro,cached
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}/demo-ssl
         target: /etc/nginx/conf.d/demo-ssl
@@ -37,7 +37,7 @@ services:
         source: ./config/${NGINX_CONF_D:-nginx}/demo-fzjh.config
         target: /etc/nginx/conf.d/fzjh.conf
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:cached
     depends_on:
       - php7
@@ -52,27 +52,27 @@ services:
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:cached
 
   nginx-2:
     << : *default-common
     volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro
+      # - ./config/nginx:/etc/nginx/conf.d:ro,cached
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:cached
 
   nginx-3:
     << : *default-common
     volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro
+      # - ./config/nginx:/etc/nginx/conf.d:ro,cached
       - type: bind
         source: ./config/${NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:cached
