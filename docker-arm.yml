@@ -193,7 +193,7 @@ services:
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
-      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro
+      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-log.conf:ro
@@ -201,9 +201,11 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
       - ./log/php:/var/log/php
       - composer_cache-data:/tmp/cache
+      - ./dockerfile/php-fpm/docker-php-entrypoint:/usr/local/bin/docker-php-entrypoint
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} ${ARM_ARCH:-arm64v8} With Pull Docker Image
       - APP_ENV=development
+      - XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST:-192.168.199.100}
     command: ["php-fpm","-R"]
 
   nginx:

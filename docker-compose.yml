@@ -152,11 +152,12 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro,cached
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro,cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro,cached
+      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro,cached
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro,cached
       - ./log/php:/var/log/php:cached
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
+      - ./dockerfile/php-fpm/docker-php-entrypoint:/usr/local/bin/docker-php-entrypoint:ro,cached
       - type: tmpfs
         target: /temp
         tmpfs:
@@ -170,6 +171,7 @@ services:
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} x86_64 With Pull Docker Image
       - APP_ENV=${APP_ENV:-development}
+      - XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST:-192.168.199.100}
 
   phpmyadmin:
     << : *default-common
