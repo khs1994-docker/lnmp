@@ -27,7 +27,7 @@ ENV PHP_EXTENSION \
       sysvmsg \
       sysvsem \
       sysvshm \
-# tidy \
+      # tidy \
       xmlrpc \
       xsl \
       zip
@@ -37,7 +37,7 @@ ENV PECL_EXTENSION \
       igbinary \
       redis \
       memcached \
-# 安装测试版的扩展，可以在扩展名后加 -beta
+      # 安装测试版的扩展，可以在扩展名后加 -beta
       xdebug \
       yaml \
       swoole
@@ -157,7 +157,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
  # composer 中国镜像
- && composer config -g repo.packagist composer https://packagist.phpcomposer.com \
+ && composer config -g repo.packagist composer https://packagist.laravel-china.org \
  # laravel 安装程序
  # && composer global require "laravel/installer" \
  # && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
