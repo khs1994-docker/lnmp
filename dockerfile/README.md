@@ -13,3 +13,15 @@ $ cp example.Dockerfile Dockerfile
 
 $ docker-compose build
 ```
+
+## BuildKit
+
+```json
+{"experimental":true, "features": {"feature-buildkit":true}}
+```
+
+```bash
+$ export DOCKER_BUILDKIT=1
+
+$ docker build --secret id=mysecret,src=$(pwd)/mysecret.txt -f buildkit.Dockerfile .
+```
