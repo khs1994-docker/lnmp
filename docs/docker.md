@@ -1,5 +1,7 @@
 # Docker
 
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 使用本项目必须提前安装配置好 `Docker` `Docker Compose`，下面列举出一些资料
 
 * [Docker CE 安装教程](https://www.khs1994.com/docker/README.html)

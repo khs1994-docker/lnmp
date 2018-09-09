@@ -1,5 +1,7 @@
 # ClusterKit
 
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 `ClusterKit` 的目标是使用 Docker 部署 `MySQL` `Redis` `Memcached` 集群。
 
 以下命令均在项目根目录执行，切勿在此目录内执行，随后我们使用命令行测试集群功能。

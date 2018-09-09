@@ -1,5 +1,7 @@
 # PHP 扩展列表
 
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 > 更多扩展请通过 `$ php -m` 查看
 
 如果你需要增加其他扩展，请到这里反馈：https://github.com/khs1994-docker/lnmp/issues/63

@@ -1,6 +1,6 @@
 # LNMP Docker
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 使用 Docker Compose 快速搭建 LNMP 环境。
 
@@ -56,39 +56,19 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 如果你使用的是 Windows 10 请查看 [支持文档](docs/install/windows.md)。
 
-#### 使用 WSL ?
-
-请查看 https://github.com/khs1994-docker/lnmp/tree/master/wsl
-
 ### 安装
 
-使用以下的任意一种方法来安装本项目。
+```bash
+$ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
 
-* **使用 `git clone`**
+# $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
 
-  ```bash
-  $ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
+# 从 GitHub 克隆太慢？请使用中国镜像
 
-  # $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
+$ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 
-  # 中国镜像
-
-  $ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
-
-  # $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
-  ```
-
-* **使用 Composer 创建项目**
-
-  ```bash
-  $ composer create-project --prefer-dist khs1994/lnmp:dev-master ~/lnmp
-  ```
-
-* **使用一键安装脚本**
-
-  ```bash
-  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-  ```
+# $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+```
 
 ### 启动 LNMP Demo
 
@@ -323,3 +303,7 @@ https://doc.lnmp.khs1994.com
 ## 赞赏我
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
+
+## 云容器服务推广
+
+* [腾讯云容器服务](http://dwz.cn/I2vYahwq)

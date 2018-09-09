@@ -206,7 +206,10 @@ You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you
 
 You must Update .env file when update this project.
 
-Donate https://zan.khs1994.com"
+Donate https://zan.khs1994.com
+
+AD Tencent Kubernetes Engine http://dwz.cn/I2vYahwq
+"
 
 cd $source
 

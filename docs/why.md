@@ -1,5 +1,7 @@
 # 项目初衷
 
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 搭建一个 LNMP 环境需要手动下载 LNMP 源码包，安装依赖包，编译，编译出错再安装依赖包，再修改默认配置，这样一个过程差不多半天过去了。
 
 Docker 的优点是轻量、跨平台、提供一致的环境，避免「在我这里行换到你那就不行的问题」，我之前一直使用 `docker run` 来使用 Docker，问题是启动一个容器需要写参数、环境变量、挂载文件目录等，造成命令的繁杂，不易读，之后我就将 `docker run ...` 写入脚本文件，通过运行脚本文件来启动Docker。

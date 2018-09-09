@@ -1,6 +1,6 @@
 # LNMP Docker
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) [![](https://img.shields.io/badge/AD-Tencent%20Kubernetes%20Engine-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 Start LNMP In Less than 2 minutes Powered By Docker Compose.
 
@@ -54,39 +54,21 @@ To use LNMP Docker, you need:
 
 Please see [Windows 10](docs/install/windows.md).
 
-#### Try WSL ?
-
-Please see https://github.com/khs1994-docker/lnmp/tree/master/wsl
-
 ### Install
 
-Pick one method install LNMP Docker.
+Use git install LNMP Docker.
 
-* **Using `git clone`**
+```bash
+$ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
 
-  ```bash
-  $ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
+# $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
 
-  # $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
+# 中国镜像
 
-  # 中国镜像
+$ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 
-  $ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
-
-  # $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
-  ```
-
-* **Using Composer create project**
-
-  ```bash
-  $ composer create-project --prefer-dist khs1994/lnmp:dev-master ~/lnmp
-  ```
-
-* **Using the convenience script**
-
-  ```bash
-  $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-  ```
+# $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+```
 
 ### Start LNMP Demo
 
@@ -310,3 +292,7 @@ Please see [Contributing](CONTRIBUTING.md)
 ## Donate
 
 Please see [https://zan.khs1994.com](https://zan.khs1994.com)
+
+## AD
+
+* [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)

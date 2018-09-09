@@ -3,6 +3,7 @@
 * [LNMP Docker 支持文档](README.md)
 * [项目初衷](why.md)
 * [安装配置 Docker](docker.md)
+* [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## 安装
 

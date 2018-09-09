@@ -1,14 +1,12 @@
 # 安装教程
 
-## 使用一键安装脚本
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
-```bash
-$ cd
+## 安装
 
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
-```
+任选其一
 
-## 使用 `git clone`
+### 使用 `git clone`
 
 ```bash
 $ cd
@@ -22,6 +20,20 @@ $ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
 $ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
 
 # $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+```
+
+### 使用 Composer 创建项目
+
+```bash
+$ composer create-project --prefer-dist khs1994/lnmp:dev-master ~/lnmp
+```
+
+### 使用一键安装脚本
+
+```bash
+$ cd
+
+$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 ```
 
 ## 启动 Demo
