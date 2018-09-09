@@ -24,6 +24,8 @@ $ lnmp-wsl-install.sh mysql php go node postgresql mongodb swift
 
 $ lnmp-wsl-install.sh enable nginx httpd
 
+$ lnmp-wsl-install.sh php-extension-list
+
 Example:
 
 $ lnmp-wsl-install.sh php 7.2.9 tar
@@ -54,6 +56,8 @@ GO_VERSION=1.11
 NODE_VERSION=10.10.0
 
 NODE_PREFIX=/usr/local
+
+PHP_VERSION=7.2.9
 
 ################################################################################
 _httpd(){
@@ -92,7 +96,7 @@ _nginx(){
 }
 
 _php(){
-  command -v docker || echo -e "Docker cli not install, you can exec $ lnmp-wsl-docker-cli.sh "
+  command -v docker || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli.sh "
 
   command -v docker || exit 1
 
@@ -106,27 +110,27 @@ _php(){
     5.6.* )
       export PHP_NUM=56
       if [ $ID = 'debian' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, you can self build use $ lnmp-wsl-builder-php.sh\n\n" ; \
+       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, please self build use $ lnmp-wsl-builder-php.sh\n\n" ; \
        exit 1; fi
       ;;
 
     7.0.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, you can self build use $ lnmp-wsl-builder-php.sh \n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, please self build use $ lnmp-wsl-builder-php.sh \n\n" \
        ; exit 1; fi
       export PHP_NUM=70
       ;;
 
     7.1.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, you can self build use $ lnmp-wsl-builder-php.sh\n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, please self build use $ lnmp-wsl-builder-php.sh\n\n" \
        ; exit 1; fi
       export PHP_NUM=71
       ;;
 
     7.2.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, you can self build use $ lnmp-wsl-builder-php.sh\n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, please self build use $ lnmp-wsl-builder-php.sh\n\n" \
        ; exit 1; fi
       export PHP_NUM=72
       ;;
@@ -266,7 +270,7 @@ php -i | grep .ini
 
 # composer cn mirror
 
-command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.phpcomposer.com
+command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.laravel-china.org
 
 }
 
@@ -324,9 +328,13 @@ _mysql(){
   sudo apt install mysql-server
 }
 
-_list(){
+_php-extension-list(){
   # list php extension
-  cd /usr/local/src/php-7.2.9/ext
+  if ! [ -d /usr/local/src/php-${PHP_VERSION}/ext ];then
+    echo "php src not found"
+    return;
+  fi
+  cd /usr/local/src/php-${PHP_VERSION}/ext
   set +x
   for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done
 }
@@ -417,12 +425,15 @@ export PATH=${GO_PREFIX}/go/bin:\$PATH
 }
 
 _node(){
+
+  sudo mkdir -p /usr/local/node
+
   _downloader ${NODE_PREFIX}/node node-v${NODE_VERSION}-linux-x64.tar.gz \
       http://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz \
       ${NODE_PREFIX} \
-      "sudo mv ${NODE_PREFIX}/node-v${NODE_VERSION}-linux-x64  ${NODE_PREFIX}/node"
+      "sudo cp -r ${NODE_PREFIX}/node-v${NODE_VERSION}-linux-x64/ ${NODE_PREFIX}/node/"
 
-  sudo chown -R 1000:1000 ${NODE_PREFIX}/node
+  sudo chown -R $USER:$USER ${NODE_PREFIX}/node
 
   . ~/.bash_profile
 

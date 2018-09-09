@@ -43,6 +43,6 @@ sudo apt update && sudo apt -y install \
 
 # composer cn mirror
 
-command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.phpcomposer.com
+command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.laravel-china.org
 
 lnmp-wsl-docker-cli.sh

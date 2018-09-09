@@ -76,7 +76,7 @@ _env(){
 }
 
 _composer(){
-  composer config -g repo.packagist composer https://packagist.phpcomposer.com
+  composer config -g repo.packagist composer https://packagist.laravel-china.org
 }
 
 _mkdir(){
