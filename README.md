@@ -2,9 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) [![](https://img.shields.io/badge/AD-Tencent%20Kubernetes%20Engine-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
-Start LNMP In Less than 2 minutes Powered By Docker Compose.
-
-More Than LNMP Docker，Support ALL Arch、ALL Environment.
+:computer: :whale: :elephant: :dolphin: :penguin: :rocket: Start LNMP In Less than 2 minutes Powered By Docker Compose.
 
 * [中文说明](README.cn.md)
 
@@ -16,13 +14,15 @@ More Than LNMP Docker，Support ALL Arch、ALL Environment.
 
 * [TODO](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ftodo)
 
+* [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 * [Best Practice](https://github.com/khs1994-docker/php-demo)
 
 LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
-**Warning** Don't Edit Any Files except `.env`， [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
+:warning: Don't Edit Any Files except `.env` [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
 
-**Warning** Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
+:warning: Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
 
 ## Advanced
 
@@ -42,11 +42,11 @@ Please see https://github.com/khs1994-docker/lnmp/issues/450
 
 To use LNMP Docker, you need:
 
-* [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
+:one: [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
 
-* [Docker Compose](https://github.com/docker/compose) 1.22.0+
+:two: [Docker Compose](https://github.com/docker/compose) 1.22.0+
 
-* WSL (**Windows** Only)
+:three: WSL (**Windows** Only)
 
 ## Quick Start
 
@@ -85,7 +85,7 @@ development
 
 ```
 
-MySQL default root password `mytest`
+:bulb: MySQL default root password `mytest`
 
 ### Start PHP Project
 
@@ -103,9 +103,9 @@ More information please see Docker PHP Best Practice https://github.com/khs1994-
 
 ### How to connect Services
 
-~~`$redis->connect('127.0.0.1',6379);`~~
+:no_entry: ~~`$redis->connect('127.0.0.1',6379);`~~
 
-~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
+:no_entry: ~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
 
 ```php
 $redis = new \Redis();
@@ -293,6 +293,6 @@ Please see [Contributing](CONTRIBUTING.md)
 
 Please see [https://zan.khs1994.com](https://zan.khs1994.com)
 
-## AD
+## AD :whale:
 
 * [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)

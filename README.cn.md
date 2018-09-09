@@ -2,9 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
-使用 Docker Compose 快速搭建 LNMP 环境。
-
-More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
+:computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境。
 
 * [项目初衷](docs/why.md)
 
@@ -16,13 +14,15 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 * [计划支持特性](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ftodo)
 
+* [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 * [最佳实践](https://github.com/khs1994-docker/php-demo)
 
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
-**警告** 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
+:warning: 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
 
-**警告** Windows Docker 非常不稳定，且运行 Laravel 相应较慢。建议使用 [WSL](wsl)。
+:warning: Windows Docker 非常不稳定，且运行 Laravel 相应较慢。建议使用 [WSL](wsl)。
 
 ## 进阶
 
@@ -42,11 +42,11 @@ More Than LNMP Docker，LNMP 全流程、全平台、全环境解决方案。
 
 本项目需要以下软件：
 
-* [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
+:one: [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
 
-* [Docker Compose](https://github.com/docker/compose) 1.22.0+
+:two: [Docker Compose](https://github.com/docker/compose) 1.22.0+
 
-* WSL (**Windows** Only)
+:three: WSL (**Windows** Only)
 
 ## 快速上手
 
@@ -85,7 +85,7 @@ development
 
 ```
 
-MySQL 默认 ROOT 密码为 `mytest`
+:bulb: MySQL 默认 ROOT 密码为 `mytest`
 
 ### PHP 项目开发
 
@@ -105,9 +105,9 @@ $ ./lnmp-docker restart nginx
 
 ### 如何连接服务
 
-~~`$redis->connect('127.0.0.1',6379);`~~
+:no_entry: ~~`$redis->connect('127.0.0.1',6379);`~~
 
-~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
+:no_entry: ~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
 
 ```php
 $redis = new \Redis();
@@ -304,6 +304,6 @@ https://doc.lnmp.khs1994.com
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
 
-## 云容器服务推广
+## 云容器服务推广 :whale:
 
 * [腾讯云容器服务](http://dwz.cn/I2vYahwq)
