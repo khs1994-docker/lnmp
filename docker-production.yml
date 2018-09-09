@@ -128,7 +128,7 @@ services:
       - ./backup/mysql:/backup
       - mysql-data:/var/lib/mysql
     command: ["mysqld","--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
-    logging: *default-logging
+    # logging: *default-logging
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -181,7 +181,7 @@ services:
   #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
-  #   logging: *default-logging
+  #   # logging: *default-logging
   #   secrets:
   #     - db_root_password
   #   configs:
@@ -215,7 +215,7 @@ services:
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
       ]
-    logging: *default-logging
+    # logging: *default-logging
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -249,7 +249,7 @@ services:
   #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
-  #   logging: *default-logging
+  #   # logging: *default-logging
 
   # rabbitmq:
   #   << : *default-common
@@ -276,7 +276,7 @@ services:
   #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
-  #   logging: *default-logging
+  #   # logging: *default-logging
 
   # postgresql:
   #   << : *default-common
@@ -305,7 +305,7 @@ services:
   #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
-  #   logging: *default-logging
+  #   # logging: *default-logging
   #   secrets:
   #     # default is mysql password
   #     - db_root_password
@@ -331,7 +331,7 @@ services:
   #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
-  #   logging: *default-logging
+  #   # logging: *default-logging
   #   # ports:
   #   #    - "127.0.0.1:27017:27017"
   #   command: ["mongod","--config","/etc/mongod.conf"]
@@ -352,7 +352,7 @@ services:
       - /bin/sh
       - khscid
       - up
-    logging: *default-logging
+    # logging: *default-logging
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -388,7 +388,7 @@ services:
     environment:
       - APP_ENV=production
       - LNMP_DOCKER_VERSION=v18.10 x86_64 Docker Swarm
-    logging: *default-logging
+    # logging: *default-logging
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -405,7 +405,7 @@ services:
   #     - /app/laravel/artisan
   #     - queue:work
   #     - --tries=3
-  #   logging: *default-logging
+  #   # logging: *default-logging
   #   deploy:
   #     << : *default-deploy
   #     << : *default-labels
@@ -439,7 +439,7 @@ services:
     depends_on:
       - php7
       - minio
-    logging: *default-logging
+    # logging: *default-logging
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -546,7 +546,7 @@ services:
   #     - frontend
   #   depends_on:
   #     - php7
-  #   logging: *default-logging
+  #   # logging: *default-logging
   #   deploy:
   #     << : *default-deploy
   #     << : *default-labels
@@ -610,7 +610,7 @@ services:
   #     << : *default-labels
   #     placement:
   #       constraints: [node.role == manager]
-  #   logging: *default-logging
+  #   # logging: *default-logging
   #   configs:
   #     - source: registy_yml
   #       target: /etc/docker/registry/config.yml
