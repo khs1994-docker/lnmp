@@ -1,10 +1,18 @@
+
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
+
+# [在生产环境请尽可能使用 `kubernetes`](../kubernetes)
+
+# 仍然使用 Swarm
+
 这里以三节点 `Swarm 集群` 为例。
 
 # 开发环境
 
 **1.** 要想在生产环境部署，当然先得在开发环境制作好镜像
 
-**2.** 编写 `PHP` 项目源代码（项目中可以必须包含 `Dockerfile`）及 `nginx` 配置文件
+**2.** 编写 `PHP` 项目源代码（项目中可以必须包含 `Dockerfile`）及 `nginx` 配置文件(可选)
 
 **3.** 本地测试
 
@@ -109,5 +117,5 @@ $ docker secret create khs1994_com_ssl_crt_v2 config/nginx/ssl/khs1994.com.crt
 $ docker service update \
     --secret-rm khs1994_com_ssl_crt \
     --secret-add source=khs1994_com_ssl_crt_v2,target=/etc/nginx/conf.d/ssl/khs1994.com.crt \
-    lnmp_nginx    
+    lnmp_nginx
 ```
