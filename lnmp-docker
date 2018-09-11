@@ -540,7 +540,7 @@ install_docker_compose_move(){
 install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
   curl -sL ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
-      > /tmp/docker-compose
+      > /tmp/docker-compose || print_error "Download docker-compose error, code is $?\n"
   install_docker_compose_move
 }
 
@@ -561,7 +561,8 @@ install_docker_compose(){
   if [ "${ARCH}" = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
     install_docker_compose_arm "$@"
   elif [ "$ARCH" = 'x86_64' ];then
-    curl -sL ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose
+    curl -sL ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` \
+      > /tmp/docker-compose || print_error "Download docker-compose error, code is $?\n"
     install_docker_compose_move
   fi
 }
