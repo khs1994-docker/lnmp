@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.3.0beta3
+ARG PHP_VERSION=7.0.31
 
 FROM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -36,10 +36,10 @@ ENV PECL_EXTENSION \
       # mongodb \
       igbinary \
       redis \
-      # memcached \
-# 安装测试版的扩展，可以在扩展名后加 -beta
-      # xdebug \
-      # yaml \
+      memcached \
+      # 安装测试版的扩展，可以在扩展名后加 -beta
+      xdebug \
+      yaml \
       swoole
 
 # 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
@@ -64,7 +64,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && PHP_FPM_RUN_DEPS=" \
                          libmemcached \
                          libpq \
-                         libzip \
+                         zlib \
                          libpng \
                          freetype \
                          libjpeg-turbo \
@@ -88,7 +88,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libmemcached-dev \
                          cyrus-sasl-dev \
                          postgresql-dev \
-                         libzip-dev \
+                         zlib-dev \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
@@ -107,38 +107,24 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp-dev \
                          " \
                          # tidyhtml-dev \
-        && apk add --no-cache --virtual .php-fpm-apks $PHP_FPM_APKS \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
+        && apk add --no-cache --virtual .php-fpm-apks $PHP_FPM_APKS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
-        && docker-php-ext-configure zip \
-                                    --with-libzip \
         && docker-php-ext-configure gd \
-                                        --disable-gd-jis-conv \
-                                        --with-freetype-dir=/usr \
-                                        --with-jpeg-dir=/usr \
-                                        --with-png-dir=/usr \
-                                        --with-webp-dir=/usr \
-                                        --with-xpm-dir=/usr \
+                                    --with-freetype-dir=/usr \
+                                    --with-jpeg-dir=/usr \
+                                    --with-png-dir=/usr \
+                                    --with-webp-dir=/usr \
+                                    --with-xpm-dir=/usr \
         && docker-php-ext-install $PHP_EXTENSION \
-        && apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS \
-        && for extension in $PECL_EXTENSION;do pecl install ${extension}-beta; done \
-        # && git clone -b PHP-7.3-support --depth=1 https://github.com/derickr/xdebug.git \
-        # && cd xdebug \
-        # && phpize \
-        # && ./configure --enable-xdebug-dev \
-        # && make all \
-        # && make install \
-        # && cd - \
-        # && rm -rf xdebug \
+        && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
+        && for extension in $PECL_EXTENSION;do pecl install $extension; done \
         && docker-php-ext-enable $PECL_EXTENSION opcache \
         && apk del --no-cache .build-deps .php-fpm-build-deps \
-        && rm -rf /tmp/* \
         # 默认不启用 xdebug
-        # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-        #   /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
-        # config opcache
-        # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-        # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
+        && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+          /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
+        && rm -rf /tmp/* \
         # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \
         && ln -sf /dev/stdout /var/log/php-fpm/access.log \

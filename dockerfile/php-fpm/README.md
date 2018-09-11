@@ -1,6 +1,6 @@
 # PHP-FPM
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/php-fpm.svg)](https://github.com/khs1994-docker/php-fpm) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![](https://images.microbadger.com/badges/image/khs1994/php.svg)](https://microbadger.com/images/khs1994/php "Get your own image badge on microbadger.com")
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/php.svg)](https://github.com/khs1994-docker/php) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![](https://images.microbadger.com/badges/image/khs1994/php.svg)](https://microbadger.com/images/khs1994/php "Get your own image badge on microbadger.com")
 
 ## Supported Versions
 
@@ -11,6 +11,15 @@
 * [`7.2.9-fpm-alpine`, `7.2-fpm-alpine`, `7-fpm-alpine`, `fpm-alpine`, `latest` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.2.9/7.2/alpine/Dockerfile)
 
 * [`7.1.21-fpm-alpine` `7.1-fpm-alpine` (7.1/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.2.9/7.1/alpine/Dockerfile)
+
+| VERSION     | DETAILS     |
+| :------------- | :------------- |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:5.6.37-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:5.6.37-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:5.6.37-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:5.6.37-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.0.31-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.0.31-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.0.31-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.0.31-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.1.21-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.1.21-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.1.21-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.1.21-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.2.9-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.2.9-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.2.9-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.2.9-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.3.0beta3-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.0beta3-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.3.0beta3-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.0beta3-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own image badge on microbadger.com")       |
 
 ## Overview
 

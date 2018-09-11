@@ -1,5 +1,3 @@
-conditions: v1
-
 language: bash
 
 sudo: required

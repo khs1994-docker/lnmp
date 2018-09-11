@@ -1,6 +1,6 @@
 ARG PHP_VERSION=7.1.21
 
-FROM php:${PHP_VERSION}-fpm-alpine
+FROM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -136,7 +136,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.7.1 \
+    COMPOSER_VERSION=1.7.2 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
@@ -156,11 +156,14 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && composer --ansi --version --no-interaction \
  && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
+ \
  # composer 中国镜像
  && composer config -g repo.packagist composer https://packagist.laravel-china.org \
+ \
  # laravel 安装程序
  # && composer global require "laravel/installer" \
  # && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
+ \
  && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub
 
 WORKDIR /app

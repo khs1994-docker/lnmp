@@ -1,6 +1,6 @@
 ARG PHP_VERSION=7.2.9
 
-FROM php:${PHP_VERSION}-fpm-alpine
+FROM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -161,18 +161,23 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  && composer --ansi --version --no-interaction \
  && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
+ \
  # composer 中国镜像
  && composer config -g repo.packagist composer https://packagist.laravel-china.org \
+ \
  # laravel 安装程序
  && composer global require --prefer-dist "laravel/installer" \
+ \
  # php-cs-fixer
  # https://github.com/FriendsOfPHP/PHP-CS-Fixer
  && composer global require --prefer-dist "friendsofphp/php-cs-fixer" \
+ \
  # Sami an API documentation generator
  # https://github.com/FriendsOfPHP/Sami
  && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
- && ln -sf /tmp/vendor/bin/* /usr/local/bin \
  && chmod +x /usr/local/bin/sami \
+ \
+ && ln -sf /tmp/vendor/bin/* /usr/local/bin \
  && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub
 
 WORKDIR /app
