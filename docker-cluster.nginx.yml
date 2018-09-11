@@ -38,7 +38,7 @@ services:
         target: /etc/nginx/conf.d/fzjh.conf
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:cached
+      - ./log/nginx:/var/log/nginx:delegated
     depends_on:
       - php7
       - nginx-1
@@ -53,7 +53,7 @@ services:
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:cached
+      - ./log/nginx:/var/log/nginx:delegated
 
   nginx-2:
     << : *default-common
@@ -64,7 +64,7 @@ services:
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:cached
+      - ./log/nginx:/var/log/nginx:delegated
 
   nginx-3:
     << : *default-common
@@ -75,4 +75,4 @@ services:
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:cached
+      - ./log/nginx:/var/log/nginx:delegated

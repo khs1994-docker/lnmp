@@ -13,7 +13,7 @@ tp_path=$1
 shift
 
 docker run -it --rm \
-  --mount type=bind,src=$PWD,target=/app,consistency=cached \
+  --mount type=bind,src=$PWD,target=/app,consistency=delegated \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --entrypoint /docker-entrypoint.composer.sh \
   --mount type=bind,src=$DIR/../config/composer/config.json,target=/tmp/config.json \
