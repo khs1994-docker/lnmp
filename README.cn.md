@@ -304,6 +304,12 @@ https://doc.lnmp.khs1994.com
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
 
+## 数据收集
+
+本项目每日默认会将用户的系统和 IP 信息发送到数据收集服务器。建议用户保持开启状态来帮助提升本项目。
+
+你可以通过在 `.env` 文件中设置 `DATA_COLLECTION=false` 来禁用数据收集服务。
+
 ## 云容器服务推广 :whale:
 
 * [腾讯云容器服务](http://dwz.cn/I2vYahwq)

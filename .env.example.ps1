@@ -1,3 +1,7 @@
+# privacy info, please set true to help us improve
+
+$global:DATA_COLLECTION="true"
+
 #
 # You Can overwrite this file in .env.ps1
 #

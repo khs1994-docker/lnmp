@@ -293,6 +293,12 @@ Please see [Contributing](CONTRIBUTING.md)
 
 Please see [https://zan.khs1994.com](https://zan.khs1994.com)
 
+## Privacy
+
+We send OS type and IP data to us data collextion server, please set true to help us improve.
+
+You can edit `.env` file `DATA_COLLECTION=false` to disable it.
+
 ## AD :whale:
 
 * [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)

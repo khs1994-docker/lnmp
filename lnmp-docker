@@ -157,6 +157,23 @@ AD Tencent Kubernetes Engine http://dwz.cn/I2vYahwq
 "
 }
 
+_tongji(){
+  if ! [ -f log/tongji.txt ];then
+    print_info "Send OS type and IP data to khs1994-docker/lnmp, Thanks you help us improve\n"
+    if [ -f /etc/os-release ];then . /etc/os-release ; fi
+    curl -s -X GET --user-agent "${OS:-unkown os}-${ID:-unknow id}-${VERSION:-unkown version}" https://developer.khs1994.com/tongji/lnmp --connect-timeout 5 > /dev/null || echo 'ERROR=true' > log/tongji.txt
+    TIMESTAMP=`date +%s`
+    echo "TIMESTAMP=${TIMESTAMP}" > log/tongji.txt
+  else
+    . ./log/tongji.txt
+
+    if [ `date +%s` -gt $((TIMESTAMP + 86400)) ];then
+      rm -rf log/tongji.txt
+      _tongji
+    fi
+  fi
+}
+
 clusterkit_help(){
 exec echo "
 ClusterKit:
@@ -509,7 +526,7 @@ install_docker_compose_move(){
         sudo install -m755 /tmp/docker-compose /opt/bin/docker-compose
         ;;
       * )
-        sudo install -m755 /tmp/docker-compose /usr/local/bin/docker-compose \
+        sudo install -m755 /tmp/docker-compose /usr/local/bin/docker-compose > /dev/null 2>&1 \
             || install -m755 /tmp/docker-compose /usr/local/bin/docker-compose
         ;;
     esac
@@ -1820,6 +1837,10 @@ command -v docker > /dev/null 2>&1 && ( print_info `docker --version` ; check_do
 command -v > /dev/null 2>&1 || print_warning "docker cli is not install"
 
 echo ; docker_compose "$@"
+
+# data collaction
+
+if ! [ "${DATA_COLLECTION}" = "false" ];then _tongji; fi
 
 # output help
 
