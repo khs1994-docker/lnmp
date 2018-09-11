@@ -1248,6 +1248,7 @@ main() {
 
   swarm-down )
     docker stack rm lnmp
+    sleep 6
     ;;
 
   swarm-ps )

@@ -89,7 +89,7 @@ development
 
 ### PHP 项目开发
 
-在 `./app` 目录下开始 PHP 项目开发，在 `./config/nginx/` 新建 nginx 配置文件。
+在 `./app/` 下新建一个文件夹作为 PHP 项目开发目录，并在 `./config/nginx/` 新建一个 nginx 配置文件。
 
 你也可以使用以下命令快速的新建一个 PHP 项目，并完成后续一系列配置（生成 nginx 配置、申请 SSL 证书）。
 
@@ -233,7 +233,7 @@ $ ./lnmp-docker down
 
 ## 生产环境
 
-马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/production/README.md)
+马上开启 `容器即服务( CaaS )` 之旅！更多信息请查看 [支持文档](docs/swarm/README.md)
 
 ## LinuxKit (实验性玩法)
 

@@ -89,7 +89,7 @@ development
 
 ### Start PHP Project
 
-Start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file in `./config/nginx/yourfilename.conf`.
+Create new folder to start PHP project(e.g, Laravel) in `./app/` folder, And edit nginx config file in `./config/nginx/yourfilename.conf`.
 
 ```bash
 # $ ./lnmp-docker new
@@ -230,7 +230,7 @@ Easy to generate nginx or apache config, etc. Please use [`./lnmp-docker`](docs/
 
 ## Run in Production
 
-Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/production/README.md).
+Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/swarm/README.md).
 
 ## LinuxKit
 
@@ -295,7 +295,7 @@ Please see [https://zan.khs1994.com](https://zan.khs1994.com)
 
 ## Privacy
 
-We send OS type and IP data to us data collextion server, please set true to help us improve.
+We send OS type and IP data to us data collection server, please set true (default) to help us improve.
 
 You can edit `.env` file `DATA_COLLECTION=false` to disable it.
 
