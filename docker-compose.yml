@@ -160,8 +160,8 @@ services:
       - ./dockerfile/php-fpm/docker-php-entrypoint:/usr/local/bin/docker-php-entrypoint:ro,cached
       - type: tmpfs
         target: /temp
-        tmpfs:
-          size: 1000
+        # tmpfs:
+        #   size: 1000
     networks:
       - frontend
       - backend
@@ -170,7 +170,7 @@ services:
     command: php-fpm -R -F
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.10} x86_64 With Pull Docker Image
-      - APP_ENV=${APP_ENV:-development}
+      - APP_ENV=development
       - XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST:-192.168.199.100}
 
   phpmyadmin:
