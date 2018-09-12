@@ -19,15 +19,20 @@
   "require-dev": {
 
   },
-  "scripts":{
-    "zz-docker-mirror":[
+  "scripts": {
+    "zz-docker-mirror": [
       "@php -r \"echo PHP_EOL.PHP_EOL.'$ https://registry.docker-cn.com'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
-    "zz-chinese-mirror":[
+    "zz-chinese-mirror": [
       "@php -r \"echo PHP_EOL.PHP_EOL.'$ composer config -g repo.packagist composer https://packagist.phpcomposer.com'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
     "post-create-project-cmd": [
       "lnmp-docker update -f"
     ]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "18.06-dev"
+    }
   }
 }
