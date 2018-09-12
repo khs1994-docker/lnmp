@@ -11,7 +11,7 @@ sudo sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 sudo sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
 # conf wsl
-sudo curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/wsl.conf -o /etc/wsl.conf
+sudo curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf -o /etc/wsl.conf
 
 if [ -z $APP_ENV ];then
   echo "export APP_ENV=wsl" >> ~/.bash_profile

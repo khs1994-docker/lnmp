@@ -40,11 +40,21 @@ command -v apt
 
 if ! [ 0 -eq $? ];then echo "Only Support Debian"; exit ; fi
 
+################################################################################
+
 PHP_TIMEZONE=PRC
-
 PHP_URL=http://cn2.php.net/distributions
-
 host=x86_64-linux-gnu
+
+PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
+
+export COMPOSER_VERSION=1.7.2
+export COMPOSER_ALLOW_SUPERUSER=1
+export COMPOSER_HOME=/tmp
+export TZ=Asia/Shanghai
+export CC=clang CXX=clang
+# export CC=gcc CXX=g++
+################################################################################
 
 for command in "$@"
 do
@@ -52,20 +62,6 @@ test $command = 'travis' && PHP_URL=https://secure.php.net/distributions
 test $command = 'arm64' && host=aarch64-linux-gnu
 test $command = 'arm32' && host=arm-linux-gnueabihf
 done
-
-PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
-
-export COMPOSER_VERSION=1.7.2
-
-export COMPOSER_ALLOW_SUPERUSER=1
-
-export COMPOSER_HOME=/tmp
-
-export TZ=Asia/Shanghai
-
-export CC=clang CXX=clang
-
-# export CC=gcc CXX=g++
 
 test $host = 'aarch64-linux-gnu' && \
               export CC=aarch64-linux-gnu-gcc \

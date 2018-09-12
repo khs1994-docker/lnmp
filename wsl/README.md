@@ -97,9 +97,9 @@ http {
 ```bash
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /usr/local/etc/nginx/conf.d
 
-$ sudo ln -sf $WSL_HOME/lnmp/wsl/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fpm.d/zz-wsl.conf
+$ sudo ln -sf $WSL_HOME/lnmp/wsl/config/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fpm.d/zz-wsl.conf
 
-$ cat $WSL_HOME/lnmp/wsl/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.cnf
+$ cat $WSL_HOME/lnmp/wsl/config/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.cnf
 ```
 
 ## MySQL

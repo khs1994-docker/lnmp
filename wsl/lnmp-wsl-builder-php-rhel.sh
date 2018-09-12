@@ -32,30 +32,25 @@ command -v yum
 
 if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
 
-PHP_TIMEZONE=PRC
+################################################################################
 
+PHP_TIMEZONE=PRC
 PHP_URL=http://cn2.php.net/distributions
+PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
+
+export COMPOSER_VERSION=1.7.2
+export COMPOSER_ALLOW_SUPERUSER=1
+export COMPOSER_HOME=/tmp
+export TZ=Asia/Shanghai
+# export CC=clang CXX=clang
+# export CC=gcc CXX=g++
+
+################################################################################
 
 for command in "$@"
 do
 test $command = 'travis' && PHP_URL=https://secure.php.net/distributions
 done
-
-PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
-
-export COMPOSER_VERSION=1.7.2
-
-export COMPOSER_ALLOW_SUPERUSER=1
-
-export COMPOSER_HOME=/tmp
-
-export TZ=Asia/Shanghai
-
-# export CC=clang CXX=clang
-
-# export CC=gcc CXX=g++
-
-################################################################################
 
 #
 # https://github.com/docker-library/php/issues/272
