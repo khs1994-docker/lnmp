@@ -1,5 +1,7 @@
 # 微信小程序 PHP 后端部署
 
+[![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+
 腾讯云免费提供了微信小程序的测试环境和生产环境，但出现错误排查不了。使用本项目，你也可以轻松部署小程序 PHP 后端。
 
 * 准备网站 `SSL` 证书，假设域名是 `wechat-mini.t.khs1994.com`，上传到服务器 `./app/config/nginx/ssl/` 文件夹下。
