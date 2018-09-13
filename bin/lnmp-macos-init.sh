@@ -38,6 +38,26 @@ _install_brew(){
   command -v gcc || exit $?
 
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+  cd "$(brew --repo)"
+  git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
+  # https://github.com/Homebrew/brew
+  # https://mirrors.ustc.edu.cn/brew.git
+
+  cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core"
+  git remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
+  # https://github.com/Homebrew/homebrew-core
+  # https://mirrors.ustc.edu.cn/homebrew-core.git
+
+  echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.bash_profile
+  # https://mirrors.ustc.edu.cn/homebrew-bottles
+  source ~/.bash_profile
+
+  if [ -f ~/.config/fish/config.fish ];then
+    echo "set -g HOMEBREW_BOTTLE_DOMAIN https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles" >> ~/.config/fish/config.fish
+  fi
+
+  brew update
 }
 
 _brew(){
@@ -64,7 +84,7 @@ _fish(){
 }
 
 _file(){
-    ( cat $1 | grep $2 ) || echo -e $3 >> $1
+    ( cat $1 | grep "$2" ) || echo -e $3 >> $1
 }
 
 _ruby(){
