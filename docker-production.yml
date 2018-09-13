@@ -623,8 +623,12 @@ services:
       - server
       - /data
     environment:
-      - MINIO_ACCESS_KEY_FILE=miniokey
-      - MINIO_SECRET_KEY_FILE=miniosecret
+      MINIO_ACCESS_KEY_FILE: miniokey
+      MINIO_SECRET_KEY_FILE: miniosecret
+      MINIO_REGION: ${MINIO_REGION:-''}
+      MINIO_BROWSER: ${MINIO_BROWSER:-on}
+      MINIO_WORM: ${MINIO_WORM:-off}
+      MINIO_DOMAIN: ${MINIO_DOMAIN:-''}
     networks:
       - backend
       - frontend

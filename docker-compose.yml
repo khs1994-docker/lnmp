@@ -290,7 +290,7 @@ services:
 
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-09-01T00-38-25Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-09-12T18-49-56Z}
     volumes:
       - minio-data:/data
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt
@@ -298,8 +298,13 @@ services:
     # ports:
     #   - "9000:9000"
     environment:
+      # https://github.com/minio/minio/blob/master/docs/config/README.md
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-khs1994miniokey}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-khs1994miniosecret}
+      MINIO_REGION: ${MINIO_REGION:-''}
+      MINIO_BROWSER: ${MINIO_BROWSER:-on}
+      MINIO_WORM: ${MINIO_WORM:-off}
+      MINIO_DOMAIN: ${MINIO_DOMAIN:-''}
     command: server /data
     networks:
       - backend

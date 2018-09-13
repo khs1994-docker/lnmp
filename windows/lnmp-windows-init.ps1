@@ -274,9 +274,9 @@ _downloader `
 #
 
 _downloader `
-  http://mirrors.ustc.edu.cn/node/v${NODE_VEERSION}/node-v${NODE_VEERSION}-win-x64.zip `
-  node-v${NODE_VEERSION}-win-x64.zip `
-  Node.js ${NODE_VEERSION}
+  http://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/node-v${NODE_VERSION}-win-x64.zip `
+  node-v${NODE_VERSION}-win-x64.zip `
+  Node.js ${NODE_VERSION}
 
 #
 # Pytohn
@@ -360,15 +360,15 @@ Function _node(){
   $NODE_CURRENT_VERSION=$(node -v)
 
   if ($NODE_CURRENT_VERSION.length -eq 0){
-    _installer node-v${NODE_VEERSION}-win-x64.zip C:\ C:\node-v${NODE_VEERSION}-win-x64 C:\node
+    _installer node-v${NODE_VERSION}-win-x64.zip C:\ C:\node-v${NODE_VERSION}-win-x64 C:\node
     return
   }
 
-  if($NODE_CURRENT_VERSION -ne "v$NODE_VEERSION"){
-    echo "===> Installing node ${NODE_VEERSION} ..."
-    _unzip node-v${NODE_VEERSION}-win-x64.zip C:\
-    Copy-Item -Recurse -Force "C:/node-v${NODE_VEERSION}-win-x64/*" "C:/node/"
-    Remove-Item -Force -Recurse "C:/node-v${NODE_VEERSION}-win-x64"
+  if($NODE_CURRENT_VERSION -ne "v$NODE_VERSION"){
+    echo "===> Installing node ${NODE_VERSION} ..."
+    _unzip node-v${NODE_VERSION}-win-x64.zip C:\
+    Copy-Item -Recurse -Force "C:/node-v${NODE_VERSION}-win-x64/*" "C:/node/"
+    Remove-Item -Force -Recurse "C:/node-v${NODE_VERSION}-win-x64"
   }
 }
 

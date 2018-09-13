@@ -243,11 +243,13 @@ _gcr_io(){
 This local server support Docker Desktop v18.05-EDGE-67
 
 "
+    mkdir -p data/registry
+
     docker run -it -d \
       -p 443:443 \
       -v $PWD/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml \
       -v $PWD/config/registry:/etc/docker/registry/ssl \
-      -v gcr_local_server:/var/lib/registry \
+      -v $PWD/data/registry:/var/lib/registry:delegated \
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 
@@ -297,6 +299,8 @@ this command up a Local Server on port 443.
 When Docker for Desktop Start Kubernetes Success, you must remove this local server.
 
 $ lnmp-docker gcr.io down
+
+More information please see docs/kubernetes/docker-desktop.md
 
     "
 }
