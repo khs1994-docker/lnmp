@@ -108,7 +108,7 @@ wsl.builder('nginx-' + input_version, configure_cmd, sudo_cmd)
 
 def nginx_conf():
     cmd = sudo_cmd + '''nginx -T | grep "fastcgi_buffering off;" \
-|| ( curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/nginx.wsl.conf \
+|| ( curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/nginx.wsl.conf \
 > /tmp/nginx.conf; sudo cp /tmp/nginx.conf {nginx_conf_dir}/nginx.conf )'''.format(nginx_conf_dir=nginx_conf_dir)
 
     os.system(cmd)

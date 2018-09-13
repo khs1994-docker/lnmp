@@ -2,7 +2,7 @@ FROM debian:stretch-slim@sha256:47deb9c70213403e923bd46a17591933facb263a1455908f
 
 ################################################################################
 
-ARG PHP_VERSION=7.2.7
+ARG PHP_VERSION=7.2.9
 
 ARG PHP_NUM=72
 
@@ -10,7 +10,7 @@ ARG PHP_PREFIX=/usr/local/php72
 
 ARG PHP_INI_DIR=/usr/local/etc/php72
 
-ARG COMPOSER_VERSION=1.6.5
+ARG COMPOSER_VERSION=1.7.2
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 

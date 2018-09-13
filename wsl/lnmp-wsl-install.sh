@@ -89,7 +89,7 @@ _nginx(){
   if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf \
       /etc/nginx/fastcgi.conf ; fi
 
-  sudo nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/nginx.wsl.conf /etc/nginx/nginx.conf
+  sudo nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/config/nginx.wsl.conf /etc/nginx/nginx.conf
 
   sudo nginx -t
 
@@ -347,7 +347,7 @@ _enable(){
       if ! [ -h /usr/local/etc/nginx/conf.d ];then sudo rm -rf /usr/local/etc/nginx/conf.d; \
           sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /usr/local/etc/nginx/conf.d; fi
       # test main conf
-      sudo /usr/local/sbin/nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/nginx.wsl.conf /usr/local/etc/nginx/nginx.conf
+      sudo /usr/local/sbin/nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/config/nginx.wsl.conf /usr/local/etc/nginx/nginx.conf
       sudo /usr/local/sbin/nginx -t
     fi
     exit $?

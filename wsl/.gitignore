@@ -19,8 +19,7 @@
 !wsl.phpbuilder.Dockerfile
 !wsl.phpbuilder.rhel.Dockerfile
 !docker-compose.yml
-!nginx.wsl.conf
 !*.example
 !wsl-php-ext-enable.sh
 !.env
-!wsl.conf
+!config
