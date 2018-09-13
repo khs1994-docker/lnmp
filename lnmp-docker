@@ -300,6 +300,8 @@ When Docker for Desktop Start Kubernetes Success, you must remove this local ser
 
 $ lnmp-docker gcr.io down
 
+More information please see docs/kubernetes/docker-desktop.md
+
     "
 }
 

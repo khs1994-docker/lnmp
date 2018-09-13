@@ -66,3 +66,32 @@ $ mc config host add myminio https://minio.t.khs1994.com khs1994miniokey khs1994
 
 $ mc cp /path myminio/mybucket
 ```
+
+## Laravel
+
+我们知道 minio API 与 AWS s3 兼容，所以我们可以很方便的在 Laravel 中使用 minio
+
+```bash
+$ composer require league/flysystem-aws-s3-v3
+```
+
+`config/filesystems.php` 中进行如下设置。
+
+```php
+'s3' => [
+    'driver' => 's3',
+    'key' => env('AWS_ACCESS_KEY_ID'),
+    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+    'region' => env('AWS_DEFAULT_REGION', 'us-east-1'), // 随便填一个
+    'bucket' => env('AWS_BUCKET'), // 使用前先在 minio web 界面新建一个 bucket
+    'use_path_style_endpoint' => true, // 这个必须加上
+    'endpoint' => 'https://minio.t.khs1994.com'
+],
+```
+
+```php
+# 在 minio 中存储一个文件
+\Storage::disk('s3')->put('test.txt', '1');
+```
+
+* https://docs.minio.io/docs/how-to-use-aws-sdk-for-php-with-minio-server.html

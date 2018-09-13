@@ -859,6 +859,8 @@ this command up a Local Server on port 443.
 When Docker Desktop Start Kubernetes Success, you must remove this local server.
 
 $ lnmp-docker.ps1 gcr.io down
+
+More information please see docs/kubernetes/docker-desktop.md
       "
     }
 
