@@ -243,11 +243,13 @@ _gcr_io(){
 This local server support Docker Desktop v18.05-EDGE-67
 
 "
+    mkdir -p data/registry
+
     docker run -it -d \
       -p 443:443 \
       -v $PWD/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml \
       -v $PWD/config/registry:/etc/docker/registry/ssl \
-      -v gcr_local_server:/var/lib/registry \
+      -v $PWD/data/registry:/var/lib/registry:delegated \
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 

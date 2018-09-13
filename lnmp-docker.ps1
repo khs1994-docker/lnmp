@@ -824,11 +824,15 @@ This local server support Docker Desktop v18.05-EDGE-67
         exit
       }
 
+      if (!(Test-Path data/registry)){
+        mkdir data/registry
+      }
+
       docker run -it -d `
         -p 443:443 `
         -v $pwd/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml `
         -v $pwd/config/registry:/etc/docker/registry/ssl `
-        -v gcr_local_server:/var/lib/registry `
+        -v $pwd/data/registry:/var/lib/registry `
         --label com.khs1994.lnmp.gcr.io `
         registry
 
