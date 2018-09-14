@@ -3,7 +3,6 @@ language: bash
 sudo: required
 
 dist: xenial # 16.04
-# dist: xenial # 16.04
 
 services:
 - docker
