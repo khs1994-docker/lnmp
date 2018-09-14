@@ -3,7 +3,7 @@ language: bash
 sudo: required
 dist: trusty # 14.04
 
-# dist: xenial 16.04
+# dist: xenial # 16.04
 
 services:
 - docker
