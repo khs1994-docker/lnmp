@@ -1,6 +1,9 @@
 language: bash
 
 sudo: required
+dist: trusty # 14.04
+
+# dist: xenial 16.04
 
 services:
 - docker
@@ -16,12 +19,13 @@ env:
 before_install:
 - date
 # 升级 Docker 最新 stable
-
 - docker --version
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 - sudo apt-get update
-- sudo apt-get -y install docker-ce
+# - sudo apt-get -y install docker-ce
+# https://download.docker.com/linux/ubuntu/dists/trusty/pool/stable/amd64/
+- sudo apt-get -y install docker-ce=18.06.1~ce~3-0~ubuntu
 - docker --version
 
 # 升级最新 Docker Compose

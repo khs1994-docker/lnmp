@@ -1759,8 +1759,9 @@ First Run? Maybe you wait 60s then open url.
     checkout )
       if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit; fi
 
-      git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
+      git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} || echo > /dev/null
       git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
+      update
       ;;
 
   * )
