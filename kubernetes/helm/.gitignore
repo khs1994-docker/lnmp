@@ -1,0 +1,5 @@
+*.tgz
+
+index.yaml
+
+charts

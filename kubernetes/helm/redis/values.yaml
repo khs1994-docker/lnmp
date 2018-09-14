@@ -1,0 +1,17 @@
+nameOverride: "redis"
+fullnameOverride: "fullname"
+
+TZ: Asia/Shanghai
+
+APP_ENV: production
+
+platform: Linux
+# platform: windows
+# platform: Darwin
+
+nfs:
+  enabled: false
+  server: 192.168.199.100
+
+redis:
+  image: redis:5.0-rc4-alpine

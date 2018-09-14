@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: lnmp
+    tier: frontend
+    version: {{ .Chart.Version }}
+spec:
+  # 若类型为 ingress，可以不声明 type
+
+  {{if eq .Values.service.type "LoadBalancer"}}
+  # 暴露服务方式之一
+  type: LoadBalancer
+  {{- end}}
+
+  {{if eq .Values.service.type "NodePort"}}
+  # 暴露服务方式之一
+  type: NodePort
+  externalTrafficPolicy: Local
+  # sessionAffinity: None
+  {{- end}}
+
+  # 集群内的私有 ip ，this is default
+  # type: ClusterIP
+  # clusterIP: None
+
+  # externalIPs:
+  # - 80.11.12.10
+
+  # 定义标签选择器
+  selector:
+    app: lnmp
+    tier: frontend
+    version: {{ .Chart.Version }}
+
+  ports:
+  - name: https
+    protocol: TCP
+    port: 443
+    # targetPort: 443
+    # 通过访问 Service 的 port 端口转发到 Pod 的 targetPort 端口上, targetPort 是 pod 上的端口
+
+    # 暴露服务方式之一
+    # 将 service 的 port 映射到每个 node 的 port 上，如果不指定 nodePort,k8s 将随机映射
+    {{if eq .Values.service.type "NodePort"}}
+    nodePort: 443
+    {{- end}}
+  - name: http
+    protocol: TCP
+    port: 80
+    {{if eq .Values.service.type "NodePort"}}
+    nodePort: 80
+    {{- end}}

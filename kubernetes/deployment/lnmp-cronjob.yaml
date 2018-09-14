@@ -1,0 +1,38 @@
+# 可以运行 Laravel 调度器 Schedule
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: lnmp-cron
+  labels:
+    app: lnmp
+    version: 0.0.1
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          # 指定可以保留多少完成和失败的 Job。
+          successfulJobsHistoryLimit: 0
+          failedJobsHistoryLimit: 0
+          suspend: false
+          # 并发策略
+          concurrencyPolicy: Forbid # Allow Replace
+          # startingDeadlineSeconds: 0
+          containers:
+          - name: lnmp-cron
+            image: khs1994/php:7.2.9-fpm-alpine
+            args:
+            - /bin/sh
+            - -c
+            # - date; echo Hello from the Kubernetes cluster
+            - php /app/laravel/artisan schedule:run
+            volumeMounts:
+            - name: lnmp-data
+              mountPath: /app
+          volumes:
+          - name: lnmp-data
+            persistentVolumeClaim:
+              claimName: lnmp-data
+          restartPolicy: Never # OnFailure

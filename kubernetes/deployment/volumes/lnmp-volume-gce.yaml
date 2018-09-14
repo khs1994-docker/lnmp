@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-pv-1
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  gcePersistentDisk: # gcloud compute disks create --size=500GB --zone=us-central1-a my-data-disk
+    pdName: my-data-disk
+    fsType: ext4

@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php7
+  labels:
+    app: lnmp
+    tier: php7
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    app: lnmp
+    tier: php7
+    version: {{ .Chart.Version }}
+  ports:
+  - name: php-fpm
+    port: 9000
+  # clusterIP: None
+---
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: php7
+  labels:
+    app: lnmp
+    tier: php7
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: php7
+      version: {{ .Chart.Version }}
+  replicas: {{ .Values.php.replicaCount }}
+  minReadySeconds: 5
+  revisionHistoryLimit: 5 # 保留几个版本
+  strategy:
+    type: RollingUpdate # Recreate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: lnmp
+        tier: php7
+        version: {{ .Chart.Version }}
+    spec:
+      containers:
+      - name: lnmp-php7
+        image: {{ .Values.php.image }}
+        args:
+        - php-fpm
+        - -R
+        env:
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: TZ
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: APP_ENV
+        - name: APP_LOG
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: APP_LOG
+        - name: LOG_CHANNEL
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: LOG_CHANNEL
+        ports:
+        - containerPort: 9000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: lnmp-data
+          mountPath: /app
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php/php.ini
+          subPath: php.ini
+        {{ if eq .Values.APP_ENV "development" }}
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
+          subPath: docker-xdebug.ini
+        {{- else if eq .Values.APP_ENV "testing" -}}
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
+          subPath: docker-xdebug.ini
+        {{- end }}
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php/conf.d/docker.ini
+          subPath: docker.ini
+        - name: lnmp-php-conf
+          mountPath: /usr/local/etc/php-fpm.d/zz-docker.conf
+          subPath: zz-docker.conf
+        - name: lnmp-php-conf
+          mountPath: /tmp/config.json
+          subPath: config.json
+        - name: lnmp-php-log
+          mountPath: /var/log
+      restartPolicy: Always
+      volumes:
+      - name: lnmp-php-log
+        hostPath:
+          path: /var/log
+      - name: lnmp-data
+        persistentVolumeClaim:
+          claimName: lnmp-data
+      - name: lnmp-php-conf
+        configMap:
+          name: lnmp-php-conf-{{ .Chart.Version }}
+          items:
+          - key: php.ini
+            path: php.ini
+          - key: docker-xdebug.ini
+            path: docker-xdebug.ini
+          - key: docker.ini
+            path: docker.ini
+          - key: zz-docker.conf
+            path: zz-docker.conf
+          - key: composer.config.json
+            path: config.json

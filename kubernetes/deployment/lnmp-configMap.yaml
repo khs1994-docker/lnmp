@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lnmp-env-0.0.1
+  labels:
+    app: lnmp
+    version: 0.0.1
+data:
+  TZ: Asia/Shanghai
+  APP_ENV: production
+  APP_LOG: errorlog
+  LOG_CHANNEL: errorlog
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lnmp-redis-conf-0.0.1
+  labels:
+    app: lnmp
+    version: 0.0.1
+data:
+  redis.conf: |
+    maxmemory 2mb
+    maxmemory-policy allkeys-lru

@@ -1,0 +1,101 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: khs1994/nginx:1.15.12-swarm-alpine
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - 18080:80
+      - 18443:443
+    networks:
+      - frontend
+    depends_on:
+      - php7
+    logging:
+      driver: journald
+    deploy:
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      labels:
+        - "com.khs1994.lnmp.demo=true"
+        - "com.khs1994.lnmp.demo.nginx=true"
+    configs:
+      - source: nginx-conf
+        target: /etc/nginx/nginx.conf
+      - source: khs1994-com-conf
+        target: /etc/nginx/conf.d/khs1994.com.conf
+    secrets:
+      - source: khs1994-com-crt
+        target: /etc/nginx/conf.d/ssl/khs1994.com.crt
+      - source: khs1994-com-key
+        target: /etc/nginx/conf.d/ssl/khs1994.com.key
+
+  php7:
+    image: khs1994/php:7.2.8-swarm-alpine
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - frontend
+      - backend
+    logging:
+      driver: journald
+    deploy:
+      # replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 5
+        window: 123s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: stop-first
+      labels:
+        - "com.khs1994.lnmp.demo=true"
+        - "com.khs1994.lnmp.demo.php7=true"
+    configs:
+      - source: php-ini
+        target: /usr/local/etc/php.ini
+      - source: php-fpm-d-zz-docker-conf
+        target: /usr/local/etc/php-fpm.d/zz-docker.conf
+
+networks:
+  backend:
+    labels:
+      - "com.khs1994.lnmp.demo=true"
+      - "com.khs1994.lnmp.demo.backend=true"
+  frontend:
+    labels:
+      - "com.khs1994.lnmp.demo=true"
+      - "com.khs1994.lnmp.demo.frontend=true"
+#
+# $ git clone -b config git@github.com:khs1994-docker/php-demo.git ../demo-config
+#
+configs:
+  nginx-conf:
+    file: ../demo-config/nginx/nginx.conf
+  khs1994-com-conf:
+    file: ../demo-config/nginx/khs1994.com.conf
+  php-ini:
+    file: ../demo-config/php/php.ini
+  php-fpm-d-zz-docker-conf:
+    file: ../demo-config/php/zz-docker.conf
+
+secrets:
+  khs1994-com-crt:
+    file: ../demo-config/ssl/khs1994.com.crt
+  khs1994-com-key:
+    file: ../demo-config/ssl/khs1994.com.key

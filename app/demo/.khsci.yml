@@ -1,0 +1,160 @@
+#
+# @see @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
+#
+
+workspace:
+  base: /app
+  # path: .
+  path: src
+
+pipeline:
+  #
+  # This is phpunit demo
+  #
+
+  php:
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    pull: true
+    shell: bash
+    environment:
+      - CI_REDIS_HOST=redis
+      - CI_REDIS_PORT=6379
+      - CI_MYSQL_HOST=mysql
+      - CI_MYSQL_PORT=3306
+      - CI_MYSQL_USERNAME=root
+      - CI_MYSQL_PASSWORD=mytest
+      - CI_MYSQL_DBNAME=test
+    commands:
+      - composer config -g repo.packagist composer https://packagist.laravel-china.org
+      - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+      - pwd
+      - composer install -q
+      # - composer update -q
+      # 服务初始化需要时间，这里延迟执行
+      - sleep 30
+      - vendor/bin/phpunit --coverage-clover=coverage.xml
+      # please set env CODECOV_TOKEN=XXX
+      - bash <(curl -s https://codecov.io/bash)
+    when:
+      # platform: linux/amd64
+      # platform:  [ linux/*, windows/amd64 ]
+
+      # status: changed
+      # status:  [ failure, success ]
+
+      # event: tag
+      # event: [push, pull_request, tag, deployment]
+      event: [push, pull_request, tag]
+
+      # branch: master
+      # branch: prefix/*
+      # branch: [master, develop]
+      # branch:
+      #   include: [ master, release/* ]
+      #   exclude: [ release/1.0.0, release/1.1.* ]
+
+  #
+  # This is a build docker image demo，when tag push
+  #
+
+  publish_php:
+    #
+    # ci_xxx KhsCI Image
+    #
+    image: ci_docker_build
+    # registry: docker.khs1994.com
+    repo: khs1994/php
+    tags: ${PHP_VERSION}-swarm-${CI_TAG}-alpine
+    # target: php
+    build_args:
+       - a:1
+    # dockerfile: Dockerfile
+    # dockerfile: path/to/Dockerfile
+    when:
+      event: tag
+    # 这里指定 secrets 系统将自动载入对应的环境变量
+    secrets: [ docker_username, docker_password ]
+
+  #
+  # This is success after demo
+  #
+
+  success:
+    image: ci_after_success
+    when:
+      status: success
+
+
+  #
+  # This is failure after demo
+  #
+
+  failure:
+    image: ci_after_failure
+    when:
+      status: failure
+
+  #
+  # This is build status changed demo,example prev success current failure
+  #
+
+  changed:
+    image: ci_status_changed
+    when:
+      status: changed
+
+
+services:
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_ROOT_PASSWORD=mytest
+    # entrypoint: [ "mysqld" ]
+    command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
+
+  # postgresql:
+  #   image: postgres:${POSTGRESQL_VERSION}
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_DB=test
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    command: ["--bind", "0.0.0.0"]
+
+  # mongodb:
+  #   image: mongo:${MONGODB_VERSION}
+  #   command: [ --smallfiles ]
+
+matrix:
+  PHP_VERSION:
+    - 7.2.9
+    - 7.1.21
+    # - 7.0.30
+    # - 5.6.36
+  NGINX_VERSION:
+    - 1.15.3
+  REDIS_VERSION:
+    - 5.0-rc4-alpine
+  MYSQL_VERSION:
+    # - 8.0.11
+    - 5.7.22
+  MONGODB_VERSION:
+    - 3.7.3
+  POSTGRESQL_VERSION:
+    - 10.3-alpine
+
+# branches:
+#   include: [ master, dev, feature/* ]
+#   exclude: [ release/1.0.0, release/1.1.* ]
+
+config:
+  aliyun:
+    docker_registry:
+      # registry: git_repo_full_name
+      khs1994/wsl: khs1994-php/khsci
+
+  tencent_cloud:
+    docker_registry:
+      khs1994/wsl: khs1994-php/khsci

@@ -1,0 +1,7 @@
+/*
+!example
+!.gitignore
+!ca-key.pem
+!ca.pem
+!mk-docker-opts.sh
+!registry-ca.pem

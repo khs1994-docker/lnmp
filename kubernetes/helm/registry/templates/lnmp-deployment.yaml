@@ -1,0 +1,49 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: registry
+  labels:
+    app: lnmp
+    tier: registry
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: registry
+      version: {{ .Chart.Version }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: lnmp
+        tier: registry
+        version: {{ .Chart.Version }}
+    spec:
+      containers:
+      - name: lnmp-registry
+        image: registry
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: lnmp-registry-data
+          mountPath: /var/lib/registry
+        - name: lnmp-registry-conf
+          mountPath: /etc/docker/registry
+        - name: lnmp-registry-tls
+          mountPath: /etc/docker/registry/ssl
+        restartPolicy: Always
+        ports:
+        - containerPort: 443
+      volumes:
+      - name: lnmp-registry-data
+        persistentVolumeClaim:
+          claimName: lnmp-registry-data
+      - name: lnmp-registry-tls
+        secret:
+          secretName: lnmp-registry-tls-{{ .Chart.Version }}
+      - name: lnmp-registry-conf
+        configMap:
+          name: lnmp-registry-conf-{{ .Chart.Version }}

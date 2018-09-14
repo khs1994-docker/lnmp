@@ -1,0 +1,32 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/kubernetes/kubernetes
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStartPre=-/usr/sbin/swapoff -a
+ExecStartPre=-/opt/bin/generate-kubelet-bootstrap-kubeconfig.sh
+ExecStartPre=-/usr/bin/mkdir -p /var/lib/kubelet
+
+WorkingDirectory=/var/lib/kubelet
+Environment="NODE_NAME=node1"
+Environment="KUBE_APISERVER=https://192.168.199.100:6443"
+
+ExecStart=/opt/bin/kubelet \
+--bootstrap-kubeconfig=/etc/kubernetes/kubelet-bootstrap.kubeconfig \
+--cert-dir=/etc/kubernetes/certs \
+--kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
+--config=/etc/kubernetes/kubelet.config.json \
+--hostname-override=node1 \
+--pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest \
+--alsologtostderr=true \
+--logtostderr=false \
+--log-dir=/var/log/kubernetes \
+--v=2
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

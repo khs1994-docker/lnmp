@@ -1,0 +1,68 @@
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: lnmp
+    tier: redis
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: redis
+      version: {{ .Chart.Version }}
+  replicas: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 5 # 保留几个版本
+  strategy:
+    type: RollingUpdate # Recreate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: lnmp
+        tier: redis
+        version: {{ .Chart.Version }}
+    spec:
+      containers:
+      - name: lnmp-redis
+        image: {{ .Values.redis.image }}
+        args:
+        - redis-server
+        - /redis.conf
+        - --daemonize no
+        - --bind 0.0.0.0
+        - --appendonly yes
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: TZ
+        volumeMounts:
+        - name: lnmp-redis-data
+          mountPath: /data
+        - name: lnmp-redis-conf
+          mountPath: /redis.conf
+          subPath: redis.conf
+        ports:
+        - containerPort: 6379
+      restartPolicy: Always
+      volumes:
+      - name: lnmp-redis-data
+        persistentVolumeClaim:
+          claimName: lnmp-redis-data
+      # 将 configMap 挂载为文件
+      - name: lnmp-redis-conf
+        configMap:
+          name: lnmp-redis-conf-{{ .Chart.Version }}
+          items:
+          - key: redis.conf
+            path: redis.conf

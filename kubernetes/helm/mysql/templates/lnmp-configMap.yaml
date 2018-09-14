@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lnmp-mysql-cnf-{{ .Chart.Version }}
+  labels:
+    app: lnmp
+    version: {{ .Chart.Version }}
+data:
+  {{ if eq .Values.APP_ENV "development" }}
+  docker.cnf: | {{ range .Files.Lines "config/docker.development.cnf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "testing" -}}
+  docker.cnf: | {{ range .Files.Lines "config/docker.testing.cnf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "staging" -}}
+  docker.cnf: | {{ range .Files.Lines "config/docker.staging.cnf" }}
+    {{ . }}{{ end }}
+  {{- else if eq .Values.APP_ENV "production" -}}
+  docker.cnf: | {{ range .Files.Lines "config/docker.production.cnf" }}
+    {{ . }}{{ end }}
+  {{- end }}
+---

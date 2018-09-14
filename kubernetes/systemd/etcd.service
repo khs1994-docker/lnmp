@@ -1,0 +1,55 @@
+[Unit]
+Description=etcd
+Documentation=https://github.com/etcd-io/etcd
+# Requires= 当前 unit 依赖的
+Wants=network-online.target network.target
+# 我在谁之后启动
+After=network-online.target
+# Befora 我在谁之前启动
+# Conflicts 冲突
+# Condition...：当前 Unit 运行必须满足的条件，否则不会运行
+# Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
+
+[Service]
+
+Type=notify
+Restart=on-failure
+# always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog
+RestartSec=10s
+# 自动重启当前服务间隔的秒数
+TimeoutStartSec=0
+# 定义 Systemd 停止当前服务之前等待的秒数
+LimitNOFILE=40000
+
+Environment="ETCD_DATA_DIR=/var/lib/etcd"
+
+ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
+
+ExecStart= /opt/bin/etcd \
+  --name="node1" \
+  --data-dir="/var/lib/etcd" \
+  --listen-peer-urls="https://192.168.199.100:2380" \
+  --listen-client-urls="https://192.168.199.100:2379,http://127.0.0.1:2379" \
+  --initial-advertise-peer-urls="https://192.168.199.100:2380" \
+  --initial-cluster="node1=https://192.168.199.100:2380" \
+  --initial-cluster-state="new" \
+  --initial-cluster-token="mytoken" \
+  --advertise-client-urls="https://192.168.199.100:2379" \
+  --cert-file="/etc/kubernetes/certs/etcd.pem" \
+  --key-file="/etc/kubernetes/certs/etcd-key.pem" \
+  --client-cert-auth=true \
+  --trusted-ca-file="/etc/kubernetes/certs/ca.pem" \
+  --peer-cert-file="/etc/kubernetes/certs/etcd.pem" \
+  --peer-key-file="/etc/kubernetes/certs/etcd-key.pem" \
+  --peer-client-cert-auth=true \
+  --peer-trusted-ca-file="/etc/kubernetes/certs/ca.pem"
+
+# ExecStartPost
+# ExecReload：重启当前服务时执行的命令
+# ExecStop：停止当前服务时执行的命令
+# ExecStopPost：停止当其服务之后执行的命令
+[Install]
+WantedBy=multi-user.target
+
+# Alias：当前 Unit 可用于启动的别名
+# Also：当前 Unit 激活（enable）时，会被同时激活的其他 Unit

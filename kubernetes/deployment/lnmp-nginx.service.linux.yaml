@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  # namespace: my-namespace
+  labels:
+    app: lnmp
+    tier: frontend
+    version: 0.0.1
+spec:
+  # 若类型为 ingress，可以不声明 type
+
+  # externalIPs:
+  #   - 192.168.57.110
+  # 暴露服务方式之一
+  # type: LoadBalancer
+
+  # 暴露服务方式之一
+  type: NodePort
+  externalTrafficPolicy: Local
+
+  # 集群内的私有 ip ，this is default
+  # type: ClusterIP
+  # clusterIP: None
+
+  # sessionAffinity: None # 基于客户端 IP 地址进行会话保持的模式，第一次客户端访问后端某个 Pod，之后的请求都转发到这个 Pod 上
+
+  # sessionAffinity: ClientIP
+  # sessionAffinityConfig:
+  #   clientIP:
+  #     timeoutSeconds: 10800 # 保持时间
+
+  # roundRobin：轮询模式，即轮询将请求转发到后端的各个Pod上
+
+  # 定义标签选择器
+  selector:
+    app: lnmp
+    tier: frontend
+    version: 0.0.1
+  ports:
+  - name: https
+    protocol: TCP # UDP
+    port: 443
+    # targetPort: 443 # 后端 pod 上的端口
+
+    # 暴露服务方式之一
+    # 将 service 的 port 映射到每个 node 的 port 上，如果不指定 nodePort,k8s 将随机映射
+    nodePort: 443
+  - name: http
+    protocol: TCP
+    port: 80
+    nodePort: 80

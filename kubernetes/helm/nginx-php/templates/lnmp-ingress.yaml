@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: lnmp
+  labels:
+    app: lnmp
+    version: {{ .Chart.Version }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.APP_ENV }}.{{ .Values.domain }}
+    secretName: lnmp-ingress-tls-{{ .Chart.Version }}
+  rules:
+  - host: {{ .Values.APP_ENV }}.{{ .Values.domain }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nginx
+          servicePort: 443

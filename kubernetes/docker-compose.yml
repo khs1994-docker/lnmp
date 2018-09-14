@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+
+  server:
+    image: khs1994/coreos:server
+    env_file:
+      - ./coreos/.env.example
+      - ./coreos/.env
+    volumes:
+      - ./coreos/cert:/srv/www/coreos/cert
+      - ./coreos/current:/srv/www/coreos/current
+      - ./coreos/disk:/srv/www/coreos/disk
+      - ./coreos/pxe:/srv/www/coreos/pxe
+      - ./coreos/kubernetes-release:/srv/www/coreos/kubernetes-release
+    ports:
+      - "8080:80"
+
+  cfssl:
+    image: khs1994/coreos:cert
+    volumes:
+      - ./coreos/cert:/srv/cfssl
+      - ./coreos/cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+    env_file:
+      - ./coreos/.env.example
+      - ./coreos/.env
+
+  cfssl-single:
+    image: khs1994/coreos:cert
+    volumes:
+      - ./systemd/certs:/srv/cfssl
+      - ./coreos/cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+    env_file:
+      - ./systemd/.env.example
+      - ./systemd/.env

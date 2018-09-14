@@ -1,0 +1,109 @@
+#
+# Travis CI
+#
+# @link https://docs.travis-ci.com/
+# @link https://www.khs1994.com/categories/CI/Travis-CI/
+#
+
+language: php
+# cache:
+#   directories:
+#   - cache
+
+dist: xenial #16.04
+# dist: trusty # 14.04
+
+sudo: required
+# services:
+# - docker
+# - rabbitmq
+# - memcached
+# - redis-server
+# - mysql
+# - mariadb
+# - postgresql
+# - mongodb
+
+php:
+  # - 5.6
+  # - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
+  - nightly
+
+matrix:
+  fast_finish: true
+  allow_failures:
+  - php: 7.3
+  - php: nightly
+  # - env: KEY=VALUE
+
+#
+# 设置数据库
+#
+# @link https://docs.travis-ci.com/user/database-setup/
+#
+# addons:
+#   mariadb: '10.0'
+#   postgresql: '9.4'
+
+before_install:
+  # update docker version
+
+  # - docker --version
+  # - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  # - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+  # - sudo apt-get update
+  # - sudo apt-get -y install docker-ce || sudo apt-get -f install
+  # - docker --version
+
+  # - sleep 15
+  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS tests;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS tests_tmp;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'CREATE DATABASE tests;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'CREATE DATABASE tests_tmp;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS tests_tmp; CREATE DATABASE IF NOT EXISTS tests;'; fi"
+  - sh -c "if [ '$ENABLE_MONGODB' = 'enable' ]; then mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'; fi"
+  - php .khsci.php
+
+install:
+  - composer install -q
+  # - composer update -q
+  - composer require illuminate/console
+  # - curl -fsSL http://get.sensiolabs.org/sami.phar -o sami
+  # - chmod +x sami
+
+script:
+  # - phpenv config-rm xdebug.ini || echo "xdebug not available"
+  - vendor/bin/phpunit --coverage-clover=coverage.xml
+
+# after_success:
+# - bash <(curl -s https://codecov.io/bash)
+# - ./sami update .sami.php
+
+env:
+  global:
+    - MONGODB=disable
+    # - DB=sqlite
+    # - DB=mysql
+    # - DB=postgresql
+
+# deploy:
+#   provider: pages
+#   skip-cleanup: true
+#   local-dir: build
+#   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+#   keep-history: true
+#   on:
+#     branch: master
+
+#
+# rabbitmq vhost / username guest password guest
+#
+
+#
+# mysql 127.0.0.1 username-> root/travis 空密码
+#
+# memcached/redis -> localhost
+#
