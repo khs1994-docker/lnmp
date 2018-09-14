@@ -223,12 +223,6 @@ stages:
   - name: wsl-php-builder-rhel-72
     if: tag =~ /^(v18)/
 
-# stages:
-#   - name: deb
-#     if: tag =~ ^v
-#   - name: rpm
-#     if: tag =~ ^v
-
 # branches:
 #   only:
 #   - master
