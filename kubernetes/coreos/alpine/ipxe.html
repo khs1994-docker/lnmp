@@ -1,0 +1,6 @@
+#!ipxe
+
+set base-url http://LOCAL_HOST:8080/current
+kernel ${base-url}/coreos_production_pxe.vmlinuz initrd=coreos_production_pxe_image.cpio.gz coreos.first_boot=1 coreos.config.url=http://192.168.199.100:8080/pxe-config.ign console=tty0 console=ttyS0 coreos.autologin=tty1 coreos.autologin=ttyS0
+initrd ${base-url}/coreos_production_pxe_image.cpio.gz
+boot

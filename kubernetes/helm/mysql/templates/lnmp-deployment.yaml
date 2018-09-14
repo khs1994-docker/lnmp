@@ -1,0 +1,82 @@
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: lnmp
+    tier: mysql
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: mysql
+      version: {{ .Chart.Version }}
+  replicas: 1
+  # 新创建的 Pod 状态为 Ready 持续的时间至少为多少秒才认为 Pod Available(Ready)。
+  minReadySeconds: 5
+  revisionHistoryLimit: 5 # 保留几个版本
+  strategy:
+    type: RollingUpdate # Recreate
+    rollingUpdate:
+      # 可以为整数或者百分比，默认为 desired Pods数的 25%.
+      # Scale Up 新的 ReplicaSet 时，按照比例计算出允许的 MaxSurge，计算时向上取整(比如 3.4，取4)。
+      # 滚动升级时会先启动 1 个 pod
+      maxSurge: 1
+      # 可以为整数或者百分比，默认为 desired Pods数的25%.
+      # Scale Down 旧的 ReplicaSet 时，按照比例计算出允许的 maxUnavailable，计算时向下取整(比如 3.6，取3)。
+      # 滚动升级时允许的最大 Unavailable 的 pod 个数
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: lnmp
+        tier: mysql
+        version: {{ .Chart.Version }}
+    spec:
+      # restartPolicy: Never # Always、OnFailure 和 Never
+      containers:
+      - name: lnmp-mysql
+        image: {{ .Values.mysql.image }}
+        imagePullPolicy: IfNotPresent
+        # envFrom:
+        #   - configMapKeyRef:
+        #       name: env-config
+        env:
+        # 将 secret 变为环境变量
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: lnmp-mysql-password-{{ .Chart.Version }}
+              key: password
+        # config 用作环境变量
+        - name: TZ
+          valueFrom:
+             configMapKeyRef:
+               name: lnmp-env-{{ .Chart.Version }}
+               key: TZ
+        - name: MYSQL_DATABASE
+          value: test
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: lnmp-mysql-data
+          mountPath: /var/lib/mysql
+        - name: lnmp-mysql-cnf
+          mountPath: /etc/mysql/conf.d/docker.cnf
+          subPath: docker.cnf
+        # - name: lnmp-mysql-log
+        #   mountPath: /var/log/mysql
+      volumes:
+      # - name: lnmp-mysql-log
+      #   hostPath:
+      #     path: /var/log/mysql
+      - name: lnmp-mysql-data
+        persistentVolumeClaim:
+          claimName: lnmp-mysql-data
+      - name: lnmp-mysql-cnf
+        configMap:
+          name: lnmp-mysql-cnf-{{ .Chart.Version }}
+          items:
+          - key: docker.cnf
+            path: docker.cnf

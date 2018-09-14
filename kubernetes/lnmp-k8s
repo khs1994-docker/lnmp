@@ -1,0 +1,404 @@
+#!/usr/bin/env bash
+
+KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
+KUBERNETES_VERSION=1.11.3
+MINIKUBE_VERSION=0.28.1
+
+# HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
+
+################################################################################
+
+if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
+
+if ! [ -f .env ];then cp .env.example .env; fi
+if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
+
+source ./.env.example
+source ./.env
+
+set -e
+
+os=`uname -s`
+
+print_help_info(){
+  echo "
+Usage: lnmp-k8s COMMAND
+
+Commands:
+  kubectl-install    Install kubectl
+  kubectl-getinfo    Get kubectl latest version info
+
+  minikube-install   Install minikube
+  minikube           Start minikube
+
+  single-install     Install Local Kubernetes（Manager by systemd）
+  single-start       Start Local Kubernetes (Manager by systemd)
+
+  create             Deploy lnmp on k8s
+  delete             Stop lnmp on k8s, keep data resource(pv and pvc)
+  cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
+
+  registry           Up Registry
+
+  create-pv          Create PV and PVC
+
+  helm-development   Install Helm LNMP In Development
+  helm-testing       Install Helm LNMP In Testing
+  helm-staging       Install Helm LNMP In Staging
+  helm-production    Install Helm LNMP In Production
+
+  dashboard          How to open Dashboard
+"
+}
+
+if ! [ -f systemd/.env ];then
+  cp systemd/.env.example systemd/.env
+fi
+
+_delete(){
+  kubectl delete deployment -l app=lnmp -n lnmp
+  kubectl delete service -l app=lnmp -n lnmp
+  kubectl delete secret -l app=lnmp -n lnmp
+  kubectl delete configmap -l app=lnmp -n lnmp
+
+  kubectl delete cronjob -l app=lnmp -n lnmp
+}
+
+_minikube(){
+  if [ `uname -s` = 'Darwin' ];then
+    minikube start \
+      -v 10 \
+      --registry-mirror=https://registry.docker-cn.com \
+      --vm-driver="hyperkit" \
+      --memory=4096
+  else
+    minikube start \
+      -v 10 \
+      --registry-mirror=https://registry.docker-cn.com \
+      --vm-driver="none"
+  fi
+}
+
+_minikube-install(){
+  if [ $os = 'Linux' ];then
+    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
+  elif [ $os = 'Darwin' ];then
+    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-darwin-amd64
+  fi
+
+  curl -L $url -o minikube
+
+  chmod +x minikube
+
+  echo "
+  move minikube to your PATH"
+}
+
+_cleanup(){
+  _delete
+  kubectl delete pvc -l app=lnmp -n lnmp
+  kubectl delete pv -l app=lnmp -n lnmp
+  kubectl delete ingress -l app=lnmp -n lnmp
+}
+
+_create_pv(){
+  if [ "$os" = 'Linux' ];then
+    # sed "s#/home/username#$HOME#g" deployment/lnmp-volume.linux.example.yaml \
+    # | kubectl create -f -
+    kubectl create -f deployment/lnmp-volume.linux.nfs.yaml
+    kubectl -n lnmp create -f deployment/lnmp-pvc.linux.nfs.yaml
+  elif [ "$os" = 'Darwin' ];then
+    sed "s#/Users/username#$HOME#g" deployment/lnmp-volume.macos.example.yaml \
+    | kubectl create -f -
+
+    kubectl -n lnmp create -f deployment/lnmp-pvc.yaml
+  fi
+}
+
+_registry(){
+  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=helm/registry/config/config.development.yml
+  kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
+
+  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=tls.crt=helm/registry/config/ssl/public.crt \
+      --from-file=tls.key=helm/registry/config/ssl/private.key
+  kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
+
+  kubectl -n lnmp create -f coreos/addons/registry.yaml
+}
+
+_create(){
+  current_context=`kubectl config current-context`
+
+  if [ $current_context != "docker-for-desktop" -a $os = 'Darwin' ];then
+     echo "This Script Support Docker for Desktop Only"
+     exit
+  fi
+
+  kubectl create namespace lnmp > /dev/null 2>&1 | echo > /dev/null
+
+  _create_pv
+
+  kubectl -n lnmp create configmap lnmp-php-conf-0.0.1 \
+             --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini \
+                     --from-file=helm/nginx-php/config/php/docker-xdebug.ini \
+      --from-file=zz-docker.conf=helm/nginx-php/config/php/zz-docker.development.conf \
+--from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json \
+          --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.development.ini
+  kubectl -n lnmp label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
+
+  kubectl -n lnmp create configmap lnmp-mysql-cnf-0.0.1 \
+   --from-file=docker.cnf=helm/mysql/config/docker.development.cnf
+  kubectl -n lnmp label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
+
+  kubectl -n lnmp create configmap lnmp-nginx-conf-0.0.1 \
+   --from-file=nginx.conf=helm/nginx-php/config/nginx/nginx.development.conf
+  kubectl -n lnmp label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
+
+  kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 --from-file=deployment/configMap/nginx-conf-d
+  kubectl -n lnmp label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
+
+  kubectl -n lnmp create -f deployment/lnmp-configMap.yaml
+
+  kubectl -n lnmp create -f deployment/lnmp-secret.yaml
+
+  kubectl -n lnmp create -f deployment/lnmp-mysql.yaml
+
+  kubectl -n lnmp create -f deployment/lnmp-redis.yaml
+
+  kubectl -n lnmp create -f deployment/lnmp-php7.yaml
+
+  if [ "$os" = 'Linux' ];then
+    kubectl -n lnmp create -f deployment/lnmp-nginx.service.linux.yaml
+  elif [ "$os" = 'Darwin' ];then
+    kubectl -n lnmp create -f deployment/lnmp-nginx.service.yaml
+  fi
+
+  kubectl -n lnmp create -f deployment/lnmp-nginx.yaml
+}
+
+kubectl-install(){
+  if [ $os = 'Linux' ];then
+    command -v docker
+    if [ $? -eq 0 ];then
+      docker container rm -f khs1994-kubectl || echo > /dev/null
+      docker container create --name=khs1994-kubectl khs1994/coreos:cert
+      docker container cp khs1994-kubectl:/usr/local/bin/kubectl .
+      docker container rm -f khs1994-kubectl
+      sudo mv kubectl /usr/local/bin
+      kubectl version
+      return
+    fi
+  fi
+
+  KUBECTL_VERSION=$(curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+
+  if [ $OS = 'Linux' ];then
+    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > kubectl-Linux-x86_64
+    sudo mv kubectl-* /usr/local/bin/
+  elif [ $OS = 'Darwin' ];then
+    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/darwin/amd64/kubectl > kubectl-Darwin-x86_64
+    sudo mv kubectl-* /usr/local/bin/
+  fi
+
+  kubectl version
+}
+
+kubectl-getinfo(){
+  echo "kubectl latest version is
+  "
+  curl https://storage.googleapis.com/kubernetes-release/release/stable.txt
+}
+
+_etcd(){
+  if ! [ -f /opt/bin/etcd ];then
+      cd /opt/bin
+      sudo wget https://github.com/etcd-io/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz
+      sudo tar -zxvf etcd-v3.3.9-linux-amd64.tar.gz
+      sudo mv etcd-v3.3.9-linux-amd64/etcd* ../
+      sduo rm -rf *.tar.gz
+      cd -
+      return
+  fi
+
+  echo "flanneld already install"
+}
+
+_flanneld(){
+  if ! [ -f /opt/bin/flanneld ];then
+    sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v0.10.0/flanneld-amd64 -o /opt/bin/flanneld
+    return
+  fi
+
+  echo "etcd already install"
+}
+
+_k8s_install(){
+  _etcd
+  _flanneld
+
+  if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ cd coreos ; docker-compose up cfssl-single"; exit; fi
+
+  sudo mkdir -p /opt/bin
+
+  if ! [ -f /opt/bin/kubeadm ];then
+    sudo cp coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/
+  fi
+
+  sudo cp coreos/disk/bin/*.sh /opt/bin/
+
+  sudo chmod +x /opt/bin/*
+
+  sudo mkdir -p /etc/kubernetes/certs
+
+  sudo cp systemd/*.service /etc/systemd/system/
+  sudo cp systemd/certs/*.pem /etc/kubernetes/certs/
+
+  sudo cp systemd/certs/*.kubeconfig /etc/kubernetes/
+
+  sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml /etc/kubernetes/
+  sudo cp coreos/disk/system/csr-crb.yaml /etc/kubernetes/
+
+  source systemd/.env.example
+
+  sudo cp systemd/encryption-config.yaml /etc/kubernetes/encryption-config.yaml
+
+  sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" /etc/kubernetes/encryption-config.yaml
+
+  sudo mkdir -p /etc/systemd/system/docker.service.d
+
+  sudo cp systemd/docker.conf /etc/systemd/system/docker.service.d/
+
+  sudo systemctl daemon-reload
+
+  sudo useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || echo > /dev/null
+
+  # sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
+
+  sudo mkdir --parents /var/log/kubernetes
+
+  sudo chown k8s:root /var/log/kubernetes
+
+  sudo touch /var/log/kube-apiserver-audit.log
+  sudo chown k8s:root /var/log/kube-apiserver-audit.log
+
+  sudo mkdir -p /home/k8s/.kube
+  sudo cp systemd/certs/kubectl.kubeconfig /home/k8s/.kube/config
+
+}
+
+_k8s_start(){
+  sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler \
+                       kube-proxy kubelet
+}
+
+if [ -z "$1" ];then
+  print_help_info
+  exit
+fi
+
+_helm(){
+  cd helm
+  lnmp_app_env=$1
+
+  if [ "--debug" = "$2" ];then opt="--dry-run --debug"; fi
+  set +e
+  for service in ${HELM_SERVICES[@]}
+  do
+    helm install ./$service \
+        --name lnmp-$service-${lnmp_app_env} \
+        --namespace lnmp-${lnmp_app_env} \
+        --set APP_ENV=${lnmp_app_env} \
+        --set platform=$(uname -s) \
+        --set username=$(whoami) \
+        --tls $opt
+  done
+}
+
+_single_start(){
+  echo "
+$ sudo systemctl start kube-apiserver
+$ sudo systemctl start kube-controller-manager
+$ sudo systemctl start kube-scheduler
+$ sudo systemctl start kube-proxy
+$ sudo systemctl start kubelket
+"
+}
+
+case $1 in
+    kubectl-install )
+      kubectl-install
+    ;;
+    kubectl-getinfo )
+      kubectl-getinfo
+    ;;
+
+    create )
+      _create
+    ;;
+
+    delete )
+      set +e
+      _delete
+    ;;
+
+    cleanup )
+      set +e
+      _cleanup
+    ;;
+
+    registry )
+      set +e
+      _create_pv
+      _registry
+    ;;
+
+    create-pv )
+      _create_pv
+    ;;
+
+    single-install )
+      _k8s_install
+    ;;
+
+    single-start )
+      _single_start
+    ;;
+
+    minikube )
+      _minikube
+    ;;
+
+    minikube-install )
+      _minikube-install
+    ;;
+
+    helm-development )
+    shift
+    _helm development "$@"
+    ;;
+    helm-testing )
+    shift
+    _helm testing "$@"
+    ;;
+    helm-staging )
+    shift
+    _helm staging "$@"
+    ;;
+    helm-production )
+    shift
+    _helm production "$@"
+    ;;
+
+    dashboard )
+      echo "
+$ kubectl proxy
+
+open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+
+"
+    ;;
+
+    * )
+    echo "command not found"
+    ;;
+esac

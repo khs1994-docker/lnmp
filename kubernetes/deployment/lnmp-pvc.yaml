@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-mysql-data
+  labels:
+    app: lnmp
+    tier: mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 20Gi
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: mysql
+    # matchExpressions:
+      # - {key: environment, operator: In, values: [dev]}
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-redis-data
+  labels:
+    app: lnmp
+    tier: redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: redis
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-data
+  labels:
+    app: lnmp
+    tier: code-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: code-data
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-registry-data
+  labels:
+    app: lnmp
+    tier: registry
+spec:
+  accessModes:
+    - ReadWriteOnce
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: registry
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-log
+  labels:
+    app: lnmp
+    tier: log
+spec:
+  accessModes:
+    - ReadWriteOnce
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: log
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: hostpath

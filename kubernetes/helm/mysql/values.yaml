@@ -1,0 +1,18 @@
+nameOverride: "mysql"
+fullnameOverride: "fullname"
+
+TZ: Asia/Shanghai
+
+APP_ENV: production
+
+platform: Linux
+# platform: windows
+# platform: Darwin
+
+nfs:
+  enabled: false
+  server: 192.168.199.100
+
+mysql:
+  image: mysql:8.0.12
+  password: mytest

@@ -1,0 +1,167 @@
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-rsa SSH_PUB
+      groups:
+        - wheel
+        - sudo
+        - docker
+etcd:
+  version:                     3.2.10
+  name:                        "{HOSTNAME}"
+  # discovery: https://DISCOVERY_URL
+  initial_cluster:             "{HOSTNAME}=http://192.168.56.120:2380"
+  initial_advertise_peer_urls: http://0.0.0.0:2380
+  advertise_client_urls:       http://0.0.0.0:2379
+  listen_client_urls:          http://0.0.0.0:2379
+  listen_peer_urls:            http://0.0.0.0:2380
+systemd:
+  units:
+    - name: etcd-member.service
+      enabled: true
+      dropins:
+        - name: 30-certs.conf
+          contents: |
+            [Service]
+            Environment="ETCD_NAME=coreos"
+    - name: settimezone.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Set the time zone
+
+        [Service]
+        ExecStart=/usr/bin/timedatectl set-timezone  PRC
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: docker-tls-tcp.socket
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Docker Secured Socket for the API
+
+        [Socket]
+        # ListenStream=192.168.56.120:2376
+        ListenStream=2376
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+    # https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/dynamic-data.md#example
+    - name: "coreos-metadata.service"
+      dropins:
+       - name: "use-script.conf"
+         contents: |
+           [Service]
+           # Empty ExecStart= prevents the previously defined ExecStart from running
+           ExecStart=
+           ExecStart=/opt/get-metadata.sh
+networkd:
+   units:
+     - name: 10-static.network
+       contents: |
+         [Match]
+         Name=enp0s3
+
+         [Network]
+         Address=192.168.56.120/24
+         DHCP=no
+     - name: 20-dhcp.network
+       contents: |
+         [Match]
+         Name=enp0s8
+
+         [Network]
+         DHCP=yes
+     - name: 30-static.network
+       contents: |
+         [Match]
+         Name=eth0
+
+         [Network]
+         Address=IP_1/24
+         DNS=114.114.114.114
+         # Gateway=
+storage:
+  files:
+    - path:       "/etc/hostname"
+      filesystem: "root"
+      mode:       0644
+      contents:
+        inline: coreos
+    - path:       "/etc/resolv.conf"
+      filesystem: "root"
+      mode:       0644
+      contents:
+        inline: |
+          nameserver 114.114.114.114
+          nameserver 8.8.8.8
+    - path:       "/etc/hosts"
+      filesystem: "root"
+      mode:       0644
+      contents:
+        inline: |
+          127.0.0.1 localhost
+          ::1       localhost
+          127.0.0.1 example.com
+    - path:       "/etc/docker/daemon.json"
+      filesystem: "root"
+      mode:       0644
+      contents:
+        inline: |
+          {
+            "tlsverify": true,
+            "tlscert": "/etc/docker/server.pem",
+            "tlskey": "/etc/docker/server-key.pem",
+            "tlscacert": "/etc/docker/ca.pem",
+            "registry-mirrors" : [
+              "https://registry.docker-cn.com"
+            ],
+            "debug" : true,
+            "dns" : [
+              "114.114.114.114",
+              "8.8.8.8"
+            ],
+            "experimental" : true
+          }
+    - path: /etc/docker/ca.pem
+      filesystem: root
+      mode: 0644
+      contents:
+        remote:
+          url: http://LOCAL_HOST:8080/cert/ca.pem
+    - path: /etc/docker/server.pem
+      filesystem: root
+      mode: 0644
+      contents:
+        remote:
+          url: http://LOCAL_HOST:8080/cert/server-cert.pem
+    - path: /etc/docker/server-key.pem
+      filesystem: root
+      mode: 0644
+      contents:
+        remote:
+          url: http://LOCAL_HOST:8080/cert/server-key.pem
+    - path: /etc/profile.env
+      filesystem: root
+      mode: 0644
+      contents:
+        inline: |
+          export ETCDCTL_API=3
+    - filesystem: "root"
+      path: "/opt/get-metadata.sh"
+      mode: 0755
+      contents:
+        remote:
+          url: "https://LOCAL_HOST:8080/disk/system/metadata-script.sh"
+# 官方文档配置，我选择写入 `/etc/docker/daemon.json`
+# https://coreos.com/os/docs/latest/customizing-docker.html
+# docker:
+#   flags:
+#     - --tlsverify
+#     - --tlscacert=/etc/docker/ca.pem
+#     - --tlscert=/etc/docker/server.pem
+#     - --tlskey=/etc/docker/server-key.pem

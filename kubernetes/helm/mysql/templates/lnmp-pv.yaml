@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-mysql-data-{{ .Values.APP_ENV }}
+  labels:
+    type: local
+    app: lnmp
+    tier: mysql
+    env: {{ .Values.APP_ENV }}
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    {{if .Values.nfs.enabled -}}
+    - ReadWriteMany    # 被单个节点mount为读写rw模式
+    # - ReadOnlyMany   # 被多个节点mount为只读ro模式
+    {{- else -}}
+    - ReadWriteOnce  # 被多个节点mount为读写rw模式
+    {{- end }}
+  persistentVolumeReclaimPolicy: Retain
+  # Retain 允许用户手动回收
+  # Recycle 删除 PV 上的数据
+  # Delete 删除 PV
+  {{if .Values.nfs.enabled -}}
+  nfs:
+    # FIXME: use the right IP
+    server: {{ .Values.nfs.server }}
+    path: /lnmp/mysql/{{ .Values.APP_ENV }}
+  storageClassName: slow
+  {{- else -}}
+  hostPath:
+    {{if eq .Values.platform "Linux" -}}
+    path: /var/lib/lnmp/mysql-{{ .Values.APP_ENV }}
+    {{- end -}}
+    {{- if eq .Values.platform "windows" -}}
+    path: /c/Users/{{ .Values.username }}/.docker/Volumes/lnmp-mysql-data-{{ .Values.APP_ENV }}
+    {{- end -}}
+    {{- if eq .Values.platform "Darwin" -}}
+    path: /Users/{{ .Values.username }}/.docker/Volumes/lnmp-mysql-data-{{ .Values.APP_ENV }}
+    {{- end }}
+  storageClassName: hostpath
+  {{- end }}

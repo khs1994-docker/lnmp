@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  server:
+    build:
+      context: ./coreos/alpine
+      dockerfile: Dockerfile
+    image: khs1994/coreos:server
+
+  cfssl:
+    build: ./coreos/cfssl
+    image: khs1994/coreos:cert

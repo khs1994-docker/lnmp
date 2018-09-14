@@ -1,0 +1,11 @@
+kubectl-*
+minikube*
+!minikube.md
+
+.DS_Store
+test
+
+.env
+.env.ps1
+
+vim.exe.*

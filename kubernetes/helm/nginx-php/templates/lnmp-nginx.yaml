@@ -1,0 +1,113 @@
+apiVersion: apps/v1 #  for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: lnmp
+    tier: frontend
+    version: {{ .Chart.Version }}
+spec:
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: frontend
+      version: {{ .Chart.Version }}
+  replicas: {{ .Values.nginx.replicaCount }}
+  minReadySeconds: 5
+  revisionHistoryLimit: 5 # 保留几个版本
+  strategy:
+    type: RollingUpdate # Recreate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: lnmp
+        tier: frontend
+        version: {{ .Chart.Version }}
+    spec:
+      # nodeSelector:
+      #   beta.kubernetes.io/arch: amd64
+      #   beta.kubernetes.io/os: windows # linux
+      #   kubernetes.io/hostname: coreos3
+
+      # k8s将会给应用发送SIGTERM信号，可以用来正确、优雅地关闭应用,默认为30秒
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: lnmp-nginx
+        image: {{ .Values.nginx.image }}
+        imagePullPolicy: IfNotPresent # Always
+        args:
+        - nginx
+        - -g
+        - "daemon off;"
+        env:
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: TZ
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+        # securityContext:
+        #   privileged: true
+        volumeMounts:
+        - name: lnmp-data
+          mountPath: /app
+        - name: lnmp-nginx-conf-d
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
+        - name: lnmp-nginx-khs1994-com-tls
+          mountPath: /etc/nginx/conf.d/ssl
+          readOnly: true
+        # 挂载 secret configMap 为文件夹，默认会覆盖掉文件夹中的全部文件
+        # 通过以下配置，只挂载指定的文件
+        - name: lnmp-nginx-conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          readOnly: true
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        # livenessProbe: # 探测应用是否处于健康状态，如果不健康则删除并重新创建容器
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #     scheme: HTTP
+        #   initialDelaySeconds: 15
+        #   timeoutSeconds: 1
+        #   successThreshold: 1
+        #   failureThreshold: 5
+        # readinessProbe: # 探测应用是否启动完成并且处于正常服务状态，如果不正常则不会接收来自Kubernetes Service的流量
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 1
+      volumes:
+      - name: lnmp-data
+        persistentVolumeClaim:
+          claimName: lnmp-data
+      # 将 secret 挂载为文件夹，文件夹里的文件名为 secret 的 data 的 key 值
+      - name: lnmp-nginx-khs1994-com-tls
+        secret:
+          secretName: lnmp-nginx-khs1994-com-tls-{{ .Chart.Version }}
+
+      # 将 configMap 挂载为文件
+      - name: lnmp-nginx-conf
+        configMap:
+          name: lnmp-nginx-conf-{{ .Chart.Version }}
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+      - name: lnmp-nginx-conf-d
+        configMap:
+          name: lnmp-nginx-conf-d-{{ .Chart.Version }}
+      restartPolicy: Always
+      # dnsPolicy: ClusterFirst

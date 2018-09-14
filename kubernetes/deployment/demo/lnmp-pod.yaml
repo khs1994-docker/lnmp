@@ -1,0 +1,18 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: lnmp-pod
+  labels:
+    app: lnmp
+spec:
+  restartPolicy: Never
+  hostAliases:
+  - ip: "127.0.0.1"
+    hostnames:
+    - "foo.local"
+    - "bar.local"
+  containers:
+  - name: "lnmp-pod"
+    image: "khs1994/nginx:1.15.3-alpine"
+    # command:
+    # args:

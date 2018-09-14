@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-registry-data-{{ .Values.APP_ENV }}
+  labels:
+    type: local
+    app: lnmp
+    tier: registry
+    env: {{ .Values.APP_ENV }}
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    {{if .Values.nfs.enabled -}}
+    - ReadWriteMany
+    {{- else -}}
+    - ReadWriteOnce
+    {{- end }}
+  persistentVolumeReclaimPolicy: Retain
+  {{if .Values.nfs.enabled -}}
+  nfs:
+    server: {{ .Values.nfs.server }}
+    path: /lnmp/registry/{{ .Values.APP_ENV }}
+  storageClassName: slow
+  {{- else -}}
+  hostPath:
+    {{if eq .Values.platform "Linux" -}}
+    path: /var/lib/lnmp/registry-{{ .Values.APP_ENV }}
+    {{- end -}}
+    {{- if eq .Values.platform "windows" -}}
+    path: /c/Users/{{ .Values.username }}/.docker/Volumes/lnmp-registry-data-{{ .Values.APP_ENV }}
+    {{- end -}}
+    {{- if eq .Values.platform "Darwin" -}}
+    path: /Users/{{ .Values.username }}/.docker/Volumes/lnmp-registry-data-{{ .Values.APP_ENV }}
+    {{- end }}
+  storageClassName: hostpath
+  {{- end }}

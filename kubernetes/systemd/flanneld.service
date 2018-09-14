@@ -1,0 +1,35 @@
+[Unit]
+Description=flannel - Network fabric for containers
+Documentation=https://github.com/coreos/flannel
+Requires=etcd.service
+After=etcd.service
+Before=docker.service
+
+[Service]
+Type=notify
+Restart=always
+RestartSec=10s
+TimeoutStartSec=300
+LimitNOFILE=40000
+LimitNPROC=1048576
+
+ExecStartPre=/sbin/modprobe ip_tables
+ExecStartPre=-/usr/bin/mkdir --parents /var/lib/coreos /run/flannel
+ExecStartPre=/usr/bin/env ETCDCTL_API=2 /opt/bin/etcdctl \
+  --endpoints="https://192.168.199.100:2379" \
+  --ca-file="/etc/kubernetes/certs/ca.pem" \
+  --cert-file="/etc/kubernetes/certs/etcd.pem" \
+  --key-file="/etc/kubernetes/certs/etcd-key.pem" \
+  set /coreos.com/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
+
+ExecStart=/opt/bin/flanneld \
+  --etcd-endpoints="https://192.168.199.100:2379" \
+  --etcd-cafile="/etc/kubernetes/certs/ca.pem" \
+  --etcd-certfile="/etc/kubernetes/certs/flanneld.pem" \
+  --etcd-keyfile="/etc/kubernetes/certs/flanneld-key.pem" \
+  --etcd-prefix="/coreos.com/network"
+
+ExecStartPost=/opt/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/docker/flannel_docker_opts.env
+
+[Install]
+WantedBy=multi-user.target

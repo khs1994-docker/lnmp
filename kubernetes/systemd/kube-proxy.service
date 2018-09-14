@@ -1,0 +1,27 @@
+[Unit]
+Description=Kubernetes Kube-Proxy Server
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+
+[Service]
+
+ExecStartPre=-/usr/bin/apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp
+ExecStartPre=-/usr/bin/dnf install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp
+ExecStartPre=-/usr/bin/mkdir -p /var/lib/kube-proxy
+ExecStartPre=-/usr/sbin/modprobe ip_vs
+
+WorkingDirectory=/var/lib/kube-proxy
+
+ExecStart=/opt/bin/kube-proxy \
+--config=/etc/kubernetes/kube-proxy.config.yaml \
+--alsologtostderr=true \
+--logtostderr=false \
+--log-dir=/var/log/kubernetes \
+--v=2
+
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

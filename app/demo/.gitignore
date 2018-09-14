@@ -1,0 +1,30 @@
+# https://github.com/github/gitignore
+
+.DS_Store
+.idea
+.vscode
+
+# composer
+
+vendor
+composer.lock
+
+# PHP-CS-Fixer
+
+.php_cs.cache
+
+# python
+
+__pycache__
+
+# Sami
+
+build
+cache
+
+# coerage report
+
+coverage_report
+coverage.xml
+
+.env

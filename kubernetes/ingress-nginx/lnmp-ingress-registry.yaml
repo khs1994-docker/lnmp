@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    # nginx.ingress.kubernetes.io/secure-backends: "true" deprecated
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  name: lnmp-registry
+  labels:
+    app: lnmp
+    version: 0.0.1
+spec:
+  tls:
+  - hosts:
+    - gcr.io
+    - k8s.gcr.io
+    secretName: lnmp-registry-tls-0.0.1
+  rules:
+  - host: gcr.io
+    http:
+      paths:
+      - backend:
+          serviceName: registry
+          servicePort: 443
+        path: /
+  - host: k8s.gcr.io
+    http:
+      paths:
+      - backend:
+          serviceName: registry
+          servicePort: 443
+        path: /
+        # path: /test
+        # 发送后端路径也是 /test

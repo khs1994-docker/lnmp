@@ -1,0 +1,40 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: lnmp-registry
+  labels:
+    app: lnmp
+    version: {{ .Chart.Version}}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+  tls:
+  - hosts:
+    - gcr.io
+    - k8s.gcr.io
+    - docker.t.khs1994.com
+    secretName: lnmp-registry-tls-{{ .Chart.Version }}
+  rules:
+  - host: gcr.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: registry
+          servicePort: 443
+  - host: k8s.gcr.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: registry
+          servicePort: 443
+  - host: docker.t.khs1994.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: registry
+          servicePort: 443

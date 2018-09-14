@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ds
+  labels:
+    app: nginx-ds
+    test: "true"
+spec:
+  type: NodePort
+  selector:
+    app: nginx-ds
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: nginx-ds
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+    test: "true"
+spec:
+  template:
+    metadata:
+      labels:
+        app: nginx-ds
+    spec:
+      containers:
+      - name: my-nginx
+        image: nginx:1.15.1-alpine
+        ports:
+        - containerPort: 80

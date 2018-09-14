@@ -1,0 +1,59 @@
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+Requires=etcd.service
+
+[Service]
+
+ExecStart=/opt/bin/kube-apiserver \
+--enable-admission-plugins=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
+--anonymous-auth=false \
+--experimental-encryption-provider-config=/etc/kubernetes/encryption-config.yaml \
+--advertise-address=192.168.199.100 \
+--bind-address=192.168.199.100 \
+--insecure-port=0 \
+--authorization-mode=Node,RBAC \
+--runtime-config=api/all \
+--enable-bootstrap-token-auth \
+--service-cluster-ip-range=10.254.0.0/16 \
+--service-node-port-range="1-65535" \
+--tls-cert-file=/etc/kubernetes/certs/kubernetes.pem \
+--tls-private-key-file=/etc/kubernetes/certs/kubernetes-key.pem \
+--client-ca-file=/etc/kubernetes/certs/ca.pem \
+--kubelet-client-certificate=/etc/kubernetes/certs/kubernetes.pem \
+--kubelet-client-key=/etc/kubernetes/certs/kubernetes-key.pem \
+--service-account-key-file=/etc/kubernetes/certs/ca-key.pem \
+--etcd-cafile=/etc/kubernetes/certs/ca.pem \
+--etcd-certfile=/etc/kubernetes/certs/kubernetes.pem \
+--etcd-keyfile=/etc/kubernetes/certs/kubernetes-key.pem \
+--etcd-servers="https://192.168.199.100:2379" \
+--enable-swagger-ui=true \
+--allow-privileged=true \
+--apiserver-count=1 \
+--audit-log-maxage=30 \
+--audit-log-maxbackup=3 \
+--audit-log-maxsize=100 \
+--audit-log-path=/var/log/kube-apiserver-audit.log \
+--event-ttl=1h \
+--alsologtostderr=true \
+--logtostderr=false \
+--log-dir=/var/log/kubernetes \
+--v=2 \
+--requestheader-client-ca-file=/etc/kubernetes/certs/ca.pem \
+--requestheader-allowed-names="" \
+--requestheader-extra-headers-prefix="X-Remote-Extra-" \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--proxy-client-cert-file=/etc/kubernetes/certs/metrics-server.pem \
+--proxy-client-key-file=/etc/kubernetes/certs/metrics-server-key.pem \
+--runtime-config=api/all=true
+
+Restart=on-failure
+RestartSec=5
+Type=notify
+User=k8s
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
