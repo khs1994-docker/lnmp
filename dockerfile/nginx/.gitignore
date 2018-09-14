@@ -1,5 +1,6 @@
-/*
-!.env.example
-!.gitignore
-!docker-compose.yml
-!example.Dockerfile
+.DS_Store
+.env
+*.gz
+nginx
+nginx-*
+openssl
