@@ -19,6 +19,7 @@
 * Support `Minio`
 * Resupport PHP56 PHP57
 * Remove `gitlab` `gogs`, please see `khs1994-docker/ci`
+* Remove all git submodule
 * Rsync `app/demo` 18.06
 * Rsync `kubernetes` 1.11
 
