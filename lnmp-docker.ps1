@@ -159,6 +159,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   debug                Generate Debug information, then copy it to GitHub Issues
+  daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   up                   Up LNMP (Support x86_64 arm32v7 arm64v8)
   config               Validate and view the LNMP Compose file
   pull                 Pull LNMP Docker Images
@@ -793,6 +794,14 @@ XXX
         git -C ${APP_ROOT}/khsdocs/nginx fetch --depth=1 origin gh-pages
         git -C ${APP_ROOT}/khsdocs/nginx reset --hard origin/gh-pages
       }
+    }
+
+    daemon-socket {
+      docker run -d --restart=always `
+        -p 2376:2375 `
+        -v /var/run/docker.sock:/var/run/docker.sock `
+        -e PORT=2375 `
+        shipyard/docker-proxy
     }
 
     gcr.io {
