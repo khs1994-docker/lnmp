@@ -229,9 +229,9 @@ stages:
 #   - name: rpm
 #     if: tag =~ ^v
 
-branches:
-  only:
-  - master
-  - '18.06'
-  - dev
-  - /^(v18)/
+# branches:
+#   only:
+#   - master
+#   - '18.06'
+#   - dev
+#   - /^(v18)/
