@@ -1,6 +1,9 @@
 language: bash
 
 sudo: required
+# dist: trusty # 14.04
+
+dist: xenial # 16.04
 
 services:
 - docker
@@ -11,17 +14,17 @@ env:
   - TZ=Asia/Shanghai
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
-  - TAG=v18.06.03
 
 before_install:
 - date
 # 升级 Docker 最新 stable
-
 - docker --version
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
 - sudo apt-get update
-- sudo apt-get -y install docker-ce
+# - sudo apt-get -y install docker-ce
+# https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/
+- sudo apt-get -y install docker-ce=18.09.0~ce~1.1.beta1-0
 - docker --version
 
 # 升级最新 Docker Compose
@@ -54,10 +57,6 @@ before_install:
 - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
 
 #
-# common end
-#
-
-#
 # github release
 #
 
@@ -67,13 +66,22 @@ before_install:
 
 jobs:
   include:
+    - stage: tag
+      script: |
+        github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
+          cat CHANGELOG.md | github-release release -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
+
     - stage: development
       install:
         - sudo rm /usr/local/bin/docker-compose
         - ./lnmp-docker compose --official -f
       script: cli/test development
-    # - stage: swarm
-    #   script: cli/test swarm
+
+    - stage: swarm
+      script:
+        - sudo rm /usr/local/bin/docker-compose
+        - ./lnmp-docker compose --official -f
+        - cli/test swarm
 
     #
     # wsl-debian
@@ -82,60 +90,68 @@ jobs:
     # Debian9 not support php56
     # use ubuntu 16.04
     - stage: wsl-php-builder-71
-      script:
+      install:
         - ./lnmp-docker compose --official -f
+      script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.1.16 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-71
         - docker-compose build ${DOCKER_SERVICE_NAME}
+      after_success:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_71}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
     - stage: wsl-php-builder-72
-      script:
+      install:
         - ./lnmp-docker compose --official -f
+      script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-72
         - docker-compose build ${DOCKER_SERVICE_NAME}
+      after_success:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
     # wsl-rhel
     #
 
     - stage: wsl-php-builder-rhel-71
-      script:
+      install:
         - ./lnmp-docker compose --official -f
+      script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.1.16 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-71
         - docker-compose build ${DOCKER_SERVICE_NAME}
+      after_success:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_71}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     - stage: wsl-php-builder-rhel-72
-      script:
+      install:
         - ./lnmp-docker compose --official -f
+      script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
         - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-72
         - docker-compose build ${DOCKER_SERVICE_NAME}
+      after_success:
         - docker-compose push ${DOCKER_SERVICE_NAME}
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_72}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
     #
     # clusterkit
     #
@@ -157,12 +173,12 @@ jobs:
 
     - stage: deb
       script:
-        - sh cli/build.sh deb ${TAG}
-        - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
+        - sh cli/build.sh deb ${TRAVIS_TAG}
+        - export VERSION=$( echo ${TRAVIS_TAG} | cut -d "v" -f 2 )
         - export DEB_NAME=khs1994-docker-lnmp_${VERSION}_amd64.deb
         - ls -la cli
         - sudo dpkg -i cli/${DEB_NAME}
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${DEB_NAME}" --file "cli/${DEB_NAME}" -R
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "cli/${DEB_NAME}" -R
 
     #
     # yum
@@ -171,14 +187,14 @@ jobs:
     - stage: rpm
       install:
         # Don't build rc rpm
-        - test $( echo "${TAG}" | grep rc ) && exit 0 || echo
+        - test $( echo "${TRAVIS_TAG}" | grep rc ) && exit 0 || echo
       script:
         - sudo apt install -y rpm
-        - sh cli/build.sh rpm ${TAG}
-        - export VERSION=$( echo ${TAG} | cut -d "v" -f 2 )
+        - sh cli/build.sh rpm ${TRAVIS_TAG}
+        - export VERSION=$( echo ${TRAVIS_TAG} | cut -d "v" -f 2 )
         - export RPM_NAME=$( cd $HOME; ls *.rpm )
         - ls -la ~/*.rpm
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TAG} --name "${RPM_NAME}" --file "${HOME}/${RPM_NAME}" -R
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${HOME}/${RPM_NAME}" -R
 
 # stages:
 #   - test
@@ -186,6 +202,26 @@ jobs:
 #   #   if: tag =~ ^[0-9.]+$
 #   #   if: branch = master
 #   #   if: type IN (push, pull_request, api, cron)
+
+# https://docs.travis-ci.com/user/conditions-v1
+
+stages:
+  - name: tag
+    if: tag =~ /^(v18)/
+  - development
+  - swarm
+  - name: deb
+    if: tag =~ /^(v18)/
+  - name: rpm
+    if: tag =~ /^(v18)/
+  - name: wsl-php-builder-71
+    if: tag =~ /^(v18)/
+  - name: wsl-php-builder-72
+    if: tag =~ /^(v18)/
+  - name: wsl-php-builder-rhel-71
+    if: tag =~ /^(v18)/
+  - name: wsl-php-builder-rhel-72
+    if: tag =~ /^(v18)/
 
 # stages:
 #   - name: deb
@@ -196,4 +232,6 @@ jobs:
 branches:
   only:
   - master
+  - '18.06'
   - dev
+  - /^(v18)/

@@ -139,7 +139,6 @@ ClusterKit:
 
 Developer Tools:
   cn-mirror            Push master branch to CN mirror
-  reset-master         Reset master branch in dev branch
   test                 Test LNMP
 
 ToolKit:
@@ -709,36 +708,12 @@ update(){
   fi
   git fetch --depth=1 origin
   print_info "Branch is ${BRANCH}\n"
-  if [ "${BRANCH}" = 'dev' ] || [ "${BRANCH}" = 'master' ];then
-    git reset --hard origin/${BRANCH}
-    echo ;print_info "Update Git Submodule\n"
-    set +e
-    git submodule update --init --recursive
-    set -e
-  else
-    print_error "${BRANCH} error，Please checkout to dev or master branch\n\n$ git checkout dev\n "
-  fi
+  git reset --hard origin/${BRANCH}
+  echo ;print_info "Update Git Submodule\n"
+  set +e
+  git submodule update --init --recursive
+  set -e
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker
-}
-
-# 提交项目「开发者选项」
-
-reset_master(){
-  set_git_remote_origin_url
-  print_info "Branch is ${BRANCH}\n"
-  print_info "Reset master branch in dev branch\n"
-  if [ ${BRANCH} = 'dev' ];then
-    git fetch --depth=1 origin
-    git reset --hard origin/master
-    echo ;print_info "Update Git Submodule\n"
-    set +e
-    git submodule update --init --recursive
-    set -e
-  elif [ ${BRANCH} = 'master' ];then
-    print_error "${BRANCH} branch，Please exec ./lnmp-docker update [-f]"
-  else
-    print_error "${BRANCH} error，Please checkout to  dev branch\n\n$ git checkout dev\n"
-  fi
 }
 
 cn_mirror(){
@@ -1203,10 +1178,6 @@ main() {
 
    _gcr_io "$@"
   ;;
-
-  reset-master )
-    reset_master
-    ;;
 
   registry-up )
     _registry
@@ -1785,6 +1756,14 @@ First Run? Maybe you wait 60s then open url.
 
     ;;
 
+    checkout )
+      if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit; fi
+
+      git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} || echo > /dev/null
+      git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
+      update
+      ;;
+
   * )
   if ! [ -z "$command" ];then
     print_warning "command not found, Now Exec docker-compose commands"; echo
@@ -1815,9 +1794,27 @@ print_info "APP_ROOT is $APP_ROOT\n"
 
 check_nginx_conf
 
-if [ -d .git ];then BRANCH=`git rev-parse --abbrev-ref HEAD`; fi
+if [ -d .git ];then
+  BRANCH=`git rev-parse --abbrev-ref HEAD`
+  print_info "Branch is ${BRANCH}\n"
+fi
 
-if [ "$1" = "development" ] || [ "$1" = "production" ];then APP_ENV=$1; fi
+_check_docker_version(){
+  if [ -z "${BRANCH}" ];then
+    return
+  fi
+
+  DOCKER_VERSION_YY=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 1)
+  DOCKER_VERSION_MM=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 2)
+
+  if [ "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" != "${BRANCH}" ];then
+    print_warning "Current branch incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout\n"
+  fi
+}
+
+set +e
+command -v docker > /dev/null 2>&1 && _check_docker_version
+set -e
 
 # 写入版本号
 

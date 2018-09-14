@@ -21,7 +21,7 @@ x-deploy:
   &default-deploy
   restart_policy:
     condition: any
-    delay: 10s
+    delay: 15s
     max_attempts: 2
     window: 123s
   update_config:
