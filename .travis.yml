@@ -69,7 +69,7 @@ jobs:
     - stage: tag
       script: |
         github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
-          cat CHANGELOG.md | github-release create -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
+          cat CHANGELOG.md | github-release release -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
 
     - stage: development
       install:
@@ -208,6 +208,8 @@ jobs:
 stages:
   - name: tag
     if: tag =~ /^(v18)/
+  - development
+  - swarm
   - name: deb
     if: tag =~ /^(v18)/
   - name: rpm
@@ -232,3 +234,4 @@ branches:
   - master
   - '18.06'
   - dev
+  - /^(v18)/

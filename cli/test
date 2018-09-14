@@ -93,7 +93,7 @@ echo "
 server {
   server_name  127.0.0.1;
   listen       80 default_server;
-  root         /app/demo;
+  root         /app/demo/public;
   index        index.html index.htm index.php;
 
   location / {
