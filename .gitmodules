@@ -1,6 +1,0 @@
-[submodule "config/nginx"]
-	path = config/nginx
-	url = https://github.com/khs1994-docker/lnmp-nginx-conf-demo.git
-[submodule "config/httpd"]
-	path = config/httpd
-	url = https://github.com/khs1994-docker/lnmp-httpd-conf-demo.git
