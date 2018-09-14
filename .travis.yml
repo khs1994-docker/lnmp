@@ -1,9 +1,9 @@
 language: bash
 
 sudo: required
-# dist: trusty # 14.04
 
 dist: xenial # 16.04
+# dist: xenial # 16.04
 
 services:
 - docker
@@ -224,15 +224,9 @@ stages:
   - name: wsl-php-builder-rhel-72
     if: tag =~ /^(v18)/
 
-# stages:
-#   - name: deb
-#     if: tag =~ ^v
-#   - name: rpm
-#     if: tag =~ ^v
-
-branches:
-  only:
-  - master
-  - '18.06'
-  - dev
-  - /^(v18)/
+# branches:
+#   only:
+#   - master
+#   - '18.06'
+#   - dev
+#   - /^(v18)/
