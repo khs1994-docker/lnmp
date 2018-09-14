@@ -679,9 +679,12 @@ set_git_remote_origin_url(){
     print_info `git remote get-url origin`
     echo
   elif [ `git remote get-url origin` != 'git@github.com:khs1994-docker/lnmp.git' ] \
+      && [ `git remote get-url origin` != 'https://code.aliyun.com/khs1994-docker/lnmp' ] \
+      && [ `git remote get-url origin` != 'git@code.aliyun.com:khs1994-docker/lnmp' ] \
       && [ `git remote get-url origin` != 'https://github.com/khs1994-docker/lnmp' ];then
     # 存在但是设置错误
-    print_error "This git remote origin NOT set Correct, reseting...\n"
+    GIT_REMOTE_ORIGIN=`git remote get-url origin`
+    print_error "This git remote origin ${GIT_REMOTE_ORIGIN} NOT set Correct, reseting...\n"
     git remote rm origin
     git remote add origin git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
@@ -717,19 +720,20 @@ update(){
 }
 
 cn_mirror(){
+  set -x
   set_git_remote_origin_url
   git remote add origin git@github.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || echo > /dev/null
   git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || echo > /dev/null
   git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || echo > /dev/null
   git remote add coding git@git.coding.net:khs1994/lnmp.git > /dev/null 2>&1 || echo > /dev/null
   git fetch origin
-  git push -f aliyun remotes/origin/dev:dev
+  git push -f aliyun remotes/origin/18.06:18.06
   git push -f aliyun remotes/origin/master:master
   git push -f aliyun --tags
-  git push -f tgit remotes/origin/dev:dev
+  git push -f tgit remotes/origin/18.06:18.06
   git push -f tgit remotes/origin/master:master
   git push -f tgit --tags
-  git push -f coding remotes/origin/dev:dev
+  git push -f coding remotes/origin/18.06:18.06
   git push -f coding remotes/origin/master:master
   git push -f coding --tags
 }
