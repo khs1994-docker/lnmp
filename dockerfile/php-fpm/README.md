@@ -39,6 +39,10 @@ Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.co
 
 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) use this Docker Image.
 
+## 镜像优化
+
+* 本镜像包含了 Composer 故又加上了 git。使得总体积增加了 20 M 左右，在大规模使用时，建议去除掉 git + composer
+
 ## Extension
 
 ```bash
@@ -123,10 +127,6 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [ ] zend_test
 * [x] zip
 * [x] zlib
-
-## 镜像优化
-
-* 本镜像包含了 Composer 故又加上了 git。使得总体积增加了 20 M 左右，在大规模使用时，建议去除掉 git + composer
 
 ## More Information
 

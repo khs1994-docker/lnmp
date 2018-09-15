@@ -107,39 +107,41 @@
 │   │       └── local
 │   │           └── etc
 │   │               ├── php
-│   │               │   └── conf.d
-│   │               │       ├── date_timezone.ini
-│   │               │       ├── docker-php-ext-bcmath.ini
-│   │               │       ├── docker-php-ext-bz2.ini
-│   │               │       ├── docker-php-ext-calendar.ini
-│   │               │       ├── docker-php-ext-enchant.ini
-│   │               │       ├── docker-php-ext-exif.ini
-│   │               │       ├── docker-php-ext-gd.ini
-│   │               │       ├── docker-php-ext-gettext.ini
-│   │               │       ├── docker-php-ext-gmp.ini
-│   │               │       ├── docker-php-ext-igbinary.ini
-│   │               │       ├── docker-php-ext-imap.ini
-│   │               │       ├── docker-php-ext-intl.ini
-│   │               │       ├── docker-php-ext-memcached.ini
-│   │               │       ├── docker-php-ext-mysqli.ini
-│   │               │       ├── docker-php-ext-opcache.ini
-│   │               │       ├── docker-php-ext-pcntl.ini
-│   │               │       ├── docker-php-ext-pdo_mysql.ini
-│   │               │       ├── docker-php-ext-pdo_pgsql.ini
-│   │               │       ├── docker-php-ext-pgsql.ini
-│   │               │       ├── docker-php-ext-redis.ini
-│   │               │       ├── docker-php-ext-sockets.ini
-│   │               │       ├── docker-php-ext-sodium.ini
-│   │               │       ├── docker-php-ext-swoole.ini
-│   │               │       ├── docker-php-ext-sysvmsg.ini
-│   │               │       ├── docker-php-ext-sysvsem.ini
-│   │               │       ├── docker-php-ext-sysvshm.ini
-│   │               │       ├── docker-php-ext-xdebug.ini.default
-│   │               │       ├── docker-php-ext-xmlrpc.ini
-│   │               │       ├── docker-php-ext-xsl.ini
-│   │               │       ├── docker-php-ext-yaml.ini
-│   │               │       ├── docker-php-ext-zip.ini
-│   │               │       └── memory-limit.ini
+│   │               │   ├── conf.d
+│   │               │   │   ├── date_timezone.ini
+│   │               │   │   ├── docker-php-ext-bcmath.ini
+│   │               │   │   ├── docker-php-ext-bz2.ini
+│   │               │   │   ├── docker-php-ext-calendar.ini
+│   │               │   │   ├── docker-php-ext-enchant.ini
+│   │               │   │   ├── docker-php-ext-exif.ini
+│   │               │   │   ├── docker-php-ext-gd.ini
+│   │               │   │   ├── docker-php-ext-gettext.ini
+│   │               │   │   ├── docker-php-ext-gmp.ini
+│   │               │   │   ├── docker-php-ext-igbinary.ini
+│   │               │   │   ├── docker-php-ext-imap.ini
+│   │               │   │   ├── docker-php-ext-intl.ini
+│   │               │   │   ├── docker-php-ext-memcached.ini
+│   │               │   │   ├── docker-php-ext-mysqli.ini
+│   │               │   │   ├── docker-php-ext-opcache.ini
+│   │               │   │   ├── docker-php-ext-pcntl.ini
+│   │               │   │   ├── docker-php-ext-pdo_mysql.ini
+│   │               │   │   ├── docker-php-ext-pdo_pgsql.ini
+│   │               │   │   ├── docker-php-ext-pgsql.ini
+│   │               │   │   ├── docker-php-ext-redis.ini
+│   │               │   │   ├── docker-php-ext-sockets.ini
+│   │               │   │   ├── docker-php-ext-sodium.ini
+│   │               │   │   ├── docker-php-ext-swoole.ini
+│   │               │   │   ├── docker-php-ext-sysvmsg.ini
+│   │               │   │   ├── docker-php-ext-sysvsem.ini
+│   │               │   │   ├── docker-php-ext-sysvshm.ini
+│   │               │   │   ├── docker-php-ext-xdebug.ini.default
+│   │               │   │   ├── docker-php-ext-xmlrpc.ini
+│   │               │   │   ├── docker-php-ext-xsl.ini
+│   │               │   │   ├── docker-php-ext-yaml.ini
+│   │               │   │   ├── docker-php-ext-zip.ini
+│   │               │   │   └── memory-limit.ini
+│   │               │   ├── php.ini-development
+│   │               │   └── php.ini-production
 │   │               ├── php-fpm.conf
 │   │               ├── php-fpm.conf.default
 │   │               └── php-fpm.d
@@ -169,5 +171,5 @@
     ├── gcr.io.crt
     └── gcr.io.key
 
-41 directories, 127 files
+41 directories, 129 files
 ```

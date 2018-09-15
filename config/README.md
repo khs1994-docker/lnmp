@@ -18,7 +18,7 @@
 
 通过 [`Secrets`](https://docs.docker.com/engine/swarm/secrets/) [`Configs`](https://docs.docker.com/engine/swarm/configs/) 统一挂载到集群中。
 
-## 开发者
+## 项目贡献者
 
 更新默认配置文件
 

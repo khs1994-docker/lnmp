@@ -52,3 +52,5 @@ curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP_VERSION}/ph
 curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP_VERSION}/php.ini-development > php/php.development.ini
 
 rm -rf .env
+
+rm -rf php/default/usr/local/etc/php/php.ini-*
