@@ -20,7 +20,7 @@ $ lnmp-wsl-builder-php.sh 7.2.10
 
 $ lnmp-wsl-builder-php.sh apt
 
-$ lnmp-wsl-builder-php.sh 7.3.0
+$ lnmp-wsl-builder-php.sh 7.3.0RC1 7.3.0beta3
 
 $ lnmp-wsl-builder-php.sh 7.2.10 [--skipbuild] [tar] [deb] [enable-ext]
 
@@ -105,12 +105,17 @@ case "$1" in
     ;;
 
   7.3.* )
-     sudo apt install bison git -y
      export PHP_NUM=73
     ;;
 
+  nightly )
+    sudo apt install bison git -y
+    export PHP_NUM=74
+    export BUILD_FROM_GIT=1
+    ;;
+
   * )
-    echo "ONLY SUPPORT 5.6 +"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 nightly"
     exit 1
 esac
 }
@@ -129,17 +134,18 @@ _download_src(){
 
         cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-        if [ $PHP_NUM = 73 ];then
+        if ! [ -z "$BUILD_FROM_GIT" ];then
 
-          git clone --depth=1 https://github.com/php/php-src.git /usr/local/src/php-7.3.0 || \
-            ( git -C /usr/local/src/php-7.3.0 fetch --depth=1 origin master ; \
-              git -C /usr/local/src/php-7.3.0 fetch reset --hard origin/master ;
+          git clone --depth=1 https://github.com/php/php-src.git /usr/local/src/php || \
+            ( git -C /usr/local/src/php fetch --depth=1 origin master ; \
+              git -C /usr/local/src/php fetch reset --hard origin/master ;
             )
 
           return
         fi
 
-        wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null
+        wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null || \
+          wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
 
         echo -e "Untar ...\n\n"
 
@@ -577,7 +583,7 @@ _install_pecl_ext(){
     for extension in ${PHP_EXTENSION}
     do
         echo $extension | tee -a ${PHP_INSTALL_LOG}
-        sudo ${PHP_PREFIX}/bin/pecl install $extension || echo
+        sudo ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
     done
 }
 
@@ -618,7 +624,7 @@ exts=" pdo_pgsql \
 set -e
 for ext in $exts
 do
-  wsl-php-ext-enable.sh $ext || echo "$ext install error"
+  wsl-php-ext-enable.sh $ext || echo "$ext install error" | tee -a ${PHP_INSTALL_LOG}
 done
 
 # config opcache
