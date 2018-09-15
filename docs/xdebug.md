@@ -18,27 +18,23 @@
 
 ### 调试 HOST (必选项)
 
-编辑 `.env` 文件中的 `XDEBUG_REMOTE_HOST` 变量为你自己的 IP。这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改配置文件。
+编辑 `.env` 文件中的 `XDEBUG_REMOTE_HOST` 变量为你自己的 IP，这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改 `XDEBUG_REMOTE_HOST` 变量。
 
-#### Docker 桌面版特殊说明
+#### Docker for Windows macOS
 
-* 在 Docker 没有配置 DNS 的情况下可以使用 `host.docker.internal`
+Docker 没有配置 DNS 的情况下可以使用 `XDEBUG_REMOTE_HOST=host.docker.internal`，否则 IP 变化时重新修改变量
 
-所以有以下几种情况
-
-* Docker 没有配置 DNS 建议使用第二种配置方法
-
-* 电脑拥有固定 IP，采用第一种方法，但由于网络环境（家、公司）不定，每次还是得编辑 `.env` 文件中的 `XDEBUG_REMOTE_HOST` 变量
-
-* 电脑 IP 不定，又想自定义 Docker DNS 配置，那就只能每次 IP 变化时重新编辑 `.env` 文件中的 `XDEBUG_REMOTE_HOST` 变量
-
-#### Docker Linux
+#### Docker for Linux
 
 要么电脑固定 IP，要么 IP 变化时必须编辑 `.env` 文件中的 `XDEBUG_REMOTE_HOST` 变量
 
 ### 调试端口（可选项）
 
-`xdebug.remote_port=9001`
+`./config/php/docker-xdebug.ini`
+
+```bash
+xdebug.remote_port=9001
+```
 
 ### 警告
 

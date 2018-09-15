@@ -8,4 +8,6 @@
 
 * 官方默认的 `apt` 镜像
 
-* `pecl` 网站
+* `pecl`
+
+* PHP `composer`

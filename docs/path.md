@@ -22,9 +22,9 @@
 
 |名称|本机|容器|
 |--|--|--|
-|`httpd.conf` | `./config/etc/apache2/httpd.conf` | `/usr/local/apache2/conf/httpd.conf`|
-|`conf.d/`    | `./config/apache2/`               | `/usr/local/apache2/conf.d`         |
-|`logs/`      | `./log/apache2`                  | `/usr/local/apache2/logs`           |
+|`httpd.conf` | `./config/etc/httpd/httpd.conf` | `/usr/local/apache2/conf/httpd.conf`|
+|`conf.d/`    | `./config/httpd/`               | `/usr/local/apache2/conf.d`         |
+|`logs/`      | `./log/httpd`                  | `/usr/local/apache2/logs`           |
 
 # PHP
 

@@ -1,0 +1,12 @@
+{
+  "assignees": ["khs1994"],
+  "reviewers": ["khs1994"],
+  "baseBranches": ["dev"],
+  "commitBody": "[skip ci]",
+  "labels": ["renovateapp"],
+  "timezone": "Asia/Shanghai",
+  "extends": [
+    "config:base",
+    "docker:enableMajor"
+  ]
+}

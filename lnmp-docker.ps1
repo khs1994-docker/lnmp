@@ -278,8 +278,8 @@ Function cleanup(){
 }
 
 Function _update(){
-  git remote rm origin
-  git remote add origin git@github.com:khs1994-docker/lnmp
+  # git remote rm origin
+  # git remote add origin git@github.com:khs1994-docker/lnmp
   git fetch --depth=1 origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   git reset --hard origin/${BRANCH}

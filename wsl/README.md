@@ -46,7 +46,7 @@ export APP_ENV=wsl
 
 ## 脚本安装软件
 
-如果你不想编译安装，那么我写了一个脚本 （**脚本** 从 Docker 复制编译好的软件 [PHP 最新版] 到 WSL ，或设置 apt 从软件源 [或本人打包的 deb 包] 安装）。
+如果你不想编译安装，那么可以使用脚本（**脚本** 从 Docker 复制编译好的软件 [PHP 最新版] 到 WSL ，或设置 apt 从软件源 [或笔者打包的 deb 包] 安装）。
 
 * https://store.docker.com/community/images/khs1994/wsl/tags
 

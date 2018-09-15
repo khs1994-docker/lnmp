@@ -46,16 +46,18 @@
 
 ### 安装
 
-```bash
-$ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
+> 鉴于国内 clone GitHub 项目较慢，本项目在 gitee.com 进行开发，每日集成到 GitHub，建议国内用户使用中国镜像
 
-# $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
+```bash
+$ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git
+
+# $ git clone --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 # 从 GitHub 克隆太慢？请使用中国镜像
 
-$ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
+$ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git
 
-# $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+# $ git clone --depth=1 git@gitee.com:khs1994-docker/lnmp.git
 ```
 
 ### 启动 LNMP Demo
@@ -193,7 +195,7 @@ $ ./lnmp-docker down
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.9`            | **10.3.9**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc5-alpine`        | **5.0-rc5**            |`Alpine:3.8`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.10-fpm-alpine`  | **7.2.10**       |`Alpine:3.8`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.10-fpm-alpine`  | **5.6.x**       |`Alpine:3.8`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.10-fpm-alpine`  | **5.7.x**       |`Alpine:3.8`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.10-fpm-alpine`  | **1.7.2**       |`Alpine:3.8`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.10-fpm-alpine`  | **2.13.0**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.10-alpine`           | **1.5.10**       |`Alpine:3.8`    |
@@ -294,7 +296,7 @@ https://doc.lnmp.khs1994.com
 * [yeszao/dnmp](https://github.com/yeszao/dnmp)
 * [laradock/laradock](https://github.com/laradock/laradock)
 
-## 赞赏我
+## 赞助项目
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
 

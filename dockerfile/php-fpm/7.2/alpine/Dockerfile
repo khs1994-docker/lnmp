@@ -159,11 +159,8 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.7/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
- \
- # composer 中国镜像
- && composer config -g repo.packagist composer https://packagist.laravel-china.org \
  \
  # laravel 安装程序
  && composer global require --prefer-dist "laravel/installer" \
@@ -171,6 +168,9 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
  # php-cs-fixer
  # https://github.com/FriendsOfPHP/PHP-CS-Fixer
  && composer global require --prefer-dist "friendsofphp/php-cs-fixer" \
+ \
+ # composer 中国镜像
+ && composer config -g repo.packagist composer https://packagist.laravel-china.org \
  \
  # Sami an API documentation generator
  # https://github.com/FriendsOfPHP/Sami

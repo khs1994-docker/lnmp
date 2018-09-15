@@ -681,8 +681,8 @@ set_git_remote_origin_url(){
     print_info `git remote get-url origin`
     echo
   elif [ `git remote get-url origin` != 'git@github.com:khs1994-docker/lnmp.git' ] \
-      && [ `git remote get-url origin` != 'https://code.aliyun.com/khs1994-docker/lnmp' ] \
-      && [ `git remote get-url origin` != 'git@code.aliyun.com:khs1994-docker/lnmp' ] \
+      && [ `git remote get-url origin` != 'https://gitee.com/khs1994-docker/lnmp' ] \
+      && [ `git remote get-url origin` != 'git@gitee.com:khs1994-docker/lnmp' ] \
       && [ `git remote get-url origin` != 'https://github.com/khs1994-docker/lnmp' ];then
     # 存在但是设置错误
     GIT_REMOTE_ORIGIN=`git remote get-url origin`

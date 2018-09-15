@@ -1,5 +1,5 @@
 #
-# @see @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
+# @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
 #
 
 workspace:
@@ -8,11 +8,20 @@ workspace:
   path: src
 
 pipeline:
-  #
-  # This is phpunit demo
-  #
 
-  php:
+  # install dep
+  install:
+    image: composer:${COMPOSER_VERSION}
+    shell: bash
+    commands:
+      - pwd
+      - composer config -g repo.packagist composer https://packagist.laravel-china.org
+      # 由于 composer 镜像缺少某些扩展，故忽略这些
+      - composer install -q --ignore-platform-reqs
+      # - composer update -q --ignore-platform-reqs
+
+  # test script
+  script:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
     pull: true
     shell: bash
@@ -25,16 +34,11 @@ pipeline:
       - CI_MYSQL_PASSWORD=mytest
       - CI_MYSQL_DBNAME=test
     commands:
-      - composer config -g repo.packagist composer https://packagist.laravel-china.org
-      - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       - pwd
-      - composer install -q
-      # - composer update -q
+      - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit --coverage-clover=coverage.xml
-      # please set env CODECOV_TOKEN=XXX
-      - bash <(curl -s https://codecov.io/bash)
     when:
       # platform: linux/amd64
       # platform:  [ linux/*, windows/amd64 ]
@@ -53,14 +57,8 @@ pipeline:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
 
-  #
-  # This is a build docker image demo，when tag push
-  #
-
+  # when tag push build docker image
   publish_php:
-    #
-    # ci_xxx KhsCI Image
-    #
     image: ci_docker_build
     # registry: docker.khs1994.com
     repo: khs1994/php
@@ -72,37 +70,29 @@ pipeline:
     # dockerfile: path/to/Dockerfile
     when:
       event: tag
-    # 这里指定 secrets 系统将自动载入对应的环境变量
-    secrets: [ docker_username, docker_password ]
 
-  #
-  # This is success after demo
-  #
-
-  success:
-    image: ci_after_success
+  after_success:
+    image: bash
+    shell: bash
     when:
       status: success
+    commands:
+      # please set env CODECOV_TOKEN=XXX
+      - bash <(curl -s https://codecov.io/bash)
 
-
-  #
-  # This is failure after demo
-  #
-
-  failure:
-    image: ci_after_failure
+  after_failure:
+    image: bash
     when:
       status: failure
-
-  #
-  # This is build status changed demo,example prev success current failure
-  #
+    commands:
+      - echo "build failure"
 
   changed:
-    image: ci_status_changed
+    image: bash
     when:
       status: changed
-
+    commands:
+      - echo "build status changed"
 
 services:
   mysql:
@@ -128,6 +118,8 @@ services:
   #   command: [ --smallfiles ]
 
 matrix:
+  COMPOSER_VERSION:
+    - 1.7.2
   PHP_VERSION:
     - 7.2.10
     - 7.1.22
