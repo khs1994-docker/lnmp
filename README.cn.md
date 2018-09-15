@@ -47,15 +47,15 @@
 ### 安装
 
 ```bash
-$ git clone --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git
+$ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git
 
-# $ git clone --depth=1 --recursive git@github.com:khs1994-docker/lnmp.git
+# $ git clone --depth=1 git@github.com:khs1994-docker/lnmp.git
 
 # 从 GitHub 克隆太慢？请使用中国镜像
 
-$ git clone --depth=1 --recursive https://code.aliyun.com/khs1994-docker/lnmp.git
+$ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git
 
-# $ git clone --depth=1 --recursive git@code.aliyun.com:khs1994-docker/lnmp.git
+# $ git clone --depth=1 git@gitee.com:khs1994-docker/lnmp.git
 ```
 
 ### 启动 LNMP Demo
