@@ -109,7 +109,7 @@ _download_src(){
       cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
       wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
-        || wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
+        wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
 
       echo -e "Untar ...\n\n"
 

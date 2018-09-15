@@ -62,14 +62,14 @@ $ gpg --import filename
 
 * https://help.github.com/articles/telling-git-about-your-signing-key/#telling-git-about-your-x509-key
 
-2.19 +
+git 2.19 +
 
 ```bash
 $ git config --global gpg.x509.program smimesign
 $ git config --global gpg.format x509
 ```
 
-2.18 -
+git 2.18 -
 
 ```bash
 $ git config --global gpg.program smimesign
