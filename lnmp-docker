@@ -501,6 +501,8 @@ cleanup(){
       && echo > log/mariadb/error.log \
       && echo > log/nginx/error.log \
       && echo > log/nginx/access.log \
+      && echo > log/nginx-unit/nginx-unit.log \
+      && echo > log/nginx-unit/access.log \
       && echo > log/php/php-fpm-access.log \
       && echo > log/php/php-fpm-error.log \
       && echo > log/php/error.log \

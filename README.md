@@ -1,6 +1,6 @@
 # LNMP Docker
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/lnmp.svg)](https://packagist.org/packages/khs1994/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/lnmp.svg)](https://packagist.org/packages/khs1994/lnmp) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
 
 [![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-Tencent%20Kubernetes%20Engine-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
@@ -25,20 +25,6 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 :warning: Don't Edit Any Files except `.env` [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
 
 :warning: Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
-
-## Advanced
-
-* [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
-
-* [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
-
-## Need PHP Under 7.1?
-
-Please see https://github.com/khs1994-docker/lnmp/issues/354
-
-## Meet issues With MySQL 8.0 ?
-
-Please see https://github.com/khs1994-docker/lnmp/issues/450
 
 ## Prerequisites
 
@@ -117,7 +103,21 @@ $redis->connect('redis', 6379);
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
 
-### PHPer commands
+## Advanced
+
+* [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
+
+* [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
+
+## Need PHP Under 7.1?
+
+Please see https://github.com/khs1994-docker/lnmp/issues/354
+
+## Meet issues With MySQL 8.0 ?
+
+Please see https://github.com/khs1994-docker/lnmp/issues/450
+
+## PHPer commands
 
 * `lnmp-php`
 
@@ -131,7 +131,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 For more information please see [Documents](docs/command.md)
 
-### Issue SSL certificate
+## Issue SSL certificate
 
 >Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
 
@@ -141,17 +141,17 @@ $ ./lnmp-docker ssl khs1994.com -d *.khs1994.com
 
 >Please set API key and id in `.env` file or System ENV. Support Self-Signed SSL certificate, for more information, see [Documents](docs/nginx/issue-ssl.md).
 
-### List LNMP Container
+## List LNMP Container
 
 ```bash
 $ docker container ls -a -f label=com.khs1994.lnmp
 ```
 
-### Use Self-Build Docker Image
+## Use Self-Build Docker Image
 
 Edit `Dockerfile` in `./dockerfile/*/Dockerfile`, then exec `./lnmp-docker build`.
 
-### Restart
+## Restart
 
 ```bash
 # Restart all container
@@ -160,13 +160,13 @@ $ ./lnmp-docker restart
 $ ./lnmp-docker restart nginx php7
 ```
 
-### Stop
+## Stop
 
 ```bash
 $ ./lnmp-docker stop
 ```
 
-### Stop and remove
+## Stop and remove
 
 ```bash
 $ ./lnmp-docker down
@@ -188,11 +188,11 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.34-alpine`       | **2.4.34**             |`Alpine:3.7`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.12`              | **8.0.12**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.9`            | **10.3.9**             |`Ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc4-alpine`        | **5.0-rc4**            |`Alpine:3.8`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.9-fpm-alpine`  | **7.2.9**       |`Alpine:3.8`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.9-fpm-alpine`  | **5.6.x**       |`Alpine:3.8`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.9-fpm-alpine`  | **1.7.2**       |`Alpine:3.8`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.9-fpm-alpine`  | **2.13.0**      |`Alpine:3.8`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc5-alpine`        | **5.0-rc5**            |`Alpine:3.8`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.10-fpm-alpine`  | **7.2.10**       |`Alpine:3.8`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.10-fpm-alpine`  | **5.6.x**       |`Alpine:3.8`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.10-fpm-alpine`  | **1.7.2**       |`Alpine:3.8`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.10-fpm-alpine`  | **2.13.0**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.10-alpine`           | **1.5.10**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.6-management-alpine` | **3.7.6**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.8`    |

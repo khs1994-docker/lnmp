@@ -1,6 +1,6 @@
 # khs1994-docker/lnmp 支持文档
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=18.06)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=18.06)](https://travis-ci.org/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
 本项目不建议刚学习 LNMP 的新手使用，当掌握 LNMP 到一定程度时，相信你一定会与我产生共鸣：[项目初衷](why.md)。
 
@@ -18,9 +18,9 @@
 
 `vYY.MM` 分支与 Docker Stable 版本 `vYY.MM` 一致，每当 PHP 主线版本升级时，修正版本号加 1。
 
-例如：当 Docker 桌面版发布 `v18.09` 时，本项目将从 `master` 分支检出 `18.09` 分支，PHP 发布 7.2.10 时，本项目将发布 `v18.09` 版本，PHP 发布 7.2.11 时，本项目将发布 `v18.09.01` 版本，当大部分 PHP 扩展兼容 PHP 7.3.0 时，本项目会将 PHP 版本由 7.2 切换到 7.3
+例如：当 Docker 桌面版发布 `v18.09` 时，本项目将从 `master` 分支检出 `18.09` 分支，PHP 发布 7.2.11 时，本项目将发布 `v18.09` 版本，PHP 发布 7.2.12 时，本项目将发布 `v18.09.01` 版本，当大部分 PHP 扩展兼容 PHP 7.3.0 时，本项目会将 PHP 版本由 7.2 切换到 7.3
 
-即：本项目 `v18.09.ZZ` 与 **Docker 桌面版** `v18.09.ZZ` 和 **PHP** `7.2.10` 对应。
+即：本项目 `v18.09` 与 **Docker 桌面版** `v18.09` 和 **PHP** `7.2.11` 对应。
 
 ## 为什么选择 CaaS
 

@@ -22,7 +22,7 @@ services:
 
   redis:
     << : *default-common
-    image: redis:${LNMP_REDIS_VERSION:-5.0-rc4}-alpine
+    image: redis:${LNMP_REDIS_VERSION:-5.0-rc5}-alpine
 
   memcached:
     << : *default-common
@@ -42,7 +42,7 @@ services:
 
   php7:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.9}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.10}-fpm-alpine
 
   phpmyadmin:
     << : *default-common

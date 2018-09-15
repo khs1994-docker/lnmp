@@ -26,7 +26,7 @@ $global:TZ='Asia/Shanghai'
 # You can overwrite this file in .env.ps1
 #
 
-$global:LNMP_PHP_IMAGE="khs1994/php:7.2.9-fpm-alpine"
+$global:LNMP_PHP_IMAGE="khs1994/php:7.2.10-fpm-alpine"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 
@@ -41,7 +41,7 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 $global:NGINX_VERSION="1.15.3"
 # https://windows.php.net/download/
-$global:PHP_VERSION="7.2.9"
+$global:PHP_VERSION="7.2.10"
 $global:MYSQL_VERSION="8.0.12"
 $global:HTTPD_VERSION="2.4.34"
 $global:IDEA_VERSION="1.11.4269"

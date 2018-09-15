@@ -14,11 +14,11 @@ Build php in WSL RHEL by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php-rhel.sh 7.2.9
+$ lnmp-wsl-builder-php-rhel.sh 7.2.10 7.3.0RC1 7.3.0beta3
 
 $ lnmp-wsl-builder-php-rhel.sh yum
 
-$ lnmp-wsl-builder-php-rhel.sh 7.2.9 [--skipbuild] [tar] [rpm] [enable-ext]
+$ lnmp-wsl-builder-php-rhel.sh 7.2.10 [--skipbuild] [tar] [rpm] [enable-ext]
 
 "
 
@@ -81,8 +81,17 @@ case "$1" in
     export PHP_NUM=72
     ;;
 
+  7.3.* )
+    export PHP_NUM=73
+    ;;
+
+  nightly )
+    export PHP_NUM=74
+    export BUILD_FROM_GIT=1
+    ;;
+
   * )
-    echo "ONLY SUPPORT 5.6 +"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 nightly"
     exit 1
 esac
 }
@@ -99,7 +108,8 @@ _download_src(){
 
       cd /usr/local/src ; sudo chmod 777 /usr/local/src
 
-      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null
+      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
+        || wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
 
       echo -e "Untar ...\n\n"
 
@@ -463,7 +473,7 @@ _install_pecl_ext(){
     for extension in ${PHP_EXTENSION}
     do
         echo $extension | sudo tee -a ${PHP_INSTALL_LOG}
-        sudo ${PHP_PREFIX}/bin/pecl install $extension || echo
+        sudo ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
     done
 }
 
@@ -690,7 +700,7 @@ command -v wget || sudo yum install -y wget
 
 mkdir -p /tmp/php-builder || echo
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.9 ; fi
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.10 ; fi
 
 _get_phpnum $PHP_VERSION
 
