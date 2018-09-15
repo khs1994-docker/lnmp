@@ -46,6 +46,8 @@
 
 ### 安装
 
+> 鉴于国内 clone GitHub 项目较慢，本项目在 gitee.com 进行开发，每日集成到 GitHub，建议国内用户使用中国镜像
+
 ```bash
 $ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git
 
