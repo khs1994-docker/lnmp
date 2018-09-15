@@ -5,7 +5,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-# ARG PHP_VERSION=7.3.0beta2
+# ARG PHP_VERSION=7.3.0RC1
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -106,6 +106,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-shmop=shared \
         --with-snmp=shared \
         --enable-wddx=shared \
+        # https://github.com/docker-library/php/issues/510
         --enable-embed=shared \
         --with-mysqli=shared \
         --with-pgsql=shared
@@ -355,18 +356,21 @@ ENV PECL_RUN_DEPS \
       yaml
 
 ENV PECL_EXTENSION \
-      # mongodb \
+      mongodb \
       igbinary \
-      redis
-      # memcached \
-      # xdebug \
-      # yaml \
-      # swoole
+      redis \
+      memcached \
+      xdebug \
+      yaml \
+      swoole
 
 RUN set -x \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && for extension in $PECL_EXTENSION; do pecl install ${extension}-beta; done \
+      && for extension in $PECL_EXTENSION; \
+         do
+           pecl install ${extension}-beta;
+         done \
       # && apk add --no-cache git openssh-client \
       # && git clone -b PHP-7.3-support --depth=1 https://github.com/derickr/xdebug.git \
       # && apk del --no-cache git openssh-client \
@@ -404,7 +408,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.7/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
  \
  # composer 中国镜像

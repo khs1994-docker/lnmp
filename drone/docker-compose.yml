@@ -1,0 +1,102 @@
+version: "3.7"
+
+#
+# This file is override by docker-compose.override.yml
+#
+
+x-common:
+  &default-common
+  restart: always
+  networks:
+    - backend
+
+services:
+
+  drone-server:
+    << : *default-common
+    image: drone/drone:${CI_DRONE_VERSION:-0.8.6}
+    ports:
+      # - 80:80
+      # - 443:443
+      - "${CI_HOST:-192.168.199.100}:${CI_DRONE_PORT:-8000}:8000"
+      # - 9000:9000
+    volumes:
+      - drone-data:/var/lib/drone/:rw
+    networks:
+      - frontend
+      - backend
+
+  drone-agent:
+    << : *default-common
+    image: drone/agent:${CI_DRONE_VERSION:-0.8.6}
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    environment:
+      - DRONE_SECRET=${DRONE_SECRET}
+      - DRONE_SERVER=drone-server:9000
+
+  gogs:
+    << : *default-common
+    image: gogs/gogs:latest@sha256:e63c53931539b1869ac36e1262fe6564274abeb8e577ca9962187368f242022c
+    ports:
+      - "${CI_HOST:-192.168.199.100}:${CI_GOGS_SSH_PORT}:22"
+      - "${CI_HOST:-192.168.199.100}:${CI_GOGS_PORT}:3000"
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - gogs-data:/data:rw
+      - ./config/nginx/ssl:/etc/nginx/conf.d/ssl:rw
+      - ./config/gogs/app.ini:/data/gogs/conf/app.ini:rw
+      - ./logs/gogs:/app/gogs/log:rw
+
+  registry:
+    << : *default-common
+    image: registry:latest@sha256:672d519d7fd7bbc7a448d17956ebeefe225d5eb27509d8dc5ce67ecb4a0bce54
+    ports:
+      - "${CI_HOST:-192.168.199.100}:${CI_REGISTRY_PORT:-5000}:5000"
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./config/registry/config.yml:/etc/docker/registry/config.yml:ro
+      - registry-data:/var/lib/registry:rw
+
+  mysql:
+    << : *default-common
+    image: mysql:${CI_MYSQL_VERSION:-8.0.12}
+    env_file: secrets/mysql.env
+    volumes:
+      - mysql-data:/var/lib/mysql:rw
+      - ./backup/init:/docker-entrypoint-initdb.d:ro
+    command: ["mysqld","--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
+
+  redis:
+    << : *default-common
+    image: redis:${CI_REDIS_VERSION:-5.0-rc4}-alpine
+    volumes:
+      - redis-data:/data
+
+  nginx:
+    << : *default-common
+    image: khs1994/nginx:${CI_NGINX_VERSION:-1.15.3}-alpine
+    networks:
+      - frontend
+    ports:
+      - "443:443"
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./logs/nginx:/var/log/nginx
+
+volumes:
+  gogs-data:
+  redis-data:
+  mysql-data:
+  drone-data:
+  registry-data:
+
+networks:
+  backend:
+  frontend:

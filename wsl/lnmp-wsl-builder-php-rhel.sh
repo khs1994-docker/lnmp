@@ -158,12 +158,12 @@ cyrus-sasl \
 freetype \
 libpng \
 libjpeg \
-                $( if [ $PHP_NUM -ge "72" ];then \
-echo $( if ! [ "${ARGON2}" = 'false' ];then \
-echo "libargon2";
-                             fi ); \
-echo "libsodium"; \
-                   fi ) \
+$( if [ $PHP_NUM -ge "72" ];then \
+     echo $( if ! [ "${ARGON2}" = 'false' ];then \
+               echo "libargon2";
+             fi ); \
+     echo "libsodium"; \
+   fi ) \
 libyaml \
 libtidy \
 xmlrpc-c \

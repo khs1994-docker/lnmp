@@ -1,0 +1,14 @@
+version: "3.7"
+
+#
+# This file is to open service port
+#
+
+services:
+
+  mysql:
+    ports:
+      - "${CI_HOST:-127.0.0.1}:${CI_MYSQL_PORT:-13306}:3306"
+  redis:
+    ports:
+      - "${CI_HOST:-127.0.0.1}:${CI_REDIS_PORT:-16379}:6379"

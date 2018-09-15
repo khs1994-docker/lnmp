@@ -1,0 +1,68 @@
+version: 0.1
+#
+# https://docs.docker.com/registry/configuration/#list-of-configuration-options
+#
+log:
+  accesslog:
+    disabled: true
+  level: info
+  formatter: json
+  fields:
+    service: registry
+    environment: staging
+storage:
+  delete:
+    enabled: true
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+# auth:
+#   htpasswd:
+#     realm: basic-realm
+#     path: /etc/docker/registry/auth/nginx.htpasswd
+http:
+  addr: :5000
+  # host: https://docker.t.khs1994.com
+  headers:
+    X-Content-Type-Options: [nosniff]
+  # http2:
+  #   disabled: false
+  # tls:
+  #   certificate: /etc/docker/registry/ssl/docker.t.khs194.com.crt
+  #   key: /etc/docker/registry/ssl/docker.t.khs1994.com.key
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
+  tcp:
+    - addr: {{ REDIS_HOST }}
+      timeout: 3s
+      interval: 10s
+      threshold: 3
+notifications:
+  endpoints:
+    - name: alistener
+      disabled: false
+      url: {{ WEBHOOKS_HOST }}
+      # headers:
+      #   Authorization: [Bearer <your token, if needed>]
+      timeout: 500ms
+      threshold: 5
+      backoff: 1s
+# proxy:
+#   remoteurl: https://registry-1.docker.io
+#   username: khs1994
+#   password: ****
+
+redis:
+  addr: {{ REDIS_HOST }}
+  db: 0
+  dialtimeout: 10ms
+  readtimeout: 10ms
+  writetimeout: 10ms
+  pool:
+    maxidle: 16
+    maxactive: 64
+    idletimeout: 300s

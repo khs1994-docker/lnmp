@@ -12,22 +12,25 @@ workspace:
 #
 
 pipeline:
-  #
-  # 测试 PHP 项目
-  #
-  php:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
-    # pull: true
+  # install dep
+  install:
+    image: composer:${COMPOSER_VERSION}
     commands:
       - pwd
       - composer config -g repo.packagist composer https://packagist.laravel-china.org
       - composer install -q
       - composer update -q
-      #
+
+  # test script
+  script:
+    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    # pull: true
+    commands:
+      - pwd
+      - mv $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       # 服务初始化需要时间，这里延迟执行
-      #
       - sleep 20
-      - vendor/bin/phpunit
+      - vendor/bin/phpunit --coverage-clover=coverage.xml
     # volumes:
       # - /Users/khs1994/khs1994/khs1994-lnmp/tmp/cache:/tmp/cache
       # - /data/lnmp/tmp/cache:/tmp/cache
@@ -48,9 +51,7 @@ pipeline:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
 
-  #
-  # CI/CD 构建预上线环境 PHP NGINX 镜像
-  #
+  # when tag push, build docker image
   publish_php:
     image: plugins/docker
     # registry: docker.khs1994.com
@@ -132,6 +133,28 @@ pipeline:
       environment: production
     secrets: [ docker_username, docker_password ]
 
+  after_success:
+    image: bash
+    when:
+      status: success
+    commands:
+      - bash <(curl -s https://codecov.io/bash)
+    secrets: codecov_token
+
+  after_failure:
+    image: bash
+    when:
+      status: failure
+    commands:
+      - echo "build failure"
+
+  after_success:
+    image: bash
+    when:
+      status: changed
+    commands:
+      - echo "build changed"
+
 services:
   mysql:
     image: mysql:${MYSQL_VERSION}
@@ -155,6 +178,8 @@ services:
   #   command: [ --smallfiles ]
 
 matrix:
+  COMPOSER_VERSION:
+    - 1.7.2
   PHP_VERSION:
     - 7.2.10
     - 7.1.22

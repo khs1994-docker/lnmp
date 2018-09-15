@@ -230,10 +230,10 @@ libpng16-16 \
 $( sudo apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
 $( sudo apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
 $( if [ $PHP_NUM -ge "72" ];then \
-echo $( if ! [ "${ARGON2}" = 'false' ];then \
-echo "libargon2-0";
-          fi ); \
-echo "libsodium18 libzip4"; \
+     echo $( if ! [ "${ARGON2}" = 'false' ];then \
+               echo "libargon2-0";
+             fi ); \
+     echo "libsodium18 libzip4"; \
    fi ) \
 libyaml-0-2 \
 $( sudo apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
@@ -482,9 +482,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
 
-    if ! [ -f configure ];then
-      ./buildconf --force
-    fi
+    if ! [ -f configure ];then ./buildconf --force; fi
 
     ./configure ${CONFIGURE}
 
@@ -855,8 +853,6 @@ if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
   echo "debian9 notsupport php56" ; exit 1 ; fi
 
 sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
-
-echo $2
 
 if [ "$2" = 'enable-ext' ];then
   ( _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
