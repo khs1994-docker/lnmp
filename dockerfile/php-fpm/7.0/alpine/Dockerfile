@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.0.31
+ARG PHP_VERSION=7.0.32
 
 FROM php:${PHP_VERSION}-fpm-alpine as php
 

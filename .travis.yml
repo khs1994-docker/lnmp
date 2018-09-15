@@ -17,7 +17,6 @@ env:
 
 before_install:
 - date
-# 升级 Docker 最新 stable
 - docker --version
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -104,6 +103,7 @@ jobs:
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_71}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+
     - stage: wsl-php-builder-72
       install:
         - ./lnmp-docker compose --official -f
@@ -119,8 +119,6 @@ jobs:
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
-    # wsl-rhel
-    #
 
     - stage: wsl-php-builder-rhel-71
       install:
@@ -137,6 +135,7 @@ jobs:
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_71}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+
     - stage: wsl-php-builder-rhel-72
       install:
         - ./lnmp-docker compose --official -f
