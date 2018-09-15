@@ -38,9 +38,11 @@ $ ./ci
 
 ### 编辑 `.env` 文件
 
-* `CI_HOST` 为主机 IP (建议使用 内网 IP, example 192.168.199.100)
+* `CI_HOST` 为主机 IP (建议使用内网 IP, 例如 192.168.199.100)
 
 * `CI_DOMAIN` 为服务主域名（example t.khs1994.com）
+
+* Windows 用户请将 `COMPOSE_CONVERT_WINDOWS_PATHS=1` 取消注释
 
 ### `443` 端口是否占用
 

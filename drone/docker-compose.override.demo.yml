@@ -4,8 +4,8 @@ version: "3.7"
 # This file override docker-compose.yml
 #
 
-x-khs1994:
-  &khs1994
+x-ci:
+  &production
   environment:
     - DRONE_GITHUB=true
     - DRONE_OPEN=${DRONE_OPEN:-false}
@@ -72,4 +72,4 @@ services:
     # << : *github
     # << : *gitlab
     # << : *coding
-    # << : *khs1994
+    # << : *production

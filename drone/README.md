@@ -40,10 +40,18 @@
 
 ### 安装
 
+> 已经使用 khs1994-docker/lnmp?请直接执行 `$ cd ~/lnmp/drone`
+
 ```bash
 $ git clone https://github.com/khs1994-docker/ci.git ~/ci
 
 $ cd ci
+```
+
+#### Windows 用户使用 WSL
+
+```bash
+$ wsl
 ```
 
 ### 修改配置
@@ -57,6 +65,8 @@ $ ./ci
 ### 配置 hosts
 
 修改 `.env` 中的 `CI_HOST` 变量值为 `你自己的 IP`(例如 `云服务器公网 IP`、`路由器分配给电脑的 IP`)
+
+> Windows 用户请将 `COMPOSE_CONVERT_WINDOWS_PATHS=1` 取消注释
 
 ### MySQL 密码(可选)
 

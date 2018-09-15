@@ -19,14 +19,11 @@ Options:
   --use-external-nginx   使用外部 NGINX = 后边值为配置文件路径 (TLS Only)
 
 Commands:
-
-  change-mysql-root-password
-
   up           [-d]   [--open-port]
   config              [--open-port]
   down
 
-  up-tls       [-d]   [--open-port]  [--use-external-nginx=/etc/nginx/conf.d]
+  tls-up       [-d]   [--open-port]  [--use-external-nginx=/etc/nginx/conf.d]
   tls-config          [--open-port]
 
   swarm-deploy
@@ -46,31 +43,25 @@ You must Update .env file when update this project.
 }
 
 _cp(){
-  if [ ! -f $1 ];then cp $2 $1; fi
+  if [ ! -f $2 ];then cp $1 $2; fi
 }
 
 _init(){
-  _cp .env .env.example
-  _cp docker-compose.override.yml docker-compose.override.demo.yml
+  _cp .env.example .env
+  _cp docker-compose.override.demo.yml docker-compose.override.yml
 
   cd config
 
-  _cp gogs/app.ini gogs/app.example.ini
-  _cp registry/config.yml registry/config.example.yml
-
-  cd ../webhooks
-
-  _cp .env .env.example
-  _cp update.js update.example.js
-  _cp update.sh update.example.sh
+  _cp gogs/app.example.ini gogs/app.ini
+  _cp registry/config.example.yml registry/config.yml
 
   cd ../
 
   cd config/nginx
 
-  _cp docker-registry.conf demo-docker-registry.config
-  _cp drone.conf demo-drone.config
-  _cp gogs.conf demo-gogs.config
+  _cp demo-docker-registry.config docker-registry.conf
+  _cp demo-drone.config drone.conf
+  _cp demo-gogs.config gogs.conf
 
   cd ../../
 
@@ -82,18 +73,12 @@ _init(){
 _reset_(){
   rm -rf config/gogs/app.ini \
       config/registry/config.yml \
-      webhooks/update.js \
-      webhooks/update.sh \
       config/nginx/*.conf
 }
 
 _reset(){
   _reset_
   rm -rf .env webhooks/.env docker-compose.override.yml
-}
-
-_change_mysql_root_password(){
- echo "Please edit ./secrets/mysql.env"
 }
 
 _sed_common(){
