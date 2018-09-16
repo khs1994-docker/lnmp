@@ -4,6 +4,14 @@ FROM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
+ARG PHP_EXTENSION_EXTRA
+
+ARG PECL_EXTENSION_EXTRA
+
+ARG APK_EXTRA
+
+ARG APK_DEV_EXTRA
+
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
@@ -30,7 +38,8 @@ ENV PHP_EXTENSION \
       # tidy \
       xmlrpc \
       xsl \
-      zip
+      zip \
+      ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \
       # mongodb \
@@ -39,17 +48,8 @@ ENV PECL_EXTENSION \
       # memcached \ # 5.6 not support
       # 安装测试版的扩展，可以在扩展名后加 -beta
       xdebug-2.5.5 \
-      yaml-1.3.1
-      # swoole
-
-ENV PECL_EXTENSION_LIST \
-      # mongodb \
-      igbinary \
-      redis \
-      # memcached \ # 5.6 not support
-      # 安装测试版的扩展，可以在扩展名后加 -beta
-      xdebug \
-      yaml
+      yaml-1.3.1 \
+      ${PECL_EXTENSION_EXTRA:-}
       # swoole
 
 # 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
@@ -89,6 +89,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp \
                          icu-libs \
                          libxpm \
+                         ${APK_EXTRA:-} \
                          " \
                          # libwebp \
                          # tidyhtml-libs \
@@ -114,6 +115,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp-dev \
                          icu-dev \
                          libxpm-dev \
+                         ${APK_DEV_EXTRA:-} \
                          " \
                          # libwebp-dev \
                          # tidyhtml-dev \
@@ -127,8 +129,11 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                     --with-xpm-dir=/usr \
         && docker-php-ext-install $PHP_EXTENSION \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
-        && for extension in $PECL_EXTENSION;do pecl install $extension; done \
-        && docker-php-ext-enable $PECL_EXTENSION_LIST opcache \
+        && for extension in $PECL_EXTENSION;do \
+             pecl install $extension \
+               && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
+           done \
+        && docker-php-ext-enable opcache \
         && apk del --no-cache .build-deps .php-fpm-build-deps \
         # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \

@@ -9,6 +9,14 @@ ENV TZ=Asia/Shanghai \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
+ARG PHP_EXTENSION_EXTRA
+
+ARG PECL_EXTENSION_EXTRA
+
+ARG APK_EXTRA
+
+ARG APK_DEV_EXTRA
+
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
 ENV PHPIZE_DEPS \
@@ -122,11 +130,11 @@ ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
 ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
-ENV GPG_KEYS CBAF69F173A0FEA4B537F470D66C9593118BCCB6 F38252826ACD957EF380D39F2F7956BC5DA04B5D
+# ENV GPG_KEYS CBAF69F173A0FEA4B537F470D66C9593118BCCB6 F38252826ACD957EF380D39F2F7956BC5DA04B5D
 
-ENV PHP_VERSION 7.3.0beta2
-ENV PHP_URL="https://downloads.php.net/~cmb/php-7.3.0beta2.tar.xz" PHP_ASC_URL="https://downloads.php.net/~cmb/php-7.3.0beta2.tar.xz.asc"
-ENV PHP_SHA256="32670f40aecce130727d841e3191d30237caff643a239d3c16cd579e762bc4c6" PHP_MD5=""
+# ENV PHP_VERSION 7.3.0beta2
+# ENV PHP_URL="https://downloads.php.net/~cmb/php-7.3.0beta2.tar.xz" PHP_ASC_URL="https://downloads.php.net/~cmb/php-7.3.0beta2.tar.xz.asc"
+# ENV PHP_SHA256="32670f40aecce130727d841e3191d30237caff643a239d3c16cd579e762bc4c6" PHP_MD5=""
 
 COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
 
@@ -138,15 +146,13 @@ COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
 
 RUN set -xe \
   ; mkdir -p $PHP_INI_DIR/conf.d \
-  && apk add --no-cache --virtual .fetch-deps gnupg \
+  # && apk add --no-cache --virtual .fetch-deps gnupg \
 	&& mkdir -p /usr/src \
 	&& cd /usr/src \
   && apk add --no-cache git openssh-client \
   && git clone --depth=1 https://github.com/php/php-src.git php \
   && apk del --no-cache git openssh-clinet \
-	\
 	# wget -O php.tar.xz "$PHP_URL"; \
-	\
 	# if [ -n "$PHP_SHA256" ]; then \
 	# 	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
 	# fi; \
@@ -164,8 +170,7 @@ RUN set -xe \
 	# 	command -v gpgconf > /dev/null && gpgconf --kill all; \
 	# 	rm -rf "$GNUPGHOME"; \
 	# fi; \
-	\
-	&& apk del --no-cache .fetch-deps \
+	# && apk del --no-cache .fetch-deps \
 	&& apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
@@ -200,6 +205,7 @@ RUN set -xe \
           tidyhtml-dev \
           net-snmp-dev \
           openldap-dev \
+          ${APK_DEV_EXTRA:-} \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
 		        CPPFLAGS="$PHP_CPPFLAGS" \
@@ -279,6 +285,7 @@ RUN set -xe \
                            xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \
+                           ${PHP_EXTENSION_EXTRA:-} \
 	&& runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
 			| tr ',' '\n' \
@@ -356,20 +363,21 @@ ENV PECL_RUN_DEPS \
       yaml
 
 ENV PECL_EXTENSION \
-      mongodb \
-      igbinary \
-      redis \
-      memcached \
-      xdebug \
-      yaml \
-      swoole
+      mongodb-beta \
+      igbinary-beta \
+      redis-beta \
+      memcached-beta \
+      xdebug-beta \
+      yaml-beta \
+      swoole-beta \
+      ${PECL_EXTENSION_EXTRA:-}
 
 RUN set -x \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && for extension in $PECL_EXTENSION; \
-         do
-           pecl install ${extension}-beta;
+      && for extension in $PECL_EXTENSION;do \
+           pecl install $extension \
+             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
          done \
       # && apk add --no-cache git openssh-client \
       # && git clone -b PHP-7.3-support --depth=1 https://github.com/derickr/xdebug.git \
@@ -381,7 +389,6 @@ RUN set -x \
       # && make install \
       # && cd - \
       # && rm -rf xdebug \
-      ; docker-php-ext-enable $PECL_EXTENSION \
       ; apk del --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
 # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \

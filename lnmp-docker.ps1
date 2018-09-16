@@ -338,6 +338,7 @@ switch($first){
     }
 
     httpd-config {
+      clear
       wsl -d $DistributionName lnmp-docker httpd-config $other
     }
 
@@ -366,6 +367,7 @@ switch($first){
     }
 
     cn-mirror {
+      clear
       wsl -d $DistributionName lnmp-docker cn-mirror
     }
 
@@ -388,14 +390,17 @@ switch($first){
     }
 
     dashboard {
+      clear
       wsl -d $DistributionName lnmp-docker dashboard
     }
 
     new {
+      clear
       wsl -d $DistributionName lnmp-docker new $other
     }
 
     nginx-config {
+      clear
       wsl -d $DistributionName lnmp-docker nginx-config $other
     }
 
@@ -663,6 +668,7 @@ switch($first){
     }
 
     update-version {
+      clear
       wsl -d $DistributionName lnmp-docker update-version
     }
 
