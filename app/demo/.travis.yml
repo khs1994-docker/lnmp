@@ -70,7 +70,7 @@ before_install:
 install:
   - composer install -q
   # - composer update -q
-  - composer require illuminate/console
+  # - composer require illuminate/console
   # - curl -fsSL http://get.sensiolabs.org/sami.phar -o sami
   # - chmod +x sami
 

@@ -1,4 +1,4 @@
-version: "3.6"
+version: "3.7"
 
 #
 # 警告 compose 文件中包含中文字符会报错，所以阅读之后请删掉中文
@@ -24,10 +24,10 @@ services:
       context: .
       dockerfile: test.Dockerfile
       args:
-        - PHP_VERSION_7_2_X=7.2.0
-        - PHP_VERSION_7_1_X=7.1.0
-        - PHP_VERSION_7_0_X=7.0.0
-        - PHP_VERSION_5_6_X=5.6.0
+        - PHP_VERSION_7_2_X=7.2.10
+        - PHP_VERSION_7_1_X=7.1.22
+        - PHP_VERSION_7_0_X=7.0.32
+        - PHP_VERSION_5_6_X=5.6.38
     image: khs1994/EXAMPLE
 
   nginx:
@@ -35,9 +35,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - NGINX_VERSION=${NGINX_VERSION:-1.15.1}-alpine
+        - NGINX_VERSION=${NGINX_VERSION:-1.15.3}-alpine
       target: nginx
-    image: khs1994/nginx:${NGINX_VERSION:-1.15.1}-swarm-alpine
+    image: khs1994/nginx:${NGINX_VERSION:-1.15.3}-swarm-alpine
     depends_on:
       - 7_2_X
       # - 7_1_X
