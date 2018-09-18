@@ -249,7 +249,7 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 ### [khs1994.com](//khs1994.com)
 
-### [KhsCI](https://github.com/khs1994-php/khsci)
+### [PCIT (PHP CI TOOLKIT)](https://github.com/khs1994-php/pcit)
 
 ## 项目国内镜像
 

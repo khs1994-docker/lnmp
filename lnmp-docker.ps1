@@ -145,8 +145,8 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp.sh COMMAND
 
-KhsCI EE:
-  khsci-up             Up(Run) KhsCI EE https://github.com/khs1994-php/khsci
+PCIT EE:
+  pcit-up             Up(Run) PCIT EE https://github.com/khs1994-php/pcit
 
 Commands:
   backup               Backup MySQL databases
@@ -721,46 +721,46 @@ XXX
 " | Out-File debug.md -encoding utf8
     }
 
-    khsci-up {
-      # 判断 app/khsci 是否存在
+    pcit-up {
+      # 判断 app/pcit 是否存在
 
-      if (!(Test-Path ${APP_ROOT}/khsci)){
-        git clone --depth=1 https://github.com/khs1994-php/khsci ${APP_ROOT}/khsci
+      if (!(Test-Path ${APP_ROOT}/pcit)){
+        git clone --depth=1 https://github.com/khs1994-php/pcit ${APP_ROOT}/pcit
       }
 
-      if (!(Test-Path ${APP_ROOT}/khsci/public/.env.produnction)){
-        cp ${APP_ROOT}/khsci/public/.env.example ${APP_ROOT}/khsci/public/.env.production
+      if (!(Test-Path ${APP_ROOT}/pcit/public/.env.produnction)){
+        cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
       }
 
-      if (!(Test-Path ${APP_ROOT}/khsci/public/.env.development)){
-        cp ${APP_ROOT}/khsci/public/.env.example ${APP_ROOT}/khsci/public/.env.development
+      if (!(Test-Path ${APP_ROOT}/pcit/public/.env.development)){
+        cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.development
       }
 
       # 判断 nginx 配置文件是否存在
 
-      if(!(Test-Path khsci/conf/khsci.conf)){
-        cp khsci/conf/khsci.config khsci/conf/khsci.conf
+      if(!(Test-Path pcit/conf/pcit.conf)){
+        cp pcit/conf/pcit.config pcit/conf/pcit.conf
       }
 
-      $a=Select-String 'demo.ci.khs1994.com' khsci/conf/khsci.conf
+      $a=Select-String 'demo.ci.khs1994.com' pcit/conf/pcit.conf
 
       if ($a.Length -ne 0){
-        throw "CI conf error, please see khsci/README.md"
+        throw "CI conf error, please see pcit/README.md"
       }
 
-      if(!(Test-Path khsci/ssl/ci.crt)){
-        throw "CI Website SSL key not found, please see khsci/README.md"
+      if(!(Test-Path pcit/ssl/ci.crt)){
+        throw "CI Website SSL key not found, please see pcit/README.md"
       }
 
-      cp khsci/ssl/ci.crt config/nginx/ssl/ci.crt
+      cp pcit/ssl/ci.crt config/nginx/ssl/ci.crt
 
-      cp khsci/conf/khsci.conf config/nginx/khsci.conf
+      cp pcit/conf/pcit.conf config/nginx/pcit.conf
 
       # 启动
 
       docker-compose -f docker-compose.yml -f docker-compose.override.yml `
-          -f docker-khsci.include.yml up -d `
-          ${DEVELOPMENT_INCLUDE} khsci
+          -f docker-pcit.include.yml up -d `
+          ${DEVELOPMENT_INCLUDE} pcit
     }
 
     "toolkit-docs" {

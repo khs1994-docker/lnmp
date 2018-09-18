@@ -65,7 +65,7 @@ pipeline:
     tags: ${PHP_VERSION}-swarm-${CI_TAG}-alpine
     # target: php
     build_args:
-       - a:1
+      - a:1
     # dockerfile: Dockerfile
     # dockerfile: path/to/Dockerfile
     when:

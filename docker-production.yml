@@ -339,18 +339,18 @@ services:
   #     - source: mongod_conf
   #       target: /etc/mongod.conf
 
-  khsci:
+  pcit:
     << : *default-common
     << : *default-labels
     << : *default-php
     volumes:
-      - ./app/khsci:/app/khsci
-      - khsci-tmp:/tmp
+      - ./app/pcit:/app/pcit
+      - pcit-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
-    working_dir: /app/khsci/bin
+    working_dir: /app/pcit/bin
     command:
       - /bin/sh
-      - khscid
+      - pcitd
       - up
     # logging: *default-logging
     deploy:
@@ -670,7 +670,7 @@ volumes:
   # registry-data:
   #   << : *default-labels
 
-  khsci-tmp:
+  pcit-tmp:
     << : *default-labels
 
   minio-data:
