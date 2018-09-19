@@ -13,6 +13,14 @@ language: php
 dist: xenial #16.04
 # dist: trusty # 14.04
 
+# addons:
+#   apt:
+#     sources:
+#       - mysql-5.7-trusty
+#     packages:
+#       - mysql-server
+#       - mysql-client
+
 sudo: required
 # services:
 # - docker
@@ -63,8 +71,11 @@ before_install:
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'DROP DATABASE IF EXISTS tests_tmp;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'CREATE DATABASE tests;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'postgres' ]; then psql -c 'CREATE DATABASE tests_tmp;' -U postgres; fi"
-  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS tests_tmp; CREATE DATABASE IF NOT EXISTS tests;'; fi"
   - sh -c "if [ '$ENABLE_MONGODB' = 'enable' ]; then mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'; fi"
+  - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS tests_tmp; CREATE DATABASE IF NOT EXISTS tests;'; fi"
+  - if [ "$DB" = 'mysql' ]; then sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('new_password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"; fi
+  - if [ "$DB" = 'mysql' ]; then sudo mysql_upgrade -u root -pnew_password; fi
+  - if [ "$DB" = 'mysql' ]; then sudo service mysql restart; fi
   - php .khsci.php
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 

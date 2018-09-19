@@ -140,13 +140,3 @@ matrix:
 # branches:
 #   include: [ master, dev, feature/* ]
 #   exclude: [ release/1.0.0, release/1.1.* ]
-
-config:
-  aliyun:
-    docker_registry:
-      # registry: git_repo_full_name
-      khs1994/wsl: khs1994-php/khsci
-
-  tencent_cloud:
-    docker_registry:
-      khs1994/wsl: khs1994-php/khsci

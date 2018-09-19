@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $1 = 'rsa' ];then
-  lnmp-docker.sh ssl khs1994.com -d *.khs1994.com \
+  lnmp-docker ssl khs1994.com -d *.khs1994.com \
                      -d *.developer.khs1994.com \
                      -d *.home.khs1994.com \
                      -d *.baidu.khs1994.com \
@@ -11,7 +11,7 @@ if [ $1 = 'rsa' ];then
                      --rsa
 fi
 
-lnmp-docker.sh ssl khs1994.com -d *.khs1994.com \
+lnmp-docker ssl khs1994.com -d *.khs1994.com \
                    -d *.developer.khs1994.com \
                    -d *.home.khs1994.com \
                    -d *.baidu.khs1994.com \

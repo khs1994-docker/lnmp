@@ -73,13 +73,13 @@ success(){
 
   cd $LNMP_PATH
   which bash 2>&1 >/dev/null
-  if ! [ $? -eq 0 ];then sed -i "s/bin\/bash/bin\/sh/g" lnmp-docker.sh; fi
+  if ! [ $? -eq 0 ];then sed -i "s/bin\/bash/bin\/sh/g" lnmp-docker; fi
 
   echo "Success please exec
 
 $ cd ${LNMP_PATH}
 "
-exec echo "$ ./lnmp-docker.sh development | production"
+exec echo "$ ./lnmp-docker development | production"
 }
 
 error(){
