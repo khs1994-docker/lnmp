@@ -34,7 +34,7 @@ ENV PHP_EXTENSION \
       zip
 
 ENV PECL_EXTENSION \
-      # mongodb \
+      mongodb \
       igbinary \
       redis \
       memcached \
@@ -111,8 +111,11 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                                     --with-kerberos \
                                     --with-imap-ssl \
         && docker-php-ext-install $PHP_EXTENSION \
-        && for extension in $PECL_EXTENSION;do pecl install $extension; done \
-        && docker-php-ext-enable $PECL_EXTENSION opcache \
+        && for extension in $PECL_EXTENSION;do \
+             pecl install $extension \
+               && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
+           done \
+        && docker-php-ext-enable opcache \
         && apt-get purge -y --auto-remove  $buildDeps \
         && rm -rf /tmp/* \
         # config opcache
@@ -149,7 +152,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.6/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.7/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
  \
  # composer 中国镜像

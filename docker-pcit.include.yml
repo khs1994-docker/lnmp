@@ -1,21 +1,21 @@
 version: "3.7"
 
 services:
-  khsci:
+  pcit:
     # restart: always
     image: khs1994/php:${LNMP_PHP_VERSION:-7.2.10}-fpm-alpine
     volumes:
-      - ${APP_ROOT:-./app}/khsci:/app/khsci:cached
+      - ${APP_ROOT:-./app}/pcit:/app/pcit:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
-      - khsci-tmp:/tmp
+      - pcit-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
     networks:
       - backend
-    working_dir: /app/khsci/bin
+    working_dir: /app/pcit/bin
     command:
       - /bin/sh
-      - khscid
+      - pcitd
       - up
     environment:
       - APP_ENV=production
@@ -24,7 +24,7 @@ services:
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
-      - "${LNMP_KHSCI_PORT:-0.0.0.0:10000}:10000"
+      - "${LNMP_PCIT_PORT:-0.0.0.0:10000}:10000"
 
 volumes:
-  khsci-tmp:
+  pcit-tmp:

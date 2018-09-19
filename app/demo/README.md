@@ -69,7 +69,7 @@ $ cd example
 
 * git 分支 `dev`
 
-* 使用 Docker 作为 LNMP 环境，实际上大大简化了部署，但配置开发环境需要较多步骤，同时由于 Windows、macOS 运行 Docker 效率较 Linux 差，实际在开发环境是否使用 Docker，请各位自行权衡。
+* 使用 Docker 作为 LNMP 环境，实际上大大简化了部署，但配置开发环境需要较多步骤，同时由于 Windows(性能特别差)、macOS（还可以） 运行 Docker 效率较 Linux 差，实际在开发环境是否使用 Docker，请各位自行权衡。
 
 ### 1. 新建 PHP 项目
 
