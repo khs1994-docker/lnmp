@@ -17,7 +17,7 @@ $ docker-compose build
 ## BuildKit
 
 ```json
-{"experimental":true, "features": {"feature-buildkit":true}}
+{"experimental":true, "features":{"buildkit": true}}
 ```
 
 ```bash
