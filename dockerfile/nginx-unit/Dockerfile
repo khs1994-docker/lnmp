@@ -2,17 +2,19 @@ ARG PHP_VERSION=nightly
 
 FROM khs1994/php:${PHP_VERSION}-fpm-alpine
 
-ARG NGINX_UNIT_VERSION=1.3
+ARG NGINX_UNIT_VERSION=1.4
+
+ENV MODULE_NAME=php74
 
 RUN git clone --depth=1 -b ${NGINX_UNIT_VERSION} https://github.com/nginx/unit /usr/src/unit \
-      && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+      && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS libressl-dev \
       && cd /usr/local/lib \
       && tar -zxvf libphp7.so.tar.gz \
       && rm -rf *.tar.gz \
       && cd /usr/src/unit \
-      && ./configure --prefix=/usr/local/nginx-unit \
+      && ./configure --prefix=/usr/local/nginx-unit --openssl \
       && ./configure php \
-      --module=php73 \
+      --module=${MODULE_NAME} \
       --lib-path=/usr/local/lib \
       --config=/usr/local/bin/php-config \
       && make \

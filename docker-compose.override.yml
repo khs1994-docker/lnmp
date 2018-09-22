@@ -54,7 +54,7 @@ services:
 
   nginx-unit:
     << : *default-common
-    image: khs1994/nginx-unit:${LNMP_NGINX_UNIT_VERSION:-1.3}-alpine
+    image: khs1994/nginx-unit:${LNMP_NGINX_UNIT_VERSION:-1.4}-alpine
 
   httpd:
     << : *default-common

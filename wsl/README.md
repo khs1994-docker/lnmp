@@ -154,7 +154,7 @@ $ git clone --depth=1 https://github.com/nginx/unit
 
 $ cd unit
 
-$ ./configure --prefix=/usr/local/nginx_unit
+$ ./configure --prefix=/usr/local/nginx_unit --openssl
 
 # PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文默认使用 $ lnmp-wsl-install.sh php 7.2.5 安装 PHP
 
@@ -173,12 +173,21 @@ $ cd /usr/local/nginx_unit
 
 $ sudo ./sbin/unitd
 
+# TLS (1.4 + support)
+
+$ cat cert.pem ca.pem key.pem > bundle.pem
+
+$ curl -X PUT --data-binary @bundle.pem 127.1:8443/certificates/cert_name
+
 # 通过向 Linux Socket 发送 json 文件来配置 Unit
 
 {
     "listeners": {
         "*:8300": {
-            "application": "test"
+            "application": "test",
+            "tls": {
+              "certificate": "cert_name"
+            }
         }
     },
 

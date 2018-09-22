@@ -206,7 +206,7 @@ services:
 
   nginx-unit:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx-unit:${LNMP_NGINX_UNIT_VERSION:-1.3}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx-unit:${LNMP_NGINX_UNIT_VERSION:-1.4}-alpine"
     volumes:
       - ./config/${NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
