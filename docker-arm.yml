@@ -241,7 +241,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
     #   dockerfile: Dockerfile
     # image: lnmp-httpd:latest
-    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.34}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.35}${ARM_BASED_OS}"
     ports:
       - "443:443"
       - "80:80"

@@ -16,3 +16,4 @@
 * Redis `5.0-rc5`
 * NGINX-UNIT `1.4`
 * NGINX `1.15.4`
+* HTTPD `2.4.35`

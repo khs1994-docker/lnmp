@@ -530,9 +530,9 @@ services:
   #   #
   #   # image: username/lnmp-httpd:tag
   #   #
-  #   # image: khs1994/lnmp-httpd:2.4.34
+  #   # image: khs1994/lnmp-httpd:2.4.35
   #   #
-  #   image: "httpd:2.4.34-alpine"
+  #   image: "httpd:2.4.35-alpine"
   #   ports:
   #     - "443:443"
   #     - "80:80"
