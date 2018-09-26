@@ -104,7 +104,7 @@ services:
 
   rabbitmq:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.6}-management-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.8}-management-alpine
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
       - zoneinfo-data:/usr/share/zoneinfo
