@@ -76,4 +76,4 @@ complete -W "acme.sh \
         test \
         cn-mirror \
         compose \
-        nfs" lnmp-docker.sh
+        nfs" lnmp-docker

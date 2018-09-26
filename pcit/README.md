@@ -32,7 +32,7 @@
 之后执行以下命令启动 `PCIT EE`
 
 ```bash
-$ lnmp-docker.sh pcit-up
+$ lnmp-docker pcit-up
 ```
 
 ## 使用

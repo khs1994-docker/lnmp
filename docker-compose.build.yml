@@ -11,7 +11,7 @@ version: "3.7"
 #
 # $ cd ../../
 #
-# $ ./lnmp-docker.sh build [soft]
+# $ ./lnmp-docker build [soft]
 #
 
 x-build:

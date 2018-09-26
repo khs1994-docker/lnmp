@@ -11,7 +11,7 @@ about: Create a report to help us improve
 ```bash
 $ cd lnmp
 
-$ ./lnmp-docker.sh debug
+$ ./lnmp-docker debug
 ```
 
 复制 `lnmp/debug.md` 内容到这里，并贴出终端执行内容及问题

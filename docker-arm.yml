@@ -127,7 +127,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/rabbitmq/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.6}-management${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.8}-management${ARM_BASED_OS}"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
       - zoneinfo-data:/usr/share/zoneinfo
@@ -217,7 +217,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/nginx/
     #   dockerfile: Dockerfile
     # image: lnmp-nginx:latest
-    image: "${ARM_ARCH:-arm64v8}/nginx:${LNMP_NGINX_VERSION:-1.15.3}"
+    image: "${ARM_ARCH:-arm64v8}/nginx:${LNMP_NGINX_VERSION:-1.15.4}"
     networks:
       - frontend
     ports:
@@ -241,7 +241,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
     #   dockerfile: Dockerfile
     # image: lnmp-httpd:latest
-    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.34}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.35}${ARM_BASED_OS}"
     ports:
       - "443:443"
       - "80:80"

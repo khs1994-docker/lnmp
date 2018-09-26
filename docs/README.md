@@ -10,7 +10,7 @@
 
 在线阅读：[WebSite](https://doc.lnmp.khs1994.com/)
 
-或在命令行执行 `./lnmp-docker.sh docs` 在本地阅读。
+或在命令行执行 `./lnmp-docker docs` 在本地阅读。
 
 ## 版本策略
 
