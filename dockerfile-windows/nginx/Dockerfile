@@ -2,7 +2,7 @@ FROM microsoft/windowsservercore:1803
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-ENV NGINX_VERSION 1.15.3
+ENV NGINX_VERSION 1.15.4
 
 RUN $url = ('http://nginx.org/download/nginx-{0}.zip' -f $env:NGINX_VERSION); \
 	      Write-Host ('Downloading {0} ...' -f $url); \

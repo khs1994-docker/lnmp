@@ -8,8 +8,8 @@
 
 | Verson     | Details     |
 | :------------- | :------------- |
-| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.15.3-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.15.3-alpine "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.15.3-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.15.3-alpine "Get your own image badge on microbadger.com") |
-|[![](https://images.microbadger.com/badges/version/khs1994/nginx:1.15.3-stretch.svg)](https://microbadger.com/images/khs1994/nginx:1.15.3-stretch "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.15.3-stretch.svg)](https://microbadger.com/images/khs1994/nginx:1.15.3-stretch "Get your own image badge on microbadger.com") |
+| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.15.4-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.15.4-alpine "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.15.4-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.15.4-alpine "Get your own image badge on microbadger.com") |
+|[![](https://images.microbadger.com/badges/version/khs1994/nginx:1.15.4-stretch.svg)](https://microbadger.com/images/khs1994/nginx:1.15.4-stretch "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.15.4-stretch.svg)](https://microbadger.com/images/khs1994/nginx:1.15.4-stretch "Get your own image badge on microbadger.com") |
 
 ## `Docker Compose`
 
@@ -18,7 +18,7 @@ version: "3"
 services:
 
   nginx:
-    image: "khs1994/nginx:1.15.3-alpine"
+    image: "khs1994/nginx:1.15.4-alpine"
     ports:
       - "80:80"
       - "443:443"
@@ -38,7 +38,7 @@ $ docker run -dit \
          -p 443:443 \
          -v $PWD/app:/app \
          -v $PWD/conf.d:/etc/nginx/conf.d \
-         khs1994/nginx:1.15.3-alpine
+         khs1994/nginx:1.15.4-alpine
 ```
 
 # Who use it?

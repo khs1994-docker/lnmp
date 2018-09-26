@@ -15,3 +15,4 @@
 * PHP `7.2.10`
 * Redis `5.0-rc5`
 * NGINX-UNIT `1.4`
+* NGINX `1.15.4`
