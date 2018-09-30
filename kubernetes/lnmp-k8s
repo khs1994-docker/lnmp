@@ -32,7 +32,7 @@ Commands:
   minikube           Start minikube
 
   single-install     Install Local Kubernetes（Manager by systemd）
-  single-start       Start Local Kubernetes (Manager by systemd)
+  single-start       Print how to start Local Kubernetes (Manager by systemd)
 
   create             Deploy lnmp on k8s
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)

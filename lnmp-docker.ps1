@@ -181,7 +181,7 @@ Composer:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes
+  gcr.io               Up local gcr.io registry server to start Docker for Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -195,8 +195,8 @@ Container Tools:
 ClusterKit:
   clusterkit-help      Print ClusterKit help info
 
-ToolKit:
-  toolkit-docs         Up local docs Server
+Developer Tools:
+  cookbooks            Up local cookbooks server
 
 Read './docs/*.md' for more information about CLI commands.
 
@@ -763,40 +763,40 @@ XXX
           ${DEVELOPMENT_INCLUDE} pcit
     }
 
-    "toolkit-docs" {
-      if(!(Test-Path ${APP_ROOT}/khsdocs/k8s)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/khsdocs/k8s
+    "cookbooks" {
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/k8s)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
       }else{
-        git -C ${APP_ROOT}/khsdocs/k8s fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/k8s reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/k8s fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/docker)){
-        git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git ${APP_ROOT}/khsdocs/docker
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker)){
+        git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git ${APP_ROOT}/lnmp-docs/docker
       }else{
-        git -C ${APP_ROOT}/khsdocs/docker fetch --depth=1 origin pages
-        git -C ${APP_ROOT}/khsdocs/docker reset --hard origin/pages
+        git -C ${APP_ROOT}/lnmp-docs/docker fetch --depth=1 origin pages
+        git -C ${APP_ROOT}/lnmp-docs/docker reset --hard origin/pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/laravel)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/khsdocs/laravel
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
       }else{
-        git -C ${APP_ROOT}/khsdocs/laravel fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/laravel reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/laravel-en)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git ${APP_ROOT}/khsdocs/laravel-en
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel-en)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git ${APP_ROOT}/lnmp-docs/laravel-en
       }else{
-        git -C ${APP_ROOT}/khsdocs/laravel-en fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/laravel-en reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/nginx)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/khsdocs/nginx
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/nginx)){
+        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
       }else{
-        git -C ${APP_ROOT}/khsdocs/nginx fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/nginx reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/nginx fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/nginx reset --hard origin/gh-pages
       }
     }
 
@@ -858,7 +858,7 @@ This local server support Docker Desktop v18.05-EDGE-67
       }
 
        Write-Warning "
-this command up a Local Server on port 443.
+this command up a local server on port 443.
 
 When Docker Desktop Start Kubernetes Success, you must remove this local server.
 

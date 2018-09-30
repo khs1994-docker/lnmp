@@ -95,7 +95,7 @@ Commands:
   down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
   help                 Display this help message
-  nfs                  Up NFS Server [ down | ]
+  nfs                  Up NFS server [ down | ]
   init                 Init LNMP environment
   restore              Restore MySQL databases
   restart              Restart LNMP services
@@ -117,7 +117,7 @@ Composer:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes [ --no-pull | ]
+  gcr.io               Up local gcr.io registry server to start Docker for Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -140,9 +140,7 @@ ClusterKit:
 Developer Tools:
   cn-mirror            Push master branch to CN mirror
   test                 Test LNMP
-
-ToolKit:
-  toolkit-docs         Up local docs Server
+  cookbooks            Up local cookbooks server
 
 Read './docs/*.md' for more information about CLI commands.
 
@@ -293,7 +291,7 @@ This local server support Docker Desktop v18.05-EDGE-67
     echo "
 Warning
 
-this command up a Local Server on port 443.
+this command up a local server on port 443.
 
 When Docker for Desktop Start Kubernetes Success, you must remove this local server.
 
@@ -314,39 +312,39 @@ _satis(){
 }
 
 _local_docs_server(){
-  if ! [ -d ${APP_ROOT}/khsdocs/k8s ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/khsdocs/k8s
+  if ! [ -d ${APP_ROOT}/lnmp-docs/k8s ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
   else
-    git -C ${APP_ROOT}/khsdocs/k8s fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/khsdocs/k8s reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/k8s fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
   fi
 
-  if ! [ -d ${APP_ROOT}/khsdocs/docker ];then
-    git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git ${APP_ROOT}/khsdocs/docker
+  if ! [ -d ${APP_ROOT}/lnmp-docs/docker ];then
+    git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git ${APP_ROOT}/lnmp-docs/docker
   else
-    git -C ${APP_ROOT}/khsdocs/docker fetch --depth=1 origin pages
-    git -C ${APP_ROOT}/khsdocs/docker reset --hard origin/pages
+    git -C ${APP_ROOT}/lnmp-docs/docker fetch --depth=1 origin pages
+    git -C ${APP_ROOT}/lnmp-docs/docker reset --hard origin/pages
   fi
 
-  if ! [ -d ${APP_ROOT}/khsdocs/laravel ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/khsdocs/laravel
+  if ! [ -d ${APP_ROOT}/lnmp-docs/laravel ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
   else
-    git -C ${APP_ROOT}/khsdocs/laravel fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/khsdocs/laravel reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
   fi
 
-  if ! [ -d ${APP_ROOT}/khsdocs/laravel-en ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git ${APP_ROOT}/khsdocs/laravel-en
+  if ! [ -d ${APP_ROOT}/lnmp-docs/laravel-en ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git ${APP_ROOT}/lnmp-docs/laravel-en
   else
-    git -C ${APP_ROOT}/khsdocs/laravel-en fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/khsdocs/laravel-en reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
   fi
 
-  if ! [ -d ${APP_ROOT}/khsdocs/nginx ];then
-    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/khsdocs/nginx
+  if ! [ -d ${APP_ROOT}/lnmp-docs/nginx ];then
+    git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
   else
-    git -C ${APP_ROOT}/khsdocs/nginx fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/khsdocs/nginx reset --hard origin/gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/nginx fetch --depth=1 origin gh-pages
+    git -C ${APP_ROOT}/lnmp-docs/nginx reset --hard origin/gh-pages
   fi
 }
 
@@ -1439,7 +1437,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     cn_mirror
     ;;
 
-  toolkit-docs )
+  cookbooks )
 
     _local_docs_server
   ;;
