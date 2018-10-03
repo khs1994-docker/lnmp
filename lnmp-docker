@@ -142,6 +142,10 @@ Developer Tools:
   test                 Test LNMP
   cookbooks            Up local cookbooks server
 
+AD:
+  haokan               Baidu haokan
+  alipay               Alipay
+
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
@@ -1766,6 +1770,32 @@ First Run? Maybe you wait 60s then open url.
       git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} || echo > /dev/null
       git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
       update
+      ;;
+
+      alipay )
+        clear
+        cat ad/alipay.txt
+
+        echo "
+1. 打开支付宝扫一扫
+
+2. 扫描二维码领取红包
+
+3. 线下支付时，使用即可
+        "
+      ;;
+
+      haokan )
+        clear
+        cat ad/haokan.txt
+
+        echo "
+1. 扫描二维码，输入手机号领取红包
+
+2. 下载好看视频，输入手机号登录
+
+3. 观看视频
+        "
       ;;
 
   * )

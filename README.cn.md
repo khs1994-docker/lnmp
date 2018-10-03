@@ -26,6 +26,8 @@
 
 :warning: Windows Docker 非常不稳定，且运行 Laravel 相应较慢。建议使用 [WSL](wsl)。
 
+:gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
+
 ## 准备
 
 本项目需要以下软件：
