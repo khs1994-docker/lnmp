@@ -1,7 +1,7 @@
-FROM nginx:1.15.2-alpine
+FROM nginx:1.15.5-alpine
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.11.3"
+      version="1.12.0"
 
 ARG CT_URL=https://github.com/coreos/container-linux-config-transpiler/releases/download/
 

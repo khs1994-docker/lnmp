@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KUBERNETES_VERSION=v1.11.3
+KUBERNETES_VERSION=v1.12.0
 
 set -e
 
