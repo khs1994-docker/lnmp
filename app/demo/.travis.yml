@@ -77,7 +77,7 @@ before_install:
   - if [ "$DB" = 'mysql' ]; then sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('new_password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"; fi
   - if [ "$DB" = 'mysql' ]; then sudo mysql_upgrade -u root -pnew_password; fi
   - if [ "$DB" = 'mysql' ]; then sudo service mysql restart; fi
-  - php .khsci.php
+  - php .pcit.php
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 install:

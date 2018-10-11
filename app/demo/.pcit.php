@@ -12,7 +12,7 @@ const COMPOSER_DESCRIPT='A PHP Library for the XXX';
 
 if ($fh = opendir(__DIR__)) {
     while (false !== ($file = readdir($fh))) {
-        if ('.' === $file or '..' === $file or is_dir($file) or '.khsci.php' === $file) {
+        if ('.' === $file or '..' === $file or is_dir($file) or '.pcit.php' === $file) {
             continue;
         }
         // echo $file.PHP_EOL;
