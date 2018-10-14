@@ -52,7 +52,7 @@ services:
   #   command: ["mysqld", "--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
   #   net: host
   - name: redis
-    image: redis:5.0-rc5-alpine
+    image: redis:5.0-rc6-alpine
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN

@@ -188,7 +188,7 @@ matrix:
   NGINX_VERSION:
     - 1.15.5
   REDIS_VERSION:
-    - 5.0-rc5-alpine
+    - 5.0-rc6-alpine
   MYSQL_VERSION:
     # - 8.0.11
     - 5.7.22

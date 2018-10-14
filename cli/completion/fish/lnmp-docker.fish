@@ -39,14 +39,14 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-memcached-ex
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-memcached-deploy           -d     'Deploy memcached Cluster in Swarm mode'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-memcached-remove           -d     'Remove memcached Cluster in Swarm mode'
 
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-up   -d     'Up Redis M-S'
-complete -c lnmp-docker -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d           -d     'Up Redis M-S in the background'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-down -d     'Stop Redis M-S'
-complete -c lnmp-docker -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v         -d     'Stop Redis M-S AND Remove named volumes declared in the `volumes`'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-exec -d     'Execute a command in a running Redis M-S'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-replication-up        -d     'Up Redis M-S (replication)'
+complete -c lnmp-docker -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d           -d     'Up Redis M-S (replication) in the background'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-replication-down      -d     'Stop Redis M-S (replication)'
+complete -c lnmp-docker -n '__fish_seen_subcommand_from clusterkit-redis-down' -s v         -d     'Stop Redis M-S (replication) AND Remove named volumes declared in the `volumes`'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-replication-exec      -d     'Execute a command in a running Redis M-S (replication)'
 
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-deploy    -d     'Deploy Redis M-S in Swarm mode'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-master-slave-remove    -d     'Remove Redis M-S in Swarm mode'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-replication-deploy    -d     'Deploy Redis M-S (replication) in Swarm mode'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-replication-remove    -d     'Remove Redis M-S (replication) in Swarm mode'
 
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-sentinel-up      -d     'Up Redis S'
 complete -c lnmp-docker -n '__fish_seen_subcommand_from clusterkit-redis-up' -s d          -d     'Up Redis S in the background'

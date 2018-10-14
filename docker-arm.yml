@@ -88,7 +88,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/redis/
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
-    image: "${ARM_ARCH:-arm64v8}/redis:${LNMP_REDIS_VERSION:-5.0-rc5}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/redis:${LNMP_REDIS_VERSION:-5.0-rc6}${ARM_BASED_OS}"
     volumes:
       - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro
       - ./log/redis:/var/log/redis
