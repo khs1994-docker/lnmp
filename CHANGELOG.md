@@ -1,10 +1,10 @@
 # Changelog
 
-## v18.06.05
+## v18.06.06
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/18.06...v18.06.04
+* https://github.com/khs1994-docker/lnmp/compare/18.06...v18.06.05
 
 ### Bug fixes:
 
@@ -12,8 +12,6 @@
 
 ### Updates:
 
-* PHP `7.2.10`
-* Redis `5.0-rc5`
-* NGINX-UNIT `1.4`
-* NGINX `1.15.5`
-* HTTPD `2.4.35`
+* PHP `7.2.11` `7.1.23` `7.3.0RC3`
+* Redis `5.0-rc6`
+* Memcached `1.5.11`

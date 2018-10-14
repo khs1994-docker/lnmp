@@ -3,7 +3,7 @@ version: "3.7"
 services:
   pcit:
     # restart: always
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.2.10}-fpm-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.2.11}-fpm-alpine
     volumes:
       - ${APP_ROOT:-./app}/pcit:/app/pcit:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro

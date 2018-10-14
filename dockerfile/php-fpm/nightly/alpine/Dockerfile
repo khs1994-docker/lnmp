@@ -5,7 +5,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-# ARG PHP_VERSION=7.3.0RC1
+# ARG PHP_VERSION=7.3.0RC3
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
