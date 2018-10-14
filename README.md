@@ -26,6 +26,12 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 :warning: Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
 
+## WeChat
+
+![](https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg)
+
+关注项目作者微信订阅号，接收项目的最新动态。
+
 ## Prerequisites
 
 To use LNMP Docker, you need:

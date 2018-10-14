@@ -42,10 +42,8 @@ cmd = sudo_cmd + '''apt install -y gcc \
 
 wsl.install_build_dep(cmd)
 
-bin_cmd = 'echo "do nothing"'
-
 configure_cmd = 'echo "do nothing"'
 
-wsl.builder('redis-' + input_version, configure_cmd, sudo_cmd, bin_cmd)
+wsl.builder('redis-' + input_version, configure_cmd, sudo_cmd)
 
 wsl.test('redis-server -v')
