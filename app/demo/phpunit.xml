@@ -9,9 +9,9 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
         <exclude>
-            <directory suffix=".php">./src/Example/Console</directory>
-            <file>./src/Example/ServiceProvider.php</file>
-            <file>./src/Example/Facade.php</file>
+            <directory suffix=".php">./src/{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}/Console</directory>
+            <file>./src/{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}/Support/ServiceProvider.php</file>
+            <file>./src/{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}/Support/Facade.php</file>
         </exclude>
         </whitelist>
     </filter>

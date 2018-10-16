@@ -70,7 +70,7 @@ services:
 
   redis:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0-rc5}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0-rc6}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
@@ -96,7 +96,7 @@ services:
 
   memcached:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.10}-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.11}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
@@ -140,7 +140,7 @@ services:
 
   php7:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.10}-fpm-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.11}-fpm-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached

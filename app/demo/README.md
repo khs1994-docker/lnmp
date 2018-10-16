@@ -28,9 +28,9 @@ $ cd example
 
 > 注意本项目专用于 khs1994.com PHP 开源项目，他人使用请按以下步骤进行初始化，严禁直接使用。
 
-* 编辑 `.khsci.php` 文件中的常量
+* 编辑 `.pcit.php` 文件中的常量
 
-* 执行 `php .khsci.php` 完成替换
+* 执行 `php .pcit.php` 完成替换
 
 ### 准备
 
@@ -47,7 +47,7 @@ $ cd example
 | `.gitattributes`  | git 打包时排除文件（例如 测试代码）|
 | `.drone.yml`      | [`Drone` CI 工具](https://github.com/khs1994-docker/ci) |
 | `.editorconfig`   | [定义文件格式规则（例如 缩进方式）](https://editorconfig.org/)|
-| `.khsci.yml`      | [`KhsCI` CI 工具](https://ci.khs1994.com) |
+| `.pcit.yml`      | [`PCIT` CI 工具](https://ci.khs1994.com) |
 | `.php_cs`         | [PHP 代码格式化工具](https://github.com/FriendsOfPHP/PHP-CS-Fixer) |
 | `.sami.php`       | [PHP 文档生成工具](https://github.com/FriendsOfPHP/Sami) |
 | `.styleci.yml`    | [`Style CI` PHP 代码格式化 CI 工具](https://styleci.io/) |
@@ -225,7 +225,7 @@ $ git push origin dev:dev
 
 * Drone (私有化 CI/CD)
 
-* KhsCI (开发中，专为 PHPer 设计的基于容器的 CI/CD 系统)
+* PCIT (开发中，支持各种开发语言，特别为 PHP 设计的基于容器的 CI/CD 系统)
 
 ### 2. CI/CD 服务器测试
 

@@ -12,7 +12,7 @@ if len(sys.argv) == 3:
     input_version = sys.argv[1]
     input_sudo = sys.argv[2]
 else:
-    wsl.print_help_info('lnmp-wsl-builder-redis.py', 'Redis', '5.0-rc5')
+    wsl.print_help_info('lnmp-wsl-builder-redis.py', 'Redis', '5.0-rc6')
     exit(0)
 
 sudo_cmd = 'echo ' + input_sudo + ' | sudo -S '
@@ -42,10 +42,8 @@ cmd = sudo_cmd + '''apt install -y gcc \
 
 wsl.install_build_dep(cmd)
 
-bin_cmd = 'echo "do nothing"'
-
 configure_cmd = 'echo "do nothing"'
 
-wsl.builder('redis-' + input_version, configure_cmd, sudo_cmd, bin_cmd)
+wsl.builder('redis-' + input_version, configure_cmd, sudo_cmd)
 
 wsl.test('redis-server -v')

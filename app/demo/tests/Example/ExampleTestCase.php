@@ -13,6 +13,11 @@ class ExampleTestCase extends TestCase
 
     public static function getTest()
     {
+        if (file_exists($envfile = __DIR__.'/../../.env.testing')) {
+            $dotenv = new Dotenv(__DIR__.'/../../', '.env.testing');
+            $dotenv->load();
+       }
+
         if (!(self::$test instanceof Example)) {
             self::$test = new Example(['a' => 1]);
         }

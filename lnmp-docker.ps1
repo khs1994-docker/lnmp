@@ -248,12 +248,12 @@ ClusterKit:
   clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
   clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
 
-  clusterkit-redis-master-slave-up       Up Redis M-S
-  clusterkit-redis-master-slave-down     Stop Redis M-S
-  clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
+  clusterkit-redis-replication-up       Up Redis M-S (replication)
+  clusterkit-redis-replication-down     Stop Redis M-S (replication)
+  clusterkit-redis-replication-exec     Execute a command in a running Redis M-S (replication) node
 
-  clusterkit-redis-master-slave-deploy   Deploy Redis M-S in Swarm mode
-  clusterkit-redis-master-slave-remove   Remove Redis M-S in Swarm mode
+  clusterkit-redis-replication-deploy   Deploy Redis M-S (replication) in Swarm mode
+  clusterkit-redis-replication-remove   Remove Redis M-S (replication) in Swarm mode
 
   clusterkit-redis-sentinel-up           Up Redis S
   clusterkit-redis-sentinel-down         Stop Redis S
@@ -620,24 +620,24 @@ switch($first){
       clusterkit_bash_cli clusterkit_redis redis_$service $cmd
     }
 
-    clusterkit-redis-master-slave-up {
-          docker-compose -f docker-cluster.redis.master.slave.yml up $other
+    clusterkit-redis-replication-up {
+          docker-compose -f docker-cluster.redis.replication.yml up $other
     }
 
-    clusterkit-redis-master-slave-down {
-          docker-compose -f docker-cluster.redis.master.slave.yml down $other
+    clusterkit-redis-replication-down {
+          docker-compose -f docker-cluster.redis.replication.yml down $other
     }
 
-    clusterkit-redis-master-slave-exec {
+    clusterkit-redis-replication-exec {
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
-        echo '$ ./lnmp-docker.ps1 clusterkit-redis-master-slave-exec {master|slave-N} {COMMAND}'
+        echo '$ ./lnmp-docker.ps1 clusterkit-redis-replication-exec {master|slave-N} {COMMAND}'
 
         cd $source
 
         exit 1
       }
-      clusterkit_bash_cli clusterkit_redis_master_slave redis_m_s_$service $cmd
+      clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$service $cmd
     }
 
     clusterkit-redis-sentinel-up {

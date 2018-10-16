@@ -204,12 +204,12 @@ ClusterKit:
   clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
   clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
 
-  clusterkit-redis-master-slave-up       Up Redis M-S
-  clusterkit-redis-master-slave-down     Stop Redis M-S
-  clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
+  clusterkit-redis-replication-up       Up Redis M-S (replication)
+  clusterkit-redis-replication-down     Stop Redis M-S (replication)
+  clusterkit-redis-replication-exec     Execute a command in a running Redis M-S (replication) node
 
-  clusterkit-redis-master-slave-deploy   Deploy Redis M-S in Swarm mode
-  clusterkit-redis-master-slave-remove   Remove Redis M-S in Swarm mode
+  clusterkit-redis-replication-deploy   Deploy Redis M-S (replication) in Swarm mode
+  clusterkit-redis-replication-remove   Remove Redis M-S (replication) in Swarm mode
 
   clusterkit-redis-sentinel-up           Up Redis S
   clusterkit-redis-sentinel-down         Stop Redis S
@@ -1619,31 +1619,31 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     docker stack rm redis_cluster
     ;;
 
-  clusterkit-redis-master-slave-up )
+  clusterkit-redis-replication-up )
         if [ -z "$CLUSTERKIT_REDIS_M_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_M_S_HOST in .env file" ; exit 1 ; fi
-        docker-compose -f docker-cluster.redis.master.slave.yml up "$@"
+        docker-compose -f docker-cluster.redis.replication.yml up "$@"
         ;;
 
-  clusterkit-redis-master-slave-down )
-        docker-compose -f docker-cluster.redis.master.slave.yml down "$@"
+  clusterkit-redis-replication-down )
+        docker-compose -f docker-cluster.redis.replication.yml down "$@"
         ;;
 
-  clusterkit-redis-master-slave-exec )
+  clusterkit-redis-replication-exec )
     if [ "$#" -lt 2 ];then \
        print_error \
-       '$ ./lnmp-docker clusterkit-redis-master-slave-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
+       '$ ./lnmp-docker clusterkit-redis-replication-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
 
         NODE="$1"
         shift
         COMMAND="$@"
-        clusterkit_bash_cli clusterkit_redis_master_slave redis_m_s_$NODE ${COMMAND:-bash}
+        clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$NODE ${COMMAND:-bash}
         ;;
 
-  clusterkit-redis-master-slave-deploy )
-    docker stack deploy -c docker-cluster.redis.master.slave.yml redis_m_s_cluster
+  clusterkit-redis-replication-deploy )
+    docker stack deploy -c docker-cluster.redis.replication.yml redis_m_s_cluster
     ;;
 
-  clusterkit-redis-master-slave-remove )
+  clusterkit-redis-replication-remove )
     docker stack rm redis_m_s_cluster
     ;;
 

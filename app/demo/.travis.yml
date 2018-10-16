@@ -15,6 +15,13 @@ dist: xenial #16.04
 # dist: trusty # 14.04
 
 # addons:
+#
+#   设置数据库
+#
+#   @link https://docs.travis-ci.com/user/database-setup/
+#
+#   mariadb: '10.0'
+#   postgresql: '9.4'
 #   apt:
 #     sources:
 #       - mysql-5.7-trusty
@@ -48,15 +55,6 @@ matrix:
   - php: nightly
   # - env: KEY=VALUE
 
-#
-# 设置数据库
-#
-# @link https://docs.travis-ci.com/user/database-setup/
-#
-# addons:
-#   mariadb: '10.0'
-#   postgresql: '9.4'
-
 before_install:
   # update docker version
 
@@ -77,13 +75,12 @@ before_install:
   - if [ "$DB" = 'mysql' ]; then sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('new_password') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"; fi
   - if [ "$DB" = 'mysql' ]; then sudo mysql_upgrade -u root -pnew_password; fi
   - if [ "$DB" = 'mysql' ]; then sudo service mysql restart; fi
-  - php .khsci.php
+  - php .pcit.php
   - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 install:
   - composer install -q
   # - composer update -q
-  # - composer require illuminate/console
   # - curl -fsSL http://get.sensiolabs.org/sami.phar -o sami
   # - chmod +x sami
 
@@ -98,6 +95,7 @@ script:
 env:
   global:
     - MONGODB=disable
+  matrix:
     # - DB=sqlite
     # - DB=mysql
     # - DB=postgresql
