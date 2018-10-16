@@ -181,7 +181,7 @@ Composer:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up Local gcr.io Registry Server To Start Docker for Desktop Kubernetes
+  gcr.io               Up local gcr.io registry server to start Docker for Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -195,8 +195,13 @@ Container Tools:
 ClusterKit:
   clusterkit-help      Print ClusterKit help info
 
-ToolKit:
-  toolkit-docs         Up local docs Server
+Developer Tools:
+  cookbooks            Up local cookbooks server
+
+AD:
+  haokan               Baidu haokan
+  alipay               Alipay
+
 
 Read './docs/*.md' for more information about CLI commands.
 
@@ -243,12 +248,12 @@ ClusterKit:
   clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
   clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
 
-  clusterkit-redis-master-slave-up       Up Redis M-S
-  clusterkit-redis-master-slave-down     Stop Redis M-S
-  clusterkit-redis-master-slave-exec     Execute a command in a running Redis M-S node
+  clusterkit-redis-replication-up       Up Redis M-S (replication)
+  clusterkit-redis-replication-down     Stop Redis M-S (replication)
+  clusterkit-redis-replication-exec     Execute a command in a running Redis M-S (replication) node
 
-  clusterkit-redis-master-slave-deploy   Deploy Redis M-S in Swarm mode
-  clusterkit-redis-master-slave-remove   Remove Redis M-S in Swarm mode
+  clusterkit-redis-replication-deploy   Deploy Redis M-S (replication) in Swarm mode
+  clusterkit-redis-replication-remove   Remove Redis M-S (replication) in Swarm mode
 
   clusterkit-redis-sentinel-up           Up Redis S
   clusterkit-redis-sentinel-down         Stop Redis S
@@ -615,24 +620,24 @@ switch($first){
       clusterkit_bash_cli clusterkit_redis redis_$service $cmd
     }
 
-    clusterkit-redis-master-slave-up {
-          docker-compose -f docker-cluster.redis.master.slave.yml up $other
+    clusterkit-redis-replication-up {
+          docker-compose -f docker-cluster.redis.replication.yml up $other
     }
 
-    clusterkit-redis-master-slave-down {
-          docker-compose -f docker-cluster.redis.master.slave.yml down $other
+    clusterkit-redis-replication-down {
+          docker-compose -f docker-cluster.redis.replication.yml down $other
     }
 
-    clusterkit-redis-master-slave-exec {
+    clusterkit-redis-replication-exec {
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
-        echo '$ ./lnmp-docker.ps1 clusterkit-redis-master-slave-exec {master|slave-N} {COMMAND}'
+        echo '$ ./lnmp-docker.ps1 clusterkit-redis-replication-exec {master|slave-N} {COMMAND}'
 
         cd $source
 
         exit 1
       }
-      clusterkit_bash_cli clusterkit_redis_master_slave redis_m_s_$service $cmd
+      clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$service $cmd
     }
 
     clusterkit-redis-sentinel-up {
@@ -670,6 +675,32 @@ switch($first){
     update-version {
       clear
       wsl -d $DistributionName lnmp-docker update-version
+    }
+
+    alipay {
+      clear
+      wsl cat ad/alipay.txt
+
+      wsl echo "
+1. 打开支付宝扫一扫
+
+2. 扫描二维码领取红包
+
+3. 线下支付时，使用即可
+      "
+    }
+
+    haokan {
+      clear
+      wsl cat ad/haokan.txt
+
+      wsl echo "
+1. 扫描二维码，输入手机号领取红包
+
+2. 下载好看视频，输入手机号登录
+
+3. 观看视频
+      "
     }
 
     debug {
@@ -763,40 +794,40 @@ XXX
           ${DEVELOPMENT_INCLUDE} pcit
     }
 
-    "toolkit-docs" {
-      if(!(Test-Path ${APP_ROOT}/khsdocs/k8s)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/khsdocs/k8s
+    "cookbooks" {
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/k8s)){
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
       }else{
-        git -C ${APP_ROOT}/khsdocs/k8s fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/k8s reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/k8s fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/docker)){
-        git clone --depth=1 -b pages git@github.com:yeasy/docker_practice.git ${APP_ROOT}/khsdocs/docker
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker)){
+        git clone --depth=1 -b pages git@github.com:docker_practice/docker_practice.git ${APP_ROOT}/lnmp-docs/docker
       }else{
-        git -C ${APP_ROOT}/khsdocs/docker fetch --depth=1 origin pages
-        git -C ${APP_ROOT}/khsdocs/docker reset --hard origin/pages
+        git -C ${APP_ROOT}/lnmp-docs/docker fetch --depth=1 origin pages
+        git -C ${APP_ROOT}/lnmp-docs/docker reset --hard origin/pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/laravel)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/khsdocs/laravel
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel)){
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
       }else{
-        git -C ${APP_ROOT}/khsdocs/laravel fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/laravel reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/laravel-en)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/laravel-docs.git ${APP_ROOT}/khsdocs/laravel-en
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel-en)){
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.git ${APP_ROOT}/lnmp-docs/laravel-en
       }else{
-        git -C ${APP_ROOT}/khsdocs/laravel-en fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/laravel-en reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/khsdocs/nginx)){
-        git clone --depth=1 -b gh-pages git@github.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/khsdocs/nginx
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/nginx)){
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
       }else{
-        git -C ${APP_ROOT}/khsdocs/nginx fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/khsdocs/nginx reset --hard origin/gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/nginx fetch --depth=1 origin gh-pages
+        git -C ${APP_ROOT}/lnmp-docs/nginx reset --hard origin/gh-pages
       }
     }
 
@@ -858,7 +889,7 @@ This local server support Docker Desktop v18.05-EDGE-67
       }
 
        Write-Warning "
-this command up a Local Server on port 443.
+this command up a local server on port 443.
 
 When Docker Desktop Start Kubernetes Success, you must remove this local server.
 

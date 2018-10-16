@@ -2,7 +2,7 @@ FROM debian:stretch-slim@sha256:47deb9c70213403e923bd46a17591933facb263a1455908f
 
 ################################################################################
 
-ARG PHP_VERSION=7.2.10
+ARG PHP_VERSION=7.2.11
 
 ARG PHP_NUM=72
 
@@ -341,7 +341,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:5.0-rc5 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:5.0-rc6 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 

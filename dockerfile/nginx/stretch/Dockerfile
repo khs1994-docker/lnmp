@@ -1,6 +1,6 @@
 FROM debian:stretch-slim
 
-ARG NGINX_VERSION=1.15.4
+ARG NGINX_VERSION=1.15.5
 
 ARG DEB_URL=deb.debian.org
 

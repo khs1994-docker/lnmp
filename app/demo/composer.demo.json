@@ -28,7 +28,8 @@
     "monolog/monolog": "^1.23"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.3"
+    "phpunit/phpunit": "^7.3",
+    "vlucas/phpdotenv": "~2.5.0"
   },
   "config": {
     "optimize-autoloader": true,
@@ -56,10 +57,10 @@
     },
     "laravel":{
       "providers":[
-        "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}\\ServiceProvider"
+        "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}\\Support\\ServiceProvider"
       ],
       "aliases":{
-        "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}":"{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}\\Facade"
+        "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}":"{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}\\Support\\Facade"
       }
     }
   }

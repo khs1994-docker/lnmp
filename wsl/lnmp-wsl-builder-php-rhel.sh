@@ -14,11 +14,11 @@ Build php in WSL RHEL by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php-rhel.sh 7.2.10 7.3.0RC1 7.3.0beta3
+$ lnmp-wsl-builder-php-rhel.sh 7.2.11 7.3.0RC3 7.3.0beta3
 
 $ lnmp-wsl-builder-php-rhel.sh yum
 
-$ lnmp-wsl-builder-php-rhel.sh 7.2.10 [--skipbuild] [tar] [rpm] [enable-ext]
+$ lnmp-wsl-builder-php-rhel.sh 7.2.11 [--skipbuild] [tar] [rpm] [enable-ext]
 
 "
 
@@ -700,7 +700,7 @@ command -v wget || sudo yum install -y wget
 
 mkdir -p /tmp/php-builder || echo
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.10 ; fi
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.11 ; fi
 
 _get_phpnum $PHP_VERSION
 

@@ -24,8 +24,8 @@ services:
       context: .
       dockerfile: test.Dockerfile
       args:
-        - PHP_VERSION_7_2_X=7.2.10
-        - PHP_VERSION_7_1_X=7.1.22
+        - PHP_VERSION_7_2_X=7.2.11
+        - PHP_VERSION_7_1_X=7.1.23
         - PHP_VERSION_7_0_X=7.0.32
         - PHP_VERSION_5_6_X=5.6.38
     image: khs1994/EXAMPLE
@@ -35,9 +35,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - NGINX_VERSION=${NGINX_VERSION:-1.15.4}-alpine
+        - NGINX_VERSION=${NGINX_VERSION:-1.15.5}-alpine
       target: nginx
-    image: khs1994/nginx:${NGINX_VERSION:-1.15.4}-swarm-alpine
+    image: khs1994/nginx:${NGINX_VERSION:-1.15.5}-swarm-alpine
     depends_on:
       - 7_2_X
       # - 7_1_X

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Example;
+namespace Example\Support;
 
 class Facade extends \Illuminate\Support\Facades\Facade
 {

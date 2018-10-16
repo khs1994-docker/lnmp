@@ -116,8 +116,8 @@ server {
 
   sleep 10
 
-  if ! [ -d app/khsci ];then \
-    git clone --depth=1 https://github.com/khs1994-php/khsci app/khsci; \
+  if ! [ -d app/pcit ];then \
+    git clone --depth=1 https://github.com/khs1994-php/pcit app/pcit; \
   fi
 
   docker stack deploy -c docker-production.yml lnmp

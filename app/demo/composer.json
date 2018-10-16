@@ -65,8 +65,8 @@
     "post-create-project-cmd": [
       "@php -r \"copy('README.example.md', 'README.md');\"",
       "@php -r \"copy('.gitattributes.example', '.gitattributes');\"",
-      "@php -r \"unlink('.gitattributes.example'); unlink('README.example.md');\"",
-      "@php -r \"file_put_contents('CHANGELOG','# CHANGELOG');\""
+      "@php -r \"copy('CHANGELOG.example.md','CHANGELOG.md');\"",
+      "@php -r \"unlink('.gitattributes.example');unlink('README.example.md');unlink('CHANGELOG.example.md');\""
     ]
   },
   "scripts-descriptions": {

@@ -71,7 +71,7 @@
 │   ├── demo-include-php.config
 │   ├── demo-include-ssl-common.config
 │   ├── demo-include-ssl.config
-│   ├── demo-khsci.config
+│   ├── demo-pcit.config
 │   ├── demo-linuxkit.config
 │   ├── demo-nginx-unit.config
 │   ├── demo-registry.config

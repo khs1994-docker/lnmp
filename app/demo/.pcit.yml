@@ -1,5 +1,5 @@
 #
-# @see https://github.com/khs1994-php/khsci/blob/master/docs/SUMMARY.md
+# @see https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
 #
 
 languages: php
@@ -127,14 +127,14 @@ matrix:
   COMPOSER_VERSION:
     - 1.7.2
   PHP_VERSION:
-    - 7.2.10
-    - 7.1.22
+    - 7.2.11
+    - 7.1.23
     # - 7.0.32
     # - 5.6.38
   NGINX_VERSION:
-    - 1.15.4
+    - 1.15.5
   REDIS_VERSION:
-    - 5.0-rc5
+    - 5.0-rc6
   MYSQL_VERSION:
     # - 8.0.11
     - 5.7.22

@@ -19,7 +19,7 @@
     └── ci.crt
 ```
 
-## 新建 GitHub App
+## 新建 GitHub OAuth App 和 GitHub App
 
 ## 配置 PCIT
 

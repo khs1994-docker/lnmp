@@ -1,16 +1,10 @@
 # Deploy Kubernetes on CoreOS
 
-* Install CoreOS Local Server
-
-* Generate self-signed certificates [**生成 Docker Daemon 远程连接自签名证书文件**](https://www.khs1994.com/docker/dockerd.html)
+* [生成 Docker Daemon 远程连接自签名证书文件](https://www.khs1994.com/docker/dockerd.html)
 
 ## Overview
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/coreos.svg?style=social&label=Stars)](https://github.com/khs1994-docker/coreos) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/coreos.svg)](https://store.docker.com/community/images/khs1994/coreos) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/coreos.svg)](https://store.docker.com/community/images/khs1994/coreos)
-
-[CoreOS Installer Nginx Server](https://www.khs1994.com/docker/coreos/install-server.html)
-
-## Overview
 
 ### 技能储备
 
@@ -26,9 +20,13 @@
 
 * 安装 CoreOS 详细教程请查看：https://www.khs1994.com/categories/Docker/CoreOS/ `硬盘安装 CoreOS 三节点集群`
 
+## 注意事项
+
+* 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间。
+
 ### 虚拟机网络配置
 
-VirtualBox 增加 hostonly 网络 （192.168.57.1）
+VirtualBox 增加 hostonly 网络 **192.168.57.1** 网段
 
 ### 下载相关文件
 

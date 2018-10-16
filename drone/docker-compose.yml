@@ -77,13 +77,13 @@ services:
 
   redis:
     << : *default-common
-    image: redis:${CI_REDIS_VERSION:-5.0-rc5}-alpine
+    image: redis:${CI_REDIS_VERSION:-5.0-rc6}-alpine
     volumes:
       - redis-data:/data
 
   nginx:
     << : *default-common
-    image: khs1994/nginx:${CI_NGINX_VERSION:-1.15.4}-alpine
+    image: khs1994/nginx:${CI_NGINX_VERSION:-1.15.5}-alpine
     networks:
       - frontend
     ports:

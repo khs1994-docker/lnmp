@@ -24,7 +24,7 @@ services:
   - name: rngd
     image: linuxkit/rngd:v0.2
   - name: php7
-    image: khs1994/php:7.2.10-swarm-alpine
+    image: khs1994/php:7.2.11-swarm-alpine
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
@@ -52,7 +52,7 @@ services:
   #   command: ["mysqld", "--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
   #   net: host
   - name: redis
-    image: redis:5.0-rc5-alpine
+    image: redis:5.0-rc6-alpine
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
@@ -66,7 +66,7 @@ services:
      - /etc/hosts:/etc/hosts
     net: host
   - name: nginx
-    image: khs1994/nginx:1.15.4-swarm-alpine
+    image: khs1994/nginx:1.15.5-swarm-alpine
     # env:
     #  - TZ=Asia/Shanghai
     capabilities:
