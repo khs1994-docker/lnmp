@@ -166,7 +166,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mongodb/
     #   dockerfile: Dockerfile
     # image: lnmp-mongodb:lastet
-    image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.2}
+    image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.4}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf
       - mongodb-data:/data/db

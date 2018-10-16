@@ -28,9 +28,11 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 ## WeChat
 
-![](https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg)
+<p align="center">
+<img width="200" src="https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg">
+</p>
 
-关注项目作者微信订阅号，接收项目的最新动态。
+<p align="center"><strong>Welcome developer subscribe WeChat<strong></p>
 
 ## Prerequisites
 
@@ -190,7 +192,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.7.9`        | **2.7.9**              |`Alpine:3.8`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`khs1994/nginx:1.15.5-alpine`| **1.15.5**             |`Alpine:3.8`    |
-|[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/nginx-unit:1.3-alpine`| **1.3**             |`Alpine:3.8`    |
+|[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/nginx-unit:1.4-alpine`| **1.4**             |`Alpine:3.8`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.35-alpine`       | **2.4.35**             |`Alpine:3.7`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.12`              | **8.0.12**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.9`            | **10.3.9**             |`Ubuntu:bionic` |
@@ -202,7 +204,7 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.11-alpine`           | **1.5.11**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.4-alpine`             | **10.4**        |`Alpine:3.8`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.2`                      | **4.1.2**       |`Ubuntu:xenial` |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.4`                      | **4.1.4**       |`Ubuntu:xenial` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.8`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.4`    |
 
