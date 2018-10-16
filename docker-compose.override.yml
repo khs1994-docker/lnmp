@@ -18,7 +18,7 @@ services:
 
   mariadb:
     << : *default-common
-    image: mariadb:${LNMP_MYSQL_VERSION:-10.3.9}
+    image: mariadb:${LNMP_MYSQL_VERSION:-10.3.10}
 
   redis:
     << : *default-common
@@ -38,7 +38,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: mongo:${LNMP_MONGODB_VERSION:-4.1.2}
+    image: mongo:${LNMP_MONGODB_VERSION:-4.1.4}
 
   php7:
     << : *default-common

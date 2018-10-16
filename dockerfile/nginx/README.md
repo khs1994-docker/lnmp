@@ -78,7 +78,7 @@ traffic: 17.12KB (17532) total, 1.70KB (1742) headers (space savings 90.10%), 13
 time for request:    10.71ms    103.80ms     71.21ms     17.92ms    74.00%
 time for connect:   118.40ms    307.03ms    178.26ms     61.53ms    80.00%
 time to 1st byte:   163.51ms    396.44ms    232.83ms     73.78ms    80.00%
-req/s           :      10.49       12.09       11.25        0.57    60.00%
+req/s           :      10.59       12.09       11.25        0.57    60.00%
 ```
 
 ## official
@@ -87,7 +87,7 @@ req/s           :      10.49       12.09       11.25        0.57    60.00%
 finished in 701.79ms, 142.49 req/s, 36.88KB/s
 requests: 100 total, 100 started, 100 done, 100 succeeded, 0 failed, 0 errored, 0 timeout
 status codes: 100 2xx, 0 3xx, 0 4xx, 0 5xx
-traffic: 25.88KB (26500) total, 10.46KB (10710) headers (space savings 39.15%), 13.18KB (13500) data
+traffic: 25.88KB (26500) total, 10.56KB (10710) headers (space savings 39.15%), 13.18KB (13500) data
                      min         max         mean         sd        +/- sd
 time for request:     9.32ms     62.95ms     49.54ms      9.66ms    83.00%
 time for connect:    82.70ms    285.17ms    150.81ms     70.20ms    80.00%

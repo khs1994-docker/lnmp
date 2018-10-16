@@ -57,7 +57,7 @@ services:
 
   mysql:
     << : *default-common
-    image: "${ARM_ARCH:-arm64v8}/mariadb:${LNMP_MARIADB_VERSION:-10.3.9}"
+    image: "${ARM_ARCH:-arm64v8}/mariadb:${LNMP_MARIADB_VERSION:-10.3.10}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -145,7 +145,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/postgresql/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-10.4}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-10.5}${ARM_BASED_OS}"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -166,7 +166,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mongodb/
     #   dockerfile: Dockerfile
     # image: lnmp-mongodb:lastet
-    image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.2}
+    image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.4}
     volumes:
       - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf
       - mongodb-data:/data/db
