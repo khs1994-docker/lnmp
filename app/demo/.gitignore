@@ -27,4 +27,6 @@ __pycache__
 coverage_report
 coverage.xml
 
+.env.*
 .env
+!.env.example

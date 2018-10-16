@@ -15,6 +15,13 @@ dist: xenial #16.04
 # dist: trusty # 14.04
 
 # addons:
+#
+#   设置数据库
+#
+#   @link https://docs.travis-ci.com/user/database-setup/
+#
+#   mariadb: '10.0'
+#   postgresql: '9.4'
 #   apt:
 #     sources:
 #       - mysql-5.7-trusty
@@ -48,15 +55,6 @@ matrix:
   - php: nightly
   # - env: KEY=VALUE
 
-#
-# 设置数据库
-#
-# @link https://docs.travis-ci.com/user/database-setup/
-#
-# addons:
-#   mariadb: '10.0'
-#   postgresql: '9.4'
-
 before_install:
   # update docker version
 
@@ -83,7 +81,6 @@ before_install:
 install:
   - composer install -q
   # - composer update -q
-  # - composer require illuminate/console
   # - curl -fsSL http://get.sensiolabs.org/sami.phar -o sami
   # - chmod +x sami
 
@@ -98,6 +95,7 @@ script:
 env:
   global:
     - MONGODB=disable
+  matrix:
     # - DB=sqlite
     # - DB=mysql
     # - DB=postgresql
