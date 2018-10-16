@@ -16,3 +16,4 @@
 * Redis `5.0-rc6`
 * Memcached `1.5.11`
 * MongoDB `4.1.4`
+* MariaDB `10.3.10`
