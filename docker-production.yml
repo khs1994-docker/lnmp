@@ -289,9 +289,9 @@ services:
   #   #
   #   # image: username/lnmp-postgresql:tag
   #   #
-  #   # image: khs1994/lnmp-postgresql:10.4
+  #   # image: khs1994/lnmp-postgresql:10.5
   #   #
-  #   image: postgres:10.4-alpine
+  #   image: postgres:10.5-alpine
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
