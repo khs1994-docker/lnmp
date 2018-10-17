@@ -54,7 +54,7 @@
     * [MySQL 一主两从](clusterkit/mysql.md)
     * [Memcached 集群](clusterkit/memcached.md)
     * [Redis Cluster ](clusterkit/redis_cluster.md)
-    * [Redis Replica](clusterkit/redis_replication.md)
+    * [Redis Replication](clusterkit/redis_replication.md)
     * [Redis Sentinel](clusterkit/redis_sentinel.md)
 * 树莓派3
     * [ARM架构](arm.md)
