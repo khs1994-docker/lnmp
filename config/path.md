@@ -71,7 +71,7 @@
 │   ├── demo-include-php.config
 │   ├── demo-include-ssl-common.config
 │   ├── demo-include-ssl.config
-│   ├── demo-pcit.config
+│   ├── demo-khsci.config
 │   ├── demo-linuxkit.config
 │   ├── demo-nginx-unit.config
 │   ├── demo-registry.config
@@ -121,6 +121,7 @@
 │   │               │   │   ├── docker-php-ext-imap.ini
 │   │               │   │   ├── docker-php-ext-intl.ini
 │   │               │   │   ├── docker-php-ext-memcached.ini
+│   │               │   │   ├── docker-php-ext-mongodb.ini
 │   │               │   │   ├── docker-php-ext-mysqli.ini
 │   │               │   │   ├── docker-php-ext-opcache.ini
 │   │               │   │   ├── docker-php-ext-pcntl.ini
@@ -171,5 +172,5 @@
     ├── gcr.io.crt
     └── gcr.io.key
 
-41 directories, 129 files
+41 directories, 130 files
 ```

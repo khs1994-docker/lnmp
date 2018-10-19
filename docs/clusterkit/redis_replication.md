@@ -36,7 +36,7 @@ $ ./lnmp-docker clusterkit-redis-replication-remove
 
 ### predis
 
-* https://github.com/nrk/predis#replicationtion
+* https://github.com/nrk/predis#replication
 
 ```php
 $parameters = [
@@ -44,7 +44,7 @@ $parameters = [
   'tcp://192.168.199.100:23000',
   ];
 
-$options = ['replicationtion' => true];
+$options = ['replication' => true];
 
 $client = new Predis\Client($parameters, $options);
 ```
