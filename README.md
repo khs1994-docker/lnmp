@@ -6,6 +6,10 @@
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: Start LNMP In Less than 2 minutes Powered By Docker Compose.
 
+<p align="center">
+<img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
+</p>
+
 * [中文说明](README.cn.md)
 
 * [Documents](docs/)

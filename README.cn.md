@@ -6,6 +6,10 @@
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境。
 
+<p align="center">
+<img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
+</p>
+
 * [项目初衷](docs/why.md)
 
 * [支持文档](docs)
