@@ -1,7 +1,7 @@
 version: "3.7"
 
 #
-# Redis 1master-1slave (M-S)
+# Redis 1master-1slave (M-S) Replication
 #
 
 #
@@ -31,7 +31,7 @@ x-deploy:
 
 x-common:
   &default-common
-  image: redis:5.0-rc6-alpine
+  image: redis:5.0.0-alpine
   restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}
@@ -68,8 +68,8 @@ services:
       "--port 22000",
       # "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
-      "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 21000",
+      "--replica-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
+      "--replica-announce-port 21000",
       "--appendonly yes",
       # "--save \"\""
       "--aof-use-rdb-preamble yes"
@@ -95,9 +95,9 @@ services:
       "--bind 0.0.0.0",
       "--port 23000",
       # "--logfile /var/log/redis/redis.log",
-      "--slaveof redis_m_s_master 21000",
-      "--slave-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 23000",
+      "--replicaof redis_m_s_master 21000",
+      "--replica-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
+      "--replica-announce-port 23000",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"

@@ -28,7 +28,7 @@ version: "3.7"
 
 x-common:
   &default-common
-  image: redis:5.0-rc6-alpine
+  image: redis:5.0.0-alpine
   # restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
@@ -77,8 +77,8 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 20000",
-      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 20000",
+      "--replica-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
+      "--replica-announce-port 20000",
       "--appendonly yes",
       # "--save \"\""
       "--aof-use-rdb-preamble yes"
@@ -110,9 +110,9 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 20001",
-      "--slaveof redis_sentinel_master-1 20000",
-      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 20001",
+      "--replicaof redis_sentinel_master-1 20000",
+      "--replica-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
+      "--replica-announce-port 20001",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
@@ -148,9 +148,9 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 20002",
-      "--slaveof redis_sentinel_master-1 20000",
-      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 20002",
+      "--replicaof redis_sentinel_master-1 20000",
+      "--replica-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
+      "--replica-announce-port 20002",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
@@ -184,9 +184,9 @@ services:
       "--daemonize no",
       "--bind 0.0.0.0",
       "--port 20003",
-      "--slaveof redis_sentinel_master-1 20000",
-      "--slave-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
-      "--slave-announce-port 20003",
+      "--replicaof redis_sentinel_master-1 20000",
+      "--replica-announce-ip ${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}",
+      "--replica-announce-port 20003",
       "--appendonly yes",
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"

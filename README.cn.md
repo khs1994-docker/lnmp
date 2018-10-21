@@ -6,6 +6,10 @@
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境。
 
+<p align="center">
+<img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
+</p>
+
 * [项目初衷](docs/why.md)
 
 * [支持文档](docs)
@@ -34,15 +38,15 @@
 <img width="200" src="https://user-images.githubusercontent.com/16733187/46847944-84a96b80-ce19-11e8-9f0c-ec84b2ac463e.jpg">
 </p>
 
-<p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态。</strong></p>
+<p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
 
 ## 准备
 
 本项目需要以下软件：
 
-:one: [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
+:one: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 18.06 Stable +
 
-:two: [Docker Compose](https://github.com/docker/compose) 1.22.0+
+:two: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.22.0+
 
 :three: WSL (**Windows** Only)
 
@@ -203,11 +207,11 @@ $ ./lnmp-docker down
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.35-alpine`       | **2.4.35**             |`Alpine:3.7`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.12`              | **8.0.12**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.3.10`            | **10.3.10**             |`Ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0-rc6-alpine`        | **5.0-rc6**            |`Alpine:3.8`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.0-alpine`        | **5.0.0**            |`Alpine:3.8`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.11-fpm-alpine`  | **7.2.11**       |`Alpine:3.8`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.11-fpm-alpine`  | **5.7.x**       |`Alpine:3.8`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.11-fpm-alpine`  | **1.7.2**       |`Alpine:3.8`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.11-fpm-alpine`  | **2.13.0**      |`Alpine:3.8`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.11-fpm-alpine`  | **2.13.1**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.11-alpine`           | **1.5.11**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.5-alpine`             | **10.5**        |`Alpine:3.8`    |

@@ -1,8 +1,8 @@
 #
 # Travis CI
 #
-# @link https://docs.travis-ci.com/
-# @link https://www.khs1994.com/categories/CI/Travis-CI/
+# @see https://docs.travis-ci.com/
+# @see https://www.khs1994.com/categories/CI/Travis-CI/
 #
 
 language: php
@@ -11,14 +11,14 @@ language: php
 #   directories:
 #   - cache
 
-dist: xenial #16.04
+dist: xenial # 16.04
 # dist: trusty # 14.04
 
 # addons:
 #
 #   设置数据库
 #
-#   @link https://docs.travis-ci.com/user/database-setup/
+#   @see https://docs.travis-ci.com/user/database-setup/
 #
 #   mariadb: '10.0'
 #   postgresql: '9.4'
@@ -49,11 +49,20 @@ php:
   - nightly
 
 matrix:
+  # @see https://docs.travis-ci.com/user/multi-os/
+  # include:
+  #   - os: windows
+  #   dist: 1803-containers
+  #   env:
+  #   - os: linux
+  #   dist: xenial
+  #   env:
   fast_finish: true
   allow_failures:
-  - php: 7.3
-  - php: nightly
-  # - env: KEY=VALUE
+    - php: 7.3
+    - php: nightly
+    # - env: KEY=VALUE
+    # - os: windows
 
 before_install:
   # update docker version
@@ -89,8 +98,8 @@ script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 
 # after_success:
-# - bash <(curl -s https://codecov.io/bash)
-# - ./sami update .sami.php
+#   - bash <(curl -s https://codecov.io/bash)
+#   - ./sami update .sami.php
 
 env:
   global:

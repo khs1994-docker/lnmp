@@ -5,7 +5,7 @@ version: "3.7"
 # This file Only Example
 #
 #
-# @link https://docs.docker.com/compose/overview/
+# @see https://docs.docker.com/compose/overview/
 #
 
 x-common:

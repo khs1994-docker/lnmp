@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Example\Support;
 
+use Example\Example;
+
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
@@ -23,12 +25,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
         // $this->loadMigrationsFrom(__DIR__.'/path/to/migrations');
         // $this->loadTranslationsFrom(__DIR__.'/path/to/translations', 'courier');
-        $this->app->singleton(Example::class, function ($app) {
+        $this->app->singleton('example', function ($app) {
             return new Example($app);
         });
 
-        $this->app->alias(Example::class, 'example');
-        //        $this->app->bind(Example::class, function () {
+        $this->app->alias('example', Example::class);
+        //        $this->app->bind('example', function () {
         //            return new Example();
         //        });
     }
@@ -75,6 +77,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function provides()
     {
-        return [Example::class];
+        return ['example'];
     }
 }
