@@ -34,10 +34,6 @@ NOTSUPPORT(){
   exit 1
 }
 
-check_docker_version(){
-  docker --version | grep 'ce' >/dev/null 2>&1 || print_error "Your Docker Version is too old, Please install Docker CE https://github.com/yeasy/docker_practice/tree/master/install"
-}
-
 check_nginx_conf(){
   set +e
   echo "$DEVELOPMENT_INCLUDE" | grep 'minio' > /dev/null 2>&1 || ( ls config/${NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
@@ -117,7 +113,7 @@ Composer:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up local gcr.io registry server to start Docker for Desktop Kubernetes [ --no-pull | ]
+  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker for Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -1833,21 +1829,8 @@ if [ -d .git ];then
   print_info "Branch is ${BRANCH}\n"
 fi
 
-_check_docker_version(){
-  if [ -z "${BRANCH}" ];then
-    return
-  fi
-
-  DOCKER_VERSION_YY=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 1)
-  DOCKER_VERSION_MM=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 2)
-
-  if [ "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" != "${BRANCH}" ];then
-    print_warning "Current branch incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout\n"
-  fi
-}
-
 set +e
-command -v docker > /dev/null 2>&1 && _check_docker_version
+command -v docker > /dev/null 2>&1
 set -e
 
 # 写入版本号
@@ -1869,7 +1852,7 @@ fi
 
 print_info "ARCH is ${OS} ${ARCH}\n"
 
-command -v docker > /dev/null 2>&1 && ( print_info `docker --version` ; check_docker_version )
+command -v docker > /dev/null 2>&1 && print_info `docker --version`
 
 command -v > /dev/null 2>&1 || print_warning "docker cli is not install"
 

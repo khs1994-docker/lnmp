@@ -181,7 +181,7 @@ Composer:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up local gcr.io registry server to start Docker for Desktop Kubernetes
+  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker for Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)

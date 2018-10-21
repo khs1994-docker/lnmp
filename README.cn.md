@@ -40,9 +40,9 @@
 
 本项目需要以下软件：
 
-:one: [Docker CE](https://github.com/docker/docker-ce) 18.06 Stable +
+:one: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 18.06 Stable +
 
-:two: [Docker Compose](https://github.com/docker/compose) 1.22.0+
+:two: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.22.0+
 
 :three: WSL (**Windows** Only)
 
@@ -207,7 +207,7 @@ $ ./lnmp-docker down
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.11-fpm-alpine`  | **7.2.11**       |`Alpine:3.8`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.11-fpm-alpine`  | **5.7.x**       |`Alpine:3.8`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.11-fpm-alpine`  | **1.7.2**       |`Alpine:3.8`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.11-fpm-alpine`  | **2.13.0**      |`Alpine:3.8`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.11-fpm-alpine`  | **2.13.1**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.11-alpine`           | **1.5.11**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:10.5-alpine`             | **10.5**        |`Alpine:3.8`    |

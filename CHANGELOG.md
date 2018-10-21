@@ -18,3 +18,4 @@
 * MongoDB `4.1.4`
 * MariaDB `10.3.10`
 * PostgreSQL `10.5`
+* PHP-CS-Fixer `2.13.1`
