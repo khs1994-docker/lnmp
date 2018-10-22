@@ -82,7 +82,7 @@ if ! [ -d kubernetes-release/release/${KUBERNETES_VERSION} ];then
     mkdir -p kubernetes-release/release/${KUBERNETES_VERSION}
     mkdir -p kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes
 
-    docker container rm khs1994-coreos-kubernetes || echo > /dev/null
+    docker container rm khs1994-coreos-kubernetes > /dev/null 2>&1 || echo > /dev/null
     docker container create --name khs1994-coreos-kubernetes ccr.ccs.tencentyun.com/khs1994/kubernetes:${KUBERNETES_VERSION}
     docker container cp khs1994-coreos-kubernetes:/srv.tar.gz kubernetes-release/release
     docker container rm khs1994-coreos-kubernetes
