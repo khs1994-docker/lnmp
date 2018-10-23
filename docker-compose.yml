@@ -290,7 +290,7 @@ services:
 
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-09-12T18-49-56Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-10-18T00-28-58Z}
     volumes:
       - minio-data:/data
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt

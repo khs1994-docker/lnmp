@@ -50,7 +50,7 @@ $global:GIT_VERSION="2.19.1"
 $global:PYTHON_VERSION="3.7.0"
 $global:GOLANG_VERSION="1.11.1"
 $global:HTTPD_MOD_FCGID_VERSION="2.3.9"
-$global:ZEAL_VERSION="0.5.0"
+$global:ZEAL_VERSION="0.6.1"
 
 $global:APP_ENV="windows"
 $global:APP_ROOT="./app"
