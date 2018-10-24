@@ -14,7 +14,7 @@ services:
 
   mysql:
     << : *default-common
-    image: mysql:${LNMP_MYSQL_VERSION:-8.0.12}
+    image: mysql:${LNMP_MYSQL_VERSION:-8.0.13}
 
   mariadb:
     << : *default-common
@@ -58,7 +58,7 @@ services:
 
   httpd:
     << : *default-common
-    image: httpd:${LNMP_HTTPD_VERSION:-2.4.35}-alpine
+    image: httpd:${LNMP_HTTPD_VERSION:-2.4.37}-alpine
 
 networks:
   frontend:

@@ -39,7 +39,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mysql
     #   dockerfile: Dockerfile
     # image: lnmp-mysql:latest
-    image: "${ARM_ARCH:-arm64v8}/mysql:${LNMP_MYSQL_VERSION:-8.0.12}"
+    image: "${ARM_ARCH:-arm64v8}/mysql:${LNMP_MYSQL_VERSION:-8.0.13}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test
@@ -145,7 +145,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/postgresql/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-10.5}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-11.0}${ARM_BASED_OS}"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -241,7 +241,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
     #   dockerfile: Dockerfile
     # image: lnmp-httpd:latest
-    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.35}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.37}${ARM_BASED_OS}"
     ports:
       - "443:443"
       - "80:80"

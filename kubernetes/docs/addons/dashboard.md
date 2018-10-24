@@ -19,7 +19,7 @@ $ kubectl proxy --address='localhost' --port=8086 --accept-hosts='^*$'
 Starting to serve on 127.0.0.1:8086
 ```
 
-Open browser http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
 
 ## 创建登录 token
 

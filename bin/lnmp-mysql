@@ -15,10 +15,10 @@ source $DIR/.arch
 docker run -it --rm \
     --network lnmp_backend \
     -e TZ=${TZ} \
-    mysql:${LNMP_MYSQL_VERSION:-8.0.12} \
+    mysql:${LNMP_MYSQL_VERSION:-8.0.13} \
     "$@" || docker run -it --rm \
     -e TZ=${TZ} \
-    mysql:${LNMP_MYSQL_VERSION:-8.0.12} \
+    mysql:${LNMP_MYSQL_VERSION:-8.0.13} \
     "$@"
 
 if ! [ -z "$CREATE" ];then

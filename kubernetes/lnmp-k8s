@@ -3,6 +3,8 @@
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 KUBERNETES_VERSION=1.12.0
 MINIKUBE_VERSION=0.28.1
+ETCD_VERSION=3.3.9
+FLANNEL_VERSION=0.10.0
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
@@ -90,8 +92,7 @@ _minikube-install(){
 
   chmod +x minikube
 
-  echo "
-  move minikube to your PATH"
+  sudo mv minikube /usr/local/bin/ || echo "Please move minikube to your PATH"
 }
 
 _cleanup(){
@@ -134,7 +135,7 @@ _create(){
      exit
   fi
 
-  kubectl create namespace lnmp > /dev/null 2>&1 | echo > /dev/null
+  kubectl create namespace lnmp > /dev/null 2>&1 || echo > /dev/null
 
   _create_pv
 
@@ -180,7 +181,7 @@ kubectl-install(){
   if [ $os = 'Linux' ];then
     command -v docker
     if [ $? -eq 0 ];then
-      docker container rm -f khs1994-kubectl || echo > /dev/null
+      docker container rm -f khs1994-kubectl > /dev/null 2>&1 || echo > /dev/null
       docker container create --name=khs1994-kubectl khs1994/coreos:cert
       docker container cp khs1994-kubectl:/usr/local/bin/kubectl .
       docker container rm -f khs1994-kubectl
@@ -194,10 +195,10 @@ kubectl-install(){
 
   if [ $OS = 'Linux' ];then
     curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > kubectl-Linux-x86_64
-    sudo mv kubectl-* /usr/local/bin/
+    sudo mv kubectl-Linux-x86_64 /usr/local/bin/kubectl
   elif [ $OS = 'Darwin' ];then
     curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/darwin/amd64/kubectl > kubectl-Darwin-x86_64
-    sudo mv kubectl-* /usr/local/bin/
+    sudo mv kubectl-Darwin-x86_64 /usr/local/bin/kubectl
   fi
 
   kubectl version
@@ -212,33 +213,32 @@ kubectl-getinfo(){
 _etcd(){
   if ! [ -f /opt/bin/etcd ];then
       cd /opt/bin
-      sudo wget https://github.com/etcd-io/etcd/releases/download/v3.3.9/etcd-v3.3.9-linux-amd64.tar.gz
-      sudo tar -zxvf etcd-v3.3.9-linux-amd64.tar.gz
-      sudo mv etcd-v3.3.9-linux-amd64/etcd* ../
+      sudo wget https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+      sudo tar -zxvf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+      sudo mv etcd-v${ETCD_VERSION}-linux-amd64/etcd* ../
       sduo rm -rf *.tar.gz
       cd -
       return
   fi
 
-  echo "flanneld already install"
+  echo "etcd already install"
 }
 
 _flanneld(){
   if ! [ -f /opt/bin/flanneld ];then
-    sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v0.10.0/flanneld-amd64 -o /opt/bin/flanneld
+    sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flanneld-amd64 -o /opt/bin/flanneld
     return
   fi
 
-  echo "etcd already install"
+  echo "flanneld already install"
 }
 
 _k8s_install(){
+  sudo mkdir -p /opt/bin
   _etcd
   _flanneld
 
   if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ cd coreos ; docker-compose up cfssl-single"; exit; fi
-
-  sudo mkdir -p /opt/bin
 
   if ! [ -f /opt/bin/kubeadm ];then
     sudo cp coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/

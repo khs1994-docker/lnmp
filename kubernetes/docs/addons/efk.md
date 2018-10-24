@@ -6,7 +6,7 @@
 
 * 虚拟机每个节点内存分配 3G，之前分配了 2G 一直报错
 
-* 如果把 es-statefulset.yaml 的 replicas 参数修改为1，内存够了，但是 elasticsearch 集群又是断腿的，运行不起来。
+* es-statefulset.yaml 的 replicas 参数 **不能** 为 1
 
 ## 资源占用
 
@@ -24,7 +24,7 @@
 
 * https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
 
-### 打标签
+### 给 Node 打标签
 
 ```bash
 $ kubectl label nodes NODE_NAME beta.kubernetes.io/fluentd-ds-ready=true
@@ -44,7 +44,7 @@ $ kubectl cluster-info|grep -E 'Elasticsearch|Kibana'
 $ kubectl proxy --address='192.168.57.1' --port=8086 --accept-hosts='^*$'
 ```
 
-* http://192.168.57.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/proxy
+http://192.168.57.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/proxy
 
 ## 删除
 

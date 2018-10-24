@@ -2,7 +2,7 @@ FROM microsoft/windowsservercore:1803
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-ENV MYSQL_VERSION 8.0.12
+ENV MYSQL_VERSION 8.0.13
 
 RUN $url = ('https://dev.mysql.com/get/Downloads/MySQL-${0}/mysql-${1}-winx64.zip' -f '8.0' $env:MYSQL_VERSION); \
 	      Write-Host ('Downloading {0} ...' -f $url); \

@@ -17,11 +17,11 @@ $ kubectl edit deployment DEPLOYMENT_NAME
 查看更新历史
 
 ```bash
-$ kubectl collout history deployment DEPLOYMENT_NAME
+$ kubectl rollout history deployment DEPLOYMENT_NAME
 ```
 
 ```bash
-$ kubectl collout pause | resume | status
+$ kubectl rollout pause | resume | status
 ```
 
 ```bash

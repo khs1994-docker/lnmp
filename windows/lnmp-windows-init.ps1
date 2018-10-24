@@ -399,17 +399,19 @@ Function _python(){
       return
   }
 
-# https://docs.python.org/3.5/using/windows.html#installing-without-ui
+# https://docs.python.org/3.7/using/windows.html#installing-without-ui
 	Start-Process python-${PYTHON_VERSION}-amd64.exe -Wait `
 		-ArgumentList @( `
-			'/quiet', `
-			'InstallAllUsers=1', `
-			'TargetDir=C:\Python', `
-			'PrependPath=1', `
-			'Shortcuts=0', `
-			'Include_doc=0', `
-			'Include_pip=0', `
-			'Include_test=0' `
+      '/quiet', `
+      'InstallAllUsers=1', `
+      'DefaultAllUsersTargetDir=C:\Python',
+      'DefaultJustForMeTargetDir=C:\Python',
+      'TargetDir=C:\Python', `
+      'PrependPath=1', `
+      'Shortcuts=0', `
+      'Include_doc=0', `
+      'Include_pip=1', `
+      'Include_test=0' `
     );
 }
 
@@ -435,11 +437,18 @@ $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
 $env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
 $items="$env:LNMP_PATH","$env:LNMP_PATH\windows","$env:LNMP_PATH\wsl", `
-       "$env:LNMP_PATH\kubernetes","$env:LNMP_PATH\kubernetes\coreos-kubernetes",`
-       "C:\php","C:\mysql\bin","C:\nginx","C:\Apache24\bin", `
-       "C:\node","C:\bin", `
+       "$env:LNMP_PATH\kubernetes", `
+       "$env:LNMP_PATH\kubernetes\coreos",`
+       "$env:USERPROFILE\app\pcit\bin", `
+       "C:\php", `
+       "C:\mysql\bin", `
+       "C:\nginx", `
+       "C:\Apache24\bin", `
+       "C:\node", `
+       "C:\bin", `
        "C:\Users\$env:username\go\bin", `
-       "C:\go\bin"
+       "C:\go\bin", `
+       "C:\Python"
 
 Foreach ($item in $items)
 {

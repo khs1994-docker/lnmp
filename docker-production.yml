@@ -114,9 +114,9 @@ services:
     #
     # image: username/lnmp-mysql:tag
     #
-    # image: khs1994/lnmp-mysql:8.0.12
+    # image: khs1994/lnmp-mysql:8.0.13
     #
-    image: mysql:8.0.12
+    image: mysql:8.0.13
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
@@ -289,9 +289,9 @@ services:
   #   #
   #   # image: username/lnmp-postgresql:tag
   #   #
-  #   # image: khs1994/lnmp-postgresql:10.5
+  #   # image: khs1994/lnmp-postgresql:11.0
   #   #
-  #   image: postgres:10.5-alpine
+  #   image: postgres:11.0-alpine
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
@@ -530,9 +530,9 @@ services:
   #   #
   #   # image: username/lnmp-httpd:tag
   #   #
-  #   # image: khs1994/lnmp-httpd:2.4.35
+  #   # image: khs1994/lnmp-httpd:2.4.37
   #   #
-  #   image: "httpd:2.4.35-alpine"
+  #   image: "httpd:2.4.37-alpine"
   #   ports:
   #     - "443:443"
   #     - "80:80"
@@ -618,7 +618,7 @@ services:
   minio:
     << : *default-common
     << : *default-labels
-    image: minio/minio:RELEASE.2018-09-01T00-38-25Z
+    image: minio/minio:RELEASE.2018-10-18T00-28-58Z
     command:
       - server
       - /data
