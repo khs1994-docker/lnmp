@@ -58,7 +58,7 @@ services:
 
   httpd:
     << : *default-common
-    image: httpd:${LNMP_HTTPD_VERSION:-2.4.35}-alpine
+    image: httpd:${LNMP_HTTPD_VERSION:-2.4.37}-alpine
 
 networks:
   frontend:
