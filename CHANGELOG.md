@@ -12,12 +12,12 @@
 
 ### Updates:
 
-* PHP `7.2.11` `7.1.23` `7.3.0RC3`
-* Redis `5.0.0` GA
-* Memcached `1.5.11`
-* MongoDB `4.1.4`
-* MariaDB `10.3.10`
-* PostgreSQL `10.5`
+* [PHP `7.2.11` `7.1.23` `7.3.0RC3`](http://www.php.net/ChangeLog-7.php#7.2.11)
+* [Redis `5.0.0` GA](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
+* [Memcached `1.5.11`](https://github.com/memcached/memcached/wiki/ReleaseNotes1511)
+* [MongoDB `4.1.4`]()
+* [MariaDB `10.3.10`](https://mariadb.com/kb/en/library/mariadb-10310-release-notes/)
+* [PostgreSQL `11.0`](https://www.postgresql.org/docs/11/static/release-11.html)
 * PHP-CS-Fixer `2.13.1`
-* HTTPD `2.4.37`
-* MySQL `8.0.13`
+* [HTTPD `2.4.37`](https://www.apache.org/dist/httpd/CHANGES_2.4.37)
+* [MySQL `8.0.13`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-13.html)
