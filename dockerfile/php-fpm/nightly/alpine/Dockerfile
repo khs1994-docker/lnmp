@@ -5,7 +5,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-# ARG PHP_VERSION=7.3.0RC3
+# ARG PHP_VERSION=
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -149,9 +149,9 @@ RUN set -xe \
   # && apk add --no-cache --virtual .fetch-deps gnupg \
 	&& mkdir -p /usr/src \
 	&& cd /usr/src \
-  && apk add --no-cache git openssh-client \
+  # && apk add --no-cache git openssh-client \
   && git clone --depth=1 https://github.com/php/php-src.git php \
-  && apk del --no-cache git openssh-clinet \
+  # && apk del --no-cache git \
 	# wget -O php.tar.xz "$PHP_URL"; \
 	# if [ -n "$PHP_SHA256" ]; then \
 	# 	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
@@ -379,9 +379,10 @@ RUN set -x \
            pecl install $extension \
              && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
          done \
+         \
       # && apk add --no-cache git openssh-client \
-      # && git clone -b PHP-7.3-support --depth=1 https://github.com/derickr/xdebug.git \
-      # && apk del --no-cache git openssh-client \
+      # && git clone --depth=1 https://github.com/xdebug/xdebug.git \
+      # && apk del --no-cache git \
       # && cd xdebug \
       # && phpize \
       # && ./configure --enable-xdebug-dev \
@@ -389,6 +390,7 @@ RUN set -x \
       # && make install \
       # && cd - \
       # && rm -rf xdebug \
+      # && docker-php-ext-enable xdebug \
       ; apk del --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
 # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \

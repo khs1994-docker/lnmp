@@ -2,6 +2,9 @@ language: bash
 
 sudo: required
 
+os: linux
+dist: xenial
+
 services:
 - docker
 
@@ -20,8 +23,16 @@ before_install:
 - chmod +x docker-compose
 - sudo mv docker-compose /usr/local/bin
 - docker-compose --version
-- echo 'DOCKER_OPTS="--experimental"' | sudo tee /etc/default/docker
-- sudo service docker restart
+# ubuntu 14.04
+# - echo 'DOCKER_OPTS="--experimental"' | sudo tee /etc/default/docker
+# - sudo service docker restart
+# ubuntu 16.04
+- sudo mkdir -p /etc/systemd/system/docker.service.d
+- echo -e '[Service]\nExecStart=\nExecStart=/usr/bin/dockerd' | sudo tee /etc/systemd/system/docker.service.d/docker.conf
+- echo '{"hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:2375"],"experimental":true}' | sudo tee /etc/docker/daemon.json
+- sudo systemctl daemon-reload
+- sudo systemctl cat docker
+- sudo systemctl restart docker
 
 script:
   - cp .env.example .env
