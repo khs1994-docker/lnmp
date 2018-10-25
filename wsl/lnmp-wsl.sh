@@ -76,7 +76,7 @@ function _start(){
       ;;
 
       nginx )
-          if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf ; fi
+          if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf > /dev/null 2>&1 || echo > /dev/null ; fi
 
           sudo nginx -t
           # sudo nginx -g "pid /run/nginx.pid;"
