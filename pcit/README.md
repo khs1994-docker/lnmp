@@ -1,4 +1,4 @@
-# PCIT EE (PHP CI TOOLKIT)
+# PCIT EE
 
 * https://github.com/khs1994-php/pcit
 

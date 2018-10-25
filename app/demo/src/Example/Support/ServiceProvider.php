@@ -15,6 +15,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected $defer = true;
 
+    public function connection($app)
+    {
+        return new Example($app);
+    }
+
     /**
      * 在容器中注册绑定。
      */
@@ -26,7 +31,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         // $this->loadMigrationsFrom(__DIR__.'/path/to/migrations');
         // $this->loadTranslationsFrom(__DIR__.'/path/to/translations', 'courier');
         $this->app->singleton('example', function ($app) {
-            return new Example($app);
+            return $this->connection($app);
         });
 
         $this->app->alias('example', Example::class);
