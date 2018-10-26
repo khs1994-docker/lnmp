@@ -58,20 +58,11 @@ ENV PECL_EXTENSION \
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-    && set -xe \
-      # 新增的包
-      && PHP_FPM_APKS=" \
-                            git \
-                            # 以下两个均为版本控制系统
-                            # subversion \
-                            # mercurial \
-                            openssh-client \
-                            bash \
-                            tini \
-                            tzdata \
-                            " \
+      && set -xe \
       # 不要删除
       && PHP_FPM_RUN_DEPS=" \
+                         bash \
+                         tzdata \
                          libmemcached \
                          libpq \
                          libzip \
@@ -119,7 +110,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
-        && apk add --no-cache --virtual .php-fpm-apks $PHP_FPM_APKS \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure zip \
@@ -163,13 +153,22 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 
 # install composer
 
+ENV COMPOSER_DEP_APKS \
+      git \
+      # 以下两个均为版本控制系统
+      # subversion \
+      # mercurial \
+      openssh-client \
+      tini
+
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
     COMPOSER_VERSION=1.7.2 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
+RUN apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
+    && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
     && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
     && php -r " \

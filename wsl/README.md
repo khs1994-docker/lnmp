@@ -213,7 +213,7 @@ phpinfo();
 
 $ curl -X PUT -d @/usr/local/nginx_unit/start.json  \
        --unix-socket /usr/local/nginx_unit/control.unit.sock \
-       http://localhost/
+       http://localhost/config
 
 # 浏览器打开 127.0.0.1:8300 看到 phpinfo 页面，完成部署
 ```
