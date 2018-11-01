@@ -179,7 +179,7 @@ services:
 
 matrix:
   COMPOSER_VERSION:
-    - 1.7.2
+    - 1.7.3
   PHP_VERSION:
     - 7.2.11
     - 7.1.23

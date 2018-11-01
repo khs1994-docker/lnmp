@@ -134,7 +134,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.7.2 \
+    COMPOSER_VERSION=1.7.3 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker

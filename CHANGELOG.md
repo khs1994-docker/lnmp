@@ -22,3 +22,4 @@
 * [HTTPD `2.4.37`](https://www.apache.org/dist/httpd/CHANGES_2.4.37)
 * [MySQL `8.0.13`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-13.html)
 * [NGINX Unit `1.5`](https://unit.nginx.org/CHANGES.txt)
+* [Composer `1.7.3`](https://github.com/composer/composer/releases/tag/1.7.3)
