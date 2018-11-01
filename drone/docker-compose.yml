@@ -14,7 +14,7 @@ services:
 
   drone-server:
     << : *default-common
-    image: drone/drone:${CI_DRONE_VERSION:-0.8.6}
+    image: drone/drone:${CI_DRONE_VERSION:-0.8.7}
     ports:
       # - 80:80
       # - 443:443
@@ -28,7 +28,7 @@ services:
 
   drone-agent:
     << : *default-common
-    image: drone/agent:${CI_DRONE_VERSION:-0.8.6}
+    image: drone/agent:${CI_DRONE_VERSION:-0.8.7}
     depends_on:
       - drone-server
     volumes:

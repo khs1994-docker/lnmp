@@ -23,3 +23,5 @@
 * [MySQL `8.0.13`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-13.html)
 * [NGINX Unit `1.5`](https://unit.nginx.org/CHANGES.txt)
 * [Composer `1.7.3`](https://github.com/composer/composer/releases/tag/1.7.3)
+* Drone CI `0.8.7`
+* Kubernetes `1.12.0`

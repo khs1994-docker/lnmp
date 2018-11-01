@@ -34,7 +34,6 @@ Write-Host " "
 }
 
 if (!(Test-Path cli/khs1994-robot.enc )){
-
   # 在项目目录外
   if ($env:LNMP_PATH.Length -eq 0){
   # 没有设置系统环境变量，则退出
