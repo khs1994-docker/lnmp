@@ -14,7 +14,10 @@
 .
 ├── conf
 │   ├── pcit.conf
-│   └── pcit.config (demo file)
+│   └── pcit.config
+├── key
+│   ├── private.key
+│   └── public.key
 └── ssl
     └── ci.crt
 ```
@@ -23,7 +26,7 @@
 
 ## 配置 PCIT
 
-修改 `lnmp/app/pcit/public/.env.production` 文件中的变量。
+修改 `pcit/.env.development` 文件中的变量。
 
 以上两步详情，请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
 

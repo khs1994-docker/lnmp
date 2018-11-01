@@ -146,7 +146,7 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 PCIT EE:
-  pcit-up             Up(Run) PCIT EE https://github.com/khs1994-php/pcit
+  pcit-up              Up(Run) PCIT EE https://github.com/khs1994-php/pcit
 
 Commands:
   backup               Backup MySQL databases
@@ -755,16 +755,18 @@ XXX
     pcit-up {
       # 判断 app/pcit 是否存在
 
-      if (!(Test-Path ${APP_ROOT}/pcit)){
-        git clone --depth=1 https://github.com/khs1994-php/pcit ${APP_ROOT}/pcit
-      }
+      rm -r -force ${APP_ROOT}/.pcit
+      # git clone --depth=1 https://github.com/khs1994-php/pcit ${APP_ROOT}/pcit
+      docker run -dit --name pcit_cp khs1994/pcit:alpine bash
+      docker cp pcit_cp:/app/pcit ${APP_ROOT}/.pcit/
+      docker rm -f pcit_cp
 
-      if (!(Test-Path ${APP_ROOT}/pcit/public/.env.produnction)){
-        cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
-      }
+      # if (!(Test-Path ${APP_ROOT}/pcit/public/.env.produnction)){
+      #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
+      # }
 
-      if (!(Test-Path ${APP_ROOT}/pcit/public/.env.development)){
-        cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.development
+      if (!(Test-Path pcit/.env.development)){
+        cp pcit/.env.example pcit/.env.development
       }
 
       # 判断 nginx 配置文件是否存在
@@ -776,16 +778,33 @@ XXX
       $a=Select-String 'demo.ci.khs1994.com' pcit/conf/pcit.conf
 
       if ($a.Length -ne 0){
-        throw "CI conf error, please see pcit/README.md"
+        throw "PCIT nginx conf error, please see pcit/README.md"
       }
 
       if(!(Test-Path pcit/ssl/ci.crt)){
-        throw "CI Website SSL key not found, please see pcit/README.md"
+        throw "PCIT Website SSL key not found, please see pcit/README.md"
+      }
+
+      if(!(Test-Path pcit/key/private.key)){
+        throw "PCIT GitHub App private key not found, please see pcit/README.md"
+      }
+
+      if(!(Test-Path pcit/key/public.key)){
+        docker run -it --rm -v $PWD/pcit/key:/app khs1994/pcit:alpine `
+          openssl rsa -in private.key -pubout -out public.key
       }
 
       cp pcit/ssl/ci.crt config/nginx/ssl/ci.crt
 
       cp pcit/conf/pcit.conf config/nginx/pcit.conf
+
+      # GitHub App private key
+
+      cp pcit/key/* ${APP_ROOT}/.pcit/framework/storage/private_key/
+
+      # env file
+
+      cp pcit/.env.development ${APP_ROOT}/.pcit/.env.development
 
       # 启动
 

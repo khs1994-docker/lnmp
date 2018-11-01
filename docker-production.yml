@@ -343,8 +343,10 @@ services:
     << : *default-common
     << : *default-labels
     << : *default-php
+    image: khs1994/pcit:alpine
     volumes:
-      - ./app/pcit:/app/pcit
+      - ./pcit/.env.production:/app/pcit/.env.production
+      - ./pcit/key:/app/pcit/framework/storage/private_key
       - pcit-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app/pcit/bin

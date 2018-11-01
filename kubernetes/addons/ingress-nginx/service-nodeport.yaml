@@ -6,19 +6,19 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-
 spec:
   type: NodePort
   ports:
-  - name: http
-    port: 80
-    targetPort: 80
-    protocol: TCP
-    nodePort: 8080
-  - name: https
-    port: 443
-    targetPort: 443
-    protocol: TCP
-    nodePort: 8443
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 443
+      protocol: TCP
   selector:
     app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+
+---

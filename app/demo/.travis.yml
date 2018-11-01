@@ -48,6 +48,14 @@ php:
   - 7.3
   - nightly
 
+env:
+  global:
+    - MONGODB=disable
+  matrix:
+    # - DB=sqlite
+    # - DB=mysql
+    # - DB=postgresql
+
 matrix:
   # @see https://docs.travis-ci.com/user/multi-os/
   # include:
@@ -100,14 +108,6 @@ script:
 # after_success:
 #   - bash <(curl -s https://codecov.io/bash)
 #   - ./sami update .sami.php
-
-env:
-  global:
-    - MONGODB=disable
-  matrix:
-    # - DB=sqlite
-    # - DB=mysql
-    # - DB=postgresql
 
 # deploy:
 #   provider: pages

@@ -91,7 +91,7 @@ $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
 ```bash
 $ cd ~/lnmp/kubernetes
 
-$ kubectl apply -f coreos/addons/helm/rbac-config.yaml
+$ kubectl apply -f addons/helm/rbac-config.yaml
 ```
 
 ## Helm 仓库 Charts

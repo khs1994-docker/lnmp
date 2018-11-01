@@ -1,6 +1,0 @@
-version: "3.7"
-
-services:
-  nginx-unit:
-    build: .
-    image: khs1994/nginx-unit:1.4-alpine
