@@ -1,11 +1,13 @@
 version: "3.7"
 
 services:
+  # PCIT Daemon
   pcit:
     # restart: always
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.2.11}-fpm-alpine
+    image: khs1994/pcit:alpine
     volumes:
-      - ${APP_ROOT:-./app}/pcit:/app/pcit:cached
+      - ./pcit/key:/app/pcit/framework/storage/private_key:cached
+      - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       - pcit-tmp:/tmp
       - zoneinfo-data:/usr/share/zoneinfo
@@ -18,7 +20,7 @@ services:
       - pcitd
       - up
     environment:
-      - APP_ENV=production
+      - APP_ENV=${APP_ENV:-development}
 
   nginx:
     ports:

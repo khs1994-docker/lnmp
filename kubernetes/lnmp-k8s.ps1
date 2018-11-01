@@ -99,7 +99,7 @@ Function _registry(){
       --from-file=tls.key=helm/registry/config/ssl/private.key `
   kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
 
-  kubectl -n lnmp create -f coreos/addons/registry.yaml
+  kubectl -n lnmp create -f addons/registry.yaml
 }
 
 Function _helm($environment, $debug=0){

@@ -448,7 +448,9 @@ $items="$env:LNMP_PATH","$env:LNMP_PATH\windows","$env:LNMP_PATH\wsl", `
        "C:\bin", `
        "C:\Users\$env:username\go\bin", `
        "C:\go\bin", `
-       "C:\Python"
+       "C:\Python", `
+       "$HOME\AppData\Roaming\Composer\vendor\bin", `
+       "$env:SystemRoot\system32\WindowsPowerShell\v1.0"
 
 Foreach ($item in $items)
 {
@@ -468,7 +470,7 @@ set system env $item ...
 
 ################################################################################
 
-$env:Path = [environment]::GetEnvironmentvariable("Path", "User")
+$env:Path = $env:Path + [environment]::GetEnvironmentvariable("Path", "Machine")
 
 if($(_command php)){
   $PHP_CURRENT_VERSION=$( php -r "echo PHP_VERSION;" )

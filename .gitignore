@@ -16,8 +16,13 @@ docker-production.*.yml
 
 # env
 .env
+.env.*
+
 .env.backup
 .env.ps1
+
+!.env.example
+!.env.example.ps1
 
 # LinuxKit
 

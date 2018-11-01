@@ -21,3 +21,4 @@
 * PHP-CS-Fixer `2.13.1`
 * [HTTPD `2.4.37`](https://www.apache.org/dist/httpd/CHANGES_2.4.37)
 * [MySQL `8.0.13`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-13.html)
+* [NGINX Unit `1.5`](https://unit.nginx.org/CHANGES.txt)

@@ -69,7 +69,7 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp COMMAND
 
 PCIT EE:
-  pcit-up             Up(Run) PCIT EE https://github.com/khs1994-php/pcit
+  pcit-up              Up(Run) PCIT EE https://github.com/khs1994-php/pcit
 
 Commands:
   acme.sh              Run original acme.sh command to issue SSL certificate
@@ -1111,6 +1111,65 @@ restore(){
   bash_cli mysql /backup/restore.sh $1
 }
 
+pcit_nginx_init(){
+  # 判断 nginx 配置文件是否存在
+
+  if ! [ -f pcit/conf/pcit.conf ];then
+    sudo cp pcit/conf/pcit.config pcit/conf/pcit.conf
+  fi
+
+  cat pcit/conf/pcit.conf | grep demo.ci.khs1994.com > /dev/null 2>&1 && print_error "PCIT conf error, please see pcit/README.md\n"
+
+  # SSL 证书
+
+  if ! [ -f pcit/ssl/ci.crt ];then
+    print_error "PCIT Website SSL key not found, please see pcit/README.md"
+    exit 1
+  fi
+
+  sudo cp pcit/ssl/ci.crt config/${NGINX_CONF_D:-nginx}/ssl/ci.crt
+
+  sudo cp pcit/conf/pcit.conf config/${NGINX_CONF_D:-nginx}/pcit.conf
+}
+
+pcit_init(){
+  # 判断 app/pcit 是否存在
+
+  rm -rf ${APP_ROOT:-app}/.pcit
+  # git clone --depth=1 https://github.com/khs1994-php/pcit ${APP_ROOT}/pcit
+  docker run -dit --name pcit_cp khs1994/pcit:alpine bash > /dev/null 2>&1
+  docker cp pcit_cp:/app/pcit ${APP_ROOT:-app}/.pcit/
+  docker rm -f pcit_cp > /dev/null 2>&1
+
+  if ! [ -f pcit/.env.${APP_ENV:-development} ];then
+    cp pcit/.env.example pcit/.env.${APP_ENV:-development}
+  fi
+
+  # if ! [ -f ${APP_ROOT}/pcit/public/.env.development ];then
+  #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.development
+  # fi
+
+  # GitHub App private key
+
+  if ! [ -f pcit/key/private.key ];then
+    print_error "PCIT GitHub App private key not found, please see pcit/README.md"
+    exit 1
+  fi
+
+  if ! [ -f pcit/key/public.key ];then
+    docker run -it --rm -v $PWD/pcit/key:/app khs1994/pcit:alpine \
+      openssl rsa -in private.key -pubout -out public.key
+  fi
+
+  sudo cp pcit/key/*.key ${APP_ROOT:-app}/.pcit/framework/storage/private_key/
+
+  # env file
+
+  sudo cp pcit/.env.* ${APP_ROOT:-app}/.pcit
+
+  # 启动
+}
+
 
 # 入口文件
 
@@ -1216,6 +1275,8 @@ main() {
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       run_docker
+      rm -rf app/.pcit
+      pcit_init
       docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
 
       sleep 2; docker stack ps lnmp
@@ -1704,47 +1765,15 @@ First Run? Maybe you wait 60s then open url.
         update_version
     ;;
 
-    pcit-init )
-
-    ;;
-
     pcit-up )
-    # 判断 app/pcit 是否存在
+    pcit_init
+    pcit_nginx_init
 
-    if ! [ -d ${APP_ROOT}/pcit ];then
-      git clone --depth=1 https://github.com/khs1994-php/pcit ${APP_ROOT}/pcit
-    fi
-
-    if ! [ -f ${APP_ROOT}/pcit/public/.env.produnction ];then
-      cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
-    fi
-
-    if ! [ -f ${APP_ROOT}/pcit/public/.env.development ];then
-      cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.development
-    fi
-
-    # 判断 nginx 配置文件是否存在
-
-    if ! [ -f pcit/conf/pcit.conf ];then
-      cp pcit/conf/pcit.config pcit/conf/pcit.conf
-    fi
-
-    cat pcit/conf/pcit.conf | grep demo.ci.khs1994.com || print_error "CI conf error, please see pcit/README.md"
-
-    if [ -f Test-Path pcit/ssl/ci.crt ];then
-      print_error "CI Website SSL key not found, please see pcit/README.md"
-      exit 1
-    fi
-
-    cp pcit/ssl/ci.crt config/${NGINX_CONF_D:-nginx}/ssl/ci.crt
-
-    cp pcit/conf/pcit.conf config/${NGINX_CONF_D:-nginx}/pcit.conf
-
-    # 启动
-
-    docker-compose -f docker-compose.yml -f docker-compose.override.yml `
-        -f docker-pcit.include.yml up -d `
+    if [ -z "$1" ];then
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml \
+        -f docker-pcit.include.yml up -d \
         ${DEVELOPMENT_INCLUDE} pcit
+    fi
     ;;
 
     nfs )
@@ -1829,8 +1858,21 @@ if [ -d .git ];then
   print_info "Branch is ${BRANCH}\n"
 fi
 
+_check_docker_version(){
+  if [ -z "${BRANCH}" ];then
+    return
+  fi
+
+  DOCKER_VERSION_YY=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 1)
+  DOCKER_VERSION_MM=$(docker -v | cut -d ' ' -f 3 | cut -d '.' -f 2)
+
+  if [ "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" != "${BRANCH}" ];then
+    print_warning "Current branch incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout\n"
+  fi
+}
+
 set +e
-command -v docker > /dev/null 2>&1
+command -v docker > /dev/null 2>&1 && _check_docker_version
 set -e
 
 # 写入版本号
