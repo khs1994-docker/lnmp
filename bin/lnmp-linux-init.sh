@@ -104,9 +104,13 @@ cd /tmp
 
 # atom
 
-curl -O https://github.com/atom/atom/releases/download/v1.29.0-beta1/atom.x86_64.rpm
+# curl -O https://github.com/atom/atom/releases/download/v1.29.0-beta1/atom.x86_64.rpm
 
 cd -
+
+# apm
+
+command -v apm && apm config set registry https://registry.npm.taobao.org
 
 if [ "$1" = '--help' ];then print_help_info; fi
 if [ "$1" = 'dockerd' ];then _docker_daemon; fi

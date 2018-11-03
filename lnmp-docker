@@ -631,10 +631,10 @@ demo() {
     print_info "Import app and nginx conf Demo ...\n"
     # 检查网络连接
     network
-    echo ;print_info "Update Git Submodule\n"
-    set +e
-    git submodule update --init --recursive
-    set -e
+    # echo ;print_info "Update Git Submodule\n"
+    # set +e
+    # git submodule update --init --recursive
+    # set -e
   fi
 }
 
@@ -707,10 +707,10 @@ update(){
   git fetch --depth=1 origin
   print_info "Branch is ${BRANCH}\n"
   git reset --hard origin/${BRANCH}
-  echo ;print_info "Update Git Submodule\n"
-  set +e
-  git submodule update --init --recursive
-  set -e
+  # echo ;print_info "Update Git Submodule\n"
+  # set +e
+  # git submodule update --init --recursive
+  # set -e
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker
 }
 
@@ -1865,9 +1865,7 @@ _check_docker_version(){
   fi
 }
 
-set +e
 command -v docker > /dev/null 2>&1 && _check_docker_version
-set -e
 
 # 写入版本号
 

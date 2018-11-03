@@ -116,3 +116,7 @@ _file ~/.npmrc "registry=https://registry.npm.taobao.org" "registry=https://regi
 _mkdir ~/.pip
 
 _file ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
+
+# apm
+
+command -v apm && apm config set registry https://registry.npm.taobao.org
