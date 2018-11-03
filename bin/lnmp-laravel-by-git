@@ -12,7 +12,7 @@ get-version
 
 5.6 {PATH}
 
-$ git clone $HOME\lnmp\app\laravel
+$ git clone $HOME/lnmp/app/laravel
 
 $ git clone -b 5.5    --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git laravel
 
@@ -35,7 +35,7 @@ _clone(){
   local version=$1
   local desc=$2
 
-  temp_path="$LNMP_PATH\app\temp\laravel$1"
+  temp_path="~/.khs1994-docker/lnmp/temp/laravel$1"
   if [ -d $temp_path ];then
     echo -e "
 ==> Found Temp $temp_path
@@ -51,7 +51,7 @@ _clone(){
 ==> Now Clone from git then clone from local
 "
     git clone -b $version \
-        --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git "$LNMP_PATH\app\temp\laravel$version"
+        --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git "~/.khs1994-docker/lnmp/temp/laravel$version"
 
     _clone $version $desc
   fi
@@ -67,6 +67,12 @@ elif [ "$1" = '5.6' ];then
   _clone 5.6 $2
   cd $2
   lnmp-laravel-init
+elif [ "$1" = '5.7' ];then
+  if [ -z "$2" ];then echo "Please inout path"; exit; fi
+  _clone 5.7 $2
+  cd $2
+  lnmp-laravel-init
+fi
 fi
 
 print_help_info
