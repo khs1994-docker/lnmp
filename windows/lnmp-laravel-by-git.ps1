@@ -1,12 +1,14 @@
 Function print_help_info(){
 Write-Host "
+Usage:
+
 get-version
 
 5.5 {PATH}
 
 5.6 {PATH}
 
-$ git clone $HOME\lnmp\app\laravel
+Example:
 
 $ git clone -b 5.5    --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git laravel
 

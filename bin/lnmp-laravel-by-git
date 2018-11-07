@@ -6,13 +6,16 @@ if [ "$debug" = 'true' ];then set -x; fi
 
 print_help_info(){
 echo "
+
+Usage:
+
 get-version
 
 5.5 {PATH}
 
 5.6 {PATH}
 
-$ git clone $HOME/lnmp/app/laravel
+Example:
 
 $ git clone -b 5.5    --depth=1 https://code.aliyun.com/khs1994-php/laravel-git.git laravel
 
@@ -58,17 +61,17 @@ _clone(){
 }
 
 if [ "$1" = '5.5' ];then
-  if [ -z "$2" ];then echo "Please inout path"; exit; fi
+  if [ -z "$2" ];then echo "Please input path"; exit; fi
   _clone 5.5 $2
   cd $2
   lnmp-laravel-init
 elif [ "$1" = '5.6' ];then
-  if [ -z "$2" ];then echo "Please inout path"; exit; fi
+  if [ -z "$2" ];then echo "Please input path"; exit; fi
   _clone 5.6 $2
   cd $2
   lnmp-laravel-init
 elif [ "$1" = '5.7' ];then
-  if [ -z "$2" ];then echo "Please inout path"; exit; fi
+  if [ -z "$2" ];then echo "Please input path"; exit; fi
   _clone 5.7 $2
   cd $2
   lnmp-laravel-init

@@ -41,7 +41,7 @@ CMD [ "echo", "$HOME" ]
 
 CMD [ "sh", "-c", "echo $HOME" ]
 
-ONBUILD RUN echo "你把我当成基础镜像了" \
+ONBUILD RUN echo "你把我当作基础镜像了" \
               && echo "构建当前镜像我不执行"
 
 STOPSIGNAL signal
