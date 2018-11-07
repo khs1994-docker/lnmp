@@ -6,10 +6,10 @@ services:
       context: ./alpine
       args:
         # OPENSSL_BRANCH: master
-        NGINX_VERSION: ${NGINX_VERSION:-1.15.5}
+        NGINX_VERSION: ${NGINX_VERSION:-1.15.6}
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
         OPENSSL_URL: https://gitee.com/mirrors/openssl.git
-    image: khs1994/nginx:${NGINX_VERSION:-1.15.5}-alpine
+    image: khs1994/nginx:${NGINX_VERSION:-1.15.6}-alpine
     ports:
       - 443:443
       - 80:80
@@ -22,11 +22,11 @@ services:
       context: ./stretch
       args:
         # OPENSSL_BRANCH: master
-        NGINX_VERSION: ${NGINX_VERSION:-1.15.5}
+        NGINX_VERSION: ${NGINX_VERSION:-1.15.6}
         OPENSSL_URL: https://gitee.com/mirrors/openssl.git
         DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
         DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security # security.debian.org/debian-security
-    image: khs1994/nginx:${NGINX_VERSION:-1.15.5}-stretch
+    image: khs1994/nginx:${NGINX_VERSION:-1.15.6}-stretch
     ports:
       - 443:443
       - 80:80
@@ -35,7 +35,7 @@ services:
       - ./app:/app/test:rw
 
   official:
-    image: nginx:1.15.2-alpine
+    image: nginx:1.15.6-alpine
     ports:
       - 443:443
       - 80:80

@@ -25,3 +25,4 @@
 * [Composer `1.7.3`](https://github.com/composer/composer/releases/tag/1.7.3)
 * Drone CI `0.8.7`
 * Kubernetes `1.12.0`
+* [NGINX `1.15.6`](https://nginx.org/en/CHANGES)

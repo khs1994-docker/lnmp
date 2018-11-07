@@ -11,7 +11,7 @@
 
 ARG PHP_VERSION=7.2.0-fpm-alpine
 
-ARG  NGINX_VERSION=1.15.5
+ARG  NGINX_VERSION=1.15.6
 
 #
 # 安装 composer 依赖
@@ -61,7 +61,7 @@ CMD ["php-fpm", "-R"]
 # Nginx 配置文件统一通过 configs 管理，严禁将配置文件打入镜像
 #
 
-# FROM nginx:1.15.5-alpine
+# FROM nginx:1.15.6-alpine
 
 FROM nginx:${NGINX_VERSION} as nginx
 
@@ -75,7 +75,7 @@ RUN rm -rf /etc/nginx/conf.d \
 CMD ["/wait-for-php.sh"]
 
 #
-# $ docker build -t khs1994/nginx:1.15.5-swarm-GIT_TAG-alpine .
+# $ docker build -t khs1994/nginx:1.15.6-swarm-GIT_TAG-alpine .
 #
 # @link
 #

@@ -2,7 +2,7 @@ FROM alpine:3.8
 
 LABEL maintainer="khs1994.com nginx With TLSv1.3"
 
-ARG NGINX_VERSION=1.15.5
+ARG NGINX_VERSION=1.15.6
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
