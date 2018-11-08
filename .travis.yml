@@ -26,12 +26,13 @@ before_install:
 - date
 - docker --version
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 - sudo apt-get update
-- sudo apt-get -y install docker-ce || sudo apt -f install
+# - sudo apt-get -y install docker-ce || sudo apt -f install
 # https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/
 - apt-cache madison docker-ce | grep 18.09
-# - sudo apt-get -y install docker-ce=18.06.1~ce~3-0~ubuntu
+- apt-cache madison docker-ce | grep 18.06
+- sudo apt-get -y install docker-ce=5:18.09.0~3-0~ubuntu-xenial
 - docker --version
 
 # 升级最新 Docker Compose
