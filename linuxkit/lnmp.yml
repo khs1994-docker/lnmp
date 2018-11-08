@@ -66,7 +66,7 @@ services:
      - /etc/hosts:/etc/hosts
     net: host
   - name: nginx
-    image: khs1994/nginx:1.15.5-swarm-alpine
+    image: khs1994/nginx:1.15.6-swarm-alpine
     # env:
     #  - TZ=Asia/Shanghai
     capabilities:

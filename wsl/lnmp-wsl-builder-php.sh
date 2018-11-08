@@ -48,7 +48,7 @@ host=x86_64-linux-gnu
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.7.2
+export COMPOSER_VERSION=1.7.3
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai

@@ -2,7 +2,7 @@
 
 print_help_info(){
   exec echo "
-CI-CLI 0.8.6
+CI-CLI 0.8.7
 
 Donate WebSite https://zan.khs1994.com
 
@@ -20,11 +20,11 @@ Options:
 
 Commands:
   up           [-d]   [--open-port]
-  config              [--open-port]
+  config              [--open-port] Show config
   down
 
-  tls-up       [-d]   [--open-port]  [--use-external-nginx=/etc/nginx/conf.d]
-  tls-config          [--open-port]
+  up-tls       [-d]   [--open-port]  [--use-external-nginx=/etc/nginx/conf.d]
+  tls-config          [--open-port] Show config
 
   swarm-deploy
   swarm-remove
@@ -170,10 +170,10 @@ _up-tls(){
         sed -i "s#{{ DRONE_UPSTREAM }}#${CI_HOST:-192.168.199.100}#g" $file
         sed -i "s#{{ GOGS_UPSTREAM }}#${CI_HOST:-192.168.199.100}#g" $file
       done
-        cp -a $PWD/*.conf $NGINX_CONF
-        mkdir -p $NGINX_CONF/ssl || echo
-        if ! [ -f ssl/$CI_DOMAIN.crt ];then
-            cp -a $PWD/ssl/*  $NGINX_CONF/ssl
+        if [ -n "$NGINX_CONF" ];then
+          cp -a $PWD/*.conf $NGINX_CONF
+          mkdir -p $NGINX_CONF/ssl || echo
+          if ! [ -f ssl/$CI_DOMAIN.crt ];then cp -a $PWD/ssl/*  $NGINX_CONF/ssl; fi
         fi
       cd -
     }

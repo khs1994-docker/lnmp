@@ -8,7 +8,7 @@ version: "3.7"
 
 x-common:
   &default-common
-  image: "khs1994/nginx:${LNMP_NGINX_VERSION:-1.15.5}-alpine"
+  image: "khs1994/nginx:${LNMP_NGINX_VERSION:-1.15.6}-alpine"
   restart: always
   env_file: ./cli/timezone.env
   networks:

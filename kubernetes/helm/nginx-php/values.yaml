@@ -27,7 +27,7 @@ nfs:
   server: 192.168.199.100
 
 nginx:
-  image: khs1994/nginx:1.15.5-alpine
+  image: khs1994/nginx:1.15.6-alpine
   replicaCount: 2
 
 php:

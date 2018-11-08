@@ -41,6 +41,10 @@ check_nginx_conf(){
   set -e
 }
 
+_check_and_copy_file(){
+  if ! [ -f $2 ];then cp $1 $2 ; fi
+}
+
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD\n"
 else
@@ -54,7 +58,7 @@ else
     fi
 fi
 
-if ! [ -f config/composer/config.json ];then cp config/composer/config.example.json config/composer/config.json ; fi
+_check_and_copy_file config/composer/config.example.json config/composer/config.json
 
 # PHPer command
 
@@ -235,14 +239,14 @@ _gcr_io(){
 
   _gcr_io_down
 
-   # https://github.com/anjia0532/gcr.io_mirror
-   echo "
-This local server support Docker Desktop v18.05-EDGE-67
+  # https://github.com/anjia0532/gcr.io_mirror
+  echo ""
+  echo "This local server support Docker Desktop v18.05-EDGE-67"
+  echo ""
 
-"
-    mkdir -p data/registry
+  mkdir -p data/registry
 
-    docker run -it -d \
+  docker run -it -d \
       -p 443:443 \
       -v $PWD/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml \
       -v $PWD/config/registry:/etc/docker/registry/ssl \
@@ -254,7 +258,7 @@ This local server support Docker Desktop v18.05-EDGE-67
         echo
         print_error "Please stop soft who bind 443 port first"
         echo
-        exit
+        exit 1
       fi
 
     if [ "$1" = '--no-pull' ];then
@@ -295,7 +299,7 @@ this command up a local server on port 443.
 
 When Docker for Desktop Start Kubernetes Success, you must remove this local server.
 
-$ lnmp-docker gcr.io down
+\$ lnmp-docker gcr.io down
 
 More information please see docs/kubernetes/docker-desktop.md
 
@@ -308,7 +312,8 @@ _satis(){
     print_warning "Please modify app/satis/satis.json\n"
   fi
 
-  docker run --rm -it -v ${APP_ROOT}/satis:/build -v lnmp_composer_cache-data:/composer composer/satis
+  docker run --rm -it -v ${APP_ROOT}/satis:/build \
+      -v lnmp_composer_cache-data:/composer composer/satis
 }
 
 _local_docs_server(){
@@ -349,9 +354,7 @@ _local_docs_server(){
 }
 
 _registry(){
-
   # SSL 相关
-
   if [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.crt ] \
       || [ ! -f config/${NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.key ];then
     print_warning "Docker Registry SSL not found, generating ...."
@@ -366,7 +369,6 @@ _registry(){
   fi
 
   # 生成 密码 验证文件
-
   if ! [ -f config/${NGINX_CONF_D:-nginx}/auth/docker_registry.htpasswd ];then
     echo; print_info "First start, Please set username and password"
     read -p "username: " username
@@ -388,7 +390,6 @@ _registry(){
   fi
 
   # NGINX 配置文件
-
   if ! [ -f config/${NGINX_CONF_D:-nginx}/${REGISTRY_CONF:-registry.conf} ];then
     if [ -f config/${NGINX_CONF_D:-nginx}/registry.conf.backup ];then
       cp config/${NGINX_CONF_D:-nginx}/registry.conf.backup config/${NGINX_CONF_D:-nginx}/registry.conf
@@ -414,9 +415,7 @@ env_status(){
       print_info ".env file existing\n"; \
   else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
 
-  if ! [ -f volumes/.env ];then
-    cp volumes/.env.example volumes/.env
-  fi
+  _check_and_copy_file volumes/.env.example volumes/.env
 
   if ! [ -f secrets/minio/key.txt ];then
     cp secrets/minio/key.example.txt secrets/minio/key.txt
@@ -491,7 +490,6 @@ logs(){
 }
 
 # 清理日志文件
-
 cleanup(){
       logs \
       && echo > log/mongodb/mongo.log \
@@ -513,13 +511,13 @@ cleanup(){
 
 gitbook(){
   docker rm -f lnmp-docs > /dev/null 2>&1 || echo
-  exec docker run --init -it --rm -p 4000:4000 --name lnmp-docs -v $PWD/docs:/srv/gitbook-src \
+  exec docker run --init -it --rm -p 4000:4000 \
+    --name lnmp-docs -v $PWD/docs:/srv/gitbook-src \
     khs1994/gitbook \
     server
 }
 
 # 将 compose 移入 PATH
-
 install_docker_compose_move(){
   if [ -f /etc/os-release ];then
     . /etc/os-release
@@ -539,7 +537,6 @@ install_docker_compose_move(){
 }
 
 # 从 GitHub 安装 compose
-
 install_docker_compose_official(){
   if [ "$OS" != 'Linux' ];then exit 1;fi
   curl -sL ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
@@ -548,7 +545,6 @@ install_docker_compose_official(){
 }
 
 # 安装 compose arm 版本
-
 install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ...\n"
   command -v pip3 >/dev/null 2>&1 || sudo apt install -y python3-pip
@@ -623,11 +619,11 @@ docker_compose(){
 }
 
 network(){
+  command -v ping > /dev/null 2>&1 || return
   ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
 }
 
 # 克隆示例项目、nginx 配置文件
-
 demo() {
   if [ -d config/nginx/.git ] || [ -f config/nginx/.git ];then
     echo > /dev/null 2>&1
@@ -635,15 +631,14 @@ demo() {
     print_info "Import app and nginx conf Demo ...\n"
     # 检查网络连接
     network
-    echo ;print_info "Update Git Submodule\n"
-    set +e
-    git submodule update --init --recursive
-    set -e
+    # echo ;print_info "Update Git Submodule\n"
+    # set +e
+    # git submodule update --init --recursive
+    # set -e
   fi
 }
 
 # 初始化
-
 init() {
   docker volume create lnmp_composer_cache-data > /dev/null 2>&1 | echo > /dev/null
 
@@ -712,10 +707,10 @@ update(){
   git fetch --depth=1 origin
   print_info "Branch is ${BRANCH}\n"
   git reset --hard origin/${BRANCH}
-  echo ;print_info "Update Git Submodule\n"
-  set +e
-  git submodule update --init --recursive
-  set -e
+  # echo ;print_info "Update Git Submodule\n"
+  # set +e
+  # git submodule update --init --recursive
+  # set -e
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker
 }
 
@@ -925,7 +920,6 @@ server{
 }
 
 # 申请 ssl 证书
-
 acme(){
   exec docker run --init -it --rm \
          -v $PWD/config/${NGINX_CONF_D:-nginx}/ssl:/ssl \
@@ -1871,9 +1865,7 @@ _check_docker_version(){
   fi
 }
 
-set +e
 command -v docker > /dev/null 2>&1 && _check_docker_version
-set -e
 
 # 写入版本号
 
@@ -1894,9 +1886,7 @@ fi
 
 print_info "ARCH is ${OS} ${ARCH}\n"
 
-command -v docker > /dev/null 2>&1 && print_info `docker --version`
-
-command -v > /dev/null 2>&1 || print_warning "docker cli is not install"
+command -v docker > /dev/null 2>&1 && print_info `docker --version` || print_warning "docker cli is not install"
 
 echo ; docker_compose "$@"
 

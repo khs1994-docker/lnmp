@@ -18,7 +18,7 @@ uid                 [ultimate] khs1994 <khs1994@khs1994.com>
 
 $ gpg --armor --export <GPG-key-id>
 
-# copy print to github
+# copy output to github
 # https://help.github.com/articles/adding-a-new-gpg-key-to-your-github-account/
 
 $ git config --global user.signingkey <GPG-key-id>

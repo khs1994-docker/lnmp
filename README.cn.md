@@ -202,7 +202,7 @@ $ ./lnmp-docker down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.7.9`        | **2.7.9**              |`Alpine:3.8`    |
-|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`khs1994/nginx:1.15.5-alpine`| **1.15.5**             |`Alpine:3.8`    |
+|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`khs1994/nginx:1.15.6-alpine`| **1.15.6**             |`Alpine:3.8`    |
 |[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/nginx-unit:1.4-alpine`| **1.4**             |`Alpine:3.8`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.37-alpine`       | **2.4.37**             |`Alpine:3.8`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.13`              | **8.0.13**             |`Debian:stretch`|
@@ -210,7 +210,7 @@ $ ./lnmp-docker down
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.0-alpine`        | **5.0.0**            |`Alpine:3.8`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.11-fpm-alpine`  | **7.2.11**       |`Alpine:3.8`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.11-fpm-alpine`  | **5.7.x**       |`Alpine:3.8`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.11-fpm-alpine`  | **1.7.2**       |`Alpine:3.8`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.11-fpm-alpine`  | **1.7.3**       |`Alpine:3.8`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.11-fpm-alpine`  | **2.13.1**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.11-alpine`           | **1.5.11**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |

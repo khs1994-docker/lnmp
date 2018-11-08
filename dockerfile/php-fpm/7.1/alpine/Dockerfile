@@ -149,7 +149,7 @@ ENV COMPOSER_DEP_APKS \
       tini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.7.2 \
+    COMPOSER_VERSION=1.7.3 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker

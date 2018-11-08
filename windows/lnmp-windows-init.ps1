@@ -468,6 +468,12 @@ set system env $item ...
 
 [environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User");
 
+# apm
+
+if($(_command apm)){
+  apm config set registry https://registry.npm.taobao.org
+}
+
 ################################################################################
 
 $env:Path = $env:Path + [environment]::GetEnvironmentvariable("Path", "Machine")
