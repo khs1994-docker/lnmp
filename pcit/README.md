@@ -45,3 +45,7 @@ Git 仓库安装你新建的 GitHub App，项目根目录包含 `.pcit.yml` 文�
 ## 如何编写 `.pcit.yml` 文件
 
 请查看 https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md#usage
+
+# 缓存功能
+
+请配置好 `Minio` 在 `pcit/.env.development` 文件中设置好相关变量即可。
