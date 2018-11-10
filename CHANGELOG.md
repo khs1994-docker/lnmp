@@ -11,3 +11,5 @@
 ### Changes:
 
 ### Updates:
+
+* [Redis `5.0.1`](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
