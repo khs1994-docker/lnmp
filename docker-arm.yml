@@ -111,7 +111,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/memcached/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.11}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.12}${ARM_BASED_OS}"
     env_file:
       - ./cli/timezone.env
     volumes:
