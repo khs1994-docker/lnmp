@@ -38,7 +38,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: mongo:${LNMP_MONGODB_VERSION:-4.1.4}
+    image: mongo:${LNMP_MONGODB_VERSION:-4.1.5}
 
   php7:
     << : *default-common
