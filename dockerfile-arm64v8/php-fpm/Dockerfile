@@ -1,6 +1,6 @@
 # https://git.alpinelinux.org/cgit/aports/tree/community/php7/APKBUILD
 
-ARG PHP_VERSION=7.2.11
+ARG PHP_VERSION=7.2.12
 
 FROM arm64v8/php:${PHP_VERSION}-fpm-alpine as php
 

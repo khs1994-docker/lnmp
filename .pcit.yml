@@ -3,7 +3,7 @@ workspace:
 
 pipeline:
   test_cli:
-    image: khs1994/php:7.2.11-fpm-alpine
+    image: khs1994/php:7.2.12-fpm-alpine
     commands:
       - pwd
       - bash lnmp-docker

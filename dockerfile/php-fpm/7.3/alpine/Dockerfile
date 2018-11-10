@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.3.0RC3
+ARG PHP_VERSION=7.3.0RC5
 
 FROM php:${PHP_VERSION}-fpm-alpine as php
 

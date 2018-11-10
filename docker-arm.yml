@@ -186,7 +186,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/php/
     #   dockerfile: Dockerfile
     # image:lnmp-php:lastet
-    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.11}-fpm-${ARM_PHP_BASED_OS}"
+    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.12}-fpm-${ARM_PHP_BASED_OS}"
     networks:
       - frontend
       - backend
