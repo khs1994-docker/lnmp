@@ -145,7 +145,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/postgresql/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-11.0}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-11.1}${ARM_BASED_OS}"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
