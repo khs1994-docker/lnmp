@@ -51,11 +51,21 @@ spec:
         tier: mysql
         version: 0.0.1
     spec:
+      # imagePullSecrets:
+      # nodeSelector:
+      # initContainers:
+      #   - name: "remove-lost-found"
+      #     image: "busybox"
+      #     command: ["rm", "-fr", "/var/lib/mysql/lost+found"]
+      #     volumeMounts:
+      #     - name: data
+      #       mountPath: /var/lib/mysql
       # restartPolicy: Never # Always、OnFailure 和 Never
       containers:
       - name: lnmp-mysql
         image: mysql:8.0.13
         imagePullPolicy: IfNotPresent
+        # resources:
         # envFrom:
         #   - configMapKeyRef:
         #       name: env-config
@@ -76,6 +86,25 @@ spec:
           value: test
         ports:
         - containerPort: 3306
+        # livenessProbe:
+        #   exec:
+        #     command:
+        #       no password
+        #       - mysqladmin
+        #       - ping
+        #
+        #       - sh
+        #       - -c
+        #       - "mysqladmin ping -u root -p${MYSL_ROOT_PASSWORD}"
+        #   initialDelaySeconds:
+        #   periodSeconds:
+        #   timeoutSeconds:
+        #   successThreshold:
+        #   failureThreshold:
+        # readinessProbe:
+        #   exec:
+        #     command:
+        #     # 同上
         volumeMounts:
         - name: lnmp-mysql-data
           mountPath: /var/lib/mysql
