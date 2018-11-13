@@ -85,6 +85,10 @@ Function env_status(){
     Copy-Item config/composer/config.example.json config/composer/config.json
   }
 
+  if (!(Test-Path config/supervisord/supervisord.ini)){
+    Copy-Item config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
+  }
+
   if (!(Test-Path secrets/minio/key.txt)){
     Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
     Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
@@ -126,6 +130,14 @@ Function logs(){
   if (! (Test-Path log\redis)){
     New-Item log\redis -type directory | Out-Null
     New-Item log\redis\redis.log -type file | Out-Null
+  }
+
+  if (! (Test-Path log\supervisord)){
+    New-Item log\supervisord -type directory | Out-Null
+  }
+
+  if(! (Test-Path log\supervisord.log)){
+    New-Item log\supervisord.log | Out-Null
   }
 }
 
@@ -276,6 +288,8 @@ Function cleanup(){
   rm log\nginx-unit -Recurse -Force | Out-Null
   rm log\php -Recurse -Force | Out-Null
   rm log\redis -Recurse -Force | Out-Null
+  rm log\supervisord | Out-Null
+  rm log\supervisord.log | Out-Null
   logs
 
   printInfo "Cleanup logs files Success"
@@ -328,6 +342,7 @@ Function satis(){
 # main
 
 env_status
+logs
 
 if ($args.Count -eq 0){
   help_information

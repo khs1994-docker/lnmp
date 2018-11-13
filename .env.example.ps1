@@ -13,6 +13,7 @@ $global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 #                      rabbitmq httpd registry \
 #                      etcd \
 #                      minio \
+#                      supervisord \
 #                      "
 
 $global:CI_HOST="ci.khs1994.com:10000"

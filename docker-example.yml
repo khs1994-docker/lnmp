@@ -185,6 +185,12 @@ services:
     secrets:
       - my_secret
       - my_other_secret # /run/secrets/my_other_secret
+    secrets:
+      - source: my_secret
+        target: /redis.conf
+        uid: '103'
+        gid: '103'
+        mode: 0440
     security_opt: # no Swarm mode
       - label:user:USER
       - label:role:ROLE

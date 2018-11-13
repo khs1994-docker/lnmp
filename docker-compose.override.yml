@@ -99,3 +99,6 @@ secrets:
   db_root_password:
     << : *default-common
     file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+  supervisord_conf:
+    << : *default-common
+    file: ./config/supervisord/${SUPERVISORD_CONF_PATH:-supervisord.ini}

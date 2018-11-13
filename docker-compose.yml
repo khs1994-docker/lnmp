@@ -139,6 +139,7 @@ services:
     command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
+    &php7
     << : *default-common
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.12}-fpm-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
@@ -155,6 +156,8 @@ services:
       - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro,cached
       - ./config/php/${LNMP_PHP_ERROR_INI:-docker-error-log.ini}:/usr/local/etc/php/conf.d/error-log.ini:ro,cached
       - ./log/php:/var/log/php:delegated
+      - ./log/supervisord.log:/var/log/supervisord.log
+      - ./log/supervisord:/var/log/supervisord
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
       - ./dockerfile/php-fpm/docker-php-entrypoint:/usr/local/bin/docker-php-entrypoint:ro,cached
@@ -172,6 +175,20 @@ services:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.09} x86_64 With Pull Docker Image
       - APP_ENV=development
       - XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST:-192.168.199.100}
+
+  # https://docs.docker.com/config/containers/multi-service_container/
+  # http://supervisord.org/running.html
+  supervisord:
+    << : *php7
+    networks:
+      - backend
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.12}-supervisord-alpine"
+    secrets:
+      - source: supervisord_conf
+        target: /etc/supervisor.d/supervisord.ini
+    command: ["/usr/bin/supervisord","-n"]
+    expose:
+      - 9001
 
   phpmyadmin:
     << : *default-common

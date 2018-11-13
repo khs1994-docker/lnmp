@@ -421,6 +421,10 @@ env_status(){
     cp secrets/minio/key.example.txt secrets/minio/key.txt
     cp secrets/minio/secret.example.txt secrets/minio/secret.txt
   fi
+
+  if ! [ -f config/supervisord/supervisord.ini ];then
+    cp config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
+  fi
 }
 
 # 自动升级软件版本
@@ -463,6 +467,8 @@ run_docker(){
 # 创建日志文件
 
 logs(){
+  if ! [ -f log/supervisord.log ];then touch log/supervisord.log; fi
+  if ! [ -d log/supervisord ];then mkdir -p log/supervisord; fi
   if ! [ -d log/httpd ];then mkdir -p log/httpd; fi
   if ! [ -d log/mongodb ];then mkdir -p log/mongodb && echo > log/mongodb/mongo.log; fi
   if ! [ -d log/mysql ];then mkdir -p log/mysql && echo > log/mysql/error.log; fi
@@ -506,6 +512,8 @@ cleanup(){
       && echo > log/php/xdebug-remote.log \
       && echo > log/redis/redis.log \
       && rm -rf log/httpd/* \
+      && rm -rf log/supervisord/* \
+      && rm -rf log/supervisord.log \
       print_info "Clean log files SUCCESS\n"
 }
 

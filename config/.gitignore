@@ -19,3 +19,5 @@
 !npm
 !python
 !composer
+supervisord/supervisord.ini
+!supervisord

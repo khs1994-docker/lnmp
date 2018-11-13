@@ -1,0 +1,33 @@
+[supervisord]
+
+user=root
+
+[program:example]
+
+command=php-fpm -R
+
+; stdout_logfile=/var/log/supervisor/stdout.log
+
+; stderr_logfile=/var/log/supervisor/error.log
+
+directory=/app
+
+autostart=true
+
+autorestart=true
+
+startretries=10
+
+startsecs=60
+
+; laravel 队列
+; https://docs.khs1994.com/laravel5.5-docs.zh-cn/queues.html#supervisor-configuration
+
+; [program:laravel-worker]
+; command=php /app/laravel/artisan queue:work redis --sleep=3 --tries=3
+; autostart=true
+; autorestart=true
+; user=root
+; numprocs=8
+; redirect_stderr=true
+; stdout_logfile=/var/log/supervisord/laravel_work.log
