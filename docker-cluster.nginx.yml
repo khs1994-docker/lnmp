@@ -46,6 +46,7 @@ services:
       - nginx-3
 
   nginx-1:
+    &nginx_node
     << : *default-common
     volumes:
       - type: bind
@@ -56,23 +57,9 @@ services:
       - ./log/nginx:/var/log/nginx:delegated
 
   nginx-2:
+    << : *nginx_node
     << : *default-common
-    volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro,cached
-      - type: bind
-        source: ./config/${NGINX_CONF_D:-nginx}
-        target: /etc/nginx/conf.d
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:delegated
 
   nginx-3:
+    << : *nginx_node
     << : *default-common
-    volumes:
-      # - ./config/nginx:/etc/nginx/conf.d:ro,cached
-      - type: bind
-        source: ./config/${NGINX_CONF_D:-nginx}
-        target: /etc/nginx/conf.d
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:delegated

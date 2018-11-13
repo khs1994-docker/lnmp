@@ -178,6 +178,7 @@ services:
     command: ["mongod","--config","/etc/mongod.conf"]
 
   php7:
+    &php7
     << : *default-common
     << : *default-labels
     # build:
@@ -200,6 +201,8 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro
       - ./log/php:/var/log/php
+      - ./log/supervisord:/var/log/supervisord
+      - ./log/supervisord.log:/var/log/supervisord.log
       - composer_cache-data:/tmp/cache
       - ./dockerfile/php-fpm/docker-php-entrypoint:/usr/local/bin/docker-php-entrypoint
     environment:
@@ -207,6 +210,18 @@ services:
       - APP_ENV=development
       - XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST:-192.168.199.100}
     command: ["php-fpm","-R"]
+
+  supervisord:
+    << : *php7
+    networks:
+      - backend
+    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.12}-supervisord-alpine"
+    secrets:
+      - source: supervisord_conf
+        target: /etc/supervisor.d/supervisord.ini
+    command: ["/usr/bin/supervisord","-n"]
+    expose:
+      - 9001
 
   nginx:
     << : *default-common
@@ -285,4 +300,7 @@ volumes:
 secrets:
   db_root_password:
     << : *default-labels
-    file: secrets/db_root_password.txt
+    file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+  supervisord_conf:
+    << : *default-labels
+    file: ./config/supervisord/${SUPERVISORD_CONF_PATH:-supervisord.ini}

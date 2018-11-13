@@ -99,6 +99,7 @@ services:
       #     memory: 20M
 
   redis_sentinel_slave-1:
+    &redis_slave
     << : *default-common
     << : *default-labels
     depends_on:
@@ -135,13 +136,11 @@ services:
       - "20001:20001"
 
   redis_sentinel_slave-2:
+    << : *redis_slave
     << : *default-common
     << : *default-labels
-    depends_on:
-      - redis_sentinel_master-1
     ports:
       - "20002:20002"
-    entrypoint: /docker-entrypoint.redis.sh
     command: [
       "redis-server",
       "/data/redis.conf",
@@ -157,18 +156,6 @@ services:
       ]
     volumes:
       - cluster_redis_s_slave-2-data:/data
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      # placement:
-      #   constraints: [node.role == manager]
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
 
   redis_sentinel_slave-3:
     << : *default-common

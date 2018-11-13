@@ -96,6 +96,7 @@ services:
       #     memory: 20M
 
   redis_master-1:
+    &redis-master
     << : *default-common
     << : *default-labels
     command: [
@@ -130,6 +131,7 @@ services:
       - "17001:17001"
 
   redis_master-2:
+    << : *redis-master
     << : *default-common
     << : *default-labels
     depends_on:
@@ -152,18 +154,6 @@ services:
       ]
     volumes:
       - cluster_redis_master-2-data:/data
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      placement:
-        constraints: [node.role == manager]
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
 
   redis_master-3:
     << : *default-common
@@ -188,20 +178,9 @@ services:
       ]
     volumes:
       - cluster_redis_master-3-data:/data
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      placement:
-        constraints: [node.role == manager]
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
 
   redis_slave-1:
+    &redis-slave
     << : *default-common
     << : *default-labels
     depends_on:
@@ -237,10 +216,9 @@ services:
       #     memory: 20M
 
   redis_slave-2:
+    << : *redis-slave
     << : *default-common
     << : *default-labels
-    depends_on:
-      - redis_master-1
     ports:
       - "8002:8002"
       - "18002:18002"
@@ -259,23 +237,11 @@ services:
       ]
     volumes:
       - cluster_redis_slave-2-data:/data
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      replicas: 1
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
 
   redis_slave-3:
+    << : *redis-slave
     << : *default-common
     << : *default-labels
-    depends_on:
-      - redis_master-1
     ports:
       - "8003:8003"
       - "18003:18003"
@@ -294,17 +260,6 @@ services:
       ]
     volumes:
       - cluster_redis_slave-3-data:/data
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      replicas: 1
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
 
 networks:
   cluster_redis:

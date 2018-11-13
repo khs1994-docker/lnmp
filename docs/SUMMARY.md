@@ -48,6 +48,10 @@
         * [k8s on Docker for Desktop](kubernetes/docker-desktop.md)
     * [Docker Registry](registry.md)
 
+## Supervisord
+
+* [Supervisord](supervisord.md)
+
 ## ClusterKit
 
 * [ClusterKit](clusterkit/README.md)

@@ -51,6 +51,7 @@ x-labels:
 services:
 
   mysql_master-1:
+    &mysql_master
     << : *default-common
     << : *default-labels
     environment:
@@ -103,6 +104,7 @@ services:
         mode: 0555
 
   mysql_master-2:
+    << : *mysql_master
     << : *default-common
     << : *default-labels
     environment:
@@ -112,7 +114,7 @@ services:
     ports:
       - "13307:3306"
     volumes:
-      - cluster_mysql_master-data:/var/lib/mysql
+      - cluster_mysql_master-2-data:/var/lib/mysql
     command:
       - --log-bin=mysql-bin
       - --server-id=2
@@ -140,6 +142,7 @@ services:
         mode: 0555
 
   mysql_node-1:
+    &mysql_node
     << : *default-common
     << : *default-labels
     environment:
@@ -178,6 +181,7 @@ services:
         mode: 0555
 
   mysql_node-2:
+    << : *mysql_node
     << : *default-common
     << : *default-labels
     environment:
@@ -217,6 +221,8 @@ services:
 
 volumes:
   cluster_mysql_master-data:
+    << : *default-labels
+  cluster_mysql_master-2-data:
     << : *default-labels
   cluster_mysql_node-1-data:
     << : *default-labels
