@@ -44,6 +44,10 @@ services:
     << : *default-common
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.12}-fpm-alpine
 
+  supervisord:
+    << : *default-common
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.12}-supervisord-alpine
+
   phpmyadmin:
     << : *default-common
     image: phpmyadmin/phpmyadmin:latest@sha256:6fa491d4e3994ab3ec3410409bf0d59436072df1cfb16b8fe25c47486988103f
@@ -99,6 +103,6 @@ secrets:
   db_root_password:
     << : *default-common
     file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
-  supervisord_conf:
+  supervisord_ini:
     << : *default-common
-    file: ./config/supervisord/${SUPERVISORD_CONF_PATH:-supervisord.ini}
+    file: ./config/supervisord/${SUPERVISORD_INI_PATH:-supervisord.ini}

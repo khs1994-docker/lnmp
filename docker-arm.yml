@@ -217,7 +217,7 @@ services:
       - backend
     image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.12}-supervisord-alpine"
     secrets:
-      - source: supervisord_conf
+      - source: supervisord_ini
         target: /etc/supervisor.d/supervisord.ini
     command: ["/usr/bin/supervisord","-n"]
     expose:
@@ -301,6 +301,6 @@ secrets:
   db_root_password:
     << : *default-labels
     file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
-  supervisord_conf:
+  supervisord_ini:
     << : *default-labels
-    file: ./config/supervisord/${SUPERVISORD_CONF_PATH:-supervisord.ini}
+    file: ./config/supervisord/${SUPERVISORD_INI_PATH:-supervisord.ini}
