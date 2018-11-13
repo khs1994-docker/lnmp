@@ -68,7 +68,9 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --disable-cgi \
         --with-gettext=shared \
         --with-gd=shared \
-            --with-freetype-dir=/usr \
+            # https://github.com/php/php-src/commit/2d03197749696ac3f8effba6b7977b0d8729fef3
+            --enable-freetype \
+            # --with-freetype-dir=/usr \
             --disable-gd-jis-conv \
             --with-jpeg-dir=/usr \
             --with-png-dir=/usr \
