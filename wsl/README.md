@@ -51,9 +51,9 @@ export APP_ENV=wsl
 * https://store.docker.com/community/images/khs1994/wsl/tags
 
 ```bash
-$ lnmp-wsl-install.sh # 输出帮助信息
+$ lnmp-wsl-install # 输出帮助信息
 
-$ lnmp-wsl-install.sh php | mysql ...
+$ lnmp-wsl-install php | mysql ...
 ```
 
 * PHP 版本问题：https://github.com/khs1994-docker/lnmp/issues/348
@@ -63,7 +63,7 @@ $ lnmp-wsl-install.sh php | mysql ...
 主版本所有执行文件放到 `/usr/local/bin`，其他版本请使用绝对路径。
 
 ```bash
-$ lnmp-wsl-install.sh enable php72 | php71 | php70 | php56
+$ lnmp-wsl-install enable php72 | php71 | php70 | php56
 ```
 
 ### PHP 安装路径
@@ -123,7 +123,7 @@ Debian MySQL 初始化请查看：
 > 必须用下面的脚本来控制软件的 启动、重启、停止
 
 ```bash
-$ lnmp-wsl.sh start | restart | stop [SOFT_NAME or all]
+$ lnmp-wsl start | restart | stop [SOFT_NAME or all]
 ```
 
 ## WSL Run Docker CLI
@@ -131,7 +131,7 @@ $ lnmp-wsl.sh start | restart | stop [SOFT_NAME or all]
 * https://www.khs1994.com/docker/wsl-run-docker-cli.html
 
 ```bash
-$ lnmp-wsl-docker-cli.sh
+$ lnmp-wsl-docker-cli
 ```
 
 ## PHP 扩展列表
@@ -156,7 +156,7 @@ $ cd unit
 
 $ ./configure --prefix=/usr/local/nginx_unit --openssl
 
-# PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文默认使用 $ lnmp-wsl-install.sh php 7.2.5 安装 PHP
+# PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文默认使用 $ lnmp-wsl-install php 7.2.5 安装 PHP
 
 $ ./configure php \
       --module=php72 \

@@ -8,15 +8,15 @@ print_help_info(){
   exec echo -e "
 Usage:
 
-lnmp-mnamp.sh {start | restart | stop} {SOFT_NAME | all | common}
+lnmp-mnamp {start | restart | stop} {SOFT_NAME | all | common}
 
-lnmp-mnamp.sh status
+lnmp-mnamp status
 
 Example:
 
-lnmp-mnamp.sh start php nginx mysql redis
+lnmp-mnamp start php nginx mysql redis
 
-lnmp-mnamp.sh stop common
+lnmp-mnamp stop common
 "
 }
 

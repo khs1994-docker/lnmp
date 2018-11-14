@@ -6,9 +6,9 @@ ENV TZ Asia/Shanghai
 
 ARG PHP_VERSION=7.2.12
 
-COPY lnmp-wsl-builder-php-rhel.sh /lnmp-wsl-builder-php-rhel.sh
+COPY lnmp-wsl-builder-php-rhel /lnmp-wsl-builder-php-rhel.sh
 
-COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
+COPY wsl-php-ext-enable /usr/local/bin/wsl-php-ext-enable.sh
 
 RUN sed -i "s#sudo##g" /lnmp-wsl-builder-php-rhel.sh \
       && chmod +x /usr/local/bin/wsl-php-ext-enable.sh \

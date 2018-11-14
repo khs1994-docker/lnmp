@@ -271,9 +271,9 @@ $ httpd -d C:/Apache24 -k start
 
 Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://github.com/khs1994-docker/lnmp/tree/master/wsl)。
 
-## 使用 lnmp-wsl.sh 脚本控制 WSL 软件
+## 使用 lnmp-wsl 脚本控制 WSL 软件
 
-由于部分软件运行于 WSL ,你可以使用本项目 `wsl` 目录下的 `lnmp-wsl.sh` 脚本控制它们。
+由于部分软件运行于 WSL ,你可以使用本项目 `wsl` 目录下的 `lnmp-wsl` 脚本控制它们。
 
 打开 PowerShell
 

@@ -42,9 +42,9 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 To use LNMP Docker, you need:
 
-:one: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 18.06 Stable +
+:one: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 18.09 Stable +
 
-:two: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.22.0+
+:two: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.23.1+
 
 :three: WSL (**Windows** Only)
 
