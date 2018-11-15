@@ -170,10 +170,10 @@ _up-tls(){
         sed -i "s#{{ DRONE_UPSTREAM }}#${CI_HOST:-192.168.199.100}#g" $file
         sed -i "s#{{ GOGS_UPSTREAM }}#${CI_HOST:-192.168.199.100}#g" $file
       done
-        if [ -n "$NGINX_CONF" ];then
-          cp -a $PWD/*.conf $NGINX_CONF
-          mkdir -p $NGINX_CONF/ssl || echo
-          if ! [ -f ssl/$CI_DOMAIN.crt ];then cp -a $PWD/ssl/*  $NGINX_CONF/ssl; fi
+        if [ -n "$LNMP_NGINX_CONF" ];then
+          cp -a $PWD/*.conf $LNMP_NGINX_CONF
+          mkdir -p $LNMP_NGINX_CONF/ssl || echo
+          if ! [ -f ssl/$CI_DOMAIN.crt ];then cp -a $PWD/ssl/*  $LNMP_NGINX_CONF/ssl; fi
         fi
       cd -
     }
@@ -254,7 +254,7 @@ for arg in "$@"
 do
   test $arg = '--open-port' && COMPOSE_FILE='-f docker-compose.yml -f docker-compose.override.yml -f docker-compose.port.yml'
   test $arg = '-d' && opt='-d'
-  [[ $arg =~ --use-external-nginx=* ]] && ENABLE_NGINX=FALSE && NGINX_CONF=$( echo $arg | cut -d '=' -f 2 )
+  [[ $arg =~ --use-external-nginx=* ]] && ENABLE_NGINX=FALSE && LNMP_NGINX_CONF=$( echo $arg | cut -d '=' -f 2 )
 done
 
 _$command "$@"

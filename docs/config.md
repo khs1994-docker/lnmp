@@ -50,7 +50,7 @@ datadir         = /var/lib/mysql-my
 
 **1.** 在 `./secrets/` 新建 `*.txt` 文件，并写入密码。例如 `db.my.txt`
 
-**2.** 在 `.env` 文件中设置 `DB_ROOT_PASSWORD_PATH` 值为文件名，例如 `DB_ROOT_PASSWORD_PATH=db.my.txt`
+**2.** 在 `.env` 文件中设置 `LNMP_DB_ROOT_PASSWORD_PATH` 值为文件名，例如 `LNMP_DB_ROOT_PASSWORD_PATH=db.my.txt`
 
 > 如果原来启动过，要么销毁（数据卷）之后重新启动，要么手动进入命令行修改密码。
 
@@ -68,7 +68,7 @@ datadir         = /var/lib/mysql-my
 
 **5.** 我们以后就在 `nginx.my` 文件夹内新增 NGINX 子配置文件（请参照 `nginx` 文件中的示例配置），HTTPD 同理。为了方便备份配置文件，可以在 `./config/nginx.my` 文件夹中初始化一个 Git 仓库，通过 Git 管理配置文件。当你切换到另一个环境中，你可以很方便的通过 git clone url 快速恢复配置文件。
 
-**6.** 修改 `.env` 文件 `NGINX_CONF=nginx.my.conf` `NGINX_CONF_D=nginx.my`，HTTPD 同理
+**6.** 修改 `.env` 文件 `LNMP_NGINX_CONF=nginx.my.conf` `LNMP_NGINX_CONF_D=nginx.my`，HTTPD 同理
 
 ## 其他软件
 

@@ -38,7 +38,7 @@ RUN cd /app \
 # 2.安装 composer 依赖
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.2.12-composer-alpine as composer
 
-# COPY composer.json composer.lock /app/EXAMPLE/
+# COPY composer.json composer.lock /app/
 COPY composer.json /app/
 COPY database/ /app/database/
 
@@ -52,22 +52,17 @@ RUN cd /app \
 
 # 3.将项目打入 PHP 镜像
 # $ docker build -t khs1994/php:7.2.12-pro-GIT_TAG-alpine --target=php .
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as bundle
-
-COPY . /app
-COPY --from=composer /app/vendor/ /app/vendor/
-COPY --from=frontend /app/public/js/ /app/public/js/
-COPY --from=frontend /app/public/css/ /app/public/css/
-COPY --from=frontend /app/mix-manifest.json /app/mix-manifest.json
-
-# 4. 将多个文件合并到一层
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
-COPY --from=bundle /app/ /app/EXAMPLE/
+COPY . /app/EXAMPLE/
+COPY --from=composer /app/vendor/ /app/EXAMPLE/vendor/
+COPY --from=frontend /app/public/js/ /app/EXAMPLE/public/js/
+COPY --from=frontend /app/public/css/ /app/EXAMPLE/public/css/
+COPY --from=frontend /app/mix-manifest.json /app/EXAMPLE/mix-manifest.json
 
 CMD ["php-fpm", "-R"]
 
-# 5.将 PHP 项目打入 NGINX 镜像
+# 4.将 PHP 项目打入 NGINX 镜像
 # Nginx 配置文件统一通过 configs 管理，严禁将配置文件打入镜像
 # $ docker build -t khs1994/nginx:1.15.6-pro-GIT_TAG-alpine .
 

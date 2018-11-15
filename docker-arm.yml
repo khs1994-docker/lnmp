@@ -90,7 +90,7 @@ services:
     # image: lnmp-redis:latest
     image: "${ARM_ARCH:-arm64v8}/redis:${LNMP_REDIS_VERSION:-5.0.1}${ARM_BASED_OS}"
     volumes:
-      - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro
+      - ./config/redis/${LNMP_REDIS_CONF:-redis.conf}:/redis.conf:ro
       - ./log/redis:/var/log/redis
       - redis-data:/data
     ports:
@@ -168,7 +168,7 @@ services:
     # image: lnmp-mongodb:lastet
     image: ${ARM_ARCH:-arm64v8}/mongo:${LNMP_MONGODB_VERSION:-4.1.5}
     volumes:
-      - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf
+      - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf
       - mongodb-data:/data/db
       - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log
     ports:
@@ -240,8 +240,8 @@ services:
       - "80:80"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      - ./config/${NGINX_CONF_D:-nginx}:/etc/nginx/conf.d:ro
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
+      - ./config/${LNMP_NGINX_CONF_D:-nginx}:/etc/nginx/conf.d:ro
+      - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro
       - ./config/etc/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro
       - ./log/nginx:/var/log/nginx
     depends_on:
@@ -262,8 +262,8 @@ services:
       - "80:80"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}
-      - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
-      - ./config/httpd/${HTTPD_CONF_D:-conf.d}:/usr/local/apache2/conf.d
+      - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf
+      - ./config/httpd/${LNMP_HTTPD_CONF_D:-conf.d}:/usr/local/apache2/conf.d
       - ./log/httpd:/usr/local/apache2/logs
       - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app
@@ -300,7 +300,7 @@ volumes:
 secrets:
   db_root_password:
     << : *default-labels
-    file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
   supervisord_ini:
     << : *default-labels
-    file: ./config/supervisord/${SUPERVISORD_INI_PATH:-supervisord.ini}
+    file: ./config/supervisord/${LNMP_SUPERVISORD_INI_PATH:-supervisord.ini}

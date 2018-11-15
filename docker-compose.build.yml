@@ -152,7 +152,7 @@ volumes:
 secrets:
   db_root_password:
     << : *default-labels
-    file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
   supervisord_ini:
     << : *default-labels
-    file: ./config/supervisord/${SUPERVISORD_INI_PATH:-supervisord.ini}
+    file: ./config/supervisord/${LNMP_SUPERVISORD_INI_PATH:-supervisord.ini}
