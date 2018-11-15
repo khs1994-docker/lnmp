@@ -52,3 +52,7 @@ RUN apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
  \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
  && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub
+
+ENTRYPOINT ["/bin/sh", "/docker-entrypoint.composer.sh"]
+
+CMD ["composer"]

@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: khs1994/nginx:1.15.6-windowsservercore-1809
+    volumes:
+      - ./windows/config/nginx:C:/nginx/conf/conf.d
+      - ./config/nginx/demo-ssl:C:/nginx/conf/conf.d/ssl
+      - ./app:C:/Users/90621/lnmp/app
+    ports:
+      - "80:80"
+      - "443:443"
+
+  mysql:
+    image: khs1994/mysql:8.0.13-windowsservercore-1809
+
+  php:
+    image: khs1994/php:7.2.12-windowsservercore-1809

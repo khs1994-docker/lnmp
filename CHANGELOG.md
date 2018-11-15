@@ -10,7 +10,9 @@
 
 ### Changes:
 
-* Remove composer from `khs1994/php:x.y.z-fpm-alpine`, you can access composer with `khs1994/php:x.y.z-composer-alpine`
+* Remove composer from `khs1994/php:x.y.z-fpm-alpine`, you can access composer with `khs1994/php:x.y.z-composer-alpine`.
+* Move `docker-cluster.*.yml` to cluster folder.
+* Windows Container based `mcr.microsoft.com/windows/servercore:1809`
 
 ### Updates:
 

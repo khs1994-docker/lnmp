@@ -4,7 +4,7 @@
 # @link https://docs.docker.com/develop/develop-images/multistage-build/
 # @link https://laravel-news.com/multi-stage-docker-builds-for-laravel
 #
-# 约定，只有 git 打了 tag 才能将对应的镜像部署到生产环境
+# 只有 git 打了 tag 才能将对应的镜像部署到生产环境
 #
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
@@ -13,55 +13,57 @@ ARG PHP_VERSION=7.2.12
 ARG NGINX_VERSION=1.15.6
 ARG DOCKER_HUB_USERNAME=khs1994
 
-# 1.安装前端依赖
-FROM node:${NODE_VERSION:-11.1.0}-alpine as frontend_install
-
-# COPY package.json webpack.mix.js yarn.lock /app/
-COPY package.json webpack.mix.js package-lock.json /app/
-
-RUN cd /app/EXAMPLE \
-      # && yarn install \
-      && npm install --production
-
-# 2.运行前端脚本
+# 1.前端构建
 FROM node:${NODE_VERSION:-11.1.0}-alpine as frontend
 
-COPY --from=frontend_install /app/EXAMPLE /app/EXAMPLE
+ARG NODE_REGISTRY=https://registry.npmjs.org
+
+# COPY package.json webpack.mix.js yarn.lock /app/
+# COPY package.json webpack.mix.js /app/
+
+# COPY package.json webpack.mix.js package-lock.json /app/
+COPY package.json webpack.mix.js /app/
+
+RUN cd /app \
+      # && yarn install \
+      && npm install --registry=${NODE_REGISTRY}
+
 COPY resources/assets/ /app/resources/assets/
 
-RUN cd /app/EXAMPLE \
-      && set PATH=./node_modules/.bin:$PATH
+RUN cd /app \
+      && set PATH=./node_modules/.bin:$PATH \
       # && yarn production \
       && npm run production
 
-# 3.安装 composer 依赖
+# 2.安装 composer 依赖
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.2.12-composer-alpine as composer
 
-COPY composer.json composer.lock /app/EXAMPLE/
+# COPY composer.json composer.lock /app/EXAMPLE/
+COPY composer.json /app/
+COPY database/ /app/database/
 
-RUN cd /app/EXAMPLE \
-      # 安装 composer 依赖
-      && if [ -f composer.json ];then \
-           echo "Composer packages installing..."; \
-           composer install --no-dev \
+RUN cd /app \
+      && composer install --no-dev \
              --ignore-platform-reqs \
              --prefer-dist \
              --no-interaction \
-           ; echo "Composer packages install success"; \
-         else \
-           echo "composer.json NOT exists"; \
-         fi
+             --no-scripts \
+             --no-plugins
 
-# 4.将项目打入 PHP 镜像
+# 3.将项目打入 PHP 镜像
 # $ docker build -t khs1994/php:7.2.12-pro-GIT_TAG-alpine --target=php .
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as bundle
 
+COPY . /app
+COPY --from=composer /app/vendor/ /app/vendor/
+COPY --from=frontend /app/public/js/ /app/public/js/
+COPY --from=frontend /app/public/css/ /app/public/css/
+COPY --from=frontend /app/mix-manifest.json /app/mix-manifest.json
+
+# 4. 将多个文件合并到一层
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
-COPY . /app/EXAMPLE
-COPY --from=composer /app/EXAMPLE/vendor/ /app/EXAMPLE/vendor/
-COPY --from=frontend /app/public/js/ /app/EXAMPLE/public/js/
-COPY --from=frontend /app/public/css/ /app/EXAMPLE/public/css/
-COPY --from=frontend /app/mix-manifest.json /app/EXAMPLE/mix-manifest.json
+COPY --from=bundle /app/ /app/EXAMPLE/
 
 CMD ["php-fpm", "-R"]
 
@@ -72,7 +74,7 @@ CMD ["php-fpm", "-R"]
 # FROM ${DOCKER_HUB_USERNAME:-khs1994}/nginx:1.15.6-alpine
 FROM nginx:${NGINX_VERSION} as nginx
 
-COPY --from=php /app /app
+COPY --from=php /app/ /app/
 
 ADD https://raw.githubusercontent.com/khs1994-docker/lnmp-nginx-conf-demo/master/wait-for-php.sh /wait-for-php.sh
 

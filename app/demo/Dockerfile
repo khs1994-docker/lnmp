@@ -16,20 +16,14 @@ ARG DOCKER_HUB_USERNAME=khs1994
 # 1.安装 composer 依赖
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.2.12-composer-alpine as composer
 
-COPY composer.json composer.lock /app/EXAMPLE/
+# COPY composer.json composer.lock /app/EXAMPLE/
+COPY composer.json /app/EXAMPLE/
 
 RUN cd /app/EXAMPLE \
-      # 安装 composer 依赖
-      && if [ -f composer.json ];then \
-           echo "Composer packages installing..."; \
-           composer install --no-dev \
-             --ignore-platform-reqs \
-             --prefer-dist \
-             --no-interaction \
-           ; echo "Composer packages install success"; \
-         else \
-           echo "composer.json NOT exists"; \
-         fi
+      && composer install --no-dev \
+           --ignore-platform-reqs \
+           --prefer-dist \
+           --no-interaction
 
 # 2.将项目打入 PHP 镜像
 # $ docker build -t khs1994/php:7.2.12-pro-GIT_TAG-alpine --target=php .

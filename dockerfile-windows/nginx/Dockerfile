@@ -1,4 +1,6 @@
-FROM microsoft/windowsservercore:1803
+# FROM microsoft/windowsservercore:1803
+
+FROM mcr.microsoft.com/windows/servercore:1809
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -11,10 +13,10 @@ RUN $url = ('http://nginx.org/download/nginx-{0}.zip' -f $env:NGINX_VERSION); \
        	\
         Write-Host 'Installing ...'; \
         Expand-Archive -Path nginx.zip -DestinationPath C:/ -Force; \
-        Move-Item C:/nginx-${NGINX_VERSION} C:/nginx; \
+        Move-Item C:/nginx-${env:NGINX_VERSION} C:/nginx; \
         \
         Write-Host 'Updating PATH ...'; \
-	      $env:PATH = 'C:\nginx' + $env:PATH; \
+	      $env:PATH = 'C:\nginx;' + $env:PATH; \
         [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine); \
         \
         Write-Host 'Verifying install ...'; \
@@ -26,6 +28,8 @@ RUN $url = ('http://nginx.org/download/nginx-{0}.zip' -f $env:NGINX_VERSION); \
         Write-Host 'Complete.';
 
 WORKDIR C:\\nginx
+
+COPY nginx.conf C:/nginx/conf
 
 EXPOSE 80 443
 

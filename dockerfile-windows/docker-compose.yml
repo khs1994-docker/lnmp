@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  nginx:
+    build: nginx
+    image: khs1994/nginx:1.15.6-windowsservercore-1809
+
+  mysql:
+    build: mysql
+    image: khs1994/mysql:8.0.13-windowsservercore-1809
+
+  php:
+    build: php
+    image: khs1994/php:7.2.12-windowsservercore-1809

@@ -1,4 +1,6 @@
-FROM microsoft/windowsservercore:1803
+# FROM microsoft/windowsservercore:1803
+
+FROM mcr.microsoft.com/windows/servercore:1809
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -13,7 +15,7 @@ RUN $url = ('https://windows.php.net/downloads/releases/php-{0}-nts-Win32-VC15-x
         Expand-Archive -Path php.zip -DestinationPath C:/PHP -Force; \
         \
         Write-Host 'Updating PATH ...'; \
-	      $env:PATH = 'C:\php' + $env:PATH; \
+	      $env:PATH = 'C:\php;' + $env:PATH; \
         [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine); \
         \
         Write-Host 'Verifying install ...'; \
