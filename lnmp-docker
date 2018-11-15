@@ -1586,17 +1586,17 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
   clusterkit )
      docker-compose -f docker-compose.yml \
        -f docker-compose.override.yml \
-       -f docker-cluster.mysql.yml \
-       -f docker-cluster.redis.yml \
+       -f cluster/docker-cluster.mysql.yml \
+       -f cluster/docker-cluster.redis.yml \
        up "$@"
      ;;
 
   clusterkit-mysql-up )
-     docker-compose -f docker-cluster.mysql.yml up "$@"
+     docker-compose --project-directory=$PWD -f cluster/docker-cluster.mysql.yml up "$@"
      ;;
 
   clusterkit-mysql-down )
-     docker-compose -f docker-cluster.mysql.yml down "$@"
+     docker-compose --project-directory=$PWD -f cluster/docker-cluster.mysql.yml down "$@"
      ;;
 
   clusterkit-mysql-exec )
@@ -1613,6 +1613,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      ;;
 
   clusterkit-mysql-deploy )
+       cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
        docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
         ;;
 
@@ -1621,11 +1622,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
         ;;
 
   clusterkit-memcached-up )
-    docker-compose -f docker-cluster.memcached.yml up "$@"
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.memcached.yml up "$@"
     ;;
 
   clusterkit-memcached-down )
-    docker-compose -f docker-cluster.memcached.yml down "$@"
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.memcached.yml down "$@"
     ;;
 
   clusterkit-memcached-exec )
@@ -1642,6 +1643,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   clusterkit-memcached-deploy )
+    cp cluster/docker-cluster.memcached.yml docker-cluster.memcached.yml
     docker stack deploy -c docker-cluster.memcached.yml memcached_cluster
     ;;
 
@@ -1651,11 +1653,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   clusterkit-redis-up )
         if [ -z "$CLUSTERKIT_REDIS_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_HOST in .env file" ; exit 1 ; fi
-        docker-compose -f docker-cluster.redis.yml up "$@"
+        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml up "$@"
         ;;
 
   clusterkit-redis-down )
-        docker-compose -f docker-cluster.redis.yml down "$@"
+        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml down "$@"
         ;;
 
   clusterkit-redis-exec )
@@ -1671,6 +1673,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
         ;;
 
   clusterkit-redis-deploy )
+    cp cluster/docker-cluster.redis.yml docker-cluster.redis.yml
     docker stack deploy -c docker-cluster.redis.yml redis_cluster
     ;;
 
@@ -1680,11 +1683,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   clusterkit-redis-replication-up )
         if [ -z "$CLUSTERKIT_REDIS_M_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_M_S_HOST in .env file" ; exit 1 ; fi
-        docker-compose -f docker-cluster.redis.replication.yml up "$@"
+        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml up "$@"
         ;;
 
   clusterkit-redis-replication-down )
-        docker-compose -f docker-cluster.redis.replication.yml down "$@"
+        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml down "$@"
         ;;
 
   clusterkit-redis-replication-exec )
@@ -1699,6 +1702,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
         ;;
 
   clusterkit-redis-replication-deploy )
+    cp cluster/docker-cluster.redis.replication.yml docker-cluster.redis.replication.yml
     docker stack deploy -c docker-cluster.redis.replication.yml redis_m_s_cluster
     ;;
 
@@ -1708,11 +1712,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   clusterkit-redis-sentinel-up )
         if [ -z "$CLUSTERKIT_REDIS_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_S_HOST in .env file" ; exit 1 ; fi
-        docker-compose -f docker-cluster.redis.sentinel.yml up "$@"
+        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml up "$@"
         ;;
 
   clusterkit-redis-sentinel-down )
-        docker-compose -f docker-cluster.redis.sentinel.yml down "$@"
+        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml down "$@"
         ;;
 
   clusterkit-redis-sentinel-exec )
@@ -1727,6 +1731,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
         ;;
 
   clusterkit-redis-sentinel-deploy )
+    cp cluster/docker-cluster.redis.sentinel.yml docker-cluster.redis.sentinel.yml
     docker stack deploy -c docker-cluster.redis.sentinel.yml redis_s_cluster
     ;;
 
@@ -1738,12 +1743,13 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
         command=$(echo $command | cut -d '-' -f 2)
         exec docker-compose -f docker-compose.yml \
              -f docker-compose.override.yml \
-             -f docker-cluster.mysql.yml \
-             -f docker-cluster.redis.yml \
+             -f cluster/docker-cluster.mysql.yml \
+             -f cluster/docker-cluster.redis.yml \
              $command "$@"
         ;;
 
   swarm-clusterkit )
+    cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
     docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
         ;;
 

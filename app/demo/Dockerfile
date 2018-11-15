@@ -38,9 +38,6 @@ FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
 COPY . /app/EXAMPLE
 COPY --from=composer /app/EXAMPLE/vendor/ /app/EXAMPLE/vendor/
-COPY --from=frontend /app/public/js/ /var/www/html/public/js/
-COPY --from=frontend /app/public/css/ /var/www/html/public/css/
-COPY --from=frontend /app/mix-manifest.json /var/www/html/mix-manifest.json
 
 CMD ["php-fpm", "-R"]
 
