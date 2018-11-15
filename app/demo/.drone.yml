@@ -1,15 +1,12 @@
-workspace:
-  base: /app
-  path: .
-
-#
-# khs1994.com PHP CI/CD 由 khs1994-docker/ci 提供。
-#
 # @link http://docs.drone.io/
 # @link https://github.com/khs1994-docker/ci
 #
 # 项目构建设置中 Repository Hooks 全部勾选
 #
+
+workspace:
+  base: /app
+  path: .
 
 pipeline:
   # install dep
@@ -51,6 +48,9 @@ pipeline:
       # branch:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
+      # matrix:
+      #   - PHP_VERSION=7.2.12
+      #     REDIS_VERSION=5.0.1
 
   # when tag push, build docker image
   # http://plugins.drone.io/drone-plugins/drone-docker/
@@ -81,7 +81,6 @@ pipeline:
 
   publish_nginx:
     image: plugins/docker
-    # registry: docker.khs1994.com
     repo: khs1994/nginx
     tags: ${NGINX_VERSION}-pro-${DRONE_TAG}-alpine
     target: nginx
@@ -102,7 +101,6 @@ pipeline:
   #
   publish_php_to_prod:
     image: plugins/docker
-    # registry: docker.khs1994.com
     repo: khs1994/php
     tags: ${PHP_VERSION}-pro-${DRONE_TAG}-alpine
     target: php
@@ -190,14 +188,21 @@ matrix:
   NGINX_VERSION:
     - 1.15.6
   REDIS_VERSION:
-    - 5.0.1-alpine
+    - 5.0.1
   MYSQL_VERSION:
-    # - 8.0.11
+    # - 8.0.13
     - 5.7.22
   MONGODB_VERSION:
-    - 3.7.3
+    - 4.1.5
   POSTGRESQL_VERSION:
-    - 10.3-alpine
+    - 11.1-alpine
+
+# matrix:
+#   include:
+#     - PHP_VERSION=7.2.12
+#       REDIS_VERSION=5.0.1
+#     - PHP_VERSION=7.1.24
+#       REDIS_VERSION=5.0.1
 
 # branches:
 #   include: [ master, dev, feature/* ]

@@ -18,11 +18,9 @@
 
 ## 准备
 
-* 域名 (花生壳也行)
+* 域名
 
-* 公网 IP (花生壳也行)
-
-* 设置 DNS 解析，或内网 DNS 服务器
+* 公网 IP
 
 * `*.CI_DOMAIN` 通配符 TLS 证书 （acme.sh 可以免费申请）或 `git.CI_DOMAIN` `drone.CI_DOMAIN` 网址的 TLS 证书。
 
@@ -44,7 +42,7 @@ $ ./ci
 
 * Windows 用户请将 `COMPOSE_CONVERT_WINDOWS_PATHS=1` 取消注释
 
-### 使用 khs1994-docker/lnmp 的 MySQL Redis NGINX 服务
+### 使用 khs1994-docker/lnmp 的 MySQL Redis NGINX 服务(可选项)
 
 修改 `.env` 中的 `CI_INCLUDE` 变量，若 git 使用 Gogs 则只保留 `gogs` 即可，若使用 GitHub，请留空。
 
@@ -88,6 +86,8 @@ $ lnmp-docker restart nginx
 
 ### `443` 端口是否占用
 
+> 若使用 khs1994-docker/lnmp 的 NGINX 服务，请忽略此节。
+
 根据 `443` 端口是否占用情况，使用下面的命令启动 CI `服务`。
 
 * 已占用->实体机运行 NGINX
@@ -123,3 +123,7 @@ $ lnmp-docker restart nginx
 
 则 Drone 访问地址为 `https://drone.t.khs1994.com`
 则 Gogs 访问地址为 `https://git.t.khs1994.com`
+
+## 错误排查
+
+进入 `logs` 文件夹内，查看日志文件排错。

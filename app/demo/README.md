@@ -209,7 +209,9 @@ $ lnmp-phpunit [参数]
 
 ### 12. 本地测试构建 PHP 及 NGINX 镜像
 
-> 此示例将 PHP 代码打入了镜像中，如果你选择将代码放入宿主机，那么无需进行此步骤。两种方法自行取舍。
+此示例将 PHP 代码打入了镜像中，如果你选择将代码放入宿主机，那么无需进行此步骤。两种方法自行取舍。
+
+关于代码放到哪里？代码放入宿主机，上线时需要人工在服务器 pull 代码。放入镜像中，上线时直接拉取镜像之后启动容器，无需人工干预。
 
 > 将 PHP 项目打入镜像，镜像中严禁包含配置文件
 
@@ -233,15 +235,7 @@ $ git push origin dev:dev
 
 ## CI/CD 服务搭建
 
-`khs1994.com` CI/CD 由 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 提供。
-
-`Drone + Gogs` 暂不支持挂载本地 `Volume`
-
-本例 CI/CD 由 `Travis` 提供。
-
-## 二、测试（全自动）
-
-### 1. Git 通知到 CI/CD 服务器
+CI/CD 可以到 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 查看。
 
 * Travis CI (公共的、仅支持 GitHub CI/CD)
 
@@ -249,9 +243,9 @@ $ git push origin dev:dev
 
 * PCIT (开发中，支持各种开发语言，特别为 PHP 设计的基于容器的 CI/CD 系统)
 
-### 2. CI/CD 服务器测试
+## 二、测试（全自动）
 
-具体请搜索 `Travis` 学习如何使用。
+### CI/CD 服务器收到 Git Push 事件，进行代码测试
 
 ## 三、开发、测试循环
 
@@ -259,18 +253,10 @@ $ git push origin dev:dev
 
 > 可以在生产环境之前加一个 **预上线** 环境，这里省略。
 
-### 1. git 添加 tag
+### 1. git 添加 tag，并推送到远程仓库
 
-* 只有添加了 `tag` 的代码才能部署到生产环境
+### 2. CI/CD 服务器收到 Git Tag 事件，自动构建镜像并推送镜像到 Docker 仓库。
 
-* Docker 镜像名必须包含 git `tag`
-
-* CI/CD 服务器构建镜像并推送镜像到 Docker 仓库。
-
-生产环境部署 [khs1994-docker/lnmp-k8s](https://github.com/khs1994-docker/lnmp-k8s)
-
-### 2. Docker 私有仓库通知到指定地址
-
-### 3. 在 CI/CD 系统中使用 Helm 在 k8s 集群更新服务
+### 3. CI/CD 服务器中使用 Helm 在 k8s 集群更新服务
 
 * https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm

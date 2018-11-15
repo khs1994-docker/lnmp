@@ -28,9 +28,9 @@
 
 * 有公网 IP 的云服务器（推荐，但不是必须）
 
-* Docker CE v18.06 Stable +
+* Docker CE v18.09 Stable +
 
-* docker-compose v1.22.0 +
+* docker-compose v1.23.1 +
 
 * 知道如何注册 GitHub App (GitHub only)
 
@@ -76,7 +76,7 @@ $ ./ci
 
 修改 `.env` 中的 `CI_INCLUDE` 变量。
 
-### 使用 khs1994-docker/lnmp 的 MySQL Redis 服务
+### 使用 khs1994-docker/lnmp 的 MySQL Redis 服务（可选项）
 
 修改 `.env` 中的 `CI_INCLUDE` 变量，若 Git 使用 `Gogs` 则只保留 `gogs` 即可，若使用 `GitHub` 请留空。
 
