@@ -13,7 +13,28 @@ ARG PHP_VERSION=7.2.12
 ARG NGINX_VERSION=1.15.6
 ARG DOCKER_HUB_USERNAME=khs1994
 
-# 1.安装 composer 依赖
+# 1.安装前端依赖
+FROM node:${NODE_VERSION:-11.1.0}-alpine as frontend_install
+
+# COPY package.json webpack.mix.js yarn.lock /app/
+COPY package.json webpack.mix.js package-lock.json /app/
+
+RUN cd /app/EXAMPLE \
+      # && yarn install \
+      && npm install --production
+
+# 2.运行前端脚本
+FROM node:${NODE_VERSION:-11.1.0}-alpine as frontend
+
+COPY --from=frontend_install /app/EXAMPLE /app/EXAMPLE
+COPY resources/assets/ /app/resources/assets/
+
+RUN cd /app/EXAMPLE \
+      && set PATH=./node_modules/.bin:$PATH
+      # && yarn production \
+      && npm run production
+
+# 3.安装 composer 依赖
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.2.12-composer-alpine as composer
 
 COPY composer.json composer.lock /app/EXAMPLE/
@@ -31,16 +52,16 @@ RUN cd /app/EXAMPLE \
            echo "composer.json NOT exists"; \
          fi
 
-# 2.将项目打入 PHP 镜像
+# 4.将项目打入 PHP 镜像
 # $ docker build -t khs1994/php:7.2.12-pro-GIT_TAG-alpine --target=php .
 
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
 COPY . /app/EXAMPLE
 COPY --from=composer /app/EXAMPLE/vendor/ /app/EXAMPLE/vendor/
-COPY --from=frontend /app/public/js/ /var/www/html/public/js/
-COPY --from=frontend /app/public/css/ /var/www/html/public/css/
-COPY --from=frontend /app/mix-manifest.json /var/www/html/mix-manifest.json
+COPY --from=frontend /app/public/js/ /app/EXAMPLE/public/js/
+COPY --from=frontend /app/public/css/ /app/EXAMPLE/public/css/
+COPY --from=frontend /app/mix-manifest.json /app/EXAMPLE/mix-manifest.json
 
 CMD ["php-fpm", "-R"]
 

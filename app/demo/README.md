@@ -32,6 +32,12 @@ $ cd example
 
 * `helm install ./lnmp --tls`
 
+## 说明
+
+* 本项目以 PHP 最新的主线版本 `7.2.12` 为例，如果你需要其他版本，或多种版本请到 https://github.com/khs1994-docker/lnmp/issues/354 反馈
+
+* Laravel 项目: 将 `deploy/laravel.Dockerfile` `docker-compose.yml` `.dockerignore` 复制到 Laravel 项目根目录，使用 docker-compose build 构建 Laravel 镜像。
+
 ## 初始化
 
 > 注意本项目专用于 khs1994.com PHP 开源项目，他人使用请按以下步骤进行初始化，严禁直接使用。
@@ -55,7 +61,7 @@ $ cd example
 | `.gitattributes`  | git 打包时排除文件（例如 测试代码）|
 | `.drone.yml`      | [`Drone` CI 工具](https://github.com/khs1994-docker/ci) |
 | `.editorconfig`   | [定义文件格式规则（例如 缩进方式）](https://editorconfig.org/)|
-| `.pcit.yml`      | [`PCIT` CI 工具](https://ci.khs1994.com) |
+| `.pcit.yml`       | [`PCIT` CI 工具](https://ci.khs1994.com) |
 | `.php_cs`         | [PHP 代码格式化工具](https://github.com/FriendsOfPHP/PHP-CS-Fixer) |
 | `.sami.php`       | [PHP 文档生成工具](https://github.com/FriendsOfPHP/Sami) |
 | `.styleci.yml`    | [`Style CI` PHP 代码格式化 CI 工具](https://styleci.io/) |
@@ -169,7 +175,11 @@ $ ./lnmp-docker up
 容器化 PHPer 常用命令请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/command.md
 
 ```bash
+# 引入依赖
 $ lnmp-composer require phpunit/phpunit
+
+# 或安装依赖
+$ lnmp-composer install [--ignore-platform-reqs]
 ```
 
 ### 9. 编写 PHP 代码
@@ -197,14 +207,18 @@ $ cd lnmp/app/PHP_PROJECT
 $ lnmp-phpunit [参数]
 ```
 
-### 12. 测试构建 PHP 及 NGINX 镜像
+### 12. 本地测试构建 PHP 及 NGINX 镜像
+
+> 此示例将 PHP 代码打入了镜像中，如果你选择将代码放入宿主机，那么无需进行此步骤。两种方法自行取舍。
 
 > 将 PHP 项目打入镜像，镜像中严禁包含配置文件
+
+> 最佳实践：Docker 镜像由 CI 服务器构建，而不是本地人工构建！
 
 自行修改 `.env` `docker-compose.yml` 文件，保留所需的 PHP 版本，其他的注释
 
 ```bash
-$ docker-compose build
+$ docker-compose build php72 nginx
 ```
 
 ### 13. 将项目提交到 Git
@@ -251,7 +265,7 @@ $ git push origin dev:dev
 
 * Docker 镜像名必须包含 git `tag`
 
-* CI/CD 服务器构建并推送镜像到 Docker 仓库。
+* CI/CD 服务器构建镜像并推送镜像到 Docker 仓库。
 
 生产环境部署 [khs1994-docker/lnmp-k8s](https://github.com/khs1994-docker/lnmp-k8s)
 

@@ -27,7 +27,7 @@ $global:TZ='Asia/Shanghai'
 # You can overwrite this file in .env.ps1
 #
 
-$global:LNMP_PHP_IMAGE="khs1994/php:7.2.12-fpm-alpine"
+$global:LNMP_PHP_IMAGE="khs1994/php:7.2.12-composer-alpine"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 

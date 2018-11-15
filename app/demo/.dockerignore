@@ -1,4 +1,13 @@
 .git
+
 .idea
+
 vendor
-composer.lock
+
+node_modules/
+
+public/js/
+public/css/
+mix-manifest.json
+
+yarn-error.log

@@ -66,7 +66,7 @@ datadir         = /var/lib/mysql-my
 
 **4.** 在 `./config` 目录中新建 `nginx.my` 文件夹，HTTPD 新建 `httpd.my` 文件夹
 
-**5.** 建议通过 git 管理 `./config/nginx.my` 文件夹，我们以后就在 `nginx.my` 文件夹内新增 NGINX 子配置文件（请参照 `nginx` 文件中的示例配置），HTTPD 同理
+**5.** 我们以后就在 `nginx.my` 文件夹内新增 NGINX 子配置文件（请参照 `nginx` 文件中的示例配置），HTTPD 同理。为了方便备份配置文件，可以在 `./config/nginx.my` 文件夹中初始化一个 Git 仓库，通过 Git 管理配置文件。当你切换到另一个环境中，你可以很方便的通过 git clone url 快速恢复配置文件。
 
 **6.** 修改 `.env` 文件 `NGINX_CONF=nginx.my.conf` `NGINX_CONF_D=nginx.my`，HTTPD 同理
 

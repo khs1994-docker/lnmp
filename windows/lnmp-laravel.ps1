@@ -17,7 +17,7 @@ if (!(Test-Path ${LARAVEL_PATH})){
 # docker run --init -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `
 #     --mount src=lnmp_composer_cache-data,target=/tmp/cache `
-#     $LNMP_PHP_IMAGE `
+#     khs1994/php:7.2.12-composer-alpine `
 #     laravel $args
 
 composer create-project --prefer-dist laravel/laravel=5.6.* "$LARAVEL_PATH"
