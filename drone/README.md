@@ -76,14 +76,36 @@ $ ./ci
 
 修改 `.env` 中的 `CI_INCLUDE` 变量。
 
+### 使用 khs1994-docker/lnmp 的 MySQL Redis 服务
+
+修改 `.env` 中的 `CI_INCLUDE` 变量，若 Git 使用 `Gogs` 则只保留 `gogs` 即可，若使用 `GitHub` 请留空。
+
+```bash
+CI_INCLUDE="gogs"
+```
+
+编辑 `docker-compose.override.yml`，将以下内容取消注释。
+
+```yaml
+networks:
+  backend:
+    external: true
+    name: lnmp_backend
+  frontend:
+    external: true
+    name: lnmp_frontend
+```
+
+> CI 启动之前必须先启动 khs1994-docker/lnmp
+
 ### 使用外部服务？(高级选项)
 
 编辑 `.env` 文件，编辑 `CI_INCLUDE` 变量，去掉内置的软件名，之后填写外部服务的相关配置
 
 ```bash
-# CI_INCLUDE="drone-server drone-agent gogs registry mysql redis"
+# CI_INCLUDE="gogs registry mysql redis"
 
-CI_INCLUDE="drone-server drone-agent gogs registry"
+CI_INCLUDE="gogs registry"
 
 CI_EXTERNAL_MYSQL_HOST=
 CI_EXTERNAL_MYSQL_PORT=

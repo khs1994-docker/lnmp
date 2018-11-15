@@ -10,9 +10,11 @@ if ($args -contains 'new' ){
   }
 }
 
+$global:LARAVEL_PATH=$args[1]
+
 if (!(Test-Path ${LARAVEL_PATH})){
   echo ""
-  echo "${LARAVEL_PATH} not existing"
+  echo "${LARAVEL_PATH} not existing, laravel is install..."
   echo ""
 # docker run --init -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `
@@ -29,8 +31,6 @@ composer create-project --prefer-dist laravel/laravel=5.6.* "$LARAVEL_PATH"
 }
 
 if ($args -contains 'new' ){
-  $global:LARAVEL_PATH=$args[1]
-
   cd ${LARAVEL_PATH}
 
   . "$PSScriptRoot/lnmp-laravel-init.ps1"

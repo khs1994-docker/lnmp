@@ -32,7 +32,7 @@ Commands:
   k8s-create
   k8s-delete
 
-  reset           恢复原始状态
+  reset           重置，恢复原始状态
 
 Read './docs/*.md' for more information about CLI commands.
 
@@ -197,8 +197,7 @@ _up-tls(){
 
     test "$ENABLE_NGINX" = 'FALSE' || _sed_nginx
 
-    docker-compose ${COMPOSE_FILE:-} up ${opt:-} ${CI_INCLUDE:-gogs registry} drone-server drone-agent \
-       $( test "$ENABLE_NGINX" = 'FALSE' || echo 'nginx' )
+    docker-compose ${COMPOSE_FILE:-} up ${opt:-} ${CI_INCLUDE:-gogs registry} drone-server drone-agent
 }
 
 _tls-config(){

@@ -36,7 +36,7 @@ $ cd example
 
 * 本项目以 PHP 最新的主线版本 `7.2.12` 为例，如果你需要其他版本，或多种版本请到 https://github.com/khs1994-docker/lnmp/issues/354 反馈
 
-* Laravel 项目: 将 `deploy/laravel.Dockerfile` `docker-compose.yml` `.dockerignore` 复制到 Laravel 项目根目录，使用 docker-compose build 构建 Laravel 镜像。
+* Laravel 项目，请查看 https://github.com/khs1994-docker/laravel-demo
 
 ## 初始化
 

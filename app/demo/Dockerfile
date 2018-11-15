@@ -4,7 +4,7 @@
 # @link https://docs.docker.com/develop/develop-images/multistage-build/
 # @link https://laravel-news.com/multi-stage-docker-builds-for-laravel
 #
-# 约定，只有 git 打了 tag 才能将对应的镜像部署到生产环境
+# 只有 git 打了 tag 才能将对应的镜像部署到生产环境
 #
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
@@ -17,13 +17,15 @@ ARG DOCKER_HUB_USERNAME=khs1994
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.2.12-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/EXAMPLE/
-COPY composer.json /app/EXAMPLE/
+COPY composer.json /app
 
-RUN cd /app/EXAMPLE \
+RUN cd /app \
       && composer install --no-dev \
            --ignore-platform-reqs \
            --prefer-dist \
-           --no-interaction
+           --no-interaction \
+           --no-scripts \
+           --no-plugins
 
 # 2.将项目打入 PHP 镜像
 # $ docker build -t khs1994/php:7.2.12-pro-GIT_TAG-alpine --target=php .
@@ -31,7 +33,7 @@ RUN cd /app/EXAMPLE \
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
 COPY . /app/EXAMPLE
-COPY --from=composer /app/EXAMPLE/vendor/ /app/EXAMPLE/vendor/
+COPY --from=composer /app/vendor/ /app/EXAMPLE/vendor/
 
 CMD ["php-fpm", "-R"]
 
