@@ -21,3 +21,4 @@
 * [Memcached `1.5.12`](https://github.com/memcached/memcached/wiki/ReleaseNotes1512)
 * MongoDB `4.1.5`
 * [PostgreSQL `11.1`](https://www.postgresql.org/about/news/1905/)
+* [MariaDB `10.4.0`](https://mariadb.com/kb/en/library/mariadb-1040-release-notes/)
