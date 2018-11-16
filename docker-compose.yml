@@ -270,7 +270,7 @@ services:
 
   registry:
     << : *default-common
-    image: registry:${LNMP_REGISTRY_VERSION:-latest}
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/registry:${LNMP_REGISTRY_VERSION:-latest}
     networks:
       - frontend
       - backend
@@ -307,7 +307,7 @@ services:
 
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-10-18T00-28-58Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-11-15T01-26-07Z}
     volumes:
       - minio-data:/data
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt

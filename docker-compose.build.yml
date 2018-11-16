@@ -148,6 +148,14 @@ volumes:
     << : *default-labels
   phpmyadmin-data:
     << : *default-labels
+  etcd-data:
+    << : *default-labels
+  composer_cache-data:
+    << : *default-labels
+  nginx-unit-state-data:
+    << : *default-labels
+  minio-data:
+    << : *default-labels
 
 secrets:
   db_root_password:

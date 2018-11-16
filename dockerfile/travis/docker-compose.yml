@@ -7,4 +7,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
-    image: khs1994/travis:cli@sha256:1cd911c54bbb569d86e408eddf5af949523307dfbe5ee1ed9e4d353f6260e9c7
+    image: khs1994/travis:cli
