@@ -6,6 +6,13 @@
 
 * http://php.net/supported-versions.php
 
+## 后缀
+
+* 7.2.12-fpm-alpine
+* 7.2.12-unit-alpine
+* 7.2.12-composer-alpine
+* 7.2.12-supervisord-alpine
+
 ## Supported tags and respective `Dockerfile` links
 
 * [`7.2.12-fpm-alpine`, `7.2-fpm-alpine`, `7-fpm-alpine`, `fpm-alpine`, `latest` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.2.12/7.2/alpine/Dockerfile)
@@ -38,10 +45,6 @@ Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.co
 ## Who use it?
 
 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) use this Docker Image.
-
-## 镜像优化
-
-本镜像包含了 Composer 故又加上了 git。使得总体积增加了 20 M 左右，在大规模使用时，建议去除掉 git + composer 。或者参考官方镜像，构建符合自己业务的镜像。
 
 ## Extension
 

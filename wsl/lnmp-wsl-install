@@ -5,7 +5,7 @@
 #
 # Only Support WSL Debian
 #
-# $ lnmp-wsl-install.sh php [deb | tar] [7.2.12]
+# $ lnmp-wsl-install php [deb | tar] [7.2.12]
 #
 
 _print_help_info(){
@@ -16,25 +16,25 @@ Install WSL soft by shell script
 
 Usage:
 
-$ lnmp-wsl-install.sh php 7.2.12 [ tar | deb ]
+$ lnmp-wsl-install php 7.2.12 [ tar | deb ]
 
-$ lnmp-wsl-install.sh enable [ php72 | php71 | php70 | php56 ]
+$ lnmp-wsl-install enable [ php72 | php71 | php70 | php56 ]
 
-$ lnmp-wsl-install.sh mysql php go node postgresql mongodb swift
+$ lnmp-wsl-install mysql php go node postgresql mongodb swift
 
-$ lnmp-wsl-install.sh enable nginx httpd
+$ lnmp-wsl-install enable nginx httpd
 
-$ lnmp-wsl-install.sh php-extension-list
+$ lnmp-wsl-install php-extension-list
 
 Example:
 
-$ lnmp-wsl-install.sh php 7.2.12 tar
+$ lnmp-wsl-install php 7.2.12 tar
 
-$ lnmp-wsl-install.sh php 7.2.12 deb
+$ lnmp-wsl-install php 7.2.12 deb
 
 [ deb 方法一个系统只能存在一个 PHP 版本，若想多版本共存，主版本使用 deb 方法，其他版本使用 tar 方法 ]
 
-$ lnmp-wsl-install.sh php 7.1.24 [7.0.32] [5.6.38]
+$ lnmp-wsl-install php 7.1.24 [7.0.32] [5.6.38]
 
 [ php56 只支持 ubuntu ]
 "
@@ -53,7 +53,7 @@ GO_PREFIX=/usr/local
 
 GO_VERSION=1.11.2
 
-NODE_VERSION=11.1.0
+NODE_VERSION=11.2.0
 
 NODE_PREFIX=/usr/local
 
@@ -96,7 +96,7 @@ _nginx(){
 }
 
 _php(){
-  command -v docker || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli.sh "
+  command -v docker || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli "
 
   command -v docker || exit 1
 
@@ -110,27 +110,27 @@ _php(){
     5.6.* )
       export PHP_NUM=56
       if [ $ID = 'debian' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, please self build use $ lnmp-wsl-builder-php.sh\n\n" ; \
+       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, please self build use $ lnmp-wsl-builder-php\n\n" ; \
        exit 1; fi
       ;;
 
     7.0.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, please self build use $ lnmp-wsl-builder-php.sh \n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, please self build use $ lnmp-wsl-builder-php \n\n" \
        ; exit 1; fi
       export PHP_NUM=70
       ;;
 
     7.1.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, please self build use $ lnmp-wsl-builder-php.sh\n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, please self build use $ lnmp-wsl-builder-php\n\n" \
        ; exit 1; fi
       export PHP_NUM=71
       ;;
 
     7.2.* )
       if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, please self build use $ lnmp-wsl-builder-php.sh\n\n" \
+       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, please self build use $ lnmp-wsl-builder-php\n\n" \
        ; exit 1; fi
       export PHP_NUM=72
       ;;
@@ -203,7 +203,7 @@ for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /u
 
 sudo ln -sf ${PHP_PREFIX}/sbin/* /usr/local/sbin
 
-lnmp-wsl-builder-php.sh apt
+lnmp-wsl-builder-php apt
 }
 
 _deb(){

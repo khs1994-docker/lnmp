@@ -41,7 +41,7 @@ services:
 
   gogs:
     << : *default-common
-    image: gogs/gogs:latest@sha256:e63c53931539b1869ac36e1262fe6564274abeb8e577ca9962187368f242022c
+    image: gogs/gogs:latest
     ports:
       - "${CI_HOST:-192.168.199.100}:${CI_GOGS_SSH_PORT}:22"
       - "${CI_HOST:-192.168.199.100}:${CI_GOGS_PORT}:3000"
@@ -56,7 +56,7 @@ services:
 
   registry:
     << : *default-common
-    image: registry:latest@sha256:672d519d7fd7bbc7a448d17956ebeefe225d5eb27509d8dc5ce67ecb4a0bce54
+    image: registry:latest
     ports:
       - "${CI_HOST:-192.168.199.100}:${CI_REGISTRY_PORT:-5000}:5000"
     networks:

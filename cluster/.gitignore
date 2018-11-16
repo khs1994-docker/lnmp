@@ -4,3 +4,4 @@
 !redis
 !redis.sentinel
 !mysql
+!docker-cluster.*

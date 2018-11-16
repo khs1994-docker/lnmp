@@ -73,3 +73,11 @@ services:
     # << : *gitlab
     # << : *coding
     # << : *production
+
+# networks:
+#   backend:
+#     external: true
+#     name: lnmp_backend
+#   frontend:
+#     external: true
+#     name: lnmp_frontend

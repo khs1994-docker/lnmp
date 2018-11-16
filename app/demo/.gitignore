@@ -30,3 +30,19 @@ coverage.xml
 .env.*
 .env
 !.env.example
+
+# node
+node_modules/
+
+# public
+public/js/
+public/css/
+
+# yarn
+yarn-error.log
+
+# npm
+package-lock.json
+
+# laravel
+mix-manifest.json

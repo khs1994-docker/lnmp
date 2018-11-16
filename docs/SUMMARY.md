@@ -70,6 +70,10 @@
     * [LinuxKit](linuxkit.md)
 * [微信小程序 PHP 后端部署](wechat.md)
 
+## self build
+
+[使用自己的镜像](build.md)
+
 ## Volumes
 
 * Volumes

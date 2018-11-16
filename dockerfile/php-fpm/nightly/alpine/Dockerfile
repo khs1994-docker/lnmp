@@ -68,7 +68,9 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --disable-cgi \
         --with-gettext=shared \
         --with-gd=shared \
-            --with-freetype-dir=/usr \
+            # https://github.com/php/php-src/commit/2d03197749696ac3f8effba6b7977b0d8729fef3
+            --enable-freetype \
+            # --with-freetype-dir=/usr \
             --disable-gd-jis-conv \
             --with-jpeg-dir=/usr \
             --with-png-dir=/usr \
@@ -395,39 +397,6 @@ RUN set -x \
 # 默认不启用 xdebug
 # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
       && rm -rf /tmp/*
-
-# install composer
-
-ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.7.3 \
-    PS1="[\u@\h \w]# "
-
-# https://github.com/composer/docker
-
-RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
-    && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
-    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
-    && php -r " \
-    \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
-    \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
-    if (!hash_equals(\$signature, \$hash)) { \
-        unlink('/tmp/installer.php'); \
-        echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
-        exit(1); \
-    }" \
- && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
- && composer --ansi --version --no-interaction \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.7/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
- && chmod +x /docker-entrypoint.composer.sh \
- \
- # composer 中国镜像
- && composer config -g repo.packagist composer https://packagist.laravel-china.org \
- \
- # laravel 安装程序
- # && composer global require "laravel/installer" \
- # && ln -sf /tmp/vendor/laravel/installer/laravel /usr/local/bin/ \
- \
- && rm -rf /tmp/cache /tmp/.htaccess /tmp/installer.php /tmp/*.pub
 
 EXPOSE 9000
 CMD ["php-fpm"]

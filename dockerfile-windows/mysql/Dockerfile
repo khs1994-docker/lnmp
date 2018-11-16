@@ -1,4 +1,6 @@
-FROM microsoft/windowsservercore:1803
+# FROM microsoft/windowsservercore:1803
+
+FROM mcr.microsoft.com/windows/servercore:1809
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -11,10 +13,10 @@ RUN $url = ('https://dev.mysql.com/get/Downloads/MySQL-${0}/mysql-${1}-winx64.zi
        	\
         Write-Host 'Installing ...'; \
         Expand-Archive -Path mysql.zip -DestinationPath C:/ -Force; \
-        Move-Item C:/mysql-${MYSQL_VERSION}-winx64 C:/mysql; \
+        Move-Item C:/mysql-${env:MYSQL_VERSION}-winx64 C:/mysql; \
         \
         Write-Host 'Updating PATH ...'; \
-	      $env:PATH = 'C:\mysql' + $env:PATH; \
+	      $env:PATH = 'C:\mysql;' + $env:PATH; \
         [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine); \
         \
         Write-Host 'Verifying install ...'; \

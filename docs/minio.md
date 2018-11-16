@@ -84,7 +84,7 @@ $ composer require league/flysystem-aws-s3-v3
     'secret' => env('AWS_SECRET_ACCESS_KEY'),
     'region' => env('AWS_DEFAULT_REGION', 'us-east-1'), // 随便填一个
     'bucket' => env('AWS_BUCKET'), // 使用前先在 minio web 界面新建一个 bucket
-    'use_path_style_endpoint' => true, // 这个必须加上
+    'use_path_style_endpoint' => true, // 必须加上
     'endpoint' => 'https://minio.t.khs1994.com'
 ],
 ```

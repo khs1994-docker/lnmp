@@ -10,8 +10,6 @@ services:
       - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
       - pcit-tmp:/tmp
-      - zoneinfo-data:/usr/share/zoneinfo
-      - composer_cache-data:/tmp/cache
     networks:
       - backend
     working_dir: /app/pcit/bin

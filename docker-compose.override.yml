@@ -50,7 +50,7 @@ services:
 
   phpmyadmin:
     << : *default-common
-    image: phpmyadmin/phpmyadmin:latest@sha256:6fa491d4e3994ab3ec3410409bf0d59436072df1cfb16b8fe25c47486988103f
+    image: phpmyadmin/phpmyadmin:latest
 
   nginx:
     << : *default-common
@@ -102,7 +102,7 @@ volumes:
 secrets:
   db_root_password:
     << : *default-common
-    file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
   supervisord_ini:
     << : *default-common
-    file: ./config/supervisord/${SUPERVISORD_INI_PATH:-supervisord.ini}
+    file: ./config/supervisord/${LNMP_SUPERVISORD_INI_PATH:-supervisord.ini}

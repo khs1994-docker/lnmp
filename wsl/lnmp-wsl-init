@@ -44,7 +44,7 @@ sudo apt update && sudo apt -y install \
 
 command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.laravel-china.org
 
-# lnmp-wsl-docker-cli.sh
+# lnmp-wsl-docker-cli
 # 18.03 +
 sudo ln -sf "/c/Program Files/Docker/Docker/resources/bin/docker.exe" /usr/local/bin/docker
 sudo ln -sf "/c/Program Files/Docker/Docker/resources/bin/docker-compose.exe" /usr/local/bin/docker-compose

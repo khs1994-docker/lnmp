@@ -569,17 +569,17 @@ switch($first){
     clusterkit {
        docker-compose -f docker-compose.yml \
          -f docker-compose.override.yml \
-         -f docker-cluster.mysql.yml \
-         -f docker-cluster.redis.yml \
+         -f cluster/docker-cluster.mysql.yml \
+         -f cluster/docker-cluster.redis.yml \
          up $other
     }
 
     clusterkit-mysql-up {
-       docker-compose -f docker-cluster.mysql.yml up $other
+       docker-compose -f cluster/docker-cluster.mysql.yml up $other
     }
 
     clusterkit-mysql-down {
-       docker-compose -f docker-cluster.mysql.yml down $other
+       docker-compose -f cluster/docker-cluster.mysql.yml down $other
     }
 
     clusterkit-mysql-exec {
@@ -595,11 +595,11 @@ switch($first){
     }
 
     clusterkit-memcached-up {
-      docker-compose -f docker-cluster.memcached.yml up $other
+      docker-compose -f cluster/docker-cluster.memcached.yml up $other
     }
 
     clusterkit-memcached-down {
-      docker-compose -f docker-cluster.memcached.yml down $other
+      docker-compose -f cluster/docker-cluster.memcached.yml down $other
     }
 
     clusterkit-memcached-exec {
@@ -615,11 +615,11 @@ switch($first){
     }
 
     clusterkit-redis-up {
-          docker-compose -f docker-cluster.redis.yml up $other
+          docker-compose -f cluster/docker-cluster.redis.yml up $other
     }
 
     clusterkit-redis-down {
-          docker-compose -f docker-cluster.redis.yml down $other
+          docker-compose -f cluster/docker-cluster.redis.yml down $other
     }
 
     clusterkit-redis-exec {
@@ -635,11 +635,11 @@ switch($first){
     }
 
     clusterkit-redis-replication-up {
-          docker-compose -f docker-cluster.redis.replication.yml up $other
+          docker-compose -f cluster/docker-cluster.redis.replication.yml up $other
     }
 
     clusterkit-redis-replication-down {
-          docker-compose -f docker-cluster.redis.replication.yml down $other
+          docker-compose -f cluster/docker-cluster.redis.replication.yml down $other
     }
 
     clusterkit-redis-replication-exec {
@@ -655,11 +655,11 @@ switch($first){
     }
 
     clusterkit-redis-sentinel-up {
-          docker-compose -f docker-cluster.redis.sentinel.yml up $other
+          docker-compose -f cluster/docker-cluster.redis.sentinel.yml up $other
     }
 
     clusterkit-redis-sentinel-down {
-          docker-compose -f docker-cluster.redis.sentinel.yml down $other
+          docker-compose -f cluster/docker-cluster.redis.sentinel.yml down $other
     }
 
     clusterkit-redis-sentinel-exec {

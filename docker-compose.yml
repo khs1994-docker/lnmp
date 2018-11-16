@@ -74,7 +74,7 @@ services:
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
-      - ./config/redis/${REDIS_CONF:-redis.conf}:/redis.conf:ro,cached
+      - ./config/redis/${LNMP_REDIS_CONF:-redis.conf}:/redis.conf:ro,cached
       # - redis-data:/data:cached
       - type: volume
         source: redis-data
@@ -131,7 +131,7 @@ services:
     << : *default-common
     image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.5}
     volumes:
-      - ./config/mongodb/${MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
+      - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
       - mongodb-data:/data/db
       - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log:delegated
     ports:
@@ -210,10 +210,10 @@ services:
     volumes:
       # - ./config/nginx:/etc/nginx/conf.d:ro,cached
       - type: bind
-        source: ./config/${NGINX_CONF_D:-nginx}
+        source: ./config/${LNMP_NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/nginx/${NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
+      - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:delegated
     working_dir: /app
     networks:
@@ -225,7 +225,7 @@ services:
     << : *default-common
     image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.12}-unit-alpine"
     volumes:
-      - ./config/${NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
+      - ./config/${LNMP_NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./log/nginx-unit:/var/log/nginx-unit:delegated
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
@@ -258,8 +258,8 @@ services:
       - "${LNMP_HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/httpd/${HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf:cached
-      - ./config/${HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d:cached
+      - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf:cached
+      - ./config/${LNMP_HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d:cached
       - ./log/httpd:/usr/local/apache2/logs:delegated
       - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app
@@ -270,14 +270,14 @@ services:
 
   registry:
     << : *default-common
-    image: registry:${LNMP_REGISTRY_VERSION:-latest}
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/registry:${LNMP_REGISTRY_VERSION:-latest}
     networks:
       - frontend
       - backend
     # ports:
     #   - "5000:5000"
     volumes:
-      - ./config/registry/${REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro,cached
+      - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro,cached
       - registry-data:/var/lib/registry
       - zoneinfo-data:/usr/share/zoneinfo
 
@@ -307,7 +307,7 @@ services:
 
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-10-18T00-28-58Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-11-15T01-26-07Z}
     volumes:
       - minio-data:/data
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt

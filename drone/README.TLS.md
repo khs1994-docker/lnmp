@@ -18,13 +18,11 @@
 
 ## 准备
 
-* 域名 (花生壳也行)
+* 域名
 
-* 公网 IP (花生壳也行)
+* 公网 IP
 
-* 设置 DNS 解析，或内网 DNS 服务器
-
-* `*.t.khs1994.com` 通配符 TLS 证书 （acme.sh 可以免费申请）
+* `*.CI_DOMAIN` 通配符 TLS 证书 （acme.sh 可以免费申请）或 `git.CI_DOMAIN` `drone.CI_DOMAIN` 网址的 TLS 证书。
 
 ## 快速开始
 
@@ -38,13 +36,57 @@ $ ./ci
 
 ### 编辑 `.env` 文件
 
-* `CI_HOST` 为主机 IP (建议使用内网 IP, 例如 192.168.199.100)
+* `CI_HOST` 为主机 IP (建议使用内网 IP, 例如 `192.168.199.100`)
 
-* `CI_DOMAIN` 为服务主域名（example t.khs1994.com）
+* `CI_DOMAIN` 为服务主域名（例如 `t.khs1994.com`）
 
 * Windows 用户请将 `COMPOSE_CONVERT_WINDOWS_PATHS=1` 取消注释
 
+### 使用 khs1994-docker/lnmp 的 MySQL Redis NGINX 服务(可选项)
+
+修改 `.env` 中的 `CI_INCLUDE` 变量，若 git 使用 Gogs 则只保留 `gogs` 即可，若使用 GitHub，请留空。
+
+```bash
+CI_INCLUDE="gogs"
+```
+
+编辑 `docker-compose.override.yml`，将以下内容取消注释。
+
+```yaml
+networks:
+  backend:
+    external: true
+    name: lnmp_backend
+  frontend:
+    external: true
+    name: lnmp_frontend
+```
+
+> CI 启动之前必须先启动 khs1994-docker/lnmp
+
+```bash
+$ ./ci up-tls
+```
+
+将生成的 NGINX 配置移入 `khs1994-docker/lnmp` 项目的 NGINX 配置目录
+
+`config/nginx/drone.conf` `config/nginx/gogs.conf`
+
+自行调整 SSL 相关配置。
+
+将 SSL 证书移入 khs1994-docker/lnmp 项目的 NGINX 配置目录的 `ssl` 文件夹内。
+
+注意 SSL 证书文件名与 NGINX 配置一致。
+
+NGINX 配置好之后，重启 `khs1994-docker/lnmp`
+
+```bash
+$ lnmp-docker restart nginx
+```
+
 ### `443` 端口是否占用
+
+> 若使用 khs1994-docker/lnmp 的 NGINX 服务，请忽略此节。
 
 根据 `443` 端口是否占用情况，使用下面的命令启动 CI `服务`。
 
@@ -65,7 +107,23 @@ $ ./ci
   重启 NGINX 容器
 
 * 未占用
+  `.env` 文件
+
+  ```bash
+  CI_INCLUDE="gogs nginx redis mysql"
+  ```
 
   ```bash
   $ ./ci up-tls [-d] [--reset]
   ```
+
+## 访问测试
+
+假设 `CI_DOMAIN` 设置为 `t.khs1994.com`
+
+则 Drone 访问地址为 `https://drone.t.khs1994.com`
+则 Gogs 访问地址为 `https://git.t.khs1994.com`
+
+## 错误排查
+
+进入 `logs` 文件夹内，查看日志文件排错。

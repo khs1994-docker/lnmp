@@ -1,11 +1,11 @@
 version: "3.7"
 
 #
-# 警告 compose 文件中包含中文字符会报错，所以阅读之后请删掉中文
+# 警告 compose 文件中包含中文可能会报错，所以阅读之后请删掉中文
 #
 
 #
-# docker-compose.yml 文件是为了方便本地测试构建镜像
+# docker-compose.yml 文件是为了方便本地测试构建镜像，实际请在 CI 服务器中构建镜像
 #
 # @link https://docs.docker.com/compose/compose-file/
 #
@@ -17,68 +17,68 @@ version: "3.7"
 
 services:
   #
-  # docker-compose build test
+  # $ docker-compose build test
   #
-  test:
-    build:
-      context: .
-      dockerfile: test.Dockerfile
-      args:
-        - PHP_VERSION_7_2_X=7.2.12
-        - PHP_VERSION_7_1_X=7.1.24
-        - PHP_VERSION_7_0_X=7.0.32
-        - PHP_VERSION_5_6_X=5.6.38
-    image: khs1994/EXAMPLE
+  # test:
+  #  build:
+  #    context: .
+  #    dockerfile: test.Dockerfile
+  #    args:
+  #      - PHP_VERSION_72=7.2.12
+  #      - PHP_VERSION_71=7.1.24
+  #      - PHP_VERSION_70=7.0.32
+  #      - PHP_VERSION_56=5.6.38
+  #  image: ${DOCKER_HUB_USERNAME:-khs1994}/EXAMPLE
 
   nginx:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        - NGINX_VERSION=${NGINX_VERSION:-1.15.6}-alpine
+        - NGINX_VERSION=${NGINX_VERSION:-1.15.6}
       target: nginx
-    image: khs1994/nginx:${NGINX_VERSION:-1.15.6}-swarm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/nginx:${NGINX_VERSION:-1.15.6}-pro-alpine
     depends_on:
-      - 7_2_X
-      # - 7_1_X
-      # - 7_0_X
-      # - 5_6_X
+      - php72
+      # - php71
+      # - php70
+      # - php56
 
-  #
   # 项目使用哪个 PHP 版本就保留哪个服务，其他注释
-  #
-  7_2_X:
+  php72:
     build:
       context: .
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION_7_2_X:-7.2.0}-fpm-alpine
-    image: khs1994/php:${PHP_VERSION_7_2_X:-7.2.0}-swarm-alpine
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.12}
+        - NODE_VERSION=${NODE_VERSION:-11.2.0}
+        - NODE_REGISTRY=https://registry.npm.taobao.org
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.12}-pro-alpine
 
-#  7_1_X:
+#  php71:
 #    build:
 #      context: .
 #      dockerfile: Dockerfile
-#      target: nginx
+#      target: php
 #      args:
-#        - PHP_VERSION=${PHP_VERSION_7_1_X:-7.1.0}-fpm-alpine
-#    image: khs1994/php:${PHP_VERSION_7_1_X:-7.1.0}-swarm-alpine
+#        - PHP_VERSION=${PHP_VERSION_71:-7.1.23}
+#    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_71:-7.1.23}-pro-alpine
 #
-#  7_0_X:
+#  php70:
 #    build:
 #      context: .
 #      dockerfile: Dockerfile
-#      target: nginx
+#      target: php
 #      args:
-#        - PHP_VERSION=${PHP_VERSION_7_0_X:-7.0.0}-fpm-alpine
-#    image: khs1994/php:${PHP_VERSION_7_0_X:-7.0.0}-swarm-alpine
+#        - PHP_VERSION=${PHP_VERSION_70:-7.0.32}
+#    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_70:-7.0.32}-pro-alpine
 #
-#  5_6_X:
+#  php56:
 #    build:
 #      context: .
 #      dockerfile: Dockerfile
-#      target: nginx
+#      target: php
 #      args:
-#        - PHP_VERSION=${PHP_VERSION_5_6_X:5.6.0}-fpm-alpine
-#    image: khs1994/php:${PHP_VERSION_5_6_X:5.6.0}-swarm-alpine
+#        - PHP_VERSION=${PHP_VERSION_56:5.6.38}
+#    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_56:5.6.38}-pro-alpine

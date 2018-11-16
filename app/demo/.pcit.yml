@@ -17,7 +17,8 @@ pipeline:
 
   # install dep
   install:
-    image: composer:${COMPOSER_VERSION}
+    # image: composer:${COMPOSER_VERSION}
+    image: khs1994/php:7.2.12-composer-alpine
     shell: bash
     commands:
       - pwd
@@ -68,17 +69,17 @@ pipeline:
     image: ci_docker_build
     # registry: docker.khs1994.com
     repo: khs1994/php
-    tags: ${PHP_VERSION}-swarm-${CI_TAG}-alpine
+    tags: ${PHP_VERSION}-pro-${CI_TAG}-alpine
     # target: php
     build_args:
-      - a:1
+      - key=value
     # dockerfile: Dockerfile
     # dockerfile: path/to/Dockerfile
     when:
       event: tag
 
   after_success:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
+    image: khs1994/php:7.2.12-composer-alpine
     shell: bash
     when:
       status: success

@@ -148,11 +148,19 @@ volumes:
     << : *default-labels
   phpmyadmin-data:
     << : *default-labels
+  etcd-data:
+    << : *default-labels
+  composer_cache-data:
+    << : *default-labels
+  nginx-unit-state-data:
+    << : *default-labels
+  minio-data:
+    << : *default-labels
 
 secrets:
   db_root_password:
     << : *default-labels
-    file: ./secrets/${DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
   supervisord_ini:
     << : *default-labels
-    file: ./config/supervisord/${SUPERVISORD_INI_PATH:-supervisord.ini}
+    file: ./config/supervisord/${LNMP_SUPERVISORD_INI_PATH:-supervisord.ini}

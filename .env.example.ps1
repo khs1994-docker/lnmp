@@ -27,7 +27,7 @@ $global:TZ='Asia/Shanghai'
 # You can overwrite this file in .env.ps1
 #
 
-$global:LNMP_PHP_IMAGE="khs1994/php:7.2.12-fpm-alpine"
+$global:LNMP_PHP_IMAGE="khs1994/php:7.2.12-composer-alpine"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 
@@ -45,8 +45,8 @@ $global:NGINX_VERSION="1.15.6"
 $global:PHP_VERSION="7.2.12"
 $global:MYSQL_VERSION="8.0.13"
 $global:HTTPD_VERSION="2.4.37"
-$global:IDEA_VERSION="1.11.4269"
-$global:NODE_VERSION="11.1.0"
+$global:IDEA_VERSION="1.12.4481"
+$global:NODE_VERSION="11.2.0"
 $global:GIT_VERSION="2.19.1"
 $global:PYTHON_VERSION="3.7.1"
 $global:GOLANG_VERSION="1.11.2"

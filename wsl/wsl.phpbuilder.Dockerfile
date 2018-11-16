@@ -6,9 +6,9 @@ ENV TZ Asia/Shanghai
 
 ARG PHP_VERSION=7.2.12
 
-COPY lnmp-wsl-builder-php.sh /lnmp-wsl-builder-php.sh
+COPY lnmp-wsl-builder-php /lnmp-wsl-builder-php.sh
 
-COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
+COPY wsl-php-ext-enable /usr/local/bin/wsl-php-ext-enable.sh
 
 RUN sed -i "s#sudo##g" /lnmp-wsl-builder-php.sh \
       && chmod +x /usr/local/bin/wsl-php-ext-enable.sh \
@@ -16,7 +16,7 @@ RUN sed -i "s#sudo##g" /lnmp-wsl-builder-php.sh \
 
 # scratch
 
-FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1
+FROM hello-world:latest
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -24,7 +24,7 @@ COPY --from=builder /*.tar.gz /
 
 ################################################################################
 
-# FROM hello-world:latest@sha256:97ce6fa4b6cdc0790cda65fe7290b74cfebd9fa0c9b8c38e979330d547d22ce1 as deb
+# FROM hello-world:latest as deb
 #
 # LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
