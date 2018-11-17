@@ -278,6 +278,13 @@ _downloader `
   node-v${NODE_VERSION}-win-x64.zip `
   Node.js ${NODE_VERSION}
 
+# Yarn
+
+_downloader `
+  https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-${YARN_VERSION}.msi `
+  yarn-${YARN_VERSION}.msi `
+  Yarn ${YARN_VERSION}
+
 #
 # Pytohn
 #

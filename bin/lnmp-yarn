@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+#
+# https://github.com/yarnpkg/yarn
+#
+
+set -e
+
+if [ "$debug" = 'true' ];then set -x; fi
+
+docker run -it --rm \
+    --mount type=bind,src=$PWD,target=/app,consistency=delegated \
+    --mount type=volume,src=lnmp_yarn-data,target=/tmp/node/.yarn \
+    --workdir /app \
+    --entrypoint yarn \
+    node:alpine \
+    --registry https://registry.npm.taobao.org --cache-folder /tmp/node/.yarn "$@"

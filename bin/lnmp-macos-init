@@ -15,6 +15,7 @@ fish \
 git \
 python \
 node \
+yarn \
 libmemcached \
 libyaml \
 pkg-config \
