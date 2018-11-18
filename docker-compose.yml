@@ -200,6 +200,9 @@ services:
     volumes:
       - phpmyadmin-data:/sessions
       - zoneinfo-data:/usr/share/zoneinfo
+    networks:
+      - backend
+      - frontend
 
   nginx:
     << : *default-common
