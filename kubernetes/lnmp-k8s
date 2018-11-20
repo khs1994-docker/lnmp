@@ -320,7 +320,7 @@ $ sudo systemctl start kube-apiserver
 $ sudo systemctl start kube-controller-manager
 $ sudo systemctl start kube-scheduler
 $ sudo systemctl start kube-proxy
-$ sudo systemctl start kubelket
+$ sudo systemctl start kubelet
 "
 }
 

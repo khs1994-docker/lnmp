@@ -13,7 +13,9 @@ if ($?){
 }
 
 docker run -it --rm `
+    --network lnmp_backend `
     -e TZ=${TZ} `
+    --entrypoint mysql `
     mysql:8.0.11 `
     $args
 

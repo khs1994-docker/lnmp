@@ -1,6 +1,6 @@
 # Volumes
 
-* PV 是 **全局** 的
+* PV 是 **全局** 的,没有命名空间的概念。
 
 ```bash
 $ kubectl get storageclass
