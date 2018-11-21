@@ -351,8 +351,6 @@ services:
       - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app/pcit/bin
     command:
-      - /bin/sh
-      - pcitd
       - up
     # logging: *default-logging
     deploy:

@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: lnmp
+    tier: mysql
+    version: 0.0.1
+spec:
+  selector:
+    app: lnmp
+    tier: mysql
+    version: 0.0.1
+  ports:
+    - port: 3306
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  labels:
+    app: lnmp
+    tier: mysql
+    version: 0.0.1
+spec:
+  serviceName: mysql
+  # podManagementPolicy: "Parallel" # 并行创建或删除 Pod
+  # podManagementPolicy: "OrderedReady" # default 按照 Pod 的次序依次创建每个 Pod 并等待 Ready 之后才创建后面的 Pod
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: mysql
+      version: 0.0.1
+  template:
+    metadata:
+      labels:
+        app: lnmp
+        tier: mysql
+        version: 0.0.1
+      # annotations:
+    spec:
+      containers:
+      - name: lnmp-mysql
+        image: mysql:8.0.13
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: lnmp-mysql-data
+          mountPath: /var/lib/mysql
+        # - name: lnmp-mysql-cnf
+        #   mountPath: /etc/mysql/conf.d/docker.cnf
+        #   subPath: docker.cnf
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: lnmp-mysql-password-0.0.1
+              key: password
+        - name: TZ
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-0.0.1
+              key: TZ
+        - name: MYSQL_DATABASE
+          value: test
+  volumeClaimTemplates:
+  - metadata:
+      name: lnmp-mysql-data
+    spec:
+      accessModes: ["ReadWriteMany"]
+      resources:
+        requests:
+          storage: 20Gi
+      selector:
+        matchLabels:
+          app: lnmp
+          tier: mysql
+      storageClassName: slow

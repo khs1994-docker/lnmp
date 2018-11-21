@@ -27,7 +27,7 @@ spec:
   # Delete 删除 PV
   nfs:
     # FIXME: use the right IP
-    server: 192.168.57.1
+    server: 192.168.199.100
     path: "/lnmp/mysql"
   storageClassName: slow
 
@@ -48,7 +48,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     # FIXME: use the right IP
-    server: 192.168.57.1
+    server: 192.168.199.100
     path: "/lnmp/redis"
   storageClassName: slow
 ---
@@ -67,7 +67,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     # FIXME: use the right IP
-    server: 192.168.57.1
+    server: 192.168.199.100
     path: "/lnmp/app"
   storageClassName: slow
 ---
@@ -87,7 +87,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     # FIXME: use the right IP
-    server: 192.168.57.1
+    server: 192.168.199.100
     path: "/lnmp/registry"
   storageClassName: slow
 ---
@@ -107,6 +107,6 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     # FIXME: use the right IP
-    server: 192.168.57.1
+    server: 192.168.199.100
     path: "/lnmp/log"
   storageClassName: slow

@@ -16,6 +16,7 @@
 * [`lnmp-docker`](cli.md)
 * 开发环境
     * [使用方法](development.md)
+* [Git](git.md)
 
 ## NGINX
 
@@ -60,14 +61,17 @@
     * [Redis Cluster ](clusterkit/redis_cluster.md)
     * [Redis Replication](clusterkit/redis_replication.md)
     * [Redis Sentinel](clusterkit/redis_sentinel.md)
+
 * 树莓派3
     * [ARM架构](arm.md)
 * [systemd](systemd.md)
 * [备份恢复](backup.md)
 * [清理](cleanup.md)
 * [国内网络问题](cn.md)
+
 * 实验玩法
     * [LinuxKit](linuxkit.md)
+
 * [微信小程序 PHP 后端部署](wechat.md)
 
 ## port

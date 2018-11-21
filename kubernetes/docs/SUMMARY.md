@@ -17,6 +17,10 @@
 * [Volume](volume/README.md)
     * [data](volume/data.md)
 
+## Secret
+
+* [Secret](secret.md)
+
 ## 插件
 
 * [CoreDNS](addons/coredns.md)
