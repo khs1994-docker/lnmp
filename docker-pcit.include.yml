@@ -3,6 +3,7 @@ version: "3.7"
 services:
   # PCIT Daemon
   pcit:
+    &pcit
     # restart: always
     image: khs1994/pcit:alpine
     volumes:
@@ -14,11 +15,21 @@ services:
       - backend
     working_dir: /app/pcit/bin
     command:
-      - /bin/sh
-      - pcitd
       - up
     environment:
       - APP_ENV=${APP_ENV:-development}
+
+  pcit-server:
+    << : *pcit
+    command: server
+
+  pcit-agent:
+    << : *pcit
+    command: server
+
+  pcit-gc:
+    << : *pcit
+    command: gc
 
   nginx:
     ports:

@@ -1773,6 +1773,10 @@ First Run? Maybe you wait 60s then open url.
         update_version
     ;;
 
+    pcit-cp )
+      pcit_init
+    ;;
+
     pcit-up )
     pcit_init
     pcit_nginx_init
