@@ -1,6 +1,6 @@
 # PCIT EE
 
-* https://github.com/khs1994-php/pcit
+* https://github.com/pcit-ce/pcit
 
 私有部署 **PCIT EE**
 
@@ -28,7 +28,7 @@
 
 修改 `pcit/.env.development` 文件中的变量。
 
-以上两步详情，请查看 https://github.com/khs1994-php/pcit/blob/master/docs/install/ee.md
+以上两步详情，请查看 https://github.com/pcit-ce/pcit/blob/master/docs/install/ee.md
 
 ## 启动
 
@@ -44,7 +44,7 @@ Git 仓库安装你新建的 GitHub App，项目根目录包含 `.pcit.yml` 文�
 
 ## 如何编写 `.pcit.yml` 文件
 
-请查看 https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md#usage
+请查看 https://github.com/pcit-ce/pcit/blob/master/docs/SUMMARY.md#usage
 
 # 缓存功能
 
