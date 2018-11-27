@@ -157,7 +157,7 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 PCIT EE:
-  pcit-up              Up(Run) PCIT EE https://github.com/khs1994-php/pcit
+  pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
 
 Commands:
   backup               Backup MySQL databases
@@ -770,7 +770,7 @@ XXX
       # 判断 app/pcit 是否存在
 
       rm -r -force ${APP_ROOT}/.pcit
-      # git clone --depth=1 https://github.com/khs1994-php/pcit ${APP_ROOT}/pcit
+      # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
       docker run -dit --name pcit_cp khs1994/pcit:alpine bash
       docker cp pcit_cp:/app/pcit ${APP_ROOT}/.pcit/
       docker rm -f pcit_cp

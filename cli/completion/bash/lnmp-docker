@@ -76,4 +76,6 @@ complete -W "acme.sh \
         test \
         cn-mirror \
         compose \
+        pcit-up \
+        pcit-cp \
         nfs" lnmp-docker

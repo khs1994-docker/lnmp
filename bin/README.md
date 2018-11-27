@@ -128,3 +128,11 @@ $ cd project
 
 $ lnmp-travis env list
 ```
+
+#### npm with git
+
+在 `.env` 文件中新增变量，变量值为你自己的镜像（用户自行构建）。
+
+```bash
+LNMP_NODE_IMAGE=your/node:git-alpine
+```

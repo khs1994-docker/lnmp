@@ -1,3 +1,6 @@
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a pcit-up           -d     'Up(Run) PCIT EE https://github.com/pcit-ce/pcit'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a pcit-cp           -d     'Copy PCIT files to app/.pcit'
+
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a acme.sh           -d     'Run original acme.sh command to issue SSL certificate'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a httpd-config     -d     'Generate Apache2 vhost conf'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a backup            -d     'Backup MySQL databases'
