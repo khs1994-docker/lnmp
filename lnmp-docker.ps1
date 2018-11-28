@@ -93,6 +93,10 @@ Function env_status(){
     Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
     Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
   }
+
+  if (!(Test-Path docker-compose.include.yml)){
+    Copy-Item docker-compose.include.example.yml docker-compose.include.yml
+  }
 }
 
 Function logs(){
@@ -157,7 +161,7 @@ Official WebSite https://lnmp.khs1994.com
 Usage: ./docker-lnmp.sh COMMAND
 
 PCIT EE:
-  pcit-up              Up(Run) PCIT EE https://github.com/khs1994-php/pcit
+  pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
 
 Commands:
   backup               Backup MySQL databases
@@ -382,7 +386,11 @@ switch($first){
     }
 
     config {
-      docker-compose config
+      docker-compose `
+      -f docker-compose.yml `
+      -f docker-compose.override.yml `
+      -f docker-compose.include.yml `
+      config
     }
 
     cn-mirror {
@@ -392,11 +400,15 @@ switch($first){
 
     up {
       init
-      docker-compose up -d ${DEVELOPMENT_INCLUDE}
+      docker-compose up `
+        -f docker-compose.yml `
+        -f docker-compose.override.yml `
+        -f docker-compose.include.yml `
+        -d ${LNMP_INCLUDE}
     }
 
     pull {
-      docker-compose pull ${DEVELOPMENT_INCLUDE}
+      docker-compose pull ${LNMP_INCLUDE}
     }
 
     down {
@@ -770,7 +782,7 @@ XXX
       # 判断 app/pcit 是否存在
 
       rm -r -force ${APP_ROOT}/.pcit
-      # git clone --depth=1 https://github.com/khs1994-php/pcit ${APP_ROOT}/pcit
+      # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
       docker run -dit --name pcit_cp khs1994/pcit:alpine bash
       docker cp pcit_cp:/app/pcit ${APP_ROOT}/.pcit/
       docker rm -f pcit_cp
@@ -823,8 +835,8 @@ XXX
       # 启动
 
       docker-compose -f docker-compose.yml -f docker-compose.override.yml `
-          -f docker-pcit.include.yml up -d `
-          ${DEVELOPMENT_INCLUDE} pcit
+          -f docker-compose.include.yml -f docker-pcit.include.yml up -d `
+          ${LNMP_INCLUDE} pcit
     }
 
     "cookbooks" {

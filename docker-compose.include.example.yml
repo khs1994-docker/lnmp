@@ -1,0 +1,13 @@
+version: "3.7"
+
+x-common:
+  &default-common
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+services:
+
+  my-service:
+    << : *default-common
+    image: bash

@@ -8,10 +8,14 @@ set -e
 
 if [ "$debug" = 'true' ];then set -x; fi
 
+DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+
+source $DIR/.arch
+
 docker run -it --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=delegated \
     --mount type=volume,src=lnmp_npm-data,target=/tmp/node/.npm \
     --workdir /app \
     --entrypoint npm \
-    node:alpine \
+    ${LNMP_NODE_IMAGE:-node:alpine} \
     --registry https://registry.npm.taobao.org --cache /tmp/node/.npm "$@"

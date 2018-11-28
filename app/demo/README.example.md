@@ -55,8 +55,6 @@ require __DIR__.'/vendor/autoload.php';
 
 * [Aliyun CodePipeline](https://www.aliyun.com/product/codepipeline)
 
-* [Tencent Cloud Continuous Integration](https://cloud.tencent.com/product/cci)
-
 * [Docker Build Powered By Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 
 * [Docker Build Powered By Docker Cloud](https://cloud.docker.com)
