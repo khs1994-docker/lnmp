@@ -13,6 +13,6 @@ spec:
     - "bar.local"
   containers:
   - name: "lnmp-pod"
-    image: "khs1994/nginx:1.15.6-alpine"
+    image: "khs1994/nginx:1.15.7-alpine"
     # command:
     # args:

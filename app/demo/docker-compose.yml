@@ -35,9 +35,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - NGINX_VERSION=${NGINX_VERSION:-1.15.6}
+        - NGINX_VERSION=${NGINX_VERSION:-1.15.7}
       target: nginx
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/nginx:${NGINX_VERSION:-1.15.6}-pro-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/nginx:${NGINX_VERSION:-1.15.7}-pro-alpine
     depends_on:
       - php72
       # - php71

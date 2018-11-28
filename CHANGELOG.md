@@ -22,3 +22,4 @@
 * MongoDB `4.1.5`
 * [PostgreSQL `11.1`](https://www.postgresql.org/about/news/1905/)
 * [MariaDB `10.4.0`](https://mariadb.com/kb/en/library/mariadb-1040-release-notes/)
+* [NGINX `1.15.7`](https://nginx.org/en/CHANGES)

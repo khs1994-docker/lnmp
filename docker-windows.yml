@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   nginx:
-    image: khs1994/nginx:1.15.6-windowsservercore-1809
+    image: khs1994/nginx:1.15.7-windowsservercore-1809
     volumes:
       - ./windows/config/nginx:C:/nginx/conf/conf.d
       - ./config/nginx/demo-ssl:C:/nginx/conf/conf.d/ssl
