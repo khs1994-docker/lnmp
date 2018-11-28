@@ -1,9 +1,16 @@
 version: "3.7"
 
+x-common:
+  &default-common
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
 services:
   # PCIT Daemon
   pcit:
     &pcit
+    << : *default-common
     # restart: always
     image: khs1994/pcit:alpine
     volumes:

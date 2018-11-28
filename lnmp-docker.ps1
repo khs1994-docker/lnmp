@@ -93,6 +93,10 @@ Function env_status(){
     Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
     Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
   }
+
+  if (!(Test-Path docker-compose.include.yml)){
+    Copy-Item docker-compose.include.example.yml docker-compose.include.yml
+  }
 }
 
 Function logs(){
@@ -382,7 +386,11 @@ switch($first){
     }
 
     config {
-      docker-compose config
+      docker-compose `
+      -f docker-compose.yml `
+      -f docker-compose.override.yml `
+      -f docker-compose.include.yml `
+      config
     }
 
     cn-mirror {
@@ -392,7 +400,11 @@ switch($first){
 
     up {
       init
-      docker-compose up -d ${DEVELOPMENT_INCLUDE}
+      docker-compose up `
+        -f docker-compose.yml `
+        -f docker-compose.override.yml `
+        -f docker-compose.include.yml `
+        -d ${DEVELOPMENT_INCLUDE}
     }
 
     pull {
@@ -823,7 +835,7 @@ XXX
       # 启动
 
       docker-compose -f docker-compose.yml -f docker-compose.override.yml `
-          -f docker-pcit.include.yml up -d `
+          -f docker-compose.include.yml -f docker-pcit.include.yml up -d `
           ${DEVELOPMENT_INCLUDE} pcit
     }
 

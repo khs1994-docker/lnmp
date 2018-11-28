@@ -112,3 +112,13 @@ $global:DEVELOPMENT_INCLUDE='httpd','mysql','php7','redis' # 使用 httpd 代替
 
 $global:DEVELOPMENT_INCLUDE='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 ```
+
+### 增加服务
+
+在 `docker-compose.include.yml` 文件中新增服务。
+
+在 `.env` 文件中增加服务名
+
+```bash
+DEVELOPMENT_INCLUDE="nginx mysql php7 redis phpmyadmin my-service"
+```

@@ -58,6 +58,10 @@ else
     fi
 fi
 
+if ! [ -f docker-compose.include.yml ];then
+  cp docker-compose.include.example.yml docker-compose.include.yml
+fi
+
 _check_and_copy_file config/composer/config.example.json config/composer/config.json
 
 # PHPer command
@@ -1193,7 +1197,10 @@ main() {
     ;;
 
   config )
-    exec docker-compose config
+    exec docker-compose -f docker-compose.yml \
+      -f docker-compose.override.yml \
+      -f docker-compose.include.yml \
+      config
     ;;
 
   demo )
@@ -1358,7 +1365,11 @@ For information please run $ docker service update --help
     # 判断架构
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
     if [ ${ARCH} = 'x86_64' ];then
-      docker-compose up $opt ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
+      docker-compose \
+        -f docker-compose.yml \
+        -f docker-compose.override.yml \
+        -f docker-compose.include.yml \
+      up $opt ${DEVELOPMENT_INCLUDE:-nginx mysql php7 redis phpmyadmin}
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker exec -it \
           $(docker container ls --format {{.ID}} \
@@ -1785,7 +1796,7 @@ First Run? Maybe you wait 60s then open url.
 
     if [ -z "$1" ];then
     docker-compose -f docker-compose.yml -f docker-compose.override.yml \
-        -f docker-pcit.include.yml up -d \
+        -f docker-compose.include.yml -f docker-pcit.include.yml up -d \
         ${DEVELOPMENT_INCLUDE} pcit
     fi
     ;;
