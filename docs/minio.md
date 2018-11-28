@@ -12,7 +12,7 @@
 在 `.env.ps1` 文件中将 `minio` 包含进来
 
 ```bash
-$global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin',"minio"
+$global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin',"minio"
 ```
 
 ### Other
@@ -20,7 +20,7 @@ $global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin',"minio"
 在 `.env` 文件中将 `minio` 包含进来
 
 ```bash
-DEVELOPMENT_INCLUDE="nginx mysql php7 redis phpmyadmin minio"
+LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin minio"
 ```
 
 ### 配置 NGINX

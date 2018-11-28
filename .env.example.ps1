@@ -6,9 +6,9 @@ $global:DATA_COLLECTION="true"
 # You Can overwrite this file in .env.ps1
 #
 
-$global:DEVELOPMENT_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
+$global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 
-# DEVELOPMENT_INCLUDE="nginx mysql mariadb php7 redis phpmyadmin \
+# LNMP_INCLUDE="nginx mysql mariadb php7 redis phpmyadmin \
 #                      memcached postgresql mongodb \
 #                      rabbitmq httpd registry \
 #                      etcd \

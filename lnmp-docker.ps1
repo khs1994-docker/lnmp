@@ -404,11 +404,11 @@ switch($first){
         -f docker-compose.yml `
         -f docker-compose.override.yml `
         -f docker-compose.include.yml `
-        -d ${DEVELOPMENT_INCLUDE}
+        -d ${LNMP_INCLUDE}
     }
 
     pull {
-      docker-compose pull ${DEVELOPMENT_INCLUDE}
+      docker-compose pull ${LNMP_INCLUDE}
     }
 
     down {
@@ -836,7 +836,7 @@ XXX
 
       docker-compose -f docker-compose.yml -f docker-compose.override.yml `
           -f docker-compose.include.yml -f docker-pcit.include.yml up -d `
-          ${DEVELOPMENT_INCLUDE} pcit
+          ${LNMP_INCLUDE} pcit
     }
 
     "cookbooks" {
