@@ -50,7 +50,7 @@ pipeline:
       #   exclude: [ release/1.0.0, release/1.1.* ]
       # matrix:
       #   - PHP_VERSION=7.2.12
-      #     REDIS_VERSION=5.0.1
+      #     REDIS_VERSION=5.0.2
 
   # when tag push, build docker image
   # http://plugins.drone.io/drone-plugins/drone-docker/
@@ -188,7 +188,7 @@ matrix:
   NGINX_VERSION:
     - 1.15.7
   REDIS_VERSION:
-    - 5.0.1
+    - 5.0.2
   MYSQL_VERSION:
     # - 8.0.13
     - 5.7.22
@@ -200,9 +200,9 @@ matrix:
 # matrix:
 #   include:
 #     - PHP_VERSION=7.2.12
-#       REDIS_VERSION=5.0.1
+#       REDIS_VERSION=5.0.2
 #     - PHP_VERSION=7.1.24
-#       REDIS_VERSION=5.0.1
+#       REDIS_VERSION=5.0.2
 
 # branches:
 #   include: [ master, dev, feature/* ]

@@ -28,7 +28,7 @@ version: "3.7"
 
 x-common:
   &default-common
-  image: redis:5.0.1-alpine
+  image: redis:5.0.2-alpine
   # restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
@@ -36,7 +36,7 @@ x-common:
     - ./cli/timezone.env
   networks:
     cluster_redis_s:
-      # ipv4_address: 172.15.0.105
+      # ipv4_address: 172.15.0.205
   secrets:
     - source: cluster_redis_s_redis_conf
       target: /redis.conf.default
@@ -273,7 +273,7 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.15.0.1/24
+        - subnet: 172.15.0.2/24
 
 secrets:
   cluster_redis_s_redis_conf:
