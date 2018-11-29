@@ -61,3 +61,5 @@ logs
 # clusterkit
 
 /docker-cluster.*
+
+/lnmp-custom-script

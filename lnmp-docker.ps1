@@ -400,11 +400,11 @@ switch($first){
 
     up {
       init
-      docker-compose up `
+      docker-compose `
         -f docker-compose.yml `
         -f docker-compose.override.yml `
         -f docker-compose.include.yml `
-        -d ${LNMP_INCLUDE}
+        up -d ${LNMP_INCLUDE}
     }
 
     pull {

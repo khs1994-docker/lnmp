@@ -122,3 +122,7 @@ $global:LNMP_INCLUDE='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 ```bash
 LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin my-service"
 ```
+
+### 自定义脚本
+
+新建 `lnmp-custom-script` shell 脚本。

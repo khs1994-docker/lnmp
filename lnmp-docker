@@ -62,6 +62,10 @@ if ! [ -f docker-compose.include.yml ];then
   cp docker-compose.include.example.yml docker-compose.include.yml
 fi
 
+if [ -f lnmp-custom-script ];then
+  . ./lnmp-custom-script
+fi
+
 _check_and_copy_file config/composer/config.example.json config/composer/config.json
 
 # PHPer command
