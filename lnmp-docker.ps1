@@ -99,6 +99,10 @@ Function env_status(){
   }
 }
 
+if (Test-Path lnmp-custom-script.ps1){
+  . ./lnmp-custom-script.ps1
+}
+
 Function logs(){
   if (! (Test-Path log\httpd)){
     New-Item log\httpd -type directory | Out-Null
