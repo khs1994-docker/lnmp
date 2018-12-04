@@ -161,7 +161,7 @@ systemd:
         [Service]
         ExecStart=/opt/bin/kube-controller-manager \
         --port=0 \
-        --secure-port=10252 \
+        --secure-port=10257 \
         --bind-address=127.0.0.1 \
         --kubeconfig=/etc/kubernetes/kube-controller-manager.kubeconfig \
         --service-cluster-ip-range=${SERVICE_CIDR} \

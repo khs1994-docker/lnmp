@@ -83,14 +83,14 @@ $ journalctl -u kube-controller-manager
 
 $ sudo netstat -lnpt|grep kube-controll
 
-tcp        0      0 127.0.0.1:10252         0.0.0.0:*               LISTEN      638/kube-controller
+tcp        0      0 127.0.0.1:10257         0.0.0.0:*               LISTEN      638/kube-controller
 
-$ curl -s --cacert /etc/kubernetes/certs/ca.pem https://127.0.0.1:10252/metrics |head
+$ curl -s --cacert /etc/kubernetes/certs/ca.pem https://127.0.0.1:10257/metrics |head
 
 $ kubectl get endpoints kube-controller-manager --namespace=kube-system  -o yaml
 ```
 
-- **10252** 监听 10252 端口，接收 https 请求
+- **10257** 监听 10257 端口，接收 https 请求
 
 ### kube-scheduler
 

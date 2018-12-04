@@ -6,6 +6,8 @@
 
 * move `kubernetes-server` command from `./coreos/coreos` to `./lnmp-k8s`
 
+* `kube-controller-manager` --secure-port=10257
+
 ## 1.12.0-0
 
 * Kubernetes `1.12.0`

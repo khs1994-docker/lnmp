@@ -10,7 +10,7 @@ Requires=kube-apiserver.service
 # Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
 
 ExecStart=/opt/bin/kube-controller-manager \
---secure-port=10252 \
+--secure-port=10257 \
 --bind-address=127.0.0.1 \
 --kubeconfig=/etc/kubernetes/kube-controller-manager.kubeconfig \
 --service-cluster-ip-range=10.254.0.0/16 \

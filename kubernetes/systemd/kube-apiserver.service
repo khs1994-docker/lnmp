@@ -5,8 +5,8 @@ After=network.target
 Requires=etcd.service
 
 [Service]
-#Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
-#--insecure-port has been deprecated, This flag will be removed in a future version.
+# Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
+# --insecure-port has been deprecated, This flag will be removed in a future version.
 
 ExecStart=/opt/bin/kube-apiserver \
 --enable-admission-plugins=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \

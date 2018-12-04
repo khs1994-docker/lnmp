@@ -12,6 +12,8 @@ FLANNEL_VERSION=0.10.0
 
 if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes; else exit; fi; fi
 
+source_path=$PWD
+
 if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 
@@ -62,11 +64,14 @@ fi
 
 _kubernetes_server(){
 
+echo "install kubernetes"
+
 cd coreos
 
 if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION} ];then
   command -v docker
   if [ $? -eq 0 ];then
+    docker container ls > /dev/null 2>&1
     mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}
     mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes
 
@@ -87,8 +92,6 @@ if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION} ];then
     mv srv.tar.gz kubernetes-server-linux-amd64-v${KUBERNETES_VERSION}.tar.gz
   fi
 fi
-
-cd -
 }
 
 _delete(){
@@ -273,21 +276,27 @@ _k8s_install(){
   _etcd
   _flanneld
 
-  if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ docker-compose up cfssl-single"; exit; fi
-
-  if ! [ -f /opt/bin/kubeadm ];then
-    _kubernetes_server
-    sudo cp coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/
-  fi
-
-  sudo cp coreos/disk/bin/*.sh /opt/bin/
-
-  sudo chmod +x /opt/bin/*
-
   sudo mkdir -p /etc/kubernetes/certs
 
   sudo cp systemd/*.service /etc/systemd/system/
   sudo cp systemd/certs/*.pem /etc/kubernetes/certs/
+  sudo cp coreos/disk/bin/*.sh /opt/bin/
+
+  sudo chmod +x /opt/bin/*
+
+  if ! [ -f systemd/certs/admin-key.pem ];then \
+    echo "Please Generate certs first $ docker-compose up cfssl-single"; exit; fi
+
+  if ! [ -f /opt/bin/kubeadm ];then
+    _kubernetes_server
+    cd $source_path
+    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/ || \
+    rm -rf $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}
+    cd $source_path
+    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/
+  fi
+
+  sudo chmod +x /opt/bin/*
 
   sudo cp systemd/certs/*.kubeconfig /etc/kubernetes/
 
@@ -311,6 +320,7 @@ _k8s_install(){
   # sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
 
   sudo mkdir --parents /var/log/kubernetes
+  sudo mkdir --parents /var/lib/kubelet
 
   sudo chown k8s:root /var/log/kubernetes
 
@@ -365,13 +375,15 @@ $ sudo systemctl start kubelet
 
 _single_cleanup(){
   sudo systemctl stop etcd flanneld docker kube-apiserver \
-    kube-controller-manager kube-scheduler kube-proxy kubelet
+    kube-controller-manager kube-scheduler kube-proxy kubelet docker
 
   sudo rm -rf /opt/bin
   sudo rm -rf /var/lib/etcd
   sudo rm -rf /var/log/ku*
   sudo rm -rf /var/lib/kubelet
   sudo rm -rf /var/lib/kube-proxy
+
+  sudo rm -rf /etc/kubernetes
 }
 
 case $1 in
