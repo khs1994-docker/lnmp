@@ -35,7 +35,8 @@ VirtualBox 增加 hostonly 网络 **192.168.57.1** 网段
 $ ./coreos init
 
 # download kubernetes server files
-$ ./coreos kubernetes-server
+$ cd ..
+$ ./lnmp-k8s kubernetes-server
 ```
 
 ### 修改 .env 文件

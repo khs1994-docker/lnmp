@@ -32,6 +32,9 @@ $ hostnamectl set-hostname node1
 # 生成证书
 $ dockr-composer up cfssl-single
 
+# 下载 Kubernetes 二进制文件
+$ ./lnmp-k8s kubernetes-server
+
 # 部署
 $ ./lnmp-k8s single-install
 

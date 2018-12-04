@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
-KUBERNETES_VERSION=1.12.0
+KUBERNETES_VERSION=1.13.0
 MINIKUBE_VERSION=0.28.1
-ETCD_VERSION=3.3.9
+ETCD_VERSION=3.3.10
 FLANNEL_VERSION=0.10.0
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
@@ -27,6 +27,8 @@ print_help_info(){
 Usage: lnmp-k8s COMMAND
 
 Commands:
+  kubernetes-server  Download kubernetes server files
+
   kubectl-install    Install kubectl
   kubectl-getinfo    Get kubectl latest version info
 
@@ -35,6 +37,7 @@ Commands:
 
   single-install     Install Local Kubernetes（Manager by systemd）
   single-start       Print how to start Local Kubernetes (Manager by systemd)
+  single-cleanup     Cleanup Kubernetes Env.
 
   create             Deploy lnmp on k8s
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -56,6 +59,37 @@ Commands:
 if ! [ -f systemd/.env ];then
   cp systemd/.env.example systemd/.env
 fi
+
+_kubernetes_server(){
+
+cd coreos
+
+if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION} ];then
+  command -v docker
+  if [ $? -eq 0 ];then
+    mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}
+    mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes
+
+    docker container rm khs1994-coreos-kubernetes > /dev/null 2>&1 || echo > /dev/null
+    docker container create --name khs1994-coreos-kubernetes \
+      ccr.ccs.tencentyun.com/khs1994/kubernetes:v${KUBERNETES_VERSION}
+    docker container cp khs1994-coreos-kubernetes:/srv.tar.gz kubernetes-release/release
+    docker container rm khs1994-coreos-kubernetes
+
+    cd kubernetes-release/release
+    tar -zxvf srv.tar.gz
+    cd srv
+    tar -zxvf kubernetes-server-linux-amd64.tar.gz
+    # srv/kubernetes
+    cd ..
+    mv srv/kubernetes v${KUBERNETES_VERSION}/
+    rm -rf srv
+    mv srv.tar.gz kubernetes-server-linux-amd64-v${KUBERNETES_VERSION}.tar.gz
+  fi
+fi
+
+cd -
+}
 
 _delete(){
   kubectl delete deployment -l app=lnmp -n lnmp
@@ -213,10 +247,11 @@ kubectl-getinfo(){
 _etcd(){
   if ! [ -f /opt/bin/etcd ];then
       cd /opt/bin
+      rm -rf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
       sudo wget https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
       sudo tar -zxvf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
-      sudo mv etcd-v${ETCD_VERSION}-linux-amd64/etcd* ../
-      sduo rm -rf *.tar.gz
+      sudo mv etcd-v${ETCD_VERSION}-linux-amd64/etcd* ./
+      sudo rm -rf *.tar.gz
       cd -
       return
   fi
@@ -238,9 +273,10 @@ _k8s_install(){
   _etcd
   _flanneld
 
-  if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ cd coreos ; docker-compose up cfssl-single"; exit; fi
+  if ! [ -f systemd/certs/admin-key.pem ];then echo "Please Generate certs first $ docker-compose up cfssl-single"; exit; fi
 
   if ! [ -f /opt/bin/kubeadm ];then
+    _kubernetes_server
     sudo cp coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/
   fi
 
@@ -316,6 +352,9 @@ _helm(){
 
 _single_start(){
   echo "
+$ sudo systemctl start etcd
+$ sudo systemctl start flanneld
+$ sudo systemctl start docker
 $ sudo systemctl start kube-apiserver
 $ sudo systemctl start kube-controller-manager
 $ sudo systemctl start kube-scheduler
@@ -324,7 +363,21 @@ $ sudo systemctl start kubelet
 "
 }
 
+_single_cleanup(){
+  sudo systemctl stop etcd flanneld docker kube-apiserver \
+    kube-controller-manager kube-scheduler kube-proxy kubelet
+
+  sudo rm -rf /opt/bin
+  sudo rm -rf /var/lib/etcd
+  sudo rm -rf /var/log/ku*
+  sudo rm -rf /var/lib/kubelet
+  sudo rm -rf /var/lib/kube-proxy
+}
+
 case $1 in
+    kubernetes_server )
+      _kubernetes_server
+      ;;
     kubectl-install )
       kubectl-install
     ;;
@@ -362,6 +415,11 @@ case $1 in
 
     single-start )
       _single_start
+    ;;
+
+    single-cleanup )
+
+      _single_cleanup
     ;;
 
     minikube )

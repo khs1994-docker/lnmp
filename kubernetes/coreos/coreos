@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KUBERNETES_VERSION=v1.12.0
+KUBERNETES_VERSION=v1.13.0
 
 set -e
 
@@ -13,7 +13,6 @@ CoreOS CLI $KUBERNETES_VERSION
 Usages:
 
 init              Download CoreOS ISO files
-kubernetes-server Download kubernetes server files
 server            Up CoreOS install local server
 cert              Generate Self-Signed Certificates
 
@@ -73,32 +72,6 @@ cd ..
 }
 
 if [ "$1" = 'init' ];then _init ; exit; fi
-
-_kubernetes_server(){
-
-if ! [ -d kubernetes-release/release/${KUBERNETES_VERSION} ];then
-  command -v docker
-  if [ $? -eq 0 ];then
-    mkdir -p kubernetes-release/release/${KUBERNETES_VERSION}
-    mkdir -p kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes
-
-    docker container rm khs1994-coreos-kubernetes > /dev/null 2>&1 || echo > /dev/null
-    docker container create --name khs1994-coreos-kubernetes ccr.ccs.tencentyun.com/khs1994/kubernetes:${KUBERNETES_VERSION}
-    docker container cp khs1994-coreos-kubernetes:/srv.tar.gz kubernetes-release/release
-    docker container rm khs1994-coreos-kubernetes
-
-    cd kubernetes-release/release
-    tar -zxvf srv.tar.gz
-    cd srv
-    tar -zxvf kubernetes-server-linux-amd64.tar.gz
-    # srv/kubernetes
-    cd ..
-    mv srv/kubernetes ${KUBERNETES_VERSION}/
-    rm -rf srv
-    mv srv.tar.gz kubernetes-server-linux-amd64-${KUBERNETES_VERSION}.tar.gz
-  fi
-fi
-}
 
 _efk(){
   if [ "$1" = 'list' ];then
@@ -264,12 +237,6 @@ case "$1" in
 
   coredns )
     kubectl create -f ../addons/coredns.yaml
-
-  ;;
-
-  kubernetes-server )
-
-  _kubernetes_server
 
   ;;
 
