@@ -24,3 +24,4 @@
 * [MariaDB `10.4.0`](https://mariadb.com/kb/en/library/mariadb-1040-release-notes/)
 * [NGINX `1.15.7`](https://nginx.org/en/CHANGES)
 * [Node 11.3.0](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V11.md#2018-11-27-version-1130-current-rvagg)
+* [Composer `1.8.0`](https://github.com/composer/composer/releases/tag/1.8.0)
