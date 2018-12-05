@@ -7,14 +7,12 @@
 * https://blog.csdn.net/shida_csdn/article/details/80028905
 
 ```bash
-$ sudo systemctl stop kubelet
-$ sudo systemctl stop docker
+$ sudo systemctl stop kubelet docker
 
 $ sudo iptables --flush
 $ sudo iptables -tnat --flush
 
-$ sudo systemctl start kubelet
-$ sudo systemctl start docker
+$ sudo systemctl start docker kubelet
 ```
 
 ```bash

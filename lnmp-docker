@@ -247,8 +247,6 @@ _gcr_io(){
   fi
 
   _gcr_io_down
-
-  # https://github.com/anjia0532/gcr.io_mirror
   echo ""
   echo "This local server support Docker Desktop v18.05-EDGE-67"
   echo ""
@@ -295,10 +293,10 @@ _gcr_io(){
 
     for image in $images
     do
-       docker pull anjia0532/$image
-       docker tag anjia0532/$image k8s.gcr.io/$image
+       docker pull gcr.mirrors.ustc.edu.cn/$image
+       docker tag gcr.mirrors.ustc.edu.cn/$image k8s.gcr.io/$image
        docker push k8s.gcr.io/$image
-       docker rmi anjia0532/$image
+       docker rmi gcr.mirrors.ustc.edu.cn/$image
     done
 
     echo "

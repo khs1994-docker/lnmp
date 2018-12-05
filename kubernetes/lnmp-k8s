@@ -272,6 +272,16 @@ _flanneld(){
 }
 
 _k8s_install(){
+  # 安装依赖软件
+  command -v dnf && sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
+    sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
+
+  command -v yum && sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
+    sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
+
+  command -v apt && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
+    sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
+
   # 关闭防火墙
   sudo systemctl stop firewalld && sudo systemctl disable firewalld
   sudo mkdir -p /opt/bin
@@ -323,6 +333,7 @@ _k8s_install(){
 
   sudo mkdir --parents /var/log/kubernetes
   sudo mkdir --parents /var/lib/kubelet
+  sudo mkdir -p /var/lib/kube-proxy
 
   sudo chown k8s:root /var/log/kubernetes
 

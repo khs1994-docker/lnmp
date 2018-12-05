@@ -4,24 +4,29 @@
 
 # 基础设施
 
+* [安装概览](install.md)
 * [Docker For Desktop](docker-desktop.md)
 * [Minikube](minikube.md)
 * [Minikube On Windows](windows.md)
 
-## 服务暴露
+# 错误排查
+
+* [网络不通](network.md)
+
+# 服务暴露
 
 * [Endpoints](endpoints.md)
 
-## 数据持久化
+# 数据持久化
 
 * [Volume](volume/README.md)
     * [data](volume/data.md)
 
-## Secret
+# Secret
 
 * [Secret](secret.md)
 
-## 插件
+# 插件
 
 * [CoreDNS](addons/coredns.md)
 * [Ingress-nginx](ingress.md)
@@ -31,23 +36,23 @@
 * [监控 Metrics Server](addons/metrics-server.md)
 * [监控 Prometheus Operator](addons/prometheus-operator.md)
 
-## COMMAND
+# COMMAND
 
 * [command](command.md)
 
-## 包管理
+# 包管理
 
 * [Helm](helm.md)
 
-## LNMP
+# LNMP
 
 * [NGINX](nginx.md)
 
-## 滚动升级
+# 滚动升级
 
 * [rollout](rollout.md)
 
-## LOG
+# LOG
 
 * [LOG](log/README.md)
     * [NGINX](log/nginx.md)

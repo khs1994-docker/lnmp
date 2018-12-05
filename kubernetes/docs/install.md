@@ -170,16 +170,20 @@ tcp6       0      0 :::8588                 :::*                    LISTEN      
 
 ## Test k8s Cluster
 
-```bash
-$ cd kubernetes
+务必保证各组件正常运行之后，再进行测试！（$ sudo systemctl status XXX）
 
-$ kubectl create -f nginx-ds.yaml
+```bash
+$ cd ~/lnmp/kubernetes
+
+$ cd deployment/demo/
+
+$ kubectl create -f lnmp-ds.yaml
 
 $ kubectl get pods  -o wide|grep nginx-ds
 
 nginx-ds-dxc8j   1/1       Running   0          12s       172.30.100.2   coreos1
 
-$ kubectl get svc |grep nginx-ds
+$ kubectl get service |grep nginx-ds
 
 nginx-ds     NodePort    10.254.199.71   <none>        80:8448/TCP   3m
 ```

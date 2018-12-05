@@ -58,7 +58,7 @@ $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
       --tiller-tls-verify --tls-ca-cert ./ca.pem \
       --service-account=tiller \
       --upgrade -i \
-      anjia0532/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+      gcr.mirrors.ustc.edu.cn/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 ```
 
 客户端使用时加上 `--tls`
@@ -74,7 +74,7 @@ $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem `
       --tiller-tls-verify --tls-ca-cert ./ca.pem `
       --service-account=tiller `
       --upgrade -i `
-      anjia0532/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+      gcr.mirrors.ustc.edu.cn/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 # macOS
 $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
@@ -82,7 +82,7 @@ $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
       --tiller-tls-verify --tls-ca-cert ./ca.pem \
       --service-account=tiller \
       --upgrade -i \
-      anjia0532/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+      gcr.mirrors.ustc.edu.cn/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 ```
 

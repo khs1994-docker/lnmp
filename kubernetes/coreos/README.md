@@ -135,5 +135,3 @@ $ sudo systemctl restart systemd-networkd
 * https://coreos.com/os/docs/latest/generate-self-signed-certificates.html
 
 * https://github.com/cloudflare/cfssl
-
-* https://github.com/anjia0532/gcr.io_mirror
