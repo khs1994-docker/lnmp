@@ -111,7 +111,7 @@ spec:
     spec:
       containers:
       - name: kubernetes-dashboard
-        image: anjia0532/google-containers.kubernetes-dashboard-amd64:v1.10.0
+        image: gcr.mirrors.ustc.edu.cn/google-containers/kubernetes-dashboard-amd64:v1.10.0
         ports:
         - containerPort: 8443
           protocol: TCP

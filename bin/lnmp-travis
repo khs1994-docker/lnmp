@@ -9,7 +9,7 @@ set -e
 if [ "$debug" = 'true' ];then set -x; fi
 
 if [ -z "$GITHUB_TOKEN" ];then
-  echo "\nYou must set [ GITHUB_TOKEN ] env\n"
+  echo -e "\nYou must set [ GITHUB_TOKEN ] env\n"
   exit 1
 fi
 

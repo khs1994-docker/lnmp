@@ -9,13 +9,17 @@ $ kubectl get all -n kube-system
 ## Test
 
 ```bash
-$ kubectl run nginx --image=nginx:1.15.6-alpine
+$ kubectl run nginx --image=nginx:alpine
 
-$ kubectl expose pod nginx
+$ kubectl get pod
 
-$ kubectl run nginx2 --image=nginx:1.15.6-alpine
+$ kubectl expose pod nginx-6b4b85b77b-sxskl --port 80
 
-$ kubectl exec nginx2 -i -t -- /bin/sh
+$ kubectl run nginx2 --image=nginx:alpine
+
+$ kubectl get pod
+
+$ kubectl exec nginx2-5f48f6bb64-gr5jk -i -t -- /bin/sh
 
 root@nginx:/# cat /etc/resolv.conf
 

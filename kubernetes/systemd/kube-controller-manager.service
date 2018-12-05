@@ -5,9 +5,12 @@ Requires=kube-apiserver.service
 
 [Service]
 
+# Flag --port has been deprecated, see --secure-port instead.
+# Flag --horizontal-pod-autoscaler-use-rest-clients has been deprecated,
+# Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
+
 ExecStart=/opt/bin/kube-controller-manager \
---port=0 \
---secure-port=10252 \
+--secure-port=10257 \
 --bind-address=127.0.0.1 \
 --kubeconfig=/etc/kubernetes/kube-controller-manager.kubeconfig \
 --service-cluster-ip-range=10.254.0.0/16 \
@@ -20,7 +23,6 @@ ExecStart=/opt/bin/kube-controller-manager \
 --leader-elect=true \
 --feature-gates=RotateKubeletServerCertificate=true \
 --controllers=*,bootstrapsigner,tokencleaner \
---horizontal-pod-autoscaler-use-rest-clients=true \
 --horizontal-pod-autoscaler-sync-period=10s \
 --tls-cert-file=/etc/kubernetes/certs/kube-controller-manager.pem \
 --tls-private-key-file=/etc/kubernetes/certs/kube-controller-manager-key.pem \
@@ -28,8 +30,7 @@ ExecStart=/opt/bin/kube-controller-manager \
 --alsologtostderr=true \
 --logtostderr=false \
 --log-dir=/var/log/kubernetes \
---v=2 \
---horizontal-pod-autoscaler-use-rest-clients=true
+--v=2
 
 Restart=on-failure
 RestartSec=5

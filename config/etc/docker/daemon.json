@@ -2,6 +2,9 @@
   "registry-mirrors": [
     "https://registry.docker-cn.com"
   ],
+  "insecure-registries":[
+    "gcr.io" 
+  ],
   "debug": true,
   "dns": [
     "114.114.114.114",

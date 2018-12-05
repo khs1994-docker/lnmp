@@ -10,7 +10,7 @@ ARG PHP_PREFIX=/usr/local/php72
 
 ARG PHP_INI_DIR=/usr/local/etc/php72
 
-ARG COMPOSER_VERSION=1.7.3
+ARG COMPOSER_VERSION=1.8.0
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -341,7 +341,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:5.0.1 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:5.0.2 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 

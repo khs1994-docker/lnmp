@@ -126,16 +126,16 @@ services:
 
 matrix:
   COMPOSER_VERSION:
-    - 1.7.3
+    - 1.8.0
   PHP_VERSION:
     - 7.2.12
     - 7.1.24
     # - 7.0.32
     # - 5.6.38
   NGINX_VERSION:
-    - 1.15.6
+    - 1.15.7
   REDIS_VERSION:
-    - 5.0.1
+    - 5.0.2
   MYSQL_VERSION:
     # - 8.0.11
     - 5.7.22

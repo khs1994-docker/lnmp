@@ -7,21 +7,19 @@
 * https://blog.csdn.net/shida_csdn/article/details/80028905
 
 ```bash
-$ systemctl stop kubelet
-$ systemctl stop docker
+$ sudo systemctl stop kubelet docker
 
-$ iptables --flush
-$ iptables -tnat --flush
+$ sudo iptables --flush
+$ sudo iptables -tnat --flush
 
-$ systemctl start kubelet
-$ systemctl start docker
+$ sudo systemctl start docker kubelet
 ```
 
 ```bash
-$ systemctl stop firewalld && systemctl disable firewalld
-$ /usr/sbin/iptables -F && /usr/sbin/iptables -X && /usr/sbin/iptables -F -t nat && /usr/sbin/iptables -X -t nat
-$ /usr/sbin/iptables -P FORWARD ACCEPT
-$ systemctl daemon-reload && systemctl enable docker && systemctl restart docker
+$ sudo systemctl stop firewalld && sudo systemctl disable firewalld
+$ sudo /usr/sbin/iptables -F && sudo /usr/sbin/iptables -X && sudo /usr/sbin/iptables -F -t nat && sudo /usr/sbin/iptables -X -t nat
+$ sudo /usr/sbin/iptables -P FORWARD ACCEPT
+$ sudo systemctl daemon-reload && sudo systemctl enable docker && sudo systemctl restart docker
 $ for intf in /sys/devices/virtual/net/docker0/brif/*; do echo 1 > $intf/hairpin_mode; done
 $ sudo sysctl -p /etc/sysctl.d/kubernetes.conf
 ```

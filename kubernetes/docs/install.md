@@ -83,14 +83,14 @@ $ journalctl -u kube-controller-manager
 
 $ sudo netstat -lnpt|grep kube-controll
 
-tcp        0      0 127.0.0.1:10252         0.0.0.0:*               LISTEN      638/kube-controller
+tcp        0      0 127.0.0.1:10257         0.0.0.0:*               LISTEN      638/kube-controller
 
-$ curl -s --cacert /etc/kubernetes/certs/ca.pem https://127.0.0.1:10252/metrics |head
+$ curl -s --cacert /etc/kubernetes/certs/ca.pem https://127.0.0.1:10257/metrics |head
 
 $ kubectl get endpoints kube-controller-manager --namespace=kube-system  -o yaml
 ```
 
-- **10252** 监听 10252 端口，接收 https 请求
+- **10257** 监听 10257 端口，接收 https 请求
 
 ### kube-scheduler
 
@@ -170,16 +170,20 @@ tcp6       0      0 :::8588                 :::*                    LISTEN      
 
 ## Test k8s Cluster
 
-```bash
-$ cd kubernetes
+务必保证各组件正常运行之后，再进行测试！（$ sudo systemctl status XXX）
 
-$ kubectl create -f nginx-ds.yaml
+```bash
+$ cd ~/lnmp/kubernetes
+
+$ cd deployment/demo/
+
+$ kubectl create -f lnmp-ds.yaml
 
 $ kubectl get pods  -o wide|grep nginx-ds
 
 nginx-ds-dxc8j   1/1       Running   0          12s       172.30.100.2   coreos1
 
-$ kubectl get svc |grep nginx-ds
+$ kubectl get service |grep nginx-ds
 
 nginx-ds     NodePort    10.254.199.71   <none>        80:8448/TCP   3m
 ```

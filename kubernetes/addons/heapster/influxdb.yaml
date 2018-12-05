@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: influxdb
-        image: anjia0532/google-containers.heapster-influxdb-amd64:v1.5.2
+        image: gcr.mirrors.ustc.edu.cn/google-containers/heapster-influxdb-amd64:v1.5.2
         volumeMounts:
         - mountPath: /data
           name: influxdb-storage

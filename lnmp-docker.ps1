@@ -99,6 +99,10 @@ Function env_status(){
   }
 }
 
+if (Test-Path lnmp-custom-script.ps1){
+  . ./lnmp-custom-script.ps1
+}
+
 Function logs(){
   if (! (Test-Path log\httpd)){
     New-Item log\httpd -type directory | Out-Null
@@ -400,11 +404,11 @@ switch($first){
 
     up {
       init
-      docker-compose up `
+      docker-compose `
         -f docker-compose.yml `
         -f docker-compose.override.yml `
         -f docker-compose.include.yml `
-        -d ${LNMP_INCLUDE}
+        up -d ${LNMP_INCLUDE}
     }
 
     pull {
@@ -893,8 +897,6 @@ XXX
 
       docker container rm -f `
           $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
-
-      # https://github.com/anjia0532/gcr.io_mirror
 echo "
 This local server support Docker Desktop v18.05-EDGE-67
 
@@ -927,10 +929,10 @@ This local server support Docker Desktop v18.05-EDGE-67
       "pause-amd64:3.1"
 
       foreach ($image in $images){
-         docker pull anjia0532/$image
-         docker tag anjia0532/$image k8s.gcr.io/$image
+         docker pull gcr.mirrors.ustc.edu.cn/$image
+         docker tag gcr.mirrors.ustc.edu.cn/$image k8s.gcr.io/$image
          docker push k8s.gcr.io/$image
-         docker rmi anjia0532/$image
+         docker rmi gcr.mirrors.ustc.edu.cn/$image
       }
 
        Write-Warning "
