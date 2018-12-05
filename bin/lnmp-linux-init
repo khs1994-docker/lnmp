@@ -116,6 +116,18 @@ set +e
 command -v apm && apm config set registry https://registry.npm.taobao.org
 set -e
 
+_file(){
+  ( cat $1 | grep "$2" ) || echo -e $3 >> $1
+}
+
+# node
+_file ~/.npmrc "registry=https://registry.npm.taobao.org" "registry=https://registry.npm.taobao.org"
+
+# python
+mkdir -p ~/.pip
+
+_file ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
+
 if [ "$1" = '--help' ];then print_help_info; fi
 if [ "$1" = 'dockerd' ];then _docker_daemon; fi
 if [ "$1" = 'rkt' ];then __rkt; fi
