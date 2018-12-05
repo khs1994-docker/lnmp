@@ -272,6 +272,8 @@ _flanneld(){
 }
 
 _k8s_install(){
+  # 关闭防火墙
+  sudo systemctl stop firewalld && sudo systemctl disable firewalld
   sudo mkdir -p /opt/bin
   _etcd
   _flanneld
