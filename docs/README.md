@@ -84,8 +84,8 @@
 
 ## 捐赠
 
-请访问 [https://zan.khs1994.com](https://zan.khs1994.com)。
+请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
 
-## 云容器服务推广
+## 免费体验 Kubernetes
 
 * [腾讯云容器服务](http://dwz.cn/I2vYahwq)

@@ -16,7 +16,7 @@
 
 * [Try Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
-* [Asciinema](https://asciinema.org/a/152107)
+* [Asciinema Live Demo](https://asciinema.org/a/215588)
 
 * [Feedback](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ffeedback)
 
@@ -33,6 +33,8 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 :warning: Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
 
 :gift: [Donate](https://zan.khs1994.com)
+
+:whale: [Try Kubernetes **FREE**](http://dwz.cn/I2vYahwq)
 
 ## WeChat
 
@@ -118,6 +120,12 @@ $redis->connect('redis', 6379);
 
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
+
+## AD :whale:
+
+Try Kubernetes **FREE**
+
+* [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)
 
 ## Advanced
 
@@ -260,7 +268,7 @@ Open your Browers `127.0.0.1:8080`
 
 ### [khs1994.com](//khs1994.com)
 
-### [PCIT PHP CI TOOLKIT](https://github.com/khs1994-php/pcit)
+### [PCIT PHP CI TOOLKIT](https://github.com/pcit-ce/pcit)
 
 ## TLS1.3
 
@@ -310,5 +318,7 @@ We send OS type and IP data to us data collection server, please set true (defau
 You can edit `.env` file `DATA_COLLECTION=false` to disable it.
 
 ## AD :whale:
+
+Try Kubernetes **FREE**
 
 * [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)

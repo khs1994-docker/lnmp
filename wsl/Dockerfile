@@ -185,6 +185,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --with-curl \
     --with-gettext \
     --with-gd \
+        # php 7.4
+        # --enable-freetype \
         --with-freetype-dir=/usr/lib \
         --disable-gd-jis-conv \
         --with-jpeg-dir=/usr/lib \

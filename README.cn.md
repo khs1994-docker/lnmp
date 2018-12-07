@@ -16,7 +16,7 @@
 
 * [Kubernetes 免费实验室](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
-* [项目演示](https://asciinema.org/a/152107)
+* [项目演示](https://asciinema.org/a/215588)
 
 * [反馈](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ffeedback)
 
@@ -33,6 +33,8 @@
 :warning: Windows Docker 非常不稳定，且运行 Laravel 相应较慢。建议使用 [WSL](wsl)。
 
 :gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
+
+:whale: [**免费** 体验 Kubernetes](http://dwz.cn/I2vYahwq)
 
 ## 微信订阅号
 
@@ -122,6 +124,12 @@ $redis->connect('redis', 6379);
 
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
+
+## 云容器服务推广 :whale:
+
+**免费** 体验 Kubernetes
+
+* [腾讯云容器服务](http://dwz.cn/I2vYahwq)
 
 ## 进阶
 
@@ -265,7 +273,7 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 ### [khs1994.com](//khs1994.com)
 
-### [PCIT (PHP CI TOOLKIT)](https://github.com/khs1994-php/pcit)
+### [PCIT (PHP CI TOOLKIT)](https://github.com/pcit-ce/pcit)
 
 ## 项目国内镜像
 
@@ -323,5 +331,7 @@ https://doc.lnmp.khs1994.com
 你可以通过在 `.env` 文件中设置 `DATA_COLLECTION=false` 来禁用数据收集服务。
 
 ## 云容器服务推广 :whale:
+
+**免费** 体验 Kubernetes
 
 * [腾讯云容器服务](http://dwz.cn/I2vYahwq)

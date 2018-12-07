@@ -20,7 +20,7 @@ $ lnmp-wsl-builder-php 7.2.13
 
 $ lnmp-wsl-builder-php apt
 
-$ lnmp-wsl-builder-php 7.3.0 7.3.0beta3
+$ lnmp-wsl-builder-php 7.3.0 7.3.0beta1 7.3.0RC1
 
 $ lnmp-wsl-builder-php 7.2.13 [--skipbuild] [tar] [deb] [enable-ext]
 
@@ -248,12 +248,14 @@ libxpm4 \
 $( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
-libssl1.1 \
 libicu57 \
 libldap-2.4-2"
     set -e
     sudo apt install -y $PHP_RUN_DEP > /dev/null
 }
+
+# https://github.com/khs1994-docker/lnmp/issues/630
+sudo apt install libssl1.1=1.1.0f-3+deb9u2 || sudo apt install libssl1.1
 
 ################################################################################
 
@@ -406,7 +408,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --with-kerberos \
       --with-libedit \
       --with-openssl \
-          --with-system-ciphers \
+        --with-system-ciphers \
       --with-pcre-regex \
       --with-pdo-mysql \
       --with-pdo-pgsql=shared \
@@ -414,7 +416,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --with-zlib \
       --with-mhash \
       --with-gd \
-          --with-freetype-dir=/usr/lib \
+          $( test $PHP_NUM -ge "74" && echo "--enable-freetype" || echo "--with-freetype-dir=/usr/lib") \
           --disable-gd-jis-conv \
           --with-jpeg-dir=/usr/lib \
           --with-png-dir=/usr/lib \
