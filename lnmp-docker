@@ -1566,7 +1566,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   restart )
     if [ -z "$1" ];then docker-compose down --remove-orphans; \
-        print_info "Please exec \n\n$ ./lnmp-docker development | production\n"; exit 0; fi
+        print_info "Please exec \n\n$ ./lnmp-docker up\n"; exit 0; fi
 
     for soft in "$@"
     do

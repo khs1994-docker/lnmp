@@ -76,7 +76,7 @@ $ ./lnmp-docker ssl example.com -d *.example.com --rsa
 
 ### 生成证书的位置
 
-`./lnmp/config/nginx/ssl/*`
+`./config/nginx/ssl/*`
 
 ## 其他
 
