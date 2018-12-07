@@ -42,11 +42,11 @@ services:
 
   php7:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.12}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.13}-fpm-alpine
 
   supervisord:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.12}-supervisord-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.2.13}-supervisord-alpine
 
   phpmyadmin:
     << : *default-common
@@ -58,7 +58,7 @@ services:
 
   nginx-unit:
     << : *default-common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.2.12}-unit-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.2.13}-unit-alpine
 
   httpd:
     << : *default-common

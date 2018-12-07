@@ -5,7 +5,7 @@
 #
 # Only Support WSL Debian
 #
-# $ lnmp-wsl-install php [deb | tar] [7.2.12]
+# $ lnmp-wsl-install php [deb | tar] [7.2.13]
 #
 
 _print_help_info(){
@@ -16,7 +16,7 @@ Install WSL soft by shell script
 
 Usage:
 
-$ lnmp-wsl-install php 7.2.12 [ tar | deb ]
+$ lnmp-wsl-install php 7.2.13 [ tar | deb ]
 
 $ lnmp-wsl-install enable [ php72 | php71 | php70 | php56 ]
 
@@ -28,13 +28,13 @@ $ lnmp-wsl-install php-extension-list
 
 Example:
 
-$ lnmp-wsl-install php 7.2.12 tar
+$ lnmp-wsl-install php 7.2.13 tar
 
-$ lnmp-wsl-install php 7.2.12 deb
+$ lnmp-wsl-install php 7.2.13 deb
 
 [ deb 方法一个系统只能存在一个 PHP 版本，若想多版本共存，主版本使用 deb 方法，其他版本使用 tar 方法 ]
 
-$ lnmp-wsl-install php 7.1.24 [7.0.32] [5.6.38]
+$ lnmp-wsl-install php 7.1.25 [7.0.33] [7.6.39]
 
 [ php56 只支持 ubuntu ]
 "
@@ -57,7 +57,7 @@ NODE_VERSION=11.3.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.2.12
+PHP_VERSION=7.2.13
 
 ################################################################################
 _httpd(){
@@ -102,9 +102,9 @@ _php(){
 
   # include redis memcached
   # default install latest php version
-  # current version is php 7.2.12
+  # current version is php 7.2.13
 
-  PHP_VERSION=${1:-7.2.12}
+  PHP_VERSION=${1:-7.2.13}
 
   case ${PHP_VERSION} in
     5.6.* )

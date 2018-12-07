@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.12
+ARG PHP_VERSION=7.2.13
 
 FROM khs1994/php:${PHP_VERSION}-fpm-alpine
 

@@ -24,10 +24,10 @@ services:
   #    context: .
   #    dockerfile: test.Dockerfile
   #    args:
-  #      - PHP_VERSION_72=7.2.12
-  #      - PHP_VERSION_71=7.1.24
-  #      - PHP_VERSION_70=7.0.32
-  #      - PHP_VERSION_56=5.6.38
+  #      - PHP_VERSION_72=7.2.13
+  #      - PHP_VERSION_71=7.1.25
+  #      - PHP_VERSION_70=7.0.33
+  #      - PHP_VERSION_56=7.6.39
   #  image: ${DOCKER_HUB_USERNAME:-khs1994}/EXAMPLE
 
   nginx:
@@ -51,10 +51,10 @@ services:
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION_72:-7.2.12}
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.13}
         - NODE_VERSION=${NODE_VERSION:-11.3.0}
         - NODE_REGISTRY=https://registry.npm.taobao.org
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.12}-pro-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.13}-pro-alpine
 
 #  php71:
 #    build:
@@ -71,8 +71,8 @@ services:
 #      dockerfile: Dockerfile
 #      target: php
 #      args:
-#        - PHP_VERSION=${PHP_VERSION_70:-7.0.32}
-#    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_70:-7.0.32}-pro-alpine
+#        - PHP_VERSION=${PHP_VERSION_70:-7.0.33}
+#    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_70:-7.0.33}-pro-alpine
 #
 #  php56:
 #    build:
@@ -80,5 +80,5 @@ services:
 #      dockerfile: Dockerfile
 #      target: php
 #      args:
-#        - PHP_VERSION=${PHP_VERSION_56:5.6.38}
-#    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_56:5.6.38}-pro-alpine
+#        - PHP_VERSION=${PHP_VERSION_56:7.6.39}
+#    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_56:7.6.39}-pro-alpine

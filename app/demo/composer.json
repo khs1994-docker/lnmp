@@ -31,7 +31,7 @@
     "phpunit/phpunit": "^7.3"
   },
   "config": {
-    "php": "7.2.12",
+    "php": "7.2.13",
     "optimize-autoloader": true,
     "sort-packages": true,
     "preferred-install": "dist"
