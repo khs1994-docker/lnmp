@@ -75,6 +75,22 @@ before_install:
 
 jobs:
   include:
+    - stage: docs
+      script:
+        - cd docs
+        - docker run -it --rm -v $PWD:/srv/gitbook khs1994/gitbook
+        - sudo touch _book/CNAME
+        - sudo echo "docs.lnmp.khs1994.com" | sudo tee _book/CNAME
+      deploy:
+        provider: pages
+        repo: khs1994-docker/lnmp-docs
+        skip-cleanup: true
+        local-dir: docs/_book
+        keep-history: true
+        github-token: $GITHUB_TOKEN
+        on:
+          branch: master
+
     - stage: tag
       script: |
         github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
