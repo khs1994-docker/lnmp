@@ -191,29 +191,29 @@ _downloader `
 
 # http://pecl.php.net/package/yaml
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/yaml/$PHP_YAML_EXTENSION_VERSION/php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64 null $false
+  https://windows.php.net/downloads/pecl/releases/yaml/$PHP_YAML_EXTENSION_VERSION/php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  C:\php-ext\php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64 null $false
 # http://pecl.php.net/package/xdebug
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/xdebug/$PHP_XDEBUG_EXTENSION_VERSION/php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+  https://windows.php.net/downloads/pecl/releases/xdebug/$PHP_XDEBUG_EXTENSION_VERSION/php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  C:\php-ext\php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
 # http://pecl.php.net/package/redis
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/redis/$PHP_REDIS_EXTENSION_VERSION/php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+  https://windows.php.net/downloads/pecl/releases/redis/$PHP_REDIS_EXTENSION_VERSION/php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  C:\php-ext\php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
 # http://pecl.php.net/package/mongodb
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/mongodb/$PHP_MONGODB_EXTENSION_VERSION/php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+  https://windows.php.net/downloads/pecl/releases/mongodb/$PHP_MONGODB_EXTENSION_VERSION/php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  C:\php-ext\php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
 # http://pecl.php.net/package/igbinary
 _downloader `
-  https://windows.php.net/downloads/pecl/releases/igbinary/$PHP_IGBINARY_EXTENSION_VERSION/php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  C:\php-ext\php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip `
-  php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip null $false
+  https://windows.php.net/downloads/pecl/releases/igbinary/$PHP_IGBINARY_EXTENSION_VERSION/php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  C:\php-ext\php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
+  php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
 # https://curl.haxx.se/docs/caextract.html
 # https://github.com/khs1994-docker/lnmp/issues/339
 _downloader `
@@ -228,15 +228,15 @@ Function _pecl($zip,$file){
   }
 }
 
-_pecl php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_igbinary.dll
+_pecl php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_igbinary.dll
 
-_pecl php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_mongodb.dll
+_pecl php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_mongodb.dll
 
-_pecl php_redis-$PHP_REDIS_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_redis.dll
+_pecl php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_redis.dll
 
-_pecl php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_xdebug.dll
+_pecl php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_xdebug.dll
 
-_pecl php_yaml-$PHP_YAML_EXTENSION_VERSION-7.2-nts-vc15-x64.zip php_yaml.dll
+_pecl php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_yaml.dll
 
 cp -Force C:\php\php.ini C:\php-ext\php.ini
 
