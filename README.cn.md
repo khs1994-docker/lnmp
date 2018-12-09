@@ -137,9 +137,11 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 * [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
-## 需要 PHP 7.1 以下版本 ?
+## 停止更新的 PHP 版本
 
-请查看 https://github.com/khs1994-docker/lnmp/issues/354
+* 7.0
+
+详情 https://github.com/khs1994-docker/lnmp/issues/354
 
 ## 使用 MySQL 8.0 遇到问题 ?
 

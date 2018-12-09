@@ -133,9 +133,11 @@ Try Kubernetes **FREE**
 
 * [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
-## Need PHP Under 7.1?
+## PHP EOL
 
-Please see https://github.com/khs1994-docker/lnmp/issues/354
+* 7.0
+
+More information please see https://github.com/khs1994-docker/lnmp/issues/354
 
 ## Meet issues With MySQL 8.0 ?
 
