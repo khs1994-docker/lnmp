@@ -30,7 +30,7 @@
 
 :warning: 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
 
-:warning: Windows Docker 非常不稳定，且运行 Laravel 相应较慢。建议使用 [WSL](wsl)。
+:warning: Windows Docker 非常不稳定，且运行 Laravel 响应较慢。建议使用 [WSL](wsl)。
 
 :gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
 
@@ -64,7 +64,7 @@
 
 ### 安装
 
-> 鉴于国内 clone GitHub 项目较慢，本项目在 gitee.com 进行开发，每日集成到 GitHub，建议国内用户使用中国镜像
+> 鉴于国内 clone GitHub 项目较慢，本项目在 gitee.com 托管，每日集成到 GitHub，建议国内用户使用中国镜像，技术交流请到本项目 GitHub，避免在 gitee.com 提 issue 或 PR。
 
 ```bash
 $ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git
@@ -169,7 +169,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 $ ./lnmp-docker ssl khs1994.com -d *.khs1994.com
 ```
 
->使用前请提前在 `.env` 文件或系统环境变量中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx/issue-ssl.md)。
+>使用前请提前在 `.env` 文件或系统环境变量中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx/issue-ssl.md)
 
 ## 查看详情
 
@@ -207,7 +207,7 @@ $ ./lnmp-docker down
 
 ### 支持特性
 
-请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)
+请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/18.09/docs#%E7%89%B9%E8%89%B2)
 
 ### 包含软件
 
@@ -262,7 +262,7 @@ $ ./lnmp-docker down
 ```bash
 # OS: macOS
 
-$ cd toolkit/linuxkit
+$ cd linuxkit
 
 $ linuxkit build lnmp.yml
 

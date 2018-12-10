@@ -202,7 +202,7 @@ $ ./lnmp-docker down
 
 ### Features
 
-Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82).
+Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/18.09/docs#%E7%89%B9%E8%89%B2).
 
 ### What's inside
 
@@ -257,7 +257,7 @@ Start `Containers as a Service(CaaS)`. For more information, see [Documents](doc
 ```bash
 # OS: macOS
 
-$ cd toolkit/linuxkit
+$ cd linuxkit
 
 $ linuxkit build lnmp.yml
 

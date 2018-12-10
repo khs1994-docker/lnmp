@@ -4,19 +4,15 @@
 
 * 建议使用 `Debian 9` 版本，在商店搜索 `Linux` 选择 `Debian` 安装即可
 
-* https://www.khs1994.com/php/development/wsl.html
-
 * **NGINX** **PHP** 均为编译安装，配置目录为 `/usr/local/etc/*`。本项目提供了一键编译脚本，可以很方便的进行一键编译安装
 
-编译安装软件请查看上面的链接，为方便修改，文件夹内的配置文件（`*.example`）均为示例，使用时请去掉 `.example` 后缀。
-
-**注意备份原来的配置文件**
+* 编译安装软件请查看 https://www.khs1994.com/php/development/wsl.html
 
 ## 设置环境变量
 
 部分设置项可能与 `windows/README.md` 重复，保证设置过即可，建议操作之前先大概明白每条指令的意义，不要无脑复制！
 
-**Windows Path 变量会默认传递到 WSL**
+**Windows PATH 变量会默认传递到 WSL**
 
 打开 PowerShell
 
@@ -30,16 +26,10 @@ $ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\window
 $ sudo vi /etc/profile
 
 # 在文件末尾添加如下内容
-
 export WSL_HOME=/c/Users/90621 # 注意替换为自己的实际路径
-
 export APP_ENV=wsl
 
-# 保存
-
 $ vi ~/.bash_profile
-
-# 两个文件必须都设置 APP_ENV
 
 export APP_ENV=wsl
 ```
@@ -60,7 +50,7 @@ $ lnmp-wsl-install php | mysql ...
 
 * PHP 多版本共存
 
-主版本所有执行文件放到 `/usr/local/bin`，其他版本请使用绝对路径。
+主版本所有执行文件放到 `/usr/local/bin`，其他版本请使用绝对路径，例如 `/usr/local/php56/bin/php`。
 
 ```bash
 $ lnmp-wsl-install enable php72 | php71 | php70 | php56
@@ -92,7 +82,7 @@ http {
 
 **本例假设将 khs1994-docker/lnmp 放到了用户家目录**
 
-为了方便配置，NGINX 的子配置文件目录在本项目 `wsl/nginx` 文件夹中，之后在 WSL 中通过 **软链接** 链接到软件配置目录。所以你要配置 WSL 中的 NGINX，直接编辑 `wsl/nginx/*.conf` 即可。
+为了方便配置，NGINX 的子配置文件目录在本项目 `wsl/nginx` 文件夹中，之后在 WSL 中通过 **软链接** 链接到软件配置目录。所以你要配置 WSL 中的 NGINX，直接在 Windows 编辑本项目文件夹内的 `wsl/nginx/*.conf` 文件即可。
 
 ```bash
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /usr/local/etc/nginx/conf.d
@@ -156,7 +146,7 @@ $ cd unit
 
 $ ./configure --prefix=/usr/local/nginx_unit --openssl
 
-# PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文默认使用 $ lnmp-wsl-install php 7.2.5 安装 PHP
+# PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文使用 $ lnmp-wsl-install php 7.2.5 命令所安装 PHP
 
 $ ./configure php \
       --module=php72 \

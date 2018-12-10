@@ -1,4 +1,12 @@
-# 赞助商信息
+# 推广产品
+
+## 腾讯云容器服务
+
+* http://dwz.cn/I2vYahwq
+
+## 阿里云
+
+* https://promotion.aliyun.com/ntms/act/enterprise-discount.html?userCode=8lx5zmtu
 
 ## 支付宝门店红包
 
