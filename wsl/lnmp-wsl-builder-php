@@ -254,9 +254,6 @@ libldap-2.4-2"
     sudo apt install -y $PHP_RUN_DEP > /dev/null
 }
 
-# https://github.com/khs1994-docker/lnmp/issues/630
-sudo apt install libssl1.1=1.1.0f-3+deb9u2 || sudo apt install libssl1.1
-
 ################################################################################
 
 _install_php_build_dep(){
@@ -647,6 +644,9 @@ sudo chmod 777 php${PHP_NUM}-*
 _composer(){
    curl -sfL -o /tmp/installer.php \
        https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer
+
+   # https://github.com/khs1994-docker/lnmp/issues/630
+   sudo apt install -y libssl1.1=1.1.0f-3+deb9u2 || sudo apt install libssl1.1
 
    ${PHP_PREFIX}/bin/php -r " \
         \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \

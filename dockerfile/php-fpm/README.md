@@ -17,9 +17,11 @@
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`7.2.13-fpm-alpine`, `7.2-fpm-alpine`, `7-fpm-alpine`, `fpm-alpine`, `latest` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.2.13/7.2/alpine/Dockerfile)
+* [`7.3.0-fpm-alpine`, `7.3-fpm-alpine`, `7-fpm-alpine`, `fpm-alpine`, `latest` (7.3/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.0/7.3/alpine/Dockerfile)
 
-* [`7.1.25-fpm-alpine` `7.1-fpm-alpine` (7.1/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.2.13/7.1/alpine/Dockerfile)
+* [`7.2.13-fpm-alpine`, `7.2-fpm-alpine` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.0/7.3/alpine/Dockerfile)
+
+* [`7.1.25-fpm-alpine` `7.1-fpm-alpine` (7.1/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.0/7.3/alpine/Dockerfile)
 
 | VERSION     | DETAILS     |
 | :------------- | :------------- |

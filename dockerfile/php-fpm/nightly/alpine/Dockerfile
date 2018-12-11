@@ -103,7 +103,9 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-imap=shared \
             --with-kerberos \
             --with-imap-ssl \
-        --with-icu-dir=/usr \
+        # https://github.com/php/php-src/commit/20fa2e7b58c519cc148d9658456b695884b1ecf4
+        # 7.4 remove
+        # --with-icu-dir=/usr \
         --with-xmlrpc=shared \
         --with-pic \
         --with-enchant=shared \
@@ -216,6 +218,7 @@ RUN set -xe \
 	&& cd /usr/src/php \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./buildconf --force \
+  && ./buildconf --help \
 	&& ./configure \
 		--build="$gnuArch" \
 		--with-config-file-path="$PHP_INI_DIR" \

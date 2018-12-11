@@ -80,5 +80,5 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-  # - env: PHP_VERSION=7_3_X FOLDER=7.3 PHP_TAG_VERSION=7.3.0
-  - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly
+  # - env: PHP_VERSION=7_3_X FOLDER=7.3 PHP_TAG_VERSION=7.3.0 FPM=1
+  - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly FPM=1
