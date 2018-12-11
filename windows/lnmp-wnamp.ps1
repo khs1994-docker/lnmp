@@ -16,9 +16,7 @@ Example
 
 lnmp-wnamp.ps1 start php nginx mysql wsl-redis
 
-You can set common soft include in `windows/.env.ps1` file like `windows/.env.example.ps1`
-
-lnmp-wnamp.ps1 start common
+lnmp-wnamp.ps1 start common  UP COMMON_SOFT set in `.env.ps1` file.
 
 lnmp-wnamp.ps1 stop all
 
@@ -260,7 +258,7 @@ $global:WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgr
 $global:WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql","wsl-redis","wsl-memcached"
 
 if ($args.length -eq 1){
-  if ($args[0] -eq 'status'){
+  if ($args[0] -eq 'status' -or $args[0] -eq 'ps'){
     _status
 	exit
   }
