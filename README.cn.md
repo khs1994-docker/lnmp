@@ -294,7 +294,7 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 ## 支持文档
 
-https://doc.lnmp.khs1994.com
+https://docs.lnmp.khs1994.com
 
 ## 贡献项目
 

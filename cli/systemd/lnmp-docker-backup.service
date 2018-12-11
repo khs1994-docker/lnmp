@@ -1,6 +1,6 @@
 [Unit]
 Description=LNMP Docker backup databases weekly
-Documentation=https://doc.lnmp.khs1994.com
+Documentation=https://docs.lnmp.khs1994.com
 Requires=docker.service
 After=docker.service
 

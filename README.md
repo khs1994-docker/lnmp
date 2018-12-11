@@ -282,7 +282,7 @@ Please see [khs1994-docker/ci](https://github.com/khs1994-docker/ci)
 
 ## Documents
 
-https://doc.lnmp.khs1994.com
+https://docs.lnmp.khs1994.com
 
 ## Contributing
 
