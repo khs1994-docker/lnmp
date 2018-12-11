@@ -75,6 +75,22 @@ before_install:
 
 jobs:
   include:
+    - stage: docs
+      script:
+        - cd docs
+        - docker run -it --rm -v $PWD:/srv/gitbook-src khs1994/gitbook
+        - sudo touch _book/CNAME
+        - sudo echo "docs.lnmp.khs1994.com" | sudo tee _book/CNAME
+      deploy:
+        provider: pages
+        repo: khs1994-docker/lnmp-docs
+        skip-cleanup: true
+        local-dir: docs/_book
+        keep-history: true
+        github-token: $GITHUB_TOKEN
+        on:
+          branch: master
+
     - stage: tag
       script: |
         github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
@@ -127,6 +143,22 @@ jobs:
         - docker-compose create ${DOCKER_SERVICE_NAME}
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-stretch_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+
+    - stage: wsl-php-builder-73
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - export DOCKER_SERVICE_NAME=wsl-php-builder-73
+        - docker-compose build ${DOCKER_SERVICE_NAME}
+      after_success:
+        - docker-compose push ${DOCKER_SERVICE_NAME}
+        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - . .env
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -226,6 +258,8 @@ stages:
   - name: wsl-php-builder-71
     if: tag =~ /^(v18)/
   - name: wsl-php-builder-72
+    if: tag =~ /^(v18)/
+  - name: wsl-php-builder-73
     if: tag =~ /^(v18)/
   - name: wsl-php-builder-rhel-71
     if: tag =~ /^(v18)/

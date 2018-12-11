@@ -1,6 +1,6 @@
 # Changelog
 
-## v18.09
+## v18.09.01
 
 ### Compare
 
@@ -10,18 +10,7 @@
 
 ### Changes:
 
-* Remove composer from `khs1994/php:x.y.z-fpm-alpine`, you can access composer with `khs1994/php:x.y.z-composer-alpine`.
-* Move `docker-cluster.*.yml` to cluster folder.
-* Windows Container based `mcr.microsoft.com/windows/servercore:1809`
-
 ### Updates:
 
-* [Redis `5.0.2`](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
-* [PHP 7.2.12 7.3.0RC5](http://www.php.net/ChangeLog-7.php#7.2.12)
-* [Memcached `1.5.12`](https://github.com/memcached/memcached/wiki/ReleaseNotes1512)
-* MongoDB `4.1.5`
-* [PostgreSQL `11.1`](https://www.postgresql.org/about/news/1905/)
-* [MariaDB `10.4.0`](https://mariadb.com/kb/en/library/mariadb-1040-release-notes/)
-* [NGINX `1.15.7`](https://nginx.org/en/CHANGES)
-* [Node 11.3.0](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V11.md#2018-11-27-version-1130-current-rvagg)
-* [Composer `1.8.0`](https://github.com/composer/composer/releases/tag/1.8.0)
+* [PHP 7.3.0 7.2.13 7.1.25 7.0.33 5.6.39 ](http://www.php.net/ChangeLog-7.php#7.3.0)
+* [Node.js `11.4.0`](https://github.com/nodejs/node/releases/tag/v11.4.0)

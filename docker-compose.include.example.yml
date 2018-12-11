@@ -7,7 +7,23 @@ x-common:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
+  # add or override your custom service
 
   my-service:
     << : *default-common
     image: bash
+
+  ## https://docs.docker.com/compose/extends/
+  # php7:
+  #   # open more port
+  #   ports:
+  #     - "9000"
+  #     - "10001:10001"
+  #   # add more volumes
+  #   volumes:
+  #     - ./app/app:/app
+
+  # mysql:
+  #   # change default volumes settings
+  #   volumes:
+  #     - ./data:/var/lib/mysql

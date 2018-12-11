@@ -4,7 +4,7 @@
 
 [![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
-:computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境。
+:computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境，仅需 **一条命令** `$ ./lnmp-docker up`。
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -14,23 +14,27 @@
 
 * [支持文档](docs)
 
-* [项目演示](https://asciinema.org/a/152107)
+* [Kubernetes 免费实验室](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
+* [项目演示](https://asciinema.org/a/215588)
 
 * [反馈](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ffeedback)
 
 * [计划支持特性](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ftodo)
 
-* [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
-
 * [最佳实践](https://github.com/khs1994-docker/php-demo)
+
+* [赞助](https://zan.khs1994.com)
 
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
 :warning: 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
 
-:warning: Windows Docker 非常不稳定，且运行 Laravel 相应较慢。建议使用 [WSL](wsl)。
+:warning: Windows Docker 非常不稳定，且运行 Laravel 响应较慢。建议使用 [WSL](wsl)。
 
 :gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
+
+:whale: [**免费** 体验 Kubernetes](http://dwz.cn/I2vYahwq)
 
 ## 微信订阅号
 
@@ -60,7 +64,7 @@
 
 ### 安装
 
-> 鉴于国内 clone GitHub 项目较慢，本项目在 gitee.com 进行开发，每日集成到 GitHub，建议国内用户使用中国镜像
+> 鉴于国内 clone GitHub 项目较慢，本项目在 gitee.com 托管，每日集成到 GitHub，建议国内用户使用中国镜像，技术交流请到本项目 GitHub，避免在 gitee.com 提 issue 或 PR。
 
 ```bash
 $ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git
@@ -121,15 +125,23 @@ $redis->connect('redis', 6379);
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
 
+## 云容器服务推广 :whale:
+
+**免费** 体验 Kubernetes
+
+* [腾讯云容器服务](http://dwz.cn/I2vYahwq)
+
 ## 进阶
 
 * [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
 
 * [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
-## 需要 PHP 7.1 以下版本 ?
+## 停止更新的 PHP 版本
 
-请查看 https://github.com/khs1994-docker/lnmp/issues/354
+* 7.0
+
+详情 https://github.com/khs1994-docker/lnmp/issues/354
 
 ## 使用 MySQL 8.0 遇到问题 ?
 
@@ -157,7 +169,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 $ ./lnmp-docker ssl khs1994.com -d *.khs1994.com
 ```
 
->使用前请提前在 `.env` 文件或系统环境变量中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx/issue-ssl.md)。
+>使用前请提前在 `.env` 文件或系统环境变量中设置 DNS 服务商的相关密钥。也支持一键生成自签名 SSL 证书，更多信息请查看 [支持文档](docs/nginx/issue-ssl.md)
 
 ## 查看详情
 
@@ -195,7 +207,7 @@ $ ./lnmp-docker down
 
 ### 支持特性
 
-请查看 [支持文档](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82)
+请查看 [支持文档](https://github.com/khs1994-docker/lnmp/tree/18.09/docs#%E7%89%B9%E8%89%B2)
 
 ### 包含软件
 
@@ -208,10 +220,10 @@ $ ./lnmp-docker down
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.13`              | **8.0.13**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.0`            | **10.4.0**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.2-alpine`        | **5.0.2**            |`Alpine:3.8`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.12-fpm-alpine`  | **7.2.12**       |`Alpine:3.8`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.12-composer-alpine`  | **5.7.x**       |`Alpine:3.8`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.12-composer-alpine`  | **1.8.0**       |`Alpine:3.8`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.12-composer-alpine`  | **2.13.1**      |`Alpine:3.8`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.13-fpm-alpine`  | **7.2.13**       |`Alpine:3.8`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.13-composer-alpine`  | **5.7.x**       |`Alpine:3.8`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.13-composer-alpine`  | **1.8.0**       |`Alpine:3.8`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.13-composer-alpine`  | **2.13.1**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.12-alpine`           | **1.5.12**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.1-alpine`             | **11.1**        |`Alpine:3.8`    |
@@ -250,7 +262,7 @@ $ ./lnmp-docker down
 ```bash
 # OS: macOS
 
-$ cd toolkit/linuxkit
+$ cd linuxkit
 
 $ linuxkit build lnmp.yml
 
@@ -263,7 +275,7 @@ $ linuxkit run -publish 8080:80/tcp lnmp
 
 ### [khs1994.com](//khs1994.com)
 
-### [PCIT (PHP CI TOOLKIT)](https://github.com/khs1994-php/pcit)
+### [PCIT (PHP CI TOOLKIT)](https://github.com/pcit-ce/pcit)
 
 ## 项目国内镜像
 
@@ -321,5 +333,7 @@ https://doc.lnmp.khs1994.com
 你可以通过在 `.env` 文件中设置 `DATA_COLLECTION=false` 来禁用数据收集服务。
 
 ## 云容器服务推广 :whale:
+
+**免费** 体验 Kubernetes
 
 * [腾讯云容器服务](http://dwz.cn/I2vYahwq)

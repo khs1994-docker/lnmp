@@ -751,18 +751,24 @@ cn_mirror(){
 _lnmp_debug(){
   docker_version=$(docker --version)
   compose_version=$(docker-compose --version)
+  git_commit=$(git log -1 --pretty=%H)
   echo "
 <details>
 <summary>OS Environment Info</summary>
-<code>
+<pre>
 " > debug.md
 
-cat /etc/os-release >> debug.md > /dev/null 2>&1 || uname -s >> debug.md
+cat /etc/os-release >> debug.md || uname -s >> debug.md
 
 echo "
-</code>
+</pre>
+
 <code>$docker_version</code>
+
 <code>$compose_version</code>
+
+* https://github.com/khs1994-docker/lnmp/commit/$git_commit
+
 </details>
 <details>
 <summary>Console output</summary>
@@ -1566,7 +1572,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   restart )
     if [ -z "$1" ];then docker-compose down --remove-orphans; \
-        print_info "Please exec \n\n$ ./lnmp-docker development | production\n"; exit 0; fi
+        print_info "Please exec \n\n$ ./lnmp-docker up\n"; exit 0; fi
 
     for soft in "$@"
     do

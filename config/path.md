@@ -19,10 +19,11 @@
 │   ├── httpd
 │   │   ├── httpd.conf
 │   │   └── httpd.production.conf
-│   └── nginx
-│       ├── fastcgi.conf
-│       ├── nginx.conf
-│       └── nginx.production.conf
+│   ├── nginx
+│   │   ├── fastcgi.conf
+│   │   ├── nginx.conf
+│   │   └── nginx.production.conf
+│   └── supervisord.conf
 ├── httpd
 │   ├── demo-ajax-header.config
 │   ├── demo-https.config
@@ -91,6 +92,8 @@
 │   ├── minio.config
 │   ├── README.md
 │   ├── ssl
+│   │   ├── t.khs1994.com.crt
+│   │   └── t.khs1994.com.key
 │   ├── ssl-self
 │   ├── unit.config
 │   ├── wait-for-php.sh
@@ -108,7 +111,6 @@
 │   │           └── etc
 │   │               ├── php
 │   │               │   ├── conf.d
-│   │               │   │   ├── date_timezone.ini
 │   │               │   │   ├── docker-php-ext-bcmath.ini
 │   │               │   │   ├── docker-php-ext-bz2.ini
 │   │               │   │   ├── docker-php-ext-calendar.ini
@@ -139,8 +141,7 @@
 │   │               │   │   ├── docker-php-ext-xmlrpc.ini
 │   │               │   │   ├── docker-php-ext-xsl.ini
 │   │               │   │   ├── docker-php-ext-yaml.ini
-│   │               │   │   ├── docker-php-ext-zip.ini
-│   │               │   │   └── memory-limit.ini
+│   │               │   │   └── docker-php-ext-zip.ini
 │   │               │   ├── php.ini-development
 │   │               │   └── php.ini-production
 │   │               ├── php-fpm.conf
@@ -164,13 +165,16 @@
 ├── redis
 │   ├── redis.conf
 │   └── redis.production.conf
-└── registry
-    ├── ca.crt
-    ├── config.gcr.io.yml
-    ├── config.production.yml
-    ├── config.yml
-    ├── gcr.io.crt
-    └── gcr.io.key
+├── registry
+│   ├── ca.crt
+│   ├── config.gcr.io.yml
+│   ├── config.production.yml
+│   ├── config.yml
+│   ├── gcr.io.crt
+│   └── gcr.io.key
+└── supervisord
+    ├── supervisord.ini
+    └── supervisord.ini.example
 
-41 directories, 130 files
+42 directories, 133 files
 ```

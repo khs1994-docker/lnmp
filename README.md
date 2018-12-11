@@ -4,7 +4,7 @@
 
 [![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-Tencent%20Kubernetes%20Engine-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
-:computer: :whale: :elephant: :dolphin: :penguin: :rocket: Start LNMP In Less than 2 minutes Powered By Docker Compose.
+:computer: :whale: :elephant: :dolphin: :penguin: :rocket: Start LNMP In Less than 2 minutes Powered By Docker Compose, **one command** `$ ./lnmp-docker up` .
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -14,21 +14,27 @@
 
 * [Documents](docs/)
 
-* [Asciinema](https://asciinema.org/a/152107)
+* [Try Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
+* [Asciinema Live Demo](https://asciinema.org/a/215588)
 
 * [Feedback](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ffeedback)
 
 * [TODO](https://github.com/khs1994-docker/lnmp/issues?q=is%3Aopen+is%3Aissue+label%3Alnmp%2Ftodo)
 
-* [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
-
 * [Best Practice](https://github.com/khs1994-docker/php-demo)
+
+* [Donate](https://zan.khs1994.com)
 
 LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Raspberry Pi3) on `arm`.
 
 :warning: Don't Edit Any Files except `.env` [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
 
 :warning: Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
+
+:gift: [Donate](https://zan.khs1994.com)
+
+:whale: [Try Kubernetes **FREE**](http://dwz.cn/I2vYahwq)
 
 ## WeChat
 
@@ -115,15 +121,23 @@ $redis->connect('redis', 6379);
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
 
+## AD :whale:
+
+Try Kubernetes **FREE**
+
+* [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)
+
 ## Advanced
 
 * [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
 
 * [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
-## Need PHP Under 7.1?
+## PHP EOL
 
-Please see https://github.com/khs1994-docker/lnmp/issues/354
+* 7.0
+
+More information please see https://github.com/khs1994-docker/lnmp/issues/354
 
 ## Meet issues With MySQL 8.0 ?
 
@@ -188,7 +202,7 @@ $ ./lnmp-docker down
 
 ### Features
 
-Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%E9%83%A8%E9%9C%80%E6%B1%82).
+Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/18.09/docs#%E7%89%B9%E8%89%B2).
 
 ### What's inside
 
@@ -201,10 +215,10 @@ Please see [Documents](docs#%E6%BB%A1%E8%B6%B3-lnmp-%E5%BC%80%E5%8F%91%E5%85%A8%
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.13`              | **8.0.13**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.0`            | **10.4.0**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.2-alpine`        | **5.0.2**            |`Alpine:3.8`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.12-fpm-alpine`  | **7.2.12**       |`Alpine:3.8`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.12-composer-alpine`  | **5.7.x**       |`Alpine:3.8`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.12-composer-alpine`  | **1.8.0**       |`Alpine:3.8`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.12-composer-alpine`  | **2.13.1**      |`Alpine:3.8`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.13-fpm-alpine`  | **7.2.13**       |`Alpine:3.8`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.13-composer-alpine`  | **5.7.x**       |`Alpine:3.8`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.13-composer-alpine`  | **1.8.0**       |`Alpine:3.8`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.13-composer-alpine`  | **2.13.1**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.12-alpine`           | **1.5.12**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.1-alpine`             | **11.1**        |`Alpine:3.8`    |
@@ -243,7 +257,7 @@ Start `Containers as a Service(CaaS)`. For more information, see [Documents](doc
 ```bash
 # OS: macOS
 
-$ cd toolkit/linuxkit
+$ cd linuxkit
 
 $ linuxkit build lnmp.yml
 
@@ -256,7 +270,7 @@ Open your Browers `127.0.0.1:8080`
 
 ### [khs1994.com](//khs1994.com)
 
-### [PCIT PHP CI TOOLKIT](https://github.com/khs1994-php/pcit)
+### [PCIT PHP CI TOOLKIT](https://github.com/pcit-ce/pcit)
 
 ## TLS1.3
 
@@ -306,5 +320,7 @@ We send OS type and IP data to us data collection server, please set true (defau
 You can edit `.env` file `DATA_COLLECTION=false` to disable it.
 
 ## AD :whale:
+
+Try Kubernetes **FREE**
 
 * [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)

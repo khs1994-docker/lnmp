@@ -4,7 +4,7 @@ FROM ${OS_TYPE} as builder
 
 ENV TZ Asia/Shanghai
 
-ARG PHP_VERSION=7.2.12
+ARG PHP_VERSION=7.2.13
 
 COPY lnmp-wsl-builder-php-rhel /lnmp-wsl-builder-php-rhel.sh
 

@@ -126,3 +126,48 @@ LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin my-service"
 ### 自定义脚本
 
 新建 `lnmp-custom-script` shell 脚本。
+
+### 自定义卷
+
+> 例如我们想增加一个数据卷挂载，将本机 `/path/my_path` 挂载到 PHP 容器中的 `/path/target`
+
+编辑 `docker-compose.include.yml` 文件
+
+```yaml
+version: "3.7"
+
+services:
+  php7:
+    volumes:
+      - /path/my_path:/path/target
+```
+
+> 再例如 `MySQL` 默认将容器目录 `/var/lib/mysql` 映射到了宿主机中的数据卷，但我们想映射到宿主机的 `/path/mysql` 目录
+
+同样的编辑 `docker-compose.include.yml` 文件
+
+```yaml
+version: "3.7"
+
+services:
+  mysql:
+    volumes:
+      - /path/mysql:/var/lib/mysql
+```
+
+执行 `$ lnmp-docker config` 查看配置是否正确，之后启动。
+
+## 自定义 compose 文件配置
+
+编辑 `docker-compose.include.yml` 文件，增加服务名，修改指令即可。
+
+> 例如我们想自定义 `php7` 服务的配置，我们先增加 php7 这个条目。
+
+```yaml
+version: "3.7"
+
+services:
+  php7:
+    # 想修改哪个在这里重写即可，例如我们想修改镜像名字
+    image: username/image:tag
+```

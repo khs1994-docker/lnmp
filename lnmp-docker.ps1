@@ -742,6 +742,7 @@ switch($first){
 
       $docker_version=$(docker --version)
       $compose_version=$(docker-compose --version)
+      $git_commit=$(git log -1 --pretty=%H)
       Write-Output "
 <details>
 
@@ -752,6 +753,8 @@ switch($first){
 <code>$docker_version</code>
 
 <code>$compose_version</code>
+
+* https://github.com/khs1994-docker/lnmp/commit/$git_commit
 
 </details>
 

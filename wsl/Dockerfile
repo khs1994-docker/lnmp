@@ -2,7 +2,7 @@ FROM debian:stretch-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.2.12
+ARG PHP_VERSION=7.2.13
 
 ARG PHP_NUM=72
 
@@ -185,6 +185,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --with-curl \
     --with-gettext \
     --with-gd \
+        # php 7.4
+        # --enable-freetype \
         --with-freetype-dir=/usr/lib \
         --disable-gd-jis-conv \
         --with-jpeg-dir=/usr/lib \
