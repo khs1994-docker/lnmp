@@ -151,7 +151,7 @@
 │   │                   ├── www.conf
 │   │                   ├── www.conf.default
 │   │                   └── zz-docker.conf
-│   ├── docker-error-log.ini
+│   ├── docker-php.ini
 │   ├── docker-xdebug.ini
 │   ├── php.development.ini
 │   ├── php.production.ini

@@ -98,8 +98,8 @@ Function env_status(){
     Copy-Item docker-compose.include.example.yml docker-compose.include.yml
   }
 
-  if (!(Test-Path config/php/docker-error-log.ini)){
-    Copy-Item config/php/docker-error-log.ini.example config/php/docker-error-log.ini
+  if (!(Test-Path config/php/docker-php.ini)){
+    Copy-Item config/php/docker-php.ini.example config/php/docker-php.ini
   }
 }
 

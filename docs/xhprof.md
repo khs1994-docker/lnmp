@@ -4,7 +4,7 @@
 
 ## 启用
 
-编辑 `./config/php/docker-error-log.ini` 文件
+编辑 `./config/php/docker-php.ini` 文件
 
 ```bash
 extension=tideways_xhprof.so
