@@ -1,7 +1,7 @@
 /*
 !.gitignore
 !default
-!docker-error-log.ini
+!docker-error-log.ini.example
 !docker-xdebug.ini
 !php.development.ini
 !php.production.ini
