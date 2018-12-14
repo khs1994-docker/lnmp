@@ -52,8 +52,8 @@ export COMPOSER_VERSION=1.8.0
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
-export CC=clang CXX=clang
-# export CC=gcc CXX=g++
+# export CC=clang CXX=clang
+export CC=gcc CXX=g++
 ################################################################################
 
 for command in "$@"
@@ -248,6 +248,7 @@ libxpm4 \
 $( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
+libssl1.1 \
 libicu57 \
 libldap-2.4-2"
     set -e
@@ -289,9 +290,6 @@ _install_php_build_dep(){
                    $( test $PHP_NUM = "70" && echo "" ) \
                    $( test $PHP_NUM = "71" && echo "" ) \
                    $( if [ $PHP_NUM -ge "72" ];then \
-                        echo $( if ! [ "${ARGON2}" = 'false' ];then \
-                                  echo "libargon2-0-dev"; \
-                                fi ); \
                         echo "libsodium-dev libzip-dev"; \
                       fi ) \
                       \
@@ -646,8 +644,9 @@ _composer(){
        https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer
 
    # https://github.com/khs1994-docker/lnmp/issues/630
-   sudo apt install -y libssl1.1=1.1.0f-3+deb9u2 || sudo apt install libssl1.1
-
+   set +e
+   sudo apt show libssl1.1=1.1.0f-3+deb9u2 && sudo apt install -y --allow-downgrades libssl1.1=1.1.0f-3+deb9u2
+   set -e
    ${PHP_PREFIX}/bin/php -r " \
         \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
         \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
@@ -855,6 +854,24 @@ if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
   echo "debian9 notsupport php56" ; exit 1 ; fi
 
 sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
+
+if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ];then
+##<argon2>##
+	sed -e 's/stretch/buster/g' /etc/apt/sources.list | sudo tee /etc/apt/sources.list.d/buster.list; \
+	{ \
+		echo 'Package: *'; \
+		echo 'Pin: release n=buster'; \
+		echo 'Pin-Priority: -10'; \
+		echo; \
+		echo 'Package: libargon2*'; \
+		echo 'Pin: release n=buster'; \
+		echo 'Pin-Priority: 990'; \
+	} | sudo tee /etc/apt/preferences.d/argon2-buster
+
+	sudo apt update
+  sudo apt install -y --no-install-recommends libargon2-dev
+  export ARGON2=true
+fi
 
 if [ "$2" = 'enable-ext' ];then
   ( _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \

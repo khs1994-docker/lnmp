@@ -12,7 +12,7 @@
 
 在线阅读：[GitHub](SUMMARY.md)
 
-在线阅读：[WebSite](https://doc.lnmp.khs1994.com/)
+在线阅读：[WebSite](https://docs.lnmp.khs1994.com/)
 
 或在命令行执行 `./lnmp-docker docs` 在本地阅读。
 
