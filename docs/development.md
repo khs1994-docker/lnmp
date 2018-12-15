@@ -168,6 +168,6 @@ version: "3.7"
 
 services:
   php7:
-    # 想修改哪个在这里重写即可，例如我们想修改镜像名字
+    # 想修改哪个在这里重写即可，例如我们想使用自己的 PHP 镜像，那么增加 `image` 指令即可
     image: username/image:tag
 ```

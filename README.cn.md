@@ -30,7 +30,7 @@
 
 :warning: 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
 
-:warning: Windows Docker 非常不稳定，且运行 Laravel 响应较慢。建议使用 [WSL](wsl)。
+:warning: Windows Docker 非常不稳定，且运行 Laravel 响应较慢。[解决办法](docs/laravel.md)
 
 :gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
 

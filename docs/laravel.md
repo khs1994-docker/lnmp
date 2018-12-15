@@ -10,6 +10,57 @@
 
 所以如果你想要安装 `5.5.x` LTS 版本请使用 [`lnmp-laravel5.5`](command.md) 安装。
 
+## Windows 运行 Laravel 响应缓慢的问题
+
+原因：监听宿主机目录通过 NFS 实现，性能存在问题。
+
+解决思路：`vendor` 目录使用数据卷（数据卷存在于虚拟机中）。
+
+编辑 `docker-compose.include.yml` 文件，重写默认的 `php` 配置。
+
+```yaml
+version: "3.7"
+
+services:
+  # 这里增加的条目会重写本项目的默认配置
+  php7:
+    # 本项目默认的 php 镜像不包含 composer，所以我们这里使用 composer 镜像
+    image: khs1994/php:7.3.0-composer-alpine
+    # vendor 目录使用数据卷
+    volumes:
+      # 假设 laravel 目录位于 `./app/laravel/`
+      - laravel_vendor:/app/laravel/vendor
+      # 假设还有一个 Laravel 应用位于 `./app/laravel2` 与 `./app/laravel` 版本一致（依赖一致），那么可以共用 vendor 数据卷
+      - laravel_vendor:/app/laravel/vendor2
+      # 假设还有一个 laravel 5.7 应用位于 `./app/laravel5.7`，由于与 `./app/laravel` 依赖不一致，必须使用新的数据卷
+      - laravel_57_vendor:/app/laravel5.7/vendor
+
+# 定义数据卷
+volumes:
+  laravel_vendor:
+  laravel_57_vendor:
+```
+
+修改之后启动
+
+```bash
+$ lnmp-docker up
+```
+
+进入命令行安装依赖
+
+```bash
+$ lnmp-docker php7-cli
+
+$ cd /app/laravel/
+
+$ composer install
+
+# $ composer update
+
+# 以此类推，进入 Laravel 目录，安装依赖。
+```
+
 ## 运行 Laravel 队列(Queue)
 
 ```bash
