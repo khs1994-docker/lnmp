@@ -15,7 +15,7 @@
 $global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin',"minio"
 ```
 
-### Other
+### Linux、macOS
 
 在 `.env` 文件中将 `minio` 包含进来
 

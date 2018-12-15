@@ -51,6 +51,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     && sed -i "s!security.debian.org/debian-security!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
     && set -xe \
 	      && buildDeps=" \
+        wget \
+        unzip \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
@@ -115,7 +117,16 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
              pecl install $extension \
                && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
            done \
-        && docker-php-ext-enable opcache \
+        # https://github.com/tideways/php-xhprof-extension.git
+        && cd /tmp \
+        && wget https://github.com/tideways/php-xhprof-extension/archive/master.zip \
+        && unzip master.zip \
+        && cd php-xhprof-extension-master \
+        && phpize \
+        && ./configure \
+        && make \
+        && make install \
+        && docker-php-ext-enable opcache tideways_xhprof \
         && apt-get purge -y --auto-remove  $buildDeps \
         && rm -rf /tmp/* \
         # config opcache
@@ -123,7 +134,9 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
         # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-        /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
+          /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
+        && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
+          /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default \
         # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \
         && ln -sf /dev/stdout /var/log/php-fpm/access.log \

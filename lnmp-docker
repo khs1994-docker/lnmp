@@ -66,6 +66,10 @@ if [ -f lnmp-custom-script ];then
   . ./lnmp-custom-script
 fi
 
+if ! [ -f config/php/docker-php.ini ];then
+  cp config/php/docker-php.ini.example config/php/docker-php.ini
+fi
+
 _check_and_copy_file config/composer/config.example.json config/composer/config.json
 
 # PHPer command

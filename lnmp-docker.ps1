@@ -97,6 +97,10 @@ Function env_status(){
   if (!(Test-Path docker-compose.include.yml)){
     Copy-Item docker-compose.include.example.yml docker-compose.include.yml
   }
+
+  if (!(Test-Path config/php/docker-php.ini)){
+    Copy-Item config/php/docker-php.ini.example config/php/docker-php.ini
+  }
 }
 
 if (Test-Path lnmp-custom-script.ps1){

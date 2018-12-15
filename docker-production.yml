@@ -833,7 +833,7 @@ configs:
     << : *default-labels
 
   php_ini_error_log:
-    file: ./config/php/docker-error-log.ini
+    file: ./config/php/docker-php.ini
     << : *default-labels
 
   php_fpm_conf_d_zz_docker_conf:

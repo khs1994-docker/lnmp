@@ -70,6 +70,12 @@ datadir         = /var/lib/mysql-my
 
 **6.** 修改 `.env` 文件 `LNMP_NGINX_CONF=nginx.my.conf` `LNMP_NGINX_CONF_D=nginx.my`，HTTPD 同理
 
+## 简单的自定义 `php.ini` 配置
+
+编辑 `./config/php/docker-php.ini` 文件。
+
+> 当你需要更改大量的 `php.ini` 配置时，建议使用 `LNMP_PHP_INI` 变量定义自己的 `php.ini` 文件所在路径，这样就可以使用自己的 `php.ini` 文件了。
+
 ## 其他软件
 
 不再赘述，如果你还是实在不知道该怎么正确的自定义配置，请在本项目 GitHub 提出 `issue`。

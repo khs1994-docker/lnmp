@@ -30,7 +30,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 :warning: Don't Edit Any Files except `.env` [Why ?](https://github.com/khs1994-docker/lnmp/issues/238)
 
-:warning: Run Laravel on Docker For Windows very slow, you can try [WSL](wsl).
+:warning: Run Laravel on Docker For Windows very slow. [solve it](docs/laravel.md).
 
 :gift: [Donate](https://zan.khs1994.com)
 
@@ -210,7 +210,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/18.09/docs#%E
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.7.9`        | **2.7.9**              |`Alpine:3.8`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`khs1994/nginx:1.15.7-alpine`| **1.15.7**             |`Alpine:3.8`    |
-|[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/nginx-unit:1.4-alpine`| **1.4**             |`Alpine:3.8`    |
+|[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/nginx-unit:1.6-alpine`| **1.6**             |`Alpine:3.8`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.37-alpine`       | **2.4.37**             |`Alpine:3.8`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.13`              | **8.0.13**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.0`            | **10.4.0**             |`Ubuntu:bionic` |

@@ -1,7 +1,5 @@
 language: bash
 
-sudo: required
-
 # dist: trusty # 14.04
 dist: xenial # 16.04
 
@@ -120,11 +118,12 @@ jobs:
       script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.1.16 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-71
-        - docker-compose build ${DOCKER_SERVICE_NAME}
+        # - export DOCKER_SERVICE_NAME=wsl-php-builder-71
+        # - docker-compose build ${DOCKER_SERVICE_NAME}
+        - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_71}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -136,11 +135,10 @@ jobs:
       script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-72
-        - docker-compose build ${DOCKER_SERVICE_NAME}
+        - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -152,11 +150,10 @@ jobs:
       script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-73
-        - docker-compose build ${DOCKER_SERVICE_NAME}
+        - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-stretch_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -168,11 +165,10 @@ jobs:
       script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.1.16 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-71
-        - docker-compose build ${DOCKER_SERVICE_NAME}
+        - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_71}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
@@ -184,11 +180,10 @@ jobs:
       script:
         - cd wsl
         # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
-        - export DOCKER_SERVICE_NAME=wsl-php-builder-rhel-72
-        - docker-compose build ${DOCKER_SERVICE_NAME}
+        - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
-        - docker-compose push ${DOCKER_SERVICE_NAME}
-        - docker-compose create ${DOCKER_SERVICE_NAME}
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_72}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .

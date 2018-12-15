@@ -37,6 +37,7 @@
     * [Laravel](laravel.md)
     * [Composer](composer.md)
     * [PHPUnit](phpunit.md)
+    * [XHProf](xhprof.md)
 
 * Composer
     * [Satis](composer/satis.md)

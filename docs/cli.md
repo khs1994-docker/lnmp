@@ -6,7 +6,7 @@
 
 * 各种场景和架构中一键启动
 
-* 便捷生成 NGINX APACHE 配置文件
+* 便捷生成 `NGINX` `APACHE` 配置文件
 
 ## 尽量兼容原始命令
 
@@ -33,4 +33,4 @@
 
 >`docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
 
-调试参数配置请把 `up -d` 替换为 `config` 即可。
+调试参数配置时请把 `up -d` 替换为 `config` 即可。
