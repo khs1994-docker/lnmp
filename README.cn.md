@@ -4,7 +4,7 @@
 
 [![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
-:computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境，仅需 **一条命令** `$ ./lnmp-docker up`。
+:computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境，仅需 **一条命令** `$ ./lnmp-docker up`
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">

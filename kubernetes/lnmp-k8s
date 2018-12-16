@@ -2,7 +2,7 @@
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 KUBERNETES_VERSION=1.13.0
-MINIKUBE_VERSION=0.28.1
+MINIKUBE_VERSION=0.30.0
 ETCD_VERSION=3.3.10
 FLANNEL_VERSION=0.10.0
 

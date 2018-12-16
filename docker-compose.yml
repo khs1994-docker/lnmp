@@ -153,8 +153,8 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro,cached
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro,cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro,cached
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro,cached
       - ./log/php:/var/log/php:delegated
       - ./log/supervisord.log:/var/log/supervisord.log
       - ./log/supervisord:/var/log/supervisord

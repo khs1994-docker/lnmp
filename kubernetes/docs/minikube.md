@@ -1,6 +1,7 @@
 ## Minikube
 
-* https://www.khs1994.com/docker/minikube/README.html
+* https://github.com/AliyunContainerService/minikube
+* https://yq.aliyun.com/articles/221687
 
 ```bash
 $ ./lnmp-k8s minikube-install

@@ -28,3 +28,19 @@ services:
   #   # change default volumes settings
   #   volumes:
   #     - ./data:/var/lib/mysql
+
+  swoole:
+    << : *default-common
+    image: khs1994/php:7.3.0-fpm-alpine
+    command:
+      - php
+      - /app/swoole/index.php
+    ports:
+      - 10001:10001
+    networks:
+      - backend
+    volumes:
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./log/php:/var/log/php:delegated

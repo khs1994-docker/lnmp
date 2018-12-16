@@ -2,7 +2,7 @@ cd $PSScriptRoot
 
 ################################################################################
 
-$MINIKUBE_VERSION="0.28.1"
+$MINIKUBE_VERSION="0.30.0"
 $KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 
 ################################################################################
