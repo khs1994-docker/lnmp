@@ -46,7 +46,7 @@ version: "3.7"
 services:
   # 这里增加的条目会重写本项目的默认配置
   php7:
-    # 本项目默认的 php 镜像不包含 composer，所以我们这里使用 composer 镜像
+    # 本项目默认的 php 镜像不包含 composer，所以我们这里更换为 composer 镜像
     image: khs1994/php:7.3.0-composer-alpine
     # vendor 目录使用数据卷
     volumes:
@@ -69,7 +69,7 @@ volumes:
 $ lnmp-docker up
 ```
 
-进入命令行安装依赖
+进入命令行安装 composer 依赖
 
 ```bash
 $ lnmp-docker php7-cli

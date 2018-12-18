@@ -123,6 +123,16 @@ $global:LNMP_INCLUDE='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin my-service"
 ```
 
+### 自定义启动软件
+
+```bash
+$ lnmp-docker up SOFT_NAME SOFT_NAME2
+
+# $ lnmp-docker up kong-dashboard
+
+# $ lnmp-docker up kong kong-dashboard
+```
+
 ### 自定义脚本
 
 新建 `lnmp-custom-script` shell 脚本。

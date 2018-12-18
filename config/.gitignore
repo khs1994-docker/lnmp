@@ -19,3 +19,5 @@
 !README.md
 supervisord/supervisord.ini
 !supervisord
+!kong
+kong/*.conf

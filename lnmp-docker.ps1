@@ -408,11 +408,18 @@ switch($first){
 
     up {
       init
+
+      if($other){
+        $command = $other
+      }else{
+        $command = ${LNMP_INCLUDE}
+      }
+
       docker-compose `
         -f docker-compose.yml `
         -f docker-compose.override.yml `
         -f docker-compose.include.yml `
-        up -d ${LNMP_INCLUDE}
+        up -d $command
     }
 
     pull {
