@@ -28,3 +28,83 @@ services:
   #   # change default volumes settings
   #   volumes:
   #     - ./data:/var/lib/mysql
+
+
+
+
+
+
+
+# More Demo
+
+  swoole:
+    << : *default-common
+    image: khs1994/php:7.3.0-fpm-alpine
+    command:
+      - php
+      - /app/swoole/index.php
+    ports:
+      - 10001:10001
+    networks:
+      - backend
+    volumes:
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./log/php:/var/log/php:delegated
+
+  # with kong
+  # https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
+  postgresql-kong:
+    image: postgres:11.1-alpine
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+    volumes:
+      - postgresql-kong-data:/var/lib/postgresql/data
+
+  kong:
+    image: kong
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: postgresql-kong
+      KONG_PG_PASSWORD: mytest
+      # KONG_CASSANDRA_CONTACT_POINS: 'kong-db'
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001,0.0.0.0:8444 ssl"
+    # command:
+    #   - kong
+    #   - migrations
+    #   - up
+    volumes:
+      - ./config/kong:/etc/kong
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "8000:8000"
+      - "8445:8443"
+      - "8001:8001"
+      - "8444:8444"
+    depends_on:
+      - postgresql-kong
+
+  kong-dashboard:
+    image: pgbi/kong-dashboard
+    ports:
+      - 8082:8080
+    command:
+      - start
+      - --kong-url
+      - http://kong:8001
+    networks:
+      - frontend
+
+# 定义数据卷
+
+volumes:
+  # laravel_vendor:
+  postgresql-kong-data:

@@ -113,6 +113,7 @@ services:
       - "${LNMP_RABBITMQ_PORT:-127.0.0.1:5672}:5672"
 
   postgresql:
+    &postgresql
     << : *default-common
     image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-11.1}-alpine
     environment:
@@ -126,6 +127,9 @@ services:
     secrets:
       # default is mysql password
       - db_root_password
+
+  postgresql-kong:
+    << : *postgresql
 
   mongodb:
     << : *default-common
@@ -153,8 +157,8 @@ services:
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro,cached
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro,cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro,cached
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro,cached
       - ./log/php:/var/log/php:delegated
       - ./log/supervisord.log:/var/log/supervisord.log
       - ./log/supervisord:/var/log/supervisord

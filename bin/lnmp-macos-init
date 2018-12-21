@@ -55,7 +55,7 @@ _install_brew(){
   source ~/.bash_profile
 
   if [ -f ~/.config/fish/config.fish ];then
-    echo "set -g HOMEBREW_BOTTLE_DOMAIN https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles" >> ~/.config/fish/config.fish
+    echo "set -gx HOMEBREW_BOTTLE_DOMAIN https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles" >> ~/.config/fish/config.fish
   fi
 
   brew update

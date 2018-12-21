@@ -46,7 +46,7 @@ version: "3.7"
 services:
   # 这里增加的条目会重写本项目的默认配置
   php7:
-    # 本项目默认的 php 镜像不包含 composer，所以我们这里使用 composer 镜像
+    # 本项目默认的 php 镜像不包含 composer，所以我们这里更换为 composer 镜像
     image: khs1994/php:7.3.0-composer-alpine
     # vendor 目录使用数据卷
     volumes:
@@ -69,7 +69,7 @@ volumes:
 $ lnmp-docker up
 ```
 
-进入命令行安装依赖
+进入命令行安装 composer 依赖
 
 ```bash
 $ lnmp-docker php7-cli
@@ -85,15 +85,15 @@ $ composer install
 
 ## 运行 Laravel 队列(Queue)
 
+使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md)
+
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 ```
 
-生产环境中使用 **宿主机** 的系统级的守护程序（systemd）来保证上边的命令运行。具体请查看 [systemd](systemd.md)
-
 ## 运行 Laravel 调度器(Schedule)
 
-使用 **宿主机** 的系统级的计划任务（systemd、crontab,etc）执行以下命令即可
+使用 **宿主机** 的系统级的计划任务（systemd、crontab 等）执行以下命令即可
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan schedule:run

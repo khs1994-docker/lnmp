@@ -408,11 +408,18 @@ switch($first){
 
     up {
       init
+
+      if($other){
+        $command = $other
+      }else{
+        $command = ${LNMP_INCLUDE}
+      }
+
       docker-compose `
         -f docker-compose.yml `
         -f docker-compose.override.yml `
         -f docker-compose.include.yml `
-        up -d ${LNMP_INCLUDE}
+        up -d $command
     }
 
     pull {
@@ -936,10 +943,10 @@ This local server support Docker Desktop v18.05-EDGE-67
       "pause-amd64:3.1"
 
       foreach ($image in $images){
-         docker pull gcr.mirrors.ustc.edu.cn/$image
-         docker tag gcr.mirrors.ustc.edu.cn/$image k8s.gcr.io/$image
+         docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
+         docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
          docker push k8s.gcr.io/$image
-         docker rmi gcr.mirrors.ustc.edu.cn/$image
+         docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
       }
 
        Write-Warning "
