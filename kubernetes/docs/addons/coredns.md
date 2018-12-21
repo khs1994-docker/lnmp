@@ -1,4 +1,4 @@
-# 部署 CoreDNS 插件
+# CoreDNS 插件
 
 ```bash
 $ kubectl create -f addons/coredns.yaml

@@ -1,4 +1,4 @@
-# Windows Hyperv 使用 minikube
+# Minikube on Windows Hyperv
 
 Windows 10 在 Hyper-V 虚拟机中运行 Minikube
 

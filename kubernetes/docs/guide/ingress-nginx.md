@@ -1,4 +1,4 @@
-# Docker for Desktop Kubernetes Ingress NGINX
+# Ingress NGINX
 
 * https://kubernetes.github.io/ingress-nginx/
 

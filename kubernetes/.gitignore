@@ -9,3 +9,5 @@ test
 .env.ps1
 
 vim.exe.*
+
+docs/.vuepress/dist

@@ -1,4 +1,6 @@
-# run
+# Kubectl
+
+## run
 
 ```bash
 $ kubectl run nginx \
@@ -8,19 +10,19 @@ $ kubectl run nginx \
     --port=80
 ```
 
-# exec
+## exec
 
 ```bash
 $ kubectl exec -it nginx -- sh
 ```
 
-# expose
+## expose
 
 ```bash
-$ kubectl expose deployment nginx --port=80 --target-port=8000
+$ kubectl expose deployment nginx --port=80 --target-port=80
 ```
 
-# logs
+## logs
 
 ```bash
 $ kubectl logs POD_NAME

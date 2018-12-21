@@ -6,6 +6,8 @@
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
 </p>
 
+* [文档](https://docs.k8s.lnmp.khs1994.com)
+
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
 * **Windows** 用户务必安装 `WSL`

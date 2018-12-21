@@ -1,4 +1,6 @@
-# kubectl
+# 安装
+
+## kubectl
 
 copy k8s config file to `~/.kube/config`
 
@@ -68,7 +70,7 @@ $ kubectl get componentstatuses
 
 $ sudo netstat -lnpt|grep kube-apiserver
 
-tcp        0      0 192.168.57.110:6443     0.0.0.0:*               LISTEN      847/kube-apiserver  
+tcp        0      0 192.168.57.110:6443     0.0.0.0:*               LISTEN      847/kube-apiserver
 tcp        0      0 127.0.0.1:8080          0.0.0.0:*               LISTEN      847/kube-apiserver
 ```
 
@@ -121,8 +123,8 @@ $ journalctl -u kubelet
 
 $ sudo netstat -lnpt|grep kubelet
 
-tcp        0      0 127.0.0.1:10248         0.0.0.0:*               LISTEN      29531/kubelet       
-tcp        0      0 192.168.57.111:10250    0.0.0.0:*               LISTEN      29531/kubelet       
+tcp        0      0 127.0.0.1:10248         0.0.0.0:*               LISTEN      29531/kubelet
+tcp        0      0 192.168.57.111:10250    0.0.0.0:*               LISTEN      29531/kubelet
 tcp        0      0 127.0.0.1:41039         0.0.0.0:*               LISTEN      29531/kubelet
 ```
 

@@ -1,4 +1,4 @@
-# 部署 dashboard 插件
+# dashboard 插件
 
 ```bash
 $ kubectl apply -f addons/dashboard.yaml

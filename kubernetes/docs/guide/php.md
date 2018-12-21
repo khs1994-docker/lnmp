@@ -1,4 +1,4 @@
-# PHP On Kubernetes
+# PHP
 
 ## Xdebug
 

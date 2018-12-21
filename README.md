@@ -14,7 +14,7 @@
 
 * [Documents](docs/)
 
-* [Try Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [Try Kubernetes Free](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 * [Asciinema Live Demo](https://asciinema.org/a/215588)
 
