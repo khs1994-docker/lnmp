@@ -70,8 +70,6 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a down              -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a docs              -d     'Support Documents'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a gcr.io             -d    'Up local gcr.io(k8s.gcr.io) registry server to start Docker for Desktop Kubernetes'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a help              -d     'Display this help message'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a k8s               -d     'Deploy LNMP on k8s'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a k8s-down          -d     'Remove k8s LNMP'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a new               -d     'New PHP Project and generate nginx conf and issue SSL certificate'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a nginx-config      -d     'Generate nginx vhost conf'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a restore           -d     'Restore MySQL databases'

@@ -48,8 +48,6 @@ complete -W "acme.sh \
         docs \
         gcr.io \
         help \
-        k8s \
-        k8s-down \
         new \
         restore \
         restart \
