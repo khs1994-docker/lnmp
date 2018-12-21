@@ -1,5 +1,7 @@
 # CoreDNS 插件
 
+* https://github.com/kubernetes/kubernetes/blob/master/cluster/addons/dns/coredns/coredns.yaml.base
+
 ```bash
 $ kubectl create -f addons/coredns.yaml
 

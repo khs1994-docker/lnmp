@@ -22,6 +22,8 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
     nginx.ingress.kubernetes.io/secure-backends: "true"
+    # host 302=> host/app
+    # nginx.ingress.kubernetes.io/app-root: /app
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
   name: lnmp
   namespace: default
@@ -29,6 +31,7 @@ metadata:
     app: lnmp
     version: 0.0.1
 spec:
+  # 一个 Ingress 只能使用一个 secret
   tls:
   - hosts:
     - laravel.t.khs1994.com
@@ -36,26 +39,26 @@ spec:
     - www.t.khs1994.com
     secretName: lnmp-ingress-nginx-tls-0.0.1
   rules:
-  - host: laravel2.t.khs1994.com
+  - host: laravel2.t.khs1994.com # must be a DNS name, not an IP address
     http:
       paths:
-      - backend:
+      - path: /
+        backend:
           serviceName: nginx
           servicePort: 443
-        path: /
   - host: www.t.khs1994.com
     http:
       paths:
-      - backend:
-          serviceName: nginx
-          servicePort: 443
-        path: /
+      - path: /
         # path: /test
         # 发送后端路径也是 /test
+        backend:
+          serviceName: nginx
+          servicePort: 443
   - host: laravel.t.khs1994.com
     http:
       paths:
-      - backend:
+      - path: /
+        backend:
           serviceName: nginx
           servicePort: 443
-        path: /

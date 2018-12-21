@@ -11,3 +11,6 @@ test
 vim.exe.*
 
 docs/.vuepress/dist
+
+*.test.yaml
+*.test.yml

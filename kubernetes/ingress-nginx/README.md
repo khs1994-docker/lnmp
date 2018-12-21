@@ -6,6 +6,8 @@
 
 * https://blog.csdn.net/aixiaoyang168/article/details/78485581?locationNum=5&fps=1
 
+* https://mritd.me/2017/03/04/how-to-use-nginx-ingress/
+
 ## 组成
 
 * NGINX 反向代理负载均衡器

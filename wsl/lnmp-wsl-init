@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-#
-# init WSL
-#
+# WSL init
 
 sudo sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 sudo sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
@@ -13,17 +11,11 @@ sudo sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 # conf wsl
 sudo curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf -o /etc/wsl.conf
 
-if [ -z $APP_ENV ];then
-  echo "export APP_ENV=wsl" >> ~/.bash_profile
-fi
+if [ -z $APP_ENV ];then echo "export APP_ENV=wsl" >> ~/.bash_profile; fi
 
-if [ -z $WSL_HOME ];then
-  echo "export WSL_HOME=/c/Users/90621" >> ~/.bash_profile
-fi
+if [ -z $WSL_HOME ];then echo "export WSL_HOME=/c/Users/90621" >> ~/.bash_profile; fi
 
-if [ -z $COMPOSER_HOME ];then
-  echo "export COMPOSER_HOME=/tmp" >> ~/.bash_profile
-fi
+if [ -z $COMPOSER_HOME ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bash_profile; fi
 
 sudo apt update && sudo apt -y install \
                             bash-completion \
@@ -42,7 +34,8 @@ sudo apt update && sudo apt -y install \
 
 # composer cn mirror
 
-command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.laravel-china.org
+command -v /usr/local/bin/composer \
+  && composer config -g repo.packagist composer https://packagist.laravel-china.org
 
 # lnmp-wsl-docker-cli
 # 18.03 +
@@ -54,11 +47,30 @@ sudo ln -sf "/c/Program Files/Docker/Docker/resources/bin/docker-compose.exe" /u
 if ! [ -d /etc/bash_completion.d ];then sudo mkdir -p /etc/bash_completion.d; fi
 
 if ! [ -f /etc/bash_completion.d/docker ];then
-
-sudo curl -L https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker
-
+sudo curl -L \
+  https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker \
+  -o /etc/bash_completion.d/docker
 fi
 
 # verify
 
 docker --version
+
+# cp docker for windows k8s config
+
+mkdir -p ${HOME}/.kube
+
+for user in `ls /c/Users`;
+do
+  if [ -f "/c/Users/${user}/.kube/config" ];then
+    if ! [ -f "${HOME}/.kube/config" ];then
+      cp "/c/Users/${user}/.kube/config" ${HOME}/.kube/config
+
+      echo -e "\n\n===> copy .kube folder success\n\n"
+
+      kubectl version
+    fi
+  fi
+done
+
+echo -e '\n';
