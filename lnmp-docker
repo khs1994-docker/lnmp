@@ -21,12 +21,12 @@ print_info(){
 }
 
 print_error(){
-  echo -e "\033[31mERROR\033[0m  $@"
+  echo -e "\033[31mERROR\033[0m \a $@"
   export exit_by_error=1
 }
 
 print_warning(){
-  echo -e "\033[33mWARNING\033[0m  $@"
+  echo -e "\033[33mWARNING\033[0m \a $@"
 }
 
 NOTSUPPORT(){

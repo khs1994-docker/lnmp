@@ -12,7 +12,7 @@
 
 证书直接用之前生成的，具体原理和 Dockerd TLS 一样
 
-之前没有生成证书，使用如下命令生成证书
+如果之前没有生成证书，使用如下命令生成证书
 
 编辑 `./coreos/.env` 文件中的变量
 
@@ -58,7 +58,7 @@ $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
       --tiller-tls-verify --tls-ca-cert ./ca.pem \
       --service-account=tiller \
       --upgrade -i \
-      gcr.mirrors.ustc.edu.cn/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+      gcr.mirrors.ustc.edu.cn/kubernetes-helm/tiller:v2.12.1 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 ```
 
 客户端使用时加上 `--tls`
@@ -74,7 +74,7 @@ $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem `
       --tiller-tls-verify --tls-ca-cert ./ca.pem `
       --service-account=tiller `
       --upgrade -i `
-      gcr.mirrors.ustc.edu.cn/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+      gcr.mirrors.ustc.edu.cn/kubernetes-helm/tiller:v2.12.1 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 # macOS
 $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
@@ -82,7 +82,7 @@ $ helm init --tiller-tls --tiller-tls-cert ./server-cert.pem \
       --tiller-tls-verify --tls-ca-cert ./ca.pem \
       --service-account=tiller \
       --upgrade -i \
-      gcr.mirrors.ustc.edu.cn/kubernetes-helm.tiller:v2.10.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+      gcr.mirrors.ustc.edu.cn/kubernetes-helm/tiller:v2.12.1 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
 
 ```
 

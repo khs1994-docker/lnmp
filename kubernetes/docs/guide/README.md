@@ -27,3 +27,7 @@ $ kubectl expose deployment nginx --port=80 --target-port=80
 ```bash
 $ kubectl logs POD_NAME
 ```
+
+* https://www.jianshu.com/p/258539db000a
+
+* https://kubernetes.io/zh/docs/user-guide/kubectl-overview/
