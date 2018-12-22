@@ -95,6 +95,7 @@ $ kubectl get endpoints kube-controller-manager --namespace=kube-system  -o yaml
 ```
 
 - **10257** 监听 10257 端口，接收 https 请求
+- **10252**
 
 ### kube-scheduler
 
@@ -113,8 +114,18 @@ $ kubectl get endpoints kube-scheduler --namespace=kube-system  -o yaml
 ```
 
 - **10251** 接收 http 请求
+- **10259**
 
 ## Worker
+
+### kube-proxy
+
+```bash
+tcp        0      0 192.168.199.100:10249   0.0.0.0:*               LISTEN      4108/kube-proxy
+tcp        0      0 192.168.199.100:10256   0.0.0.0:*               LISTEN      4108/kube-proxy
+tcp6       0      0 :::21943                :::*                    LISTEN      4108/kube-proxy
+tcp6       0      0 :::8443                 :::*                    LISTEN      4108/kube-proxy
+```
 
 ### kubelet
 
@@ -132,7 +143,9 @@ tcp        0      0 127.0.0.1:41039         0.0.0.0:*               LISTEN      
 
 - **4194** cadvisor http 服务
 - **10248** healthz http 服务
-- **10250** https API 服务 注意：未开启只读端口 10255
+- **10250** https API 服务
+- **10255** 只读端口
+- **41563**
 
 #### approve kubelet CSR 请求
 
@@ -171,6 +184,44 @@ tcp6       0      0 :::8588                 :::*                    LISTEN      
 
 - **10249** http prometheus metrics port
 - **10256** http healthz port;
+
+## 端口总览
+
+```bash
+# --healthz-port int32
+# The port of the localhost healthz endpoint (set to 0 to disable) (default 10248) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
+tcp        0      0 127.0.0.1:10248         0.0.0.0:*               LISTEN      4575/kubelet
+# --port int3
+# The port for the Kubelet to serve on. (default 10250) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
+tcp        0      0 192.168.199.100:10250   0.0.0.0:*               LISTEN      4575/kubelet
+tcp        0      0 127.0.0.1:41563         0.0.0.0:*               LISTEN      4575/kubelet
+
+# --port int
+# DEPRECATED: the port on which to serve HTTP insecurely without authentication and authorization. If 0, don't serve HTTPS at all. See --secure-port instead. (default 10251)
+tcp        0      0 127.0.0.1:10251         0.0.0.0:*               LISTEN      3927/kube-scheduler
+# --secure-port int
+# The port on which to serve HTTPS with authentication and authorization.If 0, don't serve HTTPS at all. (default 10259)
+tcp6       0      0 :::10259                :::*                    LISTEN      3927/kube-scheduler
+
+# --secure-port int
+# The port on which to serve HTTPS with authentication and authorization.It cannot be switched off with 0. (default 6443)
+tcp        0      0 192.168.199.100:6443    0.0.0.0:*               LISTEN      3848/kube-apiserver
+# --insecure-port int
+# The port on which to serve unsecured, unauthenticated access. (default 8080) (DEPRECATED: This flag will be removed in a future version.)
+tcp        0      0 127.0.0.1:8080          0.0.0.0:*               LISTEN      3848/kube-apiserver
+
+# --secure-port int
+# The port on which to serve HTTPS with authentication and authorization.If 0, don't serve HTTPS at all. (default 10257)
+tcp        0      0 127.0.0.1:10257         0.0.0.0:*               LISTEN      3883/kube-controlle
+tcp6       0      0 :::10252                :::*                    LISTEN      3883/kube-controlle
+
+# --metrics-bind-address 0.0.0.0
+# The IP address and port for the metrics server to serve on (set to 0.0.0.0 for all IPv4 interfaces and `::` for all IPv6 interfaces) (default 127.0.0.1:10249)
+tcp        0      0 192.168.199.100:10249   0.0.0.0:*               LISTEN      4108/kube-proxy
+# --healthz-port int32
+# The port to bind the health check server. Use 0 to disable. (default 10256)
+tcp        0      0 192.168.199.100:10256   0.0.0.0:*               LISTEN      4108/kube-proxy
+```
 
 ## Test k8s Cluster
 

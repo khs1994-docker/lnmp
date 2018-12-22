@@ -35,3 +35,7 @@ $ kubectl certificate approve CSR_NAME
 
 $ kubectl describe csr CSR_NAME
 ```
+
+## 特性
+
+* 使用 TLS bootstrap 机制自动生成 client 和 server 证书，过期后自动轮转；
