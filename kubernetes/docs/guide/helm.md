@@ -4,9 +4,9 @@
 
 * https://github.com/helm/helm
 
-在 GitHub Release 处下载二进制文件，放入 PATH 即可
+在 GitHub Release 处下载二进制文件，放入 `PATH` 即可
 
-* 需要安装 `socat`，yum apt 直装即可
+* 需要安装 `socat`，`yum/apt` 直接安装即可
 
 ## 客户端
 

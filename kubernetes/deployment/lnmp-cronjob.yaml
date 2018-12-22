@@ -1,4 +1,4 @@
-# 可以运行 Laravel 调度器 Schedule
+# 可以理解为计划任务，可以运行 Laravel 调度器 Schedule
 
 apiVersion: batch/v1beta1
 kind: CronJob

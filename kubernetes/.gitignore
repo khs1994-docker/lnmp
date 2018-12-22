@@ -10,7 +10,8 @@ test
 
 vim.exe.*
 
-docs/.vuepress/dist
+docs/.vuepress/*
+!docs/.vuepress/config.js
 
 *.test.yaml
 *.test.yml

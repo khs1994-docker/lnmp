@@ -1,8 +1,10 @@
-# 安装
+# 部署 Kubernetes
+
+请查看 [GitHub](https://github.com/khs1994-docker/lnmp-k8s) README.md 文件。
 
 ## kubectl
 
-copy k8s config file to `~/.kube/config`
+复制 K8s 配置文件到 `~/.kube/config`
 
 ```bash
 $ cp cert/kubectl.kubeconfig ~/.kube/config

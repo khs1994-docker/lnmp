@@ -14,13 +14,23 @@ footer: Copyright @2019 khs1994.com
 
 # K8s LNMP Docs
 
-## 生产环境
+> 本文档 **不会** 一步一步的教你如何部署 Kubernetes，只是记录一些本人搭建时遇到的问题及一些关键提示或步骤，如果你在遇到问题时，选择对应的主题查看，也许会发现解决方法。
 
-* 数据
+## 准备
 
-* 日志
+* Linux 知识
+* systemd 知识
+* Docker 知识
 
-* 监控
+## 部署 Kubernetes
+
+请查看 [GitHub](https://github.com/khs1994-docker/lnmp-k8s) README.md 文件。
+
+详细的搭建教程请查看：https://github.com/opsnull/follow-me-install-kubernetes-cluster
+
+## YAML 文件
+
+请在 `deployment` 文件夹查看。
 
 ## Service
 

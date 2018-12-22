@@ -14,7 +14,7 @@
 
 * 本项目的目标是超大规模 Kubernetes LNMP 集群(首要考虑的是跨节点问题)
 
-## Kubernetes 基础设施(从 0 开始搭建 Kubernetes 集群)
+## Kubernetes 基础设施(从 0 开始部署 Kubernetes 集群)
 
 * [自己手动部署 Kubernetes 集群(CoreOS)](coreos)
 
@@ -55,9 +55,9 @@
 
 ## Demo
 
-```bash
-$ cd kubernetes
+> 部署好 Kubernetes 集群之后，按照以下步骤启动 LNMP
 
+```bash
 # 部署 LNMP
 $ ./lnmp-k8s create
 

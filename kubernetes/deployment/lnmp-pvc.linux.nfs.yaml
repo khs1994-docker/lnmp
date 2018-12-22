@@ -1,3 +1,5 @@
+# 适用于 Linux NFS 的 PVC 定义文件
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

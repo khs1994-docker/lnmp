@@ -42,9 +42,12 @@ module.exports = {
     sidebar: {
       '/guide/': [
         'install',
+        'coreos',
+        'systemd',
         'docker-desktop',
         'endpoints',
         'network',
+        'port',
         'ingress-nginx',
         'nginx',
         'php',

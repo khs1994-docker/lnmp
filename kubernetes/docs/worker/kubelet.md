@@ -6,6 +6,16 @@
 
 * 状态： 正在排查
 
+### 错误详情
+
+```bash
+bootstrap.go:65] Using bootstrap kubeconfig to generate TLS client cert, key and kubeconfig file
+
+bootstrap.go:96] No valid private key and/or certificate found, reusing existing private key or creating a new one
+```
+
+### 解决办法
+
 ```bash
 $ kubectl get csr
 
@@ -24,10 +34,4 @@ node-csr-j1Ja8wpP3FxFBMnEVNsrwYosgWk_-796bWmRg9cnFTE   63m     system:bootstrap:
 $ kubectl certificate approve CSR_NAME
 
 $ kubectl describe csr CSR_NAME
-```
-
-```bash
-bootstrap.go:65] Using bootstrap kubeconfig to generate TLS client cert, key and kubeconfig file
-
-bootstrap.go:96] No valid private key and/or certificate found, reusing existing private key or creating a new one
 ```

@@ -10,7 +10,7 @@
 
 ## 资源占用
 
-`elasticsearch-logging-N` 单个 pod 内存占用 1.5 G，怪不得分配 2G 内存直接崩溃。
+`elasticsearch-logging-N` 单个 pod 内存占用 1.5 G。
 
 ## 基础知识
 

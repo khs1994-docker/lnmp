@@ -8,13 +8,19 @@
 
 * https://k8s-install.opsnull.com/07-0.%E9%83%A8%E7%BD%B2worker%E8%8A%82%E7%82%B9.html
 
+### CentOS
+
 ```bash
 $ sudo yum install conntrack ipvsadm ipset jq iptables curl sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
 ```
 
+### Fedora
+
 ```bash
 $ sudo dnf install conntrack ipvsadm ipset jq iptables curl sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
 ```
+
+### Debian/Ubuntu
 
 ```bash
 $ sudo apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
@@ -22,11 +28,11 @@ $ sudo apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccom
 
 ## 关闭防火墙
 
+出现 pod 网络不通的情况，可以尝试关闭防火墙
+
 ```bash
 $ sudo systemctl stop firewalld && systemctl disable firewalld
 ```
-
-刚开始搭建的时候，出现 pod 网络不通的情况，可以尝试关闭防火墙
 
 ## 编辑 `.env` 文件
 
@@ -34,11 +40,11 @@ $ sudo systemctl stop firewalld && systemctl disable firewalld
 
 * `192.168.199.100` 替换为电脑 IP 或公有云主机公网 IP
 
-* `node1` 替换为 hostname
+* `node1` 替换为主机实际的 `hostname`
 
-## 修改 hostname
+## 修改主机 hostname
 
-hostname 与 etcd 启动时指定的 `--name` 必须一致
+主机的 `hostname` 与 etcd 启动时指定的 `--name` **必须一致**
 
 ```bash
 $ hostnamectl set-hostname node1
@@ -49,12 +55,12 @@ $ hostnamectl set-hostname node1
 `/etc/hosts`
 
 ```bash
-# 节点IP hostname
+# 格式: 节点IP hostname
 
 192.168.199.100 node1
 ```
 
-## 部署
+## 部署 Kubernetes
 
 ```bash
 # 生成证书

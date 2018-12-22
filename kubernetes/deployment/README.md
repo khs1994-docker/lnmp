@@ -1,6 +1,6 @@
 # Kubernetes yaml files
 
-* 这些 YAML 集合仅供参考，仅用于开发环境。实际请使用 `Helm`
+这些 YAML 文件仅供参考，仅用于开发环境。
 
 ## 计划任务
 
