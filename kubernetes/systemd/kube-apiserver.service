@@ -55,6 +55,7 @@ RestartSec=5
 Type=notify
 User=k8s
 LimitNOFILE=65536
+TimeoutStartSec=0
 
 [Install]
 WantedBy=multi-user.target

@@ -168,6 +168,12 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp.sh COMMAND
 
+Try Kubernetes Free:
+  k8s                  Try Kubernetes Free
+
+Donate:
+  zan                  Donate
+
 PCIT EE:
   pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
 
@@ -235,6 +241,10 @@ You must Update .env file when update this project.
 Donate https://zan.khs1994.com
 
 AD Tencent Kubernetes Engine http://dwz.cn/I2vYahwq
+
+Exec '$ lnmp-docker k8s' Try Kubernetes Free
+
+Exec '$ lnmp-docker zan' donate
 "
 
 cd $source
@@ -794,6 +804,27 @@ XXX
 
 <!--Be sure to click < Preview > Tab before submitting questions-->
 " | Out-File debug.md -encoding utf8
+
+    Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
+    }
+
+    k8s {
+      clear
+
+      printInfo "please try kubernetes on website"
+      Start-Process -FilePath http://dwz.cn/I2vYahwq
+    }
+
+    zan {
+      clear
+      printInfo "Thank You"
+      Start-Process -FilePath http://zan.khs1994.com
+    }
+
+    donate {
+      clear
+      printInfo "Thank You"
+      Start-Process -FilePath http://zan.khs1994.com
     }
 
     pcit-up {

@@ -6,10 +6,11 @@ Requires=docker.service
 
 [Service]
 ExecStartPre=-/usr/sbin/swapoff -a
+ExecStartPre=-/sbin/swapoff -a
 ExecStartPre=-/opt/bin/generate-kubelet-bootstrap-kubeconfig.sh
-ExecStartPre=-/usr/bin/mkdir -p /var/lib/kubelet
+ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
 
-WorkingDirectory=/var/lib/kubelet
+# WorkingDirectory=/var/lib/kubelet
 Environment="NODE_NAME=node1"
 Environment="KUBE_APISERVER=https://192.168.199.100:6443"
 

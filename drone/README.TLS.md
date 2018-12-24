@@ -27,9 +27,11 @@
 
 ## 准备
 
+* 本项目基于 Drone `0.8.x` 版本，由于 `1.x` 变化较大，暂时不进行更新。
+
 * 域名
 
-* 公网 IP
+* 公网 IP (推荐，但不是必须)
 
 * `*.CI_DOMAIN` 通配符 TLS 证书 （acme.sh 可以免费申请）或 `git.CI_DOMAIN` `drone.CI_DOMAIN` 网址的 TLS 证书。
 
@@ -116,7 +118,8 @@ $ lnmp-docker restart nginx
   重启 NGINX 容器
 
 * 未占用
-  `.env` 文件
+
+  编辑 `.env` 文件
 
   ```bash
   CI_INCLUDE="gogs nginx redis mysql"
