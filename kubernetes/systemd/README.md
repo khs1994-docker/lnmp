@@ -47,7 +47,7 @@ $ sudo systemctl stop firewalld && systemctl disable firewalld
 主机的 `hostname` 与 etcd 启动时指定的 `--name` **必须一致**
 
 ```bash
-$ hostnamectl set-hostname node1
+$ sudo hostnamectl set-hostname node1
 ```
 
 ## 增加 hosts

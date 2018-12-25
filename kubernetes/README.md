@@ -93,7 +93,7 @@ $ ./lnmp-k8s delete
 $ ./lnmp-k8s cleanup
 ```
 
-## [Helm (终极方案)](helm)
+## [Helm](helm)
 
 * 完美支持 `开发` `测试` `预上线` `生产` 四种环境
 

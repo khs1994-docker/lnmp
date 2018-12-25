@@ -357,8 +357,8 @@ Function satis(){
   }
 
   docker run --rm -it `
-      -v ${APP_ROOT}/satis:/build `
-      -v lnmp_composer_cache-data:/composer composer/satis
+      --mount type=bind,src=${APP_ROOT}/satis,target=/build `
+      --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
 }
 
 # main
@@ -486,7 +486,9 @@ switch($first){
     }
 
     ssl-self {
-      docker run --init -it --rm -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
+      docker run --init -it --rm `
+        --mount type=bind,src=$pwd/config/nginx/ssl-self,target=/ssl khs1994/tls $other
+
       printInfo `
 'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
     }
@@ -865,7 +867,7 @@ XXX
       }
 
       if(!(Test-Path pcit/key/public.key)){
-        docker run -it --rm -v $PWD/pcit/key:/app khs1994/pcit:alpine `
+        docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app khs1994/pcit:alpine `
           openssl rsa -in private.key -pubout -out public.key
       }
 
@@ -928,7 +930,7 @@ XXX
     daemon-socket {
       docker run -d --restart=always `
         -p 2376:2375 `
-        -v /var/run/docker.sock:/var/run/docker.sock `
+        --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock `
         -e PORT=2375 `
         shipyard/docker-proxy
     }
@@ -957,9 +959,9 @@ This local server support Docker Desktop v18.05-EDGE-67
 
       docker run -it -d `
         -p 443:443 `
-        -v $pwd/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml `
-        -v $pwd/config/registry:/etc/docker/registry/ssl `
-        -v $pwd/data/registry:/var/lib/registry `
+        --mount type=bind,src=$pwd/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml `
+        --mount type=bind,src=$pwd/config/registry,target=/etc/docker/registry/ssl `
+        --mount type=bind,src=$pwd/data/registry,target=/var/lib/registry `
         --label com.khs1994.lnmp.gcr.io `
         registry
 

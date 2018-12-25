@@ -14,6 +14,12 @@ $ cp cert/kubectl.kubeconfig ~/.kube/config
 
 ## Check
 
+确保 `$ systemctl status 组件名` 状态为
+
+```bash
+Active: active (running) since Tue 2018-12-25 09:48:47 CST; 1h 4min ago
+```
+
 ### etcd
 
 第一步启动 `etcd` 集群。

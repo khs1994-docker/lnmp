@@ -47,17 +47,7 @@ http://192.168.57.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/p
 ## 删除
 
 ```bash
-$ kubectl delete deployment.apps/kibana-logging -n kube-system
-
-$ kubectl delete service/kibana-logging -n kube-system
-
-$ kubectl delete service/elasticsearch-logging -n kube-system
-
-$ kubectl delete daemonset.apps/fluentd-es-v2.2.0 -n kube-system
-
-$ kubectl delete statefulset.apps/elasticsearch-logging -n kube-system
-
-$ kubectl delete statefulset.apps/elasticsearch-logging -n kube-system
+$ kubectl delete -f addons/efk
 ```
 
 ## 资源列表
@@ -73,5 +63,5 @@ daemonset.apps/fluentd
 ## More Information
 
 * http://blog.51cto.com/ylw6006/2071943
-
 * https://www.jianshu.com/p/1000ae80a493
+* https://blog.csdn.net/java_zyq/article/details/82179175
