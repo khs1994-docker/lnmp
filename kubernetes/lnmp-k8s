@@ -272,6 +272,8 @@ _flanneld(){
 }
 
 _k8s_install(){
+  source systemd/.env.example
+  source systemd/.env
   # 安装依赖软件
   command -v dnf && sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
@@ -288,10 +290,10 @@ _k8s_install(){
   _etcd
   _flanneld
 
-  sudo mkdir -p /etc/kubernetes/certs
+  sudo mkdir -p ${CERT_PATH:-/etc/kubernetes}/certs
 
   sudo cp systemd/*.service /etc/systemd/system/
-  sudo cp systemd/certs/*.pem /etc/kubernetes/certs/
+  sudo cp systemd/certs/*.pem ${CERT_PATH:-/etc/kubernetes}/certs/
   sudo cp coreos/disk/bin/*.sh /opt/bin/
 
   sudo chmod +x /opt/bin/*
@@ -310,16 +312,29 @@ _k8s_install(){
 
   sudo chmod +x /opt/bin/*
 
-  sudo cp systemd/certs/*.kubeconfig /etc/kubernetes/
+  for file in `ls systemd` ; do \
+    if [ -f systemd/$file ];then \
+      sed -i "s/192.168.199.100/${MASTER_IP}/g" systemd/$file ;\
+    fi \
+  done
 
-  sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml /etc/kubernetes/
-  sudo cp coreos/disk/system/csr-crb.yaml /etc/kubernetes/
+  local files=("kube-proxy.config.yaml" "kubelet.config.json")
+
+  for file in ${files[@]}; \
+  do \
+    sed -i "s#/etc/kubernetes#${CERT_PATH}#g" systemd/$file ; \
+  done
+
+  sudo cp systemd/certs/*.kubeconfig ${CERT_PATH:-/etc/kubernetes}/
+
+  sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml ${CERT_PATH:-/etc/kubernetes}/
+  sudo cp coreos/disk/system/csr-crb.yaml ${CERT_PATH:-/etc/kubernetes}/
 
   source systemd/.env.example
 
-  sudo cp systemd/encryption-config.yaml /etc/kubernetes/encryption-config.yaml
+  sudo cp systemd/encryption-config.yaml ${CERT_PATH:-/etc/kubernetes}/encryption-config.yaml
 
-  sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" /etc/kubernetes/encryption-config.yaml
+  sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" ${CERT_PATH:-/etc/kubernetes}/encryption-config.yaml
 
   sudo mkdir -p /etc/systemd/system/docker.service.d
 
@@ -396,7 +411,7 @@ _single_cleanup(){
   sudo rm -rf /var/lib/kubelet
   sudo rm -rf /var/lib/kube-proxy
 
-  sudo rm -rf /etc/kubernetes
+  sudo rm -rf ${CERT_PATH:-/etc/kubernetes}
 }
 
 case $1 in

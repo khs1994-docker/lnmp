@@ -13,8 +13,11 @@ ExecStartPre=-/sbin/modprobe ip_vs
 
 # WorkingDirectory=/var/lib/kube-proxy
 
+Environment="CERT_PATH=/etc/kubernetes"
+# Environment="CERT_PATH=/opt/bin/kubernetes"
+
 ExecStart=/opt/bin/kube-proxy \
---config=/etc/kubernetes/kube-proxy.config.yaml \
+--config=${CERT_PATH:-/etc/kubernetes}/kube-proxy.config.yaml \
 --alsologtostderr=true \
 --logtostderr=false \
 --log-dir=/var/log/kubernetes \

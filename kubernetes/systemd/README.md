@@ -93,3 +93,7 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 将 `*.service` 放入 `/etc/systemd/system/*`
 
 将 `docker.conf` 放入 `/etc/systemd/system/docker.service.d/*` 中
+
+将证书文件放入 `/etc/kubernetes/certs`
+
+将配置文件放入 `/etc/kubernetes`
