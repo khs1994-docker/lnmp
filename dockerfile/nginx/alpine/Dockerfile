@@ -2,19 +2,19 @@ FROM alpine:3.8
 
 LABEL maintainer="khs1994.com nginx With TLSv1.3"
 
-ARG NGINX_VERSION=1.15.7
+ARG NGINX_VERSION=1.15.8
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-ARG OPENSSL_BRANCH=OpenSSL_1_1_1
+ARG OPENSSL_BRANCH=OpenSSL_1_1_1a
 
 ARG OPENSSL_URL=https://github.com/openssl/openssl
 
 RUN set -x ; apk add --no-cache git \
      && git clone -b $OPENSSL_BRANCH --depth=1 $OPENSSL_URL /srv/openssl \
      && cd /srv/openssl \
-     && wget https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1.patch \
-     && patch -p1 < openssl-equal-1.1.1.patch \
+     && wget https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1a_ciphers.patch \
+     && patch -p1 < openssl-equal-1.1.1a_ciphers.patch \
      && cd / \
      && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
      && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
@@ -77,7 +77,7 @@ RUN set -x ; apk add --no-cache git \
 		zlib-dev \
 		linux-headers \
 		curl \
-		gnupg \
+		gnupg1 \
 		libxslt-dev \
 		gd-dev \
 		geoip-dev \
@@ -116,9 +116,9 @@ RUN set -x ; apk add --no-cache git \
 	&& ./configure $CONFIG \
 	&& make -j$(getconf _NPROCESSORS_ONLN) \
 	&& make install \
-	&& rm -rf /etc/nginx/html/ \
+	&& rm -rf /etc/nginx/html/index.html \
 	&& mkdir /etc/nginx/conf.d/ \
-	&& mkdir -p /usr/share/nginx/html/ \
+	# && mkdir -p /usr/share/nginx/html/ \
 	&& install -m755 objs/nginx-debug /usr/sbin/nginx-debug \
 	&& install -m755 objs/ngx_http_xslt_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_xslt_filter_module-debug.so \
 	&& install -m755 objs/ngx_http_image_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_image_filter_module-debug.so \
@@ -158,6 +158,7 @@ RUN set -x ; apk add --no-cache git \
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
+COPY index.html /etc/nginx/html/
 
 EXPOSE 80
 

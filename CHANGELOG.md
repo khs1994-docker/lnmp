@@ -16,3 +16,4 @@
 * [Node.js `11.5.0`](https://github.com/nodejs/node/releases/tag/v11.5.0)
 * [NGINX Unit `1.7`](https://unit.nginx.org/CHANGES.txt)
 * [Redis `5.0.3`](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
+* [NGINX `1.15.8`](http://nginx.org/en/CHANGES)

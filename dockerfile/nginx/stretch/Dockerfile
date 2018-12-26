@@ -1,6 +1,6 @@
 FROM debian:stretch-slim
 
-ARG NGINX_VERSION=1.15.7
+ARG NGINX_VERSION=1.15.8
 
 ARG DEB_URL=deb.debian.org
 
@@ -8,7 +8,7 @@ ARG DEB_SECURITY_URL=security.debian.org/debian-security
 
 ARG OPENSSL_URL=https://github.com/openssl/openssl
 
-ARG OPENSSL_BRANCH=OpenSSL_1_1_1
+ARG OPENSSL_BRANCH=OpenSSL_1_1_1a
 
 RUN set -x ; sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 && sed -i "s!security.debian.org/debian-security!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
@@ -36,8 +36,8 @@ RUN set -x ; sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
     && git clone -b $OPENSSL_BRANCH --depth=1 $OPENSSL_URL /srv/openssl \
     && cd /srv/openssl \
-    && curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1.patch \
-    && patch -p1 < openssl-equal-1.1.1.patch \
+    && curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1a_ciphers.patch \
+    && patch -p1 < openssl-equal-1.1.1a_ciphers.patch \
     && cd / \
   && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
@@ -104,9 +104,10 @@ RUN set -x ; sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 	&& make \
 	&& make install \
 	&& mkdir /etc/nginx/conf.d/ \
-	&& mkdir -p /usr/share/nginx/html/ \
-	&& install -m644 html/index.html /usr/share/nginx/html/ \
-	&& install -m644 html/50x.html /usr/share/nginx/html/ \
+  && rm -rf /etc/nginx/html/index.html \
+	# && mkdir -p /usr/share/nginx/html/ \
+	# && install -m644 html/index.html /usr/share/nginx/html/ \
+	# && install -m644 html/50x.html /usr/share/nginx/html/ \
 	&& install -m755 objs/nginx-debug /usr/sbin/nginx-debug \
 	&& install -m755 objs/ngx_http_xslt_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_xslt_filter_module-debug.so \
 	&& install -m755 objs/ngx_http_image_filter_module-debug.so /usr/lib/nginx/modules/ngx_http_image_filter_module-debug.so \
@@ -117,7 +118,6 @@ RUN set -x ; sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 	&& strip /usr/lib/nginx/modules/*.so
 
 COPY nginx.conf /etc/nginx/nginx.conf
-
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 
 FROM debian:stretch-slim
@@ -125,10 +125,9 @@ FROM debian:stretch-slim
 LABEL maintainer="khs1994.com nginx With TLSv1.3"
 
 COPY --from=0 /etc/nginx /etc/nginx
-
 COPY --from=0 /usr/lib/nginx /usr/lib/nginx
-
 COPY --from=0 /usr/sbin/nginx* /usr/sbin/
+COPY index.html /etc/nginx/html/
 
 RUN groupadd -r nginx \
   && useradd -r -g nginx -s /bin/false -M nginx \
