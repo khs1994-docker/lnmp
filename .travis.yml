@@ -113,6 +113,7 @@ jobs:
     # Debian9 not support php56
     # use ubuntu 16.04
     - stage: wsl-php-builder-71
+      name: "wsl-php-builder-71"
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -130,6 +131,7 @@ jobs:
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
     - stage: wsl-php-builder-72
+      name: wsl-php-builder-72
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -145,6 +147,7 @@ jobs:
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
     - stage: wsl-php-builder-73
+      name: wsl-php-builder-73
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -160,6 +163,7 @@ jobs:
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
     - stage: wsl-php-builder-rhel-71
+      name: wsl-php-builder-rhel-71
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -175,6 +179,7 @@ jobs:
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
     - stage: wsl-php-builder-rhel-72
+      name: wsl-php-builder-rhel-72
       install:
         - ./lnmp-docker compose --official -f
       script:

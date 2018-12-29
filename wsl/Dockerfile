@@ -312,7 +312,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            wddx \
                            mysqli \
                            pgsql \
-  && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/dev/wsl/php.fpm.zz-wsl.conf.example \
+  && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/php.fpm.zz-wsl.conf.example \
        > ${PHP_INI_DIR}/php-fpm.d/zz-debian.conf \
   && curl -s -f -L -o /tmp/installer.php \
          https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
