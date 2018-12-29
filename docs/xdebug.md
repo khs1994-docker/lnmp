@@ -4,7 +4,7 @@
 
 * https://xdebug.org/docs/all_settings
 
-* 生产环境不启用 `xdebug`
+> 生产环境不启用 `xdebug`
 
 ## 准备 PHP 项目
 
@@ -18,23 +18,19 @@
 
 ### 调试 HOST (必选项)
 
-编辑 `.env` 文件中的 `XDEBUG_REMOTE_HOST` 变量为你自己的 IP，这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改 `XDEBUG_REMOTE_HOST` 变量。
+编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_HOST=192.168.199.100` 变量为你电脑的 IP，这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改此变量。
 
-#### Docker for Windows macOS
+#### Docker for Windows or macOS
 
-Docker 没有配置 DNS 的情况下可以使用 `XDEBUG_REMOTE_HOST=host.docker.internal`，否则 IP 变化时重新修改变量
+在 Docker 设置中没有配置自定义 DNS 的情况下可以使用 `LNMP_XDEBUG_REMOTE_HOST=host.docker.internal`。
 
 #### Docker for Linux
 
-要么电脑固定 IP，要么 IP 变化时必须编辑 `.env` 文件中的 `XDEBUG_REMOTE_HOST` 变量
+要么电脑固定 IP，要么 IP 变化时编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_HOST` 变量
 
 ### 调试端口（可选项）
 
-`./config/php/docker-xdebug.ini`
-
-```bash
-xdebug.remote_port=9001
-```
+编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_PORT=9001` 变量，默认 `9001`
 
 ### 警告
 

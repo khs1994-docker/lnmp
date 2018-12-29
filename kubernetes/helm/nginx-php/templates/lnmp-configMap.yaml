@@ -10,6 +10,9 @@ data:
   APP_ENV: {{ .Values.APP_ENV }}
   APP_LOG: {{ .Values.APP_LOG }}
   LOG_CHANNEL: {{ .Values.LOG_CHANNEL }}
+  LNMP_XDEBUG_REMOTE_HOST: 192.168.199.100
+  LNMP_XDEBUG_REMOTE_PORT: 9001
+  LNMP_OPCACHE_ENABLE: 1
 ---
 apiVersion: v1
 kind: ConfigMap

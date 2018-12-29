@@ -72,6 +72,21 @@ spec:
             configMapKeyRef:
               name: lnmp-env-{{ .Chart.Version }}
               key: LOG_CHANNEL
+        - name: LNMP_OPCACHE_ENABLE
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: LNMP_OPCACHE_ENABLE
+        - name: LNMP_XDEBUG_REMOTE_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: LNMP_XDEBUG_REMOTE_HOST
+        - name: LNMP_XDEBUG_REMOTE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: lnmp-env-{{ .Chart.Version }}
+              key: LNMP_XDEBUG_REMOTE_PORT
         ports:
         - containerPort: 9000
         resources:
@@ -86,12 +101,12 @@ spec:
           subPath: php.ini
         {{ if eq .Values.APP_ENV "development" }}
         - name: lnmp-php-conf
-          mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
-          subPath: docker-xdebug.ini
+          mountPath: /usr/local/etc/php/conf.d/docker-php.ini
+          subPath: docker-php.ini
         {{- else if eq .Values.APP_ENV "testing" -}}
         - name: lnmp-php-conf
-          mountPath: /usr/local/etc/php/conf.d/docker-xdebug.ini
-          subPath: docker-xdebug.ini
+          mountPath: /usr/local/etc/php/conf.d/docker-php.ini
+          subPath: docker-php.ini
         {{- end }}
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/conf.d/docker.ini
@@ -118,8 +133,8 @@ spec:
           items:
           - key: php.ini
             path: php.ini
-          - key: docker-xdebug.ini
-            path: docker-xdebug.ini
+          - key: docker-php.ini
+            path: docker-php.ini
           - key: docker.ini
             path: docker.ini
           - key: zz-docker.conf
