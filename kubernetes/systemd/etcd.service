@@ -22,6 +22,8 @@ TimeoutStartSec=0
 LimitNOFILE=40000
 
 Environment="ETCD_DATA_DIR=/var/lib/etcd"
+Environment="CERT_PATH=/etc/kubernetes"
+# Environment="CERT_PATH=/opt/bin/kubernetes"
 
 ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
 
@@ -35,14 +37,14 @@ ExecStart= /opt/bin/etcd \
   --initial-cluster-state="new" \
   --initial-cluster-token="mytoken" \
   --advertise-client-urls="https://192.168.199.100:2379" \
-  --cert-file="/etc/kubernetes/certs/etcd.pem" \
-  --key-file="/etc/kubernetes/certs/etcd-key.pem" \
+  --cert-file="${CERT_PATH:-/etc/kubernetes}/certs/etcd.pem" \
+  --key-file="${CERT_PATH:-/etc/kubernetes}/certs/etcd-key.pem" \
   --client-cert-auth=true \
-  --trusted-ca-file="/etc/kubernetes/certs/ca.pem" \
-  --peer-cert-file="/etc/kubernetes/certs/etcd.pem" \
-  --peer-key-file="/etc/kubernetes/certs/etcd-key.pem" \
+  --trusted-ca-file="${CERT_PATH:-/etc/kubernetes}/certs/ca.pem" \
+  --peer-cert-file="${CERT_PATH:-/etc/kubernetes}/certs/etcd.pem" \
+  --peer-key-file="${CERT_PATH:-/etc/kubernetes}/certs/etcd-key.pem" \
   --peer-client-cert-auth=true \
-  --peer-trusted-ca-file="/etc/kubernetes/certs/ca.pem"
+  --peer-trusted-ca-file="${CERT_PATH:-/etc/kubernetes}/certs/ca.pem"
 
 # ExecStartPost
 # ExecReload：重启当前服务时执行的命令

@@ -23,6 +23,7 @@ services:
   #   # add more volumes
   #   volumes:
   #     - ./app/app:/app
+  #     - laravel_vendor:/app/laravel/vendor
 
   # mysql:
   #   # change default volumes settings

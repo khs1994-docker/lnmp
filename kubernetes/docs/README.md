@@ -1,12 +1,36 @@
-# Docs
+---
+home: true
+actionText: Kubernetes 免费实验室
+actionLink: http://dwz.cn/I2vYahwq
+features:
+- title: 开始 Kubernetes 之旅
+  details: ''
+- title: 部署 Kubernetes
+  details: 在 Linux 单机(或集群中)使用 systemd 部署 Kubernetes
+- title: 支持 Laravel
+  details: ''
+footer: Copyright @2019 khs1994.com
+---
 
-## 生产环境
+# K8s LNMP Docs
 
-* 数据
+> 本文档 **不会** 一步一步的教你如何部署 Kubernetes，只是记录一些本人搭建时遇到的问题及一些关键提示或步骤，如果你在遇到问题时，选择对应的主题查看，也许会发现解决方法。
 
-* 日志
+## 准备
 
-* 监控
+* Linux 知识
+* systemd 知识
+* Docker 知识
+
+## 部署 Kubernetes
+
+请查看 [GitHub](https://github.com/khs1994-docker/lnmp-k8s) README.md 文件。
+
+详细的搭建教程请查看：https://github.com/opsnull/follow-me-install-kubernetes-cluster
+
+## YAML 文件
+
+请在 `deployment` 文件夹查看。
 
 ## Service
 
@@ -49,7 +73,7 @@ NodePort 服务主要有两点区别于普通的 ClusterIP 服务。第一，它
 
 LoadBlancer Service 是 Kubernetes 结合云平台的组件，如国外 GCE、AWS、国内阿里云等等，使用它向使用的底层云平台申请创建负载均衡器来实现，有局限性，对于使用云平台的集群比较方便。
 
-Docker 桌面版也可以使用
+> Docker 桌面版也可以使用
 
 ### Ingress
 
@@ -69,6 +93,20 @@ internet
 
 ![](https://raw.githubusercontent.com/containous/traefik/master/docs/img/architecture.png)
 
+## 官方文档导引
+
+* [组件](https://kubernetes.io/docs/concepts/overview/components/)
+
 # More Information
 
 * https://github.com/kubernetes/examples
+
+# Vue Press
+
+```bash
+$ npm i -g vuepress
+
+$ vuepress dev
+
+$ vuepress build
+```

@@ -9,3 +9,9 @@ test
 .env.ps1
 
 vim.exe.*
+
+docs/.vuepress/*
+!docs/.vuepress/config.js
+
+*.test.yaml
+*.test.yml

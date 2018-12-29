@@ -1,4 +1,4 @@
-# Docker for Desktop Kubernetes Ingress NGINX
+# Ingress NGINX
 
 * https://kubernetes.github.io/ingress-nginx/
 
@@ -21,6 +21,8 @@ $ kubectl apply -f addons/ingress-nginx/service-nodeport.yaml
 ```
 
 ## 定义规则
+
+参考 `ingress-nginx/lnmp-ingress.yaml`，编写自己的文件，之后应用。
 
 ```bash
 $ kubectl apply -f ingress-nginx/my-ingress.yaml

@@ -6,13 +6,15 @@
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
 </p>
 
+* [文档](https://docs.k8s.lnmp.khs1994.com)
+
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
 * **Windows** 用户务必安装 `WSL`
 
 * 本项目的目标是超大规模 Kubernetes LNMP 集群(首要考虑的是跨节点问题)
 
-## Kubernetes 基础设施(从 0 开始搭建 Kubernetes 集群)
+## Kubernetes 基础设施(从 0 开始部署 Kubernetes 集群)
 
 * [自己手动部署 Kubernetes 集群(CoreOS)](coreos)
 
@@ -53,9 +55,9 @@
 
 ## Demo
 
-```bash
-$ cd kubernetes
+> 部署好 Kubernetes 集群之后，按照以下步骤启动 LNMP
 
+```bash
 # 部署 LNMP
 $ ./lnmp-k8s create
 
@@ -91,7 +93,7 @@ $ ./lnmp-k8s delete
 $ ./lnmp-k8s cleanup
 ```
 
-## [Helm (终极方案)](helm)
+## [Helm](helm)
 
 * 完美支持 `开发` `测试` `预上线` `生产` 四种环境
 

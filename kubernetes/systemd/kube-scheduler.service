@@ -5,9 +5,12 @@ Requires=kube-apiserver.service
 
 [Service]
 
+Environment="CERT_PATH=/etc/kubernetes"
+# Environment="CERT_PATH=/opt/bin/kubernetes"
+
 ExecStart=/opt/bin/kube-scheduler \
 --address=127.0.0.1 \
---kubeconfig=/etc/kubernetes/kube-scheduler.kubeconfig \
+--kubeconfig=${CERT_PATH:-/etc/kubernetes}/kube-scheduler.kubeconfig \
 --leader-elect=true \
 --alsologtostderr=true \
 --logtostderr=false \

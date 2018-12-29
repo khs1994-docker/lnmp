@@ -149,22 +149,18 @@ services:
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      #
-      # php-fpm config set in zz-docker.conf one file
-      #
+      # fpm config
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-log.conf:ro,cached
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-slow-log.conf}:/usr/local/etc/php-fpm.d/zz-docker-slow-log.conf:ro,cached
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker-pm.conf}:/usr/local/etc/php-fpm.d/zz-docker-pm.conf:ro,cached
+      # php.ini
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      # php.ini override
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
-      - ./config/php/${LNMP_PHP_XDEBUG_INI:-docker-xdebug.ini}:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.temp:ro,cached
+      # log,etc
       - ./log/php:/var/log/php:delegated
       - ./log/supervisord.log:/var/log/supervisord.log
       - ./log/supervisord:/var/log/supervisord
       - zoneinfo-data:/usr/share/zoneinfo
       - composer_cache-data:/tmp/cache
-      - ./dockerfile/php-fpm/docker-php-entrypoint:/usr/local/bin/docker-php-entrypoint:ro,cached
       - type: tmpfs
         target: /temp
         # tmpfs:
@@ -178,8 +174,9 @@ services:
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v18.09} x86_64 With Pull Docker Image
       - APP_ENV=development
-      - XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST:-192.168.199.100}
-
+      - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
+      - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
   # https://docs.docker.com/config/containers/multi-service_container/
   # http://supervisord.org/running.html
   supervisord:
@@ -210,7 +207,7 @@ services:
 
   nginx:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.15.7}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.15.8}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
@@ -314,7 +311,7 @@ services:
 
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-11-15T01-26-07Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2018-12-19T23-46-24Z}
     volumes:
       - minio-data:/data
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt

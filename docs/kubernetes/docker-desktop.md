@@ -31,7 +31,7 @@ Windows 系统每次升级之后，k8s 可能一直处于启动状态中，请�
 ```bash
 $ lnmp-docker gcr.io
 
-# see local server logs (only suport macOS)
+# see local server logs
 
 $ lnmp-docker gcr.io logs
 

@@ -1,3 +1,5 @@
+# 适用于 Docker for macOS 的 PV 定义文件
+
 apiVersion: v1
 kind: PersistentVolume
 metadata:

@@ -1,6 +1,4 @@
-# Endpoints
-
-**将外部服务映射到内部**
+# Endpoints 将外部服务映射到 K8s
 
 * https://blog.csdn.net/liyingke112/article/details/76204038
 
@@ -14,7 +12,7 @@ spec:
   - port: 80
     targetPort: 81
     protocol: TCP
----    
+---
 apiVersion: v1
 kind: Endpoints
 metadata:

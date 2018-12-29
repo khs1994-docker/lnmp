@@ -1,4 +1,4 @@
-# Heapster
+# Heapster (已废弃)
 
 * https://github.com/kubernetes/heapster/tree/master/deploy/kube-config/influxdb
 

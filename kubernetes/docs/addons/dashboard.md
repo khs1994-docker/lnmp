@@ -1,4 +1,6 @@
-# 部署 dashboard 插件
+# dashboard 插件
+
+* https://github.com/kubernetes/dashboard/tree/v1.10.1/src/deploy/recommended
 
 ```bash
 $ kubectl apply -f addons/dashboard.yaml
@@ -21,12 +23,19 @@ http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/https:kubernetes-da
 
 ## 创建登录 token
 
+> 1.10.1 之后，使用之前必须生成 token,可以将生成的 token 放到本项目的根目录的 `.env` 文件中，使用时直接复制即可。
+
 ```bash
+# for windows
+# $ wsl
+
 $ kubectl create sa dashboard-admin -n kube-system
 
 $ kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
 
 $ ADMIN_SECRET=$(kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}')
+
+# dashboard-admin-token-nzlbv
 
 $ DASHBOARD_LOGIN_TOKEN=$(kubectl describe secret -n kube-system ${ADMIN_SECRET} | grep -E '^token' | awk '{print $2}')
 
@@ -37,6 +46,9 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 
 ```bash
 # 设置集群参数
+# Docker for desktop k8s
+# $ export KUBE_APISERVER=https://localhost:6445
+
 $ kubectl config set-cluster kubernetes \
   --certificate-authority=/etc/kubernetes/certs/ca.pem \
   --embed-certs=true \

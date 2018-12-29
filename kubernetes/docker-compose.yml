@@ -25,6 +25,7 @@ services:
       - ./coreos/.env.example
       - ./coreos/.env
 
+  # systemd
   cfssl-single:
     image: khs1994/coreos:cert
     volumes:

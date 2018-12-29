@@ -40,13 +40,13 @@ $DistributionName="debian"
 
 $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
-$global:NGINX_VERSION="1.15.7"
+$global:NGINX_VERSION="1.15.8"
 # https://windows.php.net/download/
 $global:PHP_VERSION="7.3.0"
 $global:MYSQL_VERSION="8.0.13"
 $global:HTTPD_VERSION="2.4.37"
 $global:IDEA_VERSION="1.12.4481"
-$global:NODE_VERSION="11.5.0"
+$global:NODE_VERSION="11.6.0"
 $global:GIT_VERSION="2.20.0"
 $global:PYTHON_VERSION="3.7.1"
 $global:GOLANG_VERSION="1.11.2"

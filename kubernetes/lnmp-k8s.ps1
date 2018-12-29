@@ -52,7 +52,7 @@ Commands:
 
   create-pv          Create PV and PVC
 
-  dashboard          How to open Dashboard
+  dashboard          Print how to open Dashboard
 
   helm-development   Install Helm LNMP In Development
   helm-testing       Install Helm LNMP In Testing

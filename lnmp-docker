@@ -21,12 +21,12 @@ print_info(){
 }
 
 print_error(){
-  echo -e "\033[31mERROR\033[0m  $@"
+  echo -e "\033[31mERROR\033[0m \a $@"
   export exit_by_error=1
 }
 
 print_warning(){
-  echo -e "\033[33mWARNING\033[0m  $@"
+  echo -e "\033[33mWARNING\033[0m \a $@"
 }
 
 NOTSUPPORT(){
@@ -259,9 +259,9 @@ _gcr_io(){
 
   docker run -it -d \
       -p 443:443 \
-      -v $PWD/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml \
-      -v $PWD/config/registry:/etc/docker/registry/ssl \
-      -v $PWD/data/registry:/var/lib/registry:delegated \
+      --mount type=bind,src=$PWD/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml \
+      --mount type=bind,src=$PWD/config/registry,target=/etc/docker/registry/ssl \
+      --mount type=bind,src=$PWD/data/registry,target=/var/lib/registry:delegated \
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 
@@ -323,8 +323,8 @@ _satis(){
     print_warning "Please modify app/satis/satis.json\n"
   fi
 
-  docker run --rm -it -v ${APP_ROOT}/satis:/build \
-      -v lnmp_composer_cache-data:/composer composer/satis
+  docker run --rm -it --mount type=bind,src=${APP_ROOT}/satis,target=/build \
+      --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
 }
 
 _local_docs_server(){
@@ -531,7 +531,7 @@ cleanup(){
 gitbook(){
   docker rm -f lnmp-docs > /dev/null 2>&1 || echo
   exec docker run --init -it --rm -p 4000:4000 \
-    --name lnmp-docs -v $PWD/docs:/srv/gitbook-src \
+    --name lnmp-docs --mount type=bind,src=$PWD/docs,target=/srv/gitbook-src \
     khs1994/gitbook \
     server
 }
@@ -1176,7 +1176,7 @@ pcit_init(){
   fi
 
   if ! [ -f pcit/key/public.key ];then
-    docker run -it --rm -v $PWD/pcit/key:/app khs1994/pcit:alpine \
+    docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app khs1994/pcit:alpine \
       openssl rsa -in private.key -pubout -out public.key
   fi
 
@@ -1614,7 +1614,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
    if [ $OS != 'Darwin' ];then NOTSUPPORT; fi
    docker run -d --restart=always \
      -p 2375:2375 \
-     -v /var/run/docker.sock:/var/run/docker.sock \
+     --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock \
      -e PORT=2375 \
      shipyard/docker-proxy
      ;;
