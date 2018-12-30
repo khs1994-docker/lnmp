@@ -26,8 +26,8 @@
 
 |场景|CLI|原始命令|
 |:--|:--|:-|
-|开发环境 拉取镜像  | `$ ./lnmp-docker up` |`docker-compose up -d`                                                            |
-|开发环境 构建镜像  | `$ ./lnmp-docker build`       |`docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d`          |
+|开发环境(使用拉取的镜像)  | `$ ./lnmp-docker up` |`docker-compose up -d`                                                            |
+|开发环境(使用构建的镜像)  | `$ ./lnmp-docker build`       |`docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d`          |
 |ARM             | `$ ./lnmp-docker up` |`docker-compose -f docker-arm.yml up -d`                                          |
 |生产环境         | `$ ./lnmp-docker swarm-deploy` |`docker stack -c docker-production.yml lnmp`                                      |
 

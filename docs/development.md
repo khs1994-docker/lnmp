@@ -16,7 +16,7 @@
 
 **6.** 执行 `./lnmp-docker up` 或者 `./lnmp-docker restart nginx`
 
-**7.** `PhpStorm` 打开 `./app/project` ，开始编写代码
+**7.** `IDE(例如，PhpStorm)` 打开 `./app/project` ，开始编写代码
 
 ### 再新建一个项目
 
@@ -24,7 +24,7 @@
 
 **2.** 执行 `./lnmp-docker restart nginx` 重启 nginx
 
-**3.** `PhpStorm` 打开 `./app/new-project` ，开始编写代码
+**3.** `IDE(例如，PhpStorm)` 打开 `./app/new-project` ，开始编写代码
 
 ## APP_ROOT
 
@@ -89,7 +89,7 @@ $ ./lnmp-docker scale php7=3
 $ ./lnmp-docker scale php7=1
 ```
 
-## 自定义启动软件
+## 启动单个服务
 
 编辑 `.env` 文件，在 `LNMP_INCLUDE` 变量中增加软件名
 
@@ -141,7 +141,7 @@ $ lnmp-docker up SOFT_NAME SOFT_NAME2
 
 > 例如我们想增加一个数据卷挂载，将本机 `/path/my_path` 挂载到 PHP 容器中的 `/path/target`
 
-编辑 `docker-compose.include.yml` 文件
+编辑 `docker-compose.include.yml` 文件，重写默认的 `php7` 服务。
 
 ```yaml
 version: "3.7"
@@ -154,7 +154,7 @@ services:
 
 > 再例如 `MySQL` 默认将容器目录 `/var/lib/mysql` 映射到了宿主机中的数据卷，但我们想映射到宿主机的 `/path/mysql` 目录
 
-同样的编辑 `docker-compose.include.yml` 文件
+同样的编辑 `docker-compose.include.yml` 文件，重写默认的 `MySQL` 服务。
 
 ```yaml
 version: "3.7"
@@ -169,7 +169,7 @@ services:
 
 ## 自定义 compose 文件配置
 
-编辑 `docker-compose.include.yml` 文件，增加服务名，修改指令即可。
+编辑 `docker-compose.include.yml` 文件，增加服务名，修改服务指令即可。
 
 > 例如我们想自定义 `php7` 服务的配置，我们先增加 php7 这个条目。
 

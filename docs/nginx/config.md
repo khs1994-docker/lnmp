@@ -7,10 +7,10 @@
 命令格式为
 
 ```bash
-$ ./lnmp-docker nginx-config http 路径 url
+$ ./lnmp-docker nginx-config http 项目路径 url
 ```
 
-示例如下
+假设项目路径位于 `./app/test`，示例如下
 
 ```bash
 $ ./lnmp-docker nginx-config http test www.khs1994.com
@@ -27,10 +27,10 @@ $ ./lnmp-docker nginx-config http test www.khs1994.com
 命令格式为
 
 ```bash
-$ ./lnmp-docker nginx-config https 路径 url
+$ ./lnmp-docker nginx-config https 项目路径 url
 ```
 
-示例如下
+假设项目路径位于 `./app/test`，示例如下
 
 ```bash
 $ ./lnmp-docker nginx-config https test www.khs1994.com

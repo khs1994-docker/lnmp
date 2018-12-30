@@ -1,3 +1,7 @@
+;
+; http://www.jinbuguo.com/php/php52-ini.html
+;
+
 error_log= /var/log/php/error.log
 
 ; 你可以在这里自定义 php 配置
