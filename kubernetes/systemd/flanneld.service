@@ -13,23 +13,23 @@ TimeoutStartSec=300
 LimitNOFILE=40000
 LimitNPROC=1048576
 
-Environment="CERT_PATH=/etc/kubernetes"
-# Environment="CERT_PATH=/opt/bin/kubernetes"
+Environment="K8S_PATH=/etc/kubernetes"
+# Environment="K8S_PATH=/opt/bin/kubernetes"
 
 ExecStartPre=/sbin/modprobe ip_tables
 ExecStartPre=-/usr/bin/mkdir --parents /var/lib/coreos /run/flannel
 ExecStartPre=/usr/bin/env ETCDCTL_API=2 /opt/bin/etcdctl \
   --endpoints="https://192.168.199.100:2379" \
-  --ca-file="${CERT_PATH:-/etc/kubernetes}/certs/ca.pem" \
-  --cert-file="${CERT_PATH:-/etc/kubernetes}/certs/etcd.pem" \
-  --key-file="${CERT_PATH:-/etc/kubernetes}/certs/etcd-key.pem" \
+  --ca-file="${K8S_PATH:-/etc/kubernetes}/certs/ca.pem" \
+  --cert-file="${K8S_PATH:-/etc/kubernetes}/certs/etcd.pem" \
+  --key-file="${K8S_PATH:-/etc/kubernetes}/certs/etcd-key.pem" \
   set /coreos.com/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
 
 ExecStart=/opt/bin/flanneld \
   --etcd-endpoints="https://192.168.199.100:2379" \
-  --etcd-cafile="${CERT_PATH:-/etc/kubernetes}/certs/ca.pem" \
-  --etcd-certfile="${CERT_PATH:-/etc/kubernetes}/certs/flanneld.pem" \
-  --etcd-keyfile="${CERT_PATH:-/etc/kubernetes}/certs/flanneld-key.pem" \
+  --etcd-cafile="${K8S_PATH:-/etc/kubernetes}/certs/ca.pem" \
+  --etcd-certfile="${K8S_PATH:-/etc/kubernetes}/certs/flanneld.pem" \
+  --etcd-keyfile="${K8S_PATH:-/etc/kubernetes}/certs/flanneld-key.pem" \
   --etcd-prefix="/coreos.com/network"
 
 ExecStartPost=/opt/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/docker/flannel_docker_opts.env

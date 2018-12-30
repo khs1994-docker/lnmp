@@ -9,26 +9,26 @@ Requires=kube-apiserver.service
 # Flag --horizontal-pod-autoscaler-use-rest-clients has been deprecated,
 # Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
 
-Environment="CERT_PATH=/etc/kubernetes"
-# Environment="CERT_PATH=/opt/bin/kubernetes"
+Environment="K8S_PATH=/etc/kubernetes"
+# Environment="K8S_PATH=/opt/bin/kubernetes"
 
 ExecStart=/opt/bin/kube-controller-manager \
 --secure-port=10257 \
 --bind-address=127.0.0.1 \
---kubeconfig=${CERT_PATH:-/etc/kubernetes}/kube-controller-manager.kubeconfig \
+--kubeconfig=${K8S_PATH:-/etc/kubernetes}/kube-controller-manager.kubeconfig \
 --service-cluster-ip-range=10.254.0.0/16 \
 --cluster-name=kubernetes \
---cluster-signing-cert-file=${CERT_PATH:-/etc/kubernetes}/certs/ca.pem \
---cluster-signing-key-file=${CERT_PATH:-/etc/kubernetes}/certs/ca-key.pem \
+--cluster-signing-cert-file=${K8S_PATH:-/etc/kubernetes}/certs/ca.pem \
+--cluster-signing-key-file=${K8S_PATH:-/etc/kubernetes}/certs/ca-key.pem \
 --experimental-cluster-signing-duration=8760h \
---root-ca-file=${CERT_PATH:-/etc/kubernetes}/certs/ca.pem \
---service-account-private-key-file=${CERT_PATH:-/etc/kubernetes}/certs/ca-key.pem \
+--root-ca-file=${K8S_PATH:-/etc/kubernetes}/certs/ca.pem \
+--service-account-private-key-file=${K8S_PATH:-/etc/kubernetes}/certs/ca-key.pem \
 --leader-elect=true \
 --feature-gates=RotateKubeletServerCertificate=true \
 --controllers=*,bootstrapsigner,tokencleaner \
 --horizontal-pod-autoscaler-sync-period=10s \
---tls-cert-file=${CERT_PATH:-/etc/kubernetes}/certs/kube-controller-manager.pem \
---tls-private-key-file=${CERT_PATH:-/etc/kubernetes}/certs/kube-controller-manager-key.pem \
+--tls-cert-file=${K8S_PATH:-/etc/kubernetes}/certs/kube-controller-manager.pem \
+--tls-private-key-file=${K8S_PATH:-/etc/kubernetes}/certs/kube-controller-manager-key.pem \
 --use-service-account-credentials=true \
 --alsologtostderr=true \
 --logtostderr=false \
