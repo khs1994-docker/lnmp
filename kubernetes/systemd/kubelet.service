@@ -18,10 +18,10 @@ Environment="K8S_PATH=/etc/kubernetes"
 # Environment="K8S_PATH=/opt/bin/kubernetes"
 
 ExecStart=/opt/bin/kubelet \
---bootstrap-kubeconfig=${K8S_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig \
---cert-dir=${K8S_PATH:-/etc/kubernetes}/certs \
---kubeconfig=${K8S_PATH:-/etc/kubernetes}/kubelet.kubeconfig \
---config=${K8S_PATH:-/etc/kubernetes}/kubelet.config.json \
+--bootstrap-kubeconfig=${K8S_PATH}/kubelet-bootstrap.kubeconfig \
+--cert-dir=${K8S_PATH}/certs \
+--kubeconfig=${K8S_PATH}/kubelet.kubeconfig \
+--config=${K8S_PATH}/kubelet.config.json \
 --hostname-override=node1 \
 --pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest \
 --alsologtostderr=true \

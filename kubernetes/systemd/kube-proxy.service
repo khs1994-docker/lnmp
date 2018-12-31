@@ -17,7 +17,7 @@ Environment="K8S_PATH=/etc/kubernetes"
 # Environment="K8S_PATH=/opt/bin/kubernetes"
 
 ExecStart=/opt/bin/kube-proxy \
---config=${K8S_PATH:-/etc/kubernetes}/kube-proxy.config.yaml \
+--config=${K8S_PATH}/kube-proxy.config.yaml \
 --alsologtostderr=true \
 --logtostderr=false \
 --log-dir=/var/log/kubernetes \

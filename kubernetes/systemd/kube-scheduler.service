@@ -10,7 +10,7 @@ Environment="K8S_PATH=/etc/kubernetes"
 
 ExecStart=/opt/bin/kube-scheduler \
 --address=127.0.0.1 \
---kubeconfig=${K8S_PATH:-/etc/kubernetes}/kube-scheduler.kubeconfig \
+--kubeconfig=${K8S_PATH}/kube-scheduler.kubeconfig \
 --leader-elect=true \
 --alsologtostderr=true \
 --logtostderr=false \

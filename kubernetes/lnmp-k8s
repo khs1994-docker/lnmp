@@ -330,8 +330,6 @@ _k8s_install(){
   sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml ${K8S_PATH:-/etc/kubernetes}/
   sudo cp coreos/disk/system/csr-crb.yaml ${K8S_PATH:-/etc/kubernetes}/
 
-  source systemd/.env.example
-
   sudo cp systemd/encryption-config.yaml ${K8S_PATH:-/etc/kubernetes}/encryption-config.yaml
 
   sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" ${K8S_PATH:-/etc/kubernetes}/encryption-config.yaml

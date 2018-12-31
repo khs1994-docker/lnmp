@@ -37,14 +37,14 @@ ExecStart= /opt/bin/etcd \
   --initial-cluster-state="new" \
   --initial-cluster-token="mytoken" \
   --advertise-client-urls="https://192.168.199.100:2379" \
-  --cert-file="${K8S_PATH:-/etc/kubernetes}/certs/etcd.pem" \
-  --key-file="${K8S_PATH:-/etc/kubernetes}/certs/etcd-key.pem" \
+  --cert-file="${K8S_PATH}/certs/etcd.pem" \
+  --key-file="${K8S_PATH}/certs/etcd-key.pem" \
   --client-cert-auth=true \
-  --trusted-ca-file="${K8S_PATH:-/etc/kubernetes}/certs/ca.pem" \
-  --peer-cert-file="${K8S_PATH:-/etc/kubernetes}/certs/etcd.pem" \
-  --peer-key-file="${K8S_PATH:-/etc/kubernetes}/certs/etcd-key.pem" \
+  --trusted-ca-file="${K8S_PATH}/certs/ca.pem" \
+  --peer-cert-file="${K8S_PATH}/certs/etcd.pem" \
+  --peer-key-file="${K8S_PATH}/certs/etcd-key.pem" \
   --peer-client-cert-auth=true \
-  --peer-trusted-ca-file="${K8S_PATH:-/etc/kubernetes}/certs/ca.pem"
+  --peer-trusted-ca-file="${K8S_PATH}/certs/ca.pem"
 
 # ExecStartPost
 # ExecReload：重启当前服务时执行的命令
