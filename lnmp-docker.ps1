@@ -976,10 +976,15 @@ This local server support Docker Desktop v18.05-EDGE-67
       "pause-amd64:3.1"
 
       foreach ($image in $images){
-         docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
-         docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
+         # docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
+         # docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
+         # docker push k8s.gcr.io/$image
+         # docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
+
+         docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$image
+         docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$image k8s.gcr.io/$image
          docker push k8s.gcr.io/$image
-         docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
+         docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$image
       }
 
        Write-Warning "

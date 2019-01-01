@@ -29,6 +29,6 @@ spec:
     spec:
       containers:
       - name: my-nginx
-        image: nginx:1.15.1-alpine
+        image: nginx:1.15.8-alpine
         ports:
         - containerPort: 80

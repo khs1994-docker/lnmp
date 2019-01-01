@@ -25,16 +25,6 @@ http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/https:kubernetes-da
 
 > 1.10.1 之后，使用之前必须生成 token,可以将生成的 token 放到本项目的根目录的 `.env` 文件中，使用时直接复制即可。
 
-### Docker 桌面版
-
-* https://github.com/AliyunContainerService/k8s-for-docker-desktop
-
-```bash
-$ TOKEN=$(kubectl -n kube-system describe secret default| awk '$1=="token:"{print $2}')
-
-$ kubectl config set-credentials docker-for-desktop --token="${TOKEN}"
-```
-
 ### 其他
 
 ```bash
