@@ -14,8 +14,10 @@ if ! [ -f lnmp-k8s ];then if ! [ -z "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes
 
 source_path=$PWD
 
+# copy .env
 if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
+if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
 
 source ./.env.example
 source ./.env
@@ -58,13 +60,9 @@ Commands:
 "
 }
 
-if ! [ -f systemd/.env ];then
-  cp systemd/.env.example systemd/.env
-fi
-
 _kubernetes_server(){
 
-echo "install kubernetes"
+echo "===> install kubernetes"
 
 cd coreos
 
@@ -119,9 +117,9 @@ _minikube(){
 }
 
 _minikube-install(){
-  if [ $os = 'Linux' ];then
+  if [ "$os" = 'Linux' ];then
     url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
-  elif [ $os = 'Darwin' ];then
+  elif [ "$os" = 'Darwin' ];then
     url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-darwin-amd64
   fi
 
@@ -259,7 +257,7 @@ _etcd(){
       return
   fi
 
-  echo "etcd already install"
+  echo "===> etcd already install"
 }
 
 _flanneld(){
@@ -268,12 +266,22 @@ _flanneld(){
     return
   fi
 
-  echo "flanneld already install"
+  echo "===> flanneld already install"
 }
 
 _k8s_install(){
   source systemd/.env.example
   source systemd/.env
+
+  if [ ${MASTER_IP} == '192.168.199.100' ];then
+    clear
+    echo ""
+    echo "======================================================"
+    echo "==== you must edit MASTER_IP in systemd/.env file ===="
+    echo "======================================================"
+    echo ""
+  fi
+
   # 安装依赖软件
   command -v dnf && sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
@@ -312,19 +320,6 @@ _k8s_install(){
 
   sudo chmod +x /opt/bin/*
 
-  for file in `ls systemd` ; do \
-    if [ -f systemd/$file ];then \
-      sed -i "s/192.168.199.100/${MASTER_IP}/g" systemd/$file ;\
-    fi \
-  done
-
-  local files=("kube-proxy.config.yaml" "kubelet.config.json")
-
-  for file in ${files[@]}; \
-  do \
-    sed -i "s#/etc/kubernetes#${K8S_PATH}#g" systemd/$file ; \
-  done
-
   sudo cp systemd/certs/*.kubeconfig ${K8S_PATH:-/etc/kubernetes}/
 
   sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml ${K8S_PATH:-/etc/kubernetes}/
@@ -332,11 +327,33 @@ _k8s_install(){
 
   sudo cp systemd/encryption-config.yaml ${K8S_PATH:-/etc/kubernetes}/encryption-config.yaml
 
+  local files=("kube-proxy.config.yaml" "kubelet.config.json")
+
+  for file in ${files[@]}; \
+  do \
+    sudo sed -i "s#/etc/kubernetes#${K8S_PATH}#g" ${K8S_PATH:-/etc/kubernetes}/$file ; \
+  done
+
+  for file in `ls systemd` ; do \
+    if [ -f ${K8S_PATH:-/etc/kubernetes}/$file ];then \
+      sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" ${K8S_PATH:-/etc/kubernetes}/$file ;\
+    fi \
+  done
+
   sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" ${K8S_PATH:-/etc/kubernetes}/encryption-config.yaml
 
   sudo mkdir -p /etc/systemd/system/docker.service.d
 
   sudo cp systemd/docker.conf /etc/systemd/system/docker.service.d/
+
+  cd systemd
+
+  for file in `ls *.service`; \
+  do \
+  sudo sed -i "s#/etc/kubernetes#${K8S_PATH:-/etc/kubernetes}#g" /etc/systemd/system/$file ; \
+  done
+
+  cd -
 
   sudo systemctl daemon-reload
 
@@ -410,6 +427,10 @@ _single_cleanup(){
   sudo rm -rf /var/lib/kube-proxy
 
   sudo rm -rf ${K8S_PATH:-/etc/kubernetes}
+  sudo rm -rf /etc/systemd/system/docker.service.d
+
+  sudo systemctl daemon-reload
+  sudo systemctl restart docker
 }
 
 case $1 in

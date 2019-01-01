@@ -45,8 +45,7 @@ before_install:
 
 # 部署公钥
 
-- openssl aes-256-cbc -K $encrypted_3418790a352e_key -iv $encrypted_3418790a352e_iv
-  -in cli/khs1994-robot.enc -out ~/.ssh/id_rsa -d
+- openssl aes-256-cbc -K $encrypted_70ae0c965114_key -iv $encrypted_70ae0c965114_iv -in cli/khs1994-robot.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
 
 # git config
