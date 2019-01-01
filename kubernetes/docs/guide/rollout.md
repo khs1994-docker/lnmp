@@ -1,5 +1,15 @@
 # 滚动更新
 
+参数
+
+```bash
+history     显示 rollout 历史
+pause       标记提供的 resource 为中止状态
+resume      继续一个停止的 resource
+status      显示 rollout 的状态
+undo        撤销上一次的 rollout
+```
+
 ## Deployment
 
 更新 `Image`
@@ -22,10 +32,6 @@ $ kubectl rollout history deployment DEPLOYMENT_NAME
 
 ```bash
 $ kubectl rollout pause | resume | status
-```
-
-```bash
-$ kubectl rolling-update DEPLOYMENT_NAME --update-period=10s -f NEW_YAML_FILE
 ```
 
 ## 回滚 undo

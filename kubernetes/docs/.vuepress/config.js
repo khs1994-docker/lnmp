@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         text: '工作节点',
-        link: '/worker/',
+        link: '/node/',
       },
       {
         text: 'GitHub',
@@ -75,7 +75,7 @@ module.exports = {
       "/volume/": [
         "data",
       ],
-      "/worker/": [
+      "/node/": [
         "kubelet",
       ],
     },

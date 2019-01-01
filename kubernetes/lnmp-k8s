@@ -322,7 +322,7 @@ _k8s_install(){
   sudo cp systemd/certs/*.kubeconfig ${K8S_PATH:-/etc/kubernetes}/
 
   sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml ${K8S_PATH:-/etc/kubernetes}/
-  sudo cp coreos/disk/system/csr-crb.yaml ${K8S_PATH:-/etc/kubernetes}/
+  sudo cp systemd/csr-crb.yaml ${K8S_PATH:-/etc/kubernetes}/
 
   sudo cp systemd/encryption-config.yaml ${K8S_PATH:-/etc/kubernetes}/encryption-config.yaml
 
@@ -372,6 +372,11 @@ _k8s_install(){
   sudo mkdir -p /home/k8s/.kube
   sudo cp systemd/certs/kubectl.kubeconfig /home/k8s/.kube/config
 
+  mkdir -p ~/.kube
+
+  if ! [ -f ~/.kube/config ];then
+    cp systemd/certs/kubectl.kubeconfig ~/.kube/config
+  fi
 }
 
 _k8s_start(){
