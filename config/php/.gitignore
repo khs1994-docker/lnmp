@@ -2,7 +2,6 @@
 !.gitignore
 !default
 !docker-php.ini.example
-!docker-xdebug.ini
 !php.development.ini
 !php.production.ini
 !zz-docker*.conf

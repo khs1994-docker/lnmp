@@ -13,10 +13,12 @@
     * [Windows 10](install/windows.md)
 * [项目初始化过程](init.md)
 * [路径说明](path.md)
-* [`lnmp-docker`](cli.md)
+* [lnmp-docker CLI](cli.md)
+
+## 开发环境
+
 * 开发环境
     * [使用方法](development.md)
-* [Git](git.md)
 
 ## NGINX
 
@@ -27,7 +29,6 @@
     * [NGINX Unit](nginx/unit.md)
 * [PHPer 常用命令容器化](command.md)
 * [软件配置](config.md)
-* [Crontab](crontab.md)
 
 ## PHP
 
@@ -50,8 +51,9 @@
         * [k8s on Docker for Desktop](kubernetes/docker-desktop.md)
     * [Docker Registry](registry.md)
 
-## Supervisord
+## 计划任务
 
+* [Crontab](crontab.md)
 * [Supervisord](supervisord.md)
 
 ## ClusterKit
@@ -98,5 +100,6 @@
 
 ## TOOL
 
+* [Git](git.md)
 * [Git GPG](gpg.md)
 * [常用镜像站点](mirror.md)

@@ -2,7 +2,7 @@
 
 set -x
 
-until curl --cacert ${CERT_PATH:-/etc/kubernetes}/certs/ca.pem ${KUBE_APISERVER}; do
+until curl --cacert ${K8S_PATH:-/etc/kubernetes}/certs/ca.pem ${KUBE_APISERVER}; do
   >&2 echo "KUBE_APISERVER is unavailable - sleeping"
   sleep 3
 done
@@ -17,9 +17,9 @@ su - k8s -c "/opt/bin/kubectl create clusterrolebinding kubelet-bootstrap --clus
 
 # https://github.com/opsnull/follow-me-install-kubernetes-cluster/blob/master/07-2.kubelet.md#%E8%87%AA%E5%8A%A8-approve-csr-%E8%AF%B7%E6%B1%82
 
-su - k8s -c "/opt/bin/kubectl apply -f ${CERT_PATH:-/etc/kubernetes}/csr-crb.yaml"
+su - k8s -c "/opt/bin/kubectl apply -f ${K8S_PATH:-/etc/kubernetes}/csr-crb.yaml"
 
-if [ -f ${CERT_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig ];then
+if [ -f ${K8S_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig ];then
   exit 0
 fi
 
@@ -37,23 +37,23 @@ export BOOTSTRAP_TOKEN=$(/opt/bin/kubeadm token create \
 
     # 设置集群参数
     /opt/bin/kubectl config set-cluster kubernetes \
-      --certificate-authority=${CERT_PATH:-/etc/kubernetes}/certs/ca.pem \
+      --certificate-authority=${K8S_PATH:-/etc/kubernetes}/certs/ca.pem \
       --embed-certs=true \
       --server=${KUBE_APISERVER} \
-      --kubeconfig=${CERT_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
+      --kubeconfig=${K8S_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
 
     # 设置客户端认证参数
     /opt/bin/kubectl config set-credentials kubelet-bootstrap \
       --token=${BOOTSTRAP_TOKEN} \
-      --kubeconfig=${CERT_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
+      --kubeconfig=${K8S_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
 
     # 设置上下文参数
     /opt/bin/kubectl config set-context default \
       --cluster=kubernetes \
       --user=kubelet-bootstrap \
-      --kubeconfig=${CERT_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
+      --kubeconfig=${K8S_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
 
     # 设置默认上下文
-    /opt/bin/kubectl config use-context default --kubeconfig=${CERT_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
+    /opt/bin/kubectl config use-context default --kubeconfig=${K8S_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
 
-    chmod 644 ${CERT_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
+    chmod 644 ${K8S_PATH:-/etc/kubernetes}/kubelet-bootstrap.kubeconfig
