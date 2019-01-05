@@ -6,6 +6,14 @@
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境，仅需 **一条命令** `$ ./lnmp-docker up`
 
+| Platform | Status |
+| -- | -- |
+| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/d5a9dlhd9gar7v9v/branch/18.09?svg=true)](https://ci.appveyor.com/project/khs1994/lnmp/branch/18.09) |
+| Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=18.09)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
+| macOS | [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=18.09)](https://travis-ci.org/khs1994-docker/lnmp) |
+| Linux arm64v8 | - |
+| Linux arm32v7 | - |
+
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
 </p>
