@@ -830,7 +830,7 @@ XXX
     }
 
     pcit-up {
-      # 判断 app/pcit 是否存在
+      # 判断 app/.pcit 是否存在
       docker rm -f pcit_cp
       rm -r -force ${APP_ROOT}/.pcit
       # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit

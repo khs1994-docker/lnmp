@@ -1157,7 +1157,7 @@ pcit_nginx_init(){
 }
 
 pcit_init(){
-  # 判断 app/pcit 是否存在
+  # 判断 app/.pcit 是否存在
   docker rm -f pcit_cp > /dev/null 2>&1 || echo > /dev/null
   rm -rf ${APP_ROOT:-app}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit

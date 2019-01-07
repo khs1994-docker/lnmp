@@ -19,6 +19,11 @@
 
 * 开发环境
     * [使用方法](development.md)
+    * [数据库备份恢复](backup.md)
+    * [日志清理](cleanup.md)
+* [软件配置](config.md)
+* [开放端口](port.md)
+* [PHPer 常用命令容器化](command.md)
 
 ## NGINX
 
@@ -27,8 +32,6 @@
     * [申请或自签发 SSL 证书](nginx/issue-ssl.md)
     * [HTTPS 配置](nginx/https.md)
     * [NGINX Unit](nginx/unit.md)
-* [PHPer 常用命令容器化](command.md)
-* [软件配置](config.md)
 
 ## PHP
 
@@ -39,6 +42,9 @@
     * [Composer](composer.md)
     * [PHPUnit](phpunit.md)
     * [XHProf](xhprof.md)
+    * [微信小程序 PHP 后端部署](wechat.md)
+
+## 私有化 composer
 
 * Composer
     * [Satis](composer/satis.md)
@@ -65,21 +71,13 @@
     * [Redis Replication](clusterkit/redis_replication.md)
     * [Redis Sentinel](clusterkit/redis_sentinel.md)
 
+## ARM
+
 * 树莓派3
     * [ARM架构](arm.md)
-* [systemd](systemd.md)
-* [备份恢复](backup.md)
-* [清理](cleanup.md)
-* [国内网络问题](cn.md)
 
 * 实验玩法
     * [LinuxKit](linuxkit.md)
-
-* [微信小程序 PHP 后端部署](wechat.md)
-
-## port
-
-* [开放端口](port.md)
 
 ## self build
 
@@ -100,6 +98,8 @@
 
 ## TOOL
 
+* [systemd](systemd.md)
 * [Git](git.md)
 * [Git GPG](gpg.md)
+* [国内网络问题](cn.md)
 * [常用镜像站点](mirror.md)
