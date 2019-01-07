@@ -1292,7 +1292,7 @@ main() {
     ;;
 
   swarm-build )
-    docker-compose -f ${PRODUCTION_COMPOSE_FILE} build "$@"
+    docker-compose -f ${PRODUCTION_COMPOSE_FILE} build "$@" --parallel
     ;;
 
   swarm-push )
@@ -1357,7 +1357,7 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml build "$@"
+      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml build "$@" --parallel
     else
       NOTSUPPORT
     fi
@@ -1511,7 +1511,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   build-push )
     run_docker; init; exec \
-        docker-compose -f docker-compose.build.yml build && docker-compose -f docker-compose.build.yml push
+        docker-compose -f docker-compose.build.yml build --parallel \
+          && docker-compose -f docker-compose.build.yml push
     ;;
 
   down )

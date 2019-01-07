@@ -8,7 +8,7 @@
 
 | Platform | Status |
 | -- | -- |
-| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/d5a9dlhd9gar7v9v/branch/18.09?svg=true)](https://ci.appveyor.com/project/khs1994/lnmp/branch/18.09) |
+| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/18.09?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/18.09) |
 | Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=18.09)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 | macOS | [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=18.09)](https://travis-ci.org/khs1994-docker/lnmp) |
 | Linux arm64v8 | - |

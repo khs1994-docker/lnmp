@@ -388,7 +388,7 @@ switch($first){
     }
 
     build {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build $other
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml build $other --parallel
     }
 
     build-config {
@@ -465,7 +465,7 @@ switch($first){
     }
 
     swarm-build {
-      docker-compose -f docker-production.yml build $other
+      docker-compose -f docker-production.yml build $other --parallel
     }
 
     swarm-push {
@@ -473,7 +473,7 @@ switch($first){
     }
 
     push {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml build --parallel
       docker-compose -f docker-compose.yml -f docker-compose.build.yml push
     }
 
