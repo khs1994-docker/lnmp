@@ -114,7 +114,7 @@ spec:
           operator: "Exists"
       containers:
       - name: coredns
-        image: gcr.mirrors.ustc.edu.cn/google_containers/coredns:1.2.6
+        image: registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.2.6
         imagePullPolicy: IfNotPresent
         resources:
           limits:

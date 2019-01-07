@@ -37,7 +37,7 @@ before_install:
 script:
   - cp .env.example .env
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  # - docker-compose build ${PHP_VERSION}
+  # - docker-compose build ${PHP_VERSION} --parallel
   - if [ -n "$UNIT" ];then docker build --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${FOLDER}/unit; fi
   - if [ -n "$SUPERVISORD" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${FOLDER}/supervisord; fi
   - if [ -n "$COMPOSER" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine ${FOLDER}/composer; fi
@@ -57,8 +57,8 @@ branches:
 
 env:
   matrix:
-  - PHP_VERSION=5_6_X FOLDER=5.6 PHP_TAG_VERSION=5.6.39 FPM=1
-  - PHP_VERSION=7_0_X FOLDER=7.0 PHP_TAG_VERSION=7.0.33 FPM=1
+  # - PHP_VERSION=5_6_X FOLDER=5.6 PHP_TAG_VERSION=5.6.39 FPM=1
+  # - PHP_VERSION=7_0_X FOLDER=7.0 PHP_TAG_VERSION=7.0.33 FPM=1
   - PHP_VERSION=7_1_X FOLDER=7.1 PHP_TAG_VERSION=7.1.25 FPM=1
 
   - PHP_VERSION=7_2_X FOLDER=7.2 PHP_TAG_VERSION=7.2.13 FPM=1

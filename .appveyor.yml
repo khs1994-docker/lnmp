@@ -1,0 +1,16 @@
+version: build-{build}.{branch}
+image: Visual Studio 2017
+
+branches:
+  only:
+  - windows
+
+skip_non_tags: true
+
+build_script:
+  - pwsh: docker --version
+  - pwsh: docker-compose --version
+  - pwsh: Invoke-WebRequest -Uri https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Windows-x86_64.exe -OutFile "C:\Program Files\Docker\Docker\Resources\bin\docker-compose.exe"
+  - pwsh: ./lnmp-docker.ps1 up
+  - pwsh: sleep 5
+  - pwsh: Invoke-WebRequest 127.0.0.1

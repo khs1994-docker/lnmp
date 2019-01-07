@@ -388,7 +388,7 @@ switch($first){
     }
 
     build {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build $other
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml build $other --parallel
     }
 
     build-config {
@@ -465,7 +465,7 @@ switch($first){
     }
 
     swarm-build {
-      docker-compose -f docker-production.yml build $other
+      docker-compose -f docker-production.yml build $other --parallel
     }
 
     swarm-push {
@@ -473,7 +473,7 @@ switch($first){
     }
 
     push {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml build --parallel
       docker-compose -f docker-compose.yml -f docker-compose.build.yml push
     }
 
@@ -831,7 +831,7 @@ XXX
 
     pcit-up {
       # 判断 app/pcit 是否存在
-
+      docker rm -f pcit_cp
       rm -r -force ${APP_ROOT}/.pcit
       # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
       docker run -dit --name pcit_cp khs1994/pcit:alpine bash
@@ -976,10 +976,15 @@ This local server support Docker Desktop v18.05-EDGE-67
       "pause-amd64:3.1"
 
       foreach ($image in $images){
-         docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
-         docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
+         # docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
+         # docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
+         # docker push k8s.gcr.io/$image
+         # docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
+
+         docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$image
+         docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$image k8s.gcr.io/$image
          docker push k8s.gcr.io/$image
-         docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
+         docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$image
       }
 
        Write-Warning "

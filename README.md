@@ -6,6 +6,14 @@
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: Start LNMP In Less than 2 minutes Powered By Docker Compose, **one command** `$ ./lnmp-docker up`
 
+| Platform | Status |
+| -- | -- |
+| Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/master?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/master) |
+| Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
+| macOS | [![Build Status](https://travis-ci.org/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.org/khs1994-docker/lnmp) |
+| Linux arm64v8 | - |
+| Linux arm32v7 | - |
+
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
 </p>
@@ -218,7 +226,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/18.09/docs#%E
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.13-fpm-alpine`  | **7.2.13**       |`Alpine:3.8`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.13-composer-alpine`  | **5.7.x**       |`Alpine:3.8`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.13-composer-alpine`  | **1.8.0**       |`Alpine:3.8`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.13-composer-alpine`  | **2.13.1**      |`Alpine:3.8`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.13-composer-alpine`  | **2.14.0**      |`Alpine:3.8`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.12-alpine`           | **1.5.12**       |`Alpine:3.8`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.1-alpine`             | **11.1**        |`Alpine:3.8`    |

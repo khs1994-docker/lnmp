@@ -42,7 +42,7 @@ $ ./lnmp-docker.ps1 up
 
 `mytest`
 
-## Use WSL
+## WSL
 
 * https://github.com/khs1994-docker/lnmp/blob/master/wsl/wsl.conf
 

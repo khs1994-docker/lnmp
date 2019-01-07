@@ -23,3 +23,7 @@
 ### `proxy`
 
 * https://my.oschina.net/u/3797264/blog/2231630
+
+## DNS 配置
+
+在 `kubelet.config.json` 中进行配置

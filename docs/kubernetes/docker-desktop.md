@@ -39,3 +39,5 @@ $ lnmp-docker gcr.io logs
 
 $ lnmp-docker gcr.io down
 ```
+
+* https://github.com/AliyunContainerService/k8s-for-docker-desktop

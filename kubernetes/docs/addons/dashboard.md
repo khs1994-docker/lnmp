@@ -25,6 +25,8 @@ http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/https:kubernetes-da
 
 > 1.10.1 之后，使用之前必须生成 token,可以将生成的 token 放到本项目的根目录的 `.env` 文件中，使用时直接复制即可。
 
+### 其他
+
 ```bash
 # for windows
 # $ wsl
@@ -48,9 +50,11 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 # 设置集群参数
 # Docker for desktop k8s
 # $ export KUBE_APISERVER=https://localhost:6445
+# $ export K8S_PATH=/etc/kubernetes
+# $ export K8S_PATH=/opt/bin/kubernetes
 
 $ kubectl config set-cluster kubernetes \
-  --certificate-authority=/etc/kubernetes/certs/ca.pem \
+  --certificate-authority=${K8S_PATH:-/etc/kubernetes}/certs/ca.pem \
   --embed-certs=true \
   --server=${KUBE_APISERVER:-https://192.168.57.110:6443} \
   --kubeconfig=dashboard.kubeconfig
