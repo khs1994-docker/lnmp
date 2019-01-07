@@ -1,10 +1,11 @@
-# syntax = tonistiigi/dockerfile:20181026-secrets
+# syntax=docker/dockerfile:experimental
 FROM alpine
 
-RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret > /test.txt
+RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret
 
-RUN --mount=type=secret,id=mysecret,dst=/foobar cat /foobar > /test2.txt
+RUN --mount=type=secret,id=mysecret,target=/foobar cat /foobar
 
-RUN apk add --no-cache git openssh-client
+RUN --mount=type=cache,target=/root/.cache ls -la /root/.cache \
+      && echo 1 > /root/.cache/1.txt
 
-RUN --mount=type=ssh git clone git@github.com:khs1994-docker/lnmp
+RUN --mount=type=tmpfs,target=/tmpfs ls -la /tmpfs
