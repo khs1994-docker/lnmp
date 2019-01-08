@@ -12,7 +12,7 @@ services:
     &pcit
     << : *default-common
     # restart: always
-    image: khs1994/pcit:alpine
+    image: pcit/pcit:alpine
     volumes:
       - ./pcit/key:/app/pcit/framework/storage/private_key:cached
       - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached

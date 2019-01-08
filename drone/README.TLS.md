@@ -8,6 +8,13 @@
 
 * [更多信息](https://www.khs1994.com/categories/CI/Drone/)
 
+## 重要提示
+
+本项目基于 Drone `0.8.x` 版本，近期 Drone 发布了 `1.x` 版本与本项目不兼容！
+
+* `0.8.x` 文档 `https://0-8-0.docs.drone.io/`
+* `1.x` 文档 `https://docs.drone.io/`
+
 ## 微信订阅号
 
 <p align="center">
@@ -15,7 +22,6 @@
 </p>
 
 <p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
-
 
 ## 内部端口
 
@@ -26,8 +32,6 @@
 * `Docker Registry` **5000**
 
 ## 准备
-
-* 本项目基于 Drone `0.8.x` 版本，由于 `1.x` 变化较大，暂时不进行更新。
 
 * 域名
 
@@ -107,7 +111,7 @@ $ lnmp-docker restart nginx
   $ ./ci up-tls --use-external-nginx=/etc/nginx/conf.d
   ```
 
-  重启 NGINX (`--use-external-nginx` 后边的路径为 NGINX 配置文件所在路径，必须为绝对路径，下同)
+  重启 NGINX (`--use-external-nginx` 后边的路径为 NGINX 配置文件所在路径，必须为绝对路径)
 
 * 已占用->容器运行 NGINX
 
@@ -133,8 +137,7 @@ $ lnmp-docker restart nginx
 
 假设 `CI_DOMAIN` 设置为 `t.khs1994.com`
 
-则 Drone 访问地址为 `https://drone.t.khs1994.com`
-则 Gogs 访问地址为 `https://git.t.khs1994.com`
+则 Drone 访问地址为 `https://drone.t.khs1994.com`,Gogs 访问地址为 `https://git.t.khs1994.com`
 
 ## 错误排查
 

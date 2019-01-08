@@ -834,7 +834,7 @@ XXX
       docker rm -f pcit_cp
       rm -r -force ${APP_ROOT}/.pcit
       # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-      docker run -dit --name pcit_cp khs1994/pcit:alpine bash
+      docker run -dit --name pcit_cp pcit/pcit:alpine bash
       docker cp pcit_cp:/app/pcit ${APP_ROOT}/.pcit/
       docker rm -f pcit_cp
 
@@ -867,7 +867,7 @@ XXX
       }
 
       if(!(Test-Path pcit/key/public.key)){
-        docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app khs1994/pcit:alpine `
+        docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine `
           openssl rsa -in private.key -pubout -out public.key
       }
 

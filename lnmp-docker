@@ -1161,7 +1161,7 @@ pcit_init(){
   docker rm -f pcit_cp > /dev/null 2>&1 || echo > /dev/null
   rm -rf ${APP_ROOT:-app}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-  docker run -dit --name pcit_cp khs1994/pcit:alpine bash > /dev/null 2>&1
+  docker run -dit --name pcit_cp pcit/pcit:alpine bash > /dev/null 2>&1
   docker cp pcit_cp:/app/pcit ${APP_ROOT:-app}/.pcit/
   docker rm -f pcit_cp > /dev/null 2>&1
 
@@ -1181,7 +1181,7 @@ pcit_init(){
   fi
 
   if ! [ -f pcit/key/public.key ];then
-    docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app khs1994/pcit:alpine \
+    docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine \
       openssl rsa -in private.key -pubout -out public.key
   fi
 
@@ -1816,7 +1816,7 @@ First Run? Maybe you wait 60s then open url.
     ;;
 
     pcit-cp )
-      docker pull khs1994/pcit:alpine
+      docker pull pcit/pcit:alpine
       pcit_init
     ;;
 
