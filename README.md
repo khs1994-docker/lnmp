@@ -42,7 +42,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 :gift: [Donate](https://zan.khs1994.com)
 
-:whale: [Try Kubernetes **FREE**](http://dwz.cn/I2vYahwq)
+:whale: [Try Kubernetes **FREE**](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## WeChat
 
@@ -133,7 +133,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 Try Kubernetes **FREE**
 
-* [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)
+* [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## Advanced
 
@@ -331,4 +331,4 @@ You can edit `.env` file `DATA_COLLECTION=false` to disable it.
 
 Try Kubernetes **FREE**
 
-* [Tencent Kubernetes Engine](http://dwz.cn/I2vYahwq)
+* [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
