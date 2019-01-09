@@ -8,6 +8,13 @@
 
 * [更多信息](https://www.khs1994.com/categories/CI/Drone/)
 
+## 重要提示
+
+本项目基于 Drone `0.8.x` 版本，近期 Drone 发布了 `1.x` 版本与本项目不兼容！
+
+* `0.8.x` 文档 `https://0-8-0.docs.drone.io/`
+* `1.x` 文档 `https://docs.drone.io/`
+
 ## 微信订阅号
 
 <p align="center">
@@ -15,7 +22,6 @@
 </p>
 
 <p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
-
 
 ## CI & DevOps 工作流程
 
@@ -32,8 +38,6 @@
 本教程通过 IP + 不同端口 来提供不同的服务，如果你想要通过域名（`TLS`）来提供不同的服务，请查看 [README.TLS.md](README.TLS.md)。
 
 ## 准备
-
-* 本项目基于 Drone `0.8.x` 版本，由于 `1.x` 变化较大，暂时不进行更新。
 
 * 了解 CI，了解 Travis CI (Drone 和大多数 CI 工具一样，不过 Drone 可以免费的进行私有部署)
 

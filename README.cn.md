@@ -42,7 +42,7 @@
 
 :gift: 为了本项目的持续发展，你可以使用 [推广产品](ad) 或直接 [打赏](https://zan.khs1994.com) 赞助本项目。
 
-:whale: [**免费** 体验 Kubernetes](http://dwz.cn/I2vYahwq)
+:whale: [**免费** 体验 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## 微信订阅号
 
@@ -137,7 +137,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 **免费** 体验 Kubernetes
 
-* [腾讯云容器服务](http://dwz.cn/I2vYahwq)
+* [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## 进阶
 
@@ -344,4 +344,4 @@ https://docs.lnmp.khs1994.com
 
 **免费** 体验 Kubernetes
 
-* [腾讯云容器服务](http://dwz.cn/I2vYahwq)
+* [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)

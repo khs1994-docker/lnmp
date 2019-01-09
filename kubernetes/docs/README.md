@@ -1,7 +1,7 @@
 ---
 home: true
 actionText: Kubernetes 免费实验室
-actionLink: http://dwz.cn/I2vYahwq
+actionLink: https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61
 features:
 - title: 开始 Kubernetes 之旅
   details: ''

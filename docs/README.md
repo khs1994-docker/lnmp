@@ -88,4 +88,4 @@
 
 ## 免费体验 Kubernetes
 
-* [腾讯云容器服务](http://dwz.cn/I2vYahwq)
+* [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)

@@ -343,7 +343,7 @@ services:
     << : *default-common
     << : *default-labels
     << : *default-php
-    image: khs1994/pcit:alpine
+    image: pcit/pcit:alpine
     volumes:
       - ./pcit/.env.production:/app/pcit/.env.production
       - ./pcit/key:/app/pcit/framework/storage/private_key
@@ -831,8 +831,8 @@ configs:
   php_development_ini:
     file: ./config/php/php.development.ini
     << : *default-labels
-
-  php_ini_error_log:
+  # 重写 php.ini
+  php_ini_include_log:
     file: ./config/php/docker-php.ini
     << : *default-labels
 

@@ -1,4 +1,4 @@
-# syntax = tonistiigi/dockerfile:20181026-ssh
+# syntax=docker/dockerfile:experimental
 FROM alpine
 
 RUN apk add --no-cache git openssh-client
