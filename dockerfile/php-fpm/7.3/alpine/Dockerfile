@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:experimental
 ARG PHP_VERSION=7.3.0
 
 FROM php:${PHP_VERSION}-fpm-alpine as php
@@ -57,8 +58,14 @@ ENV PECL_EXTENSION \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
+      && cd /usr/local/bin \
+      && for file in `ls docker-php-*`; \
+         do \
+         sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+         done \
+      && chmod +x /usr/local/sbin/docker-php-* \
       # 不要删除
       && PHP_FPM_RUN_DEPS=" \
                          bash \
@@ -110,8 +117,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
-        && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
-        && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
+        && apk add --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
+        && apk add --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-configure gd \
@@ -122,7 +129,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                         --with-webp-dir=/usr \
                                         --with-xpm-dir=/usr \
         && docker-php-ext-install $PHP_EXTENSION \
-        && apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS \
+        && apk add --virtual .build-deps linux-headers $PHPIZE_DEPS \
         && for extension in $PECL_EXTENSION;do \
              pecl install $extension \
                && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
@@ -152,6 +159,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stdout /var/log/php-fpm/access.log \
         && ln -sf /dev/stderr /var/log/php-fpm/error.log \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
-        && chmod -R 777 /var/log/php-fpm
+        && chmod -R 777 /var/log/php-fpm \
+        && rm -rf /usr/local/sbin/docker-php-*
 
 WORKDIR /app

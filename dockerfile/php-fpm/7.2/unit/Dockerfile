@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:experimental
 FROM alpine:3.8 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
@@ -32,9 +33,9 @@ ENV PHPIZE_DEPS \
       bison
 
 # persistent / runtime deps
-RUN set -ex \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-      && apk add --no-cache --virtual .persistent-deps \
+      && apk add --virtual .persistent-deps \
                  curl \
                  tar \
                  xz \
@@ -145,9 +146,15 @@ COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN set -xe \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -xe \
+  && cd /usr/local/bin \
+  && for file in `ls docker-php-*`; \
+   do \
+   sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+   done \
+  && chmod +x /usr/local/sbin/docker-php-* \
   ; mkdir -p $PHP_INI_DIR/conf.d \
-  # && apk add --no-cache --virtual .fetch-deps gnupg \
+  # && apk add --virtual .fetch-deps gnupg \
 	&& mkdir -p /usr/src \
 	&& cd /usr/src \
   && wget -O php.tar.xz "$PHP_URL" \
@@ -169,7 +176,7 @@ RUN set -xe \
 	# 	rm -rf "$GNUPGHOME"; \
 	# fi; \
 	# && apk del --no-cache .fetch-deps \
-	&& apk add --no-cache --virtual .build-deps \
+	&& apk add --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
           curl-dev \
@@ -287,7 +294,7 @@ RUN set -xe \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
-	&& apk add --no-cache --virtual .php-rundeps $runDeps \
+	&& apk add --virtual .php-rundeps $runDeps \
   \
   && apk del --no-cache .build-deps \
 # https://github.com/docker-library/php/issues/443
@@ -299,14 +306,15 @@ RUN set -xe \
   \
   # 创建日志文件夹
   && ln -sf /dev/stderr /var/log/xdebug-remote.log \
-  && rm -rf /usr/src/*
+  && rm -rf /usr/src/* \
+  && rm -rf /usr/local/sbin/docker-php-*
 
-RUN cd /usr/src \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache cd /usr/src \
   && wget https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
   && tar -zxvf ${NGINX_UNIT_VERSION}.tar.gz \
   && mv unit-${NGINX_UNIT_VERSION} unit \
   && cd /usr/src/unit \
-  && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS libressl-dev \
+  && apk add --virtual .build-deps $PHPIZE_DEPS libressl-dev \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php72 \
@@ -342,9 +350,15 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN set -x \
-      && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
-      && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -x \
+      && cd /usr/local/bin \
+      && for file in `ls docker-php-*`; \
+        do \
+        sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+        done \
+      && chmod +x /usr/local/sbin/docker-php-* \
+      && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
+      && apk add --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && for extension in $PECL_EXTENSION;do \
            pecl install $extension \
              && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
@@ -352,10 +366,13 @@ RUN set -x \
       ; apk del --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
 # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
-      && rm -rf /tmp/*
+      && rm -rf /tmp/* \
+      && rm -rf /usr/local/sbin/docker-php-*
 
 ENV PS1="[\u@\h \w]# "
 
-CMD ["unitd","--no-daemon","--user","root","--group","root","--log","/var/log/nginx-unit/nginx-unit.log"]
+ENTRYPOINT ["unitd"]
+
+CMD ["--no-daemon","--user","root","--group","root","--log","/var/log/nginx-unit/nginx-unit.log"]
 
 WORKDIR /app

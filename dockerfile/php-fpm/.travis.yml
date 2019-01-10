@@ -48,6 +48,7 @@ after_success:
   - if [ -n "$SUPERVISORD" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine; fi
   - if [ -n "$COMPOSER" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine; fi
   - if [ -n "$FPM" ];then docker-compose push ${PHP_VERSION}; fi
+  - bash tag.sh
   - curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
 
 branches:
