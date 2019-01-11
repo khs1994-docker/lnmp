@@ -79,7 +79,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-webp-dir=/usr \
             --with-xpm-dir=/usr \
         # --with-pcre-regex \ 7.4 remove
-        --with-external-pcre \
+        # --with-external-pcre \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
         --with-xsl=shared \

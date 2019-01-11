@@ -133,9 +133,9 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
-ENV PHP_VERSION 7.3.0
+ENV PHP_VERSION 7.3.1
 ENV NGINX_UNIT_VERSION 1.7
-ENV PHP_URL="https://secure.php.net/get/php-7.3.0.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.3.0.tar.xz.asc/from/this/mirror"
+ENV PHP_URL="https://secure.php.net/get/php-7.3.1.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.3.1.tar.xz.asc/from/this/mirror"
 ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/

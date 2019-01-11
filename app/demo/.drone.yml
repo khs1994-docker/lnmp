@@ -12,7 +12,7 @@ pipeline:
   # install dep
   install:
     # image: composer:${COMPOSER_VERSION}
-    image: khs1994/php:7.2.13-composer-alpine
+    image: khs1994/php:7.2.14-composer-alpine
     commands:
       - pwd
       - composer config -g repo.packagist composer https://packagist.laravel-china.org
@@ -49,7 +49,7 @@ pipeline:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
       # matrix:
-      #   - PHP_VERSION=7.2.13
+      #   - PHP_VERSION=7.2.14
       #     REDIS_VERSION=5.0.3
 
   # when tag push, build docker image
@@ -134,7 +134,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
 
   after_success:
-    image: khs1994/php:7.2.13-composer-alpine
+    image: khs1994/php:7.2.14-composer-alpine
     when:
       status: success
     commands:
@@ -181,8 +181,8 @@ matrix:
   COMPOSER_VERSION:
     - 1.8.0
   PHP_VERSION:
-    - 7.2.13
-    - 7.1.25
+    - 7.2.14
+    - 7.1.26
     # - 7.0.33
     # - 5.6.39
   NGINX_VERSION:
@@ -199,9 +199,9 @@ matrix:
 
 # matrix:
 #   include:
-#     - PHP_VERSION=7.2.13
+#     - PHP_VERSION=7.2.14
 #       REDIS_VERSION=5.0.3
-#     - PHP_VERSION=7.1.25
+#     - PHP_VERSION=7.1.26
 #       REDIS_VERSION=5.0.3
 
 # branches:
