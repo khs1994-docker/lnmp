@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:experimental
 FROM alpine:3.8 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
@@ -32,9 +33,9 @@ ENV PHPIZE_DEPS \
       bison
 
 # persistent / runtime deps
-RUN set -ex \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-      && apk add --no-cache --virtual .persistent-deps \
+      && apk add --virtual .persistent-deps \
                  curl \
                  tar \
                  xz \
@@ -69,14 +70,16 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-gettext=shared \
         --with-gd=shared \
             # https://github.com/php/php-src/commit/2d03197749696ac3f8effba6b7977b0d8729fef3
-            --enable-freetype \
-            # --with-freetype-dir=/usr \
+            # https://github.com/php/php-src/commit/285a077c1284544e938cd07cfa1fca3d56cf7726#diff-cc5a741d5e9ffea246bbe851c2635502
+            --with-freetype \
+            # --with-freetype-dir=/usr \ 7.4 remove
             --disable-gd-jis-conv \
             --with-jpeg-dir=/usr \
             --with-png-dir=/usr \
             --with-webp-dir=/usr \
             --with-xpm-dir=/usr \
-        --with-pcre-regex \
+        # --with-pcre-regex \ 7.4 remove
+        # --with-external-pcre \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
         --with-xsl=shared \
@@ -148,12 +151,18 @@ COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN set -xe \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -xe \
+  && cd /usr/local/bin \
+  && for file in `ls docker-php-*`; \
+  do \
+  sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+  done \
+  && chmod +x /usr/local/sbin/docker-php-* \
   ; mkdir -p $PHP_INI_DIR/conf.d \
-  # && apk add --no-cache --virtual .fetch-deps gnupg \
+  # && apk add --virtual .fetch-deps gnupg \
 	&& mkdir -p /usr/src \
 	&& cd /usr/src \
-  # && apk add --no-cache git openssh-client \
+  # && apk add git openssh-client \
   && git clone --depth=1 https://github.com/php/php-src.git php \
   # && apk del --no-cache git \
 	# wget -O php.tar.xz "$PHP_URL"; \
@@ -175,7 +184,7 @@ RUN set -xe \
 	# 	rm -rf "$GNUPGHOME"; \
 	# fi; \
 	# && apk del --no-cache .fetch-deps \
-	&& apk add --no-cache --virtual .build-deps \
+	&& apk add --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
           curl-dev \
@@ -206,6 +215,7 @@ RUN set -xe \
           aspell-dev \
           openldap-dev \
           pcre-dev \
+          pcre2-dev \
           tidyhtml-dev \
           net-snmp-dev \
           openldap-dev \
@@ -218,7 +228,6 @@ RUN set -xe \
 	&& cd /usr/src/php \
 	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./buildconf --force \
-  && ./buildconf --help \
 	&& ./configure \
 		--build="$gnuArch" \
 		--with-config-file-path="$PHP_INI_DIR" \
@@ -297,9 +306,9 @@ RUN set -xe \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
-	&& apk add --no-cache --virtual .php-rundeps $runDeps \
+	&& apk add --virtual .php-rundeps $runDeps \
   \
-  && apk del --no-cache .build-deps \
+  && apk del .build-deps \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
@@ -353,7 +362,8 @@ RUN set -xe \
   && ln -sf /dev/stdout /var/log/php-fpm/access.log \
   && ln -sf /dev/stderr /var/log/php-fpm/error.log \
   && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
-  && chmod -R 777 /var/log/php-fpm
+  && chmod -R 777 /var/log/php-fpm \
+  && rm -rf /usr/local/sbin/docker-php-*
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
@@ -377,15 +387,21 @@ ENV PECL_EXTENSION \
       swoole-beta \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN set -x \
-      && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
-      && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -x \
+      && cd /usr/local/bin \
+      && for file in `ls docker-php-*`; \
+      do \
+      sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+      done \
+      && chmod +x /usr/local/sbin/docker-php-* \
+      && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
+      && apk add --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && for extension in $PECL_EXTENSION;do \
            pecl install $extension \
              && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
          done \
          \
-      # && apk add --no-cache git openssh-client \
+      # && apk add git openssh-client \
       # && git clone --depth=1 https://github.com/xdebug/xdebug.git \
       # && apk del --no-cache git \
       # && cd xdebug \
@@ -399,7 +415,8 @@ RUN set -x \
       ; apk del --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
 # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
-      && rm -rf /tmp/*
+      && rm -rf /tmp/* \
+      && rm -rf /usr/local/sbin/docker-php-*
 
 EXPOSE 9000
 CMD ["php-fpm"]

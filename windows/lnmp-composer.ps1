@@ -8,5 +8,5 @@
 #     --mount type=bind,src=$PWD,target=/app `
 #     --mount src=lnmp_composer_cache-data,target=/tmp/cache `
 #     --entrypoint /docker-entrypoint.composer.sh `
-#     khs1994/php:7.2.13-composer-alpine `
+#     khs1994/php:7.2.14-composer-alpine `
      composer $args

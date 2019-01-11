@@ -24,7 +24,7 @@ spec:
     # command:
     # args:
   - name: "lnmp-pod2"
-    image: "khs1994/php:7.3.0-fpm-alpine"
+    image: "khs1994/php:7.3.1-fpm-alpine"
     resources:
       requests:
         cpu: "200m"
