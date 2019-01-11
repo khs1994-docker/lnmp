@@ -252,7 +252,7 @@ _gcr_io(){
 
   _gcr_io_down
   echo ""
-  echo "This local server support Docker Desktop v18.05-EDGE-67"
+  echo "This local server support Docker Desktop EDGE v2.0.1.0(30090)"
   echo ""
 
   mkdir -p data/registry
@@ -285,15 +285,13 @@ _gcr_io(){
           echo; exit; fi
     fi
 
-    images="kube-controller-manager-amd64:v1.10.3 \
-    kube-apiserver-amd64:v1.10.3 \
-    kube-scheduler-amd64:v1.10.3 \
-    kube-proxy-amd64:v1.10.3 \
-    etcd-amd64:3.1.12 \
-    k8s-dns-sidecar-amd64:1.14.8 \
-    k8s-dns-kube-dns-amd64:1.14.8 \
-    k8s-dns-dnsmasq-nanny-amd64:1.14.8 \
-    pause-amd64:3.1"
+    images="kube-controller-manager:v1.13.0 \
+    kube-apiserver:v1.13.0 \
+    kube-scheduler:v1.13.0 \
+    kube-proxy:v1.13.0 \
+    etcd:3.2.24 \
+    coredns:1.2.6 \
+    pause:3.1"
 
     for image in $images
     do

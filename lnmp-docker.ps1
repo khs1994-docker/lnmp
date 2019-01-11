@@ -814,7 +814,7 @@ XXX
       clear
 
       printInfo "please try kubernetes on website"
-      Start-Process -FilePath https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61
+      Start-Process -FilePath "https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61"
     }
 
     zan {
@@ -945,7 +945,7 @@ XXX
       docker container rm -f `
           $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
 echo "
-This local server support Docker Desktop v18.05-EDGE-67
+This local server support Docker Desktop EDGE v2.0.1.0(30090)
 
 "
       if ('down' -eq $args[1]){
@@ -965,15 +965,13 @@ This local server support Docker Desktop v18.05-EDGE-67
         --label com.khs1994.lnmp.gcr.io `
         registry
 
-      $images="kube-controller-manager-amd64:v1.10.3", `
-      "kube-apiserver-amd64:v1.10.3", `
-      "kube-scheduler-amd64:v1.10.3", `
-      "kube-proxy-amd64:v1.10.3", `
-      "etcd-amd64:3.1.12", `
-      "k8s-dns-sidecar-amd64:1.14.8", `
-      "k8s-dns-kube-dns-amd64:1.14.8", `
-      "k8s-dns-dnsmasq-nanny-amd64:1.14.8", `
-      "pause-amd64:3.1"
+      $images="kube-controller-manager:v1.13.0", `
+      "kube-apiserver:v1.13.0", `
+      "kube-scheduler:v1.13.0", `
+      "kube-proxy:v1.13.0", `
+      "etcd:3.2.24", `
+      "coredns:1.2.6", `
+      "pause:3.1"
 
       foreach ($image in $images){
          # docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
