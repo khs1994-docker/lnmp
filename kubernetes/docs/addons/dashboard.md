@@ -23,14 +23,37 @@ http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/https:kubernetes-da
 
 ## 创建登录 token
 
-> 1.10.1 之后，使用之前必须生成 token,可以将生成的 token 放到本项目的根目录的 `.env` 文件中，使用时直接复制即可。
+### Docker 桌面版
 
-### 其他
+* https://github.com/AliyunContainerService/k8s-for-docker-desktop
+
+#### macOS
 
 ```bash
-# for windows
-# $ wsl
+$ TOKEN=$(kubectl -n kube-system describe secret default| awk '$1=="token:"{print $2}')
 
+$ kubectl config set-credentials docker-desktop --token="${TOKEN}"
+```
+
+#### Windows
+
+```bash
+$TOKEN=((kubectl -n kube-system describe secret default | Select-String "token:") -split " +")[1]
+
+$ kubectl config set-credentials docker-desktop --token="${TOKEN}"
+```
+
+**登录 dashboard 的时候选择 kubeconfig 文件**
+
+```bash
+macOS: $HOME/.kube/config
+
+Windows: %UserProfile%\.kube\config
+```
+
+### Linux
+
+```bash
 $ kubectl create sa dashboard-admin -n kube-system
 
 $ kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
