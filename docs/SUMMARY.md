@@ -47,7 +47,7 @@
 
 ## 私有化 composer
 
-* Composer
+* [Composer](composer/README.md)
     * [Satis](composer/satis.md)
 
 ## 生产环境

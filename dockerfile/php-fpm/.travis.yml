@@ -1,7 +1,5 @@
 language: bash
 
-# sudo: required
-
 os: linux
 dist: xenial
 
