@@ -30,7 +30,7 @@ $ lnmp-docker satis
         "url": "http://packages.t.khs1994.com/",
         "options": {
           "ssl": {
-                    "cafile": "/home/path/my-root-ca.crt"
+              "cafile": "/home/path/my-root-ca.crt"
           }
         }
       }

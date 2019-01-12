@@ -11,6 +11,7 @@
 * 安装
     * [Linux macOS](install/linux.md)
     * [Windows 10](install/windows.md)
+* [更新](update.md)
 * [项目初始化过程](init.md)
 * [路径说明](path.md)
 * [lnmp-docker CLI](cli.md)
