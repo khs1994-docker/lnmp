@@ -1367,7 +1367,9 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d "$@"
+      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml \
+        -f docker-compose.include.yml \
+        up -d "$@"
     else
       NOTSUPPORT
     fi
@@ -1416,7 +1418,11 @@ For information please run $ docker service update --help
 
   build-config )
     init; if [ ${ARCH} = 'x86_64' ];then \
-        exec docker-compose -f docker-compose.yml -f docker-compose.build.yml config; else NOTSUPPORT; fi
+        exec docker-compose -f docker-compose.yml \
+             -f docker-compose.build.yml \
+             -f docker-compose.include.yml
+             config; \
+          else NOTSUPPORT; fi
     ;;
 
   restore )
@@ -1509,7 +1515,9 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   build-push )
     run_docker; init; exec \
-        docker-compose -f docker-compose.build.yml build --parallel \
+        docker-compose -f docker-compose.build.yml \
+          -f docker-compose.include.yml \
+          build --parallel \
           && docker-compose -f docker-compose.build.yml push
     ;;
 
@@ -1525,7 +1533,11 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     run_docker; init
     case "${ARCH}" in
         x86_64 )
-          sleep 2; exec docker-compose pull ${LNMP_INCLUDE:-nginx mysql php7 redis phpmyadmin}
+          sleep 2; exec docker-compose \
+            -f docker-compose.yml \
+            -f docker-compose.override.yml \
+            -f docker-compose.include.yml \
+          pull ${LNMP_INCLUDE:-nginx mysql php7 redis phpmyadmin}
           ;;
         aarch64 | armv7l )
           sleep 2; exec docker-compose -f docker-arm.yml pull ${LNMP_INCLUDE:-nginx mysql php7 redis phpmyadmin}

@@ -392,11 +392,23 @@ switch($first){
     }
 
     build-config {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml config
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml `
+        -f docker-compose.include.yml `
+        config
     }
 
     build-up {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml up -d $other
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml `
+      -f docker-compose.include.yml `
+      up -d $other
+    }
+
+    build-push {
+      docker-compose -f docker-compose.build.yml `
+        -f docker-compose.include.yml `
+        build --parallel
+
+      docker-compose -f docker-compose.build.yml push
     }
 
     cleanup {
@@ -433,7 +445,11 @@ switch($first){
     }
 
     pull {
-      docker-compose pull ${LNMP_INCLUDE}
+      docker-compose `
+        -f docker-compose.yml `
+        -f docker-compose.override.yml `
+        -f docker-compose.include.yml `
+        pull ${LNMP_INCLUDE}
     }
 
     down {
