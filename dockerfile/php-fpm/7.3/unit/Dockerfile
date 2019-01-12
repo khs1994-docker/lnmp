@@ -33,7 +33,8 @@ ENV PHPIZE_DEPS \
       bison
 
 # persistent / runtime deps
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -ex \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+      set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --virtual .persistent-deps \
                  curl \
@@ -131,14 +132,14 @@ ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
 ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
-ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
+# ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
 ENV PHP_VERSION 7.3.1
 ENV NGINX_UNIT_VERSION 1.7
-ENV PHP_URL="https://secure.php.net/get/php-7.3.1.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.3.1.tar.xz.asc/from/this/mirror"
-ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
+# ENV PHP_URL="https://secure.php.net/get/php-7.3.1.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.3.1.tar.xz.asc/from/this/mirror"
+# ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
-COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
+# COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-source /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-entrypoint /usr/local/bin/
@@ -146,36 +147,19 @@ COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -xe \
-  && cd /usr/local/bin \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+  --mount=type=bind,from=php:7.3.1-alpine,source=/usr/src,target=/usr/src,rw \
+  --mount=type=bind,from=php:7.3.1-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+  set -xe \
+  \
+  && export PATH=/opt/bin:$PATH \
+  && cd /opt/bin \
   && for file in `ls docker-php-*`; \
    do \
-   sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+   sed -i "s#apk --no-cache#apk#g" $file; \
    done \
-  && chmod +x /usr/local/sbin/docker-php-* \
+  \
   ; mkdir -p $PHP_INI_DIR/conf.d \
-  # && apk add --virtual .fetch-deps gnupg \
-	&& mkdir -p /usr/src \
-	&& cd /usr/src \
-  && wget -O php.tar.xz "$PHP_URL" \
-	# if [ -n "$PHP_SHA256" ]; then \
-	# 	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
-	# fi; \
-	# if [ -n "$PHP_MD5" ]; then \
-	# 	echo "$PHP_MD5 *php.tar.xz" | md5sum -c -; \
-	# fi; \
-	# \
-	# if [ -n "$PHP_ASC_URL" ]; then \
-	# 	wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
-	# 	export GNUPGHOME="$(mktemp -d)"; \
-	# 	for key in $GPG_KEYS; do \
-	# 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-	# 	done; \
-	# 	gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-	# 	command -v gpgconf > /dev/null && gpgconf --kill all; \
-	# 	rm -rf "$GNUPGHOME"; \
-	# fi; \
-	# && apk del --no-cache .fetch-deps \
 	&& apk add --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
@@ -305,11 +289,11 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -xe \
 # RUN docker-php-ext-enable sodium
   \
   # 创建日志文件夹
-  && ln -sf /dev/stderr /var/log/xdebug-remote.log \
-  && rm -rf /usr/src/* \
-  && rm -rf /usr/local/sbin/docker-php-*
+  && ln -sf /dev/stderr /var/log/xdebug-remote.log
+  # && rm -rf /usr/src/*
 
-RUN cd /usr/src \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+  cd /usr/src \
   && wget https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
   && tar -zxvf ${NGINX_UNIT_VERSION}.tar.gz \
   && mv unit-${NGINX_UNIT_VERSION} unit \
@@ -350,13 +334,17 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -x \
-      && cd /usr/local/bin \
+RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+    --mount=type=bind,from=php:7.3.1-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+      set -x \
+      \
+      && export PATH=/opt/bin:$PATH \
+      && cd /opt/bin \
       && for file in `ls docker-php-*`; \
         do \
-        sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+        sed -i "s#apk --no-cache#apk#g" $file; \
         done \
-      && chmod +x /usr/local/sbin/docker-php-* \
+      \
       && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && for extension in $PECL_EXTENSION;do \
@@ -366,8 +354,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache set -x \
       ; apk del --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
 # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
-      && rm -rf /tmp/* \
-      && rm -rf /usr/local/sbin/docker-php-*
+      && rm -rf /tmp/*
 
 ENV PS1="[\u@\h \w]# "
 

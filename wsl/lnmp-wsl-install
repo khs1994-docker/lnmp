@@ -34,7 +34,7 @@ $ lnmp-wsl-install php 7.2.14 deb
 
 [ deb 方法一个系统只能存在一个 PHP 版本，若想多版本共存，主版本使用 deb 方法，其他版本使用 tar 方法 ]
 
-$ lnmp-wsl-install php 7.1.26 [7.0.33] [5.6.39]
+$ lnmp-wsl-install php 7.1.26 [7.0.33] [5.6.40]
 
 [ php56 只支持 ubuntu ]
 "

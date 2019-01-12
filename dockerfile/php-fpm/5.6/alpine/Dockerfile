@@ -1,4 +1,4 @@
-ARG PHP_VERSION=5.6.39
+ARG PHP_VERSION=5.6.40
 
 FROM php:${PHP_VERSION}-fpm-alpine as php
 
