@@ -126,7 +126,7 @@ PHP Tools:
   ssl-self             Issue Self-signed SSL certificate
 
 Composer:
- satis                 Build Satis
+  satis                Build Satis
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker for Desktop

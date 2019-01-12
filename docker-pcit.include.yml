@@ -32,7 +32,7 @@ services:
 
   pcit-agent:
     << : *pcit
-    command: server
+    command: agent
 
   pcit-gc:
     << : *pcit
