@@ -12,4 +12,5 @@
 
 ### Updates:
 
-* [PHP 7.3.1 7.2.14 7.1.26](http://www.php.net/ChangeLog-7.php#7.3.1)
+* [PHP `7.3.1` `7.2.14` `7.1.26`](http://www.php.net/ChangeLog-7.php#7.3.1)
+* [Node.js `11.7.0`](https://github.com/nodejs/node/releases/tag/v11.7.0)

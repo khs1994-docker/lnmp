@@ -3,3 +3,6 @@
 *           text eol=lf
 
 secrets/*   text eol=lf
+
+# 忽略文件夹下的语言识别
+# /         linguist-vendored
