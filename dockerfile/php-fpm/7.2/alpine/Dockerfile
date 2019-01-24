@@ -59,7 +59,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && PHP_FPM_RUN_DEPS=" \
                          bash \
                          tzdata \
-                         libmemcached \
+                         libmemcached-libs \
                          libpq \
                          libzip \
                          libpng \
@@ -77,12 +77,14 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libxpm \
                          libwebp \
                          ${APK_EXTRA:-} \
+                         zlib \
                          " \
                          # tidyhtml-libs \
       # *-dev 编译之后删除
       && PHP_FPM_BUILD_DEPS=" \
                          libressl-dev \
                          libmemcached-dev \
+                         zlib-dev \
                          cyrus-sasl-dev \
                          postgresql-dev \
                          libzip-dev \
@@ -126,6 +128,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
              && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
              && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
              && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
              && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         # https://github.com/tideways/php-xhprof-extension.git

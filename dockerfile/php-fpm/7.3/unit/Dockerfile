@@ -111,8 +111,8 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
-         --with-ldap=shared \
-             --with-ldap-sasl \
+        --with-ldap=shared \
+            --with-ldap-sasl \
         --enable-phar \
         --enable-posix=shared \
         --with-pspell=shared \
@@ -320,11 +320,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       yaml-dev \
-      libzip-dev
+      zlib-dev
 
 ENV PECL_RUN_DEPS \
-      libmemcached \
-      yaml
+      libmemcached-libs \
+      yaml \
+      zlib
 
 ENV PECL_EXTENSION \
       mongodb \
@@ -353,6 +354,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
            && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
            && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
            && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
+           && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
            && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
          done \
       ; apk del --no-cache .pecl_build_deps \

@@ -24,7 +24,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && for extension in $PHP_EXTENSION;do \
          docker-php-ext-install $extension \
          && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "${extension} install error" \
-         && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
          && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
        done \
     && apk del --no-cache .build-deps
@@ -60,12 +59,14 @@ RUN export EXT_NAME=gd \
                           libjpeg-turbo \
                           libxpm \
                           libwebp \
+                          zlib \
     && apk add --no-cache --virtual .build-deps \
                                       libpng-dev \
                                       freetype-dev \
                                       libjpeg-turbo-dev \
                                       libxpm-dev \
                                       libwebp-dev \
+                                      zlib-dev \
                                       $PHPIZE_DEPS \
     && docker-php-ext-configure gd \
                                     --disable-gd-jis-conv \
@@ -221,7 +222,6 @@ RUN export EXT_NAME=tidy \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
     && apk del --no-cache .build-deps
 
-                         # libressl-dev \
 ENV PECL_EXTENSION \
       mongodb \
       igbinary \
@@ -243,11 +243,11 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 
 RUN export EXT_NAME=memcached \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-    && apk add --no-cache libmemcached \
+    && apk add --no-cache libmemcached-libs \
     && apk add --no-cache --virtual .build-deps \
                                     libmemcached-dev \
                                     cyrus-sasl-dev \
-                                    libzip-dev \
+                                    zlib-dev \
                                     $PHPIZE_DEPS \
     && pecl install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
@@ -289,7 +289,7 @@ RUN export EXT_NAME=xdebug \
 
 RUN export EXT_NAME=tideways_xhprof \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-        # https://github.com/tideways/php-xhprof-extension.git
+        # https://github.com/tideways/php-xhprof-extension
         && cd /tmp \
         && wget https://github.com/tideways/php-xhprof-extension/archive/master.zip \
         && unzip master.zip \
@@ -298,11 +298,40 @@ RUN export EXT_NAME=tideways_xhprof \
         && ./configure \
         && make \
         && make install \
-        && docker-php-ext-enable tideways_xhprof \
+        && docker-php-ext-enable ${EXT_NAME} \
         && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
         && apk del --no-cache .build-deps \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default \
+        && rm -rf /tmp/*
+
+RUN export EXT_NAME=swoole \
+        && export EXT_VERSION=4.2.12 \
+        && apk add --no-cache nghttp2-libs \
+        && apk add --no-cache --virtual .build-deps \
+                                          libressl-dev \
+                                          nghttp2-dev \
+                                          $PHPIZE_DEPS \
+        # https://github.com/swoole/swoole-src
+        && cd /tmp \
+        && wget https://pecl.php.net/get/${EXT_NAME}-${EXT_VERSION}.tgz \
+        && tar -zxvf ${EXT_NAME}-${EXT_VERSION}.tgz \
+        && cd ${EXT_NAME}-${EXT_VERSION} \
+        && phpize \
+        && ./configure \
+             --with-php-config=php-config \
+             --enable-openssl \
+             --enable-sockets \
+             --enable-http2 \
+             --enable-mysqlnd \
+             # --enable-async-redis \
+        && make \
+        && make install \
+        && docker-php-ext-enable ${EXT_NAME} \
+        && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
+        && apk del --no-cache .build-deps \
+        && rm -rf /usr/local/lib/php/doc/$EXT_NAME \
+        && rm -rf /usr/local/include/php/ext/$EXT_NAME \
         && rm -rf /tmp/*
 
 # 创建日志文件夹

@@ -67,7 +67,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       && PHP_FPM_RUN_DEPS=" \
                          bash \
                          tzdata \
-                         libmemcached \
+                         libmemcached-libs \
                          libpq \
                          libzip \
                          libpng \
@@ -84,6 +84,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          icu-libs \
                          libxpm \
                          libwebp \
+                         zlib \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -110,6 +111,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          icu-dev \
                          libxpm-dev \
                          libwebp-dev \
+                         zlib-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
@@ -134,6 +136,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
              && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
              && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
              && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
              && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         # https://github.com/tideways/php-xhprof-extension.git

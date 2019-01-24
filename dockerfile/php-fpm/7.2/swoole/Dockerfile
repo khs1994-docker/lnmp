@@ -58,9 +58,10 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && PHP_SWOOLE_RUN_DEPS=" \
                          bash \
                          tzdata \
-                         libmemcached \
+                         libmemcached-libs \
                          libpq \
                          libzip \
+                         zlib \
                          libpng \
                          freetype \
                          libjpeg-turbo \
@@ -85,6 +86,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          cyrus-sasl-dev \
                          postgresql-dev \
                          libzip-dev \
+                         zlib-dev \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
@@ -101,6 +103,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-dev \
                          libxpm-dev \
                          libwebp-dev \
+                         nghttp2-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
@@ -116,7 +119,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                         --with-webp-dir=/usr \
                                         --with-xpm-dir=/usr \
         && docker-php-ext-install $PHP_EXTENSION \
-        && apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS \
+        && apk add --no-cache --virtual .build-deps \
+                                          # linux-headers \
+                                          $PHPIZE_DEPS \
         && for extension in ${PHP_EXTENSION};do \
              strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
@@ -125,6 +130,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
              && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
              && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
              && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
              && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         && apk del --no-cache .build-deps .php-swoole-build-deps \
