@@ -44,6 +44,7 @@
     * [PHPUnit](phpunit.md)
     * [XHProf](xhprof.md)
     * [微信小程序 PHP 后端部署](wechat.md)
+    * [Swoole](swoole.md)
 
 ## 私有化 composer
 

@@ -40,9 +40,9 @@ services:
 
   swoole:
     << : *default-common
-    image: khs1994/php:7.3.1-fpm-alpine
+    image: khs1994/php:7.3.1-swoole-alpine
+    # command 指令只需传入文件名即可
     command:
-      - php
       - /app/swoole/index.php
     ports:
       - 10001:10001
