@@ -177,6 +177,8 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           libpng-dev \
           freetype-dev \
           libjpeg-turbo-dev \
+          libwebp-dev \
+          libxpm-dev \
           libexif-dev \
           libxslt-dev \
           gmp-dev \
@@ -185,9 +187,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           enchant-dev \
           imap-dev \
           gettext-dev \
-          libwebp-dev \
           icu-dev \
-          libxpm-dev \
           krb5-dev \
           aspell-dev \
           openldap-dev \

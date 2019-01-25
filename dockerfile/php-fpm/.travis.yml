@@ -39,6 +39,7 @@ script:
   - if [ -n "$UNIT" ];then docker build --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${FOLDER}/unit; fi
   - if [ -n "$SUPERVISORD" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${FOLDER}/supervisord; fi
   - if [ -n "$COMPOSER" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine ${FOLDER}/composer; fi
+  - if [ -n "$SINGLE" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${FOLDER}/single; fi
   - if [ -n "$SWOOLE" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${FOLDER}/swoole; fi
   - if [ -n "$FPM" ];then docker build --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${FOLDER}/alpine; fi
 
@@ -46,6 +47,7 @@ after_success:
   - if [ -n "$UNIT" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine; fi
   - if [ -n "$SUPERVISORD" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine; fi
   - if [ -n "$COMPOSER" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine; fi
+  - if [ -n "$SINGLE" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine; fi
   - if [ -n "$SWOOLE" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine; fi
   - if [ -n "$FPM" ];then docker-compose push ${PHP_VERSION}; fi
   - bash tag.sh
@@ -67,6 +69,7 @@ env:
   - PHP_VERSION=7_2_X FOLDER=7.2 PHP_TAG_VERSION=7.2.14 UNIT=1
   - PHP_VERSION=7_2_X FOLDER=7.2 PHP_TAG_VERSION=7.2.14 SUPERVISORD=1
   - PHP_VERSION=7_2_X FOLDER=7.2 PHP_TAG_VERSION=7.2.14 COMPOSER=1
+  - PHP_VERSION=7_2_X FOLDER=7.2 PHP_TAG_VERSION=7.2.14 SINGLE=1
 
   - PHP_VERSION=7_3_X FOLDER=7.3 PHP_TAG_VERSION=7.3.1 FPM=1
   - PHP_VERSION=7_3_X FOLDER=7.3 PHP_TAG_VERSION=7.3.1 SWOOLE=1

@@ -70,9 +70,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          libmemcached-libs \
                          libpq \
                          libzip \
+                         zlib \
                          libpng \
                          freetype \
                          libjpeg-turbo \
+                         libxpm \
+                         libwebp \
                          yaml \
                          libbz2 \
                          libexif \
@@ -82,9 +85,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          enchant \
                          c-client \
                          icu-libs \
-                         libxpm \
-                         libwebp \
-                         zlib \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -95,9 +95,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          cyrus-sasl-dev \
                          postgresql-dev \
                          libzip-dev \
+                         zlib-dev \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
+                         libxpm-dev \
+                         libwebp-dev \
                          yaml-dev \
                          libexif-dev \
                          libxslt-dev \
@@ -109,9 +112,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
-                         libxpm-dev \
-                         libwebp-dev \
-                         zlib-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
