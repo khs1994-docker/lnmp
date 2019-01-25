@@ -28,7 +28,7 @@ ENV PHP_EXTENSION \
       sysvmsg \
       sysvsem \
       sysvshm \
-# tidy \
+      # tidy \
       xmlrpc \
       xsl \
       zip
@@ -61,6 +61,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libmemcached-dev \
         libpq-dev \
         libzip-dev \
+        zlib1g-dev \
         libyaml-dev \
         libxmlrpc-epi-dev \
         libbz2-dev \
@@ -84,6 +85,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libmemcachedutil2 \
        libpq5 \
        libzip4 \
+       zlib1g \
        libyaml-0-2 \
        libxslt1.1 \
        libxmlrpc-epi0 \
@@ -113,9 +115,16 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                                     --with-kerberos \
                                     --with-imap-ssl \
         && docker-php-ext-install $PHP_EXTENSION \
+        && for extension in ${PHP_EXTENSION};do \
+                     strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+           done \
         && for extension in $PECL_EXTENSION;do \
              pecl install $extension \
-               && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
+             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
+             && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
+             && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         # https://github.com/tideways/php-xhprof-extension.git
         && cd /tmp \
@@ -129,6 +138,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         && docker-php-ext-enable opcache tideways_xhprof \
         && apt-get purge -y --auto-remove  $buildDeps \
         && rm -rf /tmp/* \
+        && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         # config opcache
         # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
         # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
@@ -165,7 +175,7 @@ RUN echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.7/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.8/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
  \
  # composer 中国镜像

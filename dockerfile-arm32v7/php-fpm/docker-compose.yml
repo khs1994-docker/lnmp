@@ -4,7 +4,7 @@ services:
 
   arm32v7-php-fpm:
     build:
-      context: .
+      context: ./7.2/stretch
       args:
         DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
         DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
