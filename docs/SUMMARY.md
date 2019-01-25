@@ -11,6 +11,7 @@
 * 安装
     * [Linux macOS](install/linux.md)
     * [Windows 10](install/windows.md)
+* [更新](update.md)
 * [项目初始化过程](init.md)
 * [路径说明](path.md)
 * [lnmp-docker CLI](cli.md)
@@ -43,10 +44,11 @@
     * [PHPUnit](phpunit.md)
     * [XHProf](xhprof.md)
     * [微信小程序 PHP 后端部署](wechat.md)
+    * [Swoole](swoole.md)
 
 ## 私有化 composer
 
-* Composer
+* [Composer](composer/README.md)
     * [Satis](composer/satis.md)
 
 ## 生产环境

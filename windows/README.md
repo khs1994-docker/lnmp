@@ -6,17 +6,25 @@
 
 环境 `Windows 10`，终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也行。
 
-我将软件都放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` `C:\Apache24`...
+将软件都放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` `C:\Apache24`...
 
 MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
 
 **部分软件使用 `WSL` 来安装运行。**
 
+## 快速初始化 WNAMP 环境
+
+> 本项目提供了一个脚本，方便开发者快速建立开发环境，后面介绍的内容为脚本所做的工作。
+
+```bash
+$ lnmp-windows-init.ps1
+```
+
 ## 系统环境变量说明
 
 **务必执行此项操作**
 
-**务必知道 Windows Linux 环境变量的作用及设置方法，如果你不知道，就不用往下看了**
+**务必知道 Windows Linux 环境变量的作用及设置方法**
 
 * 为了在任意目录执行命令，请将各软件路径加入系统环境变量 `PATH`
 
@@ -197,17 +205,15 @@ $ nginx -p C:/nginx -s stop
 
 ## Apache
 
-我一般用的 `nginx`，这里记录一下 `apache`。
-
 PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/manual/fa/install.windows.apache2.php) 讲的很清楚了（暂无中文翻译）。
 
-我这里是 `Running PHP under FastCGI` 方式
+这里 `Running PHP under FastCGI` 方式
 
 其他通过在配置文件中加载模块 `LoadModule php5_module "c:/php/php7apache2_4.dll"` 即 `Installing as an Apache handler` 等运行模式（网上资料较多）请自行查阅资料。
 
 在 [文中](http://httpd.apache.org/docs/current/platform/windows.html) 提到的前两个地方选择一个下载，后几个是集成安装包。
 
-我在 http://www.apachelounge.com/download/ 下载
+在 http://www.apachelounge.com/download/ 下载
 
 同时下载 `mod_fcgid` 模块，注意版本（`win64` `vc15`）对应 (可能不太好找，网页搜索 `mod_fcgid` 来定位)。
 

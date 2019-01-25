@@ -37,7 +37,7 @@ ENV PHP_EXTENSION \
       sysvmsg \
       sysvsem \
       sysvshm \
-# tidy \
+      # tidy \
       xmlrpc \
       xsl \
       zip
@@ -52,9 +52,6 @@ ENV PECL_EXTENSION \
       yaml \
       swoole
 
-# 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
-# 国内镜像地址在 docker-compose.yml 中定义
-
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -63,9 +60,10 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && PHP_FPM_RUN_DEPS=" \
                          bash \
                          tzdata \
-                         libmemcached \
+                         libmemcached-libs \
                          libpq \
                          libzip \
+                         zlib \
                          libpng \
                          freetype \
                          libjpeg-turbo \
@@ -80,7 +78,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp \
                          icu-libs \
                          libxpm \
-                         libwebp \
                          " \
                          # tidyhtml-libs \
       # *-dev 编译之后删除
@@ -90,6 +87,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          cyrus-sasl-dev \
                          postgresql-dev \
                          libzip-dev \
+                         zlib-dev \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
@@ -106,6 +104,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-dev \
                          libxpm-dev \
                          libwebp-dev \
+                         nghttp2-dev \
                          " \
                          # tidyhtml-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
@@ -120,10 +119,19 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                         --with-webp-dir=/usr \
                                         --with-xpm-dir=/usr \
         && docker-php-ext-install $PHP_EXTENSION \
-        && apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS \
+        && apk add --no-cache --virtual .build-deps \
+                                          # linux-headers \
+                                          $PHPIZE_DEPS \
+        && for extension in ${PHP_EXTENSION};do \
+             strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+           done \
         && for extension in $PECL_EXTENSION;do \
              pecl install $extension \
-               && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
+             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
+             && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
+             && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         # https://github.com/tideways/php-xhprof-extension.git
         && cd /tmp \
@@ -137,6 +145,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && docker-php-ext-enable opcache tideways_xhprof \
         && apk del --no-cache .build-deps .php-fpm-build-deps \
         && rm -rf /tmp/* \
+        && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
@@ -148,9 +157,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/error.log \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm
-        # config opcache
-        # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-        # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
 
 # install composer
 
@@ -182,7 +188,7 @@ RUN apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
     }" \
  && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
  && composer --ansi --version --no-interaction \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.7/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.8/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
  && chmod +x /docker-entrypoint.composer.sh \
  \
  # composer 中国镜像

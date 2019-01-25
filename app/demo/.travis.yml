@@ -29,7 +29,6 @@ dist: xenial # 16.04
 #       - mysql-server
 #       - mysql-client
 
-sudo: required
 # services:
 # - docker
 # - rabbitmq

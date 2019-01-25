@@ -52,9 +52,6 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-# 构建变量默认值为原始值，笔记本构建统一使用 docker-compose 构建
-# 国内镜像地址在 docker-compose.yml 中定义
-
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -63,7 +60,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && PHP_FPM_RUN_DEPS=" \
                          bash \
                          tzdata \
-                         libmemcached \
+                         libmemcached-libs \
                          libpq \
                          zlib \
                          libpng \
@@ -77,7 +74,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          xmlrpc-c \
                          enchant \
                          c-client \
-                         libwebp \
                          icu-libs \
                          libxpm \
                          libwebp \
@@ -107,6 +103,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-dev \
                          libxpm-dev \
                          libwebp-dev \
+                         nghttp2-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
@@ -119,10 +116,19 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                     --with-webp-dir=/usr \
                                     --with-xpm-dir=/usr \
         && docker-php-ext-install $PHP_EXTENSION \
-        && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers \
+        && apk add --no-cache --virtual .build-deps \
+                                        # linux-headers \
+                                        $PHPIZE_DEPS \
+        && for extension in ${PHP_EXTENSION};do \
+             strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+           done \
         && for extension in $PECL_EXTENSION;do \
              pecl install $extension \
-               && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error"; \
+             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
+             && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
+             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
+             && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         && docker-php-ext-enable opcache \
         && docker-php-ext-enable $PECL_EXTENSION opcache \
@@ -131,6 +137,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
         && rm -rf /tmp/* \
+        && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \
         && ln -sf /dev/stdout /var/log/php-fpm/access.log \

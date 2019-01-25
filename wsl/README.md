@@ -201,6 +201,7 @@ $ vi index.php
 
 phpinfo();
 
+# 新建配置
 $ curl -X PUT -d @/usr/local/nginx_unit/start.json  \
        --unix-socket /usr/local/nginx_unit/control.unit.sock \
        http://localhost/config
