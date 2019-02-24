@@ -14,11 +14,11 @@ Build php in WSL RHEL by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php-rhel 7.2.14 7.3.1 7.3.1beta3 7.3.1RC1
+$ lnmp-wsl-builder-php-rhel 7.2.15 7.3.2 7.3.2beta3 7.3.2RC1
 
 $ lnmp-wsl-builder-php-rhel yum
 
-$ lnmp-wsl-builder-php-rhel 7.2.14 [--skipbuild] [tar] [rpm] [enable-ext]
+$ lnmp-wsl-builder-php-rhel 7.2.15 [--skipbuild] [tar] [rpm] [enable-ext]
 
 "
 
@@ -38,7 +38,7 @@ PHP_TIMEZONE=PRC
 PHP_URL=http://cn2.php.net/distributions
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.8.0
+export COMPOSER_VERSION=1.8.4
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -532,11 +532,11 @@ _create_log_file(){
 
 _composer(){
    curl -sfL -o /tmp/installer.php \
-       https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer
+       https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer
 
    ${PHP_PREFIX}/bin/php -r " \
-        \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
-        \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
+        \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \
+        \$hash = hash('sha384', file_get_contents('/tmp/installer.php')); \
         if (!hash_equals(\$signature, \$hash)) { \
             unlink('/tmp/installer.php'); \
             echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
@@ -700,7 +700,7 @@ command -v wget || sudo yum install -y wget
 
 mkdir -p /tmp/php-builder || echo
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.14 ; fi
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.15 ; fi
 
 _get_phpnum $PHP_VERSION
 

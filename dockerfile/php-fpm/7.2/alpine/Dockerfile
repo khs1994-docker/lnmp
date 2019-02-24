@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.14
+ARG PHP_VERSION=7.2.15
 
 FROM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -82,7 +82,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          # tidyhtml-libs \
       # *-dev 编译之后删除
       && PHP_FPM_BUILD_DEPS=" \
-                         libressl-dev \
+                         openssl-dev \
                          libmemcached-dev \
                          zlib-dev \
                          cyrus-sasl-dev \

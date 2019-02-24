@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM alpine:3.8 as php
+FROM alpine:3.9 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                  tar \
                  xz \
 # https://github.com/docker-library/php/issues/494
-                 libressl \
+                 openssl \
                  # git \
 # 以下两个均为版本控制系统
 # subversion \
@@ -135,9 +135,9 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
-ENV PHP_VERSION 7.2.14
+ENV PHP_VERSION 7.2.15
 ENV NGINX_UNIT_VERSION 1.7
-# ENV PHP_URL="https://secure.php.net/get/php-7.2.14.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.2.14.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://secure.php.net/get/php-7.2.15.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.2.15.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -149,8 +149,8 @@ ENV NGINX_UNIT_VERSION 1.7
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-  --mount=type=bind,from=php:7.2.14-alpine,source=/usr/src,target=/usr/src,rw \
-  --mount=type=bind,from=php:7.2.14-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+  --mount=type=bind,from=php:7.2.15-alpine,source=/usr/src,target=/usr/src,rw \
+  --mount=type=bind,from=php:7.2.15-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
   && export PATH=/opt/bin:$PATH \
@@ -166,7 +166,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           coreutils \
           curl-dev \
           libedit-dev \
-          libressl-dev \
+          openssl-dev \
           libsodium-dev \
           libxml2-dev \
           sqlite-dev \
@@ -237,6 +237,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 		\
 		$PHP_EXTRA_CONFIGURE_ARGS \
 	&& make -j "$(nproc)" \
+  && find -type f -name '*.a' -delete \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
 # && docker-php-source delete \
@@ -302,7 +303,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   && tar -zxvf ${NGINX_UNIT_VERSION}.tar.gz \
   && mv unit-${NGINX_UNIT_VERSION} unit \
   && cd /usr/src/unit \
-  && apk add --virtual .build-deps $PHPIZE_DEPS libressl-dev \
+  && apk add --virtual .build-deps $PHPIZE_DEPS openssl-dev \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php72 \
@@ -338,7 +339,7 @@ ENV PECL_EXTENSION \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-    --mount=type=bind,from=php:7.2.14-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+    --mount=type=bind,from=php:7.2.15-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       \
       && export PATH=/opt/bin:$PATH \

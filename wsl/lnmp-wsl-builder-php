@@ -16,17 +16,17 @@ Build php in WSL Debian by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php 7.2.14
+$ lnmp-wsl-builder-php 7.2.15
 
 $ lnmp-wsl-builder-php apt
 
-$ lnmp-wsl-builder-php 7.3.1 7.3.1beta1 7.3.1RC1
+$ lnmp-wsl-builder-php 7.3.2 7.3.2beta1 7.3.2RC1
 
-$ lnmp-wsl-builder-php 7.2.14 [--skipbuild] [tar] [deb] [enable-ext]
+$ lnmp-wsl-builder-php 7.2.15 [--skipbuild] [tar] [deb] [enable-ext]
 
-$ lnmp-wsl-builder-php 7.2.14 arm64 tar [TODO]
+$ lnmp-wsl-builder-php 7.2.15 arm64 tar [TODO]
 
-$ lnmp-wsl-builder-php 7.2.14 arm32 tar [TODO]
+$ lnmp-wsl-builder-php 7.2.15 arm32 tar [TODO]
 
 "
 
@@ -48,7 +48,7 @@ host=x86_64-linux-gnu
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.8.0
+export COMPOSER_VERSION=1.8.4
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -641,15 +641,15 @@ sudo chmod 777 php${PHP_NUM}-*
 
 _composer(){
    curl -sfL -o /tmp/installer.php \
-       https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer
+       https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer
 
    # https://github.com/khs1994-docker/lnmp/issues/630
    set +e
    sudo apt show libssl1.1=1.1.0f-3+deb9u2 && sudo apt install -y --allow-downgrades libssl1.1=1.1.0f-3+deb9u2
    set -e
    ${PHP_PREFIX}/bin/php -r " \
-        \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
-        \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
+        \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \
+        \$hash = hash('sha384', file_get_contents('/tmp/installer.php')); \
         if (!hash_equals(\$signature, \$hash)) { \
             unlink('/tmp/installer.php'); \
             echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
@@ -820,7 +820,7 @@ command -v wget || sudo apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.14
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.15
 
 _get_phpnum $PHP_VERSION
 

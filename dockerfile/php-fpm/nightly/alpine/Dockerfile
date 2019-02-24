@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM alpine:3.8 as php
+FROM alpine:3.9 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -41,7 +41,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                  tar \
                  xz \
 # https://github.com/docker-library/php/issues/494
-                 libressl \
+                 openssl \
                  git \
 # 以下两个均为版本控制系统
 # subversion \
@@ -208,7 +208,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           coreutils \
           curl-dev \
           libedit-dev \
-          libressl-dev \
+          openssl-dev \
           libsodium-dev \
           libxml2-dev \
           sqlite-dev \
@@ -239,6 +239,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           tidyhtml-dev \
           net-snmp-dev \
           openldap-dev \
+          oniguruma-dev \
           ${APK_DEV_EXTRA:-} \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
@@ -282,6 +283,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 		\
 		$PHP_EXTRA_CONFIGURE_ARGS \
 	&& make -j "$(nproc)" \
+  && find -type f -name '*.a' -delete \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
 	&& make clean \

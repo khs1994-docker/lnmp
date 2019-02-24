@@ -2,7 +2,7 @@ FROM debian:stretch-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.2.14
+ARG PHP_VERSION=7.2.15
 
 ARG PHP_NUM=72
 
@@ -10,7 +10,7 @@ ARG PHP_PREFIX=/usr/local/php72
 
 ARG PHP_INI_DIR=/usr/local/etc/php72
 
-ARG COMPOSER_VERSION=1.8.0
+ARG COMPOSER_VERSION=1.8.4
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -315,15 +315,15 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/php.fpm.zz-wsl.conf.example \
        > ${PHP_INI_DIR}/php-fpm.d/zz-debian.conf \
   && curl -s -f -L -o /tmp/installer.php \
-         https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer \
+         https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \
   && php -r " \
-          \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
-          \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
-          if (!hash_equals(\$signature, \$hash)) { \
-              unlink('/tmp/installer.php'); \
-              echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
-              exit(1); \
-          }" \
+    \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \
+    \$hash = hash('sha384', file_get_contents('/tmp/installer.php')); \
+    if (!hash_equals(\$signature, \$hash)) { \
+        unlink('/tmp/installer.php'); \
+        echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
+        exit(1); \
+    }" \
   && php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION} \
   && ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction \
   && rm -rf /tmp/* \

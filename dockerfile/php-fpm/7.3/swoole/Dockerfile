@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.1
+ARG PHP_VERSION=7.3.2
 
 FROM php:${PHP_VERSION}-cli-alpine as php
 
@@ -90,7 +90,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          # tidyhtml-libs \
       # *-dev 编译之后删除
       && PHP_SWOOLE_BUILD_DEPS=" \
-                         libressl-dev \
+                         openssl-dev \
                          libmemcached-dev \
                          cyrus-sasl-dev \
                          postgresql-dev \
