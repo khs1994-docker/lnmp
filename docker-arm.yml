@@ -39,7 +39,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/mysql
     #   dockerfile: Dockerfile
     # image: lnmp-mysql:latest
-    image: "${ARM_ARCH:-arm64v8}/mysql:${LNMP_MYSQL_VERSION:-8.0.13}"
+    image: "${ARM_ARCH:-arm64v8}/mysql:${LNMP_MYSQL_VERSION:-8.0.15}"
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: test

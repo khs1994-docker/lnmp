@@ -43,7 +43,7 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 $global:NGINX_VERSION="1.15.8"
 # https://windows.php.net/download/
 $global:PHP_VERSION="7.3.2"
-$global:MYSQL_VERSION="8.0.13"
+$global:MYSQL_VERSION="8.0.15"
 $global:HTTPD_VERSION="2.4.37"
 $global:IDEA_VERSION="1.13.4801"
 $global:NODE_VERSION="11.10.0"

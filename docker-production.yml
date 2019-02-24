@@ -114,9 +114,9 @@ services:
     #
     # image: username/lnmp-mysql:tag
     #
-    # image: khs1994/lnmp-mysql:8.0.13
+    # image: khs1994/lnmp-mysql:8.0.15
     #
-    image: mysql:8.0.13
+    image: mysql:8.0.15
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password

@@ -7,7 +7,7 @@ services:
 
   mysql:
     build: mysql
-    image: khs1994/mysql:8.0.13-windowsservercore-1809
+    image: khs1994/mysql:8.0.15-windowsservercore-1809
 
   php:
     build: php
