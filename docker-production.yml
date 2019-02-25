@@ -427,7 +427,8 @@ services:
     #
     # image: khs1994/lnmp-nginx:1.15.8
     #
-    image: khs1994/nginx:1.15.8-alpine
+    # image: khs1994/nginx:1.15.8-alpine
+    image: nginx:1.15.8-alpine
     ports:
       - "443:443"
       - "80:80"

@@ -10,6 +10,8 @@
 
 ### Changes:
 
+* Use official nginx image `nginx:1.15.8-alpine`
+
 ### Updates:
 
 * [PHP `7.3.2` `7.2.15`](http://www.php.net/ChangeLog-7.php#7.3.2)
