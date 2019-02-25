@@ -330,9 +330,9 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 	)" \
 	&& apk add --virtual .php-rundeps $runDeps \
   \
-# https://github.com/docker-library/php/issues/443
-  && pecl update-channels \
-	&& rm -rf /tmp/pear ~/.pearrc \
+  # https://github.com/docker-library/php/issues/443
+  # && pecl update-channels \
+	# && rm -rf /tmp/pear ~/.pearrc \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del .build-deps
 
@@ -370,8 +370,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       done \
       && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --virtual .pecl_run_deps $PECL_RUN_DEPS \
+      && curl -sfL -o /usr/local/bin/pickle \
+        https://github.com/khs1994-php/pickle/releases/download/v0.4.0-2019-02-14/pickle.phar \
+      && chmod +x /usr/local/bin/pickle \
       && for extension in $PECL_EXTENSION;do \
-           pecl install $extension \
+           pickle install $extension -n --defaults || true \
+           && rm -rf /tmp/$(echo ${extension} | cut -d '-' -f 1) \
            && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
            && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
            && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
