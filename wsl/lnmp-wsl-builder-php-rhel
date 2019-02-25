@@ -14,11 +14,11 @@ Build php in WSL RHEL by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php-rhel 7.2.14 7.3.1 7.3.1beta3 7.3.1RC1
+$ lnmp-wsl-builder-php-rhel 7.2.15 7.3.2 7.3.2beta3 7.3.2RC1 nightly
 
 $ lnmp-wsl-builder-php-rhel yum
 
-$ lnmp-wsl-builder-php-rhel 7.2.14 [--skipbuild] [tar] [rpm] [enable-ext]
+$ lnmp-wsl-builder-php-rhel 7.2.15 [--skipbuild] [tar] [rpm] [enable-ext]
 
 "
 
@@ -38,7 +38,7 @@ PHP_TIMEZONE=PRC
 PHP_URL=http://cn2.php.net/distributions
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.8.0
+export COMPOSER_VERSION=1.8.4
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -86,7 +86,7 @@ case "$1" in
     ;;
 
   nightly )
-    export PHP_NUM=74
+    export PHP_NUM=80
     export BUILD_FROM_GIT=1
     ;;
 
@@ -177,7 +177,8 @@ libXpm \
 libwebp \
 enchant \
 openldap \
-aspell"
+aspell \
+oniguruma"
 
 
 sudo yum install -y ${PHP_DEP} rpm-build > /dev/null
@@ -232,6 +233,7 @@ _install_php_build_dep(){
                    enchant-devel \
                    openldap-devel \
                    aspell-devel \
+                   oniguruma-devel \
                    "
 
 for soft in ${DEP_SOFTS}
@@ -299,18 +301,23 @@ _builder(){
         --with-libedit \
         --with-openssl \
           --with-system-ciphers \
-        --with-pcre-regex \
         --with-pdo-mysql \
         --with-pdo-pgsql=shared \
         --with-xsl=shared \
         --with-zlib \
         --with-mhash \
-        --with-gd \
-        $( test $PHP_NUM -ge "74" && echo "--enable-freetype" || echo "--with-freetype-dir=/usr/lib") \
+        $( test $PHP_NUM -ge "80" && echo "--enable-gd=shared \
+                                             --with-freetype \
+                                             --with-jpeg \
+                                             --with-webp \
+                                             --with-xpm" \
+        || echo "--with-pcre-regex \
+                 --with-gd \
+                   --with-freetype-dir=/usr/lib \
+                   --with-jpeg-dir=/usr/lib \
+                   --with-png-dir=/usr/lib \
+                   --with-xpm-dir=/usr/lib") \
             --disable-gd-jis-conv \
-            --with-jpeg-dir=/usr/lib \
-            --with-png-dir=/usr/lib \
-            --with-xpm-dir=/usr/lib \
         --enable-ftp \
         --enable-mysqlnd \
         --enable-bcmath \
@@ -342,7 +349,10 @@ _builder(){
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2"; \
                  fi ); \
-         echo "--with-sodium --with-libzip --with-webp-dir=/usr/lib --with-pcre-jit"; \
+         echo "--with-sodium --with-libzip --with-pcre-jit"; \
+         if [ $PHP_NUM -lt "74" ];then \
+           echo "--with-webp-dir=/usr/lib"; \
+         fi; \
        fi ) \
         --enable-exif \
         --with-bz2 \
@@ -377,6 +387,8 @@ _builder(){
 # 5. make
 
     make -j "$(nproc)"
+
+    find -type f -name '*.a' -delete
 
 # 6. make install
 
@@ -530,19 +542,27 @@ _create_log_file(){
     sudo chmod 777 php${PHP_NUM}-*
 }
 
-_composer(){
-   curl -sfL -o /tmp/installer.php \
-       https://raw.githubusercontent.com/composer/getcomposer.org/b107d959a5924af895807021fcef4ffec5a76aa9/web/installer
+_pickle(){
+  # composer global require friendsofphp/pickle
+  sudo curl -sfL -o /usr/local/bin/pickle \
+    https://github.com/khs1994-php/pickle/releases/download/v0.4.0-2019-02-14/pickle.phar
+}
 
-   ${PHP_PREFIX}/bin/php -r " \
-        \$signature = '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061'; \
-        \$hash = hash('SHA384', file_get_contents('/tmp/installer.php')); \
-        if (!hash_equals(\$signature, \$hash)) { \
-            unlink('/tmp/installer.php'); \
-            echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
-            exit(1); \
-        }" \
-    && sudo ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
+_composer(){
+  sudo curl -sfL -o /usr/local/bin/composer \
+    https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
+   # curl -sfL -o /tmp/installer.php \
+   #     https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer
+   #
+   # ${PHP_PREFIX}/bin/php -r " \
+   #      \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \
+   #      \$hash = hash('sha384', file_get_contents('/tmp/installer.php')); \
+   #      if (!hash_equals(\$signature, \$hash)) { \
+   #          unlink('/tmp/installer.php'); \
+   #          echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
+   #          exit(1); \
+   #      }" \
+   #  && sudo ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
 }
 
 ################################################################################
@@ -700,7 +720,7 @@ command -v wget || sudo yum install -y wget
 
 mkdir -p /tmp/php-builder || echo
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.14 ; fi
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.2.15 ; fi
 
 _get_phpnum $PHP_VERSION
 
@@ -722,9 +742,14 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 
 sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
+command -v pickle || _pickle
+command -v composer || _composer
+
+sudo chmod +x /usr/local/bin/pickle /usr/local/bin/composer
+
 if [ "$2" = 'enable-ext' ];then
    _test ; \
-   _install_pecl_ext ; _php_ext_enable ; _create_log_file ; _composer
+   _install_pecl_ext ; _php_ext_enable ; _create_log_file
 fi
 
 _install_php_run_dep
@@ -739,7 +764,7 @@ do
 done
 
 test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test ; \
-  _install_pecl_ext ; _php_ext_enable ; _create_log_file ; _composer ; \
+  _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
     ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
     ; _write_version_to_file )
 

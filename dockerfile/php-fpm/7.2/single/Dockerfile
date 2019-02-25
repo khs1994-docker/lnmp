@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.14
+ARG PHP_VERSION=7.2.15
 
 FROM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -309,7 +309,7 @@ RUN export EXT_NAME=swoole \
         && export EXT_VERSION=4.2.12 \
         && apk add --no-cache nghttp2-libs \
         && apk add --no-cache --virtual .build-deps \
-                                          libressl-dev \
+                                          openssl-dev \
                                           nghttp2-dev \
                                           $PHPIZE_DEPS \
         # https://github.com/swoole/swoole-src

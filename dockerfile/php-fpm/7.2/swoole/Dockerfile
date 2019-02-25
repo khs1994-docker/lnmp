@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.14
+ARG PHP_VERSION=7.2.15
 
 FROM php:${PHP_VERSION}-cli-alpine as php
 
@@ -65,6 +65,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libpng \
                          freetype \
                          libjpeg-turbo \
+                         libxpm \
+                         libwebp \
                          yaml \
                          libbz2 \
                          libexif \
@@ -74,14 +76,12 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant \
                          c-client \
                          icu-libs \
-                         libxpm \
-                         libwebp \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
       # *-dev 编译之后删除
       && PHP_SWOOLE_BUILD_DEPS=" \
-                         libressl-dev \
+                         openssl-dev \
                          libmemcached-dev \
                          cyrus-sasl-dev \
                          postgresql-dev \
@@ -90,6 +90,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
+                         libxpm-dev \
+                         libwebp-dev \
                          yaml-dev \
                          libexif-dev \
                          libxslt-dev \
@@ -101,8 +103,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
-                         libxpm-dev \
-                         libwebp-dev \
                          nghttp2-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \

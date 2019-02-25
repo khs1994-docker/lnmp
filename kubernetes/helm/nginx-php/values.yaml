@@ -27,11 +27,12 @@ nfs:
   server: 192.168.199.100
 
 nginx:
-  image: khs1994/nginx:1.15.8-alpine
+  # image: khs1994/nginx:1.15.8-alpine
+  image: "nginx:1.15.8-alpine"
   replicaCount: 2
 
 php:
-  image: khs1994/php:7.2.14-fpm-alpine
+  image: khs1994/php:7.2.15-fpm-alpine
   replicaCount: 2
 
 cronjob:

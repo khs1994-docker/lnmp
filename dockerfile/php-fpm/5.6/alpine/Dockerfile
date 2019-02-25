@@ -65,6 +65,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libpng \
                          freetype \
                          libjpeg-turbo \
+                         libxpm \
                          yaml \
                          libbz2 \
                          libexif \
@@ -73,9 +74,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          xmlrpc-c \
                          enchant \
                          c-client \
-                         libwebp \
                          icu-libs \
-                         libxpm \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -89,6 +88,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libpng-dev \
                          freetype-dev \
                          libjpeg-turbo-dev \
+                         libxpm-dev \
                          yaml-dev \
                          libexif-dev \
                          libxslt-dev \
@@ -100,10 +100,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
-                         libxpm-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
-                         # libwebp-dev \
                          # tidyhtml-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \

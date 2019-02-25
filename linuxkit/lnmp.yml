@@ -24,7 +24,7 @@ services:
   - name: rngd
     image: linuxkit/rngd:v0.2
   - name: php7
-    image: khs1994/php:7.2.14-pro-alpine
+    image: khs1994/php:7.2.15-pro-alpine
     capabilities:
      - CAP_NET_BIND_SERVICE
      - CAP_CHOWN
