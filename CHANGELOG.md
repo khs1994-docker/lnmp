@@ -10,7 +10,7 @@
 
 ### Changes:
 
-* Use official nginx image `nginx:1.15.8-alpine`
+* Use official nginx image `nginx:1.15.x-alpine`
 
 ### Updates:
 
@@ -19,3 +19,4 @@
 * [MySQL `8.0.15`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-15.html)
 * [Composer `1.8.4`](https://github.com/composer/composer/releases/tag/1.8.4)
 * [HTTPD `2.4.38`](https://www.apache.org/dist/httpd/CHANGES_2.4.38)
+* [NGINX `1.15.9`](http://nginx.org/en/CHANGES)

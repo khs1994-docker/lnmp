@@ -42,6 +42,7 @@ script:
   - if [ -n "$SINGLE" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${FOLDER}/single; fi
   - if [ -n "$SWOOLE" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${FOLDER}/swoole; fi
   - if [ -n "$FPM" ];then docker build --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${FOLDER}/alpine; fi
+  - if [ -n "$JIT" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-jit-alpine ${FOLDER}/jit; fi
 
 after_success:
   - if [ -n "$UNIT" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine; fi
@@ -49,6 +50,7 @@ after_success:
   - if [ -n "$COMPOSER" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine; fi
   - if [ -n "$SINGLE" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine; fi
   - if [ -n "$SWOOLE" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine; fi
+  - if [ -n "$JIT" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-jit-alpine; fi
   - if [ -n "$FPM" ];then docker-compose push ${PHP_VERSION}; fi
   - bash tag.sh
   - curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
@@ -79,6 +81,7 @@ env:
 
   - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly FPM=1
   - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly SWOOLE=1
+  - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly JIT=1
 
   global:
   - DOCKER_COMPOSE_VERSION=1.23.2
@@ -93,3 +96,4 @@ matrix:
   - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly FPM=1
   - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly SWOOLE=1
   - env: PHP_VERSION=7_2_X FOLDER=7.2 PHP_TAG_VERSION=7.2.15 SINGLE=1
+  - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly JIT=1
