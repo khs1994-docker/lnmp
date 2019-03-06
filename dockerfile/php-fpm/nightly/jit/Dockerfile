@@ -66,9 +66,11 @@ ENV PHP_INI_DIR /usr/local/etc/php
 ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --without-pear \
         --disable-phpdbg \
-        # --enable-fpm \
-        # --with-fpm-user=www-data \
-        # --with-fpm-group=www-data \
+        # https://github.com/docker-library/php/issues/510
+        --enable-embed=shared \
+        --enable-fpm \
+        --with-fpm-user=www-data \
+        --with-fpm-group=www-data \
         --disable-cgi \
         --with-gettext=shared \
         --enable-gd=shared \
@@ -153,7 +155,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-ARG PHP_GIT=https://github.com/php/php-src.git
+ARG PHP_GIT=https://github.com/zendtech/php-src
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
@@ -180,7 +182,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
        git reset --hard origin/master; \
        git pull --depth=1; \
      else \
-       git clone --depth=1 ${PHP_GIT} php; \
+       git clone --depth=1 -b jit-dynasm ${PHP_GIT} php; \
      fi \
   \
   # && apk del --no-cache git \
@@ -216,11 +218,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           cyrus-sasl-dev \
           postgresql-dev \
           libzip-dev \
+          zlib-dev \
           libpng-dev \
           freetype-dev \
           libjpeg-turbo-dev \
-          libxpm-dev \
           libwebp-dev \
+          libxpm-dev \
           libexif-dev \
           libxslt-dev \
           gmp-dev \
@@ -238,8 +241,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           tidyhtml-dev \
           net-snmp-dev \
           openldap-dev \
-          zlib-dev \
-          nghttp2-dev \
           oniguruma-dev \
           ${APK_DEV_EXTRA:-} \
 	\
@@ -334,16 +335,69 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 	)" \
 	&& apk add --virtual .php-rundeps $runDeps \
   \
-  # https://github.com/docker-library/php/issues/443
-  # && pecl update-channels \
-	# && rm -rf /tmp/pear ~/.pearrc \
+# https://github.com/docker-library/php/issues/443
+#  && pecl update-channels \
+#	&& rm -rf /tmp/pear ~/.pearrc \
+# tar /usr/local/lib/libphp8.so
+  && cd /usr/local/lib \
+  && strip --strip-all libphp8.so \
+  && tar -zcvf libphp8.so.tar.gz libphp8.so \
+  && rm -rf libphp8.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del .build-deps
+  && apk del .build-deps \
+  \
+# sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
+# RUN docker-php-ext-enable sodium
+  \
+# ENTRYPOINT ["docker-php-entrypoint"]
+  \
+# RUN set -ex \
+	&& cd /usr/local/etc \
+	&& if [ -d php-fpm.d ]; then \
+		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
+		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
+		cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
+	else \
+		# PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
+		mkdir php-fpm.d; \
+		cp php-fpm.conf.default php-fpm.d/www.conf; \
+		{ \
+			echo '[global]'; \
+			echo 'include=etc/php-fpm.d/*.conf'; \
+		} | tee php-fpm.conf; \
+	fi \
+	&& { \
+		echo '[global]'; \
+		echo 'error_log = /proc/self/fd/2'; \
+		echo; \
+		echo '[www]'; \
+		echo '; if we send this to /proc/self/fd/1, it never appears'; \
+		echo 'access.log = /proc/self/fd/2'; \
+		echo; \
+		echo 'clear_env = no'; \
+		echo; \
+		echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
+		echo 'catch_workers_output = yes'; \
+	} | tee php-fpm.d/docker.conf \
+	&& { \
+		echo '[global]'; \
+		echo 'daemonize = no'; \
+		echo; \
+		echo '[www]'; \
+		echo 'listen = 9000'; \
+	} | tee php-fpm.d/zz-docker.conf \
+  # 创建日志文件夹
+  && mkdir -p /var/log/php-fpm \
+  && ln -sf /dev/stdout /var/log/php-fpm/access.log \
+  && ln -sf /dev/stderr /var/log/php-fpm/error.log \
+  && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
+  && chmod -R 777 /var/log/php-fpm
+
+ENTRYPOINT ["docker-php-entrypoint"]
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       yaml-dev \
-      # linux-headers \
       zlib-dev
 
 ENV PECL_RUN_DEPS \
@@ -358,7 +412,6 @@ ENV PECL_EXTENSION \
       memcached-beta \
       xdebug-beta \
       yaml-beta \
-      swoole-beta \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
@@ -391,12 +444,25 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
            && strip --strip-all $(php-config --extension-dir)/${EXT_REAL_NAME}.so || true ; \
          done \
          \
+      # && apk add git openssh-client \
+      # && git clone --depth=1 https://github.com/xdebug/xdebug.git \
+      # && apk del --no-cache git \
+      # && cd xdebug \
+      # && phpize \
+      # && ./configure --enable-xdebug-dev \
+      # && make all \
+      # && make install \
+      # && cd - \
+      # && rm -rf xdebug \
+      # && docker-php-ext-enable xdebug \
       ; apk del --no-cache .pecl_build_deps \
+# 默认不启用 xdebug
+# && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
+EXPOSE 9000
+CMD ["php-fpm"]
+##</autogenerated>##
+
 WORKDIR /app
-
-ENTRYPOINT ["php"]
-
-CMD ["index.php"]

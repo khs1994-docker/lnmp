@@ -222,9 +222,9 @@ $ ./lnmp-docker down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.0`        | **2.8.0**              |`Alpine:3.9`    |
-|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.15.8-alpine`| **1.15.8**             |`Alpine:3.9`    |
+|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.15.9-alpine`| **1.15.9**             |`Alpine:3.9`    |
 |[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/php:7.2.15-unit-alpine`| **1.7**             |`Alpine:3.9`    |
-|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.38-alpine`       | **2.4.38**             |`Alpine:3.8`    |
+|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.38-alpine`       | **2.4.38**             |`Alpine:3.9`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.15`              | **8.0.15**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.0`            | **10.4.0**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.3-alpine`        | **5.0.3**            |`Alpine:3.9`    |

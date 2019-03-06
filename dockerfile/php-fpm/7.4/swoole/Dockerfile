@@ -157,7 +157,7 @@ ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-  --mount=type=cache,target=/usr/src,id=php_src_nightly \
+  --mount=type=cache,target=/usr/src,id=php_src_74 \
   --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
@@ -177,10 +177,10 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   \
   && if [ -d php ];then \
        cd php; \
-       git reset --hard origin/master; \
+       git reset --hard origin/PHP-7.4; \
        git pull --depth=1; \
      else \
-       git clone --depth=1 ${PHP_GIT} php; \
+       git clone --depth=1 -b PHP-7.4 ${PHP_GIT} php; \
      fi \
   \
   # && apk del --no-cache git \

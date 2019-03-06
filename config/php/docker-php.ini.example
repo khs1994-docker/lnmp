@@ -23,6 +23,13 @@ opcache.max_wasted_percentage=10
 opcache.interned_strings_buffer=16
 opcache.fast_shutdown=1
 
+; JIT
+; https://wiki.php.net/rfc/jit
+; opcache.jit_buffer_size=1024K
+; opcache.jit=1205
+; 1235
+; opcache.jit_debug=0
+
 [xdebug]
 ; https://xdebug.org/docs/all_settings
 ; 每次升级 PHP 版本注意更新该路径
