@@ -155,11 +155,11 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-ARG PHP_GIT=https://github.com/zendtech/php-src
+ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-  --mount=type=cache,target=/usr/src,id=php_src_nightly \
+  --mount=type=cache,target=/usr/src,id=php_src_74 \
   --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
@@ -179,10 +179,10 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   \
   && if [ -d php ];then \
        cd php; \
-       git reset --hard origin/master; \
+       git reset --hard origin/PHP-7.4; \
        git pull --depth=1; \
      else \
-       git clone --depth=1 -b jit-dynasm ${PHP_GIT} php; \
+       git clone --depth=1 -b PHP-7.4 ${PHP_GIT} php; \
      fi \
   \
   # && apk del --no-cache git \
@@ -338,12 +338,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 # https://github.com/docker-library/php/issues/443
 #  && pecl update-channels \
 #	&& rm -rf /tmp/pear ~/.pearrc \
-# tar /usr/local/lib/libphp8.so
+# tar /usr/local/lib/libphp7.so
 #  && cd /usr/local/lib \
-#  && strip --strip-all libphp8.so \
-#  && tar -zcvf libphp8.so.tar.gz libphp8.so \
-#  && rm -rf libphp8.so \
-#  && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
+#  && strip --strip-all libphp7.so \
+#  && tar -zcvf libphp7.so.tar.gz libphp7.so \
+#  && rm -rf libphp7.so \
+  && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del .build-deps \
   \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)

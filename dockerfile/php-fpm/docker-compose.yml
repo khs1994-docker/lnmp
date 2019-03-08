@@ -11,6 +11,15 @@ services:
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:nightly-fpm-alpine
 
+  7_4_X:
+    build:
+      context: ./7.4/alpine
+      args:
+        PHP_VERSION: 7.4TEST
+        ALPINE_URL: mirrors.ustc.edu.cn
+      target: php
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:7.4TEST-fpm-alpine
+
   7_3_X:
     build:
       context: ./7.3/alpine
