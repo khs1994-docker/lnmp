@@ -32,7 +32,7 @@
     "vlucas/phpdotenv": "~2.5.0"
   },
   "config": {
-    "php": "7.2.15",
+    "php": "7.2.16",
     "optimize-autoloader": true,
     "sort-packages": true,
     "preferred-install": "dist"

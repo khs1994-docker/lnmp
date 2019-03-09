@@ -1,4 +1,4 @@
-FROM khs1994/php:7.2.15-fpm-alpine
+FROM khs1994/php:7.2.16-fpm-alpine
 
 RUN apk add --no-cache supervisor
 
