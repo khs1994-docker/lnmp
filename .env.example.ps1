@@ -14,6 +14,7 @@ $global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 #                      etcd \
 #                      minio \
 #                      supervisord \
+#                      nginx-unit \
 #                      "
 
 $global:CI_HOST="ci.khs1994.com:10000"

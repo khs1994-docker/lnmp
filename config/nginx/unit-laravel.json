@@ -1,0 +1,16 @@
+{
+  "listeners": {
+    "*:80": {
+      "application": "laravel"
+    }
+  },
+  "applications": {
+    "laravel": {
+      "type": "php",
+      "processes": 20,
+      "root": "/app/laravel/public",
+      "index": "index.php",
+      "script": "index.php"
+    }
+  }
+}

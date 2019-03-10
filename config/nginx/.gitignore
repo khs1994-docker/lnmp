@@ -8,3 +8,7 @@
 !fzjh.conf
 !gogs.config
 !minio.config
+!unit.config
+!unit-proxy.config
+!unit-laravel.config
+!unit-laravel.json
