@@ -380,12 +380,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       && for extension in $PECL_EXTENSION;do \
            EXT_REAL_NAME=$(echo ${extension} | cut -d '-' -f 1) \
            && pickle install $extension -n --defaults \
-           || cd /tmp/${EXT_REAL_NAME}/${EXT_REAL_NAME}* \
+           || (cd /tmp/${EXT_REAL_NAME}/${EXT_REAL_NAME}* \
            && phpize \
            && ./configure \
            && make \
            && make install \
-           && rm -rf /tmp/${EXT_REAL_NAME} \
+           && rm -rf /tmp/${EXT_REAL_NAME}) \
            && docker-php-ext-enable ${EXT_REAL_NAME} || echo "pecl ${extension} install error" \
            && rm -rf /usr/local/include/php/ext/${EXT_REAL_NAME} \
            && strip --strip-all $(php-config --extension-dir)/${EXT_REAL_NAME}.so || true ; \

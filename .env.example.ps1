@@ -14,6 +14,7 @@ $global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 #                      etcd \
 #                      minio \
 #                      supervisord \
+#                      nginx-unit \
 #                      "
 
 $global:CI_HOST="ci.khs1994.com:10000"
@@ -27,7 +28,7 @@ $global:TZ='Asia/Shanghai'
 # You can overwrite this file in .env.ps1
 #
 
-$global:LNMP_PHP_IMAGE="khs1994/php:7.2.15-composer-alpine"
+$global:LNMP_PHP_IMAGE="khs1994/php:7.2.16-composer-alpine"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 
@@ -42,11 +43,12 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 $global:NGINX_VERSION="1.15.9"
 # https://windows.php.net/download/
-$global:PHP_VERSION="7.3.2"
+$global:PHP_VERSION="7.3.3"
 $global:MYSQL_VERSION="8.0.15"
 $global:HTTPD_VERSION="2.4.38"
 $global:IDEA_VERSION="1.13.4801"
-$global:NODE_VERSION="11.10.1"
+$global:NODE_VERSION="11.11.0"
+$global:DENO_VERSION="0.3.2"
 $global:GIT_VERSION="2.21.0"
 $global:PYTHON_VERSION="3.7.1"
 # $global:GOLANG_VERSION="1.11.5"

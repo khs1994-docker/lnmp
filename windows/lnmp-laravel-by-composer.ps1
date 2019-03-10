@@ -14,9 +14,15 @@ if ($args.Count -lt 2 ){
 
 $global:LARAVEL_PATH=$args[1]
 
+if (!$args[2]){
+  $VERSION=5.5
+}else{
+  $VERSION=$args[2]
+}
+
 if (!(Test-Path ${LARAVEL_PATH})){
   echo ""
-  echo "${LARAVEL_PATH} not existing"
+  echo "===> ${LARAVEL_PATH} not existing"
   echo ""
 # docker run -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `
@@ -25,8 +31,8 @@ if (!(Test-Path ${LARAVEL_PATH})){
 #     --entrypoint /docker-entrypoint.laravel.sh `
 #     --workdir /tmp `
 #     -e LARAVEL_PATH=${LARAVEL_PATH} `
-#     khs1994/php:7.2.15-composer-alpine `
-    composer create-project --prefer-dist laravel/laravel=5.5.* "$LARAVEL_PATH"
+#     khs1994/php:7.2.16-composer-alpine `
+    composer create-project --prefer-dist laravel/laravel=$VERSION.* "$LARAVEL_PATH"
 
 # tar -zxvf .\${LARAVEL_PATH}.tar.gz
 }else{

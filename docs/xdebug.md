@@ -4,7 +4,18 @@
 
 * https://xdebug.org/docs/all_settings
 
+**启用 Xdebug 扩展会使 PHP 响应变慢，建议仅在需要调试时打开！**
+
+## 启用 xdebug
+
 > 生产环境不启用 `xdebug`
+
+编辑 `config/php/docker-php.ini` 文件，取消注释
+
+```bash
+; zend_extension=xdebug
+zend_extension=xdebug
+```
 
 ## 准备 PHP 项目
 
