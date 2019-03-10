@@ -14,7 +14,7 @@ $global:LARAVEL_PATH=$args[1]
 
 if (!(Test-Path ${LARAVEL_PATH})){
   echo ""
-  echo "${LARAVEL_PATH} not existing, laravel is install..."
+  echo "===> ${LARAVEL_PATH} not existing, laravel is install..."
   echo ""
 # docker run --init -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `
@@ -22,7 +22,7 @@ if (!(Test-Path ${LARAVEL_PATH})){
 #     khs1994/php:7.2.16-composer-alpine `
 #     laravel $args
 
-composer create-project --prefer-dist laravel/laravel=5.6.* "$LARAVEL_PATH"
+composer create-project --prefer-dist laravel/laravel=5.8.* "$LARAVEL_PATH"
 
 }else{
   echo ""

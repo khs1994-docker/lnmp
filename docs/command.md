@@ -8,7 +8,6 @@
 * `phpunit`  => `lnmp-phpunit`
 * `php CLI`  => `lnmp-php`
 * `laravel`  => `lnmp-laravel`
-* `lnmp-laravel5.5`
 * `php-cs-fixer` => `lnmp-php-cs-fixer`
 
 > 为避免与原始命令冲突，这里加上了 `lnmp-` 前缀
@@ -67,8 +66,6 @@ $ lnmp-phpunit command
 $ lnmp-php command
 
 $ lnmp-laravel command # Laravel 5.6
-
-$ lnmp-laravel5.5 command # Laravel 5.5
 ```
 
 当你遇到错误时，可以在前边加上 `$ debug=true lnmp-*`来进行调试，例如

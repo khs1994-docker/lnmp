@@ -14,14 +14,16 @@ $ lnmp-laravel new laravel
 
 ### Laravel 版本问题
 
-由于本项目的 PHP 镜像内置的是 Laravel 安装器，而安装器只能安装最新版本 `5.7.x`。
+由于本项目的 PHP 镜像内置的是 Laravel 安装器，而安装器只能安装最新版本 `5.8.x`。
 
-所以如果你想要安装 `5.5.x` LTS 版本请使用 [`lnmp-laravel5.5`](command.md) 安装。
+所以如果你想要安装 `5.5.x` LTS 版本请使用 [`lnmp-laravel-by-composer`](command.md) 安装。
 
 ```bash
 $ cd app
 
-$ lnmp-laravel5.5 new laravel5.5
+# $ lnmp-laravel-by-composer new FOLDER VERSION
+
+$ lnmp-laravel-by-composer new laravel5.5 5.5
 ```
 
 或者直接使用 `composer` 安装

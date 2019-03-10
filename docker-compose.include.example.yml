@@ -25,6 +25,10 @@ services:
   #     - ./app/app:/app
   #     - laravel_vendor:/app/laravel/vendor
 
+  # nginx-unit:
+  #   volumes:
+  #     - laravel_vendor:/app/laravel/vendor
+
   # mysql:
   #   # change default volumes settings
   #   volumes:
