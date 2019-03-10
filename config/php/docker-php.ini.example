@@ -32,9 +32,8 @@ opcache.fast_shutdown=1
 
 [xdebug]
 ; https://xdebug.org/docs/all_settings
-; 每次升级 PHP 版本注意更新该路径
-; zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so
-zend_extension=xdebug
+; 是否启用 Xdebug 扩展，若启用取消注释即可，启用 Xdebug 扩展会使 PHP 响应速度变慢
+; zend_extension=xdebug
 xdebug.remote_enable=on
 ; 监听 客户端 端口，为防止混乱禁止填写 9000 端口
 ; FIXME

@@ -560,7 +560,7 @@ Foreach ($item in $items)
 
     if ($item -eq 'xdebug'){
       echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-      echo "zend_extension=C:\php-ext\php_$item" | out-file -Append C:/php/php.ini -encoding utf8
+      echo "; zend_extension=C:\php-ext\php_$item" | out-file -Append C:/php/php.ini -encoding utf8
       continue
     }
     echo ' ' | out-file -Append C:/php/php.ini -encoding utf8

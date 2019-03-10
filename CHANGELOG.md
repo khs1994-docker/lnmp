@@ -10,6 +10,8 @@
 
 ### Changes:
 
+* Disable Xdebug default
+
 ### Updates:
 
 * [PHP `7.3.3` `7.2.16` `7.1.27`](http://www.php.net/ChangeLog-7.php#7.3.3)
