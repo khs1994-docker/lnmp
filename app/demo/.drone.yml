@@ -195,7 +195,7 @@ matrix:
   MONGODB_VERSION:
     - 4.1.5
   POSTGRESQL_VERSION:
-    - 11.1-alpine
+    - 11.2-alpine
 
 # matrix:
 #   include:
