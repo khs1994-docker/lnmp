@@ -19,7 +19,6 @@ x-labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
 
 services:
-
   redis:
     << : *default-common
     # build: ./dir

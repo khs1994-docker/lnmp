@@ -34,7 +34,6 @@ x-labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=self_build
 
 services:
-
   mysql:
     << : *default-labels
     build:

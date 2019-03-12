@@ -29,7 +29,6 @@ x-build-debian:
     DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
 
 services:
-
   # MySQL not in arm
   mariadb:
     << : *default-common
@@ -88,7 +87,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/redis/
     #   dockerfile: Dockerfile
     # image: lnmp-redis:latest
-    image: "${ARM_ARCH:-arm64v8}/redis:${LNMP_REDIS_VERSION:-5.0.3}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/redis:${LNMP_REDIS_VERSION:-5.0.3}-alpine"
     volumes:
       - ./config/redis/${LNMP_REDIS_CONF:-redis.conf}:/redis.conf:ro
       - ./log/redis:/var/log/redis
@@ -111,7 +110,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/memcached/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.12}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.12}-alpine"
     env_file:
       - ./cli/timezone.env
     volumes:
@@ -127,7 +126,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/rabbitmq/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.8}-management${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.11}-management-alpine"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
       - zoneinfo-data:/usr/share/zoneinfo
@@ -145,7 +144,7 @@ services:
     #   << : *default-build
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/postgresql/
     #   dockerfile: Dockerfile
-    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-11.1}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/postgres:${LNMP_POSTGRESQL_VERSION:-11.2}-alpine"
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -187,7 +186,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/php/
     #   dockerfile: Dockerfile
     # image:lnmp-php:lastet
-    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.16}-fpm-${ARM_PHP_BASED_OS}"
+    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.16}-fpm-alpine"
     networks:
       - frontend
       - backend
@@ -253,7 +252,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/httpd
     #   dockerfile: Dockerfile
     # image: lnmp-httpd:latest
-    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.38}${ARM_BASED_OS}"
+    image: "${ARM_ARCH:-arm64v8}/httpd:${LNMP_HTTPD_VERSION:-2.4.38}-alpine"
     ports:
       - "443:443"
       - "80:80"

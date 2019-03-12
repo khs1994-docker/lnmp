@@ -8,7 +8,7 @@
 
 * 错误的将宿主机地址写到配置文件中
 
-# Nginx
+# NGINX
 
 |名称|本机|容器|
 |--|--|--|
@@ -33,7 +33,7 @@
 |名称|本机|容器|
 |--|--|--|
 |`php.ini`                     |`./config/php/php.ini`                  |`/usr/local/etc/php/php.ini`                         |
-|`docker-php-ext-xdebug.ini`   |`./config/php/docker-xdebug.ini`        |`/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini`|
+|`docker-php.ini`   |`./config/php/docker-php.ini`        |`/usr/local/etc/php/conf.d/docker-php.ini`|
 |`php-fpm.d/zz-docker.conf`    |`./config/php/zz-docker.conf`           |`/usr/local/etc/php-fpm.d/zz-docker.conf`            |
 |`app/`                        |`./app`                                 |`/app`                                               |
 

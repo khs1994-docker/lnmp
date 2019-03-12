@@ -11,7 +11,6 @@ x-common:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
-
   mysql:
     << : *default-common
     image: mysql:${LNMP_MYSQL_VERSION:-8.0.15}
