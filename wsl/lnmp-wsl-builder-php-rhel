@@ -84,7 +84,11 @@ case "$1" in
   7.3.* )
     export PHP_NUM=73
     ;;
-
+  7.4.* )
+    export PHP_NUM=80
+    export BUILD_FROM_GIT=1
+    export PHP_SRC_BRANCH=PHP-7.4
+    ;;
   nightly )
     export PHP_NUM=80
     export BUILD_FROM_GIT=1
@@ -101,6 +105,18 @@ esac
 _download_src(){
 
     sudo mkdir -p /usr/local/src || echo
+
+    if ! [ -z "$BUILD_FROM_GIT" ];then
+      sudo yum install bison git -y
+
+      git clone --depth=1 -b ${PHP_SRC_BRANCH:-master} \
+      https://github.com/php/php-src.git /usr/local/src/php-${PHP_VERSION} || \
+        ( git -C /usr/local/src/php-${PHP_VERSION} fetch --depth=1 origin ${PHP_SRC_BRANCH:-master} ; \
+          git -C /usr/local/src/php-${PHP_VERSION} reset --hard ${PHP_SRC_BRANCH:-master} ;
+        )
+
+      return
+    fi
 
     if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
@@ -178,6 +194,7 @@ libwebp \
 enchant \
 openldap \
 aspell \
+libffi \
 oniguruma"
 
 
@@ -233,6 +250,7 @@ _install_php_build_dep(){
                    enchant-devel \
                    openldap-devel \
                    aspell-devel \
+                   libffi-devel \
                    oniguruma-devel \
                    "
 
@@ -306,11 +324,12 @@ _builder(){
         --with-xsl=shared \
         --with-zlib \
         --with-mhash \
-        $( test $PHP_NUM -ge "80" && echo "--enable-gd=shared \
+        $( test $PHP_NUM -ge "74" && echo "--enable-gd=shared \
                                              --with-freetype \
                                              --with-jpeg \
                                              --with-webp \
-                                             --with-xpm" \
+                                             --with-xpm \
+                                             --with-ffi=shared" \
         || echo "--with-pcre-regex \
                  --with-gd \
                    --with-freetype-dir=/usr/lib \
@@ -523,7 +542,8 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       yaml \
                       opcache \
                       mysqli \
-                      pgsql
+                      pgsql \
+                      ffi
 
 # config opcache
 
@@ -741,6 +761,8 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 #
 
 sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
+
+sudo yum install -y curl
 
 command -v pickle || _pickle
 command -v composer || _composer
