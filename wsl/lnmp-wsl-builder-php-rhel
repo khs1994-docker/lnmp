@@ -390,7 +390,6 @@ _builder(){
         --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
-        --enable-wddx=shared \
         "
 
     for a in ${CONFIGURE} ; do echo $a | sudo tee -a ${PHP_INSTALL_LOG}; done
@@ -531,7 +530,6 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       ldap \
                       posix \
                       pspell \
-                      wddx \
                       \
                       mongodb \
                       igbinary \

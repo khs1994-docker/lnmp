@@ -484,7 +484,6 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-posix=shared \
       --with-pspell=shared \
       --enable-shmop=shared \
-      --enable-wddx=shared \
       $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
                                                      --with-zlib-dir=/opt/${host}/zlib" ) \
       "
@@ -664,7 +663,6 @@ exts=" pdo_pgsql \
                       ldap \
                       posix \
                       pspell \
-                      wddx \
                       \
                       mongodb \
                       igbinary \

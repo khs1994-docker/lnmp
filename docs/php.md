@@ -97,7 +97,6 @@ $ docker rm -f CONTAINER_ID
 * [ ] sysvshm
 * [ ] tidy
 * [x] tokenizer
-* [ ] wddx
 * [x] xml
 * [x] xmlreader
 * [ ] xmlrpc

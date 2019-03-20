@@ -122,7 +122,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pspell=shared \
         --enable-shmop=shared \
         --with-snmp=shared \
-        # --enable-wddx=shared \
         --with-mysqli=shared \
         --with-pgsql=shared \
         # 7.4 +
@@ -318,7 +317,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                            sysvsem \
                            sysvshm \
                            tidy \
-                           # wddx \
                            xmlrpc \
                            xsl \
                            # opcache 已默认安装，需要自行载入

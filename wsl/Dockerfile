@@ -236,7 +236,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --with-pspell=shared \
     --enable-shmop=shared \
     # --with-snmp=shared \
-    --enable-wddx=shared \
     --enable-embed=shared \
     --with-mysqli=shared \
     --with-pgsql=shared \
@@ -309,7 +308,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            posix \
                            pspell \
                            # snmp \
-                           wddx \
                            mysqli \
                            pgsql \
   && curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/php.fpm.zz-wsl.conf.example \

@@ -197,7 +197,6 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [x] sysvshm
 * [x] tidy
 * [x] tokenizer
-* [x] wddx
 * [x] xml
 * [x] xmlreader
 * [x] xmlrpc
