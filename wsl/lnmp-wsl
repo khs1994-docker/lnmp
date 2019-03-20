@@ -216,18 +216,18 @@ fi
 
 if [ "$1" = 'status' ];then
     ps aux | grep nginx --color=auto
-    echo "====>"
+    echo "===>"
     ps aux | grep php-fpm --color=auto
-    echo "====>"
+    echo "===>"
     ps aux | grep mysql --color=auto
-    echo "====>"
+    echo "===>"
     ps aux | grep redis-server --color=auto
-    echo "====>"
+    echo "===>"
     ps aux | grep memcached --color=auto
-    echo "====>"
+    echo "===>"
     ps aux | grep mongod --color=auto
-    echo "====>"
+    echo "===>"
     ps aux | grep postgres --color=auto
-    echo "====>"
+    echo "===>"
     ps aux | grep sshd --color=auto
 fi

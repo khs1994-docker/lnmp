@@ -22,7 +22,7 @@ if (!$args[2]){
 
 if (!(Test-Path ${LARAVEL_PATH})){
   echo ""
-  echo "===> ${LARAVEL_PATH} not existing"
+  echo "==> ${LARAVEL_PATH} not existing"
   echo ""
 # docker run -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `

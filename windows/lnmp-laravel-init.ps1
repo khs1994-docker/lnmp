@@ -1,4 +1,4 @@
-echo "===> create new env file ..."
+echo "==> create new env file ..."
 
 if (Test-Path .env){
   mv .env .env.backup
@@ -9,13 +9,13 @@ cp $env:LNMP_PATH/app/.env* .
 cp $env:LNMP_PATH/app/demo/.editorconfig .
 cp $env:LNMP_PATH/app/demo/.php_cs .
 
-echo "===> install laravel-ide-helper ..."
+echo "==> install laravel-ide-helper ..."
 
 composer require --dev barryvdh/laravel-ide-helper
 
 Write-Host '
 
-===> Must EDIT app/Providers/AppServiceProvider.php add this content
+==> Must EDIT app/Providers/AppServiceProvider.php add this content
 
 
 
@@ -29,7 +29,7 @@ public function register()
 
 
 
-===> Then exec
+==> Then exec
 
 $ lnmp-php artisan ide-helper:eloquent
 $ lnmp-php artisan ide-helper:generate

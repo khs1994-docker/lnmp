@@ -56,7 +56,7 @@ $global:PYTHON_VERSION="3.7.1"
 $global:GOLANG_VERSION="1.12.1"
 $global:HTTPD_MOD_FCGID_VERSION="2.3.9"
 $global:ZEAL_VERSION="0.6.1"
-$global:YARN_VERSION="1.13.0"
+$global:YARN_VERSION="1.15.2"
 
 $global:APP_ENV="windows"
 $global:APP_ROOT="./app"

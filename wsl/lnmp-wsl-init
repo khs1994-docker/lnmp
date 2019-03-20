@@ -66,7 +66,7 @@ do
     if ! [ -f "${HOME}/.kube/config" ];then
       cp "/c/Users/${user}/.kube/config" ${HOME}/.kube/config
 
-      echo -e "\n\n===> copy .kube folder success\n\n"
+      echo -e "\n\n==> copy .kube folder success\n\n"
 
       kubectl version
     fi

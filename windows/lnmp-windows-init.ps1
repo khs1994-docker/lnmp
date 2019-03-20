@@ -71,12 +71,12 @@ Function _echo_line(){
 
 Function _installer($zip, $unzip_path, $unzip_folder_name = 'null', $soft_path = 'null'){
   if (Test-Path $soft_path){
-    Write-Host "===> $unzip_folder_name already installed" -ForegroundColor Green
+    Write-Host "==> $unzip_folder_name already installed" -ForegroundColor Green
     _echo_line
     return
   }
 
-  Write-Host "===> $unzip_folder_name installing ..." -ForegroundColor Red
+  Write-Host "==> $unzip_folder_name installing ..." -ForegroundColor Red
 
   if (!(Test-Path $unzip_folder_name)){
     _unzip $zip $unzip_path
@@ -98,11 +98,11 @@ cd $home\Downloads
 
 Function _downloader($url, $path, $soft, $version = 'null version',$wsl = $true){
   if (!(Test-Path $path)){
-    Write-Host "===> Downloading $soft $version..." -NoNewLine -ForegroundColor Green
+    Write-Host "==> Downloading $soft $version..." -NoNewLine -ForegroundColor Green
     _wget $url $path $wsl
     _echo_line
   }else{
-     Write-Host "===> Skip $soft $version" -NoNewLine -ForegroundColor Red
+     Write-Host "==> Skip $soft $version" -NoNewLine -ForegroundColor Red
      _echo_line
   }
 }
@@ -372,7 +372,7 @@ Function _node(){
   }
 
   if($NODE_CURRENT_VERSION -ne "v$NODE_VERSION"){
-    echo "===> Installing node ${NODE_VERSION} ..."
+    echo "==> Installing node ${NODE_VERSION} ..."
     _unzip node-v${NODE_VERSION}-win-x64.zip C:\
     Copy-Item -Recurse -Force "C:/node-v${NODE_VERSION}-win-x64/*" "C:/node/"
     Remove-Item -Force -Recurse "C:/node-v${NODE_VERSION}-win-x64"
@@ -389,7 +389,7 @@ Function _go(){
   }
 
   if ($GOLANG_CURRENT_VERSION -ne "go$GOLANG_VERSION"){
-    Write-Host "===> Upgrade go"
+    Write-Host "==> Upgrade go"
     Write-Host "Remove old go folder"
     Remove-Item -Recurse -Force C:\go
     Write-Host "Installing go..."
@@ -489,7 +489,7 @@ if($(_command php)){
   $PHP_CURRENT_VERSION=$( php -r "echo PHP_VERSION;" )
 
   if ($PHP_CURRENT_VERSION -ne $PHP_VERSION){
-      echo "===> Installing PHP $PHP_VERSION ..."
+      echo "==> Installing PHP $PHP_VERSION ..."
       _unzip $HOME/Downloads/php-$PHP_VERSION-nts-Win32-VC15-x64.zip C:/php-$PHP_VERSION
       Copy-Item -Force -Recurse "C:/php-$PHP_VERSION/*" "C:/php/"
       rm -Force -Recurse C:\php-$PHP_VERSION
@@ -508,7 +508,7 @@ $SOFT_TEST_COMMAND="git --version", `
 
 Foreach ($item in $SOFT_TEST_COMMAND)
 {
-  write-host "===> $item
+  write-host "==> $item
 
   "
   powershell -Command $item
