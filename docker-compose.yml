@@ -69,7 +69,7 @@ services:
 
   redis:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0.3}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0.4}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:

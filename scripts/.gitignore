@@ -5,3 +5,4 @@
 !*.example.txt
 !production-init
 !issue_tls
+!frp
