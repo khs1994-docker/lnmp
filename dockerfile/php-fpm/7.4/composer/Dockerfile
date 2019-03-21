@@ -55,11 +55,11 @@ RUN --mount=type=bind,from=composer:1.8.4,source=/usr/bin/composer,target=/opt/b
  && chmod +x /usr/local/bin/sami \
  \
  # && composer global require --prefer-dist --ignore-platform-reqs "ircmaxell/php-compiler" \
- && git clone --depth=1 https://github.com/ircmaxell/php-compiler /tmp/vendor/ircmaxell/php-compiler \
- && cd /tmp/vendor/ircmaxell/php-compiler \
- && composer install --no-dev --prefer-dist --ignore-platform-reqs -n \
- && rm -rf .git ./vendor/**/.git \
- && ln -sf $PWD/bin/* /usr/local/bin \
+ # && git clone --depth=1 https://github.com/ircmaxell/php-compiler /tmp/vendor/ircmaxell/php-compiler \
+ # && cd /tmp/vendor/ircmaxell/php-compiler \
+ # && composer install --no-dev --prefer-dist --ignore-platform-reqs -n \
+ # && rm -rf .git ./vendor/**/.git \
+ # && ln -sf $PWD/bin/* /usr/local/bin \
  \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
  && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
