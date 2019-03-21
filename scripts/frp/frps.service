@@ -1,0 +1,14 @@
+[Unit]
+Description=A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet.
+Documentation=https://github.com/fatedier/frp
+Wants=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStart=/usr/local/bin/frps -c /root/frps.ini
+ExecStop=-/bin/kill -s QUIT $MAINPID
+ExecReload=/bin/kill -s HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
