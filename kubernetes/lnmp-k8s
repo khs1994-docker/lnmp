@@ -62,7 +62,7 @@ Commands:
 
 _kubernetes_server(){
 
-echo "===> install kubernetes"
+echo "==> install kubernetes"
 
 cd coreos
 
@@ -256,7 +256,7 @@ _etcd(){
       return
   fi
 
-  echo "===> etcd already install"
+  echo "==> etcd already install"
 }
 
 _flanneld(){
@@ -265,7 +265,7 @@ _flanneld(){
     return
   fi
 
-  echo "===> flanneld already install"
+  echo "==> flanneld already install"
 }
 
 _k8s_install(){

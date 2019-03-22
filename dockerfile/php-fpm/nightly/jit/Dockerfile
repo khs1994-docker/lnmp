@@ -29,8 +29,7 @@ ENV PHPIZE_DEPS \
       libc-dev \
       make \
       pkgconf \
-      re2c \
-      bison
+      re2c
 
 # persistent / runtime deps
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
@@ -42,13 +41,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                  xz \
 # https://github.com/docker-library/php/issues/494
                  openssl \
-                 git \
-# 以下两个均为版本控制系统
-# subversion \
-# mercurial \
-                 openssh-client \
-                 bash \
-                 tini \
                  tzdata \
 # ensure www-data user exists
 # RUN set -x \
@@ -124,7 +116,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pspell=shared \
         --enable-shmop=shared \
         --with-snmp=shared \
-        # --enable-wddx=shared \
         --with-mysqli=shared \
         --with-pgsql=shared \
         # 7.4 +
@@ -175,7 +166,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   # && apk add --virtual .fetch-deps gnupg \
 	&& mkdir -p /usr/src \
 	&& cd /usr/src \
-  # && apk add git openssh-client \
+  && apk add git openssh-client \
   \
   && if [ -d php ];then \
        cd php; \
@@ -185,7 +176,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
        git clone --depth=1 -b jit-dynasm ${PHP_GIT} php; \
      fi \
   \
-  # && apk del --no-cache git \
+  && apk del --no-cache git openssh-client \
 	# wget -O php.tar.xz "$PHP_URL"; \
 	# if [ -n "$PHP_SHA256" ]; then \
 	# 	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
@@ -242,6 +233,8 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           net-snmp-dev \
           openldap-dev \
           oniguruma-dev \
+          \
+          bison \
           ${APK_DEV_EXTRA:-} \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
@@ -319,7 +312,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                            sysvsem \
                            sysvshm \
                            tidy \
-                           # wddx \
                            xmlrpc \
                            xsl \
                            # opcache 已默认安装，需要自行载入
@@ -446,7 +438,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
          \
       # && apk add git openssh-client \
       # && git clone --depth=1 https://github.com/xdebug/xdebug.git \
-      # && apk del --no-cache git \
+      # && apk del --no-cache git openssh-client \
       # && cd xdebug \
       # && phpize \
       # && ./configure --enable-xdebug-dev \

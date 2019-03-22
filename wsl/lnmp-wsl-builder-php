@@ -106,16 +106,21 @@ case "$1" in
 
   7.3.* )
      export PHP_NUM=73
-    ;;
+     ;;
+
+  7.4.* )
+     export PHP_NUM=74
+     export BUILD_FROM_GIT=1
+     export PHP_SRC_BRANCH=PHP-7.4
+     ;;
 
   nightly )
-    sudo apt install bison git -y
     export PHP_NUM=80
     export BUILD_FROM_GIT=1
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 nightly"
     exit 1
 esac
 }
@@ -128,21 +133,22 @@ _download_src(){
 
     sudo mkdir -p /usr/local/src || echo
 
+    if ! [ -z "$BUILD_FROM_GIT" ];then
+      sudo apt install bison git -y
+
+      git clone --depth=1 -b ${PHP_SRC_BRANCH:-master} https://github.com/php/php-src.git /usr/local/src/php-${PHP_VERSION} || \
+        ( git -C /usr/local/src/php-${PHP_VERSION} fetch --depth=1 origin master ; \
+          git -C /usr/local/src/php-${PHP_VERSION} reset --hard origin/master ;
+        )
+
+      return
+    fi
+
     if ! [ -d /usr/local/src/php-${PHP_VERSION} ];then
 
         echo -e "Download php src ...\n\n"
 
         cd /usr/local/src ; sudo chmod 777 /usr/local/src
-
-        if ! [ -z "$BUILD_FROM_GIT" ];then
-
-          git clone --depth=1 https://github.com/php/php-src.git /usr/local/src/php-${PHP_VERSION} || \
-            ( git -C /usr/local/src/php-${PHP_VERSION} fetch --depth=1 origin master ; \
-              git -C /usr/local/src/php-${PHP_VERSION} reset --hard origin/master ;
-            )
-
-          return
-        fi
 
         wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null || \
           wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
@@ -251,6 +257,7 @@ libenchant1c2a \
 libssl1.1 \
 libicu57 \
 libldap-2.4-2 \
+libffi6 \
 libonig4"
     set -e
     sudo apt install -y $PHP_RUN_DEP > /dev/null
@@ -309,6 +316,7 @@ _install_php_build_dep(){
                    libldap2-dev \
                    libpspell-dev \
                    libicu-dev \
+                   libffi-dev \
                    libonig-dev \
                    "
     set -e
@@ -407,12 +415,13 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --with-xsl=shared \
       --with-zlib \
       --with-mhash \
-          $( test $PHP_NUM -ge "80" && \
+          $( test $PHP_NUM -ge "74" && \
             echo "--enable-gd=shared \
                     --with-freetype \
                     --with-jpeg \
                     --with-webp \
-                    --with-xpm" \
+                    --with-xpm \
+                    --with-ffi=shared" \
             || echo "--with-pcre-regex \
                      --with-gd \
                        --with-freetype-dir=/usr/lib \
@@ -475,7 +484,6 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-posix=shared \
       --with-pspell=shared \
       --enable-shmop=shared \
-      --enable-wddx=shared \
       $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
                                                      --with-zlib-dir=/opt/${host}/zlib" ) \
       "
@@ -655,7 +663,6 @@ exts=" pdo_pgsql \
                       ldap \
                       posix \
                       pspell \
-                      wddx \
                       \
                       mongodb \
                       igbinary \
@@ -666,6 +673,7 @@ exts=" pdo_pgsql \
                       yaml \
                       opcache \
                       mysqli \
+                      ffi \
                       pgsql "
 set -e
 for ext in $exts
@@ -931,6 +939,8 @@ if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ];then
   sudo apt install -y --no-install-recommends libargon2-dev
   export ARGON2=true
 fi
+
+sudo apt install -y curl
 
 command -v /usr/local/bin/pickle || _pickle
 command -v /usr/local/bin/composer || _composer

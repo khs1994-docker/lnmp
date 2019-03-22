@@ -85,6 +85,8 @@ $ composer install
 # 以此类推，进入其他 Laravel 的目录，安装依赖。
 ```
 
+以后若在 `composer.json` 中添加依赖，请到容器中执行 `$ composer install`
+
 ## 运行 Laravel 队列(Queue)
 
 使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md)
@@ -100,3 +102,7 @@ $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan schedule:run
 ```
+
+## Redis 驱动
+
+本项目将 Laravel 默认的 `predis` 驱动改为 `phpredis` 驱动。请编辑 `env` 文件的 `REDIS_CLIENT=phpredis` 变量值自行选择驱动。

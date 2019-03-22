@@ -227,14 +227,14 @@ $ ./lnmp-docker down
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.38-alpine`       | **2.4.38**             |`Alpine:3.9`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.15`              | **8.0.15**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.0`            | **10.4.0**             |`Ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.3-alpine`        | **5.0.3**            |`Alpine:3.9`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.4-alpine`        | **5.0.4**            |`Alpine:3.9`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.2.16-fpm-alpine`  | **7.2.16**       |`Alpine:3.9`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.2.16-composer-alpine`  | **5.7.x**       |`Alpine:3.9`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.2.16-composer-alpine`  | **1.8.4**       |`Alpine:3.9`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.2.16-composer-alpine`  | **2.14.2**      |`Alpine:3.9`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.12-alpine`           | **1.5.12**       |`Alpine:3.9`    |
-|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.8-management-alpine` | **3.7.8**       |`Alpine:3.8`    |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.1-alpine`             | **11.1**        |`Alpine:3.8`    |
+|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.11-management-alpine` | **3.7.11**       |`Alpine:3.8`    |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.2-alpine`             | **11.2**        |`Alpine:3.9`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.5`                      | **4.1.5**       |`Ubuntu:xenial` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.9`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.8`    |

@@ -14,7 +14,7 @@ $global:LARAVEL_PATH=$args[1]
 
 if (!(Test-Path ${LARAVEL_PATH})){
   echo ""
-  echo "===> ${LARAVEL_PATH} not existing, laravel is install..."
+  echo "==> ${LARAVEL_PATH} not existing, laravel is install..."
   echo ""
 # docker run --init -it --rm `
 #     --mount type=bind,src=$PWD,target=/app `

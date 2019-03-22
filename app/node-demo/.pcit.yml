@@ -1,0 +1,11 @@
+language: node_js
+
+pipeline:
+
+  install:
+    commands:
+      - npm install
+
+  scripts:
+    commands:
+      - npm test

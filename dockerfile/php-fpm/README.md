@@ -145,7 +145,6 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] sysvshm
 * [ ] tidy
 * [x] tokenizer
-* [ ] wddx
 * [x] xml
 * [x] xmlreader
 * [x] xmlrpc

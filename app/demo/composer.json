@@ -50,10 +50,10 @@
     }
   },
   "scripts": {
-    "z-chinese-mirror": [
+    "z-composer:mirror": [
       "@php -r \"echo PHP_EOL.PHP_EOL.'$ composer config -g repo.packagist composer https://packagist.phpcomposer.com'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
-    "z-docker-mirror": [
+    "z-docker:mirror": [
       "@php -r \"echo PHP_EOL.PHP_EOL.'{ \"registry-mirrors\": [ \"https://registry.docker-cn.com\" ] }'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
     "z-travis": [
@@ -71,8 +71,8 @@
     ]
   },
   "scripts-descriptions": {
-    "z-chinese-mirror": "[self defined] How to set chinese composer mirror",
-    "z-docker-mirror": "[self defined] How to set chinese docker mirror",
+    "z-composer:mirror": "[self defined] How to set chinese composer mirror",
+    "z-docker:mirror": "[self defined] How to set chinese docker mirror",
     "z-travis": "[self defined] How to encrypt travis file",
     "z-encrypt": "[self defined] How to encrypt file by openssl"
   },

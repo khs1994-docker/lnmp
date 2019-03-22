@@ -167,10 +167,10 @@ case "$1" in
   ;;
 
   add-node )
-    if [ -z "$2" ];then echo "===> Please Input >3 number"; exit 1; fi
+    if [ -z "$2" ];then echo "==> Please Input >3 number"; exit 1; fi
 
     if [ "$2" -le 3 ];then
-      echo "===> Please Input >3 number"
+      echo "==> Please Input >3 number"
       exit 1
     fi
 
@@ -181,7 +181,7 @@ case "$1" in
   new-vm )
       if [ -z $2 ];then
 
-        echo -e "===> Please input node num\n\n$ ./coreos create-node N" ; exit
+        echo -e "==> Please input node num\n\n$ ./coreos create-node N" ; exit
 
       fi
 
@@ -201,7 +201,7 @@ case "$1" in
       VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
           --port 0 --device 1 --type dvddrive --medium current/coreos_production_iso_image.iso
 
-      echo "===> Please checkout coreos$2 config, then start it"
+      echo "==> Please checkout coreos$2 config, then start it"
   ;;
 
   cleanup )

@@ -199,9 +199,9 @@ services:
     #
     # image: username/lnmp-redis:tag
     #
-    # image: khs1994/lnmp-redis:5.0.3
+    # image: khs1994/lnmp-redis:5.0.4
     #
-    image: redis:5.0.3-alpine
+    image: redis:5.0.4-alpine
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -289,9 +289,9 @@ services:
   #   #
   #   # image: username/lnmp-postgresql:tag
   #   #
-  #   # image: khs1994/lnmp-postgresql:11.1
+  #   # image: khs1994/lnmp-postgresql:11.2
   #   #
-  #   image: postgres:11.1-alpine
+  #   image: postgres:11.2-alpine
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test

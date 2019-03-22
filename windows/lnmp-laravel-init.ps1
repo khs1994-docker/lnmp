@@ -15,7 +15,7 @@ composer require --dev barryvdh/laravel-ide-helper
 
 Write-Host '
 
-Must EDIT app/Providers/AppServiceProvider.php add this content
+==> Must EDIT app/Providers/AppServiceProvider.php add this content
 
 
 
@@ -29,7 +29,7 @@ public function register()
 
 
 
-Then exec
+==> Then exec
 
 $ lnmp-php artisan ide-helper:eloquent
 $ lnmp-php artisan ide-helper:generate

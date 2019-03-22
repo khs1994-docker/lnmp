@@ -111,26 +111,6 @@ jobs:
     # wsl-debian
     #
 
-    # Debian9 not support php56
-    # use ubuntu 16.04
-    - stage: wsl-php-builder-71
-      name: "wsl-php-builder-71"
-      install:
-        - ./lnmp-docker compose --official -f
-      script:
-        - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.1.16 .
-        # - export DOCKER_SERVICE_NAME=wsl-php-builder-71
-        # - docker-compose build ${DOCKER_SERVICE_NAME}
-        - docker-compose build ${TRAVIS_JOB_NAME}
-      after_success:
-        - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
-        - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_71}-debian-stretch_amd64.deb
-        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
-
     - stage: wsl-php-builder-72
       name: wsl-php-builder-72
       install:
@@ -163,21 +143,21 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
-    - stage: wsl-php-builder-rhel-71
-      name: wsl-php-builder-rhel-71
+    - stage: wsl-php-builder-74
+      name: wsl-php-builder-74
       install:
         - ./lnmp-docker compose --official -f
       script:
         - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.1.16 .
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_71}-1.el7.centos.x86_64.rpm
-        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_74}-debian-stretch_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
     - stage: wsl-php-builder-rhel-72
       name: wsl-php-builder-rhel-72
@@ -261,6 +241,8 @@ stages:
   - name: wsl-php-builder-72
     if: tag =~ /^(v18)/
   - name: wsl-php-builder-73
+    if: tag =~ /^(v18)/
+  - name: wsl-php-builder-74
     if: tag =~ /^(v18)/
   - name: wsl-php-builder-rhel-71
     if: tag =~ /^(v18)/

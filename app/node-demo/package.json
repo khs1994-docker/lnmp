@@ -1,0 +1,49 @@
+{
+  "name": "@khs1994/node-demo",
+  "description": "Node Demo",
+  "version": "18.12.0-alpha.0",
+  "scripts": {
+    "prepublishOnly": "echo"
+  },
+  "author": [
+    {
+      "name": "khs1994",
+      "email": "khs1994@khs1994.com",
+      "url": "https://khs1994.com"
+    }
+  ],
+  "homepage": "https://github.com/khs1994-docker/node-demo",
+  "bugs": {
+    "url": "https://github.com/khs1994-docker/node-demo/issues"
+  },
+  "main": "./lib/index.js",
+  "types": "./src/main.d.ts",
+  "keywords": [
+    "demo",
+    "khs1994"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "files": [
+    "lib",
+    ".pcit.yml"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khs1994-docker/node-demo"
+  },
+  "private": false,
+  "publishConfig": {
+    "access": "publich",
+    "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": ">=8.0"
+  },
+  "license": "MIT",
+  "directories": {
+    "lib": "./lib"
+  }
+}

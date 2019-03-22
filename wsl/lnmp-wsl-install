@@ -51,9 +51,9 @@ PG_MAJOR=10
 
 GO_PREFIX=/usr/local
 
-GO_VERSION=1.11.2
+GO_VERSION=1.12.1
 
-NODE_VERSION=11.7.0
+NODE_VERSION=11.12.0
 
 NODE_PREFIX=/usr/local
 
@@ -403,7 +403,7 @@ _downloader(){
 
     shift 4
 
-    "$@"
+    sudo bash -c "$@" || true
 fi
 }
 
@@ -425,13 +425,13 @@ export PATH=${GO_PREFIX}/go/bin:\$PATH
 }
 
 _node(){
+  local realname=node-v${NODE_VERSION}-linux-x64
+  local filename=${realname}.tar.gz
 
-  sudo mkdir -p /usr/local/node
-
-  _downloader ${NODE_PREFIX}/node node-v${NODE_VERSION}-linux-x64.tar.gz \
-      http://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz \
+  _downloader ${NODE_PREFIX}/node ${filename} \
+      http://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/${filename} \
       ${NODE_PREFIX} \
-      "sudo cp -r ${NODE_PREFIX}/node-v${NODE_VERSION}-linux-x64/ ${NODE_PREFIX}/node/"
+      "sudo mv ${NODE_PREFIX}/${realname} ${NODE_PREFIX}/node"
 
   sudo chown -R $USER:$USER ${NODE_PREFIX}/node
 

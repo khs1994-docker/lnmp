@@ -1,0 +1,30 @@
+# v1.0
+
+kind: pipeline
+name: default
+
+steps:
+- name: install
+  image: node-alpine
+  commands:
+    - npm install
+
+- name: script
+  image: node-alpine
+  privileged: true
+  pull: always
+  environment:
+    KEY: VALUE
+  commands:
+    - export PATH=$PATH:/
+    - npm test
+  when:
+    event:
+    - push
+    branch:
+    - master
+
+volumes:
+- name: docker
+  host:
+    path: /var/run/docker.sock

@@ -22,7 +22,7 @@
 
 ### docker-compose 原始命令
 
-使用 `docker-compose` 来启动、停止、销毁容器的参数分别是 `up -d` `stop` `down`，通过 `-f` 来加载 `docker-compose.yml` (可以任意命名，也可以是 json 格式)，本项目的 CLI 就是对以上一些命令的封装。
+使用 `docker-compose` 来启动、停止、销毁容器的参数分别是 `up -d` `stop` `down`，通过 `-f` 来加载 `docker-compose.yml` (可以任意命名)，本项目的 CLI 就是对以上一些命令的封装。
 
 |场景|CLI|原始命令|
 |:--|:--|:-|
