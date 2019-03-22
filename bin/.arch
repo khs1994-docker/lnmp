@@ -15,7 +15,7 @@ if [ -f "$LNMP_PATH/.env" ];then source $LNMP_PATH/.env; fi
 
 # VERSION=$LNMP_PHP_VERSION
 
-VERSION=7.2.16
+VERSION=7.3.3
 
 export TAG=${VERSION}-composer-alpine
 
@@ -24,7 +24,7 @@ if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
 
   if [ ${ARCH} = 'armv7l' ];then
     export DOCKER_IMAGE=khs1994/arm32v7-php
-    export TAG=${VERSION}-composer-stretch
+    # export TAG=${VERSION}-composer-stretch
   fi
 
 elif [ ${ARCH} = 'x86_64' ];then

@@ -2,13 +2,13 @@ FROM debian:stretch-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.2.16
+ARG PHP_VERSION=7.3.3
 
-ARG PHP_NUM=72
+ARG PHP_NUM=73
 
-ARG PHP_PREFIX=/usr/local/php72
+ARG PHP_PREFIX=/usr/local/php73
 
-ARG PHP_INI_DIR=/usr/local/etc/php72
+ARG PHP_INI_DIR=/usr/local/etc/php73
 
 ARG COMPOSER_VERSION=1.8.4
 
@@ -355,7 +355,7 @@ COPY --from=memcached:1.5.6 /usr/local/bin/memcached ${PHP_PREFIX}/bin/
 
       # phpmyadmin
 
-RUN cd /usr/local ; tar -zcvf php72.tar.gz php72 ; cd etc ; tar -zcvf php72-etc.tar.gz php72 \
+RUN cd /usr/local ; tar -zcvf php73.tar.gz php73 ; cd etc ; tar -zcvf php73-etc.tar.gz php73 \
     && for ext in $( ls /usr/src/php/ext ); \
         do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ); done \
     && php -v \
@@ -369,6 +369,6 @@ FROM hello-world:latest
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-COPY --from=0 /usr/local/php72.tar.gz /
+COPY --from=0 /usr/local/php73.tar.gz /
 
-COPY --from=0 /usr/local/etc/php72-etc.tar.gz /
+COPY --from=0 /usr/local/etc/php73-etc.tar.gz /

@@ -2,17 +2,17 @@
 
 pid = /var/run/php-fpm.pid
 
-error_log = /var/log/php72-fpm.error.log
+error_log = /var/log/php73-fpm.error.log
 
 [www]
 
-access.log = /var/log/php72-fpm.access.log
+access.log = /var/log/php73-fpm.access.log
 
 user = nginx
 group = nginx
 
 request_slowlog_timeout = 5
-slowlog = /var/log/php72-fpm.slow.log
+slowlog = /var/log/php73-fpm.slow.log
 
 clear_env = no
 

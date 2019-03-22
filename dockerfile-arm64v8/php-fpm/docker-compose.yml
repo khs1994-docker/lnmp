@@ -4,7 +4,7 @@ services:
 
   arm64v8-php-fpm:
     build:
-      context: ./7.2/alpine
+      context: ./7.3/alpine
       args:
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm64v8-php:${TAG:-7.2.16}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm64v8-php:${TAG:-7.3.3}-fpm-alpine

@@ -42,12 +42,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                  xz \
 # https://github.com/docker-library/php/issues/494
                  openssl \
-                 # git \
-# 以下两个均为版本控制系统
-# subversion \
-# mercurial \
-                 # openssh-client \
-                 # tini \
                  bash \
                  tzdata \
 # ensure www-data user exists
@@ -304,7 +298,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   && apk add --virtual .build-deps $PHPIZE_DEPS openssl-dev \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
-       --module=php72 \
+       --module=php73 \
        --lib-path=/usr/local/lib \
        --config=/usr/local/bin/php-config \
   && make \

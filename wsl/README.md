@@ -53,7 +53,7 @@ $ lnmp-wsl-install php | mysql ...
 主版本所有执行文件放到 `/usr/local/bin`，其他版本请使用绝对路径，例如 `/usr/local/php56/bin/php`。
 
 ```bash
-$ lnmp-wsl-install enable php72 | php71 | php70 | php56
+$ lnmp-wsl-install enable php73 php72 | php71 | php70 | php56
 ```
 
 ### PHP 安装路径
@@ -87,7 +87,7 @@ http {
 ```bash
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /usr/local/etc/nginx/conf.d
 
-$ sudo ln -sf $WSL_HOME/lnmp/wsl/config/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fpm.d/zz-wsl.conf
+$ sudo ln -sf $WSL_HOME/lnmp/wsl/config/php.fpm.zz-wsl.conf /usr/local/php73/etc/php-fpm.d/zz-wsl.conf
 
 $ cat $WSL_HOME/lnmp/wsl/config/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.cnf
 ```

@@ -12,6 +12,7 @@
 
 * Disable Xdebug default
 * `arm32v7` Image based Alpine
+* Switch to PHP 7.3.x
 
 ### Updates:
 

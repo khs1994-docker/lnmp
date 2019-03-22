@@ -4,9 +4,9 @@ services:
 
   arm32v7-php-fpm:
     build:
-      context: ./7.2/alpine
+      context: ./7.3/alpine
       args:
         DEB_URL: mirrors.ustc.edu.cn # deb.debian.org
         DEB_SECURITY_URL: mirrors.ustc.edu.cn/debian-security/ # security.debian.org
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm32v7-php:${TAG:-7.2.16}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/arm32v7-php:${TAG:-7.3.3}-fpm-alpine

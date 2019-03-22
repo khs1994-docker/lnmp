@@ -186,7 +186,7 @@ services:
     #   context: ./dockerfile/${ARM_ARCH:-arm64v8}/php/
     #   dockerfile: Dockerfile
     # image:lnmp-php:lastet
-    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.16}-fpm-alpine"
+    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.3.3}-fpm-alpine"
     networks:
       - frontend
       - backend
@@ -211,7 +211,7 @@ services:
     << : *php7
     networks:
       - backend
-    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.2.16}-supervisord-alpine"
+    image: "khs1994/${ARM_ARCH:-arm64v8}-php:${LNMP_PHP_VERSION:-7.3.3}-supervisord-alpine"
     secrets:
       - source: supervisord_ini
         target: /etc/supervisor.d/supervisord.ini
