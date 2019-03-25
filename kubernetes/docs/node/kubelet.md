@@ -4,8 +4,6 @@
 
 * https://github.com/opsnull/follow-me-install-kubernetes-cluster/issues/326
 
-* 状态： 正在排查
-
 ### 错误详情
 
 ```bash

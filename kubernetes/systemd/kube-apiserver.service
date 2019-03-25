@@ -12,16 +12,15 @@ Environment="K8S_PATH=/etc/kubernetes"
 # Environment="K8S_PATH=/opt/bin/kubernetes"
 
 ExecStart=/opt/bin/kube-apiserver \
---enable-admission-plugins=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
---anonymous-auth=false \
---encryption-provider-config=${K8S_PATH}/encryption-config.yaml \
 --advertise-address=192.168.199.100 \
---bind-address=192.168.199.100 \
+--enable-swagger-ui=true \
+--anonymous-auth=false \
 --authorization-mode=Node,RBAC \
---runtime-config=api/all \
+--runtime-config="api/all=true" \
+--enable-admission-plugins=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
+--encryption-provider-config=${K8S_PATH}/encryption-config.yaml \
+--bind-address=192.168.199.100 \
 --enable-bootstrap-token-auth \
---service-cluster-ip-range=10.254.0.0/16 \
---service-node-port-range="1-65535" \
 --tls-cert-file=${K8S_PATH}/certs/kubernetes.pem \
 --tls-private-key-file=${K8S_PATH}/certs/kubernetes-key.pem \
 --client-ca-file=${K8S_PATH}/certs/ca.pem \
@@ -32,7 +31,6 @@ ExecStart=/opt/bin/kube-apiserver \
 --etcd-certfile=${K8S_PATH}/certs/kubernetes.pem \
 --etcd-keyfile=${K8S_PATH}/certs/kubernetes-key.pem \
 --etcd-servers="https://192.168.199.100:2379" \
---enable-swagger-ui=true \
 --allow-privileged=true \
 --apiserver-count=1 \
 --audit-log-maxage=30 \
@@ -40,10 +38,6 @@ ExecStart=/opt/bin/kube-apiserver \
 --audit-log-maxsize=100 \
 --audit-log-path=/var/log/kube-apiserver-audit.log \
 --event-ttl=1h \
---alsologtostderr=true \
---logtostderr=false \
---log-dir=/var/log/kubernetes \
---v=2 \
 --requestheader-client-ca-file=${K8S_PATH}/certs/ca.pem \
 --requestheader-allowed-names="" \
 --requestheader-extra-headers-prefix="X-Remote-Extra-" \
@@ -51,7 +45,12 @@ ExecStart=/opt/bin/kube-apiserver \
 --requestheader-username-headers=X-Remote-User \
 --proxy-client-cert-file=${K8S_PATH}/certs/metrics-server.pem \
 --proxy-client-key-file=${K8S_PATH}/certs/metrics-server-key.pem \
---runtime-config=api/all=true
+--service-cluster-ip-range=10.254.0.0/16 \
+--service-node-port-range="1-65535" \
+--alsologtostderr=true \
+--log-dir=/var/log/kubernetes \
+--logtostderr=false \
+--v=2
 
 Restart=on-failure
 RestartSec=5

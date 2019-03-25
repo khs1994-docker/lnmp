@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
-KUBERNETES_VERSION=1.13.0
+KUBERNETES_VERSION=1.13.4
 MINIKUBE_VERSION=0.30.0
 ETCD_VERSION=3.3.10
 FLANNEL_VERSION=0.10.0
@@ -28,6 +28,10 @@ os=`uname -s`
 
 print_help_info(){
   echo "
+
+==> Kubernetes version is ${KUBERNETES_VERSION}
+
+
 Usage: lnmp-k8s COMMAND
 
 Commands:
@@ -80,9 +84,9 @@ if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION} ];then
     docker container rm khs1994-coreos-kubernetes
 
     cd kubernetes-release/release
-    tar -zxvf srv.tar.gz
+    tar -zxvf srv.tar.gz > /dev/null
     cd srv
-    tar -zxvf kubernetes-server-linux-amd64.tar.gz
+    tar -zxvf kubernetes-server-linux-amd64.tar.gz > /dev/null
     # srv/kubernetes
     cd ..
     mv srv/kubernetes v${KUBERNETES_VERSION}/
@@ -246,10 +250,12 @@ kubectl-getinfo(){
 
 _etcd(){
   if ! [ -f /opt/bin/etcd ];then
+      echo "==> etcd is installing ..."
+      echo ""
       cd /opt/bin
       rm -rf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
       sudo wget https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
-      sudo tar -zxvf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
+      sudo tar -zxvf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz > /dev/null
       sudo mv etcd-v${ETCD_VERSION}-linux-amd64/etcd* ./
       sudo rm -rf *.tar.gz
       cd -
@@ -261,6 +267,8 @@ _etcd(){
 
 _flanneld(){
   if ! [ -f /opt/bin/flanneld ];then
+    echo "==> flanneld is installing ..."
+    echo ""
     sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flanneld-amd64 -o /opt/bin/flanneld
     return
   fi
@@ -279,17 +287,20 @@ _k8s_install(){
     echo "==== you must edit MASTER_IP in systemd/.env file ===="
     echo "======================================================"
     echo ""
+    echo ""
+    echo "==> install deps ..."
+    echo ""
   fi
 
   # 安装依赖软件
   command -v dnf && sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
+    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs
 
   command -v yum && sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
+    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs
 
   command -v apt && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp2 && sudo /usr/sbin/modprobe ip_vs
+    sysstat libseccomp2 > /dev/null && sudo /usr/sbin/modprobe ip_vs
 
   # 关闭防火墙
   sudo systemctl stop firewalld && sudo systemctl disable firewalld
