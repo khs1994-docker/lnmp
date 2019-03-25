@@ -12,6 +12,7 @@ Environment="K8S_PATH=/etc/kubernetes"
 # Environment="K8S_PATH=/opt/bin/kubernetes"
 
 ExecStart=/opt/bin/kube-apiserver \
+--insecure-port=0 \
 --advertise-address=192.168.199.100 \
 --enable-swagger-ui=true \
 --anonymous-auth=false \

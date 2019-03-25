@@ -1,10 +1,12 @@
 # Kubelet
 
-## 自动 Approved 证书失败
+## 必须手动 approve server cert csr
+
+**基于安全性考虑，CSR approving controllers 默认不会自动 approve kubelet server 证书签名请求，需要手动 approve。**
 
 * https://github.com/opsnull/follow-me-install-kubernetes-cluster/issues/326
 
-### 错误详情
+未手动 approve 之前报错如下。
 
 ```bash
 bootstrap.go:65] Using bootstrap kubeconfig to generate TLS client cert, key and kubeconfig file

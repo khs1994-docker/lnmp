@@ -13,6 +13,7 @@ Environment="K8S_PATH=/etc/kubernetes"
 # Environment="K8S_PATH=/opt/bin/kubernetes"
 
 ExecStart=/opt/bin/kube-controller-manager \
+--port=0 \
 --secure-port=10257 \
 --bind-address=127.0.0.1 \
 --kubeconfig=${K8S_PATH}/kube-controller-manager.kubeconfig \
