@@ -8,29 +8,28 @@ Requires=etcd.service
 # Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
 # --insecure-port has been deprecated, This flag will be removed in a future version.
 
-Environment="K8S_PATH=/etc/kubernetes"
-# Environment="K8S_PATH=/opt/bin/kubernetes"
+Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
 
-ExecStart=/opt/bin/kube-apiserver \
+ExecStart=/opt/bin/k8s/kube-apiserver \
 --insecure-port=0 \
 --advertise-address=192.168.199.100 \
 --enable-swagger-ui=true \
 --anonymous-auth=false \
 --authorization-mode=Node,RBAC \
 --runtime-config="api/all=true" \
---enable-admission-plugins=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
---encryption-provider-config=${K8S_PATH}/encryption-config.yaml \
+--enable-admission-plugins=NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
+--encryption-provider-config=${K8S_CONF_PATH}/encryption-config.yaml \
 --bind-address=192.168.199.100 \
 --enable-bootstrap-token-auth \
---tls-cert-file=${K8S_PATH}/certs/kubernetes.pem \
---tls-private-key-file=${K8S_PATH}/certs/kubernetes-key.pem \
---client-ca-file=${K8S_PATH}/certs/ca.pem \
---kubelet-client-certificate=${K8S_PATH}/certs/kubernetes.pem \
---kubelet-client-key=${K8S_PATH}/certs/kubernetes-key.pem \
---service-account-key-file=${K8S_PATH}/certs/ca-key.pem \
---etcd-cafile=${K8S_PATH}/certs/ca.pem \
---etcd-certfile=${K8S_PATH}/certs/kubernetes.pem \
---etcd-keyfile=${K8S_PATH}/certs/kubernetes-key.pem \
+--tls-cert-file=${K8S_CONF_PATH}/certs/kubernetes.pem \
+--tls-private-key-file=${K8S_CONF_PATH}/certs/kubernetes-key.pem \
+--client-ca-file=${K8S_CONF_PATH}/certs/ca.pem \
+--kubelet-client-certificate=${K8S_CONF_PATH}/certs/kubernetes.pem \
+--kubelet-client-key=${K8S_CONF_PATH}/certs/kubernetes-key.pem \
+--service-account-key-file=${K8S_CONF_PATH}/certs/ca-key.pem \
+--etcd-cafile=${K8S_CONF_PATH}/certs/ca.pem \
+--etcd-certfile=${K8S_CONF_PATH}/certs/kubernetes.pem \
+--etcd-keyfile=${K8S_CONF_PATH}/certs/kubernetes-key.pem \
 --etcd-servers="https://192.168.199.100:2379" \
 --allow-privileged=true \
 --apiserver-count=1 \
@@ -39,13 +38,13 @@ ExecStart=/opt/bin/kube-apiserver \
 --audit-log-maxsize=100 \
 --audit-log-path=/var/log/kube-apiserver-audit.log \
 --event-ttl=1h \
---requestheader-client-ca-file=${K8S_PATH}/certs/ca.pem \
+--requestheader-client-ca-file=${K8S_CONF_PATH}/certs/ca.pem \
 --requestheader-allowed-names="" \
 --requestheader-extra-headers-prefix="X-Remote-Extra-" \
 --requestheader-group-headers=X-Remote-Group \
 --requestheader-username-headers=X-Remote-User \
---proxy-client-cert-file=${K8S_PATH}/certs/metrics-server.pem \
---proxy-client-key-file=${K8S_PATH}/certs/metrics-server-key.pem \
+--proxy-client-cert-file=${K8S_CONF_PATH}/certs/metrics-server.pem \
+--proxy-client-key-file=${K8S_CONF_PATH}/certs/metrics-server-key.pem \
 --service-cluster-ip-range=10.254.0.0/16 \
 --service-node-port-range="1-65535" \
 --alsologtostderr=true \

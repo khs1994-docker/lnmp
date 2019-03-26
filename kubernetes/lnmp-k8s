@@ -26,6 +26,12 @@ set -e
 
 os=`uname -s`
 
+print1_info(){
+  echo ""
+  echo "==> $1"
+  echo ""
+}
+
 print_help_info(){
   echo "
 
@@ -66,7 +72,7 @@ Commands:
 
 _kubernetes_server(){
 
-echo "==> install kubernetes"
+print1_info "install kubernetes ..."
 
 cd coreos
 
@@ -249,10 +255,11 @@ kubectl-getinfo(){
 }
 
 _etcd(){
-  if ! [ -f /opt/bin/etcd ];then
+  if ! [ -f /opt/bin/k8s/etcd ];then
+      echo ""
       echo "==> etcd is installing ..."
       echo ""
-      cd /opt/bin
+      cd /opt/bin/k8s
       rm -rf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
       sudo wget https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
       sudo tar -zxvf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz > /dev/null
@@ -262,18 +269,22 @@ _etcd(){
       return
   fi
 
-  echo "==> etcd already install"
+  print1_info "etcd already install"
+
 }
 
 _flanneld(){
-  if ! [ -f /opt/bin/flanneld ];then
+  if ! [ -f /opt/bin/k8s/flanneld ];then
+    echo ""
     echo "==> flanneld is installing ..."
     echo ""
-    sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flanneld-amd64 -o /opt/bin/flanneld
+    sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flanneld-amd64 -o /opt/bin/k8s/flanneld
     return
   fi
 
+  echo ""
   echo "==> flanneld already install"
+  echo ""
 }
 
 _k8s_install(){
@@ -304,63 +315,64 @@ _k8s_install(){
 
   # 关闭防火墙
   sudo systemctl stop firewalld && sudo systemctl disable firewalld
-  sudo mkdir -p /opt/bin
+  sudo mkdir -p /opt/bin/k8s
+  sudo chmod -R 755 /opt
   _etcd
   _flanneld
 
-  sudo mkdir -p ${K8S_PATH:-/etc/kubernetes}/certs
-
+  sudo mkdir -p ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs
+  
+  print1_info "copy systemd unit file ..."
   sudo cp systemd/*.service /etc/systemd/system/
-  sudo cp systemd/certs/*.pem ${K8S_PATH:-/etc/kubernetes}/certs/
-  sudo cp coreos/disk/bin/*.sh /opt/bin/
+  sudo cp systemd/certs/*.pem ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
+  sudo cp coreos/disk/bin/*.sh /opt/bin/k8s
 
-  sudo chmod +x /opt/bin/*
+  sudo chmod +x /opt/bin/k8s/*
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
     echo "Please Generate certs first $ docker-compose up cfssl-single"; exit; fi
 
-  if ! [ -f /opt/bin/kubeadm ];then
+  if ! [ -f /opt/bin/k8s/kubeadm ];then
     _kubernetes_server
     cd $source_path
-    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/ || \
+    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/ || \
     rm -rf $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}
     cd $source_path
-    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/
+    sudo cp $PWD/coreos/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/
   fi
 
-  sudo chmod +x /opt/bin/*
-
-  sudo cp systemd/certs/*.kubeconfig ${K8S_PATH:-/etc/kubernetes}/
-
-  sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml ${K8S_PATH:-/etc/kubernetes}/
-  sudo cp systemd/csr-crb.yaml ${K8S_PATH:-/etc/kubernetes}/
-
-  sudo cp systemd/encryption-config.yaml ${K8S_PATH:-/etc/kubernetes}/encryption-config.yaml
+  sudo chmod +x /opt/bin/k8s/*
+  
+  print1_info "copy kubernetes conf and cert file ..."
+  sudo cp systemd/certs/*.kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
+  sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
+  sudo cp systemd/csr-crb.yaml ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
+  sudo cp systemd/encryption-config.yaml ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/encryption-config.yaml
 
   local files=("kube-proxy.config.yaml" "kubelet.config.json")
 
   for file in ${files[@]}; \
   do \
-    sudo sed -i "s#/etc/kubernetes#${K8S_PATH}#g" ${K8S_PATH:-/etc/kubernetes}/$file ; \
+    sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
   done
 
   for file in `ls systemd` ; do \
-    if [ -f ${K8S_PATH:-/etc/kubernetes}/$file ];then \
-      sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" ${K8S_PATH:-/etc/kubernetes}/$file ;\
+    if [ -f ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ];then \
+      sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ;\
     fi \
   done
 
-  sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" ${K8S_PATH:-/etc/kubernetes}/encryption-config.yaml
+  sudo sed -i "s#ENCRYPTION_KEY#${ENCRYPTION_KEY}#g" ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/encryption-config.yaml
 
+  print1_info "update systemd docker unit file ..."
   sudo mkdir -p /etc/systemd/system/docker.service.d
-
   sudo cp systemd/docker.conf /etc/systemd/system/docker.service.d/
 
   cd systemd
 
   for file in `ls *.service`; \
   do \
-  sudo sed -i "s#/etc/kubernetes#${K8S_PATH:-/etc/kubernetes}#g" /etc/systemd/system/$file ; \
+  sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" /etc/systemd/system/$file ; \
   done
 
   cd -
@@ -435,13 +447,13 @@ _single_cleanup(){
   sudo systemctl stop etcd flanneld docker kube-apiserver \
     kube-controller-manager kube-scheduler kube-proxy kubelet docker
 
-  sudo rm -rf /opt/bin
+  sudo rm -rf /opt/bin/k8s
   sudo rm -rf /var/lib/etcd
   sudo rm -rf /var/log/ku*
   sudo rm -rf /var/lib/kubelet
   sudo rm -rf /var/lib/kube-proxy
 
-  sudo rm -rf ${K8S_PATH:-/etc/kubernetes}
+  sudo rm -rf ${K8S_CONF_PATH:-/opt/bin/k8s/conf}
   sudo rm -rf /etc/systemd/system/docker.service.d
 
   sudo systemctl daemon-reload

@@ -5,12 +5,11 @@ Requires=kube-apiserver.service
 
 [Service]
 
-Environment="K8S_PATH=/etc/kubernetes"
-# Environment="K8S_PATH=/opt/bin/kubernetes"
+Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
 
-ExecStart=/opt/bin/kube-scheduler \
+ExecStart=/opt/bin/k8s/kube-scheduler \
 --address=127.0.0.1 \
---kubeconfig=${K8S_PATH}/kube-scheduler.kubeconfig \
+--kubeconfig=${K8S_CONF_PATH}/kube-scheduler.kubeconfig \
 --leader-elect=true \
 --alsologtostderr=true \
 --logtostderr=false \

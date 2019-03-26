@@ -8,7 +8,7 @@
   "serverTLSBootstrap": true,
   "authentication": {
     "x509": {
-      "clientCAFile": "/etc/kubernetes/certs/ca.pem"
+      "clientCAFile": "/opt/bin/k8s/conf/certs/ca.pem"
     },
     "webhook": {
       "enabled": true,

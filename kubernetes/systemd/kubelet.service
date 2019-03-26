@@ -7,21 +7,21 @@ Requires=docker.service
 [Service]
 ExecStartPre=-/usr/sbin/swapoff -a
 ExecStartPre=-/sbin/swapoff -a
-ExecStartPre=-/opt/bin/generate-kubelet-bootstrap-kubeconfig.sh
+ExecStartPre=-/opt/bin/k8s/generate-kubelet-bootstrap-kubeconfig.sh
 ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
 
 # WorkingDirectory=/var/lib/kubelet
 Environment="NODE_NAME=node1"
 # Fix me
 Environment="KUBE_APISERVER=https://192.168.199.100:6443"
-Environment="K8S_PATH=/etc/kubernetes"
-# Environment="K8S_PATH=/opt/bin/kubernetes"
 
-ExecStart=/opt/bin/kubelet \
---bootstrap-kubeconfig=${K8S_PATH}/kubelet-bootstrap.kubeconfig \
---cert-dir=${K8S_PATH}/certs \
---kubeconfig=${K8S_PATH}/kubelet.kubeconfig \
---config=${K8S_PATH}/kubelet.config.json \
+Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
+
+ExecStart=/opt/bin/k8s/kubelet \
+--bootstrap-kubeconfig=${K8S_CONF_PATH}/kubelet-bootstrap.kubeconfig \
+--cert-dir=${K8S_CONF_PATH}/certs \
+--kubeconfig=${K8S_CONF_PATH}/kubelet.kubeconfig \
+--config=${K8S_CONF_PATH}/kubelet.config.json \
 --hostname-override=node1 \
 --pod-infra-container-image=registry.access.redhat.com/rhel7/pod-infrastructure:latest \
 --alsologtostderr=true \
