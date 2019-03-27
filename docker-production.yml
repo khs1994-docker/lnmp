@@ -425,10 +425,10 @@ services:
     #
     # image: username/lnmp-nginx:tag
     #
-    # image: khs1994/lnmp-nginx:1.15.9
+    # image: khs1994/lnmp-nginx:1.15.10
     #
-    # image: khs1994/nginx:1.15.9-alpine
-    image: nginx:1.15.9-alpine
+    # image: khs1994/nginx:1.15.10-alpine
+    image: nginx:1.15.10-alpine
     ports:
       - "443:443"
       - "80:80"

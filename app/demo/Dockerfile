@@ -10,7 +10,7 @@
 
 ARG NODE_VERSION=11.12.0
 ARG PHP_VERSION=7.3.3
-ARG NGINX_VERSION=1.15.9
+ARG NGINX_VERSION=1.15.10
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.安装 composer 依赖
@@ -39,9 +39,9 @@ CMD ["php-fpm", "-R"]
 
 # 5.将 PHP 项目打入 NGINX 镜像
 # Nginx 配置文件统一通过 configs 管理，严禁将配置文件打入镜像
-# $ docker build -t khs1994/nginx:1.15.9-pro-GIT_TAG-alpine .
+# $ docker build -t khs1994/nginx:1.15.10-pro-GIT_TAG-alpine .
 
-# FROM ${DOCKER_HUB_USERNAME:-khs1994}/nginx:1.15.9-alpine
+# FROM ${DOCKER_HUB_USERNAME:-khs1994}/nginx:1.15.10-alpine
 FROM nginx:${NGINX_VERSION} as nginx
 
 COPY --from=php /app /app
