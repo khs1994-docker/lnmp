@@ -4,32 +4,18 @@ if [ "$debug" = 'true' ];then set -x; fi
 
 set -e
 
-ARCH=`uname -m`
-OS=`uname -s`
-
 if [ -z "$LNMP_PATH" ];then echo "Please set system env LNMP_PATH"; exit ; fi
 
 source $LNMP_PATH/.env.example
 
 if [ -f "$LNMP_PATH/.env" ];then source $LNMP_PATH/.env; fi
 
-# VERSION=$LNMP_PHP_VERSION
+export OS=`uname -s`
+export ARCH=`uname -m`
 
+# VERSION=$LNMP_PHP_VERSION
 VERSION=7.3.3
 
 export TAG=${VERSION}-composer-alpine
 
-if [ ${ARCH} = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
-  export DOCKER_IMAGE=khs1994/arm64v8-php
-
-  if [ ${ARCH} = 'armv7l' ];then
-    export DOCKER_IMAGE=khs1994/arm32v7-php
-    # export TAG=${VERSION}-composer-stretch
-  fi
-
-elif [ ${ARCH} = 'x86_64' ];then
-  export DOCKER_IMAGE=khs1994/php
-else
-  echo -e "\n\033[31mERROR\033[0m  ${ARCH} 暂不支持"
-  exit 1
-fi
+export DOCKER_IMAGE=khs1994/php

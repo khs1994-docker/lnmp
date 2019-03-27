@@ -64,7 +64,7 @@
 * [Crontab](crontab.md)
 * [Supervisord](supervisord.md)
 
-## ClusterKit
+## ClusterKit 集群工具集
 
 * [ClusterKit](clusterkit/README.md)
     * [MySQL 一主两从](clusterkit/mysql.md)
@@ -81,9 +81,10 @@
 * 实验玩法
     * [LinuxKit](linuxkit.md)
 
-## self build
+## 镜像构建
 
 * [使用自己的镜像](build.md)
+* [构建多架构镜像](manifest.md)
 
 ## Volumes
 

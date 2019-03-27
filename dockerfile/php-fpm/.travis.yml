@@ -93,6 +93,7 @@ env:
   - DOCKER_BUILDKIT=1
   - DOCKER_CHANNEL=stable # test nightly
   - DOCKER_HUB_USERNAME=khs1994
+  - DOCKER_CLI_EXPERIMENTAL=enabled
 
 matrix:
   fast_finish: true

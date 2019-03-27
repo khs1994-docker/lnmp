@@ -13,6 +13,7 @@
 * Disable Xdebug default
 * `arm32v7` Image based Alpine
 * Switch to PHP 7.3.x
+* Move arm `Dockerfile-arch` to `Dockerfile` folder
 
 ### Updates:
 

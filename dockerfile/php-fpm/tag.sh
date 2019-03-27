@@ -67,3 +67,18 @@ if [[ "$PHP_VERSION" = "7_3_X" && "$FPM" = "1" ]];then
   docker push $image
   done
 fi
+
+if [[ "$PHP_VERSION" = "7_3_X" && "$COMPOSER" = "1" ]];then
+  docker pull khs1994/php:${PHP_TAG_VERSION}-fpm-alpine
+  # docker pull khs1994/php:${PHP_TAG_VERSION}-composer-alpine
+  wget https://github.com/khs1994-docker/lnmp/blob/18.09/scripts/arm-build.sh
+  chmod +x arm-build.sh
+
+  for arch in "arm32v7 arm64v8"; \
+  do \
+    docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-fpm-alpine \
+    && docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-composer-alpine ; \
+  done \
+  && ./arm-build.sh manifest 7.3.3 fpm \
+  && ./arm-build.sh manifest 7.3.3 composer || true
+fi

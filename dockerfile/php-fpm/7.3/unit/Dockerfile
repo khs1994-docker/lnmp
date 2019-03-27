@@ -1,5 +1,7 @@
 # syntax=docker/dockerfile:experimental
-FROM alpine:3.9 as php
+ARG IMAGE=alpine
+
+FROM ${IMAGE}:3.9 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -285,7 +287,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
   \
-  # 创建日志文件夹
+# 创建日志文件夹
   && ln -sf /dev/stderr /var/log/xdebug-remote.log
   # && rm -rf /usr/src/*
 
