@@ -11,8 +11,6 @@ build     [7.3.3] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | ... ]
 "
 }
 
-set -e
-
 export DOCKER_BUILDKIT=1
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
@@ -55,19 +53,19 @@ docker pull khs1994/php:${version}-${type}-alpine
 
 docker manifest create khs1994/php:${version}-${type}-alpine \
     khs1994/php:${version}-${type}-alpine \
-    khs1994/arm32v7-php:${version}-fpm-alpine \
-    khs1994/arm64v8-php:${version}-fpm-alpine
+    khs1994/arm32v7-php:${version}-${type}-alpine \
+    khs1994/arm64v8-php:${version}-${type}-alpine -a
 
 docker manifest annotate khs1994/php:${version}-${type}-alpine \
     khs1994/php:${version}-${type}-alpine \
     --os linux --arch amd64
 
 docker manifest annotate khs1994/php:${version}-${type}-alpine \
-    khs1994/arm32v7-php:${version}-fpm-alpine \
+    khs1994/arm32v7-php:${version}-${type}-alpine \
     --os linux --arch arm --variant v7
 
 docker manifest annotate khs1994/php:${version}-${type}-alpine \
-    khs1994/arm64v8-php:${version}-fpm-alpine \
+    khs1994/arm64v8-php:${version}-${type}-alpine \
     --os linux --arch arm64 --variant v8
 
 docker manifest inspect khs1994/php:${version}-${type}-alpine

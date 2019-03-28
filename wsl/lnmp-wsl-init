@@ -11,11 +11,15 @@ sudo sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 # conf wsl
 sudo curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf -o /etc/wsl.conf
 
-if [ -z $APP_ENV ];then echo "export APP_ENV=wsl" >> ~/.bash_profile; fi
+if [ -z "$APP_ENV" ];then echo "export APP_ENV=wsl" >> ~/.bash_profile; fi
 
-if [ -z $WSL_HOME ];then echo "export WSL_HOME=/c/Users/90621" >> ~/.bash_profile; fi
+if [ -z "$WSL_HOME" ];then echo "export WSL_HOME=/c/Users/90621" >> ~/.bash_profile; fi
 
-if [ -z $COMPOSER_HOME ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bash_profile; fi
+if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bash_profile; fi
+
+if [ -z "$DOCKER_BUILDKIT" ];then echo "export DOCKER_BUILDKIT=1" >> ~/.bash_profile; fi
+
+if [ -z "$DOCKER_CLI_EXPERIMENTAL" ];then echo "export DOCKER_CLI_EXPERIMENTAL=enabled" >> ~/.bash_profile; fi
 
 sudo apt update && sudo apt -y install \
                             bash-completion \
