@@ -1,8 +1,30 @@
 version: "3.7"
 
 #
+# khs1994.com Docker Swarm mode
 # @link https://docs.docker.com/engine/swarm/
 #
+#
+# $ docker-compose -f docker-production.yml build
+# $ docker-compose -f docker-production.yml push
+#
+# $ docker stack deploy -c docker-production.yml lnmp
+# $ docker stack ps lnmp
+#
+# 1. less `volumes`
+# 2. config put `configs`
+# 3. secrets put `secrets`
+# 4. use log driver journald
+#
+# tips:
+# 1. `docker stack deploy` not support env
+#
+#
+# Don't edit this file
+#
+# $ cp docker-production.yml docker-production.khs1994.yml
+#
+# Then Edit `docker-production.*.yml`
 
 x-logging:
   &default-logging
@@ -21,7 +43,7 @@ x-deploy:
   &default-deploy
   restart_policy:
     condition: any
-    delay: 20s
+    delay: 25s
     max_attempts: 5
     window: 123s
   update_config:
@@ -74,35 +96,6 @@ x-php-common:
     - backend
 
 services:
-  #
-  # Swarm mode
-  #
-  # khs1994.com Docker Swarm mode
-  #
-  #
-  # $ docker-compose -f docker-production.yml build
-  # $ docker-compose -f docker-production.yml push
-  #
-  #
-  # $ docker stack deploy -c docker-production.yml lnmp
-  # $ docker stack ps lnmp
-  #
-  #
-  # 1. less `volumes`
-  # 2. config put `configs`
-  # 3. secrets put `secrets`
-  # 4. use log driver journald
-  #
-  #
-  # 1. `docker stack deploy` not support env
-  #
-  #
-  # Don't edit this file
-  #
-  # $ cp docker-production.yml docker-production.khs1994.yml
-  #
-  # Then Edit `docker-production.*.yml`
-  #
 
   mysql:
     << : *default-common
@@ -111,12 +104,9 @@ services:
       << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-    #
-    # image: username/lnmp-mysql:tag
-    #
-    # image: khs1994/lnmp-mysql:8.0.15
-    #
     image: mysql:8.0.15
+    # image: khs1994/lnmp-mysql:8.0.15
+    # image: username/lnmp-mysql:tag
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
       MYSQL_ROOT_PASSWORD_FILE: /etc/db_root_password
@@ -155,12 +145,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   #
-  #   # image: username/lnmp-mariadb:tag
-  #   #
-  #   # image: khs1994/lnmp-mariadb:10.4.0
-  #   #
   #   image: "mariadb:10.4.0"
+  #   # image: username/lnmp-mariadb:tag
+  #   # image: khs1994/lnmp-mariadb:10.4.0
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -196,12 +183,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    #
-    # image: username/lnmp-redis:tag
-    #
-    # image: khs1994/lnmp-redis:5.0.4
-    #
     image: redis:5.0.4-alpine
+    # image: username/lnmp-redis:tag
+    # image: khs1994/lnmp-redis:5.0.4
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -234,12 +218,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./dockerfile/memcached/
   #     dockerfile: Dockerfile
-  #   #
-  #   # image: username/lnmp-memcached:tag
-  #   #
-  #   # image: khs1994/lnmp-memcached:1.5.7
-  #   #
   #   image: memcached:1.5.7-alpine
+  #   # image: username/lnmp-memcached:tag
+  #   # image: khs1994/lnmp-memcached:1.5.7
   #   # ports:
   #   #   - "127.0.0.1:11211:11211"
   #   volumes:
@@ -259,12 +240,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./dockerfile/rabbitmq/
   #     dockerfile: Dockerfile
-  #   #
-  #   # image: username/lnmp-rabbitmq:tag
-  #   #
-  #   # image: khs1994/lnmp-rabbitmq:3.7.3
-  #   #
   #   image: rabbitmq:3.7.3-management-alpine
+  #   # image: username/lnmp-rabbitmq:tag
+  #   # image: khs1994/lnmp-rabbitmq:3.7.3
   #   volumes:
   #     - rabbitmq-data:/var/lib/rabbitmq
   #     - zoneinfo-data:/usr/share/zoneinfo
@@ -286,12 +264,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./dockerfile/postgresql/
   #     dockerfile: Dockerfile
-  #   #
-  #   # image: username/lnmp-postgresql:tag
-  #   #
-  #   # image: khs1994/lnmp-postgresql:11.2
-  #   #
   #   image: postgres:11.2-alpine
+  #   # image: username/lnmp-postgresql:tag
+  #   # image: khs1994/lnmp-postgresql:11.2
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
@@ -317,12 +292,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
-  #   #
-  #   # image: username/lnmp-mongodb:tag
-  #   #
-  #   # image: khs1994/lnmp-mongodb:4.1.5
-  #   #
   #   image: mongo:4.1.5
+  #   # image: username/lnmp-mongodb:tag
+  #   # image: khs1994/lnmp-mongodb:4.1.5
   #   volumes:
   #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db
@@ -422,13 +394,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    #
-    # image: username/lnmp-nginx:tag
-    #
-    # image: khs1994/lnmp-nginx:1.15.10
-    #
-    # image: khs1994/nginx:1.15.10-alpine
     image: nginx:1.15.10-alpine
+    # image: username/lnmp-nginx:tag
     ports:
       - "443:443"
       - "80:80"
@@ -453,9 +420,7 @@ services:
         # uid: '103'
         # gid: '103'
         # mode: 0440
-      #
       # one domain one conf file
-      #
       - source: nginx_80_conf
         target: /etc/nginx/conf.d/80.conf
       - source: nginx_301_conf
@@ -465,9 +430,7 @@ services:
       - source: nginx_khs1994_com_conf
         target: /etc/nginx/conf.d/khs1994.com.conf
       #
-      #
       # Example Don't Edit
-      #
       #
       # - source: nginx_domain_com_conf
       #   target: /etc/nginx/conf.d/domain.com.conf
@@ -494,16 +457,12 @@ services:
       # - source: developer_khs1994_com_ssl_rsa_key
       #   target: /etc/nginx/conf.d/ssl/developer.khs1994.com.rsa.key
       #
-      #
       # - source: auth_htpasswd
       #   target: /etc/nginx/conf.d/auth/nginx.htpasswd
       #
-      #
       # Example Don't Edit
       #
-      #
       #  ECC + RSA
-      #
       #
       # - source: domain_com_ssl_crt
       #   target: /etc/nginx/conf.d/ssl/domain.com.crt
@@ -528,12 +487,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   #
-  #   # image: username/lnmp-httpd:tag
-  #   #
-  #   # image: khs1994/lnmp-httpd:2.4.38
-  #   #
   #   image: "httpd:2.4.38-alpine"
+  #   # image: username/lnmp-httpd:tag
+  #   # image: khs1994/lnmp-httpd:2.4.38
   #   ports:
   #     - "443:443"
   #     - "80:80"
@@ -559,9 +515,7 @@ services:
   #     - source: vhost_khs1994_com_conf
   #       target: /usr/local/apache2/conf.d/vhost.khs1994.com.conf
   #     #
-  #     #
   #     # Example Don't Edit
-  #     #
   #     #
   #     # - source: vhost_domain_com_conf
   #     #   target: /usr/local/apache2/conf.d/vhost.domain.com.conf
@@ -575,9 +529,7 @@ services:
   #     - source: developer_khs1994_com_ssl_key
   #       target: /usr/local/apache2/conf.d/ssl/developer.khs1994.com.key
   #     #
-  #     #
   #     # Example Don’t Edit
-  #     #
   #     #
   #     # - source: domain_com_ssl_crt
   #     #   target: /usr/local/apache2/conf.d/ssl/domain.com.crt
@@ -592,12 +544,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/registry
   #     dockerfile: Dockerfile
-  #   #
-  #   # image: username/lnmp-registry:tag
-  #   #
-  #   # image: khs1994/lnmp-registry:latest
-  #   #
   #   image: registry:latest
+  #   # image: username/lnmp-registry:tag
+  #   # image: khs1994/lnmp-registry:latest
   #   networks:
   #     - frontend
   #     - backend
@@ -642,21 +591,16 @@ services:
 networks:
   frontend:
     << : *default-labels
-
   backend:
     << : *default-labels
-
 
 volumes:
   mysql-data:
     << : *default-labels
-
   # mariadb-data:
   #   << : *default-labels
-
   redis-data:
     << : *default-labels
-
   # rabbitmq-data:
   #   << : *default-labels
   #
@@ -665,15 +609,12 @@ volumes:
   #
   # mongodb-data:
   #   << : *default-labels
-
   zoneinfo-data:
     << : *default-labels
   # registry-data:
   #   << : *default-labels
-
   pcit-tmp:
     << : *default-labels
-
   minio-data:
     << : *default-labels
 
@@ -681,29 +622,19 @@ secrets:
   db_root_password:
     << : *default-labels
     file: secrets/db_root_password.txt
-
-  #
-  #
   # ECC + RSA
-  #
-  #
-
   khs1994_com_ssl_key:
     << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.key
-
   khs1994_com_ssl_crt:
     << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.crt
-
   khs1994_com_ssl_rsa_key:
     << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.rsa.key
-
   khs1994_com_ssl_rsa_crt:
     << : *default-labels
     file: ./config/nginx/ssl/khs1994.com.rsa.crt
-
   #
   # developer_khs1994_com_ssl_crt:
   #   file: ./config/nginx/ssl/developer.khs1994.com.crt
@@ -721,15 +652,12 @@ secrets:
   #   file: ./config/nginx/ssl/developer.khs1994.com.rsa.key
   #   << : *default-labels
   #
-  #
   # auth_htpasswd:
   #   file: ./config/nginx/auth/nginx.htpasswd
   #   << : *default-labels
   #
-  #
   # Example Don't Edit
   #
-  #
   # domain_com_ssl_key:
   #   file: ./config/nginx/ssl/domain.com.key
   #   << : *default-labels
@@ -746,20 +674,15 @@ secrets:
   #   file: ./config/nginx/ssl/domain.com.crt
   #   << : *default-labels
   #
+
   # SSH use in  CI/CD
-  #
-  #
   ssh_id_rsa:
     file: /root/.ssh/id_rsa
     << : *default-labels
-
-  #
   # SSH config
-  #
   ssh_config:
     file: ./secrets/ssh_config
     << : *default-labels
-
   miniokey:
     file: ./secrets/minio/key.txt
     << : *default-labels
@@ -771,64 +694,48 @@ configs:
   mysql_conf_d_docker_cnf:
     file: ./config/mysql/docker.production.cnf
     << : *default-labels
-
   # mariadb_conf_d_docker_cnf:
   #   file: ./config/mariadb/docker.production.cnf
   #   << : *default-labels
-
   nginx_conf:
     file: ./config/etc/nginx/nginx.production.conf
     << : *default-labels
-
   nginx_80_conf:
     file: ./config/nginx/80.conf
     << : *default-labels
-
   nginx_301_conf:
     file: ./config/nginx/301.conf
     << : *default-labels
-
   nginx_ssl_conf:
     file: ./config/nginx/ssl.config
     << : *default-labels
-
   nginx_khs1994_com_conf:
     file: ./config/nginx/khs1994.com.conf
     << : *default-labels
   #
-  #
   # NGINX Example Don't Edit
-  #
   #
   # nginx_domain_com_conf:
   #   file ./config/nginx/domain.com.conf
   #   << : *default-labels
   #
-  #
-  #
   # httpd_conf:
   #   file: ./config/etc/httpd/httpd.production.conf
   #   << : *default-labels
-  #
-  #
   #
   # vhost_khs1994_com_conf:
   #   file: ./config/httpd/khs1994.com.conf
   #   << : *default-labels
   #
-  #
   # Apache Example Don't Edit
-  #
   #
   # vhost_domain_com_conf:
   #   file: ./config/httpd/domain.com.conf
   #   << : *default-labels
 
-
   php_ini:
     file: ./config/php/php.production.ini
     << : *default-labels
-
   php_development_ini:
     file: ./config/php/php.development.ini
     << : *default-labels
@@ -836,15 +743,12 @@ configs:
   php_ini_include_log:
     file: ./config/php/docker-php.ini
     << : *default-labels
-
   php_fpm_conf_d_zz_docker_conf:
     file: ./config/php/zz-docker.production.conf
     << : *default-labels
-
   redis_conf:
     file: ./config/redis/redis.production.conf
     << : *default-labels
-
   # mongod_conf:
   #   file: ./config/mongodb/mongod.production.conf
   #   << : *default-labels

@@ -10,7 +10,7 @@ set -ex
 
 PGDATA=${PGDATA:-/pgdata}
 
-COMMON_SOFT="nginx php mysql redis"
+LNMP_WSL_COMMON_SOFT="nginx php mysql redis"
 
 ################################################################################
 
@@ -164,7 +164,7 @@ if [ "$1" = stop ];then
   elif [ "$1" = 'common' ];then
     set +e
     clear
-    for soft in $COMMON_SOFT
+    for soft in $LNMP_WSL_COMMON_SOFT
       do
       _stop $soft
       done
@@ -184,7 +184,7 @@ if [ "$1" = start ];then
   elif [ "$1" = 'common' ];then
     set +e
     clear
-    for soft in $COMMON_SOFT
+    for soft in $LNMP_WSL_COMMON_SOFT
       do
       _start $soft
       done
@@ -204,7 +204,7 @@ if [ "$1" = restart ];then
   elif [ "$1" = 'common' ];then
     set +e
     clear
-    for soft in $COMMON_SOFT
+    for soft in $LNMP_WSL_COMMON_SOFT
       do
       _restart $soft
       done

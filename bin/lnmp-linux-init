@@ -102,20 +102,6 @@ if [ "$NAME" = Fedora ];then
     kernel-devel elfutils-libelf-devel libefp-devel
 fi
 
-cd /tmp
-
-# atom
-
-# curl -O https://github.com/atom/atom/releases/download/v1.29.0-beta1/atom.x86_64.rpm
-
-cd -
-
-# apm
-
-set +e
-command -v apm && apm config set registry https://registry.npm.taobao.org
-set -e
-
 _file(){
   ( cat $1 | grep "$2" ) || echo -e $3 >> $1
 }
@@ -131,3 +117,7 @@ _file ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nin
 if [ "$1" = '--help' ];then print_help_info; fi
 if [ "$1" = 'dockerd' ];then _docker_daemon; fi
 if [ "$1" = 'rkt' ];then __rkt; fi
+
+set +e
+# atom apm
+command -v apm && apm config set registry https://registry.npm.taobao.org
