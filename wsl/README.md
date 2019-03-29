@@ -53,7 +53,7 @@ $ lnmp-wsl-install php | mysql ...
 主版本所有执行文件放到 `/usr/local/bin`，其他版本请使用绝对路径，例如 `/usr/local/php56/bin/php`。
 
 ```bash
-$ lnmp-wsl-install enable php72 | php71 | php70 | php56
+$ lnmp-wsl-install enable php73 php72 | php71 | php70 | php56
 ```
 
 ### PHP 安装路径
@@ -64,7 +64,7 @@ $ lnmp-wsl-install enable php72 | php71 | php70 | php56
 
 ## 特别注意 NGINX
 
-NGINX 需要自己编译安装 `$ lnmp-wsl-builder-nginx.py 1.15.9 ROOT_PASSWORD`
+NGINX 需要自己编译安装 `$ lnmp-wsl-builder-nginx.py 1.15.10 ROOT_PASSWORD`
 
 `/usr/local/etc/nginx/nginx.conf` 主配置文件必须添加下面的配置项，否则 PHP 页面打开非常缓慢
 
@@ -87,7 +87,7 @@ http {
 ```bash
 $ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /usr/local/etc/nginx/conf.d
 
-$ sudo ln -sf $WSL_HOME/lnmp/wsl/config/php.fpm.zz-wsl.conf /usr/local/php72/etc/php-fpm.d/zz-wsl.conf
+$ sudo ln -sf $WSL_HOME/lnmp/wsl/config/php.fpm.zz-wsl.conf /usr/local/php73/etc/php-fpm.d/zz-wsl.conf
 
 $ cat $WSL_HOME/lnmp/wsl/config/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.cnf
 ```

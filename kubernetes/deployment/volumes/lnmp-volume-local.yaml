@@ -45,8 +45,8 @@ metadata:
 spec:
   containers:
   - name: "lnmp-pod"
-    # image: "khs1994/nginx:1.15.9-alpine"
-    image: "nginx:1.15.9-alpine"
+    # image: "khs1994/nginx:1.15.10-alpine"
+    image: "nginx:1.15.10-alpine"
     volumeMounts:
     - name: lnmp-data
       mountPath: /app

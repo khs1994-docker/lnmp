@@ -74,7 +74,8 @@ _pecl(){
   for soft in $PECL
   do
   test ! $soft = 'mongodb' || sudo ln -sf /usr/local/opt/openssl/include/openssl /usr/local/include/
-  ( pecl list | grep $soft ) || pecl install $soft
+  ( pecl list | grep $soft ) || pecl install $soft \
+      || echo "$soft install error"
   done
 }
 
@@ -114,6 +115,8 @@ mkdir -p ~/.pip
 
 _file ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
 
-# apm
+set +e
 
+# apm
 command -v apm && apm config set registry https://registry.npm.taobao.org
+command -v composer && _composer

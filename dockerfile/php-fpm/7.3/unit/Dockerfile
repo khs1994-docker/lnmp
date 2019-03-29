@@ -1,5 +1,7 @@
 # syntax=docker/dockerfile:experimental
-FROM alpine:3.9 as php
+ARG IMAGE=alpine
+
+FROM ${IMAGE}:3.9 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -42,12 +44,6 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                  xz \
 # https://github.com/docker-library/php/issues/494
                  openssl \
-                 # git \
-# 以下两个均为版本控制系统
-# subversion \
-# mercurial \
-                 # openssh-client \
-                 # tini \
                  bash \
                  tzdata \
 # ensure www-data user exists
@@ -291,7 +287,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
   \
-  # 创建日志文件夹
+# 创建日志文件夹
   && ln -sf /dev/stderr /var/log/xdebug-remote.log
   # && rm -rf /usr/src/*
 
@@ -304,7 +300,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   && apk add --virtual .build-deps $PHPIZE_DEPS openssl-dev \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
-       --module=php72 \
+       --module=php73 \
        --lib-path=/usr/local/lib \
        --config=/usr/local/bin/php-config \
   && make \

@@ -21,9 +21,9 @@ $ ./configure --prefix=/usr/local/nginx_unit --openssl
 # PHP 编译选项必须额外增加 --enable-embed=shared 选项，本文使用 $ lnmp-wsl-install php 7.2.5 命令所安装 PHP
 
 $ ./configure php \
-      --module=php72 \
-      --lib-path=/usr/local/php72/lib \
-      --config=/usr/local/php72/bin/php-config
+      --module=php73 \
+      --lib-path=/usr/local/php73/lib \
+      --config=/usr/local/php73/bin/php-config
 
       # --lib-static
 

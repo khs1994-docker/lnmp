@@ -1,6 +1,7 @@
 ARG PHP_VERSION=7.2.16
+ARG IMAGE=php
 
-FROM php:${PHP_VERSION}-cli-alpine as php
+FROM ${IMAGE}:${PHP_VERSION}-cli-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -54,7 +55,7 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
-      # 不要删除
+# 不要删除
       && PHP_SWOOLE_RUN_DEPS=" \
                          bash \
                          tzdata \
@@ -79,7 +80,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
-      # *-dev 编译之后删除
+# *-dev 编译之后删除
       && PHP_SWOOLE_BUILD_DEPS=" \
                          openssl-dev \
                          libmemcached-dev \

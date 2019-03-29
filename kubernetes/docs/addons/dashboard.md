@@ -73,11 +73,10 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 # 设置集群参数
 # Docker for desktop k8s
 # $ export KUBE_APISERVER=https://localhost:6445
-# $ export K8S_PATH=/etc/kubernetes
-# $ export K8S_PATH=/opt/bin/kubernetes
+# $ export K8S_CONF_PATH=/opt/bin/k8s/conf
 
 $ kubectl config set-cluster kubernetes \
-  --certificate-authority=${K8S_PATH:-/etc/kubernetes}/certs/ca.pem \
+  --certificate-authority=${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/ca.pem \
   --embed-certs=true \
   --server=${KUBE_APISERVER:-https://192.168.57.110:6443} \
   --kubeconfig=dashboard.kubeconfig

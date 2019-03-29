@@ -15,6 +15,10 @@ $ErrorAction="SilentlyContinue"
 
 $global:source=$PWD
 
+# 配置环境变量
+[environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
+[environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
+
 Function _command($command){
   get-command $command -ErrorAction "SilentlyContinue"
 
@@ -396,7 +400,7 @@ Function _go(){
     _unzip go${GOLANG_VERSION}.windows-amd64.zip C:\
   }
 
-  [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User");
+  [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
 }
 
 Function _python(){
@@ -438,7 +442,7 @@ _python
 
 ################################################################################
 
-[environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User");
+[environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User")
 
 $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
 $env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
@@ -473,7 +477,7 @@ set system env $item ...
   }
 }
 
-[environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User");
+[environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
 
 # apm
 

@@ -3,7 +3,7 @@ kind: KubeProxyConfiguration
 # Fix me
 bindAddress: 192.168.199.100
 clientConnection:
-  kubeconfig: /etc/kubernetes/kube-proxy.kubeconfig
+  kubeconfig: /opt/bin/k8s/conf/kube-proxy.kubeconfig
 clusterCIDR: 172.30.0.0/16 # ${CLUSTER_CIDR}
 # Fix me
 healthzBindAddress: 192.168.199.100:10256

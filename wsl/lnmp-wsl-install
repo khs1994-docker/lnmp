@@ -16,9 +16,9 @@ Install WSL soft by shell script
 
 Usage:
 
-$ lnmp-wsl-install php 7.2.16 [ tar | deb ]
+$ lnmp-wsl-install php 7.3.3 [ tar | deb ]
 
-$ lnmp-wsl-install enable [ php72 | php71 | php70 | php56 ]
+$ lnmp-wsl-install enable [ php73 | php72 | php71 | php70 | php56 ]
 
 $ lnmp-wsl-install mysql php go node postgresql mongodb swift
 
@@ -57,7 +57,7 @@ NODE_VERSION=11.12.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.2.16
+PHP_VERSION=7.3.3
 
 ################################################################################
 _httpd(){
@@ -102,9 +102,9 @@ _php(){
 
   # include redis memcached
   # default install latest php version
-  # current version is php 7.2.16
+  # current version is php 7.3.3
 
-  PHP_VERSION=${1:-7.2.16}
+  PHP_VERSION=${1:-7.3.3}
 
   case ${PHP_VERSION} in
     5.6.* )
@@ -133,6 +133,13 @@ _php(){
        echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, please self build use $ lnmp-wsl-builder-php\n\n" \
        ; exit 1; fi
       export PHP_NUM=72
+      ;;
+
+    7.3.* )
+      if [ $ID = 'ubuntu' ];then set +x ; \
+       echo -e "\n\nkhs1994-wsl-php only support php73 on Debian9, please self build use $ lnmp-wsl-builder-php\n\n" \
+       ; exit 1; fi
+      export PHP_NUM=73
       ;;
 
     * )

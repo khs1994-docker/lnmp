@@ -36,9 +36,8 @@ fi
 
 LARAVEL_PATH="$2"
 
-echo -e "\n\033[32mINFO\033[0m  change folder own and group ..."
-
-if [ ${OS} = 'Linux' ] || [ ${OS} = 'Darwin' ];then
+if [[ ${OS} = 'Linux' || ${OS} = 'Darwin' ]];then
+  echo -e "\n\033[32m==> INFO\033[0m  change folder own and group ..."
   sudo chmod -R 765 ${LARAVEL_PATH}
   sudo chown -R `id -u`:`id -g` ${LARAVEL_PATH}
   chmod -R 777 ${LARAVEL_PATH}/storage

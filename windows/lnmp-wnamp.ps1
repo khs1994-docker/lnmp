@@ -16,7 +16,7 @@ Example
 
 lnmp-wnamp.ps1 start php nginx mysql wsl-redis
 
-lnmp-wnamp.ps1 start common  UP COMMON_SOFT set in `.env.ps1` file.
+lnmp-wnamp.ps1 start common  <start COMMON_SOFT, please set env in `.env.ps1` file>
 
 lnmp-wnamp.ps1 stop all
 

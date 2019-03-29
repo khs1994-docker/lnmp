@@ -13,11 +13,10 @@ ExecStartPre=-/sbin/modprobe ip_vs
 
 # WorkingDirectory=/var/lib/kube-proxy
 
-Environment="K8S_PATH=/etc/kubernetes"
-# Environment="K8S_PATH=/opt/bin/kubernetes"
+Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
 
-ExecStart=/opt/bin/kube-proxy \
---config=${K8S_PATH}/kube-proxy.config.yaml \
+ExecStart=/opt/bin/k8s/kube-proxy \
+--config=${K8S_CONF_PATH}/kube-proxy.config.yaml \
 --alsologtostderr=true \
 --logtostderr=false \
 --log-dir=/var/log/kubernetes \

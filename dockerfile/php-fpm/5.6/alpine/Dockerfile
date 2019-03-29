@@ -1,6 +1,7 @@
 ARG PHP_VERSION=5.6.40
+ARG IMAGE=php
 
-FROM php:${PHP_VERSION}-fpm-alpine as php
+FROM ${IMAGE}:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -46,7 +47,7 @@ ENV PECL_EXTENSION \
       igbinary \
       redis \
       # memcached \ # 5.6 not support
-      # 安装测试版的扩展，可以在扩展名后加 -beta
+# 安装测试版的扩展，可以在扩展名后加 -beta
       xdebug-2.5.5 \
       yaml-1.3.1 \
       ${PECL_EXTENSION_EXTRA:-}
@@ -55,7 +56,7 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
-      # 不要删除
+# 不要删除
       && PHP_FPM_RUN_DEPS=" \
                          bash \
                          tzdata \
@@ -78,7 +79,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
-      # *-dev 编译之后删除
+# *-dev 编译之后删除
       && PHP_FPM_BUILD_DEPS=" \
                          libressl-dev \
                          libmemcached-dev \
@@ -127,12 +128,12 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
            done \
         && docker-php-ext-enable opcache \
         && apk del --no-cache .build-deps .php-fpm-build-deps \
-        # 默认不启用 xdebug
+# 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
         && rm -rf /tmp/* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
-        # 创建日志文件夹
+# 创建日志文件夹
         && mkdir -p /var/log/php-fpm \
         && ln -sf /dev/stdout /var/log/php-fpm/access.log \
         && ln -sf /dev/stderr /var/log/php-fpm/error.log \

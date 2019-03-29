@@ -1946,15 +1946,6 @@ else
   sed -i "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
 fi
 
-if [ ${ARCH} = 'armv7l' ];then
-    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm32v7/g" .env
-    # sed -i "s/^ARM_PHP_BASED_OS.*/ARM_PHP_BASED_OS=stretch/g" .env
-    # sed -i "s/^ARM_BASED_OS.*/ARM_BASED_OS=/g" .env
-elif [ ${ARCH} = 'aarch64' ];then
-    sed -i "s/^ARM_ARCH.*/ARM_ARCH=arm64v8/g" .env
-    # sed -i "s/^ARM_PHP_BASED_OS.*/ARM_PHP_BASED_OS=alpine/g" .env
-fi
-
 print_info "ARCH is ${OS} ${ARCH}\n"
 
 command -v docker > /dev/null 2>&1 && print_info `docker --version` || print_warning "docker cli is not install"

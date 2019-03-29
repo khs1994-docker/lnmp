@@ -887,7 +887,7 @@ command -v wget || sudo apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.2.16
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.3
 
 _get_phpnum $PHP_VERSION
 

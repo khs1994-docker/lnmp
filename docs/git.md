@@ -66,3 +66,9 @@ $ git config --global core.safecrlf false
 ```bash
 $ git config --global core.safecrlf warn
 ```
+
+### 重写 committer
+
+```bash
+$ git commit --amend --reset-author
+```

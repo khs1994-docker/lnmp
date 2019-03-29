@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:experimental
 ARG PHP_VERSION=nightly
+ARG IMAGE=khs1994/php
 
-FROM khs1994/php:${PHP_VERSION}-fpm-alpine
+FROM ${IMAGE}:${PHP_VERSION}-fpm-alpine as php
 
 # install composer
 
@@ -21,7 +22,8 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
 # https://github.com/composer/docker
 
 RUN --mount=type=bind,from=composer:1.8.4,source=/usr/bin/composer,target=/opt/bin/composer \
-    apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
+    set -x \
+    && apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
     && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \
@@ -34,35 +36,30 @@ RUN --mount=type=bind,from=composer:1.8.4,source=/usr/bin/composer,target=/opt/b
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.8/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
- && chmod +x /docker-entrypoint.composer.sh \
- && cp -a /opt/bin/composer /usr/bin/composer \
- && composer --ansi --version --no-interaction \
- \
- # laravel 安装程序
- && composer global require --prefer-dist --ignore-platform-reqs "laravel/installer" \
- \
- # php-cs-fixer
- # https://github.com/FriendsOfPHP/PHP-CS-Fixer
- && composer global require --prefer-dist --ignore-platform-reqs "friendsofphp/php-cs-fixer" \
- \
- # composer 中国镜像
- && composer config -g repo.packagist composer https://packagist.laravel-china.org \
- \
- # Sami an API documentation generator
- # https://github.com/FriendsOfPHP/Sami
- && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
- && chmod +x /usr/local/bin/sami \
- \
- # && composer global require --prefer-dist --ignore-platform-reqs "ircmaxell/php-compiler" \
- # && git clone --depth=1 https://github.com/ircmaxell/php-compiler /tmp/vendor/ircmaxell/php-compiler \
- # && cd /tmp/vendor/ircmaxell/php-compiler \
- # && composer install --no-dev --prefer-dist --ignore-platform-reqs -n \
- # && rm -rf .git ./vendor/**/.git \
- # && ln -sf $PWD/bin/* /usr/local/bin \
- \
- && ln -sf /tmp/vendor/bin/* /usr/local/bin \
- && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.8/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+    && chmod +x /docker-entrypoint.composer.sh \
+    && cp -a /opt/bin/composer /usr/bin/composer \
+    && composer --ansi --version --no-interaction \
+    \
+# composer 中国镜像
+    && composer config -g repo.packagist composer https://packagist.laravel-china.org \
+# laravel 安装程序
+    && composer global require --prefer-dist --ignore-platform-reqs "laravel/installer" \
+# php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer
+    && composer global require --prefer-dist --ignore-platform-reqs "friendsofphp/php-cs-fixer" \
+# Sami an API documentation generator https://github.com/FriendsOfPHP/Sami
+    && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
+    && chmod +x /usr/local/bin/sami \
+    \
+# && composer global require --prefer-dist --ignore-platform-reqs "ircmaxell/php-compiler" \
+# && git clone --depth=1 https://github.com/ircmaxell/php-compiler /tmp/vendor/ircmaxell/php-compiler \
+# && cd /tmp/vendor/ircmaxell/php-compiler \
+# && composer install --no-dev --prefer-dist --ignore-platform-reqs -n \
+# && rm -rf .git ./vendor/**/.git \
+# && ln -sf $PWD/bin/* /usr/local/bin \
+    \
+    && ln -sf /tmp/vendor/bin/* /usr/local/bin \
+    && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
 
 ENTRYPOINT ["/bin/sh", "/docker-entrypoint.composer.sh"]
 

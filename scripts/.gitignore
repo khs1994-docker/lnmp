@@ -6,3 +6,4 @@
 !production-init
 !issue_tls
 !frp
+!arm-build.sh

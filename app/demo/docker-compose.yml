@@ -35,9 +35,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - NGINX_VERSION=${NGINX_VERSION:-1.15.9}
+        - NGINX_VERSION=${NGINX_VERSION:-1.15.10}
       target: nginx
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/nginx:${NGINX_VERSION:-1.15.9}-pro-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/nginx:${NGINX_VERSION:-1.15.10}-pro-alpine
     depends_on:
       - php72
       # - php71
@@ -45,16 +45,27 @@ services:
       # - php56
 
   # 项目使用哪个 PHP 版本就保留哪个服务，其他注释
-  php72:
+  php73:
     build:
       context: .
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION_72:-7.2.16}
-        - NODE_VERSION=${NODE_VERSION:-11.7.0}
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.3}
+        - NODE_VERSION=${NODE_VERSION:-11.12.0}
         - NODE_REGISTRY=https://registry.npm.taobao.org
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.16}-pro-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.3}-pro-alpine
+
+  # php72:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: php
+  #     args:
+  #       - PHP_VERSION=${PHP_VERSION_72:-7.2.16}
+  #       - NODE_VERSION=${NODE_VERSION:-11.12.0}
+  #       - NODE_REGISTRY=https://registry.npm.taobao.org
+  #   image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.16}-pro-alpine
 
 #  php71:
 #    build:
