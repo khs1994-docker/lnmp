@@ -107,7 +107,7 @@ $ echo -e "<?php\nphpinfo();" >> index.php
 
 ### 2. 新增 NGINX 配置
 
-一个 PHP 项目， 一个 网址，一个子配置文件
+一个 **PHP 项目**， 一个 **网址**，一个 **NGINX 子配置文件**
 
 参考示例配置文件在 `config/nginx` 新建 `*.conf` NGINX 配置文件
 

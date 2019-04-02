@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# this is custom script use by lnmp-docker
+
+# 执行 up 命令前会调用此函数
+__lnmp_custom_init(){
+  true
+}
+
+__lnmp_custom_backup() {
+  true
+}
+
+__lnmp_custom_restore() {
+  true
+}
+
+__lnmp_custom_cleanup() {
+  true
+}
+
+__lnmp_custom_up() {
+  true
+}
+
+__lnmp_custom_down() {
+  true
+}
+
+__lnmp_custom_pull() {
+  true
+}
+
+__lnmp_custom_restart() {
+  true
+}
+
+# 当执行不存在的命令时会调用该函数 `lnmp-dcker no-found-cmd`
+__lnmp_custom_command() {
+  echo $@
+}

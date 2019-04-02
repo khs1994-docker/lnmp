@@ -13,7 +13,11 @@
 
 set -e
 
-if [ `uname -s` != 'Darwin' ] && [ `uname -s` != 'Linux' ];then \
+readonly OS=`uname -s`
+readonly ARCH=`uname -m`
+
+# only run on macOS and Linux
+if [ $OS != 'Darwin' ] && [ $OS != 'Linux' ];then \
     echo -e "\n\033[31mError \033[0m  Please use ./lnmp-docker.ps1 on PowerShell in Windows"; exit 1; fi
 
 print_info(){
@@ -29,19 +33,21 @@ print_warning(){
   echo -e "\033[33mWARNING\033[0m \a $@"
 }
 
-NOTSUPPORT(){
+notsupport(){
   print_error "Not Support ${OS} ${ARCH}\n"
   exit 1
 }
 
 check_nginx_conf(){
   set +e
-  echo "$LNMP_INCLUDE" | grep 'minio' > /dev/null 2>&1 || ( ls config/${LNMP_NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
-    && ( print_error "your .env file not include minio, but nginx conf.d folder include minio.conf" ; echo))
+  echo "$LNMP_INCLUDE" | grep -q 'minio' \
+    || ( ls config/${LNMP_NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
+    && ( print_error \
+    "your .env file not include minio, but nginx conf.d folder include minio.conf" ; echo))
   set -e
 }
 
-_check_and_copy_file(){
+_cp_only_not_exists(){
   if ! [ -f $2 ];then cp $1 $2 ; fi
 }
 
@@ -58,19 +64,20 @@ else
     fi
 fi
 
-if ! [ -f docker-compose.include.yml ];then
-  cp docker-compose.include.example.yml docker-compose.include.yml
-fi
+_cp_only_not_exists docker-compose.include.example.yml docker-compose.include.yml
 
-if [ -f lnmp-custom-script ];then
-  . ./lnmp-custom-script
-fi
+_cp_only_not_exists lnmp-custom-script.example lnmp-custom-script
+
+print_info "Exec custom scripts"
+echo
+
+. ./lnmp-custom-script
 
 if ! [ -f config/php/docker-php.ini ];then
   cp config/php/docker-php.ini.example config/php/docker-php.ini
 fi
 
-_check_and_copy_file config/composer/config.example.json config/composer/config.json
+_cp_only_not_exists config/composer/config.example.json config/composer/config.json
 
 # PHPer command
 
@@ -155,10 +162,6 @@ Developer Tools:
   test                 Test LNMP
   cookbooks            Up local cookbooks server
 
-AD:
-  haokan               Baidu haokan
-  alipay               Alipay
-
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
@@ -175,7 +178,7 @@ _tongji(){
   if ! [ -f log/tongji.txt ];then
     print_info "Send OS type and IP data to khs1994-docker/lnmp, Thanks you help us improve\n"
     if [ -f /etc/os-release ];then . /etc/os-release ; fi
-    curl -s -X GET --user-agent "${OS:-unkown os}-${ID:-unknow id}-${VERSION:-unkown version}" https://developer.khs1994.com/tongji/lnmp --connect-timeout 5 > /dev/null || echo 'ERROR=true' > log/tongji.txt
+    curl -s -X GET --user-agent "${OS:-unkown os}-${ID:-unknow id}-${VERSION:-unkown version}" https://developer.khs1994.com/lnmp/tongji --connect-timeout 5 > /dev/null || echo 'ERROR=true' > log/tongji.txt
     TIMESTAMP=`date +%s`
     echo "TIMESTAMP=${TIMESTAMP}" > log/tongji.txt
   else
@@ -429,7 +432,7 @@ env_status(){
       print_info ".env file existing\n"; \
   else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
 
-  _check_and_copy_file volumes/.env.example volumes/.env
+  _cp_only_not_exists volumes/.env.example volumes/.env
 
   if ! [ -f secrets/minio/key.txt ];then
     cp secrets/minio/key.example.txt secrets/minio/key.txt
@@ -554,13 +557,16 @@ install_docker_compose_move(){
         ;;
     esac
   else
-    NOTSUPPORT
+    notsupport
   fi
 }
 
 # 从 GitHub 安装 compose
 install_docker_compose_official(){
-  if [ "$OS" != 'Linux' ];then exit 1;fi
+  if [ "$OS" != 'Linux' ];then
+  print_error "Only support Linux"
+  exit 1
+  fi
   curl -sL ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
       > /tmp/docker-compose || print_error "Download docker-compose error, code is $?\n"
   install_docker_compose_move
@@ -603,7 +609,10 @@ docker_compose(){
     local true_x=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 1`
     local true_y=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 2`
     #local true_z=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 3`
-    if [ "$x" != "$true_x" ];then exit 1; fi
+    if [ "$x" != "$true_x" ];then
+      print_error "Check docker-compose error"
+      exit 1
+    fi
     # 判断是否安装正确
     # -lt 小于
     if [ "$y" -lt "$true_y" ];then
@@ -625,7 +634,7 @@ docker_compose(){
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows\n"
       exit
       else
-        NOTSUPPORT
+        notsupport
       fi
     # 安装正确
     else
@@ -678,6 +687,8 @@ init() {
       scripts/production-init
       ;;
   esac
+  #@custom
+  __lnmp_custom_init 2>/dev/null || true
   # 初始化完成提示
   print_info "Init is SUCCESS\n"
 }
@@ -953,7 +964,7 @@ acme(){
          -v $PWD/config/${LNMP_NGINX_CONF_D:-nginx}/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
-         khs1994/acme:${ACME_VERSION} acme.sh "$@"
+         khs1994/acme:${ACME_VERSION:-latest} acme.sh "$@"
 }
 
 ssl(){
@@ -1001,7 +1012,7 @@ $ ./lnmp-docker acme.sh
          --env-file .env \
          -e HTTPD=${HTTPD:-0} \
          -e RSA=${RSA:-0} \
-         khs1994/acme:${ACME_VERSION} "$command"
+         khs1994/acme:${ACME_VERSION:-latest} "$command"
 }
 
 ssl_self(){
@@ -1125,12 +1136,16 @@ clusterkit_bash_cli(){
 
 backup(){
   bash_cli mysql /backup/backup.sh $@
+  #@custom
+  __lnmp_custom_backup "$@" 2>/dev/null || true
 }
 
 # 恢复数据库
 
 restore(){
   bash_cli mysql /backup/restore.sh $1
+  #@custom
+  __lnmp_custom_restore "$@" 2>/dev/null || true
 }
 
 pcit_nginx_init(){
@@ -1224,6 +1239,8 @@ main() {
 
   cleanup )
     cleanup
+    #@custom
+    __lnmp_custom_cleanup "$@" 2>/dev/null || true
     ;;
 
   test )
@@ -1357,7 +1374,7 @@ For information please run $ docker service update --help
     if [ ${ARCH} = 'x86_64' ];then
       exec docker-compose -f docker-compose.yml -f docker-compose.build.yml build "$@" --parallel
     else
-      NOTSUPPORT
+      notsupport
     fi
 
     ;;
@@ -1371,7 +1388,7 @@ For information please run $ docker service update --help
         -f docker-compose.include.yml \
         up -d "$@"
     else
-      NOTSUPPORT
+      notsupport
     fi
 
     ;;
@@ -1397,6 +1414,9 @@ For information please run $ docker service update --help
         -f docker-compose.include.yml \
       up $opt ${soft}
 
+      #@custom
+      __lnmp_custom_up "$@" 2>/dev/null || true
+
       echo; sleep 1; print_info "Test nginx configuration file...\n"
       docker exec -it \
           $(docker container ls --format {{.ID}} \
@@ -1412,7 +1432,7 @@ For information please run $ docker service update --help
 
       echo; print_info "nginx configuration file test is successful\n" ; exit 0
     else
-      NOTSUPPORT
+      notsupport
     fi
     ;;
 
@@ -1422,7 +1442,7 @@ For information please run $ docker service update --help
              -f docker-compose.build.yml \
              -f docker-compose.include.yml
              config; \
-          else NOTSUPPORT; fi
+          else notsupport; fi
     ;;
 
   restore )
@@ -1503,7 +1523,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   *-logs | *-log )
 
-    if ! [ "${OS}" = 'Linux' ];then NOTSUPPORT; fi
+    if ! [ "${OS}" = 'Linux' ];then notsupport; fi
 
     SERVICE=$(echo $command | cut -d '-' -f 1)
     journalctl -u \
@@ -1523,6 +1543,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   down )
     init; docker-compose down --remove-orphans
+    #@custom
+    __lnmp_custom_down "$@" 2>/dev/null || true
     ;;
 
   docs )
@@ -1543,9 +1565,11 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
           sleep 2; exec docker-compose -f docker-arm.yml pull ${LNMP_INCLUDE:-nginx mysql php7 redis phpmyadmin}
           ;;
         * )
-          NOTSUPPORT
+          notsupport
           ;;
     esac
+    #@custom
+    __lnmp_custom_pull "$@" 2>/dev/null || true
      ;;
 
   cn-mirror )
@@ -1595,8 +1619,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   -h | --help | help )
-   help
-   ;;
+    help
+    ;;
 
   clusterkit-help )
     clusterkit_help
@@ -1624,10 +1648,13 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
       print_info "You Exec docker-compose commands"; echo
       exec docker-compose $command "$@"
     fi
+
+    #@custom
+    __lnmp_custom_restart "$@" 2>/dev/null || true
     ;;
 
  daemon-socket )
-   if [ $OS != 'Darwin' ];then NOTSUPPORT; fi
+   if [ $OS != 'Darwin' ];then notsupport; fi
    docker run -d --restart=always \
      -p 2375:2375 \
      --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock \
@@ -1846,9 +1873,7 @@ First Run? Maybe you wait 60s then open url.
     sudo modprobe nfsd
     cd volumes
     if [ "$1" = 'down' ];then
-      docker-compose stop nfs
-
-      exit
+      exec docker-compose stop nfs
     fi
     docker-compose up -d nfs
 
@@ -1862,33 +1887,10 @@ First Run? Maybe you wait 60s then open url.
       update
       ;;
 
-      alipay )
-        clear
-        cat ad/alipay.txt
-
-        echo "
-1. 打开支付宝扫一扫
-
-2. 扫描二维码领取红包
-
-3. 线下扫码支付
-        "
-      ;;
-
-      haokan )
-        clear
-        cat ad/haokan.txt
-
-        echo "
-1. 扫描二维码，输入手机号领取红包
-
-2. 下载好看视频，输入手机号登录
-
-3. 观看视频
-        "
-      ;;
-
   * )
+  #@custom
+  __lnmp_custom_command $command "$@" 2>/dev/null && exit || true
+
   if ! [ -z "$command" ];then
     print_warning "command not found, Now Exec docker-compose commands"; echo
     exec docker-compose $command "$@"
@@ -1901,8 +1903,6 @@ First Run? Maybe you wait 60s then open url.
 if [ "$debug" = 'true' ];then set -x; fi
 
 # if docker version info not include ce, example 1.13.1, maybe install method is error
-
-ARCH=`uname -m` && OS=`uname -s`
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
 
@@ -1948,7 +1948,9 @@ fi
 
 print_info "ARCH is ${OS} ${ARCH}\n"
 
-command -v docker > /dev/null 2>&1 && print_info `docker --version` || print_warning "docker cli is not install"
+command -v docker > /dev/null 2>&1 \
+  && print_info `docker --version` \
+  || print_warning "docker cli is not install"
 
 echo ; docker_compose "$@"
 
@@ -1964,12 +1966,8 @@ if [ $# = 0 ];then help; exit 0; fi
 
 PRODUCTION_COMPOSE_FILE='docker-production.yml'
 
-set +e
-
-ls docker-production.*.yml > /dev/null 2>&1
-
-if [ $? = '0' ];then PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`; fi
-
-set -e
+if [ `ls docker-production.*.yml > /dev/null 2>&1` ];then
+  PRODUCTION_COMPOSE_FILE=`ls docker-production.*.yml`
+fi
 
 main "$@"

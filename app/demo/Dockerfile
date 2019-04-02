@@ -8,13 +8,13 @@
 #
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
-ARG NODE_VERSION=11.12.0
+ARG NODE_VERSION=11.13.0
 ARG PHP_VERSION=7.3.3
 ARG NGINX_VERSION=1.15.10
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.3-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/EXAMPLE/
 COPY composer.json /app

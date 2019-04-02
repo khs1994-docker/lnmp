@@ -133,10 +133,6 @@ $ lnmp-docker up SOFT_NAME SOFT_NAME2
 # $ lnmp-docker up kong kong-dashboard
 ```
 
-### 自定义脚本
-
-新建 `lnmp-custom-script` shell 脚本。
-
 ### 自定义卷
 
 > 例如我们想增加一个数据卷挂载，将本机 `/path/my_path` 挂载到 PHP 容器中的 `/path/target`

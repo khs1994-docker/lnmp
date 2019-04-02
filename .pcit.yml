@@ -1,5 +1,6 @@
 workspace:
   base: /data/lnmp
+  path: .
 
 pipeline:
   bash:
