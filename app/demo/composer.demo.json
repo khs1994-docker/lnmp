@@ -8,13 +8,11 @@
   "homepage": "https://github.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}",
   "type": "library",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "khs1994",
-      "email": "khs1994@khs1994.com",
-      "homepage": "https://khs1994.com"
-    }
-  ],
+  "authors": [{
+    "name": "khs1994",
+    "email": "khs1994@khs1994.com",
+    "homepage": "https://khs1994.com"
+  }],
   "support": {
     "issues": "https://github.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}/issues"
   },
@@ -56,13 +54,19 @@
     "branch-alias": {
       "dev-master": "18.06-dev"
     },
-    "laravel":{
-      "providers":[
+    "laravel": {
+      "providers": [
         "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}\\Support\\ServiceProvider"
       ],
-      "aliases":{
-        "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}":"{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}\\Support\\Facade"
+      "aliases": {
+        "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}": "{{ EXAMPLE_FOLDER_NAME_EXAMPLE }}\\Support\\Facade"
       }
     }
+  },
+  "scripts": {
+    "fmt": "php-cs-fixer fix",
+    "test": "phpunit",
+    "test:coverage": "phpunit --coverage-clover=coverage.xml",
+    "install:docker": "composer install --ignore-platform-reqs --prefer-dist --no-interaction --no-scripts --no-plugins"
   }
 }

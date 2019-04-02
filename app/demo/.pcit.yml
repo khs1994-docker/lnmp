@@ -128,8 +128,9 @@ matrix:
   COMPOSER_VERSION:
     - 1.8.0
   PHP_VERSION:
+    - 7.3.3
     - 7.2.16
-    - 7.1.27
+    # - 7.1.27
     # - 7.0.33
     # - 5.6.40
   NGINX_VERSION:
