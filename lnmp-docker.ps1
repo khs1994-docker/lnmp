@@ -103,9 +103,13 @@ Function env_status(){
   }
 }
 
-if (Test-Path lnmp-custom-script.ps1){
-  . ./lnmp-custom-script.ps1
+if (!(Test-Path lnmp-custom-script.ps1)){
+  Copy-Item lnmp-custom-script.example.ps1 lnmp-custom-script.ps1
 }
+
+printInfo "Exec custom script"
+
+. ./lnmp-custom-script.ps1
 
 Function logs(){
   if (! (Test-Path log\httpd)){
@@ -159,6 +163,8 @@ Function init(){
   logs
   git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
+  #@custom
+  __lnmp_custom_init
 }
 
 Function help_information(){
@@ -166,7 +172,7 @@ Function help_information(){
 
 Official WebSite https://lnmp.khs1994.com
 
-Usage: ./docker-lnmp.sh COMMAND
+Usage: ./docker-lnmp COMMAND
 
 Try Kubernetes Free:
   k8s                  Try Kubernetes Free
@@ -385,6 +391,14 @@ switch($first){
 
     backup {
         docker-compose exec mysql /backup/backup.sh $other
+        #@custom
+        __lnmp_custom_backup $other
+    }
+
+    restore {
+       docker-compose exec mysql /backup/restore.sh $other
+       #@custom
+       __lnmp_custom_restore $other
     }
 
     build {
@@ -413,6 +427,8 @@ switch($first){
 
     cleanup {
       cleanup
+      #@custom
+      __lnmp_custom_cleanup
     }
 
     config {
@@ -442,6 +458,9 @@ switch($first){
         -f docker-compose.override.yml `
         -f docker-compose.include.yml `
         up -d $command
+
+      #@custom
+      __lnmp_custom_up $command
     }
 
     pull {
@@ -450,10 +469,16 @@ switch($first){
         -f docker-compose.override.yml `
         -f docker-compose.include.yml `
         pull ${LNMP_INCLUDE}
+
+      #@custom
+      __lnmp_custom_pull
     }
 
     down {
       docker-compose down --remove-orphans
+
+      #@custom
+      __lnmp_custom_down
     }
 
     docs {
@@ -493,12 +518,10 @@ switch($first){
       docker-compose -f docker-compose.yml -f docker-compose.build.yml push
     }
 
-    restore {
-       docker-compose exec mysql /backup/restore.sh $other
-    }
-
     restart {
       docker-compose restart $other
+      #@custom
+      __lnmp_custom_restart $other
     }
 
     ssl-self {
@@ -1013,6 +1036,8 @@ More information please see docs/kubernetes/docker-desktop.md
     }
 
     default {
+        #@custom
+        __lnmp_custom_command $args
         printInfo `
 "You Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
         docker-compose $args

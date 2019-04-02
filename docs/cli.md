@@ -14,6 +14,12 @@
 
 `lnmp-k8s create | delete ` 对应着 `kubectl create | delete`
 
+## 自定义 CLI
+
+可以在 `lnmp-custom-script` 或 `lnmp-custom-script.ps1` (Windows) 中编写自定义脚本。
+
+如果你需要在执行 `lnmp-docker up` 命令后执行一些操作那么可以编写 `__lnmp_custom_up` 函数。
+
 ## 原始命令详解
 
 ### 初始化
