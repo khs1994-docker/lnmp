@@ -233,11 +233,6 @@ ClusterKit:
 Developer Tools:
   cookbooks            Up local cookbooks server
 
-AD:
-  haokan               Baidu haokan
-  alipay               Alipay
-
-
 Read './docs/*.md' for more information about CLI commands.
 
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
@@ -767,32 +762,6 @@ switch($first){
     update-version {
       clear
       wsl -d $DistributionName lnmp-docker update-version
-    }
-
-    alipay {
-      clear
-      wsl cat ad/alipay.txt
-
-      wsl echo "
-1. 打开支付宝扫一扫
-
-2. 扫描二维码领取红包
-
-3. 线下扫码支付
-      "
-    }
-
-    haokan {
-      clear
-      wsl cat ad/haokan.txt
-
-      wsl echo "
-1. 扫描二维码，输入手机号领取红包
-
-2. 下载好看视频，输入手机号登录
-
-3. 观看视频
-      "
     }
 
     debug {
