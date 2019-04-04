@@ -138,7 +138,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 ENV PHP_VERSION 7.2.16
 ENV NGINX_UNIT_VERSION 1.8.0
-# ENV PHP_URL="https://secure.php.net/get/php-7.2.16.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.2.16.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.2.16.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.2.16.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/

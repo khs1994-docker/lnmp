@@ -45,7 +45,7 @@ $global:NGINX_VERSION="1.15.10"
 # https://windows.php.net/download/
 $global:PHP_VERSION="7.3.3"
 $global:MYSQL_VERSION="8.0.15"
-$global:HTTPD_VERSION="2.4.38"
+$global:HTTPD_VERSION="2.4.39"
 $global:IDEA_VERSION="1.14.5037"
 $global:NODE_VERSION="11.13.0"
 $global:DENO_VERSION="0.3.2"
