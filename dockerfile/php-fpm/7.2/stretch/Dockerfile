@@ -2,7 +2,7 @@
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.16
+ARG PHP_VERSION=7.2.17
 ARG IMAGE=php
 
 FROM ${IMAGE}:${PHP_VERSION}-fpm-stretch
@@ -166,7 +166,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=arm32v7/composer:1.8.4,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=arm32v7/composer:1.8.5,source=/usr/bin/composer,target=/opt/bin/composer \
     echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \

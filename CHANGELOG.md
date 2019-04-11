@@ -1,24 +1,15 @@
 # Changelog
 
-## v18.09.04
+## v18.09.05
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v18.09.3...v18.09.4
+* https://github.com/khs1994-docker/lnmp/compare/v18.09.4...v18.09.5
 
 ### Bug fixes:
 
 ### Changes:
 
-* Disable Xdebug default
-* `arm32v7` Image based Alpine
-* Switch to PHP 7.3.x
-* Move arm `Dockerfile-arch` to `Dockerfile` folder
-* Update custom script `lnmp-custom-script[.ps1]`
-
 ### Updates:
 
-* [PHP `7.3.3` `7.2.16` `7.1.27`](https://www.php.net/ChangeLog-7.php#7.3.3)
-* [Redis `5.0.4`](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
-* [NGINX `1.15.10`](https://nginx.org/en/CHANGES)
-* [HTTPD `2.4.39`](https://www.apache.org/dist/httpd/CHANGES_2.4.39)
+* [PHP `7.3.4` `7.2.17` `7.1.28`](https://www.php.net/ChangeLog-7.php#7.3.4)

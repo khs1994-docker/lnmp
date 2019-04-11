@@ -11,4 +11,4 @@ services:
 
   php:
     build: php
-    image: khs1994/php:7.3.3-windowsservercore-1809
+    image: khs1994/php:7.3.4-windowsservercore-1809

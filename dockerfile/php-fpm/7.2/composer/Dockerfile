@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.2.16
+ARG PHP_VERSION=7.2.17
 ARG IMAGE=khs1994/php
 
 FROM ${IMAGE}:${PHP_VERSION}-fpm-alpine as php
@@ -15,13 +15,13 @@ ENV COMPOSER_DEP_APKS \
       tini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.8.4 \
+    COMPOSER_VERSION=1.8.5 \
     PS1="[\u@\h \w]# " \
     PHP_CS_FIXER_IGNORE_ENV=1
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.8.4,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.8.5,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
     && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
