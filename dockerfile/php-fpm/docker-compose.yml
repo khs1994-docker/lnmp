@@ -26,31 +26,31 @@ services:
     build:
       context: ./7.3/alpine
       args:
-        PHP_VERSION: ${PHP_VERSION_73:-7.3.3}
+        PHP_VERSION: ${PHP_VERSION_73:-7.3.4}
         IMAGE: php
         ALPINE_URL: mirrors.ustc.edu.cn
       target: php
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.3}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.4}-fpm-alpine
 
   7_2_X:
     build:
       context: ./7.2/alpine
       args:
-        PHP_VERSION: ${PHP_VERSION_72:-7.2.16}
+        PHP_VERSION: ${PHP_VERSION_72:-7.2.17}
         IMAGE: php
         ALPINE_URL: mirrors.ustc.edu.cn
       target: php
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.16}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.17}-fpm-alpine
 
   7_1_X:
     build:
       context: ./7.1/alpine
       args:
-        PHP_VERSION: ${PHP_VERSION_71:-7.1.27}
+        PHP_VERSION: ${PHP_VERSION_71:-7.1.28}
         IMAGE: php
         ALPINE_URL: mirrors.ustc.edu.cn
       target: php
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_71:-7.1.27}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_71:-7.1.28}-fpm-alpine
 
   7_0_X:
     build:

@@ -83,6 +83,6 @@ if [[ "$PHP_VERSION" = "7_3_X" && "$COMPOSER" = "1" ]];then
     docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-fpm-alpine \
     && docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-composer-alpine ; \
   done \
-  && ./arm-build.sh manifest 7.3.3 fpm \
-  ; ./arm-build.sh manifest 7.3.3 composer || true
+  && ./arm-build.sh manifest 7.3.4 fpm \
+  ; ./arm-build.sh manifest 7.3.4 composer || true
 fi

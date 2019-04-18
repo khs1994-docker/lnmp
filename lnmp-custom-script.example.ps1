@@ -1,7 +1,4 @@
-# total 9 funcs
-
-# 执行 up 命令前会调用此函数
-function __lnmp_custom_init(){
+function __lnmp_custom_init() {
   echo ''
 }
 

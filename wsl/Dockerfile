@@ -2,7 +2,7 @@ FROM debian:stretch-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.3.3
+ARG PHP_VERSION=7.3.4
 
 ARG PHP_NUM=73
 
@@ -10,7 +10,7 @@ ARG PHP_PREFIX=/usr/local/php73
 
 ARG PHP_INI_DIR=/usr/local/etc/php73
 
-ARG COMPOSER_VERSION=1.8.4
+ARG COMPOSER_VERSION=1.8.5
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 

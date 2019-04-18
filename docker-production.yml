@@ -72,7 +72,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:7.3.3-fpm-alpine
+  image: khs1994/php:7.3.4-fpm-alpine
   volumes:
     - ./app:/app
     - zoneinfo-data:/usr/share/zoneinfo
@@ -394,7 +394,7 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.15.10-alpine
+    image: nginx:1.15.12-alpine
     # image: username/lnmp-nginx:tag
     ports:
       - "443:443"
@@ -487,9 +487,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.38-alpine"
+  #   image: "httpd:2.4.39-alpine"
   #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.38
+  #   # image: khs1994/lnmp-httpd:2.4.39
   #   ports:
   #     - "443:443"
   #     - "80:80"

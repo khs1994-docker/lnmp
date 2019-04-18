@@ -9,8 +9,8 @@
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
 ARG NODE_VERSION=11.13.0
-ARG PHP_VERSION=7.3.3
-ARG NGINX_VERSION=1.15.10
+ARG PHP_VERSION=7.3.4
+ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建
@@ -36,7 +36,7 @@ RUN cd /app \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.3-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.4-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/
@@ -51,7 +51,7 @@ RUN cd /app \
              --no-plugins
 
 # 3.将项目打入 PHP 镜像
-# $ docker build -t khs1994/php:7.3.3-pro-GIT_TAG-alpine --target=php .
+# $ docker build -t khs1994/php:7.3.4-pro-GIT_TAG-alpine --target=php .
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
 COPY . /app/EXAMPLE/
@@ -64,9 +64,9 @@ CMD ["php-fpm", "-R"]
 
 # 4.将 PHP 项目打入 NGINX 镜像
 # Nginx 配置文件统一通过 configs 管理，严禁将配置文件打入镜像
-# $ docker build -t khs1994/nginx:1.15.10-pro-GIT_TAG-alpine .
+# $ docker build -t khs1994/nginx:1.15.0-pro-GIT_TAG-alpine .
 
-# FROM ${DOCKER_HUB_USERNAME:-khs1994}/nginx:1.15.10-alpine
+# FROM ${DOCKER_HUB_USERNAME:-khs1994}/nginx:1.15.0-alpine
 FROM nginx:${NGINX_VERSION} as nginx
 
 COPY --from=php /app/ /app/

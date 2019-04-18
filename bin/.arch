@@ -14,7 +14,7 @@ export OS=`uname -s`
 export ARCH=`uname -m`
 
 # VERSION=$LNMP_PHP_VERSION
-VERSION=7.3.3
+VERSION=7.3.4
 
 export TAG=${VERSION}-composer-alpine
 
