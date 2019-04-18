@@ -194,7 +194,7 @@ matrix:
     # - 8.0.15
     - 5.7.22
   MONGODB_VERSION:
-    - 4.1.5
+    - 4.1.0
   POSTGRESQL_VERSION:
     - 11.2-alpine
 
