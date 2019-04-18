@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   nginx:
-    image: khs1994/nginx:1.15.10-pro-alpine
+    image: khs1994/nginx:1.15.0-pro-alpine
     environment:
       - TZ=Asia/Shanghai
     ports:

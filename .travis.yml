@@ -13,6 +13,7 @@ env:
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
   - LNMP_PATH=/home/travis/build/khs1994-docker/lnmp
+  - LNMP_BRANCH=18.09
 
 matrix:
   include:
@@ -29,9 +30,10 @@ before_install:
 - sudo apt-get update
 # - sudo apt-get -y install docker-ce || sudo apt -f install
 # https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/
-- apt-cache madison docker-ce | grep 18.09
-- apt-cache madison docker-ce | grep 18.06
-- sudo apt-get -y install docker-ce=5:18.09.0~3-0~ubuntu-xenial
+- apt-cache madison docker-ce | grep ${LNMP_BRANCH}
+- DOCKER_VERSION=$(apt-cache madison docker-ce | grep ${LNMP_BRANCH} | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
+- echo ${DOCKER_VERSION}
+- sudo apt-get -y install docker-ce=${DOCKER_VERSION}
 - docker --version
 
 # 升级最新 Docker Compose

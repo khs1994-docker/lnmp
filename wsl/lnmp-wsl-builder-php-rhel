@@ -541,7 +541,7 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       opcache \
                       mysqli \
                       pgsql \
-                      ffi
+                      $( test $PHP_NUM -ge "74" && echo ffi )
 
 # config opcache
 
