@@ -340,7 +340,7 @@ _builder(){
         --enable-ftp \
         --enable-mysqlnd \
         --enable-bcmath \
-        --enable-libxml \
+        $( test $PHP_NUM -ge "74" && echo "--with-libxml" || echo "--enable-libxml" ) \
         --enable-inline-optimization \
         --enable-mbregex \
         --enable-mbstring \

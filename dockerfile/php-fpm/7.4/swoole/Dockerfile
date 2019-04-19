@@ -81,7 +81,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pdo-pgsql=shared \
         --with-xsl=shared \
         --enable-bcmath=shared \
-        --enable-libxml \
+        --with-libxml \
         --enable-inline-optimization \
         --enable-mbregex \
         --enable-pcntl=shared \
