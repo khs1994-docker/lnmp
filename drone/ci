@@ -2,13 +2,13 @@
 
 print_help_info(){
   exec echo "
-CI-CLI 0.8.7
+CI-CLI 1.0.1
 
 Donate WebSite https://zan.khs1994.com
 
-Usage: ./ci COMMAND
+Usage: ./ci COMMAND options
 
-Debug: [env] DEBUG=1 ./ci COMMAND options
+Debug: DEBUG=1 ./ci COMMAND options
 
 Options:
 
@@ -116,9 +116,9 @@ _up(){
     sed -i "s#{{ REDIS_HOST }}#${CI_EXTERNAL_REDIS_HOST:-$REDIS_HOST}#g" registry/config.yml
     sed -i "s#{{ WEBHOOKS_HOST }}#${WEBHOOKS_HOST:-http://192.168.199.100}#g" registry/config.yml
     cd -
-    sed -i "s#{{ DRONE_HOST }}#http://${CI_HOST:-192.168.199.100}:${CI_DRONE_PORT:-8000}#g" docker-compose.override.yml
-    sed -i "s#{{ DRONE_GOGS_URL }}#http://${CI_HOST:-192.168.199.100}:${CI_GOGS_PORT:-3000}#g" docker-compose.override.yml
-
+    sed -i "s#{{ DRONE_SERVER_HOST }}#${CI_HOST:-192.168.199.100}:${CI_DRONE_PORT:-8000}#g" docker-compose.override.yml
+    sed -i "s#{{ DRONE_GOGS_SERVER }}#http://${CI_HOST:-192.168.199.100}:${CI_GOGS_PORT:-3000}#g" docker-compose.override.yml
+    sed -i "s#DRONE_SERVER_PROTO=https#DRONE_SERVER_PROTO=http#g" docker-compose.override.yml
     CI_INCLUDE=${CI_INCLUDE:-drone-server drone-agent gogs registry}
 
    # based posrt don't up nginx
@@ -153,8 +153,8 @@ _up-tls(){
     sed -i "s#{{ REDIS_HOST }}#${CI_EXTERNAL_REDIS_HOST:-$REDIS_HOST}#g" registry/config.yml
     sed -i "s#{{ WEBHOOKS_HOST }}#${WEBHOOKS_HOST:-https://ci.t.khs1994.com/docker/webhooks}#g" registry/config.yml
     cd -
-    sed -i "s#{{ DRONE_HOST }}#https://drone.${CI_DOMAIN:-t.khs1994.com}#g" docker-compose.override.yml
-    sed -i "s#{{ DRONE_GOGS_URL }}#https://git.${CI_DOMAIN:-t.khs1994.com}#g" docker-compose.override.yml
+    sed -i "s#{{ DRONE_SERVER_HOST }}#drone.${CI_DOMAIN:-t.khs1994.com}#g" docker-compose.override.yml
+    sed -i "s#{{ DRONE_GOGS_SERVER }}#https://git.${CI_DOMAIN:-t.khs1994.com}#g" docker-compose.override.yml
 
     sed -i "s#{{ CI_DOMAIN }}#${CI_DOMAIN:-t.khs1994.com}#g" config/nginx/docker-registry.conf
     sed -i "s#{{ CI_DOMAIN }}#${CI_DOMAIN:-t.khs1994.com}#g" config/nginx/drone.conf

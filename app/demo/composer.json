@@ -28,7 +28,7 @@
     "khs1994/curl": "~18.06.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.3"
+    "phpunit/phpunit": "^8.1"
   },
   "config": {
     "php": "7.2.17",

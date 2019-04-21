@@ -5,6 +5,7 @@ set -e
 if [ "$debug" = 'true' ];then set -x; fi
 
 SOFT=" php \
+zlib \
 composer \
 php-cs-fixer \
 nginx \
@@ -66,16 +67,16 @@ _brew(){
 
   for soft in $SOFT
   do
-    ( brew list | grep $soft ) || brew install $soft
+    ( brew list | grep -q $soft ) || brew install $soft
   done
 }
 
 _pecl(){
-  for soft in $PECL
+  for ext in $PECL
   do
-  test ! $soft = 'mongodb' || sudo ln -sf /usr/local/opt/openssl/include/openssl /usr/local/include/
-  ( pecl list | grep $soft ) || pecl install $soft \
-      || echo "$soft install error"
+  test ! $ext = 'mongodb' || sudo ln -sf /usr/local/opt/openssl/include/openssl /usr/local/include/
+  ( pecl list | grep $ext ) || pecl install $ext \
+      || echo "$ext install error"
   done
 }
 
@@ -90,7 +91,7 @@ _file(){
 }
 
 _ruby(){
-  gem sources -l | grep https://gems.ruby-china.org/ || gem sources -a https://gems.ruby-china.org/ ; gem sources -l
+  gem sources -l | grep https://gems.ruby-china.com || gem sources -a https://gems.ruby-china.com ; gem sources -l
 }
 
 _env(){

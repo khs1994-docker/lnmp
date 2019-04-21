@@ -4,25 +4,45 @@
 # 项目构建设置中 Repository Hooks 全部勾选
 #
 
-workspace:
-  base: /app
-  path: .
+# workspace:
+#   base: /app
+#   path: .
 
-pipeline:
+# kind: secret
+# name: username
+# data: hl3v+FODjduX0UpXBHgYzPzVTppQblg51CVgCbgDk4U=
+
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+  # arm64
+
+clone:
+  depth: 50
+
+steps:
   # install dep
-  install:
-    # image: composer:${COMPOSER_VERSION}
+  - name: install
+    # image: composer:1.8.4
     image: khs1994/php:7.3.4-composer-alpine
     commands:
       - pwd
       - composer config -g repo.packagist composer https://packagist.laravel-china.org
       - composer install -q --ignore-platform-reqs
       # - composer update -q --ignore-platform-reqs
+    volumes:
+    - name: cache
+      path: /tmp
 
   # test script
-  script:
-    image: khs1994/php:${PHP_VERSION}-fpm-alpine
-    # pull: true
+  - name: script
+    image: khs1994/php:7.3.4-fpm-alpine
+    # pull: always
+    # detach: true
+    # privileged: true
     commands:
       - pwd
       - mv $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default $${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
@@ -33,40 +53,49 @@ pipeline:
       # - /Users/khs1994/khs1994/khs1994-lnmp/tmp/cache:/tmp/cache
       # - /data/lnmp/tmp/cache:/tmp/cache
     when:
-      # environment: production
-      # platform: linux/amd64
-      # platform:  [ linux/*, windows/amd64 ]
-      # status: changed
-      # status:  [ failure, success ]
-      # event: tag
-      # event: [push, tag, deployment]
-      # event: [push, pull_request, tag, deployment]
+      # target:
+      # - production
+      # status:
+      # - changed
+      # status:
+      # - failure
+      # - success
+      # event:
+      # - tag
+      # event: [push, tag]
+      # event: [push, pull_request, tag]
       event: [push, pull_request, tag]
-      # branch: master
-      # branch: prefix/*
+      # branch:
+      # - master
+      # branch:
+      # - prefix/*
       # branch: [master, develop]
       # branch:
       #   include: [ master, release/* ]
       #   exclude: [ release/1.0.0, release/1.1.* ]
-      # matrix:
-      #   - PHP_VERSION=7.2.17
-      #     REDIS_VERSION=5.0.4
+      # repo:
+      # - octocat/hello-world
 
   # when tag push, build docker image
   # http://plugins.drone.io/drone-plugins/drone-docker/
-  publish_php:
+  - name: publish_php
     image: plugins/docker
-    # registry: docker.khs1994.com
-    repo: khs1994/php
-    tags: ${PHP_VERSION}-pro-${DRONE_TAG}-alpine
-    target: php
-    mirror: https://registry.docker-cn.com
-    # build_args:
-    #   - key=value
-    # dockerfile: Dockerfile
-    # dockerfile: path/to/Dockerfile
-    debug: "true"
-    launch_debug: "true"
+    settings:
+      # registry: docker.khs1994.com
+      repo: khs1994/php
+      tags: 7.3.4-pro-${DRONE_TAG}-alpine
+      target: php
+      mirror: https://registry.docker-cn.com
+      # build_args:
+      #   - key=value
+      # dockerfile: Dockerfile
+      # dockerfile: path/to/Dockerfile
+      debug: "true"
+      launch_debug: "true"
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
     when:
       #
       # 首先在命令行设置好相关变量 DRONE_SERVER DRONE_TOKEN 右上角 Token 有详细的说明
@@ -75,16 +104,19 @@ pipeline:
       #
       # $ drone deploy khs1994-php/example 6 staging
       #
-      event: deployment
-      environment: staging
-    secrets: [ docker_username, docker_password ]
+      event: [ tag ]
 
-  publish_nginx:
+  - name: publish_nginx
     image: plugins/docker
-    repo: khs1994/nginx
-    tags: ${NGINX_VERSION}-pro-${DRONE_TAG}-alpine
-    target: nginx
-    mirror: https://registry.docker-cn.com
+    settings:
+      repo: khs1994/nginx
+      tags: 1.15.12-pro-${DRONE_TAG}-alpine
+      target: nginx
+      mirror: https://registry.docker-cn.com
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
     when:
       #
       # 手动在命令行执行以下命令才会执行此步
@@ -92,36 +124,42 @@ pipeline:
       # $ drone deploy khs1994-php/example 6 staging
       #
       #
-      event: deployment
-      environment: staging
-    secrets: [ docker_username, docker_password ]
+      event: [ tag ]
 
   #
   # CI/CD 构建生产环境 PHP NGINX 镜像
   #
-  publish_php_to_prod:
+  - name: publish_php_to_prod
     image: plugins/docker
-    repo: khs1994/php
-    tags: ${PHP_VERSION}-pro-${DRONE_TAG}-alpine
-    target: php
-    mirror: https://registry.docker-cn.com
+    settings:
+      repo: khs1994/php
+      tags: 7.3.4-pro-${DRONE_TAG}-alpine
+      target: php
+      mirror: https://registry.docker-cn.com
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
     when:
       #
       # 手动在命令行执行以下命令才会执行此步
       #
       # $ drone deploy khs1994-php/demo 6 production
       #
-      event: deployment
-      environment: production
-    secrets: [ docker_username, docker_password ]
+      event: [ tag ]
 
-  publish_nginx_to_prod:
+  - name: publish_nginx_to_prod
     image: plugins/docker
-    # registry: docker.khs1994.com
-    repo: khs1994/nginx
-    tags: ${NGINX_VERSION}-pro-${DRONE_TAG}-alpine
-    target: nginx
-    mirror: https://registry.docker-cn.com
+    settings:
+      # registry: docker.khs1994.com
+      repo: khs1994/nginx
+      tags: 1.15.12-pro-${DRONE_TAG}-alpine
+      target: nginx
+      mirror: https://registry.docker-cn.com
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
     when:
       #
       # 手动在命令行执行以下命令才会执行此步
@@ -129,74 +167,81 @@ pipeline:
       # $ drone deploy khs1994-php/demo 6 production
       #
       #
-      event: deployment
-      environment: production
-    secrets: [ docker_username, docker_password ]
+      event: [ tag ]
 
-  after_success:
+  - name: after_success
     image: khs1994/php:7.3.4-composer-alpine
     when:
       status: success
     commands:
       - bash <(curl -s https://codecov.io/bash)
-    secrets: codecov_token
+    environment:
+      CODECOV_TOKEN:
+        from_secret: codecov_token
 
-  after_failure:
+  - name: after_failure
     image: bash
     when:
-      status: failure
+      status:
+      - failure
     commands:
       - echo "build failure"
 
-  after_changed:
+  - name: after_changed
     image: bash
     when:
-      status: changed
+      status:
+      - changed
     commands:
       - echo "build changed"
 
 services:
-  mysql:
-    image: mysql:${MYSQL_VERSION}
+  - name: mysql
+    image: mysql:5.7.22
     environment:
-      - MYSQL_DATABASE=test
-      - MYSQL_ROOT_PASSWORD=mytest
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: mytest
     # entrypoint: [ "mysqld" ]
     command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
-  # postgresql:
-  #   image: postgres:${POSTGRESQL_VERSION}
+  # - name: postgresql
+  #   image: postgres:11.2-alpine
   #   environment:
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_DB=test
 
-  redis:
-    image: redis:${REDIS_VERSION}
+  - name: redis
+    image: redis:5.0.4-alpine
 
-  # mongodb:
-  #   image: mongo:${MONGODB_VERSION}
+  # - name: mongodb
+  #   image: mongo:4.1.0
   #   command: [ --smallfiles ]
 
-matrix:
-  COMPOSER_VERSION:
-    - 1.8.0
-  PHP_VERSION:
-    - 7.3.4
-    - 7.2.17
-    - 7.1.28
-    # - 7.0.33
-    # - 5.6.40
-  NGINX_VERSION:
-    - 1.15.12
-  REDIS_VERSION:
-    - 5.0.4
-  MYSQL_VERSION:
-    # - 8.0.15
-    - 5.7.22
-  MONGODB_VERSION:
-    - 4.1.0
-  POSTGRESQL_VERSION:
-    - 11.2-alpine
+volumes:
+- name: cache
+  host:
+    path: /tmp
+
+# matrix:
+#   COMPOSER_VERSION:
+#     - 1.8.0
+#   PHP_VERSION:
+#     - 7.3.4
+#     - 7.2.17
+#     - 7.1.28
+#     # - 7.0.33
+#     # - 5.6.40
+#   NGINX_VERSION:
+#     - 1.15.12
+#   REDIS_VERSION:
+#     - 5.0.4
+#   MYSQL_VERSION:
+#     # - 8.0.15
+#     - 5.7.22
+#   MONGODB_VERSION:
+#     - 4.1.0
+#   POSTGRESQL_VERSION:
+#     - 11.2-alpine
 
 # matrix:
 #   include:
@@ -205,6 +250,19 @@ matrix:
 #     - PHP_VERSION=7.1.28
 #       REDIS_VERSION=5.0.4
 
-# branches:
-#   include: [ master, dev, feature/* ]
-#   exclude: [ release/1.0.0, release/1.1.* ]
+# trigger:
+#   branch:
+#   - master
+#     include: [ master, dev, feature/* ]
+#     exclude: [ release/1.0.0, release/1.1.* ]
+#   event:
+#   - push
+#   - pull_request
+#   - tag
+#   - promote
+#   - rollback
+#     exclude:
+#     - pull_request
+#   ref:
+#   - refs/heads/feature-*
+#   - refs/tags/v1.*
