@@ -13,7 +13,7 @@ env:
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
   - LNMP_PATH=/home/travis/build/khs1994-docker/lnmp
-  - LNMP_BRANCH=18.09
+  - LNMP_BRANCH=19.03
 
 matrix:
   include:
@@ -26,7 +26,7 @@ before_install:
 - date
 - docker --version
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
 - sudo apt-get update
 # - sudo apt-get -y install docker-ce || sudo apt -f install
 # https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/
@@ -34,7 +34,7 @@ before_install:
 - DOCKER_VERSION=$(apt-cache madison docker-ce | grep ${LNMP_BRANCH} | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
 - echo ${DOCKER_VERSION}
 - sudo apt-get -y install docker-ce=${DOCKER_VERSION}
-- docker --version
+- docker version
 
 # 升级最新 Docker Compose
 
@@ -90,7 +90,7 @@ jobs:
         on:
          branch:
            - master
-           - 18.09
+           - 19.03
 
     - stage: tag
       script: |
@@ -231,25 +231,25 @@ jobs:
 
 stages:
   - name: tag
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - development
   - swarm
   - name: deb
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - name: rpm
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-71
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-72
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-73
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-74
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel-71
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel-72
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(v19)/
 
 # branches:
 #   only:

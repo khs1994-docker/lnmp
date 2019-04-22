@@ -32,7 +32,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "18.09-dev"
+      "dev-master": "19.03-dev"
     }
   }
 }
