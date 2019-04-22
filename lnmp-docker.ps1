@@ -1008,7 +1008,7 @@ More information please see docs/kubernetes/docker-desktop.md
         #@custom
         __lnmp_custom_command $args
         printInfo `
-"You Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
+"Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
         docker-compose $args
       }
 }
