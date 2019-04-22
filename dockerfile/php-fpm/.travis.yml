@@ -44,6 +44,7 @@ script:
   - if [ -n "$FPM" ];then docker build --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${FOLDER}/alpine; fi
 
 after_success:
+  - if [ -z "$TRAVIS_TAG" ];then if [ "$PHP_VERSION" = 7_4_X -o "$PHP_VERSION" = nightly ];then true;else exit 0;fi; fi
   - if [ -n "$UNIT" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine; fi
   - if [ -n "$SUPERVISORD" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine; fi
   - if [ -n "$COMPOSER" ];then docker push $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine; fi
@@ -53,10 +54,10 @@ after_success:
   - bash tag.sh
   - curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
 
-branches:
-  only:
-  - master
-  - dev
+# branches:
+#   only:
+#   - master
+#   - dev
 
 env:
   matrix:

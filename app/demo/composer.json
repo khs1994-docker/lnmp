@@ -20,7 +20,7 @@
     "issues": "https://github.com/khs1994-php/example/issues"
   },
   "require": {
-    "php": "^7.1.3",
+    "php": "^7.2.0",
     "ext-curl": "*",
     "ext-json": "*",
     "ext-PDO": "*",
@@ -28,7 +28,7 @@
     "khs1994/curl": "~18.06.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.3"
+    "phpunit/phpunit": "^8.1"
   },
   "config": {
     "php": "7.2.17",

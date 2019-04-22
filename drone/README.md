@@ -10,10 +10,10 @@
 
 ## 重要提示
 
-本项目基于 Drone `0.8.x` 版本，近期 Drone 发布了 `1.x` 版本与本项目不兼容！
+本项目基于 Drone `1.x` 版本。
 
-* `0.8.x` 文档 `https://0-8-0.docs.drone.io/`
 * `1.x` 文档 `https://docs.drone.io/`
+* `0.8.x` 文档 `https://0-8-0.docs.drone.io/`
 
 ## 微信订阅号
 
@@ -167,6 +167,10 @@ $ ./ci up [-d] [--reset]
 
 * registry **5000**
 
+## 注意事项
+
+*  Gogs 不支持 volume 功能。
+
 ## 启用构建
 
 在 `Drone` 页面登录账号，在项目列表的右边打开开关，将项目推送到 Git，可以看到 Drone 开始构建项目。
@@ -181,7 +185,7 @@ $ ./ci up [-d] [--reset]
 
 ## 最佳实践
 
-https://www.khs1994.com/categories/CI/Drone/
+https://blog.khs1994.com/categories/CI/Drone/
 
 ## More Information
 

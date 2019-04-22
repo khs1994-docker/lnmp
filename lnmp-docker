@@ -776,7 +776,7 @@ _lnmp_debug(){
 <pre>
 " > debug.md
 
-cat /etc/os-release >> debug.md || uname -s >> debug.md
+cat /etc/os-release >> debug.md 2>&1 /dev/null || uname -s >> debug.md
 
 echo "
 </pre>
@@ -823,8 +823,8 @@ XXX
 <!--提交问题之前务必点击预览（Preview）标签-->
 " >> debug.md
 
-  echo "Please Edit debug.md, then new issue in https://github.com/khs1994-docker/lnmp/issues/new/choose with copy debug.md"
-
+  print_warning "Please Edit debug.md, then new issue in [ https://github.com/khs1994-docker/lnmp/issues/new/choose ] with copy debug.md"
+  echo
 }
 
 nginx_http(){
@@ -1255,13 +1255,13 @@ main() {
     ;;
 
   daemon-tls )
-    echo
-    echo https://github.com/khs1994-website/docs/blob/master/docker/dockerd.md
+    print_warning please see [ https://github.com/khs1994-website/docs/blob/master/docker/dockerd.md ]
     echo
   ;;
 
   daemon-tls-cert )
-
+    print_error 'Not Support Now'
+    echo
   ;;
 
   debug )
@@ -1457,7 +1457,8 @@ For information please run $ docker service update --help
      if [ -z "$3" ];then print_error "$ ./lnmp-docker nginx-config {https|http} {PATH} {URL}"; exit 1; fi
      print_info 'Please set hosts in /etc/hosts in development\n'
      print_info \
-'Maybe you need generate nginx HTTPS conf in website \
+'Maybe you need generate nginx HTTPS conf in website
+
 https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      if [ "$1" = 'http' ];then shift; nginx_http $2 $1; fi
      if [ "$1" = 'https' ];then shift; nginx_https $2 $1; fi
@@ -1469,7 +1470,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     if [ -z "$3" ];then print_error "$ ./lnmp-docker apache-config {https|http} {PATH} {URL}"; exit 1; fi
     print_info 'Please set hosts in /etc/hosts in development\n'
     print_info \
-'Maybe you need generate Apache2 HTTPS conf in website \
+'Maybe you need generate Apache2 HTTPS conf in website
+
 https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     if [ "$1" = 'http' ];then shift; apache_http $2 $1; fi
     if [ "$1" = 'https' ];then shift; apache_https $2 $1; fi
@@ -1645,7 +1647,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
       echo; print_info "nginx configuration file test is successful\n"
       exec docker-compose $command "$@"
     else
-      print_info "You Exec docker-compose commands"; echo
+      print_info "Exec docker-compose commands"; echo
       exec docker-compose $command "$@"
     fi
 

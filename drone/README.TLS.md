@@ -10,10 +10,10 @@
 
 ## 重要提示
 
-本项目基于 Drone `0.8.x` 版本，近期 Drone 发布了 `1.x` 版本与本项目不兼容！
+本项目基于 Drone `1.x` 版本。
 
-* `0.8.x` 文档 `https://0-8-0.docs.drone.io/`
 * `1.x` 文档 `https://docs.drone.io/`
+* `0.8.x` 文档 `https://0-8-0.docs.drone.io/`
 
 ## 微信订阅号
 
