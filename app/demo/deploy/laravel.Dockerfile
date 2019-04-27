@@ -8,13 +8,13 @@
 #
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
-ARG NODE_VERSION=11.14.0
+ARG NODE_VERSION=12.0.0
 ARG PHP_VERSION=7.3.4
 ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-11.14.0}-alpine as frontend
+FROM node:${NODE_VERSION:-12.0.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
