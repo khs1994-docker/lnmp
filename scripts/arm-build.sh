@@ -6,7 +6,7 @@ echo "
 Usage:
 
 manifest  [7.3.4] [TYPE:fpm | composer | unit | swoole | supervisord ]
-build     [7.3.4] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | ... ]
+build     [7.3.4] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | composer | ... ]
 
 "
 }
