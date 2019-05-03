@@ -136,9 +136,9 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
-ENV PHP_VERSION 7.2.17
+ENV PHP_VERSION 7.2.18
 ENV NGINX_UNIT_VERSION 1.8.0
-# ENV PHP_URL="https://www.php.net/get/php-7.2.17.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.2.17.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.2.18.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.2.18.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -150,8 +150,8 @@ ENV NGINX_UNIT_VERSION 1.8.0
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-  --mount=type=bind,from=php:7.2.17-alpine,source=/usr/src,target=/usr/src,rw \
-  --mount=type=bind,from=php:7.2.17-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+  --mount=type=bind,from=php:7.2.18-alpine,source=/usr/src,target=/usr/src,rw \
+  --mount=type=bind,from=php:7.2.18-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
   && export PATH=$PATH:/opt/bin \
@@ -339,7 +339,7 @@ ENV PECL_EXTENSION \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-    --mount=type=bind,from=php:7.2.17-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+    --mount=type=bind,from=php:7.2.18-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       \
       && export PATH=$PATH:/opt/bin \

@@ -2,7 +2,7 @@ FROM debian:stretch-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.3.4
+ARG PHP_VERSION=7.3.5
 
 ARG PHP_NUM=73
 
