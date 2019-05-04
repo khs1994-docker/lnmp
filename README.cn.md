@@ -219,7 +219,7 @@ $ ./lnmp-docker down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.0`        | **2.8.0**              |`Alpine:3.9`    |
+|[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.1`        | **2.8.1**              |`Alpine:3.9`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.15.12-alpine`| **1.15.12**             |`Alpine:3.9`    |
 |[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/php:7.3.5-unit-alpine`| **1.8.0**             |`Alpine:3.9`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.39-alpine`       | **2.4.39**             |`Alpine:3.9`    |
