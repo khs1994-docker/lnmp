@@ -953,7 +953,7 @@ XXX
       docker container rm -f `
           $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
 echo "
-This local server support Docker Desktop EDGE v2.0.1.0(30090)
+This local server support Docker Desktop EDGE v2.0.4.0(33772)
 
 "
       if ('down' -eq $args[1]){
@@ -973,12 +973,12 @@ This local server support Docker Desktop EDGE v2.0.1.0(30090)
         --label com.khs1994.lnmp.gcr.io `
         registry
 
-      $images="kube-controller-manager:v1.13.0", `
-      "kube-apiserver:v1.13.0", `
-      "kube-scheduler:v1.13.0", `
-      "kube-proxy:v1.13.0", `
-      "etcd:3.2.24", `
-      "coredns:1.2.6", `
+      $images="kube-controller-manager:v1.14.1", `
+      "kube-apiserver:v1.14.1", `
+      "kube-scheduler:v1.14.1", `
+      "kube-proxy:v1.14.1", `
+      "etcd:3.3.10", `
+      "coredns:1.3.1", `
       "pause:3.1"
 
       foreach ($image in $images){

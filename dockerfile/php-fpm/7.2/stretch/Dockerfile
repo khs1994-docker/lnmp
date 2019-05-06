@@ -2,7 +2,7 @@
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.17
+ARG PHP_VERSION=7.2.18
 ARG IMAGE=php
 
 FROM ${IMAGE}:${PHP_VERSION}-fpm-stretch

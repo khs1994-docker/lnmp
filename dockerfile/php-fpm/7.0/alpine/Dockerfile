@@ -133,7 +133,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
            done \
         && docker-php-ext-enable opcache \
         && docker-php-ext-enable $PECL_EXTENSION opcache \
-        && apk del --no-cache .build-deps .php-fpm-build-deps \
+        && apk del --no-network --no-cache .build-deps .php-fpm-build-deps \
 # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
@@ -145,5 +145,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/error.log \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm
+
+STOPSIGNAL SIGQUIT
 
 WORKDIR /app

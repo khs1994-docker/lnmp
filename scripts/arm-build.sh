@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
+set -e
+
 print_help_info(){
 echo "
 
 Usage:
 
-manifest  [7.3.4] [TYPE:fpm | composer | unit | swoole | supervisord ]
-build     [7.3.4] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | ... ]
+manifest  [7.3.5] [TYPE:fpm | composer | unit | swoole | supervisord ]
+build     [7.3.5] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | composer | ... ]
 
 "
 }
@@ -49,7 +51,7 @@ manifest(){
   local version=$1
   local type=$2
 
-docker pull khs1994/php:${version}-${type}-alpine
+# docker pull khs1994/php:${version}-${type}-alpine
 
 docker manifest create khs1994/php:${version}-${type}-alpine \
     khs1994/php:${version}-${type}-alpine \
@@ -83,23 +85,23 @@ fi
 set -x
 
 if [ "$1" = 'manifest' ];then
-  manifest ${2:-7.3.4} ${3:-fpm}
+  manifest ${2:-7.3.5} ${3:-fpm}
   exit
 fi
 
 if [ "$1" = 'build' ];then
-  build ${2:-7.3.4} ${3:-arm32v7} ${4:-7.3/alpine} ${5:-fpm}
+  build ${2:-7.3.5} ${3:-arm32v7} ${4:-7.3/alpine} ${5:-fpm}
   exit
 fi
 
-# build 7.2.17 arm32v7 7.2/alpine fpm
-# build 7.2.17 arm64v8 7.2/alpine fpm
+# build 7.2.18 arm32v7 7.2/alpine fpm
+# build 7.2.18 arm64v8 7.2/alpine fpm
 
-build 7.3.4 arm32v7 7.3/alpine fpm
-build 7.3.4 arm32v7 7.3/composer composer
+build 7.3.5 arm32v7 7.3/alpine fpm
+build 7.3.5 arm32v7 7.3/composer composer
 
-build 7.3.4 arm64v8 7.3/alpine fpm
-build 7.3.4 arm64v8 7.3/composer composer
+build 7.3.5 arm64v8 7.3/alpine fpm
+build 7.3.5 arm64v8 7.3/composer composer
 
-manifest 7.3.4 fpm
-manifest 7.3.4 composer
+manifest 7.3.5 fpm
+manifest 7.3.5 composer

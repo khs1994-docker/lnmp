@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.2.17
+ARG PHP_VERSION=7.2.18
 ARG IMAGE=khs1994/php
 
 FROM ${IMAGE}:${PHP_VERSION}-fpm-alpine as php

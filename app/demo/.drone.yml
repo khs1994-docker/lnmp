@@ -27,7 +27,7 @@ steps:
   # install dep
   - name: install
     # image: composer:1.8.4
-    image: khs1994/php:7.3.4-composer-alpine
+    image: khs1994/php:7.3.5-composer-alpine
     commands:
       - pwd
       - composer config -g repo.packagist composer https://packagist.laravel-china.org
@@ -39,7 +39,7 @@ steps:
 
   # test script
   - name: script
-    image: khs1994/php:7.3.4-fpm-alpine
+    image: khs1994/php:7.3.5-fpm-alpine
     # pull: always
     # detach: true
     # privileged: true
@@ -83,7 +83,7 @@ steps:
     settings:
       # registry: docker.khs1994.com
       repo: khs1994/php
-      tags: 7.3.4-pro-${DRONE_TAG}-alpine
+      tags: 7.3.5-pro-${DRONE_TAG}-alpine
       target: php
       mirror: https://registry.docker-cn.com
       # build_args:
@@ -133,7 +133,7 @@ steps:
     image: plugins/docker
     settings:
       repo: khs1994/php
-      tags: 7.3.4-pro-${DRONE_TAG}-alpine
+      tags: 7.3.5-pro-${DRONE_TAG}-alpine
       target: php
       mirror: https://registry.docker-cn.com
       username:
@@ -170,7 +170,7 @@ steps:
       event: [ tag ]
 
   - name: after_success
-    image: khs1994/php:7.3.4-composer-alpine
+    image: khs1994/php:7.3.5-composer-alpine
     when:
       status: success
     commands:
@@ -226,9 +226,9 @@ volumes:
 #   COMPOSER_VERSION:
 #     - 1.8.0
 #   PHP_VERSION:
-#     - 7.3.4
-#     - 7.2.17
-#     - 7.1.28
+#     - 7.3.5
+#     - 7.2.18
+#     - 7.1.29
 #     # - 7.0.33
 #     # - 5.6.40
 #   NGINX_VERSION:
@@ -245,9 +245,9 @@ volumes:
 
 # matrix:
 #   include:
-#     - PHP_VERSION=7.2.17
+#     - PHP_VERSION=7.2.18
 #       REDIS_VERSION=5.0.4
-#     - PHP_VERSION=7.1.28
+#     - PHP_VERSION=7.1.29
 #       REDIS_VERSION=5.0.4
 
 # trigger:
