@@ -8,13 +8,13 @@
 #
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
-ARG NODE_VERSION=12.0.0
-ARG PHP_VERSION=7.3.4
+ARG NODE_VERSION=12.1.0
+ARG PHP_VERSION=7.3.5
 ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-12.0.0}-alpine as frontend
+FROM node:${NODE_VERSION:-12.1.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -36,7 +36,7 @@ RUN cd /app \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.4-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.5-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/
@@ -51,7 +51,7 @@ RUN cd /app \
              --no-plugins
 
 # 3.将项目打入 PHP 镜像
-# $ docker build -t khs1994/php:7.3.4-pro-GIT_TAG-alpine --target=php .
+# $ docker build -t khs1994/php:7.3.5-pro-GIT_TAG-alpine --target=php .
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
 COPY . /app/EXAMPLE/

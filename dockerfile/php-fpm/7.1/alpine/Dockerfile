@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.1.28
+ARG PHP_VERSION=7.1.29
 ARG IMAGE=php
 
 FROM ${IMAGE}:${PHP_VERSION}-fpm-alpine as php
@@ -146,7 +146,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default) \
         || docker-php-ext-enable opcache \
-        && apk del --no-cache .build-deps .php-fpm-build-deps \
+        && apk del --no-network --no-cache .build-deps .php-fpm-build-deps \
 # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
