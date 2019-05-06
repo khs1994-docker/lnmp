@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 print_help_info(){
 echo "
 
@@ -49,7 +51,7 @@ manifest(){
   local version=$1
   local type=$2
 
-docker pull khs1994/php:${version}-${type}-alpine
+# docker pull khs1994/php:${version}-${type}-alpine
 
 docker manifest create khs1994/php:${version}-${type}-alpine \
     khs1994/php:${version}-${type}-alpine \

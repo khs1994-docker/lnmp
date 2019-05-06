@@ -37,8 +37,9 @@ ENV PHPIZE_DEPS \
 # persistent / runtime deps
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       set -ex \
+      && rm -rf /var/cache/apk/* \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-      && apk add --virtual .persistent-deps \
+      && apk add \
                  curl \
                  tar \
                  xz \
@@ -148,11 +149,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   --mount=type=bind,from=php:7.3.5-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
+  && rm -rf /var/cache/apk/* \
   && export PATH=$PATH:/opt/bin \
   && cd /opt/bin \
   && for file in `ls docker-php-*`; \
    do \
-   sed -i "s#apk --no-cache#apk#g" $file; \
+   sed -i "s#apk add --no-cache#apk add#g" $file; \
    done \
   \
   ; mkdir -p $PHP_INI_DIR/conf.d \
@@ -275,11 +277,11 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
-	&& apk add --virtual .php-rundeps $runDeps \
+	&& apk add $runDeps \
   \
   && strip --strip-all /usr/local/lib/libphp7.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del --no-cache .build-deps \
+  && apk del --no-network --no-cache .build-deps \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
@@ -293,6 +295,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   cd /usr/src \
+  && rm -rf /var/cache/apk/* \
   && wget https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
   && tar -zxvf ${NGINX_UNIT_VERSION}.tar.gz \
   && mv unit-${NGINX_UNIT_VERSION} unit \
@@ -308,7 +311,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   && strip --strip-all /usr/local/nginx-unit/sbin/unitd \
   && mkdir -p /usr/local/sbin \
   && ln -sf /usr/local/nginx-unit/sbin/unitd /usr/local/sbin/unitd \
-  && apk del --no-cache .build-deps \
+  && apk del --no-network --no-cache .build-deps \
   && rm -rf /usr/src/* \
   && mkdir -p /var/log/nginx-unit \
   && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log
@@ -335,12 +338,13 @@ ENV PECL_EXTENSION \
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
     --mount=type=bind,from=php:7.3.5-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
+      && rm -rf /var/cache/apk/* \
       \
       && export PATH=$PATH:/opt/bin \
       && cd /opt/bin \
       && for file in `ls docker-php-*`; \
         do \
-        sed -i "s#apk --no-cache#apk#g" $file; \
+        sed -i "s#apk add --no-cache#apk add#g" $file; \
         done \
       \
       && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
@@ -353,7 +357,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
            && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
            && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
          done \
-      ; apk del --no-cache .pecl_build_deps \
+      ; apk del --no-network --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
       # && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
       #      /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \

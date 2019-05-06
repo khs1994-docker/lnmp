@@ -27,7 +27,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
          && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "${extension} install error" \
          && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
        done \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=bcmath \
     # 替换源
@@ -40,7 +40,7 @@ RUN export EXT_NAME=bcmath \
     && docker-php-ext-enable $EXT_NAME \
     # 删除构建工具
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=zip \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -51,7 +51,7 @@ RUN export EXT_NAME=zip \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=gd \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -80,7 +80,7 @@ RUN export EXT_NAME=gd \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
     && rm -rf /usr/local/include/php/ext/$(echo ${EXT_NAME} | cut -d '-' -f 1) \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=pdo_mysql \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -88,7 +88,7 @@ RUN export EXT_NAME=pdo_mysql \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=mysqli \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -97,7 +97,7 @@ RUN export EXT_NAME=mysqli \
     && docker-php-ext-enable $EXT_NAME \
     && rm -rf /usr/local/include/php/ext/$(echo ${EXT_NAME} | cut -d '-' -f 1) \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=calendar \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -105,7 +105,7 @@ RUN export EXT_NAME=calendar \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=pcntl \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -113,7 +113,7 @@ RUN export EXT_NAME=pcntl \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=pdo_pgsql \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -122,7 +122,7 @@ RUN export EXT_NAME=pdo_pgsql \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=pgsql \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -131,7 +131,7 @@ RUN export EXT_NAME=pgsql \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=gmp \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -140,7 +140,7 @@ RUN export EXT_NAME=gmp \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=exif \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -149,7 +149,7 @@ RUN export EXT_NAME=exif \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=enchant \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -158,7 +158,7 @@ RUN export EXT_NAME=enchant \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=xmlrpc \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -167,7 +167,7 @@ RUN export EXT_NAME=xmlrpc \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=xsl \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -176,7 +176,7 @@ RUN export EXT_NAME=xsl \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=imap \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -185,7 +185,7 @@ RUN export EXT_NAME=imap \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=bz2 \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -194,7 +194,7 @@ RUN export EXT_NAME=bz2 \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=gettext \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -203,7 +203,7 @@ RUN export EXT_NAME=gettext \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=intl \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -212,7 +212,7 @@ RUN export EXT_NAME=intl \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 RUN export EXT_NAME=tidy \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -221,7 +221,7 @@ RUN export EXT_NAME=tidy \
     && docker-php-ext-install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps
+    && apk del --no-network --no-cache .build-deps
 
 ENV PECL_EXTENSION \
       mongodb \
@@ -238,7 +238,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
          && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
          && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
       done \
-    && apk del --no-cache .build-deps \
+    && apk del --no-network --no-cache .build-deps \
     && rm -rf /tmp/pear \
     && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
@@ -253,7 +253,7 @@ RUN export EXT_NAME=memcached \
     && pecl install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps \
+    && apk del --no-network --no-cache .build-deps \
     && rm -rf /tmp/pear \
     && rm -rf /usr/local/lib/php/doc/$EXT_NAME \
     && rm -rf /usr/local/lib/php/test/$EXT_NAME \
@@ -267,7 +267,7 @@ RUN export EXT_NAME=yaml \
     && pecl install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps \
+    && apk del --no-network --no-cache .build-deps \
     && rm -rf /tmp/pear \
     && rm -rf /usr/local/lib/php/doc/$EXT_NAME \
     && rm -rf /usr/local/lib/php/test/$EXT_NAME \
@@ -280,7 +280,7 @@ RUN export EXT_NAME=xdebug \
     && pecl install $EXT_NAME \
     && docker-php-ext-enable $EXT_NAME \
     && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-    && apk del --no-cache .build-deps \
+    && apk del --no-network --no-cache .build-deps \
     && rm -rf /tmp/pear \
     && rm -rf /usr/local/lib/php/doc/$EXT_NAME \
     && rm -rf /usr/local/include/php/ext/$EXT_NAME \
@@ -301,7 +301,7 @@ RUN export EXT_NAME=tideways_xhprof \
         && make install \
         && docker-php-ext-enable ${EXT_NAME} \
         && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-        && apk del --no-cache .build-deps \
+        && apk del --no-network --no-cache .build-deps \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default \
         && rm -rf /tmp/*
@@ -330,7 +330,7 @@ RUN export EXT_NAME=swoole \
         && make install \
         && docker-php-ext-enable ${EXT_NAME} \
         && strip --strip-all $(php-config --extension-dir)/$(echo ${EXT_NAME} | cut -d '-' -f 1).so \
-        && apk del --no-cache .build-deps \
+        && apk del --no-network --no-cache .build-deps \
         && rm -rf /usr/local/lib/php/doc/$EXT_NAME \
         && rm -rf /usr/local/include/php/ext/$EXT_NAME \
         && rm -rf /tmp/*

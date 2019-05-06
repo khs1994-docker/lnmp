@@ -57,11 +57,13 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
+      && rm -rf /var/cache/apk/* \
       && mkdir -p /usr/local/sbin \
       && cd /usr/local/bin \
       && for file in `ls docker-php-*`; \
          do \
-         sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+         sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file \
+         ; sed "s#apk add --no-cache#apk add#g" $file > /usr/local/sbin/$file; \
          done \
       && chmod +x /usr/local/sbin/docker-php-* \
       # 不要删除
@@ -143,7 +145,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
              && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
              && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
-        && apk del --no-cache .build-deps .php-swoole-build-deps \
+        && apk del --no-network --no-cache .build-deps .php-swoole-build-deps \
         && rm -rf /tmp/* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         && rm -rf /usr/local/sbin

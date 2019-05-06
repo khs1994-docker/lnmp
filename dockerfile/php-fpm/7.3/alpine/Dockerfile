@@ -58,10 +58,12 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
+      && rm -rf /var/cache/apk/* \
       && cd /usr/local/bin \
       && for file in `ls docker-php-*`; \
          do \
-         sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file; \
+         sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file \
+         ; sed "s#apk add --no-cache#apk add#g" $file > /usr/local/sbin/$file; \
          done \
       && chmod +x /usr/local/sbin/docker-php-* \
 # 不要删除
@@ -154,7 +156,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default) \
         || docker-php-ext-enable opcache \
-        && apk del --no-cache .build-deps .php-fpm-build-deps \
+        && apk del --no-network --no-cache .build-deps .php-fpm-build-deps \
         && rm -rf /tmp/* \
 # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \

@@ -36,8 +36,9 @@ ENV PHPIZE_DEPS \
 # persistent / runtime deps
 RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       set -ex \
+      && rm -rf /var/cache/apk/* \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-      && apk add --virtual .persistent-deps \
+      && apk add \
                  curl \
                  tar \
                  xz \
@@ -144,11 +145,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
+  && rm -rf /var/cache/apk/* \
   && export PATH=$PATH:/opt/bin \
   && cd /opt/bin \
   && for file in `ls docker-php-*`; \
   do \
-  sed -i "s#apk --no-cache#apk#g" $file; \
+  sed -i "s#apk add --no-cache#apk add#g" $file; \
   done \
   \
   ; cp /opt/bin/docker-php-entrypoint /usr/local/bin \
@@ -166,7 +168,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
        git clone --depth=1 ${PHP_GIT} php; \
      fi \
   \
-  && apk del --no-cache git openssh-client \
+  && apk del --no-network --no-cache git openssh-client \
 	# wget -O php.tar.xz "$PHP_URL"; \
 	# if [ -n "$PHP_SHA256" ]; then \
 	# 	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
@@ -185,7 +187,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 	# 	command -v gpgconf > /dev/null && gpgconf --kill all; \
 	# 	rm -rf "$GNUPGHOME"; \
 	# fi; \
-	# && apk del --no-cache .fetch-deps \
+	# && apk del --no-network --no-cache .fetch-deps \
 	&& apk add --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
@@ -316,13 +318,13 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
-	&& apk add --virtual .php-rundeps $runDeps \
+	&& apk add $runDeps \
   \
   # https://github.com/docker-library/php/issues/443
   # && pecl update-channels \
 	# && rm -rf /tmp/pear ~/.pearrc \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del .build-deps
+  && apk del --no-network --no-cache .build-deps
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
@@ -350,11 +352,12 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
     --mount=type=cache,target=/usr/local/lib/php/test \
     --mount=type=cache,target=/usr/local/lib/php/doc \
       set -x \
+      && rm -rf /var/cache/apk/* \
       && export PATH=$PATH:/opt/bin \
       && cd /opt/bin \
       && for file in `ls docker-php-*`; \
       do \
-      sed -i "s#apk --no-cache#apk#g" $file; \
+      sed -i "s#apk add --no-cache#apk add#g" $file; \
       done \
       && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --virtual .pecl_run_deps $PECL_RUN_DEPS \
@@ -375,7 +378,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
            && strip --strip-all $(php-config --extension-dir)/${EXT_REAL_NAME}.so || true ; \
          done \
          \
-      ; apk del --no-cache .pecl_build_deps \
+      ; apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 

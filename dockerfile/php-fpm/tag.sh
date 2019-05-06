@@ -71,18 +71,18 @@ if [[ "$PHP_VERSION" = "7_3_X" && "$FPM" = "1" ]];then
 fi
 
 if [[ "$PHP_VERSION" = "7_3_X" && "$COMPOSER" = "1" ]];then
-  docker pull khs1994/php:${PHP_TAG_VERSION}-fpm-alpine
+  # docker pull khs1994/php:${PHP_TAG_VERSION}-fpm-alpine
   # docker pull khs1994/php:${PHP_TAG_VERSION}-composer-alpine
   wget https://raw.githubusercontent.com/khs1994-docker/lnmp/18.09/scripts/arm-build.sh
   chmod +x arm-build.sh
 
   archList="arm32v7 arm64v8"
 
-  for arch in ${archList}; \
-  do \
-    docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-fpm-alpine \
-    && docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-composer-alpine ; \
-  done \
+  # for arch in ${archList}; \
+  # do \
+  #   docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-fpm-alpine \
+  #   && docker pull khs1994/${arch}-php:${PHP_TAG_VERSION}-composer-alpine ; \
+  # done \
   && ./arm-build.sh manifest 7.3.5 fpm \
   ; ./arm-build.sh manifest 7.3.5 composer || true
 fi
