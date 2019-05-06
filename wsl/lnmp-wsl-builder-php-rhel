@@ -159,7 +159,7 @@ _libzip(){
     sudo rpm -Uvh libzip*rpm ; cd -
 }
 
-    test ${PHP_NUM} = '72' && _libzip
+    test ${PHP_NUM} -ge '72' && _libzip
 
     export PHP_DEP="libedit \
 zlib \
