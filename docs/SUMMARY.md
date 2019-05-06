@@ -104,5 +104,5 @@
 * [systemd](systemd.md)
 * [Git](git.md)
 * [Git GPG](gpg.md)
-* [国内网络问题](cn.md)
+* [国内网络问题](network.md)
 * [常用镜像站点](mirror.md)

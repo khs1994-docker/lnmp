@@ -410,7 +410,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       && for file in `ls docker-php-*`; \
       do \
       sed -i "s#apk add --no-cache#apk add#g" $file; \
-      done \s
+      done \
       && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && curl -sfL -o /usr/local/bin/pickle \

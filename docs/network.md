@@ -12,6 +12,8 @@
 
 * PHP `composer`
 
+* Alpine apk https://mirrors.alpinelinux.org/
+
 解决思路：
 
 镜像构建尽可能使用 CI 服务器，国内云服务商均免费提供国外的容器构建环境。
