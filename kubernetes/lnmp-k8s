@@ -83,7 +83,7 @@ if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION} ];then
     mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}
     mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes
 
-    docker container rm khs1994-coreos-kubernetes > /dev/null 2>&1 || echo > /dev/null
+    docker container rm khs1994-coreos-kubernetes > /dev/null 2>&1 || true
     docker container create --name khs1994-coreos-kubernetes \
       ccr.ccs.tencentyun.com/khs1994/kubernetes:v${KUBERNETES_VERSION}
     docker container cp khs1994-coreos-kubernetes:/srv.tar.gz kubernetes-release/release
@@ -180,7 +180,7 @@ _create(){
      exit
   fi
 
-  kubectl create namespace lnmp > /dev/null 2>&1 || echo > /dev/null
+  kubectl create namespace lnmp > /dev/null 2>&1 || true
 
   _create_pv
 
@@ -225,7 +225,7 @@ kubectl-install(){
   if [ "$os" = 'Linux' ];then
     command -v docker
     if [ $? -eq 0 ];then
-      docker container rm -f khs1994-kubectl > /dev/null 2>&1 || echo > /dev/null
+      docker container rm -f khs1994-kubectl > /dev/null 2>&1 || true
       docker container create --name=khs1994-kubectl khs1994/coreos:cert
       docker container cp khs1994-kubectl:/usr/local/bin/kubectl .
       docker container rm -f khs1994-kubectl
@@ -304,11 +304,9 @@ _k8s_install(){
   fi
 
   # 安装依赖软件
-  command -v dnf && sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs
-
-  command -v yum && sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs
+  command -v dnf && (sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
+    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) || command -v yum && (sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
+    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs)
 
   command -v apt && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp2 > /dev/null && sudo /usr/sbin/modprobe ip_vs
@@ -321,7 +319,7 @@ _k8s_install(){
   _flanneld
 
   sudo mkdir -p ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs
-  
+
   print1_info "copy systemd unit file ..."
   sudo cp systemd/*.service /etc/systemd/system/
   sudo cp systemd/certs/*.pem ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
@@ -342,7 +340,7 @@ _k8s_install(){
   fi
 
   sudo chmod +x /opt/bin/k8s/*
-  
+
   print1_info "copy kubernetes conf and cert file ..."
   sudo cp systemd/certs/*.kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
   sudo cp systemd/kubelet.config.json systemd/kube-proxy.config.yaml ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
@@ -379,7 +377,7 @@ _k8s_install(){
 
   sudo systemctl daemon-reload
 
-  sudo useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || echo > /dev/null
+  sudo useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
 
   # sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
 
@@ -420,13 +418,12 @@ _helm(){
   set +e
   for service in ${HELM_SERVICES[@]}
   do
-    helm install ./$service \
-        --name lnmp-$service-${lnmp_app_env} \
+    helm install lnmp-$service-${lnmp_app_env} ./$service \
         --namespace lnmp-${lnmp_app_env} \
         --set APP_ENV=${lnmp_app_env} \
         --set platform=$(uname -s) \
         --set username=$(whoami) \
-        --tls $opt
+        $opt
   done
 }
 

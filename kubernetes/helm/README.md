@@ -33,9 +33,9 @@ $ ./lnmp-k8s helm-production [--debug]
 ## 删除
 
 ```bash
-$ helm list --tls
+$ helm list
 
-$ helm delete NAME --purge --tls
+$ helm delete NAME --purge
 ```
 
 ## 回退
