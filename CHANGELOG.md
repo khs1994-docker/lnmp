@@ -18,3 +18,4 @@
 * [Memcached `1.5.14`](https://github.com/memcached/memcached/wiki/ReleaseNotes1514)
 * MongoDB `4.1.11`
 * [MariaDB `10.4.4`](https://mariadb.com/kb/en/library/mariadb-1044-release-notes/)
+* [PostgreSQL `11.3`](https://www.postgresql.org/about/news/1939/)

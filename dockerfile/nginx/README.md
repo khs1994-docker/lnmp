@@ -77,7 +77,7 @@ traffic: 17.12KB (17532) total, 1.70KB (1742) headers (space savings 90.10%), 13
 time for request:    10.71ms    103.80ms     71.21ms     17.92ms    74.00%
 time for connect:   118.40ms    307.03ms    178.26ms     61.53ms    80.00%
 time to 1st byte:   163.51ms    396.44ms    232.83ms     73.78ms    80.00%
-req/s           :      10.59       12.09       11.25        0.57    60.00%
+req/s           :      10.59       12.09       11.35        0.57    60.00%
 ```
 
 ## official
