@@ -8,6 +8,8 @@
 
 ### Bug fixes:
 
+* `registry.docker-cn.com` is down
+
 ### Changes:
 
 ### Updates:
