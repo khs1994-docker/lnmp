@@ -145,9 +145,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.4.0"
+  #   image: "mariadb:10.4.4"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.4.0
+  #   # image: khs1994/lnmp-mariadb:10.4.4
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
