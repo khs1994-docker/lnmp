@@ -80,7 +80,7 @@ services:
 
   redis:
     << : *default-common
-    image: redis:${CI_REDIS_VERSION:-5.0.4}-alpine
+    image: redis:${CI_REDIS_VERSION:-5.0.5}-alpine
     volumes:
       - redis-data:/data
 
