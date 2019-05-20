@@ -1,4 +1,4 @@
-FROM mongo:4.1.10
+FROM mongo:4.1.11
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
