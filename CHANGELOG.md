@@ -18,6 +18,7 @@
 * [Redis `5.0.5`](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
 * [MySQL `8.0.16`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-16.html)
 * [Memcached `1.5.14`](https://github.com/memcached/memcached/wiki/ReleaseNotes1514)
-* MongoDB `4.1.11`
 * [MariaDB `10.4.4`](https://mariadb.com/kb/en/library/mariadb-1044-release-notes/)
 * [PostgreSQL `11.3`](https://www.postgresql.org/about/news/1939/)
+* MongoDB `4.1.11`
+* Node `12.2.0`
