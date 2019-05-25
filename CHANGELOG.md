@@ -21,4 +21,4 @@
 * [MariaDB `10.4.5`](https://mariadb.com/kb/en/library/mariadb-1045-release-notes/)
 * [PostgreSQL `11.3`](https://www.postgresql.org/about/news/1939/)
 * MongoDB `4.1.11`
-* Node `12.2.0`
+* Node `12.3.1`
