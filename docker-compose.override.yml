@@ -13,15 +13,15 @@ x-common:
 services:
   mysql:
     << : *default-common
-    image: mysql:${LNMP_MYSQL_VERSION:-8.0.15}
+    image: mysql:${LNMP_MYSQL_VERSION:-8.0.16}
 
   mariadb:
     << : *default-common
-    image: mariadb:${LNMP_MYSQL_VERSION:-10.4.0}
+    image: mariadb:${LNMP_MYSQL_VERSION:-10.4.5}
 
   redis:
     << : *default-common
-    image: redis:${LNMP_REDIS_VERSION:-5.0.4}-alpine
+    image: redis:${LNMP_REDIS_VERSION:-5.0.5}-alpine
 
   memcached:
     << : *default-common
@@ -37,7 +37,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: mongo:${LNMP_MONGODB_VERSION:-4.1.10}
+    image: mongo:${LNMP_MONGODB_VERSION:-4.1.11}
 
   php7:
     << : *default-common

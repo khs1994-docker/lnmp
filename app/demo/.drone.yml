@@ -205,13 +205,13 @@ services:
     command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # - name: postgresql
-  #   image: postgres:11.2-alpine
+  #   image: postgres:11.3-alpine
   #   environment:
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_DB=test
 
   - name: redis
-    image: redis:5.0.4-alpine
+    image: redis:5.0.5-alpine
 
   # - name: mongodb
   #   image: mongo:4.1.0
@@ -234,21 +234,21 @@ volumes:
 #   NGINX_VERSION:
 #     - 1.15.12
 #   REDIS_VERSION:
-#     - 5.0.4
+#     - 5.0.5
 #   MYSQL_VERSION:
-#     # - 8.0.15
+#     # - 8.0.16
 #     - 5.7.22
 #   MONGODB_VERSION:
 #     - 4.1.0
 #   POSTGRESQL_VERSION:
-#     - 11.2-alpine
+#     - 11.3-alpine
 
 # matrix:
 #   include:
 #     - PHP_VERSION=7.2.18
-#       REDIS_VERSION=5.0.4
+#       REDIS_VERSION=5.0.5
 #     - PHP_VERSION=7.1.29
-#       REDIS_VERSION=5.0.4
+#       REDIS_VERSION=5.0.5
 
 # trigger:
 #   branch:

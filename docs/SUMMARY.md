@@ -43,7 +43,6 @@
     * [Composer](composer.md)
     * [PHPUnit](phpunit.md)
     * [XHProf](xhprof.md)
-    * [微信小程序 PHP 后端部署](wechat.md)
     * [Swoole](swoole.md)
 
 ## 私有化 composer
@@ -56,7 +55,7 @@
 * [生产环境(重要)](production.md)
     * [Swarm mode](swarm/README.md)
     * [Kubernetes](kubernetes/README.md)
-        * [k8s on Docker for Desktop](kubernetes/docker-desktop.md)
+        * [k8s on Docker Desktop](kubernetes/docker-desktop.md)
     * [Docker Registry](registry.md)
 
 ## 计划任务
@@ -104,5 +103,5 @@
 * [systemd](systemd.md)
 * [Git](git.md)
 * [Git GPG](gpg.md)
-* [国内网络问题](cn.md)
+* [国内网络问题](network.md)
 * [常用镜像站点](mirror.md)

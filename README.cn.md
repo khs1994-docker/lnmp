@@ -223,17 +223,17 @@ $ ./lnmp-docker down
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.15.12-alpine`| **1.15.12**             |`Alpine:3.9`    |
 |[NGINX Unit](https://github.com/nginx/unit)                       |`khs1994/php:7.3.5-unit-alpine`| **1.8.0**             |`Alpine:3.9`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.39-alpine`       | **2.4.39**             |`Alpine:3.9`    |
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.15`              | **8.0.15**             |`Debian:stretch`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.0`            | **10.4.0**             |`Ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.4-alpine`        | **5.0.4**            |`Alpine:3.9`    |
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.16`              | **8.0.16**             |`Debian:stretch`|
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.5`            | **10.4.5**             |`Ubuntu:bionic` |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.5-alpine`        | **5.0.5**            |`Alpine:3.9`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.3.5-fpm-alpine`  | **7.3.5**       |`Alpine:3.9`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.3.5-composer-alpine`  | **5.8.x**       |`Alpine:3.9`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.5-composer-alpine`  | **1.8.5**       |`Alpine:3.9`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.3.5-composer-alpine`  | **2.14.3**      |`Alpine:3.9`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.12-alpine`           | **1.5.12**       |`Alpine:3.9`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.3.5-composer-alpine`  | **2.15.0**      |`Alpine:3.9`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.15-alpine`           | **1.5.15**       |`Alpine:3.9`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.14-management-alpine` | **3.7.14**       |`Alpine:3.8`    |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.2-alpine`             | **11.2**        |`Alpine:3.9`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.10`                      | **4.1.10**       |`Ubuntu:xenial` |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.3-alpine`             | **11.3**        |`Alpine:3.9`    |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.11`                      | **4.1.11**       |`Ubuntu:bionic` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.9`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.8`    |
 

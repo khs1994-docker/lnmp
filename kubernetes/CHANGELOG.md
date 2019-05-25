@@ -1,5 +1,7 @@
 # CHANGELOG
 
+* helm 3
+
 * Kubernetes version please see `.env.example`
 
 * move `kubernetes-server` command from `./coreos/coreos` to `./lnmp-k8s`

@@ -36,12 +36,12 @@ script:
   - cp .env.example .env
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   # - docker-compose build ${PHP_VERSION} --parallel
-  - if [ -n "$UNIT" ];then docker build --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${FOLDER}/unit; fi
-  - if [ -n "$SUPERVISORD" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${FOLDER}/supervisord; fi
-  - if [ -n "$COMPOSER" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine ${FOLDER}/composer; fi
-  - if [ -n "$SINGLE" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${FOLDER}/single; fi
-  - if [ -n "$SWOOLE" ];then docker build -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${FOLDER}/swoole; fi
-  - if [ -n "$FPM" ];then docker build --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${FOLDER}/alpine; fi
+  - if [ -n "$UNIT" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${FOLDER}/unit; fi
+  - if [ -n "$SUPERVISORD" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${FOLDER}/supervisord; fi
+  - if [ -n "$COMPOSER" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine ${FOLDER}/composer; fi
+  - if [ -n "$SINGLE" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${FOLDER}/single; fi
+  - if [ -n "$SWOOLE" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${FOLDER}/swoole; fi
+  - if [ -n "$FPM" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${FOLDER}/alpine; fi
 
 after_success:
   - if [ -z "$TRAVIS_TAG" ];then if [ "$PHP_VERSION" = 7_4_X -o "$PHP_VERSION" = nightly ];then true;else exit 0;fi; fi
@@ -87,7 +87,6 @@ env:
 
   - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly FPM=1
   - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly SWOOLE=1
-  - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly JIT=1
   - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly COMPOSER=1
 
   global:

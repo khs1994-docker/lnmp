@@ -136,8 +136,8 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker for Desktop Kubernetes [ --no-pull | ]
+  dashboard            Print how run kubernetes dashboard in Docker Desktop
+  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -314,7 +314,7 @@ Warning
 
 this command up a local server on port 443.
 
-When Docker for Desktop Start Kubernetes Success, you must remove this local server.
+When Docker Desktop Start Kubernetes Success, you must remove this local server.
 
 \$ lnmp-docker gcr.io down
 
@@ -584,7 +584,7 @@ install_docker_compose_arm(){
 }
 
 install_docker_compose(){
-  if ! [ "$OS" = 'Linux' ];then echo; print_error "Docker For Mac not Support install docker-compose"; exit 1; fi
+  if ! [ "$OS" = 'Linux' ];then echo; print_error "Docker Desktop not Support install docker-compose"; exit 1; fi
   if [ "${ARCH}" = 'armv7l' ] || [ ${ARCH} = 'aarch64' ];then
     install_docker_compose_arm "$@"
   elif [ "$ARCH" = 'x86_64' ];then
@@ -623,7 +623,7 @@ docker_compose(){
       # 判断 OS
       if [ "$OS" = 'Darwin' ] ;then
         print_error \
-"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Mac\n"
+"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker Desktop\n"
       exit
       elif [ "$OS" = 'Linux' ];then
         print_error \
@@ -631,7 +631,7 @@ docker_compose(){
       exit
       elif [ "$OS" = 'MINGW64_NT-10.0' ];then
         print_error \
-"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker for Windows\n"
+"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker Desktop\n"
       exit
       else
         notsupport

@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: registry.cn-hangzhou.aliyuncs.com/google_containers/heapster-grafana-amd64:v5.0.4
+        image: registry.cn-hangzhou.aliyuncs.com/google_containers/heapster-grafana-amd64:v5.0.5
         ports:
         - containerPort: 3000
           protocol: TCP

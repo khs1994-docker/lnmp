@@ -31,7 +31,7 @@ zend_extension=xdebug
 
 编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_HOST=192.168.199.100` 变量为你电脑的 IP，这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改此变量。
 
-#### Docker for Windows or macOS
+#### Docker Desktop
 
 在 Docker 设置中没有配置自定义 DNS 的情况下可以使用 `LNMP_XDEBUG_REMOTE_HOST=host.docker.internal`。
 

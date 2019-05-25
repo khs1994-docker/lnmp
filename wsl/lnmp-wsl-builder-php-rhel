@@ -152,14 +152,14 @@ _libzip(){
 
     cd /tmp
 
-    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
+    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.3-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
-    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
+    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.3-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
     sudo rpm -Uvh libzip*rpm ; cd -
 }
 
-    test ${PHP_NUM} = '72' && _libzip
+    test ${PHP_NUM} -ge '72' && _libzip
 
     export PHP_DEP="libedit \
 zlib \
@@ -329,18 +329,21 @@ _builder(){
                                              --with-jpeg \
                                              --with-webp \
                                              --with-xpm \
-                                             --with-ffi=shared" \
+                                             --with-ffi=shared \
+                                             --with-libxml \
+                                             --with-zip" \
         || echo "--with-pcre-regex \
                  --with-gd \
                    --with-freetype-dir=/usr/lib \
                    --with-jpeg-dir=/usr/lib \
                    --with-png-dir=/usr/lib \
-                   --with-xpm-dir=/usr/lib") \
+                   --with-xpm-dir=/usr/lib \
+                   --enable-libxml \
+                   --enable-zip") \
             --disable-gd-jis-conv \
         --enable-ftp \
         --enable-mysqlnd \
         --enable-bcmath \
-        $( test $PHP_NUM -ge "74" && echo "--with-libxml" || echo "--enable-libxml" ) \
         --enable-inline-optimization \
         --enable-mbregex \
         --enable-mbstring \
@@ -352,7 +355,6 @@ _builder(){
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
         --enable-xml \
-        --enable-zip \
         --enable-calendar=shared \
         --enable-intl=shared \
         --enable-embed=shared \
@@ -368,9 +370,9 @@ _builder(){
          echo $( if ! [ "${ARGON2}" = 'false' ];then \
                    echo "--with-password-argon2"; \
                  fi ); \
-         echo "--with-sodium --with-libzip --with-pcre-jit"; \
+         echo "--with-sodium --with-pcre-jit"; \
          if [ $PHP_NUM -lt "74" ];then \
-           echo "--with-webp-dir=/usr/lib"; \
+           echo "--with-webp-dir=/usr/lib --with-libzip"; \
          fi; \
        fi ) \
         --enable-exif \

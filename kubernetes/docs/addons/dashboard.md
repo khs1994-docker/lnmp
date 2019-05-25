@@ -71,7 +71,7 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 
 ```bash
 # 设置集群参数
-# Docker for desktop k8s
+# Docker desktop k8s
 # $ export KUBE_APISERVER=https://localhost:6445
 # $ export K8S_CONF_PATH=/opt/bin/k8s/conf
 

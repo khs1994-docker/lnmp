@@ -60,7 +60,7 @@ fi
 
 docker --version
 
-# cp docker for windows k8s config
+# cp docker desktop k8s config
 
 mkdir -p ${HOME}/.kube
 

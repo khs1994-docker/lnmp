@@ -28,7 +28,7 @@ if (Test-Path .env.ps1 ){
 $current_context=kubectl config current-context
 
 if (!($current_context -eq "docker-for-desktop")){
-   Write-Warning "This Script Support Docker for Desktop Only"
+   Write-Warning "This Script Support Docker Desktop Only"
    exit
 }
 
