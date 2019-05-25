@@ -5,7 +5,7 @@
 # 基础设施
 
 * [安装概览](install.md)
-* [Docker For Desktop](docker-desktop.md)
+* [Docker Desktop](docker-desktop.md)
 * [Minikube](minikube.md)
 * [Minikube On Windows](windows.md)
 

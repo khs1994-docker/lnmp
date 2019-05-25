@@ -1,9 +1,11 @@
 {
   "registry-mirrors": [
+    "https://dockerhub.azk8s.cn",
+    "https://reg-mirror.qiniu.com",
     "https://registry.docker-cn.com"
   ],
   "insecure-registries":[
-    "gcr.io" 
+    "gcr.io"
   ],
   "debug": true,
   "dns": [

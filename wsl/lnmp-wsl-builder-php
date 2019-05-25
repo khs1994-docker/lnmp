@@ -421,18 +421,21 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
                     --with-jpeg \
                     --with-webp \
                     --with-xpm \
-                    --with-ffi=shared" \
+                    --with-ffi=shared \
+                    --with-libxml \
+                    --with-zip" \
             || echo "--with-pcre-regex \
                      --with-gd \
                        --with-freetype-dir=/usr/lib \
                        --with-jpeg-dir=/usr/lib \
                        --with-png-dir=/usr/lib \
-                       --with-xpm-dir=/usr/lib") \
+                       --with-xpm-dir=/usr/lib \
+                       --enable-libxml \
+                       --enable-zip") \
         --disable-gd-jis-conv \
       --enable-ftp \
       --enable-mysqlnd \
       --enable-bcmath \
-      $( test $PHP_NUM -ge "74" && echo "--with-libxml" || echo "--enable-libxml" ) \
       --enable-inline-optimization \
       --enable-mbregex \
       --enable-mbstring \
@@ -444,7 +447,6 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       --enable-sysvsem=shared \
       --enable-sysvshm=shared \
       --enable-xml \
-      --enable-zip \
       --enable-calendar=shared \
       --enable-intl=shared \
       --enable-embed=shared \
@@ -461,10 +463,9 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
                    echo "--with-password-argon2"; \
                  fi ); \
          echo "--with-sodium \
-               --with-libzip \
                --with-pcre-jit"; \
          if [ $PHP_NUM -lt "74" ];then \
-           echo "--with-webp-dir=/usr/lib"; \
+           echo "--with-webp-dir=/usr/lib --with-libzip"; \
          fi; \
        fi ) \
       --enable-exif \

@@ -10,7 +10,7 @@
 
 ### 开发环境
 
-使用 Docker 桌面版（`Docker For Mac` 或者 `Docker For Windows`）。
+使用 Docker 桌面版 `Docker Desktop`。
 
 或者你可能使用的 `Linux` 系统。
 

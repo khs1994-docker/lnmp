@@ -18,7 +18,7 @@ x-common:
 services:
   mysql:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${LNMP_MYSQL_VERSION:-8.0.15}"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${LNMP_MYSQL_VERSION:-8.0.16}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
@@ -45,7 +45,7 @@ services:
 
   mariadb:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${LNMP_MARIADB_VERSION:-10.4.0}"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${LNMP_MARIADB_VERSION:-10.4.5}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
@@ -69,7 +69,7 @@ services:
 
   redis:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0.4}-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0.5}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
@@ -95,7 +95,7 @@ services:
 
   memcached:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.12}-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.15}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
@@ -114,7 +114,7 @@ services:
   postgresql:
     &postgresql
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-11.2}-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-11.3}-alpine
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
@@ -132,7 +132,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.10}
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.11}
     volumes:
       - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
       - mongodb-data:/data/db

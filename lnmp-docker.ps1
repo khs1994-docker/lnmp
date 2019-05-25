@@ -215,8 +215,8 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  dashboard            Print how run kubernetes dashboard in Docker for Desktop
-  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker for Desktop Kubernetes
+  dashboard            Print how run kubernetes dashboard in Docker Desktop
+  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)

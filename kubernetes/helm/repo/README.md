@@ -7,7 +7,7 @@ $ cd nginx-php
 
 $ helm package . [--dependency-update]
 
-# $ helm install --name lnmp-nginx-php nginx-php-0.0.1.tgz --set service.type=NodePort --tls
+# $ helm install lnmp-nginx-php nginx-php-0.0.1.tgz --set service.type=NodePort
 
 # index.yaml
 $ helm repo index . --merge ../repo/index.yaml --url https://storage.khs1994.com/charts
@@ -47,7 +47,7 @@ $ mc cp nginx-php-0.0.1.tgz myminio/charts
 ```bash
 $ helm repo add khs1994-docker https://storage.khs1994.com/charts
 
-$ helm install khs1994-docker/nginx-php --dry-run --debug --tls --set KEY=VALUE
+$ helm install lnmp-nginx-php khs1994-docker/nginx-php --dry-run --debug --set KEY=VALUE
 ```
 
 ## More Information

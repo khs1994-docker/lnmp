@@ -10,7 +10,7 @@ PHP 项目放入此文件夹中，一个项目一个文件夹。
 
 例如 `APP_ENV` 值为 `development`，那么 `Laravel` 就会加载 `.env.development` 文件
 
-* `development` Docker 容器开发环境，例如 `Docker for Mac` `Docker for Windows`
+* `development` Docker 容器开发环境，例如 `Docker Desktop`
 
 * `production` Docker 生产环境
 
