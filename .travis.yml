@@ -249,6 +249,8 @@ stages:
     if: tag =~ /^(v18)/
   - development
   - swarm
+  - name: docs
+    if: tag =~ /^(v18)/
   - name: deb
     if: tag =~ /^(v18)/
   - name: rpm

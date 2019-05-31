@@ -22,3 +22,4 @@
 * [PostgreSQL `11.3`](https://www.postgresql.org/about/news/1939/)
 * MongoDB `4.1.11`
 * Node `12.3.1`
+* [Nginx Unit `1.9.0`](https://raw.githubusercontent.com/nginx/unit/1.9.0/CHANGES)
