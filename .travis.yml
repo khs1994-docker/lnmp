@@ -265,6 +265,8 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel-72
     if: tag =~ /^(v19)/
+  - name: wsl-php-builder-rhel-73
+    if: tag =~ /^(v19)/
 
 # branches:
 #   only:
