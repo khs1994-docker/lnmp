@@ -1,7 +1,7 @@
 {
   "assignees": ["khs1994"],
   "reviewers": ["khs1994"],
-  "baseBranches": ["dev"],
+  "baseBranches": ["18.09"],
   "commitBody": "[skip ci]",
   "labels": ["renovateapp"],
   "timezone": "Asia/Shanghai",
@@ -12,7 +12,16 @@
   "ignorePaths": [
     "wsl/docker-compose.yml",
     "wsl/Dockerfile",
-    "dockerfile/php-fpm/5.6/alpine3.4/Dockerfile",
-    "dockerfile/php-fpm/7.0/alpine3.4/Dockerfile"
-  ]
+    "dockerfile/php-fpm/",
+    "app/"
+  ],
+  "docker": {
+    "enabled": true
+  },
+  "docker-compose": {
+    "enabled": true,
+    "digest": {
+      "enabled": false
+    }
+  }
 }
