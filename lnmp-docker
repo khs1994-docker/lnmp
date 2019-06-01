@@ -96,6 +96,8 @@ PCIT EE:
   pcit-cp              Copy PCIT files to app/.pcit
 
 Commands:
+  up                   Up LNMP
+  down                 Stop and remove LNMP Docker containers, networks
   acme.sh              Run original acme.sh command to issue SSL certificate
   backup               Backup MySQL databases
   build                Build or rebuild LNMP Self Build images (Only Support x86_64)
@@ -105,18 +107,16 @@ Commands:
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
   completion           Move fish shell completion code (Only Support fish)
-  up                   Up LNMP
   config               Validate and view the LNMP Compose file
-  pull                 Pull LNMP Docker Images
   debug                Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   daemon-tls           Display how to enable Docker TLS Daemon
   daemon-tls-cert      Generate Docker Daemon TLS cert
-  down                 Stop and remove LNMP Docker containers, networks
   docs                 Read support documents
   help                 Display this help message
-  nfs                  Up NFS server [ down | ]
   init                 Init LNMP environment
+  nfs                  Up NFS server [ down | ]
+  pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
   registry-up          Up Docker Registry

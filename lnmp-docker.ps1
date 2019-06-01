@@ -184,21 +184,21 @@ PCIT EE:
   pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
 
 Commands:
+  up                   Up LNMP (Support x86_64 arm32v7 arm64v8)
+  down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   backup               Backup MySQL databases
   build                Build or rebuild LNMP Self Build images (Only Support x86_64)
   build-config         Validate and view the LNMP Self Build images Compose file
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
+  config               Validate and view the LNMP Compose file
   debug                Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
-  up                   Up LNMP (Support x86_64 arm32v7 arm64v8)
-  config               Validate and view the LNMP Compose file
-  pull                 Pull LNMP Docker Images
-  down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   docs                 Support Documents
   help                 Display this help message
   init                 Init LNMP environment
+  pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
   update               Upgrades LNMP

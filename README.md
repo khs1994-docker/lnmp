@@ -226,7 +226,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/18.09/docs#%E
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.3.6-fpm-alpine`  | **7.3.6**       |`Alpine:3.9`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.3.6-composer-alpine`  | **5.8.x**       |`Alpine:3.9`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.6-composer-alpine`  | **1.8.5**       |`Alpine:3.9`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.3.6-composer-alpine`  | **2.15.0**      |`Alpine:3.9`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.3.6-composer-alpine`  | **2.15.1**      |`Alpine:3.9`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.16-alpine`           | **1.5.16**       |`Alpine:3.9`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.14-management-alpine` | **3.7.14**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.3-alpine`             | **11.3**        |`Alpine:3.9`    |
