@@ -31,7 +31,7 @@ if (!(Test-Path ${LARAVEL_PATH})){
 #     --entrypoint /docker-entrypoint.laravel.sh `
 #     --workdir /tmp `
 #     -e LARAVEL_PATH=${LARAVEL_PATH} `
-#     khs1994/php:7.3.5-composer-alpine `
+#     khs1994/php:7.3.6-composer-alpine `
     composer create-project --prefer-dist laravel/laravel=$VERSION.* "$LARAVEL_PATH"
 
 # tar -zxvf .\${LARAVEL_PATH}.tar.gz

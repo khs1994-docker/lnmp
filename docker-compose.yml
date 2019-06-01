@@ -144,7 +144,7 @@ services:
   php7:
     &php7
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.5}-fpm-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-fpm-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
@@ -183,7 +183,7 @@ services:
     << : *php7
     networks:
       - backend
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.5}-supervisord-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-supervisord-alpine"
     secrets:
       - source: supervisord_ini
         target: /etc/supervisor.d/supervisord.ini
@@ -228,7 +228,7 @@ services:
 
   nginx-unit:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.5}-unit-alpine"
+    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-unit-alpine"
     volumes:
       - ./config/${LNMP_NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached

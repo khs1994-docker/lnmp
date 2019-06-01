@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.5
+ARG PHP_VERSION=7.3.6
 ARG IMAGE=php
 
 FROM ${IMAGE}:${PHP_VERSION}-cli-alpine as php
