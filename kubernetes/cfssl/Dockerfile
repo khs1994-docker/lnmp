@@ -1,6 +1,6 @@
 FROM alpine:3.9
 
-ENV KUBECTL_VERSION=v1.14.0
+ENV KUBECTL_VERSION=v1.14.2
 
 RUN apk add --no-cache curl \
       && curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 > /usr/local/bin/cfssl \
@@ -13,7 +13,7 @@ RUN apk add --no-cache curl \
 FROM alpine:3.9
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.14.0"
+      version="1.14.2"
 
 COPY --from=0 /usr/local/bin /usr/local/bin
 
@@ -22,6 +22,8 @@ RUN apk add --no-cache bash
 WORKDIR /srv/cfssl
 
 VOLUME /srv/cfssl
+
+COPY *.yaml /
 
 COPY docker-entrypoint.sh /
 

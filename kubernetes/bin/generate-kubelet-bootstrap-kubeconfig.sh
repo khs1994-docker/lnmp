@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# NODE_NAME
+# KUBE_APISERVER
+
 set -x
 
 until curl --cacert ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/ca.pem ${KUBE_APISERVER}; do

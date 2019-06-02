@@ -22,14 +22,14 @@ ExecStartPre=/usr/bin/env ETCDCTL_API=2 /opt/bin/k8s/etcdctl \
   --ca-file="${K8S_CONF_PATH}/certs/ca.pem" \
   --cert-file="${K8S_CONF_PATH}/certs/etcd.pem" \
   --key-file="${K8S_CONF_PATH}/certs/etcd-key.pem" \
-  set /coreos.com/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
+  set /kubernetes/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
 
 ExecStart=/opt/bin/k8s/flanneld \
   --etcd-endpoints="https://192.168.199.100:2379" \
   --etcd-cafile="${K8S_CONF_PATH}/certs/ca.pem" \
   --etcd-certfile="${K8S_CONF_PATH}/certs/flanneld.pem" \
   --etcd-keyfile="${K8S_CONF_PATH}/certs/flanneld-key.pem" \
-  --etcd-prefix="/coreos.com/network"
+  --etcd-prefix="/kubernetes/network"
 
 ExecStartPost=/opt/bin/k8s/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/docker/flannel_docker_opts.env
 

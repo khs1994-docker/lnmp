@@ -61,7 +61,6 @@ module.exports = {
         'coredns',
         'dashboard',
         'efk',
-        'heapster',
         'metrics-server',
         'prometheus-operator',
         'registry',

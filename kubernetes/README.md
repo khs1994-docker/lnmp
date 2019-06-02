@@ -20,9 +20,9 @@
 
 * [Linux 单机部署](systemd)
 
-* [Docker Desktop](docs/docker-desktop.md)
+* [Docker Desktop](docs/guide/docker-desktop.md)
 
-* [MiniKube](docs/minikube.md)
+* [MiniKube](docs/guide/minikube.md)
 
 * [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
@@ -101,11 +101,11 @@ $ ./lnmp-k8s cleanup
 
 * [数据持久化](docs/volume/data.md)
 
-* [Windows 10](docs/windows.md)
+* [Windows 10](docs/guide/windows.md)
 
-* [滚动升级 不停机更新](docs/rollout.md)
+* [滚动升级 不停机更新](docs/guide/rollout.md)
 
-* [pod 网络出错](docs/network.md)
+* [pod 网络出错](docs/guide/network.md)
 
 ## 资源占用
 

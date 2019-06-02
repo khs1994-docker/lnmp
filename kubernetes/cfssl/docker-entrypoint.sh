@@ -11,14 +11,36 @@ main (){
 
   # check ca
 
-  echo '{"signing":{"default":{"expiry":"43800h","usages":["signing","key encipherment","server auth","client auth"]}}}' \
+  echo '{
+    "signing":
+      {"default":
+        {"expiry":"43800h",
+          "usages":["signing","key encipherment","server auth","client auth"]
+        }
+      }
+  }
+' \
        > ca-config.json
 
   if [ -f ca-key.pem ];then
     cp ca-key.pem ca.pem registry-ca.pem cert/
   else
     cd cert
-    echo '{"CN":"kubernetes","key":{"algo":"rsa","size":2048},"names": [{"C":"CN","ST":"Beijing","L":"Beijing","O":"k8s","OU":"khs1994.com"}]}' \
+    echo '{
+      "CN":"kubernetes",
+      "key":{
+        "algo":"rsa",
+        "size":2048
+      },
+      "names": [
+      {
+        "C":"CN",
+        "ST":"Beijing",
+        "L":"Beijing",
+        "O":"k8s",
+        "OU":"khs1994.com"
+      }]
+    }' \
          | cfssl gencert -initca - | cfssljson -bare ca -
     # ca-key.pem ca.csr ca.pem
     cd ..
@@ -32,7 +54,14 @@ main (){
   # server
   export CN_NAME=server
 
-  echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048}}' \
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"rsa",
+      "size":2048
+    }
+  }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
        -hostname="$server_hosts" - | cfssljson -bare $CN_NAME
 
@@ -46,61 +75,216 @@ main (){
   # etcd
   export CN_NAME=etcd
 
-  echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"k8s","OU":"khs1994.com"}]}' \
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"rsa",
+      "size":2048
+    },
+    "names":[{
+      "C":"CN",
+      "ST":"Beijing",
+      "L":"Beijing",
+      "O":"k8s",
+      "OU":"khs1994.com"
+      }
+    ]
+}' \
        | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
       -hostname="$server_hosts" - | cfssljson -bare $CN_NAME
 
   # client
   export CN_NAME=client
 
-  echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048}}' \
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"rsa",
+      "size":2048
+    }
+  }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -hostname="" - | cfssljson -bare $CN_NAME
 
   # flanneld (client)
   export CN_NAME=flanneld
 
-  echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"k8s","OU":"khs1994.com"}]}' \
+  echo '{"CN":"'$CN_NAME'",
+  "hosts":[""],
+  "key":{
+    "algo":"rsa",
+    "size":2048
+  },
+  "names":[{
+    "C":"CN",
+    "ST":"Beijing",
+    "L":"Beijing",
+    "O":"k8s",
+    "OU":"khs1994.com"
+  }]
+}' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -hostname="" - | cfssljson -bare $CN_NAME
 
   # admin (client)
   export CN_NAME=admin
 
-  echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"system:masters","OU":"khs1994.com"}]}' \
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"rsa",
+      "size":2048
+    },
+    "names":[{
+      "C":"CN",
+      "ST":"Beijing",
+      "L":"Beijing",
+      "O":"system:masters",
+      "OU":"khs1994.com"
+    }]
+    }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
        -hostname="" - | cfssljson -bare $CN_NAME
 
   # kubernetes master
   export CN_NAME=kubernetes
 
-  echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"k8s","OU":"khs1994.com"}]}' \
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"rsa",
+      "size":2048
+    },"names":[{
+      "C":"CN",
+      "ST":"Beijing",
+      "L":"Beijing",
+      "O":"k8s",
+      "OU":"khs1994.com"
+    }]
+    }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -hostname="$server_hosts,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts" - | cfssljson -bare $CN_NAME
+
+    cat > encryption-config.yaml <<EOF
+kind: EncryptionConfig
+apiVersion: v1
+resources:
+  - resources:
+      - secrets
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              secret: ${ENCRYPTION_KEY}
+      - identity: {}
+EOF
 
   # system:kube-controller-manager master
   export CN_NAME=system:kube-controller-manager
 
-  echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"system:kube-controller-manager","OU":"khs1994.com"}]}' \
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"rsa",
+      "size":2048
+    },
+    "names":[{
+      "C":"CN",
+      "ST":"Beijing",
+      "L":"Beijing",
+      "O":"system:kube-controller-manager",
+      "OU":"khs1994.com"
+  }]
+  }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -hostname="$server_hosts"    - | cfssljson -bare kube-controller-manager
 
    # system:kube-scheduler master 无需传输到节点
    export CN_NAME=system:kube-scheduler
 
-   echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"system:kube-scheduler","OU":"khs1994.com"}]}' \
+   echo '{
+     "CN":"'$CN_NAME'",
+     "hosts":[""],
+     "key":{
+       "algo":"rsa",
+       "size":2048
+     },
+     "names":[{
+       "C":"CN",
+       "ST":"Beijing",
+       "L":"Beijing",
+       "O":"system:kube-scheduler",
+       "OU":"khs1994.com"
+     }]
+   }' \
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
         -hostname="$server_hosts"    - | cfssljson -bare kube-scheduler
+
+   # metrics-server 证书
+   echo '{
+  "CN": "aggregator",
+  "hosts": [],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "BeiJing",
+      "L": "BeiJing",
+      "O": "k8s",
+      "OU": "4Paradigm"
+    }
+  ]
+}' |
+   cfssl gencert -ca=ca.pem \
+    -ca-key=ca-key.pem  \
+    -config=ca-config.json  \
+    -profile=kubernetes - | cfssljson -bare proxy-client
 
    # system:kube-proxy worker 无需传输到节点
    export CN_NAME=system:kube-proxy
 
-   echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST":"Beijing","L":"Beijing","O":"k8s","OU":"khs1994.com"}]}' \
+   echo '{
+     "CN":"'$CN_NAME'",
+     "hosts":[""],
+     "key":{
+       "algo":"rsa",
+       "size":2048
+     },
+     "names":[{
+       "C":"CN",
+       "ST":"Beijing",
+       "L":"Beijing",
+       "O":"k8s",
+       "OU":"khs1994.com"
+     }]
+   }' \
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
         -hostname="$server_hosts"    - | cfssljson -bare kube-proxy
 
    # metrics-server
-   echo '{"CN":"aggregator","hosts":[],"key":{"algo":"rsa","size":2048},"names":[{"C":"CN","ST": "BeiJing", "L": "BeiJing","O":"k8s","OU":"4Paradigm"}]}' \
+   echo '{
+     "CN":"aggregator",
+     "hosts":[],
+     "key":{
+       "algo":"rsa",
+       "size":2048
+     },
+     "names":[{
+       "C":"CN",
+       "ST": "BeiJing",
+       "L": "BeiJing",
+       "O":"k8s",
+       "OU":"4Paradigm"
+     }]
+   }' \
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
         -hostname="" - | cfssljson -bare metrics-server
 
@@ -192,6 +376,8 @@ main (){
     --kubeconfig=kube-proxy.kubeconfig
 
   kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+
+  cp /*.yaml .
 
   chmod 777 *
 }
