@@ -1,6 +1,8 @@
 # Metrics Server
 
-> 本文基于 0.3.1 版本。
+> 本文基于 0.3.x 版本。
+
+* https://github.com/kubernetes-incubator/metrics-server/tree/master/deploy/1.8%2B
 
 ```bash
 $ kubectl apply -f addons/metrics-server
