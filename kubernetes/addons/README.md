@@ -2,9 +2,9 @@
 
 * EFK
 
-* ingress-nginx `0.21.0`
+* ingress-nginx `0.24.1`
 
-* metrics-server `0.3.1`
+* metrics-server `0.3.3`
 
 * CoreDNS `1.5.0`
 

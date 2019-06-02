@@ -18,7 +18,6 @@ Environment="KUBE_APISERVER=https://192.168.199.100:6443"
 Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
 
 ExecStart=/opt/bin/k8s/kubelet \
---allow-privileged=true \
 --bootstrap-kubeconfig=${K8S_CONF_PATH}/kubelet-bootstrap.kubeconfig \
 --cert-dir=${K8S_CONF_PATH}/certs \
 --cni-conf-dir=/etc/cni/net.d \

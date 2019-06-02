@@ -657,15 +657,16 @@ network(){
 # 克隆示例项目、nginx 配置文件
 demo() {
   if [ -d config/nginx/.git ] || [ -f config/nginx/.git ];then
-    echo > /dev/null 2>&1
+    true
   else
-    print_info "Import app and nginx conf Demo ...\n"
+    # print_info "Import app and nginx conf Demo ...\n"
     # 检查网络连接
-    network
+    # network
     # echo ;print_info "Update Git Submodule\n"
     # set +e
     # git submodule update --init --recursive
     # set -e
+    true
   fi
 }
 

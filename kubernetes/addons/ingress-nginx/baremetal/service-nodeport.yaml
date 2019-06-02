@@ -3,24 +3,15 @@ kind: Service
 metadata:
   name: ingress-nginx
   namespace: ingress-nginx
-  labels:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
 spec:
   type: NodePort
   ports:
     - name: http
       port: 80
       targetPort: 80
-      nodePort: 8080
       protocol: TCP
     - name: https
       port: 443
       targetPort: 443
-      nodePort: 8443
       protocol: TCP
-  selector:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
-
----
+  externalTrafficPolicy: Cluster
