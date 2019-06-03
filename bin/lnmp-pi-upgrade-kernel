@@ -6,7 +6,7 @@ if [ "$debug" = 'true' ];then set -x; fi
 
 CURRENT_KERNEL_VERSION=`uname -r | cut -d '-' -f 1`
 
-KERNEL_VERSION=5.0.3
+KERNEL_VERSION=5.1.5
 
 ARCH=`uname -m`
 OS=`uname -s`

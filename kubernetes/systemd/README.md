@@ -3,6 +3,7 @@
 ## 准备
 
 * 了解 `systemd`
+* 机器内存 **2GB** 以上                                 
 
 ## 安装依赖软件
 
@@ -23,7 +24,7 @@ $ sudo dnf install conntrack ipvsadm ipset jq iptables curl sysstat libseccomp &
 ### Debian/Ubuntu
 
 ```bash
-$ sudo apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp2 && sudo /usr/sbin/modprobe ip_vs
+$ sudo apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp2 kmod && (sudo /usr/sbin/modprobe ip_vs || /sbin/modprobe ip_vs)
 ```
 
 ## 关闭防火墙
@@ -66,16 +67,12 @@ $ sudo hostnamectl set-hostname node1
 # 生成证书
 $ dockr-composer up cfssl-single
 
-# 下载 Kubernetes 二进制文件
-$ ./lnmp-k8s kubernetes-server
-
 # 部署
 $ ./lnmp-k8s single-install
 
 # 启动
 $ ./lnmp-k8s single-start
 # 按照提示，手动执行 systemctl 命令，依次启动 kubernetes 各组件
-# 为了方便大家熟悉各组件，启动命令只进行提示！
 ```
 
 ### 手动复制 `kubectl` 配置文件

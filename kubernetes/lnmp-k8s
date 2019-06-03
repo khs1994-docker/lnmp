@@ -289,8 +289,6 @@ _k8s_install(){
   source systemd/.env.example
   source systemd/.env
 
-  docker pull khs1994/coreos:cert
-
   if [ ${MASTER_IP} == '192.168.199.100' ];then
     clear
     echo ""
@@ -304,15 +302,15 @@ _k8s_install(){
   fi
 
   # 安装依赖软件
-  command -v dnf && (sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
+  command -v dnf > /dev/null && (sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) || command -v yum && (sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs)
 
-  command -v apt && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp2 > /dev/null && sudo /usr/sbin/modprobe ip_vs
+  command -v apt > /dev/null && sudo apt update > /dev/null && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
+    sysstat libseccomp2 kmod > /dev/null && (sudo /usr/sbin/modprobe ip_vs || sudo /sbin/modprobe ip_vs )
 
   # 关闭防火墙
-  sudo systemctl stop firewalld && sudo systemctl disable firewalld
+  sudo systemctl stop firewalld && sudo systemctl disable firewalld || true
   sudo mkdir -p /opt/bin/k8s
   sudo chmod -R 755 /opt
   _etcd
@@ -321,6 +319,7 @@ _k8s_install(){
   sudo mkdir -p ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs
 
   print1_info "copy systemd unit file ..."
+  sudo mkdir -p /etc/systemd/system
   sudo cp systemd/*.service /etc/systemd/system/
   sudo cp systemd/certs/*.pem ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
   sudo cp bin/*.sh /opt/bin/k8s
@@ -362,13 +361,6 @@ _k8s_install(){
       ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
   done
 
-  for file in `ls systemd` ; do \
-    if [ -f ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ];then \
-      sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" \
-        ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ;\
-    fi \
-  done
-
   print1_info "update systemd docker unit file ..."
   sudo mkdir -p /etc/systemd/system/docker.service.d
   sudo cp systemd/docker.conf /etc/systemd/system/docker.service.d/
@@ -379,9 +371,11 @@ _k8s_install(){
   do \
     sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" \
       /etc/systemd/system/$file ; \
+    sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" \
+      /etc/systemd/system/$file ; \
   done
 
-  cd -
+  cd - > /dev/null
 
   sudo systemctl daemon-reload
 

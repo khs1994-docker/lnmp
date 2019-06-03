@@ -1,6 +1,6 @@
 # Run LNMP on Kubernetes
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![Build Status](https://travis-ci.com/khs1994-docker/lnmp-k8s.svg?branch=master)](https://travis-ci.com/khs1994-docker/lnmp-k8s)
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -11,8 +11,6 @@
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
 * **Windows** 用户务必安装 `WSL`
-
-* 本项目的目标是超大规模 Kubernetes LNMP 集群(首要考虑的是跨节点问题)
 
 ## Kubernetes 基础设施(从 0 开始部署 Kubernetes 集群)
 
@@ -33,7 +31,6 @@
 </p>
 
 <p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
-
 
 ## 注意事项
 
@@ -106,17 +103,6 @@ $ ./lnmp-k8s cleanup
 * [滚动升级 不停机更新](docs/guide/rollout.md)
 
 * [pod 网络出错](docs/guide/network.md)
-
-## 资源占用
-
-* `Core DNS` + `Dashboard` + `Heapster` + `Metrics Server` + `EFK` + `LNMP`
-
-```bash
-NAME      CPU(cores)   CPU%      MEMORY(bytes)   MEMORY%
-coreos1   217m         21%       1710Mi          58%
-coreos2   249m         24%       2258Mi          77%
-coreos3   267m         26%       2353Mi          81%
-```
 
 ## More Information
 
