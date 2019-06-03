@@ -53,9 +53,11 @@ module.exports = {
         'php',
         'rollout',
         'secret',
+        'ha',
         'helm',
         'minikube',
         'windows',
+        'arm64',
       ],
       '/addons/': [
         'coredns',

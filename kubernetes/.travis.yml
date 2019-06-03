@@ -87,7 +87,7 @@ script:
   - kubectl create namespace ingress-nginx
   - kubectl apply -k addons/ingress-nginx/deploy-bare/
 
-  - sleep 60
+  - sleep 100
 
   - kubectl get all --all-namespaces
   # test metrics server
@@ -101,8 +101,8 @@ script:
   - kubectl exec ${POD_NAME} -- ping -c 5 baidu.com || true
   - kubectl delete pod ${POD_NAME}
   # test ingress-nginx
-  - PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
-  - curl ${SERVER_IP}:${PORT}
+  - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
+  - curl ${SERVER_IP}:${HTTP_PORT}
 
 success:
   - echo deploy

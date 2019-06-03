@@ -1,4 +1,4 @@
-## Minikube
+# Minikube
 
 * https://github.com/AliyunContainerService/minikube
 * https://yq.aliyun.com/articles/221687
@@ -18,7 +18,7 @@ http://192.168.64.98:30626
 $ curl http://192.168.64.98:30626
 ```
 
-#### 挂载宿主机目录
+## 挂载宿主机目录
 
 ```bash
 $ minikube mount ~/lnmp:/data/lnmp

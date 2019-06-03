@@ -24,7 +24,7 @@ $ sudo dnf install conntrack ipvsadm ipset jq iptables curl sysstat libseccomp &
 ### Debian/Ubuntu
 
 ```bash
-$ sudo apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp2 kmod && (sudo /usr/sbin/modprobe ip_vs || /sbin/modprobe ip_vs)
+$ sudo apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp2 kmod && (sudo /usr/sbin/modprobe ip_vs || sudo /sbin/modprobe ip_vs)
 ```
 
 ## 关闭防火墙
