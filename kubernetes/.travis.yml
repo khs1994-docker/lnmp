@@ -1,0 +1,113 @@
+language: bash
+
+services:
+- docker
+
+dist: xenial
+
+cache:
+  directories:
+    - kubernetes-release/release/v1.14.2/kubernetes/server/bin
+
+before_install:
+  # 升级最新 Docker Compose
+  # - docker-compose --version
+  # - sudo rm /usr/local/bin/docker-compose
+  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.24.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  # - chmod +x docker-compose
+  # - sudo mv docker-compose /usr/local/bin
+  # - docker-compose --version
+  - ip addr
+  - hostnamectl
+  - SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+  - ./lnmp-k8s > /dev/null
+  - echo $SERVER_IP
+
+install:
+  - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
+  - sudo hostnamectl set-hostname node1
+  - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
+  - docker-compose up cfssl-single
+  - source .env
+  - ls kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}
+  - ./lnmp-k8s single-install
+  - export PATH=$PATH:/opt/bin/k8s
+  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/*.tar
+  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/*.docker_tag
+  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/apiextensions-apiserver
+  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/cloud-controller-manager
+  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/hyperkube
+  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/mounter
+
+before_script:
+  - sudo systemctl cat etcd
+  - sudo systemctl start etcd
+
+  - sudo systemctl cat flanneld
+  - sudo systemctl start flanneld
+
+  - sudo systemctl cat docker
+  - sudo systemctl start docker
+
+  - sudo systemctl cat kube-apiserver
+  - sudo systemctl start kube-apiserver
+
+  - sudo systemctl cat kube-controller-manager
+  - sudo systemctl start kube-controller-manager
+
+  - sudo systemctl cat kube-scheduler
+  - sudo systemctl start kube-scheduler
+
+  - sudo systemctl cat kube-proxy
+  - sudo systemctl start kube-proxy
+
+  - sudo systemctl cat kubelet
+  - sudo systemctl start kubelet
+
+  - sleep 10
+
+  - kubectl version
+  - kubectl cluster-info
+
+  - sleep 60
+
+  - sudo journalctl -u kubelet
+  - kubectl get csr
+  - CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
+  - echo ${CSR_NAME}
+  - kubectl certificate approve $CSR_NAME
+  - kubectl get csr
+  - kubectl get node
+  - kubectl get all --all-namespaces
+
+script:
+  - kubectl apply -f addons/coredns.yaml
+  - kubectl apply -f addons/dashboard.yaml
+  - kubectl apply -f addons/metrics-server
+  - kubectl create namespace ingress-nginx
+  - kubectl apply -k addons/ingress-nginx/deploy-bare/
+
+  - sleep 100
+
+  - kubectl get all --all-namespaces
+  # test metrics server
+  - kubectl top node
+  # test dns
+  - kubectl run nginx --image nginx:1.15.12-alpine
+  - sleep 20
+  - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
+  - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
+  - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || true
+  - kubectl exec ${POD_NAME} -- ping -c 5 baidu.com || true
+  - kubectl delete pod ${POD_NAME}
+  # test ingress-nginx
+  - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
+  - curl ${SERVER_IP}:${HTTP_PORT}
+
+success:
+  - echo deploy
+  # - ./lnmp-k8s create
+
+env:
+  global:
+    - k=v

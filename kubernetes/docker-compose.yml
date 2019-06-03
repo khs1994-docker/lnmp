@@ -12,7 +12,8 @@ services:
       - ./coreos/current:/srv/www/coreos/current
       - ./coreos/disk:/srv/www/coreos/disk
       - ./coreos/pxe:/srv/www/coreos/pxe
-      - ./coreos/kubernetes-release:/srv/www/coreos/kubernetes-release
+      - ./bin:/srv/www/coreos/disk/bin
+      - ./kubernetes-release:/srv/www/coreos/kubernetes-release
     ports:
       - "8080:80"
 
@@ -20,7 +21,7 @@ services:
     image: khs1994/coreos:cert
     volumes:
       - ./coreos/cert:/srv/cfssl
-      - ./coreos/cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
     env_file:
       - ./coreos/.env.example
       - ./coreos/.env
@@ -30,7 +31,7 @@ services:
     image: khs1994/coreos:cert
     volumes:
       - ./systemd/certs:/srv/cfssl
-      - ./coreos/cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+      - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
     env_file:
       - ./systemd/.env.example
       - ./systemd/.env

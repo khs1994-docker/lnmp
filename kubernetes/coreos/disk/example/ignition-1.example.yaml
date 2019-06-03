@@ -529,7 +529,7 @@ storage:
       mode: 0644
       contents:
         remote:
-          url: http://LOCAL_HOST:8080/disk/system/csr-crb.yaml
+          url: http://LOCAL_HOST:8080/cert/csr-crb.yaml
     - path: /etc/kubernetes/certs/registry-ca.pem
       filesystem: root
       mode: 0644

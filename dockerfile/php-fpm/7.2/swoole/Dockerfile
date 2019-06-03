@@ -1,7 +1,6 @@
-ARG PHP_VERSION=7.2.18
-ARG IMAGE=php
+ARG PHP_VERSION=7.2.19
 
-FROM ${IMAGE}:${PHP_VERSION}-cli-alpine as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-cli-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

@@ -26,7 +26,7 @@ footer: Copyright @2019 khs1994.com
 
 请查看 [GitHub](https://github.com/khs1994-docker/lnmp-k8s) README.md 文件。
 
-详细的搭建教程请查看：https://github.com/opsnull/follow-me-install-kubernetes-cluster
+详细的搭建教程请查看这个项目：https://github.com/opsnull/follow-me-install-kubernetes-cluster
 
 ## YAML 文件
 
@@ -87,11 +87,9 @@ internet
 
 ```
 
-### Traefik
+### [Traefik](https://github.com/containous/traefik)
 
-* https://github.com/containous/traefik
-
-![](https://raw.githubusercontent.com/containous/traefik/master/docs/img/architecture.png)
+![](https://raw.githubusercontent.com/containous/traefik/master/docs/content/assets/img/traefik-architecture.png)
 
 ## 官方文档导引
 

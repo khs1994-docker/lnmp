@@ -16,17 +16,17 @@ Build php in WSL Debian by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php 7.2.18
+$ lnmp-wsl-builder-php 7.3.0
 
 $ lnmp-wsl-builder-php apt
 
-$ lnmp-wsl-builder-php 7.3.5 7.3.5beta1 7.3.5RC1 nightly
+$ lnmp-wsl-builder-php 7.3.6 7.3.0beta1 7.3.0RC1 nightly
 
-$ lnmp-wsl-builder-php 7.2.18 [--skipbuild] [tar] [deb] [enable-ext]
+$ lnmp-wsl-builder-php 7.3.0 [--skipbuild] [tar] [deb] [enable-ext]
 
-$ lnmp-wsl-builder-php 7.2.18 arm64 tar [TODO]
+$ lnmp-wsl-builder-php 7.3.0 arm64 tar [TODO]
 
-$ lnmp-wsl-builder-php 7.2.18 arm32 tar [TODO]
+$ lnmp-wsl-builder-php 7.3.0 arm32 tar [TODO]
 
 "
 
@@ -888,7 +888,7 @@ command -v wget || sudo apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.5
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.6
 
 _get_phpnum $PHP_VERSION
 
