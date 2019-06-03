@@ -6,16 +6,21 @@
 
 ################################################################################
 
-DOCKER_VERSION=${1:-19.03.0-beta1}
-
+DOCKER_VERSION=${1:-19.03.0-beta5}
+DOCKER_BUILDX_VERSION=0.2.2
 ################################################################################
 
 set -ex
 
+__test(){
+  docker --version
+  docker buildx
+}
+
 command -v curl || sudo apt install curl tar
 
 command -v docker && DOCKER_CURRENT_VERSION=$( docker --version | cut -d ' ' -f 3 ) \
-                  && test "${DOCKER_CURRENT_VERSION}" = "$DOCKER_VERSION," && exit 0;
+                  && test "${DOCKER_CURRENT_VERSION}" = "$DOCKER_VERSION," && __test && exit 0;
 
 download_docker(){
   curl -SL http://mirrors.ustc.edu.cn/docker-ce/linux/static/test/x86_64/docker-${DOCKER_VERSION}.tgz | tar -zxvf -
@@ -50,4 +55,10 @@ fi
 
 # verify
 
-docker --version
+mkdir -p ~/.docker/cli-plugins
+
+test -f ~/.docker/cli-plugins/docker-buildx || curl -fSsL https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+
+chmod +x ~/.docker/cli-plugins/docker-buildx
+
+__test
