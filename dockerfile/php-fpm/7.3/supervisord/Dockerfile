@@ -1,7 +1,6 @@
 ARG PHP_VERSION=7.3.6
-ARG IMAGE=khs1994/php
 
-FROM ${IMAGE}:${PHP_VERSION}-fpm-alpine as php
+FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine as php
 
 RUN apk add --no-cache supervisor
 

@@ -3,9 +3,8 @@
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
 ARG PHP_VERSION=7.2.19
-ARG IMAGE=php
 
-FROM ${IMAGE}:${PHP_VERSION}-fpm-stretch
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-stretch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

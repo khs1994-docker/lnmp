@@ -22,22 +22,18 @@ build(){
   local folder=$3
   local type=$4
 
-case "${type}" in
-  fpm | swoole )
-    image=${arch}/php
+case "${arch}" in
+  arm32v7 )
+    platform=linux/arm/v7
     ;;
-  composer | supervisord )
-    image=khs1994/${arch}-php
+  arm64v8)
+    platform=linux/arm64
     ;;
-  unit )
-    image=${arch}/alpine
-    ;;
-
 esac
 
 cd dockerfile/php-fpm/${folder}
-docker build -t khs1994/${arch}-php:${version}-${type}-alpine \
-  --build-arg IMAGE=${image} \
+docker buildx build -t khs1994/${arch}-php:${version}-${type}-alpine \
+  --platform=$platform \
   --build-arg ALPINE_URL=mirrors.ustc.edu.cn \
   --build-arg PHP_VERSION=${version} \
   --progress plain \
@@ -93,9 +89,6 @@ if [ "$1" = 'build' ];then
   build ${2:-7.3.6} ${3:-arm32v7} ${4:-7.3/alpine} ${5:-fpm}
   exit
 fi
-
-# build 7.2.19 arm32v7 7.2/alpine fpm
-# build 7.2.19 arm64v8 7.2/alpine fpm
 
 build 7.3.6 arm32v7 7.3/alpine fpm
 build 7.3.6 arm32v7 7.3/composer composer

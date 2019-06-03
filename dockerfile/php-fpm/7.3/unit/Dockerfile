@@ -1,7 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG IMAGE=alpine
-
-FROM ${IMAGE}:3.9 as php
+FROM --platform=$TARGETPLATFORM alpine:3.9 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

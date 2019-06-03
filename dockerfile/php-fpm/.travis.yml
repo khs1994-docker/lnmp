@@ -36,12 +36,12 @@ script:
   - cp .env.example .env
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   # - docker-compose build ${PHP_VERSION} --parallel
-  - if [ -n "$UNIT" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${FOLDER}/unit; fi
-  - if [ -n "$SUPERVISORD" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${FOLDER}/supervisord; fi
-  - if [ -n "$COMPOSER" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine ${FOLDER}/composer; fi
-  - if [ -n "$SINGLE" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${FOLDER}/single; fi
-  - if [ -n "$SWOOLE" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${FOLDER}/swoole; fi
-  - if [ -n "$FPM" ];then docker build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${FOLDER}/alpine; fi
+  - if [ -n "$UNIT" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${FOLDER}/unit; fi
+  - if [ -n "$SUPERVISORD" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${FOLDER}/supervisord; fi
+  - if [ -n "$COMPOSER" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine ${FOLDER}/composer; fi
+  - if [ -n "$SINGLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${FOLDER}/single; fi
+  - if [ -n "$SWOOLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${FOLDER}/swoole; fi
+  - if [ -n "$FPM" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${FOLDER}/alpine; fi
 
 after_success:
   - if [ -z "$TRAVIS_TAG" ];then if [ "$PHP_VERSION" = 7_4_X -o "$PHP_VERSION" = nightly ];then true;else exit 0;fi; fi
@@ -92,7 +92,7 @@ env:
   global:
   - DOCKER_COMPOSE_VERSION=1.23.2
   - DOCKER_BUILDKIT=1
-  - DOCKER_CHANNEL=stable # test nightly
+  - DOCKER_CHANNEL=test # stable test nightly
   - DOCKER_HUB_USERNAME=khs1994
   - DOCKER_CLI_EXPERIMENTAL=enabled
 
