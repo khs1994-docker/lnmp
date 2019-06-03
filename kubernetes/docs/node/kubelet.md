@@ -1,5 +1,9 @@
 # Kubelet
 
+## 初始化步骤
+
+* 参考 `bin/generate-kubelet-bootstrap-kubeconfig.sh`
+
 ## 必须手动 approve server cert csr
 
 **基于安全性考虑，CSR approving controllers 默认不会自动 approve kubelet server 证书签名请求，需要手动 approve。**

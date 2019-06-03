@@ -1,4 +1,4 @@
-# Kubernetes yaml files
+# 部署文件
 
 这些 YAML 文件仅供参考，仅用于开发环境。
 

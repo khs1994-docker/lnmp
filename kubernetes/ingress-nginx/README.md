@@ -17,18 +17,14 @@
 * `Ingress` 则是定义规则，通过它定义某个域名的请求过来之后转发到集群中指定的 Service。它可以通过 Yaml 文件定义，可以给一个或多个 Service 定义一个或多个 Ingress 规则。
 
 ```bash
-$ kubectl apply -f addons/ingress-nginx/ingress-nginx.yaml
+$ kubectl create namespace ingress-nginx
 
-# 裸机 通过 nodeport ，Docker 桌面版使用下一条命令，不要执行这条命令
-$ kubectl apply -f addons/ingress-nginx/service-nodeport.yaml
+# 裸机 通过 nodeport
+$ kubectl apply --kustomize addons/ingress-nginx/deploy-bare
 
 # Docker 桌面版
-$ kubectl apply -f addons/ingress-nginx/cloud-generic.yaml
+$ kubectl apply --kustomize addons/ingress-nginx/deploy-docker-desktop
 ```
-
-## 注意事项
-
-为避免 **切换暴露服务方式** 时频繁切换端口， `ingress-nginx` 默认端口改为 `8080` `8443`
 
 ## 定义规则
 

@@ -37,19 +37,17 @@ $ kubectl config set-credentials docker-desktop --token="${TOKEN}"
 
 #### Windows
 
-```bash
-$TOKEN=((kubectl -n kube-system describe secret default | Select-String "token:") -split " +")[1]
+```powershell
+$ $TOKEN=((kubectl -n kube-system describe secret default | Select-String "token:") -split " +")[1]
 
 $ kubectl config set-credentials docker-desktop --token="${TOKEN}"
 ```
 
 **登录 dashboard 的时候选择 kubeconfig 文件**
 
-```bash
-macOS: $HOME/.kube/config
+* **macOS** `$HOME/.kube/config`
 
-Windows: %UserProfile%\.kube\config
-```
+* **Windows** `%UserProfile%\.kube\config`
 
 ### Linux
 

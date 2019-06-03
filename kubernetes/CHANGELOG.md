@@ -1,5 +1,7 @@
 # CHANGELOG
 
+* Kubernetes `1.14.2`
+
 * helm 3
 
 * Kubernetes version please see `.env.example`
