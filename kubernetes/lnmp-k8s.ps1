@@ -44,7 +44,7 @@ Commands:
   minikube-install   Install minikube
   minikube           Start minikube
 
-  create             Deploy lnmp on k8s
+  create             Deploy lnmp on k8s [--ingress]
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
 
@@ -84,11 +84,11 @@ Function _delete(){
 }
 
 Function _create_pv(){
-  Get-Content deployment/lnmp-volume.windows.example.yaml `
+  Get-Content deployment/pv/lnmp-volume.windows.example.yaml `
       | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
       | kubectl create -f -
 
-  kubectl -n lnmp create -f deployment/lnmp-pvc.yaml
+  kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
 }
 
 Function _registry(){
@@ -146,37 +146,43 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
 
     kubectl -n lnmp create -f deployment/lnmp-configMap.yaml
 
-    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 --from-file=deployment/configMap/nginx-conf-d
+    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 \
+      --from-file=deployment/configMap/nginx-conf-d
+
     kubectl -n lnmp label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
 
     kubectl -n lnmp create configmap lnmp-php-conf-0.0.1 `
-             --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini `
+      --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini `
       --from-file=zz-docker.conf=helm/nginx-php/config/php/zz-docker.development.conf `
---from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json `
-          --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.development.ini
+      --from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json `
+      --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.development.ini
+
     kubectl -n lnmp label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
 
     kubectl -n lnmp create configmap lnmp-mysql-cnf-0.0.1 `
-     --from-file=docker.cnf=helm/mysql/config/docker.development.cnf
+       --from-file=docker.cnf=helm/mysql/config/docker.development.cnf
+
     kubectl -n lnmp label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
 
     kubectl -n lnmp create configmap lnmp-nginx-conf-0.0.1 `
-     --from-file=nginx.conf=helm/nginx-php/config/nginx/nginx.development.conf
+       --from-file=nginx.conf=helm/nginx-php/config/nginx/nginx.development.conf
+
     kubectl -n lnmp label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
 
     # kubectl -n lnmp create secret generic lnmp-mysql-password --from-literal=password=mytest
 
     kubectl -n lnmp create -f deployment/lnmp-secret.yaml
 
-    kubectl -n lnmp create -f deployment/lnmp-mysql.yaml
+    kubectl -n lnmp create -f deployment/mysql/lnmp-mysql.yaml
 
-    kubectl -n lnmp create -f deployment/lnmp-redis.yaml
+    kubectl -n lnmp create -f deployment/redis/lnmp-redis.yaml
 
-    kubectl -n lnmp create -f deployment/lnmp-php7.yaml
+    kubectl -n lnmp create -f deployment/php/lnmp-php7.yaml
 
-    kubectl -n lnmp create -f deployment/lnmp-nginx.service.yaml
+    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.yaml
 
-    kubectl -n lnmp create -f deployment/lnmp-nginx.yaml
+    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.service.yaml
+
   }
 
   "delete" {

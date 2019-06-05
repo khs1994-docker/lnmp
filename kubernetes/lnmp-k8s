@@ -53,7 +53,7 @@ Commands:
   single-start       Print how to start Local Kubernetes (Manager by systemd)
   single-cleanup     Cleanup Kubernetes Env.
 
-  create             Deploy lnmp on k8s
+  create             Deploy lnmp on k8s [--ingress]
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
 
@@ -147,15 +147,15 @@ _cleanup(){
 
 _create_pv(){
   if [ "$os" = 'Linux' ];then
-    # sed "s#/home/username#$HOME#g" deployment/lnmp-volume.linux.example.yaml \
+    # sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.example.yaml \
     # | kubectl create -f -
-    kubectl create -f deployment/lnmp-volume.linux.nfs.yaml
-    kubectl -n lnmp create -f deployment/lnmp-pvc.linux.nfs.yaml
+    kubectl create -f deployment/pv/lnmp-volume.linux.nfs.yaml
+    kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
   elif [ "$os" = 'Darwin' ];then
-    sed "s#/Users/username#$HOME#g" deployment/lnmp-volume.macos.example.yaml \
+    sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.example.yaml \
     | kubectl create -f -
 
-    kubectl -n lnmp create -f deployment/lnmp-pvc.yaml
+    kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
   fi
 }
 
@@ -204,19 +204,19 @@ _create(){
 
   kubectl -n lnmp create -f deployment/lnmp-secret.yaml
 
-  kubectl -n lnmp create -f deployment/lnmp-mysql.yaml
+  kubectl -n lnmp create -f deployment/mysql/lnmp-mysql.yaml
 
-  kubectl -n lnmp create -f deployment/lnmp-redis.yaml
+  kubectl -n lnmp create -f deployment/redis/lnmp-redis.yaml
 
-  kubectl -n lnmp create -f deployment/lnmp-php7.yaml
+  kubectl -n lnmp create -f deployment/php/lnmp-php7.yaml
+
+  kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.yaml
 
   if [ "$os" = 'Linux' ];then
-    kubectl -n lnmp create -f deployment/lnmp-nginx.service.linux.yaml
+    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.service.linux.yaml
   elif [ "$os" = 'Darwin' ];then
-    kubectl -n lnmp create -f deployment/lnmp-nginx.service.yaml
+    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.service.yaml
   fi
-
-  kubectl -n lnmp create -f deployment/lnmp-nginx.yaml
 }
 
 kubectl-install(){

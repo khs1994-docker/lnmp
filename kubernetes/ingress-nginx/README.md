@@ -16,6 +16,8 @@
 
 * `Ingress` 则是定义规则，通过它定义某个域名的请求过来之后转发到集群中指定的 Service。它可以通过 Yaml 文件定义，可以给一个或多个 Service 定义一个或多个 Ingress 规则。
 
+## 部署
+
 ```bash
 $ kubectl create namespace ingress-nginx
 
