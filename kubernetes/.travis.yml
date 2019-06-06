@@ -7,7 +7,7 @@ dist: xenial
 
 cache:
   directories:
-    - kubernetes-release/release/v1.14.2/kubernetes/server/bin
+    - kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin
 
 before_install:
   # 升级最新 Docker Compose
@@ -28,16 +28,16 @@ install:
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
   - docker-compose up cfssl-single
-  - source .env
-  - ls kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}
+  # - source .env
+  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}
   - ./lnmp-k8s single-install
   - export PATH=$PATH:/opt/bin/k8s
-  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/*.tar
-  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/*.docker_tag
-  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/apiextensions-apiserver
-  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/cloud-controller-manager
-  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/hyperkube
-  - rm -rf kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/mounter
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/*.tar
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/*.docker_tag
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/apiextensions-apiserver
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/cloud-controller-manager
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/hyperkube
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/mounter
 
 before_script:
   - sudo systemctl cat etcd
@@ -61,15 +61,25 @@ before_script:
   - sudo systemctl cat kube-proxy
   - sudo systemctl start kube-proxy
 
+  - sleep 10
   - sudo systemctl cat kubelet
   - sudo systemctl start kubelet
 
-  - sleep 10
+  - sleep 20
+
+  # - sudo systemctl status etcd
+  # - sudo systemctl status flanneld
+  # - sudo systemctl status docker
+  # - sudo systemctl status kube-apiserver
+  # - sudo systemctl status kube-controller-manager
+  # - sudo systemctl status kube-scheduler
+  # - sudo systemctl status kube-proxy
+  # - sudo systemctl status kubelet
 
   - kubectl version
   - kubectl cluster-info
 
-  - sleep 60
+  - sleep 30
 
   - sudo journalctl -u kubelet
   - kubectl get csr
@@ -87,7 +97,7 @@ script:
   - kubectl create namespace ingress-nginx
   - kubectl apply -k addons/ingress-nginx/deploy-bare/
 
-  - sleep 100
+  - sleep 120
 
   - kubectl get all --all-namespaces
   # test metrics server
@@ -109,5 +119,8 @@ success:
   # - ./lnmp-k8s create
 
 env:
+  matrix:
+    - CI_KUBERNETES_VERSION=1.14.2
+    - CI_KUBERNETES_VERSION=1.15.0-beta.2
   global:
     - k=v
