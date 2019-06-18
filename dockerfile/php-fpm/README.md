@@ -15,6 +15,7 @@
 * 7.3.6-unit-alpine
 * 7.3.6-composer-alpine
 * 7.3.6-supervisord-alpine
+* 7.4.0alpha-fpm-alpine
 
 ## Supported tags and respective `Dockerfile` links
 
@@ -27,8 +28,6 @@
 * [`7.4.0alpha-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.6/7.4/alpine/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.6/nightly/alpine/Dockerfile)
-
-* [`7.4TEST-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.2/7.4/alpine/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.2/nightly/alpine/Dockerfile)
 
@@ -165,3 +164,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
 * https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html
+
+* https://engineering.docker.com/2019/04/multi-arch-images/
+
+* https://engineering.docker.com/2019/06/getting-started-with-docker-for-arm-on-linux/
