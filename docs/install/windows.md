@@ -1,4 +1,4 @@
-# Windows 安装本项目
+# Windows 上安装
 
 [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
@@ -21,7 +21,7 @@ $ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git
 ## 设置环境变量
 
 ```bash
-$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$env:HOME/lnmp", "User");
+$ [environment]::SetEnvironmentvariable("LNMP_PATH", "${HOME}\lnmp", "User")
 ```
 
 ## 启动 Demo
@@ -51,9 +51,11 @@ $ ./lnmp-docker.ps1 up
 这里我们修改配置，将 C 盘挂载到 `/c`
 
 ```bash
-$ wsl
+# 设置 Windows PATH 变量
 
-# Windows PATH 变量为 %LNMP_PATH%\windows; %LNMP_PATH%\wsl; %LNMP_PATH\bin
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
+
+$ wsl
 
 $ lnmp-wsl-docker-cli.sh
 

@@ -1,6 +1,6 @@
-# FROM microsoft/windowsservercore:1803
+# FROM microsoft/windowsservercore:1903
 
-FROM mcr.microsoft.com/windows/servercore:1809
+FROM mcr.microsoft.com/windows/servercore:1903
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
