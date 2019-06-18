@@ -11,6 +11,8 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 $env:DOCKER_DEFAULT_PLATFORM="linux"
 
 $source=$PWD
+$DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
+$DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
 
 Function printError(){
 Write-Host " "
@@ -154,6 +156,15 @@ Function logs(){
 
   if(! (Test-Path log\supervisord.log)){
     New-Item log\supervisord.log | Out-Null
+  }
+}
+
+Function check_docker_version(){
+  ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
+
+  if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
+    printWarning "Current branch incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
+    write-host
   }
 }
 
@@ -366,6 +377,7 @@ Function satis(){
 
 env_status
 logs
+check_docker_version
 
 if ($args.Count -eq 0){
   help_information
@@ -437,6 +449,12 @@ switch($first){
     cn-mirror {
       clear
       wsl -d $DistributionName lnmp-docker cn-mirror
+    }
+
+    checkout {
+      git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
+      git checkout "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
+      _update
     }
 
     up {

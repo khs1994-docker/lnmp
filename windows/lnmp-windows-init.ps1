@@ -14,35 +14,38 @@ $ErrorAction="SilentlyContinue"
 . "$PSScriptRoot/common.ps1"
 
 $global:source=$PWD
+$global:USER_AGENT="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3828.0 Safari/537.36"
 
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
 
 Function _command($command){
-  get-command $command -ErrorAction "SilentlyContinue"
-
-  if($?){
-    return $true
+  if ($command -eq "wsl"){
+    wsl ls
+  }else{
+    get-command $command -ErrorAction "SilentlyContinue"
   }
 
-  return $false
+  return $?
 }
 
 Function _wget($src,$des,$wsl=$true){
-  if ($( _command wsl) -and $wsl){
+  $useWSL=_command wsl -and $wsl
+
+  if ($useWSL -eq "True"){
 
     Write-host "
 
 use WSL curl download file ...
 "
 
-    wsl curl -L $src -o $des
+    wsl -- curl -L $src -o $des --user-agent $USER_AGENT
 
     return
   }
 
-  Invoke-WebRequest -uri $src -OutFile $des
+  Invoke-WebRequest -uri $src -OutFile $des -UserAgent $USER_AGENT
   Unblock-File $des
 }
 
@@ -128,7 +131,7 @@ _downloader `
 #
 
 _downloader `
-  https://aka.ms/vs/15/release/vc_redist.x64.exe `
+  https://aka.ms/vs/16/release/VC_redist.x64.exe `
   vc_redist.x64.exe `
   vc_redist.x64.exe
 
@@ -137,7 +140,7 @@ _downloader `
 #
 
 _downloader `
-  http://nginx.org/download/nginx-${NGINX_VERSION}.zip `
+  https://nginx.org/download/nginx-${NGINX_VERSION}.zip `
   nginx-${NGINX_VERSION}.zip `
   NGINX ${NGINX_VERSION}
 
@@ -146,21 +149,21 @@ _downloader `
 #
 
 _downloader `
-    http://home.apache.org/~steffenal/VC15/binaries/httpd-${HTTPD_VERSION}-win64-VC15.zip `
-    httpd-${HTTPD_VERSION}-win64-VC15.zip `
+    https://www.apachelounge.com/download/VS16/binaries/httpd-${HTTPD_VERSION}-win64-VS16.zip `
+    httpd-${HTTPD_VERSION}-win64-VS16.zip `
     HTTPD ${HTTPD_VERSION}
 
 _downloader `
-  http://www.apachelounge.com/download/VC15/modules/mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip `
-  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip `
-  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15
+  https://www.apachelounge.com/download/VS16/modules/mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `
+  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `
+  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16
 
 #
 # PHP
 #
 
 _downloader `
-  http://windows.php.net/downloads/releases/php-${PHP_VERSION}-nts-Win32-VC15-x64.zip `
+  https://windows.php.net/downloads/releases/php-${PHP_VERSION}-nts-Win32-VC15-x64.zip `
   php-${PHP_VERSION}-nts-Win32-VC15-x64.zip `
   PHP ${PHP_VERSION}
 
@@ -193,27 +196,27 @@ _downloader `
 # pecl
 #
 
-# http://pecl.php.net/package/yaml
+# https://pecl.php.net/package/yaml
 _downloader `
   https://windows.php.net/downloads/pecl/releases/yaml/$PHP_YAML_EXTENSION_VERSION/php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   C:\php-ext\php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64 null $false
-# http://pecl.php.net/package/xdebug
+# https://pecl.php.net/package/xdebug
 _downloader `
   https://windows.php.net/downloads/pecl/releases/xdebug/$PHP_XDEBUG_EXTENSION_VERSION/php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   C:\php-ext\php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
-# http://pecl.php.net/package/redis
+# https://pecl.php.net/package/redis
 _downloader `
   https://windows.php.net/downloads/pecl/releases/redis/$PHP_REDIS_EXTENSION_VERSION/php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   C:\php-ext\php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
-# http://pecl.php.net/package/mongodb
+# https://pecl.php.net/package/mongodb
 _downloader `
   https://windows.php.net/downloads/pecl/releases/mongodb/$PHP_MONGODB_EXTENSION_VERSION/php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   C:\php-ext\php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
-# http://pecl.php.net/package/igbinary
+# https://pecl.php.net/package/igbinary
 _downloader `
   https://windows.php.net/downloads/pecl/releases/igbinary/$PHP_IGBINARY_EXTENSION_VERSION/php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
   C:\php-ext\php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
@@ -251,7 +254,7 @@ cp -Force C:\php\php.ini C:\php-ext\php.ini
 # https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${MYSQL_VERSION}-winx64.zip `
 
 _downloader `
-  http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-8.0/mysql-${MYSQL_VERSION}-winx64.zip `
+  https://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-8.0/mysql-${MYSQL_VERSION}-winx64.zip `
   mysql-${MYSQL_VERSION}-winx64.zip `
   MySQL ${MYSQL_VERSION}
 
@@ -259,10 +262,10 @@ _downloader `
 # Docker
 #
 
-_downloader `
-  "https://download.docker.com/win/edge/Docker%20for%20Windows%20Installer.exe" `
-  "docker.exe" `
-  Docker
+# _downloader `
+#  "https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe" `
+#  "docker.exe" `
+#  Docker
 
 #
 # IDEA
@@ -278,7 +281,7 @@ _downloader `
 #
 
 _downloader `
-  http://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/node-v${NODE_VERSION}-win-x64.zip `
+  https://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/node-v${NODE_VERSION}-win-x64.zip `
   node-v${NODE_VERSION}-win-x64.zip `
   Node.js ${NODE_VERSION}
 
@@ -351,16 +354,16 @@ Function _httpd(){
   $HTTPD_CURRENT_VERSION=($(httpd -v) -split " ")[2]
 
   if ($HTTPD_CURRENT_VERSION.length -eq 0){
-    _installer httpd-${HTTPD_VERSION}-win64-VC15.zip C:\ C:\Apache24 C:\Apache24
+    _installer httpd-${HTTPD_VERSION}-win64-VS16.zip C:\ C:\Apache24 C:\Apache24
   }
 
   if ($HTTPD_CURRENT_VERSION -ne "Apache/${HTTPD_VERSION}"){
-    _unzip httpd-${HTTPD_VERSION}-win64-VC15.zip $HOME\Downloads
+    _unzip httpd-${HTTPD_VERSION}-win64-VS16.zip $HOME\Downloads
     Copy-Item -Recurse -Force "$HOME\Downloads\Apache24\*" "C:\Apache24\"
   }
 
   if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
-    _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VC15.zip C:\Apache24\modules `
+    _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip C:\Apache24\modules `
       C:\Apache24\modules\mod_fcgid-${HTTPD_MOD_FCGID_VERSION} C:\Apache24\modules\mod_fcgid
 
     mv C:\Apache24\modules\mod_fcgid\mod_fcgid.so C:\Apache24\modules\mod_fcgid.so

@@ -75,17 +75,17 @@ spec:
         - name: LNMP_OPCACHE_ENABLE
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-{{ .Chart.Version }}
+              name: lnmp-env-0.0.1
               key: LNMP_OPCACHE_ENABLE
         - name: LNMP_XDEBUG_REMOTE_HOST
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-{{ .Chart.Version }}
+              name: lnmp-env-0.0.1
               key: LNMP_XDEBUG_REMOTE_HOST
         - name: LNMP_XDEBUG_REMOTE_PORT
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-{{ .Chart.Version }}
+              name: lnmp-env-0.0.1
               key: LNMP_XDEBUG_REMOTE_PORT
         ports:
         - containerPort: 9000

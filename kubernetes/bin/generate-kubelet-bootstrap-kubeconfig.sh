@@ -12,15 +12,25 @@ done
 
 # https://github.com/opsnull/follow-me-install-kubernetes-cluster/blob/master/06-1.api-server.md#%E6%8E%88%E4%BA%88-kubernetes-%E8%AF%81%E4%B9%A6%E8%AE%BF%E9%97%AE-kubelet-api-%E7%9A%84%E6%9D%83%E9%99%90
 
-su - k8s -c "/opt/bin/k8s/kubectl create clusterrolebinding kube-apiserver:kubelet-apis --clusterrole=system:kubelet-api-admin --user kubernetes"
+/opt/bin/k8s/kubectl create clusterrolebinding \
+  kube-apiserver:kubelet-apis \
+  --clusterrole=system:kubelet-api-admin \
+  --user kubernetes \
+  --kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/kubectl.kubeconfig
 
 # https://github.com/opsnull/follow-me-install-kubernetes-cluster/blob/master/07-2.kubelet.md#bootstrap-token-auth-%E5%92%8C%E6%8E%88%E4%BA%88%E6%9D%83%E9%99%90
 
-su - k8s -c "/opt/bin/k8s/kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --group=system:bootstrappers"
+/opt/bin/k8s/kubectl create clusterrolebinding \
+  kubelet-bootstrap \
+  --clusterrole=system:node-bootstrapper \
+  --group=system:bootstrappers \
+  --kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/kubectl.kubeconfig
 
 # https://github.com/opsnull/follow-me-install-kubernetes-cluster/blob/master/07-2.kubelet.md#%E8%87%AA%E5%8A%A8-approve-csr-%E8%AF%B7%E6%B1%82
 
-su - k8s -c "/opt/bin/k8s/kubectl apply -f ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/csr-crb.yaml"
+/opt/bin/k8s/kubectl apply \
+  -f ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/csr-crb.yaml \
+  --kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/kubectl.kubeconfig
 
 if [ -f ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/kubelet-bootstrap.kubeconfig ];then
   exit 0
@@ -28,15 +38,10 @@ fi
 
 set -e
 
-if ! [ -f /home/k8s/.kube/config ];then
-  echo "please copy kubctl config file to /home/k8s/.kube/config"
-  exit 1
-fi
-
 export BOOTSTRAP_TOKEN=$(/opt/bin/k8s/kubeadm token create \
       --description kubelet-bootstrap-token \
       --groups system:bootstrappers:${NODE_NAME} \
-      --kubeconfig /home/k8s/.kube/config)
+      --kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/kubectl.kubeconfig)
 
     # 设置集群参数
     /opt/bin/k8s/kubectl config set-cluster kubernetes \

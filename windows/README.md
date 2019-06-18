@@ -2,19 +2,21 @@
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/474)
 
-由于 `Docker For Windows` 不太稳定，这里记录一下 Plan B `WNAMP` 开发环境。
+由于 `Docker Desktop` 不太稳定，这里记录一下 **Plan B** `WNAMP` 开发环境。
 
-环境 `Windows 10`，终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也行。
+* 系统 `Windows 10`
 
-将软件都放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` `C:\Apache24`...
+* 终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也可以。
 
-MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
+* 软件都放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` `C:\Apache24`
+
+* MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
 
 **部分软件使用 `WSL` 来安装运行。**
 
 ## 快速初始化 WNAMP 环境
 
-> 本项目提供了一个脚本，方便开发者快速建立开发环境，后面介绍的内容为脚本所做的工作。
+> 使用以下脚本，开发者可以快速的建立开发环境，后续会介绍脚本所做的工作。
 
 ```bash
 $ lnmp-windows-init.ps1
@@ -24,23 +26,23 @@ $ lnmp-windows-init.ps1
 
 **务必执行此项操作**
 
-**务必知道 Windows Linux 环境变量的作用及设置方法**
+**务必知道 Windows 或 Linux 环境变量的作用及设置方法**
 
 * 为了在任意目录执行命令，请将各软件路径加入系统环境变量 `PATH`
 
-* **特别的** 新增变量 `APP_ENV` 值为 `windows`, 之后 `Laravel` 框架就会默认的加载 `.env.windows` 文件。
+* 新增变量 `APP_ENV` 值为 `windows`, 之后 `Laravel` 框架就会默认的加载 `.env.windows` 文件。
 
 打开 `PowerShell` 执行以下命令设置环境变量
 
 ```bash
-$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User");
+$ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User")
 
 $ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c:\nginx;c:\Apache24\bin", "User")
 
-$ [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User");
+$ [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User")
 ```
 
-**退出 PowerShell，重新打开，若以下命令不生效的话那就注销登陆**
+**退出 PowerShell，重新打开，若以下命令不生效的话请注销登陆**
 
 ```bash
 $ cd LARAVEL_APP_PATH
@@ -59,10 +61,6 @@ Current application environment: windows
 **使用之前** 在 `.env.ps1` 文件中参照 `.env.example.ps1` 设置好相关变量
 
 ```bash
-# 首次运行，务必通过以下命令设置环境变量
-
-$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
-
 $ lnmp-wnamp.ps1 start | stop | restart | status | ps [SOFT_NAME] [SOFT_NAME_2]
 ```
 
@@ -127,7 +125,7 @@ $ net stop mysql
 
 ## PHP
 
-http://windows.php.net/download/
+https://windows.php.net/download/
 
 里面有 `Non Thread Safe` 和 `Thread Safe`，两者区别请查阅资料，我这里的是下载 `NTS` 版。
 
@@ -169,7 +167,7 @@ $ RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c C:/php/php.ini
 
 ### pecl 下载扩展
 
-手动在 http://pecl.php.net/ 下载扩展（注意与 PHP 版本对应）。
+手动在 https://pecl.php.net/ 下载扩展（注意与 PHP 版本对应）。
 
 之后在 `php.ini` 中增加配置(为了后续升级方便将 pecl 下载的扩展放到 `C:\php-ext`)。
 
@@ -189,7 +187,7 @@ $ composer -V
 
 ## Nginx
 
-http://nginx.org/en/download.html
+https://nginx.org/en/download.html
 
 ```bash
 $ nginx -p C:/nginx -t
@@ -205,17 +203,17 @@ $ nginx -p C:/nginx -s stop
 
 ## Apache
 
-PHP 在 Windows Apache 下的几种运行模式 [官方文档](http://php.net/manual/fa/install.windows.apache2.php) 讲的很清楚了（暂无中文翻译）。
+PHP 在 Windows Apache 下的几种运行模式 [官方文档](https://php.net/manual/fa/install.windows.apache2.php) 讲的很清楚了（暂无中文翻译）。
 
 这里 `Running PHP under FastCGI` 方式
 
 其他通过在配置文件中加载模块 `LoadModule php5_module "c:/php/php7apache2_4.dll"` 即 `Installing as an Apache handler` 等运行模式（网上资料较多）请自行查阅资料。
 
-在 [文中](http://httpd.apache.org/docs/current/platform/windows.html) 提到的前两个地方选择一个下载，后几个是集成安装包。
+在 [文中](https://httpd.apache.org/docs/current/platform/windows.html) 提到的前两个地方选择一个下载，后几个是集成安装包。
 
-在 http://www.apachelounge.com/download/ 下载
+在 https://www.apachelounge.com/download/ 下载
 
-同时下载 `mod_fcgid` 模块，注意版本（`win64` `vc15`）对应 (可能不太好找，网页搜索 `mod_fcgid` 来定位)。
+同时下载 `mod_fcgid` 模块，注意版本（`win64` `VS16`）对应 (可能不太好找，网页搜索 `mod_fcgid` 来定位)。
 
 ### fcgid 模块
 
@@ -286,7 +284,7 @@ Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://github.com/khs1994
 ```bash
 $ cd $HOME
 
-$ bash
+$ wsl
 
 $ pwd
 
@@ -324,7 +322,7 @@ $ sudo mongod --fork --logpath=/var/run/mongodb/error.log
 
 ## Memcached WSL
 
-[`memcached`](http://pecl.php.net/package/memcached) 扩展暂不支持 Windows。
+[`memcached`](https://pecl.php.net/package/memcached) 扩展暂不支持 Windows。
 
 ```bash
 $ sudo apt install memcached

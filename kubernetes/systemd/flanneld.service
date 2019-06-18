@@ -1,8 +1,8 @@
 [Unit]
 Description=flannel - Network fabric for containers
 Documentation=https://github.com/coreos/flannel
-Requires=etcd.service
-After=etcd.service
+#Requires=etcd.service
+#After=etcd.service
 Before=docker.service
 
 [Service]
@@ -15,13 +15,13 @@ LimitNPROC=1048576
 
 Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
 
-ExecStartPre=/sbin/modprobe ip_tables
-ExecStartPre=-/usr/bin/mkdir --parents /var/lib/coreos /run/flannel
-ExecStartPre=/usr/bin/env ETCDCTL_API=2 /opt/bin/k8s/etcdctl \
+ExecStartPre=-/sbin/modprobe ip_tables
+ExecStartPre=-/usr/bin/env mkdir --parents /var/lib/coreos /run/flannel
+ExecStartPre=-/usr/bin/env ETCDCTL_API=2 /opt/bin/k8s/etcdctl \
   --endpoints="https://192.168.199.100:2379" \
   --ca-file="${K8S_CONF_PATH}/certs/ca.pem" \
-  --cert-file="${K8S_CONF_PATH}/certs/etcd.pem" \
-  --key-file="${K8S_CONF_PATH}/certs/etcd-key.pem" \
+  --cert-file="${K8S_CONF_PATH}/certs/flanneld.pem" \
+  --key-file="${K8S_CONF_PATH}/certs/flanneld-key.pem" \
   set /kubernetes/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
 
 ExecStart=/opt/bin/k8s/flanneld \
@@ -29,7 +29,8 @@ ExecStart=/opt/bin/k8s/flanneld \
   --etcd-cafile="${K8S_CONF_PATH}/certs/ca.pem" \
   --etcd-certfile="${K8S_CONF_PATH}/certs/flanneld.pem" \
   --etcd-keyfile="${K8S_CONF_PATH}/certs/flanneld-key.pem" \
-  --etcd-prefix="/kubernetes/network"
+  --etcd-prefix="/kubernetes/network" \
+  -ip-masq
 
 ExecStartPost=/opt/bin/k8s/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/docker/flannel_docker_opts.env
 
