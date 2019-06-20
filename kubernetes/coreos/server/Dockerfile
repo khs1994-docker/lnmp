@@ -1,4 +1,4 @@
-FROM nginx:1.15.12-alpine
+FROM nginx:1.17.0-alpine
 
 LABEL maintainer="khs1994@khs1994.com" \
       version="1.14.2"
