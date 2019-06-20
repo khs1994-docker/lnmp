@@ -45,7 +45,7 @@ script:
   - if [ -z "$TRAVIS_TAG" ];then if [ "$PHP_VERSION" = 7_4_X -o "$PHP_VERSION" = nightly ];then IS_PUSH=--push;else true;fi;else IS_PUSH=--push; fi
   - if [ -n "$UNIT" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
   - if [ -n "$SUPERVISORD" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
-  - if [ -n "$COMPOSER" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform {PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
+  - if [ -n "$COMPOSER" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
   - if [ -n "$SINGLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
   - if [ -n "$SWOOLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} ${FOLDER}/swoole; fi
   - if [ -n "$FPM" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
@@ -92,7 +92,8 @@ env:
   - DOCKER_CHANNEL=test # stable test nightly
   - DOCKER_HUB_USERNAME=khs1994
   - DOCKER_CLI_EXPERIMENTAL=enabled
-  - PLATFORM=linux/amd64,linux/arm64,linux/arm/v7
+  # - PLATFORM=linux/amd64,linux/arm64,linux/arm/v7
+  - PLATFORM=linux/amd64
 
 matrix:
   fast_finish: true

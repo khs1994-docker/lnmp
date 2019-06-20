@@ -158,7 +158,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   && cd /opt/bin \
   && for file in `ls docker-php-*`; \
      do \
-       sed -i "s#apk add --no-cache#apk add#g" $file; \
+       sed "s#apk add --no-cache#apk add#g" $file > /usr/local/bin/$file; chmod +x /usr/local/bin/$file;\
      done \
   \
   ; mkdir -p $PHP_INI_DIR/conf.d \
@@ -348,7 +348,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
       && cd /opt/bin \
       && for file in `ls docker-php-*`; \
          do \
-           sed -i "s#apk add --no-cache#apk add#g" $file; \
+           sed "s#apk add --no-cache#apk add#g" $file > /usr/local/bin/$file; chmod +x /usr/local/bin/$file;\
          done \
       \
       && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
