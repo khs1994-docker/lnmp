@@ -11,6 +11,7 @@ pool:
 
 steps:
 - pwsh: |
+    docker info
     docker --version
     docker-compose --version
     ./lnmp-docker up
