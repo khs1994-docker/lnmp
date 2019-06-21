@@ -61,7 +61,7 @@ services:
   # with kong
   # https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
   postgresql-kong:
-    image: postgres:11.3-alpine
+    image: postgres:11.4-alpine
     environment:
       POSTGRES_USER: kong
       POSTGRES_DB: kong
