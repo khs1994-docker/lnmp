@@ -54,7 +54,7 @@ ENV PECL_EXTENSION \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
       sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
       && rm -rf /var/cache/apk/* \

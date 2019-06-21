@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.9 as php
+FROM --platform=$TARGETPLATFORM alpine:3.10 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -32,7 +32,7 @@ ENV PHPIZE_DEPS \
       re2c
 
 # persistent / runtime deps
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
       set -ex \
       && rm -rf /var/cache/apk/* \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -138,7 +138,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
   --mount=type=cache,target=/usr/src,id=php_src_nightly \
   --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
@@ -345,7 +345,7 @@ ENV PECL_EXTENSION \
       swoole-beta \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
     --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --mount=type=cache,target=/usr/local/lib/php/test \
     --mount=type=cache,target=/usr/local/lib/php/doc \

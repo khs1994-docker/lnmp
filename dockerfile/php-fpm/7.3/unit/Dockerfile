@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.9 as php
+FROM --platform=$TARGETPLATFORM alpine:3.10 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -33,7 +33,7 @@ ENV PHPIZE_DEPS \
       bison
 
 # persistent / runtime deps
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
       set -ex \
       && rm -rf /var/cache/apk/* \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -142,7 +142,7 @@ ENV NGINX_UNIT_VERSION 1.9.0
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
   --mount=type=bind,from=php:7.3.6-alpine,source=/usr/src,target=/usr/src,rw \
   --mount=type=bind,from=php:7.3.6-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
@@ -291,7 +291,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
   && ln -sf /dev/stderr /var/log/xdebug-remote.log
   # && rm -rf /usr/src/*
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
   cd /usr/src \
   && rm -rf /var/cache/apk/* \
   && wget https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
@@ -333,7 +333,7 @@ ENV PECL_EXTENSION \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
+RUN --mount=type=cache,target=/var/cache/apk,id=$TARGETPLATFORM_php_apk_cache \
     --mount=type=bind,from=php:7.3.6-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && rm -rf /var/cache/apk/* \
