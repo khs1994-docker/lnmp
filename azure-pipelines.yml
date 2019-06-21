@@ -4,16 +4,19 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- 18.09
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-2019'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- pwsh: |
+    docker --version
+    docker-compose --version
+    ./lnmp-docker up
+  displayName: 'Up'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- pwsh: |
+    sleep 20
+    curl 127.0.0.1
+  displayName: 'Test'
