@@ -2,6 +2,7 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/migrate/from-travis?view=azure-devops
 
 trigger:
 - master
@@ -167,3 +168,11 @@ jobs:
       DOCKER_HUB_USERNAME: khs1994
     displayName: 'Build Image'
     timeoutInMinutes: 0
+
+  - script: |
+      bash tag.sh
+      curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
+    env:
+      DOCKER_HUB_USERNAME: khs1994
+    displayName: 'Push alias'
+    condition: succeeded()
