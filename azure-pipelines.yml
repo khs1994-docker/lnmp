@@ -1,0 +1,23 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- 18.09
+
+pool:
+  vmImage: 'windows-2019'
+
+steps:
+- pwsh: |
+    docker info
+    docker --version
+    docker-compose --version
+    ./lnmp-docker up
+  displayName: 'Up'
+
+- pwsh: |
+    sleep 20
+    curl 127.0.0.1
+  displayName: 'Test'
