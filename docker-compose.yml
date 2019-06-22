@@ -200,7 +200,6 @@ services:
       - ${LNMP_PHPMYADMIN_PORT:-127.0.0.1:8080}:80
     volumes:
       - phpmyadmin-data:/sessions
-      - zoneinfo-data:/usr/share/zoneinfo
     networks:
       - backend
       - frontend
