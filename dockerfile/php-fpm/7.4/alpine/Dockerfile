@@ -221,11 +221,15 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           oniguruma-dev \
           \
           bison \
+          libgcrypt-dev \
+          libgpg-error-dev \
           ${APK_DEV_EXTRA:-} \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
 		        CPPFLAGS="$PHP_CPPFLAGS" \
 		        LDFLAGS="$PHP_LDFLAGS" \
+            ARGON2_LIBS="-largon2" \
+            ARGON2_CFLAGS="-I/usr/include" \
 	# && docker-php-source extract \
 	&& cd /usr/src/php \
   && make clean || echo \

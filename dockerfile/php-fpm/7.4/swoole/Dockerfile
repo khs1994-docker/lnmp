@@ -216,11 +216,15 @@ RUN --mount=type=cache,target=/usr/src,id=php_src_74 \
           oniguruma-dev \
           \
           bison \
+          libgcrypt-dev \
+          libgpg-error-dev \
           ${APK_DEV_EXTRA:-} \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
 		        CPPFLAGS="$PHP_CPPFLAGS" \
 		        LDFLAGS="$PHP_LDFLAGS" \
+            ARGON2_LIBS="-largon2" \
+            ARGON2_CFLAGS="-I/usr/include" \
 	# && docker-php-source extract \
 	&& cd /usr/src/php \
   && make clean || echo \
