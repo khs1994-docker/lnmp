@@ -12,14 +12,14 @@ spec:
 
   # externalIPs:
   #   - 192.168.57.110
-  # 暴露服务方式之一
+  # 1.
   # type: LoadBalancer
 
-  # 暴露服务方式之一
+  # 2.
   type: NodePort
   externalTrafficPolicy: Local
 
-  # 集群内的私有 ip ，this is default
+  # 3.集群内的私有 ip ，this is default
   # type: ClusterIP
   # clusterIP: None
 
@@ -45,8 +45,10 @@ spec:
 
     # 暴露服务方式之一
     # 将 service 的 port 映射到每个 node 的 port 上，如果不指定 nodePort,k8s 将随机映射
+    # Fix me
     nodePort: 443
   - name: http
     protocol: TCP
     port: 80
+    # Fix me
     nodePort: 80

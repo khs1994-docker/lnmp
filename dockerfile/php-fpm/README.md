@@ -1,6 +1,6 @@
 # PHP-FPM
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/php.svg)](https://github.com/khs1994-docker/php) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![](https://images.microbadger.com/badges/image/khs1994/php.svg)](https://microbadger.com/images/khs1994/php "Get your own image badge on microbadger.com")
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php) [![GitHub tag](https://img.shields.io/github/tag/khs1994-docker/php.svg)](https://github.com/khs1994-docker/php) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/php.svg)](https://store.docker.com/community/images/khs1994/php) [![](https://images.microbadger.com/badges/image/khs1994/php.svg)](https://microbadger.com/images/khs1994/php "Get your own image badge on microbadger.com") [![Build Status](https://dev.azure.com/khs1994-docker/php/_apis/build/status/khs1994-docker.php?branchName=master)](https://dev.azure.com/khs1994-docker/php/_build/latest?definitionId=1&branchName=master)
 
 * https://github.com/khs1994-docker/php
 
@@ -15,6 +15,7 @@
 * 7.3.6-unit-alpine
 * 7.3.6-composer-alpine
 * 7.3.6-supervisord-alpine
+* 7.4.0alpha-fpm-alpine
 
 ## Supported tags and respective `Dockerfile` links
 
@@ -24,11 +25,9 @@
 
 * [`7.1.30-fpm-alpine` `7.1-fpm-alpine` (7.1/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.6/7.1/alpine/Dockerfile)
 
-* [`7.4TEST-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.6/7.4/alpine/Dockerfile)
+* [`7.4.0alpha-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.6/7.4/alpine/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.6/nightly/alpine/Dockerfile)
-
-* [`7.4TEST-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.2/7.4/alpine/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.2/nightly/alpine/Dockerfile)
 
@@ -49,7 +48,7 @@
 
 | VERSION     | DETAILS     |
 | :------------- | :------------- |
-| [![](https://images.microbadger.com/badges/version/khs1994/php:7.4TEST-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4TEST-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.4TEST-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4TEST-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.4.0alpha-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0alpha-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.4.0alpha-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0alpha-fpm-alpine "Get your own image badge on microbadger.com")       |
 | [![](https://images.microbadger.com/badges/version/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own image badge on microbadger.com")       |
 
 ## Overview
@@ -165,3 +164,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
 * https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html
+
+* https://engineering.docker.com/2019/04/multi-arch-images/
+
+* https://engineering.docker.com/2019/06/getting-started-with-docker-for-arm-on-linux/

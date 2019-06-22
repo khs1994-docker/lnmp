@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.10
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 

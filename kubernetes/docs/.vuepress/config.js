@@ -78,6 +78,7 @@ module.exports = {
       ],
       "/node/": [
         "kubelet",
+        "worker",
       ],
     },
     sidebarDepth: 1,

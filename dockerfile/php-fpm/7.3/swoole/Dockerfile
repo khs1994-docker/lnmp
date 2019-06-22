@@ -53,18 +53,8 @@ ENV PECL_EXTENSION \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-      sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
-      && rm -rf /var/cache/apk/* \
-      && mkdir -p /usr/local/sbin \
-      && cd /usr/local/bin \
-      && for file in `ls docker-php-*`; \
-         do \
-         sed "s#apk --no-cache#apk#g" $file > /usr/local/sbin/$file \
-         ; sed "s#apk add --no-cache#apk add#g" $file > /usr/local/sbin/$file; \
-         done \
-      && chmod +x /usr/local/sbin/docker-php-* \
       # 不要删除
       && PHP_SWOOLE_RUN_DEPS=" \
                          bash \
@@ -118,8 +108,8 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
-        && apk add --virtual .php-swoole-run-deps $PHP_SWOOLE_RUN_DEPS \
-        && apk add --virtual .php-swoole-build-deps $PHP_SWOOLE_BUILD_DEPS \
+        && apk add --no-cache --virtual .php-swoole-run-deps $PHP_SWOOLE_RUN_DEPS \
+        && apk add --no-cache --virtual .php-swoole-build-deps $PHP_SWOOLE_BUILD_DEPS \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-configure gd \
@@ -130,7 +120,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
                                         --with-webp-dir=/usr \
                                         --with-xpm-dir=/usr \
         && docker-php-ext-install $PHP_EXTENSION \
-        && apk add --virtual .build-deps \
+        && apk add --no-cache --virtual .build-deps \
                                 # linux-headers \
                                 $PHPIZE_DEPS \
         && for extension in ${PHP_EXTENSION};do \

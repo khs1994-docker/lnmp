@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.9 as php
+FROM --platform=$TARGETPLATFORM alpine:3.10 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -32,11 +32,9 @@ ENV PHPIZE_DEPS \
       re2c
 
 # persistent / runtime deps
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-      set -ex \
-      && rm -rf /var/cache/apk/* \
+RUN set -ex \
       && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-      && apk add \
+      && apk add --no-cache \
                  curl \
                  tar \
                  xz \
@@ -137,25 +135,18 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-  --mount=type=cache,target=/usr/src,id=php_src_74 \
+RUN --mount=type=cache,target=/usr/src,id=php_src_74 \
   --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
-  && rm -rf /var/cache/apk/* \
   && export PATH=$PATH:/opt/bin \
-  && cd /opt/bin \
-  && for file in `ls docker-php-*`; \
-  do \
-  sed -i "s#apk add --no-cache#apk add#g" $file; \
-  done \
-  \
   ; cp /opt/bin/docker-php-entrypoint /usr/local/bin \
+  \
   ; mkdir -p $PHP_INI_DIR/conf.d \
-  # && apk add --virtual .fetch-deps gnupg \
+  # && apk add --no-cache --virtual .fetch-deps gnupg \
 	&& mkdir -p /usr/src \
 	&& cd /usr/src \
-  && apk add git openssh-client \
+  && apk add --no-cache git openssh-client \
   \
   && if [ -d php ];then \
        cd php; \
@@ -185,7 +176,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 	# 	rm -rf "$GNUPGHOME"; \
 	# fi; \
 	# && apk del --no-network --no-cache .fetch-deps \
-	&& apk add --virtual .build-deps \
+	&& apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
           curl-dev \
@@ -225,11 +216,15 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
           oniguruma-dev \
           \
           bison \
+          libgcrypt-dev \
+          libgpg-error-dev \
           ${APK_DEV_EXTRA:-} \
 	\
 	&& export CFLAGS="$PHP_CFLAGS" \
 		        CPPFLAGS="$PHP_CPPFLAGS" \
 		        LDFLAGS="$PHP_LDFLAGS" \
+            ARGON2_LIBS="-largon2" \
+            ARGON2_CFLAGS="-I/usr/include" \
 	# && docker-php-source extract \
 	&& cd /usr/src/php \
   && make clean || echo \
@@ -315,7 +310,7 @@ RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
-	&& apk add $runDeps \
+	&& apk add --no-cache $runDeps \
   \
   # https://github.com/docker-library/php/issues/443
   # && pecl update-channels \
@@ -344,20 +339,13 @@ ENV PECL_EXTENSION \
       swoole-beta \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=cache,target=/var/cache/apk,id=php_apk_cache \
-    --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --mount=type=cache,target=/usr/local/lib/php/test \
     --mount=type=cache,target=/usr/local/lib/php/doc \
       set -x \
-      && rm -rf /var/cache/apk/* \
       && export PATH=$PATH:/opt/bin \
-      && cd /opt/bin \
-      && for file in `ls docker-php-*`; \
-      do \
-      sed -i "s#apk add --no-cache#apk add#g" $file; \
-      done \
-      && apk add --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
-      && apk add --virtual .pecl_run_deps $PECL_RUN_DEPS \
+      && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
+      && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && curl -sfL -o /usr/local/bin/pickle \
         https://github.com/khs1994-php/pickle/releases/download/v0.4.0-2019-02-14/pickle.phar \
       && chmod +x /usr/local/bin/pickle \
