@@ -205,7 +205,7 @@ services:
     command: [ "--character-set-server=utf8mb4", "--default-authentication-plugin=mysql_native_password" ]
 
   # - name: postgresql
-  #   image: postgres:11.3-alpine
+  #   image: postgres:11.4-alpine
   #   environment:
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_DB=test
@@ -241,7 +241,7 @@ volumes:
 #   MONGODB_VERSION:
 #     - 4.1.0
 #   POSTGRESQL_VERSION:
-#     - 11.3-alpine
+#     - 11.4-alpine
 
 # matrix:
 #   include:
