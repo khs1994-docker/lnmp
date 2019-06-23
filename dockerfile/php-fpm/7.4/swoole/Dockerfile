@@ -135,8 +135,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
-RUN --mount=type=cache,target=/usr/src,id=php_src_74 \
-  --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
   && export PATH=$PATH:/opt/bin \
@@ -316,7 +315,8 @@ RUN --mount=type=cache,target=/usr/src,id=php_src_74 \
   # && pecl update-channels \
 	# && rm -rf /tmp/pear ~/.pearrc \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del --no-network --no-cache .build-deps
+  && apk del --no-network --no-cache .build-deps \
+  && rm -rf /usr/src/php
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \

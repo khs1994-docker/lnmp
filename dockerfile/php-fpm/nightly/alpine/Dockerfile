@@ -137,8 +137,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
-RUN --mount=type=cache,target=/usr/src,id=php_src_nightly \
-  --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
   && export PATH=$PATH:/opt/bin \
@@ -361,7 +360,8 @@ RUN --mount=type=cache,target=/usr/src,id=php_src_nightly \
   && ln -sf /dev/stdout /var/log/php-fpm/access.log \
   && ln -sf /dev/stderr /var/log/php-fpm/error.log \
   && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
-  && chmod -R 777 /var/log/php-fpm
+  && chmod -R 777 /var/log/php-fpm \
+  && rm -rf /usr/src/php
 
 ENTRYPOINT ["docker-php-entrypoint"]
 

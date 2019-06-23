@@ -309,7 +309,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            opcache \
                            # 7.4 +
                            ffi \
-                           tideways_xhprof \
+                           $(test `uname -m` = 'x86_64' && echo tideways_xhprof) \
                            ${PHP_EXTENSION_EXTRA:-} \
 	&& runDeps="$( \
 		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
@@ -367,7 +367,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   && ln -sf /dev/stdout /var/log/php-fpm/access.log \
   && ln -sf /dev/stderr /var/log/php-fpm/error.log \
   && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
-  && chmod -R 777 /var/log/php-fpm
+  && chmod -R 777 /var/log/php-fpm \
+  && rm -rf /usr/src/php
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
