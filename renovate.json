@@ -23,5 +23,6 @@
     "digest": {
       "enabled": false
     }
-  }
+  },
+  "fileMatch": ["docker-compose.bump.yml"]
 }
