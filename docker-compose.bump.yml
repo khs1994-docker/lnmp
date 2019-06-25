@@ -26,7 +26,7 @@ services:
     image: postgres:11.4-alpine
 
   mongodb:
-    image: mongo:4.1.11
+    image: mongo:4.1.13
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
