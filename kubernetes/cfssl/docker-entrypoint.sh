@@ -39,7 +39,10 @@ main (){
         "L":"Beijing",
         "O":"k8s",
         "OU":"khs1994.com"
-      }]
+      }],
+      "ca": {
+        "expiry": "876000h"
+      }
     }' \
          | cfssl gencert -initca - | cfssljson -bare ca -
     # ca-key.pem ca.csr ca.pem
