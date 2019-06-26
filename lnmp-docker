@@ -13,6 +13,7 @@
 
 set -e
 
+readonly KUBERNETES_VERSION=1.13.0
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -288,10 +289,10 @@ _gcr_io(){
           echo; exit; fi
     fi
 
-    images="kube-controller-manager:v1.13.0 \
-    kube-apiserver:v1.13.0 \
-    kube-scheduler:v1.13.0 \
-    kube-proxy:v1.13.0 \
+    images="kube-controller-manager:v${KUBERNETES_VERSION} \
+    kube-apiserver:v${KUBERNETES_VERSION} \
+    kube-scheduler:v${KUBERNETES_VERSION} \
+    kube-proxy:v${KUBERNETES_VERSION} \
     etcd:3.2.24 \
     coredns:1.2.6 \
     pause:3.1"

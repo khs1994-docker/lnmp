@@ -9,7 +9,7 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
 
 $env:DOCKER_DEFAULT_PLATFORM="linux"
-
+$env:KUBERNETES_VERSION="1.13.0"
 $source=$PWD
 $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
 $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
@@ -991,10 +991,10 @@ This local server support Docker Desktop EDGE v2.0.1.0(30090)
         --label com.khs1994.lnmp.gcr.io `
         registry
 
-      $images="kube-controller-manager:v1.13.0", `
-      "kube-apiserver:v1.13.0", `
-      "kube-scheduler:v1.13.0", `
-      "kube-proxy:v1.13.0", `
+      $images="kube-controller-manager:v${KUBERNETES_VERSION}", `
+      "kube-apiserver:v${KUBERNETES_VERSION}", `
+      "kube-scheduler:v${KUBERNETES_VERSION}", `
+      "kube-proxy:v${KUBERNETES_VERSION}", `
       "etcd:3.2.24", `
       "coredns:1.2.6", `
       "pause:3.1"
