@@ -40,7 +40,7 @@ RUN --mount=type=bind,from=composer:1.8.6,source=/usr/bin/composer,target=/opt/b
     && cp -a /opt/bin/composer /usr/bin/composer \
     && composer --ansi --version --no-interaction \
 # composer 中国镜像
-    && composer config -g repo.packagist composer https://packagist.laravel-china.org \
+    && composer config -g repo.packagist composer https://php.cnpkg.org \
 # laravel 安装程序
     && composer global require --prefer-dist --ignore-platform-reqs "laravel/installer" \
 # php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer

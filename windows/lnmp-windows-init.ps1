@@ -598,13 +598,13 @@ php -m
 
 ################################################################################
 
-$HTTP_IS_RUN=0
+$HTTPD_IS_RUN=0
 
 get-service Apache2.4 | out-null
 
 if (!($?)){
     httpd.exe -k install
-    $HTTP_IS_RUN=1
+    $HTTPD_IS_RUN=1
 }
 
 $a=Select-String 'include conf.d/' C:\Apache24\conf\httpd.conf
@@ -640,7 +640,7 @@ Please exec command start(or init) mysql
 
 $ net start mysql
 
-$ mysql -uroot -p $mysql_password
+$ mysql -uroot -p`"$mysql_password`"
 
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 
