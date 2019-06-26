@@ -8,8 +8,9 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
 
-$env:DOCKER_DEFAULT_PLATFORM="linux"
-
+$DOCKER_DEFAULT_PLATFORM="linux"
+$KUBERNETES_VERSION="1.14.3"
+$DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
 $source=$PWD
 $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
 $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
@@ -970,10 +971,9 @@ XXX
 
       docker container rm -f `
           $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
-echo "
-This local server support Docker Desktop EDGE v2.0.4.0(33772)
 
-"
+printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes ${KUBERNETES_VERSION}"
+
       if ('down' -eq $args[1]){
         Write-Warning "Stop k8s.gcr.io local server success"
         exit
@@ -991,10 +991,10 @@ This local server support Docker Desktop EDGE v2.0.4.0(33772)
         --label com.khs1994.lnmp.gcr.io `
         registry
 
-      $images="kube-controller-manager:v1.14.1", `
-      "kube-apiserver:v1.14.1", `
-      "kube-scheduler:v1.14.1", `
-      "kube-proxy:v1.14.1", `
+      $images="kube-controller-manager:v${KUBERNETES_VERSION}", `
+      "kube-apiserver:v${KUBERNETES_VERSION}", `
+      "kube-scheduler:v${KUBERNETES_VERSION}", `
+      "kube-proxy:v${KUBERNETES_VERSION}", `
       "etcd:3.3.10", `
       "coredns:1.3.1", `
       "pause:3.1"
@@ -1005,6 +1005,7 @@ This local server support Docker Desktop EDGE v2.0.4.0(33772)
          # docker push k8s.gcr.io/$image
          # docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
 
+         printInfo "Handle ${image}"
          docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$image
          docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$image k8s.gcr.io/$image
          docker push k8s.gcr.io/$image

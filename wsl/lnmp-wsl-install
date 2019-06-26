@@ -274,7 +274,7 @@ php -i | grep .ini
 
 # composer cn mirror
 
-command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://packagist.laravel-china.org
+command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://php.cnpkg.org
 
 }
 
