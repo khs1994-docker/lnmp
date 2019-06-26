@@ -8,8 +8,8 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
 
-$env:DOCKER_DEFAULT_PLATFORM="linux"
-$env:KUBERNETES_VERSION="1.13.0"
+$DOCKER_DEFAULT_PLATFORM="linux"
+$KUBERNETES_VERSION="1.13.0"
 $source=$PWD
 $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
 $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
