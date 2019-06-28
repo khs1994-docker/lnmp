@@ -7,7 +7,7 @@ dist: xenial
 
 cache:
   directories:
-    - kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin
+    - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
 
 before_install:
   # 升级最新 Docker Compose
@@ -29,15 +29,15 @@ install:
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
   - docker-compose up cfssl-single
   # - source .env
-  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}
+  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}
   - ./lnmp-k8s single-install
   - export PATH=$PATH:/opt/bin/k8s
-  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/*.tar
-  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/*.docker_tag
-  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/apiextensions-apiserver
-  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/cloud-controller-manager
-  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/hyperkube
-  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}/kubernetes/server/bin/mounter
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/cloud-controller-manager
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/hyperkube
+  - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/mounter
 
 before_script:
   - sudo systemctl cat etcd
