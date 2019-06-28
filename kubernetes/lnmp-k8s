@@ -443,12 +443,13 @@ _k8s_install(){
   print_info "copy kubernetes conf and cert file ..."
   sudo cp systemd/certs/*.kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
   sudo cp \
-    systemd/certs/audit-policy.yaml \
-    systemd/certs/kubelet-config.yaml \
-    systemd/certs/kube-proxy.config.yaml \
-    systemd/certs/csr-crb.yaml \
-    systemd/certs/kube-scheduler.yaml \
-    systemd/certs/encryption-config.yaml \
+    systemd/certs/{audit-policy.yaml, \
+                   kubelet-config.yaml, \
+                   kube-proxy.config.yaml, \
+                   csr-crb.yaml, \
+                   kube-scheduler.yaml, \
+                   encryption-config.yaml \
+                  } \
     ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml" "kube-scheduler.yaml")
@@ -513,11 +514,12 @@ _k8s_join(){
 
   print_info "copy kubernetes conf and cert file ..."
   sudo cp \
-    systemd/certs/kubelet-config.yaml \
-    systemd/certs/kube-proxy.config.yaml \
-    systemd/certs/csr-crb.yaml \
-    systemd/certs/kubectl.kubeconfig \
-    systemd/certs/kube-proxy.kubeconfig \
+    systemd/certs/{kubelet-config.yaml, \
+                   kube-proxy.config.yaml, \
+                   csr-crb.yaml, \
+                   kubectl.kubeconfig, \
+                   kube-proxy.kubeconfig \
+                 } \
     ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml")
@@ -594,11 +596,11 @@ _single_cleanup(){
   sudo systemctl stop etcd flanneld docker kube-apiserver \
     kube-controller-manager kube-scheduler kube-proxy kubelet docker || true
 
-  sudo rm -rf /opt/bin/k8s
-  sudo rm -rf /var/lib/etcd
-  sudo rm -rf /var/log/ku*
-  sudo rm -rf /var/lib/kubelet
-  sudo rm -rf /var/lib/kube-proxy
+  sudo rm -rf /opt/bin/k8s \
+              /var/lib/etcd \
+              /var/log/ku* \
+              /var/lib/kubelet \
+              /var/lib/kube-proxy \
 
   sudo rm -rf ${K8S_CONF_PATH:-/opt/bin/k8s/conf}
   sudo rm -rf /etc/systemd/system/docker.service.d
