@@ -517,7 +517,11 @@ _k8s_join(){
   # kubelet
   sudo cp systemd/kubelet.service /etc/systemd/system/
   # cp pem
-  sudo cp systemd/certs/ca.pem ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
+  sudo cp systemd/certs/{ca.pem,\
+ca-key.pem,\
+flanneld-key.pem,\
+flanneld.pem} \
+${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
 
   _k8s_install_cp_bin
 

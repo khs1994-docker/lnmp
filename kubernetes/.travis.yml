@@ -29,7 +29,7 @@ install:
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
   - docker-compose up cfssl-single
   # - source .env
-  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}
+  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
   - ./lnmp-k8s single-install
   - export PATH=$PATH:/opt/bin/k8s
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar

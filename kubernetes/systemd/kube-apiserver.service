@@ -9,9 +9,11 @@ Requires=etcd.service
 # --insecure-port has been deprecated, This flag will be removed in a future version.
 
 Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
+Environment="KUBE_APISERVER_HOST=192.168.199.100"
+Environment="K8S_ETCD_HOST=192.168.199.100"
 
 ExecStart=/opt/bin/k8s/kube-apiserver \
---advertise-address=192.168.199.100 \
+--advertise-address=${KUBE_APISERVER_HOST} \
 --default-not-ready-toleration-seconds=360 \
 --default-unreachable-toleration-seconds=360 \
 --feature-gates=DynamicAuditing=true \
@@ -23,8 +25,8 @@ ExecStart=/opt/bin/k8s/kube-apiserver \
 --etcd-cafile=${K8S_CONF_PATH}/certs/ca.pem \
 --etcd-certfile=${K8S_CONF_PATH}/certs/kubernetes.pem \
 --etcd-keyfile=${K8S_CONF_PATH}/certs/kubernetes-key.pem \
---etcd-servers="https://192.168.199.100:2379" \
---bind-address=192.168.199.100 \
+--etcd-servers="https://${K8S_ETCD_HOST}:2379" \
+--bind-address=${KUBE_APISERVER_HOST} \
 --secure-port=6443 \
 --tls-cert-file=${K8S_CONF_PATH}/certs/kubernetes.pem \
 --tls-private-key-file=${K8S_CONF_PATH}/certs/kubernetes-key.pem \
