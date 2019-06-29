@@ -233,7 +233,7 @@ $ ./lnmp-docker down
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.16-alpine`           | **1.5.16**       |`Alpine:3.10`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.14-management-alpine` | **3.7.14**       |`Alpine:3.8`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:11.4-alpine`             | **11.4**        |`Alpine:3.10`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.11`                      | **4.1.11**       |`Ubuntu:bionic` |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.1.13`                      | **4.1.13**       |`Ubuntu:bionic` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.10`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.8`    |
 
