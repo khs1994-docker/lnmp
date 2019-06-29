@@ -35,16 +35,16 @@ services:
     image: httpd:2.4.39-alpine
 
   etcd:
-    image: quay.io/coreos/etcd:3.3.12
+    image: quay.io/coreos/etcd:3.3.13
 
   minio:
     image: minio/minio:RELEASE.2019-04-18T01-15-57Z
 
   kong:
-    image: kong:1.2.0-alpine
+    image: kong:1.2.1-alpine
 
   node:
-    image: node:12.4.0-alpine
+    image: node:12.5.0-alpine
 
   go:
     image: golang:1.12.6-alpine
