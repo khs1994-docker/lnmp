@@ -29,7 +29,7 @@ services:
 
   rabbitmq:
     << : *default-common
-    image: rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.14}-management-alpine
+    image: rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.15}-management-alpine
 
   postgresql:
     << : *default-common
@@ -37,7 +37,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: mongo:${LNMP_MONGODB_VERSION:-4.1.11}
+    image: mongo:${LNMP_MONGODB_VERSION:-4.1.13}
 
   php7:
     << : *default-common

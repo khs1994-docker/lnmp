@@ -69,7 +69,7 @@ services:
       - postgresql-kong-data:/var/lib/postgresql/data
 
   kong:
-    image: kong
+    image: kong:1.2.1-alpine
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgresql-kong

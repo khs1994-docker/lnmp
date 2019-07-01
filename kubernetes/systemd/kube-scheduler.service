@@ -6,10 +6,11 @@ Requires=kube-apiserver.service
 [Service]
 
 Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
+Environment="K8S_S_HOST=192.168.199.100"
 
 ExecStart=/opt/bin/k8s/kube-scheduler \
 --config=${K8S_CONF_PATH}/kube-scheduler.yaml \
---bind-address=192.168.199.100 \
+--bind-address=${K8S_S_HOST} \
 --secure-port=10259 \
 --port=0 \
 --tls-cert-file=${K8S_CONF_PATH}/certs/kube-scheduler.pem \

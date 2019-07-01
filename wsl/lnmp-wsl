@@ -97,6 +97,10 @@ function _start(){
                                         start
       ;;
 
+      mysql )
+         sudo mysqld_safe -D
+      ;;
+
       * )
           sudo service $soft start
       ;;
@@ -133,6 +137,11 @@ function _stop(){
 
     postgresql )
         /usr/lib/postgresql/10/bin/pg_ctl -D "$PGDATA" stop
+    ;;
+
+    mysql )
+       pid=`ps -aux | grep /usr/sbin/mysqld | awk -F " " '{print $2}' | head -1`
+       sudo kill -9 $pid
     ;;
 
     * )

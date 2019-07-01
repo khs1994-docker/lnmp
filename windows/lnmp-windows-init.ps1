@@ -22,7 +22,7 @@ $global:USER_AGENT="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 
 Function _command($command){
   if ($command -eq "wsl"){
-    wsl ls
+    wsl curl
   }else{
     get-command $command -ErrorAction "SilentlyContinue"
   }
@@ -224,9 +224,9 @@ _downloader `
 # https://curl.haxx.se/docs/caextract.html
 # https://github.com/khs1994-docker/lnmp/issues/339
 _downloader `
-  https://curl.haxx.se/ca/cacert-${PHP_CACERT_DATA}.pem `
-  C:\php-ext\cacert-${PHP_CACERT_DATA}.pem `
-  C:\php-ext\cacert-${PHP_CACERT_DATA}.pem null $false
+  https://curl.haxx.se/ca/cacert-${PHP_CACERT_DATE}.pem `
+  C:\php-ext\cacert-${PHP_CACERT_DATE}.pem `
+  C:\php-ext\cacert-${PHP_CACERT_DATE}.pem null $false
 
 Function _pecl($zip,$file){
   if (!(Test-Path C:\php-ext\$file)){
@@ -583,8 +583,8 @@ Foreach ($item in $items)
 
 $a = php -r "echo ini_get('curl.cainfo');"
 
-if ($a -ne "C:\php-ext\cacert-${PHP_CACERT_DATA}.pem"){
-  echo "curl.cainfo=C:\php-ext\cacert-${PHP_CACERT_DATA}.pem" | out-file -Append C:/php/php.ini -encoding utf8
+if ($a -ne "C:\php-ext\cacert-${PHP_CACERT_DATE}.pem"){
+  echo "curl.cainfo=C:\php-ext\cacert-${PHP_CACERT_DATE}.pem" | out-file -Append C:/php/php.ini -encoding utf8
 }
 
 php -r "echo ini_get('curl.cainfo');"

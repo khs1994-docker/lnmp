@@ -1,6 +1,6 @@
-# FROM microsoft/windowsservercore:1903
+ARG WIN_VERSION="/servercore:1903"
 
-FROM mcr.microsoft.com/windows/servercore:1903
+FROM mcr.microsoft.com/windows${WIN_VERSION}
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
