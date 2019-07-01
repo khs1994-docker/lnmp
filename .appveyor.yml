@@ -78,4 +78,6 @@ test_script:
       wsl lsb_release -a
       wsl ls /mnt/d/lnmp
   - ps: |
-      & $HOME\lnmp\windows\lnmp-windows-init
+      if($APPVEYOR_REPO_TAG){
+        & $HOME\lnmp\windows\lnmp-windows-init
+      }
