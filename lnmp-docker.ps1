@@ -103,6 +103,10 @@ Function env_status(){
   if (!(Test-Path config/php/docker-php.ini)){
     Copy-Item config/php/docker-php.ini.example config/php/docker-php.ini
   }
+
+  if (!(Test-Path config/php/php.ini)){
+    Copy-Item config/php/php.development.ini config/php/php.ini
+  }
 }
 
 if (!(Test-Path lnmp-custom-script.ps1)){
@@ -112,6 +116,21 @@ if (!(Test-Path lnmp-custom-script.ps1)){
 printInfo "Exec custom script"
 
 . ./lnmp-custom-script.ps1
+
+Function wait_docker(){
+  while ($i -lt (300)) {
+  $i +=1
+  get-process docker*
+  get-service docker*
+  docker info
+  if ($? -eq 'True') {
+    Write-Host "`nDocker peparation finished OK"
+    break
+  }
+  Write-warning "Retrying in 30 seconds..."
+  sleep 30
+  }
+}
 
 Function logs(){
   if (! (Test-Path log\httpd)){
@@ -163,7 +182,7 @@ Function check_docker_version(){
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
 
   if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
-    printWarning "Current branch incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
+    printWarning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
     write-host
   }
 }
@@ -959,6 +978,10 @@ XXX
         --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock `
         -e PORT=2375 `
         shipyard/docker-proxy
+    }
+
+    wait-docker {
+      wait_docker
     }
 
     gcr.io {

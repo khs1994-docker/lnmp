@@ -1,16 +1,81 @@
 version: build-{build}.{branch}
-image: Visual Studio 2017
+# image: Visual Studio 2017
+image: Windows Server 2019
 
 branches:
   only:
-  - windows
+  # - windows
+  - 18.09
+  - 19.03
+  - master
 
-skip_non_tags: true
+# skip_non_tags: true
+clone_depth: 1
+clone_folder: D:\lnmp
 
 build_script:
-  - pwsh: docker --version
+  - ps: |
+      [System.Environment]::OSVersion
+      echo $HOME
+      copy-item -r -Force D:\lnmp $HOME\lnmp
+  - pwsh: docker version
+  - pwsh: docker info
   - pwsh: docker-compose --version
-  - pwsh: Invoke-WebRequest -Uri https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Windows-x86_64.exe -OutFile "C:\Program Files\Docker\Docker\Resources\bin\docker-compose.exe"
-  - pwsh: ./lnmp-docker.ps1 up
-  - pwsh: sleep 5
-  - pwsh: Invoke-WebRequest 127.0.0.1
+  - ps: get-command docker
+  # - ps: choco install docker-desktop --pre
+  # - ps: choco upgrade docker-desktop --pre
+  # - ps: choco install docker-desktop
+  # - ps: get-command docker
+  # - ps: |
+  #     ls $Env:ProgramFiles\Docker\Docker
+  - ps: Write-host "`nSwitch to linux engine"  -foregroundcolor green
+  - ps: Switch-DockerLinux
+  # - ps: ./lnmp-docker wait-docker
+  - ps: docker info
+  - ps: |
+      & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SharedDrives
+  # - ps: ./lnmp-docker wait-docker
+  # - pwsh: Invoke-WebRequest -Uri https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Windows-x86_64.exe -OutFile "C:\Program Files\Docker\Docker\Resources\bin\docker-compose.exe"
+  # - pwsh: docker-compose --version
+  - pwsh: ./lnmp-docker
+  - pwsh: icacls d:\lnmp\log /grant 'DockerExchange:f' /T
+  - pwsh: ./lnmp-docker up
+  - pwsh: |
+      sleep 60
+      docker ps -a
+      cat log/php/php-fpm-error.log
+      cat log/nginx/error.log
+      docker-compose logs
+      (Invoke-WebRequest 127.0.0.1).content
+      ./lnmp-docker down
+  # - ps: Write-host "`nSwitch to Windows engine"  -foregroundcolor green
+  # - ps: Switch-DockerWindows
+  # - ps: |
+  #     cd dockerfile-windows
+  #     echo "WIN_VERSION=/servercore:1809" >> .env
+  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/nginx:1.17.0-windowsservercore-1903 nginx
+  #     docker run --isolation=process -it -d -p 8080:80 -p 443:443 khs1994/nginx:1.17.0-windowsservercore-1903
+  #     sleep 10
+  #     docker ps -a
+  #     (Invoke-WebRequest 127.0.0.1:8080).content
+  #     docker rm -f $(docker ps -a -q)
+  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/php:7.3.6-windowsservercore-1903 php
+  #     cd ..
+  #     remove-item windows/config/nginx/www.conf
+  #     move-item windows/config/nginx/www.container.config windows/config/nginx/www.conf
+  # - ps: docker-compose -f docker-windows.yml up -d nginx php
+  # - ps: |
+  #     sleep 60
+  #     docker ps -a
+  #     (Invoke-WebRequest 127.0.0.1:8080).content
+  #     (Invoke-WebRequest https://demo.t.khs1994.com/index.html).content
+  #     (Invoke-WebRequest https://demo.t.khs1994.com/index.php).content
+  #     docker-compose -f docker-windows.yml down
+test_script:
+  - ps: |
+      wsl --help
+      wslconfig /setdefault ubuntu-18.04
+      wsl lsb_release -a
+      wsl ls /mnt/d/lnmp
+  - ps: |
+      & $HOME\lnmp\windows\lnmp-windows-init
