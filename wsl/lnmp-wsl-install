@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-#
 # 从 Docker 复制二进制文件，安装 PHP Redis Memcached
-#
-# Only Support WSL Debian
 
 _print_help_info(){
     echo "
@@ -48,13 +45,17 @@ PG_MAJOR=10
 
 GO_PREFIX=/usr/local
 
-GO_VERSION=1.12.4
+GO_VERSION=1.12.6
 
-NODE_VERSION=12.3.1
+NODE_VERSION=12.5.0
 
 NODE_PREFIX=/usr/local
 
 PHP_VERSION=7.3.6
+
+MYSQL_DEB_VERSION=0.8.13-1
+
+SWIFT_VERSION=5.0.1
 
 ################################################################################
 _httpd(){
@@ -287,12 +288,12 @@ _postgresql(){
     # echo "deb http://apt.postgresql.org/pub/repos/apt/ $( lsb_release -cs )-pgdg main" | \
     echo "deb http://mirrors.ustc.edu.cn/postgresql/repos/apt/ $( lsb_release -cs )-pgdg main" | \
       sudo tee /etc/apt/sources.list.d/postgresql.list
+
+    apt-key list | grep PostgreSQL || \
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+    sudo apt-get update
  fi
-
-  apt-key list | grep PostgreSQL || \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-
-  sudo apt-get update
 
   sudo apt-get -y install postgresql
 
@@ -322,14 +323,15 @@ _mongodb(){
 
 _mysql(){
   # apt
-  if ! [ -f mysql-apt-config_0.8.9-1_all.deb ];then
-      wget https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
+  apt show mysql-apt-config > /dev/null
+  if ! [ $? -eq 0 ];then
+      wget https://dev.mysql.com/get/mysql-apt-config_${MYSQL_DEB_VERSION}_all.deb
+      sudo dpkg -i mysql-apt-config_${MYSQL_DEB_VERSION}_all.deb
+      sudo apt install -f
+      sudo apt update
   fi
 
-  sudo dpkg -i mysql-apt-config_0.8.10-1_all.deb
-  sudo apt install -f
-  sudo apt update
-  sudo apt install mysql-server
+  sudo apt install -y mysql-server
 }
 
 _php-extension-list(){
@@ -375,16 +377,17 @@ _enable(){
 }
 
 _swift(){
-  if [ `lsb_release -cs` != 'xenial' ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04\n"; exit 1; fi
+  source /etc/os-release
+  if [ ${UBUNTU_CODENAME} != 'xenial' -a ${UBUNTU_CODENAME} != 'bionic' ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04/18.04\n"; exit 1; fi
 
   sudo apt install -y clang libicu-dev
 
   cd /tmp
-  test -f swift-4.1-RELEASE-ubuntu16.04.tar.gz || \
-      wget https://swift.org/builds/swift-4.1-release/ubuntu1604/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu16.04.tar.gz
+  test -f swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz || \
+      wget https://swift.org/builds/swift-${SWIFT_VERSION}-release/ubuntu${VERSION_ID/./''}/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz
   sudo rm -rf $SWIFT_PREFIX ; sudo mkdir -p $SWIFT_PREFIX
-  sudo tar -zxvf swift-4.1-RELEASE-ubuntu16.04.tar.gz -C $SWIFT_PREFIX
-  sudo ln -sf $SWIFT_PREFIX/swift-4.1-RELEASE-ubuntu16.04/usr/bin/* /usr/local/bin
+  sudo tar -zxvf swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz -C $SWIFT_PREFIX
+  sudo ln -sf $SWIFT_PREFIX/swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}/usr/bin/* /usr/local/bin
 
   swift --version
 }

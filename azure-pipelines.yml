@@ -10,14 +10,41 @@ pool:
   vmImage: 'windows-2019'
 
 steps:
+# - pwsh: |
+#     get-command docker
+#     ls $env:ProgramFiles\Docker
+#     stop-service docker
+#     choco install docker-desktop | out-null
+#     & $env:ProgramFiles\Docker\Docker\DockerCli.exe -Start --testftw!928374kasljf039
+#     ./lnmp-docker wait-docker
+#   displayName: 'Setting Docker'
+
 - pwsh: |
     docker info
-    docker --version
+    docker version
     docker-compose --version
-    ./lnmp-docker up
+    ./lnmp-docker
+    cd dockerfile-windows
+    echo "WIN_VERSION=/servercore:1809" >> .env
+    docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/nginx:1.17.0-windowsservercore-1903 nginx
+    docker run --isolation=process -it -d -p 8080:80 -p 443:443 khs1994/nginx:1.17.0-windowsservercore-1903
+    sleep 10
+    docker ps -a
+    Invoke-WebRequest 127.0.0.1:8080
+    docker rm -f $(docker ps -a -q)
+    docker ps -a
+    docker-compose config
+    docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/php:7.3.6-windowsservercore-1903 php
+    cd ..
+    remove-item windows/config/nginx/www.conf
+    move-item windows/config/nginx/www.container.config windows/config/nginx/www.conf
+    docker-compose -f docker-windows.yml up -d nginx php
   displayName: 'Up'
 
 - pwsh: |
     sleep 20
-    curl 127.0.0.1
+    docker ps -a
+    Invoke-WebRequest 127.0.0.1:8080
+    Invoke-WebRequest https://demo.t.khs1994.com/index.html
+    Invoke-WebRequest https://demo.t.khs1994.com/index.php
   displayName: 'Test'

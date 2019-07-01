@@ -13,11 +13,11 @@
 将以下文件从主节点复制到从节点
 
 ```bash
-~/lnmp/kubernetes/systemd/certs/kubelet-config.yaml
-~/lnmp/kubernetes/systemd/certs/kube-proxy.config.yaml
-~/lnmp/kubernetes/systemd/certs/csr-crb.yaml
-~/lnmp/kubernetes/systemd/certs/kubectl.kubeconfig
-~/lnmp/kubernetes/systemd/certs/kube-proxy.kubeconfig
-~/lnmp/kubernetes/systemd/certs/flanneld.pem
-~/lnmp/kubernetes/systemd/certs/flanneld-key.pem
+$ scp khs1994@192.168.199.100:/home/khs1994/lnmp/kubernetes/systemd/certs/{kubelet-config.yaml,\
+kube-proxy.config.yaml,\
+csr-crb.yaml,\
+kubectl.kubeconfig,\
+kube-proxy.kubeconfig,\
+flanneld.pem,\
+flanneld-key.pem} .
 ```

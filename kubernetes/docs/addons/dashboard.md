@@ -73,6 +73,8 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 # $ export KUBE_APISERVER=https://localhost:6445
 # $ export K8S_CONF_PATH=/opt/bin/k8s/conf
 
+$ cd ~/.kube
+
 $ kubectl config set-cluster kubernetes \
   --certificate-authority=${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/ca.pem \
   --embed-certs=true \

@@ -103,7 +103,7 @@ services:
 
   rabbitmq:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.14}-management-alpine
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.15}-management-alpine
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
       - zoneinfo-data:/usr/share/zoneinfo
@@ -132,7 +132,7 @@ services:
 
   mongodb:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.11}
+    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.13}
     volumes:
       - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
       - mongodb-data:/data/db
@@ -286,7 +286,7 @@ services:
 
   etcd:
     << : *default-common
-    image: quay.io/coreos/etcd:v${LNMP_ETCD_VERSION:-3.3.12}
+    image: quay.io/coreos/etcd:v${LNMP_ETCD_VERSION:-3.3.13}
     networks:
       - frontend
       - backend

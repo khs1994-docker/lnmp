@@ -1,6 +1,6 @@
-# FROM microsoft/windowsservercore:1903
+ARG WIN_VERSION="/servercore:1903"
 
-FROM mcr.microsoft.com/windows/servercore:1903
+FROM mcr.microsoft.com/windows${WIN_VERSION}
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -35,4 +35,4 @@ WORKDIR C:\\php
 
 EXPOSE 9000
 
-CMD ["php-cgi-spawner","php-cgi.exe","-c","c:/php/php.ini","9000","1"]
+CMD ["php-cgi-spawner","php-cgi.exe","-c","c:/phpconfig/php.ini","9000","1"]

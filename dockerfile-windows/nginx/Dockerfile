@@ -1,6 +1,6 @@
-# FROM microsoft/windowsservercore:1903
+ARG WIN_VERSION="/servercore:1903"
 
-FROM mcr.microsoft.com/windows/servercore:1903
+FROM mcr.microsoft.com/windows${WIN_VERSION}
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -29,7 +29,8 @@ RUN $url = ('http://nginx.org/download/nginx-{0}.zip' -f $env:NGINX_VERSION); \
 
 WORKDIR C:\\nginx
 
-COPY nginx.conf C:/nginx/conf
+COPY nginx.conf C:/nginx/conf/
+COPY www.conf C:/nginx/conf/conf2.d/
 
 EXPOSE 80 443
 

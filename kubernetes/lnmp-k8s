@@ -49,8 +49,8 @@ print_help_info(){
 Usage: lnmp-k8s COMMAND
 
 Commands:
-  kubernetes-server      Download kubernetes server files
-  pull-k8s-image         Use By developer Only [GOOS] [GOARCH] {TYPE:-server'}
+  kubernetes-server      Download kubernetes server files {GOOS} {GOARCH} {TYPE:-server} {KUBERNETES_VERSION:-${KUBERNETES_VERSION}}
+  pull-k8s-image         Use By developer Only {GOOS} {GOARCH} {TYPE:-server} {KUBERNETES_VERSION:-${KUBERNETES_VERSION}}
 
   kubectl-install        Install kubectl
   kubectl-getinfo        Get kubectl latest version info
@@ -96,11 +96,12 @@ GOOS=`uname -s | tr A-Z  a-z`
 
 _pull_k8s_image(){
   local TYPE=server
-  test -n "${1}" && GOOS=$1
-  test -n "${2}" && GOARCH=$2
-  test -n "${3}" && TYPE=$3
+  test -n "${1}" && local GOOS=$1
+  test -n "${2}" && local GOARCH=$2
+  test -n "${3}" && local TYPE=$3
+  test -n "${4}" && local KUBERNETES_VERSION=$4
 
-  if [ -f kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz ];then
+  if [ -f kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz ];then
      print_info "Already download"
      return
   fi
@@ -108,7 +109,7 @@ _pull_k8s_image(){
   docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   docker container create --name khs1994-kubernetes-${TYPE} \
     ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}:v${KUBERNETES_VERSION}
-  docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release
+  docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
   docker container rm khs1994-kubernetes-${TYPE}
 }
 
@@ -116,21 +117,35 @@ _get_kubernetes_server_by_url(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt \
     && ( \
        cd kubernetes-release/release/ \
-         && curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
+         && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
+                 -o kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
     ) && return 0 || return 1
 }
 
 _kubernetes_server(){
+  test -n "${1}" && local GOOS=$1
+  test -n "${2}" && local GOARCH=$2
+  test -n "${3}" && local TYPE=$3
+  test -n "${4}" && local KUBERNETES_VERSION=$4
+
   __untar(){
-    tar -zxvf kubernetes-server-${GOOS}-${GOARCH}.tar.gz
+    test -n "${1}" && local GOOS=$1
+    test -n "${2}" && local GOARCH=$2
+    test -n "${3}" && local TYPE=$3
+    test -n "${4}" && local KUBERNETES_VERSION=$4
+    tar -zxvf kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
     # pwd => kubernetes-release/release/
-    mv kubernetes v${KUBERNETES_VERSION}/
+    mv kubernetes v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/
   }
 
 print_info "install kubernetes ..."
 
-if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin ];then
-  mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}
+if [ -d kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin ];then
+  print_info "Kubernetes files existed" 
+  return
+fi
+
+mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
 
   # set +e
   # _get_kubernetes_server_by_url
@@ -146,11 +161,10 @@ if ! [ -d kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bi
 
   if [ $? -eq 0 ];then
     docker container ls > /dev/null 2>&1
-    _pull_k8s_image
+    _pull_k8s_image $@
     cd kubernetes-release/release
-    __untar
+    __untar $@
   fi
-fi
 }
 
 _delete(){
@@ -177,7 +191,7 @@ _minikube(){
   fi
 }
 
-_minikube-install(){
+_minikube_install(){
   if [ "$OS" = 'Linux' ];then
     url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
   elif [ "$OS" = 'Darwin' ];then
@@ -272,7 +286,7 @@ _create(){
   fi
 }
 
-kubectl-install(){
+kubectl_install(){
   if [ "$OS" = 'Linux' ];then
     command -v docker > /dev/null
     if [ $? -eq 0 ];then
@@ -299,7 +313,7 @@ kubectl-install(){
   kubectl version
 }
 
-kubectl-getinfo(){
+kubectl_getinfo(){
   echo "kubectl latest version is
   "
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt
@@ -308,9 +322,8 @@ kubectl-getinfo(){
 _etcd(){
 
   if ! [ -f /opt/bin/k8s/etcd ];then
-      echo ""
-      echo "==> etcd is installing ..."
-      echo ""
+      print_info "==> etcd is installing ..."
+
       cd /opt/bin/k8s
       rm -rf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
       sudo curl -fsSLO https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz
@@ -328,19 +341,19 @@ _etcd(){
 _flanneld(){
 
   if ! [ -f /opt/bin/k8s/flanneld ];then
-    echo ""
-    echo "==> flanneld is installing ..."
-    echo ""
+
+    print_info "flanneld is installing ..."
+
     sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flanneld-${GOARCH} -o /opt/bin/k8s/flanneld
     return
   fi
 
-  echo ""
-  echo "==> flanneld already install"
-  echo ""
+  print_info "flanneld already install"
+
 }
 
 _k8s_install_dep(){
+  print_info "install dep ..."
   # 安装依赖软件
   command -v dnf > /dev/null && (sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) || command -v yum && (sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
@@ -365,7 +378,7 @@ _k8s_install_cp_bin(){
   if ! [ -f /opt/bin/k8s/kubeadm ];then
     _kubernetes_server
     cd $source_path > /dev/null
-    sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes/server/bin/* /opt/bin/k8s/
+    sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* /opt/bin/k8s/
   fi
 
   sudo cp bin/*.sh /opt/bin/k8s
@@ -373,7 +386,7 @@ _k8s_install_cp_bin(){
   sudo chmod +x /opt/bin/k8s/*
 }
 
-_k8s_install_docker(){
+_k8s_install_systemd_docker(){
   print_info "Update systemd Docker unit file ..."
   sudo mkdir -p /etc/systemd/system/docker.service.d
   sudo cp systemd/docker.conf /etc/systemd/system/docker.service.d/
@@ -419,9 +432,6 @@ _k8s_install(){
     echo "==== you must edit MASTER_IP in systemd/.env file ===="
     echo "======================================================"
     echo ""
-    echo ""
-    echo "==> install deps ..."
-    echo ""
   fi
 
   _k8s_install_dep
@@ -443,12 +453,12 @@ _k8s_install(){
   print_info "copy kubernetes conf and cert file ..."
   sudo cp systemd/certs/*.kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
   sudo cp \
-    systemd/certs/audit-policy.yaml \
-    systemd/certs/kubelet-config.yaml \
-    systemd/certs/kube-proxy.config.yaml \
-    systemd/certs/csr-crb.yaml \
-    systemd/certs/kube-scheduler.yaml \
-    systemd/certs/encryption-config.yaml \
+    systemd/certs/{audit-policy.yaml,\
+kubelet-config.yaml,\
+kube-proxy.config.yaml,\
+csr-crb.yaml,\
+kube-scheduler.yaml,\
+encryption-config.yaml} \
     ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml" "kube-scheduler.yaml")
@@ -463,7 +473,7 @@ _k8s_install(){
       ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
   done
 
-  _k8s_install_docker
+  _k8s_install_systemd_docker
 
   _k8s_install_systemd
 
@@ -507,17 +517,21 @@ _k8s_join(){
   # kubelet
   sudo cp systemd/kubelet.service /etc/systemd/system/
   # cp pem
-  sudo cp systemd/certs/ca.pem ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
+  sudo cp systemd/certs/{ca.pem,\
+ca-key.pem,\
+flanneld-key.pem,\
+flanneld.pem} \
+${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
 
   _k8s_install_cp_bin
 
   print_info "copy kubernetes conf and cert file ..."
   sudo cp \
-    systemd/certs/kubelet-config.yaml \
-    systemd/certs/kube-proxy.config.yaml \
-    systemd/certs/csr-crb.yaml \
-    systemd/certs/kubectl.kubeconfig \
-    systemd/certs/kube-proxy.kubeconfig \
+    systemd/certs/{kubelet-config.yaml,\
+kube-proxy.config.yaml,\
+csr-crb.yaml,\
+kubectl.kubeconfig,\
+kube-proxy.kubeconfig} \
     ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml")
@@ -534,7 +548,7 @@ _k8s_join(){
       ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
   done
 
-  _k8s_install_docker
+  _k8s_install_systemd_docker
 
   _k8s_install_systemd ${HOSTNAME}
 
@@ -594,11 +608,12 @@ _single_cleanup(){
   sudo systemctl stop etcd flanneld docker kube-apiserver \
     kube-controller-manager kube-scheduler kube-proxy kubelet docker || true
 
-  sudo rm -rf /opt/bin/k8s
-  sudo rm -rf /var/lib/etcd
-  sudo rm -rf /var/log/ku*
-  sudo rm -rf /var/lib/kubelet
-  sudo rm -rf /var/lib/kube-proxy
+  set +e 
+  sudo rm -rf /opt/bin/k8s \
+              /var/lib/etcd \
+              /var/log/ku* \
+              /var/lib/kubelet \
+              /var/lib/kube-proxy \
 
   sudo rm -rf ${K8S_CONF_PATH:-/opt/bin/k8s/conf}
   sudo rm -rf /etc/systemd/system/docker.service.d
@@ -607,19 +622,21 @@ _single_cleanup(){
   sudo systemctl restart docker
 }
 
-case $1 in
+_command=$1
+shift
+
+case $_command in
     kubernetes-server )
-      _kubernetes_server
+      _kubernetes_server $@
       ;;
     pull-k8s-image )
-      shift 1
       _pull_k8s_image $@
       ;;
     kubectl-install )
-      kubectl-install
+      kubectl_install
     ;;
     kubectl-getinfo )
-      kubectl-getinfo
+      kubectl_getinfo
     ;;
 
     create )
@@ -659,8 +676,8 @@ case $1 in
     ;;
 
     join )
-      if [ -z $2 ];then echo "Please Input Node Ip"; exit 1; fi
-      _k8s_join $2
+      if [ -z $1 ];then echo "Please Input Node Ip"; exit 1; fi
+      _k8s_join $1
     ;;
 
     minikube )
@@ -668,23 +685,19 @@ case $1 in
     ;;
 
     minikube-install )
-      _minikube-install
+      _minikube_install
     ;;
 
     helm-development )
-    shift
     _helm development "$@"
     ;;
     helm-testing )
-    shift
     _helm testing "$@"
     ;;
     helm-staging )
-    shift
     _helm staging "$@"
     ;;
     helm-production )
-    shift
     _helm production "$@"
     ;;
 

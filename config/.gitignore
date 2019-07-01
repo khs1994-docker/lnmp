@@ -21,3 +21,4 @@ supervisord/supervisord.ini
 !supervisord
 !kong
 kong/*.conf
+!frpc.ini
