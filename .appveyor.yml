@@ -23,7 +23,6 @@ build_script:
   - pwsh: docker-compose --version
   - ps: get-command docker
   # - ps: choco install docker-desktop --pre
-  - ps: choco upgrade docker-desktop --pre
   # - ps: choco install docker-desktop
   - ps: get-command docker
   # - ps: |
