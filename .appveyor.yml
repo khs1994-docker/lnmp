@@ -52,8 +52,8 @@ build_script:
   # - ps: |
   #     cd dockerfile-windows
   #     echo "WIN_VERSION=/servercore:1809" >> .env
-  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/nginx:1.17.0-windowsservercore-1903 nginx
-  #     docker run --isolation=process -it -d -p 8080:80 -p 443:443 khs1994/nginx:1.17.0-windowsservercore-1903
+  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/nginx:1.17.1-windowsservercore-1903 nginx
+  #     docker run --isolation=process -it -d -p 8080:80 -p 443:443 khs1994/nginx:1.17.1-windowsservercore-1903
   #     sleep 10
   #     docker ps -a
   #     (Invoke-WebRequest 127.0.0.1:8080).content
@@ -79,4 +79,6 @@ test_script:
   - ps: |
       if($APPVEYOR_REPO_TAG){
         & $HOME\lnmp\windows\lnmp-windows-init
+        & $HOME\lnmp\windows\lnmp-windows-init install deno
+        & $HOME\lnmp\windows\lnmp-windows-init install python
       }

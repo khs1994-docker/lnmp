@@ -110,7 +110,7 @@ steps:
     image: plugins/docker
     settings:
       repo: khs1994/nginx
-      tags: 1.17.0-pro-${DRONE_TAG}-alpine
+      tags: 1.17.1-pro-${DRONE_TAG}-alpine
       target: nginx
       mirror: https://registry.docker-cn.com
       username:
@@ -153,7 +153,7 @@ steps:
     settings:
       # registry: docker.khs1994.com
       repo: khs1994/nginx
-      tags: 1.17.0-pro-${DRONE_TAG}-alpine
+      tags: 1.17.1-pro-${DRONE_TAG}-alpine
       target: nginx
       mirror: https://registry.docker-cn.com
       username:
@@ -232,7 +232,7 @@ volumes:
 #     # - 7.0.33
 #     # - 5.6.40
 #   NGINX_VERSION:
-#     - 1.17.0
+#     - 1.17.1
 #   REDIS_VERSION:
 #     - 5.0.5
 #   MYSQL_VERSION:

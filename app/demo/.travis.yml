@@ -2,7 +2,7 @@
 # Travis CI
 #
 # @see https://docs.travis-ci.com/
-# @see https://www.khs1994.com/categories/CI/Travis-CI/
+# @see https://blog.khs1994.com/categories/CI/Travis-CI/
 #
 
 language: php

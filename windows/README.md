@@ -263,7 +263,7 @@ $ httpd -d C:/Apache24 -k start
 
 ### https
 
-* https://www.khs1994.com/php/development/apache/config.html
+* https://blog.khs1994.com/php/development/apache/config.html
 
 * https://github.com/khs1994-website/server-side-tls
 

@@ -6,7 +6,7 @@
 
 * [问题反馈](https://github.com/khs1994-docker/ci/issues)
 
-* [更多信息](https://www.khs1994.com/categories/CI/Drone/)
+* [更多信息](https://blog.khs1994.com/categories/CI/Drone/)
 
 ## 重要提示
 

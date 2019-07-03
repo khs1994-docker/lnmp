@@ -58,9 +58,11 @@
 
 * 支持一键启动 `MySQL` `Redis` `Memcached` 集群
 
-* 所有软件尽可能启用了 **TLS** **HTTPS**，为推动 **HTTPS** 普及贡献自己的力量
+* 所有软件尽可能启用了 **TLS** **HTTPS**
 
-* 内置 `Drone CI` 私有化 CI/CD 方案
+* 内置 `Drone CI` 私有 CI/CD 方案
+
+* 可扩展，支持自定义 `compose` 文件。
 
 ## 系列文章
 
