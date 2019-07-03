@@ -41,7 +41,7 @@ require __DIR__.'/vendor/autoload.php';
 
 ## CI/CD
 
-* [Drone](https://www.khs1994.com/categories/CI/Drone/)
+* [Drone](https://blog.khs1994.com/categories/CI/Drone/)
 
 * [Travis CI](https://travis-ci.org/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }})
 

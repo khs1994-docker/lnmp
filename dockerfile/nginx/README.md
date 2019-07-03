@@ -2,7 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/nginx-tls1.3.svg?style=social&label=Stars)](https://github.com/khs1994-docker/nginx-tls1.3)  [![GitHub release](https://img.shields.io/github/release/khs1994-docker/nginx-tls1.3.svg)](https://github.com/khs1994-docker/nginx-tls1.3/releases) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/nginx.svg)](https://store.docker.com/community/images/khs1994/nginx/) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/nginx.svg)](https://store.docker.com/community/images/khs1994/nginx/)
 
-* https://www.khs1994.com/linux/ssl/https/README.html
+* https://blog.khs1994.com/linux/ssl/https/README.html
 
 * https://github.com/khs1994-docker/lnmp/issues/137
 

@@ -50,6 +50,7 @@ $items="$LNMP_PATH","$LNMP_PATH\windows","$LNMP_PATH\wsl", `
        "C:\nginx", `
        "C:\Apache24\bin", `
        "C:\node", `
+       "$env:ProgramData\npm", `
        "C:\bin", `
        "C:\Users\$env:username\go\bin", `
        "C:\go\bin", `
@@ -64,7 +65,7 @@ Foreach ($item in $items)
 
   if($string.Length -eq 0){
     write-host "
-set system env $item ...
+Add $item to system PATH env ...
     "
     [environment]::SetEnvironmentvariable("Path", "$env_Path;$item;","User")
   }
@@ -421,7 +422,9 @@ Function _php(){
 }
 
 Function _httpd(){
-  $HTTPD_CURRENT_VERSION=($(httpd -v) -split " ")[2]
+  if($(_command httpd)){
+    $HTTPD_CURRENT_VERSION=($(httpd -v) -split " ")[2]
+  }
 
   if ($HTTPD_CURRENT_VERSION.length -eq 0){
     _installer httpd-${HTTPD_VERSION}-win64-VS16.zip C:\ C:\Apache24 C:\Apache24
@@ -441,7 +444,9 @@ Function _httpd(){
 }
 
 Function _node(){
-  $NODE_CURRENT_VERSION=$(node -v)
+  if($(_command node)){
+    $NODE_CURRENT_VERSION=$(node -v)
+  }
 
   if ($NODE_CURRENT_VERSION.length -eq 0){
     _installer node-v${NODE_VERSION}-win-x64.zip C:\ C:\node-v${NODE_VERSION}-win-x64 C:\node
@@ -457,8 +462,9 @@ Function _node(){
 }
 
 Function _go(){
-
-  $GOLANG_CURRENT_VERSION=($(go version) -split " ")[2]
+  if($(_command go)){
+    $GOLANG_CURRENT_VERSION=($(go version) -split " ")[2]
+  }
 
   if($GOLANG_CURRENT_VERSION.length -eq 0){
     _installer go${GOLANG_VERSION}.windows-amd64.zip C:\ C:\go C:\go
@@ -485,6 +491,8 @@ _mysql
 _php
 
 _node
+
+npm config set prefix $env:ProgramData\npm
 
 _go
 
