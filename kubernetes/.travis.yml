@@ -103,7 +103,7 @@ script:
   # test metrics server
   - kubectl top node
   # test dns
-  - kubectl run nginx --image nginx:1.17.0-alpine
+  - kubectl run nginx --image nginx:1.17.1-alpine
   - sleep 20
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
