@@ -1,6 +1,6 @@
 # Deploy Kubernetes on CoreOS
 
-* [生成 Docker Daemon 远程连接自签名证书文件](https://www.khs1994.com/docker/dockerd.html)
+* [生成 Docker Daemon 远程连接自签名证书文件](https://blog.khs1994.com/docker/dockerd.html)
 
 ## Overview
 
@@ -18,7 +18,7 @@
 
 ## Usage
 
-* 安装 CoreOS 详细教程请查看：https://www.khs1994.com/categories/Docker/CoreOS/ `硬盘安装 CoreOS 三节点集群`
+* 安装 CoreOS 详细教程请查看：https://blog.khs1994.com/categories/Docker/CoreOS/ `硬盘安装 CoreOS 三节点集群`
 
 ## 注意事项
 
@@ -61,7 +61,7 @@ $ ./coreos server
 
 ### 安装 CoreOS
 
-* https://www.khs1994.com/categories/Docker/CoreOS/ `硬盘安装 CoreOS 三节点集群`
+* https://blog.khs1994.com/categories/Docker/CoreOS/ `硬盘安装 CoreOS 三节点集群`
 
 ```bash
 # create VirtualBox vm

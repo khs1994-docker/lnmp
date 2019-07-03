@@ -19,7 +19,7 @@
 $ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-dashboard-amd64:v1.10.1
 ```
 
-## 开源社
+## Azure
 
 ```bash
 $ docker pull gcr.azk8s.cn/google_containers/pause-amd64:3.0

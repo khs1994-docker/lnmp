@@ -25,9 +25,7 @@ $ cd ../../config/nginx
 
 $ docker-compose build
 
-$ cd ~/lnmp
-
-$ cd toolkit/linuxkit
+$ cd ~/lnmp/scripts/linuxkit
 
 $ linuxkit build lnmp.yml
 
@@ -48,4 +46,4 @@ $ halt
 
 * https://github.com/linuxkit/linuxkit
 
-* https://www.khs1994.com/docker/linuxkit.html
+* https://blog.khs1994.com/docker/linuxkit.html

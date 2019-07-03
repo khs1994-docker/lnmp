@@ -100,4 +100,4 @@ $ sudo journalctl -u cleanup-lnmp-docker
 
 # More Information
 
-* https://www.khs1994.com/linux/systemd.html
+* https://blog.khs1994.com/linux/systemd.html

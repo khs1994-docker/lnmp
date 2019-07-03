@@ -74,11 +74,8 @@
 
 ## ARM
 
-* 树莓派3
+* 树莓派
     * [ARM架构](arm.md)
-
-* 实验玩法
-    * [LinuxKit](linuxkit.md)
 
 ## 镜像构建
 
@@ -98,7 +95,7 @@
 
 * [ab command](ab.md)
 
-## TOOL
+## 参考
 
 * [systemd](systemd.md)
 * [Git](git.md)

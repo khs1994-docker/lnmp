@@ -17,7 +17,7 @@ services:
     image: php:7.3.6-fpm-alpine
 
   nginx:
-    image: nginx:1.17.0-alpine
+    image: nginx:1.17.1-alpine
 
   rabbitmq:
     image: rabbitmq:3.7.15-management-alpine
@@ -51,3 +51,6 @@ services:
 
   alpine:
     image: alpine:3.10
+
+  python:
+    image: python:3.7.3-alpine

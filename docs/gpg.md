@@ -9,8 +9,11 @@
 ```bash
 $ gpg --default-new-key-algo rsa4096 --gen-key
 
-# $ gpg --list-keys         #公钥
-$ gpg --list-secret-keys --keyid-format LONG # #私钥
+# 列出公钥
+$ gpg --list-keys
+
+# 列出私钥
+$ gpg --list-secret-keys --keyid-format LONG
 
 sec   rsa4096/<GPG-key-id> 2018-09-15 [SC] [expires: 2020-09-14]
       XXXX
@@ -31,10 +34,13 @@ $ git config --local commit.gpgsign true
 # Linux 可能会遇到错误
 # 在 ~/.bashrc ~/.bash_profile 两个文件中加入 export GPG_TTY=$(tty)
 
+# 签署 commit
 $ git commit -S -s -m "your commit message"
 
+# 签署 tag
 $ git tag -s mytag
 
+# 查看 tag
 $ git tag -v mytag
 ```
 
