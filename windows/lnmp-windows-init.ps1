@@ -9,6 +9,22 @@
 # 不相等 -ne （not equal）
 # 等于 -eq
 
+Function print_help_info(){
+  echo "
+LNMP Windows init Tool
+
+COMMANDS:
+
+install     Install soft
+uninstall   Uninstall soft
+remove      Uninstall soft
+list        List available softs
+help        Print help info
+"
+
+  exit
+}
+
 $ErrorAction="SilentlyContinue"
 
 . "$PSScriptRoot/common.ps1"
@@ -17,12 +33,49 @@ $global:source=$PWD
 $global:USER_AGENT="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3828.0 Safari/537.36"
 
 # 配置环境变量
+$LNMP_PATH="$HOME\lnmp"
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
+[environment]::SetEnvironmentvariable("LNMP_PATH", "$LNMP_PATH", "User")
+[environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
+
+$LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
+
+$items="$LNMP_PATH","$LNMP_PATH\windows","$LNMP_PATH\wsl", `
+       "$LNMP_PATH\kubernetes", `
+       "$LNMP_PATH\kubernetes\coreos",`
+       "$env:USERPROFILE\app\pcit\bin", `
+       "C:\php", `
+       "C:\mysql\bin", `
+       "C:\nginx", `
+       "C:\Apache24\bin", `
+       "C:\node", `
+       "C:\bin", `
+       "C:\Users\$env:username\go\bin", `
+       "C:\go\bin", `
+       "C:\Python", `
+       "$HOME\AppData\Roaming\Composer\vendor\bin", `
+       "$env:SystemRoot\system32\WindowsPowerShell\v1.0"
+
+Foreach ($item in $items)
+{
+  $env_path=[environment]::GetEnvironmentvariable("Path", "User")
+  $string=$(echo $env_path | select-string ("$item;").replace('\','\\'))
+
+  if($string.Length -eq 0){
+    write-host "
+set system env $item ...
+    "
+    [environment]::SetEnvironmentvariable("Path", "$env_Path;$item;","User")
+  }
+}
+
+$env:Path = [environment]::GetEnvironmentvariable("Path", "User") `
+            + ";" + [environment]::GetEnvironmentvariable("Path", "Machine")
 
 Function _command($command){
   if ($command -eq "wsl"){
-    wsl curl
+    wsl curl -V | out-null
   }else{
     get-command $command -ErrorAction "SilentlyContinue"
   }
@@ -102,6 +155,66 @@ _mkdir C:\php-ext
 _mkdir C:\bin
 
 cd $home\Downloads
+
+$Env:PSModulePath="$Env:PSModulePath" + ";" `
+                  + $PSScriptRoot + "\powershell_system" + ";"
+
+Function __install($softs){
+  Foreach ($soft in $softs){
+    $soft,$version=(echo $soft).split('@')
+    echo "==> Installing $soft $version ..."
+    Import-Module "${PSScriptRoot}\powershell_softs\$soft"
+
+    if($version){
+      install $version
+    }else{
+      install
+    }
+    Remove-Module -Name $soft
+  }
+}
+
+Function __uninstall($softs){
+  Foreach ($soft in $softs){
+    echo "==> Uninstalling $soft ..."
+    Import-Module -Name "${PSScriptRoot}\powershell_softs\$soft"
+    uninstall
+    Remove-Module -Name $soft
+  }
+}
+
+Function __list(){
+  echo ""
+  ls "${PSScriptRoot}\powershell_softs" -Name
+  echo ""
+  exit
+}
+
+if($args[0] -eq 'install'){
+  $_, $softs = $args
+  __install $softs
+  exit
+}
+
+if($args[0] -eq 'uninstall' -or $args[0] -eq 'remove'){
+  $_, $softs = $args
+  __uninstall $softs
+  exit
+}
+
+if($args[0] -eq 'list'){
+  $_, $softs = $args
+  __list $softs
+  exit
+}
+
+if($args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[0] -eq 'help'){
+  $_, $softs = $args
+  print_help_info
+  exit
+}
+
+################################################################################
 
 Function _downloader($url, $path, $soft, $version = 'null version',$wsl = $true){
   if (!(Test-Path $path)){
@@ -259,24 +372,6 @@ _downloader `
   MySQL ${MYSQL_VERSION}
 
 #
-# Docker
-#
-
-# _downloader `
-#  "https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe" `
-#  "docker.exe" `
-#  Docker
-
-#
-# IDEA
-#
-
-_downloader `
-  https://download.jetbrains.com/toolbox/jetbrains-toolbox-${IDEA_VERSION}.exe `
-  jetbrains-toolbox-${IDEA_VERSION}.exe `
-  jetbrains-toolbox ${IDEA_VERSION} `
-
-#
 # Node
 #
 
@@ -284,22 +379,6 @@ _downloader `
   https://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/node-v${NODE_VERSION}-win-x64.zip `
   node-v${NODE_VERSION}-win-x64.zip `
   Node.js ${NODE_VERSION}
-
-# Yarn
-
-_downloader `
-  https://github.com/yarnpkg/yarn/releases/download/v${YARN_VERSION}/yarn-${YARN_VERSION}.msi `
-  yarn-${YARN_VERSION}.msi `
-  Yarn ${YARN_VERSION}
-
-#
-# Pytohn
-#
-
-_downloader `
-  https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe `
-  python-${PYTHON_VERSION}-amd64.exe `
-  Python ${PYTHON_VERSION}
 
 #
 # Golang
@@ -309,15 +388,6 @@ _downloader `
   https://studygolang.com/dl/golang/go${GOLANG_VERSION}.windows-amd64.zip `
   go${GOLANG_VERSION}.windows-amd64.zip `
   Golang ${GOLANG_VERSION}
-
-#
-# zeal
-#
-
-_downloader `
-  https://dl.bintray.com/zealdocs/windows/zeal-${ZEAL_VERSION}-windows-x64.msi `
-  zeal-${ZEAL_VERSION}-windows-x64.msi `
-  Zeal
 
 #
 # vim
@@ -406,29 +476,6 @@ Function _go(){
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
 }
 
-Function _python(){
-  $PYTHON_CURRENT_VERSION=($(python --version) -split " ")[1]
-
-  if ($PYTHON_CURRENT_VERSION -eq $PYTHON_VERSION){
-      return
-  }
-
-# https://docs.python.org/3.7/using/windows.html#installing-without-ui
-	Start-Process python-${PYTHON_VERSION}-amd64.exe -Wait `
-		-ArgumentList @( `
-      '/quiet', `
-      'InstallAllUsers=1', `
-      'DefaultAllUsersTargetDir=C:\Python',
-      'DefaultJustForMeTargetDir=C:\Python',
-      'TargetDir=C:\Python', `
-      'PrependPath=1', `
-      'Shortcuts=0', `
-      'Include_doc=0', `
-      'Include_pip=1', `
-      'Include_test=0' `
-    );
-}
-
 _nginx
 
 _httpd
@@ -441,46 +488,7 @@ _node
 
 _go
 
-_python
-
 ################################################################################
-
-[environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User")
-
-$env:Path = [environment]::GetEnvironmentvariable("Path", "User")
-$env:LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
-
-$items="$env:LNMP_PATH","$env:LNMP_PATH\windows","$env:LNMP_PATH\wsl", `
-       "$env:LNMP_PATH\kubernetes", `
-       "$env:LNMP_PATH\kubernetes\coreos",`
-       "$env:USERPROFILE\app\pcit\bin", `
-       "C:\php", `
-       "C:\mysql\bin", `
-       "C:\nginx", `
-       "C:\Apache24\bin", `
-       "C:\node", `
-       "C:\bin", `
-       "C:\Users\$env:username\go\bin", `
-       "C:\go\bin", `
-       "C:\Python", `
-       "$HOME\AppData\Roaming\Composer\vendor\bin", `
-       "$env:SystemRoot\system32\WindowsPowerShell\v1.0"
-
-Foreach ($item in $items)
-{
-  $env:Path = [environment]::GetEnvironmentvariable("Path", "User")
-
-  $string=$(echo $env:path | select-string ("$item;").replace('\','\\'))
-
-  if($string.Length -eq 0){
-    write-host "
-set system env $item ...
-    "
-    [environment]::SetEnvironmentvariable("Path", "$env:Path;$item;","User")
-  }
-}
-
-[environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
 
 # apm
 
@@ -489,8 +497,6 @@ if($(_command apm)){
 }
 
 ################################################################################
-
-$env:Path = $env:Path + [environment]::GetEnvironmentvariable("Path", "Machine")
 
 if($(_command php)){
   $PHP_CURRENT_VERSION=$( php -r "echo PHP_VERSION;" )
@@ -510,7 +516,6 @@ $SOFT_TEST_COMMAND="git --version", `
                    "mysql --version", `
                    "node -v", `
                    "npm -v", `
-                   "python --version", `
                    "go version"
 
 Foreach ($item in $SOFT_TEST_COMMAND)

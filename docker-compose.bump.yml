@@ -51,3 +51,6 @@ services:
 
   alpine:
     image: alpine:3.10
+
+  python:
+    image: python:3.7.3-alpine

@@ -80,4 +80,6 @@ test_script:
   - ps: |
       if($APPVEYOR_REPO_TAG){
         & $HOME\lnmp\windows\lnmp-windows-init
+        & $HOME\lnmp\windows\lnmp-windows-init install deno
+        & $HOME\lnmp\windows\lnmp-windows-init install python
       }
