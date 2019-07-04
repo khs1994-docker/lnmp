@@ -6,6 +6,8 @@
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: 使用 Docker Compose 快速搭建 LNMP 环境，仅需 **一条命令** `$ ./lnmp-docker up`
 
+**企业版** 个性化定制请访问 [`lnmp-ee`](https://github.com/khs1994-docker/lnmp-ee)
+
 | Platform | Status |
 | -- | -- |
 | Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/18.09?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/18.09) |
@@ -36,7 +38,7 @@
 
 本项目支持 `x86_64` 架构的 Linux，macOS，Windows 10 并且支持 `arm` 架构的 Debian(树莓派)。
 
-:warning: 除了 `.env` 文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
+:warning: 除了 `.env` 等特定文件，本项目中的任何文件严禁二次修改。[为什么？](https://github.com/khs1994-docker/lnmp/issues/238)
 
 :warning: Windows Docker 非常不稳定，且运行 Laravel 响应较慢。[解决办法](docs/laravel.md)
 

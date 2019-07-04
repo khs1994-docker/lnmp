@@ -54,7 +54,7 @@
 
 * 支持 **开发环境** **测试环境**
 
-* 支持 `Swarm mode` `k8s` **生产环境** 部署
+* 支持 `kubernetes` **生产环境** 部署
 
 * 支持一键启动 `MySQL` `Redis` `Memcached` 集群
 
@@ -62,7 +62,7 @@
 
 * 内置 `Drone CI` 私有 CI/CD 方案
 
-* 可扩展，支持自定义 `compose` 文件。
+* [可扩展](custom.md)，支持自定义 `compose` 文件。
 
 ## 系列文章
 

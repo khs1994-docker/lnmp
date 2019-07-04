@@ -155,7 +155,9 @@ _mkdir C:\php-ext
 
 _mkdir C:\bin
 
-cd $home\Downloads
+_mkdir $home\Downloads\lnmp-docker-cache
+
+cd $home\Downloads\lnmp-docker-cache
 
 $Env:PSModulePath="$Env:PSModulePath" + ";" `
                   + $PSScriptRoot + "\powershell_system" + ";"

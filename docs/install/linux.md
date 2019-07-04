@@ -49,13 +49,3 @@ $ ./lnmp-docker up
 ## MySQL 默认 ROOT 密码
 
 `mytest`
-
-## 更新
-
-```bash
-$ ./lnmp-docker update
-
-# 强制与上游保持一致
-
-$ ./lnmp-docker update -f
-```
