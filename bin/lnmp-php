@@ -14,15 +14,15 @@ else
   COMMAND="$@"
 fi
 
-DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-if ! [ -f $DIR/../log/php/cli_error.log ];then
-  touch $DIR/../log/php/cli_error.log
+if ! [ -f $ScriptRoot/../log/php/cli_error.log ];then
+  touch $ScriptRoot/../log/php/cli_error.log
 fi
 
-. $DIR/.arch
+. $ScriptRoot/.arch
 
-. $DIR/../.env
+. $ScriptRoot/../.env
 
 # -S 参数需要容器暴露端口
 
@@ -49,8 +49,8 @@ if [ "$1" = '-S' ];then
   exec docker run --init -it --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=cached \
     --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-    --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
-    --mount type=bind,src=$DIR/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+    --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+    --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
     --network lnmp_backend \
     --entrypoint php \
     -e APP_ENV=${APP_ENV} \
@@ -61,8 +61,8 @@ if [ "$1" = '-S' ];then
     docker run --init -it --rm \
       --mount type=bind,src=$PWD,target=/app,consistency=cached \
       --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-      --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
-      --mount type=bind,src=$DIR/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+      --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+      --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
       --network lnmp_backend \
       --entrypoint php \
       -e APP_ENV=${APP_ENV} \
@@ -82,8 +82,8 @@ fi
 docker run --init -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-  --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
-  --mount type=bind,src=$DIR/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+  --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+  --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
   --network lnmp_backend \
   --entrypoint php \
   -e TZ=${TZ} \
@@ -93,8 +93,8 @@ docker run --init -it --rm \
   docker run --init -it --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=cached \
     --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-    --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
-    --mount type=bind,src=$DIR/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+    --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+    --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
     --entrypoint php \
     -e TZ=${TZ} \
     -e APP_ENV=${APP_ENV} \

@@ -79,6 +79,13 @@ if ! [ -f config/php/docker-php.ini ];then
 fi
 
 _cp_only_not_exists config/composer/config.example.json config/composer/config.json
+_cp_only_not_exists config/composer/.env.example config/composer/.env
+
+_cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
+_cp_only_not_exists config/npm/.env.example config/npm/.env
+
+_cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
+_cp_only_not_exists config/yarn/.env.example config/yarn/.env
 
 # PHPer command
 

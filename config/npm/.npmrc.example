@@ -1,1 +1,2 @@
 registry=https://registry.npm.taobao.org
+prefix=/tmp/node/npm

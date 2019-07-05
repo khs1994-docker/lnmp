@@ -6,14 +6,15 @@
 
 set -e
 
-DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $DIR/.arch
+source $ScriptRoot/.arch
 
 docker run -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=delegated \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --entrypoint sami \
+  --user ${LNMP_USER:-root:root} \
   -e TZ=${TZ} \
   ${DOCKER_IMAGE}:${TAG} \
   "$@"

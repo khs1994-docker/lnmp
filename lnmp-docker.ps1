@@ -61,6 +61,12 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 
 printInfo "APP_ROOT is $APP_ROOT"
 
+Function _cp_only_not_exists($src,$desc){
+  if (!(Test-Path $desc)){
+    Copy-Item $src $desc
+  }
+}
+
 Function env_status(){
   if (Test-Path .env){
     printInfo '.env file existing'
@@ -78,35 +84,25 @@ Function env_status(){
     cp .env.example.ps1 .env.ps1
   }
 
-  if (!(Test-Path volumes/.env)){
-    Write-Host ''
-    Copy-Item volumes/.env.example volumes/.env
-  }
+  _cp_only_not_exists volumes/.env.example volumes/.env
 
-  if (!(Test-Path config/composer/config.json)){
-    Copy-Item config/composer/config.example.json config/composer/config.json
-  }
+  _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 
-  if (!(Test-Path config/supervisord/supervisord.ini)){
-    Copy-Item config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
-  }
+  _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 
   if (!(Test-Path secrets/minio/key.txt)){
     Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
     Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
   }
 
-  if (!(Test-Path docker-compose.include.yml)){
-    Copy-Item docker-compose.include.example.yml docker-compose.include.yml
-  }
+  _cp_only_not_exists docker-compose.include.example.yml docker-compose.include.yml
 
-  if (!(Test-Path config/php/docker-php.ini)){
-    Copy-Item config/php/docker-php.ini.example config/php/docker-php.ini
-  }
+  _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
+  _cp_only_not_exists config/php/php.development.ini config/php/php.ini
 
-  if (!(Test-Path config/php/php.ini)){
-    Copy-Item config/php/php.development.ini config/php/php.ini
-  }
+  _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
+  _cp_only_not_exists config/npm/.env.example config/npm/.env
+
 }
 
 if (!(Test-Path lnmp-custom-script.ps1)){

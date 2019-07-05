@@ -8,17 +8,17 @@ fi
 
 if ! [ -f $LARAVEL_PATH/artisan ];then echo "This path is not Laravel path"; exit; fi
 
-DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $DIR/.arch
+source $ScriptRoot/.arch
 
 echo -e "\n\033[32mINFO\033[0m  create new env file ..."
 
 if [ -f .env ];then mv ${LARAVEL_PATH}/.env ${LARAVEL_PATH}/.env.backup; fi
 
-cp $DIR/../app/.env* ${LARAVEL_PATH}
-cp $DIR/../app/demo/.editorconfig ${LARAVEL_PATH}
-cp $DIR/../app/demo/.php_cs ${LARAVEL_PATH}
+cp $ScriptRoot/../app/.env* ${LARAVEL_PATH}
+cp $ScriptRoot/../app/demo/.editorconfig ${LARAVEL_PATH}
+cp $ScriptRoot/../app/demo/.php_cs ${LARAVEL_PATH}
 
 echo -e "\n\033[32mINFO\033[0m  change Redis config ..."
 
@@ -32,7 +32,7 @@ echo -e "\n\033[32mINFO\033[0m  install laravel-ide-helper ..."
 
 cd ${LARAVEL_PATH}
 
-$DIR/lnmp-composer require --dev barryvdh/laravel-ide-helper
+$ScriptRoot/lnmp-composer require --dev barryvdh/laravel-ide-helper
 
 echo -e "
 

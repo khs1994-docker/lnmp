@@ -15,17 +15,22 @@ if [ -z "$2" ];then
   exit 1
 fi
 
-DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $DIR/.arch
+source $ScriptRoot/.arch
+source $ScriptRoot/../config/composer/.env.example
+source $ScriptRoot/../config/composer/.env
 
 if ! [ -d "$2" ];then
 
 docker run -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=delegated \
-  --mount src=lnmp_composer_cache-data,target=/tmp/cache \
+  --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} \
+  --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
+  --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
+  --env-file $ScriptRoot/../config/composer/.env \
   --entrypoint /docker-entrypoint.composer.sh \
-  --mount type=bind,src=$DIR/../config/composer/config.json,target=/tmp/config.json \
+  --user ${LNMP_USER:-root:root} \
   ${DOCKER_IMAGE}:${TAG} \
   composer create-project --prefer-dist laravel/laravel=${3:-5.5}.* "$2"
 
@@ -44,4 +49,4 @@ if [[ ${OS} = 'Linux' || ${OS} = 'Darwin' ]];then
 fi
 
 cd $LARAVEL_PATH
-$DIR/lnmp-laravel-init
+$ScriptRoot/lnmp-laravel-init
