@@ -1050,6 +1050,7 @@ new(){
   if [ $protocol = 'https' ];then
     # 申请 ssl 证书
     read -n 1 -p "Self-Signed SSL certificate? [y/N]:" self_signed
+    echo ""
     if [ "$self_signed" = 'y' ];then
       ssl_self $url
     else
@@ -1442,7 +1443,7 @@ For information please run $ docker service update --help
     init; if [ ${ARCH} = 'x86_64' ];then \
         exec docker-compose -f docker-compose.yml \
              -f docker-compose.build.yml \
-             -f docker-compose.include.yml
+             -f docker-compose.include.yml \
              config; \
           else notsupport; fi
     ;;
