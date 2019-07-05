@@ -109,7 +109,7 @@ Commands:
   compose              Install docker-compose [ --official | -f ]
   completion           Move fish shell completion code (Only Support fish)
   config               Validate and view the LNMP Compose file
-  debug                Generate Debug information, then copy it to GitHub Issues
+  bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   daemon-tls           Display how to enable Docker TLS Daemon
   daemon-tls-cert      Generate Docker Daemon TLS cert
@@ -768,7 +768,7 @@ cn_mirror(){
   git push -f coding --tags
 }
 
-_lnmp_debug(){
+_lnmp_bug(){
   docker_version=$(docker --version)
   compose_version=$(docker-compose --version)
   git_commit=$(git log -1 --pretty=%H)
@@ -776,9 +776,9 @@ _lnmp_debug(){
 <details>
 <summary>OS Environment Info</summary>
 <pre>
-" > debug.md
+" > bug.md
 
-cat /etc/os-release >> debug.md 2>&1 /dev/null || uname -s >> debug.md
+cat /etc/os-release >> bug.md 2>&1 /dev/null || uname -s >> bug.md
 
 echo "
 </pre>
@@ -823,9 +823,9 @@ XXX
 
 
 <!--提交问题之前务必点击预览（Preview）标签-->
-" >> debug.md
+" >> bug.md
 
-  print_warning "Please Edit debug.md, then new issue in [ https://github.com/khs1994-docker/lnmp/issues/new/choose ] with copy debug.md"
+  print_warning "Please Edit bug.md, then new issue in [ https://github.com/khs1994-docker/lnmp/issues/new/choose ] with copy bug.md"
   echo
 }
 
@@ -1266,9 +1266,9 @@ main() {
     echo
   ;;
 
-  debug )
+  bug )
 
-  _lnmp_debug
+  _lnmp_bug
 
   ;;
 

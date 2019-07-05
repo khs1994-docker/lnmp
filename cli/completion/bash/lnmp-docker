@@ -43,7 +43,7 @@ complete -W "acme.sh \
         up \
         config \
         pull \
-        debug \
+        bug \
         down \
         docs \
         gcr.io \

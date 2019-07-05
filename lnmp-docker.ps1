@@ -223,7 +223,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
-  debug                Generate Debug information, then copy it to GitHub Issues
+  bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   docs                 Support Documents
   help                 Display this help message
@@ -801,7 +801,7 @@ switch($first){
       wsl -d $DistributionName lnmp-docker update-version
     }
 
-    debug {
+    bug {
       $os_info=$($psversiontable.BuildVersion)
 
       if ($os_info.length -eq 0){
@@ -850,7 +850,7 @@ XXX
 XXX
 
 <!--Be sure to click < Preview > Tab before submitting questions-->
-" | Out-File debug.md -encoding utf8
+" | Out-File bug.md -encoding utf8
 
     Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
     }
