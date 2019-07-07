@@ -114,8 +114,8 @@ services:
     # ports:
     #   - "127.0.0.1:3306:3306"
     volumes:
-      - ./backup/init.production:/docker-entrypoint-initdb.d:ro
-      - ./backup/mysql:/backup
+      - ./scripts/backup/init.production:/docker-entrypoint-initdb.d:ro
+      - ./scripts/backup/mysql:/backup
       - mysql-data:/var/lib/mysql
     command: ["mysqld","--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
     # logging: *default-logging
@@ -157,9 +157,9 @@ services:
   #   #   - "127.0.0.1:3306:3306"
   #   volumes:
   #     # https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-  #     - ./backup/init.production:/docker-entrypoint-initdb.d:ro
+  #     - ./scripts/backup/init.production:/docker-entrypoint-initdb.d:ro
   #     - mariadb-data:/var/lib/mysql
-  #     - ./backup/mariadb:/backup
+  #     - ./scripts/backup/mariadb:/backup
   #   command:
   #     - mysqld
   #     - --character-set-server=utf8mb4

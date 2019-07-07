@@ -19,6 +19,7 @@ install     Install soft
 uninstall   Uninstall soft
 remove      Uninstall soft
 list        List available softs
+init        Init a new package(soft)
 help        Print help info
 "
 
@@ -30,7 +31,6 @@ $ErrorAction="SilentlyContinue"
 . "$PSScriptRoot/common.ps1"
 
 $global:source=$PWD
-$global:USER_AGENT="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3828.0 Safari/537.36"
 
 # 配置环境变量
 $LNMP_PATH="$HOME\lnmp"
@@ -74,39 +74,6 @@ Add $item to system PATH env ...
 $env:Path = [environment]::GetEnvironmentvariable("Path", "User") `
             + ";" + [environment]::GetEnvironmentvariable("Path", "Machine")
 
-Function _command($command){
-  if ($command -eq "wsl"){
-    wsl curl -V | out-null
-  }else{
-    get-command $command -ErrorAction "SilentlyContinue"
-  }
-
-  return $?
-}
-
-Function _wget($src,$des,$wsl=$true){
-  $useWSL=_command wsl -and $wsl
-
-  if ($useWSL -eq "True"){
-
-    Write-host "
-
-use WSL curl download file ...
-"
-
-    wsl -- curl -L $src -o $des --user-agent $USER_AGENT
-
-    return
-  }
-
-  Invoke-WebRequest -uri $src -OutFile $des -UserAgent $USER_AGENT
-  Unblock-File $des
-}
-
-Function _unzip($zip, $folder){
-  Expand-Archive -Path $zip -DestinationPath $folder -Force
-}
-
 Function _rename($src,$target){
   if (!(Test-Path $target)){
   Rename-Item $src $target
@@ -117,10 +84,6 @@ Function _mkdir($dir_path){
   if (!(Test-Path $dir_path )){
     New-Item $dir_path -type directory
   }
-}
-
-Function _ln($src,$target){
-  New-Item -Path $target -ItemType SymbolicLink -Value $src -ErrorAction "SilentlyContinue"
 }
 
 Function _echo_line(){
@@ -193,6 +156,18 @@ Function __list(){
   exit
 }
 
+function __init($soft){
+  if(test-path ${PSScriptRoot}\powershell_softs\${soft}\){
+    echo "This package already exists !"
+    exit
+  }
+  new-item ${PSScriptRoot}\powershell_softs\${soft} -ItemType Directory | out-null
+  copy-item ${PSScriptRoot}\powershell_softs\example.psm1 `
+            ${PSScriptRoot}\powershell_softs\${soft}\${soft}.psm1
+
+  echo "Please edit ${PSScriptRoot}\powershell_softs\${soft}\${soft}.psm1"
+}
+
 if($args[0] -eq 'install'){
   $_, $softs = $args
   __install $softs
@@ -217,18 +192,16 @@ if($args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[0] -eq 'help'){
   exit
 }
 
-################################################################################
-
-Function _downloader($url, $path, $soft, $version = 'null version',$wsl = $true){
-  if (!(Test-Path $path)){
-    Write-Host "==> Downloading $soft $version..." -NoNewLine -ForegroundColor Green
-    _wget $url $path $wsl
-    _echo_line
-  }else{
-     Write-Host "==> Skip $soft $version" -NoNewLine -ForegroundColor Red
-     _echo_line
+if($args[0] -eq 'init'){
+  if($args[1].length -eq 0){
+    echo "Please input soft name"
+    exit
   }
+  __init $args[1]
+  exit
 }
+
+################################################################################
 
 #
 # Git
@@ -259,20 +232,6 @@ _downloader `
   https://nginx.org/download/nginx-${NGINX_VERSION}.zip `
   nginx-${NGINX_VERSION}.zip `
   NGINX ${NGINX_VERSION}
-
-#
-# HTTPD
-#
-
-_downloader `
-    https://www.apachelounge.com/download/VS16/binaries/httpd-${HTTPD_VERSION}-win64-VS16.zip `
-    httpd-${HTTPD_VERSION}-win64-VS16.zip `
-    HTTPD ${HTTPD_VERSION}
-
-_downloader `
-  https://www.apachelounge.com/download/VS16/modules/mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `
-  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `
-  mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16
 
 #
 # PHP
@@ -383,24 +342,6 @@ _downloader `
   node-v${NODE_VERSION}-win-x64.zip `
   Node.js ${NODE_VERSION}
 
-#
-# Golang
-#
-
-_downloader `
-  https://studygolang.com/dl/golang/go${GOLANG_VERSION}.windows-amd64.zip `
-  go${GOLANG_VERSION}.windows-amd64.zip `
-  Golang ${GOLANG_VERSION}
-
-#
-# vim
-#
-
-_downloader `
-  https://github.com/vim/vim-win32-installer/releases/download/v8.1.0005/gvim_8.1.0005_x86.exe `
-  gvim_8.1.0005_x86.exe `
-  gvim_8.1.0005_x86.exe
-
 ################################################################################
 
 Function _nginx(){
@@ -423,28 +364,6 @@ Function _php(){
   _installer RunHiddenConsole.zip C:\bin C:\bin\RunHiddenConsole.exe C:\bin\RunHiddenConsole.exe
 }
 
-Function _httpd(){
-  if($(_command httpd)){
-    $HTTPD_CURRENT_VERSION=($(httpd -v) -split " ")[2]
-  }
-
-  if ($HTTPD_CURRENT_VERSION.length -eq 0){
-    _installer httpd-${HTTPD_VERSION}-win64-VS16.zip C:\ C:\Apache24 C:\Apache24
-  }
-
-  if ($HTTPD_CURRENT_VERSION -ne "Apache/${HTTPD_VERSION}"){
-    _unzip httpd-${HTTPD_VERSION}-win64-VS16.zip $HOME\Downloads
-    Copy-Item -Recurse -Force "$HOME\Downloads\Apache24\*" "C:\Apache24\"
-  }
-
-  if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
-    _installer mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip C:\Apache24\modules `
-      C:\Apache24\modules\mod_fcgid-${HTTPD_MOD_FCGID_VERSION} C:\Apache24\modules\mod_fcgid
-
-    mv C:\Apache24\modules\mod_fcgid\mod_fcgid.so C:\Apache24\modules\mod_fcgid.so
-  }
-}
-
 Function _node(){
   if($(_command node)){
     $NODE_CURRENT_VERSION=$(node -v)
@@ -463,30 +382,7 @@ Function _node(){
   }
 }
 
-Function _go(){
-  if($(_command go)){
-    $GOLANG_CURRENT_VERSION=($(go version) -split " ")[2]
-  }
-
-  if($GOLANG_CURRENT_VERSION.length -eq 0){
-    _installer go${GOLANG_VERSION}.windows-amd64.zip C:\ C:\go C:\go
-    return
-  }
-
-  if ($GOLANG_CURRENT_VERSION -ne "go$GOLANG_VERSION"){
-    Write-Host "==> Upgrade go"
-    Write-Host "Remove old go folder"
-    Remove-Item -Recurse -Force C:\go
-    Write-Host "Installing go..."
-    _unzip go${GOLANG_VERSION}.windows-amd64.zip C:\
-  }
-
-  [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
-}
-
 _nginx
-
-_httpd
 
 _mysql
 
@@ -495,8 +391,6 @@ _php
 _node
 
 npm config set prefix $env:ProgramData\npm
-
-_go
 
 ################################################################################
 
@@ -522,11 +416,9 @@ if($(_command php)){
 $SOFT_TEST_COMMAND="git --version", `
                    "docker --version", `
                    "nginx -v", `
-                   "httpd -v", `
                    "mysql --version", `
                    "node -v", `
-                   "npm -v", `
-                   "go version"
+                   "npm -v"
 
 Foreach ($item in $SOFT_TEST_COMMAND)
 {
@@ -613,26 +505,6 @@ php -m
 
 ################################################################################
 
-$HTTPD_IS_RUN=0
-
-get-service Apache2.4 | out-null
-
-if (!($?)){
-    httpd.exe -k install
-    $HTTPD_IS_RUN=1
-}
-
-$a=Select-String 'include conf.d/' C:\Apache24\conf\httpd.conf
-
-if ($a.Length -eq 0){
-  echo "Add config in C:\Apache24\conf\httpd.conf"
-
-  echo ' ' | out-file -Append C:\Apache24\conf\httpd.conf
-  echo "include conf.d/*.conf" | out-file -Append C:\Apache24\conf\httpd.conf
-}
-
-################################################################################
-
 if(!(Test-Path C:\mysql\data)){
 
   Write-Host "mysql is init ..."
@@ -686,13 +558,3 @@ if (!($?)){
   echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
   echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
 }
-
-################################################################################
-
-_mkdir C:\Apache24\conf.d
-
-_ln C:\Apache24\conf.d $home\lnmp\windows\httpd
-
-_ln C:\Apache24\logs $home\lnmp\windows\logs\httpd
-
-################################################################################

@@ -32,10 +32,10 @@ services:
     volumes:
       - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
-      - ./backup/init:/docker-entrypoint-initdb.d:ro,cached
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
       - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:delegated
-      - ./backup/mysql:/backup
+      - ./scripts/backup/mysql:/backup
     command:
       - mysqld
       - --character-set-server=utf8mb4
@@ -57,10 +57,10 @@ services:
     volumes:
       - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-      - ./backup/init:/docker-entrypoint-initdb.d:ro,cached
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
       - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}
       - ./log/mariadb:/var/log/mysql:delegated
-      - ./backup/mariadb:/backup
+      - ./scripts/backup/mariadb:/backup
     command:
       - mysqld
       - --character-set-server=utf8mb4

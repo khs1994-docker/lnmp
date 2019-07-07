@@ -263,7 +263,7 @@ services:
       MYSQL_USER_FILE: /run/secrets/mysql-root
       MYSQL_PASSWORD_FILE: /run/secrets/mysql-root
     volumes:
-      - ./backup/init:/docker-entrypoint-initdb.d  # .sh .sql .sql.gz
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d  # .sh .sql .sql.gz
 
   postgresql:
     image: postgres:10.2-alpine

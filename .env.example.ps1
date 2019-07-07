@@ -1,10 +1,11 @@
-# privacy info, please set true to help us improve
+# You Can overwrite this file in .env.ps1
 
+# privacy info, please set true to help us improve
 $global:DATA_COLLECTION="true"
 
-#
-# You Can overwrite this file in .env.ps1
-#
+$global:APP_ENV="windows"
+$global:APP_ROOT="./app"
+# $global:APP_ROOT="../app"
 
 $global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
 
@@ -24,10 +25,6 @@ $global:DistributionName="debian"
 
 $global:TZ='Asia/Shanghai'
 
-#
-# You can overwrite this file in .env.ps1
-#
-
 $global:LNMP_PHP_IMAGE="khs1994/php:7.3.6-composer-alpine"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
@@ -41,21 +38,14 @@ $DistributionName="debian"
 
 $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
+# lnmp-windows-pm.ps1 soft version
+
 $global:NGINX_VERSION="1.17.1"
 # https://windows.php.net/download/
 $global:PHP_VERSION="7.3.6"
 $global:MYSQL_VERSION="8.0.16"
-$global:HTTPD_VERSION="2.4.39"
-$global:HTTPD_MOD_FCGID_VERSION="2.3.10"
 $global:NODE_VERSION="12.6.0"
 $global:GIT_VERSION="2.22.0"
-$global:GOLANG_VERSION="1.13beta1"
-# $global:GOLANG_VERSION="1.12rc1"
-# $global:GOLANG_VERSION="1.12.5"
-
-$global:APP_ENV="windows"
-$global:APP_ROOT="./app"
-# $global:APP_ROOT="../app"
 
 $global:PHP_REDIS_EXTENSION_VERSION="4.3.0"
 $global:PHP_MONGODB_EXTENSION_VERSION="1.5.5"

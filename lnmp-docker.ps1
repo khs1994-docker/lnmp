@@ -222,6 +222,7 @@ Commands:
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   docs                 Support Documents
+  env                  Edit .env/.env.ps1 file
   help                 Display this help message
   init                 Init LNMP environment
   pull                 Pull LNMP Docker Images
@@ -517,6 +518,11 @@ switch($first){
     dashboard {
       clear
       wsl -d $DistributionName lnmp-docker dashboard
+    }
+
+    env {
+      notepad.exe .env
+      notepad.exe .env.ps1
     }
 
     new {

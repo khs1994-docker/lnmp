@@ -30,6 +30,7 @@
 * [软件配置](config.md)
 * [开放端口](port.md)
 * [PHPer 常用命令容器化](command.md)
+* [Windows 包管理工具](windows/lwpm.md)
 
 ## NGINX
 
