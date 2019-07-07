@@ -11,6 +11,15 @@ if [ "$debug" = 'true' ];then set -x; fi
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
 docker run -it --rm \
+  --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
+  --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
+  bash \
+  bash -c \
+  "set -x;chown -R ${LNMP_USER} /tmp/node/.yarn; \
+   chown -R ${LNMP_USER} /tmp/node/yarn; \
+  "
+
+docker run -it --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=delegated \
     --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
     --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \

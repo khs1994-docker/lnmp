@@ -11,3 +11,5 @@
 !frontend
 !linuxkit
 !backup
+!docker-compose.bump.yml
+!docker-example.yml
