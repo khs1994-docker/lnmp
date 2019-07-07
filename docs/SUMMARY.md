@@ -8,7 +8,7 @@
 
 ## 商业版
 
-* [EE](ee.md)
+* [EE](ee/README.md)
 
 ## 安装
 

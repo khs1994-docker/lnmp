@@ -1,6 +1,6 @@
 workflow "Sync Git" {
   on = "push"
-  resolves = ["action-when","sync-php-demo","sync-node-demo","sync-kubernetes","sync-ci","sync-acme"]
+  resolves = ["docs-build","sync-docs","action-when","sync-php-demo","sync-node-demo","sync-kubernetes","sync-ci","sync-acme"]
 }
 
 action "action-when" {
@@ -9,6 +9,29 @@ action "action-when" {
     PCIT_WHEN_BRANCH="18.09"
     PCIT_WHEN_COMMIT_MESSAGE="1"
     PCIT_WHEN_COMMIT_MESSAGE_SKIP="skip sync"
+  }
+}
+
+action "docs-build" {
+  uses = "docker://pcit/vuepress"
+  args = "build"
+  env = {
+    PCIT_LOCAL_DIR = "docs"
+  }
+}
+
+action "sync-docs" {
+  uses = "docker://pcit/pages"
+  secrets = ["PCIT_GIT_TOKEN"]
+  needs = ["action-when","docs-build"]
+  env = {
+    PCIT_USERNAME = "khs1994"
+    PCIT_EMAIL = "khs1994@khs1994.com"
+    PCIT_TARGET_BRANCH = "master"
+    PCIT_GIT_URL = "github.com/khs1994-docker/lnmp-docs"
+    PCIT_LOCAL_DIR = "docs/.vuepress/dist"
+    PCIT_KEEP_HISTORY = "1"
+    PCIT_MESSAGE = "Build docs by vuepress, Upload docs by PCIT"
   }
 }
 

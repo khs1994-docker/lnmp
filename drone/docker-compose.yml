@@ -75,7 +75,7 @@ services:
     env_file: secrets/mysql.env
     volumes:
       - mysql-data:/var/lib/mysql:rw
-      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro
+      - ./backup/init:/docker-entrypoint-initdb.d:ro
     command: ["mysqld","--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
 
   redis:

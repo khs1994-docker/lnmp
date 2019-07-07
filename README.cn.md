@@ -22,7 +22,7 @@
 
 * [项目初衷](docs/why.md)
 
-* [支持文档](docs)
+* [支持文档](https://docs.lnmp.khs1994.com)
 
 * [Kubernetes 免费实验室](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
