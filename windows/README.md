@@ -25,7 +25,7 @@ $ lnmp-windows-pm.ps1
 ### 安装指定软件(Windows 包管理)
 
 ```bash
-$ lnmp-windows-pm.ps1 install xxx
+$ lnmp-windows-pm.ps1 install xxx [--pre 安装测试版软件]
 
 # $ lnmp-windows-pm.ps1 install go
 ```

@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="3.3.13"){
+Function install($VERSION="3.3.13",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://mirrors.huaweicloud.com/etcd/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip"
   $name="Etcd"
   $filename="etcd-v${VERSION}-windows-amd64.zip"

@@ -1,7 +1,10 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="0.6.1"){
+Function install($VERSION="0.6.1",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://dl.bintray.com/zealdocs/windows/zeal-${VERSION}-windows-x64.msi"
   $name="Zeal"
   $filename="zeal-${VERSION}-windows-x64.msi"

@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="0.7.2"){
+Function install($VERSION="0.7.2",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://github.com/aktau/github-release/releases/download/v${VERSION}/windows-amd64-github-release.zip"
   $name="github-release"
   $filename="windows-amd64-github-release-v${VERSION}.zip"

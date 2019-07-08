@@ -7,7 +7,10 @@ Import-Module cleanup
 # $global:GOLANG_VERSION="1.12rc1"
 # $global:GOLANG_VERSION="1.12.5"
 
-Function install($VERSION="1.13beta1"){
+Function install($VERSION="1.12.6",$preVersion=0){
+  if($preVersion){
+    $VERSION="1.13beta1"
+  }
   $url="https://studygolang.com/dl/golang/go${VERSION}.windows-amd64.zip"
   $name="Go"
   $filename="go${VERSION}.windows-amd64.zip"
@@ -40,6 +43,8 @@ Function install($VERSION="1.13beta1"){
   cleanup go
 
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
+  _exportPath "C:\go\bin" "C:\Users\$env:username\go\bin"
+  $env:Path = [environment]::GetEnvironmentvariable("Path")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

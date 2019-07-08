@@ -2,7 +2,10 @@ Import-Module downloader
 Import-Module unzip
 Import-Module command
 
-Function install($VERSION="1.17.2"){
+Function install($VERSION="1.16.0",$preVersion=0){
+  if($preVersion){
+    $VERSION="1.17.2"
+  }
   $url="https://github.com/yarnpkg/yarn/releases/download/v${VERSION}/yarn-${VERSION}.msi"
   $name="Yarn"
   $filename="yarn-${VERSION}.msi"

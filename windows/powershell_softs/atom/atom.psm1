@@ -1,7 +1,10 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="1.39.0-beta3"){
+Function install($VERSION="1.38.2",$preVersion=0){
+  if($preVersion){
+    $VERSION="1.39.0-beta3"
+  }
   $url="https://github.com/atom/atom/releases/download/v${VERSION}/AtomSetup.exe"
   $name="Atom"
   $filename="AtomSetup-${VERSION}.exe"

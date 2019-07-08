@@ -1,7 +1,10 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="1.02.1907032_x64"){
+Function install($VERSION="1.02.1907032_x64",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://dldir1.qq.com/WechatWebDev/nightly/p-7aa88fbb60d64e4a96fac38999591e31/wechat_devtools_1.02.1907032_x64.exe"
   $name="WeChat Devtool"
   $filename="wechat_devtools_${VERSION}.exe"

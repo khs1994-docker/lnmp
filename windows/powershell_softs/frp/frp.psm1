@@ -1,7 +1,10 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="0.27.0"){
+Function install($VERSION="0.27.0",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://github.com/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_windows_amd64.zip"
   $name="Frp"
   $filename="frp_${VERSION}_windows_amd64.zip"

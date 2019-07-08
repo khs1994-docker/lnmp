@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="3.0.0-alpha.1"){
+Function install($VERSION="3.0.0-alpha.1",$preVersion=0){
+  if($preVersion){
+    $VERSION="3.0.0-alpha.1"
+  }
   $url="https://mirrors.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip"
   $name="Helm"
   $filename="helm-v${VERSION}-windows-amd64.zip"

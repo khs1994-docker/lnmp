@@ -1,7 +1,10 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="19.03.0-rc2"){
+Function install($VERSION="19.03.0-rc2",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe"
   $name="Docker"
   $filename="docker.exe"

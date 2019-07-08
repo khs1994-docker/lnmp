@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="latest"){
+Function install($VERSION="latest",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://dl.min.io/server/minio/release/windows-amd64/minio.exe"
   $name="minio server"
   $filename="minio.exe"

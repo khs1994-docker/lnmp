@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="8.1.1640"){
+Function install($VERSION="8.1.1640",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://github.com/vim/vim-win32-installer/releases/download/v${VERSION}/gvim_${VERSION}_x86.exe"
   $name="vim"
   $filename="gvim_${VERSION}_x86.exe"

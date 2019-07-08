@@ -41,38 +41,22 @@ $LNMP_PATH="$HOME\lnmp"
 
 $LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
-$items="$LNMP_PATH","$LNMP_PATH\windows","$LNMP_PATH\wsl", `
+$Env:PSModulePath="$Env:PSModulePath" + ";" `
+                  + $PSScriptRoot + "\powershell_system" + ";"
+
+_exportPath "$LNMP_PATH","$LNMP_PATH\windows","$LNMP_PATH\wsl", `
        "$LNMP_PATH\kubernetes", `
        "$LNMP_PATH\kubernetes\coreos",`
        "$env:USERPROFILE\app\pcit\bin", `
        "C:\php", `
        "C:\mysql\bin", `
        "C:\nginx", `
-       "C:\Apache24\bin", `
        "C:\node", `
        "$env:ProgramData\npm", `
        "C:\bin", `
-       "C:\Users\$env:username\go\bin", `
-       "C:\go\bin", `
-       "C:\Python", `
-       "$HOME\AppData\Roaming\Composer\vendor\bin", `
-       "$env:SystemRoot\system32\WindowsPowerShell\v1.0"
+       "$HOME\AppData\Roaming\Composer\vendor\bin"
 
-Foreach ($item in $items)
-{
-  $env_path=[environment]::GetEnvironmentvariable("Path", "User")
-  $string=$(echo $env_path | select-string ("$item;").replace('\','\\'))
-
-  if($string.Length -eq 0){
-    write-host "
-Add $item to system PATH env ...
-    "
-    [environment]::SetEnvironmentvariable("Path", "$env_Path;$item;","User")
-  }
-}
-
-$env:Path = [environment]::GetEnvironmentvariable("Path", "User") `
-            + ";" + [environment]::GetEnvironmentvariable("Path", "Machine")
+$env:Path = [environment]::GetEnvironmentvariable("Path")
 
 Function _rename($src,$target){
   if (!(Test-Path $target)){
@@ -122,19 +106,29 @@ _mkdir $home\Downloads\lnmp-docker-cache
 
 cd $home\Downloads\lnmp-docker-cache
 
-$Env:PSModulePath="$Env:PSModulePath" + ";" `
-                  + $PSScriptRoot + "\powershell_system" + ";"
-
 Function __install($softs){
+  $preVersion=0
+
+  Foreach ($soft in $softs)
+  {
+    if($soft -eq '--pre'){
+      $preVersion=1
+      break
+    }
+  }
+
   Foreach ($soft in $softs){
+    if($soft -eq '--pre'){
+      continue
+    }
     $soft,$version=(echo $soft).split('@')
     echo "==> Installing $soft $version ..."
     Import-Module "${PSScriptRoot}\powershell_softs\$soft"
 
     if($version){
-      install $version
+      install $version $preVersion
     }else{
-      install
+      install -preVersion $preVersion
     }
     Remove-Module -Name $soft
   }
@@ -171,33 +165,39 @@ function __init($soft){
 if($args[0] -eq 'install'){
   $_, $softs = $args
   __install $softs
+  cd $source
   exit
 }
 
 if($args[0] -eq 'uninstall' -or $args[0] -eq 'remove'){
   $_, $softs = $args
   __uninstall $softs
+  cd $source
   exit
 }
 
 if($args[0] -eq 'list'){
   $_, $softs = $args
   __list $softs
+  cd $source
   exit
 }
 
 if($args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[0] -eq 'help'){
   $_, $softs = $args
   print_help_info
+  cd $source
   exit
 }
 
 if($args[0] -eq 'init'){
   if($args[1].length -eq 0){
     echo "Please input soft name"
+    cd $source
     exit
   }
   __init $args[1]
+  cd $source
   exit
 }
 
@@ -500,8 +500,6 @@ Write-Host "
 
 
 "
-
-php -m
 
 ################################################################################
 

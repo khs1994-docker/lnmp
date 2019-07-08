@@ -1,7 +1,10 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="1.15.5387"){
+Function install($VERSION="1.15.5387",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://download.jetbrains.com/toolbox/jetbrains-toolbox-${VERSION}.exe"
   $name="Jetbrains Toolbox"
   $filename="jetbrains-toolbox-${VERSION}.exe"

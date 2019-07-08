@@ -2,7 +2,10 @@ Import-Module downloader
 Import-Module unzip
 Import-Module cleanup
 
-Function install($VERSION="0.7.2"){
+Function install($VERSION="0.7.2",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_windows_amd64.zip"
   $name="Dive"
   $filename="dive_${VERSION}_windows_amd64.zip"

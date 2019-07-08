@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="1018"){
+Function install($VERSION="1018",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://dldir1.qq.com/weixin/Windows/WeChat_C${VERSION}.exe"
   $name="WeChat"
   $filename="WeChat_C${VERSION}.exe"

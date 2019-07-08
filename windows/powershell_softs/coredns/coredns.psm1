@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="1.5.2"){
+Function install($VERSION="1.5.2",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://github.com/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_windows_amd64.tgz"
   $name="CoreDNS"
   $filename="coredns_${VERSION}_windows_amd64.tgz"

@@ -22,7 +22,10 @@ LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
   }
 }
 
-Function install($VERSION="2.4.39"){
+Function install($VERSION="2.4.39",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip"
   $name="HTTPD"
   $filename="httpd-${VERSION}-win64-VS16.zip"
@@ -89,6 +92,9 @@ Function install($VERSION="2.4.39"){
   _cleanup $unzipDesc
 
   after_install
+
+  _exportPath "C:\Apache24\bin"
+  $env:Path = [environment]::GetEnvironmentvariable("Path")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

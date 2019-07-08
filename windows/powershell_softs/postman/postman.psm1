@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="7.2.2"){
+Function install($VERSION="7.2.2",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://dl.pstmn.io/download/latest/win64"
   $name="Postman"
   $filename="Postman-win64-${VERSION}-Setup.exe"

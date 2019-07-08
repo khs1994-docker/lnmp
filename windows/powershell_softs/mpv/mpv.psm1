@@ -3,7 +3,10 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="20181002"){
+Function install($VERSION="20181002",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://mpv.srsfckn.biz/mpv-x86_64-${VERSION}.7z"
   $name="mpv"
   $filename="mpv-x86_64-${VERSION}.7z"

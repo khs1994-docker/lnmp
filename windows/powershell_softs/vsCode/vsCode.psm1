@@ -1,7 +1,10 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="1.36.0"){
+Function install($VERSION="1.36.0",$preVersion=0){
+  if($preVersion){
+
+  }
   $url="https://vscode.cdn.azure.cn/stable/0f3794b38477eea13fb47fbe15a42798e6129338/VSCodeUserSetup-x64-1.36.0.exe"
   $name="VSCode"
   $filename="VSCodeUserSetup-x64-${VERSION}.exe"
