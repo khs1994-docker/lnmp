@@ -4,27 +4,19 @@
 
 ## 使用方法
 
-**1.** 在 `.env` 文件中通过 `LNMP_INCLUDE` 变量修改需要启用的软件，详细说明在本文最后(可选项)
+**1.** 在 `.env` 文件中通过 `LNMP_INCLUDE` 变量修改需要启用的软件，详细说明请参考 [个性化方案](custom.md) (可选项)
 
-**2.** 在 `.env` 文件中通过 `LNMP_DOCKER_IMAGE_PREFIX` 变量修改镜像前缀，默认为 khs1994，你可以自由的定义镜像前缀来使用你自己的镜像(可选项)
+**2.** 如果你想使用自己的镜像，可以在 `.env` 文件中通过 `LNMP_DOCKER_IMAGE_PREFIX` 变量修改镜像前缀，默认为 `khs1994`，详细说明请参考 [自己构建镜像](build.md) (可选项)
 
 **3.** 在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app` (可选项)
 
-**4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/` 目录下(可自定义，请查看下方 `APP_ROOT` 一节)，或新建 PHP 项目文件夹
+**4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/my-project` 目录下(可自定义，请查看下方 `APP_ROOT` 一节)，或新建 PHP 项目文件夹
 
 **5.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件(`./config/nginx/*.conf`)
 
-**6.** 执行 `./lnmp-docker up` 或者 `./lnmp-docker restart nginx`
+**6.** 执行 `./lnmp-docker up` 或者 `./lnmp-docker restart nginx` 启动或重启
 
-**7.** `IDE(例如，PhpStorm)` 打开 `./app/project` ，开始编写代码
-
-### 再新建一个项目
-
-**1.** `./app` 新建项目文件夹，`./config/nginx/` 新增配置文件
-
-**2.** 执行 `./lnmp-docker restart nginx` 重启 nginx
-
-**3.** `IDE(例如，PhpStorm)` 打开 `./app/new-project` ，开始编写代码
+**7.** `IDE(PhpStorm)` 打开 `./app/my-project` ，开始编写代码
 
 ## APP_ROOT
 

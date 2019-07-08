@@ -35,12 +35,13 @@ docker-compose down
 
 rm -rf php/default/usr/local/etc/pear.conf
 
+set +x
 echo "\`\`\`bash" > path.md
 
 tree . >> path.md
 
 echo "\`\`\`" >> path.md
-
+set -x
 source ./.env
 
 wget https://gitee.com/mirrors/redis/raw/${LNMP_REDIS_VERSION}/redis.conf -O redis/redis.conf

@@ -7,3 +7,11 @@ $ lnmp-windows-pm.ps1 install go
 ```
 
 执行以上命令可以安装 `go`。执行 `$ lnmp-windows-pm.ps1 list` 查看可供安装的软件。
+
+## 安装测试版软件
+
+```bash
+$ lnmp-windows-pm.ps1 install go --pre
+```
+
+只需加上 `--pre` 参数即可安装测试版软件。

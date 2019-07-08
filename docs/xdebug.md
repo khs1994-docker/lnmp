@@ -8,7 +8,7 @@
 
 ## 启用 xdebug
 
-> 生产环境不启用 `xdebug`
+> 不建议在生产环境启用 `xdebug`
 
 编辑 `config/php/docker-php.ini` 文件，取消注释
 
@@ -31,11 +31,11 @@ zend_extension=xdebug
 
 编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_HOST=192.168.199.100` 变量为你电脑的 IP，这就要求你的电脑必须固定 IP。不然电脑 IP 每次变化时，必须重新修改此变量。
 
-#### Docker Desktop
+#### 1. Docker Desktop
 
 在 Docker 设置中没有配置自定义 DNS 的情况下可以使用 `LNMP_XDEBUG_REMOTE_HOST=host.docker.internal`。
 
-#### Docker for Linux
+#### 2. Docker for Linux
 
 要么电脑固定 IP，要么 IP 变化时编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_HOST` 变量
 
@@ -59,29 +59,27 @@ $ ./lnmp-docker restart php7
 
 > `9001` 端口务必与 `./config/php/docker-xdebug.ini` 一致。
 
-该设置页 `Pre-configuration` 有简要的步骤。
-
 ## 浏览器扩展
 
 * [火狐](https://github.com/BrianGilbert/xdebug-helper-for-firefox)
 
 * [Chrome](https://github.com/mac-cain13/xdebug-helper-for-chrome)
 
-### 设置扩展
+> 在扩展配置中 IDE key 选择 PhpStorm
 
-在扩展配置中 IDE key 选择 PhpStorm
+## 使用步骤
 
-## IDE 中点击工具栏电话图标
+* 1.IDE 中点击工具栏电话图标
 
-## 编写代码
+* 2.编写代码
 
-## 打断点
+* 3.打断点
 
-## 浏览器刷新对应页面
+* 4.浏览器刷新对应页面
 
 在调试页面点击扩展图标，选择 `debug`，之后刷新页面
 
-## 自动跳转到 IDE
+* 5.自动跳转到 IDE
 
 ## More Information
 

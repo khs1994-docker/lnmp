@@ -32,7 +32,7 @@ $global:LNMP_INCLUDE='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 
 ## 使用自己的镜像
 
-**不想使用本项目默认的镜像，可以！**
+> **不想使用本项目默认的镜像，可以！**
 
 在 `./dockerfile/` 下各个软件的文件夹内复制 `example.Dockerfile` 为 `Dockerfile`，并编写 `Dockerfile` 之后运行如下命令：
 
@@ -51,7 +51,7 @@ development
 
 ## 增加服务
 
-**这个项目能不能增加 xxx 软件，可以！**
+> **这个项目能不能增加 xxx 软件，可以！**
 
 在 `docker-compose.include.yml` 文件中新增服务。
 
@@ -63,7 +63,7 @@ LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin my-service"
 
 ## 单独启动某个软件
 
-**我想单独启动某个软件，可以！**
+> **我想单独启动某个软件，可以！**
 
 ```bash
 $ lnmp-docker up SOFT_NAME SOFT_NAME2
@@ -75,7 +75,7 @@ $ lnmp-docker up SOFT_NAME SOFT_NAME2
 
 ## 自定义数据卷
 
-**我想把某个软件的目录挂载到本机，可以！**
+> **我想把某个软件的目录挂载到本机，可以！**
 
 > 例如我们想增加一个数据卷挂载，将本机 `/path/src` 挂载到 PHP 容器中的 `/path/target`
 
@@ -107,7 +107,7 @@ services:
 
 ## 自定义 compose 文件配置
 
-**软件的默认配置不满足我的要求（例如这个软件我想使用别的镜像），怎么修改**
+> **软件的默认配置不满足我的要求（例如这个软件我想使用别的镜像），怎么修改**
 
 编辑 `docker-compose.include.yml` 文件，增加服务名，修改服务指令即可。
 

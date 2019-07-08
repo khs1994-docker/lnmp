@@ -15,6 +15,7 @@
 * 安装
     * [Linux macOS](install/linux.md)
     * [Windows 10](install/windows.md)
+* [MySQL](mysql.md)
 * [更新](update.md)
 * [lnmp-docker CLI](cli.md)
 * [项目初始化过程](init.md)

@@ -14,6 +14,7 @@ action "action-when" {
 
 action "docs-build" {
   uses = "docker://pcit/vuepress"
+  needs = ["action-when"]
   args = "build"
   env = {
     PCIT_LOCAL_DIR = "docs"
@@ -23,7 +24,7 @@ action "docs-build" {
 action "sync-docs" {
   uses = "docker://pcit/pages"
   secrets = ["PCIT_GIT_TOKEN"]
-  needs = ["action-when","docs-build"]
+  needs = ["docs-build"]
   env = {
     PCIT_USERNAME = "khs1994"
     PCIT_EMAIL = "khs1994@khs1994.com"
