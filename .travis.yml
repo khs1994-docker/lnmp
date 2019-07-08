@@ -230,10 +230,9 @@ jobs:
         - ./default.sh
         - cd ..
         - git status
-        - git diff
         - git add .
         - git commit -m "[Config] Update default config"
-        - git remote set-url github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
+        - git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
         - git checkout -b 18.09-config
         - git push github 18.09-config -f
 

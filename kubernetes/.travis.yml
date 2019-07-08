@@ -94,8 +94,8 @@ script:
   - kubectl apply -f addons/coredns.yaml
   - kubectl apply -f addons/dashboard.yaml
   - kubectl apply -f addons/metrics-server
-  - kubectl create namespace ingress-nginx
-  - kubectl apply -k addons/ingress-nginx/deploy-bare/
+  - kubectl apply -f addons/ingress-nginx/mandatory.yaml
+  - kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
 
   - sleep 120
 

@@ -19,13 +19,13 @@
 ## 部署
 
 ```bash
-$ kubectl create namespace ingress-nginx
+$ kubectl apply -f addons/ingress-nginx/mandatory.yaml
 
 # 裸机 通过 nodeport
-$ kubectl apply --kustomize addons/ingress-nginx/deploy-bare
+$ kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
 
 # Docker 桌面版
-$ kubectl apply --kustomize addons/ingress-nginx/deploy-docker-desktop
+$ kubectl apply -f addons/ingress-nginx/provider/cloud-generic.yaml
 ```
 
 ## 定义规则
