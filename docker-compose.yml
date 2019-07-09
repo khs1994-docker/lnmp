@@ -310,7 +310,7 @@ services:
 
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-04-18T01-15-57Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-07-05T21-20-21Z}
     volumes:
       - minio-data:/data
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt
