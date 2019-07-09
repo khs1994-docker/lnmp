@@ -43,8 +43,7 @@ print_info(){
 
 print_help_info(){
   echo "
-
-==> Kubernetes version is ${KUBERNETES_VERSION}
+Kubernetes version is ${KUBERNETES_VERSION}
 
 
 Usage: lnmp-k8s COMMAND
@@ -59,9 +58,9 @@ Commands:
   minikube-install       Install minikube
   minikube               Start minikube
 
-  single-install         Install Local Kubernetes（Manager by systemd）
-  single-start           Print how to start Local Kubernetes (Manager by systemd)
-  single-cleanup         Cleanup Kubernetes Env.
+  single-install         Install Single Kubernetes（Manager by systemd）
+  single-start           Print how to start Single Kubernetes (Manager by systemd)
+  single-cleanup         Cleanup Single Kubernetes.
 
   join                   New worker [NODE_IP]
 
@@ -77,8 +76,6 @@ Commands:
   helm-testing           Install Helm LNMP In Testing
   helm-staging           Install Helm LNMP In Staging
   helm-production        Install Helm LNMP In Production
-
-  dashboard              Print how to open Dashboard
 "
 }
 
@@ -168,7 +165,7 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
   fi
 }
 
-_delete(){
+_delete_lnmp(){
   kubectl delete deployment -l app=lnmp -n lnmp
   kubectl delete service -l app=lnmp -n lnmp
   kubectl delete secret -l app=lnmp -n lnmp
@@ -193,11 +190,7 @@ _minikube(){
 }
 
 _minikube_install(){
-  if [ "$OS" = 'Linux' ];then
-    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
-  elif [ "$OS" = 'Darwin' ];then
-    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-darwin-amd64
-  fi
+  url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-${GOOS}-amd64
 
   curl -L $url -o minikube
 
@@ -206,8 +199,8 @@ _minikube_install(){
   sudo mv minikube /usr/local/bin/ || echo "Please move minikube to your PATH"
 }
 
-_cleanup(){
-  _delete
+_cleanup_lnmp(){
+  _delete_lnmp
   kubectl delete pvc -l app=lnmp -n lnmp
   kubectl delete pv -l app=lnmp -n lnmp
   kubectl delete ingress -l app=lnmp -n lnmp
@@ -238,7 +231,7 @@ _registry(){
   kubectl -n lnmp create -f addons/registry.yaml
 }
 
-_create(){
+_create_lnmp(){
   current_context=`kubectl config current-context`
 
   if [ $current_context != "docker-for-desktop" -a "$OS" = 'Darwin' ];then
@@ -686,17 +679,17 @@ case $_command in
     ;;
 
     create )
-      _create
+      _create_lnmp
     ;;
 
     delete )
       set +e
-      _delete
+      _delete_lnmp
     ;;
 
     cleanup )
       set +e
-      _cleanup
+      _cleanup_lnmp
     ;;
 
     registry )
@@ -745,15 +738,6 @@ case $_command in
     ;;
     helm-production )
     _helm production "$@"
-    ;;
-
-    dashboard )
-      echo "
-$ kubectl proxy
-
-open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-"
     ;;
 
     * )
