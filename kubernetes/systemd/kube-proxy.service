@@ -5,8 +5,6 @@ After=network.target
 
 [Service]
 
-ExecStartPre=-/usr/bin/apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp2
-ExecStartPre=-/usr/bin/dnf install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp
 ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kube-proxy
 ExecStartPre=-/usr/sbin/modprobe ip_vs
 ExecStartPre=-/sbin/modprobe ip_vs
