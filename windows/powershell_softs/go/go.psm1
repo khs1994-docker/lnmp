@@ -7,7 +7,7 @@ Import-Module cleanup
 # $global:GOLANG_VERSION="1.12rc1"
 # $global:GOLANG_VERSION="1.12.5"
 
-Function install($VERSION="1.12.6",$preVersion=0){
+Function install($VERSION="1.12.7",$preVersion=0){
   if($preVersion){
     $VERSION="1.13beta1"
   }

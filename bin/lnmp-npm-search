@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-npm search --registry=https://registry.npmjs.org "$@"

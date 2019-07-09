@@ -1,7 +1,12 @@
+. "$PSScriptRoot/common.ps1"
+
 docker run -it --rm `
     --mount type=bind,src=$PWD,target=/app `
-    --mount type=volume,src=lnmp_npm-data,target=/tmp/node/.npm `
+    --mount type=bind,src=${PSScriptRoot}/../config/npm/.npmrc,target=/usr/local/etc/npmrc `
+    --mount type=volume,src=lnmp_npm_cache-data,target=/tmp/node/.npm `
+    --mount type=volume,src=lnmp_npm_global-data,target=/tmp/node/npm `
+    --env-file ${PSScriptRoot}/../config/npm/.env `
     --workdir /app `
     --entrypoint npx `
-    node:alpine `
-    --registry https://registry.npm.taobao.org --cache /tmp/node/.npm $args
+    ${LNMP_NODE_IMAGE} `
+    $args

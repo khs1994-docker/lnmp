@@ -2,6 +2,7 @@
 !.gitignore
 !composer/config.example.json
 !composer/.env.example
+!composer/.env.example.ps1
 !etc
 !httpd/demo-ssl
 !httpd/demo-*.config
@@ -21,7 +22,6 @@
 !registry
 !default.sh
 !docker-compose.yml
-!path.md
 !README.md
 supervisord/supervisord.ini
 !supervisord

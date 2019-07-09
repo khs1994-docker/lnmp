@@ -11,6 +11,7 @@ if [ "$debug" = 'true' ];then set -x; fi
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
 docker run -it --rm \
+  --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
   --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
   --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
   bash \
@@ -21,6 +22,7 @@ docker run -it --rm \
 
 docker run -it --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=delegated \
+    --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
     --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
     --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
     --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/root/.yarnrc \
@@ -29,7 +31,4 @@ docker run -it --rm \
     --entrypoint yarn \
     --user ${LNMP_USER:-root:root} \
     ${LNMP_NODE_IMAGE:-node:alpine} \
-    --registry https://registry.npm.taobao.org \
-    --cache-folder /tmp/node/.yarn \
-    --global-folder /tmp/node/yarn \
     "$@"

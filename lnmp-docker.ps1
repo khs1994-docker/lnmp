@@ -86,8 +86,6 @@ Function env_status(){
 
   _cp_only_not_exists volumes/.env.example volumes/.env
 
-  _cp_only_not_exists config/composer/config.example.json config/composer/config.json
-
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 
   if (!(Test-Path secrets/minio/key.txt)){
@@ -102,6 +100,13 @@ Function env_status(){
 
   _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
   _cp_only_not_exists config/npm/.env.example config/npm/.env
+
+  _cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
+  _cp_only_not_exists config/yarn/.env.example config/yarn/.env
+
+  _cp_only_not_exists config/composer/.env.example config/composer/.env
+  _cp_only_not_exists config/composer/.env.example.ps1 config/composer/.env.ps1
+  _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 
 }
 

@@ -109,12 +109,8 @@ cd $home\Downloads\lnmp-docker-cache
 Function __install($softs){
   $preVersion=0
 
-  Foreach ($soft in $softs)
-  {
-    if($soft -eq '--pre'){
-      $preVersion=1
-      break
-    }
+  if($softs -contains '--pre'){
+    $preVersion=1
   }
 
   Foreach ($soft in $softs){

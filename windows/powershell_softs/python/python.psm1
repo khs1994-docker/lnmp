@@ -2,7 +2,7 @@ Import-Module downloader
 Import-Module unzip
 Import-Module command
 
-Function install($VERSION="3.7.3",$preVersion=0){
+Function install($VERSION="3.7.4",$preVersion=0){
   if($preVersion){
     $VERSION="3.8.0b2"
     $url="https://www.python.org/ftp/python/3.8.0/python-${VERSION}-amd64.exe"

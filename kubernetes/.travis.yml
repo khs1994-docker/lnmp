@@ -97,7 +97,7 @@ script:
   - kubectl apply -f addons/ingress-nginx/mandatory.yaml
   - kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
 
-  - sleep 120
+  - sleep 140
 
   - kubectl get all --all-namespaces
   # test metrics server

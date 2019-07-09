@@ -27,4 +27,4 @@ docker run -it --rm \
     --entrypoint npx \
     --user ${LNMP_USER:-root:root} \
     ${LNMP_NODE_IMAGE:-node:alpine} \
-    --registry https://registry.npm.taobao.org --cache /tmp/node/.npm "$@"
+    "$@"

@@ -54,3 +54,6 @@ $global:PHP_XDEBUG_EXTENSION_VERSION="2.7.2"
 $global:PHP_YAML_EXTENSION_VERSION="2.0.4"
 # https://curl.haxx.se/docs/caextract.html
 $global:PHP_CACERT_DATE="2019-05-15"
+
+$global:LNMP_NODE_IMAGE="node:alpine"
+# $global:LNMP_NODE_IMAGE="khs1994/node:git"
