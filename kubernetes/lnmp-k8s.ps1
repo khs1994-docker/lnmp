@@ -27,7 +27,7 @@ if (Test-Path .env.ps1 ){
 
 $current_context=kubectl config current-context
 
-if (!($current_context -eq "docker-for-desktop")){
+if (!($current_context -eq "docker-desktop")){
    Write-Warning "This Script Support Docker Desktop Only"
    exit
 }
@@ -56,7 +56,6 @@ Commands:
   helm-testing       Install Helm LNMP In Testing
   helm-staging       Install Helm LNMP In Staging
   helm-production    Install Helm LNMP In Production
-
 "
 }
 
@@ -144,7 +143,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
 
     kubectl -n lnmp create -f deployment/lnmp-configMap.yaml
 
-    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 \
+    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 `
       --from-file=deployment/configMap/nginx-conf-d
 
     kubectl -n lnmp label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1

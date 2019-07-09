@@ -234,7 +234,7 @@ _registry(){
 _create_lnmp(){
   current_context=`kubectl config current-context`
 
-  if [ $current_context != "docker-for-desktop" -a "$OS" = 'Darwin' ];then
+  if [ $current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
      echo "This Script Support Docker Desktop Only"
      exit
   fi
