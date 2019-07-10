@@ -1,0 +1,354 @@
+version: "3.7"
+
+#
+# Don't use this compose file
+# This file Only Example
+#
+#
+# @see https://docs.docker.com/compose/overview/
+#
+
+x-common:
+  &default-common
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+
+x-labels:
+  &default-labels
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+
+services:
+  redis:
+    << : *default-common
+    # build: ./dir
+    build: # no Swarm mode
+      << : *default-labels
+      context: ./dockerfile/redis
+      cache_from:
+        - alpine:latest
+      dockerfile: Dockerfile
+      args:
+        VAR: 1
+      args:
+        - a=1
+      shm_size: '2gb' # 3.5
+      #
+      # Dockerfile target
+      #
+      target: prod
+    image: soft:${VERSION:-1.0}-alpine
+    cap_add:
+      - ALL
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+    command: redis-server /redis.conf
+    command:
+      - redis-server
+      - /redis.conf
+    command: ["redis-server", "/redis.conf"]
+    command: ["sh", "-c", "echo $$HOME"] # sh -c echo $HOME
+    configs: # no compose
+      - source: redis_conf
+        target: /redis.conf
+        uid: '103'
+        gid: '103'
+        mode: '0440'
+      - my_other_config # /run/configs/my_other_config
+    cgroup_parent: m-executor-abcd # no Swarm mode
+    # container_name: my-web-container # no Swarm mode
+    credential_spec: # no compose v3.3
+      file: my-credential-spec.json
+    deploy: # no compose
+      mode: global
+
+      replicas: 6
+
+      mode: replicated # this is default
+      replicas: 6
+
+      placement:
+        constraints:
+          - node.role == manager
+          - engine.labels.operatingsystem == ubuntu 14.04
+        preferences:
+          - spread: node.labels.zone
+
+      endpoint_mode: vip # this is default v3.3
+
+      # endpoint_mode: dnsrr
+
+      update_config:
+        parallelism: 2
+        delay: 10s
+        # failure_action: continue rollback pause (default: pause)
+        # monitor:
+        # max_failure_ratio:
+        order: stop-first # start-first
+
+      restart_policy:
+        condition: any # none | on-failure | any(default)
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      # 3.7 options same as update_config
+      # rollback_config:
+
+      << : *default-labels
+
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+    devices: # no Swarm mode
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    depends_on:
+      - mysql
+    # dns: 8.8.8.8
+    dns:
+      - 8.8.8.8
+      - 9.9.9.9
+    # dns_search: example.com
+    dns_search:
+      - dc1.example.com
+      - dc2.example.com
+    entrypoint: /code/entrypoint.sh
+    entrypoint:
+      - php
+      - -d
+      - zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so
+      - -d
+      - memory_limit=-1
+      - vendor/bin/phpunit
+    env_file: .env
+    env_file:
+      - ./.env
+    environment:
+      RACK_ENV: development
+      SHOW: 'true'
+      SESSION_SECRET:
+    environment:
+      - RACK_ENV=development
+      - SHOW=true
+      - SESSION_SECRET
+    expose:
+      - "3000"
+      - "8000"
+    # external_links: # no Swarm mode
+    #   - redis_1
+    #   - project_db_1:mysql
+    #   - project_db_1:postgresql
+    extra_hosts:
+      - "somehost:162.242.195.82"
+      - "otherhost:50.31.209.229"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # healthcheck:
+    #   disable: true
+    isolation: default # windows process hyperv
+    # links: # no Swarm mode
+    #    - mysql
+    # 3.7
+    init: true
+    # init: /usr/libexec/docker-init
+    logging:
+       driver: syslog # json-file none journald
+       options:
+         syslog-address: "tcp://192.168.0.42:123"
+         max-size: "200k"
+         max-file: "10"
+    # network_mode: "host" # bridge \ none \ service:service name \ container: container name # no Swarm mode
+    networks:
+       app_net:
+         aliases:
+           - alias2
+         ipv4_address: 172.16.238.10
+    pid: "host"
+    ports:
+      # - "80:80"
+      - "127.0.0.1:443:443"
+      - "127.0.0.1:5000-5010:5000-5010"
+      - "9000:9000/udp"
+      - target: 80
+        published: 8080
+        protocol: tcp
+        mode: host
+    secrets:
+      - my_secret
+      - my_other_secret # /run/secrets/my_other_secret
+    secrets:
+      - source: my_secret
+        target: /redis.conf
+        uid: '103'
+        gid: '103'
+        mode: 0440
+    security_opt: # no Swarm mode
+      - label:user:USER
+      - label:role:ROLE
+    stop_grace_period: 1s
+    stop_grace_period: 1m30s
+    stop_signal: SIGUSR1 # no Swarm mode
+    sysctls: # no Swarm mode
+      net.core.somaxconn: 1024
+      net.ipv4.tcp_syncookies: 0
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
+    userns_mode: "host" # no Swarm mode
+    volumes:
+      # https://blog.docker.com/2017/05/user-guided-caching-in-docker-for-mac/
+      # https://docs.docker.com/docker-for-mac/osxfs-caching/
+      # https://github.com/docker/for-mac/issues/77
+      # :cached is used for improving read speed
+      - ./config:/config:cached # consistent(default) delegated
+      - redis-data:/data
+      - type: volume
+        source: mydata
+        target: /app
+        volume:
+          nocopy: true
+        read_only: true
+        bind:
+          propagation: rprivate
+      - type: bind
+        source: ${APP_ROOT:-./app}
+        target: /app
+      - type: tmpfs
+        target: /app
+        tmpfs:
+          size: 1000
+    restart: "no" # always | on-failure | unless-stopped # no Swarm mode
+    user: postgresql
+    working_dir: /code
+    domainname: foo.com
+    hostname: foo
+    ipc: host
+    mac_address: 02:42:ac:11:65:43
+    privileged: true
+    read_only: true
+    shm_size: 64M
+    stdin_open: true
+    tty: true
+    sysctls:
+      - net.core.somaxconn=1024
+      - net.ipv4.tcp_syncookies=0
+
+  mysql:
+    image: mysql:8.0.16
+    environment:
+      # https://github.com/docker-library/docs/tree/master/mysql
+      MYSQL_ROOT_PASSWORD: mytest
+      MYSQL_DATABASE: test
+
+      MYSQL_USER: test
+      MYSQL_PASSWORD: mytest
+
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_ONETIME_PASSWORD: mytest
+
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql-root
+      MYSQL_ROOT_HOST_FILE: /run/secrets/mysql-root
+      MYSQL_DATABASE_FILE: /run/secrets/mysql-root
+      MYSQL_USER_FILE: /run/secrets/mysql-root
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql-root
+    volumes:
+      - ./scripts/backup/init:/docker-entrypoint-initdb.d  # .sh .sql .sql.gz
+
+  postgresql:
+    image: postgres:10.2-alpine
+    environment:
+      # https://github.com/docker-library/docs/tree/master/postgres
+      POSTGRES_PASSWORD: mytest
+      POSTGRES_USER: test
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: test # default is POSTGRES_USER
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      POSTGRES_INITDB_WALDIR: "null"
+
+      POSTGRES_INITDB_ARGS_FILE: /run/secrets/postgres-passwd
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-passwd
+      POSTGRES_USER_FILE: /run/secrets/postgres-passwd
+      POSTGRES_DB_FILE: /run/secrets/postgres-passwd
+
+  nfs-demo:
+    image: nginx
+    volumes:
+      - nfs-demo:/data
+
+configs:
+  redis_conf:
+    file: ./config/redis/redis.conf
+    << : *default-labels
+
+  #
+  # 3.5
+  #
+  my_other_config:
+    external: true
+    name: redis_config
+
+secrets:
+  my_secret:
+    file: ./secrets/db_root_password
+    << : *default-labels
+  #
+  # 3.5
+  #
+  my_second_secret:
+    external: true
+    name: redis_secret
+
+networks:
+  app_net:
+    driver: bridge
+    # enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.16.238.0/24
+      # -
+        # subnet: 2001:3984:3989::/64
+
+  #
+  # 3.5
+  #
+  outside:
+    external: true
+    name: actual-name-of-network
+
+  mynet1:
+    driver: overlay
+    driver_opts:
+      foo: "bar"
+      baz: 1
+    attachable: true
+    << : *default-labels
+
+volumes:
+  redis-data:
+    << : *default-labels
+
+  nfs-demo:
+    driver: local
+    driver_opts:
+      type: nfs
+      device: "${NFS_DEVICE:-192.168.199.100:/nfs}"
+      o: "${NFS_O:-addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw}"
+  #
+  # 3.5
+  #
+  data:
+    external: true
+    name: actual-name-of-volume

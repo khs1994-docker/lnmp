@@ -109,9 +109,7 @@ jobs:
         - ./lnmp-docker compose --official -f
         - cli/test swarm
 
-    #
     # wsl-debian
-    #
 
     - stage: wsl-php-builder-72
       name: wsl-php-builder-72
@@ -191,9 +189,8 @@ jobs:
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_73}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
-    #
+
     # clusterkit
-    #
 
     # - stage: memcached
     #   script:
@@ -206,10 +203,6 @@ jobs:
     # - stage: redis-cluster-by-ruby
     #   script:
 
-    #
-    # deg
-    #
-
     - stage: deb
       script:
         - sh cli/build.sh deb ${TRAVIS_TAG}
@@ -218,10 +211,6 @@ jobs:
         - ls -la cli
         - sudo dpkg -i cli/${DEB_NAME}
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "cli/${DEB_NAME}" -R
-
-    #
-    # yum
-    #
 
     - stage: rpm
       install:
@@ -234,6 +223,18 @@ jobs:
         - export RPM_NAME=$( cd $HOME; ls *.rpm )
         - ls -la ~/*.rpm
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${HOME}/${RPM_NAME}" -R
+
+    - stage: checkConfig
+      script:
+        - cd config
+        - ./default.sh
+        - cd ..
+        - git status
+        - git add .
+        - git commit -m "[Config] Update default config"
+        - git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
+        - git checkout -b 18.09-config
+        - git push github 18.09-config -f
 
 # stages:
 #   - test
@@ -249,8 +250,11 @@ stages:
     if: tag =~ /^(v19)/
   - development
   - swarm
+  - name: checkConfig
+    if: branch = "18.09"
+  # don't run
   - name: docs
-    if: tag =~ /^(v18)/
+    if: tag =~ /^(vxx)/
   - name: deb
     if: tag =~ /^(v19)/
   - name: rpm

@@ -7,6 +7,8 @@ if ($?){
 }
 
 . "$PSScriptRoot/common.ps1"
+. "$PSScriptRoot/../config/composer/.env.example.ps1"
+. "$PSScriptRoot/../config/composer/.env.ps1"
 
 if ($args.Count -eq 0){
   $COMMAND="-h"
@@ -41,7 +43,10 @@ if ($args -contains '-S' ){
 
 docker run --init -it --rm `
    --mount type=bind,src=$PWD,target=/app `
-   --mount src=lnmp_composer_cache-data,target=/tmp/cache `
+   --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} `
+   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} `
+   --mount type=bind,src=$PSScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json `
+   --env-file $PSScriptRoot/../config/composer/.env `
    -p "${ADDR_PORT}:${PORT}" `
    -e TZ=${TZ} `
    --network lnmp_backend ${LNMP_PHP_IMAGE} `
@@ -51,7 +56,10 @@ exit 0
 
 docker run --init -it --rm `
   --mount type=bind,src=$PWD,target=/app `
-  --mount src=lnmp_composer_cache-data,target=/tmp/cache `
+  --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} `
+  --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} `
+  --mount type=bind,src=$PSScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json `
+  --env-file $PSScriptRoot/../config/composer/.env `
   -e APP_ENV=development `
   -e TZ=${TZ} `
   ${LNMP_PHP_IMAGE} `

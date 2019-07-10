@@ -52,6 +52,7 @@ __pycache__
 # debug info
 
 debug.md
+bug.md
 
 *.sum
 *.exe

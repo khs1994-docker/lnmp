@@ -1,0 +1,17 @@
+# GitHub
+
+192.30.255.116   api.github.com
+151.101.129.69   cdn.sstatic.net
+52.216.226.0     github-cloud.s3.amazonaws.com
+52.216.131.35    github-production-release-asset-2e65be.s3.amazonaws.com
+151.101.229.194  github.global.ssl.fastly.net
+#192.30.253.112   github.com
+#192.30.253.113 github.com
+# 59.24.3.173      gist.github.com
+192.30.253.119   gist.github.com github.com
+151.101.228.133  assets-cdn.github.com
+151.101.228.133  avatars1.githubusercontent.com avatars2.githubusercontent.com
+151.101.228.133  avatars0.githubusercontent.com avatars3.githubusercontent.com
+# 34.228.249.31    collector.githubapp.com
+
+# http://tool.chinaz.com/dns

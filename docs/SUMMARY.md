@@ -6,25 +6,32 @@
 * [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 * [腾讯云自媒体](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
+## 商业版
+
+* [EE](ee/README.md)
+
 ## 安装
 
 * 安装
     * [Linux macOS](install/linux.md)
     * [Windows 10](install/windows.md)
+* [MySQL](mysql.md)
 * [更新](update.md)
+* [lnmp-docker CLI](cli.md)
 * [项目初始化过程](init.md)
 * [路径说明](path.md)
-* [lnmp-docker CLI](cli.md)
 
 ## 开发环境
 
 * 开发环境
     * [使用方法](development.md)
+    * [个性化配置](custom.md)
     * [数据库备份恢复](backup.md)
     * [日志清理](cleanup.md)
 * [软件配置](config.md)
 * [开放端口](port.md)
 * [PHPer 常用命令容器化](command.md)
+* [Windows 包管理工具](windows/lwpm.md)
 
 ## NGINX
 

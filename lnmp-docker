@@ -42,7 +42,7 @@ notsupport(){
 
 check_nginx_conf(){
   set +e
-  echo "$LNMP_INCLUDE" | grep -q 'minio' \
+  echo "$LNMP_SERVICES" | grep -q 'minio' \
     || ( ls config/${LNMP_NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
     && ( print_error \
     "your .env file not include minio, but nginx conf.d folder include minio.conf" ; echo))
@@ -80,6 +80,13 @@ if ! [ -f config/php/docker-php.ini ];then
 fi
 
 _cp_only_not_exists config/composer/config.example.json config/composer/config.json
+_cp_only_not_exists config/composer/.env.example config/composer/.env
+
+_cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
+_cp_only_not_exists config/npm/.env.example config/npm/.env
+
+_cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
+_cp_only_not_exists config/yarn/.env.example config/yarn/.env
 
 # PHPer command
 
@@ -110,7 +117,7 @@ Commands:
   compose              Install docker-compose [ --official | -f ]
   completion           Move fish shell completion code (Only Support fish)
   config               Validate and view the LNMP Compose file
-  debug                Generate Debug information, then copy it to GitHub Issues
+  bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
   daemon-tls           Display how to enable Docker TLS Daemon
   daemon-tls-cert      Generate Docker Daemon TLS cert
@@ -370,6 +377,40 @@ _local_docs_server(){
     git -C ${APP_ROOT}/lnmp-docs/nginx fetch --depth=1 origin gh-pages
     git -C ${APP_ROOT}/lnmp-docs/nginx reset --hard origin/gh-pages
   fi
+}
+
+_get_compose_options(){
+  local isBuild=0
+  for compose_file in "$@"
+  do
+    if [ $compose_file = "--build" ];then
+      isBuild=1
+      continue
+    fi
+    options+=" -f $compose_file "
+  done
+
+  for compose_file in $LNMP_COMPOSE_INCLUDE
+  do
+    if [ $isBuild -eq 1 ];then
+      if ! [ -f "lnmp-include/$compose_file/docker-compose.build.yml" ];then
+        options+=" -f lnmp-include/$compose_file/docker-compose.yml "
+        continue
+      fi
+
+      options+=" -f lnmp-include/$compose_file/docker-compose.yml -f lnmp-include/$compose_file/docker-compose.build.yml "
+
+      continue
+    fi
+
+    if ! [ -f "lnmp-include/$compose_file/docker-compose.override.yml" ];then
+      options+=" -f lnmp-include/$compose_file/docker-compose.yml "
+      continue
+    fi
+    options+=" -f lnmp-include/$compose_file/docker-compose.yml -f lnmp-include/$compose_file/docker-compose.override.yml "
+  done
+
+  options+=" -f docker-compose.include.yml "
 }
 
 _registry(){
@@ -769,7 +810,7 @@ cn_mirror(){
   git push -f coding --tags
 }
 
-_lnmp_debug(){
+_lnmp_bug(){
   docker_version=$(docker --version)
   compose_version=$(docker-compose --version)
   git_commit=$(git log -1 --pretty=%H)
@@ -777,9 +818,9 @@ _lnmp_debug(){
 <details>
 <summary>OS Environment Info</summary>
 <pre>
-" > debug.md
+" > bug.md
 
-cat /etc/os-release >> debug.md 2>&1 /dev/null || uname -s >> debug.md
+cat /etc/os-release >> bug.md 2>&1 /dev/null || uname -s >> bug.md
 
 echo "
 </pre>
@@ -824,9 +865,9 @@ XXX
 
 
 <!--提交问题之前务必点击预览（Preview）标签-->
-" >> debug.md
+" >> bug.md
 
-  print_warning "Please Edit debug.md, then new issue in [ https://github.com/khs1994-docker/lnmp/issues/new/choose ] with copy debug.md"
+  print_warning "Please Edit bug.md, then new issue in [ https://github.com/khs1994-docker/lnmp/issues/new/choose ] with copy bug.md"
   echo
 }
 
@@ -1051,6 +1092,7 @@ new(){
   if [ $protocol = 'https' ];then
     # 申请 ssl 证书
     read -n 1 -p "Self-Signed SSL certificate? [y/N]:" self_signed
+    echo ""
     if [ "$self_signed" = 'y' ];then
       ssl_self $url
     else
@@ -1230,10 +1272,10 @@ main() {
     ;;
 
   config )
-    exec docker-compose -f docker-compose.yml \
-      -f docker-compose.override.yml \
-      -f docker-compose.include.yml \
-      config
+    _get_compose_options "docker-compose.yml" \
+                         "docker-compose.override.yml"
+
+    exec docker-compose $options config "$@"
     ;;
 
   demo )
@@ -1267,9 +1309,9 @@ main() {
     echo
   ;;
 
-  debug )
+  bug )
 
-  _lnmp_debug
+  _lnmp_bug
 
   ;;
 
@@ -1375,7 +1417,11 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml build "$@" --parallel
+      _get_compose_options "docker-compose.yml" \
+                           "docker-compose.build.yml" \
+                           "--build"
+
+      exec docker-compose $options build "$@" --parallel
     else
       notsupport
     fi
@@ -1387,9 +1433,10 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      exec docker-compose -f docker-compose.yml -f docker-compose.build.yml \
-        -f docker-compose.include.yml \
-        up -d "$@"
+      _get_compose_options "docker-compose.yml" \
+                           "docker-compose.build.yml" \
+                           "--build"
+      exec docker-compose $options up -d "$@"
     else
       notsupport
     fi
@@ -1401,51 +1448,42 @@ For information please run $ docker service update --help
     init
     # 判断架构
 
-    local soft=${LNMP_INCLUDE:-nginx mysql php7 redis phpmyadmin}
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
 
     if ! [ -z "$@" ];then
-      soft="$@"
+      service="$@"
     fi
 
-    # echo $soft
+    # echo $service
 
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
-    if [ ${ARCH} = 'x86_64' ];then
-      docker-compose \
-        -f docker-compose.yml \
-        -f docker-compose.override.yml \
-        -f docker-compose.include.yml \
-      up $opt ${soft}
 
-      #@custom
-      __lnmp_custom_up "$@" 2>/dev/null || true
+    _get_compose_options docker-compose.yml \
+                         docker-compose.override.yml
 
-      echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker exec -it \
+    docker-compose $options up $opt ${service}
+
+    #@custom
+    __lnmp_custom_up "$@" 2>/dev/null || true
+
+    echo; sleep 1; print_info "Test nginx configuration file...\n"
+    docker exec -it \
           $(docker container ls --format {{.ID}} \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
-    elif [ ${ARCH} = 'armv7l' -o ${ARCH} = 'aarch64' ];then
-      docker-compose -f docker-arm.yml \
-        up $opt ${soft}
-
-      echo; sleep 1; print_info "Test nginx configuration file...\n"
-      docker-compose -f docker-arm.yml exec nginx nginx -t || \
-        (print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
-
-      echo; print_info "nginx configuration file test is successful\n" ; exit 0
-    else
-      notsupport
-    fi
     ;;
 
   build-config )
-    init; if [ ${ARCH} = 'x86_64' ];then \
-        exec docker-compose -f docker-compose.yml \
-             -f docker-compose.build.yml \
-             -f docker-compose.include.yml
-             config; \
-          else notsupport; fi
+    init
+    if [ ${ARCH} = 'x86_64' ];then
+      _get_compose_options "docker-compose.yml" \
+                           "docker-compose.build.yml" \
+                           "--build"
+
+      exec docker-compose $options config "$@"
+    else
+      notsupport
+    fi
     ;;
 
   restore )
@@ -1539,11 +1577,13 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   build-push )
-    run_docker; init; exec \
-        docker-compose -f docker-compose.build.yml \
-          -f docker-compose.include.yml \
-          build --parallel \
-          && docker-compose -f docker-compose.build.yml push
+    run_docker; init;
+    _get_compose_options "docker-compose.yml" \
+                         "docker-compose.build.yml" \
+                         "--build"
+
+    docker-compose $options build --parallel "$@"
+    exec docker-compose $options push "$@"
     ;;
 
   down )
@@ -1558,21 +1598,13 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   pull )
     run_docker; init
-    case "${ARCH}" in
-        x86_64 )
-          sleep 2; exec docker-compose \
-            -f docker-compose.yml \
-            -f docker-compose.override.yml \
-            -f docker-compose.include.yml \
-          pull ${LNMP_INCLUDE:-nginx mysql php7 redis phpmyadmin}
-          ;;
-        aarch64 | armv7l )
-          sleep 2; exec docker-compose -f docker-arm.yml pull ${LNMP_INCLUDE:-nginx mysql php7 redis phpmyadmin}
-          ;;
-        * )
-          notsupport
-          ;;
-    esac
+
+    sleep 2;
+    _get_compose_options "docker-compose.yml" \
+                         "docker-compose.override.yml"
+
+    docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+
     #@custom
     __lnmp_custom_pull "$@" 2>/dev/null || true
      ;;
@@ -1640,6 +1672,9 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
       if [ $soft = 'nginx' ];then opt='true'; fi
     done
 
+    _get_compose_options "docker-compose.yml" \
+                         "docker-compose.override.yml"
+
     if [ "$opt" = 'true' ];then
       docker exec -it $(docker container ls \
                             --format {{.ID}} \
@@ -1648,10 +1683,10 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
         (echo; print_error "nginx configuration file test failed, You must check nginx configuration file!"; exit 1)
 
       echo; print_info "nginx configuration file test is successful\n"
-      exec docker-compose $command "$@"
+      exec docker-compose $options $command "$@"
     else
       print_info "Exec docker-compose commands"; echo
-      exec docker-compose $command "$@"
+      exec docker-compose $options $command "$@"
     fi
 
     #@custom
@@ -1668,11 +1703,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      ;;
 
   clusterkit )
-     docker-compose -f docker-compose.yml \
-       -f docker-compose.override.yml \
-       -f cluster/docker-cluster.mysql.yml \
-       -f cluster/docker-cluster.redis.yml \
-       up "$@"
+     _get_compose_options "docker-compose.yml" \
+                          "docker-compose.override.yml" \
+                          "cluster/docker-cluster.mysql.yml" \
+                          "cluster/docker-cluster.redis.yml"
+     exec docker-compose $options up "$@"
      ;;
 
   clusterkit-mysql-up )
@@ -1825,11 +1860,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   clusterkit-* )
         command=$(echo $command | cut -d '-' -f 2)
-        exec docker-compose -f docker-compose.yml \
-             -f docker-compose.override.yml \
-             -f cluster/docker-cluster.mysql.yml \
-             -f cluster/docker-cluster.redis.yml \
-             $command "$@"
+        _get_compose_options "docker-compose.yml" \
+                             "docker-compose.override.yml" \
+                             "cluster/docker-cluster.mysql.yml" \
+                             "cluster/docker-cluster.redis.yml"
+        exec docker-compose $options $command "$@"
         ;;
 
   swarm-clusterkit )
@@ -1867,9 +1902,10 @@ First Run? Maybe you wait 60s then open url.
     pcit_nginx_init
 
     if [ -z "$1" ];then
-    docker-compose -f docker-compose.yml -f docker-compose.override.yml \
-        -f docker-compose.include.yml -f docker-pcit.include.yml up -d \
-        ${LNMP_INCLUDE} pcit
+      _get_compose_options "docker-compose.yml" \
+                           "docker-compose.override.yml"
+
+    exec docker-compose $options ${LNMP_SERVICES} pcit
     fi
     ;;
 
@@ -1898,7 +1934,11 @@ First Run? Maybe you wait 60s then open url.
 
   if ! [ -z "$command" ];then
     print_warning "command not found, Now Exec docker-compose commands"; echo
-    exec docker-compose $command "$@"
+
+    _get_compose_options "docker-compose.yml" \
+                         "docker-compose.override.yml"
+
+    exec docker-compose $options $command "$@"
   fi
   help
     ;;

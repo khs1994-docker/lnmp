@@ -5,13 +5,13 @@ services:
     image: k8s.gcr.io/kube-apiserver:v1.15.0
 
   k8s_dashboard:
-    image: k8s.gcr.io/kubernetes-dashboard-amd64:v1.10.1
+    image: kubernetesui/dashboard:v2.0.0-beta1
 
   coredns:
     image: k8s.gcr.io/coredns:1.5.0
 
   ingress_nginx:
-    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1
+    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.0
 
   metrics_server:
     image: k8s.gcr.io/metrics-server-amd64:v0.3.3

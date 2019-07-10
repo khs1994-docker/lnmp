@@ -1,0 +1,41 @@
+version: "3.7"
+
+x-common:
+  &default-common
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - backend
+  # dns:
+  #   - ${DNS:-114.114.114.114}
+
+x-common-label:
+  &default-common-label
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+services:
+  postgresql:
+    &postgresql
+    << : *default-common
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-11.4}-alpine
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+      - POSTGRES_DB=test
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    ports:
+      - "${LNMP_POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
+    secrets:
+      # default is mysql password
+      - db_root_password
+
+secrets:
+  db_root_password:
+    << : *default-common-label
+    file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+
+volumes:
+  postgresql-data:
+    << : *default-common-label

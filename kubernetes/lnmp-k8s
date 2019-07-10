@@ -5,6 +5,7 @@ KUBERNETES_VERSION=1.15.0
 MINIKUBE_VERSION=0.30.0
 ETCD_VERSION=3.3.13
 FLANNEL_VERSION=0.10.0
+HELM_VERSION=3.0.0-alpha.1
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
@@ -42,8 +43,7 @@ print_info(){
 
 print_help_info(){
   echo "
-
-==> Kubernetes version is ${KUBERNETES_VERSION}
+Kubernetes version is ${KUBERNETES_VERSION}
 
 
 Usage: lnmp-k8s COMMAND
@@ -58,9 +58,9 @@ Commands:
   minikube-install       Install minikube
   minikube               Start minikube
 
-  single-install         Install Local Kubernetes（Manager by systemd）
-  single-start           Print how to start Local Kubernetes (Manager by systemd)
-  single-cleanup         Cleanup Kubernetes Env.
+  single-install         Install Single Kubernetes（Manager by systemd）
+  single-start           Print how to start Single Kubernetes (Manager by systemd)
+  single-cleanup         Cleanup Single Kubernetes.
 
   join                   New worker [NODE_IP]
 
@@ -76,8 +76,6 @@ Commands:
   helm-testing           Install Helm LNMP In Testing
   helm-staging           Install Helm LNMP In Staging
   helm-production        Install Helm LNMP In Production
-
-  dashboard              Print how to open Dashboard
 "
 }
 
@@ -141,7 +139,7 @@ _kubernetes_server(){
 print_info "install kubernetes ..."
 
 if [ -d kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin ];then
-  print_info "Kubernetes files existed" 
+  print_info "Kubernetes files existed"
   return
 fi
 
@@ -167,7 +165,7 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
   fi
 }
 
-_delete(){
+_delete_lnmp(){
   kubectl delete deployment -l app=lnmp -n lnmp
   kubectl delete service -l app=lnmp -n lnmp
   kubectl delete secret -l app=lnmp -n lnmp
@@ -192,11 +190,7 @@ _minikube(){
 }
 
 _minikube_install(){
-  if [ "$OS" = 'Linux' ];then
-    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
-  elif [ "$OS" = 'Darwin' ];then
-    url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-darwin-amd64
-  fi
+  url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-${GOOS}-amd64
 
   curl -L $url -o minikube
 
@@ -205,8 +199,8 @@ _minikube_install(){
   sudo mv minikube /usr/local/bin/ || echo "Please move minikube to your PATH"
 }
 
-_cleanup(){
-  _delete
+_cleanup_lnmp(){
+  _delete_lnmp
   kubectl delete pvc -l app=lnmp -n lnmp
   kubectl delete pv -l app=lnmp -n lnmp
   kubectl delete ingress -l app=lnmp -n lnmp
@@ -237,10 +231,10 @@ _registry(){
   kubectl -n lnmp create -f addons/registry.yaml
 }
 
-_create(){
+_create_lnmp(){
   current_context=`kubectl config current-context`
 
-  if [ $current_context != "docker-for-desktop" -a "$OS" = 'Darwin' ];then
+  if [ $current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
      echo "This Script Support Docker Desktop Only"
      exit
   fi
@@ -302,13 +296,10 @@ kubectl_install(){
 
   KUBECTL_VERSION=$(curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-  if [ "$OS" = 'Linux' ];then
-    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > kubectl-Linux-x86_64
-    sudo mv kubectl-Linux-x86_64 /usr/local/bin/kubectl
-  elif [ "$OS" = 'Darwin' ];then
-    curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/darwin/amd64/kubectl > kubectl-Darwin-x86_64
-    sudo mv kubectl-Darwin-x86_64 /usr/local/bin/kubectl
-  fi
+  curl -fsSL ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/${GOOS}/${GOARCH}/kubectl \
+      -o /tmp/kubectl-${GOOS}-${GOARCH}
+
+  sudo mv /tmp/kubectl-${GOOS}-${GOARCH} /usr/local/bin/kubectl
 
   kubectl version
 }
@@ -320,36 +311,82 @@ kubectl_getinfo(){
 }
 
 _etcd(){
+  # local url="https://github.com/etcd-io/etcd/releases/download"
+  local url="https://mirrors.huaweicloud.com/etcd"
+  local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  __download(){
+    sudo curl -fsSL ${url}/v${ETCD_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
+  }
 
-  if ! [ -f /opt/bin/k8s/etcd ];then
-      print_info "==> etcd is installing ..."
-
-      cd /opt/bin/k8s
-      rm -rf etcd-v${ETCD_VERSION}-linux-amd64.tar.gz
-      sudo curl -fsSLO https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz
-      sudo tar -zxf etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz
-      sudo mv etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ./
-      sudo rm -rf *.tar.gz
-      cd -
-      return
-  fi
-
-  print_info "etcd already install"
-
-}
-
-_flanneld(){
-
-  if ! [ -f /opt/bin/k8s/flanneld ];then
-
-    print_info "flanneld is installing ..."
-
-    sudo curl -fsSL https://github.com/coreos/flannel/releases/download/v${FLANNEL_VERSION}/flanneld-${GOARCH} -o /opt/bin/k8s/flanneld
+  if [ -f /opt/bin/k8s/etcd ];then
+    print_info "etcd already install"
     return
   fi
 
-  print_info "flanneld already install"
+  print_info "==> install etcd ..."
 
+  if [ -f /tmp/${TAR_FILE} ];then
+    true
+  else
+    rm -rf /tmp/${TAR_FILE}
+    __download
+  fi
+
+  sudo tar -zxf /tmp/${TAR_FILE} -C /tmp
+  sudo mv /tmp/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* /opt/bin/k8s/
+  sudo rm -rf /tmp/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
+}
+
+_flanneld(){
+  local url="https://github.com/coreos/flannel/releases/download"
+  local TAR_FILE="flannel-v${FLANNEL_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  __download(){
+    sudo curl -fsSL ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
+  }
+
+  if [ -f /opt/bin/k8s/flanneld ];then
+    print_info "flanneld already install"
+    return
+  fi
+
+  print_info "install flanneld ..."
+
+  if [ -f /tmp/${TAR_FILE} ];then
+    true
+  else
+    __download
+  fi
+
+  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/bin/k8s/
+}
+
+_helm_install(){
+  if [ -f /opt/bin/k8s/helm ];then
+    print_info "helm already install"
+    return
+  fi
+
+  local url="https://mirrors.huaweicloud.com/helm/v${HELM_VERSION}"
+  local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  __download(){
+    sudo curl -fsSL ${url}/${TAR_FILE} -o /tmp/${TAR_FILE}
+  }
+
+  print_info "install helm ..."
+
+  if [ -f /tmp/${TAR_FILE} ];then
+      local sha256=$(sha256sum /tmp/${TAR_FILE} | cut -d " " -f 1)
+    if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256` ];then
+      rm -rf /tmp/${TAR_FILE}
+      __download
+    fi
+  else
+      __download
+  fi
+
+  sudo tar -zxf /tmp/${TAR_FILE} -C /tmp
+  sudo mv /tmp/${GOOS}-${GOARCH}/helm /opt/bin/k8s/
+  sudo rm -rf /tmp/${GOOS}-${GOARCH}
 }
 
 _k8s_install_dep(){
@@ -440,6 +477,7 @@ _k8s_install(){
 
   _etcd
   _flanneld
+  _helm_install
 
   print_info "copy systemd unit file ..."
   sudo cp systemd/*.service /etc/systemd/system/
@@ -510,6 +548,7 @@ _k8s_join(){
   # Flanneld
   _flanneld
   _etcd
+  _helm_install
   sudo cp systemd/flanneld.service /etc/systemd/system/
   # Docker
   # kube-proxy
@@ -608,7 +647,7 @@ _single_cleanup(){
   sudo systemctl stop etcd flanneld docker kube-apiserver \
     kube-controller-manager kube-scheduler kube-proxy kubelet docker || true
 
-  set +e 
+  set +e
   sudo rm -rf /opt/bin/k8s \
               /var/lib/etcd \
               /var/log/ku* \
@@ -640,17 +679,17 @@ case $_command in
     ;;
 
     create )
-      _create
+      _create_lnmp
     ;;
 
     delete )
       set +e
-      _delete
+      _delete_lnmp
     ;;
 
     cleanup )
       set +e
-      _cleanup
+      _cleanup_lnmp
     ;;
 
     registry )
@@ -699,15 +738,6 @@ case $_command in
     ;;
     helm-production )
     _helm production "$@"
-    ;;
-
-    dashboard )
-      echo "
-$ kubectl proxy
-
-open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-"
     ;;
 
     * )

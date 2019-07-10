@@ -38,10 +38,6 @@ $ ./lnmp-docker.ps1 up
 
 浏览器打开 `127.0.0.1`，看到页面。
 
-## MySQL 默认 ROOT 密码
-
-`mytest`
-
 ## WSL
 
 * https://github.com/khs1994-docker/lnmp/blob/master/wsl/wsl.conf

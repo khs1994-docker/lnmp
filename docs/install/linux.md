@@ -22,12 +22,6 @@ $ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git
 # $ git clone --depth=1 git@gitee.com:khs1994-docker/lnmp
 ```
 
-### 使用 Composer 创建项目
-
-```bash
-$ composer create-project --prefer-dist khs1994/lnmp:dev-master ~/lnmp
-```
-
 ### 使用一键安装脚本
 
 ```bash
@@ -45,17 +39,3 @@ $ ./lnmp-docker up
 ```
 
 浏览器打开 `127.0.0.1`，看到页面。
-
-## MySQL 默认 ROOT 密码
-
-`mytest`
-
-## 更新
-
-```bash
-$ ./lnmp-docker update
-
-# 强制与上游保持一致
-
-$ ./lnmp-docker update -f
-```

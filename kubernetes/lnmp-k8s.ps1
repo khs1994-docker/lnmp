@@ -27,7 +27,7 @@ if (Test-Path .env.ps1 ){
 
 $current_context=kubectl config current-context
 
-if (!($current_context -eq "docker-for-desktop")){
+if (!($current_context -eq "docker-desktop")){
    Write-Warning "This Script Support Docker Desktop Only"
    exit
 }
@@ -52,13 +52,10 @@ Commands:
 
   create-pv          Create PV and PVC
 
-  dashboard          Print how to open Dashboard
-
   helm-development   Install Helm LNMP In Development
   helm-testing       Install Helm LNMP In Testing
   helm-staging       Install Helm LNMP In Staging
   helm-production    Install Helm LNMP In Production
-
 "
 }
 
@@ -75,7 +72,7 @@ Function get_kubectl_version(){
   return $KUBECTL_VERSION=$(wsl curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 }
 
-Function _delete(){
+Function _delete_lnmp(){
   kubectl -n lnmp delete deployment -l app=lnmp
   kubectl -n lnmp delete service -l app=lnmp
   kubectl -n lnmp delete secret -l app=lnmp
@@ -117,7 +114,7 @@ Function _helm($environment, $debug=0){
       --set APP_ENV=$environment `
       --set platform=windows `
       --set username=$env:username `
-      --tls $( Foreach ($opt in $opts){ echo $opt} )
+      $( Foreach ($opt in $opts){ echo $opt} )
   }
 
   cd $PSScriptRoot
@@ -146,7 +143,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
 
     kubectl -n lnmp create -f deployment/lnmp-configMap.yaml
 
-    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 \
+    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 `
       --from-file=deployment/configMap/nginx-conf-d
 
     kubectl -n lnmp label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
@@ -186,11 +183,11 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "delete" {
-    _delete
+    _delete_lnmp
   }
 
   "cleanup" {
-    _delete
+    _delete_lnmp
 
     kubectl -n lnmp delete pvc -l app=lnmp
     kubectl -n lnmp delete pv -l app=lnmp
@@ -219,15 +216,6 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     wsl curl -L `
       http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-windows-amd64.exe `
       -o minikube.exe
-  }
-
-  "dashboard" {
-    echo "
-$ kubectl proxy
-
-open http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-"
   }
 
   "helm-development" {
