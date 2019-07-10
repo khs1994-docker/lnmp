@@ -1,6 +1,12 @@
 Import-Module downloader
 Import-Module unzip
 
+Function install_after(){
+  if($(_command apm)){
+    apm config set registry https://registry.npm.taobao.org
+  }
+}
+
 Function install($VERSION="1.38.2",$preVersion=0){
   if($preVersion){
     $VERSION="1.39.0-beta3"
@@ -34,6 +40,8 @@ Function install($VERSION="1.38.2",$preVersion=0){
   # Copy-item "" ""
 
   Start-Process -FilePath $filename -wait
+
+  install_after
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

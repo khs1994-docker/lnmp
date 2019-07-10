@@ -59,7 +59,8 @@ Function install($VERSION="2.4.39",$preVersion=0){
   _cleanup $unzipDesc
   _unzip $filename $unzipDesc
   # 安装 Fix me
-  Copy-item -r -force "httpd\Apache24\" "C:\Apache24"
+  _mkdir C:\Apache24
+  Copy-item -r -force "httpd\Apache24\*" "C:\Apache24"
   if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
     _unzip mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `
            mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16

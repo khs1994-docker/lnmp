@@ -19,7 +19,7 @@
 > 使用以下脚本，开发者可以快速的建立开发环境，后续会介绍脚本所做的工作。
 
 ```bash
-$ lnmp-windows-pm.ps1
+$ lnmp-windows-pm.ps1 nginx mysql php composer node
 ```
 
 ### 安装指定软件(Windows 包管理)

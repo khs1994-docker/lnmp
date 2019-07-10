@@ -4,6 +4,10 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+Function install_after(){
+
+}
+
 Function install($VERSION="x.y.z",$PreVersion=0){
   if($PreVersion){
     $VERSION=""
@@ -45,6 +49,8 @@ Function install($VERSION="x.y.z",$PreVersion=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
   # $env:Path = [environment]::GetEnvironmentvariable("Path")
+
+  install_after
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
