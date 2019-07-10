@@ -22,20 +22,30 @@ Function install_ext(){
          'curl',`
          'pdo_mysql'
 
-  Foreach ($extension in $extensions)
-  {
-    _mkdir C:\php-ext
-    _downloader `
+  _mkdir C:\php-ext
+
+  _downloader `
       http://redmine.lighttpd.net/attachments/download/660/RunHiddenConsole.zip `
       RunHiddenConsole.zip `
       RunHiddenConsole
-    _unzip RunHiddenConsole.zip RunHiddenConsole
-    copy-item -r -force RunHiddenConsole\RunHiddenConsole.exe C:\bin
-    _downloader `
+
+  _unzip RunHiddenConsole.zip RunHiddenConsole
+
+  copy-item -r -force RunHiddenConsole\RunHiddenConsole.exe C:\bin
+  _cleanup RunHiddenConsole
+
+  _downloader `
       https://github.com/deemru/php-cgi-spawner/releases/download/1.1.23/php-cgi-spawner.exe `
       php-cgi-spawner.exe `
       php-cgi-spawner
 
+  Get-Process php-cgi-spawner -ErrorAction "SilentlyContinue" | out-null
+
+  if(!($?)){
+    cp php-cgi-spawner.exe C:\php
+  }
+
+  cp -Force C:\php\php.ini C:\php-ext\php.ini
     #
     # pecl
     #
@@ -72,12 +82,6 @@ Function install_ext(){
       C:\php-ext\cacert-${PHP_CACERT_DATE}.pem `
       C:\php-ext\cacert-${PHP_CACERT_DATE}.pem null $false
 
-    Get-Process php-cgi-spawner -ErrorAction "SilentlyContinue" | out-null
-
-    if(!($?)){
-      cp php-cgi-spawner.exe C:\php
-    }
-
     Function _pecl($zip,$file){
       if (!(Test-Path C:\php-ext\$file)){
         _unzip C:\php-ext\$zip C:\php-ext\temp
@@ -95,11 +99,10 @@ Function install_ext(){
 
     _pecl php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_yaml.dll
 
-    cp -Force C:\php\php.ini C:\php-ext\php.ini
+    Foreach ($extension in $extensions){
+      $a = php -r "echo extension_loaded('$extension');"
 
-    $a = php -r "echo extension_loaded('$extension');"
-
-    if (!($a -eq 1)){
+      if (!($a -eq 1)){
 
       if ($extension -eq 'Zend Opcache'){
         echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
@@ -146,9 +149,11 @@ Function install_after(){
   if (!(Test-Path C:\php\php.ini)){
     mv C:\php\php.ini-development C:\php\php.ini
   }
+
+  install_ext
 }
 
-Function install($VERSION="7.3.6",$PreVersion=0){
+Function install($VERSION="7.3.7",$PreVersion=0){
   if($PreVersion){
     $VERSION=""
     $url=""

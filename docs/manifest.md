@@ -4,30 +4,30 @@
 # 事先请登录 Docker Hub
 # 镜像列表中的镜像请事先构建并推送到 Docker Hub
 # docker manifest create PULL名字 [镜像列表]
-$ docker manifest create khs1994/php:7.3.6-fpm-alpine \
-      khs1994/php:7.3.6-fpm-alpine \
-      khs1994/arm32v7-php:7.3.6-fpm-alpine \
-      khs1994/arm64v8-php:7.3.6-fpm-alpine
+$ docker manifest create khs1994/php:7.3.7-fpm-alpine \
+      khs1994/php:7.3.7-fpm-alpine \
+      khs1994/arm32v7-php:7.3.7-fpm-alpine \
+      khs1994/arm64v8-php:7.3.7-fpm-alpine
 
 # docker manifest annotate PULL名字 镜像名 --os 系统  --arch 架构
-$ docker manifest annotate khs1994/php:7.3.6-fpm-alpine \
-      khs1994/php:7.3.6-fpm-alpine \
+$ docker manifest annotate khs1994/php:7.3.7-fpm-alpine \
+      khs1994/php:7.3.7-fpm-alpine \
       --os linux --arch amd64
 
-$ docker manifest annotate khs1994/php:7.3.6-fpm-alpine \
-      khs1994/arm64v8-php:7.3.6-fpm-alpine \
+$ docker manifest annotate khs1994/php:7.3.7-fpm-alpine \
+      khs1994/arm64v8-php:7.3.7-fpm-alpine \
       --os linux --arch arm64
 
 # 推送
-$ docker manifest push khs1994/php:7.3.6-fpm-alpine      
+$ docker manifest push khs1994/php:7.3.7-fpm-alpine      
 ```
 
-在 arm 架构中 pull `khs1994/php:7.3.6-fpm-alpine` 实际 pull 的是 `khs1994/arm64v8-php:7.3.6-fpm-alpine`
+在 arm 架构中 pull `khs1994/php:7.3.7-fpm-alpine` 实际 pull 的是 `khs1994/arm64v8-php:7.3.7-fpm-alpine`
 
 这样在多种架构中可以很方便的进行 pull，避免架构判断 pull 不同的镜像，极大简化了镜像 pull。
 
 ```bash
-$ docker manifest inspect php:7.3.6-fpm-alpine
+$ docker manifest inspect php:7.3.7-fpm-alpine
 ```
 
 ```json

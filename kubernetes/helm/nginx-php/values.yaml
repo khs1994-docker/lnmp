@@ -32,7 +32,7 @@ nginx:
   replicaCount: 2
 
 php:
-  image: khs1994/php:7.3.6-fpm-alpine
+  image: khs1994/php:7.3.7-fpm-alpine
   replicaCount: 2
 
 cronjob:
