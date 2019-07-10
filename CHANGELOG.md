@@ -4,7 +4,7 @@
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v18.09.6...18.09
+* https://github.com/khs1994-docker/lnmp/compare/v18.09.6...v18.09.7
 
 ### Bug fixes:
 
