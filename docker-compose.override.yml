@@ -15,10 +15,6 @@ services:
     << : *default-common
     image: mysql:${LNMP_MYSQL_VERSION:-8.0.16}
 
-  mariadb:
-    << : *default-common
-    image: mariadb:${LNMP_MYSQL_VERSION:-10.4.6}
-
   redis:
     << : *default-common
     image: redis:${LNMP_REDIS_VERSION:-5.0.5}-alpine
@@ -26,18 +22,6 @@ services:
   memcached:
     << : *default-common
     image: memcached:${LNMP_MEMCACHED_VERSION:-1.5.16}-alpine
-
-  rabbitmq:
-    << : *default-common
-    image: rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.15}-management-alpine
-
-  postgresql:
-    << : *default-common
-    image: postgres:${LNMP_POSTGRESQL_VERSION:-11.4}-alpine
-
-  mongodb:
-    << : *default-common
-    image: mongo:${LNMP_MONGODB_VERSION:-4.1.13}
 
   php7:
     << : *default-common
@@ -56,14 +40,6 @@ services:
     # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.17.1}-alpine
     image: nginx:${LNMP_NGINX_VERSION:-1.17.1}-alpine
 
-  nginx-unit:
-    << : *default-common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.3.6}-unit-alpine
-
-  httpd:
-    << : *default-common
-    image: httpd:${LNMP_HTTPD_VERSION:-2.4.39}-alpine
-
 networks:
   frontend:
     << : *default-common
@@ -73,31 +49,15 @@ networks:
 volumes:
   mysql-data:
     << : *default-common
-  mariadb-data:
-    << : *default-common
   redis-data:
     << : *default-common
-  rabbitmq-data:
-    << : *default-common
-  postgresql-data:
-    << : *default-common
-  mongodb-data:
-    << : *default-common
   zoneinfo-data:
-    << : *default-common
-  registry-data:
     << : *default-common
   phpmyadmin-data:
     << : *default-common
   composer_cache-data:
     external: true
     name: lnmp_composer_cache-data
-  nginx-unit-state-data:
-    << : *default-common
-  etcd-data:
-    << : *default-common
-  minio-data:
-    << : *default-common
 
 secrets:
   db_root_password:

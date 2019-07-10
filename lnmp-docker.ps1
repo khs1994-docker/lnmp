@@ -62,6 +62,12 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 
 printInfo "APP_ROOT is $APP_ROOT"
 
+Function _cp_only_not_exists($src,$desc){
+  if (!(Test-Path $desc)){
+    Copy-Item $src $desc
+  }
+}
+
 Function env_status(){
   if (Test-Path .env){
     printInfo '.env file existing'
@@ -79,35 +85,30 @@ Function env_status(){
     cp .env.example.ps1 .env.ps1
   }
 
-  if (!(Test-Path volumes/.env)){
-    Write-Host ''
-    Copy-Item volumes/.env.example volumes/.env
-  }
+  _cp_only_not_exists volumes/.env.example volumes/.env
 
-  if (!(Test-Path config/composer/config.json)){
-    Copy-Item config/composer/config.example.json config/composer/config.json
-  }
-
-  if (!(Test-Path config/supervisord/supervisord.ini)){
-    Copy-Item config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
-  }
+  _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 
   if (!(Test-Path secrets/minio/key.txt)){
     Copy-Item secrets/minio/key.example.txt secrets/minio/key.txt
     Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
   }
 
-  if (!(Test-Path docker-compose.include.yml)){
-    Copy-Item docker-compose.include.example.yml docker-compose.include.yml
-  }
+  _cp_only_not_exists docker-compose.include.example.yml docker-compose.include.yml
 
-  if (!(Test-Path config/php/docker-php.ini)){
-    Copy-Item config/php/docker-php.ini.example config/php/docker-php.ini
-  }
+  _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
+  _cp_only_not_exists config/php/php.development.ini config/php/php.ini
 
-  if (!(Test-Path config/php/php.ini)){
-    Copy-Item config/php/php.development.ini config/php/php.ini
-  }
+  _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
+  _cp_only_not_exists config/npm/.env.example config/npm/.env
+
+  _cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
+  _cp_only_not_exists config/yarn/.env.example config/yarn/.env
+
+  _cp_only_not_exists config/composer/.env.example config/composer/.env
+  _cp_only_not_exists config/composer/.env.example.ps1 config/composer/.env.ps1
+  _cp_only_not_exists config/composer/config.example.json config/composer/config.json
+
 }
 
 if (!(Test-Path lnmp-custom-script.ps1)){
@@ -224,9 +225,10 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
-  debug                Generate Debug information, then copy it to GitHub Issues
+  bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   docs                 Support Documents
+  env                  Edit .env/.env.ps1 file
   help                 Display this help message
   init                 Init LNMP environment
   pull                 Pull LNMP Docker Images
@@ -393,6 +395,35 @@ Function satis(){
       --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
 }
 
+Function get_compose_options($compose_files,$isBuild=0){
+  Foreach ($compose_file in $compose_files)
+  {
+    $options += " -f $compose_file "
+  }
+  Foreach ($item in $LNMP_COMPOSE_INCLUDE)
+  {
+    if($isBuild){
+      if(!(Test-Path "lnmp-include\$item\docker-compose.build.yml")){
+        $options +=" -f lnmp-include\$item\docker-compose.yml "
+        continue
+      }
+      $options +=" -f lnmp-include\$item\docker-compose.yml -f lnmp-include\$item\docker-compose.build.yml "
+
+      continue
+    } # end build
+
+    if (!(Test-Path "lnmp-include\$item\docker-compose.override.yml")){
+      $options +=" -f lnmp-include\$item\docker-compose.yml "
+      continue
+    }
+    $options +=" -f lnmp-include\$item\docker-compose.yml -f lnmp-include\$item\docker-compose.override.yml "
+  }
+
+  $options += " -f docker-compose.include.yml "
+
+  return $options
+}
+
 # main
 
 env_status
@@ -429,27 +460,37 @@ switch($first){
     }
 
     build {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build $other --parallel
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
+
+      powershell -c "docker-compose $options build $other --parallel"
     }
 
     build-config {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml `
-        -f docker-compose.include.yml `
-        config
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
+
+      powershell -c "docker-compose $options config $other"
     }
 
     build-up {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml `
-      -f docker-compose.include.yml `
-      up -d $other
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
+
+      powershell -c "docker-compose $options up -d $other"
     }
 
     build-push {
-      docker-compose -f docker-compose.build.yml `
-        -f docker-compose.include.yml `
-        build --parallel
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
 
-      docker-compose -f docker-compose.build.yml push
+      powershell -c "docker-compose $options build $other --parallel"
+
+      powershell -c "docker-compose $options push $other"
     }
 
     cleanup {
@@ -459,11 +500,10 @@ switch($first){
     }
 
     config {
-      docker-compose `
-      -f docker-compose.yml `
-      -f docker-compose.override.yml `
-      -f docker-compose.include.yml `
-      config
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options config $other"
     }
 
     cn-mirror {
@@ -483,25 +523,23 @@ switch($first){
       if($other){
         $command = $other
       }else{
-        $command = ${LNMP_INCLUDE}
+        $command = ${LNMP_SERVICES}
       }
 
-      docker-compose `
-        -f docker-compose.yml `
-        -f docker-compose.override.yml `
-        -f docker-compose.include.yml `
-        up -d $command
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options up -d $command"
 
       #@custom
       __lnmp_custom_up $command
     }
 
     pull {
-      docker-compose `
-        -f docker-compose.yml `
-        -f docker-compose.override.yml `
-        -f docker-compose.include.yml `
-        pull ${LNMP_INCLUDE}
+      $options=get_compose_options "docker-compose.yml",`
+                                   "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options pull ${LNMP_SERVICES}"
 
       #@custom
       __lnmp_custom_pull
@@ -522,6 +560,11 @@ switch($first){
     dashboard {
       clear
       wsl -d $DistributionName lnmp-docker dashboard
+    }
+
+    env {
+      notepad.exe .env
+      notepad.exe .env.ps1
     }
 
     new {
@@ -546,13 +589,11 @@ switch($first){
       docker-compose -f docker-production.yml push $other
     }
 
-    push {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build --parallel
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml push
-    }
-
     restart {
-      docker-compose restart $other
+      $options=get_compose_options "docker-compose.yml", `
+                          "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options restart $other"
       #@custom
       __lnmp_custom_restart $other
     }
@@ -678,11 +719,12 @@ switch($first){
     }
 
     clusterkit {
-       docker-compose -f docker-compose.yml \
-         -f docker-compose.override.yml \
-         -f cluster/docker-cluster.mysql.yml \
-         -f cluster/docker-cluster.redis.yml \
-         up $other
+       $options=get_compose_options "docker-compose.yml", `
+                                    "docker-compose.override.yml", `
+                                    "cluster/docker-cluster.mysql.yml", `
+                                    "cluster/docker-cluster.redis.yml"
+
+       powershell -c "docker-compose $options up $other"
     }
 
     clusterkit-mysql-up {
@@ -802,7 +844,7 @@ switch($first){
       wsl -d $DistributionName lnmp-docker update-version
     }
 
-    debug {
+    bug {
       $os_info=$($psversiontable.BuildVersion)
 
       if ($os_info.length -eq 0){
@@ -851,7 +893,7 @@ XXX
 XXX
 
 <!--Be sure to click < Preview > Tab before submitting questions-->
-" | Out-File debug.md -encoding utf8
+" | Out-File bug.md -encoding utf8
 
     Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
     }
@@ -930,10 +972,10 @@ XXX
       cp pcit/.env.development ${APP_ROOT}/.pcit/.env.development
 
       # 启动
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.override.yml"
 
-      docker-compose -f docker-compose.yml -f docker-compose.override.yml `
-          -f docker-compose.include.yml -f docker-pcit.include.yml up -d `
-          ${LNMP_INCLUDE} pcit
+      & {docker-compose $options up -d ${LNMP_SERVICES} pcit}
     }
 
     "cookbooks" {
@@ -1051,7 +1093,10 @@ More information please see docs/kubernetes/docker-desktop.md
         __lnmp_custom_command $args
         printInfo `
 "Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
-        docker-compose $args
+        $options=get_compose_options "docker-compose.yml",`
+                                     "docker-compose.override.yml"
+
+        powershell -c "docker-compose $options $args"
       }
 }
 

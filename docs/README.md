@@ -8,8 +8,6 @@
 
 本项目不建议刚学习 LNMP 的新手使用，当掌握 LNMP 到一定程度时，相信你一定会与我产生共鸣：[项目初衷](why.md)。
 
-本项目实际只是一个 PHP 程序的运行环境，PHP 项目文件位于 `./app/*`，nginx 配置文件位于 `./config/nginx/*.conf`。
-
 在线阅读：[GitHub](SUMMARY.md)
 
 在线阅读：[WebSite](https://docs.lnmp.khs1994.com/)
@@ -34,12 +32,6 @@
 
 即：本项目 `v18.09` 与 **Docker 桌面版** `v18.09` 和 **PHP** `7.2.13` 对应。
 
-## 为什么选择 CaaS
-
-* 分钟级上线
-
-* 分钟级迁移
-
 ## 特色
 
 * 各组件（软件）多版本支持
@@ -54,7 +46,7 @@
 
 * 支持 **开发环境** **测试环境**
 
-* 支持 `Swarm mode` `k8s` **生产环境** 部署
+* 支持 `kubernetes` **生产环境** 部署
 
 * 支持一键启动 `MySQL` `Redis` `Memcached` 集群
 
@@ -62,7 +54,7 @@
 
 * 内置 `Drone CI` 私有 CI/CD 方案
 
-* 可扩展，支持自定义 `compose` 文件。
+* [可扩展](custom.md)，支持自定义 `compose` 文件。
 
 ## 系列文章
 

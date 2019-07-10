@@ -3,34 +3,39 @@
 #
 
 . "$PSScriptRoot/common.ps1"
+. "$PSScriptRoot/../config/composer/.env.example.ps1"
+. "$PSScriptRoot/../config/composer/.env.ps1"
 
-if ($args -contains 'new' ){
+if ($args[0] -eq 'new' ){
   if ($args.Count -lt 2 ){
+    write-warning "Please input path!"
     exit 1
   }
-}
 
-$global:LARAVEL_PATH=$args[1]
+  $global:LARAVEL_PATH=$args[1]
 
-if (!(Test-Path ${LARAVEL_PATH})){
+  if (Test-Path ${LARAVEL_PATH}){
+    write-warning "${LARAVEL_PATH} existing"
+    exit 1
+  }
+
   echo ""
-  echo "==> ${LARAVEL_PATH} not existing, laravel is install..."
-  echo ""
-# docker run --init -it --rm `
-#     --mount type=bind,src=$PWD,target=/app `
-#     --mount src=lnmp_composer_cache-data,target=/tmp/cache `
-#     khs1994/php:7.3.6-composer-alpine `
-#     laravel $args
-
-composer create-project --prefer-dist laravel/laravel=5.8.* "$LARAVEL_PATH"
-
-}else{
-  echo ""
-  echo "${LARAVEL_PATH} existing"
+  echo "==>Installing laravel ..."
   echo ""
 }
 
-if ($args -contains 'new' ){
+docker run --init -it --rm `
+    --mount type=bind,src=$PWD,target=/app `
+    --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} `
+    --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} `
+    --mount type=bind,src=$PSScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json `
+    --env-file $PSScriptRoot/../config/composer/.env `
+    khs1994/php:7.3.6-composer-alpine `
+    laravel $args
+
+# composer create-project --prefer-dist laravel/laravel=5.8.* "$LARAVEL_PATH"
+
+if ($args[0] -eq 'new' ){
   cd ${LARAVEL_PATH}
 
   . "$PSScriptRoot/lnmp-laravel-init.ps1"

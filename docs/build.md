@@ -3,7 +3,7 @@
 `.env` 文件更改以下变量
 
 ```bash
-LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX=username
+LNMP_BUILD_DOCKER_IMAGE_PREFIX=username
 ```
 
 ```bash

@@ -23,3 +23,4 @@
 !wsl-php-ext-enable.sh
 !.env
 !config
+!lnmp-wsl-pm

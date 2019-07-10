@@ -2,7 +2,7 @@
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/474)
 
-由于 `Docker Desktop` 不太稳定，这里记录一下 **Plan B** `WNAMP` 开发环境。
+由于 `Docker Desktop` 不太稳定，本项目支持 **Plan B** `WNAMP` 开发环境。
 
 * 系统 `Windows 10`
 
@@ -12,23 +12,37 @@
 
 * MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
 
-**部分软件使用 `WSL` 来安装运行。**
+* 部分软件使用 `WSL` 来安装运行。
 
 ## 快速初始化 WNAMP 环境
 
 > 使用以下脚本，开发者可以快速的建立开发环境，后续会介绍脚本所做的工作。
 
 ```bash
-$ lnmp-windows-init.ps1
+$ lnmp-windows-pm.ps1 nginx mysql php composer node
+```
+
+### 安装指定软件(Windows 包管理)
+
+```bash
+$ lnmp-windows-pm.ps1 install xxx [--pre 安装测试版软件]
+
+# $ lnmp-windows-pm.ps1 install go
+```
+
+## 使用 PS1 脚本控制软件
+
+为了方便的管理 `WNAMP`，你可以使用本项目 windows 目录下的脚本 `lnmp-wnamp.ps1`
+
+**使用之前** 在 `.env.ps1` 文件中参照 `.env.example.ps1` 设置好相关变量
+
+```bash
+$ lnmp-wnamp.ps1 start | stop | restart | status | ps [SOFT_NAME] [SOFT_NAME_2]
 ```
 
 ## 系统环境变量说明
 
-**务必执行此项操作**
-
-**务必知道 Windows 或 Linux 环境变量的作用及设置方法**
-
-* 为了在任意目录执行命令，请将各软件路径加入系统环境变量 `PATH`
+* 将各软件路径加入系统环境变量 `PATH`
 
 * 新增变量 `APP_ENV` 值为 `windows`, 之后 `Laravel` 框架就会默认的加载 `.env.windows` 文件。
 
@@ -52,16 +66,6 @@ $ php artisan env
 Current application environment: windows
 
 # 输出 windows 说明设置成功
-```
-
-## 使用 PS1 脚本控制软件
-
-为了方便的管理 `WNAMP`，你可以使用本项目 windows 目录下的脚本 `lnmp-wnamp.ps1`
-
-**使用之前** 在 `.env.ps1` 文件中参照 `.env.example.ps1` 设置好相关变量
-
-```bash
-$ lnmp-wnamp.ps1 start | stop | restart | status | ps [SOFT_NAME] [SOFT_NAME_2]
 ```
 
 ## MySQL

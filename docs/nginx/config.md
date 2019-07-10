@@ -16,9 +16,9 @@ $ ./lnmp-docker nginx-config http 项目路径 url
 $ ./lnmp-docker nginx-config http test www.khs1994.com
 ```
 
->注意，执行命令之后请到 `config/nginx/url.conf` 检查配置文件，之后再执行 `./lnmp-docker restart nginx` 重启 `NGINX`。
+> 注意，执行命令之后请到 `config/nginx/url.conf` 检查配置文件，之后再执行 `./lnmp-docker restart nginx` 重启 `NGINX`。
 
-开发、测试环境可能需要修改 `/etc/hosts`。
+> 开发、测试环境可能需要修改 `/etc/hosts`。
 
 ## 生成 https 配置
 
@@ -38,4 +38,4 @@ $ ./lnmp-docker nginx-config https test www.khs1994.com
 
 >注意，执行命令之后请到 `config/nginx/url.conf` 检查配置文件，之后再执行 `./lnmp-docker restart nginx` 重启 `NGINX`。
 
-开发、测试环境可能需要修改 `/etc/hosts`。
+> 开发、测试环境可能需要修改 `/etc/hosts`。

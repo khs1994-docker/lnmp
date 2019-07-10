@@ -1,13 +1,23 @@
-echo "==> create new env file ..."
+if(!(Test-Path artisan)){
+  Write-Warning "This folder is not laravel project!"
+  exit 1
+}
 
+echo "==> create new env file ..."
 if (Test-Path .env){
   mv .env .env.backup
 }
 
-cp $env:LNMP_PATH/app/.env* .
+$LARAVEL_CONFIG_PATH="$PsScriptRoot/../app"
 
-cp $env:LNMP_PATH/app/demo/.editorconfig .
-cp $env:LNMP_PATH/app/demo/.php_cs .
+if($env:LNMP_PATH){
+  $LARAVEL_CONFIG_PATH="$env:LNMP_PATH/app"
+}
+
+cp $LARAVEL_CONFIG_PATH/.env* .
+
+cp $LARAVEL_CONFIG_PATH/demo/.editorconfig .
+cp $LARAVEL_CONFIG_PATH/demo/.php_cs .
 
 echo "==> install laravel-ide-helper ..."
 

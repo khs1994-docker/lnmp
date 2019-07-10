@@ -12,35 +12,37 @@ fi
 
 docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)
 
-DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-if ! [ -f $DIR/../log/php/cli_error.log ];then
-  touch $DIR/../log/php/cli_error.log
+if ! [ -f $ScriptRoot/../log/php/cli_error.log ];then
+  touch $ScriptRoot/../log/php/cli_error.log
 fi
 
-source $DIR/.arch
+source $ScriptRoot/.arch
 
-. $DIR/../.env
+. $ScriptRoot/../.env
 
 docker run --init -it --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-  --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
-  --mount type=bind,src=$DIR/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+  --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+  --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
   --network lnmp_backend \
   --entrypoint vendor/bin/phpunit \
   -e APP_ENV=testing \
   -e TZ=${TZ} \
+  --user ${LNMP_USER:-root:root} \
   ${DOCKER_IMAGE}:${TAG} \
   -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log "$@" || \
   docker run --init -it --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=cached \
     --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-    --mount type=bind,src=$DIR/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
-    --mount type=bind,src=$DIR/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
+    --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
+    --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
     --entrypoint vendor/bin/phpunit \
     -e APP_ENV=testing \
     -e TZ=${TZ} \
+    --user ${LNMP_USER:-root:root} \
     ${DOCKER_IMAGE}:${TAG} \
     -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log "$@"
 
