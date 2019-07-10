@@ -22,8 +22,6 @@ list        List available softs
 init        Init a new package(soft)
 help        Print help info
 "
-
-  exit
 }
 
 $ErrorAction="SilentlyContinue"

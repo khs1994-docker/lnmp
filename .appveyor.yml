@@ -58,7 +58,7 @@ build_script:
   #     docker ps -a
   #     (Invoke-WebRequest 127.0.0.1:8080).content
   #     docker rm -f $(docker ps -a -q)
-  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/php:7.3.6-windowsservercore-1903 php
+  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/php:7.3.7-windowsservercore-1903 php
   #     cd ..
   #     remove-item windows/config/nginx/www.conf
   #     move-item windows/config/nginx/www.container.config windows/config/nginx/www.conf

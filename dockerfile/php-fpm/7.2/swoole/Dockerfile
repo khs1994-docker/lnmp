@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.19
+ARG PHP_VERSION=7.2.20
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-cli-alpine as php
 
