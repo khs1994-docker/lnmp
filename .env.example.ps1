@@ -7,9 +7,9 @@ $global:APP_ENV="windows"
 $global:APP_ROOT="./app"
 # $global:APP_ROOT="../app"
 
-$global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin'
+$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
 
-# LNMP_INCLUDE="nginx mysql mariadb php7 redis phpmyadmin \
+# LNMP_SERVICES="nginx mysql mariadb php7 redis phpmyadmin \
 #                      memcached postgresql mongodb \
 #                      rabbitmq httpd registry \
 #                      etcd \
@@ -38,3 +38,6 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 $global:LNMP_NODE_IMAGE="node:alpine"
 # $global:LNMP_NODE_IMAGE="khs1994/node:git"
+
+$global:LNMP_COMPOSE_INCLUDE="etcd","pcit"
+# $global:LNMP_COMPOSE_INCLUDE="etcd","pcit","minio"

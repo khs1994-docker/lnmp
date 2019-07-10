@@ -8,15 +8,32 @@ sudo sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 sudo sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 sudo sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
-if [ -z "$APP_ENV" ];then echo "export APP_ENV=wsl" >> ~/.bash_profile; fi
+if [ -z "$APP_ENV" ];then echo "export APP_ENV=wsl" >> ~/.bashrc; fi
 
-if [ -z "$WSL_HOME" ];then echo "export WSL_HOME=/c/Users/90621" >> ~/.bash_profile; fi
+if [ -z "$WSL_HOME" ];then echo "export WSL_HOME=/c/Users/90621" >> ~/.bashrc; fi
 
-if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bash_profile; fi
+if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bashrc; fi
 
-if [ -z "$DOCKER_BUILDKIT" ];then echo "export DOCKER_BUILDKIT=1" >> ~/.bash_profile; fi
+if [ -z "$DOCKER_BUILDKIT" ];then echo "export DOCKER_BUILDKIT=1" >> ~/.bashrc; fi
 
-if [ -z "$DOCKER_CLI_EXPERIMENTAL" ];then echo "export DOCKER_CLI_EXPERIMENTAL=enabled" >> ~/.bash_profile; fi
+if [ -z "$DOCKER_CLI_EXPERIMENTAL" ];then echo "export DOCKER_CLI_EXPERIMENTAL=enabled" >> ~/.bashrc; fi
+
+if [ -z "$DOCKER_HOST" ];then
+  echo "export DOCKER_HOST=127.0.0.1:2375" >> ~/.bashrc
+fi
+
+# WSL2
+if [ `uname -r` = '4.19.43-microsoft-standard' ];then
+
+  if [ -z "$WSL2_WINDOWS_HOST" ];then
+    echo "export WSL2_WINDOWS_HOST=\$(nslookup 127.0.0.1 | awk -F ":" '{print \$2}' | head -n 1 | sed \"s#\\t##g\")" >> ~/.bashrc;
+  fi
+
+  if [ -z "$DOCKER_HOST" ];then
+    echo "export DOCKER_HOST=\${WSL2_WINDOWS_HOST}:2376" >> ~/.bashrc
+  fi
+
+fi
 
 sudo apt update && sudo apt -y install \
                             bash-completion \

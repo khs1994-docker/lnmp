@@ -8,7 +8,7 @@ x-common:
 
 services:
 
-  # add or override your custom service
+  # override service
   my-service:
     image: bash
 
@@ -34,12 +34,6 @@ services:
   #   volumes:
   #     - ./data:/var/lib/mysql
 
-
-
-
-
-
-
 # More Demo
 
   swoole:
@@ -58,58 +52,5 @@ services:
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       - ./log/php:/var/log/php:delegated
 
-  # with kong
-  # https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
-  postgresql-kong:
-    image: postgres:11.4-alpine
-    environment:
-      POSTGRES_USER: kong
-      POSTGRES_DB: kong
-    volumes:
-      - postgresql-kong-data:/var/lib/postgresql/data
-
-  kong:
-    image: kong:1.2.1-alpine
-    environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: postgresql-kong
-      KONG_PG_PASSWORD: mytest
-      # KONG_CASSANDRA_CONTACT_POINS: 'kong-db'
-      KONG_PROXY_ACCESS_LOG: /dev/stdout
-      KONG_ADMIN_ACCESS_LOG: /dev/stdout
-      KONG_PROXY_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_LISTEN: "0.0.0.0:8001,0.0.0.0:8444 ssl"
-    # command:
-    #   - kong
-    #   - migrations
-    #   - up
-    volumes:
-      - ./config/kong:/etc/kong
-    networks:
-      - frontend
-      - backend
-    ports:
-      - "8000:8000"
-      - "8445:8443"
-      - "8001:8001"
-      - "8444:8444"
-    depends_on:
-      - postgresql-kong
-
-  kong-dashboard:
-    image: pgbi/kong-dashboard
-    ports:
-      - 8082:8080
-    command:
-      - start
-      - --kong-url
-      - http://kong:8001
-    networks:
-      - frontend
-
-# 定义数据卷
-
-volumes:
+# volumes:
   # laravel_vendor:
-  postgresql-kong-data:

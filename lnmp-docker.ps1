@@ -394,6 +394,35 @@ Function satis(){
       --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
 }
 
+Function get_compose_options($compose_files,$isBuild=0){
+  Foreach ($compose_file in $compose_files)
+  {
+    $options += " -f $compose_file "
+  }
+  Foreach ($item in $LNMP_COMPOSE_INCLUDE)
+  {
+    if($isBuild){
+      if(!(Test-Path "lnmp-include\$item\docker-compose.build.yml")){
+        $options +=" -f lnmp-include\$item\docker-compose.yml "
+        continue
+      }
+      $options +=" -f lnmp-include\$item\docker-compose.yml -f lnmp-include\$item\docker-compose.build.yml "
+
+      continue
+    } # end build
+
+    if (!(Test-Path "lnmp-include\$item\docker-compose.override.yml")){
+      $options +=" -f lnmp-include\$item\docker-compose.yml "
+      continue
+    }
+    $options +=" -f lnmp-include\$item\docker-compose.yml -f lnmp-include\$item\docker-compose.override.yml "
+  }
+
+  $options += " -f docker-compose.include.yml "
+
+  return $options
+}
+
 # main
 
 env_status
@@ -430,27 +459,37 @@ switch($first){
     }
 
     build {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build $other --parallel
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
+
+      powershell -c "docker-compose $options build $other --parallel"
     }
 
     build-config {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml `
-        -f docker-compose.include.yml `
-        config
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
+
+      powershell -c "docker-compose $options config $other"
     }
 
     build-up {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml `
-      -f docker-compose.include.yml `
-      up -d $other
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
+
+      powershell -c "docker-compose $options up -d $other"
     }
 
     build-push {
-      docker-compose -f docker-compose.build.yml `
-        -f docker-compose.include.yml `
-        build --parallel
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.build.yml" `
+                                    1
 
-      docker-compose -f docker-compose.build.yml push
+      powershell -c "docker-compose $options build $other --parallel"
+
+      powershell -c "docker-compose $options push $other"
     }
 
     cleanup {
@@ -460,11 +499,10 @@ switch($first){
     }
 
     config {
-      docker-compose `
-      -f docker-compose.yml `
-      -f docker-compose.override.yml `
-      -f docker-compose.include.yml `
-      config
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options config $other"
     }
 
     cn-mirror {
@@ -484,25 +522,23 @@ switch($first){
       if($other){
         $command = $other
       }else{
-        $command = ${LNMP_INCLUDE}
+        $command = ${LNMP_SERVICES}
       }
 
-      docker-compose `
-        -f docker-compose.yml `
-        -f docker-compose.override.yml `
-        -f docker-compose.include.yml `
-        up -d $command
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options up -d $command"
 
       #@custom
       __lnmp_custom_up $command
     }
 
     pull {
-      docker-compose `
-        -f docker-compose.yml `
-        -f docker-compose.override.yml `
-        -f docker-compose.include.yml `
-        pull ${LNMP_INCLUDE}
+      $options=get_compose_options "docker-compose.yml",`
+                                   "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options pull ${LNMP_SERVICES}"
 
       #@custom
       __lnmp_custom_pull
@@ -552,13 +588,11 @@ switch($first){
       docker-compose -f docker-production.yml push $other
     }
 
-    push {
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml build --parallel
-      docker-compose -f docker-compose.yml -f docker-compose.build.yml push
-    }
-
     restart {
-      docker-compose restart $other
+      $options=get_compose_options "docker-compose.yml", `
+                          "docker-compose.override.yml"
+
+      powershell -c "docker-compose $options restart $other"
       #@custom
       __lnmp_custom_restart $other
     }
@@ -684,11 +718,12 @@ switch($first){
     }
 
     clusterkit {
-       docker-compose -f docker-compose.yml \
-         -f docker-compose.override.yml \
-         -f cluster/docker-cluster.mysql.yml \
-         -f cluster/docker-cluster.redis.yml \
-         up $other
+       $options=get_compose_options "docker-compose.yml", `
+                                    "docker-compose.override.yml", `
+                                    "cluster/docker-cluster.mysql.yml", `
+                                    "cluster/docker-cluster.redis.yml"
+
+       powershell -c "docker-compose $options up $other"
     }
 
     clusterkit-mysql-up {
@@ -936,10 +971,10 @@ XXX
       cp pcit/.env.development ${APP_ROOT}/.pcit/.env.development
 
       # 启动
+      $options=get_compose_options "docker-compose.yml", `
+                                   "docker-compose.override.yml"
 
-      docker-compose -f docker-compose.yml -f docker-compose.override.yml `
-          -f docker-compose.include.yml -f docker-pcit.include.yml up -d `
-          ${LNMP_INCLUDE} pcit
+      & {docker-compose $options up -d ${LNMP_SERVICES} pcit}
     }
 
     "cookbooks" {
@@ -1057,7 +1092,10 @@ More information please see docs/kubernetes/docker-desktop.md
         __lnmp_custom_command $args
         printInfo `
 "Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
-        docker-compose $args
+        $options=get_compose_options "docker-compose.yml",`
+                                     "docker-compose.override.yml"
+
+        powershell -c "docker-compose $options $args"
       }
 }
 

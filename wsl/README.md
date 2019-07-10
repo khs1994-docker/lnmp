@@ -31,7 +31,7 @@ $ sudo vi /etc/profile
 export WSL_HOME=/c/Users/90621 # 注意替换为自己的实际路径
 export APP_ENV=wsl
 
-$ vi ~/.bash_profile
+$ vi ~/.bashrc
 
 export APP_ENV=wsl
 ```

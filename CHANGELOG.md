@@ -10,6 +10,9 @@
 
 ### Changes:
 
+* Env change `LNMP_INCLUDE` to `LNMP_SERVICES`
+* Env change `LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX` to `LNMP_BUILD_DOCKER_IMAGE_PREFIX`
+
 ### Updates:
 
 * [PHP `7.3.6` `7.2.19` `7.1.30`](https://www.php.net/ChangeLog-7.php#7.3.6)

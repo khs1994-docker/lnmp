@@ -1,0 +1,33 @@
+version: "3.7"
+
+x-common:
+  &default-common
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - backend
+  # dns:
+  #   - ${DNS:-114.114.114.114}
+
+x-common-label:
+  &default-common-label
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+services:
+  registry:
+    << : *default-common
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/registry:${LNMP_REGISTRY_VERSION:-latest}
+    networks:
+      - frontend
+      - backend
+    # ports:
+    #   - "5000:5000"
+    volumes:
+      - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro,cached
+      - registry-data:/var/lib/registry
+
+volumes:
+  registry-data:
+    << : *default-common-label

@@ -1,0 +1,13 @@
+/*
+!.gitignore
+!etcd
+!httpd
+!minio
+!mariadb
+!pcit
+!kong
+!mongodb
+!postgresql
+!rabbitmq
+!nginx-unit
+!registry

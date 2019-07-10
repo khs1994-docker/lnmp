@@ -18,7 +18,7 @@ x-common:
 services:
   mysql:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${LNMP_MYSQL_VERSION:-8.0.16}"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${LNMP_MYSQL_VERSION:-8.0.16}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
@@ -43,33 +43,9 @@ services:
     secrets:
       - db_root_password
 
-  mariadb:
-    << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mariadb:${LNMP_MARIADB_VERSION:-10.4.6}"
-    environment:
-      # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: test
-      # MYSQL_USER:
-      # MYSQL_PASSWORD:
-    ports:
-      - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
-    volumes:
-      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
-      # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
-      - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
-      - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}
-      - ./log/mariadb:/var/log/mysql:delegated
-      - ./scripts/backup/mariadb:/backup
-    command:
-      - mysqld
-      - --character-set-server=utf8mb4
-    secrets:
-      - db_root_password
-
   redis:
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0.5}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-5.0.5}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
@@ -95,56 +71,16 @@ services:
 
   memcached:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.16}-alpine
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.16}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
       - zoneinfo-data:/usr/share/zoneinfo
 
-  rabbitmq:
-    << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.15}-management-alpine
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-      - zoneinfo-data:/usr/share/zoneinfo
-    ports:
-      - "${LNMP_RABBITMQ_PORT_1000:-127.0.0.1:15672}:15672"
-      - "${LNMP_RABBITMQ_PORT:-127.0.0.1:5672}:5672"
-
-  postgresql:
-    &postgresql
-    << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/postgres:${LNMP_POSTGRESQL_VERSION:-11.4}-alpine
-    environment:
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
-      - POSTGRES_DB=test
-    volumes:
-      - zoneinfo-data:/usr/share/zoneinfo
-      - postgresql-data:/var/lib/postgresql/data
-    ports:
-      - "${LNMP_POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
-    secrets:
-      # default is mysql password
-      - db_root_password
-
-  postgresql-kong:
-    << : *postgresql
-
-  mongodb:
-    << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.1.13}
-    volumes:
-      - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
-      - mongodb-data:/data/db
-      - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log:delegated
-    ports:
-      - "${LNMP_MONGODB_PORT:-127.0.0.1:27017}:27017"
-    command: ["mongod","--config","/etc/mongod.conf"]
-
   php7:
     &php7
     << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-fpm-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-fpm-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
@@ -183,7 +119,7 @@ services:
     << : *php7
     networks:
       - backend
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-supervisord-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-supervisord-alpine"
     secrets:
       - source: supervisord_ini
         target: /etc/supervisor.d/supervisord.ini
@@ -193,7 +129,7 @@ services:
 
   phpmyadmin:
     << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-latest}
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-latest}
     environment:
       - PMA_HOST=mysql
     ports:
@@ -206,8 +142,7 @@ services:
 
   nginx:
     << : *default-common
-    # image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.17.1}-alpine"
-    image: "/nginx:${LNMP_NGINX_VERSION:-1.17.1}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.17.1}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
@@ -224,108 +159,3 @@ services:
       - frontend
     depends_on:
       - php7
-
-  nginx-unit:
-    << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.6}-unit-alpine"
-    volumes:
-      - ./config/${LNMP_NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./log/nginx-unit:/var/log/nginx-unit:delegated
-      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
-      - ./log/php:/var/log/php:delegated
-      - zoneinfo-data:/usr/share/zoneinfo
-      - composer_cache-data:/tmp/cache
-      - nginx-unit-state-data:/usr/local/nginx-unit/state
-    networks:
-      - backend
-      - frontend
-    command:
-      # - unitd
-      - --no-daemon
-      - --user
-      - root
-      - --group
-      - root
-      - --log
-      - /var/log/nginx-unit/nginx-unit.log
-      # --state
-      # /usr/local/nginx-unit/state
-
-  httpd:
-    << : *default-common
-    image: "${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${LNMP_HTTPD_VERSION:-2.4.39}-alpine"
-    ports:
-      - "${LNMP_HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
-      - "${LNMP_HTTPD_HTTP_PORT:-0.0.0.0:80}:80"
-    volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf:cached
-      - ./config/${LNMP_HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d:cached
-      - ./log/httpd:/usr/local/apache2/logs:delegated
-      - zoneinfo-data:/usr/share/zoneinfo
-    working_dir: /app
-    networks:
-      - frontend
-    depends_on:
-      - php7
-
-  registry:
-    << : *default-common
-    image: ${LNMP_SELF_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/registry:${LNMP_REGISTRY_VERSION:-latest}
-    networks:
-      - frontend
-      - backend
-    # ports:
-    #   - "5000:5000"
-    volumes:
-      - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro,cached
-      - registry-data:/var/lib/registry
-      - zoneinfo-data:/usr/share/zoneinfo
-
-  etcd:
-    << : *default-common
-    image: quay.io/coreos/etcd:v${LNMP_ETCD_VERSION:-3.3.13}
-    networks:
-      - frontend
-      - backend
-    ports:
-      - "2379:2379"
-      - "2380:2380"
-    volumes:
-      - etcd-data:/etcd-data
-    command: [
-      "/usr/local/bin/etcd",
-      "--name s1",
-      "--data-dir /etcd-data",
-      "--listen-client-urls http://0.0.0.0:2379",
-      "--advertise-client-urls http://0.0.0.0:2379",
-      "--listen-peer-urls http://0.0.0.0:2380",
-      "--initial-advertise-peer-urls http://0.0.0.0:2380",
-      "--initial-cluster s1=http://0.0.0.0:2380",
-      "--initial-cluster-token token",
-      "--initial-cluster-state new"
-      ]
-
-  minio:
-    << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-07-05T21-20-21Z}
-    volumes:
-      - minio-data:/data
-      # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt
-      # - ./config/nginx/demo-ssl/www.t.khs1994.com.key:/root/.minio/certs/private.key
-    # ports:
-    #   - "9000:9000"
-    environment:
-      # https://github.com/minio/minio/blob/master/docs/config/README.md
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-khs1994miniokey}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-khs1994miniosecret}
-      MINIO_REGION: ${MINIO_REGION:-''}
-      MINIO_BROWSER: ${MINIO_BROWSER:-on}
-      MINIO_WORM: ${MINIO_WORM:-off}
-      MINIO_DOMAIN: ${MINIO_DOMAIN:-''}
-    command: server /data
-    networks:
-      - backend
-      - frontend

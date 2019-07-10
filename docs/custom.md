@@ -8,14 +8,14 @@
 
 ### Linux、macOS
 
-编辑 `.env` 文件，在 `LNMP_INCLUDE` 变量中增加软件名
+编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名
 
 ```bash
-LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin" # 默认配置
+LNMP_SERVICES="nginx mysql php7 redis phpmyadmin" # 默认配置
 
-LNMP_INCLUDE="httpd mysql php7 redis" # 使用 httpd 代替 nginx
+LNMP_SERVICES="httpd mysql php7 redis" # 使用 httpd 代替 nginx
 
-LNMP_INCLUDE="httpd mysql php7 redis mongodb" # 增加 mongodb
+LNMP_SERVICES="httpd mysql php7 redis mongodb" # 增加 mongodb
 ```
 
 ### Windows
@@ -23,11 +23,11 @@ LNMP_INCLUDE="httpd mysql php7 redis mongodb" # 增加 mongodb
 编辑 `env.ps1`
 
 ```bash
-$global:LNMP_INCLUDE='nginx','mysql','php7','redis','phpmyadmin' # 默认配置
+$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin' # 默认配置
 
-$global:LNMP_INCLUDE='httpd','mysql','php7','redis' # 使用 httpd 代替 nginx
+$global:LNMP_SERVICES='httpd','mysql','php7','redis' # 使用 httpd 代替 nginx
 
-$global:LNMP_INCLUDE='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
+$global:LNMP_SERVICES='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 ```
 
 ## 使用自己的镜像
@@ -53,12 +53,28 @@ development
 
 > **这个项目能不能增加 xxx 软件，可以！**
 
-在 `docker-compose.include.yml` 文件中新增服务。
+新建 `lnmp-include/xxx` 文件夹
 
-在 `.env` 文件中增加服务名
+在 `lnmp-include/xxx` 文件夹内新建 `docker-compose.yml` 文件，并编辑。
+
+> 可以参考 `lnmp-include` 文件夹中的示例项目
+
+### Linux、macOS
+
+编辑 `.env` 文件，将 `xxx` 加入到以下变量中，例如
 
 ```bash
-LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin my-service"
+LNMP_SERVICES="nginx mysql php7 redis phpmyadmin xxx"
+LNMP_COMPOSE_INCLUDE="etcd xxx"
+```
+
+### Windows
+
+编辑 `.env.ps1` 文件，将 `xxx` 加入到以下变量中，例如
+
+```bash
+$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','xxx'
+$global:LNMP_COMPOSE_INCLUDE="etcd","xxx"
 ```
 
 ## 单独启动某个软件
@@ -109,7 +125,7 @@ services:
 
 > **软件的默认配置不满足我的要求（例如这个软件我想使用别的镜像），怎么修改**
 
-编辑 `docker-compose.include.yml` 文件，增加服务名，修改服务指令即可。
+编辑 `docker-compose.include.yml` 文件，增加服务名，修改指令即可。
 
 > 例如我们想自定义 `php7` 服务的配置，我们先增加 php7 这个条目。
 

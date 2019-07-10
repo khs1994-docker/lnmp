@@ -14,9 +14,9 @@ $ ./lnmp-docker up
 * 请在 `.env` 文件中将 phpmyadmin 去掉
 
 ```bash
-# LNMP_INCLUDE="nginx mysql php7 redis phpmyadmin"
+# LNMP_SERVICES="nginx mysql php7 redis phpmyadmin"
 
-LNMP_INCLUDE="nginx mariadb php7 redis"
+LNMP_SERVICES="nginx mariadb php7 redis"
 ```
 
 # Docker ARM 镜像

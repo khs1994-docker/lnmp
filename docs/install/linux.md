@@ -22,12 +22,6 @@ $ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git
 # $ git clone --depth=1 git@gitee.com:khs1994-docker/lnmp
 ```
 
-### 使用 Composer 创建项目
-
-```bash
-$ composer create-project --prefer-dist khs1994/lnmp:dev-master ~/lnmp
-```
-
 ### 使用一键安装脚本
 
 ```bash

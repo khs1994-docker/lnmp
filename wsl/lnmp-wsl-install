@@ -421,7 +421,7 @@ _go(){
 
   echo "
 
-vi ~/.bash_profile
+vi ~/.bashrc
 
 export GOROOT=${GO_PREFIX}/go
 
@@ -436,19 +436,20 @@ _node(){
   local filename=${realname}.tar.gz
 
   _downloader ${NODE_PREFIX}/node ${filename} \
-      http://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/${filename} \
+      https://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/${filename} \
       ${NODE_PREFIX} \
       "sudo mv ${NODE_PREFIX}/${realname} ${NODE_PREFIX}/node"
 
   sudo chown -R $USER:$USER ${NODE_PREFIX}/node
 
-  . ~/.bash_profile
+  . ~/.bashrc
 
-  node -v || echo "export PATH=${NODE_PREFIX}/node/bin:\$PATH" >> ~/.bash_profile
+  node -v || echo "export PATH=$HOME/.npm/bin:${NODE_PREFIX}/node/bin:\$PATH" >> ~/.bashrc
 
-  if ! [ -f $HOME/.npmrc ];then
-    echo "registry=https://registry.npm.taobao.org" > ~/.npmrc
-  fi
+  source $HOME/.npmrc || true
+
+  test -z "$registry" && echo "registry=https://registry.npm.taobao.org" >> ~/.npmrc
+  test -z "$prefix" && echo "prefix=$HOME/.npm" >> ~/.npmrc
 
 }
 
@@ -462,7 +463,7 @@ set -e
 
 . /etc/os-release
 
-. ~/.bash_profile || echo
+. ~/.bashrc || echo
 
 if [ -z $WSL_HOME ];then exit 1 ; fi
 

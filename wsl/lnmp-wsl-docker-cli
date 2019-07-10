@@ -17,6 +17,8 @@ command -v curl || sudo apt install curl tar
 command -v docker && DOCKER_CURRENT_VERSION=$( docker --version | cut -d ' ' -f 3 ) \
                   && test "${DOCKER_CURRENT_VERSION}" = "$DOCKER_VERSION," && exit 0;
 
+cd /tmp
+
 download_docker(){
   curl -SL http://mirrors.ustc.edu.cn/docker-ce/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz | tar -zxvf -
 }
@@ -33,10 +35,6 @@ else
 fi
 
 sudo cp docker/docker /usr/local/bin/docker
-
-if [ -z $DOCKER_HOST ];then
-  echo "export DOCKER_HOST=tcp://127.0.0.1:2375" >> ~/.bash_profile
-fi
 
 # 命令行补全
 

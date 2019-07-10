@@ -1,7 +1,7 @@
 version: "3.7"
 
-x-common:
-  &default-common
+x-common-label:
+  &default-common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
@@ -10,7 +10,7 @@ services:
   # PCIT Daemon
   pcit:
     &pcit
-    << : *default-common
+    << : *default-common-label
     # restart: always
     image: pcit/pcit:alpine
     volumes:
@@ -46,3 +46,4 @@ services:
 
 volumes:
   pcit-tmp:
+    << : *default-common-label
