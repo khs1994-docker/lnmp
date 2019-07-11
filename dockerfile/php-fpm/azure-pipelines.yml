@@ -5,7 +5,12 @@
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/migrate/from-travis?view=azure-devops
 
 trigger:
-- master
+  branches:
+    include:
+    - master
+  tags:
+    include:
+    - 7.*
 
 jobs:
 - job: build
@@ -30,52 +35,52 @@ jobs:
       PHP_72_FPM:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.19
+        PHP_TAG_VERSION: 7.2.20
         FPM: 1
       PHP_72_COMPOSER:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.19
+        PHP_TAG_VERSION: 7.2.20
         COMPOSER: 1
       PHP_72_SWOOLE:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.19
+        PHP_TAG_VERSION: 7.2.20
         SWOOLE: 1
       PHP_72_UNIT:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.19
+        PHP_TAG_VERSION: 7.2.20
         UNIT: 1
       PHP_72_SUPERVISORD:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.19
+        PHP_TAG_VERSION: 7.2.20
         SUPERVISORD: 1
       PHP_73_FPM:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.6
+        PHP_TAG_VERSION: 7.3.7
         FPM: 1
       PHP_73_COMPOSER:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.6
+        PHP_TAG_VERSION: 7.3.7
         COMPOSER: 1
       PHP_73_SWOOLE:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.6
+        PHP_TAG_VERSION: 7.3.7
         SWOOLE: 1
       PHP_73_UNIT:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.6
+        PHP_TAG_VERSION: 7.3.7
         UNIT: 1
       PHP_73_SUPERVISORD:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.6
+        PHP_TAG_VERSION: 7.3.7
         SUPERVISORD: 1
       PHP_74_FPM:
         PHP_VERSION: 7_4_X

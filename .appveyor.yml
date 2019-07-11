@@ -8,6 +8,7 @@ branches:
   - 18.09
   - 19.03
   - master
+  - /v*/
 
 # skip_non_tags: true
 clone_depth: 1
