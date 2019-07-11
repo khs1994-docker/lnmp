@@ -46,7 +46,8 @@ Function install($VERSION="2.22.0",$PreVersion=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
-  # $env:Path = [environment]::GetEnvironmentvariable("Path")
+  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 
@@ -56,6 +57,6 @@ Function install($VERSION="2.22.0",$PreVersion=0){
 }
 
 Function uninstall(){
-  echo "Not Support"
+  & $env:ProgramFiles\Git\unins000.exe
   # _cleanup ""
 }

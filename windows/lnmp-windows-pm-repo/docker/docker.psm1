@@ -41,6 +41,6 @@ Function install($VERSION="19.03.0-rc2",$preVersion=0){
 }
 
 Function uninstall(){
-  echo ""
+  echo "Not Support"
   # Remove-item
 }

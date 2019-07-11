@@ -28,6 +28,10 @@ Function install($VERSION="1.17.1",$PreVersion=0){
   $filename="nginx-${VERSION}.zip"
   $unzipDesc="nginx"
 
+  _exportPath "C:\nginx"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command nginx)){
     # $CURRENT_VERSION=""
 
@@ -58,7 +62,8 @@ Function install($VERSION="1.17.1",$PreVersion=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\nginx"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 

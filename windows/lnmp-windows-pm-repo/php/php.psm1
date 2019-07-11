@@ -164,6 +164,10 @@ Function install($VERSION="7.3.7",$PreVersion=0){
   $filename="php-${VERSION}-nts-Win32-VC15-x64.zip"
   $unzipDesc="php"
 
+  _exportPath "C:\php"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command php)){
     $CURRENT_VERSION=(php -v).split(" ")[1]
 
@@ -194,7 +198,9 @@ Function install($VERSION="7.3.7",$PreVersion=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\php"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   install_after
 
   echo "==> Checking ${name} ${VERSION} install ..."

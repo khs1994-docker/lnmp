@@ -15,8 +15,8 @@ LNMP Windows Package Manager
 
 COMMANDS:
 
-install     Install soft
-uninstall   Uninstall soft
+install     Install soft [--pre| ]
+uninstall   Uninstall soft [--prune| ]
 remove      Uninstall soft
 list        List available softs
 init        Init a new package(soft)
@@ -48,7 +48,8 @@ _exportPath "$LNMP_PATH","$LNMP_PATH\windows","$LNMP_PATH\wsl", `
        "$env:USERPROFILE\app\pcit\bin", `
        "C:\bin"
 
-$env:Path = [environment]::GetEnvironmentvariable("Path")
+$env:path=[environment]::GetEnvironmentvariable("Path","user") `
+          + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
 Function _rename($src,$target){
   if (!(Test-Path $target)){

@@ -13,6 +13,10 @@ Function install($VERSION="1900",$preVersion=0){
   $filename="7z${VERSION}-x64.msi"
   $unzipDesc="7zip"
 
+  _exportPath $env:programFiles\7-Zip
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command $env:programFiles\7-Zip\7z.exe)){
     $VERSION_X=(& $env:programFiles\7-Zip\7z.exe).split(" ")[2].split(".")[0]
     $VERSION_Y=(& $env:programFiles\7-Zip\7z.exe).split(" ")[2].split(".")[1]
@@ -43,7 +47,8 @@ Function install($VERSION="1900",$preVersion=0){
   # _cleanup ""
 
   _exportPath $env:programFiles\7-Zip
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

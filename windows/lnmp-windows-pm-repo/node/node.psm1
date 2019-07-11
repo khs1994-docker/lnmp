@@ -17,8 +17,12 @@ Function install($VERSION="12.6.0",$PreVersion=0){
   $filename="node-v${VERSION}-win-x64.zip"
   $unzipDesc="node"
 
-  if($(_command node)){
-    $CURRENT_VERSION=(node --version).trim("v")
+  _exportPath "$env:ProgramData\node" "$env:ProgramData\npm"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
+  if($(_command $env:ProgramData\node\node.exe)){
+    $CURRENT_VERSION=(& "$env:ProgramData\node\node.exe" --version).trim("v")
 
     if ($CURRENT_VERSION -eq $VERSION){
         echo "==> $name $VERSION already install"
@@ -40,21 +44,25 @@ Function install($VERSION="12.6.0",$PreVersion=0){
   _unzip $filename $unzipDesc
 
   # 安装 Fix me
-  _mkdir C:\node
-  Copy-item -r -force "node\node-v${VERSION}-win-x64\*" "C:\node\"
+  _mkdir "$env:ProgramData\node"
+  Copy-item -r -force "node\node-v${VERSION}-win-x64\*" "$env:ProgramData\node\"
   # Start-Process -FilePath $filename -wait
   _cleanup node
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  _exportPath "C:\node" "$env:ProgramData\npm"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  _exportPath "$env:ProgramData\node" "$env:ProgramData\npm"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   install_after
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  node --version
+  node.exe --version
 }
 
 Function uninstall(){
-  _cleanup C:\node "$env:ProgramData\npm"
+  _cleanup "$env:ProgramData\node"
+  # user data
+  # _cleanup "$env:ProgramData\npm"
 }

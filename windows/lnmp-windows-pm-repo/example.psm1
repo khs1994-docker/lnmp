@@ -19,6 +19,10 @@ Function install($VERSION="x.y.z",$PreVersion=0){
   $filename=""
   $unzipDesc="example"
 
+  # _exportPath "/path"
+  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command example)){
     $CURRENT_VERSION=""
 
@@ -48,7 +52,8 @@ Function install($VERSION="x.y.z",$PreVersion=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
-  # $env:Path = [environment]::GetEnvironmentvariable("Path")
+  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 
@@ -57,7 +62,11 @@ Function install($VERSION="x.y.z",$PreVersion=0){
   example version
 }
 
-Function uninstall(){
+Function uninstall($prune=0){
   echo "Not Support"
   # _cleanup ""
+  # user data
+  if($prune){
+    # _cleanup ""
+  }
 }
