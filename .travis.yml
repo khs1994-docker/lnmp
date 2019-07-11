@@ -94,8 +94,9 @@ jobs:
 
     - stage: tag
       script: |
-        github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
-          cat CHANGELOG.md | github-release release -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
+        echo ${TRAVIS_TAG} | grep 'rc' && exit 0 || true \
+        ; github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
+        cat CHANGELOG.md | github-release release -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
 
     - stage: development
       install:
