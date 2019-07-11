@@ -17,16 +17,16 @@ jobs:
   strategy:
     maxParallel: 1
     matrix:
-      PHP_56_FPM:
-        PHP_VERSION: 5_6_X
-        FOLDER: 5.6
-        PHP_TAG_VERSION: 5.6.40
-        FPM: 1
-      PHP_70_FPM:
-        PHP_VERSION: 7_0_X
-        FOLDER: 7.0
-        PHP_TAG_VERSION: 7.0.33
-        FPM: 1
+      # PHP_56_FPM:
+      #   PHP_VERSION: 5_6_X
+      #   FOLDER: 5.6
+      #   PHP_TAG_VERSION: 5.6.40
+      #   FPM: 1
+      # PHP_70_FPM:
+      #   PHP_VERSION: 7_0_X
+      #   FOLDER: 7.0
+      #   PHP_TAG_VERSION: 7.0.33
+      #   FPM: 1
       PHP_71_FPM:
         PHP_VERSION: 7_1_X
         FOLDER: 7.1
