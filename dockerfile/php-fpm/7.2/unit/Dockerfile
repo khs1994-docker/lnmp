@@ -146,9 +146,11 @@ ENV NGINX_UNIT_VERSION 1.9.0
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.2.20-alpine,source=/usr/src,target=/usr/src,rw \
+RUN --mount=type=bind,from=php:7.2.20-alpine,source=/usr/src,target=/usr/local/src,rw \
   --mount=type=bind,from=php:7.2.20-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
+  && mkdir -p /usr/src \
+  && cp /usr/local/src/* /usr/src/ \
   && export PATH=$PATH:/opt/bin \
   ; mkdir -p $PHP_INI_DIR/conf.d \
 	&& apk add --no-cache --virtual .build-deps \
@@ -283,8 +285,8 @@ RUN --mount=type=bind,from=php:7.2.20-alpine,source=/usr/src,target=/usr/src,rw 
   && strip --strip-all /usr/local/lib/libphp7.so \
   && apk del --no-network --no-cache .build-deps \
   # 创建日志文件夹
-  && ln -sf /dev/stderr /var/log/xdebug-remote.log
-  # && rm -rf /usr/src/*
+  && ln -sf /dev/stderr /var/log/xdebug-remote.log \
+  && rm -rf /usr/src/*
 
 RUN cd /usr/src \
   && wget https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \

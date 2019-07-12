@@ -17,6 +17,31 @@ jobs:
   strategy:
     maxParallel: 1
     matrix:
+      PHP_73_FPM:
+        PHP_VERSION: 7_3_X
+        FOLDER: 7.3
+        PHP_TAG_VERSION: 7.3.7
+        FPM: 1
+      PHP_73_COMPOSER:
+        PHP_VERSION: 7_3_X
+        FOLDER: 7.3
+        PHP_TAG_VERSION: 7.3.7
+        COMPOSER: 1
+      PHP_73_SWOOLE:
+        PHP_VERSION: 7_3_X
+        FOLDER: 7.3
+        PHP_TAG_VERSION: 7.3.7
+        SWOOLE: 1
+      PHP_73_UNIT:
+        PHP_VERSION: 7_3_X
+        FOLDER: 7.3
+        PHP_TAG_VERSION: 7.3.7
+        UNIT: 1
+      PHP_73_SUPERVISORD:
+        PHP_VERSION: 7_3_X
+        FOLDER: 7.3
+        PHP_TAG_VERSION: 7.3.7
+        SUPERVISORD: 1
       # PHP_56_FPM:
       #   PHP_VERSION: 5_6_X
       #   FOLDER: 5.6
@@ -56,31 +81,6 @@ jobs:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
         PHP_TAG_VERSION: 7.2.20
-        SUPERVISORD: 1
-      PHP_73_FPM:
-        PHP_VERSION: 7_3_X
-        FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
-        FPM: 1
-      PHP_73_COMPOSER:
-        PHP_VERSION: 7_3_X
-        FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
-        COMPOSER: 1
-      PHP_73_SWOOLE:
-        PHP_VERSION: 7_3_X
-        FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
-        SWOOLE: 1
-      PHP_73_UNIT:
-        PHP_VERSION: 7_3_X
-        FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
-        UNIT: 1
-      PHP_73_SUPERVISORD:
-        PHP_VERSION: 7_3_X
-        FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
         SUPERVISORD: 1
       PHP_74_FPM:
         PHP_VERSION: 7_4_X
@@ -159,23 +159,23 @@ jobs:
     displayName: 'Docker Login'
 
   - script: |
-      set -x
       export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7
       cp .env.example .env
+      source tag.sh
+      set -x
       if [ ! `echo $BUILD_SOURCEBRANCH | grep 'refs/tags/'` ];then if [ "$PHP_VERSION" = 7_4_X -o "$PHP_VERSION" = nightly ];then IS_PUSH=--push;else true;fi;else IS_PUSH=--push; fi
       if [ -n "$UNIT" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
       if [ -n "$SUPERVISORD" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
       if [ -n "$COMPOSER" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
       if [ -n "$SINGLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
       if [ -n "$SWOOLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} ${FOLDER}/swoole; fi
-      if [ -n "$FPM" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
+      if [ -n "$FPM" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
     env:
       DOCKER_HUB_USERNAME: khs1994
     displayName: 'Build Image'
     timeoutInMinutes: 0
 
   - script: |
-      bash tag.sh
       curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
     env:
       DOCKER_HUB_USERNAME: khs1994
