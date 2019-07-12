@@ -17,7 +17,8 @@ Function install($VERSION="1.8.6",$PreVersion=0){
   $filename="composer.phar"
   $unzipDesc="composer"
 
-  _exportPath "$env:ProgramData\ComposerSetup\bin\" "$HOME\AppData\Roaming\Composer\vendor\bin"
+  _exportPath "$env:ProgramData\ComposerSetup\bin\", `
+              "$HOME\AppData\Roaming\Composer\vendor\bin"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
@@ -55,7 +56,8 @@ Function install($VERSION="1.8.6",$PreVersion=0){
   # _cleanup ""
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  _exportPath "$env:ProgramData\ComposerSetup\bin\" "$HOME\AppData\Roaming\Composer\vendor\bin"
+  _exportPath "$env:ProgramData\ComposerSetup\bin\", `
+              "$HOME\AppData\Roaming\Composer\vendor\bin"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 

@@ -42,13 +42,13 @@ Function install($VERSION="x.y.z",$PreVersion=0){
   # 验证原始 zip 文件 Fix me
 
   # 解压 zip 文件 Fix me
-  # _cleanup ""
+  # _cleanup "$unzipDesc"
   _unzip $filename $unzipDesc
 
   # 安装 Fix me
-  Copy-item -r -force "" ""
+  Copy-item -r -force "$unzipDesc/" ""
   # Start-Process -FilePath $filename -wait
-  # _cleanup ""
+  # _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"

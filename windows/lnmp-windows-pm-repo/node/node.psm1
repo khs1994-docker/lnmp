@@ -17,7 +17,7 @@ Function install($VERSION="12.6.0",$PreVersion=0){
   $filename="node-v${VERSION}-win-x64.zip"
   $unzipDesc="node"
 
-  _exportPath "$env:ProgramData\node" "$env:ProgramData\npm"
+  _exportPath "$env:ProgramData\node","$env:ProgramData\npm"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
@@ -50,7 +50,7 @@ Function install($VERSION="12.6.0",$PreVersion=0){
   _cleanup node
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  _exportPath "$env:ProgramData\node" "$env:ProgramData\npm"
+  _exportPath "$env:ProgramData\node","$env:ProgramData\npm"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 

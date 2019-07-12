@@ -17,7 +17,7 @@ Function install($VERSION="1.12.7",$preVersion=0){
   $unzipDesc="go"
 
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
-  _exportPath "C:\go\bin" "C:\Users\$env:username\go\bin"
+  _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
@@ -48,7 +48,7 @@ Function install($VERSION="1.12.7",$preVersion=0){
   cleanup go
 
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
-  _exportPath "C:\go\bin" "C:\Users\$env:username\go\bin"
+  _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 

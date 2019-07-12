@@ -12,7 +12,7 @@ $global:PHP_YAML_EXTENSION_VERSION="2.0.4"
 # https://curl.haxx.se/docs/caextract.html
 $global:PHP_CACERT_DATE="2019-05-15"
 
-Function install_ext(){
+Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
   $extensions='yaml',`
          'xdebug',`
          'Zend Opcache',`
@@ -52,29 +52,29 @@ Function install_ext(){
 
     # https://pecl.php.net/package/yaml
     _downloader `
-      https://windows.php.net/downloads/pecl/releases/yaml/$PHP_YAML_EXTENSION_VERSION/php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      C:\php-ext\php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64 null $false
+      https://windows.php.net/downloads/pecl/releases/yaml/$PHP_YAML_EXTENSION_VERSION/php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      C:\php-ext\php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64 null $false
     # https://pecl.php.net/package/xdebug
     _downloader `
-      https://windows.php.net/downloads/pecl/releases/xdebug/$PHP_XDEBUG_EXTENSION_VERSION/php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      C:\php-ext\php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
+      https://windows.php.net/downloads/pecl/releases/xdebug/$PHP_XDEBUG_EXTENSION_VERSION/php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      C:\php-ext\php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
     # https://pecl.php.net/package/redis
     _downloader `
-      https://windows.php.net/downloads/pecl/releases/redis/$PHP_REDIS_EXTENSION_VERSION/php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      C:\php-ext\php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
+      https://windows.php.net/downloads/pecl/releases/redis/$PHP_REDIS_EXTENSION_VERSION/php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      C:\php-ext\php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
     # https://pecl.php.net/package/mongodb
     _downloader `
-      https://windows.php.net/downloads/pecl/releases/mongodb/$PHP_MONGODB_EXTENSION_VERSION/php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      C:\php-ext\php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
+      https://windows.php.net/downloads/pecl/releases/mongodb/$PHP_MONGODB_EXTENSION_VERSION/php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      C:\php-ext\php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
     # https://pecl.php.net/package/igbinary
     _downloader `
-      https://windows.php.net/downloads/pecl/releases/igbinary/$PHP_IGBINARY_EXTENSION_VERSION/php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      C:\php-ext\php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip `
-      php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip null $false
+      https://windows.php.net/downloads/pecl/releases/igbinary/$PHP_IGBINARY_EXTENSION_VERSION/php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      C:\php-ext\php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
+      php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
     # https://curl.haxx.se/docs/caextract.html
     # https://github.com/khs1994-docker/lnmp/issues/339
     _downloader `
@@ -89,15 +89,15 @@ Function install_ext(){
       }
     }
 
-    _pecl php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_igbinary.dll
+    _pecl php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_igbinary.dll
 
-    _pecl php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_mongodb.dll
+    _pecl php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_mongodb.dll
 
-    _pecl php_redis-$PHP_REDIS_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_redis.dll
+    _pecl php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_redis.dll
 
-    _pecl php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_xdebug.dll
+    _pecl php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_xdebug.dll
 
-    _pecl php_yaml-$PHP_YAML_EXTENSION_VERSION-7.3-nts-vc15-x64.zip php_yaml.dll
+    _pecl php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_yaml.dll
 
     Foreach ($extension in $extensions){
       $a = php -r "echo extension_loaded('$extension');"
@@ -145,24 +145,47 @@ Function install_ext(){
   php -r "echo ini_get('curl.cainfo');"
 }
 
-Function install_after(){
+Function install_after($VERSION){
+  $PHP_VERSION_XY=$VERSION.split(".")[0]+'.'+$VERSION.split(".")[1]
+
+  switch ($PHP_VERSION_XY)
+  {
+    {$_ -in "7.1","7.0"} {
+      $VC_VERSION="nts-vc14"
+    }
+    {$_ -in "7.2","7.3"} {
+      $VC_VERSION="nts-vc15"
+    }
+    # {$_ -in "A","B","C"} {}
+    # "7.4" {
+    #   $VC_VERSION=
+    # }
+    Default {
+      echo "==> Not Support this version, SKIP install extension"
+      return
+    }
+  }
+
   if (!(Test-Path C:\php\php.ini)){
     mv C:\php\php.ini-development C:\php\php.ini
   }
 
-  install_ext
+  install_ext $PHP_VERSION_XY $VC_VERSION
 }
 
 Function install($VERSION="7.3.7",$PreVersion=0){
   if($PreVersion){
-    $VERSION=""
-    $url=""
+    $VC_VERSION="nts-Win32-vs16"
+    $VERSION="7.4.0alpha3"
+    $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $unzipDesc="php74"
   }else{
-    $url="https://windows.php.net/downloads/releases/php-${VERSION}-nts-Win32-VC15-x64.zip"
+    $VC_VERSION="nts-Win32-VC15"
+    $url="https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $unzipDesc="php"
   }
   $name="php"
-  $filename="php-${VERSION}-nts-Win32-VC15-x64.zip"
-  $unzipDesc="php"
+  $filename="php-${VERSION}-${VC_VERSION}-x64.zip"
 
   _exportPath "C:\php"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
@@ -187,24 +210,28 @@ Function install($VERSION="7.3.7",$PreVersion=0){
   # 验证原始 zip 文件 Fix me
 
   # 解压 zip 文件 Fix me
-  _cleanup "php"
+  _cleanup "$unzipDesc"
   _unzip $filename $unzipDesc
 
   # 安装 Fix me
-  _mkdir C:\php
-  Copy-item -r -force "php" "C:\"
+  Copy-item -r -force "$unzipDesc" "C:\"
   # Start-Process -FilePath $filename -wait
-  _cleanup "php"
+  _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\php"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
-  install_after
+  install_after $VERSION
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
+  if($PreVersion){
+    C:\php74\php -v
+    return
+  }
+
   php -v
 }
 

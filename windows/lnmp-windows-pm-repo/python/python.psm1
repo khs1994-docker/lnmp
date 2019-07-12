@@ -14,7 +14,7 @@ Function install($VERSION="3.7.4",$preVersion=0){
   $filename="python-${VERSION}-amd64.exe"
   $unzipDesc="python"
 
-  _exportPath "${env:ProgramData}\Python" "${env:ProgramData}\Python\Scripts"
+  _exportPath "${env:ProgramData}\Python","${env:ProgramData}\Python\Scripts"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
@@ -56,7 +56,7 @@ Function install($VERSION="3.7.4",$preVersion=0){
         'Include_test=0' `
   );
 
-  _exportPath "${env:ProgramData}\Python" "${env:ProgramData}\Python\Scripts"
+  _exportPath "${env:ProgramData}\Python","${env:ProgramData}\Python\Scripts"
   $env:path=[environment]::GetEnvironmentvariable("Path","user") `
             + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
