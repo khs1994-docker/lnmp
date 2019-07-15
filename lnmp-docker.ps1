@@ -1035,8 +1035,9 @@ XXX
       printInfo "Check gcr.io host config"
 
       $GCR_IO_HOST=(ping gcr.io -n 1).split(" ")[9]
+      $GCR_IO_HOST_EN=(ping gcr.io -n 1).split(" ")[11].trim(":")
 
-      if(!($GCR_IO_HOST -eq "127.0.0.1")){
+      if(!(($GCR_IO_HOST -eq "127.0.0.1") -or ($GCR_IO_HOST_EN -eq "127.0.0.1"))){
         printWarning "Please set host on C:\Windows\System32\drivers\etc
 
 127.0.0.1 gcr.io k8s.gcr.io
@@ -1090,7 +1091,7 @@ This local server support Docker Desktop EDGE v2.0.1.0(30090)
       "coredns:1.2.6", `
       "pause:3.1"
 
-      sleep 5
+      sleep 10
 
       foreach ($image in $images){
          docker pull gcr.io/google-containers/$image
