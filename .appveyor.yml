@@ -48,6 +48,15 @@ build_script:
       docker-compose logs
       (Invoke-WebRequest 127.0.0.1).content
       ./lnmp-docker down
+  - pwsh: |
+      write-host "Test gcr.io k8s.gcr.io mirror"
+      "" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
+      "127.0.0.1 k8s.gcr.io gcr.io" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
+      ./lnmp-docker gcr.io --no-pull
+      ./lnmp-docker gcr.io
+      docker pull k8s.gcr.io/google-containers/kube-controller-manager:v1.15.0
+      docker image ls
+      ./lnmp-docker down
   # - ps: Write-host "`nSwitch to Windows engine"  -foregroundcolor green
   # - ps: Switch-DockerWindows
   # - ps: |

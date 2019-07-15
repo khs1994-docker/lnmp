@@ -145,7 +145,7 @@ Composer:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker Desktop
-  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker Desktop Kubernetes [ --no-pull | ]
+  gcr.io               Up local gcr.io sregistry server to start Docker Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -252,7 +252,7 @@ _gcr_io_down(){
 _gcr_io(){
   if [ "$1" = down ];then
     _gcr_io_down
-    print_info "Stop k8s.gcr.io local server success"
+    print_info "Stop gcr.io local server success"
     echo
     exit
   fi
@@ -270,6 +270,7 @@ _gcr_io(){
 
   docker run -it -d \
       -p 443:443 \
+      -p 80:80 \
       --mount type=bind,src=$PWD/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml \
       --mount type=bind,src=$PWD/config/registry,target=/etc/docker/registry/ssl \
       --mount type=bind,src=$PWD/data/registry,target=/var/lib/registry:delegated \
@@ -284,6 +285,7 @@ _gcr_io(){
       fi
 
     if [ "$1" = '--no-pull' ];then
+      print_info "Up gcr.io Server Success"
       return
     fi
 
@@ -304,31 +306,17 @@ _gcr_io(){
     coredns:1.2.6 \
     pause:3.1"
 
+    sleep 5
+
     for image in $images
     do
-       # docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
-       # docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
+       docker pull gcr.io/google-containers/$image
+       docker tag  gcr.io/google-containers/$image k8s.gcr.io/$image
        # docker push k8s.gcr.io/$image
-       # docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
-
-       docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$image
-       docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$image k8s.gcr.io/$image
-       docker push k8s.gcr.io/$image
-       docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$image
+       docker rmi  gcr.io/google-containers/$image
     done
 
-    echo "
-Warning
-
-this command up a local server on port 443.
-
-When Docker Desktop Start Kubernetes Success, you must remove this local server.
-
-\$ lnmp-docker gcr.io down
-
-More information please see docs/kubernetes/docker-desktop.md
-
-    "
+    _gcr_io_down
 }
 
 _satis(){
@@ -1315,6 +1303,7 @@ main() {
   ;;
 
   gcr.io )
+   print_info "Check gcr.io host "
    cat /etc/hosts | grep 'gcr.io' > /dev/null || \
        (print_info "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io gcr.io' | sudo tee -a /etc/hosts )
 

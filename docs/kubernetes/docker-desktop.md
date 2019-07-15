@@ -2,19 +2,13 @@
 
 [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
-本 Local Registry 紧跟最新 Docker EDGE 版本。
-
-## k8s.gcr.io Local Server
+## gcr.io Local Server
 
 修改 Hosts
 
 ```bash
-ip k8s.gcr.io gcr.io
-
-# 192.168.199.100 k8s.gcr.io gcr.io
+127.0.0.1 k8s.gcr.io gcr.io
 ```
-
-> ip 为路由器分配给电脑的 IP，请勿填写 127.0.0.1
 
 ### macOS
 
