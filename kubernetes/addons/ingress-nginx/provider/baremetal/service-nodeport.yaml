@@ -10,11 +10,11 @@ spec:
   type: NodePort
   ports:
     - name: http
-      port: 80
+      port: 8080
       targetPort: 80
       protocol: TCP
     - name: https
-      port: 443
+      port: 8443
       targetPort: 443
       protocol: TCP
   selector:

@@ -28,7 +28,7 @@ Function install($VERSION="0.7.2",$preVersion=0){
     $VERSION
 
   # 验证原始 zip 文件 Fix me
-
+  _cleanup dive
   # 解压 zip 文件 Fix me
   _unzip $filename $unzipDesc
   # 安装 Fix me

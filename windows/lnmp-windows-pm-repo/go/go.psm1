@@ -16,6 +16,11 @@ Function install($VERSION="1.12.7",$preVersion=0){
   $filename="go${VERSION}.windows-amd64.zip"
   $unzipDesc="go"
 
+  [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
+  _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command go)){
     $CURRENT_VERSION=($(go version) -split " ")[2].trim("go")
 
@@ -43,8 +48,9 @@ Function install($VERSION="1.12.7",$preVersion=0){
   cleanup go
 
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
-  _exportPath "C:\go\bin" "C:\Users\$env:username\go\bin"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

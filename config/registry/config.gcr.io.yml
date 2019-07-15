@@ -35,3 +35,8 @@ health:
     enabled: true
     interval: 10s
     threshold: 3
+
+proxy:
+  remoteurl: https://gcr.azk8s.cn
+  # gcr.mirrors.ustc.edu.cn
+  # gcr-mirror.qiniu.com

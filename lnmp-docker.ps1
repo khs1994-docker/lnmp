@@ -249,7 +249,7 @@ Composer:
 
 Kubernets:
   dashboard            Print how run kubernetes dashboard in Docker Desktop
-  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker Desktop Kubernetes
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -1029,6 +1029,22 @@ XXX
 
     gcr.io {
 
+      printInfo "Check gcr.io host config"
+
+      $GCR_IO_HOST=(ping gcr.io -n 1).split(" ")[9]
+
+      if(!($GCR_IO_HOST -eq "127.0.0.1")){
+        printWarning "Please set host on C:\Windows\System32\drivers\etc
+
+127.0.0.1 gcr.io k8s.gcr.io
+"
+
+        explorer.exe C:\Windows\System32\drivers\etc
+        exit
+      }
+
+      printInfo "gcr.io host config correct"
+
       if ('logs' -eq $args[1]){
         docker logs $(docker container ls -f label=com.khs1994.lnmp.gcr.io -q) -f
         exit
@@ -1040,7 +1056,7 @@ XXX
 printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes ${KUBERNETES_VERSION}"
 
       if ('down' -eq $args[1]){
-        Write-Warning "Stop k8s.gcr.io local server success"
+        Write-Warning "Stop gcr.io local server success"
         exit
       }
 
@@ -1050,11 +1066,17 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
       docker run -it -d `
         -p 443:443 `
+        -p 80:80 `
         --mount type=bind,src=$pwd/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml `
         --mount type=bind,src=$pwd/config/registry,target=/etc/docker/registry/ssl `
         --mount type=bind,src=$pwd/data/registry,target=/var/lib/registry `
         --label com.khs1994.lnmp.gcr.io `
         registry
+
+      if ('--no-pull' -eq $args[1]){
+        printInfo "Up gcr.io Server Success"
+        exit
+      }
 
       $images="kube-controller-manager:v${KUBERNETES_VERSION}", `
       "kube-apiserver:v${KUBERNETES_VERSION}", `
@@ -1064,28 +1086,18 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       "coredns:1.3.1", `
       "pause:3.1"
 
-      foreach ($image in $images){
-         # docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
-         # docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
-         # docker push k8s.gcr.io/$image
-         # docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
+      sleep 5
 
+      foreach ($image in $images){
          printInfo "Handle ${image}"
-         docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$image
-         docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$image k8s.gcr.io/$image
-         docker push k8s.gcr.io/$image
-         docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$image
+         docker pull gcr.io/google-containers/$image
+         docker tag  gcr.io/google-containers/$image k8s.gcr.io/$image
+         # docker push k8s.gcr.io/$image
+         docker rmi  gcr.io/google-containers/$image
       }
 
-       Write-Warning "
-this command up a local server on port 443.
-
-When Docker Desktop Start Kubernetes Success, you must remove this local server.
-
-$ lnmp-docker.ps1 gcr.io down
-
-More information please see docs/kubernetes/docker-desktop.md
-      "
+      docker container rm -f `
+          $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
     }
 
     default {

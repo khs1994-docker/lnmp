@@ -141,7 +141,7 @@ _install_php_run_dep(){
 
     cd /tmp ; sudo wget -N http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
-    sudo rpm -Uvh epel-release*rpm
+    sudo rpm -Uvh epel-release-latest-7.noarch.rpm
 
 _libzip(){
 

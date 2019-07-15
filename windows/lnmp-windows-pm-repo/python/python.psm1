@@ -14,6 +14,10 @@ Function install($VERSION="3.7.4",$preVersion=0){
   $filename="python-${VERSION}-amd64.exe"
   $unzipDesc="python"
 
+  _exportPath "${env:ProgramData}\Python","${env:ProgramData}\Python\Scripts"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command python)){
     $CURRENT_VERSION=($(python --version) -split " ")[1]
 
@@ -42,9 +46,9 @@ Function install($VERSION="3.7.4",$preVersion=0){
   		-ArgumentList @( `
         '/quiet', `
         'InstallAllUsers=1', `
-        "DefaultAllUsersTargetDir=${env:ProgramFiles}\Python",
-        "DefaultJustForMeTargetDir=${env:ProgramFiles}\Python",
-        'TargetDir=C:\Python', `
+        "DefaultAllUsersTargetDir=${env:ProgramData}\Python", `
+        "DefaultJustForMeTargetDir=${env:ProgramData}\Python", `
+        "TargetDir=${env:ProgramData}\Python", `
         'PrependPath=1', `
         'Shortcuts=0', `
         'Include_doc=0', `
@@ -52,8 +56,9 @@ Function install($VERSION="3.7.4",$preVersion=0){
         'Include_test=0' `
   );
 
-  _exportPath "${env:ProgramFiles}\Python" "${env:ProgramFiles}\Python\Scripts"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  _exportPath "${env:ProgramData}\Python","${env:ProgramData}\Python\Scripts"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

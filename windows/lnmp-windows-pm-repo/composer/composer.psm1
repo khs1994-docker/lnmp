@@ -17,6 +17,11 @@ Function install($VERSION="1.8.6",$PreVersion=0){
   $filename="composer.phar"
   $unzipDesc="composer"
 
+  _exportPath "$env:ProgramData\ComposerSetup\bin\", `
+              "$HOME\AppData\Roaming\Composer\vendor\bin"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command composer)){
     $CURRENT_VERSION=(composer --version).split(" ")[2]
 
@@ -51,8 +56,10 @@ Function install($VERSION="1.8.6",$PreVersion=0){
   # _cleanup ""
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  _exportPath "$env:ProgramData\ComposerSetup\bin\" "$HOME\AppData\Roaming\Composer\vendor\bin"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  _exportPath "$env:ProgramData\ComposerSetup\bin\", `
+              "$HOME\AppData\Roaming\Composer\vendor\bin"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 
@@ -61,6 +68,11 @@ Function install($VERSION="1.8.6",$PreVersion=0){
   composer --version
 }
 
-Function uninstall(){
+Function uninstall($prune=0){
   _sudo "remove-item -r -force $env:ProgramData\ComposerSetup"
+  # user data
+  if($prune){
+    _cleanup "$HOME\AppData\Roaming\Composer"
+    _cleanup "$HOME\AppData\Local\Composer"
+  }
 }

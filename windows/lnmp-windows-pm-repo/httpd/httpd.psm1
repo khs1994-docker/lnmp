@@ -31,6 +31,10 @@ Function install($VERSION="2.4.39",$preVersion=0){
   $filename="httpd-${VERSION}-win64-VS16.zip"
   $unzipDesc="httpd"
 
+  _exportPath "C:\Apache24\bin"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command httpd)){
     $CURRENT_VERSION=($(httpd -v) -split " ")[2].trim("Apache/")
 
@@ -95,7 +99,8 @@ Function install($VERSION="2.4.39",$preVersion=0){
   after_install
 
   _exportPath "C:\Apache24\bin"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

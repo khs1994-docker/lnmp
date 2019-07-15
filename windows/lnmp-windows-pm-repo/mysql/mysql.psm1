@@ -54,6 +54,10 @@ Function install($VERSION="8.0.16",$PreVersion=0){
   $filename="mysql-${VERSION}-winx64.zip"
   $unzipDesc="mysql"
 
+  _exportPath "C:\mysql\bin"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
   if($(_command mysql)){
     $CURRENT_VERSION=(mysql --version).split(" ")[3]
 
@@ -84,7 +88,8 @@ Function install($VERSION="8.0.16",$PreVersion=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\mysql\bin"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 
