@@ -28,8 +28,14 @@ $ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/
 
 ### 其他
 
-```
-$ composer config -g repos.packagist composer https://packagist.phpcomposer.com
+不推荐使用
 
-$ composer config -g repos.packagist composer https://packagist.laravel-china.org
+```bash
+$ composer config -g repos.packagist composer https://packagist.phpcomposer.com
 ```
+
+### 主页
+
+* https://developer.aliyun.com/composer
+* https://mirrors.sjtug.sjtu.edu.cn/packagist/
+* https://mirrors.cloud.tencent.com/composer/

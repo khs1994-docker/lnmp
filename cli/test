@@ -40,7 +40,6 @@ _command(){
   lnmp-php -v
 
   # lnmp-composer global config github-oauth.github.com ${GITHUB_TOKEN}
-  # composer config -g repo.packagist composer https://packagist.laravel-china.org
   lnmp-composer config -g --unset repos.packagist
   lnmp-composer install
 

@@ -49,10 +49,13 @@ build_script:
       (Invoke-WebRequest 127.0.0.1).content
       ./lnmp-docker down
   - pwsh: |
-      write-host "Test gcr.io k8s.gcr.io mirror"
+      write-host "Set gcr.io k8s.gcr.io hosts"
       "" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
       "127.0.0.1 k8s.gcr.io gcr.io" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
       cat C:\Windows\System32\drivers\etc\hosts
+  - pwsh: |
+      write-host "Test gcr.io k8s.gcr.io mirror"
+      ping gcr.io -n 1
       ./lnmp-docker gcr.io
       ./lnmp-docker gcr.io --no-pull
       docker pull gcr.io/google-containers/kube-controller-manager:v1.15.0

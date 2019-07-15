@@ -28,3 +28,4 @@ supervisord/supervisord.ini
 !kong
 kong/*.conf
 !frpc.ini
+path.md
