@@ -10,6 +10,8 @@
 
 ### Changes:
 
+* Rename docker compose files `docker-compose.*` to `docker-lnmp.*`
+
 ### Updates:
 
 * [PHP `7.3.7` `7.2.20`](https://www.php.net/ChangeLog-7.php#7.3.7)

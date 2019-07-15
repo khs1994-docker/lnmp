@@ -9,7 +9,7 @@ docker-compose
 docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
 docker-production.*.yml
-docker-compose.include.yml
+docker-lnmp.include.yml
 
 # cache
 

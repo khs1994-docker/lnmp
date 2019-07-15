@@ -65,7 +65,7 @@ else
     fi
 fi
 
-_cp_only_not_exists docker-compose.include.example.yml docker-compose.include.yml
+_cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
 
 _cp_only_not_exists lnmp-custom-script.example lnmp-custom-script
 
@@ -397,7 +397,7 @@ _get_compose_options(){
     options+=" -f lnmp-include/$compose_file/docker-compose.yml -f lnmp-include/$compose_file/docker-compose.override.yml "
   done
 
-  options+=" -f docker-compose.include.yml "
+  options+=" -f docker-lnmp.include.yml "
 }
 
 _registry(){
@@ -1259,8 +1259,8 @@ main() {
     ;;
 
   config )
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     exec docker-compose $options config "$@"
     ;;
@@ -1405,8 +1405,8 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.build.yml" \
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.build.yml" \
                            "--build"
 
       exec docker-compose $options build "$@" --parallel
@@ -1421,8 +1421,8 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.build.yml" \
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.build.yml" \
                            "--build"
       exec docker-compose $options up -d "$@"
     else
@@ -1446,8 +1446,8 @@ For information please run $ docker service update --help
 
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
 
-    _get_compose_options docker-compose.yml \
-                         docker-compose.override.yml
+    _get_compose_options docker-lnmp.yml \
+                         docker-lnmp.override.yml
 
     docker-compose $options up $opt ${service}
 
@@ -1464,8 +1464,8 @@ For information please run $ docker service update --help
   build-config )
     init
     if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.build.yml" \
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.build.yml" \
                            "--build"
 
       exec docker-compose $options config "$@"
@@ -1566,8 +1566,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   build-push )
     run_docker; init;
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.build.yml" \
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.build.yml" \
                          "--build"
 
     docker-compose $options build --parallel "$@"
@@ -1575,7 +1575,9 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   down )
-    init; docker-compose down --remove-orphans
+    _get_compose_options "docker-lnmp.yml" "docker-lnmp.override.yml"
+
+    init; docker-compose $options down --remove-orphans
     #@custom
     __lnmp_custom_down "$@" 2>/dev/null || true
     ;;
@@ -1588,8 +1590,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     run_docker; init
 
     sleep 2;
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
 
@@ -1660,8 +1662,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
       if [ $soft = 'nginx' ];then opt='true'; fi
     done
 
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     if [ "$opt" = 'true' ];then
       docker exec -it $(docker container ls \
@@ -1687,12 +1689,13 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      -p 2375:2375 \
      --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock \
      -e PORT=2375 \
+     --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" \
      shipyard/docker-proxy
      ;;
 
   clusterkit )
-     _get_compose_options "docker-compose.yml" \
-                          "docker-compose.override.yml" \
+     _get_compose_options "docker-lnmp.yml" \
+                          "docker-lnmp.override.yml" \
                           "cluster/docker-cluster.mysql.yml" \
                           "cluster/docker-cluster.redis.yml"
      exec docker-compose $options up "$@"
@@ -1848,8 +1851,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   clusterkit-* )
         command=$(echo $command | cut -d '-' -f 2)
-        _get_compose_options "docker-compose.yml" \
-                             "docker-compose.override.yml" \
+        _get_compose_options "docker-lnmp.yml" \
+                             "docker-lnmp.override.yml" \
                              "cluster/docker-cluster.mysql.yml" \
                              "cluster/docker-cluster.redis.yml"
         exec docker-compose $options $command "$@"
@@ -1890,8 +1893,8 @@ First Run? Maybe you wait 60s then open url.
     pcit_nginx_init
 
     if [ -z "$1" ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.override.yml"
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.override.yml"
 
     exec docker-compose $options ${LNMP_SERVICES} pcit
     fi
@@ -1923,8 +1926,8 @@ First Run? Maybe you wait 60s then open url.
   if ! [ -z "$command" ];then
     print_warning "command not found, Now Exec docker-compose commands"; echo
 
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     exec docker-compose $options $command "$@"
   fi
