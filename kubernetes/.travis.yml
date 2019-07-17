@@ -82,6 +82,11 @@ before_script:
   - sleep 30
 
   - sudo journalctl -u kubelet
+  - sudo journalctl -u kube-apiserver
+  - sudo journalctl -u kube-controller-manager
+  - sudo journalctl -u kube-scheduler
+  - sudo journalctl -u kube-proxy
+
   - kubectl get csr
   - CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
   - echo ${CSR_NAME}
@@ -89,6 +94,8 @@ before_script:
   - kubectl get csr
   - kubectl get node
   - kubectl get all --all-namespaces
+  - kubectl api-versions
+  - kubectl api-resources
 
 script:
   - kubectl apply -f addons/coredns.yaml
@@ -122,5 +129,6 @@ env:
   matrix:
     - CI_KUBERNETES_VERSION=1.14.2
     - CI_KUBERNETES_VERSION=1.15.0
+    - CI_KUBERNETES_VERSION=1.16.0-alpha.1
   global:
     - k=v

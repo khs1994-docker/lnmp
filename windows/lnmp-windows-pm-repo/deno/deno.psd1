@@ -12,7 +12,7 @@
 RootModule = 'deno.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.11.0'
+ModuleVersion = '0.12.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
