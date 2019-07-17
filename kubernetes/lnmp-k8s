@@ -23,6 +23,7 @@ source_path=$PWD
 if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
+if ! [ -f volumes/.env ];then cp volumes/.env.example volumes/.env; fi
 
 source ./.env.example
 source ./.env
@@ -64,13 +65,14 @@ Commands:
 
   join                   New worker [NODE_IP]
 
-  create                 Deploy lnmp on k8s [--ingress]
+  create                 Deploy lnmp on k8s [--ingress | --no-nfs ]
   delete                 Stop lnmp on k8s, keep data resource(pv and pvc)
   cleanup                Stop lnmp on k8s, and remove all resource(pv and pvc)
 
-  registry               Up Registry
+  registry               Up Registry [--no-nfs | ]
 
-  create-pv              Create PV and PVC
+  create-pv              Create PV and PVC [--no-nfs | ]
+  nfs                    Up NFS server [ down | logs ]
 
   helm-development       Install Helm LNMP In Development
   helm-testing           Install Helm LNMP In Testing
@@ -208,8 +210,15 @@ _cleanup_lnmp(){
 
 _create_pv(){
   if [ "$OS" = 'Linux' ];then
-    # sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.example.yaml \
-    # | kubectl create -f -
+    if [ "${1}" = '--no-nfs' ];then
+      sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.example.yaml \
+      | kubectl create -f -
+
+      kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
+
+      return
+    fi
+
     kubectl create -f deployment/pv/lnmp-volume.linux.nfs.yaml
     kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
   elif [ "$OS" = 'Darwin' ];then
@@ -235,13 +244,13 @@ _create_lnmp(){
   current_context=`kubectl config current-context`
 
   if [ $current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
-     echo "This Script Support Docker Desktop Only"
+     echo "This Script Support Docker Desktop Only On macOS"
      exit
   fi
 
   kubectl create namespace lnmp > /dev/null 2>&1 || true
 
-  _create_pv
+  _create_pv "$@"
 
   kubectl -n lnmp create configmap lnmp-php-conf-0.0.1 \
              --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini \
@@ -679,7 +688,7 @@ case $_command in
     ;;
 
     create )
-      _create_lnmp
+      _create_lnmp $@
     ;;
 
     delete )
@@ -694,12 +703,12 @@ case $_command in
 
     registry )
       set +e
-      _create_pv
+      _create_pv $@
       _registry
     ;;
 
     create-pv )
-      _create_pv
+      _create_pv $@
     ;;
 
     single-install )
@@ -716,7 +725,7 @@ case $_command in
 
     join )
       if [ -z $1 ];then echo "Please Input Node Ip"; exit 1; fi
-      _k8s_join $1
+      _k8s_join $@
     ;;
 
     minikube )
@@ -738,6 +747,19 @@ case $_command in
     ;;
     helm-production )
     _helm production "$@"
+    ;;
+
+    nfs )
+    sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
+    sudo modprobe nfsd
+    cd volumes
+    if [ "$1" = 'down' ];then
+      exec docker-compose stop nfs
+    elif [ "$1" = 'logs' ]; then
+      exec docker-compose logs nfs
+    fi
+    exec docker-compose up -d nfs
+
     ;;
 
     * )

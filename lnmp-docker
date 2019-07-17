@@ -462,7 +462,7 @@ env_status(){
       print_info ".env file existing\n"; \
   else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
 
-  _cp_only_not_exists volumes/.env.example volumes/.env
+  _cp_only_not_exists kubernetes/volumes/.env.example kubernetes/volumes/.env
 
   if ! [ -f secrets/minio/key.txt ];then
     cp secrets/minio/key.example.txt secrets/minio/key.txt
@@ -1903,11 +1903,11 @@ First Run? Maybe you wait 60s then open url.
     nfs )
     sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
     sudo modprobe nfsd
-    cd volumes
+    cd kubernetes/volumes
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs
     fi
-    docker-compose up -d nfs
+    exec docker-compose up -d nfs
 
     ;;
 

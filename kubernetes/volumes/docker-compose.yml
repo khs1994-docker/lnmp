@@ -5,11 +5,12 @@ services:
     restart: "no"
     image: erichough/nfs-server
     volumes:
-      - ../data/nfs:/nfs
+      - ./nfs-data/nfs:/nfs
       - ${APP_ROOT:-../app}:/nfs/lnmp/app
-      - ../data/nfs/lnmp/mysql:/nfs/lnmp/mysql
-      - ../data/nfs/lnmp/redis:/nfs/lnmp/redis
-      - ../data/nfs/lnmp/registry:/nfs/lnmp/registry
+      - ./nfs-data/nfs/lnmp/mysql:/nfs/lnmp/mysql
+      - ./nfs-data/nfs/lnmp/redis:/nfs/lnmp/redis
+      - ./nfs-data/nfs/lnmp/registry:/nfs/lnmp/registry
+      - ./nfs-data/nfs/lnmp/log:/nfs/lnmp/log
     env_file:
       - ./.env.example
       - ./.env

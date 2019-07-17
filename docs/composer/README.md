@@ -34,6 +34,12 @@ $ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/
 $ composer config -g repos.packagist composer https://packagist.phpcomposer.com
 ```
 
+### 取消配置
+
+```bash
+$ composer config --unset repos.packagist
+```
+
 ### 主页
 
 * https://developer.aliyun.com/composer

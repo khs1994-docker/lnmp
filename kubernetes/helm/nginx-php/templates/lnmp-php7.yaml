@@ -99,15 +99,6 @@ spec:
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/php.ini
           subPath: php.ini
-        {{ if eq .Values.APP_ENV "development" }}
-        - name: lnmp-php-conf
-          mountPath: /usr/local/etc/php/conf.d/docker-php.ini
-          subPath: docker-php.ini
-        {{- else if eq .Values.APP_ENV "testing" -}}
-        - name: lnmp-php-conf
-          mountPath: /usr/local/etc/php/conf.d/docker-php.ini
-          subPath: docker-php.ini
-        {{- end }}
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/conf.d/docker.ini
           subPath: docker.ini
@@ -133,8 +124,6 @@ spec:
           items:
           - key: php.ini
             path: php.ini
-          - key: docker-php.ini
-            path: docker-php.ini
           - key: docker.ini
             path: docker.ini
           - key: zz-docker.conf
