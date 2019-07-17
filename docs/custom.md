@@ -64,8 +64,9 @@ development
 编辑 `.env` 文件，将 `xxx` 加入到以下变量中，例如
 
 ```bash
-LNMP_SERVICES="nginx mysql php7 redis phpmyadmin xxx"
 LNMP_COMPOSE_INCLUDE="etcd xxx"
+
+LNMP_SERVICES="nginx mysql php7 redis phpmyadmin xxx"
 ```
 
 ### Windows
@@ -73,8 +74,9 @@ LNMP_COMPOSE_INCLUDE="etcd xxx"
 编辑 `.env.ps1` 文件，将 `xxx` 加入到以下变量中，例如
 
 ```bash
-$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','xxx'
 $global:LNMP_COMPOSE_INCLUDE="etcd","xxx"
+
+$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','xxx'
 ```
 
 ## 单独启动某个软件

@@ -100,9 +100,6 @@ spec:
           mountPath: /usr/local/etc/php/php.ini
           subPath: php.ini
         - name: lnmp-php-conf
-          mountPath: /usr/local/etc/php/conf.d/docker-php.ini
-          subPath: docker-php.ini
-        - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/conf.d/docker.ini
           subPath: docker.ini
         - name: lnmp-php-conf
@@ -129,8 +126,6 @@ spec:
           items:
           - key: php.ini
             path: php.ini
-          - key: docker-php.ini
-            path: docker-php.ini
           - key: docker.ini
             path: docker.ini
           - key: zz-docker.conf

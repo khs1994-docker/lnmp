@@ -11,7 +11,7 @@
       "root": "/app/demo/public",
       "index": "index.php",
       "user": "root",
-      "group": "root",
+      "group": "root"
     }
   },
   "access_log": "/var/log/nginx-unit/access.log"
