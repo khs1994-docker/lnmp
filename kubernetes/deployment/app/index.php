@@ -1,7 +1,11 @@
 <?php
-$pdo = new PDO('mysql:host=mysql;dbname=test','root','mytest');
+try{
+  $pdo = new PDO('mysql:host=mysql;dbname=test','root','mytest');
 
-var_dump($pdo);
+  var_dump($pdo);
+}catch(Exception $e){
+  var_dump($e);
+}
 
 echo "<br/>";
 
