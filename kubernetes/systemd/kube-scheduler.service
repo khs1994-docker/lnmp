@@ -1,7 +1,7 @@
 [Unit]
 Description=Kubernetes Scheduler
 Documentation=https://github.com/kubernetes/kubernetes
-Requires=kube-apiserver.service
+# Requires=kube-apiserver.service
 
 [Service]
 
@@ -28,7 +28,6 @@ ExecStart=/opt/bin/k8s/kube-scheduler \
 
 Restart=on-failure
 RestartSec=5
-User=k8s
 
 [Install]
 WantedBy=multi-user.target

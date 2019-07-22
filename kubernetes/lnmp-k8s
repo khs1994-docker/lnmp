@@ -6,6 +6,7 @@ MINIKUBE_VERSION=0.30.0
 ETCD_VERSION=3.3.13
 FLANNEL_VERSION=0.10.0
 HELM_VERSION=3.0.0-alpha.1
+CNI_VERSION=0.8.1
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
@@ -59,11 +60,11 @@ Commands:
   minikube-install       Install minikube
   minikube               Start minikube
 
-  single-install         Install Single Kubernetes（Manager by systemd）
+  single-install         Install Single Kubernetes（Manager by systemd）[--containerd | ]
   single-start           Print how to start Single Kubernetes (Manager by systemd)
   single-cleanup         Cleanup Single Kubernetes.
 
-  join                   New worker [NODE_IP]
+  join                   New worker [NODE_IP] [--containerd | ]
 
   create                 Deploy lnmp on k8s [--ingress | --no-nfs ]
   delete                 Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -332,7 +333,7 @@ _etcd(){
     return
   fi
 
-  print_info "==> install etcd ..."
+  print_info "install etcd ..."
 
   if [ -f /tmp/${TAR_FILE} ];then
     true
@@ -343,6 +344,7 @@ _etcd(){
 
   sudo tar -zxf /tmp/${TAR_FILE} -C /tmp
   sudo mv /tmp/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* /opt/bin/k8s/
+  sudo chown -R root:root /opt/bin/k8s
   sudo rm -rf /tmp/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
 }
 
@@ -367,6 +369,7 @@ _flanneld(){
   fi
 
   sudo tar -zxf /tmp/${TAR_FILE} -C /opt/bin/k8s/
+  sudo chown -R root:root /opt/bin/k8s
 }
 
 _helm_install(){
@@ -396,6 +399,34 @@ _helm_install(){
   sudo tar -zxf /tmp/${TAR_FILE} -C /tmp
   sudo mv /tmp/${GOOS}-${GOARCH}/helm /opt/bin/k8s/
   sudo rm -rf /tmp/${GOOS}-${GOARCH}
+}
+
+_cni_install(){
+  sudo mkdir -p /opt/k8s/cni/bin
+  if [ -f /opt/k8s/cni/bin/flannel ];then
+    print_info "cni already install"
+    return
+  fi
+
+  local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
+  local TAR_FILE="cni-plugins-${GOOS}-${GOARCH}-v${CNI_VERSION}.tgz"
+  __download(){
+    sudo curl -fsSL ${url}/${TAR_FILE} -o /tmp/${TAR_FILE}
+  }
+
+  print_info "install cni ..."
+
+  if [ -f /tmp/${TAR_FILE} ];then
+      local sha256=$(sha256sum /tmp/${TAR_FILE} | cut -d " " -f 1)
+    if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256 | cut -d " " -f 1` ];then
+      sudo rm -rf /tmp/${TAR_FILE}
+      __download
+    fi
+  else
+      __download
+  fi
+
+  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/k8s/cni/bin/
 }
 
 _k8s_install_dep(){
@@ -467,6 +498,27 @@ _k8s_install_systemd(){
   sudo systemctl daemon-reload
 }
 
+# https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
+_containerd_config(){
+  _cni_install
+
+  sudo mkdir -p /etc/containerd/
+  sudo cp systemd/containerd/config.toml /etc/containerd/
+
+  sudo rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
+  sudo touch /etc/sysctl.d/99-kubernetes-cri.conf
+  echo "net.bridge.bridge-nf-call-iptables  = 1" | sudo tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
+  echo "net.ipv4.ip_forward                 = 1" | sudo tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
+  echo "net.bridge.bridge-nf-call-ip6tables = 1" | sudo tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
+
+  # cni conf
+  sudo mkdir -p /opt/k8s/cni/net.d
+  sudo cp systemd/cni/10-flannel.conflist /opt/k8s/cni/net.d
+
+  sudo sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
+  sudo sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=unix:///run/containerd/containerd.sock#g" /etc/systemd/system/kubelet.service
+}
+
 _k8s_install(){
   source systemd/.env.example
   source systemd/.env
@@ -520,9 +572,17 @@ encryption-config.yaml} \
       ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
   done
 
-  _k8s_install_systemd_docker
-
   _k8s_install_systemd
+
+  if ! [ "${1}" = "--containerd" ];then
+    print_info "Kubelet Runtime is Docker"
+    _k8s_install_systemd_docker
+  else
+    print_info "Kubelet Runtime is Containerd"
+    _containerd_config
+  fi
+
+  sudo systemctl daemon-reload
 
   sudo useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
 
@@ -658,6 +718,7 @@ _single_cleanup(){
 
   set +e
   sudo rm -rf /opt/bin/k8s \
+              /opt/k8s \
               /var/lib/etcd \
               /var/log/ku* \
               /var/lib/kubelet \
@@ -665,6 +726,12 @@ _single_cleanup(){
 
   sudo rm -rf ${K8S_CONF_PATH:-/opt/bin/k8s/conf}
   sudo rm -rf /etc/systemd/system/docker.service.d
+
+  sudo ip addr flush cni0
+  sudo ip addr flush docker0
+  sudo ip addr flush flannel.1
+
+  sudo rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
   sudo systemctl daemon-reload
   sudo systemctl restart docker
@@ -712,7 +779,7 @@ case $_command in
     ;;
 
     single-install )
-      _k8s_install
+      _k8s_install $@
     ;;
 
     single-start )

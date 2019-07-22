@@ -16,7 +16,10 @@ before_install:
   # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.24.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
   # - chmod +x docker-compose
   # - sudo mv docker-compose /usr/local/bin
-  # - docker-compose --version
+  - docker-compose --version
+  - docker --version
+  - sudo cat /etc/docker/daemon.json
+  - sudo rm -rf /etc/docker/daemon.json
   - ip addr
   - hostnamectl
   - SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
@@ -30,7 +33,7 @@ install:
   - docker-compose up cfssl-single
   # - source .env
   - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
-  - ./lnmp-k8s single-install
+  - ./lnmp-k8s single-install ${LNMP_K8S_SINGLE_INSTALL_OPTIONS:-}
   - export PATH=$PATH:/opt/bin/k8s
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
@@ -46,8 +49,7 @@ before_script:
   - sudo systemctl cat flanneld
   - sudo systemctl start flanneld
 
-  - sudo systemctl cat docker
-  - sudo systemctl start docker
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo cp systemd/containerd.service.back /etc/systemd/system/ ; sudo systemctl daemon-reload ; sudo systemctl start containerd) || (sudo systemctl cat docker ; sudo systemctl restart docker || sudo journalctl -u docker)
 
   - sudo systemctl cat kube-apiserver
   - sudo systemctl start kube-apiserver
@@ -159,5 +161,6 @@ env:
     - CI_KUBERNETES_VERSION=1.14.2
     - CI_KUBERNETES_VERSION=1.15.0
     - CI_KUBERNETES_VERSION=1.16.0-alpha.1
+    - CI_KUBERNETES_VERSION=1.16.0-alpha.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"
   global:
     - k=v
