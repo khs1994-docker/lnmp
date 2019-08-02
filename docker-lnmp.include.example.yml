@@ -40,7 +40,7 @@ services:
 
   swoole:
     << : *default-common
-    image: khs1994/php:7.3.7-swoole-alpine
+    image: khs1994/php:7.3.8-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php

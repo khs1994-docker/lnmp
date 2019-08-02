@@ -173,7 +173,7 @@ Function install_after($VERSION){
   install_ext $PHP_VERSION_XY $VC_VERSION
 }
 
-Function install($VERSION="7.3.7",$PreVersion=0){
+Function install($VERSION="7.3.8",$PreVersion=0){
   if($PreVersion){
     $VC_VERSION="nts-Win32-vs16"
     $VERSION="7.4.0alpha3"

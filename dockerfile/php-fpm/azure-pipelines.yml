@@ -20,27 +20,27 @@ jobs:
       PHP_73_FPM:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
+        PHP_TAG_VERSION: 7.3.8
         FPM: 1
       PHP_73_COMPOSER:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
+        PHP_TAG_VERSION: 7.3.8
         COMPOSER: 1
       PHP_73_SWOOLE:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
+        PHP_TAG_VERSION: 7.3.8
         SWOOLE: 1
       PHP_73_UNIT:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
+        PHP_TAG_VERSION: 7.3.8
         UNIT: 1
       PHP_73_SUPERVISORD:
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.7
+        PHP_TAG_VERSION: 7.3.8
         SUPERVISORD: 1
       # PHP_56_FPM:
       #   PHP_VERSION: 5_6_X
@@ -55,32 +55,32 @@ jobs:
       PHP_71_FPM:
         PHP_VERSION: 7_1_X
         FOLDER: 7.1
-        PHP_TAG_VERSION: 7.1.30
+        PHP_TAG_VERSION: 7.1.31
         FPM: 1
       PHP_72_FPM:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.20
+        PHP_TAG_VERSION: 7.2.21
         FPM: 1
       PHP_72_COMPOSER:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.20
+        PHP_TAG_VERSION: 7.2.21
         COMPOSER: 1
       PHP_72_SWOOLE:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.20
+        PHP_TAG_VERSION: 7.2.21
         SWOOLE: 1
       PHP_72_UNIT:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.20
+        PHP_TAG_VERSION: 7.2.21
         UNIT: 1
       PHP_72_SUPERVISORD:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.20
+        PHP_TAG_VERSION: 7.2.21
         SUPERVISORD: 1
       PHP_74_FPM:
         PHP_VERSION: 7_4_X

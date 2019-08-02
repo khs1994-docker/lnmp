@@ -20,4 +20,4 @@ services:
       context: php
       args:
         WIN_VERSION: ${WIN_VERSION:-/servercore:1903}
-    image: khs1994/php:7.3.7-windowsservercore-1903
+    image: khs1994/php:7.3.8-windowsservercore-1903

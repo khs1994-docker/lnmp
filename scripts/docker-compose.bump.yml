@@ -14,7 +14,7 @@ services:
     image: memcached:1.5-alpine
 
   php:
-    image: php:7.3.7-fpm-alpine
+    image: php:7.3.8-fpm-alpine
 
   nginx:
     image: nginx:1.17.2-alpine

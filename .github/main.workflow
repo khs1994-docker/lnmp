@@ -6,7 +6,7 @@ workflow "Sync Git" {
 action "action-when" {
   uses = "./.github/actions/when/"
   env = {
-    PCIT_WHEN_BRANCH="18.09"
+    PCIT_WHEN_BRANCH="19.03"
     PCIT_WHEN_COMMIT_MESSAGE="1"
     PCIT_WHEN_COMMIT_MESSAGE_SKIP="skip sync"
   }
