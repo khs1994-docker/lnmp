@@ -51,18 +51,10 @@ sudo apt update && sudo apt -y install \
                             man \
                             dnsutils
 
-# conf wsl
-sudo curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf -o /etc/wsl.conf
-
 # composer cn mirror
 
 command -v /usr/local/bin/composer \
   && composer config -g repo.packagist composer https://php.cnpkg.org
-
-# lnmp-wsl-docker-cli
-# 18.03 +
-# sudo ln -sf "/c/Program Files/Docker/Docker/resources/bin/docker.exe" /usr/local/bin/docker
-# sudo ln -sf "/c/Program Files/Docker/Docker/resources/bin/docker-compose.exe" /usr/local/bin/docker-compose
 
 # 命令行补全
 

@@ -71,7 +71,7 @@ volumes:
 $ lnmp-docker up
 ```
 
-进入命令行安装 composer 依赖
+在容器中运行 composer ，安装依赖
 
 ```bash
 $ lnmp-docker php7-cli
@@ -85,7 +85,7 @@ $ composer install
 # 以此类推，进入其他 Laravel 的目录，安装依赖。
 ```
 
-以后若在 `composer.json` 中添加依赖，请到容器中执行 `$ composer install`
+以后若在 `composer.json` 中添加依赖，重复上述步骤，在容器中执行 `$ composer install`
 
 ## 运行 Laravel 队列(Queue)
 

@@ -8,7 +8,7 @@ Function install_after(){
   npm config set prefix $env:ProgramData\npm
 }
 
-Function install($VERSION="12.6.0",$PreVersion=0){
+Function install($VERSION="12.7.0",$PreVersion=0){
   if($PreVersion){
   }else{
     $url="https://mirrors.ustc.edu.cn/node/v${VERSION}/node-v${VERSION}-win-x64.zip"

@@ -1,12 +1,23 @@
 # WSL As PHP Development Environment
 
-* 可选版本 `Ubuntu 16.04` `Debian`
-
-* 建议使用 `Debian` 版本，在商店搜索 `Linux` 选择 `Debian` 安装即可
+* 建议使用 `Ubuntu-18.04` 版本，在商店搜索 `Linux` 选择 `Ubuntu` 安装即可
 
 * **NGINX** **PHP** 均为编译安装，配置目录为 `/usr/local/etc/*`。本项目提供了一键编译脚本，可以很方便的进行一键编译安装
 
 * 编译安装软件请查看 https://blog.khs1994.com/php/development/wsl.html
+
+## WSL2
+
+```bash
+$ wsl --set-default-version 2
+
+# $ wsl --set-version <Distro> 2
+
+# 设置默认发行版
+$ wsl -s Ubuntu-18.04
+
+$ wsl -l -v
+```
 
 ## 设置环境变量
 
@@ -110,7 +121,7 @@ $ cat $WSL_HOME/lnmp/wsl/config/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.c
 
 * https://blog.khs1994.com/database/mysql/remote.html
 
-Debian MySQL 初始化请查看：
+MySQL 初始化请查看：
 
 * https://blog.khs1994.com/raspberry-pi3/mysql.html
 
