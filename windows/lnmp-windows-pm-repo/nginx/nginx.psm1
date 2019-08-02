@@ -19,7 +19,7 @@ Function install_after(){
   }
 }
 
-Function install($VERSION="1.17.1",$PreVersion=0){
+Function install($VERSION="1.17.2",$PreVersion=0){
   if($PreVersion){
   }else{
     $url="https://nginx.org/download/nginx-${VERSION}.zip"

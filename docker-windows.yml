@@ -3,7 +3,7 @@ version: "3.7"
 services:
   nginx:
     restart: always
-    image: khs1994/nginx:1.17.1-windowsservercore-1903
+    image: khs1994/nginx:1.17.2-windowsservercore-1903
     volumes:
       - ./windows/config/nginx:C:/nginx/conf/conf.d
       - ./config/nginx/demo-ssl:C:/nginx/conf/conf.d/ssl
