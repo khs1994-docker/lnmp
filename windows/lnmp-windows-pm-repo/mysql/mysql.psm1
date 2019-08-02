@@ -43,7 +43,7 @@ mysql> GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
 "
 }
 
-Function install($VERSION="8.0.16",$PreVersion=0){
+Function install($VERSION="8.0.17",$PreVersion=0){
   if($PreVersion){
 
 

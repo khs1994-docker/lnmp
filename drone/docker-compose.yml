@@ -71,7 +71,7 @@ services:
 
   mysql:
     << : *default-common
-    image: mysql:${CI_MYSQL_VERSION:-8.0.16}
+    image: mysql:${CI_MYSQL_VERSION:-8.0.17}
     env_file: secrets/mysql.env
     volumes:
       - mysql-data:/var/lib/mysql:rw
