@@ -1,7 +1,7 @@
 {
   "assignees": ["khs1994"],
   "reviewers": ["khs1994"],
-  "baseBranches": ["18.09"],
+  "baseBranches": ["19.03"],
   "commitBody": "[skip ci]",
   "labels": ["renovateapp"],
   "timezone": "Asia/Shanghai",

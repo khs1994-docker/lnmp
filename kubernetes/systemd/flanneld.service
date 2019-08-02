@@ -31,7 +31,7 @@ ExecStart=/opt/bin/k8s/flanneld \
   --etcd-certfile="${K8S_CONF_PATH}/certs/flanneld.pem" \
   --etcd-keyfile="${K8S_CONF_PATH}/certs/flanneld-key.pem" \
   --etcd-prefix="/kubernetes/network" \
-  -ip-masq
+  --ip-masq
 
 ExecStartPost=/opt/bin/k8s/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/docker/flannel_docker_opts.env
 

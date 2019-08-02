@@ -68,6 +68,8 @@ services:
       # "--save \"\"",
       "--aof-use-rdb-preamble yes"
       ]
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
 
   memcached:
     << : *default-common
@@ -139,6 +141,8 @@ services:
     networks:
       - backend
       - frontend
+    healthcheck:
+      test: ["CMD","curl","-sf","127.0.0.1:80"]
 
   nginx:
     << : *default-common
@@ -159,3 +163,5 @@ services:
       - frontend
     depends_on:
       - php7
+    healthcheck:
+      test: ["CMD","nginx","-t"]

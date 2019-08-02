@@ -40,7 +40,7 @@ $ lnmp-composer create-project laravel/laravel laravel5.5 "5.5.*"
 
 解决思路：`vendor` 目录使用数据卷（数据卷存在于虚拟机中）。
 
-编辑 `docker-compose.include.yml` 文件，重写默认的 `php` 配置。
+编辑 `docker-lnmp.include.yml` 文件，重写默认的 `php` 配置。
 
 ```yaml
 version: "3.7"

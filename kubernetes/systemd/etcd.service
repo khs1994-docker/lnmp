@@ -29,7 +29,6 @@ ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
 
 ExecStart= /opt/bin/k8s/etcd \
   --name="node1" \
-  --data-dir="/var/lib/etcd" \
   --listen-peer-urls="https://${K8S_ETCD_HOST}:2380" \
   --listen-client-urls="https://${K8S_ETCD_HOST}:2379,http://127.0.0.1:2379" \
   --initial-advertise-peer-urls="https://${K8S_ETCD_HOST}:2380" \

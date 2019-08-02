@@ -25,6 +25,7 @@
 !README.md
 supervisord/supervisord.ini
 !supervisord
-!kong
 kong/*.conf
 !frpc.ini
+path.md
+kong

@@ -94,7 +94,7 @@ Function env_status(){
     Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
   }
 
-  _cp_only_not_exists docker-compose.include.example.yml docker-compose.include.yml
+  _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
 
   _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
@@ -419,7 +419,7 @@ Function get_compose_options($compose_files,$isBuild=0){
     $options +=" -f lnmp-include\$item\docker-compose.yml -f lnmp-include\$item\docker-compose.override.yml "
   }
 
-  $options += " -f docker-compose.include.yml "
+  $options += " -f docker-lnmp.include.yml "
 
   return $options
 }
@@ -460,32 +460,32 @@ switch($first){
     }
 
     build {
-      $options=get_compose_options "docker-compose.yml", `
-                                   "docker-compose.build.yml" `
+      $options=get_compose_options "docker-lnmp.yml", `
+                                   "docker-lnmp.build.yml" `
                                     1
 
       powershell -c "docker-compose $options build $other --parallel"
     }
 
     build-config {
-      $options=get_compose_options "docker-compose.yml", `
-                                   "docker-compose.build.yml" `
+      $options=get_compose_options "docker-lnmp.yml", `
+                                   "docker-lnmp.build.yml" `
                                     1
 
       powershell -c "docker-compose $options config $other"
     }
 
     build-up {
-      $options=get_compose_options "docker-compose.yml", `
-                                   "docker-compose.build.yml" `
+      $options=get_compose_options "docker-lnmp.yml", `
+                                   "docker-lnmp.build.yml" `
                                     1
 
       powershell -c "docker-compose $options up -d $other"
     }
 
     build-push {
-      $options=get_compose_options "docker-compose.yml", `
-                                   "docker-compose.build.yml" `
+      $options=get_compose_options "docker-lnmp.yml", `
+                                   "docker-lnmp.build.yml" `
                                     1
 
       powershell -c "docker-compose $options build $other --parallel"
@@ -500,8 +500,8 @@ switch($first){
     }
 
     config {
-      $options=get_compose_options "docker-compose.yml", `
-                                   "docker-compose.override.yml"
+      $options=get_compose_options "docker-lnmp.yml", `
+                                   "docker-lnmp.override.yml"
 
       powershell -c "docker-compose $options config $other"
     }
@@ -526,8 +526,8 @@ switch($first){
         $command = ${LNMP_SERVICES}
       }
 
-      $options=get_compose_options "docker-compose.yml", `
-                                   "docker-compose.override.yml"
+      $options=get_compose_options "docker-lnmp.yml", `
+                                   "docker-lnmp.override.yml"
 
       powershell -c "docker-compose $options up -d $command"
 
@@ -536,8 +536,8 @@ switch($first){
     }
 
     pull {
-      $options=get_compose_options "docker-compose.yml",`
-                                   "docker-compose.override.yml"
+      $options=get_compose_options "docker-lnmp.yml",`
+                                   "docker-lnmp.override.yml"
 
       powershell -c "docker-compose $options pull ${LNMP_SERVICES}"
 
@@ -546,7 +546,10 @@ switch($first){
     }
 
     down {
-      docker-compose down --remove-orphans
+      $options=get_compose_options "docker-lnmp.yml",`
+                                   "docker-lnmp.override.yml"
+
+      powershell -c "docker-compose $options down --remove-orphans"
 
       #@custom
       __lnmp_custom_down
@@ -590,8 +593,8 @@ switch($first){
     }
 
     restart {
-      $options=get_compose_options "docker-compose.yml", `
-                          "docker-compose.override.yml"
+      $options=get_compose_options "docker-lnmp.yml", `
+                          "docker-lnmp.override.yml"
 
       powershell -c "docker-compose $options restart $other"
       #@custom
@@ -719,8 +722,8 @@ switch($first){
     }
 
     clusterkit {
-       $options=get_compose_options "docker-compose.yml", `
-                                    "docker-compose.override.yml", `
+       $options=get_compose_options "docker-lnmp.yml", `
+                                    "docker-lnmp.override.yml", `
                                     "cluster/docker-cluster.mysql.yml", `
                                     "cluster/docker-cluster.redis.yml"
 
@@ -972,8 +975,8 @@ XXX
       cp pcit/.env.development ${APP_ROOT}/.pcit/.env.development
 
       # 启动
-      $options=get_compose_options "docker-compose.yml", `
-                                   "docker-compose.override.yml"
+      $options=get_compose_options "docker-lnmp.yml", `
+                                   "docker-lnmp.override.yml"
 
       & {docker-compose $options up -d ${LNMP_SERVICES} pcit}
     }
@@ -1020,6 +1023,7 @@ XXX
         -p 2376:2375 `
         --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock `
         -e PORT=2375 `
+        --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
         shipyard/docker-proxy
     }
 
@@ -1032,8 +1036,9 @@ XXX
       printInfo "Check gcr.io host config"
 
       $GCR_IO_HOST=(ping gcr.io -n 1).split(" ")[9]
+      $GCR_IO_HOST_EN=(ping gcr.io -n 1).split(" ")[11].trim(":")
 
-      if(!($GCR_IO_HOST -eq "127.0.0.1")){
+      if(!(($GCR_IO_HOST -eq "127.0.0.1") -or ($GCR_IO_HOST_EN -eq "127.0.0.1"))){
         printWarning "Please set host on C:\Windows\System32\drivers\etc
 
 127.0.0.1 gcr.io k8s.gcr.io
@@ -1086,7 +1091,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       "coredns:1.3.1", `
       "pause:3.1"
 
-      sleep 5
+      sleep 10
 
       foreach ($image in $images){
          printInfo "Handle ${image}"
@@ -1105,8 +1110,8 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         __lnmp_custom_command $args
         printInfo `
 "Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
-        $options=get_compose_options "docker-compose.yml",`
-                                     "docker-compose.override.yml"
+        $options=get_compose_options "docker-lnmp.yml",`
+                                     "docker-lnmp.override.yml"
 
         powershell -c "docker-compose $options $args"
       }

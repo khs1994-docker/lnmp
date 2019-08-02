@@ -11,7 +11,7 @@ print_info(){
 }
 
 delete(){
-  docker-compose down -v > /dev/null 2>&1 || echo
+  ./lnmp-docker down -v > /dev/null 2>&1 || echo
   print_info "删除原有项目成功"
 }
 
@@ -23,7 +23,7 @@ docker_run(){
   curl 127.0.0.1
 
   docker ps -a \
-    && docker-compose down \
+    && ./lnmp-docker down \
     && print_info $1
 }
 
@@ -40,7 +40,6 @@ _command(){
   lnmp-php -v
 
   # lnmp-composer global config github-oauth.github.com ${GITHUB_TOKEN}
-  # composer config -g repo.packagist composer https://packagist.laravel-china.org
   lnmp-composer config -g --unset repos.packagist
   lnmp-composer install
 

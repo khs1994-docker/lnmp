@@ -1,7 +1,7 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="1.02.1907112",$preVersion=0){
+Function install($VERSION="1.02.1907152",$preVersion=0){
   if($preVersion){
 
   }

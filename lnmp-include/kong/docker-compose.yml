@@ -35,6 +35,8 @@ services:
       - db_root_password
 
   kong:
+    &kong
+    << : *default-common
     image: kong:1.2.1-alpine
     environment:
       KONG_DATABASE: postgres
@@ -46,24 +48,28 @@ services:
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: "0.0.0.0:8001,0.0.0.0:8444 ssl"
-    # command:
-    #   - kong
-    #   - migrations
-    #   - up
     volumes:
-      - ./config/kong:/etc/kong
+      - ./lnmp-include/kong/config:/etc/kong
     networks:
       - frontend
       - backend
     ports:
-      - "8000:8000"
-      - "8445:8443"
-      - "8001:8001"
-      - "8444:8444"
+      - "18000:8000"
+      - "18443:8443"
+      - "127.0.0.1:18001:8001"
+      - "127.0.0.1:18444:8444"
     depends_on:
       - postgresql-kong
 
+  kong-migrations:
+    << : *kong
+    command:
+    - kong
+    - migrations
+    - bootstrap
+
   kong-dashboard:
+    << : *default-common
     image: pgbi/kong-dashboard
     ports:
       - 8082:8080

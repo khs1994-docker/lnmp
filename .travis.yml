@@ -230,9 +230,9 @@ jobs:
         - cd config
         - ./default.sh
         - cd ..
-        - git status
+        - git status | grep "nothing to commit" && exit 0 || true
         - git add .
-        - git commit -m "[Config] Update default config"
+        - git commit -m "[Config] Update default config" || exit 0
         - git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
         - git checkout -b 18.09-config
         - git push github 18.09-config -f

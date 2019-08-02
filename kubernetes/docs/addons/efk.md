@@ -24,12 +24,6 @@
 
 * https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
 
-### 给 Node 打标签
-
-```bash
-$ kubectl label nodes NODE_NAME beta.kubernetes.io/fluentd-ds-ready=true
-```
-
 ### 部署
 
 ```bash

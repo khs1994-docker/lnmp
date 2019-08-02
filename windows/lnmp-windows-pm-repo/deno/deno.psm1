@@ -3,7 +3,7 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="0.11.0",$preVersion){
+Function install($VERSION="0.12.0",$preVersion){
   if($preVersion){
 
   }
