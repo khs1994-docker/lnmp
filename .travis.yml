@@ -250,8 +250,8 @@ jobs:
         - git add .
         - git commit -m "[Config] Update default config" || exit 0
         - git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
-        - git checkout -b 18.09-config
-        - git push github 18.09-config -f
+        - git checkout -b 19.03-config
+        - git push github 19.03-config -f
 
 # stages:
 #   - test
@@ -268,7 +268,7 @@ stages:
   - development
   - swarm
   - name: checkConfig
-    if: branch = "18.09"
+    if: branch = "19.03"
   # don't run
   - name: docs
     if: tag =~ /^(vxx)/
