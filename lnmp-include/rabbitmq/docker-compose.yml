@@ -20,7 +20,9 @@ services:
     << : *default-common
     image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.7.15}-management-alpine
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - type: volume
+        source: rabbitmq-data
+        target: /var/lib/rabbitmq
     ports:
       - "${LNMP_RABBITMQ_PORT_1000:-127.0.0.1:15672}:15672"
       - "${LNMP_RABBITMQ_PORT:-127.0.0.1:5672}:5672"

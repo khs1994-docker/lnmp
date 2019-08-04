@@ -20,7 +20,9 @@ services:
     << : *default-common
     image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-07-05T21-20-21Z}
     volumes:
-      - minio-data:/data
+      - type: volume
+        source: minio-data
+        target: /data
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt
       # - ./config/nginx/demo-ssl/www.t.khs1994.com.key:/root/.minio/certs/private.key
     # ports:

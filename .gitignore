@@ -10,6 +10,7 @@ docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
 docker-production.*.yml
 docker-lnmp.include.yml
+/docker-compose.yml
 
 # cache
 
@@ -63,5 +64,5 @@ logs
 
 /docker-cluster.*
 
-/lnmp-custom-script
-/lnmp-custom-script.ps1
+/lnmp-docker-custom-script
+/lnmp-docker-custom-script.ps1

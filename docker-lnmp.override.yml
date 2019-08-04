@@ -27,6 +27,10 @@ services:
     << : *default-common
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.8}-fpm-alpine
 
+  composer:
+    << : *default-common
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.8}-composer-alpine
+
   supervisord:
     << : *default-common
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.8}-supervisord-alpine

@@ -68,12 +68,12 @@ fi
 
 _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
 
-_cp_only_not_exists lnmp-custom-script.example lnmp-custom-script
+_cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
 print_info "Exec custom scripts"
 echo
 
-. ./lnmp-custom-script
+. ./lnmp-docker-custom-script
 
 if ! [ -f config/php/docker-php.ini ];then
   cp config/php/docker-php.ini.example config/php/docker-php.ini

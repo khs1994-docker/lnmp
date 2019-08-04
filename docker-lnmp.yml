@@ -33,7 +33,9 @@ services:
       - ./config/mysql/${LNMP_MYSQL_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mysql#initializing-a-fresh-instance
       - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
-      - mysql-data:${LNMP_MYSQL_DATA:-/var/lib/mysql}
+      - type: volume
+        source: mysql-data
+        target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:delegated
       - ./scripts/backup/mysql:/backup
     command:
@@ -85,6 +87,7 @@ services:
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.8}-fpm-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
+      &php7-volumes
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       # fpm config
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
@@ -96,8 +99,9 @@ services:
       - ./log/php:/var/log/php:delegated
       - ./log/supervisord.log:/var/log/supervisord.log
       - ./log/supervisord:/var/log/supervisord
-      - zoneinfo-data:/usr/share/zoneinfo
-      - composer_cache-data:/tmp/cache
+      - type: volume
+        source: zoneinfo-data
+        target: /usr/share/zoneinfo
       - type: tmpfs
         target: /temp
         # tmpfs:
@@ -114,6 +118,17 @@ services:
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
+
+  composer:
+    << : *default-common
+    restart: "no"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.8}-composer-alpine"
+    volumes:
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - type: volume
+        source: composer_cache-data
+        target: /tmp/cache
+      - ./config/composer/config.json:/tmp/config.json
 
   # https://docs.docker.com/config/containers/multi-service_container/
   # http://supervisord.org/running.html
@@ -137,7 +152,9 @@ services:
     ports:
       - ${LNMP_PHPMYADMIN_PORT:-127.0.0.1:8080}:80
     volumes:
-      - phpmyadmin-data:/sessions
+      - type: volume
+        source: phpmyadmin-data
+        target: /sessions
     networks:
       - backend
       - frontend

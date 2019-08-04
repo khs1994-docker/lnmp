@@ -32,7 +32,9 @@ services:
       - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
       - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
-      - mariadb-data:${LNMP_MARIADB_DATA:-/var/lib/mysql}
+      - type: volume
+        source: mariadb-data
+        target: ${LNMP_MARIADB_DATA:-/var/lib/mysql}
       - ./log/mariadb:/var/log/mysql:delegated
       - ./scripts/backup/mariadb:/backup
     command:

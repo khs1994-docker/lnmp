@@ -24,7 +24,9 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
       - POSTGRES_DB=test
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
+      - type: volume
+        source: postgresql-data
+        target: /var/lib/postgresql/data
     ports:
       - "${LNMP_POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
     secrets:

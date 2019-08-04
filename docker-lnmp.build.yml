@@ -86,29 +86,13 @@ networks:
 volumes:
   mysql-data:
     << : *default-labels
-  mariadb-data:
-    << : *default-labels
   redis-data:
-    << : *default-labels
-  rabbitmq-data:
-    << : *default-labels
-  postgresql-data:
-    << : *default-labels
-  mongodb-data:
     << : *default-labels
   zoneinfo-data:
     << : *default-labels
-  registry-data:
-    << : *default-labels
   phpmyadmin-data:
     << : *default-labels
-  etcd-data:
-    << : *default-labels
   composer_cache-data:
-    << : *default-labels
-  nginx-unit-state-data:
-    << : *default-labels
-  minio-data:
     << : *default-labels
 
 secrets:

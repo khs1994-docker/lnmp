@@ -3,6 +3,7 @@
 !composer/config.example.json
 !composer/.env.example
 !composer/.env.example.ps1
+!composer/auth.example.json
 !etc
 !httpd/demo-ssl
 !httpd/demo-*.config

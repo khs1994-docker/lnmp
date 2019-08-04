@@ -111,13 +111,13 @@ Function env_status(){
 
 }
 
-if (!(Test-Path lnmp-custom-script.ps1)){
-  Copy-Item lnmp-custom-script.example.ps1 lnmp-custom-script.ps1
+if (!(Test-Path lnmp-docker-custom-script.ps1)){
+  Copy-Item lnmp-docker-custom-script.example.ps1 lnmp-docker-custom-script.ps1
 }
 
 printInfo "Exec custom script"
 
-. ./lnmp-custom-script.ps1
+. ./lnmp-docker-custom-script.ps1
 
 Function wait_docker(){
   while ($i -lt (300)) {
@@ -225,6 +225,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
+  composer             Exec composer command on Docker
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   docs                 Support Documents
@@ -425,6 +426,13 @@ Function get_compose_options($compose_files,$isBuild=0){
 }
 
 # main
+
+$isWSL=docker context ls | where {$_ -match "wsl *"}
+
+if($isWSL){
+  printInfo "Docker Engine run in WSL2"
+  $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
+}
 
 env_status
 logs
@@ -1104,6 +1112,15 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       docker container rm -f `
           $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
     }
+
+    composer {
+        $LARAVEL_ROOT,$COMPOSER_COMMAND=$other
+
+        $options=get_compose_options "docker-lnmp.yml",`
+                                     "docker-lnmp.override.yml"
+
+        powershell -c "docker-compose $options run -w $LARAVEL_ROOT composer $COMPOSER_COMMAND"
+      }
 
     default {
         #@custom

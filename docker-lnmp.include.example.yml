@@ -13,7 +13,9 @@ services:
     image: bash
 
   ## https://docs.docker.com/compose/extends/
+
   # php7:
+  #   &php7
   #   # change php7 default image
   #   image: username/php
   #   # open more port
@@ -22,14 +24,15 @@ services:
   #     - "10001:10001"
   #   # add more volumes
   #   volumes:
-  #     - ./app/app:/app
-  #     - laravel_vendor:/app/laravel/vendor
-  #     - /tmp/lnmp/app/larvel/vendor:/app/laravel/vendor
+  #     - type: volume
+  #       source: laravel_vendor
+  #       target: /app/laravel/vendor
+
+  # composer:
+  #   << : *php7
 
   # nginx-unit:
-  #   volumes:
-  #     - laravel_vendor:/app/laravel/vendor
-  #     - /tmp/lnmp/app/larvel/vendor:/app/laravel/vendor
+  #   << : *php7
 
   # mysql:
   #   # change default volumes settings

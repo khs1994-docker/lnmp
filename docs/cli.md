@@ -16,7 +16,7 @@
 
 ## 自定义 CLI
 
-可以在 `lnmp-custom-script` 或 `lnmp-custom-script.ps1` (Windows) 中编写自定义脚本。
+可以在 `lnmp-docker-custom-script` 或 `lnmp-docker-custom-script.ps1` (Windows) 中编写自定义脚本。
 
 如果你需要在执行 `lnmp-docker up` 命令后执行一些操作那么可以编写 `__lnmp_custom_up` 函数。
 

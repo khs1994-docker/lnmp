@@ -27,7 +27,9 @@ services:
       - POSTGRES_USER=kong
       - POSTGRES_DB=kong
     volumes:
-      - postgresql-kong-data:/var/lib/postgresql/data
+      - type: volume
+        source: postgresql-kong-data
+        target: /var/lib/postgresql/data
     ports:
       - "${LNMP_POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
     secrets:

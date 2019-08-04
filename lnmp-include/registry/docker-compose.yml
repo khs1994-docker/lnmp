@@ -26,7 +26,9 @@ services:
     #   - "5000:5000"
     volumes:
       - ./config/registry/${LNMP_REGISTRY_CONF:-config.yml}:/etc/docker/registry/config.yml:ro,cached
-      - registry-data:/var/lib/registry
+      - type: volume
+        source: registry-data
+        target: /var/lib/registry
 
 volumes:
   registry-data:
