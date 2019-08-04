@@ -39,7 +39,6 @@ complete -W "acme.sh \
         clusterkit-redis-sentinel-deploy \
         clusterkit-redis-sentinel-remove \
         daemon-socket \
-        dashboard \
         up \
         config \
         pull \

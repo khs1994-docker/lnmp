@@ -61,7 +61,6 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-sentin
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-redis-sentinel-remove  -d     'Remove Redis S in Swarm mode'
 
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a daemon-socket     -d     'Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a dashboard         -d     'Print how run kubernetes dashboard in Docker Desktop'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a up                -d     'Up LNMP'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a bug               -d     'Generate Debug information, then copy it to GitHub Issues'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a config            -d    'Validate and view the LNMP Compose file'

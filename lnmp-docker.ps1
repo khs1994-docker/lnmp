@@ -249,7 +249,6 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  dashboard            Print how run kubernetes dashboard in Docker Desktop
   gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes
 
 Swarm mode:
@@ -259,7 +258,6 @@ Swarm mode:
 
 Container Tools:
   SERVICE-cli          Execute a command in a running LNMP container
-  SERVICE-logs         Print LNMP containers logs (journald)
 
 ClusterKit:
   clusterkit-help      Print ClusterKit help info
@@ -272,10 +270,6 @@ Read './docs/*.md' for more information about CLI commands.
 You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you meet problems.
 
 You must Update .env file when update this project.
-
-Donate https://zan.khs1994.com
-
-AD Tencent Kubernetes Engine https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61
 
 Exec '$ lnmp-docker k8s' Try Kubernetes Free
 
@@ -566,11 +560,6 @@ switch($first){
     docs {
       docker run --init -it --rm -p 4000:4000 `
           --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
-    }
-
-    dashboard {
-      clear
-      wsl -d $DistributionName lnmp-docker dashboard
     }
 
     env {

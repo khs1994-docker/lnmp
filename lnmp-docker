@@ -145,7 +145,6 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  dashboard            Print how run kubernetes dashboard in Docker Desktop
   gcr.io               Up local gcr.io sregistry server to start Docker Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
@@ -1863,22 +1862,6 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
     docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
         ;;
-
-  dashboard )
-    echo -e "
-$ cd kubernetes
-
-$ kubectl apply -f coreos/addons/dashboard.yaml
-
-$ kubectl proxy
-
-OPEN http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-First Run? Maybe you wait 60s then open url.
-"
-    print_info "More information please see https://github.com/kubernetes/dashboard"
-
-    ;;
 
     update-version )
         update_version

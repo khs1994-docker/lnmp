@@ -265,8 +265,10 @@ jobs:
 stages:
   - name: tag
     if: tag =~ /^(v19)/
-  - development
-  - swarm
+  - name: development
+    if: branch = "19.03"
+  - name: swarm
+    if: branch = "19.03"
   - name: checkConfig
     if: branch = "19.03"
   # don't run
