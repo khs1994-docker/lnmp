@@ -1,0 +1,10 @@
+{
+  "name": "docker",
+  "description": "Docker: the open-source application container engine",
+  "version": "19.03.1",
+  "preVersion": "19.03.1",
+  "homepage": "https://www.docker.com/",
+  "bug": "https://github.com/docker/for-win/issues",
+  "github": "docker/docker-ce",
+  "releases": "https://github.com/docker/docker-ce/releases"
+}

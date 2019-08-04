@@ -3,12 +3,28 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="0.7.2",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+     $VERSION=$preVersion
+  }
+
   $url="https://github.com/aktau/github-release/releases/download/v${VERSION}/windows-amd64-github-release.zip"
-  $name="github-release"
+
   $filename="windows-amd64-github-release-v${VERSION}.zip"
   $unzipDesc="github-release"
 
@@ -47,4 +63,33 @@ Function install($VERSION="0.7.2",$preVersion=0){
 
 Function uninstall(){
   _cleanup C:\bin\github-release.exe
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  $latestVersion=getLatestRelease $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

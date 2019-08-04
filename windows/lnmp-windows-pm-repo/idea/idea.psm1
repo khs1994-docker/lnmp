@@ -1,12 +1,27 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="1.15.5387",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION=$preVersion
+  }
+
   $url="https://download.jetbrains.com/toolbox/jetbrains-toolbox-${VERSION}.exe"
-  $name="Jetbrains Toolbox"
   $filename="jetbrains-toolbox-${VERSION}.exe"
   $unzipDesc="jetbrains-toolbox"
 
@@ -34,4 +49,30 @@ Function install($VERSION="1.15.5387",$preVersion=0){
 Function uninstall(){
   echo ""
   # Remove-item
+}
+
+Function getInfo(){
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

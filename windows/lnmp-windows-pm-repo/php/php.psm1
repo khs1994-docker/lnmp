@@ -12,6 +12,17 @@ $global:PHP_YAML_EXTENSION_VERSION="2.0.4"
 # https://curl.haxx.se/docs/caextract.html
 $global:PHP_CACERT_DATE="2019-05-15"
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
   $extensions='yaml',`
          'xdebug',`
@@ -173,10 +184,13 @@ Function install_after($VERSION){
   install_ext $PHP_VERSION_XY $VC_VERSION
 }
 
-Function install($VERSION="7.3.8",$PreVersion=0){
-  if($PreVersion){
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
+  }
+  if($isPre){
     $VC_VERSION="nts-Win32-vs16"
-    $VERSION="7.4.0alpha3"
+    $VERSION=$preVersion
     $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php74"
   }else{
@@ -184,7 +198,7 @@ Function install($VERSION="7.3.8",$PreVersion=0){
     $url="https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php"
   }
-  $name="php"
+
   $filename="php-${VERSION}-${VC_VERSION}-x64.zip"
 
   _exportPath "C:\php"
@@ -227,7 +241,7 @@ Function install($VERSION="7.3.8",$PreVersion=0){
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  if($PreVersion){
+  if($isPre){
     C:\php74\php -v
     return
   }
@@ -237,4 +251,33 @@ Function install($VERSION="7.3.8",$PreVersion=0){
 
 Function uninstall(){
   _cleanup "C:\php" "C:\php-ext"
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+
+  $latestVersion=(getLatestTag $githubRepo 0 5).trim("php-")
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

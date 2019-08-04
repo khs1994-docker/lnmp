@@ -3,12 +3,28 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="0.12.0",$preVersion){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION=$preVersion
+  }
+
   $url="https://github.com/denoland/deno/releases/download/v${VERSION}/deno_win_x64.zip"
-  $name="Deno"
+
   $filename="deno_win_x64_${VERSION}.zip"
   $unzipDesc="deno"
 
@@ -42,4 +58,33 @@ Function install($VERSION="0.12.0",$preVersion){
 
 Function uninstall(){
   Remove-item C:\bin\deno.exe
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  $latestVersion=getLatestRelease $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

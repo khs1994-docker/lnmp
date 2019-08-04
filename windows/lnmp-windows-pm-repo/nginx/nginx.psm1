@@ -4,6 +4,17 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function install_after(){
   _mkdir C:\nginx\conf\conf.d
 
@@ -19,12 +30,18 @@ Function install_after(){
   }
 }
 
-Function install($VERSION="1.17.2",$PreVersion=0){
-  if($PreVersion){
-  }else{
-    $url="https://nginx.org/download/nginx-${VERSION}.zip"
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
-  $name="nginx"
+  if($isPre){
+    $VERSION=$preVersion
+  }else{
+
+  }
+
+  $url="https://nginx.org/download/nginx-${VERSION}.zip"
+
   $filename="nginx-${VERSION}.zip"
   $unzipDesc="nginx"
 
@@ -74,4 +91,33 @@ Function install($VERSION="1.17.2",$PreVersion=0){
 
 Function uninstall(){
   _cleanup C:\nginx
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+
+  $latestVersion=(getLatestTag $githubRepo).trim("release-")
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

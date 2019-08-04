@@ -1,5 +1,7 @@
 # 构建支持多种架构的 Docker 镜像
 
+> 请使用 `$ docker buildx build` 命令。
+
 ```bash
 # 事先请登录 Docker Hub
 # 镜像列表中的镜像请事先构建并推送到 Docker Hub
@@ -19,7 +21,7 @@ $ docker manifest annotate khs1994/php:7.3.8-fpm-alpine \
       --os linux --arch arm64
 
 # 推送
-$ docker manifest push khs1994/php:7.3.8-fpm-alpine      
+$ docker manifest push khs1994/php:7.3.8-fpm-alpine
 ```
 
 在 arm 架构中 pull `khs1994/php:7.3.8-fpm-alpine` 实际 pull 的是 `khs1994/arm64v8-php:7.3.8-fpm-alpine`
@@ -96,7 +98,7 @@ $ docker manifest inspect php:7.3.8-fpm-alpine
 }
 ```
 
-# 示例
+## 示例
 
 请查看 `scripts/arm-build.sh`
 

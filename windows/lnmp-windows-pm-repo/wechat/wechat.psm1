@@ -3,12 +3,26 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="1018",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
+  }
+  if($isPre){
+    $VERSION=$preVersion
   }
   $url="https://dldir1.qq.com/weixin/Windows/WeChat_C${VERSION}.exe"
-  $name="WeChat"
+
   $filename="WeChat_C${VERSION}.exe"
   $unzipDesc="WeChat"
 
@@ -44,4 +58,30 @@ Function install($VERSION="1018",$preVersion=0){
 
 Function uninstall(){
   & ${env:ProgramFiles(x86)}\Tencent\WeChat\Uninstall.exe
+}
+
+Function getInfo(){
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

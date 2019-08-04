@@ -4,12 +4,27 @@ Import-Module command
 Import-Module cleanup
 Import-module exportPath
 
-Function install($VERSION="1900",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION=$preVersion
+  }
+
   $url="https://www.7-zip.org/a/7z${VERSION}-x64.msi"
-  $name="7zip"
   $filename="7z${VERSION}-x64.msi"
   $unzipDesc="7zip"
 
@@ -57,4 +72,30 @@ Function install($VERSION="1900",$preVersion=0){
 
 Function uninstall(){
   & $env:programFiles\7-Zip\Uninstall.exe
+}
+
+Function getInfo(){
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

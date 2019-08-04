@@ -7,6 +7,17 @@ Import-Module sudo
 
 $global:HTTPD_MOD_FCGID_VERSION="2.3.10"
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function after_install(){
   $a=Select-String 'IncludeOptional conf.d/' C:\Apache24\conf\httpd.conf
 
@@ -22,12 +33,17 @@ LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
   }
 }
 
-Function install($VERSION="2.4.39",$preVersion=0){
-  if($preVersion){
-
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION=$preVersion
+  }
+
   $url="https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip"
-  $name="HTTPD"
+
   $filename="httpd-${VERSION}-win64-VS16.zip"
   $unzipDesc="httpd"
 
@@ -110,4 +126,33 @@ Function install($VERSION="2.4.39",$preVersion=0){
 Function uninstall(){
   _sudo "httpd -k uninstall"
   _cleanup C:\Apache24
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+
+  $latestVersion=getLatestTag $githubRepo 3
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

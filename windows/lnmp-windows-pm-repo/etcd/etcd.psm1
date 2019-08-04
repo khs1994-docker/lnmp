@@ -3,12 +3,28 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="3.3.13",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION=$preVersion
+  }
+
   $url="https://mirrors.huaweicloud.com/etcd/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip"
-  $name="Etcd"
+
   $filename="etcd-v${VERSION}-windows-amd64.zip"
   $unzipDesc="etcd"
 
@@ -49,4 +65,33 @@ Function install($VERSION="3.3.13",$preVersion=0){
 
 Function uninstall(){
   _cleanup C:\bin\etcd.exe C:\bin\etcdctl.exe
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  $latestVersion=getLatestRelease $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

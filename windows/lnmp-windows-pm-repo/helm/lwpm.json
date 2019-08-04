@@ -1,0 +1,10 @@
+{
+  "name": "helm",
+  "description": "The Kubernetes Package Manager",
+  "version": "3.0.0-alpha.2",
+  "preVersion": "3.0.0-alpha.2",
+  "homepage": "https://helm.sh/",
+  "bug": "https://github.com/helm/helm/issues",
+  "github": "helm/helm",
+  "releases": "https://github.com/helm/helm/releases"
+}

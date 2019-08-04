@@ -4,18 +4,33 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function install_after(){
 
 }
 
-Function install($VERSION="x.y.z",$PreVersion=0){
-  if($PreVersion){
-    $VERSION=""
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
+  }
+
+  if($isPre){
+    $VERSION=$preVersion
     $url=""
   }else{
     $url=""
   }
-  $name="Example"
+
   $filename=""
   $unzipDesc="example"
 
@@ -69,4 +84,35 @@ Function uninstall($prune=0){
   if($prune){
     # _cleanup ""
   }
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+
+  $latestVersion=getLatestRelease $githubRepo
+  $latestVersion=getLatestTag $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

@@ -40,6 +40,8 @@ $ ./lnmp-docker.ps1 up
 
 ## WSL
 
+> 不建议使用，请使用 Docker for WSL2(预览版)
+
 * https://github.com/khs1994-docker/lnmp/blob/master/wsl/wsl.conf
 
 默认的 WSL 将 C 盘挂载到了 `/mnt/c`

@@ -3,12 +3,26 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="7.2.2",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
+  }
+  if($isPre){
+    $VERSION=$preVersion
   }
   $url="https://dl.pstmn.io/download/latest/win64"
-  $name="Postman"
+
   $filename="Postman-win64-${VERSION}-Setup.exe"
   $unzipDesc="postman"
 
@@ -44,4 +58,30 @@ Function install($VERSION="7.2.2",$preVersion=0){
 
 Function uninstall(){
   echo "Not Support"
+}
+
+Function getInfo(){
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

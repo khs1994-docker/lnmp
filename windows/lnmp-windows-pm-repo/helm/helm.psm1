@@ -3,17 +3,33 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="3.0.0-alpha.1",$preVersion=0){
-  if($preVersion){
-    $VERSION="3.0.0-alpha.1"
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION=$preVersion
+  }
+
   $url="https://mirrors.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip"
-  $name="Helm"
+
   $filename="helm-v${VERSION}-windows-amd64.zip"
   $unzipDesc="helm"
 
   if($(_command helm)){
-    $CURRENT_VERSION=(helm version).split(",")[0].split("v")[2].trim('"')
+    $CURRENT_VERSION=(ConvertFrom-Json -InputObject (helm version).trim('version.BuildInfo')).Version.trim("v")
 
     if ($CURRENT_VERSION -eq $VERSION){
         echo "==> $name $VERSION already install"
@@ -41,9 +57,38 @@ Function install($VERSION="3.0.0-alpha.1",$preVersion=0){
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  helm version
+  (ConvertFrom-Json -InputObject (helm version).trim('version.BuildInfo')).Version.trim("v")
 }
 
 Function uninstall(){
   _cleanup C:\bin\helm.exe
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  $lastRelease=getLatestRelease $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LastVersion: $lastRelease
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

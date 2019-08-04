@@ -1,0 +1,10 @@
+{
+  "name": "php",
+  "description": "PHP is a popular general-purpose scripting language that is especially suited to web development",
+  "version": "7.3.8",
+  "preVersion": "7.4.0beta1",
+  "homepage": "https://www.php.net/",
+  "bug": "https://www.php.net/",
+  "github": "php/php-src",
+  "releases": "https://www.php.net/downloads.php"
+}

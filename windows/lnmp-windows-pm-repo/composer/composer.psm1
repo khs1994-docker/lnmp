@@ -4,16 +4,33 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function install_after(){
 
 }
 
-Function install($VERSION="1.8.6",$PreVersion=0){
-  if($PreVersion){
-  }else{
-    $url="https://github.com/composer/composer/releases/download/${VERSION}/composer.phar"
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
-  $name="composer"
+
+  if($isPre){
+    $VERSION=$preVersion
+  }else{
+
+  }
+
+  $url="https://github.com/composer/composer/releases/download/${VERSION}/composer.phar"
   $filename="composer.phar"
   $unzipDesc="composer"
 
@@ -75,4 +92,33 @@ Function uninstall($prune=0){
     _cleanup "$HOME\AppData\Roaming\Composer"
     _cleanup "$HOME\AppData\Local\Composer"
   }
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  $latestVersion=getLatestRelease $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

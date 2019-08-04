@@ -1,0 +1,10 @@
+{
+  "name": "firefox",
+  "description": "Mozilla Firefox web browser",
+  "version": "68.0.1",
+  "preVersion": "690b10",
+  "homepage": "https://www.mozilla.org/en-US/",
+  "bug": "https://bugzilla.mozilla.org/",
+  "github": "https://github.com/mozilla",
+  "releases": "https://ftp.mozilla.org/"
+}

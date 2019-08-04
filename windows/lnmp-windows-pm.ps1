@@ -20,6 +20,10 @@ uninstall   Uninstall soft [--prune| ]
 remove      Uninstall soft
 list        List available softs
 init        Init a new package(soft)
+info        Shows information about packages
+homepage    Opens the package's repository URL or homepage in your browser
+bug         Opens the package's bug report page in your browser
+releases    Opens the package's releases page in your browser
 help        Print help info
 "
 }
@@ -120,7 +124,7 @@ Function __install($softs){
     if($version){
       install $version $preVersion
     }else{
-      install -preVersion $preVersion
+      install -isPre $preVersion
     }
     Remove-Module -Name $soft
   }
@@ -139,6 +143,7 @@ Function __list(){
   echo ""
   ls "${PSScriptRoot}\lnmp-windows-pm-repo" -Name -Directory
   echo ""
+  cd $source
   exit
 }
 
@@ -151,7 +156,34 @@ function __init($soft){
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\example.psm1 `
             ${PSScriptRoot}\lnmp-windows-pm-repo\${soft}\${soft}.psm1
 
+  copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\lwpm.json `
+            ${PSScriptRoot}\lnmp-windows-pm-repo\${soft}\lwpm.json
+
   echo "Please edit ${PSScriptRoot}\lnmp-windows-pm-repo\${soft}\${soft}.psm1"
+}
+
+function __info($soft){
+  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  getInfo
+  Remove-Module -Name $soft
+}
+
+function __homepage($soft){
+  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  start-process (homepage)
+  Remove-Module -Name $soft
+}
+
+function __releases($soft){
+  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  start-process (releases)
+  Remove-Module -Name $soft
+}
+
+function __bug($soft){
+  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  start-process (bug)
+  Remove-Module -Name $soft
 }
 
 if($args[0] -eq 'install'){
@@ -182,6 +214,50 @@ if($args[0] -eq 'init'){
     exit
   }
   __init $args[1]
+  cd $source
+  exit
+}
+
+if($args[0] -eq 'info'){
+  if($args[1].length -eq 0){
+    echo "Please input soft name"
+    cd $source
+    exit
+  }
+  __info $args[1]
+  cd $source
+  exit
+}
+
+if($args[0] -eq 'homepage'){
+  if($args[1].length -eq 0){
+    echo "Please input soft name"
+    cd $source
+    exit
+  }
+  __homepage $args[1]
+  cd $source
+  exit
+}
+
+if($args[0] -eq 'bug'){
+  if($args[1].length -eq 0){
+    echo "Please input soft name"
+    cd $source
+    exit
+  }
+  __bug $args[1]
+  cd $source
+  exit
+}
+
+if($args[0] -eq 'releases'){
+  if($args[1].length -eq 0){
+    echo "Please input soft name"
+    cd $source
+    exit
+  }
+  __releases $args[1]
   cd $source
   exit
 }
