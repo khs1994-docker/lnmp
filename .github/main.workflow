@@ -134,7 +134,7 @@ workflow "Sync PHP" {
 action "action-when-sync-php" {
   uses = "./.github/actions/when/"
   env = {
-    PCIT_WHEN_BRANCH="19.03"
+    PCIT_WHEN_BRANCH="19.03-pre"
     PCIT_WHEN_COMMIT_MESSAGE="1"
     PCIT_WHEN_COMMIT_MESSAGE_INCLUDE="sync php"
   }

@@ -284,6 +284,8 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-74
     if: tag =~ /^(v19)/
+  - name: wsl-php-builder-ubuntu1804-73
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel7-71
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel7-72

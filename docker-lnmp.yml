@@ -87,7 +87,6 @@ services:
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.3.8}-fpm-alpine"
     # container_name: khs1994-docker-lnmp-php-fpm
     volumes:
-      &php7-volumes
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       # fpm config
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached

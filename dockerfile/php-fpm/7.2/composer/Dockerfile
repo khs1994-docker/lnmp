@@ -39,8 +39,6 @@ RUN --mount=type=bind,from=composer:1.8.6,source=/usr/bin/composer,target=/opt/b
     && chmod +x /docker-entrypoint.composer.sh \
     && cp -a /opt/bin/composer /usr/bin/composer \
     && composer --ansi --version --no-interaction \
-# composer 中国镜像
-    && composer config -g repo.packagist composer https://php.cnpkg.org \
 # laravel 安装程序
     && composer global require --prefer-dist --ignore-platform-reqs "laravel/installer" \
 # php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer
@@ -50,7 +48,9 @@ RUN --mount=type=bind,from=composer:1.8.6,source=/usr/bin/composer,target=/opt/b
     && chmod +x /usr/local/bin/sami \
     \
     && ln -sf /tmp/vendor/bin/* /usr/local/bin \
-    && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
+    && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock \
+# composer 中国镜像
+    && composer config -g repo.packagist composer https://php.cnpkg.org
 
 ENTRYPOINT ["/bin/sh", "/docker-entrypoint.composer.sh"]
 
