@@ -35,7 +35,7 @@ zend_extension=xdebug
 
 在 Docker 设置中没有配置自定义 DNS 的情况下可以使用 `LNMP_XDEBUG_REMOTE_HOST=host.docker.internal`。
 
-#### 2. Docker for Linux
+#### 2. Docker for Linux / Docker for WSL2
 
 要么电脑固定 IP，要么 IP 变化时编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_HOST` 变量
 
@@ -65,7 +65,7 @@ $ ./lnmp-docker restart php7
 
 * [Chrome](https://github.com/mac-cain13/xdebug-helper-for-chrome)
 
-> 在扩展配置中 IDE key 选择 PhpStorm
+**在扩展配置中 IDE key 选择 PhpStorm**
 
 ## 使用步骤
 
@@ -75,11 +75,13 @@ $ ./lnmp-docker restart php7
 
 * 3.打断点
 
-* 4.浏览器刷新对应页面
+* 4.浏览器打开对应页面，在页面点击扩展图标，选择 `debug`，之后刷新页面
 
-在调试页面点击扩展图标，选择 `debug`，之后刷新页面
+* 5.自动跳转到 IDE，开始调试
 
-* 5.自动跳转到 IDE
+* 6.首次刷新 IDE 会出现配置窗口，直接点击 `Accept` 即可。(仅需配置一次)
+
+* 7.配置路径对应关系，由于本地代码目录结构与容器中的不一致，我们必须配置其对应关系，设置页面，`Preferenences` -> `Languages & ...`-> `PHP` -> `Servers` -> `C:\Users\username\app\laravel(本地路径)` 对应 `/app/laravel(容器路径)`(请根据实际情况配置)(仅需配置一次)
 
 ## More Information
 

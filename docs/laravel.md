@@ -34,6 +34,18 @@ $ cd app
 $ lnmp-composer create-project laravel/laravel laravel5.5 "5.5.*"
 ```
 
+## 设置 Laravel .env 文件
+
+正确配置服务的 `HOST`，填写 `127.0.0.1` 将连接不到服务，具体原因不再赘述。
+
+```bash
+DB_HOST=mysql
+
+REDIS_HOST=redis
+
+MEMCACHED_HOST=memcached
+```
+
 ## Windows 运行 Laravel 响应缓慢的问题
 
 原因：监听宿主机目录通过 NFS 实现，性能存在问题。

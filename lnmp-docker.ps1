@@ -421,6 +421,8 @@ Function get_compose_options($compose_files,$isBuild=0){
 
 # main
 
+$env:DOCKER_HOST=$null
+
 $isWSL=docker context ls | where {$_ -match "wsl *"}
 
 if($isWSL){

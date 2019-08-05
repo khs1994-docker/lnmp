@@ -6,5 +6,6 @@
   "homepage": "https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html",
   "bug": "https://developers.weixin.qq.com/community/develop/question",
   "github": "https://github.com/wechat-miniprogram",
-  "releases": "https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html"
+  "releases": "https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html",
+  "url": ""
 }

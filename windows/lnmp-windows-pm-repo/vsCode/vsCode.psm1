@@ -16,10 +16,13 @@ Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stableVersion
   }
+
+  $url=$lwpm.url
+
   if($isPre){
     $VERSION=$preVersion
+    $url=$lwpm.preUrl
   }
-  $url="https://vscode.cdn.azure.cn/stable/0f3794b38477eea13fb47fbe15a42798e6129338/VSCodeUserSetup-x64-1.36.0.exe"
 
   $filename="VSCodeUserSetup-x64-${VERSION}.exe"
   $unzipDesc="vscode"
