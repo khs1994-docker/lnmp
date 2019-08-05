@@ -38,7 +38,9 @@ install:
   - docker-compose up cfssl-single
   # - source .env
   - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
+
   - ./lnmp-k8s single-install ${LNMP_K8S_SINGLE_INSTALL_OPTIONS:-}
+
   - export PATH=$PATH:/opt/bin/k8s
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
@@ -50,15 +52,7 @@ install:
 before_script:
   - sudo systemctl cat etcd
   - sudo systemctl start etcd
-
-  - sudo systemctl cat flanneld
-  - sudo systemctl start flanneld
-
-  - sudo systemctl cat docker
-  - sudo systemctl cat containerd || true
-
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo cp systemd/containerd.service.back /etc/systemd/system/containerd.service ; sudo systemctl daemon-reload ; sudo systemctl start containerd) || (sudo systemctl cat docker ; sudo systemctl restart docker || sudo journalctl -u docker)
-
+  # master
   - sudo systemctl cat kube-apiserver
   - sudo systemctl start kube-apiserver
 
@@ -67,9 +61,17 @@ before_script:
 
   - sudo systemctl cat kube-scheduler
   - sudo systemctl start kube-scheduler
-
+  # worker
   - sudo systemctl cat kube-proxy
   - sudo systemctl start kube-proxy
+
+  - sudo systemctl cat flanneld
+  - sudo systemctl start flanneld
+
+  - sudo systemctl cat docker
+  - sudo systemctl cat containerd || sudo cp systemd/containerd.service.back /etc/systemd/system/containerd.service
+
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart containerd) || (sudo systemctl restart docker || sudo journalctl -u docker)
 
   - sleep 10
   - sudo systemctl cat kubelet
@@ -153,7 +155,7 @@ after_success:
   - ./lnmp-k8s create
   - echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
   - ping -c 1 laravel2.t.khs1994.com
-  - sleep 70
+  - sleep 120
   - kubectl get -n lnmp all
   - curl -k https://laravel2.t.khs1994.com
   - ./lnmp-k8s delete
@@ -162,9 +164,10 @@ after_success:
   - echo "Test noNFS volume"
   - cp -rf ../app ~/app
   - ./lnmp-k8s create --no-nfs
-  - sleep 50
+  - sleep 60
   - kubectl get -n lnmp all
   - curl -k https://laravel2.t.khs1994.com
+  - ip addr
 
 env:
   matrix:

@@ -123,7 +123,7 @@ _get_kubernetes_server_by_url(){
     ) && return 0 || return 1
 }
 
-_kubernetes_server(){
+_kubernetes_server_install(){
   test -n "${1}" && local GOOS=$1
   test -n "${2}" && local GOARCH=$2
   test -n "${3}" && local TYPE=$3
@@ -177,7 +177,7 @@ _delete_lnmp(){
   kubectl delete cronjob -l app=lnmp -n lnmp
 }
 
-_minikube(){
+_minikube_up(){
   if [ `uname -s` = 'Darwin' ];then
     minikube start \
       -v 10 \
@@ -230,7 +230,7 @@ _create_pv(){
   fi
 }
 
-_registry(){
+_registry_up(){
   kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=helm/registry/config/config.development.yml
   kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
 
@@ -320,7 +320,7 @@ kubectl_getinfo(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt
 }
 
-_etcd(){
+_etcd_install(){
   # local url="https://github.com/etcd-io/etcd/releases/download"
   local url="https://mirrors.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
@@ -348,7 +348,7 @@ _etcd(){
   sudo rm -rf /tmp/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
 }
 
-_flanneld(){
+_flanneld_install(){
   local url="https://github.com/coreos/flannel/releases/download"
   local TAR_FILE="flannel-v${FLANNEL_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
@@ -453,7 +453,7 @@ _k8s_install_common(){
 
 _k8s_install_cp_bin(){
   if ! [ -f /opt/bin/k8s/kubeadm ];then
-    _kubernetes_server
+    _kubernetes_server_install
     cd $source_path > /dev/null
     sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* /opt/bin/k8s/
   fi
@@ -515,8 +515,10 @@ _containerd_config(){
   sudo mkdir -p /opt/k8s/cni/net.d
   sudo cp systemd/cni/10-flannel.conflist /opt/k8s/cni/net.d
 
+  local CONTAINER_RUNTIME_ENDPOINT="unix:///run/containerd/containerd.sock"
+
   sudo sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
-  sudo sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=unix:///run/containerd/containerd.sock#g" /etc/systemd/system/kubelet.service
+  sudo sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT}#g" /etc/systemd/system/kubelet.service
 }
 
 _k8s_install(){
@@ -536,8 +538,8 @@ _k8s_install(){
 
   _k8s_install_common
 
-  _etcd
-  _flanneld
+  _etcd_install
+  _flanneld_install
   _helm_install
 
   print_info "copy systemd unit file ..."
@@ -615,8 +617,8 @@ _k8s_join(){
   _k8s_install_dep
   _k8s_install_common
   # Flanneld
-  _flanneld
-  _etcd
+  _flanneld_install
+  _etcd_install
   _helm_install
   sudo cp systemd/flanneld.service /etc/systemd/system/
   # Docker
@@ -682,7 +684,7 @@ if [ -z "$1" ];then
   exit
 fi
 
-_helm(){
+_helm_lnmp(){
   cd helm
   lnmp_app_env=$1
 
@@ -742,7 +744,7 @@ shift
 
 case $_command in
     kubernetes-server )
-      _kubernetes_server $@
+      _kubernetes_server_install $@
       ;;
     pull-k8s-image )
       _pull_k8s_image $@
@@ -771,7 +773,7 @@ case $_command in
     registry )
       set +e
       _create_pv $@
-      _registry
+      _registry_up
     ;;
 
     create-pv )
@@ -796,7 +798,7 @@ case $_command in
     ;;
 
     minikube )
-      _minikube
+      _minikube_up
     ;;
 
     minikube-install )
@@ -804,16 +806,16 @@ case $_command in
     ;;
 
     helm-development )
-    _helm development "$@"
+    _helm_lnmp development "$@"
     ;;
     helm-testing )
-    _helm testing "$@"
+    _helm_lnmp testing "$@"
     ;;
     helm-staging )
-    _helm staging "$@"
+    _helm_lnmp staging "$@"
     ;;
     helm-production )
-    _helm production "$@"
+    _helm_lnmp production "$@"
     ;;
 
     nfs )
