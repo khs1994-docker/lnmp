@@ -10,6 +10,10 @@ cache:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
 
 before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce || sudo apt -f install
   # 升级最新 Docker Compose
   # - docker-compose --version
   # - sudo rm /usr/local/bin/docker-compose
@@ -30,6 +34,7 @@ install:
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
+
   - docker-compose up cfssl-single
   # - source .env
   - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
@@ -49,7 +54,10 @@ before_script:
   - sudo systemctl cat flanneld
   - sudo systemctl start flanneld
 
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo cp systemd/containerd.service.back /etc/systemd/system/ ; sudo systemctl daemon-reload ; sudo systemctl start containerd) || (sudo systemctl cat docker ; sudo systemctl restart docker || sudo journalctl -u docker)
+  - sudo systemctl cat docker
+  - sudo systemctl cat containerd || true
+
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo cp systemd/containerd.service.back /etc/systemd/system/containerd.service ; sudo systemctl daemon-reload ; sudo systemctl start containerd) || (sudo systemctl cat docker ; sudo systemctl restart docker || sudo journalctl -u docker)
 
   - sudo systemctl cat kube-apiserver
   - sudo systemctl start kube-apiserver
@@ -94,6 +102,7 @@ before_script:
   - echo ${CSR_NAME}
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
+
   - kubectl get node
   - kubectl get all --all-namespaces
   - kubectl api-versions
@@ -136,6 +145,7 @@ after_success:
   - docker ps -a
   - ./lnmp-k8s nfs logs
   - sudo mkdir -p /tmp2
+  # install nfs dep
   - sudo apt install -y nfs-common
   - sudo mount -t nfs4 ${SERVER_IP}:/lnmp/log /tmp2
   - sudo umount /tmp2
