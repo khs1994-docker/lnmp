@@ -60,11 +60,11 @@ Commands:
   minikube-install       Install minikube
   minikube               Start minikube
 
-  single-install         Install Single Kubernetes（Manager by systemd）[--containerd | ]
+  single-install         Install Single Kubernetes（Manager by systemd）[--containerd | --crio | ]
   single-start           Print how to start Single Kubernetes (Manager by systemd)
   single-cleanup         Cleanup Single Kubernetes.
 
-  join                   New worker [NODE_IP] [--containerd | ]
+  join                   New worker [NODE_IP] [--containerd | --crio | ]
 
   create                 Deploy lnmp on k8s [--ingress | --no-nfs ]
   delete                 Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -401,6 +401,39 @@ _helm_install(){
   sudo rm -rf /tmp/${GOOS}-${GOARCH}
 }
 
+_gvisor_docker_conf(){
+  print_info "config docker with gvisor(runsc) ..."
+  echo ""
+}
+
+_gvisor_containerd_conf(){
+  print_info "config containerd with gvisor(runsc) ..."
+  cat <<EOF | sudo tee -a /etc/containerd/config.toml
+[plugins.cri.containerd.runtimes.runsc]
+  runtime_type = "io.containerd.runsc.v1"
+EOF
+}
+
+_gvisor_crio_conf(){
+  print "config crio with gvisor(runsc) ..."
+  cat <<EOF | sudo tee -a /etc/crio/crio.conf
+[crio.runtime.runtimes.runsc]
+  runtime_path = "/usr/local/bin/runsc"
+EOF
+}
+
+_gvisor_install(){
+  print_info "install gvisor ..."
+  sudo curl -fsSL -o /usr/local/bin/containerd-shim-runsc-v1 \
+    https://github.com/google/gvisor-containerd-shim/releases/download/v0.0.3/containerd-shim-runsc-v1.linux-amd64
+  sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
+
+  sudo curl -fsSL -o /usr/local/bin/runsc \
+    https://github.com/khs1994-docker/gvisor-mirror/releases/download/nightly/runsc
+
+  sudo chmod +x /usr/local/bin/runsc
+}
+
 _cni_install(){
   sudo mkdir -p /opt/k8s/cni/bin
   if [ -f /opt/k8s/cni/bin/flannel ];then
@@ -433,10 +466,10 @@ _k8s_install_dep(){
   print_info "install dep ..."
   # 安装依赖软件
   command -v dnf > /dev/null && (sudo dnf install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) || command -v yum && (sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
+    sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) || command -v yum > /dev/null && (sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp > /dev/null && sudo /usr/bin/env modprobe ip_vs) && return
 
-  command -v apt > /dev/null && sudo apt update > /dev/null && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
+  command -v apt > /dev/null && sudo apt update -qq && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp2 kmod > /dev/null && (sudo /usr/bin/env modprobe ip_vs)
 
 }
@@ -498,13 +531,8 @@ _k8s_install_systemd(){
   sudo systemctl daemon-reload
 }
 
-# https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
-_containerd_config(){
-  _cni_install
-
-  sudo mkdir -p /etc/containerd/
-  sudo cp systemd/containerd/config.toml /etc/containerd/
-
+_cri_config(){
+  print_info "config cri ..."
   sudo rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
   sudo touch /etc/sysctl.d/99-kubernetes-cri.conf
   echo "net.bridge.bridge-nf-call-iptables  = 1" | sudo tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
@@ -513,9 +541,90 @@ _containerd_config(){
 
   # cni conf
   sudo mkdir -p /opt/k8s/cni/net.d
-  sudo cp systemd/cni/10-flannel.conflist /opt/k8s/cni/net.d
+  sudo cp systemd/etc/cni/10-flannel.conflist /opt/k8s/cni/net.d
+}
+
+_crio_install(){
+  set +e
+  command -v crio > /dev/null
+  if [ $? -eq 0 ];then return;fi
+  set -e
+
+  print_info "install cri-o ..."
+
+  local CRIO_VERSION_X=`echo $KUBERNETES_VERSION | cut -d "." -f 1`
+  local CRIO_VERSION_Y=`echo $KUBERNETES_VERSION | cut -d "." -f 2`
+  local CRIO_VERSION="$CRIO_VERSION_X"."$CRIO_VERSION_Y"
+
+  set -x
+
+  command -v apt > /dev/null && sudo apt-add-repository -y ppa:projectatomic/ppa \
+  && sudo apt-get update -qq && sudo apt-get install -y \
+  btrfs-tools \
+  containers-common \
+  git \
+  golang-go \
+  libassuan-dev \
+  libdevmapper-dev \
+  libglib2.0-dev \
+  libc6-dev \
+  libgpgme11-dev \
+  libgpg-error-dev \
+  libseccomp-dev \
+  libsystemd-dev \
+  libselinux1-dev \
+  pkg-config \
+  go-md2man
+
+  git clone --depth=1 -b release-${CRIO_VERSION} \
+    https://github.com/cri-o/cri-o \
+    $HOME/go/src/github.com/cri-o/cri-o
+
+  cd $HOME/go/src/github.com/cri-o/cri-o
+  rm -rf _output/src/github.com/cri-o
+  mkdir -p _output/src/github.com/cri-o
+  ln -s $PWD "$PWD/_output/src/github.com/cri-o/cri-o"
+  make
+  # make build-static CONTAINER_RUNTIME=docker
+  sudo make install.bin
+  sudo make install.config
+  sudo make install.systemd
+
+  # command -v yum > /dev/null && sudo yum install cri-o
+  #
+  # command -v apt > /dev/null && (sudo apt-add-repository -y ppa:projectatomic/ppa \
+  #   && sudo apt-get update -qq \
+  #   && sudo apt-get install cri-o-$CRIO_VERSION)
+}
+
+_crio_config(){
+  _cni_install
+  _crio_install
+  print_info "config cri-o ..."
+  sudo mkdir -p /etc/crio/
+  # crio --config="" config --default > crio.conf
+  sudo cp systemd/etc/crio/crio.conf /etc/crio/
+
+  _cri_config
+
+  local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
+
+  sudo sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
+  sudo sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT}#g" /etc/systemd/system/kubelet.service
+}
+
+# https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
+_containerd_config(){
+  _cni_install
+  print_info "config containerd ..."
+  sudo mkdir -p /etc/containerd/
+  # containerd config default > /etc/containerd/config.toml
+  sudo cp systemd/etc/containerd/config.toml /etc/containerd/
+
+  _cri_config
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///run/containerd/containerd.sock"
+  # local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
 
   sudo sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
   sudo sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT}#g" /etc/systemd/system/kubelet.service
@@ -576,12 +685,20 @@ encryption-config.yaml} \
 
   _k8s_install_systemd
 
-  if ! [ "${1}" = "--containerd" ];then
-    print_info "Kubelet Runtime is Docker"
-    _k8s_install_systemd_docker
-  else
+  _gvisor_install
+
+  if [ "${1}" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
     _containerd_config
+    _gvisor_containerd_conf
+  elif [ "${1}" = "--crio" ];then
+    print_info "Kubelet Runtime is CRI-O"
+    _crio_config
+    _gvisor_crio_conf
+  else
+    print_info "Kubelet Runtime is Docker"
+    _gvisor_docker_conf
+    _k8s_install_systemd_docker
   fi
 
   sudo systemctl daemon-reload
@@ -658,7 +775,21 @@ kube-proxy.kubeconfig} \
       ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
   done
 
-  _k8s_install_systemd_docker
+  _gvisor_install
+
+  if [ "${2}" = "--containerd" ];then
+    print_info "Kubelet Runtime is Containerd"
+    _containerd_config
+    _gvisor_containerd_conf
+  elif [ "${2}" = "--crio" ];then
+    print_info "Kubelet Runtime is CRI-O"
+    _crio_config
+    _gvisor_crio_conf
+  else
+    print_info "Kubelet Runtime is Docker"
+    _gvisor_docker_conf
+    _k8s_install_systemd_docker
+  fi
 
   _k8s_install_systemd ${HOSTNAME}
 
@@ -832,6 +963,6 @@ case $_command in
     ;;
 
     * )
-    echo "command not found"
+    command -v $_command > /dev/null && $_command $@ || echo "command not found"
     ;;
 esac

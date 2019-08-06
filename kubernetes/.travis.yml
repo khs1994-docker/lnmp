@@ -71,7 +71,13 @@ before_script:
   - sudo systemctl cat docker
   - sudo systemctl cat containerd || sudo cp systemd/containerd.service.back /etc/systemd/system/containerd.service
 
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart containerd) || (sudo systemctl restart docker || sudo journalctl -u docker)
+  - sudo sed -i "s#https://dockerhub.azk8s.cn#https://registry-1.docker.io#g" /etc/containerd/config.toml
+
+  - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart containerd) || true
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
+
+  - docker info
 
   - sleep 10
   - sudo systemctl cat kubelet
@@ -111,6 +117,7 @@ before_script:
   - kubectl api-resources
 
 script:
+  - sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#k8s.gcr.io#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/addons`
   - kubectl apply -f addons/coredns.yaml
   - kubectl apply -f addons/dashboard.yaml
   - kubectl apply -f addons/metrics-server
@@ -121,6 +128,7 @@ script:
 
   - kubectl get all --all-namespaces
   # test metrics server
+  - sleep 60
   - kubectl top node
   # test dns
   - kubectl run nginx --image nginx:1.17.2-alpine
@@ -168,12 +176,19 @@ after_success:
   - kubectl get -n lnmp all
   - curl -k https://laravel2.t.khs1994.com
   - ip addr
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (kubectl apply -f deployment/runtimeClass/runtimeClass.yaml && kubectl apply -f deployment/runtimeClass/pod.yaml) || true
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f deployment/runtimeClass/runtimeClass.yaml && kubectl apply -f deployment/runtimeClass/pod.yaml) || true
+  - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && docker run -it --rm --runtime=runsc alpine:3.10 uname -a || true
+  - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && docker run -it --rm alpine:3.10 uname -a || true
+  - sleep 10
+  - kubectl get pod || true
 
 env:
   matrix:
     - CI_KUBERNETES_VERSION=1.14.2
-    - CI_KUBERNETES_VERSION=1.15.0
+    - CI_KUBERNETES_VERSION=1.15.1
     - CI_KUBERNETES_VERSION=1.16.0-alpha.1
     - CI_KUBERNETES_VERSION=1.16.0-alpha.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"
+    - CI_KUBERNETES_VERSION=1.15.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
   global:
     - k=v
