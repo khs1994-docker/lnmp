@@ -51,7 +51,7 @@ Kubernetes version is ${KUBERNETES_VERSION}
 Usage: lnmp-k8s COMMAND
 
 Commands:
-  kubernetes-server      Download kubernetes server files {GOOS} {GOARCH} {TYPE:-server} {KUBERNETES_VERSION:-${KUBERNETES_VERSION}}
+  kubernetes-server      Download kubernetes server files [--url ] {GOOS} {GOARCH} {TYPE:-server} {KUBERNETES_VERSION:-${KUBERNETES_VERSION}}
   pull-k8s-image         Use By developer Only {GOOS} {GOARCH} {TYPE:-server} {KUBERNETES_VERSION:-${KUBERNETES_VERSION}}
 
   kubectl-install        Install kubectl
@@ -82,6 +82,10 @@ Commands:
 "
 }
 
+_sudo(){
+  command -v sudo > /dev/null && echo sudo
+}
+
 case `uname -m` in
   x86_64 )
   GOARCH=amd64
@@ -95,7 +99,7 @@ esac
 
 GOOS=`uname -s | tr A-Z  a-z`
 
-_pull_k8s_image(){
+_get_kubernetes_server_by_docker_image(){
   local TYPE=server
   test -n "${1}" && local GOOS=$1
   test -n "${2}" && local GOARCH=$2
@@ -110,6 +114,7 @@ _pull_k8s_image(){
   docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   docker container create --name khs1994-kubernetes-${TYPE} \
     ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}:v${KUBERNETES_VERSION}
+  docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
   docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
   docker container rm khs1994-kubernetes-${TYPE}
 }
@@ -117,13 +122,17 @@ _pull_k8s_image(){
 _get_kubernetes_server_by_url(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt \
     && ( \
-       cd kubernetes-release/release/ \
-         && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
-                 -o kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
+      curl -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
+        -o kubernetes-release/release/kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
     ) && return 0 || return 1
 }
 
 _kubernetes_server_install(){
+  if [ "$1" = "--url" ];then
+    local get_by_url=1
+    shift 1
+  fi
+
   test -n "${1}" && local GOOS=$1
   test -n "${2}" && local GOARCH=$2
   test -n "${3}" && local TYPE=$3
@@ -158,11 +167,19 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
 
   test $GOOS != 'linux' && exit
 
+  if [ -n "$get_by_url" ];then
+    _get_kubernetes_server_by_url $@
+    cd kubernetes-release/release
+    __untar $@
+
+    return
+  fi
+
   command -v docker > /dev/null
 
   if [ $? -eq 0 ];then
     docker container ls > /dev/null 2>&1
-    _pull_k8s_image $@
+    _get_kubernetes_server_by_docker_image $@
     cd kubernetes-release/release
     __untar $@
   fi
@@ -181,13 +198,13 @@ _minikube_up(){
   if [ `uname -s` = 'Darwin' ];then
     minikube start \
       -v 10 \
-      --registry-mirror=https://registry.docker-cn.com \
+      --registry-mirror=https://dockerhub.azk8s.cn \
       --vm-driver="hyperkit" \
       --memory=4096
   else
     minikube start \
       -v 10 \
-      --registry-mirror=https://registry.docker-cn.com \
+      --registry-mirror=https://dockerhub.azk8s.cn \
       --vm-driver="none"
   fi
 }
@@ -415,7 +432,7 @@ EOF
 }
 
 _gvisor_crio_conf(){
-  print "config crio with gvisor(runsc) ..."
+  print_info "config crio with gvisor(runsc) ..."
   cat <<EOF | sudo tee -a /etc/crio/crio.conf
 [crio.runtime.runtimes.runsc]
   runtime_path = "/usr/local/bin/runsc"
@@ -547,7 +564,7 @@ _cri_config(){
 _crio_install(){
   set +e
   command -v crio > /dev/null
-  if [ $? -eq 0 ];then return;fi
+  if [ $? -eq 0 ];then print_info "cri-o already install" ; return;fi
   set -e
 
   print_info "install cri-o ..."
@@ -558,12 +575,41 @@ _crio_install(){
 
   set -x
 
-  command -v apt > /dev/null && sudo apt-add-repository -y ppa:projectatomic/ppa \
-  && sudo apt-get update -qq && sudo apt-get install -y \
+  command -v dnf > /dev/null && isRPM=1
+  command -v yum > /dev/null && isRPM=1
+
+  test -n "$isRPM" && sudo yum install -y \
+  btrfs-progs-devel \
+  containers-common \
+  device-mapper-devel \
+  git \
+  glib2-devel \
+  glibc-devel \
+  glibc-static \
+  $(command -v go > /dev/null || echo "go") \
+  gpgme-devel \
+  libassuan-devel \
+  libgpg-error-devel \
+  libseccomp-devel \
+  libselinux-devel \
+  pkgconfig \
+  runc
+
+  # $(_sudo) sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+  # $(_sudo) sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+  #
+  # $(_sudo) sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+  # $(_sudo) sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+
+  command -v apt > /dev/null \
+  && $(_sudo) apt update -qq \
+  && $(_sudo) apt install -y software-properties-common \
+  && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
+  && $(_sudo) apt-get update -qq && $(_sudo) apt-get install -y \
   btrfs-tools \
   containers-common \
   git \
-  golang-go \
+  $(command -v go > /dev/null || echo "golang-go") \
   libassuan-dev \
   libdevmapper-dev \
   libglib2.0-dev \
@@ -574,32 +620,50 @@ _crio_install(){
   libsystemd-dev \
   libselinux1-dev \
   pkg-config \
-  go-md2man
+  $(command -v runc > /dev/null || echo "cri-o-runc") \
+  libudev-dev \
+  gcc
+
+  go_path=`go env GOPATH | cut -d ":" -f 1`
+
+  export GOPATH=$go_path
 
   git clone --depth=1 -b release-${CRIO_VERSION} \
     https://github.com/cri-o/cri-o \
-    $HOME/go/src/github.com/cri-o/cri-o
+    $go_path/src/github.com/cri-o/cri-o || git clone --depth=1 -b master \
+        https://github.com/cri-o/cri-o \
+        $go_path/src/github.com/cri-o/cri-o
 
-  cd $HOME/go/src/github.com/cri-o/cri-o
-  rm -rf _output/src/github.com/cri-o
-  mkdir -p _output/src/github.com/cri-o
-  ln -s $PWD "$PWD/_output/src/github.com/cri-o/cri-o"
+  if ! [ -d $go_path/src/github.com/cri-o/cri-o ];then
+    exit 1
+  fi
+
+  cd $go_path/src/github.com/cri-o/cri-o
+
+  go version
+  $(_sudo) go version || true
+  go env
+  $(_sudo) go env || true
+  go get github.com/cpuguy83/go-md2man
+
   make
   # make build-static CONTAINER_RUNTIME=docker
-  sudo make install.bin
-  sudo make install.config
-  sudo make install.systemd
+  $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.bin
+  $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.config
+  $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.systemd
 
   # command -v yum > /dev/null && sudo yum install cri-o
   #
   # command -v apt > /dev/null && (sudo apt-add-repository -y ppa:projectatomic/ppa \
   #   && sudo apt-get update -qq \
   #   && sudo apt-get install cri-o-$CRIO_VERSION)
+  set +x
 }
 
 _crio_config(){
   _cni_install
   _crio_install
+  cd $source_path
   print_info "config cri-o ..."
   sudo mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf
@@ -878,7 +942,7 @@ case $_command in
       _kubernetes_server_install $@
       ;;
     pull-k8s-image )
-      _pull_k8s_image $@
+      _get_kubernetes_server_by_docker_image $@
       ;;
     kubectl-install )
       kubectl_install

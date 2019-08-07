@@ -11,6 +11,10 @@
 * https://github.com/google/gvisor
 * https://gvisor.dev/docs/user_guide/docker/
 
+### 注意事项
+
+* runsc 与 `--exec-opt native.cgroupdriver=systemd` 不兼容。
+
 ### Kubernetes(Containerd)
 
 * https://github.com/google/gvisor-containerd-shim
