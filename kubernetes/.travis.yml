@@ -94,6 +94,8 @@ before_script:
   - sudo systemctl cat kubelet
   - sudo systemctl start kubelet
 
+  - sudo systemctl cat crio || true
+
   - sleep 20
 
   # - sudo systemctl status etcd
@@ -110,11 +112,14 @@ before_script:
 
   - sleep 30
 
-  - sudo journalctl -u kubelet
   - sudo journalctl -u kube-apiserver
   - sudo journalctl -u kube-controller-manager
   - sudo journalctl -u kube-scheduler
   - sudo journalctl -u kube-proxy
+  - sudo journalctl -u kubelet
+  - sudo journalctl -u containerd
+  - sudo journalctl -u crio || true
+  - sudo journalctl -u flanneld
 
   - kubectl get csr
   - CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`

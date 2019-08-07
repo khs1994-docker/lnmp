@@ -207,7 +207,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     minikube.exe start `
       --hyperv-virtual-switch="minikube" `
       -v 10 `
-      --registry-mirror=https://registry.docker-cn.com `
+      --registry-mirror=https://dockerhub.azk8s.cn `
       --vm-driver="hyperv" `
       --memory=4096
   }

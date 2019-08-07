@@ -54,7 +54,7 @@
       "@php -r \"echo PHP_EOL.PHP_EOL.'$ composer config -g repo.packagist composer https://packagist.phpcomposer.com'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
     "z-docker:mirror": [
-      "@php -r \"echo PHP_EOL.PHP_EOL.'{ \"registry-mirrors\": [ \"https://registry.docker-cn.com\" ] }'.PHP_EOL.PHP_EOL.PHP_EOL;\""
+      "@php -r \"echo PHP_EOL.PHP_EOL.'{ \"registry-mirrors\": [ \"https://dockerhub.azk8s.cn\" ] }'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
     "z-travis": [
       "@php -r \"echo PHP_EOL.PHP_EOL.'travis encrypt-file ~/.ssh/id_rsa --add'.PHP_EOL.PHP_EOL;\""

@@ -37,7 +37,7 @@ memcached \
 "
 
 _install_brew(){
-  command -v gcc || exit $?
+  command -v gcc > /dev/null || exit $?
 
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
@@ -63,7 +63,7 @@ _install_brew(){
 }
 
 _brew(){
-  command -v brew || _install_brew
+  command -v brew > /dev/null || _install_brew
 
   for soft in $SOFT
   do
@@ -119,5 +119,5 @@ _file ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nin
 set +e
 
 # apm
-command -v apm && apm config set registry https://registry.npm.taobao.org
-command -v composer && _composer
+command -v apm > /dev/null && apm config set registry https://registry.npm.taobao.org
+command -v composer > /dev/null && _composer

@@ -27,13 +27,15 @@ if [ -z "$LNMP_PATH" ];then
 
   echo export "PATH=\$LNMP_PATH:\$LNMP_PATH/bin:\$LNMP_PATH/kubernetes:\$PATH" >> ~/.bash_profile
   echo export "PATH=\$LNMP_PATH:\$LNMP_PATH/bin:\$LNMP_PATH/kubernetes:\$PATH" >> ~/.bashrc
+  # https://segmentfault.com/a/1190000016492729
+  echo export ELECTRON_TRASH=gio >> ~/.bashrc
 fi
 
 if [ "$NAME" = Fedora ];then
 
   set +e
   # install docker
-  command -v docker
+  command -v docker > /dev/null
   if ! [ $? -eq 0 ];then
     sudo dnf -y install dnf-plugins-core
 
@@ -62,7 +64,7 @@ _docker_daemon(){
       echo '
 {
   "registry-mirrors": [
-  "https://registry.docker-cn.com"
+  "https://dockerhub.azk8s.cn"
   ],
   "debug": true,
   "dns": [
@@ -84,22 +86,25 @@ fi
 # rkt
 __rkt(){
   if [ "$NAME" = Fedora ];then
-    command -v rkt
+    command -v rkt > /dev/null
 
-    if ! [ $? -eq 0 ];then
-      curl -L https://github.com/rkt/rkt/releases/download/v1.30.0/rkt-1.30.0-1.x86_64.rpm > /tmp/rkt.rpm
+    if [ $? -eq 0 ];then echo "rkt already install" ; return ; fi
 
-      sudo dnf install /tmp/rkt.rpm
+    curl -L https://github.com/rkt/rkt/releases/download/v1.30.0/rkt-1.30.0-1.x86_64.rpm > /tmp/rkt.rpm
 
-      rkt version
-    fi
+    sudo dnf install /tmp/rkt.rpm
+
+    rkt version
 fi
 }
 
 # install soft
 if [ "$NAME" = Fedora ];then
   sudo dnf install -y tilix \
-    kernel-devel elfutils-libelf-devel libefp-devel
+    kernel-devel \
+    elfutils-libelf-devel \
+    libefp-devel \
+    vim
 fi
 
 _file(){
@@ -120,4 +125,4 @@ if [ "$1" = 'rkt' ];then __rkt; fi
 
 set +e
 # atom apm
-command -v apm && apm config set registry https://registry.npm.taobao.org
+command -v apm > /dev/null && apm config set registry https://registry.npm.taobao.org
