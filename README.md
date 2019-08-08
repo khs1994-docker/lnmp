@@ -225,7 +225,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.5-alpine`        | **5.0.5**            |`Alpine:3.10`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.3.8-fpm-alpine`  | **7.3.8**       |`Alpine:3.10`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.3.8-composer-alpine`  | **5.8.x**       |`Alpine:3.10`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.8-composer-alpine`  | **1.8.6**       |`Alpine:3.10`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.8-composer-alpine`  | **1.9.0**       |`Alpine:3.10`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.3.8-composer-alpine`  | **2.15.1**      |`Alpine:3.10`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.16-alpine`           | **1.5.16**       |`Alpine:3.10`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.7.15-management-alpine` | **3.7.15**       |`Alpine:3.8`    |

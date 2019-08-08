@@ -29,7 +29,7 @@ Function install($VERSION=0,$isPre=0){
 
   }
 
-  $url="https://mirrors.ustc.edu.cn/node/v${VERSION}/node-v${VERSION}-win-x64.zip"
+  $url="https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-win-x64.zip"
 
   $filename="node-v${VERSION}-win-x64.zip"
   $unzipDesc="node"
