@@ -1,6 +1,6 @@
 # CHANGELOG
 
-* Kubernetes `1.15.1`
+* Kubernetes `1.15.2`
 
 * helm 3
 

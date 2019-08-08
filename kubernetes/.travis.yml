@@ -117,7 +117,7 @@ before_script:
   - sudo journalctl -u kube-scheduler
   - sudo journalctl -u kube-proxy
   - sudo journalctl -u kubelet
-  - sudo journalctl -u containerd
+  - sudo journalctl -u containerd || true
   - sudo journalctl -u crio || true
   - sudo journalctl -u flanneld
 
