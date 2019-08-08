@@ -42,7 +42,7 @@ Commands:
   kubectl-getinfo    Get kubectl latest version info
 
   minikube-install   Install minikube
-  minikube           Start minikube
+  minikube-up        Start minikube
 
   create             Deploy lnmp on k8s [--ingress]
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -203,7 +203,7 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
     _create_pv
   }
 
-  "minikube" {
+  "minikube-up" {
     minikube.exe start `
       --hyperv-virtual-switch="minikube" `
       -v 10 `

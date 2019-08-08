@@ -58,11 +58,11 @@ Commands:
   kubectl-getinfo        Get kubectl latest version info
 
   minikube-install       Install minikube
-  minikube               Start minikube
+  minikube-up            Start minikube
 
-  single-install         Install Single Kubernetes（Manager by systemd）[--containerd | --crio | ]
-  single-start           Print how to start Single Kubernetes (Manager by systemd)
-  single-cleanup         Cleanup Single Kubernetes.
+  local-install          Install local Kubernetes（Manager by systemd）[--containerd | --crio | ]
+  local-up               Print how to start local Kubernetes (Manager by systemd)
+  local-cleanup          Cleanup local Kubernetes.
 
   join                   New worker [NODE_IP] [--containerd | --crio | ]
 
@@ -720,7 +720,7 @@ _k8s_install(){
   sudo cp systemd/certs/*.pem ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
-    echo "Please Generate certs first $ docker-compose up cfssl-single"; exit; fi
+    echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
 
   _k8s_install_cp_bin
 
@@ -896,7 +896,7 @@ _helm_lnmp(){
   done
 }
 
-_single_start(){
+_local_start(){
   echo "
 $ sudo systemctl start etcd
 $ sudo systemctl start flanneld
@@ -909,7 +909,7 @@ $ sudo systemctl start kubelet
 "
 }
 
-_single_cleanup(){
+_local_cleanup(){
   sudo systemctl stop etcd flanneld docker kube-apiserver \
     kube-controller-manager kube-scheduler kube-proxy kubelet docker || true
 
@@ -975,16 +975,16 @@ case $_command in
       _create_pv $@
     ;;
 
-    single-install )
+    local-install )
       _k8s_install $@
     ;;
 
-    single-start )
-      _single_start
+    local-start )
+      _local_start
     ;;
 
-    single-cleanup )
-      _single_cleanup
+    local-cleanup )
+      _local_cleanup
     ;;
 
     join )
@@ -992,7 +992,7 @@ case $_command in
       _k8s_join $@
     ;;
 
-    minikube )
+    minikube-up )
       _minikube_up
     ;;
 
