@@ -20,10 +20,13 @@ Function install($VERSION=0,$isPre=0){
   }
   if($isPre){
     $VERSION=$preVersion
+    $url="https://dldir1.qq.com/weixin/Windows/WeChat${VERSION}.exe"
+    $filename="WeChat${VERSION}.exe"
+  }else{
+    $url="https://dldir1.qq.com/weixin/Windows/WeChat_C${VERSION}.exe"
+    $filename="WeChat_C${VERSION}.exe"
   }
-  $url="https://dldir1.qq.com/weixin/Windows/WeChat_C${VERSION}.exe"
 
-  $filename="WeChat_C${VERSION}.exe"
   $unzipDesc="WeChat"
 
   if($(_command ${env:ProgramFiles(x86)}\Tencent\WeChat\WeChat.exe)){

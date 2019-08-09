@@ -28,6 +28,7 @@ Function install($VERSION=0,$isPre=0){
   }
 
   $url="https://github.com/atom/atom/releases/download/v${VERSION}/AtomSetup.exe"
+  $url="https://mirrors.huaweicloud.com/atom/v${VERSION}/AtomSetup.exe"
   $filename="AtomSetup-${VERSION}.exe"
   $unzipDesc="atom"
 

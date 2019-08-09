@@ -21,7 +21,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$preVersion
   }
   $url="https://github.com/yarnpkg/yarn/releases/download/v${VERSION}/yarn-${VERSION}.msi"
-
+  $url="https://mirrors.huaweicloud.com/yarn/v${VERSION}/yarn-${VERSION}.msi"
   $filename="yarn-${VERSION}.msi"
   $unzipDesc="yarn"
 

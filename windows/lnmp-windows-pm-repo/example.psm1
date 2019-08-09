@@ -87,11 +87,16 @@ Function uninstall($prune=0){
 }
 
 Function getInfo(){
+  # vendor
+  . $PSScriptRoot\..\..\..\windows\sdk\github\releases.ps1
   . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  # vendor
+  . $PSScriptRoot\..\..\..\windows\sdk\github\repos\repos.ps1
   . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
 
-  $latestVersion=getLatestRelease $githubRepo
-  $latestVersion=getLatestTag $githubRepo
+  $latestVersion=(getLatestRelease $githubRepo).trim("")
+  $latestVersion=(getLatestTag $githubRepo).trim("")
 
   echo "
 Package: $name

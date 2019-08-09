@@ -15,3 +15,29 @@ $ lnmp-windows-pm.ps1 install go --pre
 ```
 
 只需加上 `--pre` 参数即可安装测试版软件。
+
+## 开发者
+
+本项目默认提供了一些常用的包，你也可以自己开发一个包，供用户安装某个软件。
+
+### 新增一个包
+
+```bash
+$ lnmp-windows-pm.ps1 init example
+```
+
+编辑 `~/lnmp/vendor/lwpm-dev/example` 文件夹中的文件。
+
+编辑好之后推送到 GitHub，并发布到 composer。
+
+* 示例: https://github.com/khs1994-docker/lwpm-openjdk
+
+## 添加一个包，并安装软件
+
+```bash
+$ cd ~/lnmp
+
+$ lnmp-windows-pm.ps1 add example
+
+$ lnmp-windows-pm.ps1 install example
+```

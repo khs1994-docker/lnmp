@@ -19,7 +19,9 @@ install     Install soft [--pre| ]
 uninstall   Uninstall soft [--prune| ]
 remove      Uninstall soft
 list        List available softs
-init        Init a new package(soft)
+outdated    Shows a list of installed packages that have updates available
+add         Add package to install soft
+init        Init a new package
 info        Shows information about packages
 homepage    Opens the package's repository URL or homepage in your browser
 bug         Opens the package's bug report page in your browser
@@ -106,6 +108,20 @@ if($args.length -eq 0 -or $args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[
 
 ################################################################################
 
+Function _import_module($soft){
+  if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
+    Import-Module -Name "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
+    echo "==> vendor dev"
+    Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
+  }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm\$soft"){
+    Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm\$soft"
+  }else{
+    echo "==> Not Found"
+    exit 1
+  }
+}
+
 Function __install($softs){
   $preVersion=0
 
@@ -119,7 +135,7 @@ Function __install($softs){
     }
     $soft,$version=(echo $soft).split('@')
     echo "==> Installing $soft $version ..."
-    Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+    _import_module $soft
 
     if($version){
       install $version $preVersion
@@ -133,9 +149,19 @@ Function __install($softs){
 Function __uninstall($softs){
   Foreach ($soft in $softs){
     echo "==> Uninstalling $soft ..."
-    Import-Module -Name "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+    _import_module $soft
     uninstall
     Remove-Module -Name $soft
+  }
+}
+
+Function _outdated($softs=$null){
+  composer outdated -d ${PSScriptRoot}/..
+}
+
+Function _add($softs){
+  Foreach($soft in $softs){
+    composer require -d ${PSScriptRoot}/../ lwpm/$soft --prefer-source
   }
 }
 
@@ -148,40 +174,54 @@ Function __list(){
 }
 
 function __init($soft){
-  if(test-path ${PSScriptRoot}\lnmp-windows-pm-repo\${soft}\){
-    echo "This package already exists !"
+  $SOFT_ROOT="${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
+
+  if(test-path $SOFT_ROOT){
+    echo "==> This package already exists !"
+    cd $source
     exit
   }
-  new-item ${PSScriptRoot}\lnmp-windows-pm-repo\${soft} -ItemType Directory | out-null
+
+  new-item $SOFT_ROOT -ItemType Directory | out-null
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\example.psm1 `
-            ${PSScriptRoot}\lnmp-windows-pm-repo\${soft}\${soft}.psm1
+            $SOFT_ROOT\${soft}.psm1
 
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\lwpm.json `
-            ${PSScriptRoot}\lnmp-windows-pm-repo\${soft}\lwpm.json
+            $SOFT_ROOT\lwpm.json
 
-  echo "Please edit ${PSScriptRoot}\lnmp-windows-pm-repo\${soft}\${soft}.psm1"
+  if(_command composer){
+    composer init -d $SOFT_ROOT `
+      --name "lwpm/$soft" `
+      --homepage "https://docs.lnmp.khs1994.com/windows/lwpm.html" `
+      --license "MIT" `
+      -q
+  }
+
+  echo "Please edit $SOFT_ROOT files"
+
+  cd $source
 }
 
 function __info($soft){
-  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  _import_module $soft
   getInfo
   Remove-Module -Name $soft
 }
 
 function __homepage($soft){
-  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  _import_module $soft
   start-process (homepage)
   Remove-Module -Name $soft
 }
 
 function __releases($soft){
-  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  _import_module $soft
   start-process (releases)
   Remove-Module -Name $soft
 }
 
 function __bug($soft){
-  Import-Module "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  _import_module $soft
   start-process (bug)
   Remove-Module -Name $soft
 }
@@ -260,6 +300,20 @@ if($args[0] -eq 'releases'){
   __releases $args[1]
   cd $source
   exit
+}
+
+$command,$opt=$args
+
+switch ($command)
+{
+  "outdated" {
+    _outdated $opt
+  }
+  # {$_ -in "A","B","C"} {}
+  "add" {
+    _add $opt
+  }
+  Default {}
 }
 
 cd $source
