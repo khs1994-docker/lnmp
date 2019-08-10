@@ -1,0 +1,25 @@
+on:
+  push:
+    branches:
+    - 19.03-pre
+
+name: Sync PHP
+
+jobs:
+  sync-php:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: sync-php
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/khs1994-docker/php
+        PCIT_KEEP_HISTORY: "1"
+        PCIT_LOCAL_DIR: dockerfile/php-fpm
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
