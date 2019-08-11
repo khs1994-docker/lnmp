@@ -7,6 +7,7 @@ ETCD_VERSION=3.3.13
 FLANNEL_VERSION=0.10.0
 HELM_VERSION=3.0.0-alpha.2
 CNI_VERSION=0.8.1
+CRICTL_VERSION=1.15.0
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
@@ -85,6 +86,9 @@ Commands:
 _sudo(){
   command -v sudo > /dev/null && echo sudo
 }
+
+$(_sudo) mkdir -p /opt/bin/k8s
+export PATH=/opt/bin/k8s:$PATH
 
 case `uname -m` in
   x86_64 )
@@ -451,6 +455,18 @@ _gvisor_install(){
   sudo chmod +x /usr/local/bin/runsc
 }
 
+_runc_install(){
+  if [ `command -v runc` ];then print_info "runc already install";\
+    runc --version;return; fi
+  print_info "install runc ..."
+}
+
+_containerd_install(){
+  if [ `command -v containerd` ];then print_info "containerd already install"; \
+    containerd --version;return; fi
+  print_info "install containerd ..."
+}
+
 _cni_install(){
   sudo mkdir -p /opt/k8s/cni/bin
   if [ -f /opt/k8s/cni/bin/flannel ];then
@@ -479,6 +495,48 @@ _cni_install(){
   sudo tar -zxf /tmp/${TAR_FILE} -C /opt/k8s/cni/bin/
 }
 
+_crictl_docker_conf(){
+  sudo cp systemd/etc/crictl.yaml /etc/crictl.yaml
+}
+
+_crictl_containerd_conf(){
+  sudo rm -rf /etc/crictl.yaml
+  cat <<EOF | sudo tee -a /etc/crictl.yaml
+runtime-endpoint: unix:///run/containerd/containerd.sock
+image-endpoint: unix:///run/containerd/containerd.sock
+timeout: 10
+debug: true
+EOF
+}
+
+_crictl_install(){
+  if [ -f /opt/bin/k8s/crictl ];then
+    print_info "crictl already install"
+    crictl --version
+    return
+  fi
+
+  local url="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
+  local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz"
+  __download(){
+    sudo curl -fsSL ${url}/${TAR_FILE} -o /tmp/${TAR_FILE}
+  }
+
+  print_info "install crictl ..."
+
+  if [ -f /tmp/${TAR_FILE} ];then
+      local sha256=$(sha256sum /tmp/${TAR_FILE} | cut -d " " -f 1)
+    if ! [ $sha256 = "c3b71be1f363e16078b51334967348aab4f72f46ef64a61fe7754e029779d45a" ];then
+      sudo rm -rf /tmp/${TAR_FILE}
+      __download
+    fi
+  else
+      __download
+  fi
+
+  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/bin/k8s
+}
+
 _k8s_install_dep(){
   print_info "install dep ..."
   # 安装依赖软件
@@ -494,7 +552,6 @@ _k8s_install_dep(){
 _k8s_install_common(){
   # 关闭防火墙
   sudo systemctl stop firewalld && sudo systemctl disable firewalld || true
-  sudo mkdir -p /opt/bin/k8s
   sudo mkdir -p /etc/docker
   sudo chmod -R 755 /opt
   sudo mkdir -p ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs
@@ -678,7 +735,7 @@ _crio_config(){
 }
 
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
-_containerd_config(){
+_containerd_cri_config(){
   _cni_install
   print_info "config containerd ..."
   sudo mkdir -p /etc/containerd/
@@ -750,11 +807,15 @@ encryption-config.yaml} \
   _k8s_install_systemd
 
   _gvisor_install
+  _crictl_install
+  _containerd_install
+  _runc_install
 
   if [ "${1}" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
-    _containerd_config
+    _containerd_cri_config
     _gvisor_containerd_conf
+    _crictl_containerd_conf
   elif [ "${1}" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
     _crio_config
@@ -763,6 +824,7 @@ encryption-config.yaml} \
     print_info "Kubelet Runtime is Docker"
     _gvisor_docker_conf
     _k8s_install_systemd_docker
+    _crictl_docker_conf
   fi
 
   sudo systemctl daemon-reload
@@ -840,11 +902,15 @@ kube-proxy.kubeconfig} \
   done
 
   _gvisor_install
+  _crictl_install
+  _containerd_install
+  _runc_install
 
   if [ "${2}" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
-    _containerd_config
+    _containerd_cri_config
     _gvisor_containerd_conf
+    _crictl_containerd_conf
   elif [ "${2}" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
     _crio_config
@@ -853,6 +919,7 @@ kube-proxy.kubeconfig} \
     print_info "Kubelet Runtime is Docker"
     _gvisor_docker_conf
     _k8s_install_systemd_docker
+    _crictl_docker_conf
   fi
 
   _k8s_install_systemd ${HOSTNAME}
