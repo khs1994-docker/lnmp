@@ -2,7 +2,7 @@
 Description=Kubernetes API Server
 Documentation=https://github.com/kubernetes/kubernetes
 After=network.target
-Requires=etcd.service
+# Requires=etcd.service
 
 [Service]
 # Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
@@ -69,7 +69,6 @@ ExecStart=/opt/bin/k8s/kube-apiserver \
 Restart=on-failure
 RestartSec=5
 Type=notify
-User=k8s
 LimitNOFILE=65536
 TimeoutStartSec=0
 

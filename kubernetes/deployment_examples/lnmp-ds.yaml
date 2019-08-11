@@ -14,7 +14,7 @@ spec:
     port: 80
     targetPort: 80
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: nginx-ds
@@ -29,6 +29,6 @@ spec:
     spec:
       containers:
       - name: my-nginx
-        image: nginx:1.17.1-alpine
+        image: nginx:1.17.2-alpine
         ports:
         - containerPort: 80

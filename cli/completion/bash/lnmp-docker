@@ -39,7 +39,6 @@ complete -W "acme.sh \
         clusterkit-redis-sentinel-deploy \
         clusterkit-redis-sentinel-remove \
         daemon-socket \
-        dashboard \
         up \
         config \
         pull \
@@ -70,6 +69,10 @@ complete -W "acme.sh \
         upgrade \
         update-version \
         init \
+        add \
+        outdated \
+        pkg-backup \
+        pkg-update \
         commit \
         test \
         cn-mirror \

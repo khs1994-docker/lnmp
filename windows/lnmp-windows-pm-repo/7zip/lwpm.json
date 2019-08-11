@@ -1,0 +1,10 @@
+{
+  "name": "7zip",
+  "description": "7-Zip is a file archiver with a high compression ratio",
+  "version": "1900",
+  "preVersion": "1900",
+  "homepage": "https://www.7-zip.org/",
+  "bug": "https://www.7-zip.org/support.html",
+  "github": "",
+  "releases": "https://www.7-zip.org/download.html"
+}

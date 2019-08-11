@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: lnmp-php7
-        image: khs1994/php:7.3.6-fpm-alpine
+        image: khs1994/php:7.3.8-fpm-alpine
         args:
         - php-fpm
         - -R
@@ -100,9 +100,6 @@ spec:
           mountPath: /usr/local/etc/php/php.ini
           subPath: php.ini
         - name: lnmp-php-conf
-          mountPath: /usr/local/etc/php/conf.d/docker-php.ini
-          subPath: docker-php.ini
-        - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/conf.d/docker.ini
           subPath: docker.ini
         - name: lnmp-php-conf
@@ -129,8 +126,6 @@ spec:
           items:
           - key: php.ini
             path: php.ini
-          - key: docker-php.ini
-            path: docker-php.ini
           - key: docker.ini
             path: docker.ini
           - key: zz-docker.conf

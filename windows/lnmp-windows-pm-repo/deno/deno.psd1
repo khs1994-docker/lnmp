@@ -12,7 +12,7 @@
 RootModule = 'deno.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.11.0'
+ModuleVersion = '0.14.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@ Copyright = '(c) lnmp@docker.khs1994.com. All rights reserved.'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @("install","uninstall")
+FunctionsToExport = @("install","uninstall","getInfo","homepage","bug","releases")
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()

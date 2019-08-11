@@ -25,7 +25,7 @@ $global:DistributionName="debian"
 
 $global:TZ='Asia/Shanghai'
 
-$global:LNMP_PHP_IMAGE="khs1994/php:7.3.6-composer-alpine"
+$global:LNMP_PHP_IMAGE="khs1994/php:7.3.8-composer-alpine"
 
 $global:HYPERV_VIRTUAL_SWITCH='zy'
 

@@ -13,6 +13,9 @@
 
 set -e
 
+tty=
+tty -s && tty=--tty
+
 readonly KUBERNETES_VERSION=1.14.3
 readonly DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
 readonly OS=`uname -s`
@@ -66,14 +69,14 @@ else
     fi
 fi
 
-_cp_only_not_exists docker-compose.include.example.yml docker-compose.include.yml
+_cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
 
-_cp_only_not_exists lnmp-custom-script.example lnmp-custom-script
+_cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
 print_info "Exec custom scripts"
 echo
 
-. ./lnmp-custom-script
+. ./lnmp-docker-custom-script
 
 if ! [ -f config/php/docker-php.ini ];then
   cp config/php/docker-php.ini.example config/php/docker-php.ini
@@ -123,7 +126,6 @@ Commands:
   daemon-tls-cert      Generate Docker Daemon TLS cert
   docs                 Read support documents
   help                 Display this help message
-  init                 Init LNMP environment
   nfs                  Up NFS server [ down | ]
   pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
@@ -133,6 +135,13 @@ Commands:
   update               Upgrades LNMP [ -f | ]
   upgrade              Upgrades LNMP [ -f | ]
   update-version       Update LNMP soft to latest vesion
+
+lnmp-include(package):
+  init                 Init a new lnmp-include package
+  add                  Add new lnmp-include package
+  outdated             Shows a list of installed lnmp-include packages that have updates available
+  pkg-backup           Upload composer.json to GitHub Gist
+  pkg-update           Update lnmp-include package
 
 PHP Tools:
   httpd-config         Generate Apache2 vhost conf
@@ -145,8 +154,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  dashboard            Print how run kubernetes dashboard in Docker Desktop
-  gcr.io               Up local gcr.io(k8s.gcr.io) registry server to start Docker Desktop Kubernetes [ --no-pull | ]
+  gcr.io               Up local gcr.io sregistry server to start Docker Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -253,7 +261,7 @@ _gcr_io_down(){
 _gcr_io(){
   if [ "$1" = down ];then
     _gcr_io_down
-    print_info "Stop k8s.gcr.io local server success"
+    print_info "Stop gcr.io local server success"
     echo
     exit
   fi
@@ -268,8 +276,9 @@ _gcr_io(){
 
   mkdir -p data/registry
 
-  docker run -it -d \
+  docker run -i ${tty} -d \
       -p 443:443 \
+      -p 80:80 \
       --mount type=bind,src=$PWD/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml \
       --mount type=bind,src=$PWD/config/registry,target=/etc/docker/registry/ssl \
       --mount type=bind,src=$PWD/data/registry,target=/var/lib/registry:delegated \
@@ -284,6 +293,7 @@ _gcr_io(){
       fi
 
     if [ "$1" = '--no-pull' ];then
+      print_info "Up gcr.io Server Success"
       return
     fi
 
@@ -304,32 +314,18 @@ _gcr_io(){
     coredns:1.3.1 \
     pause:3.1"
 
+    sleep 5
+
     for image in $images
     do
-       # docker pull gcr.mirrors.ustc.edu.cn/google-containers/$image
-       # docker tag gcr.mirrors.ustc.edu.cn/google-containers/$image k8s.gcr.io/$image
-       # docker push k8s.gcr.io/$image
-       # docker rmi gcr.mirrors.ustc.edu.cn/google-containers/$image
-
        print_info "Handle ${image}"
-       docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$image
-       docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$image k8s.gcr.io/$image
-       docker push k8s.gcr.io/$image
-       docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$image
+       docker pull gcr.io/google-containers/$image
+       docker tag  gcr.io/google-containers/$image k8s.gcr.io/$image
+       # docker push k8s.gcr.io/$image
+       docker rmi  gcr.io/google-containers/$image
     done
 
-    echo "
-Warning
-
-this command up a local server on port 443.
-
-When Docker Desktop Start Kubernetes Success, you must remove this local server.
-
-\$ lnmp-docker gcr.io down
-
-More information please see docs/kubernetes/docker-desktop.md
-
-    "
+    _gcr_io_down
 }
 
 _satis(){
@@ -338,7 +334,7 @@ _satis(){
     print_warning "Please modify app/satis/satis.json\n"
   fi
 
-  docker run --rm -it --mount type=bind,src=${APP_ROOT}/satis,target=/build \
+  docker run --rm -i ${tty} --mount type=bind,src=${APP_ROOT}/satis,target=/build \
       --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
 }
 
@@ -392,25 +388,35 @@ _get_compose_options(){
 
   for compose_file in $LNMP_COMPOSE_INCLUDE
   do
+    if [ -d vendor/lnmp-include-dev/$compose_file ];then
+      LNMP_COMPOSE_INCLUDE_ROOT="vendor/lnmp-include-dev/$compose_file"
+    elif [ -d vendor/lnmp-include/$compose_file ];then
+      LNMP_COMPOSE_INCLUDE_ROOT="vendor/lnmp-include/$compose_file"
+    elif [ -d lnmp-include/$compose_file ];then
+      LNMP_COMPOSE_INCLUDE_ROOT="lnmp-include/$compose_file"
+    else
+      continue
+    fi
+
     if [ $isBuild -eq 1 ];then
-      if ! [ -f "lnmp-include/$compose_file/docker-compose.build.yml" ];then
-        options+=" -f lnmp-include/$compose_file/docker-compose.yml "
+      if ! [ -f "$LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.build.yml" ];then
+        options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml "
         continue
       fi
 
-      options+=" -f lnmp-include/$compose_file/docker-compose.yml -f lnmp-include/$compose_file/docker-compose.build.yml "
+      options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.build.yml "
 
       continue
     fi
 
-    if ! [ -f "lnmp-include/$compose_file/docker-compose.override.yml" ];then
-      options+=" -f lnmp-include/$compose_file/docker-compose.yml "
+    if ! [ -f "$LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.override.yml" ];then
+      options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml "
       continue
     fi
-    options+=" -f lnmp-include/$compose_file/docker-compose.yml -f lnmp-include/$compose_file/docker-compose.override.yml "
+    options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.override.yml "
   done
 
-  options+=" -f docker-compose.include.yml "
+  options+=" -f docker-lnmp.include.yml "
 }
 
 _registry(){
@@ -475,7 +481,7 @@ env_status(){
       print_info ".env file existing\n"; \
   else print_warning ".env file NOT existing (Maybe First Run)\n"; cp .env.example .env ; fi
 
-  _cp_only_not_exists volumes/.env.example volumes/.env
+  _cp_only_not_exists kubernetes/volumes/.env.example kubernetes/volumes/.env
 
   if ! [ -f secrets/minio/key.txt ];then
     cp secrets/minio/key.example.txt secrets/minio/key.txt
@@ -579,7 +585,7 @@ cleanup(){
 
 gitbook(){
   docker rm -f lnmp-docs > /dev/null 2>&1 || echo
-  exec docker run --init -it --rm -p 4000:4000 \
+  exec docker run --init -i ${tty} --rm -p 4000:4000 \
     --name lnmp-docs --mount type=bind,src=$PWD/docs,target=/srv/gitbook-src \
     khs1994/gitbook \
     server
@@ -1004,7 +1010,7 @@ server{
 
 # 申请 ssl 证书
 acme(){
-  exec docker run --init -it --rm \
+  exec docker run --init -i ${tty} --rm \
          -v $PWD/config/${LNMP_NGINX_CONF_D:-nginx}/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
          --env-file .env \
@@ -1049,7 +1055,7 @@ $ ./lnmp-docker acme.sh
   command=${command[@]//'--rsa'/}
   command=${command[@]//'--httpd'/}
 
-  exec docker run --init -it --rm \
+  exec docker run --init -i ${tty} --rm \
          -v $PWD/config/$(if [ "$HTTPD" = 1 ];then \
              echo ${LNMP_HTTPD_CONF_D:-httpd}; else echo ${LNMP_NGINX_CONF_D:-nginx}; fi)/ssl:/ssl \
          --mount source=lnmp_ssl-data,target=/acme.sh \
@@ -1060,7 +1066,7 @@ $ ./lnmp-docker acme.sh
 }
 
 ssl_self(){
-  docker run --init -it --rm -v $PWD/config/${LNMP_NGINX_CONF_D:-nginx}/ssl:/ssl khs1994/tls "$@"
+  docker run --init -i ${tty} --rm -v $PWD/config/${LNMP_NGINX_CONF_D:-nginx}/ssl:/ssl khs1994/tls "$@"
 }
 
 # 快捷开始 PHP 项目开发
@@ -1140,7 +1146,7 @@ bash_cli(){
   get_service_container_id $SERVICE_NAME
   shift
   # avoid systemd error the input device is not a TTY
-  docker exec -it $container_id $@ || docker exec -i $container_id $@
+  docker exec -i ${tty} $container_id $@ || docker exec -i $container_id $@
   exit $?
 }
 
@@ -1172,7 +1178,7 @@ clusterkit_bash_cli(){
   local SERVICE_NAME=$2
   get_clusterkit_service_container_id $ENV_NAME $SERVICE_NAME
   shift 2
-  docker exec -it $container_id $@ || docker exec -i $container_id $@
+  docker exec -i ${tty} $container_id $@ || docker exec -i $container_id $@
 
   exit $?
 }
@@ -1239,7 +1245,7 @@ pcit_init(){
   fi
 
   if ! [ -f pcit/key/public.key ];then
-    docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine \
+    docker run -i ${tty} --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine \
       openssl rsa -in private.key -pubout -out public.key
   fi
 
@@ -1252,6 +1258,83 @@ pcit_init(){
   # 启动
 }
 
+_package_add(){
+  if [ -z "$1" ];then
+     print_error "Please Input package name"
+     exit 1
+  fi
+
+  for package in "$@"
+  do
+    composer require lnmp-include/$package --prefer-source
+  done
+
+  for package in "$@"
+  do
+    if ! [ -d vendor/lnmp-include/$package ];then continue ; fi
+    cd vendor/lnmp-include/$package
+    if [ -f bin/post-install ];then source bin/post-install ; fi
+    cd ../../ > /dev/null
+  done
+}
+
+_package_init(){
+  if [ -z "$1" ];then
+     print_error "Please Input package name"
+     exit 1
+  fi
+
+  local package=$1
+
+  if [ -d vendor/lnmp-include-dev/$package ];then
+     print_error "This package already exists"
+     exit 1
+  fi
+
+  cp -r lnmp-include/example vendor/lnmp-include-dev/$package
+
+  if [ `command -v composer` ];then
+     composer init -d vendor/lnmp-include-dev/$package \
+       --name "lnmp-include/$package" \
+       --homepage "https://docs.lnmp.khs1994.com/lnmp-include.html" \
+       --license "MIT" \
+       -q
+  fi
+}
+
+_package_outdated(){
+  if ! [ -d vendor/lnmp-include ];then return; fi
+
+  if [ -z "$1" ];then
+    composer outdated "lnmp-include/*"
+    return
+  fi
+
+  composer outdated "$@"
+}
+
+_package_backup(){
+  echo ""
+}
+
+_package_update(){
+  if ! [ -d vendor/lnmp-include ];then return; fi
+
+  if [ -z "$1" ];then
+    composer update "lnmp-include/*"
+    return
+  fi
+
+  composer update "$@"
+
+  for package in "$@"
+  do
+    if ! [ -d vendor/lnmp-include/$package ];then continue ; fi
+    cd vendor/lnmp-include/$package
+    if [ -f bin/post-install ];then source bin/post-install ; fi
+    cd ../../ > /dev/null
+  done
+}
 
 # 入口文件
 
@@ -1264,16 +1347,27 @@ main() {
     ;;
 
   init )
-    init
+    _package_init "$@"
     ;;
-
+  add )
+    _package_add "$@"
+    ;;
+  pkg-backup )
+    _package_backup
+    ;;
+  pkg-update )
+    _package_update "$@"
+    ;;
+  outdated )
+    _package_outdated "$@"
+    ;;
   backup )
     run_docker; backup "$@"
     ;;
 
   config )
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     exec docker-compose $options config "$@"
     ;;
@@ -1316,6 +1410,7 @@ main() {
   ;;
 
   gcr.io )
+   print_info "Check gcr.io host "
    cat /etc/hosts | grep 'gcr.io' > /dev/null || \
        (print_info "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io gcr.io' | sudo tee -a /etc/hosts )
 
@@ -1417,8 +1512,8 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.build.yml" \
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.build.yml" \
                            "--build"
 
       exec docker-compose $options build "$@" --parallel
@@ -1433,8 +1528,8 @@ For information please run $ docker service update --help
     init
 
     if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.build.yml" \
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.build.yml" \
                            "--build"
       exec docker-compose $options up -d "$@"
     else
@@ -1458,8 +1553,8 @@ For information please run $ docker service update --help
 
     if [ "$1" != '--systemd' ];then opt='-d'; else opt= ;fi
 
-    _get_compose_options docker-compose.yml \
-                         docker-compose.override.yml
+    _get_compose_options docker-lnmp.yml \
+                         docker-lnmp.override.yml
 
     docker-compose $options up $opt ${service}
 
@@ -1467,7 +1562,8 @@ For information please run $ docker service update --help
     __lnmp_custom_up "$@" 2>/dev/null || true
 
     echo; sleep 1; print_info "Test nginx configuration file...\n"
-    docker exec -it \
+
+    docker exec -i ${tty}\
           $(docker container ls --format {{.ID}} \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
@@ -1476,8 +1572,8 @@ For information please run $ docker service update --help
   build-config )
     init
     if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.build.yml" \
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.build.yml" \
                            "--build"
 
       exec docker-compose $options config "$@"
@@ -1578,8 +1674,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
   build-push )
     run_docker; init;
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.build.yml" \
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.build.yml" \
                          "--build"
 
     docker-compose $options build --parallel "$@"
@@ -1587,7 +1683,9 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   down )
-    init; docker-compose down --remove-orphans
+    _get_compose_options "docker-lnmp.yml" "docker-lnmp.override.yml"
+
+    init; docker-compose $options down --remove-orphans
     #@custom
     __lnmp_custom_down "$@" 2>/dev/null || true
     ;;
@@ -1600,8 +1698,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     run_docker; init
 
     sleep 2;
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
 
@@ -1672,11 +1770,11 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
       if [ $soft = 'nginx' ];then opt='true'; fi
     done
 
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     if [ "$opt" = 'true' ];then
-      docker exec -it $(docker container ls \
+      docker exec -i ${tty} $(docker container ls \
                             --format {{.ID}} \
                             -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
                             -f label=com.docker.compose.service=nginx -n 1 ) nginx -t || \
@@ -1699,12 +1797,13 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      -p 2375:2375 \
      --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock \
      -e PORT=2375 \
+     --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" \
      shipyard/docker-proxy
      ;;
 
   clusterkit )
-     _get_compose_options "docker-compose.yml" \
-                          "docker-compose.override.yml" \
+     _get_compose_options "docker-lnmp.yml" \
+                          "docker-lnmp.override.yml" \
                           "cluster/docker-cluster.mysql.yml" \
                           "cluster/docker-cluster.redis.yml"
      exec docker-compose $options up "$@"
@@ -1860,8 +1959,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   clusterkit-* )
         command=$(echo $command | cut -d '-' -f 2)
-        _get_compose_options "docker-compose.yml" \
-                             "docker-compose.override.yml" \
+        _get_compose_options "docker-lnmp.yml" \
+                             "docker-lnmp.override.yml" \
                              "cluster/docker-cluster.mysql.yml" \
                              "cluster/docker-cluster.redis.yml"
         exec docker-compose $options $command "$@"
@@ -1871,22 +1970,6 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
     docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
         ;;
-
-  dashboard )
-    echo -e "
-$ cd kubernetes
-
-$ kubectl apply -f coreos/addons/dashboard.yaml
-
-$ kubectl proxy
-
-OPEN http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
-
-First Run? Maybe you wait 60s then open url.
-"
-    print_info "More information please see https://github.com/kubernetes/dashboard"
-
-    ;;
 
     update-version )
         update_version
@@ -1902,8 +1985,8 @@ First Run? Maybe you wait 60s then open url.
     pcit_nginx_init
 
     if [ -z "$1" ];then
-      _get_compose_options "docker-compose.yml" \
-                           "docker-compose.override.yml"
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.override.yml"
 
     exec docker-compose $options ${LNMP_SERVICES} pcit
     fi
@@ -1912,11 +1995,11 @@ First Run? Maybe you wait 60s then open url.
     nfs )
     sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
     sudo modprobe nfsd
-    cd volumes
+    cd kubernetes/volumes
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs
     fi
-    docker-compose up -d nfs
+    exec docker-compose up -d nfs
 
     ;;
 
@@ -1935,8 +2018,8 @@ First Run? Maybe you wait 60s then open url.
   if ! [ -z "$command" ];then
     print_warning "command not found, Now Exec docker-compose commands"; echo
 
-    _get_compose_options "docker-compose.yml" \
-                         "docker-compose.override.yml"
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
 
     exec docker-compose $options $command "$@"
   fi

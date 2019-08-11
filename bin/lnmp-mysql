@@ -16,12 +16,12 @@ docker run -it --rm \
     --network lnmp_backend \
     --entrypoint mysql \
     -e TZ=${TZ} \
-    mysql:${LNMP_MYSQL_VERSION:-8.0.16} \
+    mysql:${LNMP_MYSQL_VERSION:-8.0.17} \
     "$@" || docker run -it --rm \
     --entrypoint mysql \
     -e TZ=${TZ} \
     --user ${LNMP_USER:-root:root} \
-    mysql:${LNMP_MYSQL_VERSION:-8.0.16} \
+    mysql:${LNMP_MYSQL_VERSION:-8.0.17} \
     "$@"
 
 if ! [ -z "$CREATE" ];then

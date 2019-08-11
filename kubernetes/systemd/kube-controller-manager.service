@@ -1,7 +1,7 @@
 [Unit]
 Description=Kubernetes Controller Manager
 Documentation=https://github.com/kubernetes/kubernetes
-Requires=kube-apiserver.service
+# Requires=kube-apiserver.service
 
 [Service]
 
@@ -52,7 +52,6 @@ ExecStart=/opt/bin/k8s/kube-controller-manager \
 
 Restart=on-failure
 RestartSec=5
-User=k8s
 
 [Install]
 WantedBy=multi-user.target

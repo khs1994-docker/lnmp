@@ -1,4 +1,4 @@
-# 本项目开发 Laravel 最佳实践
+# Laravel 最佳实践
 
 [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
@@ -34,13 +34,25 @@ $ cd app
 $ lnmp-composer create-project laravel/laravel laravel5.5 "5.5.*"
 ```
 
+## 设置 Laravel .env 文件
+
+正确配置服务的 `HOST`，填写 `127.0.0.1` 将连接不到服务，具体原因不再赘述。
+
+```bash
+DB_HOST=mysql
+
+REDIS_HOST=redis
+
+MEMCACHED_HOST=memcached
+```
+
 ## Windows 运行 Laravel 响应缓慢的问题
 
 原因：监听宿主机目录通过 NFS 实现，性能存在问题。
 
 解决思路：`vendor` 目录使用数据卷（数据卷存在于虚拟机中）。
 
-编辑 `docker-compose.include.yml` 文件，重写默认的 `php` 配置。
+编辑 `docker-lnmp.include.yml` 文件，重写默认的 `php` `composer` 配置。
 
 ```yaml
 version: "3.7"
@@ -48,16 +60,24 @@ version: "3.7"
 services:
   # 这里增加的条目会重写本项目的默认配置
   php7:
-    # 本项目默认的 php 镜像不包含 composer，所以我们这里更换为 composer 镜像
-    image: khs1994/php:7.3.0-composer-alpine
+    &php7
     # vendor 目录使用数据卷
     volumes:
       # 假设 laravel 目录位于 `./app/laravel/`
-      - laravel_vendor:/app/laravel/vendor
+      - type: volume
+        source: laravel_vendor
+        target: /app/laravel/vendor
       # 假设还有一个 Laravel 应用位于 `./app/laravel2` 与 `./app/laravel` 版本一致（依赖一致），那么可以共用 vendor 数据卷
-      - laravel_vendor:/app/laravel/vendor2
+      - type: volume
+        source: laravel_vendor
+        target: /app/laravel/vendor2
       # 假设还有一个 laravel 5.7 应用位于 `./app/laravel5.7`，由于与 `./app/laravel` 依赖不一致，必须使用新的数据卷
-      - laravel_57_vendor:/app/laravel5.7/vendor
+      - type: volume
+        source: laravel_57_vendor
+        target: /app/laravel5.7/vendor
+
+  composer:
+    << : *php7
 
 # 定义数据卷
 volumes:
@@ -71,21 +91,14 @@ volumes:
 $ lnmp-docker up
 ```
 
-进入命令行安装 composer 依赖
+在容器中运行 composer ，安装依赖
 
 ```bash
-$ lnmp-docker php7-cli
-
-$ cd /app/laravel/
-
-$ composer install
-
-# $ composer update
-
-# 以此类推，进入其他 Laravel 的目录，安装依赖。
+# $ lnmp-docker composer LARAVEL_ROOT COMPOSER_COMMAND
+$ lnmp-docker composer /app/laravel install
 ```
 
-以后若在 `composer.json` 中添加依赖，请到容器中执行 `$ composer install`
+以后若在 `composer.json` 中添加依赖，重复上述步骤。
 
 ## 运行 Laravel 队列(Queue)
 

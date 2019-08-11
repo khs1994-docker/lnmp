@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 if [[ "$PHP_VERSION" = "nightly" && "$FPM" = "1" ]];then
   images=("$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm")
   images[1]="$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}"
@@ -9,8 +7,7 @@ if [[ "$PHP_VERSION" = "nightly" && "$FPM" = "1" ]];then
 
   for image in ${images[@]} ;
   do
-  docker tag $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine $image
-  docker push $image
+    fpmTagOptions+=" -t $image "
   done
 fi
 
@@ -25,8 +22,7 @@ if [[ "$PHP_VERSION" = "7_1_X" && "$FPM" = "1" ]];then
 
   for image in ${images[@]} ;
   do
-  docker tag $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine $image
-  docker push $image
+    fpmTagOptions+=" -t $image "
   done
 fi
 
@@ -41,8 +37,7 @@ if [[ "$PHP_VERSION" = "7_2_X" && "$FPM" = "1" ]];then
 
   for image in ${images[@]} ;
   do
-  docker tag $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine $image
-  docker push $image
+    fpmTagOptions+=" -t $image "
   done
 fi
 
@@ -65,10 +60,11 @@ if [[ "$PHP_VERSION" = "7_3_X" && "$FPM" = "1" ]];then
 
   for image in ${images[@]} ;
   do
-  docker tag $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine $image
-  docker push $image
+    fpmTagOptions+=" -t $image "
   done
 fi
+
+echo $fpmTagOptions
 
 # wget https://raw.githubusercontent.com/khs1994-docker/lnmp/18.09/scripts/arm-build.sh
 # chmod +x arm-build.sh

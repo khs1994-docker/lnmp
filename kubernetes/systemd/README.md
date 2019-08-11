@@ -3,7 +3,7 @@
 ## 准备
 
 * 了解 `systemd`
-* 机器内存 **2GB** 以上                                 
+* 机器内存 **2GB** 以上
 
 ## 安装依赖软件
 
@@ -65,13 +65,13 @@ $ sudo hostnamectl set-hostname node1
 
 ```bash
 # 生成证书
-$ dockr-composer up cfssl-single
+$ dockr-composer up cfssl-local
 
 # 部署
-$ ./lnmp-k8s single-install
+$ ./lnmp-k8s local-install
 
 # 启动
-$ ./lnmp-k8s single-start
+$ ./lnmp-k8s local-up
 # 按照提示，手动执行 systemctl 命令，依次启动 kubernetes 各组件
 ```
 
@@ -94,3 +94,14 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 将证书文件放入 `/opt/bin/k8s/conf/certs`
 
 将配置文件放入 `/opt/bin/k8s/conf`
+
+## 容器运行时
+
+* docker
+* containerd
+* cri-o
+
+## OCI 运行时
+
+* runc
+* runsc

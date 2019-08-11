@@ -1,0 +1,10 @@
+{
+  "name": "python",
+  "description": "Python is a programming language that lets you work quickly and integrate systems more effectively",
+  "version": "3.7.4",
+  "preVersion": "3.8.0b3",
+  "homepage": "https://www.python.org/",
+  "bug": "",
+  "github": "python/cpython",
+  "releases": "https://www.python.org/downloads/"
+}

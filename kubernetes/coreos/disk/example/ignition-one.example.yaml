@@ -85,7 +85,7 @@ storage:
             "tlskey": "/etc/docker/server-key.pem",
             "tlscacert": "/etc/docker/ca.pem",
             "registry-mirrors" : [
-              "https://registry.docker-cn.com"
+              "https://dockerhub.azk8s.cn"
             ],
             "debug" : true,
             "dns" : [

@@ -1,0 +1,95 @@
+name: CI
+
+on: push
+
+jobs:
+  skip-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - uses: ./.github/actions/when
+        with:
+          PCIT_WHEN_BRANCH: "19.03"
+          PCIT_WHEN_COMMIT_MESSAGE: "1"
+          PCIT_WHEN_COMMIT_MESSAGE_SKIP: "skip actions"
+  linux:
+    # needs: skip-ci
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: Update docker
+      run: |
+        docker --version
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+        sudo apt-get update
+        apt-cache madison docker-ce | grep 19.03
+        DOCKER_VERSION=$(apt-cache madison docker-ce | grep 19.03 | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
+        echo ${DOCKER_VERSION}
+        sudo apt-get -y install docker-ce=${DOCKER_VERSION}
+        docker --version
+        sudo systemctl status docker
+    - name: Update docker compose
+      run: |
+        docker-compose --version
+        ./lnmp-docker compose --official
+    - name: before_script
+      run: |
+        sudo systemctl stop mysql
+    - name: Up
+      run: ./lnmp-docker up
+    - name: Connect
+      run: |
+        sleep 20
+        curl 127.0.0.1
+    - name: Down
+      run: ./lnmp-docker down
+    - name: pwsh
+      run: pwsh -command "./lnmp-docker.ps1"
+  pw:
+    # needs: skip-ci
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: exec
+      run:
+        powershell -command "./lnmp-docker.ps1"
+  lwpm:
+    # needs: skip-ci
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: lwpm
+      run: powershell -command "./windows/lnmp-windows-pm.ps1 install composer"
+    - name: lwpm-add
+      run: |
+        echo extension=openssl >> C:\tools\php\php.ini
+        powershell -command "php -i | select-string .ini"
+        powershell -command "php -m"
+        powershell -command "cat C:\tools\php\php.ini | select-string extension"
+        powershell -command "./windows/lnmp-windows-pm.ps1 ; composer init -q"
+        powershell -command "./windows/lnmp-windows-pm.ps1 ; composer config minimum-stability dev"
+        powershell -command "./windows/lnmp-windows-pm.ps1 init test"
+        powershell -command "./windows/lnmp-windows-pm.ps1 add openjdk"
+        powershell -command "./windows/lnmp-windows-pm.ps1 install openjdk"
+  lnmp-include:
+    # needs: skip-ci
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: lnmp-include-add
+      run: |
+        echo extension=openssl >> C:\tools\php\php.ini
+        powershell -command "./windows/lnmp-windows-pm.ps1 install composer"
+        powershell -command "./lnmp-docker.ps1 init test"
+        powershell -command "./lnmp-docker.ps1 add harbor"

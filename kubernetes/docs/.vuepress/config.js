@@ -79,6 +79,8 @@ module.exports = {
       "/node/": [
         "kubelet",
         "worker",
+        "runtime",
+        "oci_runtime",
       ],
     },
     sidebarDepth: 1,

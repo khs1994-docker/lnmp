@@ -3,6 +3,7 @@
 !composer/config.example.json
 !composer/.env.example
 !composer/.env.example.ps1
+!composer/auth.example.json
 !etc
 !httpd/demo-ssl
 !httpd/demo-*.config
@@ -25,6 +26,7 @@
 !README.md
 supervisord/supervisord.ini
 !supervisord
-!kong
 kong/*.conf
 !frpc.ini
+path.md
+kong

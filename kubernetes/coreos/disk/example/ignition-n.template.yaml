@@ -275,7 +275,7 @@ storage:
             "tlskey": "/etc/kubernetes/certs/server-key.pem",
             "tlscacert": "/etc/kubernetes/certs/ca.pem",
             "registry-mirrors" : [
-              "https://registry.docker-cn.com"
+              "https://dockerhub.azk8s.cn"
             ],
             "debug" : true,
             "dns" : [

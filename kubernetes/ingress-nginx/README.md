@@ -28,6 +28,13 @@ $ kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
 $ kubectl apply -f addons/ingress-nginx/provider/cloud-generic.yaml
 ```
 
+## 端口
+
+默认没有将 `80` `443` 端口暴露。改为以下端口。
+
+* 8080
+* 8443
+
 ## 定义规则
 
 ```bash

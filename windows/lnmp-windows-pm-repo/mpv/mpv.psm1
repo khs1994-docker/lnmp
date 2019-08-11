@@ -3,12 +3,26 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 
-Function install($VERSION="20181002",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
+  }
+  if($isPre){
+    $VERSION=$preVersion
   }
   $url="https://mpv.srsfckn.biz/mpv-x86_64-${VERSION}.7z"
-  $name="mpv"
+
   $filename="mpv-x86_64-${VERSION}.7z"
   $unzipDesc="mpv"
 
@@ -43,9 +57,35 @@ Function install($VERSION="20181002",$preVersion=0){
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  example version
+  mpv version
 }
 
 Function uninstall(){
   _cleanup ""
+}
+
+Function getInfo(){
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

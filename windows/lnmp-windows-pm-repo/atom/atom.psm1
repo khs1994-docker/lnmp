@@ -1,18 +1,34 @@
 Import-Module downloader
 Import-Module unzip
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function install_after(){
   if($(_command apm)){
     apm config set registry https://registry.npm.taobao.org
   }
 }
 
-Function install($VERSION="1.38.2",$preVersion=0){
-  if($preVersion){
-    $VERSION="1.39.0-beta3"
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION="1.40.0-beta1"
+  }
+
   $url="https://github.com/atom/atom/releases/download/v${VERSION}/AtomSetup.exe"
-  $name="Atom"
+  $url="https://mirrors.huaweicloud.com/atom/v${VERSION}/AtomSetup.exe"
   $filename="AtomSetup-${VERSION}.exe"
   $unzipDesc="atom"
 
@@ -51,4 +67,33 @@ Function install($VERSION="1.38.2",$preVersion=0){
 Function uninstall(){
   echo ""
   # Remove-item
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  $latestVersion=getLatestRelease $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

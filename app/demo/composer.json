@@ -31,7 +31,7 @@
     "phpunit/phpunit": "^8.1"
   },
   "config": {
-    "php": "7.2.19",
+    "php": "7.2.21",
     "optimize-autoloader": true,
     "sort-packages": true,
     "preferred-install": "dist"
@@ -54,7 +54,7 @@
       "@php -r \"echo PHP_EOL.PHP_EOL.'$ composer config -g repo.packagist composer https://packagist.phpcomposer.com'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
     "z-docker:mirror": [
-      "@php -r \"echo PHP_EOL.PHP_EOL.'{ \"registry-mirrors\": [ \"https://registry.docker-cn.com\" ] }'.PHP_EOL.PHP_EOL.PHP_EOL;\""
+      "@php -r \"echo PHP_EOL.PHP_EOL.'{ \"registry-mirrors\": [ \"https://dockerhub.azk8s.cn\" ] }'.PHP_EOL.PHP_EOL.PHP_EOL;\""
     ],
     "z-travis": [
       "@php -r \"echo PHP_EOL.PHP_EOL.'travis encrypt-file ~/.ssh/id_rsa --add'.PHP_EOL.PHP_EOL;\""

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.6
+ARG PHP_VERSION=7.3.8
 
 FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine as php
 
@@ -14,13 +14,13 @@ ENV COMPOSER_DEP_APKS \
       tini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.8.6 \
+    COMPOSER_VERSION=1.9.0 \
     PS1="[\u@\h \w]# " \
     PHP_CS_FIXER_IGNORE_ENV=1
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.8.6,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.9.0,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
     && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
@@ -40,8 +40,6 @@ RUN --mount=type=bind,from=composer:1.8.6,source=/usr/bin/composer,target=/opt/b
     && cp -a /opt/bin/composer /usr/bin/composer \
     && composer --ansi --version --no-interaction \
     \
-# composer 中国镜像
-    && composer config -g repo.packagist composer https://php.cnpkg.org \
 # laravel 安装程序
     && composer global require --prefer-dist --ignore-platform-reqs "laravel/installer" \
 # php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer
@@ -51,7 +49,9 @@ RUN --mount=type=bind,from=composer:1.8.6,source=/usr/bin/composer,target=/opt/b
     && chmod +x /usr/local/bin/sami \
     \
     && ln -sf /tmp/vendor/bin/* /usr/local/bin \
-    && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
+    && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock \
+# composer 中国镜像
+    && composer config -g repo.packagist composer https://php.cnpkg.org
 
 ENTRYPOINT ["/bin/sh", "/docker-entrypoint.composer.sh"]
 

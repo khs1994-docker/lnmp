@@ -45,7 +45,7 @@ spec:
   # Recycle 删除 PV 上的数据 deprecated
   # Delete 删除 PV
   hostPath:
-    path: /var/lib/lnmp/mysql
+    path: /home/username/.docker/Volumes/lnmp-mysql
   storageClassName: hostpath
 
 ---
@@ -64,7 +64,7 @@ spec:
   accessModes: [ "ReadWriteOnce" ]
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /var/lib/lnmp/redis
+    path: /home/username/.docker/Volumes/lnmp-redis
   storageClassName: hostpath
 ---
 apiVersion: v1
@@ -81,7 +81,7 @@ spec:
   accessModes: [ "ReadWriteOnce" ]
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /var/lib/lnmp/registry
+    path: /home/username/.docker/Volumes/lnmp-registry
   storageClassName: hostpath
 ---
 apiVersion: v1
@@ -99,5 +99,5 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /var/log
+    path: /home/username/.docker/Volumes/lnmp-log
   storageClassName: hostpath

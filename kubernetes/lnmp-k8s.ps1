@@ -42,7 +42,7 @@ Commands:
   kubectl-getinfo    Get kubectl latest version info
 
   minikube-install   Install minikube
-  minikube           Start minikube
+  minikube-up        Start minikube
 
   create             Deploy lnmp on k8s [--ingress]
   delete             Stop lnmp on k8s, keep data resource(pv and pvc)
@@ -88,7 +88,7 @@ Function _create_pv(){
   kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
 }
 
-Function _registry(){
+Function _registry_up(){
   kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=helm/registry/config/config.development.yml
   kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
 
@@ -99,7 +99,7 @@ Function _registry(){
   kubectl -n lnmp create -f addons/registry.yaml
 }
 
-Function _helm($environment, $debug=0){
+Function _helm_lnmp($environment, $debug=0){
   cd helm
 
   if ($debug){
@@ -196,18 +196,18 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
 
   "registry" {
     _create_pv
-    _registry
+    _registry_up
   }
 
   "create-pv" {
     _create_pv
   }
 
-  "minikube" {
+  "minikube-up" {
     minikube.exe start `
       --hyperv-virtual-switch="minikube" `
       -v 10 `
-      --registry-mirror=https://registry.docker-cn.com `
+      --registry-mirror=https://dockerhub.azk8s.cn `
       --vm-driver="hyperv" `
       --memory=4096
   }
@@ -219,19 +219,19 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "helm-development" {
-    _helm development $args[1]
+    _helm_lnmp development $args[1]
   }
 
   "helm-testing" {
-    _helm testing $args[1]
+    _helm_lnmp testing $args[1]
   }
 
   "helm-staging" {
-    _helm staging $args[1]
+    _helm_lnmp staging $args[1]
   }
 
   "helm-production" {
-    _helm production $args[1]
+    _helm_lnmp production $args[1]
   }
 
   Default {

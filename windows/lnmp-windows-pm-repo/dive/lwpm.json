@@ -1,0 +1,10 @@
+{
+  "name": "dive",
+  "description": "A tool for exploring each layer in a docker image",
+  "version": "0.7.2",
+  "preVersion": "0.7.2",
+  "homepage": "https://github.com/wagoodman/dive",
+  "bug": "https://github.com/wagoodman/dive/issues",
+  "github": "wagoodman/dive",
+  "releases": "https://github.com/wagoodman/dive/releases"
+}

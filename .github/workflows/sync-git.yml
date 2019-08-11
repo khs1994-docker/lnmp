@@ -1,0 +1,69 @@
+on:
+  push:
+    branches:
+    - 19.03
+
+name: Sync Git
+
+jobs:
+  sync-git:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: sync-acme
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/khs1994-docker/acme-docker
+        PCIT_KEEP_HISTORY: "1"
+        PCIT_LOCAL_DIR: dockerfile/acme
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-ci
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/khs1994-docker/ci
+        PCIT_KEEP_HISTORY: "1"
+        PCIT_LOCAL_DIR: drone
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-kubernetes
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/khs1994-docker/lnmp-k8s
+        PCIT_KEEP_HISTORY: "1"
+        PCIT_LOCAL_DIR: kubernetes
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-node-demo
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/khs1994-docker/node-demo
+        PCIT_KEEP_HISTORY: "1"
+        PCIT_LOCAL_DIR: app/node-demo
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994
+    - name: sync-php-demo
+      uses: docker://pcit/pages
+      env:
+        PCIT_EMAIL: khs1994@khs1994.com
+        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/khs1994-docker/php-demo
+        PCIT_KEEP_HISTORY: "1"
+        PCIT_LOCAL_DIR: app/demo
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_TARGET_BRANCH: master
+        PCIT_USERNAME: khs1994

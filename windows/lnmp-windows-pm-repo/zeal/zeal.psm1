@@ -1,12 +1,26 @@
 Import-Module downloader
 Import-Module unzip
 
-Function install($VERSION="0.6.1",$preVersion=0){
-  if($preVersion){
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
-  $url="https://dl.bintray.com/zealdocs/windows/zeal-${VERSION}-windows-x64.msi"
-  $name="Zeal"
+  if($isPre){
+    $VERSION=$preVersion
+  }
+  $url="https://github.com/zealdocs/zeal/releases/download/v${VERSION}/zeal-${VERSION}-windows-x64.msi"
+
   $filename="zeal-${VERSION}-windows-x64.msi"
   # $unzipDesc="zeal"
 
@@ -33,4 +47,33 @@ Function install($VERSION="0.6.1",$preVersion=0){
 Function uninstall(){
   echo ""
   # Remove-item
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  $latestVersion=getLatestRelease $githubRepo
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

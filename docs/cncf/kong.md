@@ -8,7 +8,7 @@
 
 第一步先执行数据库迁移
 
-在 `docker-compose.include.yml` 中将 `kong` 字段的 `command` 指令取消注释。
+在 `docker-lnmp.include.yml` 中将 `kong` 字段的 `command` 指令取消注释。
 
 由于 `postgresql` 初始化需要一定的时间，所以等待一会，重启失败的 `kong` 即可。
 

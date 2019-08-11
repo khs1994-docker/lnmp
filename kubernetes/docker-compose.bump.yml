@@ -2,10 +2,10 @@ version: "3.7"
 
 services:
   k8s_apiserver:
-    image: k8s.gcr.io/kube-apiserver:v1.15.0
+    image: k8s.gcr.io/kube-apiserver:v1.15.2
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.0.0-beta1
+    image: kubernetesui/dashboard:v2.0.0-beta3
 
   coredns:
     image: k8s.gcr.io/coredns:1.5.0

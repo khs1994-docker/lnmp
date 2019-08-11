@@ -1,8 +1,8 @@
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
-After=docker.service
-Requires=docker.service
+# After=docker.service
+# Requires=docker.service
 
 [Service]
 ExecStartPre=-/usr/sbin/swapoff -a
@@ -20,7 +20,6 @@ Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
 ExecStart=/opt/bin/k8s/kubelet \
 --bootstrap-kubeconfig=${K8S_CONF_PATH}/kubelet-bootstrap.kubeconfig \
 --cert-dir=${K8S_CONF_PATH}/certs \
---cni-conf-dir=/etc/cni/net.d \
 --container-runtime=docker \
 --container-runtime-endpoint=unix:///var/run/dockershim.sock \
 --root-dir=/var/lib/kubelet \
@@ -32,6 +31,9 @@ ExecStart=/opt/bin/k8s/kubelet \
 --volume-plugin-dir=/var/lib/kubelet/kubelet-plugins/volume/exec/ \
 --logtostderr=true \
 --v=2
+
+# --container-runtime=remote \
+# --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
 
 Restart=on-failure
 RestartSec=5

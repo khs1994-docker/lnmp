@@ -17,7 +17,9 @@ services:
       - ./pcit/key:/app/pcit/framework/storage/private_key:cached
       - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
-      - pcit-tmp:/tmp
+      - type: volume
+        source: pcit-tmp
+        target: /tmp
     networks:
       - backend
     working_dir: /app/pcit/bin

@@ -1,0 +1,10 @@
+{
+  "name": "zeal",
+  "description": "Offline documentation browser inspired by Dash",
+  "version": "0.6.1",
+  "preVersion": "0.6.1",
+  "homepage": "https://zealdocs.org/",
+  "bug": "https://github.com/zealdocs/zeal/issues",
+  "github": "zealdocs/zeal",
+  "releases": "https://github.com/zealdocs/zeal/releases"
+}

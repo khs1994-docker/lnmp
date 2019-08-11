@@ -2,6 +2,7 @@ language: bash
 
 # dist: trusty # 14.04
 dist: xenial # 16.04
+# dist: bionic # 18.04
 
 services:
 - docker
@@ -94,8 +95,9 @@ jobs:
 
     - stage: tag
       script: |
-        github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
-          cat CHANGELOG.md | github-release release -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
+        echo ${TRAVIS_TAG} | grep 'rc' && exit 0 || true \
+        ; github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
+        cat CHANGELOG.md | github-release release -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
 
     - stage: development
       install:
@@ -143,6 +145,22 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
+    - stage: wsl-php-builder-ubuntu1804-73
+      name: wsl-php-builder-ubuntu1804-73
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose create ${TRAVIS_JOB_NAME}
+        - . .env
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-ubuntu-bionic_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+
     - stage: wsl-php-builder-74
       name: wsl-php-builder-74
       install:
@@ -159,8 +177,8 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
-    - stage: wsl-php-builder-rhel-72
-      name: wsl-php-builder-rhel-72
+    - stage: wsl-php-builder-rhel7-72
+      name: wsl-php-builder-rhel7-72
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -174,8 +192,8 @@ jobs:
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_72}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
-    - stage: wsl-php-builder-rhel-73
-      name: wsl-php-builder-rhel-73
+    - stage: wsl-php-builder-rhel7-73
+      name: wsl-php-builder-rhel7-73
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -229,12 +247,12 @@ jobs:
         - cd config
         - ./default.sh
         - cd ..
-        - git status
+        - git status | grep "nothing to commit" && exit 0 || true
         - git add .
-        - git commit -m "[Config] Update default config"
+        - git commit -m "[Config] Update default config" || exit 0
         - git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
-        - git checkout -b 18.09-config
-        - git push github 18.09-config -f
+        - git checkout -b 19.03-config
+        - git push github 19.03-config -f
 
 # stages:
 #   - test
@@ -248,10 +266,12 @@ jobs:
 stages:
   - name: tag
     if: tag =~ /^(v19)/
-  - development
-  - swarm
+  - name: development
+    if: branch = "19.03"
+  - name: swarm
+    if: branch = "19.03"
   - name: checkConfig
-    if: branch = "18.09"
+    if: branch = "19.03"
   # don't run
   - name: docs
     if: tag =~ /^(vxx)/
@@ -267,11 +287,13 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-74
     if: tag =~ /^(v19)/
-  - name: wsl-php-builder-rhel-71
+  - name: wsl-php-builder-ubuntu1804-73
     if: tag =~ /^(v19)/
-  - name: wsl-php-builder-rhel-72
+  - name: wsl-php-builder-rhel7-71
     if: tag =~ /^(v19)/
-  - name: wsl-php-builder-rhel-73
+  - name: wsl-php-builder-rhel7-72
+    if: tag =~ /^(v19)/
+  - name: wsl-php-builder-rhel7-73
     if: tag =~ /^(v19)/
 
 # branches:

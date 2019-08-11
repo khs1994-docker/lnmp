@@ -53,29 +53,7 @@ development
 
 > **这个项目能不能增加 xxx 软件，可以！**
 
-新建 `lnmp-include/xxx` 文件夹
-
-在 `lnmp-include/xxx` 文件夹内新建 `docker-compose.yml` 文件，并编辑。
-
-> 可以参考 `lnmp-include` 文件夹中的示例项目
-
-### Linux、macOS
-
-编辑 `.env` 文件，将 `xxx` 加入到以下变量中，例如
-
-```bash
-LNMP_SERVICES="nginx mysql php7 redis phpmyadmin xxx"
-LNMP_COMPOSE_INCLUDE="etcd xxx"
-```
-
-### Windows
-
-编辑 `.env.ps1` 文件，将 `xxx` 加入到以下变量中，例如
-
-```bash
-$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','xxx'
-$global:LNMP_COMPOSE_INCLUDE="etcd","xxx"
-```
+请查看 [lnmp-include](lnmp-include.md)
 
 ## 单独启动某个软件
 
@@ -95,7 +73,7 @@ $ lnmp-docker up SOFT_NAME SOFT_NAME2
 
 > 例如我们想增加一个数据卷挂载，将本机 `/path/src` 挂载到 PHP 容器中的 `/path/target`
 
-编辑 `docker-compose.include.yml` 文件，重写默认的 `php7` 服务。
+编辑 `docker-lnmp.include.yml` 文件，重写默认的 `php7` 服务。
 
 ```yaml
 version: "3.7"
@@ -108,7 +86,7 @@ services:
 
 > 再例如 `MySQL` 默认将容器目录 `/var/lib/mysql` 映射到了宿主机中的数据卷，但我们想映射到宿主机的 `/path/mysql` 目录
 
-同样的编辑 `docker-compose.include.yml` 文件，重写默认的 `MySQL` 服务。
+同样的编辑 `docker-lnmp.include.yml` 文件，重写默认的 `MySQL` 服务。
 
 ```yaml
 version: "3.7"
@@ -125,7 +103,7 @@ services:
 
 > **软件的默认配置不满足我的要求（例如这个软件我想使用别的镜像），怎么修改**
 
-编辑 `docker-compose.include.yml` 文件，增加服务名，修改指令即可。
+编辑 `docker-lnmp.include.yml` 文件，增加服务名，修改指令即可。
 
 > 例如我们想自定义 `php7` 服务的配置，我们先增加 php7 这个条目。
 

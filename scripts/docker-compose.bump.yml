@@ -2,10 +2,10 @@ version: "3.7"
 
 services:
   mysql:
-    image: mysql:8.0.16
+    image: mysql:8.0.17
 
   mariadb:
-    image: mariadb:10.4.6
+    image: mariadb:10.4.7
 
   redis:
     image: redis:5.0.5-alpine
@@ -14,10 +14,10 @@ services:
     image: memcached:1.5-alpine
 
   php:
-    image: php:7.3.6-fpm-alpine
+    image: php:7.3.8-fpm-alpine
 
   nginx:
-    image: nginx:1.17.1-alpine
+    image: nginx:1.17.2-alpine
 
   rabbitmq:
     image: rabbitmq:3.7.15-management-alpine
@@ -44,7 +44,7 @@ services:
     image: kong:1.2.1-alpine
 
   node:
-    image: node:12.6.0-alpine
+    image: node:12.7.0-alpine
 
   go:
     image: golang:1.12.7-alpine

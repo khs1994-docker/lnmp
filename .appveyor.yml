@@ -8,6 +8,7 @@ branches:
   - 18.09
   - 19.03
   - master
+  - /v*/
 
 # skip_non_tags: true
 clone_depth: 1
@@ -47,18 +48,33 @@ build_script:
       docker-compose logs
       (Invoke-WebRequest 127.0.0.1).content
       ./lnmp-docker down
+  - pwsh: |
+      write-host "Set gcr.io k8s.gcr.io hosts"
+      "" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
+      "127.0.0.1 k8s.gcr.io gcr.io" | Out-File -Append C:\Windows\System32\drivers\etc\hosts
+      cat C:\Windows\System32\drivers\etc\hosts
+  - pwsh: |
+      write-host "Test gcr.io k8s.gcr.io mirror"
+      ping gcr.io -n 1
+      (ping gcr.io -n 1).split(" ")[11]
+      ./lnmp-docker gcr.io
+      ./lnmp-docker gcr.io --no-pull
+      sleep 5
+      docker pull gcr.io/google-containers/kube-controller-manager:v1.15.0
+      docker image ls
+      ./lnmp-docker gcr.io down
   # - ps: Write-host "`nSwitch to Windows engine"  -foregroundcolor green
   # - ps: Switch-DockerWindows
   # - ps: |
   #     cd dockerfile-windows
   #     echo "WIN_VERSION=/servercore:1809" >> .env
-  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/nginx:1.17.1-windowsservercore-1903 nginx
-  #     docker run --isolation=process -it -d -p 8080:80 -p 443:443 khs1994/nginx:1.17.1-windowsservercore-1903
+  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/nginx:1.17.2-windowsservercore-1903 nginx
+  #     docker run --isolation=process -it -d -p 8080:80 -p 443:443 khs1994/nginx:1.17.2-windowsservercore-1903
   #     sleep 10
   #     docker ps -a
   #     (Invoke-WebRequest 127.0.0.1:8080).content
   #     docker rm -f $(docker ps -a -q)
-  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/php:7.3.6-windowsservercore-1903 php
+  #     docker build --build-arg WIN_VERSION=/servercore:1809 -t khs1994/php:7.3.8-windowsservercore-1903 php
   #     cd ..
   #     remove-item windows/config/nginx/www.conf
   #     move-item windows/config/nginx/www.container.config windows/config/nginx/www.conf

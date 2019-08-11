@@ -4,20 +4,43 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function install_after(){
 
 }
 
-Function install($VERSION="x.y.z",$PreVersion=0){
-  if($PreVersion){
-    $VERSION=""
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
+  }
+
+  # $url=$lwpm.url
+  $url=""
+
+  if($isPre){
+    $VERSION=$preVersion
+    # $url=$lwpm.preUrl
     $url=""
   }else{
-    $url=""
+
   }
-  $name="Example"
+
   $filename=""
   $unzipDesc="example"
+
+  # _exportPath "/path"
+  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command example)){
     $CURRENT_VERSION=""
@@ -38,17 +61,18 @@ Function install($VERSION="x.y.z",$PreVersion=0){
   # 验证原始 zip 文件 Fix me
 
   # 解压 zip 文件 Fix me
-  # _cleanup ""
+  # _cleanup "$unzipDesc"
   _unzip $filename $unzipDesc
 
   # 安装 Fix me
-  Copy-item -r -force "" ""
+  Copy-item -r -force "$unzipDesc/" ""
   # Start-Process -FilePath $filename -wait
-  # _cleanup ""
+  # _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
-  # $env:Path = [environment]::GetEnvironmentvariable("Path")
+  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 
@@ -57,7 +81,47 @@ Function install($VERSION="x.y.z",$PreVersion=0){
   example version
 }
 
-Function uninstall(){
+Function uninstall($prune=0){
   echo "Not Support"
   # _cleanup ""
+  # user data
+  if($prune){
+    # _cleanup ""
+  }
+}
+
+Function getInfo(){
+  # vendor
+  . $PSScriptRoot\..\..\..\windows\sdk\github\releases.ps1
+  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+
+  # vendor
+  . $PSScriptRoot\..\..\..\windows\sdk\github\repos\repos.ps1
+  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+
+  $latestVersion=(getLatestRelease $githubRepo).trim("")
+  $latestVersion=(getLatestTag $githubRepo).trim("")
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

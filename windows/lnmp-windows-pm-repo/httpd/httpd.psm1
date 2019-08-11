@@ -7,6 +7,17 @@ Import-Module sudo
 
 $global:HTTPD_MOD_FCGID_VERSION="2.3.10"
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 Function after_install(){
   $a=Select-String 'IncludeOptional conf.d/' C:\Apache24\conf\httpd.conf
 
@@ -22,14 +33,23 @@ LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
   }
 }
 
-Function install($VERSION="2.4.39",$preVersion=0){
-  if($preVersion){
-
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
+
+  if($isPre){
+    $VERSION=$preVersion
+  }
+
   $url="https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip"
-  $name="HTTPD"
+
   $filename="httpd-${VERSION}-win64-VS16.zip"
   $unzipDesc="httpd"
+
+  _exportPath "C:\Apache24\bin"
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command httpd)){
     $CURRENT_VERSION=($(httpd -v) -split " ")[2].trim("Apache/")
@@ -60,7 +80,7 @@ Function install($VERSION="2.4.39",$preVersion=0){
   _unzip $filename $unzipDesc
   # 安装 Fix me
   _mkdir C:\Apache24
-  Copy-item -r -force "httpd\Apache24\*" "C:\Apache24"
+  Copy-item -r -force "httpd\Apache24" "C:\"
   if (!(Test-Path C:\Apache24\modules\mod_fcgid.so)){
     _unzip mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `
            mod_fcgid-${HTTPD_MOD_FCGID_VERSION}-win64-VS16
@@ -95,7 +115,8 @@ Function install($VERSION="2.4.39",$preVersion=0){
   after_install
 
   _exportPath "C:\Apache24\bin"
-  $env:Path = [environment]::GetEnvironmentvariable("Path")
+  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
@@ -105,4 +126,33 @@ Function install($VERSION="2.4.39",$preVersion=0){
 Function uninstall(){
   _sudo "httpd -k uninstall"
   _cleanup C:\Apache24
+}
+
+Function getInfo(){
+  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+
+  $latestVersion=getLatestTag $githubRepo 3
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }

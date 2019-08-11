@@ -1,0 +1,10 @@
+{
+  "name": "github-release",
+  "description": "Commandline app to create and edit releases on Github (and upload artifacts)",
+  "version": "0.7.2",
+  "preVersion": "0.7.2",
+  "homepage": "https://github.com/aktau/github-release",
+  "bug": "https://github.com/aktau/github-release/issues",
+  "github": "aktau/github-release",
+  "releases": "https://github.com/aktau/github-release/releases"
+}

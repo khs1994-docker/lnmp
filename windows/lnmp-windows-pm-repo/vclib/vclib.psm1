@@ -4,6 +4,17 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+
+$stableVersion=$lwpm.version
+$preVersion=$lwpm.preVersion
+$githubRepo=$lwpm.github
+$homepage=$lwpm.homepage
+$releases=$lwpm.releases
+$bug=$lwpm.bug
+$name=$lwpm.name
+$description=$lwpm.description
+
 #
 # VC++ library
 #
@@ -15,13 +26,18 @@ Function install_after(){
 
 }
 
-Function install($VERSION="16.0.0",$PreVersion=0){
-  if($PreVersion){
-
-  }else{
-    $url="https://aka.ms/vs/16/release/VC_redist.x64.exe"
+Function install($VERSION=0,$isPre=0){
+  if(!($VERSION)){
+    $VERSION=$stableVersion
   }
-  $name="VC_redist"
+  if($isPre){
+    $VERSION=$preVersion
+  }else{
+
+  }
+
+  $url="https://aka.ms/vs/16/release/VC_redist.x64.exe"
+
   $filename="VC_redist.x64.exe"
   $unzipDesc="VC_redist"
 
@@ -54,7 +70,8 @@ Function install($VERSION="16.0.0",$PreVersion=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
-  # $env:Path = [environment]::GetEnvironmentvariable("Path")
+  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 
@@ -66,4 +83,30 @@ Function install($VERSION="16.0.0",$PreVersion=0){
 Function uninstall(){
   # echo "Not Support"
   # _cleanup ""
+}
+
+Function getInfo(){
+
+  echo "
+Package: $name
+Version: $stableVersion
+PreVersion: $preVersion
+LatestVersion: $latestVersion
+HomePage: $homepage
+Releases: $releases
+Bugs: $bug
+Description: $description
+"
+}
+
+Function bug(){
+  return $bug
+}
+
+Function homepage(){
+  return $homepage
+}
+
+Function releases(){
+  return $releases
 }
