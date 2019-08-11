@@ -24,11 +24,15 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
 
+  # $url=$lwpm.url
+  $url=""
+
   if($isPre){
     $VERSION=$preVersion
+    # $url=$lwpm.preUrl
     $url=""
   }else{
-    $url=""
+
   }
 
   $filename=""
