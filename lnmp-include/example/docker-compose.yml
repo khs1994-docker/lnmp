@@ -1,0 +1,36 @@
+version: "3.7"
+
+x-common:
+  &default-common
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - backend
+  # dns:
+  #   - ${DNS:-114.114.114.114}
+
+x-common-label:
+  &default-common-label
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+services:
+  example:
+    << : *default-common
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/example:${LNMP_EXAMPLE_VERSION:-2.4.39}-alpine"
+    ports:
+      - "${LNMP_EXAMPLE_HTTPS_PORT:-0.0.0.0:443}:443"
+      - "${LNMP_EXAMPLE_HTTP_PORT:-0.0.0.0:80}:80"
+    volumes:
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example/config/${LNMP_EXAMPLE_CONF:-example.conf}:/usr/local/etc/example.conf:cached
+      - ./log/example:/usr/local/apache2/logs:delegated
+    env_file:
+      - ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example/.env.example
+      - ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example/.env
+    working_dir: /app
+    # networks:
+    #   - frontend
+    # depends_on:
+    #   - nginx

@@ -75,9 +75,9 @@ jobs:
         powershell -command "php -i | select-string .ini"
         powershell -command "php -m"
         powershell -command "cat C:\tools\php\php.ini | select-string extension"
-        powershell -command "./windows/lnmp-windows-pm.ps1 ; composer config -g disable-tls true"
         powershell -command "./windows/lnmp-windows-pm.ps1 ; composer init -q"
         powershell -command "./windows/lnmp-windows-pm.ps1 ; composer config minimum-stability dev"
+        powershell -command "./windows/lnmp-windows-pm.ps1 init test"
         powershell -command "./windows/lnmp-windows-pm.ps1 add openjdk"
         powershell -command "./windows/lnmp-windows-pm.ps1 install openjdk"
   lnmp-include:
@@ -89,7 +89,7 @@ jobs:
         fetch-depth: 2
     - name: lnmp-include-add
       run: |
-        powershell -command "echo extension=openssl >> C:\tools\php\php.ini"
+        echo extension=openssl >> C:\tools\php\php.ini
         powershell -command "./windows/lnmp-windows-pm.ps1 install composer"
-        powershell -command "./windows/lnmp-windows-pm.ps1 ; get-command composer"
+        powershell -command "./lnmp-docker.ps1 init test"
         powershell -command "./lnmp-docker.ps1 add harbor"

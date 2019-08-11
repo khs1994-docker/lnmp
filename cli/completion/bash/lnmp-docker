@@ -69,6 +69,10 @@ complete -W "acme.sh \
         upgrade \
         update-version \
         init \
+        add \
+        outdated \
+        pkg-backup \
+        pkg-update \
         commit \
         test \
         cn-mirror \

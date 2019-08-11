@@ -53,31 +53,7 @@ development
 
 > **这个项目能不能增加 xxx 软件，可以！**
 
-新建 `lnmp-include/xxx` 文件夹
-
-在 `lnmp-include/xxx` 文件夹内新建 `docker-compose.yml` 文件，并编辑。
-
-> 可以参考 `lnmp-include` 文件夹中的示例项目
-
-### Linux、macOS
-
-编辑 `.env` 文件，将 `xxx` 加入到以下变量中，例如
-
-```bash
-LNMP_COMPOSE_INCLUDE="etcd xxx"
-
-LNMP_SERVICES="nginx mysql php7 redis phpmyadmin xxx"
-```
-
-### Windows
-
-编辑 `.env.ps1` 文件，将 `xxx` 加入到以下变量中，例如
-
-```bash
-$global:LNMP_COMPOSE_INCLUDE="etcd","xxx"
-
-$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','xxx'
-```
+请查看 [lnmp-include](lnmp-include.md)
 
 ## 单独启动某个软件
 

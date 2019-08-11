@@ -8,6 +8,9 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
 
+$env:path=[environment]::GetEnvironmentvariable("Path","user") `
+          + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+
 $DOCKER_DEFAULT_PLATFORM="linux"
 $KUBERNETES_VERSION="1.14.3"
 $DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
@@ -193,7 +196,7 @@ Function init(){
   docker-compose --version
   docker volume create lnmp_composer_cache-data | out-null
   logs
-  git submodule update --init --recursive
+  # git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
   #@custom
   __lnmp_custom_init
@@ -231,13 +234,19 @@ Commands:
   docs                 Support Documents
   env                  Edit .env/.env.ps1 file
   help                 Display this help message
-  init                 Init LNMP environment
   pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
   update-version       Update LNMP soft to latest vesion
+
+lnmp-include(package):
+  init                 Init a new lnmp-include package
+  add                  Add new lnmp-include package
+  outdated             Shows a list of installed lnmp-include packages that have updates available
+  pkg-backup           Upload composer.json to GitHub Gist
+  pkg-update           Update lnmp-include package
 
 PHP Tools:
   httpd-config         Generate Apache2 vhost conf
@@ -352,7 +361,7 @@ Function _update(){
   git fetch --depth=1 origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   git reset --hard origin/${BRANCH}
-  git submodule update --init --recursive
+  # git submodule update --init --recursive
 }
 
 Function _get_container_id($service){
@@ -397,21 +406,31 @@ Function get_compose_options($compose_files,$isBuild=0){
   }
   Foreach ($item in $LNMP_COMPOSE_INCLUDE)
   {
+    if(Test-Path $PSScriptRoot/vendor/lnmp-include-dev/$item){
+      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/vendor/lnmp-include-dev/$item"
+    }elseif(Test-Path $PSScriptRoot/vendor/lnmp-include/$item){
+      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/vendor/lnmp-include/$item"
+    }elseif(Test-Path $PSScriptRoot/lnmp-include/$item){
+      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/lnmp-include/$item"
+    }else{
+      continue
+    }
+
     if($isBuild){
-      if(!(Test-Path "lnmp-include\$item\docker-compose.build.yml")){
-        $options +=" -f lnmp-include\$item\docker-compose.yml "
+      if(!(Test-Path "$LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.build.yml")){
+        $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml "
         continue
       }
-      $options +=" -f lnmp-include\$item\docker-compose.yml -f lnmp-include\$item\docker-compose.build.yml "
+      $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.build.yml "
 
       continue
     } # end build
 
-    if (!(Test-Path "lnmp-include\$item\docker-compose.override.yml")){
-      $options +=" -f lnmp-include\$item\docker-compose.yml "
+    if (!(Test-Path "$LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.override.yml")){
+      $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml "
       continue
     }
-    $options +=" -f lnmp-include\$item\docker-compose.yml -f lnmp-include\$item\docker-compose.override.yml "
+    $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.override.yml "
   }
 
   $options += " -f docker-lnmp.include.yml "
@@ -440,10 +459,111 @@ if ($args.Count -eq 0){
   $first, $other = $args
 }
 
+Function _package_add($packages=$null){
+  if(!$packages){
+     printError "Please Input package name"
+     exit 1
+  }
+
+  Foreach($package in $packages){
+    composer require lnmp-include/$package --prefer-source
+  }
+
+  Foreach($package in $packages){
+    if(!(Test-Path $PSScriptRoot/vendor/lnmp-include/$package)){
+      continue
+    }
+
+    cd $PSScriptRoot/vendor/lnmp-include/$package
+    if(Test-Path bin/post-install.ps1){
+      . ./bin/post-install.ps1
+    }
+  }
+}
+
+Function _package_init($package=$null){
+  if(!$package){
+     printError "Please Input package name"
+     exit 1
+  }
+
+  if(Test-Path vendor/lnmp-include-dev/$package){
+     printInfo "This package already exists"
+     return
+   }
+
+   cp -r lnmp-include/example vendor/lnmp-include-dev/$package
+
+   if(get-command composer){
+     composer init -d vendor/lnmp-include-dev/$package `
+       --name "lnmp-include/$package" `
+       --homepage "https://docs.lnmp.khs1994.com/lnmp-include.html" `
+       --license "MIT" `
+       -q
+   }
+}
+
+Function _package_outdated($packages=$null){
+  if (!(Test-Path vendor/lnmp-include)){
+    return
+  }
+
+  if(!$packages){
+    composer outdated "lnmp-include/*"
+    return
+  }
+
+  composer outdated $packages
+}
+
+Function _package_update($packages=$null){
+  if (!(Test-Path vendor/lnmp-include)){
+    return
+  }
+
+  if(!$packages){
+    composer update "lnmp-include/*"
+    return
+  }
+
+  composer update $packages
+
+  Foreach($package in $packages){
+    if(!(Test-Path $PSScriptRoot/vendor/lnmp-include/$package)){
+      continue
+    }
+
+    cd $PSScriptRoot/vendor/lnmp-include/$package
+    if(Test-Path bin/post-install.ps1){
+      . ./bin/post-install.ps1
+    }
+  }
+}
+
+Function _package_backup(){
+
+}
+
 switch($first){
 
     init {
-      init
+      _package_init $other
+    }
+
+    add {
+      _package_add $other
+    }
+
+    outdated {
+      _package_outdated $other
+    }
+
+    pkg-backup {
+      _package_backup
+    }
+
+    pkg-update {
+      _package_update $other
     }
 
     httpd-config {

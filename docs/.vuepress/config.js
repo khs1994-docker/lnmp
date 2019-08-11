@@ -66,6 +66,7 @@ module.exports = {
           children: [
             '/development',
             '/custom',
+            '/lnmp-include',
             '/backup',
             '/cleanup',
             '/config',
