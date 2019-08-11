@@ -1226,7 +1226,7 @@ pcit_init(){
   rm -rf ${APP_ROOT:-app}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
   docker run -dit --name pcit_cp pcit/pcit:alpine bash > /dev/null 2>&1
-  docker cp pcit_cp:/app/pcit ${APP_ROOT:-app}/.pcit/
+  docker cp pcit_cp:/app/pcit ${APP_ROOT:-app}/.pcit
   docker rm -f pcit_cp > /dev/null 2>&1
 
   if ! [ -f pcit/.env.${APP_ENV:-development} ];then
