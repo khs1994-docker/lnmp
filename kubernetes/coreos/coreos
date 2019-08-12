@@ -1,6 +1,7 @@
 #!/bin/bash
 
 KUBERNETES_VERSION=v1.15.2
+FCOS_VERSION=30.20190801.0
 
 set -e
 
@@ -8,7 +9,10 @@ if ! [ -f coreos.ps1 ];then echo "please exec this shell scipt in coreos folder"
 
 print_help_info(){
     echo "
-CoreOS CLI $KUBERNETES_VERSION
+CoreOS CLI
+
+KUBERNETES: $KUBERNETES_VERSION
+FCOS: $FCOS_VERSION
 
 Usages:
 
@@ -54,20 +58,18 @@ _init(){
 # Download coreos iso files
 cd current
 
-items="coreos_production_iso_image.iso \
-        coreos_production_image.bin.bz2 \
-        coreos_production_image.bin.bz2.sig \
-        version.txt"
+items="${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-metal.raw.xz \
+      ${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-installer.iso"
 
 for item in $items;do
 
 if ! [ -f $item ];then
-  curl -O http://alpha.release.core-os.net/amd64-usr/current/$item
+  curl -O https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/$item
 fi
 
 done
 
-cd ..
+cd .. > /dev/null
 
 }
 
@@ -189,7 +191,13 @@ case "$1" in
 
       VBoxManage createvm --name "coreos"$2 --ostype 'Linux26_64' --register
 
-      VBoxManage modifyvm "coreos"$2 --memory 2048 --acpi on --boot1 dvd --nic1 hostonly --nic2 bridged
+      VBoxManage modifyvm "coreos"$2 \
+      --memory 2048 \
+      --acpi on \
+      --boot1 dvd \
+      --nic1 hostonly \
+      --nic2 bridged \
+      --firmware efi
 
       VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 10000
 
@@ -199,7 +207,7 @@ case "$1" in
           --port 0 --device 0 --type hdd --medium "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi"
 
       VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --port 0 --device 1 --type dvddrive --medium current/coreos_production_iso_image.iso
+          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-installer.iso
 
       echo "==> Please checkout coreos$2 config, then start it"
   ;;

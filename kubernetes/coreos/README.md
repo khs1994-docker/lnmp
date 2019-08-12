@@ -1,4 +1,4 @@
-# Deploy Kubernetes on CoreOS
+# Deploy Kubernetes on Fedora CoreOS（FCOS）
 
 * [生成 Docker Daemon 远程连接自签名证书文件](https://blog.khs1994.com/docker/dockerd.html)
 
@@ -8,7 +8,7 @@
 
 ### 技能储备
 
-* VirtualBox 或其他虚拟机的使用方法
+* VirtualBox（6.x）或其他虚拟机的使用方法
 
 * systemd
 
@@ -27,6 +27,8 @@
 ### 虚拟机网络配置
 
 VirtualBox 增加 hostonly 网络 **192.168.57.1** 网段
+
+VirtualBox -> 管理 -> 主机网络管理器 -> 创建（保证 IPv4 网络掩码 **192.168.57.1/24**）（初次配置点击两次创建）
 
 ### 下载相关文件
 
@@ -68,13 +70,13 @@ $ ./coreos server
 $ ./coreos new-vm N
 
 # 在管理界面打开设置，按照实际进行微调，之后保存
+# 启动虚拟机，在终端执行以下命令
 # then start node, exec this command in node console
 
 $ export LOCAL_HOST=192.168.57.1
 
-$ curl ${LOCAL_HOST}:8080/disk/bin/coreos.sh > coreos.sh
-
-$ sh coreos.sh { 1 | 2 | 3 | n | test | one }
+# 节点 1 设置 NODE_NAME 为 1，以此类推
+$ curl ${LOCAL_HOST}:8080/disk/bin/coreos.sh | NODE_NAME=1 bash
 ```
 
 ## 虚拟机网卡设置
@@ -121,17 +123,13 @@ $ sudo systemctl restart systemd-networkd
 # More Information
 
 * https://github.com/coreos/coreos-kubernetes
-
 * https://github.com/opsnull/follow-me-install-kubernetes-cluster
-
 * https://github.com/Mengkzhaoyun/ansible
-
 * https://github.com/coreos/container-linux-config-transpiler
-
 * https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md
-
 * http://www.cnblogs.com/mengkzhaoyun/p/7599695.html
-
 * https://coreos.com/os/docs/latest/generate-self-signed-certificates.html
-
 * https://github.com/cloudflare/cfssl
+* https://docs.fedoraproject.org/en-US/fedora-coreos/getting-started/
+* https://github.com/coreos/coreos-installer/
+* https://github.com/coreos/fcct

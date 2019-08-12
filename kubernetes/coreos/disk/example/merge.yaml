@@ -1,0 +1,227 @@
+variant: fcos
+version: 1.0.0
+passwd:
+  # groups:
+  #   - name:
+  #     gid:
+  #     password_hash:
+  users:
+    - name: core
+      # password_hash: "$6$43y3tkl..."
+      # https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/examples.md#generating-a-password-hash
+      # $ openssl passwd -1
+      ssh_authorized_keys:
+        - ssh-rsa {{SSH_PUB}}
+      groups:
+        - wheel
+        - sudo
+        - docker
+      # uid:
+      # gecos:
+      # no_create_home: false
+      # primary_group:
+      # no_user_group: true
+      # no_log_init: true
+      # shell: bash
+      # system: true
+    - name: k8s
+      ssh_authorized_keys:
+        - ssh-rsa {{SSH_PUB}}
+      groups:
+        - wheel
+        - sudo
+        - docker
+      home_dir: /home/k8s
+systemd:
+  units:
+    - name: settimezone.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Set the time zone
+
+        [Service]
+        ExecStart=/usr/bin/timedatectl set-timezone PRC
+
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    # - path: "/etc/hostname"
+    # - path: "/etc/hosts"
+    # - path: "${K8S_ROOT}/kubelet.config.json"
+    # - path: "${K8S_ROOT}/kube-proxy.config.yaml"
+    - path:       "/etc/resolv.conf"
+      filesystem: "root"
+      mode:       0644
+      contents:
+        inline: |
+          nameserver 114.114.114.114
+          nameserver 8.8.8.8
+    - path:       "${K8S_ROOT}/certs/daemon.json"
+      filesystem: "root"
+      mode:       0644
+      contents:
+        inline: |
+          {
+            "tlsverify": true,
+            "tlscert": "${K8S_ROOT}/certs/server.pem",
+            "tlskey": "${K8S_ROOT}/certs/server-key.pem",
+            "tlscacert": "${K8S_ROOT}/certs/ca.pem",
+            "registry-mirrors" : [
+              "https://dockerhub.azk8s.cn"
+            ],
+            "debug" : true,
+            "dns" : [
+              "114.114.114.114",
+              "8.8.8.8"
+            ],
+            "experimental" : true
+          }
+    - path: /home/k8s/.kube/config
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kubectl.kubeconfig
+      user:
+        name: k8s
+      group:
+        name: k8s
+    - path: /home/root/.kube/config
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kubectl.kubeconfig
+    - path: /home/core/.kube/config
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kubectl.kubeconfig
+      user:
+        name: core
+      group:
+        name: core
+    - path: ${K8S_ROOT}/kube-controller-manager.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kube-controller-manager.kubeconfig
+    - path: ${K8S_ROOT}/kube-scheduler.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kube-scheduler.kubeconfig
+    - path: ${K8S_ROOT}/kube-proxy.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kube-proxy.kubeconfig
+    - path: ${K8S_ROOT}/csr-crb.yaml
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/csr-crb.yaml
+    - path: ${K8S_ROOT}/certs/registry-ca.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/registry-ca.pem
+    - path: ${K8S_ROOT}/certs/ca.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/ca.pem
+    - path: ${K8S_ROOT}/certs/server.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/server-cert.pem
+    - path: ${K8S_ROOT}/certs/server-key.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/server-key.pem
+    - path: /etc/profile.d/profile.sh
+      mode: 0755
+      contents:
+        inline: |
+          export ETCDCTL_API=3
+          export etcd_endpoints=${ETCD_ENDPOINTS}
+    - path: ${K8S_ROOT}/certs/etcd.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/etcd.pem
+    - path: ${K8S_ROOT}/certs/etcd-key.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/etcd-key.pem
+    - path: ${K8S_ROOT}/certs/flanneld.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/flanneld.pem
+    - path: ${K8S_ROOT}/certs/flanneld-key.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/flanneld-key.pem
+    - path: ${K8S_ROOT}/certs/kube-controller-manager.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kube-controller-manager.pem
+    - path: ${K8S_ROOT}/certs/kube-controller-manager-key.pem
+      mode: 0644
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/cert/kube-controller-manager-key.pem
+    - path: /opt/bin/kube-proxy
+      mode: 0755
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-proxy
+    - path: /opt/bin/kubelet
+      mode: 0755
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubelet
+    - path: /opt/bin/kubeadm
+      mode: 0755
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubeadm
+    - path: /opt/bin/kubectl
+      mode: 0755
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubectl
+    - path: /opt/bin/generate-kubelet-bootstrap-kubeconfig.sh
+      mode: 0755
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/disk/bin/generate-kubelet-bootstrap-kubeconfig.sh
+    - path: /opt/bin/kube-controller-manager
+      mode: 0755
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-controller-manager
+    - path: /opt/bin/kube-scheduler
+      mode: 0755
+      contents:
+        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-scheduler
+  directories:
+    - path: ${K8S_ROOT}
+      mode: 0755
+      user:
+        name: k8s
+      group:
+        name: k8s
+    - path: ${K8S_ROOT}/certs
+      mode: 0755
+      user:
+        name: k8s
+      group:
+        name: k8s
+    - path: ${K8S_ROOT}/bin
+      mode: 0755
+      user:
+        name: k8s
+      group:
+        name: k8s
+    - path: /var/lib/kube-proxy
+      mode: 0755
+      user:
+        name: k8s
+      group:
+        name: k8s
+    - path: /var/log/kubernetes
+      mode: 0755
+      user:
+        name: k8s
+      group:
+        name: k8s
+    - path: /var/lib/kubelet
+      mode: 0755
+      user:
+        name: k8s
+      group:
+        name: k8s

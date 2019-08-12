@@ -13,6 +13,7 @@ dist: xenial
 cache:
   directories:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
+    - /home/travis/.lnmp/caches
 
 before_install:
   - echo $PATH
@@ -54,7 +55,7 @@ install:
   - ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
   - ./lnmp-k8s local-install ${LNMP_K8S_SINGLE_INSTALL_OPTIONS:-}
 
-  - export PATH=$PATH:/opt/bin/k8s
+  - export PATH=$PATH:/opt/k8s/bin
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver

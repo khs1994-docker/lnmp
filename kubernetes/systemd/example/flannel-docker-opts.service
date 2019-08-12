@@ -12,7 +12,7 @@ Type=oneshot
 
 Environment="FLANNEL_IMAGE_TAG=v0.10.0"
 Environment="RKT_RUN_ARGS=--uuid-file-save=/var/lib/coreos/flannel-wrapper2.uuid"
-Environment="FLANNEL_IMAGE_ARGS=--exec=/opt/bin/mk-docker-opts.sh"
+Environment="FLANNEL_IMAGE_ARGS=--exec=${K8S_ROOT}/bin/mk-docker-opts.sh"
 
 ExecStartPre=-/usr/bin/rkt rm --uuid-file=/var/lib/coreos/flannel-wrapper2.uuid
 ExecStart=/usr/lib/coreos/flannel-wrapper -d /run/flannel/flannel_docker_opts.env -i

@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   server:
-    image: khs1994/coreos:server
+    image: khs1994/fcos
     env_file:
       - ./coreos/.env.example
       - ./coreos/.env
@@ -18,7 +18,7 @@ services:
       - "8080:80"
 
   cfssl:
-    image: khs1994/coreos:cert
+    image: khs1994/k8s-cfssl
     volumes:
       - ./coreos/cert:/srv/cfssl
       - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
@@ -28,7 +28,7 @@ services:
 
   # systemd
   cfssl-local:
-    image: khs1994/coreos:cert
+    image: khs1994/k8s-cfssl
     volumes:
       - ./systemd/certs:/srv/cfssl
       - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh

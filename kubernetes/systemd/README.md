@@ -91,9 +91,9 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 
 将 `docker.conf` 放入 `/etc/systemd/system/docker.service.d/*` 中
 
-将证书文件放入 `/opt/bin/k8s/conf/certs`
+将证书文件放入 `/opt/k8s/certs`
 
-将配置文件放入 `/opt/bin/k8s/conf`
+将配置文件放入 `/opt/k8s/conf`
 
 ## 容器运行时
 

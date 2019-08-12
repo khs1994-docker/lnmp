@@ -8,6 +8,7 @@ FLANNEL_VERSION=0.10.0
 HELM_VERSION=3.0.0-alpha.2
 CNI_VERSION=0.8.1
 CRICTL_VERSION=1.15.0
+TMP_ROOT=$HOME/.lnmp/caches
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
@@ -27,6 +28,8 @@ if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
 if ! [ -f volumes/.env ];then cp volumes/.env.example volumes/.env; fi
 
+source ./systemd/.env.example
+source ./systemd/.env
 source ./.env.example
 source ./.env
 
@@ -87,8 +90,13 @@ _sudo(){
   command -v sudo > /dev/null && echo sudo
 }
 
-$(_sudo) mkdir -p /opt/bin/k8s
-export PATH=/opt/bin/k8s:$PATH
+$(_sudo) mkdir -p ${K8S_ROOT}
+$(_sudo) mkdir -p ${K8S_ROOT}/bin
+$(_sudo) mkdir -p ${K8S_ROOT}/conf
+$(_sudo) mkdir -p ${K8S_ROOT}/certs
+mkdir -p ${TMP_ROOT} || TMP_ROOT=/tmp
+
+export PATH=${K8S_ROOT}/bin:$PATH
 
 case `uname -m` in
   x86_64 )
@@ -316,7 +324,7 @@ kubectl_install(){
     command -v docker > /dev/null
     if [ $? -eq 0 ];then
       docker container rm -f khs1994-kubectl > /dev/null 2>&1 || true
-      docker container create --name=khs1994-kubectl khs1994/coreos:cert
+      docker container create --name=khs1994-kubectl khs1994/k8s-cfssl
       docker container cp khs1994-kubectl:/usr/local/bin/kubectl .
       docker container rm -f khs1994-kubectl
       sudo mv kubectl /usr/local/bin
@@ -328,9 +336,9 @@ kubectl_install(){
   KUBECTL_VERSION=$(curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
   curl -fsSL ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/${GOOS}/${GOARCH}/kubectl \
-      -o /tmp/kubectl-${GOOS}-${GOARCH}
+      -o ${TMP_ROOT}/kubectl-${GOOS}-${GOARCH}
 
-  sudo mv /tmp/kubectl-${GOOS}-${GOARCH} /usr/local/bin/kubectl
+  sudo mv ${TMP_ROOT}/kubectl-${GOOS}-${GOARCH} /usr/local/bin/kubectl
 
   kubectl version
 }
@@ -346,55 +354,55 @@ _etcd_install(){
   local url="https://mirrors.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    sudo curl -fsSL ${url}/v${ETCD_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
-  if [ -f /opt/bin/k8s/etcd ];then
+  if [ -f ${K8S_ROOT}/bin/etcd ];then
     print_info "etcd already install"
     return
   fi
 
   print_info "install etcd ..."
 
-  if [ -f /tmp/${TAR_FILE} ];then
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
     true
   else
-    rm -rf /tmp/${TAR_FILE}
+    rm -rf ${TMP_ROOT}/${TAR_FILE}
     __download
   fi
 
-  sudo tar -zxf /tmp/${TAR_FILE} -C /tmp
-  sudo mv /tmp/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* /opt/bin/k8s/
-  sudo chown -R root:root /opt/bin/k8s
-  sudo rm -rf /tmp/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
+  sudo mv ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ${K8S_ROOT}/bin/
+  sudo chown -R root:root ${K8S_ROOT}/bin/
+  sudo rm -rf ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
 }
 
 _flanneld_install(){
   local url="https://github.com/coreos/flannel/releases/download"
   local TAR_FILE="flannel-v${FLANNEL_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    sudo curl -fsSL ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
-  if [ -f /opt/bin/k8s/flanneld ];then
+  if [ -f ${K8S_ROOT}/bin/flanneld ];then
     print_info "flanneld already install"
     return
   fi
 
   print_info "install flanneld ..."
 
-  if [ -f /tmp/${TAR_FILE} ];then
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
     true
   else
     __download
   fi
 
-  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/bin/k8s/
-  sudo chown -R root:root /opt/bin/k8s
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
+  sudo chown -R root:root ${K8S_ROOT}/bin/
 }
 
 _helm_install(){
-  if [ -f /opt/bin/k8s/helm ];then
+  if [ -f ${K8S_ROOT}/bin/helm ];then
     print_info "helm already install"
     return
   fi
@@ -402,24 +410,24 @@ _helm_install(){
   local url="https://mirrors.huaweicloud.com/helm/v${HELM_VERSION}"
   local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    sudo curl -fsSL ${url}/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   print_info "install helm ..."
 
-  if [ -f /tmp/${TAR_FILE} ];then
-      local sha256=$(sha256sum /tmp/${TAR_FILE} | cut -d " " -f 1)
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
     if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256` ];then
-      rm -rf /tmp/${TAR_FILE}
+      rm -rf ${TMP_ROOT}/${TAR_FILE}
       __download
     fi
   else
       __download
   fi
 
-  sudo tar -zxf /tmp/${TAR_FILE} -C /tmp
-  sudo mv /tmp/${GOOS}-${GOARCH}/helm /opt/bin/k8s/
-  sudo rm -rf /tmp/${GOOS}-${GOARCH}
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
+  sudo mv ${TMP_ROOT}/${GOOS}-${GOARCH}/helm ${K8S_ROOT}/bin/
+  sudo rm -rf ${TMP_ROOT}/${GOOS}-${GOARCH}
 }
 
 _gvisor_docker_conf(){
@@ -477,22 +485,22 @@ _cni_install(){
   local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
   local TAR_FILE="cni-plugins-${GOOS}-${GOARCH}-v${CNI_VERSION}.tgz"
   __download(){
-    sudo curl -fsSL ${url}/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   print_info "install cni ..."
 
-  if [ -f /tmp/${TAR_FILE} ];then
-      local sha256=$(sha256sum /tmp/${TAR_FILE} | cut -d " " -f 1)
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
     if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256 | cut -d " " -f 1` ];then
-      sudo rm -rf /tmp/${TAR_FILE}
+      sudo rm -rf ${TMP_ROOT}/${TAR_FILE}
       __download
     fi
   else
       __download
   fi
 
-  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/k8s/cni/bin/
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /opt/k8s/cni/bin/
 }
 
 _crictl_docker_conf(){
@@ -510,7 +518,7 @@ EOF
 }
 
 _crictl_install(){
-  if [ -f /opt/bin/k8s/crictl ];then
+  if [ -f ${K8S_ROOT}/bin/crictl ];then
     print_info "crictl already install"
     crictl --version
     return
@@ -519,22 +527,22 @@ _crictl_install(){
   local url="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz"
   __download(){
-    sudo curl -fsSL ${url}/${TAR_FILE} -o /tmp/${TAR_FILE}
+    sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   print_info "install crictl ..."
 
-  if [ -f /tmp/${TAR_FILE} ];then
-      local sha256=$(sha256sum /tmp/${TAR_FILE} | cut -d " " -f 1)
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
     if ! [ $sha256 = "c3b71be1f363e16078b51334967348aab4f72f46ef64a61fe7754e029779d45a" ];then
-      sudo rm -rf /tmp/${TAR_FILE}
+      sudo rm -rf ${TMP_ROOT}/${TAR_FILE}
       __download
     fi
   else
       __download
   fi
 
-  sudo tar -zxf /tmp/${TAR_FILE} -C /opt/bin/k8s
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
 }
 
 _k8s_install_dep(){
@@ -554,20 +562,19 @@ _k8s_install_common(){
   sudo systemctl stop firewalld && sudo systemctl disable firewalld || true
   sudo mkdir -p /etc/docker
   sudo chmod -R 755 /opt
-  sudo mkdir -p ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs
   sudo mkdir -p /etc/systemd/system
 }
 
 _k8s_install_cp_bin(){
-  if ! [ -f /opt/bin/k8s/kubeadm ];then
+  if ! [ -f ${K8S_ROOT}/bin/kubeadm ];then
     _kubernetes_server_install
     cd $source_path > /dev/null
-    sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* /opt/bin/k8s/
+    sudo cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* ${K8S_ROOT}/bin/
   fi
 
-  sudo cp bin/*.sh /opt/bin/k8s
+  sudo cp bin/*.sh ${K8S_ROOT}/bin/
 
-  sudo chmod +x /opt/bin/k8s/*
+  sudo chmod +x ${K8S_ROOT}/bin/*
 }
 
 _k8s_install_systemd_docker(){
@@ -592,7 +599,7 @@ _k8s_install_systemd(){
   for file in `ls *.service`; \
   do \
     if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
-    sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" \
+    sudo sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" \
       /etc/systemd/system/$file ; \
     sudo sed -i "s/192.168.199.100/${MASTER_IP}/g" \
       /etc/systemd/system/$file ; \
@@ -774,7 +781,7 @@ _k8s_install(){
 
   print_info "copy systemd unit file ..."
   sudo cp systemd/*.service /etc/systemd/system/
-  sudo cp systemd/certs/*.pem ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
+  sudo cp systemd/certs/*.pem ${K8S_ROOT:-/opt/k8s}/certs/
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
     echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
@@ -782,7 +789,7 @@ _k8s_install(){
   _k8s_install_cp_bin
 
   print_info "copy kubernetes conf and cert file ..."
-  sudo cp systemd/certs/*.kubeconfig ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
+  sudo cp systemd/certs/*.kubeconfig ${K8S_ROOT:-/opt/k8s}/conf/
   sudo cp \
     systemd/certs/{audit-policy.yaml,\
 kubelet-config.yaml,\
@@ -790,18 +797,18 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kube-scheduler.yaml,\
 encryption-config.yaml} \
-    ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
+    ${K8S_ROOT:-/opt/k8s}/conf/
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml" "kube-scheduler.yaml")
 
   for file in ${files[@]}; \
   do \
     sudo sed -i "s!##NODE_IP##!${MASTER_IP}!g" \
-      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
-    sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" \
-      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
+      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
+    sudo sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" \
+      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
     sudo sed -i "s!##NODE_NAME##!node1!g" \
-      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
+      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
   done
 
   _k8s_install_systemd
@@ -874,7 +881,7 @@ _k8s_join(){
 ca-key.pem,\
 flanneld-key.pem,\
 flanneld.pem} \
-${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/
+${K8S_ROOT:-/opt/k8s}/certs/
 
   _k8s_install_cp_bin
 
@@ -885,7 +892,7 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig} \
-    ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/
+    ${K8S_ROOT:-/opt/k8s}/conf
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml")
 
@@ -894,11 +901,11 @@ kube-proxy.kubeconfig} \
   for file in ${files[@]}; \
   do \
     sudo sed -i "s!##NODE_IP##!${NODE_IP}!g" \
-      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
-    sudo sed -i "s#/opt/bin/k8s/conf#${K8S_CONF_PATH:-/opt/bin/k8s/conf}#g" \
-      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
+      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
+    sudo sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" \
+      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
     sudo sed -i "s!##NODE_NAME##!${HOSTNAME}!g" \
-      ${K8S_CONF_PATH:-/opt/bin/k8s/conf}/$file ; \
+      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
   done
 
   _gvisor_install
@@ -981,14 +988,12 @@ _local_cleanup(){
     kube-controller-manager kube-scheduler kube-proxy kubelet docker || true
 
   set +e
-  sudo rm -rf /opt/bin/k8s \
-              /opt/k8s \
+  sudo rm -rf ${K8S_ROOT:-/opt/k8s} \
               /var/lib/etcd \
               /var/log/ku* \
               /var/lib/kubelet \
               /var/lib/kube-proxy \
 
-  sudo rm -rf ${K8S_CONF_PATH:-/opt/bin/k8s/conf}
   sudo rm -rf /etc/systemd/system/docker.service.d
 
   sudo ip addr flush cni0
@@ -997,8 +1002,9 @@ _local_cleanup(){
 
   sudo rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
+  sudo cp systemd/etc/containerd/docker.toml /etc/containerd/config.toml
   sudo systemctl daemon-reload
-  sudo systemctl restart docker
+  sudo systemctl restart docker containerd
 }
 
 _command=$1

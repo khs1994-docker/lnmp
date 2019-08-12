@@ -9,10 +9,10 @@ Documentation=https://github.com/kubernetes/kubernetes
 # Flag --horizontal-pod-autoscaler-use-rest-clients has been deprecated,
 # Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
 
-Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
+Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_CM_HOST=192.168.199.100"
 
-ExecStart=/opt/bin/k8s/kube-controller-manager \
+ExecStart=/opt/k8s/bin/kube-controller-manager \
 --profiling \
 --cluster-name=kubernetes \
 --controllers=*,bootstrapsigner,tokencleaner \
@@ -23,19 +23,19 @@ ExecStart=/opt/bin/k8s/kube-controller-manager \
 --concurrent-service-syncs=2 \
 --bind-address=${K8S_CM_HOST} \
 --secure-port=10257 \
---tls-cert-file=${K8S_CONF_PATH}/certs/kube-controller-manager.pem \
---tls-private-key-file=${K8S_CONF_PATH}/certs/kube-controller-manager-key.pem \
+--tls-cert-file=${K8S_ROOT}/certs/kube-controller-manager.pem \
+--tls-private-key-file=${K8S_ROOT}/certs/kube-controller-manager-key.pem \
 --port=0 \
---authentication-kubeconfig=${K8S_CONF_PATH}/kube-controller-manager.kubeconfig \
---client-ca-file=${K8S_CONF_PATH}/certs/ca.pem \
+--authentication-kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
+--client-ca-file=${K8S_ROOT}/certs/ca.pem \
 --requestheader-allowed-names="" \
---requestheader-client-ca-file=${K8S_CONF_PATH}/certs/ca.pem \
+--requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
 --requestheader-extra-headers-prefix="X-Remote-Extra-" \
 --requestheader-group-headers=X-Remote-Group \
 --requestheader-username-headers=X-Remote-User \
---authorization-kubeconfig=${K8S_CONF_PATH}/kube-controller-manager.kubeconfig \
---cluster-signing-cert-file=${K8S_CONF_PATH}/certs/ca.pem \
---cluster-signing-key-file=${K8S_CONF_PATH}/certs/ca-key.pem \
+--authorization-kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
+--cluster-signing-cert-file=${K8S_ROOT}/certs/ca.pem \
+--cluster-signing-key-file=${K8S_ROOT}/certs/ca-key.pem \
 --experimental-cluster-signing-duration=876000h \
 --horizontal-pod-autoscaler-sync-period=10s \
 --concurrent-deployment-syncs=10 \
@@ -44,9 +44,9 @@ ExecStart=/opt/bin/k8s/kube-controller-manager \
 --service-cluster-ip-range=10.254.0.0/16 \
 --pod-eviction-timeout=6m \
 --terminated-pod-gc-threshold=10000 \
---root-ca-file=${K8S_CONF_PATH}/certs/ca.pem \
---service-account-private-key-file=${K8S_CONF_PATH}/certs/ca-key.pem \
---kubeconfig=${K8S_CONF_PATH}/kube-controller-manager.kubeconfig \
+--root-ca-file=${K8S_ROOT}/certs/ca.pem \
+--service-account-private-key-file=${K8S_ROOT}/certs/ca-key.pem \
+--kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
 --logtostderr=true \
 --v=2
 

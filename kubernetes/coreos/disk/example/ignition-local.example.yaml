@@ -1,8 +1,10 @@
+variant: fcos
+version: 1.0.0
 passwd:
   users:
     - name: core
       ssh_authorized_keys:
-        - ssh-rsa SSH_PUB
+        - ssh-rsa {{SSH_PUB}}
       groups:
         - wheel
         - sudo
@@ -34,40 +36,19 @@ systemd:
 
         [Install]
         WantedBy=sockets.target
-networkd:
-   units:
-     - name: 10-static.network
-       contents: |
-         [Match]
-         Name=eth0
-
-         [Network]
-         DHCP=yes
-     - name: 30-static.network
-       contents: |
-         [Match]
-         Name=eth0
-
-         [Network]
-         Address=IP_1/24
-         DNS=114.114.114.114
-         # Gateway=
 storage:
   files:
     - path:       "/etc/hostname"
-      filesystem: "root"
       mode:       0644
       contents:
         inline: coreos
     - path:       "/etc/resolv.conf"
-      filesystem: "root"
       mode:       0644
       contents:
         inline: |
           nameserver 114.114.114.114
           nameserver 8.8.8.8
     - path:       "/etc/hosts"
-      filesystem: "root"
       mode:       0644
       contents:
         inline: |
@@ -75,7 +56,6 @@ storage:
           ::1        localhost
           127.0.0.1  example.com
     - path:       "/etc/docker/daemon.json"
-      filesystem: "root"
       mode:       0644
       contents:
         inline: |
@@ -95,25 +75,18 @@ storage:
             "experimental" : true
           }
     - path: /etc/docker/ca.pem
-      filesystem: root
       mode: 0644
       contents:
-        remote:
-          url: http://LOCAL_HOST:8080/cert/ca.pem
+        source: http://{{LOCAL_HOST}}:8080/cert/ca.pem
     - path: /etc/docker/server.pem
-      filesystem: root
       mode: 0644
       contents:
-        remote:
-          url: http://LOCAL_HOST:8080/cert/server-cert.pem
+        source: http://{{LOCAL_HOST}}:8080/cert/server-cert.pem
     - path: /etc/docker/server-key.pem
-      filesystem: root
       mode: 0644
       contents:
-        remote:
-          url: http://LOCAL_HOST:8080/cert/server-key.pem
+        source: http://{{LOCAL_HOST}}:8080/cert/server-key.pem
     - path: /etc/profile.d/profile.sh
-      filesystem: root
       mode: 0644
       contents:
         inline: |

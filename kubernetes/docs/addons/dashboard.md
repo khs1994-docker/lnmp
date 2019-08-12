@@ -71,27 +71,25 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 # 设置集群参数
 # Docker desktop k8s
 # $ export KUBE_APISERVER=https://localhost:6445
-# $ export K8S_CONF_PATH=/opt/bin/k8s/conf
-
-$ cd ~/.kube
+# $ export K8S_ROOT=/opt/k8s
 
 $ kubectl config set-cluster kubernetes \
-  --certificate-authority=${K8S_CONF_PATH:-/opt/bin/k8s/conf}/certs/ca.pem \
+  --certificate-authority=${K8S_ROOT:-/opt/k8s}/certs/ca.pem \
   --embed-certs=true \
   --server=${KUBE_APISERVER:-https://192.168.57.110:6443} \
-  --kubeconfig=dashboard.kubeconfig
+  --kubeconfig=$HOME/.kube/dashboard.kubeconfig
 
 # 设置客户端认证参数，使用上面创建的 Token
 $ kubectl config set-credentials dashboard_user \
   --token=${DASHBOARD_LOGIN_TOKEN} \
-  --kubeconfig=dashboard.kubeconfig
+  --kubeconfig=$HOME/.kube/dashboard.kubeconfig
 
 # 设置上下文参数
 $ kubectl config set-context default \
   --cluster=kubernetes \
   --user=dashboard_user \
-  --kubeconfig=dashboard.kubeconfig
+  --kubeconfig=$HOME/.kube/dashboard.kubeconfig
 
 # 设置默认上下文
-$ kubectl config use-context default --kubeconfig=dashboard.kubeconfig
+$ kubectl config use-context default --kubeconfig=$HOME/.kube/dashboard.kubeconfig
 ```

@@ -1,0 +1,7 @@
+*
+!.gitignore
+!backup.yaml
+!ignition-local.example.yaml
+!ignition-n.template.yaml
+!merge.yaml
+!basic.yaml
