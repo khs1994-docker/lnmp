@@ -47,7 +47,7 @@ services:
     image: node:12.8.0-alpine
 
   go:
-    image: golang:1.12.7-alpine
+    image: golang:1.12.9-alpine
 
   alpine:
     image: alpine:3.10
