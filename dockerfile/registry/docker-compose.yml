@@ -1,9 +1,0 @@
-version: "3.5"
-services:
-
-  registry:
-    build:
-      context: .
-      args:
-        ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/registry:${TAG:-latest}

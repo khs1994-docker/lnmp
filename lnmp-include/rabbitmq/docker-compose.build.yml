@@ -26,4 +26,4 @@ services:
       << : *default-labels
       << : *default-build
       # << : *default-build-debian
-      context: ./dockerfile/rabbitmq/
+      context: ./lnmp-include/rabbitmq/

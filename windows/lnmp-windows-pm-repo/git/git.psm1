@@ -24,12 +24,14 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
 
+  $url="https://github.com/git-for-windows/git/releases/download/v${VERSION}.windows.1/Git-${GIT_VERSION}-64-bit.exe"
+  $url="https://mirrors.huaweicloud.com/git-for-windows/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe"
+
   if($isPre){
     $VERSION=$preVersion
-    $url=$lwpm.preUrl
+    # $url=$lwpm.preUrl
   }else{
-    $url="https://github.com/git-for-windows/git/releases/download/v${VERSION}.windows.1/Git-${GIT_VERSION}-64-bit.exe"
-    $url="https://mirrors.huaweicloud.com/git-for-windows/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe"
+
   }
 
   $filename="Git-${GIT_VERSION}-64-bit.exe"

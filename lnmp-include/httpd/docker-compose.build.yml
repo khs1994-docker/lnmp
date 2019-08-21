@@ -26,4 +26,4 @@ services:
       << : *default-labels
       << : *default-build
       # << : *default-build-debian
-      context: ./dockerfile/httpd/
+      context: ./lnmp-include/httpd/

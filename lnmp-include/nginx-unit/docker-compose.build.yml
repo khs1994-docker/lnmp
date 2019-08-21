@@ -25,4 +25,4 @@ services:
     build:
       << : *default-labels
       << : *default-build
-      context: ./dockerfile/nginx-unit
+      context: ./lnmp-include/nginx-unit

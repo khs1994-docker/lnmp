@@ -25,4 +25,4 @@ services:
     build:
       << : *default-labels
       << : *default-build-debian
-      context: ./dockerfile/mongodb/
+      context: ./lnmp-include/mongodb/
