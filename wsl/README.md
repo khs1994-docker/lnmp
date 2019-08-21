@@ -79,7 +79,7 @@ $ lnmp-wsl-install enable php73 php72 | php71 | php70 | php56
 
 ## NGINX
 
-NGINX 需要自己编译安装 `$ lnmp-wsl-builder-nginx.py 1.17.2 ROOT_PASSWORD`
+NGINX 需要自己编译安装 `$ lnmp-wsl-builder-nginx.py 1.17.3 ROOT_PASSWORD`
 
 `/usr/local/etc/nginx/nginx.conf` 主配置文件必须添加下面的配置项，否则 PHP 页面打开非常缓慢
 

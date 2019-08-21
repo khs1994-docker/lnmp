@@ -8,7 +8,7 @@ spec:
   runtimeClassName: myclass
   containers:
   - name: "lnmp-pod"
-    image: "nginx:1.17.2-alpine"
+    image: "nginx:1.17.3-alpine"
     volumeMounts:
     - name: test
       mountPath: /opt/data
