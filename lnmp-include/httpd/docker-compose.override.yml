@@ -9,4 +9,4 @@ x-common:
 services:
   httpd:
     << : *default-common
-    image: httpd:${LNMP_HTTPD_VERSION:-2.4.39}-alpine
+    image: httpd:${LNMP_HTTPD_VERSION:-2.4.41}-alpine

@@ -1,8 +1,8 @@
 {
   "name": "httpd",
   "description": "",
-  "version": "2.4.39",
-  "preVersion": "2.4.39",
+  "version": "2.4.41",
+  "preVersion": "2.4.41",
   "homepage": "https://httpd.apache.org/",
   "bug": "https://httpd.apache.org/bug_report.html",
   "github": "apache/httpd",

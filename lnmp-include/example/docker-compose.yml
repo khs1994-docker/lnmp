@@ -18,7 +18,7 @@ x-common-label:
 services:
   example:
     << : *default-common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/example:${LNMP_EXAMPLE_VERSION:-2.4.39}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/example:${LNMP_EXAMPLE_VERSION:-2.4.41}-alpine"
     ports:
       - "${LNMP_EXAMPLE_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_EXAMPLE_HTTP_PORT:-0.0.0.0:80}:80"
