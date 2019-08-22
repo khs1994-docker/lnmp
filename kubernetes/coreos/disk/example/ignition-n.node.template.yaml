@@ -146,7 +146,7 @@ systemd:
           -v /var/lib/etcd:/var/lib/etcd \
           -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
           -p 2380:2380 -p 2379:2379 \
-          gcr.azk8s.cn/etcd-development/etcd:v3.3.13 \
+          gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
           etcd \
           --name="coreos{{n}}" \
           --cert-file=${K8S_ROOT}/certs/etcd.pem \
@@ -210,7 +210,7 @@ systemd:
         ExecStartPre=-podman run --name flanneld-etcdctl --network host --privileged \
           -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
           -e ETCDCTL_API=2 \
-          gcr.azk8s.cn/etcd-development/etcd:v3.3.13 \
+          gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
           etcdctl \
           --endpoints=${ETCD_ENDPOINTS} \
           --ca-file="${K8S_ROOT}/certs/ca.pem" \

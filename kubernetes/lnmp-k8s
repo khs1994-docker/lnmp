@@ -15,13 +15,13 @@ source ./systemd/.env
 source ./.env.example
 source ./.env
 
-ETCD_VERSION=3.3.13
-FLANNEL_VERSION=0.10.0
+ETCD_VERSION=3.3.15
+FLANNEL_VERSION=0.11.0
 HELM_VERSION=3.0.0-alpha.2
-CNI_VERSION=0.8.1
+CNI_VERSION=0.8.2
 CRICTL_VERSION=1.15.0
 TMP_ROOT=$HOME/.lnmp/caches
-NGINX_VERSION=1.17.2
+NGINX_VERSION=1.17.3
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
