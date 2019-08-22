@@ -26,4 +26,4 @@ services:
       << : *default-labels
       << : *default-build
       # << : *default-build-debian
-      context: ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example/Dockerfile
+      context: ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example

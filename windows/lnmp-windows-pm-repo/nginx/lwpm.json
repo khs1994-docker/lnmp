@@ -1,7 +1,7 @@
 {
   "name": "nginx",
   "description": "small, powerful, scalable web/proxy server",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "preVersion": "1.17.3",
   "homepage": "https://nginx.org",
   "bug": "http://nginx.org/en/support.html",

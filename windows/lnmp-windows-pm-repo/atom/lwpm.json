@@ -1,8 +1,8 @@
 {
   "name": "atom",
   "description": "A hackable text editor for the 21st Century",
-  "version": "1.39.1",
-  "preVersion": "1.40.0-beta1",
+  "version": "1.40.1",
+  "preVersion": "1.41.0-beta1",
   "homepage": "https://atom.io/",
   "bug": "https://github.com/atom/atom/issues",
   "github": "atom/atom",
