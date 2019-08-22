@@ -1,1 +1,4 @@
-phpinfo.php
+*
+!.gitignore
+!demo.html
+!index.php

@@ -1,0 +1,915 @@
+# https://github.com/coreos/fcct/blob/master/docs/configuration-v1_0.md
+# master
+variant: fcos
+version: 1.0.0
+passwd:
+  # groups:
+  #   - name:
+  #     gid:
+  #     password_hash:
+  users:
+    - name: core
+      # password_hash: "$1$nwU7Pa6U$zEYWwaz2b/PIv2K.hNu41/"
+      # https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/examples.md#generating-a-password-hash
+      # $ openssl passwd -1
+      ssh_authorized_keys:
+        - ssh-rsa {{SSH_PUB}}
+      groups:
+        - wheel
+        - sudo
+        - docker
+      # uid:
+      # gecos:
+      # no_create_home: false
+      # primary_group:
+      # no_user_group: true
+      # no_log_init: true
+      # shell: bash
+      # system: true
+    - name: k8s
+      ssh_authorized_keys:
+        - ssh-rsa {{SSH_PUB}}
+      groups:
+        - wheel
+        - sudo
+        - docker
+      home_dir: /home/k8s
+systemd:
+  units:
+    - name: docker.service
+      dropins:
+        - name: docker.conf
+          contents: |
+            [Service]
+            ExecStart=
+            ExecStart=/usr/bin/dockerd \
+              --host=fd:// \
+              --exec-opt native.cgroupdriver=systemd \
+              {{DOCKER_NETWORK_OPTIONS}}
+    - name: settimezone.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Set the time zone
+
+        [Service]
+        ExecStart=/usr/bin/timedatectl set-timezone PRC
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: flanneld-install.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=flanneld installer
+
+        [Service]
+        WorkingDirectory=/home/core/.lnmp/caches
+        ExecStartPre=mkdir -p /opt/k8s/bin
+        ExecStartPre=bash -c "if ! [ `/opt/k8s/bin/flanneld --version > /dev/null ; echo $?` = 0 ];then rm -rf /opt/k8s/bin/flanneld; fi"
+        ExecStartPre=bash -c "if ! [ -f /opt/k8s/bin/flanneld ];then \
+          tar -zxvf flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz -C /opt/k8s/bin ; fi"
+        ExecStart=echo success
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: kube-nginx-install.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=kube-nginx installer
+
+        [Service]
+        WorkingDirectory=/home/core/.lnmp/caches
+        ExecStartPre=bash -c "if ! [ -f /opt/k8s/kube-nginx/sbin/nginx ];then \
+          tar -zxvf kube-nginx.tar.gz -C /opt/k8s/ ; fi"
+        ExecStart=echo success
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: kube-nginx.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=kube-apiserver nginx proxy
+        After=network.target
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]
+        Type=forking
+        ExecStartPre=/opt/k8s/kube-nginx/sbin/nginx -c /opt/k8s/kube-nginx/conf/kube-nginx.conf -p /opt/k8s/kube-nginx -t
+        ExecStart=/opt/k8s/kube-nginx/sbin/nginx -c /opt/k8s/kube-nginx/conf/kube-nginx.conf -p /opt/k8s/kube-nginx
+        ExecReload=/opt/k8s/kube-nginx/sbin/nginx -c /opt/k8s/kube-nginx/conf/kube-nginx.conf -p /opt/k8s/kube-nginx -s reload
+        PrivateTmp=true
+        Restart=always
+        RestartSec=5
+        StartLimitInterval=0
+        LimitNOFILE=65536
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: etcd.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=etcd
+        Documentation=https://github.com/etcd-io/etcd
+        # Requires= 当前 unit 依赖的
+        Wants=network-online.target network.target
+        # 我在谁之后启动
+        After=network-online.target
+        # Befora 我在谁之前启动
+        # Conflicts 冲突
+        # Condition...：当前 Unit 运行必须满足的条件，否则不会运行
+        # Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
+
+        [Service]
+
+        # Type=notify
+        Restart=on-failure
+        # always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog
+        RestartSec=10s
+        # 自动重启当前服务间隔的秒数
+        TimeoutStartSec=0
+        # 定义 Systemd 停止当前服务之前等待的秒数
+        # LimitNOFILE=40000
+
+        Environment="ETCD_DATA_DIR=/var/lib/etcd"
+        Environment="K8S_ROOT=/opt/k8s"
+
+        ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
+
+        ExecStartPre=-podman container rm etcd
+        ExecStart= podman run --name etcd --network host --privileged \
+          -e ETCD_DATA_DIR \
+          -v /var/lib/etcd:/var/lib/etcd \
+          -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
+          -p 2380:2380 -p 2379:2379 \
+          gcr.azk8s.cn/etcd-development/etcd:v3.3.13 \
+          etcd \
+          --name="coreos{{n}}" \
+          --cert-file=${K8S_ROOT}/certs/etcd.pem \
+          --key-file=${K8S_ROOT}/certs/etcd-key.pem \
+          --trusted-ca-file=${K8S_ROOT}/certs/ca.pem \
+          --peer-cert-file=${K8S_ROOT}/certs/etcd.pem \
+          --peer-key-file=${K8S_ROOT}/certs/etcd-key.pem \
+          --peer-trusted-ca-file=${K8S_ROOT}/certs/ca.pem \
+          --peer-client-cert-auth \
+          --client-cert-auth \
+          --listen-peer-urls=https://{{IP_{{n}}}}:2380 \
+          --initial-advertise-peer-urls=https://{{IP_{{n}}}}:2380 \
+          --listen-client-urls=https://{{IP_{{n}}}}:2379,http://127.0.0.1:2379 \
+          --advertise-client-urls=https://{{IP_{{n}}}}:2379 \
+          --initial-cluster-token="mytoken" \
+          --initial-cluster=${ETCD_NODES} \
+          --initial-cluster-state=new \
+          --auto-compaction-mode=periodic \
+          --auto-compaction-retention=1 \
+          --max-request-bytes=33554432 \
+          --quota-backend-bytes=6442450944 \
+          --heartbeat-interval=250 \
+          --election-timeout=2000
+
+        ExecStop=podman stop etcd
+        ExecStopPost=podman container rm etcd
+
+        # ExecStartPost
+        # ExecReload：重启当前服务时执行的命令
+        # ExecStop：停止当前服务时执行的命令
+        # ExecStopPost：停止当其服务之后执行的命令
+        [Install]
+        WantedBy=multi-user.target
+
+        # Alias：当前 Unit 可用于启动的别名
+        # Also：当前 Unit 激活（enable）时，会被同时激活的其他 Unit
+    - name: flanneld.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=flannel - Network fabric for containers
+        Documentation=https://github.com/coreos/flannel
+        #Requires=etcd.service
+        #After=etcd.service
+        Before=docker.service
+
+        [Service]
+        Type=notify
+        Restart=always
+        RestartSec=10s
+        TimeoutStartSec=300
+        LimitNOFILE=40000
+        LimitNPROC=1048576
+
+        Environment="K8S_ROOT=/opt/k8s"
+
+        ExecStartPre=-/sbin/modprobe ip_tables
+        ExecStartPre=-/usr/bin/env mkdir --parents /var/lib/coreos /run/flannel
+        ExecStartPre=-podman container rm flanneld-etcdctl
+        # ExecStartPre=-/usr/bin/env ETCDCTL_API=2 ${K8S_ROOT}/bin/etcdctl \
+        ExecStartPre=-podman run --name flanneld-etcdctl --network host --privileged \
+          -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
+          -e ETCDCTL_API=2 \
+          gcr.azk8s.cn/etcd-development/etcd:v3.3.13 \
+          etcdctl \
+          --endpoints=${ETCD_ENDPOINTS} \
+          --ca-file="${K8S_ROOT}/certs/ca.pem" \
+          --cert-file="${K8S_ROOT}/certs/flanneld.pem" \
+          --key-file="${K8S_ROOT}/certs/flanneld-key.pem" \
+          set /kubernetes/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
+        ExecStartPre=-podman container rm flanneld-etcdctl
+
+        ExecStart=/opt/k8s/bin/flanneld \
+          --etcd-endpoints=${ETCD_ENDPOINTS} \
+          --etcd-cafile="${K8S_ROOT}/certs/ca.pem" \
+          --etcd-certfile="${K8S_ROOT}/certs/flanneld.pem" \
+          --etcd-keyfile="${K8S_ROOT}/certs/flanneld-key.pem" \
+          --etcd-prefix="/kubernetes/network" \
+          --ip-masq
+
+        ExecStartPost=/opt/k8s/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/sysconfig/docker
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: kube-apiserver.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubernetes API Server
+        Documentation=https://github.com/kubernetes/kubernetes
+        After=network.target
+        # Requires=etcd.service
+
+        [Service]
+        # Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
+        # --insecure-port has been deprecated, This flag will be removed in a future version.
+
+        Environment="K8S_ROOT=/opt/k8s"
+        ExecStartPre=mkdir -p /var/log/kubernetes
+        ExecStartPre=bash -c "if ! [ `/opt/k8s/bin/kube-apiserver --version > /dev/null ; echo $?` = 0 ];then rm -rf /opt/k8s/bin/kube-apiserver; fi"
+        ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/kube-apiserver ];then \
+          curl http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-apiserver \
+          -o ${K8S_ROOT}/bin/kube-apiserver;fi"
+        ExecStartPre=chmod +x ${K8S_ROOT}/bin/kube-apiserver
+
+        ExecStart=/opt/k8s/bin/kube-apiserver \
+        --advertise-address={{IP_{{n}}}} \
+        --default-not-ready-toleration-seconds=360 \
+        --default-unreachable-toleration-seconds=360 \
+        --feature-gates=DynamicAuditing=true \
+        --max-mutating-requests-inflight=2000 \
+        --max-requests-inflight=4000 \
+        --default-watch-cache-size=200 \
+        --delete-collection-workers=2 \
+        --encryption-provider-config=${K8S_ROOT}/conf/encryption-config.yaml \
+        --etcd-cafile=${K8S_ROOT}/certs/ca.pem \
+        --etcd-certfile=${K8S_ROOT}/certs/kubernetes.pem \
+        --etcd-keyfile=${K8S_ROOT}/certs/kubernetes-key.pem \
+        --etcd-servers=${ETCD_ENDPOINTS} \
+        --bind-address={{IP_{{n}}}} \
+        --secure-port=6443 \
+        --tls-cert-file=${K8S_ROOT}/certs/kubernetes.pem \
+        --tls-private-key-file=${K8S_ROOT}/certs/kubernetes-key.pem \
+        --insecure-port=0 \
+        --audit-dynamic-configuration \
+        --audit-log-maxage=15 \
+        --audit-log-maxbackup=3 \
+        --audit-log-maxsize=100 \
+        --audit-log-truncate-enabled \
+        --audit-log-path=/var/log/kubernetes/kube-apiserver/audit.log \
+        --audit-policy-file=${K8S_ROOT}/conf/audit-policy.yaml \
+        --profiling \
+        --anonymous-auth=false \
+        --client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --enable-bootstrap-token-auth \
+        --requestheader-allowed-names="aggregator" \
+        --requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-extra-headers-prefix="X-Remote-Extra-" \
+        --requestheader-group-headers=X-Remote-Group \
+        --requestheader-username-headers=X-Remote-User \
+        --service-account-key-file=${K8S_ROOT}/certs/ca.pem \
+        --authorization-mode=Node,RBAC \
+        --runtime-config=api/all=true \
+        --enable-admission-plugins=NodeRestriction \
+        --allow-privileged=true \
+        --apiserver-count=3 \
+        --event-ttl=168h \
+        --kubelet-certificate-authority=${K8S_ROOT}/certs/ca.pem \
+        --kubelet-client-certificate=${K8S_ROOT}/certs/kubernetes.pem \
+        --kubelet-client-key=${K8S_ROOT}/certs/kubernetes-key.pem \
+        --kubelet-https=true \
+        --kubelet-timeout=10s \
+        --proxy-client-cert-file=${K8S_ROOT}/certs/proxy-client.pem \
+        --proxy-client-key-file=${K8S_ROOT}/certs/proxy-client-key.pem \
+        --service-cluster-ip-range=10.254.0.0/16 \
+        --service-node-port-range="1-65535" \
+        --logtostderr=true \
+        --v=2
+
+        Restart=on-failure
+        RestartSec=5
+        Type=notify
+        LimitNOFILE=65536
+        TimeoutStartSec=0
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: kube-controller-manager.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubernetes Controller Manager
+        Documentation=https://github.com/kubernetes/kubernetes
+        # Requires=kube-apiserver.service
+
+        [Service]
+
+        # Flag --port has been deprecated, see --secure-port instead.
+        # Flag --horizontal-pod-autoscaler-use-rest-clients has been deprecated,
+        # Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
+
+        Environment="K8S_ROOT=/opt/k8s"
+        ExecStartPre=bash -c "if ! [ `/opt/k8s/bin/kube-controller-manager --version > /dev/null ; echo $?` = 0 ];then rm -rf /opt/k8s/bin/kube-controller-manager; fi"
+        ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/kube-controller-manager ];then \
+          curl http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-controller-manager \
+          -o ${K8S_ROOT}/bin/kube-controller-manager;fi"
+        ExecStartPre=chmod +x ${K8S_ROOT}/bin/kube-controller-manager
+        ExecStart=/opt/k8s/bin/kube-controller-manager \
+        --profiling \
+        --cluster-name=kubernetes \
+        --controllers=*,bootstrapsigner,tokencleaner \
+        --kube-api-qps=1000 \
+        --kube-api-burst=2000 \
+        --leader-elect \
+        --use-service-account-credentials \
+        --concurrent-service-syncs=2 \
+        --bind-address={{IP_{{n}}}} \
+        --secure-port=10257 \
+        --tls-cert-file=${K8S_ROOT}/certs/kube-controller-manager.pem \
+        --tls-private-key-file=${K8S_ROOT}/certs/kube-controller-manager-key.pem \
+        --port=0 \
+        --authentication-kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
+        --client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-allowed-names="" \
+        --requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-extra-headers-prefix="X-Remote-Extra-" \
+        --requestheader-group-headers=X-Remote-Group \
+        --requestheader-username-headers=X-Remote-User \
+        --authorization-kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
+        --cluster-signing-cert-file=${K8S_ROOT}/certs/ca.pem \
+        --cluster-signing-key-file=${K8S_ROOT}/certs/ca-key.pem \
+        --experimental-cluster-signing-duration=876000h \
+        --horizontal-pod-autoscaler-sync-period=10s \
+        --concurrent-deployment-syncs=10 \
+        --concurrent-gc-syncs=30 \
+        --node-cidr-mask-size=24 \
+        --service-cluster-ip-range=10.254.0.0/16 \
+        --pod-eviction-timeout=6m \
+        --terminated-pod-gc-threshold=10000 \
+        --root-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --service-account-private-key-file=${K8S_ROOT}/certs/ca-key.pem \
+        --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
+        --logtostderr=true \
+        --v=2
+
+        Restart=on-failure
+        RestartSec=5
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: kube-scheduler.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubernetes Scheduler
+        Documentation=https://github.com/kubernetes/kubernetes
+        # Requires=kube-apiserver.service
+
+        [Service]
+
+        Environment="K8S_ROOT=/opt/k8s"
+
+        ExecStart=/opt/k8s/bin/kube-scheduler \
+        --config=${K8S_ROOT}/conf/kube-scheduler.yaml \
+        --bind-address={{IP_{{n}}}} \
+        --secure-port=10259 \
+        --port=0 \
+        --tls-cert-file=${K8S_ROOT}/certs/kube-scheduler.pem \
+        --tls-private-key-file=${K8S_ROOT}/certs/kube-scheduler-key.pem \
+        --authentication-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
+        --client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-allowed-names="" \
+        --requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-extra-headers-prefix="X-Remote-Extra-" \
+        --requestheader-group-headers=X-Remote-Group \
+        --requestheader-username-headers=X-Remote-User \
+        --authorization-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
+        --logtostderr=true \
+        --v=2
+
+        Restart=on-failure
+        RestartSec=5
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: docker-tls-tcp.socket
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Docker Secured Socket for the API
+
+        [Socket]
+        # ListenStream={{IP_{{n}}}}:2376
+        ListenStream=2376
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+    - name: kube-proxy.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubernetes Kube-Proxy Server
+        Documentation=https://github.com/kubernetes/kubernetes
+        After=network.target
+
+        [Service]
+
+        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kube-proxy
+        ExecStartPre=-/usr/sbin/modprobe ip_vs
+        ExecStartPre=-/sbin/modprobe ip_vs
+
+        # WorkingDirectory=/var/lib/kube-proxy
+
+        Environment="K8S_ROOT=/opt/k8s"
+
+        ExecStart=/opt/k8s/bin/kube-proxy \
+        --config=${K8S_ROOT}/conf/kube-proxy.config.yaml \
+        --logtostderr=true \
+        --v=2
+
+        Restart=on-failure
+        RestartSec=5
+        LimitNOFILE=65536
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: kubelet.service
+      enabled: true
+      contents: |
+        [[Unit]
+        Description=Kubernetes Kubelet
+        Documentation=https://github.com/kubernetes/kubernetes
+        # After=docker.service
+        # Requires=docker.service
+
+        [Service]
+        WorkingDirectory=/home/core
+        Environment="NODE_NAME=coreos{{n}}"
+        # Fix me
+        Environment="KUBE_APISERVER=${KUBE_APISERVER}"
+
+        Environment="K8S_ROOT=/opt/k8s"
+
+        ExecStartPre=-/usr/sbin/swapoff -a
+        ExecStartPre=-/sbin/swapoff -a
+        ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
+        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
+
+        ExecStart=/opt/k8s/bin/kubelet \
+        --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
+        --cert-dir=${K8S_ROOT}/certs \
+        --container-runtime=docker \
+        --container-runtime-endpoint=unix:///var/run/dockershim.sock \
+        --root-dir=/var/lib/kubelet \
+        --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
+        --config=${K8S_ROOT}/conf/kubelet-config.yaml \
+        --hostname-override=coreos{{n}} \
+        --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1 \
+        --image-pull-progress-deadline=15m \
+        --volume-plugin-dir=/var/lib/kubelet/kubelet-plugins/volume/exec/ \
+        --logtostderr=true \
+        --v=2
+
+        # --container-runtime=remote \
+        # --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
+
+        Restart=on-failure
+        RestartSec=5
+
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    - path: "/etc/hostname"
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: coreos{{n}}
+    - path: "/etc/hosts"
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          127.0.0.1 localhost
+          ::1       localhost
+          {{IP_1}} gcr.io k8s.gcr.io docker.khs1994.com docker.domain.com
+          {{IP_1}} coreos1
+          {{IP_2}} coreos2
+          {{IP_3}} coreos3
+          {{IP_{{n}}}} coreos{{n}}
+    - path: /etc/profile.d/profile.sh
+      mode: 0755
+      contents:
+        inline: |
+          export ETCDCTL_API=3
+          export etcd_endpoints=${ETCD_ENDPOINTS}
+    - path: /opt/k8s/conf/audit-policy.yaml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/audit-policy.yaml
+    - path: /opt/k8s/kube-nginx/conf/kube-nginx.conf
+      mode: 0644
+      contents:
+        inline: |
+          worker_processes 1;
+
+          events {
+              worker_connections  1024;
+          }
+
+          stream {
+              upstream backend {
+                  hash $remote_addr consistent;
+                  server {{IP_1}}:6443        max_fails=3 fail_timeout=30s;
+                  server {{IP_2}}:6443        max_fails=3 fail_timeout=30s;
+                  server {{IP_3}}:6443        max_fails=3 fail_timeout=30s;
+              }
+
+              server {
+                  listen 127.0.0.1:18443;
+                  proxy_connect_timeout 1s;
+                  proxy_pass backend;
+              }
+          }
+    - path: /opt/k8s/conf/kube-scheduler.yaml
+      mode: 0644
+      contents:
+        inline: |
+          apiVersion: kubescheduler.config.k8s.io/v1alpha1
+          kind: KubeSchedulerConfiguration
+          bindTimeoutSeconds: 600
+          clientConnection:
+            burst: 200
+            kubeconfig: "/opt/k8s/conf/kube-scheduler.kubeconfig"
+            qps: 100
+          enableContentionProfiling: false
+          enableProfiling: true
+          hardPodAffinitySymmetricWeight: 1
+          healthzBindAddress: {{IP_{{n}}}}:10251
+          leaderElection:
+            leaderElect: true
+          metricsBindAddress: {{IP_{{n}}}}:10251
+    - path: /opt/k8s/conf/kubelet-config.yaml
+      mode: 0644
+      contents:
+        inline: |
+          kind: KubeletConfiguration
+          apiVersion: kubelet.config.k8s.io/v1beta1
+          address: "{{IP_{{n}}}}"
+          staticPodPath: ""
+          syncFrequency: 1m
+          fileCheckFrequency: 20s
+          httpCheckFrequency: 20s
+          staticPodURL: ""
+          port: 10250
+          readOnlyPort: 0
+          rotateCertificates: true
+          serverTLSBootstrap: true
+          authentication:
+            anonymous:
+              enabled: false
+            webhook:
+              enabled: true
+            x509:
+              clientCAFile: "/opt/k8s/certs/ca.pem"
+          authorization:
+            mode: Webhook
+          registryPullQPS: 0
+          registryBurst: 20
+          eventRecordQPS: 0
+          eventBurst: 20
+          enableDebuggingHandlers: true
+          enableContentionProfiling: true
+          healthzPort: 10248
+          healthzBindAddress: "{{IP_{{n}}}}"
+          clusterDomain: "cluster.local."
+          clusterDNS:
+            - "10.254.0.2"
+          nodeStatusUpdateFrequency: 10s
+          nodeStatusReportFrequency: 1m
+          imageMinimumGCAge: 2m
+          imageGCHighThresholdPercent: 85
+          imageGCLowThresholdPercent: 80
+          volumeStatsAggPeriod: 1m
+          kubeletCgroups: ""
+          systemCgroups: ""
+          cgroupRoot: ""
+          cgroupsPerQOS: true
+          # cgroupDriver: cgroupfs
+          cgroupDriver: systemd
+          runtimeRequestTimeout: 10m
+          hairpinMode: promiscuous-bridge
+          maxPods: 220
+          podCIDR: "172.30.0.0/16"
+          podPidsLimit: -1
+          resolvConf: /etc/resolv.conf
+          maxOpenFiles: 1000000
+          kubeAPIQPS: 1000
+          kubeAPIBurst: 2000
+          serializeImagePulls: false
+          evictionHard:
+            memory.available:  "100Mi"
+          nodefs.available:  "10%"
+          nodefs.inodesFree: "5%"
+          imagefs.available: "15%"
+          evictionSoft: {}
+          enableControllerAttachDetach: true
+          failSwapOn: true
+          containerLogMaxSize: 20Mi
+          containerLogMaxFiles: 10
+          systemReserved: {}
+          kubeReserved: {}
+          systemReservedCgroup: ""
+          kubeReservedCgroup: ""
+          enforceNodeAllocatable: ["pods"]
+    - path: /opt/k8s/conf/kube-proxy.config.yaml
+      mode: 0644
+      contents:
+        inline: |
+          kind: KubeProxyConfiguration
+          apiVersion: kubeproxy.config.k8s.io/v1alpha1
+          clientConnection:
+            burst: 200
+            kubeconfig: "/opt/k8s/conf/kube-proxy.kubeconfig"
+            qps: 100
+          bindAddress: {{IP_{{n}}}}
+          healthzBindAddress: {{IP_{{n}}}}:10256
+          metricsBindAddress: {{IP_{{n}}}}:10249
+          enableProfiling: true
+          clusterCIDR: 172.30.0.0/16
+          hostnameOverride: coreos{{n}}
+          mode: "ipvs"
+          portRange: ""
+          kubeProxyIPTablesConfiguration:
+            masqueradeAll: false
+          kubeProxyIPVSConfiguration:
+            scheduler: rr
+            excludeCIDRs: []
+    - path:       "/etc/docker/daemon.json"
+      mode:       0644
+      contents:
+        inline: |
+          {
+            "tlsverify": true,
+            "tlscert": "/opt/k8s/certs/server.pem",
+            "tlskey": "/opt/k8s/certs/server-key.pem",
+            "tlscacert": "/opt/k8s/certs/ca.pem",
+            "registry-mirrors" : [
+              "https://dockerhub.azk8s.cn"
+            ],
+            "debug" : true,
+            "dns" : [
+              "114.114.114.114",
+              "8.8.8.8"
+            ],
+            "experimental" : true
+          }
+    - path: /home/core/.kube/config
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
+      user:
+        name: core
+      group:
+        name: core
+    - path: /opt/k8s/conf/kubectl.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
+    - path: /opt/k8s/conf/kube-controller-manager.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager.kubeconfig
+    - path: /opt/k8s/conf/kube-scheduler.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.kubeconfig
+    - path: /opt/k8s/conf/kube-proxy.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-proxy.kubeconfig
+    - path: /opt/k8s/conf/csr-crb.yaml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/csr-crb.yaml
+    - path: /opt/k8s/certs/registry-ca.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/registry-ca.pem
+    - path: /opt/k8s/certs/ca.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/ca.pem
+    - path: /opt/k8s/certs/ca-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/ca-key.pem
+    - path: /opt/k8s/certs/server.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/server-cert.pem
+    - path: /opt/k8s/certs/server-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/server-key.pem
+    - path: /opt/k8s/certs/etcd.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd.pem
+    - path: /opt/k8s/certs/etcd-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-key.pem
+    - path: /opt/k8s/certs/flanneld.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/flanneld.pem
+    - path: /opt/k8s/certs/flanneld-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/flanneld-key.pem
+    - path: /opt/k8s/certs/kube-controller-manager.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager.pem
+    - path: /opt/k8s/certs/kube-controller-manager-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager-key.pem
+    - path: /opt/k8s/conf/encryption-config.yaml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/encryption-config.yaml
+    - path: /opt/k8s/certs/kube-scheduler.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.pem
+    - path: /opt/k8s/certs/kube-scheduler-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler-key.pem
+    - path: /opt/k8s/certs/kubernetes.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kubernetes.pem
+    - path: /opt/k8s/certs/kubernetes-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kubernetes-key.pem
+    - path: /opt/k8s/certs/proxy-client.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/proxy-client.pem
+    - path: /opt/k8s/certs/proxy-client-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/proxy-client-key.pem
+    - path: /opt/k8s/bin/kube-proxy
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-proxy
+    - path: /opt/k8s/bin/kubelet
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubelet
+    - path: /opt/k8s/bin/kubeadm
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubeadm
+    - path: /opt/k8s/bin/kubectl
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubectl
+    - path: /opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/bin/generate-kubelet-bootstrap-kubeconfig.sh
+    # - path: /opt/k8s/bin/kube-apiserver
+    #   mode: 0755
+    #   contents:
+    #     source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-apiserver
+    # - path: /opt/k8s/bin/kube-controller-manager
+    #   mode: 0755
+    #   contents:
+    #     source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-controller-manager
+    - path: /opt/k8s/bin/kube-scheduler
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-scheduler
+    - path: /opt/etc/NetworkManager/system-connections/eth0.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth0
+          type=ethernet
+          interface-name=eth0
+          permissions=
+          autoconnect=true
+
+          [ipv4]
+          dns-search=
+          method=auto
+
+          [ipv6]
+          addr-gen-mode=stable-privacy
+          dns-search=
+          method=auto
+    - path: /opt/etc/NetworkManager/system-connections/eth1.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth1
+          interface-name=eth1
+          type=ethernet
+          autoconnect=true
+
+          [ipv4]
+          method=manual
+          dns=114.114.114.114
+          addresses={{IP_{{n}}}}/24
+          gateway=192.168.57.1
+    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth0
+          type=ethernet
+          interface-name=eth0
+          permissions=
+          autoconnect=true
+
+          [ipv4]
+          dns-search=
+          method=auto
+
+          [ipv6]
+          addr-gen-mode=stable-privacy
+          dns-search=
+          method=auto
+    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth1
+          interface-name=eth1
+          type=ethernet
+          autoconnect=true
+
+          [ipv4]
+          method=manual
+          dns=114.114.114.114
+          addresses={{IP_{{n}}}}/24
+          gateway=192.168.57.1
+    - path: /etc/selinux/config
+      overwrite: true
+      mode: 0644
+      contents:
+        inline: |
+          # This file controls the state of SELinux on the system.
+          # SELINUX= can take one of these three values:
+          #     enforcing - SELinux security policy is enforced.
+          #     permissive - SELinux prints warnings instead of enforcing.
+          #     disabled - No SELinux policy is loaded.
+          # SELINUX=enforcing
+          SELINUX=disabled
+          # SELINUXTYPE= can take one of these three values:
+          #     targeted - Targeted processes are protected,
+          #     minimum - Modification of targeted policy. Only selected processes are protected.
+          #     mls - Multi Level Security protection.
+          SELINUXTYPE=targeted
+    - path: /home/core/.lnmp/caches/flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz
+      mode: 0644
+      contents:
+        compression: null
+        source: http://{{SERVER_HOST}}:8080/releases/flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz
+    - path: /home/core/.lnmp/caches/kube-nginx.tar.gz
+      mode: 0644
+      contents:
+        compression: null
+        source: http://{{SERVER_HOST}}:8080/releases/kube-nginx.tar.gz

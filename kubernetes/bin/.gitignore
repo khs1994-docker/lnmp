@@ -1,0 +1,6 @@
+*
+!coreos.sh
+!etcdctl-tls.sh
+!generate-kubelet-bootstrap-kubeconfig.sh
+!mk-docker-opts.sh
+!.gitignore

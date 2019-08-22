@@ -62,3 +62,14 @@
 #          Address=IP_{{n}}/24
 #          DNS=114.114.114.114
 #          # Gateway=
+    # - path: /etc/systemd/network/30-static.network
+    #   mode: 0644
+    #   contents:
+    #     inline: |
+    #       [Match]
+    #       Name=eth0
+    #
+    #       [Network]
+    #       Address={{IP_{{n}}}}/24
+    #       DNS=114.114.114.114
+    #       Gateway=192.168.57.1

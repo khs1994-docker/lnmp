@@ -3,12 +3,25 @@
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 KUBERNETES_VERSION=1.15.2
 MINIKUBE_VERSION=0.30.0
-ETCD_VERSION=3.3.15
+
+# copy .env
+if ! [ -f .env ];then cp .env.example .env; fi
+if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
+if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
+if ! [ -f volumes/.env ];then cp volumes/.env.example volumes/.env; fi
+
+source ./systemd/.env.example
+source ./systemd/.env
+source ./.env.example
+source ./.env
+
+ETCD_VERSION=3.3.13
 FLANNEL_VERSION=0.10.0
 HELM_VERSION=3.0.0-alpha.2
 CNI_VERSION=0.8.1
 CRICTL_VERSION=1.15.0
 TMP_ROOT=$HOME/.lnmp/caches
+NGINX_VERSION=1.17.2
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
@@ -21,17 +34,6 @@ if [ -n "${DEBUG}" ];then
 fi
 
 source_path=$PWD
-
-# copy .env
-if ! [ -f .env ];then cp .env.example .env; fi
-if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
-if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
-if ! [ -f volumes/.env ];then cp volumes/.env.example volumes/.env; fi
-
-source ./systemd/.env.example
-source ./systemd/.env
-source ./.env.example
-source ./.env
 
 if [ -n "${CI_KUBERNETES_VERSION}" ];then
   KUBERNETES_VERSION=${CI_KUBERNETES_VERSION}
@@ -349,6 +351,45 @@ kubectl_getinfo(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt
 }
 
+_nginx_build(){
+  local url="http://nginx.org/download/"
+  local TAR_FILE="nginx-${NGINX_VERSION}.tar.gz"
+  __download(){
+    sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+  }
+
+  if [ -f ${K8S_ROOT}/kube-nginx.tar.gz ];then
+    print_info "${K8S_ROOT}/kube-nginx.tar.gz already exists"
+    return
+  fi
+
+  print_info "build nginx ..."
+
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+    true
+  else
+    rm -rf ${TMP_ROOT}/${TAR_FILE}
+    __download
+  fi
+
+  sudo mkdir -p ${TMP_ROOT}/kube-nginx
+  sudo tar -zxvf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}/kube-nginx
+  cd ${TMP_ROOT}/kube-nginx/nginx-${NGINX_VERSION}
+
+  sudo ./configure --prefix=/opt/k8s/kube-nginx \
+    --with-stream --without-http \
+    --without-http_uwsgi_module \
+    --without-http_scgi_module --without-http_fastcgi_module
+
+  sudo make
+  sudo make install
+  cd /opt/k8s/
+  sudo tar -zcvf kube-nginx.tar.gz kube-nginx
+  sudo cp kube-nginx.tar.gz ${TMP_ROOT}/
+  cd $source_path
+  sudo rm -rf ${TMP_ROOT}/kube-nginx
+}
+
 _etcd_install(){
   # local url="https://github.com/etcd-io/etcd/releases/download"
   local url="https://mirrors.huaweicloud.com/etcd"
@@ -372,7 +413,7 @@ _etcd_install(){
   fi
 
   sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
-  sudo mv ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ${K8S_ROOT}/bin/
+  sudo cp ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ${K8S_ROOT}/bin/
   sudo chown -R root:root ${K8S_ROOT}/bin/
   sudo rm -rf ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
 }
@@ -426,7 +467,7 @@ _helm_install(){
   fi
 
   sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
-  sudo mv ${TMP_ROOT}/${GOOS}-${GOARCH}/helm ${K8S_ROOT}/bin/
+  sudo cp ${TMP_ROOT}/${GOOS}-${GOARCH}/helm ${K8S_ROOT}/bin/
   sudo rm -rf ${TMP_ROOT}/${GOOS}-${GOARCH}
 }
 

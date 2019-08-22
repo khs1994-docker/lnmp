@@ -66,7 +66,7 @@ main (){
     }
   }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
-       -hostname="$server_hosts" - | cfssljson -bare $CN_NAME
+       -hostname="$server_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
   # registry
   # export CN_NAME=registry
@@ -95,7 +95,7 @@ main (){
     ]
 }' \
        | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
-      -hostname="$server_hosts" - | cfssljson -bare $CN_NAME
+      -hostname="$server_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
   # client
   export CN_NAME=client
@@ -170,7 +170,7 @@ main (){
     }]
     }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="$server_hosts,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts" - | cfssljson -bare $CN_NAME
+       -hostname="$server_hosts,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
     cat > encryption-config.yaml <<EOF
 kind: EncryptionConfig
@@ -205,7 +205,7 @@ EOF
   }]
   }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="$server_hosts"    - | cfssljson -bare kube-controller-manager
+       -hostname="$server_hosts,${NODE_IPS}"    - | cfssljson -bare kube-controller-manager
 
    # system:kube-scheduler master 无需传输到节点
    export CN_NAME=system:kube-scheduler
@@ -226,7 +226,7 @@ EOF
      }]
    }' \
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-        -hostname="$server_hosts"    - | cfssljson -bare kube-scheduler
+        -hostname="$server_hosts,${NODE_IPS}"    - | cfssljson -bare kube-scheduler
 
    # metrics-server 证书
    echo '{
@@ -270,7 +270,7 @@ EOF
      }]
    }' \
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-        -hostname="$server_hosts"    - | cfssljson -bare kube-proxy
+        -hostname="$server_hosts,${NODE_IPS}"    - | cfssljson -bare kube-proxy
 
    # metrics-server
    echo '{

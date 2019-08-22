@@ -20,9 +20,9 @@ init              Download CoreOS ISO files
 server            Up CoreOS install local server
 cert              Generate Self-Signed Certificates
 
-add-node          Create node ignition yaml file [example: add-node N ]
+add-node          Create node ignition yaml file [N] [master|node]
 
-new-vm            Create new VirtualBox vm [example: new-vm N ]
+new-vm            Create new VirtualBox vm [N]
 
 cleanup           Cleanup Cache
 
@@ -176,7 +176,9 @@ case "$1" in
       exit 1
     fi
 
-    cp disk/example/ignition-n.template.yaml disk/ignition-$2.yaml
+    if [ -n "$3" ];then TYPE=$3;fi
+
+    cp disk/example/ignition-n.${TYPE:-master}.template.yaml disk/ignition-$2.yaml
     sed -i "s#{{n}}#$2#g" disk/ignition-$2.yaml
   ;;
 
@@ -195,16 +197,16 @@ case "$1" in
       --memory 2048 \
       --acpi on \
       --boot1 dvd \
-      --nic1 hostonly \
-      --nic2 bridged \
-      --firmware efi
+      --nic1 bridged \
+      --nic2 hostonly
+      # --firmware efi
 
-      VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 10000
+      VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 20000
 
       VBoxManage storagectl "coreos"$2 --name "IDE Controller" --add ide --controller PIIX4
 
       VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --port 0 --device 0 --type hdd --medium "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi"
+          --nonrotational on --port 0 --device 0 --type hdd --medium "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi"
 
       VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
           --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-installer.iso

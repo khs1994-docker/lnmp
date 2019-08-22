@@ -4,44 +4,47 @@ set -ex
 
 env
 
-if [ "$1" = 'bash' ] || [ "$1" = 'sh' ];then
-  exec /bin/sh
-fi
+if [ "$1" = 'bash' ] || [ "$1" = 'sh' ];then exec /bin/sh; fi
 
+# www root
 cd /srv/www/coreos
 
 # ipxe
 
-sed -i "s#{{LOCAL_HOST}}#${LOCAL_HOST}#g" ipxe.html
+sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ipxe.html
 
-fcct --version
-fcct --help
+fcct --version ; fcct --help || true
 
 cd disk
+
+rm -rf *.json *.yaml
 
 cp example/* .
 
 for i in `seq ${NODE_NUM}`;do
-  if [ -f ignition-$i.example.yaml ];then
-    cp ignition-$i.example.yaml ignition-$i.yaml
-  fi
+  cp ignition-n.master.template.yaml ignition-$i.example.yaml
+  sed -i "s#{{n}}#$i#g" ignition-$i.example.yaml
+  cp ignition-$i.example.yaml ignition-$i.yaml
 
-  if [ -f ignition-$i.yaml ];then
-
-    echo "handle ignition-$i.yaml ...
-
-"
-    envsubst < ignition-$i.yaml > ignition-$i.yaml.source
-
-    cp ignition-$i.yaml.source ignition-$i.yaml
-
-    sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.yaml
-    sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.yaml
-    sed -i "s#{{LOCAL_HOST}}#${LOCAL_HOST}#g" ignition-$i.yaml
-
-  else
+  if ! [ -f ignition-$i.yaml ];then
     break
   fi
+
+  echo "handle ignition-$i.yaml ...
+
+"
+  envsubst < ignition-$i.yaml > ignition-$i.yaml.source
+
+  cp ignition-$i.yaml.source ignition-$i.yaml
+
+  sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.yaml
+  sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.yaml
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.yaml
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.yaml
+  sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" ignition-$i.yaml
+  sed -i "s#{{FLANNEL_VERSION}}#${FLANNEL_VERSION}#g" ignition-$i.yaml
+  sed -i "s#{{HELM_VERSION}}#${HELM_VERSION}#g" ignition-$i.yaml
+  sed -i "s#{{DOCKER_NETWORK_OPTIONS}}#\$DOCKER_NETWORK_OPTIONS#g" ignition-$i.yaml
 done
 
 cp ../pxe/pxe-ignition.example.yaml ../pxe/pxe-ignition.yaml
@@ -65,30 +68,31 @@ _fcct(){
   echo "fcct --strict --pretty --input"
 }
 
-for i in `seq ${NODE_NUM}` ; do
-
-  if [ -f ignition-$i.yaml ];then
-    f$(_fcct) ignition-$i.yaml  > ignition-$i.json
-  fi
-
-done
-
-sed -i "s#{{LOCAL_HOST}}#${LOCAL_HOST}#g" \
+sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" \
   ignition-local.yaml \
   basic.yaml \
-  merge.yaml \
   ../pxe/pxe-ignition.yaml
 
 sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" \
   ignition-local.yaml \
   basic.yaml \
-  merge.yaml \
   ../pxe/pxe-ignition.yaml
 
-$(_fcct) ignition-local.yaml > ignition-local.json
+sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.yaml
+
+for i in `seq ${NODE_NUM}` ; do
+
+  if [ -f ignition-$i.yaml ];then
+    $(_fcct) ignition-$i.yaml --output ignition-$i.json
+  fi
+
+done
+
+$(_fcct) ignition-local.yaml --output ignition-local.json
+$(_fcct) basic.yaml --output basic.json
 
 cd ../pxe
 
-$(_fcct) pxe-ignition.yaml > pxe-config.ign
+$(_fcct) pxe-ignition.yaml --output pxe-config.ign
 
 exec nginx -g "daemon off;"
