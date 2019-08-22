@@ -40,7 +40,6 @@ before_install:
   - SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
-
 install:
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
   - sudo hostnamectl set-hostname node1
@@ -204,6 +203,9 @@ after_success:
   - kubectl get pod
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1` || true
   - kubectl exec ${POD_NAME} -- uname -a || true
+  - cd cli
+  - sh generate.sh || true
+  - cd ..
   - git diff
 
 env:

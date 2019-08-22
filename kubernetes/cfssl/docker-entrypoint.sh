@@ -7,19 +7,28 @@ set -ex
 env
 
 main (){
-  mkdir cert
+  mkdir -p cert
 
   # check ca
 
   echo '{
-    "signing":
-      {"default":
-        {"expiry":"43800h",
-          "usages":["signing","key encipherment","server auth","client auth"]
-        }
+  "signing": {
+    "default": {
+      "expiry": "87600h"
+    },
+    "profiles": {
+      "kubernetes": {
+        "usages": [
+            "signing",
+            "key encipherment",
+            "server auth",
+            "client auth"
+        ],
+        "expiry": "87600h"
       }
+    }
   }
-' \
+}' \
        > ca-config.json
 
   if [ -f ca-key.pem ];then
@@ -45,7 +54,7 @@ main (){
       }
     }' \
          | cfssl gencert -initca - | cfssljson -bare ca -
-    # ca-key.pem ca.csr ca.pem
+    # ca-key.pem ca.pem ca.csr
     cd ..
   fi
 
@@ -65,7 +74,7 @@ main (){
       "size":2048
     }
   }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
+    | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
        -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
   # client
@@ -79,8 +88,8 @@ main (){
         "size":2048
       }
     }' \
-         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-         -hostname="" - | cfssljson -bare $CN_NAME
+      | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
+      - | cfssljson -bare $CN_NAME
 
   # registry
   # export CN_NAME=registry
@@ -109,7 +118,7 @@ main (){
     ]
 }' \
        | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
-      -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+      -profile=kubernetes -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
   # flanneld (client)
   export CN_NAME=flanneld
@@ -129,9 +138,10 @@ main (){
   }]
 }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes - | cfssljson -bare $CN_NAME
 
   # admin (client)
+  # kubectl 作为集群的管理工具，需要被授予最高权限，这里创建具有最高权限的 admin 证书。
   export CN_NAME=admin
 
   echo '{
@@ -150,7 +160,7 @@ main (){
     }]
     }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
-       -hostname="" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes - | cfssljson -bare $CN_NAME
 
   # kubernetes master
   export CN_NAME=kubernetes
@@ -170,7 +180,7 @@ main (){
     }]
     }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes -hostname="127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
     cat > encryption-config.yaml <<EOF
 kind: EncryptionConfig
@@ -226,8 +236,8 @@ EOF
       "OU":"khs1994.com"
   }]
   }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="127.0.0.1,localhost,${NODE_IPS}"    - | cfssljson -bare kube-controller-manager
+  | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
+    -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-controller-manager
 
    # system:kube-scheduler master 无需传输到节点
    export CN_NAME=system:kube-scheduler
@@ -247,8 +257,8 @@ EOF
        "OU":"khs1994.com"
      }]
    }' \
-        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-        -hostname="127.0.0.1,localhost,${NODE_IPS}"    - | cfssljson -bare kube-scheduler
+  | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
+        -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-scheduler
 
    # system:kube-proxy worker 无需传输到节点
    export CN_NAME=system:kube-proxy
