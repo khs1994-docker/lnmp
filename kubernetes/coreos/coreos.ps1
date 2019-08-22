@@ -74,7 +74,7 @@ switch ($args[0])
       exit
     }
 
-    cp disk/example/ignition-n.template.yaml disk/ignition-${node}.yaml
+    cp disk/example/ignition-n.master.template.yaml disk/ignition-${node}.yaml
     wsl sed -i "s#{{n}}#${node}#g" disk/ignition-${node}.yaml
     break
   }

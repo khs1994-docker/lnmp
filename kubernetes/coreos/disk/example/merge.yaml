@@ -81,7 +81,7 @@ storage:
     - path: /home/k8s/.kube/config
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kubectl.kubeconfig
+        source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
       user:
         name: k8s
       group:
@@ -89,11 +89,11 @@ storage:
     - path: /home/root/.kube/config
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kubectl.kubeconfig
+        source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
     - path: /home/core/.kube/config
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kubectl.kubeconfig
+        source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
       user:
         name: core
       group:
@@ -101,35 +101,35 @@ storage:
     - path: ${K8S_ROOT}/kube-controller-manager.kubeconfig
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kube-controller-manager.kubeconfig
+        source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager.kubeconfig
     - path: ${K8S_ROOT}/kube-scheduler.kubeconfig
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kube-scheduler.kubeconfig
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.kubeconfig
     - path: ${K8S_ROOT}/kube-proxy.kubeconfig
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kube-proxy.kubeconfig
+        source: http://{{SERVER_HOST}}:8080/cert/kube-proxy.kubeconfig
     - path: ${K8S_ROOT}/csr-crb.yaml
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/csr-crb.yaml
+        source: http://{{SERVER_HOST}}:8080/cert/csr-crb.yaml
     - path: ${K8S_ROOT}/certs/registry-ca.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/registry-ca.pem
+        source: http://{{SERVER_HOST}}:8080/cert/registry-ca.pem
     - path: ${K8S_ROOT}/certs/ca.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/ca.pem
+        source: http://{{SERVER_HOST}}:8080/cert/ca.pem
     - path: ${K8S_ROOT}/certs/server.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/server-cert.pem
+        source: http://{{SERVER_HOST}}:8080/cert/server-cert.pem
     - path: ${K8S_ROOT}/certs/server-key.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/server-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/server-key.pem
     - path: /etc/profile.d/profile.sh
       mode: 0755
       contents:
@@ -139,55 +139,55 @@ storage:
     - path: ${K8S_ROOT}/certs/etcd.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/etcd.pem
+        source: http://{{SERVER_HOST}}:8080/cert/etcd.pem
     - path: ${K8S_ROOT}/certs/etcd-key.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/etcd-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-key.pem
     - path: ${K8S_ROOT}/certs/flanneld.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/flanneld.pem
+        source: http://{{SERVER_HOST}}:8080/cert/flanneld.pem
     - path: ${K8S_ROOT}/certs/flanneld-key.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/flanneld-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/flanneld-key.pem
     - path: ${K8S_ROOT}/certs/kube-controller-manager.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kube-controller-manager.pem
+        source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager.pem
     - path: ${K8S_ROOT}/certs/kube-controller-manager-key.pem
       mode: 0644
       contents:
-        source: http://{{LOCAL_HOST}}:8080/cert/kube-controller-manager-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager-key.pem
     - path: /opt/bin/kube-proxy
       mode: 0755
       contents:
-        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-proxy
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-proxy
     - path: /opt/bin/kubelet
       mode: 0755
       contents:
-        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubelet
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubelet
     - path: /opt/bin/kubeadm
       mode: 0755
       contents:
-        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubeadm
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubeadm
     - path: /opt/bin/kubectl
       mode: 0755
       contents:
-        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubectl
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kubectl
     - path: /opt/bin/generate-kubelet-bootstrap-kubeconfig.sh
       mode: 0755
       contents:
-        source: http://{{LOCAL_HOST}}:8080/disk/bin/generate-kubelet-bootstrap-kubeconfig.sh
+        source: http://{{SERVER_HOST}}:8080/disk/bin/generate-kubelet-bootstrap-kubeconfig.sh
     - path: /opt/bin/kube-controller-manager
       mode: 0755
       contents:
-        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-controller-manager
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-controller-manager
     - path: /opt/bin/kube-scheduler
       mode: 0755
       contents:
-        source: http://{{LOCAL_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-scheduler
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}/kubernetes/server/bin/kube-scheduler
   directories:
     - path: ${K8S_ROOT}
       mode: 0755

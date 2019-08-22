@@ -1,7 +1,17 @@
 #!/bin/bash
 
-KUBERNETES_VERSION=v1.15.2
-FCOS_VERSION=30.20190801.0
+if ! [ -f .env ];then
+  cp .env.example .env
+fi
+
+source ../.env.example
+
+if [ -f ../.env ];then
+  source ../.env
+fi
+
+source .env.example
+source .env
 
 set -e
 
@@ -36,10 +46,6 @@ ingress-nginx     Create Ingress NGINX
 metrics-server    Create Metrics-server
 "
 }
-
-if ! [ -f .env ];then
-  cp .env.example .env
-fi
 
 # write ssh pub
 
@@ -215,7 +221,7 @@ case "$1" in
   ;;
 
   cleanup )
-    docker image rm ccr.ccs.tencentyun.com/khs1994/kubernetes:${KUBERNETES_VERSION}
+    docker image rm ccr.ccs.tencentyun.com/khs1994/kubernetes:v${KUBERNETES_VERSION}
   ;;
 
   dashboard )
