@@ -478,7 +478,7 @@ _gvisor_docker_conf(){
 
 _gvisor_containerd_conf(){
   print_info "config containerd with gvisor(runsc) ..."
-  cat <<EOF | sudo tee -a /etc/containerd/config.toml
+  cat <<EOF | sudo tee -a /etc/kube-containerd/config.toml
 [plugins.cri.containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
 EOF
@@ -551,15 +551,25 @@ _crictl_docker_conf(){
 _crictl_containerd_conf(){
   sudo rm -rf /etc/crictl.yaml
   cat <<EOF | sudo tee -a /etc/crictl.yaml
-runtime-endpoint: unix:///run/containerd/containerd.sock
-image-endpoint: unix:///run/containerd/containerd.sock
+runtime-endpoint: unix:///run/kube-containerd/containerd.sock
+image-endpoint: unix:///run/kube-containerd/containerd.sock
 timeout: 10
-debug: true
+debug: false
+EOF
+}
+
+_crictl_crio_conf(){
+  sudo rm -rf /etc/crictl.yaml
+  cat <<EOF | sudo tee -a /etc/crictl.yaml
+runtime-endpoint: unix:///var/run/crio/crio.sock
+image-endpoint: unix:///var/run/crio/crio.sock
+timeout: 10
+debug: false
 EOF
 }
 
 _crictl_install(){
-  if [ -f ${K8S_ROOT}/bin/crictl ];then
+  if [ -f /usr/bin/crictl ];then
     print_info "crictl already install"
     crictl --version
     return
@@ -583,7 +593,8 @@ _crictl_install(){
       __download
   fi
 
-  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
+  # sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/bin/
 }
 
 _k8s_install_dep(){
@@ -786,14 +797,13 @@ _crio_config(){
 _containerd_cri_config(){
   _cni_install
   print_info "config containerd ..."
-  sudo mkdir -p /etc/containerd/
-  # containerd config default > /etc/containerd/config.toml
-  sudo cp systemd/etc/containerd/config.toml /etc/containerd/
+  sudo mkdir -p /etc/kube-containerd/
+  # containerd config default > /etc/kube-containerd/config.toml
+  sudo cp systemd/etc/kube-containerd/config.toml /etc/kube-containerd/
 
   _cri_config
 
-  local CONTAINER_RUNTIME_ENDPOINT="unix:///run/containerd/containerd.sock"
-  # local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
+  local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
 
   sudo sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
   sudo sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT}#g" /etc/systemd/system/kubelet.service
@@ -868,6 +878,7 @@ encryption-config.yaml} \
     print_info "Kubelet Runtime is CRI-O"
     _crio_config
     _gvisor_crio_conf
+    _crictl_crio_conf
   else
     print_info "Kubelet Runtime is Docker"
     _gvisor_docker_conf
@@ -963,6 +974,7 @@ kube-proxy.kubeconfig} \
     print_info "Kubelet Runtime is CRI-O"
     _crio_config
     _gvisor_crio_conf
+    _crictl_crio_conf
   else
     print_info "Kubelet Runtime is Docker"
     _gvisor_docker_conf
@@ -1025,8 +1037,10 @@ $ sudo systemctl start kubelet
 }
 
 _local_cleanup(){
-  sudo systemctl stop etcd flanneld docker kube-apiserver \
-    kube-controller-manager kube-scheduler kube-proxy kubelet docker || true
+  sudo systemctl stop etcd flanneld \
+    kube-apiserver kube-controller-manager kube-scheduler \
+    kube-proxy kubelet \
+    docker kube-containerd || true
 
   set +e
   sudo rm -rf ${K8S_ROOT:-/opt/k8s} \

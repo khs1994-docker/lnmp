@@ -82,10 +82,11 @@ before_script:
   - sudo systemctl start flanneld
 
   - sudo systemctl cat docker
-  - sudo systemctl cat containerd || sudo cp systemd/containerd.service.back /etc/systemd/system/containerd.service
+  - sudo systemctl cat containerd || true
+  - sudo systemctl cat kube-containerd
 
   - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart containerd) || true
+  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
   - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
 
   - docker info
@@ -115,7 +116,7 @@ before_script:
   - sudo journalctl -u kube-scheduler
   - sudo journalctl -u kube-proxy
   - sudo journalctl -u kubelet
-  - sudo journalctl -u containerd || true
+  - sudo journalctl -u kube-containerd || true
   - sudo journalctl -u crio || true
   - sudo journalctl -u flanneld
 

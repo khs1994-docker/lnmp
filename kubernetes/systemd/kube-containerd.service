@@ -1,11 +1,12 @@
 [Unit]
-Description=containerd container runtime
+Description=containerd container runtime for kubernetes
 Documentation=https://containerd.io
 After=network.target
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay
-ExecStart=/usr/bin/containerd
+ExecStart=/usr/bin/containerd \
+          --config /etc/kube-containerd/config.toml
 KillMode=process
 Delegate=yes
 LimitNOFILE=1048576

@@ -55,7 +55,7 @@ handler: runsc # 值与 OCI 配置文件对应
 ...
 ```
 
-`oci-o`
+`cri-o`
 
 ```toml
 # [crio.runtime.runtimes.${HANDLER_NAME}]

@@ -1,9 +1,9 @@
-root = "/var/lib/containerd"
-state = "/run/containerd"
+root = "/var/lib/kube-containerd"
+state = "/run/kube-containerd"
 oom_score = 0
 
 [grpc]
-  address = "/run/containerd/containerd.sock"
+  address = "/run/kube-containerd/containerd.sock"
   uid = 0
   gid = 0
   max_recv_message_size = 16777216
@@ -66,7 +66,7 @@ oom_score = 0
     no_shim = false
     shim_debug = false
   [plugins.opt]
-    path = "/opt/containerd"
+    path = "/opt/kube-containerd"
   [plugins.restart]
     interval = "10s"
   [plugins.scheduler]
