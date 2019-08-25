@@ -352,7 +352,7 @@ kubectl_getinfo(){
 }
 
 _nginx_build(){
-  local url="http://nginx.org/download/"
+  local url="https://nginx.org/download/"
   local TAR_FILE="nginx-${NGINX_VERSION}.tar.gz"
   __download(){
     sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
@@ -881,6 +881,7 @@ encryption-config.yaml} \
     _crictl_crio_conf
   else
     print_info "Kubelet Runtime is Docker"
+    sleep 15
     _gvisor_docker_conf
     _k8s_install_systemd_docker
     _crictl_docker_conf
@@ -977,6 +978,7 @@ kube-proxy.kubeconfig} \
     _crictl_crio_conf
   else
     print_info "Kubelet Runtime is Docker"
+    sleep 15
     _gvisor_docker_conf
     _k8s_install_systemd_docker
     _crictl_docker_conf

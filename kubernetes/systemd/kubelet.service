@@ -33,7 +33,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --v=2
 
 # --container-runtime=remote \
-# --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
+# --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock \
 
 Restart=on-failure
 RestartSec=5

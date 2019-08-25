@@ -70,7 +70,7 @@ $ journalctl -u kube-apiserver
 
 $ kubectl cluster-info
 
-$ kubectl get all --all-namespaces
+$ kubectl get all -A
 
 $ kubectl get componentstatuses
 

@@ -73,3 +73,30 @@
     #       Address={{IP_{{n}}}}/24
     #       DNS=114.114.114.114
     #       Gateway=192.168.57.1
+
+#passwd:
+  # groups:
+  #   - name:
+  #     gid:
+  #     password_hash:
+  #     system: false
+  # users:
+    # - name: core
+      # password_hash: "$1$nwU7Pa6U$zEYWwaz2b/PIv2K.hNu41/"
+      # https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/examples.md#generating-a-password-hash
+      # $ openssl passwd -1
+      # ssh_authorized_keys:
+      #   - ssh-rsa {{SSH_PUB}}
+      # groups:
+      #   - wheel
+      #   - sudo
+      #   - docker
+      # uid:
+      # gecos:
+      # home_dir:
+      # no_create_home: false
+      # primary_group:
+      # no_user_group: true
+      # no_log_init: true
+      # shell: bash
+      # system: true

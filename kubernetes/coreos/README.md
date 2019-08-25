@@ -19,6 +19,7 @@
 * bug1: ignition 不能有 `storage.directories` 指令
 * bug2: 硬盘空间充足，但报硬盘空间不足错误，解决办法: ignition `storage.files.path` 不要列出大文件
 * SELinux 已关闭
+* kubelet 容器运行时为 `containerd`，可以改为 `docker`
 
 ### 虚拟机网络配置
 
@@ -37,8 +38,6 @@ $ ./coreos init
 $ cd ..
 # download kubernetes server files
 $ ./lnmp-k8s kubernetes-server
-# build kube-nginx
-$ ./lnmp-k8s _nginx_build
 ```
 
 ### 修改 .env 文件
@@ -52,7 +51,7 @@ $ ./lnmp-k8s _nginx_build
 `n` 为节点数
 
 ```bash
-$ ./coreos add-node {n} # n > 3
+$ ./coreos add-node {n} [TYPE:master | node]# n > 3
 ```
 
 ### 启动本地服务器

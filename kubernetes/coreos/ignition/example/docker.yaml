@@ -1,0 +1,43 @@
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+    - name: docker.service
+      dropins:
+        - name: docker.conf
+          contents: |
+            [Service]
+            # ExecStart=
+            # ExecStart=/usr/bin/dockerd \
+            #   --host=fd:// \
+            #   --exec-opt native.cgroupdriver=systemd \
+            #   ${DOCKER_NETWORK_OPTIONS}
+storage:
+  files:
+    - path:       "/etc/docker/daemon.json"
+      mode:       0644
+      contents:
+        inline: |
+          {
+            "tlsverify": true,
+            "tlscert": "${K8S_ROOT}/certs/server.pem",
+            "tlskey": "${K8S_ROOT}/certs/server-key.pem",
+            "tlscacert": "${K8S_ROOT}/certs/ca.pem",
+            "registry-mirrors" : [
+              "https://dockerhub.azk8s.cn"
+            ],
+            "debug" : true,
+            "dns" : [
+              "114.114.114.114",
+              "8.8.8.8"
+            ],
+            "experimental" : true
+          }
+    - path: ${K8S_ROOT}/certs/server.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/server-cert.pem
+    - path: ${K8S_ROOT}/certs/server-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/server-key.pem

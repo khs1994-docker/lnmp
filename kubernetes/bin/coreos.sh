@@ -31,7 +31,7 @@ IGNITION_NAME=ignition-${NODE_NAME}.json
 
 if [ $NODE_NAME = 'basic' ];then IGNITION_NAME=basic.json; fi
 
-curl -O http://${SERVER_HOST:-192.168.57.1}:${port:-8080}/disk/$IGNITION_NAME
+curl -O http://${SERVER_HOST:-192.168.57.1}:${port:-8080}/ignition/$IGNITION_NAME
 
 echo $IGNITION_NAME
 

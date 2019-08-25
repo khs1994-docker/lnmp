@@ -10,12 +10,12 @@ if [ -f ../.env ];then
   source ../.env
 fi
 
-source .env.example
-source .env
+source ./.env.example
+source ./.env
 
 set -e
 
-if ! [ -f coreos.ps1 ];then echo "please exec this shell scipt in coreos folder"; exit ; fi
+if ! [ -f coreos.ps1 ];then echo "please exec this shell scipt in coreos folder"; exit 1; fi
 
 print_help_info(){
     echo "
@@ -184,8 +184,8 @@ case "$1" in
 
     if [ -n "$3" ];then TYPE=$3;fi
 
-    cp disk/example/ignition-n.${TYPE:-master}.template.yaml disk/ignition-$2.yaml
-    sed -i "s#{{n}}#$2#g" disk/ignition-$2.yaml
+    cp ignition/example/ignition-n.${TYPE:-master}.template.yaml ignition/ignition-$2.yaml
+    sed -i "s#{{n}}#$2#g" ignition/ignition-$2.yaml
   ;;
 
   new-vm )

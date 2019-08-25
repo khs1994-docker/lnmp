@@ -1,7 +1,7 @@
 runtime-endpoint: unix:///var/run/dockershim.sock
 image-endpoint: unix:///var/run/dockershim.sock
-# runtime-endpoint: unix:///run/containerd/containerd.sock
-# image-endpoint: unix:///run/containerd/containerd.sock
+# runtime-endpoint: unix:///run/kube-containerd/containerd.sock
+# image-endpoint: unix:///run/kube-containerd/containerd.sock
 
 # runtime-endpoint: unix:///var/run/crio/crio.sock
 # image-endpoint: unix:///var/run/crio/crio.sock

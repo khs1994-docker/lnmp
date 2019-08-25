@@ -15,11 +15,46 @@ sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ipxe.html
 
 fcct --version ; fcct --help || true
 
-cd disk
+cd ignition
 
 rm -rf *.json *.yaml
 
 cp example/* .
+cp ignition-local.example.yaml ignition-local.yaml
+
+MERGE_LIST="crictl \
+            docker \
+            etcd \
+            flanneld \
+            helm \
+            kube-apiserver \
+            kube-containerd \
+            kube-controller-manager \
+            kube-nginx \
+            kube-proxy \
+            kube-scheduler \
+            kubelet \
+            merge-common \
+            ignition-local \
+           "
+
+for item in $MERGE_LIST
+do
+  envsubst '${K8S_ROOT} \
+            ${CRICTL_VERSION} \
+            ${ETCD_VERSION} \
+            ${FLANNEL_VERSION} \
+            ${HELM_VERSION} \
+            ${ETCD_NODES} \
+            ${ETCD_ENDPOINTS} \
+            ${KUBE_APISERVER} \
+            ${CONTAINER_RUNTIME} \
+            ${CONTAINER_RUNTIME_ENDPOINT} \
+           ' \
+  < $item.yaml > $item.yaml.source
+
+  cp $item.yaml.source $item.yaml
+done
 
 for i in `seq ${NODE_NUM}`;do
   cp ignition-n.master.template.yaml ignition-$i.example.yaml
@@ -33,7 +68,17 @@ for i in `seq ${NODE_NUM}`;do
   echo "handle ignition-$i.yaml ...
 
 "
-  envsubst < ignition-$i.yaml > ignition-$i.yaml.source
+  envsubst '${K8S_ROOT} \
+            ${CRICTL_VERSION} \
+            ${ETCD_VERSION} \
+            ${FLANNEL_VERSION} \
+            ${ETCD_NODES} \
+            ${ETCD_ENDPOINTS} \
+            ${KUBE_APISERVER} \
+            ${CONTAINER_RUNTIME} \
+            ${CONTAINER_RUNTIME_ENDPOINT} \
+           ' \
+  < ignition-$i.yaml > ignition-$i.yaml.source
 
   cp ignition-$i.yaml.source ignition-$i.yaml
 
@@ -41,15 +86,9 @@ for i in `seq ${NODE_NUM}`;do
   sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.yaml
   sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.yaml
   sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.yaml
-  sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" ignition-$i.yaml
-  sed -i "s#{{FLANNEL_VERSION}}#${FLANNEL_VERSION}#g" ignition-$i.yaml
-  sed -i "s#{{HELM_VERSION}}#${HELM_VERSION}#g" ignition-$i.yaml
-  sed -i "s#{{DOCKER_NETWORK_OPTIONS}}#\$DOCKER_NETWORK_OPTIONS#g" ignition-$i.yaml
 done
 
 cp ../pxe/pxe-ignition.example.yaml ../pxe/pxe-ignition.yaml
-
-cp ignition-local.example.yaml ignition-local.yaml
 
 # replace
 
@@ -88,8 +127,17 @@ for i in `seq ${NODE_NUM}` ; do
 
 done
 
+for item in $MERGE_LIST
+do
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" $item.yaml
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" $item.yaml
+  $(_fcct) $item.yaml --output $item.json
+done
+
 $(_fcct) ignition-local.yaml --output ignition-local.json
 $(_fcct) basic.yaml --output basic.json
+
+rm -rf *.source
 
 cd ../pxe
 

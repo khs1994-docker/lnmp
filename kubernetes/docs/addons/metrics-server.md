@@ -11,7 +11,7 @@ $ kubectl apply -f addons/metrics-server
 ```bash
 $ kubectl top node
 
-$ kubectl top pod --all-namespaces
+$ kubectl top pod -A
 ```
 
 ## 错误排查

@@ -23,6 +23,12 @@ Usage: flanneld [OPTION]...
     	regex expression to match the first interface to use (IP or name) for inter-host communication. Can be specified multiple times to check each regex in order. Returns the first match found. Regexes are checked after specific interfaces specified by the iface option have already been checked.
   -ip-masq
     	setup IP masquerade rule for traffic destined outside of overlay network
+  -iptables-forward-rules
+    	add default accept rules to FORWARD chain in iptables (default true)
+  -iptables-resync int
+    	resync period for iptables rules, in seconds (default 5)
+  -kube-annotation-prefix string
+    	Kubernetes annotation prefix. Can contain single slash "/", otherwise it will be appended at the end. (default "flannel.alpha.coreos.com")
   -kube-api-url string
     	Kubernetes API server URL. Does not need to be specified if flannel is running in a pod.
   -kube-subnet-mgr

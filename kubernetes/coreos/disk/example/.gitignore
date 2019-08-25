@@ -1,8 +1,0 @@
-*
-!.gitignore
-!backup.yaml
-!ignition-local.example.yaml
-!ignition-n.node.template.yaml
-!ignition-n.master.template.yaml
-!merge.yaml
-!basic.yaml

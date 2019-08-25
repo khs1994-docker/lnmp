@@ -4,3 +4,4 @@
 !generate-kubelet-bootstrap-kubeconfig.sh
 !mk-docker-opts.sh
 !.gitignore
+!fcos-etcdctl

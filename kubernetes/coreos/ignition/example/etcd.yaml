@@ -1,0 +1,18 @@
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+storage:
+  files:
+    - path: ${K8S_ROOT}/certs/etcd.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd.pem
+    - path: ${K8S_ROOT}/certs/etcd-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-key.pem
+    - path: ${K8S_ROOT}/bin/fcos-etcdctl
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/bin/fcos-etcdctl

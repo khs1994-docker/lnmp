@@ -1,0 +1,61 @@
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+    # remove when fcos with docker 19.03
+    - name: kube-containerd-installer.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=containerd installer
+
+        [Service]
+        Restart=on-failure
+        RestartSec=5
+        WorkingDirectory=/tmp
+        ExecStartPre=bash -c "if ! [ `/usr/local/bin/containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/containerd; fi"
+        ExecStartPre=bash -c "if ! [ -f /usr/local/bin/containerd ];then \
+          curl -O https://mirrors.aliyun.com/docker-ce/linux/fedora/30/x86_64/test/Packages/containerd.io-1.2.6-3.3.fc30.x86_64.rpm; \
+            rpm2cpio containerd.io-1.2.6-3.3.fc30.x86_64.rpm | cpio -div ; \
+            cp usr/bin/containerd /usr/local/bin ; \
+            cp usr/bin/containerd-shim /usr/local/bin ; \
+          fi"
+        ExecStart=echo success
+        [Install]
+        WantedBy=multi-user.target
+    - name: kube-containerd.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=containerd container runtime for kubernetes
+        Documentation=https://containerd.io
+        After=network.target
+
+        [Service]
+        ExecStartPre=-/sbin/modprobe overlay
+        ExecStart=/usr/local/bin/containerd \
+                  --config /etc/kube-containerd/config.toml
+        KillMode=process
+        Delegate=yes
+        LimitNOFILE=1048576
+        # Having non-zero Limit*s causes performance problems due to accounting overhead
+        # in the kernel. We recommend using cgroups to do container-local accounting.
+        LimitNPROC=infinity
+        LimitCORE=infinity
+        TasksMax=infinity
+
+        Restart=on-failure
+        RestartSec=5
+
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    - path: /etc/kube-containerd/config.toml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/kube-containerd/config.toml
+    - path: ${K8S_ROOT}/cni/net.d/10-flannel.conflist
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/cni/10-flannel.conflist

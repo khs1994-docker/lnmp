@@ -127,7 +127,7 @@ before_script:
   - kubectl get csr
 
   - kubectl get node
-  - kubectl get all --all-namespaces
+  - kubectl get all -A
   - kubectl api-versions
   - kubectl api-resources
 

@@ -20,10 +20,12 @@ systemd:
         Description=flanneld installer
 
         [Service]
+        Restart=on-failure
+        RestartSec=5        
         WorkingDirectory=/home/core/.lnmp/caches
-        ExecStartPre=mkdir -p /opt/k8s/bin
-        ExecStartPre=bash -c "if ! [ -f /opt/k8s/bin/flanneld ];then \
-          tar -zxvf flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz -C /opt/k8s/bin ; fi"
+        ExecStartPre=mkdir -p ${K8S_ROOT}/bin
+        ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/flanneld ];then \
+          tar -zxvf flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz -C ${K8S_ROOT}/bin ; fi"
         ExecStart=echo success
 
         [Install]
@@ -47,40 +49,6 @@ storage:
           Address=192.168.57.200/24
           DNS=114.114.114.114
           Gateway=192.168.57.1
-    - path: /opt/etc/NetworkManager/system-connections/eth0.nmconnection
-      mode: 0600
-      contents:
-        inline: |
-          [connection]
-          id=eth0
-          type=ethernet
-          interface-name=eth0
-          permissions=
-          autoconnect=true
-
-          [ipv4]
-          dns-search=
-          method=auto
-
-          [ipv6]
-          addr-gen-mode=stable-privacy
-          dns-search=
-          method=auto
-    - path: /opt/etc/NetworkManager/system-connections/eth1.nmconnection
-      mode: 0600
-      contents:
-        inline: |
-          [connection]
-          id=eth1
-          interface-name=eth1
-          type=ethernet
-          autoconnect=true
-
-          [ipv4]
-          method=manual
-          dns=114.114.114.114
-          addresses=192.168.57.110/24
-          gateway=192.168.57.1
     - path: /etc/NetworkManager/system-connections/eth0.nmconnection
       mode: 0600
       contents:
@@ -116,7 +84,7 @@ storage:
           addresses=192.168.57.110/24
           gateway=192.168.57.1
   # directories:
-  #   - path: /opt/k8s/bin
+  #   - path: ${K8S_ROOT}/bin
   #     mode: 0755
   #     user:
   #       name: k8s

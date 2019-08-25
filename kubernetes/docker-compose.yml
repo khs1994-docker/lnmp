@@ -13,8 +13,10 @@ services:
       - ./coreos/server/docker-entrypoint.sh:/etc/nginx/docker-entrypoint.sh
       - ./coreos/cert:/srv/www/coreos/cert
       - ./coreos/current:/srv/www/coreos/current
-      - ./coreos/disk:/srv/www/coreos/disk
+      - ./coreos/ignition:/srv/www/coreos/ignition
       - ./coreos/pxe:/srv/www/coreos/pxe
+      - ./coreos/etc:/srv/www/coreos/etc
+      - ./addons:/srv/www/coreos/addons
       - ./bin:/srv/www/coreos/bin
       - ./kubernetes-release:/srv/www/coreos/kubernetes-release
       - $HOME/.lnmp/caches:/srv/www/coreos/releases
