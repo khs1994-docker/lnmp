@@ -1,0 +1,7 @@
+version: "3.7"
+
+services:
+  kube-nginx:
+    image: khs1994/kube-nginx:1.17.3
+    build:
+      context: ./
