@@ -212,15 +212,15 @@ after_success:
 
 env:
   matrix:
-    - CI_KUBERNETES_VERSION=1.15.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
     - CI_KUBERNETES_VERSION=1.14.2
     - CI_KUBERNETES_VERSION=1.15.1
     - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_GET="--url"
-    - CI_KUBERNETES_VERSION=1.16.0-alpha.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"
   global:
     - k=v
 
 matrix:
   fast_finish: true
-  allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.15.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
+  # allow_failures:
+  # - env: CI_KUBERNETES_VERSION=1.15.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
