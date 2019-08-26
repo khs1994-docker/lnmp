@@ -1,8 +1,8 @@
-# language: go
-language: bash
+language: go
+# language: bash
 
-# go:
-# - 1.12
+go:
+- 1.12
 
 services:
 - docker

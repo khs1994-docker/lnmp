@@ -60,8 +60,8 @@ Deprecated flags:
       --kube-api-content-type string        DEPRECATED: content type of requests sent to apiserver. (default "application/vnd.kubernetes.protobuf")
       --kube-api-qps float32                DEPRECATED: QPS to use while talking with kubernetes apiserver (default 50)
       --kubeconfig string                   DEPRECATED: path to kubeconfig file with authorization and master location information.
-      --lock-object-name string             DEPRECATED: define the name of the lock object. (default "kube-scheduler")
-      --lock-object-namespace string        DEPRECATED: define the namespace of the lock object. (default "kube-system")
+      --lock-object-name string             DEPRECATED: define the name of the lock object. Will be removed in favor of leader-elect-resource-name (default "kube-scheduler")
+      --lock-object-namespace string        DEPRECATED: define the namespace of the lock object. Will be removed in favor of leader-elect-resource-namespace. (default "kube-system")
       --policy-config-file string           DEPRECATED: file with scheduler policy configuration. This file is used if policy ConfigMap is not provided or --use-legacy-policy-config=true
       --policy-configmap string             DEPRECATED: name of the ConfigMap object that contains scheduler's policy configuration. It must exist in the system namespace before scheduler initialization if --use-legacy-policy-config=false. The config must be provided as the value of an element in 'Data' map with the key='policy.cfg'
       --policy-configmap-namespace string   DEPRECATED: the namespace where policy ConfigMap is located. The kube-system namespace will be used if this is not provided or is empty. (default "kube-system")
@@ -71,11 +71,13 @@ Deprecated flags:
 
 Leader election flags:
 
-      --leader-elect                           Start a leader election client and gain leadership before executing the main loop. Enable this when running replicated components for high availability. (default true)
-      --leader-elect-lease-duration duration   The duration that non-leader candidates will wait after observing a leadership renewal until attempting to acquire leadership of a led but unrenewed leader slot. This is effectively the maximum duration that a leader can be stopped before it is replaced by another candidate. This is only applicable if leader election is enabled. (default 15s)
-      --leader-elect-renew-deadline duration   The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to the lease duration. This is only applicable if leader election is enabled. (default 10s)
-      --leader-elect-resource-lock endpoints   The type of resource object that is used for locking during leader election. Supported options are endpoints (default) and `configmaps`. (default "endpoints")
-      --leader-elect-retry-period duration     The duration the clients should wait between attempting acquisition and renewal of a leadership. This is only applicable if leader election is enabled. (default 2s)
+      --leader-elect                             Start a leader election client and gain leadership before executing the main loop. Enable this when running replicated components for high availability. (default true)
+      --leader-elect-lease-duration duration     The duration that non-leader candidates will wait after observing a leadership renewal until attempting to acquire leadership of a led but unrenewed leader slot. This is effectively the maximum duration that a leader can be stopped before it is replaced by another candidate. This is only applicable if leader election is enabled. (default 15s)
+      --leader-elect-renew-deadline duration     The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to the lease duration. This is only applicable if leader election is enabled. (default 10s)
+      --leader-elect-resource-lock endpoints     The type of resource object that is used for locking during leader election. Supported options are endpoints (default) and `configmaps`. (default "endpoints")
+      --leader-elect-resource-name string        The name of resource object that is used for locking during leader election. (default "kube-scheduler")
+      --leader-elect-resource-namespace string   The namespace of resource object that is used for locking during leader election. (default "kube-system")
+      --leader-elect-retry-period duration       The duration the clients should wait between attempting acquisition and renewal of a leadership. This is only applicable if leader election is enabled. (default 2s)
 
 Feature gate flags:
 
@@ -106,11 +108,12 @@ Feature gate flags:
                                       CustomResourceSubresources=true|false (BETA - default=true)
                                       CustomResourceValidation=true|false (BETA - default=true)
                                       CustomResourceWebhookConversion=true|false (BETA - default=true)
-                                      DebugContainers=true|false (ALPHA - default=false)
                                       DevicePlugins=true|false (BETA - default=true)
                                       DryRun=true|false (BETA - default=true)
                                       DynamicAuditing=true|false (ALPHA - default=false)
                                       DynamicKubeletConfig=true|false (BETA - default=true)
+                                      EphemeralContainers=true|false (ALPHA - default=false)
+                                      EvenPodsSpread=true|false (ALPHA - default=false)
                                       ExpandCSIVolumes=true|false (ALPHA - default=false)
                                       ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                       ExpandPersistentVolumes=true|false (BETA - default=true)
@@ -129,6 +132,7 @@ Feature gate flags:
                                       ProcMountType=true|false (ALPHA - default=false)
                                       QOSReserved=true|false (ALPHA - default=false)
                                       RemainingItemCount=true|false (ALPHA - default=false)
+                                      RemoveSelfLink=true|false (ALPHA - default=false)
                                       RequestManagement=true|false (ALPHA - default=false)
                                       ResourceLimitsPriorityFunction=true|false (ALPHA - default=false)
                                       ResourceQuotaScopeSelectors=true|false (BETA - default=true)
@@ -160,9 +164,11 @@ Feature gate flags:
                                       WinDSR=true|false (ALPHA - default=false)
                                       WinOverlay=true|false (ALPHA - default=false)
                                       WindowsGMSA=true|false (ALPHA - default=false)
+                                      WindowsRunAsUserName=true|false (ALPHA - default=false)
 
 Global flags:
 
+      --add-dir-header                   If true, adds the file directory to the header
       --alsologtostderr                  log to standard error as well as files
   -h, --help                             help for kube-scheduler
       --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0)

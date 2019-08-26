@@ -25,6 +25,7 @@ Usage:
   kubelet [flags]
 
 Flags:
+      --add-dir-header                                                                                            If true, adds the file directory to the header
       --address 0.0.0.0                                                                                           The IP address for the Kubelet to serve on (set to 0.0.0.0 for all IPv4 interfaces and `::` for all IPv6 interfaces) (default 0.0.0.0) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --allowed-unsafe-sysctls strings                                                                            Comma-separated whitelist of unsafe sysctls or unsafe sysctl patterns (ending in *). Use these at your own risk. (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --alsologtostderr                                                                                           log to standard error as well as files
@@ -124,11 +125,12 @@ Flags:
                 CustomResourceSubresources=true|false (BETA - default=true)
                 CustomResourceValidation=true|false (BETA - default=true)
                 CustomResourceWebhookConversion=true|false (BETA - default=true)
-                DebugContainers=true|false (ALPHA - default=false)
                 DevicePlugins=true|false (BETA - default=true)
                 DryRun=true|false (BETA - default=true)
                 DynamicAuditing=true|false (ALPHA - default=false)
                 DynamicKubeletConfig=true|false (BETA - default=true)
+                EphemeralContainers=true|false (ALPHA - default=false)
+                EvenPodsSpread=true|false (ALPHA - default=false)
                 ExpandCSIVolumes=true|false (ALPHA - default=false)
                 ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                 ExpandPersistentVolumes=true|false (BETA - default=true)
@@ -147,6 +149,7 @@ Flags:
                 ProcMountType=true|false (ALPHA - default=false)
                 QOSReserved=true|false (ALPHA - default=false)
                 RemainingItemCount=true|false (ALPHA - default=false)
+                RemoveSelfLink=true|false (ALPHA - default=false)
                 RequestManagement=true|false (ALPHA - default=false)
                 ResourceLimitsPriorityFunction=true|false (ALPHA - default=false)
                 ResourceQuotaScopeSelectors=true|false (BETA - default=true)
@@ -177,7 +180,8 @@ Flags:
                 WatchBookmark=true|false (BETA - default=true)
                 WinDSR=true|false (ALPHA - default=false)
                 WinOverlay=true|false (ALPHA - default=false)
-                WindowsGMSA=true|false (ALPHA - default=false) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
+                WindowsGMSA=true|false (ALPHA - default=false)
+                WindowsRunAsUserName=true|false (ALPHA - default=false) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --file-check-frequency duration                                                                             Duration between checking config files for new data (default 20s) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --global-housekeeping-interval duration                                                                     Interval between global housekeepings (default 1m0s) (DEPRECATED: This is a cadvisor flag that was mistakenly registered with the Kubelet. Due to legacy concerns, it will follow the standard CLI deprecation timeline before being removed.)
       --hairpin-mode string                                                                                       How should the kubelet setup hairpin NAT. This allows endpoints of a Service to loadbalance back to themselves if they should try to access their own Service. Valid values are "promiscuous-bridge", "hairpin-veth" and "none". (default "promiscuous-bridge") (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
@@ -273,7 +277,7 @@ Flags:
       --tls-cipher-suites strings                                                                                 Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used. Possible values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_RC4_128_SHA,TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_3DES_EDE_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_RC4_128_SHA (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --tls-min-version string                                                                                    Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13 (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
       --tls-private-key-file string                                                                               File containing x509 private key matching --tls-cert-file. (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
-      --topology-manager-policy string                                                                            Topology Manager policy to use. Possible values: 'none', 'preferred', 'strict'. (default "none") (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
+      --topology-manager-policy string                                                                            Topology Manager policy to use. Possible values: 'none', 'best-effort', 'strict'. (default "none") (DEPRECATED: This parameter should be set via the config file specified by the Kubelet's --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)
   -v, --v Level                                                                                                   number for the log level verbosity
       --version version[=true]                                                                                    Print version information and quit
       --vmodule moduleSpec                                                                                        comma-separated list of pattern=N settings for file-filtered logging

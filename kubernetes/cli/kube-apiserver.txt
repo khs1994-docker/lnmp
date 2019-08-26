@@ -9,7 +9,6 @@ Usage:
 Generic flags:
 
       --advertise-address ip                         The IP address on which to advertise the apiserver to members of the cluster. This address must be reachable by the rest of the cluster. If blank, the --bind-address will be used. If --bind-address is unspecified, the host's default interface will be used.
-      --cloud-provider-gce-lb-src-cidrs cidrs        CIDRs opened in GCE firewall for LB traffic proxy & health checks (default 130.211.0.0/22,209.85.152.0/22,209.85.204.0/22,35.191.0.0/16)
       --cors-allowed-origins strings                 List of allowed origins for CORS, comma separated.  An allowed origin can be a regular expression to support subdomain matching. If this list is empty CORS will not be enabled.
       --default-not-ready-toleration-seconds int     Indicates the tolerationSeconds of the toleration for notReady:NoExecute that is added by default to every pod that does not already have such a toleration. (default 300)
       --default-unreachable-toleration-seconds int   Indicates the tolerationSeconds of the toleration for unreachable:NoExecute that is added by default to every pod that does not already have such a toleration. (default 300)
@@ -42,11 +41,12 @@ Generic flags:
                                                      CustomResourceSubresources=true|false (BETA - default=true)
                                                      CustomResourceValidation=true|false (BETA - default=true)
                                                      CustomResourceWebhookConversion=true|false (BETA - default=true)
-                                                     DebugContainers=true|false (ALPHA - default=false)
                                                      DevicePlugins=true|false (BETA - default=true)
                                                      DryRun=true|false (BETA - default=true)
                                                      DynamicAuditing=true|false (ALPHA - default=false)
                                                      DynamicKubeletConfig=true|false (BETA - default=true)
+                                                     EphemeralContainers=true|false (ALPHA - default=false)
+                                                     EvenPodsSpread=true|false (ALPHA - default=false)
                                                      ExpandCSIVolumes=true|false (ALPHA - default=false)
                                                      ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                                      ExpandPersistentVolumes=true|false (BETA - default=true)
@@ -65,6 +65,7 @@ Generic flags:
                                                      ProcMountType=true|false (ALPHA - default=false)
                                                      QOSReserved=true|false (ALPHA - default=false)
                                                      RemainingItemCount=true|false (ALPHA - default=false)
+                                                     RemoveSelfLink=true|false (ALPHA - default=false)
                                                      RequestManagement=true|false (ALPHA - default=false)
                                                      ResourceLimitsPriorityFunction=true|false (ALPHA - default=false)
                                                      ResourceQuotaScopeSelectors=true|false (BETA - default=true)
@@ -96,6 +97,7 @@ Generic flags:
                                                      WinDSR=true|false (ALPHA - default=false)
                                                      WinOverlay=true|false (ALPHA - default=false)
                                                      WindowsGMSA=true|false (ALPHA - default=false)
+                                                     WindowsRunAsUserName=true|false (ALPHA - default=false)
       --master-service-namespace string              DEPRECATED: the namespace from which the kubernetes master services should be injected into pods. (default "default")
       --max-mutating-requests-inflight int           The maximum number of mutating requests in flight at a given time. When the server exceeds this, it rejects requests. Zero for no limit. (default 200)
       --max-requests-inflight int                    The maximum number of non-mutating requests in flight at a given time. When the server exceeds this, it rejects requests. Zero for no limit. (default 400)
@@ -188,7 +190,6 @@ Authentication flags:
       --api-audiences strings                             Identifiers of the API. The service account token authenticator will validate that tokens used against the API are bound to at least one of these audiences. If the --service-account-issuer flag is configured and this flag is not, this field defaults to a single element list containing the issuer URL .
       --authentication-token-webhook-cache-ttl duration   The duration to cache responses from the webhook token authenticator. (default 2m0s)
       --authentication-token-webhook-config-file string   File with webhook configuration for token authentication in kubeconfig format. The API server will query the remote service to determine authentication for bearer tokens.
-      --basic-auth-file string                            If set, the file that will be used to admit requests to the secure port of the API server via http basic authentication.
       --client-ca-file string                             If set, any request presenting a client certificate signed by one of the authorities in the client-ca-file is authenticated with an identity corresponding to the CommonName of the client certificate.
       --enable-bootstrap-token-auth                       Enable to allow secrets of type 'bootstrap.kubernetes.io/token' in the 'kube-system' namespace to be used for TLS bootstrapping authentication.
       --oidc-ca-file string                               If set, the OpenID server's certificate will be verified by one of the authorities in the oidc-ca-file, otherwise the host's root CA set will be used.
@@ -228,6 +229,10 @@ Api enablement flags:
 
       --runtime-config mapStringString   A set of key=value pairs that describe runtime configuration that may be passed to apiserver. <group>/<version> (or <version> for the core group) key can be used to turn on/off specific api versions. api/all is special key to control all api versions, be careful setting it false, unless you know what you do. api/legacy is deprecated, we will remove it in the future, so stop using it.
 
+Egress selector flags:
+
+      --egress-selector-config-file string   File with apiserver egress selector configuration.
+
 Admission flags:
 
       --admission-control strings              Admission is divided into two phases. In the first phase, only mutating admission plugins run. In the second phase, only validating admission plugins run. The names in the below list may represent a validating plugin, a mutating plugin, or both. The order of plugins in which they are passed to this flag does not matter. Comma-delimited list of: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. (DEPRECATED: Use --enable-admission-plugins or --disable-admission-plugins instead. Will be removed in a future version.)
@@ -258,6 +263,7 @@ Misc flags:
 
 Global flags:
 
+      --add-dir-header                   If true, adds the file directory to the header
       --alsologtostderr                  log to standard error as well as files
   -h, --help                             help for kube-apiserver
       --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0)

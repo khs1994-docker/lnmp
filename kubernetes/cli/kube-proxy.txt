@@ -10,6 +10,7 @@ Usage:
   kube-proxy [flags]
 
 Flags:
+      --add-dir-header                               If true, adds the file directory to the header
       --alsologtostderr                              log to standard error as well as files
       --bind-address 0.0.0.0                         The IP address for the proxy server to serve on (set to 0.0.0.0 for all IPv4 interfaces and `::` for all IPv6 interfaces) (default 0.0.0.0)
       --cleanup                                      If true cleanup iptables and ipvs rules and exit.
@@ -48,11 +49,12 @@ Flags:
                                                      CustomResourceSubresources=true|false (BETA - default=true)
                                                      CustomResourceValidation=true|false (BETA - default=true)
                                                      CustomResourceWebhookConversion=true|false (BETA - default=true)
-                                                     DebugContainers=true|false (ALPHA - default=false)
                                                      DevicePlugins=true|false (BETA - default=true)
                                                      DryRun=true|false (BETA - default=true)
                                                      DynamicAuditing=true|false (ALPHA - default=false)
                                                      DynamicKubeletConfig=true|false (BETA - default=true)
+                                                     EphemeralContainers=true|false (ALPHA - default=false)
+                                                     EvenPodsSpread=true|false (ALPHA - default=false)
                                                      ExpandCSIVolumes=true|false (ALPHA - default=false)
                                                      ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                                      ExpandPersistentVolumes=true|false (BETA - default=true)
@@ -71,6 +73,7 @@ Flags:
                                                      ProcMountType=true|false (ALPHA - default=false)
                                                      QOSReserved=true|false (ALPHA - default=false)
                                                      RemainingItemCount=true|false (ALPHA - default=false)
+                                                     RemoveSelfLink=true|false (ALPHA - default=false)
                                                      RequestManagement=true|false (ALPHA - default=false)
                                                      ResourceLimitsPriorityFunction=true|false (ALPHA - default=false)
                                                      ResourceQuotaScopeSelectors=true|false (BETA - default=true)
@@ -102,6 +105,7 @@ Flags:
                                                      WinDSR=true|false (ALPHA - default=false)
                                                      WinOverlay=true|false (ALPHA - default=false)
                                                      WindowsGMSA=true|false (ALPHA - default=false)
+                                                     WindowsRunAsUserName=true|false (ALPHA - default=false)
       --healthz-bind-address 0.0.0.0                 The IP address for the health check server to serve on (set to 0.0.0.0 for all IPv4 interfaces and `::` for all IPv6 interfaces) (default 0.0.0.0:10256)
       --healthz-port int32                           The port to bind the health check server. Use 0 to disable. (default 10256)
   -h, --help                                         help for kube-proxy
