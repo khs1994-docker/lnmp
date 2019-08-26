@@ -32,8 +32,8 @@ $ kubectl apply -f addons/ingress-nginx/provider/cloud-generic.yaml
 
 默认没有将 `80` `443` 端口暴露。改为以下端口。
 
-* 8080
-* 8443
+* 28080
+* 28443
 
 ## 定义规则
 

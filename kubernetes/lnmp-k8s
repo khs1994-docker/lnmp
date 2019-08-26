@@ -79,6 +79,7 @@ Commands:
   registry               Up Registry [--no-nfs | ]
 
   create-pv              Create PV and PVC [--no-nfs | ]
+
   nfs                    Up NFS server [ down | logs ]
 
   helm-development       Install Helm LNMP In Development
@@ -629,9 +630,10 @@ _k8s_install_dep(){
     sysstat libseccomp > /dev/null && sudo /usr/sbin/modprobe ip_vs) || command -v yum > /dev/null && (sudo yum install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp > /dev/null && sudo /usr/bin/env modprobe ip_vs) && return
 
-  command -v apt > /dev/null && sudo apt update -qq && sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
+  set +e
+  command -v apt > /dev/null && sudo apt update -qq ; sudo apt install -y conntrack ipvsadm ipset jq iptables curl \
     sysstat libseccomp2 kmod > /dev/null && (sudo /usr/bin/env modprobe ip_vs)
-
+  set -e
 }
 
 _k8s_install_common(){
@@ -741,11 +743,12 @@ _crio_install(){
   # $(_sudo) sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
+  set +e
   command -v apt > /dev/null \
   && $(_sudo) apt update -qq \
-  && $(_sudo) apt install -y software-properties-common \
+  ; $(_sudo) apt install -y software-properties-common \
   && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
-  && $(_sudo) apt-get update -qq && $(_sudo) apt-get install -y \
+  && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
   btrfs-tools \
   containers-common \
   git \
@@ -763,6 +766,8 @@ _crio_install(){
   $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
   gcc
+
+  set -e
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 

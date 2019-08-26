@@ -14,10 +14,10 @@ spec:
     app.kubernetes.io/part-of: ingress-nginx
   ports:
     - name: http
-      port: 8080
+      port: 28080
       targetPort: http
     - name: https
-      port: 8443
+      port: 28443
       targetPort: https
 
 ---

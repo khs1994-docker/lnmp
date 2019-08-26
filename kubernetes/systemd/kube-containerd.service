@@ -16,5 +16,8 @@ LimitNPROC=infinity
 LimitCORE=infinity
 TasksMax=infinity
 
+Restart=on-failure
+RestartSec=5
+
 [Install]
 WantedBy=multi-user.target

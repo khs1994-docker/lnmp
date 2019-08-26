@@ -16,13 +16,14 @@ cache:
     - /home/travis/.lnmp/caches
 
 before_install:
+  - sestatus || true
   - echo $PATH
   - sudo netstat -lnpt
   - docker-compose --version
   - docker --version
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-  - sudo apt-get update
+  - sudo apt-get update || true
   - sudo apt-get -y install docker-ce || sudo apt -f install
   - docker --version
   # 升级最新 Docker Compose
