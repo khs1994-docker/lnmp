@@ -38,6 +38,13 @@ $ ./coreos init
 $ cd ..
 # download kubernetes server files
 $ ./lnmp-k8s kubernetes-server
+
+# download soft
+$ ./lnmp-k8s _etcd_install --dry-run
+$ ./lnmp-k8s _flanneld_install --dry-run
+$ ./lnmp-k8s _helm_install --dry-run
+$ ./lnmp-k8s _cni_install --dry-run
+$ ./lnmp-k8s _crictl_install --dry-run
 ```
 
 ### 修改 .env 文件

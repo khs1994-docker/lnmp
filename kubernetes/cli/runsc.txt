@@ -1,0 +1,31 @@
+Usage: runsc <flags> <subcommand> <subcommand args>
+
+Subcommands:
+	checkpoint       checkpoint current state of container (experimental)
+	create           create a secure container
+	delete           delete resources held by a container
+	do               Simplistic way to execute a command inside the sandbox. It's to be used for testing only.
+	events           display container events such as OOM notifications, cpu, memory, and IO usage statistics
+	exec             execute new process inside the container
+	flags            describe all known top-level flags
+	gofer            launch a gofer process that serves files over 9P protocol (internal use only)
+	help             Print help documentation.
+	kill             sends a signal to the container
+	list             list containers started by runsc with the given root
+	pause            pause suspends all processes in a container
+	ps               ps displays the processes running inside a container
+	restore          restore a saved state of container (experimental)
+	resume           Resume unpauses a paused container
+	run              create and run a secure container
+	spec             create a new OCI bundle specification file
+	start            start a secure container
+	state            get the state of a container
+	wait             wait on a process inside a container
+
+Subcommands for internal use only:
+	boot             launch a sandbox process (internal use only)
+	debug            shows a variety of debug information
+	gofer            launch a gofer process that serves files over 9P protocol (internal use only)
+
+
+Use "runsc flags" for a list of top-level flags

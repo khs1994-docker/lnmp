@@ -21,7 +21,7 @@ RUN apk add --no-cache curl \
        && curl -LO ${KUBERNETES_URL}/kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
        && ls /kubernetes*
 
-FROM hello-world
+FROM scratch
 
 ARG GOOS=linux
 ARG GOARCH=amd64

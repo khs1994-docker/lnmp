@@ -11,11 +11,16 @@ commands="kube-apiserver \
           dockerd \
           etcd \
           flanneld \
+          runsc \
           "
 
 set -x
 
 for command in $commands
 do
-command -v $command && $(echo $command) --help > $command.txt 2>&1
+command -v $command && $(echo $command) --help > $command.txt 2>&1 || continue
+if [ $command = "containerd" ];then
+  containerd config default > $command.conf 2>&1
+  continue
+fi
 done

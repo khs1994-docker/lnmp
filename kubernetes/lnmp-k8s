@@ -127,7 +127,7 @@ _get_kubernetes_server_by_docker_image(){
 
   docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   docker container create --name khs1994-kubernetes-${TYPE} \
-    ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}:v${KUBERNETES_VERSION}
+    ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}:v${KUBERNETES_VERSION} command
   docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
   docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
   docker container rm khs1994-kubernetes-${TYPE}
@@ -398,7 +398,7 @@ _etcd_install(){
     sudo curl -fsSL ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
-  if [ -f ${K8S_ROOT}/bin/etcd ];then
+  if [ -f ${K8S_ROOT}/bin/etcd -a ! "$1" = "--dry-run" ];then
     print_info "etcd already install"
     return
   fi
@@ -410,6 +410,11 @@ _etcd_install(){
   else
     rm -rf ${TMP_ROOT}/${TAR_FILE}
     __download
+  fi
+
+  if [ "$1" = "--dry-run" ];then
+    print_info "download etcd success"
+    return
   fi
 
   sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
@@ -425,7 +430,7 @@ _flanneld_install(){
     sudo curl -fsSL ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
-  if [ -f ${K8S_ROOT}/bin/flanneld ];then
+  if [ -f ${K8S_ROOT}/bin/flanneld -a ! "$1" = "--dry-run" ];then
     print_info "flanneld already install"
     return
   fi
@@ -438,12 +443,17 @@ _flanneld_install(){
     __download
   fi
 
+  if [ "$1" = "--dry-run" ];then
+    print_info "download flanneld success"
+    return
+  fi
+
   sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
   sudo chown -R root:root ${K8S_ROOT}/bin/
 }
 
 _helm_install(){
-  if [ -f ${K8S_ROOT}/bin/helm ];then
+  if [ -f ${K8S_ROOT}/bin/helm -a ! "$1" = "--dry-run" ];then
     print_info "helm already install"
     return
   fi
@@ -464,6 +474,11 @@ _helm_install(){
     fi
   else
       __download
+  fi
+
+  if [ "$1" = "--dry-run" ];then
+    print_info "download helm success"
+    return
   fi
 
   sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
@@ -518,7 +533,7 @@ _containerd_install(){
 
 _cni_install(){
   sudo mkdir -p /opt/k8s/cni/bin
-  if [ -f /opt/k8s/cni/bin/flannel ];then
+  if [ -f /opt/k8s/cni/bin/flannel -a ! "$1" = "--dry-run" ];then
     print_info "cni already install"
     return
   fi
@@ -539,6 +554,11 @@ _cni_install(){
     fi
   else
       __download
+  fi
+
+  if [ "$1" = "--dry-run" ];then
+    print_info "download cni success"
+    return
   fi
 
   sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /opt/k8s/cni/bin/
@@ -569,7 +589,7 @@ EOF
 }
 
 _crictl_install(){
-  if [ -f /usr/bin/crictl ];then
+  if [ -f /usr/bin/crictl -a ! "$1" = "--dry-run" ];then
     print_info "crictl already install"
     crictl --version
     return
@@ -593,6 +613,11 @@ _crictl_install(){
       __download
   fi
 
+  if [ "$1" = "--dry-run" ];then
+    print_info "download crictl success"
+    return
+  fi
+
   # sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
   sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/bin/
 }
@@ -612,9 +637,8 @@ _k8s_install_dep(){
 _k8s_install_common(){
   # 关闭防火墙
   sudo systemctl stop firewalld && sudo systemctl disable firewalld || true
-  sudo mkdir -p /etc/docker
+  sudo mkdir -p /etc/{docker,systemd/system}
   sudo chmod -R 755 /opt
-  sudo mkdir -p /etc/systemd/system
 }
 
 _k8s_install_cp_bin(){
@@ -891,17 +915,11 @@ encryption-config.yaml} \
 
   sudo useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
 
-  # sudo rm -rf /var/log/kubernetes /var/log/kube-apiserver-audit.log
-
   sudo mkdir --parents /var/log/kubernetes
 
-  sudo mkdir --parents /var/lib/kubelet
-  sudo mkdir -p /var/lib/kube-proxy
+  sudo mkdir --parents /var/lib/{kubelet,kube-proxy}
 
   sudo chown k8s:root /var/log/kubernetes
-
-  sudo touch /var/log/kube-apiserver-audit.log
-  sudo chown k8s:root /var/log/kube-apiserver-audit.log
 
   _k8s_install_kubectl_conf
 }
@@ -990,8 +1008,7 @@ kube-proxy.kubeconfig} \
 
   sudo mkdir --parents /var/log/kubernetes
 
-  sudo mkdir --parents /var/lib/kubelet
-  sudo mkdir -p /var/lib/kube-proxy
+  sudo mkdir --parents /var/lib/{kubelet,kube-proxy}
 
   sudo chown k8s:root /var/log/kubernetes
 

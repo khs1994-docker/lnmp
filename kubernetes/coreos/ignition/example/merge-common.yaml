@@ -39,6 +39,7 @@ storage:
           export etcd_endpoints=${ETCD_ENDPOINTS}
           export K8S_ROOT=${K8S_ROOT}
           export ETCD_VERSION=${ETCD_VERSION}
+          export SERVER_HOST={{SERVER_HOST}}
     - path: /home/core/.bashrc
       mode: 0755
       append:
@@ -114,3 +115,11 @@ storage:
       contents:
         compression: null
         source: http://{{SERVER_HOST}}:8080/releases/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
+    - path: /etc/systemd/journald.conf.d/99-prophet.conf
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/systemd/journald.conf.d/99-prophet.conf
+    - path: /etc/sysctl.d/kubernetes.conf
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/sysctl.d/kubernetes.conf
