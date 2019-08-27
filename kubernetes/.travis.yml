@@ -63,7 +63,7 @@ install:
   - sudo sed -i "s#dockerhub.azk8s.cn#mirror.gcr.io#g" `grep dockerhub.azk8s.cn -rl $PWD/systemd`
 
   - travis_retry ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
-  - ./lnmp-k8s local-install ${LNMP_K8S_SINGLE_INSTALL_OPTIONS:-}
+  - ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
   - export PATH=$PATH:/opt/k8s/bin
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
@@ -96,9 +96,9 @@ before_script:
   - sudo systemctl cat containerd || true
   - sudo systemctl cat kube-containerd
 
-  - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
+  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
+  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
+  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
 
   - docker info
 
@@ -174,12 +174,17 @@ script:
 
 after_success:
   - bash tests/test.sh
+  - ip addr
+  - cd cli
+  - sh generate.sh || true
+  - cd ..
+  - git diff
 
 env:
   matrix:
-    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
-    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
-    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_GET="--url"                            K8S_IMAGE=khs1994/kubernetes-server
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - CI_KUBERNETES_VERSION=1.14.2
     - CI_KUBERNETES_VERSION=1.15.2
   global:
@@ -188,4 +193,4 @@ env:
 matrix:
   fast_finish: true
   # allow_failures:
-  # - env: CI_KUBERNETES_VERSION=1.15.2 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
+  # - env: CI_KUBERNETES_VERSION=1.15.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"

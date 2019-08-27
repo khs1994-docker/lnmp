@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
-KUBERNETES_VERSION=1.15.2
-MINIKUBE_VERSION=0.30.0
 
 # copy .env
 if ! [ -f .env ];then cp .env.example .env; fi
@@ -15,13 +13,7 @@ source ./systemd/.env
 source ./.env.example
 source ./.env
 
-ETCD_VERSION=3.3.15
-FLANNEL_VERSION=0.11.0
-HELM_VERSION=3.0.0-alpha.2
-CNI_VERSION=0.8.2
-CRICTL_VERSION=1.15.0
 TMP_ROOT=$HOME/.lnmp/caches
-NGINX_VERSION=1.17.3
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
