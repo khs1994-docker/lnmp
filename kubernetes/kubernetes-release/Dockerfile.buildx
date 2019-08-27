@@ -1,0 +1,41 @@
+# syntax = docker/dockerfile:experimental
+
+# export TYPE=server
+# export KUBERNETES_VERSION=x.y.z
+# docker buildx build --build-arg KUBERNETES_VERSION=v${KUBERNETES_VERSION} --build-arg TYPE=${TYPE} --platform linux/amd64,linux/arm64,linux/arm/v7 --push -t khs1994/kubernetes-${TYPE} -f Dockerfile.buildx .
+
+FROM alpine:3.10
+
+ARG KUBERNETES_VERSION=v1.15.2
+
+# ARG KUBERNETES_VERSION=v1.16.0-beta.1
+
+ENV KUBERNETES_URL=https://storage.googleapis.com
+
+ARG TYPE=server
+# ARG TYPE=client
+# ARG TYPE=node
+
+ARG TARGETOS
+ARG TARGETARCH
+
+RUN set -x \
+       && echo $TARGETOS $TARGETARCH \
+       && apk add --no-cache curl \
+       && cd / \
+       && curl -LO ${KUBERNETES_URL}/kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes-${TYPE:-server}-${TARGETOS}-${TARGETARCH}.tar.gz \
+       && ls /kubernetes*
+
+# FROM ccr.ccs.tencentyun.com/khs1994/kubernetes-server-${TARGETOS}-${TARGETARCH} as tencentyun
+
+FROM scratch
+
+ARG TYPE=server
+# ARG TYPE=client
+# ARG TYPE=node
+
+ARG TARGETOS
+ARG TARGETARCH
+
+COPY --from=0 /kubernetes-${TYPE:-server}-${TARGETOS}-${TARGETARCH}.tar.gz /
+# COPY --from=tencentyun /kubernetes-${TYPE:-server}-${TARGETOS}-${TARGETARCH}.tar.gz /

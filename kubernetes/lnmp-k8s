@@ -114,6 +114,30 @@ esac
 
 GOOS=`uname -s | tr A-Z  a-z`
 
+_build_k8s_image(){
+  cd kubernetes-release
+
+  if [ -z "${CI_KUBERNETES_VERSION}" ];then
+    CI_KUBERNETES_VERSION=${KUBERNETES_VERSION}
+  fi
+
+  if [ -z "${KUBERNETES_TYPE}" ];then
+    KUBERNETES_TYPE=server
+  fi
+
+  set -x
+  docker buildx build \
+    --build-arg KUBERNETES_VERSION=v${CI_KUBERNETES_VERSION} \
+    --build-arg TYPE=${KUBERNETES_TYPE} \
+    --platform linux/amd64,linux/arm64,linux/arm/v7 \
+    --push \
+    -t khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
+    -t uswccr.ccs.tencentyun.com/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
+    -f Dockerfile.buildx .
+  set +x
+  cd .. > /dev/null
+}
+
 _get_kubernetes_server_by_docker_image(){
   local TYPE=server
   test -n "${1}" && local GOOS=$1
@@ -126,9 +150,14 @@ _get_kubernetes_server_by_docker_image(){
      return
   fi
 
+  if [ -z "${K8S_IMAGE}" ];then
+    K8S_IMAGE=ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
+  fi
+
+  docker manifest inspect ${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
   docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   docker container create --name khs1994-kubernetes-${TYPE} \
-    ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}:v${KUBERNETES_VERSION} command
+    ${K8S_IMAGE}:v${KUBERNETES_VERSION} command
   docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
   docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
   docker container rm khs1994-kubernetes-${TYPE}
