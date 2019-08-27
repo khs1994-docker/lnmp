@@ -1,9 +1,0 @@
-version: "3.7"
-services:
-
-  rabbitmq:
-    build:
-      context: .
-      args:
-        ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/rabbitmq:${TAG:-3.7.3}-management-alpine

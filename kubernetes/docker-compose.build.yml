@@ -5,8 +5,8 @@ services:
     build:
       context: ./coreos/server
       dockerfile: Dockerfile
-    image: khs1994/coreos:server
+    image: khs1994/fcos
 
   cfssl:
     build: ./cfssl
-    image: khs1994/coreos:cert
+    image: khs1994/k8s-cfssl

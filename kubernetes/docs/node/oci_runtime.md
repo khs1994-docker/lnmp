@@ -1,6 +1,7 @@
 # OCI Runtime
 
 * https://kubernetes.io/docs/concepts/containers/runtime-class/
+* https://github.com/opencontainers/runtime-spec/blob/master/implementations.md
 
 ## runc
 
@@ -55,7 +56,7 @@ handler: runsc # 值与 OCI 配置文件对应
 ...
 ```
 
-`oci-o`
+`cri-o`
 
 ```toml
 # [crio.runtime.runtimes.${HANDLER_NAME}]

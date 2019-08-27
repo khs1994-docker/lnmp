@@ -7,19 +7,28 @@ set -ex
 env
 
 main (){
-  mkdir cert
+  mkdir -p cert
 
   # check ca
 
   echo '{
-    "signing":
-      {"default":
-        {"expiry":"43800h",
-          "usages":["signing","key encipherment","server auth","client auth"]
-        }
+  "signing": {
+    "default": {
+      "expiry": "87600h"
+    },
+    "profiles": {
+      "kubernetes": {
+        "usages": [
+            "signing",
+            "key encipherment",
+            "server auth",
+            "client auth"
+        ],
+        "expiry": "87600h"
       }
+    }
   }
-' \
+}' \
        > ca-config.json
 
   if [ -f ca-key.pem ];then
@@ -45,7 +54,7 @@ main (){
       }
     }' \
          | cfssl gencert -initca - | cfssljson -bare ca -
-    # ca-key.pem ca.csr ca.pem
+    # ca-key.pem ca.pem ca.csr
     cd ..
   fi
 
@@ -65,8 +74,22 @@ main (){
       "size":2048
     }
   }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
-       -hostname="$server_hosts" - | cfssljson -bare $CN_NAME
+    | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
+       -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+
+  # client
+  export CN_NAME=client
+
+    echo '{
+      "CN":"'$CN_NAME'",
+      "hosts":[""],
+      "key":{
+        "algo":"rsa",
+        "size":2048
+      }
+    }' \
+      | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
+      - | cfssljson -bare $CN_NAME
 
   # registry
   # export CN_NAME=registry
@@ -95,21 +118,7 @@ main (){
     ]
 }' \
        | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
-      -hostname="$server_hosts" - | cfssljson -bare $CN_NAME
-
-  # client
-  export CN_NAME=client
-
-  echo '{
-    "CN":"'$CN_NAME'",
-    "hosts":[""],
-    "key":{
-      "algo":"rsa",
-      "size":2048
-    }
-  }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="" - | cfssljson -bare $CN_NAME
+      -profile=kubernetes -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
   # flanneld (client)
   export CN_NAME=flanneld
@@ -129,9 +138,10 @@ main (){
   }]
 }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes - | cfssljson -bare $CN_NAME
 
   # admin (client)
+  # kubectl 作为集群的管理工具，需要被授予最高权限，这里创建具有最高权限的 admin 证书。
   export CN_NAME=admin
 
   echo '{
@@ -150,11 +160,11 @@ main (){
     }]
     }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
-       -hostname="" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes - | cfssljson -bare $CN_NAME
 
   # kubernetes master
   export CN_NAME=kubernetes
-
+  export k8s_hosts=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local
   echo '{
     "CN":"'$CN_NAME'",
     "hosts":[""],
@@ -170,7 +180,7 @@ main (){
     }]
     }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="$server_hosts,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes -hostname="127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
     cat > encryption-config.yaml <<EOF
 kind: EncryptionConfig
@@ -185,6 +195,28 @@ resources:
               secret: ${ENCRYPTION_KEY}
       - identity: {}
 EOF
+
+  echo '{
+    "CN": "aggregator",
+    "hosts": [],
+    "key": {
+      "algo": "rsa",
+      "size": 2048
+    },
+    "names": [
+      {
+        "C": "CN",
+        "ST": "BeiJing",
+        "L": "BeiJing",
+        "O": "k8s",
+        "OU": "4Paradigm"
+      }
+    ]
+  }' |
+     cfssl gencert -ca=ca.pem \
+      -ca-key=ca-key.pem  \
+      -config=ca-config.json  \
+      -profile=kubernetes - | cfssljson -bare proxy-client
 
   # system:kube-controller-manager master
   export CN_NAME=system:kube-controller-manager
@@ -204,8 +236,8 @@ EOF
       "OU":"khs1994.com"
   }]
   }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -hostname="$server_hosts"    - | cfssljson -bare kube-controller-manager
+  | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
+    -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-controller-manager
 
    # system:kube-scheduler master 无需传输到节点
    export CN_NAME=system:kube-scheduler
@@ -225,31 +257,8 @@ EOF
        "OU":"khs1994.com"
      }]
    }' \
-        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-        -hostname="$server_hosts"    - | cfssljson -bare kube-scheduler
-
-   # metrics-server 证书
-   echo '{
-  "CN": "aggregator",
-  "hosts": [],
-  "key": {
-    "algo": "rsa",
-    "size": 2048
-  },
-  "names": [
-    {
-      "C": "CN",
-      "ST": "BeiJing",
-      "L": "BeiJing",
-      "O": "k8s",
-      "OU": "4Paradigm"
-    }
-  ]
-}' |
-   cfssl gencert -ca=ca.pem \
-    -ca-key=ca-key.pem  \
-    -config=ca-config.json  \
-    -profile=kubernetes - | cfssljson -bare proxy-client
+  | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
+        -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-scheduler
 
    # system:kube-proxy worker 无需传输到节点
    export CN_NAME=system:kube-proxy
@@ -270,27 +279,9 @@ EOF
      }]
    }' \
         | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-        -hostname="$server_hosts"    - | cfssljson -bare kube-proxy
+            -profile=kubernetes - | cfssljson -bare kube-proxy
 
-   # metrics-server
-   echo '{
-     "CN":"aggregator",
-     "hosts":[],
-     "key":{
-       "algo":"rsa",
-       "size":2048
-     },
-     "names":[{
-       "C":"CN",
-       "ST": "BeiJing",
-       "L": "BeiJing",
-       "O":"k8s",
-       "OU":"4Paradigm"
-     }]
-   }' \
-        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-        -hostname="" - | cfssljson -bare metrics-server
-
+  # docker tls cert
   mv client-key.pem key.pem
   mv client.pem cert.pem
   mv server.pem server-cert.pem

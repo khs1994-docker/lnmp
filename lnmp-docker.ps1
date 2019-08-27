@@ -15,55 +15,32 @@ $DOCKER_DEFAULT_PLATFORM="linux"
 $KUBERNETES_VERSION="1.14.3"
 $DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
 $source=$PWD
-$DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
-$DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
+
+Function _command($command){
+  get-command $command -ErrorAction "SilentlyContinue"
+
+  return $?
+}
+
+if(_command docker){
+  $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
+  $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
+}
 
 Function printError(){
-Write-Host " "
-Write-Host 'Error   ' -NoNewLine -ForegroundColor Red
-Write-Host "$args";
-Write-Host " "
+Write-Host "`nError   " -NoNewLine -ForegroundColor Red
+Write-Host "$args`n";
 }
 
 Function printInfo(){
-Write-Host " "
-Write-Host 'INFO    ' -NoNewLine -ForegroundColor Green
-Write-Host "$args";
-Write-Host " "
+Write-Host "`nINFO    " -NoNewLine -ForegroundColor Green
+Write-Host "$args`n";
 }
 
 Function printWarning(){
-Write-Host " "
-Write-Host 'Warning  ' -NoNewLine -ForegroundColor Red
-Write-Host "$args";
-Write-Host " "
+Write-Host "`nWarning  " -NoNewLine -ForegroundColor Red
+Write-Host "$args`n";
 }
-
-if (!(Test-Path cli/khs1994-robot.enc )){
-  # 在项目目录外
-  if ($env:LNMP_PATH.Length -eq 0){
-  # 没有设置系统环境变量，则退出
-    throw "Please set system environment, more information please see bin/README.md"
-
-  }else{
-    # 设置了系统环境变量
-
-    printInfo "Use LNMP CLI in $PWD"
-    # cd $env:LNMP_PATH
-    cd $PSScriptRoot
-    cd $APP_ROOT
-    $APP_ROOT=$PWD
-    cd $PSScriptRoot
-  }
-
-}else {
-  printInfo "Use LNMP CLI in LNMP Root $pwd"
-  cd $APP_ROOT
-  $APP_ROOT=$PWD
-  cd $source
-}
-
-printInfo "APP_ROOT is $APP_ROOT"
 
 Function _cp_only_not_exists($src,$desc){
   if (!(Test-Path $desc)){
@@ -76,7 +53,6 @@ Function env_status(){
     printInfo '.env file existing'
   }else{
     Write-Warning '.env file NOT existing'
-    Write-Host ''
     cp .env.example .env
   }
 
@@ -84,7 +60,6 @@ Function env_status(){
     printInfo '.env.ps1 file existing'
   }else{
     Write-Warning '.env.ps1 file NOT existing'
-    Write-Host ''
     cp .env.example.ps1 .env.ps1
   }
 
@@ -113,14 +88,6 @@ Function env_status(){
   _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 
 }
-
-if (!(Test-Path lnmp-docker-custom-script.ps1)){
-  Copy-Item lnmp-docker-custom-script.example.ps1 lnmp-docker-custom-script.ps1
-}
-
-printInfo "Exec custom script"
-
-. ./lnmp-docker-custom-script.ps1
 
 Function wait_docker(){
   while ($i -lt (300)) {
@@ -184,11 +151,14 @@ Function logs(){
 }
 
 Function check_docker_version(){
+  if(!(_command git)){
+    return
+  }
+
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
 
   if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
     printWarning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
-    write-host
   }
 }
 
@@ -356,6 +326,10 @@ Function cleanup(){
 }
 
 Function _update(){
+  if(!(_command git)){
+    printError "Git not install, not support update"
+    return
+  }
   # git remote rm origin
   # git remote add origin git@github.com:khs1994-docker/lnmp
   git fetch --depth=1 origin
@@ -440,13 +414,51 @@ Function get_compose_options($compose_files,$isBuild=0){
 
 # main
 
+if (!(Test-Path cli/khs1994-robot.enc )){
+  # 在项目目录外
+  if ($env:LNMP_PATH.Length -eq 0){
+  # 没有设置系统环境变量，则退出
+    throw "Please set system environment, more information please see bin/README.md"
+
+  }else{
+    # 设置了系统环境变量
+
+    printInfo "Use LNMP CLI in $PWD"
+    # cd $env:LNMP_PATH
+    cd $PSScriptRoot
+    cd $APP_ROOT
+    $APP_ROOT=$PWD
+    cd $PSScriptRoot
+  }
+
+}else {
+  printInfo "Use LNMP CLI in LNMP Root $pwd"
+  cd $APP_ROOT
+  $APP_ROOT=$PWD
+  cd $source
+}
+
+printInfo "APP_ROOT is $APP_ROOT"
+
+if (!(Test-Path lnmp-docker-custom-script.ps1)){
+  Copy-Item lnmp-docker-custom-script.example.ps1 lnmp-docker-custom-script.ps1
+}
+
+printInfo "Exec custom script"
+
+. ./lnmp-docker-custom-script.ps1
+
 $env:DOCKER_HOST=$null
 
-$isWSL=docker context ls | where {$_ -match "wsl *"}
+if(_command docker){
+  $isWSL=docker context ls | where {$_ -match "wsl \*"}
 
-if($isWSL){
-  printInfo "Docker Engine run in WSL2"
-  $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
+  if($isWSL){
+    printInfo "Docker Engine run in WSL2"
+    $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
+  }else{
+    $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
+  }
 }
 
 env_status
@@ -456,7 +468,7 @@ check_docker_version
 if ($args.Count -eq 0){
   help_information
 }else{
-  $first, $other = $args
+  $command, $other = $args
 }
 
 Function _package_add($packages=$null){
@@ -494,7 +506,7 @@ Function _package_init($package=$null){
 
    cp -r lnmp-include/example vendor/lnmp-include-dev/$package
 
-   if(get-command composer){
+   if(_command composer){
      composer init -d vendor/lnmp-include-dev/$package `
        --name "lnmp-include/$package" `
        --homepage "https://docs.lnmp.khs1994.com/lnmp-include.html" `
@@ -544,7 +556,7 @@ Function _package_backup(){
 
 }
 
-switch($first){
+switch -regex ($command){
 
     init {
       _package_init $other
@@ -732,24 +744,6 @@ switch($first){
       satis
     }
 
-    httpd-cli {
-      if ($other){
-        _bash_cli httpd $other
-        exit
-      }
-
-      _bash_cli httpd sh
-    }
-
-    memcached-cli {
-      if ($other){
-        _bash_cli memcached $other
-        exit
-      }
-
-      _bash_cli memcached sh
-    }
-
     mongodb-cli {
       if ($other){
         _bash_cli mongodb $other
@@ -777,15 +771,6 @@ switch($first){
       _bash_cli mariadb bash
     }
 
-    nginx-cli {
-      if ($other){
-        _bash_cli nginx $other
-        exit
-      }
-
-      _bash_cli nginx sh
-    }
-
     nginx-unit-cli {
       if ($other){
         _bash_cli nginx-unit $other
@@ -804,40 +789,15 @@ switch($first){
       _bash_cli php7 bash
     }
 
-    phpmyadmin-cli {
-      if ($other){
-        _bash_cli phpmyadmin $other
-        exit
-      }
+    "-cli$" {
+       $service=($command).split("-cli")
 
-      _bash_cli phpmyadmin sh
-    }
+       if ($other){
+         _bash_cli $service $other
+         exit
+       }
 
-    postgresql-cli {
-      if ($other){
-        _bash_cli postgresql $other
-        exit
-      }
-
-      _bash_cli postgresql sh
-    }
-
-    rabbitmq-cli {
-      if ($other){
-        _bash_cli rabbitmq $other
-        exit
-      }
-
-       _bash_cli rabbitmq sh
-    }
-
-    redis-cli {
-      if ($other){
-        _bash_cli redis $other
-        exit
-      }
-
-      _bash_cli redis sh
+       _bash_cli $service sh
     }
 
     clusterkit {
@@ -1151,7 +1111,6 @@ XXX
     }
 
     gcr.io {
-
       printInfo "Check gcr.io host config"
 
       $GCR_IO_HOST=(ping gcr.io -n 1).split(" ")[9]

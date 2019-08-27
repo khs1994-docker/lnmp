@@ -1,0 +1,125 @@
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+    - name: settimezone.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Set the time zone
+
+        [Service]
+        Restart=on-failure
+        RestartSec=5
+        ExecStart=/usr/bin/timedatectl set-timezone PRC
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: nm-settings.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=nm settings
+
+        [Service]
+        Restart=on-failure
+        RestartSec=5
+        ExecStartPre=ls /etc/NetworkManager/system-connections/eth1.nmconnection
+        ExecStart=nmcli con up eth1
+
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    - path: /etc/profile.d/profile.sh
+      mode: 0755
+      contents:
+        inline: |
+          export ETCDCTL_API=3
+          export etcd_endpoints=${ETCD_ENDPOINTS}
+          export K8S_ROOT=${K8S_ROOT}
+          export ETCD_VERSION=${ETCD_VERSION}
+          export SERVER_HOST={{SERVER_HOST}}
+    - path: /home/core/.bashrc
+      mode: 0755
+      append:
+        - inline: |
+              export PATH=${K8S_ROOT}/bin:$PATH
+    - path: /etc/containers/registries.conf
+      overwrite: true
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/containers/registries.conf
+    - path: /home/core/.kube/config
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
+      user:
+        name: core
+      group:
+        name: core
+    - path: ${K8S_ROOT}/conf/kubectl.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
+    - path: ${K8S_ROOT}/certs/registry-ca.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/registry-ca.pem
+    - path: ${K8S_ROOT}/certs/ca.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/ca.pem
+    - path: ${K8S_ROOT}/certs/ca-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/ca-key.pem
+    - path: /etc/selinux/config
+      overwrite: true
+      mode: 0644
+      contents:
+        inline: |
+          # This file controls the state of SELinux on the system.
+          # SELINUX= can take one of these three values:
+          #     enforcing - SELinux security policy is enforced.
+          #     permissive - SELinux prints warnings instead of enforcing.
+          #     disabled - No SELinux policy is loaded.
+          # SELINUX=enforcing
+          SELINUX=disabled
+          # SELINUXTYPE= can take one of these three values:
+          #     targeted - Targeted processes are protected,
+          #     minimum - Modification of targeted policy. Only selected processes are protected.
+          #     mls - Multi Level Security protection.
+          SELINUXTYPE=targeted
+    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth0
+          type=ethernet
+          interface-name=eth0
+          permissions=
+          autoconnect=true
+
+          [ipv4]
+          dns-search=
+          method=auto
+
+          [ipv6]
+          addr-gen-mode=stable-privacy
+          dns-search=
+          method=auto
+    - path: /home/core/.lnmp/caches/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
+      mode: 0644
+      contents:
+        compression: null
+        source: http://{{SERVER_HOST}}:8080/releases/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
+    - path: /etc/systemd/journald.conf.d/99-prophet.conf
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/systemd/journald.conf.d/99-prophet.conf
+    - path: /etc/sysctl.d/kubernetes.conf
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/sysctl.d/kubernetes.conf

@@ -22,12 +22,12 @@ TimeoutStartSec=0
 LimitNOFILE=40000
 
 Environment="ETCD_DATA_DIR=/var/lib/etcd"
-Environment="K8S_CONF_PATH=/opt/bin/k8s/conf"
+Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_ETCD_HOST=192.168.199.100"
 
 ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
 
-ExecStart= /opt/bin/k8s/etcd \
+ExecStart= /opt/k8s/bin/etcd \
   --name="node1" \
   --listen-peer-urls="https://${K8S_ETCD_HOST}:2380" \
   --listen-client-urls="https://${K8S_ETCD_HOST}:2379,http://127.0.0.1:2379" \
@@ -36,14 +36,14 @@ ExecStart= /opt/bin/k8s/etcd \
   --initial-cluster-state="new" \
   --initial-cluster-token="mytoken" \
   --advertise-client-urls="https://${K8S_ETCD_HOST}:2379" \
-  --cert-file="${K8S_CONF_PATH}/certs/etcd.pem" \
-  --key-file="${K8S_CONF_PATH}/certs/etcd-key.pem" \
+  --cert-file="${K8S_ROOT}/certs/etcd.pem" \
+  --key-file="${K8S_ROOT}/certs/etcd-key.pem" \
   --client-cert-auth=true \
-  --trusted-ca-file="${K8S_CONF_PATH}/certs/ca.pem" \
-  --peer-cert-file="${K8S_CONF_PATH}/certs/etcd.pem" \
-  --peer-key-file="${K8S_CONF_PATH}/certs/etcd-key.pem" \
+  --trusted-ca-file="${K8S_ROOT}/certs/ca.pem" \
+  --peer-cert-file="${K8S_ROOT}/certs/etcd.pem" \
+  --peer-key-file="${K8S_ROOT}/certs/etcd-key.pem" \
   --peer-client-cert-auth=true \
-  --peer-trusted-ca-file="${K8S_CONF_PATH}/certs/ca.pem"
+  --peer-trusted-ca-file="${K8S_ROOT}/certs/ca.pem"
 
 # ExecStartPost
 # ExecReload：重启当前服务时执行的命令

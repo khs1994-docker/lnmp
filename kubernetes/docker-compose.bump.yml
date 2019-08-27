@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   k8s_apiserver:
-    image: k8s.gcr.io/kube-apiserver:v1.15.2
+    image: k8s.gcr.io/kube-apiserver:v1.15.3
 
   k8s_dashboard:
     image: kubernetesui/dashboard:v2.0.0-beta3
@@ -11,7 +11,7 @@ services:
     image: k8s.gcr.io/coredns:1.5.0
 
   ingress_nginx:
-    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.0
+    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.1
 
   metrics_server:
     image: k8s.gcr.io/metrics-server-amd64:v0.3.3

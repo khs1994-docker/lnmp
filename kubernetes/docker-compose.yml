@@ -3,22 +3,28 @@ version: '3.7'
 services:
 
   server:
-    image: khs1994/coreos:server
+    image: khs1994/fcos
     env_file:
       - ./coreos/.env.example
       - ./coreos/.env
+      - .env.example
+      - .env
     volumes:
+      - ./coreos/server/docker-entrypoint.sh:/etc/nginx/docker-entrypoint.sh
       - ./coreos/cert:/srv/www/coreos/cert
       - ./coreos/current:/srv/www/coreos/current
-      - ./coreos/disk:/srv/www/coreos/disk
+      - ./coreos/ignition:/srv/www/coreos/ignition
       - ./coreos/pxe:/srv/www/coreos/pxe
-      - ./bin:/srv/www/coreos/disk/bin
+      - ./coreos/etc:/srv/www/coreos/etc
+      - ./addons:/srv/www/coreos/addons
+      - ./bin:/srv/www/coreos/bin
       - ./kubernetes-release:/srv/www/coreos/kubernetes-release
+      - $HOME/.lnmp/caches:/srv/www/coreos/releases
     ports:
       - "8080:80"
 
   cfssl:
-    image: khs1994/coreos:cert
+    image: khs1994/k8s-cfssl
     volumes:
       - ./coreos/cert:/srv/cfssl
       - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
@@ -28,7 +34,7 @@ services:
 
   # systemd
   cfssl-local:
-    image: khs1994/coreos:cert
+    image: khs1994/k8s-cfssl
     volumes:
       - ./systemd/certs:/srv/cfssl
       - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh

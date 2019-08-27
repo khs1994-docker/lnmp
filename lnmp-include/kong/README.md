@@ -2,10 +2,14 @@
 
 * https://konghq.com/install/
 
-## 初始化
+## 初始化数据库
+
+**初次使用或升级版本时，务必初始化数据库**
 
 ```bash
-$ lnmp-docker run kong-migrations
+$ lnmp-docker run kong-migrations [bootstrap|up|finish]
+
+$ lnmp-docker rm kong-migrations
 ```
 
 ## 端口

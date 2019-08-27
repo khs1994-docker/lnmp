@@ -1,3 +1,5 @@
+variant: fcos
+version: 1.0.0
 systemd:
   units:
     - name: etcd2.service
@@ -6,4 +8,4 @@ passwd:
   users:
     - name: core
       ssh_authorized_keys:
-        - ssh-rsa SSH_PUB
+        - ssh-rsa {{SSH_PUB}}

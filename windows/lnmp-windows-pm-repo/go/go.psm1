@@ -57,7 +57,7 @@ Function install($VERSION=0,$isPre=0){
   _unzip $filename $unzipDesc
   # 安装 Fix me
   Copy-item -r -force go/go C:\
-  cleanup go
+  _cleanup go
 
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
   _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"

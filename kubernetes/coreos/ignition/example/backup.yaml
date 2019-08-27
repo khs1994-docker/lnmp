@@ -1,0 +1,102 @@
+# update:
+#   group:  "alpha"
+# locksmith:
+#   reboot_strategy: "etcd-lock" #  reboot, etcd-lock, off
+#   window_start:    "Sun 1:00"
+#   window_length:   "2h"
+#   # group:
+#   etcd_endpoints: ${ETCD_ENDPOINTS}
+#   etcd_cafile: /etc/kubernetes/certs/ca.pem
+#   etcd_certfile: /etc/kubernetes/certs/flanneld.pem
+#   etcd_keyfile: /etc/kubernetes/certs/flanneld-key.pem
+# flannel:
+#   etcd_cafile: /etc/kubernetes/certs/ca.pem
+#   etcd_certfile: /etc/kubernetes/certs/flanneld.pem
+#   etcd_keyfile: /etc/kubernetes/certs/flanneld-key.pem
+#   etcd_endpoints: ${ETCD_ENDPOINTS}
+#   etcd_prefix: ${FLANNELD_ETCD_PREFIX}
+#   network_config: '{"Network":"${CLUSTER_CIDR}", "SubnetLen": 24, "Backend": {"Type": "vxlan"}}'
+# etcd:
+#   # https://github.com/coreos/etcd/blob/master/Documentation/platforms/container-linux-systemd.md#etcd-3x-service
+#   version:                     3.3.8
+#   name:                        coreos{{n}}
+#   # discovery: https://DISCOVERY_URL
+#   initial_cluster:             ${ETCD_NODES}
+#   initial_advertise_peer_urls: https://IP_{{n}}:2380
+#   advertise_client_urls:       https://IP_{{n}}:2379
+#   listen_client_urls:          https://0.0.0.0:2379
+#   listen_peer_urls:            https://IP_{{n}}:2380
+#   cert_file: /etc/ssl/certs/etcd.pem
+#   key_file: /etc/ssl/certs/etcd-key.pem
+#   trusted_ca_file: /etc/ssl/certs/ca.pem
+#   peer_cert_file: /etc/ssl/certs/etcd.pem
+#   peer_key_file: /etc/ssl/certs/etcd-key.pem
+#   peer_trusted_ca_file: /etc/ssl/certs/ca.pem
+#   client_cert_auth:            true
+#   peer_client_cert_auth:       true
+#   initial_cluster_token:       ${ETCD_TOKEN}
+#   initial_cluster_state:       new
+# networkd:
+#    units:
+#      - name: 10-static.network
+#        contents: |
+#          [Match]
+#          Name=enp0s3
+#
+#          [Network]
+#          Address=IP_{{n}}/24
+#          DHCP=no
+#      - name: 20-dhcp.network
+#        contents: |
+#          [Match]
+#          Name=enp0s8
+#
+#          [Network]
+#          DHCP=yes
+#      - name: 30-static.network
+#        contents: |
+#          [Match]
+#          Name=eth0
+#
+#          [Network]
+#          Address=IP_{{n}}/24
+#          DNS=114.114.114.114
+#          # Gateway=
+    # - path: /etc/systemd/network/30-static.network
+    #   mode: 0644
+    #   contents:
+    #     inline: |
+    #       [Match]
+    #       Name=eth0
+    #
+    #       [Network]
+    #       Address={{IP_{{n}}}}/24
+    #       DNS=114.114.114.114
+    #       Gateway=192.168.57.1
+
+#passwd:
+  # groups:
+  #   - name:
+  #     gid:
+  #     password_hash:
+  #     system: false
+  # users:
+    # - name: core
+      # password_hash: "$1$nwU7Pa6U$zEYWwaz2b/PIv2K.hNu41/"
+      # https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/examples.md#generating-a-password-hash
+      # $ openssl passwd -1
+      # ssh_authorized_keys:
+      #   - ssh-rsa {{SSH_PUB}}
+      # groups:
+      #   - wheel
+      #   - sudo
+      #   - docker
+      # uid:
+      # gecos:
+      # home_dir:
+      # no_create_home: false
+      # primary_group:
+      # no_user_group: true
+      # no_log_init: true
+      # shell: bash
+      # system: true

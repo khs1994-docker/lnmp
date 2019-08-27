@@ -13,7 +13,7 @@ data:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/

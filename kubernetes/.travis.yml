@@ -1,8 +1,8 @@
-# language: go
-language: bash
+language: go
+# language: bash
 
-# go:
-# - 1.12
+go:
+- 1.12
 
 services:
 - docker
@@ -13,15 +13,18 @@ dist: xenial
 cache:
   directories:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
+    - /home/travis/.lnmp/caches
 
 before_install:
+  - sestatus || true
+  - ls /home/travis/.lnmp/caches
   - echo $PATH
   - sudo netstat -lnpt
   - docker-compose --version
   - docker --version
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-  - sudo apt-get update
+  - sudo apt-get update || true
   - sudo apt-get -y install docker-ce || sudo apt -f install
   - docker --version
   # 升级最新 Docker Compose
@@ -34,13 +37,21 @@ before_install:
   - sudo cat /etc/docker/daemon.json
   - echo '{"registry-mirrors":["https://mirror.gcr.io"]}' | sudo tee /etc/docker/daemon.json
   - sudo cat /etc/docker/daemon.json
+  - docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+  - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+  - docker buildx create --name mybuilder
+  - docker buildx use mybuilder
+  - docker buildx inspect --bootstrap
   - ip addr
   - hostnamectl
-  - SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+  - export SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
-
 install:
+  - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+  - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
+  - export KUBERNETES_TYPE=server
+  - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
@@ -51,10 +62,10 @@ install:
 
   - sudo sed -i "s#dockerhub.azk8s.cn#mirror.gcr.io#g" `grep dockerhub.azk8s.cn -rl $PWD/systemd`
 
-  - ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
-  - ./lnmp-k8s local-install ${LNMP_K8S_SINGLE_INSTALL_OPTIONS:-}
+  - travis_retry ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
+  - ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
-  - export PATH=$PATH:/opt/bin/k8s
+  - export PATH=$PATH:/opt/k8s/bin
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
@@ -82,11 +93,15 @@ before_script:
   - sudo systemctl start flanneld
 
   - sudo systemctl cat docker
-  - sudo systemctl cat containerd || sudo cp systemd/containerd.service.back /etc/systemd/system/containerd.service
+  - sudo systemctl cat containerd || true
 
-  - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart containerd) || true
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
+  - sudo systemctl cat kube-containerd
+
+  - sudo systemctl cat crio || true
+
+  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
+  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
+  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
 
   - docker info
 
@@ -94,10 +109,7 @@ before_script:
   - sudo systemctl cat kubelet
   - sudo systemctl start kubelet
 
-  - sudo systemctl cat crio || true
-
-  - sleep 20
-
+  - sleep 10
   # - sudo systemctl status etcd
   # - sudo systemctl status flanneld
   # - sudo systemctl status docker
@@ -107,7 +119,7 @@ before_script:
   # - sudo systemctl status kube-proxy
   # - sudo systemctl status kubelet
 
-  - kubectl version
+  - travis_retry kubectl version
   - kubectl cluster-info
 
   - sleep 30
@@ -117,7 +129,7 @@ before_script:
   - sudo journalctl -u kube-scheduler
   - sudo journalctl -u kube-proxy
   - sudo journalctl -u kubelet
-  - sudo journalctl -u containerd || true
+  - sudo journalctl -u kube-containerd || true
   - sudo journalctl -u crio || true
   - sudo journalctl -u flanneld
 
@@ -128,7 +140,7 @@ before_script:
   - kubectl get csr
 
   - kubectl get node
-  - kubectl get all --all-namespaces
+  - kubectl get all -A
   - kubectl api-versions
   - kubectl api-resources
 
@@ -144,12 +156,11 @@ script:
 
   - kubectl get all --all-namespaces
   # test metrics server
-  - sleep 50
-  - kubectl top node
+  - travis_retry kubectl top node
   # test dns
   - kubectl describe pod coredns -n kube-system
   - kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-  - kubectl run nginx --image nginx:1.17.2-alpine
+  - kubectl run nginx --image nginx:1.17.3-alpine
   - sleep 20
   - kubectl get all
   - kubectl get pod
@@ -164,61 +175,24 @@ script:
   - curl ${SERVER_IP}:${HTTP_PORT}
 
 after_success:
-  - echo "Set app"
-  - mkdir -p ../app/laravel/public
-  - cp deployment/app/index.php ../app/laravel/public/
-  # - mkdir -p ../app
-  # - docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.8-composer-alpine composer global config --unset repos.packagist
-  # - docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.8-composer-alpine composer create-project --prefer-dist laravel/laravel=5.8.* laravel
-  - echo "Up nfs server"
-  - ./lnmp-k8s nfs
-  - sleep 20
-  - docker ps -a
-  - ./lnmp-k8s nfs logs
-  - sudo mkdir -p /tmp2
-  # install nfs dep
-  - sudo apt install -y nfs-common
-  - sudo mount -t nfs4 ${SERVER_IP}:/lnmp/log /tmp2
-  - sudo umount /tmp2
-  - sed -i "s#192.168.199.100#${SERVER_IP}#g" deployment/pv/lnmp-volume.linux.nfs.yaml
-  - ./lnmp-k8s create
-  - echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
-  - ping -c 1 laravel2.t.khs1994.com
-  - sleep 120
-  - kubectl get -n lnmp all
-  - curl -k https://laravel2.t.khs1994.com
-  - ./lnmp-k8s delete
-  - ./lnmp-k8s cleanup
-  - ./lnmp-k8s nfs down
-  - echo "Test noNFS volume"
-  - cp -rf ../app ~/app
-  - ./lnmp-k8s create --no-nfs
-  - sleep 50
-  - kubectl get -n lnmp all
-  - curl -k https://laravel2.t.khs1994.com
+  - bash tests/test.sh
   - ip addr
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--containerd" && (kubectl apply -f deployment/runtimeClass/runtimeClass.yaml && kubectl apply -f deployment/runtimeClass/pod.yaml) || true
-  - test "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f deployment/runtimeClass/runtimeClass.yaml && kubectl apply -f deployment/runtimeClass/pod.yaml) || true
-  - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && docker run -it --rm --runtime=runsc alpine:3.10 uname -a || true
-  - test -z "${LNMP_K8S_SINGLE_INSTALL_OPTIONS}" && docker run -it --rm alpine:3.10 uname -a || true
-  - sleep 10
-  - kubectl get all
-  - kubectl get pod
-  - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1` || true
-  - kubectl exec ${POD_NAME} -- uname -a || true
+  - cd cli
+  - sh generate.sh || true
+  - cd ..
   - git diff
 
 env:
   matrix:
-    - CI_KUBERNETES_VERSION=1.15.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - CI_KUBERNETES_VERSION=1.14.2
-    - CI_KUBERNETES_VERSION=1.15.1
-    - CI_KUBERNETES_VERSION=1.16.0-alpha.3 LNMP_K8S_GET="--url"
-    - CI_KUBERNETES_VERSION=1.16.0-alpha.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--containerd"
+    - CI_KUBERNETES_VERSION=1.15.2
   global:
-    - k=v
+    - DOCKER_CLI_EXPERIMENTAL=enabled
 
 matrix:
   fast_finish: true
-  allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.15.1 LNMP_K8S_SINGLE_INSTALL_OPTIONS="--crio"
+  # allow_failures:
+  # - env: CI_KUBERNETES_VERSION=1.15.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"

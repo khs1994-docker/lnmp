@@ -1,8 +1,8 @@
 FROM alpine:3.10
 
-ENV KUBERNETES_VERSION=v1.15.2
+ENV KUBERNETES_VERSION=v1.15.3
 
-# ENV KUBERNETES_VERSION=v1.16.0-alpha.3
+# ENV KUBERNETES_VERSION=v1.16.0-beta.1
 
 ENV KUBERNETES_URL=https://storage.googleapis.com
 
@@ -21,7 +21,7 @@ RUN apk add --no-cache curl \
        && curl -LO ${KUBERNETES_URL}/kubernetes-release/release/${KUBERNETES_VERSION}/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
        && ls /kubernetes*
 
-FROM hello-world
+FROM scratch
 
 ARG GOOS=linux
 ARG GOARCH=amd64

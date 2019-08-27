@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+exec podman run --rm --network host --privileged \
+  -v ${K8S_ROOT:-/opt/k8s}/certs:${K8S_ROOT:-/opt/k8s}/certs \
+  -e ETCDCTL_API \
+  gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION:-3.3.15} \
+  etcdctl \
+  --endpoints=$etcd_endpoints \
+  --cacert="${K8S_ROOT:-/opt/k8s}/certs/ca.pem" \
+  --cert="${K8S_ROOT:-/opt/k8s}/certs/flanneld.pem" \
+  --key="${K8S_ROOT:-/opt/k8s}/certs/flanneld-key.pem" \
+  "$@"

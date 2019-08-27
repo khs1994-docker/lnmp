@@ -18,7 +18,7 @@ jobs:
           PCIT_WHEN_COMMIT_MESSAGE: "1"
           PCIT_WHEN_COMMIT_MESSAGE_SKIP: "skip actions"
   linux:
-    # needs: skip-ci
+    needs: skip-ci
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -54,7 +54,7 @@ jobs:
     - name: pwsh
       run: pwsh -command "./lnmp-docker.ps1"
   pw:
-    # needs: skip-ci
+    needs: skip-ci
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
@@ -64,7 +64,7 @@ jobs:
       run:
         powershell -command "./lnmp-docker.ps1"
   lwpm:
-    # needs: skip-ci
+    needs: skip-ci
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
@@ -84,7 +84,7 @@ jobs:
         powershell -command "./windows/lnmp-windows-pm.ps1 add openjdk"
         powershell -command "./windows/lnmp-windows-pm.ps1 install openjdk"
   lnmp-include:
-    # needs: skip-ci
+    needs: skip-ci
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@master

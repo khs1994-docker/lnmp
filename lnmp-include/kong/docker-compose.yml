@@ -16,7 +16,7 @@ x-common-label:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
-  # with kong
+
   # https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
   postgresql-kong:
     << : *default-common
@@ -39,7 +39,7 @@ services:
   kong:
     &kong
     << : *default-common
-    image: kong:1.2.1-alpine
+    image: kong:1.3.0-alpine
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgresql-kong
@@ -65,11 +65,14 @@ services:
 
   kong-migrations:
     << : *kong
+    entrypoint:
+      - /docker-entrypoint.sh
+      - kong
+      - migrations
     command:
-    - kong
-    - migrations
-    - bootstrap
+      - bootstrap
 
+  # https://github.com/PGBI/kong-dashboard
   kong-dashboard:
     << : *default-common
     image: pgbi/kong-dashboard
@@ -82,6 +85,21 @@ services:
     networks:
       - frontend
 
+  # https://github.com/pantsel/konga
+  konga:
+    << : *default-common
+    image: pantsel/konga
+    ports:
+      - "1337:1337"
+    networks:
+      - frontend
+    environment:
+      TOKEN_SECRET: mytoken
+    volumes:
+      - kongadata:/app/kongadata
+
 volumes:
   postgresql-kong-data:
+    << : *default-common-label
+  kongadata:
     << : *default-common-label

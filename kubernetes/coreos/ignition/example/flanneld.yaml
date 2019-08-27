@@ -1,0 +1,85 @@
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+    - name: flanneld-installer.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=flanneld installer
+
+        [Service]
+        Restart=on-failure
+        RestartSec=5
+        WorkingDirectory=/home/core/.lnmp/caches
+        ExecStartPre=mkdir -p ${K8S_ROOT}/bin
+        ExecStartPre=bash -c "if ! [ `${K8S_ROOT}/bin/flanneld --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/flanneld; fi"
+        ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/flanneld ];then \
+          tar -zxvf flannel-v${FLANNEL_VERSION}-linux-amd64.tar.gz -C ${K8S_ROOT}/bin ; fi"
+        ExecStart=echo success
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: flanneld.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=flannel - Network fabric for containers
+        Documentation=https://github.com/coreos/flannel
+        #Requires=etcd.service
+        #After=etcd.service
+        #Before=docker.service
+
+        [Service]
+        Type=notify
+        Restart=always
+        RestartSec=10s
+        TimeoutStartSec=300
+        LimitNOFILE=40000
+        LimitNPROC=1048576
+
+        Environment="K8S_ROOT=${K8S_ROOT}"
+
+        ExecStartPre=-/sbin/modprobe ip_tables
+        ExecStartPre=-/usr/bin/env mkdir --parents /var/lib/coreos /run/flannel
+        ExecStartPre=-podman container rm flanneld-etcdctl
+        # ExecStartPre=-/usr/bin/env ETCDCTL_API=2 ${K8S_ROOT}/bin/etcdctl \
+        ExecStartPre=-podman run --name flanneld-etcdctl --network host --privileged \
+          -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
+          -e ETCDCTL_API=2 \
+          gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
+          etcdctl \
+          --endpoints=${ETCD_ENDPOINTS} \
+          --ca-file="${K8S_ROOT}/certs/ca.pem" \
+          --cert-file="${K8S_ROOT}/certs/flanneld.pem" \
+          --key-file="${K8S_ROOT}/certs/flanneld-key.pem" \
+          set /kubernetes/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
+        ExecStartPre=-podman container rm flanneld-etcdctl
+
+        ExecStart=${K8S_ROOT}/bin/flanneld \
+          --etcd-endpoints=${ETCD_ENDPOINTS} \
+          --etcd-cafile="${K8S_ROOT}/certs/ca.pem" \
+          --etcd-certfile="${K8S_ROOT}/certs/flanneld.pem" \
+          --etcd-keyfile="${K8S_ROOT}/certs/flanneld-key.pem" \
+          --etcd-prefix="/kubernetes/network" \
+          --ip-masq
+
+        ExecStartPost=${K8S_ROOT}/bin/mk-docker-opts.sh -k DOCKER_NETWORK_OPTIONS -d /etc/sysconfig/docker
+
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    - path: ${K8S_ROOT}/certs/flanneld.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/flanneld.pem
+    - path: ${K8S_ROOT}/certs/flanneld-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/flanneld-key.pem
+    - path: /home/core/.lnmp/caches/flannel-v${FLANNEL_VERSION}-linux-amd64.tar.gz
+      mode: 0644
+      contents:
+        compression: null
+        source: http://{{SERVER_HOST}}:8080/releases/flannel-v${FLANNEL_VERSION}-linux-amd64.tar.gz

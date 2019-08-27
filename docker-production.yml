@@ -394,7 +394,7 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.17.2-alpine
+    image: nginx:1.17.3-alpine
     # image: username/lnmp-nginx:tag
     ports:
       - "443:443"
@@ -487,9 +487,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.39-alpine"
+  #   image: "httpd:2.4.41-alpine"
   #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.39
+  #   # image: khs1994/lnmp-httpd:2.4.41
   #   ports:
   #     - "443:443"
   #     - "80:80"

@@ -4,62 +4,91 @@ set -ex
 
 env
 
-if [ "$1" = 'bash' ] || [ "$1" = 'sh' ];then
-  exec /bin/sh
-fi
+if [ "$1" = 'bash' ] || [ "$1" = 'sh' ];then exec /bin/sh; fi
 
-if ! [ -f /srv/www/coreos/current/version.txt ];then echo "version.txt Not Found /srv/www/coreos/current/version.txt"; exit 1; fi
-
-. /srv/www/coreos/current/version.txt
-
-echo "link current to ${COREOS_VERSION_ID}
-
-"
-
-ln -sf /srv/www/coreos/current /srv/www/coreos/${COREOS_VERSION_ID}
-
+# www root
 cd /srv/www/coreos
 
 # ipxe
 
-sed -i "s#LOCAL_HOST#${LOCAL_HOST}#g" ipxe.html
+sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ipxe.html
 
-ct --help
+fcct --version ; fcct --help || true
 
-ct --version
+cd ignition
 
-cd disk
+rm -rf *.json *.yaml
 
 cp example/* .
+cp ignition-local.example.yaml ignition-local.yaml
+
+MERGE_LIST="crictl \
+            docker \
+            etcd \
+            flanneld \
+            helm \
+            kube-apiserver \
+            kube-containerd \
+            kube-controller-manager \
+            kube-nginx \
+            kube-proxy \
+            kube-scheduler \
+            kubelet \
+            merge-common \
+            ignition-local \
+           "
+
+for item in $MERGE_LIST
+do
+  envsubst '${K8S_ROOT} \
+            ${CRICTL_VERSION} \
+            ${ETCD_VERSION} \
+            ${FLANNEL_VERSION} \
+            ${HELM_VERSION} \
+            ${ETCD_NODES} \
+            ${ETCD_ENDPOINTS} \
+            ${KUBE_APISERVER} \
+            ${CONTAINER_RUNTIME} \
+            ${CONTAINER_RUNTIME_ENDPOINT} \
+           ' \
+  < $item.yaml > $item.yaml.source
+
+  cp $item.yaml.source $item.yaml
+done
 
 for i in `seq ${NODE_NUM}`;do
-  if [ -f ignition-$i.example.yaml ];then
-    cp ignition-$i.example.yaml ignition-$i.yaml
-  fi
+  cp ignition-n.master.template.yaml ignition-$i.example.yaml
+  sed -i "s#{{n}}#$i#g" ignition-$i.example.yaml
+  cp ignition-$i.example.yaml ignition-$i.yaml
 
-  if [ -f ignition-$i.yaml ];then
-
-    echo "handle ignition-$i.yaml ...
-
-"
-    envsubst < ignition-$i.yaml > ignition-$i.yaml.source
-
-    mv ignition-$i.yaml.source ignition-$i.yaml
-
-    sed -i "s#SSH_PUB#${SSH_PUB}#g" ignition-$i.yaml
-    sed -i "s#DISCOVERY_URL#${DISCOVERY_URL}#g" ignition-$i.yaml
-    sed -i "s#LOCAL_HOST#${LOCAL_HOST}#g" ignition-$i.yaml
-
-  else
+  if ! [ -f ignition-$i.yaml ];then
     break
   fi
+
+  echo "handle ignition-$i.yaml ...
+
+"
+  envsubst '${K8S_ROOT} \
+            ${CRICTL_VERSION} \
+            ${ETCD_VERSION} \
+            ${FLANNEL_VERSION} \
+            ${ETCD_NODES} \
+            ${ETCD_ENDPOINTS} \
+            ${KUBE_APISERVER} \
+            ${CONTAINER_RUNTIME} \
+            ${CONTAINER_RUNTIME_ENDPOINT} \
+           ' \
+  < ignition-$i.yaml > ignition-$i.yaml.source
+
+  cp ignition-$i.yaml.source ignition-$i.yaml
+
+  sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.yaml
+  sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.yaml
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.yaml
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.yaml
 done
 
 cp ../pxe/pxe-ignition.example.yaml ../pxe/pxe-ignition.yaml
-
-cp ignition-test.example.yaml ignition-test.yaml
-
-cp ignition-one.example.yaml ignition-one.yaml
 
 # replace
 
@@ -67,37 +96,51 @@ for i in `seq ${NODE_NUM}` ; do
 
   IP=$(echo ${NODE_IPS} | cut -d ',' -f $i)
 
-  if ! [ -z $IP ];then
-    sed -i "s/IP_$i/${IP}/g" $( ls *.yaml )
+  if [ -n "$IP" ];then
+    sed -i "s/{{IP_$i}}/${IP}/g" $( ls *.yaml )
   fi
 done
 
-# ct
+# fcct
+
+_fcct(){
+  echo "fcct --strict --pretty --input"
+}
+
+sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" \
+  ignition-local.yaml \
+  basic.yaml \
+  ../pxe/pxe-ignition.yaml
+
+sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" \
+  ignition-local.yaml \
+  basic.yaml \
+  ../pxe/pxe-ignition.yaml
+
+sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.yaml
 
 for i in `seq ${NODE_NUM}` ; do
 
   if [ -f ignition-$i.yaml ];then
-    ct -in-file ignition-$i.yaml  > ignition-$i.json
+    $(_fcct) ignition-$i.yaml --output ignition-$i.json
   fi
 
 done
 
-sed -i "s#LOCAL_HOST#${LOCAL_HOST}#g" \
-  ignition-one.yaml \
-  ignition-test.yaml \
-  ../pxe/pxe-ignition.yaml
+for item in $MERGE_LIST
+do
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" $item.yaml
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" $item.yaml
+  $(_fcct) $item.yaml --output $item.json
+done
 
-sed -i "s#SSH_PUB#${SSH_PUB}#g" \
-  ignition-one.yaml \
-  ignition-test.yaml \
-  ../pxe/pxe-ignition.yaml
+$(_fcct) ignition-local.yaml --output ignition-local.json
+$(_fcct) basic.yaml --output basic.json
 
-ct -platform=custom -in-file ignition-test.yaml  > ignition-test.json
-
-ct -in-file ignition-one.yaml  > ignition-one.json
+rm -rf *.source
 
 cd ../pxe
 
-ct -in-file pxe-ignition.yaml  > pxe-config.ign
+$(_fcct) pxe-ignition.yaml --output pxe-config.ign
 
 exec nginx -g "daemon off;"

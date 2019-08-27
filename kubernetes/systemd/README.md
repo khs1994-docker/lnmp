@@ -5,28 +5,6 @@
 * 了解 `systemd`
 * 机器内存 **2GB** 以上
 
-## 安装依赖软件
-
-* https://k8s-install.opsnull.com/07-0.%E9%83%A8%E7%BD%B2worker%E8%8A%82%E7%82%B9.html
-
-### CentOS
-
-```bash
-$ sudo yum install conntrack ipvsadm ipset jq iptables curl sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
-```
-
-### Fedora
-
-```bash
-$ sudo dnf install conntrack ipvsadm ipset jq iptables curl sysstat libseccomp && sudo /usr/sbin/modprobe ip_vs
-```
-
-### Debian/Ubuntu
-
-```bash
-$ sudo apt install -y conntrack ipvsadm ipset jq iptables curl sysstat libseccomp2 kmod && (sudo /usr/sbin/modprobe ip_vs || sudo /sbin/modprobe ip_vs)
-```
-
 ## 关闭防火墙
 
 出现 pod 网络不通的情况，可以尝试关闭防火墙
@@ -91,9 +69,9 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 
 将 `docker.conf` 放入 `/etc/systemd/system/docker.service.d/*` 中
 
-将证书文件放入 `/opt/bin/k8s/conf/certs`
+将证书文件放入 `/opt/k8s/certs`
 
-将配置文件放入 `/opt/bin/k8s/conf`
+将配置文件放入 `/opt/k8s/conf`
 
 ## 容器运行时
 

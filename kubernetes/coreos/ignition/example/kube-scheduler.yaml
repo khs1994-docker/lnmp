@@ -1,0 +1,22 @@
+variant: fcos
+version: 1.0.0
+systemd:
+  units:
+storage:
+  files:
+    - path: ${K8S_ROOT}/conf/kube-scheduler.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.kubeconfig    
+    - path: ${K8S_ROOT}/certs/kube-scheduler.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.pem
+    - path: ${K8S_ROOT}/certs/kube-scheduler-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler-key.pem
+    - path: ${K8S_ROOT}/bin/kube-scheduler
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-scheduler

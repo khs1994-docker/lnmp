@@ -3,7 +3,7 @@ kind: KubeSchedulerConfiguration
 bindTimeoutSeconds: 600
 clientConnection:
   burst: 200
-  kubeconfig: "/opt/bin/k8s/conf/kube-scheduler.kubeconfig"
+  kubeconfig: "/opt/k8s/conf/kube-scheduler.kubeconfig"
   qps: 100
 enableContentionProfiling: false
 enableProfiling: true

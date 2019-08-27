@@ -36,14 +36,14 @@ set -e
 
 issue(){
   echo "正在申请证书 ..." ; echo ; echo
-  first=$1
+  first_domain=$1
   shift
   acme.sh --issue \
           --dns ${DNS_TYPE:-dns_dp} \
           ${RSA:---keylength ec-256} \
-          -d $first "$@"
+          -d $first_domain "$@"
 
-  install $first
+  install $first_domain
 }
 
 install(){
