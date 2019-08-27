@@ -1046,11 +1046,6 @@ _k8s_start(){
                        kube-proxy kubelet
 }
 
-if [ -z "$1" ];then
-  print_help_info
-  exit
-fi
-
 _helm_lnmp(){
   cd helm
   lnmp_app_env=$1
@@ -1107,8 +1102,20 @@ _local_cleanup(){
   sudo systemctl restart docker containerd
 }
 
+if [ -z "$1" ];then
+  print_help_info
+  exit
+fi
+
 _command=$1
 shift
+
+if [ "$ENABLE_CN_MIRROR" = 0 ];then
+  print_info "CN Mirror disabled"
+  sudo sed -i "s#dockerhub.azk8s.cn#mirror.gcr.io#g" `grep dockerhub.azk8s.cn -rl $PWD/systemd` || true
+  sudo sed -i "s#gcr.azk8s.cn#gcr.io#g" `grep gcr.azk8s.cn -rl $PWD/systemd` || true
+  sudo sed -i "s#gcr.azk8s.cn#gcr.io#g" `grep gcr.azk8s.cn -rl $PWD/addons` || true
+fi
 
 case $_command in
     kubernetes-server )

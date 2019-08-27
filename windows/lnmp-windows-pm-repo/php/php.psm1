@@ -189,7 +189,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
   if($isPre){
-    $VC_VERSION="nts-Win32-vs16"
+    $VC_VERSION="nts-Win32-vc15"
     $VERSION=$preVersion
     $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php74"
