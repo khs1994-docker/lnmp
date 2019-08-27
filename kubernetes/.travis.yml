@@ -94,7 +94,10 @@ before_script:
 
   - sudo systemctl cat docker
   - sudo systemctl cat containerd || true
+
   - sudo systemctl cat kube-containerd
+
+  - sudo systemctl cat crio || true
 
   - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
   - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
@@ -106,7 +109,6 @@ before_script:
   - sudo systemctl cat kubelet
   - sudo systemctl start kubelet
 
-  - sudo systemctl cat crio || true
   - sleep 10
   # - sudo systemctl status etcd
   # - sudo systemctl status flanneld

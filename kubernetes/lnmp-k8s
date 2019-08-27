@@ -146,7 +146,7 @@ _get_kubernetes_server_by_docker_image(){
     K8S_IMAGE=ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
   fi
 
-  docker manifest inspect ${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
+  sudo docker manifest inspect ${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
   docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   docker container create --name khs1994-kubernetes-${TYPE} \
     ${K8S_IMAGE}:v${KUBERNETES_VERSION} command
