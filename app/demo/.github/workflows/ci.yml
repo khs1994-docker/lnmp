@@ -1,0 +1,92 @@
+on:
+  push:
+    branches:
+    - master
+  # pull_request:
+  # tags:
+  # paths:
+  # schedule:
+    # * is a special character in YAML so you have to quote this string
+    # - cron:  '*/15 * * * *'
+
+name: CI
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        php_version: ["7.2.21","7.3.8"]
+    runs-on: ubuntu-latest
+    # needs: job
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: install
+        uses: khs1994-docker/actions-setup-php@master
+        with:
+          php_type: composer
+          args: |
+            ls -la vendor || true
+            php .pcit.php
+            composer config -g --unset repos.packagist
+            composer install -q --ignore-platform-reqs
+      - name: script
+        uses: khs1994-docker/actions-setup-php@master
+        with:
+          php_version: ${{ matrix.php_version }}
+          args: |
+            mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
+                    /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
+            php -v
+            env
+            sleep 30
+            ping mysql -c 4 || true
+            ping redis -c 4 || true
+            php -r "var_dump(new PDO('mysql:host=mysql;dbname=test','root','mytest'));"
+            vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: php-cs-fixer
+        uses: khs1994-docker/actions-setup-php@master
+        with:
+          php_type: composer
+          args: |
+            php-cs-fixer fix
+      - name: after_success
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          PHP_VERSION: ${{ matrix.php_version }}
+        run: |
+          set -x
+          mysql -uroot --password=mytest -h 127.0.0.1 -P 13306 -e "show databases"
+          bash <(curl -s https://codecov.io/bash) -e PHP_VERSION
+        if: success()
+      - name: after_failure
+        run: echo "build error"
+        if: failure()
+      - name: always
+        run: |
+          set -x
+          echo "run always"
+          pwd
+          docker ps -a
+          docker logs `docker ps -a --filter "name=mysql" -q`
+          docker exec -i `docker ps -a --filter "name=mysql" -q` cat /var/log/mysql/error.log
+          docker logs `docker ps -a --filter "name=redis" -q`
+        if: always()
+        working-directory: /
+    services:
+      mysql:
+        image: mysql:5.7.27
+        ports:
+          - 13306:3306
+        env:
+          MYSQL_DATABASE: test
+          MYSQL_ROOT_PASSWORD: mytest
+        volumes:
+          - mysql-data:/var/lib/mysql
+        options: -v mysql-data:/var/lib/mysql --restart always --workdir=/
+
+      redis:
+        image: redis:5.0.5-alpine
+        ports:
+          - 6379:6379

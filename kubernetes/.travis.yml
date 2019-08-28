@@ -175,7 +175,6 @@ script:
   - sudo crictl version
   - sudo crictl info
 
-  - git config --global color.diff auto
   - ip addr
   - git diff
   - cd cli ; (sh generate.sh || true); cd ..

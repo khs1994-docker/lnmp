@@ -67,4 +67,4 @@ logs
 /lnmp-docker-custom-script
 /lnmp-docker-custom-script.ps1
 
-composer.json
+/composer.json

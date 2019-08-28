@@ -1,0 +1,49 @@
+on:
+  push:
+
+name: CI
+
+jobs:
+  php:
+    name: PHP
+    strategy:
+      matrix:
+        php_version:
+          - nightly
+          - 7.4.0alpha
+          - 7.3.8
+          - 7.2.21
+          - 7.1.31
+          - 7.0.33
+          - 5.6.40
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Composer
+        uses: ./
+        # uses: khs1994-docker/actions-setup-php@master
+        with:
+          php_type: composer
+          args: |
+            php -v
+            composer --version
+            composer global config -l
+      - name: Without version
+        uses: ./
+        # uses: khs1994-docker/actions-setup-php@master
+        with:
+          args: |
+            php -v
+            env
+      - name: Check version
+        uses: ./
+        # uses: khs1994-docker/actions-setup-php@master
+        with:
+          php_version: ${{ matrix.php_version }}
+          args: |
+            mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
+                    /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
+            set -x
+            php -v

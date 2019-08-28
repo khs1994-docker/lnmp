@@ -103,9 +103,9 @@ script:
   # - phpenv config-rm xdebug.ini || echo "xdebug not available"
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 
-# after_success:
-#   - bash <(curl -s https://codecov.io/bash)
-#   - ./sami update .sami.php
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  # - ./sami update .sami.php
 
 # deploy:
 #   provider: pages
