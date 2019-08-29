@@ -42,14 +42,6 @@ LREW_INCLUDE="etcd example"
 LNMP_SERVICES="nginx mysql php7 redis phpmyadmin example"
 ```
 
-开发者:
-
-如果你在开发一个包，请增加如下变量。
-
-```bash
-LREW_EXAMPLE_VENDOR=lrew-dev
-```
-
 ### Windows
 
 编辑 `.env.ps1` 文件，将 `example` 加入到以下变量中，例如

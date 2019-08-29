@@ -124,21 +124,24 @@ jobs:
     value: 1.24.0
   timeoutInMinutes: 0
   steps:
-  - script: |
+  - displayName: 'manifest'
+    script: |
+      set -x
+      env
+      docker --version
+      docker-compose --version
+  - displayName: 'Setup Docker'
+    script: |
       set -x
       export DOCKER_CHANNEL=test
-      docker --version
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
       sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) ${DOCKER_CHANNEL}"
       sudo apt-get update
       sudo apt-get -y install docker-ce
-      docker --version
-      docker-compose --version
       sudo rm /usr/local/bin/docker-compose
       curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
       chmod +x docker-compose
       sudo mv docker-compose /usr/local/bin
-      docker-compose --version
       sudo mkdir -p /etc/systemd/system/docker.service.d
       echo -e '[Service]\nExecStart=\nExecStart=/usr/bin/dockerd' | sudo tee /etc/systemd/system/docker.service.d/docker.conf
       echo '{"hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:2375"],"experimental":true}' | sudo tee /etc/docker/daemon.json
@@ -151,8 +154,13 @@ jobs:
       docker buildx create --name mybuilder
       docker buildx use mybuilder
       docker buildx inspect --bootstrap
-    displayName: 'Setup Docker'
-
+  - displayName: 'install-after-manifest'
+    script: |
+      set -x
+      docker --version
+      docker-compose --version
+      docker buildx version
+      docker
   - script: |
       set -x
       echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
@@ -175,12 +183,16 @@ jobs:
         IS_PUSH=--push; \
       fi
 
-      if [ -n "$UNIT" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
-      if [ -n "$SUPERVISORD" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
-      if [ -n "$COMPOSER" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
-      if [ -n "$SINGLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
-      if [ -n "$SWOOLE" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} ${FOLDER}/swoole; fi
-      if [ -n "$FPM" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
+      VCS_REF=`git rev-parse --short HEAD`
+      options="--build-arg VCS_REF=$VCS_REF"
+      echo $options
+
+      if [ -n "$UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
+      if [ -n "$SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
+      if [ -n "$COMPOSER" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
+      if [ -n "$SINGLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
+      if [ -n "$SWOOLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} ${FOLDER}/swoole; fi
+      if [ -n "$FPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
     env:
       DOCKER_HUB_USERNAME: khs1994
       PLATFORM: linux/amd64,linux/arm64,linux/arm/v7

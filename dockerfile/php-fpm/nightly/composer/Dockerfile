@@ -5,6 +5,11 @@ FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine as php
 
 # install composer
 
+ARG VCS_REF
+
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+
 ENV COMPOSER_DEP_APKS \
       git \
       # 以下两个均为版本控制系统
@@ -35,7 +40,7 @@ RUN --mount=type=bind,from=composer:1.9.0,source=/usr/bin/composer,target=/opt/b
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.8/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.9/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
     && chmod +x /docker-entrypoint.composer.sh \
     && cp -a /opt/bin/composer /usr/bin/composer \
     && composer --ansi --version --no-interaction \
@@ -58,7 +63,7 @@ RUN --mount=type=bind,from=composer:1.9.0,source=/usr/bin/composer,target=/opt/b
     && ln -sf /tmp/vendor/bin/* /usr/local/bin \
     && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock \
 # composer 中国镜像
-    && composer config -g repo.packagist composer https://php.cnpkg.org
+    && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
 ENTRYPOINT ["/bin/sh", "/docker-entrypoint.composer.sh"]
 
