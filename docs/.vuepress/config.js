@@ -141,6 +141,7 @@ module.exports = {
             '/arm',
             '/ab',
             '/minio',
+            '/buildx',
           ]
         }
       ]

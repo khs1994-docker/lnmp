@@ -81,6 +81,8 @@ module.exports = {
         "worker",
         "runtime",
         "oci_runtime",
+        "cni",
+        "crictl",
       ],
     },
     sidebarDepth: 1,

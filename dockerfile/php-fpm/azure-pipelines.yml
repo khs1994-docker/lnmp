@@ -85,17 +85,17 @@ jobs:
       PHP_74_FPM:
         PHP_VERSION: 7_4_X
         FOLDER: 7.4
-        PHP_TAG_VERSION: 7.4.0alpha
+        PHP_TAG_VERSION: 7.4.0beta
         FPM: 1
       PHP_74_COMPOSER:
         PHP_VERSION: 7_4_X
         FOLDER: 7.4
-        PHP_TAG_VERSION: 7.4.0alpha
+        PHP_TAG_VERSION: 7.4.0beta
         COMPOSER: 1
       PHP_74_SWOOLE:
         PHP_VERSION: 7_4_X
         FOLDER: 7.4
-        PHP_TAG_VERSION: 7.4.0alpha
+        PHP_TAG_VERSION: 7.4.0beta
         SWOOLE: 1
       PHP_nightly_FPM:
         PHP_VERSION: nightly
@@ -159,11 +159,22 @@ jobs:
     displayName: 'Docker Login'
 
   - script: |
-      export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7
       cp .env.example .env
       source tag.sh
       set -x
-      if [ ! `echo $BUILD_SOURCEBRANCH | grep 'refs/tags/'` ];then if [ "$PHP_VERSION" = 7_4_X -o "$PHP_VERSION" = nightly ];then IS_PUSH=--push;else true;fi;else IS_PUSH=--push; fi
+
+      if [ ! `echo $BUILD_SOURCEBRANCH | grep 'refs/tags/'` ];then \
+        export PLATFORM=linux/amd64; \
+        if [ "$PHP_VERSION" = 7_4_X -o "$PHP_VERSION" = nightly ];then \
+          export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
+          IS_PUSH=--push; \
+        else \
+          true; \
+        fi; \
+      else \
+        IS_PUSH=--push; \
+      fi
+
       if [ -n "$UNIT" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
       if [ -n "$SUPERVISORD" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
       if [ -n "$COMPOSER" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
@@ -172,6 +183,7 @@ jobs:
       if [ -n "$FPM" ];then docker buildx build --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
     env:
       DOCKER_HUB_USERNAME: khs1994
+      PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
     displayName: 'Build Image'
     timeoutInMinutes: 0
 

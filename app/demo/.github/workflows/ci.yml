@@ -58,7 +58,7 @@ jobs:
         run: |
           set -x
           mysql -uroot --password=mytest -h 127.0.0.1 -P 13306 -e "show databases"
-          bash <(curl -s https://codecov.io/bash) -e PHP_VERSION
+          bash <(curl -s https://codecov.io/bash) -e PHP_VERSION -n "GitHub Actions"
         if: success()
       - name: after_failure
         run: echo "build error"
