@@ -1,17 +1,17 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.8
+ARG PHP_VERSION=7.4.0beta4
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG PHP_EXTENSION_EXTRA
+ARG PHP_EXTENSION_EXTRA="ffi"
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA
+ARG APK_EXTRA="libgcrypt"
 
-ARG APK_DEV_EXTRA
+ARG APK_DEV_EXTRA="libgpg-error-dev libgcrypt-dev"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
@@ -43,13 +43,13 @@ ENV PHP_EXTENSION \
       ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \
-      mongodb \
-      igbinary \
-      redis \
-      memcached \
+      mongodb-beta \
+      igbinary-beta \
+      redis-beta \
+      memcached-beta \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       xdebug-beta \
-      yaml \
+      yaml-beta \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
@@ -114,11 +114,10 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                     --with-libzip \
         && docker-php-ext-configure gd \
                                         --disable-gd-jis-conv \
-                                        --with-freetype-dir=/usr \
-                                        --with-jpeg-dir=/usr \
-                                        --with-png-dir=/usr \
-                                        --with-webp-dir=/usr \
-                                        --with-xpm-dir=/usr \
+                                        --with-freetype \
+                                        --with-jpeg \
+                                        --with-webp \
+                                        --with-xpm \
         && docker-php-ext-install $PHP_EXTENSION \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         && for extension in $PHP_EXTENSION;do \

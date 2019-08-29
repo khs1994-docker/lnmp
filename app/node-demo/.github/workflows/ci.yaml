@@ -1,0 +1,27 @@
+on:
+  push:
+
+name: CI
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 12
+      - name: install
+        run: |
+          npm i
+      - name: script
+        run: |
+          npm test
+      - name: after_success
+        run: |
+          npm build
+      - name: publish
+        run: |
+          npm publish

@@ -536,7 +536,7 @@ _gvisor_install(){
   sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
 
   sudo curl -fsSL -o /usr/local/bin/runsc \
-    https://github.com/khs1994-docker/gvisor-mirror/releases/download/nightly/runsc
+    https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc
 
   sudo chmod +x /usr/local/bin/runsc
 }

@@ -3,7 +3,10 @@
   "description": "Node Demo",
   "version": "18.12.0-alpha.0",
   "scripts": {
-    "prepublishOnly": "echo"
+    "prepublishOnly": "echo",
+    "test": "echo test",
+    "fmt": "npx prettier",
+    "build": "npx tsc"
   },
   "author": [
     {
