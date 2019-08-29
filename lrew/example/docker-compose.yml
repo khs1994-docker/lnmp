@@ -24,11 +24,11 @@ services:
       - "${LNMP_EXAMPLE_HTTP_PORT:-0.0.0.0:80}:80"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
-      - ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example/config/${LNMP_EXAMPLE_CONF:-example.conf}:/usr/local/etc/example.conf:cached
+      - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/config/${LNMP_EXAMPLE_CONF:-example.conf}:/usr/local/etc/example.conf:cached
       - ./log/example:/usr/local/apache2/logs:delegated
     env_file:
-      - ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example/.env.example
-      - ./vendor/${LNMP_EXAMPLE_VENDOR:-lnmp-include}/example/.env
+      - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env.example
+      - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env
     working_dir: /app
     # networks:
     #   - frontend

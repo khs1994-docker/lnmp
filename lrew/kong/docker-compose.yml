@@ -51,7 +51,7 @@ services:
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: "0.0.0.0:8001,0.0.0.0:8444 ssl"
     volumes:
-      - ./lnmp-include/kong/config:/etc/kong
+      - ./lrew/kong/config:/etc/kong
     networks:
       - frontend
       - backend

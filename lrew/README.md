@@ -1,4 +1,10 @@
-# lnmp-include-xxx
+# lrew
+
+Package manager for khs1994-docker/lnmp
+
+* https://docs.lnmp.khs1994.com/lrew.html
+
+# lrew-xxx
 
 ## `up` 命令调用
 

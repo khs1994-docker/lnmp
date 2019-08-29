@@ -39,5 +39,5 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 $global:LNMP_NODE_IMAGE="node:alpine"
 # $global:LNMP_NODE_IMAGE="khs1994/node:git"
 
-$global:LNMP_COMPOSE_INCLUDE="etcd","pcit"
-# $global:LNMP_COMPOSE_INCLUDE="etcd","pcit","minio"
+$global:LREW_INCLUDE="etcd","pcit"
+# $global:LREW_INCLUDE="etcd","pcit","minio"

@@ -53,7 +53,7 @@ development
 
 > **这个项目能不能增加 xxx 软件，可以！**
 
-请查看 [lnmp-include](lnmp-include.md)
+请查看 [lrew](lrew.md)
 
 ## 单独启动某个软件
 

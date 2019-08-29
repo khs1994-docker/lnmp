@@ -20,9 +20,9 @@ x-labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=self_build
 
 services:
-  nginx-unit:
+  mongodb:
     << : *default-labels
     build:
       << : *default-labels
-      << : *default-build
-      context: ./lnmp-include/nginx-unit
+      << : *default-build-debian
+      context: ./lrew/mongodb/

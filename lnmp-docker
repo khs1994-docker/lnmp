@@ -136,12 +136,12 @@ Commands:
   upgrade              Upgrades LNMP [ -f | ]
   update-version       Update LNMP soft to latest vesion
 
-lnmp-include(package):
-  init                 Init a new lnmp-include package
-  add                  Add new lnmp-include package
-  outdated             Shows a list of installed lnmp-include packages that have updates available
-  pkg-backup           Upload composer.json to GitHub Gist
-  pkg-update           Update lnmp-include package
+lrew(package):
+  init                 Init a new lrew package
+  add                  Add new lrew package
+  outdated             Shows a list of installed lrew packages that have updates available
+  lrew-backup          Upload composer.json to GitHub Gist
+  lrew-update          Update lrew package
 
 PHP Tools:
   httpd-config         Generate Apache2 vhost conf
@@ -386,34 +386,40 @@ _get_compose_options(){
     options+=" -f $compose_file "
   done
 
-  for compose_file in $LNMP_COMPOSE_INCLUDE
+  for compose_file in $LREW_INCLUDE
   do
-    if [ -d vendor/lnmp-include-dev/$compose_file ];then
-      LNMP_COMPOSE_INCLUDE_ROOT="vendor/lnmp-include-dev/$compose_file"
-    elif [ -d vendor/lnmp-include/$compose_file ];then
-      LNMP_COMPOSE_INCLUDE_ROOT="vendor/lnmp-include/$compose_file"
-    elif [ -d lnmp-include/$compose_file ];then
-      LNMP_COMPOSE_INCLUDE_ROOT="lnmp-include/$compose_file"
+    COMPOSE_FILE=$(echo $compose_file | tr '[a-z]' '[A-Z]')
+
+    if [ -d vendor/lrew-dev/$compose_file ];then
+      LREW_INCLUDE_ROOT="vendor/lrew-dev/$compose_file"
+      # set env
+      cat .env | grep "LREW_${COMPOSE_FILE}_VENDOR=lrew-dev" && true || echo "LREW_${COMPOSE_FILE}_VENDOR=lrew-dev" >> .env
+    elif [ -d vendor/lrew/$compose_file ];then
+      LREW_INCLUDE_ROOT="vendor/lrew/$compose_file"
+      # unset env
+      sed -i "s#^LREW_${COMPOSE_FILE}_VENDOR.*##g" .env
+    elif [ -d lrew/$compose_file ];then
+      LREW_INCLUDE_ROOT="lrew/$compose_file"
     else
       continue
     fi
 
     if [ $isBuild -eq 1 ];then
-      if ! [ -f "$LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.build.yml" ];then
-        options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml "
+      if ! [ -f "$LREW_INCLUDE_ROOT/docker-compose.build.yml" ];then
+        options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml "
         continue
       fi
 
-      options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.build.yml "
+      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml -f $LREW_INCLUDE_ROOT/docker-compose.build.yml "
 
       continue
     fi
 
-    if ! [ -f "$LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.override.yml" ];then
-      options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml "
+    if ! [ -f "$LREW_INCLUDE_ROOT/docker-compose.override.yml" ];then
+      options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml "
       continue
     fi
-    options+=" -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT/docker-compose.override.yml "
+    options+=" -f $LREW_INCLUDE_ROOT/docker-compose.yml -f $LREW_INCLUDE_ROOT/docker-compose.override.yml "
   done
 
   options+=" -f docker-lnmp.include.yml "
@@ -1266,13 +1272,13 @@ _package_add(){
 
   for package in "$@"
   do
-    composer require lnmp-include/$package --prefer-source
+    composer require lrew/$package --prefer-source
   done
 
   for package in "$@"
   do
-    if ! [ -d vendor/lnmp-include/$package ];then continue ; fi
-    cd vendor/lnmp-include/$package
+    if ! [ -d vendor/lrew/$package ];then continue ; fi
+    cd vendor/lrew/$package
     if [ -f bin/post-install ];then source bin/post-install ; fi
     cd ../../ > /dev/null
   done
@@ -1286,27 +1292,44 @@ _package_init(){
 
   local package=$1
 
-  if [ -d vendor/lnmp-include-dev/$package ];then
+  if [ -d vendor/lrew-dev/$package ];then
      print_error "This package already exists"
      exit 1
   fi
 
-  cp -r lnmp-include/example vendor/lnmp-include-dev/$package
+  mkdir -p vendor/lrew-dev
+
+  cp -r lrew/example vendor/lrew-dev/$package
 
   if [ `command -v composer` ];then
-     composer init -d vendor/lnmp-include-dev/$package \
-       --name "lnmp-include/$package" \
-       --homepage "https://docs.lnmp.khs1994.com/lnmp-include.html" \
+     composer init -d vendor/lrew-dev/$package \
+       --name "lrew/$package" \
+       --homepage "https://docs.lnmp.khs1994.com/lrew.html" \
        --license "MIT" \
        -q
+  fi
+
+  local items="docker-compose.yml docker-compose.override.yml docker-compose.build.yml"
+  local PACKAGE=$(echo $package | tr '[a-z]' '[A-Z]')
+
+  for item in $items
+  do
+    file="vendor/lrew-dev/$package/$item"
+    sed -i "s#LREW_EXAMPLE_VENDOR#LREW_${PACKAGE}_VENDOR#g" $file
+    sed -i "s#LNMP_EXAMPLE_#LNMP_${PACKAGE}_#g" $file
+    sed -i "s#example/#${package}/#g" $file
+  done
+
+  if [ -f "vendor/lrew-dev/$package/.env.example" ];then
+    cp -r "vendor/lrew-dev/$package/.env.example" "vendor/lrew-dev/$package/.env"
   fi
 }
 
 _package_outdated(){
-  if ! [ -d vendor/lnmp-include ];then return; fi
+  if ! [ -d vendor/lrew ];then return; fi
 
   if [ -z "$1" ];then
-    composer outdated "lnmp-include/*"
+    composer outdated "lrew/*"
     return
   fi
 
@@ -1318,10 +1341,10 @@ _package_backup(){
 }
 
 _package_update(){
-  if ! [ -d vendor/lnmp-include ];then return; fi
+  if ! [ -d vendor/lrew ];then return; fi
 
   if [ -z "$1" ];then
-    composer update "lnmp-include/*"
+    composer update "lrew/*"
     return
   fi
 
@@ -1329,8 +1352,8 @@ _package_update(){
 
   for package in "$@"
   do
-    if ! [ -d vendor/lnmp-include/$package ];then continue ; fi
-    cd vendor/lnmp-include/$package
+    if ! [ -d vendor/lrew/$package ];then continue ; fi
+    cd vendor/lrew/$package
     if [ -f bin/post-install ];then source bin/post-install ; fi
     cd ../../ > /dev/null
   done
@@ -1352,10 +1375,10 @@ main() {
   add )
     _package_add "$@"
     ;;
-  pkg-backup )
+  lrew-backup )
     _package_backup
     ;;
-  pkg-update )
+  lrew-update )
     _package_update "$@"
     ;;
   outdated )

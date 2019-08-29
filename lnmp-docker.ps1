@@ -211,12 +211,12 @@ Commands:
   upgrade              Upgrades LNMP
   update-version       Update LNMP soft to latest vesion
 
-lnmp-include(package):
-  init                 Init a new lnmp-include package
-  add                  Add new lnmp-include package
-  outdated             Shows a list of installed lnmp-include packages that have updates available
-  pkg-backup           Upload composer.json to GitHub Gist
-  pkg-update           Update lnmp-include package
+lrew(package):
+  init                 Init a new lrew package
+  add                  Add new lrew package
+  outdated             Shows a list of installed lrew packages that have updates available
+  lrew-backup          Upload composer.json to GitHub Gist
+  lrew-update          Update lrew package
 
 PHP Tools:
   httpd-config         Generate Apache2 vhost conf
@@ -378,33 +378,45 @@ Function get_compose_options($compose_files,$isBuild=0){
   {
     $options += " -f $compose_file "
   }
-  Foreach ($item in $LNMP_COMPOSE_INCLUDE)
+  Foreach ($item in $LREW_INCLUDE)
   {
-    if(Test-Path $PSScriptRoot/vendor/lnmp-include-dev/$item){
-      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/vendor/lnmp-include-dev/$item"
-    }elseif(Test-Path $PSScriptRoot/vendor/lnmp-include/$item){
-      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/vendor/lnmp-include/$item"
-    }elseif(Test-Path $PSScriptRoot/lnmp-include/$item){
-      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/lnmp-include/$item"
+    $KEY="LREW_${item}_VENDOR".ToUpper();
+    $content=$(cat .env | Where-Object {$_ -like "${KEY}=lrew-dev"})
+
+    if(Test-Path $PSScriptRoot/vendor/lrew-dev/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew-dev/$item"
+      # set env
+      if(!($content)){
+         echo "${KEY}=lrew-dev" >> .env
+      }
+    }elseif(Test-Path $PSScriptRoot/vendor/lrew/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew/$item"
+      # unset env
+      if($content){
+        @(Get-Content .env) -replace `
+          "${KEY}=lrew-dev",'' | Set-Content .env
+      }
+    }elseif(Test-Path $PSScriptRoot/lrew/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/lrew/$item"
     }else{
       continue
     }
 
     if($isBuild){
-      if(!(Test-Path "$LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.build.yml")){
-        $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml "
+      if(!(Test-Path "$LREW_INCLUDE_ROOT\docker-compose.build.yml")){
+        $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml "
         continue
       }
-      $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.build.yml "
+      $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml -f $LREW_INCLUDE_ROOT\docker-compose.build.yml "
 
       continue
     } # end build
 
-    if (!(Test-Path "$LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.override.yml")){
-      $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml "
+    if (!(Test-Path "$LREW_INCLUDE_ROOT\docker-compose.override.yml")){
+      $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml "
       continue
     }
-    $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.override.yml "
+    $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml -f $LREW_INCLUDE_ROOT\docker-compose.override.yml "
   }
 
   $options += " -f docker-lnmp.include.yml "
@@ -478,15 +490,15 @@ Function _package_add($packages=$null){
   }
 
   Foreach($package in $packages){
-    composer require lnmp-include/$package --prefer-source
+    composer require lrew/$package --prefer-source
   }
 
   Foreach($package in $packages){
-    if(!(Test-Path $PSScriptRoot/vendor/lnmp-include/$package)){
+    if(!(Test-Path $PSScriptRoot/vendor/lrew/$package)){
       continue
     }
 
-    cd $PSScriptRoot/vendor/lnmp-include/$package
+    cd $PSScriptRoot/vendor/lrew/$package
     if(Test-Path bin/post-install.ps1){
       . ./bin/post-install.ps1
     }
@@ -499,29 +511,49 @@ Function _package_init($package=$null){
      exit 1
   }
 
-  if(Test-Path vendor/lnmp-include-dev/$package){
+  if(Test-Path vendor/lrew-dev/$package){
      printInfo "This package already exists"
      return
    }
 
-   cp -r lnmp-include/example vendor/lnmp-include-dev/$package
+   cp -r lrew/example vendor/lrew-dev/$package
 
    if(_command composer){
-     composer init -d vendor/lnmp-include-dev/$package `
-       --name "lnmp-include/$package" `
-       --homepage "https://docs.lnmp.khs1994.com/lnmp-include.html" `
+     composer init -d vendor/lrew-dev/$package `
+       --name "lrew/$package" `
+       --homepage "https://docs.lnmp.khs1994.com/lrew.html" `
        --license "MIT" `
        -q
    }
-}
+
+   $items="docker-compose.yml","docker-compose.override.yml","docker-compose.build.yml"
+
+   Foreach ($item in $items)
+   {
+     $file="vendor/lrew-dev/$package/$item"
+
+     @(Get-Content $file) -replace `
+       'LREW_EXAMPLE_VENDOR',"LREW_${package}_VENDOR".ToUpper() | Set-Content $file
+
+     @(Get-Content $file) -replace `
+       'LNMP_EXAMPLE_',"LNMP_${package}".ToUpper() | Set-Content $file
+
+     @(Get-Content $file) -replace `
+       'example/',"${package}/" | Set-Content $file
+   }
+
+   if (Test-Path "vendor/lrew-dev/$package/.env.example"){
+     cp -r "vendor/lrew-dev/$package/.env.example" "vendor/lrew-dev/$package/.env"
+   }
+ }
 
 Function _package_outdated($packages=$null){
-  if (!(Test-Path vendor/lnmp-include)){
+  if (!(Test-Path vendor/lrew)){
     return
   }
 
   if(!$packages){
-    composer outdated "lnmp-include/*"
+    composer outdated "lrew/*"
     return
   }
 
@@ -529,23 +561,23 @@ Function _package_outdated($packages=$null){
 }
 
 Function _package_update($packages=$null){
-  if (!(Test-Path vendor/lnmp-include)){
+  if (!(Test-Path vendor/lrew)){
     return
   }
 
   if(!$packages){
-    composer update "lnmp-include/*"
+    composer update "lrew/*"
     return
   }
 
   composer update $packages
 
   Foreach($package in $packages){
-    if(!(Test-Path $PSScriptRoot/vendor/lnmp-include/$package)){
+    if(!(Test-Path $PSScriptRoot/vendor/lrew/$package)){
       continue
     }
 
-    cd $PSScriptRoot/vendor/lnmp-include/$package
+    cd $PSScriptRoot/vendor/lrew/$package
     if(Test-Path bin/post-install.ps1){
       . ./bin/post-install.ps1
     }

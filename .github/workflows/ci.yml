@@ -80,14 +80,14 @@ jobs:
         powershell -command "./windows/lnmp-windows-pm.ps1 init test"
         powershell -command "./windows/lnmp-windows-pm.ps1 add openjdk"
         powershell -command "./windows/lnmp-windows-pm.ps1 install openjdk"
-  lnmp-include:
+  lrew:
     needs: skip-ci
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
-    - name: lnmp-include-add
+    - name: lrew-add
       run: |
         echo extension=openssl >> C:\tools\php\php.ini
         powershell -command "./windows/lnmp-windows-pm.ps1 install composer"

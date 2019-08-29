@@ -26,4 +26,4 @@ services:
       << : *default-labels
       << : *default-build
       # << : *default-build-debian
-      context: ./lnmp-include/registry/
+      context: ./lrew/registry/

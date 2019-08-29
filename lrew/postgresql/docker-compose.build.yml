@@ -20,10 +20,10 @@ x-labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=self_build
 
 services:
-  httpd:
+  postgresql:
     << : *default-labels
     build:
       << : *default-labels
       << : *default-build
       # << : *default-build-debian
-      context: ./lnmp-include/httpd/
+      context: ./lrew/postgresql/
