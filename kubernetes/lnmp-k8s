@@ -413,10 +413,14 @@ _nginx_build(){
 }
 
 _etcd_install(){
-  # local url="https://github.com/etcd-io/etcd/releases/download"
+  local url_official="https://github.com/etcd-io/etcd/releases/download"
   local url="https://mirrors.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
+    httpCode=`curl -sI ${url}/v${ETCD_VERSION}/${TAR_FILE} | head -1 | awk '{print $2}'`
+    if [ $httpCode != 200 ];then
+      url=$url_official
+    fi
     sudo curl -fsSL ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
@@ -480,9 +484,15 @@ _helm_install(){
     return
   fi
 
+  local url_official="https://get.helm.sh"
   local url="https://mirrors.huaweicloud.com/helm/v${HELM_VERSION}"
   local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
+    httpCode=`curl -sI ${url}/${TAR_FILE} | head -1 | awk '{print $2}'`
+    if [ $httpCode != 200 ];then
+      url=$url_official
+    fi
+
     sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
