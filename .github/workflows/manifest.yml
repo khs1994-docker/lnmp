@@ -1,5 +1,6 @@
 on:
   push:
+  pull_request:
 
 name: Manifest
 
@@ -31,7 +32,7 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
-      - name: Test
+      - name: Check skip ci
         run: |
           echo "this build skip"
         if: |

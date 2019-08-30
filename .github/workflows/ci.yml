@@ -1,6 +1,13 @@
 name: CI
 
-on: push
+on:
+  push:
+    paths:
+      - '*'
+      - '!/docs/*'
+      - '!/drone/*'
+      - '!/kubernetes/*'
+  pull_request:
 
 jobs:
   skip-ci:

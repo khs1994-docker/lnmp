@@ -1,5 +1,6 @@
 on:
   push:
+  pull_request:
 
 name: CI
 
@@ -23,5 +24,6 @@ jobs:
         run: |
           npm build
       - name: publish
+        if: github.event_name == 'push' && contains(github.ref,'refs/tags/')
         run: |
           npm publish

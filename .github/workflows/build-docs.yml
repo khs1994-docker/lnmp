@@ -2,8 +2,14 @@
 
 on:
   push:
+    tags:
     branches:
     - 19.03
+    paths:
+    - '/docs/*'
+    - '/docs/*/*'
+    - '/docs/*/*/*'
+    - '/docs/*/*/*/*'
 
 name: Build Docs
 
