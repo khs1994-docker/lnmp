@@ -10,6 +10,9 @@ inputs:
   php_type:
     description: php image type, fpm composer or swoole
     default: fpm
+  job_container_network:
+    description: The id of the container network. The runner creates the network used by all containers in a job
+    default: bridge
 runs:
   using: 'node12'
   main: 'lib/setup-php.js'

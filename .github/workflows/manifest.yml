@@ -7,6 +7,9 @@ name: Manifest
 jobs:
   manifest:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:5.0.5-alpine
     steps:
       - name: Dump GitHub context
         env:
@@ -43,6 +46,8 @@ jobs:
       - name: System info
         run: |
           set -x
+
+          env
 
           echo $PATH
 

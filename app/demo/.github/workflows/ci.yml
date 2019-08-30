@@ -36,6 +36,7 @@ jobs:
         uses: khs1994-docker/actions-setup-php@master
         with:
           php_version: ${{ matrix.php_version }}
+          job_container_network: ${{ job.container.network }}
           args: |
             mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
                     /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true

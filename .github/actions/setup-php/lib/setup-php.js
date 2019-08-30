@@ -4,6 +4,7 @@ const core = require('@actions/core');
 const PHP_VERSION = core.getInput('php_version');
 const ARGS = core.getInput('args');
 const PHP_TYPE = core.getInput('php_type');
+const NETWORK = core.getInput('job_container_network') || 'bridge';
 
 // const RUNNER_WORKSPACE='/home/runner/work/php-demo'
 
@@ -17,8 +18,8 @@ async function run() {
     'ls',
   ]);
 
-  core.debug('get docker network create by service actions');
-  const NETWORK = await new Promise((resolve, reject) => {
+  core.debug('get docker network create by actions service');
+  const NETWORK2 = await new Promise((resolve, reject) => {
     const systemExec = require('child_process').exec;
     const cmd = 'docker network ls --filter name=github -q';
 
@@ -34,6 +35,7 @@ async function run() {
       resolve(stdout.trim() || 'bridge');
     });
   });
+
   core.debug(`docker network create by actions is : "${NETWORK}"`)
 
   const IMAGE = `khs1994/php:${PHP_VERSION}-${PHP_TYPE}-alpine`;
