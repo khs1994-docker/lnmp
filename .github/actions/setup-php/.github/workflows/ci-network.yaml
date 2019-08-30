@@ -1,0 +1,24 @@
+on:
+  push:
+  pull_request:
+
+name: Service Network
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: "Test Network"
+        uses: ./
+        # uses: khs1994-docker/actions-setup-php@master
+        with:
+          job_container_network: ${{ job.container.network }}
+          args: |
+            ping redis -c 4
+    services:
+      redis:
+        image: redis:5.0.5-alpine

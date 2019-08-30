@@ -103,7 +103,17 @@ jobs:
       install:
         - sudo rm /usr/local/bin/docker-compose
         - ./lnmp-docker compose --official -f
-      script: cli/test development
+      script:
+        - ./lnmp-docker services
+        - ./lnmp-docker config > docker-compose.yml
+        - docker-compose config -q
+
+        - docker-compose up -d $(./lnmp-docker services)
+        - sleep 20
+        - docker ps -a
+        - curl 127.0.0.1
+        - ./lnmp-docker down
+        - cli/test development
 
     - stage: swarm
       script:

@@ -16,7 +16,7 @@ docker run -it --rm `
     --network lnmp_backend `
     -e TZ=${TZ} `
     --entrypoint mysql `
-    mysql:8.0.11 `
+    mysql:8.0.17 `
     $args
 
 if($create){

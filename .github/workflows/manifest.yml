@@ -1,0 +1,80 @@
+on:
+  push:
+  pull_request:
+
+name: Manifest
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:5.0.5-alpine
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJson(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+      - name: Check skip ci
+        run: |
+          echo "this build skip"
+        if: |
+          contains( github.event.head_commit.message, '[skip ci]')
+          || contains( github.event.head_commit.message, '[skip action]')
+          || contains( github.event.head_commit.message, '[ci skip]')
+          || contains( github.event.head_commit.message, '[action skip]')
+      - name: System info
+        run: |
+          set -x
+
+          env
+
+          echo $PATH
+
+          sudo netstat -nlpt || true
+
+          sudo systemctl -t service --all || true
+          sudo systemctl -t service --all | grep mysql || true
+          sudo systemctl -t service --all | grep redis || true
+          sudo systemctl -t service --all | grep php || true
+
+          docker version
+          docker network ls
+          docker network ls | grep github || true
+          docker ps -a
+
+          mysql --version
+          sudo systemctl status mysql || true
+
+          sudo systemctl status redis || true
+
+          which php7.1 && php7.1 -v || true
+          which php7.2 && php7.2 -v || true
+          which php7.3 && php7.3 -v || true
+          which php && php -v || true
+
+          which go && go version || true
+
+          which node && node --version || true
+          which node12 && node12 --version || true
+          which npm && npm --version || true

@@ -4,7 +4,7 @@
 !composer/.env.example
 !composer/.env.example.ps1
 !composer/auth.example.json
-!etc
+!etc/**
 !httpd/demo-ssl
 !httpd/demo-*.config
 !httpd/README.md

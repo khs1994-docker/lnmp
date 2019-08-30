@@ -5,6 +5,11 @@ FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
+ARG VCS_REF
+
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+
 ARG PHP_EXTENSION_EXTRA
 
 ARG PECL_EXTENSION_EXTRA
@@ -160,7 +165,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/error.log \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm \
-        && rm -rf /usr/local/sbin/docker-php-* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
 WORKDIR /app

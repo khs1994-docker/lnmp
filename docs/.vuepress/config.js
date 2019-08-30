@@ -66,7 +66,7 @@ module.exports = {
           children: [
             '/development',
             '/custom',
-            '/lnmp-include',
+            '/lrew',
             '/backup',
             '/cleanup',
             '/config',
@@ -141,6 +141,7 @@ module.exports = {
             '/arm',
             '/ab',
             '/minio',
+            '/buildx',
           ]
         }
       ]

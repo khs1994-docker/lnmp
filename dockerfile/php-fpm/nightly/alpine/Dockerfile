@@ -3,6 +3,11 @@ FROM --platform=$TARGETPLATFORM alpine:3.10 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
+ARG VCS_REF
+
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 

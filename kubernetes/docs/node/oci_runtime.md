@@ -78,7 +78,7 @@ spec:
 ### Docker
 
 ```bash
-$ sudo curl -fsSL -o /usr/local/bin/runsc https://github.com/khs1994-docker/gvisor-mirror/releases/download/nightly/runsc
+$ sudo curl -fsSL -o /usr/local/bin/runsc https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc
 
 $ sudo chmod +x /usr/local/bin/runsc
 ```

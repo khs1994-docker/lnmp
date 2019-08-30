@@ -1,0 +1,105 @@
+version: "3.7"
+
+x-common:
+  &default-common
+  restart: always
+  env_file: ./cli/timezone.env
+  networks:
+    - backend
+  # dns:
+  #   - ${DNS:-114.114.114.114}
+
+x-common-label:
+  &default-common-label
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+services:
+
+  # https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
+  postgresql-kong:
+    << : *default-common
+    image: postgres:${LNMP_POSTGRESQL_VERSION:-11.4}-alpine
+    environment:
+      - POSTGRES_PASSWORD=mytest
+      - POSTGRES_DB=test
+      - POSTGRES_USER=kong
+      - POSTGRES_DB=kong
+    volumes:
+      - type: volume
+        source: postgresql-kong-data
+        target: /var/lib/postgresql/data
+    ports:
+      - "${LNMP_POSTGRESQL_PORT:-127.0.0.1:5432}:5432"
+    secrets:
+      # default is mysql password
+      - db_root_password
+
+  kong:
+    &kong
+    << : *default-common
+    image: kong:1.3.0-alpine
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: postgresql-kong
+      KONG_PG_PASSWORD: mytest
+      # KONG_CASSANDRA_CONTACT_POINS: 'kong-db'
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: "0.0.0.0:8001,0.0.0.0:8444 ssl"
+    volumes:
+      - ./lrew/kong/config:/etc/kong
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "18000:8000"
+      - "18443:8443"
+      - "127.0.0.1:18001:8001"
+      - "127.0.0.1:18444:8444"
+    depends_on:
+      - postgresql-kong
+
+  kong-migrations:
+    << : *kong
+    entrypoint:
+      - /docker-entrypoint.sh
+      - kong
+      - migrations
+    command:
+      - bootstrap
+
+  # https://github.com/PGBI/kong-dashboard
+  kong-dashboard:
+    << : *default-common
+    image: pgbi/kong-dashboard
+    ports:
+      - 8082:8080
+    command:
+      - start
+      - --kong-url
+      - http://kong:8001
+    networks:
+      - frontend
+
+  # https://github.com/pantsel/konga
+  konga:
+    << : *default-common
+    image: pantsel/konga
+    ports:
+      - "1337:1337"
+    networks:
+      - frontend
+    environment:
+      TOKEN_SECRET: mytoken
+    volumes:
+      - kongadata:/app/kongadata
+
+volumes:
+  postgresql-kong-data:
+    << : *default-common-label
+  kongadata:
+    << : *default-common-label

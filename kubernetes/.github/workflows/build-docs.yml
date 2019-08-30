@@ -2,6 +2,11 @@ on:
   push:
     branches:
     - master
+    paths:
+    - '/docs/*'
+    - '/docs/*/*'
+    - '/docs/*/*/*'
+    - '/docs/*/*/*/*'
 
 name: Build Docs
 

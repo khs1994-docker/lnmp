@@ -52,6 +52,7 @@ complete -W "acme.sh \
         restart \
         registry-up \
         registry-down \
+        services \
         satis \
         ssl \
         ssl-self \

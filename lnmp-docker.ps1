@@ -27,17 +27,32 @@ if(_command docker){
   $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
 }
 
+$outNull=$false
+
+if ($args[0] -eq "services"){
+  $outNull=$true
+}
+
 Function printError(){
+  if($outNull){
+    return
+  }
 Write-Host "`nError   " -NoNewLine -ForegroundColor Red
 Write-Host "$args`n";
 }
 
 Function printInfo(){
+  if($outNull){
+    return
+  }
 Write-Host "`nINFO    " -NoNewLine -ForegroundColor Green
 Write-Host "$args`n";
 }
 
 Function printWarning(){
+  if($outNull){
+    return
+  }
 Write-Host "`nWarning  " -NoNewLine -ForegroundColor Red
 Write-Host "$args`n";
 }
@@ -163,8 +178,7 @@ Function check_docker_version(){
 }
 
 Function init(){
-  docker-compose --version
-  docker volume create lnmp_composer_cache-data | out-null
+  printInfo $(docker-compose --version)
   logs
   # git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
@@ -207,16 +221,17 @@ Commands:
   pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
+  services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
   update-version       Update LNMP soft to latest vesion
 
-lnmp-include(package):
-  init                 Init a new lnmp-include package
-  add                  Add new lnmp-include package
-  outdated             Shows a list of installed lnmp-include packages that have updates available
-  pkg-backup           Upload composer.json to GitHub Gist
-  pkg-update           Update lnmp-include package
+lrew(package):
+  init                 Init a new lrew package
+  add                  Add new lrew package
+  outdated             Shows a list of installed lrew packages that have updates available
+  lrew-backup          Upload composer.json to GitHub Gist
+  lrew-update          Update lrew package
 
 PHP Tools:
   httpd-config         Generate Apache2 vhost conf
@@ -378,33 +393,45 @@ Function get_compose_options($compose_files,$isBuild=0){
   {
     $options += " -f $compose_file "
   }
-  Foreach ($item in $LNMP_COMPOSE_INCLUDE)
+  Foreach ($item in $LREW_INCLUDE)
   {
-    if(Test-Path $PSScriptRoot/vendor/lnmp-include-dev/$item){
-      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/vendor/lnmp-include-dev/$item"
-    }elseif(Test-Path $PSScriptRoot/vendor/lnmp-include/$item){
-      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/vendor/lnmp-include/$item"
-    }elseif(Test-Path $PSScriptRoot/lnmp-include/$item){
-      $LNMP_COMPOSE_INCLUDE_ROOT="$PSScriptRoot/lnmp-include/$item"
+    $KEY="LREW_${item}_VENDOR".ToUpper();
+    $content=$(cat .env | Where-Object {$_ -like "${KEY}=lrew-dev"})
+
+    if(Test-Path $PSScriptRoot/vendor/lrew-dev/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew-dev/$item"
+      # set env
+      if(!($content)){
+         echo "${KEY}=lrew-dev" >> .env
+      }
+    }elseif(Test-Path $PSScriptRoot/vendor/lrew/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew/$item"
+      # unset env
+      if($content){
+        @(Get-Content .env) -replace `
+          "${KEY}=lrew-dev",'' | Set-Content .env
+      }
+    }elseif(Test-Path $PSScriptRoot/lrew/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/lrew/$item"
     }else{
       continue
     }
 
     if($isBuild){
-      if(!(Test-Path "$LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.build.yml")){
-        $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml "
+      if(!(Test-Path "$LREW_INCLUDE_ROOT\docker-compose.build.yml")){
+        $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml "
         continue
       }
-      $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.build.yml "
+      $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml -f $LREW_INCLUDE_ROOT\docker-compose.build.yml "
 
       continue
     } # end build
 
-    if (!(Test-Path "$LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.override.yml")){
-      $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml "
+    if (!(Test-Path "$LREW_INCLUDE_ROOT\docker-compose.override.yml")){
+      $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml "
       continue
     }
-    $options +=" -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.yml -f $LNMP_COMPOSE_INCLUDE_ROOT\docker-compose.override.yml "
+    $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml -f $LREW_INCLUDE_ROOT\docker-compose.override.yml "
   }
 
   $options += " -f docker-lnmp.include.yml "
@@ -451,13 +478,16 @@ printInfo "Exec custom script"
 $env:DOCKER_HOST=$null
 
 if(_command docker){
-  $isWSL=docker context ls | where {$_ -match "wsl \*"}
+  if($(docker help context)){
 
-  if($isWSL){
-    printInfo "Docker Engine run in WSL2"
-    $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
-  }else{
-    $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
+    $isWSL=docker context ls | where {$_ -match "wsl \*"}
+
+    if($isWSL){
+      printInfo "Docker Engine run in WSL2"
+      $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
+    }else{
+      $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
+    }
   }
 }
 
@@ -471,111 +501,134 @@ if ($args.Count -eq 0){
   $command, $other = $args
 }
 
-Function _package_add($packages=$null){
+Function _lrew_add($packages=$null){
   if(!$packages){
      printError "Please Input package name"
      exit 1
   }
 
   Foreach($package in $packages){
-    composer require lnmp-include/$package --prefer-source
+    composer require lrew/$package --prefer-source
   }
 
   Foreach($package in $packages){
-    if(!(Test-Path $PSScriptRoot/vendor/lnmp-include/$package)){
+    if(!(Test-Path $PSScriptRoot/vendor/lrew/$package)){
       continue
     }
 
-    cd $PSScriptRoot/vendor/lnmp-include/$package
+    cd $PSScriptRoot/vendor/lrew/$package
     if(Test-Path bin/post-install.ps1){
       . ./bin/post-install.ps1
     }
   }
 }
 
-Function _package_init($package=$null){
+Function _lrew_init($package=$null){
   if(!$package){
      printError "Please Input package name"
      exit 1
   }
 
-  if(Test-Path vendor/lnmp-include-dev/$package){
+  if(Test-Path vendor/lrew-dev/$package){
      printInfo "This package already exists"
      return
    }
 
-   cp -r lnmp-include/example vendor/lnmp-include-dev/$package
+   cp -r lrew/example vendor/lrew-dev/$package
 
    if(_command composer){
-     composer init -d vendor/lnmp-include-dev/$package `
-       --name "lnmp-include/$package" `
-       --homepage "https://docs.lnmp.khs1994.com/lnmp-include.html" `
+     composer init -d vendor/lrew-dev/$package `
+       --name "lrew/$package" `
+       --homepage "https://docs.lnmp.khs1994.com/lrew.html" `
        --license "MIT" `
        -q
    }
-}
 
-Function _package_outdated($packages=$null){
-  if (!(Test-Path vendor/lnmp-include)){
+   $items="docker-compose.yml","docker-compose.override.yml","docker-compose.build.yml"
+
+   Foreach ($item in $items)
+   {
+     $file="vendor/lrew-dev/$package/$item"
+
+     @(Get-Content $file) -replace `
+       'LREW_EXAMPLE_VENDOR',"LREW_${package}_VENDOR".ToUpper() | Set-Content $file
+
+     @(Get-Content $file) -replace `
+       'LNMP_EXAMPLE_',"LNMP_${package}".ToUpper() | Set-Content $file
+
+     @(Get-Content $file) -replace `
+       'example/',"${package}/" | Set-Content $file
+
+     @(Get-Content $file) -replace `
+        '{{example}}',"${package}" | Set-Content $file
+   }
+
+   if (Test-Path "vendor/lrew-dev/$package/.env.example"){
+     cp -r "vendor/lrew-dev/$package/.env.example" "vendor/lrew-dev/$package/.env"
+   }
+ }
+
+Function _lrew_outdated($packages=$null){
+  if (!(Test-Path vendor/lrew)){
     return
   }
 
   if(!$packages){
-    composer outdated "lnmp-include/*"
+    composer outdated "lrew/*"
     return
   }
 
   composer outdated $packages
 }
 
-Function _package_update($packages=$null){
-  if (!(Test-Path vendor/lnmp-include)){
+Function _lrew_update($packages=$null){
+  if (!(Test-Path vendor/lrew)){
     return
   }
 
   if(!$packages){
-    composer update "lnmp-include/*"
+    composer update "lrew/*"
     return
   }
 
   composer update $packages
 
   Foreach($package in $packages){
-    if(!(Test-Path $PSScriptRoot/vendor/lnmp-include/$package)){
+    if(!(Test-Path $PSScriptRoot/vendor/lrew/$package)){
       continue
     }
 
-    cd $PSScriptRoot/vendor/lnmp-include/$package
+    cd $PSScriptRoot/vendor/lrew/$package
     if(Test-Path bin/post-install.ps1){
       . ./bin/post-install.ps1
     }
   }
 }
 
-Function _package_backup(){
+Function _lrew_backup(){
 
 }
 
 switch -regex ($command){
 
     init {
-      _package_init $other
+      _lrew_init $other
     }
 
     add {
-      _package_add $other
+      _lrew_add $other
     }
 
     outdated {
-      _package_outdated $other
+      _lrew_outdated $other
     }
 
     pkg-backup {
-      _package_backup
+      _lrew_backup
     }
 
     pkg-update {
-      _package_update $other
+      _lrew_update $other
     }
 
     httpd-config {
@@ -596,14 +649,19 @@ switch -regex ($command){
     }
 
     build {
-      $options=get_compose_options "docker-lnmp.yml", `
+      if ($command -eq "build"){
+        $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-      powershell -c "docker-compose $options build $other --parallel"
+        powershell -c "docker-compose $options build $other --parallel"
+      }
     }
 
     build-config {
+
+      logs
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
@@ -636,6 +694,8 @@ switch -regex ($command){
     }
 
     config {
+      logs
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
@@ -653,22 +713,26 @@ switch -regex ($command){
       _update
     }
 
+    services {
+      echo ${LNMP_SERVICES}
+    }
+
     up {
       init
 
       if($other){
-        $command = $other
+        $services = $other
       }else{
-        $command = ${LNMP_SERVICES}
+        $services = ${LNMP_SERVICES}
       }
 
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      powershell -c "docker-compose $options up -d $command"
+      powershell -c "docker-compose $options up -d $services"
 
       #@custom
-      __lnmp_custom_up $command
+      __lnmp_custom_up $services
     }
 
     pull {

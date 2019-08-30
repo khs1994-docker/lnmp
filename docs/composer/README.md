@@ -37,7 +37,7 @@ $ composer config -g repos.packagist composer https://packagist.phpcomposer.com
 ### 取消配置
 
 ```bash
-$ composer config --unset repos.packagist
+$ composer config -g --unset repos.packagist
 ```
 
 ### 主页

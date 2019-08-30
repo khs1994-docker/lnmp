@@ -1,6 +1,11 @@
 # syntax=docker/dockerfile:experimental
 FROM --platform=$TARGETPLATFORM alpine:3.10 as php
 
+ARG VCS_REF
+
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV TZ=Asia/Shanghai \
@@ -410,7 +415,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            && make \
            && make install \
            && rm -rf /tmp/${EXT_REAL_NAME}) \
-           && docker-php-ext-enable ${EXT_REAL_NAME} || echo "pecl ${extension} install error" \
+           && docker-php-ext-enable ${EXT_REAL_NAME} || (echo "pecl ${extension} install error") \
            && rm -rf /usr/local/include/php/ext/${EXT_REAL_NAME} \
            && strip --strip-all $(php-config --extension-dir)/${EXT_REAL_NAME}.so || true ; \
          done \

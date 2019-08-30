@@ -60,8 +60,7 @@ volumes:
   phpmyadmin-data:
     << : *default-common
   composer_cache-data:
-    external: true
-    name: lnmp_composer_cache-data
+    << : *default-common
 
 secrets:
   db_root_password:

@@ -3,7 +3,14 @@ name: CI
 on:
   push:
     branches:
-    - master
+      - master
+    paths:
+      - '*'
+      - '/.github/*'
+      - '!/docs/*'
+      - '!/drone/*'
+      - '!/kubernetes/*'
+  pull_request:
 
 jobs:
   skip-ci:
@@ -26,6 +33,7 @@ jobs:
         fetch-depth: 2
     - name: Update docker
       run: |
+        set -x
         docker --version
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
@@ -38,15 +46,29 @@ jobs:
         sudo systemctl status docker
     - name: Update docker compose
       run: |
+        set -x
         docker-compose --version
         ./lnmp-docker compose --official
     - name: before_script
       run: |
+        set -x
         sudo systemctl stop mysql
     - name: Up
-      run: ./lnmp-docker up
+      run: |
+        set -x
+        ./lnmp-docker config > docker-compose.yml
+        docker-compose config -q
+
+        docker-compose up -d $(./lnmp-docker services)
+        sleep 20
+        docker ps -a
+        curl 127.0.0.1
+        ./lnmp-docker down
+
+        ./lnmp-docker up
     - name: Connect
       run: |
+        set -x
         sleep 20
         curl 127.0.0.1
     - name: Down
@@ -61,7 +83,7 @@ jobs:
       with:
         fetch-depth: 2
     - name: exec
-      run:
+      run: |
         powershell -command "./lnmp-docker.ps1"
   lwpm:
     needs: skip-ci
@@ -83,14 +105,14 @@ jobs:
         powershell -command "./windows/lnmp-windows-pm.ps1 init test"
         powershell -command "./windows/lnmp-windows-pm.ps1 add openjdk"
         powershell -command "./windows/lnmp-windows-pm.ps1 install openjdk"
-  lnmp-include:
+  lrew:
     needs: skip-ci
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
-    - name: lnmp-include-add
+    - name: lrew-add
       run: |
         echo extension=openssl >> C:\tools\php\php.ini
         powershell -command "./windows/lnmp-windows-pm.ps1 install composer"

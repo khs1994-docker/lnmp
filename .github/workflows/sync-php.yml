@@ -1,7 +1,10 @@
 on:
   push:
+    tags:
     branches:
     - 19.03-pre
+    paths:
+    - '/dockerfile/php-fpm/*'
 
 name: Sync PHP
 
