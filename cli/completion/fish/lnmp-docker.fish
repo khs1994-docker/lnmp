@@ -92,7 +92,7 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a nfs               -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a cookbooks         -d     'Up local cookbooks server'
 
 ##
-
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a services          -d      'List services'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a update            -d      'Upgrades LNMP'
 complete -c lnmp-docker -n '__fish_seen_subcommand_from update' -s f  -f   -d      'Force update'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a upgrade           -d      'Upgrades LNMP'

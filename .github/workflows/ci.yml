@@ -41,7 +41,10 @@ jobs:
       run: |
         sudo systemctl stop mysql
     - name: Up
-      run: ./lnmp-docker up
+      run: |
+        ./lnmp-docker config > docker-compose.yml
+        docker-compose config -q
+        ./lnmp-docker up
     - name: Connect
       run: |
         sleep 20
@@ -58,7 +61,7 @@ jobs:
       with:
         fetch-depth: 2
     - name: exec
-      run:
+      run: |
         powershell -command "./lnmp-docker.ps1"
   lwpm:
     needs: skip-ci

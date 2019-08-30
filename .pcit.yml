@@ -8,9 +8,11 @@ pipeline:
     commands:
       - pwd
       - bash ./lnmp-docker
+      - bash ./lnmp-docker services
 
   # https://hub.docker.com/_/microsoft-powershell?tab=description
   powershell:
     image: mcr.microsoft.com/powershell:alpine-3.8
     commands:
       - pwsh ./lnmp-docker.ps1
+      - pwsh ./lnmp-docker.ps1 services

@@ -10,6 +10,8 @@
 
 ### Changes:
 
+* Add CLI `services` command
+
 ### Updates:
 
 * [PHP `7.3.8` `7.2.21` `7.1.31`](https://www.php.net/ChangeLog-7.php#7.3.8)

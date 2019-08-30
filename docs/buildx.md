@@ -17,3 +17,18 @@ $ docker buildx create --use --name=mybuilder --driver docker-container --driver
 ```bash
 $ docker buildx create --use --name=mybuilder --driver docker-container
 ```
+
+## ARG
+
+```docker
+# syntax=docker/dockerfile:experimental
+ARG TARGETPLATFORM - platform of the build result. Eg linux/amd64, linux/arm/v7, windows/amd64.
+ARG TARGETOS - OS component of TARGETPLATFORM
+ARG TARGETARCH - architecture component of TARGETPLATFORM
+ARG TARGETVARIANT - variant component of TARGETPLATFORM
+
+ARG BUILDPLATFORM - platform of the node performing the build.
+ARG BUILDOS - OS component of BUILDPLATFORM
+ARG BUILDARCH - OS component of BUILDPLATFORM
+ARG BUILDVARIANT - OS component of BUILDPLATFORM
+```

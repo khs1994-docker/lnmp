@@ -39,6 +39,12 @@ build_script:
   # - pwsh: docker-compose --version
   - pwsh: ./lnmp-docker
   - pwsh: icacls d:\lnmp\log /grant 'DockerExchange:f' /T
+  - pwsh: |
+      ./lnmp-docker services
+      ./lnmp-docker config | out-file docker-compose.yml
+      docker-compose config -q
+      ./lnmp-docker config > docker-compose.yml
+      docker-compose config -q
   - pwsh: ./lnmp-docker up
   - pwsh: |
       sleep 60

@@ -27,17 +27,32 @@ if(_command docker){
   $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
 }
 
+$outNull=$false
+
+if ($args[0] -eq "services"){
+  $outNull=$true
+}
+
 Function printError(){
+  if($outNull){
+    return
+  }
 Write-Host "`nError   " -NoNewLine -ForegroundColor Red
 Write-Host "$args`n";
 }
 
 Function printInfo(){
+  if($outNull){
+    return
+  }
 Write-Host "`nINFO    " -NoNewLine -ForegroundColor Green
 Write-Host "$args`n";
 }
 
 Function printWarning(){
+  if($outNull){
+    return
+  }
 Write-Host "`nWarning  " -NoNewLine -ForegroundColor Red
 Write-Host "$args`n";
 }
@@ -163,8 +178,7 @@ Function check_docker_version(){
 }
 
 Function init(){
-  docker-compose --version
-  docker volume create lnmp_composer_cache-data | out-null
+  printInfo $(docker-compose --version)
   logs
   # git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
@@ -207,6 +221,7 @@ Commands:
   pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
+  services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
   update-version       Update LNMP soft to latest vesion
@@ -483,7 +498,7 @@ if ($args.Count -eq 0){
   $command, $other = $args
 }
 
-Function _package_add($packages=$null){
+Function _lrew_add($packages=$null){
   if(!$packages){
      printError "Please Input package name"
      exit 1
@@ -505,7 +520,7 @@ Function _package_add($packages=$null){
   }
 }
 
-Function _package_init($package=$null){
+Function _lrew_init($package=$null){
   if(!$package){
      printError "Please Input package name"
      exit 1
@@ -540,6 +555,9 @@ Function _package_init($package=$null){
 
      @(Get-Content $file) -replace `
        'example/',"${package}/" | Set-Content $file
+
+     @(Get-Content $file) -replace `
+        '{{example}}',"${package}" | Set-Content $file
    }
 
    if (Test-Path "vendor/lrew-dev/$package/.env.example"){
@@ -547,7 +565,7 @@ Function _package_init($package=$null){
    }
  }
 
-Function _package_outdated($packages=$null){
+Function _lrew_outdated($packages=$null){
   if (!(Test-Path vendor/lrew)){
     return
   }
@@ -560,7 +578,7 @@ Function _package_outdated($packages=$null){
   composer outdated $packages
 }
 
-Function _package_update($packages=$null){
+Function _lrew_update($packages=$null){
   if (!(Test-Path vendor/lrew)){
     return
   }
@@ -584,30 +602,30 @@ Function _package_update($packages=$null){
   }
 }
 
-Function _package_backup(){
+Function _lrew_backup(){
 
 }
 
 switch -regex ($command){
 
     init {
-      _package_init $other
+      _lrew_init $other
     }
 
     add {
-      _package_add $other
+      _lrew_add $other
     }
 
     outdated {
-      _package_outdated $other
+      _lrew_outdated $other
     }
 
     pkg-backup {
-      _package_backup
+      _lrew_backup
     }
 
     pkg-update {
-      _package_update $other
+      _lrew_update $other
     }
 
     httpd-config {
@@ -628,14 +646,19 @@ switch -regex ($command){
     }
 
     build {
-      $options=get_compose_options "docker-lnmp.yml", `
+      if ($command -eq "build"){
+        $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-      powershell -c "docker-compose $options build $other --parallel"
+        powershell -c "docker-compose $options build $other --parallel"
+      }
     }
 
     build-config {
+
+      logs
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
@@ -668,6 +691,8 @@ switch -regex ($command){
     }
 
     config {
+      logs
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
@@ -685,22 +710,26 @@ switch -regex ($command){
       _update
     }
 
+    services {
+      echo ${LNMP_SERVICES}
+    }
+
     up {
       init
 
       if($other){
-        $command = $other
+        $services = $other
       }else{
-        $command = ${LNMP_SERVICES}
+        $services = ${LNMP_SERVICES}
       }
 
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      powershell -c "docker-compose $options up -d $command"
+      powershell -c "docker-compose $options up -d $services"
 
       #@custom
-      __lnmp_custom_up $command
+      __lnmp_custom_up $services
     }
 
     pull {

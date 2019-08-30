@@ -77,3 +77,23 @@ $ ln -s $LNMP_PATH/cli/completion/fish/lnmp-docker.fish ~/.config/fish/completio
 >`docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
 
 调试参数配置时请把 `up -d` 替换为 `config` 即可。
+
+### 使用 docker-compose 命令
+
+> 我就是不想使用你提供的 `CLI`，我就爱 `docker-compose` 命令，怎们办？
+
+本项目支持生成标准的 `docker-compose.yml` 文件，执行以下命令即可。
+
+**注意: 每次修改 .env 文件，必须重新执行此命令**
+
+```bash
+$ ./lnmp-docker config > docker-compose.yml
+```
+
+之后就可以使用 `docker-compose` 命令执行熟悉的各种命令
+
+```bash
+$ docker-compose up $(./lnmp-docker services)
+
+$ docker-compose down
+```
