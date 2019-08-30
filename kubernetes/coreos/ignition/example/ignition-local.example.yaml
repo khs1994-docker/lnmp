@@ -79,6 +79,7 @@ systemd:
           -p 2380:2380 -p 2379:2379 \
           gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
           etcd \
+          --enable-v2=true \
           --name="coreos{{n}}" \
           --cert-file=${K8S_ROOT}/certs/etcd.pem \
           --key-file=${K8S_ROOT}/certs/etcd-key.pem \
