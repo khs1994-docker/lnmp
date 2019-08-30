@@ -23,8 +23,6 @@ $ wsl -l -v
 
 部分设置项可能与 `windows/README.md` 重复，保证设置过即可，建议操作之前先大概明白每条指令的意义！
 
-**Windows PATH 变量会默认传递到 WSL**
-
 打开 PowerShell
 
 ```bash
@@ -39,8 +37,10 @@ $ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\window
 $ sudo vi /etc/profile
 
 # 在文件末尾添加如下内容
-export WSL_HOME=/c/Users/90621 # 注意替换为自己的实际路径
+export WSL_HOME=/mnt/c/Users/90621 # 注意替换为自己的实际路径
+export LNMP_PATH=$WSL_HOME/lnmp
 export APP_ENV=wsl
+export PATH=$LNMP_PATH:$LNMP_PATH/bin:$LNMP_PATH/wsl:/usr/share/docker-desktop/default/cli/bin:$PATH
 
 $ vi ~/.bashrc
 

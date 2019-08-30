@@ -23,6 +23,7 @@ jobs:
         fetch-depth: 2
     - name: Update docker
       run: |
+        set -x
         docker --version
         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
         sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
@@ -35,18 +36,29 @@ jobs:
         sudo systemctl status docker
     - name: Update docker compose
       run: |
+        set -x
         docker-compose --version
         ./lnmp-docker compose --official
     - name: before_script
       run: |
+        set -x
         sudo systemctl stop mysql
     - name: Up
       run: |
+        set -x
         ./lnmp-docker config > docker-compose.yml
         docker-compose config -q
+
+        docker-compose up -d $(./lnmp-docker services)
+        sleep 20
+        docker ps -a
+        curl 127.0.0.1
+        ./lnmp-docker down
+
         ./lnmp-docker up
     - name: Connect
       run: |
+        set -x
         sleep 20
         curl 127.0.0.1
     - name: Down

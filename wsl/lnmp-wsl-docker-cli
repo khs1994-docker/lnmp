@@ -6,8 +6,8 @@
 
 ################################################################################
 
-DOCKER_VERSION=${1:-19.03.0-beta5}
-DOCKER_BUILDX_VERSION=0.2.2
+DOCKER_VERSION=${1:-19.03.2-rc1}
+DOCKER_BUILDX_VERSION=0.3.0
 ################################################################################
 
 set -ex
@@ -25,7 +25,7 @@ command -v docker && DOCKER_CURRENT_VERSION=$( docker --version | cut -d ' ' -f 
 cd /tmp
 
 download_docker(){
-  curl -SL http://mirrors.ustc.edu.cn/docker-ce/linux/static/test/x86_64/docker-${DOCKER_VERSION}.tgz | tar -zxvf -
+  curl -SL https://mirrors.ustc.edu.cn/docker-ce/linux/static/test/x86_64/docker-${DOCKER_VERSION}.tgz | tar -zxvf -
 }
 
 if [ -d docker ];then

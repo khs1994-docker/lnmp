@@ -478,13 +478,16 @@ printInfo "Exec custom script"
 $env:DOCKER_HOST=$null
 
 if(_command docker){
-  $isWSL=docker context ls | where {$_ -match "wsl \*"}
+  if($(docker help context)){
 
-  if($isWSL){
-    printInfo "Docker Engine run in WSL2"
-    $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
-  }else{
-    $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
+    $isWSL=docker context ls | where {$_ -match "wsl \*"}
+
+    if($isWSL){
+      printInfo "Docker Engine run in WSL2"
+      $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
+    }else{
+      $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
+    }
   }
 }
 

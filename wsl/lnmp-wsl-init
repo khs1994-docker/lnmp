@@ -2,15 +2,15 @@
 
 # WSL init
 
-sudo sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
-sudo sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+sudo sed -i "s#deb.debian.org#mirrors.aliyun.com#g" /etc/apt/sources.list
+sudo sed -i "s#security.debian.org#mirrors.aliyun.com#g" /etc/apt/sources.list
 
-sudo sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
-sudo sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
+sudo sed -i "s#archive.ubuntu.com#mirrors.aliyun.com#g" /etc/apt/sources.list
+sudo sed -i "s#security.ubuntu.com#mirrors.aliyun.com#g" /etc/apt/sources.list
 
 if [ -z "$APP_ENV" ];then echo "export APP_ENV=wsl" >> ~/.bashrc; fi
 
-if [ -z "$WSL_HOME" ];then echo "export WSL_HOME=/c/Users/90621" >> ~/.bashrc; fi
+if [ -z "$WSL_HOME" ];then echo "export WSL_HOME=/mnt/c/Users/90621" >> ~/.bashrc; fi
 
 if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bashrc; fi
 
@@ -23,14 +23,18 @@ if [ -z "$DOCKER_HOST" ];then
 fi
 
 # WSL2
-if [ `uname -r` = '4.19.43-microsoft-standard' ];then
+if [ -f /usr/share/docker-desktop/default/cli/bin/docker ];then
 
   if [ -z "$WSL2_WINDOWS_HOST" ];then
-    echo "export WSL2_WINDOWS_HOST=\$(nslookup 127.0.0.1 | awk -F ":" '{print \$2}' | head -n 1 | sed \"s#\\t##g\")" >> ~/.bashrc;
+    echo "export WSL2_WINDOWS_HOST=\$(cat /etc/resolv.conf | grep nameserver | awk '{print \$2}' | head -1)" >> ~/.bashrc;
   fi
 
-  if [ -z "$DOCKER_HOST" ];then
-    echo "export DOCKER_HOST=\${WSL2_WINDOWS_HOST}:2376" >> ~/.bashrc
+  if [ -z "$WINDOWS_DOCKER_HOST" ];then
+    echo "export WINDOWS_DOCKER_HOST=\${WSL2_WINDOWS_HOST}:2376" >> ~/.bashrc
+  fi
+
+  if [ -n "$DOCKER_HOST" ];then
+    sed -i "s#^export DOCKER_HOST=.*##g" ~/.bashrc
   fi
 
 fi
@@ -67,18 +71,18 @@ sudo curl -L \
 fi
 
 # verify
-
-docker --version
+source ~/.bashrc
+docker version
 
 # cp docker desktop k8s config
 
 mkdir -p ${HOME}/.kube
 
-for user in `ls /c/Users`;
+for user in `ls /mnt/c/Users`;
 do
-  if [ -f "/c/Users/${user}/.kube/config" ];then
+  if [ -f "/mnt/c/Users/${user}/.kube/config" ];then
     if ! [ -f "${HOME}/.kube/config" ];then
-      cp "/c/Users/${user}/.kube/config" ${HOME}/.kube/config
+      cp "/mnt/c/Users/${user}/.kube/config" ${HOME}/.kube/config
 
       echo -e "\n\n==> copy .kube folder success\n\n"
 

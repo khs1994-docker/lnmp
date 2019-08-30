@@ -93,7 +93,7 @@ $ ./lnmp-docker config > docker-compose.yml
 之后就可以使用 `docker-compose` 命令执行熟悉的各种命令
 
 ```bash
-$ docker-compose up $(./lnmp-docker services)
+$ docker-compose up -d $(./lnmp-docker services)
 
 $ docker-compose down
 ```
