@@ -4,11 +4,11 @@ version: "3.7"
 # This file override docker-compose.yml
 #
 
-x-ci:
+x-production:
   &production
   environment:
     - DRONE_SERVER_HOST=khs1994.jios.org:18000
-    - DRONE_SERVER_PROTO=https
+    - DRONE_SERVER_PROTO=http
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     - DRONE_USER_CREATE=${DRONE_USER_CREATE}
     - DRONE_USER_FILTER=${DRONE_USER_FILTER}
@@ -16,30 +16,30 @@ x-ci:
     - DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID_TEST}
     - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET_TEST}
     #
-    - DRONE_DATABASE_DRIVER=mysql
-    - DRONE_DATABASE_DATASOURCE=root:mytest@tcp(mysql:3306)/gogs?parseTime=true
+    - DRONE_DATABASE_DRIVER={{ DB_TYPE }}
+    - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/{{ DB_DATABASE }}?parseTime=true
     - DRONE_GITHUB_SERVER=https://github.com
 
 x-gogs:
   &gogs
   environment:
     - DRONE_SERVER_HOST={{ DRONE_SERVER_HOST }}
-    - DRONE_SERVER_PROTO=https
+    - DRONE_SERVER_PROTO=http
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     #
     - DRONE_GOGS_SERVER={{ DRONE_GOGS_SERVER }}
     - DRONE_GOGS_PRIVATE_MODE=${DRONE_GOGS_PRIVATE_MODE:-true}
     - DRONE_TLS_AUTOCERT=false
     #
-    - DRONE_DATABASE_DRIVER=mysql
-    - DRONE_DATABASE_DATASOURCE=root:mytest@tcp(mysql:3306)/gogs?parseTime=true
+    - DRONE_DATABASE_DRIVER={{ DB_TYPE }}
+    - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/gogs?parseTime=true
 
 x-github:
   &github
   environment:
     - DRONE_GITHUB_SERVER=${DRONE_GITHUB_SERVER:-https://github.com}
     - DRONE_SERVER_HOST={{ DRONE_SERVER_HOST }}
-    - DRONE_SERVER_PROTO=https
+    - DRONE_SERVER_PROTO=http
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     #
     - DRONE_USER_CREATE=${DRONE_USER_CREATE}
@@ -47,36 +47,22 @@ x-github:
     - DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID}
     - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET}
     #
-    - DRONE_DATABASE_DRIVER=mysql
-    - DRONE_DATABASE_DATASOURCE=root:mytest@tcp(mysql:3306)/gogs?parseTime=true
-
-# Don't use this config
-x-coding:
-  &coding
-  environment:
-    - DRONE_HOST={{ DRONE_SERVER_HOST }}
-    - DRONE_SERVER_PROTO=https
-    - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
-    #
-    - DRONE_CODING_CLIENT=${DRONE_CODING_CLIENT}
-    - DRONE_CODING_SECRET=${DRONE_CODING_SECRET}
-    #
-    - DRONE_DATABASE_DRIVER=mysql
-    - DRONE_DATABASE_DATASOURCE=root:mytest@tcp(mysql:3306)/gogs?parseTime=true
+    - DRONE_DATABASE_DRIVER={{ DB_TYPE }}
+    - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/gogs?parseTime=true
 
 x-gitlab:
   &gitlab
   environment:
     - DRONE_SERVER_HOST={{ DRONE_SERVER_HOST }}
-    - DRONE_SERVER_PROTO=https
+    - DRONE_SERVER_PROTO=http
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     #
     - DRONE_GITLAB_CLIENT_ID=${DRONE_GITLAB_CLIENT_ID}
     - DRONE_GITLAB_CLIENT_SECRET=${DRONE_GITLAB_CLIENT_SECRET}
     - DRONE_GITLAB_SERVER={{ DRONE_GITLAB_SERVER }}
     #
-    - DRONE_DATABASE_DRIVER=mysql
-    - DRONE_DATABASE_DATASOURCE=root:mytest@tcp(mysql:3306)/gogs?parseTime=true
+    - DRONE_DATABASE_DRIVER={{ DB_TYPE }}
+    - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/gogs?parseTime=true
 
 services:
   drone-server:
