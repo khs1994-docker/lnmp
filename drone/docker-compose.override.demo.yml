@@ -71,6 +71,9 @@ services:
     # << : *gitlab
     # << : *coding
     # << : *production
+  drone-agent:
+    # ports:
+    #   - 3000:3000
 
 # networks:
 #   backend:
