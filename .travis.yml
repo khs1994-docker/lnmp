@@ -113,13 +113,13 @@ jobs:
         - docker ps -a
         - curl 127.0.0.1
         - ./lnmp-docker down
-        - cli/test development
+        - QUITE=true ./lnmp-docker test development
 
     - stage: swarm
       script:
         - sudo rm /usr/local/bin/docker-compose
         - ./lnmp-docker compose --official -f
-        - cli/test swarm
+        - QUITE=true ./lnmp-docker test swarm
 
     # wsl-debian
 

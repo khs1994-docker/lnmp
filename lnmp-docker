@@ -11,10 +11,10 @@
 # sudo ? only need by install docker-compose
 #
 
-tty=
-tty -s && tty=--tty
-
 set -e
+
+tty=
+tty -s && tty=--tty || true
 
 readonly KUBERNETES_VERSION=1.14.3
 readonly DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
@@ -50,12 +50,12 @@ notsupport(){
 }
 
 check_nginx_conf(){
-  set +e
   echo "$LNMP_SERVICES" | grep -q 'minio' \
     || ( ls config/${LNMP_NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
-    && ( print_error \
-    "your .env file not include minio, but nginx conf.d folder include minio.conf"))
-  set -e
+         && ( print_error \
+              "your .env file not include minio, but nginx conf.d folder include minio.conf" \
+            ) || true \
+        )
 }
 
 _cp_only_not_exists(){
@@ -1409,7 +1409,7 @@ main() {
     ;;
 
   test )
-    run_docker; cli/test
+    run_docker; cli/test $@
     ;;
 
   completion )

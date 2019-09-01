@@ -10,7 +10,11 @@ if [ "$debug" = 'true' ];then set -x; fi
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-docker run -it --rm \
+source $ScriptRoot/.arch
+
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
+docker run -i ${tty} --rm \
   --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
   --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
   --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
@@ -20,7 +24,7 @@ docker run -it --rm \
    chown -R ${LNMP_USER} /tmp/node/yarn; \
   "
 
-docker run -it --rm \
+docker run -i ${tty} --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=delegated \
     --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
     --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \

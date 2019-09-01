@@ -21,3 +21,6 @@ export TAG=${VERSION}-composer-alpine
 export DOCKER_IMAGE=khs1994/php
 
 export LNMP_USER=`id -u`:`id -g`
+
+export tty=
+tty -s && export tty=--tty || true

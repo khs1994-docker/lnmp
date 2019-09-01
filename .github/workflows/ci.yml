@@ -4,10 +4,10 @@ on:
   push:
     paths:
       - '*'
-      - '/.github/*'
       - '!/docs/*'
-      - '!/drone/*'
-      - '!/kubernetes/*'
+      # - '/.github/*'
+      # - '!/drone/*'
+      # - '!/kubernetes/*'
   pull_request:
 
 jobs:
@@ -73,6 +73,17 @@ jobs:
       run: ./lnmp-docker down
     - name: pwsh
       run: pwsh -command "./lnmp-docker.ps1"
+    - name: CLI
+      run: |
+        export LNMP_PATH=$PWD
+        export PATH=$PWD/bin:$PATH
+
+        set -x
+        lnmp-php -v
+        lnmp-composer --version
+
+        lnmp-npm -v
+        lnmp-yarn -v
   pw:
     needs: skip-ci
     runs-on: windows-latest

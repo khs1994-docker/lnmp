@@ -8,7 +8,7 @@ ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $ScriptRoot/.arch
 
-docker run -it --rm \
+docker run -i ${tty} --rm \
   --mount type=volume,src=lnmp_npm_cache-data,target=/tmp/node/.npm \
   --mount type=volume,src=lnmp_npm_global-data,target=/tmp/node/npm \
   bash \
@@ -17,7 +17,7 @@ docker run -it --rm \
    chown -R ${LNMP_USER} /tmp/node/npm; \
   "
 
-docker run -it --rm \
+docker run -i ${tty} --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=delegated \
     --mount type=bind,src=${ScriptRoot}/../config/npm/.npmrc,target=/usr/local/etc/npmrc \
     --mount type=volume,src=lnmp_npm_cache-data,target=/tmp/node/.npm \
