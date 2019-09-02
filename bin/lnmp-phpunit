@@ -10,7 +10,9 @@ if ! [ -f vendor/bin/phpunit ];then
   lnmp-composer install
 fi
 
-docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)
+checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+
+test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
@@ -22,30 +24,17 @@ source $ScriptRoot/.arch
 
 . $ScriptRoot/../.env
 
-docker run --init -i ${tty} --rm \
+if [ "$debug" = 'true' ];then set -x; fi
+
+exec docker run --init -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
   --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
-  --network lnmp_backend \
+  --network $network \
   --entrypoint vendor/bin/phpunit \
   -e APP_ENV=testing \
   -e TZ=${TZ} \
   --user ${LNMP_USER:-root:root} \
   ${DOCKER_IMAGE}:${TAG} \
-  -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log "$@" || \
-  docker run --init -i ${tty} --rm \
-    --mount type=bind,src=$PWD,target=/app,consistency=cached \
-    --mount src=lnmp_composer_cache-data,target=/tmp/cache \
-    --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
-    --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
-    --entrypoint vendor/bin/phpunit \
-    -e APP_ENV=testing \
-    -e TZ=${TZ} \
-    --user ${LNMP_USER:-root:root} \
-    ${DOCKER_IMAGE}:${TAG} \
-    -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log "$@"
-
-if ! [ -z "$CREATE" ];then
-  docker network rm lnmp_backend
-fi
+  -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log "$@"

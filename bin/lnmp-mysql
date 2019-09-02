@@ -3,27 +3,23 @@
 #
 # https://github.com/mysql/mysql-server
 #
+# $ lnmp-mysql -uroot -pmytest -h mysql
 
 set -e
 
-docker network inspect lnmp_backend > /dev/null 2>&1 || (docker network create lnmp_backend; CRETAT=true)
+checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+
+test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
 source $ScriptRoot/.arch
 
-docker run -i ${tty} --rm \
-    --network lnmp_backend \
+if [ "$debug" = 'true' ];then set -x; fi
+
+exec docker run -i ${tty} --rm \
+    --network $network \
     --entrypoint mysql \
     -e TZ=${TZ} \
-    mysql:${LNMP_MYSQL_VERSION:-8.0.17} \
-    "$@" || docker run -i ${tty} --rm \
-    --entrypoint mysql \
-    -e TZ=${TZ} \
-    --user ${LNMP_USER:-root:root} \
     mysql:${LNMP_MYSQL_VERSION:-8.0.17} \
     "$@"
-
-if ! [ -z "$CREATE" ];then
-    docker network rm lnmp_backend > /dev/null 2>&1
-fi

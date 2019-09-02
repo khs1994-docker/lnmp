@@ -17,7 +17,7 @@ if [ -z "$GITHUB_TOKEN" ];then
   exit 1
 fi
 
-docker run -i ${tty} --rm \
+exec docker run -i ${tty} --rm \
     --mount type=bind,source=$PWD,target=/app,consistency=cached \
     --mount source=lnmp_travis-data,target=/root/.travis \
     -e GITHUB_TOKEN=$GITHUB_TOKEN \

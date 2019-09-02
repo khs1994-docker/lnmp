@@ -8,6 +8,8 @@ source $ScriptRoot/.arch
 source $ScriptRoot/../config/composer/.env.example
 source $ScriptRoot/../config/composer/.env
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 if [ -z $1 ];then echo "Please input project name,Example $ lnmp-tp my-project-name" ; exit 1 ; fi
 
 tp_path=$1
@@ -24,7 +26,7 @@ docker run -i ${tty} --rm \
    chown -R ${LNMP_USER} ${COMPOSER_HOME}; \
   "
 
-docker run -i ${tty} --rm \
+exec docker run -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=delegated \
   --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \

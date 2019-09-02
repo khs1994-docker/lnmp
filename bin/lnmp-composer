@@ -10,7 +10,13 @@ source $ScriptRoot/.arch
 source $ScriptRoot/../config/composer/.env.example
 source $ScriptRoot/../config/composer/.env
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 LNMP_USER=`id -u`:`id -g`
+
+checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+
+test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
 docker run -i ${tty} --rm \
   --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} \
@@ -22,7 +28,7 @@ docker run -i ${tty} --rm \
    chown -R ${LNMP_USER} ${COMPOSER_HOME}; \
   "
 
-docker run -i ${tty} --rm \
+exec docker run -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=delegated \
   --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
@@ -30,5 +36,6 @@ docker run -i ${tty} --rm \
   --env-file $ScriptRoot/../config/composer/.env \
   --entrypoint /docker-entrypoint.composer.sh \
   --user ${LNMP_USER:-root:root} \
+  --network $network \
   ${DOCKER_IMAGE}:${TAG} \
   composer "$@"

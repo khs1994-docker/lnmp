@@ -21,6 +21,8 @@ source $ScriptRoot/.arch
 source $ScriptRoot/../config/composer/.env.example
 source $ScriptRoot/../config/composer/.env
 
+if [ "$debug" = 'true' ];then set -x; fi
+
 if ! [ -d "$2" ];then
 
 docker run -i ${tty} --rm \
