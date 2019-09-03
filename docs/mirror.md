@@ -4,6 +4,7 @@
 
 * https://github.com/ustclug/mirrorrequest/issues?utf8=%E2%9C%93&q=gcr
 * https://www.akscn.io/help/gcr-proxy-cache.html
+* https://hub.qiniu.com/home
 
 `https://dockerhub.azk8s.cn`
 
@@ -23,8 +24,6 @@
 
 替换 `gcr.io` 为 `gcr.mirrors.ustc.edu.cn`
 
-替换 `quay.io` 为 `quay.mirrors.ustc.edu.cn`
-
 ### 阿里云
 
 ```bash
@@ -35,10 +34,16 @@ $ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-das
 
 `https://gcr-mirror.qiniu.com`
 
-`https://quay-mirror.qiniu.com`
-
 ### Azure
+
+`https://gcr.azk8s.cn`
 
 ```bash
 $ docker pull gcr.azk8s.cn/google-containers/pause:3.0
 ```
+
+## quay.io
+
+`https://quay.mirrors.ustc.edu.cn`
+`https://quay-mirror.qiniu.com`
+`https://quay.azk8s.cn`

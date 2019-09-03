@@ -2,12 +2,13 @@
 Description=containerd container runtime for kubernetes
 Documentation=https://containerd.io
 After=network.target
-Conflicts=kube-containerd-130
+Conflicts=kube-containerd
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay
-ExecStart=/usr/bin/containerd \
-          --config /etc/kube-containerd/config.toml
+
+ExecStart=/usr/local/bin/kube-containerd \
+          --config /etc/kube-containerd/1.3.0/config.toml
 
 KillMode=process
 Delegate=yes

@@ -529,6 +529,16 @@ _gvisor_containerd_conf(){
 [plugins.cri.containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
 EOF
+
+# containerd 1.3.0
+cat <<EOF | sudo tee -a /etc/kube-containerd/1.3.0/config.toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
+  runtime_type = "io.containerd.runsc.v1"
+  # runtime_engine = ""
+  # runtime_root = ""
+  # privileged_without_host_devices = false
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
+EOF
 }
 
 _gvisor_crio_conf(){
@@ -569,9 +579,44 @@ _runc_install(){
 }
 
 _containerd_install(){
-  if [ `command -v containerd` ];then print_info "containerd already install"; \
-    containerd --version;return; fi
-  print_info "install containerd ..."
+  if [ `command -v containerd || false` -a ! "$1" = "--dry-run" ];then \
+    print_info "containerd already install"; \
+    containerd --version; fi
+
+  if [ -f /usr/local/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
+    print_info "containerd 1.3.0 already install"; \
+    /usr/local/bin/kube-containerd --version;return; fi
+
+  print_info "install containerd 1.3.0 ..."
+
+  local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+  local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
+  __download(){
+    sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+  }
+
+  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256sum | cut -d " " -f 1` ];then
+      sudo rm -rf ${TMP_ROOT}/${TAR_FILE}
+      __download
+    fi
+  else
+      __download
+  fi
+
+  if [ "$1" = "--dry-run" ];then
+    print_info "download containerd success"
+    return
+  fi
+
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/local
+
+  sudo mv /usr/local/bin/containerd /usr/local/bin/kube-containerd
+  sudo mv /usr/local/bin/containerd-shim /usr/local/bin/kube-containerd-shim
+  # sudo mv /usr/local/bin/containerd-shim-runc-v1
+  # sudo mv /usr/local/bin/containerd-shim-runc-v2
+  # sudo mv /usr/local/bin/containerd-stress
 }
 
 _cni_install(){
@@ -868,9 +913,10 @@ _crio_config(){
 _containerd_cri_config(){
   _cni_install
   print_info "config containerd ..."
-  sudo mkdir -p /etc/kube-containerd/
+  sudo mkdir -p /etc/kube-containerd/1.3.0
   # containerd config default > /etc/kube-containerd/config.toml
   sudo cp systemd/etc/kube-containerd/config.toml /etc/kube-containerd/
+  sudo cp systemd/etc/kube-containerd/1.3.0/config.toml /etc/kube-containerd/1.3.0/
 
   _cri_config
 

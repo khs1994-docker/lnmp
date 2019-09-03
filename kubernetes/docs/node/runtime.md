@@ -10,6 +10,7 @@
 * http://dockone.io/article/5806
 * https://kubernetes.io/blog/2017/11/containerd-container-runtime-options-kubernetes/
 * https://kubernetes.io/blog/2018/05/24/kubernetes-containerd-integration-goes-ga/
+* https://github.com/containerd/cri/blob/master/docs/config.md
 
 ## CRI-O
 
@@ -29,3 +30,7 @@ $ sudo systemctl disable libvirtd.service
 ```
 
 * https://www.cnblogs.com/cloudos/p/8288041.html
+
+### 镜像加速器
+
+最好在运行时级别设置好镜像加速器，例如 `gcr.io` => `https://gcr.azk8s.cn`,具体请查看运行时配置文件。
