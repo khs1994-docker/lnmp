@@ -9,7 +9,7 @@
 # !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
 
 ARG NODE_VERSION=12.9.1
-ARG PHP_VERSION=7.3.8
+ARG PHP_VERSION=7.3.9
 ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
@@ -36,7 +36,7 @@ RUN cd /app \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.8-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.9-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/
@@ -51,7 +51,7 @@ RUN cd /app \
              --no-plugins
 
 # 3.将项目打入 PHP 镜像
-# $ docker build -t khs1994/php:7.3.8-pro-GIT_TAG-alpine --target=php .
+# $ docker build -t khs1994/php:7.3.9-pro-GIT_TAG-alpine --target=php .
 FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
 
 COPY . /app/EXAMPLE/
