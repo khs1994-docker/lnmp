@@ -2,7 +2,7 @@ language: go
 # language: bash
 
 go:
-- 1.12
+- 1.12.9
 
 services:
 - docker
@@ -179,6 +179,7 @@ script:
   - git diff
   - cd cli ; (sh generate.sh || true); cd ..
   - git diff
+  - sudo netstat -lnpt
 
 after_success:
   - ./tests/test.sh

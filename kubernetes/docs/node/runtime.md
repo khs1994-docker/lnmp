@@ -17,3 +17,15 @@
 * https://github.com/cri-o/cri-o#installing-cri-o
 * https://github.com/cri-o/cri-o/blob/master/tutorial.md
 * https://github.com/cri-o/cri-o/blob/master/tutorials/kubernetes.md
+
+### Fedora kubernetes DNS 解析不了
+
+与 `virbr0` 网卡有关，关闭相关进程。
+
+```bash
+$ sudo nmcli device delete virbr0
+
+$ sudo systemctl disable libvirtd.service
+```
+
+* https://www.cnblogs.com/cloudos/p/8288041.html

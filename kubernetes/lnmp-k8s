@@ -443,7 +443,7 @@ _etcd_install(){
     return
   fi
 
-  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT} > /dev/null 2>&1
   sudo cp ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ${K8S_ROOT}/bin/
   sudo chown -R root:root ${K8S_ROOT}/bin/
   sudo rm -rf ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
@@ -540,15 +540,26 @@ EOF
 }
 
 _gvisor_install(){
-  print_info "install gvisor ..."
-  sudo curl -fsSL -o /usr/local/bin/containerd-shim-runsc-v1 \
-    https://github.com/google/gvisor-containerd-shim/releases/download/v0.0.3/containerd-shim-runsc-v1.linux-amd64
-  sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
+  print_info "install gvisor(runsc) ..."
+  local url="https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/"
+  local TAR_FILE="runsc-linux-amd64.tar.gz"
 
-  sudo curl -fsSL -o /usr/local/bin/runsc \
-    https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc
+  __download(){
+    sudo curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+  }
 
-  sudo chmod +x /usr/local/bin/runsc
+  if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+    __download
+  fi
+
+  if [ "$1" = "--dry-run" ];then
+    print_info "download gvisor(runsc) success"
+    return
+  fi
+
+  sudo tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/local/bin
+
+  runsc --version
 }
 
 _runc_install(){
