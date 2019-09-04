@@ -74,6 +74,7 @@ systemd:
         ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
 
         ExecStartPre=-podman container rm etcd
+        ExecStartPre=-/bin/podman pull gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION}
         ExecStart= podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
           -v /var/lib/etcd:/var/lib/etcd \

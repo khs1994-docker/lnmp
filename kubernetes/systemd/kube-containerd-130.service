@@ -2,7 +2,7 @@
 Description=containerd container runtime for kubernetes
 Documentation=https://containerd.io
 After=network.target
-Conflicts=kube-containerd
+Conflicts=kube-containerd.service
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay

@@ -50,6 +50,7 @@ do
             ${KUBE_APISERVER} \
             ${CONTAINER_RUNTIME} \
             ${CONTAINER_RUNTIME_ENDPOINT} \
+            ${CONTAINERD_VERSION} \
            ' \
   < $item.yaml > $item.yaml.source
 
@@ -77,6 +78,7 @@ for i in `seq ${NODE_NUM}`;do
             ${KUBE_APISERVER} \
             ${CONTAINER_RUNTIME} \
             ${CONTAINER_RUNTIME_ENDPOINT} \
+            ${CONTAINERD_VERSION} \
            ' \
   < ignition-$i.yaml > ignition-$i.yaml.source
 

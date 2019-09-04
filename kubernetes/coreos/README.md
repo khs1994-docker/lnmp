@@ -27,7 +27,14 @@
 
 > VirtualBox 增加 hostonly 网络 **192.168.57.1** 网段:
 
-VirtualBox -> 管理 -> 主机网络管理器 -> 创建（保证 IPv4 网络掩码 **192.168.57.1/24**）（初次配置点击两次创建）
+```bash
+# 首次使用执行两次，保证存在 vboxnet1 网卡，到 VirtualBox -> 管理 -> 主机网络管理器 查看
+$ VBoxManage hostonlyif create
+
+$ VBoxManage hostonlyif ipconfig vboxnet1 --ip 192.168.57.1 --netmask 255.255.255.0
+```
+
+VirtualBox -> 管理 -> 主机网络管理器 -> vboxnet1 -> 启用 DHCP 服务器（右边）
 
 ### 下载相关文件
 
