@@ -3,13 +3,34 @@
 * https://github.com/AliyunContainerService/minikube
 * https://yq.aliyun.com/articles/221687
 
+## 安装
+
 ```bash
-$ ./lnmp-k8s minikube-install
+$ GOOS=linux # darwin
+$ MINIKUBE_VERSION=0.30.0
+$ url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-${GOOS}-amd64
 
-# move minikube to your PATH
-$ ./lnmp-k8s minikube
+$ sudo curl -L $url -o /usr/local/bin/minikube
+```
 
-# create
+## 启动
+
+```bash
+# macOS
+$ minikube start \
+  -v 10 \
+  --registry-mirror=https://dockerhub.azk8s.cn \
+  --vm-driver="hyperkit" \
+  --memory=4096
+
+# linux
+$ minikube start \
+  -v 10 \
+  --registry-mirror=https://dockerhub.azk8s.cn \
+  --vm-driver="none"
+```
+
+```bash
 $ minikube service nginx --url
 
 http://192.168.64.98:32228

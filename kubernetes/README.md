@@ -10,8 +10,6 @@
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
-* **Windows** 用户务必安装 `WSL`
-
 ## Kubernetes 基础设施(从 0 开始部署 Kubernetes 集群)
 
 * [自己手动部署 Kubernetes 集群(CoreOS)](coreos)
