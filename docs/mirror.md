@@ -39,6 +39,8 @@ $ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-das
 `https://gcr.azk8s.cn`
 
 ```bash
+$ docker pull k8s.gcr.io/pause:3.0
+$ docker pull gcr.io/google-containers/pause:3.0
 $ docker pull gcr.azk8s.cn/google-containers/pause:3.0
 ```
 

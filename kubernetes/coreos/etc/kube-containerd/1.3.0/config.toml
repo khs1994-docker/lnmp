@@ -97,7 +97,7 @@ oom_score = 0
             # BinaryName = "kube-containerd-shim"
             # BinaryName = "containerd-shim-runc-v1"
     [plugins."io.containerd.grpc.v1.cri".cni]
-      bin_dir = "/opt/k8s/cni/bin"
+      bin_dir = "/usr/libexec/cni"
       conf_dir = "/opt/k8s/cni/net.d"
       max_conf_num = 1
       conf_template = ""

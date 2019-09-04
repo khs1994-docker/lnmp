@@ -1074,11 +1074,6 @@ kube-proxy.kubeconfig} \
   _k8s_install_kubectl_conf
 }
 
-_k8s_start(){
-  sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler \
-                       kube-proxy kubelet
-}
-
 _helm_lnmp(){
   cd helm
   lnmp_app_env=$1
@@ -1096,16 +1091,18 @@ _helm_lnmp(){
   done
 }
 
-_local_start(){
+_local_up(){
   echo "
 $ sudo systemctl start etcd
 $ sudo systemctl start flanneld
-$ sudo systemctl start docker
+
 $ sudo systemctl start kube-apiserver
 $ sudo systemctl start kube-controller-manager
 $ sudo systemctl start kube-scheduler
+
 $ sudo systemctl start kube-proxy
 $ sudo systemctl start kubelet
+$ sudo systemctl start docker
 "
 }
 
@@ -1189,8 +1186,8 @@ case $_command in
       _k8s_install $@
     ;;
 
-    local-start )
-      _local_start
+    local-up )
+      _local_up
     ;;
 
     local-cleanup )
