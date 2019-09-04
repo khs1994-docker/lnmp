@@ -14,4 +14,4 @@ services:
     image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.1
 
   metrics_server:
-    image: k8s.gcr.io/metrics-server-amd64:v0.3.3
+    image: k8s.gcr.io/metrics-server-amd64:v0.3.4
