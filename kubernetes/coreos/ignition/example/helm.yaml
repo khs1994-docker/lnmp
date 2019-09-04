@@ -7,10 +7,12 @@ systemd:
       contents: |
         [Unit]
         Description=helm installer
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
         Restart=on-failure
-        RestartSec=5        
+        RestartSec=5
         WorkingDirectory=/home/core/.lnmp/caches
         ExecStartPre=mkdir -p ${K8S_ROOT}/bin
         ExecStartPre=bash -c "if ! [ `${K8S_ROOT}/bin/helm --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/helm; fi"

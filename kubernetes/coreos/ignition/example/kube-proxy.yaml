@@ -8,7 +8,8 @@ systemd:
         [Unit]
         Description=Kubernetes Kube-Proxy Server
         Documentation=https://github.com/kubernetes/kubernetes
-        After=network.target
+        After=network-online.target network.target
+        Wants=network-online.target
 
         [Service]
 

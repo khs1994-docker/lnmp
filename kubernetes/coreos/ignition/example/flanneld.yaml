@@ -7,6 +7,8 @@ systemd:
       contents: |
         [Unit]
         Description=flanneld installer
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
         Restart=on-failure
@@ -29,6 +31,8 @@ systemd:
         #Requires=etcd.service
         #After=etcd.service
         #Before=docker.service
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
         Type=notify

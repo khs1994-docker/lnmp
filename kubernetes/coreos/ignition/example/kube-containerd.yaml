@@ -8,6 +8,8 @@ systemd:
       contents: |
         [Unit]
         Description=containerd installer
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
         Restart=on-failure
@@ -29,7 +31,8 @@ systemd:
         [Unit]
         Description=containerd container runtime for kubernetes
         Documentation=https://containerd.io
-        After=network.target
+        After=network-online.target network.target
+        Wants=network-online.target
 
         [Service]
         ExecStartPre=-/sbin/modprobe overlay

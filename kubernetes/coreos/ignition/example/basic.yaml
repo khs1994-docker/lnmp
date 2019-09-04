@@ -18,10 +18,12 @@ systemd:
       contents: |
         [Unit]
         Description=flanneld installer
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
         Restart=on-failure
-        RestartSec=5        
+        RestartSec=5
         WorkingDirectory=/home/core/.lnmp/caches
         ExecStartPre=mkdir -p ${K8S_ROOT}/bin
         ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/flanneld ];then \

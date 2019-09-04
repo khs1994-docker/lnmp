@@ -54,6 +54,8 @@ systemd:
         # Conflicts 冲突
         # Condition...：当前 Unit 运行必须满足的条件，否则不会运行
         # Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
 
@@ -76,7 +78,6 @@ systemd:
           -e ETCD_DATA_DIR \
           -v /var/lib/etcd:/var/lib/etcd \
           -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
-          -p 2380:2380 -p 2379:2379 \
           gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
           etcd \
           --enable-v2=true \
@@ -121,17 +122,25 @@ systemd:
         [Unit]
         Description=Kubernetes API Server
         Documentation=https://github.com/kubernetes/kubernetes
-        After=network.target
         # Requires=etcd.service
+        After=network-online.target network.target
+        Wants=network-online.target
 
         [Service]
         # Flag --experimental-encryption-provider-config has been deprecated, use --encryption-provider-config.
         # --insecure-port has been deprecated, This flag will be removed in a future version.
 
         Environment="K8S_ROOT=${K8S_ROOT}"
+
         ExecStartPre=mkdir -p /var/log/kubernetes
 
-        ExecStart=${K8S_ROOT}/bin/kube-apiserver \
+        ExecStart=podman run \
+        --name kube-apiserver \
+        -v ${K8S_ROOT}:${K8S_ROOT} \
+        -v /var/log/kubernetes:/var/log/kubernetes \
+        --network host \
+        k8s.gcr.io/kube-apiserver:{{KUBERNETES_VERSION}} \
+        kube-apiserver \
         --advertise-address={{IP_{{n}}}} \
         --default-not-ready-toleration-seconds=360 \
         --default-unreachable-toleration-seconds=360 \
@@ -187,7 +196,7 @@ systemd:
 
         Restart=on-failure
         RestartSec=5
-        Type=notify
+        # Type=notify
         LimitNOFILE=65536
         TimeoutStartSec=0
 
@@ -200,6 +209,8 @@ systemd:
         Description=Kubernetes Controller Manager
         Documentation=https://github.com/kubernetes/kubernetes
         # Requires=kube-apiserver.service
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
 
@@ -209,7 +220,12 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStart=${K8S_ROOT}/bin/kube-controller-manager \
+        ExecStart=podman run \
+        --name kube-controller-manager \
+        -v ${K8S_ROOT}:${K8S_ROOT} \
+        --network host \
+        k8s.gcr.io/kube-controller-manager:{{KUBERNETES_VERSION}} \
+        kube-controller-manager \
         --profiling \
         --cluster-name=kubernetes \
         --controllers=*,bootstrapsigner,tokencleaner \
@@ -259,12 +275,18 @@ systemd:
         Description=Kubernetes Scheduler
         Documentation=https://github.com/kubernetes/kubernetes
         # Requires=kube-apiserver.service
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStart=${K8S_ROOT}/bin/kube-scheduler \
+        ExecStart=podman run --name=kube-scheduler \
+        --network host \
+        -v ${K8S_ROOT}:${K8S_ROOT} \
+        k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}} \
+        kube-scheduler \
         --config=${K8S_ROOT}/conf/kube-scheduler.yaml \
         --bind-address={{IP_{{n}}}} \
         --secure-port=10259 \
@@ -309,6 +331,8 @@ systemd:
         Documentation=https://github.com/kubernetes/kubernetes
         # After=docker.service
         # Requires=docker.service
+        After=network-online.target
+        Wants=network-online.target
 
         [Service]
         WorkingDirectory=/home/core

@@ -62,6 +62,8 @@ systemd:
         Documentation=https://github.com/kubernetes/kubernetes
         # After=docker.service
         # Requires=docker.service
+        After=network-online.target
+        Wants=network-online.target        
 
         [Service]
         WorkingDirectory=/home/core
