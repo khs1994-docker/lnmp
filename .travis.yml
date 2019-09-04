@@ -1,8 +1,8 @@
 language: bash
 
 # dist: trusty # 14.04
-dist: xenial # 16.04
-# dist: bionic # 18.04
+# dist: xenial # 16.04
+dist: bionic # 18.04
 
 services:
 - docker
@@ -16,12 +16,12 @@ env:
   - LNMP_PATH=/home/travis/build/khs1994-docker/lnmp
   - LNMP_BRANCH=19.03
 
-matrix:
-  include:
-    # - os: windows
-    #   dist: 1803-containers
-    - os: linux
-      dist: xenial
+# matrix:
+#   include:
+#     # - os: windows
+#     #   dist: 1803-containers
+#     - os: linux
+#       dist: xenial
 
 before_install:
 - date
@@ -35,6 +35,8 @@ before_install:
 - DOCKER_VERSION=$(apt-cache madison docker-ce | grep ${LNMP_BRANCH} | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
 - echo ${DOCKER_VERSION}
 - sudo apt-get -y install docker-ce=${DOCKER_VERSION}
+- sudo cat /etc/docker/daemon.json || true
+- cat /etc/resolv.conf
 - docker version
 
 # 升级最新 Docker Compose
