@@ -139,7 +139,11 @@ _get_kubernetes_server_by_docker_image(){
   fi
 
   if [ -z "${K8S_IMAGE}" ];then
-    K8S_IMAGE=ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
+    if [ "${ENABLE_CN_MIRROR}" ];then
+      K8S_IMAGE=ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
+    else
+      K8S_IMAGE=uswccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}
+    fi
   fi
 
   sudo docker manifest inspect ${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image

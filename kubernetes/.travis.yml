@@ -197,6 +197,7 @@ after_success:
   - ./tests/test.sh
 # switch containerd 1.3.0
   - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--containerd" && sudo systemctl start kube-containerd-130
+  - sleep 30
   - sudo crictl version
   - sudo crictl info
 
@@ -208,13 +209,13 @@ matrix:
   include:
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.14.2
