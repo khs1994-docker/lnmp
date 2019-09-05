@@ -52,3 +52,17 @@ jobs:
                     /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
             set -x
             php -v
+  notsupport-platform:
+    strategy:
+      matrix:
+        os:
+         - windows-latest
+         - macOS-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Without version
+        uses: ./
+        # uses: khs1994-docker/actions-setup-php@master

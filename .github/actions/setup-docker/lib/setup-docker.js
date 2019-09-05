@@ -1,5 +1,6 @@
 const exec = require('@actions/exec');
 const core = require('@actions/core');
+const os = require('os');
 
 const DOCKER_VERSION = core.getInput('docker_version');
 const DOCKER_CHANNEL = core.getInput('docker_channel');
@@ -23,6 +24,15 @@ async function shell(cmd) {
 }
 
 async function run() {
+  const platform = os.platform();
+
+  if (platform !== 'linux') {
+    core.debug('check platform');
+    await exec.exec('echo',
+      [`Only Support linux platform, this platform is ${os.platform()}`]);
+    return
+  }
+
   core.debug('check docker version');
   await exec.exec('docker', [
     'version',
@@ -42,7 +52,7 @@ async function run() {
   ]);
 
   core.debug('add apt source');
-  const UBUNTU_CODENAME=await shell('lsb_release -cs');
+  const UBUNTU_CODENAME = await shell('lsb_release -cs');
   await exec.exec('sudo', [
     'add-apt-repository',
     `deb [arch=amd64] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}`,

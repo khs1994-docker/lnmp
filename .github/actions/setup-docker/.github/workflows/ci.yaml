@@ -52,3 +52,17 @@ jobs:
           docker_version: 0.0.0.0
           docker_channel: nightly
       - run: docker version
+  notsupport-platform:
+    strategy:
+      matrix:
+        os:
+         - windows-latest
+         - macOS-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Without version
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master
