@@ -10,11 +10,11 @@ $ lnmp-windows-pm.ps1 install go
 
 ## 安装测试版软件
 
+只需加上 `--pre` 参数即可安装测试版软件。
+
 ```bash
 $ lnmp-windows-pm.ps1 install go --pre
 ```
-
-只需加上 `--pre` 参数即可安装测试版软件。
 
 ## 开发者
 

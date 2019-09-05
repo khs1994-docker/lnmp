@@ -50,6 +50,11 @@ MEMCACHED_HOST=memcached
 
 原因：监听宿主机目录通过 NFS 实现，性能存在问题。
 
+* Docker Desktop 上 Docker 运行在虚拟机，项目文件位于 Windows
+* Docker WSL2 上 Docker 运行在 WSL2，项目文件位于 Windows
+
+以上两种情况均存在性能问题。
+
 解决思路：`vendor` 目录使用数据卷（数据卷存在于虚拟机中）。
 
 编辑 `docker-lnmp.include.yml` 文件，重写默认的 `php` `composer` 配置。

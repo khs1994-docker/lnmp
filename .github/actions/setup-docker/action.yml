@@ -1,0 +1,21 @@
+# https://help.github.com/en/articles/metadata-syntax-for-github-actions
+
+name: 'setup-docker'
+description: 'Set up your GitHub Actions workflow with a specific version of Docker'
+author: 'khs1994'
+inputs:
+  docker_version:
+    description: Docker Version
+    default: 19.03
+    # 18.09
+  docker_channel:
+    description: Docker Channel
+    default: stable
+    # test
+    # nightly
+runs:
+  using: 'node12'
+  main: 'lib/setup-docker.js'
+branding:
+  icon: 'box'
+  color: 'green'

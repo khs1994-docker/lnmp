@@ -29,19 +29,7 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
-    - name: Update docker
-      run: |
-        set -x
-        docker --version
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-        sudo apt-get update
-        apt-cache madison docker-ce | grep 19.03
-        DOCKER_VERSION=$(apt-cache madison docker-ce | grep 19.03 | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
-        echo ${DOCKER_VERSION}
-        sudo apt-get -y install docker-ce=${DOCKER_VERSION}
-        docker --version
-        sudo systemctl status docker
+    - uses: docker-practice/actions-setup-docker@master
     - name: Update docker compose
       run: |
         set -x

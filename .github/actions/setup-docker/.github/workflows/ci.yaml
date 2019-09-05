@@ -1,0 +1,54 @@
+on:
+  push:
+  pull_request:
+
+name: CI
+
+jobs:
+  docker:
+    name: Docker
+    strategy:
+      matrix:
+        docker_version:
+          - 18.09
+          - 19.03
+          - 19.09
+        docker_channel:
+          - stable
+          - test
+          # - nightly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: set version
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_version: ${{ matrix.docker_version }}
+          docker_channel: ${{ matrix.docker_channel }}
+      - run: docker version
+  docker-default:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Without version
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master
+      - run: docker version
+  docker-nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Without version
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_version: 0.0.0.0
+          docker_channel: nightly
+      - run: docker version
