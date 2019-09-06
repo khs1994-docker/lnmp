@@ -30,6 +30,8 @@ jobs:
       with:
         fetch-depth: 2
     - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_version: 19.03
     - name: Update docker compose
       run: |
         set -x

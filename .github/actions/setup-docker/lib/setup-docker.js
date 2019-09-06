@@ -4,6 +4,9 @@ const os = require('os');
 
 const DOCKER_VERSION = core.getInput('docker_version');
 const DOCKER_CHANNEL = core.getInput('docker_channel');
+const DOCKER_CLI_EXPERIMENTAL = core.getInput('docker_cli_experimental');
+const DOCKER_DAEMON_JSON = core.getInput('docker_daemon_json');
+const DOCKER_BUILDX = core.getInput('docker_buildx');
 
 const systemExec = require('child_process').exec;
 
@@ -96,6 +99,70 @@ async function run() {
     'status',
     'docker',
   ]);
+
+  core.debug('set DOCKER_CLI_EXPERIMENTAL');
+  if (DOCKER_CLI_EXPERIMENTAL === 'enabled') {
+    core.exportVariable('DOCKER_CLI_EXPERIMENTAL', 'enabled');
+  }
+
+  // /etc/docker/daemon.json
+  core.debug('set /etc/docker/daemon.json');
+  await exec.exec('sudo', [
+    'cat',
+    '/etc/docker/daemon.json',
+  ]);
+
+  await shell(`echo '${DOCKER_DAEMON_JSON}' | sudo tee /etc/docker/daemon.json`);
+
+  await exec.exec('sudo', [
+    'cat',
+    '/etc/docker/daemon.json',
+  ]);
+
+  await exec.exec('sudo', [
+    'systemctl',
+    'restart',
+    'docker',
+  ]);
+
+  // buildx
+  await exec.exec('docker', [
+    'buildx',
+    'version',
+  ]).then(async () => {
+    if (DOCKER_BUILDX !== 'true') {
+      core.debug('buildx disabled');
+      return;
+    }
+
+    // install buildx
+    await exec.exec('docker', [
+      'run',
+      '--rm',
+      '--privileged',
+      'docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3',
+    ]);
+
+    await exec.exec('cat', [
+      '/proc/sys/fs/binfmt_misc/qemu-aarch64',
+    ]);
+
+    await exec.exec('docker', [
+      'buildx',
+      'create',
+      '--use',
+      '--name',
+      'mybuilder',
+    ]);
+
+    await exec.exec('docker', [
+      'buildx',
+      'inspect',
+      '--bootstrap'
+    ]);
+  }, () => {
+    core.debug('NOT Support Buildx');
+  });
 }
 
 run().then(() => {

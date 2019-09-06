@@ -14,6 +14,8 @@ $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$preUrl=$lwpm.preUrl
 
 Function install_after(){
 
@@ -24,13 +26,11 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
 
-  # $url=$lwpm.url
-  $url=""
+  $url=$url.replace('${VERSION}',${VERSION});
 
   if($isPre){
     $VERSION=$preVersion
-    # $url=$lwpm.preUrl
-    $url=""
+    # $url=$preUrl.replace('${VERSION}',${VERSION});
   }else{
 
   }
@@ -78,7 +78,9 @@ Function install($VERSION=0,$isPre=0){
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  example version
+  if($lwpm.scripts.test){
+    powershell -c $lwpm.scripts.test
+  }
 }
 
 Function uninstall($prune=0){
@@ -91,13 +93,13 @@ Function uninstall($prune=0){
 }
 
 Function getInfo(){
-  # vendor
-  . $PSScriptRoot\..\..\..\windows\sdk\github\releases.ps1
-  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+  # get latestVersion by releases
+  . $PSScriptRoot\..\..\..\windows\sdk\github\repos\releases.ps1
+  # . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
 
-  # vendor
+  # get latestVersion by tag
   . $PSScriptRoot\..\..\..\windows\sdk\github\repos\repos.ps1
-  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+  # . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
 
   $latestVersion=(getLatestRelease $githubRepo).trim("")
   $latestVersion=(getLatestTag $githubRepo).trim("")
