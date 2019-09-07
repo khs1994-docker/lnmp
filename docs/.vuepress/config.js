@@ -143,6 +143,7 @@ module.exports = {
             '/ab',
             '/minio',
             '/buildx',
+            '/cncf/kong',
           ]
         }
       ]

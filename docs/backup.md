@@ -14,6 +14,6 @@ $ mysqldump -uroot -p${MYSQL_ROOT_PASSWORD} -R test > /backup/"$(date "+%Y%m%d-%
 $ mysql -uroot -p{MYSQL_ROOT_PASSWORD} < /backup/default.sql
 ```
 
-# More Information
+## More Information
 
 * https://zhuanlan.zhihu.com/p/26129750

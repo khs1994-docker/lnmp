@@ -6,37 +6,19 @@
 * https://www.akscn.io/help/gcr-proxy-cache.html
 * https://hub.qiniu.com/home
 
-`https://dockerhub.azk8s.cn`
+* `https://dockerhub.azk8s.cn`
+* `https://docker.mirrors.ustc.edu.cn`
+* `https://reg-mirror.qiniu.com`
+* `https://hub-mirror.c.163.com`
 
-`https://docker.mirrors.ustc.edu.cn`
+## gcr.io k8s.gcr.io
 
-`https://reg-mirror.qiniu.com`
+* `k8s.gcr.io/xxx` 对应 `gcr.io/google-containers/xxx`
 
-`https://hub-mirror.c.163.com`
-
-## gcr.io
-
-### k8s.gcr.io 与 gcr.io 对应关系
-
-`k8s.gcr.io/xxx` 对应 `gcr.io/google-containers/xxx`
-
-### USTC
-
-替换 `gcr.io` 为 `gcr.mirrors.ustc.edu.cn`
-
-### 阿里云
-
-```bash
-$ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-dashboard-amd64:v1.10.1
-```
-
-### 七牛云
-
-`https://gcr-mirror.qiniu.com`
-
-### Azure
-
-`https://gcr.azk8s.cn`
+* `https://gcr.mirrors.ustc.edu.cn`
+* `registry.cn-hangzhou.aliyuncs.com/google_containers/kubernetes-dashboard-amd64:v1.10.1`
+* `https://gcr-mirror.qiniu.com`
+* `https://gcr.azk8s.cn`
 
 ```bash
 $ docker pull k8s.gcr.io/pause:3.0
@@ -46,6 +28,6 @@ $ docker pull gcr.azk8s.cn/google-containers/pause:3.0
 
 ## quay.io
 
-`https://quay.mirrors.ustc.edu.cn`
-`https://quay-mirror.qiniu.com`
-`https://quay.azk8s.cn`
+* `https://quay.mirrors.ustc.edu.cn`
+* `https://quay-mirror.qiniu.com`
+* `https://quay.azk8s.cn`

@@ -9,9 +9,9 @@ $ crontab -e
 ```
 
 ```bash
-* * * * * /usr/local/bin/docker exec -it $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.compose.service=php7 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
+* * * * * /usr/local/bin/docker exec -i $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.compose.service=php7 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
 
-* * * * * /usr/local/bin/docker exec -it $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.swarm.service.name=lnmp_php7 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
+* * * * * /usr/local/bin/docker exec -i $( docker container ls --format '{{.ID}}' -f label=com.khs1994.com -f label=com.docker.swarm.service.name=lnmp_php7 ) sh -c "php /app/path-to-your-project/artisan schedule:run >> /dev/null 2>&1"
 ```
 
 原理：通过在 **宿主机** 计划执行 `docker exec ***`，变相实现容器内计划任务，只适用于 **单机环境**。

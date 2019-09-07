@@ -106,7 +106,7 @@ $ docker rm -f CONTAINER_ID
 * [x] zip
 * [x] zlib
 
-# Session Redis 驱动
+## Session Redis 驱动
 
 ```ini
 session.save_handler = redis
@@ -114,6 +114,6 @@ session.save_handler = redis
 session.save_path ="tcp://redis:6379?auth=redis密码
 ```
 
-# More Information
+## More Information
 
 * [mongodb](https://github.com/mongodb/mongo-php-driver)

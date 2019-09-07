@@ -29,4 +29,4 @@ services:
       - "10001:10001"
 ```
 
-> 编辑之后执行 `$ lnmp-docker config` 查看配置是否正确，之后启动即可。
+> 编辑之后执行 `$ lnmp-docker config` 查看配置是否正确，再启动即可。

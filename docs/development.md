@@ -52,9 +52,7 @@ $global:APP_ROOT="../app"
 
 ## PHPStorm
 
-想要在 PHPStorm 中实现右键点击运行脚本必须进行额外的设置
-
-具体请查看 PHP 容器化最佳实践 https://github.com/khs1994-docker/php-demo#6-cli-settings
+想要在 PHPStorm 中实现右键点击运行测试脚本必须进行额外的设置，请查看 [PHP 容器化最佳实践](https://github.com/khs1994-docker/php-demo#6-cli-settings)
 
 ## 容器数量伸缩
 
