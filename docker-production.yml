@@ -75,7 +75,11 @@ x-php-common:
   image: khs1994/php:7.3.9-fpm-alpine
   volumes:
     - ./app:/app
-    - zoneinfo-data:/usr/share/zoneinfo
+    - type: volume
+      source: zoneinfo-data
+      target: /usr/share/zoneinfo
+      volume:
+        nocopy: false
   environment:
     - APP_ENV=production
   configs:
@@ -320,7 +324,6 @@ services:
       - ./pcit/.env.production:/app/pcit/.env.production
       - ./pcit/key:/app/pcit/framework/storage/private_key
       - pcit-tmp:/tmp
-      - zoneinfo-data:/usr/share/zoneinfo
     working_dir: /app/pcit/bin
     command:
       - up

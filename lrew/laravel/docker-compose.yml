@@ -36,9 +36,6 @@ services:
       - ./lrew/laravel/.env.development:/app/laravel-docker/.env.development
       - laravel_cache_views:/app/laravel-docker/storage/framework/views
       - type: volume
-        source: zoneinfo-data
-        target: /usr/share/zoneinfo
-      - type: volume
         source: laravel_public
         target: /app/laravel-docker/public
         volume:
