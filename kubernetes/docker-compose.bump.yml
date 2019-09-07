@@ -8,7 +8,7 @@ services:
     image: kubernetesui/dashboard:v2.0.0-beta4
 
   coredns:
-    image: k8s.gcr.io/coredns:1.5.0
+    image: k8s.gcr.io/coredns:1.6.2
 
   ingress_nginx:
     image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.1
