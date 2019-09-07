@@ -37,6 +37,7 @@ async function run() {
   core.debug('init lnmp')
   core.exportVariable('quite','true');
   await exec.exec('lnmp-docker');
+  await exec.exec('lnmp-docker',['services']);
   await exec.exec('lnmp-docker', ['compose', '--official']);
   core.exportVariable('quite','');
   await exec.exec('sudo', ['systemctl', 'stop', 'mysql']);

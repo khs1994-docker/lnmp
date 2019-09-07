@@ -44,7 +44,7 @@ docker run -i ${tty} --rm \
   --entrypoint /docker-entrypoint.composer.sh \
   --user ${LNMP_USER:-root:root} \
   ${DOCKER_IMAGE}:${TAG} \
-  composer create-project --prefer-dist laravel/laravel=${3:-5.5}.* "$2"
+  composer create-project --prefer-dist laravel/laravel=${3:-6.0}.* "$2"
 
 else
   echo "Path $2 existing"

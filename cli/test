@@ -49,6 +49,7 @@ _command(){
 
   date
   lnmp-laravel-by-composer new laravel5_5 5.5
+  lnmp-laravel-by-composer new laravel6_0 6.0
   date
 
   lnmp-laravel new laravel

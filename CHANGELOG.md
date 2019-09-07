@@ -10,7 +10,7 @@
 
 ### Changes:
 
-* Add CLI `services` command
+* Support Laravel 6.0
 
 ### Updates:
 
