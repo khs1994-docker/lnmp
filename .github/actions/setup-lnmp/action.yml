@@ -9,10 +9,13 @@ inputs:
     default: 19.03
   lnmp_services:
     description: lnmp services
-    default: nginx mysql php redis
+    default: nginx mysql php7 redis
   lrew_include:
     description: LREW package
     default: pcit
+  docker_compose_version:
+    description: docker compose version
+    default: 1.24.0
 runs:
   using: 'node12'
   main: 'lib/setup-lnmp.js'

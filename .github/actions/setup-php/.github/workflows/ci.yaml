@@ -63,6 +63,6 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 2
-      - name: Without version
+      - name: default
         uses: ./
         # uses: khs1994-docker/actions-setup-php@master

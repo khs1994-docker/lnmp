@@ -14,7 +14,7 @@ test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $ScriptRoot/.arch
+source $ScriptRoot/.init
 
 docker run -i ${tty} --rm \
   --mount type=volume,src=lnmp_npm_cache-data,target=/tmp/node/.npm \

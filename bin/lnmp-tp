@@ -4,7 +4,7 @@ set -e
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $ScriptRoot/.arch
+source $ScriptRoot/.init
 source $ScriptRoot/../config/composer/.env.example
 source $ScriptRoot/../config/composer/.env
 

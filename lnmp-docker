@@ -306,7 +306,7 @@ _gcr_io(){
       if [ "$please_set" = 1 ];then \
           print_error \
           "Please add gcr.io k8s.gcr.io as Insecure registries In [ Docker Menu -> preferences -> Daemon -> Basic -> Insecure registries ]"; \
-          exit; fi
+          exit 1; fi
     fi
 
     images="kube-controller-manager:v${KUBERNETES_VERSION} \
@@ -682,15 +682,15 @@ docker_compose(){
       if [ "$OS" = 'Darwin' ] ;then
         print_error \
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker Desktop"
-      exit
+      exit 1
       elif [ "$OS" = 'Linux' ];then
         print_error \
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker compose -f"
-      exit
+      exit 1
       elif [ "$OS" = 'MINGW64_NT-10.0' ];then
         print_error \
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker Desktop"
-      exit
+      exit 1
       else
         notsupport
       fi
@@ -2030,7 +2030,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
     checkout )
-      if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit; fi
+      if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit 1; fi
 
       git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} || true
       git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
@@ -2064,7 +2064,13 @@ COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 
 # 获取正确版本号
 
+if [ -n "${LNMP_SERVICES}" ];then LNMP_SERVICES_SYSTEM_ENV=$LNMP_SERVICES;fi
+if [ -n "${LREW_INCLUDE}" ];then LREW_INCLUDE_SYSTEM_ENV=$LREW_INCLUDE;fi
+
 env_status && . ./.env && . cli/.env
+
+if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
+if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi
 
 APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
 

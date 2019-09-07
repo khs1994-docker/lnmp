@@ -22,13 +22,14 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 2
-      - name: set version
+      - name: Setup Docker
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
         with:
           docker_version: ${{ matrix.docker_version }}
           docker_channel: ${{ matrix.docker_channel }}
-      - run: |
+      - name: Test
+        run: |
           set -x
           docker version
           cat /etc/docker/daemon.json
@@ -82,6 +83,6 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 2
-      - name: Without version
+      - name: default
         uses: ./
         # uses: docker-practice/actions-setup-docker@master

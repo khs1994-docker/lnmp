@@ -8,7 +8,7 @@ set -e
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $ScriptRoot/.arch
+source $ScriptRoot/.init
 
 if [ "$debug" = 'true' ];then set -x; fi
 

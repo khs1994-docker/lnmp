@@ -10,21 +10,26 @@ jobs:
       matrix:
         lnmp_branch:
           - 19.03
-          - master
+          # - master
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
         with:
           fetch-depth: 2
       - uses: docker-practice/actions-setup-docker@master
-      - name: Check version
+      - name: Test
         uses: ./
         # uses: khs1994-docker/actions-setup-lnmp@master
         with:
           lnmp_branch: ${{ matrix.lnmp_branch }}
+      - name: Init LNMP
+        run: |
+          QUITE=true lnmp-docker
+          docker-compose --version
       - name: Up
         run: |
           set -x
+          lnmp-docker services
           lnmp-docker up
           sleep 30
           docker ps  -a
@@ -43,6 +48,6 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 2
-      - name: Without with
+      - name: default
         uses: ./
         # uses: khs1994-docker/actions-setup-lnmp@master

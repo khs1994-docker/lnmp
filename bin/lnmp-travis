@@ -10,7 +10,7 @@ if [ "$debug" = 'true' ];then set -x; fi
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $ScriptRoot/.arch
+source $ScriptRoot/.init
 
 if [ -z "$GITHUB_TOKEN" ];then
   echo -e "\nYou must set [ GITHUB_TOKEN ] env\n"

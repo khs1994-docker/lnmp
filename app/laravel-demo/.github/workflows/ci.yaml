@@ -17,14 +17,16 @@ jobs:
         with:
           lnmp_services: "laravel nginx mysql php7 redis"
           lrew_include: "laravel"
+      - name: Init LNMP
+        run: |
+          lnmp-docker services
+          docker-compose --version
       - name: Install Laravel
         env:
           ACTIONS_COMPOSER_BIN_PATH: /home/runner/.composer/vendor/bin
         run: |
           set -x
           export PATH=$ACTIONS_COMPOSER_BIN_PATH:$PATH
-
-          docker-compose --version
 
           lnmp-composer config -g --unset repos.packagist
 

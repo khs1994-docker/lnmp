@@ -24,7 +24,7 @@ if ! [ -f $ScriptRoot/../log/php/cli_error.log ];then
   touch $ScriptRoot/../log/php/cli_error.log
 fi
 
-. $ScriptRoot/.arch
+. $ScriptRoot/.init
 
 . $ScriptRoot/../.env
 
