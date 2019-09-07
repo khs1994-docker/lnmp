@@ -2,7 +2,7 @@ cd $PSScriptRoot
 
 ################################################################################
 
-$MINIKUBE_VERSION="0.30.0"
+$MINIKUBE_VERSION="1.3.1"
 $KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 $KUBECTL_URL="https://mirror.azure.cn/kubernetes/kubectl"
 
@@ -31,6 +31,10 @@ $current_context=kubectl config current-context
 if (!($current_context -eq "docker-desktop")){
    Write-Warning "This Script Support Docker Desktop Only"
    exit
+}
+
+Function print_info($message){
+  write-host "==> $message"
 }
 
 Function print_help_info(){
@@ -128,11 +132,11 @@ switch ($args[0])
   "kubectl-install" {
     $KUBECTL_VERSION=get_kubectl_version
     $url="${KUBECTL_URL}/${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe"
-    curl.exe -fsSL $url -o $HOME/kubectl.exe
-
-    echo "
-Move $HOME/kubectl.exe to your PATH, then rename it kubectl
-    "
+    if(Test-Path C:\bin\kubectl.exe){
+      print_info "kubectl already install"
+      return
+    }
+    curl.exe -fsSL $url -o C:\bin\kubectl.exe
   }
 
   "kubectl-info" {

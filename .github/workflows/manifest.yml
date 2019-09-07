@@ -35,6 +35,11 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJson(matrix) }}
         run: echo "$MATRIX_CONTEXT"
+
+      - name: Only Build on Tag
+        run: |
+          echo "tag event"
+        if: github.event_name == 'push' && contains(github.ref,'refs/tags/')
       - name: Check skip ci
         run: |
           echo "this build skip"
@@ -63,6 +68,8 @@ jobs:
           docker network ls | grep github || true
           docker ps -a
 
+          docker-compose --version
+
           mysql --version
           sudo systemctl status mysql || true
 
@@ -72,6 +79,8 @@ jobs:
           which php7.2 && php7.2 -v || true
           which php7.3 && php7.3 -v || true
           which php && php -v || true
+
+          which composer && composer -V && composer config -g -l || true
 
           which go && go version || true
 

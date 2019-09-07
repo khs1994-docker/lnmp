@@ -1589,12 +1589,13 @@ For information please run $ docker service update --help
     #@custom
     __lnmp_custom_up "$@" 2>/dev/null || true
 
-    sleep 1; print_info "Test nginx configuration file..."
+    sleep 5; print_info "Test nginx configuration file..."
 
     docker exec -i ${tty}\
           $(docker container ls --format {{.ID}} \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
+          -f label=com.docker.compose.service=nginx -n 1 ) nginx -t \
+    || (print_error "Nginx start error,please check config/nginx" ; docker ps -a)
     ;;
 
   build-config )

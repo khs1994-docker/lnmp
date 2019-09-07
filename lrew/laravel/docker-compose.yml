@@ -19,7 +19,7 @@ x-common-label:
 services:
   nginx:
     volumes:
-      - laravel_public:/app/laravel/public
+      - laravel_public:/app/laravel-docker/public
       - ./lrew/laravel/config/laravel.conf:/etc/nginx/conf.d/laravel.conf
   laravel:
     << : *default-common
@@ -33,14 +33,14 @@ services:
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:delegated
-      - ./lrew/laravel/.env.development:/app/laravel/.env.development
-      - laravel_cache_views:/app/laravel/storage/framework/views
+      - ./lrew/laravel/.env.development:/app/laravel-docker/.env.development
+      - laravel_cache_views:/app/laravel-docker/storage/framework/views
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
       - type: volume
         source: laravel_public
-        target: /app/laravel/public
+        target: /app/laravel-docker/public
         volume:
           nocopy: false
     expose:

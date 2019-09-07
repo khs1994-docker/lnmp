@@ -7,7 +7,7 @@
 
 ```bash
 $ GOOS=linux # darwin
-$ MINIKUBE_VERSION=0.30.0
+$ MINIKUBE_VERSION=1.3.1
 $ url=http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-${GOOS}-amd64
 
 $ sudo curl -L $url -o /usr/local/bin/minikube
