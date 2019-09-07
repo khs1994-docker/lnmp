@@ -28,8 +28,8 @@ spec:
         emptyDir: {}
       containers:
       - name: metrics-server
-        # image: k8s.gcr.io/metrics-server-amd64:v0.3.3
-        image: gcr.azk8s.cn/google-containers/metrics-server-amd64:v0.3.3
+        # image: k8s.gcr.io/metrics-server-amd64:v0.3.4
+        image: gcr.azk8s.cn/google-containers/metrics-server-amd64:v0.3.4
         imagePullPolicy: Always
         args:
         - /metrics-server

@@ -8,9 +8,17 @@ set -e
 
 if [ "$debug" = 'true' ];then set -x; fi
 
+checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
+
+test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
+
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-docker run -it --rm \
+source $ScriptRoot/.init
+
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
+docker run -i ${tty} --rm \
   --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
   --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
   --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
@@ -20,13 +28,14 @@ docker run -it --rm \
    chown -R ${LNMP_USER} /tmp/node/yarn; \
   "
 
-docker run -it --rm \
+exec docker run -i ${tty} --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=delegated \
     --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/usr/local/share/.yarnrc \
     --mount type=volume,src=lnmp_yarn_cache-data,target=/tmp/node/.yarn \
     --mount type=volume,src=lnmp_yarn_global-data,target=/tmp/node/yarn \
     --mount type=bind,src=${ScriptRoot}/../config/yarn/.yarnrc,target=/root/.yarnrc \
     --env-file ${ScriptRoot}/../config/yarn/.env \
+    --network $network \
     --workdir /app \
     --entrypoint yarn \
     --user ${LNMP_USER:-root:root} \

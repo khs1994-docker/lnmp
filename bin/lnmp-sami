@@ -8,9 +8,11 @@ set -e
 
 ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
-source $ScriptRoot/.arch
+source $ScriptRoot/.init
 
-docker run -it --rm \
+if [ "$debug" = 'true' ];then set -x; fi
+
+exec docker run -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=delegated \
   --mount src=lnmp_composer_cache-data,target=/tmp/cache \
   --entrypoint sami \

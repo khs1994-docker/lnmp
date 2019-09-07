@@ -6,21 +6,22 @@
 #
 # 只有 git 打了 tag 才能将对应的镜像部署到生产环境
 #
-# !! 搜索 /app/EXAMPLE 替换为自己的项目目录 !!
+# !! 搜索 /app/laravel 替换为自己的项目目录 !!
+# 此 Dockerfile 专为 CI 环境设计（国外），请通过 --build-arg ARG=value 设置国内镜像
+#
+# $ docker build --target=laravel -t khs1994/laravel:6.0 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
-ARG NODE_VERSION=12.9.1
-ARG PHP_VERSION=7.3.8
+ARG NODE_VERSION=12.10.0
+ARG PHP_VERSION=7.3.9
 ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
-# 1.前端构建
-FROM node:${NODE_VERSION:-12.9.1}-alpine as frontend
+# 1.前端构建，建议放到 CDN，可省略此步
+FROM node:${NODE_VERSION:-12.10.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
 # COPY package.json webpack.mix.js yarn.lock /app/
-# COPY package.json webpack.mix.js /app/
-
 # COPY package.json webpack.mix.js package-lock.json /app/
 COPY package.json webpack.mix.js /app/
 
@@ -28,21 +29,24 @@ RUN cd /app \
       # && yarn install \
       && npm install --registry=${NODE_REGISTRY}
 
-COPY resources/assets/ /app/resources/assets/
+COPY resources/ /app/resources/
 
 RUN cd /app \
-      && set PATH=./node_modules/.bin:$PATH \
+      && mkdir -p public \
       # && yarn production \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.8-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.3.9-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/
 COPY database/ /app/database/
 
+ARG CI=true
+
 RUN cd /app \
+      && test $CI = 'true' && composer config -g --unset repos.packagist || true \
       && composer install --no-dev \
              --ignore-platform-reqs \
              --prefer-dist \
@@ -51,25 +55,27 @@ RUN cd /app \
              --no-plugins
 
 # 3.将项目打入 PHP 镜像
-# $ docker build -t khs1994/php:7.3.8-pro-GIT_TAG-alpine --target=php .
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as php
+# $ docker build -t khs1994/laravel:TAG --target=laravel .
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION}-fpm-alpine as laravel
 
-COPY . /app/EXAMPLE/
-COPY --from=composer /app/vendor/ /app/EXAMPLE/vendor/
-COPY --from=frontend /app/public/js/ /app/EXAMPLE/public/js/
-COPY --from=frontend /app/public/css/ /app/EXAMPLE/public/css/
-COPY --from=frontend /app/mix-manifest.json /app/EXAMPLE/mix-manifest.json
+COPY . /app/laravel/
+COPY --from=composer /app/vendor/ /app/laravel/vendor/
+COPY --from=frontend /app/public/js/ /app/laravel/public/js/
+COPY --from=frontend /app/public/css/ /app/laravel/public/css/
+COPY --from=frontend /app/mix-manifest.json /app/laravel/mix-manifest.json
+
+VOLUME /app/laravel/storage/framework/views
 
 CMD ["php-fpm", "-R"]
 
 # 4.将 PHP 项目打入 NGINX 镜像
 # Nginx 配置文件统一通过 configs 管理，严禁将配置文件打入镜像
-# $ docker build -t khs1994/nginx:1.15.0-pro-GIT_TAG-alpine .
+# $ docker build -t khs1994/laravel:TAG-nginx .
 
-# FROM ${DOCKER_HUB_USERNAME:-khs1994}/nginx:1.15.0-alpine
+# FROM ${DOCKER_HUB_USERNAME:-khs1994}/laravel:TAG-nginx
 FROM nginx:${NGINX_VERSION} as nginx
 
-COPY --from=php /app/ /app/
+COPY --from=laravel /app/ /app/
 
 ADD https://raw.githubusercontent.com/khs1994-docker/lnmp-nginx-conf-demo/master/wait-for-php.sh /wait-for-php.sh
 

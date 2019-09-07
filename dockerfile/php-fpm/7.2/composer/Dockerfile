@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.2.21
+ARG PHP_VERSION=7.2.22
 
 FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine as php
 

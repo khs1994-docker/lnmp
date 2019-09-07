@@ -20,7 +20,7 @@ $ lnmp-wsl-builder-php 7.3.0
 
 $ lnmp-wsl-builder-php apt
 
-$ lnmp-wsl-builder-php 7.3.8 7.3.0beta1 7.3.0RC1 nightly
+$ lnmp-wsl-builder-php 7.3.9 7.3.0beta1 7.3.0RC1 nightly
 
 $ lnmp-wsl-builder-php 7.3.0 [--skipbuild] [tar] [deb] [enable-ext]
 
@@ -888,7 +888,7 @@ command -v wget || sudo apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.8
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.9
 
 _get_phpnum $PHP_VERSION
 

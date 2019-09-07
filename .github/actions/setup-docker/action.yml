@@ -1,0 +1,36 @@
+# https://help.github.com/en/articles/metadata-syntax-for-github-actions
+
+name: 'setup-docker'
+description: 'Set up your GitHub Actions workflow with a specific version of Docker'
+author: 'khs1994'
+inputs:
+  docker_version:
+    description: Docker Version
+    default: 19.03
+    # 18.09
+  docker_channel:
+    description: Docker Channel
+    default: stable
+    # test
+    # nightly
+  docker_buildx:
+    # https://docs.docker.com/engine/reference/commandline/buildx/
+    description: Enable Buildx
+    default: true
+  docker_cli_experimental:
+    # https://docs.docker.com/engine/reference/commandline/cli/#configuration-files
+    description: docker cli experimental
+    default: enabled
+  docker_daemon_json:
+    # https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
+    description: /etc/docker/daemon.json
+    default: |
+      {
+        "experimental": true
+      }
+runs:
+  using: 'node12'
+  main: 'lib/setup-docker.js'
+branding:
+  icon: 'box'
+  color: 'green'

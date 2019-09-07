@@ -72,7 +72,8 @@ module.exports = {
             '/config',
             '/port',
             '/command',
-            '/windows/lwpm'
+            '/windows/lwpm',
+            '/compose',
           ]
         }, {
           title: "nginx",

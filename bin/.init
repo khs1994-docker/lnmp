@@ -7,17 +7,20 @@ set -e
 if [ -z "$LNMP_PATH" ];then echo "Please set system env LNMP_PATH"; exit ; fi
 
 source $LNMP_PATH/.env.example
+source $LNMP_PATH/.env
 
 if [ -f "$LNMP_PATH/.env" ];then source $LNMP_PATH/.env; fi
 
 export OS=`uname -s`
 export ARCH=`uname -m`
 
-# VERSION=$LNMP_PHP_VERSION
-VERSION=7.3.8
+VERSION=$LNMP_PHP_VERSION
 
 export TAG=${VERSION}-composer-alpine
 
 export DOCKER_IMAGE=khs1994/php
 
 export LNMP_USER=`id -u`:`id -g`
+
+export tty=
+tty -s && export tty=--tty || true

@@ -2,7 +2,8 @@ language: go
 # language: bash
 
 go:
-- 1.12
+- 1.12.9
+# - 1.13
 
 services:
 - docker
@@ -19,7 +20,20 @@ before_install:
   - sestatus || true
   - ls /home/travis/.lnmp/caches
   - echo $PATH
+
   - sudo netstat -lnpt
+  - cat /etc/resolv.conf
+  - cat /etc/systemd/resolved.conf || true
+  - sudo systemd-resolve --status || true
+  - sudo systemctl status systemd-resolved || true
+  - sudo systemctl stop systemd-resolved || true
+  - sudo netstat -lnpt
+  - cat /etc/resolv.conf
+  - echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
+  - echo "search google.internal" | sudo tee -a /etc/resolv.conf
+  - cat /etc/resolv.conf
+  - nslookup gcr.io
+
   - docker-compose --version
   - docker --version
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -172,28 +186,42 @@ script:
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
   - curl ${SERVER_IP}:${HTTP_PORT}
+after_success:
   - sudo crictl version
   - sudo crictl info
-
   - ip addr
   - git diff
   - cd cli ; (sh generate.sh || true); cd ..
   - git diff
-
-after_success:
+  - sudo netstat -lnpt
   - ./tests/test.sh
+# switch containerd 1.3.0
+  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--containerd" && sudo systemctl start kube-containerd-130
+  - sleep 30
+  - sudo crictl version
+  - sudo crictl info
 
 env:
-  matrix:
-    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
-    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
-    - CI_KUBERNETES_VERSION=1.16.0-beta.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
-    - CI_KUBERNETES_VERSION=1.14.2
-    - CI_KUBERNETES_VERSION=1.15.2
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
 
 matrix:
+  include:
+    - os: linux
+      dist: bionic
+      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.14.2
+    - os: linux
+      dist: bionic
+      env: CI_KUBERNETES_VERSION=1.15.2
   fast_finish: true
   # allow_failures:
   # - env: CI_KUBERNETES_VERSION=1.15.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"

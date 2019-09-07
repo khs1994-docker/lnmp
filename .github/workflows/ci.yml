@@ -6,10 +6,10 @@ on:
       - master
     paths:
       - '*'
-      - '/.github/*'
       - '!/docs/*'
-      - '!/drone/*'
-      - '!/kubernetes/*'
+      # - '/.github/*'
+      # - '!/drone/*'
+      # - '!/kubernetes/*'
   pull_request:
 
 jobs:
@@ -31,19 +31,9 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
-    - name: Update docker
-      run: |
-        set -x
-        docker --version
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
-        sudo apt-get update
-        apt-cache madison docker-ce | grep 19.03
-        DOCKER_VERSION=$(apt-cache madison docker-ce | grep 19.03 | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
-        echo ${DOCKER_VERSION}
-        sudo apt-get -y install docker-ce=${DOCKER_VERSION}
-        docker --version
-        sudo systemctl status docker
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_version: 19.03
     - name: Update docker compose
       run: |
         set -x
@@ -75,6 +65,17 @@ jobs:
       run: ./lnmp-docker down
     - name: pwsh
       run: pwsh -command "./lnmp-docker.ps1"
+    - name: CLI
+      run: |
+        export LNMP_PATH=$PWD
+        export PATH=$PWD/bin:$PATH
+
+        set -x
+        lnmp-php -v
+        lnmp-composer --version
+
+        lnmp-npm -v
+        lnmp-yarn -v
   pw:
     needs: skip-ci
     runs-on: windows-latest

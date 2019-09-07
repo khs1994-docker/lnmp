@@ -7,8 +7,7 @@ systemd:
       contents: |
         [Unit]
         Description=kube-apiserver nginx proxy
-        After=network.target
-        After=network-online.target
+        After=network-online.target network.target
         Wants=network-online.target
 
         [Service]
@@ -30,6 +29,6 @@ systemd:
         LimitNOFILE=65536
 
         [Install]
-        WantedBy=multi-user.target    
+        WantedBy=multi-user.target
 storage:
   files:

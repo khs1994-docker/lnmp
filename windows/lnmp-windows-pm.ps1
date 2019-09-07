@@ -189,6 +189,9 @@ function __init($soft){
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\lwpm.json `
             $SOFT_ROOT\lwpm.json
 
+  copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\README.md `
+            $SOFT_ROOT\README.md
+
   if(_command composer){
     composer init -d $SOFT_ROOT `
       --name "lwpm/$soft" `

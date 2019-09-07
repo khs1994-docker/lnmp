@@ -1,3 +1,5 @@
+# sed "s#myclass#runcv1#g" deployment/runtimeClass/pod.yaml | kubectl apply -f -
+
 kind: Pod
 apiVersion: v1
 metadata:
@@ -6,6 +8,8 @@ metadata:
     lnmp: test
 spec:
   runtimeClassName: myclass
+  # runtimeClassName: runcv1
+  # runtimeClassName: runclinux
   containers:
   - name: "lnmp-pod"
     image: "nginx:1.17.3-alpine"
@@ -13,7 +17,7 @@ spec:
     - name: test
       mountPath: /opt/data
   # - name: "lnmp-pod2"
-  #   image: khs1994/php:7.3.8-fpm-alpine
+  #   image: khs1994/php:7.3.9-fpm-alpine
   volumes:
   - name: test
     emptyDir: {}

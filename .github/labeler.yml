@@ -1,0 +1,92 @@
+# https://github.com/actions/labeler
+
+lnmp/app:
+- app/**/*
+
+lnmp/cli:
+- bin/**/*
+- cli/**/*
+- lnmp-docker
+- lnmp-docker.ps1
+- lnmp-docker-custom-script.example
+- lnmp-docker-custom-script.example.ps1
+
+lnmp/lrew:
+- lrew/**/*
+
+lnmp/lwpm:
+- windows/lnmp-windows-pm-repo/**/*
+
+lnmp/core:
+- scripts/**/*
+- secrets/**/*
+- .env.example
+- .env.example.ps1
+- docker-lnmp.build.yml
+- docker-lnmp.include.example.yml
+- docker-lnmp.override.yml
+- docker-lnmp.yml
+- docker-windows.yml
+- bin/**/*
+- cli/**/*
+- lnmp-docker
+- lnmp-docker.ps1
+- lnmp-docker-custom-script.example
+- lnmp-docker-custom-script.example.ps1
+
+lnmp/env:
+- .env.example
+- .env.example.ps1
+
+lnmp/todo:
+- TODO.md
+
+lnmp/docs:
+- docs/**/*
+
+arch/windows:
+- windows/**/*
+
+arch/wsl:
+- wsl/**/*
+
+deploy/cluster:
+- cluster/**/*
+
+deploy/k8s:
+- kubernetes/**/*
+
+deploy/ci:
+- drone/**/*
+
+soft/acme.sh:
+- dockerfile/acme.sh/**/*
+
+soft/php:
+- dockerfile/php-fpm/**/*
+- config/php/**/*
+- config/composer/**/*
+
+soft/registry:
+- config/registry/**/*
+
+Config:
+- config/**/*
+
+Dockerfile:
+- dockerfile/**/*
+- dockerfile-windows/**/*
+
+PCIT:
+- pcit/**/*
+
+CI:
+- .appveyor.yml
+- .pcit.yml
+- .travis.yml
+- azure-pipelines.yml
+- renovate.json
+- .github/workflows/**/*
+
+actions:
+- .github/actions/**/*

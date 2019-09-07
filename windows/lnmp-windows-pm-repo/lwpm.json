@@ -5,8 +5,19 @@
   "preVersion": "x.y.z-alpha.1",
   "homepage": "",
   "bug": "",
-  "github": "",
+  "github": "repo/name",
   "releases": "",
   "url": "",
-  "preUrl": ""
+  "preUrl": "",
+  "scripts": {
+    "preinstall": "",
+    "install": "",
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": "",
+    "postuninstall": "",
+    "pretest": "",
+    "test": "",
+    "posttest":""
+  }
 }

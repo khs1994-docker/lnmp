@@ -1,0 +1,88 @@
+on:
+  push:
+  pull_request:
+
+name: CI
+
+jobs:
+  docker:
+    name: Docker
+    strategy:
+      matrix:
+        docker_version:
+          - 18.09
+          - 19.03
+          - 19.09
+        docker_channel:
+          - stable
+          - test
+          # - nightly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Setup Docker
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_version: ${{ matrix.docker_version }}
+          docker_channel: ${{ matrix.docker_channel }}
+      - name: Test
+        run: |
+          set -x
+          docker version
+          cat /etc/docker/daemon.json
+          docker buildx version || true
+          docker buildx ls || true
+  docker-default:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Without version
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master
+      - run: docker version
+      # Login docker hub or other docker registry
+      - uses: azure/container-actions/docker-login@master
+        with:
+          # login-server: contoso.azurecr.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        if: github.event_name == 'push'
+      # test docker login
+      - run: |
+          set -x
+          docker pull alpine:latest
+          docker tag alpine:latest khs1994/alpine:latest
+          docker push khs1994/alpine:latest
+        if: github.event_name == 'push'
+  docker-nightly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: Without version
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_version: 0.0.0.0
+          docker_channel: nightly
+      - run: docker version
+  notsupport-platform:
+    strategy:
+      matrix:
+        os:
+         - windows-latest
+         - macOS-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - name: default
+        uses: ./
+        # uses: docker-practice/actions-setup-docker@master

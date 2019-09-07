@@ -1,0 +1,12 @@
+version: "3.7"
+
+x-common:
+  &default-common
+  labels:
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
+    - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
+
+services:
+  laravel:
+    << : *default-common
+    image: khs1994/laravel:6.0

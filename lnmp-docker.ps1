@@ -554,7 +554,7 @@ Function _lrew_init($package=$null){
        'LREW_EXAMPLE_VENDOR',"LREW_${package}_VENDOR".ToUpper() | Set-Content $file
 
      @(Get-Content $file) -replace `
-       'LNMP_EXAMPLE_',"LNMP_${package}".ToUpper() | Set-Content $file
+       'LNMP_EXAMPLE_',"LNMP_${package}_".ToUpper() | Set-Content $file
 
      @(Get-Content $file) -replace `
        'example/',"${package}/" | Set-Content $file

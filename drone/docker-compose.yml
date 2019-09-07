@@ -14,14 +14,14 @@ services:
 
   drone-server:
     << : *default-common
-    image: drone/drone:${CI_DRONE_VERSION:-1.0.1}
+    image: drone/drone:${CI_DRONE_VERSION:-1.3.1}
     ports:
       # - 80:80
       # - 443:443
       - "${CI_HOST:-192.168.199.100}:${CI_DRONE_PORT:-8000}:80"
       # - 9000:9000
     volumes:
-      - drone-data-v1:/var/lib/drone/:rw
+      - drone-data-v1:/data:rw
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
@@ -31,16 +31,27 @@ services:
 
   drone-agent:
     << : *default-common
-    image: drone/agent:${CI_DRONE_VERSION:-1.0.1}
+    image: drone/agent:${CI_DRONE_VERSION:-1.3.1}
+    # ports:
+    #   - 3000:3000
     depends_on:
       - drone-server
     volumes:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
+    # https://docker-runner.docs.drone.io/installation/reference/
     environment:
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
       - DRONE_RPC_SERVER=drone-server:9000
+      - DRONE_RPC_PROTO=http
+      - DRONE_RUNNER_NAME=${DRONE_RUNNER_NAME:-drone}
+      - DRONE_RUNNER_CAPACITY=2
+      - DRONE_UI_DISABLED=${DRONE_UI_DISABLED:-true}
+      - DRONE_UI_USERNAME=${DRONE_UI_USERNAME:-root}
+      - DRONE_UI_PASSWORD=${DRONE_UI_PASSWORD:-root}
+      # - DRONE_HTTP_HOST=127.0.0.1
+      # - DRONE_HTTP_PROTO=http
 
   gogs:
     << : *default-common

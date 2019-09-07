@@ -1,5 +1,6 @@
 const exec = require('@actions/exec');
 const core = require('@actions/core');
+const os = require('os');
 
 const PHP_VERSION = core.getInput('php_version');
 const ARGS = core.getInput('args');
@@ -12,6 +13,15 @@ const RUNNER_WORKSPACE = process.env.RUNNER_WORKSPACE;
 const WORKSPACE = RUNNER_WORKSPACE.split('/').pop();
 
 async function run() {
+  const platform = os.platform();
+
+  if (platform !== 'linux') {
+    core.debug('check platform');
+    await exec.exec('echo',
+      [`Only Support linux platform, this platform is ${os.platform()}`]);
+    return
+  }
+
   core.debug('get docker network');
   await exec.exec('docker', [
     'network',

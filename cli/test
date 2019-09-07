@@ -11,7 +11,7 @@ print_info(){
 }
 
 delete(){
-  ./lnmp-docker down -v > /dev/null 2>&1 || echo
+  ./lnmp-docker down -v > /dev/null 2>&1 || true
   print_info "删除原有项目成功"
 }
 
@@ -49,6 +49,7 @@ _command(){
 
   date
   lnmp-laravel-by-composer new laravel5_5 5.5
+  lnmp-laravel-by-composer new laravel6_0 6.0
   date
 
   lnmp-laravel new laravel
@@ -114,7 +115,7 @@ server {
 
   docker node ls > /dev/null 2>&1 || docker swarm init
 
-  docker stack rm lnmp > /dev/null 2>&1 || echo
+  docker stack rm lnmp > /dev/null 2>&1 || true
 
   sleep 10
 

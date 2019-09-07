@@ -1,0 +1,63 @@
+on:
+  push:
+  pull_request:
+
+name: CI
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 2
+      - uses: docker-practice/actions-setup-docker@master
+      - uses: khs1994-docker/actions-setup-lnmp@master
+        with:
+          lnmp_services: "laravel nginx mysql php7 redis"
+          lrew_include: "laravel"
+      - name: Init LNMP
+        run: |
+          lnmp-docker services
+          docker-compose --version
+      - name: Install Laravel
+        env:
+          ACTIONS_COMPOSER_BIN_PATH: /home/runner/.composer/vendor/bin
+        run: |
+          set -x
+          export PATH=$ACTIONS_COMPOSER_BIN_PATH:$PATH
+
+          lnmp-composer config -g --unset repos.packagist
+
+          cd ..
+          lnmp-laravel-by-composer new laravel 6.0
+          cp -r laravel-demo/{.dockerignore,Dockerfile,Dockerfile.buildkit} laravel/
+          ls -la laravel
+      - name: Test Laravel
+        run: |
+          set -x
+          cd ../laravel
+
+          lnmp-php artisan -V
+          echo "Test Laravel"
+      - name: Build Docker Image
+        env:
+          DOCKER_CLI_EXPERIMENTAL: enabled
+        run: |
+          set -x
+          cd ../laravel
+          docker buildx build --load --target=laravel -t khs1994/laravel:6.0 -f Dockerfile.buildkit .
+      - name: Up
+        run: |
+          set -x
+
+          lnmp-docker up
+          sleep 30
+          lnmp-docker nginx-cli ls /app/laravel/public
+      - name: Connect
+        run: |
+          set -x
+          sleep 30
+          docker ps -a
+          curl -k https://laravel-docker.t.khs1994.com

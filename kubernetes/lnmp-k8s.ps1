@@ -4,6 +4,7 @@ cd $PSScriptRoot
 
 $MINIKUBE_VERSION="0.30.0"
 $KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
+$KUBECTL_URL="https://mirror.azure.cn/kubernetes/kubectl"
 
 ################################################################################
 
@@ -39,7 +40,7 @@ Usage: lnmp-k8s.ps1 COMMAND
 
 Commands:
   kubectl-install    Install kubectl
-  kubectl-getinfo    Get kubectl latest version info
+  kubectl-info       Get kubectl latest version info
 
   minikube-install   Install minikube
   minikube-up        Start minikube
@@ -69,7 +70,9 @@ if ($args.length -eq 0){
 }
 
 Function get_kubectl_version(){
-  return $KUBECTL_VERSION=$(wsl curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+  $url="https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+  $url="https://mirror.azure.cn/kubernetes/kubectl/stable.txt"
+  return $KUBECTL_VERSION=$(curl.exe -fsSL $url)
 }
 
 Function _delete_lnmp(){
@@ -124,14 +127,15 @@ switch ($args[0])
 {
   "kubectl-install" {
     $KUBECTL_VERSION=get_kubectl_version
-    wsl curl -L ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe -o kubectl-Windows-x86_64.exe
+    $url="${KUBECTL_URL}/${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe"
+    curl.exe -fsSL $url -o $HOME/kubectl.exe
 
     echo "
-Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
+Move $HOME/kubectl.exe to your PATH, then rename it kubectl
     "
   }
 
-  "kubectl-getinfo" {
+  "kubectl-info" {
     $KUBECTL_VERSION=get_kubectl_version
     echo "Latest Stable Version is: $KUBECTL_VERSION
     "
@@ -213,9 +217,9 @@ Move kubectl-Windows-x86_64.exe to your PATH, then rename it kubectl
   }
 
   "minikube-install" {
-    wsl curl -L `
+    curl.exe -fsSL `
       http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-windows-amd64.exe `
-      -o minikube.exe
+      -o $HOME/minikube.exe
   }
 
   "helm-development" {

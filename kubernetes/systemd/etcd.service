@@ -28,6 +28,7 @@ Environment="K8S_ETCD_HOST=192.168.199.100"
 ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
 
 ExecStart= /opt/k8s/bin/etcd \
+  --enable-v2=true \
   --name="node1" \
   --listen-peer-urls="https://${K8S_ETCD_HOST}:2380" \
   --listen-client-urls="https://${K8S_ETCD_HOST}:2379,http://127.0.0.1:2379" \

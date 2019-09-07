@@ -8,12 +8,16 @@ set -e
 
 if [ "$debug" = 'true' ];then set -x; fi
 
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
+source $ScriptRoot/.init
+
 if [ -z "$GITHUB_TOKEN" ];then
   echo -e "\nYou must set [ GITHUB_TOKEN ] env\n"
   exit 1
 fi
 
-docker run -it --rm \
+exec docker run -i ${tty} --rm \
     --mount type=bind,source=$PWD,target=/app,consistency=cached \
     --mount source=lnmp_travis-data,target=/root/.travis \
     -e GITHUB_TOKEN=$GITHUB_TOKEN \

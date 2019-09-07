@@ -2,12 +2,22 @@ variant: fcos
 version: 1.0.0
 systemd:
   units:
+    - name: kube-scheduler.service
+      dropins:
+        - name: 10-installer.conf
+          contents: |
+            [Service]
+            ExecStartPre=-/bin/podman kill kube-scheduler
+            ExecStartPre=-/bin/podman rm kube-scheduler
+            ExecStartPre=-/bin/podman pull k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}}
+
+            ExecStop=/bin/podman stop kube-scheduler
 storage:
   files:
     - path: ${K8S_ROOT}/conf/kube-scheduler.kubeconfig
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.kubeconfig    
+        source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.kubeconfig
     - path: ${K8S_ROOT}/certs/kube-scheduler.pem
       mode: 0644
       contents:
@@ -16,7 +26,7 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler-key.pem
-    - path: ${K8S_ROOT}/bin/kube-scheduler
-      mode: 0755
-      contents:
-        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-scheduler
+    # - path: ${K8S_ROOT}/bin/kube-scheduler
+    #   mode: 0755
+    #   contents:
+    #     source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-scheduler
