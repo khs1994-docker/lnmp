@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 2
-      - name: Without version
+      - name: default
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
       - run: docker version
@@ -53,7 +53,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
         if: github.event_name == 'push'
       # test docker login
-      - run: |
+      - name: Docker Push Image
+        run: |
           set -x
           docker pull alpine:latest
           docker tag alpine:latest khs1994/alpine:latest
@@ -72,6 +73,7 @@ jobs:
           docker_version: 0.0.0.0
           docker_channel: nightly
       - run: docker version
+
   notsupport-platform:
     strategy:
       matrix:

@@ -52,6 +52,7 @@ jobs:
                     /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
             set -x
             php -v
+
   notsupport-platform:
     strategy:
       matrix:
