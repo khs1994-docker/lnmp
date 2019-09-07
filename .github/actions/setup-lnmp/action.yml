@@ -1,0 +1,21 @@
+# https://help.github.com/en/articles/metadata-syntax-for-github-actions
+
+name: 'setup-lnmp'
+description: 'Set up your GitHub Actions workflow with khs1994-docker/lnmp'
+author: 'khs1994'
+inputs:
+  lnmp_branch:
+    description: lnmp branch
+    default: 19.03
+  lnmp_services:
+    description: lnmp services
+    default: nginx mysql php redis
+  lrew_include:
+    description: LREW package
+    default: pcit
+runs:
+  using: 'node12'
+  main: 'lib/setup-lnmp.js'
+branding:
+  icon: 'box'
+  color: 'green'

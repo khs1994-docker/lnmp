@@ -1,0 +1,19 @@
+{
+  "name": "setup-php",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/setup-php.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "@actions/core": "^1.0.0",
+    "@actions/exec": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "cross-env RUNNER_WORKSPACE='/home/runner/work/php-demo' INPUT_ARGS=\"php -v ; env\" INPUT_PHP_VERSION='7.3.9' INPUT_PHP_TYPE=composer INPUT_JOB_CONTAINER_NETWORK=test node lib/setup-php"
+  },
+  "author": "",
+  "license": "ISC"
+}
