@@ -66,7 +66,6 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a bug               -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a config            -d    'Validate and view the LNMP Compose file'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a pull              -d     'Pull LNMP Docker Images'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a down              -d     'Stop and remove LNMP Docker containers, networks'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a docs              -d     'Support Documents'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a gcr.io            -d    'Up local gcr.io(k8s.gcr.io) registry server to start Docker Desktop Kubernetes'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a help              -d     'Display this help message'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a new               -d     'New PHP Project and generate nginx conf and issue SSL certificate'

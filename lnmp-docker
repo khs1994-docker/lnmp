@@ -1,15 +1,8 @@
 #!/usr/bin/env bash
 
-# git remote add origin git@github.com:khs1994-docker/lnmp.git
-# git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git
-# git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git
-# git remote add coding git@git.coding.net:khs1994/lnmp.git
-
 # Don't Run this shell script on git bash Windows, please use ./lnmp-docker.ps1
 
-#
 # sudo ? only need by install docker-compose
-#
 
 set -e
 
@@ -83,9 +76,7 @@ print_info "Exec custom scripts"
 
 . ./lnmp-docker-custom-script
 
-if ! [ -f config/php/docker-php.ini ];then
-  cp config/php/docker-php.ini.example config/php/docker-php.ini
-fi
+_cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
 
 _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 _cp_only_not_exists config/composer/.env.example config/composer/.env
@@ -129,7 +120,6 @@ Commands:
   config               Validate and view the LNMP Compose file
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
-  docs                 Read support documents
   help                 Display this help message
   nfs                  Up NFS server [ down | ]
   pull                 Pull LNMP Docker Images
@@ -211,51 +201,7 @@ _tongji(){
   fi
 }
 
-clusterkit_help(){
-exec echo "
-ClusterKit:
-  clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
-  clusterkit-COMMAND           Run docker-compsoe commands(config, pull, etc)
-
-  swarm-clusterkit             UP LNMP With Mysql Redis Memcached Cluster IN Swarm mode
-
-  clusterkit-mysql-up          Up MySQL Cluster
-  clusterkit-mysql-down        Stop MySQL Cluster
-  clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
-
-  clusterkit-mysql-deploy      Deploy MySQL Cluster in Swarm mode
-  clusterkit-mysql-remove      Remove MySQL Cluster in Swarm mode
-
-  clusterkit-memcached-up      Up memcached Cluster
-  clusterkit-memcached-down    Stop memcached Cluster
-  clusterkit-memcached-exec    Execute a command in a running memcached Cluster node
-
-  clusterkit-memcached-deploy  Deploy memcached Cluster in Swarm mode
-  clusterkit-memcached-remove  Remove memcached Cluster in Swarm mode
-
-  clusterkit-redis-up          Up Redis Cluster(By Ruby)
-  clusterkit-redis-down        Stop Redis Cluster(by Ruby)
-  clusterkit-redis-exec        Execute a command in a running Redis Cluster node(By Ruby)
-
-  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
-  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
-
-  clusterkit-redis-replication-up       Up Redis M-S (replication)
-  clusterkit-redis-replication-down     Stop Redis M-S (replication)
-  clusterkit-redis-replication-exec     Execute a command in a running Redis M-S (replication) node
-
-  clusterkit-redis-replication-deploy   Deploy Redis M-S (replication) in Swarm mode
-  clusterkit-redis-replication-remove   Remove Redis M-S (replication) in Swarm mode
-
-  clusterkit-redis-sentinel-up           Up Redis S
-  clusterkit-redis-sentinel-down         Stop Redis S
-  clusterkit-redis-sentinel-exec         Execute a command in a running Redis S node
-
-  clusterkit-redis-sentinel-deploy       Deploy Redis S in Swarm mode
-  clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
-
-"
-}
+test -f cluster/help.sh && source cluster/help.sh || true
 
 _gcr_io_down(){
   docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1 || true
@@ -471,8 +417,7 @@ update_version(){
 }
 
 # Docker 是否运行
-
-run_docker(){
+_docker_is_run(){
   docker info > /dev/null 2>&1 || (clear ; \
     echo "==========================" ;\
     echo "=== Please Run Docker ====" ;\
@@ -481,7 +426,6 @@ run_docker(){
 }
 
 # 创建日志文件
-
 logs(){
   if ! [ -f log/supervisord.log ];then touch log/supervisord.log; fi
   if ! [ -d log/supervisord ];then mkdir -p log/supervisord; fi
@@ -489,26 +433,18 @@ logs(){
   if ! [ -d log/mongodb ];then mkdir -p log/mongodb && touch log/mongodb/mongo.log; fi
   if ! [ -d log/mysql ];then mkdir -p log/mysql && touch log/mysql/error.log; fi
   if ! [ -d log/mariadb ];then mkdir -p log/mariadb && touch log/mariadb/error.log; fi
-  if ! [ -d log/nginx ];then mkdir -p log/nginx && touch log/nginx/error.log && touch log/nginx/access.log; fi
+  if ! [ -d log/nginx ];then mkdir -p log/nginx && touch log/nginx/{error.log,access.log}; fi
   if ! [ -d log/nginx-unit ];then mkdir -p log/nginx-unit; fi
-  if ! [ -d log/php ];then
-    mkdir -p log/php \
-      && touch log/php/error.log \
-      && touch log/php/slow.log \
-      && touch log/php/php-fpm-access.log \
-      && touch log/php/php-fpm-error.log \
-      && touch log/php/xdebug-remote.log
-  fi
+
+if ! [ -d log/php ];then
+ mkdir -p log/php \
+ && touch log/php/{error.log,slow.log,php-fpm-access.log,php-fpm-error.log,xdebug-remote.log}
+fi
+
   if ! [ -d log/redis ];then mkdir -p log/redis && touch log/redis/redis.log ; fi
-  chmod -R 777 log/mongodb \
-               log/mysql \
-               log/nginx \
-               log/php \
-               log/redis || sudo chmod -R 777 log/mongodb \
-                                          log/mysql \
-                                          log/nginx \
-                                          log/php \
-                                          log/redis
+
+  chmod -R 777 log/{mongodb,mysql,nginx,php,redis} \
+    || sudo chmod -R 777 log/{mongodb,mysql,nginx,php,redis}
 }
 
 # 清理日志文件
@@ -531,14 +467,6 @@ cleanup(){
       && rm -rf log/supervisord/* \
       && rm -rf log/supervisord.log \
       print_info "Clean log files SUCCESS"
-}
-
-gitbook(){
-  docker rm -f lnmp-docs > /dev/null 2>&1 || echo
-  exec docker run --init -i ${tty} --rm -p 4000:4000 \
-    --name lnmp-docs --mount type=bind,src=$PWD/docs,target=/srv/gitbook-src \
-    khs1994/gitbook \
-    server
 }
 
 # 将 compose 移入 PATH
@@ -692,7 +620,6 @@ init() {
 }
 
 # 更新项目
-
 set_git_remote_origin_url(){
   network
   git remote get-url origin > /dev/null 2>&1 || local a=1
@@ -1069,7 +996,7 @@ get_service_container_id(){
 }
 
 bash_cli(){
-  run_docker
+  _docker_is_run
   local SERVICE_NAME=$1
   get_service_container_id $SERVICE_NAME
   shift
@@ -1289,9 +1216,8 @@ main() {
   local command=$1; shift
   case $command in
   acme.sh )
-    run_docker; acme "$@"
+    _docker_is_run; acme "$@"
     ;;
-
   init )
     _lrew_init "$@"
     ;;
@@ -1308,9 +1234,8 @@ main() {
     _lrew_outdated "$@"
     ;;
   backup )
-    run_docker; backup "$@"
+    _docker_is_run; backup "$@"
     ;;
-
   config )
     logs
 
@@ -1331,7 +1256,7 @@ main() {
     ;;
 
   test )
-    run_docker; cli/test $@
+    _docker_is_run; cli/test $@
     ;;
 
   completion )
@@ -1342,9 +1267,7 @@ main() {
     ;;
 
   bug )
-
   _lnmp_bug
-
   ;;
 
   gcr.io )
@@ -1367,7 +1290,7 @@ main() {
     ;;
 
   swarm-pull )
-    run_docker
+    _docker_is_run
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       init; sleep 2; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} pull "$@"
@@ -1386,7 +1309,7 @@ main() {
 
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      run_docker
+      _docker_is_run
       rm -rf app/.pcit
       pcit_init
       docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
@@ -1410,7 +1333,6 @@ main() {
   swarm-update )
   echo -e "
 Example:
-
 
 $ docker config create nginx_khs1994_com_conf_v2 config/${LNMP_NGINX_CONF_D:-nginx}/khs1994.com.conf
 
@@ -1438,7 +1360,7 @@ For information please run $ docker service update --help
   ;;
 
   build )
-    run_docker
+    _docker_is_run
     init
 
     if [ ${ARCH} = 'x86_64' ];then
@@ -1454,7 +1376,7 @@ For information please run $ docker service update --help
     ;;
 
   build-up )
-    run_docker
+    _docker_is_run
     init
 
     if [ ${ARCH} = 'x86_64' ];then
@@ -1473,7 +1395,7 @@ For information please run $ docker service update --help
     ;;
 
   up )
-    run_docker
+    _docker_is_run
     init
     # 判断架构
 
@@ -1506,7 +1428,6 @@ For information please run $ docker service update --help
 
   build-config )
     logs
-
     if [ ${ARCH} = 'x86_64' ];then
       _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.build.yml" \
@@ -1519,7 +1440,7 @@ For information please run $ docker service update --help
     ;;
 
   restore )
-    run_docker; restore "$@"
+    _docker_is_run; restore "$@"
     ;;
 
   update|upgrade )
@@ -1584,7 +1505,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     local SERVICE=$(echo $command | cut -d '-' -f 1)
     local cli_command
     if [ -z "$1" ];then cli_command=sh; else cli_command="$@"; fi
-    run_docker
+    _docker_is_run
     bash_cli $SERVICE $cli_command
     ;;
 
@@ -1595,7 +1516,6 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   *-logs | *-log )
-
     if ! [ "${OS}" = 'Linux' ];then notsupport; fi
 
     SERVICE=$(echo $command | cut -d '-' -f 1)
@@ -1607,7 +1527,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   build-push )
-    run_docker; init;
+    _docker_is_run; init;
     _get_compose_options "docker-lnmp.yml" \
                          "docker-lnmp.build.yml" \
                          "--build"
@@ -1624,12 +1544,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     __lnmp_custom_down "$@" 2>/dev/null || true
     ;;
 
-  docs )
-    run_docker; gitbook
-    ;;
-
   pull )
-    run_docker; init
+    _docker_is_run; init
 
     sleep 2;
     _get_compose_options "docker-lnmp.yml" \
@@ -1642,7 +1558,6 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
      ;;
 
   cookbooks )
-
     _local_docs_server
   ;;
 
@@ -1655,7 +1570,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   ssl )
-    run_docker; ssl "$@"
+    _docker_is_run; ssl "$@"
     ;;
 
   ssl-self )
@@ -2018,15 +1933,12 @@ command -v docker > /dev/null 2>&1 \
 docker_compose "$@"
 
 # data collaction
-
 if ! [ "${DATA_COLLECTION}" = "false" ];then _tongji; fi
 
 # output help
-
 if [ $# = 0 ];then help; exit 0; fi
 
 # 生产环境 compose 文件
-
 PRODUCTION_COMPOSE_FILE='docker-production.yml'
 
 if [ `ls docker-production.*.yml > /dev/null 2>&1` ];then

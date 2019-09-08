@@ -217,7 +217,6 @@ Commands:
   composer             Exec composer command on Docker
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
-  docs                 Support Documents
   env                  Edit .env/.env.ps1 file
   help                 Display this help message
   pull                 Pull LNMP Docker Images
@@ -755,11 +754,6 @@ switch -regex ($command){
 
       #@custom
       __lnmp_custom_down
-    }
-
-    docs {
-      docker run --init -it --rm -p 4000:4000 `
-          --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
     }
 
     env {

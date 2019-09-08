@@ -122,6 +122,7 @@ module.exports = {
           children: [
             '/build',
             '/manifest',
+            '/buildx',
           ]
         }, {
           title: "数据卷 Volumes",
@@ -143,7 +144,6 @@ module.exports = {
             '/arm',
             '/ab',
             '/minio',
-            '/buildx',
             '/cncf/kong',
             '/windows/wsl2',
           ]

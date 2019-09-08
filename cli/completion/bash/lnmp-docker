@@ -44,7 +44,6 @@ complete -W "acme.sh \
         pull \
         bug \
         down \
-        docs \
         gcr.io \
         help \
         new \

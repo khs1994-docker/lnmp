@@ -16,11 +16,9 @@ $ lnmp-windows-pm.ps1 install go
 $ lnmp-windows-pm.ps1 install go --pre
 ```
 
-## 开发者
+## 新增一个包(开发者)
 
-本项目默认提供了一些常用的包，你也可以自己开发一个包，供用户安装某个软件。
-
-### 新增一个包
+本项目提供了一些常用的包，你也可以自己开发一个包，供用户安装某个软件。
 
 ```bash
 $ lnmp-windows-pm.ps1 init example
