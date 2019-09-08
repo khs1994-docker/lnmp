@@ -1121,6 +1121,7 @@ XXX
     }
 
     "cookbooks" {
+      printInfo k8s
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/k8s)){
         git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
       }else{
@@ -1128,27 +1129,31 @@ XXX
         git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker)){
-        git clone --depth=1 -b pages git@github.com:docker_practice/docker_practice.git ${APP_ROOT}/lnmp-docs/docker
+      printInfo docker_practice
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker_practice)){
+        git clone --depth=1 -b master git@github.com:docker_practice/zh-cn.git ${APP_ROOT}/lnmp-docs/docker_practice
       }else{
-        git -C ${APP_ROOT}/lnmp-docs/docker fetch --depth=1 origin pages
-        git -C ${APP_ROOT}/lnmp-docs/docker reset --hard origin/pages
+        git -C ${APP_ROOT}/lnmp-docs/docker_practice fetch --depth=1 origin master
+        git -C ${APP_ROOT}/lnmp-docs/docker_practice reset --hard origin/master
       }
 
+      printInfo laravel
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
       }else{
         git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
         git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
       }
 
+      printInfo laravel_en
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel-en)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.git ${APP_ROOT}/lnmp-docs/laravel-en
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.us-en.git ${APP_ROOT}/lnmp-docs/laravel-en
       }else{
         git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
         git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
       }
 
+      printInfo nginx
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/nginx)){
         git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
       }else{

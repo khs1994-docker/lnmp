@@ -136,6 +136,7 @@ module.exports = {
           children: [
             '/dockerd',
             '/systemd',
+            '/journalctl',
             '/git',
             '/gpg',
             '/network',

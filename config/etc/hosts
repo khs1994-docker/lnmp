@@ -15,7 +15,10 @@
 # 34.228.249.31  collector.githubapp.com
 
 216.58.199.16    storage.googleapis.com
+
 13.225.103.126   builds.coreos.fedoraproject.org
+
+172.217.160.81   proxy.golang.org
 
 # http://tool.chinaz.com/dns
 # https://site.ip138.com/

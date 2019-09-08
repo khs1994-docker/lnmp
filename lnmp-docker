@@ -42,15 +42,6 @@ notsupport(){
   exit 1
 }
 
-check_nginx_conf(){
-  echo "$LNMP_SERVICES" | grep -q 'minio' \
-    || ( ls config/${LNMP_NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
-         && ( print_error \
-              "your .env file not include minio, but nginx conf.d folder include minio.conf" \
-            ) || true \
-        )
-}
-
 _cp_only_not_exists(){
   if ! [ -f $2 ];then cp $1 $2 ; fi
 }
@@ -285,6 +276,7 @@ _satis(){
 }
 
 _local_docs_server(){
+  print_info k8s
   if ! [ -d ${APP_ROOT}/lnmp-docs/k8s ];then
     git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
   else
@@ -292,27 +284,31 @@ _local_docs_server(){
     git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
   fi
 
-  if ! [ -d ${APP_ROOT}/lnmp-docs/docker ];then
-    git clone --depth=1 -b pages git@gitee.com:docker_practice/docker_practice.git ${APP_ROOT}/lnmp-docs/docker
+  print_info docker_practice
+  if ! [ -d ${APP_ROOT}/lnmp-docs/docker_practice ];then
+    git clone --depth=1 -b master git@gitee.com:docker_practice/zh-cn ${APP_ROOT}/lnmp-docs/docker_practice
   else
-    git -C ${APP_ROOT}/lnmp-docs/docker fetch --depth=1 origin pages
-    git -C ${APP_ROOT}/lnmp-docs/docker reset --hard origin/pages
+    git -C ${APP_ROOT}/lnmp-docs/docker_practice fetch --depth=1 origin master
+    git -C ${APP_ROOT}/lnmp-docs/docker_practice reset --hard origin/master
   fi
 
+  print_info laravel
   if ! [ -d ${APP_ROOT}/lnmp-docs/laravel ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
+    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
   else
     git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
     git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
   fi
 
+  print_info laravel_en
   if ! [ -d ${APP_ROOT}/lnmp-docs/laravel-en ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.git ${APP_ROOT}/lnmp-docs/laravel-en
+    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.us-en ${APP_ROOT}/lnmp-docs/laravel-en
   else
     git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
     git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
   fi
 
+  print_info nginx
   if ! [ -d ${APP_ROOT}/lnmp-docs/nginx ];then
     git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
   else
@@ -1893,8 +1889,6 @@ if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_EN
 APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
 
 print_info "APP_ROOT is $APP_ROOT"
-
-check_nginx_conf
 
 if [ -d .git ];then
   BRANCH=`git rev-parse --abbrev-ref HEAD`
