@@ -18,7 +18,7 @@ x-common-label:
 services:
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-07-05T21-20-21Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-09-05T23-24-38Z}
     volumes:
       - type: volume
         source: minio-data

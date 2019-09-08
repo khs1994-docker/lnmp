@@ -144,6 +144,7 @@ module.exports = {
             '/minio',
             '/buildx',
             '/cncf/kong',
+            '/windows/wsl2',
           ]
         }
       ]

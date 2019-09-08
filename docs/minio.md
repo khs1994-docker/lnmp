@@ -68,6 +68,24 @@ $ ./lnmp-docker up
 
 选择对应的操作系统，移入 PATH 即可
 
+> 官网直接下载可能较缓慢。
+
+### Windows 安装
+
+```bash
+$ lnmp-windows-pm.ps1 install minio
+```
+
+### macOS 安装
+
+```bash
+$ brew install minio/stable/minio
+
+$ brew install minio/stable/mc
+```
+
+### 命令
+
 ```bash
 $ mc config host add minio https://minio.t.khs1994.com khs1994miniokey khs1994miniosecret
 
