@@ -1142,6 +1142,8 @@ if [ "$ENABLE_CN_MIRROR" = 0 ];then
   print_info "CN Mirror disabled"
   sudo sed -i "s#dockerhub.azk8s.cn#mirror.gcr.io#g" `grep dockerhub.azk8s.cn -rl $PWD/systemd` || true
   sudo sed -i "s#gcr.azk8s.cn#gcr.io#g" `grep gcr.azk8s.cn -rl $PWD/systemd` || true
+  sudo sed -i "s#quay.azk8s.cn#quay.io#g" `grep quay.azk8s.cn -rl $PWD/systemd` || true
+
   sudo sed -i "s#gcr.azk8s.cn#gcr.io#g" `grep gcr.azk8s.cn -rl $PWD/addons` || true
 fi
 

@@ -52,15 +52,17 @@ oom_score = 0
     [plugins.cri.registry]
       [plugins.cri.registry.mirrors]
         [plugins.cri.registry.mirrors."docker.io"]
+          # endpoint = ["https://registry-1.docker.io"]
           endpoint = ["https://dockerhub.azk8s.cn"]
-# endpoint = ["https://registry-1.docker.io"]
         [plugins.cri.registry.mirrors."gcr.io"]
           endpoint = ["https://gcr.azk8s.cn"]
-          # [plugins.cri.registry.configs."gcr.io".auth]
-          #   username = ""
-          #   password = ""
-          #   auth = ""
-          #   identitytoken = ""
+        [plugins.cri.registry.mirrors."quay.io"]
+          endpoint = ["https://quay.azk8s.cn"]          
+      # [plugins.cri.registry.configs."gcr.io".auth]
+      #   username = ""
+      #   password = ""
+      #   auth = ""
+      #   identitytoken = ""
     [plugins.cri.x509_key_pair_streaming]
       tls_cert_file = ""
       tls_key_file = ""
