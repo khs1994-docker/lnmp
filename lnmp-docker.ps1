@@ -102,6 +102,8 @@ Function env_status(){
   _cp_only_not_exists config/composer/.env.example.ps1 config/composer/.env.ps1
   _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 
+  _cp_only_not_exists config/registry/config.example.yml config/registry/config.yml
+
 }
 
 Function wait_docker(){

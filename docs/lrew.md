@@ -4,33 +4,9 @@
 
 macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lrew`。`lrew` 实现了对 khs1994-docker/lnmp 项目的扩展，提供了以下功能。
 
-## 增加服务
-
-> **这个项目能不能增加 xxx 软件，可以！** 下文用 `example` 代替 `xxx` 软件
-
-```bash
-$ lnmp-docker init example
-```
-
-修改 `vendor/lrew-dev/example` 内的文件。
-
-根据下方 `修改配置` 一节，测试项目文件。
-
-之后推送到 GitHub，并发布到 composer。
-
-* 示例：https://github.com/khs1994-docker/lrew-harbor
-
-> 可以参考 `lrew` 文件夹中的示例项目
-
-## 增加已有服务
-
-你可以使用已发布到 [composer](https://packagist.org/packages/lrew/) 的服务。
-
-```bash
-$ lnmp-docker add example
-```
-
 ## 修改配置
+
+你可以通过以下方式启用 `example` 包。若在 `lrew` 目录下没找到你所需要的包，你可以参照下一小节开发一个包。
 
 ### Linux、macOS
 
@@ -56,4 +32,30 @@ $global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','example'
 
 ```bash
 $ lnmp-docker up
+```
+
+## 增加服务（开发者）
+
+> **这个项目能不能增加 xxx 软件，可以！** 下文用 `example` 代替 `xxx` 软件
+
+```bash
+$ lnmp-docker init example
+```
+
+修改 `vendor/lrew-dev/example` 内的文件。
+
+根据下方 `修改配置` 一节，测试项目文件。
+
+之后推送到 GitHub，并发布到 composer。
+
+* 示例：https://github.com/khs1994-docker/lrew-harbor
+
+> 可以参考 `lrew` 文件夹中的示例项目
+
+## 增加已有服务
+
+你可以使用已发布到 [composer](https://packagist.org/packages/lrew/) 的服务。
+
+```bash
+$ lnmp-docker add example
 ```

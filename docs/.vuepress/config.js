@@ -133,6 +133,7 @@ module.exports = {
           title: '参考',
           collapsable: false,
           children: [
+            '/dockerd',
             '/systemd',
             '/git',
             '/gpg',

@@ -73,8 +73,6 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a new               -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a nginx-config      -d     'Generate nginx vhost conf'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a restore           -d     'Restore MySQL databases'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a restart           -d     'Restart LNMP services'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a registry-up       -d     'Up Docker Registry'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a registry-down     -d     'Stop Docker Registry'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a ssl               -d     'Issue SSL certificate powered by acme.sh'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a ssl-self          -d     'Issue Self-signed SSL certificate'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a swarm-build       -d     'Build Swarm mode LNMP images (nginx php7 etc)'
