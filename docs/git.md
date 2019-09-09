@@ -67,8 +67,22 @@ $ git config --global core.safecrlf false
 $ git config --global core.safecrlf warn
 ```
 
-### 重写 committer
+## 重写 committer
 
 ```bash
 $ git commit --amend --reset-author
 ```
+
+## TOOLS
+
+### github/git-sizer
+
+* https://github.com/github/git-sizer
+
+### github/hub
+
+* https://github.com/github/hub
+
+### git-lfs/git-lfs
+
+* https://github.com/git-lfs/git-lfs

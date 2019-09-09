@@ -84,6 +84,7 @@ module.exports = {
             '/nginx/issue-ssl',
             '/nginx/https',
             '/nginx/unit',
+            '/nginx/arg',
           ]
         }, {
           title: "PHP",
@@ -147,6 +148,8 @@ module.exports = {
             '/minio',
             '/cncf/kong',
             '/windows/wsl2',
+            '/go',
+            '/github',
           ]
         }
       ]

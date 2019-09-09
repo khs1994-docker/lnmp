@@ -15,3 +15,7 @@
 **特别提示：** 国内使用 Docker **务必** 配置国内镜像，第三个参考链接中安装一节已经给出了详细的配置过程。
 
 如果仍有 Docker 安装配置方面的问题请到 [issues](https://github.com/khs1994-docker/lnmp/issues/180) 反馈。
+
+## 配置
+
+* https://docs.docker.com/engine/reference/commandline/cli/

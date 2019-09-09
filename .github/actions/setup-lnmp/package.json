@@ -14,7 +14,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "cross-env RUNNER_WORKSPACE='/home/runner/work/php-demo' INPUT_ARGS=\"php -v ; env\" INPUT_PHP_VERSION='7.3.9' INPUT_PHP_TYPE=composer INPUT_JOB_CONTAINER_NETWORK=test node lib/setup-php"
+    "test": ""
   },
   "author": "",
   "license": "ISC"

@@ -56,9 +56,9 @@
 
 * 内置 `Drone CI` 私有 CI/CD 方案
 
-* [可扩展](custom.md)，支持自定义 `compose` 文件。
+* [可扩展](custom.md)，支持自定义 `compose` 文件
 
-* 通过 [khs1994-docker/actions-setup-lnmp](https://github.com/khs1994-docker/actions-setup-lnmp) 可在 GitHub Actions CI/CD 中快速启用 LNMP 环境。
+* 通过 [khs1994-docker/actions-setup-lnmp](https://github.com/khs1994-docker/actions-setup-lnmp) 可在 GitHub Actions CI/CD 中快速启用 LNMP 环境
 
 ## 系列文章
 
