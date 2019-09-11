@@ -12,8 +12,8 @@ $env:path=[environment]::GetEnvironmentvariable("Path","user") `
           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
 $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION="1.14.3"
-$DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
+$KUBERNETES_VERSION="1.14.6"
+$DOCKER_DESKTOP_VERSION="2.1.2.0 (38030)"
 $source=$PWD
 
 Function _command($command){

@@ -33,7 +33,7 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/acme-docker
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: dockerfile/acme.sh
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
     - name: sync-ci
@@ -44,7 +44,7 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/ci
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: drone
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
     - name: sync-kubernetes
@@ -55,7 +55,7 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/lnmp-k8s
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: kubernetes
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
     - name: sync-node-demo
@@ -66,7 +66,7 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/node-demo
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: app/node-demo
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
     - name: sync-php-demo
@@ -77,7 +77,7 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/php-demo
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: app/demo
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
     - name: sync-buildx
@@ -99,6 +99,6 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/laravel-demo
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: app/laravel-demo
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
