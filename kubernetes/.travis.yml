@@ -62,8 +62,8 @@ before_install:
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
 install:
-  - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-  - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
+  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
   - export KUBERNETES_TYPE=server
   - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env

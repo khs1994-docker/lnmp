@@ -2,7 +2,7 @@
 
 ## Overview
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/coreos.svg?style=social&label=Stars)](https://github.com/khs1994-docker/coreos) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/coreos.svg)](https://store.docker.com/community/images/khs1994/coreos) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/coreos.svg)](https://store.docker.com/community/images/khs1994/coreos)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/coreos.svg?style=social&label=Stars)](https://github.com/khs1994-docker/coreos) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/coreos.svg)](https://hub.docker.com/r/khs1994/coreos) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/coreos.svg)](https://hub.docker.com/r/khs1994/coreos)
 
 ### 技能储备
 
