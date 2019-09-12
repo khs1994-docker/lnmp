@@ -145,8 +145,6 @@ services:
   drone-server:
     # << : *gogs
     << : *github
-    # << : *coding
-    # << : *khs1994
 ```
 
 ## 启动

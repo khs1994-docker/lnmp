@@ -150,6 +150,8 @@ module.exports = {
             '/windows/wsl2',
             '/go',
             '/github',
+            '/atom',
+            '/vscode',
           ]
         }
       ]
