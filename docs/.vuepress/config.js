@@ -84,6 +84,7 @@ module.exports = {
             '/nginx/issue-ssl',
             '/nginx/https',
             '/nginx/unit',
+            '/nginx/arg',
           ]
         }, {
           title: "PHP",
@@ -122,6 +123,7 @@ module.exports = {
           children: [
             '/build',
             '/manifest',
+            '/buildx',
           ]
         }, {
           title: "数据卷 Volumes",
@@ -133,7 +135,9 @@ module.exports = {
           title: '参考',
           collapsable: false,
           children: [
+            '/dockerd',
             '/systemd',
+            '/journalctl',
             '/git',
             '/gpg',
             '/network',
@@ -142,7 +146,12 @@ module.exports = {
             '/arm',
             '/ab',
             '/minio',
-            '/buildx',
+            '/cncf/kong',
+            '/windows/wsl2',
+            '/go',
+            '/github',
+            '/atom',
+            '/vscode',
           ]
         }
       ]

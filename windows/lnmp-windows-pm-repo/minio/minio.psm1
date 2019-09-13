@@ -21,10 +21,10 @@ Function install($VERSION=0,$isPre=0){
   if($isPre){
     $VERSION=$preVersion
   }
-  $url="https://dl.min.io/server/minio/release/windows-amd64/minio.exe"
+  $url="https://github.com/khs1994-docker/minio-mirror/releases/download/nightly/minio-windows-amd64.zip"
 
-  $filename="minio.exe"
-  $unzipDesc="minio server"
+  $filename="minio-windows-amd64.zip"
+  $unzipDesc="minio"
 
   if($(_command minio)){
     # $CURRENT_VERSION=""
@@ -42,25 +42,20 @@ Function install($VERSION=0,$isPre=0){
     $name `
     $VERSION
 
-  _downloader `
-    "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" `
-    "mc.exe" `
-    "minio client" `
-    latest
   # 验证原始 zip 文件 Fix me
 
   # 解压 zip 文件 Fix me
   # _cleanup minio.exe mc.exe
-  # _unzip $filename $unzipDesc
+  _unzip $filename C:\bin
 
   # 安装 Fix me
-  Copy-item -r -force minio.exe mc.exe C:\bin\
   # Start-Process -FilePath $filename -wait
-  _cleanup minio.exe mc.exe
+  # _cleanup minio.exe mc.exe
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   minio version
+  mc version
 }
 
 Function uninstall(){
@@ -72,16 +67,19 @@ Function getInfo(){
 
   $latestVersion=getLatestRelease $githubRepo
 
-  echo "
-Package: $name
-Version: $stableVersion
-PreVersion: $preVersion
-LatestVersion: $latestVersion
-HomePage: $homepage
-Releases: $releases
-Bugs: $bug
-Description: $description
-"
+  ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 Function bug(){

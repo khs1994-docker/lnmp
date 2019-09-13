@@ -184,14 +184,15 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 	# && apk del --no-network --no-cache .fetch-deps \
 	&& apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
+          argon2-dev \
           coreutils \
           curl-dev \
           libedit-dev \
-          openssl-dev \
           libsodium-dev \
           libxml2-dev \
+          oniguruma-dev \
+          openssl-dev \
           sqlite-dev \
-          argon2-dev \
           cyrus-sasl-dev \
           postgresql-dev \
           libzip-dev \
@@ -218,7 +219,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           tidyhtml-dev \
           net-snmp-dev \
           openldap-dev \
-          oniguruma-dev \
           \
           bison \
           libgcrypt-dev \
@@ -264,7 +264,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 		\
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
-		$(test "$gnuArch" = 's390x-linux-gnu' && echo '--without-pcre-jit') \
+		$(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
 		\
 		$PHP_EXTRA_CONFIGURE_ARGS \
 	&& make -j "$(nproc)" \
@@ -272,6 +272,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
 	&& make clean \
+  && cp -v php.ini-* "$PHP_INI_DIR/" \
 	&& cd / \
   # && docker-php-source delete \
   # && rm -rf /usr/src/php \
@@ -343,6 +344,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 	&& { \
 		echo '[global]'; \
 		echo 'error_log = /proc/self/fd/2'; \
+    echo; echo '; https://github.com/docker-library/php/pull/725#issuecomment-443540114'; echo 'log_limit = 8192'; \
 		echo; \
 		echo '[www]'; \
 		echo '; if we send this to /proc/self/fd/1, it never appears'; \
@@ -352,6 +354,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 		echo; \
 		echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
 		echo 'catch_workers_output = yes'; \
+    echo 'decorate_workers_output = no'; \
 	} | tee php-fpm.d/docker.conf \
 	&& { \
 		echo '[global]'; \

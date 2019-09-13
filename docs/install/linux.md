@@ -27,7 +27,7 @@ $ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git
 ```bash
 $ cd
 
-$ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
+$ curl -fsSL lnmp.khs1994.com | sh
 ```
 
 ## 启动 Demo

@@ -22,7 +22,7 @@
 
 ## 集群
 
-直接将 PHP 项目打入镜像，以容器方式 (`Dockerfile`) 交付。
+直接将 PHP 项目打入镜像，以容器方式 (`Dockerfile`) 交付。可以参考 [Laravel Demo](https://github.com/khs1994-docker/laravel-demo)
 
 ## PHP
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/coreos.svg?style=social&label=Stars)](https://github.com/khs1994-docker/coreos) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/coreos.svg)](https://store.docker.com/community/images/khs1994/coreos) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/coreos.svg)](https://store.docker.com/community/images/khs1994/coreos)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/coreos.svg?style=social&label=Stars)](https://github.com/khs1994-docker/coreos) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/coreos.svg)](https://hub.docker.com/r/khs1994/coreos) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/coreos.svg)](https://hub.docker.com/r/khs1994/coreos)
 
 ### 技能储备
 
@@ -41,18 +41,19 @@ VirtualBox -> 管理 -> 主机网络管理器 -> vboxnet1 -> 启用 DHCP 服务�
 ```bash
 # download coreos iso files
 $ ./coreos init
+```
 
+如果下载缓慢可以替换 `hosts`,具体参考 `khs1994-docker/lnmp` 的 `config/etc/hosts`
+
+```bash
 $ cd ..
 # download kubernetes server files
 $ ./lnmp-k8s kubernetes-server
 
 # download soft
-# $ ./lnmp-k8s _etcd_install --dry-run
-$ ./lnmp-k8s _flanneld_install --dry-run
-$ ./lnmp-k8s _helm_install --dry-run
-# $ ./lnmp-k8s _cni_install --dry-run
-$ ./lnmp-k8s _crictl_install --dry-run
-$ ./lnmp-k8s _containerd_install --dry-run
+$ items="etcd cni flanneld helm crictl containerd"
+$ items="flanneld helm crictl containerd"
+$ for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
 ```
 
 ### 修改 .env 文件

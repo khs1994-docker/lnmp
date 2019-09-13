@@ -16,7 +16,6 @@ print_help_info(){
 Usage:
 
 dockerd  Config Docker Daemon
-rkt      Install Rkt
   "
 }
 
@@ -83,21 +82,6 @@ if ! [ -f ~/.ssh/id_rsa ];then
   ssh-keygen
 fi
 
-# rkt
-__rkt(){
-  if [ "$NAME" = Fedora ];then
-    command -v rkt > /dev/null
-
-    if [ $? -eq 0 ];then echo "rkt already install" ; return ; fi
-
-    curl -L https://github.com/rkt/rkt/releases/download/v1.30.0/rkt-1.30.0-1.x86_64.rpm > /tmp/rkt.rpm
-
-    sudo dnf install /tmp/rkt.rpm
-
-    rkt version
-fi
-}
-
 # install soft
 if [ "$NAME" = Fedora ];then
   sudo dnf install -y tilix \
@@ -121,8 +105,9 @@ _file ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nin
 
 if [ "$1" = '--help' ];then print_help_info; fi
 if [ "$1" = 'dockerd' ];then _docker_daemon; fi
-if [ "$1" = 'rkt' ];then __rkt; fi
 
 set +e
 # atom apm
 command -v apm > /dev/null && apm config set registry https://registry.npm.taobao.org
+
+# https://mirrors.huaweicloud.com/atom/

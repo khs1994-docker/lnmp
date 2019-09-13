@@ -1,7 +1,7 @@
 /*
 !.gitignore
 !config.production.yml
-!config.yml
+!config.example.yml
 !gcr.io*
 !config.gcr.io.yml
 !ca.crt

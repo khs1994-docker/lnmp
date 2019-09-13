@@ -12,8 +12,8 @@ $env:path=[environment]::GetEnvironmentvariable("Path","user") `
           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
 $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION="1.14.3"
-$DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
+$KUBERNETES_VERSION="1.14.6"
+$DOCKER_DESKTOP_VERSION="2.1.2.0 (38030)"
 $source=$PWD
 
 Function _command($command){
@@ -101,6 +101,8 @@ Function env_status(){
   _cp_only_not_exists config/composer/.env.example config/composer/.env
   _cp_only_not_exists config/composer/.env.example.ps1 config/composer/.env.ps1
   _cp_only_not_exists config/composer/config.example.json config/composer/config.json
+
+  _cp_only_not_exists config/registry/config.example.yml config/registry/config.yml
 
 }
 
@@ -215,7 +217,6 @@ Commands:
   composer             Exec composer command on Docker
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
-  docs                 Support Documents
   env                  Edit .env/.env.ps1 file
   help                 Display this help message
   pull                 Pull LNMP Docker Images
@@ -755,11 +756,6 @@ switch -regex ($command){
       __lnmp_custom_down
     }
 
-    docs {
-      docker run --init -it --rm -p 4000:4000 `
-          --mount type=bind,src=$pwd\docs,target=/srv/gitbook-src khs1994/gitbook server
-    }
-
     env {
       notepad.exe .env
       notepad.exe .env.ps1
@@ -1125,6 +1121,7 @@ XXX
     }
 
     "cookbooks" {
+      printInfo k8s
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/k8s)){
         git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
       }else{
@@ -1132,27 +1129,31 @@ XXX
         git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
       }
 
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker)){
-        git clone --depth=1 -b pages git@github.com:docker_practice/docker_practice.git ${APP_ROOT}/lnmp-docs/docker
+      printInfo docker_practice
+      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker_practice)){
+        git clone --depth=1 -b master git@github.com:docker_practice/zh-cn.git ${APP_ROOT}/lnmp-docs/docker_practice
       }else{
-        git -C ${APP_ROOT}/lnmp-docs/docker fetch --depth=1 origin pages
-        git -C ${APP_ROOT}/lnmp-docs/docker reset --hard origin/pages
+        git -C ${APP_ROOT}/lnmp-docs/docker_practice fetch --depth=1 origin master
+        git -C ${APP_ROOT}/lnmp-docs/docker_practice reset --hard origin/master
       }
 
+      printInfo laravel
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
       }else{
         git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
         git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
       }
 
+      printInfo laravel_en
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel-en)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.git ${APP_ROOT}/lnmp-docs/laravel-en
+        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.us-en.git ${APP_ROOT}/lnmp-docs/laravel-en
       }else{
         git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
         git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
       }
 
+      printInfo nginx
       if(!(Test-Path ${APP_ROOT}/lnmp-docs/nginx)){
         git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
       }else{

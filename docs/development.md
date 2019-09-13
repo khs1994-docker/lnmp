@@ -4,11 +4,11 @@
 
 ## 使用方法
 
-**1.** 在 `.env` 文件中通过 `LNMP_SERVICES` 变量修改需要启用的软件，详细说明请参考 [个性化方案](custom.md) (可选项)
+**1.** (可选项)在 `.env` 文件中通过 `LNMP_SERVICES` 变量修改需要启用的软件，详细说明请参考 [个性化方案](custom.md)
 
-**2.** 如果你想使用自己的镜像，可以在 `.env` 文件中通过 `LNMP_DOCKER_IMAGE_PREFIX` 变量修改镜像前缀，默认为 `khs1994`，详细说明请参考 [自己构建镜像](build.md) (可选项)
+**2.** (可选项)如果你想使用自己的镜像，可以在 `.env` 文件中通过 `LNMP_DOCKER_IMAGE_PREFIX` 变量修改镜像前缀，默认为 `khs1994`，详细说明请参考 [自己构建镜像](build.md)
 
-**3.** 在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app` (可选项)
+**3.** (可选项)在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app`
 
 **4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/my-project` 目录下(可自定义，请查看下方 `APP_ROOT` 一节)，或新建 PHP 项目文件夹
 
@@ -27,6 +27,14 @@
 ```bash
 # APP_ROOT=./app
 APP_ROOT=../app
+```
+
+此时文件结构为
+
+```bash
+.
+├── app
+└── lnmp
 ```
 
 ### Windows
@@ -52,9 +60,7 @@ $global:APP_ROOT="../app"
 
 ## PHPStorm
 
-想要在 PHPStorm 中实现右键点击运行脚本必须进行额外的设置
-
-具体请查看 PHP 容器化最佳实践 https://github.com/khs1994-docker/php-demo#6-cli-settings
+想要在 PHPStorm 中实现右键点击运行测试脚本必须进行额外的设置，请查看 [PHP 容器化最佳实践](https://github.com/khs1994-docker/php-demo#6-cli-settings)
 
 ## 容器数量伸缩
 

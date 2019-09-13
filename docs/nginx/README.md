@@ -84,7 +84,8 @@ server {
   }
 
   # nginx 将选择具有最长前缀的 location 块
-
+  # /images/top.gif 的请求，将发送服务器路径为 /data/images/top.gif 的文件
+  # 注意与 alias 区别，alias 会丢弃 location 的前缀
   location /images/ {
     root /data;
   }
@@ -98,7 +99,7 @@ server {
     proxy_set_header X-Real-IP $remote_addr;    # 获取客户端真实IP
   }
 
-  # /i/top.gif 的请求，将发送 /data/w3/images/top.gif 文件
+  # /i/top.gif 的请求，将发送服务器路径为 /data/w3/images/top.gif 的文件
   location /i/ {
     alias /data/w3/images/;
   }

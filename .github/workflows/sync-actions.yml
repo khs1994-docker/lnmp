@@ -28,7 +28,7 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/actions-setup-php
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: .github/actions/setup-php
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
     - name: build-actions-setup-docker
@@ -44,20 +44,7 @@ jobs:
         PCIT_GIT_URL: github.com/docker-practice/actions-setup-docker
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: .github/actions/setup-docker
-        PCIT_MESSAGE: commit by ci
-        PCIT_TARGET_BRANCH: master
-        PCIT_USERNAME: khs1994
-    - name: Remove files
-      run: sudo rm -rf .github/actions/setup-docker/.git
-    - name: sync-actions-setup-docker-2
-      uses: docker://pcit/pages
-      env:
-        PCIT_EMAIL: khs1994@khs1994.com
-        PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
-        PCIT_GIT_URL: github.com/khs1994-docker/actions-setup-docker
-        PCIT_KEEP_HISTORY: "1"
-        PCIT_LOCAL_DIR: .github/actions/setup-docker
-        PCIT_MESSAGE: commit by ci
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
     - name: build-actions-setup-lnmp
@@ -73,6 +60,6 @@ jobs:
         PCIT_GIT_URL: github.com/khs1994-docker/actions-setup-lnmp
         PCIT_KEEP_HISTORY: "1"
         PCIT_LOCAL_DIR: .github/actions/setup-lnmp
-        PCIT_MESSAGE: Sync from khs1994-docker/lnmp by PCIT
+        PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994

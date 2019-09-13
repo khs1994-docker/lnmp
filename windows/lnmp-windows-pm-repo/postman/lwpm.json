@@ -1,10 +1,11 @@
 {
   "name": "postman",
   "description": "Manage all of your organization's APIs in Postman, with the industry's most complete API development environment",
-  "version": "7.2.2",
-  "preVersion": "7.2.2",
+  "version": "7.6.0",
+  "preVersion": "7.6.0",
   "homepage": "https://www.getpostman.com/",
   "bug": "https://www.getpostman.com/support",
   "github": "postmanlabs/postman-app-support",
-  "releases": ""
+  "releases": "",
+  "url": "https://dl.pstmn.io/download/latest/win64"
 }

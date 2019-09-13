@@ -75,11 +75,15 @@ services:
 
   memcached:
     << : *default-common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.16}-alpine
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.5.17}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
-      - zoneinfo-data:/usr/share/zoneinfo
+      - type: volume
+        source: zoneinfo-data
+        target: /usr/share/zoneinfo
+        volume:
+          nocopy: true
 
   php7:
     &php7
@@ -96,11 +100,13 @@ services:
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:delegated
-      - ./log/supervisord.log:/var/log/supervisord.log
-      - ./log/supervisord:/var/log/supervisord
+      - ./log/supervisord.log:/var/log/supervisord.log:delegated
+      - ./log/supervisord:/var/log/supervisord:delegated
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
+        volume:
+          nocopy: false
       - type: tmpfs
         target: /temp
         # tmpfs:
@@ -127,7 +133,7 @@ services:
       - type: volume
         source: composer_cache-data
         target: /tmp/cache
-      - ./config/composer/config.json:/tmp/config.json
+      - ./config/composer/config.json:/tmp/config.json:delegated
 
   # https://docs.docker.com/config/containers/multi-service_container/
   # http://supervisord.org/running.html

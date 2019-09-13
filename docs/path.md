@@ -8,7 +8,7 @@
 
 * 错误的将宿主机地址写到配置文件中
 
-# NGINX
+## NGINX
 
 |名称|本机|容器|
 |--|--|--|
@@ -18,7 +18,7 @@
 |`access.log`|`./log/nginx/access.log`      |`/var/log/nginx/access.log`|
 |`app/`      |`./app`                        |`/app`                     |
 
-# Apache
+## Apache
 
 |名称|本机|容器|
 |--|--|--|
@@ -26,9 +26,9 @@
 |`conf.d/`    | `./config/httpd/`               | `/usr/local/apache2/conf.d`         |
 |`logs/`      | `./log/httpd`                  | `/usr/local/apache2/logs`           |
 
-# PHP
+## PHP
 
-## php-fpm
+### php-fpm
 
 |名称|本机|容器|
 |--|--|--|
@@ -37,24 +37,24 @@
 |`php-fpm.d/zz-docker.conf`    |`./config/php/zz-docker.conf`           |`/usr/local/etc/php-fpm.d/zz-docker.conf`            |
 |`app/`                        |`./app`                                 |`/app`                                               |
 
-## Composer
+### Composer
 
 |名称|本机|容器|
 |--|--|--|
 |`缓存`|`volume:lnmp_composer_cache-data`|`/tmp/cache`|
 
-# 缓存
+## 缓存
 
-## Redis
+### Redis
 
 |名称|本机|容器|
 |--|--|--|
 |`redis.conf`|`./config/redis/redis.conf`|`/usr/local/etc/redis/redis.conf`|
 |`/data/`    |`redis-data`               |`/data`                          |
 
-# 数据库
+## 数据库
 
-## MySQL
+### MySQL
 
 |名称|本机|容器|
 |--|--|--|
@@ -62,7 +62,7 @@
 |`error.log`        |`./log/mysql/error.log`          |`/var/log/mysql/error.log`     |
 |`/var/lib/mysql/`  |`mysql-data`                      |`/var/lib/mysql`               |
 
-## MariaDB
+### MariaDB
 
 |名称|本机|容器|
 |--|--|--|
@@ -70,13 +70,13 @@
 |`error.log`        |`./log/mysql/error.log`          |`/var/log/mysql/error.log`     |
 |`/var/lib/mysql/`  |`mariadb-data`                    |`/var/lib/mysql`               |
 
-## PostgreSQL
+### PostgreSQL
 
 |名称|本机|容器|
 |--|--|--|
 |`/var/lib/postgresql/`|`postgresql-data`|`/var/lib/postgresql`|
 
-## MongoDB
+### MongoDB
 
 |名称|本机|容器|
 |--|--|--|

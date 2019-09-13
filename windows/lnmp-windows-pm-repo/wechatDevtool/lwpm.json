@@ -1,11 +1,11 @@
 {
   "name": "wechatDevtool",
   "description": "WeChat Dev tool",
-  "version": "1.02.1908282",
-  "preVersion": "1.02.1908282",
+  "version": "1.02.1909122",
+  "preVersion": "1.02.1909122",
   "homepage": "https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html",
   "bug": "https://developers.weixin.qq.com/community/develop/question",
   "github": "https://github.com/wechat-miniprogram",
   "releases": "https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html",
-  "url": ""
+  "url": "https://dldir1.qq.com/WechatWebDev/nightly/p-7aa88fbb60d64e4a96fac38999591e31/wechat_devtools_${VERSION}_x64.exe"
 }

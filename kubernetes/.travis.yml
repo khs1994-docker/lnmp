@@ -62,8 +62,8 @@ before_install:
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
 install:
-  - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-  - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
+  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
   - export KUBERNETES_TYPE=server
   - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
@@ -209,13 +209,13 @@ matrix:
   include:
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.0-rc.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.0-rc.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.0-beta.2 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.0-rc.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.14.2

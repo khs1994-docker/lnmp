@@ -1,23 +1,16 @@
 #!/usr/bin/env bash
 
-# git remote add origin git@github.com:khs1994-docker/lnmp.git
-# git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git
-# git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git
-# git remote add coding git@git.coding.net:khs1994/lnmp.git
-
 # Don't Run this shell script on git bash Windows, please use ./lnmp-docker.ps1
 
-#
 # sudo ? only need by install docker-compose
-#
 
 set -e
 
 tty=
 tty -s && tty=--tty || true
 
-readonly KUBERNETES_VERSION=1.14.3
-readonly DOCKER_DESKTOP_VERSION="2.0.5.0 (35318)"
+readonly KUBERNETES_VERSION="1.14.6"
+readonly DOCKER_DESKTOP_VERSION="2.1.2.0 (38030)"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -49,15 +42,6 @@ notsupport(){
   exit 1
 }
 
-check_nginx_conf(){
-  echo "$LNMP_SERVICES" | grep -q 'minio' \
-    || ( ls config/${LNMP_NGINX_CONF_D:-nginx}/minio.conf > /dev/null 2>&1 \
-         && ( print_error \
-              "your .env file not include minio, but nginx conf.d folder include minio.conf" \
-            ) || true \
-        )
-}
-
 _cp_only_not_exists(){
   if ! [ -f $2 ];then cp $1 $2 ; fi
 }
@@ -83,9 +67,7 @@ print_info "Exec custom scripts"
 
 . ./lnmp-docker-custom-script
 
-if ! [ -f config/php/docker-php.ini ];then
-  cp config/php/docker-php.ini.example config/php/docker-php.ini
-fi
+_cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
 
 _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 _cp_only_not_exists config/composer/.env.example config/composer/.env
@@ -95,6 +77,8 @@ _cp_only_not_exists config/npm/.env.example config/npm/.env
 
 _cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
 _cp_only_not_exists config/yarn/.env.example config/yarn/.env
+
+_cp_only_not_exists config/registry/config.example.yml config/registry/config.yml
 
 # PHPer command
 
@@ -127,16 +111,11 @@ Commands:
   config               Validate and view the LNMP Compose file
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2375 without TLS on macOS
-  daemon-tls           Display how to enable Docker TLS Daemon
-  daemon-tls-cert      Generate Docker Daemon TLS cert
-  docs                 Read support documents
   help                 Display this help message
   nfs                  Up NFS server [ down | ]
   pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
-  registry-up          Up Docker Registry
-  registry-down        Stop Docker Registry
   services             List services
   update               Upgrades LNMP [ -f | ]
   upgrade              Upgrades LNMP [ -f | ]
@@ -181,7 +160,6 @@ ClusterKit:
   clusterkit-help      Print ClusterKit help info
 
 Developer Tools:
-  cn-mirror            Push master branch to CN mirror
   test                 Test LNMP
   cookbooks            Up local cookbooks server
 
@@ -214,51 +192,7 @@ _tongji(){
   fi
 }
 
-clusterkit_help(){
-exec echo "
-ClusterKit:
-  clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
-  clusterkit-COMMAND           Run docker-compsoe commands(config, pull, etc)
-
-  swarm-clusterkit             UP LNMP With Mysql Redis Memcached Cluster IN Swarm mode
-
-  clusterkit-mysql-up          Up MySQL Cluster
-  clusterkit-mysql-down        Stop MySQL Cluster
-  clusterkit-mysql-exec        Execute a command in a running MySQL Cluster node
-
-  clusterkit-mysql-deploy      Deploy MySQL Cluster in Swarm mode
-  clusterkit-mysql-remove      Remove MySQL Cluster in Swarm mode
-
-  clusterkit-memcached-up      Up memcached Cluster
-  clusterkit-memcached-down    Stop memcached Cluster
-  clusterkit-memcached-exec    Execute a command in a running memcached Cluster node
-
-  clusterkit-memcached-deploy  Deploy memcached Cluster in Swarm mode
-  clusterkit-memcached-remove  Remove memcached Cluster in Swarm mode
-
-  clusterkit-redis-up          Up Redis Cluster(By Ruby)
-  clusterkit-redis-down        Stop Redis Cluster(by Ruby)
-  clusterkit-redis-exec        Execute a command in a running Redis Cluster node(By Ruby)
-
-  clusterkit-redis-deploy      Deploy Redis Cluster in Swarm mode(By Ruby)
-  clusterkit-redis-remove      Remove Redis Cluster in Swarm mode(By Ruby)
-
-  clusterkit-redis-replication-up       Up Redis M-S (replication)
-  clusterkit-redis-replication-down     Stop Redis M-S (replication)
-  clusterkit-redis-replication-exec     Execute a command in a running Redis M-S (replication) node
-
-  clusterkit-redis-replication-deploy   Deploy Redis M-S (replication) in Swarm mode
-  clusterkit-redis-replication-remove   Remove Redis M-S (replication) in Swarm mode
-
-  clusterkit-redis-sentinel-up           Up Redis S
-  clusterkit-redis-sentinel-down         Stop Redis S
-  clusterkit-redis-sentinel-exec         Execute a command in a running Redis S node
-
-  clusterkit-redis-sentinel-deploy       Deploy Redis S in Swarm mode
-  clusterkit-redis-sentinel-remove       Remove Redis S in Swarm mode
-
-"
-}
+test -f cluster/help.sh && source cluster/help.sh || true
 
 _gcr_io_down(){
   docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1 || true
@@ -342,6 +276,7 @@ _satis(){
 }
 
 _local_docs_server(){
+  print_info k8s
   if ! [ -d ${APP_ROOT}/lnmp-docs/k8s ];then
     git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
   else
@@ -349,27 +284,31 @@ _local_docs_server(){
     git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
   fi
 
-  if ! [ -d ${APP_ROOT}/lnmp-docs/docker ];then
-    git clone --depth=1 -b pages git@gitee.com:docker_practice/docker_practice.git ${APP_ROOT}/lnmp-docs/docker
+  print_info docker_practice
+  if ! [ -d ${APP_ROOT}/lnmp-docs/docker_practice ];then
+    git clone --depth=1 -b master git@gitee.com:docker_practice/zh-cn ${APP_ROOT}/lnmp-docs/docker_practice
   else
-    git -C ${APP_ROOT}/lnmp-docs/docker fetch --depth=1 origin pages
-    git -C ${APP_ROOT}/lnmp-docs/docker reset --hard origin/pages
+    git -C ${APP_ROOT}/lnmp-docs/docker_practice fetch --depth=1 origin master
+    git -C ${APP_ROOT}/lnmp-docs/docker_practice reset --hard origin/master
   fi
 
+  print_info laravel
   if ! [ -d ${APP_ROOT}/lnmp-docs/laravel ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel5.5-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
+    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
   else
     git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
     git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
   fi
 
+  print_info laravel_en
   if ! [ -d ${APP_ROOT}/lnmp-docs/laravel-en ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.git ${APP_ROOT}/lnmp-docs/laravel-en
+    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.us-en ${APP_ROOT}/lnmp-docs/laravel-en
   else
     git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
     git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
   fi
 
+  print_info nginx
   if ! [ -d ${APP_ROOT}/lnmp-docs/nginx ];then
     git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
   else
@@ -428,62 +367,6 @@ _get_compose_options(){
   options+=" -f docker-lnmp.include.yml "
 }
 
-_registry(){
-  # SSL 相关
-  if [ ! -f config/${LNMP_NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.crt ] \
-      || [ ! -f config/${LNMP_NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.key ];then
-    print_warning "Docker Registry SSL not found, generating ...."
-    ssl_self $LNMP_REGISTRY_HOST
-  fi
-
-  if [ ! -f config/${LNMP_NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.crt ] \
-      || [ ! -f config/${LNMP_NGINX_CONF_D:-nginx}/ssl/${LNMP_REGISTRY_HOST}.key ];then
-    print_error "Docker Registry SSL error" ; exit 1
-  else
-    print_info "Docker Registry SSL Correct"
-  fi
-
-  # 生成 密码 验证文件
-  if ! [ -f config/${LNMP_NGINX_CONF_D:-nginx}/auth/docker_registry.htpasswd ];then
-    print_info "First start, Please set username and password"
-    read -p "username: " username
-    if [ -z $username ];then print_error "Please input username"; exit 1; fi
-    read -s -p "password: " password
-    if [ -z $password ];then print_error "Please input password"; exit 1; fi
-    read -s -p "Please reinput password: " password_verify
-
-    if ! [ "$password" = "$password_verify" ];then
-      print_error "两次输入的密码不同，请再次执行 ./lnmp-docker registry 完成操作"; exit 1
-    fi
-
-    docker run --init --rm \
-      --entrypoint htpasswd \
-      registry \
-      -Bbn $username $password > config/${LNMP_NGINX_CONF_D:-nginx}/auth/docker_registry.htpasswd
-      # 部分 nginx 可能不能解密，你可以替换为下面的命令
-      # -mbn username password > auth/nginx.htpasswd \
-  fi
-
-  # NGINX 配置文件
-  if ! [ -f config/${LNMP_NGINX_CONF_D:-nginx}/${REGISTRY_CONF:-registry.conf} ];then
-    if [ -f config/${LNMP_NGINX_CONF_D:-nginx}/registry.conf.backup ];then
-      cp config/${LNMP_NGINX_CONF_D:-nginx}/registry.conf.backup config/${LNMP_NGINX_CONF_D:-nginx}/registry.conf
-    else
-      cp config/nginx/demo-registry.config config/${LNMP_NGINX_CONF_D:-nginx}/registry.conf
-    fi
-  fi
-
-  sed -i '' "s#DOMAIN#${LNMP_REGISTRY_HOST}#g" config/${LNMP_NGINX_CONF_D:-nginx}/registry.conf
-
-  exec docker-compose up -d registry nginx
-}
-
-_registry_down(){
-  docker-compose stop registry
-  docker-compose rm -f registry
-  mv config/${LNMP_NGINX_CONF_D:-nginx}/registry.conf config/${LNMP_NGINX_CONF_D:-nginx}/registry.conf.backup
-}
-
 env_status(){
   # cp .env.example to .env
   if [ -f .env ];then \
@@ -530,8 +413,7 @@ update_version(){
 }
 
 # Docker 是否运行
-
-run_docker(){
+_docker_is_run(){
   docker info > /dev/null 2>&1 || (clear ; \
     echo "==========================" ;\
     echo "=== Please Run Docker ====" ;\
@@ -540,7 +422,6 @@ run_docker(){
 }
 
 # 创建日志文件
-
 logs(){
   if ! [ -f log/supervisord.log ];then touch log/supervisord.log; fi
   if ! [ -d log/supervisord ];then mkdir -p log/supervisord; fi
@@ -548,26 +429,18 @@ logs(){
   if ! [ -d log/mongodb ];then mkdir -p log/mongodb && touch log/mongodb/mongo.log; fi
   if ! [ -d log/mysql ];then mkdir -p log/mysql && touch log/mysql/error.log; fi
   if ! [ -d log/mariadb ];then mkdir -p log/mariadb && touch log/mariadb/error.log; fi
-  if ! [ -d log/nginx ];then mkdir -p log/nginx && touch log/nginx/error.log && touch log/nginx/access.log; fi
+  if ! [ -d log/nginx ];then mkdir -p log/nginx && touch log/nginx/{error.log,access.log}; fi
   if ! [ -d log/nginx-unit ];then mkdir -p log/nginx-unit; fi
-  if ! [ -d log/php ];then
-    mkdir -p log/php \
-      && touch log/php/error.log \
-      && touch log/php/slow.log \
-      && touch log/php/php-fpm-access.log \
-      && touch log/php/php-fpm-error.log \
-      && touch log/php/xdebug-remote.log
-  fi
+
+if ! [ -d log/php ];then
+ mkdir -p log/php \
+ && touch log/php/{error.log,slow.log,php-fpm-access.log,php-fpm-error.log,xdebug-remote.log}
+fi
+
   if ! [ -d log/redis ];then mkdir -p log/redis && touch log/redis/redis.log ; fi
-  chmod -R 777 log/mongodb \
-               log/mysql \
-               log/nginx \
-               log/php \
-               log/redis || sudo chmod -R 777 log/mongodb \
-                                          log/mysql \
-                                          log/nginx \
-                                          log/php \
-                                          log/redis
+
+  chmod -R 777 log/{mongodb,mysql,nginx,php,redis} \
+    || sudo chmod -R 777 log/{mongodb,mysql,nginx,php,redis}
 }
 
 # 清理日志文件
@@ -590,14 +463,6 @@ cleanup(){
       && rm -rf log/supervisord/* \
       && rm -rf log/supervisord.log \
       print_info "Clean log files SUCCESS"
-}
-
-gitbook(){
-  docker rm -f lnmp-docs > /dev/null 2>&1 || echo
-  exec docker run --init -i ${tty} --rm -p 4000:4000 \
-    --name lnmp-docs --mount type=bind,src=$PWD/docs,target=/srv/gitbook-src \
-    khs1994/gitbook \
-    server
 }
 
 # 将 compose 移入 PATH
@@ -751,7 +616,6 @@ init() {
 }
 
 # 更新项目
-
 set_git_remote_origin_url(){
   network
   git remote get-url origin > /dev/null 2>&1 || local a=1
@@ -802,25 +666,6 @@ update(){
   # git submodule update --init --recursive
   # set -e
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker
-}
-
-cn_mirror(){
-  set -x
-  set_git_remote_origin_url
-  git remote add origin git@github.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || true
-  git remote add aliyun git@code.aliyun.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || true
-  git remote add tgit git@git.qcloud.com:khs1994-docker/lnmp.git > /dev/null 2>&1 || true
-  git remote add coding git@git.coding.net:khs1994/lnmp.git > /dev/null 2>&1 || true
-  git fetch origin
-  git push -f aliyun remotes/origin/18.06:18.06
-  git push -f aliyun remotes/origin/master:master
-  git push -f aliyun --tags
-  git push -f tgit remotes/origin/18.06:18.06
-  git push -f tgit remotes/origin/master:master
-  git push -f tgit --tags
-  git push -f coding remotes/origin/18.06:18.06
-  git push -f coding remotes/origin/master:master
-  git push -f coding --tags
 }
 
 _lnmp_bug(){
@@ -1147,7 +992,7 @@ get_service_container_id(){
 }
 
 bash_cli(){
-  run_docker
+  _docker_is_run
   local SERVICE_NAME=$1
   get_service_container_id $SERVICE_NAME
   shift
@@ -1367,9 +1212,8 @@ main() {
   local command=$1; shift
   case $command in
   acme.sh )
-    run_docker; acme "$@"
+    _docker_is_run; acme "$@"
     ;;
-
   init )
     _lrew_init "$@"
     ;;
@@ -1386,9 +1230,8 @@ main() {
     _lrew_outdated "$@"
     ;;
   backup )
-    run_docker; backup "$@"
+    _docker_is_run; backup "$@"
     ;;
-
   config )
     logs
 
@@ -1409,7 +1252,7 @@ main() {
     ;;
 
   test )
-    run_docker; cli/test $@
+    _docker_is_run; cli/test $@
     ;;
 
   completion )
@@ -1419,18 +1262,8 @@ main() {
     ls -la $ROOT_PATH
     ;;
 
-  daemon-tls )
-    print_warning please see [ https://github.com/khs1994-website/docs/blob/master/docker/dockerd.md ]
-  ;;
-
-  daemon-tls-cert )
-    print_error 'Not Support Now'
-  ;;
-
   bug )
-
   _lnmp_bug
-
   ;;
 
   gcr.io )
@@ -1448,20 +1281,12 @@ main() {
    _gcr_io "$@"
   ;;
 
-  registry-up )
-    _registry
-    ;;
-
-  registry-down )
-    _registry_down
-    ;;
-
   swarm-config )
     init; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} config
     ;;
 
   swarm-pull )
-    run_docker
+    _docker_is_run
     # 仅允许运行在 Linux x86_64
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
       init; sleep 2; exec docker-compose -f ${PRODUCTION_COMPOSE_FILE} pull "$@"
@@ -1480,7 +1305,7 @@ main() {
 
   swarm-deploy )
     if [ "$OS" = 'Linux' ] && [ ${ARCH} = 'x86_64' ];then
-      run_docker
+      _docker_is_run
       rm -rf app/.pcit
       pcit_init
       docker stack deploy -c ${PRODUCTION_COMPOSE_FILE} lnmp
@@ -1504,7 +1329,6 @@ main() {
   swarm-update )
   echo -e "
 Example:
-
 
 $ docker config create nginx_khs1994_com_conf_v2 config/${LNMP_NGINX_CONF_D:-nginx}/khs1994.com.conf
 
@@ -1532,7 +1356,7 @@ For information please run $ docker service update --help
   ;;
 
   build )
-    run_docker
+    _docker_is_run
     init
 
     if [ ${ARCH} = 'x86_64' ];then
@@ -1548,7 +1372,7 @@ For information please run $ docker service update --help
     ;;
 
   build-up )
-    run_docker
+    _docker_is_run
     init
 
     if [ ${ARCH} = 'x86_64' ];then
@@ -1567,7 +1391,7 @@ For information please run $ docker service update --help
     ;;
 
   up )
-    run_docker
+    _docker_is_run
     init
     # 判断架构
 
@@ -1589,17 +1413,17 @@ For information please run $ docker service update --help
     #@custom
     __lnmp_custom_up "$@" 2>/dev/null || true
 
-    sleep 1; print_info "Test nginx configuration file..."
+    sleep 5; print_info "Test nginx configuration file..."
 
     docker exec -i ${tty}\
           $(docker container ls --format {{.ID}} \
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
-          -f label=com.docker.compose.service=nginx -n 1 ) nginx -t
+          -f label=com.docker.compose.service=nginx -n 1 ) nginx -t \
+    || (print_error "Nginx start error,please check config/nginx" ; docker ps -a)
     ;;
 
   build-config )
     logs
-
     if [ ${ARCH} = 'x86_64' ];then
       _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.build.yml" \
@@ -1612,7 +1436,7 @@ For information please run $ docker service update --help
     ;;
 
   restore )
-    run_docker; restore "$@"
+    _docker_is_run; restore "$@"
     ;;
 
   update|upgrade )
@@ -1677,7 +1501,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     local SERVICE=$(echo $command | cut -d '-' -f 1)
     local cli_command
     if [ -z "$1" ];then cli_command=sh; else cli_command="$@"; fi
-    run_docker
+    _docker_is_run
     bash_cli $SERVICE $cli_command
     ;;
 
@@ -1688,7 +1512,6 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   *-logs | *-log )
-
     if ! [ "${OS}" = 'Linux' ];then notsupport; fi
 
     SERVICE=$(echo $command | cut -d '-' -f 1)
@@ -1700,7 +1523,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   build-push )
-    run_docker; init;
+    _docker_is_run; init;
     _get_compose_options "docker-lnmp.yml" \
                          "docker-lnmp.build.yml" \
                          "--build"
@@ -1717,12 +1540,8 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     __lnmp_custom_down "$@" 2>/dev/null || true
     ;;
 
-  docs )
-    run_docker; gitbook
-    ;;
-
   pull )
-    run_docker; init
+    _docker_is_run; init
 
     sleep 2;
     _get_compose_options "docker-lnmp.yml" \
@@ -1734,12 +1553,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     __lnmp_custom_pull "$@" 2>/dev/null || true
      ;;
 
-  cn-mirror )
-    cn_mirror
-    ;;
-
   cookbooks )
-
     _local_docs_server
   ;;
 
@@ -1752,7 +1566,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     ;;
 
   ssl )
-    run_docker; ssl "$@"
+    _docker_is_run; ssl "$@"
     ;;
 
   ssl-self )
@@ -2076,8 +1890,6 @@ APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
 
 print_info "APP_ROOT is $APP_ROOT"
 
-check_nginx_conf
-
 if [ -d .git ];then
   BRANCH=`git rev-parse --abbrev-ref HEAD`
   print_info "Branch is ${BRANCH}"
@@ -2115,15 +1927,12 @@ command -v docker > /dev/null 2>&1 \
 docker_compose "$@"
 
 # data collaction
-
 if ! [ "${DATA_COLLECTION}" = "false" ];then _tongji; fi
 
 # output help
-
 if [ $# = 0 ];then help; exit 0; fi
 
 # 生产环境 compose 文件
-
 PRODUCTION_COMPOSE_FILE='docker-production.yml'
 
 if [ `ls docker-production.*.yml > /dev/null 2>&1` ];then

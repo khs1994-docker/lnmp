@@ -2,9 +2,7 @@
 
 LARAVEL_PATH=$PWD
 
-if ! [ -z $1 ];then
-  LARAVEL_PATH=$1
-fi
+if [ -n "$1" ];then LARAVEL_PATH=$1;fi
 
 if ! [ -f $LARAVEL_PATH/artisan ];then echo "This path is not Laravel path"; exit; fi
 
@@ -19,14 +17,6 @@ if [ -f .env ];then mv ${LARAVEL_PATH}/.env ${LARAVEL_PATH}/.env.backup; fi
 cp $ScriptRoot/../app/.env* ${LARAVEL_PATH}
 cp $ScriptRoot/../app/demo/.editorconfig ${LARAVEL_PATH}
 cp $ScriptRoot/../app/demo/.php_cs ${LARAVEL_PATH}
-
-echo -e "\n\033[32mINFO\033[0m  change Redis config ..."
-
-if [ $OS = 'Darwin' ];then
-  sed -i '' 's#predis#phpredis#g' ${LARAVEL_PATH}/config/database.php
-else
-  sed -i 's#predis#phpredis#g' ${LARAVEL_PATH}/config/database.php
-fi
 
 echo -e "\n\033[32mINFO\033[0m  install laravel-ide-helper ..."
 

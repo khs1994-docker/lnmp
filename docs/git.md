@@ -67,8 +67,31 @@ $ git config --global core.safecrlf false
 $ git config --global core.safecrlf warn
 ```
 
-### 重写 committer
+## 重写 committer
 
 ```bash
 $ git commit --amend --reset-author
 ```
+
+## 拉取 tag、pull_request
+
+```bash
+$ git fetch origin refs/tags/v18.09.0
+# 默认拉取到 FETCH_HEAD，你可以在后边加 `:branch` 拉取到指定分支。
+
+$ git fetch origin refs/pull/1/head:pull_request
+```
+
+## TOOLS
+
+### github/git-sizer
+
+* https://github.com/github/git-sizer
+
+### github/hub
+
+* https://github.com/github/hub
+
+### git-lfs/git-lfs
+
+* https://github.com/git-lfs/git-lfs

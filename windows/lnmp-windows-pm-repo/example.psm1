@@ -26,7 +26,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
 
-  $url=$url.replace('${VERSION}',${VERSION});
+  # $url=$url.replace('${VERSION}',${VERSION});
 
   if($isPre){
     $VERSION=$preVersion
@@ -34,6 +34,8 @@ Function install($VERSION=0,$isPre=0){
   }else{
 
   }
+
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename=""
   $unzipDesc="example"
@@ -104,16 +106,19 @@ Function getInfo(){
   $latestVersion=(getLatestRelease $githubRepo).trim("")
   $latestVersion=(getLatestTag $githubRepo).trim("")
 
-  echo "
-Package: $name
-Version: $stableVersion
-PreVersion: $preVersion
-LatestVersion: $latestVersion
-HomePage: $homepage
-Releases: $releases
-Bugs: $bug
-Description: $description
-"
+  ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 Function bug(){

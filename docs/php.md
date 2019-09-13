@@ -4,7 +4,7 @@
 
 > 更多扩展请通过 `$ php -m` 查看
 
-如果你需要增加其他扩展，请到这里反馈：https://github.com/khs1994-docker/lnmp/issues/63
+如果你需要增加其他扩展，请到这里 [issues](https://github.com/khs1994-docker/lnmp/issues/63) 反馈。
 
 ## pecl 扩展
 
@@ -106,7 +106,7 @@ $ docker rm -f CONTAINER_ID
 * [x] zip
 * [x] zlib
 
-# Session Redis 驱动
+## Session Redis 驱动
 
 ```ini
 session.save_handler = redis
@@ -114,6 +114,6 @@ session.save_handler = redis
 session.save_path ="tcp://redis:6379?auth=redis密码
 ```
 
-# More Information
+## More Information
 
 * [mongodb](https://github.com/mongodb/mongo-php-driver)

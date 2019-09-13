@@ -8,7 +8,7 @@
 $ ./lnmp-docker up
 ```
 
-# arm 暂不支持 MySQL、PHPMyAdmin
+## arm 暂不支持 MySQL、PHPMyAdmin
 
 * 请在 `.env` 文件中将 mysql 替换为 mariadb
 * 请在 `.env` 文件中将 phpmyadmin 去掉
@@ -19,7 +19,7 @@ $ ./lnmp-docker up
 LNMP_SERVICES="nginx mariadb php7 redis"
 ```
 
-# Docker ARM 镜像
+## Docker ARM 镜像
 
 |镜像|系统|架构|
 |:--|:--|:--|
@@ -27,11 +27,11 @@ LNMP_SERVICES="nginx mariadb php7 redis"
 |[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[pi 64](https://github.com/bamarni/pi64)|arm64|
 |[armhf Docker image](https://hub.docker.com/u/armhf/)    |已经废弃，已经转移到了上述两个项目中|-|
 
-# 镜像构建
+## 镜像构建
 
 请查看 [manifest](manifest.md)
 
-# More Information
+## More Information
 
 * [树莓派3 安装 Docker](https://blog.khs1994.com/raspberry-pi3/docker.html)
 * https://github.com/docker-library/official-images#architectures-other-than-amd64

@@ -15,3 +15,7 @@ Docker 的优点是轻量、跨平台、提供一致的环境，避免「在我�
 综上，本项目的目标是让 PHP 开发者快速（一键）搭建基于容器技术（Docker、Kubernetes）的开发、测试、生产（CI/CD）环境。
 
 支持 `Linux` `macOS` `Windows` `WSL` `WSL2` 等平台，并提供一系列 CLI (`lnmp-*`) 方便开发者管理开发工具（安装、启动、停止、执行命令）。
+
+提供 [`lrew`](lrew.md) 包管理工具扩展本项目。
+
+提供 [`lwpm`](windows/lwpm.md) Windows 包管理工具安装 Windows 软件。

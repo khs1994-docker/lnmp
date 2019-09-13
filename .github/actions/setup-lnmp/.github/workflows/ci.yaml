@@ -10,7 +10,7 @@ jobs:
       matrix:
         lnmp_branch:
           - 19.03
-          # - master
+          - master
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -31,12 +31,15 @@ jobs:
           set -x
           lnmp-docker services
           lnmp-docker up
-          sleep 30
-          docker ps  -a
-          lnmp-php -v
       - name: Connect
         run: |
+          set -x
+          sleep 30
+          docker ps -a
+          lnmp-php -v
+
           curl 127.0.0.1
+
   notsupport-platform:
     strategy:
       matrix:

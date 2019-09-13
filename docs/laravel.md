@@ -75,11 +75,11 @@ services:
       # 假设还有一个 Laravel 应用位于 `./app/laravel2` 与 `./app/laravel` 版本一致（依赖一致），那么可以共用 vendor 数据卷
       - type: volume
         source: laravel_vendor
-        target: /app/laravel/vendor2
-      # 假设还有一个 laravel 5.7 应用位于 `./app/laravel5.7`，由于与 `./app/laravel` 依赖不一致，必须使用新的数据卷
+        target: /app/laravel2/vendor
+      # 假设还有一个 laravel 5.5 应用位于 `./app/laravel5.5`，由于与 `./app/laravel` 版本或依赖不一致，必须使用新的数据卷
       - type: volume
-        source: laravel_57_vendor
-        target: /app/laravel5.7/vendor
+        source: laravel_55_vendor
+        target: /app/laravel5.5/vendor
 
   composer:
     << : *php7
@@ -120,7 +120,3 @@ $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan schedule:run
 ```
-
-## Redis 驱动
-
-本项目将 Laravel 默认的 `predis` 驱动改为 `phpredis` 驱动。请编辑 `env` 文件的 `REDIS_CLIENT=phpredis` 变量值自行选择驱动。

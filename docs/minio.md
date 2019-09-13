@@ -13,6 +13,7 @@
 
 ```bash
 $global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin',"minio"
+$global:LREW_INCLUDE="minio","pcit"
 ```
 
 ### Linux、macOS
@@ -21,6 +22,7 @@ $global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin',"minio"
 
 ```bash
 LNMP_SERVICES="nginx mysql php7 redis phpmyadmin minio"
+LREW_INCLUDE="minio pcit"
 ```
 
 ### 配置 NGINX
@@ -43,6 +45,12 @@ MINIO_SECRET_KEY=khs1994miniosecret
 
 > 自行修改配置之后，下边命令中的密钥换成你自己设置的！
 
+#### 启动
+
+```bash
+$ ./lnmp-docker up
+```
+
 ### 验证
 
 打开 `https://minio.t.khs1994.com`
@@ -53,18 +61,37 @@ MINIO_SECRET_KEY=khs1994miniosecret
 
 在登录框输入上面密钥即可
 
-## 客户端安装
+## 客户端安装(mc)
 
 * https://dl.minio.io/server/minio/release/
+* https://dl.minio.io/client/mc/release/
 
 选择对应的操作系统，移入 PATH 即可
 
+> 官网直接下载可能较缓慢。
+
+### Windows 安装
+
 ```bash
-$ mc config host add myminio https://minio.t.khs1994.com khs1994miniokey khs1994miniosecret
+$ lnmp-windows-pm.ps1 install minio
+```
+
+### macOS 安装
+
+```bash
+$ brew install minio/stable/minio
+
+$ brew install minio/stable/mc
+```
+
+### 命令
+
+```bash
+$ mc config host add minio https://minio.t.khs1994.com khs1994miniokey khs1994miniosecret
 
 # 上传文件
 
-$ mc cp /path myminio/mybucket
+$ mc cp /path minio/mybucket
 ```
 
 ## Laravel

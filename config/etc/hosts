@@ -7,7 +7,6 @@
 151.101.229.194  github.global.ssl.fastly.net
 #192.30.253.112  github.com
 #192.30.253.113  github.com
-# 59.24.3.173    gist.github.com
 192.30.253.119   gist.github.com github.com
 151.101.228.133  assets-cdn.github.com
 151.101.228.133  avatars1.githubusercontent.com avatars2.githubusercontent.com
@@ -15,6 +14,12 @@
 # 34.228.249.31  collector.githubapp.com
 
 216.58.199.16    storage.googleapis.com
+
+13.225.103.126   builds.coreos.fedoraproject.org
+
+172.217.160.81   proxy.golang.org
+
+18.140.75.175    docker.pkg.github.com pkg.github.com
 
 # http://tool.chinaz.com/dns
 # https://site.ip138.com/

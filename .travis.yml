@@ -279,9 +279,9 @@ stages:
   - name: tag
     if: tag =~ /^(v19)/
   - name: development
-    if: branch = "19.03"
+    if: branch = "master"
   - name: swarm
-    if: branch = "19.03"
+    if: branch = "master"
   - name: checkConfig
     if: branch = "19.03"
   # don't run

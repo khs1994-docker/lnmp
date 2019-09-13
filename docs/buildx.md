@@ -18,7 +18,7 @@ $ docker buildx create --use --name=mybuilder --driver docker-container --driver
 $ docker buildx create --use --name=mybuilder --driver docker-container
 ```
 
-## ARG
+## Dockerfile ARG
 
 ```docker
 # syntax=docker/dockerfile:experimental

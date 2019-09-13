@@ -65,7 +65,7 @@ $ lnmp-phpunit command
 
 $ lnmp-php command
 
-$ lnmp-laravel command # Laravel 5.6
+$ lnmp-laravel command
 ```
 
 当你遇到错误时，可以在前边加上 `$ debug=true lnmp-*`来进行调试，例如

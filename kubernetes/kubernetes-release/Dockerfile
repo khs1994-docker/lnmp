@@ -2,7 +2,7 @@ FROM alpine:3.10
 
 ENV KUBERNETES_VERSION=v1.15.3
 
-# ENV KUBERNETES_VERSION=v1.16.0-beta.2
+# ENV KUBERNETES_VERSION=v1.16.0-rc.1
 
 ENV KUBERNETES_URL=https://storage.googleapis.com
 
