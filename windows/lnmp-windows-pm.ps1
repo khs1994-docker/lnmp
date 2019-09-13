@@ -20,13 +20,14 @@ uninstall   Uninstall soft [--prune| ]
 remove      Uninstall soft
 list        List available softs
 outdated    Shows a list of installed packages that have updates available
-add         Add package to install soft
-init        Init a new package
 info        Shows information about packages
 homepage    Opens the package's repository URL or homepage in your browser
 bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
+
+add         Add package
+init        Init a new package(developer)
 "
 }
 
