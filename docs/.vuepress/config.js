@@ -146,7 +146,6 @@ module.exports = {
             '/arm',
             '/ab',
             '/minio',
-            '/cncf/kong',
             '/windows/wsl2',
             '/go',
             '/github',
