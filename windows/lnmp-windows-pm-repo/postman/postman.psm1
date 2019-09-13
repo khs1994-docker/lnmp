@@ -13,15 +13,21 @@ $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+Function getVersion($url){
+  $result = Invoke-WebRequest -Method Head `
+  -uri $url
+
+  return $result.Headers.'Content-Disposition'.split('-')[2]
+}
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=getVersion $url
   }
   if($isPre){
-    $VERSION=$preVersion
+    $VERSION=getVersion $url
   }
-  $url="https://dl.pstmn.io/download/latest/win64"
 
   $filename="Postman-win64-${VERSION}-Setup.exe"
   $unzipDesc="postman"
@@ -61,17 +67,21 @@ Function uninstall(){
 }
 
 Function getInfo(){
+  $latestVersion=getVersion $url
 
-  echo "
-Package: $name
-Version: $stableVersion
-PreVersion: $preVersion
-LatestVersion: $latestVersion
-HomePage: $homepage
-Releases: $releases
-Bugs: $bug
-Description: $description
-"
+  ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 Function bug(){

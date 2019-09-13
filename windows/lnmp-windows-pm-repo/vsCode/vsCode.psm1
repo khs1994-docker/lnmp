@@ -11,17 +11,31 @@ $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$preUrl=$lwpm.preUrl
+
+Function getVersion($url){
+  try{
+    Invoke-WebRequest `
+      -MaximumRedirection 0 `
+      -Method Head `
+      -uri $url
+    }catch{
+      $location = $_.Exception.Response.Headers.Location
+      $url=$location.AbsoluteUri
+      $version=$location.Segments[3].split('-')[2].trim('.exe')
+    }
+
+    return $version,$url
+}
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION,$url=getVersion $url
   }
 
-  $url=$lwpm.url
-
   if($isPre){
-    $VERSION=$preVersion
-    $url=$lwpm.preUrl
+    $VERSION,$url=getVersion $preUrl
   }
 
   $filename="VSCodeUserSetup-x64-${VERSION}.exe"
@@ -63,20 +77,22 @@ Function uninstall(){
 }
 
 Function getInfo(){
-  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+  $latestVersion=(getVersion $url)[0]
+  $latestPreVersion=(getVersion $preUrl)[0]
 
-  $latestVersion=getLatestTag $githubRepo 0 27
-
-  echo "
-Package: $name
-Version: $stableVersion
-PreVersion: $preVersion
-LatestVersion: $latestVersion
-HomePage: $homepage
-Releases: $releases
-Bugs: $bug
-Description: $description
-"
+  ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 Function bug(){

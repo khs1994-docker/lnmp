@@ -19,11 +19,11 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
 
-  $url=$url.replace('${VERSION}',${VERSION});
-
   if($isPre){
     $VERSION=$preVersion
   }
+
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename="wechat_devtools_${VERSION}_x64.exe"
   $unzipDesc="wechat_devtools"
@@ -55,16 +55,19 @@ Function uninstall(){
 
 Function getInfo(){
 
-  echo "
-Package: $name
-Version: $stableVersion
-PreVersion: $preVersion
-LatestVersion: $latestVersion
-HomePage: $homepage
-Releases: $releases
-Bugs: $bug
-Description: $description
-"
+  ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 Function bug(){

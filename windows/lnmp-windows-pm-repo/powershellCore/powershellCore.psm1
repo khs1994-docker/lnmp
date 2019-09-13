@@ -13,6 +13,8 @@ $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$preUrl=$lwpm.preUrl
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
@@ -21,7 +23,8 @@ Function install($VERSION=0,$isPre=0){
   if($isPre){
     $VERSION=$preVersion
   }
-  $url="https://github.com/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-win-x64.msi"
+
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename="PowerShell-${VERSION}-win-x64.msi"
   $unzipDesc="PowerShell"
@@ -76,16 +79,19 @@ Function getInfo(){
 
   $latestVersion=getLatestRelease $githubRepo
 
-  echo "
-Package: $name
-Version: $stableVersion
-PreVersion: $preVersion
-LatestVersion: $latestVersion
-HomePage: $homepage
-Releases: $releases
-Bugs: $bug
-Description: $description
-"
+  ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 Function bug(){

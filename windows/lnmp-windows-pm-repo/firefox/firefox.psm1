@@ -13,19 +13,35 @@ $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$preUrl=$lwpm.preUrl
+
+Function getVersion($url){
+  try{
+    Invoke-WebRequest `
+      -MaximumRedirection 0 `
+      -Method Head `
+      -uri $url
+    }catch{
+      $version=$_.Exception.Response.Headers.Location.LocalPath.split('/')[4]
+    }
+
+    return $version
+}
 
 Function install($VERSION=0,$isPre=0){
+
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=getVersion $url
   }
 
   if($isPre){
-    $VERSION=$preVersion
+    $VERSION=getVersion $preUrl
   }
 
-  $url="https://ftp.mozilla.org/pub/firefox/releases/${VERSION}/win64/en-US/Firefox%20Setup%20${VERSION}.msi"
+  $url="https://download-installer.cdn.mozilla.net/pub/firefox/releases/${VERSION}/win64/en-US/Firefox%20Setup%20${VERSION}.exe"
 
-  $filename="Firefox Setup ${VERSION}.msi"
+  $filename="Firefox Setup ${VERSION}.exe"
   $unzipDesc="firefox"
 
   if($(_command "$env:ProgramFiles\Mozilla Firefox\firefox.exe")){
@@ -59,7 +75,7 @@ Function install($VERSION=0,$isPre=0){
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  & ls "$env:ProgramFiles\Mozilla Firefox\firefox.exe"
+  & get-command "$env:ProgramFiles\Mozilla Firefox\firefox.exe"
 }
 
 Function uninstall(){
@@ -67,17 +83,22 @@ Function uninstall(){
 }
 
 Function getInfo(){
+  $latestVersion=getVersion $url
+  $latestPreVersion=getVersion $preUrl
 
-  echo "
-Package: $name
-Version: $stableVersion
-PreVersion: $preVersion
-LatestVersion: $latestVersion
-HomePage: $homepage
-Releases: $releases
-Bugs: $bug
-Description: $description
-"
+  ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 Function bug(){
