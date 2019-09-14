@@ -1,9 +1,5 @@
 version: "3.7"
 
-#
-# This file is override by docker-compose.override.yml
-#
-
 x-common:
   &default-common
   restart: always
@@ -22,12 +18,17 @@ services:
       # - 9000:9000
     volumes:
       - drone-data-v1:/data:rw
-      - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
     networks:
       - frontend
       - backend
+    environment:
+    - DRONE_LOGS_DEBUG=${CI_DEBUG:-true}
+    # 设为 false, server 与 agent 将同时运行
+    - DRONE_AGENTS_ENABLED=true
+    # volumes:
+    #   - type: bind
+    #     source: /var/run/docker.sock
+    #     target: /var/run/docker.sock
 
   drone-agent:
     << : *default-common
@@ -43,13 +44,14 @@ services:
     # https://docker-runner.docs.drone.io/installation/reference/
     environment:
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
-      - DRONE_RPC_SERVER=drone-server:9000
+      - DRONE_RPC_HOST=drone-server
       - DRONE_RPC_PROTO=http
       - DRONE_RUNNER_NAME=${DRONE_RUNNER_NAME:-drone}
       - DRONE_RUNNER_CAPACITY=2
       - DRONE_UI_DISABLED=${DRONE_UI_DISABLED:-true}
       - DRONE_UI_USERNAME=${DRONE_UI_USERNAME:-root}
       - DRONE_UI_PASSWORD=${DRONE_UI_PASSWORD:-root}
+      - DRONE_DEBUG=${CI_DEBUG:-true}
       # - DRONE_HTTP_HOST=127.0.0.1
       # - DRONE_HTTP_PROTO=http
 

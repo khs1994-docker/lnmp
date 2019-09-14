@@ -8,7 +8,7 @@ x-production:
   &production
   environment:
     - DRONE_SERVER_HOST=khs1994.jios.org:18000
-    - DRONE_SERVER_PROTO=http
+    - DRONE_SERVER_PROTO={{ DRONE_SERVER_PROTO }}
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     - DRONE_USER_CREATE=${DRONE_USER_CREATE}
     - DRONE_USER_FILTER=${DRONE_USER_FILTER}
@@ -16,15 +16,15 @@ x-production:
     - DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID_TEST}
     - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET_TEST}
     #
-    - DRONE_DATABASE_DRIVER={{ DB_TYPE }}
-    - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/{{ DB_DATABASE }}?parseTime=true
-    - DRONE_GITHUB_SERVER=https://github.com
+    # - DRONE_DATABASE_DRIVER={{ DB_TYPE }}
+    # - DRONE_DATABASE_DATASOURCE={{ DB_USERNAME }}:{{ DB_PASSWORD }}@tcp({{ DB_HOST }})/{{ DB_DATABASE }}?parseTime=true
+    # - DRONE_GITHUB_SERVER=https://github.com
 
 x-gogs:
   &gogs
   environment:
     - DRONE_SERVER_HOST={{ DRONE_SERVER_HOST }}
-    - DRONE_SERVER_PROTO=http
+    - DRONE_SERVER_PROTO={{ DRONE_SERVER_PROTO }}
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     #
     - DRONE_GOGS_SERVER={{ DRONE_GOGS_SERVER }}
@@ -39,7 +39,7 @@ x-github:
   environment:
     - DRONE_GITHUB_SERVER=${DRONE_GITHUB_SERVER:-https://github.com}
     - DRONE_SERVER_HOST={{ DRONE_SERVER_HOST }}
-    - DRONE_SERVER_PROTO=http
+    - DRONE_SERVER_PROTO={{ DRONE_SERVER_PROTO }}
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     #
     - DRONE_USER_CREATE=${DRONE_USER_CREATE}
@@ -54,7 +54,7 @@ x-gitlab:
   &gitlab
   environment:
     - DRONE_SERVER_HOST={{ DRONE_SERVER_HOST }}
-    - DRONE_SERVER_PROTO=http
+    - DRONE_SERVER_PROTO={{ DRONE_SERVER_PROTO }}
     - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
     #
     - DRONE_GITLAB_CLIENT_ID=${DRONE_GITLAB_CLIENT_ID}
@@ -69,7 +69,6 @@ services:
     << : *gogs
     # << : *github
     # << : *gitlab
-    # << : *coding
     # << : *production
   drone-agent:
     # ports:

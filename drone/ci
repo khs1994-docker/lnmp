@@ -18,13 +18,13 @@ Options:
 
   --use-external-nginx   使用外部 NGINX = 后边值为配置文件路径 (TLS Only)
 
+  --config               生成 docker-compose.yml 文件
+
 Commands:
   up           [-d]   [--open-port]
-  config              [--open-port] Show config
   down
 
   up-tls       [-d]   [--open-port]  [--use-external-nginx=/etc/nginx/conf.d]
-  tls-config          [--open-port] Show config
 
   swarm-deploy
   swarm-remove
@@ -48,7 +48,7 @@ _cp(){
 
 _init(){
   _cp .env.example .env
-  _cp docker-compose.override.demo.yml docker-compose.override.yml
+  _cp docker-ci.override.demo.yml docker-ci.override.yml
 
   cd config
 
@@ -67,7 +67,7 @@ _init(){
 
   command -v docker-compose > /dev/null 2>&1
 
-  if [ $? -ne 0 ];then exec echo "docker-compose not install" ; fi
+  if [ $? -ne 0 ];then exec echo "Error: docker-compose not install" ; fi
 }
 
 _reset_(){
@@ -78,20 +78,20 @@ _reset_(){
 
 _reset(){
   _reset_
-  rm -rf .env webhooks/.env docker-compose.override.yml
+  rm -rf .env docker-ci.override.yml
 }
 
 _sed_common(){
   sed -i "s#{{ DB_TYPE }}#${CI_DB_TYPE:-mysql}#g" \
-    config/gogs/app.ini docker-compose.override.yml
+    config/gogs/app.ini docker-ci.override.yml
   sed -i "s#{{ DB_HOST }}#${CI_EXTERNAL_MYSQL_HOST:-mysql}:${CI_EXTERNAL_MYSQL_PORT:-3306}#g" \
-    config/gogs/app.ini docker-compose.override.yml
+    config/gogs/app.ini docker-ci.override.yml
   sed -i "s#{{ DB_DATABASE }}#${CI_EXTERNAL_MYSQL_DATABASE:-$MYSQL_DATABASE}#g" \
-    config/gogs/app.ini docker-compose.override.yml
+    config/gogs/app.ini docker-ci.override.yml
   sed -i "s#{{ DB_USERNAME }}#${CI_EXTERNAL_MYSQL_USERNAME:-root}#g" \
-    config/gogs/app.ini docker-compose.override.yml
+    config/gogs/app.ini docker-ci.override.yml
   sed -i "s#{{ DB_PASSWORD }}#${CI_EXTERNAL_MYSQL_PASSWORD:-$MYSQL_ROOT_PASSWORD}#g" \
-    config/gogs/app.ini docker-compose.override.yml
+    config/gogs/app.ini docker-ci.override.yml
 
   sed -i "s#{{ SSH_PORT }}#${CI_GOGS_SSH_PORT:-8022}#g" config/gogs/app.ini
 
@@ -103,10 +103,10 @@ _sed_common(){
 
 _up_sed(){
   sed -i "s#{{ DRONE_SERVER_HOST }}#${CI_HOST:-192.168.199.100}:${CI_DRONE_PORT:-8000}#g" \
-    docker-compose.override.yml
+    docker-ci.override.yml
   sed -i "s#{{ DRONE_GOGS_SERVER }}#http://${CI_HOST:-192.168.199.100}:${CI_GOGS_PORT:-3000}#g" \
-    docker-compose.override.yml
-  sed -i "s#DRONE_SERVER_PROTO=https#DRONE_SERVER_PROTO=http#g" docker-compose.override.yml
+    docker-ci.override.yml
+  sed -i "s#{{ DRONE_SERVER_PROTO }}#http#g" docker-ci.override.yml
 }
 
 _up(){
@@ -128,7 +128,7 @@ _up(){
     sed -i "s#{{ WEBHOOKS_HOST }}#${WEBHOOKS_HOST:-http://192.168.199.100}#g" registry/config.yml
     cd - > /dev/null
     _up_sed
-    CI_INCLUDE=${CI_INCLUDE:-drone-server drone-agent gogs registry}
+    CI_INCLUDE=${CI_INCLUDE-drone-server drone-agent gogs registry}
 
    # based posrt don't up nginx
 
@@ -140,39 +140,40 @@ _up(){
       CI_INCLUDE_TARGET+="$soft "
     done
 
-    docker-compose ${COMPOSE_FILE:-} up ${opt:-} ${CI_INCLUDE_TARGET} drone-server drone-agent
-}
+    docker-compose ${COMPOSE_FILE?err} config > docker-compose.yml
 
-_config(){
-  cp docker-compose.override.demo.yml docker-compose.override.yml
-  _sed_common
-  _up_sed
-  docker-compose ${COMPOSE_FILE:-} config
+    if [ -n "${CONFIG_ONLY}" ];then return;fi
+
+    docker-compose ${COMPOSE_FILE?err} up ${opt:-} ${CI_INCLUDE_TARGET} drone-server drone-agent
 }
 
 _up-tls_sed(){
   sed -i "s#{{ DRONE_SERVER_HOST }}#drone.${CI_DOMAIN:-t.khs1994.com}#g" \
-    docker-compose.override.yml
+    docker-ci.override.yml
+
   sed -i "s#{{ DRONE_GOGS_SERVER }}#https://git.${CI_DOMAIN:-t.khs1994.com}#g" \
-    docker-compose.override.yml
+    docker-ci.override.yml
+
+  sed -i "s#{{ DRONE_SERVER_PROTO }}#https#g" docker-ci.override.yml
 }
 
 _up-tls(){
     _reset_ ; _init
     _sed_common
-    sed -i "s#{{ CI_DOMAIN }}#${CI_DOMAIN:-t.khs1994.com}#g" gogs/app.ini
+    sed -i "s#{{ CI_DOMAIN }}#${CI_DOMAIN:-t.khs1994.com}#g" config/gogs/app.ini
 
-    sed -i "s#{{ CI_DOMAIN_FULL }}#git.${CI_DOMAIN:-t.khs1994.com}#g" gogs/app.ini
+    sed -i "s#{{ CI_DOMAIN_FULL }}#git.${CI_DOMAIN:-t.khs1994.com}#g" config/gogs/app.ini
 
-    sed -i "s#{{ CI_GOGS_PORT }}#${CI_GOGS_PORT:-443}#g" gogs/app.ini
+    sed -i "s#{{ CI_GOGS_PORT }}#${CI_GOGS_PORT:-443}#g" config/gogs/app.ini
 
-    sed -i "s#{{ PROTOCOL }}#https#g" gogs/app.ini
+    sed -i "s#{{ PROTOCOL }}#https#g" config/gogs/app.ini
 
-    sed -i "s#{{ REDIS_HOST }}#${CI_EXTERNAL_REDIS_HOST:-$REDIS_HOST}#g" registry/config.yml
+    sed -i "s#{{ REDIS_HOST }}#${CI_EXTERNAL_REDIS_HOST:-$REDIS_HOST}#g" config/registry/config.yml
     sed -i "s#{{ WEBHOOKS_HOST }}#${WEBHOOKS_HOST:-https://ci.t.khs1994.com/docker/webhooks}#g" \
-      registry/config.yml
-    cd - > /dev/null
+      config/registry/config.yml
+
     _up-tls_sed
+
     sed -i "s#{{ CI_DOMAIN }}#${CI_DOMAIN:-t.khs1994.com}#g" config/nginx/docker-registry.conf
     sed -i "s#{{ CI_DOMAIN }}#${CI_DOMAIN:-t.khs1994.com}#g" config/nginx/drone.conf
     sed -i "s#{{ CI_DOMAIN }}#${CI_DOMAIN:-t.khs1994.com}#g" config/nginx/gogs.conf
@@ -187,7 +188,10 @@ _up-tls(){
         sed -i "s#{{ DRONE_UPSTREAM }}#${CI_HOST:-192.168.199.100}#g" $file
         sed -i "s#{{ GOGS_UPSTREAM }}#${CI_HOST:-192.168.199.100}#g" $file
       done
-        if [ -n "$LNMP_NGINX_CONF" ];then
+        if [ "$LNMP_NGINX_CONF" != '--use-external-nginx' ];then
+          if ! [ -d "$LNMP_NGINX_CONF" ];then
+            return
+          fi
           cp -a $PWD/*.conf $LNMP_NGINX_CONF
           mkdir -p $LNMP_NGINX_CONF/ssl || echo
           if ! [ -f ssl/$CI_DOMAIN.crt ];then cp -a $PWD/ssl/*  $LNMP_NGINX_CONF/ssl; fi
@@ -214,15 +218,12 @@ _up-tls(){
 
     test "$ENABLE_NGINX" = 'FALSE' || _sed_nginx
 
-    docker-compose ${COMPOSE_FILE:-} up ${opt:-} ${CI_INCLUDE:-gogs registry} \
-      drone-server drone-agent
-}
+    docker-compose ${COMPOSE_FILE?err} config > docker-compose.yml
 
-_tls-config(){
-  cp docker-compose.override.demo.yml docker-compose.override.yml
-  _sed_common
-  _up-tls_sed
-  docker-compose ${COMPOSE_FILE:-} config
+    if [ -n "${CONFIG_ONLY}" ];then return;fi
+
+    docker-compose ${COMPOSE_FILE?err} up ${opt:-} ${CI_INCLUDE-gogs registry} \
+      drone-server drone-agent
 }
 
 _down(){
@@ -257,7 +258,7 @@ if [ -f $HOME/.bash_profile ];then
   . ~/.bash_profile
 fi
 
-test ! -z "$1" || print_help_info
+test "$#" = 0 && print_help_info || true
 
 command=$1
 
@@ -271,11 +272,16 @@ if [ -z "$CI_DOMAIN" -a "$command" = 'up-tls' ];then
   exec echo "CI_DOMAIN not set"
 fi
 
+COMPOSE_FILE='-f docker-ci.yml -f docker-ci.override.yml'
+CONFIG_ONLY=
+LNMP_NGINX_CONF=
+
 for arg in "$@"
 do
   test $arg = '--open-port' && \
-  COMPOSE_FILE='-f docker-compose.yml -f docker-compose.override.yml -f docker-compose.port.yml'
+  COMPOSE_FILE='-f docker-ci.yml -f docker-ci.override.yml -f docker-ci.port.yml'
   test $arg = '-d' && opt='-d'
+  test $arg = '--config' && CONFIG_ONLY=1
   [[ $arg =~ --use-external-nginx=* ]] && \
     ENABLE_NGINX=FALSE && LNMP_NGINX_CONF=$( echo $arg | cut -d '=' -f 2 )
 done
