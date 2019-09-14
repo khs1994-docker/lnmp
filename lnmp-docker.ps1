@@ -189,7 +189,7 @@ Function init(){
 }
 
 Function help_information(){
-  echo "Docker-LNMP CLI ${LNMP_DOCKER_VERSION}
+  "Docker-LNMP CLI ${LNMP_DOCKER_VERSION}
 
 Official WebSite https://lnmp.khs1994.com
 
@@ -277,7 +277,7 @@ exit
 }
 
 Function clusterkit_help(){
-echo "
+"
 ClusterKit:
   clusterkit [-d]              UP LNMP With Mysql Redis Memcached Cluster [Background]
   clusterkit-COMMAND           Run docker-compsoe commands(config, pull, etc)
@@ -403,7 +403,7 @@ Function get_compose_options($compose_files,$isBuild=0){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew-dev/$item"
       # set env
       if(!($content)){
-         echo "${KEY}=lrew-dev" >> .env
+         "${KEY}=lrew-dev" >> .env
       }
     }elseif(Test-Path $PSScriptRoot/vendor/lrew/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew/$item"
@@ -437,7 +437,7 @@ Function get_compose_options($compose_files,$isBuild=0){
 
   $options += " -f docker-lnmp.include.yml "
 
-  return $options
+  return $options.split(' ')
 }
 
 # main
@@ -655,7 +655,7 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-        powershell -c "docker-compose $options build $other --parallel"
+        & {docker-compose $options build $other --parallel}
       }
     }
 
@@ -667,7 +667,7 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-      powershell -c "docker-compose $options config $other"
+      & {docker-compose $options config $other}
     }
 
     build-up {
@@ -675,7 +675,7 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-      powershell -c "docker-compose $options up -d $other"
+      & {docker-compose $options up -d $other}
     }
 
     build-push {
@@ -683,9 +683,9 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-      powershell -c "docker-compose $options build $other --parallel"
+      & {docker-compose $options build $other --parallel}
 
-      powershell -c "docker-compose $options push $other"
+      & {docker-compose $options push $other}
     }
 
     cleanup {
@@ -700,7 +700,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      powershell -c "docker-compose $options config $other"
+      & {docker-compose $options config $other}
     }
 
     cn-mirror {
@@ -715,7 +715,7 @@ switch -regex ($command){
     }
 
     services {
-      echo ${LNMP_SERVICES}
+      ${LNMP_SERVICES}
     }
 
     up {
@@ -730,7 +730,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      powershell -c "docker-compose $options up -d $services"
+      & {docker-compose $options up -d $services}
 
       #@custom
       __lnmp_custom_up $services
@@ -740,7 +740,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml",`
                                    "docker-lnmp.override.yml"
 
-      powershell -c "docker-compose $options pull ${LNMP_SERVICES}"
+      & {docker-compose $options pull ${LNMP_SERVICES}}
 
       #@custom
       __lnmp_custom_pull
@@ -750,7 +750,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml",`
                                    "docker-lnmp.override.yml"
 
-      powershell -c "docker-compose $options down --remove-orphans"
+      & {docker-compose $options down --remove-orphans}
 
       #@custom
       __lnmp_custom_down
@@ -787,7 +787,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml", `
                           "docker-lnmp.override.yml"
 
-      powershell -c "docker-compose $options restart $other"
+      & {docker-compose $options restart $other}
       #@custom
       __lnmp_custom_restart $other
     }
@@ -866,7 +866,7 @@ switch -regex ($command){
                                     "cluster/docker-cluster.mysql.yml", `
                                     "cluster/docker-cluster.redis.yml"
 
-       powershell -c "docker-compose $options up $other"
+       & {docker-compose $options up $other}
     }
 
     clusterkit-mysql-up {
@@ -880,7 +880,7 @@ switch -regex ($command){
     clusterkit-mysql-exec {
          $service,$cmd=$other
          if ($cmd.Count -eq 0){
-           echo '$ ./lnmp-docker.ps1 clusterkit-mysql-exec {master|node-N} {COMMAND}'
+           '$ ./lnmp-docker.ps1 clusterkit-mysql-exec {master|node-N} {COMMAND}'
 
            cd $source
 
@@ -900,7 +900,7 @@ switch -regex ($command){
     clusterkit-memcached-exec {
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
-        echo '$ ./lnmp-docker.ps1 clusterkit-memcached-exec {N} {COMMAND}'
+        '$ ./lnmp-docker.ps1 clusterkit-memcached-exec {N} {COMMAND}'
 
         cd $source
 
@@ -920,7 +920,7 @@ switch -regex ($command){
     clusterkit-redis-exec {
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
-        echo '$ ./lnmp-docker.ps1 clusterkit-redis-exec {master-N|slave-N} {COMMAND}'
+        '$ ./lnmp-docker.ps1 clusterkit-redis-exec {master-N|slave-N} {COMMAND}'
 
         cd $source
 
@@ -940,7 +940,7 @@ switch -regex ($command){
     clusterkit-redis-replication-exec {
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
-        echo '$ ./lnmp-docker.ps1 clusterkit-redis-replication-exec {master|slave-N} {COMMAND}'
+        '$ ./lnmp-docker.ps1 clusterkit-redis-replication-exec {master|slave-N} {COMMAND}'
 
         cd $source
 
@@ -960,7 +960,7 @@ switch -regex ($command){
     clusterkit-redis-sentinel-exec {
       $service,$cmd=$other
       if ($cmd.Count -eq 0){
-        echo '$ ./lnmp-docker.ps1 clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}'
+        '$ ./lnmp-docker.ps1 clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}'
 
         cd $source
 
@@ -1254,7 +1254,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
-        powershell -c "docker-compose $options run -w $LARAVEL_ROOT composer $COMPOSER_COMMAND"
+        & {docker-compose $options run -w $LARAVEL_ROOT composer $COMPOSER_COMMAND}
       }
 
     default {
@@ -1265,7 +1265,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
-        powershell -c "docker-compose $options $args"
+        & {docker-compose $options $args}
       }
 }
 

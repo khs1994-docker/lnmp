@@ -5,7 +5,7 @@ Import-Module cleanup
 Import-Module ln
 Import-Module sudo
 
-$global:HTTPD_MOD_FCGID_VERSION="2.3.10"
+$HTTPD_MOD_FCGID_VERSION="2.3.10"
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 

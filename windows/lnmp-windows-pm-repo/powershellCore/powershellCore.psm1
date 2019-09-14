@@ -58,6 +58,15 @@ Function install($VERSION=0,$isPre=0){
   # 安装 Fix me
   # Copy-item -r -force "" ""
   Start-Process -FilePath $filename -wait
+
+  # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7#administrative-install-from-the-command-line
+  # https://docs.microsoft.com/en-us/windows/win32/msi/command-line-options
+  # msiexec.exe /package $filename `
+  #  /quiet `
+  #  ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 `
+  #  ENABLE_PSREMOTING=1 `
+  #  REGISTER_MANIFEST=1
+
   # _cleanup ""
 
   # [environment]::SetEnvironmentvariable("", "", "User")

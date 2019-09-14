@@ -22,7 +22,7 @@ lnmp-laravel-by-composer new [My-project] [VERSION:-5.5]"
     exit 1
 }
 
-$global:LARAVEL_PATH=$args[1]
+$LARAVEL_PATH=$args[1]
 
 if (!$args[2]){
   $VERSION=5.5

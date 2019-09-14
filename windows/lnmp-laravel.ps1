@@ -12,7 +12,7 @@ if ($args[0] -eq 'new' ){
     exit 1
   }
 
-  $global:LARAVEL_PATH=$args[1]
+  $LARAVEL_PATH=$args[1]
 
   if (Test-Path ${LARAVEL_PATH}){
     write-warning "${LARAVEL_PATH} existing"

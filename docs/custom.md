@@ -23,11 +23,11 @@ LNMP_SERVICES="httpd mysql php7 redis mongodb" # 增加 mongodb
 编辑 `env.ps1`
 
 ```bash
-$global:LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin' # 默认配置
+$LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin' # 默认配置
 
-$global:LNMP_SERVICES='httpd','mysql','php7','redis' # 使用 httpd 代替 nginx
+$LNMP_SERVICES='httpd','mysql','php7','redis' # 使用 httpd 代替 nginx
 
-$global:LNMP_SERVICES='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
+$LNMP_SERVICES='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 ```
 
 ## 使用自己的镜像

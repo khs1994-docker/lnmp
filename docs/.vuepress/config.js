@@ -98,7 +98,8 @@ module.exports = {
             '/xhprof',
             '/swoole',
             '/composer/',
-            '/composer/satis'
+            '/composer/satis',
+            '/symfony',
           ]
         }, {
           title: '生产环境',
@@ -147,6 +148,7 @@ module.exports = {
             '/ab',
             '/minio',
             '/windows/wsl2',
+            '/powershell',
             '/go',
             '/github',
             '/atom',

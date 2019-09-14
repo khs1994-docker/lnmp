@@ -10,7 +10,7 @@
 # 等于 -eq
 
 Function print_help_info(){
-  echo "
+  "
 LNMP Windows Package Manager
 
 COMMANDS:
@@ -35,7 +35,7 @@ $ErrorAction="SilentlyContinue"
 
 . "$PSScriptRoot/common.ps1"
 
-$global:source=$PWD
+$source=$PWD
 
 # 配置环境变量
 $LNMP_PATH="$HOME\lnmp"
@@ -113,12 +113,12 @@ Function _import_module($soft){
   if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
     Import-Module -Name "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
-    echo "==> vendor dev"
+    "==> vendor dev"
     Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm\$soft"){
     Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm\$soft"
   }else{
-    echo "==> Not Found"
+    "==> Not Found"
     exit 1
   }
 }
@@ -134,8 +134,8 @@ Function __install($softs){
     if($soft -eq '--pre'){
       continue
     }
-    $soft,$version=(echo $soft).split('@')
-    echo "==> Installing $soft $version ..."
+    $soft,$version=$soft.split('@')
+    "==> Installing $soft $version ..."
     _import_module $soft
 
     if($version){
@@ -149,7 +149,7 @@ Function __install($softs){
 
 Function __uninstall($softs){
   Foreach ($soft in $softs){
-    echo "==> Uninstalling $soft ..."
+    "==> Uninstalling $soft ..."
     _import_module $soft
     uninstall
     Remove-Module -Name $soft
@@ -167,9 +167,9 @@ Function _add($softs){
 }
 
 Function __list(){
-  echo ""
+  ""
   ls "${PSScriptRoot}\lnmp-windows-pm-repo" -Name -Directory
-  echo ""
+  ""
   cd $source
   exit
 }
@@ -178,7 +178,7 @@ function __init($soft){
   $SOFT_ROOT="${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
 
   if(test-path $SOFT_ROOT){
-    echo "==> This package already exists !"
+    "==> This package already exists !"
     cd $source
     exit
   }
@@ -201,7 +201,7 @@ function __init($soft){
       -q
   }
 
-  echo "Please edit $SOFT_ROOT files"
+  "Please edit $SOFT_ROOT files"
 
   cd $source
 }
@@ -253,7 +253,7 @@ if($args[0] -eq 'list'){
 
 if($args[0] -eq 'init'){
   if($args[1].length -eq 0){
-    echo "Please input soft name"
+    "Please input soft name"
     cd $source
     exit
   }
@@ -264,7 +264,7 @@ if($args[0] -eq 'init'){
 
 if($args[0] -eq 'info'){
   if($args[1].length -eq 0){
-    echo "Please input soft name"
+    "Please input soft name"
     cd $source
     exit
   }
@@ -275,7 +275,7 @@ if($args[0] -eq 'info'){
 
 if($args[0] -eq 'homepage'){
   if($args[1].length -eq 0){
-    echo "Please input soft name"
+    "Please input soft name"
     cd $source
     exit
   }
@@ -286,7 +286,7 @@ if($args[0] -eq 'homepage'){
 
 if($args[0] -eq 'bug'){
   if($args[1].length -eq 0){
-    echo "Please input soft name"
+    "Please input soft name"
     cd $source
     exit
   }
@@ -297,7 +297,7 @@ if($args[0] -eq 'bug'){
 
 if($args[0] -eq 'releases'){
   if($args[1].length -eq 0){
-    echo "Please input soft name"
+    "Please input soft name"
     cd $source
     exit
   }

@@ -254,8 +254,8 @@ Function _status(){
 
 ################################################################################
 
-$global:WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgresql","httpd","sshd"
-$global:WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql","wsl-redis","wsl-memcached"
+$WINDOWS_SOFT="nginx","php","mysql","redis","memcached","mongodb","postgresql","httpd","sshd"
+$WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql","wsl-redis","wsl-memcached"
 
 if ($args.length -eq 1){
   if ($args[0] -eq 'status' -or $args[0] -eq 'ps'){
