@@ -1,5 +1,8 @@
 # PowerShell
 
+* https://www.pstips.net/
+* https://docs.microsoft.com/en-us/powershell/
+
 ## write-debug
 
 ```powershell

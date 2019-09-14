@@ -20,7 +20,8 @@ $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
 
 $CI_HOST="ci.khs1994.com:10000"
 
-# wsl name $ wslconfig /l
+# wsl name
+# $ wslconfig /l
 $DistributionName="debian"
 
 $TZ='Asia/Shanghai'

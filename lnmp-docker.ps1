@@ -481,9 +481,9 @@ $env:DOCKER_HOST=$null
 if(_command docker){
   if($(docker help context)){
 
-    $isWSL=docker context ls | where {$_ -match "wsl \*"}
+    $isWSL2=docker context ls | where {$_ -match "wsl \*"}
 
-    if($isWSL){
+    if($isWSL2){
       printInfo "Docker Engine run in WSL2"
       $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
     }else{
