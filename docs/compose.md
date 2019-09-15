@@ -5,7 +5,9 @@
 
 `环境变量` 优先级大于 `.env` 文件。
 
-## vars
+> Values set in the shell environment override those set in the `.env` file.
+
+## 变量解析
 
 * `${VARIABLE:-default}` evaluates to default if VARIABLE is unset or empty in the environment.
 
@@ -22,3 +24,15 @@ Similarly, the following syntax allows you to specify mandatory variables:
 * `consistent`: 或者 default：完全一致的默认设置，如上所述。
 * `delegated`：容器运行时的挂载视图是权威的。在容器中进行的更新可能在主机上可见之前可能会有延迟。
 * `cached`：macOS 主机的挂载视图是权威的。在主机上进行的更新在容器中可见之前可能会有延迟。
+
+## $$
+
+```bash
+web:
+  build: .
+  command: "echo $$VAR_NOT_INTERPOLATED_BY_COMPOSE"
+```
+
+使用 `$$` 避免被解析成变量。
+
+## docker stack 不支持 `.env` 文件

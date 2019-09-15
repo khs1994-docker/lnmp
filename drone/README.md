@@ -10,10 +10,7 @@
 
 ## 重要提示
 
-本项目基于 Drone `1.x` 版本。
-
-* `1.x` 文档 `https://docs.drone.io/`
-* `0.8.x` 文档 `https://0-8-0.docs.drone.io/`
+本项目基于 [Drone `1.x`](https://docs.drone.io/) 版本。
 
 ## 微信订阅号
 
@@ -25,7 +22,7 @@
 
 ## CI & DevOps 工作流程
 
-**1.** 本地制作 Docker 镜像推送到私有仓库（Docker Registry）
+**1.** 本地编写 Dockerfile，CI 构建镜像推送到私有仓库（Docker Registry）
 
 **2.** 本地开发项目，项目根目录编写 `.drone.yml` 文件，推送到 git （例如，GitHub，Gogs ...）
 
@@ -49,7 +46,7 @@
 
 * 知道如何注册 GitHub App (GitHub only)
 
-* `brew install gnu-sed` (macOS only)
+* `$ brew install gnu-sed` (macOS only)
 
 ## 快速开始
 
@@ -87,13 +84,34 @@ $ ./ci
 
 修改 `secrets/mysql.env` 中的 `MYSQL_ROOT_PASSWORD` 变量值为 MySQL 密码。
 
+### 安全（务必仔细配置）
+
+```bash
+# https://docs.drone.io/manage/user/admins/
+# https://docs.drone.io/installation/reference/drone-user-create/
+# 只有管理员账户(admin) 才可以编辑仓库的 `Trusted` 选项
+# 为了启用 `Trusted` 选项，强烈建议编辑此变量
+# 将 USERNAME 替换为自己的 github 用户名
+# 或者参考 https://docs.drone.io/manage/user/admins/ 使用 CLI 设置管理员
+DRONE_USER_CREATE=
+# DRONE_USER_CREATE=username:USERNAME,admin:true
+# DRONE_USER_CREATE=username:khs1994,machine:false,admin:true,token:TOKEN
+# TOKEN 使用 $ openssl rand -hex 16 生成
+# https://docs.drone.io/installation/security/registration/
+DRONE_USER_FILTER=
+# DRONE_USER_FILTER=khs1994,github
+```
+
+* `DRONE_USER_CREATE` Drone 启动时创建哪些用户
+* `DRONE_USER_FILTER` Drone 允许哪些用户注册，留空即表示允许所有用户注册，将会造成资源浪费，**强烈建议** 配置该选项
+
 ### 启用软件
 
 修改 `.env` 中的 `CI_INCLUDE` 变量。
 
 ### 使用 khs1994-docker/lnmp 的 MySQL Redis 服务（可选项）
 
-修改 `.env` 中的 `CI_INCLUDE` 变量，若 Git 使用 `Gogs` 则只保留 `gogs` 即可，若使用 `GitHub` 请留空。
+修改 `.env` 中的 `CI_INCLUDE` 变量，若 Git 使用 `Gogs` 则只保留 `gogs` 即可，若使用 `GitHub` 请留空 `CI_INCLUDE=""`。
 
 ```bash
 CI_INCLUDE="gogs"
@@ -113,7 +131,7 @@ networks:
 
 > CI 启动之前必须先启动 khs1994-docker/lnmp
 
-### 使用外部服务？(高级选项)
+### 使用外部服务(高级选项)
 
 编辑 `.env` 文件，编辑 `CI_INCLUDE` 变量，去掉内置的软件名，之后填写外部服务的相关配置
 
@@ -150,6 +168,12 @@ services:
 ## 启动
 
 ```bash
+$ ./ci up --config
+```
+
+检查 `docker-compose.yml` 配置是否正确，之后启动
+
+```bash
 $ ./ci up [-d] [--reset]
 ```
 
@@ -164,10 +188,6 @@ $ ./ci up [-d] [--reset]
 * drone **8000**
 
 * registry **5000**
-
-## 注意事项
-
-*  Gogs 不支持 volume 功能。
 
 ## 启用构建
 
