@@ -296,8 +296,8 @@ RUN export EXT_NAME=tideways_xhprof \
         && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
         # https://github.com/tideways/php-xhprof-extension
         && cd /tmp \
-        && wget https://github.com/tideways/php-xhprof-extension/archive/master.zip \
-        && unzip master.zip \
+        && curl -fsSL https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+           | tar -zxvf - \
         && cd php-xhprof-extension-master \
         && phpize \
         && ./configure \

@@ -135,8 +135,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
            done \
         # https://github.com/tideways/php-xhprof-extension.git
         # && cd /tmp \
-        # && wget https://github.com/tideways/php-xhprof-extension/archive/master.zip \
-        # && unzip master.zip \
+        # && curl -fsSL https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+        #   | tar -zxvf - \
         # && cd php-xhprof-extension-master \
         # && phpize \
         # && ./configure \
@@ -147,9 +147,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         && apt-get purge -y --auto-remove  $buildDeps \
         && rm -rf /tmp/* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
-        # config opcache
-        # && echo 'opcache.enable_cli=1' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-        # && echo 'opcache.file_cache=/tmp' >> ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini
         # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \

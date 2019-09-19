@@ -24,7 +24,7 @@
 
 * [`7.1.32-fpm-alpine` `7.1-fpm-alpine` (7.1/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.9/7.1/alpine/Dockerfile)
 
-* [`7.4.0beta-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.9/7.4/alpine/Dockerfile)
+* [`7.4.0RC1-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.9/7.4/alpine/Dockerfile)
 
 * [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.9/nightly/alpine/Dockerfile)
 
@@ -45,7 +45,7 @@
 
 | VERSION     | DETAILS     |
 | :------------- | :------------- |
-| [![](https://images.microbadger.com/badges/version/khs1994/php:7.4.0beta-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0beta-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.4.0beta-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0beta-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.4.0RC1-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0RC1-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.4.0RC1-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0RC1-fpm-alpine "Get your own image badge on microbadger.com")       |
 | [![](https://images.microbadger.com/badges/version/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own image badge on microbadger.com")       |
 
 ## Overview

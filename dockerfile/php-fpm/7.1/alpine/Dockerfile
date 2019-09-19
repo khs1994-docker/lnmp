@@ -139,22 +139,24 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 # https://github.com/tideways/php-xhprof-extension.git
         && test `uname -m` = 'x86_64' \
         && (cd /tmp \
-        && wget https://github.com/tideways/php-xhprof-extension/archive/master.zip \
-        && unzip master.zip \
+        && curl -fsSL https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+             | tar -zxvf - \
         && cd php-xhprof-extension-master \
         && phpize \
         && ./configure \
         && make \
         && make install \
-        && docker-php-ext-enable opcache tideways_xhprof \
+        && docker-php-ext-enable tideways_xhprof \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default) \
-        || docker-php-ext-enable opcache \
+        || true \
+        && docker-php-ext-enable opcache \
         && apk del --no-network --no-cache .build-deps .php-fpm-build-deps \
 # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
-        ; rm -rf /tmp/* \
+        || true \
+        && rm -rf /tmp/* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
 # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \
