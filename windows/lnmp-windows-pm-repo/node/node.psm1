@@ -35,8 +35,6 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="node"
 
   _exportPath "$env:ProgramData\node","$env:ProgramData\npm"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command $env:ProgramData\node\node.exe)){
     $CURRENT_VERSION=(& "$env:ProgramData\node\node.exe" --version).trim("v")
@@ -68,8 +66,6 @@ Function install($VERSION=0,$isPre=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "$env:ProgramData\node","$env:ProgramData\npm"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 

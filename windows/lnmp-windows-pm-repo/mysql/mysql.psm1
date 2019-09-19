@@ -71,8 +71,6 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="mysql"
 
   _exportPath "C:\mysql\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command mysql)){
     $CURRENT_VERSION=(mysql --version).split(" ")[3]
@@ -104,8 +102,6 @@ Function install($VERSION=0,$isPre=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\mysql\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 

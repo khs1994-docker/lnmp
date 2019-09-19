@@ -70,8 +70,6 @@ Function install($VERSION=0,$isPre=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
-  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 

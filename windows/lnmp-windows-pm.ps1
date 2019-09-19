@@ -56,7 +56,8 @@ _exportPath "$LNMP_PATH","$LNMP_PATH\windows","$LNMP_PATH\wsl", `
        "C:\bin"
 
 $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-          + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+          + ';' + [environment]::GetEnvironmentvariable("Path","machine") `
+          + ';' + [environment]::GetEnvironmentvariable("Path","process")
 
 Function _rename($src,$target){
   if (!(Test-Path $target)){
