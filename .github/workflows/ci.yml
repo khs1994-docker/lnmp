@@ -48,7 +48,7 @@ jobs:
         docker-compose up -d $(./lnmp-docker services)
         sleep 20
         docker ps -a
-        curl 127.0.0.1
+        curl -fsSL 127.0.0.1
         ./lnmp-docker down
 
         ./lnmp-docker up
@@ -56,7 +56,7 @@ jobs:
       run: |
         set -x
         sleep 20
-        curl 127.0.0.1
+        curl -fsSL 127.0.0.1
     - name: Down
       run: ./lnmp-docker down
     - name: pwsh
@@ -66,6 +66,7 @@ jobs:
       run: |
         echo ::add-path::`pwd`
         echo ::add-path::`pwd`/bin
+        echo ::set-env name=LNMP_PATH::`pwd`
     - name: lnmp-CLI
       run: |
         set -x
