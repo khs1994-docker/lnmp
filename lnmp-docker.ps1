@@ -503,9 +503,16 @@ if ($args.Count -eq 0){
 }
 
 Function _lrew_add($packages=$null){
+  printInfo "LREW add $packages ..."
+
   if(!$packages){
      printError "Please Input package name"
      exit 1
+  }
+
+  if (!(Test-Path composer.json)){
+    composer init -q
+    composer config minimum-stability dev
   }
 
   Foreach($package in $packages){
@@ -525,13 +532,15 @@ Function _lrew_add($packages=$null){
 }
 
 Function _lrew_init($package=$null){
+  printInfo "LREW init $package ..."
+
   if(!$package){
      printError "Please Input package name"
      exit 1
   }
 
   if(Test-Path vendor/lrew-dev/$package){
-     printInfo "This package already exists"
+     printError "This package already exists"
      return
    }
 
@@ -567,9 +576,11 @@ Function _lrew_init($package=$null){
    if (Test-Path "vendor/lrew-dev/$package/.env.example"){
      cp -r "vendor/lrew-dev/$package/.env.example" "vendor/lrew-dev/$package/.env"
    }
- }
+}
 
 Function _lrew_outdated($packages=$null){
+  printInfo "LREW check $packages update ..."
+
   if (!(Test-Path vendor/lrew)){
     return
   }
@@ -583,6 +594,8 @@ Function _lrew_outdated($packages=$null){
 }
 
 Function _lrew_update($packages=$null){
+  printInfo "LREW update $packages ..."
+
   if (!(Test-Path vendor/lrew)){
     return
   }

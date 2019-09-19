@@ -157,10 +157,17 @@ Function __uninstall($softs){
 }
 
 Function _outdated($softs=$null){
+  Write-Host "==> check $softs update ..." -ForegroundColor Green
   composer outdated -d ${PSScriptRoot}/..
 }
 
 Function _add($softs){
+  Write-Host "==> Add $softs ..." -ForegroundColor Green
+  if (!(Test-Path composer.json)){
+    composer init -q
+    composer config minimum-stability dev
+  }
+
   Foreach($soft in $softs){
     composer require -d ${PSScriptRoot}/../ lwpm/$soft --prefer-source
   }
@@ -175,10 +182,11 @@ Function __list(){
 }
 
 function __init($soft){
+  Write-Host "==> Init $soft ..." -ForegroundColor Green
   $SOFT_ROOT="${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
 
   if(test-path $SOFT_ROOT){
-    "==> This package already exists !"
+    Write-Host "==> This package already exists !" -ForegroundColor Red
     cd $source
     exit
   }
