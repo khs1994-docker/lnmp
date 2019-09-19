@@ -18,7 +18,7 @@ x-common-label:
 services:
   etcd:
     << : *default-common
-    image: quay.io/coreos/etcd:v${LNMP_ETCD_VERSION:-3.4.0}
+    image: quay.io/coreos/etcd:v${LNMP_ETCD_VERSION:-3.4.1}
     networks:
       - frontend
       - backend

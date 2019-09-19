@@ -1,5 +1,5 @@
 # CHANGELOG
 
-* Kubernetes `1.15.3`
+* Kubernetes `1.16.0`
 
 * Helm 3

@@ -3,7 +3,7 @@
 exec podman run --rm --network host --privileged \
   -v ${K8S_ROOT:-/opt/k8s}/certs:${K8S_ROOT:-/opt/k8s}/certs \
   -e ETCDCTL_API \
-  gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION:-3.4.0} \
+  gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION:-3.4.1} \
   etcdctl \
   --endpoints=$etcd_endpoints \
   --cacert="${K8S_ROOT:-/opt/k8s}/certs/ca.pem" \
