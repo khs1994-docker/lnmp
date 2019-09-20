@@ -2,12 +2,6 @@ name: CI
 
 on:
   push:
-    paths:
-      - '*'
-      - '!/docs/*'
-      # - '/.github/*'
-      # - '!/drone/*'
-      # - '!/kubernetes/*'
   pull_request:
 
 jobs:
