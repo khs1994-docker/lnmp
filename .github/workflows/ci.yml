@@ -43,7 +43,7 @@ jobs:
         sleep 20
         docker ps -a
         curl -fsSL 127.0.0.1
-        ./lnmp-docker down
+        quite=true ./lnmp-docker down
 
         ./lnmp-docker up
     - name: Connect

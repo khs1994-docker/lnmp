@@ -8,9 +8,8 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
 
-$env:path=[environment]::GetEnvironmentvariable("Path","user") `
-          + ';' + [environment]::GetEnvironmentvariable("Path","machine") `
-          + ';' + [environment]::GetEnvironmentvariable("Path","process")
+# $ErrorActionPreference="SilentlyContinue"
+# Stop, Continue, Inquire, Ignore, Suspend, Break
 
 $DOCKER_DEFAULT_PLATFORM="linux"
 $KUBERNETES_VERSION="1.14.6"
@@ -29,6 +28,10 @@ if(_command docker){
 }
 
 $outNull=$false
+
+if (${QUITE} -eq $true){
+  $outNull=$true
+}
 
 if ($args[0] -eq "services"){
   $outNull=$true
@@ -441,68 +444,6 @@ Function get_compose_options($compose_files,$isBuild=0){
   return $options.split(' ')
 }
 
-# main
-
-if (!(Test-Path cli/khs1994-robot.enc )){
-  # 在项目目录外
-  if ($env:LNMP_PATH.Length -eq 0){
-  # 没有设置系统环境变量，则退出
-    throw "Please set system environment, more information please see bin/README.md"
-
-  }else{
-    # 设置了系统环境变量
-
-    printInfo "Use LNMP CLI in $PWD"
-    # cd $env:LNMP_PATH
-    cd $PSScriptRoot
-    cd $APP_ROOT
-    $APP_ROOT=$PWD
-    cd $PSScriptRoot
-  }
-
-}else {
-  printInfo "Use LNMP CLI in LNMP Root $pwd"
-  cd $APP_ROOT
-  $APP_ROOT=$PWD
-  cd $source
-}
-
-printInfo "APP_ROOT is $APP_ROOT"
-
-if (!(Test-Path lnmp-docker-custom-script.ps1)){
-  Copy-Item lnmp-docker-custom-script.example.ps1 lnmp-docker-custom-script.ps1
-}
-
-printInfo "Exec custom script"
-
-. ./lnmp-docker-custom-script.ps1
-
-$env:DOCKER_HOST=$null
-
-if(_command docker){
-  if($(docker help context)){
-
-    $isWSL2=docker context ls | where {$_ -match "wsl \*"}
-
-    if($isWSL2){
-      printInfo "Docker Engine run in WSL2"
-      $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
-    }else{
-      $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
-    }
-  }
-}
-
-env_status
-logs
-check_docker_version
-
-if ($args.Count -eq 0){
-  help_information
-}else{
-  $command, $other = $args
-}
-
 Function _lrew_add($packages=$null){
   printInfo "LREW add $packages ..."
 
@@ -621,6 +562,68 @@ Function _lrew_update($packages=$null){
 
 Function _lrew_backup(){
 
+}
+
+# main
+
+if (!(Test-Path cli/khs1994-robot.enc )){
+  # 在项目目录外
+  if ($env:LNMP_PATH.Length -eq 0){
+  # 没有设置系统环境变量，则退出
+    throw "Please set system environment LNMP_PATH, more information please see bin/README.md"
+
+  }else{
+    # 设置了系统环境变量
+
+    printInfo "Use LNMP CLI in $PWD"
+    # cd $env:LNMP_PATH
+    cd $PSScriptRoot
+    cd $APP_ROOT
+    $APP_ROOT=$PWD
+    cd $PSScriptRoot
+  }
+
+}else {
+  printInfo "Use LNMP CLI in LNMP Root $pwd"
+  cd $APP_ROOT
+  $APP_ROOT=$PWD
+  cd $source
+}
+
+printInfo "APP_ROOT is $APP_ROOT"
+
+if (!(Test-Path lnmp-docker-custom-script.ps1)){
+  Copy-Item lnmp-docker-custom-script.example.ps1 lnmp-docker-custom-script.ps1
+}
+
+printInfo "Exec custom script"
+
+. ./lnmp-docker-custom-script.ps1
+
+$env:DOCKER_HOST=$null
+
+if(_command docker){
+  if($(docker help context)){
+
+    $isWSL2=docker context ls | where {$_ -match "wsl \*"}
+
+    if($isWSL2){
+      printInfo "Docker Engine run in WSL2"
+      $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
+    }else{
+      $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
+    }
+  }
+}
+
+env_status
+logs
+check_docker_version
+
+if ($args.Count -eq 0){
+  help_information
+}else{
+  $command, $other = $args
 }
 
 switch -regex ($command){

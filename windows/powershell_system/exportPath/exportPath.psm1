@@ -13,7 +13,20 @@ Add $item to system PATH env ...
       [environment]::SetEnvironmentvariable("Path", "$item;$env_Path","User")
     }
   }
-$env:path=[environment]::GetEnvironmentvariable("Path","user") `
+
+$env_path=[environment]::GetEnvironmentvariable("Path","user") `
           + ';' + [environment]::GetEnvironmentvariable("Path","machine") `
           + ';' + [environment]::GetEnvironmentvariable("Path","process")
+
+$env_path=$env_path.split(';')
+
+$env:path="C:\bin;";
+
+Foreach ($item in $env_Path)
+{
+  if($env:path.indexof($item) -eq -1){
+    $env:path+="${item};"
+  }
+}
+
 }

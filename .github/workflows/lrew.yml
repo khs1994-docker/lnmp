@@ -27,6 +27,11 @@ jobs:
     - name: lrew-init
       shell: powershell
       run: lnmp-docker.ps1 init test
+    - name: lrew-init-quite
+      shell: powershell
+      run: |
+        $QUITE=$true
+        lnmp-docker.ps1 init test2
     - name: lrew-add
       shell: pwsh
       run: lnmp-docker.ps1 add harbor

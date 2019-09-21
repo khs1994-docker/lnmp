@@ -16,7 +16,7 @@ fi
 COMMIT_MESSAGE=`git log -n 1`
 
 _check_commit_message_fail() {
-  echo "Commit Message Check Fail"
+  echo "Commit Message Check Fail $@"
   exit 78
 }
 
@@ -26,7 +26,7 @@ if [ -n "${PCIT_WHEN_BRANCH}" -a ${BRANCH} != "${PCIT_WHEN_BRANCH}" ];then \
 # 包含某个标志才运行
 if [ -n "${PCIT_WHEN_COMMIT_MESSAGE_INCLUDE}" ];then \
  echo ${COMMIT_MESSAGE} | grep -i -q "\[${PCIT_WHEN_COMMIT_MESSAGE_INCLUDE}\]" \
-   && exit 0 || _check_commit_message_fail;
+   && exit 0 || _check_commit_message_fail notInclude;
 fi
 
 # 包含某个标志时不运行
@@ -37,5 +37,5 @@ if [ "${PCIT_WHEN_COMMIT_MESSAGE:-1}" != "1" ];then \
 ## 自定义标志
 if [ -n "${PCIT_WHEN_COMMIT_MESSAGE_SKIP}" ];then
   echo ${COMMIT_MESSAGE} | grep -i -q "\[${PCIT_WHEN_COMMIT_MESSAGE_SKIP}\]" \
-    && _check_commit_message_fail || true
+    && _check_commit_message_fail skipByMessage || true
 fi
