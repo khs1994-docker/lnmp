@@ -36,8 +36,6 @@ Function install($VERSION=0,$isPre=0){
 
   _exportPath "$env:ProgramData\ComposerSetup\bin\", `
               "$HOME\AppData\Roaming\Composer\vendor\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command composer)){
     $CURRENT_VERSION=(composer --version).split(" ")[2]
@@ -75,8 +73,6 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "$env:ProgramData\ComposerSetup\bin\", `
               "$HOME\AppData\Roaming\Composer\vendor\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 

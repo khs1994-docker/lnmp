@@ -38,25 +38,18 @@ $ErrorAction="SilentlyContinue"
 $source=$PWD
 
 # 配置环境变量
-$LNMP_PATH="$HOME\lnmp"
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
-[environment]::SetEnvironmentvariable("LNMP_PATH", "$LNMP_PATH", "User")
 [environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
-
-$LNMP_PATH = [environment]::GetEnvironmentvariable("LNMP_PATH", "User")
 
 $Env:PSModulePath="$Env:PSModulePath" + ";" `
                   + $PSScriptRoot + "\powershell_system" + ";"
 
-_exportPath "$LNMP_PATH","$LNMP_PATH\windows","$LNMP_PATH\wsl", `
-       "$LNMP_PATH\kubernetes", `
-       "$LNMP_PATH\kubernetes\coreos",`
-       "$env:USERPROFILE\app\pcit\bin", `
-       "C:\bin"
+_exportPath "C:\bin"
 
-$env:path=[environment]::GetEnvironmentvariable("Path","user") `
-          + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+# $env:path=[environment]::GetEnvironmentvariable("Path","user") `
+#           + ';' + [environment]::GetEnvironmentvariable("Path","machine") `
+#           + ';' + [environment]::GetEnvironmentvariable("Path","process")
 
 Function _rename($src,$target){
   if (!(Test-Path $target)){
@@ -157,10 +150,16 @@ Function __uninstall($softs){
 }
 
 Function _outdated($softs=$null){
+  Write-Host "==> check $softs update ..." -ForegroundColor Green
   composer outdated -d ${PSScriptRoot}/..
 }
 
 Function _add($softs){
+  Write-Host "==> Add $softs ..." -ForegroundColor Green
+  if (!(Test-Path "${PSScriptRoot}/../composer.json")){
+    composer init -d ${PSScriptRoot}/../ -q -n --stability dev
+  }
+
   Foreach($soft in $softs){
     composer require -d ${PSScriptRoot}/../ lwpm/$soft --prefer-source
   }
@@ -175,10 +174,11 @@ Function __list(){
 }
 
 function __init($soft){
+  Write-Host "==> Init $soft ..." -ForegroundColor Green
   $SOFT_ROOT="${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
 
   if(test-path $SOFT_ROOT){
-    "==> This package already exists !"
+    Write-Host "==> This package already exists !" -ForegroundColor Red
     cd $source
     exit
   }

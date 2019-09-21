@@ -9,7 +9,8 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
 
 $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-          + ';' + [environment]::GetEnvironmentvariable("Path","machine")
+          + ';' + [environment]::GetEnvironmentvariable("Path","machine") `
+          + ';' + [environment]::GetEnvironmentvariable("Path","process")
 
 $DOCKER_DEFAULT_PLATFORM="linux"
 $KUBERNETES_VERSION="1.14.6"
@@ -503,13 +504,19 @@ if ($args.Count -eq 0){
 }
 
 Function _lrew_add($packages=$null){
+  printInfo "LREW add $packages ..."
+
   if(!$packages){
      printError "Please Input package name"
      exit 1
   }
 
+  if (!(Test-Path composer.json)){
+    composer init -q -n --stability dev
+  }
   Foreach($package in $packages){
-    composer require lrew/$package --prefer-source
+    $ErrorActionPreference="continue"
+    composer require "lrew/$package" --prefer-source
   }
 
   Foreach($package in $packages){
@@ -525,20 +532,22 @@ Function _lrew_add($packages=$null){
 }
 
 Function _lrew_init($package=$null){
+  printInfo "LREW init $package ..."
+
   if(!$package){
      printError "Please Input package name"
      exit 1
   }
 
   if(Test-Path vendor/lrew-dev/$package){
-     printInfo "This package already exists"
+     printError "This package already exists"
      return
    }
 
    cp -r lrew/example vendor/lrew-dev/$package
 
    if(_command composer){
-     composer init -d vendor/lrew-dev/$package `
+     composer init -d "vendor/lrew-dev/$package" `
        --name "lrew/$package" `
        --homepage "https://docs.lnmp.khs1994.com/lrew.html" `
        --license "MIT" `
@@ -567,9 +576,11 @@ Function _lrew_init($package=$null){
    if (Test-Path "vendor/lrew-dev/$package/.env.example"){
      cp -r "vendor/lrew-dev/$package/.env.example" "vendor/lrew-dev/$package/.env"
    }
- }
+}
 
 Function _lrew_outdated($packages=$null){
+  printInfo "LREW check $packages update ..."
+
   if (!(Test-Path vendor/lrew)){
     return
   }
@@ -583,6 +594,8 @@ Function _lrew_outdated($packages=$null){
 }
 
 Function _lrew_update($packages=$null){
+  printInfo "LREW update $packages ..."
+
   if (!(Test-Path vendor/lrew)){
     return
   }

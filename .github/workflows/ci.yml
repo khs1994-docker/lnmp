@@ -2,12 +2,6 @@ name: CI
 
 on:
   push:
-    paths:
-      - '*'
-      - '!/docs/*'
-      # - '/.github/*'
-      # - '!/drone/*'
-      # - '!/kubernetes/*'
   pull_request:
 
 jobs:
@@ -37,10 +31,8 @@ jobs:
         set -x
         docker-compose --version
         ./lnmp-docker compose --official
-    - name: before_script
-      run: |
-        set -x
-        sudo systemctl stop mysql
+    - name: Stop MySQL
+      run: sudo systemctl stop mysql
     - name: Up
       run: |
         set -x
@@ -50,7 +42,7 @@ jobs:
         docker-compose up -d $(./lnmp-docker services)
         sleep 20
         docker ps -a
-        curl 127.0.0.1
+        curl -fsSL 127.0.0.1
         ./lnmp-docker down
 
         ./lnmp-docker up
@@ -58,62 +50,32 @@ jobs:
       run: |
         set -x
         sleep 20
-        curl 127.0.0.1
+        curl -fsSL 127.0.0.1
     - name: Down
       run: ./lnmp-docker down
     - name: pwsh
-      run: pwsh -command "./lnmp-docker.ps1"
-    - name: CLI
+      shell: pwsh
+      run: ./lnmp-docker.ps1
+    - name: Set ENV
       run: |
-        export LNMP_PATH=$PWD
-        export PATH=$PWD/bin:$PATH
-
+        echo ::add-path::`pwd`
+        echo ::add-path::`pwd`/bin
+        echo ::set-env name=LNMP_PATH::`pwd`
+    - name: lnmp-CLI
+      run: |
         set -x
         lnmp-php -v
         lnmp-composer --version
 
         lnmp-npm -v
         lnmp-yarn -v
-  pw:
+  powershell:
     needs: skip-ci
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
-    - name: exec
+    - shell: powershell
       run: |
-        powershell -command "./lnmp-docker.ps1"
-  lwpm:
-    needs: skip-ci
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@master
-      with:
-        fetch-depth: 2
-    - name: lwpm
-      run: powershell -command "./windows/lnmp-windows-pm.ps1 install composer"
-    - name: lwpm-add
-      run: |
-        echo extension=openssl >> C:\tools\php\php.ini
-        powershell -command "php -i | select-string .ini"
-        powershell -command "php -m"
-        powershell -command "cat C:\tools\php\php.ini | select-string extension"
-        powershell -command "./windows/lnmp-windows-pm.ps1 ; composer init -q"
-        powershell -command "./windows/lnmp-windows-pm.ps1 ; composer config minimum-stability dev"
-        powershell -command "./windows/lnmp-windows-pm.ps1 init test"
-        powershell -command "./windows/lnmp-windows-pm.ps1 add openjdk"
-        powershell -command "./windows/lnmp-windows-pm.ps1 install openjdk"
-  lrew:
-    needs: skip-ci
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@master
-      with:
-        fetch-depth: 2
-    - name: lrew-add
-      run: |
-        echo extension=openssl >> C:\tools\php\php.ini
-        powershell -command "./windows/lnmp-windows-pm.ps1 install composer"
-        powershell -command "./lnmp-docker.ps1 init test"
-        powershell -command "./lnmp-docker.ps1 add harbor"
+        ./lnmp-docker.ps1

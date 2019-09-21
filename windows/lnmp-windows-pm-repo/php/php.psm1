@@ -202,8 +202,6 @@ Function install($VERSION=0,$isPre=0){
   $filename="php-${VERSION}-${VC_VERSION}-x64.zip"
 
   _exportPath "C:\php"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command php)){
     $CURRENT_VERSION=(php -v).split(" ")[1]
@@ -234,8 +232,6 @@ Function install($VERSION=0,$isPre=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\php"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after $VERSION
 

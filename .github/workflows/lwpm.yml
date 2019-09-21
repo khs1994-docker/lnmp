@@ -1,0 +1,38 @@
+name: LWPM
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  CI:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: Set ENV
+      run: |
+        echo ::add-path::%cd%\windows
+        echo ::add-path::C:\ProgramData\ComposerSetup\bin
+        echo ::set-env name=LNMP_PATH::%cd%
+    - name: init
+      shell: pwsh
+      run: echo "extension=openssl" >> C:\tools\php\php.ini
+    - shell: powershell
+      run: php -i | select-string .ini
+    - run: php -m
+    - shell: powershell
+      run: cat C:\tools\php\php.ini | select-string extension
+    - name: install composer
+      shell: powershell
+      run: lnmp-windows-pm.ps1 install composer
+    - name: lwpm-init
+      shell: powershell
+      run: lnmp-windows-pm.ps1 init test
+    - name: lwpm-add
+      shell: pwsh
+      run: lnmp-windows-pm.ps1 add openjdk
+    - name: lwpm-install
+      shell: pwsh
+      run: lnmp-windows-pm.ps1 install openjdk
