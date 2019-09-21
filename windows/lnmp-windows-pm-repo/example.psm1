@@ -4,6 +4,8 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+$ErrorActionPreference='stop'
+
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
 $stableVersion=$lwpm.version
@@ -43,12 +45,14 @@ Function install($VERSION=0,$isPre=0){
   # _exportPath "/path"
 
   if($(_command example)){
+    $ErrorActionPreference='Continue'
     $CURRENT_VERSION=""
 
     if ($CURRENT_VERSION -eq $VERSION){
         echo "==> $name $VERSION already install"
         return
     }
+    $ErrorActionPreference='stop'
   }
 
   # 下载原始 zip 文件，若存在则不再进行下载
