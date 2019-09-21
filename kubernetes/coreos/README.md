@@ -15,13 +15,13 @@
 
 ## 注意事项
 
-* 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间。
+* 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间
 * bug1: ignition 不能有 `storage.directories` 指令
 * bug2: 硬盘空间充足，但报硬盘空间不足错误，解决办法: ignition `storage.files.path` 不要列出大文件
 * `SELinux` 已关闭
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
 * `Etcd` `kube-nginx` 运行方式为 `podman`
-* bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像之后重启服务。
+* bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像之后重启服务
 
 ### 虚拟机网络配置
 
@@ -94,7 +94,7 @@ $ curl ${SERVER_HOST}:8080/bin/coreos.sh | NODE_NAME=1 bash
 
 # 关机，在虚拟机设置页面
 # 1.系统 -> 启用 EFI
-# 重新启动。
+# 重新启动
 ```
 
 ## 测试三节点集群
