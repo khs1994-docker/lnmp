@@ -2,10 +2,18 @@
 
 # https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/
 
-BRANCH=`git rev-parse --abbrev-ref HEAD`
-COMMIT_MESSAGE=`git log -n 1`
+if [ -n "$GITHUB_ACTION" ];then
+  # "refs/heads/19.03"
+  BRANCH=$(echo $GITHUB_REF | cut -d '/' -f 3)
+  PCIT_WHEN_COMMIT_MESSAGE=${INPUT_PCIT_WHEN_COMMIT_MESSAGE:-}
+  PCIT_WHEN_BRANCH=${INPUT_PCIT_WHEN_BRANCH:-}
+  PCIT_WHEN_COMMIT_MESSAGE_SKIP=${INPUT_PCIT_WHEN_COMMIT_MESSAGE_SKIP:-}
+  PCIT_WHEN_COMMIT_MESSAGE_INCLUDE=${INPUT_PCIT_WHEN_COMMIT_MESSAGE_INCLUDE:-}
+else
+  BRANCH=`git rev-parse --abbrev-ref HEAD`
+fi
 
-# GITHUB_REF=refs/heads/feature-branch-1
+COMMIT_MESSAGE=`git log -n 1`
 
 _check_commit_message_fail() {
   echo "Commit Message Check Fail"
