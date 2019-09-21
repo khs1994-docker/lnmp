@@ -26,11 +26,6 @@ fi
 if [ "${PCIT_WHEN_COMMIT_MESSAGE:-1}" != "1" ];then \
   echo "Skip Check Commit Message"; exit 0; fi
 
-echo ${COMMIT_MESSAGE} | grep -i -q '\[skip ci\]' && _check_commit_message_fail || true
-echo ${COMMIT_MESSAGE} | grep -i -q '\[ci skip\]' && _check_commit_message_fail || true
-echo ${COMMIT_MESSAGE} | grep -i -q '\[skip action\]' && _check_commit_message_fail || true
-echo ${COMMIT_MESSAGE} | grep -i -q '\[action skip\]' && _check_commit_message_fail || true
-
 ## 自定义标志
 if [ -n "${PCIT_WHEN_COMMIT_MESSAGE_SKIP}" ];then
   echo ${COMMIT_MESSAGE} | grep -i -q "\[${PCIT_WHEN_COMMIT_MESSAGE_SKIP}\]" \

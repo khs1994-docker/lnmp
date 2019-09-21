@@ -127,7 +127,7 @@ $ kubectl get endpoints kube-scheduler --namespace=kube-system  -o yaml
 ```bash
 $ sudo netstat -lnpt|grep kube-proxy
 
-tcp        0      0 192.168.199.100:10249   0.0.0.0:*               LISTEN      26034/kube-proxy    
+tcp        0      0 192.168.199.100:10249   0.0.0.0:*               LISTEN      26034/kube-proxy
 tcp        0      0 192.168.199.100:10256   0.0.0.0:*               LISTEN      26034/kube-proxy
 ```
 
@@ -143,8 +143,8 @@ $ journalctl -u kubelet
 
 $ sudo netstat -lnpt|grep kubelet
 
-tcp        0      0 192.168.199.100:10248   0.0.0.0:*               LISTEN      26484/kubelet       
-tcp        0      0 192.168.199.100:10250   0.0.0.0:*               LISTEN      26484/kubelet       
+tcp        0      0 192.168.199.100:10248   0.0.0.0:*               LISTEN      26484/kubelet
+tcp        0      0 192.168.199.100:10250   0.0.0.0:*               LISTEN      26484/kubelet
 tcp        0      0 127.0.0.1:35843         0.0.0.0:*               LISTEN      26484/kubelet
 ```
 
@@ -154,38 +154,10 @@ tcp        0      0 127.0.0.1:35843         0.0.0.0:*               LISTEN      
 
 #### 自动生成的证书
 
-而 kubelet 与 apiserver 通讯所使用的证书为 `kubelet-client.crt` 剩下的 `kubelet.crt` 将会被用于 kubelet server(10250) 做鉴权使用
+而 `kubelet` 与 `apiserver` 通讯所使用的证书为 `kubelet-client.crt` 剩下的 `kubelet.crt` 将会被用于 kubelet server(10250) 做鉴权使用
 
 ## Test k8s Cluster
 
-务必保证各组件正常运行之后，再进行测试！（$ sudo systemctl status XXX）
+务必保证各组件正常运行之后，再进行测试！
 
-```bash
-$ cd ~/lnmp/kubernetes
-
-$ cd deployment/demo/
-
-$ kubectl create -f lnmp-ds.yaml
-
-$ kubectl get pods  -o wide|grep nginx-ds
-
-nginx-ds-dxc8j   1/1       Running   0          12s       172.30.100.2   coreos1
-
-$ kubectl get service |grep nginx-ds
-
-nginx-ds     NodePort    10.254.199.71   <none>        80:8448/TCP   3m
-```
-
-open browser `node_ip:8448`
-
-## Cleanup test resource
-
-```bash
-$ kubectl delete service -l test="true"
-
-$ kubectl delete deployment -l test="true"
-
-$ kubectl delete pod -l test="true"
-
-$ kubectl delete daemonset -l test="true"
-```
+部署 [CoreDNS 插件](../addons.md) 进行测试。

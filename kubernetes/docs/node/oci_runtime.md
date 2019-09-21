@@ -12,14 +12,14 @@
 * https://github.com/google/gvisor
 * https://gvisor.dev/docs/user_guide/docker/
 
-### 注意事项
+### 在 Kubernetes 使用
 
-* runsc 与 `--exec-opt native.cgroupdriver=systemd` 不兼容。
-
-### Kubernetes(Containerd)
+#### Containerd
 
 * https://github.com/google/gvisor-containerd-shim
 * https://github.com/google/gvisor-containerd-shim/blob/master/docs/runtime-handler-shim-v2-quickstart.md
+
+下载 `containerd-shim-runsc-v1`
 
 ```bash
 $ sudo curl -fsSL -o /usr/local/bin/containerd-shim-runsc-v1 https://github.com/google/gvisor-containerd-shim/releases/download/v0.0.3/containerd-shim-runsc-v1.linux-amd64
@@ -30,6 +30,7 @@ $ sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
 `/etc/containerd/config.toml`
 
 ```toml
+# [plugins.cri.containerd.runtimes.${HANDLER_NAME}]
 [plugins.cri.containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
 ```
@@ -38,25 +39,9 @@ $ sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
 $ sudo systemctl restart containerd
 ```
 
-```yaml
-apiVersion: node.k8s.io/v1beta1  # RuntimeClass is defined in the node.k8s.io API group
-kind: RuntimeClass
-metadata:
-  name: myclass  # The name the RuntimeClass will be referenced by
-  # RuntimeClass is a non-namespaced resource
-# handler: myconfiguration  # The name of the corresponding CRI configuration
-handler: runsc # 值与 OCI 配置文件对应
-```
+#### cri-o
 
-`containerd`
-
-```toml
-# [plugins.cri.containerd.runtimes.${HANDLER_NAME}]
-[plugins.cri.containerd.runtimes.runsc]
-...
-```
-
-`cri-o`
+`/etc/crio/crio.conf`
 
 ```toml
 # [crio.runtime.runtimes.${HANDLER_NAME}]
@@ -65,23 +50,48 @@ handler: runsc # 值与 OCI 配置文件对应
   runtime_path = "/usr/local/bin/runsc"
 ```
 
+#### 使用
+
+新建 `runtimeclass`
+
+```yaml
+apiVersion: node.k8s.io/v1beta1  # RuntimeClass is defined in the node.k8s.io API group
+kind: RuntimeClass
+metadata:
+  name: myclass  # The name the RuntimeClass will be referenced by
+  # RuntimeClass is a non-namespaced resource
+# handler: myconfiguration  # The name of the corresponding CRI configuration
+handler: runsc # 值与 CRI 配置文件对应 ${HANDLER_NAME}
+```
+
+使用 `runtimeclass`
+
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
   name: mypod
 spec:
+  # 与 runtimeclass 配置文件的 metadata.name 对应
   runtimeClassName: myclass
   # ...
 ```
 
-### Docker
+### 在 Docker 中使用
+
+* `runsc` 与 `Docker` 的 `--exec-opt native.cgroupdriver=systemd` 不兼容。
+
+下载 `runsc`
 
 ```bash
-$ sudo curl -fsSL -o /usr/local/bin/runsc https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc
+$ curl -fsSL https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz | sudo tar -C /usr/local/bin -zxvf -
+
+$ ls /usr/local/bin/runsc
 
 $ sudo chmod +x /usr/local/bin/runsc
 ```
+
+配置 Docker
 
 `/etc/docker/daemon.json`
 
@@ -94,6 +104,8 @@ $ sudo chmod +x /usr/local/bin/runsc
     }
 }
 ```
+
+在 Docker 中使用
 
 ```bash
 $ docker run --runtime=runsc --rm hello-world
