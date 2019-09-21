@@ -12,7 +12,6 @@ $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
 # LNMP_SERVICES="nginx mysql mariadb php7 redis phpmyadmin \
 #                      memcached postgresql mongodb \
 #                      rabbitmq httpd registry \
-#                      etcd \
 #                      minio \
 #                      supervisord \
 #                      nginx-unit \
@@ -40,5 +39,5 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 $LNMP_NODE_IMAGE="node:alpine"
 # $LNMP_NODE_IMAGE="khs1994/node:git"
 
-$LREW_INCLUDE="etcd","pcit"
-# $LREW_INCLUDE="etcd","pcit","minio"
+$LREW_INCLUDE="pcit","minio"
+# $LREW_INCLUDE="pcit","minio"

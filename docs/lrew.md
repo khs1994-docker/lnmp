@@ -13,7 +13,7 @@ macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lr
 编辑 `.env` 文件，将 `example` 加入到以下变量中，例如
 
 ```bash
-LREW_INCLUDE="etcd example"
+LREW_INCLUDE="minio example"
 
 LNMP_SERVICES="nginx mysql php7 redis phpmyadmin example"
 ```
@@ -23,7 +23,7 @@ LNMP_SERVICES="nginx mysql php7 redis phpmyadmin example"
 编辑 `.env.ps1` 文件，将 `example` 加入到以下变量中，例如
 
 ```bash
-$LREW_INCLUDE="etcd","example"
+$LREW_INCLUDE="minio","example"
 
 $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','example'
 ```

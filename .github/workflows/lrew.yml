@@ -34,4 +34,7 @@ jobs:
         lnmp-docker.ps1 init test2
     - name: lrew-add
       shell: pwsh
-      run: lnmp-docker.ps1 add harbor
+      run: lnmp-docker.ps1 add etcd
+    - shell: pwsh
+      run: |
+        ls -r vendor

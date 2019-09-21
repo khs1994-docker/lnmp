@@ -3,6 +3,7 @@
 Package manager for khs1994-docker/lnmp
 
 * https://docs.lnmp.khs1994.com/lrew.html
+* https://packagist.org/packages/lrew/
 
 # lrew-xxx
 

@@ -36,3 +36,6 @@ jobs:
     - name: lwpm-install
       shell: pwsh
       run: lnmp-windows-pm.ps1 install openjdk
+    - shell: pwsh
+      run: |
+        ls -r vendor
