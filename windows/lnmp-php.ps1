@@ -1,11 +1,3 @@
-$create=$false
-
-docker network create lnmp_backend | Out-Null
-
-if ($?){
-  $create=$true
-}
-
 . "$PSScriptRoot/common.ps1"
 . "$PSScriptRoot/../config/composer/.env.example.ps1"
 . "$PSScriptRoot/../config/composer/.env.ps1"
@@ -14,6 +6,11 @@ if ($args.Count -eq 0){
   $COMMAND="-h"
 } else {
   $COMMAND=$args
+}
+
+$NETWORK="lnmp_backend"
+if ($null -eq $(docker network ls -f name="lnmp_backend" -q)){
+  $NETWORK="bridge"
 }
 
 # -S 参数需要容器暴露端口
@@ -49,7 +46,7 @@ docker run --init -it --rm `
    --env-file $PSScriptRoot/../config/composer/.env `
    -p "${ADDR_PORT}:${PORT}" `
    -e TZ=${TZ} `
-   --network lnmp_backend ${LNMP_PHP_IMAGE} `
+   --network ${NETWORK} ${LNMP_PHP_IMAGE} `
    php -S 0.0.0.0:$PORT $other
 exit 0
 }
@@ -62,9 +59,6 @@ docker run --init -it --rm `
   --env-file $PSScriptRoot/../config/composer/.env `
   -e APP_ENV=development `
   -e TZ=${TZ} `
+  --network ${NETWORK} `
   ${LNMP_PHP_IMAGE} `
   php $COMMAND
-
-if($create){
-  docker network rm lnmp_backend
-}

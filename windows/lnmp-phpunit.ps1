@@ -6,9 +6,10 @@
 . "$PSScriptRoot/../config/composer/.env.example.ps1"
 . "$PSScriptRoot/../config/composer/.env.ps1"
 
-$create=$false
-
-docker network create lnmp_backend | Out-Null
+$NETWORK="lnmp_backend"
+if ($null -eq $(docker network ls -f name="lnmp_backend" -q)){
+  $NETWORK="bridge"
+}
 
 if ($?){
   $create=$true
@@ -35,10 +36,6 @@ docker run -it --init --rm `
     --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} `
     --mount type=bind,src=$PSScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json `
     --env-file $PSScriptRoot/../config/composer/.env `
-    --network lnmp_backend `
+    --network ${NETWORK} `
     ${LNMP_PHP_IMAGE} `
     vendor/bin/phpunit $args
-
-if($create){
-  docker network rm lnmp_backend
-}

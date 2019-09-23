@@ -41,6 +41,46 @@ $ lnmp-docker gcr.io down
 * `~/.kube`
 * `C:\ProgramData\DockerDesktop\pki`
 
+## 切换
+
+之前你可能使用了 `minikube`，使用以下命令切换到 Docker 桌面版。
+
+```bash
+$ kubectl config get-contexts
+
+CURRENT   NAME                 CLUSTER                      AUTHINFO             NAMESPACE
+          docker-desktop       docker-desktop               docker-desktop
+*         minikube             minikube                     minikube
+
+$ kubectl config use-context docker-desktop
+
+# 切换回 minikube 的命令
+
+$ kubectl config use-context minikube
+```
+
+## 部署 lnmp
+
+启用 `k8s` 之后，输入如下命令
+
+> 虽然 Docker 桌面版启用 k8s 之后可以使用 `docker stack` 命令进行部署，但是建议使用 `K8s` 的命令行 `kubectl` 进行部署。
+
+```bash
+$ lnmp-k8s create
+```
+
+### 删除 lnmp
+
+```bash
+$ lnmp-k8s delete
+```
+
+### 销毁 lnmp
+
+```bash
+$ lnmp-k8s cleanup
+```
+
 ## 相关项目
 
 * https://github.com/AliyunContainerService/k8s-for-docker-desktop

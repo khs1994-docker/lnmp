@@ -2,7 +2,7 @@
 # Start Docker Machine
 #
 
-$global:HYPERV_BOOT2DOCKER_URL="https://ci2.khs1994.com:10000/boot2docker.iso"
+$HYPERV_BOOT2DOCKER_URL="https://ci2.khs1994.com:10000/boot2docker.iso"
 
 docker-machine -D create `
     -d hyperv `

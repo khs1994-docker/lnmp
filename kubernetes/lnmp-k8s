@@ -770,6 +770,23 @@ _cri_config(){
   sudo cp systemd/etc/cni/10-flannel.conflist /opt/k8s/cni/net.d
 }
 
+_conmon_install(){
+  cd /tmp
+
+  if [ -d conmon/.git ];then
+    cd conmon
+    git fetch origin master --depth=1
+    git reset --hard origin/master
+  else
+    rm -rf conmon
+    git clone --depth=1 https://github.com/containers/conmon
+  fi
+
+  cd /tmp/conmon
+  make
+  sudo make install
+}
+
 _crio_install(){
   set +e
   command -v crio > /dev/null
@@ -864,6 +881,7 @@ _crio_install(){
   $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.config
   $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.systemd
 
+  _conmon_install
   # command -v yum > /dev/null && sudo yum install cri-o
   #
   # command -v apt > /dev/null && (sudo apt-add-repository -y ppa:projectatomic/ppa \

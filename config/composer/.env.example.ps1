@@ -1,9 +1,9 @@
 # https://docs.phpcomposer.com/03-cli.html#Environment-variables
 
-# $global:HTTP_PROXY
-# $global:HTTP_PROXY_REQUEST_FULLURI
-# $global:HTTPS_PROXY_REQUEST_FULLURI
-# $global:COMPOSER_PROCESS_TIMEOUT
+# $HTTP_PROXY
+# $HTTP_PROXY_REQUEST_FULLURI
+# $HTTPS_PROXY_REQUEST_FULLURI
+# $COMPOSER_PROCESS_TIMEOUT
 
-$global:COMPOSER_HOME="/tmp/composer"
-$global:COMPOSER_CACHE_DIR="/tmp/cache"
+$COMPOSER_HOME="/tmp/composer"
+$COMPOSER_CACHE_DIR="/tmp/cache"

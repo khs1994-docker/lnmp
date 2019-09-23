@@ -29,8 +29,6 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="7zip"
 
   _exportPath $env:programFiles\7-Zip
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command $env:programFiles\7-Zip\7z.exe)){
     $VERSION_X=(& $env:programFiles\7-Zip\7z.exe).split(" ")[2].split(".")[0]
@@ -62,8 +60,6 @@ Function install($VERSION=0,$isPre=0){
   # _cleanup ""
 
   _exportPath $env:programFiles\7-Zip
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

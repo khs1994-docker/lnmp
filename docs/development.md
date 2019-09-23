@@ -42,8 +42,8 @@ APP_ROOT=../app
 Windows 除了在 `.env` 文件中设置 `APP_ROOT` 变量外，还需在 `.env.ps1` 中进行如下设置
 
 ```bash
-# $global:APP_ROOT="./app"
-$global:APP_ROOT="../app"
+# $APP_ROOT="./app"
+$APP_ROOT="../app"
 ```
 
 ## 如何正确的自定义配置文件

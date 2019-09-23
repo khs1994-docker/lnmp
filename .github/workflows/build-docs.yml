@@ -2,6 +2,8 @@
 
 on:
   push:
+    paths:
+      - '/docs/*'
     tags:
     branches:
     - 19.03

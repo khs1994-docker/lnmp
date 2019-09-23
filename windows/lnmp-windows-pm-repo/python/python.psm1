@@ -30,8 +30,6 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="python"
 
   _exportPath "${env:ProgramData}\Python","${env:ProgramData}\Python\Scripts"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command python)){
     $CURRENT_VERSION=($(python --version) -split " ")[1]
@@ -72,8 +70,6 @@ Function install($VERSION=0,$isPre=0){
   );
 
   _exportPath "${env:ProgramData}\Python","${env:ProgramData}\Python\Scripts"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

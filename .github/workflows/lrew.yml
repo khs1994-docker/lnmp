@@ -1,0 +1,40 @@
+name: LREW
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  CI:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: Init
+      shell: pwsh
+      run: |
+        echo "extension=openssl" >> C:\tools\php\php.ini
+    - name: Set ENV
+      run: |
+        echo ::add-path::%cd%
+        echo ::add-path::%cd%\windows
+        echo ::add-path::C:\ProgramData\ComposerSetup\bin
+        echo ::set-env name=LNMP_PATH::%cd%
+    - name: install composer
+      shell: powershell
+      run: lnmp-windows-pm.ps1 install composer
+    - name: lrew-init
+      shell: powershell
+      run: lnmp-docker.ps1 init test
+    - name: lrew-init-quite
+      shell: powershell
+      run: |
+        $QUITE=$true
+        lnmp-docker.ps1 init test2
+    - name: lrew-add
+      shell: pwsh
+      run: lnmp-docker.ps1 add etcd
+    - shell: pwsh
+      run: |
+        ls -r vendor

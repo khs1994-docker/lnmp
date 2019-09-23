@@ -2,13 +2,21 @@
 
 # https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/
 
-BRANCH=`git rev-parse --abbrev-ref HEAD`
+if [ -n "$GITHUB_ACTION" ];then
+  # "refs/heads/19.03"
+  BRANCH=$(echo $GITHUB_REF | cut -d '/' -f 3)
+  PCIT_WHEN_COMMIT_MESSAGE=${INPUT_PCIT_WHEN_COMMIT_MESSAGE:-}
+  PCIT_WHEN_BRANCH=${INPUT_PCIT_WHEN_BRANCH:-}
+  PCIT_WHEN_COMMIT_MESSAGE_SKIP=${INPUT_PCIT_WHEN_COMMIT_MESSAGE_SKIP:-}
+  PCIT_WHEN_COMMIT_MESSAGE_INCLUDE=${INPUT_PCIT_WHEN_COMMIT_MESSAGE_INCLUDE:-}
+else
+  BRANCH=`git rev-parse --abbrev-ref HEAD`
+fi
+
 COMMIT_MESSAGE=`git log -n 1`
 
-# GITHUB_REF=refs/heads/feature-branch-1
-
 _check_commit_message_fail() {
-  echo "Commit Message Check Fail"
+  echo "Commit Message Check Fail $@"
   exit 78
 }
 
@@ -18,7 +26,7 @@ if [ -n "${PCIT_WHEN_BRANCH}" -a ${BRANCH} != "${PCIT_WHEN_BRANCH}" ];then \
 # 包含某个标志才运行
 if [ -n "${PCIT_WHEN_COMMIT_MESSAGE_INCLUDE}" ];then \
  echo ${COMMIT_MESSAGE} | grep -i -q "\[${PCIT_WHEN_COMMIT_MESSAGE_INCLUDE}\]" \
-   && exit 0 || _check_commit_message_fail;
+   && exit 0 || _check_commit_message_fail notInclude;
 fi
 
 # 包含某个标志时不运行
@@ -26,13 +34,8 @@ fi
 if [ "${PCIT_WHEN_COMMIT_MESSAGE:-1}" != "1" ];then \
   echo "Skip Check Commit Message"; exit 0; fi
 
-echo ${COMMIT_MESSAGE} | grep -i -q '\[skip ci\]' && _check_commit_message_fail || true
-echo ${COMMIT_MESSAGE} | grep -i -q '\[ci skip\]' && _check_commit_message_fail || true
-echo ${COMMIT_MESSAGE} | grep -i -q '\[skip action\]' && _check_commit_message_fail || true
-echo ${COMMIT_MESSAGE} | grep -i -q '\[action skip\]' && _check_commit_message_fail || true
-
 ## 自定义标志
 if [ -n "${PCIT_WHEN_COMMIT_MESSAGE_SKIP}" ];then
   echo ${COMMIT_MESSAGE} | grep -i -q "\[${PCIT_WHEN_COMMIT_MESSAGE_SKIP}\]" \
-    && _check_commit_message_fail || true
+    && _check_commit_message_fail skipByMessage || true
 fi

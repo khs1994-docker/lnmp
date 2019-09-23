@@ -11,6 +11,10 @@ module.exports = {
         link: '/guide/',
       },
       {
+        text: '示例',
+        link: '/example/',
+      },
+      {
         text: '插件',
         link: '/addons/',
       },
@@ -49,8 +53,6 @@ module.exports = {
         'network',
         'port',
         'ingress-nginx',
-        'nginx',
-        'php',
         'rollout',
         'secret',
         'ha',
@@ -58,6 +60,10 @@ module.exports = {
         'minikube',
         'windows',
         'arm64',
+      ],
+      '/example/': [
+        'nginx',
+        'php',
       ],
       '/addons/': [
         'coredns',

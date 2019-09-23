@@ -1,3 +1,4 @@
 .DS_Store
 .env
-docker-compose.override.yml
+docker-compose.yml
+docker-ci.override.yml

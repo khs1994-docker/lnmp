@@ -139,6 +139,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
              && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
              && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
+        && docker-php-ext-enable opcache \
         && apk del --no-network --no-cache .build-deps .php-swoole-build-deps \
         && rm -rf /tmp/* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \

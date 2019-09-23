@@ -214,7 +214,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           krb5-dev \
           aspell-dev \
           openldap-dev \
-          pcre-dev \
           pcre2-dev \
           tidyhtml-dev \
           net-snmp-dev \

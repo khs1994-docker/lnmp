@@ -4,21 +4,14 @@
 
 . "$PSScriptRoot/common.ps1"
 
-$create=$false
-
-docker network create lnmp_backend | Out-Null
-
-if ($?){
-  $create=$true
+$NETWORK="lnmp_backend"
+if ($null -eq $(docker network ls -f name="lnmp_backend" -q)){
+  $NETWORK="bridge"
 }
 
 docker run -it --rm `
-    --network lnmp_backend `
+    --network $NETWORK `
     -e TZ=${TZ} `
     --entrypoint mysql `
     mysql:8.0.17 `
     $args
-
-if($create){
-  docker network rm lnmp_backend
-}

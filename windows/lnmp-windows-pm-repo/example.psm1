@@ -4,6 +4,8 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
+$ErrorActionPreference='stop'
+
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
 $stableVersion=$lwpm.version
@@ -41,16 +43,16 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="example"
 
   # _exportPath "/path"
-  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command example)){
+    $ErrorActionPreference='Continue'
     $CURRENT_VERSION=""
 
     if ($CURRENT_VERSION -eq $VERSION){
         echo "==> $name $VERSION already install"
         return
     }
+    $ErrorActionPreference='stop'
   }
 
   # 下载原始 zip 文件，若存在则不再进行下载
@@ -73,8 +75,6 @@ Function install($VERSION=0,$isPre=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
-  # $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-  #           + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after
 
@@ -111,8 +111,8 @@ Function getInfo(){
 "Package": "$name",
 "Version": "$stableVersion",
 "PreVersion": "$preVersion",
-"LatestVersion": "$latestVersion",
-"LatestPreVersion": "$latestPreVersion",
+"LatestVersion": "$($latestVersion.trim('v'))",
+"LatestPreVersion": "$($latestPreVersion.trim('v'))",
 "HomePage": "$homepage",
 "Releases": "$releases",
 "Bugs": "$bug",

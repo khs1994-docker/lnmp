@@ -1110,9 +1110,16 @@ pcit_init(){
 }
 
 _lrew_add(){
+  print_info "LREW add $@ ..."
+
   if [ -z "$1" ];then
      print_error "Please Input package name"
      exit 1
+  fi
+
+  if ! [ -f composer.json ];then
+    composer init -q
+    composer config minimum-stability dev
   fi
 
   for package in "$@"
@@ -1130,6 +1137,8 @@ _lrew_add(){
 }
 
 _lrew_init(){
+  print_info "LREW init $@ ..."
+
   if [ -z "$1" ];then
      print_error "Please Input package name"
      exit 1
@@ -1172,6 +1181,8 @@ _lrew_init(){
 }
 
 _lrew_outdated(){
+  print_info "LREW check $@ update ..."
+
   if ! [ -d vendor/lrew ];then return; fi
 
   if [ -z "$1" ];then
@@ -1187,6 +1198,8 @@ _lrew_backup(){
 }
 
 _lrew_update(){
+  print_info "LREW update $@ ..."
+
   if ! [ -d vendor/lrew ];then return; fi
 
   if [ -z "$1" ];then

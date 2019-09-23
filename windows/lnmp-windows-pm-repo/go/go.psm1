@@ -30,8 +30,6 @@ Function install($VERSION=0,$isPre=0){
 
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
   _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command go)){
     $CURRENT_VERSION=($(go version) -split " ")[2].trim("go")
@@ -61,8 +59,6 @@ Function install($VERSION=0,$isPre=0){
 
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
   _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

@@ -5,7 +5,7 @@ Import-Module cleanup
 Import-Module ln
 Import-Module sudo
 
-$global:HTTPD_MOD_FCGID_VERSION="2.3.10"
+$HTTPD_MOD_FCGID_VERSION="2.3.10"
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
@@ -48,8 +48,6 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="httpd"
 
   _exportPath "C:\Apache24\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command httpd)){
     $CURRENT_VERSION=($(httpd -v) -split " ")[2].trim("Apache/")
@@ -115,8 +113,6 @@ Function install($VERSION=0,$isPre=0){
   after_install
 
   _exportPath "C:\Apache24\bin"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   echo "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

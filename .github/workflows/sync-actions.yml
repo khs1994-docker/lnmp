@@ -3,8 +3,8 @@ on:
     tags:
     branches:
       - 19.03
-    # paths:
-    #   - '/.github/actions/*'
+    paths:
+      - '/.github/actions/*'
 
 name: Sync Actions
 

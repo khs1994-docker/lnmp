@@ -4,13 +4,13 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
-$global:PHP_REDIS_EXTENSION_VERSION="4.3.0"
-$global:PHP_MONGODB_EXTENSION_VERSION="1.5.5"
-$global:PHP_IGBINARY_EXTENSION_VERSION="3.0.1"
-$global:PHP_XDEBUG_EXTENSION_VERSION="2.7.2"
-$global:PHP_YAML_EXTENSION_VERSION="2.0.4"
+$PHP_REDIS_EXTENSION_VERSION="4.3.0"
+$PHP_MONGODB_EXTENSION_VERSION="1.5.5"
+$PHP_IGBINARY_EXTENSION_VERSION="3.0.1"
+$PHP_XDEBUG_EXTENSION_VERSION="2.7.2"
+$PHP_YAML_EXTENSION_VERSION="2.0.4"
 # https://curl.haxx.se/docs/caextract.html
-$global:PHP_CACERT_DATE="2019-05-15"
+$PHP_CACERT_DATE="2019-05-15"
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
@@ -202,8 +202,6 @@ Function install($VERSION=0,$isPre=0){
   $filename="php-${VERSION}-${VC_VERSION}-x64.zip"
 
   _exportPath "C:\php"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   if($(_command php)){
     $CURRENT_VERSION=(php -v).split(" ")[1]
@@ -234,8 +232,6 @@ Function install($VERSION=0,$isPre=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\php"
-  $env:path=[environment]::GetEnvironmentvariable("Path","user") `
-            + ';' + [environment]::GetEnvironmentvariable("Path","machine")
 
   install_after $VERSION
 
