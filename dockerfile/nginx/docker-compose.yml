@@ -33,7 +33,7 @@ services:
       - ./conf.d:/etc/nginx/conf.d:ro
 
   official:
-    image: nginx:1.17.3-alpine
+    image: nginx:1.17.4-alpine
     ports:
       - 443:443
       - 80:80
