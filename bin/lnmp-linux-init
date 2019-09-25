@@ -19,6 +19,10 @@ dockerd  Config Docker Daemon
   "
 }
 
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 # check env
 if [ -z "$LNMP_PATH" ];then
   echo export LNMP_PATH=~/lnmp >> ~/.bash_profile
@@ -36,23 +40,23 @@ if [ "$NAME" = Fedora ];then
   # install docker
   command -v docker > /dev/null
   if ! [ $? -eq 0 ];then
-    sudo dnf -y install dnf-plugins-core
+    $(_sudo) dnf -y install dnf-plugins-core
 
-    sudo dnf config-manager \
+    $(_sudo) dnf config-manager \
     --add-repo \
     https://mirrors.ustc.edu.cn/docker-ce/linux/fedora/docker-ce.repo
 
-    sudo dnf config-manager --set-enabled docker-ce-test
+    $(_sudo) dnf config-manager --set-enabled docker-ce-test
 
-    sudo dnf install docker-ce
+    $(_sudo) dnf install docker-ce
 
-    sudo groupadd docker
+    $(_sudo) groupadd docker
 
-    sudo usermod -aG docker $USER
+    $(_sudo) usermod -aG docker $USER
 
-    sudo systemctl enable docker
+    $(_sudo) systemctl enable docker
 
-    sudo systemctl start docker
+    $(_sudo) systemctl start docker
   fi
   set -e
 fi
@@ -71,9 +75,9 @@ _docker_daemon(){
     "8.8.8.8"
   ],
   "experimental": true
-}' | sudo tee /etc/docker/daemon.json
+}' | $(_sudo) tee /etc/docker/daemon.json
 
-  sudo systemctl restart docker
+  $(_sudo) systemctl restart docker
 }
 
 # config ssh
@@ -84,7 +88,7 @@ fi
 
 # install soft
 if [ "$NAME" = Fedora ];then
-  sudo dnf install -y tilix \
+  $(_sudo) dnf install -y tilix \
     kernel-devel \
     elfutils-libelf-devel \
     libefp-devel \

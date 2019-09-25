@@ -36,6 +36,10 @@ exit 0
 
 ################################################################################
 
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 command -v apt
 
 if ! [ 0 -eq $? ];then echo "Only Support Debian"; exit ; fi
@@ -131,10 +135,10 @@ esac
 
 _download_src(){
 
-    sudo mkdir -p /usr/local/src || echo
+    $(_sudo) mkdir -p /usr/local/src || echo
 
     if ! [ -z "$BUILD_FROM_GIT" ];then
-      sudo apt install bison git -y
+      $(_sudo) apt install bison git -y
 
       git clone --depth=1 -b ${PHP_SRC_BRANCH:-master} https://github.com/php/php-src.git /usr/local/src/php-${PHP_VERSION} || \
         ( git -C /usr/local/src/php-${PHP_VERSION} fetch --depth=1 origin master ; \
@@ -148,7 +152,7 @@ _download_src(){
 
         echo -e "Download php src ...\n\n"
 
-        cd /usr/local/src ; sudo chmod 777 /usr/local/src
+        cd /usr/local/src ; $(_sudo) chmod 777 /usr/local/src
 
         wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null || \
           wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
@@ -178,7 +182,7 @@ _buildlib(){
 
   cd /tmp ; test ! -d $TAR_FILE && ( wget $URL ; tar -zxvf $TAR )
 
-  cd $TAR_FILE && ./configure $CONFIGURES && make && sudo make install
+  cd $TAR_FILE && ./configure $CONFIGURES && make && $(_sudo) make install
 }
 
 ################################################################################
@@ -233,8 +237,8 @@ libmemcachedutil2 \
 libsasl2-2 \
 libfreetype6 \
 libpng16-16 \
-$( sudo apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
-$( sudo apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
+$( $(_sudo) apt install -y libjpeg62-turbo > /dev/null 2>&1 && echo libjpeg62-turbo ) \
+$( $(_sudo) apt install -y libjpeg-turbo8 > /dev/null 2>&1 && echo libjpeg-turbo8 ) \
 $( if [ $PHP_NUM -ge "72" ];then \
      echo $( if ! [ "${ARGON2}" = 'false' ];then \
                echo "libargon2-0";
@@ -242,8 +246,8 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo "libsodium18 libzip4"; \
    fi ) \
 libyaml-0-2 \
-$( sudo apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
-$( sudo apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+$( $(_sudo) apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+$( $(_sudo) apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -251,8 +255,8 @@ libgmp10 \
 libc-client2007e \
 libkrb5-3 \
 libxpm4 \
-$( sudo apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
-$( sudo apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
+$( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
+$( $(_sudo) apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
 libssl1.1 \
 libicu57 \
@@ -260,7 +264,7 @@ libldap-2.4-2 \
 libffi6 \
 libonig4"
     set -e
-    sudo apt install -y $PHP_RUN_DEP > /dev/null
+    $(_sudo) apt install -y $PHP_RUN_DEP > /dev/null
 }
 
 ################################################################################
@@ -291,8 +295,8 @@ _install_php_build_dep(){
                    libsasl2-dev \
                    libfreetype6-dev \
                    libpng-dev \
-                   $( sudo apt install -y libjpeg62-turbo-dev > /dev/null 2>&1 && echo libjpeg62-turbo-dev ) \
-                   $( sudo apt install -y libjpeg-turbo8-dev > /dev/null 2>&1 && echo libjpeg-turbo8-dev ) \
+                   $( $(_sudo) apt install -y libjpeg62-turbo-dev > /dev/null 2>&1 && echo libjpeg62-turbo-dev ) \
+                   $( $(_sudo) apt install -y libjpeg-turbo8-dev > /dev/null 2>&1 && echo libjpeg-turbo8-dev ) \
                    \
                    $( test $PHP_NUM = "56" && echo "" ) \
                    $( test $PHP_NUM = "70" && echo "" ) \
@@ -322,7 +326,7 @@ _install_php_build_dep(){
     set -e
     for soft in ${DEP_SOFTS} ; do echo $soft | tee -a ${PHP_INSTALL_LOG} ; done
 
-    sudo apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
+    $(_sudo) apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
 }
 
 ################################################################################
@@ -356,33 +360,33 @@ _fix_bug(){
 #
 
     if [ ! -d /usr/include/curl ]; then
-    sudo ln -sTf "/usr/include/$debMultiarch/curl" /usr/local/include/curl
+    $(_sudo) ln -sTf "/usr/include/$debMultiarch/curl" /usr/local/include/curl
     fi
 
 #
 # https://stackoverflow.com/questions/34272444/compiling-php7-error
 #
 
-    sudo ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/$debMultiarch/libc-client.a
+    $(_sudo) ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/$debMultiarch/libc-client.a
 
 #
 # debian 9 php56 configure: error: Unable to locate gmp.h
 #
 
-    sudo ln -sf /usr/include/$debMultiarch/gmp.h /usr/include/gmp.h
+    $(_sudo) ln -sf /usr/include/$debMultiarch/gmp.h /usr/include/gmp.h
 
 #
 # https://stackoverflow.com/questions/43617752/docker-php-and-freetds-cannot-find-freetds-in-know-installation-directories
 #
 
-    # sudo ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/
+    # $(_sudo) ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/
 
 #
 # configure: error: Cannot find ldap libraries in /usr/lib.
 #
 # @link https://blog.csdn.net/ei__nino/article/details/8598490
 
-    sudo cp -frp /usr/lib/$debMultiarch/libldap* /usr/lib/
+    $(_sudo) cp -frp /usr/lib/$debMultiarch/libldap* /usr/lib/
 }
 
 test $host = 'x86_64-linux-gnu'  && _fix_bug
@@ -509,17 +513,17 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
 
 # make install
 
-    sudo rm -rf ${PHP_PREFIX} || echo
+    $(_sudo) rm -rf ${PHP_PREFIX} || echo
 
-    if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
+    if [ -d ${PHP_INI_DIR} ];then $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
-    sudo make install
+    $(_sudo) make install
 
-    sudo mkdir -p ${PHP_INI_DIR}/conf.d
+    $(_sudo) mkdir -p ${PHP_INI_DIR}/conf.d
 
-    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
-    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
-    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
+    $(_sudo) cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
+    $(_sudo) cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
+    $(_sudo) cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
 
 # php5 not have php-fpm.d
 
@@ -527,17 +531,17 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
 
     if ! [ -d php-fpm.d ]; then
     # php5
-        sudo mkdir php-fpm.d
-        sudo cp php-fpm.conf.default php-fpm.d/www.conf
+        $(_sudo) mkdir php-fpm.d
+        $(_sudo) cp php-fpm.conf.default php-fpm.d/www.conf
 
     { \
         echo '[global]'; \
         echo "include=${PHP_INI_DIR}/php-fpm.d/*.conf"; \
-    } | sudo tee php-fpm.conf
+    } | $(_sudo) tee php-fpm.conf
 
     else
-        sudo cp php-fpm.d/www.conf.default php-fpm.d/www.conf
-        sudo cp php-fpm.conf.default php-fpm.conf
+        $(_sudo) cp php-fpm.d/www.conf.default php-fpm.d/www.conf
+        $(_sudo) cp php-fpm.conf.default php-fpm.conf
     fi
 
     echo "
@@ -574,13 +578,13 @@ listen.group = nginx
 listen.mode = 0660
 env[APP_ENV] = wsl
 
-" | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
+" | $(_sudo) tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
 }
 
 _install_pecl_ext_by_pickle(){
   export PATH=${PHP_PREFIX}/bin:$PATH
-  sudo chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+  $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 
   pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php \
     || cd /tmp/igbinary/igbinary* \
@@ -609,7 +613,7 @@ _install_pecl_ext_by_pickle(){
     && make install \
 
   pickle install mongodb --defaults -n --php=${PHP_PREFIX}/bin/php || true
-  sudo chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+  $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 }
 
 _install_pecl_ext(){
@@ -625,7 +629,7 @@ _install_pecl_ext(){
       return
     fi
 
-    sudo ${PHP_PREFIX}/bin/pecl update-channels
+    $(_sudo) ${PHP_PREFIX}/bin/pecl update-channels
 
     PHP_EXTENSION="igbinary \
                redis \
@@ -638,15 +642,15 @@ _install_pecl_ext(){
     for extension in ${PHP_EXTENSION}
     do
         echo $extension | tee -a ${PHP_INSTALL_LOG}
-        sudo ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
+        $(_sudo) ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
     done
 }
 
 _php_ext_enable(){
 
-echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
-echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
-echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
+echo "error_log=/var/log/php${PHP_NUM}.error.log" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/error_log.ini
+echo "session.save_path = \"/tmp\"" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/session.ini
 set +e
 exts=" pdo_pgsql \
                       xsl \
@@ -684,36 +688,36 @@ done
 
 # config opcache
 
-# echo 'opcache.enable_cli=1' | sudo tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
-echo 'opcache.file_cache=/tmp' | sudo tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+# echo 'opcache.enable_cli=1' | $(_sudo) tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+echo 'opcache.file_cache=/tmp' | $(_sudo) tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 }
 
 _create_log_file(){
 
 cd /var/log
 
-if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then $(_sudo) touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then $(_sudo) touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then $(_sudo) touch php${PHP_NUM}-fpm.slow.log; fi
 
-sudo chmod 777 php${PHP_NUM}-*
+$(_sudo) chmod 777 php${PHP_NUM}-*
 }
 
 _pickle(){
   # composer global require friendsofphp/pickle
-  sudo curl -sfL -o /usr/local/bin/pickle \
+  $(_sudo) curl -sfL -o /usr/local/bin/pickle \
     https://github.com/khs1994-php/pickle/releases/download/v0.4.0-2019-02-14/pickle.phar
 }
 
 _composer(){
-  sudo curl -sfL -o /usr/local/bin/composer \
+  $(_sudo) curl -sfL -o /usr/local/bin/composer \
     https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
 #    curl -sfL -o /tmp/installer.php \
 #        https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer
 #
 #    # https://github.com/khs1994-docker/lnmp/issues/630
 #    set +e
-#    sudo apt show libssl1.1=1.1.0f-3+deb9u2 && sudo apt install -y --allow-downgrades libssl1.1=1.1.0f-3+deb9u2
+#    $(_sudo) apt show libssl1.1=1.1.0f-3+deb9u2 && $(_sudo) apt install -y --allow-downgrades libssl1.1=1.1.0f-3+deb9u2
 #    set -e
 #    ${PHP_PREFIX}/bin/php -r " \
 #         \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \
@@ -723,39 +727,39 @@ _composer(){
 #             echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
 #             exit(1); \
 #         }" \
-# && sudo ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
+# && $(_sudo) ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
 }
 
 ################################################################################
 
 _write_version_to_file(){
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-${PHP_PREFIX}/bin/php -v | sudo tee -a ${PHP_PREFIX}/README.md
+${PHP_PREFIX}/bin/php -v | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-${PHP_PREFIX}/bin/php -i | grep .ini | sudo tee -a ${PHP_PREFIX}/README.md
+${PHP_PREFIX}/bin/php -i | grep .ini | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-${PHP_PREFIX}/sbin/php-fpm -v | sudo tee -a ${PHP_PREFIX}/README.md
+${PHP_PREFIX}/sbin/php-fpm -v | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_PREFIX}/README.md
+cat ${PHP_INSTALL_LOG} | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
 set +x
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
-do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_PREFIX}/README.md ; done
+do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | $(_sudo) tee -a ${PHP_PREFIX}/README.md ; done
 set -x
 cat ${PHP_PREFIX}/README.md
 
@@ -768,20 +772,20 @@ _tar(){
 
   test $host = 'aarch64-linux-gnu' && cd arm64
 
-  sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  $(_sudo) tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
 
-  cd etc ; sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+  cd etc ; $(_sudo) tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
-  sudo mv ${PHP_PREFIX}.tar.gz /
+  $(_sudo) mv ${PHP_PREFIX}.tar.gz /
 
-  sudo mv ${PHP_INI_DIR}-etc.tar.gz /
+  $(_sudo) mv ${PHP_INI_DIR}-etc.tar.gz /
 }
 
 ################################################################################
 
 _deb(){
 
-cd /tmp; sudo rm -rf khs1994-wsl-php-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php-${PHP_VERSION}
+cd /tmp; $(_sudo) rm -rf khs1994-wsl-php-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php-${PHP_VERSION}
 
 ################################################################################
 
@@ -807,18 +811,18 @@ echo "#!/bin/bash
 
 cd /var/log
 
-if ! [ -f php${PHP_NUM}.error.log ];then sudo touch php${PHP_NUM}.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+if ! [ -f php${PHP_NUM}.error.log ];then $(_sudo) touch php${PHP_NUM}.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then $(_sudo) touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then $(_sudo) touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then $(_sudo) touch php${PHP_NUM}-fpm.slow.log; fi
 
-sudo chmod 777 php${PHP_NUM}*
+$(_sudo) chmod 777 php${PHP_NUM}*
 
 # bin sbin
 
-for file in \$( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
+for file in \$( ls ${PHP_PREFIX}/bin ); do $(_sudo) ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
 
-sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
+$(_sudo) ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
 " > DEBIAN/postinst
 
 echo "#!/bin/bash
@@ -830,7 +834,7 @@ echo
 echo "#!/bin/bash
 
 if [ -d ${PHP_INI_DIR} ];then
-  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup
+  $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup
 fi
 
 echo -e \"
@@ -854,21 +858,21 @@ Meet issue? please see:
 
 chmod -R 755 DEBIAN ; mkdir -p usr/local/etc
 
-sudo cp -a ${PHP_PREFIX} usr/local/php${PHP_NUM} ; sudo cp -a ${PHP_INI_DIR} usr/local/etc/
+$(_sudo) cp -a ${PHP_PREFIX} usr/local/php${PHP_NUM} ; $(_sudo) cp -a ${PHP_INI_DIR} usr/local/etc/
 
 cd ..
 
 DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
 
-sudo dpkg-deb -b khs1994-wsl-php-${PHP_VERSION} $DEB_NAME
+$(_sudo) dpkg-deb -b khs1994-wsl-php-${PHP_VERSION} $DEB_NAME
 
-sudo cp -a /tmp/${DEB_NAME} /
+$(_sudo) cp -a /tmp/${DEB_NAME} /
 
-echo "$ sudo dpkg -i ${DEB_NAME}"
+echo "$ $(_sudo) dpkg -i ${DEB_NAME}"
 
-sudo rm -rf $PHP_PREFIX ; sudo rm -rf $PHP_INI_DIR
+$(_sudo) rm -rf $PHP_PREFIX ; $(_sudo) rm -rf $PHP_INI_DIR
 
-sudo dpkg -i /${DEB_NAME}
+$(_sudo) dpkg -i /${DEB_NAME}
 
 # test
 
@@ -882,9 +886,9 @@ if [ -z "$1" ];then _print_help_info ; else PHP_VERSION=$1 ; fi
 
 set -ex
 
-sudo apt update
+$(_sudo) apt update
 
-command -v wget || sudo apt install wget -y
+command -v wget || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
@@ -921,11 +925,11 @@ test $host = 'arm-linux-gnueabihf' && \
 if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ] && [ $PHP_NUM = "56" ];then \
   echo "debian9 notsupport php56" ; exit 1 ; fi
 
-sudo apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
+$(_sudo) apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ];then
 ##<argon2>##
-	sed -e 's/stretch/buster/g' /etc/apt/sources.list | sudo tee /etc/apt/sources.list.d/buster.list; \
+	sed -e 's/stretch/buster/g' /etc/apt/sources.list | $(_sudo) tee /etc/apt/sources.list.d/buster.list; \
 	{ \
 		echo 'Package: *'; \
 		echo 'Pin: release n=buster'; \
@@ -934,25 +938,25 @@ if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ];then
 		echo 'Package: libargon2*'; \
 		echo 'Pin: release n=buster'; \
 		echo 'Pin-Priority: 990'; \
-	} | sudo tee /etc/apt/preferences.d/argon2-buster
+	} | $(_sudo) tee /etc/apt/preferences.d/argon2-buster
 
-	sudo apt update
-  sudo apt install -y --no-install-recommends libargon2-dev
+	$(_sudo) apt update
+  $(_sudo) apt install -y --no-install-recommends libargon2-dev
   export ARGON2=true
 fi
 
-sudo apt install -y curl
+$(_sudo) apt install -y curl
 
 command -v /usr/local/bin/pickle || _pickle
 command -v /usr/local/bin/composer || _composer
 
-sudo chmod +x /usr/local/bin/pickle /usr/local/bin/composer
+$(_sudo) chmod +x /usr/local/bin/pickle /usr/local/bin/composer
 
 if [ "$2" = 'enable-ext' ];then
   ( _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
   ( test $host = 'x86_64-linux-gnu'  && \
   _test \
-  ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+  ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
   ) ; _write_version_to_file )
 
   exit
@@ -973,7 +977,7 @@ test "${SKIP_BUILD}" != 1 &&  \
     ( _download_src ; _builder ; _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
     ( test $host = 'x86_64-linux-gnu'  && \
     _test \
-    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
     ) ; _write_version_to_file )
 
 for command in "$@"

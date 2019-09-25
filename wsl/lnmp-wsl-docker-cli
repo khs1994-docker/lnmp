@@ -6,7 +6,7 @@
 
 ################################################################################
 
-DOCKER_VERSION=${1:-19.03.2-rc1}
+DOCKER_VERSION=${1:-19.03.2}
 DOCKER_BUILDX_VERSION=0.3.0
 ################################################################################
 
@@ -17,7 +17,11 @@ __test(){
   docker buildx
 }
 
-command -v curl || sudo apt install curl tar
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
+command -v curl || $(_sudo) apt install curl tar
 
 command -v docker && DOCKER_CURRENT_VERSION=$( docker --version | cut -d ' ' -f 3 ) \
                   && test "${DOCKER_CURRENT_VERSION}" = "$DOCKER_VERSION," && __test && exit 0;
@@ -39,15 +43,15 @@ else
   download_docker
 fi
 
-sudo cp docker/docker /usr/local/bin/docker
+$(_sudo) cp docker/docker /usr/local/bin/docker
 
 # 命令行补全
 
-if ! [ -d /etc/bash_completion.d ];then sudo mkdir -p /etc/bash_completion.d; fi
+if ! [ -d /etc/bash_completion.d ];then $(_sudo) mkdir -p /etc/bash_completion.d; fi
 
 if ! [ -f /etc/bash_completion.d/docker ];then
 
-sudo curl -L https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker
+$(_sudo) curl -L https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker -o /etc/bash_completion.d/docker
 
 fi
 

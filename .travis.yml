@@ -255,6 +255,7 @@ jobs:
 
     - stage: deb
       script:
+        - ./lnmp-docker compose --official -f
         - sh cli/build.sh deb ${TRAVIS_TAG}
         - export VERSION=$( echo ${TRAVIS_TAG} | cut -d "v" -f 2 )
         - export DEB_NAME=khs1994-docker-lnmp_${VERSION}_amd64.deb

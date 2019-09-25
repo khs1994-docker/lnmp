@@ -56,6 +56,10 @@ MYSQL_DEB_VERSION=0.8.13-1
 SWIFT_VERSION=5.0.1
 
 ################################################################################
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 _httpd(){
   echo "Please exec $ lnmp-wsl-builder-httpd.py"
 }
@@ -68,26 +72,26 @@ _nginx(){
   if ! [ -f /etc/apt/sources.list.d/nginx.list ];then
     set +x
     echo "deb http://nginx.org/packages/mainline/${ID} $(lsb_release -cs) nginx" | \
-        sudo tee /etc/apt/sources.list.d/nginx.list
+        $(_sudo) tee /etc/apt/sources.list.d/nginx.list
     set -x
   fi
 
-  apt-key list | grep nginx || curl -fsSL http://nginx.org/packages/keys/nginx_signing.key | sudo apt-key add -
+  apt-key list | grep nginx || curl -fsSL http://nginx.org/packages/keys/nginx_signing.key | $(_sudo) apt-key add -
 
-  sudo apt update
+  $(_sudo) apt update
 
-  sudo apt install -y nginx
+  $(_sudo) apt install -y nginx
 
-  if ! [ -h /etc/nginx/conf.d ];then sudo rm -rf /etc/nginx/conf.d; \
-      sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
+  if ! [ -h /etc/nginx/conf.d ];then $(_sudo) rm -rf /etc/nginx/conf.d; \
+      $(_sudo) ln -sf $WSL_HOME/lnmp/wsl/nginx /etc/nginx/conf.d; fi
 
   # apt install nginx notinclude fastcgi.conf
-  if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf \
+  if ! [ -f /etc/nginx/fastcgi.conf ];then $(_sudo) cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf \
       /etc/nginx/fastcgi.conf ; fi
 
-  sudo nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/config/nginx.wsl.conf /etc/nginx/nginx.conf
+  $(_sudo) nginx -T | grep "fastcgi_buffering off;" || $(_sudo) cp $WSL_HOME/lnmp/wsl/config/nginx.wsl.conf /etc/nginx/nginx.conf
 
-  sudo nginx -t
+  $(_sudo) nginx -t
 
 }
 
@@ -167,44 +171,44 @@ docker pull ${TAR_IMAGE}
 docker create --name=${CONTAINER_NAME} ${TAR_IMAGE} #khs1994/php-fpm:wsl
 
 # rm
-sudo rm -rf ${PHP_PREFIX}
+$(_sudo) rm -rf ${PHP_PREFIX}
 
-sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}.tar.gz /usr/local/
-sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}-etc.tar.gz /usr/local/etc/
+$(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}.tar.gz /usr/local/
+$(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}-etc.tar.gz /usr/local/etc/
 
 docker rm -f ${CONTAINER_NAME}
 
 cd /usr/local
 
-sudo tar -zxvf php${PHP_NUM}.tar.gz
+$(_sudo) tar -zxvf php${PHP_NUM}.tar.gz
 
-sudo rm -rf php${PHP_NUM}.tar.gz
+$(_sudo) rm -rf php${PHP_NUM}.tar.gz
 
 cd /usr/local/etc
 
 # backup
 if [ -d ${PHP_INI_DIR} ];then
-  sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
+  $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
 fi
 
-sudo tar -zxvf php${PHP_NUM}-etc.tar.gz
+$(_sudo) tar -zxvf php${PHP_NUM}-etc.tar.gz
 
-sudo rm -rf php${PHP_NUM}-etc.tar.gz
+$(_sudo) rm -rf php${PHP_NUM}-etc.tar.gz
 
 # log
 cd /var/log
 
-if ! [ -f php${PHP_NUM}.error.log ];then sudo touch php${PHP_NUM}.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+if ! [ -f php${PHP_NUM}.error.log ];then $(_sudo) touch php${PHP_NUM}.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then $(_sudo) touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then $(_sudo) touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then $(_sudo) touch php${PHP_NUM}-fpm.slow.log; fi
 
-sudo chmod 777 php${PHP_NUM}*
+$(_sudo) chmod 777 php${PHP_NUM}*
 
 # ln
-for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
+for file in $( ls ${PHP_PREFIX}/bin ); do $(_sudo) ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
-sudo ln -sf ${PHP_PREFIX}/sbin/* /usr/local/sbin
+$(_sudo) ln -sf ${PHP_PREFIX}/sbin/* /usr/local/sbin
 
 lnmp-wsl-builder-php apt
 }
@@ -214,17 +218,17 @@ _deb(){
 
     DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64
 
-    sudo rm -rf ${DEB_NAME}.deb
+    $(_sudo) rm -rf ${DEB_NAME}.deb
 
     docker pull khs1994/wsl:${DEB_NAME}
 
     docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME}
 
-    sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
+    $(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
 
     docker rm -f ${CONTAINER_NAME}
 
-    sudo dpkg -i ${DEB_NAME}.deb || ( sudo apt install -f && sudo dpkg -i ${DEB_NAME}.deb || true )
+    $(_sudo) dpkg -i ${DEB_NAME}.deb || ( $(_sudo) apt install -f && $(_sudo) dpkg -i ${DEB_NAME}.deb || true )
 }
 
 rpm(){
@@ -234,17 +238,17 @@ rpm(){
 
   DOCKER_IMAGE_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 
-  sudo rm -rf ${RPM_NAME}
+  $(_sudo) rm -rf ${RPM_NAME}
 
   docker pull khs1994/wsl:${DOCKER_IMAGE_NAME}
 
   docker create --name=${CONTAINER_NAME} khs1994/wsl:${DOCKER_IMAGE_NAME}
 
-  sudo docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${RPM_NAME} .
+  $(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${RPM_NAME} .
 
   docker rm -f ${CONTAINER_NAME}
 
-  sudo yum install -y ${RPM_NAME}
+  $(_sudo) yum install -y ${RPM_NAME}
 }
 
 if [ -z "$2" ];then
@@ -285,25 +289,25 @@ _postgresql(){
  if ! [ -f /etc/apt/sources.list.d/postgresql.list ];then
     # echo "deb http://apt.postgresql.org/pub/repos/apt/ $( lsb_release -cs )-pgdg main" | \
     echo "deb http://mirrors.ustc.edu.cn/postgresql/repos/apt/ $( lsb_release -cs )-pgdg main" | \
-      sudo tee /etc/apt/sources.list.d/postgresql.list
+      $(_sudo) tee /etc/apt/sources.list.d/postgresql.list
 
     apt-key list | grep PostgreSQL || \
-        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | $(_sudo) apt-key add -
 
-    sudo apt-get update
+    $(_sudo) apt-get update
  fi
 
-  sudo apt-get -y install postgresql
+  $(_sudo) apt-get -y install postgresql
 
   if ! [ -f /usr/share/postgresql/postgresql.conf.sample  ];then
-    sudo mv -v "/usr/share/postgresql/$PG_MAJOR/postgresql.conf.sample" /usr/share/postgresql/
+    $(_sudo) mv -v "/usr/share/postgresql/$PG_MAJOR/postgresql.conf.sample" /usr/share/postgresql/
 
-    sudo ln -sv /usr/share/postgresql/postgresql.conf.sample "/usr/share/postgresql/$PG_MAJOR/"
+    $(_sudo) ln -sv /usr/share/postgresql/postgresql.conf.sample "/usr/share/postgresql/$PG_MAJOR/"
 
-    sudo sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample
+    $(_sudo) sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample
   fi
 
-  env | grep /usr/lib/postgresql/$PG_MAJOR/bin || echo "PATH=\$PATH:/usr/lib/postgresql/$PG_MAJOR/bin" | sudo tee -a /etc/profile
+  env | grep /usr/lib/postgresql/$PG_MAJOR/bin || echo "PATH=\$PATH:/usr/lib/postgresql/$PG_MAJOR/bin" | $(_sudo) tee -a /etc/profile
 
 }
 
@@ -316,7 +320,7 @@ _mongodb(){
   # apt
   #
   # @link https://docs.mongodb.com/master/tutorial/install-mongodb-on-debian/
-  sudo apt install mongodb
+  $(_sudo) apt install mongodb
 }
 
 _mysql(){
@@ -324,12 +328,12 @@ _mysql(){
   apt show mysql-apt-config > /dev/null
   if ! [ $? -eq 0 ];then
       wget https://dev.mysql.com/get/mysql-apt-config_${MYSQL_DEB_VERSION}_all.deb
-      sudo dpkg -i mysql-apt-config_${MYSQL_DEB_VERSION}_all.deb
-      sudo apt install -f
-      sudo apt update
+      $(_sudo) dpkg -i mysql-apt-config_${MYSQL_DEB_VERSION}_all.deb
+      $(_sudo) apt install -f
+      $(_sudo) apt update
   fi
 
-  sudo apt install -y mysql-server
+  $(_sudo) apt install -y mysql-server
 }
 
 _php-extension-list(){
@@ -348,11 +352,11 @@ _enable(){
     # /usr/local/nginx self build nginx
 
     if [ -d /usr/local/nginx ];then
-      if ! [ -h /usr/local/etc/nginx/conf.d ];then sudo rm -rf /usr/local/etc/nginx/conf.d; \
-          sudo ln -sf $WSL_HOME/lnmp/wsl/nginx /usr/local/etc/nginx/conf.d; fi
+      if ! [ -h /usr/local/etc/nginx/conf.d ];then $(_sudo) rm -rf /usr/local/etc/nginx/conf.d; \
+          $(_sudo) ln -sf $WSL_HOME/lnmp/wsl/nginx /usr/local/etc/nginx/conf.d; fi
       # test main conf
-      sudo /usr/local/sbin/nginx -T | grep "fastcgi_buffering off;" || sudo cp $WSL_HOME/lnmp/wsl/config/nginx.wsl.conf /usr/local/etc/nginx/nginx.conf
-      sudo /usr/local/sbin/nginx -t
+      $(_sudo) /usr/local/sbin/nginx -T | grep "fastcgi_buffering off;" || $(_sudo) cp $WSL_HOME/lnmp/wsl/config/nginx.wsl.conf /usr/local/etc/nginx/nginx.conf
+      $(_sudo) /usr/local/sbin/nginx -t
     fi
     exit $?
   fi
@@ -363,14 +367,14 @@ _enable(){
 
   if ! [ -d ${PHP_PREFIX} ];then echo -e "\n\n$1 is not install\n\n"; exit 1; fi
 
-  for file in $( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
+  for file in $( ls ${PHP_PREFIX}/bin ); do $(_sudo) ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
 
-  sudo ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
+  $(_sudo) ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
 
-  # sudo sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" \
+  # $(_sudo) sed -i "s#/var/run/php${php_num}-fpm.sock#/var/run/php-fpm.sock#g" \
   #     /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
   #
-  # sudo sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" \
+  # $(_sudo) sed -i "s#/var/run/php${php_num}-fpm.pid#/var/run/php-fpm.pid#g" \
   #     /usr/local/etc/php${php_num}/php-fpm.d/zz-${ID}.conf
 }
 
@@ -378,14 +382,14 @@ _swift(){
   source /etc/os-release
   if [ ${UBUNTU_CODENAME} != 'xenial' -a ${UBUNTU_CODENAME} != 'bionic' ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04/18.04\n"; exit 1; fi
 
-  sudo apt install -y clang libicu-dev
+  $(_sudo) apt install -y clang libicu-dev
 
   cd /tmp
   test -f swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz || \
       wget https://swift.org/builds/swift-${SWIFT_VERSION}-release/ubuntu${VERSION_ID/./''}/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz
-  sudo rm -rf $SWIFT_PREFIX ; sudo mkdir -p $SWIFT_PREFIX
-  sudo tar -zxvf swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz -C $SWIFT_PREFIX
-  sudo ln -sf $SWIFT_PREFIX/swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}/usr/bin/* /usr/local/bin
+  $(_sudo) rm -rf $SWIFT_PREFIX ; $(_sudo) mkdir -p $SWIFT_PREFIX
+  $(_sudo) tar -zxvf swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz -C $SWIFT_PREFIX
+  $(_sudo) ln -sf $SWIFT_PREFIX/swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}/usr/bin/* /usr/local/bin
 
   swift --version
 }
@@ -404,11 +408,11 @@ _downloader(){
       wget $url
     fi
 
-    sudo tar -zxvf /tmp/$install_file -C $target_path
+    $(_sudo) tar -zxvf /tmp/$install_file -C $target_path
 
     shift 4
 
-    sudo bash -c "$@" || true
+    $(_sudo) $@
 fi
 }
 
@@ -436,16 +440,16 @@ _node(){
   _downloader ${NODE_PREFIX}/node ${filename} \
       https://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/${filename} \
       ${NODE_PREFIX} \
-      "sudo mv ${NODE_PREFIX}/${realname} ${NODE_PREFIX}/node"
+      "mv ${NODE_PREFIX}/${realname} ${NODE_PREFIX}/node"
 
-  sudo chown -R $USER:$USER ${NODE_PREFIX}/node
+  $(_sudo) chown -R $USER:$USER ${NODE_PREFIX}/node
 
   . ~/.bashrc
 
-  node -v || \
-    (echo "export PATH=$HOME/.npm/bin:${NODE_PREFIX}/node/bin:\$PATH" >> ~/.bashrc \
-     source ~/.bashrc; node -v \
-    )
+  node -v || ( \
+    echo "export PATH=$HOME/.npm/bin:${NODE_PREFIX}/node/bin:\$PATH" >> ~/.bashrc \
+    ; source ~/.bashrc \
+    ; node -v )
 
   source $HOME/.npmrc || true
 

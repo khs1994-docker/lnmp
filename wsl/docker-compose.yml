@@ -65,4 +65,4 @@ services:
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_73:-7.3.9}
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.3.9}-centos-7_amd64
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.9}-centos-7_amd64

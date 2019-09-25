@@ -42,6 +42,10 @@ notsupport(){
   exit 1
 }
 
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 _cp_only_not_exists(){
   if ! [ -f $2 ];then cp $1 $2 ; fi
 }
@@ -440,7 +444,7 @@ fi
   if ! [ -d log/redis ];then mkdir -p log/redis && touch log/redis/redis.log ; fi
 
   chmod -R 777 log/{mongodb,mysql,nginx,php,redis} \
-    || sudo chmod -R 777 log/{mongodb,mysql,nginx,php,redis}
+    || $(_sudo) chmod -R 777 log/{mongodb,mysql,nginx,php,redis}
 }
 
 # 清理日志文件
@@ -471,11 +475,11 @@ install_docker_compose_move(){
     . /etc/os-release
     case "$ID" in
       coreos )
-        if ! [ -d /opt/bin ];then sudo mkdir -p /opt/bin; fi
-        sudo install -m755 /tmp/docker-compose /opt/bin/docker-compose
+        if ! [ -d /opt/bin ];then $(_sudo) mkdir -p /opt/bin; fi
+        $(_sudo) install -m755 /tmp/docker-compose /opt/bin/docker-compose
         ;;
       * )
-        sudo install -m755 /tmp/docker-compose /usr/local/bin/docker-compose > /dev/null 2>&1 \
+        $(_sudo) install -m755 /tmp/docker-compose /usr/local/bin/docker-compose > /dev/null 2>&1 \
             || install -m755 /tmp/docker-compose /usr/local/bin/docker-compose
         ;;
     esac
@@ -498,12 +502,12 @@ install_docker_compose_official(){
 # 安装 compose arm 版本
 install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ..."
-  command -v pip3 >/dev/null 2>&1 || sudo apt install -y python3-pip
+  command -v pip3 >/dev/null 2>&1 || $(_sudo) apt install -y python3-pip
   if ! [ -d ~/.pip ];then
     mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" \
         > ~/.pip/pip.conf
   fi
-  sudo pip3 install --upgrade docker-compose
+  $(_sudo) pip3 install --upgrade docker-compose
 }
 
 install_docker_compose(){
@@ -1054,7 +1058,7 @@ pcit_nginx_init(){
   # 判断 nginx 配置文件是否存在
 
   if ! [ -f pcit/conf/pcit.conf ];then
-    sudo cp pcit/conf/pcit.config pcit/conf/pcit.conf
+    $(_sudo) cp pcit/conf/pcit.config pcit/conf/pcit.conf
   fi
 
   cat pcit/conf/pcit.conf | grep -q demo.ci.khs1994.com && print_error "PCIT conf error, please see pcit/README.md"
@@ -1066,9 +1070,9 @@ pcit_nginx_init(){
     exit 1
   fi
 
-  sudo cp pcit/ssl/ci.crt config/${LNMP_NGINX_CONF_D:-nginx}/ssl/ci.crt
+  $(_sudo) cp pcit/ssl/ci.crt config/${LNMP_NGINX_CONF_D:-nginx}/ssl/ci.crt
 
-  sudo cp pcit/conf/pcit.conf config/${LNMP_NGINX_CONF_D:-nginx}/pcit.conf
+  $(_sudo) cp pcit/conf/pcit.conf config/${LNMP_NGINX_CONF_D:-nginx}/pcit.conf
 }
 
 pcit_init(){
@@ -1100,11 +1104,11 @@ pcit_init(){
       openssl rsa -in private.key -pubout -out public.key
   fi
 
-  sudo cp pcit/key/*.key ${APP_ROOT:-app}/.pcit/framework/storage/private_key/
+  $(_sudo) cp pcit/key/*.key ${APP_ROOT:-app}/.pcit/framework/storage/private_key/
 
   # env file
 
-  sudo cp pcit/.env.* ${APP_ROOT:-app}/.pcit
+  $(_sudo) cp pcit/.env.* ${APP_ROOT:-app}/.pcit
 
   # 启动
 }
@@ -1282,13 +1286,13 @@ main() {
   gcr.io )
    print_info "Check gcr.io host "
    cat /etc/hosts | grep -q 'gcr.io' || \
-       (print_info "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io gcr.io' | sudo tee -a /etc/hosts )
+       (print_info "Append hosts, please input password " ; echo '127.0.0.1 k8s.gcr.io gcr.io' | $(_sudo) tee -a /etc/hosts )
 
    if ! [ "$OS" = 'Darwin' ];then
-     sudo mkdir -p /etc/docker/certs.d/gcr.io
-     sudo mkdir -p /etc/docker/certs.d/k8s.gcr.io
-     sudo bash -c "cat config/registry/ca.crt > /etc/docker/certs.d/gcr.io/ca.crt"
-     sudo bash -c "cat config/registry/ca.crt > /etc/docker/certs.d/k8s.gcr.io/ca.crt"
+     $(_sudo) mkdir -p /etc/docker/certs.d/gcr.io
+     $(_sudo) mkdir -p /etc/docker/certs.d/k8s.gcr.io
+     $(_sudo) bash -c "cat config/registry/ca.crt > /etc/docker/certs.d/gcr.io/ca.crt"
+     $(_sudo) bash -c "cat config/registry/ca.crt > /etc/docker/certs.d/k8s.gcr.io/ca.crt"
    fi
 
    _gcr_io "$@"
@@ -1846,8 +1850,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
     nfs )
-    sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
-    sudo modprobe nfsd
+    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5}
+    $(_sudo) modprobe nfsd
     cd kubernetes/volumes
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs

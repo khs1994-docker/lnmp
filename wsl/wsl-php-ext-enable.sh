@@ -16,6 +16,10 @@ usage() {
 	echo 'the output of "php -i" to see which modules are already loaded.'
 }
 
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 opts="$(getopt -o 'h?' --long 'help,ini-name:' -- "$@" || { usage >&2 && false; })"
 eval set -- "$opts"
 
@@ -98,7 +102,7 @@ for module in $modules; do
 
 	ini="${PHP_INI_DIR:-/usr/local/etc/php}/conf.d/${iniName:-"wsl-php-ext-$ext.ini"}"
 	if ! grep -q "$line" "$ini" 2>/dev/null; then
-		echo "$line" | sudo tee -a "$ini" || echo "$line" | tee -a "$ini"
+		echo "$line" | $(_sudo) tee -a "$ini"
 	fi
 done
 
