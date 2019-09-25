@@ -42,12 +42,6 @@ _deb(){
 
   sudo rm -rf data/lnmp/.git
 
-  sudo rm -rf data/lnmp/config/nginx/.git
-
-  sudo rm -rf data/lnmp/config/httpd/.git
-
-  sudo rm -rf data/lnmp/app/demo/.git
-
   chmod -R 755 DEBIAN
 
   cd .. ; dpkg-deb -b deb khs1994-docker-lnmp_${VERSION}_amd64.deb

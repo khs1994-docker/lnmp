@@ -6,15 +6,6 @@ services:
     build: .
     image: khs1994/wsl:latest
 
-  wsl-php-builder-71:
-    build:
-      context: .
-      dockerfile: wsl.phpbuilder.Dockerfile
-      args:
-        - PHP_VERSION=${PHP_VERSION_71:-7.1.32}
-        - OS_TYPE=debian:stretch-slim
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_71:-7.1.32}-debian-stretch_amd64
-
   wsl-php-builder-72:
     build:
       context: .
@@ -33,15 +24,6 @@ services:
         - OS_TYPE=debian:stretch-slim
     image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.9}-debian-stretch_amd64
 
-  wsl-php-builder-ubuntu1804-73:
-    build:
-      context: .
-      dockerfile: wsl.phpbuilder.Dockerfile
-      args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.9}
-        - OS_TYPE=ubuntu:18.04
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.9}-ubuntu-bionic_amd64
-
   wsl-php-builder-74:
     build:
       context: .
@@ -51,13 +33,23 @@ services:
         - OS_TYPE=debian:stretch-slim
     image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_74:-7.4}-debian-stretch_amd64
 
-  wsl-php-builder-rhel7-71:
+  wsl-php-builder-ubuntu1804-72:
     build:
       context: .
-      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_71:-7.1.32}
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_71:-7.1.32}-centos-7_amd64
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.22}
+        - OS_TYPE=ubuntu:18.04
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.2.22}-ubuntu-bionic_amd64
+
+  wsl-php-builder-ubuntu1804-73:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.9}
+        - OS_TYPE=ubuntu:18.04
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.9}-ubuntu-bionic_amd64
 
   wsl-php-builder-rhel7-72:
     build:
