@@ -6,6 +6,7 @@ x-common:
   env_file: ./cli/timezone.env
   networks:
     - backend
+    # - frontend
   # dns:
   #   - ${DNS:-114.114.114.114}
 
@@ -31,6 +32,8 @@ services:
       - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env.example
       - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env
     working_dir: /app
+    # required vars ${VAR?-VAR is empty, must set in ~/lnmp/.env}
+    # required vars ${VAR?VAR is not set, must set in ~/lnmp/.env}
     # networks:
     #   - frontend
     # depends_on:

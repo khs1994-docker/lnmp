@@ -1,4 +1,4 @@
-# lrew
+# [lrew](https://github.com/khs1994-docker?utf8=✓&q=lrew&type=&language=)
 
 > khs1994-docker/lnmp 包管理工具。
 
@@ -6,7 +6,7 @@ macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lr
 
 ## 修改配置
 
-你可以通过以下方式启用 `example` 包(假设 `example` 包提供了 `example` 服务)。若在 `lrew` 目录下没找到你所需要的包，你可以参照下一小节开发一个包。
+你可以通过以下方式启用 `example` 包(假设 `example` 包提供了 `example` 服务)。若在 `lrew` 目录下没找到你所需要的包，你可以参照下一小节开发一个包或者在 https://packagist.org/packages/lrew/ 寻找一个包。
 
 ### Linux、macOS
 
@@ -65,3 +65,7 @@ $ lnmp-docker add example
 ```bash
 $ ./lnmp-docker up
 ```
+
+## 优先级(开发者)
+
+`vendor/lrew-dev` 优先级大于 `vendor/lrew`。
