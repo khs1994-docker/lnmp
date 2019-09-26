@@ -12,6 +12,11 @@ RUN mkdir /ppm \
 
 FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine
 
+ARG VCS_REF
+
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+
 RUN --mount=type=cache,from=composer,source=/ppm,target=/tmp/ppm \
       cp -a /tmp/ppm / \
       && curl -o /usr/local/bin/docker-entrypoint \

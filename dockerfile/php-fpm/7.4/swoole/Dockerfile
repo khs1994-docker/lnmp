@@ -53,7 +53,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default) \
         || true \
-        && docker-php-ext-enable opcache \
         && apk del --no-network --no-cache .pecl_build_deps \
         && rm -rf /tmp/* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*

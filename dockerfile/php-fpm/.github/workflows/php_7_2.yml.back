@@ -1,0 +1,94 @@
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - '*'
+
+name: PHP_7.2
+
+jobs:
+  build:
+    name: Build
+    strategy:
+      max-parallel: 1
+      matrix:
+        TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
+    runs-on: ubuntu-latest
+    steps:
+    - uese: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - run: |
+        set -x
+        env
+        docker --version
+        docker-compose --version
+      name: 'manifest'
+    - run: |
+        set -x
+        sudo rm /usr/local/bin/docker-compose
+        curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+        chmod +x docker-compose
+        sudo mv docker-compose /usr/local/bin
+      name: 'Setup Docker Compose'
+      env:
+        DOCKER_COMPOSE_VERSION: 1.24.1
+    - uses: docker-practice/actions-setup-docker@master
+    - run: |
+        set -x
+        docker --version
+        docker-compose --version
+        docker buildx version
+        docker
+      name: 'install-after-manifest'
+    - run: |
+        set -x
+        echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+      name: 'Docker Login'
+      env:
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+    - run: |
+        cp .env.example .env
+        source tag.sh
+        set -ex
+
+        if [ ! `echo $GITHUB_REF | grep 'refs/tags/'` ];then \
+          export PLATFORM=linux/amd64; \
+          if [ "$PHP_VERSION" = 8_0_X -o "$PHP_VERSION" = nightly ];then \
+            export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
+            IS_PUSH=--push; \
+          else \
+            true; \
+          fi; \
+        else \
+          IS_PUSH=--push; \
+        fi
+
+        VCS_REF=`git rev-parse --short HEAD`
+        options="--build-arg VCS_REF=$VCS_REF"
+        echo $options
+
+        if [ "$TYPE" = "UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
+        if [ "$TYPE" = "SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
+        if [ "$TYPE" = "COMPOSER" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
+        if [ "$TYPE" = "SINGLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
+        if [ "$TYPE" = "SWOOLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} ${FOLDER}/swoole; fi
+        if [ "$TYPE" = "FPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
+        if [ "$TYPE" = "CLI" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; fi
+        if [ "$TYPE" = "PPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; fi
+      env:
+        DOCKER_HUB_USERNAME: khs1994
+
+        PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
+        PHP_VERSION: 7_2_X
+        FOLDER: 7.2
+        PHP_TAG_VERSION: 7.2.22
+        TYPE: ${{ matrix.TYPE }}
+      name: 'Build Image'
+
+    - run: |
+        curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
+      name: 'Trigger hooks'
+      if: success()

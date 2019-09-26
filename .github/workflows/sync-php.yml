@@ -1,8 +1,12 @@
 on:
   push:
+    # Sequence of patterns matched against refs/tags
     tags:
+    # - '*'
+    # Sequence of patterns matched against refs/heads
     branches:
     - 19.03-pre
+    # - 'releases/*'   # Push events to branches matching refs/heads/releases/*
 
 name: Sync PHP
 

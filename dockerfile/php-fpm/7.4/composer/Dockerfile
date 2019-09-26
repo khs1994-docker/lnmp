@@ -40,8 +40,9 @@ RUN --mount=type=bind,from=composer:1.9.0,source=/usr/bin/composer,target=/opt/b
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.9/docker-entrypoint.sh > /docker-entrypoint.composer.sh \
-    && chmod +x /docker-entrypoint.composer.sh \
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.9/docker-entrypoint.sh \
+         -o /docker-entrypoint.composer \
+    && chmod +x /docker-entrypoint.composer \
     && cp -a /opt/bin/composer /usr/bin/composer \
     && composer --ansi --version --no-interaction \
     \
@@ -65,6 +66,6 @@ RUN --mount=type=bind,from=composer:1.9.0,source=/usr/bin/composer,target=/opt/b
 # composer 中国镜像
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
-ENTRYPOINT ["/bin/sh", "/docker-entrypoint.composer.sh"]
+ENTRYPOINT ["/docker-entrypoint.composer"]
 
 CMD ["composer"]

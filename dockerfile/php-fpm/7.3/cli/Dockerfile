@@ -320,7 +320,21 @@ RUN --mount=type=bind,from=php:7.3.9-alpine,source=/usr/local/bin,target=/opt/bi
            && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
            && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
          done \
-      ; apk del --no-network --no-cache .pecl_build_deps \
+# https://github.com/tideways/php-xhprof-extension.git
+      && test `uname -m` = 'x86_64' \
+      && (cd /tmp \
+      && curl -fsSL https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+             | tar -zxvf - \
+      && cd php-xhprof-extension-master \
+      && phpize \
+      && ./configure \
+      && make \
+      && make install \
+      && docker-php-ext-enable tideways_xhprof \
+      && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
+          /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default) \
+      || true \
+      && apk del --no-network --no-cache .pecl_build_deps \
 # 默认不启用 xdebug
       && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
            /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \

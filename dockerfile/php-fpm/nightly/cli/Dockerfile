@@ -15,13 +15,13 @@ ENV TZ=Asia/Shanghai \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-ARG PHP_EXTENSION_EXTRA="ffi"
+ARG PHP_EXTENSION_EXTRA=
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA="libgcrypt"
+ARG APK_EXTRA=
 
-ARG APK_DEV_EXTRA="libgpg-error-dev libgcrypt-dev"
+ARG APK_DEV_EXTRA=
 
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
@@ -79,7 +79,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pdo-pgsql=shared \
         --with-xsl=shared \
         --enable-bcmath=shared \
-        --with-libxml \
         --enable-inline-optimization \
         --enable-mbregex \
         --enable-pcntl=shared \
@@ -97,8 +96,8 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-bz2=shared \
         --with-tidy=shared \
         --with-gmp=shared \
+        --with-kerberos \
         --with-imap=shared \
-            --with-kerberos \
             --with-imap-ssl \
         --with-xmlrpc=shared \
         --with-pic \
@@ -372,20 +371,34 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            && strip --strip-all $(php-config --extension-dir)/${EXT_REAL_NAME}.so || true ; \
          done \
          \
-      && (apk add --no-cache git openssh-client \
-      && git clone --depth=1 https://github.com/xdebug/xdebug.git \
-      && apk del --no-network --no-cache git openssh-client \
-      && cd xdebug \
+      && (cd /tmp \
+      && curl -fsSL https://github.com/xdebug/xdebug/archive/master.tar.gz \
+           | tar -zxvf - \
+      && cd xdebug-master \
       && phpize \
       && ./configure --enable-xdebug-dev \
       && make all \
       && make install \
       && cd - \
-      && rm -rf xdebug \
+      && rm -rf xdebug* \
       && docker-php-ext-enable xdebug \
 # 默认不启用 xdebug
       && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
              /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default) \
+# https://github.com/tideways/php-xhprof-extension.git
+      ; test `uname -m` = 'x86_64' \
+      && (cd /tmp \
+      && curl -fsSL https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+           | tar -zxvf - \
+      && cd php-xhprof-extension-master \
+      && phpize \
+      && ./configure \
+      && make \
+      && make install \
+      && docker-php-ext-enable tideways_xhprof \
+      && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
+          /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default) \
+      || true \
       ; apk del --no-network --no-cache .pecl_build_deps \
       ; mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
            /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default \
