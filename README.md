@@ -217,7 +217,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.2`        | **2.8.2**              |`Alpine:3.10`    |
-|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.3-alpine`      | **1.17.3**             |`Alpine:3.9`    |
+|[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.4-alpine`      | **1.17.4**             |`Alpine:3.9`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.3.9-unit-alpine`| **1.10.0**             |`Alpine:3.10`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.10`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.17`              | **8.0.17**             |`Debian:stretch`|
