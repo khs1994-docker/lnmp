@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.10 as php
+FROM --platform=$TARGETPLATFORM alpine:3.10
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -15,13 +15,13 @@ ENV TZ=Asia/Shanghai \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-ARG PHP_EXTENSION_EXTRA
+ARG PHP_EXTENSION_EXTRA="ffi"
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA
+ARG APK_EXTRA="libgcrypt"
 
-ARG APK_DEV_EXTRA
+ARG APK_DEV_EXTRA="libgpg-error-dev libgcrypt-dev"
 
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
@@ -63,10 +63,11 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --disable-phpdbg \
         # https://github.com/docker-library/php/issues/510
         # --enable-embed=shared \
-        --enable-fpm \
-        --with-fpm-user=www-data \
-        --with-fpm-group=www-data \
-        --disable-cgi \
+        # --enable-fpm \
+        # --with-fpm-user=www-data \
+        # --with-fpm-group=www-data \
+        --enable-embed=shared \
+        # --disable-cgi \
         --with-gettext=shared \
         --enable-gd=shared \
             --with-freetype \
@@ -142,7 +143,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 ARG PHP_GIT=https://github.com/php/php-src.git
 # ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
 
-RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   \
   && export PATH=$PATH:/opt/bin \
@@ -326,51 +327,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
 # ENTRYPOINT ["docker-php-entrypoint"]
   \
 # RUN set -ex \
-	&& cd /usr/local/etc \
-	&& if [ -d php-fpm.d ]; then \
-		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
-		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
-		cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
-	else \
-		# PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
-		mkdir php-fpm.d; \
-		cp php-fpm.conf.default php-fpm.d/www.conf; \
-		{ \
-			echo '[global]'; \
-			echo 'include=etc/php-fpm.d/*.conf'; \
-		} | tee php-fpm.conf; \
-	fi \
-	&& { \
-		echo '[global]'; \
-		echo 'error_log = /proc/self/fd/2'; \
-    echo; echo '; https://github.com/docker-library/php/pull/725#issuecomment-443540114'; echo 'log_limit = 8192'; \
-		echo; \
-		echo '[www]'; \
-		echo '; if we send this to /proc/self/fd/1, it never appears'; \
-		echo 'access.log = /proc/self/fd/2'; \
-		echo; \
-		echo 'clear_env = no'; \
-		echo; \
-		echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
-		echo 'catch_workers_output = yes'; \
-    echo 'decorate_workers_output = no'; \
-	} | tee php-fpm.d/docker.conf \
-	&& { \
-		echo '[global]'; \
-		echo 'daemonize = no'; \
-		echo; \
-		echo '[www]'; \
-		echo 'listen = 9000'; \
-	} | tee php-fpm.d/zz-docker.conf \
-# 创建日志文件夹
-  && mkdir -p /var/log/php-fpm \
-  && ln -sf /dev/stdout /var/log/php-fpm/access.log \
-  && ln -sf /dev/stderr /var/log/php-fpm/error.log \
-  && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
-  && chmod -R 777 /var/log/php-fpm \
   && rm -rf /usr/src/php
-
-ENTRYPOINT ["docker-php-entrypoint"]
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
@@ -435,8 +392,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       ; rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
-STOPSIGNAL SIGQUIT
-EXPOSE 9000
-CMD ["php-fpm"]
+ENTRYPOINT ["docker-php-entrypoint"]
+
+CMD ["php", "-a"]
 
 WORKDIR /app

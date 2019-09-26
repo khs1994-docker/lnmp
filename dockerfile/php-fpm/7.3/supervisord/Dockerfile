@@ -1,6 +1,6 @@
 ARG PHP_VERSION=7.3.9
 
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine as php
+FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine
 
 ARG VCS_REF
 
