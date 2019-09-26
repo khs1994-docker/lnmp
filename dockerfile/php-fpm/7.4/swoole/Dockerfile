@@ -29,8 +29,10 @@ ENV PECL_EXTENSION \
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+RUN --mount=type=bind,from=php:7.4.0RC1-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+    sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && apk add --no-cache --virtual .pecl_build_deps $PHPIZE_DEPS \
+        && export PATH=$PATH:/opt/bin \
         && for extension in $PECL_EXTENSION;do \
              pecl install $extension \
              && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \

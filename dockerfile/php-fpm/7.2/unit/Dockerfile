@@ -18,7 +18,10 @@ RUN cd /usr/src \
   && tar -zxvf ${NGINX_UNIT_VERSION}.tar.gz \
   && mv unit-${NGINX_UNIT_VERSION} unit \
   && cd /usr/src/unit \
-  && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS openssl-dev \
+  && apk add --no-cache --virtual .build-deps \
+                                  $PHPIZE_DEPS \
+                                  openssl-dev \
+                                  linux-headers \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php72 \
