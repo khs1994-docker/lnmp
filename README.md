@@ -222,7 +222,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.10`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.17`              | **8.0.17**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.8`            | **10.4.8**             |`Ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.5-alpine`        | **5.0.5**            |`Alpine:3.10`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.6-alpine`        | **5.0.6**            |`Alpine:3.10`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.3.9-fpm-alpine`  | **7.3.9**       |`Alpine:3.10`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.3.9-composer-alpine`  | **5.8.x**       |`Alpine:3.10`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.9-composer-alpine`  | **1.9.0**       |`Alpine:3.10`    |
