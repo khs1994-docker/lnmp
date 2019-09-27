@@ -22,6 +22,8 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
+ENV SWOOLE_VERSION=4.4.7
+
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN --mount=type=bind,from=php:7.3.9-alpine,source=/usr/local/bin,target=/opt/bin,rw \

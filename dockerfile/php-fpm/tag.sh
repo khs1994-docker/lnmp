@@ -66,7 +66,7 @@ fi
 
 echo $fpmTagOptions
 
-# wget https://raw.githubusercontent.com/khs1994-docker/lnmp/18.09/scripts/arm-build.sh
+# wget https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/scripts/arm-build.sh
 # chmod +x arm-build.sh
 #
 # if [[ "$PHP_VERSION" = "7_3_X" && "$FPM" = "1" ]];then

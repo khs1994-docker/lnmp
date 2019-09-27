@@ -668,7 +668,7 @@ The php package contains the module (often referred to as mod_php)
 which adds support for the PHP language to Apache HTTP Server.
 
 %pre
-if [ -d ${PHP_INI_DIR} ];then $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup; fi
+if [ -d ${PHP_INI_DIR} ];then mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup; fi
 echo -e \"----------------------------------------------------------------------
 \n
 \n
@@ -682,7 +682,7 @@ Meet issue? please see:
 ----------------------------------------------------------------------
 \n\n\"
 %post
-for file in \$( ls ${PHP_PREFIX}/bin ); do $(_sudo) ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
+for file in \$( ls ${PHP_PREFIX}/bin ); do ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
 ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
 echo > /dev/null
 cd /var/log
@@ -719,7 +719,7 @@ rpmbuild -bb /tmp/khs1994-wsl-php.spec
 
 RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
 
-echo "$ $(_sudo) yum install -y ${RPM_NAME}"
+echo "\$ yum install -y ${RPM_NAME}"
 
 cp ~/${RPM_NAME} /
 

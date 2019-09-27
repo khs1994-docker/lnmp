@@ -40,6 +40,8 @@ _sudo(){
   command -v sudo > /dev/null && echo "sudo" || true
 }
 
+source /etc/os-release
+
 command -v apt
 
 if ! [ 0 -eq $? ];then echo "Only Support Debian"; exit ; fi
@@ -219,6 +221,38 @@ _buildlib
 
 ################################################################################
 
+}
+
+buster_pkg(){
+  if ! [ "${VERSION_CODENAME}" = 'buster' ];then
+    return
+  fi
+
+  echo ""
+}
+
+stretch_pkg(){
+  if ! [ "${VERSION_CODENAME}" = 'stretch' ];then
+    return
+  fi
+
+  echo ""
+}
+
+ubuntu_xenial_pkg(){
+  if ! [ "${UBUNTU_CODENAME}" = 'xenial' ];then
+    return
+  fi
+
+  echo ""
+}
+
+ubuntu_bionic_pkg(){
+  if ! [ "${UBUNTU_CODENAME}" = 'xenial' ];then
+    return
+  fi
+
+  echo ""
 }
 
 _install_php_run_dep(){
@@ -508,6 +542,20 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
     export CFLAGS="$PHP_CFLAGS"
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
+
+    buster_patch(){
+      if ! [ "${VERSION_CODENAME}" = 'buster' ];then
+        return
+      fi
+
+      if [ "${PHP_NUM}" -le "73" ];then
+        curl -O https://sources.debian.org/data/main/p/php7.3/7.3.9-1~deb10u1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
+        patch -p1 < 0047-Use-pkg-config-for-FreeType2-detection.patch
+        ./buildconf --force
+      fi
+    }
+
+    buster_patch
 
     if ! [ -f configure ];then ./buildconf --force; fi
 
@@ -819,18 +867,18 @@ echo "#!/bin/bash
 
 cd /var/log
 
-if ! [ -f php${PHP_NUM}.error.log ];then $(_sudo) touch php${PHP_NUM}.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.error.log ];then $(_sudo) touch php${PHP_NUM}-fpm.error.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.access.log ];then $(_sudo) touch php${PHP_NUM}-fpm.access.log ; fi
-if ! [ -f php${PHP_NUM}-fpm.slow.log ];then $(_sudo) touch php${PHP_NUM}-fpm.slow.log; fi
+if ! [ -f php${PHP_NUM}.error.log ];then touch php${PHP_NUM}.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.error.log ];then touch php${PHP_NUM}-fpm.error.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.access.log ];then touch php${PHP_NUM}-fpm.access.log ; fi
+if ! [ -f php${PHP_NUM}-fpm.slow.log ];then touch php${PHP_NUM}-fpm.slow.log; fi
 
-$(_sudo) chmod 777 php${PHP_NUM}*
+chmod 777 php${PHP_NUM}*
 
 # bin sbin
 
-for file in \$( ls ${PHP_PREFIX}/bin ); do $(_sudo) ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
+for file in \$( ls ${PHP_PREFIX}/bin ); do ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
 
-$(_sudo) ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
+ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
 " > DEBIAN/postinst
 
 echo "#!/bin/bash
@@ -842,7 +890,7 @@ echo
 echo "#!/bin/bash
 
 if [ -d ${PHP_INI_DIR} ];then
-  $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup
+  mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup
 fi
 
 echo -e \"
@@ -876,7 +924,7 @@ $(_sudo) dpkg-deb -b khs1994-wsl-php-${PHP_VERSION} $DEB_NAME
 
 $(_sudo) cp -a /tmp/${DEB_NAME} /
 
-echo "$ $(_sudo) dpkg -i ${DEB_NAME}"
+echo "\$ $(_sudo) dpkg -i ${DEB_NAME}"
 
 $(_sudo) rm -rf $PHP_PREFIX ; $(_sudo) rm -rf $PHP_INI_DIR
 

@@ -14,18 +14,18 @@ ARG PHP_EXTENSION_EXTRA="ffi"
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA="libgcrypt"
+ARG APK_EXTRA
 
-ARG APK_DEV_EXTRA="libgpg-error-dev libgcrypt-dev"
+ARG APK_DEV_EXTRA
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
 ENV PECL_EXTENSION \
-# 安装测试版的扩展，可以在扩展名后加 -beta
-      # xdebug-beta \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
+
+ENV SWOOLE_VERSION=4.4.7
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 

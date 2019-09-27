@@ -134,7 +134,7 @@ jobs:
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -150,7 +150,7 @@ jobs:
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -166,7 +166,7 @@ jobs:
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_74}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -184,7 +184,7 @@ jobs:
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-ubuntu-bionic_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -200,7 +200,7 @@ jobs:
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-ubuntu-bionic_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
@@ -218,7 +218,7 @@ jobs:
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_72}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
@@ -234,7 +234,7 @@ jobs:
         - docker-compose build ${TRAVIS_JOB_NAME}
       after_success:
         - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose create ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_73}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
@@ -297,14 +297,19 @@ jobs:
 # https://docs.travis-ci.com/user/conditions-v1
 
 stages:
+  - name: development
+    if: |
+      branch = "19.03" OR \
+      tag =~ /^(v19)/
+  - name: swarm
+    if: |
+      branch = "19.03" OR \
+      tag =~ /^(v19)/
+  - name: checkConfig
+    if: |
+      branch = "19.03"
   - name: tag
     if: tag =~ /^(v19)/
-  - name: development
-    if: branch = "19.03"
-  - name: swarm
-    if: branch = "19.03"
-  - name: checkConfig
-    if: branch = "19.03"
   # don't run
   # - name: docs
   #   if: tag =~ /^(vxx)/
