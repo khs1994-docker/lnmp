@@ -43,7 +43,7 @@ script:
   - cp .env.example .env
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   # - docker-compose build ${PHP_VERSION} --parallel
-  - source tag.sh
+  # - source tag.sh
 
   - VCS_REF=`git rev-parse --short HEAD`
   - options="--build-arg VCS_REF=$VCS_REF"

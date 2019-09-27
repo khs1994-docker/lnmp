@@ -10,7 +10,8 @@
 
 ### Changes:
 
-* Support Laravel 6.0
+* Support Laravel `6.0`
+* WSL Debian Update `stretch(9)` to `buster(10)`
 
 ### Updates:
 

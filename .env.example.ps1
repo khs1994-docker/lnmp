@@ -21,7 +21,7 @@ $CI_HOST="ci.khs1994.com:10000"
 
 # wsl name
 # $ wslconfig /l
-$DistributionName="debian"
+$DistributionName="Ubuntu-18.04"
 
 $TZ='Asia/Shanghai'
 

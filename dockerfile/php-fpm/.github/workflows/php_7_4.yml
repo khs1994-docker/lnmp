@@ -52,7 +52,6 @@ jobs:
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
     - run: |
         cp .env.example .env
-        source tag.sh
         set -ex
 
         if [ ! `echo $GITHUB_REF | grep 'refs/tags/'` ];then \

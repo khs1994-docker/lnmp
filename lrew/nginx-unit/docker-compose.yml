@@ -32,8 +32,8 @@ services:
     networks:
       - backend
       - frontend
+    # entrypoint: unitd
     command:
-      # - unitd
       - --no-daemon
       - --user
       - root

@@ -41,7 +41,6 @@ docker run -i ${tty} --rm \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --env-file $ScriptRoot/../config/composer/.env \
-  --entrypoint /docker-entrypoint.composer.sh \
   --user ${LNMP_USER:-root:root} \
   ${DOCKER_IMAGE}:${TAG} \
   composer create-project --prefer-dist laravel/laravel=${3:-6.0}.* "$2"

@@ -18,24 +18,31 @@ ARG APK_EXTRA
 ARG APK_DEV_EXTRA
 
 ENV PECL_EXTENSION \
-      swoole \
       ${PECL_EXTENSION_EXTRA:-}
+
+ENV SWOOLE_VERSION=4.4.7
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-        && apk add --no-cache --virtual .pecl_build_deps $PHPIZE_DEPS \
-        && for extension in $PECL_EXTENSION;do \
-             pecl install $extension \
-             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
-             && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
-             && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
-           done \
-        && apk del --no-network --no-cache .pecl_build_deps \
-        && rm -rf /tmp/* \
-        && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+      && apk add --no-cache --virtual .pecl_build_deps $PHPIZE_DEPS \
+      && export extension_name=swoole
+      && cd /tmp \
+      && curl -fsSL https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
+           | tar -zxvf - \
+      && cd swoole-src-${SWOOLE_VERSION} \
+      && phpize \
+      && ./configure \
+      && make \
+      && make install \
+      && docker-php-ext-enable ${extension_name} || echo "pecl ${extension} install error" \
+      && rm -rf /usr/local/lib/php/doc/${extension_name} \
+      && rm -rf /usr/local/lib/php/test/${extension_name} \
+      && rm -rf /usr/local/include/php/ext/${extension_name} \
+      && strip --strip-all $(php-config --extension-dir)/${extension_name}.so ; \
+      && apk del --no-network --no-cache .pecl_build_deps \
+      && rm -rf /tmp/* \
+      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
 WORKDIR /app
 

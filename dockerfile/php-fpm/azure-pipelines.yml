@@ -204,7 +204,6 @@ jobs:
 
   - script: |
       cp .env.example .env
-      source tag.sh
       set -ex
 
       if [ ! `echo $BUILD_SOURCEBRANCH | grep 'refs/tags/'` ];then \

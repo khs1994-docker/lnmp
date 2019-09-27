@@ -136,7 +136,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-stretch_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -152,7 +152,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-stretch_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -168,7 +168,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose create ${TRAVIS_JOB_NAME}
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_74}-debian-stretch_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_74}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 

@@ -1,4 +1,4 @@
-ARG OS_TYPE=debian:stretch-slim
+ARG OS_TYPE=debian:buster-slim
 
 FROM ${OS_TYPE} as builder
 

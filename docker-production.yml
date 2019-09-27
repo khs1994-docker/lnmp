@@ -594,8 +594,10 @@ services:
 networks:
   frontend:
     << : *default-labels
+    attachable: true
   backend:
     << : *default-labels
+    attachable: true
 
 volumes:
   mysql-data:
@@ -743,7 +745,7 @@ configs:
     file: ./config/php/php.development.ini
     << : *default-labels
   # 重写 php.ini
-  php_ini_include_log:
+  php_ini_include:
     file: ./config/php/docker-php.ini
     << : *default-labels
   php_fpm_conf_d_zz_docker_conf:

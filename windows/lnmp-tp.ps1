@@ -12,6 +12,7 @@ docker run -it --rm `
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} `
   --mount type=bind,src=$PSScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json `
   --env-file $PSScriptRoot/../config/composer/.env `
-  --entrypoint /docker-entrypoint.composer.sh `
   ${LNMP_PHP_IMAGE} `
   composer create-project topthink/think=5.0.* $args[0] --prefer-dist
+
+#   --entrypoint /docker-entrypoint.composer `

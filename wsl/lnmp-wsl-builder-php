@@ -52,7 +52,7 @@ host=x86_64-linux-gnu
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.8.5
+export COMPOSER_VERSION=1.9.0
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -223,8 +223,8 @@ _buildlib
 
 _install_php_run_dep(){
 
-    test $host != 'x86_64-linux-gnu' && _build_arm_php_build_dep ; return 0
-    set +e
+    test $host != 'x86_64-linux-gnu' && _build_arm_php_build_dep && return 0 || true
+
     export PHP_RUN_DEP="libedit2 \
 zlib1g \
 libxml2 \
@@ -243,11 +243,14 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo $( if ! [ "${ARGON2}" = 'false' ];then \
                echo "libargon2-0";
              fi ); \
-     echo "libsodium18 libzip4"; \
+     echo $( $(_sudo) apt install -y libsodium18 > /dev/null 2>&1 && echo libsodium18) ;\
+     echo $( $(_sudo) apt install -y libsodium23 > /dev/null 2>&1 && echo libsodium23) ;\
+     echo "libzip4"; \
    fi ) \
 libyaml-0-2 \
 $( $(_sudo) apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
 $( $(_sudo) apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+$( $(_sudo) apt install -y libtidy5deb1 > /dev/null 2>&1 && echo libtidy5deb1 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -259,10 +262,15 @@ $( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( $(_sudo) apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 libenchant1c2a \
 libssl1.1 \
-libicu57 \
+$( $(_sudo) apt install -y libicu55 > /dev/null 2>&1 && echo libicu55) \
+$( $(_sudo) apt install -y libicu57 > /dev/null 2>&1 && echo libicu57) \
+$( $(_sudo) apt install -y libicu60 > /dev/null 2>&1 && echo libicu60) \
+$( $(_sudo) apt install -y libicu63 > /dev/null 2>&1 && echo libicu63) \
 libldap-2.4-2 \
 libffi6 \
-libonig4"
+$( $(_sudo) apt install -y libonig4 > /dev/null 2>&1 && echo libonig4) \
+$( $(_sudo) apt install -y libonig5 > /dev/null 2>&1 && echo libonig5) \
+"
     set -e
     $(_sudo) apt install -y $PHP_RUN_DEP > /dev/null
 }

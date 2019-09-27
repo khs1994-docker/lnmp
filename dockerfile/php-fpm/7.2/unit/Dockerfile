@@ -14,8 +14,8 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 ENV NGINX_UNIT_VERSION 1.11.0-2
 
 RUN cd /usr/src \
-  && wget https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
-  && tar -zxvf ${NGINX_UNIT_VERSION}.tar.gz \
+  && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
+       | tar -zxvf - \
   && mv unit-${NGINX_UNIT_VERSION} unit \
   && cd /usr/src/unit \
   && apk add --no-cache --virtual .build-deps \
