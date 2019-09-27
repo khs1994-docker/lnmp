@@ -89,7 +89,7 @@ case "$1" in
     export PHP_NUM=73
     ;;
   7.4.* )
-    export PHP_NUM=80
+    export PHP_NUM=74
     export BUILD_FROM_GIT=1
     export PHP_SRC_BRANCH=PHP-7.4
     ;;
@@ -143,7 +143,7 @@ _download_src(){
 
 _install_php_run_dep(){
 
-    cd /tmp ; $(_sudo) wget -N http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    cd /tmp ; $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
     $(_sudo) rpm -Uvh epel-release-latest-7.noarch.rpm
 
@@ -315,7 +315,7 @@ _builder(){
         \
         --with-config-file-path=${PHP_INI_DIR} \
         --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
-        --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
+        --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
         \
         --with-curl \
         --with-gettext \

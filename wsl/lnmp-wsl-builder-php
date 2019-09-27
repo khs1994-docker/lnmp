@@ -292,8 +292,8 @@ libgmp10 \
 libc-client2007e \
 libkrb5-3 \
 libxpm4 \
-$( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 $( $(_sudo) apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
+$( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
 libenchant1c2a \
 libssl1.1 \
 $( $(_sudo) apt install -y libicu55 > /dev/null 2>&1 && echo libicu55) \
@@ -445,7 +445,6 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       \
       --with-config-file-path=${PHP_INI_DIR} \
       --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
-      --disable-cgi \
       --enable-fpm \
       --with-fpm-user=nginx \
       --with-fpm-group=nginx \
