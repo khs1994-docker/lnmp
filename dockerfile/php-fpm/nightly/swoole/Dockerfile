@@ -19,8 +19,10 @@ ARG APK_EXTRA
 ARG APK_DEV_EXTRA
 
 ENV PECL_EXTENSION \
-      swoole-beta \
+      swoole \
       ${PECL_EXTENSION_EXTRA:-}
+
+ENV SWOOLE_VERSION=4.4.7
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --mount=type=cache,target=/usr/local/lib/php/test \

@@ -168,7 +168,7 @@ fi
 
 docker pull ${TAR_IMAGE}
 
-docker create --name=${CONTAINER_NAME} ${TAR_IMAGE} #khs1994/php-fpm:wsl
+docker create --name=${CONTAINER_NAME} ${TAR_IMAGE} command #khs1994/php-fpm:wsl
 
 # rm
 $(_sudo) rm -rf ${PHP_PREFIX}
@@ -222,7 +222,7 @@ _deb(){
 
     docker pull khs1994/wsl:${DEB_NAME}
 
-    docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME}
+    docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME} command
 
     $(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
 
@@ -242,7 +242,7 @@ rpm(){
 
   docker pull khs1994/wsl:${DOCKER_IMAGE_NAME}
 
-  docker create --name=${CONTAINER_NAME} khs1994/wsl:${DOCKER_IMAGE_NAME}
+  docker create --name=${CONTAINER_NAME} khs1994/wsl:${DOCKER_IMAGE_NAME} command
 
   $(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${RPM_NAME} .
 

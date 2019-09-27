@@ -14,9 +14,9 @@ ARG PHP_EXTENSION_EXTRA="ffi"
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA="libgcrypt"
+ARG APK_EXTRA
 
-ARG APK_DEV_EXTRA="libgpg-error-dev libgcrypt-dev"
+ARG APK_DEV_EXTRA
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
@@ -83,6 +83,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant \
                          c-client \
                          icu-libs \
+                         libgcrypt \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -110,6 +111,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
+                         libgpg-error-dev \
+                         libgcrypt-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \

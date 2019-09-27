@@ -19,9 +19,9 @@ ARG PHP_EXTENSION_EXTRA
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA
+ARG APK_EXTRA="libzip"
 
-ARG APK_DEV_EXTRA
+ARG APK_DEV_EXTRA="libzip-dev"
 
 # dependencies required for running "phpize"
 # these get automatically installed and removed by "docker-php-ext-*" (unless they're already installed)
@@ -171,7 +171,7 @@ RUN --mount=type=bind,from=php:7.2.22-alpine,source=/usr/src,target=/usr/local/s
           argon2-dev \
           cyrus-sasl-dev \
           postgresql-dev \
-          libzip-dev \
+          # libzip-dev \
           libpng-dev \
           freetype-dev \
           libjpeg-turbo-dev \

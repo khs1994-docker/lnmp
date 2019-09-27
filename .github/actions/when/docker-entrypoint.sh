@@ -22,8 +22,12 @@ _check_commit_message_fail() {
 }
 
 if [ "${IS_TAG}" -ne 1 ];then
+
 if [ -n "${PCIT_WHEN_BRANCH}" -a ${BRANCH} != "${PCIT_WHEN_BRANCH}" ];then \
   echo "Branch Check Fail"; exit 78; fi
+
+else
+  echo "tag event, not check branch"
 fi
 
 # 包含某个标志才运行

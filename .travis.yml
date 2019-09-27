@@ -297,14 +297,19 @@ jobs:
 # https://docs.travis-ci.com/user/conditions-v1
 
 stages:
+  - name: development
+    if: |
+      branch = "19.03" OR \
+      tag =~ /^(v19)/
+  - name: swarm
+    if: |
+      branch = "19.03" OR \
+      tag =~ /^(v19)/
+  - name: checkConfig
+    if: |
+      branch = "19.03"
   - name: tag
     if: tag =~ /^(v19)/
-  - name: development
-    if: branch = "19.03"
-  - name: swarm
-    if: branch = "19.03"
-  - name: checkConfig
-    if: branch = "19.03"
   # don't run
   # - name: docs
   #   if: tag =~ /^(vxx)/

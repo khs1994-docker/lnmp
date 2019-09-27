@@ -150,6 +150,14 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] zip
 * [x] zlib
 
+## 系统支持
+
+### Debian Buster 不支持 7.3 及以下（freetype-config）
+
+* https://sources.debian.org/src/php7.3/7.3.9-1%7Edeb10u1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch/
+
+* https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=870618
+
 ## More Information
 
 * [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp)
@@ -158,7 +166,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * https://git.alpinelinux.org/cgit/aports/tree/community/php7/APKBUILD
 
-* https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
+* https://sources.debian.org/src/php7.3/7.3.9-1%7Edeb10u1/debian/control/
 
 * https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html
 
