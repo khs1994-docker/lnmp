@@ -5,7 +5,7 @@ FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-composer-alpine as co
 
 RUN mkdir /ppm \
       && cd /ppm \
-      && composer composer config -g --unset repos.packagist \
+      && composer config -g --unset repos.packagist \
       && composer require php-pm/php-pm --no-cache \
       && composer require php-pm/httpkernel-adapter --no-cache \
       && rm -rf /tmp/cache /ppm/composer*

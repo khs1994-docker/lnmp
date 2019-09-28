@@ -354,19 +354,18 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && curl -sfL -o /usr/local/bin/pickle \
-        https://github.com/khs1994-php/pickle/releases/download/v0.4.0-2019-02-14/pickle.phar \
-      && chmod +x /usr/local/bin/pickle \
+      && cd /tmp \
       && for extension in $PECL_EXTENSION;do \
            EXT_REAL_NAME=$(echo ${extension} | cut -d '-' -f 1) \
-           && pickle install $extension -n --defaults \
-           || (cd /tmp/${EXT_REAL_NAME}/${EXT_REAL_NAME}* \
+           && (curl -fsSL https://pecl.php.net/get/${EXT_REAL_NAME} \
+                | tar -zxvf - \
+           && cd /tmp/${EXT_REAL_NAME}* \
            && phpize \
            && ./configure \
-           && make \
+           && make -j "$(nproc)" \
            && make install \
-           && rm -rf /tmp/${EXT_REAL_NAME}) \
-           && docker-php-ext-enable ${EXT_REAL_NAME} || echo "pecl ${extension} install error" \
+           && rm -rf /tmp/${EXT_REAL_NAME}* \
+           && docker-php-ext-enable ${EXT_REAL_NAME}) || echo "pecl ${extension} install error" \
            && rm -rf /usr/local/include/php/ext/${EXT_REAL_NAME} \
            && strip --strip-all $(php-config --extension-dir)/${EXT_REAL_NAME}.so || true ; \
          done \
@@ -377,7 +376,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && cd xdebug-master \
       && phpize \
       && ./configure --enable-xdebug-dev \
-      && make all \
+      && make all -j "$(nproc)" \
       && make install \
       && cd - \
       && rm -rf xdebug* \
@@ -385,24 +384,23 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 # 默认不启用 xdebug
       && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
              /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default) \
+      || true \
 # https://github.com/tideways/php-xhprof-extension.git
-      ; test `uname -m` = 'x86_64' \
+      && test `uname -m` = 'x86_64' \
       && (cd /tmp \
       && curl -fsSL https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
            | tar -zxvf - \
       && cd php-xhprof-extension-master \
       && phpize \
       && ./configure \
-      && make \
+      && make -j "$(nproc)" \
       && make install \
       && docker-php-ext-enable tideways_xhprof \
       && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default) \
       || true \
-      ; apk del --no-network --no-cache .pecl_build_deps \
-      ; mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \
-           /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini.default \
-      ; rm -rf /tmp/* \
+      && apk del --no-network --no-cache .pecl_build_deps \
+      && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
 ENTRYPOINT ["docker-php-entrypoint"]

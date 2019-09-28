@@ -27,7 +27,7 @@ RUN cd /usr/src \
        --module=php72 \
        --lib-path=/usr/local/lib \
        --config=/usr/local/bin/php-config \
-  && make \
+  && make -j "$(nproc)" \
   && make install \
   && strip --strip-all /usr/local/nginx-unit/sbin/unitd \
   && mkdir -p /usr/local/sbin \

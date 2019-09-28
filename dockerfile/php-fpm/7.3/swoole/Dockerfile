@@ -28,7 +28,9 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN --mount=type=bind,from=php:7.3.9-alpine,source=/usr/local/bin,target=/opt/bin,rw \
     sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-      && apk add --no-cache --virtual .pecl_build_deps $PHPIZE_DEPS \
+      && apk add --no-cache --virtual .pecl_build_deps \
+                                      $PHPIZE_DEPS \
+                                      openssl-dev \
       && export PATH=$PATH:/opt/bin \
       && export extension_name=swoole \
       && cd /tmp \
@@ -41,7 +43,7 @@ RUN --mount=type=bind,from=php:7.3.9-alpine,source=/usr/local/bin,target=/opt/bi
            --enable-openssl \
            --enable-http2 \
            --enable-mysqlnd \
-      && make \
+      && make -j "$(nproc)" \
       && make install \
       && docker-php-ext-enable ${extension_name} || echo "pecl ${extension_name} install error" \
       && rm -rf /usr/local/lib/php/doc/${extension_name} \
