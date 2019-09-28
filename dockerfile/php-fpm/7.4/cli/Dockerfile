@@ -313,6 +313,7 @@ RUN --mount=type=bind,from=php:7.4.0RC1-alpine,source=/usr/local/bin,target=/opt
            && curl -fsSL $EXT_URL | tar -zxvf - \
            && cd /tmp/${EXT_REAL_NAME}* \
            && phpize \
+           && ./configure --help || true \
            && ./configure \
            && make -j "$(nproc)" \
            && make install \
@@ -329,6 +330,7 @@ RUN --mount=type=bind,from=php:7.4.0RC1-alpine,source=/usr/local/bin,target=/opt
              | tar -zxvf - \
       && cd php-xhprof-extension-master \
       && phpize \
+      && ./configure --help || true \
       && ./configure \
       && make -j "$(nproc)" \
       && make install \

@@ -20,7 +20,7 @@ $ lnmp-wsl-builder-php 7.3.0
 
 $ lnmp-wsl-builder-php apt
 
-$ lnmp-wsl-builder-php 7.3.9 7.3.0beta1 7.3.0RC1 nightly
+$ lnmp-wsl-builder-php 7.3.10 7.3.0beta1 7.3.0RC1 nightly
 
 $ lnmp-wsl-builder-php 7.3.0 [--skipbuild] [tar] [deb] [enable-ext]
 
@@ -548,7 +548,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       fi
 
       if [ "${PHP_NUM}" -le "73" ];then
-        curl -O https://sources.debian.org/data/main/p/php7.3/7.3.9-1~deb10u1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
+        curl -O https://sources.debian.org/data/main/p/php7.3/7.3.10-1~deb10u1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
         patch -p1 < 0047-Use-pkg-config-for-FreeType2-detection.patch
         ./buildconf --force
       fi
@@ -947,7 +947,7 @@ command -v wget || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder || echo
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.9
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.10
 
 _get_phpnum $PHP_VERSION
 

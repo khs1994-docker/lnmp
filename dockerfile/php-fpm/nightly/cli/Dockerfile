@@ -361,6 +361,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                 | tar -zxvf - \
            && cd /tmp/${EXT_REAL_NAME}* \
            && phpize \
+           && ./configure --help || true \
            && ./configure \
            && make -j "$(nproc)" \
            && make install \
@@ -375,6 +376,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            | tar -zxvf - \
       && cd xdebug-master \
       && phpize \
+      && ./configure --help || true \
       && ./configure --enable-xdebug-dev \
       && make all -j "$(nproc)" \
       && make install \
@@ -392,6 +394,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            | tar -zxvf - \
       && cd php-xhprof-extension-master \
       && phpize \
+      && ./configure --help || true \
       && ./configure \
       && make -j "$(nproc)" \
       && make install \

@@ -744,7 +744,7 @@ command -v wget || $(_sudo) yum install -y wget
 
 mkdir -p /tmp/php-builder || echo
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.3.9 ; fi
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.3.10 ; fi
 
 _get_phpnum $PHP_VERSION
 

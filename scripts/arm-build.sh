@@ -7,8 +7,8 @@ echo "
 
 Usage:
 
-manifest  [7.3.9] [TYPE:fpm | composer | unit | swoole | supervisord ]
-build     [7.3.9] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | composer | ... ]
+manifest  [7.3.10] [TYPE:fpm | composer | unit | swoole | supervisord ]
+build     [7.3.10] [ arm32v7 | arm64v8 ] [7.3/alpine] [TYPE: fpm | composer | ... ]
 
 "
 }
@@ -81,23 +81,23 @@ fi
 set -x
 
 if [ "$1" = 'manifest' ];then
-  manifest ${2:-7.3.9} ${3:-fpm}
+  manifest ${2:-7.3.10} ${3:-fpm}
   exit
 fi
 
 if [ "$1" = 'build' ];then
-  build ${2:-7.3.9} ${3:-arm32v7} ${4:-7.3/alpine} ${5:-fpm}
+  build ${2:-7.3.10} ${3:-arm32v7} ${4:-7.3/alpine} ${5:-fpm}
   exit
 fi
 
-# build 7.2.22 arm32v7 7.2/alpine fpm
-# build 7.2.22 arm64v8 7.2/alpine fpm
+# build 7.2.23 arm32v7 7.2/alpine fpm
+# build 7.2.23 arm64v8 7.2/alpine fpm
 
-build 7.3.9 arm32v7 7.3/alpine fpm
-build 7.3.9 arm32v7 7.3/composer composer
+build 7.3.10 arm32v7 7.3/alpine fpm
+build 7.3.10 arm32v7 7.3/composer composer
 
-build 7.3.9 arm64v8 7.3/alpine fpm
-build 7.3.9 arm64v8 7.3/composer composer
+build 7.3.10 arm64v8 7.3/alpine fpm
+build 7.3.10 arm64v8 7.3/composer composer
 
-manifest 7.3.9 fpm
-manifest 7.3.9 composer
+manifest 7.3.10 fpm
+manifest 7.3.10 composer

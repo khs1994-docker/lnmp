@@ -11,18 +11,18 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_72:-7.2.22}
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.23}
         - OS_TYPE=debian:buster-slim
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.2.22}-debian-buster_amd64
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.2.23}-debian-buster_amd64
 
   wsl-php-builder-73:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.9}
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.10}
         - OS_TYPE=debian:buster-slim
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.9}-debian-buster_amd64
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.10}-debian-buster_amd64
 
   wsl-php-builder-74:
     build:
@@ -38,31 +38,31 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_72:-7.2.22}
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.23}
         - OS_TYPE=ubuntu:18.04
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.2.22}-ubuntu-bionic_amd64
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.2.23}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu1804-73:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.9}
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.10}
         - OS_TYPE=ubuntu:18.04
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.9}-ubuntu-bionic_amd64
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.10}-ubuntu-bionic_amd64
 
   wsl-php-builder-rhel7-72:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_72:-7.2.22}
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.2.22}-centos-7_amd64
+        - PHP_VERSION=${PHP_VERSION_72:-7.2.23}
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_72:-7.2.23}-centos-7_amd64
 
   wsl-php-builder-rhel7-73:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.9}
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.9}-centos-7_amd64
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.10}
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.10}-centos-7_amd64

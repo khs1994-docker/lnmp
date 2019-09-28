@@ -1,20 +1,15 @@
 # Changelog
 
-## v19.03.1
+## v19.03.2
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/19.03.0...19.03.1
+* https://github.com/khs1994-docker/lnmp/compare/v19.03.1...19.03
 
 ### Bug fixes:
 
 ### Changes:
 
-* Support Laravel `6.0`
-* WSL Debian Update `stretch(9)` to `buster(10)`
-
 ### Updates:
 
-* [PHP `7.3.9` `7.2.22` `7.1.32`](https://www.php.net/ChangeLog-7.php#7.3.9)
-* [NGINX `1.17.4`](https://nginx.org/en/CHANGES)
-* [Redis `5.0.6`](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
+* [PHP `7.3.10` `7.2.23` `7.1.32`](https://www.php.net/ChangeLog-7.php#7.3.10)
