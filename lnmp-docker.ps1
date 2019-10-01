@@ -176,6 +176,12 @@ Function check_docker_version(){
     return
   }
 
+  if(!(_command docker)){
+    printError "Docker not install"
+
+    return
+  } 
+
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
 
   if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
@@ -184,7 +190,9 @@ Function check_docker_version(){
 }
 
 Function init(){
-  printInfo $(docker-compose --version)
+  if(_command docker){
+    printInfo $(docker-compose --version)
+  }
   logs
   # git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
@@ -350,8 +358,19 @@ Function _update(){
     printError "Git not install, not support update"
     return
   }
+
+  if(! $(git remote get-url origin)){
+    printError "git remote origin not set, setting ..."
+    # git remote add origin git@github.com:khs1994-docker/lnmp
+    git remote add origin https://github.com/khs1994-docker/lnmp
+  }
+
   # git remote rm origin
-  # git remote add origin git@github.com:khs1994-docker/lnmp
+  if($(git status).split("")[-1] -eq 'clean' -eq $False){
+    printError "Somefile changed, please commit or stash first"
+    exit 1
+  }
+
   git fetch --depth=1 origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   git reset --hard origin/${BRANCH}
@@ -734,7 +753,7 @@ switch -regex ($command){
       ${LNMP_SERVICES}
     }
 
-    up {
+    "up$" {
       init
 
       if($other){
