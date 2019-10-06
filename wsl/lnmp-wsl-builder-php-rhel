@@ -143,9 +143,9 @@ _download_src(){
 
 _install_php_run_dep(){
 
-    cd /tmp ; $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    cd /tmp ; $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
 
-    $(_sudo) rpm -Uvh epel-release-latest-7.noarch.rpm
+    $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
 
 _libzip(){
 
@@ -153,6 +153,8 @@ _libzip(){
 #
 # checking for libzip... configure: error: system libzip must be upgraded to version >= 0.11
 #
+
+    if [ ${VERSION_ID} -ge 8 ];then return; fi
 
     cd /tmp
 

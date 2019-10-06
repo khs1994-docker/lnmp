@@ -66,3 +66,12 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_73:-7.3.10}
     image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.10}-centos-7_amd64
+
+  wsl-php-builder-rhel8-73:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.10}
+        - OS_TYPE=centos:8
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.10}-centos-7_amd64

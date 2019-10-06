@@ -17,6 +17,11 @@ cache:
     - /home/travis/.lnmp/caches
 
 before_install:
+  # remove some apt source
+  - cat /etc/apt/sources.list
+  - ls /etc/apt/sources.list.d || true
+  - sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
+
   - sestatus || true
   - ls /home/travis/.lnmp/caches
   - echo $PATH
