@@ -268,9 +268,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./dockerfile/postgresql/
   #     dockerfile: Dockerfile
-  #   image: postgres:11.4-alpine
+  #   image: postgres:12.0-alpine
   #   # image: username/lnmp-postgresql:tag
-  #   # image: khs1994/lnmp-postgresql:11.4
+  #   # image: khs1994/lnmp-postgresql:12.0
   #   environment:
   #     - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
   #     - POSTGRES_DB=test
