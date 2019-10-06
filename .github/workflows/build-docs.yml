@@ -1,5 +1,7 @@
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 
+# build when commit message include [Docs]
+
 on:
   push:
     paths:
@@ -14,17 +16,16 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
+    if: contains( github.event.head_commit.message, '[Docs]')
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
-      if: contains( github.event.head_commit.message, '[Docs]')
     - name: docs-build
       uses: docker://pcit/vuepress
       env:
         PCIT_LOCAL_DIR: docs
       with:
         args: build
-      if: contains( github.event.head_commit.message, '[Docs]')
     - name: sync-docs
       uses: docker://pcit/pages
       env:
@@ -36,4 +37,3 @@ jobs:
         PCIT_MESSAGE: Build docs by vuepress, Upload docs by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
-      if: contains( github.event.head_commit.message, '[Docs]')

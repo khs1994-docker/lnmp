@@ -1,3 +1,5 @@
+# commit mesage include [skip sync] to skip ci
+
 on:
   push:
     tags:
