@@ -4,8 +4,8 @@
 
 on:
   push:
-    paths:
-      - '/docs/*'
+    # paths:
+    #   - '/docs/*'
     tags:
     branches:
     - 19.03
