@@ -2,7 +2,7 @@
 
 print_help_info(){
   exec echo "
-CI-CLI 1.5.1
+CI-CLI 1.6.0
 
 Donate WebSite https://zan.khs1994.com
 
