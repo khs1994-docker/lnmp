@@ -154,7 +154,7 @@ _php(){
 
 _tar(){
 # debian ubuntu
-TAR_IMAGE=khs1994/wsl:khs1994-wsl-php_${PHP_VERSION}-${ID}-"$( lsb_release -cs )"_amd64
+TAR_IMAGE=khs1994/wsl:khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-"$( lsb_release -cs )"_amd64
 
 if [[ $PHP_NUM = '72' && "$ID" = 'debian' ]];then
   # debian php latest version
@@ -163,7 +163,7 @@ fi
 
 if [ "$ID" = 'centos' ];then
   # rhel
-  TAR_IMAGE=khs1994/wsl:khs1994-wsl-php_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
+  TAR_IMAGE=khs1994/wsl:khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 fi
 
 docker pull ${TAR_IMAGE}
@@ -216,7 +216,7 @@ lnmp-wsl-builder-php apt
 _deb(){
     cd /tmp
 
-    DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64
+    DEB_NAME=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64
 
     $(_sudo) rm -rf ${DEB_NAME}.deb
 
@@ -236,7 +236,7 @@ rpm(){
 
   RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
 
-  DOCKER_IMAGE_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
+  DOCKER_IMAGE_NAME=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 
   $(_sudo) rm -rf ${RPM_NAME}
 

@@ -653,11 +653,6 @@ _install_pecl_ext_by_pickle(){
 }
 
 _install_pecl_ext(){
-
-    #
-    # https://github.com/docker-library/php/issues/443
-    #
-
     command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
 
     if [ $pecl -ge 0 ];then
@@ -665,6 +660,9 @@ _install_pecl_ext(){
       return
     fi
 
+    #
+    # https://github.com/docker-library/php/issues/443
+    #
     $(_sudo) ${PHP_PREFIX}/bin/pecl update-channels
 
     PHP_EXTENSION="igbinary \
@@ -821,11 +819,11 @@ _tar(){
 
 _deb(){
 
-cd /tmp; $(_sudo) rm -rf khs1994-wsl-php-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php-${PHP_VERSION}
+cd /tmp; $(_sudo) rm -rf khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}
 
 ################################################################################
 
-echo "Package: khs1994-wsl-php
+echo "Package: khs1994-wsl-php${PHP_NUM}
 Version: ${PHP_VERSION}
 Prioritt: optional
 Section: php
@@ -877,9 +875,9 @@ echo -e \"
 
 ----------------------------------------------------------------------
 
-Thanks for using khs1994-wsl-php !
+Thanks for using khs1994-wsl-php${PHP_NUM} !
 
-Please find the official documentation for khs1994-wsl-php here:
+Please find the official documentation for khs1994-wsl-php${PHP_NUM} here:
 * https://github.com/khs1994-docker/lnmp/tree/master/wsl
 
 Meet issue? please see:
@@ -898,9 +896,9 @@ $(_sudo) cp -a ${PHP_PREFIX} usr/local/php${PHP_NUM} ; $(_sudo) cp -a ${PHP_INI_
 
 cd ..
 
-DEB_NAME=khs1994-wsl-php_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
+DEB_NAME=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
 
-$(_sudo) dpkg-deb -b khs1994-wsl-php-${PHP_VERSION} $DEB_NAME
+$(_sudo) dpkg-deb -b khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} $DEB_NAME
 
 $(_sudo) cp -a /tmp/${DEB_NAME} /
 
@@ -992,7 +990,7 @@ if [ "$2" = 'enable-ext' ];then
   ( _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
   ( test $host = 'x86_64-linux-gnu'  && \
   _test \
-  ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+  ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
   ) ; _write_version_to_file )
 
   exit
@@ -1013,7 +1011,7 @@ test "${SKIP_BUILD}" != 1 &&  \
     ( _download_src ; _builder ; _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
     ( test $host = 'x86_64-linux-gnu'  && \
     _test \
-    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
     ) ; _write_version_to_file )
 
 for command in "$@"

@@ -427,6 +427,8 @@ _builder(){
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
 
+    if ! [ -f configure ];then ./buildconf --force; fi
+
     ./configure ${CONFIGURE}
 
 # 5. make
@@ -525,14 +527,7 @@ _install_pecl_ext_by_pickle(){
 }
 
 _install_pecl_ext(){
-
-    #
-    # https://github.com/docker-library/php/issues/443
-    #
-
-    $(_sudo) ${PHP_PREFIX}/bin/pecl update-channels
-
-    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true
 
     command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
 
@@ -540,6 +535,12 @@ _install_pecl_ext(){
       _install_pecl_ext_by_pickle
       return
     fi
+
+    #
+    # https://github.com/docker-library/php/issues/443
+    #
+
+    $(_sudo) ${PHP_PREFIX}/bin/pecl update-channels
 
     PHP_EXTENSION="igbinary \
                redis \
@@ -689,7 +690,7 @@ _rpm(){
 
 cd /tmp
 
-echo "Name:       khs1994-wsl-php
+echo "Name:       khs1994-wsl-php${PHP_NUM}
 Version:    ${PHP_VERSION}
 Release:    1.el${VERSION_ID}.centos
 Summary:    PHP scripting language for creating dynamic web sites
@@ -715,8 +716,8 @@ if [ -d ${PHP_INI_DIR} ];then mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).ba
 echo -e \"----------------------------------------------------------------------
 \n
 \n
-Thanks for using khs1994-wsl-php !\n
-Please find the official documentation for khs1994-wsl-php here:
+Thanks for using khs1994-wsl-php${PHP_NUM} !\n
+Please find the official documentation for khs1994-wsl-php${PHP_NUM} here:
 * https://github.com/khs1994-docker/lnmp/tree/master/wsl\n
 Meet issue? please see:
 * https://github.com/khs1994-docker/lnmp/issues
@@ -752,15 +753,15 @@ ${PHP_PREFIX}
 ${PHP_INI_DIR}
 %changelog
 %clean
-RPM_NAME=khs1994-wsl-php-%{version}-%{release}.x86_64.rpm
+RPM_NAME=khs1994-wsl-php${PHP_NUM}-%{version}-%{release}.x86_64.rpm
 cp -a %{buildroot}/../../RPMS/x86_64/\${RPM_NAME} ~
-" > khs1994-wsl-php.spec
+" > khs1994-wsl-php${PHP_NUM}.spec
 
-cat /tmp/khs1994-wsl-php.spec
+cat /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-rpmbuild -bb /tmp/khs1994-wsl-php.spec
+rpmbuild -bb /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
+RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
 
 echo "\$ yum install -y ${RPM_NAME}"
 
@@ -834,7 +835,7 @@ done
 
 test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test ; \
   _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
-    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
     ; _write_version_to_file )
 
 for command in "$@"

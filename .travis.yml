@@ -141,7 +141,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-debian-buster_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php72_${PHP_VERSION_72}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -157,7 +157,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-debian-buster_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php73_${PHP_VERSION_73}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -173,7 +173,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_74}-debian-buster_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php74_${PHP_VERSION_74}-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -191,7 +191,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_72}-ubuntu-bionic_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php72_${PHP_VERSION_72}-ubuntu-bionic_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -207,7 +207,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export DEB_NAME=khs1994-wsl-php_${PHP_VERSION_73}-ubuntu-bionic_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php73_${PHP_VERSION_73}-ubuntu-bionic_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -225,7 +225,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_72}-1.el7.centos.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php72-${PHP_VERSION_72}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
@@ -241,7 +241,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_73}-1.el7.centos.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php73-${PHP_VERSION_73}-1.el7.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
@@ -257,7 +257,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_73}-1.el8.centos.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php73-${PHP_VERSION_73}-1.el8.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
@@ -273,7 +273,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_74}-1.el8.centos.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php74-${PHP_VERSION_74}-1.el8.centos.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
@@ -372,8 +372,8 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel8-73
     if: tag =~ /^(v19)/
-  # - name: wsl-php-builder-rhel8-74
-  #   if: tag =~ /^(v19)/
+  - name: wsl-php-builder-rhel8-74
+    if: tag =~ /^(v19)/
 
 # branches:
 #   only:
