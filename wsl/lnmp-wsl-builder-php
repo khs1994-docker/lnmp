@@ -548,7 +548,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       fi
 
       if [ "${PHP_NUM}" -le "73" ];then
-        curl -O https://sources.debian.org/data/main/p/php7.3/7.3.10-1~deb10u1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
+        curl -O https://salsa.debian.org/php-team/php/raw/debian/7.3.9-1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
         patch -p1 < 0047-Use-pkg-config-for-FreeType2-detection.patch
         ./buildconf --force
       fi
