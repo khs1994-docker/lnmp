@@ -1,8 +1,8 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.3.9
+ARG PHP_VERSION=7.3.10
 
 ARG PHP_NUM=73
 
@@ -71,7 +71,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 		libedit-dev \
     libenchant1c2a \
     libenchant-dev \
-    libsodium18 \
+    # libsodium18 \
+    libsodium23 \
 		libsodium-dev \
     libsqlite3-0 \
 		libsqlite3-dev \
@@ -107,7 +108,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     tar \
     wget \
 		xz-utils \
-    libtidy5 \
+    # libtidy5 \
+    libtidy5deb1 \
     libtidy-dev \
     libxmlrpc-epi0 \
     libxmlrpc-epi-dev \
@@ -133,8 +135,13 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libmhash-dev \
     libpcre3 \
     libpcre3-dev \
-    libicu57 \
+    # libicu57 \
+    libicu63 \
     libicu-dev \
+    libonig5 \
+    libonig-dev \
+    libffi6 \
+    libffi-dev \
   && mkdir -p $PHP_INI_DIR/conf.d; \
       mkdir -p /usr/src; \
 	    cd /usr/src; \
@@ -341,7 +348,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:5.0.5 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:5.0.6 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 
@@ -362,10 +369,7 @@ RUN cd /usr/local ; tar -zcvf php73.tar.gz php73 ; cd etc ; tar -zcvf php73-etc.
     && php -i | grep ".ini" \
     && ${PHP_PREFIX}/sbin/php-fpm -v
 
-
-FROM hello-world:latest
-
-# scratch
+FROM scratch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

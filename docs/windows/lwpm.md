@@ -1,6 +1,6 @@
 # Windows 包管理工具
 
-正如 macOS 上的 `brew`、Linux 上的 `apt` `yum` `dnf`，本项目提供了 `lnmp-windows-pm.ps1` 这一包管理工具，让开发者使用 `CLI` 快速安装开发软件。
+正如 `macOS` 上的 `brew`、Linux 上的 `apt` `yum` `dnf`，本项目提供了 `lnmp-windows-pm.ps1` 这一包管理工具，让开发者快速在 `Windows` 安装开发软件。
 
 ```bash
 $ lnmp-windows-pm.ps1 install go
@@ -32,6 +32,8 @@ $ lnmp-windows-pm.ps1 init example
 
 ## 添加一个包，并安装软件
 
+在 https://packagist.org/packages/lwpm/ 寻找一个包，并使用以下命令添加包并安装包所提供的软件：
+
 ```bash
 $ cd ~/lnmp
 
@@ -39,3 +41,7 @@ $ lnmp-windows-pm.ps1 add example
 
 $ lnmp-windows-pm.ps1 install example
 ```
+
+## 优先级(开发者)
+
+`vendor/lwpm-dev` 优先级大于 `vendor/lwpm`

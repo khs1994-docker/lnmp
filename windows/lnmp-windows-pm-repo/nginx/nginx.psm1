@@ -48,15 +48,17 @@ Function install($VERSION=0,$isPre=0){
   _exportPath "C:\nginx"
 
   if($(_command nginx)){
-    # $CURRENT_VERSION=""
-
-    # if ($CURRENT_VERSION -eq $VERSION){
+    nginx -v > $env:TEMP/.nginx.version 2>&1
+    $CURRENT_VERSION=$(cat $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]
+    rm -r $env:TEMP/.nginx.version
+    if ($CURRENT_VERSION -eq $VERSION){
         echo "==> $name $VERSION already install"
         return
-    # }
+    }
   }
 
   # 下载原始 zip 文件，若存在则不再进行下载
+
   _downloader `
     $url `
     $filename `

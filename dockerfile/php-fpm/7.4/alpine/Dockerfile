@@ -1,17 +1,22 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.0RC1
+ARG PHP_VERSION=7.4.0RC3
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
+ARG VCS_REF
+
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+
 ARG PHP_EXTENSION_EXTRA="ffi"
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA="libgcrypt"
+ARG APK_EXTRA
 
-ARG APK_DEV_EXTRA="libgpg-error-dev libgcrypt-dev"
+ARG APK_DEV_EXTRA
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
@@ -78,6 +83,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant \
                          c-client \
                          icu-libs \
+                         libgcrypt \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -105,6 +111,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
+                         libgpg-error-dev \
+                         libgcrypt-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
@@ -139,7 +147,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && cd php-xhprof-extension-master \
         && phpize \
         && ./configure \
-        && make \
+        && make -j "$(nproc)" \
         && make install \
         && docker-php-ext-enable tideways_xhprof \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \

@@ -6,6 +6,7 @@ x-common:
   env_file: ./cli/timezone.env
   networks:
     - backend
+    # - frontend
   # dns:
   #   - ${DNS:-114.114.114.114}
 
@@ -19,7 +20,7 @@ services:
   example:
     << : *default-common
     << : *default-common-label
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/example:${LNMP_EXAMPLE_VERSION:-2.4.41}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/example:${LNMP_EXAMPLE_VERSION:-x.y.z}-alpine"
     ports:
       - "${LNMP_EXAMPLE_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_EXAMPLE_HTTP_PORT:-0.0.0.0:80}:80"
@@ -31,6 +32,8 @@ services:
       - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env.example
       - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env
     working_dir: /app
+    # required vars ${VAR?-VAR is empty, must set in ~/lnmp/.env}
+    # required vars ${VAR?VAR is not set, must set in ~/lnmp/.env}
     # networks:
     #   - frontend
     # depends_on:

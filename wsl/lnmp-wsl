@@ -30,14 +30,18 @@ lnmp-wsl stop common
 "
 }
 
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 function _start(){
     for soft in "$@"
     do
     echo -e "\033[31mStart $soft\033[0m...\n"
     case "$soft" in
       redis )
-          if ! [ -f /run/redis.log ];then sudo touch /run/redis.log; fi
-          sudo redis-server \
+          if ! [ -f /run/redis.log ];then $(_sudo) touch /run/redis.log; fi
+          $(_sudo) redis-server \
               --logfile /run/redis.log \
               --bind 127.0.0.1 \
               --save 900 1 \
@@ -54,55 +58,55 @@ function _start(){
       ;;
 
       mongodb )
-         if ! [ -d /data/db ];then sudo mkdir -p /data/db ; fi
+         if ! [ -d /data/db ];then $(_sudo) mkdir -p /data/db ; fi
 
-          sudo mongod \
+          $(_sudo) mongod \
               --fork --logpath=/run/mongodb.error.log \
               --pidfilepath /run/mongodb.pid
       ;;
 
       memcached )
-          sudo memcached \
+          $(_sudo) memcached \
               -uroot \
               -d \
               -P /run/memcached.pid
       ;;
 
       php )
-          sudo php-fpm \
+          $(_sudo) php-fpm \
               -D \
               -R \
               -g /run/php-fpm.pid
       ;;
 
       nginx )
-          if ! [ -f /etc/nginx/fastcgi.conf ];then sudo cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf > /dev/null 2>&1 || echo > /dev/null ; fi
+          if ! [ -f /etc/nginx/fastcgi.conf ];then $(_sudo) cp $WSL_HOME/lnmp/config/etc/nginx/fastcgi.conf /etc/nginx/fastcgi.conf > /dev/null 2>&1 || echo > /dev/null ; fi
 
-          sudo nginx -t
-          # sudo nginx -g "pid /run/nginx.pid;"
-          sudo nginx
+          $(_sudo) nginx -t
+          # $(_sudo) nginx -g "pid /run/nginx.pid;"
+          $(_sudo) nginx
       ;;
 
       postgresql )
 
-      sudo mkdir -p "$PGDATA" || echo
-      sudo chown -R "$(id -u)" "$PGDATA"
-      sudo chmod 700 "$PGDATA"
+      $(_sudo) mkdir -p "$PGDATA" || echo
+      $(_sudo) chown -R "$(id -u)" "$PGDATA"
+      $(_sudo) chmod 700 "$PGDATA"
 
-      sudo mkdir -p /var/run/postgresql
-      sudo chown -R "$(id -u)" /var/run/postgresql
-      sudo chmod 777 /var/run/postgresql
+      $(_sudo) mkdir -p /var/run/postgresql
+      $(_sudo) chown -R "$(id -u)" /var/run/postgresql
+      $(_sudo) chmod 777 /var/run/postgresql
 
       /usr/lib/postgresql/10/bin/pg_ctl -D "$PGDATA" \
                                         start
       ;;
 
       mysql )
-         sudo mysqld_safe -D
+         $(_sudo) mysqld_safe -D
       ;;
 
       * )
-          sudo service $soft start
+          $(_sudo) service $soft start
       ;;
 esac
 done
@@ -114,13 +118,13 @@ function _stop(){
     echo -e "\033[31mStop $soft\033[0m...\n"
   case "$soft" in
     php )
-        sudo kill $(cat /run/php-fpm.pid)
+        $(_sudo) kill $(cat /run/php-fpm.pid)
     ;;
 
     nginx )
-        # sudo nginx -s stop -g "pid /run/nginx.pid;"
+        # $(_sudo) nginx -s stop -g "pid /run/nginx.pid;"
 
-        sudo nginx -s stop
+        $(_sudo) nginx -s stop
     ;;
 
     redis )
@@ -128,11 +132,11 @@ function _stop(){
     ;;
 
     memcached )
-        sudo kill $(cat /run/memcached.pid)
+        $(_sudo) kill $(cat /run/memcached.pid)
     ;;
 
     mongodb )
-        sudo kill $(cat /run/mongodb.pid)
+        $(_sudo) kill $(cat /run/mongodb.pid)
     ;;
 
     postgresql )
@@ -141,11 +145,11 @@ function _stop(){
 
     mysql )
        pid=`ps -aux | grep /usr/sbin/mysqld | awk -F " " '{print $2}' | head -1`
-       sudo kill -9 $pid
+       $(_sudo) kill -9 $pid
     ;;
 
     * )
-        sudo service $soft stop
+        $(_sudo) service $soft stop
     ;;
   esac
 done

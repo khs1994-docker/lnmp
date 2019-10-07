@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.9
+ARG PHP_VERSION=7.3.10
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -145,7 +145,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && cd php-xhprof-extension-master \
         && phpize \
         && ./configure \
-        && make \
+        && make -j "$(nproc)" \
         && make install \
         && docker-php-ext-enable tideways_xhprof \
         && mv /usr/local/etc/php/conf.d/docker-php-ext-tideways_xhprof.ini \

@@ -9,15 +9,15 @@
 
 ## 变量解析
 
-* `${VARIABLE:-default}` evaluates to default if VARIABLE is unset or empty in the environment.
+* `${VARIABLE:-default}` evaluates to default if VARIABLE is unset or empty in the environment. 未设置或为空，则为 `default`
 
-* `${VARIABLE-default}` evaluates to default only if VARIABLE is unset in the environment.
+* `${VARIABLE-default}` evaluates to default only if VARIABLE is unset in the environment. 未设置，则为 `default`
 
 Similarly, the following syntax allows you to specify mandatory variables:
 
-* `${VARIABLE:?err}` exits with an error message containing err if VARIABLE is unset or empty in the environment.
+* `${VARIABLE:?err msg}` exits with an error message containing err if VARIABLE is unset or empty in the environment. 未设置或为空，报错 `err msg`
 
-* `${VARIABLE?err}` exits with an error message containing err if VARIABLE is unset in the environment.
+* `${VARIABLE?err msg}` exits with an error message containing err if VARIABLE is unset in the environment. 未设置，报错 `err msg`
 
 ## macOS
 
@@ -33,6 +33,10 @@ web:
   command: "echo $$VAR_NOT_INTERPOLATED_BY_COMPOSE"
 ```
 
-使用 `$$` 避免被解析成变量。
+`$VAR` 都会被 compose 解析，使用 `$$` 避免被解析成变量。
 
 ## docker stack 不支持 `.env` 文件
+
+## network attachable (swarm mode)
+
+* https://docs.docker.com/compose/compose-file/#attachable

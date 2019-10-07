@@ -28,6 +28,10 @@ exit 0
 
 ################################################################################
 
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 command -v yum
 
 if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
@@ -38,7 +42,7 @@ PHP_TIMEZONE=PRC
 PHP_URL=http://cn2.php.net/distributions
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.8.5
+export COMPOSER_VERSION=1.9.0
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -85,7 +89,7 @@ case "$1" in
     export PHP_NUM=73
     ;;
   7.4.* )
-    export PHP_NUM=80
+    export PHP_NUM=74
     export BUILD_FROM_GIT=1
     export PHP_SRC_BRANCH=PHP-7.4
     ;;
@@ -104,10 +108,10 @@ esac
 
 _download_src(){
 
-    sudo mkdir -p /usr/local/src || echo
+    $(_sudo) mkdir -p /usr/local/src || echo
 
     if ! [ -z "$BUILD_FROM_GIT" ];then
-      sudo yum install bison git -y
+      $(_sudo) yum install bison git -y
 
       git clone --depth=1 -b ${PHP_SRC_BRANCH:-master} \
       https://github.com/php/php-src.git /usr/local/src/php-${PHP_VERSION} || \
@@ -122,7 +126,7 @@ _download_src(){
 
       echo -e "Download php src ...\n\n"
 
-      cd /usr/local/src ; sudo chmod 777 /usr/local/src
+      cd /usr/local/src ; $(_sudo) chmod 777 /usr/local/src
 
       wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
         wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
@@ -139,9 +143,17 @@ _download_src(){
 
 _install_php_run_dep(){
 
-    cd /tmp ; sudo wget -N http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    cd /tmp
 
-    sudo rpm -Uvh epel-release-latest-7.noarch.rpm
+    $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
+
+    $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
+
+    if [ ${VERSION_ID} -ge 8 ];then
+      $(_sudo) wget -N http://rpms.remirepo.net/enterprise/${VERSION_ID}/remi/x86_64/remi-release-8.0-4.el${VERSION_ID}.remi.noarch.rpm
+      $(_sudo) rpm -Uvh remi-release-8.0-4.el${VERSION_ID}.remi.noarch.rpm
+      $(_sudo) dnf --enablerepo=remi install libtidy -y
+    fi
 
 _libzip(){
 
@@ -150,13 +162,19 @@ _libzip(){
 # checking for libzip... configure: error: system libzip must be upgraded to version >= 0.11
 #
 
+    if [ ${VERSION_ID} -ge 8 ];then
+      $(_sudo) dnf --repo AppStream install -y libzip libzip-devel
+
+      return
+    fi
+
     cd /tmp
 
-    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
+    $(_sudo) wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-devel-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
-    sudo wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
+    $(_sudo) wget -N http://packages.psychotic.ninja/7/plus/x86_64/RPMS/libzip-0.11.2-6.el${VERSION_ID}.psychotic.x86_64.rpm
 
-    sudo rpm -Uvh libzip*rpm ; cd -
+    $(_sudo) rpm -Uvh libzip*rpm ; cd -
 }
 
     test ${PHP_NUM} -ge '72' && _libzip
@@ -167,8 +185,8 @@ libxml2 \
 openssl \
 libsqlite3x \
 libxslt \
-libcurl \
-libpqxx \
+$(if [ ${VERSION_ID} -ge 8 ];then echo libcurl-minimal; else echo libcurl ;fi ) \
+$(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo libpqxx ;fi ) \
 libmemcached \
 cyrus-sasl \
 freetype \
@@ -181,7 +199,7 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo "libsodium"; \
    fi ) \
 libyaml \
-libtidy \
+$(if [ ${VERSION_ID} -ge 8 ];then true; else echo libtidy ;fi ) \
 xmlrpc-c \
 bzip2 \
 libexif \
@@ -198,7 +216,7 @@ libffi \
 oniguruma"
 
 
-sudo yum install -y ${PHP_DEP} rpm-build > /dev/null
+$(_sudo) yum install -y ${PHP_DEP} rpm-build > /dev/null
 }
 
 _install_php_build_dep(){
@@ -210,7 +228,7 @@ _install_php_build_dep(){
                    \
                    re2c \
                    $( test ${CC:-gcc} = 'gcc'  && echo "gcc gcc-c++ libgcc" ) \
-                   $( test $CC = 'clang'       && echo "clang" ) \
+                   $( test "$CC" = 'clang'     && echo "clang" ) \
                    libedit-devel \
                    zlib-devel \
                    libxml2-devel \
@@ -218,7 +236,7 @@ _install_php_build_dep(){
                    libsqlite3x-devel \
                    libxslt-devel \
                    libcurl-devel \
-                   libpqxx-devel \
+                   $(if [ ${VERSION_ID} -ge 8 ];then echo libpq-devel; else echo libpqxx-devel ;fi ) \
                    libmemcached-devel \
                    cyrus-sasl-devel \
                    freetype-devel \
@@ -236,7 +254,7 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-devel \
-                   libtidy-devel \
+                   $(if [ ${VERSION_ID} -ge 8 ];then true; else echo libtidy-devel ;fi ) \
                    xmlrpc-c-devel \
                    bzip2-devel \
                    libexif-devel \
@@ -256,10 +274,17 @@ _install_php_build_dep(){
 
 for soft in ${DEP_SOFTS}
 do
-    echo $soft | sudo tee -a ${PHP_INSTALL_LOG}
+    echo $soft | $(_sudo) tee -a ${PHP_INSTALL_LOG}
 done
 
-sudo yum install -y ${DEP_SOFTS} > /dev/null
+if [ $VERSION_ID -ge 8 ];then
+  $(_sudo) dnf --enablerepo=remi install libtidy-devel -y
+
+  $(_sudo) dnf install -y dnf-utils
+  $(_sudo) yum-config-manager --enable PowerTools
+fi
+
+$(_sudo) yum install -y ${DEP_SOFTS} > /dev/null
 }
 
 ################################################################################
@@ -267,9 +292,9 @@ sudo yum install -y ${DEP_SOFTS} > /dev/null
 _test(){
     ${PHP_PREFIX}/bin/php -v
 
-    sudo ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
+    $(_sudo) ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
 
-    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || echo ; sudo rm -rf /usr/local/sbin/php
+    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || echo ; $(_sudo) rm -rf /usr/local/sbin/php
 
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
@@ -292,14 +317,14 @@ _builder(){
 # https://blog.csdn.net/alexdream/article/details/7408453
 #
 
-     sudo ln -sf /usr/lib64/libc-client.so.2007 /usr/lib/libc-client.so
+     $(_sudo) ln -sf /usr/lib64/libc-client.so.2007 /usr/lib/libc-client.so
 
 #
 # configure: error: Cannot find ldap libraries in /usr/lib.
 #
 # @link https://blog.csdn.net/ei__nino/article/details/8598490
 
-     sudo cp -frp /usr/lib64/libldap* /usr/lib/
+     $(_sudo) cp -frp /usr/lib64/libldap* /usr/lib/
 
 # 4. configure
 
@@ -311,7 +336,7 @@ _builder(){
         \
         --with-config-file-path=${PHP_INI_DIR} \
         --with-config-file-scan-dir=${PHP_INI_DIR}/conf.d \
-        --disable-cgi --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
+        --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
         \
         --with-curl \
         --with-gettext \
@@ -394,13 +419,15 @@ _builder(){
         --enable-shmop=shared \
         "
 
-    for a in ${CONFIGURE} ; do echo $a | sudo tee -a ${PHP_INSTALL_LOG}; done
+    for a in ${CONFIGURE} ; do echo $a | $(_sudo) tee -a ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
 
     export CFLAGS="$PHP_CFLAGS"
     export CPPFLAGS="$PHP_CPPFLAGS"
     export LDFLAGS="$PHP_LDFLAGS"
+
+    if ! [ -f configure ];then ./buildconf --force; fi
 
     ./configure ${CONFIGURE}
 
@@ -412,19 +439,19 @@ _builder(){
 
 # 6. make install
 
-    sudo rm -rf ${PHP_PREFIX} || echo
+    $(_sudo) rm -rf ${PHP_PREFIX} || echo
 
-    if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
+    if [ -d ${PHP_INI_DIR} ];then $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
-    sudo make install
+    $(_sudo) make install
 
 ################################################################################
 
-    sudo mkdir -p ${PHP_INI_DIR}/conf.d
+    $(_sudo) mkdir -p ${PHP_INI_DIR}/conf.d
 
-    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
-    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
-    sudo cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
+    $(_sudo) cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini
+    $(_sudo) cp /usr/local/src/php-${PHP_VERSION}/php.ini-development ${PHP_INI_DIR}/php.ini-development
+    $(_sudo) cp /usr/local/src/php-${PHP_VERSION}/php.ini-production  ${PHP_INI_DIR}/php.ini-production
 
 
 # php5 not have php-fpm.d
@@ -433,17 +460,17 @@ _builder(){
 
     if ! [ -d php-fpm.d ]; then
     # php5
-        sudo mkdir php-fpm.d
-        sudo cp php-fpm.conf.default php-fpm.d/www.conf
+        $(_sudo) mkdir php-fpm.d
+        $(_sudo) cp php-fpm.conf.default php-fpm.d/www.conf
 
     { \
         echo '[global]'; \
         echo "include=${PHP_INI_DIR}/php-fpm.d/*.conf"; \
-    } | sudo tee php-fpm.conf
+    } | $(_sudo) tee php-fpm.conf
 
     else
-        sudo cp php-fpm.d/www.conf.default php-fpm.d/www.conf
-        sudo cp php-fpm.conf.default php-fpm.conf
+        $(_sudo) cp php-fpm.d/www.conf.default php-fpm.d/www.conf
+        $(_sudo) cp php-fpm.conf.default php-fpm.conf
     fi
 
 echo "
@@ -480,19 +507,44 @@ listen.group = nginx
 listen.mode = 0660
 env[APP_ENV] = wsl
 
-" | sudo tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
+" | $(_sudo) tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
 
 }
 
+_install_pecl_ext_by_pickle(){
+  export PATH=${PHP_PREFIX}/bin:$PATH
+  $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+
+  if [ ${PHP_NUM} -ge "80" ];then set +e; fi
+
+  pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install xdebug --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install yaml --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install swoole --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install mongodb --defaults -n --php=${PHP_PREFIX}/bin/php
+
+  $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+
+  set -e
+}
+
 _install_pecl_ext(){
+    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true
+
+    command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
+
+    if [ $pecl -ge 0 ];then
+      _install_pecl_ext_by_pickle
+      return
+    fi
 
     #
     # https://github.com/docker-library/php/issues/443
     #
 
-    sudo ${PHP_PREFIX}/bin/pecl update-channels
-
-    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+    $(_sudo) ${PHP_PREFIX}/bin/pecl update-channels
 
     PHP_EXTENSION="igbinary \
                redis \
@@ -504,16 +556,16 @@ _install_pecl_ext(){
 
     for extension in ${PHP_EXTENSION}
     do
-        echo $extension | sudo tee -a ${PHP_INSTALL_LOG}
-        sudo ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
+        echo $extension | $(_sudo) tee -a ${PHP_INSTALL_LOG}
+        $(_sudo) ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
     done
 }
 
 _php_ext_enable(){
 
-echo "date.timezone=${PHP_TIMEZONE:-PRC}" | sudo tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
-echo "error_log=/var/log/php${PHP_NUM}.error.log" | sudo tee ${PHP_INI_DIR}/conf.d/error_log.ini
-echo "session.save_path = \"/tmp\"" | sudo tee ${PHP_INI_DIR}/conf.d/session.ini
+echo "date.timezone=${PHP_TIMEZONE:-PRC}" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
+echo "error_log=/var/log/php${PHP_NUM}.error.log" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/error_log.ini
+echo "session.save_path = \"/tmp\"" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/session.ini
 
 wsl-php-ext-enable.sh pdo_pgsql \
                       xsl \
@@ -543,33 +595,34 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       opcache \
                       mysqli \
                       pgsql \
+                      gd \
                       $( test $PHP_NUM -ge "74" && echo ffi )
 
 # config opcache
 
-# echo 'opcache.enable_cli=1' | sudo tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
-echo 'opcache.file_cache=/tmp' | sudo tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+# echo 'opcache.enable_cli=1' | $(_sudo) tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
+echo 'opcache.file_cache=/tmp' | $(_sudo) tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 }
 
 
 _create_log_file(){
     cd /var/log
 
-    if ! [ -f php${PHP_NUM}-fpm.error.log ];then sudo touch php${PHP_NUM}-fpm.error.log ; fi
-    if ! [ -f php${PHP_NUM}-fpm.access.log ];then sudo touch php${PHP_NUM}-fpm.access.log ; fi
-    if ! [ -f php${PHP_NUM}-fpm.slow.log ];then sudo touch php${PHP_NUM}-fpm.slow.log; fi
+    if ! [ -f php${PHP_NUM}-fpm.error.log ];then $(_sudo) touch php${PHP_NUM}-fpm.error.log ; fi
+    if ! [ -f php${PHP_NUM}-fpm.access.log ];then $(_sudo) touch php${PHP_NUM}-fpm.access.log ; fi
+    if ! [ -f php${PHP_NUM}-fpm.slow.log ];then $(_sudo) touch php${PHP_NUM}-fpm.slow.log; fi
 
-    sudo chmod 777 php${PHP_NUM}-*
+    $(_sudo) chmod 777 php${PHP_NUM}-*
 }
 
 _pickle(){
   # composer global require friendsofphp/pickle
-  sudo curl -sfL -o /usr/local/bin/pickle \
-    https://github.com/khs1994-php/pickle/releases/download/v0.4.0-2019-02-14/pickle.phar
+  $(_sudo) curl -sfL -o /usr/local/bin/pickle \
+    https://github.com/khs1994-php/pickle/releases/download/v0.4.1-2019-10-07/pickle.phar
 }
 
 _composer(){
-  sudo curl -sfL -o /usr/local/bin/composer \
+  $(_sudo) curl -sfL -o /usr/local/bin/composer \
     https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
    # curl -sfL -o /tmp/installer.php \
    #     https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer
@@ -582,41 +635,41 @@ _composer(){
    #          echo 'Integrity check failed, installer is either corrupt or worse.' . PHP_EOL; \
    #          exit(1); \
    #      }" \
-   #  && sudo ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
+   #  && $(_sudo) ${PHP_PREFIX}/bin/php /tmp/installer.php --no-ansi --install-dir=${PHP_PREFIX}/bin --filename=composer --version=${COMPOSER_VERSION}
 }
 
 ################################################################################
 
 _write_version_to_file(){
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-${PHP_PREFIX}/bin/php -v | sudo tee -a ${PHP_PREFIX}/README.md
+${PHP_PREFIX}/bin/php -v | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-${PHP_PREFIX}/bin/php -i | grep .ini | sudo tee -a ${PHP_PREFIX}/README.md
+${PHP_PREFIX}/bin/php -i | grep .ini | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-${PHP_PREFIX}/sbin/php-fpm -v | sudo tee -a ${PHP_PREFIX}/README.md
+${PHP_PREFIX}/sbin/php-fpm -v | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`bash" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`bash" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-cat ${PHP_INSTALL_LOG} | sudo tee -a ${PHP_PREFIX}/README.md
+cat ${PHP_INSTALL_LOG} | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
-echo "\`\`\`" | sudo tee -a ${PHP_PREFIX}/README.md
+echo "\`\`\`" | $(_sudo) tee -a ${PHP_PREFIX}/README.md
 
 set +x
 
 for ext in `ls /usr/local/src/php-${PHP_VERSION}/ext`; \
-do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | sudo tee -a ${PHP_PREFIX}/README.md ; done
+do echo '*' $( ${PHP_PREFIX}/bin/php -r "if(extension_loaded('$ext')){echo '[x] $ext';}else{echo '[ ] $ext';}" ) | $(_sudo) tee -a ${PHP_PREFIX}/README.md ; done
 
 set -x
 
@@ -627,13 +680,13 @@ cat ${PHP_PREFIX}/README.md
 ################################################################################
 
 _tar(){
-  cd /usr/local ; sudo tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  cd /usr/local ; $(_sudo) tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
 
-  cd etc ; sudo tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+  cd etc ; $(_sudo) tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
 
-  sudo mv ${PHP_PREFIX}.tar.gz /
+  $(_sudo) mv ${PHP_PREFIX}.tar.gz /
 
-  sudo mv ${PHP_INI_DIR}-etc.tar.gz /
+  $(_sudo) mv ${PHP_INI_DIR}-etc.tar.gz /
 }
 
 ################################################################################
@@ -642,7 +695,7 @@ _rpm(){
 
 cd /tmp
 
-echo "Name:       khs1994-wsl-php
+echo "Name:       khs1994-wsl-php${PHP_NUM}
 Version:    ${PHP_VERSION}
 Release:    1.el${VERSION_ID}.centos
 Summary:    PHP scripting language for creating dynamic web sites
@@ -664,12 +717,12 @@ The php package contains the module (often referred to as mod_php)
 which adds support for the PHP language to Apache HTTP Server.
 
 %pre
-if [ -d ${PHP_INI_DIR} ];then sudo mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup; fi
+if [ -d ${PHP_INI_DIR} ];then mv ${PHP_INI_DIR} ${PHP_INI_DIR}.\$( date +%s ).backup; fi
 echo -e \"----------------------------------------------------------------------
 \n
 \n
-Thanks for using khs1994-wsl-php !\n
-Please find the official documentation for khs1994-wsl-php here:
+Thanks for using khs1994-wsl-php${PHP_NUM} !\n
+Please find the official documentation for khs1994-wsl-php${PHP_NUM} here:
 * https://github.com/khs1994-docker/lnmp/tree/master/wsl\n
 Meet issue? please see:
 * https://github.com/khs1994-docker/lnmp/issues
@@ -678,7 +731,7 @@ Meet issue? please see:
 ----------------------------------------------------------------------
 \n\n\"
 %post
-for file in \$( ls ${PHP_PREFIX}/bin ); do sudo ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
+for file in \$( ls ${PHP_PREFIX}/bin ); do ln -sf ${PHP_PREFIX}/bin/\$file /usr/local/bin/ ; done
 ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin/
 echo > /dev/null
 cd /var/log
@@ -705,25 +758,25 @@ ${PHP_PREFIX}
 ${PHP_INI_DIR}
 %changelog
 %clean
-RPM_NAME=khs1994-wsl-php-%{version}-%{release}.x86_64.rpm
+RPM_NAME=khs1994-wsl-php${PHP_NUM}-%{version}-%{release}.x86_64.rpm
 cp -a %{buildroot}/../../RPMS/x86_64/\${RPM_NAME} ~
-" > khs1994-wsl-php.spec
+" > khs1994-wsl-php${PHP_NUM}.spec
 
-cat /tmp/khs1994-wsl-php.spec
+cat /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-rpmbuild -bb /tmp/khs1994-wsl-php.spec
+rpmbuild -bb /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
+RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
 
-echo "$ sudo yum install -y ${RPM_NAME}"
+echo "\$ yum install -y ${RPM_NAME}"
 
 cp ~/${RPM_NAME} /
 
-sudo rm -rf $PHP_PREFIX
+$(_sudo) rm -rf $PHP_PREFIX
 
-sudo rm -rf $PHP_INI_DIR
+$(_sudo) rm -rf $PHP_INI_DIR
 
-sudo yum install -y /${RPM_NAME}
+$(_sudo) yum install -y /${RPM_NAME}
 
 # test
 
@@ -736,11 +789,11 @@ if [ -z "$1" ];then _print_help_info ; else PHP_VERSION="$1" ; fi
 
 set -ex
 
-command -v wget || sudo yum install -y wget
+command -v wget || $(_sudo) yum install -y wget
 
 mkdir -p /tmp/php-builder || echo
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.3.9 ; fi
+if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.3.10 ; fi
 
 _get_phpnum $PHP_VERSION
 
@@ -760,14 +813,14 @@ export PHP_INI_DIR=/usr/local/etc/php${PHP_NUM}
 # VERSION_ID=27
 #
 
-sudo yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
+$(_sudo) yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
-sudo yum install -y curl
+$(_sudo) yum install -y curl
 
 command -v pickle || _pickle
 command -v composer || _composer
 
-sudo chmod +x /usr/local/bin/pickle /usr/local/bin/composer
+$(_sudo) chmod +x /usr/local/bin/pickle /usr/local/bin/composer
 
 if [ "$2" = 'enable-ext' ];then
    _test ; \
@@ -787,7 +840,7 @@ done
 
 test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test ; \
   _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
-    ${PHP_PREFIX}/bin/php-config | sudo tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1 \
+    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
     ; _write_version_to_file )
 
 for command in "$@"

@@ -165,7 +165,11 @@ services:
          syslog-address: "tcp://192.168.0.42:123"
          max-size: "200k"
          max-file: "10"
-    # network_mode: "host" # bridge \ none \ service:service name \ container: container name # no Swarm mode
+    # network_mode: "host" # no Swarm mode
+    # bridge
+    # none
+    # service:service name
+    # container:container name
     networks:
        app_net:
          aliases:

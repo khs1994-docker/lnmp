@@ -11,3 +11,5 @@
 !unit-proxy.config
 !unit-laravel.config
 !unit-laravel.json
+!demo.config
+!demo.config/*.config

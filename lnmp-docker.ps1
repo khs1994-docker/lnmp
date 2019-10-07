@@ -176,6 +176,12 @@ Function check_docker_version(){
     return
   }
 
+  if(!(_command docker)){
+    printError "Docker not install"
+
+    return
+  } 
+
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
 
   if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
@@ -184,7 +190,9 @@ Function check_docker_version(){
 }
 
 Function init(){
-  printInfo $(docker-compose --version)
+  if(_command docker-compose){
+    printInfo $(docker-compose --version)
+  }
   logs
   # git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
@@ -350,8 +358,19 @@ Function _update(){
     printError "Git not install, not support update"
     return
   }
+
+  if(! $(git remote get-url origin)){
+    printError "git remote origin not set, setting ..."
+    # git remote add origin git@github.com:khs1994-docker/lnmp
+    git remote add origin https://github.com/khs1994-docker/lnmp
+  }
+
   # git remote rm origin
-  # git remote add origin git@github.com:khs1994-docker/lnmp
+  if($(git status).split("")[-1] -eq 'clean' -eq $False){
+    printError "Somefile changed, please commit or stash first"
+    exit 1
+  }
+
   git fetch --depth=1 origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
   git reset --hard origin/${BRANCH}
@@ -734,7 +753,7 @@ switch -regex ($command){
       ${LNMP_SERVICES}
     }
 
-    up {
+    "up$" {
       init
 
       if($other){
@@ -1012,49 +1031,59 @@ switch -regex ($command){
       $docker_version=$(docker --version)
       $compose_version=$(docker-compose --version)
       $git_commit=$(git log -1 --pretty=%H)
-      Write-Output "
-<details>
-
+      Write-Output "<details>
+%0A
 <summary>OS Environment Info</summary>
-
-<code>$os_info</code>
-
-<code>$docker_version</code>
-
-<code>$compose_version</code>
-
-* https://github.com/khs1994-docker/lnmp/commit/$git_commit
-
+%0A%0A
+<code>OS: $os_info</code>
+%0A%0A
+<code>Docker: $docker_version</code>
+%0A%0A
+<code>Docker Compose: $compose_version</code>
+%0A%0A
+<code>LNMP COMMIT: https://github.com/khs1994-docker/lnmp/commit/$git_commit</code>
+%0A%0A
 </details>
-
+%0A%0A
 <details>
-
+%0A%0A
 <summary>Console output</summary>
-
+%0A%0A
 <!--Don't Edit it-->
+%0A
 <!--Do not manually edit the above, pleae paste the terminal output to the following-->
-
+%0A%0A
 <pre>
 
-
+%0A
+%0A
+%0A
+%0A
+%0A
+%0A
+%0A
+%0A
 
 </pre>
-
+%0A%0A
 </details>
-
-## My Issue is
-
+%0A%0A
+<h2>My Issue is</h2>
+%0A
 <!--Describe your problem here-->
 
+%0A%0A
 XXX
-
+%0A%0A
 XXX
+%0A%0A
 
 <!--Be sure to click < Preview > Tab before submitting questions-->
 " | Out-File bug.md -encoding utf8
 
-    Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
-    }
+    # Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
+    Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues/new?body=$(cat bug.md)
+    }    
 
     k8s {
       clear

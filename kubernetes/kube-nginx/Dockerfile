@@ -1,6 +1,6 @@
 FROM alpine:3.10
 
-ENV NGINX_VERSION=1.17.3
+ENV NGINX_VERSION=1.17.4
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .build_deps \

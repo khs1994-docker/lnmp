@@ -5,7 +5,6 @@ image: Windows Server 2019
 branches:
   only:
   # - windows
-  - 18.09
   - 19.03
   - master
   - /v*/

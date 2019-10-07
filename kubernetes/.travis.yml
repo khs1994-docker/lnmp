@@ -17,6 +17,11 @@ cache:
     - /home/travis/.lnmp/caches
 
 before_install:
+  # remove some apt source
+  - cat /etc/apt/sources.list
+  - ls /etc/apt/sources.list.d || true
+  - sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
+
   - sestatus || true
   - ls /home/travis/.lnmp/caches
   - echo $PATH
@@ -173,7 +178,7 @@ script:
   # test dns
   - kubectl describe pod coredns -n kube-system
   - kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-  - kubectl run nginx --image nginx:1.17.3-alpine
+  - kubectl run nginx --image nginx:1.17.4-alpine
   - sleep 20
   - kubectl get all
   - kubectl get pod
@@ -209,6 +214,9 @@ matrix:
   include:
     - os: linux
       dist: bionic
+      env: CI_KUBERNETES_VERSION=1.17.0-alpha.1 LNMP_K8S_GET="--url" LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: bionic
       env: CI_KUBERNETES_VERSION=1.16.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
@@ -217,11 +225,11 @@ matrix:
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.16.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.14.2
-    - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.15.2
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.14.2
   fast_finish: true
   # allow_failures:
   # - env: CI_KUBERNETES_VERSION=1.15.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"

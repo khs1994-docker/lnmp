@@ -25,6 +25,8 @@ $ npm login | publish | search --registry http://registry.npmjs.org
 * mocha
 * nyc
 
+* rimraf
+
 ## 命令
 
 * npx

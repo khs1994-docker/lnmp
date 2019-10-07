@@ -22,9 +22,6 @@ bash lnmp-docker
 rm -rf %{buildroot}
 git clone -b v%{version} --depth=1 --recursive https://github.com/khs1994-docker/lnmp.git %{buildroot}/data/lnmp
 rm -rf %{buildroot}/data/lnmp/.git
-rm -rf %{buildroot}/data/lnmp/config/nginx/.git
-rm -rf %{buildroot}/data/lnmp/config/httpd/.git
-rm -rf %{buildroot}/data/lnmp/app/demo/.git
 %files
 %defattr (-,root,root,-)
 /data/lnmp

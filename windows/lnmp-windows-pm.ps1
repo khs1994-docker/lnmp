@@ -1,5 +1,5 @@
 #
-# $ set-ExecutionPolicy RemoteSigned
+# $ set-ExecutionPolicy Bypass
 #
 
 # 大于 -gt (greater than)

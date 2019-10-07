@@ -32,7 +32,12 @@
 
 即：本项目 `v18.09.0` 与 **Docker 桌面版** `v18.09` 和 **PHP** `7.2.13` 对应。
 
-发布流程：PHP 发布新版本时，打 `tag` ，更新 PHP Dockerfile，commit 信息包含 "[sync php]"，推送到 `YY.MM-pre` 分支，CI 构建 PHP 镜像，构建完成之后合并到 `YY.MM` 分支，发布 `rc` 版本。
+发布流程：
+* PHP 发布新版本时(PHP 7.3.10)，打 `tag`，归档当前项目(PHP 7.3.9)，发布正式版本
+* 更新 PHP Dockerfile(PHP 7.3.10)，推送到 `YY.MM-pre` 分支，CI 自动同步 PHP Dockerfile 到 `khs1994-docker/php`
+* `khs1994-docker/php` 打 `tag`(PHP 7.3.10)
+* CI 构建 PHP 镜像(PHP 7.3.10)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.10)
+* 后续根据开发流程，发布 `beta` `rc` 版本(PHP 7.3.10)
 
 ## 特色
 

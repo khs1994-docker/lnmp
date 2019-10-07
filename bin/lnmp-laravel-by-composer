@@ -41,7 +41,6 @@ docker run -i ${tty} --rm \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --env-file $ScriptRoot/../config/composer/.env \
-  --entrypoint /docker-entrypoint.composer.sh \
   --user ${LNMP_USER:-root:root} \
   ${DOCKER_IMAGE}:${TAG} \
   composer create-project --prefer-dist laravel/laravel=${3:-6.0}.* "$2"
@@ -53,10 +52,14 @@ fi
 
 LARAVEL_PATH="$2"
 
+_sudo(){
+  command -v sudo > /dev/null && echo "sudo" || true
+}
+
 if [[ ${OS} = 'Linux' || ${OS} = 'Darwin' ]];then
   echo -e "\n\033[32m==> INFO\033[0m  change folder own and group ..."
-  sudo chmod -R 765 ${LARAVEL_PATH}
-  sudo chown -R `id -u`:`id -g` ${LARAVEL_PATH}
+  $(_sudo) chmod -R 765 ${LARAVEL_PATH}
+  $(_sudo) chown -R `id -u`:`id -g` ${LARAVEL_PATH}
   chmod -R 777 ${LARAVEL_PATH}/storage
 fi
 

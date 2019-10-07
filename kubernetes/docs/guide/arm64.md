@@ -1,11 +1,25 @@
-# arm64
+# [arm64](https://github.com/khs1994/pi64)
 
 ## 内核启动参数设置
 
+默认参数下的警告信息:
+
+```bash
+WARNING: No memory limit support
+WARNING: No swap limit support
+WARNING: No kernel memory limit support
+WARNING: No kernel memory TCP limit support
+WARNING: No oom kill disable support
+```
+
 ```bash
 $ sudo vi /boot/cmdline.txt
+```
 
-dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 cgroup_enable=cpuset cgroup_enable=memory swapaccount=1 elevator=deadline fsck.repair=yes rootwait console=ttyAMA0,115200 kgdboc=ttyAMA0,115200
+增加以下参数:
+
+```bash
+cgroup_enable=memory cgroup_enable=cpuset
 ```
 
 ### 原始数据

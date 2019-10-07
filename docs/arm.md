@@ -24,7 +24,7 @@ LNMP_SERVICES="nginx mariadb php7 redis"
 |镜像|系统|架构|
 |:--|:--|:--|
 |[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/)|[官方系统 Raspbian (基于 Debian 9)](https://www.raspberrypi.org/downloads/raspbian/)|arm32|
-|[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[pi 64](https://github.com/bamarni/pi64)|arm64|
+|[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[pi 64](https://github.com/khs1994/pi64)|arm64|
 |[armhf Docker image](https://hub.docker.com/u/armhf/)    |已经废弃，已经转移到了上述两个项目中|-|
 
 ## 镜像构建
@@ -35,3 +35,7 @@ LNMP_SERVICES="nginx mariadb php7 redis"
 
 * [树莓派3 安装 Docker](https://blog.khs1994.com/raspberry-pi3/docker.html)
 * https://github.com/docker-library/official-images#architectures-other-than-amd64
+
+## ARM64
+
+由于 [bamarni/pi64](https://github.com/bamarni/pi64) 不再更新,我 [fork](https://github.com/khs1994/pi64) 了此项目并持续更新.
