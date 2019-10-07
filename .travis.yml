@@ -261,6 +261,22 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
+    - stage: wsl-php-builder-rhel8-74
+      name: wsl-php-builder-rhel8-74
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
+        - . .env
+        - export RPM_NAME=khs1994-wsl-php-${PHP_VERSION_74}-1.el8.centos.x86_64.rpm
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+
     # clusterkit
 
     # - stage: memcached
@@ -356,6 +372,8 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel8-73
     if: tag =~ /^(v19)/
+  # - name: wsl-php-builder-rhel8-74
+  #   if: tag =~ /^(v19)/
 
 # branches:
 #   only:

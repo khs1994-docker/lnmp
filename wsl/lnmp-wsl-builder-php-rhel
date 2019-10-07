@@ -509,6 +509,21 @@ env[APP_ENV] = wsl
 
 }
 
+_install_pecl_ext_by_pickle(){
+  export PATH=${PHP_PREFIX}/bin:$PATH
+  $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+
+  pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install xdebug --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install yaml --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install swoole --defaults -n --php=${PHP_PREFIX}/bin/php
+  pickle install mongodb --defaults -n --php=${PHP_PREFIX}/bin/php
+
+  $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+}
+
 _install_pecl_ext(){
 
     #
@@ -518,6 +533,13 @@ _install_pecl_ext(){
     $(_sudo) ${PHP_PREFIX}/bin/pecl update-channels
 
     ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || echo > /dev/null 2>&1
+
+    command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
+
+    if [ $pecl -ge 0 ];then
+      _install_pecl_ext_by_pickle
+      return
+    fi
 
     PHP_EXTENSION="igbinary \
                redis \
@@ -590,7 +612,7 @@ _create_log_file(){
 _pickle(){
   # composer global require friendsofphp/pickle
   $(_sudo) curl -sfL -o /usr/local/bin/pickle \
-    https://github.com/khs1994-php/pickle/releases/download/v0.4.0-2019-02-14/pickle.phar
+    https://github.com/khs1994-php/pickle/releases/download/v0.4.1-2019-10-07/pickle.phar
 }
 
 _composer(){

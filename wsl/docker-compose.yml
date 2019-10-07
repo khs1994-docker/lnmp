@@ -29,9 +29,9 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_74:-7.4}
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.0}
         - OS_TYPE=debian:buster-slim
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_74:-7.4}-debian-buster_amd64
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_74:-7.4.0}-debian-buster_amd64
 
   wsl-php-builder-ubuntu1804-72:
     build:
@@ -74,4 +74,13 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_73:-7.3.10}
         - OS_TYPE=centos:8
-    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.10}-centos-7_amd64
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_73:-7.3.10}-centos-8_amd64
+
+  wsl-php-builder-rhel8-74:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.0}
+        - OS_TYPE=centos:8
+    image: khs1994/wsl:khs1994-wsl-php_${PHP_VERSION_74:-7.4.0}-centos-8_amd64
