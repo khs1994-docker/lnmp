@@ -228,7 +228,7 @@ _install_php_build_dep(){
                    \
                    re2c \
                    $( test ${CC:-gcc} = 'gcc'  && echo "gcc gcc-c++ libgcc" ) \
-                   $( test $CC = 'clang'       && echo "clang" ) \
+                   $( test "$CC" = 'clang'     && echo "clang" ) \
                    libedit-devel \
                    zlib-devel \
                    libxml2-devel \
@@ -515,6 +515,8 @@ _install_pecl_ext_by_pickle(){
   export PATH=${PHP_PREFIX}/bin:$PATH
   $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 
+  if [ ${PHP_NUM} -ge "80" ];then set +e; fi
+
   pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
@@ -524,6 +526,8 @@ _install_pecl_ext_by_pickle(){
   pickle install mongodb --defaults -n --php=${PHP_PREFIX}/bin/php
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+
+  set -e
 }
 
 _install_pecl_ext(){
@@ -591,6 +595,7 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       opcache \
                       mysqli \
                       pgsql \
+                      gd \
                       $( test $PHP_NUM -ge "74" && echo ffi )
 
 # config opcache

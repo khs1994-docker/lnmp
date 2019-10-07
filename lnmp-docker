@@ -590,9 +590,7 @@ demo() {
     # 检查网络连接
     # network
     # echo ;print_info "Update Git Submodule"
-    # set +e
     # git submodule update --init --recursive
-    # set -e
     true
   fi
 }
@@ -666,9 +664,7 @@ update(){
   print_info "Branch is ${BRANCH}"
   git reset --hard origin/${BRANCH}
   # print_info "Update Git Submodule"
-  # set +e
   # git submodule update --init --recursive
-  # set -e
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker
 }
 

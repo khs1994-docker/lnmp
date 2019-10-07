@@ -312,16 +312,15 @@ $( $(_sudo) apt install -y libonig5 > /dev/null 2>&1 && echo libonig5) \
 ################################################################################
 
 _install_php_build_dep(){
-    set +e
     export DEP_SOFTS="autoconf \
                    curl \
                    lsb-release \
                    dpkg-dev \
                    file \
                    $( test ${CC:-gcc} = 'gcc'  && echo "gcc g++ libc6-dev" ) \
-                   $( test $CC = 'clang'       && echo "clang" ) \
-                   $( test $host = 'aarch64-linux-gnu'    && echo "gcc-aarch64-linux-gnu g++-aarch64-linux-gnu" ) \
-                   $( test $host = 'arm-linux-gnueabihf'  && echo "gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf" ) \
+                   $( test "$CC" = 'clang'     && echo "clang" ) \
+                   $( test "$host" = 'aarch64-linux-gnu'    && echo "gcc-aarch64-linux-gnu g++-aarch64-linux-gnu" ) \
+                   $( test "$host" = 'arm-linux-gnueabihf'  && echo "gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf" ) \
                    make \
                    pkg-config \
                    re2c \
@@ -365,7 +364,7 @@ _install_php_build_dep(){
                    libffi-dev \
                    libonig-dev \
                    "
-    set -e
+
     for soft in ${DEP_SOFTS} ; do echo $soft | tee -a ${PHP_INSTALL_LOG} ; done
 
     $(_sudo) apt install -y --no-install-recommends ${DEP_SOFTS} > /dev/null
@@ -436,7 +435,6 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
 ################################################################################
 
 # configure
-    set +e
     CONFIGURE="--prefix=${PHP_PREFIX} \
       --sysconfdir=${PHP_INI_DIR} \
       \
@@ -533,7 +531,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
       $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
                                                      --with-zlib-dir=/opt/${host}/zlib" ) \
       "
-    set -e
+
     for a in ${CONFIGURE}; do echo $a | tee -a ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
@@ -641,6 +639,8 @@ _install_pecl_ext_by_pickle(){
   export PATH=${PHP_PREFIX}/bin:$PATH
   $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 
+  if [ ${PHP_NUM} -ge "80" ];then set +e; fi
+
   pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
@@ -650,6 +650,8 @@ _install_pecl_ext_by_pickle(){
   pickle install mongodb --defaults -n --php=${PHP_PREFIX}/bin/php
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+
+  set -e
 }
 
 _install_pecl_ext(){
@@ -685,7 +687,7 @@ _php_ext_enable(){
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/error_log.ini
 echo "session.save_path = \"/tmp\"" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/session.ini
-set +e
+
 exts=" pdo_pgsql \
                       xsl \
                       pcntl \
@@ -713,8 +715,9 @@ exts=" pdo_pgsql \
                       opcache \
                       mysqli \
                       ffi \
-                      pgsql "
-set -e
+                      pgsql \
+                      gd "
+
 for ext in $exts
 do
   wsl-php-ext-enable.sh $ext || echo "$ext install error" | tee -a ${PHP_INSTALL_LOG}
