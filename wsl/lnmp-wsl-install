@@ -161,7 +161,7 @@ if [[ $PHP_NUM = '72' && "$ID" = 'debian' ]];then
   TAR_IMAGE=registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
 fi
 
-if [ "$ID" = 'centos' ];then
+if [ "$ID" = 'centos' -o "$ID" = 'fedora' ];then
   # rhel
   TAR_IMAGE=khs1994/wsl:khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 fi

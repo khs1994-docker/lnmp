@@ -1,5 +1,10 @@
 # podman
 
+## 配置文件
+
+* `/etc/containers/registries.conf`
+* `/etc/containers/storage.conf`
+
 * https://github.com/containers/image/tree/master/docs
 * https://github.com/containers/libpod/tree/master/docs
 

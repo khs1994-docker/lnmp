@@ -367,7 +367,10 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
   && ln -sf /dev/stderr /var/log/php-fpm/error.log \
   && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
   && chmod -R 777 /var/log/php-fpm \
-  && rm -rf /usr/src/php
+  && rm -rf /usr/src/php \
+  && curl -fsSL -o /usr/local/bin/pickle \
+       https://github.com/khs1994-php/pickle/releases/download/v0.4.1-2019-10-07/pickle.phar \
+  && chmod +x /usr/local/bin/pickle
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
@@ -400,13 +403,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && cd /tmp \
       && for extension in $PECL_EXTENSION;do \
            EXT_REAL_NAME=$(echo ${extension} | cut -d '-' -f 1) \
-           && (curl -fsSL https://pecl.php.net/get/${EXT_REAL_NAME} \
-                | tar -zxvf - \
-           && cd /tmp/${EXT_REAL_NAME}* \
-           && phpize \
-           && ./configure \
-           && make -j "$(nproc)" \
-           && make install \
+           && ( pickle install $extension -n --defaults \
            && rm -rf /tmp/${EXT_REAL_NAME}* \
            && docker-php-ext-enable ${EXT_REAL_NAME}) || echo "pecl ${extension} install error" \
            && rm -rf /usr/local/include/php/ext/${EXT_REAL_NAME} \

@@ -31,18 +31,12 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                                       openssl-dev \
       && export PATH=$PATH:/opt/bin \
       && export extension_name=swoole \
-      && cd /tmp \
-      && curl -fsSL https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
-           | tar -zxvf - \
-      && cd swoole-src-${SWOOLE_VERSION} \
-      && phpize \
-      && ./configure \
-           --enable-sockets \
-           --enable-openssl \
-           --enable-http2 \
-           --enable-mysqlnd \
-      && make -j "$(nproc)" \
-      && make install \
+      && echo "--enable-sockets --enable-openssl --enable-http2 --enable-mysqlnd" \
+           > /tmp/${extension_name}.configure.options \
+      && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
+           $(test -f /tmp/${extension_name}.configure.options \
+                 && echo --with-configure-options=/tmp/${extension_name}.configure.options) \
+           -n \
       && docker-php-ext-enable ${extension_name} || echo "pecl ${extension_name} install error" \
       && rm -rf /usr/local/lib/php/doc/${extension_name} \
       && rm -rf /usr/local/lib/php/test/${extension_name} \

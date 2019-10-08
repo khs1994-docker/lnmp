@@ -61,6 +61,7 @@ module.exports = {
         'windows',
         'arm64',
         'virtualbox',
+        'podman',
       ],
       '/example/': [
         'nginx',
