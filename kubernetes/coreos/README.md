@@ -2,8 +2,6 @@
 
 ## Overview
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/coreos.svg?style=social&label=Stars)](https://github.com/khs1994-docker/coreos) [![Docker Stars](https://img.shields.io/docker/stars/khs1994/coreos.svg)](https://hub.docker.com/r/khs1994/coreos) [![Docker Pulls](https://img.shields.io/docker/pulls/khs1994/coreos.svg)](https://hub.docker.com/r/khs1994/coreos)
-
 ### 技能储备
 
 * VirtualBox（6.x）或其他虚拟机的使用方法
@@ -21,7 +19,7 @@
 * `SELinux` 已关闭
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
 * `Etcd` `kube-nginx` 运行方式为 `podman`
-* bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像之后重启服务
+* bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像之后重启服务(例如：sudo systemctl restart etcd)
 
 ### 虚拟机网络配置
 
@@ -47,6 +45,7 @@ $ ./coreos init
 
 ```bash
 $ cd ..
+# ~/lnmp/kubernetes
 # download kubernetes server files
 $ ./lnmp-k8s kubernetes-server
 
@@ -94,6 +93,7 @@ $ curl ${SERVER_HOST}:8080/bin/coreos.sh | NODE_NAME=1 bash
 
 # 关机，在虚拟机设置页面
 # 1.系统 -> 启用 EFI
+# 2.存储 -> 存储介质 -> 选住 ISO -> 属性 -> 移除虚拟盘 点击确定
 # 重新启动
 ```
 

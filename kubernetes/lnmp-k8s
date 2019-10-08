@@ -105,8 +105,10 @@ GOOS=`uname -s | tr A-Z  a-z`
 _build_k8s_image(){
   cd kubernetes-release
 
+  # 仅在 CI 环境构建镜像
   if [ -z "${CI_KUBERNETES_VERSION}" ];then
-    CI_KUBERNETES_VERSION=${KUBERNETES_VERSION}
+    cd .. > /dev/null
+    return
   fi
 
   if [ -z "${KUBERNETES_TYPE}" ];then
@@ -557,6 +559,7 @@ _runc_install(){
 }
 
 _containerd_install(){
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf /usr/local/bin/kube-containerd;fi
   if [ `command -v containerd || false` -a ! "$1" = "--dry-run" ];then \
     print_info "containerd already install"; \
     containerd --version; fi
@@ -657,6 +660,7 @@ EOF
 }
 
 _crictl_install(){
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf /usr/bin/crictl;fi
   if [ -f /usr/bin/crictl -a ! "$1" = "--dry-run" ];then
     print_info "crictl already install"
     crictl --version
@@ -673,7 +677,7 @@ _crictl_install(){
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
       local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = "c3b71be1f363e16078b51334967348aab4f72f46ef64a61fe7754e029779d45a" ];then
+    if ! [ $sha256 = "19fed421710fccfe58f5573383bb137c19438a9056355556f1a15da8d23b3ad1" ];then
       $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
       __download
     fi
@@ -924,6 +928,17 @@ _containerd_cri_config(){
   $(_sudo) sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT}#g" /etc/systemd/system/kubelet.service
 }
 
+_docker_default_conf(){
+  print_info "restore docker default conf"
+  $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
+  $(_sudo) rm -rf /etc/systemd/system/docker.service.d/*
+  $(_sudo) cp systemd/docker.default.conf /etc/systemd/system/docker.service.d/
+}
+
+_kubectl_completion(){
+   ${K8S_ROOT}/bin/kubectl completion bash |$(_sudo) tee /etc/bash_completion.d/kubectl || true
+}
+
 _k8s_install(){
   if [ ${MASTER_IP} == '192.168.199.100' ];then
     clear
@@ -984,11 +999,13 @@ encryption-config.yaml} \
   if [ "${1}" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
     _containerd_cri_config
+    _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_containerd_conf;fi
     _crictl_containerd_conf
   elif [ "${1}" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
     _crio_config
+    _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
   else
@@ -1008,6 +1025,7 @@ encryption-config.yaml} \
   $(_sudo) mkdir --parents /var/lib/{kubelet,kube-proxy}
 
   _k8s_install_kubectl_conf
+  _kubectl_completion
 }
 
 _k8s_join(){
@@ -1070,11 +1088,13 @@ kube-proxy.kubeconfig} \
   if [ "${2}" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
     _containerd_cri_config
+    _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_containerd_conf;fi
     _crictl_containerd_conf
   elif [ "${2}" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
     _crio_config
+    _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
   else
@@ -1094,6 +1114,7 @@ kube-proxy.kubeconfig} \
   $(_sudo) mkdir --parents /var/lib/{kubelet,kube-proxy}
 
   _k8s_install_kubectl_conf
+  _kubectl_completion
 }
 
 _helm_lnmp(){
@@ -1115,16 +1136,26 @@ _helm_lnmp(){
 
 _local_up(){
   echo "
+ETCD:
+
 $ $(_sudo) systemctl start etcd
-$ $(_sudo) systemctl start flanneld
+
+MASTER:
 
 $ $(_sudo) systemctl start kube-apiserver
 $ $(_sudo) systemctl start kube-controller-manager
 $ $(_sudo) systemctl start kube-scheduler
 
+NODE:
+
+$ $(_sudo) systemctl start flanneld
 $ $(_sudo) systemctl start kube-proxy
 $ $(_sudo) systemctl start kubelet
-$ $(_sudo) systemctl start docker
+
+$ $(_sudo) systemctl start docker (Docker runtime only)
+$ $(_sudo) systemctl start kube-containerd (Containerd runtime only)
+$ $(_sudo) systemctl start kube-containerd-130 (Containerd runtime only)
+$ $(_sudo) systemctl start kube-crio (CRI-O runtime only)
 "
 }
 
@@ -1141,7 +1172,7 @@ _local_cleanup(){
               /var/lib/kubelet \
               /var/lib/kube-proxy \
 
-  $(_sudo) rm -rf /etc/systemd/system/docker.service.d
+  _docker_default_conf
 
   $(_sudo) ip addr flush cni0
   $(_sudo) ip addr flush docker0

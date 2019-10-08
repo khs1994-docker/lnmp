@@ -19,7 +19,7 @@ Options:
 Management Commands:
   app*        Docker Application (Docker Inc., v0.8.0)
   builder     Manage builds
-  buildx*     Build with BuildKit (Docker Inc., v0.3.0-5-g5b97415-tp-docker)
+  buildx*     Build with BuildKit (Docker Inc., v0.3.1-tp-docker)
   config      Manage Docker configs
   container   Manage containers
   context     Manage contexts
@@ -43,7 +43,6 @@ Commands:
   commit      Create a new image from a container's changes
   cp          Copy files/folders between a container and the local filesystem
   create      Create a new container
-  deploy      Deploy a new stack or update an existing stack
   diff        Inspect changes to files or directories on a container's filesystem
   events      Get real time events from the server
   exec        Run a command in a running container

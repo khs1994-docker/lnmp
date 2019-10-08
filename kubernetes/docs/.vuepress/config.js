@@ -60,6 +60,7 @@ module.exports = {
         'minikube',
         'windows',
         'arm64',
+        'virtualbox',
       ],
       '/example/': [
         'nginx',

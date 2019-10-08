@@ -153,6 +153,7 @@ module.exports = {
             '/github',
             '/atom',
             '/vscode',
+            '/cgroupv2',
           ]
         }
       ]
