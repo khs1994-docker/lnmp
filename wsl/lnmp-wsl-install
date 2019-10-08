@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# 从 Docker 复制二进制文件，安装 PHP Redis Memcached
+# 从 Docker 镜像 复制二进制文件，安装 PHP Redis Memcached
 
 _print_help_info(){
     exec echo "
@@ -26,14 +26,14 @@ $ lnmp-wsl-install php 7.3.0 tar
 
 $ lnmp-wsl-install php 7.3.0 deb
 
-[ deb 方法一个系统只能存在一个 PHP 版本，若想多版本共存，主版本使用 deb 方法，其他版本使用 tar 方法 ]
-
 $ lnmp-wsl-install php 7.1.32 [7.0.33] [5.6.40]
 
 [ php56 只支持 ubuntu ]
 "
 
 }
+
+if [ -n "$debug" -o -n "$DEBUG" ];then set -x ;fi
 
 ################################################################################
 
@@ -96,9 +96,9 @@ _nginx(){
 }
 
 _php(){
-  command -v docker || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli "
+  command -v docker > /dev/null || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli "
 
-  command -v docker || exit 1
+  command -v docker > /dev/null || exit 1
 
   # include redis memcached
   # default install latest php version
@@ -109,37 +109,26 @@ _php(){
   case ${PHP_VERSION} in
     5.6.* )
       export PHP_NUM=56
-      if [ $ID = 'debian' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php56 on Ubuntu, please self build use $ lnmp-wsl-builder-php\n\n" ; \
-       exit 1; fi
       ;;
 
     7.0.* )
-      if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php70 on Debian9, please self build use $ lnmp-wsl-builder-php \n\n" \
-       ; exit 1; fi
       export PHP_NUM=70
       ;;
 
     7.1.* )
-      if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php71 on Debian9, please self build use $ lnmp-wsl-builder-php\n\n" \
-       ; exit 1; fi
       export PHP_NUM=71
       ;;
 
     7.2.* )
-      if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php72 on Debian9, please self build use $ lnmp-wsl-builder-php\n\n" \
-       ; exit 1; fi
       export PHP_NUM=72
       ;;
 
     7.3.* )
-      if [ $ID = 'ubuntu' ];then set +x ; \
-       echo -e "\n\nkhs1994-wsl-php only support php73 on Debian9, please self build use $ lnmp-wsl-builder-php\n\n" \
-       ; exit 1; fi
       export PHP_NUM=73
+      ;;
+
+    7.4.* )
+      export PHP_NUM=74
       ;;
 
     * )
@@ -156,11 +145,6 @@ _tar(){
 # debian ubuntu
 TAR_IMAGE=khs1994/wsl:khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-"$( lsb_release -cs )"_amd64
 
-if [[ $PHP_NUM = '72' && "$ID" = 'debian' ]];then
-  # debian php latest version
-  TAR_IMAGE=registry.cn-hangzhou.aliyuncs.com/khs1994/wsl
-fi
-
 if [ "$ID" = 'centos' -o "$ID" = 'fedora' ];then
   # rhel
   TAR_IMAGE=khs1994/wsl:khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
@@ -168,32 +152,23 @@ fi
 
 docker pull ${TAR_IMAGE}
 
-docker create --name=${CONTAINER_NAME} ${TAR_IMAGE} command #khs1994/php-fpm:wsl
+docker create --name=${CONTAINER_NAME} ${TAR_IMAGE} command
 
 # rm
 $(_sudo) rm -rf ${PHP_PREFIX}
 
-$(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}.tar.gz /usr/local/
-$(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/php${PHP_NUM}-etc.tar.gz /usr/local/etc/
+docker cp ${CONTAINER_NAME}:/php${PHP_NUM}.tar.gz /tmp
 
 docker rm -f ${CONTAINER_NAME}
-
-cd /usr/local
-
-$(_sudo) tar -zxvf php${PHP_NUM}.tar.gz
-
-$(_sudo) rm -rf php${PHP_NUM}.tar.gz
-
-cd /usr/local/etc
 
 # backup
 if [ -d ${PHP_INI_DIR} ];then
   $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup
 fi
 
-$(_sudo) tar -zxvf php${PHP_NUM}-etc.tar.gz
+$(_sudo) tar -zxvf /tmp/php${PHP_NUM}.tar.gz -C /usr/local
 
-$(_sudo) rm -rf php${PHP_NUM}-etc.tar.gz
+$(_sudo) rm -rf /tmp/php${PHP_NUM}.tar.gz
 
 # log
 cd /var/log
@@ -210,7 +185,12 @@ for file in $( ls ${PHP_PREFIX}/bin ); do $(_sudo) ln -sf ${PHP_PREFIX}/bin/$fil
 
 $(_sudo) ln -sf ${PHP_PREFIX}/sbin/* /usr/local/sbin
 
-lnmp-wsl-builder-php apt
+echo "
+Please Exec this command install dep
+
+lnmp-wsl-builder-php apt/yum
+
+"
 }
 
 _deb(){
@@ -224,7 +204,7 @@ _deb(){
 
     docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME} command
 
-    $(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
+    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb
 
     docker rm -f ${CONTAINER_NAME}
 
@@ -244,7 +224,7 @@ rpm(){
 
   docker create --name=${CONTAINER_NAME} khs1994/wsl:${DOCKER_IMAGE_NAME} command
 
-  $(_sudo) docker -H 127.0.0.1:2375 cp ${CONTAINER_NAME}:/${RPM_NAME} .
+  docker cp ${CONTAINER_NAME}:/${RPM_NAME} .
 
   docker rm -f ${CONTAINER_NAME}
 
@@ -469,7 +449,7 @@ set -e
 
 . ~/.bashrc || echo
 
-if [ -z $WSL_HOME ];then exit 1 ; fi
+if [ -z "$WSL_HOME" ];then echo "env WSL_HOME not set" ; fi
 
 if [ "$1" = 'enable' ];then shift ; _enable "$@" ; exit $? ; fi
 

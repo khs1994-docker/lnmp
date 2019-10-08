@@ -53,7 +53,7 @@ export TZ=Asia/Shanghai
 
 for command in "$@"
 do
-test $command = 'travis' && PHP_URL=https://secure.php.net/distributions
+test $command = 'travis' && PHP_URL=https://www.php.net/distributions
 done
 
 #
@@ -146,7 +146,7 @@ _install_php_run_dep(){
 
     cd /tmp
 
-    if ![ ${ID} = 'fedora' ];then
+    if ! [ ${ID} = 'fedora' ];then
       $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
 
       $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
@@ -273,8 +273,8 @@ _install_php_build_dep(){
                    openldap-devel \
                    aspell-devel \
                    libffi-devel \
-                   oniguruma-devel \
                    krb5-devel \
+                   oniguruma-devel \
                    "
 
 for soft in ${DEP_SOFTS}
@@ -289,7 +289,7 @@ if [ $VERSION_ID -ge 8 -a ${ID} != 'fedora' ];then
   $(_sudo) yum-config-manager --enable PowerTools
 fi
 
-$(_sudo) yum install -y ${DEP_SOFTS} > /dev/null
+$(_sudo) yum install -y ${DEP_SOFTS}
 }
 
 ################################################################################
@@ -378,7 +378,6 @@ _builder(){
         --enable-mbregex \
         --enable-mbstring \
         --enable-pcntl=shared \
-        --enable-shmop=shared \
         --enable-soap=shared \
         --enable-sockets=shared \
         --enable-sysvmsg=shared \
@@ -685,13 +684,17 @@ cat ${PHP_PREFIX}/README.md
 ################################################################################
 
 _tar(){
-  cd /usr/local ; $(_sudo) tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  rm -rf /tmp/php${PHP_NUM}_ROOT/
+  mkdir -p /tmp/php${PHP_NUM}_ROOT/etc
 
-  cd etc ; $(_sudo) tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+  cd /usr/local/
 
-  $(_sudo) mv ${PHP_PREFIX}.tar.gz /
+  cp -a php${PHP_NUM} /tmp/php${PHP_NUM}_ROOT/
+  cp -a etc/php${PHP_NUM} /tmp/php${PHP_NUM}_ROOT/etc
 
-  $(_sudo) mv ${PHP_INI_DIR}-etc.tar.gz /
+  cd /tmp/php${PHP_NUM}_ROOT/
+
+  $(_sudo) tar -zcvf /php${PHP_NUM}.tar.gz .
 }
 
 ################################################################################
