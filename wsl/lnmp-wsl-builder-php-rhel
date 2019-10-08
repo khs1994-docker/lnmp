@@ -107,8 +107,9 @@ esac
 ################################################################################
 
 _download_src(){
+    $(_sudo) mkdir -p /usr/local/src
 
-    $(_sudo) mkdir -p /usr/local/src || echo
+    $(_sudo) chmod -R 777 /usr/local/src
 
     if ! [ -z "$BUILD_FROM_GIT" ];then
       $(_sudo) yum install bison git -y
@@ -126,7 +127,7 @@ _download_src(){
 
       echo -e "Download php src ...\n\n"
 
-      cd /usr/local/src ; $(_sudo) chmod 777 /usr/local/src
+      cd /usr/local/src
 
       wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
         wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
@@ -158,7 +159,7 @@ _install_php_run_dep(){
     fi
 
 _libzip(){
-    if [ ${ID} = 'fedora' ];then return;fi
+    if [ ${ID} = 'fedora' ];then $(_sudo) dnf install -y libzip libzip-devel; return;fi
 # libzip php7.2
 #
 # checking for libzip... configure: error: system libzip must be upgraded to version >= 0.11
@@ -215,6 +216,7 @@ enchant \
 openldap \
 aspell \
 libffi \
+krb5-libs \
 oniguruma"
 
 
@@ -272,6 +274,7 @@ _install_php_build_dep(){
                    aspell-devel \
                    libffi-devel \
                    oniguruma-devel \
+                   krb5-devel \
                    "
 
 for soft in ${DEP_SOFTS}
@@ -441,7 +444,7 @@ _builder(){
 
 # 6. make install
 
-    $(_sudo) rm -rf ${PHP_PREFIX} || echo
+    $(_sudo) rm -rf ${PHP_PREFIX}
 
     if [ -d ${PHP_INI_DIR} ];then $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
@@ -755,9 +758,9 @@ echo
 %build
 %install
 rm -rf %{buildroot}
-ls -la %{buildroot}/../ || echo
-mkdir -p %{buildroot} || echo
-mkdir -p %{buildroot}/usr/local/etc || echo
+ls -la %{buildroot}/../ || true
+mkdir -p %{buildroot}
+mkdir -p %{buildroot}/usr/local/etc
 cp -a ${PHP_PREFIX} %{buildroot}/${PHP_PREFIX}
 cp -a ${PHP_INI_DIR} %{buildroot}/${PHP_INI_DIR}
 %files
@@ -799,7 +802,7 @@ set -ex
 
 command -v wget || $(_sudo) yum install -y wget
 
-mkdir -p /tmp/php-builder || echo
+mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
     PHP_VERSION=7.3.10 ; fi

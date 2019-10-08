@@ -6,10 +6,10 @@ if [ -n "$GITHUB_ACTION" ];then
   # "refs/heads/19.03"
   echo $GITHUB_REF | grep 'refs/tags/' && IS_TAG=1 || true
   BRANCH=$(echo $GITHUB_REF | cut -d '/' -f 3)
-  PCIT_WHEN_COMMIT_MESSAGE=${INPUT_PCIT_WHEN_COMMIT_MESSAGE:-}
-  PCIT_WHEN_BRANCH=${INPUT_PCIT_WHEN_BRANCH:-}
-  PCIT_WHEN_COMMIT_MESSAGE_SKIP=${INPUT_PCIT_WHEN_COMMIT_MESSAGE_SKIP:-}
-  PCIT_WHEN_COMMIT_MESSAGE_INCLUDE=${INPUT_PCIT_WHEN_COMMIT_MESSAGE_INCLUDE:-}
+  PCIT_WHEN_COMMIT_MESSAGE=${INPUT_COMMIT_MESSAGE:-}
+  PCIT_WHEN_BRANCH=${INPUT_BRANCH:-}
+  PCIT_WHEN_COMMIT_MESSAGE_SKIP=${INPUT_COMMIT_MESSAGE_SKIP:-}
+  PCIT_WHEN_COMMIT_MESSAGE_INCLUDE=${INPUT_COMMIT_MESSAGE_INCLUDE:-}
 else
   BRANCH=`git rev-parse --abbrev-ref HEAD`
 fi
@@ -21,9 +21,9 @@ _check_commit_message_fail() {
   exit 78
 }
 
-if [ "${IS_TAG}" -ne 1 ];then
+if [ "${IS_TAG}" != 1 ];then
 
-if [ -n "${PCIT_WHEN_BRANCH}" -a ${BRANCH} != "${PCIT_WHEN_BRANCH}" ];then \
+if [ -n "${PCIT_WHEN_BRANCH}" ] && [ "${BRANCH}" != "${PCIT_WHEN_BRANCH}" ];then \
   echo "Branch Check Fail"; exit 78; fi
 
 else

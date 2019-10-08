@@ -136,8 +136,7 @@ esac
 # download php src
 
 _download_src(){
-
-    $(_sudo) mkdir -p /usr/local/src || echo
+    $(_sudo) mkdir -p /usr/local/src
 
     if ! [ -z "$BUILD_FROM_GIT" ];then
       $(_sudo) apt install bison git -y
@@ -566,7 +565,7 @@ test $host = 'x86_64-linux-gnu'  && _fix_bug
 
 # make install
 
-    $(_sudo) rm -rf ${PHP_PREFIX} || echo
+    $(_sudo) rm -rf ${PHP_PREFIX}
 
     if [ -d ${PHP_INI_DIR} ];then $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
@@ -822,7 +821,7 @@ _tar(){
 
 _deb(){
 
-cd /tmp; $(_sudo) rm -rf khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} || echo ; mkdir -p khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}
+cd /tmp; $(_sudo) rm -rf khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} ; mkdir -p khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}
 
 ################################################################################
 
@@ -927,7 +926,7 @@ $(_sudo) apt update
 
 command -v wget || $(_sudo) apt install wget -y
 
-mkdir -p /tmp/php-builder || echo
+mkdir -p /tmp/php-builder
 
 test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.10
 

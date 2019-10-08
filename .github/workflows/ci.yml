@@ -13,9 +13,9 @@ jobs:
           fetch-depth: 2
       - uses: ./.github/actions/when
         with:
-          PCIT_WHEN_BRANCH: "19.03"
-          PCIT_WHEN_COMMIT_MESSAGE: "1"
-          PCIT_WHEN_COMMIT_MESSAGE_SKIP: "skip ci"
+          BRANCH: "19.03"
+          COMMIT_MESSAGE: "1"
+          COMMIT_MESSAGE_SKIP: "skip ci"
   linux:
     needs: skip-ci
     runs-on: ubuntu-latest
