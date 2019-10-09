@@ -52,11 +52,6 @@ export TZ=Asia/Shanghai
 
 ################################################################################
 
-for command in "$@"
-do
-test $command = '--ci' && PHP_URL=https://www.php.net/distributions
-done
-
 #
 # https://github.com/docker-library/php/issues/272
 #
@@ -109,7 +104,6 @@ esac
 
 _download_src(){
     $(_sudo) mkdir -p /usr/local/src
-
     $(_sudo) chmod -R 777 /usr/local/src
 
     if ! [ -z "$BUILD_FROM_GIT" ];then
@@ -424,7 +418,7 @@ _builder(){
         --enable-shmop=shared \
         "
 
-    for a in ${CONFIGURE} ; do echo $a | $(_sudo) tee -a ${PHP_INSTALL_LOG}; done
+    for item in ${CONFIGURE} ; do echo $item | $(_sudo) tee -a ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
 
@@ -554,7 +548,6 @@ _install_pecl_ext_by_pickle(){
   $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
-
   set -e
 }
 
@@ -563,8 +556,16 @@ _install_pecl_ext(){
 
     command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
 
-    if [ $pecl -ge 0 ];then
+    $(_sudo) mkdir -p /usr/local/sbin
+    $(_sudo) ln -s ${PHP_PREFIX}/bin/php /usr/local/sbin
+    $(_sudo) ln -s ${PHP_PREFIX}/bin/phpize /usr/local/sbin
+    $(_sudo) ln -s ${PHP_PREFIX}/bin/php-config /usr/local/sbin
+
+    if [ $pecl -eq 0 ];then
       _install_pecl_ext_by_pickle $@
+
+      # $(_sudo) rm -rf /usr/local/sbin/{php,phpize,php-config}
+      $(_sudo) rm -rf /usr/local/sbin/php*
       return
     fi
 
@@ -589,6 +590,8 @@ _install_pecl_ext(){
         echo $extension | $(_sudo) tee -a ${PHP_INSTALL_LOG}
         $(_sudo) ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
     done
+
+    $(_sudo) rm -rf /usr/local/sbin/php*
 }
 
 _php_ext_enable(){
@@ -891,6 +894,7 @@ _install_php_build_dep
 for command in "$@"
 do
   test $command = '--skipbuild' && export SKIP_BUILD=1
+  test $command = '--ci'        && export PHP_URL=https://www.php.net/distributions
 done
 
 test "${SKIP_BUILD}" != 1 && ( \
@@ -901,7 +905,7 @@ test "${SKIP_BUILD}" != 1 && ( \
   _php_ext_enable ; \
   _create_log_file ; \
   ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true ; \
-  _write_version_to_file ) || true
+  _write_version_to_file )
 
 for command in "$@"
 do
@@ -909,4 +913,4 @@ do
   test $command = 'rpm' && _rpm
 done
 
-ls -la /*.tar.gz /*.rpm || true
+ls -lah /*.tar.gz /*.rpm || true

@@ -32,6 +32,7 @@ function __lnmp_custom_restart() {
 
 # 当执行不存在的命令时会调用该函数 `lnmp-dcker no-found-cmd`
 function __lnmp_custom_command() {
-  echo ''
-  # echo $args
+  echo "command [ $args ] not found"
+
+  # please handle your custom command
 }

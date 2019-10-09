@@ -18,6 +18,8 @@
 
 **7.** `IDE(PhpStorm)` 打开 `./app/my-project` ，开始编写代码
 
+**8.** 谨慎执行 `$ docker volume prune`，否则将会删除数据库数据。
+
 ## APP_ROOT
 
 默认的 PHP 项目目录位于 `./app/*`，你可以通过在 `.env` 文件中设置 `APP_ROOT` 变量来更改 PHP 项目目录。
