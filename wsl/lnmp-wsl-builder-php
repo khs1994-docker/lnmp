@@ -21,7 +21,8 @@ $ lnmp-wsl-builder-php [ apt | apt-dev ]
 
 $ lnmp-wsl-builder-php 7.3.0 [ tar | deb ] [--skipbuild] [--ci]
 
-$ lnmp-wsl-builder-php 7.3.0 enable-ext [ext-name]
+# echo \"--with-xxx --enable-xxx\" > /tmp/EXT_REAL_NAME.configure.options
+$ lnmp-wsl-builder-php 7.3.0 enable-ext [EXT_NAME@EXT_REAL_NAME]
 
 $ lnmp-wsl-builder-php 7.3.0 [ arm64 | arm32 ] tar [TODO]
 
@@ -463,7 +464,7 @@ set +e
                     --with-libxml \
                     --with-zip" \
             || echo "--with-pcre-regex \
-                     --with-gd \
+                     --with-gd=shared \
                        --with-freetype-dir=/usr/lib \
                        --with-jpeg-dir=/usr/lib \
                        --with-png-dir=/usr/lib \
@@ -635,10 +636,21 @@ _install_pecl_ext_by_pickle(){
 
   if [ ${PHP_NUM} -ge "80" ];then set +e; fi
 
+  PICKLE_OPTIONS="-n --php=${PHP_PREFIX}/bin/php -vvv"
+
   if [ $# -ne 0 ];then
     for extension in $@
-    do
-      pickle install $extension --defaults -n --php=${PHP_PREFIX}/bin/php
+    do 
+      local extension_real_name=$(echo $extension | cut -d "@" -f 2)
+      local extension=$(echo $extension | cut -d "@" -f 1)
+      local WITH_CONFIGURE_OPTIONS_FILE="/tmp/${extension_real_name:-$extension}.configure.options"
+      local WITH_CONFIGURE_OPTIONS=$( \
+        test -f ${WITH_CONFIGURE_OPTIONS_FILE} && \
+        echo --with-configure-options=${WITH_CONFIGURE_OPTIONS_FILE} \
+        || echo --defaults \
+      )
+
+      $(_sudo) pickle install $extension ${PICKLE_OPTIONS} ${WITH_CONFIGURE_OPTIONS}
     done
 
     $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
@@ -647,13 +659,13 @@ _install_pecl_ext_by_pickle(){
     return
   fi
 
-  pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install xdebug --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install yaml --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install swoole --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install mongodb --defaults -n --php=${PHP_PREFIX}/bin/php
+  $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS} 
+  $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install yaml --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 
@@ -728,7 +740,7 @@ exts=" pdo_pgsql \
                       yaml \
                       opcache \
                       mysqli \
-                      ffi \
+                      $( test $PHP_NUM -ge "74" && echo ffi ) \
                       pgsql \
                       gd "
 

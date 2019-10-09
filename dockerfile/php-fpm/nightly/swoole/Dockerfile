@@ -35,7 +35,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            > /tmp/${extension_name}.configure.options \
       && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
            $(test -f /tmp/${extension_name}.configure.options \
-                 && echo --with-configure-options=/tmp/${extension_name}.configure.options) \
+                 && echo --with-configure-options=/tmp/${extension_name}.configure.options \
+                 || echo --defaults \
+            ) \
            -n \
       && docker-php-ext-enable ${extension_name} || echo "pecl ${extension_name} install error" \
       && rm -rf /usr/local/lib/php/doc/${extension_name} \
