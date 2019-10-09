@@ -3,23 +3,23 @@
 #
 # Build php in WSL(RHEL)
 #
-# $ lnmp-wsl-php-builder.rhel 5.6.35 [--skipbuild] [tar] [rpm] [travis]
+# $ lnmp-wsl-php-builder.rhel 5.6.35 [--skipbuild] [tar] [rpm] [--ci]
 #
 
 _print_help_info(){
 
     echo "
-
 Build php in WSL RHEL by shell script
 
 Usage:
 
 $ lnmp-wsl-builder-php-rhel 7.3.0 7.3.0beta3 7.3.0RC1 nightly
 
-$ lnmp-wsl-builder-php-rhel [ yum | dnf | rpm ]
+$ lnmp-wsl-builder-php-rhel [ yum | dnf | rpm | yum-devel | dnf-devel | rpm-devel ]
 
-$ lnmp-wsl-builder-php-rhel 7.3.0 [--skipbuild] [tar] [rpm] [enable-ext]
+$ lnmp-wsl-builder-php-rhel 7.3.0 [ tar | rpm ] [--skipbuild] [--ci]
 
+$ lnmp-wsl-builder-php-rhel 7.3.0 enable-ext [ext-name]
 "
 
 exit 0
@@ -32,7 +32,7 @@ _sudo(){
   command -v sudo > /dev/null && echo "sudo" || true
 }
 
-command -v yum
+command -v yum > /dev/null
 
 if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
 
@@ -53,7 +53,7 @@ export TZ=Asia/Shanghai
 
 for command in "$@"
 do
-test $command = 'travis' && PHP_URL=https://www.php.net/distributions
+test $command = '--ci' && PHP_URL=https://www.php.net/distributions
 done
 
 #
@@ -99,7 +99,7 @@ case "$1" in
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 nightly"
     exit 1
 esac
 }
@@ -521,6 +521,18 @@ _install_pecl_ext_by_pickle(){
 
   if [ ${PHP_NUM} -ge "80" ];then set +e; fi
 
+  if [ $# -ne 0 ];then
+    for extension in $@
+    do
+      pickle install $extension --defaults -n --php=${PHP_PREFIX}/bin/php
+    done
+
+    $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+    set -e
+
+    return
+  fi
+
   pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
@@ -540,7 +552,7 @@ _install_pecl_ext(){
     command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
 
     if [ $pecl -ge 0 ];then
-      _install_pecl_ext_by_pickle
+      _install_pecl_ext_by_pickle $@
       return
     fi
 
@@ -558,6 +570,8 @@ _install_pecl_ext(){
                $( if ! [ $PHP_NUM = "56" ];then echo "swoole"; else echo ""; fi ) \
                mongodb"
 
+    if [ $# -ne 0 ];then PHP_EXTENSION=$@;fi
+
     for extension in ${PHP_EXTENSION}
     do
         echo $extension | $(_sudo) tee -a ${PHP_INSTALL_LOG}
@@ -570,6 +584,12 @@ _php_ext_enable(){
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/error_log.ini
 echo "session.save_path = \"/tmp\"" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/session.ini
+
+if [ $# -ne 0 ];then
+  wsl-php-ext-enable.sh $@
+
+  return
+fi
 
 wsl-php-ext-enable.sh pdo_pgsql \
                       xsl \
@@ -803,11 +823,14 @@ if [ -z "$1" ];then _print_help_info ; else PHP_VERSION="$1" ; fi
 
 set -ex
 
-command -v wget || $(_sudo) yum install -y wget
+command -v wget > /dev/null || $(_sudo) yum install -y wget
 
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
+    PHP_VERSION=7.3.10 ; fi
+
+if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
     PHP_VERSION=7.3.10 ; fi
 
 _get_phpnum $PHP_VERSION
@@ -832,19 +855,25 @@ $(_sudo) yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 $(_sudo) yum install -y curl
 
-command -v pickle || _pickle
-command -v composer || _composer
+command -v pickle > /dev/null || _pickle
+command -v composer > /dev/null || _composer
 
 $(_sudo) chmod +x /usr/local/bin/pickle /usr/local/bin/composer
 
 if [ "$2" = 'enable-ext' ];then
+   shift 2; \
    _test ; \
-   _install_pecl_ext ; _php_ext_enable ; _create_log_file
+   _install_pecl_ext $@; \
+   _php_ext_enable $@; \
+   _create_log_file
+
+   exit
 fi
 
 _install_php_run_dep
 
-if [ "$1" = 'rpm' -o "$1" = 'yum' -o "$1" = 'dnf' ];then _install_php_build_dep ; exit $? ; fi
+if [ "$1" = 'rpm' -o "$1" = 'yum' -o "$1" = 'dnf' ];then exit 0 ; fi
+if [ "$1" = 'rpm-devel' -o "$1" = 'yum-devel' -o "$1" = 'dnf-devel' ];then _install_php_build_dep ; exit $? ; fi
 
 _install_php_build_dep
 
@@ -853,10 +882,15 @@ do
   test $command = '--skipbuild' && export SKIP_BUILD=1
 done
 
-test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test ; \
-  _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
-    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
-    ; _write_version_to_file )
+test "${SKIP_BUILD}" != 1 && ( \
+  _download_src ; \
+  _builder ; \
+  _test ; \
+  _install_pecl_ext ; \
+  _php_ext_enable ; \
+  _create_log_file ; \
+  ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true ; \
+  _write_version_to_file ) || true
 
 for command in "$@"
 do
@@ -864,6 +898,4 @@ do
   test $command = 'rpm' && _rpm
 done
 
-ls -la /*.tar.gz
-
-ls -la /*.rpm
+ls -la /*.tar.gz /*.rpm || true

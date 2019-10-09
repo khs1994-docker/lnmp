@@ -3,7 +3,7 @@
 #
 # Build php in WSL(Debian Ubuntu)
 #
-# $ lnmp-wsl-php-builder 5.6.35 [--skipbuild] [tar] [deb] [travis] [arm64] [arm32]
+# $ lnmp-wsl-php-builder 5.6.35 [--skipbuild] [tar] [deb] [--ci] [arm64] [arm32]
 #
 
 # help info
@@ -11,22 +11,19 @@
 _print_help_info(){
 
     echo "
-
 Build php in WSL Debian by shell script
 
 Usage:
 
-$ lnmp-wsl-builder-php 7.3.0
+$ lnmp-wsl-builder-php 7.3.0 7.3.0beta1 7.3.0RC1 nightly
 
-$ lnmp-wsl-builder-php apt
+$ lnmp-wsl-builder-php [ apt | apt-dev ]
 
-$ lnmp-wsl-builder-php 7.3.10 7.3.0beta1 7.3.0RC1 nightly
+$ lnmp-wsl-builder-php 7.3.0 [ tar | deb ] [--skipbuild] [--ci]
 
-$ lnmp-wsl-builder-php 7.3.0 [--skipbuild] [tar] [deb] [enable-ext]
+$ lnmp-wsl-builder-php 7.3.0 enable-ext [ext-name]
 
-$ lnmp-wsl-builder-php 7.3.0 arm64 tar [TODO]
-
-$ lnmp-wsl-builder-php 7.3.0 arm32 tar [TODO]
+$ lnmp-wsl-builder-php 7.3.0 [ arm64 | arm32 ] tar [TODO]
 
 "
 
@@ -40,7 +37,7 @@ _sudo(){
   command -v sudo > /dev/null && echo "sudo" || true
 }
 
-command -v apt
+command -v apt > /dev/null
 
 if ! [ 0 -eq $? ];then echo "Only Support Debian"; exit ; fi
 
@@ -64,7 +61,7 @@ export CC=gcc CXX=g++
 
 for command in "$@"
 do
-test $command = 'travis' && PHP_URL=https://www.php.net/distributions
+test $command = '--ci' && PHP_URL=https://www.php.net/distributions
 test $command = 'arm64' && host=aarch64-linux-gnu
 test $command = 'arm32' && host=arm-linux-gnueabihf
 done
@@ -206,7 +203,7 @@ _buildlib
 
 ################################################################################
 
-command -v python-config || pip install python-config
+command -v python-config > /dev/null || pip install python-config
 
 LIB_NAME=libxm2/lib/libxml2.so.${LIBXML2_VERSION}
 URL=ftp://xmlsoft.org/libxml2/libxml2-${LIBXML2_VERSION}.tar.gz
@@ -638,6 +635,18 @@ _install_pecl_ext_by_pickle(){
 
   if [ ${PHP_NUM} -ge "80" ];then set +e; fi
 
+  if [ $# -ne 0 ];then
+    for extension in $@
+    do
+      pickle install $extension --defaults -n --php=${PHP_PREFIX}/bin/php
+    done
+
+    $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+    set -e
+
+    return
+  fi
+
   pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
   pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
@@ -655,7 +664,7 @@ _install_pecl_ext(){
     command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
 
     if [ $pecl -ge 0 ];then
-      _install_pecl_ext_by_pickle
+      _install_pecl_ext_by_pickle $@
       return
     fi
 
@@ -672,6 +681,8 @@ _install_pecl_ext(){
                $( if ! [ $PHP_NUM = "56" ];then echo "swoole"; else echo ""; fi ) \
                mongodb"
 
+    if [ $# -ne 0 ];then PHP_EXTENSION=$@;fi
+
     for extension in ${PHP_EXTENSION}
     do
         echo $extension | tee -a ${PHP_INSTALL_LOG}
@@ -684,6 +695,12 @@ _php_ext_enable(){
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/error_log.ini
 echo "session.save_path = \"/tmp\"" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/session.ini
+
+if [ $# -ne 0 ];then
+  wsl-php-ext-enable.sh $@
+
+  return
+fi
 
 exts=" pdo_pgsql \
                       xsl \
@@ -920,11 +937,12 @@ set -ex
 
 $(_sudo) apt update
 
-command -v wget || $(_sudo) apt install wget -y
+command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.10
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.10 || true
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.3.10 || true
 
 _get_phpnum $PHP_VERSION
 
@@ -979,13 +997,13 @@ fi
 
 $(_sudo) apt install -y curl
 
-command -v /usr/local/bin/pickle || _pickle
-command -v /usr/local/bin/composer || _composer
+command -v /usr/local/bin/pickle > /dev/null || _pickle
+command -v /usr/local/bin/composer > /dev/null || _composer
 
 $(_sudo) chmod +x /usr/local/bin/pickle /usr/local/bin/composer
 
 if [ "$2" = 'enable-ext' ];then
-  ( _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
+  ( shift 2 ; _install_pecl_ext $@; _php_ext_enable $@; _create_log_file ; \
   ( test $host = 'x86_64-linux-gnu'  && \
   _test \
   ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
@@ -996,7 +1014,8 @@ fi
 
 _install_php_run_dep
 
-if [ "$1" = 'apt' ];then _install_php_build_dep ; exit $? ; fi
+if [ "$1" = 'apt' ];then exit 0;fi
+if [ "$1" = 'apt-dev' ];then _install_php_build_dep ; exit $? ; fi
 
 _install_php_build_dep
 
@@ -1006,11 +1025,16 @@ do
 done
 
 test "${SKIP_BUILD}" != 1 &&  \
-    ( _download_src ; _builder ; _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
+    ( _download_src ; \
+      _builder ; \
+      _install_pecl_ext ; \
+      _php_ext_enable ; \
+      _create_log_file ; \
     ( test $host = 'x86_64-linux-gnu'  && \
-    _test \
+    _test ; \
     ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
-    ) ; _write_version_to_file )
+    ) ; \
+    _write_version_to_file ) || true
 
 for command in "$@"
 do
@@ -1018,6 +1042,4 @@ do
   test $command = 'deb' && _deb
 done
 
-ls -la /*.tar.gz
-
-ls -la /*.deb
+ls -la /*.tar.gz /*.deb || true
