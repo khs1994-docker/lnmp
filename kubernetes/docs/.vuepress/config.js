@@ -62,6 +62,7 @@ module.exports = {
         'arm64',
         'virtualbox',
         'podman',
+        'rpi',
       ],
       '/example/': [
         'nginx',

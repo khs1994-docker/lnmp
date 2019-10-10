@@ -42,3 +42,12 @@ services:
     env_file:
       - ./systemd/.env.example
       - ./systemd/.env
+
+  cfssl-rpi:
+    image: khs1994/k8s-cfssl
+    volumes:
+      - ./rpi/certs:/srv/cfssl
+      - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+    env_file:
+      - ./rpi/.env.example
+      - ./rpi/.env

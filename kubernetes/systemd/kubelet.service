@@ -12,6 +12,8 @@ Environment="KUBE_APISERVER=https://192.168.199.100:6443"
 
 Environment="K8S_ROOT=/opt/k8s"
 
+ExecStartPre=/opt/k8s/bin/kubeadm version
+ExecStartPre=ls /opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 ExecStartPre=-/usr/sbin/swapoff -a
 ExecStartPre=-/sbin/swapoff -a
 ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh

@@ -102,6 +102,8 @@ esac
 
 GOOS=`uname -s | tr A-Z  a-z`
 
+command -v curl > /dev/null || print_info "curl not install"
+
 _build_k8s_image(){
   cd kubernetes-release
 
@@ -325,7 +327,7 @@ kubectl_install(){
 
   command -v kubectl && return || true
 
-  if [ "$OS" = 'Linux' ];then
+  if [ "$OS" = 'Linux' -a "$GOARCH" = 'amd64' ];then
       local KUBECTL_VERSION=$(curl -fsSL https://mirror.azure.cn/kubernetes/kubectl/stable.txt)
       $(_sudo) curl -fsSL -o /usr/local/bin/kubectl https://mirror.azure.cn/kubernetes/kubectl/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
       $(_sudo) chmod +x /usr/local/bin/kubectl
@@ -406,6 +408,8 @@ _etcd_install(){
 
   if [ -f ${K8S_ROOT}/bin/etcd -a ! "$1" = "--dry-run" ];then
     print_info "etcd already install"
+
+    ${K8S_ROOT}/bin/etcd --version || true
     return
   fi
 
@@ -438,6 +442,8 @@ _flanneld_install(){
 
   if [ -f ${K8S_ROOT}/bin/flanneld -a ! "$1" = "--dry-run" ];then
     print_info "flanneld already install"
+
+    ${K8S_ROOT}/bin/flanneld --version || true
     return
   fi
 
@@ -461,6 +467,8 @@ _flanneld_install(){
 _helm_install(){
   if [ -f ${K8S_ROOT}/bin/helm -a ! "$1" = "--dry-run" ];then
     print_info "helm already install"
+
+    ${K8S_ROOT}/bin/helm version || true
     return
   fi
 
@@ -504,6 +512,12 @@ _gvisor_docker_conf(){
 }
 
 _gvisor_containerd_conf(){
+  if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
+    print_info "$GOOS $GOARCH not support gvisor, skip config containerd with runsc"
+
+    return
+  fi
+
   print_info "config containerd with gvisor(runsc) ..."
   cat <<EOF | $(_sudo) tee -a /etc/kube-containerd/config.toml
 [plugins.cri.containerd.runtimes.runsc]
@@ -530,6 +544,12 @@ EOF
 }
 
 _gvisor_install(){
+  if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
+    print_info "$GOOS $GOARCH not support gvisor"
+
+    return
+  fi
+
   print_info "install gvisor(runsc) ..."
   local url="https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/"
   local TAR_FILE="runsc-${GOOS}-${GOARCH}.tar.gz"
@@ -555,16 +575,23 @@ _gvisor_install(){
 _runc_install(){
   if [ `command -v runc` ];then print_info "runc already install";\
     runc --version;return; fi
-  print_info "install runc ..."
+  # print_info "install runc ..."
+  print_info "runc not found, please install docker-ce first"
 }
 
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf /usr/local/bin/kube-containerd;fi
-  if [ `command -v containerd || false` -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd already install"; \
-    containerd --version; fi
 
-  if ! [ "$GOOS" = "linux" ];then return;fi
+  if [ -f /usr/bin/containerd -a ! "$1" = "--dry-run" ];then \
+    print_info "containerd already install"; \
+    containerd --version; \
+  fi
+
+  if ! [ -f /usr/bin/containerd ];then \
+    print_info "containerd not found, please install docker-ce first"; \
+  fi
+
+  if ! [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then return;fi
 
   if [ -f /usr/local/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd 1.3.0 already install"; \
@@ -668,7 +695,7 @@ _crictl_install(){
   fi
 
   local url="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
-  local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz"
+  local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
   __download(){
     $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
@@ -676,10 +703,10 @@ _crictl_install(){
   print_info "install crictl ..."
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
     if ! [ $sha256 = "19fed421710fccfe58f5573383bb137c19438a9056355556f1a15da8d23b3ad1" ];then
-      $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
-      __download
+      test $GOARCH = 'amd64' && $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+      test $GOARCH = 'amd64' && __download
     fi
   else
       __download
@@ -991,7 +1018,8 @@ encryption-config.yaml} \
 
   _k8s_install_systemd
 
-  if [ "$GOOS" = 'linux' ];then _gvisor_install;fi
+  _gvisor_install
+
   _crictl_install
   _containerd_install
   _runc_install
@@ -1031,16 +1059,26 @@ encryption-config.yaml} \
 _k8s_join(){
   NODE_IP=$1
 
-  test -f systemd/certs/ca.pem || exit 1
-  test -f systemd/certs/kubectl.kubeconfig || exit 1
-  test -f systemd/certs/flanneld.pem || exit 1
-  test -f systemd/certs/flanneld-key.pem || exit 1
+  for options in $@
+  do
+    test $options = '--skip-cp-k8s-bin' && export SKIP_CP_K8S_BIN=1
+  done
+
+  ls systemd/certs/{ca.pem,\
+flanneld.pem,\
+flanneld-key.pem,\
+kubectl.kubeconfig,\
+kubelet-config.yaml,\
+kube-proxy.config.yaml,\
+csr-crb.yaml,\
+kubectl.kubeconfig,\
+kube-proxy.kubeconfig} > /dev/null
 
   _k8s_install_dep
   _k8s_install_common
   # Flanneld
   _flanneld_install
-  _etcd_install
+  # _etcd_install
   _helm_install
   $(_sudo) cp systemd/flanneld.service /etc/systemd/system/
   # Docker
@@ -1055,7 +1093,10 @@ flanneld-key.pem,\
 flanneld.pem} \
 ${K8S_ROOT:-/opt/k8s}/certs/
 
-  _k8s_install_cp_bin
+  test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \
+  (print_info "skip cp k8s bin" ; \
+     $(_sudo) cp bin/*.sh ${K8S_ROOT}/bin/ ; \
+     $(_sudo) chmod +x ${K8S_ROOT}/bin/*)
 
   print_info "copy kubernetes conf and cert file ..."
   $(_sudo) cp \
@@ -1080,12 +1121,13 @@ kube-proxy.kubeconfig} \
       ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
   done
 
-  if [ "$GOOS" = 'linux' ];then _gvisor_install;fi
+  _gvisor_install
   _crictl_install
   _containerd_install
   _runc_install
 
   if [ "${2}" = "--containerd" ];then
+    $(_sudo) cp systemd/kube-containerd.service /etc/systemd/system/
     print_info "Kubelet Runtime is Containerd"
     _containerd_cri_config
     _docker_default_conf

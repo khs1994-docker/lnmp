@@ -20,6 +20,14 @@ if (!(Test-Path coreos/.env )){
   cp coreos/.env.example coreos/.env
 }
 
+if (!(Test-Path rpi/.env )){
+  cp rpi/.env.example rpi/.env
+}
+
+if (!(Test-Path rpi/.env.ps1 )){
+  cp rpi/.env.example.ps1 rpi/.env.ps1
+}
+
 . "$PSScriptRoot/.env.example.ps1"
 
 if (Test-Path .env.ps1 ){

@@ -50,7 +50,7 @@ $ cd ..
 $ ./lnmp-k8s kubernetes-server
 
 # download soft
-$ items="etcd cni flanneld helm crictl containerd"
+# $ items="etcd cni flanneld helm crictl containerd"
 $ items="flanneld helm crictl containerd"
 $ for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
 ```
