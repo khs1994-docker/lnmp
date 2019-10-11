@@ -4,7 +4,7 @@
 
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
 * Windows 固定 IP `192.168.199.100`
-* WSL2 `Ubuntu-18.04` 并设为默认 WSL
+* WSL2 `Ubuntu-18.04` 设为默认 WSL
 
 ## master
 
@@ -14,7 +14,7 @@
 
 ## node
 
-## 复制文件
+### 复制文件
 
 ```bash
 $ wsl
@@ -29,11 +29,12 @@ $ $items="kubelet-config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.
 $ foreach($item in $items){cp ./rpi/certs/$item systemd/certs}
 ```
 
-## join
+### join
 
 ```bash
 # 编辑 systemd/.env
-# KUBE_APISERVER=https://192.168.199.100:6443
+
+KUBE_APISERVER=https://192.168.199.100:16443
 
 $ wsl
 

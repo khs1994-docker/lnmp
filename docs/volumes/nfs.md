@@ -12,7 +12,7 @@
 
 ## 配置 IP 段
 
-在 `volumes/.env` 文件中配置
+在 `kubernetes/volumes/.env` 文件中配置
 
 `NFS_EXPORT_N` 变量值为容器中 `/etc/exports` 中的每一行
 
@@ -23,7 +23,8 @@
 # /home/work 192.168.1.0/24(rw,fsid=0,insecure,sync,no_root_squash)
 # /home/work *(rw,fsid=0,insecure,sync,no_root_squash)
 
-# 同一目录的访问规则请写在同一行，上边只是列出规则的写法
+# 同一目录的访问规则请写在同一行
+```
 
 rw：read-write，可读写;注意，仅仅这里设置成读写客户端还是不能正常写入，还要正确地设置共享目录的权限，参考问题7
 ro：read-only，只读；
@@ -38,9 +39,9 @@ all_squash：不论 NFS 客户端连接服务端时使用什么用户，对服�
 anonuid：匿名用户的 UID 值，通常是 nobody 或 nfsnobody，可以在此处自行设定；
 anongid：匿名用户的 GID 值。
 
-no_subtree_check:
+subtree_check（默认） ：若输出目录是一个子目录，则nfs服务器将检查其父目录的权限；
+no_subtree_check: 即使输出目录是一个子目录，nfs服务器也不检查其父目录的权限，这样可以提高效率；
 insecure:
-```
 
 ### `fsid=0`
 
@@ -52,12 +53,14 @@ insecure:
 /home/nfs  192.168.78.0/24(rw,insecure,sync,no_root_squash)    #导出虚拟根下的子目录1
 
 /home/data  192.168.78.0/24(rw,insecure,sync,no_root_squash)   #导出虚拟根下的子目录2
+```
 
-# 客户端对应的挂载命令如下
+客户端对应的挂载命令如下
 
-sudo mount -t nfs4 192.168.78.1:/nfs   /tmp/nfs
+```bash
+$ sudo mount -t nfs4 192.168.78.1:/nfs   /tmp/nfs
 
-sudo mount -t nfs4 192.168.78.1:/data  /tmp/data
+$ sudo mount -t nfs4 192.168.78.1:/data  /tmp/data
 ```
 
 ## 加载内核模块
@@ -68,13 +71,16 @@ $ sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
 
 ## 容器运行 NFS 服务端
 
-```bash
-$ cd volumes
-
-$ docker-compose up [-d] nfs # or $ lnmp-docker nfs [down]
-```
-
 * https://github.com/ehough/docker-nfs-server
+
+```bash
+$ cd kubernetes/volumes
+
+$ docker-compose up [-d] nfs
+
+# 或者可以直接执行
+$ lnmp-docker nfs [down]
+```
 
 ```bash
 $ docker run -it \
@@ -91,7 +97,7 @@ $ docker run -it \
 * NFSv3 port `111` `20048`
 * `--privileged`
 
-## 系统安装 NFS 服务端
+## 宿主机安装 NFS 服务端
 
 * https://help.ubuntu.com/community/SettingUpNFSHowTo
 
@@ -105,7 +111,7 @@ $ sudo yum install nfs-utils rpcbind
 $ sudo systemctl start nfs
 ```
 
-自行编辑 `/etc/exports` 文件
+编辑 `/etc/exports` 文件
 
 ## NFS 客户端尝试挂载
 
@@ -116,11 +122,11 @@ $ sudo systemctl start nfs
 
 # $ showmount -e ${SERVER_IP:-192.168.199.100} # nfs4 not support
 
-$ sudo mkdir /nfs
+$ sudo mkdir /cli-nfs
 
 # 虽然服务端指定的是 /nfs 这里对应为 /
 # 必须通过 -t 指定类型，默认为 nfs3
-$ sudo mount -v -t nfs4 -o proto=tcp,port=2049 ${SERVER_IP:-192.168.199.100}:/ /nfs
+$ sudo mount -v -t nfs4 -o proto=tcp,port=2049 ${SERVER_IP:-192.168.199.100}:/ /cli-nfs
 
 $ mount
 ```
@@ -146,7 +152,7 @@ $ docker container run -it --rm \
 
 ## Compose 中使用 NFS volume
 
-请查看 `docker-example.yml` 文件的 `volumes` 部分
+请查看 `scripts/docker-example.yml` 文件的 `volumes` 部分
 
 ## More Information
 
@@ -157,3 +163,5 @@ $ docker container run -it --rm \
 * https://blog.csdn.net/younger_china/article/details/52175085
 
 * https://github.com/kubernetes/examples/blob/master/staging/volumes/nfs/nfs-server-rc.yaml
+
+* https://www.cnblogs.com/lykyl/archive/2013/06/14/3136921.html
