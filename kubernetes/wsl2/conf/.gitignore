@@ -2,3 +2,4 @@
 !.gitignore
 !*.temp
 !kube-containerd
+!cni

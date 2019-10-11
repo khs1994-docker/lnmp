@@ -63,3 +63,7 @@ $ ./wsl2/kube-containerd
 ```bash
 $ ./wsl2/kubelet
 ```
+
+## 参考
+
+* https://github.com/kubernetes-sigs/kind/blob/master/site/content/docs/user/using-wsl2.md

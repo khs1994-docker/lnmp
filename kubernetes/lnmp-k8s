@@ -639,6 +639,21 @@ _cni_install(){
 
   local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
   local TAR_FILE="cni-plugins-${GOOS}-${GOARCH}-v${CNI_VERSION}.tgz"
+
+  # wsl2 with cni 0.8.2 error:
+  # https://github.com/containernetworking/plugins/issues/370
+  # down to 0.7.6
+  uname -a | grep -q microsoft && IS_WSL2=1 || IS_WSL2=0
+
+  if [ $IS_WSL2 -eq 1 ];then
+    CNI_VERSION="0.7.6"
+
+    print_info "WSL2 use cni $CNI_VERSION"
+
+    local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
+    local TAR_FILE="cni-plugins-${GOARCH}-v${CNI_VERSION}.tgz"
+  fi
+
   __download(){
     $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }

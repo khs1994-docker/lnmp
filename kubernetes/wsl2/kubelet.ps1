@@ -1,3 +1,5 @@
+$wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+
 $NODE_NAME="wsl2"
 $KUBE_APISERVER='https://192.168.199.100:16443'
 $K8S_ROOT="/opt/k8s"
@@ -24,7 +26,23 @@ wsl -u root -- /sbin/swapoff -a
 wsl -u root -- /opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 wsl -u root -- mkdir -p /var/lib/kubelet
 
-wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+if (Test-Path $PSScriptRoot/conf/.wsl_ip){
+   $wsl_ip_from_file=cat $PSScriptRoot/conf/.wsl_ip
+
+   if($wsl_ip -eq $wsl_ip_from_file){
+      Write-Warning "wsl ip not changed, skip rm cert"
+   }else{
+      Write-Warning "wsl ip changed, rm cert ..."
+      echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
+      wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+   }
+}else{
+   Write-Warning "wsl ip changed, rm cert ..."
+   echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
+   wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+}
+
+sleep 2
 
 wsl -u root -- /opt/k8s/bin/kubelet `
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
@@ -39,7 +57,6 @@ wsl -u root -- /opt/k8s/bin/kubelet `
 --image-pull-progress-deadline=15m `
 --volume-plugin-dir=/var/lib/kubelet/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
---fail-swap-on=false `
 --v=2
 
 # --container-runtime=docker `

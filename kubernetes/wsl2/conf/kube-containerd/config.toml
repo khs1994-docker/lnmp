@@ -57,7 +57,7 @@ oom_score = 0
         [plugins.cri.registry.mirrors."gcr.io"]
           endpoint = ["https://gcr.azk8s.cn"]
         [plugins.cri.registry.mirrors."quay.io"]
-          endpoint = ["https://quay.azk8s.cn"]          
+          endpoint = ["https://quay.azk8s.cn"]
       # [plugins.cri.registry.configs."gcr.io".auth]
       #   username = ""
       #   password = ""

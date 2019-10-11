@@ -12,17 +12,23 @@
 
 ## Kubernetes 基础设施(从 0 开始部署 Kubernetes 集群)
 
-* [自己手动部署 Kubernetes 集群(CoreOS)](coreos)
+* [自己手动部署 Kubernetes 集群(Fedora CoreOS)](coreos)
 
-* [Linux 单机部署](systemd)
+* [Linux 单机部署(systemd)](systemd)
 
 * [Docker Desktop](docs/guide/docker-desktop.md)
-
-* [MiniKube](docs/guide/minikube.md)
 
 * [Windows + WSL2 + 树莓派](rpi)
 
 * [WSL2](wsl2)
+
+* [MiniKube](docs/guide/minikube.md)
+
+* [k3s](https://github.com/rancher/k3s)
+
+* [kind](https://github.com/kubernetes-sigs/kind)
+
+* [microk8s](https://github.com/ubuntu/microk8s)
 
 * [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 

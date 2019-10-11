@@ -59,7 +59,8 @@ nodefs.inodesFree: "5%"
 imagefs.available: "15%"
 evictionSoft: {}
 enableControllerAttachDetach: true
-failSwapOn: true
+# failSwapOn: true
+failSwapOn: false
 containerLogMaxSize: 20Mi
 containerLogMaxFiles: 10
 systemReserved: {}
