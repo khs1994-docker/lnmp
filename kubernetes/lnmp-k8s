@@ -7,6 +7,7 @@ if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
 if ! [ -f volumes/.env ];then cp volumes/.env.example volumes/.env; fi
+if ! [ -f rpi/.env ];then cp rpi/.env.example rpi/.env; fi
 
 source ./systemd/.env.example
 source ./systemd/.env
@@ -781,6 +782,8 @@ _k8s_install_systemd(){
       /etc/systemd/system/$file ; \
     $(_sudo) sed -i "s!##NODE_NAME##!${HOSTNAME}!g" \
       /etc/systemd/system/$file ; \
+    $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
+      /etc/systemd/system/$file ; \
   done
 
   cd - > /dev/null
@@ -795,6 +798,8 @@ _cri_config(){
   echo "net.bridge.bridge-nf-call-iptables  = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
   echo "net.ipv4.ip_forward                 = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
   echo "net.bridge.bridge-nf-call-ip6tables = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
+
+  $(_sudo) sysctl --system || true
 
   # cni conf
   $(_sudo) mkdir -p /opt/k8s/cni/net.d
@@ -1078,7 +1083,8 @@ kube-proxy.kubeconfig} > /dev/null
   _k8s_install_common
   # Flanneld
   _flanneld_install
-  # _etcd_install
+  # etcdctl require by flanneld
+  _etcd_install
   _helm_install
   $(_sudo) cp systemd/flanneld.service /etc/systemd/system/
   # Docker

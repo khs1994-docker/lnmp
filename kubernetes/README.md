@@ -20,6 +20,10 @@
 
 * [MiniKube](docs/guide/minikube.md)
 
+* [Windows + WSL2 + 树莓派](rpi)
+
+* [WSL2](wsl2)
+
 * [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## 微信订阅号

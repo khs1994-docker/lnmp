@@ -5,6 +5,10 @@
 
 set -x
 
+if [ -f /opt/k8s/.env ];then
+  source /opt/k8s/.env 
+fi
+
 until curl --cacert ${K8S_ROOT:-/opt/k8s}/certs/ca.pem ${KUBE_APISERVER}; do
   >&2 echo "KUBE_APISERVER is unavailable - sleeping"
   sleep 3

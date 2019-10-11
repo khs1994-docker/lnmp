@@ -99,6 +99,8 @@ internet
 
 * https://github.com/kubernetes/examples
 * https://my.oschina.net/u/3797264
+* https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm
+* https://kubernetes.io/docs/reference/command-line-tools-reference/
 
 # Vue Press
 

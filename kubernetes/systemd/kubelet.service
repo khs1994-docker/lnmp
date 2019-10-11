@@ -8,7 +8,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 # WorkingDirectory=/var/lib/kubelet
 Environment="NODE_NAME=##NODE_NAME##"
 # Fix me
-Environment="KUBE_APISERVER=https://192.168.199.100:6443"
+Environment="KUBE_APISERVER=##KUBE_APISERVER##"
 
 Environment="K8S_ROOT=/opt/k8s"
 
