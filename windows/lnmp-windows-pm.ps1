@@ -102,9 +102,10 @@ Function _import_module($soft){
   if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
     Import-Module -Name "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
-    "==> vendor dev"
+    "==> Found in vendor/lwpm-dev"
     Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm\$soft"){
+    "==> Found in vendor/lwpm"
     Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm\$soft"
   }else{
     "==> Not Found"

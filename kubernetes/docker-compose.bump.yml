@@ -10,6 +10,9 @@ services:
   coredns:
     image: k8s.gcr.io/coredns:1.6.2
 
+  flannel:
+    image: quay.io/coreos/flannel:v0.11.0
+
   ingress_nginx:
     image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
 

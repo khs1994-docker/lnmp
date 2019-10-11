@@ -9,4 +9,4 @@ echo $wsl_ip
 
 nginx -c $PSScriptRoot/conf/kube-nginx.conf -p $HOME/.kube-nginx -s stop
 
-nginx -c $PSScriptRoot/conf/kube-nginx.conf -p $HOME/.kube-nginx
+RunHiddenConsole.exe nginx -c $PSScriptRoot/conf/kube-nginx.conf -p $HOME/.kube-nginx

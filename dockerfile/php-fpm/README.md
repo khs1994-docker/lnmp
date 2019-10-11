@@ -12,11 +12,11 @@
 
 * 7.3.10-cli-alpine
 * 7.3.10-fpm-alpine
-* 7.3.10-composer-alpine
-* 7.3.10-swoole-alpine
-* 7.3.10-unit-alpine
-* 7.3.10-supervisord-alpine
-* 7.3.10-ppm-alpine
+* 7.3.10-composer-alpine     (based fpm)
+* 7.3.10-swoole-alpine       (based cli)
+* 7.3.10-unit-alpine         (based cli) 
+* 7.3.10-supervisord-alpine  (based fpm)
+* 7.3.10-ppm-alpine          (based cli)
 
 ## Supported tags and respective `Dockerfile` links
 
@@ -156,7 +156,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 ### Debian Buster 不支持 7.3 及以下（freetype-config）
 
-* https://sources.debian.org/src/php7.3/7.3.10-1%7Edeb10u1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch/
+* https://salsa.debian.org/cleclerc-guest/php/blob/debian/7.3.9-1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
 
 * https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=870618
 
