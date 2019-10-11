@@ -1,4 +1,4 @@
-mkdir -Force $HOME/.kube-nginx/logs
+mkdir -Force $HOME/.kube-nginx/logs | out-null
 
 $wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 

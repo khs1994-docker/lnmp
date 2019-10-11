@@ -8,10 +8,10 @@ $KUBE_APISERVER_HOST=$wsl_ip
 # wsl1
 # $KUBE_APISERVER_HOST="192.168.199.100"
 
-$K8S_ROOT='/opt/k8s'
+# $K8S_ROOT='/opt/k8s'
 # $K8S_ETCD_HOST="192.168.199.100"
 
-wsl -u root -- /opt/k8s/bin/kube-apiserver `
+$command=wsl -u root -- echo /opt/k8s/bin/kube-apiserver `
 --advertise-address=${KUBE_APISERVER_HOST} `
 --default-not-ready-toleration-seconds=360 `
 --default-unreachable-toleration-seconds=360 `
@@ -64,3 +64,21 @@ wsl -u root -- /opt/k8s/bin/kube-apiserver `
 --service-node-port-range="1-65535" `
 --logtostderr=true `
 --v=2
+
+mkdir -Force $PSScriptRoot/supervisor.d | out-null
+
+echo "[program:kube-apiserver]
+
+command=$command
+stdout_logfile=/opt/k8s/log/kube-apiserver-stdout.log
+stderr_logfile=/opt/k8s/log/kube-apiserver-error.log
+directory=/
+autostart=false
+autorestart=false
+startretries=10
+user=root
+startsecs=60" > $PSScriptRoot/supervisor.d/kube-apiserver.ini
+
+if($args[1] -eq 'start'){
+  wsl -u root -- bash -c $command
+}

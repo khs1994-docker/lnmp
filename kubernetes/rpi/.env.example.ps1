@@ -1,1 +1,2 @@
 $K8S_ETCD_HOST="192.168.199.100"
+$K8S_ROOT='/opt/k8s'

@@ -44,27 +44,57 @@ $ ./lnmp-k8s join 192.168.199.100 --containerd --skip-cp-k8s-bin
 ## flanneld
 
 ```bash
-$ ./wsl2/flanneld
+$ ./wsl2/flanneld start
 ```
 
 ## kube-proxy
 
 ```bash
-$ ./wsl2/kube-proxy
+$ ./wsl2/kube-proxy start
 ```
 
 ## kube-containerd
 
 ```bash
-$ ./wsl2/kube-containerd
+$ ./wsl2/kube-containerd start
 ```
 
 ## kubelet
 
 ```bash
-$ ./wsl2/kubelet
+$ ./wsl2/kubelet start
 ```
 
 ## 参考
 
 * https://github.com/kubernetes-sigs/kind/blob/master/site/content/docs/user/using-wsl2.md
+
+## 使用 supervisor 管理组件
+
+安装配置请参考 [rpi](../rpi)
+
+生成配置文件
+
+```bash
+$ ./wsl2/flanneld
+$ ./wsl2/kube-containerd
+
+# 以下两个组件命令, 包含 WSL2 ip,故每次启动时必须生成新的配置文件
+$ ./wsl2/kube-proxy
+$ ./wsl2/kubelet
+
+# 复制配置文件
+$ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
+```
+
+重新加载配置
+
+```bash
+$ wsl -u root -- supervisorctl reload
+```
+
+启动组件
+
+```bash
+$ wsl -u root -- supervisorctl start kube-apiserver
+```

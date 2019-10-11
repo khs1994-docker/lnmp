@@ -96,7 +96,7 @@ Function _delete_lnmp(){
 }
 
 Function _create_pv(){
-  Get-Content deployment/pv/lnmp-volume.windows.example.yaml `
+  Get-Content deployment/pv/lnmp-volume.windows.temp.yaml `
       | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
       | kubectl create -f -
 

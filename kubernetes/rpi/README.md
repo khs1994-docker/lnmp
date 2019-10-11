@@ -65,7 +65,7 @@ $ docker-compose up cfssl-rpi
 ```bash
 $ wsl
 
-$ sudo mkdir -p /opt/k8s/{certs,conf,bin}
+$ sudo mkdir -p /opt/k8s/{certs,conf,bin,log}
 $ sudo cp -a rpi/certs /opt/k8s/
 $ sudo mv /opt/k8s/certs/*.yaml /opt/k8s/conf
 $ sudo mv /opt/k8s/certs/*.kubeconfig /opt/k8s/conf
@@ -95,19 +95,19 @@ $ get-process nginx
 ## Windows 启动 kube-apiserver
 
 ```bash
-$ ./rpi/kube-apiserver
+$ ./rpi/kube-apiserver start
 ```
 
 ## Windows 启动 kube-controller-manager
 
 ```bash
-$ ./rpi/kube-controller-manager
+$ ./rpi/kube-controller-manager start
 ```
 
 ## Windows 启动 kube-scheduler
 
 ```bash
-$ ./rpi/kube-scheduler
+$ ./rpi/kube-scheduler start
 ```
 
 ## 传输文件到树莓派
@@ -155,4 +155,28 @@ $ sudo systemctl start kubelet
 $ kubectl --kubeconfig ./rpi/certs/kubectl.kubeconfig get csr
 
 $ kubectl --kubeconfig ./rpi/certs/kubectl.kubeconfig certificate approve csr-d6ndc
+```
+
+## 使用 supervisord 管理进程
+
+上面运行于 `WSL2` 中的组件，启动时会占据窗口，我们可以使用 `supervisord` 管理这些组件
+
+配置 supervisor 请查看 `~/lnmp/docs/supervisord.md`
+
+生成配置文件
+
+```bash
+$ ./rpi/kube-apiserver
+$ ./rpi/kube-controller-manager
+$ ./rpi/kube-scheduler
+
+$ wsl -u root -- mkdir -p /etc/supervisor.d/
+$ wsl -u root -- cp rpi/supervisor.d/*.ini /etc/supervisor.d/
+
+# 启动服务端
+$ wsl -u root -- supervisord -c /etc/supervisord.conf -u root
+# $ wsl -u root -- supervisorctl reload
+
+# 启动组件
+$ wsl -u root -- supervisorctl start kube-apiserver
 ```

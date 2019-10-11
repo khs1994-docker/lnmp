@@ -12,4 +12,4 @@
 
 ### Updates:
 
-* [PHP `7.3.10` `7.2.23` `7.1.32`](https://www.php.net/ChangeLog-7.php#7.3.10)
+* [PHP `7.3.10` `7.2.23`](https://www.php.net/ChangeLog-7.php#7.3.10)

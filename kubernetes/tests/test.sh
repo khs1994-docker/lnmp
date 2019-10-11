@@ -18,7 +18,10 @@ sudo mkdir -p /tmp2
 sudo apt install -y nfs-common
 sudo mount -t nfs4 ${SERVER_IP}:/lnmp/log /tmp2
 sudo umount /tmp2
-sed -i "s#192.168.199.100#${SERVER_IP}#g" deployment/pv/lnmp-volume.linux.nfs.yaml
+
+echo "set LNMP_NFS_SERVER_HOST .env"
+sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
+
 ./lnmp-k8s create
 echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
 ping -c 1 laravel2.t.khs1994.com

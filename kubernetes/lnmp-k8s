@@ -245,7 +245,7 @@ _cleanup_lnmp(){
 _create_pv(){
   if [ "$OS" = 'Linux' ];then
     if [ "${1}" = '--no-nfs' ];then
-      sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.example.yaml \
+      sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.temp.yaml \
       | kubectl create -f -
 
       kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
@@ -253,10 +253,12 @@ _create_pv(){
       return
     fi
 
-    kubectl create -f deployment/pv/lnmp-volume.linux.nfs.yaml
+    sed "s#192.168.199.100#${LNMP_NFS_SERVER_HOST}#g" deployment/pv/lnmp-volume.linux.nfs.yaml | \
+      kubectl create -f -
+
     kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
   elif [ "$OS" = 'Darwin' ];then
-    sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.example.yaml \
+    sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.temp.yaml \
     | kubectl create -f -
 
     kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
@@ -1331,8 +1333,8 @@ case $_command in
     ;;
 
     nfs )
-    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5}
-    $(_sudo) modprobe nfsd
+    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+    $(_sudo) modprobe nfsd || true
     cd volumes
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs

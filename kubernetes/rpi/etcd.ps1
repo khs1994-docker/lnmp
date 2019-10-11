@@ -4,7 +4,7 @@
 # $K8S_ETCD_HOST="192.168.199.100"
 $K8S_ROOT=$PSScriptRoot
 
-mkdir -Force "$HOME/.k8s-rpi"
+mkdir -Force "$HOME/.k8s-rpi" | out-null
 
 RunHiddenConsole.exe etcd `
   --data-dir="$HOME/.k8s-rpi" `

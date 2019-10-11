@@ -15,3 +15,6 @@ docs/.vuepress/*
 
 *.test.yaml
 *.test.yml
+
+rpi/supervisor.d
+wsl2/supervisor.d
