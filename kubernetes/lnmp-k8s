@@ -791,7 +791,7 @@ _k8s_install_systemd(){
   for file in `ls *.service`; \
   do \
     if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
-    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" \
+    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
       /etc/systemd/system/$file ; \
     $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
       /etc/systemd/system/$file ; \
@@ -1006,7 +1006,7 @@ _k8s_install(){
 
   print_info "copy systemd unit file ..."
   $(_sudo) cp systemd/*.service /etc/systemd/system/
-  $(_sudo) cp systemd/certs/*.pem ${K8S_ROOT:-/opt/k8s}/certs/
+  $(_sudo) cp systemd/certs/*.pem ${K8S_ROOT}/certs/
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
     echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
@@ -1014,7 +1014,7 @@ _k8s_install(){
   _k8s_install_cp_bin
 
   print_info "copy kubernetes conf and cert file ..."
-  $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT:-/opt/k8s}/conf/
+  $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT}/conf/
   $(_sudo) cp \
     systemd/certs/{audit-policy.yaml,\
 kubelet-config.yaml,\
@@ -1022,18 +1022,18 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kube-scheduler.yaml,\
 encryption-config.yaml} \
-    ${K8S_ROOT:-/opt/k8s}/conf/
+    ${K8S_ROOT}/conf/
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml" "kube-scheduler.yaml")
 
   for file in ${files[@]}; \
   do \
     $(_sudo) sed -i "s!##NODE_IP##!${MASTER_IP}!g" \
-      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
-    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" \
-      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
+      ${K8S_ROOT}/conf/$file ; \
+    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
+      ${K8S_ROOT}/conf/$file ; \
     $(_sudo) sed -i "s!##NODE_NAME##!node1!g" \
-      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
+      ${K8S_ROOT}/conf/$file ; \
   done
 
   _k8s_install_systemd
@@ -1112,7 +1112,7 @@ kube-proxy.kubeconfig} > /dev/null
 ca-key.pem,\
 flanneld-key.pem,\
 flanneld.pem} \
-${K8S_ROOT:-/opt/k8s}/certs/
+${K8S_ROOT}/certs/
 
   test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \
   (print_info "skip cp k8s bin" ; \
@@ -1126,7 +1126,7 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig} \
-    ${K8S_ROOT:-/opt/k8s}/conf
+    ${K8S_ROOT}/conf
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml")
 
@@ -1135,11 +1135,11 @@ kube-proxy.kubeconfig} \
   for file in ${files[@]}; \
   do \
     $(_sudo) sed -i "s!##NODE_IP##!${NODE_IP}!g" \
-      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
-    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" \
-      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
+      ${K8S_ROOT}/conf/$file ; \
+    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
+      ${K8S_ROOT}/conf/$file ; \
     $(_sudo) sed -i "s!##NODE_NAME##!${HOSTNAME}!g" \
-      ${K8S_ROOT:-/opt/k8s}/conf/$file ; \
+      ${K8S_ROOT}/conf/$file ; \
   done
 
   _gvisor_install
@@ -1229,7 +1229,7 @@ _local_cleanup(){
     docker kube-containerd || true
 
   set +e
-  $(_sudo) rm -rf ${K8S_ROOT:-/opt/k8s}
+  $(_sudo) rm -rf ${K8S_ROOT}
 
   _docker_default_conf
 

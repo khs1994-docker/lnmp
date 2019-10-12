@@ -70,8 +70,10 @@ install:
   - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
   - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
   - export KUBERNETES_TYPE=server
-  - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" systemd/.env
+  - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
+  - cat systemd/.env
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
 
@@ -85,7 +87,7 @@ install:
   - ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
   # - debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
-  - export PATH=$PATH:/opt/k8s/bin
+  - export PATH=$PATH:${K8S_ROOT:-/opt/k8s}/bin
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
@@ -208,8 +210,8 @@ after_success:
   - sleep 30
   - sudo crictl version
   - sudo crictl info
-  - sudo ls -la /opt
-  - sudo ls -la /opt/k8s
+  - sudo ls -la /opt || true
+  - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
 
 env:
   global:
@@ -229,6 +231,9 @@ matrix:
     - os: linux
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.16.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.16.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s/custom
     - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.15.2
