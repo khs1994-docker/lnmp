@@ -11,7 +11,7 @@ $KUBE_APISERVER_HOST=$wsl_ip
 # $K8S_ROOT='/opt/k8s'
 # $K8S_ETCD_HOST="192.168.199.100"
 
-$command=wsl -u root -- echo /opt/k8s/bin/kube-apiserver `
+$command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --advertise-address=${KUBE_APISERVER_HOST} `
 --default-not-ready-toleration-seconds=360 `
 --default-unreachable-toleration-seconds=360 `
@@ -70,14 +70,14 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-apiserver]
 
 command=$command
-stdout_logfile=/opt/k8s/log/kube-apiserver-stdout.log
-stderr_logfile=/opt/k8s/log/kube-apiserver-error.log
+stdout_logfile=${K8S_ROOT}/log/kube-apiserver-stdout.log
+stderr_logfile=${K8S_ROOT}/log/kube-apiserver-error.log
 directory=/
 autostart=false
 autorestart=false
 startretries=2
 user=root
-startsecs=60" > $PSScriptRoot/supervisor.d/kube-apiserver.ini
+startsecs=10" > $PSScriptRoot/supervisor.d/kube-apiserver.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
 

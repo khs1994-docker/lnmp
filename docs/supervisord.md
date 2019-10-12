@@ -18,6 +18,8 @@ $ lnmp-docker up
 
 ## 宿主机使用
 
+`supervisor` 为 C(supervisorctl)/S(supervisord) 架构
+
 ```bash
 $ sudo pip install supervisor
 ```
@@ -25,7 +27,7 @@ $ sudo pip install supervisor
 ```bash
 $ sudo mkdir -p /etc/supervisor.d
 
-$ sudo cp config/supervisord/supervisord.ini /etc/supervisor.d/supervisord.ini
+# 子配置文件 /etc/supervisor.d/*.ini
 
 # 生成默认的配置文件
 $ echo_supervisord_conf | sudo tee /etc/supervisord.conf
@@ -38,3 +40,13 @@ files = /etc/supervisor.d/*.ini
 # 启动服务端
 $ sudo supervisord -u root -c /etc/supervisord.conf
 ```
+
+关闭服务端
+
+```bash
+$ sudo supervisorctl shutdown
+```
+
+## 参考
+
+* https://blog.csdn.net/zyz511919766/article/details/43967793

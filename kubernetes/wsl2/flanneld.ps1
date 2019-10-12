@@ -2,7 +2,7 @@
 . $PSScriptRoot/.env.ps1
 
 # $K8S_ROOT="/opt/k8s"
-$K8S_ETCD_ENTRYPOINTS="https://192.168.199.100:2379"
+# $K8S_ETCD_ENTRYPOINTS="https://192.168.199.100:2379"
 
 wsl -u root -- mkdir --parents /var/lib/coreos /run/flannel
 
@@ -27,7 +27,7 @@ if (!($?)){
   $('{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}' | ConvertTo-Json)
 }
 
-$command=wsl -u root -- echo /opt/k8s/bin/flanneld `
+$command=wsl -u root -- echo ${K8S_ROOT}/bin/flanneld `
   --etcd-endpoints=${K8S_ETCD_ENTRYPOINTS} `
   --etcd-cafile="${K8S_ROOT}/certs/ca.pem" `
   --etcd-certfile="${K8S_ROOT}/certs/flanneld.pem" `
@@ -40,14 +40,14 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:flanneld]
 
 command=$command
-stdout_logfile=/opt/k8s/log/flanneld-stdout.log
-stderr_logfile=/opt/k8s/log/flanneld-error.log
+stdout_logfile=${K8S_ROOT}/log/flanneld-stdout.log
+stderr_logfile=${K8S_ROOT}/log/flanneld-error.log
 directory=/
 autostart=false
 autorestart=false
 startretries=2
 user=root
-startsecs=60" > $PSScriptRoot/supervisor.d/flanneld.ini
+startsecs=10" > $PSScriptRoot/supervisor.d/flanneld.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   wsl -u root -- supervisorctl start kube-node:flanneld

@@ -4,10 +4,10 @@
 # $K8S_ETCD_HOST="192.168.199.100"
 $K8S_ROOT=$PSScriptRoot
 
-mkdir -Force "$HOME/.k8s-rpi" | out-null
+mkdir -Force "$HOME/.k8s-wsl2" | out-null
 
 RunHiddenConsole.exe etcd `
-  --data-dir="$HOME/.k8s-rpi" `
+  --data-dir="$HOME/.k8s-wsl2" `
   --enable-v2=true `
   --name="node1" `
   --listen-peer-urls="https://${K8S_ETCD_HOST}:2380" `

@@ -4,7 +4,7 @@
 $wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
 $NODE_NAME="wsl2"
-$KUBE_APISERVER='https://192.168.199.100:16443'
+# $KUBE_APISERVER='https://192.168.199.100:16443'
 # $K8S_ROOT="/opt/k8s"
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 
@@ -13,11 +13,11 @@ $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
     -replace "##NODE_IP##",$wsl_ip `
   | Set-Content $PSScriptRoot/conf/kubelet-config.yaml
 
-wsl -u root -- bash -c "echo NODE_NAME=$NODE_NAME > /opt/k8s/.env"
+wsl -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
 wsl -u root -- `
-  bash -c "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a /opt/k8s/.env"
+  bash -c "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env"
 
-$command=wsl -u root -- echo /opt/k8s/bin/kubelet `
+$command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
 --cert-dir=${K8S_ROOT}/certs `
 --container-runtime=remote `
@@ -47,30 +47,25 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kubelet]
 
 command=$command
-stdout_logfile=/opt/k8s/log/kubelet-stdout.log
-stderr_logfile=/opt/k8s/log/kubelet-error.log
+stdout_logfile=${K8S_ROOT}/log/kubelet-stdout.log
+stderr_logfile=${K8S_ROOT}/log/kubelet-error.log
 directory=/
 autostart=false
 autorestart=false
 startretries=2
 user=root
-startsecs=60" > $PSScriptRoot/supervisor.d/kubelet.ini
+startsecs=10" > $PSScriptRoot/supervisor.d/kubelet.ini
 
-if($args[1] -ne 'start'){
+if($args[0] -ne 'start'){
   exit
 }
 
 $env:ErrorActionPreference="stop"
 
-wsl -u root -- /opt/k8s/bin/kubeadm version
-wsl -u root -- ls /opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
+wsl -u root -- ${K8S_ROOT}/bin/kubeadm version
+wsl -u root -- ls ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
 $env:ErrorActionPreference="continue"
-
-wsl -u root -- /usr/sbin/swapoff -a
-wsl -u root -- /sbin/swapoff -a
-wsl -u root -- /opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
-wsl -u root -- mkdir -p /var/lib/kubelet
 
 if (Test-Path $PSScriptRoot/conf/.wsl_ip){
    $wsl_ip_from_file=cat $PSScriptRoot/conf/.wsl_ip
@@ -89,6 +84,13 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip){
 }
 
 sleep 2
+
+wsl -u root -- /usr/sbin/swapoff -a
+wsl -u root -- /sbin/swapoff -a
+wsl -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
+wsl -u root -- mkdir -p /var/lib/kubelet
+
+sleep 5
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   wsl -u root -- supervisorctl start kube-node:kubelet

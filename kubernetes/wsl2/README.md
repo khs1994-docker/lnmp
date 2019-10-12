@@ -67,25 +67,32 @@ $ ./wsl2/kubelet start
 
 ## 使用 supervisor 管理组件
 
+* http://www.supervisord.org/running.html#running-supervisorctl
+
 安装配置请参考 [kube-server](README.SERVER.md)
 
 生成配置文件
 
 ```bash
-$ ./wsl2/flanneld
-$ ./wsl2/kube-containerd
+# $ ./wsl2/flanneld
+# $ ./wsl2/kube-containerd
 
-# 以下两个组件命令, 包含 WSL2 ip,故每次启动时必须生成新的配置文件
-$ ./wsl2/kube-proxy
-$ ./wsl2/kubelet
+$ ./wsl2/bin/supervisorctl g
+```
 
-# 复制配置文件
-$ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
+**以下两个组件命令, 包含 WSL2 ip,故每次启动时必须生成新的配置文件**
+
+```bash
+# $ ./wsl2/kube-proxy
+# $ ./wsl2/kubelet
 ```
 
 重新加载配置
 
 ```bash
+# 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
+# $ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
+
 $ ./wsl2/bin/supervisorctl update
 ```
 
@@ -101,7 +108,24 @@ $ ./wsl2/bin/supervisorctl start kube-node:kubelet
 $ ./wsl2/bin/supervisorctl start kube-node:
 ```
 
+## 信任证书
+
+```bash
+$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
+
+$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d6ndc
+```
+
 ## 总结
+
+**以下两个组件命令, 包含 WSL2 ip,故每次启动时必须生成新的配置文件**
+
+```bash
+# $ ./wsl2/kube-proxy
+# $ ./wsl2/kubelet
+
+$ ./wsl2/bin/supervisorctl g
+```
 
 启动组件有三种方式,下面以 `kube-proxy` 组件为例,其他组件同理
 
@@ -111,10 +135,12 @@ $ ./wsl2/kube-proxy start
 ```
 
 ```bash
+# 对 wsl -u root -- supervisorctl 命令的封装
 $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 ```
 
 ```bash
+# 对上一条命令的封装
 $ ./wsl2/kube-proxy start -d
 ```
 
@@ -124,6 +150,8 @@ $ ./wsl2/kube-proxy start -d
 
 ```bash
 $ ./wsl2/bin/supervisorctl start kube-node:
+
+# $./wsl2/bin/supervisorctl status kube-node:
 ```
 
 ```bash
@@ -135,6 +163,12 @@ $ ./wsl2/bin/kube-node
 ```bash
 # 相当于关闭虚拟机
 $ wsl --shutdown
+```
+
+kubelet 出错
+
+```bash
+$ wsl -u root -- rm -rf /opt/k8s/conf/kubelet-bootstrap.kubeconfig
 ```
 
 * https://github.com/kubernetes-sigs/kind/blob/master/site/content/docs/user/using-wsl2.md

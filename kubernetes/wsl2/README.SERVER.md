@@ -104,6 +104,8 @@ $ ./wsl2/kube-scheduler start
 
 ## 使用 supervisord 管理组件
 
+* http://www.supervisord.org/running.html#running-supervisorctl
+
 上面运行于 `WSL2` 中的组件，启动时会占据窗口，我们可以使用 `supervisord` 管理这些组件,避免窗口占用
 
 配置 `supervisor` 请查看 `~/lnmp/docs/supervisord.md`
@@ -111,26 +113,27 @@ $ ./wsl2/kube-scheduler start
 启动服务端
 
 ```bash
+# $ .\wsl2\bin\supervisorctl.ps1 pid
+
 $ wsl -u root -- supervisord -c /etc/supervisord.conf -u root
 ```
 
 生成配置文件
 
 ```bash
-$ ./wsl2/kube-apiserver
-$ ./wsl2/kube-controller-manager
-$ ./wsl2/kube-scheduler
-```
+# $ ./wsl2/kube-apiserver
+# $ ./wsl2/kube-controller-manager
+# $ ./wsl2/kube-scheduler
 
-复制配置文件
-
-```bash
-$ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
+$ ./wsl2/bin/supervisorctl g
 ```
 
 重新载入配置文件
 
 ```bash
+# 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
+# $ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
+
 $ ./wsl2/bin/supervisorctl update
 ```
 
@@ -144,6 +147,8 @@ $ ./wsl2/bin/supervisorctl start kube-server:kube-scheduler
 
 # 启动全部组件
 $ ./wsl2/bin/supervisorctl start kube-server:
+
+# $ ./wsl2/bin/supervisorctl status kube-server:
 ```
 
 ## 总结
@@ -156,10 +161,12 @@ $ ./wsl2/kube-apiserver start
 ```
 
 ```bash
+# 对 wsl -u root -- supervisorctl 命令的封装
 $ ./wsl2/bin/supervisorctl start kube-server:kube-apiserver
 ```
 
 ```bash
+# 对上一条命令的封装
 $ ./wsl2/kube-apiserver start -d
 ```
 

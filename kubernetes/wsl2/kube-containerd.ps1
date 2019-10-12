@@ -3,7 +3,7 @@
 
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 
-wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/10-flannel.conflist /opt/k8s/cni/net.d
+wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/10-flannel.conflist ${K8S_ROOT}/cni/net.d
 
 wsl -u root -- cat /opt/k8s/cni/net.d/10-flannel.conflist
 
@@ -15,14 +15,14 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-containerd]
 
 command=$command
-stdout_logfile=/opt/k8s/log/kube-containerd-stdout.log
-stderr_logfile=/opt/k8s/log/kube-containerd-error.log
+stdout_logfile=${K8S_ROOT}/log/kube-containerd-stdout.log
+stderr_logfile=${K8S_ROOT}/log/kube-containerd-error.log
 directory=/
 autostart=false
 autorestart=false
 startretries=2
 user=root
-startsecs=60" > $PSScriptRoot/supervisor.d/kube-containerd.ini
+startsecs=10" > $PSScriptRoot/supervisor.d/kube-containerd.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   wsl -u root -- supervisorctl start kube-node:kube-containerd

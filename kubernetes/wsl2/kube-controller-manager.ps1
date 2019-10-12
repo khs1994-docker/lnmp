@@ -1,9 +1,12 @@
+. $PSScriptRoot/.env.example.ps1
+. $PSScriptRoot/.env.ps1
+
 $wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
 $K8S_CM_HOST=$wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$command=wsl -u root -- echo /opt/k8s/bin/kube-controller-manager `
+$command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
 --profiling `
 --cluster-name=kubernetes `
 --controllers=*,bootstrapsigner,tokencleaner `
@@ -46,14 +49,14 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-controller-manager]
 
 command=$command
-stdout_logfile=/opt/k8s/log/kube-controller-manager-stdout.log
-stderr_logfile=/opt/k8s/log/kube-controller-manager-error.log
+stdout_logfile=${K8S_ROOT}/log/kube-controller-manager-stdout.log
+stderr_logfile=${K8S_ROOT}/log/kube-controller-manager-error.log
 directory=/
 autostart=false
 autorestart=false
 startretries=2
 user=root
-startsecs=60" > $PSScriptRoot/supervisor.d/kube-controller-manager.ini
+startsecs=10" > $PSScriptRoot/supervisor.d/kube-controller-manager.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   wsl -u root -- supervisorctl start kube-server:kube-controller-manager

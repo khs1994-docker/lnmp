@@ -54,7 +54,7 @@ $ sudo systemctl start kube-containerd
 $ sudo systemctl start kubelet
 ```
 
-## 信任证书及 kubectl
+## 信任证书
 
 ```bash
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
