@@ -9,7 +9,7 @@
 ## 将 `Ubuntu-18.04` 设为版本 2 ,并设置为默认 wsl
 
 ```bash
-# wsl -h
+# $ wsl -h
 
 # 设为默认
 $ wsl --set-default Ubuntu-18.04
@@ -110,15 +110,22 @@ $ ./wsl2/kube-scheduler start
 
 配置 `supervisor` 请查看 `~/lnmp/docs/supervisord.md`
 
-启动服务端
+### 命令封装
+
+使用 `./wsl2/bin/supervisord` 封装了 `supervisord`
+使用 `./wsl2/bin/supervisorctl` 封装了 `supervisorctl` 并增加了额外的命令
+
+### 1.启动 supervisor 服务端
 
 ```bash
 # $ .\wsl2\bin\supervisorctl.ps1 pid
 
-$ wsl -u root -- supervisord -c /etc/supervisord.conf -u root
+# $ wsl -u root -- supervisord -c /etc/supervisord.conf -u root
+
+$ ./wsl2/bin/supervisord
 ```
 
-生成配置文件
+### 2.生成配置文件
 
 ```bash
 # $ ./wsl2/kube-apiserver
@@ -128,7 +135,7 @@ $ wsl -u root -- supervisord -c /etc/supervisord.conf -u root
 $ ./wsl2/bin/supervisorctl g
 ```
 
-重新载入配置文件
+### 3.重新载入配置文件
 
 ```bash
 # 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
@@ -137,7 +144,9 @@ $ ./wsl2/bin/supervisorctl g
 $ ./wsl2/bin/supervisorctl update
 ```
 
-启动组件(program 加入 group 之后,不能再用 program 作为参数,必须使用 group:program)
+### 4.启动组件
+
+**program 加入 group 之后,不能再用 program 作为参数,必须使用 group:program**
 
 ```bash
 # 启动单个组件
@@ -145,7 +154,7 @@ $ ./wsl2/bin/supervisorctl start kube-server:kube-apiserver
 $ ./wsl2/bin/supervisorctl start kube-server:kube-controller-manager
 $ ./wsl2/bin/supervisorctl start kube-server:kube-scheduler
 
-# 启动全部组件
+# 或者可以直接启动全部组件
 $ ./wsl2/bin/supervisorctl start kube-server:
 
 # $ ./wsl2/bin/supervisorctl status kube-server:

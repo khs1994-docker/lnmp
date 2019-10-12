@@ -71,7 +71,12 @@ $ ./wsl2/kubelet start
 
 安装配置请参考 [kube-server](README.SERVER.md)
 
-生成配置文件
+### 命令封装
+
+使用 `./wsl2/bin/supervisord` 封装了 `supervisord`
+使用 `./wsl2/bin/supervisorctl` 封装了 `supervisorctl` 并增加了额外的命令
+
+### 1.生成配置文件
 
 ```bash
 # $ ./wsl2/flanneld
@@ -87,7 +92,7 @@ $ ./wsl2/bin/supervisorctl g
 # $ ./wsl2/kubelet
 ```
 
-重新加载配置
+### 2.重新加载配置
 
 ```bash
 # 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
@@ -96,7 +101,7 @@ $ ./wsl2/bin/supervisorctl g
 $ ./wsl2/bin/supervisorctl update
 ```
 
-启动组件
+### 3.启动组件
 
 ```bash
 $ ./wsl2/bin/supervisorctl start kube-node:flanneld
@@ -104,16 +109,31 @@ $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 $ ./wsl2/bin/supervisorctl start kube-node:kube-containerd
 $ ./wsl2/bin/supervisorctl start kube-node:kubelet
 
-# 启动全部组件
+# 或者可以直接启动全部组件
 $ ./wsl2/bin/supervisorctl start kube-node:
 ```
 
-## 信任证书
+## 4.信任证书
 
 ```bash
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d6ndc
+```
+
+## 5. kubectl
+
+```bash
+# $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig
+
+# 封装上边的命令
+$ ./wsl2/bin/kubectl
+```
+
+## 6. crictl
+
+```bash
+$ ./wsl2/bin/crictl
 ```
 
 ## 总结
@@ -157,6 +177,10 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 ```bash
 $ ./wsl2/bin/kube-node
 ```
+
+## 命令封装
+
+为避免 Windows 与 WSL 切换和执行 WSL 命令时加上 `$ wsl -u root -- XXX` 的繁琐,特封装了部分命令以便于直接在 Windows 上执行,具体请查看 `./wsl2/bin/*`
 
 ## 参考
 

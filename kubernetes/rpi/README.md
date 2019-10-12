@@ -61,3 +61,12 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d6ndc
 ```
+
+## kubectl
+
+```bash
+# $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig
+
+# 封装上边的命令
+$ ./wsl2/bin/kubectl
+```
