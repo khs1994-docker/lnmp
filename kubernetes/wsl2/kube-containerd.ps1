@@ -1,5 +1,5 @@
-. $PSScriptRoot/../rpi/.env.example.ps1
-. $PSScriptRoot/../rpi/.env.ps1
+. $PSScriptRoot/.env.example.ps1
+. $PSScriptRoot/.env.ps1
 
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 
@@ -20,10 +20,16 @@ stderr_logfile=/opt/k8s/log/kube-containerd-error.log
 directory=/
 autostart=false
 autorestart=false
-startretries=10
+startretries=2
 user=root
 startsecs=60" > $PSScriptRoot/supervisor.d/kube-containerd.ini
 
-if($args[1] -eq 'start'){
+if($args[0] -eq 'start' -and $args[1] -eq '-d'){
+  wsl -u root -- supervisorctl start kube-node:kube-containerd
+
+  exit
+}
+
+if($args[0] -eq 'start'){
   wsl -u root -- bash -c $command
 }

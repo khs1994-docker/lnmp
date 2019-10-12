@@ -20,12 +20,12 @@ if (!(Test-Path coreos/.env )){
   cp coreos/.env.example coreos/.env
 }
 
-if (!(Test-Path rpi/.env )){
-  cp rpi/.env.example rpi/.env
+if (!(Test-Path wsl2/.env )){
+  cp wsl2/.env.example wsl2/.env
 }
 
-if (!(Test-Path rpi/.env.ps1 )){
-  cp rpi/.env.example.ps1 rpi/.env.ps1
+if (!(Test-Path wsl2/.env.ps1 )){
+  cp wsl2/.env.example.ps1 wsl2/.env.ps1
 }
 
 . "$PSScriptRoot/.env.example.ps1"

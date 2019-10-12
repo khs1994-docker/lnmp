@@ -51,11 +51,16 @@ stderr_logfile=/opt/k8s/log/kube-controller-manager-error.log
 directory=/
 autostart=false
 autorestart=false
-startretries=10
+startretries=2
 user=root
 startsecs=60" > $PSScriptRoot/supervisor.d/kube-controller-manager.ini
 
+if($args[0] -eq 'start' -and $args[1] -eq '-d'){
+  wsl -u root -- supervisorctl start kube-server:kube-controller-manager
 
-if($args[1] -eq 'start'){
+  exit
+}
+
+if($args[0] -eq 'start'){
   wsl -u root -- bash -c $command
 }

@@ -16,6 +16,6 @@ autostart=true
 
 autorestart=true
 
-startretries=10
+startretries=2
 
 startsecs=60

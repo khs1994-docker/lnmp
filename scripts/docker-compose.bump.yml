@@ -38,7 +38,7 @@ services:
     image: httpd:2.4.41-alpine
 
   etcd:
-    image: quay.io/coreos/etcd:3.4.1
+    image: quay.io/coreos/etcd:3.4.2
 
   minio:
     image: minio/minio:RELEASE.2019-09-05T23-24-38Z

@@ -7,7 +7,7 @@ if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
 if ! [ -f volumes/.env ];then cp volumes/.env.example volumes/.env; fi
-if ! [ -f rpi/.env ];then cp rpi/.env.example rpi/.env; fi
+if ! [ -f wsl2/.env ];then cp wsl2/.env.example wsl2/.env; fi
 
 source ./systemd/.env.example
 source ./systemd/.env
