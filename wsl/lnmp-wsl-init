@@ -27,7 +27,8 @@ if [ -z "$DOCKER_BUILDKIT" ];then echo "export DOCKER_BUILDKIT=1" >> ~/.bashrc; 
 if [ -z "$DOCKER_CLI_EXPERIMENTAL" ];then echo "export DOCKER_CLI_EXPERIMENTAL=enabled" >> ~/.bashrc; fi
 
 if [ -z "$DOCKER_HOST" ];then
-  echo "export DOCKER_HOST=127.0.0.1:2375" >> ~/.bashrc
+  # echo "export DOCKER_HOST=127.0.0.1:2375" >> ~/.bashrc
+  true
 fi
 
 # WSL2

@@ -11,6 +11,7 @@ $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 (Get-Content $PSScriptRoot/conf/kubelet-config.yaml.temp) `
     -replace "##NODE_NAME##",$NODE_NAME `
     -replace "##NODE_IP##",$wsl_ip `
+    -replace "##K8S_ROOT##",$K8S_ROOT `
   | Set-Content $PSScriptRoot/conf/kubelet-config.yaml
 
 wsl -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
@@ -22,13 +23,13 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --cert-dir=${K8S_ROOT}/certs `
 --container-runtime=remote `
 --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
---root-dir=/opt/k8s/var/lib/kubelet `
+--root-dir=${K8S_ROOT}/var/lib/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
 --config=${K8S_WSL2_ROOT}/conf/kubelet-config.yaml `
 --hostname-override=${NODE_NAME} `
 --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 `
 --image-pull-progress-deadline=15m `
---volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ `
+--volume-plugin-dir=${K8S_ROOT}/var/lib/kubelet/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
 --v=2
 
@@ -56,7 +57,7 @@ startretries=2
 user=root
 startsecs=10" > $PSScriptRoot/supervisor.d/kubelet.ini
 
-if($args[0] -ne 'start'){
+if($args[0] -ne 'start' -and $args[0] -ne 'init'){
   exit
 }
 
@@ -87,8 +88,13 @@ sleep 2
 
 wsl -u root -- /usr/sbin/swapoff -a
 wsl -u root -- /sbin/swapoff -a
-wsl -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
-wsl -u root -- mkdir -p /opt/k8s/var/lib/kubelet
+wsl -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh ${K8S_ROOT}
+wsl -u root -- mkdir -p ${K8S_ROOT}/var/lib/kubelet
+
+if($args[0] -eq 'init'){
+  echo "kubelet init success !"
+  exit
+}
 
 sleep 5
 

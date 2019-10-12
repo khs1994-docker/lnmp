@@ -1,4 +1,4 @@
-root = "/opt/k8s/var/lib/kube-containerd"
+root = "##K8S_ROOT##/var/lib/kube-containerd"
 state = "/run/kube-containerd"
 oom_score = 0
 
@@ -46,8 +46,8 @@ oom_score = 0
         runtime_engine = ""
         runtime_root = ""
     [plugins.cri.cni]
-      bin_dir = "/opt/k8s/cni/bin"
-      conf_dir = "/opt/k8s/cni/net.d"
+      bin_dir = "##K8S_ROOT##/cni/bin"
+      conf_dir = "##K8S_ROOT##/cni/net.d"
       conf_template = ""
     [plugins.cri.registry]
       [plugins.cri.registry.mirrors]
@@ -75,7 +75,7 @@ oom_score = 0
     no_shim = false
     shim_debug = false
   [plugins.opt]
-    path = "/opt/k8s/kube-containerd"
+    path = "##K8S_ROOT##/kube-containerd"
   [plugins.restart]
     interval = "10s"
   [plugins.scheduler]

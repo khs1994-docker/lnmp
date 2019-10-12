@@ -35,7 +35,7 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --audit-log-maxbackup=3 `
 --audit-log-maxsize=100 `
 --audit-log-truncate-enabled `
---audit-log-path=/opt/k8s/var/log/kubernetes/kube-apiserver/audit.log `
+--audit-log-path=${K8S_ROOT}/var/log/kubernetes/kube-apiserver/audit.log `
 --audit-policy-file=${K8S_ROOT}/conf/audit-policy.yaml `
 --profiling `
 --anonymous-auth=false `

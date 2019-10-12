@@ -6,6 +6,7 @@ $wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut 
 (Get-Content $PSScriptRoot/conf/kube-proxy.config.yaml.temp) `
     -replace "##NODE_NAME##","wsl2" `
     -replace "##NODE_IP##",$wsl_ip `
+    -replace "##K8S_ROOT##",$K8S_ROOT `
   | Set-Content $PSScriptRoot/conf/kube-proxy.config.yaml
 
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"

@@ -3,6 +3,7 @@
 ## 注意事项
 
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
+* WSL2 IP 变化时必须重启 `kube-nginx`
 * Windows 固定 IP `192.168.199.100`
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
 
@@ -19,8 +20,8 @@
 ```bash
 $ wsl
 
-$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} \
-    /opt/k8s/bin
+$ source ./wsl2/.env
+$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} ${K8S_ROOT:-/opt/k8s}/bin
 ```
 
 ```powershell
@@ -107,9 +108,13 @@ $ ./wsl2/bin/supervisorctl update
 $ ./wsl2/bin/supervisorctl start kube-node:flanneld
 $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 $ ./wsl2/bin/supervisorctl start kube-node:kube-containerd
+
+# 启动 kubelet 必须先进行初始化
+$ ./wsl2/kubelet init
 $ ./wsl2/bin/supervisorctl start kube-node:kubelet
 
 # 或者可以直接启动全部组件
+$ ./wsl2/kubelet init
 $ ./wsl2/bin/supervisorctl start kube-node:
 ```
 
@@ -145,6 +150,7 @@ $ ./wsl2/bin/crictl
 # $ ./wsl2/kubelet
 
 $ ./wsl2/bin/supervisorctl g
+$ ./wsl2/kubelet init
 ```
 
 启动组件有三种方式,下面以 `kube-proxy` 组件为例,其他组件同理
@@ -166,7 +172,19 @@ $ ./wsl2/kube-proxy start -d
 
 ### 一键启动
 
-有两种方式
+**一键启动之前必须保证 [kube-server](README.SERVER.md) 正常运行**
+
+**先生成配置并进行 kubelet 初始化**
+
+```bash
+$ ./wsl2/bin/supervisorctl g
+
+$ ./wsl2/bin/supervisorctl update
+
+$ ./wsl2/kubelet init
+```
+
+之后一键启动,有两种方式可供选择
 
 ```bash
 $ ./wsl2/bin/supervisorctl start kube-node:
@@ -192,7 +210,7 @@ $ wsl --shutdown
 kubelet 出错
 
 ```bash
-$ wsl -u root -- rm -rf /opt/k8s/conf/kubelet-bootstrap.kubeconfig
+$ wsl -u root -- rm -rf ${K8S_ROOT:-/opt/k8s}/conf/kubelet-bootstrap.kubeconfig
 ```
 
 * https://github.com/kubernetes-sigs/kind/blob/master/site/content/docs/user/using-wsl2.md

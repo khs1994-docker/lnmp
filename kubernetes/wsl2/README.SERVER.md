@@ -30,6 +30,12 @@ $ wsl --set-version Ubuntu-18.04 2
 * `kube-controller-manager` WSL2
 * `kube-scheduler` WSL2
 
+## 安装 Docker docker-compose
+
+```bash
+$ sudo service docker start
+```
+
 ## 获取 kubernetes
 
 ```bash
@@ -57,13 +63,14 @@ $ docker-compose up cfssl-wsl2
 ```bash
 $ wsl
 
-$ sudo mkdir -p /opt/k8s/{certs,conf,bin,log}
-$ sudo cp -a wsl2/certs /opt/k8s/
-$ sudo mv /opt/k8s/certs/*.yaml /opt/k8s/conf
-$ sudo mv /opt/k8s/certs/*.kubeconfig /opt/k8s/conf
+$ source wsl2/.env
+$ sudo mkdir -p ${K8S_ROOT:-/opt/k8s}/{certs,conf,bin,log}
+$ sudo cp -a wsl2/certs ${K8S_ROOT:-/opt/k8s}/
+$ sudo mv ${K8S_ROOT:-/opt/k8s}/certs/*.yaml ${K8S_ROOT:-/opt/k8s}/conf
+$ sudo mv ${K8S_ROOT:-/opt/k8s}/certs/*.kubeconfig ${K8S_ROOT:-/opt/k8s}/conf
+$ sudo sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.yaml
 
-$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} \
-    /opt/k8s/bin
+$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:-/opt/k8s}/bin
 ```
 
 ## Windows 启动 Etcd
@@ -181,7 +188,15 @@ $ ./wsl2/kube-apiserver start -d
 
 ### 一键启动
 
-有两种方式
+**由于 WSL2 IP 一直在变化,必须先生成并更新配置**
+
+```bash
+$ ./wsl2/bin/supervisorctl g
+
+$ ./wsl2/bin/supervisorctl update
+```
+
+之后一键启动,有两种方式可供选择
 
 ```bash
 $ ./wsl2/bin/supervisorctl start kube-server:
