@@ -1,5 +1,5 @@
 version = 2
-root = "/var/lib/kube-containerd"
+root = "/opt/k8s/var/lib/kube-containerd"
 state = "/run/kube-containerd"
 plugin_dir = ""
 disabled_plugins = []
@@ -119,7 +119,7 @@ oom_score = 0
       tls_cert_file = ""
       tls_key_file = ""
   [plugins."io.containerd.internal.v1.opt"]
-    path = "/opt/kube-containerd"
+    path = "/opt/k8s/kube-containerd"
   [plugins."io.containerd.internal.v1.restart"]
     interval = "10s"
   [plugins."io.containerd.metadata.v1.bolt"]

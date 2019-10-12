@@ -22,13 +22,13 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --cert-dir=${K8S_ROOT}/certs `
 --container-runtime=remote `
 --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
---root-dir=/var/lib/kubelet `
+--root-dir=/opt/k8s/var/lib/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
 --config=${K8S_WSL2_ROOT}/conf/kubelet-config.yaml `
 --hostname-override=${NODE_NAME} `
 --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 `
 --image-pull-progress-deadline=15m `
---volume-plugin-dir=/var/lib/kubelet/kubelet-plugins/volume/exec/ `
+--volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
 --v=2
 
@@ -88,7 +88,7 @@ sleep 2
 wsl -u root -- /usr/sbin/swapoff -a
 wsl -u root -- /sbin/swapoff -a
 wsl -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
-wsl -u root -- mkdir -p /var/lib/kubelet
+wsl -u root -- mkdir -p /opt/k8s/var/lib/kubelet
 
 sleep 5
 

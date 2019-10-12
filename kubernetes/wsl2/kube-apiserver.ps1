@@ -24,7 +24,7 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --etcd-cafile=${K8S_ROOT}/certs/ca.pem `
 --etcd-certfile=${K8S_ROOT}/certs/kubernetes.pem `
 --etcd-keyfile=${K8S_ROOT}/certs/kubernetes-key.pem `
---etcd-servers="https://${K8S_ETCD_HOST}:2379" `
+--etcd-servers=$K8S_ETCD_ENTRYPOINTS `
 --bind-address=${KUBE_APISERVER_HOST} `
 --secure-port=6443 `
 --tls-cert-file=${K8S_ROOT}/certs/kubernetes.pem `
@@ -35,7 +35,7 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --audit-log-maxbackup=3 `
 --audit-log-maxsize=100 `
 --audit-log-truncate-enabled `
---audit-log-path=/var/log/kubernetes/kube-apiserver/audit.log `
+--audit-log-path=/opt/k8s/var/log/kubernetes/kube-apiserver/audit.log `
 --audit-policy-file=${K8S_ROOT}/conf/audit-policy.yaml `
 --profiling `
 --anonymous-auth=false `

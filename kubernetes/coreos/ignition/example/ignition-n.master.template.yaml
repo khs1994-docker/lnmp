@@ -71,13 +71,13 @@ systemd:
         Environment="ETCD_DATA_DIR=/var/lib/etcd"
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
+        ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
 
         ExecStartPre=-podman container rm etcd
         ExecStartPre=-/bin/podman pull gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION}
         ExecStart= podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
-          -v /var/lib/etcd:/var/lib/etcd \
+          -v /opt/k8s/var/lib/etcd:/var/lib/etcd \
           -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
           gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
           etcd \
@@ -133,12 +133,12 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=mkdir -p /var/log/kubernetes
+        ExecStartPre=mkdir -p /opt/k8s/var/log/kubernetes
 
         ExecStart=podman run \
         --name kube-apiserver \
         -v ${K8S_ROOT}:${K8S_ROOT} \
-        -v /var/log/kubernetes:/var/log/kubernetes \
+        -v /opt/k8s/var/log/kubernetes:/var/log/kubernetes \
         --network host \
         k8s.gcr.io/kube-apiserver:{{KUBERNETES_VERSION}} \
         kube-apiserver \
@@ -346,20 +346,20 @@ systemd:
         ExecStartPre=-/usr/sbin/swapoff -a
         ExecStartPre=-/sbin/swapoff -a
         ExecStartPre=-${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
-        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
 
         ExecStart=${K8S_ROOT}/bin/kubelet \
         --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
         --cert-dir=${K8S_ROOT}/certs \
         --container-runtime=${CONTAINER_RUNTIME} \
         --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
-        --root-dir=/var/lib/kubelet \
+        --root-dir=/opt/k8s/var/lib/kubelet \
         --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
         --config=${K8S_ROOT}/conf/kubelet-config.yaml \
         --hostname-override=coreos{{n}} \
         --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
         --image-pull-progress-deadline=15m \
-        --volume-plugin-dir=/var/lib/kubelet/kubelet-plugins/volume/exec/ \
+        --volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
         --v=2
 

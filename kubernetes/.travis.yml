@@ -208,6 +208,8 @@ after_success:
   - sleep 30
   - sudo crictl version
   - sudo crictl info
+  - sudo ls -la /opt
+  - sudo ls -la /opt/k8s
 
 env:
   global:

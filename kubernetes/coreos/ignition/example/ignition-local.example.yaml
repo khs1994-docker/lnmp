@@ -71,12 +71,12 @@ systemd:
         Environment="ETCD_DATA_DIR=/var/lib/etcd"
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
+        ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
 
         ExecStartPre=-podman container rm etcd
         ExecStart= podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
-          -v /var/lib/etcd:/var/lib/etcd \
+          -v /opt/k8s/var/lib/etcd:/var/lib/etcd \
           -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
           gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
           etcd \
@@ -132,12 +132,12 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=mkdir -p /var/log/kubernetes
+        ExecStartPre=mkdir -p /opt/k8s/var/log/kubernetes
 
         ExecStart=podman run \
         --name kube-apiserver \
         -v ${K8S_ROOT}:${K8S_ROOT} \
-        -v /var/log/kubernetes:/var/log/kubernetes \
+        -v /opt/k8s/var/log/kubernetes:/var/log/kubernetes \
         --network host \
         k8s.gcr.io/kube-apiserver:{{KUBERNETES_VERSION}} \
         kube-apiserver \

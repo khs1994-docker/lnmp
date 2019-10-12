@@ -10,13 +10,13 @@ RunHiddenConsole.exe etcd `
   --data-dir="$HOME/.k8s-wsl2" `
   --enable-v2=true `
   --name="node1" `
-  --listen-peer-urls="https://${K8S_ETCD_HOST}:2380" `
-  --listen-client-urls="https://${K8S_ETCD_HOST}:2379,http://127.0.0.1:2379" `
-  --initial-advertise-peer-urls="https://${K8S_ETCD_HOST}:2380" `
-  --initial-cluster="node1=https://${K8S_ETCD_HOST}:2380" `
+  --listen-peer-urls="https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `
+  --listen-client-urls="${K8S_ETCD_ENTRYPOINTS},http://127.0.0.1:${K8S_ETCD_LISTEN_CLIENT_PORT}" `
+  --initial-advertise-peer-urls="https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `
+  --initial-cluster="node1=https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `
   --initial-cluster-state="new" `
   --initial-cluster-token="mytoken" `
-  --advertise-client-urls="https://${K8S_ETCD_HOST}:2379" `
+  --advertise-client-urls="$K8S_ETCD_ENTRYPOINTS" `
   --cert-file="${K8S_ROOT}/certs/etcd.pem" `
   --key-file="${K8S_ROOT}/certs/etcd-key.pem" `
   --client-cert-auth=true `

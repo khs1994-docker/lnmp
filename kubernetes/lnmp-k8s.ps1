@@ -28,6 +28,10 @@ if (!(Test-Path wsl2/.env.ps1 )){
   cp wsl2/.env.example.ps1 wsl2/.env.ps1
 }
 
+if (!(Test-Path systemd/.env )){
+  cp systemd/.env.example systemd/.env
+}
+
 . "$PSScriptRoot/.env.example.ps1"
 
 if (Test-Path .env.ps1 ){

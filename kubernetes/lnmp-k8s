@@ -82,10 +82,8 @@ _sudo(){
   command -v sudo > /dev/null && echo sudo || true
 }
 
-$(_sudo) mkdir -p ${K8S_ROOT}
-$(_sudo) mkdir -p ${K8S_ROOT}/bin
-$(_sudo) mkdir -p ${K8S_ROOT}/conf
-$(_sudo) mkdir -p ${K8S_ROOT}/certs
+$(_sudo) mkdir -p ${K8S_ROOT}/{bin,conf,certs,log}
+
 mkdir -p ${TMP_ROOT} || TMP_ROOT=/tmp
 
 export PATH=${K8S_ROOT}/bin:$PATH
@@ -522,13 +520,13 @@ _gvisor_containerd_conf(){
   fi
 
   print_info "config containerd with gvisor(runsc) ..."
-  cat <<EOF | $(_sudo) tee -a /etc/kube-containerd/config.toml
+  cat <<EOF | $(_sudo) tee -a /opt/k8s/etc/kube-containerd/config.toml
 [plugins.cri.containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
 EOF
 
 # containerd 1.3.0
-cat <<EOF | $(_sudo) tee -a /etc/kube-containerd/1.3.0/config.toml
+cat <<EOF | $(_sudo) tee -a /opt/k8s/etc/kube-containerd/1.3.0/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
   # runtime_engine = ""
@@ -964,10 +962,10 @@ _crio_config(){
 _containerd_cri_config(){
   _cni_install
   print_info "config containerd ..."
-  $(_sudo) mkdir -p /etc/kube-containerd/1.3.0
-  # containerd config default > /etc/kube-containerd/config.toml
-  $(_sudo) cp systemd/etc/kube-containerd/config.toml /etc/kube-containerd/
-  $(_sudo) cp systemd/etc/kube-containerd/1.3.0/config.toml /etc/kube-containerd/1.3.0/
+  $(_sudo) mkdir -p /opt/k8s/etc/kube-containerd/1.3.0
+  # containerd config default > /opt/k8s/etc/kube-containerd/config.toml
+  $(_sudo) cp systemd/etc/kube-containerd/config.toml /opt/k8s/etc/kube-containerd/
+  $(_sudo) cp systemd/etc/kube-containerd/1.3.0/config.toml /opt/k8s/etc/kube-containerd/1.3.0/
 
   _cri_config
 
@@ -1070,9 +1068,9 @@ encryption-config.yaml} \
 
   $(_sudo) useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
 
-  $(_sudo) mkdir --parents /var/log/kubernetes
+  $(_sudo) mkdir --parents /opt/k8s/var/log/kubernetes
 
-  $(_sudo) mkdir --parents /var/lib/{kubelet,kube-proxy}
+  $(_sudo) mkdir --parents /opt/k8s/var/lib/{kubelet,kube-proxy}
 
   _k8s_install_kubectl_conf
   _kubectl_completion
@@ -1174,9 +1172,9 @@ kube-proxy.kubeconfig} \
 
   $(_sudo) useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
 
-  $(_sudo) mkdir --parents /var/log/kubernetes
+  $(_sudo) mkdir --parents /opt/k8s/var/log/kubernetes
 
-  $(_sudo) mkdir --parents /var/lib/{kubelet,kube-proxy}
+  $(_sudo) mkdir --parents /opt/k8s/var/lib/{kubelet,kube-proxy}
 
   _k8s_install_kubectl_conf
   _kubectl_completion
@@ -1231,11 +1229,7 @@ _local_cleanup(){
     docker kube-containerd || true
 
   set +e
-  $(_sudo) rm -rf ${K8S_ROOT:-/opt/k8s} \
-              /var/lib/etcd \
-              /var/log/ku* \
-              /var/lib/kubelet \
-              /var/lib/kube-proxy \
+  $(_sudo) rm -rf ${K8S_ROOT:-/opt/k8s}
 
   _docker_default_conf
 

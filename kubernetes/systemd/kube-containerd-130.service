@@ -8,7 +8,7 @@ Conflicts=kube-containerd.service
 ExecStartPre=-/sbin/modprobe overlay
 
 ExecStart=/usr/local/bin/kube-containerd \
-          --config /etc/kube-containerd/1.3.0/config.toml
+          --config /opt/k8s/etc/kube-containerd/1.3.0/config.toml
 
 KillMode=process
 Delegate=yes
