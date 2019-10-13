@@ -1,4 +1,4 @@
-# WSL2 Kubernetes 节点
+# WSL2 Kubernetes 节点 ($ ./wsl2/bin/kube-node)
 
 ## 注意事项
 
@@ -44,25 +44,25 @@ $ ./lnmp-k8s join 192.168.199.100 --containerd --skip-cp-k8s-bin
 
 ## flanneld
 
-```bash
+```powershell
 $ ./wsl2/flanneld start
 ```
 
 ## kube-proxy
 
-```bash
+```powershell
 $ ./wsl2/kube-proxy start
 ```
 
 ## kube-containerd
 
-```bash
+```powershell
 $ ./wsl2/kube-containerd start
 ```
 
 ## kubelet
 
-```bash
+```powershell
 $ ./wsl2/kubelet start
 ```
 
@@ -79,23 +79,16 @@ $ ./wsl2/kubelet start
 
 ### 1.生成配置文件
 
-```bash
+```powershell
 # $ ./wsl2/flanneld
 # $ ./wsl2/kube-containerd
 
 $ ./wsl2/bin/supervisorctl g
 ```
 
-**以下两个组件命令, 包含 WSL2 ip,故每次启动时必须生成新的配置文件**
-
-```bash
-# $ ./wsl2/kube-proxy
-# $ ./wsl2/kubelet
-```
-
 ### 2.重新加载配置
 
-```bash
+```powershell
 # 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
 # $ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
 
@@ -104,7 +97,7 @@ $ ./wsl2/bin/supervisorctl update
 
 ### 3.启动组件
 
-```bash
+```powershell
 $ ./wsl2/bin/supervisorctl start kube-node:flanneld
 $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 $ ./wsl2/bin/supervisorctl start kube-node:kube-containerd
@@ -128,7 +121,7 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d
 
 ## 5. kubectl
 
-```bash
+```powershell
 # $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig
 
 # 封装上边的命令
@@ -137,46 +130,36 @@ $ ./wsl2/bin/kubectl
 
 ## 6. crictl
 
-```bash
+```powershell
 $ ./wsl2/bin/crictl
 ```
 
-## 总结
-
-**以下两个组件命令, 包含 WSL2 ip,故每次启动时必须生成新的配置文件**
-
-```bash
-# $ ./wsl2/kube-proxy
-# $ ./wsl2/kubelet
-
-$ ./wsl2/bin/supervisorctl g
-$ ./wsl2/kubelet init
-```
+## 组件启动方式总结
 
 启动组件有三种方式,下面以 `kube-proxy` 组件为例,其他组件同理
 
-```bash
+```powershell
 # 会占据窗口
 $ ./wsl2/kube-proxy start
 ```
 
-```bash
+```powershell
 # 对 wsl -u root -- supervisorctl 命令的封装
 $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 ```
 
-```bash
+```powershell
 # 对上一条命令的封装
 $ ./wsl2/kube-proxy start -d
 ```
 
-### 一键启动
+## 一键启动
 
 **一键启动之前必须保证 [kube-server](README.SERVER.md) 正常运行**
 
 **先生成配置并进行 kubelet 初始化**
 
-```bash
+```powershell
 $ ./wsl2/bin/supervisorctl g
 
 $ ./wsl2/bin/supervisorctl update
@@ -184,15 +167,17 @@ $ ./wsl2/bin/supervisorctl update
 $ ./wsl2/kubelet init
 ```
 
-之后一键启动,有两种方式可供选择
+之后一键启动
 
-```bash
+```powershell
 $ ./wsl2/bin/supervisorctl start kube-node:
 
 # $./wsl2/bin/supervisorctl status kube-node:
 ```
 
-```bash
+## 最终脚本(日常使用)
+
+```powershell
 $ ./wsl2/bin/kube-node
 ```
 
@@ -202,7 +187,7 @@ $ ./wsl2/bin/kube-node
 
 ## 参考
 
-```bash
+```powershell
 # 相当于关闭虚拟机
 $ wsl --shutdown
 ```

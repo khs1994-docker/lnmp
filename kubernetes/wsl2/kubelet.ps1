@@ -86,13 +86,13 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip){
 
 sleep 2
 
-wsl -u root -- /usr/sbin/swapoff -a
-wsl -u root -- /sbin/swapoff -a
+# wsl -u root -- /usr/sbin/swapoff -a
+# wsl -u root -- /sbin/swapoff -a
 wsl -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh ${K8S_ROOT}
 wsl -u root -- mkdir -p ${K8S_ROOT}/var/lib/kubelet
 
 if($args[0] -eq 'init'){
-  echo "kubelet init success !"
+  "==> kubelet init success !"
   exit
 }
 

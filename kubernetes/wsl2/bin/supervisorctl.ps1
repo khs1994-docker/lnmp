@@ -5,7 +5,7 @@ Function printInfo(){
 }
 
 Function _cp(){
-  printInfo "copy conf file ..."
+  printInfo "Copy WSL2 supervisor conf file to WSL2 /etc/supervisor.d/ ..."
   # 复制配置文件
   $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot/../ ; wsl pwd"
   wsl -u root -- cp ${K8S_WSL2_ROOT}/supervisor.d/*.ini /etc/supervisor.d/
@@ -47,4 +47,4 @@ if ($args[0] -eq 'update'){
   _cp
 }
 
-wsl -u root -- supervisorctl $args
+wsl -u root -- bash -ec "supervisorctl $args"
