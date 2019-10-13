@@ -63,6 +63,7 @@ module.exports = {
         'virtualbox',
         'podman',
         'rpi',
+        'kubectl',
       ],
       '/example/': [
         'nginx',

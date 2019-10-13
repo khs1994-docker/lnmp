@@ -6,6 +6,7 @@
 * WSL2 IP 变化时必须重启 `kube-nginx`
 * Windows 固定 IP `192.168.199.100`
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
+* 由于缺少文件 `kube-proxy` 不能使用 `ipvs` 模式,解决办法请查看 [编译 WSL2 内核](README.KERNEL.md)
 
 ## master
 

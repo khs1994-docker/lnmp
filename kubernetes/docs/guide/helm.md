@@ -6,8 +6,6 @@
 
 在 GitHub Release 处下载二进制文件，放入 `PATH` 即可
 
-* 需要安装 `socat`，`yum/apt` 直接安装即可
-
 ## 初始化
 
 ```bash

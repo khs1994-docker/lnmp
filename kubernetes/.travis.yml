@@ -186,7 +186,7 @@ script:
   - kubectl run nginx --image nginx:1.17.4-alpine
   - sleep 20
   - kubectl get all
-  - kubectl get pod
+  - kubectl get pod -o wide
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes

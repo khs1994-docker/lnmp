@@ -1,4 +1,9 @@
 # https://github.com/MicrosoftDocs/WSL/releases/tag/18945
+
+#
+# file path windows ~/.wslconfig
+#
+
 [wsl2]
 kernel=<path>              # An absolute Windows path to a custom Linux kernel.
 memory=<size>              # How much memory to assign to the WSL2 VM.

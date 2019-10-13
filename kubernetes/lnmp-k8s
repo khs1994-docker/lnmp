@@ -740,12 +740,12 @@ _crictl_install(){
 _k8s_install_dep(){
   print_info "install dep ..."
   # 安装依赖软件
-  command -v dnf > /dev/null && ($(_sudo) dnf install -y conntrack ipvsadm ipset jq iptables curl \
-    sysstat libseccomp > /dev/null && $(_sudo) /usr/sbin/modprobe ip_vs) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl \
+  command -v dnf > /dev/null && ($(_sudo) dnf install -y conntrack ipvsadm ipset jq iptables curl socat \
+    sysstat libseccomp > /dev/null && $(_sudo) /usr/sbin/modprobe ip_vs) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat \
     sysstat libseccomp > /dev/null && $(_sudo) /usr/bin/env modprobe ip_vs) && return
 
   set +e
-  command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl \
+  command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat \
     sysstat libseccomp2 kmod > /dev/null && ($(_sudo) /usr/bin/env modprobe ip_vs)
   set -e
 }
