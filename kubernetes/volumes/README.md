@@ -22,7 +22,7 @@ APP_ROOT="../../app"
 
 在 WSL2 上启动 NFS Server 容器不支持挂载 Windows 路径
 
-### 第一种选择：编辑 `.env` 文件,挂载路径改为 WSL2 路径
+### 第一种选择：编辑 `.env` 文件，挂载路径改为 WSL2 路径
 
 ```bash
 NFS_DATA_ROOT=/opt/nfs-data
@@ -31,4 +31,4 @@ APP_ROOT=/opt/app
 # 以上路径均为 WSL2 路径
 ```
 
-### 第二种选择：将 本项目 克隆到 `WSL2` 路径，在 WSL2 中使用本项目
+### 第二种选择：将 `khs1994-docker/lnmp` 克隆到 `WSL2` 路径，在 `WSL2` 中使用

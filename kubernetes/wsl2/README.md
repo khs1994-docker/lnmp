@@ -74,10 +74,10 @@ $ ./wsl2/kubelet start
 
 ### 命令封装
 
-使用 `./wsl2/bin/supervisord` 封装了 `supervisord`
-使用 `./wsl2/bin/supervisorctl` 封装了 `supervisorctl` 并增加了额外的命令
+* 使用 `./wsl2/bin/supervisord` 封装 `supervisord`
+* 使用 `./wsl2/bin/supervisorctl` 封装 `supervisorctl` 并增加了额外的命令
 
-### 1.生成配置文件
+### 1. 生成配置文件
 
 ```powershell
 # $ ./wsl2/flanneld
@@ -86,7 +86,7 @@ $ ./wsl2/kubelet start
 $ ./wsl2/bin/supervisorctl g
 ```
 
-### 2.重新加载配置
+### 2. 重新加载配置
 
 ```powershell
 # 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
@@ -95,7 +95,7 @@ $ ./wsl2/bin/supervisorctl g
 $ ./wsl2/bin/supervisorctl update
 ```
 
-### 3.启动组件
+### 3. 启动组件
 
 ```powershell
 $ ./wsl2/bin/supervisorctl start kube-node:flanneld
@@ -111,7 +111,7 @@ $ ./wsl2/kubelet init
 $ ./wsl2/bin/supervisorctl start kube-node:
 ```
 
-## 4.信任证书
+## 4. 信任证书
 
 ```bash
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
@@ -157,7 +157,7 @@ $ ./wsl2/kube-proxy start -d
 
 **一键启动之前必须保证 [kube-server](README.SERVER.md) 正常运行**
 
-**先生成配置并进行 kubelet 初始化**
+**生成配置并进行 kubelet 初始化**
 
 ```powershell
 $ ./wsl2/bin/supervisorctl g

@@ -123,10 +123,10 @@ $ ./wsl2/kube-scheduler start
 
 ### 命令封装
 
-使用 `./wsl2/bin/supervisord` 封装 `supervisord`
-使用 `./wsl2/bin/supervisorctl` 封装 `supervisorctl` 并增加了额外的命令
+* 使用 `./wsl2/bin/supervisord` 封装 `supervisord`
+* 使用 `./wsl2/bin/supervisorctl` 封装 `supervisorctl` 并增加了额外的命令
 
-### 1.启动 supervisor 服务端
+### 1. 启动 supervisor 服务端
 
 ```powershell
 # $ .\wsl2\bin\supervisorctl.ps1 pid
@@ -136,7 +136,7 @@ $ ./wsl2/kube-scheduler start
 $ ./wsl2/bin/supervisord
 ```
 
-### 2.生成配置文件
+### 2. 生成配置文件
 
 ```powershell
 # $ ./wsl2/kube-apiserver
@@ -146,7 +146,7 @@ $ ./wsl2/bin/supervisord
 $ ./wsl2/bin/supervisorctl g
 ```
 
-### 3.重新载入配置文件
+### 3. 重新载入配置文件
 
 ```powershell
 # 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
@@ -155,7 +155,7 @@ $ ./wsl2/bin/supervisorctl g
 $ ./wsl2/bin/supervisorctl update
 ```
 
-### 4.启动组件
+### 4. 启动组件
 
 **program 加入 group 之后,不能再用 program 作为参数,必须使用 group:program**
 
@@ -192,7 +192,7 @@ $ ./wsl2/kube-apiserver start -d
 
 ## 一键启动
 
-**由于 WSL2 IP 一直在变化，必须先生成并更新配置**
+**由于 WSL2 IP 一直在变化，每次必须生成并更新配置**
 
 ```powershell
 $ ./wsl2/bin/supervisorctl g

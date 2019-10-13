@@ -19,11 +19,11 @@
 * `SELinux` 已关闭
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
 * `Etcd` `kube-nginx` 运行方式为 `podman`
-* bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像之后重启服务(例如：sudo systemctl restart etcd)
+* bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像 `(例如：$ sudo podman rmi IMAGE_NAME)` 之后重启服务 `(例如：$ sudo systemctl restart etcd)`
 
 ### 虚拟机网络配置
 
-> VirtualBox 增加 hostonly 网络 **192.168.57.1** 网段:
+> VirtualBox 增加 hostonly 网络 **192.168.57.1** 网段,并启用 DHCP:
 
 ```bash
 # 首次使用执行两次，保证存在 vboxnet1 网卡，到 VirtualBox -> 管理 -> 主机网络管理器 查看
@@ -63,10 +63,10 @@ $ for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
 
 本项目默认支持 **3** 节点，如果你要增加节点，请进行如下操作
 
-`n` 为节点数
+`n` 为节点数,必须大于 **3**
 
 ```bash
-$ ./coreos add-node {n} [TYPE:master | node]# n > 3
+$ ./coreos add-node {n} [TYPE:master | node] # n > 3
 ```
 
 ### 启动本地服务器

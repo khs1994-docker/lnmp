@@ -6,7 +6,7 @@
 
 由于配置文件只能在 `templates` 文件夹中，故不能复用 `khs1994-docker/lnmp` 中的配置
 
-全部的配置文件位于 `soft_name/config/*` 目录中
+全部的配置文件位于 `SOFT_NAME/config/*` 目录中
 
 ## 部署 LNMP
 
@@ -14,11 +14,17 @@
 
 * [官方文档-模板配置](https://docs.helm.sh/chart_template_guide/#the-chart-template-developer-s-guide)
 
-* 本项目已将 LNMP 架构分解成 NGINX & PHP + MySQL + Redis + N 多个 Helm 包。
+* 本项目已将 LNMP 架构分解成 NGINX & PHP + MySQL + Redis + N 多个 Helm 包
 
 ### 四种环境
 
-编辑 `.env` 文件或 `.env.ps1` (Windows Only) 修改启用的 helm 包。
+编辑 `.env` 文件或 `.env.ps1` (Windows Only) 中的 `HELM_SERVICES` 变量,修改启用的 helm 包
+
+```bash
+HELM_SERVICES="redis mysql nginx-php"
+```
+
+部署
 
 ```bash
 $ ./lnmp-k8s helm-development [--debug]
