@@ -1,0 +1,102 @@
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * */1'
+
+name: Build
+
+jobs:
+  build:
+    name: Kernel
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+        repository: ${{ matrix.repo }}
+        ref: master
+    - name: Build
+      id: build
+      run: |
+        set -x
+        pwd
+
+        if [ -d $PWD/../linux ];then
+          cp -a ../linux/* .
+        fi
+
+        sudo apt update
+        sudo apt install -y build-essential flex bison libssl-dev libelf-dev rsync
+
+        if ! [ -f Microsoft/config-wsl ];then
+          mkdir Microsoft/
+          curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/master/Microsoft/config-wsl
+        fi
+
+        make KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc)
+
+        make INSTALL_MOD_PATH=linux modules_install
+        make INSTALL_HDR_PATH=linux/usr headers_install
+
+        ls -lah arch/x86/boot/bzImage
+
+        kernelversion=$(make -s kernelversion)-microsoft-standard+
+        kernelversion=`ls linux/lib/modules`
+        echo ::set-output name=kernelversion::`echo $kernelversion`
+
+    - name: Dist
+      env:
+        kernelversion: ${{ steps.build.outputs.kernelversion }}
+      run: |
+        mv Microsoft/config-wsl .config
+
+        hdr_dir=linux-headers-${kernelversion}
+
+        echo "./.config" >../hdr_files
+        find . -name Makefile\* -o -name Kconfig\* -o -name \*.pl >>../hdr_files
+        find arch/x86/include include scripts -type f >>../hdr_files
+        find arch/x86 -name module.lds -o -name Kbuild.platforms -o -name Platform>>../hdr_files
+
+        find $(find arch/x86 -name include -o -name scripts -type d) -type f>>../hdr_files
+
+        if grep -q '^CONFIG_STACK_VALIDATION=y' .config ; then
+          find tools/objtool -type f -executable>>../hdr_files
+        fi
+
+        find arch/x86/include Module.symvers include scripts -type f>>../hdr_files
+
+        if grep -q '^CONFIG_GCC_PLUGINS=y' .config ; then
+          find scripts/gcc-plugins -name \*.so -o -name gcc-common.h>>../hdr_files
+        fi
+
+        mkdir -p linux/usr/src/$hdr_dir
+
+        ls -la linux/lib/modules
+        ls -la linux/lib/modules/$kernelversion
+
+        ln -snf /usr/src/linux-headers-$kernelversion linux/lib/modules/$kernelversion/build
+        unlink linux/lib/modules/$kernelversion/source
+        rsync -a --files-from=../hdr_files ./ linux/usr/src/$hdr_dir
+
+        cd linux
+        sudo chown -R root:root .
+        sudo tar -zcvf ../linux.tar.gz .
+        cd ..
+        mkdir wsl2_dist
+        cp arch/x86/boot/bzImage wsl2_dist/wsl2Kernel
+        cp linux.tar.gz wsl2_dist
+    - uses: actions/upload-artifact@master
+      name: Upload Kernel
+      with:
+        name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}
+        path: wsl2_dist
+    - uses: actions/upload-artifact@master
+      name: Upload modules.builtin file
+      with:
+        name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}-modules.builtin
+        path: linux/lib/modules/${{ steps.build.outputs.kernelversion }}/modules.builtin

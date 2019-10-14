@@ -1,6 +1,13 @@
 . $PSScriptRoot/../.env.example.ps1
 . $PSScriptRoot/../.env.ps1
 
+if ($args[0] -eq 'stop'){
+  "==> stop kube-node ..."
+  wsl -u root -- supervisorctl stop kube-node:
+
+  exit
+}
+
 "==> check kube-server $KUBE_APISERVER"
 curl.exe -k --cacert /opt/k8s2/certs/ca.pem $KUBE_APISERVER
 

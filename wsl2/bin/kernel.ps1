@@ -5,7 +5,7 @@ You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2
 
 COMMAND:
 
-download  download kernel
+download  download kernel [ url ]
 update    update kernel(Expand Archive kernel files to WSL2)
 
 "
@@ -13,10 +13,10 @@ update    update kernel(Expand Archive kernel files to WSL2)
 exit
 }
 
-$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/263061296/artifacts/119359"
-$kernelversion="wsl2-kernel-4.19.75-microsoft-standard+"
-$zip="$home/Downloads/$kernelversion.zip"
-$unzipFolder="$home/Downloads/$kernelversion"
+$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/263673284/artifacts/121226"
+$kernelversion="wsl2-kernel-4.19.79-microsoft-standard+"
+$zip="$home\Downloads\$kernelversion.zip"
+$unzipFolder="$home\Downloads\$kernelversion"
 
 # 下载文件
 
@@ -45,19 +45,21 @@ if ($args[0] -eq 'download'){
 
 # 复制文件
 $source=PWD
-cd "$home/Downloads/$kernelversion"
+cd "$home\Downloads\$kernelversion"
 
-write-warning "==> Exec: cp wsl2Kernel $home"
+"==> Exec: cp wsl2Kernel $home"
 
 try{
-cp wsl2Kernel $home
+  cp -r -Force wsl2Kernel $home
 
-$command="tar -zxvf linux.tar.gz -C /"
+  $command="tar -zxvf linux.tar.gz -C /"
 
-write-warning "==> Exec: $command"
+  "==> Exec: $command"
 
-wsl -u root -- bash -c $command
-cd $source
-}catch{
-cd $source
+  wsl -u root -- bash -c $command
+  cd $source
+}catch {
+  Write-Warning $_
+  "==> wsl2 is running, please shutdown wsl( $ wsl --shutdown ),then rerun"
+  cd $source
 }

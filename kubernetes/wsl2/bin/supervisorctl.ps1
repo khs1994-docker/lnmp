@@ -4,14 +4,14 @@ Function printInfo(){
 "
 }
 
-Function _cp(){
+Function _cp_conf(){
   printInfo "Copy WSL2 supervisor conf file to WSL2 /etc/supervisor.d/ ..."
   # 复制配置文件
   $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot/../ ; wsl pwd"
   wsl -u root -- cp ${K8S_WSL2_ROOT}/supervisor.d/*.ini /etc/supervisor.d/
 }
 
-Function _generate(){
+Function _generate_conf(){
   printInfo "generate supervisor conf ..."
 
   printInfo "handle kube-apiserver supervisor conf ..."
@@ -32,19 +32,19 @@ Function _generate(){
 }
 
 if ($args[0] -eq 'cp'){
-  _cp
+  _cp_conf
 
   exit
 }
 
 if ($args[0] -eq 'g' -or $args[0] -eq 'generate'){
-  _generate
+  _generate_conf
 
   exit
 }
 
 if ($args[0] -eq 'update'){
-  _cp
+  _cp_conf
 }
 
 wsl -u root -- bash -ec "supervisorctl $args"

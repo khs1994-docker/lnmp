@@ -1,4 +1,12 @@
 $ErrorActionPreference="stop"
+
+if ($args[0] -eq 'stop'){
+  "==> stop kube-server ..."
+  wsl -u root -- supervisorctl stop kube-server:
+
+  exit
+}
+
 Function _supervisor_checker(){
   "==> check WSL2 Supervisord running ..."
   wsl -u root -- bash -ec "supervisorctl pid" > $HOME/.k8s-wsl2/out-null 2>&1

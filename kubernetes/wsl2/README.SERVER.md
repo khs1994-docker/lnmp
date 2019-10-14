@@ -5,6 +5,7 @@
 * Windows 固定 IP `192.168.199.100`
 * `apiServer` 通过 `kube-nginx` 代理到 `https://192.168.199.100:16443`（避免与桌面版 Docker 的 Kubernetes 冲突（127.0.0.1:6443 端口））
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
+* 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
 
 ## 将 `Ubuntu-18.04` 设为版本 2 ,并设置为默认 wsl
 
@@ -210,4 +211,8 @@ $ ./wsl2/bin/supervisorctl start kube-server:
 
 ```powershell
 $ ./wsl2/bin/kube-server
+
+# $ ./wsl2/bin/kube-server stop
+# $ ./wsl2/kube-nginx stop
+# $ ./wsl2/etcd stop
 ```
