@@ -211,6 +211,7 @@ after_success:
   - sudo crictl version
   - sudo crictl info
   - sudo ls -la /opt || true
+  - sudo ls -la /opt/k8s || true
   - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
 
 env:

@@ -78,6 +78,8 @@ Commands:
 "
 }
 
+if [ "$#" = 0 ];then print_help_info;exit;fi
+
 _sudo(){
   command -v sudo > /dev/null && echo sudo || true
 }
@@ -948,7 +950,7 @@ _crio_config(){
   print_info "config cri-o ..."
   $(_sudo) mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf
-  $(_sudo) cp systemd/etc/crio/crio.conf /etc/crio/
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/crio/crio.conf | $(_sudo) tee /etc/crio/crio.conf
 
   _cri_config
 
@@ -964,8 +966,10 @@ _containerd_cri_config(){
   print_info "config containerd ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.3.0
   # containerd config default > ${K8S_ROOT}/etc/kube-containerd/config.toml
-  $(_sudo) cp systemd/etc/kube-containerd/config.toml ${K8S_ROOT}/etc/kube-containerd/
-  $(_sudo) cp systemd/etc/kube-containerd/1.3.0/config.toml ${K8S_ROOT}/etc/kube-containerd/1.3.0/
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/config.toml \
+    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/config.toml
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3.0/config.toml \
+    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3.0/config.toml
 
   _cri_config
 
@@ -1243,8 +1247,6 @@ _local_cleanup(){
   $(_sudo) systemctl daemon-reload || true
   $(_sudo) systemctl restart docker containerd || true
 }
-
-if [ "$#" = 0 ];then print_help_info;exit;fi
 
 if [ "$ENABLE_CN_MIRROR" = 0 ];then
   print_info "CN Mirror disabled"
