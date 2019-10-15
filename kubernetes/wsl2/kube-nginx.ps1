@@ -9,6 +9,8 @@ Write-Output $wsl_ip > $PSScriptRoot/conf/.kube_nginx_wsl2_ip
 
 nginx -c $PSScriptRoot/conf/kube-nginx.conf -p $HOME/.k8s-wsl2/kube-nginx -s stop
 
+sleep 5
+
 if ($args[0] -eq 'stop'){
   exit
 }

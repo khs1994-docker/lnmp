@@ -22,7 +22,7 @@ Function _kube_nginx_checker(){
   "==> check Windows kube-nginx running ..."
   if (!(Test-Path $HOME/.k8s-wsl2/kube-nginx/logs/nginx.pid)){
     write-warning "Windows kube-nginx not running, exit"
-
+    Write-Warning "please exec ( $ ./wsl2/kube-nginx ) first"
     exit 1
   }
 
@@ -30,7 +30,10 @@ Function _kube_nginx_checker(){
   $wsl2_ip=& $PSScriptRoot/wsl2host.ps1
 
   if ($kube_nginx_wsl2_ip -ne $wsl2_ip){
-    Write-Warning "kube-nginx proxy wsl2ip $kube_nginx_wsl2_ip noteq $wsl2_ip"
+    Write-Warning "kube-nginx proxy $kube_nginx_wsl2_ip noteq wsl2ip $wsl2_ip ,exit"
+    Write-Warning "please exec ( $ ./wsl2/kube-nginx ) restart kube-nginx"
+
+    exit
   }
 }
 
@@ -41,6 +44,7 @@ Function _etcd_checker(){
     # (get-process etcd).Id
   }catch{
     write-warning "Windows Etcd not running, exit"
+    Write-Warning "please exec ( $ ./wsl2/etcd ) first"
 
     exit 1
   }

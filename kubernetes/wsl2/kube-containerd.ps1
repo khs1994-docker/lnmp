@@ -7,7 +7,7 @@ wsl -u root -- mkdir -p ${K8S_ROOT}/cni/net.d
 
 wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/10-flannel.conflist ${K8S_ROOT}/cni/net.d
 
-wsl -u root -- cat ${K8S_ROOT}/cni/net.d/10-flannel.conflist
+# wsl -u root -- cat ${K8S_ROOT}/cni/net.d/10-flannel.conflist
 
 (Get-Content $PSScriptRoot/conf/kube-containerd/config.toml.temp) `
   -replace "##K8S_ROOT##",$K8S_ROOT `

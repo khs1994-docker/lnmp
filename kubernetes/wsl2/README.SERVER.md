@@ -209,7 +209,12 @@ $ ./wsl2/bin/supervisorctl start kube-server:
 
 ## 最终脚本(日常使用)
 
+> 请先手动启动 `kube-nginx` `kube-etcd`
+
 ```powershell
+# $ ./wsl2/kube-nginx
+# $ ./wsl2/etcd
+
 $ ./wsl2/bin/kube-server
 
 # $ ./wsl2/bin/kube-server stop

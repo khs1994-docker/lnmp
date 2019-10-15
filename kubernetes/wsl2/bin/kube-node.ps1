@@ -18,6 +18,10 @@ if(!$?){
   exit
 }
 
+& $PSScriptRoot/wsl2host --write
+
+exit
+
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update
 & $PSScriptRoot/../kubelet init

@@ -16,7 +16,7 @@ $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 
 wsl -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
 wsl -u root -- `
-  bash -c "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env"
+  bash -c "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env > /dev/null"
 
 $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
@@ -76,12 +76,16 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip){
    }else{
       Write-Warning "wsl ip changed, rm cert ..."
       echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-      wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+      # wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+      wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+      # wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
    }
 }else{
    Write-Warning "wsl ip changed, rm cert ..."
    echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-   wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+   # wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+   wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+   # wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
 }
 
 sleep 2

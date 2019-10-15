@@ -118,7 +118,10 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 ```bash
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 
-$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d6ndc
+NAME        AGE    REQUESTOR                 CONDITION
+csr-4njmh   2d2h   system:node:wsl2          Pending
+
+$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_NAME(csr-4njmh)
 ```
 
 ## 5. kubectl
@@ -155,6 +158,16 @@ $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 $ ./wsl2/kube-proxy start -d
 ```
 
+## 添加 hosts
+
+```bash
+NODE_IP NODE_NAME
+
+# x.x.x.x wsl2
+```
+
+或者执行脚本 `./wsl2/bin/wsl2host [ --write ]` 需要管理员权限
+
 ## 一键启动
 
 **一键启动之前必须保证 [kube-server](README.SERVER.md) 正常运行**
@@ -177,14 +190,6 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 # $./wsl2/bin/supervisorctl status kube-node:
 ```
 
-## 最终脚本(日常使用)
-
-```powershell
-$ ./wsl2/bin/kube-node
-
-# $ ./wsl2/bin/kube-node stop
-```
-
 ## 命令封装
 
 为避免 Windows 与 WSL 切换和执行 WSL 命令时加上 `$ wsl -u root -- XXX` 的繁琐,特封装了部分命令以便于直接在 Windows 上执行,具体请查看 `./wsl2/bin/*`
@@ -203,3 +208,35 @@ $ wsl -u root -- rm -rf ${K8S_ROOT:-/opt/k8s}/conf/kubelet-bootstrap.kubeconfig
 ```
 
 * https://github.com/kubernetes-sigs/kind/blob/master/site/content/docs/user/using-wsl2.md
+
+## WSL2 IP 变化造成的 kubelet 报错
+
+```bash
+certificate_manager.go:464] Current certificate is missing requested IP addresses [172.21.21.166]
+```
+
+## 最终脚本(日常使用)
+
+> 脚本 **需要** 管理员权限(弹出窗口,点击确定)写入 wsl2hosts 到 `C:\Windows\System32\drivers\etc\hosts`
+
+```powershell
+$ ./wsl2/bin/kube-node
+
+# $ ./wsl2/bin/kube-node stop
+```
+
+由于 WSL2 IP 不能固定, 每次重启时 **必须** 签署 kubelet 证书:
+
+```bash
+# 获取 csr
+$ ./wsl2/bin/kubectl-get-csr
+
+NAME        AGE   REQUESTOR          CONDITION
+csr-9pvrm   11m    system:node:wsl2          Pending
+```
+
+根据提示 **签署** 证书,一般为最后一个
+
+```bash
+$ ./wsl2/bin/kubectl certificate approve csr-9pvrm
+```

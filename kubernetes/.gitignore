@@ -1,4 +1,5 @@
 kubectl-*
+!kubectl-get-csr.ps1
 minikube*
 !minikube.md
 
