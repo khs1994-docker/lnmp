@@ -4,7 +4,7 @@
 
 * ingress-nginx `0.26.1`
 
-* metrics-server `0.3.5`
+* metrics-server `0.3.6`
 
 * CoreDNS `1.6.2`
 
