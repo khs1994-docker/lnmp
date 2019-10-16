@@ -17,6 +17,13 @@
 APP_ROOT="../../app"
 ```
 
+## 启动 NFS 服务端容器
+
+```bash
+# $ lnmp-docker nfs
+$ lnmp-k8s nfs
+```
+
 ## WSL2
 
 **问题 1:** 在 WSL2 上启动 NFS Server 容器不支持挂载 Windows 路径(例如: `/mnt/c`)

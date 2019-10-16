@@ -12,8 +12,8 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION="1.14.6"
-$DOCKER_DESKTOP_VERSION="2.1.2.0 (38030)"
+$KUBERNETES_VERSION="1.15.4"
+$DOCKER_DESKTOP_VERSION="2.1.4.0 (39357)"
 $source=$PWD
 
 Function _command($command){
@@ -180,7 +180,7 @@ Function check_docker_version(){
     printError "Docker not install"
 
     return
-  } 
+  }
 
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
 
@@ -1083,7 +1083,7 @@ XXX
 
     # Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
     Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues/new?body=$(cat bug.md)
-    }    
+    }
 
     k8s {
       clear

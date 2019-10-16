@@ -18,18 +18,10 @@
 
 Windows 系统每次升级之后，k8s 可能一直处于启动状态中，请首先开启 Local Server，然后在设置中重置 Kubernetes。
 
-### 启动
+### 拉取镜像
 
 ```bash
 $ lnmp-docker gcr.io
-
-# see local server logs
-
-$ lnmp-docker gcr.io logs
-
-# when start k8s success,please stop k8s.gcr.io
-
-$ lnmp-docker gcr.io down
 ```
 
 ## 故障排查
@@ -84,3 +76,17 @@ $ lnmp-k8s cleanup
 ## 相关项目
 
 * https://github.com/AliyunContainerService/k8s-for-docker-desktop
+
+## 开发者
+
+> 找出 `Docker 桌面版` 需要哪些 k8s.gcr.io 镜像
+
+```bash
+$ lnmp-docker gcr.io --no-pull
+
+# 查看日志
+$ lnmp-docker gcr.io logs
+
+# 根据日志找出 Docker 桌面版 会拉取哪些镜像,例如
+# 在 `lnmp-docker` 中更新镜像
+```
