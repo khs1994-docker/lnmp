@@ -4,8 +4,9 @@
 
 on:
   push:
-    # paths:
-    #   - '/docs/*'
+    paths:
+      - '**'
+      - 'docs/**'
     tags:
     branches:
     - 19.03
@@ -15,7 +16,7 @@ name: Build Docs
 jobs:
   docs:
     runs-on: ubuntu-latest
-    if: contains( github.event.head_commit.message, '[Docs]')    
+    if: contains( github.event.head_commit.message, '[Docs]')
     steps:
     - uses: actions/checkout@master
       with:

@@ -79,14 +79,16 @@ $ lnmp-k8s cleanup
 
 ## 开发者
 
-> 找出 `Docker 桌面版` 需要哪些 k8s.gcr.io 镜像
+> 本项目可能会更新不及时,你可以自行找出 `Docker 桌面版` 需要哪些 k8s.gcr.io 镜像
 
 ```bash
+# 启动本地 gcr.io 服务器
 $ lnmp-docker gcr.io --no-pull
 
 # 查看日志
 $ lnmp-docker gcr.io logs
 
 # 根据日志找出 Docker 桌面版 会拉取哪些镜像,例如
-# 在 `lnmp-docker` 中更新镜像
+
+# 在 `lnmp-docker(.ps1)` 中更新镜像(搜索 k8s.gcr.io)
 ```
