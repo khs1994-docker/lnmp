@@ -1,4 +1,4 @@
-# NFS Volume
+# NFS Volume(NFSv4)
 
 [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
@@ -10,7 +10,7 @@
 
 本文以 `NFSv4` 版本为例，无需 RPC `111` 端口, 只需监听 `2049` 端口即可。
 
-## 配置 IP 段
+## 配置 NFS Server 容器
 
 在 `kubernetes/volumes/.env` 文件中配置
 
@@ -55,12 +55,45 @@ insecure:
 /home/data  192.168.78.0/24(rw,insecure,sync,no_root_squash)   #导出虚拟根下的子目录2
 ```
 
-客户端对应的挂载命令如下
+## 客户端挂载
+
+安装依赖
 
 ```bash
-$ sudo mount -t nfs4 192.168.78.1:/nfs   /tmp/nfs
+$ sudo apt install -y nfs-common
 
-$ sudo mount -t nfs4 192.168.78.1:/data  /tmp/data
+$ sudo yum install -y nfs-utils
+```
+
+挂载
+
+```bash
+$ sudo mount -t nfs4 -v 192.168.78.1:/nfs   /tmp/nfs
+
+$ sudo mount -t nfs4 -v 192.168.78.1:/data  /tmp/data
+```
+
+## 客户端支持的 NFS 版本与 Linux 内核有关
+
+* https://github.com/torvalds/linux/blob/master/fs/nfs/Kconfig
+
+```bash
+CONFIG_NETWORK_FILESYSTEMS=y
+CONFIG_NFS_FS=y
+CONFIG_NFS_V2=y
+CONFIG_NFS_V3=y
+# CONFIG_NFS_V3_ACL is not set
+CONFIG_NFS_V4=y
+# CONFIG_NFS_SWAP is not set
+# CONFIG_NFS_V4_1 is not set
+```
+
+使用以上参数编译的 Linux 内核不支持 NFS `4.1`
+
+```bash
+$ cat /lib/modules/$(uname -r)/modules.builtin | grep nfs
+
+$ zcat /proc/config.gz | grep NFS
 ```
 
 ## 加载内核模块
@@ -82,6 +115,8 @@ $ docker-compose up [-d] nfs
 $ lnmp-docker nfs [down]
 ```
 
+或者执行 `$ docker run XXX`
+
 ```bash
 $ docker run -it \
     -v /nfs:/nfs:rw \
@@ -94,20 +129,17 @@ $ docker run -it \
     erichough/nfs-server
 ```
 
-* NFSv3 port `111` `20048`
-* `--privileged`
-
 ## 宿主机安装 NFS 服务端
 
 * https://help.ubuntu.com/community/SettingUpNFSHowTo
 
 ```bash
 $ sudo apt install -y --no-install-recommends nfs-kernel-server kmod libcap2-bin
+
+$ sudo yum install nfs-utils rpcbind
 ```
 
 ```bash
-$ sudo yum install nfs-utils rpcbind
-
 $ sudo systemctl start nfs
 ```
 
@@ -125,7 +157,7 @@ $ sudo systemctl start nfs
 $ sudo mkdir /cli-nfs
 
 # 虽然服务端指定的是 /nfs 这里对应为 /
-# 必须通过 -t 指定类型，默认为 nfs3
+# 必须通过 -t 指定类型，默认为 nfs3 (根据操作系统的不同默认挂载类型也不同)
 $ sudo mount -v -t nfs4 -o proto=tcp,port=2049 ${SERVER_IP:-192.168.199.100}:/ /cli-nfs
 
 $ mount
@@ -134,25 +166,40 @@ $ mount
 ## 容器挂载 NFS Volume
 
 * https://docs.docker.com/storage/volumes/#choose-the--v-or---mount-flag
+* https://docs.docker.com/storage/volumes/#create-a-service-which-creates-an-nfs-volume
 
 ```bash
+# 创建 NFS 数据卷
+# Docker 桌面版 支持 vers=4.2
 $ docker volume create volume-nfs \
     -d local \
     -o type=nfs \
     -o device=192.168.199.100:/ \
     -o o=addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw
 
+# 挂载
 $ docker container run -it --rm \
     --mount "type=volume,src=volume-nfs,dst=/data" \
     busybox sh
 
-# $ docker container run -it --rm \
-# --mount 'type=volume,src=volume-nfs,dst=/data,volume-driver=local,volume-opt=type=nfs,volume-opt=device=192.168.199.100:/,"volume-opt=o=addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw"' busybox sh
+# 或者在 --mount 中直接配置
+$ docker container run -it --rm \
+      --mount 'type=volume,src=volume-nfs,dst=/data,volume-driver=local,volume-opt=type=nfs,volume-opt=device=192.168.199.100:/,"volume-opt=o=addr=192.168.199.100,vers=4,soft,timeo=180,bg,tcp,rw"' busybox sh
 ```
+
+支持哪些 NFS 版本 `4.2` `4.1` `4` 与宿主机一致,可以在宿主机使用 `$ sudo mount -t nfs4 -v XXX` 进行测试
+
+宿主机不支持 `4.2`, `$ docker run` 指定 `vers=4.2` 也会出错
 
 ## Compose 中使用 NFS volume
 
 请查看 `scripts/docker-example.yml` 文件的 `volumes` 部分
+
+## Windows 10 挂载 NFS
+
+* https://docs.microsoft.com/en-us/windows-server/storage/nfs/nfs-overview#windows-and-windows-server-versions
+
+**只支持 NFSv2, NFSv3**
 
 ## More Information
 

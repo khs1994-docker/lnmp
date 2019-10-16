@@ -1,6 +1,7 @@
 # `kube-proxy` ipvs 模式(为什么要编译 WSL2 内核)
 
 * https://github.com/kubernetes/kubernetes/tree/master/pkg/proxy/ipvs
+* https://github.com/khs1994/WSL2-Linux-Kernel
 
 由于 `kube-proxy` 通过检测 `/lib/modules/$(uname -r)/modules.builtin` 文件决定是否启用 `ipvs` 模式.日志如下
 

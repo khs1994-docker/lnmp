@@ -38,6 +38,11 @@ jobs:
           curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/master/Microsoft/config-wsl
         fi
 
+        echo "
+        CONFIG_NFS_V4_1=y
+        CONFIG_NFS_V4_2=y
+        " >> Microsoft/config-wsl
+
         make KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc)
 
         make INSTALL_MOD_PATH=linux modules_install

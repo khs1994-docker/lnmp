@@ -64,7 +64,10 @@
 
 ```bash
 # 部署 LNMP
-$ ./lnmp-k8s create
+# 事先部署好 NFS 服务端(v4), 并在 .env 文件中配置 `LNMP_NFS_SERVER_HOST`
+# 你可以加上 [ --no-nfs ],来避免使用 NFS 数据卷
+
+$ ./lnmp-k8s create --no-nfs
 
 # PHP 项目开发
 $ cd ~/app

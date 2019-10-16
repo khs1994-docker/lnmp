@@ -2,7 +2,7 @@
 
 ## 注意事项
 
-* Windows 固定 IP `192.168.199.100`
+* Windows 固定 IP `192.168.199.100` (`.env.ps1 $WINDOWS_HOST 变量`)
 * `apiServer` 通过 `kube-nginx` 代理到 `https://192.168.199.100:16443`（避免与桌面版 Docker 的 Kubernetes 冲突（127.0.0.1:6443 端口））
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
@@ -170,6 +170,14 @@ $ ./wsl2/bin/supervisorctl start kube-server:kube-scheduler
 $ ./wsl2/bin/supervisorctl start kube-server:
 
 # $ ./wsl2/bin/supervisorctl status kube-server:
+```
+
+### 5. 设置 ~/.kube/config
+
+执行以下命令,根据提示设置
+
+```bash
+$ ./wsl2/bin/kubectl-config-set-cluster.ps1
 ```
 
 ## 组件启动方式总结

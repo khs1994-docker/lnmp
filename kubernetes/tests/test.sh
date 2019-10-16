@@ -16,7 +16,7 @@ docker ps -a
 sudo mkdir -p /tmp2
 # install nfs dep
 sudo apt install -y nfs-common
-sudo mount -t nfs4 ${SERVER_IP}:/lnmp/log /tmp2
+sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
 sudo umount /tmp2
 
 echo "set LNMP_NFS_SERVER_HOST .env"

@@ -13,26 +13,35 @@ spec:
     storage: 20Gi
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-mode
   volumeMode: Filesystem # or raw Block
-  accessModes:
-    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
 
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+  accessModes:
     # - ReadWriteOnce    # 被单个节点mount为读写rw模式 RWO
                        # the volume can be mounted as read-write by a single node
     # - ReadOnlyMany   # 被多个节点mount为只读ro模式 ROX
                        # the volume can be mounted read-only by many nodes
     - ReadWriteMany  # 被多个节点mount为读写rw模式 RWX
                        # the volume can be mounted as read-write by many nodes
-  persistentVolumeReclaimPolicy: Retain
+
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming
+  persistentVolumeReclaimPolicy: Retain
   # Retain 允许用户手动回收
   # Recycle 删除 PV 上的数据 deprecated
   # Delete 删除 PV
+
+  # Currently, only NFS and HostPath support recycling.
+  # AWS EBS, GCE PD, Azure Disk, and Cinder volumes support deletion.
   nfs:
     # FIXME: use the right IP
     server: 192.168.199.100
     path: "/lnmp/mysql"
   storageClassName: slow
 
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 
 apiVersion: v1
@@ -53,6 +62,10 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/redis"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -72,6 +85,10 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/app"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 
 apiVersion: v1
@@ -92,6 +109,10 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/registry"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -112,3 +133,7 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/log"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4

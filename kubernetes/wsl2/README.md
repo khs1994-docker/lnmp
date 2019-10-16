@@ -4,7 +4,7 @@
 
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
 * WSL2 IP 变化时必须重启 `kube-nginx`
-* Windows 固定 IP `192.168.199.100`
+* Windows 固定 IP `192.168.199.100` (`.env.ps1 $WINDOWS_HOST 变量`)
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
 * 由于缺少文件 `kube-proxy` 不能使用 `ipvs` 模式,解决办法请查看 [编译 WSL2 内核](README.KERNEL.md)
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-node)**
@@ -214,6 +214,8 @@ $ wsl -u root -- rm -rf ${K8S_ROOT:-/opt/k8s}/conf/kubelet-bootstrap.kubeconfig
 ```bash
 certificate_manager.go:464] Current certificate is missing requested IP addresses [172.21.21.166]
 ```
+
+* 删除 `${K8S_ROOT}/certs/kubelet-server-*.pem` 证书.
 
 ## 最终脚本(日常使用)
 

@@ -244,6 +244,7 @@ _cleanup_lnmp(){
 
 _create_pv(){
   if [ "$OS" = 'Linux' ];then
+    # linux 默认使用 NFS PV
     if [ "${1}" = '--no-nfs' ];then
       sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.temp.yaml \
       | kubectl create -f -

@@ -40,10 +40,7 @@ if (Test-Path .env.ps1 ){
 
 $current_context=kubectl config current-context
 
-if (!($current_context -eq "docker-desktop")){
-   Write-Warning "This Script Support Docker Desktop Only"
-   exit
-}
+Write-Warning "==> Kubernetes context is [ $current_context ]"
 
 Function print_info($message){
   write-host "==> $message"

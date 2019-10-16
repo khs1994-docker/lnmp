@@ -1,5 +1,7 @@
 # Volumes
 
+* https://github.com/kubernetes-incubator/external-storage
+
 * PV 是 **全局** 的,没有命名空间的概念。
 
 ```bash
