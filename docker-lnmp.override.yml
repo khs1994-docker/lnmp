@@ -13,7 +13,7 @@ x-common:
 services:
   mysql:
     << : *default-common
-    image: mysql:${LNMP_MYSQL_VERSION:-8.0.17}
+    image: mysql:${LNMP_MYSQL_VERSION:-8.0.18}
 
   redis:
     << : *default-common

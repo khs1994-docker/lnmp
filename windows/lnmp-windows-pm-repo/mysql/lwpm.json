@@ -1,8 +1,8 @@
 {
   "name": "mysql",
   "description": "MySQL Server, the world's most popular open source database, and MySQL Cluster, a real-time, open source transactional database",
-  "version": "8.0.17",
-  "preVersion": "8.0.17",
+  "version": "8.0.18",
+  "preVersion": "8.0.18",
   "homepage": "http://www.mysql.com/",
   "bug": "",
   "github": "mysql/mysql-server",
