@@ -1,6 +1,10 @@
-# 部署文件
+# YAML 部署文件
 
 这些 YAML 文件仅供参考，仅用于开发环境。
+
+## 配置文件
+
+配置文件位于 `SOFT/overlays/ENVIRONMENT/config`
 
 ## 计划任务
 

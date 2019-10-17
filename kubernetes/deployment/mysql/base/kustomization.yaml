@@ -1,0 +1,93 @@
+# https://github.com/kubernetes-sigs/kustomize/blob/master/docs/fields.md
+
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+# custom resource definition (CRD)
+# crds:
+# - crds/typeA.yaml
+
+# commonLabels:
+#   k: v
+# commonAnnotations:
+#   k: v
+
+# images:
+# - name: postgres
+  # newName: my-registry/my-postgres
+  # newTag: v1
+  # digest: sha256:24a0c4b4a4c0eb97a1aabb8e29f18e917d05abfe1b7a7c07857230879ce7d3d3
+
+# inventory:
+
+# namespace: str
+
+# namePrefix: str-
+# nameSuffix: -str
+
+# bases:
+
+resources:
+- lnmp-mysql.yaml
+
+# ------------------------------------
+
+# kind: Deployment
+# metadata:
+  # name: deployment-name
+# spec:
+  # replicas: 3
+
+# replicas:
+# - name: deployment-name
+  # count: 5
+
+# -------------------------------------
+
+# patches:
+# patchesStrategicMerge:
+# patchesJson6902:
+
+# configMapGenerator:
+#   - name: str
+#     files:
+#     - filename
+#     - key=filename
+#   - name: str
+#     literals:
+#     - k=v
+
+# secretGenerator:
+#   - name: str
+#     files:
+#     - filename
+#     - k=filename
+#     type: "kubernetes.io/tls"
+#   - name: str
+#     envs:
+#     - env.txt
+#     type: Opaque
+#   - name: str
+#     literals:
+#     - k=v
+
+# generatorOptions:
+  # labels to add to all generated resources
+  # labels:
+    # kustomize.generated.resources: somevalue
+  # annotations to add to all generated resources
+  # annotations:
+    # kustomize.generated.resource: somevalue
+  # disableNameSuffixHash is true disables the default behavior of adding a
+  # suffix to the names of generated resources that is a hash of
+  # the resource contents.
+  # disableNameSuffixHash: true
+
+# generators:
+
+# vars:
+# - name: SOME_SECRET_NAME
+  # objref:
+    # kind: Secret
+    # name: my-secret
+    # apiVersion: v1

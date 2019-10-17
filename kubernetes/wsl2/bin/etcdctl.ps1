@@ -1,3 +1,6 @@
+. $PSScriptRoot/../.env.example.ps1
+. $PSScriptRoot/../.env.ps1
+
 $env:ETCDCTL_API=3
 
 etcdctl `

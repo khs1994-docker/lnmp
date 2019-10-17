@@ -1,5 +1,5 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
   name: php7
   labels:
@@ -16,8 +16,8 @@ spec:
     port: 9000
   # clusterIP: None
 ---
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
   name: php7
   labels:
@@ -94,7 +94,7 @@ spec:
             cpu: 100m
             memory: 100Mi
         volumeMounts:
-        - name: lnmp-data
+        - name: lnmp-app
           mountPath: /app
         - name: lnmp-php-conf
           mountPath: /usr/local/etc/php/php.ini
@@ -117,9 +117,9 @@ spec:
         #   path: /var/log/php
         persistentVolumeClaim:
           claimName: lnmp-log
-      - name: lnmp-data
+      - name: lnmp-app
         persistentVolumeClaim:
-          claimName: lnmp-data
+          claimName: lnmp-app
       - name: lnmp-php-conf
         configMap:
           name: lnmp-php-conf-0.0.1

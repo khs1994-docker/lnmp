@@ -6,7 +6,7 @@ You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2
 COMMAND:
 
 download  download kernel [ url ]
-update    update kernel(Expand Archive kernel files to WSL2)
+update    update kernel(Expand Archive kernel files to WSL2) [WSL_NAME(ubuntu-18.14)]
 
 "
 
@@ -50,13 +50,19 @@ cd "$home\Downloads\$kernelversion"
 "==> Exec: cp wsl2Kernel $home"
 
 try{
+  $ErrorActionPreference="continue"
   cp -r -Force wsl2Kernel $home
 
   $command="tar -zxvf linux.tar.gz -C /"
 
-  "==> Exec: $command"
-
-  wsl -u root -- bash -c $command
+  if($args[1]){
+    $dist=$args[1]
+    "==> Exec: $command on $dist"
+    wsl -d $dist -u root -- bash -c $command
+  }else{
+    "==> Exec: $command"
+    wsl -u root -- bash -c $command
+  }
   cd $source
 }catch {
   Write-Warning $_

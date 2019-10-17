@@ -1,0 +1,18 @@
+bases:
+- ../../base
+configMapGenerator:
+- name: lnmp-php-conf-0.0.1
+  files:
+  - php.ini=config/ini/php.development.ini
+  - zz-docker.conf=config/zz-docker.development.conf
+  - composer.config.json=config/composer/config.development.json
+  - docker.ini=config/conf.d/docker.development.ini
+- name: lnmp-env-0.0.1
+  literals:
+  - TZ=Asia/Shanghai
+  - APP_ENV=development
+  - APP_LOG=errorlog
+  - LOG_CHANNEL=errorlog
+  - LNMP_XDEBUG_REMOTE_HOST=192.168.199.100
+  - LNMP_XDEBUG_REMOTE_PORT="9001"
+  - LNMP_OPCACHE_ENABLE="1"

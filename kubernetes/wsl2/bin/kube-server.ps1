@@ -50,9 +50,9 @@ Function _etcd_checker(){
   }
 }
 
+_supervisor_checker
 _kube_nginx_checker
 _etcd_checker
-_supervisor_checker
 
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update

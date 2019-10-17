@@ -3,7 +3,7 @@
 192.30.255.116   api.github.com
 151.101.129.69   cdn.sstatic.net
 52.216.226.0     github-cloud.s3.amazonaws.com
-52.216.131.35    github-production-release-asset-2e65be.s3.amazonaws.com
+52.216.169.83    github-production-release-asset-2e65be.s3.amazonaws.com
 151.101.229.194  github.global.ssl.fastly.net
 #192.30.253.112  github.com
 #192.30.253.113  github.com

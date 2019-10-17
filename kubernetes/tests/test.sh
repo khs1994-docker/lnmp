@@ -33,7 +33,7 @@ curl -k https://laravel2.t.khs1994.com
 ./lnmp-k8s nfs down
 echo "Test noNFS volume"
 cp -rf ../app ~/app
-./lnmp-k8s create --no-nfs
+./lnmp-k8s create development --no-nfs
 sleep 50
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com

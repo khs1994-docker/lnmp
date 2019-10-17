@@ -4,9 +4,7 @@
 
 * [配置文件](https://docs.helm.sh/chart_template_guide/#accessing-files-inside-templates)
 
-由于配置文件只能在 `templates` 文件夹中，故不能复用 `khs1994-docker/lnmp` 中的配置
-
-全部的配置文件位于 `SOFT_NAME/config/*` 目录中
+配置文件位于 `SOFT_NAME/config/*` 目录中
 
 ## 部署 LNMP
 

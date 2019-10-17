@@ -93,7 +93,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: lnmp-nginx-conf-d-{{ .Chart.Version }}
+  name: lnmp-nginx-conf.d-{{ .Chart.Version }}
   labels:
     app: lnmp
     version: {{ .Chart.Version }}

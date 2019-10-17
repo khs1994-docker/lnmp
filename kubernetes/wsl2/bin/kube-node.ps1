@@ -25,3 +25,10 @@ if(!$?){
 & $PSScriptRoot/../kubelet init
 
 wsl -u root -- supervisorctl start kube-node:
+
+Write-Warning "
+
+==> EXEC: ( $ ./wsl2/bin/kubectl-get-csr ), then approve csr
+
+==> if PV is NFS, please up NFS Server first
+"

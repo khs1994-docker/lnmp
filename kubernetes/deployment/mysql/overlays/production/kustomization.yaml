@@ -1,0 +1,16 @@
+# namePrefix: prod-
+# commonLabels:
+# commonAnnotations:
+bases:
+- ../../base
+patches:
+- lnmp-mysql.yaml
+- pv.yaml
+configMapGenerator:
+- name: lnmp-mysql-cnf-prod-0.0.1
+  files:
+  - docker.cnf=config/docker.production.cnf
+secretGenerator:
+- name: lnmp-mysql-password-0.0.1
+  literals:
+  - password=mytest

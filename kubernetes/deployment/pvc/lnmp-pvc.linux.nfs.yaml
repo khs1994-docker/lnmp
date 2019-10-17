@@ -44,7 +44,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: lnmp-data
+  name: lnmp-app
   labels:
     app: lnmp
     tier: code-data

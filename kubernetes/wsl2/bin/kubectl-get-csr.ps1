@@ -1,4 +1,5 @@
 & $PSScriptRoot/kubectl get csr --sort-by='{.metadata.creationTimestamp}'
 
-""
-"==> Approve cert by exec: ./wsl2/bin/kubectl certificate approve CSR_NAME(XXX)"
+Write-Warning "
+==> Approve csr by EXEC: $ ./wsl2/bin/kubectl certificate approve CSR_NAME(XXX)
+"

@@ -1,3 +1,21 @@
+<#
+.SYNOPSIS
+  lnmp k8s CLI
+.DESCRIPTION
+  lnmp k8s CLI
+.EXAMPLE
+  PS C:\> lnmp-k8s create development
+
+.EXAMPLE
+  PS C:\> lnmp-k8s create development --dry-run
+
+.INPUTS
+
+.OUTPUTS
+
+.NOTES
+
+#>
 cd $PSScriptRoot
 
 ################################################################################
@@ -58,13 +76,9 @@ Commands:
   minikube-install   Install minikube
   minikube-up        Start minikube
 
-  create             Deploy lnmp on k8s [--ingress]
-  delete             Stop lnmp on k8s, keep data resource(pv and pvc)
-  cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc)
-
-  registry           Up Registry
-
-  create-pv          Create PV and PVC
+  create             Deploy lnmp on k8s {ENVIRONMENT: development (default) | testing | staging | production} {OPTIONS}
+  delete             Stop lnmp on k8s, keep data resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
+  cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
 
   helm-development   Install Helm LNMP In Development
   helm-testing       Install Helm LNMP In Testing
@@ -88,31 +102,20 @@ Function get_kubectl_version(){
   return $KUBECTL_VERSION=$(curl.exe -fsSL $url)
 }
 
-Function _delete_lnmp(){
-  kubectl -n lnmp delete deployment -l app=lnmp
-  kubectl -n lnmp delete service -l app=lnmp
-  kubectl -n lnmp delete secret -l app=lnmp
-  kubectl -n lnmp delete configmap -l app=lnmp
-  kubectl -n lnmp delete cronjob -l app=lnmp
+Function _delete_lnmp($NAMESPACE="lnmp"){
+  kubectl -n $NAMESPACE delete deployment -l app=lnmp
+  kubectl -n $NAMESPACE delete service -l app=lnmp
+  kubectl -n $NAMESPACE delete secret -l app=lnmp
+  kubectl -n $NAMESPACE delete configmap -l app=lnmp
+  kubectl -n $NAMESPACE delete cronjob -l app=lnmp
 }
 
-Function _create_pv(){
+Function _create_pv($NAMESPACE="lnmp"){
   Get-Content deployment/pv/lnmp-volume.windows.temp.yaml `
       | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
       | kubectl create -f -
 
-  kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
-}
-
-Function _registry_up(){
-  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=helm/registry/config/config.development.yml
-  kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
-
-  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=tls.crt=helm/registry/config/ssl/public.crt `
-      --from-file=tls.key=helm/registry/config/ssl/private.key `
-  kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
-
-  kubectl -n lnmp create -f addons/registry.yaml
+  kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.yaml
 }
 
 Function _helm_lnmp($environment, $debug=0){
@@ -136,6 +139,8 @@ Function _helm_lnmp($environment, $debug=0){
   cd $PSScriptRoot
 }
 
+$command,$others=$args
+
 switch ($args[0])
 {
   "kubectl-install" {
@@ -150,74 +155,118 @@ switch ($args[0])
 
   "kubectl-info" {
     $KUBECTL_VERSION=get_kubectl_version
-    echo "Latest Stable Version is: $KUBECTL_VERSION
+    "==> Latest Stable Version is: $KUBECTL_VERSION
     "
   }
 
   "create" {
-    kubectl create namespace lnmp
-    _create_pv
+    $ENVIRONMENT="development"
+    $NAMESPACE="lnmp"
 
-    kubectl -n lnmp create -f deployment/lnmp-configMap.yaml
+    if ($others){
+      $ENVIRONMENT=$others[0]
+      $_,$options=$others
+    }
 
-    kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 `
-      --from-file=deployment/configMap/nginx-conf-d
+    if($ENVIRONMENT -ne "development"){
+      $NAMESPACE="lnmp", $ENVIRONMENT -join '-'
+    }
 
-    kubectl -n lnmp label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
+    "==> NAMESPACE is $NAMESPACE"
+    "==> OPTIONS is $options"
 
-    kubectl -n lnmp create configmap lnmp-php-conf-0.0.1 `
-      --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini `
-      --from-file=zz-docker.conf=helm/nginx-php/config/php/zz-docker.development.conf `
-      --from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json `
-      --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.development.ini
+    kubectl create namespace $NAMESPACE $options
 
-    kubectl -n lnmp label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
+    if($NAMESPACE -ne "lnmp"){
+      $items="mysql","redis","php","nginx"
 
-    kubectl -n lnmp create configmap lnmp-mysql-cnf-0.0.1 `
-       --from-file=docker.cnf=helm/mysql/config/docker.development.cnf
+      foreach($item in $items){
+        kubectl -n $NAMESPACE create -k deployment/$item/overlays/$ENVIRONMENT/ $options
+      }
 
-    kubectl -n lnmp label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
+      return
+    }
 
-    kubectl -n lnmp create configmap lnmp-nginx-conf-0.0.1 `
-       --from-file=nginx.conf=helm/nginx-php/config/nginx/nginx.development.conf
+    _create_pv $NAMESPACE $options
 
-    kubectl -n lnmp label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
+    $CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
+    kubectl -n $NAMESPACE create configmap lnmp-php-conf-0.0.1 `
+      --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini `
+      --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf `
+      --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json `
+      --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini $options
+    kubectl -n $NAMESPACE label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $options
 
-    # kubectl -n lnmp create secret generic lnmp-mysql-password --from-literal=password=mytest
+    $CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
+    kubectl -n $NAMESPACE create configmap lnmp-mysql-cnf-0.0.1 `
+       --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf $options
+    kubectl -n $NAMESPACE label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $options
 
-    kubectl -n lnmp create -f deployment/lnmp-secret.yaml
+    $CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
+    kubectl -n $NAMESPACE create configmap lnmp-nginx-conf-0.0.1 `
+       --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf $options
+    kubectl -n $NAMESPACE label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $options
 
-    kubectl -n lnmp create -f deployment/mysql/lnmp-mysql.yaml
+    kubectl -n $NAMESPACE create configmap lnmp-nginx-conf.d-0.0.1 `
+    --from-file=deployment/configMap/nginx-conf-d $options
+    kubectl -n $NAMESPACE label configmap lnmp-nginx-conf.d-0.0.1 app=lnmp version=0.0.1 $options
 
-    kubectl -n lnmp create -f deployment/redis/lnmp-redis.yaml
+    # kubectl -n $NAMESPACE create secret generic lnmp-mysql-password `
+    #  --from-literal=password=mytest $options
 
-    kubectl -n lnmp create -f deployment/php/lnmp-php7.yaml
+    kubectl -n $NAMESPACE create -f deployment/lnmp-configMap.${ENVIRONMENT}.yaml $options
 
-    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.yaml
+    kubectl -n $NAMESPACE create -f deployment/lnmp-secret.${ENVIRONMENT}.yaml $options
 
-    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.service.yaml
+    kubectl -n $NAMESPACE create -f deployment/mysql/base/lnmp-mysql.yaml $options
+
+    kubectl -n $NAMESPACE create -f deployment/redis/base/lnmp-redis.yaml $options
+
+    kubectl -n $NAMESPACE create -f deployment/php/base/lnmp-php7.yaml $options
+
+    kubectl -n $NAMESPACE create -f deployment/nginx/base/lnmp-nginx.yaml $options
+
+    kubectl -n $NAMESPACE create -f deployment/nginx/base/lnmp-nginx.service.yaml $options
 
   }
 
   "delete" {
-    _delete_lnmp
+    $ENVIRONMENT="development"
+    $NAMESPACE="lnmp"
+
+    if ($others){
+      $ENVIRONMENT=$others[0]
+      $_,$options=$others
+    }
+
+    if($ENVIRONMENT -ne "development"){
+      $NAMESPACE="lnmp", $ENVIRONMENT -join '-'
+    }
+
+    "==> NAMESPACE is $NAMESPACE"
+
+    _delete_lnmp $NAMESPACE
   }
 
   "cleanup" {
-    _delete_lnmp
+    $ENVIRONMENT="development"
+    $NAMESPACE="lnmp"
 
-    kubectl -n lnmp delete pvc -l app=lnmp
-    kubectl -n lnmp delete pv -l app=lnmp
-    kubectl -n lnmp delete ingress -l app=lnmp
-  }
+    if ($others){
+      $ENVIRONMENT=$others[0]
+      $_,$options=$others
+    }
 
-  "registry" {
-    _create_pv
-    _registry_up
-  }
+    if($ENVIRONMENT -ne "development"){
+      $NAMESPACE="lnmp", $ENVIRONMENT -join '-'
+    }
 
-  "create-pv" {
-    _create_pv
+    "==> NAMESPACE is $NAMESPACE"
+    _delete_lnmp $NAMESPACE
+
+    kubectl -n $NAMESPACE delete pvc -l app=lnmp
+    kubectl -n $NAMESPACE delete pv -l app=lnmp
+    kubectl -n $NAMESPACE delete ingress -l app=lnmp
   }
 
   "minikube-up" {

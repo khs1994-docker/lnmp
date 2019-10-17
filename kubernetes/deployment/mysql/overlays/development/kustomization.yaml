@@ -1,0 +1,17 @@
+# commonLabels:
+#   app: lnmp
+# commonAnnotations:
+#   app: lnmp
+bases:
+  - ../../base
+patches:
+  - lnmp-mysql.yaml
+  - pv.yaml
+configMapGenerator:
+- name: lnmp-mysql-cnf-0.0.1
+  files:
+  - docker.cnf=config/docker.development.cnf
+secretGenerator:
+- name: lnmp-mysql-password-0.0.1
+  literals:
+  - password=mytest

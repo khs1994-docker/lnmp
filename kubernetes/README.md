@@ -10,7 +10,13 @@
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/122)
 
-## Kubernetes 基础设施(从 0 开始部署 Kubernetes 集群)
+## 从 0 开始部署 Kubernetes 集群
+
+### 云服务
+
+* [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
+### 本项目维护方案
 
 * [手动部署 Kubernetes 集群(Fedora CoreOS)](coreos)
 
@@ -18,9 +24,11 @@
 
 * [Docker Desktop](docs/guide/docker-desktop.md)
 
-* [Windows + WSL2 + 树莓派](rpi)
+* [Windows(etcd,kube-nginx) + WSL2(master) + 树莓派(node)](rpi)
 
-* [WSL2](wsl2)
+* [Windows(etcd,kube-nginx) + WSL2(master + node)](wsl2)
+
+### 其他方案
 
 * [MiniKube](docs/guide/minikube.md)
 
@@ -29,8 +37,6 @@
 * [kind](https://github.com/kubernetes-sigs/kind)
 
 * [microk8s](https://github.com/ubuntu/microk8s)
-
-* [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## 微信订阅号
 
@@ -42,9 +48,7 @@
 
 ## 注意事项
 
-* 本项目今后可能通过 Helm 分发（建议用户了解 K8s 基本概念之后，尽快了解 Helm）
-
-* `lnmp-k8s` 脚本在 Windows 或 macOS 上执行的 k8s 目标集群为 **Docker 桌面版启动的 k8s 集群**，未考虑在 Windows 或 macOS 操作 **远程 k8s 集群** 的情况。（相信有能力操作远程集群的人群不再需要本项目的一键脚本）
+* `lnmp-k8s` 脚本在 Windows 或 macOS 上执行的 k8s 目标集群为 **Docker 桌面版启动的 k8s 集群**，未考虑在 Windows 或 macOS 操作 **其他（远程） k8s 集群** 的情况。（相信有能力操作远程集群的人群不再需要本项目的一键脚本）
 
 * 本项目是给大家提供一个 lnmp k8s yaml 文件的模板，具体内容还请根据实际情况自行更改
 
@@ -68,7 +72,7 @@
 # 具体参考 volumes 文件夹中的内容
 # 或者你可以加上 [ --no-nfs ] 避免使用 NFS 数据卷
 
-$ ./lnmp-k8s create --no-nfs
+$ ./lnmp-k8s create development --no-nfs
 
 # PHP 项目开发
 $ cd ~/app # 或者 NFS 路径
@@ -85,9 +89,9 @@ $ cd ~/lnmp/kubernetes/deployment/configMap/nginx-conf-d
 $ vi filename.conf
 
 # 创建新版本的 configmap
-$ kubectl create configmap lnmp-nginx-conf-d-0.0.2 --from-file deployment/configMap/nginx-conf-d
+$ kubectl create configmap lnmp-nginx-conf.d-0.0.2 --from-file deployment/configMap/nginx-conf-d
 
-$ kubectl label configmap lnmp-nginx-conf-d-0.0.2 app=lnmp version=0.0.2
+$ kubectl label configmap lnmp-nginx-conf.d-0.0.2 app=lnmp version=0.0.2
 
 $ kubectl edit deployment nginx
 
@@ -97,10 +101,14 @@ $ kubectl edit deployment nginx
 
 $ ./lnmp-k8s delete
 
-# 销毁 LNMP ,不保留数据
+# 销毁 LNMP ,不保留数据（谨慎操作）
 
 $ ./lnmp-k8s cleanup
 ```
+
+## `Helm` or `Kustomize`
+
+固定的 YAML 文件很难扩展，可以使用 `Helm` 或 `Kustomize($ kubectl apply -k XXX)` 灵活的部署应用。
 
 ## [Helm](helm)
 

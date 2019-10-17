@@ -23,6 +23,8 @@
 $ wsl
 
 $ source ./wsl2/.env
+
+$ sudo mkdir -p ${K8S_ROOT:-/opt/k8s}/bin
 $ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} ${K8S_ROOT:-/opt/k8s}/bin
 ```
 
@@ -194,28 +196,13 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 
 为避免 Windows 与 WSL 切换和执行 WSL 命令时加上 `$ wsl -u root -- XXX` 的繁琐,特封装了部分命令以便于直接在 Windows 上执行,具体请查看 `./wsl2/bin/*`
 
-## 参考
-
-```powershell
-# 相当于关闭虚拟机
-$ wsl --shutdown
-```
-
-kubelet 出错
-
-```bash
-$ wsl -u root -- rm -rf ${K8S_ROOT:-/opt/k8s}/conf/kubelet-bootstrap.kubeconfig
-```
-
-* https://github.com/kubernetes-sigs/kind/blob/master/site/content/docs/user/using-wsl2.md
-
 ## WSL2 IP 变化造成的 kubelet 报错
 
 ```bash
 certificate_manager.go:464] Current certificate is missing requested IP addresses [172.21.21.166]
 ```
 
-* 删除 `${K8S_ROOT}/certs/kubelet-server-*.pem` 证书.
+* 每次 IP 变化时删除 `${K8S_ROOT}/certs/kubelet-server-*.pem` 证书.
 
 ## 最终脚本(日常使用)
 
@@ -241,4 +228,14 @@ csr-9pvrm   11m    system:node:wsl2          Pending
 
 ```bash
 $ ./wsl2/bin/kubectl certificate approve csr-9pvrm
+```
+
+如果使用 NFS 卷
+
+启动 NFS 服务端容器
+
+```bash
+$ sudo service docker start
+
+$ ./lnmp-k8s nfs
 ```

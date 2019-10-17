@@ -59,15 +59,11 @@ Commands:
   local-up               Print how to start local Kubernetes (Manager by systemd)
   local-cleanup          Cleanup local Kubernetes.
 
-  join                   New worker [NODE_IP] { CRI: --containerd (default) | --crio | --docker }
+  join                   New worker [NODE_IP] { CRI: --containerd (default) | --crio | --docker } {--hostname=HOST_NAME} {--skip-cp-k8s-bin}
 
-  create                 Deploy lnmp on k8s { --ingress | --no-nfs }
-  delete                 Stop lnmp on k8s, keep data resource(pv and pvc)
-  cleanup                Stop lnmp on k8s, and remove all resource(pv and pvc)
-
-  registry               Up Registry { --no-nfs | }
-
-  create-pv              Create PV and PVC { --no-nfs | }
+  create                 Deploy lnmp on k8s {ENVIRONMENT: development (default) | testing | staging | production} { --ingress | --no-nfs } {options}
+  delete                 Stop lnmp on k8s, keep data resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
+  cleanup                Stop lnmp on k8s, and remove all resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
 
   nfs                    Up NFS server { down | logs }
 
@@ -79,6 +75,12 @@ Commands:
 }
 
 if [ "$#" = 0 ];then print_help_info;exit;fi
+
+_curl() {
+  if [ -n "${DEBUG}" -o -n "${debug}" ];then echo "curl -fL -A curl-lnmp-k8s"; return; fi
+
+  echo "curl -fsSL -A curl-lnmp-k8s "
+}
 
 _sudo(){
   command -v sudo > /dev/null && echo sudo || true
@@ -227,46 +229,90 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
 }
 
 _delete_lnmp(){
-  kubectl delete deployment -l app=lnmp -n lnmp
-  kubectl delete service -l app=lnmp -n lnmp
-  kubectl delete secret -l app=lnmp -n lnmp
-  kubectl delete configmap -l app=lnmp -n lnmp
+  ENVIRONMENT=${1:-development}
+  NAMESPACE="lnmp"
 
-  kubectl delete cronjob -l app=lnmp -n lnmp
+  if [ $ENVIRONMENT != 'development' ];then
+    NAMESPACE="lnmp-${ENVIRONMENT}"
+  fi
+
+  kubectl delete deployment -l app=lnmp -n $NAMESPACE
+  kubectl delete service -l app=lnmp -n $NAMESPACE
+  kubectl delete secret -l app=lnmp -n $NAMESPACE
+  kubectl delete configmap -l app=lnmp -n $NAMESPACE
+
+  kubectl delete cronjob -l app=lnmp -n $NAMESPACE
 }
 
 _cleanup_lnmp(){
-  _delete_lnmp
-  kubectl delete pvc -l app=lnmp -n lnmp
-  kubectl delete pv -l app=lnmp -n lnmp
-  kubectl delete ingress -l app=lnmp -n lnmp
+  ENVIRONMENT=${1:-development}
+  NAMESPACE="lnmp"
+
+  if [ $ENVIRONMENT != 'development' ];then
+    NAMESPACE="lnmp-${ENVIRONMENT}"
+  fi
+
+  _delete_lnmp $ENVIRONMENT
+  kubectl delete pvc -l app=lnmp -n $NAMESPACE
+  kubectl delete pv -l app=lnmp -n $NAMESPACE
+  kubectl delete ingress -l app=lnmp -n $NAMESPACE
 }
 
 _create_pv(){
+  NAMESPACE=${1:-lnmp}
+
+  for options in $@
+  do
+    test $options = "--no-nfs" && NO_NFS=1
+  done
+
   if [ "$OS" = 'Linux' ];then
     # linux 默认使用 NFS PV
-    if [ "${1}" = '--no-nfs' ];then
+    if [ -n "$NO_NFS" ];then
+      echo "==> create PV with HOSTPATH"
       sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.temp.yaml \
       | kubectl create -f -
 
-      kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
+      kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.yaml
 
       return
     fi
 
+    echo "==> create PV with NFS"
     sed "s#192.168.199.100#${LNMP_NFS_SERVER_HOST}#g" deployment/pv/lnmp-volume.linux.nfs.yaml | \
       kubectl create -f -
 
-    kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
+    kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
+
   elif [ "$OS" = 'Darwin' ];then
+    echo "==> create PV with HOSTPATH on macOS"
+
     sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.temp.yaml \
     | kubectl create -f -
 
-    kubectl -n lnmp create -f deployment/pvc/lnmp-pvc.yaml
+    kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.yaml
   fi
 }
 
 _create_lnmp(){
+  ENVIRONMENT=${1:-development}
+  NAMESPACE="lnmp"
+
+  if [ ${ENVIRONMENT} != 'development' ];then
+    NAMESPACE="lnmp-${ENVIRONMENT}"
+  fi
+
+  for option in $@
+  do
+    test $option = "--no-nfs" && NFS_OPTIONS=$option && shift
+    test $option = "--ingress" && INGRESS=1 && shift
+  done
+
+  shift || true
+
+  echo "==> NAMESPACE is ${NAMESPACE}"
+  echo "==> OPTIONS is $@"
+
   current_context=`kubectl config current-context`
 
   if [ $current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
@@ -274,56 +320,60 @@ _create_lnmp(){
      exit
   fi
 
-  kubectl create namespace lnmp > /dev/null 2>&1 || true
+  kubectl create namespace lnmp $@> /dev/null 2>&1 || true
 
-  _create_pv "$@"
+  if [ $NAMESPACE != 'lnmp' ];then
+    items="mysql redis php nginx"
 
-  kubectl -n lnmp create configmap lnmp-php-conf-0.0.1 \
-             --from-file=php.ini=helm/nginx-php/config/php/ini/php.development.ini \
-      --from-file=zz-docker.conf=helm/nginx-php/config/php/zz-docker.development.conf \
---from-file=composer.config.json=helm/nginx-php/config/php/composer/config.development.json \
-          --from-file=docker.ini=helm/nginx-php/config/php/conf.d/docker.development.ini
-  kubectl -n lnmp label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1
+    for item in $items
+    do
+      kubectl -n ${NAMESPACE} create -k deployment/$item/overlays/${ENVIRONMENT}/ $@
+    done
 
-  kubectl -n lnmp create configmap lnmp-mysql-cnf-0.0.1 \
-   --from-file=docker.cnf=helm/mysql/config/docker.development.cnf
-  kubectl -n lnmp label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1
+    return
+  fi
 
-  kubectl -n lnmp create configmap lnmp-nginx-conf-0.0.1 \
-   --from-file=nginx.conf=helm/nginx-php/config/nginx/nginx.development.conf
-  kubectl -n lnmp label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1
+  _create_pv ${NAMESPACE} ${NFS_OPTIONS}
 
-  kubectl -n lnmp create configmap lnmp-nginx-conf-d-0.0.1 --from-file=deployment/configMap/nginx-conf-d
-  kubectl -n lnmp label configmap lnmp-nginx-conf-d-0.0.1 app=lnmp version=0.0.1
+  CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
+  kubectl -n ${NAMESPACE} create configmap lnmp-php-conf-0.0.1 \
+    --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini \
+    --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf \
+    --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json \
+    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini
+  kubectl -n ${NAMESPACE} label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $@
 
-  kubectl -n lnmp create -f deployment/lnmp-configMap.yaml
+  CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
+  kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf-0.0.1 \
+    --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf
+  kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $@
 
-  kubectl -n lnmp create -f deployment/lnmp-secret.yaml
+  CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
+  kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf-0.0.1 \
+    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf
+  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $@
 
-  kubectl -n lnmp create -f deployment/mysql/lnmp-mysql.yaml
+  kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf.d-0.0.1 \
+    --from-file=deployment/configMap/nginx-conf-d
+  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d-0.0.1 app=lnmp version=0.0.1 $@
 
-  kubectl -n lnmp create -f deployment/redis/lnmp-redis.yaml
+  kubectl -n ${NAMESPACE} create -f deployment/lnmp-configMap.${ENVIRONMENT}.yaml $@
 
-  kubectl -n lnmp create -f deployment/php/lnmp-php7.yaml
+  kubectl -n ${NAMESPACE} create -f deployment/lnmp-secret.${ENVIRONMENT}.yaml $@
 
-  kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.yaml
+  kubectl -n ${NAMESPACE} create -f deployment/mysql/base/lnmp-mysql.yaml $@
+
+  kubectl -n ${NAMESPACE} create -f deployment/redis/base/lnmp-redis.yaml $@
+
+  kubectl -n ${NAMESPACE} create -f deployment/php/base/lnmp-php7.yaml $@
+
+  kubectl -n ${NAMESPACE} create -f deployment/nginx/base/lnmp-nginx.yaml $@
 
   if [ "$OS" = 'Linux' ];then
-    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.service.linux.yaml
+    kubectl -n ${NAMESPACE} create -k deployment/nginx/overlays/linux/ $@ || true
   elif [ "$OS" = 'Darwin' ];then
-    kubectl -n lnmp create -f deployment/nginx/lnmp-nginx.service.yaml
+    kubectl -n ${NAMESPACE} create -f deployment/nginx/base/lnmp-nginx.service.yaml $@
   fi
-}
-
-_registry_up(){
-  kubectl -n lnmp create configmap lnmp-registry-conf-0.0.1 --from-file=config.yml=helm/registry/config/config.development.yml
-  kubectl -n lnmp label configmap lnmp-registry-conf-0.0.1 app=lnmp version=0.0.1
-
-  kubectl -n lnmp create secret generic lnmp-registry-tls-0.0.1 --from-file=tls.crt=helm/registry/config/ssl/public.crt \
-      --from-file=tls.key=helm/registry/config/ssl/private.key
-  kubectl -n lnmp label secret lnmp-registry-tls-0.0.1 app=lnmp version=0.0.1
-
-  kubectl -n lnmp create -f addons/registry.yaml
 }
 
 kubectl_install(){
@@ -333,7 +383,7 @@ kubectl_install(){
 
   if [ "$OS" = 'Linux' -a "$GOARCH" = 'amd64' ];then
       local KUBECTL_VERSION=$(curl -fsSL https://mirror.azure.cn/kubernetes/kubectl/stable.txt)
-      $(_sudo) curl -fsSL -o /usr/local/bin/kubectl https://mirror.azure.cn/kubernetes/kubectl/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+      $(_sudo) $(_curl) -o /usr/local/bin/kubectl https://mirror.azure.cn/kubernetes/kubectl/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
       $(_sudo) chmod +x /usr/local/bin/kubectl
       kubectl version
       return
@@ -341,7 +391,7 @@ kubectl_install(){
 
   KUBECTL_VERSION=$(curl https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-  curl -fsSL ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/${GOOS}/${GOARCH}/kubectl \
+  $(_curl) ${KUBECTL_URL}/${KUBECTL_VERSION}/bin/${GOOS}/${GOARCH}/kubectl \
       -o ${TMP_ROOT}/kubectl-${GOOS}-${GOARCH}
 
   $(_sudo) mv ${TMP_ROOT}/kubectl-${GOOS}-${GOARCH} /usr/local/bin/kubectl
@@ -356,14 +406,14 @@ kubectl_info(){
   if [ -n "ENABLE_CN_MIRROR" ];then
     url=https://mirror.azure.cn/kubernetes/kubectl/stable.txt
   fi
-  curl -fsSL $url
+  $(_curl) $url
 }
 
 _nginx_build(){
   local url="https://nginx.org/download/"
   local TAR_FILE="nginx-${NGINX_VERSION}.tar.gz"
   __download(){
-    $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   if [ -f ${K8S_ROOT}/kube-nginx.tar.gz ];then
@@ -407,7 +457,7 @@ _etcd_install(){
     if [ $httpCode != 200 ];then
       url=$url_official
     fi
-    $(_sudo) curl -fsSL ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   if [ -f ${K8S_ROOT}/bin/etcd -a ! "$1" = "--dry-run" ];then
@@ -438,10 +488,11 @@ _etcd_install(){
 }
 
 _flanneld_install(){
+  if [ "$1" = '-f' ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/flanneld; fi
   local url="https://github.com/coreos/flannel/releases/download"
   local TAR_FILE="flannel-v${FLANNEL_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    $(_sudo) curl -fsSL ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   if [ -f ${K8S_ROOT}/bin/flanneld -a ! "$1" = "--dry-run" ];then
@@ -485,7 +536,7 @@ _helm_install(){
       url=$url_official
     fi
 
-    $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   print_info "install helm ..."
@@ -559,7 +610,7 @@ _gvisor_install(){
   local TAR_FILE="runsc-${GOOS}-${GOARCH}.tar.gz"
 
   __download(){
-    $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
@@ -606,7 +657,7 @@ _containerd_install(){
   local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
@@ -658,7 +709,7 @@ _cni_install(){
   fi
 
   __download(){
-    $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   print_info "install cni ..."
@@ -716,7 +767,7 @@ _crictl_install(){
   local url="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
   __download(){
-    $(_sudo) curl -fsSL ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   print_info "install crictl ..."
@@ -1092,11 +1143,23 @@ encryption-config.yaml} \
 
 _k8s_join(){
   NODE_IP=$1
+  HOSTNAME=`hostname`
 
   for options in $@
   do
     test $options = '--skip-cp-k8s-bin' && export SKIP_CP_K8S_BIN=1
+    [[ $options =~ --hostname=* ]] && HOSTNAME=`echo $options | cut -d "=" -f 2`
   done
+
+  echo $HOSTNAME | grep -q '-' \
+    &&  print_info "hostname $HOSTNAME include -, \
+not allowed, please input new hostname by --hostname=XXX" \
+    && exit 1
+
+  if [ $HOSTNAME = "wsl2" ];then
+    print_info "hostname not allowed set wsl2, please input new hostname by --hostname=XXX"
+    exit 1
+  fi
 
   ls systemd/certs/{ca.pem,\
 flanneld.pem,\
@@ -1143,8 +1206,6 @@ kube-proxy.kubeconfig} \
     ${K8S_ROOT}/conf
 
   local files=("kube-proxy.config.yaml" "kubelet-config.yaml")
-
-  HOSTNAME=`hostname`
 
   for file in ${files[@]}; \
   do \
@@ -1299,22 +1360,12 @@ case $_command in
 
     delete )
       set +e
-      _delete_lnmp
+      _delete_lnmp $@
     ;;
 
     cleanup )
       set +e
-      _cleanup_lnmp
-    ;;
-
-    registry )
-      set +e
-      _create_pv $@
-      _registry_up
-    ;;
-
-    create-pv )
-      _create_pv $@
+      _cleanup_lnmp $@
     ;;
 
     local-install )

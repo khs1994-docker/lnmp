@@ -1,5 +1,5 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
   name: redis
   labels:
@@ -16,8 +16,8 @@ spec:
     # targetPort: 6379
   clusterIP: None
 ---
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
   name: redis
   labels:
