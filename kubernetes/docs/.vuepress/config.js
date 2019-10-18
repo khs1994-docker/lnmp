@@ -85,6 +85,8 @@ module.exports = {
       ],
       "/volume/": [
         "data",
+        "nfs",
+        "pv",
       ],
       "/node/": [
         "kubelet",

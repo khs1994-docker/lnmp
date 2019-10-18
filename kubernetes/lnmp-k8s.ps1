@@ -56,9 +56,9 @@ if (Test-Path .env.ps1 ){
   . "$PSScriptRoot/.env.ps1"
 }
 
-$current_context=kubectl config current-context
+$k8s_current_context=kubectl config current-context
 
-Write-Warning "==> Kubernetes context is [ $current_context ]"
+Write-Warning "==> Kubernetes context is [ $k8s_current_context ]"
 
 Function print_info($message){
   write-host "==> $message"
@@ -113,9 +113,9 @@ Function _delete_lnmp($NAMESPACE="lnmp"){
 Function _create_pv($NAMESPACE="lnmp"){
   Get-Content deployment/pv/lnmp-volume.windows.temp.yaml `
       | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
-      | kubectl create -f -
+      | kubectl apply -f -
 
-  kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.yaml
+  kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
 }
 
 Function _helm_lnmp($environment, $debug=0){
@@ -160,6 +160,12 @@ switch ($args[0])
   }
 
   "create" {
+    if( $k8s_current_context -ne "docker-desktop"){
+      Write-Warning "==> This Script ONLY Support [ K8S on Docker Desktop ] On Winodws"
+
+      exit
+    }
+
     $ENVIRONMENT="development"
     $NAMESPACE="lnmp"
 
@@ -181,8 +187,10 @@ switch ($args[0])
       $items="mysql","redis","php","nginx"
 
       foreach($item in $items){
-        kubectl -n $NAMESPACE create -k deployment/$item/overlays/$ENVIRONMENT/ $options
+        kubectl -n $NAMESPACE apply -k deployment/$item/overlays/$ENVIRONMENT/ $options
       }
+
+      # kubectl -n $NAMESPACE apply -k deployment/nginx/overlays/windows/ $options
 
       return
     }
@@ -265,7 +273,13 @@ switch ($args[0])
     _delete_lnmp $NAMESPACE
 
     kubectl -n $NAMESPACE delete pvc -l app=lnmp
-    kubectl -n $NAMESPACE delete pv -l app=lnmp
+
+    if($ENVIRONMENT -eq 'development'){
+      kubectl delete pv -l app=lnmp
+    }else{
+      "==> SKIP delete PV"
+    }
+
     kubectl -n $NAMESPACE delete ingress -l app=lnmp
   }
 

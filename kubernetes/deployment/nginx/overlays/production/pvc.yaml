@@ -1,0 +1,44 @@
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: lnmp-app
+#   labels:
+#     type: local
+#     app: lnmp
+#     tier: code-data
+# spec:
+#   capacity:
+#     storage: 20Gi
+#   accessModes: [ "ReadWriteMany" ]
+#   persistentVolumeReclaimPolicy: Retain
+#   nfs:
+#     # FIXME: use the right IP
+#     server: 192.168.199.100
+#     path: "/lnmp/app"
+#   storageClassName: slow
+#   mountOptions:
+#     # - hard
+#     # - nfsvers=4.1
+#     - nfsvers=4
+---
+# NFS PVC 动态创建 NFS PV
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-app
+  labels:
+    app: lnmp
+    tier: code-data
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+spec:
+  accessModes:
+    - ReadWriteMany
+  # selector:
+  #   matchLabels:
+  #     app: lnmp
+  #     tier: code-data
+  resources:
+    requests:
+      storage: 20Gi
+  # storageClassName: slow

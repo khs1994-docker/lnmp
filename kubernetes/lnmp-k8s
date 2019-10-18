@@ -74,6 +74,35 @@ Commands:
 "
 }
 
+# 生成自定义示例文件
+_lnmp_k8s_init(){
+  items="development production"
+  local ROOT="deployment"
+  # nginx conf.d
+  touch $ROOT/configMap/nginx-conf-d/custom.conf
+  # mysql conf
+  for item in $items
+  do
+  touch $ROOT/mysql/overlays/$item/config/docker.custom.cnf
+  done
+  # php conf
+  for item in $items
+  do
+    touch $ROOT/php/overlays/$item/config/docker-php.custom.ini
+    touch $ROOT/php/overlays/$item/config/zz-docker.custom.conf
+    touch $ROOT/php/overlays/$item/config/ini/php.custom.ini
+    touch $ROOT/php/overlays/$item/config/conf.d/docker.custom.ini
+    touch $ROOT/php/overlays/$item/config/composer/config.custom.json
+  done
+  # redis conf
+  for item in $items
+  do
+  touch $ROOT/redis/overlays/$item/config/redis.custom.conf
+  done
+}
+
+_lnmp_k8s_init
+
 if [ "$#" = 0 ];then print_help_info;exit;fi
 
 _curl() {
@@ -254,7 +283,13 @@ _cleanup_lnmp(){
 
   _delete_lnmp $ENVIRONMENT
   kubectl delete pvc -l app=lnmp -n $NAMESPACE
-  kubectl delete pv -l app=lnmp -n $NAMESPACE
+
+  if [ $ENVIRONMENT = 'development' ];then
+    kubectl delete pv -l app=lnmp
+  else
+    echo "==> SKIP delete PV"
+  fi
+
   kubectl delete ingress -l app=lnmp -n $NAMESPACE
 }
 
@@ -271,26 +306,26 @@ _create_pv(){
     if [ -n "$NO_NFS" ];then
       echo "==> create PV with HOSTPATH"
       sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.temp.yaml \
-      | kubectl create -f -
+      | kubectl apply -f -
 
-      kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.yaml
+      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
 
       return
     fi
 
     echo "==> create PV with NFS"
     sed "s#192.168.199.100#${LNMP_NFS_SERVER_HOST}#g" deployment/pv/lnmp-volume.linux.nfs.yaml | \
-      kubectl create -f -
+      kubectl apply -f -
 
-    kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
+    kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
 
   elif [ "$OS" = 'Darwin' ];then
     echo "==> create PV with HOSTPATH on macOS"
 
     sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.temp.yaml \
-    | kubectl create -f -
+    | kubectl apply -f -
 
-    kubectl -n $NAMESPACE create -f deployment/pvc/lnmp-pvc.yaml
+    kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
   fi
 }
 
@@ -313,22 +348,28 @@ _create_lnmp(){
   echo "==> NAMESPACE is ${NAMESPACE}"
   echo "==> OPTIONS is $@"
 
-  current_context=`kubectl config current-context`
+  k8s_current_context=`kubectl config current-context`
 
-  if [ $current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
-     echo "This Script Support Docker Desktop Only On macOS"
+  if [ $k8s_current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
+     echo "==> This Script ONLY Support [ K8S on Docker Desktop ] On macOS"
+
      exit
   fi
 
-  kubectl create namespace lnmp $@> /dev/null 2>&1 || true
+  kubectl create namespace $NAMESPACE $@> /dev/null 2>&1 || true
 
   if [ $NAMESPACE != 'lnmp' ];then
+    echo "==> create CSI nfs-client "
+    kubectl apply -f csi/nfs-client
+
     items="mysql redis php nginx"
 
     for item in $items
     do
-      kubectl -n ${NAMESPACE} create -k deployment/$item/overlays/${ENVIRONMENT}/ $@
+      kubectl -n ${NAMESPACE} apply -k deployment/$item/overlays/${ENVIRONMENT}/ $@
     done
+
+    # kubectl -n ${NAMESPACE} apply -k deployment/nginx/overlays/macos/ $@
 
     return
   fi

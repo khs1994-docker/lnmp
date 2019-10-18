@@ -1,17 +1,18 @@
 bases:
 - ../../base
+resources:
+- pvc.yaml
 configMapGenerator:
 - name: lnmp-nginx-conf-0.0.1
   files:
-  - nginx.conf=config/nginx.development.conf
+  - nginx.conf=config/nginx.production.conf
 - name: lnmp-nginx-conf.d-0.0.1
   files:
-  - config/conf.d
-secretGeneratator:
+  - config/conf.d/t.khs1994.com.production.conf
+secretGenerator:
 - name: lnmp-nginx-khs1994-com-tls-0.0.1
   files:
   - t.khs1994.com.crt=config/conf.d/ssl/t.khs1994.com.crt
   - t.khs1994.com.key=config/conf.d/ssl/t.khs1994.com.key
 patches:
   - lnmp-nginx.service.yaml
-  - pv.yaml
