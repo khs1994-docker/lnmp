@@ -296,19 +296,30 @@ _cleanup_lnmp(){
 _create_pv(){
   NAMESPACE=${1:-lnmp}
 
+  if [ $NAMESPACE = "lnmp" ];then
+    local ENVIRONMENT="development"
+  else
+    local ENVIRONMENT=`echo $NAMESPACE | cut -d '-' -f 2`
+  fi
+
   for options in $@
   do
-    test $options = "--no-nfs" && NO_NFS=1
+    test $options = "--no-nfs" && NO_NFS=1 && shift
+    test $options = "--no-pvc" && NO_PVC=1 && shift
   done
+
+  shift
 
   if [ "$OS" = 'Linux' ];then
     # linux 默认使用 NFS PV
     if [ -n "$NO_NFS" ];then
       echo "==> create PV with HOSTPATH"
       sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.temp.yaml \
-      | kubectl apply -f -
+        | sed "s#development#${ENVIRONMENT}#g" \
+        | kubectl apply -f -
 
-      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
+      test -n "$NO_PVC" || \
+        kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
 
       return
     fi
@@ -317,15 +328,18 @@ _create_pv(){
     sed "s#192.168.199.100#${LNMP_NFS_SERVER_HOST}#g" deployment/pv/lnmp-volume.linux.nfs.yaml | \
       kubectl apply -f -
 
-    kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
+    test -n "$NO_PVC" || \
+      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
 
   elif [ "$OS" = 'Darwin' ];then
     echo "==> create PV with HOSTPATH on macOS"
 
     sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.temp.yaml \
-    | kubectl apply -f -
+      | sed "s#development#${ENVIRONMENT}#g" \
+      | kubectl apply -f -
 
-    kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
+    test -n "$NO_PVC" || \
+      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
   fi
 }
 
@@ -364,6 +378,15 @@ _create_lnmp(){
       storage/nfs-client/deploy.yaml | kubectl apply -f - || true
 
     items="mysql redis php nginx"
+
+    if [ "$OS" = "Darwin" ] || [ "$NFS_OPTIONS" = "--no-nfs" ];then
+      _create_pv ${NAMESPACE} ${NFS_OPTIONS} --no-pvc
+
+      for item in $items
+      do
+        sed -i "s/# - hostpath.patch.yaml/- hostpath.patch.yaml/g" deployment/$item/overlays/${ENVIRONMENT}/kustomization.yaml
+      done
+    fi
 
     for item in $items
     do

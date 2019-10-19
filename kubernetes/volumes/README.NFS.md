@@ -5,7 +5,7 @@
 * https://github.com/ehough/docker-nfs-server
 * https://www.cnblogs.com/lykyl/archive/2013/06/14/3136921.html
 
-* https://github.com/khs1994-docker/lnmp/blob/master/docs/storage/nfs.md
+* https://github.com/khs1994-docker/lnmp/blob/master/docs/volumes/nfs.md
 
 之前本项目默认的 PHP 项目目录为 `./app`，你可以通过设置 `APP_ROOT` 变量来设置 PHP 项目目录。
 

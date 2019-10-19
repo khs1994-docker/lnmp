@@ -16,3 +16,4 @@ secretGenerator:
   - t.khs1994.com.key=config/conf.d/ssl/t.khs1994.com.key
 patches:
   - lnmp-nginx.service.yaml
+  # - hostpath.patch.yaml

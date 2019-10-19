@@ -111,12 +111,28 @@ Function _delete_lnmp($NAMESPACE="lnmp"){
   kubectl -n $NAMESPACE delete cronjob -l app=lnmp
 }
 
-Function _create_pv($NAMESPACE="lnmp"){
-  Get-Content deployment/pv/lnmp-volume.windows.temp.yaml `
-      | %{Write-Output $_.Replace("/Users/username","/Users/$env:username")} `
-      | kubectl apply -f -
-
+Function _create_pvc($NAMESPACE="lnmp"){
   kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
+}
+
+Function _create_hostpath($ENVIRONMENT="development"){
+  $items="mysql-data","nginx-data","redis-data","log","registry-data"
+  foreach($item in $items){
+    mkdir -Force /Users/$env:username/.docker/Volumes/lnmp-$item-$ENVIRONMENT
+  }
+}
+
+Function _create_pv($NAMESPACE="lnmp",$ENVIRONMENT="development"){
+  # _create_hostpath $ENVIRONMENT
+
+  Get-Content deployment/pv/lnmp-volume.windows.temp.yaml `
+      | %{Write-Output `
+            $_.Replace("/Users/username","/Users/$env:username") `
+          } `
+      | %{Write-Output `
+            $_.Replace("development",$ENVIRONMENT) `
+         } `
+      | kubectl apply -f -
 }
 
 Function _helm_lnmp($environment, $debug=0){
@@ -191,7 +207,7 @@ $ kubectl config use-context docker-desktop
     $NAMESPACE="lnmp"
 
     if ($others){
-      $ENVIRONMENT=$others[0]
+      $ENVIRONMENT=$others.split(' ')[0]
       $_,$options=$others
     }
 
@@ -207,6 +223,15 @@ $ kubectl config use-context docker-desktop
     if($NAMESPACE -ne "lnmp"){
       $items="mysql","redis","php","nginx"
 
+      _create_pv $NAMESPACE $ENVIRONMENT $options
+      # dont create pvc
+
+      foreach($item in $items){
+        (get-content deployment/$item/overlays/$ENVIRONMENT/kustomization.yaml) `
+        -replace "# - hostpath.patch.yaml","- hostpath.patch.yaml" `
+        | Set-Content deployment/$item/overlays/$ENVIRONMENT/kustomization.yaml
+      }
+
       foreach($item in $items){
         kubectl -n $NAMESPACE apply -k deployment/$item/overlays/$ENVIRONMENT/ $options
       }
@@ -216,7 +241,8 @@ $ kubectl config use-context docker-desktop
       return
     }
 
-    _create_pv $NAMESPACE $options
+    _create_pv $NAMESPACE $ENVIRONMENT $options
+    _create_pvc $NAMESPACE $options
 
     $CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-php-conf-0.0.1 `
@@ -264,7 +290,7 @@ $ kubectl config use-context docker-desktop
     $NAMESPACE="lnmp"
 
     if ($others){
-      $ENVIRONMENT=$others[0]
+      $ENVIRONMENT=$others.split(' ')[0]
       $_,$options=$others
     }
 
@@ -282,7 +308,7 @@ $ kubectl config use-context docker-desktop
     $NAMESPACE="lnmp"
 
     if ($others){
-      $ENVIRONMENT=$others[0]
+      $ENVIRONMENT=$others.split(' ')[0]
       $_,$options=$others
     }
 

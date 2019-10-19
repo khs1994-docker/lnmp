@@ -7,3 +7,5 @@ configMapGenerator:
   files:
   # - redis.conf=config/redis.custom.conf
   - redis.conf=config/redis.production.conf
+patches:
+# - hostpath.patch.yaml
