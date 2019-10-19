@@ -58,7 +58,8 @@ if (Test-Path .env.ps1 ){
 
 $k8s_current_context=kubectl config current-context
 
-Write-Warning "==> Kubernetes context is [ $k8s_current_context ]"
+"==> Kubernetes context is [ $k8s_current_context ]"
+""
 
 Function print_info($message){
   write-host "==> $message"
@@ -161,7 +162,27 @@ switch ($args[0])
 
   "create" {
     if( $k8s_current_context -ne "docker-desktop"){
-      Write-Warning "==> This Script ONLY Support [ K8S on Docker Desktop ] On Winodws"
+      Write-Warning "==> You can use this script on WSL2:
+
+PS:> $ wsl -- ./lnmp-k8s $args
+"
+
+      exit
+    }
+
+    if( $k8s_current_context -ne "docker-desktop"){
+      Write-Warning "
+==> This Script ONLY Support [ K8S on Docker Desktop ] On Winodws
+
+==> Check Kubernetes context [ docker-desktop ] ...
+
+$(kubectl config get-contexts docker-desktop 2>&1 )
+
+==> you can use kubernetes context [ docker-desktop ] by EXEC:
+
+$ kubectl config use-context docker-desktop
+
+"
 
       exit
     }

@@ -41,6 +41,7 @@ metadata:
     tier: mysql
   annotations:
     volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
     - ReadWriteMany
@@ -89,6 +90,7 @@ metadata:
     tier: log
   annotations:
     volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
     - ReadWriteMany

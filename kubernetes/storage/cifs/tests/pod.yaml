@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command:
+      - sleep
+      - "36000"
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: test
+      mountPath: /data
+  volumes:
+  - name: test
+    flexVolume:
+      driver: "fstab/cifs"
+      fsType: "cifs"
+      secretRef:
+        name: "cifs-secret"
+      options:
+        networkPath: "//HIWIFI/sd/xunlei"
+        mountOptions: "dir_mode=0755,file_mode=0644,noperm"

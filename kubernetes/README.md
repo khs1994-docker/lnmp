@@ -64,12 +64,11 @@
 
 ## Demo
 
-> 部署好 Kubernetes 集群之后，按照以下步骤启动 LNMP
+> 部署好 Kubernetes 集群之后，按照以下步骤启动 LNMP Demo
 
 ```bash
 # 部署 LNMP
-# 事先部署好 NFS 服务端(v4), 并在 .env 文件中配置 `LNMP_NFS_SERVER_HOST`
-# 具体参考 volumes 文件夹中的内容
+# 事先部署好 NFS 服务端(v4), 并在 .env 文件中配置 `LNMP_NFS_SERVER_HOST`,具体参考 volumes 文件夹中的内容
 # 或者你可以加上 [ --no-nfs ] 避免使用 NFS 数据卷
 
 $ ./lnmp-k8s create development --no-nfs
@@ -89,26 +88,44 @@ $ cd ~/lnmp/kubernetes/deployment/configMap/nginx-conf-d
 $ vi filename.conf
 
 # 创建新版本的 configmap
-$ kubectl create configmap lnmp-nginx-conf.d-0.0.2 --from-file deployment/configMap/nginx-conf-d
+$ kubectl -n lnmp create configmap lnmp-nginx-conf.d-0.0.2 --from-file deployment/configMap/nginx-conf-d
 
-$ kubectl label configmap lnmp-nginx-conf.d-0.0.2 app=lnmp version=0.0.2
+$ kubectl -n lnmp label configmap lnmp-nginx-conf.d-0.0.2 app=lnmp version=0.0.2
 
-$ kubectl edit deployment nginx
+# 编辑 nginx
+$ kubectl -n lnmp edit deployment nginx
+```
 
-# 更新配置信息，保存文件即可。
+```diff
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  template:
+    spec:
+      volumes:
+      - configMap:
+-         name: lnmp-nginx-conf.d-0.0.1
++         name: lnmp-nginx-conf.d-0.0.2
+        name: lnmp-nginx-conf-d
+```
 
-# 停止 LNMP ,保留数据
+保存文件,即可更新 nginx。
 
-$ ./lnmp-k8s delete
+### 停止 LNMP ,保留数据
 
-# 销毁 LNMP ,不保留数据（谨慎操作）
+```bash
+$ ./lnmp-k8s delete development
+```
 
-$ ./lnmp-k8s cleanup
+### 销毁 LNMP ,不保留数据（谨慎操作）
+
+```bash
+$ ./lnmp-k8s cleanup development
 ```
 
 ## `Helm` or `Kustomize`
 
-固定的 YAML 文件很难扩展，可以使用 `Helm` 或 `Kustomize($ kubectl apply -k XXX)` 灵活的部署应用。
+固定的 YAML 文件很难扩展，可以使用 `Helm` 或 `Kustomize($ kubectl apply -k XXX)` 灵活的部署应用。具体说明请查看文档。
 
 ## [Helm](helm)
 

@@ -8,14 +8,30 @@
 
 ## 自定义配置文件
 
+`SOFT/overlays/ENVIRONMENT/config/*.custom.*`
+
+并修改 `SOFT/overlays/ENVIRONMENT/kustomization.yaml` 文件,例如
+
+```diff
+configMapGenerator:
+...
+  files:
++  - docker.cnf=config/docker.custom.cnf
+-  # - docker.cnf=config/docker.production.cnf
+```
+
 ## 数据卷
 
-## 生产环境
+## 开发环境 development
 
-* NFS `PVC` 动态创建 NFS `PV`,具体参考 `csi/nfs-client`
+* NFS `PVC` 及对应 `PV` 均为手工声明
+
+## 生产环境 production
+
+* NFS `PVC` 动态创建 NFS `PV`,具体参考 `storage/nfs-client`
 
 ```bash
-$ kubectl apply -f csi/nfs-client
+$ kubectl apply -f storage/nfs-client
 ```
 
 ## 计划任务

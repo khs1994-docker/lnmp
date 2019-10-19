@@ -360,7 +360,8 @@ _create_lnmp(){
 
   if [ $NAMESPACE != 'lnmp' ];then
     echo "==> create CSI nfs-client "
-    kubectl apply -f csi/nfs-client
+    sed "s/192.168.199.100/${LNMP_NFS_SERVER_HOST:-192.168.199.100}/g" \
+      storage/nfs-client/deploy.yaml | kubectl apply -f - || true
 
     items="mysql redis php nginx"
 

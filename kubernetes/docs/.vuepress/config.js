@@ -57,6 +57,7 @@ module.exports = {
         'secret',
         'ha',
         'helm',
+        'kustomize',
         'minikube',
         'windows',
         'arm64',
@@ -87,6 +88,7 @@ module.exports = {
         "data",
         "nfs",
         "pv",
+        "flexVolume",
       ],
       "/node/": [
         "kubelet",
