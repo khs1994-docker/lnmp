@@ -231,6 +231,9 @@ services:
         target: /app
         tmpfs:
           size: 1000
+    tmpfs:
+      - /run
+    tmpfs: /run
     restart: "no" # always | on-failure | unless-stopped # no Swarm mode
     user: postgresql
     working_dir: /code

@@ -12,6 +12,7 @@ x-common:
   env_file: ./cli/timezone.env
   networks:
     - backend
+  read_only: ${LNMP_ROOT_FILESYSTEM_READ_ONLY:-false}
   # dns:
   #   - ${DNS:-114.114.114.114}
 
@@ -38,6 +39,8 @@ services:
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:delegated
       - ./scripts/backup/mysql:/backup
+      - type: tmpfs
+        target: /run
     command:
       - mysqld
       - --character-set-server=utf8mb4
@@ -59,6 +62,8 @@ services:
         volume:
           nocopy: true
       - ./log/redis:/var/log/redis:delegated
+      - type: tmpfs
+        target: /run
     # set config by command
     command: [
       "redis-server",
@@ -84,6 +89,8 @@ services:
         target: /usr/share/zoneinfo
         volume:
           nocopy: true
+      - type: tmpfs
+        target: /run
 
   php7:
     &php7
@@ -108,7 +115,7 @@ services:
         volume:
           nocopy: false
       - type: tmpfs
-        target: /temp
+        target: /run
         # tmpfs:
         #   size: 1000
     networks:
@@ -161,6 +168,8 @@ services:
       - type: volume
         source: phpmyadmin-data
         target: /sessions
+      - type: tmpfs
+        target: /run
     networks:
       - backend
       - frontend
@@ -181,6 +190,8 @@ services:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:delegated
+      - type: tmpfs
+        target: /run
     working_dir: /app
     networks:
       - frontend

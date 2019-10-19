@@ -36,8 +36,11 @@ x-common:
     - ./cli/timezone.env
   networks:
     - backend
+  read_only: false
   # dns:
   #   - 114.114.114.114
+  tmpfs:
+    - /run
 
 x-deploy:
   &default-deploy
