@@ -133,7 +133,7 @@ $ ./lnmp-k8s cleanup development
 
 ## Tips
 
-* [数据持久化](docs/volume/data.md)
+* [数据持久化](docs/storage/data.md)
 
 * [Windows 10](docs/guide/windows.md)
 

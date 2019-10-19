@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command:
+      - sleep
+      - "36000"
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: test
+      mountPath: /data
+  volumes:
+  - name: test
+    persistentVolumeClaim:
+      cliamName: cifs-pvc
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cifs-pv
+  labels:
+    name: cifs-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  flexVolume:
+    driver: "fstab/cifs"
+    fsType: "cifs"
+    secretRef:
+        name: "cifs-secret"
+    options:
+      networkPath: "//HIWIFI/sd/xunlei"
+      mountOptions: "dir_mode=0755,file_mode=0644,noperm"
+  persistentVolumeReclaimPolicy: Retain
+---
+kind: PersistentVolumeCliam
+apiVersion: v1
+metedata:
+  name: cifs-pvc
+  lables:
+    name: cifs-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    request:
+      storage: 2Gi

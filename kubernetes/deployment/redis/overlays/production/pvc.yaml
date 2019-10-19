@@ -30,7 +30,7 @@ metadata:
     app: lnmp
     tier: redis
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    # volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
     volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
@@ -42,4 +42,4 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  # storageClassName: slow
+  storageClassName: "managed-nfs-storage"

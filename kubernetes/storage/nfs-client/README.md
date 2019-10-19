@@ -11,4 +11,4 @@ NFS 服务端路径 `/exported/path/${namespace}-${pvcName}-${pvName}`
 ## 参考
 
 * https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client
-* docs/volume/nfs.md
+* docs/storage/nfs.md

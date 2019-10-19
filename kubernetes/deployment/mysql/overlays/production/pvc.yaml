@@ -40,7 +40,7 @@ metadata:
     app: lnmp
     tier: mysql
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    # volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
     volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
@@ -55,7 +55,7 @@ spec:
   #     tier: mysql
     # matchExpressions:
       # - {key: environment, operator: In, values: [dev]}
-  # storageClassName: slow
+  storageClassName: "managed-nfs-storage"
 ---
 # apiVersion: v1
 # kind: PersistentVolume
@@ -89,7 +89,7 @@ metadata:
     app: lnmp
     tier: log
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    # volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
     volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
@@ -101,4 +101,4 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  # storageClassName: slow
+  storageClassName: "managed-nfs-storage"

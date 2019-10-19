@@ -68,9 +68,9 @@ Windows 盘符开启共享请查看 [这里](https://jingyan.baidu.com/article/e
 ## 宿主机挂载
 
 ```bash
-# 用用户/密码登录
+# 用 用户/密码 登录
 $ mount -t cifs //<host>/<path> /<localpath> -o user=<user>,password=<user>
 
-# 用游客登录
+# 用 游客 登录
 $ mount -t cifs //<host>/<path> /<localpath> -o guest
 ```

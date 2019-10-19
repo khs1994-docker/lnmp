@@ -4,27 +4,27 @@
 
 # 基础设施
 
-* [安装概览](install.md)
-* [Docker Desktop](docker-desktop.md)
-* [Minikube](minikube.md)
-* [Minikube On Windows](windows.md)
+* [安装概览](guide/install.md)
+* [Docker Desktop](guide/docker-desktop.md)
+* [Minikube](guide/minikube.md)
+* [Minikube On Windows](guide/windows.md)
 
 # 错误排查
 
-* [网络不通](network.md)
+* [网络不通](guide/network.md)
 
 # 服务暴露
 
-* [Endpoints](endpoints.md)
+* [Endpoints](guide/endpoints.md)
 
 # 数据持久化
 
-* [Volume](volume/README.md)
-    * [data](volume/data.md)
+* [Storage](storage/README.md)
+    * [data](storage/data.md)
 
 # Secret
 
-* [Secret](secret.md)
+* [Secret](guide/secret.md)
 
 # 插件
 
@@ -32,25 +32,17 @@
 * [Ingress-nginx](ingress.md)
 * [Dashboard](addons/dashboard.md)
 * [日志 EFK](addons/efk,md)
-* [监控 Heapster 已废弃](addons/heapster.md)
+* 监控 Heapster 已废弃
 * [监控 Metrics Server](addons/metrics-server.md)
 * [监控 Prometheus Operator](addons/prometheus-operator.md)
 
-# COMMAND
-
-* [command](command.md)
-
 # 包管理
 
-* [Helm](helm.md)
-
-# LNMP
-
-* [NGINX](nginx.md)
+* [Helm](guide/helm.md)
 
 # 滚动升级
 
-* [rollout](rollout.md)
+* [rollout](guide/rollout.md)
 
 # LOG
 
@@ -62,4 +54,4 @@
 
 # 端口
 
-* [端口](port.md)
+* [端口](guide/port.md)

@@ -23,8 +23,8 @@ module.exports = {
         link: '/log/',
       },
       {
-        text: '数据卷',
-        link: '/volume/'
+        text: '存储',
+        link: '/storage/'
       },
       {
         text: '工作节点',
@@ -84,11 +84,13 @@ module.exports = {
         "php",
         "redis",
       ],
-      "/volume/": [
+      "/storage/": [
         "data",
         "nfs",
         "pv",
         "flexVolume",
+        "csi",
+        "storage-classes",
       ],
       "/node/": [
         "kubelet",

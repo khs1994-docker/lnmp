@@ -30,7 +30,7 @@ $ kubectl get storageclass
 $ kubectl replace -f xxx.yaml # 定义 PV 的 YAML 文件
 ```
 
-# Tips
+## Tips
 
 * 静态提供：管理员手动创建多个PV，供PVC使用。
 

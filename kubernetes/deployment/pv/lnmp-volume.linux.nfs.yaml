@@ -12,15 +12,15 @@ spec:
   capacity:
     storage: 20Gi
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-mode
-  volumeMode: Filesystem # or raw Block
+  volumeMode: Filesystem # Block
 
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
   accessModes:
-    # - ReadWriteOnce    # 被单个节点mount为读写rw模式 RWO
+    # - ReadWriteOnce    # 被单个节点 mount 为读写 rw 模式 RWO
                        # the volume can be mounted as read-write by a single node
-    # - ReadOnlyMany   # 被多个节点mount为只读ro模式 ROX
+    # - ReadOnlyMany   # 被多个节点 mount 为只读 ro 模式 ROX
                        # the volume can be mounted read-only by many nodes
-    - ReadWriteMany  # 被多个节点mount为读写rw模式 RWX
+    - ReadWriteMany  # 被多个节点 mount 为读写 rw 模式 RWX
                        # the volume can be mounted as read-write by many nodes
 
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming

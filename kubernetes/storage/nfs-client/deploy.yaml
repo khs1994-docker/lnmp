@@ -7,7 +7,10 @@ metadata:
 provisioner: fuseim.pri/ifs # or choose another name, must match deployment's env PROVISIONER_NAME'
 parameters:
   archiveOnDelete: "false" # "false" 删除 PVC 时不会保留数据，"true" 将保留PVC数据
-reclaimPolicy: Retain
+# Pod 使用完后会释放 PV，PV 的状态变成 Released。
+# 变成 Released 的 PV 会根据定义的回收策略(reclaimPolicy)做相应的回收工作。
+reclaimPolicy: Retain # Retain Delete Recycle
+# mountOptions:
 ---
 kind: ServiceAccount
 apiVersion: v1
