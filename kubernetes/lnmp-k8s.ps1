@@ -85,12 +85,22 @@ Commands:
   helm-testing       Install Helm LNMP In Testing
   helm-staging       Install Helm LNMP In Staging
   helm-production    Install Helm LNMP In Production
+
+Remove custom conf:
+
+PS:> ls -R .\deployment\ | %{ if (`$_.Name -match 'custom.*'){rm `$_} }
 "
 }
 
 if (!(Test-Path systemd/.env)){
   Copy-Item systemd/.env.example systemd/.env
 }
+
+Function _lnmp_k8s_custom_conf_generator(){
+  wsl -- ./lnmp-k8s | out-null
+}
+
+_lnmp_k8s_custom_conf_generator
 
 if ($args.length -eq 0){
   print_help_info
@@ -236,30 +246,41 @@ $ kubectl config use-context docker-desktop
         kubectl -n $NAMESPACE apply -k deployment/$item/overlays/$ENVIRONMENT/ $options
       }
 
+      foreach($item in $items){
+        "==> restore kustomization.yaml"
+        git checkout -- deployment/$item/overlays/$ENVIRONMENT/kustomization.yaml
+      }
+
       # kubectl -n $NAMESPACE apply -k deployment/nginx/overlays/windows/ $options
 
       return
     }
 
-    _create_pv $NAMESPACE $ENVIRONMENT $options
-    _create_pvc $NAMESPACE $options
+    kubectl get pvc/lnmp-app -n $NAMESPACE -o json > $env:TEMP/null
+
+    if ($?){
+      "==> PVC exists, SKIP create PV and PVC"
+    }else{
+      _create_pv $NAMESPACE $ENVIRONMENT $options
+      _create_pvc $NAMESPACE $options
+    }
 
     $CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-php-conf-0.0.1 `
-      --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini `
-      --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf `
-      --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json `
-      --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini $options
+      --from-file=php.ini=${CONFIG_ROOT}/ini/php.custom.ini `
+      --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.custom.conf `
+      --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.custom.json `
+      --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini $options
     kubectl -n $NAMESPACE label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $options
 
     $CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-mysql-cnf-0.0.1 `
-       --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf $options
+       --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf $options
     kubectl -n $NAMESPACE label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $options
 
     $CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-nginx-conf-0.0.1 `
-       --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf $options
+       --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf $options
     kubectl -n $NAMESPACE label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $options
 
     kubectl -n $NAMESPACE create configmap lnmp-nginx-conf.d-0.0.1 `

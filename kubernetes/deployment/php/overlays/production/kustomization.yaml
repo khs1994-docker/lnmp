@@ -3,14 +3,14 @@ bases:
 configMapGenerator:
 - name: lnmp-php-conf-0.0.1
   files:
-  # - php.ini=config/ini/php.custom.ini
-  - php.ini=config/ini/php.production.ini
-  # - zz-docker.conf=config/zz-docker.custom.conf
-  - zz-docker.conf=config/zz-docker.production.conf
-  # - composer.config.json=config/composer/config.custom.json
-  - composer.config.json=config/composer/config.production.json
-  # - docker.ini=config/conf.d/docker.custom.ini
-  - docker.ini=config/conf.d/docker.production.ini
+  - php.ini=config/ini/php.custom.ini
+  # - php.ini=config/ini/php.production.ini
+  - zz-docker.conf=config/zz-docker.custom.conf
+  # - zz-docker.conf=config/zz-docker.production.conf
+  - composer.config.json=config/composer/config.custom.json
+  # - composer.config.json=config/composer/config.production.json
+  - docker.ini=config/conf.d/docker.custom.ini
+  # - docker.ini=config/conf.d/docker.production.ini
 - name: lnmp-env-0.0.1
   literals:
   - TZ=Asia/Shanghai
@@ -22,3 +22,6 @@ configMapGenerator:
   - LNMP_OPCACHE_ENABLE="1"
 generatorOptions:
   disableNameSuffixHash: true
+  labels:
+    app: lnmp
+    tier: php

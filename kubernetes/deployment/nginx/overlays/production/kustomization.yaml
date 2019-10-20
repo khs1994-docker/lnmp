@@ -5,10 +5,12 @@ resources:
 configMapGenerator:
 - name: lnmp-nginx-conf-0.0.1
   files:
-  - nginx.conf=config/nginx.production.conf
+  - nginx.conf=config/nginx.custom.conf
+  # - nginx.conf=config/nginx.production.conf
 - name: lnmp-nginx-conf.d-0.0.1
   files:
-  - config/conf.d/t.khs1994.com.production.conf
+  - config/conf.d/www.custom.conf
+  # - config/conf.d/t.khs1994.com.production.conf
 secretGenerator:
 - name: lnmp-nginx-khs1994-com-tls-0.0.1
   files:
@@ -17,3 +19,7 @@ secretGenerator:
 patches:
   - lnmp-nginx.service.yaml
   # - hostpath.patch.yaml
+generatorOptions:
+  labels:
+    app: lnmp
+    tier: nginx

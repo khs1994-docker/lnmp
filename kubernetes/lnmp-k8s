@@ -74,34 +74,50 @@ Commands:
 "
 }
 
+_cp(){
+  if ! [ -f $1 ];then echo "$1 not found"; touch $2; return ;fi
+  if ! [ -f $2 ];then cp $1 $2 ;fi
+}
+
 # 生成自定义示例文件
-_lnmp_k8s_init(){
+_lnmp_k8s_custom_conf_generator(){
   items="development production"
-  local ROOT="deployment"
   # nginx conf.d
-  touch $ROOT/configMap/nginx-conf-d/custom.conf
+  for item in $items
+  do
+    touch deployment/configMap/nginx-conf-d/custom.conf
+
+    local ROOT="deployment/nginx/overlays/$item/config"
+    _cp $ROOT/conf.d/t.khs1994.com.$item.conf $ROOT/conf.d/wwww.custom.conf
+    _cp $ROOT/nginx.$item.conf $ROOT/nginx.custom.conf
+  done
   # mysql conf
   for item in $items
   do
-  touch $ROOT/mysql/overlays/$item/config/docker.custom.cnf
+    local ROOT="deployment/mysql/overlays/$item/config"
+    _cp $ROOT/docker.$item.cnf $ROOT/docker.custom.cnf
   done
   # php conf
   for item in $items
   do
-    touch $ROOT/php/overlays/$item/config/docker-php.custom.ini
-    touch $ROOT/php/overlays/$item/config/zz-docker.custom.conf
-    touch $ROOT/php/overlays/$item/config/ini/php.custom.ini
-    touch $ROOT/php/overlays/$item/config/conf.d/docker.custom.ini
-    touch $ROOT/php/overlays/$item/config/composer/config.custom.json
+    local ROOT="deployment/php/overlays/$item/config"
+    local SOURCE_ROOT="helm/nginx-php/config/php"
+
+    _cp $SOURCE_ROOT/docker-php.ini             $ROOT/docker-php.custom.ini
+    _cp $SOURCE_ROOT/zz-docker.$item.conf       $ROOT/zz-docker.custom.conf
+    _cp $SOURCE_ROOT/ini/php.$item.ini          $ROOT/ini/php.custom.ini
+    _cp $SOURCE_ROOT/conf.d/docker.$item.ini    $ROOT/conf.d/docker.custom.ini
+    _cp $SOURCE_ROOT/composer/config.$item.json $ROOT/composer/config.custom.json
   done
   # redis conf
   for item in $items
   do
-  touch $ROOT/redis/overlays/$item/config/redis.custom.conf
+    local ROOT="deployment/redis/overlays/$item/config"
+    _cp helm/redis/config/redis.$item.conf $ROOT/redis.custom.conf
   done
 }
 
-_lnmp_k8s_init
+_lnmp_k8s_custom_conf_generator
 
 if [ "$#" = 0 ];then print_help_info;exit;fi
 
@@ -393,29 +409,37 @@ _create_lnmp(){
       kubectl -n ${NAMESPACE} apply -k deployment/$item/overlays/${ENVIRONMENT}/ $@
     done
 
+    for item in $items
+    do
+      echo "==> restore kustomization.yaml"
+      git checkout -- deployment/$item/overlays/${ENVIRONMENT}/kustomization.yaml
+    done
+
     # kubectl -n ${NAMESPACE} apply -k deployment/nginx/overlays/macos/ $@
 
     return
   fi
 
-  _create_pv ${NAMESPACE} ${NFS_OPTIONS}
+  kubectl get pvc/lnmp-app -n $NAMESPACE -o json > /dev/null 2>&1 \
+    && echo "==> PVC exists, SKIP create PV and PVC" \
+    || _create_pv ${NAMESPACE} ${NFS_OPTIONS}
 
   CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-php-conf-0.0.1 \
-    --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini \
-    --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf \
-    --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json \
-    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini
+    --from-file=php.ini=${CONFIG_ROOT}/ini/php.custom.ini \
+    --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.custom.conf \
+    --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.custom.json \
+    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini
   kubectl -n ${NAMESPACE} label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $@
 
   CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf-0.0.1 \
-    --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf
+    --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf
   kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $@
 
   CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf-0.0.1 \
-    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf
+    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf
   kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $@
 
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf.d-0.0.1 \
