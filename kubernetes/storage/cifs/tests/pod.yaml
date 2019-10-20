@@ -1,11 +1,21 @@
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: flexvolume-cifs-secret
+#   namespace: default
+# type: fstab/cifs
+# data:
+#   username: 'ZXhhbXBsZQ=='
+#   password: 'bXktc2VjcmV0LXBhc3N3b3Jk'
+---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: busybox
+  name: flexvolume-tests-busybox
   namespace: default
 spec:
   containers:
-  - name: busybox
+  - name: flexvolume-tests-busybox
     image: busybox
     command:
       - sleep
@@ -21,7 +31,7 @@ spec:
       driver: "fstab/cifs"
       fsType: "cifs"
       secretRef:
-        name: "cifs-secret"
+        name: "flexvolume-cifs-secret"
       options:
         networkPath: "//HIWIFI/sd/xunlei"
         mountOptions: "dir_mode=0755,file_mode=0644,noperm"

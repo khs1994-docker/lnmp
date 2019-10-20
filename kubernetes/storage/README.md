@@ -4,5 +4,5 @@
 
 你可以将数据存入以下地方
 
-* [NFS](nfs-client)
-* [CIFS (SMB, Samba, Windows Share)](cifs)
+* [NFS 动态创建 PV](nfs-client)
+* [flexvolume-CIFS (SMB, Samba, Windows Share)](cifs)

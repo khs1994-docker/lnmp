@@ -1,10 +1,29 @@
-apiVersion: v1
-kind: Secret
+apiVersion: apps/v1
+kind: DaemonSet
 metadata:
-  name: cifs-secret
-  namespace: default
-type: fstab/cifs
-data:
-  username: 'ZXhhbXBsZQ=='
-  password: 'bXktc2VjcmV0LXBhc3N3b3Jk'
----
+  name: flexvolume-cifs
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: flexvolume-cifs
+  template:
+    metadata:
+      name: flexvolume-cifs
+      labels:
+        app: flexvolume-cifs
+    spec:
+      containers:
+        - image: dockerpracticesig/flexvolume-cifs
+          name: flexvolume-cifs
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /flexmnt
+              name: flexvolume-mount
+      volumes:
+        - name: flexvolume-mount
+          hostPath:
+            # TODO Change to the Flexvolume plugin directory of your cluster.
+            # path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+            path: ##KUBELET_PLUGINS_VOLUME_PATH##

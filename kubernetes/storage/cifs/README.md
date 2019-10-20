@@ -1,4 +1,6 @@
-# CIFS(SMB, Samba, Windows Share)
+# [CIFS(SMB, Samba, Windows Share)](https://github.com/docker-practice/flexvolume_cifs)
+
+* https://hub.docker.com/r/dockerpracticesig/flexvolume-cifs
 
 * https://github.com/fstab/cifs
 * https://blog.csdn.net/changqing1234/article/details/81128548
@@ -12,50 +14,63 @@ $ sudo apt install -y cifs-utils jq util-linux coreutils
 
 ## 安装
 
-```bash
-$ VOLUME_PLUGIN_DIR="${K8S_ROOT:-/opt/k8s}/var/lib/kubelet/kubelet-plugins/volume/exec/"
-$ sudo mkdir -p "$VOLUME_PLUGIN_DIR/fstab~cifs"
-$ cd "$VOLUME_PLUGIN_DIR/fstab~cifs"
-$ sudo curl -L -O https://raw.githubusercontent.com/fstab/cifs/master/cifs
-$ sudo chmod 755 cifs
+> 不支持 Docker Desktop k8s
 
-$ $VOLUME_PLUGIN_DIR/fstab~cifs/cifs init
+以 `Daemonset` 方式部署
+
+> `KUBELET_PLUGINS_VOLUME_PATH` 为 `kubelet` `--volume-plugin-dir=` 参数指定的值
+
+`Linux/macOS` 请执行如下命令:
+
+```bash
+# $ KUBELET_PLUGINS_VOLUME_PATH=${K8S_ROOT:-/opt/k8s}/var/lib/kubelet/kubelet-plugins/volume/exec/
+$ KUBELET_PLUGINS_VOLUME_PATH="/usr/libexec/kubernetes/kubelet-plugins/volume/exec"
+
+$ sed "s%##KUBELET_PLUGINS_VOLUME_PATH##%${KUBELET_PLUGINS_VOLUME_PATH:?value empty}%g" deploy.yaml | kubectl apply -f -
 ```
 
-## 配置
+`Windows` 请执行如下命令:
 
-配置 `deploy.yaml`
+```powershell
+$ PS:> $KUBELET_PLUGINS_VOLUME_PATH="/usr/libexec/kubernetes/kubelet-plugins/volume/exec"
 
-配置用户名及密码
+$ PS:> (get-content deploy.yaml) -Replace "##KUBELET_PLUGINS_VOLUME_PATH##",${KUBELET_PLUGINS_VOLUME_PATH} | kubectl apply -f -
+```
+
+## 测试
+
+配置 `flexvolume-cifs-secret.yaml`
+
+生成用户名及密码
 
 ```bash
 $ echo -n username | base64
 $ echo -n password | base64
 ```
 
-```diff
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: flexvolume-cifs-secret
+  namespace: default
+type: fstab/cifs
 data:
--  username: 'ZXhhbXBsZQ=='
-+  username: 'base64Str'
--  password: 'bXktc2VjcmV0LXBhc3N3b3Jk'
-+  password: 'base64Str'
+  username: 'ZXhhbXBsZQ==' # 自行替换
+  password: 'bXktc2VjcmV0LXBhc3N3b3Jk' # 自行替换
 ```
-
-## 部署
 
 ```bash
-$ kubectl apply -f storage/cifs/deploy.yaml
+$ kubectl apply -f flexvolume-cifs-secret.yaml
 ```
-
-## 测试
 
 > `pod.yaml` 中替换 `//HIWIFI/sd/xunlei` 为网络路径
 
 ```bash
-$ kubectl apply -f storage/cifs/tests/pod.yaml
+$ kubectl apply -f tests/pod.yaml
 ```
 
-进入 pod `/data` 目录,新建文件.之后在 CIFS 服务端查看文件是否存在.具体步骤不再赘述
+进入 `pod/flexvolume-tests-busybox` 的 `/data` 目录,新建文件.之后在 CIFS 服务端查看文件是否存在.具体步骤不再赘述
 
 ## 挂载 Windows 盘符(例如 C 盘文件)
 

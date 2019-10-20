@@ -373,7 +373,7 @@ _create_lnmp(){
   kubectl create namespace $NAMESPACE $@> /dev/null 2>&1 || true
 
   if [ $NAMESPACE != 'lnmp' ];then
-    echo "==> create CSI nfs-client "
+    echo "==> create storage nfs-client "
     sed "s/192.168.199.100/${LNMP_NFS_SERVER_HOST:-192.168.199.100}/g" \
       storage/nfs-client/deploy.yaml | kubectl apply -f - || true
 
