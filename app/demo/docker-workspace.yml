@@ -8,6 +8,7 @@ services:
       - backend
     volumes:
       - vscode-server:/root/.vscode-server
+      - phpls-cache:/root/.phpls
       # fix me
       - ./:/app/demo
       # fix me 将依赖挂载到数据卷
@@ -15,7 +16,9 @@ services:
       - type: volume
         source: composer_cache-data
         target: /tmp/cache
-    command: /bin/sh -c "while sleep 1000; do :; done"
+    command: /bin/sh -c "cp $$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini.default $$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini ; while sleep 1000; do :; done"
+    environment:
+      APP_ENV: development
 
   composer:
     << : *workspace
@@ -35,6 +38,7 @@ volumes:
     external: true
     name: lnmp_composer_cache-data
   vscode-server:
+  phpls-cache:
   vendor:
     # 或者复用其他数据卷
     # external: true

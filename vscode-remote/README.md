@@ -60,7 +60,7 @@ $ docker-compose -f docker-workspace.yml run --rm composer require XXX
 $ docker-compose -f docker-workspace.yml run --rm composer update
 ```
 
-或者执行
+**或者执行**
 
 ```bash
 $ lnmp-docker composer install | update | require XXX
