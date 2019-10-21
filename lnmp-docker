@@ -50,6 +50,8 @@ _cp_only_not_exists(){
   if ! [ -f $2 ];then cp $1 $2 ; fi
 }
 
+source=`pwd`
+
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD"
 else
@@ -111,6 +113,7 @@ Commands:
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
+  composer             Exec composer command on Docker
   completion           Move fish shell completion code (Only Support fish)
   config               Validate and view the LNMP Compose file
   bug                  Generate Debug information, then copy it to GitHub Issues
@@ -1253,7 +1256,28 @@ main() {
 
     exec docker-compose $options config "$@"
     ;;
+  composer )
+    if [ -d $source/.devcontainer -a -f $source/docker-workspace.yml ];then
+        print_info "Exec composer command in vscode remote folder"
+        cd $source
+        docker-compose -f docker-workspace.yml run --rm composer "$@"
 
+        exit
+    fi
+
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
+
+    if [ -z "$1" ];then
+      print_error "Please input path, $ ./lnmp-docker composer /app/path COMPOSER_COMMAND"
+    fi
+
+    WORKING_DIR=$1
+
+    shift
+
+    exec docker-compose $options run -w $WORKING_DIR --rm composer "$@"
+    ;;
   demo )
     demo
     ;;

@@ -1294,12 +1294,20 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
     }
 
     composer {
-        $LARAVEL_ROOT,$COMPOSER_COMMAND=$other
+      if((Test-Path $source/.devcontainer) -And (Test-Path $source/docker-workspace.yml)){
+        printInfo "Exec composer command in vscode remote folder"
+        cd $source
+        docker-compose -f docker-workspace.yml run --rm composer $args
+
+        exit
+      }
+
+        $WORKING_DIR,$COMPOSER_COMMAND=$other
 
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
-        & {docker-compose $options run -w $LARAVEL_ROOT composer $COMPOSER_COMMAND}
+        & {docker-compose $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND}
       }
 
     default {

@@ -55,7 +55,7 @@ MEMCACHED_HOST=memcached
 
 以上两种情况均为跨主机, 故存在性能问题。
 
-解决思路：`vendor` 目录使用数据卷（数据卷存在于虚拟机中）。
+解决思路：`vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_improving-container-disk-performance) 的说明和笔者提出的方案原理大致相同
 
 编辑 `docker-lnmp.include.yml` 文件，重写默认的 `php` `composer` 配置。
 

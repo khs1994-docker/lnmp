@@ -2,13 +2,28 @@ version: "3.7"
 
 services:
   workspace:
+    &workspace
     image: khs1994/php:7.3.10-cli-alpine
     networks:
       - backend
     volumes:
       - vscode-server:/root/.vscode-server
+      # fix me
       - ./:/app/demo
+      # fix me 将依赖挂载到数据卷
+      - vendor:/app/demo/vendor
+      - type: volume
+        source: composer_cache-data
+        target: /tmp/cache
     command: /bin/sh -c "while sleep 1000; do :; done"
+
+  composer:
+    << : *workspace
+    restart: "no"
+    image: "khs1994/php:7.3.10-composer-alpine"
+    # fix me
+    working_dir: /app/demo
+    command: [] # install | update
 
 networks:
   backend:
@@ -16,4 +31,11 @@ networks:
     name: lnmp_backend
 
 volumes:
+  composer_cache-data:
+    external: true
+    name: lnmp_composer_cache-data
   vscode-server:
+  vendor:
+    # 或者复用其他数据卷
+    # external: true
+    # name: lnmp_laravel_vendor
