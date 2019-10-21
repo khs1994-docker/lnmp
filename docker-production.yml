@@ -144,6 +144,7 @@ services:
     configs:
       - source: mysql_conf_d_docker_cnf
         target: /etc/mysql/conf.d/docker.cnf
+    tmpfs: /var/run/mysqld
 
   # mariadb:
   #   << : *default-common

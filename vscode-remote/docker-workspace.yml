@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  workspace:
+    image: khs1994/php:7.3.10-cli-alpine
+    networks:
+      - backend
+    volumes:
+      - vscode-server:/root/.vscode-server
+      - ./:/app/demo
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+networks:
+  backend:
+    external: true
+    name: lnmp_backend
+
+volumes:
+  vscode-server:

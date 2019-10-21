@@ -204,7 +204,7 @@ _deb(){
 
     docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME} command
 
-    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb
+    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
 
     docker rm -f ${CONTAINER_NAME}
 

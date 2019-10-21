@@ -61,6 +61,8 @@ volumes:
     << : *default-common
   composer_cache-data:
     << : *default-common
+  # vscode-server:
+  #   << : *default-common
 
 secrets:
   db_root_password:

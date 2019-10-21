@@ -1,4 +1,4 @@
-# Docker 化 PHP 项目最佳实践(从 docker run 到 helm install ... --tls)
+# Docker 化 PHP 项目最佳实践(从 docker run 到 helm install ...)
 
 完全使用 Docker 开发、部署 PHP 项目。本指南只是简单列出，具体内容请查看 [文档](https://github.com/khs1994-docker/lnmp/tree/master/docs)
 
@@ -30,7 +30,9 @@ $ cd example
 
 * `kubectl create -f filename.yaml`
 
-* `helm install ./lnmp --tls`
+* `kubectl create -k /path/kustomize_folder`
+
+* `helm install ./lnmp`
 
 ## 说明
 

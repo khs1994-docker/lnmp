@@ -1,5 +1,7 @@
 # WSL2 最佳实践
 
+Docker 或 Kubernetes 运行于 WSL2 ,代码文件夹位于 WSL2 (不要放到 Windows 挂载路径), 使用 vsCode 进行 [远程开发](README.REMOTE.md).
+
 ## Docker
 
 ```bash
@@ -23,3 +25,9 @@ $ ./lnmp-wsl-init
 `conf/.wslconfig`
 
 * https://github.com/MicrosoftDocs/WSL/releases/tag/18947
+
+## 安装 PHP
+
+```bash
+$ ./lnmp-wsl-install php 7.3.10 deb
+```
