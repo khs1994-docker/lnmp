@@ -1950,7 +1950,7 @@ command -v docker > /dev/null 2>&1 && _check_docker_version
 # 写入版本号
 
 if [ ${OS} = "Darwin" ];then
-  sed -i "" "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
+  /usr/bin/sed -i "" "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
 else
   sed -i "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
 fi

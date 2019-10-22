@@ -236,7 +236,19 @@ if [ "$DEBUG" = 'true' ];then set -x; fi
 
 OS=`uname -s`
 
-test $OS = 'Darwin' && export PATH=/usr/local/opt/gnu-sed/libexec/gnubin:$PATH
+# test $OS = 'Darwin' && export PATH=/usr/local/opt/gnu-sed/libexec/gnubin:$PATH
+
+if [ $OS = 'Darwin' -a ! -f /usr/local/opt/gnu-sed/libexec/gnubin/sed ];then
+  print_info "please install gnu-sed by EXEC:
+
+\$ brew install gnu-sed"
+
+  exit 1
+fi
+
+if [ $GOOS = 'darwin' ];then
+  alias sed=gsed
+fi
 
 _init
 

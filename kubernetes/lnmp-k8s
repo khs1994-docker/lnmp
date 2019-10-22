@@ -152,6 +152,18 @@ GOOS=`uname -s | tr A-Z  a-z`
 
 command -v curl > /dev/null || print_info "curl not install"
 
+if [ $GOOS = 'darwin' -a ! -f /usr/local/opt/gnu-sed/libexec/gnubin/sed ];then
+  print_info "please install gnu-sed by EXEC:
+
+\$ brew install gnu-sed"
+
+  exit 1
+fi
+
+if [ $GOOS = 'darwin' ];then
+  alias sed=gsed
+fi
+
 _build_k8s_image(){
   cd kubernetes-release
 
