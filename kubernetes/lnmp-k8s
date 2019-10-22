@@ -88,7 +88,7 @@ _lnmp_k8s_custom_conf_generator(){
     touch deployment/configMap/nginx-conf-d/custom.conf
 
     local ROOT="deployment/nginx/overlays/$item/config"
-    _cp $ROOT/conf.d/t.khs1994.com.$item.conf $ROOT/conf.d/wwww.custom.conf
+    _cp $ROOT/conf.d/t.khs1994.com.$item.conf $ROOT/conf.d/www.custom.conf
     _cp $ROOT/nginx.$item.conf $ROOT/nginx.custom.conf
   done
   # mysql conf
@@ -312,11 +312,7 @@ _cleanup_lnmp(){
   _delete_lnmp $ENVIRONMENT
   kubectl delete pvc -l app=lnmp -n $NAMESPACE
 
-  if [ $ENVIRONMENT = 'development' ];then
-    kubectl delete pv -l app=lnmp
-  else
-    echo "==> SKIP delete PV"
-  fi
+  kubectl delete pv -l app=lnmp
 
   kubectl delete ingress -l app=lnmp -n $NAMESPACE
 }
