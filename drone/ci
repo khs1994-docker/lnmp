@@ -2,7 +2,7 @@
 
 print_help_info(){
   exec echo "
-CI-CLI 1.6.0
+CI-CLI 1.6.1
 
 Donate WebSite https://zan.khs1994.com
 
@@ -246,7 +246,7 @@ if [ $OS = 'Darwin' -a ! -f /usr/local/opt/gnu-sed/libexec/gnubin/sed ];then
   exit 1
 fi
 
-if [ $GOOS = 'darwin' ];then
+if [ $OS = 'Darwin' ];then
   alias sed=gsed
 fi
 

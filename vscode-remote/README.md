@@ -77,6 +77,7 @@ $ lnmp-docker composer install | update | require XXX
 
 以上两项到 `khs1994-docker/lnmp` 配置
 
+* [浏览器安装 `xdebug` 扩展](https://docs.lnmp.khs1994.com/xdebug.html#%e6%b5%8f%e8%a7%88%e5%99%a8%e6%89%a9%e5%b1%95)
 * `vsCode` -> `调试` -> `打开配置` -> `port 改为 9001`
 * `vsCode` -> `调试` -> `启动调试` -> `打断点` -> `浏览器刷新页面` -> `在 vsCode 调试`
 
