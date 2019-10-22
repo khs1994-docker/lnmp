@@ -16,9 +16,15 @@ services:
       - type: volume
         source: composer_cache-data
         target: /tmp/cache
-    command: /bin/sh -c "cp $$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini.default $$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini ; while sleep 1000; do :; done"
+      - ./.devcontainer/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini
+      - ./.devcontainer/php-log:/var/log/php
+    ports:
+      # xdebug port
+      - 9001:9001
+    command: /bin/sh -c "while sleep 1000; do :; done"
     environment:
       APP_ENV: development
+      TZ: Asia/Shanghai
 
   composer:
     << : *workspace

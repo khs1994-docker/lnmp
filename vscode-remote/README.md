@@ -4,37 +4,41 @@
 
 ## 说明
 
-`工具链(PHP)` `vsCode Server` 位于容器, 编辑器位于本地
+`工具链(PHP)` `vsCode Server` 位于容器, `vsCode` 位于本地
 
 ## 准备
 
 **项目文件夹**
 
-将 `.devcontainer` `docker-workspace.yml` 复制到 PHP 项目文件夹根目录,并作适当调整(搜索 `fix me`)
+1. 将 `.devcontainer` `docker-workspace.yml` 复制到 PHP 项目文件夹根目录,并作适当调整(搜索 `fix me`)
 
 **工具准备**
 
-`vsCode` 安装 `Remote Development` 扩展
+2. `vsCode` 安装 `Remote Development` 扩展
 
-适当调大 Docker 桌面版内存(建议 `4GB`)
+3. 适当调大 Docker 桌面版内存(建议 `4GB`)
 
-启动 `khs1994-docker/lnmp`
+4. 启动 `khs1994-docker/lnmp`
 
 ```bash
 $ ./lnmp-docker up
 ```
 
+## vsCode 扩展
+
+* `felixfbecker.php-pack`
+
 ## 步骤
 
-打开 `vsCode`(`$ code`)
+1. 打开 `vsCode`(`$ code`)
 
-Press `F1`, select `Remote-Containers: Open Folder in Container...`. 选择项目文件夹(包含 .devcontainer, docker-workspace.yml)).
+2. Press `F1`, select `Remote-Containers: Open Folder in Container...`. 选择项目文件夹(包含 `.devcontainer`, `docker-workspace.yml`).
 
-扩展需要在 `远程` 安装(以前安装过的扩展在 远程 重新安装)
+3. 扩展需要在 `远程` 安装(以前安装过的扩展在 **远程** 重新安装)
 
-首次使用,需要初始化,请耐心等待
+4. 首次使用,需要初始化,请耐心等待
 
-修改 `.devcontainer` `docker-workspace.yml` 之后重新载入. Press `F1`, select `Remote-Containers: Rebuild Container...`
+5. 修改 `.devcontainer` `docker-workspace.yml` 之后重新载入. Press `F1`, select `Remote-Containers: Rebuild Container`
 
 ## 依赖管理(执行 composer 命令)
 
@@ -68,6 +72,18 @@ $ lnmp-docker composer install | update | require XXX
 
 ## Xdebug
 
+* 端口: 9001
+* 远程地址: 192.168.199.100(宿主机 IP)
+
+以上两项到 `khs1994-docker/lnmp` 配置
+
+* `vsCode` -> `调试` -> `打开配置` -> `port 改为 9001`
+* `vsCode` -> `调试` -> `启动调试` -> `打断点` -> `浏览器刷新页面` -> `在 vsCode 调试`
+
+## 与 `khs1994-docker/lnmp` 项目关系
+
+**远程开发** 启动的容器只提供开发所用的工具链,浏览器访问 PHP 项目与远程开发 **无关**。
+
 ## 功能
 
-* 可以在 **终端** 直接执行命令(查看 -> 终端) `$ php artisan`
+* 可以在 **终端** 直接执行命令(`vsCode` -> `查看` -> `终端` -> 右上角 `+` 号) `$ php artisan`

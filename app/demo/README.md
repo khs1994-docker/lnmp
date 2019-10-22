@@ -4,6 +4,10 @@
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/187)
 
+## vsCode 远程开发
+
+* 请查看 https://github.com/khs1994-docker/lnmp/tree/19.03/vscode-remote
+
 ## Create PHP Application by Composer
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php-demo.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php-demo) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/example.svg)](https://packagist.org/packages/khs1994/example) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/php-demo/all.svg)](https://github.com/khs1994-docker/php-demo/releases) [![Build Status](https://travis-ci.com/khs1994-docker/php-demo.svg?branch=master)](https://travis-ci.com/khs1994-docker/php-demo) [![StyleCI](https://styleci.io/repos/124168962/shield?branch=master)](https://styleci.io/repos/124168962) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
@@ -58,8 +62,9 @@ $ cd example
 
 * 建议多看看几个 PHP 开源项目，看看别人的项目里都有哪些文件，作用是什么
 
-| Filename          | Description                     |
-| :-------------    | :-------------                  |
+| Filename            | Description                     |
+| :-------------      | :-------------                  |
+| `.github/workflows` | GitHub Actions CI 工具          |
 | `.gitattributes`  | git 打包时排除文件（例如 测试代码）|
 | `.drone.yml`      | [`Drone` CI 工具](https://github.com/khs1994-docker/ci) |
 | `.editorconfig`   | [定义文件格式规则（例如 缩进方式）](https://editorconfig.org/)|
@@ -81,7 +86,7 @@ $ cd example
 
 * 将 Docker 化的常用命令所在文件夹加入 `PATH`，具体请查看 [这里](https://github.com/khs1994-docker/lnmp/tree/master/bin)。
 
-* IDE `PHPStorm`
+* IDE `PHPStorm` `vsCode`
 
 * git 分支 `dev`
 
@@ -89,7 +94,7 @@ $ cd example
 
 ### 1. 新建 PHP 项目
 
-使用自己的模板项目初始化 `PHP` 项目并初始化 git 仓库。
+使用自己的模板项目初始化 `PHP` 项目。
 
 ```bash
 $ cd lnmp/app
@@ -172,7 +177,7 @@ $ ./lnmp-docker up
 
 请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/xdebug.md
 
-### 8. 引入 Composer 依赖
+### 8. 依赖管理 Composer
 
 容器化 PHPer 常用命令请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/command.md
 
@@ -217,7 +222,7 @@ $ lnmp-phpunit [参数]
 
 > 将 PHP 项目打入镜像，镜像中严禁包含配置文件
 
-> 最佳实践：Docker 镜像由 CI 服务器构建，而不是本地人工构建！
+> Docker 镜像必须由 CI 服务器构建，而不是本地人工构建！
 
 自行修改 `.env` `docker-compose.yml` 文件，保留所需的 PHP 版本，其他的注释
 
