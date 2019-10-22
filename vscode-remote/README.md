@@ -26,7 +26,7 @@ $ ./lnmp-docker up
 
 ## 步骤
 
-打开 `vsCode`
+打开 `vsCode`(`$ code`)
 
 Press `F1`, select `Remote-Containers: Open Folder in Container...`. 选择项目文件夹(包含 .devcontainer, docker-workspace.yml)).
 
