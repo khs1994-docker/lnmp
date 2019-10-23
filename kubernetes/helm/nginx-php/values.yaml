@@ -27,8 +27,8 @@ nfs:
   server: 192.168.199.100
 
 nginx:
-  # image: khs1994/nginx:1.17.4-alpine
-  image: "nginx:1.17.4-alpine"
+  # image: khs1994/nginx:1.17.5-alpine
+  image: "nginx:1.17.5-alpine"
   replicaCount: 2
 
 php:

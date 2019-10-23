@@ -36,8 +36,8 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
       - name: lnmp-nginx
-        # image: khs1994/nginx:1.17.4-alpine
-        image: "nginx:1.17.4-alpine"
+        # image: khs1994/nginx:1.17.5-alpine
+        image: "nginx:1.17.5-alpine"
         imagePullPolicy: IfNotPresent # Always
         args:
         - nginx
