@@ -1,0 +1,51 @@
+version: "3.7"
+
+services:
+  workspace:
+    &workspace
+    image: khs1994/php:7.3.10-cli-alpine
+    networks:
+      - backend
+    volumes:
+      - vscode-server:/root/.vscode-server
+      - phpls-cache:/root/.phpls
+      # fix me
+      - ./:/app/demo
+      # fix me 将依赖挂载到数据卷
+      - vendor:/app/demo/vendor
+      - type: volume
+        source: composer_cache-data
+        target: /tmp/cache
+      - ./.devcontainer/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini
+      - ./.devcontainer/php-log:/var/log/php
+    ports:
+      # xdebug port
+      - 9001:9001
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    environment:
+      APP_ENV: development
+      TZ: Asia/Shanghai
+
+  composer:
+    << : *workspace
+    restart: "no"
+    image: "khs1994/php:7.3.10-composer-alpine"
+    # fix me
+    working_dir: /app/demo
+    command: [] # install | update
+
+networks:
+  backend:
+    external: true
+    name: lnmp_backend
+
+volumes:
+  composer_cache-data:
+    external: true
+    name: lnmp_composer_cache-data
+  vscode-server:
+  phpls-cache:
+  vendor:
+    # 或者复用其他数据卷
+    # external: true
+    # name: lnmp_laravel_vendor

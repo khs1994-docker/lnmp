@@ -12,8 +12,8 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION="1.14.6"
-$DOCKER_DESKTOP_VERSION="2.1.2.0 (38030)"
+$KUBERNETES_VERSION="1.15.4"
+$DOCKER_DESKTOP_VERSION="2.1.4.0 (39357)"
 $source=$PWD
 
 Function _command($command){
@@ -180,7 +180,7 @@ Function check_docker_version(){
     printError "Docker not install"
 
     return
-  } 
+  }
 
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
 
@@ -1083,7 +1083,7 @@ XXX
 
     # Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues
     Start-Process -FilePath https://github.com/khs1994-docker/lnmp/issues/new?body=$(cat bug.md)
-    }    
+    }
 
     k8s {
       clear
@@ -1294,12 +1294,20 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
     }
 
     composer {
-        $LARAVEL_ROOT,$COMPOSER_COMMAND=$other
+      if((Test-Path $source/.devcontainer) -And (Test-Path $source/docker-workspace.yml)){
+        printInfo "Exec composer command in vscode remote folder"
+        cd $source
+        docker-compose -f docker-workspace.yml run --rm composer $args
+
+        exit
+      }
+
+        $WORKING_DIR,$COMPOSER_COMMAND=$other
 
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
-        & {docker-compose $options run -w $LARAVEL_ROOT composer $COMPOSER_COMMAND}
+        & {docker-compose $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND}
       }
 
     default {

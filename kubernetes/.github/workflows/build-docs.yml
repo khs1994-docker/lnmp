@@ -3,14 +3,17 @@ on:
     branches:
     - master
     paths:
-    - '/docs/*'
-    - '/docs/*/*'
+    - '**'
+    - 'docs/**'
+  schedule:
+    - cron: '0 0 * * */1'
 
 name: Build Docs
 
 jobs:
   docs:
     runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
     steps:
     - uses: actions/checkout@master
       with:

@@ -33,4 +33,4 @@ $ sudo systemctl disable libvirtd.service
 
 ### 镜像加速器
 
-最好在运行时级别设置好镜像加速器，例如 `gcr.io` => `https://gcr.azk8s.cn`,具体请查看运行时配置文件。
+最好在运行时级别设置好镜像加速器，例如 `gcr.io` => `gcr.azk8s.cn`,具体请查看运行时配置文件。

@@ -5,11 +5,11 @@ After=network.target
 
 [Service]
 
-ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kube-proxy
+ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kube-proxy
 ExecStartPre=-/usr/sbin/modprobe ip_vs
 ExecStartPre=-/sbin/modprobe ip_vs
 
-# WorkingDirectory=/var/lib/kube-proxy
+# WorkingDirectory=/opt/k8s/var/lib/kube-proxy
 
 Environment="K8S_ROOT=/opt/k8s"
 

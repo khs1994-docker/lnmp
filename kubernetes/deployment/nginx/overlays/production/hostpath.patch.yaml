@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lnmp-app
+  annotations:
+    volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
+    $patch: delete
+spec:
+  accessModes:
+  - ReadWriteOnce
+  selector:
+    matchLabels:
+      app: lnmp
+      tier: code-data
+      env: production
+  storageClassName: "hostpath"

@@ -3,23 +3,24 @@
 #
 # Build php in WSL(RHEL)
 #
-# $ lnmp-wsl-php-builder.rhel 5.6.35 [--skipbuild] [tar] [rpm] [travis]
+# $ lnmp-wsl-php-builder.rhel 5.6.35 [--skipbuild] [tar] [rpm] [--ci]
 #
 
 _print_help_info(){
 
     echo "
-
 Build php in WSL RHEL by shell script
 
 Usage:
 
 $ lnmp-wsl-builder-php-rhel 7.3.0 7.3.0beta3 7.3.0RC1 nightly
 
-$ lnmp-wsl-builder-php-rhel yum
+$ lnmp-wsl-builder-php-rhel [ yum | dnf | rpm | yum-devel | dnf-devel | rpm-devel ]
 
-$ lnmp-wsl-builder-php-rhel 7.3.0 [--skipbuild] [tar] [rpm] [enable-ext]
+$ lnmp-wsl-builder-php-rhel 7.3.0 [ tar | rpm ] [--skipbuild] [--ci]
 
+# echo \"--with-xxx --enable-xxx\" > /tmp/EXT_REAL_NAME.configure.options
+$ lnmp-wsl-builder-php-rhel 7.3.0 enable-ext [EXT_NAME@EXT_REAL_NAME]
 "
 
 exit 0
@@ -32,7 +33,7 @@ _sudo(){
   command -v sudo > /dev/null && echo "sudo" || true
 }
 
-command -v yum
+command -v yum > /dev/null
 
 if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
 
@@ -50,11 +51,6 @@ export TZ=Asia/Shanghai
 # export CC=gcc CXX=g++
 
 ################################################################################
-
-for command in "$@"
-do
-test $command = 'travis' && PHP_URL=https://secure.php.net/distributions
-done
 
 #
 # https://github.com/docker-library/php/issues/272
@@ -99,7 +95,7 @@ case "$1" in
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 nightly"
     exit 1
 esac
 }
@@ -107,8 +103,8 @@ esac
 ################################################################################
 
 _download_src(){
-
-    $(_sudo) mkdir -p /usr/local/src || echo
+    $(_sudo) mkdir -p /usr/local/src
+    $(_sudo) chmod -R 777 /usr/local/src
 
     if ! [ -z "$BUILD_FROM_GIT" ];then
       $(_sudo) yum install bison git -y
@@ -126,7 +122,7 @@ _download_src(){
 
       echo -e "Download php src ...\n\n"
 
-      cd /usr/local/src ; $(_sudo) chmod 777 /usr/local/src
+      cd /usr/local/src
 
       wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
         wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
@@ -145,18 +141,20 @@ _install_php_run_dep(){
 
     cd /tmp
 
-    $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
+    if ! [ ${ID} = 'fedora' ];then
+      $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
 
-    $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
+      $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
+    fi
 
-    if [ ${VERSION_ID} -ge 8 ];then
+    if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then
       $(_sudo) wget -N http://rpms.remirepo.net/enterprise/${VERSION_ID}/remi/x86_64/remi-release-8.0-4.el${VERSION_ID}.remi.noarch.rpm
       $(_sudo) rpm -Uvh remi-release-8.0-4.el${VERSION_ID}.remi.noarch.rpm
       $(_sudo) dnf --enablerepo=remi install libtidy -y
     fi
 
 _libzip(){
-
+    if [ ${ID} = 'fedora' ];then $(_sudo) dnf install -y libzip libzip-devel; return;fi
 # libzip php7.2
 #
 # checking for libzip... configure: error: system libzip must be upgraded to version >= 0.11
@@ -185,8 +183,8 @@ libxml2 \
 openssl \
 libsqlite3x \
 libxslt \
-$(if [ ${VERSION_ID} -ge 8 ];then echo libcurl-minimal; else echo libcurl ;fi ) \
-$(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo libpqxx ;fi ) \
+$(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then echo libcurl-minimal; else echo libcurl ;fi ) \
+$(if [ ${VERSION_ID} -ge 8 ];then echo libpq; else echo postgresql-libs ;fi ) \
 libmemcached \
 cyrus-sasl \
 freetype \
@@ -199,7 +197,7 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo "libsodium"; \
    fi ) \
 libyaml \
-$(if [ ${VERSION_ID} -ge 8 ];then true; else echo libtidy ;fi ) \
+$(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then true; else echo libtidy ;fi ) \
 xmlrpc-c \
 bzip2 \
 libexif \
@@ -213,6 +211,7 @@ enchant \
 openldap \
 aspell \
 libffi \
+krb5-libs \
 oniguruma"
 
 
@@ -236,7 +235,7 @@ _install_php_build_dep(){
                    libsqlite3x-devel \
                    libxslt-devel \
                    libcurl-devel \
-                   $(if [ ${VERSION_ID} -ge 8 ];then echo libpq-devel; else echo libpqxx-devel ;fi ) \
+                   $(if [ ${VERSION_ID} -ge 8 ];then echo libpq-devel; else echo postgresql-devel ;fi ) \
                    libmemcached-devel \
                    cyrus-sasl-devel \
                    freetype-devel \
@@ -254,7 +253,7 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-devel \
-                   $(if [ ${VERSION_ID} -ge 8 ];then true; else echo libtidy-devel ;fi ) \
+                   $(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then true; else echo libtidy-devel ;fi ) \
                    xmlrpc-c-devel \
                    bzip2-devel \
                    libexif-devel \
@@ -269,6 +268,7 @@ _install_php_build_dep(){
                    openldap-devel \
                    aspell-devel \
                    libffi-devel \
+                   krb5-devel \
                    oniguruma-devel \
                    "
 
@@ -277,14 +277,14 @@ do
     echo $soft | $(_sudo) tee -a ${PHP_INSTALL_LOG}
 done
 
-if [ $VERSION_ID -ge 8 ];then
+if [ $VERSION_ID -ge 8 -a ${ID} != 'fedora' ];then
   $(_sudo) dnf --enablerepo=remi install libtidy-devel -y
 
   $(_sudo) dnf install -y dnf-utils
   $(_sudo) yum-config-manager --enable PowerTools
 fi
 
-$(_sudo) yum install -y ${DEP_SOFTS} > /dev/null
+$(_sudo) yum install -y ${DEP_SOFTS}
 }
 
 ################################################################################
@@ -358,7 +358,7 @@ _builder(){
                                              --with-libxml \
                                              --with-zip" \
         || echo "--with-pcre-regex \
-                 --with-gd \
+                 --with-gd=shared \
                    --with-freetype-dir=/usr/lib \
                    --with-jpeg-dir=/usr/lib \
                    --with-png-dir=/usr/lib \
@@ -373,7 +373,6 @@ _builder(){
         --enable-mbregex \
         --enable-mbstring \
         --enable-pcntl=shared \
-        --enable-shmop=shared \
         --enable-soap=shared \
         --enable-sockets=shared \
         --enable-sysvmsg=shared \
@@ -419,7 +418,7 @@ _builder(){
         --enable-shmop=shared \
         "
 
-    for a in ${CONFIGURE} ; do echo $a | $(_sudo) tee -a ${PHP_INSTALL_LOG}; done
+    for item in ${CONFIGURE} ; do echo $item | $(_sudo) tee -a ${PHP_INSTALL_LOG}; done
 
     cd /usr/local/src/php-${PHP_VERSION}
 
@@ -439,7 +438,7 @@ _builder(){
 
 # 6. make install
 
-    $(_sudo) rm -rf ${PHP_PREFIX} || echo
+    $(_sudo) rm -rf ${PHP_PREFIX}
 
     if [ -d ${PHP_INI_DIR} ];then $(_sudo) mv ${PHP_INI_DIR} ${PHP_INI_DIR}.$( date +%s ).backup; fi
 
@@ -517,16 +516,38 @@ _install_pecl_ext_by_pickle(){
 
   if [ ${PHP_NUM} -ge "80" ];then set +e; fi
 
-  pickle install igbinary --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install redis --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install memcached --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install xdebug --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install yaml --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install swoole --defaults -n --php=${PHP_PREFIX}/bin/php
-  pickle install mongodb --defaults -n --php=${PHP_PREFIX}/bin/php
+  PICKLE_OPTIONS="-n --php=${PHP_PREFIX}/bin/php -vvv"
+
+  if [ $# -ne 0 ];then
+    for extension in $@
+    do
+      local extension_real_name=$(echo $extension | cut -d "@" -f 2)
+      local extension=$(echo $extension | cut -d "@" -f 1)
+      local WITH_CONFIGURE_OPTIONS_FILE="/tmp/${extension_real_name:-$extension}.configure.options"
+      local WITH_CONFIGURE_OPTIONS=$( \
+        test -f ${WITH_CONFIGURE_OPTIONS_FILE} && \
+        echo --with-configure-options=${WITH_CONFIGURE_OPTIONS_FILE} \
+        || echo --defaults \
+      )
+
+      $(_sudo) pickle install $extension ${PICKLE_OPTIONS} ${WITH_CONFIGURE_OPTIONS}
+    done
+
+    $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
+    set -e
+
+    return
+  fi
+
+  $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install yaml --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
-
   set -e
 }
 
@@ -535,8 +556,16 @@ _install_pecl_ext(){
 
     command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
 
-    if [ $pecl -ge 0 ];then
-      _install_pecl_ext_by_pickle
+    $(_sudo) mkdir -p /usr/local/sbin
+    $(_sudo) ln -s ${PHP_PREFIX}/bin/php /usr/local/sbin
+    $(_sudo) ln -s ${PHP_PREFIX}/bin/phpize /usr/local/sbin
+    $(_sudo) ln -s ${PHP_PREFIX}/bin/php-config /usr/local/sbin
+
+    if [ $pecl -eq 0 ];then
+      _install_pecl_ext_by_pickle $@
+
+      # $(_sudo) rm -rf /usr/local/sbin/{php,phpize,php-config}
+      $(_sudo) rm -rf /usr/local/sbin/php*
       return
     fi
 
@@ -554,11 +583,15 @@ _install_pecl_ext(){
                $( if ! [ $PHP_NUM = "56" ];then echo "swoole"; else echo ""; fi ) \
                mongodb"
 
+    if [ $# -ne 0 ];then PHP_EXTENSION=$@;fi
+
     for extension in ${PHP_EXTENSION}
     do
         echo $extension | $(_sudo) tee -a ${PHP_INSTALL_LOG}
         $(_sudo) ${PHP_PREFIX}/bin/pecl install $extension || echo "install $extension error" | tee -a ${PHP_INSTALL_LOG}
     done
+
+    $(_sudo) rm -rf /usr/local/sbin/php*
 }
 
 _php_ext_enable(){
@@ -566,6 +599,12 @@ _php_ext_enable(){
 echo "date.timezone=${PHP_TIMEZONE:-PRC}" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/date_timezone.ini
 echo "error_log=/var/log/php${PHP_NUM}.error.log" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/error_log.ini
 echo "session.save_path = \"/tmp\"" | $(_sudo) tee ${PHP_INI_DIR}/conf.d/session.ini
+
+if [ $# -ne 0 ];then
+  wsl-php-ext-enable.sh $@
+
+  return
+fi
 
 wsl-php-ext-enable.sh pdo_pgsql \
                       xsl \
@@ -603,7 +642,6 @@ wsl-php-ext-enable.sh pdo_pgsql \
 # echo 'opcache.enable_cli=1' | $(_sudo) tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 echo 'opcache.file_cache=/tmp' | $(_sudo) tee -a ${PHP_INI_DIR}/conf.d/wsl-php-ext-opcache.ini
 }
-
 
 _create_log_file(){
     cd /var/log
@@ -680,13 +718,17 @@ cat ${PHP_PREFIX}/README.md
 ################################################################################
 
 _tar(){
-  cd /usr/local ; $(_sudo) tar -zcvf php${PHP_NUM}.tar.gz php${PHP_NUM}
+  rm -rf /tmp/php${PHP_NUM}_ROOT/
+  mkdir -p /tmp/php${PHP_NUM}_ROOT/etc
 
-  cd etc ; $(_sudo) tar -zcvf php${PHP_NUM}-etc.tar.gz php${PHP_NUM}
+  cd /usr/local/
 
-  $(_sudo) mv ${PHP_PREFIX}.tar.gz /
+  cp -a php${PHP_NUM} /tmp/php${PHP_NUM}_ROOT/
+  cp -a etc/php${PHP_NUM} /tmp/php${PHP_NUM}_ROOT/etc
 
-  $(_sudo) mv ${PHP_INI_DIR}-etc.tar.gz /
+  cd /tmp/php${PHP_NUM}_ROOT/
+
+  $(_sudo) tar -zcvf /php${PHP_NUM}.tar.gz .
 }
 
 ################################################################################
@@ -695,9 +737,15 @@ _rpm(){
 
 cd /tmp
 
+if [ ${ID} = 'fedora' ];then
+  rpm_release_name="1.fc${VERSION_ID}"
+else
+  rpm_release_name="1.el${VERSION_ID}.centos"
+fi
+
 echo "Name:       khs1994-wsl-php${PHP_NUM}
 Version:    ${PHP_VERSION}
-Release:    1.el${VERSION_ID}.centos
+Release:    ${rpm_release_name}
 Summary:    PHP scripting language for creating dynamic web sites
 
 License:    PHP and Zend and BSD
@@ -747,9 +795,9 @@ echo
 %build
 %install
 rm -rf %{buildroot}
-ls -la %{buildroot}/../ || echo
-mkdir -p %{buildroot} || echo
-mkdir -p %{buildroot}/usr/local/etc || echo
+ls -la %{buildroot}/../ || true
+mkdir -p %{buildroot}
+mkdir -p %{buildroot}/usr/local/etc
 cp -a ${PHP_PREFIX} %{buildroot}/${PHP_PREFIX}
 cp -a ${PHP_INI_DIR} %{buildroot}/${PHP_INI_DIR}
 %files
@@ -766,7 +814,7 @@ cat /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
 rpmbuild -bb /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
+RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}-${rpm_release_name}.x86_64.rpm
 
 echo "\$ yum install -y ${RPM_NAME}"
 
@@ -789,11 +837,15 @@ if [ -z "$1" ];then _print_help_info ; else PHP_VERSION="$1" ; fi
 
 set -ex
 
-command -v wget || $(_sudo) yum install -y wget
+command -v wget > /dev/null || $(_sudo) yum install -y wget
 
-mkdir -p /tmp/php-builder || echo
+mkdir -p /tmp/php-builder
 
-if [ "$PHP_VERSION" = 'rpm' ];then PHP_VERSION=7.3.10 ; fi
+if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
+    PHP_VERSION=7.3.10 ; fi
+
+if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
+    PHP_VERSION=7.3.10 ; fi
 
 _get_phpnum $PHP_VERSION
 
@@ -817,31 +869,43 @@ $(_sudo) yum install -y libargon2-devel > /dev/null 2>&1 || export ARGON2=false
 
 $(_sudo) yum install -y curl
 
-command -v pickle || _pickle
-command -v composer || _composer
+command -v pickle > /dev/null || _pickle
+command -v composer > /dev/null || _composer
 
 $(_sudo) chmod +x /usr/local/bin/pickle /usr/local/bin/composer
 
 if [ "$2" = 'enable-ext' ];then
+   shift 2; \
    _test ; \
-   _install_pecl_ext ; _php_ext_enable ; _create_log_file
+   _install_pecl_ext $@; \
+   _php_ext_enable $@; \
+   _create_log_file
+
+   exit
 fi
 
 _install_php_run_dep
 
-if [ "$1" = yum ];then _install_php_build_dep ; exit $? ; fi
+if [ "$1" = 'rpm' -o "$1" = 'yum' -o "$1" = 'dnf' ];then exit 0 ; fi
+if [ "$1" = 'rpm-devel' -o "$1" = 'yum-devel' -o "$1" = 'dnf-devel' ];then _install_php_build_dep ; exit $? ; fi
 
 _install_php_build_dep
 
 for command in "$@"
 do
   test $command = '--skipbuild' && export SKIP_BUILD=1
+  test $command = '--ci'        && export PHP_URL=https://www.php.net/distributions
 done
 
-test "${SKIP_BUILD}" != 1 && ( _download_src ; _builder ; _test ; \
-  _install_pecl_ext ; _php_ext_enable ; _create_log_file ; \
-    ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true \
-    ; _write_version_to_file )
+test "${SKIP_BUILD}" != 1 && ( \
+  _download_src ; \
+  _builder ; \
+  _test ; \
+  _install_pecl_ext ; \
+  _php_ext_enable ; \
+  _create_log_file ; \
+  ${PHP_PREFIX}/bin/php-config | $(_sudo) tee -a ${PHP_INSTALL_LOG} || true ; \
+  _write_version_to_file )
 
 for command in "$@"
 do
@@ -849,6 +913,4 @@ do
   test $command = 'rpm' && _rpm
 done
 
-ls -la /*.tar.gz
-
-ls -la /*.rpm
+ls -lah /*.tar.gz /*.rpm || true

@@ -108,6 +108,6 @@ spec:
             path: nginx.conf
       - name: lnmp-nginx-conf-d
         configMap:
-          name: lnmp-nginx-conf-d-{{ .Chart.Version }}
+          name: lnmp-nginx-conf.d-{{ .Chart.Version }}
       restartPolicy: Always
       # dnsPolicy: ClusterFirst

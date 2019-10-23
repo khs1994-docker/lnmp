@@ -1,4 +1,4 @@
-root = "/var/lib/kube-containerd"
+root = "/opt/k8s/var/lib/kube-containerd"
 state = "/run/kube-containerd"
 oom_score = 0
 
@@ -57,7 +57,7 @@ oom_score = 0
         [plugins.cri.registry.mirrors."gcr.io"]
           endpoint = ["https://gcr.azk8s.cn"]
         [plugins.cri.registry.mirrors."quay.io"]
-          endpoint = ["https://quay.azk8s.cn"]          
+          endpoint = ["https://quay.azk8s.cn"]
       # [plugins.cri.registry.configs."gcr.io".auth]
       #   username = ""
       #   password = ""
@@ -75,7 +75,7 @@ oom_score = 0
     no_shim = false
     shim_debug = false
   [plugins.opt]
-    path = "/opt/kube-containerd"
+    path = "/opt/k8s/kube-containerd"
   [plugins.restart]
     interval = "10s"
   [plugins.scheduler]

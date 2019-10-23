@@ -59,19 +59,24 @@ if ! [ -d $HOME/.kube ];then mkdir -p $HOME/.kube ; fi
 
 # cp cert/kubectl.kubeconfig ~/.kube/config
 
+if [ -n "$debug" -o -n "$DEBUG" ];then set -x;fi
+
 _init(){
 
 # Download coreos iso files
 cd current
 
-items="${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-metal.raw.xz \
-      ${FCOS_VERSION}/x86_64/fedora-coreos-${FCOS_VERSION}-installer.iso"
+items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
+      fedora-coreos-${FCOS_VERSION}-installer.x86_64.iso"
 
 for item in $items;do
 
 if ! [ -f $item ];then
-  curl -O https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/$item
+  curl -O \
+    https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/$item
 fi
+
+cp fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz fedora-coreos-${FCOS_VERSION}-metal.raw.xz
 
 done
 
@@ -217,7 +222,7 @@ case "$1" in
           --nonrotational on --port 0 --device 0 --type hdd --medium "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi"
 
       VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-installer.iso
+          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-installer.x86_64.iso
 
       echo "==> Please checkout coreos$2 config, then start it"
   ;;

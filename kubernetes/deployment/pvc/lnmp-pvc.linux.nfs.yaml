@@ -7,17 +7,19 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
+    env: development
 spec:
-  accessModes:
+  accessModes: # 申请的访问模式必须与 pv 相同
     - ReadWriteMany
   # volumeMode: Filesystem
   resources:
     requests:
       storage: 20Gi
-  selector:
+  selector: # 根据标签选择器把 pvc 与 pv 进行绑定, 动态创建 pv 不适合配置选择器
     matchLabels:
       app: lnmp
       tier: mysql
+      env: development
     # matchExpressions:
       # - {key: environment, operator: In, values: [dev]}
   storageClassName: slow
@@ -29,6 +31,7 @@ metadata:
   labels:
     app: lnmp
     tier: redis
+    env: development
 spec:
   accessModes:
     - ReadWriteMany
@@ -36,6 +39,7 @@ spec:
     matchLabels:
       app: lnmp
       tier: redis
+      env: development
   resources:
     requests:
       storage: 20Gi
@@ -44,10 +48,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: lnmp-data
+  name: lnmp-app
   labels:
     app: lnmp
     tier: code-data
+    env: development
 spec:
   accessModes:
     - ReadWriteMany
@@ -55,6 +60,7 @@ spec:
     matchLabels:
       app: lnmp
       tier: code-data
+      env: development
   resources:
     requests:
       storage: 20Gi
@@ -67,6 +73,7 @@ metadata:
   labels:
     app: lnmp
     tier: registry
+    env: development
 spec:
   accessModes:
     - ReadWriteMany
@@ -74,6 +81,7 @@ spec:
     matchLabels:
       app: lnmp
       tier: registry
+      env: development
   resources:
     requests:
       storage: 20Gi
@@ -86,6 +94,7 @@ metadata:
   labels:
     app: lnmp
     tier: log
+    env: development
 spec:
   accessModes:
     - ReadWriteMany
@@ -93,6 +102,7 @@ spec:
     matchLabels:
       app: lnmp
       tier: log
+      env: development
   resources:
     requests:
       storage: 20Gi

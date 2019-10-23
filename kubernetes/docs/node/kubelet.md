@@ -48,9 +48,19 @@ $ kubectl describe csr CSR_NAME
 
 `kublet` 启动时查找配置的 `--kubeletconfig` 文件是否存在，如果不存在则使用 `--bootstrap-kubeconfig` 向 `kube-apiserver` 发送证书签名请求 (CSR)。
 
-kube-apiserver 收到 CSR 请求后，对其中的 Token 进行认证（事先使用 kubeadm 创建的 token），认证通过后将请求的 user 设置为 system:bootstrap:，group 设置为 system:bootstrappers，这一过程称为 Bootstrap Token Auth。
+`kube-apiserver` 收到 CSR 请求后，对其中的 Token 进行认证（事先使用 kubeadm 创建的 token），认证通过后将请求的 user 设置为 `system:bootstrap:`，group 设置为 `system:bootstrappers`，这一过程称为 Bootstrap Token Auth。
 
-kubelet 启动后使用 --bootstrap-kubeconfig 向 kube-apiserver 发送 CSR 请求，当这个 CSR 被 approve 后，kube-controller-manager 为 kubelet 创建 TLS 客户端证书、私钥和 --kubeletconfig 文件。
+kubelet 启动后使用 `--bootstrap-kubeconfig` 向 kube-apiserver 发送 CSR 请求，当这个 CSR 被 approve 后，`kube-controller-manager` 为 kubelet 创建 TLS 客户端证书、私钥和 --kubeletconfig 文件。
+
+### kubelet-client-current.pem
+
+这是一个软连接文件，当 kubelet 配置了 `--feature-gates=RotateKubeletClientCertificate=true` 选项后，会在证书总有效期的 70%~90% 的时间内发起续期请求，请求被批准后会生成一个 `kubelet-client-时间戳.pem` `kubelet-client-current.pem` 文件则始终软连接到最新的真实证书文件，除首次启动外，kubelet 一直会使用这个证书同 apiserver 通讯
+
+### kubelet-server-current.pem
+
+同样是一个软连接文件，当 kubelet 配置了 `--feature-gates=RotateKubeletServerCertificate=true` 选项后，会在证书总有效期的 70%~90% 的时间内发起续期请求，请求被批准后会生成一个 `kubelet-server-时间戳.pem` `kubelet-server-current.pem` 文件则始终软连接到最新的真实证书文件，该文件将会一直被用于 kubelet 10250 api 端口鉴权
+
+`kubelet-client.crt` 该文件在 kubelet 完成 TLS bootstrapping 后生成，此证书是由 `controller-manager` 签署的，此后 kubelet 将会加载该证书，用于与 apiserver 建立 TLS 通讯，同时使用该证书的 CN 字段作为用户名，O 字段作为用户组向 apiserver 发起其他请求
 
 ## pause
 

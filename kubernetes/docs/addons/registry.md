@@ -3,7 +3,7 @@
 ## 创建
 
 ```bash
-$ lnmp-k8s registry
+# TODO
 ```
 
 ## Ingress

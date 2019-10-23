@@ -1,0 +1,8 @@
+{
+  "apps": [{
+    "exec_interpreter": "powershell",
+    "script": "./kube-scheduler.ps1",
+    "args": [],
+    "exec_mode"  : "fork_mode"
+  }]
+}

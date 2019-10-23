@@ -25,7 +25,7 @@ $ fcos-etcdctl member add coreos3 --peer-urls="https://192.168.57.112:2380"
 # 启动故障节点
 # 由于默认 etcd 自动启动，我们先将其停止
 $ sudo systemctl stop etcd
-$ sudo rm -rf /var/lib/etcd
+$ sudo rm -rf /opt/k8s/var/lib/etcd
 
 # 修改 etcd.service 参数
 

@@ -42,3 +42,12 @@ services:
     env_file:
       - ./systemd/.env.example
       - ./systemd/.env
+
+  cfssl-wsl2:
+    image: khs1994/k8s-cfssl
+    volumes:
+      - ./wsl2/certs:/srv/cfssl
+      - ./cfssl/docker-entrypoint.sh:/docker-entrypoint.sh
+    env_file:
+      - ./wsl2/.env.example
+      - ./wsl2/.env

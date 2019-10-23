@@ -70,8 +70,10 @@ install:
   - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
   - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
   - export KUBERNETES_TYPE=server
-  - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" systemd/.env
+  - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
+  - cat systemd/.env
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
 
@@ -83,8 +85,9 @@ install:
 
   - travis_retry ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
   - ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
+  # - debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
-  - export PATH=$PATH:/opt/k8s/bin
+  - export PATH=$PATH:${K8S_ROOT:-/opt/k8s}/bin
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
@@ -93,6 +96,8 @@ install:
   - rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/mounter
 
 before_script:
+  - ls -la /etc/systemd/system/
+
   - sudo systemctl cat etcd
   - sudo systemctl start etcd
   # master
@@ -118,8 +123,8 @@ before_script:
 
   - sudo systemctl cat crio || true
 
-  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl restart docker || sudo journalctl -u docker) || true
-  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--containerd" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
+  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
+  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker"  && (sudo systemctl restart docker || sudo journalctl -u docker) || true
   - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
 
   - docker info
@@ -178,10 +183,10 @@ script:
   # test dns
   - kubectl describe pod coredns -n kube-system
   - kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-  - kubectl run nginx --image nginx:1.17.4-alpine
+  - kubectl run nginx --image nginx:1.17.5-alpine
   - sleep 20
   - kubectl get all
-  - kubectl get pod
+  - kubectl get pod -o wide
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes
@@ -201,10 +206,13 @@ after_success:
   - sudo netstat -lnpt
   - ./tests/test.sh
 # switch containerd 1.3.0
-  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--containerd" && sudo systemctl start kube-containerd-130
+  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && sudo systemctl start kube-containerd-130
   - sleep 30
   - sudo crictl version
   - sudo crictl info
+  - sudo ls -la /opt || true
+  - sudo ls -la /opt/k8s || true
+  - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
 
 env:
   global:
@@ -214,16 +222,19 @@ matrix:
   include:
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.17.0-alpha.1 LNMP_K8S_GET="--url" LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.17.0-alpha.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.16.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--containerd"  K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom
     - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.15.2
@@ -231,5 +242,5 @@ matrix:
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.14.2
   fast_finish: true
-  # allow_failures:
-  # - env: CI_KUBERNETES_VERSION=1.15.2 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"
+  allow_failures:
+  - env: CI_KUBERNETES_VERSION=1.17.0-alpha.3 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server

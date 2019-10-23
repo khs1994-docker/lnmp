@@ -21,11 +21,11 @@ TimeoutStartSec=0
 # 定义 Systemd 停止当前服务之前等待的秒数
 LimitNOFILE=40000
 
-Environment="ETCD_DATA_DIR=/var/lib/etcd"
+Environment="ETCD_DATA_DIR=/opt/k8s/var/lib/etcd"
 Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_ETCD_HOST=192.168.199.100"
 
-ExecStartPre=-/usr/bin/mkdir --parents /var/lib/etcd
+ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
 
 ExecStart= /opt/k8s/bin/etcd \
   --enable-v2=true \

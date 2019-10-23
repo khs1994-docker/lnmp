@@ -12,13 +12,14 @@ x-common:
   env_file: ./cli/timezone.env
   networks:
     - backend
+  read_only: ${LNMP_ROOT_FILESYSTEM_READ_ONLY:-false}
   # dns:
   #   - ${DNS:-114.114.114.114}
 
 services:
   mysql:
     << : *default-common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${LNMP_MYSQL_VERSION:-8.0.17}"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mysql:${LNMP_MYSQL_VERSION:-8.0.18}"
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
@@ -38,6 +39,10 @@ services:
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:delegated
       - ./scripts/backup/mysql:/backup
+      - type: tmpfs
+        target: /run
+      - type: tmpfs
+        target: /run/mysqld
     command:
       - mysqld
       - --character-set-server=utf8mb4
@@ -59,6 +64,8 @@ services:
         volume:
           nocopy: true
       - ./log/redis:/var/log/redis:delegated
+      - type: tmpfs
+        target: /run
     # set config by command
     command: [
       "redis-server",
@@ -84,6 +91,8 @@ services:
         target: /usr/share/zoneinfo
         volume:
           nocopy: true
+      - type: tmpfs
+        target: /run
 
   php7:
     &php7
@@ -102,13 +111,16 @@ services:
       - ./log/php:/var/log/php:delegated
       - ./log/supervisord.log:/var/log/supervisord.log:delegated
       - ./log/supervisord:/var/log/supervisord:delegated
+      # vscode remote
+      # https://code.visualstudio.com/docs/remote/containers-advanced#_avoiding-extension-reinstalls-on-container-rebuild
+      # - vscode-server:/root/.vscode-server
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
         volume:
           nocopy: false
       - type: tmpfs
-        target: /temp
+        target: /run
         # tmpfs:
         #   size: 1000
     networks:
@@ -161,6 +173,8 @@ services:
       - type: volume
         source: phpmyadmin-data
         target: /sessions
+      - type: tmpfs
+        target: /run
     networks:
       - backend
       - frontend
@@ -169,7 +183,7 @@ services:
 
   nginx:
     << : *default-common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.17.4}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.17.5}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
@@ -181,6 +195,8 @@ services:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:delegated
+      - type: tmpfs
+        target: /run
     working_dir: /app
     networks:
       - frontend

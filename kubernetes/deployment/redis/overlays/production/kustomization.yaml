@@ -1,0 +1,15 @@
+bases:
+- ../../base
+resources:
+- pvc.yaml
+configMapGenerator:
+- name: lnmp-redis-conf-0.0.1
+  files:
+  - redis.conf=config/redis.custom.conf
+  # - redis.conf=config/redis.production.conf
+patches:
+# - hostpath.patch.yaml
+generatorOptions:
+  labels:
+    app: lnmp
+    tier: redis

@@ -24,3 +24,6 @@ if [ $command = "containerd" ];then
   continue
 fi
 done
+
+kube-proxy      --write-config-to ./kube-proxy.config.yaml || true
+kube-scheduler  --write-config-to ./kube-scheduler.config.yaml || true

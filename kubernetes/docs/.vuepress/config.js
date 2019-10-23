@@ -23,8 +23,8 @@ module.exports = {
         link: '/log/',
       },
       {
-        text: '数据卷',
-        link: '/volume/'
+        text: '存储',
+        link: '/storage/'
       },
       {
         text: '工作节点',
@@ -57,9 +57,14 @@ module.exports = {
         'secret',
         'ha',
         'helm',
+        'kustomize',
         'minikube',
         'windows',
         'arm64',
+        'virtualbox',
+        'podman',
+        'rpi',
+        'kubectl',
       ],
       '/example/': [
         'nginx',
@@ -79,8 +84,13 @@ module.exports = {
         "php",
         "redis",
       ],
-      "/volume/": [
+      "/storage/": [
         "data",
+        "nfs",
+        "pv",
+        "flexVolume",
+        "csi",
+        "storage-classes",
       ],
       "/node/": [
         "kubelet",

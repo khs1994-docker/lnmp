@@ -1,0 +1,31 @@
+worker_processes 1;
+
+          events {
+              worker_connections  1024;
+          }
+
+          stream {
+              upstream wsl2kube {
+                  # hash $remote_addr consistent;
+                  # server {{IP_1}}:16443        max_fails=3 fail_timeout=30s;
+                  # server {{IP_2}}:16443        max_fails=3 fail_timeout=30s;
+                  # server {{IP_3}}:16443        max_fails=3 fail_timeout=30s;
+                  server ##WSL2_HOST##:6443;
+              }
+
+              server {
+                  listen ##WINDOWS_HOST##:16443;
+                  proxy_connect_timeout 1s;
+                  proxy_pass wsl2kube;
+              }
+
+              upstream wsl2nfs {
+                  server ##WSL2_HOST##:2049;
+              }
+
+              server {
+                  listen ##WINDOWS_HOST##:2049;
+                  proxy_connect_timeout 1s;
+                  proxy_pass wsl2nfs;
+              }
+          }

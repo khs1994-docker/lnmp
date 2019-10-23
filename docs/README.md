@@ -28,16 +28,17 @@
 
 `YY.MM` 分支与 Docker Stable 版本 `vYY.MM` 一致，每当 PHP 主线版本升级时，修正版本号加 1。
 
-例如：当 Docker 桌面版发布 `v18.09` 时，本项目将从 `master` 分支检出 `18.09` 分支，PHP 发布 7.2.13 时，本项目将发布 `v18.09.0` 版本，PHP 发布 7.2.13 时，本项目将发布 `v18.09.01` 版本，当大部分 PHP 扩展兼容 PHP 7.3.x 时，本项目会将 PHP 版本由 7.2 切换到 7.3
+例如：当 Docker 桌面版发布 `v18.09` 时，本项目将从 `master` 分支检出 `18.09` 分支，PHP 发布 7.2.13 时，本项目将发布 `v18.09.0` 版本，PHP 发布 7.2.14 时，本项目将发布 `v18.09.01` 版本，当大部分 PHP 扩展兼容 PHP 7.3.x 时，本项目会将 PHP 版本由 7.2 切换到 7.3
 
 即：本项目 `v18.09.0` 与 **Docker 桌面版** `v18.09` 和 **PHP** `7.2.13` 对应。
 
 发布流程：
-* PHP 发布新版本时(PHP 7.3.10)，打 `tag`，归档当前项目(PHP 7.3.9)，发布正式版本
-* 更新 PHP Dockerfile(PHP 7.3.10)，推送到 `YY.MM-pre` 分支，CI 自动同步 PHP Dockerfile 到 `khs1994-docker/php`
-* `khs1994-docker/php` 打 `tag`(PHP 7.3.10)
-* CI 构建 PHP 镜像(PHP 7.3.10)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.10)
-* 后续根据开发流程，发布 `beta` `rc` 版本(PHP 7.3.10)
+* PHP 发布新版本时(PHP 7.3.9)，打 `tag`，归档当前项目(PHP 7.3.8)，发布正式版本
+* 更新 PHP Dockerfile(PHP 7.3.9)，推送到 `YY.MM-pre` 分支，CI 自动同步 PHP Dockerfile 到 `khs1994-docker/php`
+* `khs1994-docker/php` 打 `tag`(PHP 7.3.9)
+* CI 构建 PHP 镜像(PHP 7.3.9)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.9)
+* 后续根据开发流程，发布 `beta` `rc` 版本(PHP 7.3.9)
+* 期间更新 PHP Dockerfile (PHP 7.3.9)时，`khs1994-docker/php` 可以打多个 tag (7.3.9-1,7.3.9-2)
 
 ## 特色
 

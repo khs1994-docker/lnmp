@@ -1,0 +1,69 @@
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: flexvolume-cifs-secret
+#   namespace: default
+# type: fstab/cifs
+# data:
+#   username: 'ZXhhbXBsZQ=='
+#   password: 'bXktc2VjcmV0LXBhc3N3b3Jk'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: flexvolume-tests-busybox
+  namespace: default
+spec:
+  containers:
+  - name: flexvolume-tests-busybox
+    image: busybox
+    command:
+      - sleep
+      - "36000"
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - name: test
+      mountPath: /data
+  volumes:
+  - name: test
+    persistentVolumeClaim:
+      claimName: cifs-pvc
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: cifs-pv
+  labels:
+    name: cifs
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  flexVolume:
+    driver: "fstab/cifs"
+    fsType: "cifs"
+    secretRef:
+        name: "flexvolume-cifs-secret"
+    options:
+      networkPath: "//HIWIFI/sd/xunlei"
+      mountOptions: "dir_mode=0755,file_mode=0644,noperm"
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: cifs
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cifs-pvc
+  labels:
+    name: cifs
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  selector:
+    matchLabels:
+      name: cifs
+  storageClassName: cifs

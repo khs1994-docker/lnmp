@@ -1,0 +1,4 @@
+bases:
+- ../../base
+patches:
+- lnmp-nginx.service.yaml

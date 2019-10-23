@@ -84,3 +84,21 @@ services:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.0}
         - OS_TYPE=centos:8
     image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.0}-centos-8_amd64
+
+  wsl-php-builder-fc31-73:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.10}
+        - OS_TYPE=fedora:31
+    image: khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.10}-fedora-31_amd64
+
+  wsl-php-builder-fc31-74:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.0}
+        - OS_TYPE=fedora:31
+    image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.0}-fedora-31_amd64

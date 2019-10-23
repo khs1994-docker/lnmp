@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.14.6"
-readonly DOCKER_DESKTOP_VERSION="2.1.2.0 (38030)"
+readonly KUBERNETES_VERSION="1.15.4"
+readonly DOCKER_DESKTOP_VERSION="2.1.4.0 (39357)"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -49,6 +49,8 @@ _sudo(){
 _cp_only_not_exists(){
   if ! [ -f $2 ];then cp $1 $2 ; fi
 }
+
+source=`pwd`
 
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD"
@@ -111,6 +113,7 @@ Commands:
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
+  composer             Exec composer command on Docker
   completion           Move fish shell completion code (Only Support fish)
   config               Validate and view the LNMP Compose file
   bug                  Generate Debug information, then copy it to GitHub Issues
@@ -1253,7 +1256,28 @@ main() {
 
     exec docker-compose $options config "$@"
     ;;
+  composer )
+    if [ -d $source/.devcontainer -a -f $source/docker-workspace.yml ];then
+        print_info "Exec composer command in vscode remote folder"
+        cd $source
+        docker-compose -f docker-workspace.yml run --rm composer "$@"
 
+        exit
+    fi
+
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.override.yml"
+
+    if [ -z "$1" ];then
+      print_error "Please input path, $ ./lnmp-docker composer /app/path COMPOSER_COMMAND"
+    fi
+
+    WORKING_DIR=$1
+
+    shift
+
+    exec docker-compose $options run -w $WORKING_DIR --rm composer "$@"
+    ;;
   demo )
     demo
     ;;
@@ -1846,8 +1870,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
     nfs )
-    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5}
-    $(_sudo) modprobe nfsd
+    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+    $(_sudo) modprobe nfsd || true
     cd kubernetes/volumes
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs
@@ -1926,7 +1950,7 @@ command -v docker > /dev/null 2>&1 && _check_docker_version
 # 写入版本号
 
 if [ ${OS} = "Darwin" ];then
-  sed -i "" "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
+  /usr/bin/sed -i "" "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
 else
   sed -i "s/^LNMP_DOCKER_VERSION.*/LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION}/g" .env
 fi

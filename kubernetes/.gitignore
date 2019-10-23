@@ -1,4 +1,7 @@
 kubectl-*
+!kubectl-get-csr.ps1
+!kubectl-config-set-cluster.ps1
+!kubectl-config-sync.ps1
 minikube*
 !minikube.md
 
@@ -15,3 +18,13 @@ docs/.vuepress/*
 
 *.test.yaml
 *.test.yml
+
+wsl2/supervisor.d/*
+!wsl2/supervisor.d/kube-server.ini
+!wsl2/supervisor.d/supervisord.ini.demo
+!wsl2/supervisor.d/kube-node.ini
+
+deployment/**/*.custom.cnf
+deployment/**/*.custom.conf
+deployment/**/*.custom.ini
+deployment/**/*.custom.json

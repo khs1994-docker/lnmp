@@ -79,7 +79,7 @@ $ lnmp-wsl-install enable php73 php72 | php71 | php70 | php56
 
 ## NGINX
 
-NGINX 需要自己编译安装 `$ lnmp-wsl-builder-nginx.py 1.17.4 ROOT_PASSWORD`
+NGINX 需要自己编译安装 `$ lnmp-wsl-builder-nginx.py 1.17.0 ROOT_PASSWORD`
 
 `/usr/local/etc/nginx/nginx.conf` 主配置文件必须添加下面的配置项，否则 PHP 页面打开非常缓慢
 
@@ -109,11 +109,11 @@ $ cat $WSL_HOME/lnmp/wsl/config/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.c
 
 ## MySQL
 
-手动设置 `APT` 之后安装，不要直接使用 `apt install mysql-server`(直接安装的是 MariaDB)。
+不要直接使用 `$ apt install mysql-server`(直接安装的是 MariaDB),请手动设置 `APT` 之后安装
 
 * https://dev.mysql.com/downloads/repo/apt/
 
-密码在安装的时候弹出窗口中进行设置。
+密码在安装的时候弹出的窗口中进行设置。
 
 ### MySQL 远程登陆
 

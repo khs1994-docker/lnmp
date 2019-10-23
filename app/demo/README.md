@@ -1,8 +1,12 @@
-# Docker 化 PHP 项目最佳实践(从 docker run 到 helm install ... --tls)
+# Docker 化 PHP 项目最佳实践(从 docker run 到 helm install ...)
 
 完全使用 Docker 开发、部署 PHP 项目。本指南只是简单列出，具体内容请查看 [文档](https://github.com/khs1994-docker/lnmp/tree/master/docs)
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/187)
+
+## vsCode 远程开发
+
+* 请查看 https://github.com/khs1994-docker/lnmp/tree/19.03/vscode-remote
 
 ## Create PHP Application by Composer
 
@@ -30,7 +34,9 @@ $ cd example
 
 * `kubectl create -f filename.yaml`
 
-* `helm install ./lnmp --tls`
+* `kubectl create -k /path/kustomize_folder`
+
+* `helm install ./lnmp`
 
 ## 说明
 
@@ -56,8 +62,9 @@ $ cd example
 
 * 建议多看看几个 PHP 开源项目，看看别人的项目里都有哪些文件，作用是什么
 
-| Filename          | Description                     |
-| :-------------    | :-------------                  |
+| Filename            | Description                     |
+| :-------------      | :-------------                  |
+| `.github/workflows` | GitHub Actions CI 工具          |
 | `.gitattributes`  | git 打包时排除文件（例如 测试代码）|
 | `.drone.yml`      | [`Drone` CI 工具](https://github.com/khs1994-docker/ci) |
 | `.editorconfig`   | [定义文件格式规则（例如 缩进方式）](https://editorconfig.org/)|
@@ -79,7 +86,7 @@ $ cd example
 
 * 将 Docker 化的常用命令所在文件夹加入 `PATH`，具体请查看 [这里](https://github.com/khs1994-docker/lnmp/tree/master/bin)。
 
-* IDE `PHPStorm`
+* IDE `PHPStorm` `vsCode`
 
 * git 分支 `dev`
 
@@ -87,7 +94,7 @@ $ cd example
 
 ### 1. 新建 PHP 项目
 
-使用自己的模板项目初始化 `PHP` 项目并初始化 git 仓库。
+使用自己的模板项目初始化 `PHP` 项目。
 
 ```bash
 $ cd lnmp/app
@@ -170,7 +177,7 @@ $ ./lnmp-docker up
 
 请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/xdebug.md
 
-### 8. 引入 Composer 依赖
+### 8. 依赖管理 Composer
 
 容器化 PHPer 常用命令请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/command.md
 
@@ -215,7 +222,7 @@ $ lnmp-phpunit [参数]
 
 > 将 PHP 项目打入镜像，镜像中严禁包含配置文件
 
-> 最佳实践：Docker 镜像由 CI 服务器构建，而不是本地人工构建！
+> Docker 镜像必须由 CI 服务器构建，而不是本地人工构建！
 
 自行修改 `.env` `docker-compose.yml` 文件，保留所需的 PHP 版本，其他的注释
 

@@ -1,8 +1,8 @@
 {
   "name": "helm",
   "description": "The Kubernetes Package Manager",
-  "version": "3.0.0-beta.3",
-  "preVersion": "3.0.0-beta.3",
+  "version": "3.0.0-beta.5",
+  "preVersion": "3.0.0-beta.5",
   "homepage": "https://helm.sh/",
   "bug": "https://github.com/helm/helm/issues",
   "github": "helm/helm",

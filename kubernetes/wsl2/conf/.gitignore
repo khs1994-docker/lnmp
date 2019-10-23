@@ -1,0 +1,6 @@
+/*
+!.gitignore
+!*.temp
+!cni
+!kube-containerd
+kube-containerd/config.toml

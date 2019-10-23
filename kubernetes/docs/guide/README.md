@@ -4,7 +4,7 @@
 
 ```bash
 $ kubectl run nginx \
-    --image=nginx:1.17.4-alpine \
+    --image=nginx:1.17.5-alpine \
     --command -- cmd arg1 \
     -- arg1 arg2 \
     --port=80

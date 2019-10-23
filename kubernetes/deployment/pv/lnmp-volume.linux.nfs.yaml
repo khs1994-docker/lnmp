@@ -3,46 +3,57 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-mysql-data
+  name: lnmp-mysql-data-development
   labels:
     type: local
     app: lnmp
     tier: mysql
+    env: development
 spec:
   capacity:
     storage: 20Gi
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-mode
-  volumeMode: Filesystem # or raw Block
-  accessModes:
-    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+  volumeMode: Filesystem # Block
 
-    # - ReadWriteOnce    # 被单个节点mount为读写rw模式 RWO
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+  accessModes:
+    # - ReadWriteOnce    # 被单个节点 mount 为读写 rw 模式 RWO
                        # the volume can be mounted as read-write by a single node
-    # - ReadOnlyMany   # 被多个节点mount为只读ro模式 ROX
+    # - ReadOnlyMany   # 被多个节点 mount 为只读 ro 模式 ROX
                        # the volume can be mounted read-only by many nodes
-    - ReadWriteMany  # 被多个节点mount为读写rw模式 RWX
+    - ReadWriteMany  # 被多个节点 mount 为读写 rw 模式 RWX
                        # the volume can be mounted as read-write by many nodes
-  persistentVolumeReclaimPolicy: Retain
+
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming
+  persistentVolumeReclaimPolicy: Retain
   # Retain 允许用户手动回收
   # Recycle 删除 PV 上的数据 deprecated
   # Delete 删除 PV
+
+  # Currently, only NFS and HostPath support recycling.
+  # AWS EBS, GCE PD, Azure Disk, and Cinder volumes support deletion.
   nfs:
     # FIXME: use the right IP
     server: 192.168.199.100
     path: "/lnmp/mysql"
   storageClassName: slow
 
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-redis-data
+  name: lnmp-redis-data-development
   labels:
     type: local
     app: lnmp
     tier: redis
+    env: development
 spec:
   capacity:
     storage: 20Gi
@@ -53,15 +64,20 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/redis"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-data
+  name: lnmp-app-development
   labels:
     type: local
     app: lnmp
     tier: code-data
+    env: development
 spec:
   capacity:
     storage: 20Gi
@@ -72,16 +88,21 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/app"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-registry-data
+  name: lnmp-registry-data-development
   labels:
     type: local
     app: lnmp
     tier: registry
+    env: development
 spec:
   capacity:
     storage: 20Gi
@@ -92,15 +113,20 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/registry"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: lnmp-log
+  name: lnmp-log-development
   labels:
     type: local
     app: lnmp
     tier: log
+    env: development
 spec:
   capacity:
     storage: 20Gi
@@ -112,3 +138,7 @@ spec:
     server: 192.168.199.100
     path: "/lnmp/log"
   storageClassName: slow
+  mountOptions:
+    # - hard
+    # - nfsvers=4.1
+    - nfsvers=4
