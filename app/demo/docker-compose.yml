@@ -42,6 +42,6 @@ services:
       target: php
       args:
         - PHP_VERSION=${PHP_VERSION:-7.3.10}
-        - NODE_VERSION=${NODE_VERSION:-12.13.0}
+        - NODE_VERSION=${NODE_VERSION:-13.0.0}
         - NODE_REGISTRY=https://registry.npm.taobao.org
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-7.3.10}-pro-alpine
