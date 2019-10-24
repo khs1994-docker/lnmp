@@ -88,3 +88,7 @@ $ lnmp-docker composer install | update | require XXX
 ## 功能
 
 * 可以在 **终端** 直接执行命令(`vsCode` -> `查看` -> `终端` -> 右上角 `+` 号) `$ php artisan`
+
+## Dockerd 运行在 WSL2 ?
+
+请查看 [WSL2](https://github.com/khs1994-docker/lnmp/tree/master/wsl2)
