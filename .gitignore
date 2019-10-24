@@ -70,3 +70,5 @@ logs
 /composer.json
 
 lnmp-include
+
+wsl2/config/coredns/corefile

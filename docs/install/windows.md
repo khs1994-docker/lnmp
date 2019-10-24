@@ -40,27 +40,46 @@ $ ./lnmp-docker.ps1 up
 
 ## WSL
 
-> 不建议使用，请使用 Docker for WSL2(预览版)
+> 不建议使用，请使用 [WSL2](https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.DOCKER.md)
 
-* https://github.com/khs1994-docker/lnmp/blob/master/wsl/wsl.conf
+* https://github.com/khs1994-docker/lnmp/blob/master/wsl/config/wsl.conf
 
-默认的 WSL 将 C 盘挂载到了 `/mnt/c`
+默认的 WSL 将 C 盘挂载到了 `/mnt/c`，这里我们修改配置，将 C 盘挂载到 `/c`
 
-这里我们修改配置，将 C 盘挂载到 `/c`
+### 1. 设置 Windows PATH 变量
+
+```powershell
+$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
+```
+
+### 2. 安装 Docker CLI/ docker-compose
+
+WSL 中执行
 
 ```bash
-# 设置 Windows PATH 变量
-
-$ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
-
-$ wsl
-
 $ lnmp-wsl-docker-cli.sh
-
-$ curl https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/wsl.conf \
-  | sudo tee /etc/wsl.conf
-
-# 打开 PowerShell
-
-$ wsl ./lnmp-docker
 ```
+
+### 3. 设置挂载路径
+
+* https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf
+
+WSL 中执行
+
+```bash
+$ sudo vim /etc/wsl.conf
+
+[automount]
+enabled = true
+root = /
+```
+
+### 4. 使用
+
+```bash
+$ ./lnmp-docker
+```
+
+## [WSL2](https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.DOCKER.md)
+
+由于 Docker 桌面版启动时间较长，经常出现问题（无法启动），本项目支持 WSL2 Docker。

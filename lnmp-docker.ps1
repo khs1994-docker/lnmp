@@ -108,6 +108,9 @@ Function env_status(){
 
   _cp_only_not_exists config/registry/config.example.yml config/registry/config.yml
 
+  _cp_only_not_exists wsl2/.env.example.ps1 wsl2/.env.ps1
+
+  _cp_only_not_exists wsl2/config/coredns/corefile.example wsl2/config/coredns/corefile
 }
 
 Function wait_docker(){
@@ -619,7 +622,16 @@ printInfo "Exec custom script"
 
 . ./lnmp-docker-custom-script.ps1
 
-$env:DOCKER_HOST=$null
+Function _wsl2_docker_init(){
+  wsl -u root -- chmod -R 777 log
+  $env:COMPOSE_CONVERT_WINDOWS_PATHS=1
+  wsl -u root -- ls /c/Users | out-null
+  if(!$?){
+    printError "WSL2 must mount C to /c"
+
+    exit 1
+  }
+}
 
 if(_command docker){
   if($(docker help context)){
@@ -627,10 +639,21 @@ if(_command docker){
     $isWSL2=docker context ls | where {$_ -match "wsl \*"}
 
     if($isWSL2){
-      printInfo "Docker Engine run in WSL2"
-      $env:DOCKER_HOST="npipe:////./pipe/docker_wsl"
+      printInfo "Docker Engine run in WSL2 (start by docker desktop)"
+      $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_wsl"
+      _wsl2_docker_init
     }else{
-      $env:DOCKER_HOST="npipe:////./pipe/docker_engine"
+      # $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_engine"
+    }
+
+    $isWSL2=docker context ls | where {$_ -match "wsl2 \*"}
+
+    if($isWSL2){
+      printInfo "Docker Engine run in WSL2 (start by $ service docker start)"
+      $LNMP_COMPOSE_GLOBAL_OPTIONS="-H ${LNMP_WSL2_DOCKER_HOST}"
+      _wsl2_docker_init
+    }else{
+      # $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_engine"
     }
   }
 }
@@ -673,13 +696,13 @@ switch -regex ($command){
     }
 
     backup {
-        docker-compose exec mysql /backup/backup.sh $other
+        docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} exec mysql /backup/backup.sh $other
         #@custom
         __lnmp_custom_backup $other
     }
 
     restore {
-       docker-compose exec mysql /backup/restore.sh $other
+       docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} exec mysql /backup/restore.sh $other
        #@custom
        __lnmp_custom_restore $other
     }
@@ -690,7 +713,7 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-        & {docker-compose $options build $other --parallel}
+        & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $other --parallel}
       }
     }
 
@@ -702,7 +725,7 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-      & {docker-compose $options config $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other}
     }
 
     build-up {
@@ -710,7 +733,7 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-      & {docker-compose $options up -d $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d $other}
     }
 
     build-push {
@@ -718,9 +741,9 @@ switch -regex ($command){
                                    "docker-lnmp.build.yml" `
                                     1
 
-      & {docker-compose $options build $other --parallel}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $other --parallel}
 
-      & {docker-compose $options push $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $other}
     }
 
     cleanup {
@@ -735,7 +758,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose $options config $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other}
     }
 
     cn-mirror {
@@ -765,7 +788,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose $options up -d $services}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d $services}
 
       #@custom
       __lnmp_custom_up $services
@@ -775,7 +798,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml",`
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose $options pull ${LNMP_SERVICES}}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull ${LNMP_SERVICES}}
 
       #@custom
       __lnmp_custom_pull
@@ -785,7 +808,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml",`
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose $options down --remove-orphans}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options down --remove-orphans}
 
       #@custom
       __lnmp_custom_down
@@ -807,22 +830,22 @@ switch -regex ($command){
     }
 
     swarm-config {
-       docker-compose -f docker-production.yml config
+       docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml config
     }
 
     swarm-build {
-      docker-compose -f docker-production.yml build $other --parallel
+      docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml build $other --parallel
     }
 
     swarm-push {
-      docker-compose -f docker-production.yml push $other
+      docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml push $other
     }
 
     restart {
       $options=get_compose_options "docker-lnmp.yml", `
                           "docker-lnmp.override.yml"
 
-      & {docker-compose $options restart $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options restart $other}
       #@custom
       __lnmp_custom_restart $other
     }
@@ -901,15 +924,15 @@ switch -regex ($command){
                                     "cluster/docker-cluster.mysql.yml", `
                                     "cluster/docker-cluster.redis.yml"
 
-       & {docker-compose $options up $other}
+       & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up $other}
     }
 
     clusterkit-mysql-up {
-       docker-compose -f cluster/docker-cluster.mysql.yml up $other
+       docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
     }
 
     clusterkit-mysql-down {
-       docker-compose -f cluster/docker-cluster.mysql.yml down $other
+       docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
     }
 
     clusterkit-mysql-exec {
@@ -925,11 +948,11 @@ switch -regex ($command){
     }
 
     clusterkit-memcached-up {
-      docker-compose -f cluster/docker-cluster.memcached.yml up $other
+      docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
     }
 
     clusterkit-memcached-down {
-      docker-compose -f cluster/docker-cluster.memcached.yml down $other
+      docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
     }
 
     clusterkit-memcached-exec {
@@ -945,11 +968,11 @@ switch -regex ($command){
     }
 
     clusterkit-redis-up {
-          docker-compose -f cluster/docker-cluster.redis.yml up $other
+          docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
     }
 
     clusterkit-redis-down {
-          docker-compose -f cluster/docker-cluster.redis.yml down $other
+          docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
     }
 
     clusterkit-redis-exec {
@@ -965,11 +988,11 @@ switch -regex ($command){
     }
 
     clusterkit-redis-replication-up {
-          docker-compose -f cluster/docker-cluster.redis.replication.yml up $other
+          docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
     }
 
     clusterkit-redis-replication-down {
-          docker-compose -f cluster/docker-cluster.redis.replication.yml down $other
+          docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
     }
 
     clusterkit-redis-replication-exec {
@@ -985,11 +1008,11 @@ switch -regex ($command){
     }
 
     clusterkit-redis-sentinel-up {
-          docker-compose -f cluster/docker-cluster.redis.sentinel.yml up $other
+          docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
     }
 
     clusterkit-redis-sentinel-down {
-          docker-compose -f cluster/docker-cluster.redis.sentinel.yml down $other
+          docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
     }
 
     clusterkit-redis-sentinel-exec {
@@ -1162,7 +1185,7 @@ XXX
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose $options up -d ${LNMP_SERVICES} pcit}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d ${LNMP_SERVICES} pcit}
     }
 
     "cookbooks" {
@@ -1297,7 +1320,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       if((Test-Path $source/.devcontainer) -And (Test-Path $source/docker-workspace.yml)){
         printInfo "Exec composer command in vscode remote folder"
         cd $source
-        docker-compose -f docker-workspace.yml run --rm composer $args
+        docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-workspace.yml run --rm composer $args
 
         exit
       }
@@ -1307,7 +1330,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
-        & {docker-compose $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND}
+        & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND}
       }
 
     default {

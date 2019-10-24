@@ -1,0 +1,23 @@
+.:53 {	# 监听tcp和udp的53端口
+    etcd {   # 配置启用etcd插件,后面可以指定域名,例如 etcd test.com {
+        stubzones # 启用存根区域功能。 stubzone仅在位于指定的第一个区域下方的etcd树中完成
+        path /coredns # etcd里面的路径 默认为/skydns，以后所有的dns记录就是存储在该存根路径底下
+        endpoint http://localhost:2379 # etcd访问地址，多个空格分开
+
+        # upstream设置要使用的上游解析程序解决指向外部域名的在etcd（认为CNAME）中找到的外部域名。
+        upstream 8.8.8.8:53 8.8.4.4:53
+
+        fallthrough # 如果区域匹配但不能生成记录，则将请求传递给下一个插件
+        # tls CERT KEY CACERT # 可选参数，etcd认证证书设置
+    }
+    hosts {
+        192.168.1.122     sample1.xx.com
+        192.168.1.123     sample2.xx.com
+        fallthrough
+    }
+    prometheus  # 监控插件
+    cache 160
+    loadbalance   # 负载均衡，开启DNS记录轮询策略
+    forward . 8.8.8.8 8.8.4.4 # 上面etcd未查询到的请求转发给设置的DNS服务器解析
+    log # 打印日志
+}

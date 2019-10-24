@@ -41,3 +41,5 @@ $LNMP_NODE_IMAGE="node:alpine"
 
 $LREW_INCLUDE="pcit","minio"
 # $LREW_INCLUDE="pcit","minio"
+
+$LNMP_WSL2_DOCKER_HOST="tcp://localhost:2375"

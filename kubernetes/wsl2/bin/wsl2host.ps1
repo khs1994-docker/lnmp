@@ -37,7 +37,15 @@ Function _sudo($command){
   $encodedCommand = [Convert]::ToBase64String($bytes)
 
   start-process -FilePath powershell.exe `
-    -ArgumentList "-encodedCommand","$encodedCommand" -Verb RunAs
+    -ArgumentList "-encodedCommand","$encodedCommand" -Verb RunAs -WindowStyle Minimized
+}
+
+Function _write_host(){
+ping -n 1 wsl2 | out-null
+
+if ($?){
+  "==> not changed, skip"
+  return
 }
 
 ""
@@ -75,3 +83,6 @@ $wsl2_ip wsl2 $WSL2_DOMAIN
 "
 
 _sudo "echo `"$hosts_content`" | out-file -FilePath $hosts_path -Append -Encoding Unknown"
+}
+
+_write_host

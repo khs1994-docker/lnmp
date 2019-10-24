@@ -1,6 +1,6 @@
 # WSL2 最佳实践
 
-Docker 或 Kubernetes 运行于 WSL2 ,代码文件夹位于 WSL2 (不要放到 Windows 挂载路径), 使用 vsCode 进行 [远程开发](README.REMOTE.md).
+Docker 或 Kubernetes 运行于 WSL2 ,代码文件夹位于 WSL2 (或者 Windows 挂载路径), 使用 vsCode 进行 [远程开发](README.REMOTE.md).
 
 ## Docker
 
@@ -22,7 +22,7 @@ $ ./lnmp-wsl-init
 
 ## %UserProfile%.wslconfig
 
-`conf/.wslconfig`
+`config/.wslconfig`
 
 * https://github.com/MicrosoftDocs/WSL/releases/tag/18947
 
