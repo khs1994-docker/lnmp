@@ -45,7 +45,7 @@ Function install($VERSION=0,$isPre=0){
 
   Start-Process -FilePath $filename -wait
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   & 'C:\Program Files (x86)\Tencent\微信web开发者工具\cli.bat' --version
 }

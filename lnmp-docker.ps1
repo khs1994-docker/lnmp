@@ -633,28 +633,23 @@ Function _wsl2_docker_init(){
   }
 }
 
-if(_command docker){
-  if($(docker help context)){
+if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT") -and (Test-Path $HOME\.docker\config.json)){
+  $docker_current_context=(ConvertFrom-Json -InputObject (get-content $HOME\.docker\config.json -Raw)).currentContext
 
-    $isWSL2=docker context ls | where {$_ -match "wsl \*"}
-
-    if($isWSL2){
-      printInfo "Docker Engine run in WSL2 (start by docker desktop)"
-      $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_wsl"
-      _wsl2_docker_init
+  if ($docker_current_context -eq "wsl"){
+    printInfo "Docker Engine run in WSL2 (start by docker desktop)"
+    $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_wsl"
+    _wsl2_docker_init
     }else{
       # $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_engine"
-    }
+  }
 
-    $isWSL2=docker context ls | where {$_ -match "wsl2 \*"}
-
-    if($isWSL2){
-      printInfo "Docker Engine run in WSL2 (start by $ service docker start)"
-      $LNMP_COMPOSE_GLOBAL_OPTIONS="-H ${LNMP_WSL2_DOCKER_HOST}"
-      _wsl2_docker_init
-    }else{
+  if ($docker_current_context -eq "wsl2"){
+    printInfo "Docker Engine run in WSL2 (start by $ service docker start)"
+    $LNMP_COMPOSE_GLOBAL_OPTIONS="-H ${LNMP_WSL2_DOCKER_HOST}"
+    _wsl2_docker_init
+  }else{
       # $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_engine"
-    }
   }
 }
 

@@ -7,7 +7,10 @@ Function _update_wsl2_host(){
   etcdctl put /coredns/wsl2 $("{`"host`":`"$wsl2host`"}" | ConvertTo-Json)
 
   if (!$?){
-    "==> etcd not running, please start etcd first
+    "
+==> etcd not running, please start etcd first
+
+$ .\kubernetes\wsl2\etcd
 
 "
 

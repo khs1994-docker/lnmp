@@ -47,7 +47,7 @@ $ ./wsl2/bin/dockerd-wsl2
 
 * 监听 WSL2 IP 变化,并写入 hosts
 
-## 4. 不要设置 DOCKER_HOST 环境变量
+## 4. 不要设置 `DOCKER_HOST` 环境变量
 
 设置过的取消
 
@@ -63,27 +63,30 @@ $ docker context create wsl2 --description "wsl2" --docker "host=tcp://localhost
 $ ./lnmp-docker up
 ```
 
-## 7. 原理说明
+## 7. 设置 hosts
+
+`kubernetes/wsl2/.env.ps1`
+
+```powershell
+$WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com","wsl2.docker.internal"
+```
+
+## 8. 原理说明
 
 * DOCKER_HOST `tcp://wsl2:2375`
 * COMPOSE_CONVERT_WINDOWS_PATHS=1
 
-## 8. 修改 DNS 服务器
+## 9. Xdebug
 
-`192.168.199.100` Windows IP
-
-## 9. coreDNS
-
-* 编辑 `wsl2/.env.ps1`, 将需要解析到 WSL2 的域名写入。
-* `coreDNS` 配置文件 `wsl2/config/coredns/corefile`
+`~/lnmp/.env`
 
 ```bash
-$ ./kubernetes/wsl2/etcd
-
-$ ./wsl2/bin/lnmp-coredns start
+LNMP_XDEBUG_REMOTE_HOST=wsl2.docker.internal
 ```
 
-## 10. vsCode 设置(远程开发)
+## IDE
+
+### vsCode 设置(远程开发)
 
 `文件` -> `首选项` -> `设置` -> `搜索 Docker:host` -> `改为 tcp://wsl2:2375`
 
@@ -95,12 +98,4 @@ $ ./wsl2/bin/lnmp-coredns start
 
 ```bash
 COMPOSE_CONVERT_WINDOWS_PATHS=1
-```
-
-## 11. Xdebug
-
-`~/lnmp/.env`
-
-```bash
-LNMP_XDEBUG_REMOTE_HOST=wsl2.docker.internal
 ```

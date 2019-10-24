@@ -35,7 +35,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=($(python --version) -split " ")[1]
 
     if ($CURRENT_VERSION -eq $VERSION){
-      echo "==> $name $VERSION already install"
+      "==> $name $VERSION already install"
       return
     }
   }
@@ -72,13 +72,13 @@ Function install($VERSION=0,$isPre=0){
 
   _exportPath "${env:ProgramData}\Python","${env:ProgramData}\Python\Scripts"
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   python --version
 }
 
 Function uninstall(){
-  echo "Not Support"
+  "Not Support"
 }
 
 Function getInfo(){

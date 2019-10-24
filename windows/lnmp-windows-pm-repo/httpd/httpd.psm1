@@ -22,10 +22,10 @@ Function after_install(){
   $a=Select-String 'IncludeOptional conf.d/' C:\Apache24\conf\httpd.conf
 
   if ($a.Length -eq 0){
-    echo "==> Add config in C:\Apache24\conf\httpd.conf"
+    "==> Add config in C:\Apache24\conf\httpd.conf"
 
     echo ' ' | out-file -Append C:\Apache24\conf\httpd.conf
-    echo "IncludeOptional conf.d/*.conf
+    "IncludeOptional conf.d/*.conf
 LoadModule ssl_module modules/mod_ssl.so
 LoadModule headers_module modules/mod_headers.so
 LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
@@ -53,7 +53,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=($(httpd -v) -split " ")[2].trim("Apache/")
 
     if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     }
   }
@@ -115,7 +115,7 @@ Function install($VERSION=0,$isPre=0){
 
   _exportPath "C:\Apache24\bin"
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   httpd -v
 }

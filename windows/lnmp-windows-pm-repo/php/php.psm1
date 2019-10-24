@@ -117,14 +117,14 @@ Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
 
       if ($extension -eq 'Zend Opcache'){
         echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-        echo "zend_extension=opcache" | out-file -Append C:/php/php.ini -encoding utf8
+        "zend_extension=opcache" | out-file -Append C:/php/php.ini -encoding utf8
         continue
       }
 
       if (!(Test-Path C:\php-ext\php_$extension.dll)){
         if ((Test-Path C:\php\ext\php_$extension.dll)){
           echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-          echo "extension=$extension" | out-file -Append C:/php/php.ini -encoding utf8
+          "extension=$extension" | out-file -Append C:/php/php.ini -encoding utf8
         }else{
           continue
         }
@@ -133,11 +133,11 @@ Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
 
       if ($extension -eq 'xdebug'){
         echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-        echo "; zend_extension=C:\php-ext\php_$extension" | out-file -Append C:/php/php.ini -encoding utf8
+        "; zend_extension=C:\php-ext\php_$extension" | out-file -Append C:/php/php.ini -encoding utf8
         continue
       }
       echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-      echo "extension=C:\php-ext\php_$extension" | out-file -Append C:/php/php.ini -encoding utf8
+      "extension=C:\php-ext\php_$extension" | out-file -Append C:/php/php.ini -encoding utf8
     }
   }
 
@@ -150,7 +150,7 @@ Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
   $a = php -r "echo ini_get('curl.cainfo');"
 
   if ($a -ne "C:\php-ext\cacert-${PHP_CACERT_DATE}.pem"){
-    echo "curl.cainfo=C:\php-ext\cacert-${PHP_CACERT_DATE}.pem" | out-file -Append C:/php/php.ini -encoding utf8
+    "curl.cainfo=C:\php-ext\cacert-${PHP_CACERT_DATE}.pem" | out-file -Append C:/php/php.ini -encoding utf8
   }
 
   php -r "echo ini_get('curl.cainfo');"
@@ -172,7 +172,7 @@ Function install_after($VERSION){
     #   $VC_VERSION=
     # }
     Default {
-      echo "==> Not Support this version, SKIP install extension"
+      "==> Not Support this version, SKIP install extension"
       return
     }
   }
@@ -207,7 +207,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=(php -v).split(" ")[1]
 
     if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     }
   }
@@ -236,7 +236,7 @@ Function install($VERSION=0,$isPre=0){
 
   install_after $VERSION
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   if($isPre){
     C:\php74\php -v

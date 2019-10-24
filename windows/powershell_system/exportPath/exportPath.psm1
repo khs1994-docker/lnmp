@@ -4,12 +4,11 @@ Function _exportPath($items){
 
   Foreach ($item in $items)
   {
-    $string=$(echo $env_path | select-string ("$item;").replace('\','\\'))
+    $env_array=$env_path.split(';')
 
-    if($string.Length -eq 0){
-      write-host "
-Add $item to system PATH env ...
-    "
+    if($env_array.IndexOf($item) -eq -1){
+      "Add $item to system PATH env ...
+"
       [environment]::SetEnvironmentvariable("Path", "$item;$env_Path","User")
     }
   }
@@ -24,7 +23,7 @@ $env:path="C:\bin;";
 
 Foreach ($item in $env_Path)
 {
-  if($env:path.indexof($item) -eq -1){
+  if($env:path.split(';').indexof($item) -eq -1){
     $env:path+="${item};"
   }
 }

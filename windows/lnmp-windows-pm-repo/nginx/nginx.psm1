@@ -52,7 +52,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=$(cat $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]
     rm -r $env:TEMP/.nginx.version
     if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     }
   }
@@ -82,7 +82,7 @@ Function install($VERSION=0,$isPre=0){
 
   install_after
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   nginx -v
 }

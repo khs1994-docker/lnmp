@@ -82,7 +82,7 @@ $wsl2_ip wsl2 $WSL2_DOMAIN
 # add wsl2host by khs1994-docker/lnmp END
 "
 
-_sudo "echo `"$hosts_content`" | out-file -FilePath $hosts_path -Append -Encoding Unknown"
+_sudo "echo `"$hosts_content`" | out-file -FilePath $hosts_path -Append -Encoding Default"
 }
 
 _write_host

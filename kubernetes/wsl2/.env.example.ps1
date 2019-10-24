@@ -16,4 +16,4 @@ $KUBE_APISERVER="https://${WINDOWS_HOST}:16443"
 # WSL2 domain
 # 解析到 WSL2 的域名
 
-$WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com wsl2.docker.internal"
+$WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com","wsl2.docker.internal"

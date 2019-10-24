@@ -30,7 +30,7 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="WeChat"
 
   if($(_command ${env:ProgramFiles(x86)}\Tencent\WeChat\WeChat.exe)){
-    echo "==> $name $VERSION already install"
+    "==> $name $VERSION already install"
     return
   }
 
@@ -55,7 +55,7 @@ Function install($VERSION=0,$isPre=0){
 
   # [environment]::SetEnvironmentvariable("", "", "User")
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   & get-command ${env:ProgramFiles(x86)}\Tencent\WeChat\WeChat.exe
 }
