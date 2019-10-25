@@ -4,7 +4,7 @@
 
 打开 `PowerShell`
 
-```bash
+```powershell
 $ cd $HOME
 
 $ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git
@@ -20,13 +20,13 @@ $ git clone --depth=1 https://gitee.com/khs1994-docker/lnmp.git
 
 ## 设置环境变量
 
-```bash
+```powershell
 $ [environment]::SetEnvironmentvariable("LNMP_PATH", "${HOME}\lnmp", "User")
 ```
 
 ## 启动 Demo
 
-```bash
+```powershell
 $ cd $HOME
 
 $ cd lnmp
@@ -39,6 +39,8 @@ $ ./lnmp-docker.ps1 up
 浏览器打开 `127.0.0.1`，看到页面。
 
 ## WSL
+
+**在 WSL 执行 Docker CLI 命令，不是在 WSL 运行 Docker 服务端**
 
 > 不建议使用，请使用 [WSL2](https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.DOCKER.md)
 
@@ -77,7 +79,7 @@ root = /
 ### 4. 使用
 
 ```bash
-$ ./lnmp-docker
+$ wsl -- ./lnmp-docker
 ```
 
 ## [WSL2](https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.DOCKER.md)

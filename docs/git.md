@@ -84,14 +84,8 @@ $ git fetch origin refs/pull/1/head:pull_request
 
 ## TOOLS
 
-### github/git-sizer
+* [github/git-sizer](https://github.com/github/git-sizer)
 
-* https://github.com/github/git-sizer
+* [github/hub](https://github.com/github/hub)
 
-### github/hub
-
-* https://github.com/github/hub
-
-### git-lfs/git-lfs
-
-* https://github.com/git-lfs/git-lfs
+* [git-lfs/git-lfs](https://github.com/git-lfs/git-lfs)

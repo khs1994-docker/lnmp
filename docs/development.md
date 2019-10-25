@@ -18,7 +18,7 @@
 
 **7.** `IDE(PhpStorm)` 打开 `./app/my-project` ，开始编写代码
 
-**8.** 谨慎执行 `$ docker volume prune`，否则将会删除数据库数据。
+> 谨慎执行 `$ docker volume prune`，否则将会删除数据库数据。
 
 ## APP_ROOT
 
@@ -26,9 +26,9 @@
 
 例如你想要将 PHP 项目目录 `app` 与本项目并列
 
-```bash
-# APP_ROOT=./app
-APP_ROOT=../app
+```diff
+- APP_ROOT=./app
++ APP_ROOT=../app
 ```
 
 此时文件结构为
@@ -43,9 +43,9 @@ APP_ROOT=../app
 
 Windows 除了在 `.env` 文件中设置 `APP_ROOT` 变量外，还需在 `.env.ps1` 中进行如下设置
 
-```bash
-# $APP_ROOT="./app"
-$APP_ROOT="../app"
+```diff
+- $APP_ROOT="./app"
++ $APP_ROOT="../app"
 ```
 
 ## 如何正确的自定义配置文件

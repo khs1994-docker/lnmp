@@ -65,7 +65,7 @@ for ($i = 0; $i -lt $exists_hosts_content_array.Count; $i++) {
 }
 
 if( $begin_line  -and $end_line){
-  Write-Warning "==> old wsl2host already add on line: $begin_line - $end_line , update wsl2host ..."
+  Write-Warning "==> old wsl2host already add on line: $begin_line - $end_line , update wsl2host to new $wsl2_ip ..."
 
   $exists_hosts_content_array[$begin_line + 1] = "$wsl2_ip wsl2 $WSL2_DOMAIN"
 

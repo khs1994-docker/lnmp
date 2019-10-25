@@ -35,7 +35,21 @@ root = /
 DOCKER_OPTS="--registry-mirror=https://dockerhub.azk8s.cn --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock"
 ```
 
-## 3. 启动 Docker
+* https://docs.docker.com/engine/reference/commandline/dockerd/
+
+## 3. 不要设置 `DOCKER_HOST` 环境变量
+
+设置过的取消
+
+## 4. 新增 docker context
+
+```bash
+$ docker context create wsl2 --description "wsl2" --docker "host=tcp://localhost:2375"
+
+$ docker context use wsl2
+```
+
+## 5. 启动 Docker
 
 ```bash
 # $ wsl -u root -- service docker start
@@ -47,16 +61,6 @@ $ ./wsl2/bin/dockerd-wsl2
 
 * 监听 WSL2 IP 变化,并写入 hosts
 
-## 4. 不要设置 `DOCKER_HOST` 环境变量
-
-设置过的取消
-
-## 5. 新增 docker context
-
-```bash
-$ docker context create wsl2 --description "wsl2" --docker "host=tcp://localhost:2375"
-```
-
 ## 6. 使用
 
 ```bash
@@ -65,7 +69,7 @@ $ ./lnmp-docker up
 
 ## 7. 设置 hosts
 
-`kubernetes/wsl2/.env.ps1`
+`kubernetes/wsl2/.env.ps1` 自行添加要解析到 WSL2 的域名
 
 ```powershell
 $WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com","wsl2.docker.internal"
@@ -83,6 +87,10 @@ $WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com","wsl2.docker.internal"
 ```bash
 LNMP_XDEBUG_REMOTE_HOST=wsl2.docker.internal
 ```
+
+## 文件权限
+
+由于文件权限问题（例如 Laravel 的 storage 文件夹），部分应用可能会报错，进入 WSL 更改文件权限即可。
 
 ## IDE
 

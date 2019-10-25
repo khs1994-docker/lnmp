@@ -4,10 +4,10 @@
 
 若开放 `MySQL` 端口，请编辑 `.env` 文件
 
-```bash
-# LNMP_MYSQL_PORT=127.0.0.1:3306
+```diff
+- LNMP_MYSQL_PORT=127.0.0.1:3306
 
-LNMP_MYSQL_PORT=0.0.0.0:3306
++ LNMP_MYSQL_PORT=0.0.0.0:3306
 ```
 
 其他软件同理，不再赘述。
