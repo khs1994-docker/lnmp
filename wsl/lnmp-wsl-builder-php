@@ -662,7 +662,7 @@ _install_pecl_ext_by_pickle(){
 
   $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
-  $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS} 
+  $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install yaml --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
@@ -675,7 +675,7 @@ _install_pecl_ext_by_pickle(){
 
 _install_pecl_ext(){
     command -v ${PHP_PREFIX}/bin/pecl && pecl=1 || pecl=0
-    
+
     $(_sudo) mkdir -p /usr/local/sbin
     $(_sudo) ln -s ${PHP_PREFIX}/bin/php /usr/local/sbin
     $(_sudo) ln -s ${PHP_PREFIX}/bin/phpize /usr/local/sbin
@@ -963,8 +963,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.10
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.3.10
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.11
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.3.11
 
 _get_phpnum $PHP_VERSION
 

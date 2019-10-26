@@ -218,15 +218,15 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.3`        | **2.8.3**              |`Alpine:3.10`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.5-alpine`      | **1.17.5**             |`Alpine:3.10`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.3.10-unit-alpine`| **1.12.0**             |`Alpine:3.10`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.3.11-unit-alpine`| **1.12.0**             |`Alpine:3.10`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.10`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.18`              | **8.0.18**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.8`            | **10.4.8**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.6-alpine`        | **5.0.6**            |`Alpine:3.10`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.3.10-fpm-alpine`  | **7.3.10**       |`Alpine:3.10`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.3.10-composer-alpine`  | **6.x**       |`Alpine:3.10`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.10-composer-alpine`  | **1.9.0**       |`Alpine:3.10`    |
-|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.3.10-composer-alpine`  | **2.15.3**      |`Alpine:3.10`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.3.11-fpm-alpine`  | **7.3.11**       |`Alpine:3.10`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.3.11-composer-alpine`  | **6.x**       |`Alpine:3.10`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.11-composer-alpine`  | **1.9.0**       |`Alpine:3.10`    |
+|[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php:7.3.11-composer-alpine`  | **2.15.3**      |`Alpine:3.10`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.19-alpine`           | **1.5.19**       |`Alpine:3.10`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.0-management-alpine` | **3.8.0**       |`Alpine:3.10`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.0-alpine`             | **12.0**        |`Alpine:3.10`    |

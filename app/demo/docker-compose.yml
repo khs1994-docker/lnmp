@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: deploy/test.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.3.10}
+        - PHP_VERSION=${PHP_VERSION:-7.3.11}
     image: ${DOCKER_HUB_USERNAME:-khs1994}/EXAMPLE
 
   nginx:
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.3.10}
+        - PHP_VERSION=${PHP_VERSION:-7.3.11}
         - NODE_VERSION=${NODE_VERSION:-13.0.1}
         - NODE_REGISTRY=https://registry.npm.taobao.org
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-7.3.10}-pro-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-7.3.11}-pro-alpine

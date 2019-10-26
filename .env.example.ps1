@@ -25,7 +25,7 @@ $DistributionName="Ubuntu-18.04"
 
 $TZ='Asia/Shanghai'
 
-$LNMP_PHP_IMAGE="khs1994/php:7.3.10-composer-alpine"
+$LNMP_PHP_IMAGE="khs1994/php:7.3.11-composer-alpine"
 
 $HYPERV_VIRTUAL_SWITCH='zy'
 
