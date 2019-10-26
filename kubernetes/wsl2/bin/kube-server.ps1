@@ -2,6 +2,10 @@ $ErrorActionPreference="stop"
 
 & $PSScriptRoot/kube-check
 
+if(!$?){
+  exit 1
+}
+
 if ($args[0] -eq 'stop'){
   "==> stop kube-server ..."
   wsl -u root -- supervisorctl stop kube-server:

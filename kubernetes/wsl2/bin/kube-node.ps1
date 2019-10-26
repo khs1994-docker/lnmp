@@ -22,7 +22,7 @@ wsl -- bash -c "ls /lib/modules/`$(uname -r)/modules.builtin"
 
 if(!$?){
   Write-Warning "
-==> please update your WSL2 kernel, please see wsl2/README.KERNEL.md
+==> MUST update your WSL2 kernel, please see wsl2/README.KERNEL.md
 
 "
 

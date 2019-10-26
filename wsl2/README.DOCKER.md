@@ -7,6 +7,7 @@
 ## 说明
 
 * Docker 服务端(`dockerd`) 运行于 `WSL2`
+* 数据放到 `k8s-data` WSL2 发行版
 
 ## 准备
 
@@ -27,15 +28,13 @@ enabled = true
 root = /
 ```
 
-## 2. 配置 Docker
+## 2. [配置 Docker](https://docs.docker.com/engine/reference/commandline/dockerd/)
 
 `/etc/default/docker`
 
 ```bash
-DOCKER_OPTS="--registry-mirror=https://dockerhub.azk8s.cn --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock"
+DOCKER_OPTS="--registry-mirror=https://dockerhub.azk8s.cn --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock --data-root=/wsl/k8s-data/docker"
 ```
-
-* https://docs.docker.com/engine/reference/commandline/dockerd/
 
 ## 3. 不要设置 `DOCKER_HOST` 环境变量
 

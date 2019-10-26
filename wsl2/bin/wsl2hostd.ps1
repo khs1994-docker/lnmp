@@ -47,6 +47,7 @@ switch ($args[0]) {
   start {_start}
 
   stop {
+    $ErrorActionPreference="SilentlyContinue"
     kill $(cat $PIDFILE)
     rm $PIDFILE
     sleep 2

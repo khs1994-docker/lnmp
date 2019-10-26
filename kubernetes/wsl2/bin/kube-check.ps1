@@ -5,7 +5,7 @@ if(!$?){
   # k8s-data 是否安装
   wsl -d k8s-data -- echo 'k8s-data exists'
   if(!$?){
-    "==> k8s-data not found"
+    "==> k8s-data not found, please see README.SERVER.md"
 
     exit 1
   }
@@ -13,7 +13,7 @@ if(!$?){
   wsl -- sh -c "df -h | grep '/c'"
 
   if(!$?){
-    "==> mount is error"
+    "==> mount is error, please check wsl [ /etc/wsl.conf ], and see README.SERVER.md"
 
     exit 1
   }
