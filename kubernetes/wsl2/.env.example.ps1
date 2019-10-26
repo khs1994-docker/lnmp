@@ -1,7 +1,6 @@
 # 请同步更改
-# `.env` 中的 K8S_ROOT=/opt/k8s
-# `../systemd/.env` 中的 K8S_ROOT=/opt/k8s
-$K8S_ROOT='/opt/k8s'
+# `.env` 中的 K8S_ROOT=/wsl/k8s-data/k8s
+$K8S_ROOT='/wsl/k8s-data/k8s'
 
 # Windows 固定 IP
 $WINDOWS_HOST="192.168.199.100"

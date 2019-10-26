@@ -5,6 +5,7 @@
 * Windows 固定 IP `192.168.199.100` (`.env.ps1 $WINDOWS_HOST 变量`)
 * `apiServer` 通过 `kube-nginx` 代理到 `https://192.168.199.100:16443`（避免与桌面版 Docker 的 Kubernetes 冲突（127.0.0.1:6443 端口））
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
+* 新建 `k8s-data` WSL 发行版用于存储数据
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
 
 ## 将 `Ubuntu-18.04` 设为版本 2 ,并设置为默认 wsl
@@ -30,6 +31,36 @@ $ wsl --set-version Ubuntu-18.04 2
 * `kube-apiserver` WSL2
 * `kube-controller-manager` WSL2
 * `kube-scheduler` WSL2
+
+## 新建 `k8s-data` WSL2 发行版
+
+* https://gitee.com/love_linger/WSL-Launcher
+
+`launcher.json`
+
+```json
+{
+    "distro": "k8s-data",
+    "repo": "library/alpine"
+}
+```
+
+由于 WSL 存储机制，硬盘空间不能回收，我们将数据放到 `k8s-data`，若不再需要 `k8s` 直接删除 `k8s-data` 即可。
+
+## WSL 配置挂载路径
+
+`/etc/wsl.conf`
+
+* https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
+
+```diff
+- root = /mnt
++ root = /
+```
+
+```bash
+$ wsl --shutdown
+```
 
 ## 安装 Docker 和 docker-compose
 
@@ -64,16 +95,21 @@ $ docker-compose up cfssl-wsl2
 ## `WSL2` 文件准备
 
 ```bash
+$ ./wsl2/bin/kube-check
+
 $ wsl
 
+$ set -x
 $ source wsl2/.env
-$ sudo mkdir -p ${K8S_ROOT:-/opt/k8s}/{certs,conf,bin,log}
-$ sudo cp -a wsl2/certs ${K8S_ROOT:-/opt/k8s}/
-$ sudo mv ${K8S_ROOT:-/opt/k8s}/certs/*.yaml ${K8S_ROOT:-/opt/k8s}/conf
-$ sudo mv ${K8S_ROOT:-/opt/k8s}/certs/*.kubeconfig ${K8S_ROOT:-/opt/k8s}/conf
-$ sudo sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.yaml
 
-$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:-/opt/k8s}/bin
+$ sudo mkdir -p ${K8S_ROOT:?err}
+$ sudo mkdir -p ${K8S_ROOT:?err}/{certs,conf,bin,log}
+$ sudo cp -a wsl2/certs ${K8S_ROOT:?err}/
+$ sudo mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
+$ sudo mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
+$ sudo sed -i "s#/opt/k8s#${K8S_ROOT:?err}#g" ${K8S_ROOT:?err}/conf/kube-scheduler.yaml
+
+$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
 ## Windows 启动 Etcd
@@ -120,7 +156,9 @@ $ ./wsl2/kube-scheduler start
 
 上面运行于 `WSL2` 中的组件，启动时会占据窗口，我们可以使用 `supervisord` 管理这些组件，避免窗口占用
 
-配置 `supervisor` 请查看 `~/lnmp/docs/supervisord.md`
+### 安装配置 `supervisor`
+
+**请查看 `~/lnmp/docs/supervisord.md`**
 
 ### 命令封装
 

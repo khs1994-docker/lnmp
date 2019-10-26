@@ -43,6 +43,14 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 # $ kubectl --kubeconfig .\rpi\certs\kubectl.kubeconfig get csr --sort-by='{.metadata.creationTimestamp}'
 #
 
+wsl -- sh -c "command -v runc > /dev/null 2>&1"
+
+if(!$?){
+  Write-Warning "==> runc not found, please install docker-ce first"
+
+  exit 1
+}
+
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 
 echo "[program:kubelet]

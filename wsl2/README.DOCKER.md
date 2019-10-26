@@ -2,7 +2,7 @@
 
 > 使用 Docker 桌面版启动 WSL2 Docker 或者直接在 WSL2 安装 Docker
 
-由于 Docker 桌面版启动 WSL2 Docker 仍需运行 Docker 桌面版，无端占用资源，实际上完全可以不用 Docker 桌面版。可以在 WSL2 手动安装 Docker，按照 Linux 上安装 Docker 的教程操作即可，这里不再赘述。
+由于 Docker 桌面版启动 WSL2 Docker 仍需运行 Docker 桌面版，无端占用资源，实际上完全可以不用 Docker 桌面版(但仍需安装，只是不用启动) 启动 WSL2 Docker。可以在 WSL2 手动安装 Docker，按照 Linux 上安装 Docker 的教程操作即可，这里不再赘述。
 
 ## 说明
 
@@ -42,6 +42,8 @@ DOCKER_OPTS="--registry-mirror=https://dockerhub.azk8s.cn --host tcp://0.0.0.0:2
 设置过的取消
 
 ## 4. 新增 docker context
+
+Windows `~/.docker/config.json` 增加 `"experimental": "enabled"`
 
 ```bash
 $ docker context create wsl2 --description "wsl2" --docker "host=tcp://localhost:2375"

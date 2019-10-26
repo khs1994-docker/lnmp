@@ -66,6 +66,6 @@ try{
   cd $source
 }catch {
   Write-Warning $_
-  "==> wsl2 is running, please shutdown wsl( $ wsl --shutdown ),then rerun"
+  "==> wsl2 is running, please shutdown wsl( $ wsl --shutdown ),then rerun this command"
   cd $source
 }

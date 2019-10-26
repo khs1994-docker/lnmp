@@ -26,7 +26,7 @@ systemd:
         ExecStartPre=bash -c "if ! [ `/usr/local/bin/kube-containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/kube-containerd; fi"
         ExecStartPre=bash -c "if ! [ -f /usr/local/bin/kube-containerd ];then \
           rm -rf /tmp/bin ;\
-          tar -zxvf /home/core/.lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz \
+          tar -zxvf /home/core/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz \
           -C /tmp ;\
           cp /tmp/bin/containerd /tmp/bin/kube-containerd ; \
           cp /tmp/bin/containerd-shim /tmp/bin/kube-containerd-shim ; \
@@ -105,7 +105,7 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/cni/10-flannel.conflist
-    - path: /home/core/.lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
+    - path: /home/core/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
       mode: 0644
       contents:
         compression: null

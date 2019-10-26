@@ -4,7 +4,8 @@
 # $K8S_ETCD_HOST="192.168.199.100"
 $K8S_ROOT=$PSScriptRoot
 
-mkdir -Force "$HOME/.k8s-wsl2/log" | out-null
+mkdir -Force "$HOME/.khs1994-docker-lnmp/k8s-wsl2/etcd" | out-null
+mkdir -Force "$HOME/.khs1994-docker-lnmp/k8s-wsl2/log" | out-null
 
 if($args[0] -eq 'stop'){
   stop-process (get-process etcd).Id
@@ -14,10 +15,10 @@ if($args[0] -eq 'stop'){
 
 Start-Process -FilePath etcd `
   -WindowStyle Hidden `
-  -RedirectStandardError "$HOME/.k8s-wsl2/log/etcd-err.log" `
-  -RedirectStandardOutput "$HOME/.k8s-wsl2/log/etcd.log" `
-  -WorkingDirectory "$HOME/.k8s-wsl2" `
-  -ArgumentList (Write-Output --data-dir="$HOME/.k8s-wsl2" `
+  -RedirectStandardError "$HOME/.khs1994-docker-lnmp/k8s-wsl2/log/etcd-err.log" `
+  -RedirectStandardOutput "$HOME/.khs1994-docker-lnmp/k8s-wsl2/log/etcd.log" `
+  -WorkingDirectory "$HOME/.khs1994-docker-lnmp/k8s-wsl2/etcd" `
+  -ArgumentList (Write-Output --data-dir="$HOME/.khs1994-docker-lnmp/k8s-wsl2/etcd" `
   --enable-v2=true `
   --name="node1" `
   --listen-peer-urls="https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `

@@ -110,7 +110,7 @@ storage:
           addr-gen-mode=stable-privacy
           dns-search=
           method=auto
-    - path: /home/core/.lnmp/caches/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
+    - path: /home/core/.khs1994-docker-lnmp/caches/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
       mode: 0644
       contents:
         compression: null

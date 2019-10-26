@@ -14,7 +14,7 @@ dist: xenial
 cache:
   directories:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
-    - /home/travis/.lnmp/caches
+    - /home/travis/.khs1994-docker-lnmp/caches
 
 before_install:
   # remove some apt source
@@ -23,7 +23,7 @@ before_install:
   - sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
   - sestatus || true
-  - ls /home/travis/.lnmp/caches
+  - ls /home/travis/.khs1994-docker-lnmp/caches
   - echo $PATH
 
   - sudo netstat -lnpt

@@ -44,12 +44,12 @@ Function _write_host(){
 ping -n 1 wsl2 | out-null
 
 if ($?){
-  "==> not changed, skip"
+  "==> WSL2 ip not changed, skip"
   return
 }
 
 ""
-"==> write hosts to [ $hosts_path ]"
+"==> write WSL2 ip to [ $hosts_path ]"
 
 $exists_hosts_content_array=get-content $hosts_path
 
@@ -69,9 +69,9 @@ if( $begin_line  -and $end_line){
 
   $exists_hosts_content_array[$begin_line + 1] = "$wsl2_ip wsl2 $WSL2_DOMAIN"
 
-  Set-Content -Path $env:TEMP/.k8s-wsl2-hosts -Value $exists_hosts_content_array
+  Set-Content -Path $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts -Value $exists_hosts_content_array
 
-  _sudo "cp $env:TEMP/.k8s-wsl2-hosts $hosts_path"
+  _sudo "cp $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts $hosts_path"
 
   exit
 }

@@ -2,6 +2,7 @@
 
 ## 注意事项
 
+* 新建 `k8s-data` WSL 发行版用于存储数据
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
 * WSL2 IP 变化时必须重启 `kube-nginx`
 * Windows 固定 IP `192.168.199.100` (`.env.ps1 $WINDOWS_HOST 变量`)
@@ -17,16 +18,27 @@
 
 ## node
 
+### 设置 PATH
+
+```bash
+$ vim ~/.bashrc
+
+export PATH=/wsl/k8s-data/k8s/bin:$PATH
+```
+
 ### 复制文件
 
 ```bash
 $ wsl
 
+$ set -x
 $ source ./wsl2/.env
 
-$ sudo mkdir -p ${K8S_ROOT:-/opt/k8s}/bin
-$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} ${K8S_ROOT:-/opt/k8s}/bin
+$ sudo mkdir -p ${K8S_ROOT:?err}/bin
+$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} ${K8S_ROOT:?err}/bin
 ```
+
+在 `Windows` 中执行
 
 ```powershell
 $ $items="kubelet-config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld.pem","flanneld-key.pem"
@@ -37,10 +49,6 @@ $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ### join
 
 ```bash
-# 编辑 systemd/.env
-
-KUBE_APISERVER=https://192.168.199.100:16443
-
 $ wsl
 
 $ ./lnmp-k8s join 192.168.199.100 --containerd --skip-cp-k8s-bin

@@ -18,6 +18,25 @@ if(!$?){
   exit
 }
 
+wsl -- bash -c "ls /lib/modules/`$(uname -r)/modules.builtin"
+
+if(!$?){
+  Write-Warning "
+==> please update your WSL2 kernel, please see wsl2/README.KERNEL.md
+
+"
+
+  exit 1
+}
+
+wsl -- sh -c "command -v runc > /dev/null 2>&1"
+
+if(!$?){
+  Write-Warning "==> WSL2 runc not found, please install docker-ce first on WSL2"
+
+  exit 1
+}
+
 & $PSScriptRoot/wsl2host --write
 
 & $PSScriptRoot/supervisorctl g
