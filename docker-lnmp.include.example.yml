@@ -27,6 +27,11 @@ services:
   #     - type: volume
   #       source: laravel_vendor
   #       target: /app/laravel/vendor
+  #     - git-sync-data:/app/git-sync
+
+  # nginx:
+  #   volumes:
+  #   - git-sync-data:/app/git-sync
 
   # composer:
   #   << : *php7

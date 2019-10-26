@@ -338,15 +338,16 @@ _get_compose_options(){
   for compose_file in $LREW_INCLUDE
   do
     # COMPOSE_FILE=$(echo $compose_file | tr '[a-z]' '[A-Z]')
+    local PACKAGE=$(echo ${compose_file^^} | tr '-' '_')
 
     if [ -d vendor/lrew-dev/$compose_file ];then
       LREW_INCLUDE_ROOT="vendor/lrew-dev/$compose_file"
       # set env
-      cat .env | grep -q "LREW_${compose_file^^}_VENDOR=lrew-dev" && true || echo "LREW_${compose_file^^}_VENDOR=lrew-dev" >> .env
+      cat .env | grep -q "LREW_${PACKAGE}_VENDOR=lrew-dev" && true || echo "LREW_${PACKAGE}_VENDOR=lrew-dev" >> .env
     elif [ -d vendor/lrew/$compose_file ];then
       LREW_INCLUDE_ROOT="vendor/lrew/$compose_file"
       # unset env
-      sed -i "s#^LREW_${compose_file^^}_VENDOR.*##g" .env
+      sed -i "s#^LREW_${PACKAGE}_VENDOR.*##g" .env
     elif [ -d lrew/$compose_file ];then
       LREW_INCLUDE_ROOT="lrew/$compose_file"
     else
@@ -1167,7 +1168,7 @@ _lrew_init(){
   fi
 
   local items="docker-compose.yml docker-compose.override.yml docker-compose.build.yml"
-  local PACKAGE=$(echo $package | tr '[a-z]' '[A-Z]')
+  local PACKAGE=$(echo $package | tr '[a-z]' '[A-Z]' | tr '-' '_')
 
   for item in $items
   do

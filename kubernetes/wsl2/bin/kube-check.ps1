@@ -3,9 +3,9 @@ wsl -- sh -c "df -h | grep '/wsl/k8s-data'"
 # k8s-data 未挂载
 if(!$?){
   # k8s-data 是否安装
-  wsl -d k8s-data -- echo 'k8s-data exists'
+  wsl -d k8s-data -- echo 'WSL2 dist k8s-data exists'
   if(!$?){
-    "==> k8s-data not found, please see README.SERVER.md"
+    "==> WSL2 dist k8s-data not found, please see README.SERVER.md"
 
     exit 1
   }
@@ -13,11 +13,12 @@ if(!$?){
   wsl -- sh -c "df -h | grep '/c'"
 
   if(!$?){
-    "==> mount is error, please check wsl [ /etc/wsl.conf ], and see README.SERVER.md"
+    "==> mount is error, please check WSL [ /etc/wsl.conf ], and see README.SERVER.md"
 
     exit 1
   }
 Start-Process -FilePath "wsl" -Argumentlist "-d","k8s-data","--","sh","-c","'while sleep 1000; do : ; done'" -WindowStyle Hidden
+sleep 1
 }else{
-  "==> k8s-data check pass"
+  "==> WSL2 dist k8s-data check passed"
 }

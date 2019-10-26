@@ -422,7 +422,7 @@ Function get_compose_options($compose_files,$isBuild=0){
   }
   Foreach ($item in $LREW_INCLUDE)
   {
-    $KEY="LREW_${item}_VENDOR".ToUpper();
+    $KEY="LREW_$($item -Replace ('-','_'))_VENDOR".ToUpper();
     $content=$(cat .env | Where-Object {$_ -like "${KEY}=lrew-dev"})
 
     if(Test-Path $PSScriptRoot/vendor/lrew-dev/$item){
@@ -524,10 +524,10 @@ Function _lrew_init($package=$null){
      $file="vendor/lrew-dev/$package/$item"
 
      @(Get-Content $file) -replace `
-       'LREW_EXAMPLE_VENDOR',"LREW_${package}_VENDOR".ToUpper() | Set-Content $file
+       'LREW_EXAMPLE_VENDOR',"LREW_$( $package -Replace('-','_'))_VENDOR".ToUpper() | Set-Content $file
 
      @(Get-Content $file) -replace `
-       'LNMP_EXAMPLE_',"LNMP_${package}_".ToUpper() | Set-Content $file
+       'LNMP_EXAMPLE_',"LNMP_$( $package -Replace('-','_'))_".ToUpper() | Set-Content $file
 
      @(Get-Content $file) -replace `
        'example/',"${package}/" | Set-Content $file
@@ -633,7 +633,7 @@ Function _wsl2_docker_init(){
   }
 }
 
-if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT") -and (Test-Path $HOME\.docker\config.json)){
+if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT" -or $PSVersionTable.Platform -eq $null) -and (Test-Path $HOME\.docker\config.json)){
   $docker_current_context=(ConvertFrom-Json -InputObject (get-content $HOME\.docker\config.json -Raw)).currentContext
 
   if ($docker_current_context -eq "wsl"){
