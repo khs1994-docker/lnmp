@@ -72,8 +72,7 @@ oom_score = 0
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
             SystemdCgroup = true
-            # BinaryName = "kube-containerd-shim"
-            # BinaryName = "containerd-shim-runc-v1"
+            # BinaryName = ""
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"
@@ -83,8 +82,7 @@ oom_score = 0
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1.options]
             SystemdCgroup = true
-            # BinaryName = "kube-containerd-shim"
-            # BinaryName = "containerd-shim-runc-v1"
+            # BinaryName = ""
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux]
           runtime_type = "io.containerd.runtime.v1.linux"
           # runtime_type = "io.containerd.runc.v1"
@@ -94,8 +92,7 @@ oom_score = 0
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux.options]
             SystemdCgroup = true
-            # BinaryName = "kube-containerd-shim"
-            # BinaryName = "containerd-shim-runc-v1"
+            # BinaryName = ""
     [plugins."io.containerd.grpc.v1.cri".cni]
       bin_dir = "/usr/libexec/cni"
       conf_dir = "/opt/k8s/cni/net.d"
