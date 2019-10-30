@@ -211,8 +211,8 @@ case "$1" in
       --nic1 bridged \
       --nic2 hostonly \
       --bridgeadapter1 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || echo ) \
-      --hostonlyadapter2 vboxnet1
-      # --firmware efi
+      --hostonlyadapter2 vboxnet1 \
+      --firmware efi
 
       VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 20000
 

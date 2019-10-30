@@ -17,8 +17,7 @@ systemd:
         WorkingDirectory=/tmp
         ExecStartPre=bash -c "if ! [ `/usr/local/bin/containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/containerd; fi"
         ExecStartPre=bash -c "if ! [ -f /usr/local/bin/containerd ];then \
-          curl -O https://mirrors.aliyun.com/docker-ce/linux/fedora/30/x86_64/test/Packages/containerd.io-1.2.6-3.3.fc30.x86_64.rpm; \
-            rpm2cpio containerd.io-1.2.6-3.3.fc30.x86_64.rpm | cpio -div ; \
+            rpm2cpio /home/core/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm | cpio -div ; \
             cp usr/bin/containerd /usr/local/bin ; \
             cp usr/bin/containerd-shim /usr/local/bin ; \
           fi"
@@ -110,3 +109,8 @@ storage:
       contents:
         compression: null
         source: http://{{SERVER_HOST}}:8080/releases/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
+    - path: /home/core/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm
+      mode: 0644
+      contents:
+        compression: null
+        source: http://{{SERVER_HOST}}:8080/releases/containerd.io-1.2.10-3.2.fc30.x86_64.rpm

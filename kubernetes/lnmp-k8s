@@ -743,6 +743,13 @@ _runc_install(){
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/kube-containerd;fi
 
+  local RPM_USE_BY_COREOS="containerd.io-1.2.10-3.2.fc30.x86_64.rpm"
+  if ! [ -f ${TMP_ROOT}/${RPM_USE_BY_COREOS} ];then
+     print_info "download containerd rpm"
+     $(_sudo) curl -fsSL -o ${TMP_ROOT}/${RPM_USE_BY_COREOS} \
+     https://mirrors.aliyun.com/docker-ce/linux/fedora/30/x86_64/test/Packages/${RPM_USE_BY_COREOS}
+  fi
+
   if [ -f /usr/bin/containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd already install"; \
     containerd --version; \
