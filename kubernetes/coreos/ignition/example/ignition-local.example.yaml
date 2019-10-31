@@ -521,7 +521,7 @@ storage:
           portRange: ""
           # kubeProxyIPTablesConfiguration:
           #  masqueradeAll: false
-          #kubeProxyIPVSConfiguration:
+          # kubeProxyIPVSConfiguration:
           #  scheduler: rr
           #  excludeCIDRs: []
     - path: ${K8S_ROOT}/bin/kubectl

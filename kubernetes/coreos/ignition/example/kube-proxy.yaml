@@ -23,7 +23,6 @@ systemd:
 
         ExecStart=${K8S_ROOT}/bin/kube-proxy \
         --config=${K8S_ROOT}/conf/kube-proxy.config.yaml \
-        --logtostderr=true \
         --v=2
 
         Restart=on-failure

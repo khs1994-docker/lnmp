@@ -15,6 +15,6 @@ mode: "ipvs"
 portRange: ""
 # kubeProxyIPTablesConfiguration:
 #  masqueradeAll: false
-#kubeProxyIPVSConfiguration:
+# kubeProxyIPVSConfiguration:
 #  scheduler: rr
 #  excludeCIDRs: []

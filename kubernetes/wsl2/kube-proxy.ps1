@@ -11,9 +11,12 @@ $wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut 
 
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 
+# WARNING: all flags other than
+# --config,
+# --write-config-to,
+# and --cleanup are deprecated. Please begin using a config file ASAP.
 $command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-proxy `
 --config=${K8S_WSL2_ROOT}/conf/kube-proxy.config.yaml `
---logtostderr=true `
 --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
