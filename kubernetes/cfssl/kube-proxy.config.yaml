@@ -1,3 +1,4 @@
+# https://github.com/kubernetes/kubernetes/blob/master/pkg/proxy/apis/config/types.go
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
@@ -12,8 +13,8 @@ clusterCIDR: 172.30.0.0/16
 hostnameOverride: ##NODE_NAME##
 mode: "ipvs"
 portRange: ""
-kubeProxyIPTablesConfiguration:
-  masqueradeAll: false
-kubeProxyIPVSConfiguration:
-  scheduler: rr
-  excludeCIDRs: []
+# kubeProxyIPTablesConfiguration:
+#  masqueradeAll: false
+#kubeProxyIPVSConfiguration:
+#  scheduler: rr
+#  excludeCIDRs: []

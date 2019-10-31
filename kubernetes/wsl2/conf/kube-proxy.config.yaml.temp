@@ -10,11 +10,11 @@ metricsBindAddress: ##NODE_IP##:10249
 enableProfiling: true
 clusterCIDR: 172.30.0.0/16
 hostnameOverride: ##NODE_NAME##
+portRange: ""
 mode: "ipvs"
 # mode: "iptables"
-portRange: ""
-kubeProxyIPTablesConfiguration:
-  masqueradeAll: false
-kubeProxyIPVSConfiguration:
-  scheduler: rr
-  excludeCIDRs: []
+# kubeProxyIPTablesConfiguration:
+#  masqueradeAll: false
+# kubeProxyIPVSConfiguration:
+#  scheduler: rr
+#  excludeCIDRs: []

@@ -7,7 +7,7 @@ $K8S_S_HOST=$wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
 $command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-scheduler `
---config=${K8S_ROOT}/conf/kube-scheduler.yaml `
+--config=${K8S_ROOT}/conf/kube-scheduler.config.yaml `
 --bind-address=${K8S_S_HOST} `
 --secure-port=10259 `
 --port=0 `

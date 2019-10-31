@@ -8,11 +8,11 @@ $NODE_NAME="wsl2"
 # $K8S_ROOT="/opt/k8s"
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 
-(Get-Content $PSScriptRoot/conf/kubelet-config.yaml.temp) `
+(Get-Content $PSScriptRoot/conf/kubelet.config.yaml.temp) `
     -replace "##NODE_NAME##",$NODE_NAME `
     -replace "##NODE_IP##",$wsl_ip `
     -replace "##K8S_ROOT##",$K8S_ROOT `
-  | Set-Content $PSScriptRoot/conf/kubelet-config.yaml
+  | Set-Content $PSScriptRoot/conf/kubelet.config.yaml
 
 wsl -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
 wsl -u root -- `
@@ -25,7 +25,7 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
 --root-dir=${K8S_ROOT}/var/lib/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
---config=${K8S_WSL2_ROOT}/conf/kubelet-config.yaml `
+--config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
 --hostname-override=${NODE_NAME} `
 --image-pull-progress-deadline=15m `
 --volume-plugin-dir=${K8S_ROOT}/var/lib/kubelet/kubelet-plugins/volume/exec/ `

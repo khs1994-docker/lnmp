@@ -107,7 +107,7 @@ $ sudo mkdir -p ${K8S_ROOT:?err}/{certs,conf,bin,log}
 $ sudo cp -a wsl2/certs ${K8S_ROOT:?err}/
 $ sudo mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
 $ sudo mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
-$ sudo sed -i "s#/opt/k8s#${K8S_ROOT:?err}#g" ${K8S_ROOT:?err}/conf/kube-scheduler.yaml
+$ sudo sed -i "s#/opt/k8s#${K8S_ROOT:?err}#g" ${K8S_ROOT:?err}/conf/kube-scheduler.config.yaml
 
 $ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
