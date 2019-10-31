@@ -234,6 +234,7 @@ Commands:
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   env                  Edit .env/.env.ps1 file
   help                 Display this help message
+  hosts                Open hosts files
   pull                 Pull LNMP Docker Images
   restore              Restore MySQL databases
   restart              Restart LNMP services
@@ -1327,6 +1328,12 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
         & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options run -w $WORKING_DIR --rm composer $COMPOSER_COMMAND}
       }
+
+    hosts {
+      Start-Process -FilePath "notepad.exe" `
+        -ArgumentList "C:\Windows\System32\drivers\etc\hosts" `
+        -Verb RunAs
+    }
 
     default {
         #@custom

@@ -44,6 +44,9 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
 --logtostderr=true `
 --v=2
 
+# 调为 1h, 方便查看 kubelet 证书轮转
+# --experimental-cluster-signing-duration=876000h `
+
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 
 echo "[program:kube-controller-manager]

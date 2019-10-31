@@ -27,7 +27,7 @@ module.exports = {
         link: '/storage/'
       },
       {
-        text: '工作节点',
+        text: '节点',
         link: '/node/',
       },
       {
@@ -45,8 +45,8 @@ module.exports = {
     ],
     sidebar: {
       '/guide/': [
-        'install',
         'coreos',
+        'etcd',
         'systemd',
         'docker-desktop',
         'endpoints',
@@ -93,12 +93,22 @@ module.exports = {
         "storage-classes",
       ],
       "/node/": [
+        'flanneld',
         "kubelet",
         "worker",
         "runtime",
         "oci_runtime",
         "cni",
         "crictl",
+        {
+          title: "master 节点",
+          collapsable: false,
+          children: [
+            "/server/kube-apiserver",
+            "/server/kube-controller-manager",
+            "/server/kube-scheduler",
+          ],
+        },
       ],
     },
     sidebarDepth: 1,
