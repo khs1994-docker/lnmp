@@ -2,9 +2,11 @@
 
 ## 注意事项
 
-* Windows 固定 IP `192.168.199.100` (`.env.ps1 $WINDOWS_HOST 变量`)
-* `apiServer` 通过 `kube-nginx` 代理到 `https://192.168.199.100:16443`（避免与桌面版 Docker 的 Kubernetes 冲突（127.0.0.1:6443 端口））
+* `wsl2.lnmp.khs1994.com` 解析到 WSL2 IP
+* `windows.lnmp.khs1994.com` 解析到 Windows IP
+* k8s 入口为 **域名** `wsl2.lnmp.khs1994.com:6443` `windows.lnmp.khs1994.com:16443(kube-nginx 代理)`
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
+* WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 新建 `k8s-data` WSL 发行版用于存储数据
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
 
@@ -20,11 +22,7 @@ $ wsl --set-default Ubuntu-18.04
 $ wsl --set-version Ubuntu-18.04 2
 ```
 
-## 编辑 `.env` `.env.ps1` 文件
-
-* 替换 `192.168.199.100` 为你 Windows 固定 IP
-
-## Master `192.168.199.100`
+## Master
 
 * `Etcd` Windows
 * `kube-nginx` Windows
@@ -212,10 +210,10 @@ $ ./wsl2/bin/supervisorctl start kube-server:
 
 ### 5. 设置 ~/.kube/config
 
-执行以下命令,根据提示设置
+将 WSL2 K8S 配置写入 `~/.kube/config`
 
 ```bash
-$ ./wsl2/bin/kubectl-config-set-cluster.ps1
+$ ./wsl2/bin/kubectl-config-set-cluster
 ```
 
 ## 组件启动方式总结

@@ -1,7 +1,7 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-# $K8S_ETCD_HOST="192.168.199.100"
+$K8S_ETCD_HOST="127.0.0.1"
 $K8S_ROOT=$PSScriptRoot
 
 mkdir -Force "$HOME/.khs1994-docker-lnmp/k8s-wsl2/etcd" | out-null
@@ -22,12 +22,12 @@ Start-Process -FilePath etcd `
   --enable-v2=true `
   --name="node1" `
   --listen-peer-urls="https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `
-  --listen-client-urls="${K8S_ETCD_ENTRYPOINTS},http://127.0.0.1:${K8S_ETCD_LISTEN_CLIENT_PORT}" `
+  --listen-client-urls="https://0.0.0.0:${K8S_ETCD_LISTEN_CLIENT_PORT},http://127.0.0.1:${K8S_ETCD_LISTEN_CLIENT_PORT}" `
   --initial-advertise-peer-urls="https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `
   --initial-cluster="node1=https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `
   --initial-cluster-state="new" `
   --initial-cluster-token="mytoken" `
-  --advertise-client-urls="$K8S_ETCD_ENTRYPOINTS" `
+  --advertise-client-urls="http://${K8S_ETCD_HOST}:${K8S_ETCD_LISTEN_CLIENT_PORT}" `
   --cert-file="${K8S_ROOT}/certs/etcd.pem" `
   --key-file="${K8S_ROOT}/certs/etcd-key.pem" `
   --client-cert-auth=true `

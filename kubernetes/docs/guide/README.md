@@ -32,6 +32,9 @@ $ ETCDCTL_API=3 etcdctl \
     --key=/etc/kubernetes/certs/etcd-key.pem endpoint health
 ```
 
+- **2379**
+- **2380**
+
 ### flannel
 
 第二步启动 `flannel` 配置 Docker 网段
@@ -120,6 +123,8 @@ $ kubectl get endpoints kube-scheduler --namespace=kube-system  -o yaml
 - **10251** http 端口
 - **10259** https 端口
 
+两个接口都对外提供 `/metrics` 和 `/healthz` 的访问
+
 ## Worker
 
 ### kube-proxy
@@ -131,8 +136,8 @@ tcp        0      0 192.168.199.100:10249   0.0.0.0:*               LISTEN      
 tcp        0      0 192.168.199.100:10256   0.0.0.0:*               LISTEN      26034/kube-proxy
 ```
 
-- 10249：http prometheus metrics port;
-- 10256：http healthz port;
+- **10249** http prometheus metrics port;
+- **10256** http healthz port;
 
 ### kubelet
 
@@ -154,7 +159,7 @@ tcp        0      0 127.0.0.1:35843         0.0.0.0:*               LISTEN      
 
 #### 自动生成的证书
 
-而 `kubelet` 与 `apiserver` 通讯所使用的证书为 `kubelet-client.crt` 剩下的 `kubelet.crt` 将会被用于 kubelet server(10250) 做鉴权使用
+`kubelet` 与 `apiserver` 通讯所使用的证书为 `kubelet-client.crt` 剩下的 `kubelet.crt` 将会被用于 kubelet server(10250) 做鉴权使用
 
 ## Test k8s Cluster
 

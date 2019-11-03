@@ -2,9 +2,11 @@
 . $PSScriptRoot/.env.ps1
 
 # $K8S_ROOT="/opt/k8s"
-# $K8S_ETCD_ENTRYPOINTS="https://192.168.199.100:2379"
+# $K8S_ETCD_ENTRYPOINTS="https://x.x.x.x:2379"
 
 wsl -u root -- mkdir --parents /var/lib/coreos /run/flannel
+
+$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
 
 $env:ETCDCTL_API=2
 
@@ -40,8 +42,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:flanneld]
 
 command=$command
-stdout_logfile=${K8S_ROOT}/log/flanneld-stdout.log
-stderr_logfile=${K8S_ROOT}/log/flanneld-error.log
+stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/flanneld-stdout.log
+stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/flanneld-error.log
 directory=/
 autostart=false
 autorestart=false
@@ -50,11 +52,13 @@ user=root
 startsecs=10" > $PSScriptRoot/supervisor.d/flanneld.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
+  & $PSScriptRoot/bin/wsl2host-check
   wsl -u root -- supervisorctl start kube-node:flanneld
 
   exit
 }
 
 if($args[0] -eq 'start'){
+  & $PSScriptRoot/bin/wsl2host-check
   wsl -u root -- bash -c $command
 }

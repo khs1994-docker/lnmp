@@ -1,4 +1,4 @@
-wsl -- sh -c "df -h | grep '/wsl/k8s-data'"
+wsl -- sh -c "df -h | grep -q '/wsl/k8s-data'"
 
 # k8s-data 未挂载
 if(!$?){
@@ -10,7 +10,7 @@ if(!$?){
     exit 1
   }
   # 检查挂载路径
-  wsl -- sh -c "df -h | grep '/c'"
+  wsl -- sh -c "df -h | grep -q '/c'"
 
   if(!$?){
     "==> mount is error, please check WSL [ /etc/wsl.conf ], and see README.SERVER.md"

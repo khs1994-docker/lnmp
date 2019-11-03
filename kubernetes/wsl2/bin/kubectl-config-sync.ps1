@@ -15,12 +15,9 @@
 . $PSScriptRoot/../.env.example.ps1
 . $PSScriptRoot/../.env.ps1
 
-$source=PWD
-cd $HOME
+$WINDOWS_HOME_ON_WSL=powershell -c "cd $HOME ; wsl pwd"
 
 wsl -- mkdir -p ~/.kube
-wsl -- cp .kube/config ~/.kube/config
-
-cd $source
+wsl -- cp $WINDOWS_HOME_ON_WSL/.kube/config ~/.kube/config
 
 wsl -- ${K8S_ROOT}/bin/kubectl config get-contexts

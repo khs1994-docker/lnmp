@@ -8,6 +8,9 @@ if ($args[0] -eq 'stop'){
   exit
 }
 
+& $PSScriptRoot/wsl2host --write
+& $PSScriptRoot/wsl2host-check
+
 "==> check kube-server $KUBE_APISERVER"
 curl.exe -k --cacert /opt/k8s2/certs/ca.pem $KUBE_APISERVER
 
@@ -36,8 +39,6 @@ if(!$?){
 
   exit 1
 }
-
-& $PSScriptRoot/wsl2host --write
 
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update

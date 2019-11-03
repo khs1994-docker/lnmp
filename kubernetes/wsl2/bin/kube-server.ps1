@@ -66,6 +66,8 @@ _supervisor_checker
 _kube_nginx_checker
 _etcd_checker
 
+& $PSScriptRoot/wsl2host-check
+& $PSScriptRoot/wsl2host --write
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update
 

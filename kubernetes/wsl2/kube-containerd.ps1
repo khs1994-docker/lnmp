@@ -2,6 +2,7 @@
 . $PSScriptRoot/.env.ps1
 
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
+$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
 
 wsl -u root -- mkdir -p ${K8S_ROOT}/cni/net.d
 
@@ -21,8 +22,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-containerd]
 
 command=$command
-stdout_logfile=${K8S_ROOT}/log/kube-containerd-stdout.log
-stderr_logfile=${K8S_ROOT}/log/kube-containerd-error.log
+stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kube-containerd-stdout.log
+stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kube-containerd-error.log
 directory=/
 autostart=false
 autorestart=false

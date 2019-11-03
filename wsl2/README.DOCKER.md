@@ -73,7 +73,7 @@ $ ./lnmp-docker up
 `kubernetes/wsl2/.env.ps1` 自行添加要解析到 WSL2 的域名
 
 ```powershell
-$WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com","wsl2.docker.internal"
+$WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com"
 ```
 
 ## 8. 原理说明
@@ -86,7 +86,7 @@ $WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com","wsl2.docker.internal"
 `~/lnmp/.env`
 
 ```bash
-LNMP_XDEBUG_REMOTE_HOST=wsl2.docker.internal
+LNMP_XDEBUG_REMOTE_HOST=wsl2.lnmp.khs1994.com
 ```
 
 ## 文件权限

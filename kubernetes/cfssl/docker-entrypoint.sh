@@ -87,7 +87,7 @@ main (){
     }
   }' \
     | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
-       -hostname="wsl2,wsl,127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+       -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
 # client 无需提供 hosts
   export CN_NAME=client
@@ -130,7 +130,7 @@ main (){
     ]
 }' \
        | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
-      -profile=kubernetes -hostname="127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+      -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
 # flanneld (client) 连接 Etcd
   export CN_NAME=flanneld
@@ -199,7 +199,7 @@ main (){
     }]
     }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -profile=kubernetes -hostname="wsl2,wsl,127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
     cat > encryption-config.yaml <<EOF
 kind: EncryptionConfig
@@ -268,7 +268,7 @@ EOF
   }]
   }' \
   | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
-    -hostname="wsl2,wsl,127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-controller-manager
+    -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-controller-manager
 
 # system:kube-scheduler (server + client)
    # 1. 与 kube-apiserver 的安全端口通信
@@ -292,7 +292,7 @@ EOF
      }]
    }' \
   | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
-        -hostname="wsl2,wsl,127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-scheduler
+        -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare kube-scheduler
 
 # system:kube-proxy 无需传输到节点 (client)
    # 不提供 server

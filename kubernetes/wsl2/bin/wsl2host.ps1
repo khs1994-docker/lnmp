@@ -67,7 +67,7 @@ for ($i = 0; $i -lt $exists_hosts_content_array.Count; $i++) {
 if( $begin_line  -and $end_line){
   Write-Warning "==> old wsl2host already add on line: $begin_line - $end_line , update wsl2host to new $wsl2_ip ..."
 
-  $exists_hosts_content_array[$begin_line + 1] = "$wsl2_ip wsl2 $WSL2_DOMAIN"
+  $exists_hosts_content_array[$begin_line + 1] = "$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN"
 
   Set-Content -Path $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts -Value $exists_hosts_content_array
 
@@ -78,7 +78,7 @@ if( $begin_line  -and $end_line){
 
 $hosts_content="
 # add wsl2host by khs1994-docker/lnmp BEGIN
-$wsl2_ip wsl2 $WSL2_DOMAIN
+$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN
 # add wsl2host by khs1994-docker/lnmp END
 "
 
