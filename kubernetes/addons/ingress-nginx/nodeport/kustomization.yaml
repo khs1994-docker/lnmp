@@ -1,0 +1,4 @@
+bases:
+- ../base
+resources:
+- service-nodeport.yaml

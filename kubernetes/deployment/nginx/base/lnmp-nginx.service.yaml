@@ -34,6 +34,9 @@ spec:
     version: 0.0.1
 
   ports:
+  # - name: http3-udp
+  #   protocol: UDP
+  #   port: 443
   - name: https
     protocol: TCP
     port: 443

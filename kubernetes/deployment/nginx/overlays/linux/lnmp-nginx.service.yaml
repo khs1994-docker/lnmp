@@ -38,6 +38,10 @@ spec:
     tier: frontend
     version: 0.0.1
   ports:
+  # - name: http3-udp
+  #   protocol: UDP
+  #   port: 443
+  #   nodePort: 443
   - name: https
     protocol: TCP # UDP
     port: 443

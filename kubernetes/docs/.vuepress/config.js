@@ -65,6 +65,8 @@ module.exports = {
         'podman',
         'rpi',
         'kubectl',
+        '/resources/deployment',
+        '/resources/configMap',
       ],
       '/example/': [
         'nginx',

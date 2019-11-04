@@ -38,6 +38,7 @@ spec:
       - name: lnmp-nginx
         # image: khs1994/nginx:1.17.5-alpine
         image: "nginx:1.17.5-alpine"
+        # image: ranadeeppolavarapu/nginx-http3
         imagePullPolicy: IfNotPresent # Always
         args:
         - nginx
@@ -51,7 +52,11 @@ spec:
               key: TZ
         ports:
         - containerPort: 443
+          protocol: TCP
+        - containerPort: 443
+          protocol: UDP
         - containerPort: 80
+          protocol: TCP
         # securityContext:
         #   privileged: true
         volumeMounts:

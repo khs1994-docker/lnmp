@@ -35,15 +35,6 @@ add-node          Create node ignition yaml file [N] [master|node]
 new-vm            Create new VirtualBox vm [N]
 
 cleanup           Cleanup Cache
-
-Addons:
-
-coredns           Create coredns addons
-dashboard         Create dashboard addons [ token list ]
-efk               Create EFK addons [ list ]
-heapster          Create heapster addons [ list ]
-ingress-nginx     Create Ingress NGINX
-metrics-server    Create Metrics-server
 "
 }
 
@@ -85,79 +76,6 @@ cd .. > /dev/null
 }
 
 if [ "$1" = 'init' ];then _init ; exit; fi
-
-_efk(){
-  if [ "$1" = 'list' ];then
-    kubectl get pods -n kube-system -o wide|grep -E 'elasticsearch|fluentd|kibana'
-    exit
-
-  fi
-
-  cd ../addons/efk
-
-  kubectl apply -f .
-}
-
-_heapster(){
-  if [ "$1" = 'list' ];then
-    kubectl get pods -n kube-system | grep -E 'heapster|monitoring'
-    exit
-
-  fi
-
-  cd ../addons/heapster
-
-  kubectl apply -f .
-}
-
-_dashboard(){
-  if [ "$1" = 'token' ];then
-  set +e
-
-  sudo rm -rf $HOME/.kube/dashboard.kubeconfig
-
-  kubectl create sa dashboard-admin -n kube-system
-
-  kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
-
-  ADMIN_SECRET=$(kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}')
-
-  DASHBOARD_LOGIN_TOKEN=$(kubectl describe secret -n kube-system ${ADMIN_SECRET} | grep -E '^token' | awk '{print $2}')
-
-  echo ${DASHBOARD_LOGIN_TOKEN}
-
-  kubectl config set-cluster kubernetes \
-    --certificate-authority=cert/ca.pem \
-    --embed-certs=true \
-    --server=${KUBE_APISERVER:-https://192.168.57.110:6443} \
-    --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-
-  # 设置客户端认证参数，使用上面创建的 Token
-  kubectl config set-credentials dashboard_user \
-    --token=${DASHBOARD_LOGIN_TOKEN} \
-    --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-
-  # 设置上下文参数
-  kubectl config set-context default \
-    --cluster=kubernetes \
-    --user=dashboard_user \
-    --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-
-  # 设置默认上下文
-  kubectl config use-context default --kubeconfig=$HOME/.kube/dashboard.kubeconfig
-  exit
-  fi
-
-  if [ "$1" = 'list' ];then
-      kubectl get deployment kubernetes-dashboard  -n kube-system
-      kubectl --namespace kube-system get pods -o wide
-      kubectl get services kubernetes-dashboard -n kube-system
-      exit
-  fi
-
-  kubectl apply -f ../addons/dashboard.yaml
-
-}
 
 case "$1" in
 
@@ -229,33 +147,6 @@ case "$1" in
 
   cleanup )
     docker image rm ccr.ccs.tencentyun.com/khs1994/kubernetes:v${KUBERNETES_VERSION}
-  ;;
-
-  dashboard )
-   shift
-   set +e
-   _dashboard $@
-  ;;
-
-  efk )
-    shift
-    set +e
-    _efk $@
-  ;;
-
-  heapster )
-   shift
-   set +e
-   _heapster $@
-  ;;
-
-  ingress-nginx )
-
-    cd ../addons/ingress-nginx
-
-    kubectl apply -f ingress-nginx.yaml
-    kubectl apply -f service-nodeport.yaml
-
   ;;
 
   coredns )
