@@ -3,9 +3,9 @@ wsl -- sh -c "df -h | grep -q '/wsl/k8s-data'"
 # k8s-data 未挂载
 if(!$?){
   # k8s-data 是否安装
-  wsl -d k8s-data -- echo 'WSL2 dist k8s-data exists'
+  wsl -d k8s-data -- echo '==> WSL2 dist [ k8s-data ] exists'
   if(!$?){
-    "==> WSL2 dist k8s-data not found, please see README.SERVER.md"
+    "==> WSL2 dist [ k8s-data ] not found, please see README.SERVER.md"
 
     exit 1
   }
@@ -20,5 +20,14 @@ if(!$?){
 Start-Process -FilePath "wsl" -Argumentlist "-d","k8s-data","--","sh","-c","'while sleep 1000; do : ; done'" -WindowStyle Hidden
 sleep 1
 }else{
-  "==> WSL2 dist k8s-data check passed"
+  "==> WSL2 dist [ k8s-data ] check passed"
+}
+
+# docker desktop check
+foreach ($item in $(wsl -l --running)){
+  if($item -eq 'docker-desktop'){
+    Write-Warning "docker desktop running, exit"
+
+    exit 1
+  }
 }

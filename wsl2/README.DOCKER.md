@@ -1,15 +1,16 @@
 # WSL2
 
-> 使用 Docker 桌面版启动 WSL2 Docker 或者直接在 WSL2 安装 Docker
+* 1. 使用 Docker 桌面版启动 WSL2 Docker（在设置中启用）
+* 2. 直接在 WSL2 安装 Docker（按照 Linux 上安装 Docker 的教程操作即可，这里不再赘述。）
 
-由于 Docker 桌面版启动 WSL2 Docker 仍需运行 Docker 桌面版，无端占用资源，实际上完全可以不用 Docker 桌面版(但仍需安装，只是不用启动) 启动 WSL2 Docker。可以在 WSL2 手动安装 Docker，按照 Linux 上安装 Docker 的教程操作即可，这里不再赘述。
+> 两种方式启动的 Docker 相互冲突，请停止另一个并执行 `$ wsl --shutdown` 后重新启动。
 
 ## 说明
 
 * Docker 服务端(`dockerd`) 运行于 `WSL2`
 * 数据放到 `k8s-data` WSL2 发行版
 
-## 准备
+## 准备(自定义 DNS)
 
 * `etcd`
 * `coreDNS`
@@ -55,10 +56,8 @@ $ docker context use wsl2
 ```bash
 # $ wsl -u root -- service docker start
 
-$ ./wsl2/bin/dockerd-wsl2
+$ ./lnmp-docker dockerd start
 ```
-
-`./wsl2/bin/dockerd-wsl2` 脚本会执行一些初始化命令
 
 * 监听 WSL2 IP 变化,并写入 hosts
 

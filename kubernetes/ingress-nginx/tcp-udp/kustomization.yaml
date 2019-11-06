@@ -1,0 +1,13 @@
+configMapGenerator:
+- name: tcp-services
+  literals:
+    - 53=kube-system/kube-dns:53
+- name: udp-services
+  literals:
+    - 53=kube-system/kube-dns:53
+namespace: ingress-nginx
+commonLabels:
+  app.kubernetes.io/name: ingress-nginx
+  app.kubernetes.io/part-of: ingress-nginx
+generatorOptions:
+  disableNameSuffixHash: true

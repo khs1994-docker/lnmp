@@ -12,8 +12,8 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION="1.15.4"
-$DOCKER_DESKTOP_VERSION="2.1.4.0 (39357)"
+$KUBERNETES_VERSION="1.15.5"
+$DOCKER_DESKTOP_VERSION="2.1.5.0 (40323)"
 $source=$PWD
 
 Function _command($command){
@@ -275,6 +275,10 @@ ClusterKit:
 
 Developer Tools:
   cookbooks            Up local cookbooks server
+
+WSL2:
+
+  dockerd              Start Dockerd on WSL2
 
 Read './docs/*.md' for more information about CLI commands.
 
@@ -636,14 +640,6 @@ Function _wsl2_docker_init(){
 
 if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT" -or $PSVersionTable.Platform -eq $null) -and (Test-Path $HOME\.docker\config.json)){
   $docker_current_context=(ConvertFrom-Json -InputObject (get-content $HOME\.docker\config.json -Raw)).currentContext
-
-  if ($docker_current_context -eq "wsl"){
-    printInfo "Docker Engine run in WSL2 (start by docker desktop)"
-    $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_wsl"
-    _wsl2_docker_init
-    }else{
-      # $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_engine"
-  }
 
   if ($docker_current_context -eq "wsl2"){
     printInfo "Docker Engine run in WSL2 (start by $ service docker start)"
@@ -1333,6 +1329,10 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       Start-Process -FilePath "notepad.exe" `
         -ArgumentList "C:\Windows\System32\drivers\etc\hosts" `
         -Verb RunAs
+    }
+
+    dockerd {
+      & $PSScriptRoot/wsl2/bin/dockerd-wsl2.ps1 $other
     }
 
     default {

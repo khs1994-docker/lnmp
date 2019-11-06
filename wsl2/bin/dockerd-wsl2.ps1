@@ -15,10 +15,31 @@ if(!$?){
   exit 1
 }
 
-wsl -u root -- service docker start
+Function _start(){
+  wsl -u root -- service docker start
 
-$ErrorActionPreference="continue"
+  $ErrorActionPreference="continue"
 
-& $PSScriptRoot/wsl2hostd.ps1 stop
+  & $PSScriptRoot/wsl2hostd.ps1 stop
 
-& $PSScriptRoot/wsl2hostd.ps1 start
+  & $PSScriptRoot/wsl2hostd.ps1 start
+}
+
+Function _stop(){
+  wsl -u root -- service docker stop
+}
+
+switch ($args[0]) {
+  start {_start}
+  stop {_stop}
+  Default {
+"
+control Dockerd on WSL2
+
+COMMAND:
+
+start  Start Docker on WSL2
+stop   Stop  Docker on WSL2
+"
+  }
+}

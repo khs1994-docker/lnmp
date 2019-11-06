@@ -53,10 +53,24 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 ```
 
+* cli -> (http) -> ingress -> (http) -> backend
+* cli -> (https) -> ingress -> (http) -> backend
+* cli -> (https) -> ingress -> (https) -> backend
+
 ## Docker Registry Example
 
 ```bash
 $ kubectl apply -f ingress-nginx/registry.example.yaml
 
 $ kubectl apply -f ingress-nginx/ingress.example.yaml
+```
+
+## 4 层代理
+
+* https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/exposing-tcp-udp-services.md
+
+`tcp-udp`
+
+```bash
+$ host -t A nginx.lnmp.svc.cluster.local wsl2.lnmp.khs1994.com
 ```

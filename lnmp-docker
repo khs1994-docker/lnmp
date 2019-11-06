@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.15.4"
-readonly DOCKER_DESKTOP_VERSION="2.1.4.0 (39357)"
+readonly KUBERNETES_VERSION="1.15.5"
+readonly DOCKER_DESKTOP_VERSION="2.1.5.0 (40323)"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 

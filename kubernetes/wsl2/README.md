@@ -12,6 +12,7 @@
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 由于缺少文件 `kube-proxy` 不能使用 `ipvs` 模式,解决办法请查看 [编译 WSL2 内核](README.KERNEL.md)
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-node)**
+* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 重新使用本项目
 
 ## master
 
