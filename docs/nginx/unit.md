@@ -117,4 +117,7 @@ $ curl -X PUT -d @/usr/local/nginx_unit/start.json  \
 
 ### Laravel
 
-请查看 `config/nginx/unit-laravel.config` `unit-laravel.json`
+请查看
+
+* `config/nginx/demo.config/unit-laravel.config`
+* `config/nginx-unit/laravel.json.back`

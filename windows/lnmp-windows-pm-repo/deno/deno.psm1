@@ -32,7 +32,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=(deno version).split(":")[1].trim()
 
     if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     }
   }
@@ -52,7 +52,7 @@ Function install($VERSION=0,$isPre=0){
   # 安装 Fix me
   Copy-item deno/deno.exe C:\bin
   _cleanup deno
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   deno version
 }

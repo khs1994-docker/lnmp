@@ -1,3 +1,4 @@
+# https://github.com/kubernetes/kubernetes/blob/master/pkg/kubelet/apis/config/types.go
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
 address: "##NODE_IP##"

@@ -1,10 +1,9 @@
 # SUMMARY
 
-* [Overview](README.md)
+* [安装概览](guide/README.md)
 
 # 基础设施
 
-* [安装概览](guide/install.md)
 * [Docker Desktop](guide/docker-desktop.md)
 * [Minikube](guide/minikube.md)
 * [Minikube On Windows](guide/windows.md)

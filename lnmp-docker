@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.15.4"
-readonly DOCKER_DESKTOP_VERSION="2.1.4.0 (39357)"
+readonly KUBERNETES_VERSION="1.15.5"
+readonly DOCKER_DESKTOP_VERSION="2.1.5.0 (40323)"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -220,14 +220,14 @@ _gcr_io(){
 
   print_info "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
 
-  mkdir -p data/registry
+  mkdir -p $HOME/.khs1994-docker-lnmp/registry
 
   docker run -i ${tty} -d \
       -p 443:443 \
       -p 80:80 \
       --mount type=bind,src=$PWD/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml \
       --mount type=bind,src=$PWD/config/registry,target=/etc/docker/registry/ssl \
-      --mount type=bind,src=$PWD/data/registry,target=/var/lib/registry:delegated \
+      --mount type=bind,src=$HOME/.khs1994-docker-lnmp/registry,target=/var/lib/registry:delegated \
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 
@@ -338,15 +338,16 @@ _get_compose_options(){
   for compose_file in $LREW_INCLUDE
   do
     # COMPOSE_FILE=$(echo $compose_file | tr '[a-z]' '[A-Z]')
+    local PACKAGE=$(echo ${compose_file^^} | tr '-' '_')
 
     if [ -d vendor/lrew-dev/$compose_file ];then
       LREW_INCLUDE_ROOT="vendor/lrew-dev/$compose_file"
       # set env
-      cat .env | grep -q "LREW_${compose_file^^}_VENDOR=lrew-dev" && true || echo "LREW_${compose_file^^}_VENDOR=lrew-dev" >> .env
+      cat .env | grep -q "LREW_${PACKAGE}_VENDOR=lrew-dev" && true || echo "LREW_${PACKAGE}_VENDOR=lrew-dev" >> .env
     elif [ -d vendor/lrew/$compose_file ];then
       LREW_INCLUDE_ROOT="vendor/lrew/$compose_file"
       # unset env
-      sed -i "s#^LREW_${compose_file^^}_VENDOR.*##g" .env
+      sed -i "s#^LREW_${PACKAGE}_VENDOR.*##g" .env
     elif [ -d lrew/$compose_file ];then
       LREW_INCLUDE_ROOT="lrew/$compose_file"
     else
@@ -1167,7 +1168,7 @@ _lrew_init(){
   fi
 
   local items="docker-compose.yml docker-compose.override.yml docker-compose.build.yml"
-  local PACKAGE=$(echo $package | tr '[a-z]' '[A-Z]')
+  local PACKAGE=$(echo $package | tr '[a-z]' '[A-Z]' | tr '-' '_')
 
   for item in $items
   do

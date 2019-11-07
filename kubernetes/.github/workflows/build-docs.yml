@@ -6,7 +6,7 @@ on:
     - '**'
     - 'docs/**'
   schedule:
-    - cron: '0 0 * * */1'
+    - cron: '0 0 * * 4'
 
 name: Build Docs
 

@@ -2,12 +2,17 @@
 
 ## 注意事项
 
+* `wsl2.lnmp.khs1994.com` 解析到 WSL2 IP
+* `windows.lnmp.khs1994.com` 解析到 Windows IP
+* k8s 入口为 **域名** `wsl2.lnmp.khs1994.com:6443` `windows.lnmp.khs1994.com:16443(kube-nginx 代理)`
+* 新建 `k8s-data` WSL 发行版用于存储数据
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
 * WSL2 IP 变化时必须重启 `kube-nginx`
-* Windows 固定 IP `192.168.199.100` (`.env.ps1 $WINDOWS_HOST 变量`)
 * WSL2 `Ubuntu-18.04` 设为默认 WSL
+* WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 由于缺少文件 `kube-proxy` 不能使用 `ipvs` 模式,解决办法请查看 [编译 WSL2 内核](README.KERNEL.md)
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-node)**
+* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 重新使用本项目
 
 ## master
 
@@ -17,19 +22,30 @@
 
 ## node
 
+### 设置 PATH
+
+```bash
+$ vim ~/.bashrc
+
+export PATH=/wsl/k8s-data/k8s/bin:$PATH
+```
+
 ### 复制文件
 
 ```bash
 $ wsl
 
+$ set -x
 $ source ./wsl2/.env
 
-$ sudo mkdir -p ${K8S_ROOT:-/opt/k8s}/bin
-$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} ${K8S_ROOT:-/opt/k8s}/bin
+$ sudo mkdir -p ${K8S_ROOT:?err}/bin
+$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} ${K8S_ROOT:?err}/bin
 ```
 
+在 `Windows` 中执行
+
 ```powershell
-$ $items="kubelet-config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld.pem","flanneld-key.pem"
+$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld.pem","flanneld-key.pem"
 
 $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ```
@@ -37,13 +53,9 @@ $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ### join
 
 ```bash
-# 编辑 systemd/.env
-
-KUBE_APISERVER=https://192.168.199.100:16443
-
 $ wsl
 
-$ ./lnmp-k8s join 192.168.199.100 --containerd --skip-cp-k8s-bin
+$ ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 ```
 
 ## flanneld
@@ -127,6 +139,14 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_N
 ```
 
 ## 5. kubectl
+
+将 WSL2 K8S 配置写入 `~/.kube/config`
+
+```bash
+$ ./wsl2/bin/kubectl-config-set-cluster
+```
+
+或者 **通过参数** 加载配置文件
 
 ```powershell
 # $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig

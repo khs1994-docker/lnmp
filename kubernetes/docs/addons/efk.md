@@ -27,7 +27,7 @@
 ### 部署
 
 ```bash
-$ kubectl create -f addons/efk
+$ kubectl apply -k addons/efk
 
 $ kubectl get pods -n kube-system -o wide|grep -E 'elasticsearch|fluentd|kibana'
 
@@ -41,7 +41,7 @@ http://192.168.57.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/p
 ## 删除
 
 ```bash
-$ kubectl delete -f addons/efk
+$ kubectl delete -k addons/efk
 ```
 
 ## 资源列表

@@ -288,7 +288,7 @@ systemd:
         -v ${K8S_ROOT}:${K8S_ROOT} \
         k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}} \
         kube-scheduler \
-        --config=${K8S_ROOT}/conf/kube-scheduler.yaml \
+        --config=${K8S_ROOT}/conf/kube-scheduler.config.yaml \
         --bind-address={{IP_{{n}}}} \
         --secure-port=10259 \
         --port=0 \
@@ -355,7 +355,7 @@ systemd:
         --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
         --root-dir=/opt/k8s/var/lib/kubelet \
         --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
-        --config=${K8S_ROOT}/conf/kubelet-config.yaml \
+        --config=${K8S_ROOT}/conf/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
         --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
         --image-pull-progress-deadline=15m \
@@ -411,7 +411,7 @@ storage:
                   proxy_pass backend;
               }
           }
-    - path: ${K8S_ROOT}/conf/kube-scheduler.yaml
+    - path: ${K8S_ROOT}/conf/kube-scheduler.config.yaml
       mode: 0644
       contents:
         inline: |
@@ -429,7 +429,7 @@ storage:
           leaderElection:
             leaderElect: true
           metricsBindAddress: {{IP_{{n}}}}:10251
-    - path: ${K8S_ROOT}/conf/kubelet-config.yaml
+    - path: ${K8S_ROOT}/conf/kubelet.config.yaml
       mode: 0644
       contents:
         inline: |
@@ -520,11 +520,11 @@ storage:
           hostnameOverride: coreos{{n}}
           mode: "ipvs"
           portRange: ""
-          kubeProxyIPTablesConfiguration:
-            masqueradeAll: false
-          kubeProxyIPVSConfiguration:
-            scheduler: rr
-            excludeCIDRs: []
+          # kubeProxyIPTablesConfiguration:
+          #  masqueradeAll: false
+          # kubeProxyIPVSConfiguration:
+          #  scheduler: rr
+          #  excludeCIDRs: []
     - path: ${K8S_ROOT}/bin/kubectl
       mode: 0755
       contents:

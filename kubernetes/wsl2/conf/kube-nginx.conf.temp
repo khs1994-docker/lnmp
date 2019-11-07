@@ -14,7 +14,7 @@ worker_processes 1;
               }
 
               server {
-                  listen ##WINDOWS_HOST##:16443;
+                  listen 16443;
                   proxy_connect_timeout 1s;
                   proxy_pass wsl2kube;
               }
@@ -24,7 +24,7 @@ worker_processes 1;
               }
 
               server {
-                  listen ##WINDOWS_HOST##:2049;
+                  listen 2049;
                   proxy_connect_timeout 1s;
                   proxy_pass wsl2nfs;
               }

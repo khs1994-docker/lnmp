@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 type: Opaque
 metadata:
-  namespace: default
+  namespace: lnmp
   name: lnmp-ingress-nginx-tls-0.0.1
   labels:
     app: lnmp
@@ -21,12 +21,13 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-    nginx.ingress.kubernetes.io/secure-backends: "true"
+    # nginx.ingress.kubernetes.io/secure-backends: "true" # 已废弃
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # host 302=> host/app
     # nginx.ingress.kubernetes.io/app-root: /app
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
   name: lnmp
-  namespace: default
+  namespace: lnmp
   labels:
     app: lnmp
     version: 0.0.1

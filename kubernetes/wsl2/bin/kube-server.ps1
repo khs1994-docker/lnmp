@@ -1,5 +1,11 @@
 $ErrorActionPreference="stop"
 
+& $PSScriptRoot/kube-check
+
+if(!$?){
+  exit 1
+}
+
 if ($args[0] -eq 'stop'){
   "==> stop kube-server ..."
   wsl -u root -- supervisorctl stop kube-server:
@@ -9,7 +15,13 @@ if ($args[0] -eq 'stop'){
 
 Function _supervisor_checker(){
   "==> check WSL2 Supervisord running ..."
-  wsl -u root -- bash -ec "supervisorctl pid" > $HOME/.k8s-wsl2/out-null 2>&1
+  wsl -- sh -c "supervisorctl -h> /dev/null 2>&1"
+  if(!$?){
+    write-warning "==> WSL2 supervisor not installed, please install first"
+
+    exit 1
+  }
+  wsl -u root -- bash -ec "supervisorctl pid" > $HOME/.khs1994-docker-lnmp/k8s-wsl2/out-null 2>&1
 
   if(!$?){
     Write-Warning "WSL2 Supervisord not running"
@@ -20,7 +32,7 @@ Function _supervisor_checker(){
 
 Function _kube_nginx_checker(){
   "==> check Windows kube-nginx running ..."
-  if (!(Test-Path $HOME/.k8s-wsl2/kube-nginx/logs/nginx.pid)){
+  if (!(Test-Path $HOME/.khs1994-docker-lnmp/k8s-wsl2/kube-nginx/logs/nginx.pid)){
     write-warning "Windows kube-nginx not running, exit"
     Write-Warning "please exec ( $ ./wsl2/kube-nginx ) first"
     exit 1
@@ -40,7 +52,7 @@ Function _kube_nginx_checker(){
 Function _etcd_checker(){
   "==> check Windows Etcd running ..."
   try{
-    & $PSScriptRoot/etcdctlv2.ps1 cluster-health $HOME/.k8s-wsl2/out-null 2>&1
+    & $PSScriptRoot/etcdctlv2.ps1 cluster-health $HOME/.khs1994-docker-lnmp/k8s-wsl2/out-null 2>&1
     # (get-process etcd).Id
   }catch{
     write-warning "Windows Etcd not running, exit"
@@ -54,6 +66,8 @@ _supervisor_checker
 _kube_nginx_checker
 _etcd_checker
 
+& $PSScriptRoot/wsl2host-check
+& $PSScriptRoot/wsl2host --write
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update
 

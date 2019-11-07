@@ -83,8 +83,12 @@ $ lnmp-docker composer install | update | require XXX
 
 ## 与 `khs1994-docker/lnmp` 项目关系
 
-**远程开发** 启动的容器只提供开发所用的工具链,浏览器访问 PHP 项目与远程开发 **无关**。
+**远程开发** 启动的容器只提供开发所用的工具链,浏览器访问 PHP 项目与远程开发 **无关**
 
 ## 功能
 
 * 可以在 **终端** 直接执行命令(`vsCode` -> `查看` -> `终端` -> 右上角 `+` 号) `$ php artisan`
+
+## Dockerd 运行在 WSL2 ?
+
+请查看 [WSL2](https://github.com/khs1994-docker/lnmp/tree/master/wsl2)

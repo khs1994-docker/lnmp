@@ -14,7 +14,7 @@ dist: xenial
 cache:
   directories:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
-    - /home/travis/.lnmp/caches
+    - /home/travis/.khs1994-docker-lnmp/caches
 
 before_install:
   # remove some apt source
@@ -23,7 +23,7 @@ before_install:
   - sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
   - sestatus || true
-  - ls /home/travis/.lnmp/caches
+  - ls /home/travis/.khs1994-docker-lnmp/caches
   - echo $PATH
 
   - sudo netstat -lnpt
@@ -169,12 +169,10 @@ before_script:
   - kubectl api-resources
 
 script:
-  - kubectl apply -f addons/coredns.yaml
-  - kubectl apply -f addons/dashboard.yaml
-  - kubectl apply -f addons/metrics-server
-  - kubectl apply -f addons/ingress-nginx/mandatory.yaml
-  - kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
-
+  - kubectl apply -k addons/coredns
+  - kubectl apply -k addons/dashboard
+  - kubectl apply -k addons/metrics-server
+  - kubectl apply -k addons/ingress-nginx/nodeport
   - sleep 100
 
   - kubectl get all --all-namespaces
@@ -222,7 +220,10 @@ matrix:
   include:
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.17.0-alpha.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.18.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: bionic
+      env: CI_KUBERNETES_VERSION=1.17.0-beta.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
@@ -243,4 +244,5 @@ matrix:
       env: CI_KUBERNETES_VERSION=1.14.2
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.17.0-alpha.3 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+  - env: CI_KUBERNETES_VERSION=1.18.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+  - env: CI_KUBERNETES_VERSION=1.17.0-beta.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server

@@ -4,15 +4,16 @@
 $wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
 $NODE_NAME="wsl2"
-# $KUBE_APISERVER='https://192.168.199.100:16443'
+# $KUBE_APISERVER='https://x.x.x.x:16443'
 # $K8S_ROOT="/opt/k8s"
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
+$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
 
-(Get-Content $PSScriptRoot/conf/kubelet-config.yaml.temp) `
+(Get-Content $PSScriptRoot/conf/kubelet.config.yaml.temp) `
     -replace "##NODE_NAME##",$NODE_NAME `
     -replace "##NODE_IP##",$wsl_ip `
     -replace "##K8S_ROOT##",$K8S_ROOT `
-  | Set-Content $PSScriptRoot/conf/kubelet-config.yaml
+  | Set-Content $PSScriptRoot/conf/kubelet.config.yaml
 
 wsl -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
 wsl -u root -- `
@@ -25,12 +26,19 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
 --root-dir=${K8S_ROOT}/var/lib/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
---config=${K8S_WSL2_ROOT}/conf/kubelet-config.yaml `
+--config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
 --hostname-override=${NODE_NAME} `
 --image-pull-progress-deadline=15m `
 --volume-plugin-dir=${K8S_ROOT}/var/lib/kubelet/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
 --v=2
+
+if($args[0] -eq "reset"){
+  wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+  wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
+  wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+  exit
+}
 
 # --container-runtime=docker `
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock `
@@ -43,13 +51,21 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 # $ kubectl --kubeconfig .\rpi\certs\kubectl.kubeconfig get csr --sort-by='{.metadata.creationTimestamp}'
 #
 
+wsl -- sh -c "command -v runc > /dev/null 2>&1"
+
+if(!$?){
+  Write-Warning "==> runc not found, please install docker-ce first"
+
+  exit 1
+}
+
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 
 echo "[program:kubelet]
 
 command=$command
-stdout_logfile=${K8S_ROOT}/log/kubelet-stdout.log
-stderr_logfile=${K8S_ROOT}/log/kubelet-error.log
+stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kubelet-stdout.log
+stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kubelet-error.log
 directory=/
 autostart=false
 autorestart=false
@@ -103,11 +119,13 @@ if($args[0] -eq 'init'){
 sleep 5
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
+  & $PSScriptRoot/bin/wsl2host-check
   wsl -u root -- supervisorctl start kube-node:kubelet
 
   exit
 }
 
 if($args[0] -eq 'start'){
+  & $PSScriptRoot/bin/wsl2host-check
   wsl -u root -- bash -c $command
 }

@@ -1,7 +1,7 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-mkdir -Force $HOME/.k8s-wsl2/kube-nginx/logs | out-null
+mkdir -Force $HOME/.khs1994-docker-lnmp/k8s-wsl2/kube-nginx/logs | out-null
 
 $wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
@@ -12,7 +12,10 @@ Write-Output $wsl_ip > $PSScriptRoot/conf/.kube_nginx_wsl2_ip
     -replace "##WINDOWS_HOST##",$WINDOWS_HOST `
     | Set-Content $PSScriptRoot/conf/kube-nginx.conf
 
-nginx -c $PSScriptRoot/conf/kube-nginx.conf -p $HOME/.k8s-wsl2/kube-nginx -s stop
+if (Test-Path $HOME/.khs1994-docker-lnmp/k8s-wsl2/kube-nginx/logs/nginx.pid){
+  nginx -c $PSScriptRoot/conf/kube-nginx.conf `
+        -p $HOME/.khs1994-docker-lnmp/k8s-wsl2/kube-nginx -s stop
+}
 
 sleep 5
 
@@ -21,7 +24,7 @@ if ($args[0] -eq 'stop'){
 }
 
 Start-Process -FilePath nginx `
-  -WorkingDirectory $HOME/.k8s-wsl2/kube-nginx `
+  -WorkingDirectory $HOME/.khs1994-docker-lnmp/k8s-wsl2/kube-nginx `
   -WindowStyle Hidden `
   -ArgumentList (Write-Output `
   -c $PSScriptRoot/conf/kube-nginx.conf).split(' ')

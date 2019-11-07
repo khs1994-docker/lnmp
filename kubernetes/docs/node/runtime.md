@@ -1,4 +1,4 @@
-# Container Runtime
+# Container Runtime (CRI)
 
 * https://kubernetes.io/docs/setup/production-environment/container-runtimes/
 

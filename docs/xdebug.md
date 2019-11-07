@@ -12,9 +12,9 @@
 
 编辑 `config/php/docker-php.ini` 文件，取消注释
 
-```bash
-; zend_extension=xdebug
-zend_extension=xdebug
+```diff
+- ; zend_extension=xdebug
++ zend_extension=xdebug
 ```
 
 ## 准备 PHP 项目

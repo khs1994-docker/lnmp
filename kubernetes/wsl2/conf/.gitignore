@@ -4,3 +4,4 @@
 !cni
 !kube-containerd
 kube-containerd/config.toml
+kube-containerd/1.3.0/config.toml

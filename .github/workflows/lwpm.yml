@@ -13,9 +13,9 @@ jobs:
         fetch-depth: 2
     - name: Set ENV
       run: |
-        echo ::add-path::%cd%\windows
+        echo ::add-path::$(pwd)\windows
         echo ::add-path::C:\ProgramData\ComposerSetup\bin
-        echo ::set-env name=LNMP_PATH::%cd%
+        echo ::set-env name=LNMP_PATH::$(pwd)
     - name: init
       shell: pwsh
       run: echo "extension=openssl" >> C:\tools\php\php.ini

@@ -3,7 +3,7 @@
 * https://github.com/kubernetes/dashboard/tree/v1.10.1/src/deploy/recommended
 
 ```bash
-$ kubectl apply -f addons/dashboard.yaml
+$ kubectl apply -k addons/dashboard
 
 $ kubectl get deployment kubernetes-dashboard  -n kube-system
 

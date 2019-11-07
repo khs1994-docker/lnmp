@@ -11,7 +11,7 @@
 
 在 `.env.ps1` 文件中将 `minio` 包含进来
 
-```bash
+```powershell
 $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin',"minio"
 $LREW_INCLUDE="minio","pcit"
 ```
@@ -72,7 +72,7 @@ $ ./lnmp-docker up
 
 ### Windows 安装
 
-```bash
+```powershell
 $ lnmp-windows-pm.ps1 install minio
 ```
 

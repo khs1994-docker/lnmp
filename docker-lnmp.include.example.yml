@@ -27,6 +27,11 @@ services:
   #     - type: volume
   #       source: laravel_vendor
   #       target: /app/laravel/vendor
+  #     - git-sync-data:/app/git-sync
+
+  # nginx:
+  #   volumes:
+  #   - git-sync-data:/app/git-sync
 
   # composer:
   #   << : *php7
@@ -43,7 +48,7 @@ services:
 
   swoole:
     << : *default-common
-    image: khs1994/php:7.3.10-swoole-alpine
+    image: khs1994/php:7.3.11-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php

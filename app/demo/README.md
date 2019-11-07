@@ -40,7 +40,7 @@ $ cd example
 
 ## 说明
 
-* 本项目以 PHP 最新的主线版本 `7.3.10` 为例，如果你需要其他版本，或多种版本请到 https://github.com/khs1994-docker/lnmp/issues/354 反馈
+* 本项目以 PHP 最新的主线版本 `7.3.11` 为例，如果你需要其他版本，或多种版本请到 https://github.com/khs1994-docker/lnmp/issues/354 反馈
 
 * Laravel 项目，请查看 https://github.com/khs1994-docker/laravel-demo
 
@@ -218,9 +218,9 @@ $ lnmp-phpunit [参数]
 
 此示例将 PHP 代码打入了镜像中，如果你选择将代码放入宿主机，那么无需进行此步骤。两种方法自行取舍。
 
-关于代码放到哪里？代码放入宿主机，上线时需要人工在服务器 pull 代码。放入镜像中，上线时直接拉取镜像之后启动容器，无需人工干预。
+关于代码放到哪里？代码放入宿主机，上线时需要在服务器 pull 代码（或者参考 [git-sync](https://github.com/khs1994-docker/lrew-git-sync) 周期性监听 git 变化并克隆到本地）。代码放入镜像中，上线时直接拉取镜像之后启动容器，无需 pull 代码。
 
-> 将 PHP 项目打入镜像，镜像中严禁包含配置文件
+> 若将 PHP 项目打入镜像，镜像中严禁包含配置文件
 
 > Docker 镜像必须由 CI 服务器构建，而不是本地人工构建！
 
@@ -262,8 +262,12 @@ CI/CD 可以到 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 查看
 
 ### 1. git 添加 tag，并推送到远程仓库
 
-### 2. CI/CD 服务器收到 Git Tag 事件，自动构建镜像并推送镜像到 Docker 仓库。
+### 2. CI/CD 服务器收到 Git Tag 事件，自动构建镜像并推送镜像到 Docker 仓库（代码在镜像中）
 
-### 3. CI/CD 服务器中使用 Helm 在 k8s 集群更新服务
+### 3. CI/CD 服务器中使用 `Helm` 或 `kustomize` 在 k8s 集群更新服务（代码在镜像中）
 
 * https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm
+
+#### 4. 使用 `daemonset` 部署 `gti-sync`（代码不在镜像中）
+
+让 **每个节点** 都拥有一份代码，这样就不用关心 `pod` 调度到哪个节点。

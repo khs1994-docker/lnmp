@@ -20,7 +20,7 @@ services:
       - ./bin:/srv/www/coreos/bin
       - ./kubernetes-release:/srv/www/coreos/kubernetes-release
       - ./deployment:/srv/www/coreos/deployment
-      - $HOME/.lnmp/caches:/srv/www/coreos/releases
+      - $HOME/.khs1994-docker-lnmp/caches:/srv/www/coreos/releases
     ports:
       - "8080:80"
 

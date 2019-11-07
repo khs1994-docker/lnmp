@@ -13,7 +13,7 @@ systemd:
         [Service]
         Restart=on-failure
         RestartSec=5
-        WorkingDirectory=/home/core/.lnmp/caches
+        WorkingDirectory=/home/core/.khs1994-docker-lnmp/caches
         ExecStartPre=mkdir -p ${K8S_ROOT}/bin
         ExecStartPre=bash -c "if ! [ `${K8S_ROOT}/bin/helm --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/helm; fi"
         ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/helm ];then \
@@ -26,7 +26,7 @@ systemd:
         WantedBy=multi-user.target
 storage:
   files:
-    - path: /home/core/.lnmp/caches/helm-v${HELM_VERSION}-linux-amd64.tar.gz
+    - path: /home/core/.khs1994-docker-lnmp/caches/helm-v${HELM_VERSION}-linux-amd64.tar.gz
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/releases/helm-v${HELM_VERSION}-linux-amd64.tar.gz

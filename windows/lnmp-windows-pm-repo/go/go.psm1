@@ -35,7 +35,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=($(go version) -split " ")[2].trim("go")
 
     if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     }
   }
@@ -61,7 +61,7 @@ Function install($VERSION=0,$isPre=0){
   [environment]::SetEnvironmentvariable("GOPATH", "$HOME\go", "User")
   _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   go version
 }

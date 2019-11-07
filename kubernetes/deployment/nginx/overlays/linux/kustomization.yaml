@@ -1,4 +1,4 @@
 bases:
 - ../../base
-patches:
+resources:
 - lnmp-nginx.service.yaml

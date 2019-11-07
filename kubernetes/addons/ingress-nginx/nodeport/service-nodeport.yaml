@@ -19,6 +19,16 @@ spec:
       targetPort: 443
       protocol: TCP
       nodePort: 28443
+    - name: proxied-udp-53
+      port: 53
+      targetPort: 53
+      protocol: UDP
+      nodePort: 53
+    - name: proxied-tcp-53
+      port: 53
+      targetPort: 53
+      protocol: TCP
+      nodePort: 53
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx

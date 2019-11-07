@@ -31,7 +31,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=(& $command --version)
 
     if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     }
   }
@@ -51,7 +51,7 @@ Function install($VERSION=0,$isPre=0){
   # 安装 Fix me
   Copy-item frp\frp_${VERSION}_windows_amd64\frpc.exe C:\bin\
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   & $command --version
 }

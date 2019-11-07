@@ -37,11 +37,19 @@ Function _sudo($command){
   $encodedCommand = [Convert]::ToBase64String($bytes)
 
   start-process -FilePath powershell.exe `
-    -ArgumentList "-encodedCommand","$encodedCommand" -Verb RunAs
+    -ArgumentList "-encodedCommand","$encodedCommand" -Verb RunAs -WindowStyle Minimized
+}
+
+Function _write_host(){
+ping -n 1 wsl2 | out-null
+
+if ($?){
+  "==> WSL2 ip not changed, skip"
+  return
 }
 
 ""
-"==> write hosts to [ $hosts_path ]"
+"==> write WSL2 ip to [ $hosts_path ]"
 
 $exists_hosts_content_array=get-content $hosts_path
 
@@ -57,21 +65,24 @@ for ($i = 0; $i -lt $exists_hosts_content_array.Count; $i++) {
 }
 
 if( $begin_line  -and $end_line){
-  Write-Warning "==> old wsl2host already add on line: $begin_line - $end_line , update wsl2host ..."
+  Write-Warning "==> old wsl2host already add on line: $begin_line - $end_line , update wsl2host to new $wsl2_ip ..."
 
-  $exists_hosts_content_array[$begin_line + 1] = "$wsl2_ip wsl2 $WSL2_DOMAIN"
+  $exists_hosts_content_array[$begin_line + 1] = "$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN"
 
-  Set-Content -Path $env:TEMP/.k8s-wsl2-hosts -Value $exists_hosts_content_array
+  Set-Content -Path $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts -Value $exists_hosts_content_array
 
-  _sudo "cp $env:TEMP/.k8s-wsl2-hosts $hosts_path"
+  _sudo "cp $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts $hosts_path"
 
   exit
 }
 
 $hosts_content="
 # add wsl2host by khs1994-docker/lnmp BEGIN
-$wsl2_ip wsl2 $WSL2_DOMAIN
+$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN
 # add wsl2host by khs1994-docker/lnmp END
 "
 
-_sudo "echo `"$hosts_content`" | out-file -FilePath $hosts_path -Append -Encoding Unknown"
+_sudo "echo `"$hosts_content`" | out-file -FilePath $hosts_path -Append -Encoding Default"
+}
+
+_write_host

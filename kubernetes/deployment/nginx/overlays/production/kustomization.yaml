@@ -2,6 +2,7 @@ bases:
 - ../../base
 resources:
 - pvc.yaml
+- lnmp-nginx.service.yaml
 configMapGenerator:
 - name: lnmp-nginx-conf-0.0.1
   files:
@@ -17,7 +18,6 @@ secretGenerator:
   - t.khs1994.com.crt=config/conf.d/ssl/t.khs1994.com.crt
   - t.khs1994.com.key=config/conf.d/ssl/t.khs1994.com.key
 patches:
-  - lnmp-nginx.service.yaml
   # - hostpath.patch.yaml
 generatorOptions:
   labels:

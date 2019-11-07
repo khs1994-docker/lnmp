@@ -19,13 +19,11 @@
 ## 部署
 
 ```bash
-$ kubectl apply -f addons/ingress-nginx/mandatory.yaml
-
 # 裸机 通过 nodeport
-$ kubectl apply -f addons/ingress-nginx/provider/baremetal/service-nodeport.yaml
+$ kubectl apply -k addons/ingress-nginx/nodeport
 
 # Docker 桌面版
-$ kubectl apply -f addons/ingress-nginx/provider/cloud-generic.yaml
+$ kubectl apply -k addons/ingress-nginx/docker-desktop
 ```
 
 ## 端口
@@ -38,12 +36,26 @@ $ kubectl apply -f addons/ingress-nginx/provider/cloud-generic.yaml
 ## 定义规则
 
 ```bash
-$ kubectl apply -f ingress-nginx/my-ingress.yaml
+$ kubectl apply -k ingress-nginx/lnmp
 ```
 
 ## 后端服务是否为 TLS
 
 * https://tonybai.com/2018/06/25/the-kubernetes-ingress-practice-for-https-service/
+
+```yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
+  annotations:
+    # nginx.ingress.kubernetes.io/secure-backends: "true" # 已废弃
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+```
+
+* cli -> (http) -> ingress -> (http) -> backend
+* cli -> (https) -> ingress -> (http) -> backend
+* cli -> (https) -> ingress -> (https) -> backend
 
 ## Docker Registry Example
 
@@ -51,4 +63,14 @@ $ kubectl apply -f ingress-nginx/my-ingress.yaml
 $ kubectl apply -f ingress-nginx/registry.example.yaml
 
 $ kubectl apply -f ingress-nginx/ingress.example.yaml
+```
+
+## 4 层代理
+
+* https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/exposing-tcp-udp-services.md
+
+`tcp-udp`
+
+```bash
+$ host -t A nginx.lnmp.svc.cluster.local wsl2.lnmp.khs1994.com
 ```

@@ -6,9 +6,17 @@
 
 ## 必须手动 approve server cert csr
 
-**基于安全性考虑，CSR approving controllers 默认不会自动 approve kubelet server 证书签名请求，需要手动 approve。**
+**基于 [安全性考虑](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/#certificate-rotation)，CSR approving controllers 不会（也不能）自动 approve kubelet server 证书签名请求，需要手动 approve。**
 
 * https://github.com/opsnull/follow-me-install-kubernetes-cluster/issues/326
+* https://github.com/opsnull/follow-me-install-kubernetes-cluster/issues/399
+* https://github.com/kubernetes/kubernetes/issues/73356
+* https://github.com/kubernetes/community/pull/1982
+
+* 1.10 可以自动轮换 server 证书
+* 1.11 删除了此功能 https://github.com/kubernetes/kubernetes/commit/7665f15b7d8d9006e410e41f6678cfa2be3ac602
+
+> Note: The CSR approving controllers implemented in core Kubernetes do not approve node serving certificates for [security reasons](https://github.com/kubernetes/community/pull/1982). To use RotateKubeletServerCertificate operators need to run a custom approving controller, or manually approve the serving certificate requests.
 
 未手动 approve 之前报错如下。
 
@@ -18,7 +26,7 @@ bootstrap.go:65] Using bootstrap kubeconfig to generate TLS client cert, key and
 bootstrap.go:96] No valid private key and/or certificate found, reusing existing private key or creating a new one
 ```
 
-### 解决办法
+### 手动 approve
 
 ```bash
 $ kubectl get csr
@@ -42,7 +50,19 @@ $ kubectl describe csr CSR_NAME
 
 ## 特性
 
-* 使用 TLS bootstrap 机制自动生成 client 和 server 证书，过期后自动轮转；
+### 使用 TLS bootstrap 机制自动生成 client 和 server 证书，过期后自动轮转
+
+* 过期，server 证书也得(必须) **手动 approve**
+
+```bash
+19:00:13.625470   15572 certificate_manager.go:507] Certificate expiration is 2019-10-31 11:55:00 +0000 UTC, rotation deadline is 2019-10-31 11:43:38.484582973 +0000 UTC
+...
+19:43:38.494896   15572 certificate_manager.go:381] Rotating certificates
+...
+19:58:38.503176   15572 certificate_manager.go:414] certificate request was not signed: timed out waiting for the condition (未手动 approve 报错)
+```
+
+* 假设过期时间设为 1 小时, `kubelet` 会在 `43` 分钟（具体时间看日志）时轮换
 
 ## Bootstrap Token Auth 和授予权限
 

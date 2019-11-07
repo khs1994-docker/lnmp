@@ -36,7 +36,7 @@ Function install($VERSION=0,$isPre=0){
     $CURRENT_VERSION=(atom --version).split(":")[2].trim()
 
     if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     }
   }
@@ -60,13 +60,13 @@ Function install($VERSION=0,$isPre=0){
 
   install_after
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   atom --version
 }
 
 Function uninstall(){
-  echo ""
+  ""
   # Remove-item
 }
 

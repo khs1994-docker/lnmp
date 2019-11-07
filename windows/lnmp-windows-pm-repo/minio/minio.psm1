@@ -30,7 +30,7 @@ Function install($VERSION=0,$isPre=0){
     # $CURRENT_VERSION=""
 
     # if ($CURRENT_VERSION -eq $VERSION){
-        echo "==> $name $VERSION already install"
+        "==> $name $VERSION already install"
         return
     # }
   }
@@ -53,7 +53,7 @@ Function install($VERSION=0,$isPre=0){
   # Start-Process -FilePath $filename -wait
   # _cleanup minio.exe mc.exe
 
-  echo "==> Checking ${name} ${VERSION} install ..."
+  "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   minio version
   mc version

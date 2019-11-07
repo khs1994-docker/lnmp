@@ -19,5 +19,9 @@
   // "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*"
   "extensions": [
     "felixfbecker.php-pack"
-  ]
+  ],
+  "settings": {
+    // If you are using an Alpine-based image, change this to /bin/ash
+    // "terminal.integrated.shell.linux": "/bin/bash"
+  }
 }

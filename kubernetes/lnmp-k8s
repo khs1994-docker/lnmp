@@ -14,7 +14,7 @@ source ./systemd/.env
 source ./.env.example
 source ./.env
 
-TMP_ROOT=$HOME/.lnmp/caches
+TMP_ROOT=$HOME/.khs1994-docker-lnmp/caches
 
 # HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
 
@@ -131,9 +131,18 @@ _sudo(){
   command -v sudo > /dev/null && echo sudo || true
 }
 
+uname -a | grep -q microsoft && IS_WSL2=1 || IS_WSL2=0
+
+if [ $IS_WSL2 -eq 1 ];then
+  print_info "k8s node run on WSL2"
+  source wsl2/.env
+
+  TMP_ROOT="${K8S_ROOT}/../.khs1994-docker-lnmp/caches"
+fi
+
 $(_sudo) mkdir -p ${K8S_ROOT}/{bin,conf,certs,log}
 
-mkdir -p ${TMP_ROOT} || TMP_ROOT=/tmp
+$(_sudo) mkdir -p ${TMP_ROOT} || TMP_ROOT=/tmp
 
 export PATH=${K8S_ROOT}/bin:$PATH
 
@@ -222,7 +231,7 @@ _get_kubernetes_server_by_docker_image(){
 _get_kubernetes_server_by_url(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt \
     && ( \
-      curl -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
+      curl -A "curl" -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
         -o kubernetes-release/release/kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
     ) && return 0 || return 1
 }
@@ -437,39 +446,47 @@ _create_lnmp(){
     --from-file=php.ini=${CONFIG_ROOT}/ini/php.custom.ini \
     --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.custom.conf \
     --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.custom.json \
-    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini
-  kubectl -n ${NAMESPACE} label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf-0.0.1 \
-    --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf
-  kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf-0.0.1 \
-    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf
-  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf.d-0.0.1 \
-    --from-file=deployment/configMap/nginx-conf-d
-  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=deployment/configMap/nginx-conf-d \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d-0.0.1 app=lnmp version=0.0.1 $@ || true
 
-  kubectl -n ${NAMESPACE} create -f deployment/lnmp-configMap.${ENVIRONMENT}.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/lnmp-configMap.${ENVIRONMENT}.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/lnmp-secret.${ENVIRONMENT}.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/lnmp-secret.${ENVIRONMENT}.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/mysql/base/lnmp-mysql.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/mysql/base/lnmp-mysql.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/redis/base/lnmp-redis.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/redis/base/lnmp-redis.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/php/base/lnmp-php7.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/php/base/lnmp-php7.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/nginx/base/lnmp-nginx.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/nginx/base/lnmp-nginx.yaml $@
 
   if [ "$OS" = 'Linux' ];then
-    kubectl -n ${NAMESPACE} create -k deployment/nginx/overlays/linux/ $@ || true
+    kubectl -n ${NAMESPACE} apply -k deployment/nginx/overlays/linux/ $@ || true
   elif [ "$OS" = 'Darwin' ];then
-    kubectl -n ${NAMESPACE} create -f deployment/nginx/base/lnmp-nginx.service.yaml $@
+    kubectl -n ${NAMESPACE} apply -f deployment/nginx/base/lnmp-nginx.service.yaml $@
   fi
 }
 
@@ -732,7 +749,14 @@ _runc_install(){
 }
 
 _containerd_install(){
-  if [ "$1" = "-f" ];then $(_sudo) rm -rf /usr/local/bin/kube-containerd;fi
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/kube-containerd;fi
+
+  local RPM_USE_BY_COREOS="containerd.io-1.2.10-3.2.fc30.x86_64.rpm"
+  if ! [ -f ${TMP_ROOT}/${RPM_USE_BY_COREOS} ];then
+     print_info "download containerd rpm"
+     $(_sudo) curl -fsSL -o ${TMP_ROOT}/${RPM_USE_BY_COREOS} \
+     https://mirrors.aliyun.com/docker-ce/linux/fedora/30/x86_64/test/Packages/${RPM_USE_BY_COREOS}
+  fi
 
   if [ -f /usr/bin/containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd already install"; \
@@ -745,9 +769,9 @@ _containerd_install(){
 
   if ! [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then return;fi
 
-  if [ -f /usr/local/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
+  if [ -f ${K8S_ROOT}/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd 1.3.0 already install"; \
-    /usr/local/bin/kube-containerd --version;return; fi
+    ${K8S_ROOT}/bin/kube-containerd --version;return; fi
 
   print_info "install containerd 1.3.0 ..."
 
@@ -772,13 +796,13 @@ _containerd_install(){
     return
   fi
 
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C /usr/local
+  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
-  $(_sudo) mv /usr/local/bin/containerd /usr/local/bin/kube-containerd
-  $(_sudo) mv /usr/local/bin/containerd-shim /usr/local/bin/kube-containerd-shim
-  # $(_sudo) mv /usr/local/bin/containerd-shim-runc-v1
-  # $(_sudo) mv /usr/local/bin/containerd-shim-runc-v2
-  # $(_sudo) mv /usr/local/bin/containerd-stress
+  $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
+  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
+  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
+  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
+  $(_sudo) mv ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
 }
 
 _cni_install(){
@@ -794,7 +818,6 @@ _cni_install(){
   # wsl2 with cni 0.8.2 error:
   # https://github.com/containernetworking/plugins/issues/370
   # down to 0.7.6
-  uname -a | grep -q microsoft && IS_WSL2=1 || IS_WSL2=0
 
   if [ $IS_WSL2 -eq 1 ];then
     CNI_VERSION="0.7.6"
@@ -1170,14 +1193,14 @@ _k8s_install(){
   $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT}/conf/
   $(_sudo) cp \
     systemd/certs/{audit-policy.yaml,\
-kubelet-config.yaml,\
+kubelet.config.yaml,\
 kube-proxy.config.yaml,\
 csr-crb.yaml,\
-kube-scheduler.yaml,\
+kube-scheduler.config.yaml,\
 encryption-config.yaml} \
     ${K8S_ROOT}/conf/
 
-  local files=("kube-proxy.config.yaml" "kubelet-config.yaml" "kube-scheduler.yaml")
+  local files=("kube-proxy.config.yaml" "kubelet.config.yaml" "kube-scheduler.config.yaml")
 
   for file in ${files[@]}; \
   do \
@@ -1242,6 +1265,8 @@ _k8s_join(){
   NODE_IP=$1
   HOSTNAME=`hostname`
 
+  if [ $IS_WSL2 -eq 1 ];then HOSTNAME='wsl2' ; fi
+
   for options in $@
   do
     test $options = '--skip-cp-k8s-bin' && export SKIP_CP_K8S_BIN=1
@@ -1253,16 +1278,16 @@ _k8s_join(){
 not allowed, please input new hostname by --hostname=XXX" \
     && exit 1
 
-  if [ $HOSTNAME = "wsl2" ];then
-    print_info "hostname not allowed set wsl2, please input new hostname by --hostname=XXX"
-    exit 1
-  fi
+  # if [ $HOSTNAME = "wsl2" ];then
+  #   print_info "hostname not allowed set wsl2, please input new hostname by --hostname=XXX"
+  #   exit 1
+  # fi
 
   ls systemd/certs/{ca.pem,\
 flanneld.pem,\
 flanneld-key.pem,\
 kubectl.kubeconfig,\
-kubelet-config.yaml,\
+kubelet.config.yaml,\
 kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
@@ -1295,14 +1320,14 @@ ${K8S_ROOT}/certs/
 
   print_info "copy kubernetes conf and cert file ..."
   $(_sudo) cp \
-    systemd/certs/{kubelet-config.yaml,\
+    systemd/certs/{kubelet.config.yaml,\
 kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig} \
     ${K8S_ROOT}/conf
 
-  local files=("kube-proxy.config.yaml" "kubelet-config.yaml")
+  local files=("kube-proxy.config.yaml" "kubelet.config.yaml")
 
   for file in ${files[@]}; \
   do \
