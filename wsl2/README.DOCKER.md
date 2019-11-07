@@ -10,7 +10,7 @@
 * Docker 服务端(`dockerd`) 运行于 `WSL2`
 * 数据放到 `k8s-data` WSL2 发行版
 
-## 准备(自定义 DNS)
+## 准备(自定义 DNS 服务器)
 
 * `etcd`
 * `coreDNS`

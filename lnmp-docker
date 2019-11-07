@@ -220,14 +220,14 @@ _gcr_io(){
 
   print_info "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
 
-  mkdir -p data/registry
+  mkdir -p $HOME/.khs1994-docker-lnmp/registry
 
   docker run -i ${tty} -d \
       -p 443:443 \
       -p 80:80 \
       --mount type=bind,src=$PWD/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml \
       --mount type=bind,src=$PWD/config/registry,target=/etc/docker/registry/ssl \
-      --mount type=bind,src=$PWD/data/registry,target=/var/lib/registry:delegated \
+      --mount type=bind,src=$HOME/.khs1994-docker-lnmp/registry,target=/var/lib/registry:delegated \
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 

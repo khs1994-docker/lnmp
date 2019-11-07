@@ -9,5 +9,5 @@
 ## Ingress
 
 ```bash
-$ kubectl apply -f ingress-nginx/lnmp-ingress-registry.yaml
+$ kubectl apply -f ingress-nginx/registry/lnmp-ingress-registry.yaml
 ```

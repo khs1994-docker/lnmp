@@ -83,7 +83,7 @@ $ lnmp-docker composer install | update | require XXX
 
 ## 与 `khs1994-docker/lnmp` 项目关系
 
-**远程开发** 启动的容器只提供开发所用的工具链,浏览器访问 PHP 项目与远程开发 **无关**。
+**远程开发** 启动的容器只提供开发所用的工具链,浏览器访问 PHP 项目与远程开发 **无关**
 
 ## 功能
 

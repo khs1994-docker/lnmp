@@ -446,39 +446,47 @@ _create_lnmp(){
     --from-file=php.ini=${CONFIG_ROOT}/ini/php.custom.ini \
     --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.custom.conf \
     --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.custom.json \
-    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini
-  kubectl -n ${NAMESPACE} label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf-0.0.1 \
-    --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf
-  kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf-0.0.1 \
-    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf
-  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf.d-0.0.1 \
-    --from-file=deployment/configMap/nginx-conf-d
-  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d-0.0.1 app=lnmp version=0.0.1 $@
+    --from-file=deployment/configMap/nginx-conf-d \
+    --dry-run -o yaml \
+    | kubectl -n $NAMESPACE apply -f - $options
+  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d-0.0.1 app=lnmp version=0.0.1 $@ || true
 
-  kubectl -n ${NAMESPACE} create -f deployment/lnmp-configMap.${ENVIRONMENT}.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/lnmp-configMap.${ENVIRONMENT}.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/lnmp-secret.${ENVIRONMENT}.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/lnmp-secret.${ENVIRONMENT}.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/mysql/base/lnmp-mysql.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/mysql/base/lnmp-mysql.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/redis/base/lnmp-redis.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/redis/base/lnmp-redis.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/php/base/lnmp-php7.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/php/base/lnmp-php7.yaml $@
 
-  kubectl -n ${NAMESPACE} create -f deployment/nginx/base/lnmp-nginx.yaml $@
+  kubectl -n ${NAMESPACE} apply -f deployment/nginx/base/lnmp-nginx.yaml $@
 
   if [ "$OS" = 'Linux' ];then
-    kubectl -n ${NAMESPACE} create -k deployment/nginx/overlays/linux/ $@ || true
+    kubectl -n ${NAMESPACE} apply -k deployment/nginx/overlays/linux/ $@ || true
   elif [ "$OS" = 'Darwin' ];then
-    kubectl -n ${NAMESPACE} create -f deployment/nginx/base/lnmp-nginx.service.yaml $@
+    kubectl -n ${NAMESPACE} apply -f deployment/nginx/base/lnmp-nginx.service.yaml $@
   fi
 }
 

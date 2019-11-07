@@ -13,8 +13,8 @@ update    update kernel(Expand Archive kernel files to WSL2) [WSL_NAME(ubuntu-18
 exit
 }
 
-$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/266930828/artifacts/130277"
-$kernelversion="wsl2-kernel-4.19.79-microsoft-standard+"
+$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/299415459/artifacts/262401"
+$kernelversion="wsl2-kernel-4.19.81-microsoft-standard+"
 $zip="$home\Downloads\$kernelversion.zip"
 $unzipFolder="$home\Downloads\$kernelversion"
 

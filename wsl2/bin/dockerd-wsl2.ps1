@@ -38,8 +38,8 @@ control Dockerd on WSL2
 
 COMMAND:
 
-start  Start Docker on WSL2
-stop   Stop  Docker on WSL2
+start  Start Dockerd on WSL2
+stop   Stop  Dockerd on WSL2
 "
   }
 }

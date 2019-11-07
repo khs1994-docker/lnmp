@@ -11,7 +11,7 @@ if (Test-Path "$PSScriptRoot/.env.ps1"){
 # $ErrorActionPreference="SilentlyContinue"
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
-$DOCKER_DEFAULT_PLATFORM="linux"
+# $DOCKER_DEFAULT_PLATFORM="linux"
 $KUBERNETES_VERSION="1.15.5"
 $DOCKER_DESKTOP_VERSION="2.1.5.0 (40323)"
 $source=$PWD
@@ -1268,16 +1268,14 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         exit
       }
 
-      if (!(Test-Path data/registry)){
-        mkdir data/registry
-      }
+      mkdir -Force $HOME/.khs1994-docker-lnmp/registry | out-null
 
       docker run -it -d `
         -p 443:443 `
         -p 80:80 `
         --mount type=bind,src=$pwd/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml `
         --mount type=bind,src=$pwd/config/registry,target=/etc/docker/registry/ssl `
-        --mount type=bind,src=$pwd/data/registry,target=/var/lib/registry `
+        --mount type=bind,src=$HOME/.khs1994-docker-lnmp/registry,target=/var/lib/registry `
         --label com.khs1994.lnmp.gcr.io `
         registry
 
