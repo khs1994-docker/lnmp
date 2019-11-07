@@ -47,6 +47,7 @@ spec:
         image: mysql:8.0.18
         ports:
         - containerPort: 3306
+          name: mysql
         volumeMounts:
         - name: lnmp-mysql-data
           mountPath: /var/lib/mysql

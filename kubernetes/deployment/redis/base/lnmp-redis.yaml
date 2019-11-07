@@ -72,6 +72,7 @@ spec:
           subPath: redis.conf
         ports:
         - containerPort: 6379
+          name: redis
       restartPolicy: Always
       volumes:
       - name: lnmp-redis-data

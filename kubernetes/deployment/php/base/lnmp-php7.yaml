@@ -89,6 +89,7 @@ spec:
               key: LNMP_XDEBUG_REMOTE_PORT
         ports:
         - containerPort: 9000
+          name: php-fpm
         resources:
           requests:
             cpu: 100m

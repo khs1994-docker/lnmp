@@ -1,0 +1,8 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: ci-demo
+spec:
+  containers:
+  - name: ci-demo
+    image: nginx:1.17.0-alpine

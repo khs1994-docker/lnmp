@@ -53,10 +53,13 @@ spec:
         ports:
         - containerPort: 443
           protocol: TCP
+          name: https
         - containerPort: 443
           protocol: UDP
+          name: http3-udp
         - containerPort: 80
           protocol: TCP
+          name: http
         # securityContext:
         #   privileged: true
         volumeMounts:

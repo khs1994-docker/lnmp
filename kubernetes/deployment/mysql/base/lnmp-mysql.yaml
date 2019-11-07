@@ -86,6 +86,7 @@ spec:
           value: test
         ports:
         - containerPort: 3306
+          name: mysql
         # livenessProbe:
         #   exec:
         #     command:
