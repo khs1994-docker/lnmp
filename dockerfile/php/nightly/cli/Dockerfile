@@ -331,7 +331,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 # RUN set -ex \
   && rm -rf /usr/src/php \
   && curl -fsSL -o /usr/local/bin/pickle \
-       https://github.com/khs1994-php/pickle/releases/download/v0.4.1-2019-11-08/pickle.phar \
+       https://github.com/khs1994-php/pickle/releases/download/v19.11.8/pickle.phar \
   && chmod +x /usr/local/bin/pickle
 
 ENV PECL_BUILD_DEPS \

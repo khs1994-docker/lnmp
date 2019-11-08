@@ -54,12 +54,6 @@
 
 基于官方 [PHP](https://github.com/docker-library/docs/tree/master/php) 修改的 Docker 镜像，添加了一些常用 [PHP 扩展](https://github.com/khs1994-docker/lnmp/blob/master/docs/php.md)、Composer 和 Laravel 安装程序。
 
-## Pull
-
-```bash
-$ docker pull khs1994/php:fpm-alpine
-```
-
 ## RUN
 
 Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp/blob/master/docker-compose.yml).

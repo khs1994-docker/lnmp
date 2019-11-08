@@ -137,7 +137,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
              && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         && curl -fsSL -o /usr/local/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/v0.4.1-2019-11-08/pickle.phar \
+           https://github.com/khs1994-php/pickle/releases/download/v19.11.8/pickle.phar \
         && chmod +x /usr/local/bin/pickle \
 # https://github.com/tideways/php-xhprof-extension.git
         && pickle install \
