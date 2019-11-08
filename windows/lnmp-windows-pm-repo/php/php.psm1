@@ -4,11 +4,6 @@ Import-Module command
 Import-Module cleanup
 Import-Module exportPath
 
-$PHP_REDIS_EXTENSION_VERSION="4.3.0"
-$PHP_MONGODB_EXTENSION_VERSION="1.5.5"
-$PHP_IGBINARY_EXTENSION_VERSION="3.0.1"
-$PHP_XDEBUG_EXTENSION_VERSION="2.7.2"
-$PHP_YAML_EXTENSION_VERSION="2.0.4"
 # https://curl.haxx.se/docs/caextract.html
 $PHP_CACERT_DATE="2019-05-15"
 
@@ -23,26 +18,29 @@ $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
 
-Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
+Function install_ext(){
+  $PHP_INI="C:/php/php.ini"
+
   $extensions='yaml',`
          'xdebug',`
-         'Zend Opcache',`
          'redis',`
          'mongodb',`
-         'igbinary',`
-         'curl',`
-         'pdo_mysql'
-
-  _mkdir C:\php-ext
+         'igbinary'
 
   _downloader `
       http://redmine.lighttpd.net/attachments/download/660/RunHiddenConsole.zip `
       RunHiddenConsole.zip `
       RunHiddenConsole
 
+  _downloader `
+      https://github.com/khs1994-php/pickle/releases/download/v0.4.1-2019-11-08/pickle.phar `
+      pickle `
+      pickle
+
   _unzip RunHiddenConsole.zip RunHiddenConsole
 
   copy-item -r -force RunHiddenConsole\RunHiddenConsole.exe C:\bin
+  copy-item -r -force pickle C:\bin
   _cleanup RunHiddenConsole
 
   _downloader `
@@ -56,88 +54,28 @@ Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
     cp php-cgi-spawner.exe C:\php
   }
 
-  cp -Force C:\php\php.ini C:\php-ext\php.ini
-    #
-    # pecl
-    #
-
-    # https://pecl.php.net/package/yaml
-    _downloader `
-      https://windows.php.net/downloads/pecl/releases/yaml/$PHP_YAML_EXTENSION_VERSION/php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      C:\php-ext\php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64 null $false
-    # https://pecl.php.net/package/xdebug
-    _downloader `
-      https://windows.php.net/downloads/pecl/releases/xdebug/$PHP_XDEBUG_EXTENSION_VERSION/php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      C:\php-ext\php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
-    # https://pecl.php.net/package/redis
-    _downloader `
-      https://windows.php.net/downloads/pecl/releases/redis/$PHP_REDIS_EXTENSION_VERSION/php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      C:\php-ext\php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
-    # https://pecl.php.net/package/mongodb
-    _downloader `
-      https://windows.php.net/downloads/pecl/releases/mongodb/$PHP_MONGODB_EXTENSION_VERSION/php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      C:\php-ext\php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
-    # https://pecl.php.net/package/igbinary
-    _downloader `
-      https://windows.php.net/downloads/pecl/releases/igbinary/$PHP_IGBINARY_EXTENSION_VERSION/php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      C:\php-ext\php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip `
-      php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip null $false
-    # https://curl.haxx.se/docs/caextract.html
-    # https://github.com/khs1994-docker/lnmp/issues/339
-    _downloader `
+  # https://curl.haxx.se/docs/caextract.html
+  # https://github.com/khs1994-docker/lnmp/issues/339
+  _downloader `
       https://curl.haxx.se/ca/cacert-${PHP_CACERT_DATE}.pem `
-      C:\php-ext\cacert-${PHP_CACERT_DATE}.pem `
-      C:\php-ext\cacert-${PHP_CACERT_DATE}.pem null $false
+      cacert-${PHP_CACERT_DATE}.pem `
+      cacert-${PHP_CACERT_DATE}.pem
 
-    Function _pecl($zip,$file){
-      if (!(Test-Path C:\php-ext\$file)){
-        _unzip C:\php-ext\$zip C:\php-ext\temp
-        mv C:\php-ext\temp\$file C:\php-ext\$file
-      }
+  copy-item -r -force cacert-${PHP_CACERT_DATE}.pem C:\bin
+
+  Foreach ($extension in $extensions){
+    php -r "if(extension_loaded('$extension')===true){exit(0);}exit(1);"
+
+    if($?){
+      "==> extension $extension already loaded, skip"
+
+      continue
     }
 
-    _pecl php_igbinary-$PHP_IGBINARY_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_igbinary.dll
-
-    _pecl php_mongodb-$PHP_MONGODB_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_mongodb.dll
-
-    _pecl php_redis-$PHP_REDIS_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_redis.dll
-
-    _pecl php_xdebug-$PHP_XDEBUG_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_xdebug.dll
-
-    _pecl php_yaml-$PHP_YAML_EXTENSION_VERSION-$PHP_VERSION_XY-$VC_VERSION-x64.zip php_yaml.dll
-
-    Foreach ($extension in $extensions){
-      $a = php -r "echo extension_loaded('$extension');"
-
-      if (!($a -eq 1)){
-
-      if ($extension -eq 'Zend Opcache'){
-        echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-        "zend_extension=opcache" | out-file -Append C:/php/php.ini -encoding utf8
-        continue
-      }
-
-      if (!(Test-Path C:\php-ext\php_$extension.dll)){
-        if ((Test-Path C:\php\ext\php_$extension.dll)){
-          echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-          "extension=$extension" | out-file -Append C:/php/php.ini -encoding utf8
-        }else{
-          continue
-        }
-        continue
-      }
-
-      if ($extension -eq 'xdebug'){
-        echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-        "; zend_extension=C:\php-ext\php_$extension" | out-file -Append C:/php/php.ini -encoding utf8
-        continue
-      }
-      echo ' ' | out-file -Append C:/php/php.ini -encoding utf8
-      "extension=C:\php-ext\php_$extension" | out-file -Append C:/php/php.ini -encoding utf8
+    if (Test-Path $HOME/github/pickle/bin/pickle){
+      php $HOME/github/pickle/bin/pickle install $extension
+    }else{
+      php C:\bin\pickle install $extension
     }
   }
 
@@ -149,8 +87,9 @@ Function install_ext($PHP_VERSION_XY="7.3",$VC_VERSION="nts-vc15"){
 
   $a = php -r "echo ini_get('curl.cainfo');"
 
-  if ($a -ne "C:\php-ext\cacert-${PHP_CACERT_DATE}.pem"){
-    "curl.cainfo=C:\php-ext\cacert-${PHP_CACERT_DATE}.pem" | out-file -Append C:/php/php.ini -encoding utf8
+  if ($a -ne "C:\bin\cacert-${PHP_CACERT_DATE}.pem"){
+    "curl.cainfo=C:\bin\cacert-${PHP_CACERT_DATE}.pem" `
+    | out-file -Append $PHP_INI -encoding utf8
   }
 
   php -r "echo ini_get('curl.cainfo');"
@@ -181,7 +120,7 @@ Function install_after($VERSION){
     mv C:\php\php.ini-development C:\php\php.ini
   }
 
-  install_ext $PHP_VERSION_XY $VC_VERSION
+  install_ext $PHP_BIN $PHP_INI
 }
 
 Function install($VERSION=0,$isPre=0){
@@ -208,6 +147,9 @@ Function install($VERSION=0,$isPre=0){
 
     if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
+
+        install_after $VERSION
+
         return
     }
   }
@@ -247,7 +189,7 @@ Function install($VERSION=0,$isPre=0){
 }
 
 Function uninstall(){
-  _cleanup "C:\php" "C:\php-ext"
+  _cleanup "C:\php"
 }
 
 Function getInfo(){

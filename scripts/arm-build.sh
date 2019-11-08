@@ -31,7 +31,7 @@ case "${arch}" in
     ;;
 esac
 
-cd dockerfile/php-fpm/${folder}
+cd dockerfile/php/${folder}
 docker buildx build -t khs1994/${arch}-php:${version}-${type}-alpine \
   --platform=$platform \
   --build-arg ALPINE_URL=mirrors.ustc.edu.cn \

@@ -12,7 +12,7 @@
   "ignorePaths": [
     "wsl/docker-compose.yml",
     "wsl/Dockerfile",
-    "dockerfile/php-fpm/",
+    "dockerfile/php/",
     "app/"
   ],
   "docker": {
