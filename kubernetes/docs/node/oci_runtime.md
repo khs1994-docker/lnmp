@@ -80,6 +80,7 @@ spec:
 ### 在 Docker 中使用
 
 * `runsc` 与 `Docker` 的 `--exec-opt native.cgroupdriver=systemd` 不兼容。
+* https://github.com/google/gvisor/issues/193
 
 下载 `runsc`
 
