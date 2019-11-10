@@ -22,7 +22,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=4.4.7
+ENV SWOOLE_VERSION=4.4.12
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
@@ -30,20 +30,10 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                                       $PHPIZE_DEPS \
                                       openssl-dev \
       && export PATH=$PATH:/opt/bin \
-      && export extension_name=swoole \
       && echo "--enable-sockets --enable-openssl --enable-http2 --enable-mysqlnd" \
-           > /tmp/${extension_name}.configure.options \
+           > /tmp/swoole.configure.options \
       && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
-           $(test -f /tmp/${extension_name}.configure.options \
-                 && echo --with-configure-options=/tmp/${extension_name}.configure.options \
-                 || echo --defaults \
-            ) \
-           -n \
-      && docker-php-ext-enable ${extension_name} || echo "pecl ${extension_name} install error" \
-      && rm -rf /usr/local/lib/php/doc/${extension_name} \
-      && rm -rf /usr/local/lib/php/test/${extension_name} \
-      && rm -rf /usr/local/include/php/ext/${extension_name} \
-      && strip --strip-all $(php-config --extension-dir)/${extension_name}.so \
+           -n --defaults --strip --cleanup --continue-on-error \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*

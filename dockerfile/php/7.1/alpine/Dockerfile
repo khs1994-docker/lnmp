@@ -114,41 +114,40 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          # tidyhtml-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
-        && docker-php-ext-configure gd \
+        && apk add --no-cache --virtual .phpize-deps \
+                                          # linux-headers \
+                                          $PHPIZE_DEPS \
+        && curl -fsSL -o /usr/local/bin/pickle \
+           https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
+        && chmod +x /usr/local/bin/pickle \
+# 安装内置扩展
+        && docker-php-source extract \
+        && docker-php-ext-install zip \
+        # && docker-php-ext-configure gd \
+        && echo " \
                                     --disable-gd-jis-conv \
                                     --with-freetype-dir=/usr \
                                     --with-jpeg-dir=/usr \
                                     --with-png-dir=/usr \
                                     --with-webp-dir=/usr \
-                                    --with-xpm-dir=/usr \
-        && docker-php-ext-install $PHP_EXTENSION \
-        && apk add --no-cache --virtual .build-deps \
-                                          # linux-headers \
-                                          $PHPIZE_DEPS \
-        && for extension in ${PHP_EXTENSION};do \
-             strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
-           done \
-        && for extension in $PECL_EXTENSION;do \
-             pecl install $extension \
-             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
-             && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
-             && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
-           done \
-        && curl -fsSL -o /usr/local/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/v19.11.8/pickle.phar \
-        && chmod +x /usr/local/bin/pickle \
-        && pickle install xdebug -n --defaults --no-write \
-        || true \
-# https://github.com/tideways/php-xhprof-extension.git
+                                    --with-xpm-dir=/usr" > /tmp/gd.configure.options \
+        && pickle install $PHP_EXTENSION -n --defaults \
+           --strip \
+        && docker-php-source delete \
+# 安装 PECL 扩展
+        && pickle install $PECL_EXTENSION -n --defaults \
+           --strip --cleanup \
+# 默认不启用的扩展
         && pickle install \
-           https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
-           -n --defaults --no-write \
+             xdebug \
+# https://github.com/tideways/php-xhprof-extension.git
+             https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+             -n --defaults --strip --cleanup --no-write \
         || true \
+# 启用扩展
         && pickle install opcache \
         # && docker-php-ext-enable opcache \
-        && apk del --no-network --no-cache .build-deps .php-fpm-build-deps \
+        && apk del --no-network --no-cache .phpize-deps .php-fpm-build-deps \
         && rm -rf /tmp/* \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
 # 创建日志文件夹

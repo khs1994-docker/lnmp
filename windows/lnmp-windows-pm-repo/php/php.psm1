@@ -33,7 +33,7 @@ Function install_ext(){
       RunHiddenConsole
 
   _downloader `
-      https://github.com/khs1994-php/pickle/releases/download/v19.11.8/pickle.phar `
+      https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar `
       pickle `
       pickle
 

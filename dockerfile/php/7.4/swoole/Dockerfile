@@ -25,7 +25,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=4.4.7
+ENV SWOOLE_VERSION=4.4.12
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -35,24 +35,13 @@ RUN --mount=type=bind,from=php:7.4.0RC5-alpine,source=/usr/local/bin,target=/opt
                                       $PHPIZE_DEPS \
                                       openssl-dev \
       && export PATH=$PATH:/opt/bin \
-      && export extension_name=swoole \
-      && cd /tmp \
-      && curl -fsSL https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
-           | tar -zxvf - \
-      && cd swoole-src-${SWOOLE_VERSION} \
-      && phpize \
-      && ./configure \
-           # --enable-sockets \
+      && echo " \
+           --enable-sockets \
            --enable-openssl \
            --enable-http2 \
-           --enable-mysqlnd \
-      && make -j "$(nproc)" \
-      && make install \
-      && docker-php-ext-enable ${extension_name} || echo "pecl ${extension_name} install error" \
-      && rm -rf /usr/local/lib/php/doc/${extension_name} \
-      && rm -rf /usr/local/lib/php/test/${extension_name} \
-      && rm -rf /usr/local/include/php/ext/${extension_name} \
-      && strip --strip-all $(php-config --extension-dir)/${extension_name}.so \
+           --enable-mysqlnd" > /tmp/swoole.configure.options \
+      && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
+         -n --defaults --strip --cleanup --continue-on-error \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*

@@ -305,7 +305,7 @@ ENV PECL_EXTENSION \
       igbinary \
       redis \
       memcached \
-      xdebug \
+      # xdebug \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
@@ -315,25 +315,16 @@ RUN --mount=type=bind,from=php:7.3.11-alpine,source=/usr/local/bin,target=/opt/b
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && for extension in $PECL_EXTENSION;do \
-           pecl install $extension \
-           && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
-           && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
-           && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
-           && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
-           && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
-         done \
       && curl -fsSL -o /usr/local/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/v19.11.8/pickle.phar \
+           https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
       && chmod +x /usr/local/bin/pickle \
-# https://github.com/tideways/php-xhprof-extension.git
+      && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
+         xdebug \
+# https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
-         -n --defaults --no-write \
+         -n --defaults --no-write --strip --cleanup \
       || true \
-# 默认不启用 xdebug
-      && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*

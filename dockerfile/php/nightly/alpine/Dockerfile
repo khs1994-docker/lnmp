@@ -369,7 +369,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
   && chmod -R 777 /var/log/php-fpm \
   && rm -rf /usr/src/php \
   && curl -fsSL -o /usr/local/bin/pickle \
-       https://github.com/khs1994-php/pickle/releases/download/v19.11.8/pickle.phar \
+       https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
   && chmod +x /usr/local/bin/pickle
 
 ENTRYPOINT ["docker-php-entrypoint"]
@@ -389,7 +389,7 @@ ENV PECL_EXTENSION \
       igbinary-beta \
       redis-beta \
       memcached-beta \
-      xdebug-beta \
+      # xdebug-beta \
       yaml-beta \
       ${PECL_EXTENSION_EXTRA:-}
 
@@ -400,28 +400,16 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && cd /tmp \
-      && for extension in $PECL_EXTENSION;do \
-           EXT_REAL_NAME=$(echo ${extension} | cut -d '-' -f 1) \
-           && ( pickle install $extension -n --defaults \
-           && rm -rf /tmp/${EXT_REAL_NAME}* \
-           && docker-php-ext-enable ${EXT_REAL_NAME}) || echo "pecl ${extension} install error" \
-           && rm -rf /usr/local/include/php/ext/${EXT_REAL_NAME} \
-           && strip --strip-all $(php-config --extension-dir)/${EXT_REAL_NAME}.so || true ; \
-         done \
-         \
+      && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup --continue-on-error \
       && pickle install \
            https://github.com/xdebug/xdebug/archive/master.tar.gz \
-           -n --defaults --no-write \
+# https://github.com/tideways/php-xhprof-extension.git
+           https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
+           -n --defaults --no-write --strip --cleanup --continue-on-error \
       # && phpize \
       # && ./configure --enable-xdebug-dev \
       # && make all -j "$(nproc)"\
       # && make install \
-      || true \
-# https://github.com/tideways/php-xhprof-extension.git
-      && pickle install \
-           https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
-           -n --defaults --no-write \
       || true \
       && rm -rf /tmp/* \
       && apk del --no-network --no-cache .pecl_build_deps \
