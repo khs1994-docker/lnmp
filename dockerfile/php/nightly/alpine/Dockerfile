@@ -368,9 +368,9 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
   && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
   && chmod -R 777 /var/log/php-fpm \
   && rm -rf /usr/src/php \
-  && curl -fsSL -o /usr/local/bin/pickle \
+  && curl -fsSL -o /usr/bin/pickle \
        https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
-  && chmod +x /usr/local/bin/pickle
+  && chmod +x /usr/bin/pickle
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
@@ -412,7 +412,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       # && make install \
       && rm -rf /tmp/* \
       && apk del --no-network --no-cache .pecl_build_deps \
-      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
+      && php -m
 
 STOPSIGNAL SIGQUIT
 EXPOSE 9000

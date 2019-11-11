@@ -191,15 +191,6 @@ RUN --mount=type=bind,from=composer:1.9.1,source=/usr/bin/composer,target=/opt/b
  # laravel 安装程序
  && composer global require --prefer-dist "laravel/installer" \
  \
- # php-cs-fixer
- # https://github.com/FriendsOfPHP/PHP-CS-Fixer
- && composer global require --prefer-dist "friendsofphp/php-cs-fixer" \
- \
- # Sami an API documentation generator
- # https://github.com/FriendsOfPHP/Sami
- && curl -fsSL http://get.sensiolabs.org/sami.phar > /usr/local/bin/sami \
- && chmod +x /usr/local/bin/sami \
- \
  && ln -sf /tmp/vendor/bin/* /usr/local/bin \
  && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
 

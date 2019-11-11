@@ -115,9 +115,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
-        && curl -fsSL -o /usr/local/bin/pickle \
+        && curl -fsSL -o /usr/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
-        && chmod +x /usr/local/bin/pickle \
+        && chmod +x /usr/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \
         && docker-php-ext-configure zip \
@@ -153,6 +153,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stdout /var/log/php-fpm/access.log \
         && ln -sf /dev/stderr /var/log/php-fpm/error.log \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
-        && chmod -R 777 /var/log/php-fpm
+        && chmod -R 777 /var/log/php-fpm \
+        && php -m
 
 WORKDIR /app

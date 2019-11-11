@@ -315,9 +315,9 @@ RUN --mount=type=bind,from=php:7.3.11-alpine,source=/usr/local/bin,target=/opt/b
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && curl -fsSL -o /usr/local/bin/pickle \
+      && curl -fsSL -o /usr/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
-      && chmod +x /usr/local/bin/pickle \
+      && chmod +x /usr/bin/pickle \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
          xdebug \
@@ -326,7 +326,8 @@ RUN --mount=type=bind,from=php:7.3.11-alpine,source=/usr/local/bin,target=/opt/b
          -n --defaults --no-write --strip --cleanup \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
-      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
+      && php -m
 
 WORKDIR /app
 

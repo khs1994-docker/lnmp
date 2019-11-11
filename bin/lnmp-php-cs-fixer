@@ -20,5 +20,5 @@ exec docker run -i ${tty} --rm \
   --env-file $ScriptRoot/../config/composer/.env \
   --entrypoint php-cs-fixer \
   --user ${LNMP_USER:-root:root} \
-  ${DOCKER_IMAGE}:${TAG} \
+  khs1994/php-cs-fixer \
   "$@"

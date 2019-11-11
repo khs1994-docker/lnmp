@@ -78,6 +78,11 @@ jobs:
         if [ "$TYPE" = "FPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
         if [ "$TYPE" = "CLI" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; fi
         if [ "$TYPE" = "PPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; fi
+
+        if [ "$TYPE" = "COMPOSER" ];then
+            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} -t $DOCKER_HUB_USERNAME/php-cs-fixer --platform ${PLATFORM} ${IS_PUSH} php-cs-fixer
+            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} -t $DOCKER_HUB_USERNAME/sami --platform ${PLATFORM} ${IS_PUSH} sami
+        fi
       env:
         DOCKER_HUB_USERNAME: khs1994
 

@@ -330,9 +330,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   \
 # RUN set -ex \
   && rm -rf /usr/src/php \
-  && curl -fsSL -o /usr/local/bin/pickle \
+  && curl -fsSL -o /usr/bin/pickle \
        https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
-  && chmod +x /usr/local/bin/pickle
+  && chmod +x /usr/bin/pickle
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
@@ -368,7 +368,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            -n --defaults --no-write --strip --cleanup --continue-on-error \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
-      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
+      && php -m
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
