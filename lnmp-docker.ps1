@@ -591,6 +591,15 @@ Function _lrew_backup(){
 
 }
 
+Function _wsl_check(){
+  wsl -d $DistributionName echo ""
+
+  if(!$?){
+    printError "wsl [ $DistributionName ] not found, please check [ .env.ps1 ] file `$DistributionName value"
+    exit 1
+  }
+}
+
 # main
 
 if (!(Test-Path cli/khs1994-robot.enc )){
@@ -684,7 +693,8 @@ switch -regex ($command){
 
     httpd-config {
       clear
-      wsl -d $DistributionName lnmp-docker httpd-config $other
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker httpd-config $other
     }
 
     backup {
@@ -755,7 +765,8 @@ switch -regex ($command){
 
     cn-mirror {
       clear
-      wsl -d $DistributionName lnmp-docker cn-mirror
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker cn-mirror
     }
 
     checkout {
@@ -813,12 +824,14 @@ switch -regex ($command){
 
     new {
       clear
-      wsl -d $DistributionName lnmp-docker new $other
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker new $other
     }
 
     nginx-config {
       clear
-      wsl -d $DistributionName lnmp-docker nginx-config $other
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker nginx-config $other
     }
 
     swarm-config {
@@ -1033,7 +1046,8 @@ switch -regex ($command){
 
     update-version {
       clear
-      wsl -d $DistributionName lnmp-docker update-version
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker update-version
     }
 
     bug {
