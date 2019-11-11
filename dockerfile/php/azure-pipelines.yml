@@ -212,7 +212,8 @@ jobs:
           export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
           IS_PUSH=--push; \
         else \
-          true; \
+          IS_PUSH=--push; \
+          DOCKER_HUB_USERNAME=lrew; \
         fi; \
       else \
         IS_PUSH=--push; \
@@ -239,4 +240,6 @@ jobs:
   - script: |
       curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
     displayName: 'Trigger hooks'
+    env:
+      DOCKER_HUB_USERNAME: khs1994
     condition: succeeded()

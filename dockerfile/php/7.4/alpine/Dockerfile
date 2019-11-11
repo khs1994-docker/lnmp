@@ -147,7 +147,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 # https://github.com/tideways/php-xhprof-extension.git
              https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
              -n --defaults --strip --cleanup --no-write --continue-on-error \
-        || true \
         && pickle install opcache \
         # && docker-php-ext-enable opcache \
         && apk del --no-network --no-cache .phpize-deps .php-fpm-build-deps \

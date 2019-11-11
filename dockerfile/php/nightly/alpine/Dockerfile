@@ -410,7 +410,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       # && ./configure --enable-xdebug-dev \
       # && make all -j "$(nproc)"\
       # && make install \
-      || true \
       && rm -rf /tmp/* \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*

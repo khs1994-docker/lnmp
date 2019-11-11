@@ -331,7 +331,6 @@ RUN --mount=type=bind,from=php:7.2.24-alpine,source=/usr/local/bin,target=/opt/b
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \
-      || true \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*

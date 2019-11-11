@@ -91,4 +91,6 @@ jobs:
     - run: |
         curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
       name: 'Trigger hooks'
+      env:
+        DOCKER_HUB_USERNAME: khs1994
       if: success()
