@@ -119,6 +119,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
            https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
         && chmod +x /usr/local/bin/pickle \
 # 安装内置扩展
+        && docker-php-source extract \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-install zip \
@@ -131,7 +132,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                         --with-webp-dir=/usr \
                                         --with-xpm-dir=/usr" > /tmp/gd.configure.options \
         # && docker-php-ext-install $PHP_EXTENSION \
-        && docker-php-source extract \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \
 # 安装 PECL 扩展

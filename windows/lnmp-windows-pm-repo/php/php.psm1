@@ -18,8 +18,9 @@ $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
 
-Function install_ext(){
-  $PHP_INI="C:/php/php.ini"
+Function install_ext($PHP_PREFIX){
+  $PHP_INI="${PHP_PREFIX}/php.ini"
+  $PHP_BIN="${PHP_PREFIX}/php.exe"
 
   $extensions='yaml',`
          'xdebug',`
@@ -64,7 +65,7 @@ Function install_ext(){
   copy-item -r -force cacert-${PHP_CACERT_DATE}.pem C:\bin
 
   Foreach ($extension in $extensions){
-    php -r "if(extension_loaded('$extension')===true){exit(0);}exit(1);"
+    & ${PHP_BIN} -r "if(extension_loaded('$extension')===true){exit(0);}exit(1);"
 
     if($?){
       "==> extension $extension already loaded, skip"
@@ -73,9 +74,9 @@ Function install_ext(){
     }
 
     if (Test-Path $HOME/github/pickle/bin/pickle){
-      php $HOME/github/pickle/bin/pickle install $extension
+      & ${PHP_BIN} $HOME/github/pickle/bin/pickle install $extension --php ${PHP_BIN}
     }else{
-      php C:\bin\pickle install $extension
+      & ${PHP_BIN} C:\bin\pickle install $extension --php ${PHP_BIN}
     }
   }
 
@@ -95,7 +96,11 @@ Function install_ext(){
   php -r "echo ini_get('curl.cainfo');"
 }
 
-Function install_after($VERSION){
+Function install_after($VERSION,$PHP_PREFIX){
+  if (!(Test-Path $PHP_PREFIX\php.ini)){
+    Copy-Item $PHP_PREFIX\php.ini-development $PHP_PREFIX\php.ini
+  }
+
   $PHP_VERSION_XY=$VERSION.split(".")[0]+'.'+$VERSION.split(".")[1]
 
   switch ($PHP_VERSION_XY)
@@ -116,11 +121,7 @@ Function install_after($VERSION){
     }
   }
 
-  if (!(Test-Path C:\php\php.ini)){
-    mv C:\php\php.ini-development C:\php\php.ini
-  }
-
-  install_ext $PHP_BIN $PHP_INI
+  install_ext $PHP_PREFIX
 }
 
 Function install($VERSION=0,$isPre=0){
@@ -132,10 +133,12 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$preVersion
     $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php74"
+    $PHP_PREFIX="C:\php74"
   }else{
     $VC_VERSION="nts-Win32-VC15"
     $url="https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php"
+    $PHP_PREFIX="C:\php"
   }
 
   $filename="php-${VERSION}-${VC_VERSION}-x64.zip"
@@ -176,16 +179,11 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\php"
 
-  install_after $VERSION
+  install_after ${VERSION} $PHP_PREFIX
 
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  if($isPre){
-    C:\php74\php -v
-    return
-  }
-
-  php -v
+  & ${PHP_PREFIX}/php -v
 }
 
 Function uninstall(){
