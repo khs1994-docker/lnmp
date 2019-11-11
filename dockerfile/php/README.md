@@ -79,7 +79,7 @@ Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.co
 [pickle](https://github.com/khs1994-php/pickle)
 
 ```bash
-$ pickle install x x1 x2-beta x3-x.y.z
+$ pickle install x x1 x2-beta x3-x.y.z -n --defaults
 ```
 
 ```bash

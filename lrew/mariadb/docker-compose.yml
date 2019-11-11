@@ -23,7 +23,8 @@ services:
     environment:
       # @link https://github.com/docker-library/docs/tree/master/mariadb#environment-variables
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: test
+      # MYSQL_ROOT_PASSWORD: ${LNMP_MYSQL_ROOT_PASSWORD:-mytest}
+      MYSQL_DATABASE: ${LNMP_MYSQL_DATABASE:-test}
       # MYSQL_USER:
       # MYSQL_PASSWORD:
     ports:

@@ -77,17 +77,17 @@ mount: mem1 is already mounted or /cgroup/cgrp1 busy
 ```bash
 /cgroup/
 ├── blkio                             <--------------- hierarchy/root cgroup
-│   ├── blkio.io_merged              <--------------- subsystem parameter
+│   ├── blkio.io_merged               <--------------- subsystem parameter
 ... ...
 │   ├── blkio.weight
 │   ├── blkio.weight_device
 │   ├── cgroup.event_control
 │   ├── cgroup.procs
 │   ├── lxc                          <--------------- cgroup
-│   │   ├── blkio.io_merged         <--------------- subsystem parameter
+│   │   ├── blkio.io_merged          <--------------- subsystem parameter
 │   │   ├── blkio.io_queued
 ... ... ...
-│   │   └── tasks                   <--------------- task list
+│   │   └── tasks                    <--------------- task list
 │   ├── notify_on_release
 │   ├── release_agent
 │   └── tasks

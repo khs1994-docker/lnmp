@@ -1,6 +1,6 @@
 # 构建支持多种架构的 Docker 镜像
 
-> 请使用 `$ docker buildx build` 命令。
+**请使用 [`$ docker buildx build`](buildx.md)命令**
 
 ```bash
 # 事先请登录 Docker Hub

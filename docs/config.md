@@ -28,7 +28,7 @@
 
 **2.** 在示例配置文件夹内 `./config/mysql/` 复制 `docker.cnf` 为 `docker.my.cnf`
 
-**3.** 在 `.env` 文件内修改 `LNMP_MYSQL_CONF` 变量值为 `docker.my.cnf`(默认是注释掉的，如果你按照本文方法操作，直接取消注释即可，或者修改为你自己认为合适的文件名)。
+**3.** 在 `.env` 文件内修改 `LNMP_MYSQL_CONF` 变量值为 `docker.my.cnf`
 
 ### 修改默认数据文件夹
 
@@ -48,11 +48,23 @@ datadir         = /var/lib/mysql-my
 
 ### MySQL 自定义初始的 ROOT 密码
 
+#### 通过密钥文件设置密码（自行了解设置）
+
 **1.** 在 `./secrets/` 新建 `*.txt` 文件，并写入密码。例如 `db.my.txt`
 
 **2.** 在 `.env` 文件中设置 `LNMP_DB_ROOT_PASSWORD_PATH` 值为文件名，例如 `LNMP_DB_ROOT_PASSWORD_PATH=db.my.txt`
 
-> 如果原来启动过，要么销毁（数据卷）之后重新启动，要么手动进入命令行修改密码。
+#### 通过修改 .env 文件修改密码（默认）
+
+```diff
+- LNMP_MYSQL_ROOT_PASSWORD=mytest
++ LNMP_MYSQL_ROOT_PASSWORD=newpassword
+
+- LNMP_MYSQL_DATABASE=test
++ LNMP_MYSQL_DATABASE=mydb
+```
+
+> 如果 MySQL 之前启动过，要么销毁（数据卷）之后重新启动，要么手动进入命令行修改密码。
 
 ## NGINX HTTPD
 

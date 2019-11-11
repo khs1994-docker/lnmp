@@ -105,13 +105,13 @@ services:
 
 编辑 `docker-lnmp.include.yml` 文件，增加服务名，修改指令即可。
 
-> 例如我们想自定义 `php7` 服务的配置，我们先增加 php7 这个条目。
+> 例如想自定义 `php7` 服务的配置，我们先增加 php7 这个条目。
 
 ```yaml
 version: "3.7"
 
 services:
   php7:
-    # 想修改哪个配置在这里重写即可，例如我们想使用自己的 PHP 镜像，那么增加 `image` 指令即可
+    # 想修改哪个配置在这里重写即可，例如想使用自己的 PHP 镜像，那么增加 `image` 指令即可
     image: username/image:tag
 ```

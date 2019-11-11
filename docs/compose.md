@@ -33,7 +33,7 @@ web:
   command: "echo $$VAR_NOT_INTERPOLATED_BY_COMPOSE"
 ```
 
-`$VAR` 都会被 compose 解析，使用 `$$` 避免被解析成变量。
+`$VAR` 都会被 compose 当作变量解析，可以使用 `$$` 避免被解析成变量。
 
 ## docker stack 不支持 `.env` 文件
 

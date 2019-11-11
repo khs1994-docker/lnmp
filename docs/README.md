@@ -6,7 +6,7 @@
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
 </p>
 
-本项目不建议刚学习 LNMP 的新手使用，当掌握 LNMP 到一定程度时，相信你一定会与我产生共鸣：[项目初衷](why.md)。
+本项目不建议刚学习 LNMP 的新手使用，当掌握 LNMP 到一定程度时，相信你一定会与笔者产生共鸣：[项目初衷](why.md)。
 
 在线阅读：[GitHub](SUMMARY.md)
 

@@ -96,7 +96,7 @@ $ mc cp /path minio/mybucket
 
 ## Laravel
 
-我们知道 minio API 与 AWS s3 兼容，所以我们可以很方便的在 Laravel 中使用 minio
+minio API 与 AWS s3 兼容，所以可以很方便的在 Laravel 中使用 minio
 
 ```bash
 $ composer require league/flysystem-aws-s3-v3

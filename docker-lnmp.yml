@@ -24,8 +24,8 @@ services:
       # @link https://github.com/docker-library/docs/tree/master/mysql#environment-variables
       # @link https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
       # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_ROOT_PASSWORD: mytest
-      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: ${LNMP_MYSQL_ROOT_PASSWORD:-mytest}
+      MYSQL_DATABASE: ${LNMP_MYSQL_DATABASE:-test}
       # MYSQL_USER:
       # MYSQL_PASSWORD:
     ports:

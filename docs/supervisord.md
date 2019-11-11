@@ -8,7 +8,7 @@
 LNMP_SERVICES="nginx mysql php7 redis phpmyadmin supervisord"
 ```
 
-配置文件位于 `config/supervisord/supervisord.ini`，编辑配置文件。
+配置文件位于 `config/supervisord/supervisord.ini`。
 
 启动
 
