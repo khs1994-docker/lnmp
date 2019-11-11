@@ -113,7 +113,7 @@ Commands:
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
-  composer             Exec composer command on Docker
+  composer             Exec composer command on Docker Container
   completion           Move fish shell completion code (Only Support fish)
   config               Validate and view the LNMP Compose file
   bug                  Generate Debug information, then copy it to GitHub Issues

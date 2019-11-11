@@ -71,10 +71,9 @@ complete -W "acme.sh \
         outdated \
         pkg-backup \
         pkg-update \
-        commit \
         test \
-        cn-mirror \
         compose \
+        composer \
         pcit-up \
         pcit-cp \
         nfs" lnmp-docker

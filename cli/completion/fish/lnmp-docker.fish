@@ -10,6 +10,7 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a build-push        -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a build-up          -d     'Create and start LNMP containers With Self Build images (Only Support x86_64)'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a cleanup           -d     'Cleanup log files'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a completion        -d     'Move fish shell completion code (Only Support fish)'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a composer          -d     'Exec composer command on Docker Container'
 
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit-help   -d     'Print ClusterKit help info'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a clusterkit        -d     'UP LNMP With Mysql Redis Memcached Cluster [Background]'
@@ -100,8 +101,6 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a add               -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a outdated          -d      'Shows a list of installed lrew packages that have updates available'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a pkg-backup        -d      'Upload composer.json to GitHub Gist'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a pkg-update        -d      'Update lrew package'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a commit            -d      'Commit LNMP to git'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a test              -d      'Test LNMP'
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a cn-mirror         -d      'Push master branch to CN mirror'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a compose           -d      'Install docker-compose'
 complete -c lnmp-docker -n '__fish_seen_subcommand_from compose' -l official -f -d 'Force Install docker-compose'

@@ -22,11 +22,6 @@ Function _command($command){
   return $?
 }
 
-if(_command docker){
-  $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
-  $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
-}
-
 $outNull=$false
 
 if (${QUITE} -eq $true){
@@ -229,7 +224,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
-  composer             Exec composer command on Docker
+  composer             Exec composer command on Docker Container
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   env                  Edit .env/.env.ps1 file
@@ -647,6 +642,8 @@ Function _wsl2_docker_init(){
   }
 }
 
+$isWSL2=$false
+
 if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT" -or $PSVersionTable.Platform -eq $null) -and (Test-Path $HOME\.docker\config.json)){
   $docker_current_context=(ConvertFrom-Json -InputObject (get-content $HOME\.docker\config.json -Raw)).currentContext
 
@@ -654,8 +651,20 @@ if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT" -or $PSVersion
     printInfo "Docker Engine run in WSL2 (start by $ service docker start)"
     $LNMP_COMPOSE_GLOBAL_OPTIONS="-H ${LNMP_WSL2_DOCKER_HOST}"
     _wsl2_docker_init
+    $isWSL2=$true
   }else{
       # $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_engine"
+  }
+}
+
+# context is wsl2, exec slow
+if(_command docker){
+  if(!$isWSL2){
+    $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
+    $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
+  }else{
+    $DOCKER_VERSION_YY=$($(docker -c default --version).split(' ')[2].split('.')[0])
+    $DOCKER_VERSION_MM=$($(docker -c default --version).split(' ')[2].split('.')[1])
   }
 }
 
@@ -761,12 +770,6 @@ switch -regex ($command){
                                    "docker-lnmp.override.yml"
 
       & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other}
-    }
-
-    cn-mirror {
-      clear
-      _wsl_check
-      wsl -d $DistributionName ./lnmp-docker cn-mirror
     }
 
     checkout {
