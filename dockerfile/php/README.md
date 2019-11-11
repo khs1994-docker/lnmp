@@ -62,7 +62,25 @@ Please use `docker-compose`, example see [khs1994-docker/lnmp](https://github.co
 
 [khs1994-docker/lnmp](https://github.com/khs1994-docker/lnmp) use this Docker Image.
 
+## bin
+
+* php
+* php-cgi
+* php-config
+* phpdbg
+* phpize
+
+## sbin
+
+* php-fpm
+
 ## Extension
+
+[pickle](https://github.com/khs1994-php/pickle)
+
+```bash
+$ pickle install x x1 x2-beta x3-x.y.z
+```
 
 ```bash
 $ docker-php-source extract

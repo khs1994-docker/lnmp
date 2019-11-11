@@ -48,13 +48,13 @@ ENV PHP_EXTENSION \
       ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \
-      mongodb-beta \
-      igbinary-beta \
-      redis-beta \
-      memcached-beta \
+      mongodb \
+      igbinary \
+      redis \
+      memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \
-      yaml-beta \
+      yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
@@ -127,6 +127,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-install zip \
+        && strip --strip-all $(php-config --extension-dir)/zip.so \
         # && docker-php-ext-configure gd \
         && echo " \
                                         --disable-gd-jis-conv \

@@ -302,12 +302,12 @@ ENV PECL_RUN_DEPS \
       zlib
 
 ENV PECL_EXTENSION \
-      mongodb-beta \
-      igbinary-beta \
-      redis-beta \
-      memcached-beta \
+      mongodb \
+      igbinary \
+      redis \
+      memcached \
       # xdebug-beta \
-      yaml-beta \
+      yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:7.4.0RC5-alpine,source=/usr/local/bin,target=/opt/bin,rw \
@@ -321,7 +321,7 @@ RUN --mount=type=bind,from=php:7.4.0RC5-alpine,source=/usr/local/bin,target=/opt
       && chmod +x /usr/bin/pickle \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup --continue-on-error \
       && pickle install \
-         xdebug-beta \
+         xdebug \
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup --continue-on-error \

@@ -345,12 +345,12 @@ ENV PECL_RUN_DEPS \
       zlib
 
 ENV PECL_EXTENSION \
-      mongodb-beta \
-      igbinary-beta \
-      redis-beta \
-      memcached-beta \
+      mongodb \
+      igbinary \
+      redis \
+      memcached \
       # xdebug-beta \
-      yaml-beta \
+      yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
