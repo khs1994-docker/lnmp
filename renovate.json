@@ -24,5 +24,10 @@
       "enabled": false
     }
   },
-  "fileMatch": ["docker-compose.bump.yml"]
+  "fileMatch": ["docker-compose.bump.yml"],
+  "includePaths" : [
+    "scripts/docker-compose.bump.yml",
+    "kubernetes/docker-compose.bump.yml",
+    "drone/scripts/docker-compose.bump.yml"
+  ]
 }
