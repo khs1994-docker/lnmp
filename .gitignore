@@ -1,15 +1,17 @@
 .DS_Store
+
 .idea
 .vscode
-data
+
+/data
 
 # docker-composer
 
 docker-compose
 docker-compose-Darwin-x86_64
 docker-compose-Linux-x86_64
-docker-production.*.yml
-docker-lnmp.include.yml
+/docker-production.*.yml
+/docker-lnmp.include.yml
 /docker-compose.yml
 
 # cache
@@ -37,6 +39,7 @@ lnmp-state
 
 vendor
 composer.lock
+/composer.json
 
 # example test
 
@@ -52,13 +55,11 @@ __pycache__
 
 # debug info
 
-debug.md
-bug.md
+/debug.md
+/bug.md
 
 *.sum
 *.exe
-
-logs
 
 # clusterkit
 
@@ -66,9 +67,3 @@ logs
 
 /lnmp-docker-custom-script
 /lnmp-docker-custom-script.ps1
-
-/composer.json
-
-lnmp-include
-
-wsl2/config/coredns/corefile

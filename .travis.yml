@@ -348,8 +348,10 @@ jobs:
 
     - stage: checkConfig
       script:
+        - sudo apt install -y tree
         - cd config
         - ./default.sh
+        - tree .
         - cd ..
         - git status | grep "nothing to commit" && exit 0 || true
         - git add .

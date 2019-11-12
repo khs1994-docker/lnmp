@@ -1,0 +1,6 @@
+/*
+!.gitignore
+!config.example.json
+!.env.example
+!.env.example.ps1
+!auth.example.json
