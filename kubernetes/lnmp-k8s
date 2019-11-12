@@ -813,6 +813,7 @@ _containerd_install(){
 
 _cni_install(){
   $(_sudo) mkdir -p ${K8S_ROOT}/cni/bin
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/cni/bin/flannel;fi
   if [ -f ${K8S_ROOT}/cni/bin/flannel -a ! "$1" = "--dry-run" ];then
     print_info "cni already install"
     return
@@ -824,15 +825,16 @@ _cni_install(){
   # wsl2 with cni 0.8.2 error:
   # https://github.com/containernetworking/plugins/issues/370
   # down to 0.7.6
+  # 0.8.3 fixed
 
-  if [ $IS_WSL2 -eq 1 ];then
-    CNI_VERSION="0.7.6"
+  # if [ $IS_WSL2 -eq 1 ];then
+  #   CNI_VERSION="0.7.6"
 
-    print_info "WSL2 use cni $CNI_VERSION"
+  #   print_info "WSL2 use cni $CNI_VERSION"
 
-    local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
-    local TAR_FILE="cni-plugins-${GOARCH}-v${CNI_VERSION}.tgz"
-  fi
+  #   local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
+  #   local TAR_FILE="cni-plugins-${GOARCH}-v${CNI_VERSION}.tgz"
+  # fi
 
   __download(){
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}

@@ -821,6 +821,11 @@ switch -regex ($command){
     }
 
     env {
+      if($other){
+        notepad.exe $other
+        exit
+      }
+
       notepad.exe .env
       notepad.exe .env.ps1
     }
@@ -1131,6 +1136,12 @@ XXX
     }
 
     donate {
+      clear
+      printInfo "Thank You"
+      Start-Process -FilePath http://zan.khs1994.com
+    }
+
+    fund {
       clear
       printInfo "Thank You"
       Start-Process -FilePath http://zan.khs1994.com
