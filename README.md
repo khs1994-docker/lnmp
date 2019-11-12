@@ -227,7 +227,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.3.11-composer-alpine`  | **6.x**       |`Alpine:3.10`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.3.11-composer-alpine`  | **1.9.1**       |`Alpine:3.10`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-cs-fixer`                | **2.16.0**      |`Alpine:3.10`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.19-alpine`           | **1.5.19**       |`Alpine:3.10`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.20-alpine`           | **1.5.20**       |`Alpine:3.10`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.0-management-alpine` | **3.8.0**       |`Alpine:3.10`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.0-alpine`             | **12.0**        |`Alpine:3.10`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.1`                      | **4.2.1**       |`Ubuntu:bionic` |
