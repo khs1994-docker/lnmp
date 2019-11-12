@@ -48,6 +48,9 @@ RUN --mount=type=bind,from=composer:1.9.1,source=/usr/bin/composer,target=/opt/b
     \
 # laravel 安装程序
     && composer global require --prefer-dist --ignore-platform-reqs "laravel/installer" \
+    \
+    && ln -sf /tmp/vendor/bin/* /usr/local/bin \
+    && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock \
 # composer 中国镜像
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
