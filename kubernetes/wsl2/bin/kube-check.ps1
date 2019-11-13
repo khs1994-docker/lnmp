@@ -1,3 +1,4 @@
+# 检查 wsl 是否满足运行 k8s 的需求
 wsl -- sh -c "df -h | grep -q '/wsl/k8s-data'"
 
 # k8s-data 未挂载，说明 k8s-data 未处于运行状态

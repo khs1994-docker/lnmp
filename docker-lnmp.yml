@@ -112,9 +112,6 @@ services:
       - ./log/php:/var/log/php:delegated
       - ./log/supervisord.log:/var/log/supervisord.log:delegated
       - ./log/supervisord:/var/log/supervisord:delegated
-      # vscode remote
-      # https://code.visualstudio.com/docs/remote/containers-advanced#_avoiding-extension-reinstalls-on-container-rebuild
-      # - vscode-server:/root/.vscode-server
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo

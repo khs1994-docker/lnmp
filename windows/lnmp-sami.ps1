@@ -12,5 +12,5 @@ docker run -it --rm `
   --env-file $PSScriptRoot/../config/composer/.env `
   --entrypoint sami `
   -e TZ=${TZ} `
-  ${LNMP_PHP_IMAGE} `
+  khs1994/sami `
   $args

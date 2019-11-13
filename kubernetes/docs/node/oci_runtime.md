@@ -3,6 +3,11 @@
 * https://kubernetes.io/docs/concepts/containers/runtime-class/
 * https://github.com/opencontainers/runtime-spec/blob/master/implementations.md
 
+* [runc](https://github.com/opencontainers/runc)
+* [crun](https://github.com/containers/crun)
+* [runsc](https://github.com/google/gvisor)
+* [kata-containers](https://github.com/kata-containers/runtime)
+
 ## runc
 
 * https://github.com/opencontainers/runc
@@ -101,6 +106,12 @@ $ sudo chmod +x /usr/local/bin/runsc
     "runtimes": {
         "runsc": {
             "path": "/usr/local/bin/runsc"
+        },
+        "runsc-kvm": {
+            "path": "/usr/local/bin/runsc",
+            "runtimeArgs": [
+                "--platform=kvm"
+          ]
         }
     }
 }
@@ -110,4 +121,12 @@ $ sudo chmod +x /usr/local/bin/runsc
 
 ```bash
 $ docker run --runtime=runsc --rm hello-world
+```
+
+## 参考
+
+安装 kvm
+
+```bash
+$ sudo apt-get install qemu-kvm
 ```
