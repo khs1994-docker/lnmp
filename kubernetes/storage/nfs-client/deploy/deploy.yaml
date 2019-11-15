@@ -105,9 +105,9 @@ spec:
             - name: NFS_SERVER
               value: 192.168.199.100
             - name: NFS_PATH
-              value: /kubernetes_csi
+              value: /kubernetes_pv
       volumes:
         - name: nfs-client-root
           nfs:
             server: 192.168.199.100
-            path: /kubernetes_csi
+            path: /kubernetes_pv

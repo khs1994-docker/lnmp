@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kubelet-root
+data:
+  # kubelet_root: /var/lib/kubelet
+  kubelet_root: /wsl/k8s-data/k8s/var/lib/kubelet

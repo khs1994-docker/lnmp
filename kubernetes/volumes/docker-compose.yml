@@ -11,6 +11,7 @@ services:
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/lnmp/redis:/nfs/lnmp/redis
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/lnmp/registry:/nfs/lnmp/registry
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/lnmp/log:/nfs/lnmp/log
+      - ${NFS_DATA_ROOT:-./nfs-data}/nfs/kubernetes_pv:/nfs/kubernetes_pv
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/kubernetes_csi:/nfs/kubernetes_csi
     env_file:
       - ./.env

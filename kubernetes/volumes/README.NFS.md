@@ -24,6 +24,14 @@ APP_ROOT="../../app"
 $ lnmp-k8s nfs
 ```
 
+## 客户端进行挂载必须安装依赖(重要)
+
+```bash
+$ sudo apt install -y nfs-common
+
+$ sudo yum install -y nfs-utils
+```
+
 ## WSL2
 
 **问题 1:** 在 WSL2 上启动 NFS Server 容器不支持挂载 Windows 路径(例如: `/mnt/c`)
