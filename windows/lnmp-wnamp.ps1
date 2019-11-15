@@ -34,7 +34,7 @@ Function _stop($soft){
   switch ($soft){
     "nginx" {
       printInfo "Stop nginx..."
-      taskkill /F /IM nginx.exe
+      start-process "taskkill" -ArgumentList "/F","/IM","nginx.exe" -Verb RunAs
       Write-Host "
       "
     }
@@ -49,7 +49,7 @@ Function _stop($soft){
 
     "mysql" {
       printInfo "Stop MySQL..."
-      net stop mysql
+      start-process "net" -ArgumentList "stop","mysql" -Verb RunAs -wait
       Write-Host "
       "
     }
@@ -121,7 +121,7 @@ Function _start($soft){
       # cd $NGINX_PATH
       printInfo "Start nginx..."
       nginx -p ${NGINX_PATH} -t
-      RunHiddenConsole nginx -p ${NGINX_PATH}
+      start-process "nginx" -ArgumentList "-p","${NGINX_PATH}" -Verb RunAs -WindowStyle Hidden
       cd $source
       Write-Host "
       "
@@ -129,7 +129,8 @@ Function _start($soft){
 
     "mysql" {
       printInfo "Start MySQL..."
-      net start mysql
+      # net start mysql
+      start-process "net" -ArgumentList "start","mysql" -Verb RunAs
       Write-Host "
       "
     }

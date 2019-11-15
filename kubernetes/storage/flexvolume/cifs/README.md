@@ -26,7 +26,7 @@ $ sudo apt install -y cifs-utils jq util-linux coreutils
 # $ KUBELET_PLUGINS_VOLUME_PATH=${K8S_ROOT:-/opt/k8s}/var/lib/kubelet/kubelet-plugins/volume/exec/
 $ KUBELET_PLUGINS_VOLUME_PATH="/usr/libexec/kubernetes/kubelet-plugins/volume/exec"
 
-$ sed "s%##KUBELET_PLUGINS_VOLUME_PATH##%${KUBELET_PLUGINS_VOLUME_PATH:?value empty}%g" deploy.yaml | kubectl apply -f -
+$ sed "s%##KUBELET_PLUGINS_VOLUME_PATH##%${KUBELET_PLUGINS_VOLUME_PATH:?value empty}%g" deploy/deploy.yaml | kubectl apply -f -
 ```
 
 `Windows` 请执行如下命令:
@@ -34,7 +34,7 @@ $ sed "s%##KUBELET_PLUGINS_VOLUME_PATH##%${KUBELET_PLUGINS_VOLUME_PATH:?value em
 ```powershell
 $ PS:> $KUBELET_PLUGINS_VOLUME_PATH="/usr/libexec/kubernetes/kubelet-plugins/volume/exec"
 
-$ PS:> (get-content deploy.yaml) -Replace "##KUBELET_PLUGINS_VOLUME_PATH##",${KUBELET_PLUGINS_VOLUME_PATH} | kubectl apply -f -
+$ PS:> (get-content deploy/deploy.yaml) -Replace "##KUBELET_PLUGINS_VOLUME_PATH##",${KUBELET_PLUGINS_VOLUME_PATH} | kubectl apply -f -
 ```
 
 ## 测试

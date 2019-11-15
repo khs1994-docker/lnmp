@@ -338,8 +338,9 @@ _get_compose_options(){
   for compose_file in $LREW_INCLUDE
   do
     # COMPOSE_FILE=$(echo $compose_file | tr '[a-z]' '[A-Z]')
-    local PACKAGE=$(echo ${compose_file^^} | tr '-' '_')
+    # local PACKAGE=$(echo ${compose_file^^} | tr '-' '_')
 
+    local PACKAGE=$(echo $compose_file | tr '[a-z]' '[A-Z]' | tr '-' '_')
     if [ -d vendor/lrew-dev/$compose_file ];then
       LREW_INCLUDE_ROOT="vendor/lrew-dev/$compose_file"
       # set env

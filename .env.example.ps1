@@ -7,20 +7,23 @@ $APP_ENV="windows"
 $APP_ROOT="./app"
 # $APP_ROOT="../app"
 
+$LREW_INCLUDE="pcit","minio"
+# $LREW_INCLUDE="pcit","minio"
+
 $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
 
-# LNMP_SERVICES="nginx mysql mariadb php7 redis phpmyadmin \
-#                      memcached postgresql mongodb \
-#                      rabbitmq httpd registry \
-#                      minio \
-#                      supervisord \
-#                      nginx-unit \
-#                      "
+# LNMP_SERVICES="nginx","mysql","mariadb","php7","redis","phpmyadmin",`
+#                      "memcached","postgresql","mongodb",`
+#                      "rabbitmq","httpd","registry",`
+#                      "minio",`
+#                      "supervisord",`
+#                      "nginx-unit"
 
 $CI_HOST="ci.khs1994.com:10000"
 
 # wsl name
 # $ wslconfig /l
+# $ wsl -l
 $DistributionName="Ubuntu-18.04"
 
 $TZ='Asia/Shanghai'
@@ -38,8 +41,5 @@ $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 $LNMP_NODE_IMAGE="node:alpine"
 # $LNMP_NODE_IMAGE="khs1994/node:git"
-
-$LREW_INCLUDE="pcit","minio"
-# $LREW_INCLUDE="pcit","minio"
 
 $LNMP_WSL2_DOCKER_HOST="tcp://localhost:2375"

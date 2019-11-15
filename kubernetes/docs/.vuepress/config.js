@@ -90,8 +90,8 @@ module.exports = {
         "data",
         "nfs",
         "pv",
-        "flexVolume",
-        "csi",
+        "flexvolume/",
+        "csi/",
         "storage-classes",
       ],
       "/node/": [
