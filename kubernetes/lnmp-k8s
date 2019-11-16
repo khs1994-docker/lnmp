@@ -349,30 +349,30 @@ _create_pv(){
       echo "==> create PV with HOSTPATH"
       sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.temp.yaml \
         | sed "s#development#${ENVIRONMENT}#g" \
-        | kubectl apply -f -
+        | kubectl apply -f - $@
 
       test -n "$NO_PVC" || \
-        kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
+        kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml $@
 
       return
     fi
 
     echo "==> create PV with NFS"
     sed "s#192.168.199.100#${LNMP_NFS_SERVER_HOST}#g" deployment/pv/lnmp-volume.linux.nfs.yaml | \
-      kubectl apply -f -
+      kubectl apply -f - $@
 
     test -n "$NO_PVC" || \
-      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.linux.nfs.yaml
+      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.linux.nfs.yaml $@
 
   elif [ "$OS" = 'Darwin' ];then
     echo "==> create PV with HOSTPATH on macOS"
 
     sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.temp.yaml \
       | sed "s#development#${ENVIRONMENT}#g" \
-      | kubectl apply -f -
+      | kubectl apply -f - $@
 
     test -n "$NO_PVC" || \
-      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
+      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml $@
   fi
 }
 
@@ -439,7 +439,9 @@ _create_lnmp(){
 
   kubectl get pvc/lnmp-app -n $NAMESPACE -o json > /dev/null 2>&1 \
     && echo "==> PVC exists, SKIP create PV and PVC" \
-    || _create_pv ${NAMESPACE} ${NFS_OPTIONS}
+    || _create_pv ${NAMESPACE} ${NFS_OPTIONS} $@
+
+  local options=$@
 
   CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-php-conf-0.0.1 \
@@ -1136,8 +1138,10 @@ _crio_config(){
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
 
-  $(_sudo) sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
-  $(_sudo) sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT}#g" /etc/systemd/system/kubelet.service
+  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri.conf
+[Service]
+Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock"
+EOF
 }
 
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
@@ -1155,8 +1159,10 @@ _containerd_cri_config(){
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
 
-  $(_sudo) sed -i "s#--container-runtime=docker#--container-runtime=remote#g" /etc/systemd/system/kubelet.service
-  $(_sudo) sed -i "s#--container-runtime-endpoint=unix:///var/run/dockershim.sock#--container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT}#g" /etc/systemd/system/kubelet.service
+  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri.conf
+[Service]
+Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock"
+EOF
 }
 
 _docker_default_conf(){
@@ -1234,6 +1240,8 @@ encryption-config.yaml} \
     local CONTAINER_RUNTIME=$1
   fi
 
+  $(_sudo) rm -rf /etc/systemd/system/kubelet.service.d
+  $(_sudo) mkdir -p /etc/systemd/system/kubelet.service.d
   if [ "$CONTAINER_RUNTIME" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
     _containerd_cri_config
@@ -1252,6 +1260,7 @@ encryption-config.yaml} \
     if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
+    $(_sudo) cp systemd/kubelet-20-cri.conf /etc/systemd/system/kubelet.service.d/20-cri.conf
   else
     print_info "CRI only support containerd crio docker"
     exit
@@ -1358,6 +1367,8 @@ kube-proxy.kubeconfig} \
     local CONTAINER_RUNTIME=$2
   fi
 
+  $(_sudo) rm -rf /etc/systemd/system/kubelet.service.d
+  $(_sudo) mkdir -p /etc/systemd/system/kubelet.service.d
   if [ "$CONTAINER_RUNTIME" = "--containerd" ];then
     $(_sudo) cp systemd/kube-containerd.service /etc/systemd/system/
     print_info "Kubelet Runtime is Containerd"
@@ -1377,6 +1388,7 @@ kube-proxy.kubeconfig} \
     if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
+    $(_sudo) cp systemd/kubelet-20-cri.conf /etc/systemd/system/kubelet.service.d/20-cri.conf
   else
     print_info "CRI support containerd crio docker"
     exit
@@ -1453,6 +1465,7 @@ _local_cleanup(){
 
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
+  $(_sudo) rm -rf /etc/systemd/system/kubelet.service.d
   $(_sudo) cp systemd/etc/containerd/docker.toml /etc/containerd/config.toml
   $(_sudo) systemctl daemon-reload || true
   $(_sudo) systemctl restart docker containerd || true

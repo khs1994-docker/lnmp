@@ -165,4 +165,4 @@ tcp        0      0 127.0.0.1:35843         0.0.0.0:*               LISTEN      
 
 务必保证各组件正常运行之后，再进行测试！
 
-部署 [CoreDNS 插件](../addons.md) 进行测试。
+部署 [CoreDNS 插件](../addons/coredns.md) 进行测试。
