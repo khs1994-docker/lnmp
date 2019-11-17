@@ -201,7 +201,7 @@ $ kubeadm join 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
 
 ## 部署 CNI (以下任选其一)
 
-### flanneld
+### flanneld (0.11.0)
 
 检查 podCIDR 设置
 
@@ -214,10 +214,10 @@ $ kubectl get node -o yaml | grep CIDR
 ```
 
 ```bash
-$ kubectl apply -f addons/cni/flannel
+$ kubectl apply -k addons/cni/flannel
 ```
 
-### calico
+### calico (3.10)
 
 * https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico
 
@@ -228,7 +228,7 @@ $ kubectl apply -f addons/cni/flannel
 #### 删除 `flannel`
 
 ```bash
-$ kubectl delete -f addons/cni/flannel
+$ kubectl delete -k addons/cni/flannel
 
 $ sudo ip link del flannel.1
 ```

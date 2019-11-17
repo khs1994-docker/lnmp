@@ -4,8 +4,15 @@ resources:
 vars:
   - name: CALICO_IPV4POOL_CIDR
     objref:
-      name: calico.pod.cidr
+      name: calico.conf
       apiVersion: v1
       kind: ConfigMap
     fieldref:
       fieldpath: data.podCIDR
+  - name: CALICO_IPV4POOL_IPIP
+    objref:
+      name: calico.conf
+      apiVersion: v1
+      kind: ConfigMap
+    fieldref:
+      fieldpath: data.ipip

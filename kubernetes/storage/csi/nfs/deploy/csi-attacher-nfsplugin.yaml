@@ -16,10 +16,13 @@ spec:
 
 ---
 kind: StatefulSet
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: csi-attacher-nfsplugin
 spec:
+  selector:
+    matchLabels:
+      app: csi-attacher-nfsplugin
   serviceName: "csi-attacher"
   replicas: 1
   template:

@@ -3,12 +3,12 @@ resources:
 - csi-attacher-rbac.yaml
 - csi-nodeplugin-nfsplugin.yaml
 - csi-nodeplugin-rbac.yaml
-- configMaps.yaml
+- configMap.yaml
 vars:
 - name: KUBELET_ROOT
   objref:
     kind: ConfigMap
-    name: kubelet-root
+    name: csi.nfs.conf
     apiVersion: v1
   fieldref:
     fieldpath: data.kubelet_root
