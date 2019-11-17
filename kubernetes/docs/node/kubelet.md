@@ -85,3 +85,8 @@ kubelet 启动后使用 `--bootstrap-kubeconfig` 向 kube-apiserver 发送 CSR �
 ## pause
 
 * https://github.com/rootsongjc/kubernetes-handbook/blob/master/concepts/pause-container.md
+
+## 参考
+
+* https://cloud.tencent.com/developer/article/1381318
+* https://kubernetes.io/docs/tasks/administer-cluster/reconfigure-kubelet/

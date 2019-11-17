@@ -44,7 +44,7 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=-/sbin/modprobe ip_tables
+        ExecStartPre=-modprobe ip_tables
         ExecStartPre=-/usr/bin/env mkdir --parents /var/lib/coreos /run/flannel
         ExecStartPre=-podman container rm flanneld-etcdctl
         # ExecStartPre=-/usr/bin/env ETCDCTL_API=2 ${K8S_ROOT}/bin/etcdctl \

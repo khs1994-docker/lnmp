@@ -45,7 +45,7 @@ systemd:
         Conflicts=kube-containerd-130.service
 
         [Service]
-        ExecStartPre=-/sbin/modprobe overlay
+        ExecStartPre=-modprobe overlay
         ExecStart=/usr/local/bin/containerd \
                   --config /opt/k8s/etc/kube-containerd/config.toml
         KillMode=process
@@ -73,7 +73,7 @@ systemd:
         Conflicts=kube-containerd.service
 
         [Service]
-        ExecStartPre=-/sbin/modprobe overlay
+        ExecStartPre=-modprobe overlay
         ExecStart=/usr/local/bin/kube-containerd \
                   --config /opt/k8s/etc/kube-containerd/1.3.0/config.toml
         KillMode=process

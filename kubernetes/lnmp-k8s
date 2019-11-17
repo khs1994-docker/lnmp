@@ -925,12 +925,12 @@ _k8s_install_dep(){
   print_info "install dep ..."
   # 安装依赖软件
   command -v dnf > /dev/null && ($(_sudo) dnf install -y conntrack ipvsadm ipset jq iptables curl socat \
-    sysstat libseccomp > /dev/null && $(_sudo) /usr/sbin/modprobe ip_vs) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat \
-    sysstat libseccomp > /dev/null && $(_sudo) /usr/bin/env modprobe ip_vs) && return
+    sysstat libseccomp > /dev/null) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat \
+    sysstat libseccomp > /dev/null) && return
 
   set +e
   command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat \
-    sysstat libseccomp2 kmod > /dev/null && ($(_sudo) /usr/bin/env modprobe ip_vs)
+    sysstat libseccomp2 kmod > /dev/null
   set -e
 }
 
@@ -1276,6 +1276,18 @@ encryption-config.yaml} \
 
   _k8s_install_kubectl_conf
   _kubectl_completion
+
+  $(_sudo) modprobe -- ip_vs || true
+  $(_sudo) modprobe -- ip_vs_rr || true
+  $(_sudo) modprobe -- ip_vs_wrr || true
+  $(_sudo) modprobe -- ip_vs_sh || true
+
+  cat <<EOF | $(_sudo) tee /etc/modules
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+EOF
 }
 
 _k8s_join(){
@@ -1404,6 +1416,18 @@ kube-proxy.kubeconfig} \
 
   _k8s_install_kubectl_conf
   _kubectl_completion
+
+  $(_sudo) modprobe -- ip_vs || true
+  $(_sudo) modprobe -- ip_vs_rr || true
+  $(_sudo) modprobe -- ip_vs_wrr || true
+  $(_sudo) modprobe -- ip_vs_sh || true
+
+  cat <<EOF | $(_sudo) tee /etc/modules
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+EOF
 }
 
 _helm_lnmp(){
@@ -1466,6 +1490,7 @@ _local_cleanup(){
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
   $(_sudo) rm -rf /etc/systemd/system/kubelet.service.d
+  $(_sudo) rm -rf /etc/systemd/system/kubelet.service
   $(_sudo) cp systemd/etc/containerd/docker.toml /etc/containerd/config.toml
   $(_sudo) systemctl daemon-reload || true
   $(_sudo) systemctl restart docker containerd || true

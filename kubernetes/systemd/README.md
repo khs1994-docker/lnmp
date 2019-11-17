@@ -1,5 +1,7 @@
 # 使用 systemd 部署单节点 Kubernetes 集群
 
+> 主要参考了 https://github.com/opsnull/follow-me-install-kubernetes-cluster，笔者将步骤写成了 shell 脚本，便于一键部署。
+
 ## 准备
 
 * 了解 `systemd`
@@ -75,7 +77,7 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 
 > `${K8S_ROOT}` 默认为 `/opt/k8s`
 
-## 容器运行时
+## 容器运行时（CRI）
 
 * docker
 * containerd

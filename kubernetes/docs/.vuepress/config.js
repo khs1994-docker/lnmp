@@ -64,6 +64,7 @@ module.exports = {
         'kubectl',
         '/resources/deployment',
         '/resources/configMap',
+        'mod',
       ],
       '/setup/': [
         'systemd',
@@ -106,8 +107,8 @@ module.exports = {
         'flanneld',
         "kubelet",
         "worker",
-        "runtime",
         "oci_runtime",
+        "cri",
         "cni",
         "crictl",
         {

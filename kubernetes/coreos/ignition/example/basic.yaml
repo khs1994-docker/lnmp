@@ -39,18 +39,6 @@ storage:
       contents:
         compression: null
         source: http://{{SERVER_HOST}}:8080/releases/flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz
-    - path: /etc/systemd/network/30-static.network
-      mode: 0644
-      contents:
-        inline: |
-          [Match]
-          Name=eth0
-
-          [Network]
-          DHCP=no
-          Address=192.168.57.200/24
-          DNS=114.114.114.114
-          Gateway=192.168.57.1
     - path: /etc/NetworkManager/system-connections/eth0.nmconnection
       mode: 0600
       contents:
@@ -83,7 +71,7 @@ storage:
           [ipv4]
           method=manual
           dns=114.114.114.114
-          addresses=192.168.57.110/24
+          addresses=192.168.57.200/24
           gateway=192.168.57.1
   # directories:
   #   - path: ${K8S_ROOT}/bin
