@@ -145,7 +145,7 @@ systemd:
         --advertise-address={{IP_{{n}}}} \
         --default-not-ready-toleration-seconds=360 \
         --default-unreachable-toleration-seconds=360 \
-        --feature-gates=AllAlpha=true \
+        --feature-gates=AllAlpha=true,BoundServiceAccountTokenVolume=false \
         --max-mutating-requests-inflight=2000 \
         --max-requests-inflight=4000 \
         --default-watch-cache-size=200 \
@@ -262,7 +262,7 @@ systemd:
         --service-account-private-key-file=${K8S_ROOT}/certs/ca-key.pem \
         --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
         --logtostderr=true \
-        --feature-gates=AllAlpha=true \
+        --feature-gates=AllAlpha=true,BoundServiceAccountTokenVolume=false \
         --v=2
 
         Restart=on-failure
@@ -304,7 +304,7 @@ systemd:
         --requestheader-username-headers=X-Remote-User \
         --authorization-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
         --logtostderr=true \
-        --feature-gates=AllAlpha=true \
+        --feature-gates=AllAlpha=true,BoundServiceAccountTokenVolume=false \
         --v=2
 
         Restart=on-failure

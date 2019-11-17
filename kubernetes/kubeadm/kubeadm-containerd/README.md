@@ -14,6 +14,7 @@ kubeadm 默认运行时为 docker,这里简要介绍如何改为 `containerd`
 * 7. 重启机器
 * 8. 启动 `kubeadm-containerd` `kubelet`
 * 9. 启动 Docker, 清理原来的容器 `$ docker container prune`
+* 10. 部分 pod 等可能出错，删除之后重新部署
 
 ```diff
 - KUBELET_KUBEADM_ARGS="--cgroup-driver=systemd --network-plugin=cni --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1"

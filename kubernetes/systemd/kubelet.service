@@ -32,12 +32,6 @@ ExecStart=/opt/k8s/bin/kubelet \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 $KUBELET_CRI
 
-# docker + calico 增加以下选项
-# --network-plugin=cni
-# --cni-bin-dir=${K8S_ROOT}/cni/bin
-# --cni-conf-dir=${K8S_ROOT}/cni/net.d
-# --cni-cache-dir=${K8S_ROOT}/var/lib/cni/cache
-
 # --container-runtime=docker \
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock \
 # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \

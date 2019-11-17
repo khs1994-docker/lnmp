@@ -31,6 +31,10 @@ unable to fully collect metrics: unable to fully scrape metrics from source kube
 
 修改 `addons/metrics-server/metrics-server-deployment.yaml`,增加 `- --kubelet-insecure-tls`。
 
+```bash
+$ kubectl edit -n kube-system deployment/metrics-server
+```
+
 ## 启动参数
 
 > 0.3.1

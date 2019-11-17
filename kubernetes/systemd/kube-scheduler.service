@@ -24,7 +24,7 @@ ExecStart=/opt/k8s/bin/kube-scheduler \
 --requestheader-username-headers=X-Remote-User \
 --authorization-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
 --logtostderr=true \
---feature-gates=AllAlpha=true \
+--feature-gates=AllAlpha=true,BoundServiceAccountTokenVolume=false \
 --v=2
 
 Restart=on-failure

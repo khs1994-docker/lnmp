@@ -957,6 +957,9 @@ _k8s_install_systemd_docker(){
   print_info "Update systemd Docker unit file ..."
   $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
   $(_sudo) cp systemd/docker.conf /etc/systemd/system/docker.service.d/
+
+  $(_sudo) cp systemd/kubelet-20-cri.conf /etc/systemd/system/kubelet.service.d/20-cri.conf
+  $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" /etc/systemd/system/kubelet.service.d/20-cri.conf
 }
 
 _k8s_install_kubectl_conf(){
@@ -990,6 +993,12 @@ _k8s_install_systemd(){
   $(_sudo) systemctl daemon-reload || true
 }
 
+_cni_config(){
+  print_info "config cni ..."
+  $(_sudo) mkdir -p ${K8S_ROOT}/cni/net.d
+  $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/cni/net.d
+}
+
 _cri_config(){
   print_info "config cri ..."
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
@@ -999,10 +1008,6 @@ _cri_config(){
   echo "net.bridge.bridge-nf-call-ip6tables = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
 
   $(_sudo) sysctl --system || true
-
-  # cni conf
-  $(_sudo) mkdir -p ${K8S_ROOT}/cni/net.d
-  $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/cni/net.d
 }
 
 _conmon_install(){
@@ -1126,7 +1131,6 @@ _crio_install(){
 }
 
 _crio_config(){
-  _cni_install
   _crio_install
   cd $source_path
   print_info "config cri-o ..."
@@ -1146,7 +1150,6 @@ EOF
 
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
-  _cni_install
   print_info "config containerd ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.3.0
   # containerd config default > ${K8S_ROOT}/etc/kube-containerd/config.toml
@@ -1191,7 +1194,11 @@ _k8s_install(){
   _k8s_install_common
 
   _etcd_install
+
+  _cni_install
+  _cni_config
   _flanneld_install
+
   _helm_install
 
   print_info "copy systemd unit file ..."
@@ -1231,7 +1238,6 @@ encryption-config.yaml} \
   _gvisor_install
 
   _crictl_install
-  _containerd_install
   _runc_install
 
   local CONTAINER_RUNTIME="--containerd"
@@ -1244,6 +1250,7 @@ encryption-config.yaml} \
   $(_sudo) mkdir -p /etc/systemd/system/kubelet.service.d
   if [ "$CONTAINER_RUNTIME" = "--containerd" ];then
     print_info "Kubelet Runtime is Containerd"
+    _containerd_install
     _containerd_cri_config
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_containerd_conf;fi
@@ -1260,7 +1267,6 @@ encryption-config.yaml} \
     if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
-    $(_sudo) cp systemd/kubelet-20-cri.conf /etc/systemd/system/kubelet.service.d/20-cri.conf
   else
     print_info "CRI only support containerd crio docker"
     exit
@@ -1276,18 +1282,6 @@ encryption-config.yaml} \
 
   _k8s_install_kubectl_conf
   _kubectl_completion
-
-  $(_sudo) modprobe -- ip_vs || true
-  $(_sudo) modprobe -- ip_vs_rr || true
-  $(_sudo) modprobe -- ip_vs_wrr || true
-  $(_sudo) modprobe -- ip_vs_sh || true
-
-  cat <<EOF | $(_sudo) tee /etc/modules
-ip_vs
-ip_vs_rr
-ip_vs_wrr
-ip_vs_sh
-EOF
 }
 
 _k8s_join(){
@@ -1324,8 +1318,11 @@ kube-proxy.kubeconfig} > /dev/null
 
   _k8s_install_dep
   _k8s_install_common
-  # Flanneld
+
+  _cni_install
+  _cni_config
   _flanneld_install
+
   # etcdctl require by flanneld
   _etcd_install
   _helm_install
@@ -1370,7 +1367,6 @@ kube-proxy.kubeconfig} \
 
   _gvisor_install
   _crictl_install
-  _containerd_install
   _runc_install
 
   local CONTAINER_RUNTIME="--containerd"
@@ -1384,6 +1380,7 @@ kube-proxy.kubeconfig} \
   if [ "$CONTAINER_RUNTIME" = "--containerd" ];then
     $(_sudo) cp systemd/kube-containerd.service /etc/systemd/system/
     print_info "Kubelet Runtime is Containerd"
+    _containerd_install
     _containerd_cri_config
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_containerd_conf;fi
@@ -1400,7 +1397,6 @@ kube-proxy.kubeconfig} \
     if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
-    $(_sudo) cp systemd/kubelet-20-cri.conf /etc/systemd/system/kubelet.service.d/20-cri.conf
   else
     print_info "CRI support containerd crio docker"
     exit
@@ -1416,18 +1412,6 @@ kube-proxy.kubeconfig} \
 
   _k8s_install_kubectl_conf
   _kubectl_completion
-
-  $(_sudo) modprobe -- ip_vs || true
-  $(_sudo) modprobe -- ip_vs_rr || true
-  $(_sudo) modprobe -- ip_vs_wrr || true
-  $(_sudo) modprobe -- ip_vs_sh || true
-
-  cat <<EOF | $(_sudo) tee /etc/modules
-ip_vs
-ip_vs_rr
-ip_vs_wrr
-ip_vs_sh
-EOF
 }
 
 _helm_lnmp(){
