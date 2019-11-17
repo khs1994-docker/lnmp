@@ -383,6 +383,10 @@ $ kubeadm --config 配置文件名 其他参数
 $ kubeadm config images list
 ```
 
+## 使用其他运行时
+
+`~/lnmp/kubernetes/kubeadm`
+
 ## 笔者总结
 
 * 关键在于配置好 `kubelet`

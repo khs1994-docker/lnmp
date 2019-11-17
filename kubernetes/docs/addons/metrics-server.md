@@ -21,6 +21,16 @@ $ kubectl top pod -A
 * https://blog.csdn.net/zyl290760647/article/details/83041991
 * https://www.cnblogs.com/both/p/10078316.html
 
+## kubeadm
+
+报如下错误：
+
+```bash
+unable to fully collect metrics: unable to fully scrape metrics from source kubelet_summary:node1: unable to fetch metrics from Kubelet node1 (192.168.199.100): Get https://192.168.199.100:10250/stats/summary?only_cpu_and_memory=true: x509: cannot validate certificate for 192.168.199.100 because it doesn't contain any IP SANs
+```
+
+修改 `addons/metrics-server/metrics-server-deployment.yaml`,增加 `- --kubelet-insecure-tls`。
+
 ## 启动参数
 
 > 0.3.1
