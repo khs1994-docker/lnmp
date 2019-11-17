@@ -91,6 +91,7 @@ systemd:
         --image-pull-progress-deadline=15m \
         --volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
+        --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
         --v=2
 
         Restart=on-failure
@@ -190,6 +191,8 @@ storage:
           systemReservedCgroup: ""
           kubeReservedCgroup: ""
           enforceNodeAllocatable: ["pods"]
+          FeatureGates:
+          - AllAlpha=true
     - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
       mode: 0644
       contents:

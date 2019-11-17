@@ -16,7 +16,7 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --advertise-address=${KUBE_APISERVER_HOST} \
 --default-not-ready-toleration-seconds=360 \
 --default-unreachable-toleration-seconds=360 \
---feature-gates=DynamicAuditing=true \
+--feature-gates=AllAlpha=true \
 --max-mutating-requests-inflight=2000 \
 --max-requests-inflight=4000 \
 --default-watch-cache-size=200 \

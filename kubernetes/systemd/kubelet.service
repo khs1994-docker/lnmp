@@ -29,9 +29,10 @@ ExecStart=/opt/k8s/bin/kubelet \
 --volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ \
 --logtostderr=true \
 --v=2 \
+--dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 $KUBELET_CRI
 
-# 配置 calico 增加以下选项
+# docker + calico 增加以下选项
 # --network-plugin=cni
 # --cni-bin-dir=${K8S_ROOT}/cni/bin
 # --cni-conf-dir=${K8S_ROOT}/cni/net.d

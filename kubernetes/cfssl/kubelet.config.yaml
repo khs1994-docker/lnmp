@@ -68,3 +68,5 @@ kubeReserved: {}
 systemReservedCgroup: ""
 kubeReservedCgroup: ""
 enforceNodeAllocatable: ["pods"]
+FeatureGates:
+- AllAlpha=true

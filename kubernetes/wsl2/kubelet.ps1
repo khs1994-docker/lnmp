@@ -31,6 +31,7 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --image-pull-progress-deadline=15m `
 --volume-plugin-dir=${K8S_ROOT}/var/lib/kubelet/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
+--dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
 --v=2
 
 if($args[0] -eq "reset"){

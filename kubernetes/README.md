@@ -141,6 +141,14 @@ $ ./lnmp-k8s cleanup development
 
 * [pod 网络出错](docs/guide/network.md)
 
+## 学习
+
+* 存储 `pv` `pvc` `flexvolume` `csi`
+* 网络 `cni` `flannel` `calico`
+* 容器运行时 `cri` `docker` `cri-containerd` `cri-o`
+* 监控
+* 服务 `ingress`
+
 ## More Information
 
 * [feiskyer/kubernetes-handbook](https://github.com/feiskyer/kubernetes-handbook)
