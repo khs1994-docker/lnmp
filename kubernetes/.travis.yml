@@ -194,6 +194,9 @@ script:
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
   - curl ${SERVER_IP}:${HTTP_PORT}
+
+  - test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
+
 after_success:
   - sudo crictl version
   - sudo crictl info
@@ -232,10 +235,10 @@ matrix:
       env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.16.3 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.16.3 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom
     - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.15.2

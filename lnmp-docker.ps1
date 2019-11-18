@@ -77,7 +77,7 @@ Function env_status(){
     cp .env.example.ps1 .env.ps1
   }
 
-  _cp_only_not_exists kubernetes/volumes/.env.example kubernetes/volumes/.env
+  _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 

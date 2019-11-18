@@ -24,7 +24,6 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --cert-dir=${K8S_ROOT}/certs `
 --container-runtime=remote `
 --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
-
 --root-dir=${K8S_ROOT}/var/lib/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
 --config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
