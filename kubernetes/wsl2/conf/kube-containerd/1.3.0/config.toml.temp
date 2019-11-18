@@ -94,8 +94,8 @@ oom_score = 0
             SystemdCgroup = false
             # BinaryName = ""
     [plugins."io.containerd.grpc.v1.cri".cni]
-      bin_dir = "##K8S_ROOT##/cni/bin"
-      conf_dir = "##K8S_ROOT##/cni/net.d"
+      bin_dir = "##K8S_ROOT##/opt/cni/bin"
+      conf_dir = "##K8S_ROOT##/etc/cni/net.d"
       max_conf_num = 1
       conf_template = ""
     [plugins."io.containerd.grpc.v1.cri".registry]

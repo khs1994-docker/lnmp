@@ -95,7 +95,7 @@ oom_score = 0
             # BinaryName = ""
     [plugins."io.containerd.grpc.v1.cri".cni]
       bin_dir = "/usr/libexec/cni"
-      conf_dir = "/opt/k8s/cni/net.d"
+      conf_dir = "/opt/k8s/etc/cni/net.d"
       max_conf_num = 1
       conf_template = ""
     [plugins."io.containerd.grpc.v1.cri".registry]

@@ -360,7 +360,7 @@ systemd:
         --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
         --config=${K8S_ROOT}/conf/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
-        --volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ \
+        --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
         --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
         --v=2
@@ -369,7 +369,7 @@ systemd:
         # --network-plugin=cni \
         # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
         # --cni-bin-dir=/usr/libexec/cni \
-        # --cni-conf-dir=/opt/k8s/cni/net.d \
+        # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
 
         Restart=on-failure
         RestartSec=5

@@ -18,12 +18,12 @@ $ sudo apt install -y cifs-utils jq util-linux coreutils
 
 以 `Daemonset` 方式部署
 
-> `KUBELET_PLUGINS_VOLUME_PATH` 为 `kubelet` `--volume-plugin-dir=` 参数指定的值
+> `KUBELET_PLUGINS_VOLUME_PATH` 为 `kubelet` `--volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` 参数指定的值
 
 `Linux/macOS` 请执行如下命令:
 
 ```bash
-# $ KUBELET_PLUGINS_VOLUME_PATH=${K8S_ROOT:-/opt/k8s}/var/lib/kubelet/kubelet-plugins/volume/exec/
+# $ KUBELET_PLUGINS_VOLUME_PATH=${K8S_ROOT:-/opt/k8s}/usr/libexec/kubernetes/kubelet-plugins/volume/exec
 $ KUBELET_PLUGINS_VOLUME_PATH="/usr/libexec/kubernetes/kubelet-plugins/volume/exec"
 
 $ sed "s%##KUBELET_PLUGINS_VOLUME_PATH##%${KUBELET_PLUGINS_VOLUME_PATH:?value empty}%g" deploy/deploy.yaml | kubectl apply -f -

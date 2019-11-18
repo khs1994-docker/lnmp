@@ -27,7 +27,9 @@ spec:
   volumes:
   - name: test
     flexVolume:
-      # 与 kubelet 卷插件路径(--volume-plugin-dir=/path) /path/fstab~cifs/cifs 一致
+      # 与 kubelet 卷插件路径
+      # (--volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/)
+      # /usr/libexec/kubernetes/kubelet-plugins/volume/exec/fstab~cifs/cifs 一致
       driver: "fstab/cifs"
       fsType: "cifs"
       secretRef:

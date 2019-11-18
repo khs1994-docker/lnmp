@@ -140,7 +140,7 @@ if [ $IS_WSL2 -eq 1 ];then
   TMP_ROOT="${K8S_ROOT}/../.khs1994-docker-lnmp/caches"
 fi
 
-$(_sudo) mkdir -p ${K8S_ROOT}/{bin,conf,certs,log}
+$(_sudo) mkdir -p ${K8S_ROOT}/{bin,conf,certs,etc,opt,usr,var}
 
 $(_sudo) mkdir -p ${TMP_ROOT} || TMP_ROOT=/tmp
 
@@ -814,9 +814,9 @@ _containerd_install(){
 }
 
 _cni_install(){
-  $(_sudo) mkdir -p ${K8S_ROOT}/cni/bin
-  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/cni/bin/flannel;fi
-  if [ -f ${K8S_ROOT}/cni/bin/flannel -a ! "$1" = "--dry-run" ];then
+  $(_sudo) mkdir -p ${K8S_ROOT}/opt/cni/bin
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/opt/cni/bin/flannel;fi
+  if [ -f ${K8S_ROOT}/opt/cni/bin/flannel -a ! "$1" = "--dry-run" ];then
     print_info "cni already install"
     return
   fi
@@ -859,7 +859,7 @@ _cni_install(){
     return
   fi
 
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/cni/bin/
+  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/opt/cni/bin/
 }
 
 _crictl_docker_conf(){
@@ -995,8 +995,8 @@ _k8s_install_systemd(){
 
 _cni_config(){
   print_info "config cni ..."
-  $(_sudo) mkdir -p ${K8S_ROOT}/cni/net.d
-  $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/cni/net.d
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/cni/net.d
+  $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
 }
 
 _cri_config(){

@@ -4,9 +4,9 @@
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
 $WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
 
-wsl -u root -- mkdir -p ${K8S_ROOT}/cni/net.d
+wsl -u root -- mkdir -p ${K8S_ROOT}/etc/cni/net.d
 
-wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/10-flannel.conflist ${K8S_ROOT}/cni/net.d
+wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
 
 # wsl -u root -- cat ${K8S_ROOT}/cni/net.d/10-flannel.conflist
 

@@ -28,7 +28,7 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
 --config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
 --hostname-override=${NODE_NAME} `
---volume-plugin-dir=${K8S_ROOT}/var/lib/kubelet/kubelet-plugins/volume/exec/ `
+--volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
 --dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
 --v=2
@@ -44,6 +44,10 @@ if($args[0] -eq "reset"){
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock `
 # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 `
 # --image-pull-progress-deadline=15m `
+# --network-plugin=cni `
+# --cni-cache-dir=/opt/k8s/var/lib/cni/cache `
+# --cni-bin-dir=/opt/k8s/opt/cni/bin `
+# --cni-conf-dir=/opt/k8s/etc/cni/net.d `
 
 # --container-runtime=remote `
 # --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `

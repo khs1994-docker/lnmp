@@ -8,4 +8,4 @@
 
 `CSI` 和 `FlexVolume` 就是让存储插件放到外部去实现,不要和 k8s 强耦合.(类比 `CRI-O`)
 
-`FlexVolume` 是把可执行文件放到卷插件目录(kubelet --volume-plugin-dir=/path 参数指定的值),这个可执行文件实现接口.
+`FlexVolume` 是把可执行文件放到卷插件目录(kubelet --volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ 参数指定的值),这个可执行文件实现接口.
