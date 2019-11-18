@@ -24,11 +24,11 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --cert-dir=${K8S_ROOT}/certs `
 --container-runtime=remote `
 --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
+
 --root-dir=${K8S_ROOT}/var/lib/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
 --config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
 --hostname-override=${NODE_NAME} `
---image-pull-progress-deadline=15m `
 --volume-plugin-dir=${K8S_ROOT}/var/lib/kubelet/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
 --dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
@@ -44,6 +44,7 @@ if($args[0] -eq "reset"){
 # --container-runtime=docker `
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock `
 # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 `
+# --image-pull-progress-deadline=15m `
 
 # --container-runtime=remote `
 # --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `

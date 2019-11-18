@@ -15,6 +15,8 @@
 ### 云服务
 
 * [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [阿里云 Kubernetes](https://www.aliyun.com/product/kubernetes?source=5176.11533457&userCode=8lx5zmtu&type=copy)
+* [百度云 Kubernetes](https://cloud.baidu.com/product/cce.html)
 
 ### 本项目维护方案
 

@@ -15,17 +15,17 @@ systemd:
         Restart=on-failure
         RestartSec=5
         WorkingDirectory=/tmp
-        ExecStartPre=bash -c "if ! [ `/usr/local/bin/containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/containerd; fi"
-        ExecStartPre=bash -c "if ! [ -f /usr/local/bin/containerd ];then \
-            rpm2cpio /home/core/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm | cpio -div ; \
-            cp usr/bin/containerd /usr/local/bin ; \
-            cp usr/bin/containerd-shim /usr/local/bin ; \
-          fi"
+        # ExecStartPre=bash -c "if ! [ `/usr/local/bin/containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/containerd; fi"
+        # ExecStartPre=bash -c "if ! [ -f /usr/local/bin/containerd ];then \
+        #    rpm2cpio /opt/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm | cpio -div ; \
+        #    cp usr/bin/containerd /usr/local/bin ; \
+        #    cp usr/bin/containerd-shim /usr/local/bin ; \
+        #  fi"
 
         ExecStartPre=bash -c "if ! [ `/usr/local/bin/kube-containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/kube-containerd; fi"
         ExecStartPre=bash -c "if ! [ -f /usr/local/bin/kube-containerd ];then \
           rm -rf /tmp/bin ;\
-          tar -zxvf /home/core/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz \
+          tar -zxvf /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz \
           -C /tmp ;\
           cp /tmp/bin/containerd /tmp/bin/kube-containerd ; \
           cp /tmp/bin/containerd-shim /tmp/bin/kube-containerd-shim ; \
@@ -35,7 +35,7 @@ systemd:
         [Install]
         WantedBy=multi-user.target
     - name: kube-containerd.service
-      enabled: true
+      enabled: false
       contents: |
         [Unit]
         Description=containerd container runtime for kubernetes
@@ -63,7 +63,7 @@ systemd:
         [Install]
         WantedBy=multi-user.target
     - name: kube-containerd-130.service
-      enabled: false
+      enabled: true
       contents: |
         [Unit]
         Description=containerd container runtime for kubernetes
@@ -104,13 +104,13 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/cni/10-flannel.conflist
-    - path: /home/core/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
+    - path: /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
       mode: 0644
       contents:
         compression: null
         source: http://{{SERVER_HOST}}:8080/releases/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
-    - path: /home/core/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm
-      mode: 0644
-      contents:
-        compression: null
-        source: http://{{SERVER_HOST}}:8080/releases/containerd.io-1.2.10-3.2.fc30.x86_64.rpm
+    # - path: /opt/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm
+    #   mode: 0644
+    #   contents:
+    #     compression: null
+    #     source: http://{{SERVER_HOST}}:8080/releases/containerd.io-1.2.10-3.2.fc30.x86_64.rpm

@@ -10,8 +10,8 @@ systemd:
             # ExecStart=
             # ExecStart=/usr/bin/dockerd \
             #   --host=fd:// \
-            #   --exec-opt native.cgroupdriver=systemd \
-            #   ${DOCKER_NETWORK_OPTIONS}
+            #   --exec-opt native.cgroupdriver=systemd
+
 storage:
   files:
     - path:       "/etc/docker/daemon.json"

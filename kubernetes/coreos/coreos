@@ -132,7 +132,7 @@ case "$1" in
       --hostonlyadapter2 vboxnet1 \
       --firmware efi
 
-      VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 20000
+      VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 100000
 
       VBoxManage storagectl "coreos"$2 --name "IDE Controller" --add ide --controller PIIX4
 

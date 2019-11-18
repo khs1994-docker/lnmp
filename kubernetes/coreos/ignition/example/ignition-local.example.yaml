@@ -10,7 +10,7 @@ ignition:
       - source: http://{{SERVER_HOST}}:8080/ignition/docker.json
       - source: http://{{SERVER_HOST}}:8080/ignition/etcd.json
       - source: http://{{SERVER_HOST}}:8080/ignition/flanneld.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/helm.json
+      # - source: http://{{SERVER_HOST}}:8080/ignition/helm.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.json
@@ -354,16 +354,22 @@ systemd:
         --cert-dir=${K8S_ROOT}/certs \
         --container-runtime=${CONTAINER_RUNTIME} \
         --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
+        --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
+        --image-pull-progress-deadline=15m \
         --root-dir=/opt/k8s/var/lib/kubelet \
         --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
         --config=${K8S_ROOT}/conf/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
-        --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
-        --image-pull-progress-deadline=15m \
         --volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
         --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
         --v=2
+
+        # cri is docker
+        # --network-plugin=cni \
+        # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
+        # --cni-bin-dir=/usr/libexec/cni \
+        # --cni-conf-dir=/opt/k8s/cni/net.d \
 
         Restart=on-failure
         RestartSec=5

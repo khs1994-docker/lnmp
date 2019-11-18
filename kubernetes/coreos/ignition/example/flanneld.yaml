@@ -13,7 +13,7 @@ systemd:
         [Service]
         Restart=on-failure
         RestartSec=5
-        WorkingDirectory=/home/core/.khs1994-docker-lnmp/caches
+        WorkingDirectory=/opt/.khs1994-docker-lnmp/caches
         ExecStartPre=mkdir -p ${K8S_ROOT}/bin
         ExecStartPre=bash -c "if ! [ `${K8S_ROOT}/bin/flanneld --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/flanneld; fi"
         ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/flanneld ];then \
@@ -80,7 +80,7 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/flanneld-key.pem
-    - path: /home/core/.khs1994-docker-lnmp/caches/flannel-v${FLANNEL_VERSION}-linux-amd64.tar.gz
+    - path: /opt/.khs1994-docker-lnmp/caches/flannel-v${FLANNEL_VERSION}-linux-amd64.tar.gz
       mode: 0644
       contents:
         compression: null
