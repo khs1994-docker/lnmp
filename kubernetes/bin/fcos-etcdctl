@@ -7,6 +7,6 @@ exec podman run --rm --network host --privileged \
   etcdctl \
   --endpoints=$etcd_endpoints \
   --cacert="${K8S_ROOT:-/opt/k8s}/certs/ca.pem" \
-  --cert="${K8S_ROOT:-/opt/k8s}/certs/flanneld.pem" \
-  --key="${K8S_ROOT:-/opt/k8s}/certs/flanneld-key.pem" \
+  --cert="${K8S_ROOT:-/opt/k8s}/certs/flanneld-etcd-client.pem" \
+  --key="${K8S_ROOT:-/opt/k8s}/certs/flanneld-etcd-client-key.pem" \
   "$@"

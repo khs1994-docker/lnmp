@@ -13,8 +13,8 @@ $env:ETCDCTL_API=2
 etcdctl `
   --endpoints=${K8S_ETCD_ENTRYPOINTS} `
   --ca-file="$PSScriptRoot/certs/ca.pem" `
-  --cert-file="$PSScriptRoot/certs/flanneld.pem" `
-  --key-file="$PSScriptRoot/certs/flanneld-key.pem" `
+  --cert-file="$PSScriptRoot/certs/flanneld-etcd-client.pem" `
+  --key-file="$PSScriptRoot/certs/flanneld-etcd-client-key.pem" `
   get /kubernetes/network/config
 
 if (!($?)){
@@ -23,8 +23,8 @@ if (!($?)){
   etcdctl `
   --endpoints=${K8S_ETCD_ENTRYPOINTS} `
   --ca-file="$PSScriptRoot/certs/ca.pem" `
-  --cert-file="$PSScriptRoot/certs/flanneld.pem" `
-  --key-file="$PSScriptRoot/certs/flanneld-key.pem" `
+  --cert-file="$PSScriptRoot/certs/flanneld-etcd-client.pem" `
+  --key-file="$PSScriptRoot/certs/flanneld-etcd-client-key.pem" `
   set /kubernetes/network/config `
   $('{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}' | ConvertTo-Json)
 }
@@ -32,8 +32,8 @@ if (!($?)){
 $command=wsl -u root -- echo ${K8S_ROOT}/bin/flanneld `
   --etcd-endpoints=${K8S_ETCD_ENTRYPOINTS} `
   --etcd-cafile="${K8S_ROOT}/certs/ca.pem" `
-  --etcd-certfile="${K8S_ROOT}/certs/flanneld.pem" `
-  --etcd-keyfile="${K8S_ROOT}/certs/flanneld-key.pem" `
+  --etcd-certfile="${K8S_ROOT}/certs/flanneld-etcd-client.pem" `
+  --etcd-keyfile="${K8S_ROOT}/certs/flanneld-etcd-client-key.pem" `
   --etcd-prefix="/kubernetes/network" `
   --ip-masq
 

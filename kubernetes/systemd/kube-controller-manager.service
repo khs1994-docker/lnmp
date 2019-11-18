@@ -6,8 +6,6 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 
 # Flag --port has been deprecated, see --secure-port instead.
-# Flag --horizontal-pod-autoscaler-use-rest-clients has been deprecated,
-# Heapster is no longer supported as a source for Horizontal Pod Autoscaler metrics.
 
 Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_CM_HOST=192.168.199.100"
@@ -49,6 +47,8 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
 --logtostderr=true \
 --feature-gates=DynamicAuditing=true \
+--cluster-cidr=172.30.0.0/16 \
+--allocate-node-cidrs=true \
 --v=2
 
 Restart=on-failure

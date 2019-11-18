@@ -7,12 +7,12 @@
 #   # group:
 #   etcd_endpoints: ${ETCD_ENDPOINTS}
 #   etcd_cafile: /etc/kubernetes/certs/ca.pem
-#   etcd_certfile: /etc/kubernetes/certs/flanneld.pem
-#   etcd_keyfile: /etc/kubernetes/certs/flanneld-key.pem
+#   etcd_certfile: /etc/kubernetes/certs/flanneld-etcd-client.pem
+#   etcd_keyfile: /etc/kubernetes/certs/flanneld-etcd-client-key.pem
 # flannel:
 #   etcd_cafile: /etc/kubernetes/certs/ca.pem
-#   etcd_certfile: /etc/kubernetes/certs/flanneld.pem
-#   etcd_keyfile: /etc/kubernetes/certs/flanneld-key.pem
+#   etcd_certfile: /etc/kubernetes/certs/flanneld-etcd-client.pem
+#   etcd_keyfile: /etc/kubernetes/certs/flanneld-etcd-client-key.pem
 #   etcd_endpoints: ${ETCD_ENDPOINTS}
 #   etcd_prefix: ${FLANNELD_ETCD_PREFIX}
 #   network_config: '{"Network":"${CLUSTER_CIDR}", "SubnetLen": 24, "Backend": {"Type": "vxlan"}}'

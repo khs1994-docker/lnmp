@@ -1307,8 +1307,8 @@ not allowed, please input new hostname by --hostname=XXX" \
   # fi
 
   ls systemd/certs/{ca.pem,\
-flanneld.pem,\
-flanneld-key.pem,\
+flanneld-etcd-client.pem,\
+flanneld-etcd-client-key.pem,\
 kubectl.kubeconfig,\
 kubelet.config.yaml,\
 kube-proxy.config.yaml,\
@@ -1335,8 +1335,8 @@ kube-proxy.kubeconfig} > /dev/null
   # cp pem
   $(_sudo) cp systemd/certs/{ca.pem,\
 ca-key.pem,\
-flanneld-key.pem,\
-flanneld.pem} \
+flanneld-etcd-client-key.pem,\
+flanneld-etcd-client.pem} \
 ${K8S_ROOT}/certs/
 
   test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \

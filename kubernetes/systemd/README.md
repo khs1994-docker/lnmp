@@ -45,7 +45,8 @@ $ sudo hostnamectl set-hostname node1
 
 ```bash
 # 生成证书
-$ dockr-composer up cfssl-local
+$ docker-compose pull cfssl-local
+$ docker-compose up cfssl-local
 
 # 部署
 $ ./lnmp-k8s local-install
