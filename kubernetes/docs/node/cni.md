@@ -1,6 +1,13 @@
 # CNI
 
-容器运行时为 `Docker`, 网络由 `Docker` 管理，无需 `CNI`。容器运行时为其他（例如 `containerd`）,则需要配置 `CNI`
+容器运行时为 `Docker`, 网络由 `Docker` 管理，无需 `CNI`。或者通过 `kubelet` 的 `--network-plugin=cni` 指定网络由 `CNI` 管理。
+
+```bash
+plugins.go:166] Loaded network plugin "cni"
+docker_service.go:255] Docker cri networking managed by cni
+```
+
+容器运行时为其他（例如 `containerd`）,则需要配置 `CNI`
 
 ## cniVersion
 

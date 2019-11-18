@@ -13,7 +13,7 @@ systemd:
         [Service]
         # Type=forking
         # Type=notify
-        Environment="OPTIONS=-p 18443:18443 --privileged --network host -v ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf:${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf"
+        Environment="OPTIONS=-p 18443:18443 --privileged --network host -v ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf:/opt/k8s/kube-nginx/conf/kube-nginx.conf"
         # ExecStartPre=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx -t
         # ExecStart=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx
         # ExecReload=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx -s reload

@@ -22,6 +22,10 @@ Subcommands:
 	state            get the state of a container
 	wait             wait on a process inside a container
 
+Subcommands for helpers:
+	install          adds a runtime to docker daemon configuration
+	uninstall        removes a runtime from docker daemon configuration
+
 Subcommands for internal use only:
 	boot             launch a sandbox process (internal use only)
 	debug            shows a variety of debug information

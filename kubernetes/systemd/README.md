@@ -55,7 +55,7 @@ $ ./lnmp-k8s local-up
 # 按照提示，手动执行 systemctl 命令，依次启动 kubernetes 各组件
 ```
 
-### 手动复制 `kubectl` 配置文件
+## 手动复制 `kubectl` 配置文件
 
 复制 `kubectl` 配置文件，为防止覆盖原有文件，脚本不支持自动复制，必须手动复制
 
@@ -65,7 +65,11 @@ $ cd ~/lnmp/kubernetes
 $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 ```
 
-### 脚本原理
+## 注意事项
+
+* 一些容器可能需要挂载宿主机的 `/var/lib/kubelet` `/usr/libexec/kubernetes/kubelet-plugins/volume/exec` 。本项目将所有文件放到了 `${K8S_ROOT:-/opt/k8s}/XXX`，注意将其替换到实际地址 `${K8S_ROOT:-/opt/k8s}/XXX`
+
+## 脚本原理
 
 将 `*.service` 放入 `/etc/systemd/system/*`
 
@@ -75,15 +79,19 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 
 将配置文件放入 `${K8S_ROOT}/conf`
 
+可执行文件放入 `${K8S_ROOT}/bin`
+
 > `${K8S_ROOT}` 默认为 `/opt/k8s`
 
-## 容器运行时（CRI）
+## 参考
+
+### 容器运行时（CRI）
 
 * docker
 * containerd
 * cri-o
 
-## OCI 运行时
+### OCI 运行时
 
 * runc
 * runsc

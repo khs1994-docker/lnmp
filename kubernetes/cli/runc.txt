@@ -25,12 +25,12 @@ value for "bundle" is the current directory.
 
 USAGE:
    runc [global options] command [command options] [arguments...]
-   
+
 VERSION:
-   1.0.0-rc8
-commit: 425e105d5a03fabd737a126ad93d62a9eeede87f
+   1.0.0-rc8+dev
+commit: 3e425f80a8c931f88e6d94a8c831b9d5aa481657
 spec: 1.0.1-dev
-   
+
 COMMANDS:
      checkpoint  checkpoint a running container
      create      create a container
@@ -53,7 +53,7 @@ COMMANDS:
 
 GLOBAL OPTIONS:
    --debug             enable debug output for logging
-   --log value         set the log file path where internal debug information is written (default: "/dev/null")
+   --log value         set the log file path where internal debug information is written
    --log-format value  set the format used by logs ('text' (default), or 'json') (default: "text")
    --root value        root directory for storage of container state (this should be located in tmpfs) (default: "/run/user/1000/runc")
    --criu value        path to the criu binary used for checkpoint and restore (default: "criu")
@@ -61,4 +61,3 @@ GLOBAL OPTIONS:
    --rootless value    ignore cgroup permission errors ('true', 'false', or 'auto') (default: "auto")
    --help, -h          show help
    --version, -v       print the version
-   

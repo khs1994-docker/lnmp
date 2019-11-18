@@ -382,7 +382,7 @@ env_status(){
       print_info ".env file existing"; \
   else print_warning ".env file NOT existing (Maybe First Run)"; cp .env.example .env ; fi
 
-  _cp_only_not_exists kubernetes/volumes/.env.example kubernetes/volumes/.env
+  _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
   if ! [ -f secrets/minio/key.txt ];then
     cp secrets/minio/key.example.txt secrets/minio/key.txt
@@ -1874,7 +1874,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     nfs )
     $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
     $(_sudo) modprobe nfsd || true
-    cd kubernetes/volumes
+    cd kubernetes/nfs-server
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs
     fi

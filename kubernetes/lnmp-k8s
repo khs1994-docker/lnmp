@@ -6,7 +6,7 @@ KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
 if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
-if ! [ -f volumes/.env ];then cp volumes/.env.example volumes/.env; fi
+if ! [ -f nfs-server/.env ];then cp nfs-server/.env.example nfs-server/.env; fi
 if ! [ -f wsl2/.env ];then cp wsl2/.env.example wsl2/.env; fi
 
 source ./systemd/.env.example
@@ -958,8 +958,8 @@ _k8s_install_systemd_docker(){
   $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
   $(_sudo) cp systemd/docker.conf /etc/systemd/system/docker.service.d/
 
-  $(_sudo) cp systemd/kubelet-20-cri.conf /etc/systemd/system/kubelet.service.d/20-cri.conf
-  $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" /etc/systemd/system/kubelet.service.d/20-cri.conf
+  $(_sudo) cp systemd/kubelet-20-cri-docker.conf /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
+  $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
 }
 
 _k8s_install_kubectl_conf(){
@@ -1142,7 +1142,7 @@ _crio_config(){
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
 
-  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri.conf
+  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-crio.conf
 [Service]
 Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock"
 EOF
@@ -1162,7 +1162,7 @@ _containerd_cri_config(){
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
 
-  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri.conf
+  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-containerd.conf
 [Service]
 Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock"
 EOF
@@ -1553,7 +1553,7 @@ case $_command in
     nfs )
     $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
     $(_sudo) modprobe nfsd || true
-    cd volumes
+    cd nfs-server
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs
     elif [ "$1" = 'logs' ]; then

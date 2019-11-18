@@ -197,8 +197,10 @@ storage:
           systemReservedCgroup: ""
           kubeReservedCgroup: ""
           enforceNodeAllocatable: ["pods"]
-          FeatureGates:
-          - AllAlpha=true
+          featureGates:
+            # AllAlpha: true
+            # BoundServiceAccountTokenVolume: false
+            DynamicAuditing: true
     - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
       mode: 0644
       contents:
