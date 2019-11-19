@@ -32,24 +32,17 @@ $ ETCDCTL_API=3 etcdctl \
     --key=/etc/kubernetes/certs/etcd-key.pem endpoint health
 ```
 
-- **2379**
-- **2380**
+- **2379** 提供 HTTP(S) API 服务，供客户端交互
+- **2380** 和集群中其他节点通信
 
 ### flannel
 
-第二步启动 `flannel` 配置 Docker 网段
+第二步启动 `flannel`
 
 ```bash
 $ systemctl status flanneld
 
 $ journalctl -u flanneld
-
-core@coreos1 ~ $ cat /run/flannel/flannel_docker_opts.env
-
-
-DOCKER_OPT_BIP="--bip=172.30.27.1/24"
-DOCKER_OPT_IPMASQ="--ip-masq=false"
-DOCKER_OPT_MTU="--mtu=1450"
 ```
 
 ### Docker
@@ -59,6 +52,9 @@ $ systemctl status docker
 
 $ journalctl -u docker
 ```
+
+* **2375** http
+* **2376** TLS
 
 ## Master
 
@@ -100,8 +96,8 @@ $ curl -s --cacert /etc/kubernetes/certs/ca.pem https://127.0.0.1:10257/metrics 
 $ kubectl get endpoints kube-controller-manager --namespace=kube-system  -o yaml
 ```
 
-- **10257** https 端口
 - **10252** http 端口 (本项目不监听)
+- **10257** https 端口
 
 ### kube-scheduler
 

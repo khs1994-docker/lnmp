@@ -1,2 +1,5 @@
 resources:
 - coredns.yaml
+images:
+- name: k8s.gcr.io/coredns
+  newName: gcr.azk8s.cn/google-containers/coredns

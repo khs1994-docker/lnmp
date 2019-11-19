@@ -6,7 +6,7 @@
 
 * metrics-server `0.3.6`
 
-* CoreDNS `1.6.2`
+* CoreDNS `1.6.5`
 
 * Dashboard `2.0.0`
 

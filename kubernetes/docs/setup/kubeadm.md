@@ -365,6 +365,8 @@ ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELE
 
 ## kubeadm 配置文件
 
+* https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2
+
 生成默认的配置文件
 
 ```bash
