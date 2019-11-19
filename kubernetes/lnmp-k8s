@@ -413,7 +413,7 @@ _create_lnmp(){
     items="mysql redis php nginx"
 
     if [ "$OS" = "Darwin" ] || [ "$NFS_OPTIONS" = "--no-nfs" ];then
-      _create_pv ${NAMESPACE} ${NFS_OPTIONS} --no-pvc
+      _create_pv ${NAMESPACE} ${NFS_OPTIONS} --no-pvc $@
 
       for item in $items
       do

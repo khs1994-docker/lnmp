@@ -55,7 +55,7 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-tz
               key: TZ
         - name: APP_ENV
           valueFrom:

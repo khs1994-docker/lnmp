@@ -6,13 +6,23 @@ metadata:
     app: lnmp
     version: 0.0.1
 data:
-  TZ: Asia/Shanghai
   APP_ENV: development
   APP_LOG: errorlog
   LOG_CHANNEL: errorlog
   LNMP_XDEBUG_REMOTE_HOST: 192.168.199.100
   LNMP_XDEBUG_REMOTE_PORT: "9001"
   LNMP_OPCACHE_ENABLE: "1"
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: lnmp-tz
+  labels:
+    app: lnmp
+data:
+  TZ: Asia/Shanghai
 
 ---
 

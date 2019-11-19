@@ -7,6 +7,9 @@ configMapGenerator:
   files:
   - redis.conf=config/redis.custom.conf
   # - redis.conf=config/redis.production.conf
+- name: lnmp-tz
+  literals:
+  - TZ=Asia/Shanghai
 patches:
 # - hostpath.patch.yaml
 generatorOptions:
