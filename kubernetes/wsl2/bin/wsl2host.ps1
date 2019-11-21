@@ -28,6 +28,14 @@ if($args[0] -ne "--write"){
   exit
 }
 
+$global:FORCE=$false
+
+foreach($arg in $args ){
+  if($arg -eq "--force" -or $arg -eq "-f"){
+    $global:FORCE=$true
+  }
+}
+
 # 写入 wsl2host 到 C:\Windows\System32\drivers\etc\hosts
 
 $hosts_path="C:\Windows\System32\drivers\etc\hosts"
@@ -43,7 +51,7 @@ Function _sudo($command){
 Function _write_host(){
 ping -n 1 wsl2 | out-null
 
-if ($?){
+if ($? -and !$global:FORCE){
   "==> WSL2 ip not changed, skip"
   return
 }
@@ -67,7 +75,26 @@ for ($i = 0; $i -lt $exists_hosts_content_array.Count; $i++) {
 if( $begin_line  -and $end_line){
   Write-Warning "==> old wsl2host already add on line: $begin_line - $end_line , update wsl2host to new $wsl2_ip ..."
 
-  $exists_hosts_content_array[$begin_line + 1] = "$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN"
+  # 清空 begin - end 之间的内容
+
+  for($i=1;$i -lt $end_line;$i++){
+    if($i -gt $begin_line){
+    $exists_hosts_content_array[$i]=$null
+    }
+  }
+
+$ErrorActionPreference="SilentlyContinue"
+
+$exists_hosts_content_array[$begin_line + 1] = "
+$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN
+"
+
+for($i=1;$i -le 20; $i++){
+  if(get-variable WSL2_DOMAIN_${i}){
+    $hosts=(get-variable WSL2_DOMAIN_${i}).value
+    $exists_hosts_content_array[$begin_line + 1]+="$wsl2_ip $hosts`n"
+  }
+}
 
   Set-Content -Path $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts -Value $exists_hosts_content_array
 
@@ -79,10 +106,20 @@ if( $begin_line  -and $end_line){
 $hosts_content="
 # add wsl2host by khs1994-docker/lnmp BEGIN
 $wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN
-# add wsl2host by khs1994-docker/lnmp END
 "
+
+for($i=1;$i -le 20; $i++){
+  if(get-variable WSL2_DOMAIN_${i}){
+    $hosts=(get-variable WSL2_DOMAIN_${i}).value
+    $hosts_content+="$wsl2_ip $hosts`n"
+  }
+}
+
+$hosts_content+="# add wsl2host by khs1994-docker/lnmp END"
 
 _sudo "echo `"$hosts_content`" | out-file -FilePath $hosts_path -Append -Encoding Default"
 }
 
 _write_host
+
+$ErrorActionPreference="continue"

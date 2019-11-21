@@ -10,7 +10,7 @@ if(!$?){
   "==> set WSL2 /etc/hosts wsl2.lnmp.khs1994.com ..."
   $WSL2_IP=& $PSScriptRoot/wsl2host
 
-  wsl -u root -- echo $WSL2_IP wsl2.lnmp.khs1994.com `>`> /etc/hosts
+  wsl -u root -- echo $WSL2_IP wsl2 wsl2.lnmp.khs1994.com `>`> /etc/hosts
 }
 
 wsl -u root -- bash -c `

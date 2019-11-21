@@ -10,12 +10,12 @@ wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/10-flannel.conflist ${K8S_ROOT}/etc/cn
 
 # wsl -u root -- cat ${K8S_ROOT}/cni/net.d/10-flannel.conflist
 
-(Get-Content $PSScriptRoot/conf/kube-containerd/1.3.0/config.toml.temp) `
+(Get-Content $PSScriptRoot/conf/kube-containerd/1.3/config.toml.temp) `
   -replace "##K8S_ROOT##",$K8S_ROOT `
-  | Set-Content $PSScriptRoot/conf/kube-containerd/1.3.0/config.toml
+  | Set-Content $PSScriptRoot/conf/kube-containerd/1.3/config.toml
 
 $command=wsl -u root -- echo $K8S_ROOT/bin/kube-containerd `
---config ${K8S_WSL2_ROOT}/conf/kube-containerd/1.3.0/config.toml
+--config ${K8S_WSL2_ROOT}/conf/kube-containerd/1.3/config.toml
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 

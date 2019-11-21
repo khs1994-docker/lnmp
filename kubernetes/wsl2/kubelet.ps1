@@ -33,10 +33,15 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
 --v=2
 
-if($args[0] -eq "reset"){
+Function _reset(){
   wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
   wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
   wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+}
+
+if($args[0] -eq "reset"){
+  _reset
+
   exit
 }
 
@@ -93,20 +98,18 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip){
    $wsl_ip_from_file=cat $PSScriptRoot/conf/.wsl_ip
 
    if($wsl_ip -eq $wsl_ip_from_file){
-      Write-Warning "wsl ip not changed, skip rm cert"
+      Write-Warning "wsl ip not changed"
    }else{
-      Write-Warning "wsl ip changed, rm cert ..."
+      Write-Warning "wsl ip changed, reset ..."
       echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-      # wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
       wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
-      # wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+      # _reset
    }
 }else{
-   Write-Warning "wsl ip changed, rm cert ..."
+   Write-Warning "wsl ip changed, reset ..."
    echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-   # wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
    wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
-   # wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+   # _reset
 }
 
 sleep 2

@@ -698,8 +698,8 @@ _gvisor_containerd_conf(){
   # runtime_type = "io.containerd.runtime.v1.linux"
 EOF
 
-# containerd 1.3.0
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.3.0/config.toml
+# containerd 1.3.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
 # [plugins.linux]
 #  shim = "/usr/local/bin/gvisor-containerd-shim"
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
@@ -778,10 +778,10 @@ _containerd_install(){
   if ! [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then return;fi
 
   if [ -f ${K8S_ROOT}/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 1.3.0 already install"; \
+    print_info "containerd 1.3 already install"; \
     ${K8S_ROOT}/bin/kube-containerd --version;return; fi
 
-  print_info "install containerd 1.3.0 ..."
+  print_info "install containerd 1.3 ..."
 
   local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
@@ -1151,12 +1151,12 @@ EOF
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.3.0
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.3
   # containerd config default > ${K8S_ROOT}/etc/kube-containerd/config.toml
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/config.toml \
     | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3.0/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3.0/config.toml
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3/config.toml \
+    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
 
   _cri_config
 
