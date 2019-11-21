@@ -25,9 +25,9 @@ services:
     #     source: /var/run/docker.sock
     #     target: /var/run/docker.sock
 
-  drone-agent:
+  drone-docker-runner:
     << : *default-common
-    image: drone/agent:${CI_DRONE_VERSION:-1.6.2}
+    image: drone/drone-runner-docker:1
     depends_on:
       - drone-server
     volumes:
@@ -61,7 +61,6 @@ services:
       - gogs-data:/data:rw
       - ./config/nginx/ssl:/etc/nginx/conf.d/ssl:rw
       - ./config/gogs/app.ini:/data/gogs/conf/app.ini:rw
-      - ./logs/gogs:/app/gogs/log:rw
 
   registry:
     << : *default-common

@@ -1,0 +1,59 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gogs
+  labels:
+    app: gogs
+spec:
+  selector:
+    app: gogs
+  ports:
+  - port: 80
+    name: http
+    targetPort: http
+  - port: 22
+    name: ssh
+    targetPort: ssh
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: gogs
+  labels:
+    app: gogs
+spec:
+  selector:
+    matchLabels:
+      app: gogs
+  template:
+    metadata:
+      labels:
+        app: gogs
+    spec:
+      containers:
+      - name: gogs
+        image: gogs/gogs
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: http
+            scheme: HTTP
+        ports:
+        - containerPort: 3000
+          name: http
+        - containerPort: 22
+          name: ssh
+        volumeMounts:
+        - name: config
+          mountPath: /data/gogs/conf
+        - name: data
+          mountPath: /data
+      volumes:
+        - name: config
+          configMap:
+            name: gogs-config
+        - name: data
+          hostPath:
+            path: /var/lib/ci/gogs

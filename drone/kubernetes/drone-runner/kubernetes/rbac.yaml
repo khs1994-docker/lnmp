@@ -1,0 +1,59 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: drone-runner
+  labels:
+    app: drone-runner
+    tier: kubernetes
+
+---
+
+# runner 的 pod
+# sa 为 default
+# ns 为 ci
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: default
+  labels:
+    app: drone-runner
+    tier: kubernetes
+
+---
+
+# runner 需要的权限
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app: drone-runner
+    tier: kubernetes
+  name: drone:drone-runner-kubernetes
+rules:
+- apiGroups: [""]
+  resources: ["secrets","pods","configmaps","namespaces","services"]
+  verbs: ["create","delete","update","get","list","watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get"]
+- apiGroups: ["extensions"]
+  resources: ["deployments"]
+  verbs: ["get","list","watch","patch","update"]
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: drone:drone-runner-kubernetes
+  labels:
+    app: drone-runner
+    tier: kubernetes
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: ci
+roleRef:
+  kind: ClusterRole
+  name: drone:drone-runner-kubernetes
+  apiGroup: ""

@@ -1,0 +1,49 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: drone
+  labels:
+    app: drone
+spec:
+  selector:
+    app: drone
+  ports:
+    - port: 80
+      targetPort: 80
+      name: http
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: drone
+  labels:
+    app: drone
+spec:
+  selector:
+    matchLabels:
+      app: drone
+  template:
+    metadata:
+      labels:
+        app: drone
+    spec:
+      containers:
+      - name: drone
+        image: drone/drone:1.6.2
+        ports:
+        - name: http
+          containerPort: 80
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            scheme: HTTP
+      volumes:
+      - name: data
+        hostPath:
+          path: /var/lib/ci/drone

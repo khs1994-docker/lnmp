@@ -1,0 +1,57 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: drone
+  labels:
+    app: drone-kubenative
+spec:
+  selector:
+    app: drone-kubenative
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: drone
+  labels:
+    app: drone-kubenative
+spec:
+  selector:
+    matchLabels:
+      app: drone-kubenative
+  template:
+    metadata:
+      labels:
+        app: drone-kubenative
+    spec:
+      serviceAccountName: drone-kubenative
+      containers:
+      - name: drone
+        env:
+        - name: DRONE_AGENTS_ENABLED
+          value: "false"
+        - name: DRONE_KUBERNETES_ENABLED
+          value: "true"
+        - name: DRONE_KUBERNETES_NAMESPACE
+          value: "ci"
+        # 同步修改 rbac-runner.yaml
+        - name: DRONE_KUBERNETES_SERVICE_ACCOUNT
+          value: "drone-runner-kubenative"
+
+        - name: DRONE_LOGS_DEBUG
+          value: "true"
+        - name: DRONE_SERVER_HOST
+          value: drone-kubenative
+        - name: DRONE_SERVER_PROTO
+          value: http
+        - name: DRONE_RPC_SECRET
+          value: secret
+        - name: DRONE_GOGS_SERVER
+          value: http://gogs
+        - name: DRONE_TLS_AUTOCERT
+          value: "false"
+        - name: DRONE_DATABASE_DRIVER
+          value: mysql
+        - name: DRONE_DATABASE_DATASOURCE
+          value: root:mytest@tcp(mysql)/droneKubenative?parseTime=true

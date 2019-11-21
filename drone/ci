@@ -123,7 +123,7 @@ _up(){
 
   _up_sed
 
-  CI_INCLUDE=${CI_INCLUDE-drone-server drone-agent gogs registry}
+  CI_INCLUDE=${CI_INCLUDE-drone-server drone-docker-runner gogs registry}
 
   # based posrt don't up nginx
 
@@ -138,7 +138,7 @@ _up(){
   if [ -n "${CI_COMPOSE_CONFIG_ONLY}" ];then return;fi
 
   docker-compose ${COMPOSE_FILE:?err} up ${CI_COMPOSE_OPT:-} \
-    ${CI_INCLUDE_TARGET} drone-server drone-agent
+    ${CI_INCLUDE_TARGET} drone-server drone-docker-runner
 }
 
 _up-tls_sed(){
@@ -213,7 +213,7 @@ _up-tls(){
   if [ -n "${CI_COMPOSE_CONFIG_ONLY}" ];then return;fi
 
   docker-compose ${COMPOSE_FILE:?err} up ${CI_COMPOSE_OPT:-} \
-    ${CI_INCLUDE-gogs registry} drone-server drone-agent
+    ${CI_INCLUDE-gogs registry} drone-server drone-docker-runner
 }
 
 _down(){
