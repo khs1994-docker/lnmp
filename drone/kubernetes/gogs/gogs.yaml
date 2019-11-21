@@ -50,6 +50,8 @@ spec:
           mountPath: /data/gogs/conf
         - name: data
           mountPath: /data
+        - name: run
+          mountPath: /run
       volumes:
         - name: config
           configMap:
@@ -57,3 +59,6 @@ spec:
         - name: data
           hostPath:
             path: /var/lib/ci/gogs
+        - name: run
+          emptyDir:
+            medium: Memory

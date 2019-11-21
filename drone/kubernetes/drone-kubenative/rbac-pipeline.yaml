@@ -1,24 +1,24 @@
-# runner 的 pod
-# sa 为 drone-runner-kubenative 由 DRONE_KUBERNETES_SERVICE_ACCOUNT 控制
+# pipeline 的 pod
+# sa 为 drone-pipeline-kubenative 由 DRONE_KUBERNETES_SERVICE_ACCOUNT 控制
 # ns 为 ci
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  name: drone-runner
+  name: drone-pipeline
   labels:
-    app: drone-runner-kubenative
+    app: drone-pipeline-kubenative
     tier: kubernetes
 
 ---
 
-# runner 需要的权限
+# pipeline 需要的权限
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   labels:
-    app: drone-runner-kubenative
+    app: drone-pipeline-kubenative
     tier: kubernetes
-  name: drone:drone-runner
+  name: drone:drone-pipeline
 rules:
 - apiGroups: [""]
   resources: ["secrets","pods","configmaps","namespaces","services"]
@@ -35,15 +35,15 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: drone:drone-runner
+  name: drone:drone-pipeline
   labels:
-    app: drone-runner-kubenative
+    app: drone-pipeline-kubenative
     tier: kubernetes
 subjects:
 - kind: ServiceAccount
-  name: drone-runner
+  name: drone-pipeline
   namespace: ci
 roleRef:
   kind: ClusterRole
-  name: drone:drone-runner
+  name: drone:drone-pipeline
   apiGroup: ""

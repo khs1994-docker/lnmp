@@ -29,15 +29,16 @@ spec:
       containers:
       - name: drone
         env:
+        # https://docs.drone.io/installation/reference/
         - name: DRONE_AGENTS_ENABLED
           value: "false"
         - name: DRONE_KUBERNETES_ENABLED
           value: "true"
         - name: DRONE_KUBERNETES_NAMESPACE
           value: "ci"
-        # 同步修改 rbac-runner.yaml
+        # 同步修改 rbac-pipeline.yaml
         - name: DRONE_KUBERNETES_SERVICE_ACCOUNT
-          value: "drone-runner-kubenative"
+          value: "drone-pipeline-kubenative"
 
         - name: DRONE_LOGS_DEBUG
           value: "true"

@@ -26,7 +26,7 @@ $ kubectl apply -n ci -k mysql
 $ kubectl apply -n ci -k redis
 ```
 
-## Minio
+## [Minio](https://github.com/helm/charts/tree/master/stable/minio)
 
 ```bash
 $ kubectl apply -n ci -k minio
@@ -44,7 +44,7 @@ $ kubectl apply -n ci -k gogs
 
 > 部署 Drone 1 2 任选其一（支持同时部署），新的 drone-kubenative 将任务作为 k8s 的 pod 运行。
 
-## 1. Drone + [Runner](https://docs.drone.io/installation/runners/)
+## 1. [Drone](https://github.com/helm/charts/tree/master/stable/drone) + [Runner](https://docs.drone.io/installation/runners/)
 
 ```bash
 $ kubectl apply -n ci -k drone
@@ -72,7 +72,7 @@ $ kubectl apply -n ci -k drone-kubenative
 
 ## ingress-nginx
 
-后端 `gogs` `drone` 均为 http, 统一通过 ingress (https)代理访问(具体地址请到 `ingress-nginx/ingress-nginx.yaml` 查看)
+后端 `gogs` `drone` `s3(minio)` 均为 http, 统一通过 ingress (https)代理访问(具体地址请到 `ingress-nginx/ingress-nginx.yaml` 查看)
 
 ```bash
 $ kubectl apply -n ci -k ingress-nginx
@@ -84,7 +84,7 @@ $ kubectl apply -n ci -k ingress-nginx
 
 ## ingress 证书为自签名证书
 
-### git 克隆时跳过证书（SSL）验证
+### Drone git 克隆时跳过证书（SSL）验证
 
 ```diff
 # .drone.yml

@@ -4,6 +4,6 @@ patches:
 - patch.yaml
 resources:
 - rbac.yaml
-- rbac-runner.yaml
+- rbac-pipeline.yaml
 namespace: ci
 nameSuffix: -kubenative
