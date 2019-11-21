@@ -40,7 +40,7 @@ metadata:
   name: nginx
 spec:
   containers:
-  - image: nginx:1.17.5-alpine
+  - image: nginx:1.17.6-alpine
     imagePullPolicy: Always
     name: nginx
     ports:
