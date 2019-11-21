@@ -1,6 +1,10 @@
 # Drone + Gogs On Kubernetes
 
-* 数据存放于 hostPath `/var/lib/ci/XXX`，根据实际自行更改。
+## 数据
+
+数据存放于 hostPath `/var/lib/ci/XXX`，根据实际自行更改。
+
+## 创建 ns
 
 创建 k8s namespace
 
@@ -8,21 +12,27 @@
 $ kubectl create ns ci
 ```
 
-## 数据库服务、缓存服务
-
-### MySQL
+## MySQL
 
 ```bash
 $ kubectl apply -n ci -k mysql
 ```
 
-默认密码 `mytest`，手动进入创建 **gogs** **drone** **droneKubenative** 数据库 
+默认密码 `mytest`，手动进入创建 `gogs` `drone` `droneKubenative` 数据库 
 
-### Redis
+## Redis
 
 ```bash
 $ kubectl apply -n ci -k redis
 ```
+
+## Minio
+
+```bash
+$ kubectl apply -n ci -k minio
+```
+
+手动创建 `drone` `drone-kubenative` bucket
 
 ## Gogs
 
@@ -32,25 +42,23 @@ $ kubectl apply -n ci -k redis
 $ kubectl apply -n ci -k gogs
 ```
 
-> 部署 Drone 1 2 任选其一（支持同时部署），新的 drone-kubenative 将任务作为 k8s 的 pod 等运行。
+> 部署 Drone 1 2 任选其一（支持同时部署），新的 drone-kubenative 将任务作为 k8s 的 pod 运行。
 
-## 1. Drone + Runner
+## 1. Drone + [Runner](https://docs.drone.io/installation/runners/)
 
 ```bash
 $ kubectl apply -n ci -k drone
 ```
 
-* https://docs.drone.io/installation/runners/
-
-### Docker runner
+### [Docker runner](https://docker-runner.docs.drone.io/installation/install_linux/)
 
 ```bash
 $ kubectl apply -n ci -k drone-runner/docker
 ```
 
-### Kubernetes runner
+### [Kubernetes runner](https://kube-runner.docs.drone.io/installation/installation/)
 
-* 命名空间为 `drone-runner`
+* 任务 pod 运行在 `drone-runner` 命名空间
 
 ```
 $ kubectl apply -n ci -k drone-runner/kubernetes
@@ -64,7 +72,7 @@ $ kubectl apply -n ci -k drone-kubenative
 
 ## ingress-nginx
 
-后端 `gogs` `drone` 均为 http, 统一通过 ingress 代理访问(具体地址请到 `ingress-nginx/ingress-nginx.yaml` 查看)
+后端 `gogs` `drone` 均为 http, 统一通过 ingress (https)代理访问(具体地址请到 `ingress-nginx/ingress-nginx.yaml` 查看)
 
 ```bash
 $ kubectl apply -n ci -k ingress-nginx
@@ -74,9 +82,9 @@ $ kubectl apply -n ci -k ingress-nginx
 
 `Registry` 自行在 Kubernetes 进行部署。
 
-## 自签名证书
+## ingress 证书为自签名证书
 
-### git 克隆时跳过证书验证
+### git 克隆时跳过证书（SSL）验证
 
 ```diff
 # .drone.yml

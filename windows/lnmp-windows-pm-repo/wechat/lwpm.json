@@ -1,8 +1,8 @@
 {
   "name": "wechat",
   "description": "Free messaging and calling app",
-  "version": "1018",
-  "preVersion": "2.7.0_beta",
+  "version": "latest",
+  "preVersion": "latest",
   "homepage": "https://weixin.qq.com/",
   "bug": "",
   "github": "",

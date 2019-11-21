@@ -26,6 +26,7 @@ spec:
     - drone-kubenative.t.khs1994.com
     - drone-runner-kubernetes.t.khs1994.com
     - drone-runner-docker.t.khs1994.com
+    - s3.t.khs1994.com
     secretName: ingress-nginx-tls-0.0.1
   rules:
   - host: git.t.khs1994.com
@@ -63,3 +64,10 @@ spec:
         backend:
           serviceName: drone-runner-docker-dashboard
           servicePort: dashboard
+  - host: s3.t.khs1994.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: minio
+          servicePort: http
