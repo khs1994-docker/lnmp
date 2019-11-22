@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: lnmp-redis
-        image: redis:5.0.6-alpine
+        image: redis:5.0.7-alpine
         args:
         - redis-server
         - /redis.conf

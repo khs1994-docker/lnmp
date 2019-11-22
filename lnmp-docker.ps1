@@ -660,13 +660,14 @@ if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT" -or $PSVersion
 # context is wsl2, exec slow
 if(_command docker){
   if(!$isWSL2){
-    $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
-    $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
+    $DOCKER_VERSION=$($(docker --version).split(' ')[2]).trim(',')
   }else{
-    $DOCKER_VERSION_YY=$($(docker -c default --version).split(' ')[2].split('.')[0])
-    $DOCKER_VERSION_MM=$($(docker -c default --version).split(' ')[2].split('.')[1])
+    $DOCKER_VERSION=$($(docker -c default --version).split(' ')[2]).trim(',')
   }
 }
+
+$DOCKER_VERSION_YY=([System.Version]$DOCKER_VERSION).Major
+$DOCKER_VERSION_MM="0" + ([System.Version]$DOCKER_VERSION).Minor
 
 env_status
 logs
