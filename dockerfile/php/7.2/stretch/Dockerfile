@@ -2,7 +2,7 @@
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.24
+ARG PHP_VERSION=7.2.25
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-stretch
 

@@ -49,7 +49,7 @@ NODE_VERSION=13.1.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.3.11
+PHP_VERSION=7.3.12
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -102,9 +102,9 @@ _php(){
 
   # include redis memcached
   # default install latest php version
-  # current version is php 7.3.11
+  # current version is php 7.3.12
 
-  PHP_VERSION=${1:-7.3.11}
+  PHP_VERSION=${1:-7.3.12}
 
   case ${PHP_VERSION} in
     5.6.* )

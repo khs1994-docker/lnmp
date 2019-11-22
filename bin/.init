@@ -14,7 +14,7 @@ if [ -f "$LNMP_PATH/.env" ];then source $LNMP_PATH/.env; fi
 export OS=`uname -s`
 export ARCH=`uname -m`
 
-VERSION=${LNMP_PHP_VERSION:-7.3.11}
+VERSION=${LNMP_PHP_VERSION:-7.3.12}
 
 export TAG=${VERSION}-composer-alpine
 

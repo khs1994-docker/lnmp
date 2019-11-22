@@ -1,7 +1,5 @@
 on:
   push:
-    branches:
-    - 19.03
     tags:
     - v19.03.*
 

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-ARG PHP_VERSION=7.3.11
+ARG PHP_VERSION=7.3.12
 
 FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-composer-alpine
 

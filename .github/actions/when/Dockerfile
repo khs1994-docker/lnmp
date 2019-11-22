@@ -1,4 +1,4 @@
-FROM khs1994/php:7.3.11-composer-alpine
+FROM khs1994/php:7.3.12-composer-alpine
 
 ENV PCIT_WHEN_COMMIT_MESSAGE=1
 # ENV PCIT_WHEN_BRANCH=master
