@@ -10,7 +10,7 @@ Function getLatestRelease($repo){
   $stableRelease=$null
 
   if(!$releases_obj){
-    Write-Warning "get latest version from git tag, maybe not correct"
+    Write-Warning "get latest version from git tag, maybe not correct or outdated"
     . $PSScriptRoot\repos.ps1
 
     $stableRelease = getLatestTag $repo

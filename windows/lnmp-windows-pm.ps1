@@ -102,13 +102,16 @@ Function pkg_root(){
   if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
     return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
-    "==> Found in vendor/lwpm-dev"
+    write-host "==> Found in vendor/lwpm-dev"
+
     return "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm\$soft"){
-    "==> Found in vendor/lwpm"
+    write-host "==> Found in vendor/lwpm"
+
     return "${PSScriptRoot}\..\vendor\lwpm\$soft"
   }else{
-    "==> Not Found"
+    write-host "==> Not Found"
+
     exit 1
   }
 }
@@ -216,6 +219,7 @@ function manifest($soft){
 function getVersionByProvider($soft){
   _import_module $soft
 
+  $ErrorActionPreference="SilentlyContinue"
   if(!$(get-command getLatestVersion)){
     Remove-Module $soft
 
