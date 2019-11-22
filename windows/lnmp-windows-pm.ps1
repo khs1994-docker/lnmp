@@ -31,7 +31,7 @@ init        Init a new package(developer)
 "
 }
 
-$ErrorAction="SilentlyContinue"
+$ErrorActionPreference="SilentlyContinue"
 
 . "$PSScriptRoot/common.ps1"
 
@@ -42,7 +42,11 @@ $source=$PWD
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
 [environment]::SetEnvironmentvariable("APP_ENV", "$APP_ENV", "User")
 
-$Env:PSModulePath="$Env:PSModulePath" + ";" `
+if(!$Env:PSModulePathSystem){
+  $Env:PSModulePathSystem=$Env:PSModulePath
+}
+
+$Env:PSModulePath="$Env:PSModulePathSystem" + ";" `
                   + $PSScriptRoot + "\powershell_system" + ";"
 
 _exportPath "C:\bin"
@@ -89,11 +93,17 @@ _mkdir $home\lnmp\windows\logs
 
 cd $home\Downloads\lnmp-docker-cache
 
+function _exit(){
+  cd $source
+
+  exit
+}
+
 if($args.length -eq 0 -or $args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[0] -eq 'help'){
   $_, $softs = $args
   print_help_info
-  cd $source
-  exit
+
+  _exit
 }
 
 ################################################################################
@@ -112,7 +122,7 @@ Function pkg_root(){
   }else{
     write-host "==> Not Found"
 
-    exit 1
+    _exit
   }
 }
 
@@ -173,8 +183,7 @@ Function __list(){
   ""
   ls "${PSScriptRoot}\lnmp-windows-pm-repo" -Name -Directory
   ""
-  cd $source
-  exit
+  _exit
 }
 
 function __init($soft){
@@ -183,8 +192,8 @@ function __init($soft){
 
   if(test-path $SOFT_ROOT){
     Write-Host "==> This package already exists !" -ForegroundColor Red
-    cd $source
-    exit
+    
+    _exit
   }
 
   new-item $SOFT_ROOT -ItemType Directory | out-null
@@ -300,77 +309,67 @@ function __bug($soft){
 if($args[0] -eq 'install'){
   $_, $softs = $args
   __install $softs
-  cd $source
-  exit
+
+  _exit
 }
 
 if($args[0] -eq 'uninstall' -or $args[0] -eq 'remove'){
   $_, $softs = $args
   __uninstall $softs
-  cd $source
-  exit
+
+  _exit
 }
 
 if($args[0] -eq 'list'){
   $_, $softs = $args
   __list $softs
-  cd $source
-  exit
+
+  _exit
 }
 
 if($args[0] -eq 'init'){
   if($args[1].length -eq 0){
     "Please input soft name"
-    cd $source
-    exit
+    _exit
   }
   __init $args[1]
-  cd $source
-  exit
+  _exit
 }
 
 if($args[0] -eq 'info'){
   if($args[1].length -eq 0){
     "Please input soft name"
-    cd $source
-    exit
+    _exit
   }
   __info $args[1]
-  cd $source
-  exit
+  _exit
 }
 
 if($args[0] -eq 'homepage'){
   if($args[1].length -eq 0){
     "Please input soft name"
-    cd $source
-    exit
+    _exit
   }
   __homepage $args[1]
-  cd $source
-  exit
+  _exit
 }
 
 if($args[0] -eq 'bug'){
   if($args[1].length -eq 0){
     "Please input soft name"
-    cd $source
-    exit
+    _exit
   }
   __bug $args[1]
-  cd $source
-  exit
+  _exit
 }
 
 if($args[0] -eq 'releases'){
   if($args[1].length -eq 0){
     "Please input soft name"
-    cd $source
-    exit
+    _exit
   }
   __releases $args[1]
-  cd $source
-  exit
+  _exit
 }
 
 $command,$opt=$args

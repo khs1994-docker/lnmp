@@ -42,3 +42,27 @@ PS> Write-Information -MessageData "Got your features!" -InformationAction Conti
 ```powershell
 PS> write-error 1 2>&1 error.txt
 ```
+
+## profiles
+
+* https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles
+
+## ExperimentalFeature
+
+```powershell
+ExperimentalFeature
+```
+
+## powershellget
+
+* https://www.pstips.net/share-script-on-powershell-gallery.html
+
+```bash
+$ Get-Command -Module PowerShellGet
+
+$ Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+```
+
+## WMF
+
+* https://www.2cto.com/net/201701/585277.html

@@ -1,3 +1,56 @@
+
+<#PSScriptInfo
+
+.VERSION 19.03.3
+
+.GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
+
+.AUTHOR khs1994@khs1994.com
+
+.COMPANYNAME khs1994-docker
+
+.COPYRIGHT khs1994@khs1994.com
+
+.TAGS docker lnmp
+
+.LICENSEURI https://github.com/khs1994-docker/lnmp/blob/master/LICENSE
+
+.PROJECTURI https://github.com/khs1994-docker/lnmp
+
+.ICONURI 
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS 
+
+.EXTERNALSCRIPTDEPENDENCIES 
+
+.RELEASENOTES
+
+
+#>
+
+<#
+.SYNOPSIS
+  khs1994-docker/lnmp CLI
+.DESCRIPTION
+  khs1994-docker/lnmp CLI
+.EXAMPLE
+  PS C:\> lnmp-docker up
+.INPUTS
+  
+.OUTPUTS
+  
+.NOTES
+  khs1994-docker/lnmp CLI
+#>
+
+if ($args[0] -eq "install"){
+  git clone -b 19.03 --depth=1 https://github.com/khs1994-docker/lnmp.git ~/lnmp
+
+  exit
+}
+
 . "$PSScriptRoot/.env.example.ps1"
 
 . "$PSScriptRoot/cli/.env.ps1"

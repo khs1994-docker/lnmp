@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+    - 19.03
+    tags:
+    - v19.03.*
+
+name: release
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 10
+    - shell: pwsh
+      env:
+        NUGET_API_KEY: ${{secrets.NUGET_API_KEY}}
+      run: |
+        Publish-Script -Path ${PWD}/lnmp-docker.ps1 -NuGetApiKey $env:NUGET_API_KEY -Force
