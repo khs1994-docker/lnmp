@@ -401,7 +401,7 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.17.5-alpine
+    image: nginx:1.17.6-alpine
     # image: username/lnmp-nginx:tag
     ports:
       - "443:443"

@@ -20,7 +20,7 @@ services:
     image: composer:1.9.1
 
   nginx:
-    image: nginx:1.17.5-alpine
+    image: nginx:1.17.6-alpine
 
   rabbitmq:
     image: rabbitmq:3.8.0-management-alpine
