@@ -4,9 +4,9 @@
 
 # 基础设施
 
-* [Docker Desktop](guide/docker-desktop.md)
-* [Minikube](guide/minikube.md)
-* [Minikube On Windows](guide/windows.md)
+* [Docker Desktop](setup/docker-desktop.md)
+* [Minikube](setup/minikube.md)
+* [Minikube On Windows](setup/windows.md)
 
 # 错误排查
 
@@ -28,9 +28,8 @@
 # 插件
 
 * [CoreDNS](addons/coredns.md)
-* [Ingress-nginx](ingress.md)
 * [Dashboard](addons/dashboard.md)
-* [日志 EFK](addons/efk,md)
+* [日志 EFK](addons/efk.md)
 * 监控 Heapster 已废弃
 * [监控 Metrics Server](addons/metrics-server.md)
 * [监控 Prometheus Operator](addons/prometheus-operator.md)

@@ -46,8 +46,8 @@ oom_score = 0
         runtime_engine = ""
         runtime_root = ""
     [plugins.cri.cni]
-      bin_dir = "##K8S_ROOT##/cni/bin"
-      conf_dir = "##K8S_ROOT##/cni/net.d"
+      bin_dir = "##K8S_ROOT##/opt/cni/bin"
+      conf_dir = "##K8S_ROOT##/etc/cni/net.d"
       conf_template = ""
     [plugins.cri.registry]
       [plugins.cri.registry.mirrors]

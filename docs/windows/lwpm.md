@@ -1,4 +1,4 @@
-# Windows 包管理工具
+# [Windows 包管理工具 lwpm](https://github.com/khs1994-docker?utf8=✓&q=lwpm&type=&language=)
 
 正如 `macOS` 上的 `brew`、Linux 上的 `apt` `yum` `dnf`，本项目提供了 `lnmp-windows-pm.ps1` 这一包管理工具，让开发者快速在 `Windows` 安装开发软件。
 

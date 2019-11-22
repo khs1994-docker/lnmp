@@ -24,7 +24,7 @@ jobs:
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/php
         PCIT_KEEP_HISTORY: "1"
-        PCIT_LOCAL_DIR: dockerfile/php-fpm
+        PCIT_LOCAL_DIR: dockerfile/php
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994

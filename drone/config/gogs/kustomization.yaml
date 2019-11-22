@@ -1,0 +1,6 @@
+configMapGenerator:
+- name: gogs-config
+  files:
+  - app.ini=app.kubernetes.ini
+generatorOptions:
+  disableNameSuffixHash: true

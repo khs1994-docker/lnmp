@@ -18,5 +18,5 @@ exec docker run -i ${tty} --rm \
   --entrypoint sami \
   --user ${LNMP_USER:-root:root} \
   -e TZ=${TZ} \
-  ${DOCKER_IMAGE}:${TAG} \
+  khs1994/sami \
   "$@"

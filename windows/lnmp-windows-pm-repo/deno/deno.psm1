@@ -60,35 +60,3 @@ Function install($VERSION=0,$isPre=0){
 Function uninstall(){
   Remove-item C:\bin\deno.exe
 }
-
-Function getInfo(){
-  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
-
-  $latestVersion=getLatestRelease $githubRepo
-
-  ConvertFrom-Json -InputObject @"
-{
-"Package": "$name",
-"Version": "$stableVersion",
-"PreVersion": "$preVersion",
-"LatestVersion": "$($latestVersion.trim('v'))",
-"LatestPreVersion": "$($latestPreVersion.trim('v'))",
-"HomePage": "$homepage",
-"Releases": "$releases",
-"Bugs": "$bug",
-"Description": "$description"
-}
-"@
-}
-
-Function bug(){
-  return $bug
-}
-
-Function homepage(){
-  return $homepage
-}
-
-Function releases(){
-  return $releases
-}

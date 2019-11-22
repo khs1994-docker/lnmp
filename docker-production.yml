@@ -153,9 +153,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.4.8"
+  #   image: "mariadb:10.4.10"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.4.8
+  #   # image: khs1994/lnmp-mariadb:10.4.10
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -191,9 +191,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:5.0.6-alpine
+    image: redis:5.0.7-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:5.0.6
+    # image: khs1994/lnmp-redis:5.0.7
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -401,7 +401,7 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.17.5-alpine
+    image: nginx:1.17.6-alpine
     # image: username/lnmp-nginx:tag
     ports:
       - "443:443"

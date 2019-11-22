@@ -3,6 +3,8 @@
 set -x
 
 cp ../.env.example .env
+cat ../lrew/httpd/.env.compose >> .env
+cat ../lrew/mariadb/.env.compose >> .env
 
 echo COMPOSE_PROJECT_NAME=config >> .env
 

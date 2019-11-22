@@ -11,11 +11,11 @@ $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 $stableVersion=$lwpm.version
 $preVersion=$lwpm.preVersion
 $githubRepo=$lwpm.github
-$homepage=$lwpm.homepage
+# $homepage=$lwpm.homepage
 $releases=$lwpm.releases
-$bug=$lwpm.bug
+# $bug=$lwpm.bug
 $name=$lwpm.name
-$description=$lwpm.description
+# $description=$lwpm.description
 $url=$lwpm.url
 $preUrl=$lwpm.preUrl
 
@@ -95,41 +95,13 @@ Function uninstall($prune=0){
   }
 }
 
-Function getInfo(){
-  # get latestVersion by releases
-  . $PSScriptRoot\..\..\..\windows\sdk\github\repos\releases.ps1
-  # . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
+# 自定义获取最新版本号的方法
 
-  # get latestVersion by tag
-  . $PSScriptRoot\..\..\..\windows\sdk\github\repos\repos.ps1
-  # . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
+function getLatestVersion(){
+  $stableVersion = $null
+  $preVersion = $null
 
-  $latestVersion=(getLatestRelease $githubRepo).trim("")
-  $latestVersion=(getLatestTag $githubRepo).trim("")
+  # TODO
 
-  ConvertFrom-Json -InputObject @"
-{
-"Package": "$name",
-"Version": "$stableVersion",
-"PreVersion": "$preVersion",
-"LatestVersion": "$($latestVersion.trim('v'))",
-"LatestPreVersion": "$($latestPreVersion.trim('v'))",
-"HomePage": "$homepage",
-"Releases": "$releases",
-"Bugs": "$bug",
-"Description": "$description"
-}
-"@
-}
-
-Function bug(){
-  return $bug
-}
-
-Function homepage(){
-  return $homepage
-}
-
-Function releases(){
-  return $releases
+  return $stableVersion,$preVersion
 }

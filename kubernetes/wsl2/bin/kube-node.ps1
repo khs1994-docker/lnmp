@@ -25,11 +25,9 @@ wsl -- bash -c "if ! [ -f /lib/modules/`$(uname -r)/modules.builtin ];then exit 
 
 if(!$?){
   Write-Warning "
-==> MUST update your WSL2 kernel, please see wsl2/README.KERNEL.md
+==> Default WSL2 kernel not support kube-proxy [ IPVS ] mode, you can update WSL2 kernel, please see wsl2/README.KERNEL.md
 
 "
-
-  exit 1
 }
 
 wsl -- sh -c "command -v runc > /dev/null 2>&1"

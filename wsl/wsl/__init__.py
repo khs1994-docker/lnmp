@@ -10,7 +10,7 @@ $ {script} [{soft}_VERSION] [SUDO_PASSWORD]
 
 Example:
 
-$ {script} {example_version} root
+$ {script} {example_version} sudopasswd
 
   '''.format(script=script, soft=soft, example_version=example_version))
 

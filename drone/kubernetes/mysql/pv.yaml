@@ -1,0 +1,37 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: ci-mysql-data-pv
+  labels:
+    app: ci
+    tier: mysql
+spec:
+  capacity:
+    storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /var/lib/ci/mysql
+  storageClassName: hostpath
+
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: ci-log-pv
+  labels:
+    app: ci
+    tier: log
+spec:
+  capacity:
+    storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /var/lib/ci/log
+  storageClassName: hostpath

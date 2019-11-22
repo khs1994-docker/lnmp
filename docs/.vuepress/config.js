@@ -151,7 +151,6 @@ module.exports = {
             '/powershell',
             '/go',
             '/github',
-            '/atom',
             '/vscode',
             '/cgroupv2',
           ]

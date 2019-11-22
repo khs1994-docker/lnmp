@@ -14,7 +14,9 @@
 
 ### 云服务
 
-* [腾讯云 实验室免费体验 8 小时（可循环） ](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [阿里云 Kubernetes](https://www.aliyun.com/product/kubernetes?source=5176.11533457&userCode=8lx5zmtu&type=copy)
+* [百度云 Kubernetes](https://cloud.baidu.com/product/cce.html)
 
 ### 本项目维护方案
 
@@ -22,7 +24,7 @@
 
 * [Linux 单机部署(systemd)](systemd)
 
-* [Docker Desktop](docs/guide/docker-desktop.md)
+* [Docker Desktop](docs/setup/docker-desktop.md)
 
 * [Windows(etcd,kube-nginx) + WSL2(master) + 树莓派(node)](rpi)
 
@@ -30,9 +32,11 @@
 
 ### 其他方案
 
-* [MiniKube](docs/guide/minikube.md)
+* [MiniKube](docs/setup/minikube.md)
 
-* [k3s](https://github.com/rancher/k3s)
+* [kubeadm](docs/setup/kubeadm.md)
+
+* [k3s](docs/setup/k3s.md)
 
 * [kind](https://github.com/kubernetes-sigs/kind)
 
@@ -58,7 +62,7 @@
 
 * Linux 版本优先考虑多节点方案,所以 `pv` 采用 `NFS` 卷,而不是 `hostPath`(执行 `$ lnmp-k8s nfs` 可以启动 NFS Server )
 
-* Docker 桌面版不支持启动 NFS Server 容器，若需 NFS 卷，请自行在 Linux 上部署 NFS Server 容器或在 `WSL2` 上启动 NFS server 容器(执行 `$ lnmp-k8s nfs` 可以启动 NFS Server 容器, [需设置变量](volumes/README.md))
+* Docker 桌面版不支持启动 NFS Server 容器，若需 NFS 卷，请自行在 Linux 上部署 NFS Server 容器或在 `WSL2` 上启动 NFS server 容器(执行 `$ lnmp-k8s nfs` 可以启动 NFS Server 容器, [需设置变量](nfs-server/README.md))
 
 * 由于虚拟机模拟集群环境硬盘空间占用太大，又不能及时回收，为了方便大家学习，本项目支持在 Linux 单机上部署 Kubernetes (通过 systemd 管理)`$ lnmp-k8s local-install`
 
@@ -68,7 +72,7 @@
 
 ```bash
 # 部署 LNMP
-# 事先部署好 NFS 服务端(v4), 并在 .env 文件中配置 `LNMP_NFS_SERVER_HOST`,具体参考 volumes 文件夹中的内容
+# 事先部署好 NFS 服务端(v4), 并在 .env 文件中配置 `LNMP_NFS_SERVER_HOST`,具体参考 nfs-server 文件夹中的内容
 # 或者你可以加上 [ --no-nfs ] 避免使用 NFS 数据卷
 
 $ ./lnmp-k8s create development --no-nfs
@@ -135,11 +139,25 @@ $ ./lnmp-k8s cleanup development
 
 * [数据持久化](docs/storage/data.md)
 
-* [Windows 10](docs/guide/windows.md)
-
 * [滚动升级 不停机更新](docs/guide/rollout.md)
 
 * [pod 网络出错](docs/guide/network.md)
+
+## Ubuntu 19.04 / Debian 10(buster) / Fedora 29
+
+**Ensure iptables tooling does not use the nftables backend**
+
+In Linux, **nftables** is available as a modern replacement for the kernel’s **iptables** subsystem. The iptables tooling can act as a compatibility layer, behaving like iptables but actually configuring nftables. This nftables backend is not compatible with the current kubeadm packages: it causes duplicated firewall rules and breaks kube-proxy.
+
+* https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/#ensure-iptables-tooling-does-not-use-the-nftables-backend
+
+## 学习
+
+* 存储 `pv` `pvc` `flexvolume` `csi`
+* 网络 `cni` `flannel` `calico`
+* 容器运行时 `cri` `docker` `cri-containerd` `cri-o`
+* 监控
+* 服务 `ingress`
 
 ## More Information
 

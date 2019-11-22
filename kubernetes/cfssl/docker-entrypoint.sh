@@ -36,6 +36,7 @@ main (){
   # client auth：表示 server 可以用该该证书对 client 提供的证书进行验证；
 
   if [ -f ca-key.pem ];then
+    # CA 证书已存在，复用
     cp ca-key.pem ca.pem registry-ca.pem cert/
   else
     cd cert
@@ -73,9 +74,10 @@ main (){
   rm -rf *.pem
   rm -rf *.csr
 
+  # 复制 CA
   cp cert/* .
 
-# server hosts 为节点所在 IP
+# docker (server) hosts 为节点所在 IP
   export CN_NAME=server
 
   echo '{
@@ -89,7 +91,7 @@ main (){
     | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
        -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
-# client 无需提供 hosts
+# docker (client) 无需提供 hosts
   export CN_NAME=client
 
     echo '{
@@ -133,7 +135,7 @@ main (){
       -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
 # flanneld (client) 连接 Etcd
-  export CN_NAME=flanneld
+  export CN_NAME=flanneld-etcd-client
 
   echo '{"CN":"'$CN_NAME'",
   "hosts":[""],
@@ -151,6 +153,27 @@ main (){
 }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -profile=kubernetes - | cfssljson -bare $CN_NAME
+
+# kube-apiserver (client) 连接 Etcd
+  export CN_NAME=kube-apiserver-etcd-client
+  export O=system:masters
+
+  echo '{"CN":"'$CN_NAME'",
+  "hosts":[""],
+  "key":{
+    "algo":"rsa",
+    "size":2048
+  },
+  "names":[{
+    "C":"CN",
+    "ST":"Beijing",
+    "L":"Beijing",
+    "O":"'${O}'",
+    "OU":"khs1994.com"
+  }]
+}' \
+       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
+       -profile=kubernetes - | cfssljson -bare apiserver-etcd-client
 
 # admin (client) 用于 kubectl
   # kubectl 与 apiserver https 安全端口通信，apiserver 对提供的证书进行认证和授权。
@@ -181,8 +204,8 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
        -profile=kubernetes - | cfssljson -bare $CN_NAME
 
-# kubernetes (server)
-  export CN_NAME=kubernetes
+# kube-apiserver (server)
+  export CN_NAME=kube-apiserver
   export k8s_hosts=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local
   echo '{
     "CN":"'$CN_NAME'",
@@ -199,7 +222,29 @@ main (){
     }]
     }' \
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
-       -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+       -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - \
+       | cfssljson -bare apiserver
+
+# kube-apiserver-kubelet-client (client)
+  export CN_NAME=kube-apiserver-kubelet-client
+  export O=system:masters
+
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"rsa",
+      "size":2048
+    },"names":[{
+      "C":"CN",
+      "ST":"Beijing",
+      "L":"Beijing",
+      "O":"'${O}'",
+      "OU":"khs1994.com"
+    }]
+    }' \
+       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
+       -profile=kubernetes - | cfssljson -bare apiserver-kubelet-client
 
     cat > encryption-config.yaml <<EOF
 kind: EncryptionConfig
@@ -321,6 +366,10 @@ EOF
   mv client-key.pem key.pem
   mv client.pem cert.pem
   mv server.pem server-cert.pem
+
+  mkdir -p docker
+  mv key.pem cert.pem server-cert.pem server-key.pem docker/
+
   rm -rf cert *.csr
 
 # kubectl.kubeconfig

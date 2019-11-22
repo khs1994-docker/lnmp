@@ -1,0 +1,27 @@
+[Unit]
+Description=containerd container runtime for kubernetes
+Documentation=https://containerd.io
+After=network.target
+Conflicts=kube-containerd.service
+
+[Service]
+ExecStartPre=-/sbin/modprobe overlay
+
+# fix me 改为自己的实际路径
+ExecStart=/opt/k8s/bin/kube-containerd \
+          --config /etc/kubernetes/kubeadm-containerd-config.toml
+
+KillMode=process
+Delegate=yes
+LimitNOFILE=1048576
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -46,7 +46,7 @@ $ ./lnmp-docker.ps1 up
 
 * https://github.com/khs1994-docker/lnmp/blob/master/wsl/config/wsl.conf
 
-默认的 WSL 将 C 盘挂载到了 `/mnt/c`，这里我们修改配置，将 C 盘挂载到 `/c`
+默认的 WSL 将 C 盘挂载到了 `/mnt/c`，这里修改配置，将 C 盘挂载到 `/c`
 
 ### 1. 设置 Windows PATH 变量
 

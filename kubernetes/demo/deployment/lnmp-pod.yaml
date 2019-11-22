@@ -1,0 +1,38 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: lnmp-pod
+  labels:
+    app: lnmp
+spec:
+  restartPolicy: Never
+  hostAliases:
+  - ip: "127.0.0.1"
+    hostnames:
+    - "foo.local"
+    - "bar.local"
+  # 初始化容器
+  initContainers:
+  - name: "init"
+    image: "busybox"
+    command: ["ls"]
+  # pod 可包含多个 container
+  # 共享网络（ip addr 结果一样），故两个容器的端口不能冲突
+  containers:
+  - name: "lnmp-pod"
+    # image: "khs1994/nginx:1.17.6-alpine"
+    image: "nginx:1.17.6-alpine"
+    # command:
+    # args:
+  - name: "lnmp-pod2"
+    image: "khs1994/php:7.3.11-fpm-alpine"
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "128Mi"
+      limits:
+        cpu: "500M"
+        memory: "200Mi"
+  volumes:
+  - name: test
+    emptyDir: {}

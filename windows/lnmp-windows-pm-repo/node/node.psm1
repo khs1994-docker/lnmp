@@ -80,35 +80,3 @@ Function uninstall(){
   # user data
   # _cleanup "$env:ProgramData\npm"
 }
-
-Function getInfo(){
-  . $PSScriptRoot\..\..\sdk\github\repos\releases.ps1
-
-  $latestVersion=getLatestRelease $githubRepo
-
-  ConvertFrom-Json -InputObject @"
-{
-"Package": "$name",
-"Version": "$stableVersion",
-"PreVersion": "$preVersion",
-"LatestVersion": "$latestVersion",
-"LatestPreVersion": "$latestPreVersion",
-"HomePage": "$homepage",
-"Releases": "$releases",
-"Bugs": "$bug",
-"Description": "$description"
-}
-"@
-}
-
-Function bug(){
-  return $bug
-}
-
-Function homepage(){
-  return $homepage
-}
-
-Function releases(){
-  return $releases
-}

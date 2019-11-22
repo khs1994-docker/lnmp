@@ -114,11 +114,9 @@ $ lnmp-composer [install | update]
 $ lnmp-php-cs-fixer fix
 ```
 
-#### travis
+#### travis-cli
 
-使用前务必设置 `GITHUB_TOKEN` 环境变量为自己的 `GITHUB_TOKEN`
-
-不知道是什么的，请自行搜索 `github token` 查看生成方法，实在不会请在本项目 GitHub 提出 Issue
+使用前务必设置 [`GITHUB_TOKEN`](github.md) 环境变量为自己的 `GITHUB_TOKEN`
 
 ```bash
 $ cd project

@@ -115,35 +115,3 @@ Function uninstall(){
   _sudo "mysqld --uninstall"
   _cleanup C:\mysql
 }
-
-Function getInfo(){
-  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
-
-  $latestVersion=getLatestTag $githubRepo
-
-  ConvertFrom-Json -InputObject @"
-{
-"Package": "$name",
-"Version": "$stableVersion",
-"PreVersion": "$preVersion",
-"LatestVersion": "$latestVersion",
-"LatestPreVersion": "$latestPreVersion",
-"HomePage": "$homepage",
-"Releases": "$releases",
-"Bugs": "$bug",
-"Description": "$description"
-}
-"@
-}
-
-Function bug(){
-  return $bug
-}
-
-Function homepage(){
-  return $homepage
-}
-
-Function releases(){
-  return $releases
-}

@@ -1,5 +1,6 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
+& $PSScriptRoot/bin/wsl2d.ps1 Ubuntu-18.04
 
 mkdir -Force $HOME/.khs1994-docker-lnmp/k8s-wsl2/kube-nginx/logs | out-null
 

@@ -18,6 +18,6 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig,\
-flanneld.pem,\
-flanneld-key.pem} .
+flanneld-etcd-client.pem,\
+flanneld-etcd-client-key.pem} .
 ```

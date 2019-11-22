@@ -63,7 +63,7 @@ soft/acme.sh:
 - dockerfile/acme.sh/**/*
 
 soft/php:
-- dockerfile/php-fpm/**/*
+- dockerfile/php/**/*
 - config/php/**/*
 - config/composer/**/*
 

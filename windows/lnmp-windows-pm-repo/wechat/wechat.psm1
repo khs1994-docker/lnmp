@@ -20,11 +20,11 @@ Function install($VERSION=0,$isPre=0){
   }
   if($isPre){
     $VERSION=$preVersion
-    $url="https://dldir1.qq.com/weixin/Windows/WeChat${VERSION}.exe"
-    $filename="WeChat${VERSION}.exe"
+    $url="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe"
+    $filename="WeChatSetup.exe"
   }else{
-    $url="https://dldir1.qq.com/weixin/Windows/WeChat_C${VERSION}.exe"
-    $filename="WeChat_C${VERSION}.exe"
+    $url="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe"
+    $filename="WeChatSetup.exe"
   }
 
   $unzipDesc="WeChat"
@@ -62,33 +62,4 @@ Function install($VERSION=0,$isPre=0){
 
 Function uninstall(){
   & ${env:ProgramFiles(x86)}\Tencent\WeChat\Uninstall.exe
-}
-
-Function getInfo(){
-
-  ConvertFrom-Json -InputObject @"
-{
-"Package": "$name",
-"Version": "$stableVersion",
-"PreVersion": "$preVersion",
-"LatestVersion": "$latestVersion",
-"LatestPreVersion": "$latestPreVersion",
-"HomePage": "$homepage",
-"Releases": "$releases",
-"Bugs": "$bug",
-"Description": "$description"
-}
-"@
-}
-
-Function bug(){
-  return $bug
-}
-
-Function homepage(){
-  return $homepage
-}
-
-Function releases(){
-  return $releases
 }

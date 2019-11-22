@@ -124,35 +124,3 @@ Function uninstall(){
   _sudo "httpd -k uninstall"
   _cleanup C:\Apache24
 }
-
-Function getInfo(){
-  . $PSScriptRoot\..\..\sdk\github\repos\repos.ps1
-
-  $latestVersion=getLatestTag $githubRepo 3
-
-  ConvertFrom-Json -InputObject @"
-{
-"Package": "$name",
-"Version": "$stableVersion",
-"PreVersion": "$preVersion",
-"LatestVersion": "$latestVersion",
-"LatestPreVersion": "$latestPreVersion",
-"HomePage": "$homepage",
-"Releases": "$releases",
-"Bugs": "$bug",
-"Description": "$description"
-}
-"@
-}
-
-Function bug(){
-  return $bug
-}
-
-Function homepage(){
-  return $homepage
-}
-
-Function releases(){
-  return $releases
-}

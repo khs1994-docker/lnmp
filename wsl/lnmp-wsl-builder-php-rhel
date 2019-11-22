@@ -656,7 +656,7 @@ _create_log_file(){
 _pickle(){
   # composer global require friendsofphp/pickle
   $(_sudo) curl -sfL -o /usr/local/bin/pickle \
-    https://github.com/khs1994-php/pickle/releases/download/v0.4.1-2019-10-07/pickle.phar
+    https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar
 }
 
 _composer(){

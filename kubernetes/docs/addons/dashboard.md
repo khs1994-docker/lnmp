@@ -5,11 +5,7 @@
 ```bash
 $ kubectl apply -k addons/dashboard
 
-$ kubectl get deployment kubernetes-dashboard  -n kube-system
-
-$ kubectl --namespace kube-system get pods -o wide
-
-$ kubectl get services kubernetes-dashboard -n kube-system
+$ kubectl get all -n kubernetes-dashboard
 ```
 
 ## 通过 kubectl proxy 访问 dashboard
@@ -19,7 +15,7 @@ $ kubectl proxy --address='localhost' --port=8086 --accept-hosts='^*$'
 Starting to serve on 127.0.0.1:8086
 ```
 
-http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+http://127.0.0.1:8086/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy
 
 ## 创建登录 token
 

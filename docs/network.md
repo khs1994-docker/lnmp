@@ -22,4 +22,4 @@
 
 本地测试（国内）时，使用 `Docker compose` 通过 `ARG` 将 URL 设为国内镜像地址。
 
-具体参考本项目的 PHP compose 文件 https://github.com/khs1994-docker/lnmp/blob/master/dockerfile/php-fpm/docker-compose.yml
+具体参考本项目的 PHP compose 文件 https://github.com/khs1994-docker/lnmp/blob/master/dockerfile/php/docker-compose.yml

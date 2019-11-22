@@ -5,13 +5,16 @@ services:
     image: k8s.gcr.io/kube-apiserver:v1.16.1
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.0.0-beta5
+    image: kubernetesui/dashboard:v2.0.0-beta6
 
   coredns:
-    image: k8s.gcr.io/coredns:1.6.2
+    image: k8s.gcr.io/coredns:1.6.5
 
   flannel:
     image: quay.io/coreos/flannel:v0.11.0
+
+  calico:
+    image: calico/cni:v3.10.1
 
   ingress_nginx:
     image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1

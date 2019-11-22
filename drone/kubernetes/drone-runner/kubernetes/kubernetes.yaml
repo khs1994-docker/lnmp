@@ -1,0 +1,54 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: drone-runner-kubernetes-dashboard
+spec:
+  selector:
+    app: drone-runner
+    tier: kubernetes
+  ports:
+  - port: 3000
+    targetPort: dashboard
+    name: dashboard
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: drone-runner-kubernetes
+  labels:
+    app: drone-runner
+    tier: kubernetes
+spec:
+  selector:
+    matchLabels:
+      app: drone-runner
+      tier: kubernetes
+  template:
+    metadata:
+      name: drone-runner-kubernetes
+      labels:
+        app: drone-runner
+        tier: kubernetes
+    spec:
+      containers:
+      - name: drone-runner-kubernetes
+        image: drone/drone-runner-kube:latest
+        ports:
+        - containerPort: 3000
+          name: dashboard
+        env:
+        # https://kube-runner.docs.drone.io/installation/reference/
+        - name: DRONE_RPC_HOST
+          value: drone
+        - name: DRONE_RPC_PROTO
+          value: http
+        - name: DRONE_RPC_SECRET
+          value: secret
+        - name: DRONE_NAMESPACE_DEFAULT
+          value: drone-runner
+        - name: DRONE_UI_USERNAME
+          value: root
+        - name: DRONE_UI_PASSWORD
+          value: root

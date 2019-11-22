@@ -81,7 +81,7 @@ services:
       - "${CI_HOST:?CI_HOST}:${CI_DRONE_PORT:-8000}:80"
       # - 9000:9000
 
-  drone-agent:
+  drone-docker-runner:
     # ports:
     #   - 3000:3000
 

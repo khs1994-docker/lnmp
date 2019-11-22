@@ -1,0 +1,28 @@
+name: CI
+
+on:
+- push
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    - run: |
+        mkdir -p ~/.kube
+        echo ${KUBECTL_KUBECONFIG} | sed 's! !\n!g' | base64 -d > ~/.kube/config
+        echo "::set-env name=KUBECONFIG::${HOME}/.kube/config"
+      env:
+        KUBECTL_KUBECONFIG: ${{ secrets.KUBECTL_KUBECONFIG }}
+    - uses: azure/setup-kubectl@v1
+      # with:
+      #   version:
+    - run: kubectl cluster-info
+    - uses: Azure/k8s-deploy@v1
+      with:
+        # namespace: default
+        manifests: |
+          deployment.yaml

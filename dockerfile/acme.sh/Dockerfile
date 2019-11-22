@@ -16,4 +16,4 @@ COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
 VOLUME /acme.sh /ssl
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["sh","/docker-entrypoint.sh"]

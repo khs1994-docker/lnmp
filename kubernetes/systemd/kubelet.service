@@ -21,17 +21,20 @@ ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
 ExecStart=/opt/k8s/bin/kubelet \
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
 --cert-dir=${K8S_ROOT}/certs \
---container-runtime=docker \
---container-runtime-endpoint=unix:///var/run/dockershim.sock \
---pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
 --root-dir=/opt/k8s/var/lib/kubelet \
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
 --config=${K8S_ROOT}/conf/kubelet.config.yaml \
 --hostname-override=${NODE_NAME} \
---image-pull-progress-deadline=15m \
---volume-plugin-dir=/opt/k8s/var/lib/kubelet/kubelet-plugins/volume/exec/ \
+--volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --logtostderr=true \
---v=2
+--v=2 \
+--dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
+$KUBELET_CRI
+
+# --container-runtime=docker \
+# --container-runtime-endpoint=unix:///var/run/dockershim.sock \
+# --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
+# --image-pull-progress-deadline=15m \
 
 # --container-runtime=remote \
 # --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock \

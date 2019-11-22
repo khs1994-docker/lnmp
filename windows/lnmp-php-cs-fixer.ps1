@@ -13,5 +13,5 @@ docker run -it --rm `
   --mount type=bind,src=$PSScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json `
   --env-file $PSScriptRoot/../config/composer/.env `
   --entrypoint php-cs-fixer `
-  ${LNMP_PHP_IMAGE} `
+  khs1994/php-cs-fixer `
   $args

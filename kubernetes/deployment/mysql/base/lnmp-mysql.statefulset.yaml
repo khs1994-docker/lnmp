@@ -47,6 +47,7 @@ spec:
         image: mysql:8.0.18
         ports:
         - containerPort: 3306
+          name: mysql
         volumeMounts:
         - name: lnmp-mysql-data
           mountPath: /var/lib/mysql
@@ -62,7 +63,7 @@ spec:
         - name: TZ
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-tz
               key: TZ
         - name: MYSQL_DATABASE
           value: test

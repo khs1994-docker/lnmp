@@ -4,11 +4,11 @@
 
 ## 使用方法
 
-**1.** (可选项)在 `.env` 文件中通过 `LNMP_SERVICES` 变量修改需要启用的软件，详细说明请参考 [个性化方案](custom.md)
+**1.** **可选项** 在 `.env` 文件中通过 `LNMP_SERVICES` 变量修改需要启用的软件，详细说明请参考 [个性化方案](custom.md)
 
-**2.** (可选项)如果你想使用自己的镜像，可以在 `.env` 文件中通过 `LNMP_DOCKER_IMAGE_PREFIX` 变量修改镜像前缀，默认为 `khs1994`，详细说明请参考 [自己构建镜像](build.md)
+**2.** **可选项** 如果你想使用自己的镜像，可以在 `.env` 文件中通过 `LNMP_DOCKER_IMAGE_PREFIX` 变量修改镜像前缀，默认为 `khs1994`，详细说明请参考 [自己构建镜像](build.md)
 
-**3.** (可选项)在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app`
+**3.** **可选项** 在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app`
 
 **4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/my-project` 目录下(可自定义，请查看下方 `APP_ROOT` 一节)，或新建 PHP 项目文件夹
 
@@ -16,7 +16,9 @@
 
 **6.** 执行 `./lnmp-docker up` 或者 `./lnmp-docker restart nginx` 启动或重启
 
-**7.** `IDE(PhpStorm)` 打开 `./app/my-project` ，开始编写代码
+**7.** `IDE(PhpStorm、VSCode)` 打开 `./app/my-project` ，开始编写代码
+
+**8.** VSCode 远程开发请参考 `vscode-remote` 文件夹
 
 > 谨慎执行 `$ docker volume prune`，否则将会删除数据库数据。
 
@@ -31,7 +33,7 @@
 + APP_ROOT=../app
 ```
 
-此时文件结构为
+此时文件夹结构为
 
 ```bash
 .
@@ -70,4 +72,13 @@ Windows 除了在 `.env` 文件中设置 `APP_ROOT` 变量外，还需在 `.env.
 $ ./lnmp-docker scale php7=3
 
 $ ./lnmp-docker scale php7=1
+```
+
+## 保持运行的软件最新
+
+在 `.env` 文件中注释掉 `LNMP_SOFT_VERSION` 变量，例如
+
+```diff
+- LNMP_NGINX_VERSION=1.17.6
++ # LNMP_NGINX_VERSION=1.17.6
 ```

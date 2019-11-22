@@ -35,14 +35,30 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/proxy-client-key.pem
-    - path: ${K8S_ROOT}/certs/kubernetes.pem
+    - path: ${K8S_ROOT}/certs/apiserver.pem
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/cert/kubernetes.pem
-    - path: ${K8S_ROOT}/certs/kubernetes-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/apiserver.pem
+    - path: ${K8S_ROOT}/certs/apiserver-key.pem
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/cert/kubernetes-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/apiserver-key.pem
+    - path: ${K8S_ROOT}/certs/apiserver-etcd-client.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/apiserver-etcd-client.pem
+    - path: ${K8S_ROOT}/certs/apiserver-etcd-client-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/apiserver-etcd-client-key.pem
+    - path: ${K8S_ROOT}/certs/apiserver-kubelet-client.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/apiserver-kubelet-client.pem
+    - path: ${K8S_ROOT}/certs/apiserver-kubelet-client-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/apiserver-kubelet-client-key.pem
     # - path: ${K8S_ROOT}/bin/kube-apiserver
     #   mode: 0755
     #   contents:

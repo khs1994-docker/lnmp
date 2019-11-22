@@ -10,8 +10,8 @@ systemd:
             # ExecStart=
             # ExecStart=/usr/bin/dockerd \
             #   --host=fd:// \
-            #   --exec-opt native.cgroupdriver=systemd \
-            #   ${DOCKER_NETWORK_OPTIONS}
+            #   --exec-opt native.cgroupdriver=systemd
+
 storage:
   files:
     - path:       "/etc/docker/daemon.json"
@@ -20,8 +20,8 @@ storage:
         inline: |
           {
             "tlsverify": true,
-            "tlscert": "${K8S_ROOT}/certs/server.pem",
-            "tlskey": "${K8S_ROOT}/certs/server-key.pem",
+            "tlscert": "${K8S_ROOT}/certs/docker/server.pem",
+            "tlskey": "${K8S_ROOT}/certs/docker/server-key.pem",
             "tlscacert": "${K8S_ROOT}/certs/ca.pem",
             "registry-mirrors" : [
               "https://dockerhub.azk8s.cn"
@@ -33,11 +33,11 @@ storage:
             ],
             "experimental" : true
           }
-    - path: ${K8S_ROOT}/certs/server.pem
+    - path: ${K8S_ROOT}/certs/docker/server.pem
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/cert/server-cert.pem
-    - path: ${K8S_ROOT}/certs/server-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/docker/server-cert.pem
+    - path: ${K8S_ROOT}/certs/docker/server-key.pem
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/cert/server-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/docker/server-key.pem

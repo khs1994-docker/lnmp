@@ -13,13 +13,13 @@ systemd:
         [Service]
         # Type=forking
         # Type=notify
-        Environment="OPTIONS=-p 18443:18443 --privileged --network host -v ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf:${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf"
+        Environment="OPTIONS=-p 18443:18443 --privileged --network host -v ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf:/opt/k8s/kube-nginx/conf/kube-nginx.conf"
         # ExecStartPre=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx -t
         # ExecStart=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx
         # ExecReload=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx -s reload
         ExecStartPre=-podman container rm kube-nginx
-        ExecStartPre=podman container run --rm $OPTIONS khs1994/kube-nginx:1.17.5 -t
-        ExecStart=podman container run --name kube-nginx $OPTIONS khs1994/kube-nginx:1.17.5
+        ExecStartPre=podman container run --rm $OPTIONS khs1994/kube-nginx:1.17.6 -t
+        ExecStart=podman container run --name kube-nginx $OPTIONS khs1994/kube-nginx:1.17.6
         ExecStop=podman container stop kube-nginx
         ExecStopPost=podman container rm kube-nginx
         PrivateTmp=true

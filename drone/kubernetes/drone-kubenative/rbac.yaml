@@ -1,0 +1,52 @@
+# 所有的 pipeline pod 运行在和 drone-kubenative 相同的命名空间
+
+# sa 由 patch.yaml deployment.spec.template.spec.serviceAccountName 控制
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: drone
+  labels:
+    app: drone-kubenative
+
+---
+
+# drone 需要的权限
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: drone:drone
+  labels:
+    app: drone-kubenative
+rules:
+  - apiGroups:
+    - batch
+    resources:
+    - jobs
+    verbs:
+    - "*"
+  - apiGroups:
+    - extensions
+    resources:
+    - deployments
+    verbs:
+    - get
+    - list
+    - patch
+    - update
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: drone:drone
+  labels:
+    app: drone-kubenative
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: drone:drone
+subjects:
+- kind: ServiceAccount
+  name: drone
+  namespace: ci

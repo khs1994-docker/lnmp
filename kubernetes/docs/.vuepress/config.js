@@ -7,6 +7,10 @@ module.exports = {
   themeConfig: {
     nav: [
       {
+        text: '部署',
+        link: '/setup/'
+      },
+      {
         text: '教程',
         link: '/guide/',
       },
@@ -45,28 +49,33 @@ module.exports = {
     ],
     sidebar: {
       '/guide/': [
-        'coreos',
         'etcd',
-        'systemd',
-        'docker-desktop',
         'endpoints',
         'network',
         'port',
         'ingress-nginx',
         'rollout',
         'secret',
-        'ha',
         'helm',
         'kustomize',
-        'minikube',
-        'windows',
         'arm64',
         'virtualbox',
         'podman',
-        'rpi',
         'kubectl',
         '/resources/deployment',
         '/resources/configMap',
+        'mod',
+      ],
+      '/setup/': [
+        'systemd',
+        'coreos',
+        'minikube',
+        'windows',
+        'kubeadm',
+        'k3s',
+        'rpi',
+        'docker-desktop',
+        'ha',
       ],
       '/example/': [
         'nginx',
@@ -90,16 +99,16 @@ module.exports = {
         "data",
         "nfs",
         "pv",
-        "flexVolume",
-        "csi",
+        "flexvolume/",
+        "csi/",
         "storage-classes",
       ],
       "/node/": [
         'flanneld',
         "kubelet",
         "worker",
-        "runtime",
         "oci_runtime",
+        "cri",
         "cni",
         "crictl",
         {

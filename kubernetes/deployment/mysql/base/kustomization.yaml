@@ -92,3 +92,5 @@ resources:
     # kind: Secret
     # name: my-secret
     # apiVersion: v1
+  # fieldref:
+    # fieldpath: metadata.name

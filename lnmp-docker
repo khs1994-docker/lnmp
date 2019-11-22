@@ -113,7 +113,7 @@ Commands:
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
-  composer             Exec composer command on Docker
+  composer             Exec composer command on Docker Container
   completion           Move fish shell completion code (Only Support fish)
   config               Validate and view the LNMP Compose file
   bug                  Generate Debug information, then copy it to GitHub Issues
@@ -338,8 +338,9 @@ _get_compose_options(){
   for compose_file in $LREW_INCLUDE
   do
     # COMPOSE_FILE=$(echo $compose_file | tr '[a-z]' '[A-Z]')
-    local PACKAGE=$(echo ${compose_file^^} | tr '-' '_')
+    # local PACKAGE=$(echo ${compose_file^^} | tr '-' '_')
 
+    local PACKAGE=$(echo $compose_file | tr '[a-z]' '[A-Z]' | tr '-' '_')
     if [ -d vendor/lrew-dev/$compose_file ];then
       LREW_INCLUDE_ROOT="vendor/lrew-dev/$compose_file"
       # set env
@@ -381,7 +382,7 @@ env_status(){
       print_info ".env file existing"; \
   else print_warning ".env file NOT existing (Maybe First Run)"; cp .env.example .env ; fi
 
-  _cp_only_not_exists kubernetes/volumes/.env.example kubernetes/volumes/.env
+  _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
   if ! [ -f secrets/minio/key.txt ];then
     cp secrets/minio/key.example.txt secrets/minio/key.txt
@@ -1873,7 +1874,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     nfs )
     $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
     $(_sudo) modprobe nfsd || true
-    cd kubernetes/volumes
+    cd kubernetes/nfs-server
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs
     fi

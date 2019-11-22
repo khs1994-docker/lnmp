@@ -12,6 +12,9 @@ configMapGenerator:
   files:
   - config/conf.d/www.custom.conf
   # - config/conf.d/t.khs1994.com.production.conf
+- name: lnmp-tz
+  literals:
+  - TZ=Asia/Shanghai
 secretGenerator:
 - name: lnmp-nginx-khs1994-com-tls-0.0.1
   files:

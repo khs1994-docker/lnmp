@@ -1,0 +1,3 @@
+resources:
+- docker.yaml
+namespace: ci

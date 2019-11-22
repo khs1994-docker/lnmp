@@ -80,12 +80,13 @@ spec:
         - name: TZ
           valueFrom:
              configMapKeyRef:
-               name: lnmp-env-0.0.1
+               name: lnmp-tz
                key: TZ
         - name: MYSQL_DATABASE
           value: test
         ports:
         - containerPort: 3306
+          name: mysql
         # livenessProbe:
         #   exec:
         #     command:

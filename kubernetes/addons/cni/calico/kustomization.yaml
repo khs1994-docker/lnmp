@@ -1,0 +1,18 @@
+resources:
+- calico.yaml
+- configMap.yaml
+vars:
+  - name: CALICO_IPV4POOL_CIDR
+    objref:
+      name: calico.conf
+      apiVersion: v1
+      kind: ConfigMap
+    fieldref:
+      fieldpath: data.podCIDR
+  - name: CALICO_IPV4POOL_IPIP
+    objref:
+      name: calico.conf
+      apiVersion: v1
+      kind: ConfigMap
+    fieldref:
+      fieldpath: data.ipip

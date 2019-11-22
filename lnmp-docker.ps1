@@ -22,11 +22,6 @@ Function _command($command){
   return $?
 }
 
-if(_command docker){
-  $DOCKER_VERSION_YY=$($(docker --version).split(' ')[2].split('.')[0])
-  $DOCKER_VERSION_MM=$($(docker --version).split(' ')[2].split('.')[1])
-}
-
 $outNull=$false
 
 if (${QUITE} -eq $true){
@@ -82,7 +77,7 @@ Function env_status(){
     cp .env.example.ps1 .env.ps1
   }
 
-  _cp_only_not_exists kubernetes/volumes/.env.example kubernetes/volumes/.env
+  _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 
@@ -229,7 +224,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
-  composer             Exec composer command on Docker
+  composer             Exec composer command on Docker Container
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
   env                  Edit .env/.env.ps1 file
@@ -591,6 +586,15 @@ Function _lrew_backup(){
 
 }
 
+Function _wsl_check(){
+  wsl -d $DistributionName echo ""
+
+  if(!$?){
+    printError "wsl [ $DistributionName ] not found, please check [ .env.ps1 ] file `$DistributionName value"
+    exit 1
+  }
+}
+
 # main
 
 if (!(Test-Path cli/khs1994-robot.enc )){
@@ -638,6 +642,8 @@ Function _wsl2_docker_init(){
   }
 }
 
+$isWSL2=$false
+
 if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT" -or $PSVersionTable.Platform -eq $null) -and (Test-Path $HOME\.docker\config.json)){
   $docker_current_context=(ConvertFrom-Json -InputObject (get-content $HOME\.docker\config.json -Raw)).currentContext
 
@@ -645,10 +651,23 @@ if((_command docker) -and ($PSVersionTable.Platform -eq "Win32NT" -or $PSVersion
     printInfo "Docker Engine run in WSL2 (start by $ service docker start)"
     $LNMP_COMPOSE_GLOBAL_OPTIONS="-H ${LNMP_WSL2_DOCKER_HOST}"
     _wsl2_docker_init
+    $isWSL2=$true
   }else{
       # $LNMP_COMPOSE_GLOBAL_OPTIONS="-H npipe:////./pipe/docker_engine"
   }
 }
+
+# context is wsl2, exec slow
+if(_command docker){
+  if(!$isWSL2){
+    $DOCKER_VERSION=$($(docker --version).split(' ')[2]).trim(',')
+  }else{
+    $DOCKER_VERSION=$($(docker -c default --version).split(' ')[2]).trim(',')
+  }
+}
+
+$DOCKER_VERSION_YY=([System.Version]$DOCKER_VERSION).Major
+$DOCKER_VERSION_MM="0" + ([System.Version]$DOCKER_VERSION).Minor
 
 env_status
 logs
@@ -684,7 +703,8 @@ switch -regex ($command){
 
     httpd-config {
       clear
-      wsl -d $DistributionName lnmp-docker httpd-config $other
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker httpd-config $other
     }
 
     backup {
@@ -753,11 +773,6 @@ switch -regex ($command){
       & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options config $other}
     }
 
-    cn-mirror {
-      clear
-      wsl -d $DistributionName lnmp-docker cn-mirror
-    }
-
     checkout {
       git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
       git checkout "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
@@ -807,18 +822,25 @@ switch -regex ($command){
     }
 
     env {
+      if($other){
+        notepad.exe $other
+        exit
+      }
+
       notepad.exe .env
       notepad.exe .env.ps1
     }
 
     new {
       clear
-      wsl -d $DistributionName lnmp-docker new $other
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker new $other
     }
 
     nginx-config {
       clear
-      wsl -d $DistributionName lnmp-docker nginx-config $other
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker nginx-config $other
     }
 
     swarm-config {
@@ -1033,7 +1055,8 @@ switch -regex ($command){
 
     update-version {
       clear
-      wsl -d $DistributionName lnmp-docker update-version
+      _wsl_check
+      wsl -d $DistributionName ./lnmp-docker update-version
     }
 
     bug {
@@ -1114,6 +1137,12 @@ XXX
     }
 
     donate {
+      clear
+      printInfo "Thank You"
+      Start-Process -FilePath http://zan.khs1994.com
+    }
+
+    fund {
       clear
       printInfo "Thank You"
       Start-Process -FilePath http://zan.khs1994.com

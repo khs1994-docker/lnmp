@@ -1,7 +1,7 @@
 {
   "name": "yarn",
   "description": "Fast, reliable, and secure dependency management",
-  "version": "1.18.0",
+  "version": "1.19.1",
   "preVersion": "1.19.1",
   "homepage": "https://www.yarnpkg.com/lang/en/",
   "bug": "https://github.com/yarnpkg/yarn/issues",

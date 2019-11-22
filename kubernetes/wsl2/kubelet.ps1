@@ -28,21 +28,31 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
 --config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
 --hostname-override=${NODE_NAME} `
---image-pull-progress-deadline=15m `
---volume-plugin-dir=${K8S_ROOT}/var/lib/kubelet/kubelet-plugins/volume/exec/ `
+--volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
+--dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
 --v=2
 
-if($args[0] -eq "reset"){
+Function _reset(){
   wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
   wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
   wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+}
+
+if($args[0] -eq "reset"){
+  _reset
+
   exit
 }
 
 # --container-runtime=docker `
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock `
 # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 `
+# --image-pull-progress-deadline=15m `
+# --network-plugin=cni `
+# --cni-cache-dir=/opt/k8s/var/lib/cni/cache `
+# --cni-bin-dir=/opt/k8s/opt/cni/bin `
+# --cni-conf-dir=/opt/k8s/etc/cni/net.d `
 
 # --container-runtime=remote `
 # --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
@@ -88,20 +98,18 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip){
    $wsl_ip_from_file=cat $PSScriptRoot/conf/.wsl_ip
 
    if($wsl_ip -eq $wsl_ip_from_file){
-      Write-Warning "wsl ip not changed, skip rm cert"
+      Write-Warning "wsl ip not changed"
    }else{
-      Write-Warning "wsl ip changed, rm cert ..."
+      Write-Warning "wsl ip changed, reset ..."
       echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-      # wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
       wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
-      # wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+      # _reset
    }
 }else{
-   Write-Warning "wsl ip changed, rm cert ..."
+   Write-Warning "wsl ip changed, reset ..."
    echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-   # wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
    wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
-   # wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+   # _reset
 }
 
 sleep 2

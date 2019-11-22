@@ -1,5 +1,7 @@
 # 使用 systemd 部署单节点 Kubernetes 集群
 
+> 主要参考了 https://github.com/opsnull/follow-me-install-kubernetes-cluster，笔者将步骤写成了 shell 脚本，便于一键部署。
+
 ## 准备
 
 * 了解 `systemd`
@@ -43,7 +45,8 @@ $ sudo hostnamectl set-hostname node1
 
 ```bash
 # 生成证书
-$ dockr-composer up cfssl-local
+$ docker-compose pull cfssl-local
+$ docker-compose up cfssl-local
 
 # 部署
 $ ./lnmp-k8s local-install
@@ -53,7 +56,7 @@ $ ./lnmp-k8s local-up
 # 按照提示，手动执行 systemctl 命令，依次启动 kubernetes 各组件
 ```
 
-### 手动复制 `kubectl` 配置文件
+## 手动复制 `kubectl` 配置文件
 
 复制 `kubectl` 配置文件，为防止覆盖原有文件，脚本不支持自动复制，必须手动复制
 
@@ -63,7 +66,11 @@ $ cd ~/lnmp/kubernetes
 $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 ```
 
-### 脚本原理
+## 注意事项
+
+* 一些容器可能需要挂载宿主机的 `/var/lib/kubelet` `/usr/libexec/kubernetes/kubelet-plugins/volume/exec` 。本项目将所有文件放到了 `${K8S_ROOT:-/opt/k8s}/XXX`，注意将其替换到实际地址 `${K8S_ROOT:-/opt/k8s}/XXX`
+
+## 脚本原理
 
 将 `*.service` 放入 `/etc/systemd/system/*`
 
@@ -73,15 +80,19 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 
 将配置文件放入 `${K8S_ROOT}/conf`
 
+可执行文件放入 `${K8S_ROOT}/bin`
+
 > `${K8S_ROOT}` 默认为 `/opt/k8s`
 
-## 容器运行时
+## 参考
+
+### 容器运行时（CRI）
 
 * docker
 * containerd
 * cri-o
 
-## OCI 运行时
+### OCI 运行时
 
 * runc
 * runsc
