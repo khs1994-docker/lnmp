@@ -1,11 +1,11 @@
 {
   "name": "firefox",
   "description": "Mozilla Firefox web browser",
-  "version": "69.0",
-  "preVersion": "70.0b5",
+  "version": "",
+  "preVersion": "",
   "homepage": "https://www.mozilla.org/en-US/",
   "bug": "https://bugzilla.mozilla.org/",
-  "github": "https://github.com/mozilla",
+  "support": "https://github.com/mozilla",
   "releases": "https://ftp.mozilla.org/",
   "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US",
   "preUrl": "https://download.mozilla.org/?product=firefox-beta-latest&os=win64&lang=en-US"

@@ -5,7 +5,7 @@
   "preVersion": "7.6.0",
   "homepage": "https://www.getpostman.com/",
   "bug": "https://www.getpostman.com/support",
-  "github": "postmanlabs/postman-app-support",
+  "support": "postmanlabs/postman-app-support",
   "releases": "",
   "url": "https://dl.pstmn.io/download/latest/win64"
 }

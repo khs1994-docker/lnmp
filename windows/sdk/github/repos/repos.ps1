@@ -1,4 +1,5 @@
 . $PSScriptRoot\..\request.ps1
+. $PSScriptRoot\..\utils\trim_v.ps1
 
 Function getLatestTag($repo,$page=0,$index=0){
   $url="https://api.github.com/repos/$repo/tags"
@@ -10,7 +11,8 @@ Function getLatestTag($repo,$page=0,$index=0){
   }
 
   $tags=(request GET $url).content
+
   $tags_obj=ConvertFrom-Json -InputObject $tags
 
-  return $latestTag=$tags_obj[$index].name
+  return trim_v $tags_obj[$index].name
 }

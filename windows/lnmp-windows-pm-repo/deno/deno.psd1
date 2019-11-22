@@ -69,7 +69,7 @@ Copyright = '(c) lnmp@docker.khs1994.com. All rights reserved.'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @("install","uninstall","getInfo","homepage","bug","releases")
+FunctionsToExport = @("install","uninstall","homepage","bug","releases")
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()

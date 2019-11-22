@@ -98,19 +98,23 @@ if($args.length -eq 0 -or $args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[
 
 ################################################################################
 
-Function _import_module($soft){
+Function pkg_root(){
   if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
-    Import-Module -Name "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+    return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
     "==> Found in vendor/lwpm-dev"
-    Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
+    return "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm\$soft"){
     "==> Found in vendor/lwpm"
-    Import-Module -Name "${PSScriptRoot}\..\vendor\lwpm\$soft"
+    return "${PSScriptRoot}\..\vendor\lwpm\$soft"
   }else{
     "==> Not Found"
     exit 1
   }
+}
+
+Function _import_module($soft){
+  Import-Module -Name $(pkg_root $soft)
 }
 
 Function __install($softs){
@@ -203,28 +207,90 @@ function __init($soft){
   cd $source
 }
 
-function __info($soft){
+function manifest($soft){
+  $pkg_manifest = $(pkg_root $soft) + "\lwpm.json"
+
+  return ConvertFrom-Json -InputObject (get-content $pkg_manifest -Raw)
+}
+
+function getVersionByProvider($soft){
   _import_module $soft
-  getInfo
-  Remove-Module -Name $soft
+
+  if(!$(get-command getLatestVersion)){
+    Remove-Module $soft
+
+    return $null,$null
+  }
+
+  $latestVersion,$latestPreVersion = getLatestVersion
+
+  Remove-Module $soft
+
+  return $latestVersion,$latestPreVersion
+}
+
+function __info($soft){
+  $lwpm=manifest $soft
+
+  $stableVersion=$lwpm.version
+  $preVersion=$lwpm.preVersion
+  $githubRepo=$lwpm.github
+  $homepage=$lwpm.homepage
+  $releases=$lwpm.releases
+  $bug=$lwpm.bug
+  $name=$lwpm.name
+  $description=$lwpm.description
+
+  if($githubRepo){
+    . $PSScriptRoot\sdk\github\repos\releases.ps1
+
+    $latestVersion,$latestPreVersion=getLatestRelease $githubRepo
+  }
+
+  if(!$latestVersion){
+    $latestVersion,$latestPreVersion=getVersionByProvider $soft
+  }
+
+  if(!$latestPreVersion){
+    $latestPreVersion=$latestVersion
+  }
+
+  if(!$stableVersion){
+    $stableVersion = $latestVersion
+  }
+
+  if(!$preVersion){
+    $preVersion = $latestPreVersion
+  }
+
+ConvertFrom-Json -InputObject @"
+{
+"Package": "$name",
+"Version": "$stableVersion",
+"PreVersion": "$preVersion",
+"LatestVersion": "$latestVersion",
+"LatestPreVersion": "$latestPreVersion",
+"HomePage": "$homepage",
+"Releases": "$releases",
+"Bugs": "$bug",
+"Description": "$description"
+}
+"@
 }
 
 function __homepage($soft){
-  _import_module $soft
-  start-process (homepage)
-  Remove-Module -Name $soft
+  $lwpm=manifest $soft
+  start-process $lwpm.homepage
 }
 
 function __releases($soft){
-  _import_module $soft
-  start-process (releases)
-  Remove-Module -Name $soft
+  $lwpm=manifest $soft
+  start-process $lwpm.releases
 }
 
 function __bug($soft){
-  _import_module $soft
-  start-process (bug)
-  Remove-Module -Name $soft
+  $lwpm=manifest $soft
+  start-process $lwpm.bug
 }
 
 if($args[0] -eq 'install'){

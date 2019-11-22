@@ -16,7 +16,7 @@ $description=$lwpm.description
 $url=$lwpm.url
 $preUrl=$lwpm.preUrl
 
-Function getVersion($url){
+Function getVersion($url=$null){
   try{
     Invoke-WebRequest `
       -MaximumRedirection 0 `
@@ -27,6 +27,10 @@ Function getVersion($url){
     }
 
     return $version
+}
+
+Function getLatestVersion(){
+  return $(getVersion $url),$(getVersion $preUrl)
 }
 
 Function install($VERSION=0,$isPre=0){
@@ -81,35 +85,4 @@ Function install($VERSION=0,$isPre=0){
 
 Function uninstall(){
   & "$env:ProgramFiles\Mozilla Firefox\uninstall\helper.exe"
-}
-
-Function getInfo(){
-  $latestVersion=getVersion $url
-  $latestPreVersion=getVersion $preUrl
-
-  ConvertFrom-Json -InputObject @"
-{
-"Package": "$name",
-"Version": "$stableVersion",
-"PreVersion": "$preVersion",
-"LatestVersion": "$latestVersion",
-"LatestPreVersion": "$latestPreVersion",
-"HomePage": "$homepage",
-"Releases": "$releases",
-"Bugs": "$bug",
-"Description": "$description"
-}
-"@
-}
-
-Function bug(){
-  return $bug
-}
-
-Function homepage(){
-  return $homepage
-}
-
-Function releases(){
-  return $releases
 }
