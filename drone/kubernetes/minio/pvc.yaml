@@ -1,7 +1,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: minio
+  name: ci-minio
   labels:
     app: minio
 spec:

@@ -60,7 +60,7 @@ else
       print_info "Use LNMP CLI in $PWD"
       cd ${LNMP_PATH}
     else
-      print_error  "You must set system env LNMP_PATH, please see cli/README.md"
+      print_error  "You must set system env LNMP_PATH, please see docs/cli.md"
       exit 1
     fi
 fi
@@ -88,7 +88,7 @@ _cp_only_not_exists config/registry/config.example.yml config/registry/config.ym
 
 # PHPer command
 
-if [ -z "$LNMP_PATH" ];then print_warning "Try lnmp-* commands? Please see cli/README.md"; fi
+if [ -z "$LNMP_PATH" ];then print_warning "Try lnmp-* commands? Please see docs/cli.md"; fi
 
 help(){
   echo  -e "

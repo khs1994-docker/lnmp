@@ -20,7 +20,7 @@
 #     # - hard
 #     # - nfsvers=4.1
 #     - nfsvers=4
----
+# ---
 # NFS PVC 动态创建 NFS PV
 apiVersion: v1
 kind: PersistentVolumeClaim

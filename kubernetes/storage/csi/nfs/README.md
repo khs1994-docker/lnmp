@@ -1,6 +1,4 @@
-# CSI NFS
-
-* https://github.com/kubernetes-csi/csi-driver-nfs
+# [CSI NFS](https://github.com/kubernetes-csi/csi-driver-nfs)
 
 ## 部署
 
@@ -33,6 +31,8 @@ $ sudo yum install -y nfs-utils
 ```bash
 $ kubectl apply -f tests
 ```
+
+进入 pod 在 `/data` 目录新建文件，并在服务端确认文件是否存在。
 
 ## 参考
 

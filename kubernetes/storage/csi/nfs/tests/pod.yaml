@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: data-nfsplugin
+  name: csi-nfs-data
   labels:
-    name: data-nfsplugin
+    app: test
+    name: csi-nfs-data
 spec:
   accessModes:
   - ReadWriteMany
@@ -20,7 +21,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: data-nfsplugin
+  name: csi-nfs-data
 spec:
   accessModes:
   - ReadWriteMany
@@ -31,25 +32,30 @@ spec:
     matchExpressions:
     - key: name
       operator: In
-      values: ["data-nfsplugin"]
+      values: ["csi-nfs-data"]
   storageClassName: csi-nfs
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx
+  name: csi-nfs-test
+  labels:
+    app: test
 spec:
   containers:
-  - image: nginx:1.17.6-alpine
-    imagePullPolicy: Always
-    name: nginx
+  - image: busybox
+    name: csi-nfs-test
     ports:
     - containerPort: 80
       protocol: TCP
     volumeMounts:
-      - mountPath: /var/www
-        name: data-nfsplugin
+      - mountPath: /data
+        name: data
+    args:
+      - sh
+      - -c
+      - "while : ;do sleep 3600; done"
   volumes:
-  - name: data-nfsplugin
+  - name: data
     persistentVolumeClaim:
-      claimName: data-nfsplugin
+      claimName: csi-nfs-data

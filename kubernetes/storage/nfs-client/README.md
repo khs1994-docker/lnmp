@@ -1,8 +1,8 @@
-# NFS-client
+# [NFS-client](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)
 
 `PVC` 动态创建 `PV`
 
-NFS 服务端路径 `/exported/path/${namespace}-${pvcName}-${pvName}`
+文件位于 `/exported/path/${namespace}-${pvcName}-${pvName}`
 
 ## 准备
 
@@ -24,7 +24,14 @@ $ sudo yum install -y nfs-utils
 $ kubectl apply -f deploy
 ```
 
+## 测试
+
+```bash
+$ kubectl apply -f tests
+```
+
+进入 pod 的 `/data` 目录新建文件，并在 NFS 服务端查看文件是否存在。
+
 ## 参考
 
-* https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client
 * docs/storage/nfs.md

@@ -9,7 +9,7 @@
 # spec:
 #   capacity:
 #     storage: 20Gi
-#   volumeMode: Filesystem # or raw Block
+#   volumeMode: Filesystem # Filesystem | Block
 #   accessModes:
 #     # - ReadWriteOnce
 #     # - ReadOnlyMany   # 被多个节点mount为只读ro模式 ROX
@@ -80,7 +80,7 @@ spec:
 #     # - hard
 #     # - nfsvers=4.1
 #     - nfsvers=4
----
+# ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

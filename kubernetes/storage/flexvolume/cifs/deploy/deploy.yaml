@@ -1,8 +1,17 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: flexvolume-cifs
+  labels:
+    app: flexvolume-cifs
+
+---
+
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: flexvolume-cifs
-  namespace: kube-system
+  namespace: flexvolume-cifs
 spec:
   selector:
     matchLabels:
@@ -26,4 +35,5 @@ spec:
           hostPath:
             # TODO Change to the Flexvolume plugin directory of your cluster.
             # path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+            # path: /wsl/k8s-data/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
             path: ##KUBELET_PLUGINS_VOLUME_PATH##

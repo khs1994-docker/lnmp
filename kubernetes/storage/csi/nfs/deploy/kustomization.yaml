@@ -1,4 +1,5 @@
 resources:
+- namespace.yaml
 - csi-attacher-nfsplugin.yaml
 - csi-attacher-rbac.yaml
 - csi-nodeplugin-nfsplugin.yaml
@@ -12,3 +13,4 @@ vars:
     apiVersion: v1
   fieldref:
     fieldpath: data.kubelet_root
+namespace: csi-nfs

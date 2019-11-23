@@ -13,7 +13,7 @@ spec:
   capacity:
     storage: 20Gi
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-mode
-  volumeMode: Filesystem # Block
+  volumeMode: Filesystem # Filesystem | Block
 
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
   accessModes:

@@ -1,38 +1,30 @@
-# apiVersion: v1
-# kind: Secret
-# metadata:
-#   name: flexvolume-cifs-secret
-#   namespace: default
-# type: fstab/cifs
-# data:
-#   username: 'ZXhhbXBsZQ=='
-#   password: 'bXktc2VjcmV0LXBhc3N3b3Jk'
----
 apiVersion: v1
 kind: Pod
 metadata:
-  name: flexvolume-tests-busybox
+  name: flexvolume-cifs-test
   namespace: default
+  labels:
+    app: test
 spec:
   containers:
-  - name: flexvolume-tests-busybox
+  - name: flexvolume-cifs-test
     image: busybox
     command:
       - sleep
       - "36000"
     imagePullPolicy: IfNotPresent
     volumeMounts:
-    - name: test
+    - name: data
       mountPath: /data
   volumes:
-  - name: test
+  - name: data
     persistentVolumeClaim:
-      claimName: cifs-pvc
+      claimName: flexvolume-cifs-pvc
 ---
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: cifs-pv
+  name: flexvolume-cifs-pv
   labels:
     name: cifs
 spec:
@@ -54,7 +46,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: cifs-pvc
+  name: flexvolume-cifs-pvc
   labels:
     name: cifs
 spec:

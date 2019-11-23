@@ -58,6 +58,16 @@ $ ln -s $LNMP_PATH/cli/completion/fish/lnmp-docker.fish ~/.config/fish/completio
 
 > 删除环境变量 `$ set -Ue LNMP_PATH`
 
+### 3. zsh
+
+```bash
+$ vi ~/.zshrc
+
+export LNMP_PATH=/data/lnmp
+
+export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
+```
+
 ## 原始命令详解
 
 ### 初始化

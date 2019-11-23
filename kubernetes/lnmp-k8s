@@ -229,7 +229,7 @@ _get_kubernetes_server_by_docker_image(){
 }
 
 _get_kubernetes_server_by_url(){
-  curl https://storage.googleapis.com/kubernetes-release/release/stable.txt \
+  curl https://storage.googleapis.com/kubernetes-release/release/stable.txt > /dev/null \
     && ( \
       curl -A "curl" -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
         -o kubernetes-release/release/kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
@@ -942,7 +942,7 @@ _k8s_install_common(){
 }
 
 _k8s_install_cp_bin(){
-  if ! [ -f ${K8S_ROOT}/bin/kubeadm ];then
+  if [ ! -f ${K8S_ROOT}/bin/kubeadm -o "$1" = '-f' ];then
     _kubernetes_server_install
     cd $source_path > /dev/null
     $(_sudo) cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* ${K8S_ROOT}/bin/

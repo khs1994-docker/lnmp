@@ -1,0 +1,35 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: sc-nfs-test-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: "managed-nfs-storage"
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: sc-nfs-test
+  labels:
+    app: test
+spec:
+  containers:
+  - name: sc-nfs-test
+    image: busybox
+    volumeMounts:
+      - mountPath: /data
+        name: data
+    args:
+      - sh
+      - -c
+      - "while :; do sleep 3600; done"
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: sc-nfs-test-pvc

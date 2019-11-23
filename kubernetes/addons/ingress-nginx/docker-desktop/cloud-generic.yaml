@@ -27,4 +27,3 @@ spec:
       port: 53
       targetPort: 53
       protocol: TCP
----
