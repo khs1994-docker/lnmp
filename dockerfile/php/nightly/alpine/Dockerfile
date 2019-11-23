@@ -369,7 +369,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
   && chmod -R 777 /var/log/php-fpm \
   && rm -rf /usr/src/php \
   && curl -fsSL -o /usr/bin/pickle \
-       https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
+       https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
   && chmod +x /usr/bin/pickle
 
 ENTRYPOINT ["docker-php-entrypoint"]
