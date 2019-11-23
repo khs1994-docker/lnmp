@@ -1,4 +1,4 @@
-ARG OS_TYPE=centos:7.6.1810
+ARG OS_TYPE=centos:7.7.1908
 
 FROM ${OS_TYPE} as builder
 
