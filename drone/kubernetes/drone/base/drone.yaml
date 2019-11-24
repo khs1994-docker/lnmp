@@ -47,3 +47,4 @@ spec:
       - name: data
         hostPath:
           path: /var/lib/ci/drone
+          type: DirectoryOrCreate

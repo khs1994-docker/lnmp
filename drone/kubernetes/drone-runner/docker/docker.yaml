@@ -54,11 +54,11 @@ spec:
         volumeMounts:
         - name: docker-sock
           mountPath: /var/run/docker.sock
-          subPath: docker.sock
         ports:
           - containerPort: 3000
             name: dashboard
       volumes:
       - name: docker-sock
         hostPath:
-          path: /var/run
+          path: /var/run/docker.sock
+          type: Socket

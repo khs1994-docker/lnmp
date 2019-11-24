@@ -59,6 +59,7 @@ spec:
         - name: data
           hostPath:
             path: /var/lib/ci/gogs
+            type: DirectoryOrCreate
         - name: run
           emptyDir:
             medium: Memory

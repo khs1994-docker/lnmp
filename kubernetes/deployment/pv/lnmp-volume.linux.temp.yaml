@@ -16,6 +16,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /home/username/app-development
+    type: DirectoryOrCreate
   storageClassName: hostpath
 ---
 apiVersion: v1
@@ -48,6 +49,7 @@ spec:
   # Delete 删除 PV
   hostPath:
     path: /home/username/.docker/Volumes/lnmp-mysql-development
+    type: DirectoryOrCreate
   storageClassName: hostpath
 
 ---
@@ -68,6 +70,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /home/username/.docker/Volumes/lnmp-redis-development
+    type: DirectoryOrCreate
   storageClassName: hostpath
 ---
 apiVersion: v1
@@ -86,6 +89,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /home/username/.docker/Volumes/lnmp-registry-development
+    type: DirectoryOrCreate
   storageClassName: hostpath
 ---
 apiVersion: v1
@@ -105,4 +109,5 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /home/username/.docker/Volumes/lnmp-log-development
+    type: DirectoryOrCreate
   storageClassName: hostpath

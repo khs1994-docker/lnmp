@@ -20,7 +20,7 @@ $ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.
 
 $ foreach($item in $items){scp ./wsl2/certs/$item pi@192.168.199.101:/home/pi/lnmp/kubernetes/systemd/certs}
 
-$ $items="kube-proxy","kubelet","kubectl","kubeadm"
+$ $items="kube-proxy","kubelet","kubectl","kubeadm","mounter"
 
 $ foreach($item in $items){scp ./kubernetes-release/release/v1.16.1-linux-arm64/kubernetes/server/bin/$item pi@192.168.199.101:/home/pi/}
 ```

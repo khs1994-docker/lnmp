@@ -14,6 +14,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /var/lib/ci/mysql
+    type: DirectoryOrCreate
   storageClassName: hostpath
 
 ---
@@ -34,4 +35,5 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /var/lib/ci/log
+    type: DirectoryOrCreate
   storageClassName: hostpath

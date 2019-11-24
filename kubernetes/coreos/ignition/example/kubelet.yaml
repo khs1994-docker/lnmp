@@ -8,6 +8,10 @@ storage:
       mode: 0755
       contents:
         source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubelet
+    - path: ${K8S_ROOT}/bin/mounter
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/mounter
     - path: ${K8S_ROOT}/bin/kubeadm
       mode: 0755
       contents:
