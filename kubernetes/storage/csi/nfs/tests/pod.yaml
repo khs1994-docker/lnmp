@@ -44,6 +44,7 @@ metadata:
 spec:
   containers:
   - image: busybox
+    imagePullPolicy: IfNotPresent
     name: csi-nfs-test
     ports:
     - containerPort: 80

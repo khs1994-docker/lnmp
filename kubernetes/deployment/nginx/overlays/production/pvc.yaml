@@ -29,9 +29,6 @@ metadata:
   labels:
     app: lnmp
     tier: code-data
-  annotations:
-    # volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
-    volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
     - ReadWriteMany
@@ -42,4 +39,4 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  storageClassName: "managed-nfs-storage"
+  storageClassName: "nfs.storage.k8s.khs1994.com"

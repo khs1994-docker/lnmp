@@ -12,7 +12,8 @@ spec:
   # runtimeClassName: runclinux
   containers:
   - name: "lnmp-pod"
-    image: "nginx:1.17.6-alpine"
+    image: nginx:1.17.6-alpine
+    imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: test
       mountPath: /opt/data

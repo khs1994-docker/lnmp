@@ -23,6 +23,7 @@ spec:
       containers:
         - name: docker-registry
           image: registry:2.6.2
+          imagePullPolicy: IfNotPresent
           env:
             - name: REGISTRY_HTTP_ADDR
               value: ":5000"

@@ -2,9 +2,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: lnmp-redis-data
-  annotations:
-    volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
-    $patch: delete
 spec:
   accessModes:
   - ReadWriteOnce

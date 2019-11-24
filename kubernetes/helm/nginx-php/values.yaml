@@ -28,7 +28,7 @@ nfs:
 
 nginx:
   # image: khs1994/nginx:1.17.6-alpine
-  image: "nginx:1.17.6-alpine"
+  image: nginx:1.17.6-alpine
   replicaCount: 2
 
 php:

@@ -18,6 +18,7 @@ spec:
       containers:
         - name: node-driver-registrar
           image: quay.io/k8scsi/csi-node-driver-registrar:v1.0.2
+          imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
               exec:

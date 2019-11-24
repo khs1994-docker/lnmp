@@ -10,17 +10,41 @@ metadata:
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: managed-nfs-storage
+  name: nfs.storage.k8s.khs1994.com
   # annotations:
     # 设置该 storageclass 为 PVC 创建时默认使用的存储机制
     # storageclass.kubernetes.io/is-default-class: "true"
 provisioner: fuseim.pri/ifs # or choose another name, must match deployment's env PROVISIONER_NAME'
 parameters:
-  archiveOnDelete: "false" # "false" 删除 PVC 时不会保留数据，"true" 将保留PVC数据
+  # reclaimPolicy: Delete 时
+  # "false" 删除 PVC 时不会保留数据，"true" 将保留（archive） PVC 数据
+  archiveOnDelete: "true"
 # Pod 使用完后会释放 PV，PV 的状态变成 Released。
 # 变成 Released 的 PV 会根据定义的回收策略(reclaimPolicy)做相应的回收工作。
-reclaimPolicy: Retain # Retain | Delete | Recycle
+reclaimPolicy: Delete # Retain | Delete | Recycle(not support)
 # mountOptions:
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: delete.nfs.storage.k8s.khs1994.com
+provisioner: fuseim.pri/ifs
+parameters:
+  archiveOnDelete: "false"
+reclaimPolicy: Delete
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: retain.nfs.storage.k8s.khs1994.com
+provisioner: fuseim.pri/ifs
+parameters:
+  archiveOnDelete: "false"
+reclaimPolicy: Retain
 
 ---
 
@@ -119,6 +143,7 @@ spec:
       containers:
         - name: nfs-client-provisioner
           image: quay.io/external_storage/nfs-client-provisioner:latest
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: nfs-client-root
               mountPath: /persistentvolumes

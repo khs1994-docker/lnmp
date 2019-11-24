@@ -2,7 +2,7 @@
 
 `PVC` 动态创建 `PV`
 
-文件位于 `/exported/path/${namespace}-${pvcName}-${pvName}`
+文件位于 `/exported/path/${namespace}-${pvcName}-${pvName}`，archive 文件位于 `/exported/path/archived-${namespace}-${pvcName}-${pvName}`
 
 ## 准备
 

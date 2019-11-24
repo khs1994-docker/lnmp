@@ -39,7 +39,7 @@ spec:
         # image: khs1994/nginx:1.17.6-alpine
         image: "nginx:1.17.6-alpine"
         # image: ranadeeppolavarapu/nginx-http3
-        imagePullPolicy: IfNotPresent # Always
+        imagePullPolicy: IfNotPresent
         args:
         - nginx
         - -g

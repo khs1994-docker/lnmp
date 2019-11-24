@@ -44,6 +44,7 @@ spec:
     spec:
       containers:
       - name: lnmp-mysql
+        imagePullPolicy: IfNotPresent
         image: mysql:8.0.18
         ports:
         - containerPort: 3306

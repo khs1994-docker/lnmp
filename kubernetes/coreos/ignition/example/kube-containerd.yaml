@@ -40,7 +40,7 @@ systemd:
         [Unit]
         Description=containerd container runtime for kubernetes
         Documentation=https://containerd.io
-        After=network-online.target network.target
+        After=network-online.target network.target local-fs.target
         Wants=network-online.target
         Conflicts=kube-containerd-130.service
 
@@ -68,7 +68,7 @@ systemd:
         [Unit]
         Description=containerd container runtime for kubernetes
         Documentation=https://containerd.io
-        After=network-online.target network.target
+        After=network-online.target network.target local-fs.target
         Wants=network-online.target
         Conflicts=kube-containerd.service
 

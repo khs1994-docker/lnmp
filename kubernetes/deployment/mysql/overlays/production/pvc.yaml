@@ -39,9 +39,6 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
-  annotations:
-    # volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
-    volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
     - ReadWriteMany
@@ -55,7 +52,7 @@ spec:
   #     tier: mysql
     # matchExpressions:
       # - {key: environment, operator: In, values: [dev]}
-  storageClassName: "managed-nfs-storage"
+  storageClassName: "nfs.storage.k8s.khs1994.com"
 ---
 # apiVersion: v1
 # kind: PersistentVolume
@@ -88,9 +85,6 @@ metadata:
   labels:
     app: lnmp
     tier: log
-  annotations:
-    # volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
-    volume.beta.kubernetes.io/storage-provisioner: fuseim.pri/ifs
 spec:
   accessModes:
     - ReadWriteMany
@@ -101,4 +95,4 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  storageClassName: "managed-nfs-storage"
+  storageClassName: "nfs.storage.k8s.khs1994.com"

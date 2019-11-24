@@ -23,6 +23,7 @@ spec:
           containers:
           - name: lnmp-cron
             image: khs1994/php:7.3.12-fpm-alpine
+            imagePullPolicy: IfNotPresent
             args:
             - /bin/sh
             - -c
