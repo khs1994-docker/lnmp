@@ -39,8 +39,11 @@ jobs:
         fi
 
         echo "
+        # nfs
         CONFIG_NFS_V4_1=y
         CONFIG_NFS_V4_2=y
+
+        # iscsi
         " >> Microsoft/config-wsl
 
         make KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc)

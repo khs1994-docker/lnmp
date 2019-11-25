@@ -101,6 +101,7 @@ module.exports = {
         "pv",
         "flexvolume/",
         "csi/",
+        "csi/snapshot",
         "storage-classes",
       ],
       "/node/": [

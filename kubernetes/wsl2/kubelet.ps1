@@ -24,7 +24,7 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --cert-dir=${K8S_ROOT}/certs `
 --container-runtime=remote `
 --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
---root-dir=${K8S_ROOT}/var/lib/kubelet `
+--root-dir=/var/lib/kubelet `
 --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
 --config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
 --hostname-override=${NODE_NAME} `
@@ -127,8 +127,20 @@ if($args[0] -eq 'init'){
 
 sleep 5
 
+Function _mountKubelet(){
+  wsl -u root -- bash -c "mountpoint -q /var/lib/kubelet"
+  if(!$?){
+    wsl -u root -- bash -c "mkdir -p /var/lib/kubelet"
+    Write-Warning "try mount /var/lib/kubelet ..."
+    wsl -u root -- bash -c "mount --bind ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet"
+  }else{
+    Write-Warning "/var/lib/kubelet already mount"
+  }
+}
+
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   & $PSScriptRoot/bin/wsl2host-check
+  _mountKubelet
   wsl -u root -- supervisorctl start kube-node:kubelet
 
   exit
@@ -136,5 +148,6 @@ if($args[0] -eq 'start' -and $args[1] -eq '-d'){
 
 if($args[0] -eq 'start'){
   & $PSScriptRoot/bin/wsl2host-check
+  _mountKubelet
   wsl -u root -- bash -c $command
 }

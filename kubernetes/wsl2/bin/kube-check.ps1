@@ -1,5 +1,5 @@
 # 检查 wsl 是否满足运行 k8s 的需求
-wsl -- sh -c "df -h | grep -q '/wsl/k8s-data'"
+wsl -- sh -c "mountpoint -q /wsl/k8s-data"
 
 # k8s-data 未挂载，说明 k8s-data 未处于运行状态或未进行手动挂载
 if(!$?){
@@ -11,7 +11,7 @@ if(!$?){
     exit 1
   }
   # 检查挂载路径
-  wsl -- sh -c "df -h | grep -q '/c'"
+  wsl -- sh -c "mountpoint -q /c"
 
   if(!$?){
     "==> mount is error, please check WSL [ /etc/wsl.conf ], and see README.SERVER.md"
@@ -30,7 +30,7 @@ if(!$?){
   "==> WSL2 dist [ k8s-data ] check passed"
 }
 
-wsl -- sh -c "df -h | grep -q '/wsl/k8s-data'"
+wsl -- sh -c "mountpoint -q /wsl/k8s-data"
 
 if(!$?){
   Write-Warning "==> dist [ k8s-data ] mount error"

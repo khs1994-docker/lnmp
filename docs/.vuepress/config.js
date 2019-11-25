@@ -154,6 +154,7 @@ module.exports = {
             '/vscode',
             '/cgroupv2',
             '/iscsi',
+            '/mount',
           ]
         }
       ]
