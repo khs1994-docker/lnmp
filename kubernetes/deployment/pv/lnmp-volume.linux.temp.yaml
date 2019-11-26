@@ -72,26 +72,9 @@ spec:
     path: /home/username/.docker/Volumes/lnmp-redis-development
     type: DirectoryOrCreate
   storageClassName: hostpath
+
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: lnmp-registry-data-development
-  labels:
-    type: local
-    app: lnmp
-    tier: registry
-    env: development
-spec:
-  capacity:
-    storage: 20Gi
-  accessModes: [ "ReadWriteOnce" ]
-  persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /home/username/.docker/Volumes/lnmp-registry-development
-    type: DirectoryOrCreate
-  storageClassName: hostpath
----
+
 apiVersion: v1
 kind: PersistentVolume
 metadata:

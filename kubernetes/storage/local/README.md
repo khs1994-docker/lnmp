@@ -8,6 +8,10 @@
 $ sudo mkdir -p /data/pv
 ```
 
+```bash
+$ kubectl apply -k deploy
+```
+
 ## 参考
 
 * https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner

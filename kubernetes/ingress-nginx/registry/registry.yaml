@@ -7,32 +7,38 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
     # nginx.ingress.kubernetes.io/secure-backends: "true" deprecated
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP" # HTTP | HTTPS
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-  name: lnmp-registry
+  name: registry
   labels:
-    app: lnmp
+    app: registry
     version: 0.0.1
 spec:
   tls:
   - hosts:
     - gcr.io
     - k8s.gcr.io
-    secretName: lnmp-registry-tls-0.0.1
+    - registry.t.khs1994.com
+    secretName: cert.t.khs1994.com
   rules:
   - host: gcr.io
     http:
       paths:
       - backend:
           serviceName: registry
-          servicePort: 443
+          servicePort: http
         path: /
   - host: k8s.gcr.io
     http:
       paths:
       - backend:
           serviceName: registry
-          servicePort: 443
+          servicePort: http
         path: /
-        # path: /test
-        # 发送后端路径也是 /test
+  - host: registry.t.khs1994.com
+    http:
+      paths:
+      - backend:
+          serviceName: registry
+          servicePort: http
+        path: /

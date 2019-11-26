@@ -1,5 +1,5 @@
 bases:
-- ../../../kubernetes/deployment/minio/base
+- ../../../kubernetes/deploy/minio/base
 resources:
 - pvc.yaml
 namespace: ci

@@ -63,28 +63,9 @@ spec:
     requests:
       storage: 20Gi
   storageClassName: hostpath
+
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: lnmp-registry-data
-  labels:
-    app: lnmp
-    tier: registry
-    env: development
-spec:
-  accessModes:
-    - ReadWriteOnce
-  selector:
-    matchLabels:
-      app: lnmp
-      tier: registry
-      env: development
-  resources:
-    requests:
-      storage: 20Gi
-  storageClassName: hostpath
----
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

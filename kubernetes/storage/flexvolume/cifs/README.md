@@ -2,6 +2,8 @@
 
 * https://hub.docker.com/r/dockerpracticesig/flexvolume-cifs
 
+* https://github.com/kubernetes/examples/tree/master/staging/volumes/flexvolume
+
 * https://github.com/fstab/cifs
 * https://blog.csdn.net/changqing1234/article/details/81128548
 * https://blog.csdn.net/jay_youth/article/details/80550775

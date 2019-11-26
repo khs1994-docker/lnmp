@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: registry-data-pv
+  labels:
+    type: local
+    app: registry
+    env: development
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes: [ "ReadWriteOnce" ]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /var/lib/khs1994-docker-lnmp/registry
+    type: DirectoryOrCreate
+  storageClassName: hostpath
+
+  # nfs:
+  #   # FIXME: use the right IP
+  #   server: 192.168.199.100
+  #   path: "/lnmp/registry"
+  # storageClassName: slow
+  # mountOptions:
+  #   # - hard
+  #   # - nfsvers=4.1
+  #   - nfsvers=4

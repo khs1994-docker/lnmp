@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# https://github.com/kubernetes/examples/tree/master/staging/volumes/flexvolume/deploy
+
 set -o errexit
 set -o pipefail
 

@@ -20,9 +20,9 @@ spec:
   - name: data
     flexVolume:
       # 与 kubelet 卷插件路径
-      # (--volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/)
+      # (--volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec )
+      #                                                     vendor~driver/driver
       # /usr/libexec/kubernetes/kubelet-plugins/volume/exec/fstab~cifs/cifs 一致
-      # ~ 替换为 /
       driver: "fstab/cifs"
       fsType: "cifs"
       secretRef:

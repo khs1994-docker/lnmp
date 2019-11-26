@@ -1,4 +1,4 @@
-# Deploy Kubernetes on Fedora CoreOS（FCOS）
+# Deploy Kubernetes on [Fedora CoreOS（FCOS）](https://getfedora.org/en/coreos/download/)
 
 ## Overview
 
