@@ -5,3 +5,5 @@
 !gcr.io*
 !config.gcr.io.yml
 !ca.crt
+!kustomization.yaml
+!config.full.yml

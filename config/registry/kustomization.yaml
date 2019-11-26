@@ -1,0 +1,6 @@
+configMapGenerator:
+  - name: registry-config
+    files:
+    - config.yml=config.k8s.yml
+generatorOptions:
+  disableNameSuffixHash: true

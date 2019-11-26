@@ -1,0 +1,5 @@
+bases:
+- ../overlays/development
+- ../../../../config/registry
+patches:
+- patch.yaml
