@@ -1,5 +1,6 @@
 bases:
 - ../../base
+- ../../../secret
 resources:
 - pvc.yaml
 - lnmp-nginx.service.yaml
@@ -15,11 +16,6 @@ configMapGenerator:
 - name: lnmp-tz
   literals:
   - TZ=Asia/Shanghai
-secretGenerator:
-- name: lnmp-nginx-khs1994-com-tls-0.0.1
-  files:
-  - t.khs1994.com.crt=config/conf.d/ssl/t.khs1994.com.crt
-  - t.khs1994.com.key=config/conf.d/ssl/t.khs1994.com.key
 patches:
   # - hostpath.patch.yaml
 generatorOptions:
