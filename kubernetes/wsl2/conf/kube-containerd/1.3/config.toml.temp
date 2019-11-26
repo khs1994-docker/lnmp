@@ -116,7 +116,7 @@ oom_score = 0
           identitytoken = ""
         # 使用自签名证书的 registry
         [plugins."io.containerd.grpc.v1.cri".registry.configs."registry.t.khs1994.com:28443".tls]
-          ca_file   = "/c/Users/90621/lnmp/kubernetes/secrets/root-ca.crt"
+          ca_file   = "/c/Users/90621/lnmp/kubernetes/secrets/t.khs1994.com/root-ca.crt"
           cert_file = "/c/Users/90621/lnmp/kubernetes/secrets/t.khs1994.com/t.khs1994.com.crt"
           key_file  = "/c/Users/90621/lnmp/kubernetes/secrets/t.khs1994.com/t.khs1994.com.key"
     [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]

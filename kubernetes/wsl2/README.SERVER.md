@@ -61,6 +61,19 @@ $ wsl --set-version Ubuntu-18.04 2
 $ wsl --shutdown
 ```
 
+## 挂载 k8s-data `/dev/sdX` 到 `/wsl/k8s-data`
+
+```bash
+$ wsl -d k8s-data df -h
+
+Filesystem                Size      Used Available Use% Mounted on
+/dev/sdc                251.0G     12.4G    225.8G   5% /
+
+# 在 ubuntu-18.04 中将 /dev/sdc(不固定，必须通过上面的命令获取该值) 挂载到 /wsl/k8s-data
+
+$ wsl -u root -- mount /dev/sdc /wsl/k8s-data
+```
+
 ## 安装 Docker 和 docker-compose
 
 安装之后启动
@@ -130,19 +143,19 @@ $ ./wsl2/kube-nginx
 $ get-process nginx
 ```
 
-## Windows 启动 kube-apiserver
+## kube-apiserver
 
 ```powershell
 $ ./wsl2/kube-apiserver start
 ```
 
-## Windows 启动 kube-controller-manager
+## kube-controller-manager
 
 ```powershell
 $ ./wsl2/kube-controller-manager start
 ```
 
-## Windows 启动 kube-scheduler
+## kube-scheduler
 
 ```powershell
 $ ./wsl2/kube-scheduler start

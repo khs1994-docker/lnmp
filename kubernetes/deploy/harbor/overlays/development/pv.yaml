@@ -1,0 +1,47 @@
+# Source: harbor/templates/chartmuseum/chartmuseum-pvc.yaml
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: harbor-chartmuseum
+  labels:
+    app: "harbor"
+    component: chartmuseum
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /var/lib/khs1994-docker-lnmp/harbor/chartmuseum
+---
+# Source: harbor/templates/jobservice/jobservice-pvc.yaml
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: harbor-jobservice
+  labels:
+    app: "harbor"
+    component: jobservice
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /var/lib/khs1994-docker-lnmp/harbor/jobservice
+---
+# Source: harbor/templates/registry/registry-pvc.yaml
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: harbor-registry
+  labels:
+    app: "harbor"
+    component: registry
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /var/lib/khs1994-docker-lnmp/harbor/registry

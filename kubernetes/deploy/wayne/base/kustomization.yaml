@@ -1,0 +1,5 @@
+resources:
+- namespace.yaml
+- wayne-backend.yaml
+- wayne-frontend.yaml
+namespace: wayne

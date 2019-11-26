@@ -1,0 +1,11 @@
+bases:
+- ../overlays/development
+- ../../../secrets/t.khs1994.com
+- postgresql
+- secret/harbor-core
+- secret/harbor-notary-server
+- secret/harbor-clair
+resources:
+- namespace.yaml
+- ingress.yaml
+namespace: harbor
