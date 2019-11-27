@@ -1,4 +1,2 @@
-resources:
-- kubernetes.yaml
-- rbac.yaml
-namespace: ci
+bases:
+- base

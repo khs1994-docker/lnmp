@@ -2,6 +2,4 @@ bases:
 - base
 # - ../drone-runner/docker
 # - ../drone-runner/kubernetes
-patches:
-- env.yaml
 namespace: ci

@@ -1,0 +1,11 @@
+bases:
+- ../../base
+patches:
+- github.yaml
+secretGenerator:
+  - name: drone-github-secret
+    literals:
+    - github-client-id=""
+    - github-client-secret=""
+generatorOptions:
+  disableNameSuffixHash: true

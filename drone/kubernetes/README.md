@@ -48,6 +48,8 @@ $ kubectl apply -n ci -k gogs
 
 ```bash
 $ kubectl apply -n ci -k drone
+
+# $ kubectl apply -n ci -k drone/overlays/github
 ```
 
 ### [Docker runner](https://docker-runner.docs.drone.io/installation/install_linux/)
@@ -83,6 +85,16 @@ $ kubectl apply -n ci -k ingress-nginx
 `Registry` 自行在 Kubernetes 进行部署。
 
 ## ingress 证书为自签名证书
+
+## 自定义
+
+新建 `XXX/my-custom` 文件夹，基于 `base` 自定义（`$ kubectl kustomize`）。
+
+```bash
+$ kubectl apply -k XXX/my-custom
+
+# $ kubectl apply -k drone/my-custom
+```
 
 ### Drone git 克隆时跳过证书（SSL）验证
 

@@ -1,9 +1,2 @@
 bases:
-- ../../../kubernetes/deployment/mysql/overlays/production
-namespace: ci
-# 默认使用动态 NFS 存储方案，这里改为 hostPath
-# 请根据实际自行更改
-patches:
-- pvc.yaml
-resources:
-- pv.yaml
+- base

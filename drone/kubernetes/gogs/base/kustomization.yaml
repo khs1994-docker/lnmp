@@ -1,0 +1,5 @@
+bases:
+- ../../../config/gogs/
+resources:
+- gogs.yaml
+namespace: ci
