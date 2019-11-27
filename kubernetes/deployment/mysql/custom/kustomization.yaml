@@ -1,0 +1,4 @@
+bases:
+- ../overlays/production
+patches:
+- secret.yaml

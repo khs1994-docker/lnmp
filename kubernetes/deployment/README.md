@@ -1,12 +1,12 @@
 # YAML 部署文件
 
-这些 YAML 文件仅供参考，**建议** 将其复制到其他目录,自行更改后部署 `$ kubectl apply -k path/SOFT/overlays/ENVIRONMENT`.
+这些 YAML 文件仅供参考，**建议** 将其作为 `bases`，通过 `$ kubectl kustomize` 自定义之后部署。
 
-## 自定义配置文件
+```bash
+$ kubectl apply -k path/SOFT/my-custom`.
+```
 
-`SOFT/overlays/ENVIRONMENT/config/*.custom.*`
-
-* `MySQL` 默认密码为 `mytest`, 务必自行修改
+> 如何自定义可以参考 `mysql/custom` 文件夹
 
 ### 开发环境 development 特殊配置文件
 

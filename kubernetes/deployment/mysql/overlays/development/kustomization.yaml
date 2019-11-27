@@ -11,8 +11,7 @@ patches:
 configMapGenerator:
 - name: lnmp-mysql-cnf-0.0.1
   files:
-  - docker.cnf=config/docker.custom.cnf
-  # - docker.cnf=config/docker.development.cnf
+  - docker.cnf=config/docker.development.cnf
 - name: lnmp-tz
   literals:
   - TZ=Asia/Shanghai
