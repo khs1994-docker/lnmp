@@ -1,5 +1,5 @@
 version: build-{build}.{branch}
-# image: Visual Studio 2017
+# image: Visual Studio 2019
 image: Windows Server 2019
 
 branches:
@@ -11,26 +11,63 @@ branches:
 
 # skip_non_tags: true
 clone_depth: 1
+# clone_folder: C:\Users\appveyor\lnmp
 clone_folder: D:\lnmp
 
 build_script:
   - ps: |
       [System.Environment]::OSVersion
       echo $HOME
-      copy-item -r -Force D:\lnmp $HOME\lnmp
+      echo $env:PATH
   - pwsh: docker version
   - pwsh: docker info
   - pwsh: docker-compose --version
   - ps: get-command docker
-  # - ps: choco install docker-desktop --pre
-  # - ps: choco install docker-desktop
-  - ps: get-command docker
+  - ps: get-command docker-compose
+  - ps: date
+  - ps: |
+      & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -Shutdown
+  - ps: date
+  - ps: get-command Switch-DockerLinux
+  # - ps: rm -Force $Env:ProgramFiles\Docker\Docker\"Docker for windows Installer.exe"
+  - ps: choco uninstall docker-desktop -force
+  # - ps: mv -Force $Env:ProgramFiles\Docker\Docker\"Docker for windows Installer.exe" D:\
+  # - ps: start-process powershell -Argumentlist "-c","rm","-Force","'C:\Program Files\Docker\Docker\Docker for windows Installer.exe'" -Verb Runas -WindowStyle Hidden -wait
+  # - ps: choco install docker-desktop --pre --no-progress
+  - ps: start-process choco -Argumentlist "upgrade","docker-desktop","--no-progress","-f" -wait -verb RunAs -WindowStyle Hidden
+  # - ps: choco install docker-desktop --no-progress
   # - ps: |
-  #     ls $Env:ProgramFiles\Docker\Docker
+  #    copy-item $Env:ProgramFiles\Docker\Docker\resources\bin\docker.exe $Env:ProgramFiles\Docker\
+  #    copy-item $Env:ProgramFiles\Docker\Docker\resources\bin\docker-compose.exe $Env:ProgramFiles\Docker\
+  - ps: date
+  - ps: echo $env:PATH
+  - ps: |
+      ls $Env:ProgramFiles\Docker\
+  - ps: |
+      ls $Env:ProgramFiles\Docker\Docker
+  - ps: |
+      ls $Env:ProgramFiles\Docker\Docker\resources\bin
+  - ps: get-command docker
+  - ps: get-command docker-compose
+  # - ps: |
+  #     Stop-Service docker
   - ps: Write-host "`nSwitch to linux engine"  -foregroundcolor green
+  # - ps: |
+  #     & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SwitchLinuxEngine
   - ps: Switch-DockerLinux
   # - ps: ./lnmp-docker wait-docker
   - ps: docker info
+  - ps: docker-compose --version
+  - ps: date
+  - ps: |
+      [environment]::SetEnvironmentvariable("Path", "D:\;$env:PATH","Process")
+  - ps: echo $env:PATH
+  - ps: ./lnmp-docker compose
+  - ps: get-command docker-compose
+  - ps: ./lnmp-docker compose D:\docker-compose.exe
+  - ps: date
+  - ps: get-command docker-compose
+  - ps: docker-compose --version
   - ps: |
       & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -SharedDrives
   # - ps: ./lnmp-docker wait-docker

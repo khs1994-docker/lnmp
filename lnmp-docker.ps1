@@ -72,13 +72,15 @@ Write-Host "$args`n";
 Function getEnvFile(){
   $LNMP_ENV_FILE=".env"
   $LNMP_ENV_FILE_PS1=".env.ps1"
+  if($env:LNMP_ENV){
+    if (Test-Path(".env.$env:LNMP_ENV")){
+      write-host 1
+      $LNMP_ENV_FILE=".env.$env:LNMP_ENV"
+    }
 
-  if (Test-Path(".env.$env:LNMP_ENV")){
-    $LNMP_ENV_FILE=".env.$env:LNMP_ENV"
-  }
-
-  if (Test-Path(".env.$env:LNMP_ENV.ps1")){
-    $LNMP_ENV_FILE_PS1=".env.$env:LNMP_ENV.ps1"
+    if (Test-Path(".env.$env:LNMP_ENV.ps1")){
+      $LNMP_ENV_FILE_PS1=".env.$env:LNMP_ENV.ps1"
+    }
   }
 
   return $LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1
@@ -152,7 +154,7 @@ Function env_status(){
   if (Test-Path .env){
     printInfo '.env file existing'
   }else{
-    Write-Warning '.env file NOT existing'
+    Write-Warning '.env file NOT existing, maybe first run'
     cp .env.example .env
   }
 
@@ -310,6 +312,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
+  compose              Install docker-compose [PATH]
   composer             Exec composer command on Docker Container
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
@@ -760,6 +763,8 @@ $DOCKER_VERSION_MM="0" + ([System.Version]$DOCKER_VERSION).Minor
 env_status
 logs
 check_docker_version
+
+printInfo $(docker-compose --version)
 
 if ($args.Count -eq 0){
   help_information
@@ -1448,6 +1453,21 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
     dockerd {
       & $PSScriptRoot/wsl2/bin/dockerd-wsl2.ps1 $other
+    }
+
+    compose {
+      $DIST="C:\ProgramData\DockerDesktop\version-bin\docker-compose.exe"
+      if($other){
+        $DIST=$other
+
+        if($other.count -gt 1){
+          $DIST=$other[0]
+        }
+      }
+
+      printInfo "Download docker-compose $LNMP_DOCKER_COMPOSE_VERSION to $DIST ..."
+
+      start-process "curl.exe" -ArgumentList "-L","https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe","-o","$DIST" -Verb Runas -wait -WindowStyle Hidden
     }
 
     default {
