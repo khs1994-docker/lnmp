@@ -17,13 +17,13 @@
 
 .PROJECTURI https://github.com/khs1994-docker/lnmp
 
-.ICONURI 
+.ICONURI
 
-.EXTERNALMODULEDEPENDENCIES 
+.EXTERNALMODULEDEPENDENCIES
 
-.REQUIREDSCRIPTS 
+.REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES 
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 
@@ -38,9 +38,9 @@
 .EXAMPLE
   PS C:\> lnmp-docker up
 .INPUTS
-  
+
 .OUTPUTS
-  
+
 .NOTES
   khs1994-docker/lnmp CLI
 #>
@@ -51,12 +51,55 @@ if ($args[0] -eq "install"){
   exit
 }
 
+$outNull=$false
+
+if (${QUITE} -eq $true){
+  $outNull=$true
+}
+
+if ($args[0] -eq "services"){
+  $outNull=$true
+}
+
+Function printInfo(){
+  if($outNull){
+    return
+  }
+Write-Host "`nINFO    " -NoNewLine -ForegroundColor Green
+Write-Host "$args`n";
+}
+
+Function getEnvFile(){
+  $LNMP_ENV_FILE=".env"
+  $LNMP_ENV_FILE_PS1=".env.ps1"
+
+  if (Test-Path(".env.$env:LNMP_ENV")){
+    $LNMP_ENV_FILE=".env.$env:LNMP_ENV"
+  }
+
+  if (Test-Path(".env.$env:LNMP_ENV.ps1")){
+    $LNMP_ENV_FILE_PS1=".env.$env:LNMP_ENV.ps1"
+  }
+
+  return $LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1
+}
+
+$LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1=getEnvFile
+
+if($args[0] -eq "env-file"){
+  echo $LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1
+
+  exit
+}
+
+printInfo "Load env file [ $LNMP_ENV_FILE ] and [ $LNMP_ENV_FILE_PS1 ]"
+
 . "$PSScriptRoot/.env.example.ps1"
 
 . "$PSScriptRoot/cli/.env.ps1"
 
-if (Test-Path "$PSScriptRoot/.env.ps1"){
-  . "$PSScriptRoot/.env.ps1"
+if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1"){
+  . "$PSScriptRoot/$LNMP_ENV_FILE_PS1"
 }
 
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
@@ -73,16 +116,6 @@ Function _command($command){
   get-command $command -ErrorAction "SilentlyContinue"
 
   return $?
-}
-
-$outNull=$false
-
-if (${QUITE} -eq $true){
-  $outNull=$true
-}
-
-if ($args[0] -eq "services"){
-  $outNull=$true
 }
 
 Function printError(){
@@ -124,9 +157,9 @@ Function env_status(){
   }
 
   if (Test-Path .env.ps1){
-    printInfo '.env.ps1 file existing'
+    printInfo ".env.ps1 file existing"
   }else{
-    Write-Warning '.env.ps1 file NOT existing'
+    Write-Warning ".env.ps1 file NOT existing, maybe first run"
     cp .env.example.ps1 .env.ps1
   }
 
@@ -476,20 +509,20 @@ Function get_compose_options($compose_files,$isBuild=0){
   Foreach ($item in $LREW_INCLUDE)
   {
     $KEY="LREW_$($item -Replace ('-','_'))_VENDOR".ToUpper();
-    $content=$(cat .env | Where-Object {$_ -like "${KEY}=lrew-dev"})
+    $content=$(cat $LNMP_ENV_FILE | Where-Object {$_ -like "${KEY}=lrew-dev"})
 
     if(Test-Path $PSScriptRoot/vendor/lrew-dev/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew-dev/$item"
       # set env
       if(!($content)){
-         "${KEY}=lrew-dev" >> .env
+         "${KEY}=lrew-dev" >> $LNMP_ENV_FILE
       }
     }elseif(Test-Path $PSScriptRoot/vendor/lrew/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew/$item"
       # unset env
       if($content){
-        @(Get-Content .env) -replace `
-          "${KEY}=lrew-dev",'' | Set-Content .env
+        @(Get-Content $LNMP_ENV_FILE) -replace `
+          "${KEY}=lrew-dev",'' | Set-Content $LNMP_ENV_FILE
       }
     }elseif(Test-Path $PSScriptRoot/lrew/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/lrew/$item"
@@ -513,6 +546,8 @@ Function get_compose_options($compose_files,$isBuild=0){
     }
     $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml -f $LREW_INCLUDE_ROOT\docker-compose.override.yml "
   }
+
+  $options += " --env-file $LNMP_ENV_FILE "
 
   $options += " -f docker-lnmp.include.yml "
 
@@ -643,7 +678,7 @@ Function _wsl_check(){
   wsl -d $DistributionName echo ""
 
   if(!$?){
-    printError "wsl [ $DistributionName ] not found, please check [ .env.ps1 ] file `$DistributionName value"
+    printError "wsl [ $DistributionName ] not found, please check [ $LNMP_ENV_FILE_PS1 ] file `$DistributionName value"
     exit 1
   }
 }
@@ -880,8 +915,8 @@ switch -regex ($command){
         exit
       }
 
-      notepad.exe .env
-      notepad.exe .env.ps1
+      notepad.exe $LNMP_ENV_FILE
+      notepad.exe $LNMP_ENV_FILE_PS1
     }
 
     new {
