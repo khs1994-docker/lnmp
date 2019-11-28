@@ -155,6 +155,7 @@ module.exports = {
             '/cgroupv2',
             '/iscsi',
             '/mount',
+            '/cfssl',
           ]
         }
       ]
