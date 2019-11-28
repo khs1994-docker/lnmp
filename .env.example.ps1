@@ -43,3 +43,5 @@ $LNMP_NODE_IMAGE="node:alpine"
 # $LNMP_NODE_IMAGE="khs1994/node:git"
 
 $LNMP_WSL2_DOCKER_HOST="tcp://localhost:2375"
+
+# $LNMP_CACHE=
