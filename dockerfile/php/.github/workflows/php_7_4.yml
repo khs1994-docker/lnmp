@@ -14,7 +14,7 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, SWOOLE]
+        TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, SUPERVISORD]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -85,7 +85,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: PHP_7_X
         FOLDER: 7.4
-        PHP_TAG_VERSION: 7.4.0RC6
+        PHP_TAG_VERSION: 7.4.0
         TYPE: ${{ matrix.TYPE }}
       name: 'Build Image'
 

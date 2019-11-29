@@ -2,9 +2,9 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.3.12
+ARG PHP_VERSION=7.4.0
 
-ARG PHP_NUM=73
+ARG PHP_NUM=74
 
 ARG PHP_PREFIX=/usr/local/php73
 

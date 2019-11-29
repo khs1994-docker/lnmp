@@ -110,22 +110,22 @@ jobs:
       # PHP_74_CLI:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.0RC6
+      #   PHP_TAG_VERSION: 7.4.0
       #   CLI: 1
       # PHP_74_FPM:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.0RC6
+      #   PHP_TAG_VERSION: 7.4.0
       #   FPM: 1
       # PHP_74_COMPOSER:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.0RC6
+      #   PHP_TAG_VERSION: 7.4.0
       #   COMPOSER: 1
       # PHP_74_SWOOLE:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.0RC6
+      #   PHP_TAG_VERSION: 7.4.0
       #   SWOOLE: 1
 
       # PHP_nightly_CLI:
