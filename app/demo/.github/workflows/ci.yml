@@ -79,7 +79,7 @@ jobs:
         working-directory: /
     services:
       mysql:
-        image: mysql:5.7.27
+        image: mysql:5.7.28
         ports:
           - 13306:3306
         env:

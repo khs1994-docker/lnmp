@@ -15,7 +15,7 @@ inputs:
     default: pcit
   docker_compose_version:
     description: docker compose version
-    default: 1.24.0
+    default: 1.25.0
 runs:
   using: 'node12'
   main: 'lib/setup-lnmp.js'

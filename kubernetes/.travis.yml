@@ -51,7 +51,7 @@ before_install:
   # 升级最新 Docker Compose
   # - docker-compose --version
   # - sudo rm /usr/local/bin/docker-compose
-  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.24.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.25.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
   # - chmod +x docker-compose
   # - sudo mv docker-compose /usr/local/bin
   # - docker-compose --version
