@@ -2,20 +2,24 @@ name: CI
 
 on:
   push:
+    branches:
+      - "19.03"
+    tags:
+      - "*"
   pull_request:
 
 jobs:
   skip-ci:
     runs-on: ubuntu-latest
+    if: |
+      (! (contains( github.event.head_commit.message, '[skip ci]')
+      || contains( github.event.head_commit.message, '[skip action]')
+      || contains( github.event.head_commit.message, '[skip actions]')
+      || contains( github.event.head_commit.message, '[ci skip]')
+      || contains( github.event.head_commit.message, '[actions skip]')
+      || contains( github.event.head_commit.message, '[action skip]')))
     steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 2
-      - uses: ./.github/actions/when
-        with:
-          BRANCH: "19.03"
-          COMMIT_MESSAGE: "1"
-          COMMIT_MESSAGE_SKIP: "skip ci"
+      - run: echo "build continue !"
   linux:
     needs: skip-ci
     runs-on: ubuntu-latest

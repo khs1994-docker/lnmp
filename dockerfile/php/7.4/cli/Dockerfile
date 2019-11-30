@@ -319,12 +319,12 @@ RUN --mount=type=bind,from=php:7.4.0-alpine,source=/usr/local/bin,target=/opt/bi
       && curl -fsSL -o /usr/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
       && chmod +x /usr/bin/pickle \
-      && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup --continue-on-error \
+      && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
          xdebug \
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
-         -n --defaults --no-write --strip --cleanup --continue-on-error \
+         -n --defaults --no-write --strip --cleanup \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && php -m

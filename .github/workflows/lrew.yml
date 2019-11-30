@@ -5,8 +5,20 @@ on:
   pull_request:
 
 jobs:
+  skip-ci:
+    runs-on: ubuntu-latest
+    if: |
+      (! (contains( github.event.head_commit.message, '[skip ci]')
+      || contains( github.event.head_commit.message, '[skip action]')
+      || contains( github.event.head_commit.message, '[skip actions]')
+      || contains( github.event.head_commit.message, '[ci skip]')
+      || contains( github.event.head_commit.message, '[actions skip]')
+      || contains( github.event.head_commit.message, '[action skip]')))
+    steps:
+      - run: echo "build continue !"
   CI:
     runs-on: windows-latest
+    needs: skip-ci
     steps:
     - uses: actions/checkout@master
       with:
