@@ -1,7 +1,7 @@
 {
   "name": "vsCode",
   "description": "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications",
-  "version": "1.40.0",
+  "version": "1.40.2",
   "preVersion": "1.41.0",
   "homepage": "https://code.visualstudio.com/",
   "bug": "https://github.com/Microsoft/vscode/issues",

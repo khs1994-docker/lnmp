@@ -278,9 +278,6 @@ Function check_docker_version(){
 }
 
 Function init(){
-  if(_command docker-compose){
-    printInfo $(docker-compose --version)
-  }
   logs
   # git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
@@ -295,8 +292,8 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp COMMAND
 
-Try Kubernetes Free:
-  k8s                  Try Kubernetes Free
+Run Kubernetes on Tencent Cloud:
+  k8s                  Run Kubernetes on Tencent Cloud
 
 Donate:
   zan                  Donate
@@ -372,7 +369,7 @@ You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you
 
 You must Update .env file when update this project.
 
-Exec '$ lnmp-docker k8s' Try Kubernetes Free
+Exec '$ lnmp-docker k8s' Run Kubernetes on Tencent Cloud
 
 Exec '$ lnmp-docker zan' donate
 "
@@ -766,7 +763,9 @@ env_status
 logs
 check_docker_version
 
-printInfo $(docker-compose --version)
+if(_command docker-compose){
+  printInfo $(docker-compose --version)
+}
 
 if ($args.Count -eq 0){
   help_information
@@ -1441,6 +1440,17 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
         $WORKING_DIR,$COMPOSER_COMMAND=$other
 
+        if(!$WORKING_DIR){
+          "Some ARGs require
+
+Usage: ./lnmp-docker composer PATH_IN_CONTAINER COMPOSER_COMMAND
+
+Example: ./lnmp-docker composer /app/demo install
+"
+
+          exit 1
+        }
+
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
@@ -1457,7 +1467,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       & $PSScriptRoot/wsl2/bin/dockerd-wsl2.ps1 $other
     }
 
-    compose {
+    "compose$" {
       $DIST="C:\ProgramData\DockerDesktop\version-bin\docker-compose.exe"
       if($other){
         $DIST=$other
