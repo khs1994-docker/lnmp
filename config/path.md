@@ -120,6 +120,7 @@
 │   │               │   │   ├── php-ext-calendar.ini
 │   │               │   │   ├── php-ext-enchant.ini
 │   │               │   │   ├── php-ext-exif.ini
+│   │               │   │   ├── php-ext-ffi.ini
 │   │               │   │   ├── php-ext-gd.ini
 │   │               │   │   ├── php-ext-gettext.ini
 │   │               │   │   ├── php-ext-gmp.ini
@@ -166,13 +167,15 @@
 ├── registry
 │   ├── ca.crt
 │   ├── config.example.yml
+│   ├── config.full.yml
 │   ├── config.gcr.io.yml
 │   ├── config.production.yml
 │   ├── gcr.io.crt
-│   └── gcr.io.key
+│   ├── gcr.io.key
+│   └── kustomization.yaml
 ├── supervisord
 │   └── supervisord.ini.example
 └── yarn
 
-44 directories, 129 files
+44 directories, 132 files
 ```
