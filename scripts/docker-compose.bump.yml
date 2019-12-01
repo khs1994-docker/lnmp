@@ -41,7 +41,7 @@ services:
     image: quay.io/coreos/etcd:3.4.3
 
   minio:
-    image: minio/minio:RELEASE.2019-09-05T23-24-38Z
+    image: minio/minio:RELEASE.2019-10-12T01-39-57Z
 
   kong:
     image: kong:1.4.0-alpine

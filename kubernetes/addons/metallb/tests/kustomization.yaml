@@ -1,0 +1,3 @@
+resources:
+- l2.yaml
+namePrefix: test2

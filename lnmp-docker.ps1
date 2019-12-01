@@ -1486,11 +1486,12 @@ Example: ./lnmp-docker composer /app/demo install
         #@custom
         __lnmp_custom_command $args
         printInfo `
-"Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
+"maybe you input command is notdefined, TRY EXEC docker-compose command"
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
-        & {docker-compose $options $args}
+        $command,$other = $args
+        & {docker-compose $options $command $other}
       }
 }
 

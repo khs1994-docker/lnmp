@@ -42,7 +42,7 @@ Function _kube_nginx_checker(){
   $wsl2_ip=& $PSScriptRoot/wsl2host.ps1
 
   if ($kube_nginx_wsl2_ip -ne $wsl2_ip){
-    Write-Warning "kube-nginx proxy $kube_nginx_wsl2_ip noteq wsl2ip $wsl2_ip ,exit"
+    Write-Warning "kube-nginx proxy $kube_nginx_wsl2_ip not eq wsl2ip $wsl2_ip ,exit"
     Write-Warning "please exec ( $ ./wsl2/kube-nginx ) restart kube-nginx"
 
     exit

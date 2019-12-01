@@ -686,6 +686,10 @@ update(){
 _lnmp_bug(){
   docker_version=$(docker --version)
   compose_version=$(docker-compose --version)
+  dockerd_version=$(docker version -f "{{.Server.Version}}")
+  dockerd_os=$(docker version -f "{{.Server.Os}}")
+  dockerd_arch=$(docker version -f "{{.Server.Arch}}")
+  docker_version_info=$(docker version -f "CLIENT: {{.Client}} || DAEMON: {{.Server}}")
   git_commit=$(git log -1 --pretty=%H)
   echo "
 <details>
@@ -701,6 +705,10 @@ echo "
 <code>$docker_version</code>
 
 <code>$compose_version</code>
+
+<code>docker daemon $dockerd_version $dockerd_os $dockerd_arch</code>
+
+<code>$docker_version_info</code>
 
 * https://github.com/khs1994-docker/lnmp/commit/$git_commit
 
@@ -1906,10 +1914,10 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
   * )
   #@custom
-  __lnmp_custom_command $command "$@" 2>/dev/null && exit || true
+  __lnmp_custom_command $command "$@" 2>/dev/null || exit 0
 
   if ! [ -z "$command" ];then
-    print_warning "command not found, Now Exec docker-compose commands"
+    print_warning "command not found, TRY Exec docker-compose command"
 
     _get_compose_options "docker-lnmp.yml" \
                          "docker-lnmp.override.yml"

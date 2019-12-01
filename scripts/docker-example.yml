@@ -234,7 +234,7 @@ services:
     tmpfs:
       - /run
     tmpfs: /run
-    restart: "no" # always | on-failure | unless-stopped # no Swarm mode
+    restart: "no" # no | always | on-failure | unless-stopped # no Swarm mode
     user: postgresql
     working_dir: /code
     domainname: foo.com

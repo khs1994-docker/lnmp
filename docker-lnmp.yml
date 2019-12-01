@@ -8,7 +8,7 @@ version: "3.7"
 
 x-common:
   &default-common
-  restart: always
+  restart: ${LNMP_RESTART:-always}
   env_file: ./cli/timezone.env
   networks:
     - backend
