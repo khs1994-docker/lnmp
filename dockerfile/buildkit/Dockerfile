@@ -1,3 +1,3 @@
-FROM moby/buildkit:v0.6.3
+FROM moby/buildkit:master
 
 COPY buildkitd.toml /etc/buildkit/
