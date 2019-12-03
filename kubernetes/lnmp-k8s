@@ -212,7 +212,7 @@ _get_kubernetes_server_by_docker_image(){
   fi
 
   if [ -z "${K8S_IMAGE}" ];then
-    if [ "${ENABLE_CN_MIRROR}" ];then
+    if [ "${ENABLE_CN_MIRROR}" != 0 ];then
       # 国内
       K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
       K8S_IMAGE=khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
@@ -307,14 +307,14 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
     return
   fi
 
-  command -v docker > /dev/null
+  # command -v docker > /dev/null
 
-  if [ $? -eq 0 ];then
-    docker container ls > /dev/null 2>&1
+  # if [ $? -eq 0 ];then
+    # docker container ls > /dev/null 2>&1
     _get_kubernetes_server_by_docker_image $@
     cd kubernetes-release/release
     __untar $@
-  fi
+  # fi
 }
 
 _delete_lnmp(){

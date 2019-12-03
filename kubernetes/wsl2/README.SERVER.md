@@ -33,15 +33,21 @@ $ wsl --set-version Ubuntu-18.04 2
 
 ## 新建 `k8s-data` WSL2 发行版
 
-* https://gitee.com/love_linger/WSL-Launcher
+```powershell
+$ cd ~/lnmp
 
-`launcher.json`
+$ . ./windows/sdk/dockerhub/rootfs
 
-```json
-{
-    "distro": "k8s-data",
-    "repo": "library/alpine"
-}
+$ wsl --import k8s-data `
+    $HOME/.khs1994-docker-lnmp/k8s-wsl2/k8s-data `
+    $(rootfs alpine) `
+    --version 2
+
+# 测试
+
+$ wsl -d k8s-data
+
+$ uname -a
 ```
 
 由于 WSL 存储机制，硬盘空间不能回收，我们将数据放到 `k8s-data`，若不再需要 `k8s` 直接删除 `k8s-data` 即可。例如 WSL2 放入一个 10G 文件，即使删除之后，这 10G 空间仍然占用，无法回收。
