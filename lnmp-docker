@@ -615,13 +615,13 @@ init() {
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
-      print_info "$APP_ENV"
+      print_info "APP_ENV is $APP_ENV"
       demo
       ;;
 
     # 生产环境 转移项目文件、配置文件、安装依赖包
     production )
-      print_info "$APP_ENV"
+      print_info "APP_ENV is $APP_ENV"
       # 请在 ./scripts/production-init 定义要执行的操作
       scripts/production-init
       ;;

@@ -127,6 +127,7 @@ Function pkg_root(){
 }
 
 Function _import_module($soft){
+  Remove-Module -Name $(pkg_root $soft) -ErrorAction SilentlyContinue
   Import-Module -Name $(pkg_root $soft)
 }
 
@@ -192,7 +193,7 @@ function __init($soft){
 
   if(test-path $SOFT_ROOT){
     Write-Host "==> This package already exists !" -ForegroundColor Red
-    
+
     _exit
   }
 

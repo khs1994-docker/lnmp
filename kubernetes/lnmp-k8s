@@ -193,7 +193,7 @@ _build_k8s_image(){
     --platform linux/amd64,linux/arm64,linux/arm/v7 \
     --push \
     -t khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
-    -t uswccr.ccs.tencentyun.com/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
+    -t ${K8S_IMAGE_REGISTRY:-uswccr.ccs.tencentyun.com}/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
     -f Dockerfile.buildx .
   set +x
   cd .. > /dev/null
@@ -213,19 +213,42 @@ _get_kubernetes_server_by_docker_image(){
 
   if [ -z "${K8S_IMAGE}" ];then
     if [ "${ENABLE_CN_MIRROR}" ];then
-      K8S_IMAGE=ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
+      # 国内
+      K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
+      K8S_IMAGE=khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
     else
-      K8S_IMAGE=uswccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}
+      # 国外
+      K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
+      K8S_IMAGE=khs1994/kubernetes-${TYPE}
     fi
   fi
 
-  $(_sudo) docker manifest inspect ${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
-  docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
-  docker container create --name khs1994-kubernetes-${TYPE} \
-    ${K8S_IMAGE}:v${KUBERNETES_VERSION} command
-  docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
-  docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
-  docker container rm khs1994-kubernetes-${TYPE}
+  $(_sudo) docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
+  # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
+  # docker container create --name khs1994-kubernetes-${TYPE} \
+  #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
+  # docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
+  # docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
+  # docker container rm khs1994-kubernetes-${TYPE}
+
+  set -x
+
+  local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
+  dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
+  ${K8S_IMAGE} \
+  v${KUBERNETES_VERSION} \
+  ${GOARCH} \
+  ${GOOS} \
+  "" 0 ${K8S_IMAGE_REGISTRY:-registry.hub.docker.com}
+  )
+
+  tar -zxvf $dist -C $ScriptRoot/kubernetes-release/release/
+
+  mv kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
+    kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
+
+  set +x
 }
 
 _get_kubernetes_server_by_url(){

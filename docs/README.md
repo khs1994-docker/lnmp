@@ -90,6 +90,6 @@
 
 请访问 [https://zan.khs1994.com](https://zan.khs1994.com)
 
-## 免费体验 Kubernetes
+## 腾讯云容器服务 Kubernetes
 
-* [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+如果您的企业有使用 `Kubernetes` 的需求，欢迎使用 [腾讯云容器服务](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)。

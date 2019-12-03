@@ -18,7 +18,15 @@ cache:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
     - /home/travis/.khs1994-docker-lnmp/caches
 
+# git:
+#   clone: false
+
 before_install:
+  # /home/travis/build/khs1994-docker/lnmp-k8s
+  - pwd
+  - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
+  - cp -r ~/lnmp/* ~/gopath/src/github.com/khs1994-docker
+  - ls -la ~/gopath/src/github.com/khs1994-docker
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true

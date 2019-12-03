@@ -10,8 +10,9 @@ $ ./lnmp-docker up
 
 ## arm 暂不支持 MySQL、PHPMyAdmin
 
-* 请在 `.env` 文件中将 `mysql` 替换为 `mariadb`
-* 请在 `.env` 文件中将 `phpmyadmin` 去掉
+* 在 `.env` 文件中将 `mysql` 替换为 `mariadb`
+* 在 `.env` 文件中将 `phpmyadmin` 去掉
+* 在 `.env` 文件中 `LREW_INCLUDE` 新增 `mariadb`
 
 ```diff
 - LNMP_SERVICES="nginx mysql php7 redis phpmyadmin"

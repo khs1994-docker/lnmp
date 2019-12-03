@@ -8,5 +8,8 @@ $ [environment]::SetEnvironmentvariable('GITHUB_TOKEN', 'XXX', 'User')
     exit
 
   }
-  Invoke-WebRequest -Method $method -Headers @{Authorization="token $env:GITHUB_TOKEN"} $url
+
+  Invoke-WebRequest -Method $method `
+  -Headers @{Authorization="token $env:GITHUB_TOKEN"} `
+  $url
 }

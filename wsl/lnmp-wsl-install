@@ -2,6 +2,8 @@
 
 # 从 Docker 镜像 复制二进制文件，安装 PHP Redis Memcached
 
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
 _print_help_info(){
     exec echo "
 
@@ -10,7 +12,7 @@ Install WSL soft by shell script
 
 Usage:
 
-$ lnmp-wsl-install php 7.3.0 [ tar | deb ]
+$ lnmp-wsl-install php 7.3.0 [ tar | deb | rpm ]
 
 $ lnmp-wsl-install enable [ php73 | php72 | php71 | php70 | php56 ]
 
@@ -25,6 +27,8 @@ Example:
 $ lnmp-wsl-install php 7.3.0 tar
 
 $ lnmp-wsl-install php 7.3.0 deb
+
+$ lnmp-wsl-install php 7.3.0 rpm
 
 $ lnmp-wsl-install php 7.1.33 [7.0.33] [5.6.40]
 
@@ -143,23 +147,29 @@ _php(){
 
 _tar(){
 # debian ubuntu
-TAR_IMAGE=khs1994/wsl:khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-"$( lsb_release -cs )"_amd64
+TAR_IMAGE=khs1994/wsl
+TAR_TAG=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-"$( lsb_release -cs )"_amd64
 
 if [ "$ID" = 'centos' -o "$ID" = 'fedora' ];then
   # rhel
-  TAR_IMAGE=khs1994/wsl:khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
+  TAR_IMAGE=khs1994/wsl
+  TAR_TAG=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 fi
 
-docker pull ${TAR_IMAGE}
+# docker pull ${TAR_IMAGE}:${TAR_TAG}
 
-docker create --name=${CONTAINER_NAME} ${TAR_IMAGE} command
+# docker create --name=${CONTAINER_NAME} ${TAR_IMAGE}:${TAR_TAG} command
 
 # rm
 $(_sudo) rm -rf ${PHP_PREFIX}
 
-docker cp ${CONTAINER_NAME}:/php${PHP_NUM}.tar.gz /tmp
+# docker cp ${CONTAINER_NAME}:/php${PHP_NUM}.tar.gz /tmp
 
-docker rm -f ${CONTAINER_NAME}
+# docker rm -f ${CONTAINER_NAME}
+
+dist=`$ScriptRoot/../windows/sdk/dockerhub/rootfs.sh ${TAR_IMAGE} ${TAR_TAG}`
+
+tar -zxvf $dist -C /tmp
 
 # backup
 if [ -d ${PHP_INI_DIR} ];then
@@ -200,18 +210,22 @@ _deb(){
 
     $(_sudo) rm -rf ${DEB_NAME}.deb
 
-    docker pull khs1994/wsl:${DEB_NAME}
+    # docker pull khs1994/wsl:${DEB_NAME}
 
-    docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME} command
+    # docker create --name=${CONTAINER_NAME} khs1994/wsl:${DEB_NAME} command
 
-    docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
+    # docker cp ${CONTAINER_NAME}:/${DEB_NAME}.deb .
 
-    docker rm -f ${CONTAINER_NAME}
+    # docker rm -f ${CONTAINER_NAME}
+
+    dist=`$ScriptRoot/../windows/sdk/dockerhub/rootfs.sh khs1994/wsl ${DEB_NAME} '' '' '' 1`
+
+    tar -zxvf $dist -C /tmp
 
     $(_sudo) dpkg -i ${DEB_NAME}.deb || ( $(_sudo) apt install -f && $(_sudo) dpkg -i ${DEB_NAME}.deb || true )
 }
 
-rpm(){
+_rpm(){
   cd /tmp
 
   RPM_NAME=khs1994-wsl-php-${PHP_VERSION}-1.el${VERSION_ID}.centos.x86_64.rpm
@@ -220,13 +234,17 @@ rpm(){
 
   $(_sudo) rm -rf ${RPM_NAME}
 
-  docker pull khs1994/wsl:${DOCKER_IMAGE_NAME}
+  # docker pull khs1994/wsl:${DOCKER_IMAGE_NAME}
 
-  docker create --name=${CONTAINER_NAME} khs1994/wsl:${DOCKER_IMAGE_NAME} command
+  # docker create --name=${CONTAINER_NAME} khs1994/wsl:${DOCKER_IMAGE_NAME} command
 
-  docker cp ${CONTAINER_NAME}:/${RPM_NAME} .
+  # docker cp ${CONTAINER_NAME}:/${RPM_NAME} .
 
-  docker rm -f ${CONTAINER_NAME}
+  # docker rm -f ${CONTAINER_NAME}
+
+  dist=`$ScriptRoot/../windows/sdk/dockerhub/rootfs.sh khs1994/wsl ${DOCKER_IMAGE_NAME} '' '' '' 1`
+
+  tar -zxvf $dist -C /tmp
 
   $(_sudo) yum install -y ${RPM_NAME}
 }
