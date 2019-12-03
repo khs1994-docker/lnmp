@@ -26,7 +26,7 @@ get(){
   "${registry}@$image_conver@$digest_conver.tar.gz" `
 
   if [ -f $distTemp ];then
-    echo "==> file already exists, skip download" > /dev/stderr
+    echo "==> File already exists, skip download" > /dev/stderr
 
     getDist "${dist}" $distTemp
 

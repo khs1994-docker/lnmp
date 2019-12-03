@@ -7,6 +7,8 @@ list(){
 
   if [ -z "${header}" ];then
     header="application/vnd.docker.distribution.manifest.list.v2+json"
+
+    echo "==> Get manifest list" > /dev/stderr
   fi
 
   image_conver=`echo $image | sed 's#/#@#g'`

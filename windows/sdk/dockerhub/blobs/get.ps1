@@ -14,7 +14,7 @@ function get($token,$image,$digest,$registry="registry.hub.docker.com",$dist){
   $distTemp = getCachePath "${registry}@$($image.replace('/','@'))@$($digest.split(':')[1]).tar.gz"
 
   if(Test-Path $distTemp){
-    Write-Warning "file already exists, skip download"
+    Write-Warning "File already exists, skip download"
 
     return getDist $dist $distTemp
   }

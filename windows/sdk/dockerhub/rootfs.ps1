@@ -23,7 +23,7 @@ function rootfs($image="alpine",
                 $registry="dockerhub.azk8s.cn",
                 $tokenServer="https://auth.docker.io/token",
                 $tokenService="registry.docker.io"){
-  write-host "==> get token ..."
+  write-host "==> Get token ..."
 
   try{
     $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/x/y/manifests/latest `
@@ -76,7 +76,7 @@ if($WWW_Authenticate){
 }
 "@
 
-write-host "==> wait 3s, continue ..."
+write-host "==> Wait 3s, continue ..."
 
 sleep 3
 
@@ -87,7 +87,7 @@ $token=getToken $image pull $tokenServer $tokenService
 # write-host $token
 
 if(!$token){
-  Write-Warning "get token error
+  Write-Warning "Get token error
 
 Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 "
@@ -100,6 +100,8 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 $result = list $token $image $ref $null $registry
 
 if($result.schemaVersion -eq 1){
+  # write-host $result
+
   Write-Warning "manifest list not found"
 
   $result = list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
@@ -113,10 +115,12 @@ if($result.schemaVersion -eq 1){
   $dist = get $token $image $digest $registry $dist
 
   return $dist
-}
-
-if($result.schemaVersion -eq 2){
+}elseif($result.schemaVersion -eq 2){
   Write-Warning "manifest list is found"
+}else{
+  Write-Warning "Get manifest error, exit"
+
+  return 1
 }
 
 $manifests=$result.manifests

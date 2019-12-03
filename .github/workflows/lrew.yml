@@ -77,6 +77,14 @@ jobs:
       env:
         DOCKER_USERNAME: ${{secrets.DOCKER_TENCENT_CLOUD_USERNAME}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+    - name: Download mirror.gcr.io docker image rootfs
+      run: |
+        sh ./windows/sdk/dockerhub/rootfs.sh \
+        hello-world latest '' '' '' 0 mirror.gcr.io
+      env:
+        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      continue-on-error: true
     - name: List docker image rootfs
       run : |
         ls -la ~/.khs1994-docker-lnmp/dockerhub

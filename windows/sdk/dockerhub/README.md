@@ -5,4 +5,6 @@
 [System.Environment]::SetEnvironmentVariable('DOCKER_USERNAME','khs1994','user')
 
 [System.Environment]::SetEnvironmentVariable('DOCKER_PASSWORD','password','user')
+
+[System.Environment]::SetEnvironmentVariable('LNMP_CACHE','$HOME\.khs1994-docker-lnmp','user')
 ```

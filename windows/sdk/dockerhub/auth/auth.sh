@@ -22,7 +22,7 @@ getToken(){
   fi
 
 if [ -z "${DOCKER_USERNAME}" -o -z "${DOCKER_PASSWORD}" ];then
-  echo "==> env var DOCKER_USERNAME DOCKER_PASSWORD not set" > /dev/stderr
+  echo "==> ENV var DOCKER_USERNAME DOCKER_PASSWORD not set" > /dev/stderr
 fi
 
 basic=`echo -n "${DOCKER_USERNAME:-usernamekhs1994666}:${DOCKER_PASSWORD:-passwordkhs1994666}" | base64`

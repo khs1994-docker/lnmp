@@ -12,7 +12,7 @@ rootfs(){
   local layersIndex=${6:-0}
   local registry=${7:-dockerhub.azk8s.cn}
 
-  echo "==> get token ..." > /dev/stderr
+  echo "==> Get token ..." > /dev/stderr
 
   WWW_Authenticate=`curl https://$registry/v2/x/y/manifests/latest \
 -X HEAD -I -A "Docker-Client/19.03.5 (Linux)" | grep -i 'www\-authenticate' `
@@ -50,13 +50,23 @@ fi
 }
 " > /dev/stderr
 
-echo "==> wait 3s, continue ..." > /dev/stderr
+echo "==> Wait 3s, continue ..." > /dev/stderr
 
 sleep 3
 
 . $ScriptRoot/auth/auth.sh
 
 getToken $image pull $tokenServer $tokenService 0 || return 1
+
+if [ -z "$token" ];then
+  echo "get token error
+
+Please check DOCKER_USERNAME DOCKER_PASSWORD env value
+" > /dev/stderr
+
+  return 1
+
+fi
 
 # echo $token
 
@@ -67,6 +77,8 @@ manifest_list_json_file=`list "$token" "$image" "$ref" '' "$registry"`
 local schemaVersion=`cat $manifest_list_json_file | jq '.schemaVersion'`
 
 if [ "$schemaVersion" -eq 1 ];then
+  # cat $manifest_list_json_file > /dev/stderr
+
   echo "==> manifest list not found" > /dev/stderr
 
   manifest_json_file=`list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry`
@@ -86,7 +98,7 @@ if [ "$schemaVersion" -eq 1 ];then
 elif [ "$schemaVersion" -eq 2 ];then
   echo "==> manifest list is found" > /dev/stderr
 else
-  echo "==> get manifest error, exit"
+  echo "==> get manifest error, exit" > /dev/stderr
 
   return 1
 fi

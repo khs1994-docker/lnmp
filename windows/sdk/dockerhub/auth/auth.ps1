@@ -17,14 +17,14 @@ function getToken($image,
   }
 
 if(!$env:DOCKER_USERNAME){
-  Write-Warning "env var DOCKER_USERNAME not set"
+  Write-Warning "ENV var DOCKER_USERNAME not set"
   $DOCKER_USERNAME='usernamekhs1994666'
 }else{
   $DOCKER_USERNAME=$env:DOCKER_USERNAME
 }
 
 if(!$env:DOCKER_PASSWORD){
-  Write-Warning "env var DOCKER_PASSWORD not set"
+  Write-Warning "ENV var DOCKER_PASSWORD not set"
   $DOCKER_PASSWORD='passwordkhs1994666'
 }else{
   $DOCKER_PASSWORD=$env:DOCKER_PASSWORD

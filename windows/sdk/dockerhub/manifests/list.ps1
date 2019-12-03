@@ -1,6 +1,8 @@
 function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
   if(!$header){
     $header="application/vnd.docker.distribution.manifest.list.v2+json"
+
+    Write-Warning "Get manifest list"
   }
 
   . $PSScriptRoot/../cache/cache.ps1
