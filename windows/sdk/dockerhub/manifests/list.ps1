@@ -30,7 +30,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
       #   return
       # }
 
-      Write-Warning "Get manifest list error $($result.StatusCode) , try get manifest ..."
+      Write-Warning "Get manifest list error [ $($result.StatusCode) ], try get manifest ..."
 
       return ConvertFrom-Json -InputObject @"
 {
