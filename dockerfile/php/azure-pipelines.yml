@@ -65,11 +65,11 @@ jobs:
       #   PHP_TAG_VERSION: 7.0.33
       #   FPM: 1
 
-      PHP_71_FPM:
-        PHP_VERSION: 7_1_X
-        FOLDER: 7.1
-        PHP_TAG_VERSION: 7.1.33
-        FPM: 1
+      # PHP_71_FPM:
+      #   PHP_VERSION: 7_1_X
+      #   FOLDER: 7.1
+      #   PHP_TAG_VERSION: 7.1.33
+      #   FPM: 1
 
       PHP_72_CLI:
         PHP_VERSION: 7_2_X

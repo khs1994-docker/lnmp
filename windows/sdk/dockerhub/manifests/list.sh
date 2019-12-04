@@ -5,8 +5,10 @@ list(){
   local header=$4
   local registry=${5:-registry.hub.docker.com}
 
+  local header_default="application/vnd.docker.distribution.manifest.list.v2+json"
+
   if [ -z "${header}" ];then
-    header="application/vnd.docker.distribution.manifest.list.v2+json"
+    header=$header_default
 
     echo "==> Get manifest list" > /dev/stderr
   fi
@@ -23,6 +25,15 @@ curl \
 "https://$registry/v2/$image/manifests/$ref" \
 -A "Docker-Client/19.03.5 (Linux)" \
 -o $cache_file
+
+errorCode=`cat $cache_file | jq '.errors[0].code' | sed 's#"##g'`
+
+if [ "$errorCode" = "MANIFEST_UNKNOWN" -a $header = $header_default ];then
+  echo "==> Get manifest list error, try get manifest ..." > /dev/stderr
+
+  echo '{"schemaVersion":1}' > $cache_file
+
+fi
 
 echo $cache_file
 

@@ -798,7 +798,11 @@ _containerd_install(){
     print_info "containerd not found, please install docker-ce first"; \
   fi
 
-  if ! [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then return;fi
+  if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
+    echo "only support [ amd64 ] and [ arm64 ], other platform install containerd can by docker-ce"
+
+    return
+  fi
 
   if [ -f ${K8S_ROOT}/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd 1.3 already install"; \
@@ -808,13 +812,22 @@ _containerd_install(){
 
   local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
+
   __download(){
+    if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
+      url="https://github.com/containerd/containerd/suites/338763278/artifacts/522869"
+      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
+
+      return
+    fi
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256sum | cut -d " " -f 1` ];then
+    local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    local sha256_remote=`curl -fsSL ${url}/${TAR_FILE}.sha256sum | cut -d " " -f 1` || true
+
+    if [ $sha256 != "$sha256_remote" -a "$GOARCH" = 'amd64' ];then
       $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
       __download
     fi
@@ -827,7 +840,17 @@ _containerd_install(){
     return
   fi
 
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
+  if [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then
+    $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
+  else
+    # arm64 unzip
+    command -v unzip > /dev/null || echo "please install unzip"
+    command -v unzip > /dev/null || exit 1
+    $(_sudo) unzip -o -d ${K8S_ROOT}/bin ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) chmod +x ${K8S_ROOT}/bin/linux_arm64/*
+    $(_sudo) mv ${K8S_ROOT}/bin/linux_arm64/* ${K8S_ROOT}/bin
+    $(_sudo) rm -rf ${K8S_ROOT}/bin/linux_arm64
+  fi
 
   $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
@@ -948,11 +971,11 @@ _k8s_install_dep(){
   print_info "install dep ..."
   # 安装依赖软件
   command -v dnf > /dev/null && ($(_sudo) dnf install -y conntrack ipvsadm ipset jq iptables curl socat \
-    sysstat libseccomp > /dev/null) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat \
+    sysstat libseccomp > /dev/null) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
     sysstat libseccomp > /dev/null) && return
 
   set +e
-  command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat \
+  command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
     sysstat libseccomp2 kmod > /dev/null
   set -e
 }
