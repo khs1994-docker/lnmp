@@ -1,0 +1,80 @@
+version = 2
+
+root = "C:\\containerd\\data\\root"
+state = "C:\\containerd\\data\\state"
+
+[grpc]
+  address = "\\\\.\\pipe\\containerd-containerd"
+  max_recv_message_size = 16777216
+  max_send_message_size = 16777216
+
+[debug]
+  address = ""
+  level = "debug"
+
+[metrics]
+  address = ""
+  grpc_histogram = false
+
+[cgroup]
+  path = ""
+
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+    stream_server_address = "127.0.0.1"
+    stream_server_port = "0"
+    enable_selinux = false
+    sandbox_image = "mcr.microsoft.com/k8s/core/pause:1.2.0"
+    stats_collect_period = 10
+    systemd_cgroup = false
+    enable_tls_streaming = false
+    max_container_log_line_size = 16384
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      snapshotter = "windows"
+      no_pivot = false
+      [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
+        runtime_type = "io.containerd.runhcs.v1"
+      [plugins."io.containerd.grpc.v1.cri".conatinerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wcow]
+          runtime_type = "io.containerd.runhcs.v1"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wcow-debug]
+          runtime_type = "io.containerd.runhcs.v1"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wcow-debug.options]
+            Debug = true
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wcow-isolated]
+          runtime_type = "io.containerd.runhcs.v1"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wcow-isolated.options]
+            SandboxIsolation = 1
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wcow-isolated-debug]
+          runtime_type = "io.containerd.runhcs.v1"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.wcow-isolated-debug.options]
+            SandboxIsolation = 1
+            Debug = true
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow]
+          runtime_type = "io.containerd.runhcs.v1"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow.options]
+            SandboxImage = "gcr.azk8s.cn/pause:3.1"
+            SandboxPlatform = "linux/amd64"
+            SandboxIsolation = 1
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow-debug]
+          runtime_type = "io.containerd.runhcs.v1"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow-debug.options]
+            SandboxImage = "gcr.azk8s.cn/pause:3.1"
+            SandboxPlatform = "linux/amd64"
+            SandboxIsolation = 1
+            Debug = true
+    [plugins."io.containerd.grpc.v1.cri".cni]
+      bin_dir = "C:\\bin\\cni"
+      conf_dir = "C:\\Users\\90621\\lnmp\\kubernetes\\windows\\etc\\cni"
+    [plugins."io.containerd.grpc.v1.cri".registry]
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+          endpoint = ["https://registry-1.docker.io"]
+  [plugins."io.containerd.service.v1.diff-service"]
+    default = ["windows", "windows-lcow"]
+  [plugins."io.containerd.gc.v1.scheduler"]
+    pause_threshold = 0.02
+    deletion_threshold = 0
+    mutation_threshold = 100
+    schedule_delay = "0s"
+    startup_delay = "100ms"

@@ -10,7 +10,7 @@ list(){
   if [ -z "${header}" ];then
     header=$header_default
 
-    echo "==> Get manifest list" > /dev/stderr
+    echo "==> Get manifest list ..." > /dev/stderr
   fi
 
   image_conver=`echo $image | sed 's#/#@#g'`

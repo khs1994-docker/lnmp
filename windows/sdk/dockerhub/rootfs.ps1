@@ -23,6 +23,8 @@ function rootfs($image="alpine",
                 $registry="dockerhub.azk8s.cn",
                 $tokenServer="https://auth.docker.io/token",
                 $tokenService="registry.docker.io"){
+
+  $FormatEnumerationLimit=-1
   write-host "==> Get token ..."
 
   try{
@@ -63,18 +65,18 @@ if($WWW_Authenticate){
   if(!$arch){$arch = "amd64"}
   if(!$os){$os = "linux"}
 
-  Write-Warning @"
+  ConvertFrom-Json -InputObject @"
 {
-    "image" = "$image",
-    "ref" = "$ref",
-    "arch" = "$arch",
-    "os" = "$os",
-    "registry" = "$registry",
-    "tokenServer" = "$tokenServer",
-    "tokenService" = "$tokenService",
-    "layersIndex" = "$layersIndex",
+    "image" : "$image",
+    "ref" : "$ref",
+    "arch" : "$arch",
+    "os" : "$os",
+    "registry" : "$registry",
+    "tokenServer" : "$tokenServer",
+    "tokenService" : "$tokenService",
+    "layersIndex" : "$layersIndex",
 }
-"@
+"@ | out-host
 
 write-host "==> Wait 3s, continue ..."
 
@@ -95,6 +97,12 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
   return
 }
 
+Write-Warning "$image tags list"
+
+. $PSScriptRoot/tags/list.ps1
+
+ConvertFrom-Json (tagList $token $image $registry) | Format-List | out-host
+
 . $PSScriptRoot/manifests/list.ps1
 
 $result = list $token $image $ref $null $registry
@@ -106,6 +114,10 @@ if($result.schemaVersion -eq 1){
 
   $result = list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
 
+  if(!$result){
+    return
+  }
+
   $digest = $result.layers[$layersIndex].digest
 
   Write-Warning "Digest is $digest"
@@ -113,6 +125,8 @@ if($result.schemaVersion -eq 1){
   . $PSScriptRoot/blobs/get.ps1
 
   $dist = get $token $image $digest $registry $dist
+
+  Write-Warning "Download success to $dist"
 
   return $dist
 }elseif($result.schemaVersion -eq 2){
@@ -143,6 +157,8 @@ foreach($manifest in $manifests){
     . $PSScriptRoot/blobs/get.ps1
 
     $dist = get $token $image $digest $registry $dist
+
+    Write-Warning "Download success to $dist"
 
     return $dist
   }

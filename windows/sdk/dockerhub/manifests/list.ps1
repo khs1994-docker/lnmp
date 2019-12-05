@@ -4,7 +4,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
   if(!$header){
     $header=$header_default
 
-    Write-Warning "Get manifest list"
+    Write-Warning "Get manifest list ..."
   }
 
   . $PSScriptRoot/../cache/cache.ps1
@@ -21,8 +21,10 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
       -OutFile $cache_file `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
   }catch{
+    $result = $_.Exception.Response
+
     if($header -eq $header_default){
-      $result = $_.Exception.Response
+      # $result = $_.Exception.Response
       # write-host $result.StatusCode
       # $code = (ConvertFrom-Json $content).errors[0].code
       # if($code -ne "MANIFEST_UNKNOWN"){
@@ -38,6 +40,10 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
 }
 "@
     }
+
+    Write-Warning "Get manifest error [ $($result.StatusCode) ], exit"
+
+    return $false
   }
 
   return ConvertFrom-Json (Get-Content $cache_file -Raw)

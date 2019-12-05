@@ -96,12 +96,14 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   $HTTPD_IS_RUN=0
 
-  get-service Apache2.4 | out-null
+  get-service Apache2.4 > $null 2>&1
 
   if (!($?)){
       _sudo "httpd -k install"
       $HTTPD_IS_RUN=1
   }
+
+  _sudo set-service Apache2.4 -StartupType Disabled
 
   mkdir C:\Apache24\conf.d | out-null
 

@@ -1,4 +1,4 @@
-function list($token,$image,$registry="registry.hub.docker.com"){
+function tagList($token,$image,$registry="registry.hub.docker.com"){
   $result = Invoke-WebRequest `
   -Authentication OAuth `
   -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
@@ -7,3 +7,5 @@ function list($token,$image,$registry="registry.hub.docker.com"){
 
   return $result
 }
+
+# n=<integer>&last=<integer>

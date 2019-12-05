@@ -33,6 +33,8 @@ $ wsl --set-version Ubuntu-18.04 2
 
 ## 新建 `k8s-data` WSL2 发行版
 
+**必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用。
+
 ```powershell
 $ cd ~/lnmp
 

@@ -1,0 +1,25 @@
+apiVersion: node.k8s.io/v1beta1  # RuntimeClass is defined in the node.k8s.io API group
+kind: RuntimeClass
+metadata:
+  name: lcow  # The name the RuntimeClass will be referenced by
+  # RuntimeClass is a non-namespaced resource
+# handler: myconfiguration  # The name of the corresponding CRI configuration
+handler: lcow # 值与 OCI 配置文件对应
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: lcow-pod-test
+spec:
+  containers:
+  - name: lcow-pod-test
+    image: busybox
+    args:
+    - sh
+    - -c
+    - "while :; do sleep 3000; done"
+  runtimeClassName: lcow
+  nodeSelector:
+    kubernetes.io/os: windows

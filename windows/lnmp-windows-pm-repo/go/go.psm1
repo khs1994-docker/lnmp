@@ -51,10 +51,14 @@ Function install($VERSION=0,$isPre=0){
   # 验证原始 zip 文件 Fix me
 
   # 解压 zip 文件 Fix me
+
   _cleanup go
 
   _unzip $filename $unzipDesc
+
   # 安装 Fix me
+
+  _cleanup C:\go
   Copy-item -r -force go/go C:\
   _cleanup go
 
@@ -62,7 +66,9 @@ Function install($VERSION=0,$isPre=0){
   _exportPath "C:\go\bin","C:\Users\$env:username\go\bin"
 
   "==> Checking ${name} ${VERSION} install ..."
+
   # 验证 Fix me
+
   go version
 }
 

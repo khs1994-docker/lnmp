@@ -254,8 +254,8 @@ _get_kubernetes_server_by_docker_image(){
 _get_kubernetes_server_by_url(){
   curl https://storage.googleapis.com/kubernetes-release/release/stable.txt > /dev/null \
     && ( \
-      curl -A "curl" -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
-        -o kubernetes-release/release/kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
+      curl -A "curl" -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}.tar.gz \
+        -o kubernetes-release/release/kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
     ) && return 0 || return 1
 }
 
@@ -275,7 +275,7 @@ _kubernetes_server_install(){
     test -n "${2}" && local GOARCH=$2
     test -n "${3}" && local TYPE=$3
     test -n "${4}" && local KUBERNETES_VERSION=$4
-    tar -zxvf kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
+    tar -zxvf kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
     # pwd => kubernetes-release/release/
     mv kubernetes v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/
   }
@@ -297,8 +297,6 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
   # fi
   # set -e
 
-  test $GOOS != 'linux' && exit
-
   if [ -n "$get_by_url" ];then
     _get_kubernetes_server_by_url $@
     cd kubernetes-release/release
@@ -306,6 +304,8 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
 
     return
   fi
+
+  test $GOOS != 'linux' && exit
 
   # command -v docker > /dev/null
 
