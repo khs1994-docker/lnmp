@@ -4,7 +4,7 @@ bindAddress: 192.168.199.100
 healthzBindAddress: 192.168.199.100:10256
 metricsBindAddress: 192.168.199.100:10249
 enableProfiling: true
-clusterCIDR: 172.30.0.0/16
+clusterCIDR: 10.244.0.0/16
 hostnameOverride: windows
 portRange: ""
 mode: "kernelspace"

@@ -47,7 +47,7 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
 --logtostderr=true \
 --feature-gates=DynamicAuditing=true \
---cluster-cidr=172.30.0.0/16 \
+--cluster-cidr=10.244.0.0/16 \
 --allocate-node-cidrs=true \
 --v=2
 

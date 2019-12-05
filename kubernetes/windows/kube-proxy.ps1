@@ -5,7 +5,7 @@ kube-proxy `
 --kubeconfig=$PSScriptRoot\..\wsl2\certs\kube-proxy.kubeconfig `
 --feature-gates="WinOverlay=true" `
 --network-name=vxlan0 `
---cluster-cidr=172.30.0.0/16 `
+--cluster-cidr=10.244.0.0/16 `
 --hostname-override=windows `
 --bind-address=$ip `
 --proxy-mode=kernelspace

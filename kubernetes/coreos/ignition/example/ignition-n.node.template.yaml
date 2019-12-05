@@ -176,7 +176,7 @@ storage:
           runtimeRequestTimeout: 10m
           hairpinMode: promiscuous-bridge
           maxPods: 220
-          podCIDR: "172.30.0.0/16"
+          podCIDR: "10.244.0.0/16"
           podPidsLimit: -1
           resolvConf: /etc/resolv.conf
           maxOpenFiles: 1000000
@@ -218,7 +218,7 @@ storage:
           healthzBindAddress: {{IP_{{n}}}}:10256
           metricsBindAddress: {{IP_{{n}}}}:10249
           enableProfiling: true
-          clusterCIDR: 172.30.0.0/16
+          clusterCIDR: 10.244.0.0/16
           hostnameOverride: coreos{{n}}
           mode: "ipvs"
           portRange: ""
