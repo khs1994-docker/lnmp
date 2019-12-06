@@ -23,10 +23,10 @@ services:
     image: nginx:1.17.6-alpine
 
   rabbitmq:
-    image: rabbitmq:3.8.0-management-alpine
+    image: rabbitmq:3.8.1-management-alpine
 
   postgresql:
-    image: postgres:12.0-alpine
+    image: postgres:12.1-alpine
 
   mongodb:
     image: mongo:4.2.1
@@ -44,13 +44,13 @@ services:
     image: minio/minio:RELEASE.2019-10-12T01-39-57Z
 
   kong:
-    image: kong:1.4.0-alpine
+    image: kong:1.4.1-alpine
 
   node:
     image: node:13.2.0-alpine
 
   go:
-    image: golang:1.13.4-alpine
+    image: golang:1.13.5-alpine
 
   alpine:
     image: alpine:3.10

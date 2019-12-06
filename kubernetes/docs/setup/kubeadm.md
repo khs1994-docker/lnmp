@@ -114,9 +114,9 @@ RestartSec=10
 WantedBy=multi-user.target
 ```
 
-应用配置
-
 ```bash
+# 应用配置
+
 $ sudo systemctl daemon-reload
 ```
 
@@ -133,9 +133,9 @@ ExecStartPre=-modprobe ip_vs_wrr
 ExecStartPre=-modprobe ip_vs_sh
 ```
 
-应用配置
-
 ```bash
+# 应用配置
+
 $ sudo systemctl daemon-reload
 ```
 
@@ -184,7 +184,7 @@ kubeadm join 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
 
 ### node 工作节点
 
-根据提示在 **另一主机** 部署工作节点（重复部署小节以上的步骤，安装配置好 kubelet）
+在 **另一主机** 重复 **部署** 小节以前的步骤，安装配置好 kubelet。根据提示，加入到集群。
 
 ```bash
 $ kubeadm join 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
@@ -221,7 +221,7 @@ $ kubectl apply -k addons/cni/flannel
 
 * https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico
 
-修改 `addons/cni/calico/configMap.yaml` 中的值(官方原值 `192.168.0.0/16` 已更改为同 `flannel` 一致 `10.244.0.0/16`)
+修改 `addons/cni/calico/configMap.yaml` 中的 `192.168.0.0/16` 为 `10.244.0.0/16`(同 `flannel` 一致)
 
 有 [三种方式](https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico) 存储 calico 数据,这里采用第一种 `Installing with the Kubernetes API datastore—50 nodes or less`
 
@@ -243,9 +243,9 @@ net.ipv4.conf.all.rp_filter = 1
 
 > Fedora 31 默认值为 2 ,其他系统通过 `sysctl -a | grep net.ipv4.conf.all.rp_filter` 查看
 
-应用配置
-
 ```bash
+# 应用配置
+
 $ sysctl --system
 ```
 
@@ -334,7 +334,7 @@ $ sudo kubeadm init --apiserver-cert-extra-sans=xxx.com --control-plane-endpoint
 $ sudo kubeadm join --control-plane 其他参数
 ```
 
-* 高可用，入口地址不能为 IP(127.0.0.1 NGINX 轮询除外，这里不做介绍) 必须为一个域名,`init` 时必须指定 `--apiserver-cert-extra-sans=xxx.com` `--control-plane-endpoint=xxx.com:6443`。后续通过 DNS 轮询 xxx.com 实现高可用(搭建 DNS 服务器，这里不做介绍)
+* 高可用，入口地址不能为 IP(127.0.0.1 NGINX 轮询除外，这里不做介绍) 必须为一个域名,`init` 时必须指定 `--apiserver-cert-extra-sans=xxx.com` `--control-plane-endpoint=xxx.com:6443`。通过 DNS 轮询 xxx.com 实现高可用(请自行搭建 DNS 服务器，这里不做介绍)
 
 ## 附录
 
@@ -367,15 +367,15 @@ ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELE
 
 * https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta2
 
-生成默认的配置文件
-
 ```bash
+# 生成默认的配置文件
+
 $ kubeadm config print init-defaults
 ```
 
-使用
-
 ```bash
+# 使用
+
 $ kubeadm --config 配置文件名 其他参数
 ```
 
@@ -394,4 +394,4 @@ $ kubeadm config images list
 * 关键在于配置好 `kubelet`
 * k8s 组件除了 `kubelet` 其他组件都能够以 `pod` 方式运行，秘诀在于使用了 `hostnetwork`
 * 国内网络问题（拉取不到 `k8s.gcr.io` 镜像）：加上参数 `--image-repository gcr.azk8s.cn/google-containers` 解决
-* `kubelet` 的参数 `--cgroup-driver=systemd` 一定要与 Docker 的一致
+* `kubelet` 的参数 `--cgroup-driver=systemd` 一定要与 Docker 的一致，其他文档有介绍，这里不再赘述
