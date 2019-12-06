@@ -1,0 +1,5 @@
+FROM scratch
+
+COPY . /
+
+# docker buildx build -t lrewpkg/EXAMPLE:x.y.z -t lrewpkg/EXAMPLE -f Dockerfile.lrew --push .

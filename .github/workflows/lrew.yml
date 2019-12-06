@@ -47,6 +47,10 @@ jobs:
     - name: lrew-add
       shell: pwsh
       run: lnmp-docker.ps1 add etcd
+    # need wsl
+    - name: lrew2-add
+      shell: pwsh
+      run: ./lrew/lrew.ps1 add smee
     - shell: pwsh
       run: |
         ls -r vendor

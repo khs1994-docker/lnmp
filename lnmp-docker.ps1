@@ -513,11 +513,19 @@ Function get_compose_options($compose_files,$isBuild=0){
     $KEY="LREW_$($item -Replace ('-','_'))_VENDOR".ToUpper();
     $content=$(cat $LNMP_ENV_FILE | Where-Object {$_ -like "${KEY}=lrew-dev"})
 
+    # dev
     if(Test-Path $PSScriptRoot/vendor/lrew-dev/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew-dev/$item"
       # set env
       if(!($content)){
          "${KEY}=lrew-dev" >> $LNMP_ENV_FILE
+      }
+    }elseif(Test-Path $PSScriptRoot/vendor/lrew2/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew2/$item"
+      # unset env
+      if($content){
+        @(Get-Content $LNMP_ENV_FILE) -replace `
+          "${KEY}=lrew-dev",'' | Set-Content $LNMP_ENV_FILE
       }
     }elseif(Test-Path $PSScriptRoot/vendor/lrew/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew/$item"
@@ -787,11 +795,11 @@ switch -regex ($command){
       _lrew_outdated $other
     }
 
-    pkg-backup {
+    lrew-backup {
       _lrew_backup
     }
 
-    pkg-update {
+    lrew-update {
       _lrew_update $other
     }
 
