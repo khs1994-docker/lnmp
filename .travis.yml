@@ -213,6 +213,22 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
+    - stage: wsl-php-builder-ubuntu1804-74
+      name: wsl-php-builder-ubuntu1804-74
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
+        - . .env
+        - export DEB_NAME=khs1994-wsl-php74_${PHP_VERSION_74}-ubuntu-bionic_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+
     # wsl rhel
 
     - stage: wsl-php-builder-rhel7-72
@@ -401,6 +417,8 @@ stages:
   - name: wsl-php-builder-ubuntu1804-72
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-ubuntu1804-73
+    if: tag =~ /^(v19)/
+  - name: wsl-php-builder-ubuntu1804-74
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel7-72
     if: tag =~ /^(v19)/

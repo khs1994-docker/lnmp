@@ -51,6 +51,15 @@ services:
         - OS_TYPE=ubuntu:18.04
     image: khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.12}-ubuntu-bionic_amd64
 
+  wsl-php-builder-ubuntu1804-74:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.0}
+        - OS_TYPE=ubuntu:18.04
+    image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_73:-7.4.0}-ubuntu-bionic_amd64
+
   wsl-php-builder-rhel7-72:
     build:
       context: .

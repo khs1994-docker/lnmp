@@ -233,7 +233,7 @@ $ ./lnmp-docker down
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.0-composer-alpine`  | **1.9.1**       |`Alpine:3.10`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-cs-fixer`                | **2.16.1**      |`Alpine:3.10`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.20-alpine`           | **1.5.20**       |`Alpine:3.10`    |
-|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.1-management-alpine` | **3.8.1**       |`Alpine:3.10`    |
+|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.2-management-alpine` | **3.8.2**       |`Alpine:3.10`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.1-alpine`             | **12.1**        |`Alpine:3.10`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.1`                      | **4.2.1**       |`Ubuntu:bionic` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.10`    |
