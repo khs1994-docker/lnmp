@@ -16,4 +16,4 @@ spec:
   volumes:
   - name: data
     persistentVolumeClaim:
-        claimName: local-storage-test-pvc
+      claimName: local-storage-test-pvc

@@ -2,18 +2,6 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: example-pv
-  annotations:
-        "volume.alpha.kubernetes.io/node-affinity": '{
-            "requiredDuringSchedulingIgnoredDuringExecution": {
-                "nodeSelectorTerms": [
-                    { "matchExpressions": [
-                        { "key": "kubernetes.io/hostname",
-                          "operator": "In",
-                          "values": ["node-name"]
-                        }
-                    ]}
-                 ]}
-              }'
 spec:
     capacity:
       storage: 5Gi
@@ -23,6 +11,14 @@ spec:
     storageClassName: local-storage
     local:
       path: /mnt/disks/ssd1
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - node-name
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -45,8 +41,11 @@ metadata:
 spec:
   containers:
   - name: "lnmp-pod"
-    # image: "khs1994/nginx:1.17.6-alpine"
-    image: "nginx:1.17.6-alpine"
+    image: busybox
+    command:
+      - sh
+      - -c
+      - "while :;do sleep 3600; done"
     volumeMounts:
     - name: lnmp-data
       mountPath: /app
