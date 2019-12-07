@@ -9,7 +9,10 @@ spec:
       volumeMounts:
       - mountPath: "/data"
         name: my-csi-volume
-      command: [ "sleep", "1000000" ]
+      command:
+      - sh
+      - -c
+      - "while :; do sleep 3600 ; done"
   volumes:
     - name: my-csi-volume
       csi:

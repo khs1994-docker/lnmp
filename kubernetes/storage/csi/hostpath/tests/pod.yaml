@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: csi-hostpath-test
+spec:
+  containers:
+  - name: csi-hostpath-test
+    image: busybox
+    command:
+    - sh
+    - -c
+    - "while :; do sleep 3600;done"
+    volumeMounts:
+      - name: data
+        mountPath: /data
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: csi-pvc

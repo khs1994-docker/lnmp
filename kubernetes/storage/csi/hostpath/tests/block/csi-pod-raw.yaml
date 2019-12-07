@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-raw
+  labels:
+    name: busybox-test
+spec:
+  restartPolicy: Always
+  containers:
+    - image: alpine
+      command: ["/bin/sh", "-c"]
+      args: [ "tail -f /dev/null" ]
+      name: busybox
+      volumeDevices:
+        - name: vol
+          devicePath: /dev/loop3 # This device path needs to be replaced with the site specific
+  volumes:
+    - name: vol
+      persistentVolumeClaim:
+        claimName: pvc-raw

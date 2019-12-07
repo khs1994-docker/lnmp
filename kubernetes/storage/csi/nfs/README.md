@@ -22,7 +22,7 @@ $ sudo yum install -y nfs-utils
 
 ## 测试
 
-替换 `tests/pod.yaml`
+替换 `tests/pv.yaml`
 
 ```yaml
     volumeAttributes:
@@ -31,7 +31,7 @@ $ sudo yum install -y nfs-utils
 ```
 
 ```bash
-$ kubectl apply -f tests
+$ kubectl apply -k tests
 ```
 
 进入 pod 在 `/data` 目录新建文件，并在服务端确认文件是否存在。

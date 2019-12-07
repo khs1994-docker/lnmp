@@ -66,7 +66,7 @@ $ sudo mount --make-shared /
 local-pv-b71e07c6        6341Mi     RWO            Delete           Available                                   local-storage            10m
 ```
 
-在 `/mnt/disks` 下新增 `vol4`(具体步骤见 **虚拟** 一节)，可以看到又 **新增** 了一个 `PV`
+在 `/mnt/disks` 下新增 `vol4`(具体步骤见 **虚拟** 一节)，可以看到又自动 **新增** 了一个 `PV`
 
 ### 测试
 
