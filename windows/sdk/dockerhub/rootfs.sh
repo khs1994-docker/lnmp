@@ -91,6 +91,8 @@ if [ "$schemaVersion" -eq 1 ];then
 
   dist=`get $token $image $digest $registry "${dist}"`
 
+  echo "Download success to $dist" > /dev/stderr
+
   echo $dist
 
   return
@@ -129,6 +131,8 @@ local current_os=`cat $manifest_list_json_file | jq ".manifests[$i].platform.os"
     . $ScriptRoot/blobs/get.sh
 
     dist=`get $token $image $digest $registry "${dist}"`
+
+    echo "Download success to $dist" > /dev/stderr
 
     echo $dist
 

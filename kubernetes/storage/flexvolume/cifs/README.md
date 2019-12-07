@@ -1,5 +1,7 @@
 # [CIFS(SMB, Samba, Windows Share)](https://github.com/docker-practice/flexvolume_cifs)
 
+**静态**
+
 * https://hub.docker.com/r/dockerpracticesig/flexvolume-cifs
 
 * https://github.com/kubernetes/examples/tree/master/staging/volumes/flexvolume

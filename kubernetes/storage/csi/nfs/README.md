@@ -1,5 +1,7 @@
 # [CSI NFS](https://github.com/kubernetes-csi/csi-driver-nfs)
 
+**静态**
+
 ## 部署
 
 ### 替换 kubelet 路径(--root-dir 参数的值)

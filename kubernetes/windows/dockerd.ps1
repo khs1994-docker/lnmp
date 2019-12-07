@@ -1,2 +1,1 @@
-& "C:\Program Files\Docker\Docker\resources\dockerd.exe" `
-
+& "C:\Program Files\Docker\Docker\resources\dockerd.exe"

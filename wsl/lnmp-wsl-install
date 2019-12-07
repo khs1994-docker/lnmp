@@ -49,7 +49,7 @@ GO_PREFIX=/usr/local
 
 GO_VERSION=1.13.5
 
-NODE_VERSION=13.2.0
+NODE_VERSION=13.3.0
 
 NODE_PREFIX=/usr/local
 
@@ -100,13 +100,12 @@ _nginx(){
 }
 
 _php(){
-  command -v docker > /dev/null || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli "
+  # command -v docker > /dev/null || echo -e "Docker cli not install, please exec $ lnmp-wsl-docker-cli "
 
-  command -v docker > /dev/null || exit 1
+  # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version
-  # current version is php 7.4.0
+  # default install latest php version (7.4.0)
 
   PHP_VERSION=${1:-7.4.0}
 
@@ -152,7 +151,7 @@ TAR_TAG=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-"$( lsb_release -cs )"_am
 
 if [ "$ID" = 'centos' -o "$ID" = 'fedora' ];then
   # rhel
-  TAR_IMAGE=khs1994/wsl
+  # TAR_IMAGE=khs1994/wsl
   TAR_TAG=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-${VERSION_ID}_amd64
 fi
 
@@ -169,7 +168,7 @@ $(_sudo) rm -rf ${PHP_PREFIX}
 
 dist=`$ScriptRoot/../windows/sdk/dockerhub/rootfs.sh ${TAR_IMAGE} ${TAR_TAG}`
 
-tar -zxvf $dist -C /tmp
+$(_sudo) tar -zxvf $dist -C /tmp
 
 # backup
 if [ -d ${PHP_INI_DIR} ];then
@@ -220,7 +219,7 @@ _deb(){
 
     dist=`$ScriptRoot/../windows/sdk/dockerhub/rootfs.sh khs1994/wsl ${DEB_NAME} '' '' '' 1`
 
-    tar -zxvf $dist -C /tmp
+    $(_sudo) tar -zxvf $dist -C /tmp
 
     $(_sudo) dpkg -i ${DEB_NAME}.deb || ( $(_sudo) apt install -f && $(_sudo) dpkg -i ${DEB_NAME}.deb || true )
 }
@@ -244,20 +243,20 @@ _rpm(){
 
   dist=`$ScriptRoot/../windows/sdk/dockerhub/rootfs.sh khs1994/wsl ${DOCKER_IMAGE_NAME} '' '' '' 1`
 
-  tar -zxvf $dist -C /tmp
+  $(_sudo) tar -zxvf $dist -C /tmp
 
   $(_sudo) yum install -y ${RPM_NAME}
 }
 
 if [ -z "$2" ];then
 
-echo -e "install by tar"
+echo -e "Get php from tar (default)"
 
 _tar
 
 else
 
-echo -e "install by $2"
+echo -e "Get php from $2"
 
 _"$2"
 

@@ -1,6 +1,6 @@
 # [NFS-client](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)
 
-`PVC` 动态创建 `PV`
+**动态**
 
 文件位于 `/exported/path/${namespace}-${pvcName}-${pvName}`，archive 文件位于 `/exported/path/archived-${namespace}-${pvcName}-${pvName}`
 

@@ -8,13 +8,14 @@ metadata:
 data:
   storageClassMap: |
     local-storage:
-       hostDir: /mnt/disks
-       mountDir: /mnt/disks
-       blockCleanerCommand:
-         - "/scripts/shred.sh"
-         - "2"
-       volumeMode: Filesystem
-       fsType: ext4
+      hostDir: /mnt/disks
+      mountDir: /mnt/disks
+      blockCleanerCommand:
+        - "/scripts/shred.sh"
+        - "2"
+      volumeMode: Filesystem
+      fsType: ext4
+      # volumeMode: Block
 ---
 # Source: provisioner/templates/provisioner-service-account.yaml
 apiVersion: v1
