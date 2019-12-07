@@ -40,7 +40,7 @@ if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
 ################################################################################
 
 PHP_TIMEZONE=PRC
-PHP_URL=http://cn2.php.net/distributions
+PHP_URL=https://mirrors.sohu.com/php
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
 export COMPOSER_VERSION=1.9.1
@@ -128,7 +128,7 @@ _download_src(){
       cd /usr/local/src
 
       wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
-        wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
+        wget https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz
 
       echo -e "Untar ...\n\n"
 

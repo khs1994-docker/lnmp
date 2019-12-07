@@ -43,7 +43,7 @@ try{
 }catch{
   Write-Warning "==> dist [ k8s-data ] mount error, please exec $ wsl --shutdown"
 
-  exit 1
+  # exit 1
 }
 
 # docker desktop check
