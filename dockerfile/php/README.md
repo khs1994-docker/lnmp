@@ -100,8 +100,8 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] dom
 * [x] enchant
 * [x] exif
-* [ ] ext_skel
-* [ ] ext_skel_win32.php
+* [ ] ext_skel.php
+* [x] ffi
 * [x] fileinfo
 * [x] filter
 * [x] ftp
@@ -111,17 +111,16 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] hash
 * [x] iconv
 * [x] imap
-* [ ] interbase
 * [x] intl
 * [x] json
-* [ ] ldap
+* [x] ldap
 * [x] libxml
 * [x] mbstring
 * [x] mysqli
 * [x] mysqlnd
 * [ ] oci8
 * [ ] odbc
-* [x] opcache
+* [ ] opcache
 * [x] openssl
 * [x] pcntl
 * [x] pcre
@@ -136,16 +135,15 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] pgsql
 * [x] phar
 * [x] posix
-* [ ] pspell
+* [x] pspell
 * [x] readline
-* [ ] recode
 * [x] reflection
 * [x] session
-* [ ] shmop
+* [x] shmop
 * [x] simplexml
 * [ ] skeleton
 * [ ] snmp
-* [ ] soap
+* [x] soap
 * [x] sockets
 * [x] sodium
 * [x] spl
@@ -154,7 +152,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] sysvmsg
 * [x] sysvsem
 * [x] sysvshm
-* [ ] tidy
+* [x] tidy
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader

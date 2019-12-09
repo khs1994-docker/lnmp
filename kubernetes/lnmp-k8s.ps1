@@ -96,12 +96,6 @@ if (!(Test-Path systemd/.env)){
   Copy-Item systemd/.env.example systemd/.env
 }
 
-Function _lnmp_k8s_custom_conf_generator(){
-  wsl -- ./lnmp-k8s | out-null
-}
-
-_lnmp_k8s_custom_conf_generator
-
 if ($args.length -eq 0){
   print_help_info
   exit

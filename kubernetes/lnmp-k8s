@@ -26,6 +26,7 @@ if [ -n "${DEBUG}" -o -n "${debug}" ];then set -x; fi
 
 source_path=$PWD
 
+# CI/CD
 if [ -n "${CI_KUBERNETES_VERSION}" ];then KUBERNETES_VERSION=${CI_KUBERNETES_VERSION};fi
 
 set -e
@@ -78,46 +79,6 @@ _cp(){
   if ! [ -f $1 ];then echo "$1 not found"; touch $2; return ;fi
   if ! [ -f $2 ];then cp $1 $2 ;fi
 }
-
-# 生成自定义示例文件
-_lnmp_k8s_custom_conf_generator(){
-  items="development production"
-  # nginx conf.d
-  for item in $items
-  do
-    touch deployment/configMap/nginx-conf-d/custom.conf
-
-    local ROOT="deployment/nginx/overlays/$item/config"
-    _cp $ROOT/conf.d/t.khs1994.com.$item.conf $ROOT/conf.d/www.custom.conf
-    _cp $ROOT/nginx.$item.conf $ROOT/nginx.custom.conf
-  done
-  # mysql conf
-  for item in $items
-  do
-    local ROOT="deployment/mysql/overlays/$item/config"
-    _cp $ROOT/docker.$item.cnf $ROOT/docker.custom.cnf
-  done
-  # php conf
-  for item in $items
-  do
-    local ROOT="deployment/php/overlays/$item/config"
-    local SOURCE_ROOT="helm/nginx-php/config/php"
-
-    _cp $SOURCE_ROOT/docker-php.ini             $ROOT/docker-php.custom.ini
-    _cp $SOURCE_ROOT/zz-docker.$item.conf       $ROOT/zz-docker.custom.conf
-    _cp $SOURCE_ROOT/ini/php.$item.ini          $ROOT/ini/php.custom.ini
-    _cp $SOURCE_ROOT/conf.d/docker.$item.ini    $ROOT/conf.d/docker.custom.ini
-    _cp $SOURCE_ROOT/composer/config.$item.json $ROOT/composer/config.custom.json
-  done
-  # redis conf
-  for item in $items
-  do
-    local ROOT="deployment/redis/overlays/$item/config"
-    _cp helm/redis/config/redis.$item.conf $ROOT/redis.custom.conf
-  done
-}
-
-_lnmp_k8s_custom_conf_generator
 
 if [ "$#" = 0 ];then print_help_info;exit;fi
 
@@ -700,11 +661,6 @@ _helm_install(){
   $(_sudo) rm -rf ${TMP_ROOT}/${GOOS}-${GOARCH}
 }
 
-_gvisor_docker_conf(){
-  print_info "config docker with gvisor(runsc) ..."
-  echo ""
-}
-
 _gvisor_containerd_conf(){
   if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
     print_info "$GOOS $GOARCH not support gvisor, skip config containerd with runsc"
@@ -1007,29 +963,6 @@ _k8s_install_kubectl_conf(){
   fi
 }
 
-_k8s_install_systemd(){
-  cd systemd
-
-  HOSTNAME=${1:-node1}
-
-  for file in `ls *.service`; \
-  do \
-    if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
-    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!${HOSTNAME}!g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
-      /etc/systemd/system/$file ; \
-  done
-
-  cd - > /dev/null
-
-  $(_sudo) systemctl daemon-reload || true
-}
-
 _cni_config(){
   print_info "config cni ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/cni/net.d
@@ -1212,10 +1145,6 @@ _docker_default_conf(){
   $(_sudo) cp systemd/docker.default.conf /etc/systemd/system/docker.service.d/
 }
 
-_kubectl_completion(){
-   ${K8S_ROOT}/bin/kubectl completion bash | $(_sudo) tee /etc/bash_completion.d/kubectl > /dev/null || true
-}
-
 # k8s install
 
 _check_master_ip(){
@@ -1254,34 +1183,22 @@ _cri_handler(){
   elif [ "$CONTAINER_RUNTIME" = "--docker" ];then
     print_info "Kubelet Runtime is Docker"
     sleep 15
-    if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
   else
-    print_info "CRI only support containerd crio docker"
+    print_info "CRI only support containerd | crio | docker"
     exit 1
   fi
 }
 
-_k8s_install_after(){
-  $(_sudo) systemctl daemon-reload || true
-
-  $(_sudo) useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/log/kubernetes
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/lib/{kubelet,kube-proxy}
-}
-
 _k8s_install_conf_cp(){
-  print_info "copy systemd unit file ..."
-  $(_sudo) cp systemd/*.service /etc/systemd/system/
+  print_info "copy kubernetes conf and cert file ..."
+
   $(_sudo) cp systemd/certs/*.pem ${K8S_ROOT}/certs/
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
     echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
 
-  print_info "copy kubernetes conf and cert file ..."
   $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT}/conf/
   $(_sudo) cp \
     systemd/certs/{audit-policy.yaml,\
@@ -1305,6 +1222,43 @@ _k8s_install_conf_replace(){
     $(_sudo) sed -i "s!##NODE_NAME##!node1!g" \
       ${K8S_ROOT}/conf/$file ; \
   done
+}
+
+_k8s_install_systemd(){
+  print_info "copy systemd unit file $@ ... "
+
+  if [ -n "${1}" ];then
+    for item in $@
+    do
+      $(_sudo) cp systemd/${item}.service /etc/systemd/system/
+    done
+  else
+    $(_sudo) cp systemd/*.service /etc/systemd/system/
+  fi
+
+  cd systemd
+
+  for file in `ls *.service`; \
+  do \
+    if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
+    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
+      /etc/systemd/system/$file ; \
+    $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
+      /etc/systemd/system/$file ; \
+    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME}!g" \
+      /etc/systemd/system/$file ; \
+    $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
+      /etc/systemd/system/$file ; \
+  done
+
+  cd - > /dev/null
+
+  $(_sudo) systemctl daemon-reload || true
+}
+
+_k8s_install_mkdir(){
+  $(_sudo) mkdir --parents ${K8S_ROOT}/var/log/kubernetes
+  $(_sudo) mkdir --parents ${K8S_ROOT}/var/lib/{kubelet,kube-proxy}
 }
 
 _k8s_install(){
@@ -1337,30 +1291,22 @@ _k8s_install(){
 
   _cri_handler $1
 
-  _k8s_install_after
+  _k8s_install_mkdir
 
   # kubectl
   _k8s_install_kubectl_conf
-  _kubectl_completion
 }
 
 # k8s join
 
 _k8s_join_conf_cp(){
-  $(_sudo) cp systemd/flanneld.service /etc/systemd/system/
-  # Docker
-  # kube-proxy
-  $(_sudo) cp systemd/kube-proxy.service /etc/systemd/system/
-  # kubelet
-  $(_sudo) cp systemd/kubelet.service /etc/systemd/system/
-  # cp pem
+  print_info "copy kubernetes conf and cert file ..."
   $(_sudo) cp systemd/certs/{ca.pem,\
 ca-key.pem,\
 flanneld-etcd-client-key.pem,\
 flanneld-etcd-client.pem} \
 ${K8S_ROOT}/certs/
 
-  print_info "copy kubernetes conf and cert file ..."
   $(_sudo) cp \
     systemd/certs/{kubelet.config.yaml,\
 kube-proxy.config.yaml,\
@@ -1379,24 +1325,24 @@ _k8s_join_conf_replace(){
       ${K8S_ROOT}/conf/$file ; \
     $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
       ${K8S_ROOT}/conf/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!${HOSTNAME}!g" \
+    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME}!g" \
       ${K8S_ROOT}/conf/$file ; \
   done
 }
 
 _k8s_join_hostname_handler(){
-  HOSTNAME=`hostname`
+  KUBE_HOSTNAME=`hostname`
 
-  if [ $IS_WSL2 -eq 1 ];then HOSTNAME='wsl2' ; fi
+  if [ $IS_WSL2 -eq 1 ];then KUBE_HOSTNAME='wsl2' ; fi
 
   for options in $@
   do
     test $options = '--skip-cp-k8s-bin' && export SKIP_CP_K8S_BIN=1
-    [[ $options =~ --hostname=* ]] && HOSTNAME=`echo $options | cut -d "=" -f 2`
+    [[ $options =~ --hostname=* ]] && KUBE_HOSTNAME=`echo $options | cut -d "=" -f 2`
   done
 
-  echo $HOSTNAME | grep -q '-' \
-    &&  print_info "hostname $HOSTNAME include -, \
+  echo $KUBE_HOSTNAME | grep -q '-' \
+    &&  print_info "hostname $KUBE_HOSTNAME include -, \
 not allowed, please input new hostname by --hostname=XXX" \
     && exit 1
 
@@ -1416,14 +1362,6 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig} > /dev/null
-}
-
-_k8s_join_after(){
-  $(_sudo) useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/log/kubernetes
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/lib/{kubelet,kube-proxy}
 }
 
 _k8s_join(){
@@ -1463,12 +1401,11 @@ _k8s_join(){
 
   _cri_handler $2
 
-  _k8s_install_systemd ${HOSTNAME}
+  _k8s_install_systemd flanneld kube-proxy kubelet
 
-  _k8s_join_after
+  _k8s_install_mkdir
 
   _k8s_install_kubectl_conf
-  _kubectl_completion
 }
 
 _helm_lnmp(){
@@ -1526,7 +1463,7 @@ _local_cleanup(){
 
   $(_sudo) ip addr flush cni0
   $(_sudo) ip addr flush docker0
-  $(_sudo) ip addr flush flannel.1
+  $(_sudo) ip addr flush flannel.4096
 
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
@@ -1558,69 +1495,58 @@ case $_command in
       ;;
     kubectl-install )
       kubectl_install
-    ;;
+      ;;
     kubectl-info )
       kubectl_info
-    ;;
-
+      ;;
     create )
       _create_lnmp $@
-    ;;
-
+      ;;
     delete )
       set +e
       _delete_lnmp $@
-    ;;
-
+      ;;
     cleanup )
       set +e
       _cleanup_lnmp $@
-    ;;
-
+      ;;
     local-install )
       _k8s_install $@
-    ;;
-
+      ;;
     local-up )
       _local_up
-    ;;
-
+      ;;
     local-cleanup )
       _local_cleanup
-    ;;
-
+      ;;
     join )
       if [ -z $1 ];then echo "Please Input Node Ip"; exit 1; fi
       _k8s_join $@
-    ;;
-
+      ;;
     helm-development )
-    _helm_lnmp development "$@"
-    ;;
+      _helm_lnmp development "$@"
+      ;;
     helm-testing )
-    _helm_lnmp testing "$@"
-    ;;
+      _helm_lnmp testing "$@"
+      ;;
     helm-staging )
-    _helm_lnmp staging "$@"
-    ;;
+      _helm_lnmp staging "$@"
+      ;;
     helm-production )
-    _helm_lnmp production "$@"
-    ;;
-
+      _helm_lnmp production "$@"
+      ;;
     nfs )
-    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
-    $(_sudo) modprobe nfsd || true
-    cd nfs-server
-    if [ "$1" = 'down' ];then
-      exec docker-compose stop nfs
-    elif [ "$1" = 'logs' ]; then
-      exec docker-compose logs nfs
-    fi
-    exec docker-compose up -d nfs
-
-    ;;
-
+      $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+      $(_sudo) modprobe nfsd || true
+      cd nfs-server
+      if [ "$1" = 'down' ];then
+        exec docker-compose stop nfs
+      elif [ "$1" = 'logs' ]; then
+        exec docker-compose logs nfs
+      fi
+      exec docker-compose up -d nfs
+      ;;
     * )
-    command -v $_command > /dev/null && $_command $@ || echo "command not found"
-    ;;
+      command -v $_command > /dev/null && $_command $@ || echo "command not found"
+      ;;
 esac

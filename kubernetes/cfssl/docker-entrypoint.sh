@@ -112,6 +112,7 @@ main (){
   #      | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
   #      -hostname="$registry_hosts" - | cfssljson -bare $CN_NAME
 
+# /etcd-server               Generate the certificate for serving etcd
 # etcd (server) hosts 为 Etcd 节点 IP
   export CN_NAME=etcd
 
@@ -154,6 +155,8 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -profile=kubernetes - | cfssljson -bare $CN_NAME
 
+# /apiserver-etcd-client
+# Generate the certificate the apiserver uses to access etcd
 # kube-apiserver (client) 连接 Etcd
   export CN_NAME=kube-apiserver-etcd-client
   export O=system:masters
@@ -204,6 +207,7 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
        -profile=kubernetes - | cfssljson -bare $CN_NAME
 
+# /apiserver                 Generate the certificate for serving the Kubernetes API
 # kube-apiserver (server)
   export CN_NAME=kube-apiserver
   export k8s_hosts=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local
@@ -224,7 +228,8 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - \
        | cfssljson -bare apiserver
-
+# /apiserver-kubelet-client
+# Generate the certificate for the API server to connect to kubelet
 # kube-apiserver-kubelet-client (client)
   export CN_NAME=kube-apiserver-kubelet-client
   export O=system:masters
