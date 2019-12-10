@@ -1,7 +1,7 @@
 FROM nginx:1.17.6-alpine
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.16.1"
+      version="1.17.0"
 
 ARG CT_URL=https://github.com/coreos/container-linux-config-transpiler/releases/download/
 ARG FCCT_URL=https://github.com/coreos/fcct/releases/download/

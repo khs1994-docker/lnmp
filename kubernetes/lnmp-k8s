@@ -1282,14 +1282,14 @@ _k8s_install(){
 
   _k8s_install_conf_replace
 
-  _k8s_install_systemd
-
   _gvisor_install
 
   _crictl_install
   _runc_install
 
   _cri_handler $1
+
+  _k8s_install_systemd
 
   _k8s_install_mkdir
 
