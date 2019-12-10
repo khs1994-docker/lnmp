@@ -1245,7 +1245,7 @@ _k8s_install_systemd(){
       /etc/systemd/system/$file ; \
     $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
       /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME}!g" \
+    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME:-node1}!g" \
       /etc/systemd/system/$file ; \
     $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
       /etc/systemd/system/$file ; \
