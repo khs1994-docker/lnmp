@@ -86,9 +86,6 @@ Commands:
   helm-staging       Install Helm LNMP In Staging
   helm-production    Install Helm LNMP In Production
 
-Remove custom conf:
-
-PS:> ls -R .\deployment\ | %{ if (`$_.Name -match 'custom.*'){rm `$_} }
 "
 }
 
@@ -261,24 +258,24 @@ $ kubectl config use-context docker-desktop
 
     $CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-php-conf-0.0.1 `
-      --from-file=php.ini=${CONFIG_ROOT}/ini/php.custom.ini `
-      --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.custom.conf `
-      --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.custom.json `
-      --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini `
+      --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini `
+      --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf `
+      --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json `
+      --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini `
       --dry-run -o yaml `
       | kubectl -n $NAMESPACE apply -f - $options
     kubectl -n $NAMESPACE label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $options
 
     $CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-mysql-cnf-0.0.1 `
-       --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf `
+       --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf `
        --dry-run -o yaml `
        | kubectl -n $NAMESPACE apply -f - $options
     kubectl -n $NAMESPACE label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $options
 
     $CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-nginx-conf-0.0.1 `
-       --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf `
+       --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf `
        --dry-run -o yaml `
        | kubectl -n $NAMESPACE apply -f - $options
     kubectl -n $NAMESPACE label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $options
