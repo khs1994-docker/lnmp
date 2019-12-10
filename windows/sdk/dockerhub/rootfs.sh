@@ -85,6 +85,12 @@ if [ "$schemaVersion" -eq 1 ];then
 
   local digest=`cat $manifest_json_file | jq ".layers[$layersIndex].digest" | sed 's/"//g'`
 
+  if [ "${digest}" = 'null' ];then
+    echo "image not found, exit" > /dev/stderr
+
+    exit 1
+  fi
+
   echo "==> Digest is $digest" > /dev/stderr
 
   . $ScriptRoot/blobs/get.sh

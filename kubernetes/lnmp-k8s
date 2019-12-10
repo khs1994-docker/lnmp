@@ -1466,6 +1466,7 @@ _local_cleanup(){
   $(_sudo) ip addr flush cni0
   $(_sudo) ip addr flush docker0
   $(_sudo) ip addr flush flannel.4096
+  $(_sudo) ip addr flush flannel.1
 
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 

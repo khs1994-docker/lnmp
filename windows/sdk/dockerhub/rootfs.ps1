@@ -122,6 +122,12 @@ if($result.schemaVersion -eq 1){
 
   Write-Warning "Digest is $digest"
 
+  if(!$digest){
+    Write-Warning "image not found, exit"
+
+    return 1
+  }
+
   . $PSScriptRoot/blobs/get.ps1
 
   $dist = get $token $image $digest $registry $dist

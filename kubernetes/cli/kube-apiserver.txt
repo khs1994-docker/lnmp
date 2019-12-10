@@ -9,6 +9,7 @@ Usage:
 Generic flags:
 
       --advertise-address ip                         The IP address on which to advertise the apiserver to members of the cluster. This address must be reachable by the rest of the cluster. If blank, the --bind-address will be used. If --bind-address is unspecified, the host's default interface will be used.
+      --cloud-provider-gce-l7lb-src-cidrs cidrs      CIDRs opened in GCE firewall for L7 LB traffic proxy & health checks (default 130.211.0.0/22,35.191.0.0/16)
       --cors-allowed-origins strings                 List of allowed origins for CORS, comma separated.  An allowed origin can be a regular expression to support subdomain matching. If this list is empty CORS will not be enabled.
       --default-not-ready-toleration-seconds int     Indicates the tolerationSeconds of the toleration for notReady:NoExecute that is added by default to every pod that does not already have such a toleration. (default 300)
       --default-unreachable-toleration-seconds int   Indicates the tolerationSeconds of the toleration for unreachable:NoExecute that is added by default to every pod that does not already have such a toleration. (default 300)
@@ -16,10 +17,12 @@ Generic flags:
       --external-hostname string                     The hostname to use when generating externalized URLs for this master (e.g. Swagger API Docs).
       --feature-gates mapStringBool                  A set of key=value pairs that describe feature gates for alpha/experimental features. Options are:
                                                      APIListChunking=true|false (BETA - default=true)
+                                                     APIPriorityAndFairness=true|false (ALPHA - default=false)
                                                      APIResponseCompression=true|false (BETA - default=true)
                                                      AllAlpha=true|false (ALPHA - default=false)
+                                                     AllBeta=true|false (BETA - default=false)
+                                                     AllowInsecureBackendProxy=true|false (BETA - default=true)
                                                      AppArmor=true|false (BETA - default=true)
-                                                     AttachVolumeLimit=true|false (BETA - default=true)
                                                      BalanceAttachedNodeVolumes=true|false (ALPHA - default=false)
                                                      BlockVolume=true|false (BETA - default=true)
                                                      BoundServiceAccountTokenVolume=true|false (ALPHA - default=false)
@@ -28,20 +31,23 @@ Generic flags:
                                                      CSIBlockVolume=true|false (BETA - default=true)
                                                      CSIDriverRegistry=true|false (BETA - default=true)
                                                      CSIInlineVolume=true|false (BETA - default=true)
-                                                     CSIMigration=true|false (ALPHA - default=false)
-                                                     CSIMigrationAWS=true|false (ALPHA - default=false)
+                                                     CSIMigration=true|false (BETA - default=true)
+                                                     CSIMigrationAWS=true|false (BETA - default=false)
+                                                     CSIMigrationAWSComplete=true|false (ALPHA - default=false)
                                                      CSIMigrationAzureDisk=true|false (ALPHA - default=false)
+                                                     CSIMigrationAzureDiskComplete=true|false (ALPHA - default=false)
                                                      CSIMigrationAzureFile=true|false (ALPHA - default=false)
-                                                     CSIMigrationGCE=true|false (ALPHA - default=false)
+                                                     CSIMigrationAzureFileComplete=true|false (ALPHA - default=false)
+                                                     CSIMigrationGCE=true|false (BETA - default=false)
+                                                     CSIMigrationGCEComplete=true|false (ALPHA - default=false)
                                                      CSIMigrationOpenStack=true|false (ALPHA - default=false)
-                                                     CSINodeInfo=true|false (BETA - default=true)
+                                                     CSIMigrationOpenStackComplete=true|false (ALPHA - default=false)
                                                      CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
-                                                     CustomResourceDefaulting=true|false (BETA - default=true)
                                                      DevicePlugins=true|false (BETA - default=true)
                                                      DryRun=true|false (BETA - default=true)
                                                      DynamicAuditing=true|false (ALPHA - default=false)
                                                      DynamicKubeletConfig=true|false (BETA - default=true)
-                                                     EndpointSlice=true|false (ALPHA - default=false)
+                                                     EndpointSlice=true|false (BETA - default=false)
                                                      EphemeralContainers=true|false (ALPHA - default=false)
                                                      EvenPodsSpread=true|false (ALPHA - default=false)
                                                      ExpandCSIVolumes=true|false (BETA - default=true)
@@ -55,28 +61,23 @@ Generic flags:
                                                      LegacyNodeRoleBehavior=true|false (ALPHA - default=true)
                                                      LocalStorageCapacityIsolation=true|false (BETA - default=true)
                                                      LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
-                                                     MountContainers=true|false (ALPHA - default=false)
                                                      NodeDisruptionExclusion=true|false (ALPHA - default=false)
-                                                     NodeLease=true|false (BETA - default=true)
                                                      NonPreemptingPriority=true|false (ALPHA - default=false)
+                                                     PodDisruptionBudget=true|false (BETA - default=true)
                                                      PodOverhead=true|false (ALPHA - default=false)
-                                                     PodShareProcessNamespace=true|false (BETA - default=true)
                                                      ProcMountType=true|false (ALPHA - default=false)
                                                      QOSReserved=true|false (ALPHA - default=false)
                                                      RemainingItemCount=true|false (BETA - default=true)
                                                      RemoveSelfLink=true|false (ALPHA - default=false)
-                                                     RequestManagement=true|false (ALPHA - default=false)
                                                      ResourceLimitsPriorityFunction=true|false (ALPHA - default=false)
-                                                     ResourceQuotaScopeSelectors=true|false (BETA - default=true)
                                                      RotateKubeletClientCertificate=true|false (BETA - default=true)
                                                      RotateKubeletServerCertificate=true|false (BETA - default=true)
                                                      RunAsGroup=true|false (BETA - default=true)
                                                      RuntimeClass=true|false (BETA - default=true)
                                                      SCTPSupport=true|false (ALPHA - default=false)
-                                                     ScheduleDaemonSetPods=true|false (BETA - default=true)
                                                      ServerSideApply=true|false (BETA - default=true)
-                                                     ServiceLoadBalancerFinalizer=true|false (BETA - default=true)
                                                      ServiceNodeExclusion=true|false (ALPHA - default=false)
+                                                     ServiceTopology=true|false (ALPHA - default=false)
                                                      StartupProbe=true|false (ALPHA - default=false)
                                                      StorageVersionHash=true|false (BETA - default=true)
                                                      StreamingProxyRedirects=true|false (BETA - default=true)
@@ -85,26 +86,23 @@ Generic flags:
                                                      Sysctls=true|false (BETA - default=true)
                                                      TTLAfterFinished=true|false (ALPHA - default=false)
                                                      TaintBasedEvictions=true|false (BETA - default=true)
-                                                     TaintNodesByCondition=true|false (BETA - default=true)
                                                      TokenRequest=true|false (BETA - default=true)
                                                      TokenRequestProjection=true|false (BETA - default=true)
                                                      TopologyManager=true|false (ALPHA - default=false)
                                                      ValidateProxyRedirects=true|false (BETA - default=true)
                                                      VolumePVCDataSource=true|false (BETA - default=true)
-                                                     VolumeSnapshotDataSource=true|false (ALPHA - default=false)
-                                                     VolumeSubpathEnvExpansion=true|false (BETA - default=true)
-                                                     WatchBookmark=true|false (BETA - default=true)
+                                                     VolumeSnapshotDataSource=true|false (BETA - default=true)
                                                      WinDSR=true|false (ALPHA - default=false)
                                                      WinOverlay=true|false (ALPHA - default=false)
                                                      WindowsGMSA=true|false (BETA - default=true)
-                                                     WindowsRunAsUserName=true|false (ALPHA - default=false)
+                                                     WindowsRunAsUserName=true|false (BETA - default=true)
       --livez-grace-period duration                  This option represents the maximum amount of time it should take for apiserver to complete its startup sequence and become live. From apiserver's start time to when this amount of time has elapsed, /livez will assume that unfinished post-start hooks will complete successfully and therefore return true.
       --master-service-namespace string              DEPRECATED: the namespace from which the kubernetes master services should be injected into pods. (default "default")
       --max-mutating-requests-inflight int           The maximum number of mutating requests in flight at a given time. When the server exceeds this, it rejects requests. Zero for no limit. (default 200)
       --max-requests-inflight int                    The maximum number of non-mutating requests in flight at a given time. When the server exceeds this, it rejects requests. Zero for no limit. (default 400)
       --min-request-timeout int                      An optional field indicating the minimum number of seconds a handler must keep a request open before timing it out. Currently only honored by the watch request handler, which picks a randomized value above this number as the connection timeout, to spread out load. (default 1800)
       --request-timeout duration                     An optional field indicating the duration a handler must keep a request open before timing it out. This is the default request timeout for requests but may be overridden by flags such as --min-request-timeout for specific types of requests. (default 1m0s)
-      --shutdown-delay-duration duration             Time to delay the termination. During that time the server keeps serving requests normally and /healthz returns success, but /readzy immediately returns failure. Graceful termination starts after this delay has elapsed. This can be used to allow load balancer to stop sending traffic to this server.
+      --shutdown-delay-duration duration             Time to delay the termination. During that time the server keeps serving requests normally and /healthz returns success, but /readyz immediately returns failure. Graceful termination starts after this delay has elapsed. This can be used to allow load balancer to stop sending traffic to this server.
       --target-ram-mb int                            Memory limit for apiserver in MB (used to configure sizes of caches, etc.)
 
 Etcd flags:
@@ -190,6 +188,7 @@ Authentication flags:
       --api-audiences strings                             Identifiers of the API. The service account token authenticator will validate that tokens used against the API are bound to at least one of these audiences. If the --service-account-issuer flag is configured and this flag is not, this field defaults to a single element list containing the issuer URL .
       --authentication-token-webhook-cache-ttl duration   The duration to cache responses from the webhook token authenticator. (default 2m0s)
       --authentication-token-webhook-config-file string   File with webhook configuration for token authentication in kubeconfig format. The API server will query the remote service to determine authentication for bearer tokens.
+      --authentication-token-webhook-version string       The API version of the authentication.k8s.io TokenReview to send to and expect from the webhook. (default "v1beta1")
       --client-ca-file string                             If set, any request presenting a client certificate signed by one of the authorities in the client-ca-file is authenticated with an identity corresponding to the CommonName of the client certificate.
       --enable-bootstrap-token-auth                       Enable to allow secrets of type 'bootstrap.kubernetes.io/token' in the 'kube-system' namespace to be used for TLS bootstrapping authentication.
       --oidc-ca-file string                               If set, the OpenID server's certificate will be verified by one of the authorities in the oidc-ca-file, otherwise the host's root CA set will be used.
@@ -219,15 +218,23 @@ Authorization flags:
       --authorization-webhook-cache-authorized-ttl duration     The duration to cache 'authorized' responses from the webhook authorizer. (default 5m0s)
       --authorization-webhook-cache-unauthorized-ttl duration   The duration to cache 'unauthorized' responses from the webhook authorizer. (default 30s)
       --authorization-webhook-config-file string                File with webhook configuration in kubeconfig format, used with --authorization-mode=Webhook. The API server will query the remote service to determine access on the API server's secure port.
+      --authorization-webhook-version string                    The API version of the authorization.k8s.io SubjectAccessReview to send to and expect from the webhook. (default "v1beta1")
 
 Cloud provider flags:
 
       --cloud-config string     The path to the cloud provider configuration file. Empty string for no configuration file.
       --cloud-provider string   The provider for cloud services. Empty string for no provider.
 
-Api enablement flags:
+API enablement flags:
 
-      --runtime-config mapStringString   A set of key=value pairs that describe runtime configuration that may be passed to apiserver. <group>/<version> (or <version> for the core group) key can be used to turn on/off specific api versions. api/all is special key to control all api versions, be careful setting it false, unless you know what you do. api/legacy is deprecated, we will remove it in the future, so stop using it.
+      --runtime-config mapStringString   A set of key=value pairs that enable or disable built-in APIs. Supported options are:
+                                         v1=true|false for the core API group
+                                         <group>/<version>=true|false for a specific API group and version (e.g. apps/v1=true)
+                                         api/all=true|false controls all API versions
+                                         api/ga=true|false controls all API versions of the form v[0-9]+
+                                         api/beta=true|false controls all API versions of the form v[0-9]+beta[0-9]+
+                                         api/alpha=true|false controls all API versions of the form v[0-9]+alpha[0-9]+
+                                         api/legacy is deprecated, and will be removed in a future version
 
 Egress selector flags:
 
@@ -239,6 +246,10 @@ Admission flags:
       --admission-control-config-file string   File with admission control configuration.
       --disable-admission-plugins strings      admission plugins that should be disabled although they are in the default enabled plugins list (NamespaceLifecycle, LimitRanger, ServiceAccount, TaintNodesByCondition, Priority, DefaultTolerationSeconds, DefaultStorageClass, StorageObjectInUseProtection, PersistentVolumeClaimResize, MutatingAdmissionWebhook, ValidatingAdmissionWebhook, RuntimeClass, ResourceQuota). Comma-delimited list of admission plugins: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. The order of plugins in this flag does not matter.
       --enable-admission-plugins strings       admission plugins that should be enabled in addition to default enabled ones (NamespaceLifecycle, LimitRanger, ServiceAccount, TaintNodesByCondition, Priority, DefaultTolerationSeconds, DefaultStorageClass, StorageObjectInUseProtection, PersistentVolumeClaimResize, MutatingAdmissionWebhook, ValidatingAdmissionWebhook, RuntimeClass, ResourceQuota). Comma-delimited list of admission plugins: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. The order of plugins in this flag does not matter.
+
+Metrics flags:
+
+      --show-hidden-metrics-for-version string   The previous version for which you want to show hidden metrics. Only the previous minor version is meaningful, other values will not be allowed. The format is <major>.<minor>, e.g.: '1.16'. The purpose of this format is make sure you have the opportunity to notice if the next release hides additional metrics, rather than being surprised when they are permanently removed in the release after that.
 
 Misc flags:
 
@@ -258,7 +269,7 @@ Misc flags:
       --proxy-client-cert-file string             Client certificate used to prove the identity of the aggregator or kube-apiserver when it must call out during a request. This includes proxying requests to a user api-server and calling out to webhook admission plugins. It is expected that this cert includes a signature from the CA in the --requestheader-client-ca-file flag. That CA is published in the 'extension-apiserver-authentication' configmap in the kube-system namespace. Components receiving calls from kube-aggregator should use that CA to perform their half of the mutual TLS verification.
       --proxy-client-key-file string              Private key for the client certificate used to prove the identity of the aggregator or kube-apiserver when it must call out during a request. This includes proxying requests to a user api-server and calling out to webhook admission plugins.
       --service-account-signing-key-file string   Path to the file that contains the current private key of the service account token issuer. The issuer will sign issued ID tokens with this private key. (Requires the 'TokenRequest' feature gate.)
-      --service-cluster-ip-range string           A CIDR notation IP range from which to assign service cluster IPs. This must not overlap with any IP ranges assigned to nodes for pods. (default "10.0.0.0/24")
+      --service-cluster-ip-range string           A CIDR notation IP range from which to assign service cluster IPs. This must not overlap with any IP ranges assigned to nodes for pods.
       --service-node-port-range portRange         A port range to reserve for services with NodePort visibility. Example: '30000-32767'. Inclusive at both ends of the range. (default 30000-32767)
 
 Global flags:
