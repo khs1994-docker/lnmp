@@ -75,8 +75,9 @@ async function run() {
     '-v', '/home/runner/work/_temp/_github_home:/github/home',
     '-v', '/home/runner/work/_temp/_github_workflow:/github/workflow',
     '-v', `${RUNNER_WORKSPACE}/${WORKSPACE}:/github/workspace`,
+    '--entrypoint', 'sh',
     IMAGE,
-    'sh', '-cex', ARGS,
+    '-cex', ARGS,
   ]);
 }
 
