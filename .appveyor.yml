@@ -1,6 +1,5 @@
 version: build-{build}.{branch}
-# image: Visual Studio 2019
-image: Windows Server 2019
+image: Visual Studio 2019
 
 branches:
   only:
@@ -11,8 +10,8 @@ branches:
 
 # skip_non_tags: true
 clone_depth: 1
-# clone_folder: C:\Users\appveyor\lnmp
-clone_folder: D:\lnmp
+clone_folder: C:\Users\appveyor\lnmp
+# clone_folder: D:\lnmp
 
 build_script:
   - ps: |
@@ -29,6 +28,9 @@ build_script:
       & $Env:ProgramFiles\Docker\Docker\DockerCli.exe -Shutdown
   - ps: date
   - ps: get-command Switch-DockerLinux
+  - ps: net user
+  - ps: ls C:\Users
+  - ps: cat $HOME\Documents\WindowsPowerShell\Modules\docker-appveyor\docker-appveyor.psm1
   # - ps: choco uninstall docker-desktop -force
   # - ps: rm -Force $Env:ProgramFiles\Docker\Docker\"Docker for windows Installer.exe" -ErrorAction SilentlyContinue
   # - ps: start-process powershell -Argumentlist "-c","rm","-Force","'C:\Program Files\Docker\Docker\Docker for windows Installer.exe'" -Verb Runas -WindowStyle Hidden -wait
@@ -62,11 +64,11 @@ build_script:
   - ps: docker-compose --version
   - ps: date
   - ps: |
-      [environment]::SetEnvironmentvariable("Path", "D:\;$env:PATH","Process")
+      [environment]::SetEnvironmentvariable("Path", "C:\;$env:PATH","Process")
   - ps: echo $env:PATH
   - ps: ./lnmp-docker compose
   - ps: get-command docker-compose
-  - ps: ./lnmp-docker compose D:\docker-compose.exe
+  - ps: ./lnmp-docker compose C:\docker-compose.exe
   - ps: date
   - ps: get-command docker-compose
   - ps: docker-compose --version
@@ -76,7 +78,8 @@ build_script:
   # - pwsh: Invoke-WebRequest -Uri https://github.com/docker/compose/releases/download/1.23.2/docker-compose-Windows-x86_64.exe -OutFile "C:\Program Files\Docker\Docker\Resources\bin\docker-compose.exe"
   # - pwsh: docker-compose --version
   - pwsh: ./lnmp-docker
-  - pwsh: icacls d:\lnmp\log /grant 'DockerExchange:f' /T
+  - pwsh: icacls C:\Users\appveyor\lnmp /grant 'DockerExchange:f' /T | out-null
+  - pwsh: icacls C:\Users\appveyor\lnmp\log /grant 'DockerExchange:f' /T
   - pwsh: |
       ./lnmp-docker services
       ./lnmp-docker config | out-file docker-compose.yml
@@ -112,7 +115,7 @@ build_script:
       write-host "Test gcr.io k8s.gcr.io mirror"
       ping gcr.io -n 1
       (ping gcr.io -n 1).split(" ")[11]
-      '$LNMP_CACHE="D:/"' | Out-File -Append .env.ps1
+      '$LNMP_CACHE="C:/"' | Out-File -Append .env.ps1
       ./lnmp-docker gcr.io
       ./lnmp-docker gcr.io --no-pull
       sleep 5
@@ -143,11 +146,10 @@ build_script:
   #     (Invoke-WebRequest https://demo.t.khs1994.com/index.php).content
   #     docker-compose -f docker-windows.yml down
 test_script:
-  - ps: |
-      wsl --help
-      wslconfig /setdefault ubuntu-18.04
-      wsl lsb_release -a
-      wsl ls /mnt/d/lnmp
+  - ps: wsl --help
+  - ps: wslconfig /setdefault ubuntu-18.04
+  - ps: wsl cat /etc/os-release
+  - ps: wsl ls -la /mnt/c/Users/appveyor/lnmp
   - ps: |
       if($APPVEYOR_REPO_TAG){
         & $HOME\lnmp\windows\lnmp-windows-pm install php composer nginx node
