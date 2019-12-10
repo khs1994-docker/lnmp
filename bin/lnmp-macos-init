@@ -26,6 +26,7 @@ coreos-ct \
 gnu-sed \
 tree \
 wget \
+jq \
 "
 
 PECL=" igbinary \
@@ -51,9 +52,12 @@ _install_brew(){
   # https://github.com/Homebrew/homebrew-core
   # https://mirrors.ustc.edu.cn/homebrew-core.git
 
-  echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.bash_profile
-  # https://mirrors.ustc.edu.cn/homebrew-bottles
-  source ~/.bash_profile
+  for item in ".bash_profile .zshrc"
+  do
+    echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/$item
+    # https://mirrors.ustc.edu.cn/homebrew-bottles
+    source ~/.bash_profile
+  done
 
   if [ -f ~/.config/fish/config.fish ];then
     echo "set -gx HOMEBREW_BOTTLE_DOMAIN https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles" >> ~/.config/fish/config.fish
@@ -81,7 +85,7 @@ _pecl(){
 }
 
 _fish(){
-  if ![ -d ~/git/oh-my-fish ];then
+  if ! [ -d ~/git/oh-my-fish ];then
     git clone --depth=1 https://github.com/oh-my-fish/oh-my-fish.git ~/git/oh-my-fish
   fi
 }

@@ -1,5 +1,7 @@
 getToken(){
+  command -v curl > /dev/null || echo "==> Please install curl" > /dev/stderr
   command -v curl > /dev/null || exit 1
+  command -v jq > /dev/null || echo "==> Please install jq" > /dev/stderr
   command -v jq > /dev/null || exit 1
 
   image=$1
