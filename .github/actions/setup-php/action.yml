@@ -8,7 +8,7 @@ inputs:
     description: PHP version
     default: 7.4.0
   php_type:
-    description: php image type, fpm composer or swoole
+    description: php image type, fpm | composer | swoole | php-cs-fixer | sami
     default: fpm
   job_container_network:
     description: The id of the container network. The runner creates the network used by all containers in a job

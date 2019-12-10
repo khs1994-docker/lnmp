@@ -50,7 +50,7 @@ jobs:
       - name: php-cs-fixer
         uses: khs1994-docker/actions-setup-php@master
         with:
-          php_type: composer
+          php_type: php-cs-fixer
           args: |
             php-cs-fixer fix
       - name: after_success
