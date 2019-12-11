@@ -48,4 +48,14 @@ worker_processes 1;
                 proxy_connect_timeout 1s;
                 proxy_pass wsl2kubecontrollermanager;
               }
+
+              upstream wsl2kubeproxy {
+                server ##WSL2_HOST##:10249;
+              }
+
+              server {
+                listen 10249;
+                proxy_connect_timeout 1s;
+                proxy_pass wsl2kubeproxy;
+              }
           }

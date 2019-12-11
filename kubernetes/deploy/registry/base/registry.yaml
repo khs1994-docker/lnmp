@@ -8,7 +8,10 @@ spec:
   ports:
   - name: http
     port: 5000
-    targetPort: 5000
+    targetPort: http
+  - name: debug
+    port: 5001
+    targetPort: debug
   selector:
     app: registry
 
