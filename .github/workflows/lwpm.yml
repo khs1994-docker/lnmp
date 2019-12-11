@@ -83,7 +83,7 @@ jobs:
       env:
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      # continue-on-error: true
+      continue-on-error: true
     - name: List docker image rootfs
       run : |
         ls ~/.khs1994-docker-lnmp/dockerhub

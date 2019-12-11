@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kube-system
+  name: kube-scheduler
+  labels:
+    k8s-app: kube-scheduler #与servicemonitor中的selector匹配
+spec:
+  ports:
+  - name: http-metrics
+    port: 10251
+    protocol: TCP
+  clusterIP: None
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: kube-scheduler
+  namespace: kube-system
+  labels:
+    k8s-app: kube-scheduler
+subsets:
+  - addresses:
+    - ip: 192.168.199.100
+    ports:
+      - name: http-metrics
+        port: 10251

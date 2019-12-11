@@ -927,11 +927,9 @@ _k8s_install_dep(){
   set -e
 }
 
-_k8s_install_common(){
+_k8s_install_disable_firewalld(){
   # 关闭防火墙
   $(_sudo) systemctl stop firewalld && $(_sudo) systemctl disable firewalld || true
-  $(_sudo) mkdir -p /etc/{docker,systemd/system}
-  $(_sudo) chmod -R 755 /opt
 }
 
 _k8s_install_cp_bin(){
@@ -969,8 +967,8 @@ _cni_config(){
   $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
 }
 
-_cri_config(){
-  print_info "config cri ..."
+_cri_sysctl(){
+  print_info "exec sysctl to meet cri..."
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
   $(_sudo) touch /etc/sysctl.d/99-kubernetes-cri.conf
   echo "net.bridge.bridge-nf-call-iptables  = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
@@ -1101,14 +1099,13 @@ _crio_install(){
 }
 
 _crio_config(){
-  _crio_install
   cd $source_path
   print_info "config cri-o ..."
   $(_sudo) mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/crio/crio.conf | $(_sudo) tee /etc/crio/crio.conf
 
-  _cri_config
+  _cri_sysctl
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
 
@@ -1128,7 +1125,7 @@ _containerd_cri_config(){
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3/config.toml \
     | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
 
-  _cri_config
+  _cri_sysctl
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
 
@@ -1176,6 +1173,7 @@ _cri_handler(){
     _crictl_containerd_conf
   elif [ "$CONTAINER_RUNTIME" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
+    _crio_install
     _crio_config
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
@@ -1268,7 +1266,10 @@ _k8s_install(){
 
   _k8s_install_dep
 
-  _k8s_install_common
+  $(_sudo) mkdir -p /etc/{docker,systemd/system}
+  $(_sudo) chmod -R 755 /opt
+
+  _k8s_install_disable_firewalld
 
   _etcd_install
 
@@ -1377,7 +1378,11 @@ _k8s_join(){
 
   # dep
   _k8s_install_dep
-  _k8s_install_common
+
+  $(_sudo) mkdir -p /etc/{docker,systemd/system}
+  $(_sudo) chmod -R 755 /opt
+
+  _k8s_install_disable_firewalld
 
   # cni
   _cni_install

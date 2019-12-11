@@ -54,3 +54,5 @@ foreach ($item in $(wsl -l --running)){
     exit 1
   }
 }
+
+wsl -u root -- mount --make-shared /

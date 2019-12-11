@@ -1,0 +1,5 @@
+bases:
+- ../../../secrets/t.khs1994.com
+resources:
+- ingress.yaml
+namespace: monitoring

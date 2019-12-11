@@ -1,0 +1,33 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: ingress
+spec:
+  tls:
+  - hosts:
+    - prometheus.t.khs1994.com
+    - grafana.t.khs1994.com
+    - prometheus-server.t.khs1994.com
+    secretName: cert.t.khs1994.com
+  rules:
+  - host: prometheus.t.khs1994.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: alertmanager-main
+          servicePort: 9093
+  - host: grafana.t.khs1994.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grafana
+          servicePort: 3000
+  - host: prometheus-server.t.khs1994.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: prometheus-k8s
+          servicePort: 9090

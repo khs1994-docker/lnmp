@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kube-controller-manager
+spec:
+  endpoints:
+  - interval: 30s
+    metricRelabelings:
+    - action: drop
+      regex: etcd_(debugging|disk|request|server).*
+      sourceLabels:
+      - __name__
+    port: https-metrics
+    scheme: https
+    tlsConfig:
+      caFile: /etc/prometheus/secrets/kube-controller-manager-certs/ca.cert
+      certFile: /etc/prometheus/secrets/kube-controller-manager-certs/healthcheck-client.cert
+      keyFile: /etc/prometheus/secrets/kube-controller-manager-certs/healthcheck-client.key
+      insecureSkipVerify: true

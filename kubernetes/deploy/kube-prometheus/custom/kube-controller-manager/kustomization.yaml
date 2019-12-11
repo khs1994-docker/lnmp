@@ -1,0 +1,5 @@
+resources:
+- base/prometheus-serviceMonitorKubeControllerManager.yaml
+patches:
+  - patch.yaml
+namespace: monitoring

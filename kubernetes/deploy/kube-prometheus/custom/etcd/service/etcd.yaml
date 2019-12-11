@@ -1,0 +1,26 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: etcd
+  namespace: kube-system
+  labels:
+    k8s-app: etcd
+spec:
+  ports:
+  - port: 12379
+    name: etcd
+  clusterIP: None
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: etcd
+  namespace: kube-system
+  labels:
+    k8s-app: etcd
+subsets:
+  - addresses:
+    - ip: 192.168.199.100
+    ports:
+      - name: etcd
+        port: 12379
