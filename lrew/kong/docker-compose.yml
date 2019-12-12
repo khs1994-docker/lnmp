@@ -39,7 +39,7 @@ services:
   kong:
     &kong
     << : *default-common
-    image: kong:1.4.1-alpine
+    image: kong:1.4.2-alpine
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgresql-kong
