@@ -1,4 +1,3 @@
 resources:
-- sc.yaml
 - pvc.yaml
 - pod.yaml

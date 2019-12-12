@@ -29,6 +29,14 @@ generatorOptions:
 $ kubectl apply -k base
 ```
 
-## 创建 services
+## 创建 service
+
+```bash
+$ kubectl apply -k service
+```
 
 ## 修改 prometheus-serviceMonitorKubeControllerManager
+
+```bash
+$ kubectl apply -k .
+```

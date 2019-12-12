@@ -33,7 +33,7 @@ $ wsl --set-version Ubuntu-18.04 2
 
 ## 新建 `k8s-data` WSL2 发行版
 
-**必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用。
+**必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用以下方法。
 
 ```powershell
 $ cd ~/lnmp
@@ -79,6 +79,7 @@ Filesystem                Size      Used Available Use% Mounted on
 
 # 在 ubuntu-18.04 中将 /dev/sdc(不固定，必须通过上面的命令获取该值) 挂载到 /wsl/k8s-data
 
+$ wsl -u root -- mkdir -p /wsl/k8s-data
 $ wsl -u root -- mount /dev/sdc /wsl/k8s-data
 ```
 

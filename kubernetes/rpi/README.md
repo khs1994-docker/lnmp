@@ -27,6 +27,8 @@ $ foreach($item in $items){scp ./kubernetes-release/release/v1.17.0-linux-arm64/
 
 ## 升级 libseccomp2 到 [2.4.x](https://packages.debian.org/bullseye/libseccomp2)
 
+* https://github.com/containerd/containerd/issues/3871
+
 ```bash
 $ curl -L -o http://ftp.cn.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.2-2_arm64.deb
 

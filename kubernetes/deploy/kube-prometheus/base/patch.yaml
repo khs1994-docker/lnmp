@@ -19,7 +19,7 @@ spec:
         slector:
           matchLabels:
             app: prometheus-k8s
-        storageClassName: csi-hostpath-sc
+        storageClassName: local-path
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
@@ -41,4 +41,4 @@ spec:
         slector:
           matchLabels:
             app: prometheus-alertmanager
-        storageClassName: csi-hostpath-sc
+        storageClassName: local-path

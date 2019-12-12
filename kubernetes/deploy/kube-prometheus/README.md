@@ -22,17 +22,21 @@ $ kubectl create -f kube-prometheus/manifests/
 
 ## statefulset.apps/alertmanager-main 启动出错
 
-增加 `pause: true` 去掉 `livenessProbe` `readinessprobe`
+增加 `pause: true`，适当增加 `livenessProbe` `readinessprobe` 时间 `periodSeconds: 100`
 
 ## 动态 PV
 
-参考 `storage/csi/hostpath`
+参考 `storage/local-path`
 
 ## 监控
 
 查看 `custom` 文件夹内容
 
 ## 默认只监控 `kube-system` 和 `monitoring` NS 中的服务
+
+## Grafana
+
+* https://grafana.com/grafana/dashboards
 
 ## 参考
 

@@ -2,6 +2,18 @@
 
 **动态**
 
+**仅适用于 v1.17.x**
+
+## CRD
+
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
+
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
+
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/master/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
+```
+
 ## 部署
 
 ```bash
@@ -13,15 +25,18 @@ $ kubectl apply -k deploy
 ## RBAC
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-attacher/v2.0.0/deploy/kubernetes/rbac.yaml
+$ curl -L https://raw.githubusercontent.com/kubernetes-csi/external-attacher/v2.0.0/deploy/kubernetes/rbac.yaml -o deploy/rbac/attacher.yaml
 
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-provisioner/v1.4.0/deploy/kubernetes/rbac.yaml
+$ curl -L https://raw.githubusercontent.com/kubernetes-csi/external-provisioner/v1.5.0-rc1/deploy/kubernetes/rbac.yaml -o deploy/rbac/provisioner.yaml
 
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-resizer/v0.3.0/deploy/kubernetes/rbac.yaml
+$ curl -L https://raw.githubusercontent.com/kubernetes-csi/external-resizer/v0.3.0/deploy/kubernetes/rbac.yaml -o deploy/rbac/resizer.yaml
 
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v1.2.0/deploy/kubernetes/rbac.yaml
-
+$ curl -L https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v2.0.0-rc2/deploy/kubernetes/csi-snapshotter/rbac-csi-snapshotter.yaml -o deploy/rbac/snapshotter.yaml
 ```
+
+## 问题
+
+* 节点重启之后，pod 绑定不到 pvc
 
 ## 参考
 

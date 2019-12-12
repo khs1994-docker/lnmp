@@ -8,4 +8,6 @@ resources:
 - csi-hostpath-provisioner.yaml
 - csi-hostpath-resizer.yaml
 - csi-hostpath-snapshotter.yaml
+- csi-hostpath-snapshotclass.yaml
+- sc.yaml
 namespace: csi-hostpath

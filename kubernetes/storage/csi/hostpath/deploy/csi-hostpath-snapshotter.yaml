@@ -40,11 +40,17 @@ spec:
       serviceAccount: csi-snapshotter
       containers:
         - name: csi-snapshotter
-          image: quay.io/k8scsi/csi-snapshotter:v1.2.0
+          # TODO: change to official image when released
+          image: quay.io/k8scsi/csi-snapshotter:v2.0.0-rc2
+          imagePullPolicy: IfNotPresent
           args:
             - -v=5
             - --csi-address=/csi/csi.sock
-            - --connection-timeout=15s
+          securityContext:
+            # This is necessary only for systems with SELinux, where
+            # non-privileged sidecar containers cannot access unix domain socket
+            # created by privileged CSI driver container.
+            privileged: true
           volumeMounts:
             - mountPath: /csi
               name: socket-dir

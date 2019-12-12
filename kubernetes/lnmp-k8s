@@ -250,14 +250,6 @@ fi
 
 mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
 
-  # set +e
-  # _get_kubernetes_server_by_url
-  #
-  # if [ $?=0 ];then
-  #   __untar && return || true
-  # fi
-  # set -e
-
   if [ -n "$get_by_url" ];then
     _get_kubernetes_server_by_url $@
     cd kubernetes-release/release
@@ -921,10 +913,8 @@ _k8s_install_dep(){
     sysstat libseccomp > /dev/null) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
     sysstat libseccomp > /dev/null) && return
 
-  set +e
   command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
-    sysstat libseccomp2 kmod > /dev/null
-  set -e
+    sysstat libseccomp2 kmod > /dev/null || true
 }
 
 _k8s_install_disable_firewalld(){
@@ -1035,9 +1025,8 @@ _crio_install(){
   # $(_sudo) sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
-  set +e
   command -v apt > /dev/null \
-  && $(_sudo) apt update -qq \
+  && $(_sudo) apt update -qq || true \
   ; $(_sudo) apt install -y software-properties-common \
   && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
   && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
@@ -1058,8 +1047,6 @@ _crio_install(){
   $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
   gcc
-
-  set -e
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
@@ -1345,9 +1332,9 @@ _k8s_join_hostname_handler(){
   done
 
   echo $KUBE_HOSTNAME | grep -q '-' \
-    &&  print_info "hostname $KUBE_HOSTNAME include -, \
+    &&  print_info "hostname $KUBE_HOSTNAME include -,
 not allowed, please input new hostname by --hostname=XXX" \
-    && exit 1
+    && exit 1 || true
 
   # if [ $HOSTNAME = "wsl2" ];then
   #   print_info "hostname not allowed set wsl2, please input new hostname by --hostname=XXX"

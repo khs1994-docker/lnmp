@@ -34,7 +34,6 @@ spec:
       labels:
         app: csi-hostpathplugin
     spec:
-      hostNetwork: true
       containers:
         - name: node-driver-registrar
           image: quay.io/k8scsi/csi-node-driver-registrar:v1.2.0
@@ -47,6 +46,9 @@ spec:
             - --csi-address=/csi/csi.sock
             - --kubelet-registration-path=/var/lib/kubelet/plugins/csi-hostpath/csi.sock
           securityContext:
+            # This is necessary only for systems with SELinux, where
+            # non-privileged sidecar containers cannot access unix domain socket
+            # created by privileged CSI driver container.
             privileged: true
           env:
             - name: KUBE_NODE_NAME
