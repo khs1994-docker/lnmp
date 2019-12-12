@@ -23,7 +23,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$preVersion
   }
 
-  $url="https://studygolang.com/dl/golang/go${VERSION}.windows-amd64.zip"
+  $url="https://dl.google.com/go/go${VERSION}.windows-amd64.zip"
 
   $filename="go${VERSION}.windows-amd64.zip"
   $unzipDesc="go"

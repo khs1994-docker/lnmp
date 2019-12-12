@@ -125,17 +125,16 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 # 安装内置扩展
         && docker-php-source extract \
         && docker-php-ext-configure zip \
-                                    --with-libzip \
+                                    --with-zip \
         && docker-php-ext-install zip \
         && strip --strip-all $(php-config --extension-dir)/zip.so \
         # && docker-php-ext-configure gd \
         && echo " \
                                         --disable-gd-jis-conv \
-                                        --with-freetype-dir=/usr \
-                                        --with-jpeg-dir=/usr \
-                                        --with-png-dir=/usr \
-                                        --with-webp-dir=/usr \
-                                        --with-xpm-dir=/usr" > /tmp/gd.configure.options \
+                                        --with-freetype \
+                                        --with-jpeg \
+                                        --with-webp \
+                                        --with-xpm" > /tmp/gd.configure.options \
         # && docker-php-ext-install $PHP_EXTENSION \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \

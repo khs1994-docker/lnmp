@@ -415,7 +415,7 @@ fi
 
 _go(){
   _downloader ${GO_PREFIX}/go go${GO_VERSION}.linux-amd64.tar.gz \
-      https://studygolang.com/dl/golang/go${GO_VERSION}.linux-amd64.tar.gz \
+      https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
       $GO_PREFIX
 
   echo "
