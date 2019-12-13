@@ -8,7 +8,7 @@ services:
     image: kubernetesui/dashboard:v2.0.0-beta8
 
   coredns:
-    image: k8s.gcr.io/coredns:1.6.5
+    image: k8s.gcr.io/coredns:1.6.6
 
   flannel:
     image: quay.io/coreos/flannel:v0.11.0
