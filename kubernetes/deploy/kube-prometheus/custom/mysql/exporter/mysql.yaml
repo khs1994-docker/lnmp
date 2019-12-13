@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mysql-exporter
+  namespace: monitoring
+  labels:
+    app: mysql-exporter
+spec:
+  selector:
+    matchLabels:
+      app: mysql-exporter
+  template:
+    metadata:
+      labels:
+        app: mysql-exporter
+    spec:
+      containers:
+        - name: mysql-exporter
+          image: prom/mysqld-exporter
+          env:
+          - name: DATA_SOURCE_NAME
+            value: "root:mytest@(mysql.ci.svc.cluster.local:3306)/"
+          ports:
+          - name: metrics
+            containerPort: 9104
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-exporter
+  labels:
+    app: mysql-exporter
+spec:
+  ports:
+  - port: 9104
+    name: metrics
+  selector:
+    app: mysql-exporter
+  clusterIP: None

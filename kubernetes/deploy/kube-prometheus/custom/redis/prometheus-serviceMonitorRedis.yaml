@@ -2,17 +2,17 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    app: registry
-  name: registry
+    app: redis
+  name: redis
   namespace: monitoring
 spec:
   endpoints:
   - interval: 30s
-    port: debug
+    port: metrics
   jobLabel: app
   namespaceSelector:
     matchNames:
-    - default
+    - monitoring
   selector:
     matchLabels:
-      app: registry-metrics
+      app: redis-exporter

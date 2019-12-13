@@ -1,0 +1,3 @@
+resources:
+  - prometheus-serviceMonitorRedis.yaml
+namespace: monitoring
