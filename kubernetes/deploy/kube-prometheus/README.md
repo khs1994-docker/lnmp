@@ -34,6 +34,8 @@ $ kubectl create -f kube-prometheus/manifests/
 
 ## 默认只监控 `kube-system` 和 `monitoring` NS 中的服务
 
+具体参考 `custom/XXX/rbac.yaml`，必须使用 `$ kubectl apply -f custom/xxx/rbac.yaml` 应用。
+
 ## Grafana
 
 * https://grafana.com/grafana/dashboards

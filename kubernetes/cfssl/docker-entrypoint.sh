@@ -295,7 +295,7 @@ EOF
 
 # system:kube-controller-manager (server + client)
   # 1. 与 kube-apiserver 的安全端口通信
-  # 2. 在安全端口(https，10252) 输出 prometheus 格式的 metrics
+  # 2. 在安全端口(https，10257) 输出 prometheus 格式的 metrics
   export CN_NAME=system:kube-controller-manager
   export O=system:kube-controller-manager
 
@@ -322,7 +322,7 @@ EOF
 
 # system:kube-scheduler (server + client)
    # 1. 与 kube-apiserver 的安全端口通信
-   # 2. 在安全端口(https，10251) 输出 prometheus 格式的 metrics
+   # 2. 在安全端口(10259) 输出 prometheus 格式的 metrics
    export CN_NAME=system:kube-scheduler
    export O=system:kube-scheduler
 

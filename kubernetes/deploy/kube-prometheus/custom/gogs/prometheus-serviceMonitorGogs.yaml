@@ -2,17 +2,18 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    app: registry-metrics
-  name: registry
+    app: gogs
+  name: ci-gogs
   namespace: monitoring
 spec:
   endpoints:
   - interval: 30s
-    port: debug
+    port: http
+    path: /-/metrics
   jobLabel: app
   namespaceSelector:
     matchNames:
-    - default
+    - ci
   selector:
     matchLabels:
-      app: registry-metrics
+      app: gogs

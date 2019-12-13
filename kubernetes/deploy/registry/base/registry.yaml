@@ -9,9 +9,6 @@ spec:
   - name: http
     port: 5000
     targetPort: http
-  - name: debug
-    port: 5001
-    targetPort: debug
   selector:
     app: registry
 
@@ -39,6 +36,8 @@ spec:
           ports:
           - name: http
             containerPort: 5000
+          # - name: debug
+          #   containerPort: 5001  
           volumeMounts:
             - mountPath: /var/lib/registry
               name: data

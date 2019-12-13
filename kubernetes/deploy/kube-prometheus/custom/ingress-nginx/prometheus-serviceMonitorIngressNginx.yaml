@@ -2,17 +2,17 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    app: registry-metrics
-  name: registry
+    app: ingress-nginx-metrics
+  name: ingress-nginx
   namespace: monitoring
 spec:
   endpoints:
   - interval: 30s
-    port: debug
+    port: metrics
   jobLabel: app
   namespaceSelector:
     matchNames:
-    - default
+    - ingress-nginx
   selector:
     matchLabels:
-      app: registry-metrics
+      app: ingress-nginx-metrics
