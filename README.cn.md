@@ -226,7 +226,7 @@ $ ./lnmp-docker down
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.0-unit-alpine`| **1.13.0**             |`Alpine:3.10`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.10`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.18`              | **8.0.18**             |`Debian:stretch`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.10`            | **10.4.10**             |`Ubuntu:bionic` |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.11`            | **10.4.11**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.7-alpine`        | **5.0.7**            |`Alpine:3.10`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.4.0-fpm-alpine`  | **7.4.0**       |`Alpine:3.10`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.0-composer-alpine`  | **6.x**       |`Alpine:3.10`    |
@@ -235,7 +235,7 @@ $ ./lnmp-docker down
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.20-alpine`           | **1.5.20**       |`Alpine:3.10`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.2-management-alpine` | **3.8.2**       |`Alpine:3.10`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.1-alpine`             | **12.1**        |`Alpine:3.10`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.1`                      | **4.2.1**       |`Ubuntu:bionic` |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.2`                      | **4.2.2**       |`Ubuntu:bionic` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.10`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.8`    |
 
