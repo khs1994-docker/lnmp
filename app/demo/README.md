@@ -32,9 +32,9 @@ $ cd example
 
 * `docker-compose up`
 
-* `kubectl create -f filename.yaml`
+* `kubectl apply -f filename.yaml`
 
-* `kubectl create -k /path/kustomize_folder`
+* `kubectl apply -k /path/kustomize_folder`
 
 * `helm install ./lnmp`
 

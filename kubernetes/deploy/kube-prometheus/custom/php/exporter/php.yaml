@@ -1,0 +1,36 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: php-fpm-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: php-fpm-exporter
+  template:
+    metadata:
+      labels:
+        app: php-fpm-exporter
+    spec:
+      containers:
+        - name: php-fpm-exporter
+          image: bakins/php-fpm-exporter:v0.6.1
+          args:
+          - --addr
+          - 0.0.0.0:8080
+          - --endpoint
+          - http://php-fpm-status.lnmp.svc.cluster.local:9010/status
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: php-fpm-exporter
+  labels:
+    app: php-fpm-exporter
+spec:
+  ports:
+    - port: 8080
+      name: metrics
+  selector:
+    app: php-fpm-exporter
+  clusterIP: None
