@@ -51,6 +51,7 @@ do
             ${CONTAINER_RUNTIME} \
             ${CONTAINER_RUNTIME_ENDPOINT} \
             ${CONTAINERD_VERSION} \
+            ${NETWORK_GATEWAY} \
            ' \
   < $item.yaml > $item.yaml.source
 
@@ -79,6 +80,7 @@ for i in `seq ${NODE_NUM}`;do
             ${CONTAINER_RUNTIME} \
             ${CONTAINER_RUNTIME_ENDPOINT} \
             ${CONTAINERD_VERSION} \
+            ${NETWORK_GATEWAY} \
            ' \
   < ignition-$i.yaml > ignition-$i.yaml.source
 

@@ -20,6 +20,7 @@
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
 * `Etcd` `kube-nginx` 运行方式为 `podman`
 * bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像 `(例如：$ sudo podman rmi IMAGE_NAME)` 之后重启服务 `(例如：$ sudo systemctl restart etcd)`
+* bug4: fedora31 使用 hostonly 网络无法启动 CoreOS，暂时只使用 **桥接** 网络
 
 ### 虚拟机网络配置
 

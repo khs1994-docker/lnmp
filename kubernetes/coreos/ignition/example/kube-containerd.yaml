@@ -2,7 +2,6 @@ variant: fcos
 version: 1.0.0
 systemd:
   units:
-    # remove when fcos with docker 19.03
     - name: kube-containerd-installer.service
       enabled: true
       contents: |
@@ -15,12 +14,6 @@ systemd:
         Restart=on-failure
         RestartSec=5
         WorkingDirectory=/tmp
-        # ExecStartPre=bash -c "if ! [ `/usr/local/bin/containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/containerd; fi"
-        # ExecStartPre=bash -c "if ! [ -f /usr/local/bin/containerd ];then \
-        #    rpm2cpio /opt/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm | cpio -div ; \
-        #    cp usr/bin/containerd /usr/local/bin ; \
-        #    cp usr/bin/containerd-shim /usr/local/bin ; \
-        #  fi"
 
         ExecStartPre=bash -c "if ! [ `/usr/local/bin/kube-containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/kube-containerd; fi"
         ExecStartPre=bash -c "if ! [ -f /usr/local/bin/kube-containerd ];then \
@@ -46,7 +39,7 @@ systemd:
 
         [Service]
         ExecStartPre=-modprobe overlay
-        ExecStart=/usr/local/bin/containerd \
+        ExecStart=/usr/bin/containerd \
                   --config /opt/k8s/etc/kube-containerd/config.toml
         KillMode=process
         Delegate=yes
@@ -109,8 +102,3 @@ storage:
       contents:
         compression: null
         source: http://{{SERVER_HOST}}:8080/releases/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
-    # - path: /opt/.khs1994-docker-lnmp/caches/containerd.io-1.2.10-3.2.fc30.x86_64.rpm
-    #   mode: 0644
-    #   contents:
-    #     compression: null
-    #     source: http://{{SERVER_HOST}}:8080/releases/containerd.io-1.2.10-3.2.fc30.x86_64.rpm

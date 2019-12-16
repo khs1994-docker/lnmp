@@ -77,14 +77,17 @@ systemd:
         ExecStartPre=-/sbin/swapoff -a
         ExecStartPre=-${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
         ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
+        ExecStartPre=-mkdir -p /opt/k8s/var/lib/kubelet
+        ExecStartPre=-mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
+        ExecStartPre=-/usr/bin/env /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStartPre=-mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStartPre=-mount --bond /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
         ExecStart=${K8S_ROOT}/bin/kubelet \
         --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
         --cert-dir=${K8S_ROOT}/certs \
         --container-runtime=${CONTAINER_RUNTIME} \
         --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
-        --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
-        --image-pull-progress-deadline=15m \
         --root-dir=/opt/k8s/var/lib/kubelet \
         --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
         --config=${K8S_ROOT}/conf/kubelet.config.yaml \
@@ -100,9 +103,14 @@ systemd:
         # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
         # --cni-bin-dir=/usr/libexec/cni \
         # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
+        # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
+        # --image-pull-progress-deadline=15m \
 
         Restart=on-failure
         RestartSec=5
+
+        ExecStopPost=-umount /var/lib/kubelet
+        ExecStopPost=-umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
         [Install]
         WantedBy=multi-user.target
@@ -245,4 +253,4 @@ storage:
           method=manual
           dns=114.114.114.114
           addresses={{IP_{{n}}}}/24
-          gateway=192.168.57.1
+          gateway=${NETWORK_GATEWAY}

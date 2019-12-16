@@ -67,8 +67,6 @@ if ! [ -f $item ];then
     https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/$item
 fi
 
-cp fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz fedora-coreos-${FCOS_VERSION}-metal.raw.xz
-
 done
 
 cd .. > /dev/null
