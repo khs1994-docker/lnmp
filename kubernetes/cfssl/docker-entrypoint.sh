@@ -37,7 +37,7 @@ main (){
 
   if [ -f ca-key.pem ];then
     # CA 证书已存在，复用
-    cp ca-key.pem ca.pem registry-ca.pem cert/
+    cp ca-key.pem ca.pem cert/
   else
     cd cert
 
@@ -50,8 +50,8 @@ main (){
     echo '{
       "CN":"kubernetes",
       "key":{
-        "algo":"rsa",
-        "size":2048
+        "algo":"ecdsa",
+        "size": 384
       },
       "names": [
       {
@@ -84,8 +84,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     }
   }' \
     | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
@@ -98,8 +98,8 @@ main (){
       "CN":"'$CN_NAME'",
       "hosts":[""],
       "key":{
-        "algo":"rsa",
-        "size":2048
+        "algo":"ecdsa",
+        "size": 384
       }
     }' \
       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
@@ -108,7 +108,7 @@ main (){
 # registry (server)
   # export CN_NAME=registry
   #
-  # echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048}}' \
+  # echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"ecdsa","size":384}}' \
   #      | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
   #      -hostname="$registry_hosts" - | cfssljson -bare $CN_NAME
 
@@ -120,8 +120,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },
     "names":[{
       "C":"CN",
@@ -141,8 +141,8 @@ main (){
   echo '{"CN":"'$CN_NAME'",
   "hosts":[""],
   "key":{
-    "algo":"rsa",
-    "size":2048
+    "algo":"ecdsa",
+    "size": 384
   },
   "names":[{
     "C":"CN",
@@ -164,8 +164,8 @@ main (){
   echo '{"CN":"'$CN_NAME'",
   "hosts":[""],
   "key":{
-    "algo":"rsa",
-    "size":2048
+    "algo":"ecdsa",
+    "size": 384
   },
   "names":[{
     "C":"CN",
@@ -193,8 +193,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },
     "names":[{
       "C":"CN",
@@ -215,8 +215,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },"names":[{
       "C":"CN",
       "ST":"Beijing",
@@ -238,8 +238,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },"names":[{
       "C":"CN",
       "ST":"Beijing",
@@ -275,8 +275,8 @@ EOF
     "CN": "'${CN}'",
     "hosts": [],
     "key": {
-      "algo": "rsa",
-      "size": 2048
+      "algo": "ecdsa",
+      "size": 384
     },
     "names": [
       {
@@ -306,8 +306,8 @@ EOF
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },
     "names":[{
       "C":"CN",
@@ -330,8 +330,8 @@ EOF
      "CN":"'$CN_NAME'",
      "hosts":[""],
      "key":{
-       "algo":"rsa",
-       "size":2048
+       "algo":"ecdsa",
+       "size": 384
      },
      "names":[{
        "C":"CN",
@@ -353,8 +353,8 @@ EOF
      "CN":"'$CN_NAME'",
      "hosts":[""],
      "key":{
-       "algo":"rsa",
-       "size":2048
+       "algo":"ecdsa",
+       "size": 384
      },
      "names":[{
        "C":"CN",

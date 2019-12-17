@@ -1,6 +1,3 @@
 /*
 !example
 !.gitignore
-!ca-key.pem
-!ca.pem
-!registry-ca.pem
