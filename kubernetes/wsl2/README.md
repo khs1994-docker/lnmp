@@ -47,7 +47,7 @@ $ sudo cp -a kubernetes-release/release/v1.17.0-linux-amd64/kubernetes/server/bi
 在 `Windows` 中执行
 
 ```powershell
-$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld-etcd-client.pem","flanneld-etcd-client-key.pem"
+$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld-etcd-client.pem","flanneld-etcd-client-key.pem","ca.pem","ca-key.pem"
 
 $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ```

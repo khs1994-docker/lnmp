@@ -41,7 +41,7 @@ $ cd ~/lnmp
 $ . ./windows/sdk/dockerhub/rootfs
 
 $ wsl --import k8s-data `
-    $HOME/.khs1994-docker-lnmp/k8s-wsl2/k8s-data `
+    C:/k8s-data `
     $(rootfs alpine) `
     --version 2
 
@@ -80,7 +80,7 @@ Filesystem                Size      Used Available Use% Mounted on
 # 在 ubuntu-18.04 中将 /dev/sdc(不固定，必须通过上面的命令获取该值) 挂载到 /wsl/k8s-data
 
 $ wsl -u root -- mkdir -p /wsl/k8s-data
-$ wsl -u root -- mount /dev/sdc /wsl/k8s-data
+$ wsl -u root -- mount /dev/sdX /wsl/k8s-data
 ```
 
 ## 安装 Docker 和 docker-compose
@@ -110,6 +110,7 @@ $ ./lnmp-k8s kubernetes-server --url linux arm64
 ```bash
 $ cd ~/lnmp/kubernetes
 
+$ wsl
 $ docker-compose up cfssl-wsl2
 ```
 

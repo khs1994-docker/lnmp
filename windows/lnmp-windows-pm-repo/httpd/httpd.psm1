@@ -103,7 +103,7 @@ Function install($VERSION=0,$isPre=0){
       $HTTPD_IS_RUN=1
   }
 
-  _sudo set-service Apache2.4 -StartupType Disabled
+  _sudo set-service Apache2.4 -StartupType Manual
 
   mkdir C:\Apache24\conf.d | out-null
 

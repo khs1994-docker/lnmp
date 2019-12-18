@@ -28,7 +28,7 @@ Function install_after(){
 
     # 禁止开机启动
 
-    _sudo set-service mysql -StartupType Disabled
+    _sudo set-service mysql -StartupType Manual
   }
 
   if (!(Test-Path C:/mysql/my.cnf)){
