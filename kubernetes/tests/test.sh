@@ -6,8 +6,8 @@ echo "Set app"
 mkdir -p ../app/laravel/public
 cp deployment/app/index.php ../app/laravel/public/
 # mkdir -p ../app
-# docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.4.0-composer-alpine composer global config --unset repos.packagist
-# docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.4.0-composer-alpine composer create-project --prefer-dist laravel/laravel=5.8.* laravel
+# docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.4.1-composer-alpine composer global config --unset repos.packagist
+# docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.4.1-composer-alpine composer create-project --prefer-dist laravel/laravel=5.8.* laravel
 echo "Up nfs server"
 ./lnmp-k8s nfs
 sleep 30
