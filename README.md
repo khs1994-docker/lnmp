@@ -219,10 +219,10 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.3`        | **2.8.3**              |`Alpine:3.10`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.6-alpine`      | **1.17.6**             |`Alpine:3.10`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.1-unit-alpine`| **1.13.0**             |`Alpine:3.10`    |
-|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.10`    |
+|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.11`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.18`              | **8.0.18**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.11`            | **10.4.11**             |`Ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.7-alpine`        | **5.0.7**            |`Alpine:3.10`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.7-alpine`        | **5.0.7**            |`Alpine:3.11`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.4.1-fpm-alpine`  | **7.4.1**       |`Alpine:3.10`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.1-composer-alpine`  | **6.x**       |`Alpine:3.10`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.1-composer-alpine`  | **1.9.1**       |`Alpine:3.10`    |
