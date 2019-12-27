@@ -56,4 +56,4 @@ services:
     image: alpine:3.11
 
   python:
-    image: python:3.8.0-alpine
+    image: python:3.8.1-alpine

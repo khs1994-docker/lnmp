@@ -7,11 +7,11 @@ $ git clone --depth=1 git@github.com:coreos/kube-prometheus.git
 ```
 
 ```bash
-$ kubectl create -f kube-prometheus/manifests/setup
+$ kubectl apply -f kube-prometheus/manifests/setup
 
 # 等待 20s
 
-$ kubectl create -f kube-prometheus/manifests/
+$ kubectl apply -f kube-prometheus/manifests/
 ```
 
 ## 服务暴露
