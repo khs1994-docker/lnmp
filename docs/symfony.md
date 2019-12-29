@@ -17,5 +17,5 @@ $ php bin/console about
 
 $ lnmp-docker php7-cli
 
-$ php bin/console cache:clear
+$ php bin/console cache:clear --env development
 ```

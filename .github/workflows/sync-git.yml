@@ -28,7 +28,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/acme-docker
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: dockerfile/acme.sh
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
@@ -39,7 +39,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/ci
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: drone
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
@@ -50,7 +50,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/lnmp-k8s
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: kubernetes
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
@@ -61,7 +61,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/node-demo
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: app/node-demo
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
@@ -72,7 +72,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/php-demo
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: app/demo
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
@@ -83,7 +83,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/docker-practice/buildx
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: dockerfile/buildkit
         PCIT_MESSAGE: commit by ci
         PCIT_TARGET_BRANCH: master
@@ -94,7 +94,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/laravel-demo
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: app/laravel-demo
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
@@ -105,7 +105,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/kube-nginx
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: kubernetes/kube-nginx
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
@@ -116,7 +116,7 @@ jobs:
         PCIT_EMAIL: khs1994@khs1994.com
         PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
         PCIT_GIT_URL: github.com/khs1994-docker/k8s-demo
-        PCIT_KEEP_HISTORY: "1"
+        PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: kubernetes/demo/ci
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
