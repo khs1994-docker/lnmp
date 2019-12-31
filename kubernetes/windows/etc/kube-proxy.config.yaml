@@ -9,8 +9,8 @@ hostnameOverride: windows
 portRange: ""
 mode: "kernelspace"
 # mode: "iptables"
-# kubeProxyIPTablesConfiguration:
-#  masqueradeAll: false
-# kubeProxyIPVSConfiguration:
-#  scheduler: rr
-#  excludeCIDRs: []
+iptables:
+  masqueradeAll: false
+ipvs:
+  scheduler: rr
+  excludeCIDRs: []

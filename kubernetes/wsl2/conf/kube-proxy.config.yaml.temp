@@ -13,8 +13,8 @@ hostnameOverride: ##NODE_NAME##
 portRange: ""
 mode: "ipvs"
 # mode: "iptables"
-# kubeProxyIPTablesConfiguration:
-#  masqueradeAll: false
-# kubeProxyIPVSConfiguration:
-#  scheduler: rr
-#  excludeCIDRs: []
+iptables:
+  masqueradeAll: false
+ipvs:
+  scheduler: rr
+  excludeCIDRs: []

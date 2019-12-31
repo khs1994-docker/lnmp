@@ -4,7 +4,13 @@
 
 * https://help.github.com/articles/managing-commit-signature-verification/
 
-* Windows https://www.gnupg.org/download/index.html Simple installer for the current GnuPG
+* Windows
+* https://www.gnupg.org/download/index.html
+* https://gpg4win.org/download.html
+
+```bash
+$ sudo apt install gnupg
+```
 
 ```bash
 $ gpg --default-new-key-algo rsa4096 --gen-key
@@ -23,7 +29,11 @@ $ gpg --armor --export <GPG-key-id>
 
 # copy output to github
 # https://help.github.com/articles/adding-a-new-gpg-key-to-your-github-account/
+```
 
+## 配置 GIT
+
+```bash
 $ git config --global user.signingkey <GPG-key-id>
 $ git config --local commit.gpgsign true
 # $ git config --global commit.gpgsign true
@@ -66,7 +76,7 @@ $ gpg -o keyfilename --export-secret-keys <GPG-key-id>
 $ gpg --import filename
 ```
 
-# X.509 Key
+## X.509 Key
 
 * https://help.github.com/articles/telling-git-about-your-signing-key/#telling-git-about-your-x509-key
 

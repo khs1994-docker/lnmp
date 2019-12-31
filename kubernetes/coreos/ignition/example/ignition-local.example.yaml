@@ -543,11 +543,11 @@ storage:
           hostnameOverride: coreos{{n}}
           mode: "ipvs"
           portRange: ""
-          # kubeProxyIPTablesConfiguration:
-          #  masqueradeAll: false
-          # kubeProxyIPVSConfiguration:
-          #  scheduler: rr
-          #  excludeCIDRs: []
+          iptables:
+            masqueradeAll: false
+          ipvs:
+            scheduler: rr
+            excludeCIDRs: []
     - path: ${K8S_ROOT}/bin/kubectl
       mode: 0755
       contents:

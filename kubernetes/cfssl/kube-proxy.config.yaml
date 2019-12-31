@@ -13,8 +13,8 @@ clusterCIDR: 10.244.0.0/16
 hostnameOverride: ##NODE_NAME##
 mode: "ipvs"
 portRange: ""
-# kubeProxyIPTablesConfiguration:
-#  masqueradeAll: false
-# kubeProxyIPVSConfiguration:
-#  scheduler: rr
-#  excludeCIDRs: []
+iptables:
+  masqueradeAll: false
+ipvs:
+  scheduler: rr
+  excludeCIDRs: []
