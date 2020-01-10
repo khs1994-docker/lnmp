@@ -14,7 +14,7 @@ NODE_IP NODE_NAME
 
 ```bash
 $ kubectl run nginx \
-    --image=nginx:1.17.6-alpine \
+    --image=nginx:1.17.7-alpine \
     --command -- cmd arg1 \
     -- arg1 arg2 \
     --port=80

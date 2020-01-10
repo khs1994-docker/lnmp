@@ -79,6 +79,6 @@ $ ./lnmp-docker scale php7=1
 在 `.env` 文件中注释掉 `LNMP_SOFT_VERSION` 变量，例如
 
 ```diff
-- LNMP_NGINX_VERSION=1.17.6
-+ # LNMP_NGINX_VERSION=1.17.6
+- LNMP_NGINX_VERSION=1.17.7
++ # LNMP_NGINX_VERSION=1.17.7
 ```
