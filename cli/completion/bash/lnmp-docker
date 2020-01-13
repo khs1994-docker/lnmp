@@ -61,7 +61,6 @@ complete -W "acme.sh \
         swarm-pull \
         swarm-push \
         swarm-update \
-        cookbooks \
         nginx-config \
         update \
         upgrade \

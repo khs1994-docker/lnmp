@@ -357,7 +357,7 @@ ClusterKit:
   clusterkit-help      Print ClusterKit help info
 
 Developer Tools:
-  cookbooks            Up local cookbooks server
+
 
 WSL2:
 
@@ -1309,48 +1309,6 @@ XXX
                                    "docker-lnmp.override.yml"
 
       & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d ${LNMP_SERVICES} pcit}
-    }
-
-    "cookbooks" {
-      printInfo k8s
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/k8s)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/k8s fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
-      }
-
-      printInfo docker_practice
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker_practice)){
-        git clone --depth=1 -b master git@github.com:docker_practice/zh-cn.git ${APP_ROOT}/lnmp-docs/docker_practice
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/docker_practice fetch --depth=1 origin master
-        git -C ${APP_ROOT}/lnmp-docs/docker_practice reset --hard origin/master
-      }
-
-      printInfo laravel
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
-      }
-
-      printInfo laravel_en
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel-en)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.us-en.git ${APP_ROOT}/lnmp-docs/laravel-en
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
-      }
-
-      printInfo nginx
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/nginx)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/nginx fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/nginx reset --hard origin/gh-pages
-      }
     }
 
     daemon-socket {

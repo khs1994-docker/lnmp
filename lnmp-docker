@@ -176,7 +176,6 @@ ClusterKit:
 
 Developer Tools:
   test                 Test LNMP
-  cookbooks            Up local cookbooks server
 
 Read './docs/*.md' for more information about CLI commands.
 
@@ -288,48 +287,6 @@ _satis(){
 
   docker run --rm -i ${tty} --mount type=bind,src=${APP_ROOT}/satis,target=/build \
       --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
-}
-
-_local_docs_server(){
-  print_info k8s
-  if ! [ -d ${APP_ROOT}/lnmp-docs/k8s ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
-  else
-    git -C ${APP_ROOT}/lnmp-docs/k8s fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
-  fi
-
-  print_info docker_practice
-  if ! [ -d ${APP_ROOT}/lnmp-docs/docker_practice ];then
-    git clone --depth=1 -b master git@gitee.com:docker_practice/zh-cn ${APP_ROOT}/lnmp-docs/docker_practice
-  else
-    git -C ${APP_ROOT}/lnmp-docs/docker_practice fetch --depth=1 origin master
-    git -C ${APP_ROOT}/lnmp-docs/docker_practice reset --hard origin/master
-  fi
-
-  print_info laravel
-  if ! [ -d ${APP_ROOT}/lnmp-docs/laravel ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
-  else
-    git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
-  fi
-
-  print_info laravel_en
-  if ! [ -d ${APP_ROOT}/lnmp-docs/laravel-en ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.us-en ${APP_ROOT}/lnmp-docs/laravel-en
-  else
-    git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
-  fi
-
-  print_info nginx
-  if ! [ -d ${APP_ROOT}/lnmp-docs/nginx ];then
-    git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
-  else
-    git -C ${APP_ROOT}/lnmp-docs/nginx fetch --depth=1 origin gh-pages
-    git -C ${APP_ROOT}/lnmp-docs/nginx reset --hard origin/gh-pages
-  fi
 }
 
 _get_compose_options(){
@@ -1613,10 +1570,6 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     #@custom
     __lnmp_custom_pull "$@" 2>/dev/null || true
      ;;
-
-  cookbooks )
-    _local_docs_server
-  ;;
 
   compose )
     docker_compose "$@"
