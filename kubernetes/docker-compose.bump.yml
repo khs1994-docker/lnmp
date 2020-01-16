@@ -14,7 +14,7 @@ services:
     image: quay.io/coreos/flannel:v0.11.0
 
   calico:
-    image: calico/cni:v3.10.1
+    image: calico/cni:v3.11.2
 
   ingress_nginx:
     image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.2
