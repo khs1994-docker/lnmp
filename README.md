@@ -216,7 +216,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.3`        | **2.8.3**              |`Alpine:3.11`    |
+|[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.5`        | **2.8.5**              |`Alpine:3.11`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.7-alpine`      | **1.17.7**             |`Alpine:3.10`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.1-unit-alpine`| **1.14.0**             |`Alpine:3.11`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.11`    |
@@ -225,7 +225,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.7-alpine`        | **5.0.7**            |`Alpine:3.11`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.4.1-fpm-alpine`  | **7.4.1**       |`Alpine:3.11`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.1-composer-alpine`  | **6.x**       |`Alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.1-composer-alpine`  | **1.9.1**       |`Alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.1-composer-alpine`  | **1.9.2**       |`Alpine:3.11`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-cs-fixer`                | **2.16.1**      |`Alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.20-alpine`           | **1.5.20**       |`Alpine:3.10`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.2-management-alpine` | **3.8.2**       |`Alpine:3.11`    |

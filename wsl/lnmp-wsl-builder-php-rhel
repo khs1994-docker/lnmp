@@ -43,7 +43,7 @@ PHP_TIMEZONE=PRC
 PHP_URL=https://mirrors.sohu.com/php
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.9.1
+export COMPOSER_VERSION=1.9.2
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
