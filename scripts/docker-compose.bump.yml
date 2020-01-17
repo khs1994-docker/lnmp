@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   mysql:
-    image: mysql:8.0.18
+    image: mysql:8.0.19
 
   mariadb:
     image: mariadb:10.4.11
@@ -44,7 +44,7 @@ services:
     image: minio/minio:RELEASE.2019-10-12T01-39-57Z
 
   kong:
-    image: kong:1.4.2-alpine
+    image: kong:1.4.3-alpine
 
   node:
     image: node:13.6.0-alpine
