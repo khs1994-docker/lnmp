@@ -44,7 +44,7 @@ services:
     image: minio/minio:RELEASE.2019-10-12T01-39-57Z
 
   kong:
-    image: kong:1.4.3-alpine
+    image: kong:1.5.0-alpine
 
   node:
     image: node:13.6.0-alpine
