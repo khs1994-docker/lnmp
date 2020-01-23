@@ -23,7 +23,7 @@ jobs:
           mirror.gcr.io
           $ALIYUN_MIRROR
           "
-          image="library/nginx:1.17.7-alpine"
+          image="library/nginx:1.17.8-alpine"
 
           for registry in $registrys
           do
