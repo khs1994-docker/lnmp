@@ -17,7 +17,8 @@ $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
 #                      "rabbitmq","httpd","registry",`
 #                      "minio",`
 #                      "supervisord",`
-#                      "nginx-unit"
+#                      "nginx-unit", `
+#                      "kong","postgresql-kong","konga"
 
 $CI_HOST="ci.khs1994.com:10000"
 

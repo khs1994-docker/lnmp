@@ -38,9 +38,9 @@ LREW_INCLUDE="minio pcit"
 在 `.env` 进行配置
 
 ```bash
-MINIO_ACCESS_KEY=khs1994miniokey
+MINIO_ACCESS_KEY=minioadmin
 
-MINIO_SECRET_KEY=khs1994miniosecret
+MINIO_SECRET_KEY=minioadmin
 ```
 
 > 自行修改配置之后，下边命令中的密钥换成你自己设置的！
@@ -55,9 +55,9 @@ $ ./lnmp-docker up
 
 打开 `https://minio.t.khs1994.com`
 
-`khs1994miniokey`
+`minioadmin`
 
-`khs1994miniosecret`
+`minioadmin`
 
 在登录框输入上面密钥即可
 
@@ -87,7 +87,7 @@ $ brew install minio/stable/mc
 ### 命令
 
 ```bash
-$ mc config host add minio https://minio.t.khs1994.com khs1994miniokey khs1994miniosecret
+$ mc config host add minio https://minio.t.khs1994.com minioadmin minioadmin
 
 # 上传文件
 

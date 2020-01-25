@@ -3,7 +3,7 @@ resources:
 secretGenerator:
   - name: minio-secret
     literals:
-    - minio-access-key=minioaccess
-    - minio-secret-key=miniosecret
+    - minio-access-key=minioadmin
+    - minio-secret-key=minioadmin
 generatorOptions:
   disableNameSuffixHash: true

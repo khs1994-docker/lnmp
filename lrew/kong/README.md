@@ -4,13 +4,18 @@
 
 ## 初始化数据库
 
-**初次使用或升级版本时，务必初始化数据库**
+**初次使用或升级版本时，务必先初始化数据库**
 
 ```bash
-$ lnmp-docker run kong-migrations [bootstrap|up|finish]
+$ lnmp-docker run --rm kong-migrations [bootstrap|up|finish]
 
-$ lnmp-docker rm kong-migrations
+# 启动
+$ lnmp-docker up
 ```
+
+## WEB 界面(konga)
+
+端口 `1337`
 
 ## 端口
 
