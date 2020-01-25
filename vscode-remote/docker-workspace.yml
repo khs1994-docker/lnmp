@@ -5,7 +5,7 @@ version: "3.7"
 services:
   workspace:
     &workspace
-    image: khs1994/php:7.4.1-cli-alpine
+    image: khs1994/php:7.4.2-cli-alpine
     networks:
       - backend
     volumes:
@@ -31,7 +31,7 @@ services:
   composer:
     << : *workspace
     restart: "no"
-    image: "khs1994/php:7.4.1-composer-alpine"
+    image: "khs1994/php:7.4.2-composer-alpine"
     # fix me
     working_dir: /app/demo
     command: [] # install | update
