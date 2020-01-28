@@ -17,7 +17,7 @@ services:
     image: calico/cni:v3.10.1
 
   ingress_nginx:
-    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.27.1
+    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.28.0
 
   metrics_server:
     image: k8s.gcr.io/metrics-server-amd64:v0.3.6
