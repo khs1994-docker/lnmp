@@ -10,7 +10,6 @@ ignition:
       - source: http://{{SERVER_HOST}}:8080/ignition/docker.json
       - source: http://{{SERVER_HOST}}:8080/ignition/etcd.json
       - source: http://{{SERVER_HOST}}:8080/ignition/flanneld.json
-      # - source: http://{{SERVER_HOST}}:8080/ignition/helm.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.json

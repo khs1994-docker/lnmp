@@ -67,10 +67,6 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
-    - path: ${K8S_ROOT}/certs/registry-ca.pem
-      mode: 0644
-      contents:
-        source: http://{{SERVER_HOST}}:8080/cert/registry-ca.pem
     - path: ${K8S_ROOT}/certs/ca.pem
       mode: 0644
       contents:
@@ -128,3 +124,22 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/sysctl.d/kubernetes.conf
+  directories:
+    - path: /home/core/.kube
+      mode: 0755
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.kube/cache
+      mode: 0755
+      user:
+        name: core
+      group:
+        name: core
+    - path: /home/core/.kube/http-cache
+      mode: 0755
+      user:
+        name: core
+      group:
+        name: core

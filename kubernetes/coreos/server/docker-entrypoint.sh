@@ -26,7 +26,6 @@ MERGE_LIST="crictl \
             docker \
             etcd \
             flanneld \
-            helm \
             kube-apiserver \
             kube-containerd \
             kube-controller-manager \
@@ -44,7 +43,6 @@ do
             ${CRICTL_VERSION} \
             ${ETCD_VERSION} \
             ${FLANNEL_VERSION} \
-            ${HELM_VERSION} \
             ${ETCD_NODES} \
             ${ETCD_ENDPOINTS} \
             ${KUBE_APISERVER} \
