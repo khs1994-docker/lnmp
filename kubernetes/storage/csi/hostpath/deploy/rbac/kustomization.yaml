@@ -1,0 +1,5 @@
+resources:
+- attacher.yaml
+- provisioner.yaml
+- snapshotter.yaml
+- resizer.yaml

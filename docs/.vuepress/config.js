@@ -153,6 +153,9 @@ module.exports = {
             '/github',
             '/vscode',
             '/cgroupv2',
+            '/iscsi',
+            '/mount',
+            '/cfssl',
           ]
         }
       ]

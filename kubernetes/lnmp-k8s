@@ -26,6 +26,7 @@ if [ -n "${DEBUG}" -o -n "${debug}" ];then set -x; fi
 
 source_path=$PWD
 
+# CI/CD
 if [ -n "${CI_KUBERNETES_VERSION}" ];then KUBERNETES_VERSION=${CI_KUBERNETES_VERSION};fi
 
 set -e
@@ -78,46 +79,6 @@ _cp(){
   if ! [ -f $1 ];then echo "$1 not found"; touch $2; return ;fi
   if ! [ -f $2 ];then cp $1 $2 ;fi
 }
-
-# 生成自定义示例文件
-_lnmp_k8s_custom_conf_generator(){
-  items="development production"
-  # nginx conf.d
-  for item in $items
-  do
-    touch deployment/configMap/nginx-conf-d/custom.conf
-
-    local ROOT="deployment/nginx/overlays/$item/config"
-    _cp $ROOT/conf.d/t.khs1994.com.$item.conf $ROOT/conf.d/www.custom.conf
-    _cp $ROOT/nginx.$item.conf $ROOT/nginx.custom.conf
-  done
-  # mysql conf
-  for item in $items
-  do
-    local ROOT="deployment/mysql/overlays/$item/config"
-    _cp $ROOT/docker.$item.cnf $ROOT/docker.custom.cnf
-  done
-  # php conf
-  for item in $items
-  do
-    local ROOT="deployment/php/overlays/$item/config"
-    local SOURCE_ROOT="helm/nginx-php/config/php"
-
-    _cp $SOURCE_ROOT/docker-php.ini             $ROOT/docker-php.custom.ini
-    _cp $SOURCE_ROOT/zz-docker.$item.conf       $ROOT/zz-docker.custom.conf
-    _cp $SOURCE_ROOT/ini/php.$item.ini          $ROOT/ini/php.custom.ini
-    _cp $SOURCE_ROOT/conf.d/docker.$item.ini    $ROOT/conf.d/docker.custom.ini
-    _cp $SOURCE_ROOT/composer/config.$item.json $ROOT/composer/config.custom.json
-  done
-  # redis conf
-  for item in $items
-  do
-    local ROOT="deployment/redis/overlays/$item/config"
-    _cp helm/redis/config/redis.$item.conf $ROOT/redis.custom.conf
-  done
-}
-
-_lnmp_k8s_custom_conf_generator
 
 if [ "$#" = 0 ];then print_help_info;exit;fi
 
@@ -193,7 +154,7 @@ _build_k8s_image(){
     --platform linux/amd64,linux/arm64,linux/arm/v7 \
     --push \
     -t khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
-    -t uswccr.ccs.tencentyun.com/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
+    -t ${K8S_IMAGE_REGISTRY:-uswccr.ccs.tencentyun.com}/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
     -f Dockerfile.buildx .
   set +x
   cd .. > /dev/null
@@ -212,27 +173,50 @@ _get_kubernetes_server_by_docker_image(){
   fi
 
   if [ -z "${K8S_IMAGE}" ];then
-    if [ "${ENABLE_CN_MIRROR}" ];then
-      K8S_IMAGE=ccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
+    if [ "${ENABLE_CN_MIRROR}" != 0 ];then
+      # 国内
+      K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
+      K8S_IMAGE=khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
     else
-      K8S_IMAGE=uswccr.ccs.tencentyun.com/khs1994/kubernetes-${TYPE}
+      # 国外
+      K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
+      K8S_IMAGE=khs1994/kubernetes-${TYPE}
     fi
   fi
 
-  $(_sudo) docker manifest inspect ${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
-  docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
-  docker container create --name khs1994-kubernetes-${TYPE} \
-    ${K8S_IMAGE}:v${KUBERNETES_VERSION} command
-  docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
-  docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
-  docker container rm khs1994-kubernetes-${TYPE}
+  $(_sudo) docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
+  # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
+  # docker container create --name khs1994-kubernetes-${TYPE} \
+  #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
+  # docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
+  # docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
+  # docker container rm khs1994-kubernetes-${TYPE}
+
+  set -x
+
+  local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
+  dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
+  ${K8S_IMAGE} \
+  v${KUBERNETES_VERSION} \
+  ${GOARCH} \
+  ${GOOS} \
+  "" 0 ${K8S_IMAGE_REGISTRY:-registry.hub.docker.com}
+  )
+
+  tar -zxvf $dist -C $ScriptRoot/kubernetes-release/release/
+
+  mv kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
+    kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
+
+  set +x
 }
 
 _get_kubernetes_server_by_url(){
-  curl https://storage.googleapis.com/kubernetes-release/release/stable.txt \
+  curl https://storage.googleapis.com/kubernetes-release/release/stable.txt > /dev/null \
     && ( \
-      curl -A "curl" -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-server-${GOOS}-${GOARCH}.tar.gz \
-        -o kubernetes-release/release/kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
+      curl -A "curl" -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}.tar.gz \
+        -o kubernetes-release/release/kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
     ) && return 0 || return 1
 }
 
@@ -252,7 +236,7 @@ _kubernetes_server_install(){
     test -n "${2}" && local GOARCH=$2
     test -n "${3}" && local TYPE=$3
     test -n "${4}" && local KUBERNETES_VERSION=$4
-    tar -zxvf kubernetes-server-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
+    tar -zxvf kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
     # pwd => kubernetes-release/release/
     mv kubernetes v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/
   }
@@ -266,16 +250,6 @@ fi
 
 mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
 
-  # set +e
-  # _get_kubernetes_server_by_url
-  #
-  # if [ $?=0 ];then
-  #   __untar && return || true
-  # fi
-  # set -e
-
-  test $GOOS != 'linux' && exit
-
   if [ -n "$get_by_url" ];then
     _get_kubernetes_server_by_url $@
     cd kubernetes-release/release
@@ -284,14 +258,16 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
     return
   fi
 
-  command -v docker > /dev/null
+  test $GOOS != 'linux' && exit
 
-  if [ $? -eq 0 ];then
-    docker container ls > /dev/null 2>&1
+  # command -v docker > /dev/null
+
+  # if [ $? -eq 0 ];then
+    # docker container ls > /dev/null 2>&1
     _get_kubernetes_server_by_docker_image $@
     cd kubernetes-release/release
     __untar $@
-  fi
+  # fi
 }
 
 _delete_lnmp(){
@@ -445,24 +421,24 @@ _create_lnmp(){
 
   CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-php-conf-0.0.1 \
-    --from-file=php.ini=${CONFIG_ROOT}/ini/php.custom.ini \
-    --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.custom.conf \
-    --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.custom.json \
-    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.custom.ini \
+    --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini \
+    --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf \
+    --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json \
+    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini \
     --dry-run -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf-0.0.1 \
-    --from-file=docker.cnf=${CONFIG_ROOT}/docker.custom.cnf \
+    --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf \
     --dry-run -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf-0.0.1 \
-    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.custom.conf \
+    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf \
     --dry-run -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $@ || true
@@ -677,11 +653,6 @@ _helm_install(){
   $(_sudo) rm -rf ${TMP_ROOT}/${GOOS}-${GOARCH}
 }
 
-_gvisor_docker_conf(){
-  print_info "config docker with gvisor(runsc) ..."
-  echo ""
-}
-
 _gvisor_containerd_conf(){
   if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
     print_info "$GOOS $GOARCH not support gvisor, skip config containerd with runsc"
@@ -759,13 +730,6 @@ _runc_install(){
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/kube-containerd;fi
 
-  local RPM_USE_BY_COREOS="containerd.io-1.2.10-3.2.fc30.x86_64.rpm"
-  if ! [ -f ${TMP_ROOT}/${RPM_USE_BY_COREOS} ];then
-     print_info "download containerd rpm"
-     $(_sudo) curl -fsSL -o ${TMP_ROOT}/${RPM_USE_BY_COREOS} \
-     https://mirrors.aliyun.com/docker-ce/linux/fedora/30/x86_64/test/Packages/${RPM_USE_BY_COREOS}
-  fi
-
   if [ -f /usr/bin/containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd already install"; \
     containerd --version; \
@@ -775,7 +739,11 @@ _containerd_install(){
     print_info "containerd not found, please install docker-ce first"; \
   fi
 
-  if ! [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then return;fi
+  if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
+    echo "only support [ amd64 ] and [ arm64 ], other platform install containerd can by docker-ce"
+
+    return
+  fi
 
   if [ -f ${K8S_ROOT}/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd 1.3 already install"; \
@@ -785,13 +753,22 @@ _containerd_install(){
 
   local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
+
   __download(){
+    if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
+      url="https://github.com/containerd/containerd/suites/359556741/artifacts/703276"
+      $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
+
+      return
+    fi
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-      local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = `curl -fsSL ${url}/${TAR_FILE}.sha256sum | cut -d " " -f 1` ];then
+    local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    local sha256_remote=`curl -fsSL ${url}/${TAR_FILE}.sha256sum | cut -d " " -f 1` || true
+
+    if [ $sha256 != "$sha256_remote" -a "$GOARCH" = 'amd64' ];then
       $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
       __download
     fi
@@ -804,7 +781,17 @@ _containerd_install(){
     return
   fi
 
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
+  if [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then
+    $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
+  else
+    # arm64 unzip
+    command -v unzip > /dev/null || echo "please install unzip"
+    command -v unzip > /dev/null || exit 1
+    $(_sudo) unzip -o -d ${K8S_ROOT}/bin ${TMP_ROOT}/${TAR_FILE}
+    $(_sudo) chmod +x ${K8S_ROOT}/bin/linux_arm64/*
+    $(_sudo) mv ${K8S_ROOT}/bin/linux_arm64/* ${K8S_ROOT}/bin
+    $(_sudo) rm -rf ${K8S_ROOT}/bin/linux_arm64
+  fi
 
   $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
@@ -828,15 +815,6 @@ _cni_install(){
   # https://github.com/containernetworking/plugins/issues/370
   # down to 0.7.6
   # 0.8.3 fixed
-
-  # if [ $IS_WSL2 -eq 1 ];then
-  #   CNI_VERSION="0.7.6"
-
-  #   print_info "WSL2 use cni $CNI_VERSION"
-
-  #   local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
-  #   local TAR_FILE="cni-plugins-${GOARCH}-v${CNI_VERSION}.tgz"
-  # fi
 
   __download(){
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
@@ -925,24 +903,20 @@ _k8s_install_dep(){
   print_info "install dep ..."
   # 安装依赖软件
   command -v dnf > /dev/null && ($(_sudo) dnf install -y conntrack ipvsadm ipset jq iptables curl socat \
-    sysstat libseccomp > /dev/null) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat \
+    sysstat libseccomp > /dev/null) || command -v yum > /dev/null && ($(_sudo) yum install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
     sysstat libseccomp > /dev/null) && return
 
-  set +e
-  command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat \
-    sysstat libseccomp2 kmod > /dev/null
-  set -e
+  command -v apt > /dev/null && $(_sudo) apt update -qq ; $(_sudo) apt install -y conntrack ipvsadm ipset jq iptables curl socat unzip \
+    sysstat libseccomp2 kmod > /dev/null || true
 }
 
-_k8s_install_common(){
+_k8s_install_disable_firewalld(){
   # 关闭防火墙
   $(_sudo) systemctl stop firewalld && $(_sudo) systemctl disable firewalld || true
-  $(_sudo) mkdir -p /etc/{docker,systemd/system}
-  $(_sudo) chmod -R 755 /opt
 }
 
 _k8s_install_cp_bin(){
-  if ! [ -f ${K8S_ROOT}/bin/kubeadm ];then
+  if [ ! -f ${K8S_ROOT}/bin/kubeadm -o "$1" = '-f' ];then
     _kubernetes_server_install
     cd $source_path > /dev/null
     $(_sudo) cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* ${K8S_ROOT}/bin/
@@ -970,37 +944,14 @@ _k8s_install_kubectl_conf(){
   fi
 }
 
-_k8s_install_systemd(){
-  cd systemd
-
-  HOSTNAME=${1:-node1}
-
-  for file in `ls *.service`; \
-  do \
-    if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
-    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!${HOSTNAME}!g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
-      /etc/systemd/system/$file ; \
-  done
-
-  cd - > /dev/null
-
-  $(_sudo) systemctl daemon-reload || true
-}
-
 _cni_config(){
   print_info "config cni ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/cni/net.d
   $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
 }
 
-_cri_config(){
-  print_info "config cri ..."
+_cri_sysctl(){
+  print_info "exec sysctl to meet cri..."
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
   $(_sudo) touch /etc/sysctl.d/99-kubernetes-cri.conf
   echo "net.bridge.bridge-nf-call-iptables  = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
@@ -1067,9 +1018,8 @@ _crio_install(){
   # $(_sudo) sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
-  set +e
   command -v apt > /dev/null \
-  && $(_sudo) apt update -qq \
+  && $(_sudo) apt update -qq || true \
   ; $(_sudo) apt install -y software-properties-common \
   && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
   && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
@@ -1090,8 +1040,6 @@ _crio_install(){
   $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
   gcc
-
-  set -e
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
@@ -1131,14 +1079,13 @@ _crio_install(){
 }
 
 _crio_config(){
-  _crio_install
   cd $source_path
   print_info "config cri-o ..."
   $(_sudo) mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/crio/crio.conf | $(_sudo) tee /etc/crio/crio.conf
 
-  _cri_config
+  _cri_sysctl
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
 
@@ -1158,7 +1105,7 @@ _containerd_cri_config(){
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3/config.toml \
     | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
 
-  _cri_config
+  _cri_sysctl
 
   local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
 
@@ -1175,11 +1122,9 @@ _docker_default_conf(){
   $(_sudo) cp systemd/docker.default.conf /etc/systemd/system/docker.service.d/
 }
 
-_kubectl_completion(){
-   ${K8S_ROOT}/bin/kubectl completion bash | $(_sudo) tee /etc/bash_completion.d/kubectl > /dev/null || true
-}
+# k8s install
 
-_k8s_install(){
+_check_master_ip(){
   if [ ${MASTER_IP} == '192.168.199.100' ];then
     clear
     echo ""
@@ -1188,58 +1133,9 @@ _k8s_install(){
     echo "======================================================"
     echo ""
   fi
+}
 
-  _k8s_install_dep
-
-  _k8s_install_common
-
-  _etcd_install
-
-  _cni_install
-  _cni_config
-  _flanneld_install
-
-  _helm_install
-
-  print_info "copy systemd unit file ..."
-  $(_sudo) cp systemd/*.service /etc/systemd/system/
-  $(_sudo) cp systemd/certs/*.pem ${K8S_ROOT}/certs/
-
-  if ! [ -f systemd/certs/admin-key.pem ];then \
-    echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
-
-  _k8s_install_cp_bin
-
-  print_info "copy kubernetes conf and cert file ..."
-  $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT}/conf/
-  $(_sudo) cp \
-    systemd/certs/{audit-policy.yaml,\
-kubelet.config.yaml,\
-kube-proxy.config.yaml,\
-csr-crb.yaml,\
-kube-scheduler.config.yaml,\
-encryption-config.yaml} \
-    ${K8S_ROOT}/conf/
-
-  local files=("kube-proxy.config.yaml" "kubelet.config.yaml" "kube-scheduler.config.yaml")
-
-  for file in ${files[@]}; \
-  do \
-    $(_sudo) sed -i "s!##NODE_IP##!${MASTER_IP}!g" \
-      ${K8S_ROOT}/conf/$file ; \
-    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
-      ${K8S_ROOT}/conf/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!node1!g" \
-      ${K8S_ROOT}/conf/$file ; \
-  done
-
-  _k8s_install_systemd
-
-  _gvisor_install
-
-  _crictl_install
-  _runc_install
-
+_cri_handler(){
   local CONTAINER_RUNTIME="--containerd"
 
   if [ -n "$1" ];then
@@ -1257,55 +1153,189 @@ encryption-config.yaml} \
     _crictl_containerd_conf
   elif [ "$CONTAINER_RUNTIME" = "--crio" ];then
     print_info "Kubelet Runtime is CRI-O"
+    _crio_install
     _crio_config
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
+
+    $(_sudo) mkdir -p /usr/share/containers/oci/hooks.d
   elif [ "$CONTAINER_RUNTIME" = "--docker" ];then
     print_info "Kubelet Runtime is Docker"
     sleep 15
-    if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
     _k8s_install_systemd_docker
     _crictl_docker_conf
   else
-    print_info "CRI only support containerd crio docker"
-    exit
+    print_info "CRI only support containerd | crio | docker"
+    exit 1
   fi
-
-  $(_sudo) systemctl daemon-reload || true
-
-  $(_sudo) useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/log/kubernetes
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/lib/{kubelet,kube-proxy}
-
-  _k8s_install_kubectl_conf
-  _kubectl_completion
 }
 
-_k8s_join(){
-  NODE_IP=$1
-  HOSTNAME=`hostname`
+_k8s_install_conf_cp(){
+  print_info "copy kubernetes conf and cert file ..."
 
-  if [ $IS_WSL2 -eq 1 ];then HOSTNAME='wsl2' ; fi
+  $(_sudo) cp systemd/certs/*.pem ${K8S_ROOT}/certs/
+
+  if ! [ -f systemd/certs/admin-key.pem ];then \
+    echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
+
+  $(_sudo) cp systemd/certs/*.kubeconfig ${K8S_ROOT}/conf/
+  $(_sudo) cp \
+    systemd/certs/{audit-policy.yaml,\
+kubelet.config.yaml,\
+kube-proxy.config.yaml,\
+csr-crb.yaml,\
+kube-scheduler.config.yaml,\
+encryption-config.yaml} \
+    ${K8S_ROOT}/conf/
+}
+
+_k8s_install_conf_replace(){
+  local files=("kube-proxy.config.yaml" "kubelet.config.yaml" "kube-scheduler.config.yaml")
+
+  for file in ${files[@]}; \
+  do \
+    $(_sudo) sed -i "s!##NODE_IP##!${MASTER_IP}!g" \
+      ${K8S_ROOT}/conf/$file ; \
+    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
+      ${K8S_ROOT}/conf/$file ; \
+    $(_sudo) sed -i "s!##NODE_NAME##!node1!g" \
+      ${K8S_ROOT}/conf/$file ; \
+  done
+}
+
+_k8s_install_systemd(){
+  print_info "copy systemd unit file $@ ... "
+
+  if [ -n "${1}" ];then
+    for item in $@
+    do
+      $(_sudo) cp systemd/${item}.service /etc/systemd/system/
+    done
+  else
+    $(_sudo) cp systemd/*.service /etc/systemd/system/
+  fi
+
+  cd systemd
+
+  for file in `ls *.service`; \
+  do \
+    if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
+    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
+      /etc/systemd/system/$file ; \
+    $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
+      /etc/systemd/system/$file ; \
+    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME:-node1}!g" \
+      /etc/systemd/system/$file ; \
+    $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
+      /etc/systemd/system/$file ; \
+  done
+
+  cd - > /dev/null
+
+  $(_sudo) systemctl daemon-reload || true
+}
+
+_k8s_install_mkdir(){
+  $(_sudo) mkdir --parents ${K8S_ROOT}/var/log/kubernetes
+  $(_sudo) mkdir --parents ${K8S_ROOT}/var/lib/{kubelet,kube-proxy}
+}
+
+_k8s_install(){
+  _check_master_ip
+
+  _k8s_install_dep
+
+  $(_sudo) mkdir -p /etc/{docker,systemd/system}
+  $(_sudo) chmod -R 755 /opt
+
+  _k8s_install_disable_firewalld
+
+  _etcd_install
+
+  _cni_install
+  _cni_config
+  _flanneld_install
+
+  _helm_install
+
+  _k8s_install_cp_bin
+
+  _k8s_install_conf_cp
+
+  _k8s_install_conf_replace
+
+  _gvisor_install
+
+  _crictl_install
+  _runc_install
+
+  _cri_handler $1
+
+  _k8s_install_systemd
+
+  _k8s_install_mkdir
+
+  # kubectl
+  _k8s_install_kubectl_conf
+}
+
+# k8s join
+
+_k8s_join_conf_cp(){
+  print_info "copy kubernetes conf and cert file ..."
+  $(_sudo) cp systemd/certs/{ca.pem,\
+ca-key.pem,\
+flanneld-etcd-client-key.pem,\
+flanneld-etcd-client.pem} \
+${K8S_ROOT}/certs/
+
+  $(_sudo) cp \
+    systemd/certs/{kubelet.config.yaml,\
+kube-proxy.config.yaml,\
+csr-crb.yaml,\
+kubectl.kubeconfig,\
+kube-proxy.kubeconfig} \
+    ${K8S_ROOT}/conf
+}
+
+_k8s_join_conf_replace(){
+  local files=("kube-proxy.config.yaml" "kubelet.config.yaml")
+
+  for file in ${files[@]}; \
+  do \
+    $(_sudo) sed -i "s!##NODE_IP##!${NODE_IP}!g" \
+      ${K8S_ROOT}/conf/$file ; \
+    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
+      ${K8S_ROOT}/conf/$file ; \
+    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME}!g" \
+      ${K8S_ROOT}/conf/$file ; \
+  done
+}
+
+_k8s_join_hostname_handler(){
+  KUBE_HOSTNAME=`hostname`
+
+  if [ $IS_WSL2 -eq 1 ];then KUBE_HOSTNAME='wsl2' ; fi
 
   for options in $@
   do
     test $options = '--skip-cp-k8s-bin' && export SKIP_CP_K8S_BIN=1
-    [[ $options =~ --hostname=* ]] && HOSTNAME=`echo $options | cut -d "=" -f 2`
+    [[ $options =~ --hostname=* ]] && KUBE_HOSTNAME=`echo $options | cut -d "=" -f 2`
   done
 
-  echo $HOSTNAME | grep -q '-' \
-    &&  print_info "hostname $HOSTNAME include -, \
+  echo $KUBE_HOSTNAME | grep -q '-' \
+    &&  print_info "hostname $KUBE_HOSTNAME include -,
 not allowed, please input new hostname by --hostname=XXX" \
-    && exit 1
+    && exit 1 || true
 
   # if [ $HOSTNAME = "wsl2" ];then
   #   print_info "hostname not allowed set wsl2, please input new hostname by --hostname=XXX"
   #   exit 1
   # fi
+}
 
+_k8s_join_cert_checker(){
   ls systemd/certs/{ca.pem,\
 flanneld-etcd-client.pem,\
 flanneld-etcd-client-key.pem,\
@@ -1315,10 +1345,26 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig} > /dev/null
+}
 
+_k8s_join(){
+  NODE_IP=$1
+
+  # hostname
+  _k8s_join_hostname_handler $@
+
+  # cert
+  _k8s_join_cert_checker
+
+  # dep
   _k8s_install_dep
-  _k8s_install_common
 
+  $(_sudo) mkdir -p /etc/{docker,systemd/system}
+  $(_sudo) chmod -R 755 /opt
+
+  _k8s_install_disable_firewalld
+
+  # cni
   _cni_install
   _cni_config
   _flanneld_install
@@ -1326,92 +1372,27 @@ kube-proxy.kubeconfig} > /dev/null
   # etcdctl require by flanneld
   _etcd_install
   _helm_install
-  $(_sudo) cp systemd/flanneld.service /etc/systemd/system/
-  # Docker
-  # kube-proxy
-  $(_sudo) cp systemd/kube-proxy.service /etc/systemd/system/
-  # kubelet
-  $(_sudo) cp systemd/kubelet.service /etc/systemd/system/
-  # cp pem
-  $(_sudo) cp systemd/certs/{ca.pem,\
-ca-key.pem,\
-flanneld-etcd-client-key.pem,\
-flanneld-etcd-client.pem} \
-${K8S_ROOT}/certs/
 
   test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \
   (print_info "skip cp k8s bin" ; \
      $(_sudo) cp bin/*.sh ${K8S_ROOT}/bin/ ; \
      $(_sudo) chmod +x ${K8S_ROOT}/bin/*)
 
-  print_info "copy kubernetes conf and cert file ..."
-  $(_sudo) cp \
-    systemd/certs/{kubelet.config.yaml,\
-kube-proxy.config.yaml,\
-csr-crb.yaml,\
-kubectl.kubeconfig,\
-kube-proxy.kubeconfig} \
-    ${K8S_ROOT}/conf
+  _k8s_join_conf_cp
 
-  local files=("kube-proxy.config.yaml" "kubelet.config.yaml")
-
-  for file in ${files[@]}; \
-  do \
-    $(_sudo) sed -i "s!##NODE_IP##!${NODE_IP}!g" \
-      ${K8S_ROOT}/conf/$file ; \
-    $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
-      ${K8S_ROOT}/conf/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!${HOSTNAME}!g" \
-      ${K8S_ROOT}/conf/$file ; \
-  done
+  _k8s_join_conf_replace
 
   _gvisor_install
   _crictl_install
   _runc_install
 
-  local CONTAINER_RUNTIME="--containerd"
+  _cri_handler $2
 
-  if [ -n "$2" ];then
-    local CONTAINER_RUNTIME=$2
-  fi
+  _k8s_install_systemd flanneld kube-proxy kubelet
 
-  $(_sudo) rm -rf /etc/systemd/system/kubelet.service.d
-  $(_sudo) mkdir -p /etc/systemd/system/kubelet.service.d
-  if [ "$CONTAINER_RUNTIME" = "--containerd" ];then
-    $(_sudo) cp systemd/kube-containerd.service /etc/systemd/system/
-    print_info "Kubelet Runtime is Containerd"
-    _containerd_install
-    _containerd_cri_config
-    _docker_default_conf
-    if [ "$GOOS" = 'linux' ];then _gvisor_containerd_conf;fi
-    _crictl_containerd_conf
-  elif [ "$CONTAINER_RUNTIME" = "--crio" ];then
-    print_info "Kubelet Runtime is CRI-O"
-    _crio_config
-    _docker_default_conf
-    if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
-    _crictl_crio_conf
-  elif [ "$CONTAINER_RUNTIME" = "--docker" ];then
-    print_info "Kubelet Runtime is Docker"
-    sleep 15
-    if [ "$GOOS" = 'linux' ];then _gvisor_docker_conf;fi
-    _k8s_install_systemd_docker
-    _crictl_docker_conf
-  else
-    print_info "CRI support containerd crio docker"
-    exit
-  fi
-
-  _k8s_install_systemd ${HOSTNAME}
-
-  $(_sudo) useradd -m -s /bin/bash -G root k8s > /dev/null 2>&1 || true
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/log/kubernetes
-
-  $(_sudo) mkdir --parents ${K8S_ROOT}/var/lib/{kubelet,kube-proxy}
+  _k8s_install_mkdir
 
   _k8s_install_kubectl_conf
-  _kubectl_completion
 }
 
 _helm_lnmp(){
@@ -1469,6 +1450,7 @@ _local_cleanup(){
 
   $(_sudo) ip addr flush cni0
   $(_sudo) ip addr flush docker0
+  $(_sudo) ip addr flush flannel.4096
   $(_sudo) ip addr flush flannel.1
 
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
@@ -1501,69 +1483,58 @@ case $_command in
       ;;
     kubectl-install )
       kubectl_install
-    ;;
+      ;;
     kubectl-info )
       kubectl_info
-    ;;
-
+      ;;
     create )
       _create_lnmp $@
-    ;;
-
+      ;;
     delete )
       set +e
       _delete_lnmp $@
-    ;;
-
+      ;;
     cleanup )
       set +e
       _cleanup_lnmp $@
-    ;;
-
+      ;;
     local-install )
       _k8s_install $@
-    ;;
-
+      ;;
     local-up )
       _local_up
-    ;;
-
+      ;;
     local-cleanup )
       _local_cleanup
-    ;;
-
+      ;;
     join )
       if [ -z $1 ];then echo "Please Input Node Ip"; exit 1; fi
       _k8s_join $@
-    ;;
-
+      ;;
     helm-development )
-    _helm_lnmp development "$@"
-    ;;
+      _helm_lnmp development "$@"
+      ;;
     helm-testing )
-    _helm_lnmp testing "$@"
-    ;;
+      _helm_lnmp testing "$@"
+      ;;
     helm-staging )
-    _helm_lnmp staging "$@"
-    ;;
+      _helm_lnmp staging "$@"
+      ;;
     helm-production )
-    _helm_lnmp production "$@"
-    ;;
-
+      _helm_lnmp production "$@"
+      ;;
     nfs )
-    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
-    $(_sudo) modprobe nfsd || true
-    cd nfs-server
-    if [ "$1" = 'down' ];then
-      exec docker-compose stop nfs
-    elif [ "$1" = 'logs' ]; then
-      exec docker-compose logs nfs
-    fi
-    exec docker-compose up -d nfs
-
-    ;;
-
+      $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+      $(_sudo) modprobe nfsd || true
+      cd nfs-server
+      if [ "$1" = 'down' ];then
+        exec docker-compose stop nfs
+      elif [ "$1" = 'logs' ]; then
+        exec docker-compose logs nfs
+      fi
+      exec docker-compose up -d nfs
+      ;;
     * )
-    command -v $_command > /dev/null && $_command $@ || echo "command not found"
-    ;;
+      command -v $_command > /dev/null && $_command $@ || echo "command not found"
+      ;;
 esac

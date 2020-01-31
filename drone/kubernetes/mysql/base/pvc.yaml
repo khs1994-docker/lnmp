@@ -1,0 +1,26 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: lnmp-mysql-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: hostpath
+  selector:
+    matchLabels:
+      app: ci
+      tier: mysql
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: lnmp-log
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: hostpath
+  selector:
+    matchLabels:
+      app: ci
+      tier: log

@@ -20,7 +20,7 @@ services:
   # https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
   postgresql-kong:
     << : *default-common
-    image: postgres:${LNMP_POSTGRESQL_VERSION:-12.0}-alpine
+    image: postgres:${LNMP_POSTGRESQL_VERSION:-12.1}-alpine
     environment:
       - POSTGRES_PASSWORD=mytest
       - POSTGRES_DB=test
@@ -39,7 +39,7 @@ services:
   kong:
     &kong
     << : *default-common
-    image: kong:1.4.0-alpine
+    image: kong:2.0.0-alpine
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgresql-kong
@@ -72,19 +72,6 @@ services:
     command:
       - bootstrap
 
-  # https://github.com/PGBI/kong-dashboard
-  kong-dashboard:
-    << : *default-common
-    image: pgbi/kong-dashboard
-    ports:
-      - 8082:8080
-    command:
-      - start
-      - --kong-url
-      - http://kong:8001
-    networks:
-      - frontend
-
   # https://github.com/pantsel/konga
   konga:
     << : *default-common
@@ -96,10 +83,10 @@ services:
     environment:
       TOKEN_SECRET: mytoken
     volumes:
-      - kongadata:/app/kongadata
+      - konga-data:/app/kongadata
 
 volumes:
   postgresql-kong-data:
     << : *default-common-label
-  kongadata:
+  konga-data:
     << : *default-common-label

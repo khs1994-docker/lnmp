@@ -18,7 +18,7 @@ WARNING: The vboxdrv kernel module is not loaded. Either there is no module
 ```
 
 ```bash
-$ sudo dnf install kernel-headers
+$ sudo dnf install kernel-headers make kernel-devel
 
 $ sudo /sbin/vboxconfig
 ```

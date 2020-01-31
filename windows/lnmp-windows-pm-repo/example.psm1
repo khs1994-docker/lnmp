@@ -3,6 +3,7 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 Import-Module exportPath
+Import-Module getHttpCode
 
 $ErrorActionPreference='stop'
 
@@ -17,7 +18,9 @@ $releases=$lwpm.releases
 $name=$lwpm.name
 # $description=$lwpm.description
 $url=$lwpm.url
+$urlMirror=$lwpm.urlMirror
 $preUrl=$lwpm.preUrl
+$preUrlMirror=$lwpm.preUrlMirror
 
 Function install_after(){
 
@@ -28,16 +31,30 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
 
-  # $url=$url.replace('${VERSION}',${VERSION});
+  # stable 与 pre url 不同
+  # 先定义 stable url
+  # $url=$urlMirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $url)[0] -eq 4){
+    # $url=$url.replace('${VERSION}',${VERSION});
+  }
 
   if($isPre){
     $VERSION=$preVersion
-    # $url=$preUrl.replace('${VERSION}',${VERSION});
+
+    # 后定义 pre url
+    # $url=$preUrlMirror.replace('${VERSION}',${VERSION});
+    if((_getHttpCode $url)[0] -eq 4){
+      # $url=$preUrl.replace('${VERSION}',${VERSION});
+    }
   }else{
 
   }
 
-  $url=$url.replace('${VERSION}',${VERSION});
+  # stable 与 pre url 相同，默认
+  $url=$urlMirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $url)[0] -eq 4){
+    $url=$url.replace('${VERSION}',${VERSION});
+  }
 
   $filename=""
   $unzipDesc="example"

@@ -75,3 +75,4 @@ In the past, the annotation `volume.beta.kubernetes.io/storage-class` was used i
 ## 参考
 
 * https://www.cnblogs.com/cuishuai/p/9152277.html
+* https://blog.csdn.net/dkfajsldfsdfsd/article/details/81319735

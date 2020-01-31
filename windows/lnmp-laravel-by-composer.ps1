@@ -33,13 +33,13 @@ if (!$args[2]){
 if (!(Test-Path ${LARAVEL_PATH})){
 
 docker run -it --rm `
-    --mount type=bind,src=$PWD,target=/app `
+    --mount type=bind,src=$(wslpath $PWD),target=/app `
     --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} `
     --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} `
-    --mount type=bind,src=$PSScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json `
+    --mount type=bind,src=$( wslpath $PSScriptRoot/../config/composer/config.json),target=${COMPOSER_HOME}/config.json `
     --env-file $PSScriptRoot/../config/composer/.env `
     -e LARAVEL_PATH=${LARAVEL_PATH} `
-    khs1994/php:7.3.11-composer-alpine `
+    khs1994/php:7.4.2-composer-alpine `
     composer create-project --prefer-dist laravel/laravel=$VERSION.* "$LARAVEL_PATH"
 
 # tar -zxvf .\${LARAVEL_PATH}.tar.gz

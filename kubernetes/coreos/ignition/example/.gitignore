@@ -1,6 +1,5 @@
 *
 !.gitignore
-!backup.yaml
 !ignition-local.example.yaml
 !ignition-n.node.template.yaml
 !ignition-n.master.template.yaml
@@ -11,7 +10,7 @@
 !docker.yaml
 !etcd.yaml
 !flanneld.yaml
-!helm.yaml
+!README.md
 !kube-apiserver.yaml
 !kube-containerd.yaml
 !kube-controller-manager.yaml

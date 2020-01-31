@@ -1,0 +1,3 @@
+resources:
+  - php.yaml
+namespace: monitoring

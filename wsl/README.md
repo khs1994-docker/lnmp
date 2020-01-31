@@ -158,8 +158,8 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [x] dom
 * [x] enchant
 * [x] exif
-* [ ] ext_skel
-* [ ] ext_skel_win32.php
+* [ ] ext_skel.php
+* [x] ffi
 * [x] fileinfo
 * [x] filter
 * [x] ftp
@@ -169,17 +169,16 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [x] hash
 * [x] iconv
 * [x] imap
-* [ ] interbase
 * [x] intl
 * [x] json
 * [x] ldap
 * [x] libxml
 * [x] mbstring
-* [ ] mysqli
+* [x] mysqli
 * [x] mysqlnd
 * [ ] oci8
 * [ ] odbc
-* [x] opcache
+* [ ] opcache
 * [x] openssl
 * [x] pcntl
 * [x] pcre
@@ -191,12 +190,11 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [ ] pdo_odbc
 * [x] pdo_pgsql
 * [x] pdo_sqlite
-* [ ] pgsql
+* [x] pgsql
 * [x] phar
 * [x] posix
 * [x] pspell
 * [x] readline
-* [ ] recode
 * [x] reflection
 * [x] session
 * [x] shmop

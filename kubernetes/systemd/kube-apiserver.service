@@ -1,7 +1,8 @@
 [Unit]
 Description=Kubernetes API Server
 Documentation=https://github.com/kubernetes/kubernetes
-After=network.target
+Wants=network-online.target network.target
+After=network-online.target network.target
 # Requires=etcd.service
 
 [Service]

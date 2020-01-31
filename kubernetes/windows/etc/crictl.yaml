@@ -1,0 +1,4 @@
+runtime-endpoint: npipe:\\\\.\pipe\containerd-containerd
+image-endpoint: npipe:\\\\.\pipe\containerd-containerd
+timeout: 0
+debug: false

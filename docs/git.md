@@ -89,3 +89,9 @@ $ git fetch origin refs/pull/1/head:pull_request
 * [github/hub](https://github.com/github/hub)
 
 * [git-lfs/git-lfs](https://github.com/git-lfs/git-lfs)
+
+## 跳过 SSL 验证（使用自签名证书）
+
+```bash
+$ git config http.sslverify false
+```

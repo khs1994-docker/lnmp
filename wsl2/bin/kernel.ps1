@@ -13,7 +13,7 @@ update    update kernel(Expand Archive kernel files to WSL2) [WSL_NAME(ubuntu-18
 exit
 }
 
-$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/309969189/artifacts/316747"
+$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/327188502/artifacts/431897"
 $kernelversion="wsl2-kernel-4.19.84-microsoft-standard+"
 $zip="$home\Downloads\$kernelversion.zip"
 $unzipFolder="$home\Downloads\$kernelversion"
@@ -50,7 +50,6 @@ cd "$home\Downloads\$kernelversion"
 "==> Exec: cp wsl2Kernel $home"
 
 try{
-  $ErrorActionPreference="continue"
   cp -r -Force wsl2Kernel $home
 
   $command="tar -zxvf linux.tar.gz -C /"

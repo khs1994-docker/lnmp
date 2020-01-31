@@ -43,7 +43,7 @@ Write-Warning "==> Exec:
 $ kubectl config get-contexts
 $ kubectl config use-context wsl2
 
-to switch wsl2
+switch to wsl2
 
 ==> Exec:
 

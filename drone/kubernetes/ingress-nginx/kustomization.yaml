@@ -1,3 +1,2 @@
-resources:
-- ingress-nginx.yaml
-namespace: ci
+bases:
+- base

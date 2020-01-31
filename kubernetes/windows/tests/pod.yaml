@@ -1,0 +1,15 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: windows-pod-test
+spec:
+  containers:
+  - name: windows-pod-test
+    image: mcr.microsoft.com/windows/nanoserver/insider:10.0.19023.1
+    command:
+      - powershell.exe
+    args:
+    - -c
+    - "while(echo $true){'sleep 30s' ; sleep 30}"
+  nodeSelector:
+    kubernetes.io/os: windows

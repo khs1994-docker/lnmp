@@ -234,7 +234,7 @@ services:
     tmpfs:
       - /run
     tmpfs: /run
-    restart: "no" # always | on-failure | unless-stopped # no Swarm mode
+    restart: "no" # no | always | on-failure | unless-stopped # no Swarm mode
     user: postgresql
     working_dir: /code
     domainname: foo.com
@@ -251,7 +251,7 @@ services:
       - net.ipv4.tcp_syncookies=0
 
   mysql:
-    image: mysql:8.0.18
+    image: mysql:8.0.19
     environment:
       # https://github.com/docker-library/docs/tree/master/mysql
       MYSQL_ROOT_PASSWORD: mytest

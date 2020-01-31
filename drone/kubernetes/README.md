@@ -20,6 +20,16 @@ $ kubectl apply -n ci -k mysql
 
 默认密码 `mytest`，手动进入创建 `gogs` `drone` `droneKubenative` 数据库 
 
+```bash
+$ kubectl -n ci exec -it mysql-xxxx sh
+
+$ mysql -uroot -pmytest
+
+mysql> create database gogs;
+mysql> create database drone;
+mysql> create database droneKubenative;
+```
+
 ## Redis
 
 ```bash
@@ -48,6 +58,8 @@ $ kubectl apply -n ci -k gogs
 
 ```bash
 $ kubectl apply -n ci -k drone
+
+# $ kubectl apply -n ci -k drone/overlays/github
 ```
 
 ### [Docker runner](https://docker-runner.docs.drone.io/installation/install_linux/)
@@ -72,7 +84,7 @@ $ kubectl apply -n ci -k drone-kubenative
 
 ## ingress-nginx
 
-后端 `gogs` `drone` `s3(minio)` 均为 http, 统一通过 ingress (https)代理访问(具体地址请到 `ingress-nginx/ingress-nginx.yaml` 查看)
+后端 `gogs` `drone` `s3(minio)` 均为 http, 统一通过 ingress (https)代理访问(具体地址请到 `ingress-nginx/base/ingress-nginx.yaml` 查看)
 
 ```bash
 $ kubectl apply -n ci -k ingress-nginx
@@ -81,6 +93,16 @@ $ kubectl apply -n ci -k ingress-nginx
 ## 私有仓库
 
 `Registry` 自行在 Kubernetes 进行部署。
+
+## 自定义
+
+新建 `XXX/my-custom` 文件夹，基于 `base` 自定义（`$ kubectl kustomize`）。
+
+```bash
+$ kubectl apply -k XXX/my-custom
+
+# $ kubectl apply -k drone/my-custom
+```
 
 ## ingress 证书为自签名证书
 

@@ -25,8 +25,8 @@ jobs:
       - name: Setup S3(Minio)
         run: |
           set -x
-          echo "MINIO_ACCESS_KEY=khs1994miniokey" >> $LNMP_PATH/.env
-          echo "MINIO_SECRET_KEY=khs1994miniosecret" >> $LNMP_PATH/.env
+          echo "MINIO_ACCESS_KEY=minioadmin" >> $LNMP_PATH/.env
+          echo "MINIO_SECRET_KEY=minioadmin" >> $LNMP_PATH/.env
           echo "MINIO_REGION=us-east-1" >> $LNMP_PATH/.env
           echo "MINIO_BROWSER=off" >> $LNMP_PATH/.env
 
@@ -34,8 +34,8 @@ jobs:
           echo "ASSET_URL=https://minio.t.khs1994.com/laravel/asset/" >> $LNMP_PATH/lrew/laravel/.env.development
 
           cat <<EOF | tee -a $LNMP_PATH/lrew/laravel/.env.development
-          AWS_ACCESS_KEY_ID=khs1994miniokey
-          AWS_SECRET_ACCESS_KEY=khs1994miniosecret
+          AWS_ACCESS_KEY_ID=minioadmin
+          AWS_SECRET_ACCESS_KEY=minioadmin
           AWS_DEFAULT_REGION=us-east-1
           AWS_BUCKET=laravel
           AWS_USE_PATH_STYLE_ENDPOINT=true
@@ -96,7 +96,7 @@ jobs:
           mc: docker run --rm --network host -v minio:/root/.mc minio/mc --insecure
         run: |
           set -x
-          ${mc} config host add minio https://minio.t.khs1994.com khs1994miniokey khs1994miniosecret
+          ${mc} config host add minio https://minio.t.khs1994.com minioadmin minioadmin
           ${mc} config host list minio
           ${mc} mb minio/laravel
       - name: Upload to S3(CDN)
@@ -105,9 +105,9 @@ jobs:
         # uses: peter-evans/s3-backup@v1.0.0
         env:
           # ${{ secrets.S3_ACCESS_KEY_ID }}
-          ACCESS_KEY_ID: khs1994miniokey
+          ACCESS_KEY_ID: minioadmin
           # ${{ secrets.S3_SECRET_ACCESS_KEY }}
-          SECRET_ACCESS_KEY: khs1994miniosecret
+          SECRET_ACCESS_KEY: minioadmin
           MIRROR_TARGET: laravel/asset/
           MIRROR_SOURCE: '/home/runner/work/laravel-demo/laravel/public'
           STORAGE_SERVICE_URL: 'https://minio.t.khs1994.com'

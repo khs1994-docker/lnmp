@@ -26,7 +26,7 @@ if (!($?)){
   --cert-file="$PSScriptRoot/certs/flanneld-etcd-client.pem" `
   --key-file="$PSScriptRoot/certs/flanneld-etcd-client-key.pem" `
   set /kubernetes/network/config `
-  $('{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}' | ConvertTo-Json)
+  $('{"Network":"10.244.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan","VNI":4096,"Port":4789}}' | ConvertTo-Json)
 }
 
 $command=wsl -u root -- echo ${K8S_ROOT}/bin/flanneld `

@@ -16,6 +16,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /home/username/app-development
+    type: DirectoryOrCreate
   storageClassName: hostpath
 ---
 apiVersion: v1
@@ -31,7 +32,7 @@ spec:
   capacity:
     storage: 20Gi
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-mode
-  volumeMode: Filesystem # or raw Block
+  volumeMode: Filesystem # Filesystem | Block
   accessModes:
     # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
 
@@ -48,6 +49,7 @@ spec:
   # Delete 删除 PV
   hostPath:
     path: /home/username/.docker/Volumes/lnmp-mysql-development
+    type: DirectoryOrCreate
   storageClassName: hostpath
 
 ---
@@ -68,26 +70,11 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /home/username/.docker/Volumes/lnmp-redis-development
+    type: DirectoryOrCreate
   storageClassName: hostpath
+
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: lnmp-registry-data-development
-  labels:
-    type: local
-    app: lnmp
-    tier: registry
-    env: development
-spec:
-  capacity:
-    storage: 20Gi
-  accessModes: [ "ReadWriteOnce" ]
-  persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /home/username/.docker/Volumes/lnmp-registry-development
-  storageClassName: hostpath
----
+
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -105,4 +92,5 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /home/username/.docker/Volumes/lnmp-log-development
+    type: DirectoryOrCreate
   storageClassName: hostpath

@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: php-fpm-status
+  namespace: lnmp
+  labels:
+    app: php-fpm-status
+spec:
+  ports:
+    - port: 9010
+      name: status
+  selector:
+    app: lnmp
+    tier: frontend
+  clusterIP: None

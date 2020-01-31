@@ -8,7 +8,9 @@
   "github": "repo/name",
   "releases": "",
   "url": "",
+  "urlMirror": "",
   "preUrl": "",
+  "preUrlMirror": "",
   "scripts": {
     "preinstall": "",
     "install": "",

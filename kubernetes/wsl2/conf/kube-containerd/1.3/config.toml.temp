@@ -107,11 +107,18 @@ oom_score = 0
           endpoint = ["https://gcr.azk8s.cn"]
         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
           endpoint = ["https://quay.azk8s.cn"]
-      [plugins."io.containerd.grpc.v1.cri".registry.configs."gcr.io".auth]
-        username = ""
-        password = ""
-        auth = ""
-        identitytoken = ""
+      [plugins."io.containerd.grpc.v1.cri".registry.configs]
+        # 私有 registry 验证
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."gcr.io".auth]
+          username = ""
+          password = ""
+          auth = ""
+          identitytoken = ""
+        # 使用自签名证书的 registry
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."registry.t.khs1994.com:28443".tls]
+          ca_file   = "/c/Users/90621/lnmp/kubernetes/secrets/t.khs1994.com/root-ca.crt"
+          cert_file = "/c/Users/90621/lnmp/kubernetes/secrets/t.khs1994.com/t.khs1994.com.crt"
+          key_file  = "/c/Users/90621/lnmp/kubernetes/secrets/t.khs1994.com/t.khs1994.com.key"
     [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]
       tls_cert_file = ""
       tls_key_file = ""

@@ -48,7 +48,15 @@ async function run() {
 
   core.debug(`docker network create by actions is : "${NETWORK}"`)
 
-  const IMAGE = `khs1994/php:${PHP_VERSION}-${PHP_TYPE}-alpine`;
+  let IMAGE = `khs1994/php:${PHP_VERSION}-${PHP_TYPE}-alpine`;
+
+  if(PHP_TYPE === 'php-cs-fixer'){
+    IMAGE = 'khs1994/php-cs-fixer'
+  }
+
+  if(PHP_TYPE === 'sami'){
+    IMAGE = 'khs1994/sami'
+  }
 
   core.debug('pull docker image : ' + IMAGE);
   await exec.exec('docker', [
@@ -67,8 +75,9 @@ async function run() {
     '-v', '/home/runner/work/_temp/_github_home:/github/home',
     '-v', '/home/runner/work/_temp/_github_workflow:/github/workflow',
     '-v', `${RUNNER_WORKSPACE}/${WORKSPACE}:/github/workspace`,
+    '--entrypoint', 'sh',
     IMAGE,
-    'sh', '-cex', ARGS,
+    '-cex', ARGS,
   ]);
 }
 

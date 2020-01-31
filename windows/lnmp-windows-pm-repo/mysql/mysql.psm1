@@ -22,7 +22,13 @@ Function install_after(){
 
     mysqld --initialize
 
+    # 安装服务
+
     _sudo "mysqld --install"
+
+    # 禁止开机启动
+
+    _sudo set-service mysql -StartupType Manual
   }
 
   if (!(Test-Path C:/mysql/my.cnf)){

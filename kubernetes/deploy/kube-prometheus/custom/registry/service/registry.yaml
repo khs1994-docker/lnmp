@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: registry-metrics
+  namespace: default
+  labels:
+    app: registry-metrics
+spec:
+  ports:
+  - name: debug
+    port: 5001
+    targetPort: debug
+  selector:
+    app: registry
+  clusterIP: None

@@ -33,15 +33,23 @@ $ wsl --set-version Ubuntu-18.04 2
 
 ## 新建 `k8s-data` WSL2 发行版
 
-* https://gitee.com/love_linger/WSL-Launcher
+**必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用以下方法。
 
-`launcher.json`
+```powershell
+$ cd ~/lnmp
 
-```json
-{
-    "distro": "k8s-data",
-    "repo": "library/alpine"
-}
+$ . ./windows/sdk/dockerhub/rootfs
+
+$ wsl --import k8s-data `
+    C:/k8s-data `
+    $(rootfs alpine) `
+    --version 2
+
+# 测试
+
+$ wsl -d k8s-data
+
+$ uname -a
 ```
 
 由于 WSL 存储机制，硬盘空间不能回收，我们将数据放到 `k8s-data`，若不再需要 `k8s` 直接删除 `k8s-data` 即可。例如 WSL2 放入一个 10G 文件，即使删除之后，这 10G 空间仍然占用，无法回收。
@@ -59,6 +67,20 @@ $ wsl --set-version Ubuntu-18.04 2
 
 ```bash
 $ wsl --shutdown
+```
+
+## 挂载 k8s-data `/dev/sdX` 到 `/wsl/k8s-data`
+
+```bash
+$ wsl -d k8s-data df -h
+
+Filesystem                Size      Used Available Use% Mounted on
+/dev/sdc                251.0G     12.4G    225.8G   5% /
+
+# 在 ubuntu-18.04 中将 /dev/sdc(不固定，必须通过上面的命令获取该值) 挂载到 /wsl/k8s-data
+
+$ wsl -u root -- mkdir -p /wsl/k8s-data
+$ wsl -u root -- mount /dev/sdX /wsl/k8s-data
 ```
 
 ## 安装 Docker 和 docker-compose
@@ -88,6 +110,7 @@ $ ./lnmp-k8s kubernetes-server --url linux arm64
 ```bash
 $ cd ~/lnmp/kubernetes
 
+$ wsl
 $ docker-compose up cfssl-wsl2
 ```
 
@@ -107,7 +130,7 @@ $ sudo cp -a wsl2/certs ${K8S_ROOT:?err}/
 $ sudo mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
 $ sudo mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
 
-$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
+$ sudo cp -a kubernetes-release/release/v1.17.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
 ## Windows 启动 Etcd
@@ -130,19 +153,19 @@ $ ./wsl2/kube-nginx
 $ get-process nginx
 ```
 
-## Windows 启动 kube-apiserver
+## kube-apiserver
 
 ```powershell
 $ ./wsl2/kube-apiserver start
 ```
 
-## Windows 启动 kube-controller-manager
+## kube-controller-manager
 
 ```powershell
 $ ./wsl2/kube-controller-manager start
 ```
 
-## Windows 启动 kube-scheduler
+## kube-scheduler
 
 ```powershell
 $ ./wsl2/kube-scheduler start

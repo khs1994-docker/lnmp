@@ -28,6 +28,11 @@ http:
   # tls:
   #   certificate: /etc/docker/registry/ssl/www.t.khs1994.com.crt
   #   key: /etc/docker/registry/ssl/www.t.khs1994.com.key
+  debug:
+    addr: :5001
+    prometheus:
+      enabled: true
+      path: /metrics
 # 类似 github webhooks ,给特定网址 post 一个 json 数据
 notifications:
   endpoints:

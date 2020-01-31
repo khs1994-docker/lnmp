@@ -1,9 +1,109 @@
+
+<#PSScriptInfo
+
+.VERSION 19.03.7-alpha.1
+
+.GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
+
+.AUTHOR khs1994@khs1994.com
+
+.COMPANYNAME khs1994-docker
+
+.COPYRIGHT khs1994@khs1994.com
+
+.TAGS docker lnmp
+
+.LICENSEURI https://github.com/khs1994-docker/lnmp/blob/master/LICENSE
+
+.PROJECTURI https://github.com/khs1994-docker/lnmp
+
+.ICONURI
+
+.EXTERNALMODULEDEPENDENCIES
+
+.REQUIREDSCRIPTS
+
+.EXTERNALSCRIPTDEPENDENCIES
+
+.RELEASENOTES
+
+
+#>
+
+<#
+.SYNOPSIS
+  khs1994-docker/lnmp CLI
+.DESCRIPTION
+  khs1994-docker/lnmp CLI
+.EXAMPLE
+  PS C:\> lnmp-docker up
+.INPUTS
+
+.OUTPUTS
+
+.NOTES
+  khs1994-docker/lnmp CLI
+#>
+
+$LNMP_CACHE="$HOME/.khs1994-docker-lnmp"
+
+if ($args[0] -eq "install"){
+  git clone -b 19.03 --depth=1 https://github.com/khs1994-docker/lnmp.git ~/lnmp
+
+  exit
+}
+
+$outNull=$false
+
+if (${QUITE} -eq $true){
+  $outNull=$true
+}
+
+if ($args[0] -eq "services"){
+  $outNull=$true
+}
+
+Function printInfo(){
+  if($outNull){
+    return
+  }
+Write-Host "`nINFO    " -NoNewLine -ForegroundColor Green
+Write-Host "$args`n";
+}
+
+Function getEnvFile(){
+  $LNMP_ENV_FILE=".env"
+  $LNMP_ENV_FILE_PS1=".env.ps1"
+  if($env:LNMP_ENV){
+    if (Test-Path(".env.$env:LNMP_ENV")){
+      write-host 1
+      $LNMP_ENV_FILE=".env.$env:LNMP_ENV"
+    }
+
+    if (Test-Path(".env.$env:LNMP_ENV.ps1")){
+      $LNMP_ENV_FILE_PS1=".env.$env:LNMP_ENV.ps1"
+    }
+  }
+
+  return $LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1
+}
+
+$LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1=getEnvFile
+
+if($args[0] -eq "env-file"){
+  echo $LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1
+
+  exit
+}
+
+printInfo "Load env file [ $LNMP_ENV_FILE ] and [ $LNMP_ENV_FILE_PS1 ]"
+
 . "$PSScriptRoot/.env.example.ps1"
 
 . "$PSScriptRoot/cli/.env.ps1"
 
-if (Test-Path "$PSScriptRoot/.env.ps1"){
-  . "$PSScriptRoot/.env.ps1"
+if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1"){
+  . "$PSScriptRoot/$LNMP_ENV_FILE_PS1"
 }
 
 # [environment]::SetEnvironmentvariable("DOCKER_DEFAULT_PLATFORM", "linux", "User");
@@ -20,16 +120,6 @@ Function _command($command){
   get-command $command -ErrorAction "SilentlyContinue"
 
   return $?
-}
-
-$outNull=$false
-
-if (${QUITE} -eq $true){
-  $outNull=$true
-}
-
-if ($args[0] -eq "services"){
-  $outNull=$true
 }
 
 Function printError(){
@@ -66,14 +156,14 @@ Function env_status(){
   if (Test-Path .env){
     printInfo '.env file existing'
   }else{
-    Write-Warning '.env file NOT existing'
+    Write-Warning '.env file NOT existing, maybe first run'
     cp .env.example .env
   }
 
   if (Test-Path .env.ps1){
-    printInfo '.env.ps1 file existing'
+    printInfo ".env.ps1 file existing"
   }else{
-    Write-Warning '.env.ps1 file NOT existing'
+    Write-Warning ".env.ps1 file NOT existing, maybe first run"
     cp .env.example.ps1 .env.ps1
   }
 
@@ -188,9 +278,6 @@ Function check_docker_version(){
 }
 
 Function init(){
-  if(_command docker-compose){
-    printInfo $(docker-compose --version)
-  }
   logs
   # git submodule update --init --recursive
   printInfo 'Init is SUCCESS'
@@ -205,8 +292,8 @@ Official WebSite https://lnmp.khs1994.com
 
 Usage: ./docker-lnmp COMMAND
 
-Try Kubernetes Free:
-  k8s                  Try Kubernetes Free
+Run Kubernetes on Tencent Cloud:
+  k8s                  Run Kubernetes on Tencent Cloud
 
 Donate:
   zan                  Donate
@@ -224,6 +311,7 @@ Commands:
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
+  compose              Install docker-compose [PATH]
   composer             Exec composer command on Docker Container
   bug                  Generate Debug information, then copy it to GitHub Issues
   daemon-socket        Expose Docker daemon on tcp://0.0.0.0:2376 without TLS
@@ -269,7 +357,7 @@ ClusterKit:
   clusterkit-help      Print ClusterKit help info
 
 Developer Tools:
-  cookbooks            Up local cookbooks server
+
 
 WSL2:
 
@@ -281,7 +369,7 @@ You can open issue in [ https://github.com/khs1994-docker/lnmp/issues ] when you
 
 You must Update .env file when update this project.
 
-Exec '$ lnmp-docker k8s' Try Kubernetes Free
+Exec '$ lnmp-docker k8s' Run Kubernetes on Tencent Cloud
 
 Exec '$ lnmp-docker zan' donate
 "
@@ -423,20 +511,28 @@ Function get_compose_options($compose_files,$isBuild=0){
   Foreach ($item in $LREW_INCLUDE)
   {
     $KEY="LREW_$($item -Replace ('-','_'))_VENDOR".ToUpper();
-    $content=$(cat .env | Where-Object {$_ -like "${KEY}=lrew-dev"})
+    $content=$(cat $LNMP_ENV_FILE | Where-Object {$_ -like "${KEY}=lrew-dev"})
 
+    # dev
     if(Test-Path $PSScriptRoot/vendor/lrew-dev/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew-dev/$item"
       # set env
       if(!($content)){
-         "${KEY}=lrew-dev" >> .env
+         "${KEY}=lrew-dev" >> $LNMP_ENV_FILE
+      }
+    }elseif(Test-Path $PSScriptRoot/vendor/lrew2/$item){
+      $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew2/$item"
+      # unset env
+      if($content){
+        @(Get-Content $LNMP_ENV_FILE) -replace `
+          "${KEY}=lrew-dev",'' | Set-Content $LNMP_ENV_FILE
       }
     }elseif(Test-Path $PSScriptRoot/vendor/lrew/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/vendor/lrew/$item"
       # unset env
       if($content){
-        @(Get-Content .env) -replace `
-          "${KEY}=lrew-dev",'' | Set-Content .env
+        @(Get-Content $LNMP_ENV_FILE) -replace `
+          "${KEY}=lrew-dev",'' | Set-Content $LNMP_ENV_FILE
       }
     }elseif(Test-Path $PSScriptRoot/lrew/$item){
       $LREW_INCLUDE_ROOT="$PSScriptRoot/lrew/$item"
@@ -460,6 +556,8 @@ Function get_compose_options($compose_files,$isBuild=0){
     }
     $options +=" -f $LREW_INCLUDE_ROOT\docker-compose.yml -f $LREW_INCLUDE_ROOT\docker-compose.override.yml "
   }
+
+  $options += " --env-file $LNMP_ENV_FILE "
 
   $options += " -f docker-lnmp.include.yml "
 
@@ -590,7 +688,7 @@ Function _wsl_check(){
   wsl -d $DistributionName echo ""
 
   if(!$?){
-    printError "wsl [ $DistributionName ] not found, please check [ .env.ps1 ] file `$DistributionName value"
+    printError "wsl [ $DistributionName ] not found, please check [ $LNMP_ENV_FILE_PS1 ] file `$DistributionName value"
     exit 1
   }
 }
@@ -673,6 +771,10 @@ env_status
 logs
 check_docker_version
 
+if(_command docker-compose){
+  printInfo $(docker-compose --version)
+}
+
 if ($args.Count -eq 0){
   help_information
 }else{
@@ -693,11 +795,11 @@ switch -regex ($command){
       _lrew_outdated $other
     }
 
-    pkg-backup {
+    lrew-backup {
       _lrew_backup
     }
 
-    pkg-update {
+    lrew-update {
       _lrew_update $other
     }
 
@@ -827,8 +929,8 @@ switch -regex ($command){
         exit
       }
 
-      notepad.exe .env
-      notepad.exe .env.ps1
+      notepad.exe $LNMP_ENV_FILE
+      notepad.exe $LNMP_ENV_FILE_PS1
     }
 
     new {
@@ -1209,48 +1311,6 @@ XXX
       & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d ${LNMP_SERVICES} pcit}
     }
 
-    "cookbooks" {
-      printInfo k8s
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/k8s)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/kubernetes-handbook.git ${APP_ROOT}/lnmp-docs/k8s
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/k8s fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/k8s reset --hard origin/gh-pages
-      }
-
-      printInfo docker_practice
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/docker_practice)){
-        git clone --depth=1 -b master git@github.com:docker_practice/zh-cn.git ${APP_ROOT}/lnmp-docs/docker_practice
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/docker_practice fetch --depth=1 origin master
-        git -C ${APP_ROOT}/lnmp-docs/docker_practice reset --hard origin/master
-      }
-
-      printInfo laravel
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/laravel
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/laravel fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/laravel reset --hard origin/gh-pages
-      }
-
-      printInfo laravel_en
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/laravel-en)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/laravel-docs.us-en.git ${APP_ROOT}/lnmp-docs/laravel-en
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/laravel-en fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/laravel-en reset --hard origin/gh-pages
-      }
-
-      printInfo nginx
-      if(!(Test-Path ${APP_ROOT}/lnmp-docs/nginx)){
-        git clone --depth=1 -b gh-pages git@gitee.com:khs1994-website/nginx-docs.zh-cn.git ${APP_ROOT}/lnmp-docs/nginx
-      }else{
-        git -C ${APP_ROOT}/lnmp-docs/nginx fetch --depth=1 origin gh-pages
-        git -C ${APP_ROOT}/lnmp-docs/nginx reset --hard origin/gh-pages
-      }
-    }
-
     daemon-socket {
       docker run -d --restart=always `
         -p 2376:2375 `
@@ -1297,14 +1357,14 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         exit
       }
 
-      mkdir -Force $HOME/.khs1994-docker-lnmp/registry | out-null
+      mkdir -Force $LNMP_CACHE/registry | out-null
 
       docker run -it -d `
         -p 443:443 `
         -p 80:80 `
         --mount type=bind,src=$pwd/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml `
         --mount type=bind,src=$pwd/config/registry,target=/etc/docker/registry/ssl `
-        --mount type=bind,src=$HOME/.khs1994-docker-lnmp/registry,target=/var/lib/registry `
+        --mount type=bind,src=$LNMP_CACHE/registry,target=/var/lib/registry `
         --label com.khs1994.lnmp.gcr.io `
         registry
 
@@ -1346,6 +1406,17 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
         $WORKING_DIR,$COMPOSER_COMMAND=$other
 
+        if(!$WORKING_DIR){
+          "Some ARGs require
+
+Usage: ./lnmp-docker composer PATH_IN_CONTAINER COMPOSER_COMMAND
+
+Example: ./lnmp-docker composer /app/demo install
+"
+
+          exit 1
+        }
+
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
@@ -1362,15 +1433,31 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       & $PSScriptRoot/wsl2/bin/dockerd-wsl2.ps1 $other
     }
 
+    "compose$" {
+      $DIST="C:\ProgramData\DockerDesktop\version-bin\docker-compose.exe"
+      if($other){
+        $DIST=$other
+
+        if($other.count -gt 1){
+          $DIST=$other[0]
+        }
+      }
+
+      printInfo "Download docker-compose $LNMP_DOCKER_COMPOSE_VERSION to $DIST ..."
+
+      start-process "curl.exe" -ArgumentList "-L","https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe","-o","$DIST" -Verb Runas -wait -WindowStyle Hidden
+    }
+
     default {
         #@custom
         __lnmp_custom_command $args
         printInfo `
-"Exec docker-compose command, maybe you input command is notdefined, then output docker-compose help information"
+"maybe you input command is notdefined, TRY EXEC docker-compose command"
         $options=get_compose_options "docker-lnmp.yml",`
                                      "docker-lnmp.override.yml"
 
-        & {docker-compose $options $args}
+        $command,$other = $args
+        & {docker-compose $options $command $other}
       }
 }
 

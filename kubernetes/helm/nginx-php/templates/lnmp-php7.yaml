@@ -48,6 +48,7 @@ spec:
       containers:
       - name: lnmp-php7
         image: {{ .Values.php.image }}
+        imagePullPolicy: IfNotPresent
         args:
         - php-fpm
         - -R

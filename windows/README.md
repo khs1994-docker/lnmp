@@ -2,24 +2,20 @@
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/474)
 
-由于 `Docker Desktop` 不太稳定，本项目支持 **Plan B** `WNAMP` 开发环境。
-
 * 系统 `Windows 10`
 
 * 终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也可以。
 
 * 部分软件放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` `C:\Apache24`
 
-* MySQL、Apache 设置为服务之后会开机自启动，在服务管理中将启动类型设为手动，避免开机自启。
-
-* 部分软件使用 `WSL` 来安装运行。
+* 部分软件使用 `WSL` 来安装运行(例如 `Redis`)。
 
 ## 快速初始化 WNAMP 环境
 
 > 使用以下脚本，开发者可以快速的建立开发环境，后续会介绍脚本所做的工作。
 
 ```bash
-$ lnmp-windows-pm.ps1 nginx mysql php composer node
+$ lnmp-windows-pm.ps1 install nginx mysql php composer node
 ```
 
 ### 安装指定软件(Windows 包管理)
@@ -169,7 +165,7 @@ http://blogbuildingu.com/files/RunHiddenConsole.zip
 $ RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c C:/php/php.ini
 ```
 
-### pecl 下载扩展
+### pecl 下载扩展(或者使用 pickle)
 
 手动在 https://pecl.php.net/ 下载扩展（注意与 PHP 版本对应）。
 

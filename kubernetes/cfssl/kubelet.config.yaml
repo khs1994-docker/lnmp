@@ -46,7 +46,7 @@ cgroupDriver: systemd
 runtimeRequestTimeout: 10m
 hairpinMode: promiscuous-bridge
 maxPods: 220
-podCIDR: "172.30.0.0/16"
+podCIDR: "10.244.0.0/16"
 podPidsLimit: -1
 resolvConf: /etc/resolv.conf
 maxOpenFiles: 1000000
@@ -55,9 +55,11 @@ kubeAPIBurst: 2000
 serializeImagePulls: false
 evictionHard:
   memory.available:  "100Mi"
-nodefs.available:  "10%"
-nodefs.inodesFree: "5%"
-imagefs.available: "15%"
+  nodefs.available:  "10%"
+  nodefs.inodesFree: "5%"
+  imagefs.available: "15%"
+evictionMinimumReclaim:
+  imagefs.available: "15%"
 evictionSoft: {}
 enableControllerAttachDetach: true
 failSwapOn: true

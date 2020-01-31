@@ -28,3 +28,5 @@ deployment/**/*.custom.cnf
 deployment/**/*.custom.conf
 deployment/**/*.custom.ini
 deployment/**/*.custom.json
+
+my-custom

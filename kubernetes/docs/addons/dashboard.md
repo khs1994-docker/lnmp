@@ -45,7 +45,7 @@ $ kubectl config set-credentials docker-desktop --token="${TOKEN}"
 
 * **Windows** `%UserProfile%\.kube\config`
 
-### Linux
+### Linux(自行部署的 Kubernetes)
 
 ```bash
 $ kubectl create sa dashboard-admin -n kube-system

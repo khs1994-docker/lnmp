@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.11
+ARG PHP_VERSION=7.3.14
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -117,7 +117,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         && curl -fsSL -o /usr/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
+           https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
         && chmod +x /usr/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \

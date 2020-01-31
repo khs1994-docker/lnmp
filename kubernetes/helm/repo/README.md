@@ -27,7 +27,7 @@ $ cp index.yaml *.tgz ../repo/
 
 ```bash
 # 配置 minio 客户端 mc
-$ mc config host add myminio https://storage.khs1994.com khs1994miniokey khs1994miniosecret
+$ mc config host add myminio https://storage.khs1994.com minioadmin minioadmin
 
 # 新建 bucket
 $ mc mb myminio/charts

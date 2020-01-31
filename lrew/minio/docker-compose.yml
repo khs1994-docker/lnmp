@@ -18,7 +18,7 @@ x-common-label:
 services:
   minio:
     << : *default-common
-    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-09-05T23-24-38Z}
+    image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2019-10-12T01-39-57Z}
     volumes:
       - type: volume
         source: minio-data
@@ -29,8 +29,8 @@ services:
     #   - "9000:9000"
     environment:
       # https://github.com/minio/minio/blob/master/docs/config/README.md
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-khs1994miniokey}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-khs1994miniosecret}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
       MINIO_REGION: ${MINIO_REGION:-'us-east-1'}
       MINIO_BROWSER: ${MINIO_BROWSER:-on}
       MINIO_WORM: ${MINIO_WORM:-off}

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.10
+FROM --platform=$TARGETPLATFORM alpine:3.11
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -331,7 +331,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 # RUN set -ex \
   && rm -rf /usr/src/php \
   && curl -fsSL -o /usr/bin/pickle \
-       https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
+       https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
   && chmod +x /usr/bin/pickle
 
 ENV PECL_BUILD_DEPS \

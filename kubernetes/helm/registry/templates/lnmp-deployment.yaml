@@ -23,6 +23,7 @@ spec:
       containers:
       - name: lnmp-registry
         image: registry
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: 100m

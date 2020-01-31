@@ -1,0 +1,9 @@
+bases:
+- certs
+
+resources:
+- config.yaml
+- kubesphere-installer.yaml
+- custom.yaml
+
+namespace: kubesphere-system

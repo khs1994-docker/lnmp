@@ -1,4 +1,4 @@
-# Deploy Kubernetes on Fedora CoreOS（FCOS）
+# Deploy Kubernetes on [Fedora CoreOS（FCOS）](https://getfedora.org/en/coreos/download/)
 
 ## Overview
 
@@ -14,12 +14,11 @@
 ## 注意事项
 
 * 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间
-* bug1: ignition 不能有 `storage.directories` 指令
-* bug2: 硬盘空间充足，但报硬盘空间不足错误，解决办法: ignition `storage.files.path` 不要列出大文件
+* **bug:** 硬盘空间充足，但报硬盘空间不足错误，解决办法: ignition `storage.files.path` 不要列出大文件
 * `SELinux` 已关闭
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
-* `Etcd` `kube-nginx` 运行方式为 `podman`
-* bug3: 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像 `(例如：$ sudo podman rmi IMAGE_NAME)` 之后重启服务 `(例如：$ sudo systemctl restart etcd)`
+* `Etcd` `kube-nginx` 等部分服务运行方式为 `podman`
+* **bug:** 异常关机（强制关机）可能导致 `podman` 运行出错，请删除镜像 `(例如：$ sudo podman rmi IMAGE_NAME)` 之后重启服务 `(例如：$ sudo systemctl restart etcd)`
 
 ### 虚拟机网络配置
 
@@ -46,12 +45,15 @@ $ ./coreos init
 ```bash
 $ cd ..
 # ~/lnmp/kubernetes
+
 # download kubernetes server files
 $ ./lnmp-k8s kubernetes-server
 
+# $ ./lnmp-k8s kubernetes-server --url
+
 # download soft
-# $ items="etcd cni flanneld helm crictl containerd"
-$ items="flanneld helm crictl containerd"
+# $ items="etcd cni flanneld crictl containerd"
+$ items="flanneld crictl containerd"
 $ for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
 ```
 
@@ -82,8 +84,6 @@ $ ./coreos server
 # 安装第一个节点 N 为 1，以此类推
 $ ./coreos new-vm N
 
-# 在管理界面打开虚拟机设置
-# 1.不要勾选 系统 -> 启用EFI
 # 启动虚拟机，在终端执行以下命令
 
 $ export SERVER_HOST=192.168.57.1
@@ -91,8 +91,12 @@ $ export SERVER_HOST=192.168.57.1
 # 节点 1 设置 NODE_NAME 为 1，以此类推
 $ curl ${SERVER_HOST}:8080/bin/coreos.sh | NODE_NAME=1 bash
 
-# 关机($ poweroff)，在虚拟机设置页面移除 ISO
+# 关机
+$ poweroff
+
+# 在虚拟机设置页面移除 ISO
 # 存储 -> 存储介质 -> 选住 ISO -> 属性 -> 移除虚拟盘 点击确定
+
 # 重新启动(可能会遇到异常，只要不是 ignition 错误，强制重启即可)
 ```
 
@@ -107,9 +111,17 @@ $ curl ${SERVER_HOST}:8080/bin/coreos.sh | NODE_NAME=1 bash
 ## 虚拟机网卡设置
 
 | 网卡    | 模式                  | IP              |
-| :----- | :-------------        |:------          |
-| 网卡1   | 桥接 (`DHCP`)         | `192.168.199.*`(根据实际配置) |
-| 网卡2   | `host-only` (静态IP)  | `192.168.57.*`  |
+| :-----  | :-------------        |:------          |
+| 网卡1   | `host-only` (静态IP)  | `192.168.57.*`  |
+| 网卡2   | 桥接 (`DHCP`)         | `192.168.199.*`(根据实际配置) |
+
+## 添加默认路由
+
+有时可能连接不到网络，请添加路由（`192.168.199.1` 为桥接网络的网关地址）。
+
+```bash
+$ sudo route add default gw 192.168.199.1
+```
 
 # More Information
 

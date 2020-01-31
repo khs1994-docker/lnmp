@@ -1,0 +1,4 @@
+resources:
+- prometheus-kubeControllerManagerService.yaml
+- prometheus-kubeSchedulerService.yaml
+namespace: kube-system

@@ -47,12 +47,12 @@ source /etc/os-release
 ################################################################################
 
 PHP_TIMEZONE=PRC
-PHP_URL=http://cn2.php.net/distributions
+PHP_URL=https://mirrors.sohu.com/php
 host=x86_64-linux-gnu
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.9.1
+export COMPOSER_VERSION=1.9.2
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -113,9 +113,13 @@ case "$1" in
 
   7.4.* )
      export PHP_NUM=74
-     export BUILD_FROM_GIT=1
-     export PHP_SRC_BRANCH=PHP-7.4
      ;;
+
+  # 8.0.* )
+  #    export PHP_NUM=80
+  #    export BUILD_FROM_GIT=1
+  #    export PHP_SRC_BRANCH=PHP-8.0
+  #    ;;
 
   nightly )
     export PHP_NUM=80
@@ -154,7 +158,7 @@ _download_src(){
         cd /usr/local/src ; $(_sudo) chmod 777 /usr/local/src
 
         wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null || \
-          wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
+          wget https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz
 
         echo -e "Untar ...\n\n"
 
@@ -779,7 +783,7 @@ $(_sudo) chmod 777 php${PHP_NUM}-*
 _pickle(){
   # composer global require friendsofphp/pickle
   $(_sudo) curl -sfL -o /usr/local/bin/pickle \
-    https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar
+    https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar
 }
 
 _composer(){
@@ -963,8 +967,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.3.11
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.3.11
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.2
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.2
 
 _get_phpnum $PHP_VERSION
 

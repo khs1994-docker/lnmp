@@ -37,7 +37,7 @@ main (){
 
   if [ -f ca-key.pem ];then
     # CA 证书已存在，复用
-    cp ca-key.pem ca.pem registry-ca.pem cert/
+    cp ca-key.pem ca.pem cert/
   else
     cd cert
 
@@ -50,8 +50,8 @@ main (){
     echo '{
       "CN":"kubernetes",
       "key":{
-        "algo":"rsa",
-        "size":2048
+        "algo":"ecdsa",
+        "size": 384
       },
       "names": [
       {
@@ -84,8 +84,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     }
   }' \
     | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
@@ -98,8 +98,8 @@ main (){
       "CN":"'$CN_NAME'",
       "hosts":[""],
       "key":{
-        "algo":"rsa",
-        "size":2048
+        "algo":"ecdsa",
+        "size": 384
       }
     }' \
       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
@@ -108,10 +108,11 @@ main (){
 # registry (server)
   # export CN_NAME=registry
   #
-  # echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"rsa","size":2048}}' \
+  # echo '{"CN":"'$CN_NAME'","hosts":[""],"key":{"algo":"ecdsa","size":384}}' \
   #      | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
   #      -hostname="$registry_hosts" - | cfssljson -bare $CN_NAME
 
+# /etcd-server               Generate the certificate for serving etcd
 # etcd (server) hosts 为 Etcd 节点 IP
   export CN_NAME=etcd
 
@@ -119,8 +120,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },
     "names":[{
       "C":"CN",
@@ -140,8 +141,8 @@ main (){
   echo '{"CN":"'$CN_NAME'",
   "hosts":[""],
   "key":{
-    "algo":"rsa",
-    "size":2048
+    "algo":"ecdsa",
+    "size": 384
   },
   "names":[{
     "C":"CN",
@@ -154,6 +155,8 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -profile=kubernetes - | cfssljson -bare $CN_NAME
 
+# /apiserver-etcd-client
+# Generate the certificate the apiserver uses to access etcd
 # kube-apiserver (client) 连接 Etcd
   export CN_NAME=kube-apiserver-etcd-client
   export O=system:masters
@@ -161,8 +164,8 @@ main (){
   echo '{"CN":"'$CN_NAME'",
   "hosts":[""],
   "key":{
-    "algo":"rsa",
-    "size":2048
+    "algo":"ecdsa",
+    "size": 384
   },
   "names":[{
     "C":"CN",
@@ -190,8 +193,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },
     "names":[{
       "C":"CN",
@@ -204,6 +207,7 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem  \
        -profile=kubernetes - | cfssljson -bare $CN_NAME
 
+# /apiserver                 Generate the certificate for serving the Kubernetes API
 # kube-apiserver (server)
   export CN_NAME=kube-apiserver
   export k8s_hosts=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.default.svc.cluster.local
@@ -211,8 +215,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },"names":[{
       "C":"CN",
       "ST":"Beijing",
@@ -224,7 +228,8 @@ main (){
        | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
        -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${CLUSTER_KUBERNETES_SVC_IP},$k8s_hosts,${NODE_IPS}" - \
        | cfssljson -bare apiserver
-
+# /apiserver-kubelet-client
+# Generate the certificate for the API server to connect to kubelet
 # kube-apiserver-kubelet-client (client)
   export CN_NAME=kube-apiserver-kubelet-client
   export O=system:masters
@@ -233,8 +238,8 @@ main (){
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },"names":[{
       "C":"CN",
       "ST":"Beijing",
@@ -270,8 +275,8 @@ EOF
     "CN": "'${CN}'",
     "hosts": [],
     "key": {
-      "algo": "rsa",
-      "size": 2048
+      "algo": "ecdsa",
+      "size": 384
     },
     "names": [
       {
@@ -290,7 +295,7 @@ EOF
 
 # system:kube-controller-manager (server + client)
   # 1. 与 kube-apiserver 的安全端口通信
-  # 2. 在安全端口(https，10252) 输出 prometheus 格式的 metrics
+  # 2. 在安全端口(https，10257) 输出 prometheus 格式的 metrics
   export CN_NAME=system:kube-controller-manager
   export O=system:kube-controller-manager
 
@@ -301,8 +306,8 @@ EOF
     "CN":"'$CN_NAME'",
     "hosts":[""],
     "key":{
-      "algo":"rsa",
-      "size":2048
+      "algo":"ecdsa",
+      "size": 384
     },
     "names":[{
       "C":"CN",
@@ -317,7 +322,7 @@ EOF
 
 # system:kube-scheduler (server + client)
    # 1. 与 kube-apiserver 的安全端口通信
-   # 2. 在安全端口(https，10251) 输出 prometheus 格式的 metrics
+   # 2. 在安全端口(10259) 输出 prometheus 格式的 metrics
    export CN_NAME=system:kube-scheduler
    export O=system:kube-scheduler
 
@@ -325,8 +330,8 @@ EOF
      "CN":"'$CN_NAME'",
      "hosts":[""],
      "key":{
-       "algo":"rsa",
-       "size":2048
+       "algo":"ecdsa",
+       "size": 384
      },
      "names":[{
        "C":"CN",
@@ -348,8 +353,8 @@ EOF
      "CN":"'$CN_NAME'",
      "hosts":[""],
      "key":{
-       "algo":"rsa",
-       "size":2048
+       "algo":"ecdsa",
+       "size": 384
      },
      "names":[{
        "C":"CN",

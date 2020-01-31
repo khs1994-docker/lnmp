@@ -57,7 +57,7 @@ systemd:
           --ca-file="${K8S_ROOT}/certs/ca.pem" \
           --cert-file="${K8S_ROOT}/certs/flanneld-etcd-client.pem" \
           --key-file="${K8S_ROOT}/certs/flanneld-etcd-client-key.pem" \
-          set /kubernetes/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
+          set /kubernetes/network/config '{"Network":"10.244.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
         ExecStartPre=-podman container rm flanneld-etcdctl
 
         ExecStart=${K8S_ROOT}/bin/flanneld \

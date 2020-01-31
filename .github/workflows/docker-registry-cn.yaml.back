@@ -1,0 +1,36 @@
+on:
+  push:
+  schedule:
+    - cron: '0 0 */1 * *'
+
+name: CI
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker-practice/actions-setup-docker@master
+      - run: docker version
+      - run: docker info
+      - name: Test
+        run: |
+          registrys="
+          docker.io
+          dockerhub.azk8s.cn
+          reg-mirror.qiniu.com
+          hub-mirror.c.163.com
+          docker.mirrors.ustc.edu.cn
+          mirror.gcr.io
+          $ALIYUN_MIRROR
+          "
+          image="library/nginx:1.17.8-alpine"
+
+          for registry in $registrys
+          do
+             docker pull $registry/$image \
+               && echo -e "\033[32m$registry is good\033[0m" \
+               || echo -e "\033[31m$registry is outdated\033[0m"
+             docker rmi $registry/$image || true
+          done
+        env:
+          ALIYUN_MIRROR: ${{secrets.ALIYUN_MIRROR}}

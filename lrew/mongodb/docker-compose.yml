@@ -18,7 +18,7 @@ x-common-label:
 services:
   mongodb:
     << : *default-common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.2.1}
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.2.3}
     volumes:
       - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
       - type: volume

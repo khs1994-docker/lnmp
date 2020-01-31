@@ -1,8 +1,8 @@
 {
   "name": "python",
   "description": "Python is a programming language that lets you work quickly and integrate systems more effectively",
-  "version": "3.8.0",
-  "preVersion": "3.8.0",
+  "version": "3.8.1",
+  "preVersion": "3.8.1",
   "homepage": "https://www.python.org/",
   "bug": "",
   "github": "python/cpython",

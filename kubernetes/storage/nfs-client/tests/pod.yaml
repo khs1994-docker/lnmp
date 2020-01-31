@@ -1,0 +1,74 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: sc-nfs-test-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: "nfs.storage.k8s.khs1994.com"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: sc-nfs-test-pvc-delete
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: "delete.nfs.storage.k8s.khs1994.com"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: sc-nfs-test-pvc-retain
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: "retain.nfs.storage.k8s.khs1994.com"
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: sc-nfs-test
+  labels:
+    app: test
+spec:
+  containers:
+  - name: sc-nfs-test
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /data
+        name: data
+      - mountPath: /data-delete
+        name: data-delete
+      - mountPath: /data-retain
+        name: data-retain
+    args:
+      - sh
+      - -c
+      - "while :; do sleep 3600; done"
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: sc-nfs-test-pvc # pvc 删除，数据被 archive
+  - name: data-delete
+    persistentVolumeClaim:
+      claimName: sc-nfs-test-pvc-delete # pvc 删除，数据也被删除
+  - name: data-retain
+    persistentVolumeClaim:
+      claimName: sc-nfs-test-pvc-retain # pvc 删除，数据将被保留

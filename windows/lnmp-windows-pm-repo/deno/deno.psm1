@@ -29,7 +29,7 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="deno"
 
   if($(_command deno)){
-    $CURRENT_VERSION=(deno version).split(":")[1].trim()
+    $CURRENT_VERSION=(deno --version).split(" ")[1].trim()
 
     if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
@@ -54,7 +54,7 @@ Function install($VERSION=0,$isPre=0){
   _cleanup deno
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  deno version
+  deno --version
 }
 
 Function uninstall(){

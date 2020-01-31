@@ -4,6 +4,15 @@ about: Create a report to help us improve
 
 ---
 
+<!--
+
+！！！ 请先自助排错 ！！！
+
+1. 查看 `log/XXX/FILE` 日志文件内容
+
+2. 执行 `./lnmp-docker logs` 查看日志
+-->
+
 <!--请按照以下说明提出问题，不符合规范的问题直接关闭，不予解答-->
 
 <!--

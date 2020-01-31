@@ -5,7 +5,7 @@ set -e
 if [ "$debug" = 'true' ];then set -x; fi
 
 print_help_info(){
-  exec echo -e "
+  exec echo "
 Usage:
 
 lnmp-mnamp {start | restart | stop} {SOFT_NAME | all | common}
@@ -195,17 +195,12 @@ if [ "$1" = restart ];then
 fi
 
 if [ "$1" = 'status' ];then
-    ps aux | grep nginx --color=auto
-    echo "===>"
-    ps aux | grep php-fpm --color=auto
-    echo "===>"
-    ps aux | grep mysql --color=auto
-    echo "===>"
-    ps aux | grep redis-server --color=auto
-    echo "===>"
-    ps aux | grep memcached --color=auto
-    echo "===>"
-    ps aux | grep mongod --color=auto
-    echo "===>"
-    ps aux | grep postgres --color=auto
+    items="nginx php-fpm mysql redis-server memcached mongod postgres"
+    for item in $items
+    do
+      echo "==> $item status: "
+      ps aux | grep "$item" --color=auto | grep -v grep || true
+      echo ""
+      echo ""
+    done
 fi

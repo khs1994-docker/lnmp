@@ -58,6 +58,16 @@ $ ln -s $LNMP_PATH/cli/completion/fish/lnmp-docker.fish ~/.config/fish/completio
 
 > 删除环境变量 `$ set -Ue LNMP_PATH`
 
+### 3. zsh
+
+```bash
+$ vi ~/.zshrc
+
+export LNMP_PATH=/data/lnmp
+
+export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
+```
+
 ## 原始命令详解
 
 ### 初始化
@@ -97,3 +107,23 @@ $ docker-compose up -d $(./lnmp-docker services)
 
 $ docker-compose down
 ```
+
+### 根据环境的不同使用不同的 `.env.${LNMP_ENV}` 文件
+
+> 原理：使用 compose 1.25.0 新增的 `--env-file PATH` 选项
+
+假设你需要在 `development（开发）` `production（生产）` 两个环境中使用本项目
+
+那么在 `development` 环境中，新增 `.env.development` 文件（内容参照 `.env.example`）,并设置环境变量 `LNMP_ENV=development`
+
+```bash
+$ export LNMP_ENV=development
+# windows powershell
+# $env:LNMP_ENV="development"
+
+$ ./lnmp-docker
+```
+
+`production` 环境同理，不再赘述。
+
+> 注意，本项目不会自动生成 `.env.${LNMP_ENV}` 文件，如果找不到 `.env.${LNMP_ENV}` 文件，将使用 `.env` 文件。

@@ -13,3 +13,4 @@
 !backup
 !docker-compose.bump.yml
 !docker-example.yml
+!Switch-DockerLinux.ps1

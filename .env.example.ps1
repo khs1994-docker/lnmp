@@ -17,7 +17,8 @@ $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
 #                      "rabbitmq","httpd","registry",`
 #                      "minio",`
 #                      "supervisord",`
-#                      "nginx-unit"
+#                      "nginx-unit", `
+#                      "kong","postgresql-kong","konga"
 
 $CI_HOST="ci.khs1994.com:10000"
 
@@ -28,7 +29,7 @@ $DistributionName="Ubuntu-18.04"
 
 $TZ='Asia/Shanghai'
 
-$LNMP_PHP_IMAGE="khs1994/php:7.3.11-composer-alpine"
+$LNMP_PHP_IMAGE="khs1994/php:7.4.2-composer-alpine"
 
 $HYPERV_VIRTUAL_SWITCH='zy'
 
@@ -43,3 +44,5 @@ $LNMP_NODE_IMAGE="node:alpine"
 # $LNMP_NODE_IMAGE="khs1994/node:git"
 
 $LNMP_WSL2_DOCKER_HOST="tcp://localhost:2375"
+
+# $LNMP_CACHE=

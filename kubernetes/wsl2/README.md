@@ -41,13 +41,13 @@ $ set -x
 $ source ./wsl2/.env
 
 $ sudo mkdir -p ${K8S_ROOT:?err}/bin
-$ sudo cp -a kubernetes-release/release/v1.16.1-linux-amd64/kubernetes/server/bin/kube{-proxy,ctl,let,adm} ${K8S_ROOT:?err}/bin
+$ sudo cp -a kubernetes-release/release/v1.17.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
 ```
 
 在 `Windows` 中执行
 
 ```powershell
-$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld-etcd-client.pem","flanneld-etcd-client-key.pem"
+$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld-etcd-client.pem","flanneld-etcd-client-key.pem","ca.pem","ca-key.pem"
 
 $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ```

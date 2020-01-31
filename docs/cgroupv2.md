@@ -15,6 +15,8 @@
 * https://www.linuxprobe.com/fedora-30-shell.html
 
 ```bash
+$ sudo dnf install grubby
+
 $ sudo grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
 
 # 恢复

@@ -1,0 +1,3 @@
+resources:
+- registry.yaml
+namespace: default

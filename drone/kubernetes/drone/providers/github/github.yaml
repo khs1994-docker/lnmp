@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: drone
+spec:
+  template:
+    spec:
+      containers:
+      - name: drone
+        env:
+        - name: DRONE_GOGS_SERVER
+          $patch: delete
+        - name: DRONE_GITHUB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: github-client-id
+              name: drone-github-secret
+        - name: DRONE_GITHUB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: github-client-secret
+              name: drone-github-secret

@@ -4,6 +4,8 @@ on:
     - master
     tags:
     - '*'
+  schedule:
+    - cron: '0 0 * * 4'
 
 name: PHP_nightly
 

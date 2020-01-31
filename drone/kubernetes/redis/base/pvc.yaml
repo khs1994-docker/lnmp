@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: lnmp-redis-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: hostpath
+  selector:
+    matchLabels:
+      app: ci
+      tier: redis

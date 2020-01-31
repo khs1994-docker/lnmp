@@ -10,25 +10,23 @@
 
 ## 后缀
 
-* 7.3.11-cli-alpine
-* 7.3.11-fpm-alpine
-* 7.3.11-composer-alpine     (based fpm)
-* 7.3.11-swoole-alpine       (based cli)
-* 7.3.11-unit-alpine         (based cli)
-* 7.3.11-supervisord-alpine  (based fpm)
-* 7.3.11-ppm-alpine          (based cli)
+* 7.4.2-cli-alpine
+* 7.4.2-fpm-alpine
+* 7.4.2-composer-alpine     (based fpm)
+* 7.4.2-swoole-alpine       (based cli)
+* 7.4.2-unit-alpine         (based cli)
+* 7.4.2-supervisord-alpine  (based fpm)
+* 7.4.2-ppm-alpine          (based cli)
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`7.3.11-fpm-alpine` (7.3/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.11/7.3/alpine/Dockerfile)
+* [`7.4.2-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.2/7.4/alpine/Dockerfile)
 
-* [`7.2.24-fpm-alpine` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.11/7.2/alpine/Dockerfile)
+* [`7.3.14-fpm-alpine` (7.3/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.14/7.3/alpine/Dockerfile)
 
-* [`7.1.33-fpm-alpine` (7.1/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.11/7.1/alpine/Dockerfile)
+* [`7.2.27-fpm-alpine` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.2/7.2/alpine/Dockerfile)
 
-* [`7.4.0RC5-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.11/7.4/alpine/Dockerfile)
-
-* [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.11/nightly/alpine/Dockerfile)
+* [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.2/nightly/alpine/Dockerfile)
 
 | VERSION     | DETAILS     |
 | :------------- | :------------- |
@@ -38,16 +36,17 @@
 | [![](https://images.microbadger.com/badges/version/khs1994/php:7.0.33-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.0.33-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.0.33-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.0.33-fpm-alpine "Get your own image badge on microbadger.com")       |
 | [![](https://images.microbadger.com/badges/version/library/php:7.1.33-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.1.33-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:7.1.33-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.1.33-fpm-alpine "Get your own image badge on microbadger.com")       |
 | [![](https://images.microbadger.com/badges/version/khs1994/php:7.1.33-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.1.33-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.1.33-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.1.33-fpm-alpine "Get your own image badge on microbadger.com")       |
-| [![](https://images.microbadger.com/badges/version/library/php:7.2.24-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.2.24-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:7.2.24-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.2.24-fpm-alpine "Get your own image badge on microbadger.com")       |
-| [![](https://images.microbadger.com/badges/version/khs1994/php:7.2.24-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.2.24-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.2.24-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.2.24-fpm-alpine "Get your own image badge on microbadger.com")       |
-| [![](https://images.microbadger.com/badges/version/library/php:7.3.11-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.3.11-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:7.3.11-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.3.11-fpm-alpine "Get your own image badge on microbadger.com")       |
-| [![](https://images.microbadger.com/badges/version/khs1994/php:7.3.11-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.11-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.3.11-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.11-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/library/php:7.2.27-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.2.27-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:7.2.27-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.2.27-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.2.27-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.2.27-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.2.27-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.2.27-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/library/php:7.3.14-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.3.14-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:7.3.14-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.3.14-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.3.14-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.14-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.3.14-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.14-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/library/php:7.4.2-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.4.2-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:7.4.2-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.4.2-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:7.4.2-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.2-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.4.2-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.2-fpm-alpine "Get your own image badge on microbadger.com")       |
 
 ## Nightly
 
 | VERSION     | DETAILS     |
 | :------------- | :------------- |
-| [![](https://images.microbadger.com/badges/version/khs1994/php:7.4.0RC5-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0RC5-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.4.0RC5-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.0RC5-fpm-alpine "Get your own image badge on microbadger.com")       |
 | [![](https://images.microbadger.com/badges/version/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:nightly-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:nightly-fpm-alpine "Get your own image badge on microbadger.com")       |
 
 ## Overview
@@ -99,8 +98,8 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] dom
 * [x] enchant
 * [x] exif
-* [ ] ext_skel
-* [ ] ext_skel_win32.php
+* [ ] ext_skel.php
+* [x] ffi
 * [x] fileinfo
 * [x] filter
 * [x] ftp
@@ -110,17 +109,16 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] hash
 * [x] iconv
 * [x] imap
-* [ ] interbase
 * [x] intl
 * [x] json
-* [ ] ldap
+* [x] ldap
 * [x] libxml
 * [x] mbstring
 * [x] mysqli
 * [x] mysqlnd
 * [ ] oci8
 * [ ] odbc
-* [x] opcache
+* [ ] opcache
 * [x] openssl
 * [x] pcntl
 * [x] pcre
@@ -135,16 +133,15 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] pgsql
 * [x] phar
 * [x] posix
-* [ ] pspell
+* [x] pspell
 * [x] readline
-* [ ] recode
 * [x] reflection
 * [x] session
-* [ ] shmop
+* [x] shmop
 * [x] simplexml
 * [ ] skeleton
 * [ ] snmp
-* [ ] soap
+* [x] soap
 * [x] sockets
 * [x] sodium
 * [x] spl
@@ -153,7 +150,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] sysvmsg
 * [x] sysvsem
 * [x] sysvshm
-* [ ] tidy
+* [x] tidy
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader

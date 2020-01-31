@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: gogs
+  name: ci-gogs
+  namespace: monitoring
+spec:
+  endpoints:
+  - interval: 30s
+    port: http
+    path: /-/metrics
+  jobLabel: app
+  namespaceSelector:
+    matchNames:
+    - ci
+  selector:
+    matchLabels:
+      app: gogs

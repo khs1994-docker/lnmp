@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: csi-app-inline-test
+spec:
+  containers:
+    - name: csi-app-inline-test
+      image: busybox
+      volumeMounts:
+      - mountPath: "/data"
+        name: my-csi-volume
+      command:
+      - sh
+      - -c
+      - "while :; do sleep 3600 ; done"
+  volumes:
+    - name: my-csi-volume
+      csi:
+        driver: hostpath.csi.k8s.io

@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    # nginx.ingress.kubernetes.io/secure-backends: "true" deprecated
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP" # HTTP | HTTPS
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  name: registry
+  labels:
+    app: registry
+    version: 0.0.1
+spec:
+  tls:
+  - hosts:
+    - gcr.io
+    - k8s.gcr.io
+    - registry.t.khs1994.com
+    secretName: cert.t.khs1994.com
+  rules:
+  - host: gcr.io
+    http:
+      paths:
+      - backend:
+          serviceName: registry
+          servicePort: http
+        path: /
+  - host: k8s.gcr.io
+    http:
+      paths:
+      - backend:
+          serviceName: registry
+          servicePort: http
+        path: /
+  - host: registry.t.khs1994.com
+    http:
+      paths:
+      - backend:
+          serviceName: registry
+          servicePort: http
+        path: /

@@ -1,0 +1,3 @@
+bases:
+- ../certs
+namespace: kubesphere-monitoring-system

@@ -2,4 +2,4 @@ version: "3.7"
 
 services:
   drone:
-    image: drone/drone:1.6.2
+    image: drone/drone:1.6.5

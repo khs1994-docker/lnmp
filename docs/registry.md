@@ -33,14 +33,24 @@ $ cp config/nginx/demo-registry.config config/nginx/registry.conf
 # 5. 编辑 docker registry 配置文件 config/registry/config.yml
 ```
 
-## CA
+## 自签名证书
 
 * https://www.aidmin.cn/server/docker-registry-with-self-signed-ssl-certificate.html
+* https://docs.docker.com/registry/insecure/#use-self-signed-certificates
 
-如果你的证书为自签名证书，必须将 CA 写入系统文件夹。
+如果你的证书为自签名证书
+
+Linux 上将 CA 证书放入 `/etc/docker/certs.d/myregistrydomain.com:5000/ca.crt`(Docker 守护端所在主机)，其他系统请查看上方文档(`myregistrydomain.com:5000` 替换为自己的地址)。
+
+若启用了验证功能(密码登录)，**必须** 将 CA 写入系统文件夹(Docker 守护端所在主机)。
 
 ```bash
-$ cat config/nginx/ssl/root-ca.crt | sudo tee -a /etc/pki/tls/certs/ca-bundle.crt
+$ cat config/nginx/ssl/root-ca.crt | sudo tee -a /etc/pki/ca-trust/source/anchors/myregistrydomain.com.crt # centos
+
+$ cat config/nginx/ssl/root-ca.crt | sudo tee -a /etc/ssl/certs/myregistrydomain.com.crt # ubuntu
+
+$ update-ca-certificates # ubuntu
+$ update-ca-trust        # centos
 
 # 重启 docker
 

@@ -5,9 +5,7 @@ set -x
 echo "Set app"
 mkdir -p ../app/laravel/public
 cp deployment/app/index.php ../app/laravel/public/
-# mkdir -p ../app
-# docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.11-composer-alpine composer global config --unset repos.packagist
-# docker run -it --rm -v $PWD/helm/nginx-php/config/php/composer/config.testing.json:/tmp/config.json -v $PWD/../app:/app khs1994/php:7.3.11-composer-alpine composer create-project --prefer-dist laravel/laravel=5.8.* laravel
+
 echo "Up nfs server"
 ./lnmp-k8s nfs
 sleep 30
@@ -39,8 +37,8 @@ kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
 test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f deployment/runtimeClass/runtimeClass.yaml && kubectl apply -f deployment/runtimeClass/pod.yaml) || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f deployment/runtimeClass/runtimeClass.yaml && kubectl apply -f deployment/runtimeClass/pod.yaml) || true
-test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine:3.10 uname -a || true
-test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm alpine:3.10 uname -a || true
+test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine uname -a || true
+test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm alpine uname -a || true
 sleep 10
 kubectl get all
 kubectl get pod

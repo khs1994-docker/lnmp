@@ -1,6 +1,8 @@
 [Unit]
 Description=Kubernetes Scheduler
 Documentation=https://github.com/kubernetes/kubernetes
+After=network-online.target network.target
+Wants=network-online.target network.target
 # Requires=kube-apiserver.service
 
 [Service]

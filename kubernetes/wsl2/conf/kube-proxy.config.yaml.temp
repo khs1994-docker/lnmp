@@ -8,13 +8,13 @@ bindAddress: ##NODE_IP##
 healthzBindAddress: ##NODE_IP##:10256
 metricsBindAddress: ##NODE_IP##:10249
 enableProfiling: true
-clusterCIDR: 172.30.0.0/16
+clusterCIDR: 10.244.0.0/16
 hostnameOverride: ##NODE_NAME##
 portRange: ""
 mode: "ipvs"
 # mode: "iptables"
-# kubeProxyIPTablesConfiguration:
-#  masqueradeAll: false
-# kubeProxyIPVSConfiguration:
-#  scheduler: rr
-#  excludeCIDRs: []
+iptables:
+  masqueradeAll: false
+ipvs:
+  scheduler: rr
+  excludeCIDRs: []

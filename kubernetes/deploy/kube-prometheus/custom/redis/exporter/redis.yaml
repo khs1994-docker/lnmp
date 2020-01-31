@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: redis-exporter
+  namespace: monitoring
+  labels:
+    app: redis-exporter
+spec:
+  selector:
+    matchLabels:
+      app: redis-exporter
+  template:
+    metadata:
+      labels:
+        app: redis-exporter
+    spec:
+      containers:
+        - name: redis-exporter
+          image: oliver006/redis_exporter:latest
+          args:
+          - --redis.addr
+          # 替换为 Redis 地址
+          - redis.ci.svc.cluster.local:6379
+          ports:
+          - containerPort: 9121
+            name: metrics
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-exporter
+  namespace: monitoring
+  labels:
+    app: redis-exporter
+spec:
+  ports:
+    - port: 9121
+      name: metrics
+  clusterIP: None
+  selector:
+    app: redis-exporter

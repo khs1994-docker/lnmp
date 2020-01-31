@@ -1,0 +1,3 @@
+resources:
+  - etcd.yaml
+namespace: kube-system

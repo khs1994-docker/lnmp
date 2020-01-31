@@ -1,6 +1,6 @@
-FROM alpine:3.10
+FROM alpine:3.11
 
-ENV KUBECTL_VERSION=v1.16.1
+ENV KUBECTL_VERSION=v1.17.0
 
 RUN apk add --no-cache curl \
       && curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 > /usr/local/bin/cfssl \
@@ -10,10 +10,10 @@ RUN apk add --no-cache curl \
       && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl \
       && apk del curl
 
-FROM alpine:3.10
+FROM alpine:3.11
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.16.1"
+      version="1.17.0"
 
 COPY --from=0 /usr/local/bin /usr/local/bin
 

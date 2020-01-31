@@ -1,3 +1,2 @@
-resources:
-- docker.yaml
-namespace: ci
+bases:
+- base

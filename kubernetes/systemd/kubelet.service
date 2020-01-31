@@ -1,6 +1,8 @@
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
+After=network-online.target network.target
+Wants=network-online.target network.target
 # After=docker.service
 # Requires=docker.service
 
@@ -17,6 +19,11 @@ ExecStartPre=-/usr/sbin/swapoff -a
 ExecStartPre=-/sbin/swapoff -a
 ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
+ExecStartPre=-mkdir -p /var/lib/kubelet
+ExecStartPre=-mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
+ExecStartPre=-/usr/bin/env /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+ExecStartPre=-mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+ExecStartPre=-mount --bond /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
 ExecStart=/opt/k8s/bin/kubelet \
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
@@ -29,6 +36,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --logtostderr=true \
 --v=2 \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
+--experimental-check-node-capabilities-before-mount=true \
 $KUBELET_CRI
 
 # --container-runtime=docker \
@@ -38,6 +46,9 @@ $KUBELET_CRI
 
 # --container-runtime=remote \
 # --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock \
+
+ExecStopPost=-umount /var/lib/kubelet
+ExecStopPost=-umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
 Restart=on-failure
 RestartSec=5

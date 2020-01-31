@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.0RC5
+ARG PHP_VERSION=7.4.2
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -120,34 +120,33 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         && curl -fsSL -o /usr/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
+           https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
         && chmod +x /usr/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \
         && docker-php-ext-configure zip \
-                                    --with-libzip \
+                                    --with-zip \
         && docker-php-ext-install zip \
         && strip --strip-all $(php-config --extension-dir)/zip.so \
         # && docker-php-ext-configure gd \
         && echo " \
                                         --disable-gd-jis-conv \
-                                        --with-freetype-dir=/usr \
-                                        --with-jpeg-dir=/usr \
-                                        --with-png-dir=/usr \
-                                        --with-webp-dir=/usr \
-                                        --with-xpm-dir=/usr" > /tmp/gd.configure.options \
+                                        --with-freetype \
+                                        --with-jpeg \
+                                        --with-webp \
+                                        --with-xpm" > /tmp/gd.configure.options \
         # && docker-php-ext-install $PHP_EXTENSION \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \
 # 安装 PECL 扩展
-        && pickle install $PECL_EXTENSION -n --defaults --continue-on-error \
+        && pickle install $PECL_EXTENSION -n --defaults \
            --strip --cleanup \
 # 默认不启用的扩展
         && pickle install \
              xdebug \
 # https://github.com/tideways/php-xhprof-extension.git
              https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
-             -n --defaults --strip --cleanup --no-write --continue-on-error \
+             -n --defaults --strip --cleanup --no-write \
         && pickle install opcache \
         # && docker-php-ext-enable opcache \
         && apk del --no-network --no-cache .phpize-deps .php-fpm-build-deps \

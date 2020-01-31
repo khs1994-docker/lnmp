@@ -40,10 +40,10 @@ if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
 ################################################################################
 
 PHP_TIMEZONE=PRC
-PHP_URL=http://cn2.php.net/distributions
+PHP_URL=https://mirrors.sohu.com/php
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.9.1
+export COMPOSER_VERSION=1.9.2
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -86,9 +86,12 @@ case "$1" in
     ;;
   7.4.* )
     export PHP_NUM=74
-    export BUILD_FROM_GIT=1
-    export PHP_SRC_BRANCH=PHP-7.4
     ;;
+  # 8.0.* )
+  #   export PHP_NUM=80
+  #   export BUILD_FROM_GIT=1
+  #   export PHP_SRC_BRANCH=PHP-8.0
+  #   ;;
   nightly )
     export PHP_NUM=80
     export BUILD_FROM_GIT=1
@@ -125,7 +128,7 @@ _download_src(){
       cd /usr/local/src
 
       wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
-        wget https://downloads.php.net/~cmb/php-${PHP_VERSION}.tar.gz
+        wget https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz
 
       echo -e "Untar ...\n\n"
 
@@ -656,7 +659,7 @@ _create_log_file(){
 _pickle(){
   # composer global require friendsofphp/pickle
   $(_sudo) curl -sfL -o /usr/local/bin/pickle \
-    https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar
+    https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar
 }
 
 _composer(){
@@ -842,10 +845,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=7.3.11 ; fi
+    PHP_VERSION=7.4.2 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=7.3.11 ; fi
+    PHP_VERSION=7.4.2 ; fi
 
 _get_phpnum $PHP_VERSION
 

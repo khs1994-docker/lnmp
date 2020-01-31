@@ -1,6 +1,8 @@
 [Unit]
 Description=Kubernetes Controller Manager
 Documentation=https://github.com/kubernetes/kubernetes
+Wants=network-online.target network.target
+After=network-online.target network.target
 # Requires=kube-apiserver.service
 
 [Service]
@@ -47,7 +49,7 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
 --logtostderr=true \
 --feature-gates=DynamicAuditing=true \
---cluster-cidr=172.30.0.0/16 \
+--cluster-cidr=10.244.0.0/16 \
 --allocate-node-cidrs=true \
 --v=2
 

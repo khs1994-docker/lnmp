@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.10
+FROM --platform=$TARGETPLATFORM alpine:3.11
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -135,8 +135,8 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
-ENV PHP_VERSION 7.3.11
-# ENV PHP_URL="https://www.php.net/get/php-7.3.11.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.11.tar.xz.asc/from/this/mirror"
+ENV PHP_VERSION 7.3.14
+# ENV PHP_URL="https://www.php.net/get/php-7.3.14.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.14.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -147,8 +147,8 @@ ENV PHP_VERSION 7.3.11
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.3.11-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:7.3.11-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.3.14-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.3.14-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -309,14 +309,14 @@ ENV PECL_EXTENSION \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.3.11-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.3.14-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
       && curl -fsSL -o /usr/bin/pickle \
-           https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar \
+           https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
       && chmod +x /usr/bin/pickle \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \

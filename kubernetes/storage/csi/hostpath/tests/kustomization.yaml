@@ -1,0 +1,3 @@
+resources:
+- pvc.yaml
+- pod.yaml

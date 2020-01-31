@@ -1,0 +1,18 @@
+kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: mysql
+  namespace: monitoring
+  labels:
+    app: mysql
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+  jobLabel: app
+  namespaceSelector:
+    matchNames:
+    - monitoring
+  selector:
+    matchLabels:
+      app: mysql-exporter

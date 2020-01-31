@@ -1,0 +1,6 @@
+.git
+.github
+.dockerignore
+.gitignore
+.gitattributes
+Dockerfile.lrew

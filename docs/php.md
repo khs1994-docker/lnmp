@@ -31,38 +31,37 @@ $ docker rm -f CONTAINER_ID
 ```
 
 * [x] bcmath
-* [ ] bz2
-* [ ] calendar
+* [x] bz2
+* [x] calendar
 * [ ] com_dotnet
 * [x] ctype
 * [x] curl
 * [x] date
 * [ ] dba
 * [x] dom
-* [ ] enchant
-* [ ] exif
-* [ ] ext_skel
-* [ ] ext_skel_win32.php
+* [x] enchant
+* [x] exif
+* [ ] ext_skel.php
+* [x] ffi
 * [x] fileinfo
 * [x] filter
 * [x] ftp
 * [x] gd
-* [ ] gettext
-* [ ] gmp
+* [x] gettext
+* [x] gmp
 * [x] hash
 * [x] iconv
-* [ ] imap
-* [ ] interbase
-* [ ] intl
+* [x] imap
+* [x] intl
 * [x] json
-* [ ] ldap
+* [x] ldap
 * [x] libxml
 * [x] mbstring
-* [ ] mysqli
+* [x] mysqli
 * [x] mysqlnd
 * [ ] oci8
 * [ ] odbc
-* [x] opcache
+* [ ] opcache
 * [x] openssl
 * [x] pcntl
 * [x] pcre
@@ -74,34 +73,33 @@ $ docker rm -f CONTAINER_ID
 * [ ] pdo_odbc
 * [x] pdo_pgsql
 * [x] pdo_sqlite
-* [ ] pgsql
+* [x] pgsql
 * [x] phar
 * [x] posix
-* [ ] pspell
+* [x] pspell
 * [x] readline
-* [ ] recode
 * [x] reflection
 * [x] session
-* [ ] shmop
+* [x] shmop
 * [x] simplexml
 * [ ] skeleton
 * [ ] snmp
-* [ ] soap
-* [ ] sockets
+* [x] soap
+* [x] sockets
 * [x] sodium
 * [x] spl
 * [x] sqlite3
 * [x] standard
-* [ ] sysvmsg
-* [ ] sysvsem
-* [ ] sysvshm
-* [ ] tidy
+* [x] sysvmsg
+* [x] sysvsem
+* [x] sysvshm
+* [x] tidy
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader
-* [ ] xmlrpc
+* [x] xmlrpc
 * [x] xmlwriter
-* [ ] xsl
+* [x] xsl
 * [ ] zend_test
 * [x] zip
 * [x] zlib

@@ -4,3 +4,4 @@
 !lnmp
 !tcp-udp
 !registry
+!ingress.example.yaml

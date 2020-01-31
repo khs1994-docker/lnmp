@@ -37,7 +37,7 @@ spec:
       containers:
       - name: lnmp-nginx
         image: {{ .Values.nginx.image }}
-        imagePullPolicy: IfNotPresent # Always
+        imagePullPolicy: IfNotPresent
         args:
         - nginx
         - -g

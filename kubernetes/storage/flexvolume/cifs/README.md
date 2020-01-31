@@ -1,6 +1,10 @@
 # [CIFS(SMB, Samba, Windows Share)](https://github.com/docker-practice/flexvolume_cifs)
 
+**静态**
+
 * https://hub.docker.com/r/dockerpracticesig/flexvolume-cifs
+
+* https://github.com/kubernetes/examples/tree/master/staging/volumes/flexvolume
 
 * https://github.com/fstab/cifs
 * https://blog.csdn.net/changqing1234/article/details/81128548
@@ -18,7 +22,7 @@ $ sudo apt install -y cifs-utils jq util-linux coreutils
 
 以 `Daemonset` 方式部署
 
-> `KUBELET_PLUGINS_VOLUME_PATH` 为 `kubelet` `--volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` 参数指定的值
+> `KUBELET_PLUGINS_VOLUME_PATH` 为 `kubelet --volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec/` 参数指定的值
 
 `Linux/macOS` 请执行如下命令:
 
@@ -39,7 +43,7 @@ $ PS:> (get-content deploy/deploy.yaml) -Replace "##KUBELET_PLUGINS_VOLUME_PATH#
 
 ## 测试
 
-配置 `flexvolume-cifs-secret.yaml`
+配置 `secret`
 
 生成用户名及密码
 
@@ -48,20 +52,10 @@ $ echo -n username | base64
 $ echo -n password | base64
 ```
 
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: flexvolume-cifs-secret
-  namespace: default
-type: fstab/cifs
-data:
-  username: 'ZXhhbXBsZQ==' # 自行替换
-  password: 'bXktc2VjcmV0LXBhc3N3b3Jk' # 自行替换
-```
+将上面的结果在 `tests/secret.yaml` 中进行替换。
 
 ```bash
-$ kubectl apply -f flexvolume-cifs-secret.yaml
+$ kubectl apply -f tests/secret.yaml
 ```
 
 > `pod.yaml` 中替换 `//HIWIFI/sd/xunlei` 为网络路径
@@ -70,15 +64,13 @@ $ kubectl apply -f flexvolume-cifs-secret.yaml
 $ kubectl apply -f tests/pod.yaml
 ```
 
-进入 `pod/flexvolume-tests-busybox` 的 `/data` 目录,新建文件.之后在 CIFS 服务端查看文件是否存在.具体步骤不再赘述
+进入 `pod` 的 `/data` 目录，新建文件。在 CIFS 服务端查看文件是否存在。
 
 ## 挂载 Windows 盘符(例如 C 盘文件)
 
 Windows 盘符开启共享请查看 [这里](https://jingyan.baidu.com/article/e2284b2b6d8afbe2e6118d01.html)
 
-网络路径则为: `//192.168.199.100//c`
-
-> 192.168.199.100 为 Windows IP
+假设 `192.168.199.100` 为 Windows IP，网络路径则为: `//192.168.199.100//c`
 
 ## 宿主机挂载
 

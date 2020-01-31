@@ -30,6 +30,7 @@ spec:
       containers:
       - name: lnmp-redis
         image: {{ .Values.redis.image }}
+        imagePullPolicy: IfNotPresent
         args:
         - redis-server
         - /redis.conf

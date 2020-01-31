@@ -87,8 +87,6 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a systemd           -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a satis             -d     'Build Satis'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a nfs               -d     'Up NFS server'
 
-complete -c lnmp-docker -n "__fish_use_subcommand" -f -a cookbooks         -d     'Up local cookbooks server'
-
 ##
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a services          -d      'List services'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a update            -d      'Upgrades LNMP'

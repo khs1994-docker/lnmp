@@ -1,3 +1,5 @@
+version: ~> 1.0
+
 language: go
 # language: bash
 
@@ -16,7 +18,15 @@ cache:
     - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
     - /home/travis/.khs1994-docker-lnmp/caches
 
+# git:
+#   clone: false
+
 before_install:
+  # /home/travis/build/khs1994-docker/lnmp-k8s
+  - pwd
+  - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
+  - cp -r ~/lnmp/* ~/gopath/src/github.com/khs1994-docker
+  - ls -la ~/gopath/src/github.com/khs1994-docker
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true
@@ -49,7 +59,7 @@ before_install:
   # 升级最新 Docker Compose
   # - docker-compose --version
   # - sudo rm /usr/local/bin/docker-compose
-  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.24.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.25.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
   # - chmod +x docker-compose
   # - sudo mv docker-compose /usr/local/bin
   # - docker-compose --version
@@ -181,7 +191,7 @@ script:
   # test dns
   - kubectl describe pod coredns -n kube-system
   - kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-  - kubectl run nginx --image nginx:1.17.6-alpine
+  - kubectl run nginx --image nginx:1.17.8-alpine
   - sleep 20
   - kubectl get all
   - kubectl get pod -o wide
@@ -221,24 +231,31 @@ env:
 
 matrix:
   include:
+    # alpha version
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.18.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.18.0-alpha.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+    # next version
+    # - os: linux
+    #   dist: bionic
+    #   env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+    # current stable version
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.17.0-beta.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom
+    # old version
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
-    - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.1 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
-    - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.3 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
-    - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.3 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.16.1
     - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.15.2
@@ -247,5 +264,4 @@ matrix:
       env: CI_KUBERNETES_VERSION=1.14.2
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.18.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
-  - env: CI_KUBERNETES_VERSION=1.17.0-beta.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+  - env: CI_KUBERNETES_VERSION=1.18.0-alpha.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server

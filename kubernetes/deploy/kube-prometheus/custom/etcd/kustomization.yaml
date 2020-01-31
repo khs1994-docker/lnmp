@@ -1,0 +1,3 @@
+resources:
+  - prometheus-serviceMonitorEtcd.yaml
+namespace: monitoring

@@ -1,0 +1,9 @@
+resources:
+- minio.yaml
+secretGenerator:
+  - name: minio-secret
+    literals:
+    - minio-access-key=minioadmin
+    - minio-secret-key=minioadmin
+generatorOptions:
+  disableNameSuffixHash: true

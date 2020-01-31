@@ -34,7 +34,7 @@ Function install_ext($PHP_PREFIX){
       RunHiddenConsole
 
   _downloader `
-      https://github.com/khs1994-php/pickle/releases/download/v19.11.11/pickle.phar `
+      https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
       pickle `
       pickle
 
@@ -65,13 +65,7 @@ Function install_ext($PHP_PREFIX){
   copy-item -r -force cacert-${PHP_CACERT_DATE}.pem C:\bin
 
   Foreach ($extension in $extensions){
-    & ${PHP_BIN} -r "if(extension_loaded('$extension')===true){exit(0);}exit(1);"
-
-    if($?){
-      "==> extension $extension already loaded, skip"
-
-      continue
-    }
+    "==> install $extension ..."
 
     if (Test-Path $HOME/github/pickle/bin/pickle){
       & ${PHP_BIN} $HOME/github/pickle/bin/pickle install $extension --php ${PHP_BIN}
@@ -101,26 +95,6 @@ Function install_after($VERSION,$PHP_PREFIX){
     Copy-Item $PHP_PREFIX\php.ini-development $PHP_PREFIX\php.ini
   }
 
-  $PHP_VERSION_XY=$VERSION.split(".")[0]+'.'+$VERSION.split(".")[1]
-
-  switch ($PHP_VERSION_XY)
-  {
-    {$_ -in "7.1","7.0"} {
-      $VC_VERSION="nts-vc14"
-    }
-    {$_ -in "7.2","7.3"} {
-      $VC_VERSION="nts-vc15"
-    }
-    # {$_ -in "A","B","C"} {}
-    # "7.4" {
-    #   $VC_VERSION=
-    # }
-    Default {
-      "==> Not Support this version, SKIP install extension"
-      return
-    }
-  }
-
   install_ext $PHP_PREFIX
 }
 
@@ -132,8 +106,8 @@ Function install($VERSION=0,$isPre=0){
     $VC_VERSION="nts-Win32-vc15"
     $VERSION=$preVersion
     $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
-    $unzipDesc="php74"
-    $PHP_PREFIX="C:\php74"
+    $unzipDesc="php-pre"
+    $PHP_PREFIX="C:\php-pre"
   }else{
     $VC_VERSION="nts-Win32-VC15"
     $url="https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip"
@@ -151,7 +125,7 @@ Function install($VERSION=0,$isPre=0){
     if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
 
-        install_after $VERSION
+        install_after $VERSION $PHP_PREFIX
 
         return
     }

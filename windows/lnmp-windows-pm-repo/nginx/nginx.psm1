@@ -3,6 +3,7 @@ Import-Module unzip
 Import-Module command
 Import-Module cleanup
 Import-Module exportPath
+Import-Module getHttpCode
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
@@ -14,6 +15,8 @@ $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$urlMirror=$lwpm.urlMirror
 
 Function install_after(){
   _mkdir C:\nginx\conf\conf.d
@@ -40,7 +43,10 @@ Function install($VERSION=0,$isPre=0){
 
   }
 
-  $url="https://nginx.org/download/nginx-${VERSION}.zip"
+  $url=$urlMirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $url)[0] -eq 4){
+    $url=$url.replace('${VERSION}',${VERSION});
+  }
 
   $filename="nginx-${VERSION}.zip"
   $unzipDesc="nginx"

@@ -30,7 +30,7 @@ opcache.fast_shutdown=1
 ; 1235
 ; opcache.jit_debug=0
 
-; opcache.preload=/app/symfony4.4/var/cache/development/srcApp_KernelDevelopmentDebugContainer.preload.php
+; opcache.preload=/app/symfony/var/cache/development/App_KernelDevelopmentDebugContainer.preload.php
 ; opcache.preload_user=www-data
 
 [xdebug]

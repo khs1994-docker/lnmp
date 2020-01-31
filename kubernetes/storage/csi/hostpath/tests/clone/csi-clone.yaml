@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hp-pvc-clone
+spec:
+  storageClassName: csi-hostpath-sc
+  dataSource:
+    name: src-hp-pvc
+    kind: PersistentVolumeClaim
+    apiGroup: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

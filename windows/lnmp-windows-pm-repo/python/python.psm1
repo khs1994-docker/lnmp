@@ -19,8 +19,8 @@ Function install($VERSION=0,$isPre=0){
   }
   if($isPre){
     $VERSION=$preVersion
-    $url="https://www.python.org/ftp/python/3.8.0/python-${VERSION}-amd64.exe"
-    $url="https://mirrors.huaweicloud.com/python/3.8.0/python-${VERSION}-amd64.exe"
+    $url="https://www.python.org/ftp/python/3.8.1/python-${VERSION}-amd64.exe"
+    $url="https://mirrors.huaweicloud.com/python/3.8.1/python-${VERSION}-amd64.exe"
   }else{
     $url="https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe"
     $url="https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"

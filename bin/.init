@@ -7,14 +7,15 @@ set -e
 if [ -z "$LNMP_PATH" ];then echo "Please set system env LNMP_PATH"; exit ; fi
 
 source $LNMP_PATH/.env.example
-source $LNMP_PATH/.env
 
-if [ -f "$LNMP_PATH/.env" ];then source $LNMP_PATH/.env; fi
+LNMP_ENV_FILE=`$LNMP_PATH/lnmp-docker env-file`
+
+source $LNMP_PATH/$LNMP_ENV_FILE
 
 export OS=`uname -s`
 export ARCH=`uname -m`
 
-VERSION=${LNMP_PHP_VERSION:-7.3.11}
+VERSION=${LNMP_PHP_VERSION:-7.4.2}
 
 export TAG=${VERSION}-composer-alpine
 

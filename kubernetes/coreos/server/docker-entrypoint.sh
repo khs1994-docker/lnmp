@@ -26,7 +26,6 @@ MERGE_LIST="crictl \
             docker \
             etcd \
             flanneld \
-            helm \
             kube-apiserver \
             kube-containerd \
             kube-controller-manager \
@@ -44,13 +43,13 @@ do
             ${CRICTL_VERSION} \
             ${ETCD_VERSION} \
             ${FLANNEL_VERSION} \
-            ${HELM_VERSION} \
             ${ETCD_NODES} \
             ${ETCD_ENDPOINTS} \
             ${KUBE_APISERVER} \
             ${CONTAINER_RUNTIME} \
             ${CONTAINER_RUNTIME_ENDPOINT} \
             ${CONTAINERD_VERSION} \
+            ${NETWORK_GATEWAY} \
            ' \
   < $item.yaml > $item.yaml.source
 
@@ -79,6 +78,7 @@ for i in `seq ${NODE_NUM}`;do
             ${CONTAINER_RUNTIME} \
             ${CONTAINER_RUNTIME_ENDPOINT} \
             ${CONTAINERD_VERSION} \
+            ${NETWORK_GATEWAY} \
            ' \
   < ignition-$i.yaml > ignition-$i.yaml.source
 

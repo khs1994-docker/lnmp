@@ -15,7 +15,7 @@ source ./.env
 
 set -e
 
-if ! [ -f coreos.ps1 ];then echo "please exec this shell scipt in coreos folder"; exit 1; fi
+if ! [ -d ignition ];then echo "please exec this shell scipt in coreos folder"; exit 1; fi
 
 print_help_info(){
     echo "
@@ -58,7 +58,8 @@ _init(){
 cd current
 
 items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
-      fedora-coreos-${FCOS_VERSION}-installer.x86_64.iso"
+      fedora-coreos-${FCOS_VERSION}-live.x86_64.iso \
+      fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz.sig " 
 
 for item in $items;do
 
@@ -66,8 +67,6 @@ if ! [ -f $item ];then
   curl -O \
     https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/$item
 fi
-
-cp fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz fedora-coreos-${FCOS_VERSION}-metal.raw.xz
 
 done
 
@@ -126,10 +125,10 @@ case "$1" in
       --memory 2048 \
       --acpi on \
       --boot1 dvd \
-      --nic1 bridged \
-      --nic2 hostonly \
-      --bridgeadapter1 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || echo ) \
-      --hostonlyadapter2 vboxnet1 \
+      --nic2 bridged \
+      --nic1 hostonly \
+      --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || echo ) \
+      --hostonlyadapter1 vboxnet1 \
       --firmware efi
 
       VBoxManage createmedium --filename "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi" --size 100000
@@ -140,7 +139,7 @@ case "$1" in
           --nonrotational on --port 0 --device 0 --type hdd --medium "$HOME/VirtualBox VMs/coreos$2/coreos$2.vdi"
 
       VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
-          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-installer.x86_64.iso
+          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-live.x86_64.iso
 
       echo "==> Please checkout coreos$2 config, then start it"
   ;;

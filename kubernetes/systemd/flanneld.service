@@ -1,6 +1,8 @@
 [Unit]
 Description=flannel - Network fabric for containers
 Documentation=https://github.com/coreos/flannel
+Wants=network-online.target network.target
+After=network-online.target network.target
 #Requires=etcd.service
 #After=etcd.service
 #Before=docker.service
@@ -23,7 +25,7 @@ ExecStartPre=-/usr/bin/env ETCDCTL_API=2 ${K8S_ROOT}/bin/etcdctl \
   --ca-file="${K8S_ROOT}/certs/ca.pem" \
   --cert-file="${K8S_ROOT}/certs/flanneld-etcd-client.pem" \
   --key-file="${K8S_ROOT}/certs/flanneld-etcd-client-key.pem" \
-  set /kubernetes/network/config '{"Network":"172.30.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
+  set /kubernetes/network/config '{"Network":"10.244.0.0/16","SubnetLen":24,"Backend":{"Type":"vxlan"}}'
 
 ExecStart=/opt/k8s/bin/flanneld \
   --etcd-endpoints=${K8S_ETCD_ENTRYPOINTS} \

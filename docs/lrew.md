@@ -1,6 +1,9 @@
-# [lrew](https://github.com/khs1994-docker?utf8=✓&q=lrew&type=&language=)
+# [lrew](https://github.com/lrew)
 
 > khs1994-docker/lnmp 包管理工具。
+
+* https://hub.docker.com/u/lrewpkg
+* https://packagist.org/packages/lrew/
 
 macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lrew`。`lrew` 实现了对 khs1994-docker/lnmp 项目的扩展，提供了以下功能。
 

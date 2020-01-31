@@ -23,3 +23,17 @@ $ sudo systemctl daemon-reload && sudo systemctl enable docker && sudo systemctl
 $ for intf in /sys/devices/virtual/net/docker0/brif/*; do echo 1 > $intf/hairpin_mode; done
 $ sudo sysctl -p /etc/sysctl.d/kubernetes.conf
 ```
+
+## libvirt
+
+* https://serverfault.com/questions/516366/how-virbr0-nic-is-created
+
+```bash
+# 临时
+$ sudo virsh net-destroy default
+
+# 永久
+$ sudo virsh net-autostart default --disable
+
+$ sudo systemctl disable libvirtd.service
+```

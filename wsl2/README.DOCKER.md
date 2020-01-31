@@ -107,3 +107,11 @@ LNMP_XDEBUG_REMOTE_HOST=wsl2.lnmp.khs1994.com
 ```bash
 COMPOSE_CONVERT_WINDOWS_PATHS=1
 ```
+
+## 挂载 Windows 文件夹(Docker 桌面版正常使用即可)
+
+**适用于自行在 WSL2 安装的 Docker**
+
+```bash
+$ docker run -it --rm --mount=type=bind,source=$(wsl -- wslpath "'$PWD'"),target=/mnt busybox sh
+```
