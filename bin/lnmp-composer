@@ -34,6 +34,7 @@ exec docker run -i ${tty} --rm \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --env-file $ScriptRoot/../config/composer/.env \
+  --env PATH=${COMPOSER_HOME}/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
   --user ${LNMP_USER:-root:root} \
   --network $network \
   ${DOCKER_IMAGE}:${TAG} \

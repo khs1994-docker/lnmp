@@ -20,6 +20,8 @@ jobs:
       - name: Init LNMP
         run: |
           set -x
+          docker-compose --version
+          lnmp-docker compose --official
           lnmp-docker services
           docker-compose --version
       - name: Setup S3(Minio)

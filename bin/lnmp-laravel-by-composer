@@ -64,4 +64,6 @@ if [[ ${OS} = 'Linux' || ${OS} = 'Darwin' ]];then
 fi
 
 cd $LARAVEL_PATH
+
+echo -e "\n\033[32m==> INFO\033[0m  Laravel init ..."
 $ScriptRoot/lnmp-laravel-init
