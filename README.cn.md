@@ -171,7 +171,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 ## 一键申请 SSL 证书
 
->由 [`acme.sh`](https://github.com/Neilpang/acme.sh) 提供支持
+>由 [`acme.sh`](https://github.com/acmesh-official/acme.sh) 提供支持
 
 ```bash
 $ ./lnmp-docker ssl khs1994.com -d *.khs1994.com
@@ -221,7 +221,7 @@ $ ./lnmp-docker down
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.5`        | **2.8.5**              |`Alpine:3.11`    |
+|[ACME.sh](https://github.com/acmesh-official/acme.sh)                            |`khs1994/acme:2.8.5`        | **2.8.5**              |`Alpine:3.11`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.8-alpine`      | **1.17.8**             |`Alpine:3.10`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.2-unit-alpine`| **1.14.0**             |`Alpine:3.11`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.11`    |
@@ -314,7 +314,7 @@ https://docs.lnmp.khs1994.com
 * [Docker Cloud](https://cloud.docker.com)
 * [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 * [Let's Encrypt](https://letsencrypt.org/)
-* [acme.sh](https://github.com/Neilpang/acme.sh)
+* [acme.sh](https://github.com/acmesh-official/acme.sh)
 
 ## 更多资料
 

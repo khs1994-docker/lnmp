@@ -167,7 +167,7 @@ For more information please see [Documents](docs/command.md)
 
 ## Issue SSL certificate
 
->Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
+>Powered by [`acme.sh`](https://github.com/acmesh-official/acme.sh)
 
 ```bash
 $ ./lnmp-docker ssl khs1994.com -d *.khs1994.com
@@ -216,7 +216,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.5`        | **2.8.5**              |`Alpine:3.11`    |
+|[ACME.sh](https://github.com/acmesh-official/acme.sh)                            |`khs1994/acme:2.8.5`        | **2.8.5**              |`Alpine:3.11`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.8-alpine`      | **1.17.8**             |`Alpine:3.10`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.2-unit-alpine`| **1.14.0**             |`Alpine:3.11`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.11`    |
@@ -302,7 +302,7 @@ Please see [Contributing](CONTRIBUTING.md)
 * [Docker Cloud](https://cloud.docker.com)
 * [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 * [Let's Encrypt](https://letsencrypt.org/)
-* [acme.sh](https://github.com/Neilpang/acme.sh)
+* [acme.sh](https://github.com/acmesh-official/acme.sh)
 
 ## More Information
 
