@@ -45,3 +45,17 @@ $ lnmp-windows-pm.ps1 install example
 ## 优先级(开发者)
 
 `vendor/lwpm-dev` 优先级大于 `vendor/lwpm`
+
+## 注册 Windows 服务
+
+请以管理员打开 `powershell` 执行下面的命令
+
+```powershell
+$ lnmp-windows-pm.ps1 install-service minio "C:/bin/minio","server","$HOME/minio" C:/logs/minio.log
+```
+
+移除服务
+
+```bash
+$ lnmp-windows-pm.ps1 remove-service minio
+```

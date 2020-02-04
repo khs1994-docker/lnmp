@@ -53,6 +53,8 @@ Function install($VERSION=0,$isPre=0){
 
   _exportPath "C:\nginx"
 
+  cp $PSScriptRoot/../../config/nginx.conf C:/nginx/conf
+
   if($(_command nginx)){
     nginx -v > $env:TEMP/.nginx.version 2>&1
     $CURRENT_VERSION=$(cat $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]
