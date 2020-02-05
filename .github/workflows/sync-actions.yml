@@ -1,6 +1,7 @@
 on:
   push:
     tags:
+      - '*'
     branches:
       - 19.03
     # paths:
@@ -12,7 +13,8 @@ jobs:
   skip-ci:
     runs-on: ubuntu-latest
     if: |
-      contains( github.event.head_commit.message, '[sync actions]')
+      contains( github.ref, 'refs/tags/' )
+      || contains( github.event.head_commit.message, '[sync actions]')
       || contains( github.event.head_commit.message, '[sync action]')
     steps:
       - run: echo "sync continue !"
