@@ -325,6 +325,8 @@ RUN --mount=type=bind,from=php:7.2.27-alpine,source=/usr/local/bin,target=/opt/b
       && curl -fsSL -o /usr/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
       && chmod +x /usr/bin/pickle \
+      && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+      && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
          xdebug \

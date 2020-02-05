@@ -137,6 +137,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \
 # 安装 PECL 扩展
+        && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+        && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
         && pickle install $PECL_EXTENSION -n --defaults \
            --strip --cleanup \
 # 默认不启用的扩展
