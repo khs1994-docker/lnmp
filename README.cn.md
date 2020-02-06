@@ -232,7 +232,7 @@ $ ./lnmp-docker down
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.2-composer-alpine`  | **6.x**       |`Alpine:3.11`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.2-composer-alpine`  | **1.9.3**       |`Alpine:3.11`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-cs-fixer`                | **2.16.1**      |`Alpine:3.11`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.21-alpine`           | **1.5.21**       |`Alpine:3.10`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.22-alpine`           | **1.5.22**       |`Alpine:3.10`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.2-management-alpine` | **3.8.2**       |`Alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.1-alpine`             | **12.1**        |`Alpine:3.10`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.3`                      | **4.2.3**       |`Ubuntu:bionic` |
