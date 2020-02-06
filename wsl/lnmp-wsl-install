@@ -310,7 +310,7 @@ _postgresql(){
 
 _rabbitmq(){
   # apt
-  echo
+  true
 }
 
 _mongodb(){
@@ -439,7 +439,8 @@ _node(){
       ${NODE_PREFIX} \
       "mv ${NODE_PREFIX}/${realname} ${NODE_PREFIX}/node"
 
-  $(_sudo) chown -R $USER:$USER ${NODE_PREFIX}/node
+  mkdir -p $HOME/.npm
+  $(_sudo) chown -R $USER:$USER $HOME/.npm
 
   . ~/.bashrc
 
@@ -464,7 +465,7 @@ set -e
 
 . /etc/os-release
 
-. ~/.bashrc || echo
+. ~/.bashrc || true
 
 if [ -z "$WSL_HOME" ];then echo "env WSL_HOME not set" ; fi
 
@@ -474,4 +475,4 @@ CONTAINER_NAME=$( date +%s )
 
 if [ "$1" = "php" ];then shift ; _php "$@" ; exit $? ; fi
 
-for c in "$@"; do _$c || (clear; echo "not support $c"); done
+for soft in "$@"; do _$soft || (clear; echo "not support $soft"); done

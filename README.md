@@ -22,7 +22,7 @@
 
 * [Documents](https://docs.lnmp.khs1994.com)
 
-* [Try Kubernetes Free](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 * [Asciinema Live Demo](https://asciinema.org/a/215588)
 
@@ -42,7 +42,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 :gift: [Donate](https://zan.khs1994.com)
 
-:whale: [Try Kubernetes **FREE**](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+:whale: [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## WeChat
 
@@ -131,7 +131,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 ## AD :whale:
 
-Try Kubernetes **FREE**
+**腾讯云 Kubernetes**
 
 * [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
@@ -329,6 +329,6 @@ You can edit `.env` file `DATA_COLLECTION=false` to disable it.
 
 ## AD :whale:
 
-Try Kubernetes **FREE**
+**腾讯云 Kubernetes**
 
 * [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)

@@ -164,6 +164,7 @@ _libzip(){
 #
 
     if [ ${VERSION_ID} -ge 8 ];then
+      $(_sudo) dnf install -y pkgconf-pkg-config
       $(_sudo) dnf --repo AppStream install -y libzip libzip-devel
 
       return
