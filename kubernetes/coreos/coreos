@@ -35,6 +35,9 @@ add-node          Create node ignition yaml file [N] [master|node]
 new-vm            Create new VirtualBox vm [N]
 
 cleanup           Cleanup Cache
+
+mount-iso         Mount ISO [N]
+remove-iso        Remove ISO [N]
 "
 }
 
@@ -64,6 +67,7 @@ items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
 for item in $items;do
 
 if ! [ -f $item ];then
+  echo "download $item"
   curl -O \
     https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/$item
 fi
@@ -148,8 +152,15 @@ case "$1" in
     docker image rm ccr.ccs.tencentyun.com/khs1994/kubernetes:v${KUBERNETES_VERSION}
   ;;
 
-  coredns )
-    kubectl create -f ../addons/coredns.yaml
+  remove-iso )
+      VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
+          --port 0 --device 1 --type dvddrive --medium none
+
+  ;;
+
+  mount-iso )
+      VBoxManage storageattach "coreos"$2 --storagectl "IDE Controller" \
+          --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-live.x86_64.iso
 
   ;;
 
