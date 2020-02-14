@@ -323,7 +323,7 @@ services:
     << : *default-common
     << : *default-labels
     << : *default-php
-    image: pcit/pcit:alpine
+    image: pcit/pcit
     volumes:
       - ./pcit/.env.production:/app/pcit/.env.production
       - ./pcit/key:/app/pcit/framework/storage/private_key

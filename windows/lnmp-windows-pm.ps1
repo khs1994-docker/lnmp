@@ -262,14 +262,12 @@ function __info($soft){
   $name=$lwpm.name
   $description=$lwpm.description
 
-  if($githubRepo){
+  $latestVersion,$latestPreVersion=getVersionByProvider $soft
+
+  if($githubRepo -and !$latestVersion){
     . $PSScriptRoot\sdk\github\repos\releases.ps1
 
     $latestVersion,$latestPreVersion=getLatestRelease $githubRepo
-  }
-
-  if(!$latestVersion){
-    $latestVersion,$latestPreVersion=getVersionByProvider $soft
   }
 
   if(!$latestPreVersion){

@@ -885,7 +885,7 @@ switch -regex ($command){
       ${LNMP_SERVICES}
     }
 
-    "up$" {
+    "^up$" {
       init
 
       if($other){
@@ -1252,12 +1252,13 @@ XXX
 
     pcit-up {
       # 判断 app/.pcit 是否存在
-      docker rm -f pcit_cp
       rm -r -force ${APP_ROOT}/.pcit
       # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-      docker run -dit --name pcit_cp pcit/pcit:alpine bash
-      docker cp pcit_cp:/app/pcit ${APP_ROOT}/.pcit/
-      docker rm -f pcit_cp
+      docker pull pcit/pcit
+      docker run -it --rm -v ${APP_ROOT}/.pcit:/var/www/pcit `
+        --entrypoint=sh `
+        pcit/pcit `
+        -c "cp -rf /app/pcit/ /var/www/"
 
       # if (!(Test-Path ${APP_ROOT}/pcit/public/.env.produnction)){
       #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
@@ -1288,7 +1289,7 @@ XXX
       }
 
       if(!(Test-Path pcit/key/public.key)){
-        docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine `
+        docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit `
           openssl rsa -in private.key -pubout -out public.key
       }
 

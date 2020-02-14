@@ -1050,12 +1050,13 @@ pcit_nginx_init(){
 
 pcit_init(){
   # 判断 app/.pcit 是否存在
-  docker rm -f pcit_cp > /dev/null 2>&1 || true
   rm -rf ${APP_ROOT:-app}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-  docker run -dit --name pcit_cp pcit/pcit:alpine bash > /dev/null 2>&1
-  docker cp pcit_cp:/app/pcit ${APP_ROOT:-app}/.pcit
-  docker rm -f pcit_cp > /dev/null 2>&1
+  docker pull pcit/pcit
+  docker run -it --rm -v $PWD/${APP_ROOT:-app}/.pcit:/var/www/pcit \
+    --entrypoint=sh \
+    pcit/pcit \
+    -c "cp -rf /app/pcit/ /var/www/"
 
   if ! [ -f pcit/.env.${APP_ENV:-development} ];then
     cp pcit/.env.example pcit/.env.${APP_ENV:-development}
@@ -1073,7 +1074,7 @@ pcit_init(){
   fi
 
   if ! [ -f pcit/key/public.key ];then
-    docker run -i ${tty} --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine \
+    docker run -i ${tty} --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit \
       openssl rsa -in private.key -pubout -out public.key
   fi
 
@@ -1827,7 +1828,6 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
     pcit-cp )
-      docker pull pcit/pcit:alpine
       pcit_init
     ;;
 

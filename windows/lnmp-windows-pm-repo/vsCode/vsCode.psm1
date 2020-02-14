@@ -29,6 +29,10 @@ Function getVersion($url){
     return $version,$url
 }
 
+Function getLatestVersion(){
+  return $(getVersion)[0],$(getVersion $preUrl)[0]
+}
+
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION,$url=getVersion $url
