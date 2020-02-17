@@ -1050,13 +1050,10 @@ pcit_nginx_init(){
 
 pcit_init(){
   # 判断 app/.pcit 是否存在
-  rm -rf ${APP_ROOT:-app}/.pcit
+  rm -rf ${APP_ROOT}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-  docker pull pcit/pcit
-  docker run -it --rm -v $PWD/${APP_ROOT:-app}/.pcit:/var/www/pcit \
-    --entrypoint=sh \
-    pcit/pcit \
-    -c "cp -rf /app/pcit/ /var/www/"
+  docker pull pcit/pcit:frontend
+  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 
   if ! [ -f pcit/.env.${APP_ENV:-development} ];then
     cp pcit/.env.example pcit/.env.${APP_ENV:-development}
@@ -1077,14 +1074,6 @@ pcit_init(){
     docker run -i ${tty} --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit \
       openssl rsa -in private.key -pubout -out public.key
   fi
-
-  $(_sudo) cp pcit/key/*.key ${APP_ROOT:-app}/.pcit/framework/storage/private_key/
-
-  # env file
-
-  $(_sudo) cp pcit/.env.* ${APP_ROOT:-app}/.pcit
-
-  # 启动
 }
 
 _lrew_add(){
@@ -1839,7 +1828,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
       _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.override.yml"
 
-    exec docker-compose $options ${LNMP_SERVICES} pcit
+      exec docker-compose $options ${LNMP_SERVICES} pcit
     fi
     ;;
 

@@ -1,7 +1,7 @@
 {
   "listeners": {
     "*:80": {
-      "application": "laravel"
+      "pass": "applications/laravel"
     }
   },
   "applications": {

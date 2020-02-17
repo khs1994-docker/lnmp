@@ -323,15 +323,18 @@ services:
     << : *default-common
     << : *default-labels
     << : *default-php
-    image: pcit/pcit
+    image: pcit/pcit:unit
     volumes:
       - ./pcit/.env.production:/app/pcit/.env.production
       - ./pcit/key:/app/pcit/framework/storage/private_key
       - pcit-tmp:/tmp
-    working_dir: /app/pcit/bin
+    working_dir: /app/pcit
     command:
       - up
     # logging: *default-logging
+    networks:
+      - backend
+      - frontend
     deploy:
       << : *default-deploy
       << : *default-labels

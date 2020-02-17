@@ -1254,11 +1254,8 @@ XXX
       # 判断 app/.pcit 是否存在
       rm -r -force ${APP_ROOT}/.pcit
       # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-      docker pull pcit/pcit
-      docker run -it --rm -v ${APP_ROOT}/.pcit:/var/www/pcit `
-        --entrypoint=sh `
-        pcit/pcit `
-        -c "cp -rf /app/pcit/ /var/www/"
+      docker pull pcit/pcit:frontend
+      docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 
       # if (!(Test-Path ${APP_ROOT}/pcit/public/.env.produnction)){
       #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
@@ -1296,14 +1293,6 @@ XXX
       cp pcit/ssl/ci.crt config/nginx/ssl/ci.crt
 
       cp pcit/conf/pcit.conf config/nginx/pcit.conf
-
-      # GitHub App private key
-
-      cp pcit/key/* ${APP_ROOT}/.pcit/framework/storage/private_key/
-
-      # env file
-
-      cp pcit/.env.development ${APP_ROOT}/.pcit/.env.development
 
       # 启动
       $options=get_compose_options "docker-lnmp.yml", `
