@@ -19,7 +19,7 @@ ENV COMPOSER_DEP_APKS \
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
     COMPOSER_VERSION=1.9.3 \
     PS1="[\u@\h \w]# " \
-    PHP_CS_FIXER_IGNORE_ENV=1
+    COMPOSER_NO_INTERACTION=1
 
 # https://github.com/composer/docker
 

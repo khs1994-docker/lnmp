@@ -83,6 +83,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-libs \
                          ${APK_EXTRA:-} \
                          zlib \
+                         gnu-libiconv \
                          " \
                          # tidyhtml-libs \
 # *-dev 编译之后删除
@@ -158,5 +159,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm \
         && php -m
+
+ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 
 WORKDIR /app
