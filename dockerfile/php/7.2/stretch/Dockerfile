@@ -37,7 +37,7 @@ ENV PHP_EXTENSION \
       sysvshm \
       # tidy \
       xmlrpc \
-      xsl \
+      # xsl \
       zip
 
 ENV PECL_EXTENSION \
@@ -78,11 +78,11 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libwebp-dev \
         libxpm-dev \
         libenchant-dev \
-        libxslt1-dev \
         libc-client2007e-dev \
         libkrb5-dev \
 	" \
   # libtidy-dev \
+  # libxslt1-dev \
   && runDeps=" \
        libfreetype6 \
        libjpeg62-turbo \
@@ -94,7 +94,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libzip4 \
        zlib1g \
        libyaml-0-2 \
-       libxslt1.1 \
        libxmlrpc-epi0 \
        libbz2-1.0 \
        libexif12 \
@@ -107,6 +106,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libkrb5-3 \
   " \
   # libtidy5 \
+  # libxslt1.1 \
   && apt-get update && apt-get install -y $buildDeps $runDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
         && docker-php-ext-configure zip \
                                     --with-libzip \

@@ -118,7 +118,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] mysqlnd
 * [ ] oci8
 * [ ] odbc
-* [ ] opcache
+* [x] opcache
 * [x] openssl
 * [x] pcntl
 * [x] pcre
@@ -141,7 +141,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] simplexml
 * [ ] skeleton
 * [ ] snmp
-* [x] soap
+* [ ] soap
 * [x] sockets
 * [x] sodium
 * [x] spl
@@ -150,13 +150,13 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] sysvmsg
 * [x] sysvsem
 * [x] sysvshm
-* [x] tidy
+* [ ] tidy
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader
 * [x] xmlrpc
 * [x] xmlwriter
-* [x] xsl
+* [ ] xsl
 * [ ] zend_test
 * [x] zip
 * [x] zlib

@@ -76,13 +76,13 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-xpm \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
-        --with-xsl=shared \
+        # --with-xsl=shared \
         --enable-bcmath=shared \
         --enable-inline-optimization \
         --enable-mbregex \
         --enable-pcntl=shared \
         --enable-shmop=shared \
-        --enable-soap=shared \
+        # --enable-soap=shared \
         --enable-sockets=shared \
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
@@ -93,7 +93,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-intl=shared \
         --enable-exif=shared \
         --with-bz2=shared \
-        --with-tidy=shared \
+        # --with-tidy=shared \
         --with-gmp=shared \
         --with-kerberos \
         --with-imap=shared \
@@ -108,7 +108,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
-        --with-snmp=shared \
+        # --with-snmp=shared \
         --with-mysqli=shared \
         --with-pgsql=shared \
         --with-ffi=shared \
@@ -203,7 +203,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           libwebp-dev \
           libxpm-dev \
           libexif-dev \
-          libxslt-dev \
+          # libxslt-dev \
           gmp-dev \
           xmlrpc-c-dev \
           bzip2-dev \
@@ -215,8 +215,8 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           aspell-dev \
           openldap-dev \
           pcre2-dev \
-          tidyhtml-dev \
-          net-snmp-dev \
+          # tidyhtml-dev \
+          # net-snmp-dev \
           openldap-dev \
           \
           bison \
@@ -297,16 +297,16 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            posix \
                            pspell \
                            shmop \
-                           snmp \
-                           soap \
+                           # snmp \
+                           # soap \
                            sodium \
                            sockets \
                            sysvmsg \
                            sysvsem \
                            sysvshm \
-                           tidy \
+                           # tidy \
                            xmlrpc \
-                           xsl \
+                           # xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \
                            # 7.4 +

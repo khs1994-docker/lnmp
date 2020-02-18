@@ -42,7 +42,7 @@ ENV PHP_EXTENSION \
       sysvshm \
       # tidy \
       xmlrpc \
-      xsl \
+      # xsl \
       zip \
       ${PHP_EXTENSION_EXTRA:-}
 
@@ -76,7 +76,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          yaml \
                          libbz2 \
                          libexif \
-                         libxslt \
                          gmp \
                          xmlrpc-c \
                          enchant \
@@ -84,6 +83,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          icu-libs \
                          ${APK_EXTRA:-} \
                          " \
+                         # libxslt
                          # tidyhtml-libs \
 # *-dev 编译之后删除
       && PHP_FPM_BUILD_DEPS=" \
@@ -99,7 +99,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp-dev \
                          yaml-dev \
                          libexif-dev \
-                         libxslt-dev \
                          gmp-dev \
                          xmlrpc-c-dev \
                          bzip2-dev \
@@ -112,6 +111,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
+                         # libxslt-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && docker-php-ext-configure gd \
