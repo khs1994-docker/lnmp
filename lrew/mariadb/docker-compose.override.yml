@@ -9,4 +9,4 @@ x-common:
 services:
   mariadb:
     << : *default-common
-    image: mariadb:${LNMP_MYSQL_VERSION:-10.4.12}
+    image: mariadb:${LNMP_MYSQL_VERSION:-10.5.1}
