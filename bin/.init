@@ -15,7 +15,7 @@ source $LNMP_PATH/$LNMP_ENV_FILE
 export OS=`uname -s`
 export ARCH=`uname -m`
 
-VERSION=${LNMP_PHP_VERSION:-7.4.2}
+VERSION=${LNMP_PHP_VERSION}
 
 export TAG=${VERSION}-composer-alpine
 

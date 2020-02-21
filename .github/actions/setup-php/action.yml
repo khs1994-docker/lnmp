@@ -6,7 +6,7 @@ author: 'khs1994'
 inputs:
   php_version:
     description: PHP version
-    default: 7.4.2
+    default: 7.4.3
   php_type:
     description: php image type, fpm | composer | swoole | php-cs-fixer | sami
     default: fpm

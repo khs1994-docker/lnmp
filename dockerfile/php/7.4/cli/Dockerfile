@@ -139,8 +139,8 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
-ENV PHP_VERSION 7.4.2
-# ENV PHP_URL="https://www.php.net/get/php-7.4.2.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.2.tar.xz.asc/from/this/mirror"
+ENV PHP_VERSION 7.4.3
+# ENV PHP_URL="https://www.php.net/get/php-7.4.3.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.3.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -151,8 +151,8 @@ ENV PHP_VERSION 7.4.2
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.4.2-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:7.4.2-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.3-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.4.3-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -314,7 +314,7 @@ ENV PECL_EXTENSION \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.4.2-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.3-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \
