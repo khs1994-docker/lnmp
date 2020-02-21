@@ -30,7 +30,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                                       $PHPIZE_DEPS \
                                       openssl-dev \
       && export PATH=$PATH:/opt/bin \
-      && echo "--enable-sockets --enable-openssl --enable-http2 --enable-mysqlnd" \
+      && echo "--enable-openssl --enable-http2" \
            > /tmp/swoole.configure.options \
       && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
            -n --defaults --strip --cleanup --continue-on-error \
