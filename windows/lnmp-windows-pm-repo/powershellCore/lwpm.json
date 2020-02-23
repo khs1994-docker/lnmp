@@ -2,7 +2,7 @@
   "name": "powershellCore",
   "description": "PowerShell is a task-based command-line shell and scripting language built on .NET",
   "version": "6.2.4",
-  "preVersion": "7.0.0-rc.2",
+  "preVersion": "7.0.0-rc.3",
   "homepage": "https://docs.microsoft.com/zh-cn/powershell",
   "bug": "https://github.com/PowerShell/PowerShell/issues",
   "github": "PowerShell/PowerShell",

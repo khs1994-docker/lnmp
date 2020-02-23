@@ -6,9 +6,9 @@ Function print_help_info(){
   Write-Host "
 Usage:
 
-start     Start WNMP        [SOFT_NAME] [SOFT_NAME] ... [all]
-restart   Restart WNMP      [SOFT_NAME] [SOFT_NAME] ... [all]
-stop      Stop WNMP         [SOFT_NAME] [SOFT_NAME] ... [all]
+start     Start WNMP        [SOFT_NAME] [SOFT_NAME] ...
+restart   Restart WNMP      [SOFT_NAME] [SOFT_NAME] ...
+stop      Stop WNMP         [SOFT_NAME] [SOFT_NAME] ...
 status    Show WNMP status
 ps        Show WNMP status
 
@@ -49,7 +49,7 @@ Function _stop($soft){
 
     "mysql" {
       printInfo "Stop MySQL..."
-      start-process "net" -ArgumentList "stop","mysql" -Verb RunAs -wait
+      start-process "net" -ArgumentList "stop","mysql" -Verb RunAs
       Write-Host "
       "
     }
@@ -57,13 +57,6 @@ Function _stop($soft){
     "httpd" {
       printInfo "Stop HTTPD..."
       httpd -d C:/Apache24 -k stop
-      Write-Host "
-      "
-    }
-
-    "sshd" {
-      printInfo "Stop sshd ..."
-      Stop-Service sshd
       Write-Host "
       "
     }
@@ -100,17 +93,6 @@ Function _stop_wsl($soft){
       wsl -d ${DistributionName} -u root lnmp-wsl stop memcached
     }
   }
-}
-
-Function _stop_all(){
-  _stop php
-  _stop mysql
-  _stop nginx
-  _stop redis
-  _stop memcached
-  _stop mongodb
-  _stop postgresql
-  _stop httpd
 }
 
 ################################################################################
@@ -158,13 +140,6 @@ Function _start($soft){
        "
      }
 
-     "sshd" {
-       printInfo "Start SSHD..."
-       Start-Service sshd
-       Write-Host "
-       "
-     }
-
      Default {
        wsl -d ${DistributionName} -u root lnmp-wsl start $soft
      }
@@ -197,17 +172,6 @@ Function _start_wsl($soft){
       wsl -d ${DistributionName} -u root lnmp-wsl start memcached
     }
   }
-}
-
-Function _start_all(){
-  _start php
-  _start mysql
-  _start nginx
-  _start redis
-  _start memcached
-  _start mongodb
-  _start postgresql
-  _start httpd
 }
 
 ################################################################################
@@ -243,14 +207,11 @@ Function _status(){
   Get-Process | Where-Object { $_ -match "memcached"}
   Write-Host "
   "
-  printInfo "Apache Status
+  printInfo "HTTPD Status
   "
   Get-Process | Where-Object { $_ -match "httpd"}
   Write-Host "
   "
-  printInfo "SSHD Status
-  "
-  Get-Process | Where-Object { $_ -match "sshd"}
 }
 
 ################################################################################
@@ -290,10 +251,6 @@ foreach ($soft in $other){
         break
       }
 
-      "all" {
-        _stop_all
-      }
-
       Default {
        print_help_info
       }
@@ -311,10 +268,6 @@ foreach ($soft in $other){
       {$_ -in $WSL_SOFT}{
         _start_wsl $soft
         break
-      }
-
-      "all" {
-        _start_all
       }
 
       Default {
@@ -336,11 +289,6 @@ foreach ($soft in $other){
         _stop_wsl $soft
         _start_wsl $soft
         break
-      }
-
-      "all" {
-        _stop_all
-        _start_all
       }
 
       Default {

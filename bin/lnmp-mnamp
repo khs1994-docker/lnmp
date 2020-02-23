@@ -8,7 +8,7 @@ print_help_info(){
   exec echo "
 Usage:
 
-lnmp-mnamp {start | restart | stop} {SOFT_NAME | all | common}
+lnmp-mnamp {start | restart | stop} {SOFT_NAME | common}
 
 lnmp-mnamp status
 
@@ -135,12 +135,7 @@ fi
 
 if [ "$1" = stop ];then
   shift
-  if [ "$1" = 'all' ];then
-    set +e
-    clear
-    _stop nginx mysql php redis memcached mongodb postgresql
-    exit 0
-  elif [ "$1" = 'common' ];then
+  if [ "$1" = 'common' ];then
     set +e
     clear
     for soft in $LNMP_MACOS_COMMON_SOFT
@@ -155,12 +150,7 @@ fi
 
 if [ "$1" = start ];then
   shift
-  if [ "$1" = 'all' ];then
-    set +e
-    clear
-    _start nginx mysql php redis memcached mongodb postgresql
-    exit 0
-  elif [ "$1" = 'common' ];then
+  if [ "$1" = 'common' ];then
     set +e
     clear
     for soft in $LNMP_MACOS_COMMON_SOFT
@@ -176,12 +166,7 @@ fi
 
 if [ "$1" = restart ];then
   shift
-  if [ "$1" = 'all' ];then
-    set +e
-    clear
-    _restart nginx mysql php redis memcached mongodb postgresql
-    exit 0
-  elif [ "$1" = 'common' ];then
+  if [ "$1" = 'common' ];then
     set +e
     clear
     for soft in $LNMP_MACOS_COMMON_SOFT

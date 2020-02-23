@@ -90,7 +90,7 @@ _fish(){
   fi
 }
 
-_file(){
+_file_contain(){
     ( cat $1 | grep "$2" ) || echo -e $3 >> $1
 }
 
@@ -114,14 +114,12 @@ _ruby
 
 _env
 
-_file ~/.npmrc "registry=https://registry.npm.taobao.org" "registry=https://registry.npm.taobao.org"
+_file_contain ~/.npmrc "registry=https://registry.npm.taobao.org" "registry=https://registry.npm.taobao.org"
 
 mkdir -p ~/.pip
 
-_file ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
+_file_contain ~/.pip/pip.conf "index-url = https://pypi.douban.com/simple" "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
 
 set +e
 
-# apm
-command -v apm > /dev/null && apm config set registry https://registry.npm.taobao.org
 command -v composer > /dev/null && _composer
