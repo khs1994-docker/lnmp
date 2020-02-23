@@ -21,19 +21,19 @@ services:
 
   memcached:
     << : *default-common
-    image: memcached:${LNMP_MEMCACHED_VERSION:-1.5.21}-alpine
+    image: memcached:${LNMP_MEMCACHED_VERSION:-1.5.22}-alpine
 
   php7:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.2}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.3}-fpm-alpine
 
   composer:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.2}-composer-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.3}-composer-alpine
 
   supervisord:
     << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.2}-supervisord-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.3}-supervisord-alpine
 
   phpmyadmin:
     << : *default-common

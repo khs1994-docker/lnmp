@@ -25,9 +25,16 @@ homepage    Opens the package's repository URL or homepage in your browser
 bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
-
 add         Add package
 init        Init a new package(developer)
+
+SERVICES [Require RunAsAdministrator]:
+
+install-service Install service [ServiceName] [CommandLine] [LogFile]
+remove-service  Remove service [ServiceName]
+start-service   Start service
+stop-service    Stop service
+
 "
 }
 
@@ -255,14 +262,12 @@ function __info($soft){
   $name=$lwpm.name
   $description=$lwpm.description
 
-  if($githubRepo){
+  $latestVersion,$latestPreVersion=getVersionByProvider $soft
+
+  if($githubRepo -and !$latestVersion){
     . $PSScriptRoot\sdk\github\repos\releases.ps1
 
     $latestVersion,$latestPreVersion=getLatestRelease $githubRepo
-  }
-
-  if(!$latestVersion){
-    $latestVersion,$latestPreVersion=getVersionByProvider $soft
   }
 
   if(!$latestPreVersion){
@@ -375,6 +380,8 @@ if($args[0] -eq 'releases'){
 
 $command,$opt=$args
 
+Import-Module $PSScriptRoot/sdk/service/service.psm1 -Force
+
 switch ($command)
 {
   "outdated" {
@@ -384,7 +391,41 @@ switch ($command)
   "add" {
     _add $opt
   }
-  Default {}
+
+  "install-service" {
+    mkdir -Force C:/bin | out-null
+    $Global:BaseDir="C:\bin"
+
+    CreateService -ServiceName $opt[0] -CommandLine $opt[1] `
+    -LogFile $opt[2] -EnvVaribles $opt[3]
+
+    # @{NODE_NAME = "$nodeName";}
+  }
+
+  "remove-service" {
+    foreach($item in $opt){
+      Write-Warning "Remove service $item"
+      RemoveService -ServiceName $item
+    }
+  }
+
+  "start-service" {
+    foreach($item in $opt){
+      Write-Warning "Start service $item"
+      start-process "net" -ArgumentList "start",$item -Verb RunAs
+    }
+  }
+
+  "stop-service" {
+    foreach($item in $opt){
+      Write-Warning "Stop service $item"
+      start-process "net" -ArgumentList "stop",$item -Verb RunAs
+    }
+  }
+
+  Default {
+    print_help_info
+  }
 }
 
 cd $source

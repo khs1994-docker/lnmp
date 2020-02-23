@@ -29,5 +29,5 @@ $ ./lnmp-wsl-init
 ## 安装 PHP
 
 ```bash
-$ ./lnmp-wsl-install php 7.4.2 deb
+$ ./lnmp-wsl-install php 7.4.3 deb
 ```

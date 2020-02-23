@@ -5,19 +5,19 @@ services:
     image: mysql:8.0.19
 
   mariadb:
-    image: mariadb:10.4.12
+    image: mariadb:10.5.1
 
   redis:
     image: redis:5.0.7-alpine
 
   memcached:
-    image: memcached:1.5.21-alpine
+    image: memcached:1.5.22-alpine
 
   php:
-    image: php:7.4.2-fpm-alpine
+    image: php:7.4.3-fpm-alpine
 
   composer:
-    image: composer:1.9.2
+    image: composer:1.9.3
 
   nginx:
     image: nginx:1.17.8-alpine
@@ -26,7 +26,7 @@ services:
     image: rabbitmq:3.8.2-management-alpine
 
   postgresql:
-    image: postgres:12.1-alpine
+    image: postgres:12.2-alpine
 
   mongodb:
     image: mongo:4.2.3
@@ -44,13 +44,13 @@ services:
     image: minio/minio:RELEASE.2019-10-12T01-39-57Z
 
   kong:
-    image: kong:2.0.0-alpine
+    image: kong:2.0.1-alpine
 
   node:
-    image: node:13.7.0-alpine
+    image: node:13.8.0-alpine
 
   go:
-    image: golang:1.13.7-alpine
+    image: golang:1.13.8-alpine
 
   alpine:
     image: alpine:3.11

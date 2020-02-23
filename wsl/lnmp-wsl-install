@@ -47,13 +47,13 @@ PG_MAJOR=10
 
 GO_PREFIX=/usr/local
 
-GO_VERSION=1.13.7
+GO_VERSION=1.13.8
 
-NODE_VERSION=13.7.0
+NODE_VERSION=13.8.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.4.2
+PHP_VERSION=7.4.3
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -105,9 +105,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (7.4.2)
+  # default install latest php version (7.4.3)
 
-  PHP_VERSION=${1:-7.4.2}
+  PHP_VERSION=${1:-7.4.3}
 
   case ${PHP_VERSION} in
     5.6.* )
@@ -310,7 +310,7 @@ _postgresql(){
 
 _rabbitmq(){
   # apt
-  echo
+  true
 }
 
 _mongodb(){
@@ -439,7 +439,8 @@ _node(){
       ${NODE_PREFIX} \
       "mv ${NODE_PREFIX}/${realname} ${NODE_PREFIX}/node"
 
-  $(_sudo) chown -R $USER:$USER ${NODE_PREFIX}/node
+  mkdir -p $HOME/.npm
+  $(_sudo) chown -R $USER:$USER $HOME/.npm
 
   . ~/.bashrc
 
@@ -464,7 +465,7 @@ set -e
 
 . /etc/os-release
 
-. ~/.bashrc || echo
+. ~/.bashrc || true
 
 if [ -z "$WSL_HOME" ];then echo "env WSL_HOME not set" ; fi
 
@@ -474,4 +475,4 @@ CONTAINER_NAME=$( date +%s )
 
 if [ "$1" = "php" ];then shift ; _php "$@" ; exit $? ; fi
 
-for c in "$@"; do _$c || (clear; echo "not support $c"); done
+for soft in "$@"; do _$soft || (clear; echo "not support $soft"); done

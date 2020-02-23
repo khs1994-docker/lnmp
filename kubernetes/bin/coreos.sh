@@ -9,7 +9,7 @@ if [ -n "${NODE_NAME}"];then
   NODE_NAME="$1"
 fi
 
-FCOS_VERSION=31.20200118.2.0
+FCOS_VERSION=31.20200127.2.0
 
 if [ -z "${NODE_NAME}" ];then
   echo "Please input NODE_NAME

@@ -11,13 +11,13 @@
 #
 # $ docker build --target=laravel -t khs1994/laravel:6.0 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
-ARG NODE_VERSION=13.7.0
-ARG PHP_VERSION=7.4.2
+ARG NODE_VERSION=13.8.0
+ARG PHP_VERSION=7.4.3
 ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建，建议放到 CDN，可省略此步
-FROM node:${NODE_VERSION:-13.7.0}-alpine as frontend
+FROM node:${NODE_VERSION:-13.8.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -37,7 +37,7 @@ RUN cd /app \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.4.2-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME:-khs1994}/php:7.4.3-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/

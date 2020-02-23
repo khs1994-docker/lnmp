@@ -23,7 +23,7 @@
 
 * [Documents](https://docs.lnmp.khs1994.com)
 
-* [Try Kubernetes Free](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 * [Asciinema Live Demo](https://asciinema.org/a/215588)
 
@@ -43,7 +43,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 :gift: [Donate](https://zan.khs1994.com)
 
-:whale: [Try Kubernetes **FREE**](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+:whale: [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## WeChat
 
@@ -132,7 +132,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 ## AD :whale:
 
-Try Kubernetes **FREE**
+**腾讯云 Kubernetes**
 
 * [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
@@ -141,16 +141,6 @@ Try Kubernetes **FREE**
 * [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
 
 * [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
-
-## PHP EOL
-
-* 7.0
-
-More information please see https://github.com/khs1994-docker/lnmp/issues/354
-
-## Meet issues With MySQL 8.0 ?
-
-Please see https://github.com/khs1994-docker/lnmp/issues/450
 
 ## PHPer commands
 
@@ -168,7 +158,7 @@ For more information please see [Documents](docs/command.md)
 
 ## Issue SSL certificate
 
->Powered by [`acme.sh`](https://github.com/Neilpang/acme.sh)
+>Powered by [`acme.sh`](https://github.com/acmesh-official/acme.sh)
 
 ```bash
 $ ./lnmp-docker ssl khs1994.com -d *.khs1994.com
@@ -217,20 +207,20 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
-|[ACME.sh](https://github.com/Neilpang/acme.sh)                            |`khs1994/acme:2.8.5`        | **2.8.5**              |`Alpine:3.11`    |
+|[ACME.sh](https://github.com/acmesh-official/acme.sh)                            |`khs1994/acme:2.8.5`        | **2.8.5**              |`Alpine:3.11`    |
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.8-alpine`      | **1.17.8**             |`Alpine:3.10`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.2-unit-alpine`| **1.14.0**             |`Alpine:3.11`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.3-unit-alpine`| **1.14.0**             |`Alpine:3.11`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.41-alpine`       | **2.4.41**             |`Alpine:3.11`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.19`              | **8.0.19**             |`Debian:stretch`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.4.12`            | **10.4.12**             |`Ubuntu:bionic` |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.1`            | **10.5.1**             |`Ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.7-alpine`        | **5.0.7**            |`Alpine:3.11`    |
-|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.4.2-fpm-alpine`  | **7.4.2**       |`Alpine:3.11`    |
-|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.2-composer-alpine`  | **6.x**       |`Alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.2-composer-alpine`  | **1.9.2**       |`Alpine:3.11`    |
+|[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.4.3-fpm-alpine`  | **7.4.3**       |`Alpine:3.11`    |
+|[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.3-composer-alpine`  | **6.x**       |`Alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.3-composer-alpine`  | **1.9.3**       |`Alpine:3.11`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-cs-fixer`                | **2.16.1**      |`Alpine:3.11`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.21-alpine`           | **1.5.21**       |`Alpine:3.10`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.5.22-alpine`           | **1.5.22**       |`Alpine:3.11`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.2-management-alpine` | **3.8.2**       |`Alpine:3.11`    |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.1-alpine`             | **12.1**        |`Alpine:3.10`    |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.2-alpine`             | **12.2**        |`Alpine:3.11`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.3`                      | **4.2.3**       |`Ubuntu:bionic` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.11`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.8`    |
@@ -261,25 +251,11 @@ Easy to generate nginx or apache config, etc. Please use [`./lnmp-docker`](docs/
 
 Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/swarm/README.md).
 
-## LinuxKit
-
-```bash
-# OS: macOS
-
-$ cd linuxkit
-
-$ linuxkit build lnmp.yml
-
-$ linuxkit run -publish 8080:80/tcp lnmp
-```
-
-Open your Browers `127.0.0.1:8080`
-
 ## Who use in Production?
 
 ### [khs1994.com](//khs1994.com)
 
-### [PCIT PHP CI TOOLKIT](https://github.com/pcit-ce/pcit)
+### [PCIT -- PHP CI TOOLKIT](https://github.com/pcit-ce/pcit)
 
 ## TLS1.3
 
@@ -303,7 +279,7 @@ Please see [Contributing](CONTRIBUTING.md)
 * [Docker Cloud](https://cloud.docker.com)
 * [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 * [Let's Encrypt](https://letsencrypt.org/)
-* [acme.sh](https://github.com/Neilpang/acme.sh)
+* [acme.sh](https://github.com/acmesh-official/acme.sh)
 
 ## More Information
 
@@ -330,6 +306,6 @@ You can edit `.env` file `DATA_COLLECTION=false` to disable it.
 
 ## AD :whale:
 
-Try Kubernetes **FREE**
+**腾讯云 Kubernetes**
 
 * [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)

@@ -525,12 +525,9 @@ docker_compose(){
 "docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker Desktop"
       exit 1
       elif [ "$OS" = 'Linux' ];then
+        docker_compose_location=`command -v docker-compose`
         print_error \
-"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker compose -f"
-      exit 1
-      elif [ "$OS" = 'MINGW64_NT-10.0' ];then
-        print_error \
-"docker-compose v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST update Docker Desktop"
+"docker-compose [$docker_compose_location] v$DOCKER_COMPOSE_VERSION NOT installed Correct version, You MUST EXEC $ ./lnmp-docker compose -f"
       exit 1
       else
         notsupport
@@ -1053,12 +1050,10 @@ pcit_nginx_init(){
 
 pcit_init(){
   # 判断 app/.pcit 是否存在
-  docker rm -f pcit_cp > /dev/null 2>&1 || true
-  rm -rf ${APP_ROOT:-app}/.pcit
+  rm -rf ${APP_ROOT}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-  docker run -dit --name pcit_cp pcit/pcit:alpine bash > /dev/null 2>&1
-  docker cp pcit_cp:/app/pcit ${APP_ROOT:-app}/.pcit
-  docker rm -f pcit_cp > /dev/null 2>&1
+  docker pull pcit/pcit:frontend
+  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 
   if ! [ -f pcit/.env.${APP_ENV:-development} ];then
     cp pcit/.env.example pcit/.env.${APP_ENV:-development}
@@ -1076,17 +1071,9 @@ pcit_init(){
   fi
 
   if ! [ -f pcit/key/public.key ];then
-    docker run -i ${tty} --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine \
+    docker run -i ${tty} --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit \
       openssl rsa -in private.key -pubout -out public.key
   fi
-
-  $(_sudo) cp pcit/key/*.key ${APP_ROOT:-app}/.pcit/framework/storage/private_key/
-
-  # env file
-
-  $(_sudo) cp pcit/.env.* ${APP_ROOT:-app}/.pcit
-
-  # 启动
 }
 
 _lrew_add(){
@@ -1830,7 +1817,6 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
     pcit-cp )
-      docker pull pcit/pcit:alpine
       pcit_init
     ;;
 
@@ -1842,7 +1828,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
       _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.override.yml"
 
-    exec docker-compose $options ${LNMP_SERVICES} pcit
+      exec docker-compose $options ${LNMP_SERVICES} pcit
     fi
     ;;
 

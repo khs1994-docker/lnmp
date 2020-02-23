@@ -18,7 +18,7 @@ x-common-label:
 services:
   nginx-unit:
     << : *default-common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.2}-unit-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.3}-unit-alpine"
     volumes:
       - ./config/${LNMP_NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached

@@ -377,6 +377,8 @@ systemd:
         # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
         # --image-pull-progress-deadline=15m \
 
+        ExecStartPost=chown -R core:core /home/core/.kube
+
         ExecStopPost=-umount /var/lib/kubelet
         ExecStopPost=-umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 

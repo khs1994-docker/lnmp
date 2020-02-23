@@ -20,6 +20,8 @@ jobs:
       - name: Init LNMP
         run: |
           set -x
+          docker-compose --version
+          lnmp-docker compose --official
           lnmp-docker services
           docker-compose --version
       - name: Install Laravel
@@ -27,7 +29,8 @@ jobs:
           ACTIONS_COMPOSER_BIN_PATH: /home/runner/.composer/vendor/bin
         run: |
           set -x
-          export PATH=$ACTIONS_COMPOSER_BIN_PATH:$PATH
+
+          echo "::add-path::$ACTIONS_COMPOSER_BIN_PATH"
 
           lnmp-composer config -g --unset repos.packagist
 

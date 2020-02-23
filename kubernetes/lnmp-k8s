@@ -882,7 +882,7 @@ _crictl_install(){
 
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
     local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = "19fed421710fccfe58f5573383bb137c19438a9056355556f1a15da8d23b3ad1" ];then
+    if ! [ $sha256 = "7b72073797f638f099ed19550d52e9b9067672523fc51b746e65d7aa0bafa414" ];then
       test $GOARCH = 'amd64' && $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
       test $GOARCH = 'amd64' && __download
     fi

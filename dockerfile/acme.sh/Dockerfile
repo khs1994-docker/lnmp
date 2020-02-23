@@ -9,7 +9,7 @@ ENV ACME_SH_VERSION=2.8.5 \
 RUN apk add --no-cache openssl \
                        curl \
                        socat \
-    && curl https://raw.githubusercontent.com/Neilpang/acme.sh/${ACME_SH_VERSION}/acme.sh | INSTALLONLINE=1 sh \
+    && curl https://raw.githubusercontent.com/acmesh-official/acme.sh/${ACME_SH_VERSION}/acme.sh | INSTALLONLINE=1 sh \
     && ln -s /root/.acme.sh/acme.sh /usr/local/bin/acme.sh
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh

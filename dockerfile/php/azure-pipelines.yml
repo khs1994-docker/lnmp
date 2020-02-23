@@ -20,37 +20,37 @@ jobs:
       # PHP_73_CLI:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.14
+      #   PHP_TAG_VERSION: 7.3.15
       #   CLI: 1
       # PHP_73_FPM:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.14
+      #   PHP_TAG_VERSION: 7.3.15
       #   FPM: 1
       # PHP_73_COMPOSER:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.14
+      #   PHP_TAG_VERSION: 7.3.15
       #   COMPOSER: 1
       # PHP_73_SWOOLE:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.14
+      #   PHP_TAG_VERSION: 7.3.15
       #   SWOOLE: 1
       # PHP_73_UNIT:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.14
+      #   PHP_TAG_VERSION: 7.3.15
       #   UNIT: 1
       # PHP_73_SUPERVISORD:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.14
+      #   PHP_TAG_VERSION: 7.3.15
       #   SUPERVISORD: 1
       # PHP_73_PPM:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.14
+      #   PHP_TAG_VERSION: 7.3.15
       #   PPM: 1
 
       # PHP_56_FPM:
@@ -74,58 +74,58 @@ jobs:
       PHP_72_CLI:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.27
+        PHP_TAG_VERSION: 7.2.28
         CLI: 1
       PHP_72_FPM:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.27
+        PHP_TAG_VERSION: 7.2.28
         FPM: 1
       PHP_72_COMPOSER:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.27
+        PHP_TAG_VERSION: 7.2.28
         COMPOSER: 1
       PHP_72_SWOOLE:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.27
+        PHP_TAG_VERSION: 7.2.28
         SWOOLE: 1
       PHP_72_UNIT:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.27
+        PHP_TAG_VERSION: 7.2.28
         UNIT: 1
       PHP_72_SUPERVISORD:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.27
+        PHP_TAG_VERSION: 7.2.28
         SUPERVISORD: 1
       PHP_72_PPM:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.27
+        PHP_TAG_VERSION: 7.2.28
         PPM: 1
 
       # PHP_74_CLI:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.2
+      #   PHP_TAG_VERSION: 7.4.3
       #   CLI: 1
       # PHP_74_FPM:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.2
+      #   PHP_TAG_VERSION: 7.4.3
       #   FPM: 1
       # PHP_74_COMPOSER:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.2
+      #   PHP_TAG_VERSION: 7.4.3
       #   COMPOSER: 1
       # PHP_74_SWOOLE:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.2
+      #   PHP_TAG_VERSION: 7.4.3
       #   SWOOLE: 1
 
       # PHP_nightly_CLI:

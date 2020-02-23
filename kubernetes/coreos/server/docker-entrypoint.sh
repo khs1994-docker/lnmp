@@ -50,6 +50,7 @@ do
             ${CONTAINER_RUNTIME_ENDPOINT} \
             ${CONTAINERD_VERSION} \
             ${NETWORK_GATEWAY} \
+            ${DEFAULT_GATEWAY} \
            ' \
   < $item.yaml > $item.yaml.source
 

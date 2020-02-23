@@ -52,7 +52,7 @@ host=x86_64-linux-gnu
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.9.2
+export COMPOSER_VERSION=1.9.3
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -648,14 +648,8 @@ _install_pecl_ext_by_pickle(){
     do
       local extension_real_name=$(echo $extension | cut -d "@" -f 2)
       local extension=$(echo $extension | cut -d "@" -f 1)
-      local WITH_CONFIGURE_OPTIONS_FILE="/tmp/${extension_real_name:-$extension}.configure.options"
-      local WITH_CONFIGURE_OPTIONS=$( \
-        test -f ${WITH_CONFIGURE_OPTIONS_FILE} && \
-        echo --with-configure-options=${WITH_CONFIGURE_OPTIONS_FILE} \
-        || echo --defaults \
-      )
 
-      $(_sudo) pickle install $extension ${PICKLE_OPTIONS} ${WITH_CONFIGURE_OPTIONS}
+      $(_sudo) pickle install $extension ${PICKLE_OPTIONS} --defaults
     done
 
     $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
@@ -663,6 +657,9 @@ _install_pecl_ext_by_pickle(){
 
     return
   fi
+
+  echo "--enable-redis-igbinary" > /tmp/redis.configure.options
+  echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options
 
   $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
@@ -967,8 +964,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.2
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.2
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.3
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.3
 
 _get_phpnum $PHP_VERSION
 

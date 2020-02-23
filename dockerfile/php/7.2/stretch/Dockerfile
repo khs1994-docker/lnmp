@@ -2,7 +2,7 @@
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.27
+ARG PHP_VERSION=7.2.28
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-stretch
 
@@ -37,7 +37,7 @@ ENV PHP_EXTENSION \
       sysvshm \
       # tidy \
       xmlrpc \
-      xsl \
+      # xsl \
       zip
 
 ENV PECL_EXTENSION \
@@ -78,11 +78,11 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libwebp-dev \
         libxpm-dev \
         libenchant-dev \
-        libxslt1-dev \
         libc-client2007e-dev \
         libkrb5-dev \
 	" \
   # libtidy-dev \
+  # libxslt1-dev \
   && runDeps=" \
        libfreetype6 \
        libjpeg62-turbo \
@@ -94,7 +94,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libzip4 \
        zlib1g \
        libyaml-0-2 \
-       libxslt1.1 \
        libxmlrpc-epi0 \
        libbz2-1.0 \
        libexif12 \
@@ -107,6 +106,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libkrb5-3 \
   " \
   # libtidy5 \
+  # libxslt1.1 \
   && apt-get update && apt-get install -y $buildDeps $runDeps --no-install-recommends && rm -r /var/lib/apt/lists/* \
         && docker-php-ext-configure zip \
                                     --with-libzip \
@@ -162,12 +162,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.9.2 \
+    COMPOSER_VERSION=1.9.3 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.9.2,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.9.3,source=/usr/bin/composer,target=/opt/bin/composer \
     echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \

@@ -12,7 +12,7 @@ services:
     &pcit
     << : *default-common-label
     # restart: always
-    image: pcit/pcit:alpine
+    image: pcit/pcit:unit
     volumes:
       - ./pcit/key:/app/pcit/framework/storage/private_key:cached
       - ./pcit/.env.${APP_ENV:-development}:/app/pcit/.env.${APP_ENV:-development}:cached
@@ -22,7 +22,8 @@ services:
         target: /tmp
     networks:
       - backend
-    working_dir: /app/pcit/bin
+      - frontend
+    working_dir: /app/pcit
     command:
       - up
     environment:
@@ -35,10 +36,6 @@ services:
   pcit-agent:
     << : *pcit
     command: agent
-
-  pcit-gc:
-    << : *pcit
-    command: gc
 
   nginx:
     ports:

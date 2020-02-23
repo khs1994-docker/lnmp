@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.7-alpha.1
+.VERSION 19.03.8-alpha1
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -885,7 +885,7 @@ switch -regex ($command){
       ${LNMP_SERVICES}
     }
 
-    "up$" {
+    "^up$" {
       init
 
       if($other){
@@ -1252,12 +1252,10 @@ XXX
 
     pcit-up {
       # 判断 app/.pcit 是否存在
-      docker rm -f pcit_cp
       rm -r -force ${APP_ROOT}/.pcit
       # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-      docker run -dit --name pcit_cp pcit/pcit:alpine bash
-      docker cp pcit_cp:/app/pcit ${APP_ROOT}/.pcit/
-      docker rm -f pcit_cp
+      docker pull pcit/pcit:frontend
+      docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 
       # if (!(Test-Path ${APP_ROOT}/pcit/public/.env.produnction)){
       #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
@@ -1288,21 +1286,13 @@ XXX
       }
 
       if(!(Test-Path pcit/key/public.key)){
-        docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit:alpine `
+        docker run -it --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit `
           openssl rsa -in private.key -pubout -out public.key
       }
 
       cp pcit/ssl/ci.crt config/nginx/ssl/ci.crt
 
       cp pcit/conf/pcit.conf config/nginx/pcit.conf
-
-      # GitHub App private key
-
-      cp pcit/key/* ${APP_ROOT}/.pcit/framework/storage/private_key/
-
-      # env file
-
-      cp pcit/.env.development ${APP_ROOT}/.pcit/.env.development
 
       # 启动
       $options=get_compose_options "docker-lnmp.yml", `

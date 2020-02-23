@@ -1,8 +1,8 @@
 {
   "name": "deno",
   "description": "A secure runtime for JavaScript and TypeScript built with V8, Rust, and Tokio",
-  "version": "0.31.0",
-  "preVersion": "0.31.0",
+  "version": "0.34.0",
+  "preVersion": "0.34.0",
   "homepage": "https://deno.land/",
   "bug": "https://github.com/denoland/deno/issues",
   "github": "denoland/deno",

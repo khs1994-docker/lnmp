@@ -4,13 +4,17 @@ workspace:
 
 pipeline:
   bash:
-    image: khs1994/php:7.4.2-composer-alpine
+    image: khs1994/php:7.4.3-composer-alpine
     commands:
       - pwd
       - bash ./lnmp-docker
 
   # https://hub.docker.com/_/microsoft-powershell?tab=description
   powershell:
-    image: mcr.microsoft.com/powershell:alpine-3.8
+    image: mcr.azk8s.cn/powershell:preview-alpine-3.10
     commands:
       - pwsh ./lnmp-docker.ps1
+
+branches:
+- master
+- 19.03

@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-ARG PHP_VERSION=7.2.27
+ARG PHP_VERSION=7.2.28
 
 FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine
 
@@ -11,7 +11,7 @@ ARG VCS_REF
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
 
-ENV NGINX_UNIT_VERSION 1.14.0
+ENV NGINX_UNIT_VERSION 1.15.0
 
 RUN cd /usr/src \
   && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \

@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:7.4.2-fpm-alpine
+  image: khs1994/php:7.4.3-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -153,9 +153,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.4.12"
+  #   image: "mariadb:10.5.1"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.4.12
+  #   # image: khs1994/lnmp-mariadb:10.5.1
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -323,15 +323,18 @@ services:
     << : *default-common
     << : *default-labels
     << : *default-php
-    image: pcit/pcit:alpine
+    image: pcit/pcit:unit
     volumes:
       - ./pcit/.env.production:/app/pcit/.env.production
       - ./pcit/key:/app/pcit/framework/storage/private_key
       - pcit-tmp:/tmp
-    working_dir: /app/pcit/bin
+    working_dir: /app/pcit
     command:
       - up
     # logging: *default-logging
+    networks:
+      - backend
+      - frontend
     deploy:
       << : *default-deploy
       << : *default-labels

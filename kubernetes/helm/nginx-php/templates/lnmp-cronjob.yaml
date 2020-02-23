@@ -21,7 +21,7 @@ spec:
           # startingDeadlineSeconds: 0
           containers:
           - name: lnmp-cron
-            image: khs1994/php:7.4.2-fpm-alpine
+            image: khs1994/php:7.4.3-fpm-alpine
             imagePullPolicy: IfNotPresent
             args:
             - /bin/sh

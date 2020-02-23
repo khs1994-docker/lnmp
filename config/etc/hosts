@@ -5,14 +5,12 @@
 52.216.226.0     github-cloud.s3.amazonaws.com
 52.216.169.83    github-production-release-asset-2e65be.s3.amazonaws.com
 151.101.229.194  github.global.ssl.fastly.net
-#192.30.253.112  github.com
-#192.30.253.113  github.com
-#52.74.223.119    github.com
-192.30.253.119   gist.github.com github.com
+192.30.253.112   github.com
+192.30.253.112   gist.github.com
 151.101.76.133   avatars1.githubusercontent.com avatars2.githubusercontent.com
 151.101.76.133   avatars0.githubusercontent.com avatars3.githubusercontent.com
 # 34.228.249.31  collector.githubapp.com
-185.199.111.154  github.githubassets.com
+# 199.232.28.133   github.githubassets.com
 216.58.199.16    storage.googleapis.com
 151.101.108.133  raw.githubusercontent.com
 

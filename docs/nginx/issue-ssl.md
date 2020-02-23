@@ -4,7 +4,7 @@
 
 第一种方法是自行到国内云服务商等处申请 SSL 证书。
 
-你也可以使用以下命令申请（由 [acme.sh](https://github.com/Neilpang/acme.sh) 提供技术支持，感谢 [Let's Encrypt](https://letsencrypt.org/)）。
+你也可以使用以下命令申请（由 [acme.sh](https://github.com/acmesh-official/acme.sh) 提供技术支持，感谢 [Let's Encrypt](https://letsencrypt.org/)）。
 
 ## 通配符证书
 
@@ -12,7 +12,7 @@ Let's Encrypt 现已支持通过 DNS 验证来申请通配符证书，本例以�
 
 ## 确定域名的 DNS 服务商
 
-在 https://github.com/Neilpang/acme.sh/tree/master/dnsapi 找到自己域名的 DNS 服务商代码，例如
+在 https://github.com/acmesh-official/acme.sh/tree/master/dnsapi 找到自己域名的 DNS 服务商代码，例如
 
 * `dnspod.cn` 代码为 `dns_dp`
 

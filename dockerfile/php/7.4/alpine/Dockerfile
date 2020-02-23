@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.2
+ARG PHP_VERSION=7.4.3
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -43,7 +43,7 @@ ENV PHP_EXTENSION \
       sysvshm \
       # tidy \
       xmlrpc \
-      xsl \
+      # xsl \
       zip \
       ${PHP_EXTENSION_EXTRA:-}
 
@@ -77,16 +77,17 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          yaml \
                          libbz2 \
                          libexif \
-                         libxslt \
                          gmp \
                          xmlrpc-c \
                          enchant \
                          c-client \
                          icu-libs \
                          libgcrypt \
+                         gnu-libiconv \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
+                         # libxslt \
 # *-dev 编译之后删除
       && PHP_FPM_BUILD_DEPS=" \
                          openssl-dev \
@@ -102,7 +103,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libwebp-dev \
                          yaml-dev \
                          libexif-dev \
-                         libxslt-dev \
                          gmp-dev \
                          xmlrpc-c-dev \
                          bzip2-dev \
@@ -116,6 +116,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
+                         # libxslt-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
@@ -139,6 +140,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \
 # 安装 PECL 扩展
+        && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+        && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
         && pickle install $PECL_EXTENSION -n --defaults \
            --strip --cleanup \
 # 默认不启用的扩展
@@ -159,5 +162,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && chmod -R 777 /var/log/php-fpm \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         && php -m
+
+ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 
 WORKDIR /app
