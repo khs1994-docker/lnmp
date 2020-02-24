@@ -7,10 +7,10 @@ Wants=network-online.target network.target
 [Service]
 
 ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kube-proxy
-ExecStartPre=-modprobe ip_vs
-ExecStartPre=-modprobe ip_vs_rr
-ExecStartPre=-modprobe ip_vs_wrr
-ExecStartPre=-modprobe ip_vs_sh
+ExecStartPre=-/usr/bin/env modprobe ip_vs
+ExecStartPre=-/usr/bin/env modprobe ip_vs_rr
+ExecStartPre=-/usr/bin/env modprobe ip_vs_wrr
+ExecStartPre=-/usr/bin/env modprobe ip_vs_sh
 
 # WorkingDirectory=/opt/k8s/var/lib/kube-proxy
 
