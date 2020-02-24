@@ -23,9 +23,10 @@ cache:
 
 before_install:
   # /home/travis/build/khs1994-docker/lnmp-k8s
+  # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
   - pwd
   - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
-  - cp -r ~/lnmp/* ~/gopath/src/github.com/khs1994-docker
+  - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
   # remove some apt source
   - cat /etc/apt/sources.list
@@ -199,7 +200,8 @@ script:
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com
-  - kubectl delete deployment nginx
+  - kubectl delete deployment nginx || true
+  - kubectl delete pod nginx || true
   - kubectl get all
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
