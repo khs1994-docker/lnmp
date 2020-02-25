@@ -105,7 +105,6 @@ module.exports = {
         "storage-classes",
       ],
       "/node/": [
-        'flanneld',
         "kubelet",
         "worker",
         "oci_runtime",

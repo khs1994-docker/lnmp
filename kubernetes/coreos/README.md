@@ -52,8 +52,8 @@ $ ./lnmp-k8s kubernetes-server
 # $ ./lnmp-k8s kubernetes-server --url
 
 # download soft
-# $ items="etcd cni flanneld crictl containerd"
-$ items="flanneld crictl containerd"
+# $ items="etcd cni crictl containerd"
+$ items="crictl containerd"
 $ for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
 ```
 
@@ -110,6 +110,14 @@ $ ./coreos mount-iso N
 * `192.168.57.110`
 * `192.168.57.111`
 * `192.168.57.112`
+
+## 部署 CNI -- calico
+
+**仅需在某个节点执行一次即可**
+
+```bash
+$ kubectl apply -f /home/core/calico.yaml
+```
 
 ## 虚拟机网卡设置
 

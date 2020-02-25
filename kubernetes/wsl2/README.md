@@ -47,7 +47,7 @@ $ sudo cp -a kubernetes-release/release/v1.17.0-linux-amd64/kubernetes/server/bi
 在 `Windows` 中执行
 
 ```powershell
-$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld-etcd-client.pem","flanneld-etcd-client-key.pem","ca.pem","ca-key.pem"
+$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem"
 
 $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ```
@@ -58,12 +58,6 @@ $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 $ wsl
 
 $ ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
-```
-
-## flanneld
-
-```powershell
-$ ./wsl2/flanneld start
 ```
 
 ## kube-proxy
@@ -98,7 +92,6 @@ $ ./wsl2/kubelet start
 ### 1. 生成配置文件
 
 ```powershell
-# $ ./wsl2/flanneld
 # $ ./wsl2/kube-containerd
 
 $ ./wsl2/bin/supervisorctl g
@@ -116,7 +109,6 @@ $ ./wsl2/bin/supervisorctl update
 ### 3. 启动组件
 
 ```powershell
-$ ./wsl2/bin/supervisorctl start kube-node:flanneld
 $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 $ ./wsl2/bin/supervisorctl start kube-node:kube-containerd
 

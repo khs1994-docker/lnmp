@@ -6,9 +6,9 @@ $WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
 
 wsl -u root -- mkdir -p ${K8S_ROOT}/etc/cni/net.d
 
-wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
+wsl -u root -- cp $K8S_WSL2_ROOT/conf/cni/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
 
-# wsl -u root -- cat ${K8S_ROOT}/cni/net.d/10-flannel.conflist
+# wsl -u root -- cat ${K8S_ROOT}/cni/net.d/99-loopback.conf
 
 (Get-Content $PSScriptRoot/conf/kube-containerd/1.3/config.toml.temp) `
   -replace "##K8S_ROOT##",$K8S_ROOT `

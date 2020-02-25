@@ -579,38 +579,6 @@ _etcd_install(){
   $(_sudo) rm -rf ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
 }
 
-_flanneld_install(){
-  if [ "$1" = '-f' ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/flanneld; fi
-  local url="https://github.com/coreos/flannel/releases/download"
-  local TAR_FILE="flannel-v${FLANNEL_VERSION}-${GOOS}-${GOARCH}.tar.gz"
-  __download(){
-    $(_sudo) $(_curl) ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
-  }
-
-  if [ -f ${K8S_ROOT}/bin/flanneld -a ! "$1" = "--dry-run" ];then
-    print_info "flanneld already install"
-
-    ${K8S_ROOT}/bin/flanneld --version || true
-    return
-  fi
-
-  print_info "install flanneld ..."
-
-  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    true
-  else
-    __download
-  fi
-
-  if [ "$1" = "--dry-run" ];then
-    print_info "download flanneld success"
-    return
-  fi
-
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
-  $(_sudo) chown -R root:root ${K8S_ROOT}/bin/
-}
-
 _helm_install(){
   if [ -f ${K8S_ROOT}/bin/helm -a ! "$1" = "--dry-run" ];then
     print_info "helm already install"
@@ -802,8 +770,8 @@ _containerd_install(){
 
 _cni_install(){
   $(_sudo) mkdir -p ${K8S_ROOT}/opt/cni/bin
-  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/opt/cni/bin/flannel;fi
-  if [ -f ${K8S_ROOT}/opt/cni/bin/flannel -a ! "$1" = "--dry-run" ];then
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/opt/cni/bin/loopback;fi
+  if [ -f ${K8S_ROOT}/opt/cni/bin/loopback -a ! "$1" = "--dry-run" ];then
     print_info "cni already install"
     return
   fi
@@ -947,17 +915,19 @@ _k8s_install_kubectl_conf(){
 _cni_config(){
   print_info "config cni ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/cni/net.d
-  $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
+  $(_sudo) cp systemd/etc/cni.example/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
 }
 
 _cri_sysctl(){
   print_info "exec sysctl to meet cri..."
-  $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
+  $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf /etc/sysctl.d/99-kubernetes-calico.conf
   $(_sudo) touch /etc/sysctl.d/99-kubernetes-cri.conf
+  $(_sudo) touch /etc/sysctl.d/99-kubernetes-calico.conf
   echo "net.bridge.bridge-nf-call-iptables  = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
   echo "net.ipv4.ip_forward                 = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
   echo "net.bridge.bridge-nf-call-ip6tables = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
-
+  # calico
+  echo "net.ipv4.conf.all.rp_filter = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-calico.conf
   $(_sudo) sysctl --system || true
 }
 
@@ -1244,6 +1214,11 @@ _k8s_install_mkdir(){
 _k8s_install(){
   _check_master_ip
 
+  if ! [ -f systemd/certs/ca.pem ];then
+    print_info "please generate certs first"
+    exit 1
+  fi
+
   _k8s_install_dep
 
   $(_sudo) mkdir -p /etc/{docker,systemd/system}
@@ -1255,7 +1230,6 @@ _k8s_install(){
 
   _cni_install
   _cni_config
-  _flanneld_install
 
   _helm_install
 
@@ -1285,9 +1259,7 @@ _k8s_install(){
 _k8s_join_conf_cp(){
   print_info "copy kubernetes conf and cert file ..."
   $(_sudo) cp systemd/certs/{ca.pem,\
-ca-key.pem,\
-flanneld-etcd-client-key.pem,\
-flanneld-etcd-client.pem} \
+ca-key.pem} \
 ${K8S_ROOT}/certs/
 
   $(_sudo) cp \
@@ -1337,8 +1309,6 @@ not allowed, please input new hostname by --hostname=XXX" \
 
 _k8s_join_cert_checker(){
   ls systemd/certs/{ca.pem,\
-flanneld-etcd-client.pem,\
-flanneld-etcd-client-key.pem,\
 kubectl.kubeconfig,\
 kubelet.config.yaml,\
 kube-proxy.config.yaml,\
@@ -1367,10 +1337,7 @@ _k8s_join(){
   # cni
   _cni_install
   _cni_config
-  _flanneld_install
 
-  # etcdctl require by flanneld
-  _etcd_install
   _helm_install
 
   test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \
@@ -1388,7 +1355,7 @@ _k8s_join(){
 
   _cri_handler $2
 
-  _k8s_install_systemd flanneld kube-proxy kubelet
+  _k8s_install_systemd kube-proxy kubelet
 
   _k8s_install_mkdir
 
@@ -1426,7 +1393,6 @@ $ $(_sudo) systemctl start kube-scheduler
 
 NODE:
 
-$ $(_sudo) systemctl start flanneld
 $ $(_sudo) systemctl start kube-proxy
 $ $(_sudo) systemctl start kubelet
 
@@ -1438,7 +1404,7 @@ $ $(_sudo) systemctl start kube-crio (CRI-O runtime only)
 }
 
 _local_cleanup(){
-  $(_sudo) systemctl stop etcd flanneld \
+  $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
     docker kube-containerd || true
@@ -1450,8 +1416,6 @@ _local_cleanup(){
 
   $(_sudo) ip addr flush cni0
   $(_sudo) ip addr flush docker0
-  $(_sudo) ip addr flush flannel.4096
-  $(_sudo) ip addr flush flannel.1
 
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 

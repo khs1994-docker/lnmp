@@ -9,7 +9,6 @@ ignition:
       - source: http://{{SERVER_HOST}}:8080/ignition/crictl.json
       - source: http://{{SERVER_HOST}}:8080/ignition/docker.json
       # - source: http://{{SERVER_HOST}}:8080/ignition/etcd.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/flanneld.json
       # - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.json
       # - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.json
@@ -101,7 +100,7 @@ systemd:
         # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
         # --cni-bin-dir=/usr/libexec/cni \
         # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
-        # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
+        # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.2 \
         # --image-pull-progress-deadline=15m \
 
         ExecStartPost=chown -R core:core /home/core/.kube

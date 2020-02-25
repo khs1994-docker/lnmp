@@ -8,7 +8,6 @@
 
 ## Node `树莓派` `192.168.199.101`
 
-* `flanneld`
 * `containerd`
 * `kubelet`
 * `kube-proxy`
@@ -16,7 +15,7 @@
 ## 传输文件到树莓派
 
 ```powershell
-$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld-etcd-client.pem","flanneld-etcd-client-key.pem"
+$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","etcd-client.pem","etcd-client-key.pem"
 
 $ foreach($item in $items){scp ./wsl2/certs/$item pi@192.168.199.101:/home/pi/lnmp/kubernetes/systemd/certs}
 
@@ -48,7 +47,7 @@ $ cd ~/lnmp/kubernetes
 KUBE_APISERVER=https://192.168.199.100:16443
 
 $ ./lnmp-k8s join 192.168.199.101 --containerd --skip-cp-k8s-bin
-# 上边命令会下载 flanneld crictl 等
+# 上边命令会下载 crictl 等
 
 $ sudo cp ~/kube{-proxy,let,ctl,adm} /opt/k8s/bin
 
@@ -58,8 +57,6 @@ $ sudo chmod +x /opt/k8s/bin/kube{-proxy,let,ctl,adm}
 启动组件
 
 ```bash
-$ sudo systemctl start flanneld
-
 $ sudo systemctl start kube-proxy
 
 $ sudo systemctl start kube-containerd

@@ -124,9 +124,6 @@ before_script:
   - sudo systemctl cat kube-proxy
   - sudo systemctl start kube-proxy
 
-  - sudo systemctl cat flanneld
-  - sudo systemctl start flanneld
-
   - sudo systemctl cat docker
   - sudo systemctl cat containerd || true
 
@@ -146,7 +143,6 @@ before_script:
 
   - sleep 10
   # - sudo systemctl status etcd
-  # - sudo systemctl status flanneld
   # - sudo systemctl status docker
   # - sudo systemctl status kube-apiserver
   # - sudo systemctl status kube-controller-manager
@@ -166,13 +162,15 @@ before_script:
   - sudo journalctl -u kubelet
   - sudo journalctl -u kube-containerd || true
   - sudo journalctl -u crio || true
-  - sudo journalctl -u flanneld
 
   - kubectl get csr
   - CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
   - echo ${CSR_NAME}
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
+
+  - sed -i "s!/opt/k8s!${K8S_ROOT}!g" addons/cni/calico-custom/calico.yaml
+  - kubectl apply -k addons/cni/calico-custom
 
   - kubectl get node
   - kubectl get all -A

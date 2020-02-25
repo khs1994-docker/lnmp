@@ -8,8 +8,8 @@ secretGenerator:
 - name: etcd-certs
   files:
   - ca.cert=ca.pem
-  - healthcheck-client.cert=flanneld-etcd-client.pem
-  - healthcheck-client.key=flanneld-etcd-client-key.pem
+  - healthcheck-client.cert=etcd-client.pem
+  - healthcheck-client.key=etcd-client-key.pem
 generatorOptions:
   disableNameSuffixHash: true
 ```

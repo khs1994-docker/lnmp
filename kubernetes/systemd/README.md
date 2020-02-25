@@ -66,6 +66,18 @@ $ cd ~/lnmp/kubernetes
 $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 ```
 
+## approve csr
+
+请查看 [kubelet](../docs/node/kubelet.md)
+
+## 部署 CNI -- calico
+
+```bash
+$ kubectl apply -k addons/cni/calico-custom
+```
+
+## 部署其他插件
+
 ## 注意事项
 
 * 一些容器可能需要挂载宿主机的 `/var/lib/kubelet` `/usr/libexec/kubernetes/kubelet-plugins/volume/exec` 。本项目将所有文件放到了 `${K8S_ROOT:-/opt/k8s}/XXX`，注意将其替换到实际地址 `${K8S_ROOT:-/opt/k8s}/XXX`

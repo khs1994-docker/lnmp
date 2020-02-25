@@ -25,7 +25,6 @@ cp ignition-local.example.yaml ignition-local.yaml
 MERGE_LIST="crictl \
             docker \
             etcd \
-            flanneld \
             kube-apiserver \
             kube-containerd \
             kube-controller-manager \
@@ -42,7 +41,6 @@ do
   envsubst '${K8S_ROOT} \
             ${CRICTL_VERSION} \
             ${ETCD_VERSION} \
-            ${FLANNEL_VERSION} \
             ${ETCD_NODES} \
             ${ETCD_ENDPOINTS} \
             ${KUBE_APISERVER} \
@@ -72,7 +70,6 @@ for i in `seq ${NODE_NUM}`;do
   envsubst '${K8S_ROOT} \
             ${CRICTL_VERSION} \
             ${ETCD_VERSION} \
-            ${FLANNEL_VERSION} \
             ${ETCD_NODES} \
             ${ETCD_ENDPOINTS} \
             ${KUBE_APISERVER} \

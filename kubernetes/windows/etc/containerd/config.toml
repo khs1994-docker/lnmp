@@ -53,13 +53,13 @@ state = "C:\\containerd\\data\\state"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow]
           runtime_type = "io.containerd.runhcs.v1"
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow.options]
-            SandboxImage = "gcr.azk8s.cn/pause:3.1"
+            SandboxImage = "gcr.azk8s.cn/pause:3.2"
             SandboxPlatform = "linux/amd64"
             SandboxIsolation = 1
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow-debug]
           runtime_type = "io.containerd.runhcs.v1"
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.lcow-debug.options]
-            SandboxImage = "gcr.azk8s.cn/pause:3.1"
+            SandboxImage = "gcr.azk8s.cn/pause:3.2"
             SandboxPlatform = "linux/amd64"
             SandboxIsolation = 1
             Debug = true

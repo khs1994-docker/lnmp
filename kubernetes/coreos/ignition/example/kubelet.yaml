@@ -24,3 +24,7 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/csr-crb.yaml
+    - path: /home/core/calico.yaml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/calico/calico.yaml

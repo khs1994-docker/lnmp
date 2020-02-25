@@ -9,9 +9,10 @@ services:
 
   coredns:
     image: k8s.gcr.io/coredns:1.6.7
-
-  flannel:
-    image: quay.io/coreos/flannel:v0.11.0
+  
+  pause:
+    image: k8s.gcr.io/pause:3.2
+    # https://github.com/kubernetes/kubernetes/tree/master/build/pause
 
   calico:
     image: calico/cni:v3.10.1

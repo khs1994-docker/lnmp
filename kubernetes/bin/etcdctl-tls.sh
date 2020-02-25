@@ -4,8 +4,8 @@ if [ -z "${etcd_endpoints}" ];then echo "Please set 'etcd_endpoints' var"; exit 
 
 filename=etcd
 
-if [ -f ${CERT_DIR:-/opt/k8s}/certs/flanneld-etcd-client.pem ];then
-  filename=flanneld-etcd-client
+if [ -f ${CERT_DIR:-/opt/k8s}/certs/etcd-client.pem ];then
+  filename=etcd-client
 fi
 
 exec etcdctl \

@@ -9,7 +9,6 @@
 !crictl.yaml
 !docker.yaml
 !etcd.yaml
-!flanneld.yaml
 !README.md
 !kube-apiserver.yaml
 !kube-containerd.yaml

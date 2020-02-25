@@ -93,10 +93,10 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/kube-containerd/1.3/config.toml
-    - path: ${K8S_ROOT}/etc/cni/net.d/10-flannel.conflist
+    - path: ${K8S_ROOT}/etc/cni/net.d/99-loopback.conf
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/etc/cni/10-flannel.conflist
+        source: http://{{SERVER_HOST}}:8080/etc/cni/99-loopback.conf
     - path: /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
       mode: 0644
       contents:
