@@ -13,7 +13,7 @@ USAGE:
    containerd [global options] command [command options] [arguments...]
 
 VERSION:
-   1.2.10
+   1.2.12
 
 COMMANDS:
      config    information on the containerd config

@@ -183,6 +183,8 @@ script:
   - kubectl apply -k addons/metrics-server
   - kubectl apply -k addons/ingress-nginx/nodeport
   - sleep 100
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q)
 
   - kubectl get all --all-namespaces
   # test metrics server
