@@ -916,6 +916,7 @@ _cni_config(){
   print_info "config cni ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/cni/net.d
   $(_sudo) cp systemd/etc/cni.example/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
+  # $(_sudo) cp systemd/etc/cni.example/10-mynet.conf ${K8S_ROOT}/etc/cni/net.d
 }
 
 _cri_sysctl(){

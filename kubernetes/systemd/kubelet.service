@@ -46,8 +46,8 @@ $KUBELET_CRI
 # --container-runtime=remote \
 # --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock \
 
-ExecStopPost=-umount /var/lib/kubelet
-ExecStopPost=-umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
+ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
 Restart=on-failure
 RestartSec=5

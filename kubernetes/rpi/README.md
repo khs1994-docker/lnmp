@@ -72,6 +72,12 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d6ndc
 ```
 
+## 部署 CNI -- calico
+
+```bash
+$ kubectl apply -k addons/cni/calico-custom
+```
+
 ## kubectl
 
 ```bash

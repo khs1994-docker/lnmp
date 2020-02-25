@@ -125,13 +125,12 @@ before_script:
   - sudo systemctl start kube-proxy
 
   - sudo systemctl cat docker
-  - sudo systemctl cat containerd || true
 
   - sudo systemctl cat kube-containerd
 
   - sudo systemctl cat crio || true
 
-  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl restart kube-containerd) || true
+  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd) || true
   - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker"  && (sudo systemctl restart docker || sudo journalctl -u docker) || true
   - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
 
@@ -169,7 +168,8 @@ before_script:
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
 
-  - sed -i "s!/opt/k8s!${K8S_ROOT}!g" addons/cni/calico-custom/calico.yaml
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/calico.yaml
+  - git diff
   - kubectl apply -k addons/cni/calico-custom
 
   - kubectl get node
@@ -178,11 +178,26 @@ before_script:
   - kubectl api-resources
 
 script:
+  - sleep 120
+  - kubectl get all -A
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - ip addr
+
+  - sleep 60
+  - kubectl get all -A
+  - sudo journalctl -u kubelet
+
+  - ip addr
+  - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+
   - kubectl apply -k addons/coredns
   - kubectl apply -k addons/dashboard
   - kubectl apply -k addons/metrics-server
   - kubectl apply -k addons/ingress-nginx/nodeport
-  - sleep 100
+
+  - sleep 120
 
   - kubectl get all --all-namespaces
   # test metrics server
@@ -216,9 +231,7 @@ after_success:
   - git diff
   - sudo netstat -lnpt
   - ./tests/test.sh
-# switch containerd 1.3.x
-  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && sudo systemctl start kube-containerd-130
-  - sleep 30
+
   - sudo crictl version
   - sudo crictl info
   - sudo ls -la /opt || true
@@ -244,14 +257,14 @@ matrix:
     #   env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
     # current stable version
     - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server    
+    - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
-    - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom

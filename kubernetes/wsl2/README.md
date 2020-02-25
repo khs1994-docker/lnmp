@@ -132,7 +132,13 @@ csr-4njmh   2d2h   system:node:wsl2          Pending
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_NAME(csr-4njmh)
 ```
 
-## 5. kubectl
+## 5. 部署 CNI -- calico
+
+```bash
+$ kubectl apply -k addons/cni/calico-custom
+```
+
+## 6. kubectl
 
 将 WSL2 K8S 配置写入 `~/.kube/config`
 
@@ -149,7 +155,7 @@ $ ./wsl2/bin/kubectl-config-set-cluster
 $ ./wsl2/bin/kubectl
 ```
 
-## 6. crictl
+## 7. crictl
 
 ```powershell
 $ ./wsl2/bin/crictl
