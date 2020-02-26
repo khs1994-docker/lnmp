@@ -38,7 +38,7 @@ services:
     image: httpd:2.4.41-alpine
 
   etcd:
-    image: quay.io/coreos/etcd:3.4.3
+    image: quay.io/coreos/etcd:3.4.4
 
   minio:
     image: minio/minio:RELEASE.2019-10-12T01-39-57Z
@@ -50,10 +50,10 @@ services:
     image: node:13.8.0-alpine
 
   go:
-    image: golang:1.13.8-alpine
+    image: golang:1.14.0-alpine
 
   alpine:
     image: alpine:3.11
 
   python:
-    image: python:3.8.1-alpine
+    image: python:3.8.2-alpine

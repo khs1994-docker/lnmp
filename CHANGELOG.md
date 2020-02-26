@@ -1,10 +1,10 @@
 # Changelog
 
-## v19.03.7
+## v19.03.8
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v19.03.6...v19.03.7
+* https://github.com/khs1994-docker/lnmp/compare/v19.03.7...19.03
 
 ### Bug fixes:
 

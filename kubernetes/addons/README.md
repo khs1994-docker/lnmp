@@ -2,15 +2,13 @@
 
 * EFK
 
-* ingress-nginx `0.29.0`
+* ingress-nginx `0.30.0`
 
 * metrics-server `0.3.6`
 
 * CoreDNS `1.6.7`
 
-* Dashboard `2.0.0`
-
-* Registry
+* Dashboard `2.0.0-rc5`
 
 ## CNI
 

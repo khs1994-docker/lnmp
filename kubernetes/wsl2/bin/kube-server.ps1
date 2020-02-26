@@ -52,7 +52,7 @@ Function _kube_nginx_checker(){
 Function _etcd_checker(){
   "==> check Windows Etcd running ..."
   try{
-    & $PSScriptRoot/etcdctlv2.ps1 cluster-health > $null 2>&1
+    & $PSScriptRoot/etcdctl.ps1 endpoint health
     # (get-process etcd).Id
   }catch{
     write-warning "Windows Etcd not running, exit"
