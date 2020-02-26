@@ -98,7 +98,7 @@ systemd:
         # cri is docker
         # --network-plugin=cni \
         # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
-        # --cni-bin-dir=/usr/libexec/cni \
+        # --cni-bin-dir= \
         # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
         # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.2 \
         # --image-pull-progress-deadline=15m \

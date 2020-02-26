@@ -97,7 +97,7 @@ $ poweroff
 # 在虚拟机设置页面移除 ISO
 # 存储 -> 存储介质 -> 选住 ISO -> 属性 -> 移除虚拟盘 点击确定
 # 或者执行
-$ ./coreos remove-iso N
+$ ./coreos umount-iso N
 $ ./coreos mount-iso N
 
 # 重新启动(可能会遇到异常，只要不是 ignition 错误，强制重启即可)
@@ -111,9 +111,15 @@ $ ./coreos mount-iso N
 * `192.168.57.111`
 * `192.168.57.112`
 
+## 修改 .kube 权限
+
+```bash
+$ sudo chown -R core:core ~/.kube
+```
+
 ## 部署 CNI -- calico
 
-**仅需在某个节点执行一次即可**
+**仅需执行一次**
 
 ```bash
 $ kubectl apply -f /home/core/calico.yaml

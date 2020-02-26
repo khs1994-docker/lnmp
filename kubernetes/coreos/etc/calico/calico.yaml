@@ -678,10 +678,10 @@ spec:
             path: /lib/modules
         - name: var-run-calico
           hostPath:
-            path: /opt/k8s/var/run/calico
+            path: /var/run/calico
         - name: var-lib-calico
           hostPath:
-            path: /opt/k8s/var/lib/calico
+            path: /var/lib/calico
         - name: xtables-lock
           hostPath:
             path: /run/xtables.lock
@@ -698,17 +698,17 @@ spec:
         # if not using the upgrade-ipam init container.
         - name: host-local-net-dir
           hostPath:
-            path: /opt/k8s/var/lib/cni/networks
+            path: /var/lib/cni/networks
         # Used to create per-pod Unix Domain Sockets
         - name: policysync
           hostPath:
             type: DirectoryOrCreate
-            path: /opt/k8s/var/run/nodeagent
+            path: /var/run/nodeagent
         # Used to install Flex Volume Driver
         - name: flexvol-driver-host
           hostPath:
             type: DirectoryOrCreate
-            path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/nodeagent~uds
+            path: /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/nodeagent~uds
 ---
 
 apiVersion: v1

@@ -24,7 +24,7 @@ systemd:
           cp /tmp/bin/containerd-shim /tmp/bin/kube-containerd-shim ; \
           cp /tmp/bin/* /usr/local/bin/ ;\
           fi"
-        ExecStart=echo success
+        ExecStart=/usr/bin/env echo success
         [Install]
         WantedBy=multi-user.target
     - name: kube-containerd.service
@@ -38,7 +38,9 @@ systemd:
         # Conflicts=xxx.service
 
         [Service]
-        ExecStartPre=-modprobe overlay
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/opt/cni/bin
+        ExecStartPre=/usr/bin/env cp -a /usr/libexec/cni/. /opt/k8s/opt/cni/bin
+        ExecStartPre=-/usr/bin/env modprobe overlay
         ExecStart=/usr/local/bin/kube-containerd \
                   --config /opt/k8s/etc/kube-containerd/1.3/config.toml
         KillMode=process

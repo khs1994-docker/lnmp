@@ -178,19 +178,18 @@ before_script:
   - kubectl api-resources
 
 script:
-  - sleep 120
+  - sleep 60
   - kubectl get all -A
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
   - ip addr
 
   - sleep 60
   - kubectl get all -A
-  - sudo journalctl -u kubelet
-
   - ip addr
+
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
-  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+  # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
+  # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
 
   - kubectl apply -k addons/coredns
   - kubectl apply -k addons/dashboard
