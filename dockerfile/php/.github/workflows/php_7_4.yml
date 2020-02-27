@@ -68,8 +68,7 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        options="--build-arg VCS_REF=$VCS_REF"
-        echo $options
+        options="--build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:7.4-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:7.4-${TYPE,,}-cache"
 
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
         if [ "$TYPE" = "SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
@@ -88,7 +87,7 @@ jobs:
         PHP_TAG_VERSION: 7.4.3
         TYPE: ${{ matrix.TYPE }}
       name: 'Build Image'
-
+      shell: bash
     - run: |
         curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
       name: 'Trigger hooks'
