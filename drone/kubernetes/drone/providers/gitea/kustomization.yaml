@@ -1,0 +1,11 @@
+bases:
+  - ../../base
+patchesStrategicMerge:
+  - gitea.yaml
+secretGenerator:
+  - name: drone-provider-gitea-secret
+    literals:
+      - gitea-client-id=""
+      - gitea-client-secret=""
+generatorOptions:
+  disableNameSuffixHash: true

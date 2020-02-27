@@ -1,0 +1,5 @@
+bases:
+  - ../../../config/gitea
+resources:
+  - gitea.yaml
+namespace: ci

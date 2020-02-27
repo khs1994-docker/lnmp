@@ -3,7 +3,7 @@ bases:
 patches:
 - github.yaml
 secretGenerator:
-  - name: drone-github-secret
+  - name: drone-provider-github-secret
     literals:
     - github-client-id=""
     - github-client-secret=""

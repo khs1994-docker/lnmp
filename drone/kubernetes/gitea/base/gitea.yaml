@@ -1,0 +1,77 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gitea
+  labels:
+    app: gitea
+spec:
+  selector:
+    app: gitea
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+    - name: ssh
+      port: 22
+      targetPort: ssh
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: gitea
+  labels:
+    app: gitea
+spec:
+  selector:
+    matchLabels:
+      app: gitea
+  template:
+    metadata:
+      labels:
+        app: gitea
+    spec:
+      initContainers:
+        - name: gitea-init
+          image: alpine
+          args:
+            - sh
+            - -c
+            - |
+              mkdir -p /data/gitea/conf \
+              && cat /tmp/conf/app.ini \
+              && if ! [ -f /data/gitea/conf/app.ini ];then \
+                   cp /tmp/conf/app.ini /data/gitea/conf/ ; \
+                 fi \
+              && chown -R 1000:1000 /data/gitea/conf \
+              && cat /data/gitea/conf/app.ini
+          volumeMounts:
+            - mountPath: /tmp/conf
+              name: config
+            - mountPath: /data
+              name: data
+      containers:
+        - name: gitea
+          image: gitea/gitea:latest
+          volumeMounts:
+            - mountPath: /data
+              name: data
+          ports:
+            - name: http
+              containerPort: 3000
+            - name: ssh
+              containerPort: 22
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+              scheme: HTTP
+      volumes:
+        - name: data
+          hostPath:
+            path: /var/lib/ci/gitea
+            type: DirectoryOrCreate
+        - name: config
+          configMap:
+            name: gitea-config

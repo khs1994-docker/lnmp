@@ -48,6 +48,7 @@ _cp(){
 
 _init(){
   _cp .env.example .env
+  _cp config/gitea/app.kubernetes.example.ini config/gitea/app.kubernetes.ini
 
   command -v docker-compose > /dev/null 2>&1
 
