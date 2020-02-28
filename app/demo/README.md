@@ -1,4 +1,4 @@
-# Docker 化 PHP 项目最佳实践(从 docker run 到 helm install ...)
+# Docker 化 PHP 项目最佳实践
 
 完全使用 Docker 开发、部署 PHP 项目。本指南只是简单列出，具体内容请查看 [文档](https://github.com/khs1994-docker/lnmp/tree/master/docs)
 
@@ -13,9 +13,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php-demo.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php-demo) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/example.svg)](https://packagist.org/packages/khs1994/example) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/php-demo/all.svg)](https://github.com/khs1994-docker/php-demo/releases) [![Build Status](https://travis-ci.com/khs1994-docker/php-demo.svg?branch=master)](https://travis-ci.com/khs1994-docker/php-demo) [![StyleCI](https://styleci.io/repos/124168962/shield?branch=master)](https://styleci.io/repos/124168962) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ```bash
-$ composer create-project --prefer-dist khs1994/example example
+$ composer create-project --prefer-dist khs1994/example demo
 
-$ cd example
+$ cd demo
 ```
 
 ## 微信订阅号
@@ -25,18 +25,6 @@ $ cd example
 </p>
 
 <p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
-
-## 进阶路线
-
-* `docker run`
-
-* `docker-compose up`
-
-* `kubectl apply -f filename.yaml`
-
-* `kubectl apply -k /path/kustomize_folder`
-
-* `helm install ./lnmp`
 
 ## 说明
 
@@ -60,8 +48,6 @@ $ cd example
 
 #### 内置文件模板
 
-* 建议多看看几个 PHP 开源项目，看看别人的项目里都有哪些文件，作用是什么
-
 | Filename            | Description                     |
 | :-------------      | :-------------                  |
 | `.github/workflows` | GitHub Actions CI 工具          |
@@ -78,7 +64,7 @@ $ cd example
 
 ### 环境（以下步骤缺一不可）
 
-* 假设系统中不包含任何 PHP 等程序（实际上为了防止 Docker 崩溃等意外情况，建议系统中仍然安装这些软件作为 PLAN B）
+* 假设系统中不包含任何 PHP 等程序
 
 * 启动 Docker CE
 
@@ -86,7 +72,7 @@ $ cd example
 
 * 将 Docker 化的常用命令所在文件夹加入 `PATH`，具体请查看 [这里](https://github.com/khs1994-docker/lnmp/tree/master/bin)。
 
-* IDE `PHPStorm` `vsCode`
+* IDE `PHPStorm` 或 `vsCode`
 
 * git 分支 `dev`
 
@@ -99,13 +85,13 @@ $ cd example
 ```bash
 $ cd lnmp/app
 
-$ lnmp-composer create-project --prefer-dist khs1994/example:dev-master example
+$ lnmp-composer create-project --prefer-dist khs1994/example:dev-master demo
 
-$ cd example
+$ cd demo
 
 $ git init
 
-$ git remote add origin git@url.com:username/EXAMPLE.git
+$ git remote add origin git@url.com:username/PROJECT_NAME.git
 
 $ git checkout -b dev
 
@@ -136,15 +122,16 @@ $ ./lnmp-docker up
 
 要配置 `khs1994-docker/lnmp` 建议使用另外的文本编辑器。
 
-> 你可以通过设置 [`APP_ROOT`](https://github.com/khs1994-docker/lnmp/blob/master/docs/development.md#app_root) 变量来实现 `app` 与 `khs1994-docker/lnmp` 并列。
+> 你可以通过设置 [`APP_ROOT`](https://github.com/khs1994-docker/lnmp/blob/master/docs/development.md#app_root) 变量来实现 `app` 文件夹与 `khs1994-docker/lnmp` 并列。
 
 ### 6. CLI settings
 
 由于 PHP 环境位于 Docker 中，必须进行额外的配置
 
 `PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `CLI Interpreter` -> `点击后边三个点`
-     -> `左上角添加` -> `From Docker ...` -> `选择 Docker`
-     -> `Image name` -> `选择 khs1994/php:7.2.x-fpm-alpine`
+     -> `左上角添加` -> `From Docker ...` -> `选择 Docker Compose`
+     -> `Configuration file(s)` -> `选择 docker-workspace.yml`
+     -> `Services` -> `选择 workspace`
      -> `点击 OK 确认`
 
 点击 ok 之后跳转的页面上 `Additionl` -> `Debugger extension`-> 填写 `xdebug`
@@ -155,27 +142,21 @@ $ ./lnmp-docker up
 
 #### 配置路径对应关系
 
+> 这里的配置 PHPStorm 可能会自动生成，保证正确即可。
+
 这里以 Windows 为例，其他系统同理（添加本机路径与容器路径对应关系即可）。
 
 由于 Windows 与 Linux 路径表示方法不同，我们必须另外添加对应关系。配置容器目录与本地项目之间的对应关系。
 
-假设本地项目目录位于 `C:/Users/username/app/example` 对应的容器目录位于 `/app/example`
+假设本地项目目录位于 `C:/Users/username/app/demo` 对应的容器目录位于 `/app/demo`
 
-点击 `Path mappings` 添加一个条目 `C:/Users/username/app/example` => `/app/example`
-
-#### 配置容器其他参数
-
-点击 `Docker container` 后边三个点配置容器的参数（就像 docker run ... 命令行配置的参数一样）
-
-* Network mode `lnmp_backend` (非常重要)
-
-* Volume bindings -> Container path `/app/PHP_PROJECT`, Host path 保持不变，需要挂载其他文件再新增一个条目即可
-
-* 其他参数根据实际需要自行配置
+点击 `Path mappings` 添加一个条目 `C:/Users/username/app/demo` => `/app/demo`
 
 ### 7. 设置 Xdebug
 
 请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/xdebug.md
+
+如果在 PhpStorm 中使用，无需开放端口，必须注释掉 `docker-workspace.yml` 中的 `ports` 项
 
 ### 8. 依赖管理 Composer
 
@@ -189,28 +170,32 @@ $ lnmp-composer require phpunit/phpunit
 $ lnmp-composer install [--ignore-platform-reqs]
 ```
 
+在容器内安装依赖(为了提高性能，依赖放到数据卷中，所以本地和容器都需执行一次 composer 命令)。
+
+```bash
+$ lnmp-docker composer install
+```
+
 ### 9. 编写 PHP 代码
 
 ### 10. 编写 PHPUnit 测试代码
 
 ### 11. 使用 PHPUnit 测试
 
-#### 使用 PHPStorm
+#### 在 PHPStorm 中使用
 
 `PHPStorm 设置`-> `Languages & ...` -> `PHP` ->`Test Frameworks` -> `左上角添加`
-              -> `PHPUnit by Remote Interpreter` -> `选择第五步添加的 Docker 镜像`
+              -> `PHPUnit by Remote Interpreter` -> `选择第五步添加的 workspace`
               -> `点击 OK` -> `PHPUnit Library` -> `选择 Use Composer autoloader`
-              -> `Path to script` -> 点击右边刷新按钮即可自动识别，或者手动 `填写 /app/PHP_PROJECT/vendor/autoload.php`
+              -> `Path to script` -> 点击右边刷新按钮即可自动识别，或者手动 `填写 /app/PROJECT_NAME/vendor/autoload.php`
               -> `点击 OK 确认`
 
 在测试函数名单击右键 `run FunName` 开始测试。
 
-#### 使用命令行
+#### 在 命令行 中使用
 
 ```bash
-$ cd lnmp/app/PHP_PROJECT
-
-# 根目录必须包含 PHPUnit 配置文件 phpunit.xml
+# 项目目录必须包含 PHPUnit 配置文件 phpunit.xml
 $ lnmp-phpunit [参数]
 ```
 
@@ -248,9 +233,7 @@ CI/CD 可以到 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 查看
 
 * Drone (私有化 CI/CD)
 
-* PCIT (开发中，支持各种开发语言，特别为 PHP 设计的基于容器的 CI/CD 系统)
-
-## 二、测试（全自动）
+## 二、测试
 
 ### CI/CD 服务器收到 Git Push 事件，进行代码测试
 
@@ -271,3 +254,7 @@ CI/CD 可以到 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 查看
 #### 4. 使用 `daemonset` 部署 `gti-sync`（代码不在镜像中）
 
 让 **每个节点** 都拥有一份代码，这样就不用关心 `pod` 调度到哪个节点。
+
+## 五 已知问题
+
+1. Windows 使用 composer 容器安装依赖较缓慢

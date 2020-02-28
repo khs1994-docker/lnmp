@@ -47,10 +47,12 @@ if ($args[0] -eq 'download'){
 $source=PWD
 cd "$home\Downloads\$kernelversion"
 
-"==> Exec: cp wsl2Kernel $home"
+"==> Exec: cp wsl2Kernel $home/.wsl"
+
+mkdir -Force $home/.wsl
 
 try{
-  cp -r -Force wsl2Kernel $home
+  cp -r -Force wsl2Kernel $home/.wsl
 
   $command="tar -zxvf linux.tar.gz -C /"
 

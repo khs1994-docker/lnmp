@@ -1387,7 +1387,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
     composer {
       if((Test-Path $source/.devcontainer) -And (Test-Path $source/docker-workspace.yml)){
-        printInfo "Exec composer command in vscode remote folder"
+        printInfo "Exec composer command in [ vscode remote ] or [ PhpStorm ] folder"
         cd $source
         docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-workspace.yml run --rm composer $args
 

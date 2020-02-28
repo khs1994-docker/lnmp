@@ -20,7 +20,7 @@ if ($args[0] -eq 'new' ){
   }
 
   echo ""
-  echo "==>Installing laravel ..."
+  echo "==> Installing laravel ..."
   echo ""
 }
 
