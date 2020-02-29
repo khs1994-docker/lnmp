@@ -144,7 +144,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
 ARG PHP_GIT=https://github.com/php/php-src.git
-# ARG PHP_GIT=https://gitee.com/khs1994-php/php-src.git
+# ARG PHP_GIT=https://gitee.com/mirrors/php-src
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \

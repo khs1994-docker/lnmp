@@ -28,6 +28,7 @@ docker-compose-Linux-x86_64
 !.env.example
 !.env.example.ps1
 !.env.base
+!.env.global
 !/lrew/**/.env.compose
 
 # LinuxKit

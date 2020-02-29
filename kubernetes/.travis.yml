@@ -87,8 +87,10 @@ install:
   - cat systemd/.env
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
+  - sudo cat /etc/hosts || true
 
   - docker-compose up cfssl-local
+  - docker-compose down
   # - source .env
   - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
 
@@ -132,7 +134,7 @@ before_script:
 
   - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd) || true
   - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker"  && (sudo systemctl restart docker || sudo journalctl -u docker) || true
-  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl restart crio) || true
+  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (sudo systemctl daemon-reload ; sudo systemctl start crio) || true
 
   - docker info
 
@@ -177,26 +179,34 @@ before_script:
   - kubectl api-versions
   - kubectl api-resources
 
-script:
-  - sleep 60
+  - sleep 40
   - kubectl get all -A
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
   - ip addr
 
-  - sleep 60
+  - sleep 40
   - kubectl get all -A
   - ip addr
 
+  - sudo journalctl -u crio || true
+
+  - if [ "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" ];then sudo systemctl restart crio && sudo systemctl restart kubelet ;fi
+
+  - sleep 20
+  - kubectl get all -A
+
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-  # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
   # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+
+script:
 
   - kubectl apply -k addons/coredns
   - kubectl apply -k addons/dashboard
   - kubectl apply -k addons/metrics-server
   - kubectl apply -k addons/ingress-nginx/nodeport
 
-  - sleep 120
+  - sleep 100
 
   - kubectl get all --all-namespaces
   # test metrics server
@@ -246,7 +256,7 @@ matrix:
     # alpha version
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.18.0-beta.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.18.0-beta.1 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.19.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
@@ -256,11 +266,11 @@ matrix:
     #   env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
     # current stable version
     - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server    
-    - os: linux
       dist: bionic
       env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+    - os: linux
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
       env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
@@ -279,5 +289,5 @@ matrix:
       env: CI_KUBERNETES_VERSION=1.14.2
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.18.0-beta.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+  - env: CI_KUBERNETES_VERSION=1.18.0-beta.1 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
   - env: CI_KUBERNETES_VERSION=1.19.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server

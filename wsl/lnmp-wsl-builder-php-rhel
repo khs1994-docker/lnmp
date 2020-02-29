@@ -40,8 +40,14 @@ if ! [ $? -eq 0 ];then echo "Only Support RHEL"; exit; fi
 ################################################################################
 
 PHP_TIMEZONE=PRC
-PHP_URL=https://mirrors.sohu.com/php
+PHP_URL=https://www.php.net/distributions
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
+PHP_GIT=https://github.com/php/php-src
+
+if [ "${LNMP_CN_ENV}" = true ];then
+  PHP_URL=https://mirrors.sohu.com/php
+  PHP_GIT=https://gitee.com/mirrors/php-src
+fi
 
 export COMPOSER_VERSION=1.9.3
 export COMPOSER_ALLOW_SUPERUSER=1
@@ -113,7 +119,7 @@ _download_src(){
       $(_sudo) yum install bison git -y
 
       git clone --depth=1 -b ${PHP_SRC_BRANCH:-master} \
-      https://github.com/php/php-src.git /usr/local/src/php-${PHP_VERSION} || \
+      ${PHP_GIT} /usr/local/src/php-${PHP_VERSION} || \
         ( git -C /usr/local/src/php-${PHP_VERSION} fetch --depth=1 origin ${PHP_SRC_BRANCH:-master} ; \
           git -C /usr/local/src/php-${PHP_VERSION} reset --hard ${PHP_SRC_BRANCH:-master} ;
         )
@@ -127,8 +133,7 @@ _download_src(){
 
       cd /usr/local/src
 
-      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz >/dev/null || \
-        wget https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz
+      wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz
 
       echo -e "Untar ...\n\n"
 

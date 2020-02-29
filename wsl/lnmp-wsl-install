@@ -250,13 +250,13 @@ _rpm(){
 
 if [ -z "$2" ];then
 
-echo -e "Get php from tar (default)"
+echo -e "Install php from tar (default)"
 
 _tar
 
 else
 
-echo -e "Get php from $2"
+echo -e "Install php from $2"
 
 _"$2"
 

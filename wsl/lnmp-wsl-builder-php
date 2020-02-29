@@ -47,8 +47,14 @@ source /etc/os-release
 ################################################################################
 
 PHP_TIMEZONE=PRC
-PHP_URL=https://mirrors.sohu.com/php
+PHP_URL=https://www.php.net/distributions
 host=x86_64-linux-gnu
+PHP_GIT=https://github.com/php/php-src
+
+if [ "${LNMP_CN_ENV}" = true ];then
+  PHP_URL=https://mirrors.sohu.com/php
+  PHP_GIT=https://gitee.com/mirrors/php-src
+fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
@@ -143,7 +149,7 @@ _download_src(){
     if ! [ -z "$BUILD_FROM_GIT" ];then
       $(_sudo) apt install bison git -y
 
-      git clone --depth=1 -b ${PHP_SRC_BRANCH:-master} https://github.com/php/php-src.git /usr/local/src/php-${PHP_VERSION} || \
+      git clone --depth=1 -b ${PHP_SRC_BRANCH:-master} ${PHP_GIT} /usr/local/src/php-${PHP_VERSION} || \
         ( git -C /usr/local/src/php-${PHP_VERSION} fetch --depth=1 origin master ; \
           git -C /usr/local/src/php-${PHP_VERSION} reset --hard origin/master ;
         )
@@ -157,8 +163,7 @@ _download_src(){
 
         cd /usr/local/src ; $(_sudo) chmod 777 /usr/local/src
 
-        wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz > /dev/null || \
-          wget https://www.php.net/distributions/php-${PHP_VERSION}.tar.gz
+        wget ${PHP_URL}/php-${PHP_VERSION}.tar.gz
 
         echo -e "Untar ...\n\n"
 

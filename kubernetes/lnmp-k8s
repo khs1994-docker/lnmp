@@ -724,7 +724,7 @@ _containerd_install(){
 
   __download(){
     if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
-      url="https://github.com/containerd/containerd/suites/359556741/artifacts/703276"
+      url="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly.linux-arm64.tar.gz"
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
 
       return
@@ -749,23 +749,25 @@ _containerd_install(){
     return
   fi
 
-  if [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then
+  # if [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then
     $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
-  else
-    # arm64 unzip
-    command -v unzip > /dev/null || echo "please install unzip"
-    command -v unzip > /dev/null || exit 1
-    $(_sudo) unzip -o -d ${K8S_ROOT}/bin ${TMP_ROOT}/${TAR_FILE}
-    $(_sudo) chmod +x ${K8S_ROOT}/bin/linux_arm64/*
-    $(_sudo) mv ${K8S_ROOT}/bin/linux_arm64/* ${K8S_ROOT}/bin
-    $(_sudo) rm -rf ${K8S_ROOT}/bin/linux_arm64
-  fi
+  # else
+  #   # arm64 unzip
+  #   command -v unzip > /dev/null || echo "please install unzip"
+  #   command -v unzip > /dev/null || exit 1
+  #   $(_sudo) unzip -o -d ${K8S_ROOT}/bin ${TMP_ROOT}/${TAR_FILE}
+  #   $(_sudo) chmod +x ${K8S_ROOT}/bin/linux_arm64/*
+  #   $(_sudo) mv ${K8S_ROOT}/bin/linux_arm64/* ${K8S_ROOT}/bin
+  #   $(_sudo) rm -rf ${K8S_ROOT}/bin/linux_arm64
+  # fi
 
   $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
+
+  $(_sudo) chmod +x /usr/local/bin/*
 }
 
 _cni_install(){
@@ -949,6 +951,7 @@ _conmon_install(){
   $(_sudo) make install
 }
 
+# https://github.com/cri-o/cri-o/blob/master/tutorials/setup.md
 _crio_install(){
   set +e
   command -v crio > /dev/null
@@ -967,9 +970,7 @@ _crio_install(){
   command -v yum > /dev/null && isRPM=1
 
   test -n "$isRPM" && $(_sudo) yum install -y \
-  btrfs-progs-devel \
   containers-common \
-  device-mapper-devel \
   git \
   glib2-devel \
   glibc-devel \
@@ -981,6 +982,7 @@ _crio_install(){
   libseccomp-devel \
   libselinux-devel \
   pkgconfig \
+  make \
   runc
 
   # $(_sudo) sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
@@ -994,12 +996,10 @@ _crio_install(){
   ; $(_sudo) apt install -y software-properties-common \
   && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
   && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
-  btrfs-tools \
   containers-common \
   git \
   $(command -v go > /dev/null || echo "golang-go") \
   libassuan-dev \
-  libdevmapper-dev \
   libglib2.0-dev \
   libc6-dev \
   libgpgme11-dev \
@@ -1010,17 +1010,20 @@ _crio_install(){
   pkg-config \
   $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
-  gcc
+  gcc \
+  make
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
   export GOPATH=$go_path
 
-  git clone --depth=1 -b release-${CRIO_VERSION} \
-    https://github.com/cri-o/cri-o \
-    $go_path/src/github.com/cri-o/cri-o || git clone --depth=1 -b master \
-        https://github.com/cri-o/cri-o \
-        $go_path/src/github.com/cri-o/cri-o
+  CRIO_GIT=https://github.com/cri-o/cri-o
+  if [ "${LNMP_CN_ENV}" = "true" ];then
+      CRIO_GIT=https://gitee.com/docker_practice/cri-o.git
+  fi
+
+  git clone --depth=1 -b release-${CRIO_VERSION} ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o \
+    || git clone --depth=1 -b master ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o
 
   if ! [ -d $go_path/src/github.com/cri-o/cri-o ];then
     exit 1
@@ -1032,9 +1035,10 @@ _crio_install(){
   $(_sudo) go version || true
   go env
   $(_sudo) go env || true
-  go get github.com/cpuguy83/go-md2man
+  GO111MODULE=off go get github.com/cpuguy83/go-md2man
 
-  make
+  make clean
+  make BUILDTAGS='seccomp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper libdm_no_deferred_remove'
   # make build-static CONTAINER_RUNTIME=docker
   $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.bin
   $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.config
@@ -1129,8 +1133,6 @@ _cri_handler(){
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
-
-    $(_sudo) mkdir -p /usr/share/containers/oci/hooks.d
   elif [ "$CONTAINER_RUNTIME" = "--docker" ];then
     print_info "Kubelet Runtime is Docker"
     sleep 15

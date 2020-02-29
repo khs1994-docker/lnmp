@@ -5,7 +5,7 @@ You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2
 
 COMMAND:
 
-download  download kernel [ url ]
+download  download kernel only [ url ]
 update    update kernel(Expand Archive kernel files to WSL2) [WSL_NAME(ubuntu-18.14)]
 
 "
@@ -13,8 +13,8 @@ update    update kernel(Expand Archive kernel files to WSL2) [WSL_NAME(ubuntu-18
 exit
 }
 
-$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/327188502/artifacts/431897"
-$kernelversion="wsl2-kernel-4.19.84-microsoft-standard+"
+$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/487766163/artifacts/2328718"
+$kernelversion="wsl2-kernel-4.19.104-microsoft-standard+"
 $zip="$home\Downloads\$kernelversion.zip"
 $unzipFolder="$home\Downloads\$kernelversion"
 
@@ -30,13 +30,18 @@ Function _downloader(){
   curl.exe -fL $artifacts -o $zip
 }
 
-_downloader
+# _downloader
+
+if(!(Test-Path $zip)){
+  "==> [ $zip ] file not found, please download from [ $artifacts ]"
+  exit 1
+}
 
 # 解压
 if (Test-Path $unzipFolder){
   "==> $unzipFolder exists, skip unzip"
 }else{
-  Expand-Archive -Path $zip -DestinationPath $home/Downloads -Force
+  Expand-Archive -Path $zip -DestinationPath $home/Downloads/$kernelversion -Force
 }
 
 if ($args[0] -eq 'download'){
