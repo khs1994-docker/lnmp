@@ -76,6 +76,8 @@ $ cp systemd/certs/kubectl.kubeconfig ~/.kube/config
 $ kubectl apply -k addons/cni/calico-custom
 ```
 
+> 若不能正确匹配网卡，请修改 `calico.yaml` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
+
 ## 部署其他插件
 
 ## 注意事项

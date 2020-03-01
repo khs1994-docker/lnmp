@@ -32,6 +32,8 @@ spec:
       labels:
         app: gogs
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: gogs
         image: gogs/gogs

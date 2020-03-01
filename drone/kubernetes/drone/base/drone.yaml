@@ -29,6 +29,8 @@ spec:
       labels:
         app: drone
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: drone
         image: drone/drone:1.6.5

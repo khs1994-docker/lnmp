@@ -78,6 +78,8 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d
 $ kubectl apply -k addons/cni/calico-custom
 ```
 
+> 若不能正确匹配网卡，请修改 `calico.yaml` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
+
 ## kubectl
 
 ```bash

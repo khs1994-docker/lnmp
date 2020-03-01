@@ -27,6 +27,8 @@ spec:
         tier: redis
         version: {{ .Chart.Version }}
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: lnmp-redis
         image: {{ .Values.redis.image }}

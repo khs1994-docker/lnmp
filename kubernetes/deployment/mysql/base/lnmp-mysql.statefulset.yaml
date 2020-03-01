@@ -42,6 +42,8 @@ spec:
         version: 0.0.1
       # annotations:
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: lnmp-mysql
         imagePullPolicy: IfNotPresent

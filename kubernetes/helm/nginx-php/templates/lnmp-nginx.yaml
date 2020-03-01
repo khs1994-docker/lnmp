@@ -27,9 +27,9 @@ spec:
         tier: frontend
         version: {{ .Chart.Version }}
     spec:
-      # nodeSelector:
+      nodeSelector:
       #   beta.kubernetes.io/arch: amd64
-      #   beta.kubernetes.io/os: windows # linux
+        kubernetes.io/os: linux
       #   kubernetes.io/hostname: coreos3
 
       # k8s将会给应用发送SIGTERM信号，可以用来正确、优雅地关闭应用,默认为30秒

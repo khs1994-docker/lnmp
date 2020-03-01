@@ -29,6 +29,8 @@ spec:
       labels:
         app: registry
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
         - name: registry
           image: registry
@@ -37,7 +39,7 @@ spec:
           - name: http
             containerPort: 5000
           # - name: debug
-          #   containerPort: 5001  
+          #   containerPort: 5001
           volumeMounts:
             - mountPath: /var/lib/registry
               name: data

@@ -30,6 +30,8 @@ spec:
       labels:
         app: minio
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: minio
         imagePullPolicy: IfNotPresent

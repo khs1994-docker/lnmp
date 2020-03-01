@@ -32,6 +32,8 @@ spec:
       labels:
         app: gitea
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       initContainers:
         - name: gitea-init
           image: alpine

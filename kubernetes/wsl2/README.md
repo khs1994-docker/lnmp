@@ -141,6 +141,8 @@ $ sed -i "s#/opt/k8s#${K8S_ROOT}#g" addons/cni/calico-custom/calico.yaml
 $ kubectl apply -k addons/cni/calico-custom
 ```
 
+> 若不能正确匹配网卡，请修改 `calico.yaml` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
+
 ## 6. kubectl
 
 将 WSL2 K8S 配置写入 `~/.kube/config`
