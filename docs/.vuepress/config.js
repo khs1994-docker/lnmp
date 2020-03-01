@@ -85,6 +85,7 @@ module.exports = {
             '/nginx/https',
             '/nginx/unit',
             '/nginx/arg',
+            '/nginx/http3',
           ]
         }, {
           title: "PHP",
