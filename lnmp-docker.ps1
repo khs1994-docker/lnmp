@@ -112,8 +112,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1"){
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION="1.15.5"
-$DOCKER_DESKTOP_VERSION="2.1.5.0 (40323)"
+$KUBERNETES_VERSION="1.16.5"
+$DOCKER_DESKTOP_VERSION="2.2.2.0 (43066)"
 $source=$PWD
 
 Function _command($command){
@@ -1367,8 +1367,8 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
       "kube-apiserver:v${KUBERNETES_VERSION}", `
       "kube-scheduler:v${KUBERNETES_VERSION}", `
       "kube-proxy:v${KUBERNETES_VERSION}", `
-      "etcd:3.3.10", `
-      "coredns:1.3.1", `
+      "etcd:3.3.15-0", `
+      "coredns:1.6.2", `
       "pause:3.1"
 
       sleep 10

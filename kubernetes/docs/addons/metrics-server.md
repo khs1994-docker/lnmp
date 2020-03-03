@@ -2,7 +2,7 @@
 
 > 本文基于 0.3.x 版本。
 
-* https://github.com/kubernetes-incubator/metrics-server/tree/master/deploy/1.8%2B
+* https://github.com/kubernetes-sigs/metrics-server/tree/master/deploy/kubernetes
 
 ```bash
 $ kubectl apply -k addons/metrics-server

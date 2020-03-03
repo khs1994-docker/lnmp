@@ -900,7 +900,7 @@ _k8s_install_cp_bin(){
 _k8s_install_systemd_docker(){
   print_info "Update systemd Docker unit file ..."
   $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
-  $(_sudo) cp systemd/docker.conf /etc/systemd/system/docker.service.d/
+  $(_sudo) cp systemd/docker-10-cri-docker.conf /etc/systemd/system/docker.service.d/
 
   $(_sudo) cp systemd/kubelet-20-cri-docker.conf /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
   $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
@@ -1092,9 +1092,7 @@ EOF
 
 _docker_default_conf(){
   print_info "restore docker default conf"
-  $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
-  $(_sudo) rm -rf /etc/systemd/system/docker.service.d/*
-  $(_sudo) cp systemd/docker.default.conf /etc/systemd/system/docker.service.d/
+  $(_sudo) rm -rf /etc/systemd/system/docker.service.d/10-cri-docker.conf
 }
 
 # k8s install
@@ -1104,7 +1102,7 @@ _check_master_ip(){
     clear
     echo ""
     echo "======================================================"
-    echo "==== you must edit MASTER_IP in systemd/.env file ===="
+    echo "**** you must edit MASTER_IP in systemd/.env file ****"
     echo "======================================================"
     echo ""
   fi
@@ -1410,7 +1408,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker kube-containerd || true
+    docker kube-containerd crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}
@@ -1424,9 +1422,9 @@ _local_cleanup(){
 
   $(_sudo) rm -rf /etc/systemd/system/kubelet.service.d
   $(_sudo) rm -rf /etc/systemd/system/kubelet.service
-  $(_sudo) cp systemd/etc/containerd/docker.toml /etc/containerd/config.toml
+
   $(_sudo) systemctl daemon-reload || true
-  $(_sudo) systemctl restart docker containerd || true
+  $(_sudo) systemctl restart docker|| true
 }
 
 if [ "$ENABLE_CN_MIRROR" = 0 ];then
