@@ -29,7 +29,9 @@ Function install($VERSION=0,$isPre=0){
   $filename="PowerShell-${VERSION}-win-x64.msi"
   $unzipDesc="PowerShell"
 
-  _exportPath "$env:ProgramFiles\PowerShell\7-preview"
+  # _exportPath "$env:ProgramFiles\PowerShell\7-preview"
+
+  _exportPath "$env:ProgramFiles\PowerShell\7"
 
   if($(_command pwsh)){
     $CURRENT_VERSION=(pwsh --version).split(" ")[1]
@@ -56,7 +58,7 @@ Function install($VERSION=0,$isPre=0){
 
   # 安装 Fix me
   # Copy-item -r -force "" ""
-  Start-Process -FilePath $filename -wait
+  Start-Process -FilePath $filename
 
   # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7#administrative-install-from-the-command-line
   # https://docs.microsoft.com/en-us/windows/win32/msi/command-line-options
@@ -69,11 +71,13 @@ Function install($VERSION=0,$isPre=0){
   # _cleanup ""
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  _exportPath "$env:ProgramFiles\PowerShell\7-preview"
+  # _exportPath "$env:ProgramFiles\PowerShell\7-preview"
 
-  "==> Checking ${name} ${VERSION} install ..."
+  _exportPath "$env:ProgramFiles\PowerShell\7"
+
+  # "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  pwsh --version
+  # pwsh --version
 }
 
 Function uninstall(){

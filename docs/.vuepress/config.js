@@ -157,6 +157,7 @@ module.exports = {
             '/iscsi',
             '/mount',
             '/cfssl',
+            '/ssh',
           ]
         }
       ]

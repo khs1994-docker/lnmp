@@ -65,6 +65,7 @@ module.exports = {
         '/resources/deployment',
         '/resources/configMap',
         'mod',
+        'ssh',
       ],
       '/setup/': [
         'systemd',

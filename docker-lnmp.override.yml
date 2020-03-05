@@ -41,8 +41,8 @@ services:
 
   nginx:
     << : *default-common
-    # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine
-    image: nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine
+    # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.17.9}-alpine
+    image: nginx:${LNMP_NGINX_VERSION:-1.17.9}-alpine
 
 networks:
   frontend:

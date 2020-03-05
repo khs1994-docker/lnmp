@@ -23,3 +23,7 @@
 本地测试（国内）时，使用 `Docker compose` 通过 `ARG` 将 URL 设为国内镜像地址。
 
 具体参考本项目的 PHP compose 文件 https://github.com/khs1994-docker/lnmp/blob/master/dockerfile/php/docker-compose.yml
+
+## 增加 `LNMP_CN_ENV=true` 环境变量
+
+本项目会根据 `LNMP_CN_ENV=true` 来替换源为国内镜像，避免因网络问题影响使用。
