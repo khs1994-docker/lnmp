@@ -11,7 +11,7 @@ services:
     image: redis:5.0.7-alpine
 
   memcached:
-    image: memcached:1.5.22-alpine
+    image: memcached:1.6.0-alpine
 
   php:
     image: php:7.4.3-fpm-alpine
