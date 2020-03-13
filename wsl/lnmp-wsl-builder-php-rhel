@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" = true ];then
   PHP_GIT=https://gitee.com/mirrors/php-src
 fi
 
-export COMPOSER_VERSION=1.9.3
+export COMPOSER_VERSION=1.10.0
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai

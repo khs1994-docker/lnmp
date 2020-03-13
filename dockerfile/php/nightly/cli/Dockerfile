@@ -349,9 +349,11 @@ ENV PECL_RUN_DEPS \
       zlib
 
 ENV PECL_EXTENSION \
-      mongodb \
+      # mongodb \
+      https://github.com/mongodb/mongo-php-library/archive/master.tar.gz \
       igbinary \
-      redis \
+      # redis \
+      https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
       # xdebug-beta \
       yaml \
