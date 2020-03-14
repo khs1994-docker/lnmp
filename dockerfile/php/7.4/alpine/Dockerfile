@@ -161,7 +161,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
-        && php -m
+        && php -m \
+        && ls -la $(php-config --extension-dir)
 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 

@@ -151,21 +151,7 @@ Function _cp_only_not_exists($src,$desc){
   }
 }
 
-Function env_status(){
-  if (Test-Path .env){
-    printInfo '.env file existing'
-  }else{
-    Write-Warning '.env file NOT existing, maybe first run'
-    cp .env.example .env
-  }
-
-  if (Test-Path .env.ps1){
-    printInfo ".env.ps1 file existing"
-  }else{
-    Write-Warning ".env.ps1 file NOT existing, maybe first run"
-    cp .env.example.ps1 .env.ps1
-  }
-
+Function _cp_init_file(){
   _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
   _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
@@ -694,7 +680,19 @@ Function _wsl_check(){
 
 # main
 
-env_status
+if (Test-Path $PSScriptRoot\.env){
+  printInfo '.env file existing'
+}else{
+  Write-Warning '.env file NOT existing, maybe first run'
+  cp $PSScriptRoot\.env.example $PSScriptRoot\.env
+}
+
+if (Test-Path .env.ps1){
+  printInfo ".env.ps1 file existing"
+}else{
+  Write-Warning ".env.ps1 file NOT existing, maybe first run"
+  cp $PSScriptRoot\.env.example.ps1 $PSScriptRoot\.env.ps1
+}
 
 $APP_ROOT_CONTENT = (cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^APP_ROOT=)
 if($APP_ROOT_CONTENT){
@@ -806,6 +804,7 @@ if(_command docker){
 $DOCKER_VERSION_YY=([System.Version]$DOCKER_VERSION).Major
 $DOCKER_VERSION_MM="0" + ([System.Version]$DOCKER_VERSION).Minor
 
+_cp_init_file
 logs
 check_docker_version
 

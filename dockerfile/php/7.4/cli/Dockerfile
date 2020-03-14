@@ -333,7 +333,8 @@ RUN --mount=type=bind,from=php:7.4.3-alpine,source=/usr/local/bin,target=/opt/bi
          -n --defaults --no-write --strip --cleanup \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
-      && php -m
+      && php -m \
+      && ls -la $(php-config --extension-dir)
 
 WORKDIR /app
 

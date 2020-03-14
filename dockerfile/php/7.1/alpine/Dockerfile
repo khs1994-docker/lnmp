@@ -156,6 +156,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/error.log \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm \
-        && php -m
+        && php -m \
+        && ls -la $(php-config --extension-dir)
 
 WORKDIR /app

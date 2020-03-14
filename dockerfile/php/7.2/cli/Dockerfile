@@ -340,7 +340,8 @@ RUN --mount=type=bind,from=php:7.2.28-alpine,source=/usr/local/bin,target=/opt/b
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
-      && php -m
+      && php -m \
+      && ls -la $(php-config --extension-dir)
 
 WORKDIR /app
 

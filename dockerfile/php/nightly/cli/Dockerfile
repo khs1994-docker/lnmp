@@ -377,7 +377,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && apk del --no-network --no-cache .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
-      && php -m
+      && php -m \
+      && ls -la $(php-config --extension-dir)
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
