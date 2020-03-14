@@ -7,17 +7,6 @@
 
 ## 配置
 
-### Winodws
-
-在 `.env.ps1` 文件中将 `minio` 包含进来
-
-```powershell
-$LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin',"minio"
-$LREW_INCLUDE="minio","pcit"
-```
-
-### Linux、macOS
-
 在 `.env` 文件中将 `minio` 包含进来
 
 ```bash

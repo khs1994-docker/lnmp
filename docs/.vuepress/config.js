@@ -158,6 +158,7 @@ module.exports = {
             '/mount',
             '/cfssl',
             '/ssh',
+            '/encrypt.md',
           ]
         }
       ]

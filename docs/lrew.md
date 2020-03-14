@@ -11,24 +11,12 @@ macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lr
 
 你可以通过以下方式启用 `example` 包(假设 `example` 包提供了 `example` 服务)。若在 `lrew` 目录下没找到你所需要的包，你可以参照下一小节开发一个包或者在 https://packagist.org/packages/lrew/ 寻找一个包。
 
-### Linux、macOS
-
 编辑 `.env` 文件，将 `example` 加入到以下变量中，例如
 
 ```bash
 LREW_INCLUDE="minio example"
 
 LNMP_SERVICES="nginx mysql php7 redis phpmyadmin example"
-```
-
-### Windows
-
-编辑 `.env.ps1` 文件，将 `example` 加入到以下变量中，例如
-
-```powershell
-$LREW_INCLUDE="minio","example"
-
-$LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin','example'
 ```
 
 ### 启动

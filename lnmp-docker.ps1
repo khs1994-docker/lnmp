@@ -75,12 +75,11 @@ Function getEnvFile(){
   $LNMP_ENV_FILE=".env"
   $LNMP_ENV_FILE_PS1=".env.ps1"
   if($env:LNMP_ENV){
-    if (Test-Path(".env.$env:LNMP_ENV")){
-      write-host 1
+    if (Test-Path("$PSScriptRoot\.env.$env:LNMP_ENV")){
       $LNMP_ENV_FILE=".env.$env:LNMP_ENV"
     }
 
-    if (Test-Path(".env.$env:LNMP_ENV.ps1")){
+    if (Test-Path("$PSScriptRoot\.env.$env:LNMP_ENV.ps1")){
       $LNMP_ENV_FILE_PS1=".env.$env:LNMP_ENV.ps1"
     }
   }
@@ -695,6 +694,22 @@ Function _wsl_check(){
 
 # main
 
+env_status
+
+$APP_ROOT_CONTENT = (cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^APP_ROOT=)
+if($APP_ROOT_CONTENT){
+  $APP_ROOT = $APP_ROOT_CONTENT.Line.split('=')[-1]
+}else{
+  $APP_ROOT = './app'
+}
+
+$APP_ENV_CONTENT = (cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^APP_ENV=)
+if($APP_ENV_CONTENT){
+  $APP_ENV = $APP_ENV_CONTENT.Line.split('=')[-1]
+}else{
+  $APP_ENV = 'development'
+}
+
 if (!(Test-Path cli/khs1994-robot.enc )){
   # 在项目目录外
   if ($env:LNMP_PATH.Length -eq 0){
@@ -721,6 +736,22 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 
 printInfo "APP_ROOT is $APP_ROOT"
 
+$LNMP_SERVICES_CONTENT=(cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^LNMP_SERVICES=)
+if($LNMP_SERVICES_CONTENT){
+  $LNMP_SERVICES=$LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
+}else{
+  $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
+}
+
+$LREW_INCLUDE_CONTENT=(cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^LREW_INCLUDE=)
+if($LREW_INCLUDE_CONTENT){
+  $LREW_INCLUDE=$LREW_INCLUDE_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
+}else{
+  $LREW_INCLUDE='pcit'
+}
+
+printInfo "load lnmp service [ $LNMP_SERVICES ] from [ default $LREW_INCLUDE ]"
+
 if (!(Test-Path lnmp-docker-custom-script.ps1)){
   Copy-Item lnmp-docker-custom-script.example.ps1 lnmp-docker-custom-script.ps1
 }
@@ -738,6 +769,14 @@ Function _wsl2_docker_init(){
 
     exit 1
   }
+}
+
+function _pcit_cp(){
+  # 判断 app/.pcit 是否存在
+  rm -r -force ${APP_ROOT}/.pcit
+  # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
+  docker pull pcit/pcit:frontend
+  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 }
 
 $isWSL2=$false
@@ -767,7 +806,6 @@ if(_command docker){
 $DOCKER_VERSION_YY=([System.Version]$DOCKER_VERSION).Major
 $DOCKER_VERSION_MM="0" + ([System.Version]$DOCKER_VERSION).Minor
 
-env_status
 logs
 check_docker_version
 
@@ -1250,12 +1288,12 @@ XXX
       Start-Process -FilePath http://zan.khs1994.com
     }
 
+    pcit-cp {
+      _pcit_cp
+    }
+
     pcit-up {
-      # 判断 app/.pcit 是否存在
-      rm -r -force ${APP_ROOT}/.pcit
-      # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-      docker pull pcit/pcit:frontend
-      docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
+      _pcit_cp
 
       # if (!(Test-Path ${APP_ROOT}/pcit/public/.env.produnction)){
       #   cp ${APP_ROOT}/pcit/public/.env.example ${APP_ROOT}/pcit/public/.env.production
