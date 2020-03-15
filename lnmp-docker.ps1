@@ -75,12 +75,12 @@ Function getEnvFile(){
   $LNMP_ENV_FILE=".env"
   $LNMP_ENV_FILE_PS1=".env.ps1"
   if($env:LNMP_ENV){
-    if (Test-Path("$PSScriptRoot\.env.$env:LNMP_ENV")){
-      $LNMP_ENV_FILE=".env.$env:LNMP_ENV"
+    if (Test-Path("$PSScriptRoot\.env.${env:LNMP_ENV}")){
+      $LNMP_ENV_FILE=".env.${env:LNMP_ENV}"
     }
 
-    if (Test-Path("$PSScriptRoot\.env.$env:LNMP_ENV.ps1")){
-      $LNMP_ENV_FILE_PS1=".env.$env:LNMP_ENV.ps1"
+    if (Test-Path("$PSScriptRoot\.env.${env:LNMP_ENV}.ps1")){
+      $LNMP_ENV_FILE_PS1=".env.${env:LNMP_ENV}.ps1"
     }
   }
 
@@ -246,12 +246,12 @@ Function logs(){
 
 Function check_docker_version(){
   if(!(_command git)){
+    printError "Git not install"
     return
   }
 
   if(!(_command docker)){
     printError "Docker not install"
-
     return
   }
 
@@ -345,7 +345,6 @@ Developer Tools:
 
 
 WSL2:
-
   dockerd              Start Dockerd on WSL2
 
 Read './docs/*.md' for more information about CLI commands.
@@ -678,8 +677,28 @@ Function _wsl_check(){
   }
 }
 
+Function _wsl2_docker_init(){
+  wsl -u root -- chmod -R 777 log
+  $env:COMPOSE_CONVERT_WINDOWS_PATHS=1
+  wsl -u root -- ls /c/Users | out-null
+  if(!$?){
+    printError "WSL2 must mount C to /c"
+
+    exit 1
+  }
+}
+
+function _pcit_cp(){
+  # 判断 app/.pcit 是否存在
+  rm -r -force ${APP_ROOT}/.pcit
+  # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
+  docker pull pcit/pcit:frontend
+  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
+}
+
 # main
 
+# .env .env.ps1
 if (Test-Path $PSScriptRoot\.env){
   printInfo '.env file existing'
 }else{
@@ -687,13 +706,14 @@ if (Test-Path $PSScriptRoot\.env){
   cp $PSScriptRoot\.env.example $PSScriptRoot\.env
 }
 
-if (Test-Path .env.ps1){
+if (Test-Path $PSScriptRoot\.env.ps1){
   printInfo ".env.ps1 file existing"
 }else{
   Write-Warning ".env.ps1 file NOT existing, maybe first run"
   cp $PSScriptRoot\.env.example.ps1 $PSScriptRoot\.env.ps1
 }
 
+# APP_ROOT
 $APP_ROOT_CONTENT = (cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^APP_ROOT=)
 if($APP_ROOT_CONTENT){
   $APP_ROOT = $APP_ROOT_CONTENT.Line.split('=')[-1]
@@ -701,6 +721,7 @@ if($APP_ROOT_CONTENT){
   $APP_ROOT = './app'
 }
 
+# APP_ENV
 $APP_ENV_CONTENT = (cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^APP_ENV=)
 if($APP_ENV_CONTENT){
   $APP_ENV = $APP_ENV_CONTENT.Line.split('=')[-1]
@@ -708,6 +729,7 @@ if($APP_ENV_CONTENT){
   $APP_ENV = 'development'
 }
 
+# cd LNMP_ROOT
 if (!(Test-Path cli/khs1994-robot.enc )){
   # 在项目目录外
   if ($env:LNMP_PATH.Length -eq 0){
@@ -734,6 +756,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 
 printInfo "APP_ROOT is $APP_ROOT"
 
+# LNMP_SERVICES
 $LNMP_SERVICES_CONTENT=(cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^LNMP_SERVICES=)
 if($LNMP_SERVICES_CONTENT){
   $LNMP_SERVICES=$LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
@@ -741,6 +764,7 @@ if($LNMP_SERVICES_CONTENT){
   $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin'
 }
 
+# LREW_INCLUDE
 $LREW_INCLUDE_CONTENT=(cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^LREW_INCLUDE=)
 if($LREW_INCLUDE_CONTENT){
   $LREW_INCLUDE=$LREW_INCLUDE_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
@@ -757,25 +781,6 @@ if (!(Test-Path lnmp-docker-custom-script.ps1)){
 printInfo "Exec custom script"
 
 . ./lnmp-docker-custom-script.ps1
-
-Function _wsl2_docker_init(){
-  wsl -u root -- chmod -R 777 log
-  $env:COMPOSE_CONVERT_WINDOWS_PATHS=1
-  wsl -u root -- ls /c/Users | out-null
-  if(!$?){
-    printError "WSL2 must mount C to /c"
-
-    exit 1
-  }
-}
-
-function _pcit_cp(){
-  # 判断 app/.pcit 是否存在
-  rm -r -force ${APP_ROOT}/.pcit
-  # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
-  docker pull pcit/pcit:frontend
-  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
-}
 
 $isWSL2=$false
 
@@ -1424,7 +1429,7 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
     composer {
       if((Test-Path $source/.devcontainer) -And (Test-Path $source/docker-workspace.yml)){
-        printInfo "Exec composer command in [ vscode remote ] or [ PhpStorm ] folder"
+        printInfo "Exec composer command in [ vscode remote ] or [ PhpStorm ] project folder"
         cd $source
         docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-workspace.yml run --rm composer $args
 

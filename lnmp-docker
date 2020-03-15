@@ -1222,7 +1222,7 @@ main() {
     ;;
   composer )
     if [ -d $source/.devcontainer -a -f $source/docker-workspace.yml ];then
-        print_info "Exec composer command in [ vscode remote ] or [ PhpStorm ] folder"
+        print_info "Exec composer command in [ vscode remote ] or [ PhpStorm ] project folder"
         cd $source
         docker-compose -f docker-workspace.yml run --rm composer "$@"
 
