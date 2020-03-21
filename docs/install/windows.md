@@ -42,12 +42,6 @@ $ ./lnmp-docker.ps1 up
 
 **在 WSL 执行 Docker CLI 命令，不是在 WSL 运行 Docker 服务端**
 
-> 不建议使用，请使用 [WSL2](https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.DOCKER.md)
-
-* https://github.com/khs1994-docker/lnmp/blob/master/wsl/config/wsl.conf
-
-默认的 WSL 将 C 盘挂载到了 `/mnt/c`，这里修改配置，将 C 盘挂载到 `/c`
-
 ### 1. 设置 Windows PATH 变量
 
 ```powershell
@@ -63,6 +57,8 @@ $ lnmp-wsl-docker-cli.sh
 ```
 
 ### 3. 设置挂载路径
+
+默认的 WSL 将 C 盘挂载到了 `/mnt/c`，这里修改配置，将 C 盘挂载到 `/c`
 
 * https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf
 

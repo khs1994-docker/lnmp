@@ -21,7 +21,7 @@ services:
 
   memcached:
     << : *default-common
-    image: memcached:${LNMP_MEMCACHED_VERSION:-1.6.0}-alpine
+    image: memcached:${LNMP_MEMCACHED_VERSION:-1.6.1}-alpine
 
   php7:
     << : *default-common
