@@ -1,10 +1,10 @@
 # Changelog
 
-## v19.03.8
+## v19.03.9
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v19.03.7...19.03
+* https://github.com/khs1994-docker/lnmp/compare/v19.03.8...19.03
 
 ### Bug fixes:
 
@@ -12,6 +12,4 @@
 
 ### Updates:
 
-* [PHP `7.4.3` `7.3.15` `7.2.28`](https://www.php.net/ChangeLog-7.php#7.4.3)
-* [NGINX `1.17.9`](https://nginx.org/en/CHANGES)
-* [Redis `5.0.8`](https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES)
+* [PHP `7.4.4` `7.3.16` `7.2.29`](https://www.php.net/ChangeLog-7.php#7.4.4)

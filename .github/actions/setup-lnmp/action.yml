@@ -7,15 +7,19 @@ inputs:
   lnmp_branch:
     description: lnmp branch
     default: 19.03
+    required: false
   lnmp_services:
     description: lnmp services
     default: nginx mysql php7 redis
+    required: false
   lrew_include:
     description: LREW package
     default: pcit
+    required: false
   docker_compose_version:
     description: docker compose version
     default: 1.25.0
+    required: false
 runs:
   using: 'node12'
   main: 'lib/setup-lnmp.js'

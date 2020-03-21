@@ -49,7 +49,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: lnmp-php7
-        image: khs1994/php:7.4.3-fpm-alpine
+        image: khs1994/php:7.4.4-fpm-alpine
         imagePullPolicy: IfNotPresent
         args:
         - php-fpm

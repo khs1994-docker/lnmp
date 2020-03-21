@@ -14,10 +14,10 @@ services:
     image: memcached:1.6.1-alpine
 
   php:
-    image: php:7.4.3-fpm-alpine
+    image: php:7.4.4-fpm-alpine
 
   composer:
-    image: composer:1.10.0
+    image: composer:1.10.1
 
   nginx:
     image: nginx:1.17.9-alpine
