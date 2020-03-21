@@ -37,7 +37,7 @@ RUN --mount=type=bind,from=php:7.3.16-alpine,source=/usr/local/bin,target=/opt/b
            --enable-http2" > /tmp/swoole.configure.options \
       && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
          -n --defaults --strip --cleanup \
-      && apk del --no-network --no-cache .pecl_build_deps \
+      && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 

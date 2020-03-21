@@ -5,7 +5,7 @@ RUN apk add --no-cache \
             gcc g++ make \
             git \
     && gem install travis \
-    && apk del --no-cache gcc g++ make ruby-dev
+    && apk del --no-network gcc g++ make ruby-dev
 
 COPY docker-entrypoint.sh /
 

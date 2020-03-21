@@ -150,7 +150,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
              -n --defaults --strip --cleanup --no-write \
         && pickle install opcache \
         # && docker-php-ext-enable opcache \
-        && apk del --no-network --no-cache .phpize-deps .php-fpm-build-deps \
+        && apk del --no-network .phpize-deps .php-fpm-build-deps \
         && rm -rf /tmp/* \
 # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \

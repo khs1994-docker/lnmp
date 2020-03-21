@@ -286,7 +286,7 @@ RUN --mount=type=bind,from=php:7.4.4-alpine,source=/usr/src,target=/usr/local/sr
   \
   && strip --strip-all /usr/local/lib/libphp7.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del --no-network --no-cache .build-deps \
+  && apk del --no-network .build-deps \
   \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
@@ -331,7 +331,7 @@ RUN --mount=type=bind,from=php:7.4.4-alpine,source=/usr/local/bin,target=/opt/bi
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \
-      && apk del --no-network --no-cache .pecl_build_deps \
+      && apk del --no-network  .pecl_build_deps \
       && rm -rf /tmp/* \
       && php -m \
       && ls -la $(php-config --extension-dir)

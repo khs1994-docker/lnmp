@@ -19,7 +19,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g" /etc/apk/repositorie
     && make install \
     && rm -rf nginx-${NGINX_VERSION}.tar.gz \
               nginx-${NGINX_VERSION} \
-    && apk del .build_deps \
+    && apk del --no-network .build_deps \
     && ln -sf /dev/stdout /opt/k8s/kube-nginx/logs/access.log \
     && ln -sf /dev/stderr /opt/k8s/kube-nginx/logs/error.log
 

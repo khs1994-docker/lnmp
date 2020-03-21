@@ -166,7 +166,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
        git clone --depth=1 ${PHP_GIT} php; \
      fi \
   \
-  && apk del --no-network --no-cache git openssh-client \
+  && apk del --no-network git openssh-client \
 	# wget -O php.tar.xz "$PHP_URL"; \
 	# if [ -n "$PHP_SHA256" ]; then \
 	# 	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
@@ -185,7 +185,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 	# 	command -v gpgconf > /dev/null && gpgconf --kill all; \
 	# 	rm -rf "$GNUPGHOME"; \
 	# fi; \
-	# && apk del --no-network --no-cache .fetch-deps \
+	# && apk del --no-network  .fetch-deps \
 	&& apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
           argon2-dev \
@@ -325,7 +325,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 	&& apk add --no-cache $runDeps \
   \
 #  && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del --no-network --no-cache .build-deps \
+  && apk del --no-network .build-deps \
   \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
@@ -374,7 +374,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 # https://github.com/tideways/php-xhprof-extension.git
            https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
            -n --defaults --no-write --strip --cleanup --continue-on-error \
-      && apk del --no-network --no-cache .pecl_build_deps \
+      && apk del --no-network  .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \

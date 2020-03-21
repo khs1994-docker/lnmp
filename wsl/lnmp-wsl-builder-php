@@ -288,9 +288,6 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo "libzip4"; \
    fi ) \
 libyaml-0-2 \
-$( $(_sudo) apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
-$( $(_sudo) apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
-$( $(_sudo) apt install -y libtidy5deb1 > /dev/null 2>&1 && echo libtidy5deb1 ) \
 libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
@@ -311,6 +308,11 @@ libffi6 \
 $( $(_sudo) apt install -y libonig4 > /dev/null 2>&1 && echo libonig4) \
 $( $(_sudo) apt install -y libonig5 > /dev/null 2>&1 && echo libonig5) \
 "
+
+# $( $(_sudo) apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
+# $( $(_sudo) apt install -y libtidy5 > /dev/null 2>&1 && echo libtidy5 ) \
+# $( $(_sudo) apt install -y libtidy5deb1 > /dev/null 2>&1 && echo libtidy5deb1 ) \
+
     $(_sudo) apt install -y $PHP_RUN_DEP > /dev/null
 }
 
@@ -352,7 +354,6 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-dev \
-                   libtidy-dev \
                    libxmlrpc-epi-dev \
                    libbz2-dev \
                    libexif-dev \
@@ -369,7 +370,7 @@ _install_php_build_dep(){
                    libffi-dev \
                    libonig-dev \
                    "
-
+                  #  libtidy-dev \
     for soft in ${DEP_SOFTS} ; do echo $soft | tee -a ${PHP_INSTALL_LOG} ; done
 
     $(_sudo) apt install -y --no-install-recommends ${DEP_SOFTS}
@@ -517,7 +518,6 @@ set +e
        fi ) \
       --enable-exif \
       --with-bz2 \
-      --with-tidy \
       --with-gmp \
       --with-imap=shared \
           --with-imap-ssl \
@@ -535,6 +535,8 @@ set +e
       $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
                                                      --with-zlib-dir=/opt/${host}/zlib" ) \
       "
+
+      # --with-tidy \
     set -e
 
     for item in ${CONFIGURE}; do echo $item | tee -a ${PHP_INSTALL_LOG}; done

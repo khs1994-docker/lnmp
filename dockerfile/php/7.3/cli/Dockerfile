@@ -282,7 +282,7 @@ RUN --mount=type=bind,from=php:7.3.16-alpine,source=/usr/src,target=/usr/local/s
   \
   && strip --strip-all /usr/local/lib/libphp7.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del --no-network --no-cache .build-deps \
+  && apk del --no-network .build-deps \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc \
@@ -330,7 +330,7 @@ RUN --mount=type=bind,from=php:7.3.16-alpine,source=/usr/local/bin,target=/opt/b
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \
-      && apk del --no-network --no-cache .pecl_build_deps \
+      && apk del --no-network  .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \

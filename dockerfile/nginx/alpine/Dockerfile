@@ -142,9 +142,9 @@ RUN set -x ; apk add --no-cache git \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
   && apk add --no-cache --virtual .nginx-rundeps $runDeps \
-	&& apk del --no-cache .build-deps \
-	&& apk del --no-cache .gettext \
-  && apk del --no-cache git \
+	&& apk del --no-network .build-deps \
+	&& apk del --no-network .gettext \
+  && apk del --no-network git \
 	&& mv /tmp/envsubst /usr/local/bin/ \
 	\
 	# Bring in tzdata so users could set the timezones through the environment

@@ -15,10 +15,10 @@ RUN set -ex \
       # && curl -L ${FCCT_URL}${FCCT_VERSION}/fcct-${ARCH}-unknown-linux-gnu > /usr/local/bin/fcct \
       # && chmod +x /usr/local/bin/fcct \
       # && /usr/local/bin/fcct --version \
-      && apk del curl \
+      && apk del --no-network curl \
       && apk add --no-cache --virtual .gettext gettext \
       && mv /usr/bin/envsubst /tmp/ \
-      && apk del .gettext \
+      && apk del --no-network .gettext \
       && mv /tmp/envsubst /usr/local/bin/
 
 COPY nginx.conf docker-entrypoint.sh /etc/nginx/

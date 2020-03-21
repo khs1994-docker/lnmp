@@ -8,7 +8,7 @@ RUN apk add --no-cache curl \
       && curl -L https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 > /usr/local/bin/cfssljson \
       && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > /usr/local/bin/kubectl \
       && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl \
-      && apk del curl
+      && apk del --no-network curl
 
 FROM alpine:3.11
 

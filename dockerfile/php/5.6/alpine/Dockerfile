@@ -131,7 +131,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
              && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
            done \
         && docker-php-ext-enable opcache \
-        && apk del --no-network --no-cache .build-deps .php-fpm-build-deps \
+        && apk del --no-network .build-deps .php-fpm-build-deps \
 # 默认不启用 xdebug
         && mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
           /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.default \

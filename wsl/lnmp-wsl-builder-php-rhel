@@ -155,11 +155,11 @@ _install_php_run_dep(){
       $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
     fi
 
-    if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then
-      $(_sudo) wget -N http://rpms.remirepo.net/enterprise/${VERSION_ID}/remi/x86_64/remi-release-8.0-4.el${VERSION_ID}.remi.noarch.rpm
-      $(_sudo) rpm -Uvh remi-release-8.0-4.el${VERSION_ID}.remi.noarch.rpm
-      $(_sudo) dnf --enablerepo=remi install libtidy -y
-    fi
+    # if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then
+    #   $(_sudo) wget -N https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
+    #   $(_sudo) rpm -Uvh remi-release-${VERSION_ID}.rpm
+    #   $(_sudo) dnf --enablerepo=remi install libtidy -y
+    # fi
 
 _libzip(){
     if [ ${ID} = 'fedora' ];then $(_sudo) dnf install -y libzip libzip-devel; return;fi
@@ -206,7 +206,6 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo "libsodium"; \
    fi ) \
 libyaml \
-$(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then true; else echo libtidy ;fi ) \
 xmlrpc-c \
 bzip2 \
 libexif \
@@ -223,6 +222,7 @@ libffi \
 krb5-libs \
 oniguruma"
 
+# $(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then true; else echo libtidy ;fi ) \
 
 $(_sudo) yum install -y ${PHP_DEP} rpm-build > /dev/null
 }
@@ -262,7 +262,6 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-devel \
-                   $(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then true; else echo libtidy-devel ;fi ) \
                    xmlrpc-c-devel \
                    bzip2-devel \
                    libexif-devel \
@@ -280,6 +279,7 @@ _install_php_build_dep(){
                    krb5-devel \
                    oniguruma-devel \
                    "
+                  #  $(if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then true; else echo libtidy-devel ;fi ) \
 
 for soft in ${DEP_SOFTS}
 do
@@ -287,7 +287,7 @@ do
 done
 
 if [ $VERSION_ID -ge 8 -a ${ID} != 'fedora' ];then
-  $(_sudo) dnf --enablerepo=remi install libtidy-devel -y
+  # $(_sudo) dnf --enablerepo=remi install libtidy-devel -y
 
   $(_sudo) dnf install -y dnf-utils
   $(_sudo) yum-config-manager --enable PowerTools
@@ -410,7 +410,6 @@ _builder(){
        fi ) \
         --enable-exif \
         --with-bz2 \
-        --with-tidy \
         --with-gmp \
         --with-imap=shared \
             --with-imap-ssl \
@@ -426,6 +425,7 @@ _builder(){
         --with-pspell=shared \
         --enable-shmop=shared \
         "
+        # --with-tidy \
 
     for item in ${CONFIGURE} ; do echo $item | $(_sudo) tee -a ${PHP_INSTALL_LOG}; done
 

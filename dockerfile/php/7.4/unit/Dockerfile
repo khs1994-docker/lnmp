@@ -31,7 +31,7 @@ RUN cd /usr/src \
   && strip --strip-all /usr/local/nginx-unit/sbin/unitd \
   && mkdir -p /usr/local/sbin \
   && ln -sf /usr/local/nginx-unit/sbin/unitd /usr/local/sbin/unitd \
-  && apk del --no-network --no-cache .build-deps \
+  && apk del --no-network .build-deps \
   && rm -rf /usr/src/* \
   && mkdir -p /var/log/nginx-unit \
   && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log

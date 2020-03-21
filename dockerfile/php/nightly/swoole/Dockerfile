@@ -34,7 +34,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
            > /tmp/swoole.configure.options \
       && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
            -n --defaults --strip --cleanup --continue-on-error \
-      && apk del --no-network --no-cache .pecl_build_deps \
+      && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
