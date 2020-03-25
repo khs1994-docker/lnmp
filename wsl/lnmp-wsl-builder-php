@@ -285,7 +285,8 @@ $( if [ $PHP_NUM -ge "72" ];then \
              fi ); \
      echo $( $(_sudo) apt install -y libsodium18 > /dev/null 2>&1 && echo libsodium18) ;\
      echo $( $(_sudo) apt install -y libsodium23 > /dev/null 2>&1 && echo libsodium23) ;\
-     echo "libzip4"; \
+     echo $( $(_sudo) apt install -y libzip4 > /dev/null 2>&1 && echo libzip4) ;\
+     echo $( $(_sudo) apt install -y libzip5 > /dev/null 2>&1 && echo libzip5) ;\
    fi ) \
 libyaml-0-2 \
 libxmlrpc-epi0 \
@@ -304,7 +305,8 @@ $( $(_sudo) apt install -y libicu57 > /dev/null 2>&1 && echo libicu57) \
 $( $(_sudo) apt install -y libicu60 > /dev/null 2>&1 && echo libicu60) \
 $( $(_sudo) apt install -y libicu63 > /dev/null 2>&1 && echo libicu63) \
 libldap-2.4-2 \
-libffi6 \
+$( $(_sudo) apt install -y libffi6 > /dev/null 2>&1 && echo libffi6) \
+$( $(_sudo) apt install -y libffi7 > /dev/null 2>&1 && echo libffi7) \
 $( $(_sudo) apt install -y libonig4 > /dev/null 2>&1 && echo libonig4) \
 $( $(_sudo) apt install -y libonig5 > /dev/null 2>&1 && echo libonig5) \
 "
