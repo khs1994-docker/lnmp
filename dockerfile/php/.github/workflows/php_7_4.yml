@@ -70,11 +70,11 @@ jobs:
         VCS_REF=`git rev-parse --short HEAD`
         options="--build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:7.4-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:7.4-${TYPE,,}-cache"
 
-        if [ "$TYPE" = "UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine ${IS_PUSH} ${FOLDER}/unit; fi
-        if [ "$TYPE" = "SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine ${IS_PUSH} ${FOLDER}/supervisord; fi
+        if [ "$TYPE" = "UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit; fi
+        if [ "$TYPE" = "SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; fi
         if [ "$TYPE" = "COMPOSER" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
         if [ "$TYPE" = "SINGLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
-        if [ "$TYPE" = "SWOOLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} ${FOLDER}/swoole; fi
+        if [ "$TYPE" = "SWOOLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole; fi
         if [ "$TYPE" = "FPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
         if [ "$TYPE" = "CLI" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; fi
         if [ "$TYPE" = "PPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; fi
