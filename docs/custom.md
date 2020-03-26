@@ -4,7 +4,7 @@
 
 ## 自定义所启动的服务
 
-例如，执行 `lnmp-docker up` 时，使用 `httpd` 替换 `nginx`。
+例如使用 `httpd` 替换 `nginx`。
 
 编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名
 

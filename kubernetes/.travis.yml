@@ -256,10 +256,7 @@ matrix:
     # alpha version
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.18.0-beta.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
-    - os: linux
-      dist: bionic
-      env: CI_KUBERNETES_VERSION=1.19.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0-alpha.1 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
     # next version
     # - os: linux
     #   dist: bionic
@@ -267,27 +264,26 @@ matrix:
     # current stable version
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=khs1994/kubernetes-server
     - os: linux
       dist: xenial
-      env: CI_KUBERNETES_VERSION=1.17.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=khs1994/kubernetes-server K8S_ROOT=/opt/k8s-custom
     # old version
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.16.1
+      env: CI_KUBERNETES_VERSION=1.17.4
     - os: linux
       dist: bionic
-      env: CI_KUBERNETES_VERSION=1.15.2
+      env: CI_KUBERNETES_VERSION=1.16.8
     - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.14.2
+      dist: bionic
+      env: CI_KUBERNETES_VERSION=1.15.11
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.18.0-beta.2 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
-  - env: CI_KUBERNETES_VERSION=1.19.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server
+  - env: CI_KUBERNETES_VERSION=1.19.0-alpha.1 LNMP_K8S_GET="--url" K8S_IMAGE=khs1994/kubernetes-server

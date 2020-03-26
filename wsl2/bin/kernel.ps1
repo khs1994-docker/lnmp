@@ -1,77 +1,62 @@
+$tips="You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\conf\.wslconfig"
+
 if($args.Length -eq 0){
   "WSL2 kernel download/update tool
 
-You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\conf\.wslconfig
+$tips
 
 COMMAND:
 
-download  download kernel only [ url ]
-update    update kernel(Expand Archive kernel files to WSL2) [WSL_NAME(ubuntu-18.14)]
+download  download kernel only
+install   install linux-headers to WSL2
 
 "
 
 exit
 }
 
-$artifacts="https://github.com/khs1994/WSL2-Linux-Kernel/suites/487766163/artifacts/2328718"
-$kernelversion="wsl2-kernel-4.19.104-microsoft-standard+"
-$zip="$home\Downloads\$kernelversion.zip"
-$unzipFolder="$home\Downloads\$kernelversion"
+$source=pwd
 
-# 下载文件
+$kernelversion="4.19.104"
+$deb="linux-headers-${kernelversion}-microsoft-standard_${kernelversion}-1_amd64.deb"
 
-Function _downloader(){
-  if (Test-Path $zip){
-    "==> $zip exists, skip download"
+mkdir -f ~/.wsl | out-null
+
+cd ~/.wsl
+
+
+Function _downloader($name,$url){
+  if (Test-Path $name){
+    "==> $name exists, skip download"
 
     return
   }
-  "==> download $zip"
-  curl.exe -fL $artifacts -o $zip
+  "==> download $name"
+  curl.exe -fL $url -O
 }
 
-# _downloader
+# 下载文件
 
-if(!(Test-Path $zip)){
-  "==> [ $zip ] file not found, please download from [ $artifacts ]"
-  exit 1
-}
+_downloader "kernel-${kernelversion}-microsoft-standard.img" "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard/kernel-${kernelversion}-microsoft-standard.img"
+_downloader $deb "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard/linux-headers-${kernelversion}-microsoft-standard_${kernelversion}-1_amd64.deb"
 
-# 解压
-if (Test-Path $unzipFolder){
-  "==> $unzipFolder exists, skip unzip"
-}else{
-  Expand-Archive -Path $zip -DestinationPath $home/Downloads/$kernelversion -Force
+# 复制配置文件
+
+if(!(Test-Path $home/.wslconfig)){
+  cp $PSScriptRoot/../config/.wslconfig $home/.wslconfig
 }
 
 if ($args[0] -eq 'download'){
+  cd $source
+  Write-Warning $tips
   exit
 }
 
-# 复制文件
-$source=PWD
-cd "$home\Downloads\$kernelversion"
+# linux-headers
+echo "==> install linux-headers"
 
-"==> Exec: cp wsl2Kernel $home/.wsl"
+wsl -u root dpkg -i $deb
 
-mkdir -Force $home/.wsl
+cd $source
 
-try{
-  cp -r -Force wsl2Kernel $home/.wsl
-
-  $command="tar -zxvf linux.tar.gz -C /"
-
-  if($args[1]){
-    $dist=$args[1]
-    "==> Exec: $command on $dist"
-    wsl -d $dist -u root -- bash -c $command
-  }else{
-    "==> Exec: $command"
-    wsl -u root -- bash -c $command
-  }
-  cd $source
-}catch {
-  Write-Warning $_
-  "==> wsl2 is running, please shutdown wsl( $ wsl --shutdown ),then rerun this command"
-  cd $source
-}
+Write-Warning $tips

@@ -21,7 +21,7 @@ $ foreach($item in $items){scp ./wsl2/certs/$item pi@192.168.199.101:/home/pi/ln
 
 $ $items="kube-proxy","kubelet","kubectl","kubeadm","mounter"
 
-$ foreach($item in $items){scp ./kubernetes-release/release/v1.17.0-linux-arm64/kubernetes/server/bin/$item pi@192.168.199.101:/home/pi/}
+$ foreach($item in $items){scp ./kubernetes-release/release/v1.18.0-linux-arm64/kubernetes/server/bin/$item pi@192.168.199.101:/home/pi/}
 ```
 
 ## 升级 libseccomp2 到 [2.4.x](https://packages.debian.org/bullseye/libseccomp2)

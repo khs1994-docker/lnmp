@@ -10,15 +10,19 @@
 
 * https://docs.phpcomposer.com/articles/handling-private-packages-with-satis.html
 
+复制 `app/satis-demo` 到 `app/satis`
+
+编辑 `app/satis/satis.json`
+
 ```bash
 $ lnmp-docker satis
 ```
 
 > 若 Git 仓库为 GitHub, API 调用有限制，需要输入 GitHub Token(自行生成)。
 
-## Usage
+## composer 使用私有包
 
-`repositories options ssl` 用来配置自签名证书的信息，如果是正规证书，请忽略此项。
+`repositories -> options -> ssl` 用来配置自签名证书的信息，如果私有服务器使用的是正规证书，无需配置此项。
 
 * http://www.php.net/manual/en/context.ssl.php
 

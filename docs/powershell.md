@@ -29,6 +29,10 @@ SilentlyContinue
 PS> Write-Information -MessageData "Got your features!" -InformationAction Continue
 ```
 
+## write-output / write-host
+
+`write-host` 输出到终端，结果不能重定向到文件，`write-output` 可以。
+
 ## $ErrorActionPreference
 
 默认值为 `Continue`，当执行错误时，将继续执行。

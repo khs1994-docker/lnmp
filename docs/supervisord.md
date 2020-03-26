@@ -2,7 +2,7 @@
 
 * http://supervisord.org
 
-在 `.env` 文件中将 `supervisord` 包含进来。Windows 用户请在 `.env.ps1` 中修改。
+在 `.env` 文件中将 `supervisord` 包含进来。
 
 ```bash
 LNMP_SERVICES="nginx mysql php7 redis phpmyadmin supervisord"

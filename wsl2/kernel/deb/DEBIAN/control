@@ -1,0 +1,15 @@
+Package: linux-headers-KERNEL_VERSION
+Version: DEB_VERSION-1
+Priority: optional
+Section: kernel
+Source: linux
+Architecture: amd64
+Maintainer: khs1994-docker/lnmp <docker@khs1994.com>
+Homepage: https://www.kernel.org/
+Description: Header files for Linux KERNEL_VERSION
+ This package provides the architecture-specific kernel header files for
+ Linux kernel KERNEL_VERSION, generally used for building out-of-tree
+ kernel modules.  These files are going to be installed into
+ /usr/src/linux-headers-KERNEL_VERSION, and can be used for building
+ modules that load into the kernel provided by the
+ linux-image-KERNEL_VERSION package.
