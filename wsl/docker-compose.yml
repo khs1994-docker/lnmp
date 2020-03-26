@@ -68,7 +68,7 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.4}
         - OS_TYPE=ubuntu:18.04
-    image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_73:-7.4.4}-ubuntu-bionic_amd64
+    image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.4}-ubuntu-bionic_amd64
 
   # latest php and ubuntu
   wsl-php-builder-ubuntu2004-74:
@@ -78,7 +78,7 @@ services:
       args:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.4}
         - OS_TYPE=ubuntu:20.04
-    image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_73:-7.4.4}-ubuntu-focal_amd64
+    image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.4}-ubuntu-focal_amd64
 
   wsl-php-builder-rhel7-72:
     build:
