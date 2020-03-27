@@ -181,3 +181,4 @@ jobs:
         title: ${{ steps.build.outputs.kernelversion }}
         checksum: sha256
         draft: true
+        overwrite: true

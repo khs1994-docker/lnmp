@@ -241,7 +241,7 @@ _kubernetes_server_install(){
     mv kubernetes v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/
   }
 
-print_info "install kubernetes ..."
+print_info "install kubernetes ${KUBERNETES_VERSION}-${GOOS}-${GOARCH} ..."
 
 if [ -d kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin ];then
   print_info "Kubernetes files existed"
