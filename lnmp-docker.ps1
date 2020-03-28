@@ -75,11 +75,11 @@ Function getEnvFile(){
   $LNMP_ENV_FILE=".env"
   $LNMP_ENV_FILE_PS1=".env.ps1"
   if($env:LNMP_ENV){
-    if (Test-Path("$PSScriptRoot\.env.${env:LNMP_ENV}")){
+    if (Test-Path("$PSScriptRoot/.env.${env:LNMP_ENV}")){
       $LNMP_ENV_FILE=".env.${env:LNMP_ENV}"
     }
 
-    if (Test-Path("$PSScriptRoot\.env.${env:LNMP_ENV}.ps1")){
+    if (Test-Path("$PSScriptRoot/.env.${env:LNMP_ENV}.ps1")){
       $LNMP_ENV_FILE_PS1=".env.${env:LNMP_ENV}.ps1"
     }
   }
@@ -699,18 +699,18 @@ function _pcit_cp(){
 # main
 
 # .env .env.ps1
-if (Test-Path $PSScriptRoot\.env){
+if (Test-Path $PSScriptRoot/.env){
   printInfo '.env file existing'
 }else{
   Write-Warning '.env file NOT existing, maybe first run'
-  cp $PSScriptRoot\.env.example $PSScriptRoot\.env
+  cp $PSScriptRoot/.env.example $PSScriptRoot/.env
 }
 
-if (Test-Path $PSScriptRoot\.env.ps1){
+if (Test-Path $PSScriptRoot/.env.ps1){
   printInfo ".env.ps1 file existing"
 }else{
   Write-Warning ".env.ps1 file NOT existing, maybe first run"
-  cp $PSScriptRoot\.env.example.ps1 $PSScriptRoot\.env.ps1
+  cp $PSScriptRoot/.env.example.ps1 $PSScriptRoot/.env.ps1
 }
 
 # APP_ROOT
