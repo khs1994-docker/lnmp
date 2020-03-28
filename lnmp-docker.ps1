@@ -714,7 +714,7 @@ if (Test-Path $PSScriptRoot/.env.ps1){
 }
 
 # APP_ROOT
-$APP_ROOT_CONTENT = (cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^APP_ROOT=)
+$APP_ROOT_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^APP_ROOT=)
 if($APP_ROOT_CONTENT){
   $APP_ROOT = $APP_ROOT_CONTENT.Line.split('=')[-1]
 }else{
@@ -722,7 +722,7 @@ if($APP_ROOT_CONTENT){
 }
 
 # APP_ENV
-$APP_ENV_CONTENT = (cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^APP_ENV=)
+$APP_ENV_CONTENT = (cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^APP_ENV=)
 if($APP_ENV_CONTENT){
   $APP_ENV = $APP_ENV_CONTENT.Line.split('=')[-1]
 }else{
@@ -757,7 +757,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 printInfo "APP_ROOT is $APP_ROOT"
 
 # LNMP_SERVICES
-$LNMP_SERVICES_CONTENT=(cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^LNMP_SERVICES=)
+$LNMP_SERVICES_CONTENT=(cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^LNMP_SERVICES=)
 if($LNMP_SERVICES_CONTENT){
   $LNMP_SERVICES=$LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }else{
@@ -765,7 +765,7 @@ if($LNMP_SERVICES_CONTENT){
 }
 
 # LREW_INCLUDE
-$LREW_INCLUDE_CONTENT=(cat $PSScriptRoot\$LNMP_ENV_FILE | select-string ^LREW_INCLUDE=)
+$LREW_INCLUDE_CONTENT=(cat $PSScriptRoot/$LNMP_ENV_FILE | select-string ^LREW_INCLUDE=)
 if($LREW_INCLUDE_CONTENT){
   $LREW_INCLUDE=$LREW_INCLUDE_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }else{
