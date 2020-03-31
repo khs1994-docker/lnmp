@@ -4,9 +4,9 @@ LABEL maintainer="khs1994@khs1994.com" \
       version="1.18.0"
 
 ARG FCCT_URL=https://github.com/coreos/fcct/releases/download/
-ARG FCCT_VERSION=v0.4.0
+ARG FCCT_VERSION=v0.5.0
 
-COPY --from=quay.io/coreos/fcct:v0.4.0 /usr/local/bin/fcct /usr/local/bin/fcct
+COPY --from=quay.io/coreos/fcct:v0.5.0 /usr/local/bin/fcct /usr/local/bin/fcct
 
 RUN set -ex \
       && ARCH=`uname -m` \

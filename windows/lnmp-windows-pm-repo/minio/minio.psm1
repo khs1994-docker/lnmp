@@ -31,6 +31,9 @@ Function install($VERSION=0,$isPre=0){
 
     # if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
+
+        minio --version
+        mc --version
         return
     # }
   }
@@ -55,8 +58,8 @@ Function install($VERSION=0,$isPre=0){
 
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
-  minio version
-  mc version
+  minio --version
+  mc --version
 }
 
 Function uninstall(){

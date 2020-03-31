@@ -22,10 +22,8 @@ $ import-module k8s-helper
 
 ## [Containerd](https://github.com/microsoft/SDN/tree/master/Kubernetes/containerd)
 
-* https://github.com/containerd/containerd/actions (containerd-*.exe) (下载并移入 PATH)
+* https://github.com/containerd/containerd/actions (containerd.exe ctr.exe) (下载并移入 PATH)
 * https://github.com/microsoft/hcsshim/releases (下载并移入 PATH)
-* https://github.com/jterry75/cri (containerd.exe 源码)
-* https://github.com/khs1994-docker/k8s-windows/actions (containerd.exe)
 
 ```powershell
 $ containerd --register-service

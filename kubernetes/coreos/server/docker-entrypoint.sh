@@ -104,7 +104,7 @@ done
 # fcct
 
 _fcct(){
-  echo "fcct --strict --pretty --input"
+  echo "fcct --strict --pretty "
 }
 
 sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" \
@@ -122,7 +122,7 @@ sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.yaml
 for i in `seq ${NODE_NUM}` ; do
 
   if [ -f ignition-$i.yaml ];then
-    $(_fcct) ignition-$i.yaml --output ignition-$i.json
+    $(_fcct) ignition-$i.yaml > ignition-$i.json
   fi
 
 done
@@ -131,16 +131,16 @@ for item in $MERGE_LIST
 do
   sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" $item.yaml
   sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" $item.yaml
-  $(_fcct) $item.yaml --output $item.json
+  $(_fcct) $item.yaml > $item.json
 done
 
-$(_fcct) ignition-local.yaml --output ignition-local.json
-$(_fcct) basic.yaml --output basic.json
+$(_fcct) ignition-local.yaml > ignition-local.json
+$(_fcct) basic.yaml > basic.json
 
 rm -rf *.source
 
 cd ../pxe
 
-$(_fcct) pxe-ignition.yaml --output pxe-config.ign
+$(_fcct) pxe-ignition.yaml > pxe-config.ign
 
 exec nginx -g "daemon off;"

@@ -1,0 +1,14 @@
+{
+  "dns": [],
+  "exec-opts": [
+    "isolation=process"
+  ],
+  "experimental": true,
+  "labels": [],
+  "max-concurrent-downloads": 3,
+  "max-concurrent-uploads": 5,
+  "shutdown-timeout": 15,
+  "hosts": [],
+  "registry-mirrors": [],
+  "insecure-registries": []
+}

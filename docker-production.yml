@@ -153,9 +153,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.5.1"
+  #   image: "mariadb:10.5.2"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.5.1
+  #   # image: khs1994/lnmp-mariadb:10.5.2
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -498,9 +498,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.41-alpine"
+  #   image: "httpd:2.4.43-alpine"
   #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.41
+  #   # image: khs1994/lnmp-httpd:2.4.43
   #   ports:
   #     - "443:443"
   #     - "80:80"
@@ -579,7 +579,7 @@ services:
   minio:
     << : *default-common
     << : *default-labels
-    image: minio/minio:RELEASE.2020-03-14T02-21-58Z
+    image: minio/minio:RELEASE.2020-03-25T07-03-04Z
     command:
       - server
       - /data
