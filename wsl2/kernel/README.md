@@ -8,6 +8,20 @@
 
 * https://github.com/khs1994-docker/lnmp/blob/19.03/kubernetes/wsl2/README.KERNEL.md
 
+## .deb
+
+* `/lib/modules/$(uname -r)`
+* `/usr/include`
+* `/usr/src/linux-headers-$(uname -r)`
+
+## .img
+
+在 Windows `~/.wslconfig` 中配置内核地址
+
+## modules.builtin
+
+* `/lib/modules/$(uname -r)/modules.builtin`
+
 ## 新增模块
 
 * nfs

@@ -11,34 +11,8 @@ passwd:
         - wheel
         - sudo
         - docker
-systemd:
-  units:
-    - name: flanneld-install.service
-      enabled: true
-      contents: |
-        [Unit]
-        Description=flanneld installer
-        After=network-online.target
-        Wants=network-online.target
-
-        [Service]
-        Restart=on-failure
-        RestartSec=5
-        WorkingDirectory=/opt/.khs1994-docker-lnmp/caches
-        ExecStartPre=mkdir -p ${K8S_ROOT}/bin
-        ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/flanneld ];then \
-          tar -zxvf flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz -C ${K8S_ROOT}/bin ; fi"
-        ExecStart=echo success
-
-        [Install]
-        WantedBy=multi-user.target
 storage:
   files:
-    - path: /opt/.khs1994-docker-lnmp/caches/flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz
-      mode: 0644
-      contents:
-        compression: null
-        source: http://{{SERVER_HOST}}:8080/releases/flannel-v{{FLANNEL_VERSION}}-linux-amd64.tar.gz
     - path: /etc/NetworkManager/system-connections/eth0.nmconnection
       mode: 0600
       contents:

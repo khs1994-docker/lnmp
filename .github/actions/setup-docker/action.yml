@@ -7,20 +7,23 @@ inputs:
   docker_version:
     description: Docker Version
     default: 19.03
-    # 18.09
+    required: false
   docker_channel:
     description: Docker Channel
     default: stable
     # test
     # nightly
+    required: false
   docker_buildx:
     # https://docs.docker.com/engine/reference/commandline/buildx/
     description: Enable Buildx
     default: true
+    required: false
   docker_cli_experimental:
     # https://docs.docker.com/engine/reference/commandline/cli/#configuration-files
     description: docker cli experimental
     default: enabled
+    required: false
   docker_daemon_json:
     # https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
     description: /etc/docker/daemon.json
@@ -28,6 +31,7 @@ inputs:
       {
         "experimental": true
       }
+    required: false
 runs:
   using: 'node12'
   main: 'lib/setup-docker.js'

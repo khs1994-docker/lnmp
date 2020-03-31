@@ -35,6 +35,8 @@ spec:
         version: {{ .Chart.Version }}
     spec:
       # restartPolicy: Never # Always、OnFailure 和 Never
+      nodeSelcter:
+        kubernetes.io/os: linux
       containers:
       - name: lnmp-mysql
         image: {{ .Values.mysql.image }}

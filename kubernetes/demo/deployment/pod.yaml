@@ -20,8 +20,8 @@ spec:
   # 共享网络（ip addr 结果一样），故两个容器的端口不能冲突
   containers:
   - name: "lnmp-pod"
-    # image: "khs1994/nginx:1.17.8-alpine"
-    image: "nginx:1.17.8-alpine"
+    # image: "khs1994/nginx:1.17.9-alpine"
+    image: "nginx:1.17.9-alpine"
     # command:
     # args:
   - name: "lnmp-pod2"

@@ -4,9 +4,7 @@
 
 ## 自定义所启动的服务
 
-例如，执行 `lnmp-docker up` 时，使用 `httpd` 替换 `nginx`。
-
-### Linux、macOS
+例如使用 `httpd` 替换 `nginx`。
 
 编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名
 
@@ -16,18 +14,6 @@
 + LNMP_SERVICES="httpd mysql php7 redis" # 使用 httpd 代替 nginx
 
 + LNMP_SERVICES="httpd mysql php7 redis mongodb" # 增加 mongodb
-```
-
-### Windows
-
-编辑 `env.ps1`
-
-```diff
-- $LNMP_SERVICES='nginx','mysql','php7','redis','phpmyadmin' # 默认配置
-
-+ $LNMP_SERVICES='httpd','mysql','php7','redis' # 使用 httpd 代替 nginx
-
-+ $LNMP_SERVICES='httpd','mysql','php7','redis','mongodb' # 增加 mongodb
 ```
 
 ## 使用自己的镜像

@@ -41,15 +41,6 @@
 └── lnmp
 ```
 
-### Windows
-
-Windows 除了在 `.env` 文件中设置 `APP_ROOT` 变量外，还需在 `.env.ps1` 中进行如下设置
-
-```diff
-- $APP_ROOT="./app"
-+ $APP_ROOT="../app"
-```
-
 ## 如何正确的自定义配置文件
 
 以上是简单的配置方法，如果你有兴趣持续使用本项目作为你的 LNMP 环境，那么请 **正确** 的修改配置文件。请查看 [这里](config.md)
@@ -79,6 +70,6 @@ $ ./lnmp-docker scale php7=1
 在 `.env` 文件中注释掉 `LNMP_SOFT_VERSION` 变量，例如
 
 ```diff
-- LNMP_NGINX_VERSION=1.17.8
-+ # LNMP_NGINX_VERSION=1.17.8
+- LNMP_NGINX_VERSION=1.17.9
++ # LNMP_NGINX_VERSION=1.17.9
 ```

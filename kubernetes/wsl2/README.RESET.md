@@ -1,7 +1,6 @@
 # 重置
 
-## Flannel
+## kubelet
 
-```powershell
-$ .\wsl2\bin\etcdctlv2.ps1 rm /kubernetes/network/config
-```
+删除 `conf/kubelet-bootstrap.kubeconfig` `conf/kubelet.kubeconfig`
+删除 `certs/kubelet-client-*` `certs/kubelet-server-*`

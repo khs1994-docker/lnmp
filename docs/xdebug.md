@@ -83,6 +83,10 @@ $ ./lnmp-docker restart php7
 
 * 7.配置路径对应关系，由于本地代码目录结构与容器中的不一致，我们必须配置其对应关系，设置页面，`Preferenences` -> `Languages & ...`-> `PHP` -> `Servers` -> `C:\Users\username\app\laravel(本地路径)` 对应 `/app/laravel(容器路径)`(请根据实际情况配置)(仅需配置一次)
 
+## 排错
+
+打开 `log/php/xdebug-remote.log` 查看日志。
+
 ## More Information
 
 * https://xdebug.org/docs/remote

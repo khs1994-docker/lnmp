@@ -65,6 +65,7 @@ module.exports = {
         '/resources/deployment',
         '/resources/configMap',
         'mod',
+        'ssh',
       ],
       '/setup/': [
         'systemd',
@@ -105,7 +106,6 @@ module.exports = {
         "storage-classes",
       ],
       "/node/": [
-        'flanneld',
         "kubelet",
         "worker",
         "oci_runtime",

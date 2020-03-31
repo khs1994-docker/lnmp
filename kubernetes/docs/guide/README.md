@@ -35,16 +35,6 @@ $ ETCDCTL_API=3 etcdctl \
 - **2379** 提供 HTTP(S) API 服务，供客户端交互
 - **2380** 和集群中其他节点通信
 
-### flannel
-
-第二步启动 `flannel`
-
-```bash
-$ systemctl status flanneld
-
-$ journalctl -u flanneld
-```
-
 ### Docker
 
 ```bash

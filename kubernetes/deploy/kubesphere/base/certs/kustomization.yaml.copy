@@ -6,8 +6,8 @@ secretGenerator:
 - name: kube-etcd-client-certs
   files:
   - etcd-client-ca.crt=ca.pem
-  - etcd-client.crt=flanneld-etcd-client.pem
-  - etcd-client.key=flanneld-etcd-client-key.pem
+  - etcd-client.crt=etcd-client.pem
+  - etcd-client.key=etcd-client-key.pem
 
 generatorOptions:
   disableNameSuffixHash: true

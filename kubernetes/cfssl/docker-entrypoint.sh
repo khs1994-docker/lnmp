@@ -135,8 +135,8 @@ main (){
        | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
       -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
-# flanneld (client) 连接 Etcd
-  export CN_NAME=flanneld-etcd-client
+# etcd-client 连接 Etcd
+  export CN_NAME=etcd-client
 
   echo '{"CN":"'$CN_NAME'",
   "hosts":[""],

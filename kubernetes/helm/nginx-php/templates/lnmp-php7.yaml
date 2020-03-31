@@ -45,6 +45,8 @@ spec:
         tier: php7
         version: {{ .Chart.Version }}
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: lnmp-php7
         image: {{ .Values.php.image }}

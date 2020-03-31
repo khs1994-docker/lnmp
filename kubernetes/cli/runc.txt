@@ -27,8 +27,8 @@ USAGE:
    runc [global options] command [command options] [arguments...]
 
 VERSION:
-   1.0.0-rc8+dev
-commit: 3e425f80a8c931f88e6d94a8c831b9d5aa481657
+   1.0.0-rc10
+commit: dc9208a3303feef5b3839f4323d9beb36df0a9dd
 spec: 1.0.1-dev
 
 COMMANDS:

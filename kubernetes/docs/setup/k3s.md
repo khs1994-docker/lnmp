@@ -6,5 +6,5 @@
 
 ```bash
 # $ sudo ./k3s server --help
-$ sudo ./k3s server --pause-image "gcr.azk8s.cn/google-containers/pause:3.1"
+$ sudo ./k3s server --pause-image "gcr.azk8s.cn/google-containers/pause:3.2"
 ```

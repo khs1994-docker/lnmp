@@ -23,7 +23,7 @@ Function _mountKubelet(){
 & $PSScriptRoot/wsl2host-check
 
 "==> check kube-server $KUBE_APISERVER"
-curl.exe -k --cacert /opt/k8s2/certs/ca.pem $KUBE_APISERVER | out-null
+curl.exe -k --cacert certs/ca.pem $KUBE_APISERVER | out-null
 
 if(!$?){
   Write-Warning "kube-server $KUBE_APISERVER can't connent, maybe not running"

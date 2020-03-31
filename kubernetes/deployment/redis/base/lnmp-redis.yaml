@@ -45,10 +45,12 @@ spec:
         tier: redis
         version: 0.0.1
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: lnmp-redis
         imagePullPolicy: IfNotPresent
-        image: redis:5.0.7-alpine
+        image: redis:5.0.8-alpine
         args:
         - redis-server
         - /redis.conf

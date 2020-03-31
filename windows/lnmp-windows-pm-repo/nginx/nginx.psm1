@@ -25,6 +25,10 @@ Function install_after(){
 
   _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 
+  if(Test-Path $home/Downloads/lnmp-docker-cache/nginx.conf.backup){
+    Copy-Item $home/Downloads/lnmp-docker-cache/nginx.conf.backup C:\nginx\conf\nginx.conf
+  }
+
   Get-Process nginx -ErrorAction "SilentlyContinue" | out-null
 
   if (!($?)){
@@ -81,6 +85,12 @@ Function install($VERSION=0,$isPre=0){
 
   # 安装 Fix me
   _mkdir C:\nginx
+  # backup nginx.conf
+
+  if(Test-Path C:\nginx\conf\nginx.conf){
+    Copy-Item C:\nginx\conf\nginx.conf ~/Downloads/lnmp-docker-cache/nginx.conf.backup
+  }
+
   Copy-item -r -force "nginx\nginx-${VERSION}\*" "C:\nginx"
   # Start-Process -FilePath $filename -wait
   _cleanup nginx

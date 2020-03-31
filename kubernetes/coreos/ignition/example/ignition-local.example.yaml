@@ -9,7 +9,6 @@ ignition:
       - source: http://{{SERVER_HOST}}:8080/ignition/crictl.json
       - source: http://{{SERVER_HOST}}:8080/ignition/docker.json
       - source: http://{{SERVER_HOST}}:8080/ignition/etcd.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/flanneld.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.json
       - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.json
@@ -343,15 +342,14 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStartPre=-/usr/sbin/swapoff -a
-        ExecStartPre=-/sbin/swapoff -a
+        ExecStartPre=-/usr/bin/env swapoff -a
         ExecStartPre=-${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
         ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
-        ExecStartPre=-mkdir -p /opt/k8s/var/lib/kubelet
-        ExecStartPre=-mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
-        ExecStartPre=-/usr/bin/env /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-        ExecStartPre=-mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-        ExecStartPre=-mount --bond /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStartPre=-/usr/bin/env mkdir -p /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
         ExecStart=${K8S_ROOT}/bin/kubelet \
         --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
@@ -371,13 +369,13 @@ systemd:
         # cri is docker
         # --network-plugin=cni \
         # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
-        # --cni-bin-dir=/usr/libexec/cni \
+        # --cni-bin-dir=/opt/k8s/opt/cni/bin \
         # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
-        # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.1 \
+        # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.2 \
         # --image-pull-progress-deadline=15m \
 
-        ExecStopPost=-umount /var/lib/kubelet
-        ExecStopPost=-umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
+        ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
         Restart=on-failure
         RestartSec=5

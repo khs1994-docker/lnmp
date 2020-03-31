@@ -241,7 +241,7 @@ _kubernetes_server_install(){
     mv kubernetes v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/
   }
 
-print_info "install kubernetes ..."
+print_info "install kubernetes ${KUBERNETES_VERSION}-${GOOS}-${GOARCH} ..."
 
 if [ -d kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin ];then
   print_info "Kubernetes files existed"
@@ -579,38 +579,6 @@ _etcd_install(){
   $(_sudo) rm -rf ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}
 }
 
-_flanneld_install(){
-  if [ "$1" = '-f' ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/flanneld; fi
-  local url="https://github.com/coreos/flannel/releases/download"
-  local TAR_FILE="flannel-v${FLANNEL_VERSION}-${GOOS}-${GOARCH}.tar.gz"
-  __download(){
-    $(_sudo) $(_curl) ${url}/v${FLANNEL_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
-  }
-
-  if [ -f ${K8S_ROOT}/bin/flanneld -a ! "$1" = "--dry-run" ];then
-    print_info "flanneld already install"
-
-    ${K8S_ROOT}/bin/flanneld --version || true
-    return
-  fi
-
-  print_info "install flanneld ..."
-
-  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    true
-  else
-    __download
-  fi
-
-  if [ "$1" = "--dry-run" ];then
-    print_info "download flanneld success"
-    return
-  fi
-
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}/bin/
-  $(_sudo) chown -R root:root ${K8S_ROOT}/bin/
-}
-
 _helm_install(){
   if [ -f ${K8S_ROOT}/bin/helm -a ! "$1" = "--dry-run" ];then
     print_info "helm already install"
@@ -756,7 +724,7 @@ _containerd_install(){
 
   __download(){
     if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
-      url="https://github.com/containerd/containerd/suites/359556741/artifacts/703276"
+      url="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly.linux-arm64.tar.gz"
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
 
       return
@@ -781,29 +749,31 @@ _containerd_install(){
     return
   fi
 
-  if [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then
+  # if [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then
     $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
-  else
-    # arm64 unzip
-    command -v unzip > /dev/null || echo "please install unzip"
-    command -v unzip > /dev/null || exit 1
-    $(_sudo) unzip -o -d ${K8S_ROOT}/bin ${TMP_ROOT}/${TAR_FILE}
-    $(_sudo) chmod +x ${K8S_ROOT}/bin/linux_arm64/*
-    $(_sudo) mv ${K8S_ROOT}/bin/linux_arm64/* ${K8S_ROOT}/bin
-    $(_sudo) rm -rf ${K8S_ROOT}/bin/linux_arm64
-  fi
+  # else
+  #   # arm64 unzip
+  #   command -v unzip > /dev/null || echo "please install unzip"
+  #   command -v unzip > /dev/null || exit 1
+  #   $(_sudo) unzip -o -d ${K8S_ROOT}/bin ${TMP_ROOT}/${TAR_FILE}
+  #   $(_sudo) chmod +x ${K8S_ROOT}/bin/linux_arm64/*
+  #   $(_sudo) mv ${K8S_ROOT}/bin/linux_arm64/* ${K8S_ROOT}/bin
+  #   $(_sudo) rm -rf ${K8S_ROOT}/bin/linux_arm64
+  # fi
 
   $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
+
+  $(_sudo) chmod +x /usr/local/bin/*
 }
 
 _cni_install(){
   $(_sudo) mkdir -p ${K8S_ROOT}/opt/cni/bin
-  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/opt/cni/bin/flannel;fi
-  if [ -f ${K8S_ROOT}/opt/cni/bin/flannel -a ! "$1" = "--dry-run" ];then
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/opt/cni/bin/loopback;fi
+  if [ -f ${K8S_ROOT}/opt/cni/bin/loopback -a ! "$1" = "--dry-run" ];then
     print_info "cni already install"
     return
   fi
@@ -930,7 +900,7 @@ _k8s_install_cp_bin(){
 _k8s_install_systemd_docker(){
   print_info "Update systemd Docker unit file ..."
   $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
-  $(_sudo) cp systemd/docker.conf /etc/systemd/system/docker.service.d/
+  $(_sudo) cp systemd/docker-10-cri-docker.conf /etc/systemd/system/docker.service.d/
 
   $(_sudo) cp systemd/kubelet-20-cri-docker.conf /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
   $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
@@ -947,17 +917,20 @@ _k8s_install_kubectl_conf(){
 _cni_config(){
   print_info "config cni ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/cni/net.d
-  $(_sudo) cp systemd/etc/cni/10-flannel.conflist ${K8S_ROOT}/etc/cni/net.d
+  $(_sudo) cp systemd/etc/cni.example/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
+  # $(_sudo) cp systemd/etc/cni.example/10-mynet.conf ${K8S_ROOT}/etc/cni/net.d
 }
 
 _cri_sysctl(){
   print_info "exec sysctl to meet cri..."
-  $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
+  $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf /etc/sysctl.d/99-kubernetes-calico.conf
   $(_sudo) touch /etc/sysctl.d/99-kubernetes-cri.conf
+  $(_sudo) touch /etc/sysctl.d/99-kubernetes-calico.conf
   echo "net.bridge.bridge-nf-call-iptables  = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
   echo "net.ipv4.ip_forward                 = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
   echo "net.bridge.bridge-nf-call-ip6tables = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-cri.conf > /dev/null
-
+  # calico
+  echo "net.ipv4.conf.all.rp_filter = 1" | $(_sudo) tee -a /etc/sysctl.d/99-kubernetes-calico.conf
   $(_sudo) sysctl --system || true
 }
 
@@ -978,6 +951,7 @@ _conmon_install(){
   $(_sudo) make install
 }
 
+# https://github.com/cri-o/cri-o/blob/master/tutorials/setup.md
 _crio_install(){
   set +e
   command -v crio > /dev/null
@@ -996,9 +970,7 @@ _crio_install(){
   command -v yum > /dev/null && isRPM=1
 
   test -n "$isRPM" && $(_sudo) yum install -y \
-  btrfs-progs-devel \
   containers-common \
-  device-mapper-devel \
   git \
   glib2-devel \
   glibc-devel \
@@ -1010,6 +982,7 @@ _crio_install(){
   libseccomp-devel \
   libselinux-devel \
   pkgconfig \
+  make \
   runc
 
   # $(_sudo) sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
@@ -1023,12 +996,10 @@ _crio_install(){
   ; $(_sudo) apt install -y software-properties-common \
   && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
   && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
-  btrfs-tools \
   containers-common \
   git \
   $(command -v go > /dev/null || echo "golang-go") \
   libassuan-dev \
-  libdevmapper-dev \
   libglib2.0-dev \
   libc6-dev \
   libgpgme11-dev \
@@ -1039,17 +1010,20 @@ _crio_install(){
   pkg-config \
   $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
-  gcc
+  gcc \
+  make
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
   export GOPATH=$go_path
 
-  git clone --depth=1 -b release-${CRIO_VERSION} \
-    https://github.com/cri-o/cri-o \
-    $go_path/src/github.com/cri-o/cri-o || git clone --depth=1 -b master \
-        https://github.com/cri-o/cri-o \
-        $go_path/src/github.com/cri-o/cri-o
+  CRIO_GIT=https://github.com/cri-o/cri-o
+  if [ "${LNMP_CN_ENV}" = "true" ];then
+      CRIO_GIT=https://gitee.com/docker_practice/cri-o.git
+  fi
+
+  git clone --depth=1 -b release-${CRIO_VERSION} ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o \
+    || git clone --depth=1 -b master ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o
 
   if ! [ -d $go_path/src/github.com/cri-o/cri-o ];then
     exit 1
@@ -1061,9 +1035,10 @@ _crio_install(){
   $(_sudo) go version || true
   go env
   $(_sudo) go env || true
-  go get github.com/cpuguy83/go-md2man
+  GO111MODULE=off go get github.com/cpuguy83/go-md2man
 
-  make
+  make clean
+  make BUILDTAGS='seccomp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper libdm_no_deferred_remove'
   # make build-static CONTAINER_RUNTIME=docker
   $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.bin
   $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.config
@@ -1117,9 +1092,7 @@ EOF
 
 _docker_default_conf(){
   print_info "restore docker default conf"
-  $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
-  $(_sudo) rm -rf /etc/systemd/system/docker.service.d/*
-  $(_sudo) cp systemd/docker.default.conf /etc/systemd/system/docker.service.d/
+  $(_sudo) rm -rf /etc/systemd/system/docker.service.d/10-cri-docker.conf
 }
 
 # k8s install
@@ -1129,7 +1102,7 @@ _check_master_ip(){
     clear
     echo ""
     echo "======================================================"
-    echo "==== you must edit MASTER_IP in systemd/.env file ===="
+    echo "**** you must edit MASTER_IP in systemd/.env file ****"
     echo "======================================================"
     echo ""
   fi
@@ -1158,8 +1131,6 @@ _cri_handler(){
     _docker_default_conf
     if [ "$GOOS" = 'linux' ];then _gvisor_crio_conf;fi
     _crictl_crio_conf
-
-    $(_sudo) mkdir -p /usr/share/containers/oci/hooks.d
   elif [ "$CONTAINER_RUNTIME" = "--docker" ];then
     print_info "Kubelet Runtime is Docker"
     sleep 15
@@ -1244,6 +1215,11 @@ _k8s_install_mkdir(){
 _k8s_install(){
   _check_master_ip
 
+  if ! [ -f systemd/certs/ca.pem ];then
+    print_info "please generate certs first"
+    exit 1
+  fi
+
   _k8s_install_dep
 
   $(_sudo) mkdir -p /etc/{docker,systemd/system}
@@ -1255,7 +1231,6 @@ _k8s_install(){
 
   _cni_install
   _cni_config
-  _flanneld_install
 
   _helm_install
 
@@ -1285,9 +1260,7 @@ _k8s_install(){
 _k8s_join_conf_cp(){
   print_info "copy kubernetes conf and cert file ..."
   $(_sudo) cp systemd/certs/{ca.pem,\
-ca-key.pem,\
-flanneld-etcd-client-key.pem,\
-flanneld-etcd-client.pem} \
+ca-key.pem} \
 ${K8S_ROOT}/certs/
 
   $(_sudo) cp \
@@ -1337,8 +1310,6 @@ not allowed, please input new hostname by --hostname=XXX" \
 
 _k8s_join_cert_checker(){
   ls systemd/certs/{ca.pem,\
-flanneld-etcd-client.pem,\
-flanneld-etcd-client-key.pem,\
 kubectl.kubeconfig,\
 kubelet.config.yaml,\
 kube-proxy.config.yaml,\
@@ -1367,10 +1338,7 @@ _k8s_join(){
   # cni
   _cni_install
   _cni_config
-  _flanneld_install
 
-  # etcdctl require by flanneld
-  _etcd_install
   _helm_install
 
   test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \
@@ -1388,7 +1356,7 @@ _k8s_join(){
 
   _cri_handler $2
 
-  _k8s_install_systemd flanneld kube-proxy kubelet
+  _k8s_install_systemd kube-proxy kubelet
 
   _k8s_install_mkdir
 
@@ -1426,7 +1394,6 @@ $ $(_sudo) systemctl start kube-scheduler
 
 NODE:
 
-$ $(_sudo) systemctl start flanneld
 $ $(_sudo) systemctl start kube-proxy
 $ $(_sudo) systemctl start kubelet
 
@@ -1438,10 +1405,10 @@ $ $(_sudo) systemctl start kube-crio (CRI-O runtime only)
 }
 
 _local_cleanup(){
-  $(_sudo) systemctl stop etcd flanneld \
+  $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker kube-containerd || true
+    docker kube-containerd crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}
@@ -1450,16 +1417,14 @@ _local_cleanup(){
 
   $(_sudo) ip addr flush cni0
   $(_sudo) ip addr flush docker0
-  $(_sudo) ip addr flush flannel.4096
-  $(_sudo) ip addr flush flannel.1
 
   $(_sudo) rm -rf /etc/sysctl.d/99-kubernetes-cri.conf
 
   $(_sudo) rm -rf /etc/systemd/system/kubelet.service.d
   $(_sudo) rm -rf /etc/systemd/system/kubelet.service
-  $(_sudo) cp systemd/etc/containerd/docker.toml /etc/containerd/config.toml
+
   $(_sudo) systemctl daemon-reload || true
-  $(_sudo) systemctl restart docker containerd || true
+  $(_sudo) systemctl restart docker|| true
 }
 
 if [ "$ENABLE_CN_MIRROR" = 0 ];then

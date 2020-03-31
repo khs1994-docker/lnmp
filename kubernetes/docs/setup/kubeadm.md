@@ -150,7 +150,7 @@ $ sudo kubeadm init --image-repository gcr.azk8s.cn/google-containers \
       --ignore-preflight-errors=all
 ```
 
-* `--pod-network-cidr 10.244.0.0/16` 参数与后续 CNI 插件有关，这里以 `flannel` 为例，若后续部署其他类型的网络插件请更改此参数。
+* `--pod-network-cidr 10.244.0.0/16` 参数与后续 CNI 插件有关，这里以 `calico` 为例，若后续部署其他类型的网络插件请更改此参数。
 * 使用 **配置文件** 的方式这里不再赘述
 
 > 执行可能出现错误，例如缺少依赖包，根据提示安装即可。
@@ -199,39 +199,13 @@ $ kubeadm join 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
 
 由于未部署 CNI 插件，CoreDNS 未正常启动。
 
-## 部署 CNI (以下任选其一)
-
-### flanneld (0.11.0)
-
-检查 podCIDR 设置
-
-```bash
-$ kubectl get node -o yaml | grep CIDR
-
-# 输出
-    podCIDR: 10.244.0.0/24
-    podCIDRs:
-```
-
-```bash
-$ kubectl apply -k addons/cni/flannel
-```
-
-### calico (3.10)
+## 部署 CNI -- calico (3.10)
 
 * https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico
 
 修改 `addons/cni/calico/configMap.yaml` 中的 `192.168.0.0/16` 为 `10.244.0.0/16`(同 `flannel` 一致)
 
 有 [三种方式](https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico) 存储 calico 数据,这里采用第一种 `Installing with the Kubernetes API datastore—50 nodes or less`
-
-#### 删除 `flannel`
-
-```bash
-$ kubectl delete -k addons/cni/flannel
-
-$ sudo ip link del flannel.1
-```
 
 #### 修改内核参数
 

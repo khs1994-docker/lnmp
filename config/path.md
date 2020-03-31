@@ -143,7 +143,6 @@
 │   │               │   │   ├── php-ext-tideways_xhprof.ini.default
 │   │               │   │   ├── php-ext-xdebug.ini.default
 │   │               │   │   ├── php-ext-xmlrpc.ini
-│   │               │   │   ├── php-ext-xsl.ini
 │   │               │   │   └── php-ext-yaml.ini
 │   │               │   ├── php.ini-development
 │   │               │   └── php.ini-production
@@ -177,5 +176,5 @@
 │   └── supervisord.ini.example
 └── yarn
 
-44 directories, 132 files
+44 directories, 131 files
 ```

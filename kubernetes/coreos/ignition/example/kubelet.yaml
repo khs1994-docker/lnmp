@@ -24,3 +24,11 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/csr-crb.yaml
+    - path: /home/core/calico.yaml
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/etc/calico/calico.yaml
+    - path: /etc/sysctl.d/99-kubernetes-calico.conf
+      mode: 0644
+      contents: 
+        inline: net.ipv4.conf.all.rp_filter = 1

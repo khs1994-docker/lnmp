@@ -5,7 +5,7 @@ Import-Module cleanup
 Import-Module exportPath
 
 # https://curl.haxx.se/docs/caextract.html
-$PHP_CACERT_DATE="2019-05-15"
+$PHP_CACERT_DATE="2020-01-01"
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 

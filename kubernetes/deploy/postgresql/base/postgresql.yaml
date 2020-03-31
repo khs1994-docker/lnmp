@@ -25,6 +25,8 @@ spec:
       labels:
         app: "postgresql"
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       initContainers:
       - name: "change-permission-of-directory"
         image: "busybox:latest"

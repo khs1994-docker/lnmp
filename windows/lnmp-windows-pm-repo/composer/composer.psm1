@@ -65,9 +65,9 @@ Function install($VERSION=0,$isPre=0){
 
   # 安装 Fix me
   _mkdir "$env:ProgramData\ComposerSetup\bin\"
-  Copy-item -r -force "${PSScriptRoot}\composer" "$env:ProgramData\ComposerSetup\bin\"
-  Copy-item -r -force "${PSScriptRoot}\composer.bat" "$env:ProgramData\ComposerSetup\bin\"
-  Copy-item -r -force "composer.phar" "$env:ProgramData\ComposerSetup\bin\"
+  Copy-item -r -force "${PSScriptRoot}\composer"     "$env:ProgramData\ComposerSetup\bin\"
+  Copy-item -r -force "${PSScriptRoot}\composer.ps1" "$env:ProgramData\ComposerSetup\bin\"
+  Copy-item -r -force "composer.phar"                "$env:ProgramData\ComposerSetup\bin\"
   # Start-Process -FilePath $filename -wait
   # _cleanup ""
 

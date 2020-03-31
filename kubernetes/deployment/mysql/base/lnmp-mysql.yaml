@@ -51,8 +51,9 @@ spec:
         tier: mysql
         version: 0.0.1
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       # imagePullSecrets:
-      # nodeSelector:
       # initContainers:
       #   - name: "remove-lost-found"
       #     image: "busybox"

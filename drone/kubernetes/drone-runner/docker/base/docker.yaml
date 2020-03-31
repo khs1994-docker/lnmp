@@ -30,6 +30,8 @@ spec:
         app: drone-runner
         tier: docker
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: drone-runner-docker
         image: drone/drone-runner-docker:1

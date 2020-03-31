@@ -10,7 +10,6 @@ commands="kube-apiserver \
           docker \
           dockerd \
           etcd \
-          flanneld \
           runsc \
           "
 

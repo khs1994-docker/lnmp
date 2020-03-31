@@ -14,9 +14,9 @@ spec:
           valueFrom:
             secretKeyRef:
               key: github-client-id
-              name: drone-github-secret
+              name: drone-provider-github-secret
         - name: DRONE_GITHUB_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
               key: github-client-secret
-              name: drone-github-secret
+              name: drone-provider-github-secret

@@ -23,9 +23,9 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$preVersion
   }
 
-  $url="https://github.com/denoland/deno/releases/download/v${VERSION}/deno_win_x64.zip"
+  $url="https://github.com/denoland/deno/releases/download/v${VERSION}/deno-x86_64-pc-windows-msvc.zip"
 
-  $filename="deno_win_x64_${VERSION}.zip"
+  $filename="deno-x86_64-pc-windows-msvc_${VERSION}.zip"
   $unzipDesc="deno"
 
   if($(_command deno)){

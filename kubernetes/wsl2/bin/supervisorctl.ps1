@@ -21,8 +21,6 @@ Function _generate_conf(){
   printInfo "handle kube-scheduler supervisor conf ..."
   & $PSScriptRoot/../kube-scheduler.ps1
 
-  printInfo "handle flanneld supervisor conf ..."
-  & $PSScriptRoot/../flanneld.ps1
   printInfo "handle kube-proxy supervisor conf ..."
   & $PSScriptRoot/../kube-proxy.ps1
   printInfo "handle kubelet supervisor conf ..."

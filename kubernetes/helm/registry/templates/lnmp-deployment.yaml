@@ -20,6 +20,8 @@ spec:
         tier: registry
         version: {{ .Chart.Version }}
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
       - name: lnmp-registry
         image: registry

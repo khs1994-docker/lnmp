@@ -179,6 +179,22 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
+    - stage: wsl-php-builder-debian11-74
+      name: wsl-php-builder-debian11-74
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
+        - . .env
+        - export DEB_NAME=khs1994-wsl-php74_${PHP_VERSION_74}-debian-bullseye_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+
     # wsl ubuntu 18.04
 
     - stage: wsl-php-builder-ubuntu1804-72
@@ -226,6 +242,22 @@ jobs:
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export DEB_NAME=khs1994-wsl-php74_${PHP_VERSION_74}-ubuntu-bionic_amd64.deb
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
+
+    - stage: wsl-php-builder-ubuntu2004-74
+      name: wsl-php-builder-ubuntu2004-74
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
+        - . .env
+        - export DEB_NAME=khs1994-wsl-php74_${PHP_VERSION_74}-ubuntu-focal_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -327,6 +359,22 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
+    - stage: wsl-php-builder-fc32-74
+      name: wsl-php-builder-fc32-74
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
+        - . .env
+        - export RPM_NAME=khs1994-wsl-php74-${PHP_VERSION_74}-1.fc32.x86_64.rpm
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+
     # clusterkit
 
     # - stage: memcached
@@ -410,11 +458,15 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-74
     if: tag =~ /^(v19)/
+  - name: wsl-php-builder-debian11-74
+    if: tag =~ /^(v19)/
   - name: wsl-php-builder-ubuntu1804-72
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-ubuntu1804-73
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-ubuntu1804-74
+    if: tag =~ /^(v19)/
+  - name: wsl-php-builder-ubuntu2004-74
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel7-72
     if: tag =~ /^(v19)/
@@ -427,6 +479,8 @@ stages:
   - name: wsl-php-builder-fc31-73
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-fc31-74
+    if: tag =~ /^(v19)/
+  - name: wsl-php-builder-fc32-74
     if: tag =~ /^(v19)/
 
 # branches:

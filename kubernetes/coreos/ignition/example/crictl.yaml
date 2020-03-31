@@ -33,10 +33,3 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/crictl.yaml
-  directories:
-    - path: /opt/test/test
-      mode: 0755
-      user:
-        name: k8s
-      group:
-        name: k8s

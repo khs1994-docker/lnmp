@@ -7,7 +7,7 @@ x-common-label:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
-  # PCIT Daemon
+  # web server + daemon + agent
   pcit:
     &pcit
     << : *default-common-label
@@ -28,11 +28,36 @@ services:
       - up
     environment:
       - APP_ENV=${APP_ENV:-development}
+      # don't run daemon + agent
+      - CI_DAEMON_ENABLED=${CI_DAEMON_ENABLED:-true}
 
+  # fpm + daemon + agent
+  pcit-fpm:
+    << : *pcit
+    image: pcit/pcit:fpm
+    volumes:
+      - ./pcit/key:/app/.pcit/framework/storage/private_key:cached
+      - ./pcit/.env.${APP_ENV:-development}:/app/.pcit/.env.${APP_ENV:-development}:cached
+      - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro
+      - type: volume
+        source: pcit-tmp
+        target: /tmp
+    networks:
+      - backend
+      - frontend
+    command:
+      - up
+    environment:
+      - APP_ENV=${APP_ENV:-development}
+      # don't run daemon + agent
+      - CI_DAEMON_ENABLED=${CI_DAEMON_ENABLED:-true}
+
+  # pcit daemon
   pcit-server:
     << : *pcit
     command: server
 
+  # pcit runner
   pcit-agent:
     << : *pcit
     command: agent

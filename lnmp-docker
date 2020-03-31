@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.15.5"
-readonly DOCKER_DESKTOP_VERSION="2.1.5.0 (40323)"
+readonly KUBERNETES_VERSION="1.16.5"
+readonly DOCKER_DESKTOP_VERSION="2.2.2.0 (43066)"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -261,8 +261,8 @@ _gcr_io(){
     kube-apiserver:v${KUBERNETES_VERSION} \
     kube-scheduler:v${KUBERNETES_VERSION} \
     kube-proxy:v${KUBERNETES_VERSION} \
-    etcd:3.3.10 \
-    coredns:1.3.1 \
+    etcd:3.3.15-0 \
+    coredns:1.6.2 \
     pause:3.1"
 
     sleep 5
@@ -1222,7 +1222,7 @@ main() {
     ;;
   composer )
     if [ -d $source/.devcontainer -a -f $source/docker-workspace.yml ];then
-        print_info "Exec composer command in vscode remote folder"
+        print_info "Exec composer command in [ vscode remote ] or [ PhpStorm ] project folder"
         cd $source
         docker-compose -f docker-workspace.yml run --rm composer "$@"
 

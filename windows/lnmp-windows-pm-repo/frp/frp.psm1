@@ -51,6 +51,8 @@ Function install($VERSION=0,$isPre=0){
   # 安装 Fix me
   Copy-item frp\frp_${VERSION}_windows_amd64\frpc.exe C:\bin\
 
+  rm -r -force frp
+
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   & $command --version

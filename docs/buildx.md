@@ -34,3 +34,11 @@ ARG BUILDOS - OS component of BUILDPLATFORM
 ARG BUILDARCH - OS component of BUILDPLATFORM
 ARG BUILDVARIANT - OS component of BUILDPLATFORM
 ```
+
+## 构建镜像
+
+```bash
+$ docker buildx build ...
+```
+
+* https://vuepress.mirror.docker-practice.com/buildx/multi-arch-images.html

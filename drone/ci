@@ -2,7 +2,7 @@
 
 print_help_info(){
   exec echo "
-CI-CLI 1.6.5
+CI-CLI 1.7.0
 
 Donate WebSite https://zan.khs1994.com
 
@@ -48,6 +48,7 @@ _cp(){
 
 _init(){
   _cp .env.example .env
+  _cp config/gitea/app.kubernetes.example.ini config/gitea/app.kubernetes.ini
 
   command -v docker-compose > /dev/null 2>&1
 

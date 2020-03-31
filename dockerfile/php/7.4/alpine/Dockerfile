@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.3
+ARG PHP_VERSION=7.4.4
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -152,7 +152,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
              -n --defaults --strip --cleanup --no-write \
         && pickle install opcache \
         # && docker-php-ext-enable opcache \
-        && apk del --no-network --no-cache .phpize-deps .php-fpm-build-deps \
+        && apk del --no-network .phpize-deps .php-fpm-build-deps \
         && rm -rf /tmp/* \
 # 创建日志文件夹
         && mkdir -p /var/log/php-fpm \
@@ -161,7 +161,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
-        && php -m
+        && php -m \
+        && ls -la $(php-config --extension-dir)
 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 

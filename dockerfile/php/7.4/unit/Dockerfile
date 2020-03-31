@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.3
+ARG PHP_VERSION=7.4.4
 
 FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine
 
@@ -10,7 +10,7 @@ ARG VCS_REF
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
 
-ENV NGINX_UNIT_VERSION 1.15.0
+ENV NGINX_UNIT_VERSION 1.16.0
 
 RUN cd /usr/src \
   && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
@@ -31,7 +31,7 @@ RUN cd /usr/src \
   && strip --strip-all /usr/local/nginx-unit/sbin/unitd \
   && mkdir -p /usr/local/sbin \
   && ln -sf /usr/local/nginx-unit/sbin/unitd /usr/local/sbin/unitd \
-  && apk del --no-network --no-cache .build-deps \
+  && apk del --no-network .build-deps \
   && rm -rf /usr/src/* \
   && mkdir -p /var/log/nginx-unit \
   && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log

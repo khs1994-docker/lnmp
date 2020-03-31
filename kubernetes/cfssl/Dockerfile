@@ -1,6 +1,6 @@
 FROM alpine:3.11
 
-ENV KUBECTL_VERSION=v1.17.0
+ENV KUBECTL_VERSION=v1.18.0
 
 RUN apk add --no-cache curl \
       && curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 > /usr/local/bin/cfssl \
@@ -8,12 +8,12 @@ RUN apk add --no-cache curl \
       && curl -L https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 > /usr/local/bin/cfssljson \
       && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > /usr/local/bin/kubectl \
       && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl \
-      && apk del curl
+      && apk del --no-network curl
 
 FROM alpine:3.11
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.17.0"
+      version="1.18.0"
 
 COPY --from=0 /usr/local/bin /usr/local/bin
 

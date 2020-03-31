@@ -36,6 +36,8 @@ Function install($VERSION=0,$isPre=0){
 
   _exportPath "$env:ProgramData\node","$env:ProgramData\npm"
 
+  [environment]::SetEnvironmentvariable("NODE_PATH", "$env:ProgramData\npm\node_modules", "User");
+
   if($(_command $env:ProgramData\node\node.exe)){
     $CURRENT_VERSION=(& "$env:ProgramData\node\node.exe" --version).trim("v")
 

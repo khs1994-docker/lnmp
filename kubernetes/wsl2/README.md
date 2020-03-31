@@ -41,13 +41,13 @@ $ set -x
 $ source ./wsl2/.env
 
 $ sudo mkdir -p ${K8S_ROOT:?err}/bin
-$ sudo cp -a kubernetes-release/release/v1.17.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
+$ sudo cp -a kubernetes-release/release/v1.18.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
 ```
 
 在 `Windows` 中执行
 
 ```powershell
-$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","flanneld-etcd-client.pem","flanneld-etcd-client-key.pem","ca.pem","ca-key.pem"
+$ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","etcd-client.pem","etcd-client-key.pem","ca.pem","ca-key.pem"
 
 $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ```
@@ -58,12 +58,6 @@ $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 $ wsl
 
 $ ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
-```
-
-## flanneld
-
-```powershell
-$ ./wsl2/flanneld start
 ```
 
 ## kube-proxy
@@ -98,7 +92,6 @@ $ ./wsl2/kubelet start
 ### 1. 生成配置文件
 
 ```powershell
-# $ ./wsl2/flanneld
 # $ ./wsl2/kube-containerd
 
 $ ./wsl2/bin/supervisorctl g
@@ -116,7 +109,6 @@ $ ./wsl2/bin/supervisorctl update
 ### 3. 启动组件
 
 ```powershell
-$ ./wsl2/bin/supervisorctl start kube-node:flanneld
 $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
 $ ./wsl2/bin/supervisorctl start kube-node:kube-containerd
 
@@ -140,7 +132,18 @@ csr-4njmh   2d2h   system:node:wsl2          Pending
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_NAME(csr-4njmh)
 ```
 
-## 5. kubectl
+## 5. 部署 CNI -- calico
+
+```bash
+$ source wsl2/.env
+$ sed -i "s#/opt/k8s#${K8S_ROOT}#g" addons/cni/calico-custom/calico.yaml
+
+$ kubectl apply -k addons/cni/calico-custom
+```
+
+> 若不能正确匹配网卡，请修改 `calico.yaml` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
+
+## 6. kubectl
 
 将 WSL2 K8S 配置写入 `~/.kube/config`
 
@@ -157,7 +160,7 @@ $ ./wsl2/bin/kubectl-config-set-cluster
 $ ./wsl2/bin/kubectl
 ```
 
-## 6. crictl
+## 7. crictl
 
 ```powershell
 $ ./wsl2/bin/crictl

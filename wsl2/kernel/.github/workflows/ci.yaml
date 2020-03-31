@@ -2,7 +2,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 0 * * */1'
+    - cron: '0 0 * * 4'
 
 name: Build
 
@@ -13,14 +13,20 @@ jobs:
     strategy:
       matrix:
         repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
+        ref: ["master","linux-msft-wsl-4.19.y"]
+        exclude:
+          - repo: torvalds/linux
+            ref: linux-msft-wsl-4.19.y
       fail-fast: false
     steps:
     - uses: actions/checkout@master
       with:
         fetch-depth: 1
         repository: ${{ matrix.repo }}
-        ref: master
-    - name: Build
+        ref: ${{ matrix.ref }}
+    - name: Build Kernel
+      env:
+        ref: ${{ matrix.ref }}
       id: build
       run: |
         set -x
@@ -35,7 +41,7 @@ jobs:
 
         if ! [ -f Microsoft/config-wsl ];then
           mkdir Microsoft/
-          curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/master/Microsoft/config-wsl
+          curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/${ref}/Microsoft/config-wsl
         fi
 
         echo "
@@ -53,17 +59,16 @@ jobs:
         CONFIG_TARGET_CORE=y
         " >> Microsoft/config-wsl
 
-        make KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc)
+        make LOCALVERSION="" KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc)
 
-        make INSTALL_MOD_PATH=linux modules_install
-        make INSTALL_HDR_PATH=linux/usr headers_install
+        make LOCALVERSION="" INSTALL_MOD_PATH=linux modules_install
+        make LOCALVERSION="" INSTALL_HDR_PATH=linux/usr headers_install
 
         ls -lah arch/x86/boot/bzImage
 
-        kernelversion=$(make -s kernelversion)-microsoft-standard+
+        kernelversion=$(make -s kernelversion)-microsoft-standard
         kernelversion=`ls linux/lib/modules`
         echo ::set-output name=kernelversion::`echo $kernelversion`
-
     - name: Dist
       env:
         kernelversion: ${{ steps.build.outputs.kernelversion }}
@@ -105,8 +110,18 @@ jobs:
         mkdir wsl2_dist
         cp arch/x86/boot/bzImage wsl2_dist/wsl2Kernel
         cp linux.tar.gz wsl2_dist
+
+        cp arch/x86/boot/bzImage  kernel-${kernelversion}.img
+        cp linux.tar.gz           linux-headers-${kernelversion}.tar.gz
+        cp linux/lib/modules/$kernelversion/modules.builtin \
+                                  ${kernelversion}-modules.builtin
     - uses: actions/upload-artifact@master
       name: Upload Kernel
+      with:
+        name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}.img
+        path: kernel-${{ steps.build.outputs.kernelversion }}.img
+    - uses: actions/upload-artifact@master
+      name: Upload Kernel and headers
       with:
         name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}
         path: wsl2_dist
@@ -115,3 +130,55 @@ jobs:
       with:
         name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}-modules.builtin
         path: linux/lib/modules/${{ steps.build.outputs.kernelversion }}/modules.builtin
+    - name: Build deb
+      id: deb
+      env:
+        kernelversion: ${{ steps.build.outputs.kernelversion }}
+      run: |
+        set -x
+
+        pwd
+
+        ls -la
+
+        mkdir -p linux-headers-${kernelversion}/DEBIAN
+        mkdir -p deb/DEBIAN
+        curl -L -o deb/DEBIAN/control https://raw.githubusercontent.com/khs1994/WSL2-Linux-Kernel/master/deb/DEBIAN/control
+
+        sed "s/KERNEL_VERSION/${kernelversion}/g" deb/DEBIAN/control \
+            > linux-headers-${kernelversion}/DEBIAN/control
+
+        DEB_VERSION=`echo ${kernelversion} | cut -d '-' -f 1`
+        sed -i "s/DEB_VERSION/${DEB_VERSION}/g" \
+            linux-headers-${kernelversion}/DEBIAN/control
+
+        cat linux-headers-${kernelversion}/DEBIAN/control
+
+        sudo cp -a linux/. linux-headers-${kernelversion}
+        ls -la linux-headers-${kernelversion}
+        cd linux-headers-${kernelversion}/usr
+        sudo tar -zcvf ${kernelversion}-include.tar.gz include
+        sudo rm -rf include
+
+        cd ../../
+        DEB_NAME=linux-headers-${kernelversion}_${DEB_VERSION}-1_amd64.deb
+        sudo dpkg-deb -b linux-headers-${kernelversion} $DEB_NAME
+
+        echo ::set-output name=DEB_NAME::${DEB_NAME}
+    - uses: actions/upload-artifact@master
+      name: Upload deb
+      with:
+        name: ${{ steps.deb.outputs.DEB_NAME }}
+        path: ${{ steps.deb.outputs.DEB_NAME }}
+    - uses: docker://pcit/github-release
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repo: khs1994/WSL2-Linux-Kernel
+        # headers deb,kernel.img,headers .tar.gz,modules.builtin
+        files: ${{ steps.deb.outputs.DEB_NAME }},kernel-${{ steps.build.outputs.kernelversion }}.img,linux-headers-${{ steps.build.outputs.kernelversion }}.tar.gz,${{ steps.build.outputs.kernelversion }}-modules.builtin
+        target_commitish: refs/tags/${{ steps.build.outputs.kernelversion }}
+        note: ${{ steps.build.outputs.kernelversion }}
+        title: ${{ steps.build.outputs.kernelversion }}
+        checksum: sha256
+        draft: true
+        overwrite: true

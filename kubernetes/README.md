@@ -154,7 +154,7 @@ In Linux, **nftables** is available as a modern replacement for the kernel’s *
 ## 学习
 
 * 存储 `pv` `pvc` `flexvolume` `csi`
-* 网络 `cni` `flannel` `calico`
+* 网络 `cni` `calico`
 * 容器运行时 `cri` `docker` `cri-containerd` `cri-o`
 * 监控
 * 服务 `ingress`

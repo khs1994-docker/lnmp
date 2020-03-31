@@ -139,8 +139,8 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
-ENV PHP_VERSION 7.4.3
-# ENV PHP_URL="https://www.php.net/get/php-7.4.3.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.3.tar.xz.asc/from/this/mirror"
+ENV PHP_VERSION 7.4.4
+# ENV PHP_URL="https://www.php.net/get/php-7.4.4.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.4.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -151,8 +151,8 @@ ENV PHP_VERSION 7.4.3
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.4.3-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:7.4.3-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.4-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.4.4-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -286,7 +286,7 @@ RUN --mount=type=bind,from=php:7.4.3-alpine,source=/usr/src,target=/usr/local/sr
   \
   && strip --strip-all /usr/local/lib/libphp7.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-  && apk del --no-network --no-cache .build-deps \
+  && apk del --no-network .build-deps \
   \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
@@ -314,7 +314,7 @@ ENV PECL_EXTENSION \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.4.3-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.4-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \
@@ -331,9 +331,10 @@ RUN --mount=type=bind,from=php:7.4.3-alpine,source=/usr/local/bin,target=/opt/bi
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \
-      && apk del --no-network --no-cache .pecl_build_deps \
+      && apk del --no-network  .pecl_build_deps \
       && rm -rf /tmp/* \
-      && php -m
+      && php -m \
+      && ls -la $(php-config --extension-dir)
 
 WORKDIR /app
 

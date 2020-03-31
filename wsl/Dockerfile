@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.4.3
+ARG PHP_VERSION=7.4.4
 
 ARG PHP_NUM=74
 
@@ -348,7 +348,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:5.0.7 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:5.0.8 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 

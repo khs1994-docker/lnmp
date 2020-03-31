@@ -1,7 +1,5 @@
 # 新节点加入
 
-## Flanneld
-
 ## Docker/Containerd/CRI-O(容器运行时)
 
 ## kubelet
@@ -18,6 +16,6 @@ kube-proxy.config.yaml,\
 csr-crb.yaml,\
 kubectl.kubeconfig,\
 kube-proxy.kubeconfig,\
-flanneld-etcd-client.pem,\
-flanneld-etcd-client-key.pem} .
+etcd-client.pem,\
+etcd-client-key.pem} .
 ```

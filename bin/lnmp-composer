@@ -18,6 +18,8 @@ checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
 
 test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
 
+mkdir -p vendor
+
 docker run -i ${tty} --rm \
   --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} \
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} \

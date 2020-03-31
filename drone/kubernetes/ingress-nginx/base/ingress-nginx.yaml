@@ -36,6 +36,13 @@ spec:
         backend:
           serviceName: gogs
           servicePort: http
+  - host: gitea.t.khs1994.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gitea
+          servicePort: http
   - host: drone.t.khs1994.com
     http:
       paths:

@@ -1,12 +1,12 @@
-FROM nginx:1.17.8-alpine
+FROM nginx:1.17.9-alpine
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.17.0"
+      version="1.18.0"
 
 ARG FCCT_URL=https://github.com/coreos/fcct/releases/download/
-ARG FCCT_VERSION=v0.4.0
+ARG FCCT_VERSION=v0.5.0
 
-COPY --from=quay.io/coreos/fcct:v0.4.0 /usr/local/bin/fcct /usr/local/bin/fcct
+COPY --from=quay.io/coreos/fcct:v0.5.0 /usr/local/bin/fcct /usr/local/bin/fcct
 
 RUN set -ex \
       && ARCH=`uname -m` \
@@ -15,10 +15,10 @@ RUN set -ex \
       # && curl -L ${FCCT_URL}${FCCT_VERSION}/fcct-${ARCH}-unknown-linux-gnu > /usr/local/bin/fcct \
       # && chmod +x /usr/local/bin/fcct \
       # && /usr/local/bin/fcct --version \
-      && apk del curl \
+      && apk del --no-network curl \
       && apk add --no-cache --virtual .gettext gettext \
       && mv /usr/bin/envsubst /tmp/ \
-      && apk del .gettext \
+      && apk del --no-network .gettext \
       && mv /tmp/envsubst /usr/local/bin/
 
 COPY nginx.conf docker-entrypoint.sh /etc/nginx/
