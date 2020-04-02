@@ -2,7 +2,7 @@
 
 * https://github.com/tideways/php-xhprof-extension
 
-## 启用
+## 启用扩展
 
 编辑 `./config/php/docker-php.ini` 文件
 

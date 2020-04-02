@@ -14,9 +14,9 @@ $ lnmp-laravel new laravel
 
 ### Laravel 版本问题
 
-由于本项目的 PHP 镜像内置的是 Laravel 安装器，而安装器只能安装最新版本 `6.x`。
+由于本项目的 PHP 镜像内置的是 Laravel 安装器，而安装器只能安装最新版本。
 
-所以如果你想要安装 `5.5.x` LTS 版本请使用 [`lnmp-laravel-by-composer`](command.md) 安装。
+所以如果你想要安装特定版本（例如 `5.5.x`）请使用 [`lnmp-laravel-by-composer`](command.md) 安装。
 
 ```bash
 $ cd app
@@ -47,8 +47,6 @@ MEMCACHED_HOST=memcached
 ```
 
 ## Windows 运行 Laravel 响应缓慢的问题
-
-原因：监听宿主机目录通过 NFS 实现，性能存在问题。
 
 * Docker Desktop 上 Docker 运行在虚拟机，项目文件位于 Windows
 * Docker WSL2 上 Docker 运行在 WSL2(仍然是虚拟机)，项目文件位于 Windows

@@ -1,0 +1,17 @@
+{
+  "title": "JSON schema for configuring LWPM",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://lnmp.khs1994.com",
+  "$comment": "https://docs.lnmp.khs1994.com/windows/lwpm.html",
+  "description": "see https://docs.lnmp.khs1994.com/windows/lwpm.html",
+  "type": "object",
+  "properties": {
+    "url": {
+      "description": "soft download url"
+    },
+    "urlMirror": {
+      "description": "soft download url mirror"
+    }
+  },
+  "additionalProperties": false
+}

@@ -86,7 +86,7 @@ export PATH=$LNMP_PATH:$LNMP_PATH/bin:$PATH
 
 >`docker-compose.override.yaml` 是为了重写 `docker-compose.yaml`，执行 `docker-compose up -d` 会默认加载该文件。
 
-调试参数配置时请把 `up -d` 替换为 `config` 即可。
+你可以使用 `config` 命令查看最终的 `docker compose` 配置文件。
 
 ### 使用 docker-compose 命令
 

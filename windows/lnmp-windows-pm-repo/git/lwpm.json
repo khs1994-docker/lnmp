@@ -7,5 +7,7 @@
   "bug": "https://git-scm.com/community",
   "github": "git/git",
   "releases": "https://github.com/git/git/releases",
-  "preUrl" : ""
+  "preUrl" : "",
+  "url": "https://github.com/git-for-windows/git/releases/download/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe",
+  "urlMirror":"https://mirrors.huaweicloud.com/git-for-windows/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe"
 }

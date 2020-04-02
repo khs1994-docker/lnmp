@@ -32,7 +32,7 @@ $ lnmp-windows-pm.ps1 init example
 
 ## 添加一个包，并安装软件
 
-在 https://packagist.org/packages/lwpm/ 寻找一个包，并使用以下命令添加包并安装包所提供的软件：
+在 https://packagist.org/packages/lwpm/ 寻找一个包，并使用以下命令添加包并安装该包所提供的软件：
 
 ```bash
 $ cd ~/lnmp
@@ -54,19 +54,19 @@ $ lnmp-windows-pm.ps1 install example
 $ lnmp-windows-pm.ps1 install-service minio "C:/bin/minio","server","$HOME/minio" C:/logs/minio.log
 ```
 
-移除服务
+**移除服务**
 
 ```powershell
 $ lnmp-windows-pm.ps1 remove-service minio
 ```
 
-启动服务
+**启动服务**
 
 ```powershell
 lnmp-windows-pm.ps1 start-service minio
 ```
 
-停止服务
+**停止服务**
 
 ```powershell
 lnmp-windows-pm.ps1 stop-service minio

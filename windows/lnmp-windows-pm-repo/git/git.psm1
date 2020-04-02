@@ -14,6 +14,10 @@ $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$urlMirror=$lwpm.urlMirror
+$preUrl=$lwpm.preUrl
+$preUrlMirror=$lwpm.preUrlMirror
 
 Function install_after(){
 
@@ -24,8 +28,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stableVersion
   }
 
-  $url="https://github.com/git-for-windows/git/releases/download/v${VERSION}.windows.1/Git-${GIT_VERSION}-64-bit.exe"
-  $url="https://mirrors.huaweicloud.com/git-for-windows/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe"
+  $url=$urlMirror.replace('${VERSION}',${VERSION});
 
   if($isPre){
     $VERSION=$preVersion
@@ -34,7 +37,7 @@ Function install($VERSION=0,$isPre=0){
 
   }
 
-  $filename="Git-${GIT_VERSION}-64-bit.exe"
+  $filename="Git-${VERSION}-64-bit.exe"
   $unzipDesc="git"
 
   if($(_command git)){

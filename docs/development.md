@@ -10,7 +10,7 @@
 
 **3.** **可选项** 在 `.env` 文件中通过 `LNMP_PHP_PATH` 变量修改 **容器** 内 PHP 项目路径，默认为 `/app`
 
-**4.** 从 Git 克隆或移动已有的 PHP 项目文件到 `./app/my-project` 目录下(可自定义，请查看下方 `APP_ROOT` 一节)，或新建 PHP 项目文件夹
+**4.** 从 **Git 克隆** 或 **移动** 或 **新建** PHP 项目文件 `./app/my-project` (可自定义，请查看下方 `APP_ROOT` 一节)
 
 **5.** 在 `./config/nginx/` 参考示例配置，新建 `nginx` 配置文件(`./config/nginx/*.conf`)
 
@@ -19,8 +19,6 @@
 **7.** `IDE(PhpStorm、VSCode)` 打开 `./app/my-project` ，开始编写代码
 
 **8.** VSCode 远程开发请参考 `vscode-remote` 文件夹
-
-> 谨慎执行 `$ docker volume prune`，否则将会删除数据库数据。
 
 ## APP_ROOT
 
@@ -73,3 +71,7 @@ $ ./lnmp-docker scale php7=1
 - LNMP_NGINX_VERSION=1.17.9
 + # LNMP_NGINX_VERSION=1.17.9
 ```
+
+## 危险的命令
+
+**$ docker volume prune** 执行 `$ lnmp-docker down` 之后执行该命令将会删除数据卷（数据库数据）
