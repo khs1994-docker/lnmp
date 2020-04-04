@@ -1417,10 +1417,10 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
 
       foreach ($image in $images){
          printInfo "Handle ${image}"
-         docker pull gcr.io/google-containers/$image
-         docker tag  gcr.io/google-containers/$image k8s.gcr.io/$image
+         docker pull gcr.io/google_containers/$image
+         docker tag  gcr.io/google_containers/$image k8s.gcr.io/$image
          # docker push k8s.gcr.io/$image
-         docker rmi  gcr.io/google-containers/$image
+         docker rmi  gcr.io/google_containers/$image
       }
 
       docker container rm -f `

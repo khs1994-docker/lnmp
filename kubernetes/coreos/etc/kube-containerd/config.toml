@@ -29,7 +29,8 @@ oom_score = 0
     stream_server_address = "127.0.0.1"
     stream_server_port = "0"
     enable_selinux = false
-    sandbox_image = "gcr.azk8s.cn/google-containers/pause:3.2"
+    # sandbox_image = "gcr.mirror/google-containers/pause:3.2"
+    sandbox_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
     stats_collect_period = 10
     systemd_cgroup = true
     enable_tls_streaming = false
@@ -53,11 +54,11 @@ oom_score = 0
       [plugins.cri.registry.mirrors]
         [plugins.cri.registry.mirrors."docker.io"]
           # endpoint = ["https://registry-1.docker.io"]
-          endpoint = ["https://dockerhub.azk8s.cn"]
-        [plugins.cri.registry.mirrors."gcr.io"]
-          endpoint = ["https://gcr.azk8s.cn"]
-        [plugins.cri.registry.mirrors."quay.io"]
-          endpoint = ["https://quay.azk8s.cn"]
+          endpoint = ["https://hub-mirror.c.163.com"]
+        # [plugins.cri.registry.mirrors."gcr.io"]
+        #  endpoint = ["https://gcr.mirror"]
+        # [plugins.cri.registry.mirrors."quay.io"]
+        #  endpoint = ["https://"]
     [plugins.cri.x509_key_pair_streaming]
       tls_cert_file = ""
       tls_key_file = ""

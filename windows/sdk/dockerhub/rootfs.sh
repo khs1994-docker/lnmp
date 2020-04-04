@@ -10,7 +10,7 @@ rootfs(){
   local os=${4:-linux}
   local dist=$5
   local layersIndex=${6:-0}
-  local registry=${7:-dockerhub.azk8s.cn}
+  local registry=${7:-hub-mirror.c.163.com}
 
   echo "==> Get token ..." > /dev/stderr
 

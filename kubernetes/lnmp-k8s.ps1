@@ -74,9 +74,6 @@ Commands:
   kubectl-install    Install kubectl
   kubectl-info       Get kubectl latest version info
 
-  minikube-install   Install minikube
-  minikube-up        Start minikube
-
   create             Deploy lnmp on k8s {ENVIRONMENT: development (default) | testing | staging | production} {OPTIONS}
   delete             Stop lnmp on k8s, keep data resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
   cleanup            Stop lnmp on k8s, and remove all resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
@@ -348,21 +345,6 @@ $ kubectl config use-context docker-desktop
     }
 
     kubectl -n $NAMESPACE delete ingress -l app=lnmp
-  }
-
-  "minikube-up" {
-    minikube.exe start `
-      --hyperv-virtual-switch="minikube" `
-      -v 10 `
-      --registry-mirror=https://dockerhub.azk8s.cn `
-      --vm-driver="hyperv" `
-      --memory=4096
-  }
-
-  "minikube-install" {
-    curl.exe -fsSL `
-      http://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-windows-amd64.exe `
-      -o $HOME/minikube.exe
   }
 
   "helm-development" {

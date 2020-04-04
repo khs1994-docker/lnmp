@@ -34,7 +34,7 @@ root = /
 `/etc/default/docker`
 
 ```bash
-DOCKER_OPTS="--registry-mirror=https://dockerhub.azk8s.cn --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock --data-root=/wsl/k8s-data/docker"
+DOCKER_OPTS="--registry-mirror=https://hub-mirror.c.163.com --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock --data-root=/wsl/k8s-data/docker"
 ```
 
 ## 3. 不要设置 `DOCKER_HOST` 环境变量

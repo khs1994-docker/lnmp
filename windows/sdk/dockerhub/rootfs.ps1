@@ -22,7 +22,7 @@ function rootfs($image="alpine",
                 $os="linux",
                 $dist,
                 $layersIndex=0,
-                $registry="dockerhub.azk8s.cn",
+                $registry="hub-mirror.c.163.com",
                 $tokenServer="https://auth.docker.io/token",
                 $tokenService="registry.docker.io"){
 

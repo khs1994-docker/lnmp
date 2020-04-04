@@ -48,7 +48,7 @@ if($args[0] -eq "reset"){
 
 # --container-runtime=docker `
 # --container-runtime-endpoint=unix:///var/run/dockershim.sock `
-# --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.2 `
+# --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 `
 # --image-pull-progress-deadline=15m `
 # --network-plugin=cni `
 # --cni-cache-dir=/opt/k8s/var/lib/cni/cache `

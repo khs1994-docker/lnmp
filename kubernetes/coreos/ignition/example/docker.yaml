@@ -24,7 +24,7 @@ storage:
             "tlskey": "${K8S_ROOT}/certs/docker/server-key.pem",
             "tlscacert": "${K8S_ROOT}/certs/ca.pem",
             "registry-mirrors" : [
-              "https://dockerhub.azk8s.cn"
+              "https://hub-mirror.c.163.com"
             ],
             "debug" : true,
             "dns" : [

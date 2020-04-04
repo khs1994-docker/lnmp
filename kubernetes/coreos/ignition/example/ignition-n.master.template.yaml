@@ -72,12 +72,12 @@ systemd:
         ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
 
         ExecStartPre=-podman container rm etcd
-        ExecStartPre=-/bin/podman pull gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION}
+        ExecStartPre=-/bin/podman pull quay.io/coreos/etcd:v${ETCD_VERSION}
         ExecStart= podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
           -v /opt/k8s/var/lib/etcd:/var/lib/etcd \
           -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
-          gcr.azk8s.cn/etcd-development/etcd:v${ETCD_VERSION} \
+          quay.io/coreos/etcd:v${ETCD_VERSION} \
           etcd \
           --enable-v2=true \
           --name="coreos{{n}}" \
@@ -372,7 +372,8 @@ systemd:
         # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
         # --cni-bin-dir=/opt/k8s/opt/cni/bin \
         # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
-        # --pod-infra-container-image=gcr.azk8s.cn/google-containers/pause:3.2 \
+        # --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
+        # --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
         # --image-pull-progress-deadline=15m \
 
         ExecStartPost=/usr/bin/env chown -R core:core /home/core/.kube
