@@ -26,7 +26,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$pre_version
   }
 
-  $url="https://github.com/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_windows_amd64.zip"
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename="frp_${VERSION}_windows_amd64.zip"
   $unzipDesc="frp"

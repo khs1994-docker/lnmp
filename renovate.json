@@ -28,6 +28,7 @@
   "includePaths" : [
     "scripts/docker-compose.bump.yml",
     "kubernetes/docker-compose.bump.yml",
-    "drone/scripts/docker-compose.bump.yml"
+    "drone/scripts/docker-compose.bump.yml",
+    "windows/lnmp-windows-pm-repo/docker-compose.bump.yml"
   ]
 }
