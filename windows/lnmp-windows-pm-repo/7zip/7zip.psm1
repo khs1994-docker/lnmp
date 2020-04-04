@@ -6,25 +6,31 @@ Import-module exportPath
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$url_mirror=$lwpm.'url-mirror'
+$pre_url=$lwpm.'pre-url'
+$pre_url_mirror=$lwpm.'pre-url-mirror'
+$insert_path=$lwpm.path
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=$stable_version
   }
 
   if($isPre){
-    $VERSION=$preVersion
+    $VERSION=$pre_version
   }
 
-  $url="https://www.7-zip.org/a/7z${VERSION}-x64.msi"
+  $url=$url.replace('${VERSION}',${VERSION});
+
   $filename="7z${VERSION}-x64.msi"
   $unzipDesc="7zip"
 

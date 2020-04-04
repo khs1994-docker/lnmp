@@ -108,6 +108,6 @@ oom_score = 0
   [plugins."io.containerd.metadata.v1.bolt"]
     content_sharing_policy = "shared"
   [plugins."io.containerd.runtime.v2.task"]
-    platforms = ["windows/amd64", "linux/amd64"]
+    platforms = ["windows/amd64"]
   [plugins."io.containerd.service.v1.diff-service"]
-    default = ["windows", "windows-lcow"]
+    default = ["windows"]

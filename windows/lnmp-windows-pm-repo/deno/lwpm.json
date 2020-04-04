@@ -1,10 +1,11 @@
 {
   "name": "deno",
   "description": "A secure runtime for JavaScript and TypeScript built with V8, Rust, and Tokio",
-  "version": "0.38.0",
-  "preVersion": "0.38.0",
+  "version": "0.39.0",
+  "pre-version": "0.39.0",
   "homepage": "https://deno.land/",
   "bug": "https://github.com/denoland/deno/issues",
   "github": "denoland/deno",
-  "releases": "https://github.com/denoland/deno/releases"
+  "releases": "https://github.com/denoland/deno/releases",
+  "url": "https://github.com/denoland/deno/releases/download/v${VERSION}/deno-x86_64-pc-windows-msvc.zip"
 }

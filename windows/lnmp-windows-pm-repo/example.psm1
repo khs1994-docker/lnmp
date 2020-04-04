@@ -9,18 +9,19 @@ $ErrorActionPreference='stop'
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 # $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 # $bug=$lwpm.bug
 $name=$lwpm.name
 # $description=$lwpm.description
 $url=$lwpm.url
-$urlMirror=$lwpm.urlMirror
-$preUrl=$lwpm.preUrl
-$preUrlMirror=$lwpm.preUrlMirror
+$url_mirror=$lwpm.'url-mirror'
+$pre_url=$lwpm.'pre-url'
+$pre_url_mirror=$lwpm.'pre-url-mirror'
+$insert_path=$lwpm.path
 
 Function install_after(){
 
@@ -28,30 +29,30 @@ Function install_after(){
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=$stable_version
   }
 
   # stable 与 pre url 不同
   # 先定义 stable url
-  # $url=$urlMirror.replace('${VERSION}',${VERSION});
+  # $url=$url_mirror.replace('${VERSION}',${VERSION});
   if((_getHttpCode $url)[0] -eq 4){
     # $url=$url.replace('${VERSION}',${VERSION});
   }
 
   if($isPre){
-    $VERSION=$preVersion
+    $VERSION=$pre_version
 
     # 后定义 pre url
-    # $url=$preUrlMirror.replace('${VERSION}',${VERSION});
+    # $url=$pre_url_mirror.replace('${VERSION}',${VERSION});
     if((_getHttpCode $url)[0] -eq 4){
-      # $url=$preUrl.replace('${VERSION}',${VERSION});
+      # $url=$pre_url.replace('${VERSION}',${VERSION});
     }
   }else{
 
   }
 
   # stable 与 pre url 相同，默认
-  $url=$urlMirror.replace('${VERSION}',${VERSION});
+  $url=$url_mirror.replace('${VERSION}',${VERSION});
   if((_getHttpCode $url)[0] -eq 4){
     $url=$url.replace('${VERSION}',${VERSION});
   }
@@ -59,7 +60,7 @@ Function install($VERSION=0,$isPre=0){
   $filename=""
   $unzipDesc="example"
 
-  # _exportPath "/path"
+  # _exportPath $lwpm.path
 
   if($(_command example)){
     $ErrorActionPreference='Continue'
@@ -92,7 +93,7 @@ Function install($VERSION=0,$isPre=0){
   # _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  # _exportPath "/path"
+  # _exportPath $lwpm.path
 
   install_after
 
@@ -115,10 +116,10 @@ Function uninstall($prune=0){
 # 自定义获取最新版本号的方法
 
 function getLatestVersion(){
-  $stableVersion = $null
-  $preVersion = $null
+  $stable_version = $null
+  $pre_version = $null
 
   # TODO
 
-  return $stableVersion,$preVersion
+  return $stable_version,$pre_version
 }

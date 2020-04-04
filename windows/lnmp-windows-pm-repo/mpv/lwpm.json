@@ -2,7 +2,7 @@
   "name": "mpv",
   "description": "Video player based on MPlayer/mplayer2",
   "version": "20181002",
-  "preVersion": "20181002",
+  "pre-version": "20181002",
   "homepage": "https://mpv.io/",
   "bug": "https://mpv.io/bug-reports/",
   "github": "mpv-player/mpv",

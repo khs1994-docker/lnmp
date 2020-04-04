@@ -2,15 +2,15 @@
   "name": "example",
   "description": "",
   "version": "x.y.z",
-  "preVersion": "x.y.z-alpha.1",
+  "pre-version": "x.y.z-alpha.1",
   "homepage": "",
   "bug": "",
   "github": "repo/name",
   "releases": "",
   "url": "",
-  "urlMirror": "",
-  "preUrl": "",
-  "preUrlMirror": "",
+  "url-mirror": "",
+  "pre-url": "",
+  "pre-url-mirror": "",
   "scripts": {
     "preinstall": "",
     "install": "",
@@ -21,5 +21,8 @@
     "pretest": "",
     "test": "",
     "posttest":""
-  }
+  },
+  "path": [
+    "C:/bin"
+  ]
 }

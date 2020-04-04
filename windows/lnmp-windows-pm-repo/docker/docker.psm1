@@ -3,25 +3,25 @@ Import-Module unzip
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
 $url=$lwpm.url
-$preUrl=$lwpm.preUrl
+$pre_url=$lwpm.'pre-url'
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=$stable_version
   }
 
   if($isPre){
-    $VERSION=$preVersion
-    $url=$preUrl
+    $VERSION=$pre_version
+    $url=$pre_url
   }
 
   $filename="docker.exe"

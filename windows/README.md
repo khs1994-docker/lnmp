@@ -72,7 +72,7 @@ https://dev.mysql.com/downloads/mysql/
 
 8.0.4-rc+ ，默认使用新的密码验证机制 `caching_sha2_password` ，目前主流的客户端不支持该方式，所以我们仍然采用旧的密码验证机制。
 
-在 `C` 盘根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `my.cnf.example`.
+在 `C` 盘根目录增加 `my.cnf` 文件，文件内容可以参考本目录下的 `config/my.cnf`.
 
 ```bash
 # 这条命令会产生一个随机密码，--initialize-insecure 初始化默认密码为空
@@ -99,7 +99,7 @@ $ select-string "A temporary password is generated for" C:\mysql\data\*.err
 
 $ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 
-# 否则会报错
+# 必须修改临时密码，否则会报错
 
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 

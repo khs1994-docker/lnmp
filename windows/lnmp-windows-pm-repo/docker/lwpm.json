@@ -2,11 +2,11 @@
   "name": "docker",
   "description": "Docker: the open-source application container engine",
   "version": "19.03.5",
-  "preVersion": "19.03.5",
+  "pre-version": "19.03.5",
   "homepage": "https://www.docker.com/",
   "bug": "https://github.com/docker/for-win/issues",
   "github": "docker/docker-ce",
   "releases": "https://github.com/docker/docker-ce/releases",
   "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe",
-  "preUrl": "https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe"
+  "pre-url": "https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe"
 }

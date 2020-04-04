@@ -2,11 +2,11 @@
   "name": "vsCode",
   "description": "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications",
   "version": "1.42.1",
-  "preVersion": "1.43.0",
+  "pre-version": "1.43.0",
   "homepage": "https://code.visualstudio.com/",
   "bug": "https://github.com/Microsoft/vscode/issues",
   "github": "microsoft/vscode",
   "releases": "https://github.com/Microsoft/vscode/releases",
   "url": "https://update.code.visualstudio.com/latest/win32-x64-user/stable",
-  "preUrl": "https://update.code.visualstudio.com/latest/win32-x64-user/insider"
+  "pre-url": "https://update.code.visualstudio.com/latest/win32-x64-user/insider"
 }
