@@ -4,7 +4,7 @@
 
 * 系统 `Windows 10`
 
-* 终端 [PowerShell Core 6.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也可以。
+* 终端 [PowerShell Core 7.0](https://github.com/PowerShell/PowerShell/releases)，系统自带的 `PowerShell` 也可以。
 
 * 部分软件放在了 C 盘根目录，即 `C:\nginx` `C:\php` `C:\mysql` `C:\Apache24`
 
@@ -26,7 +26,7 @@ $ lnmp-windows-pm.ps1 install xxx [--pre 安装测试版软件]
 # $ lnmp-windows-pm.ps1 install go
 ```
 
-## 使用 PS1 脚本控制软件
+## 使用 PS1 脚本控制 `WNAMP`
 
 为了方便的管理 `WNAMP`，你可以使用本项目 windows 目录下的脚本 `lnmp-wnamp.ps1`
 
@@ -76,20 +76,19 @@ https://dev.mysql.com/downloads/mysql/
 
 ```bash
 # 这条命令会产生一个随机密码，--initialize-insecure 初始化默认密码为空
-
 $ mysqld --initialize
 
+# 安装服务
 $ mysqld --install
 
 # 启动服务
-
 $ net start mysql
 
 $ mysql -uroot -p
 
-# 初始密码在 mysql 安装目录（C:\mysql） data/计算机名.err 的文件，或者使用以下命令查看密码
+# 初始密码在 mysql 安装目录（C:\mysql） data/${env:COMPUTERNAME}.err 的文件，或者使用以下命令查看密码
 
-$ select-string "A temporary password is generated for" C:\mysql\data\*.err
+$ select-string "A temporary password is generated for" C:\mysql\data\${env:COMPUTERNAME}.err
 
 [Note] [MY-010454] A temporary password is generated for root@localhost: VgcYZ=Myf4N.
 
@@ -99,7 +98,7 @@ $ select-string "A temporary password is generated for" C:\mysql\data\*.err
 
 $ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
 
-# 必须修改临时密码，否则会报错
+# 必须执行上一步修改临时密码，否则会报错
 
 ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
 
@@ -117,7 +116,7 @@ $ CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'mytest' ;
 $ GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION ;
 ```
 
-### 停止服务
+**停止服务**
 
 ```bash
 $ net stop mysql
@@ -155,17 +154,7 @@ $ php -v
 
 其他启动方式，请在最上方 `问题反馈` 中的链接查看
 
-#### RunHiddenConsole.zip
-
-默认的直接运行 `php-cgi.exe` 会占用窗口，这里使用 `RunHiddenConsole` 可以后台运行。
-
-http://blogbuildingu.com/files/RunHiddenConsole.zip
-
-```bash
-$ RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c C:/php/php.ini
-```
-
-### pecl 下载扩展(或者使用 pickle)
+### pecl 手动下载扩展(或者使用 pickle)
 
 手动在 https://pecl.php.net/ 下载扩展（注意与 PHP 版本对应）。
 
@@ -176,6 +165,8 @@ extension=C:\php-ext\php_yaml
 
 zend_extension=C:\php-ext\php_xdebug
 ```
+
+* 或者使用 [pickle](https://github.com/khs1994-php/pickle)
 
 ## Composer
 
@@ -243,7 +234,7 @@ LoadModule ssl_module modules/mod_ssl.so
 Include conf.d/*.conf
 ```
 
-首次安装，必须先安装服务。
+**首次安装，必须先安装服务。**
 
 ```bash
 $ httpd -k install
@@ -251,7 +242,7 @@ $ httpd -k install
 # $ httpd -k uninstall
 ```
 
-测试配置文件通过之后，启动服务。
+**测试配置文件通过之后，启动服务。**
 
 ```bash
 $ httpd -t
@@ -322,7 +313,7 @@ $ sudo mongod --fork --logpath=/var/run/mongodb/error.log
 
 ## Memcached WSL
 
-[`memcached`](https://pecl.php.net/package/memcached) 扩展暂不支持 Windows。
+[php `memcached` 扩展](https://pecl.php.net/package/memcached) 暂不支持 Windows。
 
 ```bash
 $ sudo apt install memcached

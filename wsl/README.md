@@ -26,8 +26,6 @@ $ wsl -l -v
 打开 PowerShell
 
 ```bash
-$ wsl --set-default-version 2
-
 $ [environment]::SetEnvironmentvariable("LNMP_PATH", "$env:HOME/lnmp", "User");
 
 $ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")

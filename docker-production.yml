@@ -404,8 +404,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    # image: nginx:1.17.9-alpine
-    image: ranadeeppolavarapu/nginx-http3
+    image: nginx:1.17.9-alpine
+    # image: ranadeeppolavarapu/nginx-http3
     ports:
       - "443:443/tcp"
       - "443:443/udp"
