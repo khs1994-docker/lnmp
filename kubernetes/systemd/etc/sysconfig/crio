@@ -1,0 +1,2 @@
+CRIO_NETWORK_OPTIONS=" --cni-plugin-dir /opt/k8s/opt/cni/bin/ --cni-config-dir /opt/k8s/etc/cni/net.d"
+CRIO_RUNTIME_OPTIONS=" --hooks-dir /usr/local/share/containers/oci/hooks.d "

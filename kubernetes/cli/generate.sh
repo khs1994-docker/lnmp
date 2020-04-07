@@ -26,3 +26,5 @@ done
 
 kube-proxy      --write-config-to ./kube-proxy.config.yaml || true
 kube-scheduler  --write-config-to ./kube-scheduler.config.yaml || true
+
+# /usr/local/bin/crio config --default > crio.toml || true

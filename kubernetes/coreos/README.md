@@ -74,6 +74,8 @@ $ ./coreos add-node {n} [TYPE:master | node] # n > 3
 ### 启动本地服务器
 
 ```bash
+$ docker pull khs1994/fcos
+
 $ ./coreos server
 ```
 
