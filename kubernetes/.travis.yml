@@ -137,6 +137,8 @@ before_script:
   - diff crio.conf crio.default.conf || true
   - ls -R /etc/crio/crio.conf.d || true
   - cat /etc/crio/crio.conf.d/00-default.conf || true
+  - echo "!! crio.conf.d 中的文件会覆盖 /etc/crio/crio.conf 中的配置，这里删除 !!" > /dev/null
+  - echo "!! 所有的配置均在 /etc/crio/crio.conf 中进行配置                    !!" > /dev/null
   - sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
   - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd) || true
@@ -227,8 +229,8 @@ script:
   - kubectl get pod -o wide
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
-  - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes
-  - kubectl exec ${POD_NAME} -- ping -c 5 github.com
+  - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes
+  - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
   - kubectl delete deployment nginx || true
   - kubectl delete pod nginx || true
   - kubectl get all

@@ -22,7 +22,7 @@ sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
 
 ./lnmp-k8s create
 echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
-ping -c 1 laravel2.t.khs1994.com
+ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
 sleep 120
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com

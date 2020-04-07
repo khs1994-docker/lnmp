@@ -19,6 +19,8 @@
 * https://github.com/cri-o/cri-o/blob/master/tutorial.md
 * https://github.com/cri-o/cri-o/blob/master/tutorials/kubernetes.md
 
+crio 会加载 `/etc/containers/registries.conf`
+
 ### Fedora kubernetes DNS 解析不了
 
 与 `virbr0` 网卡有关，关闭相关进程。
