@@ -1,0 +1,16 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=827846
+  // for the documentation about the extensions.json format
+  "recommendations": [
+      "redhat.vscode-yaml",
+      "zainchen.json",
+      "william-voyek.vscode-nginx",
+      "ms-azuretools.vscode-docker",
+      "ms-kubernetes-tools.vscode-kubernetes-tools",
+      "hangxingliu.vscode-systemd-support",
+      "ms-vscode-remote.vscode-remote-extensionpack",
+      "ms-vscode-remote.remote-wsl",
+      "ms-vscode-remote.remote-containers",
+      "ms-vscode.powershell"
+  ]
+}

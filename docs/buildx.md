@@ -9,9 +9,7 @@
 ### 国内环境使用如下命令
 
 ```bash
-# 请勿使用
-
-# $ docker buildx create --use --name=mybuilder --driver docker-container --driver-opt image=dockerpracticesig/buildkit:master
+$ docker buildx create --use --name=mybuilder --driver docker-container --driver-opt image=dockerpracticesig/buildkit:master
 ```
 
 ### 其他环境使用如下命令

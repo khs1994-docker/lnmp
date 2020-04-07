@@ -74,4 +74,4 @@ $ ./lnmp-docker scale php7=1
 
 ## 危险的命令
 
-**$ docker volume prune** 执行 `$ lnmp-docker down` 之后执行该命令将会删除数据卷（数据库数据）
+**$ docker volume prune** 执行 `$ lnmp-docker down` 之后执行该命令将会删除数据卷（例如：数据库数据）

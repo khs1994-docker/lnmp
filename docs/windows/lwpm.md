@@ -63,11 +63,11 @@ $ lnmp-windows-pm.ps1 remove-service minio
 **启动服务**
 
 ```powershell
-lnmp-windows-pm.ps1 start-service minio
+$ lnmp-windows-pm.ps1 start-service minio
 ```
 
 **停止服务**
 
 ```powershell
-lnmp-windows-pm.ps1 stop-service minio
+$ lnmp-windows-pm.ps1 stop-service minio
 ```
