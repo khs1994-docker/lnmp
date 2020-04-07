@@ -260,7 +260,7 @@ env:
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
 
-matrix:
+jobs:
   include:
     # alpha version
     - os: linux

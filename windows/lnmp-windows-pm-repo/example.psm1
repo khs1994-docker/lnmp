@@ -35,28 +35,29 @@ Function install($VERSION=0,$isPre=0){
   # stable 与 pre url 不同
   # 先定义 stable url
   # $url=$url_mirror.replace('${VERSION}',${VERSION});
-  if((_getHttpCode $url)[0] -eq 4){
+  # if((_getHttpCode $url)[0] -eq 4){
     # $url=$url.replace('${VERSION}',${VERSION});
-  }
+  # }
 
   if($isPre){
     $VERSION=$pre_version
 
     # 后定义 pre url
     # $url=$pre_url_mirror.replace('${VERSION}',${VERSION});
-    if((_getHttpCode $url)[0] -eq 4){
+    # if((_getHttpCode $url)[0] -eq 4){
       # $url=$pre_url.replace('${VERSION}',${VERSION});
-    }
+    # }
   }else{
 
   }
 
   # stable 与 pre url 相同，默认
-  $url=$url_mirror.replace('${VERSION}',${VERSION});
-  if((_getHttpCode $url)[0] -eq 4){
-    $url=$url.replace('${VERSION}',${VERSION});
-  }
+  # $url=$url_mirror.replace('${VERSION}',${VERSION});
+  # if((_getHttpCode $url)[0] -eq 4){
+  $url=$url.replace('${VERSION}',${VERSION});
+  # }
 
+  # fix me
   $filename=""
   $unzipDesc="example"
 

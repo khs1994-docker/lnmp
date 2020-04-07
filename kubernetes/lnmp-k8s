@@ -628,22 +628,10 @@ _gvisor_containerd_conf(){
     return
   fi
 
-  print_info "config containerd with gvisor(runsc) ..."
-  cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/config.toml
-# [plugins.linux]
-#  shim = "/usr/local/bin/gvisor-containerd-shim"
-[plugins.cri.containerd.runtimes.runsc]
-  runtime_type = "io.containerd.runsc.v1"
-  # runtime_type = "io.containerd.runtime.v1.linux"
-EOF
-
 # containerd 1.3.x
 cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
-# [plugins.linux]
-#  shim = "/usr/local/bin/gvisor-containerd-shim"
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
-  # runtime_type = "io.containerd.runtime.v1.linux"
   # runtime_engine = ""
   # runtime_root = ""
   # privileged_without_host_devices = false
@@ -698,17 +686,8 @@ _runc_install(){
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/kube-containerd;fi
 
-  if [ -f /usr/bin/containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd already install"; \
-    containerd --version; \
-  fi
-
-  if ! [ -f /usr/bin/containerd ];then \
-    print_info "containerd not found, please install docker-ce first"; \
-  fi
-
   if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
-    echo "only support [ amd64 ] and [ arm64 ], other platform install containerd can by docker-ce"
+    echo "only support [ amd64 ] and [ arm64 ]"
 
     return
   fi
@@ -749,17 +728,7 @@ _containerd_install(){
     return
   fi
 
-  # if [ "$GOOS" = "linux" -a "$GOARCH" = 'amd64' ];then
-    $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
-  # else
-  #   # arm64 unzip
-  #   command -v unzip > /dev/null || echo "please install unzip"
-  #   command -v unzip > /dev/null || exit 1
-  #   $(_sudo) unzip -o -d ${K8S_ROOT}/bin ${TMP_ROOT}/${TAR_FILE}
-  #   $(_sudo) chmod +x ${K8S_ROOT}/bin/linux_arm64/*
-  #   $(_sudo) mv ${K8S_ROOT}/bin/linux_arm64/* ${K8S_ROOT}/bin
-  #   $(_sudo) rm -rf ${K8S_ROOT}/bin/linux_arm64
-  # fi
+  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
   $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
   $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
