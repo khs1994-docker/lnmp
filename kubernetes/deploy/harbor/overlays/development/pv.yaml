@@ -1,4 +1,3 @@
-# Source: harbor/templates/chartmuseum/chartmuseum-pvc.yaml
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -14,7 +13,6 @@ spec:
   hostPath:
     path: /var/lib/khs1994-docker-lnmp/harbor/chartmuseum
 ---
-# Source: harbor/templates/jobservice/jobservice-pvc.yaml
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -30,7 +28,6 @@ spec:
   hostPath:
     path: /var/lib/khs1994-docker-lnmp/harbor/jobservice
 ---
-# Source: harbor/templates/registry/registry-pvc.yaml
 kind: PersistentVolume
 apiVersion: v1
 metadata:

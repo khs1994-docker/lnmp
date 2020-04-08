@@ -2,4 +2,3 @@ bases:
 - ../../base
 resources:
 - pv.yaml
-- pvc.yaml

@@ -1,0 +1,16 @@
+function kustomize(){
+  kubectl kustomize > patches.yaml
+}
+
+cd secret/harbor-clair/
+kustomize
+
+cd ../../
+cd secret/harbor-core/
+kustomize
+
+cd ../../
+cd secret/harbor-notary-server/
+kustomize
+
+cd ../../

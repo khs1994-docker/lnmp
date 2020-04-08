@@ -1,5 +1,0 @@
-bases:
-- ../../../postgresql/custom
-patches:
-- patch.yaml
-namePrefix: harbor-
