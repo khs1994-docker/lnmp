@@ -1,0 +1,9 @@
+/*
+!.gitignore
+!README.md
+!kustomization.yaml
+!cert
+cert/*
+!cert/root-ca.crt
+!cert/t.khs1994.com.crt
+!cert/t.khs1994.com.key

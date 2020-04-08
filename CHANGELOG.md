@@ -8,6 +8,8 @@
 
 ### Bug fixes:
 
+* replace outdated tls cert
+
 ### Changes:
 
 ### Updates:

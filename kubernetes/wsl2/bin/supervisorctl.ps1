@@ -1,7 +1,7 @@
 Function printInfo(){
-  "
+  write-host "
 ==> $args
-"
+" -ForegroundColor Green
 }
 
 Function _cp_conf(){

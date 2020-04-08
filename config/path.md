@@ -36,8 +36,8 @@
 │   ├── demo-laravel.config
 │   ├── demo-ssl
 │   │   ├── root-ca.crt
-│   │   ├── www.t.khs1994.com.crt
-│   │   └── www.t.khs1994.com.key
+│   │   ├── t.khs1994.com.crt
+│   │   └── t.khs1994.com.key
 │   ├── demo-vhost.conf
 │   └── README.md
 ├── mariadb
@@ -88,8 +88,8 @@
 │   ├── demo-satis.conf
 │   ├── demo-ssl
 │   │   ├── root-ca.crt
-│   │   ├── www.t.khs1994.com.crt
-│   │   └── www.t.khs1994.com.key
+│   │   ├── t.khs1994.com.crt
+│   │   └── t.khs1994.com.key
 │   ├── demo-ssl.config
 │   ├── demo-toolkit-docs.conf
 │   ├── demo-www.conf

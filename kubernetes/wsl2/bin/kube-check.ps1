@@ -6,7 +6,7 @@ if(!$?){
   # k8s-data 是否安装
   wsl -d k8s-data -- echo '==> WSL2 dist [ k8s-data ] exists'
   if(!$?){
-    "==> WSL2 dist [ k8s-data ] not found, please see README.SERVER.md"
+    Write-Warning "==> WSL2 dist [ k8s-data ] not found, please see README.SERVER.md"
 
     exit 1
   }
@@ -14,20 +14,19 @@ if(!$?){
   wsl -- sh -c "mountpoint -q /c"
 
   if(!$?){
-    "==> mount is error, please check WSL [ /etc/wsl.conf ], and see README.SERVER.md"
+    Write-Warning "==> mount is error, please check WSL [ /etc/wsl.conf ], and see README.SERVER.md"
 
     exit 1
   }
   # 运行 k8s-data
   & $PSScriptRoot/wsl2d.ps1
-  # 19018 + 不再进行自动挂载，必须手动挂载 k8s-data
-  "==> try mount dist [ k8s-data ] to /wsl/k8s-data"
+  write-host "==> try mount dist [ k8s-data ] to /wsl/k8s-data" -ForegroundColor Green
   $dev_sdx=(wsl -d k8s-data -- mount).split(' ')[0]
   wsl -u root -- mkdir -p /wsl/k8s-data
   wsl -u root -- mount $dev_sdx /wsl/k8s-data
   sleep 1
 }else{
-  "==> WSL2 dist [ k8s-data ] check passed"
+  write-host "==> WSL2 dist [ k8s-data ] check passed" -ForegroundColor Green
 }
 
 wsl -- sh -c "mountpoint -q /wsl/k8s-data"

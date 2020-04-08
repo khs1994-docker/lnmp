@@ -662,6 +662,8 @@ _gvisor_install(){
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
+  if [ "$1" = '-f' ];then $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}; fi
+
   if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
     __download
   fi

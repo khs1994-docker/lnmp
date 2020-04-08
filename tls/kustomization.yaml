@@ -1,0 +1,5 @@
+secretGenerator:
+  - name: t.khs1994.com.crt
+    files:
+      - cert/t.khs1994.com.crt
+      - cert/t.khs1994.com.key

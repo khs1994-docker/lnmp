@@ -6,7 +6,7 @@ if($args[0]){
   $DIST=$args[0]
 }
 
-wsl -d $DIST -- ps aux `| grep -w 'sh -c while sleep 1218; do : ; done' `| grep -v grep
+wsl -d $DIST -- ps aux `| grep -w 'sh -c while sleep 1218; do : ; done' `| grep -v grep > $null
 
 if($?){
   exit 0

@@ -32,11 +32,11 @@ server{
   # 「重要」 ssl 证书路径，此处为容器内路径（注意不是本机路径）！
   # 本机 ./config/nginx/ 对应容器内 /etc/nginx/conf.d/
 
-  ssl_certificate            conf.d/demo-ssl/www.t.khs1994.com.crt;
-  ssl_certificate_key        conf.d/demo-ssl/www.t.khs1994.com.key;
+  ssl_certificate            conf.d/demo-ssl/t.khs1994.com.crt;
+  ssl_certificate_key        conf.d/demo-ssl/t.khs1994.com.key;
 
-  ssl_certificate            conf.d/demo-ssl/www.t.khs1994.com.crt;
-  ssl_certificate_key        conf.d/demo-ssl/www.t.khs1994.com.key;
+  ssl_certificate            conf.d/demo-ssl/t.khs1994.com.crt;
+  ssl_certificate_key        conf.d/demo-ssl/t.khs1994.com.key;
 
   ssl_session_cache          shared:SSL:1m;
   ssl_session_timeout        5m;

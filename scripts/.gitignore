@@ -4,7 +4,8 @@
 !*.example.sh
 !*.example.txt
 !production-init
-!issue_tls
+!issue.tls.sh
+!issue.local.tls.sh
 !frp
 !arm-build.sh
 !env.example
@@ -14,3 +15,4 @@
 !docker-compose.bump.yml
 !docker-example.yml
 !Switch-DockerLinux.ps1
+!tls.md

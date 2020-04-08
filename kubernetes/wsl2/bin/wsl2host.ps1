@@ -52,12 +52,12 @@ Function _write_host(){
 ping -n 1 wsl2 | out-null
 
 if ($? -and !$global:FORCE){
-  "==> WSL2 ip not changed, skip"
+  write-host "==> WSL2 ip not changed, skip" -ForegroundColor Yellow
   return
 }
 
 ""
-"==> write WSL2 ip to [ $hosts_path ]"
+write-host "==> write WSL2 ip to [ $hosts_path ]" -ForegroundColor Green
 
 $exists_hosts_content_array=get-content $hosts_path
 

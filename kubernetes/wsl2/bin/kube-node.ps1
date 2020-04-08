@@ -2,7 +2,7 @@
 . $PSScriptRoot/../.env.ps1
 
 if ($args[0] -eq 'stop'){
-  "==> stop kube-node ..."
+  write-host "==> stop kube-node ..." -ForegroundColor Red
   wsl -u root -- supervisorctl stop kube-node:
 
   exit
@@ -22,7 +22,7 @@ Function _mountKubelet(){
 & $PSScriptRoot/wsl2host --write
 & $PSScriptRoot/wsl2host-check
 
-"==> check kube-server $KUBE_APISERVER"
+write-host "==> check kube-server $KUBE_APISERVER" -ForegroundColor Green
 curl.exe -k --cacert certs/ca.pem $KUBE_APISERVER | out-null
 
 if(!$?){
