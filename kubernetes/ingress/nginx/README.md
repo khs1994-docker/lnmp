@@ -1,4 +1,4 @@
-# Nginx Ingress
+# [Nginx Ingress](https://github.com/kubernetes/ingress-nginx)
 
 * https://kubernetes.github.io/ingress-nginx/deploy/#installation-guide
 
@@ -36,7 +36,7 @@ $ kubectl apply -k addons/ingress-nginx/docker-desktop
 ## 定义规则
 
 ```bash
-$ kubectl apply -k ingress-nginx/lnmp
+$ kubectl apply -k ingress/nginx/lnmp
 ```
 
 ## 后端服务是否为 TLS
@@ -59,11 +59,7 @@ metadata:
 
 ## Docker Registry Example
 
-```bash
-$ kubectl apply -f ingress-nginx/registry.example.yaml
-
-$ kubectl apply -f ingress-nginx/ingress.example.yaml
-```
+请参考 `ingress/nginx/registry`
 
 ## 4 层代理
 

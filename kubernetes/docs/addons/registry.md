@@ -9,7 +9,7 @@ $ kubectl apply -k deploy/registry/overlays/development
 ## Ingress
 
 ```bash
-$ kubectl apply -k ingress-nginx/registry
+$ kubectl apply -k ingress/nginx/registry
 ```
 
 ## 测试

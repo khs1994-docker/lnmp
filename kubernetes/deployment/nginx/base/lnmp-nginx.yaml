@@ -28,7 +28,7 @@ spec:
         version: 0.0.1
     spec:
       nodeSelector:
-      #   beta.kubernetes.io/arch: amd64
+      #   kubernetes.io/arch: amd64
         kubernetes.io/os: linux
       #   kubernetes.io/hostname: coreos3
 
