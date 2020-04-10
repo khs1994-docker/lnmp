@@ -1,0 +1,3 @@
+resources:
+- service/windows-metrics.yaml
+- prometheus-serviceMonitorWindows.yaml

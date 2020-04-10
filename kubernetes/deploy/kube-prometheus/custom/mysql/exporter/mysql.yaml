@@ -19,6 +19,7 @@ spec:
           image: prom/mysqld-exporter
           env:
           - name: DATA_SOURCE_NAME
+            # fix me
             value: "root:mytest@(mysql.ci.svc.cluster.local:3306)/"
           ports:
           - name: metrics

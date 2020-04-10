@@ -13,5 +13,10 @@
       ],
       "url": "./windows/lnmp-windows-pm-repo/lwpm-json-schema.json"
     }
-  ]
+  ],
+  "yaml.trace.server": "verbose",
+  "vs-kubernetes": {
+    // "vs-kubernetes.kubectl-path": "C:\\bin\\kubectl.exe",
+  },
+  "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace"
 }

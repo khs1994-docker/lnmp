@@ -173,7 +173,7 @@ _get_kubernetes_server_by_docker_image(){
   fi
 
   if [ -z "${K8S_IMAGE}" ];then
-    if [ "${ENABLE_CN_MIRROR}" != 0 ];then
+    if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
       K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
       K8S_IMAGE=khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
@@ -473,7 +473,7 @@ kubectl_install(){
 
   command -v kubectl && return || true
 
-  if [ "$OS" = 'Linux' -a "$GOARCH" = 'amd64' ];then
+  if [ "${LNMP_CN_ENV}" != 'false' -a "$OS" = 'Linux' -a "$GOARCH" = 'amd64' ];then
       local KUBECTL_VERSION=$(curl -fsSL https://mirror.azure.cn/kubernetes/kubectl/stable.txt)
       $(_sudo) $(_curl) -o /usr/local/bin/kubectl https://mirror.azure.cn/kubernetes/kubectl/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
       $(_sudo) chmod +x /usr/local/bin/kubectl
@@ -495,7 +495,7 @@ kubectl_info(){
   print_info "kubectl latest version is"
 
   local url=https://storage.googleapis.com/kubernetes-release/release/stable.txt
-  if [ -n "ENABLE_CN_MIRROR" ];then
+  if [ "${LNMP_CN_ENV}" != 'false' ];then
     url=https://mirror.azure.cn/kubernetes/kubectl/stable.txt
   fi
   $(_curl) $url
@@ -540,15 +540,26 @@ _nginx_build(){
   $(_sudo) rm -rf ${TMP_ROOT}/kube-nginx
 }
 
+_use_cn_mirror(){
+if [ "${LNMP_CN_ENV}" = 'false' ];then
+  return 1;
+fi
+
+httpCode=`curl -sI ${1}/v${ETCD_VERSION}/${TAR_FILE} | head -1 | awk '{print $2}'`
+
+if [ $httpCode != 200 ];then
+  echo 'cn mirror http response code is not 200'
+  return 1;
+fi
+}
+
 _etcd_install(){
   local url_official="https://github.com/etcd-io/etcd/releases/download"
   local url="https://mirrors.huaweicloud.com/etcd"
   local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    httpCode=`curl -sI ${url}/v${ETCD_VERSION}/${TAR_FILE} | head -1 | awk '{print $2}'`
-    if [ $httpCode != 200 ];then
-      url=$url_official
-    fi
+    _use_cn_mirror ${url}/v${ETCD_VERSION}/${TAR_FILE} || url=$url_official
+
     $(_sudo) $(_curl) ${url}/v${ETCD_VERSION}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
 
@@ -591,10 +602,7 @@ _helm_install(){
   local url="https://mirrors.huaweicloud.com/helm/v${HELM_VERSION}"
   local TAR_FILE="helm-v${HELM_VERSION}-${GOOS}-${GOARCH}.tar.gz"
   __download(){
-    httpCode=`curl -sI ${url}/${TAR_FILE} | head -1 | awk '{print $2}'`
-    if [ $httpCode != 200 ];then
-      url=$url_official
-    fi
+    _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
 
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
@@ -749,13 +757,16 @@ _cni_install(){
     return
   fi
 
-  local url="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
+  local url="https://mirror.azure.cn/kubernetes/containernetworking-plugins"
+  local url_official="https://github.com/containernetworking/plugins/releases/download/v${CNI_VERSION}"
   local TAR_FILE="cni-plugins-${GOOS}-${GOARCH}-v${CNI_VERSION}.tgz"
 
   # wsl2 with cni 0.8.2 error:
   # https://github.com/containernetworking/plugins/issues/370
   # down to 0.7.6
   # 0.8.3 fixed
+
+  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
 
   __download(){
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
@@ -989,7 +1000,7 @@ _crio_install(){
   export GOPATH=$go_path
 
   CRIO_GIT=https://github.com/cri-o/cri-o
-  if [ "${LNMP_CN_ENV}" = "true" ];then
+  if ! [ "${LNMP_CN_ENV}" = "false" ];then
       CRIO_GIT=https://gitee.com/docker_practice/cri-o.git
   fi
 
@@ -1398,8 +1409,8 @@ _local_cleanup(){
   $(_sudo) systemctl restart docker|| true
 }
 
-if [ "$ENABLE_CN_MIRROR" = 0 ];then
-  print_info "CN Mirror disabled"
+if [ "${LNMP_CN_ENV}" = 'false' ];then
+  print_info "CN Mirror disabled, I will replace cn mirror ... "
   $(_sudo) sed -i "s#hub-mirror.c.163.com#mirror.gcr.io#g" `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true

@@ -3,9 +3,6 @@ kind: Prometheus
 metadata:
   name: k8s
 spec:
-  secrets:
-  - kube-controller-manager-certs
-  - etcd-certs
   storage:
     volumeClaimTemplate:
       metadata:
@@ -27,7 +24,6 @@ metadata:
   name: main
 spec:
   # paused: false
-  paused: true
   storage:
     volumeClaimTemplate:
       metadata:

@@ -44,7 +44,7 @@ PHP_URL=https://www.php.net/distributions
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 PHP_GIT=https://github.com/php/php-src
 
-if [ "${LNMP_CN_ENV}" = true ];then
+if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_URL=https://mirrors.sohu.com/php
   PHP_GIT=https://gitee.com/mirrors/php-src
 fi
