@@ -128,7 +128,7 @@ case "$1" in
       VBoxManage createvm --name "coreos"$2 --ostype 'Linux26_64' --register
 
       VBoxManage modifyvm "coreos"$2 \
-      --memory 2048 \
+      --memory 3072 \
       --acpi on \
       --boot1 dvd \
       --nic2 bridged \
