@@ -13,7 +13,7 @@
 
 ## 注意事项
 
-* 首次安装虚拟机内存 `3072M (3G)`，设置为 `2048M (2G)` 将无法启动
+* 虚拟机内存 `3072M (3G)`，设置为 `2048M (2G)` 将无法启动
 * 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间
 * `SELinux` 已关闭
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
@@ -130,7 +130,7 @@ $ kubectl apply -f /home/core/calico.yaml
 
 ## 安装 ipset (否则将不能启用 IPVS)
 
-每个节点都安装之后重启     
+每个节点都安装之后重启
 
 ```bash
 $ sudo rpm-ostree install ipset
