@@ -6,5 +6,7 @@
   "homepage": "https://helm.sh/",
   "bug": "https://github.com/helm/helm/issues",
   "github": "helm/helm",
-  "releases": "https://github.com/helm/helm/releases"
+  "releases": "https://github.com/helm/helm/releases",
+  "url": "https://get.helm.sh/helm-v${VERSION}-windows-amd64.zip",
+  "url-mirror": "https://mirrors.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip"
 }

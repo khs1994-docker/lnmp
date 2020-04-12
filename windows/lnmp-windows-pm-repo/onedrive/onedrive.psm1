@@ -61,6 +61,13 @@ Function install($VERSION=0,$isPre=0){
     $url=$download_url
   }
 
+  Write-Host "Please download on this website:
+
+${releases}
+
+" -ForegroundColor Green
+  exit
+
   # fix me
   $filename=""
   $unzipDesc="example"

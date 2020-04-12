@@ -62,19 +62,19 @@ Function install($VERSION=0,$isPre=0){
   }
 
   # fix me
-  $filename=""
-  $unzipDesc="example"
+  $filename="gpg4win-${VERSION}.exe"
+  $unzipDesc=""
 
-  # _exportPath $lwpm.path
+  _exportPath $lwpm.path
 
-  if($(_command example)){
+  if($(_command gpg)){
     $ErrorActionPreference='Continue'
-    $CURRENT_VERSION=""
+    # $CURRENT_VERSION=""
 
-    if ($CURRENT_VERSION -eq $VERSION){
+    # if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
         return
-    }
+    # }
     $ErrorActionPreference='stop'
   }
 
@@ -90,15 +90,15 @@ Function install($VERSION=0,$isPre=0){
 
   # 解压 zip 文件 Fix me
   # _cleanup "$unzipDesc"
-  _unzip $filename $unzipDesc
+  # _unzip $filename $unzipDesc
 
   # 安装 Fix me
-  Copy-item -r -force "$unzipDesc/" ""
-  # Start-Process -FilePath $filename -wait
+  # Copy-item -r -force "$unzipDesc/" ""
+  Start-Process -FilePath $filename -wait
   # _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  # _exportPath $lwpm.path
+  _exportPath $lwpm.path
 
   install_after
 
@@ -110,8 +110,11 @@ Function install($VERSION=0,$isPre=0){
 }
 
 Function uninstall($prune=0){
-  "Not Support"
+  # "Not Support"
   # _cleanup ""
+
+  Start-Process -FilePath "C:\Program Files (x86)\Gpg4win\gpg4win-uninstall" -Wait
+
   # user data
   if($prune){
     # _cleanup ""

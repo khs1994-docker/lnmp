@@ -28,7 +28,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$pre_version
   }
 
-  $url="https://github.com/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_windows_amd64.tgz"
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename="coredns_${VERSION}_windows_amd64.tgz"
   $unzipDesc="CoreDNS"

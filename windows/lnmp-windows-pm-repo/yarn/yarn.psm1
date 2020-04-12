@@ -25,8 +25,17 @@ Function install($VERSION=0,$isPre=0){
   if($isPre){
     $VERSION=$pre_version
   }
-  $url="https://github.com/yarnpkg/yarn/releases/download/v${VERSION}/yarn-${VERSION}.msi"
-  $url="https://mirrors.huaweicloud.com/yarn/v${VERSION}/yarn-${VERSION}.msi"
+
+  # stable 与 pre url 相同，默认
+  $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $download_url)[0] -eq 4){
+    $download_url=$url.replace('${VERSION}',${VERSION});
+  }
+
+  if($download_url){
+    $url=$download_url
+  }
+
   $filename="yarn-${VERSION}.msi"
   $unzipDesc="yarn"
 

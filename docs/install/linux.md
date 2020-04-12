@@ -9,7 +9,7 @@
 ### 使用 `git clone`
 
 ```bash
-$ cd
+$ cd ~
 
 $ git clone --depth=1 https://github.com/khs1994-docker/lnmp.git
 

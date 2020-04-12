@@ -7,5 +7,6 @@
   "bug": "https://github.com/yarnpkg/yarn/issues",
   "github": "yarnpkg/yarn",
   "releases": "https://github.com/yarnpkg/yarn/releases",
-  "url": ""
+  "url": "https://github.com/yarnpkg/yarn/releases/download/v${VERSION}/yarn-${VERSION}.msi",
+  "url-mirror": "https://mirrors.huaweicloud.com/yarn/v${VERSION}/yarn-${VERSION}.msi"
 }

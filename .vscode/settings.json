@@ -18,5 +18,9 @@
   "vs-kubernetes": {
     // "vs-kubernetes.kubectl-path": "C:\\bin\\kubectl.exe",
   },
-  "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace"
+  "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace",
+  "editor.fontSize": 20,
+  "sync.gist": "76f5fad88768a18910fadf6f8bc35c6c",
+  "editor.renderControlCharacters": true,
+  "editor.renderWhitespace": "all"
 }

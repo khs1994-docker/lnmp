@@ -29,9 +29,13 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$pre_version
   }
 
-  $url=$url_mirror.replace('${VERSION}',${VERSION});
-  if((_getHttpCode $url)[0] -eq 4){
-      $url=$url.replace('${VERSION}',${VERSION});
+  $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $download_url)[0] -eq 4){
+      $download_url=$url.replace('${VERSION}',${VERSION});
+  }
+
+  if($download_url){
+    $url=$download_url
   }
 
   $filename="etcd-v${VERSION}-windows-amd64.zip"

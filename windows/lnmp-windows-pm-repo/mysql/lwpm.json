@@ -6,5 +6,7 @@
   "homepage": "http://www.mysql.com/",
   "bug": "",
   "github": "mysql/mysql-server",
-  "releases": "https://github.com/mysql/mysql-server/releases"
+  "releases": "https://github.com/mysql/mysql-server/releases",
+  "url": "https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip",
+  "url-mirror": "https://mirrors.huaweicloud.com/mysql/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
 }

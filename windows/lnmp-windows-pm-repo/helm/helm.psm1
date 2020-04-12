@@ -28,7 +28,15 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$pre_version
   }
 
-  $url="https://mirrors.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip"
+  # stable 与 pre url 相同，默认
+  $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $download_url)[0] -eq 4){
+    $download_url=$url.replace('${VERSION}',${VERSION});
+  }
+
+  if($download_url){
+    $url=$download_url
+  }
 
   $filename="helm-v${VERSION}-windows-amd64.zip"
   $unzipDesc="helm"

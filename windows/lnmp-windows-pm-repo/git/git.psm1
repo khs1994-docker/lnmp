@@ -28,13 +28,20 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$stable_version
   }
 
-  $url=$url_mirror.replace('${VERSION}',${VERSION});
-
   if($isPre){
     $VERSION=$pre_version
     # $url=$lwpm.'pre-url'
   }else{
 
+  }
+
+  $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $download_url)[0] -eq 4){
+    $download_url=$url.replace('${VERSION}',${VERSION});
+  }
+
+  if($download_url){
+    $url=$download_url
   }
 
   $filename="Git-${VERSION}-64-bit.exe"

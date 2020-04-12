@@ -64,6 +64,10 @@ Current application environment: windows
 # 输出 windows 说明设置成功
 ```
 
+## vclib
+
+部分软件依赖 `vclib`，请首先安装，请查看 `windows/lnmp-windows-pm-repo/vclib`
+
 ## MySQL
 
 https://dev.mysql.com/downloads/mysql/

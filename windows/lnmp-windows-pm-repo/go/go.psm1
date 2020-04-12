@@ -28,7 +28,7 @@ Function install($VERSION=0,$isPre=0){
     $VERSION=$pre_version
   }
 
-  $url="https://dl.google.com/go/go${VERSION}.windows-amd64.zip"
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename="go${VERSION}.windows-amd64.zip"
   $unzipDesc="go"

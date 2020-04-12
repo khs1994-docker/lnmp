@@ -30,10 +30,10 @@ Function install($VERSION=0,$isPre=0){
   if($(_command docker)){
     $CURRENT_VERSION=(docker --version).split(" ")[2].trim(",")
 
-    if ($CURRENT_VERSION -eq $VERSION){
-        "==> $name $VERSION already install"
+    # if ($CURRENT_VERSION -eq $VERSION){
+        "==> $name $CURRENT_VERSION already install"
         return
-    }
+    # }
   }
 
   # 下载原始 zip 文件，若存在则不再进行下载

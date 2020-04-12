@@ -30,7 +30,7 @@ Function getVersion($url){
 }
 
 Function getLatestVersion(){
-  return $(getVersion)[0],$(getVersion $pre_url)[0]
+  return $(getVersion $url)[0],$(getVersion $pre_url)[0]
 }
 
 Function install($VERSION=0,$isPre=0){

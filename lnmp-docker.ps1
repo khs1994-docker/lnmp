@@ -48,9 +48,20 @@
 $LNMP_CACHE="$HOME/.khs1994-docker-lnmp"
 
 if ($args[0] -eq "install"){
-  git clone -b 19.03 --depth=1 https://github.com/khs1994-docker/lnmp.git ~/lnmp
+  if(get-command git){
+    git clone -b 19.03 --depth=1 https://github.com/khs1994-docker/lnmp.git $home/lnmp
 
-  exit
+    exit
+  }
+
+  write-warning "Please download and install git:
+
+Official: https://github.com/git-for-windows/git/releases
+
+CN_Mirror: https://mirrors.huaweicloud.com/git-for-windows/
+"
+
+    exit 1
 }
 
 $outNull=$false

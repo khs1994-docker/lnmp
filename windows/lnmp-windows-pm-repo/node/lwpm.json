@@ -7,6 +7,6 @@
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",
   "releases": "https://nodejs.org/en/download/",
-  "url": "",
+  "url": "https://nodejs.org/dist/v${VERSION}/node-v${VERSION}-win-x64.zip",
   "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-win-x64.zip"
 }

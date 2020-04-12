@@ -22,6 +22,7 @@ $insert_path=$lwpm.path
 
 Function install_after(){
   npm config set prefix $env:ProgramData\npm
+  npm config set registry https://registry.npm.taobao.org
 }
 
 Function install($VERSION=0,$isPre=0){
@@ -34,7 +35,15 @@ Function install($VERSION=0,$isPre=0){
 
   }
 
-  $url=$url_mirror.replace('${VERSION}',${VERSION});
+  # stable 与 pre url 相同，默认
+  $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $download_url)[0] -eq 4){
+    $download_url=$url.replace('${VERSION}',${VERSION});
+  }
+
+  if($download_url){
+    $url=$download_url
+  }
 
   $filename="node-v${VERSION}-win-x64.zip"
   $unzipDesc="node"

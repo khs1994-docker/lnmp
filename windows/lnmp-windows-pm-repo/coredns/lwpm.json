@@ -6,5 +6,6 @@
   "homepage": "https://coredns.io/",
   "bug": "https://github.com/coredns/coredns/issues",
   "github": "coredns/coredns",
-  "releases": "https://github.com/coredns/coredns/releases"
+  "releases": "https://github.com/coredns/coredns/releases",
+  "url": "https://github.com/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_windows_amd64.tgz"
 }

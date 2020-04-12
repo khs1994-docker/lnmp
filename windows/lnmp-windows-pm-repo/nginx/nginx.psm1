@@ -23,6 +23,8 @@ Function install_after(){
 
   _ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
 
+  mkdir -f $home\lnmp\windows\logs\nginx | out-null
+
   _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 
   if(Test-Path $home/Downloads/lnmp-docker-cache/nginx.conf.backup){
@@ -56,8 +58,6 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="nginx"
 
   _exportPath "C:\nginx"
-
-  cp $PSScriptRoot/../../config/nginx.conf C:/nginx/conf
 
   if($(_command nginx)){
     nginx -v > $env:TEMP/.nginx.version 2>&1
@@ -98,6 +98,7 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\nginx"
 
+  cp $PSScriptRoot/../../config/nginx.conf C:/nginx/conf
   install_after
 
   "==> Checking ${name} ${VERSION} install ..."

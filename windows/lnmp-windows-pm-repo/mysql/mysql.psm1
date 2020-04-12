@@ -37,7 +37,7 @@ Function install_after(){
   }
 
   if (!(Test-Path C:/mysql/my.cnf)){
-    Copy-Item $PSScriptRoot/config/my.cnf C:/mysql/my.cnf
+    Copy-Item $PSScriptRoot/../../config/my.cnf C:/mysql/my.cnf
   }
 
   $mysql_password=($(select-string `
@@ -76,7 +76,15 @@ Function install($VERSION=0,$isPre=0){
 
   }
 
-  $url="https://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
+  $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+
+  if((_getHttpCode $url)[0] -eq "4"){
+    $download_url=$url.replace('${VERSION}',${VERSION});
+  }
+
+  if($download_url){
+    $url=$download_url
+  }
 
   $filename="mysql-${VERSION}-winx64.zip"
   $unzipDesc="mysql"

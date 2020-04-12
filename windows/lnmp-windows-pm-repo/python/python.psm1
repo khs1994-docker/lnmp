@@ -22,13 +22,27 @@ Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
+
+  # stable 与 pre url 不同
+  # 先定义 stable url
+  $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  if((_getHttpCode $download_url)[0] -eq 4){
+    $download_url=$url.replace('${VERSION}',${VERSION});
+  }
+
   if($isPre){
     $VERSION=$pre_version
-    $url="https://www.python.org/ftp/python/3.8.2/python-${VERSION}-amd64.exe"
-    $url="https://mirrors.huaweicloud.com/python/3.8.2/python-${VERSION}-amd64.exe"
+    # 后定义 pre url
+    $download_url=$pre_url_mirror.replace('${VERSION}',${VERSION});
+    if((_getHttpCode $download_url)[0] -eq 4){
+      $download_url=$pre_url.replace('${VERSION}',${VERSION});
+    }
   }else{
-    $url="https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe"
-    $url="https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
+    
+  }
+
+  if($download_url){
+    $url=$download_url
   }
 
   $filename="python-${VERSION}-amd64.exe"

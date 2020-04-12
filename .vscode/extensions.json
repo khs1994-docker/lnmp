@@ -11,6 +11,8 @@
       "ms-vscode-remote.vscode-remote-extensionpack",
       "ms-vscode-remote.remote-wsl",
       "ms-vscode-remote.remote-containers",
-      "ms-vscode.powershell"
+      "ms-vscode.powershell",
+      "shan.code-settings-sync",
+      "editorconfig.editorconfig"
   ]
 }
