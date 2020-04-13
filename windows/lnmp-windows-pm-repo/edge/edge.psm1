@@ -61,12 +61,12 @@ Function install($VERSION=0,$isPre=0){
     $url=$download_url
   }
 
-  # Write-Host "Please download on this website:
+  Write-Host "Please download on this website:
 
-# ${releases}
+${releases}
 
-# " -ForegroundColor Green
-#  exit
+" -ForegroundColor Green
+  exit
 
   # fix me
   $filename=""

@@ -1,14 +1,14 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+$wsl_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
 $K8S_CM_HOST=$wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
+$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
 
-$command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
+$command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
 --profiling `
 --cluster-name=kubernetes `
 --controllers=*,bootstrapsigner,tokencleaner `
@@ -54,8 +54,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-controller-manager]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kube-controller-manager-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kube-controller-manager-error.log
+stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-controller-manager-stdout.log
+stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-controller-manager-error.log
 directory=/
 autostart=false
 autorestart=false
@@ -65,12 +65,12 @@ startsecs=10" > $PSScriptRoot/supervisor.d/kube-controller-manager.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -u root -- supervisorctl start kube-server:kube-controller-manager
+  wsl -d wsl-k8s -u root -- supervisorctl start kube-server:kube-controller-manager
 
   exit
 }
 
 if($args[0] -eq 'start'){
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -u root -- bash -c $command
+  wsl -d wsl-k8s -u root -- bash -c $command
 }

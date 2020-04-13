@@ -2,6 +2,7 @@ Import-Module downloader
 Import-Module unzip
 Import-Module command
 Import-Module cleanup
+Import-Module ln
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
@@ -23,21 +24,28 @@ Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
+
+  $download_url=$url.replace('${VERSION}',${VERSION});
+  $filename="mpv-${VERSION}-x86_64.7z"
+
   if($isPre){
     $VERSION=$pre_version
+    $download_url=$pre_url.replace('${VERSION}',${VERSION});
+    $filename="mpv-x86_64-${VERSION}.7z"
   }
-  $url="https://mpv.srsfckn.biz/mpv-x86_64-${VERSION}.7z"
 
-  $filename="mpv-x86_64-${VERSION}.7z"
-  $unzipDesc="mpv"
+  if($download_url){
+    $url=$download_url
+  }
+
+  _exportPath $insert_path
 
   if($(_command mpv)){
     $CURRENT_VERSION=""
-
-    if ($CURRENT_VERSION -eq $VERSION){
+    # if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
         return
-    }
+    # }
   }
 
   # 下载原始 zip 文件，若存在则不再进行下载
@@ -52,10 +60,16 @@ Function install($VERSION=0,$isPre=0){
 
   # 解压 zip 文件 Fix me
   # _cleanup ""
-  _unzip $filename $unzipDesc
+  # _unzip $filename $unzipDesc
+
+  mkdir -f ${env:ProgramData}/mpv | out-null
+
+  powershell -c "7z x $filename -aoa -r -o${env:ProgramData}/mpv"
+
+  _ln ${env:ProgramData}\mpv\mpv.exe $HOME\Desktop\mpv.exe
 
   # 安装 Fix me
-  Copy-item -r -force "" ""
+  # Copy-item -r -force "" ""
   # Start-Process -FilePath $filename -wait
   # _cleanup ""
 

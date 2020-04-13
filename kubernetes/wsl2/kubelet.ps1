@@ -1,13 +1,13 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+$wsl_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
 $NODE_NAME="wsl2"
 # $KUBE_APISERVER='https://x.x.x.x:16443'
 # $K8S_ROOT="/opt/k8s"
-$K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl pwd"
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
+$K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl -d wsl-k8s pwd"
+$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
 
 (Get-Content $PSScriptRoot/conf/kubelet.config.yaml.temp) `
     -replace "##NODE_NAME##",$NODE_NAME `
@@ -15,11 +15,11 @@ $WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
     -replace "##K8S_ROOT##",$K8S_ROOT `
   | Set-Content $PSScriptRoot/conf/kubelet.config.yaml
 
-wsl -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
-wsl -u root -- `
+wsl -d wsl-k8s -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
+wsl -d wsl-k8s -u root -- `
   bash -c "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env > /dev/null"
 
-$command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
+$command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
 --cert-dir=${K8S_ROOT}/certs `
 --container-runtime=remote `
@@ -35,9 +35,9 @@ $command=wsl -u root -- echo ${K8S_ROOT}/bin/kubelet `
 --v=2
 
 Function _reset(){
-  wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
-  wsl -u root -- rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
-  wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+  wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+  wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
+  wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
 }
 
 if($args[0] -eq "reset"){
@@ -62,7 +62,7 @@ if($args[0] -eq "reset"){
 # $ kubectl --kubeconfig .\rpi\certs\kubectl.kubeconfig get csr --sort-by='{.metadata.creationTimestamp}'
 #
 
-wsl -- sh -c "command -v runc > /dev/null 2>&1"
+wsl -d wsl-k8s -- sh -c "command -v runc > /dev/null 2>&1"
 
 if(!$?){
   Write-Warning "==> runc not found, please install docker-ce first"
@@ -75,8 +75,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kubelet]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kubelet-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kubelet-error.log
+stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kubelet-stdout.log
+stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kubelet-error.log
 directory=/
 autostart=false
 autorestart=false
@@ -90,8 +90,8 @@ if($args[0] -ne 'start' -and $args[0] -ne 'init'){
 
 $env:ErrorActionPreference="stop"
 
-wsl -u root -- ${K8S_ROOT}/bin/kubeadm version
-wsl -u root -- ls ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
+wsl -d wsl-k8s -u root -- ${K8S_ROOT}/bin/kubeadm version
+wsl -d wsl-k8s -u root -- ls ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
 $env:ErrorActionPreference="continue"
 
@@ -109,16 +109,16 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip){
 }else{
    Write-Warning "wsl ip changed, reset ..."
    echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-   wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+   wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
    # _reset
 }
 
 sleep 2
 
-# wsl -u root -- /usr/sbin/swapoff -a
-# wsl -u root -- /sbin/swapoff -a
-wsl -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh ${K8S_ROOT}
-wsl -u root -- mkdir -p ${K8S_ROOT}/var/lib/kubelet
+# wsl -d wsl-k8s -u root -- /usr/sbin/swapoff -a
+# wsl -d wsl-k8s -u root -- /sbin/swapoff -a
+wsl -d wsl-k8s -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh ${K8S_ROOT}
+wsl -d wsl-k8s -u root -- mkdir -p ${K8S_ROOT}/var/lib/kubelet
 
 if($args[0] -eq 'init'){
   "==> kubelet init success !"
@@ -128,11 +128,11 @@ if($args[0] -eq 'init'){
 sleep 5
 
 Function _mountKubelet(){
-  wsl -u root -- bash -c "mountpoint -q /var/lib/kubelet"
+  wsl -d wsl-k8s -u root -- bash -c "mountpoint -q /var/lib/kubelet"
   if(!$?){
-    wsl -u root -- bash -c "mkdir -p /var/lib/kubelet"
+    wsl -d wsl-k8s -u root -- bash -c "mkdir -p /var/lib/kubelet"
     Write-Warning "try mount /var/lib/kubelet ..."
-    wsl -u root -- bash -c "mount --bind ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet"
+    wsl -d wsl-k8s -u root -- bash -c "mount --bind ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet"
   }else{
     Write-Warning "/var/lib/kubelet already mount"
   }
@@ -141,7 +141,7 @@ Function _mountKubelet(){
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   & $PSScriptRoot/bin/wsl2host-check
   _mountKubelet
-  wsl -u root -- supervisorctl start kube-node:kubelet
+  wsl -d wsl-k8s -u root -- supervisorctl start kube-node:kubelet
 
   exit
 }
@@ -149,5 +149,5 @@ if($args[0] -eq 'start' -and $args[1] -eq '-d'){
 if($args[0] -eq 'start'){
   & $PSScriptRoot/bin/wsl2host-check
   _mountKubelet
-  wsl -u root -- bash -c $command
+  wsl -d wsl-k8s -u root -- bash -c $command
 }

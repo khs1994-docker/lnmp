@@ -1,10 +1,10 @@
 Function request($method="GET",$url){
   if(!($env:GITHUB_TOKEN)){
-    echo "
+    write-host "
 Please set GitHub Token :
 
 $ [environment]::SetEnvironmentvariable('GITHUB_TOKEN', 'XXX', 'User')
-"
+" -ForegroundColor Red
     exit
 
   }

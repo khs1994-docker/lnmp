@@ -20,3 +20,6 @@ $LNMP_NODE_IMAGE="node:alpine"
 $LNMP_WSL2_DOCKER_HOST="tcp://localhost:2375"
 
 # $LNMP_CACHE=
+
+# 在哪个 WSL2 上运行 Docker
+$WSL2_DOCKER_DIST="wsl-k8s"

@@ -5,12 +5,10 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
-    version: 0.0.1
 spec:
   selector:
     app: lnmp
     tier: mysql
-    version: 0.0.1
   ports:
     - port: 3306
   clusterIP: None
@@ -22,13 +20,11 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
-    version: 0.0.1
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: mysql
-      version: 0.0.1
   replicas: 1
   # 新创建的 Pod 状态为 Ready 持续的时间至少为多少秒才认为 Pod Available(Ready)。
   minReadySeconds: 5
@@ -49,7 +45,6 @@ spec:
       labels:
         app: lnmp
         tier: mysql
-        version: 0.0.1
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -75,7 +70,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: lnmp-mysql-password-0.0.1
+              name: lnmp-mysql-password
               key: password
         # config 用作环境变量
         - name: TZ
@@ -124,7 +119,7 @@ spec:
           claimName: lnmp-mysql-data
       - name: lnmp-mysql-cnf
         configMap:
-          name: lnmp-mysql-cnf-0.0.1
+          name: lnmp-mysql-cnf
           items:
           - key: docker.cnf
             path: docker.cnf

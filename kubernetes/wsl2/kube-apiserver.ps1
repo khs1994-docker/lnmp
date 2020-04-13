@@ -8,11 +8,11 @@ $KUBE_APISERVER_HOST=$wsl_ip
 # wsl1
 # $KUBE_APISERVER_HOST="x.x.x.x"
 
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl pwd"
+$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
 
 # $K8S_ROOT='/opt/k8s'
 
-$command=wsl -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
+$command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --advertise-address=${KUBE_APISERVER_HOST} `
 --default-not-ready-toleration-seconds=360 `
 --default-unreachable-toleration-seconds=360 `
@@ -71,8 +71,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-apiserver]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kube-apiserver-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/k8s-wsl2/log/kube-apiserver-error.log
+stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-apiserver-stdout.log
+stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-apiserver-error.log
 directory=/
 autostart=false
 autorestart=false
@@ -82,12 +82,12 @@ startsecs=10" > $PSScriptRoot/supervisor.d/kube-apiserver.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -u root -- supervisorctl start kube-server:kube-apiserver
+  wsl -d wsl-k8s -u root -- supervisorctl start kube-server:kube-apiserver
 
   exit
 }
 
 if($args[0] -eq 'start'){
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -u root -- bash -c $command
+  wsl -d wsl-k8s -u root -- bash -c $command
 }

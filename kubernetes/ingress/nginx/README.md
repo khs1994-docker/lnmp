@@ -68,5 +68,5 @@ metadata:
 `tcp-udp`
 
 ```bash
-$ host -t A nginx.lnmp.svc.cluster.local wsl2.lnmp.khs1994.com
+$ host -t A nginx.lnmp.svc.cluster.local wsl2.k8s.khs1994.com
 ```

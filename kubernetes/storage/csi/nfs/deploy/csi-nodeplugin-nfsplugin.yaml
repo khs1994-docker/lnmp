@@ -65,15 +65,15 @@ spec:
         - name: plugin-dir
           hostPath:
             path: /var/lib/kubelet/plugins/csi-nfsplugin
-            # path: /wsl/k8s-data/k8s/var/lib/kubelet/plugins/csi-nfsplugin
+            # path: /wsl/wsl-k8s-data/k8s/var/lib/kubelet/plugins/csi-nfsplugin
             type: DirectoryOrCreate
         - name: pods-mount-dir
           hostPath:
             path: /var/lib/kubelet/pods
-            # path: /wsl/k8s-data/k8s/var/lib/kubelet/pods
+            # path: /wsl/wsl-k8s-data/k8s/var/lib/kubelet/pods
             type: Directory
         - hostPath:
             path: /var/lib/kubelet/plugins_registry
-            # path: /wsl/k8s-data/k8s/var/lib/kubelet/plugins_registry
+            # path: /wsl/wsl-k8s-data/k8s/var/lib/kubelet/plugins_registry
             type: Directory
           name: registration-dir

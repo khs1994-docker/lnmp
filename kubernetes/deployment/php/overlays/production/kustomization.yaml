@@ -1,13 +1,13 @@
 bases:
 - ../../base
 configMapGenerator:
-- name: lnmp-php-conf-0.0.1
+- name: lnmp-php-conf
   files:
   - php.ini=config/ini/php.production.ini
   - zz-docker.conf=config/zz-docker.production.conf
   - composer.config.json=config/composer/config.production.json
   - docker.ini=config/conf.d/docker.production.ini
-- name: lnmp-env-0.0.1
+- name: lnmp-env
   literals:
   - APP_ENV=production
   - APP_LOG=errorlog

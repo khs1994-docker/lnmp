@@ -4,8 +4,14 @@
 $K8S_ETCD_HOST="127.0.0.1"
 $K8S_ROOT=$PSScriptRoot
 
-mkdir -Force "$HOME/.khs1994-docker-lnmp/k8s-wsl2/etcd" | out-null
-mkdir -Force "$HOME/.khs1994-docker-lnmp/k8s-wsl2/log" | out-null
+if(!(Test-Path $K8S_ROOT\certs\etcd.pem)){
+  write-host "Please generate cert first, see README.SERVER.md" -ForegroundColor Red
+
+  exit 1
+}
+
+mkdir -Force "$HOME/.khs1994-docker-lnmp/wsl-k8s/etcd" | out-null
+mkdir -Force "$HOME/.khs1994-docker-lnmp/wsl-k8s/log" | out-null
 
 if($args[0] -eq 'stop'){
   stop-process (get-process etcd).Id
@@ -15,10 +21,10 @@ if($args[0] -eq 'stop'){
 
 Start-Process -FilePath etcd `
   -WindowStyle Hidden `
-  -RedirectStandardError "$HOME/.khs1994-docker-lnmp/k8s-wsl2/log/etcd-err.log" `
-  -RedirectStandardOutput "$HOME/.khs1994-docker-lnmp/k8s-wsl2/log/etcd.log" `
-  -WorkingDirectory "$HOME/.khs1994-docker-lnmp/k8s-wsl2/etcd" `
-  -ArgumentList (Write-Output --data-dir="$HOME/.khs1994-docker-lnmp/k8s-wsl2/etcd" `
+  -RedirectStandardError "$HOME/.khs1994-docker-lnmp/wsl-k8s/log/etcd-err.log" `
+  -RedirectStandardOutput "$HOME/.khs1994-docker-lnmp/wsl-k8s/log/etcd.log" `
+  -WorkingDirectory "$HOME/.khs1994-docker-lnmp/wsl-k8s/etcd" `
+  -ArgumentList (Write-Output --data-dir="$HOME/.khs1994-docker-lnmp/wsl-k8s/etcd" `
   --enable-v2=false `
   --name="node1" `
   --listen-peer-urls="https://${K8S_ETCD_HOST}:$K8S_ETCD_LISTEN_PEER_PORT" `

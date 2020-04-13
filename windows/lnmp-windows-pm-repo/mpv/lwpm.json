@@ -1,10 +1,15 @@
 {
   "name": "mpv",
   "description": "Video player based on MPlayer/mplayer2",
-  "version": "20181002",
-  "pre-version": "20181002",
+  "version": "0.32.0",
+  "pre-version": "20200412-git-530a086",
   "homepage": "https://mpv.io/",
   "bug": "https://mpv.io/bug-reports/",
   "github": "mpv-player/mpv",
-  "releases": "https://github.com/mpv-player/mpv/releases"
+  "releases": "https://github.com/mpv-player/mpv/releases",
+  "url": "https://astuteinternet.dl.sourceforge.net/project/mpv-player-windows/stable/mpv-${VERSION}-x86_64.7z",
+  "pre-url": "https://astuteinternet.dl.sourceforge.net/project/mpv-player-windows/64bit/mpv-x86_64-${VERSION}.7z",
+  "path": [
+    "%ProgramData%\\mpv"
+  ]
 }

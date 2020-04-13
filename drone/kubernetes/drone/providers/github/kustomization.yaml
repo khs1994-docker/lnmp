@@ -1,6 +1,6 @@
 bases:
 - ../../base
-patches:
+patchesStrategicMerge:
 - github.yaml
 secretGenerator:
   - name: drone-provider-github-secret

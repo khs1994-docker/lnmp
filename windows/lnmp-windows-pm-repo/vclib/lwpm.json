@@ -6,5 +6,6 @@
   "homepage": "https://support.microsoft.com/zh-cn/help/2977003/the-latest-supported-visual-c-downloads",
   "bug": "",
   "github": "",
-  "releases": ""
+  "releases": "",
+  "url": "https://aka.ms/vs/16/release/VC_redist.x64.exe"
 }

@@ -48,7 +48,7 @@ $ lnmp-windows-pm.ps1 install example
 
 ## 注册 Windows 服务
 
-请以管理员打开 `powershell` 执行下面的命令(这里以 minio 为例)
+请以 **管理员** 打开 `powershell` 执行下面的命令(这里以 minio 为例)
 
 ```powershell
 $ lnmp-windows-pm.ps1 install-service minio "C:/bin/minio","server","$HOME/minio" C:/logs/minio.log

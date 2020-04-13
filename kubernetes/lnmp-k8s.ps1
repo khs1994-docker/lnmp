@@ -254,34 +254,34 @@ $ kubectl config use-context docker-desktop
     }
 
     $CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
-    kubectl -n $NAMESPACE create configmap lnmp-php-conf-0.0.1 `
+    kubectl -n $NAMESPACE create configmap lnmp-php-conf `
       --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini `
       --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf `
       --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json `
       --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini `
       --dry-run -o yaml `
       | kubectl -n $NAMESPACE apply -f - $options
-    kubectl -n $NAMESPACE label configmap lnmp-php-conf-0.0.1 app=lnmp version=0.0.1 $options
+    kubectl -n $NAMESPACE label configmap lnmp-php-conf app=lnmp version=0.0.1 $options
 
     $CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
-    kubectl -n $NAMESPACE create configmap lnmp-mysql-cnf-0.0.1 `
+    kubectl -n $NAMESPACE create configmap lnmp-mysql-cnf `
        --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf `
        --dry-run -o yaml `
        | kubectl -n $NAMESPACE apply -f - $options
-    kubectl -n $NAMESPACE label configmap lnmp-mysql-cnf-0.0.1 app=lnmp version=0.0.1 $options
+    kubectl -n $NAMESPACE label configmap lnmp-mysql-cnf app=lnmp version=0.0.1 $options
 
     $CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
-    kubectl -n $NAMESPACE create configmap lnmp-nginx-conf-0.0.1 `
+    kubectl -n $NAMESPACE create configmap lnmp-nginx-conf `
        --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf `
        --dry-run -o yaml `
        | kubectl -n $NAMESPACE apply -f - $options
-    kubectl -n $NAMESPACE label configmap lnmp-nginx-conf-0.0.1 app=lnmp version=0.0.1 $options
+    kubectl -n $NAMESPACE label configmap lnmp-nginx-conf app=lnmp version=0.0.1 $options
 
-    kubectl -n $NAMESPACE create configmap lnmp-nginx-conf.d-0.0.1 `
+    kubectl -n $NAMESPACE create configmap lnmp-nginx-conf.d `
       --from-file=deployment/configMap/nginx-conf-d `
       --dry-run -o yaml `
       | kubectl -n $NAMESPACE apply -f - $options
-    kubectl -n $NAMESPACE label configmap lnmp-nginx-conf.d-0.0.1 app=lnmp version=0.0.1 $options
+    kubectl -n $NAMESPACE label configmap lnmp-nginx-conf.d app=lnmp version=0.0.1 $options
 
     # kubectl -n $NAMESPACE create secret generic lnmp-mysql-password `
     #  --from-literal=password=mytest $options

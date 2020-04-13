@@ -36,10 +36,10 @@ kubectl apply `
 
 if (Test-Path ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig ){exit 0}
 
-$BOOTSTRAP_TOKEN=$(wsl /wsl/k8s-data/k8s/bin/kubeadm token create `
+$BOOTSTRAP_TOKEN=$(wsl -d wsl-k8s /wsl/wsl-k8s-data/k8s/bin/kubeadm token create `
       --description kubelet-bootstrap-token `
       --groups system:bootstrappers:${NODE_NAME} `
-      --kubeconfig /wsl/k8s-data/k8s/conf/kubectl.kubeconfig)
+      --kubeconfig /wsl/wsl-k8s-data/k8s/conf/kubectl.kubeconfig)
 
     # 设置集群参数
 

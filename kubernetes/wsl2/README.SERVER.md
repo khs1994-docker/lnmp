@@ -2,26 +2,13 @@
 
 ## 注意事项
 
-* `wsl2.lnmp.khs1994.com` 解析到 WSL2 IP
-* `windows.lnmp.khs1994.com` 解析到 Windows IP
-* k8s 入口为 **域名** `wsl2.lnmp.khs1994.com:6443` `windows.lnmp.khs1994.com:16443(kube-nginx 代理)`
-* WSL2 `Ubuntu-18.04` 设为默认 WSL
+* `wsl2.k8s.khs1994.com` 解析到 WSL2 IP
+* `windows.k8s.khs1994.com` 解析到 Windows IP
+* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(kube-nginx 代理)`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
-* 新建 `k8s-data` WSL 发行版用于存储数据
+* 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
 * 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后重新使用本项目
-
-## 将 `Ubuntu-18.04` 设为版本 2 ,并设置为默认 wsl
-
-```bash
-# $ wsl -h
-
-# 设为默认
-$ wsl --set-default Ubuntu-18.04
-
-# 设为版本 2
-$ wsl --set-version Ubuntu-18.04 2
-```
 
 ## Master
 
@@ -31,34 +18,67 @@ $ wsl --set-version Ubuntu-18.04 2
 * `kube-controller-manager` WSL2
 * `kube-scheduler` WSL2
 
-## 新建 `k8s-data` WSL2 发行版
+## 初始化
+
+```bash
+$ ./lnmp-k8s
+```
+
+## 修改 windows hosts
+
+```bash
+WINDOWS_IP windows.k8s.khs1994.com
+```
+
+## 新建 `wsl-k8s` `wsl-k8s-data` WSL2 发行版
 
 **必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用以下方法。
 
 ```powershell
 $ cd ~/lnmp
 
+$ $env:DOCKER_USERNAME="your_docker_hub_username"
+$ $env:DOCKER_PASSWORD="your_docker_hub_password"
+
 $ . ./windows/sdk/dockerhub/rootfs
 
-$ wsl --import k8s-data `
-    C:/k8s-data `
+$ wsl --import wsl-k8s `
+    C:/wsl-k8s `
+    $(rootfs debian sid) `
+    --version 2
+
+$ wsl --import wsl-k8s-data `
+    C:/wsl-k8s-data `
     $(rootfs alpine) `
     --version 2
 
 # 测试
 
-$ wsl -d k8s-data
+$ wsl -d wsl-k8s -- uname -a
 
-$ uname -a
+$ wsl -d wsl-k8s-data -- uname -a
 ```
 
-由于 WSL 存储机制，硬盘空间不能回收，我们将数据放到 `k8s-data`，若不再需要 `k8s` 直接删除 `k8s-data` 即可。例如 WSL2 放入一个 10G 文件，即使删除之后，这 10G 空间仍然占用，无法回收。
+> 由于 WSL 存储机制，硬盘空间不能回收，我们将数据放到 `wsl-k8s-data`，若不再需要 `wsl-k8s` 直接删除 `wsl-k8s-data` 即可。例如 WSL2 放入一个 10G 文件，即使删除之后，这 10G 空间仍然占用，无法回收。
 
-## WSL 配置挂载路径
+## WSL(wsl-k8s) 修改 APT 源并安装必要软件
 
-`/etc/wsl.conf`
+```bash
+$ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
 
-* https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
+$ wsl -d wsl-k8s -- apt update
+
+# ps 命令
+$ wsl -d wsl-k8s -- apt install procps
+```
+
+## WSL(wsl-k8s) 配置挂载路径
+
+下载并编辑 `/etc/wsl.conf`
+
+```bash
+$ sudo curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
+```
 
 ```diff
 - root = /mnt
@@ -69,26 +89,38 @@ $ uname -a
 $ wsl --shutdown
 ```
 
-## 挂载 k8s-data `/dev/sdX` 到 `/wsl/k8s-data`
+## 挂载 wsl-k8s-data `/dev/sdX` 到 `/wsl/wsl-k8s-data`
 
 ```bash
-$ wsl -d k8s-data df -h
+$ wsl -d wsl-k8s-data df -h
 
 Filesystem                Size      Used Available Use% Mounted on
 /dev/sdc                251.0G     12.4G    225.8G   5% /
 
-# 在 ubuntu-18.04 中将 /dev/sdc(不固定，必须通过上面的命令获取该值) 挂载到 /wsl/k8s-data
+# 在 wsl-k8s 中将 /dev/sdc(不固定，必须通过上面的命令获取该值) 挂载到 /wsl/wsl-k8s-data
 
-$ wsl -u root -- mkdir -p /wsl/k8s-data
-$ wsl -u root -- mount /dev/sdX /wsl/k8s-data
+$ wsl -d wsl-k8s -u root -- mkdir -p /wsl/wsl-k8s-data
+$ wsl -d wsl-k8s -u root -- mount /dev/sdX /wsl/wsl-k8s-data
 ```
 
 ## 安装 Docker 和 docker-compose
 
-安装之后启动
+[安装](https://github.com/khs1994-docker/lnmp/blob/master/wsl2/README.DOCKER.md) 之后启动
+
+[切换 iptables](README.switch.iptables.md)
+
+**安装 docker-compose**
 
 ```bash
-$ sudo service docker start
+$ lnmp-docker compose
+```
+
+**启动 Docker**
+
+```powershell
+# $ sudo service docker start
+
+PS> lnmp-docker dockerd start
 ```
 
 ## 获取 kubernetes
@@ -96,12 +128,12 @@ $ sudo service docker start
 ```bash
 $ cd ~/lnmp/kubernetes
 
-$ wsl
+$ wsl -d wsl-k8s
 
 $ ./lnmp-k8s kubernetes-server --url
 # $ ./lnmp-k8s kubernetes-server
 
-$ ./lnmp-k8s kubernetes-server --url linux arm64
+# $ ./lnmp-k8s kubernetes-server --url linux arm64
 # $ ./lnmp-k8s kubernetes-server linux arm64
 ```
 
@@ -110,7 +142,7 @@ $ ./lnmp-k8s kubernetes-server --url linux arm64
 ```bash
 $ cd ~/lnmp/kubernetes
 
-$ wsl
+$ wsl -d wsl-k8s
 $ docker-compose up cfssl-wsl2
 ```
 
@@ -119,7 +151,7 @@ $ docker-compose up cfssl-wsl2
 ```bash
 $ ./wsl2/bin/kube-check
 
-$ wsl
+$ wsl -d wsl-k8s
 
 $ set -x
 $ source wsl2/.env
@@ -191,7 +223,7 @@ $ ./wsl2/kube-scheduler start
 ```powershell
 # $ .\wsl2\bin\supervisorctl.ps1 pid
 
-# $ wsl -u root -- supervisord -c /etc/supervisord.conf -u root
+# $ wsl -d wsl-k8s -u root -- supervisord -c /etc/supervisord.conf -u root
 
 $ ./wsl2/bin/supervisord
 ```
@@ -210,7 +242,7 @@ $ ./wsl2/bin/supervisorctl g
 
 ```powershell
 # 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
-# $ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
+# $ wsl -d wsl-k8s -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
 
 $ ./wsl2/bin/supervisorctl update
 ```
@@ -233,6 +265,16 @@ $ ./wsl2/bin/supervisorctl start kube-server:
 
 ### 5. 设置 ~/.kube/config
 
+**windows**
+
+```powershell
+$ mkdir $home/.kube
+
+$ cp certs/kubectl.kubeconfig $home/.kube/config
+```
+
+**WSL**
+
 将 WSL2 K8S 配置写入 `~/.kube/config`
 
 ```bash
@@ -249,7 +291,7 @@ $ ./wsl2/kube-apiserver start
 ```
 
 ```powershell
-# 对 wsl -u root -- supervisorctl 命令的封装
+# 对 wsl -d wsl-k8s -u root -- supervisorctl 命令的封装
 $ ./wsl2/bin/supervisorctl start kube-server:kube-apiserver
 ```
 

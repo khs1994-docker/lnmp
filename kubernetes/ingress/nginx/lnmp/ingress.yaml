@@ -3,7 +3,7 @@ kind: Secret
 type: kubernetes.io/tls
 metadata:
   namespace: lnmp
-  name: lnmp-ingress-nginx-tls-0.0.1
+  name: lnmp-ingress-nginx-tls
   labels:
     app: lnmp
     version: 0.0.1
@@ -30,7 +30,6 @@ metadata:
   namespace: lnmp
   labels:
     app: lnmp
-    version: 0.0.1
 spec:
   # 一个 Ingress 只能使用一个 secret
   tls:
@@ -38,7 +37,7 @@ spec:
     - laravel.t.khs1994.com
     - laravel2.t.khs1994.com
     - www.t.khs1994.com
-    secretName: lnmp-ingress-nginx-tls-0.0.1
+    secretName: lnmp-ingress-nginx-tls
   rules:
   - host: laravel2.t.khs1994.com # must be a DNS name, not an IP address
     http:

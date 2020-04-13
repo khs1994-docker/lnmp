@@ -6,7 +6,6 @@ metadata:
   labels:
     app: lnmp
     tier: frontend
-    version: 0.0.1
 spec:
   # 若类型为 ingress，可以不声明 type
 
@@ -36,7 +35,6 @@ spec:
   selector:
     app: lnmp
     tier: frontend
-    version: 0.0.1
   ports:
   # - name: http3-udp
   #   protocol: UDP

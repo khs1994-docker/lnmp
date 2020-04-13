@@ -3,7 +3,7 @@ bases:
 resources:
 - pv.yaml
 configMapGenerator:
-- name: lnmp-redis-conf-0.0.1
+- name: lnmp-redis-conf
   files:
   - redis.conf=config/redis.development.conf
 - name: lnmp-tz

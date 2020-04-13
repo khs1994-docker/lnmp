@@ -8,7 +8,7 @@ spec:
       volumes:
         - name: lnmp-mysql-cnf
           configMap:
-            name: lnmp-mysql-cnf-prod-0.0.1
+            name: lnmp-mysql-cnf-prod
             items:
             - key: docker.cnf
               path: docker.cnf

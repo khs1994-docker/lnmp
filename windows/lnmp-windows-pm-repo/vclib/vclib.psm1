@@ -41,7 +41,7 @@ Function install($VERSION=0,$isPre=0){
 
   }
 
-  $url="https://aka.ms/vs/16/release/VC_redist.x64.exe"
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename="VC_redist.x64.exe"
   $unzipDesc="VC_redist"

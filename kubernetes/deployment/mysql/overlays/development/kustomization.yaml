@@ -6,17 +6,17 @@ bases:
   - ../../base
 resources:
 - pv.yaml
-patches:
+patchesStrategicMerge:
   - lnmp-mysql.yaml
 configMapGenerator:
-- name: lnmp-mysql-cnf-0.0.1
+- name: lnmp-mysql-cnf
   files:
   - docker.cnf=config/docker.development.cnf
 - name: lnmp-tz
   literals:
   - TZ=Asia/Shanghai
 secretGenerator:
-- name: lnmp-mysql-password-0.0.1
+- name: lnmp-mysql-password
   literals:
   - password=mytest
 generatorOptions:

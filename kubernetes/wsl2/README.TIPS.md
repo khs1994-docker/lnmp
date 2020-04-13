@@ -9,7 +9,7 @@ $ wsl --shutdown
 ## kubelet 出错
 
 ```bash
-$ wsl -u root -- rm -rf ${K8S_ROOT:-/opt/k8s}/conf/kubelet-bootstrap.kubeconfig
+$ wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT:-/opt/k8s}/conf/kubelet-bootstrap.kubeconfig
 ```
 
 ## 将某域名解析到 WSL2

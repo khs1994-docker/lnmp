@@ -22,10 +22,10 @@ $ kubectl kustomize custom
           valueFrom:
             secretKeyRef:
               key: password
-              name: lnmp-mysql-password-0.0.1-ckggtf8tf
+              name: lnmp-mysql-password-ckggtf8tf
 ```
 
-可以看到密码是通过 `lnmp-mysql-password-0.0.1-ckggtf8tf` 这个 secret 的 `password` 指定的，接下来我们修改 `lnmp-mysql-password-0.0.1` 这个 secret。
+可以看到密码是通过 `lnmp-mysql-password-ckggtf8tf` 这个 secret 的 `password` 指定的，接下来我们修改 `lnmp-mysql-password` 这个 secret。
 
 ```diff
 # kustomization.yaml
@@ -34,13 +34,13 @@ $ kubectl kustomize custom
 + - secret.yaml
 ```
 
-我们在 `secret.yaml` 文件中重新定义 `lnmp-mysql-password-0.0.1`
+我们在 `secret.yaml` 文件中重新定义 `lnmp-mysql-password`
 
 ```yaml
 kind: Secret
 apiVersion: v1
 metadata:
-  name: lnmp-mysql-password-0.0.1
+  name: lnmp-mysql-password
 data:
   # mypassword
   password: bXlwYXNzd29yZA==
@@ -49,7 +49,7 @@ data:
 值为 base64 字符串，可以通过以下命令生成
 
 ```bash
-$ kubectl create secret generic lnmp-mysql-password-0.0.1 --from-literal=password=mypassword --dry-run -o yaml
+$ kubectl create secret generic lnmp-mysql-password --from-literal=password=mypassword --dry-run -o yaml
 ```
 
 通过以上操作，我们把密码定义为了 `mypassword`

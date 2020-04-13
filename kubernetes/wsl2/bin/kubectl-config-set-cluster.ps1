@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-  Add k8s-wsl2 config to ~/.kube/config
+  Add wsl-k8s config to ~/.kube/config
 .DESCRIPTION
-  Add k8s-wsl2 config to ~/.kube/config
+  Add wsl-k8s config to ~/.kube/config
 .EXAMPLE
 
 

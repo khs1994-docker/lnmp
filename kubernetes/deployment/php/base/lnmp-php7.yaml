@@ -5,12 +5,10 @@ metadata:
   labels:
     app: lnmp
     tier: php7
-    version: 0.0.1
 spec:
   selector:
     app: lnmp
     tier: php7
-    version: 0.0.1
   ports:
   - name: php-fpm
     port: 9000
@@ -23,13 +21,11 @@ metadata:
   labels:
     app: lnmp
     tier: php7
-    version: 0.0.1
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: php7
-      version: 0.0.1
   replicas: 2
   minReadySeconds: 5
   revisionHistoryLimit: 5 # 保留几个版本
@@ -43,7 +39,6 @@ spec:
       labels:
         app: lnmp
         tier: php7
-        version: 0.0.1
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -63,32 +58,32 @@ spec:
         - name: APP_ENV
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env
               key: APP_ENV
         - name: APP_LOG
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env
               key: APP_LOG
         - name: LOG_CHANNEL
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env
               key: LOG_CHANNEL
         - name: LNMP_OPCACHE_ENABLE
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env
               key: LNMP_OPCACHE_ENABLE
         - name: LNMP_XDEBUG_REMOTE_HOST
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env
               key: LNMP_XDEBUG_REMOTE_HOST
         - name: LNMP_XDEBUG_REMOTE_PORT
           valueFrom:
             configMapKeyRef:
-              name: lnmp-env-0.0.1
+              name: lnmp-env
               key: LNMP_XDEBUG_REMOTE_PORT
         ports:
         - containerPort: 9000
@@ -126,7 +121,7 @@ spec:
           claimName: lnmp-app
       - name: lnmp-php-conf
         configMap:
-          name: lnmp-php-conf-0.0.1
+          name: lnmp-php-conf
           items:
           - key: php.ini
             path: php.ini

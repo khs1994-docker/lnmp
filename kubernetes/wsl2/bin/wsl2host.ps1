@@ -20,7 +20,7 @@
 . $PSScriptRoot/../.env.example.ps1
 . $PSScriptRoot/../.env.ps1
 
-$wsl2_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+$wsl2_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
 Write-Output $wsl2_ip
 
@@ -86,7 +86,7 @@ if( $begin_line  -and $end_line){
 $ErrorActionPreference="SilentlyContinue"
 
 $exists_hosts_content_array[$begin_line + 1] = "
-$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN
+$wsl2_ip wsl2 wsl.k8s.khs1994.com wsl2.k8s.khs1994.com $WSL2_DOMAIN
 "
 
 for($i=1;$i -le 20; $i++){
@@ -96,16 +96,16 @@ for($i=1;$i -le 20; $i++){
   }
 }
 
-  Set-Content -Path $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts -Value $exists_hosts_content_array
+  Set-Content -Path $HOME/.khs1994-docker-lnmp/.wsl-k8s-hosts -Value $exists_hosts_content_array
 
-  _sudo "cp $HOME/.khs1994-docker-lnmp/.k8s-wsl2-hosts $hosts_path"
+  _sudo "cp $HOME/.khs1994-docker-lnmp/.wsl-k8s-hosts $hosts_path"
 
   exit
 }
 
 $hosts_content="
 # add wsl2host by khs1994-docker/lnmp BEGIN
-$wsl2_ip wsl2 wsl.lnmp.khs1994.com wsl2.lnmp.khs1994.com $WSL2_DOMAIN
+$wsl2_ip wsl2 wsl.k8s.khs1994.com wsl2.k8s.khs1994.com $WSL2_DOMAIN
 "
 
 for($i=1;$i -le 20; $i++){

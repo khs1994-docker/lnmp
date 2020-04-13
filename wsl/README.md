@@ -45,6 +45,16 @@ $ vi ~/.bashrc
 export APP_ENV=wsl
 ```
 
+## 替换 APT 源
+
+**debian**
+
+```bash
+$ sudo sed -i -e "s/deb.debian.org/mirrors.aliyun.com/g" -e "s/security.debian.org/mirrors.aliyun.com/g" -e "s/ftp.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
+```
+
+**ubuntu**
+
 ## 脚本安装软件
 
 也可以使用脚本（**脚本** 从 Docker 复制编译好的软件 [PHP 最新版] 到 WSL ，或设置 apt 从软件源 [或笔者打包的 deb 包] 安装）。
