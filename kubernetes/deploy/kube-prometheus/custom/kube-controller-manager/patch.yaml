@@ -13,7 +13,15 @@ spec:
     port: https-metrics
     scheme: https
     tlsConfig:
-      caFile: /etc/prometheus/secrets/kube-controller-manager-certs/ca.cert
-      certFile: /etc/prometheus/secrets/kube-controller-manager-certs/healthcheck-client.cert
-      keyFile: /etc/prometheus/secrets/kube-controller-manager-certs/healthcheck-client.key
+      ca:
+        secret:
+          key: ca.pem
+          name: kube-controller-manager-tls
+      cert:
+        secret:
+          key: cert.pem
+          name: kube-controller-manager-tls
+      keySecret:
+        key: key.pem
+        name: kube-controller-manager-tls
       insecureSkipVerify: true

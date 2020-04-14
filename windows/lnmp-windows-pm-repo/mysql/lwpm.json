@@ -2,9 +2,11 @@
   "name": "mysql",
   "description": "MySQL Server, the world's most popular open source database, and MySQL Cluster, a real-time, open source transactional database",
   "version": "8.0.19",
-  "preVersion": "8.0.19",
+  "pre-version": "8.0.19",
   "homepage": "http://www.mysql.com/",
   "bug": "",
   "github": "mysql/mysql-server",
-  "releases": "https://github.com/mysql/mysql-server/releases"
+  "releases": "https://github.com/mysql/mysql-server/releases",
+  "url": "https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip",
+  "url-mirror": "https://mirrors.huaweicloud.com/mysql/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
 }

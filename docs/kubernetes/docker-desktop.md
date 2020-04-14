@@ -10,13 +10,7 @@
 127.0.0.1 k8s.gcr.io gcr.io
 ```
 
-### macOS
-
-需要在 Docker 设置中将 `gcr.io` `k8s.gcr.io` 加入到非安全仓库中。
-
-### Windows
-
-Windows 系统每次升级之后，k8s 可能一直处于启动状态中，请首先开启 Local Server，然后在设置中重置 Kubernetes。
+**macOS** 需要在 Docker 设置中将 `gcr.io` `k8s.gcr.io` 加入到非安全仓库中。
 
 ### 拉取镜像
 
@@ -33,7 +27,7 @@ $ lnmp-docker gcr.io
 * `~/.kube`
 * `C:\ProgramData\DockerDesktop\pki`
 
-## 切换
+## 切换 context
 
 之前你可能使用了 `minikube`，使用以下命令切换到 Docker 桌面版。
 
@@ -61,13 +55,13 @@ $ kubectl config use-context minikube
 $ lnmp-k8s create
 ```
 
-### 删除 lnmp
+**删除 lnmp**
 
 ```bash
 $ lnmp-k8s delete
 ```
 
-### 销毁 lnmp
+**销毁 lnmp**
 
 ```bash
 $ lnmp-k8s cleanup
@@ -79,12 +73,13 @@ $ lnmp-k8s cleanup
 
 ## 开发者
 
-> 本项目可能会更新不及时,你可以自行找出 `Docker 桌面版` 需要哪些 k8s.gcr.io 镜像
+> 本项目可能会更新不及时，你可以自行找出 `Docker 桌面版` 需要哪些 k8s.gcr.io 镜像
 
 ```bash
 # 启动本地 gcr.io 服务器
 $ lnmp-docker gcr.io --no-pull
 
+# 在 docker 设置中启用 k8s
 # 查看日志
 $ lnmp-docker gcr.io logs
 

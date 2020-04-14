@@ -22,35 +22,28 @@ $ import-module k8s-helper
 
 ## [Containerd](https://github.com/microsoft/SDN/tree/master/Kubernetes/containerd)
 
-* https://github.com/containerd/containerd/actions (containerd.exe ctr.exe) (下载并移入 PATH)
-* https://github.com/microsoft/hcsshim/releases (下载并移入 PATH)
+下载以下文件并移入 PATH
+
+* https://github.com/containerd/containerd/actions **containerd.exe** **ctr.exe**
+* https://github.com/microsoft/hcsshim/releases **runhcs.exe**
+* https://aksenginee2etestimages.blob.core.windows.net/test-content/windows-cri-containerd.zip **containerd-shim-runhcs-v1.exe**
 
 ```powershell
 $ containerd --register-service
 ```
 
-* 配置文件 `C:\Program Files\containerd\config.toml`
+* 默认配置文件 `C:\Program Files\containerd\config.toml`
 
 ## [Docker](https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file)
 
-* 配置文件 `$env:programdata\docker\config\daemon.json`
+* 默认配置文件 `$env:programdata\docker\config\daemon.json`
 
-## [Flannel](https://github.com/coreos/flannel/releases)
+* Docker + Containerd https://github.com/moby/moby/pull/38541
 
-```powershell
-$ New-HNSNetwork `
-  -Type overlay `
-  -AddressPrefix "192.168.255.0/30" `
-  -Gateway "192.168.255.1" `
-  -Name "External" `
-  -AdapterName "Ethernet" `
-  -SubnetPolicies @(@{Type = "VSID"; VSID = 9999; })
+## CNI
 
-# 删除
-# $ Get-HnsNetwork | ? Name -eq External | Remove-HnsNetwork
-```
-
-## [CNI](https://github.com/containernetworking/plugins/releases)
+* https://github.com/containernetworking/plugins/releases
+* https://github.com/microsoft/windows-container-networking
 
 ## kubelet kube-proxy
 
@@ -63,7 +56,7 @@ $ ./lnmp-k8s kubernetes-server --url windows amd64 node
 
 # ~/lnmp/kubernetes/kubernetes-release/release/v.x.y.z-windows-amd64
 
-# 自行复制二进制文件到 PATH
+# 自行复制二进制文件 kubelet kube-proxy 到 PATH
 ```
 
 ## [crictl](https://github.com/kubernetes-sigs/cri-tools/releases)

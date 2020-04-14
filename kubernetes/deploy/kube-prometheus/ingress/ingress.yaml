@@ -5,12 +5,12 @@ metadata:
 spec:
   tls:
   - hosts:
-    - prometheus.t.khs1994.com
+    - prometheus-alertmanager.t.khs1994.com
     - grafana.t.khs1994.com
-    - prometheus-server.t.khs1994.com
+    - prometheus.t.khs1994.com
     secretName: cert.t.khs1994.com
   rules:
-  - host: prometheus.t.khs1994.com
+  - host: prometheus-alertmanager.t.khs1994.com
     http:
       paths:
       - path: /
@@ -24,7 +24,7 @@ spec:
         backend:
           serviceName: grafana
           servicePort: 3000
-  - host: prometheus-server.t.khs1994.com
+  - host: prometheus.t.khs1994.com
     http:
       paths:
       - path: /

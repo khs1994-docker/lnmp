@@ -32,14 +32,24 @@ if(!$env:DOCKER_PASSWORD){
 
 $user = $env:DOCKER_USERNAME
 $pass = $env:DOCKER_PASSWORD
+
+if(!$user){$user='user'}
+if(!$pass){$pass='pass'}
+
 $secpasswd = ConvertTo-SecureString $pass -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($user, $secpasswd)
 
 # $credential=Get-Credential
 
+try{
 $result = Invoke-WebRequest -Authentication Basic -credential $Credential `
 "${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}" `
 -UserAgent "Docker-Client/19.03.5 (Windows)"
+}catch{
+  write-host $_.Exception.ToString()
+
+  return $null
+}
 
 $token = (ConvertFrom-Json $result.Content).token
 

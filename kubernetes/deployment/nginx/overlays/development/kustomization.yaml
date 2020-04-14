@@ -5,16 +5,15 @@ resources:
 - pv.yaml
 - lnmp-nginx.service.yaml
 configMapGenerator:
-- name: lnmp-nginx-conf-0.0.1
+- name: lnmp-nginx-conf
   files:
   - nginx.conf=config/nginx.development.conf
-- name: lnmp-nginx-conf.d-0.0.1
+- name: lnmp-nginx-conf.d
   files:
   - config/conf.d/t.khs1994.com.development.conf
 - name: lnmp-tz
   literals:
   - TZ=Asia/Shanghai
-patches:
 generatorOptions:
   labels:
     app: lnmp

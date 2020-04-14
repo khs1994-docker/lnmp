@@ -24,6 +24,6 @@
 
 具体参考本项目的 PHP compose 文件 https://github.com/khs1994-docker/lnmp/blob/master/dockerfile/php/docker-compose.yml
 
-## 增加 `LNMP_CN_ENV=true` 环境变量
+## `LNMP_CN_ENV` 环境变量
 
-本项目会根据 `LNMP_CN_ENV=true` 来替换源为国内镜像，避免因网络问题影响使用。
+本项目会根据 `LNMP_CN_ENV=true` (默认，无需添加环境变量) 来替换源为国内镜像，避免因网络问题影响使用（当你的环境处于非国内环境时请改为 `LNMP_CN_ENV=false`）。

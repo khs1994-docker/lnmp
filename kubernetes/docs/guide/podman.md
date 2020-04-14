@@ -13,5 +13,5 @@ $ podman pull alpine
 
 $ podman pull k8s.gcr.io/pause:3.0
 $ podman pull gcr.io/google-containers/pause:3.0
-$ podman pull gcr.azk8s.cn/google-containers/pause:3.0
+$ podman pull gcr.mirror/google-containers/pause:3.0
 ```

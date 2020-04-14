@@ -1,21 +1,21 @@
 # WSL2
 
 * 1. 使用 Docker 桌面版启动 WSL2 Docker（在设置中启用）
-* 2. 直接在 WSL2 安装 Docker（按照 Linux 上安装 Docker 的教程操作即可，这里不再赘述。）
+* 2. 直接在 WSL2 安装 Docker（按照 Linux 上安装 Docker 的 [教程](https://vuepress.mirror.docker-practice.com/install/debian.html) 操作即可，这里不再赘述。）
 
 > 两种方式启动的 Docker 相互冲突，请停止另一个并执行 `$ wsl --shutdown` 后重新启动。
 
 ## 说明
 
 * Docker 服务端(`dockerd`) 运行于 `WSL2`
-* 数据放到 `k8s-data` WSL2 发行版
+* 数据放到 `wsl-k8s-data` WSL2 发行版
 
 ## 准备(自定义 DNS 服务器)
 
 * `etcd`
 * `coreDNS`
 
-## 功能
+## docker-lnmp CLI
 
 * 直接在终端执行 `$ ./lnmp-docker` 无需切换到 WSL2
 
@@ -34,7 +34,7 @@ root = /
 `/etc/default/docker`
 
 ```bash
-DOCKER_OPTS="--registry-mirror=https://dockerhub.azk8s.cn --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock --data-root=/wsl/k8s-data/docker"
+DOCKER_OPTS="--registry-mirror=https://hub-mirror.c.163.com --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock --data-root=/wsl/wsl-k8s-data/docker"
 ```
 
 ## 3. 不要设置 `DOCKER_HOST` 环境变量

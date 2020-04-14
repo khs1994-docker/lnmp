@@ -26,3 +26,9 @@
 
 * nfs
 * iscsi
+
+## 内存回收
+
+* https://devblogs.microsoft.com/commandline/memory-reclaim-in-the-windows-subsystem-for-linux-2/
+
+使用官方版本的 [Linux](https://github.com/torvalds/linux) 构建的内核，内存不会回收，所以请避免使用。

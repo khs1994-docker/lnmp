@@ -108,7 +108,7 @@ spec:
     spec:
       volumes:
       - configMap:
--         name: lnmp-nginx-conf.d-0.0.1
+-         name: lnmp-nginx-conf.d
 +         name: lnmp-nginx-conf.d-0.0.2
         name: lnmp-nginx-conf-d
 ```
@@ -147,9 +147,7 @@ $ ./lnmp-k8s cleanup development
 
 **Ensure iptables tooling does not use the nftables backend**
 
-In Linux, **nftables** is available as a modern replacement for the kernel’s **iptables** subsystem. The iptables tooling can act as a compatibility layer, behaving like iptables but actually configuring nftables. This nftables backend is not compatible with the current kubeadm packages: it causes duplicated firewall rules and breaks kube-proxy.
-
-* https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/#ensure-iptables-tooling-does-not-use-the-nftables-backend
+具体请查看 [这里](./wsl2/README.switch.iptables.md)
 
 ## 学习
 

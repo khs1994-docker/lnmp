@@ -26,8 +26,6 @@ $ wsl -l -v
 打开 PowerShell
 
 ```bash
-$ wsl --set-default-version 2
-
 $ [environment]::SetEnvironmentvariable("LNMP_PATH", "$env:HOME/lnmp", "User");
 
 $ [environment]::SetEnvironmentvariable("Path", "$env:Path;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
@@ -46,6 +44,16 @@ $ vi ~/.bashrc
 
 export APP_ENV=wsl
 ```
+
+## 替换 APT 源
+
+**debian**
+
+```bash
+$ sudo sed -i -e "s/deb.debian.org/mirrors.aliyun.com/g" -e "s/security.debian.org/mirrors.aliyun.com/g" -e "s/ftp.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
+```
+
+**ubuntu**
 
 ## 脚本安装软件
 

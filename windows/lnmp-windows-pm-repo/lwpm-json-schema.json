@@ -1,0 +1,58 @@
+{
+  "title": "JSON schema for configuring LWPM",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://lnmp.khs1994.com",
+  "$comment": "https://docs.lnmp.khs1994.com/windows/lwpm.html",
+  "description": "see https://docs.lnmp.khs1994.com/windows/lwpm.html",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "soft name"
+    },
+    "description": {
+      "type": "string",
+      "description": "soft description"
+    },
+    "version": {
+      "type": "string",
+      "description": "soft version"
+    },
+    "pre-version": {
+      "type": "string",
+      "description": "soft pre version"
+    },
+    "url": {
+      "description": "soft download url",
+      "type": "string"
+    },
+    "url-mirror": {
+      "description": "soft download url mirror",
+      "type": "string"
+    },
+    "pre-url": {
+      "description": "soft pre version download url",
+      "type": "string"
+    },
+    "pre-url-mirror": {
+      "description": "soft pre version download url mirror",
+      "type": "string"
+    },
+    "scripts": {
+      "type": "object",
+      "properties": {
+        "test": {
+          "type": "string"
+        }
+      }
+    },
+    "path": {
+      "type": "array",
+      "description": "insert path",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -18,7 +18,7 @@ env:
   - LNMP_PATH=/home/travis/build/khs1994-docker/lnmp
   - LNMP_BRANCH=19.03
 
-# matrix:
+# jobs:
 #   include:
 #     # - os: windows
 #     #   dist: 1803-containers

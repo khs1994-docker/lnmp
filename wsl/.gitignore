@@ -2,6 +2,8 @@
 !.gitignore
 !wsl
 !README.md
+!README.import-dist.md
+!README.curl.md
 !nginx
 !httpd
 !deb

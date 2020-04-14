@@ -1,0 +1,8 @@
+/*
+!.gitignore
+!README.md
+!lnmp
+!tcp-udp
+!registry
+!ingress.example.yaml
+!ingressClass

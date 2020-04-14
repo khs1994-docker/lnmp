@@ -37,6 +37,6 @@ health:
     threshold: 3
 
 proxy:
-  remoteurl: https://gcr.azk8s.cn
+  remoteurl: https://registry.cn-hangzhou.aliyuncs.com
   # gcr.mirrors.ustc.edu.cn
   # gcr-mirror.qiniu.com

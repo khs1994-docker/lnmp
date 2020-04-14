@@ -1,7 +1,0 @@
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: postgresql-data
-spec:
-  hostPath:
-    path: /var/lib/khs1994-docker-lnmp/harbor/postgresql

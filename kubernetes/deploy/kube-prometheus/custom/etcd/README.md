@@ -1,20 +1,20 @@
-## 创建 secret
+## 创建 service
 
-进入 certs 目录，创建 secret
-
-```yaml
-namespace: monitoring
-secretGenerator:
-- name: etcd-certs
-  files:
-  - ca.cert=ca.pem
-  - healthcheck-client.cert=etcd-client.pem
-  - healthcheck-client.key=etcd-client-key.pem
-generatorOptions:
-  disableNameSuffixHash: true
+```bash
+$ kubectl apply -k service
 ```
 
-其他步骤参考 `kube-controller-manager`
+## 将 etcd 客户端证书放入 certs
+
+* ca.pem
+* cert.pem
+* key.pem
+
+## 创建 prometheus-serviceMonitorEtcd
+
+```bash
+$ kubectl apply -k .
+```
 
 ## Grafana
 

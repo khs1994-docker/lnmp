@@ -52,7 +52,7 @@ exit 0
 }
 
 docker run --init -it --rm `
-  --mount type=bind,src=$(wslapth $PWD),target=/app `
+  --mount type=bind,src=$(wslpath $PWD),target=/app `
   --mount src=lnmp_composer_cache-data,target=${COMPOSER_CACHE_DIR} `
   --mount src=lnmp_composer_home-data,target=${COMPOSER_HOME} `
   --mount type=bind,src=$(wslpath $PSScriptRoot/../config/composer/config.json),target=${COMPOSER_HOME}/config.json `

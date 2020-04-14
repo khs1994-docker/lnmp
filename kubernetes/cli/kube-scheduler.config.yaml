@@ -1,6 +1,4 @@
-algorithmSource:
-  provider: DefaultProvider
-apiVersion: kubescheduler.config.k8s.io/v1alpha1
+apiVersion: kubescheduler.config.k8s.io/v1alpha2
 bindTimeoutSeconds: 600
 clientConnection:
   acceptContentTypes: ""
@@ -11,14 +9,12 @@ clientConnection:
 disablePreemption: false
 enableContentionProfiling: true
 enableProfiling: true
-hardPodAffinitySymmetricWeight: 1
+extenders: null
 healthzBindAddress: 0.0.0.0:10251
 kind: KubeSchedulerConfiguration
 leaderElection:
   leaderElect: true
   leaseDuration: 15s
-  lockObjectName: kube-scheduler
-  lockObjectNamespace: kube-system
   renewDeadline: 10s
   resourceLock: endpointsleases
   resourceName: kube-scheduler
@@ -28,4 +24,5 @@ metricsBindAddress: 0.0.0.0:10251
 percentageOfNodesToScore: 0
 podInitialBackoffSeconds: 1
 podMaxBackoffSeconds: 10
-schedulerName: default-scheduler
+profiles:
+- schedulerName: default-scheduler

@@ -19,6 +19,8 @@
 * https://github.com/cri-o/cri-o/blob/master/tutorial.md
 * https://github.com/cri-o/cri-o/blob/master/tutorials/kubernetes.md
 
+crio 会加载 `/etc/containers/registries.conf`
+
 ### Fedora kubernetes DNS 解析不了
 
 与 `virbr0` 网卡有关，关闭相关进程。
@@ -33,7 +35,7 @@ $ sudo systemctl disable libvirtd.service
 
 ### 镜像加速器
 
-最好在运行时级别设置好镜像加速器，例如 `gcr.io` => `gcr.azk8s.cn`,具体请查看运行时配置文件。
+最好在运行时级别设置好镜像加速器，例如 `gcr.io` => `gcr.mirror`,具体请查看运行时配置文件。
 
 ### Cgroup Driver
 

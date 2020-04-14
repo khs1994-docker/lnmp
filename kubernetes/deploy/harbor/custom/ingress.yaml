@@ -10,7 +10,9 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  ingressClassName: kong
   tls:
+  # fix me
   - secretName: cert.t.khs1994.com
     hosts:
     - harbor.t.khs1994.com

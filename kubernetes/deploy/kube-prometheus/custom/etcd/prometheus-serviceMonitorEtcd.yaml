@@ -1,5 +1,5 @@
-apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
+apiVersion: monitoring.coreos.com/v1
 metadata:
   labels:
     k8s-app: etcd
@@ -11,9 +11,17 @@ spec:
     port: etcd
     scheme: https
     tlsConfig:
-      caFile: /etc/prometheus/secrets/etcd-certs/ca.cert
-      certFile: /etc/prometheus/secrets/etcd-certs/healthcheck-client.cert
-      keyFile: /etc/prometheus/secrets/etcd-certs/healthcheck-client.key
+      ca:
+        secret:
+          key: ca.pem
+          name: etcd-client-tls
+      cert:
+        secret:
+          key: cert.pem
+          name: etcd-client-tls
+      keySecret:
+        key: key.pem
+        name: etcd-client-tls
       insecureSkipVerify: true
   jobLabel: k8s-app
   namespaceSelector:

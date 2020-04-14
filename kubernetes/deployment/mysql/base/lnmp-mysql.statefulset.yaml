@@ -7,12 +7,10 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
-    version: 0.0.1
 spec:
   selector:
     app: lnmp
     tier: mysql
-    version: 0.0.1
   ports:
     - port: 3306
 ---
@@ -23,7 +21,6 @@ metadata:
   labels:
     app: lnmp
     tier: mysql
-    version: 0.0.1
 spec:
   serviceName: mysql
   # podManagementPolicy: "Parallel" # 并行创建或删除 Pod
@@ -33,13 +30,11 @@ spec:
     matchLabels:
       app: lnmp
       tier: mysql
-      version: 0.0.1
   template:
     metadata:
       labels:
         app: lnmp
         tier: mysql
-        version: 0.0.1
       # annotations:
     spec:
       nodeSelector:
@@ -61,7 +56,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: lnmp-mysql-password-0.0.1
+              name: lnmp-mysql-password
               key: password
         - name: TZ
           valueFrom:

@@ -5,16 +5,16 @@ Import-Module cleanup
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
 $url=$lwpm.url
-$preUrl=$lwpm.preUrl
+$pre_url=$lwpm.'pre-url'
 
 Function getVersion($url=$null){
   try{
@@ -30,7 +30,7 @@ Function getVersion($url=$null){
 }
 
 Function getLatestVersion(){
-  return $(getVersion $url),$(getVersion $preUrl)
+  return $(getVersion $url),$(getVersion $pre_url)
 }
 
 Function install($VERSION=0,$isPre=0){
@@ -40,7 +40,7 @@ Function install($VERSION=0,$isPre=0){
   }
 
   if($isPre){
-    $VERSION=getVersion $preUrl
+    $VERSION=getVersion $pre_url
   }
 
   $url="https://download-installer.cdn.mozilla.net/pub/firefox/releases/${VERSION}/win64/en-US/Firefox%20Setup%20${VERSION}.exe"

@@ -119,7 +119,8 @@ spec:
       containers:
       - name: coredns
         # image: k8s.gcr.io/coredns:1.6.7
-        image: gcr.azk8s.cn/google-containers/coredns:1.6.7
+        # image: gcr.mirror/google-containers/coredns:1.6.7
+        image: registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.7
         imagePullPolicy: IfNotPresent
         resources:
           limits:

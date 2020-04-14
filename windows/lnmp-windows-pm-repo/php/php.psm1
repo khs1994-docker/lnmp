@@ -9,14 +9,19 @@ $PHP_CACERT_DATE="2020-01-01"
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$url_mirror=$lwpm.'url-mirror'
+$pre_url=$lwpm.'pre-url'
+$pre_url_mirror=$lwpm.'pre-url-mirror'
+$insert_path=$lwpm.path
 
 Function install_ext($PHP_PREFIX){
   $PHP_INI="${PHP_PREFIX}/php.ini"
@@ -100,11 +105,11 @@ Function install_after($VERSION,$PHP_PREFIX){
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=$stable_version
   }
   if($isPre){
     $VC_VERSION="nts-Win32-vc15"
-    $VERSION=$preVersion
+    $VERSION=$pre_version
     $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php-pre"
     $PHP_PREFIX="C:\php-pre"

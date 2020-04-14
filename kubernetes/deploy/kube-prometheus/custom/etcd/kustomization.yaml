@@ -1,3 +1,11 @@
 resources:
-  - prometheus-serviceMonitorEtcd.yaml
+  - base/prometheus-serviceMonitorEtcd.yaml
 namespace: monitoring
+secretGenerator:
+  - name: etcd-client-tls
+    files:
+      - certs/ca.pem
+      - certs/cert.pem
+      - certs/key.pem
+generatorOptions:
+  disableNameSuffixHash: true

@@ -5,11 +5,11 @@
 * https://hub.docker.com/u/lrewpkg
 * https://packagist.org/packages/lrew/
 
-macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lrew`。`lrew` 实现了对 khs1994-docker/lnmp 项目的扩展，提供了以下功能。
+macOS 有 `brew` 包管理工具，khs1994-docker/lnmp 包管理工具称为 `lrew`。`lrew` 实现了对 khs1994-docker/lnmp 项目的扩展，让用户可以方便的增加某个软件。
 
 ## 修改配置
 
-你可以通过以下方式启用 `example` 包(假设 `example` 包提供了 `example` 服务)。若在 `lrew` 目录下没找到你所需要的包，你可以参照下一小节开发一个包或者在 https://packagist.org/packages/lrew/ 寻找一个包。
+你可以通过以下方式启用 `example` 包（假设 `example` 包提供了 `example` 服务）。若在 `lrew` 目录下没找到你所需要的包，你可以参照下一小节开发一个包或者在 https://packagist.org/packages/lrew/ 寻找一个包。
 
 编辑 `.env` 文件，将 `example` 加入到以下变量中，例如
 

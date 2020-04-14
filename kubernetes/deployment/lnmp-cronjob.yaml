@@ -6,7 +6,6 @@ metadata:
   name: lnmp-cron
   labels:
     app: lnmp
-    version: 0.0.1
 spec:
   schedule: "*/1 * * * *"
   jobTemplate:

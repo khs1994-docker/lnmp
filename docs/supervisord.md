@@ -21,6 +21,7 @@ $ lnmp-docker up
 `supervisor` 为 C(supervisorctl)/S(supervisord) 架构
 
 ```bash
+# $ sudo apt install python3 python3-pip
 $ sudo pip3 install supervisor
 ```
 

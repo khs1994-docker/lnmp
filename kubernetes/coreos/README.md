@@ -13,6 +13,7 @@
 
 ## 注意事项
 
+* 虚拟机内存 `3072M (3G)`，设置为 `2048M (2G)` 将无法启动
 * 若使用虚拟机安装，建议电脑内存 **16G** 硬盘 **100G** 可用空间
 * `SELinux` 已关闭
 * `kubelet` 容器运行时为 `containerd`，可以改为 `docker`
@@ -74,6 +75,8 @@ $ ./coreos add-node {n} [TYPE:master | node] # n > 3
 ### 启动本地服务器
 
 ```bash
+$ docker pull khs1994/fcos
+
 $ ./coreos server
 ```
 
@@ -125,14 +128,26 @@ $ sudo chown -R core:core ~/.kube
 $ kubectl apply -f /home/core/calico.yaml
 ```
 
-## 虚拟机网卡设置
+## 安装 ipset (否则将不能启用 IPVS)
+
+每个节点都安装之后重启
+
+```bash
+$ sudo rpm-ostree install ipset
+```
+
+## 测试 k8s 集群功能
+
+## 附录
+
+**虚拟机网卡设置**
 
 | 网卡    | 模式                  | IP              |
 | :-----  | :-------------        |:------          |
 | 网卡1   | `host-only` (静态IP)  | `192.168.57.*`  |
 | 网卡2   | 桥接 (`DHCP`)         | `192.168.199.*`(根据实际配置) |
 
-## 添加默认路由
+**添加默认路由**
 
 有时可能连接不到网络，请添加路由（`192.168.199.1` 为桥接网络的网关地址）。
 
@@ -140,7 +155,7 @@ $ kubectl apply -f /home/core/calico.yaml
 $ sudo route add default gw 192.168.199.1
 ```
 
-# More Information
+## More Information
 
 * https://blog.khs1994.com/categories/Docker/CoreOS/
 * [生成 Docker Daemon 远程连接自签名证书文件](https://blog.khs1994.com/docker/dockerd.html)

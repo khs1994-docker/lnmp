@@ -1,10 +1,11 @@
 {
   "name": "frp",
   "description": "A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet",
-  "version": "0.32.0",
-  "preVersion": "0.32.0",
+  "version": "0.32.1",
+  "pre-version": "0.32.1",
   "homepage": "https://github.com/fatedier/frp",
   "bug": "https://github.com/fatedier/frp/issues",
   "github": "fatedier/frp",
-  "releases": "https://github.com/fatedier/frp/releases"
+  "releases": "https://github.com/fatedier/frp/releases",
+  "url": "https://github.com/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_windows_amd64.zip"
 }

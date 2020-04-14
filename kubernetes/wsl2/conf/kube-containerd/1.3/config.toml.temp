@@ -48,7 +48,8 @@ oom_score = 0
     stream_server_port = "0"
     stream_idle_timeout = "4h0m0s"
     enable_selinux = false
-    sandbox_image = "gcr.azk8s.cn/google-containers/pause:3.2"
+    # sandbox_image = "gcr.mirror/google-containers/pause:3.2"
+    sandbox_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
     stats_collect_period = 10
     systemd_cgroup = false
     enable_tls_streaming = false
@@ -102,11 +103,11 @@ oom_score = 0
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
           # endpoint = ["https://registry-1.docker.io"]
-          endpoint = ["https://dockerhub.azk8s.cn"]
-        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.io"]
-          endpoint = ["https://gcr.azk8s.cn"]
-        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
-          endpoint = ["https://quay.azk8s.cn"]
+          endpoint = ["https://hub-mirror.c.163.com"]
+        # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.io"]
+        #  endpoint = ["https://gcr.mirror"]
+        # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
+        #  endpoint = ["https://"]
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
         # 私有 registry 验证
         [plugins."io.containerd.grpc.v1.cri".registry.configs."gcr.io".auth]

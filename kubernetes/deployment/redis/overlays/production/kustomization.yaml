@@ -3,13 +3,13 @@ bases:
 resources:
 - pvc.yaml
 configMapGenerator:
-- name: lnmp-redis-conf-0.0.1
+- name: lnmp-redis-conf
   files:
   - redis.conf=config/redis.production.conf
 - name: lnmp-tz
   literals:
   - TZ=Asia/Shanghai
-patches:
+# patchesStrategicMerge:
 # - hostpath.patch.yaml
 generatorOptions:
   labels:

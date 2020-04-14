@@ -9,14 +9,18 @@ $HTTPD_MOD_FCGID_VERSION="2.3.10"
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
+$url=$lwpm.url
+$url_mirror=$lwpm.'url-mirror'
+$pre_url=$lwpm.'pre-url'
+$pre_url_mirror=$lwpm.'pre-url-mirror'
 
 Function after_install(){
   $a=Select-String 'IncludeOptional conf.d/' C:\Apache24\conf\httpd.conf
@@ -35,14 +39,14 @@ LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=$stable_version
   }
 
   if($isPre){
-    $VERSION=$preVersion
+    $VERSION=$pre_version
   }
 
-  $url="https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip"
+  $url=$url.replace('${VERSION}',${VERSION});
 
   $filename="httpd-${VERSION}-win64-VS16.zip"
   $unzipDesc="httpd"

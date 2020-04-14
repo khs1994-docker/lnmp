@@ -2,9 +2,13 @@
   "name": "python",
   "description": "Python is a programming language that lets you work quickly and integrate systems more effectively",
   "version": "3.8.2",
-  "preVersion": "3.8.2",
+  "pre-version": "3.8.2",
   "homepage": "https://www.python.org/",
   "bug": "",
   "github": "python/cpython",
-  "releases": "https://www.python.org/downloads/"
+  "releases": "https://www.python.org/downloads/",
+  "url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "pre-url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
 }

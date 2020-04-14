@@ -67,7 +67,7 @@ _docker_daemon(){
       echo '
 {
   "registry-mirrors": [
-  "https://dockerhub.azk8s.cn"
+  "https://hub-mirror.c.163.com"
   ],
   "debug": true,
   "dns": [

@@ -2,9 +2,10 @@
   "name": "coredns",
   "description": "CoreDNS is a DNS server that chains plugins",
   "version": "1.6.7",
-  "preVersion": "1.6.7",
+  "pre-version": "1.6.7",
   "homepage": "https://coredns.io/",
   "bug": "https://github.com/coredns/coredns/issues",
   "github": "coredns/coredns",
-  "releases": "https://github.com/coredns/coredns/releases"
+  "releases": "https://github.com/coredns/coredns/releases",
+  "url": "https://github.com/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_windows_amd64.tgz"
 }

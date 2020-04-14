@@ -12,8 +12,6 @@
 
 在线阅读：[WebSite](https://docs.lnmp.khs1994.com/)
 
-或在命令行执行 `./lnmp-docker docs` 在本地阅读。
-
 ## 微信订阅号
 
 <p align="center">
@@ -33,12 +31,12 @@
 即：本项目 `v18.09.0` 与 **Docker 桌面版** `v18.09` 和 **PHP** `7.2.13` 对应。
 
 发布流程：
-* PHP 发布新版本时(PHP 7.3.9)，打 `tag`，归档当前项目(PHP 7.3.8)，发布正式版本
+* PHP 发布新版本时(PHP 7.3.9)，打 `tag`，归档当前项目(PHP 7.3.8)，发布正式版本(7.3.8)
 * 更新 PHP Dockerfile(PHP 7.3.9)，推送到 `YY.MM-pre` 分支，CI 自动同步 PHP Dockerfile 到 `khs1994-docker/php`
 * `khs1994-docker/php` 打 `tag`(PHP 7.3.9)
 * CI 构建 PHP 镜像(PHP 7.3.9)，构建完成之后合并到 `YY.MM` 分支，发布 `alpha` 版本(PHP 7.3.9)
 * 后续根据开发流程，发布 `beta` `rc` 版本(PHP 7.3.9)
-* 期间更新 PHP Dockerfile (PHP 7.3.9)时，`khs1994-docker/php` 可以打多个 tag (7.3.9-1,7.3.9-2)
+* 期间更新 PHP Dockerfile (PHP 7.3.9)时，`khs1994-docker/php` 可以打多个 tag (**7.3.9-1** **7.3.9-2**)
 
 ## 特色
 
@@ -62,7 +60,7 @@
 
 * 内置 `Drone CI` 私有 CI/CD 方案
 
-* [可扩展](custom.md)，支持自定义 `compose` 文件
+* [可扩展](custom.md)，支持自定义 `docker compose` 文件
 
 * 通过 [khs1994-docker/actions-setup-lnmp](https://github.com/khs1994-docker/actions-setup-lnmp) 可在 GitHub Actions CI/CD 中快速启用 LNMP 环境
 

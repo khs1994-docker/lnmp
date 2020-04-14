@@ -2,9 +2,11 @@
   "name": "yarn",
   "description": "Fast, reliable, and secure dependency management",
   "version": "1.22.0",
-  "preVersion": "1.22.0",
+  "pre-version": "1.22.0",
   "homepage": "https://www.yarnpkg.com/lang/en/",
   "bug": "https://github.com/yarnpkg/yarn/issues",
   "github": "yarnpkg/yarn",
-  "releases": "https://github.com/yarnpkg/yarn/releases"
+  "releases": "https://github.com/yarnpkg/yarn/releases",
+  "url": "https://github.com/yarnpkg/yarn/releases/download/v${VERSION}/yarn-${VERSION}.msi",
+  "url-mirror": "https://mirrors.huaweicloud.com/yarn/v${VERSION}/yarn-${VERSION}.msi"
 }

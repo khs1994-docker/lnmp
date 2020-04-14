@@ -1,0 +1,29 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: harbor-postgresql-data
+  labels:
+    app: harbor
+    component: postgresql
+spec:
+  hostPath:
+    path: /var/lib/khs1994-docker-lnmp/harbor/postgresql
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: harbor-redis-data
+  labels:
+    app: harbor
+    component: redis
+spec:
+  hostPath:
+    path: /var/lib/khs1994-docker-lnmp/harbor/redis
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce

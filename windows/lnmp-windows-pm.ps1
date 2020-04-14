@@ -254,7 +254,7 @@ function __info($soft){
   $lwpm=manifest $soft
 
   $stableVersion=$lwpm.version
-  $preVersion=$lwpm.preVersion
+  $preVersion=$lwpm.'pre-version'
   $githubRepo=$lwpm.github
   $homepage=$lwpm.homepage
   $releases=$lwpm.releases

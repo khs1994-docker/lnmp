@@ -1,0 +1,26 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: windows-metrics
+  namespace: kube-system
+  labels:
+    k8s-app: windows-metrics
+spec:
+  ports:
+  - port: 9182
+    name: http-metrics
+  clusterIP: None
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: windows-metrics
+  namespace: kube-system
+  labels:
+    k8s-app: windows-metrics
+subsets:
+  - addresses:
+    - ip: 192.168.199.100
+    ports:
+      - port: 9182
+        name: http-metrics

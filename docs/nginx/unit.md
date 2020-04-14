@@ -4,11 +4,7 @@
 
 ## WSL 编译安装 NGINX Unit
 
-本文使用源码编译安装。
-
 * [官方文档](https://unit.nginx.org/)
-
-* [第三方中文文档](https://github.com/khs1994-php/unit/blob/master/README_zh-Hans.md)
 
 ```bash
 # 克隆源码

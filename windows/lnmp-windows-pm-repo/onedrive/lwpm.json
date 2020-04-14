@@ -1,0 +1,27 @@
+{
+  "name": "onedrive",
+  "description": "",
+  "version": "",
+  "pre-version": "",
+  "homepage": "https://support.office.com/en-us/onedrive",
+  "bug": "",
+  "github": "",
+  "releases": "https://support.office.com/en-us/article/onedrive-release-notes-845dcf18-f921-435e-bf28-4e24b95e5fc0",
+  "url": "",
+  "url-mirror": "",
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "scripts": {
+    "preinstall": "",
+    "install": "",
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": "",
+    "postuninstall": "",
+    "pretest": "",
+    "test": "",
+    "posttest":""
+  },
+  "path": [
+  ]
+}

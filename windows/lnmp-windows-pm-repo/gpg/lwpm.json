@@ -1,0 +1,28 @@
+{
+  "name": "gpg",
+  "description": "",
+  "version": "3.1.11",
+  "pre-version": "3.1.11",
+  "homepage": "https://gnupg.org/",
+  "bug": "",
+  "github": "gpg/gpg4win",
+  "releases": "",
+  "url": "https://files.gpg4win.org/gpg4win-${VERSION}.exe",
+  "url-mirror": "",
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "scripts": {
+    "preinstall": "",
+    "install": "",
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": "",
+    "postuninstall": "",
+    "pretest": "",
+    "test": "gpg --version",
+    "posttest":""
+  },
+  "path": [
+    "C:\\Program Files (x86)\\GnuPG\\bin"
+  ]
+}

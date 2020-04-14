@@ -1,5 +1,16 @@
 $tips="You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\conf\.wslconfig"
 
+$WSL_DIST='wsl-k8s'
+$kernelversion="4.19.104"
+
+if($env:WSL_DIST){
+  $WSL_DIST=$env:WSL_DIST
+}
+
+if($env:WSL_KERNEL_VERSION){
+  $kernelversion=$env:WSL_KERNEL_VERSION
+}
+
 if($args.Length -eq 0){
   "WSL2 kernel download/update tool
 
@@ -8,7 +19,12 @@ $tips
 COMMAND:
 
 download  download kernel only
-install   install linux-headers to WSL2
+install   install linux-headers to WSL2($WSL_DIST) (`${env:WSL_DIST:-wsl-k8s})
+
+ENV:
+
+WSL_KERNEL_VERSION  default is [ 4.19.104 ] , more value see https://github.com/khs1994/WSL2-Linux-Kernel/releases
+WSL_DIST            default is [ wsl-k8s ]
 
 "
 
@@ -17,7 +33,6 @@ exit
 
 $source=pwd
 
-$kernelversion="4.19.104"
 $deb="linux-headers-${kernelversion}-microsoft-standard_${kernelversion}-1_amd64.deb"
 
 mkdir -f ~/.wsl | out-null
@@ -27,11 +42,11 @@ cd ~/.wsl
 
 Function _downloader($name,$url){
   if (Test-Path $name){
-    "==> $name exists, skip download"
+    write-host "==> $name exists, skip download" -ForegroundColor Yellow
 
     return
   }
-  "==> download $name"
+  write-host "==> download $name" -ForegroundColor Green
   curl.exe -fL $url -O
 }
 
@@ -53,9 +68,9 @@ if ($args[0] -eq 'download'){
 }
 
 # linux-headers
-echo "==> install linux-headers"
+Write-Host "==> install linux-headers" -ForegroundColor Green
 
-wsl -u root dpkg -i $deb
+wsl -d ${WSL_DIST} -u root dpkg -i $deb
 
 cd $source
 

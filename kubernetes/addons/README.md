@@ -8,8 +8,8 @@
 
 * CoreDNS `1.6.7`
 
-* Dashboard `2.0.0-rc5`
+* Dashboard `2.0.0-rc7`
 
 ## CNI
 
-* [calico](https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico) `3.10`
+* [calico](https://docs.projectcalico.org/v3.12/getting-started/kubernetes/installation/calico) `3.12`

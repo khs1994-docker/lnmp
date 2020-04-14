@@ -2,9 +2,11 @@
   "name": "node",
   "description": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine",
   "version": "12.16.1",
-  "preVersion": "13.12.0",
+  "pre-version": "13.12.0",
   "homepage": "https://nodejs.org/en/",
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",
-  "releases": "https://nodejs.org/en/download/"
+  "releases": "https://nodejs.org/en/download/",
+  "url": "https://nodejs.org/dist/v${VERSION}/node-v${VERSION}-win-x64.zip",
+  "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-win-x64.zip"
 }

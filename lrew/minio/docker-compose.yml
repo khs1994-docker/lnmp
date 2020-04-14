@@ -23,8 +23,8 @@ services:
       - type: volume
         source: minio-data
         target: /data
-      # - ./config/nginx/demo-ssl/www.t.khs1994.com.crt:/root/.minio/certs/public.crt
-      # - ./config/nginx/demo-ssl/www.t.khs1994.com.key:/root/.minio/certs/private.key
+      # - ./config/nginx/demo-ssl/t.khs1994.com.crt:/root/.minio/certs/public.crt
+      # - ./config/nginx/demo-ssl/t.khs1994.com.key:/root/.minio/certs/private.key
     # ports:
     #   - "9000:9000"
     environment:

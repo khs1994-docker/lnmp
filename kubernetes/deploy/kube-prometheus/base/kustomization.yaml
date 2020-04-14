@@ -1,6 +1,6 @@
 resources:
 - prometheus/prometheus-prometheus.yaml
 - prometheus/alertmanager-alertmanager.yaml
-patches:
+patchesStrategicMerge:
 - patch.yaml
 namespace: monitoring

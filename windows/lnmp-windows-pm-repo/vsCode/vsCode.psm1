@@ -3,16 +3,16 @@ Import-Module unzip
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
 $url=$lwpm.url
-$preUrl=$lwpm.preUrl
+$pre_url=$lwpm.'pre-url'
 
 Function getVersion($url){
   try{
@@ -30,16 +30,15 @@ Function getVersion($url){
 }
 
 Function getLatestVersion(){
-  return $(getVersion)[0],$(getVersion $preUrl)[0]
+  return $(getVersion $url)[0],$(getVersion $pre_url)[0]
 }
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION,$url=getVersion $url
   }
-
   if($isPre){
-    $VERSION,$url=getVersion $preUrl
+    $VERSION,$url=getVersion $pre_url
   }
 
   $filename="VSCodeUserSetup-x64-${VERSION}.exe"

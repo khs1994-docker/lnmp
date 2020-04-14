@@ -1,5 +1,3 @@
-# https://github.com/moby/buildkit/blob/master/docs/buildkitd.toml.md
-
 debug = true
 # root is where all buildkit state is stored.
 root = "/var/lib/buildkit"
@@ -28,6 +26,9 @@ insecure-entitlements = [ "network.host", "security.insecure" ]
   noProcessSandbox = false
   gc = true
   gckeepstorage = 9000
+  # alternate OCI worker binary name(example 'crun'), by default either
+  # buildkit-runc or runc binary is used
+  binary = ""
   [worker.oci.labels]
     "foo" = "bar"
 
@@ -62,3 +63,8 @@ insecure-entitlements = [ "network.host", "security.insecure" ]
 [registry."docker.io"]
   mirrors = ["hub.docker.io"]
   http = true
+  insecure = true
+  ca=["/etc/config/myca.pem"]
+  [[registry."docker.io".keypair]]
+    key="/etc/config/key.pem"
+    cert="/etc/config/cert.pem"

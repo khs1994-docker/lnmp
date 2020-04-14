@@ -2,9 +2,13 @@
   "name": "httpd",
   "description": "",
   "version": "2.4.43",
-  "preVersion": "2.4.43",
+  "pre-version": "2.4.43",
   "homepage": "https://httpd.apache.org/",
   "bug": "https://httpd.apache.org/bug_report.html",
   "github": "apache/httpd",
-  "releases": "https://httpd.apache.org/download.cgi"
+  "releases": "https://httpd.apache.org/download.cgi",
+  "url": "https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip",
+  "path": [
+    "C:\\Apache24\\bin"
+  ]
 }

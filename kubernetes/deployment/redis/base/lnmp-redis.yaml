@@ -5,12 +5,10 @@ metadata:
   labels:
     app: lnmp
     tier: redis
-    version: 0.0.1
 spec:
   selector:
     app: lnmp
     tier: redis
-    version: 0.0.1
   ports:
   - port: 6379
     # targetPort: 6379
@@ -23,13 +21,11 @@ metadata:
   labels:
     app: lnmp
     tier: redis
-    version: 0.0.1
 spec:
   selector:
     matchLabels:
       app: lnmp
       tier: redis
-      version: 0.0.1
   replicas: 1
   minReadySeconds: 5
   revisionHistoryLimit: 5 # 保留几个版本
@@ -43,7 +39,6 @@ spec:
       labels:
         app: lnmp
         tier: redis
-        version: 0.0.1
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -84,7 +79,7 @@ spec:
       # 将 configMap 挂载为文件
       - name: lnmp-redis-conf
         configMap:
-          name: lnmp-redis-conf-0.0.1
+          name: lnmp-redis-conf
           items:
           - key: redis.conf
             path: redis.conf

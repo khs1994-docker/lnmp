@@ -19,4 +19,4 @@
 # This is also a handy place to tweak where Docker's temporary files go.
 #export DOCKER_TMPDIR="/mnt/bigdrive/docker-tmp"
 
-DOCKER_OPTS="--registry-mirror=https://dockerhub.azk8s.cn --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock"
+DOCKER_OPTS="--registry-mirror=https://hub-mirror.c.163.com --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock"

@@ -1,0 +1,28 @@
+{
+  "name": "chrome",
+  "description": "",
+  "version": "",
+  "pre-version": "",
+  "homepage": "https://www.google.cn/chrome/index.html",
+  "bug": "",
+  "github": "",
+  "releases": "https://www.google.cn/intl/zh-CN/chrome/canary/",
+  "url": "",
+  "url-mirror": "",
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "scripts": {
+    "preinstall": "",
+    "install": "",
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": "",
+    "postuninstall": "",
+    "pretest": "",
+    "test": "",
+    "posttest":""
+  },
+  "path": [
+    "C:/bin"
+  ]
+}

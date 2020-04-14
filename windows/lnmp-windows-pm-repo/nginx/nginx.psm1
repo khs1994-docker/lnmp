@@ -7,21 +7,23 @@ Import-Module getHttpCode
 
 $lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stableVersion=$lwpm.version
-$preVersion=$lwpm.preVersion
-$githubRepo=$lwpm.github
+$stable_version=$lwpm.version
+$pre_version=$lwpm.'pre-version'
+$github_repo=$lwpm.github
 $homepage=$lwpm.homepage
 $releases=$lwpm.releases
 $bug=$lwpm.bug
 $name=$lwpm.name
 $description=$lwpm.description
 $url=$lwpm.url
-$urlMirror=$lwpm.urlMirror
+$url_mirror=$lwpm.'url-mirror'
 
 Function install_after(){
   _mkdir C:\nginx\conf\conf.d
 
   _ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
+
+  mkdir -f $home\lnmp\windows\logs\nginx | out-null
 
   _ln C:\nginx\logs $home\lnmp\windows\logs\nginx
 
@@ -39,15 +41,15 @@ Function install_after(){
 
 Function install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION=$stableVersion
+    $VERSION=$stable_version
   }
   if($isPre){
-    $VERSION=$preVersion
+    $VERSION=$pre_version
   }else{
 
   }
 
-  $url=$urlMirror.replace('${VERSION}',${VERSION});
+  $url=$url_mirror.replace('${VERSION}',${VERSION});
   if((_getHttpCode $url)[0] -eq 4){
     $url=$url.replace('${VERSION}',${VERSION});
   }
@@ -56,8 +58,6 @@ Function install($VERSION=0,$isPre=0){
   $unzipDesc="nginx"
 
   _exportPath "C:\nginx"
-
-  cp $PSScriptRoot/../../config/nginx.conf C:/nginx/conf
 
   if($(_command nginx)){
     nginx -v > $env:TEMP/.nginx.version 2>&1
@@ -98,6 +98,7 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\nginx"
 
+  cp $PSScriptRoot/../../config/nginx.conf C:/nginx/conf
   install_after
 
   "==> Checking ${name} ${VERSION} install ..."

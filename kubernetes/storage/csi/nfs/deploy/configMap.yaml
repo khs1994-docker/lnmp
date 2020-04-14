@@ -4,4 +4,4 @@ metadata:
   name: csi.nfs.conf
 data:
   kubelet_root: /var/lib/kubelet
-  # kubelet_root: /wsl/k8s-data/k8s/var/lib/kubelet
+  # kubelet_root: /wsl/wsl-k8s-data/k8s/var/lib/kubelet

@@ -1,10 +1,13 @@
+I0407 10:40:15.055044   49969 registry.go:150] Registering EvenPodsSpread predicate and priority function
+I0407 10:40:15.055109   49969 registry.go:150] Registering EvenPodsSpread predicate and priority function
 The Kubernetes scheduler is a policy-rich, topology-aware,
 workload-specific function that significantly impacts availability, performance,
 and capacity. The scheduler needs to take into account individual and collective
 resource requirements, quality of service requirements, hardware/software/policy
 constraints, affinity and anti-affinity specifications, data locality, inter-workload
 interference, deadlines, and so on. Workload-specific requirements will be exposed
-through the API as necessary.
+through the API as necessary. See [scheduling](https://kubernetes.io/docs/concepts/scheduling/)
+for more information about scheduling and the kube-scheduler component.
 
 Usage:
   kube-scheduler [flags]
@@ -17,15 +20,15 @@ Misc flags:
 
 Secure serving flags:
 
-      --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank, all interfaces will be used (0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces). (default 0.0.0.0)
+      --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank or an unspecified address (0.0.0.0 or ::), all interfaces will be used. (default 0.0.0.0)
       --cert-dir string                        The directory where the TLS certs are located. If --tls-cert-file and --tls-private-key-file are provided, this flag will be ignored.
       --http2-max-streams-per-connection int   The limit that the server gives to clients for the maximum number of streams in an HTTP/2 connection. Zero means to use golang's default.
-      --secure-port int                        The port on which to serve HTTPS with authentication and authorization.If 0, don't serve HTTPS at all. (default 10259)
+      --secure-port int                        The port on which to serve HTTPS with authentication and authorization. If 0, don't serve HTTPS at all. (default 10259)
       --tls-cert-file string                   File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
       --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be use.  Possible values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_RC4_128_SHA,TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_3DES_EDE_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_RC4_128_SHA
       --tls-min-version string                 Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13
       --tls-private-key-file string            File containing the default x509 private key matching --tls-cert-file.
-      --tls-sni-cert-key namedCertKey          A pair of x509 certificate and private key file paths, optionally suffixed with a list of domain patterns which are fully qualified domain names, possibly with prefixed wildcard segments. If no domain patterns are provided, the names of the certificate are extracted. Non-wildcard matches trump over wildcard matches, explicit domain patterns trump over extracted names. For multiple key/certificate pairs, use the --tls-sni-cert-key multiple times. Examples: "example.crt,example.key" or "foo.crt,foo.key:*.foo.com,foo.com". (default [])
+      --tls-sni-cert-key namedCertKey          A pair of x509 certificate and private key file paths, optionally suffixed with a list of domain patterns which are fully qualified domain names, possibly with prefixed wildcard segments. The domain patterns also allow IP addresses, but IPs should only be used if the apiserver has visibility to the IP address requested by a client. If no domain patterns are provided, the names of the certificate are extracted. Non-wildcard matches trump over wildcard matches, explicit domain patterns trump over extracted names. For multiple key/certificate pairs, use the --tls-sni-cert-key multiple times. Examples: "example.crt,example.key" or "foo.crt,foo.key:*.foo.com,foo.com". (default [])
 
 Insecure serving flags:
 
@@ -34,7 +37,7 @@ Insecure serving flags:
 
 Authentication flags:
 
-      --authentication-kubeconfig string                  kubeconfig file pointing at the 'core' kubernetes server with enough rights to create tokenaccessreviews.authentication.k8s.io. This is optional. If empty, all token requests are considered to be anonymous and no client CA is looked up in the cluster.
+      --authentication-kubeconfig string                  kubeconfig file pointing at the 'core' kubernetes server with enough rights to create tokenreviews.authentication.k8s.io. This is optional. If empty, all token requests are considered to be anonymous and no client CA is looked up in the cluster.
       --authentication-skip-lookup                        If false, the authentication-kubeconfig will be used to lookup missing authentication configuration from the cluster.
       --authentication-token-webhook-cache-ttl duration   The duration to cache responses from the webhook token authenticator. (default 10s)
       --authentication-tolerate-lookup-failure            If true, failures to look up missing authentication configuration from the cluster are not considered fatal. Note that this can result in authentication that treats all requests as anonymous. (default true)
@@ -89,14 +92,12 @@ Feature gate flags:
                                       AllAlpha=true|false (ALPHA - default=false)
                                       AllBeta=true|false (BETA - default=false)
                                       AllowInsecureBackendProxy=true|false (BETA - default=true)
+                                      AnyVolumeDataSource=true|false (ALPHA - default=false)
                                       AppArmor=true|false (BETA - default=true)
                                       BalanceAttachedNodeVolumes=true|false (ALPHA - default=false)
-                                      BlockVolume=true|false (BETA - default=true)
                                       BoundServiceAccountTokenVolume=true|false (ALPHA - default=false)
                                       CPUManager=true|false (BETA - default=true)
                                       CRIContainerLogRotation=true|false (BETA - default=true)
-                                      CSIBlockVolume=true|false (BETA - default=true)
-                                      CSIDriverRegistry=true|false (BETA - default=true)
                                       CSIInlineVolume=true|false (BETA - default=true)
                                       CSIMigration=true|false (BETA - default=true)
                                       CSIMigrationAWS=true|false (BETA - default=false)
@@ -107,23 +108,28 @@ Feature gate flags:
                                       CSIMigrationAzureFileComplete=true|false (ALPHA - default=false)
                                       CSIMigrationGCE=true|false (BETA - default=false)
                                       CSIMigrationGCEComplete=true|false (ALPHA - default=false)
-                                      CSIMigrationOpenStack=true|false (ALPHA - default=false)
+                                      CSIMigrationOpenStack=true|false (BETA - default=false)
                                       CSIMigrationOpenStackComplete=true|false (ALPHA - default=false)
+                                      ConfigurableFSGroupPolicy=true|false (ALPHA - default=false)
                                       CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
+                                      DefaultIngressClass=true|false (BETA - default=true)
                                       DevicePlugins=true|false (BETA - default=true)
                                       DryRun=true|false (BETA - default=true)
                                       DynamicAuditing=true|false (ALPHA - default=false)
                                       DynamicKubeletConfig=true|false (BETA - default=true)
-                                      EndpointSlice=true|false (BETA - default=false)
+                                      EndpointSlice=true|false (BETA - default=true)
+                                      EndpointSliceProxying=true|false (ALPHA - default=false)
                                       EphemeralContainers=true|false (ALPHA - default=false)
-                                      EvenPodsSpread=true|false (ALPHA - default=false)
+                                      EvenPodsSpread=true|false (BETA - default=true)
                                       ExpandCSIVolumes=true|false (BETA - default=true)
                                       ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                       ExpandPersistentVolumes=true|false (BETA - default=true)
                                       ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
                                       HPAScaleToZero=true|false (ALPHA - default=false)
+                                      HugePageStorageMediumSize=true|false (ALPHA - default=false)
                                       HyperVContainer=true|false (ALPHA - default=false)
                                       IPv6DualStack=true|false (ALPHA - default=false)
+                                      ImmutableEphemeralVolumes=true|false (ALPHA - default=false)
                                       KubeletPodResources=true|false (BETA - default=true)
                                       LegacyNodeRoleBehavior=true|false (ALPHA - default=true)
                                       LocalStorageCapacityIsolation=true|false (BETA - default=true)
@@ -131,7 +137,7 @@ Feature gate flags:
                                       NodeDisruptionExclusion=true|false (ALPHA - default=false)
                                       NonPreemptingPriority=true|false (ALPHA - default=false)
                                       PodDisruptionBudget=true|false (BETA - default=true)
-                                      PodOverhead=true|false (ALPHA - default=false)
+                                      PodOverhead=true|false (BETA - default=true)
                                       ProcMountType=true|false (ALPHA - default=false)
                                       QOSReserved=true|false (ALPHA - default=false)
                                       RemainingItemCount=true|false (BETA - default=true)
@@ -142,27 +148,29 @@ Feature gate flags:
                                       RunAsGroup=true|false (BETA - default=true)
                                       RuntimeClass=true|false (BETA - default=true)
                                       SCTPSupport=true|false (ALPHA - default=false)
+                                      SelectorIndex=true|false (ALPHA - default=false)
                                       ServerSideApply=true|false (BETA - default=true)
+                                      ServiceAccountIssuerDiscovery=true|false (ALPHA - default=false)
+                                      ServiceAppProtocol=true|false (ALPHA - default=false)
                                       ServiceNodeExclusion=true|false (ALPHA - default=false)
                                       ServiceTopology=true|false (ALPHA - default=false)
-                                      StartupProbe=true|false (ALPHA - default=false)
+                                      StartupProbe=true|false (BETA - default=true)
                                       StorageVersionHash=true|false (BETA - default=true)
-                                      StreamingProxyRedirects=true|false (BETA - default=true)
                                       SupportNodePidsLimit=true|false (BETA - default=true)
                                       SupportPodPidsLimit=true|false (BETA - default=true)
                                       Sysctls=true|false (BETA - default=true)
                                       TTLAfterFinished=true|false (ALPHA - default=false)
-                                      TaintBasedEvictions=true|false (BETA - default=true)
                                       TokenRequest=true|false (BETA - default=true)
                                       TokenRequestProjection=true|false (BETA - default=true)
-                                      TopologyManager=true|false (ALPHA - default=false)
+                                      TopologyManager=true|false (BETA - default=true)
                                       ValidateProxyRedirects=true|false (BETA - default=true)
-                                      VolumePVCDataSource=true|false (BETA - default=true)
                                       VolumeSnapshotDataSource=true|false (BETA - default=true)
                                       WinDSR=true|false (ALPHA - default=false)
                                       WinOverlay=true|false (ALPHA - default=false)
-                                      WindowsGMSA=true|false (BETA - default=true)
-                                      WindowsRunAsUserName=true|false (BETA - default=true)
+
+Metrics flags:
+
+      --show-hidden-metrics-for-version string   The previous version for which you want to show hidden metrics. Only the previous minor version is meaningful, other values will not be allowed. Accepted format of version is <major>.<minor>, e.g.: '1.16'. The purpose of this format is make sure you have the opportunity to notice if the next release hides additional metrics, rather than being surprised when they are permanently removed in the release after that.
 
 Global flags:
 

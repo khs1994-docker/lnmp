@@ -1,0 +1,30 @@
+# Source: harbor/templates/chartmuseum/chartmuseum-pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: harbor-chartmuseum
+spec:
+  selector:
+    matchLabels:
+      app: "harbor"
+      component: chartmuseum
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: harbor-jobservice
+spec:
+  selector:
+    matchLabels:
+      app: "harbor"
+      component: jobservice
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: harbor-registry
+spec:
+  selector:
+    matchLabels:
+      app: "harbor"
+      component: registry

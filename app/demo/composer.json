@@ -36,9 +36,6 @@
     "sort-packages": true,
     "preferred-install": "dist"
   },
-  "suggest": {
-    "ext-xdebug": "*"
-  },
   "autoload": {
     "psr-4": {
       "Example\\": "src/Example/"

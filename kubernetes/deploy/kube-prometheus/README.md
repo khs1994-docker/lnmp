@@ -16,19 +16,19 @@ $ kubectl apply -f kube-prometheus/manifests/
 
 ## 服务暴露
 
-服务通过 ingress 暴露，可以参考 `ingress` 文件夹中的内容。
+服务通过 **ingress** 暴露，WEB 访问各个服务请查看 `ingress` 文件夹中 `ingress` 配置。
+
+```bash
+$ kubectl apply -k ingress
+```
 
 * grafana 用户名 `admin` 密码 `admin`
-
-## statefulset.apps/alertmanager-main 启动出错
-
-增加 `pause: true`，适当增加 `livenessProbe` `readinessprobe` 时间 `periodSeconds: 100`
 
 ## 动态 PV
 
 参考 `storage/local-path`
 
-## 监控
+## 监控对象
 
 查看 `custom` 文件夹内容
 

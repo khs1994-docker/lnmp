@@ -1,11 +1,13 @@
 bases:
 - ../overlays/development
+# fix me ingress 用的证书
 - ../../../secrets/t.khs1994.com
-- postgresql
-- secret/harbor-core
-- secret/harbor-notary-server
-- secret/harbor-clair
+patchesStrategicMerge:
+- secret/harbor-core/patches.yaml
+- secret/harbor-notary-server/patches.yaml
+- secret/harbor-clair/patches.yaml
 resources:
 - namespace.yaml
 - ingress.yaml
+- pv.yaml
 namespace: harbor

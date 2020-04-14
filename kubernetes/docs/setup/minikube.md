@@ -20,14 +20,14 @@ $ sudo curl -L $url -o /usr/local/bin/minikube
 # macOS
 $ minikube start \
   -v 10 \
-  --registry-mirror=https://dockerhub.azk8s.cn \
+  --registry-mirror=https://hub-mirror.c.163.com \
   --vm-driver="hyperkit" \
   --memory=4096
 
 # linux
 $ minikube start \
   -v 10 \
-  --registry-mirror=https://dockerhub.azk8s.cn \
+  --registry-mirror=https://hub-mirror.c.163.com \
   --vm-driver="none"
 ```
 

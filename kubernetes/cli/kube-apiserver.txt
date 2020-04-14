@@ -13,8 +13,8 @@ Generic flags:
       --cors-allowed-origins strings                 List of allowed origins for CORS, comma separated.  An allowed origin can be a regular expression to support subdomain matching. If this list is empty CORS will not be enabled.
       --default-not-ready-toleration-seconds int     Indicates the tolerationSeconds of the toleration for notReady:NoExecute that is added by default to every pod that does not already have such a toleration. (default 300)
       --default-unreachable-toleration-seconds int   Indicates the tolerationSeconds of the toleration for unreachable:NoExecute that is added by default to every pod that does not already have such a toleration. (default 300)
-      --enable-inflight-quota-handler                If true, replace the max-in-flight handler with an enhanced one that queues and dispatches with priority and fairness
-      --external-hostname string                     The hostname to use when generating externalized URLs for this master (e.g. Swagger API Docs).
+      --enable-priority-and-fairness                 If true and the APIPriorityAndFairness feature gate is enabled, replace the max-in-flight handler with an enhanced one that queues and dispatches with priority and fairness (default true)
+      --external-hostname string                     The hostname to use when generating externalized URLs for this master (e.g. Swagger API Docs or OpenID Discovery).
       --feature-gates mapStringBool                  A set of key=value pairs that describe feature gates for alpha/experimental features. Options are:
                                                      APIListChunking=true|false (BETA - default=true)
                                                      APIPriorityAndFairness=true|false (ALPHA - default=false)
@@ -22,14 +22,12 @@ Generic flags:
                                                      AllAlpha=true|false (ALPHA - default=false)
                                                      AllBeta=true|false (BETA - default=false)
                                                      AllowInsecureBackendProxy=true|false (BETA - default=true)
+                                                     AnyVolumeDataSource=true|false (ALPHA - default=false)
                                                      AppArmor=true|false (BETA - default=true)
                                                      BalanceAttachedNodeVolumes=true|false (ALPHA - default=false)
-                                                     BlockVolume=true|false (BETA - default=true)
                                                      BoundServiceAccountTokenVolume=true|false (ALPHA - default=false)
                                                      CPUManager=true|false (BETA - default=true)
                                                      CRIContainerLogRotation=true|false (BETA - default=true)
-                                                     CSIBlockVolume=true|false (BETA - default=true)
-                                                     CSIDriverRegistry=true|false (BETA - default=true)
                                                      CSIInlineVolume=true|false (BETA - default=true)
                                                      CSIMigration=true|false (BETA - default=true)
                                                      CSIMigrationAWS=true|false (BETA - default=false)
@@ -40,23 +38,28 @@ Generic flags:
                                                      CSIMigrationAzureFileComplete=true|false (ALPHA - default=false)
                                                      CSIMigrationGCE=true|false (BETA - default=false)
                                                      CSIMigrationGCEComplete=true|false (ALPHA - default=false)
-                                                     CSIMigrationOpenStack=true|false (ALPHA - default=false)
+                                                     CSIMigrationOpenStack=true|false (BETA - default=false)
                                                      CSIMigrationOpenStackComplete=true|false (ALPHA - default=false)
+                                                     ConfigurableFSGroupPolicy=true|false (ALPHA - default=false)
                                                      CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
+                                                     DefaultIngressClass=true|false (BETA - default=true)
                                                      DevicePlugins=true|false (BETA - default=true)
                                                      DryRun=true|false (BETA - default=true)
                                                      DynamicAuditing=true|false (ALPHA - default=false)
                                                      DynamicKubeletConfig=true|false (BETA - default=true)
-                                                     EndpointSlice=true|false (BETA - default=false)
+                                                     EndpointSlice=true|false (BETA - default=true)
+                                                     EndpointSliceProxying=true|false (ALPHA - default=false)
                                                      EphemeralContainers=true|false (ALPHA - default=false)
-                                                     EvenPodsSpread=true|false (ALPHA - default=false)
+                                                     EvenPodsSpread=true|false (BETA - default=true)
                                                      ExpandCSIVolumes=true|false (BETA - default=true)
                                                      ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                                      ExpandPersistentVolumes=true|false (BETA - default=true)
                                                      ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
                                                      HPAScaleToZero=true|false (ALPHA - default=false)
+                                                     HugePageStorageMediumSize=true|false (ALPHA - default=false)
                                                      HyperVContainer=true|false (ALPHA - default=false)
                                                      IPv6DualStack=true|false (ALPHA - default=false)
+                                                     ImmutableEphemeralVolumes=true|false (ALPHA - default=false)
                                                      KubeletPodResources=true|false (BETA - default=true)
                                                      LegacyNodeRoleBehavior=true|false (ALPHA - default=true)
                                                      LocalStorageCapacityIsolation=true|false (BETA - default=true)
@@ -64,7 +67,7 @@ Generic flags:
                                                      NodeDisruptionExclusion=true|false (ALPHA - default=false)
                                                      NonPreemptingPriority=true|false (ALPHA - default=false)
                                                      PodDisruptionBudget=true|false (BETA - default=true)
-                                                     PodOverhead=true|false (ALPHA - default=false)
+                                                     PodOverhead=true|false (BETA - default=true)
                                                      ProcMountType=true|false (ALPHA - default=false)
                                                      QOSReserved=true|false (ALPHA - default=false)
                                                      RemainingItemCount=true|false (BETA - default=true)
@@ -75,29 +78,28 @@ Generic flags:
                                                      RunAsGroup=true|false (BETA - default=true)
                                                      RuntimeClass=true|false (BETA - default=true)
                                                      SCTPSupport=true|false (ALPHA - default=false)
+                                                     SelectorIndex=true|false (ALPHA - default=false)
                                                      ServerSideApply=true|false (BETA - default=true)
+                                                     ServiceAccountIssuerDiscovery=true|false (ALPHA - default=false)
+                                                     ServiceAppProtocol=true|false (ALPHA - default=false)
                                                      ServiceNodeExclusion=true|false (ALPHA - default=false)
                                                      ServiceTopology=true|false (ALPHA - default=false)
-                                                     StartupProbe=true|false (ALPHA - default=false)
+                                                     StartupProbe=true|false (BETA - default=true)
                                                      StorageVersionHash=true|false (BETA - default=true)
-                                                     StreamingProxyRedirects=true|false (BETA - default=true)
                                                      SupportNodePidsLimit=true|false (BETA - default=true)
                                                      SupportPodPidsLimit=true|false (BETA - default=true)
                                                      Sysctls=true|false (BETA - default=true)
                                                      TTLAfterFinished=true|false (ALPHA - default=false)
-                                                     TaintBasedEvictions=true|false (BETA - default=true)
                                                      TokenRequest=true|false (BETA - default=true)
                                                      TokenRequestProjection=true|false (BETA - default=true)
-                                                     TopologyManager=true|false (ALPHA - default=false)
+                                                     TopologyManager=true|false (BETA - default=true)
                                                      ValidateProxyRedirects=true|false (BETA - default=true)
-                                                     VolumePVCDataSource=true|false (BETA - default=true)
                                                      VolumeSnapshotDataSource=true|false (BETA - default=true)
                                                      WinDSR=true|false (ALPHA - default=false)
                                                      WinOverlay=true|false (ALPHA - default=false)
-                                                     WindowsGMSA=true|false (BETA - default=true)
-                                                     WindowsRunAsUserName=true|false (BETA - default=true)
+      --goaway-chance float                          To prevent HTTP/2 clients from getting stuck on a single apiserver, randomly close a connection (GOAWAY). The client's other in-flight requests won't be affected, and the client will reconnect, likely landing on a different apiserver after going through the load balancer again. This argument sets the fraction of requests that will be sent a GOAWAY. Clusters with single apiservers, or which don't use a load balancer, should NOT enable this. Min is 0 (off), Max is .02 (1/50 requests); .001 (1/1000) is a recommended starting point.
       --livez-grace-period duration                  This option represents the maximum amount of time it should take for apiserver to complete its startup sequence and become live. From apiserver's start time to when this amount of time has elapsed, /livez will assume that unfinished post-start hooks will complete successfully and therefore return true.
-      --master-service-namespace string              DEPRECATED: the namespace from which the kubernetes master services should be injected into pods. (default "default")
+      --master-service-namespace string              DEPRECATED: the namespace from which the Kubernetes master services should be injected into pods. (default "default")
       --max-mutating-requests-inflight int           The maximum number of mutating requests in flight at a given time. When the server exceeds this, it rejects requests. Zero for no limit. (default 200)
       --max-requests-inflight int                    The maximum number of non-mutating requests in flight at a given time. When the server exceeds this, it rejects requests. Zero for no limit. (default 400)
       --min-request-timeout int                      An optional field indicating the minimum number of seconds a handler must keep a request open before timing it out. Currently only honored by the watch request handler, which picks a randomized value above this number as the connection timeout, to spread out load. (default 1800)
@@ -126,15 +128,15 @@ Etcd flags:
 
 Secure serving flags:
 
-      --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank, all interfaces will be used (0.0.0.0 for all IPv4 interfaces and :: for all IPv6 interfaces). (default 0.0.0.0)
+      --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank or an unspecified address (0.0.0.0 or ::), all interfaces will be used. (default 0.0.0.0)
       --cert-dir string                        The directory where the TLS certs are located. If --tls-cert-file and --tls-private-key-file are provided, this flag will be ignored. (default "/var/run/kubernetes")
       --http2-max-streams-per-connection int   The limit that the server gives to clients for the maximum number of streams in an HTTP/2 connection. Zero means to use golang's default.
-      --secure-port int                        The port on which to serve HTTPS with authentication and authorization.It cannot be switched off with 0. (default 6443)
+      --secure-port int                        The port on which to serve HTTPS with authentication and authorization. It cannot be switched off with 0. (default 6443)
       --tls-cert-file string                   File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
       --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be use.  Possible values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_RC4_128_SHA,TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_3DES_EDE_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_RC4_128_SHA
       --tls-min-version string                 Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13
       --tls-private-key-file string            File containing the default x509 private key matching --tls-cert-file.
-      --tls-sni-cert-key namedCertKey          A pair of x509 certificate and private key file paths, optionally suffixed with a list of domain patterns which are fully qualified domain names, possibly with prefixed wildcard segments. If no domain patterns are provided, the names of the certificate are extracted. Non-wildcard matches trump over wildcard matches, explicit domain patterns trump over extracted names. For multiple key/certificate pairs, use the --tls-sni-cert-key multiple times. Examples: "example.crt,example.key" or "foo.crt,foo.key:*.foo.com,foo.com". (default [])
+      --tls-sni-cert-key namedCertKey          A pair of x509 certificate and private key file paths, optionally suffixed with a list of domain patterns which are fully qualified domain names, possibly with prefixed wildcard segments. The domain patterns also allow IP addresses, but IPs should only be used if the apiserver has visibility to the IP address requested by a client. If no domain patterns are provided, the names of the certificate are extracted. Non-wildcard matches trump over wildcard matches, explicit domain patterns trump over extracted names. For multiple key/certificate pairs, use the --tls-sni-cert-key multiple times. Examples: "example.crt,example.key" or "foo.crt,foo.key:*.foo.com,foo.com". (default [])
 
 Insecure serving flags:
 
@@ -184,32 +186,33 @@ Features flags:
 
 Authentication flags:
 
-      --anonymous-auth                                    Enables anonymous requests to the secure port of the API server. Requests that are not rejected by another authentication method are treated as anonymous requests. Anonymous requests have a username of system:anonymous, and a group name of system:unauthenticated. (default true)
-      --api-audiences strings                             Identifiers of the API. The service account token authenticator will validate that tokens used against the API are bound to at least one of these audiences. If the --service-account-issuer flag is configured and this flag is not, this field defaults to a single element list containing the issuer URL .
-      --authentication-token-webhook-cache-ttl duration   The duration to cache responses from the webhook token authenticator. (default 2m0s)
-      --authentication-token-webhook-config-file string   File with webhook configuration for token authentication in kubeconfig format. The API server will query the remote service to determine authentication for bearer tokens.
-      --authentication-token-webhook-version string       The API version of the authentication.k8s.io TokenReview to send to and expect from the webhook. (default "v1beta1")
-      --client-ca-file string                             If set, any request presenting a client certificate signed by one of the authorities in the client-ca-file is authenticated with an identity corresponding to the CommonName of the client certificate.
-      --enable-bootstrap-token-auth                       Enable to allow secrets of type 'bootstrap.kubernetes.io/token' in the 'kube-system' namespace to be used for TLS bootstrapping authentication.
-      --oidc-ca-file string                               If set, the OpenID server's certificate will be verified by one of the authorities in the oidc-ca-file, otherwise the host's root CA set will be used.
-      --oidc-client-id string                             The client ID for the OpenID Connect client, must be set if oidc-issuer-url is set.
-      --oidc-groups-claim string                          If provided, the name of a custom OpenID Connect claim for specifying user groups. The claim value is expected to be a string or array of strings. This flag is experimental, please see the authentication documentation for further details.
-      --oidc-groups-prefix string                         If provided, all groups will be prefixed with this value to prevent conflicts with other authentication strategies.
-      --oidc-issuer-url string                            The URL of the OpenID issuer, only HTTPS scheme will be accepted. If set, it will be used to verify the OIDC JSON Web Token (JWT).
-      --oidc-required-claim mapStringString               A key=value pair that describes a required claim in the ID Token. If set, the claim is verified to be present in the ID Token with a matching value. Repeat this flag to specify multiple claims.
-      --oidc-signing-algs strings                         Comma-separated list of allowed JOSE asymmetric signing algorithms. JWTs with a 'alg' header value not in this list will be rejected. Values are defined by RFC 7518 https://tools.ietf.org/html/rfc7518#section-3.1. (default [RS256])
-      --oidc-username-claim string                        The OpenID claim to use as the user name. Note that claims other than the default ('sub') is not guaranteed to be unique and immutable. This flag is experimental, please see the authentication documentation for further details. (default "sub")
-      --oidc-username-prefix string                       If provided, all usernames will be prefixed with this value. If not provided, username claims other than 'email' are prefixed by the issuer URL to avoid clashes. To skip any prefixing, provide the value '-'.
-      --requestheader-allowed-names strings               List of client certificate common names to allow to provide usernames in headers specified by --requestheader-username-headers. If empty, any client certificate validated by the authorities in --requestheader-client-ca-file is allowed.
-      --requestheader-client-ca-file string               Root certificate bundle to use to verify client certificates on incoming requests before trusting usernames in headers specified by --requestheader-username-headers. WARNING: generally do not depend on authorization being already done for incoming requests.
-      --requestheader-extra-headers-prefix strings        List of request header prefixes to inspect. X-Remote-Extra- is suggested.
-      --requestheader-group-headers strings               List of request headers to inspect for groups. X-Remote-Group is suggested.
-      --requestheader-username-headers strings            List of request headers to inspect for usernames. X-Remote-User is common.
-      --service-account-issuer string                     Identifier of the service account token issuer. The issuer will assert this identifier in "iss" claim of issued tokens. This value is a string or URI.
-      --service-account-key-file stringArray              File containing PEM-encoded x509 RSA or ECDSA private or public keys, used to verify ServiceAccount tokens. The specified file can contain multiple keys, and the flag can be specified multiple times with different files. If unspecified, --tls-private-key-file is used. Must be specified when --service-account-signing-key is provided
-      --service-account-lookup                            If true, validate ServiceAccount tokens exist in etcd as part of authentication. (default true)
-      --service-account-max-token-expiration duration     The maximum validity duration of a token created by the service account token issuer. If an otherwise valid TokenRequest with a validity duration larger than this value is requested, a token will be issued with a validity duration of this value.
-      --token-auth-file string                            If set, the file that will be used to secure the secure port of the API server via token authentication.
+      --anonymous-auth                                                                     Enables anonymous requests to the secure port of the API server. Requests that are not rejected by another authentication method are treated as anonymous requests. Anonymous requests have a username of system:anonymous, and a group name of system:unauthenticated. (default true)
+      --api-audiences strings                                                              Identifiers of the API. The service account token authenticator will validate that tokens used against the API are bound to at least one of these audiences. If the --service-account-issuer flag is configured and this flag is not, this field defaults to a single element list containing the issuer URL.
+      --authentication-token-webhook-cache-ttl duration                                    The duration to cache responses from the webhook token authenticator. (default 2m0s)
+      --authentication-token-webhook-config-file string                                    File with webhook configuration for token authentication in kubeconfig format. The API server will query the remote service to determine authentication for bearer tokens.
+      --authentication-token-webhook-version string                                        The API version of the authentication.k8s.io TokenReview to send to and expect from the webhook. (default "v1beta1")
+      --client-ca-file string                                                              If set, any request presenting a client certificate signed by one of the authorities in the client-ca-file is authenticated with an identity corresponding to the CommonName of the client certificate.
+      --enable-bootstrap-token-auth                                                        Enable to allow secrets of type 'bootstrap.kubernetes.io/token' in the 'kube-system' namespace to be used for TLS bootstrapping authentication.
+      --oidc-ca-file string                                                                If set, the OpenID server's certificate will be verified by one of the authorities in the oidc-ca-file, otherwise the host's root CA set will be used.
+      --oidc-client-id string                                                              The client ID for the OpenID Connect client, must be set if oidc-issuer-url is set.
+      --oidc-groups-claim string                                                           If provided, the name of a custom OpenID Connect claim for specifying user groups. The claim value is expected to be a string or array of strings. This flag is experimental, please see the authentication documentation for further details.
+      --oidc-groups-prefix string                                                          If provided, all groups will be prefixed with this value to prevent conflicts with other authentication strategies.
+      --oidc-issuer-url string                                                             The URL of the OpenID issuer, only HTTPS scheme will be accepted. If set, it will be used to verify the OIDC JSON Web Token (JWT).
+      --oidc-required-claim mapStringString                                                A key=value pair that describes a required claim in the ID Token. If set, the claim is verified to be present in the ID Token with a matching value. Repeat this flag to specify multiple claims.
+      --oidc-signing-algs strings                                                          Comma-separated list of allowed JOSE asymmetric signing algorithms. JWTs with a 'alg' header value not in this list will be rejected. Values are defined by RFC 7518 https://tools.ietf.org/html/rfc7518#section-3.1. (default [RS256])
+      --oidc-username-claim string                                                         The OpenID claim to use as the user name. Note that claims other than the default ('sub') is not guaranteed to be unique and immutable. This flag is experimental, please see the authentication documentation for further details. (default "sub")
+      --oidc-username-prefix string                                                        If provided, all usernames will be prefixed with this value. If not provided, username claims other than 'email' are prefixed by the issuer URL to avoid clashes. To skip any prefixing, provide the value '-'.
+      --requestheader-allowed-names strings                                                List of client certificate common names to allow to provide usernames in headers specified by --requestheader-username-headers. If empty, any client certificate validated by the authorities in --requestheader-client-ca-file is allowed.
+      --requestheader-client-ca-file string                                                Root certificate bundle to use to verify client certificates on incoming requests before trusting usernames in headers specified by --requestheader-username-headers. WARNING: generally do not depend on authorization being already done for incoming requests.
+      --requestheader-extra-headers-prefix strings                                         List of request header prefixes to inspect. X-Remote-Extra- is suggested.
+      --requestheader-group-headers strings                                                List of request headers to inspect for groups. X-Remote-Group is suggested.
+      --requestheader-username-headers strings                                             List of request headers to inspect for usernames. X-Remote-User is common.
+      --service-account-issuer {service-account-issuer}/.well-known/openid-configuration   Identifier of the service account token issuer. The issuer will assert this identifier in "iss" claim of issued tokens. This value is a string or URI. If this option is not a valid URI per the OpenID Discovery 1.0 spec, the ServiceAccountIssuerDiscovery feature will remain disabled, even if the feature gate is set to true. It is highly recommended that this value comply with the OpenID spec: https://openid.net/specs/openid-connect-discovery-1_0.html. In practice, this means that service-account-issuer must be an https URL. It is also highly recommended that this URL be capable of serving OpenID discovery documents at {service-account-issuer}/.well-known/openid-configuration.
+      --service-account-jwks-uri string                                                    Overrides the URI for the JSON Web Key Set in the discovery doc served at /.well-known/openid-configuration. This flag is useful if the discovery docand key set are served to relying parties from a URL other than the API server's external (as auto-detected or overridden with external-hostname). Only valid if the ServiceAccountIssuerDiscovery feature gate is enabled.
+      --service-account-key-file stringArray                                               File containing PEM-encoded x509 RSA or ECDSA private or public keys, used to verify ServiceAccount tokens. The specified file can contain multiple keys, and the flag can be specified multiple times with different files. If unspecified, --tls-private-key-file is used. Must be specified when --service-account-signing-key is provided
+      --service-account-lookup                                                             If true, validate ServiceAccount tokens exist in etcd as part of authentication. (default true)
+      --service-account-max-token-expiration duration                                      The maximum validity duration of a token created by the service account token issuer. If an otherwise valid TokenRequest with a validity duration larger than this value is requested, a token will be issued with a validity duration of this value.
+      --token-auth-file string                                                             If set, the file that will be used to secure the secure port of the API server via token authentication.
 
 Authorization flags:
 
@@ -242,10 +245,10 @@ Egress selector flags:
 
 Admission flags:
 
-      --admission-control strings              Admission is divided into two phases. In the first phase, only mutating admission plugins run. In the second phase, only validating admission plugins run. The names in the below list may represent a validating plugin, a mutating plugin, or both. The order of plugins in which they are passed to this flag does not matter. Comma-delimited list of: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. (DEPRECATED: Use --enable-admission-plugins or --disable-admission-plugins instead. Will be removed in a future version.)
+      --admission-control strings              Admission is divided into two phases. In the first phase, only mutating admission plugins run. In the second phase, only validating admission plugins run. The names in the below list may represent a validating plugin, a mutating plugin, or both. The order of plugins in which they are passed to this flag does not matter. Comma-delimited list of: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, CertificateApproval, CertificateSigning, CertificateSubjectRestriction, DefaultIngressClass, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. (DEPRECATED: Use --enable-admission-plugins or --disable-admission-plugins instead. Will be removed in a future version.)
       --admission-control-config-file string   File with admission control configuration.
-      --disable-admission-plugins strings      admission plugins that should be disabled although they are in the default enabled plugins list (NamespaceLifecycle, LimitRanger, ServiceAccount, TaintNodesByCondition, Priority, DefaultTolerationSeconds, DefaultStorageClass, StorageObjectInUseProtection, PersistentVolumeClaimResize, MutatingAdmissionWebhook, ValidatingAdmissionWebhook, RuntimeClass, ResourceQuota). Comma-delimited list of admission plugins: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. The order of plugins in this flag does not matter.
-      --enable-admission-plugins strings       admission plugins that should be enabled in addition to default enabled ones (NamespaceLifecycle, LimitRanger, ServiceAccount, TaintNodesByCondition, Priority, DefaultTolerationSeconds, DefaultStorageClass, StorageObjectInUseProtection, PersistentVolumeClaimResize, MutatingAdmissionWebhook, ValidatingAdmissionWebhook, RuntimeClass, ResourceQuota). Comma-delimited list of admission plugins: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. The order of plugins in this flag does not matter.
+      --disable-admission-plugins strings      admission plugins that should be disabled although they are in the default enabled plugins list (NamespaceLifecycle, LimitRanger, ServiceAccount, TaintNodesByCondition, Priority, DefaultTolerationSeconds, DefaultStorageClass, StorageObjectInUseProtection, PersistentVolumeClaimResize, RuntimeClass, CertificateApproval, CertificateSigning, CertificateSubjectRestriction, DefaultIngressClass, MutatingAdmissionWebhook, ValidatingAdmissionWebhook, ResourceQuota). Comma-delimited list of admission plugins: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, CertificateApproval, CertificateSigning, CertificateSubjectRestriction, DefaultIngressClass, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. The order of plugins in this flag does not matter.
+      --enable-admission-plugins strings       admission plugins that should be enabled in addition to default enabled ones (NamespaceLifecycle, LimitRanger, ServiceAccount, TaintNodesByCondition, Priority, DefaultTolerationSeconds, DefaultStorageClass, StorageObjectInUseProtection, PersistentVolumeClaimResize, RuntimeClass, CertificateApproval, CertificateSigning, CertificateSubjectRestriction, DefaultIngressClass, MutatingAdmissionWebhook, ValidatingAdmissionWebhook, ResourceQuota). Comma-delimited list of admission plugins: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, CertificateApproval, CertificateSigning, CertificateSubjectRestriction, DefaultIngressClass, DefaultStorageClass, DefaultTolerationSeconds, DenyEscalatingExec, DenyExecOnPrivileged, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodPreset, PodSecurityPolicy, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionWebhook. The order of plugins in this flag does not matter.
 
 Metrics flags:
 
