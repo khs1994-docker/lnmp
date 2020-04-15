@@ -37,7 +37,8 @@ os.system(sudo_cmd + 'apt update')
 
 cmd = sudo_cmd + '''apt install -y gcc \
                                 g++ \
-                                libc6-dev
+                                libc6-dev \
+                                make
 '''
 
 wsl.install_build_dep(cmd)

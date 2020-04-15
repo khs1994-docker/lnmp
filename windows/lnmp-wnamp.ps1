@@ -2,6 +2,8 @@
 
 ################################################################################
 
+$LNMP_WSL_CMD=wsl -d ${DistributionName} -- wslpath "$PSScriptRoot\..\wsl\lnmp-wsl".Replace('\','\\');
+
 Function print_help_info(){
   Write-Host "
 Usage:
@@ -62,7 +64,7 @@ Function _stop($soft){
     }
 
     Default {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop $soft
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop $soft
     }
   }
 }
@@ -70,27 +72,27 @@ Function _stop($soft){
 Function _stop_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop php
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop php
     }
 
     "wsl-nginx" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop nginx
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop nginx
     }
 
     "wsl-mysql" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop mysql
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop mysql
     }
 
     "wsl-httpd" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop httpd
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop httpd
     }
 
     "wsl-redis" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop redis
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop redis
     }
 
     "wsl-memcached" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop memcached
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop memcached
     }
   }
 }
@@ -141,7 +143,7 @@ Function _start($soft){
      }
 
      Default {
-       wsl -d ${DistributionName} -u root lnmp-wsl start $soft
+       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start $soft
      }
   }
 }
@@ -149,27 +151,27 @@ Function _start($soft){
 Function _start_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start php
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start php
     }
 
     "wsl-nginx" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start nginx
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start nginx
     }
 
     "wsl-mysql" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start mysql
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start mysql
     }
 
     "wsl-httpd" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start httpd
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start httpd
     }
 
     "wsl-redis" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start redis
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start redis
     }
 
     "wsl-memcached" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start memcached
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start memcached
     }
   }
 }
