@@ -58,11 +58,13 @@
 
 本项目需要以下软件：
 
-:one: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 19.03 Stable +
+:one: [Git](https://mirrors.huaweicloud.com/git-for-windows/)
 
-:two: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.25.0+
+:two: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 19.03 Stable +
 
-:three: WSL (**Windows** Only)
+:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.25.0+
+
+:four: WSL (**Windows** Only)
 
 ## 快速上手
 
@@ -220,7 +222,7 @@ $ ./lnmp-docker down
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.8-alpine`        | **5.0.8**            |`Alpine:3.11`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.4.4-fpm-alpine`  | **7.4.4**       |`Alpine:3.11`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.4-composer-alpine`  | **6.x**       |`Alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.4-composer-alpine`  | **1.10.1**       |`Alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.4-composer-alpine`  | **1.10.5**       |`Alpine:3.11`    |
 |[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)              |`khs1994/php-cs-fixer`                | **2.16.2**      |`Alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.5-alpine`           | **1.6.5**       |`Alpine:3.11`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.3-management-alpine` | **3.8.3**       |`Alpine:3.11`    |

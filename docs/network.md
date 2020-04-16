@@ -4,7 +4,7 @@
 
 * 从 `GitHub` 下载文件（docker-compose、composer）
 
-> https://github.com/khs1994-website/github-chinese
+> 可以尝试自定义 [hosts](https://github.com/khs1994-docker/lnmp/blob/master/config/etc/hosts)
 
 * 官方默认的 `apt` 镜像
 
@@ -26,4 +26,4 @@
 
 ## `LNMP_CN_ENV` 环境变量
 
-本项目会根据 `LNMP_CN_ENV=true` (默认，无需添加环境变量) 来替换源为国内镜像，避免因网络问题影响使用（当你的环境处于非国内环境时请改为 `LNMP_CN_ENV=false`）。
+本项目会根据 `LNMP_CN_ENV=true` (默认，无需添加环境变量) 来替换源为国内镜像，避免因网络问题影响使用（当你的环境处于非国内环境时请设置为 `LNMP_CN_ENV=false`）。

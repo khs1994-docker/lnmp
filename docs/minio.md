@@ -20,7 +20,7 @@ LREW_INCLUDE="minio pcit"
 
 ### 其他配置
 
-在 `.env` 文件中搜索 `MINIO` 进行配置
+自行在 `.env` 文件添加 [minio](https://github.com/khs1994-docker/lnmp/blob/master/lrew/minio/.env.compose) 相关变量
 
 #### 密钥配置（非常重要）
 

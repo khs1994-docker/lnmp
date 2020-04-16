@@ -56,24 +56,24 @@ $ git tag -v mytag
 
 ## 备份
 
-备份密钥分为备份公钥和私钥两个部分，备份公钥：
+备份分为备份公钥和私钥两个部分，备份公钥：
 
 ```bash
-$ gpg -o keyfilename --export <GPG-key-id>
+$ gpg -o filename.pub --export <GPG-key-id>
 ```
 
-如果没有 KeyID 则是备份所有的公钥，-o 表示输出到文件 keyfilename 中，如果加上 -a 参数则输出文本格式的信息，否则输出的是二进制格式信息。
+如果没有 KeyID 则是备份所有的公钥，-o 表示输出到文件 filename.pub 中，如果加上 -a 参数则输出文本格式的信息，否则输出的是二进制格式信息。
 
 备份私钥：
 
 ```bash
-$ gpg -o keyfilename --export-secret-keys <GPG-key-id>
+$ gpg -o filename --export-secret-keys <GPG-key-id>
 ```
 
 然后在别的机器上可以通过
 
 ```bash
-$ gpg --import filename
+$ gpg --import filename(.pub)
 ```
 
 ## X.509 Key

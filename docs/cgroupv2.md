@@ -10,7 +10,9 @@
 * https://www.redhat.com/sysadmin/fedora-31-control-group-v2
 * https://facebookmicrosites.github.io/cgroup2/
 
-## Fedora 31
+## Fedora 31+ 恢复到 cGroupv1
+
+> 在 Fedora 31+ 中使用 Docker **必须** 恢复到 cGroupv1
 
 * https://www.linuxprobe.com/fedora-30-shell.html
 
