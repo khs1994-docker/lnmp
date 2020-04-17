@@ -404,21 +404,21 @@ switch ($command)
 
   "remove-service" {
     foreach($item in $opt){
-      Write-Warning "Remove service $item"
+      Write-Host "==> Remove service $item" -ForegroundColor Red
       RemoveService -ServiceName $item
     }
   }
 
   "start-service" {
     foreach($item in $opt){
-      Write-Warning "Start service $item"
+      Write-Host "==> Start service $item" -ForegroundColor Green
       start-process "net" -ArgumentList "start",$item -Verb RunAs
     }
   }
 
   "stop-service" {
     foreach($item in $opt){
-      Write-Warning "Stop service $item"
+      Write-Host "==> Stop service $item" -ForegroundColor Red
       start-process "net" -ArgumentList "stop",$item -Verb RunAs
     }
   }

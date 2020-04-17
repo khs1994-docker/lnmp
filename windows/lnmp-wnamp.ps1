@@ -28,21 +28,21 @@ lnmp-wnamp.ps1 restart nginx wsl-memcached
 
 $source=$pwd
 
-Function printInfo(){
-  Write-Host "$args" -ForegroundColor Red
+Function printInfo($info,$color){
+  Write-Host "==> $info" -ForegroundColor $color
 }
 
 Function _stop($soft){
   switch ($soft){
     "nginx" {
-      printInfo "Stop nginx..."
+      printInfo "Stop nginx..." Red
       start-process "taskkill" -ArgumentList "/F","/IM","nginx.exe" -Verb RunAs
       Write-Host "
       "
     }
 
     "php" {
-       printInfo "Stop php-cgi..."
+       printInfo "Stop php-cgi..." Red
        taskkill /F /IM php-cgi-spawner.exe
        taskkill /F /IM php-cgi.exe
        Write-Host "
@@ -50,14 +50,14 @@ Function _stop($soft){
     }
 
     "mysql" {
-      printInfo "Stop MySQL..."
+      printInfo "Stop MySQL..." Red
       start-process "net" -ArgumentList "stop","mysql" -Verb RunAs
       Write-Host "
       "
     }
 
     "httpd" {
-      printInfo "Stop HTTPD..."
+      printInfo "Stop HTTPD..." Red
       httpd -d C:/Apache24 -k stop
       Write-Host "
       "
@@ -103,7 +103,7 @@ Function _start($soft){
   switch ($soft) {
     "nginx" {
       # cd $NGINX_PATH
-      printInfo "Start nginx..."
+      printInfo "Start nginx..." Green
       nginx -p ${NGINX_PATH} -t
       start-process "nginx" -ArgumentList "-p","${NGINX_PATH}" -Verb RunAs -WindowStyle Hidden
       cd $source
@@ -112,7 +112,7 @@ Function _start($soft){
     }
 
     "mysql" {
-      printInfo "Start MySQL..."
+      printInfo "Start MySQL..." Green
       # net start mysql
       start-process "net" -ArgumentList "start","mysql" -Verb RunAs
       Write-Host "
@@ -120,7 +120,7 @@ Function _start($soft){
     }
 
      "php" {
-       printInfo "Start php-cgi..."
+       printInfo "Start php-cgi..." Green
        # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
        # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9100 -c "$PHP_PATH"
        # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9200 -c "$PHP_PATH"
@@ -135,7 +135,7 @@ Function _start($soft){
      }
 
      "httpd" {
-       printInfo "Start HTTPD..."
+       printInfo "Start HTTPD..." Green
        httpd -t
        httpd -d C:/Apache24 -k start
        Write-Host "
