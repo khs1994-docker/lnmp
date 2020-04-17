@@ -20,20 +20,7 @@
 
 > **不想使用本项目默认的镜像，可以！**
 
-在 `./dockerfile/` 下各个软件的文件夹内复制 `example.Dockerfile` 为 `Dockerfile`，并编写 `Dockerfile` 之后运行如下命令：
-
-```bash
-$ ./lnmp-docker build
-
-$ ./lnmp-docker build-up
-
-$ curl 127.0.0.1
-
-Welcome use khs1994-docker/lnmp v18.06 x86_64 With Build Docker Image
-
-development
-
-```
+你可以全部或部分服务使用自己的镜像，请参考 [build](build.md)
 
 ## 增加服务
 

@@ -200,6 +200,7 @@ jobs:
   - script: |
       set -x
       echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
+      echo $(DOCKER_PASSWORD) | docker login -u $(TENCENT_DOCKER_USERNAME) --password-stdin ccr.ccs.tencentyun.com
     displayName: 'Docker Login'
 
   - script: |
@@ -211,6 +212,7 @@ jobs:
         if [ "$PHP_VERSION" = 8_0_X -o "$PHP_VERSION" = nightly ];then \
           export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
           IS_PUSH=--push; \
+          mirror="${add_mirror}"; \
         else \
           IS_PUSH=--push; \
           DOCKER_HUB_USERNAME=lrew; \
@@ -223,17 +225,18 @@ jobs:
       options="--build-arg VCS_REF=$VCS_REF"
       echo $options
 
-      if [ -n "$UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit; fi
-      if [ -n "$SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; fi
-      if [ -n "$COMPOSER" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
+      if [ -n "$UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine $(test -n "${mirror}" && echo " -t ${mirror}:${PHP_TAG_VERSION}-unit-alpine ") --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit; fi
+      if [ -n "$SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine $(test -n "${mirror}" && echo " -t ${mirror}:${PHP_TAG_VERSION}-supervisord-alpine ") --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; fi
+      if [ -n "$COMPOSER" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine $(test -n "${mirror}" && echo " -t ${mirror}:${PHP_TAG_VERSION}-composer-alpine ") --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
       if [ -n "$SINGLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
-      if [ -n "$SWOOLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} --platform ${PLATFORM} ${FOLDER}/swoole; fi
-      if [ -n "$FPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
-      if [ -n "$CLI" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; fi
-      if [ -n "$PPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; fi
+      if [ -n "$SWOOLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine $(test -n "${mirror}" && echo " -t ${mirror}:${PHP_TAG_VERSION}-swoole-alpine ") --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole; fi
+      if [ -n "$FPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine $(test -n "${mirror}" && echo " -t ${mirror}:${PHP_TAG_VERSION}-fpm-alpine ") ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
+      if [ -n "$CLI" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine $(test -n "${mirror}" && echo " -t ${mirror}:${PHP_TAG_VERSION}-cli-alpine ") --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; fi
+      if [ -n "$PPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine $(test -n "${mirror}" && echo " -t ${mirror}:${PHP_TAG_VERSION}-ppm-alpine ") --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; fi
     env:
       DOCKER_HUB_USERNAME: khs1994
       PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
+      add_mirror: ccr.ccs.tencentyun.com/khs1994/php
     displayName: 'Build Image'
     timeoutInMinutes: 0
 

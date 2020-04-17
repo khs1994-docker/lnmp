@@ -16,13 +16,15 @@ services:
 
   # php7:
   #   &php7
-  #   # change php7 default image
-  #   image: username/php
-  #   # open more port
+  #   # ! change php7 default image
+  #   image: username/php:VERSION-fpm-alpine
+  #   # ! cn mirror image
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:VERSION-fpm-alpine
+  #   # ! open more port
   #   ports:
   #     - "9000"
   #     - "10001:10001"
-  #   # add more volumes
+  #   # ! add more volumes
   #   volumes:
   #     - type: volume
   #       source: laravel_vendor

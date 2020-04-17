@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.9
+.VERSION 19.03.10-alpha1
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -919,7 +919,7 @@ switch -regex ($command){
       __lnmp_custom_cleanup
     }
 
-    config {
+    "^config$" {
       logs
 
       $options=get_compose_options "docker-lnmp.yml", `

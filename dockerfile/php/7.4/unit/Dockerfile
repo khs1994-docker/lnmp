@@ -10,7 +10,7 @@ ARG VCS_REF
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
 
-ENV NGINX_UNIT_VERSION 1.16.0
+ENV NGINX_UNIT_VERSION 1.17.0
 
 RUN cd /usr/src \
   && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \

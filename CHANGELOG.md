@@ -1,19 +1,13 @@
 # Changelog
 
-## v19.03.9
+## v19.03.10
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v19.03.8...v19.03.9
+* https://github.com/khs1994-docker/lnmp/compare/v19.03.9...19.03
 
 ### Bug fixes:
-
-* replace outdated tls cert
 
 ### Changes:
 
 ### Updates:
-
-* [PHP `7.4.4` `7.3.16` `7.2.29`](https://www.php.net/ChangeLog-7.php#7.4.4)
-* [Kubernetes `1.18.0`](https://github.com/kubernetes/kubernetes/releases/tag/v1.18.0)
-* [NGINX `1.17.10`](https://nginx.org/en/CHANGES)
