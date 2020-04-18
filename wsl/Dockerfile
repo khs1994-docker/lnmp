@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.4.4
+ARG PHP_VERSION=7.4.5
 
 ARG PHP_NUM=74
 
@@ -36,7 +36,7 @@ COPY wsl-php-ext-enable.sh /usr/local/bin/wsl-php-ext-enable.sh
 
 ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
-ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
+ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ENV PHP_URL="https://www.php.net/get/php-${PHP_VERSION}.tar.xz/from/this/mirror"
 

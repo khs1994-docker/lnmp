@@ -64,7 +64,7 @@ export TZ=Asia/Shanghai
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
-PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
+PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ################################################################################
 
@@ -848,10 +848,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=7.4.4 ; fi
+    PHP_VERSION=7.4.5 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=7.4.4 ; fi
+    PHP_VERSION=7.4.5 ; fi
 
 _get_phpnum $PHP_VERSION
 
