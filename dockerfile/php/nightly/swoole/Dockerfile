@@ -1,9 +1,10 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM khs1994/php:nightly-cli-alpine
+ARG USERNAME=khs1994
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-cli-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/khs1994-docker/php"

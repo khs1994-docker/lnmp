@@ -1,6 +1,7 @@
 ARG PHP_VERSION=7.3.17
+ARG USERNAME=khs1994
 
-FROM khs1994/php:${PHP_VERSION}-fpm-alpine
+FROM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
 
 # 扩展源码在 PHP 源码
 ENV PHP_CORE_EXT \
@@ -12,10 +13,14 @@ ENV PHP_PECL_EXT \
     msgpack
 
 ENV EXT_BUILD_DEP \
-    libxslt-dev
+    libxslt-dev \
+    imagemagick-dev \
+    imagemagick
 
 ENV EXT_RUN_DEP \
-    libxslt
+    libxslt \
+    imagemagick-libs \
+    musl
 
 RUN set -x \
     # 安装构建依赖，构建之后可以删除

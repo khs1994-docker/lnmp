@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:experimental
 
 ARG PHP_VERSION=7.4.5
+ARG USERNAME=khs1994
 
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-composer-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-composer-alpine
 
 # php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer
 

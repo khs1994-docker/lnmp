@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:experimental
 ARG PHP_VERSION=7.3.17
+ARG USERNAME=khs1994
 
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-composer-alpine as composer
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-composer-alpine as composer
 
 RUN mkdir /ppm \
       && cd /ppm \
@@ -10,9 +11,9 @@ RUN mkdir /ppm \
       && composer require php-pm/httpkernel-adapter --no-cache \
       && rm -rf /tmp/cache /ppm/composer*
 
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/khs1994-docker/php"

@@ -3,7 +3,7 @@ FROM --platform=$TARGETPLATFORM alpine:3.11
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/khs1994-docker/php"

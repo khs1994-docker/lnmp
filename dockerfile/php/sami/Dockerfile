@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:experimental
 
 ARG PHP_VERSION=7.3.17
+ARG USERNAME=khs1994
 
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-composer-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-composer-alpine
 
 # Sami an API documentation generator https://github.com/FriendsOfPHP/Sami
 

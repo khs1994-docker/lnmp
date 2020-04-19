@@ -1,9 +1,11 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM khs1994/php:nightly-fpm-alpine
+
+ARG USERNAME=khs1994
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-fpm-alpine
 
 # install composer
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
 LABEL org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/khs1994-docker/php"

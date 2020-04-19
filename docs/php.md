@@ -29,9 +29,10 @@
 **1. 基于 `khs1994/php:X.Y.Z-TYPE-alpine` 重新构建镜像**
 
 ```docker
-ARG PHP_VERSION=7.4.5
+ARG PHP_VERSION=7.3.17
+ARG USERNAME=khs1994
 
-FROM khs1994/php:${PHP_VERSION}-fpm-alpine
+FROM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
 
 # 扩展源码在 PHP 源码
 ENV PHP_CORE_EXT \
@@ -104,7 +105,8 @@ $ docker buildx build \
   --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
   --build-arg APK_EXTRA="libxslt" \
   --build-arg APK_DEV_EXTRA="libxslt-dev" \
-  --build-arg PHP_VERSION="X.Y.Z"
+  --build-arg PHP_VERSION="X.Y.Z" \
+  --build-arg USERNAME=${USERNAME:?USERNAME must set} \
   --push \
   -t USERNAME/php:X.Y.Z-TYPE-alpine FOLDER
 ```
