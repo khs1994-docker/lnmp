@@ -85,6 +85,8 @@ jobs:
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} -t $DOCKER_HUB_USERNAME/sami --platform ${PLATFORM} ${IS_PUSH} sami
         fi
 
+        if [ "$TYPE" != "CLI" ];then exit 0; fi
+
         docker buildx build --push \
         --build-arg PHP_VERSION=7.0.33 \
         --build-arg USERNAME=khs1994 \

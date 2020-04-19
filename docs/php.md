@@ -24,7 +24,7 @@
 
 ## 增加扩展
 
-以下两种方式任选一种：
+以下两种方式任选一种，然后按照 [自定义](custom.md) 替换为自己的镜像：
 
 **1. 基于 `khs1994/php:X.Y.Z-TYPE-alpine` 重新构建镜像**
 
@@ -51,7 +51,10 @@ ENV EXT_BUILD_DEP \
 ENV EXT_RUN_DEP \
     xxx
 
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
+
 RUN set -x \
+    && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     # 安装构建依赖，构建之后可以删除
     && apk add --no-cache --virtual .pecl_build_deps $EXT_BUILD_DEP $PHPIZE_DEPS \
     # 安装运行依赖，不可以删除
@@ -103,15 +106,16 @@ RUN set -x \
 $ docker buildx build \
   --build-arg PHP_EXTENSION_EXTRA="wddx xsl" \
   --build-arg PECL_EXTENSION_EXTRA="imagick msgpack" \
-  --build-arg APK_EXTRA="libxslt" \
-  --build-arg APK_DEV_EXTRA="libxslt-dev" \
+  --build-arg APK_EXTRA="libxslt imagemagick-libs musl" \
+  --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick imagemagick-dev" \
   --build-arg PHP_VERSION="X.Y.Z" \
   --build-arg USERNAME=${USERNAME:?USERNAME must set} \
+  --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
   --push \
   -t USERNAME/php:X.Y.Z-TYPE-alpine FOLDER
 ```
 
-## 官方扩展 (7.2.4)
+## 官方扩展列表
 
 ```bash
 $ 进入 PHP 源码目录 ext 目录

@@ -22,7 +22,10 @@ ENV EXT_RUN_DEP \
     imagemagick-libs \
     musl
 
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
+
 RUN set -x \
+    && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     # 安装构建依赖，构建之后可以删除
     && apk add --no-cache --virtual .pecl_build_deps $EXT_BUILD_DEP $PHPIZE_DEPS \
     # 安装运行依赖，不可以删除
@@ -48,6 +51,7 @@ RUN set -x \
     #
     # 7.1 + 可以使用 pickle 安装 PHP 扩展
     #
+    # && echo "--xxx" > /tmp/EXT_NAME.configure.options \
     && pickle install $PHP_CORE_EXT $PHP_PECL_EXT -n --defaults --strip --cleanup \
     # ！请自行编辑以上内容
     # 清理
