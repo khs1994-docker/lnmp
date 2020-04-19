@@ -11,7 +11,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-# ARG PHP_VERSION=
+ARG PHP_VERSION=nightly
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -419,7 +419,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       # && make all -j "$(nproc)"\
       # && make install \
       && rm -rf /tmp/* \
-      && apk del --no-network  .pecl_build_deps \
+      && apk del --no-network .pecl_build_deps \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
       && ls -la $(php-config --extension-dir)

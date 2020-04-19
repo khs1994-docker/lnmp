@@ -44,6 +44,7 @@ ENV PHP_EXTENSION \
       xmlrpc \
       # xsl \
       zip \
+      shmop \
       ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \

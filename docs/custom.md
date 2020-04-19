@@ -85,6 +85,12 @@ version: "3.7"
 
 services:
   php7:
-    # 想修改哪个配置在这里重写即可，例如想使用自己的 PHP 镜像，那么增加 `image` 指令即可
+    # 想修改哪个配置在这里重写即可，例如想使用自己的 PHP 镜像或国内镜像，那么增加 `image` 指令即可
     image: username/image:tag
 ```
+
+## 部分镜像支持国内镜像
+
+* `khs1994/php` => `ccr.ccs.tencentyun.com/khs1994/php`
+
+按上述方法自定义即可。

@@ -11,7 +11,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF \
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-# ARG PHP_VERSION=
+ARG PHP_VERSION=7.4.5
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -139,7 +139,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
-ENV PHP_VERSION 7.4.5
+ENV PHP_VERSION=${PHP_VERSION}
 # ENV PHP_URL="https://www.php.net/get/php-7.4.5.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.5.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
@@ -331,7 +331,7 @@ RUN --mount=type=bind,from=php:7.4.5-alpine,source=/usr/local/bin,target=/opt/bi
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \
-      && apk del --no-network  .pecl_build_deps \
+      && apk del --no-network .pecl_build_deps \
       && rm -rf /tmp/* \
       && php -m \
       && ls -la $(php-config --extension-dir)

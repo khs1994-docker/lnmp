@@ -16,7 +16,8 @@ ENV PHP_EXTENSION \
       sockets \
       sysvmsg \
       sysvsem \
-      sysvshm
+      sysvshm \
+      shmop
 
 # ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -27,9 +28,10 @@ RUN apk add --no-cache bash tzdata
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && for extension in $PHP_EXTENSION;do \
-         docker-php-ext-install $extension \
-         && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "${extension} install error" \
-         && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+         ext_real_name=$(echo ${extension} | cut -d '-' -f 1) \
+         && docker-php-ext-install $extension \
+         && docker-php-ext-enable $ext_real_name || echo "${extension} install error" \
+         && strip --strip-all $(php-config --extension-dir)/$ext_real_name.so ; \
        done \
     && apk del --no-network .build-deps
 
@@ -235,12 +237,13 @@ ENV PECL_EXTENSION \
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && for extension in $PECL_EXTENSION;do \
-         pecl install $extension \
-         && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
-         && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
-         && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
-         && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
-         && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+         ext_real_name=$(echo ${extension} | cut -d '-' -f 1) \
+         && pecl install $extension \
+         && docker-php-ext-enable $ext_real_name || echo "pecl ${extension} install error" \
+         && rm -rf /usr/local/lib/php/doc/$ext_real_name \
+         && rm -rf /usr/local/lib/php/test/$ext_real_name \
+         && rm -rf /usr/local/include/php/ext/$ext_real_name \
+         && strip --strip-all $(php-config --extension-dir)/$ext_real_name.so ; \
       done \
     && apk del --no-network  .build-deps \
     && rm -rf /tmp/pear \
