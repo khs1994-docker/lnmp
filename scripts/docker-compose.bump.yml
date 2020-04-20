@@ -29,7 +29,7 @@ services:
     image: postgres:12.2-alpine
 
   mongodb:
-    image: mongo:4.2.5
+    image: mongo:4.2.6
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
