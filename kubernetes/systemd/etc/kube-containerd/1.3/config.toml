@@ -119,11 +119,12 @@ oom_score = 0
         #  endpoint = ["https://"]
       [plugins."io.containerd.grpc.v1.cri".registry.configs]
         # 私有 registry 验证
-        [plugins."io.containerd.grpc.v1.cri".registry.configs."gcr.io".auth]
-          username = ""
-          password = ""
-          auth = ""
-          identitytoken = ""
+        [plugins."io.containerd.grpc.v1.cri".registry.configs.auths]
+          # [plugins."io.containerd.grpc.v1.cri".registry.configs.auths."https://gcr.io"]
+          #  username = ""
+          #  password = ""
+          #  auth = ""
+          #  identitytoken = ""
         # 使用自签名证书的 registry
         [plugins."io.containerd.grpc.v1.cri".registry.configs."registry.t.khs1994.com:28443".tls]
           ca_file   = "/path/root-ca.crt"

@@ -108,11 +108,14 @@ oom_score = 0
         #  endpoint = ["https://gcr.mirror"]
         # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
         #  endpoint = ["https://"]
-      [plugins."io.containerd.grpc.v1.cri".registry.configs."gcr.io".auth]
-        username = ""
-        password = ""
-        auth = ""
-        identitytoken = ""
+      [plugins."io.containerd.grpc.v1.cri".registry.configs]
+        # 私有 registry 验证
+        [plugins."io.containerd.grpc.v1.cri".registry.configs.auths]
+          # [plugins."io.containerd.grpc.v1.cri".registry.configs.auths."https://gcr.io"]
+          #  username = ""
+          #  password = ""
+          #  auth = ""
+          #  identitytoken = ""
     [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]
       tls_cert_file = ""
       tls_key_file = ""

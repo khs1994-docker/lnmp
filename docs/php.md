@@ -24,7 +24,7 @@
 
 ## 增加扩展
 
-以下两种方式任选一种，然后按照 [自定义](custom.md) 替换为自己的镜像：
+以下两种方式任选一种，然后按照 [自定义](custom.md) 替换为自己的镜像，具体实例可以 [参考这里](https://github.com/khs1994-docker/php/tree/master/custom)：
 
 **1. 基于 `khs1994/php:X.Y.Z-TYPE-alpine` 重新构建镜像**
 
