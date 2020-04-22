@@ -14,4 +14,4 @@ nfs:
   server: 192.168.199.100
 
 redis:
-  image: redis:5.0.8-alpine
+  image: redis:6.0-rc4-alpine

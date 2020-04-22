@@ -219,7 +219,7 @@ $ ./lnmp-docker down
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.43-alpine`       | **2.4.43**             |`Alpine:3.11`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.19`              | **8.0.19**             |`Debian:stretch`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.2`            | **10.5.2**             |`Ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:5.0.8-alpine`        | **5.0.8**            |`Alpine:3.11`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0-rc4-alpine`        | **6.0-rc4**            |`Alpine:3.11`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php-fpm)                      |`khs1994/php:7.4.5-fpm-alpine`  | **7.4.5**       |`Alpine:3.11`    |
 |[Laravel](https://github.com/laravel/laravel)                             |`khs1994/php:7.4.5-composer-alpine`  | **6.x**       |`Alpine:3.11`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.5-composer-alpine`  | **1.10.5**       |`Alpine:3.11`    |
@@ -227,7 +227,7 @@ $ ./lnmp-docker down
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.5-alpine`           | **1.6.5**       |`Alpine:3.11`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.3-management-alpine` | **3.8.3**       |`Alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.2-alpine`             | **12.2**        |`Alpine:3.11`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.5`                      | **4.2.5**       |`Ubuntu:bionic` |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.6`                      | **4.2.6**       |`Ubuntu:bionic` |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        | `phpmyadmin/phpmyadmin:latest`    | **latest**      |`Alpine:3.11`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`Alpine:3.8`    |
 
