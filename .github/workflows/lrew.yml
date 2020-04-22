@@ -26,7 +26,9 @@ jobs:
     - name: Init
       shell: pwsh
       run: |
-        echo "extension=openssl" >> C:\tools\php\php.ini
+        php -m
+        cat C:\tools\php\php.ini | select-string extension=
+        echo "extension=openssl" C:\tools\php\php.ini > $null
     - name: Set ENV
       run: |
         echo ::add-path::$(pwd)
