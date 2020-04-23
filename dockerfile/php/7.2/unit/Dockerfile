@@ -31,7 +31,7 @@ RUN cd /usr/src \
   && make -j "$(nproc)" \
   && make install \
   && strip --strip-all /usr/local/nginx-unit/sbin/unitd \
-  && mkdir -p /usr/local/sbin \
+  && mkdir -p /usr/local/sbin /usr/local/nginx-unit/tmp \
   && ln -sf /usr/local/nginx-unit/sbin/unitd /usr/local/sbin/unitd \
   && apk del --no-network .build-deps \
   && rm -rf /usr/src/* \
