@@ -5,7 +5,7 @@
 # /var/lib/unit               => /usr/local/nginx-unit/state
 # /var/run/control.unit.sock  => /usr/local/nginx-unit/control.unit.sock
 
-echo "==> Initial Configuration, plase see https://unit.nginx.org/installation/#initial-configuration"
+echo "==> Initial Configuration, please see https://unit.nginx.org/installation/#initial-configuration"
 
 set -e
 
@@ -31,7 +31,7 @@ if [ "$1" = "unitd" ]; then
     else
         if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -print -quit 2>/dev/null | /bin/grep -q .; then
             echo "$0: /docker-entrypoint.d/ is not empty, launching Unit daemon to perform initial configuration..."
-            /usr/sbin/unitd --user root --group root --log /var/log/nginx-unit/nginx-unit.log --control /usr/local/nginx-unit/control.unit.sock
+            /usr/sbin/unitd --user root --group root --log /var/log/nginx-unit/nginx-unit.log --control unix:/usr/local/nginx-unit/control.unit.sock
 
             while [ ! -S /usr/local/nginx-unit/control.unit.sock ]; do echo "$0: Waiting for control socket to be created..."; /bin/sleep 0.1; done
             # even when the control socket exists, it does not mean unit has finished initialisation

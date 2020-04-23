@@ -45,7 +45,7 @@ services:
       # --state
       # /usr/local/nginx-unit/state
       - --control
-      - /usr/local/nginx-unit/control.unit.sock
+      - unix:/usr/local/nginx-unit/control.unit.sock
 volumes:
   nginx_unit_state-data:
     << : *default-common-label

@@ -50,6 +50,6 @@ STOPSIGNAL SIGTERM
 
 ENTRYPOINT ["bash", "/docker-entrypoint.sh"]
 
-CMD ["unitd","--no-daemon","--user","root","--group","root","--log","/var/log/nginx-unit/nginx-unit.log","--control","/usr/local/nginx-unit/control.unit.sock"]
+CMD ["unitd","--no-daemon","--user","root","--group","root","--log","/var/log/nginx-unit/nginx-unit.log","--control","unix:/usr/local/nginx-unit/control.unit.sock"]
 
 WORKDIR /app
