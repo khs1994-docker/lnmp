@@ -9,10 +9,21 @@ $K8S_S_HOST=$wsl_ip
 $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl -d wsl-k8s pwd"
 $WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
 
+$kube_scheduler_version_string=wsl -d wsl-k8s /wsl/wsl-k8s-data/k8s/bin/kube-scheduler --version | select-string v1.1
+$kube_scheduler_version=($kube_scheduler_version_string).line.split()[1].Trim('v').split('-')[0]
+
 (Get-Content $PSScriptRoot/conf/kube-scheduler.config.yaml.temp) `
     -replace "##NODE_IP##",$wsl_ip `
     -replace "##K8S_ROOT##",$K8S_ROOT `
   | Set-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
+
+if([Version]$kube_scheduler_version -ge [Version]"1.19.0"){
+  $config_context = Get-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
+
+  $config_context `
+  -replace "kubescheduler.config.k8s.io/v1alpha1","kubescheduler.config.k8s.io/v1alpha2" `
+  | Set-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
+}
 
 $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-scheduler `
 --config=${K8S_WSL2_ROOT}/conf/kube-scheduler.config.yaml `

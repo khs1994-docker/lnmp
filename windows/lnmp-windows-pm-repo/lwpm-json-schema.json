@@ -38,6 +38,22 @@
       "description": "soft pre version download url mirror",
       "type": "string"
     },
+    "homepage": {
+      "description": "soft homepage",
+      "type": "string"
+    },
+    "bug": {
+      "description": "soft bug report",
+      "type": "string"
+    },
+    "github": {
+      "description": "soft github, example: user/repo",
+      "type": "string"
+    },
+    "releases": {
+      "description": "soft releases pages",
+      "type": "string"
+    },
     "scripts": {
       "type": "object",
       "properties": {

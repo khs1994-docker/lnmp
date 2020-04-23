@@ -439,7 +439,6 @@ storage:
             qps: 100
           enableContentionProfiling: false
           enableProfiling: true
-          hardPodAffinitySymmetricWeight: 1
           healthzBindAddress: {{IP_{{n}}}}:10251
           leaderElection:
             leaderElect: true

@@ -2,7 +2,7 @@
 . $PSScriptRoot/.env.ps1
 
 # wsl2
-$wsl_ip=wsl -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+$wsl_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
 
 $KUBE_APISERVER_HOST=$wsl_ip
 # wsl1
