@@ -52,7 +52,8 @@ ENV PECL_EXTENSION \
       redis \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
-      xdebug \
+# xdebug-2.9.1 require 7.1.0+
+      xdebug-2.9.0 \
       yaml \
       # swoole \
       ${PECL_EXTENSION_EXTRA:-}

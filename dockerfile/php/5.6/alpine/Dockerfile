@@ -47,13 +47,13 @@ ENV PHP_EXTENSION \
       ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \
-      # mongodb \
-      igbinary \
-      redis \
-      # memcached \ # 5.6 not support
+      # mongodb-1.7.4 \
+      igbinary-2.0.8 \
+      redis-4.3.0 \
+      memcached-2.2.0 \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       xdebug-2.5.5 \
-      yaml-1.3.1 \
+      yaml-1.3.2 \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
