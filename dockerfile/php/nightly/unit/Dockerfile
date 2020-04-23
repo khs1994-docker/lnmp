@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.5
+ARG PHP_VERSION=nightly
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
@@ -24,7 +24,7 @@ RUN cd /usr/src \
                                   linux-headers \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
-       --module=php74 \
+       --module=php80 \
        --lib-path=/usr/local/lib \
        --config=/usr/local/bin/php-config \
   && make -j "$(nproc)" \

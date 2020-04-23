@@ -30,19 +30,26 @@ RUN cd /usr/src \
   && make -j "$(nproc)" \
   && make install \
   && strip --strip-all /usr/local/nginx-unit/sbin/unitd \
-  && mkdir -p /usr/local/sbin /usr/local/nginx-unit/tmp \
+  && mkdir -p /usr/local/sbin \
   && ln -sf /usr/local/nginx-unit/sbin/unitd /usr/local/sbin/unitd \
+  && ln -sf /usr/local/nginx-unit/sbin/unitd /usr/sbin/unitd \
+  && apk add --no-cache findutils \
   && apk del --no-network .build-deps \
   && rm -rf /usr/src/* \
-  && mkdir -p /var/log/nginx-unit \
-  && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log
+  && mkdir -p /var/log/nginx-unit /usr/local/nginx-unit/tmp \
+  && ln -sf /dev/stdout /var/log/nginx-unit/nginx-unit.log \
+  && mkdir /docker-entrypoint.d/
+
+COPY docker-entrypoint.sh /
 
 ENV PS1="[\u@\h \w]# "
 
 VOLUME [ "/usr/local/nginx-unit/tmp", "/usr/local/nginx-unit/state" ]
 
-ENTRYPOINT ["unitd"]
+STOPSIGNAL SIGTERM
 
-CMD ["--no-daemon","--user","root","--group","root","--log","/var/log/nginx-unit/nginx-unit.log"]
+ENTRYPOINT ["bash", "/docker-entrypoint.sh"]
+
+CMD ["unitd","--no-daemon","--user","root","--group","root","--log","/var/log/nginx-unit/nginx-unit.log","--control","/usr/local/nginx-unit/control.unit.sock"]
 
 WORKDIR /app
