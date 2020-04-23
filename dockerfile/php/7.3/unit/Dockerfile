@@ -39,6 +39,8 @@ RUN cd /usr/src \
 
 ENV PS1="[\u@\h \w]# "
 
+VOLUME [ "/usr/local/nginx-unit/tmp", "/usr/local/nginx-unit/state" ]
+
 ENTRYPOINT ["unitd"]
 
 CMD ["--no-daemon","--user","root","--group","root","--log","/var/log/nginx-unit/nginx-unit.log"]

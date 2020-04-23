@@ -1,9 +1,17 @@
 {
-  "assignees": ["khs1994"],
-  "reviewers": ["khs1994"],
-  "baseBranches": ["19.03"],
+  "assignees": [
+    "khs1994"
+  ],
+  "reviewers": [
+    "khs1994"
+  ],
+  "baseBranches": [
+    "19.03"
+  ],
   "commitBody": "[skip ci]",
-  "labels": ["renovateapp"],
+  "labels": [
+    "renovateapp"
+  ],
   "timezone": "Asia/Shanghai",
   "extends": [
     "config:base",
@@ -24,8 +32,10 @@
       "enabled": false
     }
   },
-  "fileMatch": ["docker-compose.bump.yml"],
-  "includePaths" : [
+  "fileMatch": [
+    "docker-compose.bump.yml"
+  ],
+  "includePaths": [
     "scripts/docker-compose.bump.yml",
     "kubernetes/docker-compose.bump.yml",
     "drone/scripts/docker-compose.bump.yml",

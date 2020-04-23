@@ -200,7 +200,7 @@ jobs:
   - script: |
       set -x
       echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
-      echo $(DOCKER_PASSWORD) | docker login -u $(TENCENT_DOCKER_USERNAME) --password-stdin ccr.ccs.tencentyun.com
+      echo $(DOCKER_PASSWORD) | docker login -u $(TENCENT_DOCKER_USERNAME) --password-stdin uswccr.ccs.tencentyun.com
     displayName: 'Docker Login'
 
   - script: |
@@ -236,7 +236,7 @@ jobs:
     env:
       DOCKER_HUB_USERNAME: khs1994
       PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
-      add_mirror: ccr.ccs.tencentyun.com/khs1994/php
+      add_mirror: uswccr.ccs.tencentyun.com/khs1994/php
     displayName: 'Build Image'
     timeoutInMinutes: 0
 

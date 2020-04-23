@@ -124,7 +124,7 @@ before_script:
     if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
       echo "replace kube-scheduler config version" \
       && echo "remove it when version ge 1.19" \
-      && sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1alpha2#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
+      && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1alpha2#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
     fi
   - sudo systemctl start kube-scheduler
   # worker
@@ -235,7 +235,7 @@ script:
   - kubectl get pod -o wide
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
-  - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes
+  - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
   - kubectl delete deployment nginx || true
   - kubectl delete pod nginx || true
@@ -262,6 +262,7 @@ after_success:
   - sudo ls -la /opt/k8s || true
   - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
 
+  - kubectl get node -o yaml
 env:
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
@@ -269,6 +270,7 @@ env:
 jobs:
   include:
     # https://kubernetes.io/docs/setup/release/version-skew-policy/#supported-versions
+    # 只维护最新的 3 个版本
     # alpha version
     - os: linux
       dist: bionic
