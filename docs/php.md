@@ -22,7 +22,7 @@
 * **mysql** 7.0 移除
 * **wddx** 7.4 移除
 
-## 增加扩展
+## 自行增加扩展
 
 以下两种方式任选一种，然后按照 [自定义](custom.md) 替换为自己的镜像，具体实例可以 [参考这里](https://github.com/khs1994-docker/php/tree/master/custom)：
 
@@ -40,10 +40,11 @@ ENV PHP_CORE_EXT \
     xsl
 
 # pecl 扩展
+# 如果 PHP 版本已经 EOL，建议加上版本号，因为新的扩展可能不再兼容旧的 PHP 版本
 ENV PHP_PECL_EXT \
     xxx \
     xxx2-beta \
-    xxx3-x.v.z
+    xxx3-x.y.z
 
 ENV EXT_BUILD_DEP \
     xxx-dev

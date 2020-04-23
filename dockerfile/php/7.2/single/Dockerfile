@@ -6,8 +6,8 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ARG VCS_REF="unknow"
 
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development

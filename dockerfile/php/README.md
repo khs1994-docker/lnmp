@@ -12,11 +12,10 @@
 
 * 7.4.5-cli-alpine
 * 7.4.5-fpm-alpine
+* 7.4.5-unit-alpine         (based cli)
 * 7.4.5-composer-alpine     (based fpm)
 * 7.4.5-swoole-alpine       (based cli)
-* 7.4.5-unit-alpine         (based cli)
 * 7.4.5-supervisord-alpine  (based fpm)
-* 7.4.5-ppm-alpine          (based cli)
 
 ## Supported tags and respective `Dockerfile` links
 
