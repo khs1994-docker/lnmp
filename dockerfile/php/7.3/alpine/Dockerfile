@@ -5,11 +5,6 @@ FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF="unknow"
-
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
-
 ARG PHP_EXTENSION_EXTRA
 
 ARG PECL_EXTENSION_EXTRA
@@ -166,3 +161,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 
 WORKDIR /app
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
