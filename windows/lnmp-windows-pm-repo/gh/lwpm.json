@@ -1,0 +1,29 @@
+{
+  "name": "gh",
+  "description": "GitHub’s official command line tool",
+  "version": "0.7.0",
+  "pre-version": "0.7.0",
+  "homepage": "https://cli.github.com/",
+  "bug": "https://github.com/cli/cli/issues",
+  "github": "cli/cli",
+  "releases": "https://github.com/cli/cli/releases",
+  "url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_windows_amd64.zip",
+  "url-mirror": "",
+  "pre-url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_windows_amd64.zip",
+  "pre-url-mirror": "",
+  "scripts": {
+    "preinstall": "",
+    "install": "",
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": "",
+    "postuninstall": "",
+    "pretest": "",
+    "test": "(gh --version).split()[2]",
+    "posttest":"",
+    "version": "(gh --version).split()[2]"
+  },
+  "path": [
+    "C:/bin"
+  ]
+}

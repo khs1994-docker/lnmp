@@ -4,11 +4,6 @@ FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF="unknow"
-
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
-
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
@@ -350,3 +345,8 @@ RUN mkdir -p /var/log/php-fpm \
       && chmod -R 777 /var/log/php-fpm
 
 WORKDIR /app
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"

@@ -20,7 +20,8 @@
     "postuninstall": "",
     "pretest": "",
     "test": "",
-    "posttest":""
+    "posttest":"",
+    "version": ""
   },
   "path": [
     "C:/bin"

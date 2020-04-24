@@ -8,11 +8,6 @@ FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-stretch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF="unknow"
-
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
-
 ENV TZ=Asia/Shanghai
 
 ENV PHP_EXTENSION \
@@ -197,3 +192,8 @@ RUN --mount=type=bind,from=composer:1.10.5,source=/usr/bin/composer,target=/opt/
  && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
 
 WORKDIR /app
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"

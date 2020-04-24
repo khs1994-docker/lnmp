@@ -24,7 +24,17 @@ $pre_url_mirror=$lwpm.'pre-url-mirror'
 $insert_path=$lwpm.path
 
 Function install_after(){
+  # completion
+  $ps_module_dir=${env:PSModulePath}.split(';')[0]+"\$name"
+  mkdir -Force $ps_module_dir ? $null
 
+  gh completion --shell powershell > $ps_module_dir\$name.psm1
+
+  if((cat $PROFILE | select-string "Import-Module gh").line.Length -eq 0){
+    echo "Import-Module gh" >> $PROFILE
+  }
+
+  Import-Module gh
 }
 
 Function install($VERSION=0,$isPre=0){
@@ -69,12 +79,12 @@ Function install($VERSION=0,$isPre=0){
 #  exit
 
   # fix me
-  $filename=""
+  $filename="gh_${VERSION}_windows_amd64.zip"
   $unzipDesc=$name
 
-  # _exportPath $lwpm.path
+  _exportPath $lwpm.path
 
-  if($(_command example)){
+  if($(_command gh)){
     $ErrorActionPreference='Continue'
     $CURRENT_VERSION=""
 
@@ -84,6 +94,8 @@ Function install($VERSION=0,$isPre=0){
 
     if ($CURRENT_VERSION -eq $VERSION){
         Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
+
+        install_after
         return
     }
     $ErrorActionPreference='stop'
@@ -100,16 +112,16 @@ Function install($VERSION=0,$isPre=0){
   # 验证原始 zip 文件 Fix me
 
   # 解压 zip 文件 Fix me
-  # _cleanup "$unzipDesc"
+  _cleanup "$unzipDesc"
   _unzip $filename $unzipDesc
 
   # 安装 Fix me
-  Copy-item -r -force "$unzipDesc/" ""
+  Copy-item -r -force "$unzipDesc/bin/*" "C:\bin\"
   # Start-Process -FilePath $filename -wait
-  # _cleanup "$unzipDesc"
+  _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  # _exportPath $lwpm.path
+  _exportPath $lwpm.path
 
   install_after
 
@@ -121,8 +133,8 @@ Function install($VERSION=0,$isPre=0){
 }
 
 Function uninstall($prune=0){
-  Write-Host "Not Support" -ForegroundColor Red
-  # _cleanup ""
+  # "Not Support"
+  _cleanup C:\bin\gh.exe
   # user data
   if($prune){
     # _cleanup ""

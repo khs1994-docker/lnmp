@@ -150,7 +150,7 @@ Function __install($softs){
       continue
     }
     $soft,$version=$soft.split('@')
-    "==> Installing $soft $version ..."
+    Write-Host "==> Installing $soft $version ..." -ForegroundColor Blue
     _import_module $soft
 
     if($version){
@@ -164,7 +164,7 @@ Function __install($softs){
 
 Function __uninstall($softs){
   Foreach ($soft in $softs){
-    "==> Uninstalling $soft ..."
+    Write-Host "==> Uninstalling $soft ..." -ForegroundColor Red
     _import_module $soft
     uninstall
     Remove-Module -Name $soft
