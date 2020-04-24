@@ -218,7 +218,8 @@ jobs:
           DOCKER_HUB_USERNAME=lrew; \
         fi; \
       else \
-        IS_PUSH=--push; \
+          IS_PUSH=--push \
+          && mirror="${add_mirror}"; \
       fi
 
       VCS_REF=`git rev-parse --short HEAD`
