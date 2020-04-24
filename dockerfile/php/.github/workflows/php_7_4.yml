@@ -47,7 +47,7 @@ jobs:
         set -x
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
-        echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-west-1.aliyuncs.com
+        echo #echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-west-1.aliyuncs.com
       name: 'Docker Login'
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -139,7 +139,7 @@ jobs:
         FOLDER: 7.4
         PHP_TAG_VERSION: 7.4.5
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
+        # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
       name: 'Build Image'
       shell: bash
     - run: |
