@@ -26,7 +26,7 @@ lnmp-wnamp.ps1 restart nginx wsl-memcached
 "
 }
 
-$source=$pwd
+$EXEC_CMD_DIR=$pwd
 
 Function printInfo($info,$color){
   Write-Host "==> $info" -ForegroundColor $color
@@ -106,7 +106,7 @@ Function _start($soft){
       printInfo "Start nginx..." Green
       nginx -p ${NGINX_PATH} -t
       start-process "nginx" -ArgumentList "-p","${NGINX_PATH}" -Verb RunAs -WindowStyle Hidden
-      cd $source
+      cd $EXEC_CMD_DIR
       Write-Host "
       "
     }

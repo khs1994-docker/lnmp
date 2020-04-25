@@ -124,7 +124,7 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1"){
 # $DOCKER_DEFAULT_PLATFORM="linux"
 $KUBERNETES_VERSION="1.16.5"
 $DOCKER_DESKTOP_VERSION="2.2.2.0 (43066)"
-$source=$PWD
+$EXEC_CMD_DIR=$PWD
 
 Function _command($command){
   get-command $command -ErrorAction "SilentlyContinue"
@@ -369,7 +369,7 @@ Exec '$ lnmp-docker k8s' Run Kubernetes on Tencent Cloud
 Exec '$ lnmp-docker zan' donate
 "
 
-cd $source
+cd $EXEC_CMD_DIR
 
 exit
 }
@@ -762,7 +762,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
   printInfo "Use LNMP CLI in LNMP Root $pwd"
   cd $APP_ROOT
   $APP_ROOT=$PWD
-  cd $source
+  cd $EXEC_CMD_DIR
 }
 
 printInfo "APP_ROOT is $APP_ROOT"
@@ -1155,7 +1155,7 @@ switch -regex ($command){
          if ($cmd.Count -eq 0){
            '$ ./lnmp-docker.ps1 clusterkit-mysql-exec {master|node-N} {COMMAND}'
 
-           cd $source
+           cd $EXEC_CMD_DIR
 
            exit 1
          }
@@ -1175,7 +1175,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-memcached-exec {N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1195,7 +1195,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-redis-exec {master-N|slave-N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1215,7 +1215,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-redis-replication-exec {master|slave-N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1235,7 +1235,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1479,9 +1479,9 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
     }
 
     composer {
-      if((Test-Path $source/.devcontainer) -And (Test-Path $source/docker-workspace.yml)){
+      if((Test-Path $EXEC_CMD_DIR/.devcontainer) -And (Test-Path $EXEC_CMD_DIR/docker-workspace.yml)){
         printInfo "Exec composer command in [ vscode remote ] or [ PhpStorm ] project folder"
-        cd $source
+        cd $EXEC_CMD_DIR
         docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-workspace.yml run --rm composer $args
 
         exit
@@ -1544,4 +1544,4 @@ Example: ./lnmp-docker composer /app/demo install
       }
 }
 
-cd $source
+cd $EXEC_CMD_DIR

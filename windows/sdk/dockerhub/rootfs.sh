@@ -8,9 +8,12 @@ rootfs(){
   local ref=${2:-latest}
   local arch=${3:-amd64}
   local os=${4:-linux}
-  local dist=$5
+  local dest=$5 # dest 下载到哪里
   local layersIndex=${6:-0}
-  local registry=${7:-hub-mirror.c.163.com}
+
+  registry="hub-mirror.c.163.com"
+  if [ -n "${REGISTRY_MIRROR}" ];then registry=${REGISTRY_MIRROR}; fi
+  if [ -n "$7" ];then registry=$7; fi
 
   echo "==> Get token ..." > /dev/stderr
 
@@ -95,11 +98,11 @@ if [ "$schemaVersion" -eq 1 ];then
 
   . $ScriptRoot/blobs/get.sh
 
-  dist=`get $token $image $digest $registry "${dist}"`
+  dest=`get $token $image $digest $registry "${dest}"`
 
-  echo "Download success to $dist" > /dev/stderr
+  echo "Download success to $dest" > /dev/stderr
 
-  echo $dist
+  echo $dest
 
   return
 
@@ -136,11 +139,11 @@ local current_os=`cat $manifest_list_json_file | jq ".manifests[$i].platform.os"
 
     . $ScriptRoot/blobs/get.sh
 
-    dist=`get $token $image $digest $registry "${dist}"`
+    dest=`get $token $image $digest $registry "${dest}"`
 
-    echo "Download success to $dist" > /dev/stderr
+    echo "Download success to $dest" > /dev/stderr
 
-    echo $dist
+    echo $dest
 
     return
   fi

@@ -42,7 +42,7 @@ $ErrorActionPreference="SilentlyContinue"
 
 . "$PSScriptRoot/common.ps1"
 
-$source=$PWD
+$EXEC_CMD_DIR=$PWD
 
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
@@ -101,7 +101,7 @@ _mkdir $home\lnmp\windows\logs
 cd $home\Downloads\lnmp-docker-cache
 
 function _exit(){
-  cd $source
+  cd $EXEC_CMD_DIR
 
   exit
 }
@@ -224,7 +224,7 @@ function __init($soft){
 
   "Please edit $SOFT_ROOT files"
 
-  cd $source
+  cd $EXEC_CMD_DIR
 }
 
 function manifest($soft){
@@ -428,4 +428,4 @@ switch ($command)
   }
 }
 
-cd $source
+cd $EXEC_CMD_DIR
