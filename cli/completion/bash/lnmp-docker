@@ -7,6 +7,7 @@ complete -W "acme.sh \
         build-config \
         build-push \
         build-up \
+        build-pull \
         cleanup \
         clusterkit \
         clusterkit-help \

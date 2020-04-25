@@ -7,6 +7,7 @@ complete -c lnmp-docker -n "__fish_use_subcommand" -f -a backup            -d   
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a build             -d     'Build or rebuild LNMP Self Build images (Only Support x86_64)'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a build-config      -d     'Validate and view the LNMP Self Build images Compose file'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a build-push        -d     'Build and Pushes images to Your Docker Registory'
+complete -c lnmp-docker -n "__fish_use_subcommand" -f -a build-pull        -d     'Pull LNMP Docker Images Build By your self'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a build-up          -d     'Create and start LNMP containers With Self Build images (Only Support x86_64)'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a cleanup           -d     'Cleanup log files'
 complete -c lnmp-docker -n "__fish_use_subcommand" -f -a completion        -d     'Move fish shell completion code (Only Support fish)'

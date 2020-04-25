@@ -118,6 +118,7 @@ Commands:
   build                Build or rebuild LNMP Self Build images (Only Support x86_64)
   build-config         Validate and view the LNMP Self Build images Compose file
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
+  build-pull           Pull LNMP Docker Images Build By your self
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
@@ -1360,12 +1361,18 @@ For information please run $ docker service update --help
     _docker_is_run
     init
 
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+
+    if ! [ -z "$@" ];then
+      service="$@"
+    fi
+
     if [ ${ARCH} = 'x86_64' ];then
       _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.build.yml" \
                            "--build"
 
-      exec docker-compose $options build "$@" --parallel
+      exec docker-compose $options build $service --parallel
     else
       notsupport
     fi
@@ -1376,15 +1383,72 @@ For information please run $ docker service update --help
     _docker_is_run
     init
 
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+
+    if ! [ -z "$@" ];then
+      service="$@"
+    fi
+
     if [ ${ARCH} = 'x86_64' ];then
       _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.build.yml" \
                            "--build"
-      exec docker-compose $options up -d "$@"
+      exec docker-compose $options up -d --no-build $service
     else
       notsupport
     fi
 
+    ;;
+
+  build-config )
+    logs
+    if [ ${ARCH} = 'x86_64' ];then
+      _get_compose_options "docker-lnmp.yml" \
+                           "docker-lnmp.build.yml" \
+                           "--build"
+
+      exec docker-compose $options config "$@"
+    else
+      notsupport
+    fi
+    ;;
+
+  build-push )
+    _docker_is_run; init
+
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+
+    if ! [ -z "$@" ];then
+      service="$@"
+    fi
+
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.build.yml" \
+                         "--build"
+
+    docker-compose $options build --parallel $service
+    exec docker-compose $options push $service
+    ;;
+
+  build-pull )
+    _docker_is_run
+
+    sleep 2
+
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+
+    if ! [ -z "$@" ];then
+      service="$@"
+    fi
+
+    _get_compose_options "docker-lnmp.yml" \
+                         "docker-lnmp.build.yml" \
+                         "--build"
+
+    docker-compose $options pull $service
+
+    #@custom
+    __lnmp_custom_pull $service 2>/dev/null || true
     ;;
 
   service* )
@@ -1425,19 +1489,6 @@ For information please run $ docker service update --help
           -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
           -f label=com.docker.compose.service=nginx -n 1 ) nginx -t \
     || (print_error "Nginx start error,please check config/nginx" ; docker ps -a)
-    ;;
-
-  build-config )
-    logs
-    if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-lnmp.yml" \
-                           "docker-lnmp.build.yml" \
-                           "--build"
-
-      exec docker-compose $options config "$@"
-    else
-      notsupport
-    fi
     ;;
 
   restore )
@@ -1525,16 +1576,6 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     CONTAINER_ID=$(docker container ls --format "{{.ID}}" \
                               -f label=${LNMP_DOMAIN:-com.khs1994.lnmp} \
                               -f label=com.docker.swarm.service.name=lnmp_${SERVICE} ) "$@"
-    ;;
-
-  build-push )
-    _docker_is_run; init;
-    _get_compose_options "docker-lnmp.yml" \
-                         "docker-lnmp.build.yml" \
-                         "--build"
-
-    docker-compose $options build --parallel "$@"
-    exec docker-compose $options push "$@"
     ;;
 
   down )
@@ -1891,7 +1932,7 @@ APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
 print_info "APP_ROOT is $APP_ROOT"
 
 if [ -d .git ];then
-  BRANCH=`git rev-parse --abbrev-ref HEAD`
+  command -v git && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="unknow(git not install)"
   print_info "Branch is ${BRANCH}"
 fi
 

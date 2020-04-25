@@ -8,6 +8,10 @@
 
 * http://php.net/supported-versions.php
 
+## 中国镜像 [![中国镜像同步状态](https://pcit.coding.net/badges/khs1994-docker/job/234051/build.svg)](https://pcit.coding.net/p/khs1994-docker/ci/job)
+
+[ccr.ccs.tencentyun.com/khs1994/php:TAG](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+
 ## 后缀
 
 * 7.4.5-cli-alpine

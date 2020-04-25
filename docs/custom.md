@@ -22,11 +22,60 @@
 
 你可以全部或部分服务使用自己的镜像，请参考 [build](build.md)。某个服务使用自己的镜像请参考下方内容。
 
-## 增加服务
+## 通过修改 `docker-lnmp.include.yml` 文件自定义本项目
 
-> **这个项目能不能增加 xxx 软件，可以！**
+编辑 `docker-lnmp.include.yml` 文件，增加服务名，修改指令即可。
 
-请查看 [lrew](lrew.md)
+**建议每次修改之后执行 `$ lnmp-docker config > 1.yaml` 查看配置是否正确，之后启动。**
+
+### 自定义镜像
+
+```yaml
+# docker-lnmp.include.yml
+version: "3.7"
+
+services:
+  php7:
+    # 想修改哪个配置在这里重写即可，例如想使用自己的 PHP 镜像或国内镜像，那么增加 `image` 指令即可
+    image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+```
+
+### 自定义数据卷
+
+> 例如我们想增加一个数据卷挂载，将本机 `/path/src` 挂载到 PHP 容器中的 `/path/target`
+
+```yaml
+# docker-lnmp.include.yml
+version: "3.7"
+
+services:
+  php7:
+    volumes:
+      - /path/src:/path/target
+```
+
+> 再例如 `MySQL` 默认将容器目录 `/var/lib/mysql` 映射到了宿主机中的数据卷，但我们想映射到宿主机的 `/path/mysql` 目录
+
+```yaml
+# docker-lnmp.include.yml
+version: "3.7"
+
+services:
+  mysql:
+    volumes:
+      - /path/mysql:/var/lib/mysql
+```
+
+### 增加一个服务
+
+```yaml
+# docker-lnmp.include.yml
+version: "3.7"
+
+services:
+  my_add_service:
+    image: username/image
+```
 
 ## 单独启动某个软件
 
@@ -39,58 +88,3 @@ $ lnmp-docker up SOFT_NAME SOFT_NAME2
 
 # $ lnmp-docker up kong kong-dashboard
 ```
-
-## 自定义数据卷
-
-> **我想把某个软件的目录挂载到本机，可以！**
-
-> 例如我们想增加一个数据卷挂载，将本机 `/path/src` 挂载到 PHP 容器中的 `/path/target`
-
-编辑 `docker-lnmp.include.yml` 文件，重写默认的 `php7` 服务。
-
-```yaml
-version: "3.7"
-
-services:
-  php7:
-    volumes:
-      - /path/src:/path/target
-```
-
-> 再例如 `MySQL` 默认将容器目录 `/var/lib/mysql` 映射到了宿主机中的数据卷，但我们想映射到宿主机的 `/path/mysql` 目录
-
-同样的编辑 `docker-lnmp.include.yml` 文件，重写默认的 `MySQL` 服务。
-
-```yaml
-version: "3.7"
-
-services:
-  mysql:
-    volumes:
-      - /path/mysql:/var/lib/mysql
-```
-
-执行 `$ lnmp-docker config` 查看配置是否正确，之后启动。
-
-## 自定义 compose 文件配置
-
-> **软件的默认配置不满足我的要求（例如这个软件我想使用别的镜像），怎么修改**
-
-编辑 `docker-lnmp.include.yml` 文件，增加服务名，修改指令即可。
-
-> 例如想自定义 `php7` 服务的配置，我们先增加 php7 这个条目。
-
-```yaml
-version: "3.7"
-
-services:
-  php7:
-    # 想修改哪个配置在这里重写即可，例如想使用自己的 PHP 镜像或国内镜像，那么增加 `image` 指令即可
-    image: username/image:tag
-```
-
-## 部分镜像支持国内镜像
-
-* `khs1994/php` => `ccr.ccs.tencentyun.com/khs1994/php`
-
-按上述方法自定义即可。

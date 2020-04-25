@@ -1,4 +1,4 @@
-# 使用自己构建的镜像(对全部服务生效)
+# 使用自己的镜像(对全部服务生效)
 
 `.env` 文件更改以下变量
 
@@ -8,6 +8,10 @@ LNMP_BUILD_DOCKER_IMAGE_PREFIX=username
 # LNMP_BUILD_DOCKER_IMAGE_PREFIX=domain.com/username
 ```
 
+## 构建（或拉取）镜像
+
+**1. 构建镜像**
+
 ```bash
 $ cd dockerfile/SOFT_NAME
 
@@ -16,10 +20,18 @@ $ cp example.Dockerfile Dockerfile
 # 编辑 Dockerfile
 $ vi Dockerfile
 
-# 先构建镜像，若自定义镜像已存在，可不进行构建（跳过此步）
 $ lnmp-docker build
+```
 
-# 启动
+**2. 拉取镜像**
+
+```bash
+$ lnmp-docker build-pull
+```
+
+## 启动
+
+```
 $ lnmp-docker build-up --no-build
 
 # 测试

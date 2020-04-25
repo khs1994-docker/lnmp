@@ -305,6 +305,7 @@ Commands:
   build-config         Validate and view the LNMP Self Build images Compose file
   build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
   build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
+  build-pull           Pull LNMP Docker Images Build By your self
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
   compose              Install docker-compose [PATH]
@@ -874,14 +875,18 @@ switch -regex ($command){
        __lnmp_custom_restore $other
     }
 
-    build {
-      if ($command -eq "build"){
-        $options=get_compose_options "docker-lnmp.yml", `
+    "^build$" {
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
+      $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-        & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $other --parallel}
-      }
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel}
     }
 
     build-config {
@@ -896,21 +901,55 @@ switch -regex ($command){
     }
 
     build-up {
+      init
+
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d --no-build $services}
+
+      #@custom
+      __lnmp_custom_up $services
     }
 
     build-push {
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $other --parallel}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel}
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service}
+    }
+
+    build-pull {
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
+      $options=get_compose_options "docker-lnmp.yml",`
+                                   "docker-lnmp.build.yml" `
+                                   1
+
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services}
+
+      #@custom
+      __lnmp_custom_pull
     }
 
     cleanup {
@@ -956,11 +995,18 @@ switch -regex ($command){
       __lnmp_custom_up $services
     }
 
-    pull {
+    "^pull$" {
+
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
       $options=get_compose_options "docker-lnmp.yml",`
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull ${LNMP_SERVICES}}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services}
 
       #@custom
       __lnmp_custom_pull
