@@ -40,15 +40,15 @@ jobs:
       run: lnmp-windows-pm.ps1 install composer
     - name: lrew-init
       shell: powershell
-      run: lnmp-docker.ps1 init test
+      run: lnmp-docker.ps1 lrew-init test
     - name: lrew-init-quite
       shell: powershell
       run: |
         $QUITE=$true
-        lnmp-docker.ps1 init test2
+        lnmp-docker.ps1 lrew-init test2
     - name: lrew-add
       shell: pwsh
-      run: lnmp-docker.ps1 add etcd
+      run: lnmp-docker.ps1 lrew-add etcd
     # need wsl
     - name: lrew2-add
       shell: pwsh

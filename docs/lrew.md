@@ -30,7 +30,7 @@ $ lnmp-docker up
 > **这个项目能不能增加 xxx 软件，可以！** 下文用 `example` 代替 `xxx` 软件
 
 ```bash
-$ lnmp-docker init example
+$ lnmp-docker lrew-init example
 ```
 
 修改 `vendor/lrew-dev/example` 内的文件。
@@ -48,7 +48,7 @@ $ lnmp-docker init example
 你可以使用已发布到 [composer](https://packagist.org/packages/lrew/) 的包所提供的服务。
 
 ```bash
-$ lnmp-docker add example
+$ lnmp-docker lrew-add example
 ```
 
 根据上方 `修改配置` 一节进行配置，之后启动

@@ -7,7 +7,7 @@
 set -e
 
 tty=
-tty -s && tty=--tty || true
+tty -s > /dev/null 2>&1 && tty=--tty || true
 
 readonly KUBERNETES_VERSION="1.16.5"
 readonly DOCKER_DESKTOP_VERSION="2.2.2.0 (43066)"
@@ -50,7 +50,7 @@ _cp_only_not_exists(){
   if ! [ -f $2 ];then cp $1 $2 ; fi
 }
 
-source=`pwd`
+export EXEC_CMD_DIR=`pwd`
 
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD"
@@ -115,11 +115,12 @@ Commands:
   down                 Stop and remove LNMP Docker containers, networks
   acme.sh              Run original acme.sh command to issue SSL certificate
   backup               Backup MySQL databases
-  build                Build or rebuild LNMP Self Build images (Only Support x86_64)
-  build-config         Validate and view the LNMP Self Build images Compose file
-  build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
+  build                Build or rebuild your LNMP images (Only Support x86_64)
+  build-config         Validate and view the LNMP with your images Compose file
+  build-up             Create and start LNMP containers With your Build images
+  build-push           Pushes your images to Docker Registory
   build-pull           Pull LNMP Docker Images Build By your self
-  build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
+  build-up             Create and start LNMP containers With Self Build images
   cleanup              Cleanup log files
   compose              Install docker-compose [ --official | -f ]
   composer             Exec composer command on Docker Container
@@ -135,18 +136,17 @@ Commands:
   services             List services
   update               Upgrades LNMP [ -f | ]
   upgrade              Upgrades LNMP [ -f | ]
-  update-version       Update LNMP soft to latest vesion
 
 lrew(package):
-  init                 Init a new lrew package
-  add                  Add new lrew package
-  outdated             Shows a list of installed lrew packages that have updates available
+  lrew-init            Init a new lrew package
+  lrew-add             Add new lrew package
+  lrew-outdated        Shows a list of installed lrew packages that have updates available
   lrew-backup          Upload composer.json to GitHub Gist
   lrew-update          Update lrew package
 
 PHP Tools:
-  httpd-config         Generate Apache2 vhost conf
   new                  New PHP Project and generate nginx conf and issue SSL certificate
+  httpd-config         Generate Apache2 vhost conf
   nginx-config         Generate nginx vhost conf
   ssl                  Issue SSL certificate powered by acme.sh, Thanks Let's Encrypt
   ssl-self             Issue Self-signed SSL certificate
@@ -155,7 +155,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io sregistry server to start Docker Desktop Kubernetes [ --no-pull | ]
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -209,6 +209,7 @@ _tongji(){
 
 test -f cluster/help.sh && source cluster/help.sh || true
 
+# docker for mac local gcr.io server
 _gcr_io_down(){
   docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1 || true
 }
@@ -280,6 +281,7 @@ _gcr_io(){
     _gcr_io_down
 }
 
+# composer satis
 _satis(){
   if ! [ -d ${APP_ROOT}/satis ];then
     cp -r app/satis-demo ${APP_ROOT}/satis
@@ -352,14 +354,10 @@ env_status(){
 
   _cp_only_not_exists kubernetes/nfs-server/.env.example kubernetes/nfs-server/.env
 
-  if ! [ -f secrets/minio/key.txt ];then
-    cp secrets/minio/key.example.txt secrets/minio/key.txt
-    cp secrets/minio/secret.example.txt secrets/minio/secret.txt
-  fi
+  _cp_only_not_exists secrets/minio/key.example.txt secrets/minio/key.txt
+  _cp_only_not_exists secrets/minio/secret.example.txt secrets/minio/secret.txt
 
-  if ! [ -f config/supervisord/supervisord.ini ];then
-    cp config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
-  fi
+  _cp_only_not_exists config/supervisord/supervisord.ini.example config/supervisord/supervisord.ini
 }
 
 # 自动升级软件版本
@@ -409,10 +407,10 @@ logs(){
   if ! [ -d log/nginx ];then mkdir -p log/nginx && touch log/nginx/{error.log,access.log}; fi
   if ! [ -d log/nginx-unit ];then mkdir -p log/nginx-unit; fi
 
-if ! [ -d log/php ];then
- mkdir -p log/php \
- && touch log/php/{error.log,slow.log,php-fpm-access.log,php-fpm-error.log,xdebug-remote.log}
-fi
+  if ! [ -d log/php ];then
+    mkdir -p log/php \
+    && touch log/php/{error.log,slow.log,php-fpm-access.log,php-fpm-error.log,xdebug-remote.log}
+  fi
 
   if ! [ -d log/redis ];then mkdir -p log/redis && touch log/redis/redis.log ; fi
 
@@ -443,7 +441,7 @@ cleanup(){
 }
 
 # 将 compose 移入 PATH
-install_docker_compose_move(){
+move_docker_compose_to_path(){
   if [ -f /etc/os-release ];then
     . /etc/os-release
     case "$ID" in
@@ -452,8 +450,7 @@ install_docker_compose_move(){
         $(_sudo) install -m755 /tmp/docker-compose /opt/bin/docker-compose
         ;;
       * )
-        $(_sudo) install -m755 /tmp/docker-compose /usr/local/bin/docker-compose > /dev/null 2>&1 \
-            || install -m755 /tmp/docker-compose /usr/local/bin/docker-compose
+        $(_sudo) install -m755 /tmp/docker-compose /usr/local/bin/docker-compose
         ;;
     esac
   else
@@ -463,13 +460,10 @@ install_docker_compose_move(){
 
 # 从 GitHub 安装 compose
 install_docker_compose_official(){
-  if [ "$OS" != 'Linux' ];then
-  print_error "Only support Linux"
-  exit 1
-  fi
+  if [ "$OS" != 'Linux' ];then print_error "Only support Linux" ; exit 1; fi
   curl -sL ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
       > /tmp/docker-compose || print_error "Download docker-compose error, code is $?"
-  install_docker_compose_move
+  move_docker_compose_to_path
 }
 
 # 安装 compose arm 版本
@@ -490,32 +484,32 @@ install_docker_compose(){
   elif [ "$ARCH" = 'x86_64' ];then
     curl -sL ${COMPOSE_LINK}/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` \
       > /tmp/docker-compose || print_error "Download docker-compose error, code is $?"
-    install_docker_compose_move
+    move_docker_compose_to_path
   fi
 }
 
 docker_compose(){
   if [ "$1" = 'compose' ];then shift ; fi
 
-  command -v docker-compose >/dev/null 2>&1 || local a=1
+  command -v docker-compose >/dev/null 2>&1 || local not_install=1
 
-  if ! [ "$a" = 1 ];then
-    # 存在
+  if ! [ "$not_install" = 1 ];then
+    # compose 已经安装，判断是否安装了正确的版本
     # 取得版本号
     DOCKER_COMPOSE_VERSION=`docker-compose --version | cut -d ' ' -f 3 | cut -d , -f 1`
     local x=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 1`
     local y=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 2`
     #local z=`echo $DOCKER_COMPOSE_VERSION | cut -d . -f 3`
-    local true_x=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 1`
-    local true_y=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 2`
+    local current_x=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 1`
+    local current_y=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 2`
     #local true_z=`echo $LNMP_DOCKER_COMPOSE_VERSION | cut -d . -f 3`
-    if [ "$x" != "$true_x" ];then
+    if [ "$x" != "$current_x" ];then
       print_error "Check docker-compose error"
       exit 1
     fi
     # 判断是否安装正确
     # -lt 小于
-    if [ "$y" -lt "$true_y" ];then
+    if [ "$y" -lt "$current_y" ];then
       # 安装不正确
       if [ "$1" = '--official' ];then shift; print_info "Install compose from GitHub"; \
           install_docker_compose_official "$@"; return 0; fi
@@ -538,10 +532,11 @@ docker_compose(){
       print_info "docker-compose v$DOCKER_COMPOSE_VERSION already installed Correct version"; return 0
     fi
   else
-    # 不存在
+    # compose 未安装
     print_error "docker-compose NOT install, install..."
     if [[ "$1" = '--official' || "$2" = '--official' ]];then \
         shift; print_info "Install compose from GitHub"; install_docker_compose_official "$@" && return 0; fi
+
     install_docker_compose
   fi
 }
@@ -551,27 +546,12 @@ network(){
   ping -c 3 -W 3 baidu.com > /dev/null 2>&1 || ( print_error "Network connection error" ;exit 1)
 }
 
-# 克隆示例项目、nginx 配置文件
-demo() {
-  if [ -d config/nginx/.git ] || [ -f config/nginx/.git ];then
-    true
-  else
-    # print_info "Import app and nginx conf Demo ..."
-    # 检查网络连接
-    # network
-    # echo ;print_info "Update Git Submodule"
-    # git submodule update --init --recursive
-    true
-  fi
-}
-
 # 初始化
 init() {
   case $APP_ENV in
     # 开发环境 拉取示例项目 [cn github]
     development )
       print_info "APP_ENV is $APP_ENV"
-      demo
       ;;
 
     # 生产环境 转移项目文件、配置文件、安装依赖包
@@ -590,8 +570,8 @@ init() {
 # 更新项目
 set_git_remote_origin_url(){
   network
-  git remote get-url origin > /dev/null 2>&1 || local a=1
-  if [ "$a" = 1 ];then
+  git remote get-url origin > /dev/null 2>&1 || local no_origin=1
+  if [ "$no_origin" = 1 ];then
     # 不存在
     print_error "This git remote origin NOT set, seting..."
     git remote add origin git@github.com:khs1994-docker/lnmp.git
@@ -1195,10 +1175,10 @@ main() {
   acme.sh )
     _docker_is_run; acme "$@"
     ;;
-  init )
+  lrew-init )
     _lrew_init "$@"
     ;;
-  add )
+  lrew-add )
     _lrew_add "$@"
     ;;
   lrew-backup )
@@ -1207,7 +1187,7 @@ main() {
   lrew-update )
     _lrew_update "$@"
     ;;
-  outdated )
+  lrew-outdated )
     _lrew_outdated "$@"
     ;;
   backup )
@@ -1222,9 +1202,9 @@ main() {
     exec docker-compose $options config "$@"
     ;;
   composer )
-    if [ -d $source/.devcontainer -a -f $source/docker-workspace.yml ];then
+    if [ -d $EXEC_CMD_DIR/.devcontainer -a -f $EXEC_CMD_DIR/docker-workspace.yml ];then
         print_info "Exec composer command in [ vscode remote ] or [ PhpStorm ] project folder"
-        cd $source
+        cd $EXEC_CMD_DIR
         docker-compose -f docker-workspace.yml run --rm composer "$@"
 
         exit
@@ -1242,9 +1222,6 @@ main() {
     shift
 
     exec docker-compose $options run -w $WORKING_DIR --rm composer "$@"
-    ;;
-  demo )
-    demo
     ;;
 
   cleanup )
@@ -1354,7 +1331,6 @@ For information please run $ docker service update --help
 
   satis )
     _satis
-
   ;;
 
   build )
@@ -1376,7 +1352,6 @@ For information please run $ docker service update --help
     else
       notsupport
     fi
-
     ;;
 
   build-up )
@@ -1389,28 +1364,20 @@ For information please run $ docker service update --help
       service="$@"
     fi
 
-    if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-lnmp.yml" \
+
+    _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.build.yml" \
                            "--build"
-      exec docker-compose $options up -d --no-build $service
-    else
-      notsupport
-    fi
-
+    exec docker-compose $options up -d --no-build $service
     ;;
 
   build-config )
     logs
-    if [ ${ARCH} = 'x86_64' ];then
-      _get_compose_options "docker-lnmp.yml" \
+    _get_compose_options "docker-lnmp.yml" \
                            "docker-lnmp.build.yml" \
                            "--build"
 
-      exec docker-compose $options config "$@"
-    else
-      notsupport
-    fi
+    exec docker-compose $options config "$@"
     ;;
 
   build-push )
@@ -1597,7 +1564,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
 
     #@custom
     __lnmp_custom_pull "$@" 2>/dev/null || true
-     ;;
+    ;;
 
   compose )
     docker_compose "$@"
@@ -1681,7 +1648,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      -e PORT=2375 \
      --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" \
      shipyard/docker-proxy
-     ;;
+   ;;
 
   clusterkit )
      _get_compose_options "docker-lnmp.yml" \
@@ -1713,13 +1680,13 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      ;;
 
   clusterkit-mysql-deploy )
-       cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
-       docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
-        ;;
+    cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
+    docker stack deploy -c docker-cluster.mysql.yml mysql_cluster
+    ;;
 
   clusterkit-mysql-remove )
-       docker stack rm mysql_cluster
-        ;;
+    docker stack rm mysql_cluster
+    ;;
 
   clusterkit-memcached-up )
     docker-compose --project-directory=$PWD -f cluster/docker-cluster.memcached.yml up "$@"
@@ -1730,10 +1697,9 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   clusterkit-memcached-exec )
-
-  if [ "$#" -lt 2 ];then
-     print_error '$ ./lnmp-docker clusterkit-memcached-exec {N} {COMMAND}' ; exit 1
-  fi
+    if [ "$#" -lt 2 ];then
+      print_error '$ ./lnmp-docker clusterkit-memcached-exec {N} {COMMAND}' ; exit 1
+    fi
 
     NODE=$1
     shift
@@ -1752,25 +1718,24 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   clusterkit-redis-up )
-        if [ -z "$CLUSTERKIT_REDIS_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
-        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml up "$@"
-        ;;
+    if [ -z "$CLUSTERKIT_REDIS_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml up "$@"
+    ;;
 
   clusterkit-redis-down )
-        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml down "$@"
-        ;;
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.yml down "$@"
+    ;;
 
   clusterkit-redis-exec )
+    if [ "$#" -lt 2 ];then
+      print_error '$ ./lnmp-docker clusterkit-redis-exec {master-N|slave-N} {COMMAND}' ; exit 1
+    fi
+    NODE=$1
+    shift
+    COMMAND=$@
 
-  if [ "$#" -lt 2 ];then
-     print_error '$ ./lnmp-docker clusterkit-redis-exec {master-N|slave-N} {COMMAND}' ; exit 1
-  fi
-        NODE=$1
-        shift
-        COMMAND=$@
-
-          clusterkit_bash_cli clusterkit_redis redis_$NODE ${COMMAND:-bash}
-        ;;
+    clusterkit_bash_cli clusterkit_redis redis_$NODE ${COMMAND:-bash}
+    ;;
 
   clusterkit-redis-deploy )
     cp cluster/docker-cluster.redis.yml docker-cluster.redis.yml
@@ -1782,24 +1747,24 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   clusterkit-redis-replication-up )
-        if [ -z "$CLUSTERKIT_REDIS_M_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_M_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
-        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml up "$@"
-        ;;
+    if [ -z "$CLUSTERKIT_REDIS_M_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_M_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml up "$@"
+    ;;
 
   clusterkit-redis-replication-down )
-        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml down "$@"
-        ;;
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.replication.yml down "$@"
+    ;;
 
   clusterkit-redis-replication-exec )
     if [ "$#" -lt 2 ];then \
-       print_error \
-       '$ ./lnmp-docker clusterkit-redis-replication-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
+      print_error \
+      '$ ./lnmp-docker clusterkit-redis-replication-exec {master | slave-N} {COMMAND}' ; exit 1 ; fi
 
-        NODE="$1"
-        shift
-        COMMAND="$@"
-        clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$NODE ${COMMAND:-bash}
-        ;;
+      NODE="$1"
+      shift
+      COMMAND="$@"
+      clusterkit_bash_cli clusterkit_redis_replication redis_m_s_$NODE ${COMMAND:-bash}
+    ;;
 
   clusterkit-redis-replication-deploy )
     cp cluster/docker-cluster.redis.replication.yml docker-cluster.redis.replication.yml
@@ -1811,24 +1776,24 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   clusterkit-redis-sentinel-up )
-        if [ -z "$CLUSTERKIT_REDIS_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
-        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml up "$@"
-        ;;
+    if [ -z "$CLUSTERKIT_REDIS_S_HOST" ];then print_error "You must set CLUSTERKIT_REDIS_S_HOST in $LNMP_ENV_FILE file" ; exit 1 ; fi
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml up "$@"
+    ;;
 
   clusterkit-redis-sentinel-down )
-        docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml down "$@"
-        ;;
+    docker-compose --project-directory=$PWD -f cluster/docker-cluster.redis.sentinel.yml down "$@"
+    ;;
 
   clusterkit-redis-sentinel-exec )
-  if [ "$#" -lt 2 ];then \
+    if [ "$#" -lt 2 ];then \
       print_error \
-        '$ ./lnmp-docker clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1 ; fi
+      '$ ./lnmp-docker clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}' ; exit 1 ; fi
 
-        NODE=$1
-        shift
-        COMMAND=$@
-          clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$NODE ${COMMAND:-bash}
-        ;;
+      NODE=$1
+      shift
+      COMMAND=$@
+      clusterkit_bash_cli clusterkit_redis_sentinel redis_sentinel_$NODE ${COMMAND:-bash}
+    ;;
 
   clusterkit-redis-sentinel-deploy )
     cp cluster/docker-cluster.redis.sentinel.yml docker-cluster.redis.sentinel.yml
@@ -1840,25 +1805,21 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   clusterkit-* )
-        command=$(echo $command | cut -d '-' -f 2)
-        _get_compose_options "docker-lnmp.yml" \
+    command=$(echo $command | cut -d '-' -f 2)
+    _get_compose_options "docker-lnmp.yml" \
                              "docker-lnmp.override.yml" \
                              "cluster/docker-cluster.mysql.yml" \
                              "cluster/docker-cluster.redis.yml"
-        exec docker-compose $options $command "$@"
-        ;;
+    exec docker-compose $options $command "$@"
+    ;;
 
   swarm-clusterkit )
     cp cluster/docker-cluster.mysql.yml docker-cluster.mysql.yml
     docker stack deploy -c docker-production.yml -c docker-cluster.mysql.yml lnmp
-        ;;
-
-    update-version )
-        update_version
     ;;
 
-    pcit-cp )
-      pcit_init
+  pcit-cp )
+    pcit_init
     ;;
 
     pcit-up )
@@ -1873,7 +1834,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     fi
     ;;
 
-    nfs )
+  nfs )
     $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
     $(_sudo) modprobe nfsd || true
     cd kubernetes/nfs-server
@@ -1884,13 +1845,13 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 
     ;;
 
-    checkout )
-      if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit 1; fi
+  checkout )
+    if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit 1; fi
 
-      git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} || true
-      git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
-      update
-      ;;
+    git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} || true
+    git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
+    update
+    ;;
 
   * )
   #@custom
@@ -1909,30 +1870,27 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
   esac
 }
 
+# set -x
 if [ "$debug" = 'true' -o "$DEBUG" = 'true' ];then set -x; fi
 
-# if docker version info not include ce, example 1.13.1, maybe install method is error
-
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
-
 COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
 
-# 获取正确版本号
-
+# 在加载 .env 文件之前，先检查是否在环境变量中设置了以下变量，若设置，则使用环境变量
 if [ -n "${LNMP_SERVICES}" ];then LNMP_SERVICES_SYSTEM_ENV=$LNMP_SERVICES;fi
 if [ -n "${LREW_INCLUDE}" ];then LREW_INCLUDE_SYSTEM_ENV=$LREW_INCLUDE;fi
 
 env_status && . ./.env && . cli/.env
 
-if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
-if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi
+if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then export LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
+if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then export LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi
 
 APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
 
 print_info "APP_ROOT is $APP_ROOT"
 
 if [ -d .git ];then
-  command -v git && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="unknow(git not install)"
+  command -v git > /dev/null 2>&1 && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="unknow(git not install)"
   print_info "Branch is ${BRANCH}"
 fi
 

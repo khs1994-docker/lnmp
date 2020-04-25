@@ -65,7 +65,6 @@ complete -W "acme.sh \
         nginx-config \
         update \
         upgrade \
-        update-version \
         init \
         add \
         outdated \
@@ -76,4 +75,9 @@ complete -W "acme.sh \
         composer \
         pcit-up \
         pcit-cp \
+        lrew-init \
+        lrew-add \
+        lrew-outdated \
+        lrew-backup \
+        lrew-update \
         nfs" lnmp-docker
