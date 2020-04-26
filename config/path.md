@@ -74,6 +74,7 @@
 │   ├── demo-ajax-header.config
 │   ├── demo.config
 │   │   ├── gitlab.config
+│   │   ├── gzip.config
 │   │   ├── http3.config
 │   │   ├── ppm.config
 │   │   ├── unit-laravel.config
@@ -137,6 +138,7 @@
 │   │               │   │   ├── php-ext-pdo_pgsql.ini
 │   │               │   │   ├── php-ext-pgsql.ini
 │   │               │   │   ├── php-ext-redis.ini
+│   │               │   │   ├── php-ext-shmop.ini
 │   │               │   │   ├── php-ext-sockets.ini
 │   │               │   │   ├── php-ext-sysvmsg.ini
 │   │               │   │   ├── php-ext-sysvsem.ini
@@ -177,5 +179,5 @@
 │   └── supervisord.ini.example
 └── yarn
 
-44 directories, 132 files
+44 directories, 134 files
 ```

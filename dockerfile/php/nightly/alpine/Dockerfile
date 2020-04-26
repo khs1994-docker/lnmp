@@ -3,15 +3,15 @@ FROM --platform=$TARGETPLATFORM alpine:3.11 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-# ARG PHP_VERSION=
+ARG PHP_VERSION=nightly
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -123,7 +123,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
 # https://github.com/docker-library/php/issues/272
 ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
-ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
+ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 # ENV GPG_KEYS CBAF69F173A0FEA4B537F470D66C9593118BCCB6 F38252826ACD957EF380D39F2F7956BC5DA04B5D
 
@@ -419,7 +419,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       # && make all -j "$(nproc)"\
       # && make install \
       && rm -rf /tmp/* \
-      && apk del --no-network  .pecl_build_deps \
+      && apk del --no-network .pecl_build_deps \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
       && ls -la $(php-config --extension-dir)

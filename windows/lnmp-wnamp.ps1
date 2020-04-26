@@ -2,6 +2,8 @@
 
 ################################################################################
 
+$LNMP_WSL_CMD=wsl -d ${DistributionName} -- wslpath "$PSScriptRoot\..\wsl\lnmp-wsl".Replace('\','\\');
+
 Function print_help_info(){
   Write-Host "
 Usage:
@@ -24,23 +26,23 @@ lnmp-wnamp.ps1 restart nginx wsl-memcached
 "
 }
 
-$source=$pwd
+$EXEC_CMD_DIR=$pwd
 
-Function printInfo(){
-  Write-Host "$args" -ForegroundColor Red
+Function printInfo($info,$color){
+  Write-Host "==> $info" -ForegroundColor $color
 }
 
 Function _stop($soft){
   switch ($soft){
     "nginx" {
-      printInfo "Stop nginx..."
+      printInfo "Stop nginx..." Red
       start-process "taskkill" -ArgumentList "/F","/IM","nginx.exe" -Verb RunAs
       Write-Host "
       "
     }
 
     "php" {
-       printInfo "Stop php-cgi..."
+       printInfo "Stop php-cgi..." Red
        taskkill /F /IM php-cgi-spawner.exe
        taskkill /F /IM php-cgi.exe
        Write-Host "
@@ -48,21 +50,21 @@ Function _stop($soft){
     }
 
     "mysql" {
-      printInfo "Stop MySQL..."
+      printInfo "Stop MySQL..." Red
       start-process "net" -ArgumentList "stop","mysql" -Verb RunAs
       Write-Host "
       "
     }
 
     "httpd" {
-      printInfo "Stop HTTPD..."
+      printInfo "Stop HTTPD..." Red
       httpd -d C:/Apache24 -k stop
       Write-Host "
       "
     }
 
     Default {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop $soft
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop $soft
     }
   }
 }
@@ -70,27 +72,27 @@ Function _stop($soft){
 Function _stop_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop php
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop php
     }
 
     "wsl-nginx" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop nginx
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop nginx
     }
 
     "wsl-mysql" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop mysql
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop mysql
     }
 
     "wsl-httpd" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop httpd
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop httpd
     }
 
     "wsl-redis" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop redis
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop redis
     }
 
     "wsl-memcached" {
-      wsl -d ${DistributionName} -u root lnmp-wsl stop memcached
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD stop memcached
     }
   }
 }
@@ -101,16 +103,16 @@ Function _start($soft){
   switch ($soft) {
     "nginx" {
       # cd $NGINX_PATH
-      printInfo "Start nginx..."
+      printInfo "Start nginx..." Green
       nginx -p ${NGINX_PATH} -t
       start-process "nginx" -ArgumentList "-p","${NGINX_PATH}" -Verb RunAs -WindowStyle Hidden
-      cd $source
+      cd $EXEC_CMD_DIR
       Write-Host "
       "
     }
 
     "mysql" {
-      printInfo "Start MySQL..."
+      printInfo "Start MySQL..." Green
       # net start mysql
       start-process "net" -ArgumentList "start","mysql" -Verb RunAs
       Write-Host "
@@ -118,7 +120,7 @@ Function _start($soft){
     }
 
      "php" {
-       printInfo "Start php-cgi..."
+       printInfo "Start php-cgi..." Green
        # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9000 -c "$PHP_PATH"
        # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9100 -c "$PHP_PATH"
        # RunHiddenConsole php-cgi.exe -b 127.0.0.1:9200 -c "$PHP_PATH"
@@ -133,7 +135,7 @@ Function _start($soft){
      }
 
      "httpd" {
-       printInfo "Start HTTPD..."
+       printInfo "Start HTTPD..." Green
        httpd -t
        httpd -d C:/Apache24 -k start
        Write-Host "
@@ -141,7 +143,7 @@ Function _start($soft){
      }
 
      Default {
-       wsl -d ${DistributionName} -u root lnmp-wsl start $soft
+       wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start $soft
      }
   }
 }
@@ -149,27 +151,27 @@ Function _start($soft){
 Function _start_wsl($soft){
   switch ($soft){
     "wsl-php" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start php
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start php
     }
 
     "wsl-nginx" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start nginx
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start nginx
     }
 
     "wsl-mysql" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start mysql
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start mysql
     }
 
     "wsl-httpd" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start httpd
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start httpd
     }
 
     "wsl-redis" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start redis
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start redis
     }
 
     "wsl-memcached" {
-      wsl -d ${DistributionName} -u root lnmp-wsl start memcached
+      wsl -d ${DistributionName} -u root $LNMP_WSL_CMD start memcached
     }
   }
 }

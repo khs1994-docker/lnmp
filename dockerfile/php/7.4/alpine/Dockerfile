@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.4
+ARG PHP_VERSION=7.4.5
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
 ARG PHP_EXTENSION_EXTRA="ffi"
 
@@ -45,6 +45,7 @@ ENV PHP_EXTENSION \
       xmlrpc \
       # xsl \
       zip \
+      shmop \
       ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \

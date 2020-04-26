@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.9-alpha3
+.VERSION 19.03.10-alpha2
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -124,7 +124,7 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1"){
 # $DOCKER_DEFAULT_PLATFORM="linux"
 $KUBERNETES_VERSION="1.16.5"
 $DOCKER_DESKTOP_VERSION="2.2.2.0 (43066)"
-$source=$PWD
+$EXEC_CMD_DIR=$PWD
 
 Function _command($command){
   get-command $command -ErrorAction "SilentlyContinue"
@@ -301,10 +301,11 @@ Commands:
   up                   Up LNMP (Support x86_64 arm32v7 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   backup               Backup MySQL databases
-  build                Build or rebuild LNMP Self Build images (Only Support x86_64)
-  build-config         Validate and view the LNMP Self Build images Compose file
-  build-up             Create and start LNMP containers With Self Build images (Only Support x86_64)
-  build-push           Build and Pushes images to Docker Registory (Only Support x86_64)
+  build                Build or rebuild your LNMP images (Only Support x86_64)
+  build-config         Validate and view the LNMP with your images Compose file
+  build-up             Create and start LNMP containers With your Build images
+  build-push           Pushes your images to Docker Registory
+  build-pull           Pull LNMP Docker Images Build By your self
   cleanup              Cleanup log files
   config               Validate and view the LNMP Compose file
   compose              Install docker-compose [PATH]
@@ -320,18 +321,17 @@ Commands:
   services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
-  update-version       Update LNMP soft to latest vesion
 
 lrew(package):
-  init                 Init a new lrew package
-  add                  Add new lrew package
-  outdated             Shows a list of installed lrew packages that have updates available
+  lrew-init            Init a new lrew package
+  lrew-add             Add new lrew package
+  lrew-outdated        Shows a list of installed lrew packages that have updates available
   lrew-backup          Upload composer.json to GitHub Gist
   lrew-update          Update lrew package
 
 PHP Tools:
-  httpd-config         Generate Apache2 vhost conf
   new                  New PHP Project and generate nginx conf and issue SSL certificate
+  httpd-config         Generate Apache2 vhost conf
   nginx-config         Generate nginx vhost conf
   ssl-self             Issue Self-signed SSL certificate
 
@@ -369,7 +369,7 @@ Exec '$ lnmp-docker k8s' Run Kubernetes on Tencent Cloud
 Exec '$ lnmp-docker zan' donate
 "
 
-cd $source
+cd $EXEC_CMD_DIR
 
 exit
 }
@@ -762,7 +762,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
   printInfo "Use LNMP CLI in LNMP Root $pwd"
   cd $APP_ROOT
   $APP_ROOT=$PWD
-  cd $source
+  cd $EXEC_CMD_DIR
 }
 
 printInfo "APP_ROOT is $APP_ROOT"
@@ -835,16 +835,15 @@ if ($args.Count -eq 0){
 }
 
 switch -regex ($command){
-
-    init {
+    lrew-init {
       _lrew_init $other
     }
 
-    add {
+    lrew-add {
       _lrew_add $other
     }
 
-    outdated {
+    lrew-outdated {
       _lrew_outdated $other
     }
 
@@ -874,14 +873,20 @@ switch -regex ($command){
        __lnmp_custom_restore $other
     }
 
-    build {
-      if ($command -eq "build"){
-        $options=get_compose_options "docker-lnmp.yml", `
+    "^build$" {
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
+      $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-        & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $other --parallel}
-      }
+      Write-Host "Build this service image: $services" -ForegroundColor Green
+      sleep 3
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel}
     }
 
     build-config {
@@ -896,21 +901,55 @@ switch -regex ($command){
     }
 
     build-up {
+      init
+
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d $other}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d --no-build $services}
+
+      #@custom
+      __lnmp_custom_up $services
     }
 
     build-push {
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.build.yml" `
                                     1
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $other --parallel}
+      Write-Host "Push this service image: $services" -ForegroundColor Green
+      sleep 3
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service}
+    }
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $other}
+    build-pull {
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
+      $options=get_compose_options "docker-lnmp.yml",`
+                                   "docker-lnmp.build.yml" `
+                                   1
+
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services}
+
+      #@custom
+      __lnmp_custom_pull
     }
 
     cleanup {
@@ -919,7 +958,7 @@ switch -regex ($command){
       __lnmp_custom_cleanup
     }
 
-    config {
+    "^config$" {
       logs
 
       $options=get_compose_options "docker-lnmp.yml", `
@@ -956,11 +995,18 @@ switch -regex ($command){
       __lnmp_custom_up $services
     }
 
-    pull {
+    "^pull$" {
+
+      if($other){
+        $services = $other
+      }else{
+        $services = ${LNMP_SERVICES}
+      }
+
       $options=get_compose_options "docker-lnmp.yml",`
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull ${LNMP_SERVICES}}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services}
 
       #@custom
       __lnmp_custom_pull
@@ -1109,7 +1155,7 @@ switch -regex ($command){
          if ($cmd.Count -eq 0){
            '$ ./lnmp-docker.ps1 clusterkit-mysql-exec {master|node-N} {COMMAND}'
 
-           cd $source
+           cd $EXEC_CMD_DIR
 
            exit 1
          }
@@ -1129,7 +1175,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-memcached-exec {N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1149,7 +1195,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-redis-exec {master-N|slave-N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1169,7 +1215,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-redis-replication-exec {master|slave-N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1189,7 +1235,7 @@ switch -regex ($command){
       if ($cmd.Count -eq 0){
         '$ ./lnmp-docker.ps1 clusterkit-redis-sentinel-exec {master-N|slave-N|sentinel-N} {COMMAND}'
 
-        cd $source
+        cd $EXEC_CMD_DIR
 
         exit 1
       }
@@ -1206,12 +1252,6 @@ switch -regex ($command){
 
     clusterkit-help {
       clusterkit_help
-    }
-
-    update-version {
-      clear
-      _wsl_check
-      wsl -d $DistributionName ./lnmp-docker update-version
     }
 
     bug {
@@ -1439,9 +1479,9 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
     }
 
     composer {
-      if((Test-Path $source/.devcontainer) -And (Test-Path $source/docker-workspace.yml)){
+      if((Test-Path $EXEC_CMD_DIR/.devcontainer) -And (Test-Path $EXEC_CMD_DIR/docker-workspace.yml)){
         printInfo "Exec composer command in [ vscode remote ] or [ PhpStorm ] project folder"
-        cd $source
+        cd $EXEC_CMD_DIR
         docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-workspace.yml run --rm composer $args
 
         exit
@@ -1504,4 +1544,4 @@ Example: ./lnmp-docker composer /app/demo install
       }
 }
 
-cd $source
+cd $EXEC_CMD_DIR

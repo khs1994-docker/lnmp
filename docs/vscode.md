@@ -10,6 +10,8 @@
 
 ## macOS `code` 加入 PATH
 
+请将以下路径加入到 `PATH`
+
 ```bash
 "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 ```

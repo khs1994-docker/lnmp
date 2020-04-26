@@ -16,9 +16,25 @@ $ git ls-files --stage
 100755 e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 0       1.txt
 ```
 
+## 撤销
+
+**撤销 commit**
+
+```bash
+$ git reset --soft HEAD^
+```
+
+**撤销暂存**
+
+```bash
+$ git reset HEAD 文件名
+```
+
 ## 提交到了错误分支
 
 ```bash
+# 撤销 commit 之后
+
 $ git stash
 
 # 切到正确分支
@@ -31,37 +47,37 @@ $ git add .
 
 ## CRLF(Win) LF(Unix)
 
-### 提交时转换为LF，检出时转换为CRLF
+**提交时转换为LF，检出时转换为CRLF**
 
 ```bash
 $ git config --global core.autocrlf true
 ```
 
-### 提交时转换为LF，检出时不转换
+**提交时转换为LF，检出时不转换(推荐设置)**
 
 ```bash
 $ git config --global core.autocrlf input
 ```
 
-### 提交检出均不转换
+**提交检出均不转换**
 
 ```bash
 $ git config --global core.autocrlf false
 ```
 
-### 拒绝提交包含混合换行符的文件
+**拒绝提交包含混合换行符的文件**
 
 ```bash
 $ git config --global core.safecrlf true
 ```
 
-### 允许提交包含混合换行符的文件
+**允许提交包含混合换行符的文件**
 
 ```bash
 $ git config --global core.safecrlf false
 ```
 
-### 提交包含混合换行符的文件时给出警告
+**提交包含混合换行符的文件时给出警告**
 
 ```bash
 $ git config --global core.safecrlf warn

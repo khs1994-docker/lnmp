@@ -36,7 +36,7 @@ $ sudo apt install libffi-dev
 |:--|:--|:--|
 |[arm32v7 Docker image](https://hub.docker.com/u/arm32v7/)|[官方系统 Raspbian (基于 Debian)](https://www.raspberrypi.org/downloads/raspbian/)|arm32|
 |[arm64v8 Docker image](https://hub.docker.com/u/arm64v8/)|[pi 64](https://github.com/khs1994/pi64)|arm64|
-|[armhf Docker image](https://hub.docker.com/u/armhf/)    |已经废弃，已经转移到了上述两个项目中|-|
+|[armhf Docker image](https://hub.docker.com/u/armhf/)    |已经废弃，转移到了上述两个项目中|-|
 
 ## ARM 镜像构建
 

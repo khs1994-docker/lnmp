@@ -1,11 +1,12 @@
-ARG PHP_VERSION=7.4.4
+ARG PHP_VERSION=7.4.5
+ARG USERNAME=khs1994
 
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-fpm-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
 RUN apk add --no-cache supervisor
 

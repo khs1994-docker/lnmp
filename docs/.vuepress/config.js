@@ -101,6 +101,7 @@ module.exports = {
             '/composer/',
             '/composer/satis',
             '/symfony',
+            '/php_eol',
           ]
         }, {
           title: '生产环境',

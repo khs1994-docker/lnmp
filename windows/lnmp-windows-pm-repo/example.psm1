@@ -70,7 +70,7 @@ Function install($VERSION=0,$isPre=0){
 
   # fix me
   $filename=""
-  $unzipDesc="example"
+  $unzipDesc=$name
 
   # _exportPath $lwpm.path
 
@@ -78,8 +78,12 @@ Function install($VERSION=0,$isPre=0){
     $ErrorActionPreference='Continue'
     $CURRENT_VERSION=""
 
+    if($lwpm.scripts.version){
+      $CURRENT_VERSION=powershell -c $lwpm.scripts.version
+    }
+
     if ($CURRENT_VERSION -eq $VERSION){
-        "==> $name $VERSION already install"
+        Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
         return
     }
     $ErrorActionPreference='stop'
@@ -109,7 +113,7 @@ Function install($VERSION=0,$isPre=0){
 
   install_after
 
-  "==> Checking ${name} ${VERSION} install ..."
+  Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
   # 验证 Fix me
   if($lwpm.scripts.test){
     powershell -c $lwpm.scripts.test
@@ -117,7 +121,7 @@ Function install($VERSION=0,$isPre=0){
 }
 
 Function uninstall($prune=0){
-  "Not Support"
+  Write-Host "Not Support" -ForegroundColor Red
   # _cleanup ""
   # user data
   if($prune){

@@ -20,37 +20,37 @@ jobs:
       # PHP_73_CLI:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.16
+      #   PHP_TAG_VERSION: 7.3.17
       #   CLI: 1
       # PHP_73_FPM:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.16
+      #   PHP_TAG_VERSION: 7.3.17
       #   FPM: 1
       # PHP_73_COMPOSER:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.16
+      #   PHP_TAG_VERSION: 7.3.17
       #   COMPOSER: 1
       # PHP_73_SWOOLE:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.16
+      #   PHP_TAG_VERSION: 7.3.17
       #   SWOOLE: 1
       # PHP_73_UNIT:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.16
+      #   PHP_TAG_VERSION: 7.3.17
       #   UNIT: 1
       # PHP_73_SUPERVISORD:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.16
+      #   PHP_TAG_VERSION: 7.3.17
       #   SUPERVISORD: 1
       # PHP_73_PPM:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.16
+      #   PHP_TAG_VERSION: 7.3.17
       #   PPM: 1
 
       # PHP_56_FPM:
@@ -74,58 +74,58 @@ jobs:
       PHP_72_CLI:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.29
+        PHP_TAG_VERSION: 7.2.30
         CLI: 1
       PHP_72_FPM:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.29
+        PHP_TAG_VERSION: 7.2.30
         FPM: 1
       PHP_72_COMPOSER:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.29
+        PHP_TAG_VERSION: 7.2.30
         COMPOSER: 1
       PHP_72_SWOOLE:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.29
+        PHP_TAG_VERSION: 7.2.30
         SWOOLE: 1
       PHP_72_UNIT:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.29
+        PHP_TAG_VERSION: 7.2.30
         UNIT: 1
       PHP_72_SUPERVISORD:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.29
+        PHP_TAG_VERSION: 7.2.30
         SUPERVISORD: 1
       PHP_72_PPM:
         PHP_VERSION: 7_2_X
         FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.29
+        PHP_TAG_VERSION: 7.2.30
         PPM: 1
 
       # PHP_74_CLI:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.4
+      #   PHP_TAG_VERSION: 7.4.5
       #   CLI: 1
       # PHP_74_FPM:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.4
+      #   PHP_TAG_VERSION: 7.4.5
       #   FPM: 1
       # PHP_74_COMPOSER:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.4
+      #   PHP_TAG_VERSION: 7.4.5
       #   COMPOSER: 1
       # PHP_74_SWOOLE:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.4
+      #   PHP_TAG_VERSION: 7.4.5
       #   SWOOLE: 1
 
       # PHP_nightly_CLI:
@@ -184,7 +184,7 @@ jobs:
       sudo systemctl cat docker
       sudo systemctl restart docker
       sleep 5
-      docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+      docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
       cat /proc/sys/fs/binfmt_misc/qemu-aarch64
       docker buildx create --name mybuilder
       docker buildx use mybuilder
@@ -200,6 +200,8 @@ jobs:
   - script: |
       set -x
       echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
+      echo $(DOCKER_PASSWORD) | docker login -u $(TENCENT_DOCKER_USERNAME) --password-stdin uswccr.ccs.tencentyun.com
+      echo #echo $(DOCKER_PASSWORD) | docker login -u $(ALIYUN_DOCKER_USERNAME) --password-stdin registry.us-west-1.aliyuncs.com
     displayName: 'Docker Login'
 
   - script: |
@@ -211,29 +213,83 @@ jobs:
         if [ "$PHP_VERSION" = 8_0_X -o "$PHP_VERSION" = nightly ];then \
           export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
           IS_PUSH=--push; \
+          mirror="${add_mirror}"; \
         else \
           IS_PUSH=--push; \
           DOCKER_HUB_USERNAME=lrew; \
         fi; \
       else \
-        IS_PUSH=--push; \
+          IS_PUSH=--push \
+          && mirror="${add_mirror}"; \
       fi
 
       VCS_REF=`git rev-parse --short HEAD`
       options="--build-arg VCS_REF=$VCS_REF"
       echo $options
 
-      if [ -n "$UNIT" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit; fi
-      if [ -n "$SUPERVISORD" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; fi
-      if [ -n "$COMPOSER" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; fi
-      if [ -n "$SINGLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine ${IS_PUSH} ${FOLDER}/single; fi
-      if [ -n "$SWOOLE" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine ${IS_PUSH} --platform ${PLATFORM} ${FOLDER}/swoole; fi
-      if [ -n "$FPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; fi
-      if [ -n "$CLI" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; fi
-      if [ -n "$PPM" ];then docker buildx build $options --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; fi
+      if [ -n "$UNIT" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine \
+        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-unit-alpine ";done) \
+        --platform ${PLATFORM} \
+        ${IS_PUSH} ${FOLDER}/unit; \
+      fi
+
+      if [ -n "$SUPERVISORD" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine \
+        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-supervisord-alpine ";done) \
+        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; \
+      fi
+
+      if [ -n "$COMPOSER" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine \
+        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-composer-alpine ";done) \
+        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; \
+      fi
+
+      if [ -n "$SINGLE" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine \
+        ${IS_PUSH} ${FOLDER}/single; \
+      fi
+
+      if [ -n "$SWOOLE" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine \
+        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-swoole-alpine ";done) \
+        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole; \
+      fi
+
+      if [ -n "$FPM" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
+        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
+        ${fpmTagOptions} \
+        --platform ${PLATFORM} \
+        ${IS_PUSH} ${FOLDER}/alpine; \
+      fi
+
+      if [ -n "$CLI" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine \
+        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-cli-alpine ";done) \
+        --platform ${PLATFORM} \
+        ${IS_PUSH} ${FOLDER}/cli; \
+      fi
+
+      if [ -n "$PPM" ];then docker buildx build $options \
+        --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+        -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine \
+        $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ppm-alpine ";done) \
+        --platform ${PLATFORM} \
+        ${IS_PUSH} ${FOLDER}/ppm; \
+      fi
     env:
       DOCKER_HUB_USERNAME: khs1994
       PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
+      # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
     displayName: 'Build Image'
     timeoutInMinutes: 0
 

@@ -29,11 +29,13 @@ SilentlyContinue
 PS> Write-Information -MessageData "Got your features!" -InformationAction Continue
 ```
 
-## write-output / write-host
+## write-output(echo) / write-host
 
 `write-host` 输出到终端，结果不能重定向到文件，`write-output` 可以。
 
 ## $ErrorActionPreference
+
+> 可以设置为这些值：SilentlyContinue,Stop,Continue,Inquire,Ignore,Suspend,Break
 
 默认值为 `Continue`，当执行错误时，将继续执行。
 
@@ -51,10 +53,19 @@ PS> write-error 1 2>&1 error.txt
 
 * https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles
 
+```bash
+$ echo $PROFILE
+```
+
+> 相当于 `~/.bashrc`
+
 ## ExperimentalFeature
 
 ```powershell
-ExperimentalFeature
+$ ExperimentalFeature
+$ ExperimentalFeature -?
+
+$ Enable-ExperimentalFeature PSCommandNotFoundSuggestion
 ```
 
 ## powershellget
@@ -65,6 +76,14 @@ ExperimentalFeature
 $ Get-Command -Module PowerShellGet
 
 $ Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+```
+
+## 版本号对比
+
+```powershell
+$ [version]"1.1.0" -ge [version]"1.0.0"
+
+True
 ```
 
 ## WMF

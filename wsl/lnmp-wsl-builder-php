@@ -58,7 +58,7 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.10.1
+export COMPOSER_VERSION=1.10.5
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -90,7 +90,7 @@ test $host = 'arm-linux-gnueabihf' && \
 
 PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 PHP_CPPFLAGS="$PHP_CFLAGS"
-PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
+PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ################################################################################
 
@@ -973,8 +973,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.4
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.4
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.5
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.5
 
 _get_phpnum $PHP_VERSION
 

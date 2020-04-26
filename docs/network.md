@@ -4,7 +4,7 @@
 
 * 从 `GitHub` 下载文件（docker-compose、composer）
 
-> https://github.com/khs1994-website/github-chinese
+> 可以尝试自定义 [hosts](https://github.com/khs1994-docker/lnmp/blob/master/config/etc/hosts)
 
 * 官方默认的 `apt` 镜像
 
@@ -26,4 +26,23 @@
 
 ## `LNMP_CN_ENV` 环境变量
 
-本项目会根据 `LNMP_CN_ENV=true` (默认，无需添加环境变量) 来替换源为国内镜像，避免因网络问题影响使用（当你的环境处于非国内环境时请改为 `LNMP_CN_ENV=false`）。
+本项目会根据 `LNMP_CN_ENV=true` (默认，无需添加环境变量) 来替换源为国内镜像，避免因网络问题影响使用（当你的环境处于非国内环境时请设置为 `LNMP_CN_ENV=false`）。
+
+## 部分镜像支持国内镜像
+
+> 由于国内仓库配额有限，较旧的镜像会被自动清理，这时请使用原始镜像，如何使用请参考 [自定义](custom.md)
+
+* `khs1994/php`           => `ccr.ccs.tencentyun.com/khs1994/php`
+* `nginx`                 => `ccr.ccs.tencentyun.com/khs1994/nginx`
+* `mysql`                 => `ccr.ccs.tencentyun.com/khs1994/mysql`
+* `redis`                 => `ccr.ccs.tencentyun.com/khs1994/redis`
+* `memcached`             => `ccr.ccs.tencentyun.com/khs1994/memcached`
+* `phpmyadmin/phpmyadmin` => `ccr.ccs.tencentyun.com/khs1994/phpmyadmin`
+* `rabbitmq`              => `ccr.ccs.tencentyun.com/khs1994/rabbitmq`
+* `postgres`              => `ccr.ccs.tencentyun.com/khs1994/postgres`
+* `mongo`                 => `ccr.ccs.tencentyun.com/khs1994/mongo`
+* `minio`                 => `ccr.ccs.tencentyun.com/khs1994/minio`
+* `httpd`                 => `ccr.ccs.tencentyun.com/khs1994/httpd`
+* `registry`              => `ccr.ccs.tencentyun.com/khs1994/registry`
+* `mariadb`               => `ccr.ccs.tencentyun.com/khs1994/mariadb`
+* `kong`                  => `ccr.ccs.tencentyun.com/khs1994/kong`

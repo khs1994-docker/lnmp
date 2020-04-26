@@ -4,10 +4,10 @@ FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
 ARG PHP_EXTENSION_EXTRA
 
@@ -52,7 +52,8 @@ ENV PECL_EXTENSION \
       redis \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
-      xdebug \
+# xdebug-2.9.1 require 7.1.0+
+      xdebug-2.9.0 \
       yaml \
       # swoole \
       ${PECL_EXTENSION_EXTRA:-}
@@ -125,15 +126,17 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                                         # linux-headers \
                                         $PHPIZE_DEPS \
         && for extension in ${PHP_EXTENSION};do \
-             strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+             ext_real_name=$(echo ${extension} | cut -d '-' -f 1) \
+             && strip --strip-all $(php-config --extension-dir)/$ext_real_name.so ; \
            done \
         && for extension in $PECL_EXTENSION;do \
-             pecl install $extension \
-             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
-             && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
-             && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+             ext_real_name=$(echo ${extension} | cut -d '-' -f 1) \
+             && pecl install $extension \
+             && docker-php-ext-enable $ext_real_name || echo "pecl ${extension} install error" \
+             && rm -rf /usr/local/lib/php/doc/$ext_real_name \
+             && rm -rf /usr/local/lib/php/test/$ext_real_name \
+             && rm -rf /usr/local/include/php/ext/$ext_real_name \
+             && strip --strip-all $(php-config --extension-dir)/$ext_real_name.so ; \
            done \
         && docker-php-ext-enable $PECL_EXTENSION opcache \
         && apk del --no-network .build-deps .php-fpm-build-deps \

@@ -1,12 +1,14 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM khs1994/php:nightly-fpm-alpine
+
+ARG USERNAME=khs1994
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-fpm-alpine
 
 # install composer
 
-ARG VCS_REF
+ARG VCS_REF="unknow"
 
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
 ENV COMPOSER_DEP_APKS \
       git \
@@ -17,13 +19,13 @@ ENV COMPOSER_DEP_APKS \
       tini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.10.1 \
+    COMPOSER_VERSION=1.10.5 \
     PS1="[\u@\h \w]# " \
     COMPOSER_NO_INTERACTION=1
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.1,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.10.5,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
     && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \

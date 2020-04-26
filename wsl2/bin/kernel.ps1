@@ -31,7 +31,7 @@ WSL_DIST            default is [ wsl-k8s ]
 exit
 }
 
-$source=pwd
+$EXEC_CMD_DIR=pwd
 
 $deb="linux-headers-${kernelversion}-microsoft-standard_${kernelversion}-1_amd64.deb"
 
@@ -62,7 +62,7 @@ if(!(Test-Path $home/.wslconfig)){
 }
 
 if ($args[0] -eq 'download'){
-  cd $source
+  cd $EXEC_CMD_DIR
   Write-Warning $tips
   exit
 }
@@ -72,6 +72,6 @@ Write-Host "==> install linux-headers" -ForegroundColor Green
 
 wsl -d ${WSL_DIST} -u root dpkg -i $deb
 
-cd $source
+cd $EXEC_CMD_DIR
 
 Write-Warning $tips

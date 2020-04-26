@@ -46,7 +46,8 @@ cmd = sudo_cmd + '''apt install -y gcc \
                                 libc6-dev \
                                 zlib1g-dev \
                                 libssl-dev \
-                                libpcre3-dev
+                                libpcre3-dev \
+                                make
 '''
 
 wsl.install_build_dep(cmd)

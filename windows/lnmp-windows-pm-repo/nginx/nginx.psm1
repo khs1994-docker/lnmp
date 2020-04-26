@@ -65,6 +65,8 @@ Function install($VERSION=0,$isPre=0){
     rm -r $env:TEMP/.nginx.version
     if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
+
+        install_after
         return
     }
   }

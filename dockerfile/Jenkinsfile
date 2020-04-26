@@ -1,0 +1,164 @@
+pipeline {
+  agent any
+  environment {
+    PLATFORM = "linux/amd64,linux/arm64,linux/arm/v7"
+    DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
+    TENCENT_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
+    DOCKER_CLI_EXPERIMENTAL = "enabled"
+    BUILDX_IMAGE= "dockerpracticesig/buildkit:master-tencent"
+  }
+  stages {
+    stage("os-manifest"){
+      steps {
+        sh "cat /etc/os-release"
+      }
+    }
+    stage('update docker to latest'){
+      steps {
+        sh "docker version"
+        sh "docker info"
+
+        sh "curl -fsSL https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -"
+        sh "sudo add-apt-repository \"deb [arch=amd64] https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu \$(lsb_release -cs) stable\""
+        sh "sudo apt update"
+        sh "sudo apt install docker-ce docker-ce-cli containerd.io -y"
+
+        sh "docker version"
+        sh "docker info"
+      }
+    }
+    stage('setting docker'){
+      steps {
+        sh "cat /etc/docker/daemon.json | true"
+        // sh "sudo mkdir -p /etc/docker"
+        // sh "echo {\"registry-mirrors\": [\"https://mirror.ccs.tencentyun.com\"]} | sudo tee /etc/docker/daemon.json"
+        // sh "cat /etc/docker/daemon.json | true"
+        // sh "sudo systemctl restart docker"
+        sh "sudo systemctl cat docker"
+        sh "docker info"
+      }
+    }
+    stage('setup-buildx'){
+      steps {
+        sh "docker buildx version"
+        sh "docker buildx ls"
+        sh "sudo ls /proc/sys/fs | true"
+        sh "sudo ls /proc/sys/fs/binfmt_misc | true"
+        sh "cat /proc/sys/fs/binfmt_misc/qemu-aarch64 | true"
+
+        sh "sudo apt install qemu-user -y"
+        sh "ls /proc/sys/fs/binfmt_misc | true"
+        sh "cat /proc/sys/fs/binfmt_misc/qemu-aarch64 | true"
+
+        // sh "sudo mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc | true"
+
+        sh "docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64 | true"
+        sh "docker buildx create --use --name mybuilder --driver-opt image=${BUILDX_IMAGE}"
+        sh "docker buildx ls"
+
+        sh "docker buildx inspect --bootstrap"
+      }
+    }
+    stage("Dockerfile") {
+      steps {
+        sh "echo \\# syntax=docker/dockerfile:experimental > Dockerfile "
+        sh "echo ARG IMAGE=mysql >> Dockerfile "
+        sh "echo FROM --platform=\\\$TARGETPLATFORM \\\$IMAGE >> Dockerfile "
+        sh "cat Dockerfile"
+      }
+    }
+    stage('登录仓库') {
+      steps {
+        sh "echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin ccr.ccs.tencentyun.com"
+      }
+    }
+    stage('构建镜像-mysql-amd64') {
+      steps {
+        sh "echo mysql mysql:8.0.19 mysql:5.7.29 mysql:5.6.47> manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
+      }
+    }
+    stage('构建镜像-mariadb-amd64-arm64') {
+      steps {
+        sh "echo mariadb mariadb:10.5.2 mariadb:10.4.12 mariadb:10.3.22 > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
+      }
+    }
+    stage('构建镜像-registry-amd64-arm64') {
+      steps {
+        sh "echo registry registry:2.7.1 > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
+      }
+    }
+    stage('构建镜像-phpmyadmin-amd64') {
+      steps {
+        sh "echo phpmyadmin/phpmyadmin > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/phpmyadmin --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
+      }
+    }
+    stage('构建镜像-minio-amd64') {
+      steps {
+        sh "echo minio/minio:RELEASE.2020-03-25T07-03-04Z > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/minio:RELEASE.2020-03-25T07-03-04Z --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
+      }
+    }
+    stage('构建镜像-mongo-amd64-arm64') {
+      steps {
+        sh "echo mongo mongo:4.2.6 > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
+      }
+    }
+    stage('构建镜像-kong-amd64') {
+      steps {
+        sh "echo kong kong:alpine kong:2.0.3 kong:2.0.3-alpine > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
+      }
+    }
+
+    stage('构建镜像-redis') {
+      steps {
+        sh "echo redis:alpine redis:5.0.9-alpine redis:6.0-rc4-alpine > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
+      }
+    }
+    stage('构建镜像-memcached') {
+      steps {
+        sh "echo memcached:alpine memcached:1.6.5-alpine > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
+      }
+    }
+    stage('构建镜像-nginx') {
+      steps {
+        sh "echo nginx:alpine nginx:1.18.0-alpine nginx:1.17.10-alpine > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
+      }
+    }
+    stage('构建镜像-httpd') {
+      steps {
+        sh "echo httpd:alpine httpd:2.4.43-alpine > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
+      }
+    }
+    stage('构建镜像-postgres') {
+      steps {
+        sh "echo postgres:alpine postgres:12.2-alpine > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
+      }
+    }
+    stage('构建镜像-rabbitmq') {
+      steps {
+        sh "echo rabbitmq:alpine rabbitmq:3.8.3-alpine rabbitmq:management-alpine rabbitmq:3.8.3-management-alpine > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
+      }
+    }
+
+    stage('构建镜像-pcit-amd64-arm64') {
+      steps {
+        sh "curl -L -O https://raw.githubusercontent.com/pcit-ce/pcit/master/.docker/manifest.txt"
+        sh "sed -i 's/master/master/g' manifest.txt"
+        sh "cat manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
+      }
+    }
+  }
+}

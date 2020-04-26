@@ -1,14 +1,10 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.2.29
+ARG PHP_VERSION=7.2.30
+ARG USERNAME=khs1994
 
-FROM --platform=$TARGETPLATFORM khs1994/php:${PHP_VERSION}-cli-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
-
-ARG VCS_REF
-
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
 
 ARG PHP_EXTENSION_EXTRA
 
@@ -26,7 +22,7 @@ ENV SWOOLE_VERSION=4.4.16
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=php:7.2.29-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.2.30-alpine,source=/usr/local/bin,target=/opt/bin,rw \
     sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache --virtual .pecl_build_deps \
                                       $PHPIZE_DEPS \
@@ -46,3 +42,8 @@ WORKDIR /app
 ENTRYPOINT ["php"]
 
 CMD ["index.php"]
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"

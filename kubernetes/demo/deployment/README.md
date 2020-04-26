@@ -1,1 +1,3 @@
-# Kubernetes Type Demo
+```bash
+$ kubectl api-resources
+```

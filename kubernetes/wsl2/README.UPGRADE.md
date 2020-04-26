@@ -21,7 +21,7 @@ $ cd ~/lnmp/kubernetes
 
 $ ./wsl2/bin/kube-check
 
-$ wsl
+$ wsl -d wsl-k8s
 
 $ ./lnmp-k8s kubernetes-server --url
 # $ ./lnmp-k8s kubernetes-server

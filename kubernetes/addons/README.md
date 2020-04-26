@@ -8,7 +8,7 @@
 
 * CoreDNS `1.6.7`
 
-* Dashboard `2.0.0-rc7`
+* Dashboard `2.0.0`
 
 ## CNI
 

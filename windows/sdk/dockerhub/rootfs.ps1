@@ -20,11 +20,21 @@ function rootfs($image="alpine",
                 $ref="latest",
                 $arch="amd64",
                 $os="linux",
-                $dist,
+                $dest,
                 $layersIndex=0,
-                $registry="hub-mirror.c.163.com",
+                $registry=$null,
                 $tokenServer="https://auth.docker.io/token",
                 $tokenService="registry.docker.io"){
+  # $dest 下载到哪里
+
+  if(!($registry)){
+    if($env:REGISTRY_MIRROR){
+      $registry = $env:REGISTRY_MIRROR
+      Write-host "==> Read `$registry from `$env:REGISTRY_MIRROR($env:REGISTRY_MIRROR)" -ForegroundColor Green
+    }else{
+      $registry = "hub-mirror.c.163.com"
+    }
+  }
 
   $FormatEnumerationLimit=-1
   write-host "==> Get token ..."
@@ -132,11 +142,11 @@ if($result.schemaVersion -eq 1){
 
   . $PSScriptRoot/blobs/get.ps1
 
-  $dist = get $token $image $digest $registry $dist
+  $dest = get $token $image $digest $registry $dest
 
-  Write-Warning "Download success to $dist"
+  Write-Warning "Download success to $dest"
 
-  return $dist
+  return $dest
 }elseif($result.schemaVersion -eq 2){
   Write-Warning "manifest list is found"
 }else{
@@ -164,11 +174,11 @@ foreach($manifest in $manifests){
 
     . $PSScriptRoot/blobs/get.ps1
 
-    $dist = get $token $image $digest $registry $dist
+    $dest = get $token $image $digest $registry $dest
 
-    Write-Warning "Download success to $dist"
+    Write-Warning "Download success to $dest"
 
-    return $dist
+    return $dest
   }
   }
 

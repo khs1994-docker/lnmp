@@ -6,6 +6,14 @@ x-common:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
+#
+# 这里的文件具有最高优先级，可以通过以下命令查看最终的 compose 文件
+#
+# $ ./lnmp-docker config > 1.yaml
+#
+# $ ./lnmp-docker build-config > 2.yaml
+#
+
 services:
 
   # override service
@@ -16,13 +24,15 @@ services:
 
   # php7:
   #   &php7
-  #   # change php7 default image
-  #   image: username/php
-  #   # open more port
+  #   # ! change php7 default image
+  #   image: username/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+  #   # ! cn mirror image
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+  #   # ! open more port
   #   ports:
   #     - "9000"
   #     - "10001:10001"
-  #   # add more volumes
+  #   # ! add more volumes
   #   volumes:
   #     - type: volume
   #       source: laravel_vendor
@@ -48,7 +58,7 @@ services:
 
   swoole:
     << : *default-common
-    image: khs1994/php:7.4.4-swoole-alpine
+    image: khs1994/php:7.4.5-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php

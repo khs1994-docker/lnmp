@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:7.4.4-fpm-alpine
+  image: khs1994/php:7.4.5-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -191,9 +191,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:5.0.8-alpine
+    image: redis:6.0-rc4-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:5.0.8
+    # image: khs1994/lnmp-redis:6.0-rc4
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -300,9 +300,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
-  #   image: mongo:4.2.5
+  #   image: mongo:4.2.6
   #   # image: username/lnmp-mongodb:tag
-  #   # image: khs1994/lnmp-mongodb:4.2.5
+  #   # image: khs1994/lnmp-mongodb:4.2.6
   #   volumes:
   #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db
@@ -404,7 +404,7 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.17.9-alpine
+    image: nginx:1.17.10-alpine
     # image: ranadeeppolavarapu/nginx-http3
     ports:
       - "443:443/tcp"

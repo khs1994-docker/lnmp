@@ -24,7 +24,7 @@ if ! [ -f lnmp-k8s ];then if [ -n "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes >
 
 if [ -n "${DEBUG}" -o -n "${debug}" ];then set -x; fi
 
-source_path=$PWD
+EXEC_CMD_DIR=$PWD
 
 # CI/CD
 if [ -n "${CI_KUBERNETES_VERSION}" ];then KUBERNETES_VERSION=${CI_KUBERNETES_VERSION};fi
@@ -536,7 +536,7 @@ _nginx_build(){
   cd /opt/k8s/
   $(_sudo) tar -zcvf kube-nginx.tar.gz kube-nginx
   $(_sudo) cp kube-nginx.tar.gz ${TMP_ROOT}/
-  cd $source_path
+  cd $EXEC_CMD_DIR
   $(_sudo) rm -rf ${TMP_ROOT}/kube-nginx
 }
 
@@ -870,7 +870,7 @@ _k8s_install_disable_firewalld(){
 _k8s_install_cp_bin(){
   if [ ! -f ${K8S_ROOT}/bin/kubeadm -o "$1" = '-f' ];then
     _kubernetes_server_install
-    cd $source_path > /dev/null
+    cd $EXEC_CMD_DIR > /dev/null
     $(_sudo) cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* ${K8S_ROOT}/bin/
   fi
 
@@ -1036,7 +1036,7 @@ _crio_install(){
 }
 
 _crio_config(){
-  cd $source_path
+  cd $EXEC_CMD_DIR
   print_info "config cri-o ..."
   $(_sudo) mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf

@@ -18,9 +18,10 @@ x-common-label:
 services:
   nginx-unit:
     << : *default-common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.4}-unit-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.5}-unit-alpine"
     volumes:
       - ./config/${LNMP_NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
+      # ./path/unit-init-conf:/docker-entrypoint.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./log/nginx-unit:/var/log/nginx-unit:delegated
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
@@ -32,8 +33,8 @@ services:
     networks:
       - backend
       - frontend
-    # entrypoint: unitd
     command:
+      - unitd
       - --no-daemon
       - --user
       - root
@@ -43,7 +44,8 @@ services:
       - /var/log/nginx-unit/nginx-unit.log
       # --state
       # /usr/local/nginx-unit/state
-
+      - --control
+      - unix:/usr/local/nginx-unit/control.unit.sock
 volumes:
   nginx_unit_state-data:
     << : *default-common-label

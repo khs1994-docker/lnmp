@@ -42,7 +42,7 @@ $ErrorActionPreference="SilentlyContinue"
 
 . "$PSScriptRoot/common.ps1"
 
-$source=$PWD
+$EXEC_CMD_DIR=$PWD
 
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
@@ -101,7 +101,7 @@ _mkdir $home\lnmp\windows\logs
 cd $home\Downloads\lnmp-docker-cache
 
 function _exit(){
-  cd $source
+  cd $EXEC_CMD_DIR
 
   exit
 }
@@ -150,7 +150,7 @@ Function __install($softs){
       continue
     }
     $soft,$version=$soft.split('@')
-    "==> Installing $soft $version ..."
+    Write-Host "==> Installing $soft $version ..." -ForegroundColor Blue
     _import_module $soft
 
     if($version){
@@ -164,7 +164,7 @@ Function __install($softs){
 
 Function __uninstall($softs){
   Foreach ($soft in $softs){
-    "==> Uninstalling $soft ..."
+    Write-Host "==> Uninstalling $soft ..." -ForegroundColor Red
     _import_module $soft
     uninstall
     Remove-Module -Name $soft
@@ -224,7 +224,7 @@ function __init($soft){
 
   "Please edit $SOFT_ROOT files"
 
-  cd $source
+  cd $EXEC_CMD_DIR
 }
 
 function manifest($soft){
@@ -404,21 +404,21 @@ switch ($command)
 
   "remove-service" {
     foreach($item in $opt){
-      Write-Warning "Remove service $item"
+      Write-Host "==> Remove service $item" -ForegroundColor Red
       RemoveService -ServiceName $item
     }
   }
 
   "start-service" {
     foreach($item in $opt){
-      Write-Warning "Start service $item"
+      Write-Host "==> Start service $item" -ForegroundColor Green
       start-process "net" -ArgumentList "start",$item -Verb RunAs
     }
   }
 
   "stop-service" {
     foreach($item in $opt){
-      Write-Warning "Stop service $item"
+      Write-Host "==> Stop service $item" -ForegroundColor Red
       start-process "net" -ArgumentList "stop",$item -Verb RunAs
     }
   }
@@ -428,4 +428,4 @@ switch ($command)
   }
 }
 
-cd $source
+cd $EXEC_CMD_DIR

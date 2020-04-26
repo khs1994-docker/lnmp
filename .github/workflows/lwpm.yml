@@ -30,7 +30,7 @@ jobs:
         echo ::set-env name=LNMP_PATH::$(pwd)
     - name: init
       shell: pwsh
-      run: echo "extension=openssl" >> C:\tools\php\php.ini
+      run: echo "extension=openssl" C:\tools\php\php.ini > $null
     - shell: powershell
       run: php -i | select-string .ini
     - run: php -m

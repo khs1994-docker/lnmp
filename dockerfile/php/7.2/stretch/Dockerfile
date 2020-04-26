@@ -2,16 +2,11 @@
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.29
+ARG PHP_VERSION=7.2.30
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-stretch
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
-
-ARG VCS_REF
-
-LABEL org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.vcs-url="https://github.com/khs1994-docker/php"
 
 ENV TZ=Asia/Shanghai
 
@@ -123,15 +118,17 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                                     --with-imap-ssl \
         && docker-php-ext-install $PHP_EXTENSION \
         && for extension in ${PHP_EXTENSION};do \
-                     strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+             ext_real_name=$(echo ${extension} | cut -d '-' -f 1) \
+             && strip --strip-all $(php-config --extension-dir)/$ext_real_name.so ; \
            done \
         && for extension in $PECL_EXTENSION;do \
-             pecl install $extension \
-             && docker-php-ext-enable $(echo ${extension} | cut -d '-' -f 1) || echo "pecl ${extension} install error" \
-             && rm -rf /usr/local/lib/php/doc/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/lib/php/test/$(echo ${extension} | cut -d '-' -f 1) \
-             && rm -rf /usr/local/include/php/ext/$(echo ${extension} | cut -d '-' -f 1) \
-             && strip --strip-all $(php-config --extension-dir)/$(echo ${extension} | cut -d '-' -f 1).so ; \
+             ext_real_name=$(echo ${extension} | cut -d '-' -f 1) \
+             && pecl install $extension \
+             && docker-php-ext-enable $ext_real_name || echo "pecl ${extension} install error" \
+             && rm -rf /usr/local/lib/php/doc/$ext_real_name \
+             && rm -rf /usr/local/lib/php/test/$ext_real_name \
+             && rm -rf /usr/local/include/php/ext/$ext_real_name \
+             && strip --strip-all $(php-config --extension-dir)/$ext_real_name.so ; \
            done \
         # https://github.com/tideways/php-xhprof-extension.git
         # && cd /tmp \
@@ -162,12 +159,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.10.1 \
+    COMPOSER_VERSION=1.10.5 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.1,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.10.5,source=/usr/bin/composer,target=/opt/bin/composer \
     echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \
@@ -195,3 +192,8 @@ RUN --mount=type=bind,from=composer:1.10.1,source=/usr/bin/composer,target=/opt/
  && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
 
 WORKDIR /app
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
