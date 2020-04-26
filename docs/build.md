@@ -32,7 +32,8 @@ $ lnmp-docker build-pull
 ## 启动
 
 ```
-$ lnmp-docker build-up --no-build
+# 默认加入了 --no-build 参数，必须保证执行 build-up 前镜像已经存在，具体请参考上面的内容
+$ lnmp-docker build-up
 
 # 测试
 $ curl 127.0.0.1

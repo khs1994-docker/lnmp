@@ -57,3 +57,6 @@ services:
 
   python:
     image: python:3.8.2-alpine
+
+  xx:
+    image: docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64

@@ -140,7 +140,7 @@ async function run() {
       'run',
       '--rm',
       '--privileged',
-      'docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3',
+      'docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64',
     ]);
 
     await exec.exec('cat', [
