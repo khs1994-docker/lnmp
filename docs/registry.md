@@ -37,24 +37,65 @@ $ cp config/nginx/demo-registry.config config/nginx/registry.conf
 
 * https://www.aidmin.cn/server/docker-registry-with-self-signed-ssl-certificate.html
 * https://docs.docker.com/registry/insecure/#use-self-signed-certificates
+* https://docs.docker.com/docker-for-windows/faqs/#how-do-i-add-custom-ca-certificates
+* https://docs.docker.com/docker-for-windows/#adding-tls-certificates
+* https://docs.docker.com/engine/security/certificates/
 
 如果你的证书为自签名证书
 
-Linux 上将 CA 证书放入 `/etc/docker/certs.d/myregistrydomain.com:5000/ca.crt`(Docker 守护端所在主机)，其他系统请查看上方文档(`myregistrydomain.com:5000` 替换为自己的地址)。
+Linux 上将 CA 证书放入 `/etc/docker/certs.d/myregistrydomain.com:5000/ca.crt`(Docker 守护端所在主机)，在 Docker 桌面版(Windows、macOS)中放到 `~/.docker/certs.d/myregistrydomain.com:5000/ca.crt`。
 
-若启用了验证功能(密码登录)，**必须** 将 CA 写入系统文件夹(Docker 守护端所在主机)。
+> 若 registry 解析到 `127.0.0.0/8`，可能不需要配置。
 
 ```bash
-$ cat config/nginx/ssl/root-ca.crt | sudo tee -a /etc/pki/ca-trust/source/anchors/myregistrydomain.com.crt # centos
+/etc/docker/certs.d/           <-- Certificate directory
+└── localhost:5000             <-- Hostname:port
+    ├── client.cert            <-- Client certificate
+    ├── client.key             <-- Client key
+    └── ca.crt                 <-- Certificate authority that signed
+                                 the registry certificate
 
-$ cat config/nginx/ssl/root-ca.crt | sudo tee -a /etc/ssl/certs/myregistrydomain.com.crt # ubuntu
+└── https.registry.domain.com  <-- Hostname without port
+    ├── client.cert
+    ├── client.key
+    └── ca.crt
+```
 
-$ update-ca-certificates # ubuntu
-$ update-ca-trust        # centos
+若启用了验证功能(密码登录)，可能仍然会 [出现错误](https://docs.docker.com/registry/insecure/#troubleshoot-insecure-registry)。这时 **必须** 将 CA 写入系统文件夹(Docker 守护端所在主机)。
+
+**Linux**
+
+```bash
+# centos
+$ cp config/nginx/ssl/root-ca.crt /etc/pki/ca-trust/source/anchors/myregistrydomain.com.crt
+$ update-ca-trust
+
+# ubuntu
+$ cp config/nginx/ssl/root-ca.crt /usr/local/share/ca-certificates/myregistrydomain.com.crt
+$ update-ca-certificates
 
 # 重启 docker
 
 $ sudo systemctl restart docker
+```
+
+**Windows**
+
+* https://docs.docker.com/registry/insecure/#windows
+
+* 右键点击 CA 证书，选择 `安装证书`
+* Store location: local machine （`存储位置` -> `本地计算机` -> `下一步`）
+* Check place all certificates in the following store（选择 `将所有的证书都放入下列存储`）
+* Click Browser, and select Trusted Root Certificate Authorities（点击 `浏览`，选择 `受信任的根证书颁发机构`，点击 `确定`，下一步）
+* Click Finish (点击 `完成`)
+* 重启 Docker
+
+* https://docs.microsoft.com/zh-cn/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc754841(v=ws.11)?redirectedfrom=MSDN
+
+**macOS**
+
+```bash
+$ security add-trusted-cert -d -r trustRoot -k ~/Library/Keychains/login.keychain ca.crt
 ```
 
 ## 启动

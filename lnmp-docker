@@ -240,6 +240,8 @@ _gcr_io(){
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 
+      # -v $PWD/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd \
+
       if [ "$quit" = 1 ];then
         print_error "Please stop soft who bind 443 port first"
         exit 1

@@ -2,7 +2,7 @@
 
 * EFK
 
-* ingress-nginx `0.30.0`
+* ingress-nginx `0.31.0`
 
 * metrics-server `0.3.6`
 

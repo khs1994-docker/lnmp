@@ -1451,6 +1451,8 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         --label com.khs1994.lnmp.gcr.io `
         registry
 
+      # -v $pwd/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd `
+
       if ('--no-pull' -eq $args[1]){
         printInfo "Up gcr.io Server Success"
         exit

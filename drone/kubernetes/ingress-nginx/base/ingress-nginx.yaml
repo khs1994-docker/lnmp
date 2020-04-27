@@ -19,6 +19,8 @@ metadata:
     app: ci
   # annotations:
 spec:
+  # k8s v1.18.0+
+  # ingressClassName: nginx
   tls:
   - hosts:
     - git.t.khs1994.com

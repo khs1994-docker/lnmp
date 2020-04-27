@@ -7,3 +7,4 @@
 !ca.crt
 !kustomization.yaml
 !config.full.yml
+!nginx.htpasswd.demo
