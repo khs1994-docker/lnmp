@@ -59,7 +59,7 @@ spec:
       # restartPolicy: Never # Always、OnFailure 和 Never
       containers:
       - name: lnmp-mysql
-        image: mysql:8.0.19
+        image: mysql:8.0.20
         imagePullPolicy: IfNotPresent
         # resources:
         # envFrom:

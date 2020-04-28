@@ -74,7 +74,7 @@ pipeline {
     }
     stage('构建镜像-mysql-amd64') {
       steps {
-        sh "echo mysql mysql:8.0.19 mysql:5.7.29 mysql:5.6.47> manifest.txt"
+        sh "echo mysql mysql:8.0.20 mysql:5.7.30 mysql:5.6.48> manifest.txt"
         sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
       }
     }

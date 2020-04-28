@@ -212,7 +212,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[NGINX](https://github.com/khs1994-website/tls-1.3)                       |`nginx:1.17.10-alpine`      | **1.17.10**             |`alpine:3.11`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.5-unit-alpine`| **1.17.0**             |`alpine:3.11`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.43-alpine`       | **2.4.43**             |`alpine:3.11`    |
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.19`              | **8.0.19**             |`debian:buster-slim`|
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.20`              | **8.0.20**             |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.2`            | **10.5.2**             |`ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0-rc4-alpine`        | **6.0-rc4**            |`alpine:3.11`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                      |`khs1994/php:7.4.5-fpm-alpine`  | **7.4.5**       |`alpine:3.11`    |
