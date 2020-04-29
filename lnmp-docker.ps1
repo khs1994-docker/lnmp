@@ -106,6 +106,14 @@ if($args[0] -eq "env-file"){
   exit
 }
 
+if (!(Test-Path $PSScriptRoot\cli\khs1994-robot.enc )){
+    Write-Host "lnmp-docker.ps1 not in lnmp ROOT PATH" -ForegroundColor Red
+
+    Write-Host "Please remove $((get-command lnmp-docker).Source)" -ForegroundColor Red
+
+    exit 1
+}
+
 printInfo "Load env file [ $LNMP_ENV_FILE ] and [ $LNMP_ENV_FILE_PS1 ]"
 
 . "$PSScriptRoot/.env.example.ps1"
@@ -751,11 +759,12 @@ if (!(Test-Path cli/khs1994-robot.enc )){
     # 设置了系统环境变量
 
     printInfo "Use LNMP CLI in $PWD"
-    # cd $env:LNMP_PATH
-    cd $PSScriptRoot
+    cd $env:LNMP_PATH
+    # cd $PSScriptRoot
     cd $APP_ROOT
     $APP_ROOT=$PWD
-    cd $PSScriptRoot
+    cd $env:LNMP_PATH
+    # cd $PSScriptRoot
   }
 
 }else {
