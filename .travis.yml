@@ -327,8 +327,8 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
-    - stage: wsl-php-builder-fc31-73
-      name: wsl-php-builder-fc31-73
+    - stage: wsl-php-builder-fc32-73
+      name: wsl-php-builder-fc32-73
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -339,23 +339,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export RPM_NAME=khs1994-wsl-php73-${PHP_VERSION_73}-1.fc31.x86_64.rpm
-        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
-        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
-
-    - stage: wsl-php-builder-fc31-74
-      name: wsl-php-builder-fc31-74
-      install:
-        - ./lnmp-docker compose --official -f
-      script:
-        - cd wsl
-        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
-        - docker-compose build ${TRAVIS_JOB_NAME}
-      after_success:
-        - docker-compose push ${TRAVIS_JOB_NAME}
-        - docker-compose run ${TRAVIS_JOB_NAME} command || true
-        - . .env
-        - export RPM_NAME=khs1994-wsl-php74-${PHP_VERSION_74}-1.fc31.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php73-${PHP_VERSION_73}-1.fc32.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
@@ -372,6 +356,22 @@ jobs:
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
         - export RPM_NAME=khs1994-wsl-php74-${PHP_VERSION_74}-1.fc32.x86_64.rpm
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+
+    - stage: wsl-php-builder-fc33-74
+      name: wsl-php-builder-fc33-74
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
+        - . .env
+        - export RPM_NAME=khs1994-wsl-php74-${PHP_VERSION_74}-1.fc33.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
@@ -480,11 +480,11 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-rhel8-74
     if: tag =~ /^(v19)/
-  - name: wsl-php-builder-fc31-73
-    if: tag =~ /^(v19)/
-  - name: wsl-php-builder-fc31-74
+  - name: wsl-php-builder-fc32-73
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-fc32-74
+    if: tag =~ /^(v19)/
+  - name: wsl-php-builder-fc33-74
     if: tag =~ /^(v19)/
 
 # branches:

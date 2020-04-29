@@ -160,5 +160,11 @@ pipeline {
         sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
       }
     }
+    stage('构建镜像-docker-practice') {
+      steps {
+        sh "echo :vuepress :gitbook :latest :us-en > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice\${IMAGE} --build-arg IMAGE=dockerpracticesig/docker_practice\${IMAGE} --platform linux/amd64 --push .;done"
+      }
+    }
   }
 }
