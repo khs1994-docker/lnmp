@@ -184,7 +184,7 @@ _get_kubernetes_server_by_docker_image(){
     fi
   fi
 
-  $(_sudo) docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
+  docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
   # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   # docker container create --name khs1994-kubernetes-${TYPE} \
   #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
@@ -1057,8 +1057,6 @@ _containerd_cri_config(){
   print_info "config containerd ..."
   $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.3
   # containerd config default > ${K8S_ROOT}/etc/kube-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/config.toml
   sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3/config.toml \
     | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
 

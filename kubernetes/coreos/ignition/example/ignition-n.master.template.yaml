@@ -521,6 +521,7 @@ storage:
           systemReservedCgroup: ""
           kubeReservedCgroup: ""
           enforceNodeAllocatable: ["pods"]
+          # volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
           featureGates:
             # AllAlpha: true
             # BoundServiceAccountTokenVolume: false

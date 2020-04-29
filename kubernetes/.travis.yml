@@ -24,6 +24,7 @@ before_install:
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
   - pwd
+  - df -h
   - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
   - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
@@ -215,7 +216,7 @@ before_script:
   # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
 
 script:
-
+  - df -h
   - kubectl apply -k addons/coredns
   - kubectl apply -k addons/dashboard
   - kubectl apply -k addons/metrics-server
@@ -223,6 +224,7 @@ script:
 
   - sleep 100
 
+  - df -h
   - kubectl get all --all-namespaces
   # test metrics server
   - travis_retry kubectl top node
@@ -241,7 +243,8 @@ script:
   - kubectl delete pod nginx || true
   - kubectl get all
   # test ingress-nginx
-  - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
+  - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
+  - curl --version
   - curl ${SERVER_IP}:${HTTP_PORT}
 
   - test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
