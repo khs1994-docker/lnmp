@@ -10,8 +10,8 @@ Function _exportPath($items){
     }
 
     if($env_path_array.IndexOf($item) -eq -1){
-      "Add $item to system PATH env ...
-"
+      Write-Host "==> Add [ $item ] to system PATH env ..." -ForegroundColor Green
+
       [environment]::SetEnvironmentvariable("Path", "$item;$env_Path","User")
     }
   }
