@@ -752,9 +752,12 @@ if($APP_ENV_CONTENT){
 if (!(Test-Path cli/khs1994-robot.enc )){
   # 在项目目录外
   if ($env:LNMP_PATH.Length -eq 0){
-  # 没有设置系统环境变量，则退出
-    throw "Please set system environment LNMP_PATH, more information please see bin/README.md"
 
+  # 没有设置系统环境变量，则退出
+
+    printError "Please set system environment LNMP_PATH, more information please see bin/README.md"
+
+    exit 1
   }else{
     # 设置了系统环境变量
 
@@ -1376,15 +1379,15 @@ XXX
       $a=Select-String 'demo.ci.khs1994.com' pcit/conf/pcit.conf
 
       if ($a.Length -ne 0){
-        throw "PCIT nginx conf error, please see pcit/README.md"
+        printError "PCIT nginx conf error, please see pcit/README.md"
       }
 
       if(!(Test-Path pcit/ssl/ci.crt)){
-        throw "PCIT Website SSL key not found, please see pcit/README.md"
+        printError "PCIT Website SSL key not found, please see pcit/README.md"
       }
 
       if(!(Test-Path pcit/key/private.key)){
-        throw "PCIT GitHub App private key not found, please see pcit/README.md"
+        printError "PCIT GitHub App private key not found, please see pcit/README.md"
       }
 
       if(!(Test-Path pcit/key/public.key)){
