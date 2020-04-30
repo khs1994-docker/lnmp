@@ -5,100 +5,106 @@ Import-Module cleanup
 Import-Module exportPath
 Import-Module getHttpCode
 
-$ErrorActionPreference='stop'
+$ErrorActionPreference = 'stop'
 
-$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+$lwpm = ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 
-$stable_version=$lwpm.version
-$pre_version=$lwpm.'pre-version'
-$github_repo=$lwpm.github
+$stable_version = $lwpm.version
+$pre_version = $lwpm.'pre-version'
+$github_repo = $lwpm.github
 # $homepage=$lwpm.homepage
-$releases=$lwpm.releases
+$releases = $lwpm.releases
 # $bug=$lwpm.bug
-$name=$lwpm.name
+$name = $lwpm.name
 # $description=$lwpm.description
-$url=$lwpm.url
-$url_mirror=$lwpm.'url-mirror'
-$pre_url=$lwpm.'pre-url'
-$pre_url_mirror=$lwpm.'pre-url-mirror'
-$insert_path=$lwpm.path
+$url = $lwpm.url
+$url_mirror = $lwpm.'url-mirror'
+$pre_url = $lwpm.'pre-url'
+$pre_url_mirror = $lwpm.'pre-url-mirror'
+$insert_path = $lwpm.path
 
-Function install_after(){
-  # completion
-  $ps_module_dir=${env:PSModulePath}.split(';')[0]+"\$name"
-  mkdir -Force $ps_module_dir ? $null
-
-  gh completion --shell powershell > $ps_module_dir\$name.psm1
-
-  if((cat $PROFILE | select-string "Import-Module gh").line.Length -eq 0){
-    echo "Import-Module gh" >> $PROFILE
+Function _iex($str) {
+  if (!($str)) {
+    return;
   }
-
-  Import-Module gh
+  echo $str
+  iex $str
 }
 
-Function install($VERSION=0,$isPre=0){
-  if(!($VERSION)){
-    $VERSION=$stable_version
+Function install_after() {
+  foreach ($item in $lwpm.scripts.postinstall) {
+    _iex $item
+  }
+}
+
+Function install($VERSION = 0, $isPre = 0) {
+  if (!($VERSION)) {
+    $VERSION = $stable_version
   }
 
   # stable 与 pre url 不同
   # 先定义 stable url
-  # $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  # $download_url=$url_mirror.replace('${VERSION}',${VERSION})
   # if((_getHttpCode $download_url)[0] -eq 4){
-    # $download_url=$url.replace('${VERSION}',${VERSION});
+  # $download_url=$url.replace('${VERSION}',${VERSION})
   # }
 
-  if($isPre){
-    $VERSION=$pre_version
+  if ($isPre) {
+    $VERSION = $pre_version
 
     # 后定义 pre url
-    # $download_url=$pre_url_mirror.replace('${VERSION}',${VERSION});
+    # $download_url=$pre_url_mirror.replace('${VERSION}',${VERSION})
     # if((_getHttpCode $download_url)[0] -eq 4){
-      # $download_url=$pre_url.replace('${VERSION}',${VERSION});
+    # $download_url=$pre_url.replace('${VERSION}',${VERSION})
     # }
-  }else{
+  }
+  else {
 
   }
 
   # stable 与 pre url 相同，默认
-  # $download_url=$url_mirror.replace('${VERSION}',${VERSION});
+  # $download_url=$url_mirror.replace('${VERSION}',${VERSION})
   # if((_getHttpCode $download_url)[0] -eq 4){
-  $download_url=$url.replace('${VERSION}',${VERSION});
+  $download_url = $url.replace('${VERSION}', ${VERSION})
   # }
 
-  if($download_url){
-    $url=$download_url
+  if ($download_url) {
+    $url = $download_url
   }
 
   # Write-Host "Please download on this website:
 
-# ${releases}
+  # ${releases}
 
-# " -ForegroundColor Green
-#  exit
+  # " -ForegroundColor Green
+  #  exit
 
   # fix me
-  $filename="gh_${VERSION}_windows_amd64.zip"
-  $unzipDesc=$name
+  $filename = $url.split('/')[-1]
+  if ($lwpm.'download-filename') {
+    $filename = ($lwpm.'download-filename').replace('${VERSION}', ${VERSION})
+  }
 
-  _exportPath $lwpm.path
+  $unzipDesc = $name
 
-  if($(_command gh)){
-    $ErrorActionPreference='Continue'
-    $CURRENT_VERSION=""
+  if ($lwpm.path) { _exportPath $lwpm.path }
 
-    if($lwpm.scripts.version){
-      $CURRENT_VERSION=powershell -c $lwpm.scripts.version
+  if ($lwpm.command -and $(_command $lwpm.command)) {
+    $ErrorActionPreference = 'Continue'
+    $CURRENT_VERSION = ""
+
+    if ($lwpm.scripts.version) {
+      $CURRENT_VERSION = iex $lwpm.scripts.version
     }
 
-    if ($CURRENT_VERSION -eq $VERSION){
-        Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
+    if ($CURRENT_VERSION -eq $VERSION) {
+      Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
 
-        install_after
-        return
+      install_after
+
+      return
     }
-    $ErrorActionPreference='stop'
+    $ErrorActionPreference = 'stop'
   }
 
   # 下载原始 zip 文件，若存在则不再进行下载
@@ -112,42 +118,72 @@ Function install($VERSION=0,$isPre=0){
   # 验证原始 zip 文件 Fix me
 
   # 解压 zip 文件 Fix me
-  _cleanup "$unzipDesc"
-  _unzip $filename $unzipDesc
+  # _cleanup "$unzipDesc"
+  # _unzip $filename $unzipDesc
+
+  foreach ($item in $lwpm.scripts.preinstall.replace('${VERSION}', ${VERSION})) {
+    _iex $item
+  }
 
   # 安装 Fix me
-  Copy-item -r -force "$unzipDesc/bin/*" "C:\bin\"
+  # Copy-item -r -force "$unzipDesc/" ""
+  foreach ($item in $lwpm.scripts.install.replace('${VERSION}', ${VERSION})) {
+    _iex $item
+  }
   # Start-Process -FilePath $filename -wait
-  _cleanup "$unzipDesc"
+  # _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  _exportPath $lwpm.path
+  if ($lwpm.path) { _exportPath $lwpm.path }
 
   install_after
 
-  Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
+  # Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
   # 验证 Fix me
-  if($lwpm.scripts.test){
-    powershell -c $lwpm.scripts.test
+  foreach ($item in $lwpm.scripts.pretest.replace('${VERSION}', ${VERSION})) {
+    _iex $item
+  }
+  foreach ($item in $lwpm.scripts.test.replace('${VERSION}', ${VERSION})) {
+    _iex $item
+  }
+  foreach ($item in $lwpm.scripts.posttest.replace('${VERSION}', ${VERSION})) {
+    _iex $item
   }
 }
 
-Function uninstall($prune=0){
-  # "Not Support"
-  _cleanup C:\bin\gh.exe
+Function uninstall($prune = 0) {
+  if (!($lwpm.scripts.uninstall)) {
+    Write-Host "Not Support" -ForegroundColor Red
+
+    return
+  }
+
+  # _cleanup ""
+  foreach ($item in $lwpm.scripts.preuninstall) {
+    _iex $item
+  }
+  foreach ($item in $lwpm.scripts.uninstall) {
+    _iex $item
+  }
+  foreach ($item in $lwpm.scripts.postuninstall) {
+    _iex $item
+  }
   # user data
-  if($prune){
+  if ($prune) {
     # _cleanup ""
+    foreach ($item in $lwpm.scripts.pruneuninstall) {
+      _iex $item
+    }
   }
 }
 
 # 自定义获取最新版本号的方法
 
-function getLatestVersion(){
+function getLatestVersion() {
   $stable_version = $null
   $pre_version = $null
 
   # TODO
 
-  return $stable_version,$pre_version
+  return $stable_version, $pre_version
 }

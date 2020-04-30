@@ -57,10 +57,75 @@
     "scripts": {
       "type": "object",
       "properties": {
+        "preinstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "install": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "postinstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "preuninstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "uninstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "postuninstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "pruneuninstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "pretest": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
         "test": {
-          "type": "string"
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "posttest": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "how to get version string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "path": {
       "type": "array",
@@ -68,6 +133,14 @@
       "items": {
         "type": "string"
       }
+    },
+    "command": {
+      "type": "string",
+      "description": "what command this package provide"
+    },
+    "download-filename": {
+      "type": "string",
+      "description": "download filename"
     }
   },
   "additionalProperties": false

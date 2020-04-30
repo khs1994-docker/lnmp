@@ -11,6 +11,8 @@
   "url-mirror": "",
   "pre-url": "",
   "pre-url-mirror": "",
+  "command": "",
+  "download-filename": "",
   "scripts": {
     "preinstall": "",
     "install": "",
@@ -18,6 +20,7 @@
     "preuninstall": "",
     "uninstall": "",
     "postuninstall": "",
+    "pruneuninstall": "",
     "pretest": "",
     "test": "",
     "posttest":"",

@@ -18,33 +18,28 @@ function getToken($image,
 
 if(!$env:DOCKER_USERNAME){
   Write-Warning "ENV var DOCKER_USERNAME not set"
-  $DOCKER_USERNAME='usernamekhs1994666'
 }else{
   $DOCKER_USERNAME=$env:DOCKER_USERNAME
 }
 
 if(!$env:DOCKER_PASSWORD){
   Write-Warning "ENV var DOCKER_PASSWORD not set"
-  $DOCKER_PASSWORD='passwordkhs1994666'
 }else{
   $DOCKER_PASSWORD=$env:DOCKER_PASSWORD
 }
 
-$user = $env:DOCKER_USERNAME
-$pass = $env:DOCKER_PASSWORD
+$DOCKER_USERNAME = $env:DOCKER_USERNAME
+$DOCKER_PASSWORD = $env:DOCKER_PASSWORD
 
-if(!$user){$user='user'}
-if(!$pass){$pass='pass'}
-
-$secpasswd = ConvertTo-SecureString $pass -AsPlainText -Force
-$credential = New-Object System.Management.Automation.PSCredential($user, $secpasswd)
+if($DOCKER_USERNAME -and $DOCKER_PASSWORD){
+  $secpasswd = ConvertTo-SecureString $DOCKER_PASSWORD -AsPlainText -Force
+  $credential = New-Object System.Management.Automation.PSCredential($DOCKER_USERNAME, $secpasswd)
+}
 
 # $credential=Get-Credential
 
 try{
-$result = Invoke-WebRequest -Authentication Basic -credential $Credential `
-"${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}" `
--UserAgent "Docker-Client/19.03.5 (Windows)"
+$result = iex "Invoke-WebRequest $(if($Credential){ echo `"-Authentication Basic -credential $Credential `"}) `"${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}`" -UserAgent `"Docker-Client/19.03.5 (Windows)`""
 }catch{
   write-host $_.Exception.ToString()
 
