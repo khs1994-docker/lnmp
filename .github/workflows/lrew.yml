@@ -66,9 +66,9 @@ jobs:
     - name: Download docker hub docker image rootfs
       run: |
         sh ./windows/sdk/dockerhub/rootfs.sh hello-world
-      env:
-        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      # env:
+      #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+      #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     - name: Download aliyun docker image rootfs
       run: |
         sh ./windows/sdk/dockerhub/rootfs.sh \

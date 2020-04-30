@@ -56,9 +56,9 @@ jobs:
       run: |
         . ./windows/sdk/dockerhub/rootfs.ps1
         rootfs hello-world
-      env:
-        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      # env:
+      #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+      #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     - shell: pwsh
       name: Download aliyun docker image rootfs
       run: |
