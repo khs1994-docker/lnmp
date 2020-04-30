@@ -174,10 +174,11 @@
 │   ├── config.production.yml
 │   ├── gcr.io.crt
 │   ├── gcr.io.key
-│   └── kustomization.yaml
+│   ├── kustomization.yaml
+│   └── nginx.htpasswd.demo
 ├── supervisord
 │   └── supervisord.ini.example
 └── yarn
 
-44 directories, 134 files
+44 directories, 135 files
 ```
