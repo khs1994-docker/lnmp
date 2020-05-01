@@ -7,7 +7,17 @@ Import-Module getHttpCode
 
 $ErrorActionPreference = 'stop'
 
-$lwpm = ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+if (Test-Path $PSScriptRoot\lwpm-json-schema.json) {
+  if(!($env:LWPM_MANIFEST_PATH)){
+    Write-Host "==> lwpm package without custom script load error" -ForegroundColor Red
+
+    exit 1
+  }
+  $lwpm = ConvertFrom-Json -InputObject (get-content $env:LWPM_MANIFEST_PATH -Raw)
+}
+else {
+  $lwpm = ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+}
 
 $stable_version = $lwpm.version
 $pre_version = $lwpm.'pre-version'
@@ -32,6 +42,11 @@ Function _iex($str) {
 }
 
 Function install_after() {
+  if (!$lwpm.scripts.postinstall) {
+
+    return
+  }
+
   foreach ($item in $lwpm.scripts.postinstall) {
     _iex $item
   }
@@ -62,11 +77,18 @@ Function install($VERSION = 0, $isPre = 0) {
 
   }
 
-  # stable 与 pre url 相同，默认
-  # $download_url=$url_mirror.replace('${VERSION}',${VERSION})
-  # if((_getHttpCode $download_url)[0] -eq 4){
-  $download_url = $url.replace('${VERSION}', ${VERSION})
-  # }
+  # stable 与 pre 的 url 相同，默认
+  if($url_mirror){
+    Write-Host "==> Try use Download url mirror" -ForegroundColor Green
+    $download_url=$url_mirror.replace('${VERSION}',${VERSION})
+    if((_getHttpCode $download_url)[0] -eq 4){
+      $download_url = $url.replace('${VERSION}', ${VERSION})
+
+      Write-Host "==> Download url mirror not work" -ForegroundColor Yellow
+    }
+  }else{
+    $download_url = $url.replace('${VERSION}', ${VERSION})
+  }
 
   if ($download_url) {
     $url = $download_url
@@ -98,7 +120,7 @@ Function install($VERSION = 0, $isPre = 0) {
     }
 
     if ($CURRENT_VERSION -eq $VERSION) {
-      Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
+      Write-Host "==> $name $VERSION already install" -ForegroundColor Green
 
       # install_after
 
@@ -121,14 +143,18 @@ Function install($VERSION = 0, $isPre = 0) {
   # _cleanup "$unzipDesc"
   # _unzip $filename $unzipDesc
 
-  foreach ($item in $lwpm.scripts.preinstall.replace('${VERSION}', ${VERSION})) {
-    _iex $item
+  if ($lwpm.scripts.preinstall) {
+    foreach ($item in $lwpm.scripts.preinstall.replace('${VERSION}', ${VERSION})) {
+      _iex $item
+    }
   }
 
   # 安装 Fix me
   # Copy-item -r -force "$unzipDesc/" ""
-  foreach ($item in $lwpm.scripts.install.replace('${VERSION}', ${VERSION})) {
-    _iex $item
+  if ($lwpm.scripts.install) {
+    foreach ($item in $lwpm.scripts.install.replace('${VERSION}', ${VERSION})) {
+      _iex $item
+    }
   }
   # Start-Process -FilePath $filename -wait
   # _cleanup "$unzipDesc"
@@ -140,20 +166,26 @@ Function install($VERSION = 0, $isPre = 0) {
 
   Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
   # 验证 Fix me
-  foreach ($item in $lwpm.scripts.pretest.replace('${VERSION}', ${VERSION})) {
-    _iex $item
+  if ($lwpm.scripts.pretest) {
+    foreach ($item in $lwpm.scripts.pretest.replace('${VERSION}', ${VERSION})) {
+      _iex $item
+    }
   }
-  foreach ($item in $lwpm.scripts.test.replace('${VERSION}', ${VERSION})) {
-    _iex $item
+  if ($lwpm.scripts.test) {
+    foreach ($item in $lwpm.scripts.test.replace('${VERSION}', ${VERSION})) {
+      _iex $item
+    }
   }
-  foreach ($item in $lwpm.scripts.posttest.replace('${VERSION}', ${VERSION})) {
-    _iex $item
+  if ($lwpm.scripts.posttest) {
+    foreach ($item in $lwpm.scripts.posttest.replace('${VERSION}', ${VERSION})) {
+      _iex $item
+    }
   }
 }
 
 Function uninstall($prune = 0) {
   if (!($lwpm.scripts.uninstall)) {
-    Write-Host "Not Support" -ForegroundColor Red
+    Write-Host "==> Not Support" -ForegroundColor Red
 
     return
   }
@@ -175,6 +207,8 @@ Function uninstall($prune = 0) {
       _iex $item
     }
   }
+
+  Write-Host "==> uninstall success" -ForegroundColor Green
 }
 
 # 自定义获取最新版本号的方法

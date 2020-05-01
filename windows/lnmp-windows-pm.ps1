@@ -115,7 +115,7 @@ if($args.length -eq 0 -or $args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[
 
 ################################################################################
 
-Function pkg_root(){
+Function pkg_root($soft){
   if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
     return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
@@ -127,15 +127,38 @@ Function pkg_root(){
 
     return "${PSScriptRoot}\..\vendor\lwpm\$soft"
   }else{
-    write-host "==> Not Found"
+    write-host "==> Not Found" -ForegroundColor Red
 
-    _exit
+    throw "404"
   }
 }
 
+Function _remove_module($soft){
+  try{
+  $soft_ps_module_dir = pkg_root $soft
+  }catch{
+    return
+  }
+
+  if(!(Test-Path $soft_ps_module_dir/$soft.psm1)){
+    Remove-Module -Name example -ErrorAction SilentlyContinue
+    return
+  }
+
+  Remove-Module -Name $soft_ps_module_dir -ErrorAction SilentlyContinue
+}
+
 Function _import_module($soft){
-  Remove-Module -Name $(pkg_root $soft) -ErrorAction SilentlyContinue
-  Import-Module -Name $(pkg_root $soft)
+  $soft_ps_module_dir = pkg_root $soft
+
+  if(!(Test-Path $soft_ps_module_dir/$soft.psm1)){
+    Write-Host "==> this package not include custom script" -ForegroundColor Yellow
+    $env:LWPM_MANIFEST_PATH="$soft_ps_module_dir/lwpm.json"
+    $soft_ps_module_dir = "$PSScriptRoot\lnmp-windows-pm-repo\example.psm1"
+  }
+
+  Remove-Module -Name $soft_ps_module_dir -ErrorAction SilentlyContinue
+  Import-Module -Name $soft_ps_module_dir
 }
 
 Function __install($softs){
@@ -151,23 +174,34 @@ Function __install($softs){
     }
     $soft,$version=$soft.split('@')
     Write-Host "==> Installing $soft $version ..." -ForegroundColor Blue
-    _import_module $soft
+
+    try{
+      _import_module $soft
+    }catch{
+      continue;
+    }
 
     if($version){
       install $version $preVersion
     }else{
       install -isPre $preVersion
     }
-    Remove-Module -Name $soft
+    _remove_module $soft
   }
 }
 
 Function __uninstall($softs){
   Foreach ($soft in $softs){
     Write-Host "==> Uninstalling $soft ..." -ForegroundColor Red
-    _import_module $soft
+    
+    try{
+      _import_module $soft
+    }catch{
+        continue;
+    }
+
     uninstall
-    Remove-Module -Name $soft
+    _remove_module -Name $soft
   }
 }
 
@@ -199,7 +233,7 @@ function __init($soft){
   $SOFT_ROOT="${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
 
   if(test-path $SOFT_ROOT){
-    Write-Host "==> This package already exists !" -ForegroundColor Red
+    Write-Host "==> This package already exists" -ForegroundColor Red
 
     _exit
   }
@@ -222,7 +256,7 @@ function __init($soft){
       -q
   }
 
-  "Please edit $SOFT_ROOT files"
+  Write-Host "==> Please edit $SOFT_ROOT files" -ForegroundColor Green
 
   cd $EXEC_CMD_DIR
 }
@@ -234,18 +268,22 @@ function manifest($soft){
 }
 
 function getVersionByProvider($soft){
-  _import_module $soft
+  try{
+    _import_module $soft
+  }catch{
+    return;
+  }
 
   $ErrorActionPreference="SilentlyContinue"
   if(!$(get-command getLatestVersion)){
-    Remove-Module $soft
+    _remove_module $soft
 
     return $null,$null
   }
 
   $latestVersion,$latestPreVersion = getLatestVersion
 
-  Remove-Module $soft
+  _remove_module $soft
 
   return $latestVersion,$latestPreVersion
 }

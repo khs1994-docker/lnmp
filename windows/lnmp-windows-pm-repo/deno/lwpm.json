@@ -1,11 +1,27 @@
 {
   "name": "deno",
   "description": "A secure runtime for JavaScript and TypeScript built with V8, Rust, and Tokio",
-  "version": "0.41.0",
-  "pre-version": "0.41.0",
+  "version": "0.42.0",
+  "pre-version": "0.42.0",
   "homepage": "https://deno.land/",
   "bug": "https://github.com/denoland/deno/issues",
   "github": "denoland/deno",
   "releases": "https://github.com/denoland/deno/releases",
-  "url": "https://github.com/denoland/deno/releases/download/v${VERSION}/deno-x86_64-pc-windows-msvc.zip"
+  "url": "https://github.com/denoland/deno/releases/download/v${VERSION}/deno-x86_64-pc-windows-msvc.zip",
+  "command": "deno",
+  "download-filename": "deno-${VERSION}-x86_64-pc-windows-msvc.zip",
+  "scripts": {
+     "version": "(deno --version).split(' ')[1].trim()",
+     "install": [
+       "_cleanup deno",
+       "_unzip $filename $unzipDesc",
+       "Copy-item deno/deno.exe C:\\bin",
+       "_cleanup deno"
+     ],
+     "test": "deno --version",
+     "uninstall": "Remove-item C:\\bin\\deno.exe"
+  },
+  "path": [
+    "C:\\bin"
+  ]
 }

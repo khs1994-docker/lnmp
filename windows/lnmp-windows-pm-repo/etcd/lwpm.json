@@ -8,5 +8,21 @@
   "github": "etcd-io/etcd",
   "releases": "https://github.com/etcd-io/etcd/releases",
   "url": "https://github.com/etcd-io/etcd/releases/download/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip",
-  "url-mirror": "https://mirrors.huaweicloud.com/etcd/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip"
+  "url-mirror": "https://mirrors.huaweicloud.com/etcd/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip",
+  "command": "etcd",
+  "scripts": {
+    "install": [
+      "_cleanup etcd",
+      "_unzip $filename $unzipDesc",
+      "Copy-item -r -force etcd\\etcd-v${VERSION}-windows-amd64\\etcd.exe C:\\bin\\",
+      "Copy-item -r -force etcd\\etcd-v${VERSION}-windows-amd64\\etcdctl.exe C:\\bin\\",
+      "_cleanup etcd"
+    ],
+    "uninstall": "_cleanup C:\\bin\\etcd.exe C:\\bin\\etcdctl.exe",
+    "test": "etcd --version",
+    "version": "(etcd --version).split(' ')[2]"
+  },
+  "path": [
+    "C:\\bin"
+  ]
 }
