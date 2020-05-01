@@ -49,7 +49,6 @@ jobs:
     - name: lwpm-install
       shell: pwsh
       run: |
-        rm -r -Force $(get-command java).path
         lnmp-windows-pm.ps1 install openjdk
         echo $env:PATH
     - shell: pwsh

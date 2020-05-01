@@ -22,7 +22,7 @@ $env_path=[environment]::GetEnvironmentvariable("Path","user") `
           + ';' + [environment]::GetEnvironmentvariable("Path","machine") `
           + ';' + [environment]::GetEnvironmentvariable("Path","process")
 
-$env_path_array=$env_path.split(';') | Sort-Object -unique
+$env_path_array=$env_path.split(';')
 
 $env:path="C:\bin;";
 
