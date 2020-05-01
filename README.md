@@ -214,7 +214,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.43-alpine`       | **2.4.43**             |`alpine:3.11`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.20`              | **8.0.20**             |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.2`            | **10.5.2**             |`ubuntu:bionic` |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0-rc4-alpine`        | **6.0-rc4**            |`alpine:3.11`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.0-alpine`        | **6.0.0**            |`alpine:3.11`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                      |`khs1994/php:7.4.5-fpm-alpine`  | **7.4.5**       |`alpine:3.11`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.5-composer-alpine`  | **1.10.5**       |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.5-alpine`           | **1.6.5**       |`alpine:3.11`    |

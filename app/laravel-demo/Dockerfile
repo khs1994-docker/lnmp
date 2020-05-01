@@ -11,13 +11,13 @@
 #
 # $ docker build --target=laravel -t khs1994/laravel:6.0 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
-ARG NODE_VERSION=14.0.0
+ARG NODE_VERSION=14.1.0
 ARG PHP_VERSION=7.4.5
 ARG NGINX_VERSION=1.15.0
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建，建议放到 CDN，可省略此步
-FROM node:${NODE_VERSION:-14.0.0}-alpine as frontend
+FROM node:${NODE_VERSION:-14.1.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
