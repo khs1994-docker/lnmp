@@ -7,5 +7,22 @@
   "bug": "https://github.com/golang/go/issues",
   "github": "golang/go",
   "releases": "https://github.com/golang/go/releases",
-  "url": "https://dl.google.com/go/go${VERSION}.windows-amd64.zip"
+  "url": "https://dl.google.com/go/go${VERSION}.windows-amd64.zip",
+  "command": "go",
+  "scripts": {
+    "version": "($(go version) -split ' ')[2].trim('go')",
+    "test": "go version",
+    "install": [
+      "_cleanup go",
+      "_unzip $filename $unzipDesc",
+      "_cleanup C:\\go",
+      "Copy-item -r -force go/go C:\\",
+      "_cleanup go"
+    ],
+    "uninstall": "_cleanup C:\\go"
+  },
+  "path": [
+    "C:\\go\\bin",
+    "$HOME\\go\\bin"
+  ]
 }

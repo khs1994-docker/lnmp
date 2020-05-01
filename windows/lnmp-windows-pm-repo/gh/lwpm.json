@@ -36,6 +36,6 @@
     "version": "(gh --version).split()[2]"
   },
   "path": [
-    "C:/bin"
+    "C:\\bin"
   ]
 }

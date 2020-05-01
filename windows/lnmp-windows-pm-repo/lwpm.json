@@ -18,6 +18,7 @@
       "# _cleanup \"$unzipDesc\""
     ],
     "install": [
+      "# Write-Host \"`nPlease download on this website: ${releases}`n\" -ForegroundColor Green",
       "# _unzip $filename $unzipDesc",
       "# Copy-item -r -force \"$unzipDesc/\" \"\"",
       "# Start-Process -FilePath $filename -wait",

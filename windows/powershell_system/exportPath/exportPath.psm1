@@ -9,6 +9,8 @@ Function _exportPath($items){
       continue;
     }
 
+    $item = iex "echo $item"
+
     if($env_path_array.IndexOf($item) -eq -1){
       Write-Host "==> Add [ $item ] to system PATH env ..." -ForegroundColor Green
 

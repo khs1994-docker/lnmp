@@ -8,7 +8,7 @@ Import-Module getHttpCode
 $ErrorActionPreference = 'stop'
 
 if (Test-Path $PSScriptRoot\lwpm-json-schema.json) {
-  if(!($env:LWPM_MANIFEST_PATH)){
+  if (!($env:LWPM_MANIFEST_PATH)) {
     Write-Host "==> lwpm package without custom script load error" -ForegroundColor Red
 
     exit 1
@@ -78,15 +78,16 @@ Function install($VERSION = 0, $isPre = 0) {
   }
 
   # stable 与 pre 的 url 相同，默认
-  if($url_mirror){
+  if ($url_mirror) {
     Write-Host "==> Try use Download url mirror" -ForegroundColor Green
-    $download_url=$url_mirror.replace('${VERSION}',${VERSION})
-    if((_getHttpCode $download_url)[0] -eq 4){
+    $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
+    if ((_getHttpCode $download_url)[0] -eq 4) {
       $download_url = $url.replace('${VERSION}', ${VERSION})
 
       Write-Host "==> Download url mirror not work" -ForegroundColor Yellow
     }
-  }else{
+  }
+  else {
     $download_url = $url.replace('${VERSION}', ${VERSION})
   }
 
@@ -116,8 +117,12 @@ Function install($VERSION = 0, $isPre = 0) {
     $CURRENT_VERSION = ""
 
     if ($lwpm.scripts.version) {
-      $CURRENT_VERSION = iex $lwpm.scripts.version
+      foreach ($item in $lwpm.scripts.version) {
+        $CURRENT_VERSION = _iex $item
+      }
     }
+
+    # Write-Host $CURRENT_VERSION
 
     if ($CURRENT_VERSION -eq $VERSION) {
       Write-Host "==> $name $VERSION already install" -ForegroundColor Green
@@ -131,11 +136,13 @@ Function install($VERSION = 0, $isPre = 0) {
 
   # 下载原始 zip 文件，若存在则不再进行下载
 
-  _downloader `
-    $url `
-    $filename `
-    $name `
-    $VERSION
+  if ($url) {
+    _downloader `
+      $url `
+      $filename `
+      $name `
+      $VERSION
+  }
 
   # 验证原始 zip 文件 Fix me
 

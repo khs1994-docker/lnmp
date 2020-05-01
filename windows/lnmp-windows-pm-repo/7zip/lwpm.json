@@ -7,5 +7,23 @@
   "bug": "https://www.7-zip.org/support.html",
   "github": "",
   "releases": "https://www.7-zip.org/download.html",
-  "url": "https://www.7-zip.org/a/7z${VERSION}-x64.msi"
+  "url": "https://www.7-zip.org/a/7z${VERSION}-x64.msi",
+  "command": "7z.exe",
+  "scripts": {
+    "version": [
+      "$env:VERSION_X=(& $env:programFiles\\7-Zip\\7z.exe).split(' ')[2].split('.')[0]",
+      "$env:VERSION_Y=(& $env:programFiles\\7-Zip\\7z.exe).split(' ')[2].split('.')[1]",
+      "$env:VERSION_X + $env:VERSION_Y"
+    ],
+    "install": [
+      "Start-Process -FilePath $filename -wait"
+    ],
+    "uninstall": "",
+    "test": [
+      "7-zip $((7z.exe).split(' ')[2]) already install"
+    ]
+  },
+  "path": [
+    "$env:programFiles\\7-Zip"
+  ]
 }

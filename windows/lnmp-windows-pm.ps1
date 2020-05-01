@@ -145,7 +145,8 @@ Function _remove_module($soft){
     return
   }
 
-  Remove-Module -Name $soft_ps_module_dir -ErrorAction SilentlyContinue
+  Remove-Module -Name $soft -ErrorAction SilentlyContinue
+  Remove-Module -Name example -ErrorAction SilentlyContinue
 }
 
 Function _import_module($soft){
@@ -157,7 +158,8 @@ Function _import_module($soft){
     $soft_ps_module_dir = "$PSScriptRoot\lnmp-windows-pm-repo\example.psm1"
   }
 
-  Remove-Module -Name $soft_ps_module_dir -ErrorAction SilentlyContinue
+  Remove-Module -Name $soft -ErrorAction SilentlyContinue
+  Remove-Module example -ErrorAction SilentlyContinue
   Import-Module -Name $soft_ps_module_dir
 }
 

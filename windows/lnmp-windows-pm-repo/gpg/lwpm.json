@@ -11,16 +11,18 @@
   "url-mirror": "",
   "pre-url": "",
   "pre-url-mirror": "",
+  "command": "gpg",
   "scripts": {
     "preinstall": "",
-    "install": "",
+    "install": "Start-Process -FilePath $filename -wait",
     "postinstall": "",
     "preuninstall": "",
-    "uninstall": "",
+    "uninstall": "Start-Process -FilePath \"C:\\Program Files (x86)\\Gpg4win\\gpg4win-uninstall\" -Wait",
     "postuninstall": "",
     "pretest": "",
     "test": "gpg --version",
-    "posttest":""
+    "posttest":"",
+    "version": "echo 3.1.11"
   },
   "path": [
     "C:\\Program Files (x86)\\GnuPG\\bin"

@@ -6,5 +6,13 @@
   "homepage": "https://weixin.qq.com/",
   "bug": "",
   "github": "",
-  "releases": ""
+  "releases": "",
+  "url": "https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe",
+  "command": "${env:ProgramFiles(x86)}\\Tencent\\WeChat\\WeChat.exe",
+  "scripts": {
+    "install": "Start-Process -FilePath $filename -wait",
+    "uninstall": "& ${env:ProgramFiles(x86)}\\Tencent\\WeChat\\Uninstall.exe",
+    "version": "echo latest",
+    "test": "& get-command ${env:ProgramFiles(x86)}\\Tencent\\WeChat\\WeChat.exe"
+  }
 }

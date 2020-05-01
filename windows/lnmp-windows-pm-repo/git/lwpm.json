@@ -9,5 +9,14 @@
   "releases": "https://github.com/git/git/releases",
   "pre-url" : "",
   "url": "https://github.com/git-for-windows/git/releases/download/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe",
-  "url-mirror":"https://mirrors.huaweicloud.com/git-for-windows/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe"
+  "url-mirror":"https://mirrors.huaweicloud.com/git-for-windows/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe",
+  "command": "git",
+  "scripts": {
+    "version": "(git --version).split(' ')[2].trim('.windows.1')",
+    "install": [
+      "Start-Process -FilePath $filename -wait"
+    ],
+    "test": "git --version",
+    "uninstall": "& $env:ProgramFiles\\Git\\unins001.exe"
+  }
 }

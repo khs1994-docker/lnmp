@@ -10,6 +10,6 @@
   "url": "https://astuteinternet.dl.sourceforge.net/project/mpv-player-windows/stable/mpv-${VERSION}-x86_64.7z",
   "pre-url": "https://astuteinternet.dl.sourceforge.net/project/mpv-player-windows/64bit/mpv-x86_64-${VERSION}.7z",
   "path": [
-    "%ProgramData%\\mpv"
+    "$env:ProgramData\\mpv"
   ]
 }
