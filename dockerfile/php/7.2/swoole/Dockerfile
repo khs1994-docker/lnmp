@@ -18,7 +18,7 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=4.4.16
+ENV SWOOLE_VERSION=4.5.0
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 

@@ -52,7 +52,7 @@ ARG DEB_SECURITY_URL=security.debian.org/debian-security
 RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     && sed -i "s!security.debian.org/debian-security!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
     && set -xe \
-	      && buildDeps=" \
+        && buildDeps=" \
         wget \
         unzip \
         libfreetype6-dev \
@@ -75,7 +75,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libenchant-dev \
         libc-client2007e-dev \
         libkrb5-dev \
-	" \
+  " \
   # libtidy-dev \
   # libxslt1-dev \
   && runDeps=" \

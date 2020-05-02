@@ -159,7 +159,7 @@ RUN --mount=type=bind,from=php:7.2.30-alpine,source=/usr/src,target=/usr/local/s
   && export PATH=$PATH:/opt/bin \
   ; mkdir -p $PHP_INI_DIR/conf.d \
   && cp /opt/bin/docker-php-entrypoint /usr/local/bin \
-	&& apk add --no-cache --virtual .build-deps \
+  && apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
           coreutils \
           curl-dev \
@@ -196,51 +196,51 @@ RUN --mount=type=bind,from=php:7.2.30-alpine,source=/usr/src,target=/usr/local/s
           zlib-dev \
           gnu-libiconv-dev \
           ${APK_DEV_EXTRA:-} \
-	\
-	&& export CFLAGS="$PHP_CFLAGS" \
-		        CPPFLAGS="$PHP_CPPFLAGS" \
-		        LDFLAGS="$PHP_LDFLAGS" \
-	&& docker-php-source extract \
+  \
+  && export CFLAGS="$PHP_CFLAGS" \
+            CPPFLAGS="$PHP_CPPFLAGS" \
+            LDFLAGS="$PHP_LDFLAGS" \
+  && docker-php-source extract \
   && mv /usr/include/gnu-libiconv/*.h /usr/include \
   && rm -rf /usr/include/gnu-libiconv \
-	&& cd /usr/src/php \
-	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-	&& ./configure \
-		--build="$gnuArch" \
-		--with-config-file-path="$PHP_INI_DIR" \
-		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
-		\
+  && cd /usr/src/php \
+  && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
+  && ./configure \
+    --build="$gnuArch" \
+    --with-config-file-path="$PHP_INI_DIR" \
+    --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
+    \
 # make sure invalid --configure-flags are fatal errors intead of just warnings
-		--enable-option-checking=fatal \
-		\
+    --enable-option-checking=fatal \
+    \
 # https://github.com/docker-library/php/issues/439
-		--with-mhash \
-		\
+    --with-mhash \
+    \
 # --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically (see https://github.com/docker-library/php/issues/236)
-		--enable-ftp \
+    --enable-ftp \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
-		--enable-mbstring \
+    --enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-		--enable-mysqlnd \
+    --enable-mysqlnd \
 # https://wiki.php.net/rfc/libsodium
-		# --with-sodium=shared \
-		\
-		--with-curl \
-		--with-libedit \
-		--with-openssl \
-		--with-zlib \
+    # --with-sodium=shared \
+    \
+    --with-curl \
+    --with-libedit \
+    --with-openssl \
+    --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
-		# --with-password-argon2 \
-		\
+    # --with-password-argon2 \
+    \
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
-		$(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
-		\
-		$PHP_EXTRA_CONFIGURE_ARGS \
-	&& make -j "$(nproc)" \
+    $(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
+    \
+    $PHP_EXTRA_CONFIGURE_ARGS \
+  && make -j "$(nproc)" \
   && find -type f -name '*.a' -delete \
-	&& make install \
-	&& { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
+  && make install \
+  && { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
 # && docker-php-source delete \
   \
   && docker-php-ext-enable bcmath \
@@ -275,17 +275,17 @@ RUN --mount=type=bind,from=php:7.2.30-alpine,source=/usr/src,target=/usr/local/s
                            # opcache 已默认安装，需要自行载入
                            opcache \
                            ${PHP_EXTENSION_EXTRA:-} \
-	&& runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)" \
-	&& apk add --no-cache $runDeps \
+  && runDeps="$( \
+    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+      | tr ',' '\n' \
+      | sort -u \
+      | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+  )" \
+  && apk add --no-cache $runDeps \
   \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
-	&& rm -rf /tmp/pear ~/.pearrc \
+  && rm -rf /tmp/pear ~/.pearrc \
   \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium

@@ -150,8 +150,8 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
   \
   ; mkdir -p $PHP_INI_DIR/conf.d \
   # && apk add --no-cache --virtual .fetch-deps gnupg \
-	&& mkdir -p /usr/src \
-	&& cd /usr/src \
+  && mkdir -p /usr/src \
+  && cd /usr/src \
   && apk add --no-cache git openssh-client \
   \
   && if [ -d php ];then \
@@ -163,26 +163,26 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
      fi \
   \
   && apk del --no-network git openssh-client \
-	# wget -O php.tar.xz "$PHP_URL"; \
-	# if [ -n "$PHP_SHA256" ]; then \
-	# 	echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
-	# fi; \
-	# if [ -n "$PHP_MD5" ]; then \
-	# 	echo "$PHP_MD5 *php.tar.xz" | md5sum -c -; \
-	# fi; \
-	# \
-	# if [ -n "$PHP_ASC_URL" ]; then \
-	# 	wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
-	# 	export GNUPGHOME="$(mktemp -d)"; \
-	# 	for key in $GPG_KEYS; do \
-	# 		gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
-	# 	done; \
-	# 	gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-	# 	command -v gpgconf > /dev/null && gpgconf --kill all; \
-	# 	rm -rf "$GNUPGHOME"; \
-	# fi; \
-	# && apk del --no-network  .fetch-deps \
-	&& apk add --no-cache --virtual .build-deps \
+  # wget -O php.tar.xz "$PHP_URL"; \
+  # if [ -n "$PHP_SHA256" ]; then \
+  #  echo "$PHP_SHA256 *php.tar.xz" | sha256sum -c -; \
+  # fi; \
+  # if [ -n "$PHP_MD5" ]; then \
+  #  echo "$PHP_MD5 *php.tar.xz" | md5sum -c -; \
+  # fi; \
+  # \
+  # if [ -n "$PHP_ASC_URL" ]; then \
+  #  wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
+  #  export GNUPGHOME="$(mktemp -d)"; \
+  #  for key in $GPG_KEYS; do \
+  #    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+  #  done; \
+  #  gpg --batch --verify php.tar.xz.asc php.tar.xz; \
+  #  command -v gpgconf > /dev/null && gpgconf --kill all; \
+  #  rm -rf "$GNUPGHOME"; \
+  # fi; \
+  # && apk del --no-network  .fetch-deps \
+  && apk add --no-cache --virtual .build-deps \
           $PHPIZE_DEPS \
           argon2-dev \
           coreutils \
@@ -224,58 +224,58 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           libgpg-error-dev \
           gnu-libiconv-dev \
           ${APK_DEV_EXTRA:-} \
-	\
-	&& export CFLAGS="$PHP_CFLAGS" \
-		        CPPFLAGS="$PHP_CPPFLAGS" \
-		        LDFLAGS="$PHP_LDFLAGS" \
+  \
+  && export CFLAGS="$PHP_CFLAGS" \
+            CPPFLAGS="$PHP_CPPFLAGS" \
+            LDFLAGS="$PHP_LDFLAGS" \
             ARGON2_LIBS="-largon2" \
             ARGON2_CFLAGS="-I/usr/include" \
-	# && docker-php-source extract \
+  # && docker-php-source extract \
   && mv /usr/include/gnu-libiconv/*.h /usr/include \
   && rm -rf /usr/include/gnu-libiconv \
-	&& cd /usr/src/php \
+  && cd /usr/src/php \
   && make clean || echo \
-	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
+  && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./buildconf --force \
-	&& ./configure \
-		--build="$gnuArch" \
-		--with-config-file-path="$PHP_INI_DIR" \
-		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
-		\
+  && ./configure \
+    --build="$gnuArch" \
+    --with-config-file-path="$PHP_INI_DIR" \
+    --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
+    \
 # make sure invalid --configure-flags are fatal errors intead of just warnings
-		--enable-option-checking=fatal \
-		\
+    --enable-option-checking=fatal \
+    \
 # https://github.com/docker-library/php/issues/439
-		--with-mhash \
-		\
+    --with-mhash \
+    \
 # --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically (see https://github.com/docker-library/php/issues/236)
-		--enable-ftp \
+    --enable-ftp \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
-		--enable-mbstring \
+    --enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-		--enable-mysqlnd \
+    --enable-mysqlnd \
 # https://wiki.php.net/rfc/libsodium
-		--with-sodium=shared \
-		\
-		--with-curl \
-		--with-libedit \
-		--with-openssl \
-		--with-zlib \
+    --with-sodium=shared \
+    \
+    --with-curl \
+    --with-libedit \
+    --with-openssl \
+    --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
-		--with-password-argon2 \
-		\
+    --with-password-argon2 \
+    \
 # bundled pcre does not support JIT on s390x
 # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
-		$(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
-		\
-		$PHP_EXTRA_CONFIGURE_ARGS \
-	&& make -j "$(nproc)" \
+    $(test "$gnuArch" = 's390x-linux-musl' && echo '--without-pcre-jit') \
+    \
+    $PHP_EXTRA_CONFIGURE_ARGS \
+  && make -j "$(nproc)" \
   && find -type f -name '*.a' -delete \
-	&& make install \
-	&& { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
-	&& make clean \
+  && make install \
+  && { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
+  && make clean \
   && cp -v php.ini-* "$PHP_INI_DIR/" \
-	&& cd / \
+  && cd / \
   # && docker-php-source delete \
   # && rm -rf /usr/src/php \
   && docker-php-ext-enable bcmath \
@@ -312,13 +312,13 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            # 7.4 +
                            ffi \
                            ${PHP_EXTENSION_EXTRA:-} \
-	&& runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)" \
-	&& apk add --no-cache $runDeps \
+  && runDeps="$( \
+    scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+      | tr ',' '\n' \
+      | sort -u \
+      | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+  )" \
+  && apk add --no-cache $runDeps \
   \
 #  && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network  .build-deps \
@@ -329,42 +329,42 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
 # ENTRYPOINT ["docker-php-entrypoint"]
   \
 # RUN set -ex \
-	&& cd /usr/local/etc \
-	&& if [ -d php-fpm.d ]; then \
-		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
-		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
-		cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
-	else \
-		# PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
-		mkdir php-fpm.d; \
-		cp php-fpm.conf.default php-fpm.d/www.conf; \
-		{ \
-			echo '[global]'; \
-			echo 'include=etc/php-fpm.d/*.conf'; \
-		} | tee php-fpm.conf; \
-	fi \
-	&& { \
-		echo '[global]'; \
-		echo 'error_log = /proc/self/fd/2'; \
+  && cd /usr/local/etc \
+  && if [ -d php-fpm.d ]; then \
+    # for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
+    sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
+    cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
+  else \
+    # PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
+    mkdir php-fpm.d; \
+    cp php-fpm.conf.default php-fpm.d/www.conf; \
+    { \
+      echo '[global]'; \
+      echo 'include=etc/php-fpm.d/*.conf'; \
+    } | tee php-fpm.conf; \
+  fi \
+  && { \
+    echo '[global]'; \
+    echo 'error_log = /proc/self/fd/2'; \
     echo; echo '; https://github.com/docker-library/php/pull/725#issuecomment-443540114'; echo 'log_limit = 8192'; \
-		echo; \
-		echo '[www]'; \
-		echo '; if we send this to /proc/self/fd/1, it never appears'; \
-		echo 'access.log = /proc/self/fd/2'; \
-		echo; \
-		echo 'clear_env = no'; \
-		echo; \
-		echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
-		echo 'catch_workers_output = yes'; \
+    echo; \
+    echo '[www]'; \
+    echo '; if we send this to /proc/self/fd/1, it never appears'; \
+    echo 'access.log = /proc/self/fd/2'; \
+    echo; \
+    echo 'clear_env = no'; \
+    echo; \
+    echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
+    echo 'catch_workers_output = yes'; \
     echo 'decorate_workers_output = no'; \
-	} | tee php-fpm.d/docker.conf \
-	&& { \
-		echo '[global]'; \
-		echo 'daemonize = no'; \
-		echo; \
-		echo '[www]'; \
-		echo 'listen = 9000'; \
-	} | tee php-fpm.d/zz-docker.conf \
+  } | tee php-fpm.d/docker.conf \
+  && { \
+    echo '[global]'; \
+    echo 'daemonize = no'; \
+    echo; \
+    echo '[www]'; \
+    echo 'listen = 9000'; \
+  } | tee php-fpm.d/zz-docker.conf \
 # 创建日志文件夹
   && mkdir -p /var/log/php-fpm \
   && ln -sf /dev/stdout /var/log/php-fpm/access.log \
