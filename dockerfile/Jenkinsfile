@@ -117,7 +117,7 @@ pipeline {
 
     stage('构建镜像-redis') {
       steps {
-        sh "echo redis:alpine redis:5.0.9-alpine redis:6.0.0-alpine > manifest.txt"
+        sh "echo redis:alpine redis:5.0.9-alpine redis:6.0.1-alpine > manifest.txt"
         sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
       }
     }
