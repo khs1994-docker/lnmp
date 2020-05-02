@@ -3,11 +3,6 @@ FROM --platform=$TARGETPLATFORM alpine:3.11
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF="unknow"
-
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
-
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
@@ -341,3 +336,8 @@ WORKDIR /app
 ENTRYPOINT ["docker-php-entrypoint"]
 
 CMD ["php", "-a"]
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"

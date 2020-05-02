@@ -6,11 +6,6 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
 
 # install composer
 
-ARG VCS_REF="unknow"
-
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
-
 ENV COMPOSER_DEP_APKS \
       git \
       # 以下两个均为版本控制系统
@@ -68,3 +63,8 @@ RUN --mount=type=bind,from=composer:1.10.5,source=/usr/bin/composer,target=/opt/
 ENTRYPOINT ["/docker-entrypoint.composer"]
 
 CMD ["composer"]
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"

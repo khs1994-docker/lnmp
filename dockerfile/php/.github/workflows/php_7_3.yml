@@ -65,7 +65,7 @@ jobs:
             mirror="${add_mirror}"; \
           else \
             IS_PUSH=--push; \
-            DOCKER_HUB_USERNAME=lrew; \
+            DOCKER_HUB_USERNAME=$DOCKER_HUB_USERNAME_TEST; \
           fi; \
         else \
           IS_PUSH=--push \
@@ -73,7 +73,7 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        options="--build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:7.3-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:7.3-${TYPE,,}-cache"
+        options="--build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
 
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -166,7 +166,7 @@ jobs:
         -t ${DOCKER_HUB_USERNAME}/php:7.3-full-custom 7.3/alpine \
       env:
         DOCKER_HUB_USERNAME: khs1994
-
+        DOCKER_HUB_USERNAME_TEST: lrew
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
