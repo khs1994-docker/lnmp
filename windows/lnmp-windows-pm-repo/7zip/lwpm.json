@@ -2,12 +2,12 @@
   "name": "7zip",
   "description": "7-Zip is a file archiver with a high compression ratio",
   "version": "1900",
-  "pre-version": "1900",
+  "pre-version": "2000",
   "homepage": "https://www.7-zip.org/",
   "bug": "https://www.7-zip.org/support.html",
   "github": "",
   "releases": "https://www.7-zip.org/download.html",
-  "url": "https://www.7-zip.org/a/7z${VERSION}-x64.msi",
+  "url": "https://www.7-zip.org/a/7z${VERSION}-x64.exe",
   "command": "7z.exe",
   "scripts": {
     "version": [
@@ -18,9 +18,9 @@
     "install": [
       "Start-Process -FilePath $filename -wait"
     ],
-    "uninstall": "",
+    "uninstall": "& $env:programFiles\\7-Zip\\Uninstall.exe",
     "test": [
-      "7-zip $((7z.exe).split(' ')[2]) already install"
+      "write-host 7-zip $((7z.exe).split(' ')[2]) already install"
     ]
   },
   "path": [

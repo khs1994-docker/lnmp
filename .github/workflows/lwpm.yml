@@ -62,14 +62,14 @@ jobs:
       # env:
       #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
       #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-    # - shell: pwsh
-    #   name: Download aliyun docker image rootfs
-    #   run: |
-    #     . ./windows/sdk/dockerhub/rootfs.ps1
-    #     rootfs khs1994/hello-world latest '' '' '' 0 registry.us-west-1.aliyuncs.com
-    #   env:
-    #     DOCKER_USERNAME: ${{secrets.DOCKER_ALIYUN_USERNAME}}
-    #     DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+    - shell: pwsh
+      name: Download aliyun docker image rootfs
+      run: |
+        . ./windows/sdk/dockerhub/rootfs.ps1
+        rootfs khs1994/hello-world latest '' '' '' 0 registry.us-west-1.aliyuncs.com
+      # env:
+      #   DOCKER_USERNAME: ${{secrets.DOCKER_ALIYUN_USERNAME}}
+      #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     - shell: pwsh
       name: Download tencent cloud docker image rootfs
       run: |

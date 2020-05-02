@@ -26,7 +26,7 @@ bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
 add         Add package
-init        Init a new package(developer)
+init        Init a new package(developer) [--custom]
 
 SERVICES [Require RunAsAdministrator]:
 
@@ -153,9 +153,10 @@ Function _import_module($soft){
   $soft_ps_module_dir = pkg_root $soft
 
   if(!(Test-Path $soft_ps_module_dir/$soft.psm1)){
-    Write-Host "==> this package not include custom script" -ForegroundColor Yellow
     $env:LWPM_MANIFEST_PATH="$soft_ps_module_dir/lwpm.json"
     $soft_ps_module_dir = "$PSScriptRoot\lnmp-windows-pm-repo\example.psm1"
+  }else{
+    Write-Host "==> this package include custom script" -ForegroundColor Yellow
   }
 
   Remove-Module -Name $soft -ErrorAction SilentlyContinue
@@ -195,7 +196,7 @@ Function __install($softs){
 Function __uninstall($softs){
   Foreach ($soft in $softs){
     Write-Host "==> Uninstalling $soft ..." -ForegroundColor Red
-    
+
     try{
       _import_module $soft
     }catch{
@@ -209,17 +210,31 @@ Function __uninstall($softs){
 
 Function _outdated($softs=$null){
   Write-Host "==> check $softs update ..." -ForegroundColor Green
-  composer outdated -d ${PSScriptRoot}/..
 }
 
 Function _add($softs){
   Write-Host "==> Add $softs ..." -ForegroundColor Green
-  if (!(Test-Path "${PSScriptRoot}/../composer.json")){
-    composer init -d ${PSScriptRoot}/../ -q -n --stability dev
+  if (!(Test-Path "${PSScriptRoot}/../lwpm.lock.json")){
+
   }
 
+  . $PSScriptRoot\sdk\dockerhub\rootfs.ps1
+
   Foreach($soft in $softs){
-    composer require -d ${PSScriptRoot}/../ lwpm/$soft --prefer-source
+    $soft,$ref = $soft.split('@')
+
+    if(!($ref)){$ref = 'latest'}
+    $dest = rootfs $soft $ref
+
+    if(!($dest)){
+      write-host "==> $soft $ref not found" -ForegroundColor Red
+
+      continue
+    }
+
+    $dist = "$PSScriptRoot\..\vendor\lwpm"
+    mkdir -Force $dist | out-null
+    tar -zxvf $dest -C $dist
   }
 }
 
@@ -230,7 +245,7 @@ Function __list(){
   _exit
 }
 
-function __init($soft){
+function __init($soft,$custom_script=$false){
   Write-Host "==> Init $soft ..." -ForegroundColor Green
   $SOFT_ROOT="${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
 
@@ -241,22 +256,19 @@ function __init($soft){
   }
 
   new-item $SOFT_ROOT -ItemType Directory | out-null
-  copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\example.psm1 `
+
+  if($custom_script){
+    Write-Host "==> init package with custom script" -ForegroundColor Yellow
+
+    copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\example.psm1 `
             $SOFT_ROOT\${soft}.psm1
+  }
 
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\lwpm.json `
             $SOFT_ROOT\lwpm.json
 
   copy-item ${PSScriptRoot}\lnmp-windows-pm-repo\README.md `
             $SOFT_ROOT\README.md
-
-  if(_command composer){
-    composer init -d $SOFT_ROOT `
-      --name "lwpm/$soft" `
-      --homepage "https://docs.lnmp.khs1994.com/windows/lwpm.html" `
-      --license "MIT" `
-      -q
-  }
 
   Write-Host "==> Please edit $SOFT_ROOT files" -ForegroundColor Green
 
@@ -378,6 +390,13 @@ if($args[0] -eq 'init'){
     "Please input soft name"
     _exit
   }
+
+  if($args[2] -eq '--custom'){
+    __init $args[1] $true
+
+    _exit
+  }
+
   __init $args[1]
   _exit
 }
@@ -461,6 +480,85 @@ switch ($command)
       Write-Host "==> Stop service $item" -ForegroundColor Red
       start-process "net" -ArgumentList "stop",$item -Verb RunAs
     }
+  }
+
+  "push" {
+    $ErrorActionPreference="Stop"
+
+    try {
+      $pkg_root = pkg_root $opt.split('/')[-1]
+    }
+    catch {
+      _exit
+    }
+
+    if(!$env:LWPM_DOCKER_USERNAME -or !$env:LWPM_DOCKER_PASSWORD){
+      write-host ==> please set `$env:LWPM_DOCKER_USERNAME or `$env:LWPM_DOCKER_PASSWORD -ForegroundColor Red
+
+      exit 1
+    }
+
+    $env:DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME
+    $env:DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD
+
+    Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
+
+    $soft = $opt.split('/')[-1]
+
+    $lwpm_temp="$PSScriptRoot\..\vendor\lwpm-temp\$soft"
+    $lwpm_dist_temp="$PSScriptRoot\..\vendor\lwpm-temp\dist\$soft"
+
+    try{
+    rm -r -force $lwpm_temp
+    rm -r -force $lwpm_dist_temp
+    }catch{}
+    mkdir -force $lwpm_temp | out-null
+    mkdir -force $lwpm_dist_temp | out-null
+
+    cp $pkg_root\lwpm.json $lwpm_temp
+    cp $pkg_root\README.md $lwpm_temp
+    if(Test-Path $pkg_root\$soft.psm1){
+      cp $pkg_root\${soft}.psm1 $lwpm_temp
+    }
+
+    $tar_file="$lwpm_dist_temp\lwpm.tar.gz"
+    cd $lwpm_temp\..\
+    tar -zcvf lwpm.tar.gz $soft
+    mv lwpm.tar.gz $tar_file
+
+    . $PSScriptRoot\sdk\dockerhub\auth\auth.ps1
+
+    $token=getToken $opt "push,pull"
+    $config_file="$lwpm_temp/lwpm.json"
+
+    . $PSScriptRoot\sdk\dockerhub\blobs\upload.ps1
+
+    $length, $sha256 = upload $token $opt $tar_file
+
+    $config_length, $config_sha256 = upload $token $opt $config_file "application/vnd.docker.container.image.v1+json"
+
+    $data = ConvertTo-Json @{
+      "schemaVersion"=2;
+      "mediaType"="application/vnd.docker.distribution.manifest.v2+json";
+      "config"=@{
+        "mediaType"="application/vnd.docker.container.image.v1+json";
+        "size"=$config_length;
+        "digest"="sha256:$config_sha256";
+    };
+      "layers"       = @(@{
+          "mediaType"="application/vnd.docker.image.rootfs.diff.tar.gzip";
+          "size"=$length;
+          "digest"="sha256:$sha256";
+    })}
+
+    $manifest_json_path = "$lwpm_dist_temp/manifest.json"
+    write-output $data > $manifest_json_path
+
+    . $PSScriptRoot\sdk\dockerhub\manifests\upload.ps1
+
+    $version = "latest"
+
+    upload $token $opt $version $manifest_json_path
   }
 
   Default {
