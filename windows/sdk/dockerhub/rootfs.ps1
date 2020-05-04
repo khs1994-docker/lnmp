@@ -32,7 +32,11 @@ function rootfs($image="alpine",
       $registry = $env:REGISTRY_MIRROR
       Write-host "==> Read `$registry from `$env:REGISTRY_MIRROR($env:REGISTRY_MIRROR)" -ForegroundColor Green
     }else{
-      $registry = "hub-mirror.c.163.com"
+      if($env:LNMP_CN_ENV -ne "false"){
+        $registry = "hub-mirror.c.163.com"
+      }else{
+        $registry = "registry.hub.docker.com"
+      }
     }
   }
 

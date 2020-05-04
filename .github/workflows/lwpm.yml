@@ -20,6 +20,8 @@ jobs:
     runs-on: windows-latest
     needs: skip-ci
     timeout-minutes: 10
+    env:
+      LNMP_CN_ENV: false
     steps:
     - uses: actions/checkout@master
       with:

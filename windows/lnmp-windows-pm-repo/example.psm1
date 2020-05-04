@@ -78,7 +78,7 @@ Function install($VERSION = 0, $isPre = 0) {
   }
 
   # stable 与 pre 的 url 相同，默认
-  if ($url_mirror) {
+  if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
     Write-Host "==> Try use Download url mirror" -ForegroundColor Green
     $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
     if ((_getHttpCode $download_url)[0] -eq 4) {
