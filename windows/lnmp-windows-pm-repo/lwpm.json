@@ -13,6 +13,8 @@
   "pre-url-mirror": "",
   "command": "fix me",
   "download-filename": "",
+  "architecture": "amd64",
+  "os": "windows",
   "scripts": {
     "preinstall": [
       "# _cleanup \"$unzipDesc\""

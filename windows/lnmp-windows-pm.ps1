@@ -117,9 +117,7 @@ if($args.length -eq 0 -or $args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[
 ################################################################################
 
 Function pkg_root($soft){
-  if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
-    return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
-  }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
+  if (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
     write-host "==> Found in vendor/lwpm-dev" -ForegroundColor Green
 
     return "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
@@ -127,6 +125,8 @@ Function pkg_root($soft){
     write-host "==> Found in vendor/lwpm" -ForegroundColor Green
 
     return "${PSScriptRoot}\..\vendor\lwpm\$soft"
+  }elseif (Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
+    return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
   }else{
     write-host "==> Not Found" -ForegroundColor Red
 

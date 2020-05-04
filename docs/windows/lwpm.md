@@ -58,7 +58,7 @@ $ lnmp-windows-pm.ps1 install example
 
 ## 优先级(开发者)
 
-`vendor/lwpm-dev` 优先级大于 `vendor/lwpm`
+`vendor/lwpm-dev` 大于 `vendor/lwpm` 大于 `默认自带包（windows/lnmp-windows-pm-repo）`
 
 ## 注册 Windows 服务
 

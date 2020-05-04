@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: demo-use-private-image
+spec:
+  containers:
+    - name: demo
+      image: ccr.ccs.tencentyun.com/pcit/nginx:latest
+  # 不建议使用
+  imagePullSecrets:
+    - name: private-registry-secret
+  # 建议使用：将 secret 加入到 SA
+  serviceAccountName: 'default'

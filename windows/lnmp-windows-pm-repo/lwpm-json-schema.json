@@ -16,11 +16,13 @@
     },
     "version": {
       "type": "string",
-      "description": "soft version"
+      "description": "soft version",
+      "default": "x.y.z"
     },
     "pre-version": {
       "type": "string",
-      "description": "soft pre version"
+      "description": "soft pre version",
+      "default": "x.y.z-alpha.1"
     },
     "url": {
       "description": "soft download url",
@@ -48,11 +50,20 @@
     },
     "github": {
       "description": "soft github, example: user/repo",
-      "type": "string"
+      "type": "string",
+      "default": "username/repo"
     },
     "releases": {
       "description": "soft releases pages",
       "type": "string"
+    },
+    "architecture": {
+      "description": "architecture",
+      "default": "amd64"
+    },
+    "os": {
+      "description": "os",
+      "default": "windows"
     },
     "scripts": {
       "type": "object",
@@ -61,12 +72,23 @@
           "type": [
             "string",
             "array"
+          ],
+          "default": [
+            "# _cleanup \"$unzipDesc\""
           ]
         },
         "install": {
           "type": [
             "string",
             "array"
+          ],
+          "default": [
+            "# Write-Host \"`nPlease download on this website: ${releases}`n\" -ForegroundColor Green",
+            "# _unzip $filename $unzipDesc",
+            "# Copy-item -r -force \"$unzipDesc/\" \"\"",
+            "# cp $env:LWPM_PKG_ROOT\\dist\\file \\dest\\path",
+            "# Start-Process -FilePath $filename -wait",
+            "# _cleanup \"$unzipDesc\""
           ]
         },
         "postinstall": {
@@ -85,7 +107,8 @@
           "type": [
             "string",
             "array"
-          ]
+          ],
+          "default": "# _cleanup /soft/path"
         },
         "postuninstall": {
           "type": [
@@ -132,7 +155,10 @@
       "description": "insert path",
       "items": {
         "type": "string"
-      }
+      },
+      "default": [
+        "C:\\bin"
+      ]
     },
     "command": {
       "type": "string",

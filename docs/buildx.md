@@ -10,6 +10,8 @@
 
 ```bash
 $ docker buildx create --use --name=mybuilder --driver docker-container --driver-opt image=dockerpracticesig/buildkit:master
+
+$ docker buildx create --use --name=mybuilder-k8s --driver kubernetes --driver-opt image=dockerpracticesig/buildkit:master
 ```
 
 ### 其他环境使用如下命令
