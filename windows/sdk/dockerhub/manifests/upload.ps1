@@ -4,5 +4,7 @@ Function upload($token, $image, $ref, $manifest_json_path, $contentType = "appli
     -H "Authorization: Bearer $token" `
     -X PUT `
     --data-binary "@$manifest_json_path" `
-    "https://$registry/v2/$image/manifests/$ref" `
+    "https://$registry/v2/$image/manifests/$ref"
+
+  write-host "==> manifest push success" -ForegroundColor Green
 }

@@ -4,7 +4,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
   if(!$header){
     $header=$header_default
 
-    Write-Warning "Get manifest list ..."
+    Write-host "==> Get manifest list ..." -ForegroundColor Green
   }
 
   . $PSScriptRoot/../cache/cache.ps1
@@ -32,7 +32,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
       #   return
       # }
 
-      Write-Warning "Get manifest list error [ $($result.StatusCode) ], try get manifest ..."
+      Write-host "==> Get manifest list error [ $($result.StatusCode) ], try get manifest ..." -ForegroundColor Green
 
       return ConvertFrom-Json -InputObject @"
 {
@@ -41,7 +41,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
 "@
     }
 
-    Write-Warning "Get manifest error [ $($result.StatusCode) ], exit"
+    Write-Host "==> Get manifest error [ $($result.StatusCode) ], exit" -ForegroundColor Red
 
     return $false
   }

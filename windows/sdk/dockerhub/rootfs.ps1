@@ -37,38 +37,14 @@ function rootfs($image="alpine",
   }
 
   $FormatEnumerationLimit=-1
-  write-host "==> Get token ..."
+  write-host "==> Get token ..." -ForegroundColor Green
 
-  try{
-    $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/x/y/manifests/latest `
-      -Method Head -MaximumRedirection 0 -UserAgent "Docker-Client/19.03.5 (Windows)" `
-      ).Headers['WWW-Authenticate']
-  }catch{
-    $headers = $_.Exception.Response.Headers
-    # write-host $headers
-    if($headers.contains('WWW-Authenticate')){
-      # write-host (($headers.toString())[0])
-      $WWW_Authenticate = $headers['WWW-Authenticate']
+  . $PSScriptRoot\auth\token.ps1
 
-      if(!$WWW_Authenticate){
-        $headers = $headers.toString().replace(': ','=')
+  $tokenServerByParser,$tokenServiceByParser = getTokenServerAndService $registry
 
-        $WWW_Authenticate = (ConvertFrom-StringData $headers)['WWW-Authenticate']
-      }
-    }
-  }
-
-if($WWW_Authenticate){
-  $result = $WWW_Authenticate.split(',').split('=')
-
-  if($result[0] -eq 'Bearer realm'){
-    $tokenServer=$result[1].replace('"','')
-  }
-
-  if($result[2] -eq 'service'){
-    $tokenService=$result[3].replace('"','')
-  }
-}
+  if($tokenServerByParser){$tokenServer=$tokenServerByParser}
+  if($tokenServiceByParser){$tokenService=$tokenServiceByParser}
 
   if(!($image | select-string '/')){
     $image = "library/$image"
@@ -90,7 +66,7 @@ if($WWW_Authenticate){
 }
 "@ | out-host
 
-write-host "==> Wait 3s, continue ..."
+write-host "==> Wait 3s, continue ..." -ForegroundColor Green
 
 sleep 3
 
@@ -101,15 +77,15 @@ $token=getToken $image pull $tokenServer $tokenService
 # write-host $token
 
 if(!$token){
-  Write-Warning "Get token error
+  Write-Host "==> Get token error
 
 Please check DOCKER_USERNAME DOCKER_PASSWORD env value
-"
+" -ForegroundColor Red
 
   return
 }
 
-Write-Warning "$image tags list"
+Write-Host "==> $image tags list" -ForegroundColor Green
 
 . $PSScriptRoot/tags/list.ps1
 
@@ -122,7 +98,7 @@ $result = list $token $image $ref $null $registry
 if($result.schemaVersion -eq 1){
   # write-host $result
 
-  Write-Warning "manifest list not found"
+  Write-Host "==> manifest list not found" -ForegroundColor Red
 
   $result = list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
 
@@ -132,27 +108,27 @@ if($result.schemaVersion -eq 1){
 
   $digest = $result.layers[$layersIndex].digest
 
-  Write-Warning "Digest is $digest"
+  Write-Host "==> Digest is $digest" -ForegroundColor Green
 
   if(!$digest){
-    Write-Warning "image not found, exit"
+    Write-Host "==> image not found, exit" -ForegroundColor Red
 
-    return 1
+    return $false
   }
 
   . $PSScriptRoot/blobs/get.ps1
 
   $dest = get $token $image $digest $registry $dest
 
-  Write-Warning "Download success to $dest"
+  Write-Host "==> Download success to $dest" -ForegroundColor Green
 
   return $dest
 }elseif($result.schemaVersion -eq 2){
-  Write-Warning "manifest list is found"
+  Write-host "==> manifest list is found" -ForegroundColor Green
 }else{
-  Write-Warning "Get manifest error, exit"
+  Write-host "==> Get manifest error, exit" -ForegroundColor Red
 
-  return 1
+  return $false
 }
 
 $manifests=$result.manifests
@@ -170,19 +146,19 @@ foreach($manifest in $manifests){
 
     $digest = $layers[$layersIndex].digest
 
-    Write-Warning "Digest is $digest"
+    Write-Host "==> Digest is $digest" -ForegroundColor Green
 
     . $PSScriptRoot/blobs/get.ps1
 
     $dest = get $token $image $digest $registry $dest
 
-    Write-Warning "Download success to $dest"
+    Write-Host "==> Download success to $dest" -ForegroundColor Green
 
     return $dest
   }
   }
 
-  Write-Warning "Can't find ${image}:$ref $os $arch image"
+  Write-Host "==> Can't find ${image}:$ref $os $arch image" -ForegroundColor Red
 }
 
 # rootfs khs1994/hello-world latest '' '' '' 0 `

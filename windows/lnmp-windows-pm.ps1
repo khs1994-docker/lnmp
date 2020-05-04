@@ -26,7 +26,8 @@ bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
 add         Add package
-init        Init a new package(developer) [--custom]
+init        Init a new package (developer) [--custom]
+push        Push a package to docker registry (developer)
 
 SERVICES [Require RunAsAdministrator]:
 
@@ -119,11 +120,11 @@ Function pkg_root($soft){
   if(Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
     return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
-    write-host "==> Found in vendor/lwpm-dev"
+    write-host "==> Found in vendor/lwpm-dev" -ForegroundColor Green
 
     return "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
   }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm\$soft"){
-    write-host "==> Found in vendor/lwpm"
+    write-host "==> Found in vendor/lwpm" -ForegroundColor Green
 
     return "${PSScriptRoot}\..\vendor\lwpm\$soft"
   }else{
@@ -212,15 +213,34 @@ Function _outdated($softs=$null){
   Write-Host "==> check $softs update ..." -ForegroundColor Green
 }
 
-Function _add($softs){
-  Write-Host "==> Add $softs ..." -ForegroundColor Green
-  if (!(Test-Path "${PSScriptRoot}/../lwpm.lock.json")){
+Function getDockerRegistryToken($image,$action="push,pull"){
+  . $PSScriptRoot\sdk\dockerhub\auth\auth.ps1
 
+  if($env:LWPM_DOCKER_REGISTRY){
+    . $PSScriptRoot\sdk\dockerhub\auth\token.ps1
+
+    $tokenServer,$tokenService = getTokenServerAndService $env:LWPM_DOCKER_REGISTRY
+
+    return getToken $image $action $tokenServer $tokenService
   }
 
+  return getToken $image $action
+}
+
+Function _add($softs){
+  $env:REGISTRY_MIRROR=$env:LWPM_DOCKER_REGISTRY
   . $PSScriptRoot\sdk\dockerhub\rootfs.ps1
 
   Foreach($soft in $softs){
+    Write-Host "==> Add [ $soft ] ..." -ForegroundColor Green
+    if (!(Test-Path "${PSScriptRoot}/../lwpm.lock.json")){
+
+    }
+
+    if(!($soft.Contains('/'))){
+      $soft = "lwpm/$soft"
+    }
+
     $soft,$ref = $soft.split('@')
 
     if(!($ref)){$ref = 'latest'}
@@ -364,6 +384,98 @@ function __bug($soft){
   start-process $lwpm.bug
 }
 
+function _push($opt){
+  $ErrorActionPreference="Stop"
+
+  if(!($opt.Contains('/'))){
+    write-host "==> package name [ $opt ] not include '/', package name use 'lwpm/$opt'" -ForegroundColor Yellow
+    $opt = "lwpm/$opt"
+  }
+
+  try {
+    $pkg_root = pkg_root $opt.split('/')[-1]
+  }
+  catch {
+    return
+  }
+
+  if(!$env:LWPM_DOCKER_USERNAME -or !$env:LWPM_DOCKER_PASSWORD){
+    write-host ==> please set `$env:LWPM_DOCKER_USERNAME and `$env:LWPM_DOCKER_PASSWORD -ForegroundColor Red
+
+    exit 1
+  }
+
+  if($env:LWPM_DOCKER_REGISTRY){
+    $registry=$env:LWPM_DOCKER_REGISTRY
+
+    write-host "==> push to [ $registry ]" -ForegroundColor Green
+  }
+
+  $env:DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME
+  $env:DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD
+
+  Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
+
+  $soft = $opt.split('/')[-1]
+
+  $lwpm_temp="$PSScriptRoot\..\vendor\lwpm-temp\$soft"
+  $lwpm_dist_temp="$PSScriptRoot\..\vendor\lwpm-temp\dist\$soft"
+
+  try{rm -r -force $lwpm_temp}catch{}
+  try{rm -r -force $lwpm_dist_temp}catch{}
+
+  mkdir -force $lwpm_temp | out-null
+  mkdir -force $lwpm_dist_temp | out-null
+
+  cp $pkg_root\lwpm.json $lwpm_temp
+  cp $pkg_root\README.md $lwpm_temp
+  if(Test-Path $pkg_root\$soft.psm1){
+    cp $pkg_root\${soft}.psm1 $lwpm_temp
+  }
+
+  $tar_file="$lwpm_dist_temp\lwpm.tar.gz"
+  cd $lwpm_temp\..\
+  tar -zcvf lwpm.tar.gz $soft
+  mv lwpm.tar.gz $tar_file
+
+  $token = getDockerRegistryToken $opt
+
+  $config_file="$lwpm_temp/lwpm.json"
+
+  . $PSScriptRoot\sdk\dockerhub\blobs\upload.ps1
+
+  try{
+    $length,$sha256 = upload $token $opt $tar_file -registry $registry
+    $config_length,$config_sha256 = upload $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry
+  }catch{
+    write-host $_.Exception
+    return;
+  }
+
+  $data = ConvertTo-Json @{
+    "schemaVersion"=2;
+    "mediaType"="application/vnd.docker.distribution.manifest.v2+json";
+    "config"=@{
+      "mediaType"="application/vnd.docker.container.image.v1+json";
+      "size"=$config_length;
+      "digest"="sha256:$config_sha256";
+  };
+    "layers"       = @(@{
+        "mediaType"="application/vnd.docker.image.rootfs.diff.tar.gzip";
+        "size"=$length;
+        "digest"="sha256:$sha256";
+  })}
+
+  $manifest_json_path = "$lwpm_dist_temp/manifest.json"
+  write-output $data > $manifest_json_path
+
+  . $PSScriptRoot\sdk\dockerhub\manifests\upload.ps1
+
+  $version = "latest"
+
+  upload $token $opt $version $manifest_json_path -registry $registry
+}
+
 if($args[0] -eq 'install'){
   $_, $softs = $args
   __install $softs
@@ -483,82 +595,15 @@ switch ($command)
   }
 
   "push" {
-    $ErrorActionPreference="Stop"
+    if(!($opt)){
+      write-host "==> please input package name" -ForegroundColor Red
 
-    try {
-      $pkg_root = pkg_root $opt.split('/')[-1]
-    }
-    catch {
       _exit
     }
 
-    if(!$env:LWPM_DOCKER_USERNAME -or !$env:LWPM_DOCKER_PASSWORD){
-      write-host ==> please set `$env:LWPM_DOCKER_USERNAME or `$env:LWPM_DOCKER_PASSWORD -ForegroundColor Red
-
-      exit 1
+    foreach ($item in $opt) {
+      _push $item
     }
-
-    $env:DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME
-    $env:DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD
-
-    Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
-
-    $soft = $opt.split('/')[-1]
-
-    $lwpm_temp="$PSScriptRoot\..\vendor\lwpm-temp\$soft"
-    $lwpm_dist_temp="$PSScriptRoot\..\vendor\lwpm-temp\dist\$soft"
-
-    try{
-    rm -r -force $lwpm_temp
-    rm -r -force $lwpm_dist_temp
-    }catch{}
-    mkdir -force $lwpm_temp | out-null
-    mkdir -force $lwpm_dist_temp | out-null
-
-    cp $pkg_root\lwpm.json $lwpm_temp
-    cp $pkg_root\README.md $lwpm_temp
-    if(Test-Path $pkg_root\$soft.psm1){
-      cp $pkg_root\${soft}.psm1 $lwpm_temp
-    }
-
-    $tar_file="$lwpm_dist_temp\lwpm.tar.gz"
-    cd $lwpm_temp\..\
-    tar -zcvf lwpm.tar.gz $soft
-    mv lwpm.tar.gz $tar_file
-
-    . $PSScriptRoot\sdk\dockerhub\auth\auth.ps1
-
-    $token=getToken $opt "push,pull"
-    $config_file="$lwpm_temp/lwpm.json"
-
-    . $PSScriptRoot\sdk\dockerhub\blobs\upload.ps1
-
-    $length, $sha256 = upload $token $opt $tar_file
-
-    $config_length, $config_sha256 = upload $token $opt $config_file "application/vnd.docker.container.image.v1+json"
-
-    $data = ConvertTo-Json @{
-      "schemaVersion"=2;
-      "mediaType"="application/vnd.docker.distribution.manifest.v2+json";
-      "config"=@{
-        "mediaType"="application/vnd.docker.container.image.v1+json";
-        "size"=$config_length;
-        "digest"="sha256:$config_sha256";
-    };
-      "layers"       = @(@{
-          "mediaType"="application/vnd.docker.image.rootfs.diff.tar.gzip";
-          "size"=$length;
-          "digest"="sha256:$sha256";
-    })}
-
-    $manifest_json_path = "$lwpm_dist_temp/manifest.json"
-    write-output $data > $manifest_json_path
-
-    . $PSScriptRoot\sdk\dockerhub\manifests\upload.ps1
-
-    $version = "latest"
-
-    upload $token $opt $version $manifest_json_path
   }
 
   Default {

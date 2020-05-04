@@ -26,16 +26,30 @@ $ lnmp-windows-pm.ps1 init example
 
 编辑 `~/lnmp/vendor/lwpm-dev/example` 文件夹中的文件。
 
-编辑好之后推送到 GitHub，并发布到 composer。
+编辑好之后推送到 docker hub 或者其他私有 docker registry(通过 `$env:LWPM_DOCKER_REGISTRY="docker-registry.domain.com"` 设置)
+
+```bash
+# $ $env:LWPM_DOCKER_REGISTRY="docker-registry.domain.com"
+
+$ $env:LWPM_DOCKER_USERNAME="your_username"
+$ $env:LWPM_DOCKER_PASSWORD="your_password"
+
+$ lnmp-windows-pm.ps1 push docker_registry_username/example
+```
 
 * 示例: https://github.com/khs1994-docker/lwpm-openjdk
 
 ## 添加一个包，并安装软件
 
-在 https://packagist.org/packages/lwpm/ 寻找一个包，并使用以下命令添加包并安装该包所提供的软件：
+在 https://hub.docker.com/u/lwpm 寻找一个包，并使用以下命令添加包并安装该包所提供的软件：
 
 ```bash
 $ cd ~/lnmp
+
+# $ $env:LWPM_DOCKER_REGISTRY="docker-registry.domain.com"
+
+# $ $env:LWPM_DOCKER_USERNAME="your_username"
+# $ $env:LWPM_DOCKER_PASSWORD="your_password"
 
 $ lnmp-windows-pm.ps1 add example
 

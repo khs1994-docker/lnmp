@@ -8,13 +8,21 @@ function getToken($image,
 
   $token_file=getCachePath ".token@$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
 
-  Write-Host "==> Token File is $token_file"
+  if (Test-Path $token_file) {
+    $file_timestrap = (((ls $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
+    $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
+    if (($now_timestrap - $file_timestrap) -lt 249) {
+      write-host "==> token file cache find, not expire, use it" -ForegroundColor Green
 
-  if($cache -and (Test-Path $token_file)){
-    $token = Get-Content $token_file -raw -Encoding utf8
-
-    return $token
+      return (Get-Content $token_file -raw -Encoding utf8).trim()
+    }else{
+      write-host "==> token file cache find, but expire" -ForegroundColor Green
+    }
+  }else{
+    write-host "==> token file cache not find" -ForegroundColor Green
   }
+
+  Write-Host "==> Token File is $token_file" -ForegroundColor Green
 
 if(!$env:DOCKER_USERNAME){
   Write-Warning "ENV var DOCKER_USERNAME not set"
@@ -49,7 +57,7 @@ try{
     -UserAgent "Docker-Client/19.03.5 (Windows)"
   }
 }catch{
-  write-host $_.Exception.ToString()
+  write-host $_.Exception.ToString() -ForegroundColor Red
 
   return $null
 }

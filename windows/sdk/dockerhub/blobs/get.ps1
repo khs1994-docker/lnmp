@@ -14,7 +14,7 @@ function get($token,$image,$digest,$registry="registry.hub.docker.com",$dist){
   $distTemp = getCachePath "${registry}@$($image.replace('/','@'))@$($digest.split(':')[1]).tar.gz"
 
   if(Test-Path $distTemp){
-    Write-Warning "File already exists, skip download"
+    Write-Host "==> File already exists, skip download" -ForegroundColor Green
 
     return getDist $dist $distTemp
   }
@@ -50,7 +50,7 @@ function get($token,$image,$digest,$registry="registry.hub.docker.com",$dist){
 
   $size = (($result.RawContentLength)/1024/1024)
 
-  Write-Warning "Download size is $('{0:n2}' -f $size) M"
+  Write-Host "Download size is $('{0:n2}' -f $size) M" -ForegroundColor Green
 
   return getDist $dist $distTemp
 }
