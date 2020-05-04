@@ -6,5 +6,31 @@
   "homepage": "https://getcomposer.org/",
   "bug": "https://github.com/composer/composer/issues",
   "github": "composer/composer",
-  "releases": "https://getcomposer.org/download/"
+  "releases": "https://getcomposer.org/download/",
+  "url": "https://github.com/composer/composer/releases/download/${VERSION}/composer.phar",
+  "command": "composer",
+  "download-filename": "composer-${VERSION}.phar",
+  "scripts": {
+    "version": "(composer --version).split(' ')[2]",
+    "install": [
+      "_mkdir \"$env:ProgramData\\ComposerSetup\\bin\\\"",
+      "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer\"      \"$env:ProgramData\\ComposerSetup\\bin\\\"",
+      "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer.ps1\"  \"$env:ProgramData\\ComposerSetup\\bin\\\"",
+      "Copy-item -r -force $filename                                   \"$env:ProgramData\\ComposerSetup\\bin\\composer.phar\""
+    ],
+    "test": [
+      "composer --version"
+    ],
+    "uninstall": [
+      "_sudo \"remove-item -r -force $env:ProgramData\\ComposerSetup\""
+    ],
+    "pruneuninstall": [
+      "_cleanup \"$HOME\\AppData\\Roaming\\Composer\"",
+      "_cleanup \"$HOME\\AppData\\Local\\Composer\""
+    ]
+  },
+  "path": [
+    "$env:ProgramData\\ComposerSetup\\bin\\",
+    "$HOME\\AppData\\Roaming\\Composer\\vendor\\bin"
+  ]
 }

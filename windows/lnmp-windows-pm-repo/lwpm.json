@@ -21,6 +21,7 @@
       "# Write-Host \"`nPlease download on this website: ${releases}`n\" -ForegroundColor Green",
       "# _unzip $filename $unzipDesc",
       "# Copy-item -r -force \"$unzipDesc/\" \"\"",
+      "# cp $env:LWPM_PKG_ROOT\\dist\\file \\dest\\path",
       "# Start-Process -FilePath $filename -wait",
       "# _cleanup \"$unzipDesc\""
     ],

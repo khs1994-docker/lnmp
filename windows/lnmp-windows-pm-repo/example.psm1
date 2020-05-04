@@ -102,7 +102,6 @@ Function install($VERSION = 0, $isPre = 0) {
   # " -ForegroundColor Green
   #  exit
 
-  # fix me
   $filename = $url.split('/')[-1]
   if ($lwpm.'download-filename') {
     $filename = ($lwpm.'download-filename').replace('${VERSION}', ${VERSION})
@@ -144,9 +143,9 @@ Function install($VERSION = 0, $isPre = 0) {
       $VERSION
   }
 
-  # 验证原始 zip 文件 Fix me
+  # 验证原始 zip 文件
 
-  # 解压 zip 文件 Fix me
+  # 解压 zip 文件
   # _cleanup "$unzipDesc"
   # _unzip $filename $unzipDesc
 
@@ -156,7 +155,7 @@ Function install($VERSION = 0, $isPre = 0) {
     }
   }
 
-  # 安装 Fix me
+  # install
   # Copy-item -r -force "$unzipDesc/" ""
   if ($lwpm.scripts.install) {
     foreach ($item in $lwpm.scripts.install.replace('${VERSION}', ${VERSION})) {
@@ -172,7 +171,7 @@ Function install($VERSION = 0, $isPre = 0) {
   install_after
 
   Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
-  # 验证 Fix me
+  # test
   if ($lwpm.scripts.pretest) {
     foreach ($item in $lwpm.scripts.pretest.replace('${VERSION}', ${VERSION})) {
       _iex $item

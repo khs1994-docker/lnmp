@@ -153,6 +153,8 @@ Function _remove_module($soft){
 Function _import_module($soft){
   $soft_ps_module_dir = pkg_root $soft
 
+  $env:LWPM_PKG_ROOT = $soft_ps_module_dir
+
   if(!(Test-Path $soft_ps_module_dir/$soft.psm1)){
     $env:LWPM_MANIFEST_PATH="$soft_ps_module_dir/lwpm.json"
     $soft_ps_module_dir = "$PSScriptRoot\lnmp-windows-pm-repo\example.psm1"
@@ -405,6 +407,8 @@ function _push($opt){
     exit 1
   }
 
+  $registry="registry.hub.docker.com"
+
   if($env:LWPM_DOCKER_REGISTRY){
     $registry=$env:LWPM_DOCKER_REGISTRY
 
@@ -428,7 +432,8 @@ function _push($opt){
   mkdir -force $lwpm_dist_temp | out-null
 
   cp $pkg_root\lwpm.json $lwpm_temp
-  cp $pkg_root\README.md $lwpm_temp
+  try{cp $pkg_root\README.md $lwpm_temp}catch{}
+  try{cp -r $pkg_root\dist   $lwpm_temp}catch{}
   if(Test-Path $pkg_root\$soft.psm1){
     cp $pkg_root\${soft}.psm1 $lwpm_temp
   }
