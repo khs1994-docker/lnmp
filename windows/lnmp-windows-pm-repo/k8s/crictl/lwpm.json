@@ -1,0 +1,2 @@
+{"version": "1.18.0", "url": "https://github.com/kubernetes-sigs/cri-tools/releases/download/v${VERSION}/crictl-v${VERSION}-linux-amd64.tar.gz", "name": "crictl", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$file\n"}}
+

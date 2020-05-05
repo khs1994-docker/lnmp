@@ -4,6 +4,10 @@
     "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json": [
       ".pcit.yml",
       ".pcit.yaml"
+    ],
+    "windows/lnmp-windows-pm-repo/lwpm-json-schema.json": [
+      "lwpm.yaml",
+      "lwpm.yml"
     ]
   },
   "json.schemas": [

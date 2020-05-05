@@ -1,0 +1,2 @@
+{"version": "nightly", "url": "https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz", "name": "runsc", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"}}
+

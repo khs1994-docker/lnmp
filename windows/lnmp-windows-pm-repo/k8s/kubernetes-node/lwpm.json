@@ -1,0 +1,2 @@
+{"version": "1.18.0", "url": "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-node-linux-amd64.tar.gz", "name": "kubernetes-node", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"}}
+

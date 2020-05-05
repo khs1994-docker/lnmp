@@ -1,0 +1,2 @@
+{"version": "1.3.4", "url": "https://github.com/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}.linux-amd64.tar.gz", "name": "containerd", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"}}
+

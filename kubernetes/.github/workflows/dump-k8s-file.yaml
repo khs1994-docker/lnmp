@@ -1,0 +1,81 @@
+name: dump-k8s-file
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  dump-k8s-file:
+    name: dump-k8s-file
+    runs-on: ubuntu-latest
+    env:
+      LWPM_DOCKER_USERNAME: khs1994
+      LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      LWPM_DIST_ONLY: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: khs1994-docker/lnmp
+          fetch-depth: 1
+          ref: 19.03
+          path: lnmp
+      - name: handle-conmon
+        shell: pwsh
+        env:
+          VERSION: 2.0.15
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install conmon@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${VERSION}
+      - name: handle-containerd
+        shell: pwsh
+        env:
+          VERSION: 1.3.4
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install containerd@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    containerd@${VERSION}
+      - name: handle-crictl
+        shell: pwsh
+        env:
+          VERSION: 1.18.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install crictl@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    crictl@${VERSION}
+      - name: handle-etcd
+        if: endsWith('a', 'b')
+        shell: pwsh
+        env:
+          VERSION: 3.4.7
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install etcd@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    etcd@${VERSION}
+      - name: handle-helm
+        if: endsWith('a', 'b')
+        shell: pwsh
+        env:
+          VERSION: 3.2.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install helm@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    helm@${VERSION}
+      - name: handle-kubectl
+        if: endsWith('a', 'b')
+        shell: pwsh
+        env:
+          VERSION: 1.18.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubectl@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubectl@${VERSION}
+      - name: handle-runc
+        shell: pwsh
+        env:
+          VERSION: 1.0.0-rc10
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install runc@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    runc@${VERSION}
+      - name: handle-runsc
+        shell: pwsh
+        env:
+          VERSION: nightly
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install runsc@${VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    runsc@${VERSION}

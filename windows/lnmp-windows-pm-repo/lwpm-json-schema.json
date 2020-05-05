@@ -146,6 +146,14 @@
             "array"
           ],
           "description": "how to get version string"
+        },
+        "download": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "download",
+          "default": "# mkdir -force $env:LWPM_PKG_ROOT/dist | out-null"
         }
       },
       "additionalProperties": false
@@ -169,5 +177,8 @@
       "description": "download filename"
     }
   },
+  "required": [
+    "version"
+  ],
   "additionalProperties": false
 }

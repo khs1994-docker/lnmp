@@ -548,7 +548,7 @@ fi
 httpCode=`curl -sI ${1}/v${ETCD_VERSION}/${TAR_FILE} | head -1 | awk '{print $2}'`
 
 if [ $httpCode != 200 ];then
-  echo 'cn mirror http response code is not 200'
+  echo 'cn mirror http response code is not 200, not use'
   return 1;
 fi
 }
@@ -917,6 +917,17 @@ _cri_sysctl(){
 }
 
 _conmon_install(){
+  if [ -f /usr/local/bin/conmon ];then
+    return
+  fi
+
+  if [ $OS = "linux" -a $ARCH = "amd64"];then
+    $(_sudo) $(_curl) -o /usr/local/bin/conmon \
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
+
+    return
+  fi
+
   cd /tmp
 
   if [ -d conmon/.git ];then

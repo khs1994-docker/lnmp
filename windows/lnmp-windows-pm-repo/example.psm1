@@ -135,12 +135,18 @@ Function install($VERSION = 0, $isPre = 0) {
 
   # 下载原始 zip 文件，若存在则不再进行下载
 
-  if ($url) {
+  if ($url -and ($env:LWPM_DIST_ONLY -ne 'true')) {
     _downloader `
       $url `
       $filename `
       $name `
       $VERSION
+  }
+
+  if($lwpm.scripts.download){
+    foreach ($item in $lwpm.scripts.download.replace('${VERSION}', ${VERSION})) {
+      _iex $item
+    }
   }
 
   # 验证原始 zip 文件

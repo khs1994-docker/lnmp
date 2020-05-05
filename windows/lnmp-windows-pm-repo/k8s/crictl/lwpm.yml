@@ -1,0 +1,10 @@
+name: crictl
+version: 1.18.0
+url: "https://github.com/kubernetes-sigs/cri-tools/releases/download/v${VERSION}/crictl-v${VERSION}-linux-amd64.tar.gz"
+scripts:
+  download: |
+    mkdir -force $env:LWPM_PKG_ROOT/dist | out-null
+
+    curl.exe -L `
+      $url `
+      -o $env:LWPM_PKG_ROOT/dist/$file

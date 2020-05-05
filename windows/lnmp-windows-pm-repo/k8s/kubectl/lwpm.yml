@@ -1,0 +1,10 @@
+name: kubectl
+version: 1.18.0
+url: "https://mirror.azure.cn/kubernetes/kubectl/v${VERSION}/bin/linux/amd64/kubectl"
+scripts:
+  download: |
+    mkdir -force $env:LWPM_PKG_ROOT/dist | out-null
+
+    curl.exe -L `
+      $url `
+      -o $env:LWPM_PKG_ROOT/dist/$file

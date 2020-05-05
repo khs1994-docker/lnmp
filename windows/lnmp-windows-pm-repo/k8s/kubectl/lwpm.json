@@ -1,0 +1,2 @@
+{"version": "1.18.0", "url": "https://mirror.azure.cn/kubernetes/kubectl/v${VERSION}/bin/linux/amd64/kubectl", "name": "kubectl", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$file\n"}}
+

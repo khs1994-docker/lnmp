@@ -1,0 +1,10 @@
+name: kubernetes-node
+version: 1.18.0
+url: "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-node-linux-amd64.tar.gz"
+scripts:
+  download: |
+    mkdir -force $env:LWPM_PKG_ROOT/dist | out-null
+
+    curl.exe -L `
+      $url `
+      -o $env:LWPM_PKG_ROOT/dist/$filename

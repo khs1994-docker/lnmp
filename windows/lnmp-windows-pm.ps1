@@ -28,6 +28,7 @@ help        Print help info
 add         Add package
 init        Init a new package (developer) [--custom]
 push        Push a package to docker registry (developer)
+toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
 
 SERVICES [Require RunAsAdministrator]:
 
@@ -127,8 +128,10 @@ Function pkg_root($soft){
     return "${PSScriptRoot}\..\vendor\lwpm\$soft"
   }elseif (Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
     return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
+  }elseif (Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\k8s\$soft"){
+    return "${PSScriptRoot}\lnmp-windows-pm-repo\k8s\$soft"
   }else{
-    write-host "==> Not Found" -ForegroundColor Red
+    write-host "==> [ $soft ] Not Found" -ForegroundColor Red
 
     throw "404"
   }
@@ -389,6 +392,8 @@ function __bug($soft){
 function _push($opt){
   $ErrorActionPreference="Stop"
 
+  $opt,$version = $opt.split('@')
+
   if(!($opt.Contains('/'))){
     write-host "==> package name [ $opt ] not include '/', package name use 'lwpm/$opt'" -ForegroundColor Yellow
     $opt = "lwpm/$opt"
@@ -431,7 +436,9 @@ function _push($opt){
   mkdir -force $lwpm_temp | out-null
   mkdir -force $lwpm_dist_temp | out-null
 
-  cp $pkg_root\lwpm.json $lwpm_temp
+  ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
+  ConvertTo-Json -Compress > $lwpm_temp\lwpm.json
+
   try{cp $pkg_root\README.md $lwpm_temp}catch{}
   try{cp -r $pkg_root\dist   $lwpm_temp}catch{}
   if(Test-Path $pkg_root\$soft.psm1){
@@ -476,9 +483,36 @@ function _push($opt){
 
   . $PSScriptRoot\sdk\dockerhub\manifests\upload.ps1
 
-  $version = "latest"
+  if(!($version)){
+    $version = "latest"
+  }
 
   upload $token $opt $version $manifest_json_path -registry $registry
+}
+
+function _toJson($soft){
+  get-command ConvertFrom-Yaml | out-null
+
+  try{ $pkg_root = pkg_root $soft }catch{ return }
+
+    if(Test-Path $pkg_root/lwpm.yml){
+      $yaml_file="lwpm.yml"
+    }
+
+    if(Test-Path $pkg_root/lwpm.yaml){
+      $yaml_file="lwpm.yaml"
+    }
+
+    if(!$yaml_file){
+       Write-Host "==> lwpm.yml or lwpm.yaml file not found" -ForegroundColor Red
+
+       return
+    }
+
+    ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) | `
+    ConvertTo-Yaml -JsonCompatible > $pkg_root/lwpm.json
+
+    Write-Host "==> [ $soft ] success, please see $pkg_root\lwpm.json" -ForegroundColor Green
 }
 
 if($args[0] -eq 'install'){
@@ -608,6 +642,12 @@ switch ($command)
 
     foreach ($item in $opt) {
       _push $item
+    }
+  }
+
+  "toJson" {
+    foreach ($item in $opt) {
+      _toJson $item
     }
   }
 
