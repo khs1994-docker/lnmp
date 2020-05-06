@@ -27,11 +27,11 @@ $insert_path=$lwpm.path
 # @link https://www.microsoft.com/en-us/download/details.aspx?id=40784
 #
 
-Function install_after(){
+Function _install_after(){
 
 }
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
@@ -77,14 +77,14 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   # _exportPath "/path"
 
-  install_after
+  _install_after
 
   # "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   # example version
 }
 
-Function uninstall(){
+Function _uninstall(){
   # "Not Support"
   # _cleanup ""
 }

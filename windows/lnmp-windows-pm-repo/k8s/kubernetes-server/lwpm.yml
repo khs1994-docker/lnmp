@@ -5,7 +5,7 @@ scripts:
   download: |
     mkdir -force $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture} | out-null
 
-    curl.exe -L `
+    curl -L `
       $url `
       -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
 platform:

@@ -40,7 +40,7 @@ stop-service    Stop service
 "
 }
 
-$ErrorActionPreference="SilentlyContinue"
+$ErrorActionPreference="Continue"
 
 . "$PSScriptRoot/common.ps1"
 
@@ -55,10 +55,16 @@ if(!$Env:PSModulePathSystem){
   $Env:PSModulePathSystem=$Env:PSModulePath
 }
 
-$Env:PSModulePath="$Env:PSModulePathSystem" + ";" `
-                  + $PSScriptRoot + "\powershell_system" + ";"
+if ($IsWindows) {
+  $Env:PSModulePath = "$Env:PSModulePathSystem" + ";" `
+    + $PSScriptRoot + "/powershell_system" + ";"
 
-_exportPath "C:\bin"
+  _exportPath "C:\bin"
+}
+else {
+  $Env:PSModulePath = "$Env:PSModulePathSystem" + ":" `
+    + $PSScriptRoot + "/powershell_system" + ":"
+}
 
 Function _rename($src,$target){
   if (!(Test-Path $target)){
@@ -94,7 +100,7 @@ Function _installer($zip, $unzip_path, $unzip_folder_name = 'null', $soft_path =
 
 ################################################################################
 
-_mkdir C:\bin
+if($IsWindows){_mkdir C:\bin}
 
 _mkdir $home\Downloads\lnmp-docker-cache
 
@@ -118,18 +124,18 @@ if($args.length -eq 0 -or $args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[
 ################################################################################
 
 Function pkg_root($soft){
-  if (Test-Path "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"){
+  if (Test-Path "${PSScriptRoot}/../vendor/lwpm-dev/$soft"){
     write-host "==> Found in vendor/lwpm-dev" -ForegroundColor Green
 
-    return "${PSScriptRoot}\..\vendor\lwpm-dev\$soft"
-  }elseif (Test-Path "${PSScriptRoot}\..\vendor\lwpm\$soft"){
+    return "${PSScriptRoot}/../vendor/lwpm-dev/$soft"
+  }elseif (Test-Path "${PSScriptRoot}/../vendor/lwpm/$soft"){
     write-host "==> Found in vendor/lwpm" -ForegroundColor Green
 
-    return "${PSScriptRoot}\..\vendor\lwpm\$soft"
-  }elseif (Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"){
-    return "${PSScriptRoot}\lnmp-windows-pm-repo\$soft"
-  }elseif (Test-Path "${PSScriptRoot}\lnmp-windows-pm-repo\k8s\$soft"){
-    return "${PSScriptRoot}\lnmp-windows-pm-repo\k8s\$soft"
+    return "${PSScriptRoot}/../vendor/lwpm/$soft"
+  }elseif (Test-Path "${PSScriptRoot}/lnmp-windows-pm-repo/$soft"){
+    return "${PSScriptRoot}/lnmp-windows-pm-repo/$soft"
+  }elseif (Test-Path "${PSScriptRoot}/lnmp-windows-pm-repo/k8s/$soft"){
+    return "${PSScriptRoot}/lnmp-windows-pm-repo/k8s/$soft"
   }else{
     write-host "==> [ $soft ] Not Found" -ForegroundColor Red
 
@@ -199,9 +205,9 @@ Function __install($softs){
         $env:lwpm_os = $platform.os
 
         if($version){
-          install $version $preVersion
+          _install $version $preVersion
         }else{
-          install -isPre $preVersion
+          _install -isPre $preVersion
         }
       }
       $env:lwpm_architecture=$null
@@ -215,9 +221,9 @@ Function __install($softs){
     $env:lwpm_os="windows"
 
     if($version){
-      install $version $preVersion
+      _install $version $preVersion
     }else{
-      install -isPre $preVersion
+      _install -isPre $preVersion
     }
     _remove_module $soft
   }
@@ -233,7 +239,7 @@ Function __uninstall($softs){
         continue;
     }
 
-    uninstall
+    _uninstall
     _remove_module -Name $soft
   }
 }
@@ -284,8 +290,8 @@ Function _add($softs){
       continue
     }
 
-    $dist = "$PSScriptRoot\..\vendor\lwpm"
-    mkdir -Force $dist | out-null
+    $dist = "$PSScriptRoot/../vendor/lwpm"
+    _mkdir $dist | out-null
     tar -zxvf $dest -C $dist
   }
 }
@@ -340,14 +346,14 @@ function getVersionByProvider($soft){
     return;
   }
 
-  $ErrorActionPreference="SilentlyContinue"
-  if(!$(get-command getLatestVersion)){
+  $ErrorActionPreference="Continue"
+  if(!$(get-command _getLatestVersion)){
     _remove_module $soft
 
     return $null,$null
   }
 
-  $latestVersion,$latestPreVersion = getLatestVersion
+  $latestVersion,$latestPreVersion = _getLatestVersion
 
   _remove_module $soft
 
@@ -416,6 +422,10 @@ function __bug($soft){
   start-process $lwpm.bug
 }
 
+function _tolf($file){
+  (cat $file -raw) -replace "`r`n", "`n" | Set-Content -NoNewline $file
+}
+
 function _push($opt){
   $ErrorActionPreference="Continue"
 
@@ -476,17 +486,17 @@ function _push($opt){
 
     $soft = $opt.split('/')[-1]
 
-    $lwpm_temp = "$PSScriptRoot\..\vendor\lwpm-temp\${env:lwpm_os}-${env:lwpm_architecture}\$soft"
-    $lwpm_dist_temp = "$PSScriptRoot\..\vendor\lwpm-temp\dist\$soft\${env:lwpm_os}-${env:lwpm_architecture}"
+    $lwpm_temp = "$PSScriptRoot/../vendor/lwpm-temp/${env:lwpm_os}-${env:lwpm_architecture}/$soft"
+    $lwpm_dist_temp = "$PSScriptRoot/../vendor/lwpm-temp/dist/$soft/${env:lwpm_os}-${env:lwpm_architecture}"
 
     try { rm -r -force $lwpm_temp }catch { }
     try { rm -r -force $lwpm_dist_temp }catch { }
 
-    mkdir -force $lwpm_temp | out-null
-    mkdir -force $lwpm_dist_temp | out-null
+    _mkdir $lwpm_temp | out-null
+    _mkdir $lwpm_dist_temp | out-null
 
     ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
-      ConvertTo-Json -Compress > $lwpm_temp\lwpm.json
+      ConvertTo-Json -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
 
     try { cp $pkg_root\README.md $lwpm_temp }catch { }
     if(Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}){
@@ -499,7 +509,7 @@ function _push($opt){
       cp $pkg_root\${soft}.psm1 $lwpm_temp
     }
 
-    $tar_file = "$lwpm_dist_temp\lwpm.tar.gz"
+    $tar_file = "$lwpm_dist_temp/lwpm.tar.gz"
     cd $lwpm_temp\..\
     tar -zcvf lwpm.tar.gz $soft
     mv lwpm.tar.gz $tar_file
@@ -535,7 +545,7 @@ function _push($opt){
     } -Compress
 
     $manifest_json_path = "$lwpm_dist_temp/manifest.json"
-    write-output $data > $manifest_json_path
+    write-output $data | Set-Content -NoNewline $manifest_json_path
 
     . $PSScriptRoot\sdk\dockerhub\manifests\upload.ps1
 
@@ -567,7 +577,7 @@ function _push($opt){
   } -Compress -Depth 10
 
   $manifest_list_json_path = "$lwpm_dist_temp/manifest_list.json"
-  write-output $data > $manifest_list_json_path
+  write-output $data | Set-Content -NoNewline $manifest_list_json_path
 
   write-host $(cat $manifest_list_json_path -raw)
 
@@ -594,8 +604,11 @@ function _toJson($soft){
        return
     }
 
-    (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) | `
-    ConvertTo-Yaml -JsonCompatible) -Join "" | Set-Content -NoNewline $pkg_root\lwpm.json
+    ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) `
+    | ConvertTo-Yaml -JsonCompatible)) -Compress `
+    | Set-Content $pkg_root\lwpm.json
+
+    _tolf $pkg_root\lwpm.json
 
     Write-Host "==> [ $soft ] success, please see $pkg_root\lwpm.json" -ForegroundColor Green
 }
@@ -688,7 +701,7 @@ switch ($command)
   }
 
   "install-service" {
-    mkdir -Force C:/bin | out-null
+    _mkdir C:/bin | out-null
     $Global:BaseDir="C:\bin"
 
     CreateService -ServiceName $opt[0] -CommandLine $opt[1] `

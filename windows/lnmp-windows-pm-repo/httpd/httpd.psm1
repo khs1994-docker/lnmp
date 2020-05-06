@@ -22,7 +22,7 @@ $url_mirror=$lwpm.'url-mirror'
 $pre_url=$lwpm.'pre-url'
 $pre_url_mirror=$lwpm.'pre-url-mirror'
 
-Function after_install(){
+Function _after_install(){
   $a=Select-String 'IncludeOptional conf.d/' C:\Apache24\conf\httpd.conf
 
   if ($a.Length -eq 0){
@@ -37,7 +37,7 @@ LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
   }
 }
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
@@ -117,7 +117,7 @@ Function install($VERSION=0,$isPre=0){
 
   _cleanup $unzipDesc
 
-  after_install
+  _after_install
 
   _exportPath "C:\Apache24\bin"
 
@@ -126,7 +126,7 @@ Function install($VERSION=0,$isPre=0){
   httpd -v
 }
 
-Function uninstall(){
+Function _uninstall(){
   _sudo "httpd -k uninstall"
   _cleanup C:\Apache24
 }

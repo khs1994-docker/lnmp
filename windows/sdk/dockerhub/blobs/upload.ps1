@@ -1,6 +1,16 @@
+Function _sha256($file){
+  if($IsWindows){
+    return (certutil -hashfile $file SHA256).split()[4]
+  }
+
+  return (sha256sum $file | cut -d ' ' -f 1)
+}
+
 Function upload($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
-  $sha256 = (certutil -hashfile $file SHA256).split()[4]
+  $sha256 = _sha256 $file
   $length = (ls $file).Length
+
+  if(!($IsWindows)){ $env:TEMP="/tmp" }
 
   try{
   $result = Invoke-WebRequest `
@@ -32,14 +42,14 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
 
   $length = (ls $file).Length
 
-  $result = curl.exe -L `
+  $result = curl -L `
     -H "Content-Length: $length" `
     -H "Content-Type: $contentType" `
     -H "Authorization: Bearer $token" `
     -X PUT `
     -T $file `
     -A "Docker-Client/19.03.5 (Windows)" `
-    -D $env:TEMP\curl_resp_header.txt `
+    -D $env:TEMP/curl_resp_header.txt `
     "$uuid&digest=sha256:$sha256"
 
   if(!($result)){

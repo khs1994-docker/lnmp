@@ -23,7 +23,7 @@ $pre_url=$lwpm.'pre-url'
 $pre_url_mirror=$lwpm.'pre-url-mirror'
 $insert_path=$lwpm.path
 
-Function install_ext($PHP_PREFIX){
+Function _install_ext($PHP_PREFIX){
   $PHP_INI="${PHP_PREFIX}/php.ini"
   $PHP_BIN="${PHP_PREFIX}/php.exe"
 
@@ -95,15 +95,15 @@ Function install_ext($PHP_PREFIX){
   php -r "echo ini_get('curl.cainfo');"
 }
 
-Function install_after($VERSION,$PHP_PREFIX){
+Function _install_after($VERSION,$PHP_PREFIX){
   if (!(Test-Path $PHP_PREFIX\php.ini)){
     Copy-Item $PHP_PREFIX\php.ini-development $PHP_PREFIX\php.ini
   }
 
-  install_ext $PHP_PREFIX
+  _install_ext $PHP_PREFIX
 }
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
@@ -130,7 +130,7 @@ Function install($VERSION=0,$isPre=0){
     if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
 
-        install_after $VERSION $PHP_PREFIX
+        _install_after $VERSION $PHP_PREFIX
 
         return
     }
@@ -158,13 +158,13 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\php"
 
-  install_after ${VERSION} $PHP_PREFIX
+  _install_after ${VERSION} $PHP_PREFIX
 
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   & ${PHP_PREFIX}/php -v
 }
 
-Function uninstall(){
+Function _uninstall(){
   _cleanup "C:\php"
 }

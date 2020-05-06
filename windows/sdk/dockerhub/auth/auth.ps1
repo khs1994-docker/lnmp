@@ -6,7 +6,7 @@ function getToken($image,
 
   . $PSScriptRoot/../cache/cache.ps1
 
-  $token_file=getCachePath ".token@$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
+  $token_file=getCachePath "token@$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
 
   if (Test-Path $token_file) {
     $file_timestrap = (((ls $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)

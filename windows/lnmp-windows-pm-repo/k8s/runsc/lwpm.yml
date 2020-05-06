@@ -3,9 +3,9 @@ version: nightly
 url: "https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz"
 scripts:
   download: |
-    mkdir -force $env:LWPM_PKG_ROOT/dist | out-null
+    _mkdir $env:LWPM_PKG_ROOT/dist | out-null
 
-    curl.exe -L `
+    curl -L `
       $url `
       -o $env:LWPM_PKG_ROOT/dist/$filename
 platform:

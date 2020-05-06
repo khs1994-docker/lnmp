@@ -18,7 +18,7 @@ $pre_url=$lwpm.'pre-url'
 $pre_url_mirror=$lwpm.'pre-url-mirror'
 $insert_path=$lwpm.path
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
@@ -38,7 +38,7 @@ Function install($VERSION=0,$isPre=0){
       $download_url=$pre_url.replace('${VERSION}',${VERSION});
     }
   }else{
-    
+
   }
 
   if($download_url){
@@ -96,6 +96,6 @@ Function install($VERSION=0,$isPre=0){
   python --version
 }
 
-Function uninstall(){
+Function _uninstall(){
   "Not Support"
 }

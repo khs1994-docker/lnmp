@@ -3,7 +3,7 @@ Function _getHttpCode($url){
     return "404"
   }
 
-  $header=curl.exe -sI $url
+  $header=curl -sI $url
 
   if(!$header){
     return "404"

@@ -41,7 +41,7 @@ Function _iex($str) {
   iex $str
 }
 
-Function install_after() {
+Function _install_after() {
   if (!$lwpm.scripts.postinstall) {
 
     return
@@ -52,7 +52,7 @@ Function install_after() {
   }
 }
 
-Function install($VERSION = 0, $isPre = 0) {
+Function _install($VERSION = 0, $isPre = 0) {
   if (!($VERSION)) {
     $VERSION = $stable_version
   }
@@ -128,7 +128,7 @@ Function install($VERSION = 0, $isPre = 0) {
     if ($CURRENT_VERSION -eq $VERSION) {
       Write-Host "==> $name $VERSION already install" -ForegroundColor Green
 
-      # install_after
+      # _install_after
 
       return
     }
@@ -180,7 +180,7 @@ Function install($VERSION = 0, $isPre = 0) {
   # [environment]::SetEnvironmentvariable("", "", "User")
   if ($lwpm.path) { _exportPath $lwpm.path }
 
-  install_after
+  _install_after
 
   Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
   # test
@@ -201,7 +201,7 @@ Function install($VERSION = 0, $isPre = 0) {
   }
 }
 
-Function uninstall($prune = 0) {
+Function _uninstall($prune = 0) {
   if (!($lwpm.scripts.uninstall)) {
     Write-Host "==> Not Support" -ForegroundColor Red
 
@@ -231,7 +231,7 @@ Function uninstall($prune = 0) {
 
 # 自定义获取最新版本号的方法
 
-function getLatestVersion() {
+function _getLatestVersion() {
   $stable_version = $null
   $pre_version = $null
 
