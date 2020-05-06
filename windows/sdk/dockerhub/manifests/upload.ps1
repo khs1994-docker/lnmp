@@ -1,7 +1,7 @@
 Function upload($token, $image, $ref, $manifest_json_path, $contentType = "application/vnd.docker.distribution.manifest.v2+json", $registry = "registry.hub.docker.com") {
   write-host "==> push [ $image $ref ] $contentType" -ForegroundColor Green
 
-  curl.exe `
+  curl.exe -L `
     -H "Content-Type: $contentType" `
     -H "Authorization: Bearer $token" `
     -X PUT `

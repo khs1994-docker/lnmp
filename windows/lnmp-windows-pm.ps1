@@ -414,7 +414,7 @@ function __bug($soft){
 }
 
 function _push($opt){
-  $ErrorActionPreference="Stop"
+  $ErrorActionPreference="Continue"
 
   $opt,$version = $opt.split('@')
 
@@ -565,6 +565,8 @@ function _push($opt){
 
   $manifest_list_json_path = "$lwpm_dist_temp/manifest_list.json"
   write-output $data > $manifest_list_json_path
+
+  write-host $(cat $manifest_list_json_path -raw)
 
   # push manifest list
   $manifest_length, $manifest_sha256 = upload $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry

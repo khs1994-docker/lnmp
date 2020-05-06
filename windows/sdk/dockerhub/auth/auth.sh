@@ -30,12 +30,12 @@ fi
 if [ -n "${DOCKER_USERNAME}" -a -n "${DOCKER_PASSWORD}" ];then
   basic=`echo -n "${DOCKER_USERNAME:-usernamekhs1994666}:${DOCKER_PASSWORD:-passwordkhs1994666}" | base64`
 
-  curl -H "Authorization:basic $basic" \
+  curl -L -H "Authorization:basic $basic" \
 "${tokenSever}?service=${tokenService}&scope=repository:${image}:${action}" \
 -o $token_file \
 -A "Docker-Client/19.03.5 (Linux)"
 else
-  curl \
+  curl -L \
 "${tokenSever}?service=${tokenService}&scope=repository:${image}:${action}" \
 -o $token_file \
 -A "Docker-Client/19.03.5 (Linux)"

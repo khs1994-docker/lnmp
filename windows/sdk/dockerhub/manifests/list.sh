@@ -19,7 +19,7 @@ list(){
   local cache_file=`getCachePath \
         "manifest@${registry}@${image_conver}@${ref_conver}.json" `
 
-curl \
+curl -L \
 -H "Authorization:Bearer $token" \
 -H "Accept:$header" \
 "https://$registry/v2/$image/manifests/$ref" \

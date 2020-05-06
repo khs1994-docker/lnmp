@@ -32,7 +32,7 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
 
   $length = (ls $file).Length
 
-  $result = curl.exe `
+  $result = curl.exe -L `
     -H "Content-Length: $length" `
     -H "Content-Type: $contentType" `
     -H "Authorization: Bearer $token" `

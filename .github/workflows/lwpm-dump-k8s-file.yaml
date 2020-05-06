@@ -22,7 +22,6 @@ jobs:
           path: lnmp
       - name: handle-conmon
         shell: pwsh
-        continue-on-error: true
         env:
           VERSION: 2.0.15
         run: |
@@ -30,7 +29,6 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}
       - name: handle-containerd
         shell: pwsh
-        continue-on-error: true
         env:
           VERSION: 1.3.4
         run: |
@@ -38,7 +36,6 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    containerd@${env:VERSION}
       - name: handle-crictl
         shell: pwsh
-        continue-on-error: true
         env:
           VERSION: 1.18.0
         run: |
@@ -47,7 +44,6 @@ jobs:
       - name: handle-etcd
         if: endsWith('a', 'b')
         shell: pwsh
-        continue-on-error: true
         env:
           VERSION: 3.4.7
         run: |
@@ -55,7 +51,6 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    etcd@${env:VERSION}
       - name: handle-helm
         if: endsWith('a', 'b')
-        continue-on-error: true
         shell: pwsh
         env:
           VERSION: 3.2.0
@@ -64,7 +59,6 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    helm@${env:VERSION}
       - name: handle-kubectl
         if: endsWith('a', 'b')
-        continue-on-error: true
         shell: pwsh
         env:
           VERSION: 1.18.0
@@ -73,7 +67,6 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    kubectl@${env:VERSION}
       - name: handle-runc
         shell: pwsh
-        continue-on-error: true
         env:
           VERSION: 1.0.0-rc10
         run: |
@@ -81,7 +74,6 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    runc@${env:VERSION}
       - name: handle-runsc
         shell: pwsh
-        continue-on-error: true
         env:
           VERSION: nightly
         run: |

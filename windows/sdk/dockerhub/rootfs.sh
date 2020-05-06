@@ -17,7 +17,7 @@ rootfs(){
 
   echo "==> Get token ..." > /dev/stderr
 
-  WWW_Authenticate=`curl https://$registry/v2/x/y/manifests/latest \
+  WWW_Authenticate=`curl -L https://$registry/v2/x/y/manifests/latest \
 -X HEAD -I -A "Docker-Client/19.03.5 (Linux)" | grep -i 'www\-authenticate' `
 
 if [ $? -eq 0 ];then
