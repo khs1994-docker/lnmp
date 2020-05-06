@@ -79,3 +79,24 @@ jobs:
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 install runsc@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    runsc@${env:VERSION}
+      - name: handle-kubectl
+        shell: pwsh
+        env:
+          VERSION: 1.18.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubectl@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubectl@${env:VERSION}
+      - name: handle-kubernetes-server
+        shell: pwsh
+        env:
+          VERSION: 1.18.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-server@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-server@${env:VERSION}
+      - name: handle-kubernetes-node
+        shell: pwsh
+        env:
+          VERSION: 1.18.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-node@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-node@${env:VERSION}
