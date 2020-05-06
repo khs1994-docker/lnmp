@@ -273,6 +273,9 @@ Function _add($softs){
     $soft,$ref = $soft.split('@')
 
     if(!($ref)){$ref = 'latest'}
+
+    $os = 'windows'
+    if($env:lwpm_os){$os=$env:lwpm_os}
     $dest = rootfs $soft $ref -os windows
 
     if(!($dest)){

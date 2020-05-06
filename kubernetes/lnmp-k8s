@@ -134,32 +134,6 @@ if [ $GOOS = 'darwin' ];then
   alias sed=gsed
 fi
 
-_build_k8s_image(){
-  cd kubernetes-release
-
-  # 仅在 CI 环境构建镜像
-  if [ -z "${CI_KUBERNETES_VERSION}" ];then
-    cd .. > /dev/null
-    return
-  fi
-
-  if [ -z "${KUBERNETES_TYPE}" ];then
-    KUBERNETES_TYPE=server
-  fi
-
-  set -x
-  docker buildx build \
-    --build-arg KUBERNETES_VERSION=v${CI_KUBERNETES_VERSION} \
-    --build-arg TYPE=${KUBERNETES_TYPE} \
-    --platform linux/amd64,linux/arm64,linux/arm/v7 \
-    --push \
-    -t khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
-    -t ${K8S_IMAGE_REGISTRY:-uswccr.ccs.tencentyun.com}/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
-    -f Dockerfile.buildx .
-  set +x
-  cd .. > /dev/null
-}
-
 _get_kubernetes_server_by_docker_image(){
   local TYPE=server
   test -n "${1}" && local GOOS=$1
@@ -176,15 +150,15 @@ _get_kubernetes_server_by_docker_image(){
     if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
       K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
-      K8S_IMAGE=khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
+      K8S_IMAGE=lwpm/kubernetes-${TYPE}
     else
       # 国外
-      K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
-      K8S_IMAGE=khs1994/kubernetes-${TYPE}
+      # K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
+      K8S_IMAGE=lwpm/kubernetes-${TYPE}
     fi
   fi
 
-  docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
+  docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:${KUBERNETES_VERSION}
   # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   # docker container create --name khs1994-kubernetes-${TYPE} \
   #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
@@ -206,7 +180,7 @@ _get_kubernetes_server_by_docker_image(){
 
   tar -zxvf $dist -C $ScriptRoot/kubernetes-release/release/
 
-  mv kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
+  mv kubernetes-release/release/kubernetes-${TYPE}/dist/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
     kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
 
   set +x

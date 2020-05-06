@@ -166,5 +166,26 @@ pipeline {
         sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice\${IMAGE} --build-arg IMAGE=dockerpracticesig/docker_practice\${IMAGE} --platform linux/amd64 --push .;done"
       }
     }
+
+    stage('构建镜像-kubectl') {
+      steps {
+        sh "echo kubectl:1.18.0 > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/lwpm/\${IMAGE} --build-arg IMAGE=lwpm/\${IMAGE} --platform linux/amd64,linux/arm64,windows/amd64,darwin/amd64 --push .;done"
+      }
+    }
+
+    stage('构建镜像-kubernetes-node') {
+      steps {
+        sh "echo kubernetes-node:1.18.0 > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/lwpm/\${IMAGE} --build-arg IMAGE=lwpm/\${IMAGE} --platform linux/amd64,linux/arm64,windows/amd64 --push .;done"
+      }
+    }
+
+    stage('构建镜像-kubernetes-server') {
+      steps {
+        sh "echo kubernetes-server:1.18.0 > manifest.txt"
+        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/lwpm/\${IMAGE} --build-arg IMAGE=lwpm/\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
+      }
+    }
   }
 }
