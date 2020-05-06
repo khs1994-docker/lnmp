@@ -6,7 +6,7 @@ Function _downloader($url, $path, $soft, $version = 'null version',$wsl = $true)
     _wget $url $path $wsl
     echo ""
   }else{
-     Write-Host "==> Skip download $soft $version" -NoNewLine -ForegroundColor Yellow
+     Write-Host "==> Skip download $soft $version, file already exists" -NoNewLine -ForegroundColor Yellow
      echo ""
   }
 }

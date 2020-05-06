@@ -1,2 +1,1 @@
-{"version": "2.0.15", "url": "https://github.com/containers/conmon/releases/download/v{VERSION}/conmon", "name": "conmon", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon\n"}}
-
+{"name": "conmon", "version": "2.0.15", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon\n"}, "platform": [{"architecture": "amd64", "os": "linux"}], "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon"}

@@ -39,6 +39,7 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
     -X PUT `
     -T $file `
     -A "Docker-Client/19.03.5 (Windows)" `
+    -D $env:TEMP\curl_resp_header.txt `
     "$uuid&digest=sha256:$sha256"
 
   if(!($result)){
@@ -51,6 +52,8 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
 }
 "@) -ForegroundColor Blue
   }
+
+  write-host "==> resp header `n$(cat $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
 
   return $length,$sha256
 }

@@ -1,2 +1,1 @@
-{"version": "1.0.0-rc10", "url": "https://github.com/opencontainers/runc/releases/download/v${VERSION}/runc.amd64", "name": "runc", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/runc\n"}}
-
+{"name": "runc", "version": "1.0.0-rc10", "scripts": {"download": "mkdir -force $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl.exe -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/runc\n"}, "platform": [{"architecture": "amd64", "os": "linux"}], "url": "https://github.com/opencontainers/runc/releases/download/v${VERSION}/runc.amd64"}

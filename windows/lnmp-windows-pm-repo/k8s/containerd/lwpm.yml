@@ -8,3 +8,6 @@ scripts:
     curl.exe -L `
       $url `
       -o $env:LWPM_PKG_ROOT/dist/$filename
+platform:
+  - architecture: amd64
+    os: linux

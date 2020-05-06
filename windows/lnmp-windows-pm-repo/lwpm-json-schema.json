@@ -5,6 +5,27 @@
   "$comment": "https://docs.lnmp.khs1994.com/windows/lwpm.html",
   "description": "see https://docs.lnmp.khs1994.com/windows/lwpm.html",
   "type": "object",
+  "definitions": {
+    "architecture": {
+      "description": "architecture",
+      "default": "amd64",
+      "type": "string",
+      "enum": [
+        "arm",
+        "arm64",
+        "amd64"
+      ]
+    },
+    "os": {
+      "description": "os",
+      "default": "windows",
+      "type": "string",
+      "enum": [
+        "linux",
+        "windows"
+      ]
+    }
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -58,12 +79,27 @@
       "type": "string"
     },
     "architecture": {
-      "description": "architecture",
-      "default": "amd64"
+      "$ref": "#/definitions/architecture"
     },
     "os": {
-      "description": "os",
-      "default": "windows"
+      "$ref": "#/definitions/os"
+    },
+    "platform": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "architecture": {
+            "$ref": "#/definitions/architecture"
+          },
+          "os": {
+            "$ref": "#/definitions/os"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true,
+      "minimum": 1
     },
     "scripts": {
       "type": "object",

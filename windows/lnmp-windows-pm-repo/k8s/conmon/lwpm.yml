@@ -1,6 +1,6 @@
 name: conmon
 version: 2.0.15
-url: "https://github.com/containers/conmon/releases/download/v{VERSION}/conmon"
+url: "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon"
 scripts:
   download: |
     mkdir -force $env:LWPM_PKG_ROOT/dist | out-null
@@ -8,3 +8,6 @@ scripts:
     curl.exe -L `
       $url `
       -o $env:LWPM_PKG_ROOT/dist/conmon
+platform:
+  - architecture: amd64
+    os: linux

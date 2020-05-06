@@ -95,6 +95,8 @@ Function install($VERSION = 0, $isPre = 0) {
     $url = $download_url
   }
 
+  if($url){ $url = iex "echo $url" }
+
   # Write-Host "Please download on this website:
 
   # ${releases}
@@ -136,6 +138,8 @@ Function install($VERSION = 0, $isPre = 0) {
   # 下载原始 zip 文件，若存在则不再进行下载
 
   if ($url -and ($env:LWPM_DIST_ONLY -ne 'true')) {
+    write-host "==> Download from $url" -ForegroundColor Green
+
     _downloader `
       $url `
       $filename `
@@ -143,8 +147,10 @@ Function install($VERSION = 0, $isPre = 0) {
       $VERSION
   }
 
-  if($lwpm.scripts.download){
-    foreach ($item in $lwpm.scripts.download.replace('${VERSION}', ${VERSION})) {
+  if($lwpm.scripts.download -and ($env:LWPM_DIST_ONLY -eq 'true')){
+    write-host "==> Dist files, Download from $url" -ForegroundColor Green
+
+    foreach ($item in $lwpm.scripts.download) {
       _iex $item
     }
   }
@@ -156,7 +162,7 @@ Function install($VERSION = 0, $isPre = 0) {
   # _unzip $filename $unzipDesc
 
   if ($lwpm.scripts.preinstall) {
-    foreach ($item in $lwpm.scripts.preinstall.replace('${VERSION}', ${VERSION})) {
+    foreach ($item in $lwpm.scripts.preinstall) {
       _iex $item
     }
   }
@@ -164,7 +170,7 @@ Function install($VERSION = 0, $isPre = 0) {
   # install
   # Copy-item -r -force "$unzipDesc/" ""
   if ($lwpm.scripts.install) {
-    foreach ($item in $lwpm.scripts.install.replace('${VERSION}', ${VERSION})) {
+    foreach ($item in $lwpm.scripts.install) {
       _iex $item
     }
   }
@@ -179,17 +185,17 @@ Function install($VERSION = 0, $isPre = 0) {
   Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
   # test
   if ($lwpm.scripts.pretest) {
-    foreach ($item in $lwpm.scripts.pretest.replace('${VERSION}', ${VERSION})) {
+    foreach ($item in $lwpm.scripts.pretest) {
       _iex $item
     }
   }
   if ($lwpm.scripts.test) {
-    foreach ($item in $lwpm.scripts.test.replace('${VERSION}', ${VERSION})) {
+    foreach ($item in $lwpm.scripts.test) {
       _iex $item
     }
   }
   if ($lwpm.scripts.posttest) {
-    foreach ($item in $lwpm.scripts.posttest.replace('${VERSION}', ${VERSION})) {
+    foreach ($item in $lwpm.scripts.posttest) {
       _iex $item
     }
   }

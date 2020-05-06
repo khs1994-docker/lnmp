@@ -1,10 +1,20 @@
 name: kubectl
 version: 1.18.0
-url: "https://mirror.azure.cn/kubernetes/kubectl/v${VERSION}/bin/linux/amd64/kubectl"
+# url: "https://mirror.azure.cn/kubernetes/kubectl/v${VERSION}/bin/linux/amd64/kubectl"
+url: "https://storage.googleapis.com/kubernetes-release/release/v${VERSION}/kubernetes-client-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz"
 scripts:
   download: |
-    mkdir -force $env:LWPM_PKG_ROOT/dist | out-null
+    mkdir -force $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture} | out-null
 
     curl.exe -L `
       $url `
-      -o $env:LWPM_PKG_ROOT/dist/$file
+      -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
+platform:
+  - architecture: amd64
+    os: windows
+  - architecture: amd64
+    os: linux
+  - architecture: arm64
+    os: linux
+  - architecture: arm
+    os: linux

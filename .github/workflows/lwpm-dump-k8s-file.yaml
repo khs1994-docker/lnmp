@@ -1,0 +1,89 @@
+name: lwpm-dump-k8s-file
+
+on: push
+
+jobs:
+  lwpm-dump-k8s-file:
+    name: lwpm-dump-k8s-file
+    runs-on: windows-latest
+    if: |
+      contains( github.event.head_commit.message, '[dump k8s]')
+    env:
+      LWPM_DOCKER_USERNAME: khs1994
+      LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      LWPM_DIST_ONLY: 'true'
+      LWPM_DOCKER_REGISTRY: registry-1.docker.io
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: khs1994-docker/lnmp
+          fetch-depth: 1
+          ref: 19.03
+          path: lnmp
+      - name: handle-conmon
+        shell: pwsh
+        continue-on-error: true
+        env:
+          VERSION: 2.0.15
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install conmon@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}
+      - name: handle-containerd
+        shell: pwsh
+        continue-on-error: true
+        env:
+          VERSION: 1.3.4
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install containerd@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    containerd@${env:VERSION}
+      - name: handle-crictl
+        shell: pwsh
+        continue-on-error: true
+        env:
+          VERSION: 1.18.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install crictl@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    crictl@${env:VERSION}
+      - name: handle-etcd
+        if: endsWith('a', 'b')
+        shell: pwsh
+        continue-on-error: true
+        env:
+          VERSION: 3.4.7
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install etcd@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    etcd@${env:VERSION}
+      - name: handle-helm
+        if: endsWith('a', 'b')
+        continue-on-error: true
+        shell: pwsh
+        env:
+          VERSION: 3.2.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install helm@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    helm@${env:VERSION}
+      - name: handle-kubectl
+        if: endsWith('a', 'b')
+        continue-on-error: true
+        shell: pwsh
+        env:
+          VERSION: 1.18.0
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubectl@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubectl@${env:VERSION}
+      - name: handle-runc
+        shell: pwsh
+        continue-on-error: true
+        env:
+          VERSION: 1.0.0-rc10
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install runc@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    runc@${env:VERSION}
+      - name: handle-runsc
+        shell: pwsh
+        continue-on-error: true
+        env:
+          VERSION: nightly
+        run: |
+          ./lnmp/windows/lnmp-windows-pm.ps1 install runsc@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    runsc@${env:VERSION}

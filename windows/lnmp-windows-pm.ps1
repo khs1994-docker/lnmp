@@ -190,6 +190,30 @@ Function __install($softs){
       continue;
     }
 
+    if($env:LWPM_DIST_ONLY -eq "true"){
+      $pkg_root = pkg_root $soft
+      $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
+
+      foreach ($platform in $platforms) {
+        $env:lwpm_architecture = $platform.architecture
+        $env:lwpm_os = $platform.os
+
+        if($version){
+          install $version $preVersion
+        }else{
+          install -isPre $preVersion
+        }
+      }
+      $env:lwpm_architecture=$null
+      $env:lwpm_os=$null
+
+      _remove_module $soft
+      continue
+    }
+
+    $env:lwpm_architecture="amd64"
+    $env:lwpm_os="windows"
+
     if($version){
       install $version $preVersion
     }else{
@@ -249,7 +273,7 @@ Function _add($softs){
     $soft,$ref = $soft.split('@')
 
     if(!($ref)){$ref = 'latest'}
-    $dest = rootfs $soft $ref
+    $dest = rootfs $soft $ref -os windows
 
     if(!($dest)){
       write-host "==> $soft $ref not found" -ForegroundColor Red
@@ -425,69 +449,125 @@ function _push($opt){
 
   Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
 
-  $soft = $opt.split('/')[-1]
+  $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
 
-  $lwpm_temp="$PSScriptRoot\..\vendor\lwpm-temp\$soft"
-  $lwpm_dist_temp="$PSScriptRoot\..\vendor\lwpm-temp\dist\$soft"
-
-  try{rm -r -force $lwpm_temp}catch{}
-  try{rm -r -force $lwpm_dist_temp}catch{}
-
-  mkdir -force $lwpm_temp | out-null
-  mkdir -force $lwpm_dist_temp | out-null
-
-  ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
-  ConvertTo-Json -Compress > $lwpm_temp\lwpm.json
-
-  try{cp $pkg_root\README.md $lwpm_temp}catch{}
-  try{cp -r $pkg_root\dist   $lwpm_temp}catch{}
-  if(Test-Path $pkg_root\$soft.psm1){
-    cp $pkg_root\${soft}.psm1 $lwpm_temp
+  if (!($platforms)) {
+    $platforms = ConvertFrom-Json -InputObject @"
+    [{
+      "architecture": "amd64",
+      "os"           : "windows"
+    }]
+"@
   }
 
-  $tar_file="$lwpm_dist_temp\lwpm.tar.gz"
-  cd $lwpm_temp\..\
-  tar -zcvf lwpm.tar.gz $soft
-  mv lwpm.tar.gz $tar_file
+  $manifests = 0..($platforms.count-1)
+  $i=-1
 
-  $token = getDockerRegistryToken $opt
+  foreach ($platform in $platforms) {
+    $env:lwpm_architecture = $platform.architecture
+    $env:lwpm_os = $platform.os
 
-  $config_file="$lwpm_temp/lwpm.json"
+    $i +=1
 
-  . $PSScriptRoot\sdk\dockerhub\blobs\upload.ps1
+    write-host "==> os: $env:lwpm_os ; architecture: $env:lwpm_architecture" -ForegroundColor Green
 
-  try{
-    $length,$sha256 = upload $token $opt $tar_file -registry $registry
-    $config_length,$config_sha256 = upload $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry
-  }catch{
-    write-host $_.Exception
-    return;
+    $soft = $opt.split('/')[-1]
+
+    $lwpm_temp = "$PSScriptRoot\..\vendor\lwpm-temp\${env:lwpm_os}-${env:lwpm_architecture}\$soft"
+    $lwpm_dist_temp = "$PSScriptRoot\..\vendor\lwpm-temp\dist\$soft\${env:lwpm_os}-${env:lwpm_architecture}"
+
+    try { rm -r -force $lwpm_temp }catch { }
+    try { rm -r -force $lwpm_dist_temp }catch { }
+
+    mkdir -force $lwpm_temp | out-null
+    mkdir -force $lwpm_dist_temp | out-null
+
+    ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
+      ConvertTo-Json -Compress > $lwpm_temp\lwpm.json
+
+    try { cp $pkg_root\README.md $lwpm_temp }catch { }
+    if(Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}){
+      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+    }else{
+      try { cp -r $pkg_root\dist   $lwpm_temp }catch { }
+    }
+
+    if (Test-Path $pkg_root\$soft.psm1) {
+      cp $pkg_root\${soft}.psm1 $lwpm_temp
+    }
+
+    $tar_file = "$lwpm_dist_temp\lwpm.tar.gz"
+    cd $lwpm_temp\..\
+    tar -zcvf lwpm.tar.gz $soft
+    mv lwpm.tar.gz $tar_file
+
+    $token = getDockerRegistryToken $opt
+
+    $config_file = "$lwpm_temp/lwpm.json"
+
+    . $PSScriptRoot\sdk\dockerhub\blobs\upload.ps1
+
+    try {
+      $length, $sha256 = upload $token $opt $tar_file -registry $registry
+      $config_length, $config_sha256 = upload $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry
+    }
+    catch {
+      write-host $_.Exception
+      return;
+    }
+
+    $data = ConvertTo-Json @{
+      "schemaVersion" = 2;
+      "mediaType"     = "application/vnd.docker.distribution.manifest.v2+json";
+      "config"        = @{
+        "mediaType" = "application/vnd.docker.container.image.v1+json";
+        "size"      = $config_length;
+        "digest"    = "sha256:$config_sha256";
+      };
+      "layers"        = @(@{
+          "mediaType" = "application/vnd.docker.image.rootfs.diff.tar.gzip";
+          "size"      = $length;
+          "digest"    = "sha256:$sha256";
+        })
+    } -Compress
+
+    $manifest_json_path = "$lwpm_dist_temp/manifest.json"
+    write-output $data > $manifest_json_path
+
+    . $PSScriptRoot\sdk\dockerhub\manifests\upload.ps1
+
+    if (!($version)) {
+      $version = "latest"
+    }
+
+    # push manifest
+    $manifest_length, $manifest_sha256 = upload $token $opt $version $manifest_json_path -registry $registry
+
+    # generate manifest list
+    $manifest = @{
+        "digest"    = "sha256:$manifest_sha256";
+        "mediaType" = "application/vnd.docker.distribution.manifest.v2+json";
+        "platform"  = @{
+          "architecture" = $env:lwpm_architecture;
+          "os"           = $env:lwpm_os;
+        };
+        "size"      = $manifest_length;
+    };
+
+    $manifests[$i] =$manifest
   }
 
-  $data = ConvertTo-Json @{
-    "schemaVersion"=2;
-    "mediaType"="application/vnd.docker.distribution.manifest.v2+json";
-    "config"=@{
-      "mediaType"="application/vnd.docker.container.image.v1+json";
-      "size"=$config_length;
-      "digest"="sha256:$config_sha256";
-  };
-    "layers"       = @(@{
-        "mediaType"="application/vnd.docker.image.rootfs.diff.tar.gzip";
-        "size"=$length;
-        "digest"="sha256:$sha256";
-  })}
+  $data = ConvertTo-Json -InputObject @{
+    "mediaType"     = "application/vnd.docker.distribution.manifest.list.v2+json";
+    "schemaVersion" = 2;
+    "manifests"     = $manifests
+  } -Compress -Depth 10
 
-  $manifest_json_path = "$lwpm_dist_temp/manifest.json"
-  write-output $data > $manifest_json_path
+  $manifest_list_json_path = "$lwpm_dist_temp/manifest_list.json"
+  write-output $data > $manifest_list_json_path
 
-  . $PSScriptRoot\sdk\dockerhub\manifests\upload.ps1
-
-  if(!($version)){
-    $version = "latest"
-  }
-
-  upload $token $opt $version $manifest_json_path -registry $registry
+  # push manifest list
+  $manifest_length, $manifest_sha256 = upload $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry
 }
 
 function _toJson($soft){
@@ -509,8 +589,8 @@ function _toJson($soft){
        return
     }
 
-    ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) | `
-    ConvertTo-Yaml -JsonCompatible > $pkg_root/lwpm.json
+    (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) | `
+    ConvertTo-Yaml -JsonCompatible) -Join "" | Set-Content -NoNewline $pkg_root\lwpm.json
 
     Write-Host "==> [ $soft ] success, please see $pkg_root\lwpm.json" -ForegroundColor Green
 }
