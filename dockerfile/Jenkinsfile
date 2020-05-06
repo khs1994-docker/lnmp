@@ -6,6 +6,11 @@ pipeline {
     TENCENT_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     DOCKER_CLI_EXPERIMENTAL = "enabled"
     BUILDX_IMAGE= "dockerpracticesig/buildkit:master-tencent"
+
+    LWPM_DIST_ONLY = 'treu'
+    LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
+    LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
+    LWPM_DOCKER_REGISTRY = "ccr.ccs.tencentyun.com"
   }
   stages {
     stage("os-manifest"){
@@ -185,6 +190,26 @@ pipeline {
       steps {
         sh "echo kubernetes-server:1.18.0 > manifest.txt"
         sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/lwpm/\${IMAGE} --build-arg IMAGE=lwpm/\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
+      }
+    }
+
+    stage('setup-pwsh') {
+      steps {
+        sh "pwsh || true"
+        sh "wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb"
+        sh "sudo dpkg -i packages-microsoft-prod.deb"
+        sh "sudo apt-get update"
+        sh "sudo apt-get install -y powershell"
+      }
+    }
+
+    stage('lwpm') {
+      steps {
+        sh "pwsh -c 'echo $env:LWPM_DIST_ONLY' "
+        sh "pwsh -c 'echo $env:LWPM_DOCKER_USERNAME' "
+        sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
+        sh "git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp"
+        sh "pwsh ./lnmp/kubernetes/bin/lwpm.ps1"
       }
     }
   }
