@@ -88,7 +88,9 @@ $ lnmp-windows-pm.ps1 stop-service minio
 
 ## 开发者
 
-**add --platform** 获取所有架构的文件
+**$env:LWPM_DIST_ONLY='true' install** 从软件源下载文件并打包
+
+**add --platform** 获取所有架构的文件（适用于从 docker hub 获取文件）
 
 ```bash
  package
@@ -100,7 +102,7 @@ $ lnmp-windows-pm.ps1 stop-service minio
  |__lwpm.json
 ```
 
-**dist** 按架构将文件放置
+**dist** 按架构将文件放置（适用于重新打包文件）
 
 ```bash
  package
@@ -117,3 +119,5 @@ $ lnmp-windows-pm.ps1 stop-service minio
        |__dist_file-linux-arm
  |__lwpm.json
 ```
+
+**push** 推送到 Docker Registry

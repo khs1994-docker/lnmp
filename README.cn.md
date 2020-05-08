@@ -221,7 +221,7 @@ $ ./lnmp-docker down
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.2`            | **10.5.2**             |`ubuntu:bionic` |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.1-alpine`        | **6.0.1**            |`alpine:3.11`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                      |`khs1994/php:7.4.5-fpm-alpine`  | **7.4.5**       |`alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.5-composer-alpine`  | **1.10.5**       |`alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.5-composer-alpine`  | **1.10.6**       |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.5-alpine`           | **1.6.5**       |`alpine:3.11`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.3-management-alpine` | **3.8.3**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.2-alpine`             | **12.2**        |`alpine:3.11`    |

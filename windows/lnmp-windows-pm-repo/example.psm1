@@ -240,7 +240,7 @@ function _getLatestVersion() {
   return $stable_version, $pre_version
 }
 
-function _dist(){
+function _dist($VERSION=$null){
   if(!($lwpm.scripts.dist)){
 
     return;

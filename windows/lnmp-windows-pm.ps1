@@ -526,6 +526,8 @@ function _tolf($file){
 }
 
 function _lwpm_dist($soft){
+  $soft, $ref = $soft.split('@')
+
   $pkg_root=pkg_root $soft
 
   $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
@@ -544,7 +546,9 @@ function _lwpm_dist($soft){
     $env:lwpm_architecture = $platform.architecture
     $env:lwpm_os = $platform.os
 
-    _dist
+    write-host "==> Handle $platform" -ForegroundColor Blue
+
+    _dist $ref
   }
 }
 

@@ -115,7 +115,7 @@ pipeline {
     }
     stage('构建镜像-kong-amd64') {
       steps {
-        sh "echo kong kong:alpine kong:2.0.3 kong:2.0.3-alpine > manifest.txt"
+        sh "echo kong kong:alpine kong:2.0.4 kong:2.0.4-alpine > manifest.txt"
         sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
       }
     }
