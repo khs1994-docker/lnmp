@@ -11,6 +11,7 @@ pipeline {
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     LWPM_DOCKER_REGISTRY_MIRROR = "ccr.ccs.tencentyun.com"
+    LWPM_K8S_VERSION = "1.18.0"
   }
   stages {
     stage("os-manifest"){
@@ -192,29 +193,34 @@ pipeline {
         sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
             -e LWPM_DOCKER_PASSWORD \
             -e LWPM_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
+            -e CI=true \
             -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
-            add kubernetes-node@1.18.0 \
-                kubernetes-server@1.18.0 \
+            add kubernetes-node@\${LWPM_K8S_VERSION} \
+                kubernetes-server@\${LWPM_K8S_VERSION} \
                 --all-platform"
 
         sh "ls -R vendor"
 
         sh "docker run -i --rm  \
             -v \$PWD/vendor:/root/lnmp/vendor \
+            -e CI=true \
             lwpm/lwpm \
-            dist kubernetes-node@1.18.0 \
-                 kubernetes-server@1.18.0"
+            dist kubernetes-node@\${LWPM_K8S_VERSION} \
+                 kubernetes-server@\${LWPM_K8S_VERSION}"
 
         sh "ls -R vendor"
 
         sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
             -e LWPM_DOCKER_PASSWORD \
             -e LWPM_DOCKER_REGISTRY=\${LWPM_DOCKER_REGISTRY_MIRROR} \
+            -e CI=true \
             -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
-            push kubernetes-node@1.18.0 \
-                 kubernetes-server@1.18.0"
+            push kubernetes-node@\${LWPM_K8S_VERSION} \
+                 kubernetes-server@\${LWPM_K8S_VERSION}"
+
+        sh "ls -R vendor"
       }
     }
 

@@ -17,8 +17,8 @@ COPY powershell_system     /root/lnmp/windows/powershell_system
 
 VOLUME /root/lnmp/vendor
 
-SHELL [ "pwsh", "-c"]
+SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-ENTRYPOINT ["/root/lnmp/windows/lnmp-windows-pm.ps1"]
+ENTRYPOINT ["pwsh", "-Command", "$ProgressPreference = 'SilentlyContinue'; /root/lnmp/windows/lnmp-windows-pm.ps1"]
 
 CMD ["--help"]

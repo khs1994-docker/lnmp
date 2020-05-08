@@ -40,6 +40,10 @@ function rootfs($image="alpine",
     }
   }
 
+  if($env:CI -or $CI){
+    $ProgressPreference = 'SilentlyContinue'
+  }
+
   $FormatEnumerationLimit=-1
   write-host "==> Get token ..." -ForegroundColor Green
 

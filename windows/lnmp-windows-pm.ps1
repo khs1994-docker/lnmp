@@ -45,6 +45,10 @@ stop-service    Stop service
 
 $ErrorActionPreference="Continue"
 
+if($env:CI -or $CI){
+  $ProgressPreference = 'SilentlyContinue'
+}
+
 if ($IsWindows) {
 . "$PSScriptRoot/common.ps1"
 }else{
