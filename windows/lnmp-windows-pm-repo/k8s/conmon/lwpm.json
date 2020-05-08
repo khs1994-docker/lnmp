@@ -1,1 +1,14 @@
-{"name":"conmon","version":"2.0.15","scripts":{"download":"_mkdir $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon\n"},"platform":[{"architecture":"amd64","os":"linux"}],"url":"https://github.com/containers/conmon/releases/download/v${VERSION}/conmon"}
+{
+  "platform": [
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  ],
+  "scripts": {
+    "download": "_mkdir $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon\n"
+  },
+  "name": "conmon",
+  "version": "2.0.15",
+  "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon"
+}

@@ -85,3 +85,35 @@ $ lnmp-windows-pm.ps1 start-service minio
 ```powershell
 $ lnmp-windows-pm.ps1 stop-service minio
 ```
+
+## 开发者
+
+**add --platform** 获取所有架构的文件
+
+```bash
+ package
+ |__dist
+    |
+    |__dist_file-os-arch
+    |__dist_file-linux-amd64
+    |__dist_file-linux-arm
+ |__lwpm.json
+```
+
+**dist** 按架构将文件放置
+
+```bash
+ package
+ |__dist
+    |
+    |__os-arch
+       |
+       |__dist_file-os-arch
+    |__linux-amd64
+       |
+       |__dist_file-linux-amd64
+    |__linux-arm
+       |
+       |__dist_file-linux-arm
+ |__lwpm.json
+```

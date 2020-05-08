@@ -22,7 +22,8 @@
       "type": "string",
       "enum": [
         "linux",
-        "windows"
+        "windows",
+        "darwin"
       ]
     }
   },

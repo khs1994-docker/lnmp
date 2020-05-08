@@ -41,7 +41,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
 "@
     }
 
-    Write-Host "==> Get manifest error [ $($result.StatusCode) ], exit" -ForegroundColor Red
+    Write-Host "==> Get manifest error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false
   }

@@ -27,6 +27,11 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
+    - uses: azure/docker-login@v1
+      with:
+        # login-server: contoso.azurecr.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_version: 19.03
@@ -73,6 +78,9 @@ jobs:
 
         lnmp-npm -v
         lnmp-yarn -v
+    - name: build lwpm image
+      run: |
+        docker buildx build -t lwpm/lwpm -f windows/lwpm.Dockerfile --push windows
   powershell:
     needs: skip-ci
     runs-on: windows-latest

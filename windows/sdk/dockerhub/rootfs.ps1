@@ -124,6 +124,10 @@ if($result.schemaVersion -eq 1){
 
   $dest = get $token $image $digest $registry $dest
 
+  if(!($dest)){
+    return;
+  }
+
   Write-Host "==> Download success to $dest" -ForegroundColor Green
 
   return $dest
@@ -155,6 +159,10 @@ foreach($manifest in $manifests){
     . $PSScriptRoot/blobs/get.ps1
 
     $dest = get $token $image $digest $registry $dest
+
+    if(!($dest)){
+      return;
+    }
 
     Write-Host "==> Download success to $dest" -ForegroundColor Green
 

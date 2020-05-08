@@ -1,3 +1,5 @@
+#!/usr/bin/env pwsh
+
 #
 # $ set-ExecutionPolicy Bypass
 #
@@ -25,7 +27,8 @@ homepage    Opens the package's repository URL or homepage in your browser
 bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
-add         Add package
+add         Add package [ --all-platform | ]
+dist        Dist package
 init        Init a new package (developer) [--custom]
 push        Push a package to docker registry (developer)
 toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
@@ -42,7 +45,11 @@ stop-service    Stop service
 
 $ErrorActionPreference="Continue"
 
+if ($IsWindows) {
 . "$PSScriptRoot/common.ps1"
+}else{
+  Import-Alias -Force $PSScriptRoot/pwsh-alias.txt
+}
 
 $EXEC_CMD_DIR=$PWD
 
@@ -124,6 +131,10 @@ if($args.length -eq 0 -or $args[0] -eq '--help' -or $args[0] -eq '-h' -or $args[
 ################################################################################
 
 Function pkg_root($soft){
+  if(!($soft)){
+    throw "please inout soft"
+  }
+
   if (Test-Path "${PSScriptRoot}/../vendor/lwpm-dev/$soft"){
     write-host "==> Found in vendor/lwpm-dev" -ForegroundColor Green
 
@@ -248,6 +259,18 @@ Function _outdated($softs=$null){
   Write-Host "==> check $softs update ..." -ForegroundColor Green
 }
 
+Function getLwpmDockerRegistry(){
+  if($env:LWPM_DOCKER_REGISTRY){
+    return $env:LWPM_DOCKER_REGISTRY
+  }
+
+  if($env:LNMP_CN_ENV -ne "false"){
+    return "hub-mirror.c.163.com"
+  }
+
+  return "registry.hub.docker.com"
+}
+
 Function getDockerRegistryToken($image,$action="push,pull"){
   . $PSScriptRoot\sdk\dockerhub\auth\auth.ps1
 
@@ -256,10 +279,43 @@ Function getDockerRegistryToken($image,$action="push,pull"){
 
     $tokenServer,$tokenService = getTokenServerAndService $env:LWPM_DOCKER_REGISTRY
 
+    if(!($tokenServer)){
+      write-host "==> Get tokenServer error,use default" -ForegroundColor Red
+      $tokenServer="https://auth.docker.io/token"
+    }
+
+    if(!($tokenService)){
+      write-host "==> Get tokenService error,use default" -ForegroundColor Red
+      $tokenService='registry.docker.io'
+    }
+
     return getToken $image $action $tokenServer $tokenService
   }
 
   return getToken $image $action
+}
+
+Function _getlwpmConfig($image,$ref){
+  $registry = getLwpmDockerRegistry
+
+  $token = getDockerRegistryToken $image 'pull'
+ . $PSScriptRoot\sdk\dockerhub\manifests\list.ps1
+
+ $result = list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
+
+ if (!($result)){
+   write-host "==> [ $image $ref ] not found" -ForegroundColor Red
+
+   throw "404"
+ }
+
+ $config_sha256 = $result.config.digest
+
+ . $PSScriptRoot\sdk\dockerhub\blobs\get.ps1
+
+ $dest = get $token $image $config_sha256 $registry
+
+ return cat $dest
 }
 
 Function _add($softs){
@@ -267,6 +323,17 @@ Function _add($softs){
   . $PSScriptRoot\sdk\dockerhub\rootfs.ps1
 
   Foreach($soft in $softs){
+    if($soft -eq '--all-platform'){
+      write-host "==> Add all platform" -ForegroundColor Green
+      $add_all_platform = $true
+
+      break
+    }
+  }
+
+  Foreach($soft in $softs){
+    if($soft -eq '--all-platform'){continue}
+
     Write-Host "==> Add [ $soft ] ..." -ForegroundColor Green
     if (!(Test-Path "${PSScriptRoot}/../lwpm.lock.json")){
 
@@ -279,21 +346,53 @@ Function _add($softs){
     $soft,$ref = $soft.split('@')
 
     if(!($ref)){$ref = 'latest'}
-
     $os = 'windows'
+    $architecture = 'amd64'
+
     if($env:lwpm_os){$os=$env:lwpm_os}
-    $dest = rootfs $soft $ref -os windows
+    if($env:lwpm_architecture){$architecture=$env:lwpm_architecture}
 
-    if(!($dest)){
-      write-host "==> $soft $ref not found" -ForegroundColor Red
+    if ($add_all_platform) {
+      try{
+      $platforms = (ConvertFrom-Json (_getlwpmConfig $soft $ref )).platform
 
-      continue
+      write-host "==> Support platform: " -ForegroundColor Green
+      write-host $platforms -ForegroundColor Blue
+      }catch{
+        write-host $_.exception -ForegroundColor Red
+        continue
+      }
     }
 
-    $dist = "$PSScriptRoot/../vendor/lwpm"
-    _mkdir $dist | out-null
-    tar -zxvf $dest -C $dist
-  }
+    if (!($platforms)) {
+        $platforms = ConvertFrom-Json -InputObject @"
+[{
+  "architecture": "$architecture",
+  "os"           : "$os"
+}]
+"@
+    }
+
+    foreach ($platform in $platforms) {
+      write-host "==> Handle platform $platform" -ForegroundColor Blue
+
+      $os = $platform.os
+      $architecture = $platform.architecture
+
+      $dest = rootfs $soft $ref -os $os -arch $architecture
+
+      if (!($dest)) {
+        write-host "==> $soft $ref not found" -ForegroundColor Red
+
+        continue
+      }
+
+      $dist = "$PSScriptRoot/../vendor/lwpm"
+      _mkdir $dist | out-null
+      tar -zxvf $dest -C $dist
+    } # platforms end
+
+  } # softs end
 }
 
 Function __list(){
@@ -426,6 +525,29 @@ function _tolf($file){
   (cat $file -raw) -replace "`r`n", "`n" | Set-Content -NoNewline $file
 }
 
+function _lwpm_dist($soft){
+  $pkg_root=pkg_root $soft
+
+  $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
+
+  if (!($platforms)) {
+    write-host "==> lwpm.json not include platform, skip dist" -ForegroundColor Red
+  }
+
+  try{
+    _import_module $soft
+  }catch{
+    continue;
+  }
+
+  foreach ($platform in $platforms) {
+    $env:lwpm_architecture = $platform.architecture
+    $env:lwpm_os = $platform.os
+
+    _dist
+  }
+}
+
 function _push($opt){
   $ErrorActionPreference="Continue"
 
@@ -449,13 +571,9 @@ function _push($opt){
     exit 1
   }
 
-  $registry="registry.hub.docker.com"
+  $registry= getLwpmDockerRegistry
 
-  if($env:LWPM_DOCKER_REGISTRY){
-    $registry=$env:LWPM_DOCKER_REGISTRY
-
-    write-host "==> push to [ $registry ]" -ForegroundColor Green
-  }
+  write-host "==> push to [ $registry ]" -ForegroundColor Green
 
   $env:DOCKER_USERNAME=$env:LWPM_DOCKER_USERNAME
   $env:DOCKER_PASSWORD=$env:LWPM_DOCKER_PASSWORD
@@ -482,7 +600,7 @@ function _push($opt){
 
     $i +=1
 
-    write-host "==> os: $env:lwpm_os ; architecture: $env:lwpm_architecture" -ForegroundColor Green
+    write-host "==> Handle $platform" -ForegroundColor Blue
 
     $soft = $opt.split('/')[-1]
 
@@ -605,7 +723,7 @@ function _toJson($soft){
     }
 
     ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) `
-    | ConvertTo-Yaml -JsonCompatible)) -Compress `
+    | ConvertTo-Yaml -JsonCompatible)) `
     | Set-Content $pkg_root\lwpm.json
 
     _tolf $pkg_root\lwpm.json
@@ -688,8 +806,6 @@ if($args[0] -eq 'releases'){
 
 $command,$opt=$args
 
-Import-Module $PSScriptRoot/sdk/service/service.psm1 -Force
-
 switch ($command)
 {
   "outdated" {
@@ -701,6 +817,8 @@ switch ($command)
   }
 
   "install-service" {
+    Import-Module $PSScriptRoot/sdk/service/service.psm1 -Force
+
     _mkdir C:/bin | out-null
     $Global:BaseDir="C:\bin"
 
@@ -731,13 +849,13 @@ switch ($command)
     }
   }
 
-  "push" {
-    if(!($opt)){
-      write-host "==> please input package name" -ForegroundColor Red
-
-      _exit
+  "dist" {
+    foreach ($item in $opt) {
+      _lwpm_dist $item
     }
+  }
 
+  "push" {
     foreach ($item in $opt) {
       _push $item
     }

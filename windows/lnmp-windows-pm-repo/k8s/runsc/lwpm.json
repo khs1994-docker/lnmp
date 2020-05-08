@@ -1,1 +1,14 @@
-{"name":"runsc","version":"nightly","scripts":{"download":"_mkdir $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"},"platform":[{"architecture":"amd64","os":"linux"}],"url":"https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz"}
+{
+  "platform": [
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  ],
+  "scripts": {
+    "download": "_mkdir $env:LWPM_PKG_ROOT/dist | out-null\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"
+  },
+  "name": "runsc",
+  "version": "nightly",
+  "url": "https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz"
+}

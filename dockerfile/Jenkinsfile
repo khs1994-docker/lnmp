@@ -10,7 +10,7 @@ pipeline {
     LWPM_DIST_ONLY = 'treu'
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
-    LWPM_DOCKER_REGISTRY = "ccr.ccs.tencentyun.com"
+    LWPM_DOCKER_REGISTRY_MIRROR = "ccr.ccs.tencentyun.com"
   }
   stages {
     stage("os-manifest"){
@@ -172,45 +172,44 @@ pipeline {
       }
     }
 
-    stage('构建镜像-kubectl') {
-      steps {
-        sh "echo kubectl:1.18.0 > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/lwpm/\${IMAGE} --build-arg IMAGE=lwpm/\${IMAGE} --platform linux/amd64,linux/arm64,windows/amd64,darwin/amd64 --push .;done"
-      }
-    }
-
-    stage('构建镜像-kubernetes-node') {
-      steps {
-        sh "echo kubernetes-node:1.18.0 > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/lwpm/\${IMAGE} --build-arg IMAGE=lwpm/\${IMAGE} --platform linux/amd64,linux/arm64,windows/amd64 --push .;done"
-      }
-    }
-
-    stage('构建镜像-kubernetes-server') {
-      steps {
-        sh "echo kubernetes-server:1.18.0 > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/lwpm/\${IMAGE} --build-arg IMAGE=lwpm/\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
-      }
-    }
-
-    stage('setup-pwsh') {
-      steps {
-        sh "pwsh || true"
-        sh "wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb"
-        sh "sudo dpkg -i packages-microsoft-prod.deb"
-        sh "sudo apt-get update"
-        sh "sudo apt-get install -y powershell"
-      }
-    }
+    // stage('setup-pwsh') {
+    //   steps {
+    //     sh "pwsh || true"
+    //     sh "wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb"
+    //     sh "sudo dpkg -i packages-microsoft-prod.deb"
+    //     sh "sudo apt-get update"
+    //     sh "sudo apt-get install -y powershell"
+    //   }
+    // }
 
     stage('lwpm') {
       steps {
-        sh "pwsh -c 'echo $env:LWPM_DIST_ONLY' "
-        sh "pwsh -c 'echo $env:LWPM_DOCKER_USERNAME' "
-        sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
-        sh "git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp"
-        sh "pwsh ./lnmp/kubernetes/bin/lwpm.ps1"
+        // sh "pwsh -c 'echo $env:LWPM_DIST_ONLY' "
+        // sh "pwsh -c 'echo $env:LWPM_DOCKER_USERNAME' "
+        // sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
+        // sh "git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp"
+        // sh "pwsh ./lnmp/kubernetes/bin/lwpm.ps1"
+        sh "docker run -it --rm -e LWPM_DOCKER_USERNAME \
+            -e LWPM_DOCKER_PASSWORD \
+            -e LWPM_DOCKER_MIRROR=mirror.ccs.tencentyun.com \
+            -v $PWD/vendor:/root/lnmp/vendor \
+            lwpm/lwpm \
+            add kubernetes-node@1.18.0 --all-platform"
+
+        sh "docker run -it --rm  \
+            -v $PWD/vendor:/root/lnmp/vendor \
+            lwpm/lwpm \
+            dist kubernetes-node@1.18.0"
+
+        sh "docker run -it --rm -e LWPM_DOCKER_USERNAME \
+            -e LWPM_DOCKER_PASSWORD \
+            -e LWPM_DOCKER_MIRROR=\${LWPM_DOCKER_REGISTRY_MIRROR} \
+            -v $PWD/vendor:/root/lnmp/vendor \
+            lwpm/lwpm \
+            push kubernetes-node@1.18.0"
       }
     }
+
+
   }
 }

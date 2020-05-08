@@ -239,3 +239,14 @@ function _getLatestVersion() {
 
   return $stable_version, $pre_version
 }
+
+function _dist(){
+  if(!($lwpm.scripts.dist)){
+
+    return;
+  }
+
+  foreach ($item in $lwpm.scripts.dist) {
+    _iex $item
+  }
+}

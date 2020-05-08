@@ -12,14 +12,14 @@ function getToken($image,
     $file_timestrap = (((ls $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
     $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
     if (($now_timestrap - $file_timestrap) -lt 249) {
-      write-host "==> token file cache find, not expire, use it" -ForegroundColor Green
+      write-host "==> Token file cache find, not expire, use it" -ForegroundColor Green
 
       return (Get-Content $token_file -raw -Encoding utf8).trim()
     }else{
-      write-host "==> token file cache find, but expire" -ForegroundColor Green
+      write-host "==> Token file cache find, but expire" -ForegroundColor Green
     }
   }else{
-    write-host "==> token file cache not find" -ForegroundColor Green
+    write-host "==> Token file cache not find" -ForegroundColor Green
   }
 
   Write-Host "==> Token File is $token_file" -ForegroundColor Green

@@ -45,6 +45,8 @@ function get($token,$image,$digest,$registry="registry.hub.docker.com",$dist){
       -PassThru `
       -OutFile $distTemp `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
+    }else{
+      return $false
     }
   }
 
