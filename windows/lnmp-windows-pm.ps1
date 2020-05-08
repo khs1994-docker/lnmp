@@ -732,7 +732,7 @@ function _toJson($soft){
 
     _tolf $pkg_root\lwpm.json
 
-    Write-Host "==> [ $soft ] success, please see $pkg_root\lwpm.json" -ForegroundColor Green
+    Write-Host "==> Handle [ $soft ] success, please see $pkg_root/lwpm.json" -ForegroundColor Green
 }
 
 if($args[0] -eq 'install'){

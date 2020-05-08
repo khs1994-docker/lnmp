@@ -189,22 +189,22 @@ pipeline {
         // sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
         // sh "git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp"
         // sh "pwsh ./lnmp/kubernetes/bin/lwpm.ps1"
-        sh "docker run -it --rm -e LWPM_DOCKER_USERNAME \
+        sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
             -e LWPM_DOCKER_PASSWORD \
             -e LWPM_DOCKER_MIRROR=mirror.ccs.tencentyun.com \
-            -v $PWD/vendor:/root/lnmp/vendor \
+            -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
             add kubernetes-node@1.18.0 --all-platform"
 
-        sh "docker run -it --rm  \
-            -v $PWD/vendor:/root/lnmp/vendor \
+        sh "docker run -i --rm  \
+            -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
             dist kubernetes-node@1.18.0"
 
-        sh "docker run -it --rm -e LWPM_DOCKER_USERNAME \
+        sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
             -e LWPM_DOCKER_PASSWORD \
             -e LWPM_DOCKER_MIRROR=\${LWPM_DOCKER_REGISTRY_MIRROR} \
-            -v $PWD/vendor:/root/lnmp/vendor \
+            -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
             push kubernetes-node@1.18.0"
       }

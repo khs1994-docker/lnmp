@@ -52,32 +52,7 @@ Function _install_after() {
   }
 }
 
-Function _install($VERSION = 0, $isPre = 0) {
-  if (!($VERSION)) {
-    $VERSION = $stable_version
-  }
-
-  # stable 与 pre url 不同
-  # 先定义 stable url
-  # $download_url=$url_mirror.replace('${VERSION}',${VERSION})
-  # if((_getHttpCode $download_url)[0] -eq 4){
-  # $download_url=$url.replace('${VERSION}',${VERSION})
-  # }
-
-  if ($isPre) {
-    $VERSION = $pre_version
-
-    # 后定义 pre url
-    # $download_url=$pre_url_mirror.replace('${VERSION}',${VERSION})
-    # if((_getHttpCode $download_url)[0] -eq 4){
-    # $download_url=$pre_url.replace('${VERSION}',${VERSION})
-    # }
-  }
-  else {
-
-  }
-
-  # stable 与 pre 的 url 相同，默认
+Function _getUrl($url, $url_mirror, $VERSION) {
   if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
     Write-Host "==> Try use Download url mirror" -ForegroundColor Green
     $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
@@ -89,6 +64,32 @@ Function _install($VERSION = 0, $isPre = 0) {
   }
   else {
     $download_url = $url.replace('${VERSION}', ${VERSION})
+  }
+
+  return $download_url
+}
+
+Function _install($VERSION = 0, $isPre = 0) {
+  if ($isPre) {
+    if (!($VERSION)) {
+      $VERSION = $pre_version
+    }
+
+    # stable 与 pre 的 url 不相同
+    if ($lwpm.'pre-url') {
+       $download_url = _getUrl $pre_url $pre_url_mirror $VERSION
+    }
+
+  }
+  else {
+    if (!($VERSION)) {
+      $VERSION = $stable_version
+    }
+  }
+
+  if (!$download_url) {
+    # stable 与 pre 的 url 相同
+    $download_url = _getUrl $url $url_mirror $VERSION
   }
 
   if ($download_url) {
@@ -126,7 +127,7 @@ Function _install($VERSION = 0, $isPre = 0) {
     # Write-Host $CURRENT_VERSION
 
     if ($CURRENT_VERSION -eq $VERSION) {
-      Write-Host "==> $name $VERSION already install" -ForegroundColor Green
+      Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
 
       # _install_after
 

@@ -11,5 +11,16 @@
   "pre-url": "https://astuteinternet.dl.sourceforge.net/project/mpv-player-windows/64bit/mpv-x86_64-${VERSION}.7z",
   "path": [
     "$env:ProgramData\\mpv"
-  ]
+  ],
+  "command": "mpv",
+  "scripts": {
+    "install": [
+      "_mkdir ${env:ProgramData}/mpv",
+      "powershell -c \"7z x $filename -aoa -r -o${env:ProgramData}/mpv\"",
+      "_ln ${env:ProgramData}\\mpv\\mpv.exe $HOME\\Desktop\\mpv.exe"
+    ],
+    "version": "# (mpv).split()[1]\n echo ${VERSION}",
+    "test": "write-host $((mpv).split()[1]) install success",
+    "uninstall": "_cleanup $env:ProgramData\\mpv"
+  }
 }

@@ -15,8 +15,8 @@
     "install": [
       "_cleanup node",
       "_unzip $filename $unzipDesc",
-      "# _mkdir \"$env:ProgramData\\node\"",
-      "Copy-item -r -force \"node\\node-v${VERSION}-win-x64\" \"$env:ProgramData\\node\"",
+      "_mkdir \"$env:ProgramData\\node\"",
+      "Copy-item -r -force \"node\\node-v${VERSION}-win-x64\\*\" \"$env:ProgramData\\node\"",
       "_cleanup node"
     ],
     "postinstall": [
