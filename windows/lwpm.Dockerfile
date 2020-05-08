@@ -7,6 +7,8 @@ ENV LWPM_DIST_ONLY='true' \
     LWPM_DOCKER_PASSWORD= \
     LWPM_DOCKER_REGISTRY=
 
+RUN apk add --no-cache curl
+
 COPY lnmp-windows-pm-repo  /root/lnmp/windows/lnmp-windows-pm-repo
 COPY lnmp-windows-pm.ps1 \
      pwsh-alias.txt        /root/lnmp/windows/

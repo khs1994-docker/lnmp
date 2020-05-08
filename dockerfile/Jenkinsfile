@@ -191,22 +191,26 @@ pipeline {
         // sh "pwsh ./lnmp/kubernetes/bin/lwpm.ps1"
         sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
             -e LWPM_DOCKER_PASSWORD \
-            -e LWPM_DOCKER_MIRROR=mirror.ccs.tencentyun.com \
+            -e LWPM_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
             -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
-            add kubernetes-node@1.18.0 --all-platform"
+            add kubernetes-node@1.18.0 \
+                kubernetes-server@1.18.0 \
+                --all-platform"
 
         sh "docker run -i --rm  \
             -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
-            dist kubernetes-node@1.18.0"
+            dist kubernetes-node@1.18.0 \
+                 kubernetes-server@1.18.0"
 
         sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
             -e LWPM_DOCKER_PASSWORD \
-            -e LWPM_DOCKER_MIRROR=\${LWPM_DOCKER_REGISTRY_MIRROR} \
+            -e LWPM_DOCKER_REGISTRY=\${LWPM_DOCKER_REGISTRY_MIRROR} \
             -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
-            push kubernetes-node@1.18.0"
+            push kubernetes-node@1.18.0 \
+                 kubernetes-server@1.18.0"
       }
     }
 
