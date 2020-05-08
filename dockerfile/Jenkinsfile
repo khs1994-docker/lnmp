@@ -11,7 +11,8 @@ pipeline {
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     LWPM_DOCKER_REGISTRY_MIRROR = "ccr.ccs.tencentyun.com"
-    LWPM_K8S_VERSION = "1.18.0"
+    # 请修改此环境变量的值为 K8S 版本号
+    LWPM_K8S_VERSION = "${env.LWPM_K8S_VERSION}"
   }
   stages {
     stage("os-manifest"){

@@ -4,6 +4,7 @@
 * 执行 `cd cli ; sh generate.sh`
 * NGINX 更新时 `khs1994-docker/kube-nginx` 打 TAG，CI 构建 `khs1994/kube-nginx:TAG`
 * 更新 lwpm k8s 包，commit 包含 [dist k8s]
+* 修改 `.github/workflows/lwpm-dist-k8s-file.yaml` 中的 `LWPM_K8S_VERSION: "1.18.0"` 中的版本号，推送到 `bump-k8s` 分支，构建 lwpm k8s 指定版本的镜像
 * 同步 lwpm k8s 包到国内镜像，coding.net
 
 ## 打包 containerd arm64

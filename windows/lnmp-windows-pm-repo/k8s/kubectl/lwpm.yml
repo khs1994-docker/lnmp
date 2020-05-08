@@ -12,7 +12,7 @@ scripts:
   dist: |
     _mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}
 
-    cp -r -force $env:LWPM_PKG_ROOT/dist/kubernetes-client-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz `
+    cp -r $env:LWPM_PKG_ROOT/dist/kubernetes-client-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz `
           $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/
 platform:
   - architecture: amd64

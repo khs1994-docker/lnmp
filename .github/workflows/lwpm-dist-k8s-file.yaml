@@ -1,14 +1,17 @@
 name: lwpm-dist-k8s-file
 
-on: push
+on:
+  push:
+    branches:
+      - bump-k8s
 
 jobs:
   lwpm-dist-k8s-file:
     name: lwpm-dist-k8s-file
     runs-on: ${{ matrix.os }}-latest
-    if: |
-      contains( github.event.head_commit.message, '[dist k8s]')
     env:
+      LWPM_K8S_VERSION: "1.19.0-alpha.3"
+
       LWPM_DOCKER_USERNAME: khs1994
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       LWPM_DIST_ONLY: 'true'
@@ -22,93 +25,25 @@ jobs:
         with:
           repository: khs1994-docker/lnmp
           fetch-depth: 1
-          ref: 19.03
           path: lnmp
-      - name: handle-conmon
-        shell: pwsh
-        if: matrix.os == 'ubuntu'
-        env:
-          VERSION: 2.0.15
-        run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
-          ./lnmp/windows/lnmp-windows-pm.ps1 install conmon@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}
-      - name: handle-containerd
-        shell: pwsh
-        if: matrix.os == 'ubuntu'
-        env:
-          VERSION: 1.3.4
-        run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
-          ./lnmp/windows/lnmp-windows-pm.ps1 install containerd@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    containerd@${env:VERSION}
-      - name: handle-crictl
-        shell: pwsh
-        if: matrix.os == 'windows'
-        env:
-          VERSION: 1.18.0
-        run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install crictl@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    crictl@${env:VERSION}
-      - name: handle-etcd
-        if: endsWith('a', 'b')
-        shell: pwsh
-        env:
-          VERSION: 3.4.7
-        run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install etcd@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    etcd@${env:VERSION}
-      - name: handle-helm
-        if: endsWith('a', 'b')
-        shell: pwsh
-        env:
-          VERSION: 3.2.0
-        run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install helm@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    helm@${env:VERSION}
-      - name: handle-runc
-        shell: pwsh
-        if: matrix.os == 'windows'
-        env:
-          VERSION: 1.0.0-rc10
-        run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install runc@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    runc@${env:VERSION}
-      - name: handle-runsc
-        shell: pwsh
-        if: matrix.os == 'ubuntu'
-        env:
-          VERSION: nightly
-        run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
-          ./lnmp/windows/lnmp-windows-pm.ps1 install runsc@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    runsc@${env:VERSION}
       - name: handle-kubectl
         shell: pwsh
         if: matrix.os == 'windows'
-        env:
-          VERSION: 1.18.0
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install kubectl@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubectl@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubectl@${env:LWPM_K8S_VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubectl@${env:LWPM_K8S_VERSION}
       - name: handle-kubernetes-server
         shell: pwsh
         if: matrix.os == 'windows'
-        env:
-          VERSION: 1.18.0
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-server@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-server@${env:VERSION}
+
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-server@${env:LWPM_K8S_VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-server@${env:LWPM_K8S_VERSION}
       - name: handle-kubernetes-node
         shell: pwsh
         if: matrix.os == 'ubuntu'
-        env:
-          VERSION: 1.18.0
         run: |
           Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
 
-          ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-node@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-node@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-node@${env:LWPM_K8S_VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-node@${env:LWPM_K8S_VERSION}
