@@ -198,11 +198,15 @@ pipeline {
                 kubernetes-server@1.18.0 \
                 --all-platform"
 
+        sh "ls -R vendor"
+
         sh "docker run -i --rm  \
             -v \$PWD/vendor:/root/lnmp/vendor \
             lwpm/lwpm \
             dist kubernetes-node@1.18.0 \
                  kubernetes-server@1.18.0"
+
+        sh "ls -R vendor"
 
         sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
             -e LWPM_DOCKER_PASSWORD \

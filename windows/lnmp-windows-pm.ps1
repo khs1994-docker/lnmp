@@ -526,6 +526,8 @@ function _tolf($file){
 }
 
 function _lwpm_dist($soft){
+  Write-Host "==> Dist $soft" -ForegroundColor Blue
+
   $soft, $ref = $soft.split('@')
 
   $pkg_root=pkg_root $soft

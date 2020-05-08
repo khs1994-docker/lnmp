@@ -28,6 +28,8 @@ jobs:
       with:
         fetch-depth: 2
     - uses: azure/docker-login@v1
+      if: |
+        contains( github.event.head_commit.message, '[lwpm]' ) && github.event_name == 'push'
       with:
         # login-server: contoso.azurecr.io
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -78,7 +80,9 @@ jobs:
 
         lnmp-npm -v
         lnmp-yarn -v
-    - name: build lwpm image
+    - name: build and push lwpm image
+      if: |
+        contains( github.event.head_commit.message, '[lwpm]' ) && github.event_name == 'push'
       run: |
         docker buildx build -t lwpm/lwpm -f windows/lwpm.Dockerfile --push windows
   powershell:
