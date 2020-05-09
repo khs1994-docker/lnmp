@@ -47,3 +47,6 @@ jobs:
 
           ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-node@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-node@${env:LWPM_K8S_VERSION}
+      - name: trigger-coding.net-ci
+        run: |
+          echo ''

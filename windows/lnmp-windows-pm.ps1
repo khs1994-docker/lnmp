@@ -693,7 +693,7 @@ function _push($opt){
           "os"           = $env:lwpm_os;
         };
         "size"      = $manifest_length;
-    };
+    }
 
     $manifests[$i] =$manifest
   }

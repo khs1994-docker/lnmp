@@ -158,7 +158,7 @@ _get_kubernetes_server_by_docker_image(){
     fi
   fi
 
-  docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:${KUBERNETES_VERSION}
+  # docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:${KUBERNETES_VERSION}
   # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   # docker container create --name khs1994-kubernetes-${TYPE} \
   #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
@@ -172,7 +172,7 @@ _get_kubernetes_server_by_docker_image(){
 
   dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
   ${K8S_IMAGE} \
-  v${KUBERNETES_VERSION} \
+  ${KUBERNETES_VERSION} \
   ${GOARCH} \
   ${GOOS} \
   "" 0 ${K8S_IMAGE_REGISTRY:-registry.hub.docker.com}

@@ -25,7 +25,7 @@ jobs:
         with:
           repository: khs1994-docker/lnmp
           fetch-depth: 1
-          ref: 19.03
+          # ref: 19.03
           path: lnmp
       - name: handle-conmon
         shell: pwsh

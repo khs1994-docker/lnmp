@@ -62,7 +62,7 @@ sleep 3
 getToken $image pull $tokenServer $tokenService 0 || return 1
 
 if [ -z "$token" ];then
-  echo "get token error
+  echo "==> get token error
 
 Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 " > /dev/stderr
@@ -89,7 +89,7 @@ if [ "$schemaVersion" -eq 1 ];then
   local digest=`cat $manifest_json_file | jq ".layers[$layersIndex].digest" | sed 's/"//g'`
 
   if [ "${digest}" = 'null' ];then
-    echo "image not found, exit" > /dev/stderr
+    echo "==> image not found, exit" > /dev/stderr
 
     exit 1
   fi
@@ -100,7 +100,7 @@ if [ "$schemaVersion" -eq 1 ];then
 
   dest=`get $token $image $digest $registry "${dest}"`
 
-  echo "Download success to $dest" > /dev/stderr
+  echo "==> Download success to $dest" > /dev/stderr
 
   echo $dest
 
@@ -121,7 +121,7 @@ do
 local current_arch=`cat $manifest_list_json_file | jq ".manifests[$i].platform.architecture" | sed 's/"//g'`
 
 if [ $current_arch = null ];then
-  echo "Can't find ${image}:$ref $os $arch image" > /dev/stderr
+  echo "==> Can't find ${image}:$ref $os $arch image" > /dev/stderr
 
   return
 fi
@@ -141,7 +141,7 @@ local current_os=`cat $manifest_list_json_file | jq ".manifests[$i].platform.os"
 
     dest=`get $token $image $digest $registry "${dest}"`
 
-    echo "Download success to $dest" > /dev/stderr
+    echo "==> Download success to $dest" > /dev/stderr
 
     echo $dest
 

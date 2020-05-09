@@ -1,4 +1,5 @@
-function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
+function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$raw=$true){
+  # application/vnd.docker.distribution.manifest.v2+json
   $header_default="application/vnd.docker.distribution.manifest.list.v2+json"
 
   if(!$header){
@@ -46,5 +47,9 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com"){
     return $false
   }
 
-  return ConvertFrom-Json (Get-Content $cache_file -Raw)
+  if($raw){
+    return ConvertFrom-Json (Get-Content $cache_file -Raw)
+  }
+
+  return $cache_file
 }

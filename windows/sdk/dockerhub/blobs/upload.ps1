@@ -6,36 +6,53 @@ Function _sha256($file){
   return (sha256sum $file | cut -d ' ' -f 1)
 }
 
+# application/vnd.docker.container.image.v1+json
+
+Function _isExists($token, $image, $sha256, $registry = "registry.hub.docker.com") {
+  try {
+    Invoke-WebRequest `
+      -Authentication OAuth `
+      -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
+      -Method 'HEAD' `
+      -Uri "https://$registry/v2/$image/blobs/sha256:$sha256" `
+      -UserAgent "Docker-Client/19.03.5 (Windows)"
+
+    write-host "==> Blob found, skip upload" -ForegroundColor Yellow
+
+    return $true
+  }
+  catch {
+    write-host "==> Check blob exists error" -ForegroundColor Yellow
+    write-host $_.Exception
+  }
+
+  return $false
+}
+
 Function upload($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
   $sha256 = _sha256 $file
   $length = (ls $file).Length
 
   if(!($IsWindows)){ $env:TEMP="/tmp" }
 
-  try{
-  $result = Invoke-WebRequest `
-    -Authentication OAuth `
-    -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-    -Method 'HEAD' `
-    -Uri "https://$registry/v2/$opt/blobs/sha256:$sha256" `
+  if(_isExists $token $image $sha256 $registry){
+    write-host (ConvertFrom-Json -InputObject @"
+    {
+      "file": "$($file.replace('\','\\'))",
+      "digest": "sha256:$sha256"
+    }
+"@) -ForegroundColor Yellow
 
-  write-host "==> blob found, skip upload" -ForegroundColor Yellow
+     return $length,$sha256
+  }
 
-  write-host (ConvertFrom-Json -InputObject @"
-{
-  "file": "$($file.replace('\','\\'))",
-  "digest": "sha256:$sha256"
-}
-"@) -ForegroundColor Blue
-
-  return $length,$sha256
-  }catch{}
+  write-host "==> Upload blob ..." -ForegroundColor Blue
 
   $result = Invoke-WebRequest `
     -Authentication OAuth `
     -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
     -Method 'POST' `
-    -Uri "https://$registry/v2/$opt/blobs/uploads/" `
+    -Uri "https://$registry/v2/$image/blobs/uploads/" `
     -UserAgent "Docker-Client/19.03.5 (Windows)"
 
   $uuid = $result.Headers.'Location'
@@ -53,7 +70,7 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
     "$uuid&digest=sha256:$sha256"
 
   if(!($result)){
-    write-host "==> blob upload success" -ForegroundColor Green
+    write-host "==> Blob upload success" -ForegroundColor Green
 
     write-host (ConvertFrom-Json -InputObject @"
 {
@@ -63,7 +80,7 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
 "@) -ForegroundColor Blue
   }
 
-  write-host "==> resp header `n$(cat $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
+  write-host "==> Response header `n$(cat $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
 
   return $length,$sha256
 }

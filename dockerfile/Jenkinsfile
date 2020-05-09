@@ -11,7 +11,7 @@ pipeline {
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     LWPM_DOCKER_REGISTRY_MIRROR = "ccr.ccs.tencentyun.com"
-    # 请修改此环境变量的值为 K8S 版本号
+    // 请修改此环境变量的值为 K8S 版本号
     LWPM_K8S_VERSION = "${env.LWPM_K8S_VERSION}"
   }
   stages {
@@ -20,144 +20,52 @@ pipeline {
         sh "cat /etc/os-release"
       }
     }
-    stage('update docker to latest'){
-      steps {
-        sh "docker version"
-        sh "docker info"
+    // stage('update docker to latest'){
+    //   steps {
+    //     sh "docker version"
+    //     sh "docker info"
 
-        sh "curl -fsSL https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -"
-        sh "sudo add-apt-repository \"deb [arch=amd64] https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu \$(lsb_release -cs) stable\""
-        sh "sudo apt update"
-        sh "sudo apt install docker-ce docker-ce-cli containerd.io -y"
+    //     sh "curl -fsSL https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -"
+    //     sh "sudo add-apt-repository \"deb [arch=amd64] https://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu \$(lsb_release -cs) stable\""
+    //     sh "sudo apt update"
+    //     sh "sudo apt install docker-ce docker-ce-cli containerd.io -y"
 
-        sh "docker version"
-        sh "docker info"
-      }
-    }
-    stage('setting docker'){
-      steps {
-        sh "cat /etc/docker/daemon.json | true"
-        // sh "sudo mkdir -p /etc/docker"
-        // sh "echo {\"registry-mirrors\": [\"https://mirror.ccs.tencentyun.com\"]} | sudo tee /etc/docker/daemon.json"
-        // sh "cat /etc/docker/daemon.json | true"
-        // sh "sudo systemctl restart docker"
-        sh "sudo systemctl cat docker"
-        sh "docker info"
-      }
-    }
-    stage('setup-buildx'){
-      steps {
-        sh "docker buildx version"
-        sh "docker buildx ls"
-        sh "sudo ls /proc/sys/fs | true"
-        sh "sudo ls /proc/sys/fs/binfmt_misc | true"
-        sh "cat /proc/sys/fs/binfmt_misc/qemu-aarch64 | true"
+    //     sh "docker version"
+    //     sh "docker info"
+    //   }
+    // }
+    // stage('setting docker'){
+    //   steps {
+    //     sh "cat /etc/docker/daemon.json | true"
+    //     // sh "sudo mkdir -p /etc/docker"
+    //     // sh "echo {\"registry-mirrors\": [\"https://mirror.ccs.tencentyun.com\"]} | sudo tee /etc/docker/daemon.json"
+    //     // sh "cat /etc/docker/daemon.json | true"
+    //     // sh "sudo systemctl restart docker"
+    //     sh "sudo systemctl cat docker"
+    //     sh "docker info"
+    //   }
+    // }
+    // stage('setup-buildx'){
+    //   steps {
+    //     sh "docker buildx version"
+    //     sh "docker buildx ls"
+    //     sh "sudo ls /proc/sys/fs | true"
+    //     sh "sudo ls /proc/sys/fs/binfmt_misc | true"
+    //     sh "cat /proc/sys/fs/binfmt_misc/qemu-aarch64 | true"
 
-        sh "sudo apt install qemu-user -y"
-        sh "ls /proc/sys/fs/binfmt_misc | true"
-        sh "cat /proc/sys/fs/binfmt_misc/qemu-aarch64 | true"
+    //     sh "sudo apt install qemu-user -y"
+    //     sh "ls /proc/sys/fs/binfmt_misc | true"
+    //     sh "cat /proc/sys/fs/binfmt_misc/qemu-aarch64 | true"
 
-        // sh "sudo mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc | true"
+    //     // sh "sudo mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc | true"
 
-        sh "docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64 | true"
-        sh "docker buildx create --use --name mybuilder --driver-opt image=${BUILDX_IMAGE}"
-        sh "docker buildx ls"
+    //     sh "docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64 | true"
+    //     sh "docker buildx create --use --name mybuilder --driver-opt image=${BUILDX_IMAGE}"
+    //     sh "docker buildx ls"
 
-        sh "docker buildx inspect --bootstrap"
-      }
-    }
-    stage("Dockerfile") {
-      steps {
-        sh "echo \\# syntax=docker/dockerfile:experimental > Dockerfile "
-        sh "echo ARG IMAGE=mysql >> Dockerfile "
-        sh "echo FROM --platform=\\\$TARGETPLATFORM \\\$IMAGE >> Dockerfile "
-        sh "cat Dockerfile"
-      }
-    }
-    stage('登录仓库') {
-      steps {
-        sh "echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin ccr.ccs.tencentyun.com"
-      }
-    }
-    stage('构建镜像-mysql-amd64') {
-      steps {
-        sh "echo mysql mysql:8.0.20 mysql:5.7.30 mysql:5.6.48> manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
-      }
-    }
-    stage('构建镜像-mariadb-amd64-arm64') {
-      steps {
-        sh "echo mariadb mariadb:10.5.2 mariadb:10.4.12 mariadb:10.3.22 > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
-      }
-    }
-    stage('构建镜像-registry-amd64-arm64') {
-      steps {
-        sh "echo registry registry:2.7.1 > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
-      }
-    }
-    stage('构建镜像-phpmyadmin-amd64') {
-      steps {
-        sh "echo phpmyadmin/phpmyadmin > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/phpmyadmin --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
-      }
-    }
-    stage('构建镜像-minio-amd64') {
-      steps {
-        sh "echo minio/minio:RELEASE.2020-03-25T07-03-04Z > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/minio:RELEASE.2020-03-25T07-03-04Z --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
-      }
-    }
-    stage('构建镜像-mongo-amd64-arm64') {
-      steps {
-        sh "echo mongo mongo:4.2.6 > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
-      }
-    }
-    stage('构建镜像-kong-amd64') {
-      steps {
-        sh "echo kong kong:alpine kong:2.0.4 kong:2.0.4-alpine > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64 --push .;done"
-      }
-    }
-
-    stage('构建镜像-redis') {
-      steps {
-        sh "echo redis:alpine redis:5.0.9-alpine redis:6.0.1-alpine > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
-      }
-    }
-    stage('构建镜像-memcached') {
-      steps {
-        sh "echo memcached:alpine memcached:1.6.5-alpine > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
-      }
-    }
-    stage('构建镜像-nginx') {
-      steps {
-        sh "echo nginx:alpine nginx:1.18.0-alpine nginx:1.17.10-alpine > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
-      }
-    }
-    stage('构建镜像-httpd') {
-      steps {
-        sh "echo httpd:alpine httpd:2.4.43-alpine > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
-      }
-    }
-    stage('构建镜像-postgres') {
-      steps {
-        sh "echo postgres:alpine postgres:12.2-alpine > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
-      }
-    }
-    stage('构建镜像-rabbitmq') {
-      steps {
-        sh "echo rabbitmq:alpine rabbitmq:3.8.3-alpine rabbitmq:management-alpine rabbitmq:3.8.3-management-alpine > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/khs1994/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform ${PLATFORM} --push .;done"
-      }
-    }
+    //     sh "docker buildx inspect --bootstrap"
+    //   }
+    // }
 
     stage('构建镜像-pcit-amd64-arm64') {
       steps {
@@ -167,61 +75,17 @@ pipeline {
         sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
       }
     }
-    stage('构建镜像-docker-practice') {
+
+    stage('同步镜像') {
       steps {
-        sh "echo :vuepress :gitbook :latest :us-en > manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice\${IMAGE} --build-arg IMAGE=dockerpracticesig/docker_practice\${IMAGE} --platform linux/amd64 --push .;done"
-      }
-    }
+        sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/docker-image-sync.json"
 
-    // stage('setup-pwsh') {
-    //   steps {
-    //     sh "pwsh || true"
-    //     sh "wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb"
-    //     sh "sudo dpkg -i packages-microsoft-prod.deb"
-    //     sh "sudo apt-get update"
-    //     sh "sudo apt-get install -y powershell"
-    //   }
-    // }
-
-    stage('lwpm') {
-      steps {
-        // sh "pwsh -c 'echo $env:LWPM_DIST_ONLY' "
-        // sh "pwsh -c 'echo $env:LWPM_DOCKER_USERNAME' "
-        // sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
-        // sh "git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp"
-        // sh "pwsh ./lnmp/kubernetes/bin/lwpm.ps1"
-        sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
-            -e LWPM_DOCKER_PASSWORD \
-            -e LWPM_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
+        sh "docker run -i --rm -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
+            -e DEST_DOCKER_PASSWORD=\${DOCKER_PASSWORD} \
+            -e SOURCE_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
             -e CI=true \
-            -v \$PWD/vendor:/root/lnmp/vendor \
-            lwpm/lwpm \
-            add kubernetes-node@\${LWPM_K8S_VERSION} \
-                kubernetes-server@\${LWPM_K8S_VERSION} \
-                --all-platform"
-
-        sh "ls -R vendor"
-
-        sh "docker run -i --rm  \
-            -v \$PWD/vendor:/root/lnmp/vendor \
-            -e CI=true \
-            lwpm/lwpm \
-            dist kubernetes-node@\${LWPM_K8S_VERSION} \
-                 kubernetes-server@\${LWPM_K8S_VERSION}"
-
-        sh "ls -R vendor"
-
-        sh "docker run -i --rm -e LWPM_DOCKER_USERNAME \
-            -e LWPM_DOCKER_PASSWORD \
-            -e LWPM_DOCKER_REGISTRY=\${LWPM_DOCKER_REGISTRY_MIRROR} \
-            -e CI=true \
-            -v \$PWD/vendor:/root/lnmp/vendor \
-            lwpm/lwpm \
-            push kubernetes-node@\${LWPM_K8S_VERSION} \
-                 kubernetes-server@\${LWPM_K8S_VERSION}"
-
-        sh "ls -R vendor"
+            -v \$PWD/docker-image-sync.json:/root/lnmp/windows/docker-image-sync.json \
+            khs1994/docker-image-sync"
       }
     }
 

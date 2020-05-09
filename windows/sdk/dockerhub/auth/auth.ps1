@@ -16,7 +16,7 @@ function getToken($image,
 
       return (Get-Content $token_file -raw -Encoding utf8).trim()
     }else{
-      write-host "==> Token file cache find, but expire" -ForegroundColor Green
+      write-host "==> Token file cache find, but expire" -ForegroundColor Yellow
     }
   }else{
     write-host "==> Token file cache not find" -ForegroundColor Green

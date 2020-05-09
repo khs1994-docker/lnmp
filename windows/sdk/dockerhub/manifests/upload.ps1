@@ -12,7 +12,7 @@ Function upload($token, $image, $ref, $manifest_json_path, $contentType = "appli
     -A "Docker-Client/19.03.5 (Windows)" `
     "https://$registry/v2/$image/manifests/$ref"
 
-  write-host "==> resp header `n$(cat $env:TEMP/curl_resp_header.txt -raw)" -ForegroundColor Green
+  write-host "==> Response header `n$(cat $env:TEMP/curl_resp_header.txt -raw)" -ForegroundColor Green
 
   $manifest_sha256=((cat $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split('sha256:')[-1]
 

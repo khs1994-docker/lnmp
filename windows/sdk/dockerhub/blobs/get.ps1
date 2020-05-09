@@ -11,7 +11,8 @@ function getDist($dist,$distTemp){
 function get($token,$image,$digest,$registry="registry.hub.docker.com",$dist){
   . $PSScriptRoot/../cache/cache.ps1
 
-  $distTemp = getCachePath "${registry}@$($image.replace('/','@'))@$($digest.split(':')[1]).tar.gz"
+  New-Item -force -type Directory (getCachePath blobs) | out-null
+  $distTemp = getCachePath "blobs/$($digest.split(':')[1]).tar.gz"
 
   if(Test-Path $distTemp){
     Write-Host "==> File already exists, skip download" -ForegroundColor Green
@@ -33,6 +34,11 @@ function get($token,$image,$digest,$registry="registry.hub.docker.com",$dist){
 
     $statusCode = $result.StatusCode
 
+    if(!$statusCode){
+      Write-Host $_.Exception
+    }
+
+    # Write-Host $_.Exception
     Write-Host "==> HTTP StatusCode is $statusCode"
 
     if($statusCode -lt 400 -and $statusCode -gt 200){
