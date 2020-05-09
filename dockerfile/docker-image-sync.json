@@ -1,7 +1,39 @@
 [
   {
-    "source": "library/node:alpine",
+    "source": "node:alpine",
     "dest": "ccr.ccs.tencentyun.com/khs1994/node:alpine"
+  },
+  {
+    "source": "library/node:14.2.0-alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/node:14.2.0-alpine"
+  },
+  {
+    "source": "library/go:1.14.2-alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/go:1.14.2-alpine"
+  },
+  {
+    "source": "library/go:alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/go:alpine"
+  },
+  {
+    "source": "library/alpine:3.11",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/alpine:3.11"
+  },
+  {
+    "source": "library/alpine:edge",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/alpine:edge"
+  },
+  {
+    "source": "library/alpine:latest",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/alpine:latest"
+  },
+  {
+    "source": "library/python:alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/python:alpine"
+  },
+  {
+    "source": "library/python:3.8.2-alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/python:3.8.2-alpine"
   },
   {
     "source": "library/mysql:latest",
@@ -154,5 +186,29 @@
   {
     "source": "dockerpracticesig/docker_practice:us-en",
     "dest": "ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice:us-en"
+  },
+  {
+    "source": "khs1994/acme:2.8.6",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/acme:2.8.6"
+  },
+  {
+    "source": "library/bash:latest",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/bash:latest"
+  },
+  {
+    "source": "library/caddy:alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/caddy:alpine"
+  },
+  {
+    "source": "quay.io/coreos/etcd:v3.4.7",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/etcd:v3.4.7"
+  },
+  {
+    "source": "quay.io/coreos/etcd:v3.4.7-arm64",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/etcd:v3.4.7-arm64"
+  },
+  {
+    "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller:0.32.0"
   }
 ]

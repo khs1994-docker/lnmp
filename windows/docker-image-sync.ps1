@@ -15,7 +15,17 @@ $EXCLUDE_VARIANT = "v6", "v5"
 
 Function _sync() {
   $source_image, $source_ref = $source.split(':')
-  $source_registry = $env:SOURCE_DOCKER_REGISTRY
+  if ($source.split('/').Count -ge 3 ) {
+    $source_registry, $source_image = $source_image.split('/', 2)
+  }
+  else {
+    $source_registry = $env:SOURCE_DOCKER_REGISTRY
+  }
+
+  if (!$source_image.contains('/')) {
+    $source_image = "library/$source_image"
+  }
+
   $dest_image, $dest_ref = $dest.split(':')
   $dest_registry, $dest_image = $dest_image.split('/', 2)
 
@@ -36,29 +46,51 @@ Function _sync() {
     "registry": "$dest_registry",
     "image": "$dest_image",
     "ref":"$dest_ref"
-  }
+}
 "@) -ForegroundColor Red
 
   Function _getSourceToken() {
     $env:DOCKER_PASSWORD = $null
     $env:DOCKER_USERNAME = $null
+    . $PSScriptRoot/sdk/dockerhub/auth/token.ps1
 
-    . $PSScriptRoot/sdk/dockerhub/auth/auth.ps1
-    $token = getToken $source_image
+    try {
+      $tokenServer, $tokenService = getTokenServerAndService $source_registry
+      . $PSScriptRoot/sdk/dockerhub/auth/auth.ps1
+      if (!$tokenServer) {
+        throw "tokenServer not found"
+      }
+      $token = getToken $source_image 'pull' $tokenServer $tokenService
 
-    return $token
+      return $token
+    }
+    catch {
+      write-host "==> get source token error" -ForegroundColor Yellow
+      write-host $_.Exception
+    }
+
+    return getToken $source_image
   }
 
   Function _getDestToken() {
     . $PSScriptRoot/sdk/dockerhub/auth/token.ps1
-    $tokenServer, $tokenService = getTokenServerAndService $dest_registry
+    try {
+      $tokenServer, $tokenService = getTokenServerAndService $dest_registry
+      if (!$tokenServer) {
+        throw "tokenServer not found"
+      }
 
-    . $PSScriptRoot/sdk/dockerhub/auth/auth.ps1
-    $env:DOCKER_PASSWORD = $env:DEST_DOCKER_PASSWORD
-    $env:DOCKER_USERNAME = $env:DEST_DOCKER_USERNAME
-    $dest_token = getToken $dest_image 'push,pull' $tokenServer $tokenService
+      . $PSScriptRoot/sdk/dockerhub/auth/auth.ps1
+      $env:DOCKER_PASSWORD = $env:DEST_DOCKER_PASSWORD
+      $env:DOCKER_USERNAME = $env:DEST_DOCKER_USERNAME
+      $dest_token = getToken $dest_image 'push,pull' $tokenServer $tokenService
 
-    return $dest_token
+      return $dest_token
+    }
+    catch {
+      write-host "==> get dest token error" -ForegroundColor Red
+      write-host $_.Exception
+    }
   }
 
   if (!$env:DEST_DOCKER_PASSWORD -or !$env:DEST_DOCKER_USERNAME) {
@@ -71,9 +103,14 @@ Function _sync() {
 
   $token = _getSourceToken
   $manifest_list_json_path = list $token $source_image $source_ref -raw $false -registry $source_registry
-  $manifest_list_json = ConvertFrom-Json (cat $manifest_list_json_path -raw)
+  if (!$manifest_list_json_path) {
+    $manifest_list_json = ConvertFrom-Json (cat $manifest_list_json_path -raw)
+  }
+  else {
+    $manifest_list_json = $null
+  }
 
-  if ($manifest_list_json.schemaVersion -eq 1) {
+  if ((!$manifest_list_json) -or ($manifest_list_json.schemaVersion -eq 1)) {
     $manifests_list_not_exists = $true
     $manifests = $(1)
   }
@@ -109,6 +146,13 @@ Function _sync() {
     $token = _getSourceToken
     $manifest_json_path = list $token $source_image $manifest_digest $manifest_media_type `
       -raw $false -registry $source_registry
+
+    if (!$manifest_json_path) {
+      write-host "==> Image manifest not found, skip" -ForegroundColor Red
+
+      return
+    }
+
     $manifest_json = ConvertFrom-Json (cat $manifest_json_path -raw)
 
     . $PSScriptRoot/sdk/dockerhub/blobs/get.ps1
@@ -121,7 +165,7 @@ Function _sync() {
     }
     else {
       $token = _getSourceToken
-      $blob_dest = get $token $source_image $config_digest
+      $blob_dest = get $token $source_image $config_digest $source_registry
       if (!$blob_dest) {
         write-host "==> get blob error" -ForegroundColor Red
 

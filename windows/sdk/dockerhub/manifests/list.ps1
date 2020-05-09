@@ -33,7 +33,11 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
       #   return
       # }
 
-      Write-host "==> Get manifest list error [ $($result.StatusCode) ], try get manifest ..." -ForegroundColor Green
+      Write-host "==> Get manifest list error [ $($result.StatusCode) ], please try get manifest ..." -ForegroundColor Red
+
+      if($raw){
+        return $false
+      }
 
       return ConvertFrom-Json -InputObject @"
 {
