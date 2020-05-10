@@ -106,7 +106,7 @@ $result = list $token $image $ref $null $registry
 if($result.schemaVersion -eq 1){
   # write-host $result
 
-  Write-Host "==> manifest list not found" -ForegroundColor Red
+  Write-Host "==> Manifest list not found" -ForegroundColor Red
 
   $result = list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
 
@@ -119,7 +119,7 @@ if($result.schemaVersion -eq 1){
   Write-Host "==> Digest is $digest" -ForegroundColor Green
 
   if(!$digest){
-    Write-Host "==> image not found, exit" -ForegroundColor Red
+    Write-Host "==> [error] Image not found, exit" -ForegroundColor Red
 
     return $false
   }
@@ -136,9 +136,9 @@ if($result.schemaVersion -eq 1){
 
   return $dest
 }elseif($result.schemaVersion -eq 2){
-  Write-host "==> manifest list is found" -ForegroundColor Green
+  Write-host "==> Manifest list is found" -ForegroundColor Green
 }else{
-  Write-host "==> Get manifest error, exit" -ForegroundColor Red
+  Write-host "==> [error] Get manifest error, exit" -ForegroundColor Red
 
   return $false
 }

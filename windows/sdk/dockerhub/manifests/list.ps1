@@ -35,7 +35,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
 
       Write-host "==> Get manifest list error [ $($result.StatusCode) ], please try get manifest ..." -ForegroundColor Red
 
-      if($raw){
+      if(!$raw){
         return $false
       }
 
@@ -46,7 +46,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
 "@
     }
 
-    Write-Host "==> Get manifest error [ $($result.StatusCode) ]" -ForegroundColor Red
+    Write-Host "==> [error] Get manifest error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false
   }

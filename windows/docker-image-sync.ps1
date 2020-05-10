@@ -103,7 +103,7 @@ Function _sync() {
 
   $token = _getSourceToken
   $manifest_list_json_path = list $token $source_image $source_ref -raw $false -registry $source_registry
-  if (!$manifest_list_json_path) {
+  if ($manifest_list_json_path) {
     $manifest_list_json = ConvertFrom-Json (cat $manifest_list_json_path -raw)
   }
   else {
