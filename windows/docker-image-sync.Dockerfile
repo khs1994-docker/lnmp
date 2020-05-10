@@ -4,7 +4,8 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 
 ENV DEST_DOCKER_USERNAME= \
     DEST_DOCKER_PASSWORD= \
-    SOURCE_DOCKER_REGISTRY=
+    SOURCE_DOCKER_REGISTRY= \
+    DEST_DOCKER_REGISTRY=
 
 RUN apk add --no-cache curl
 

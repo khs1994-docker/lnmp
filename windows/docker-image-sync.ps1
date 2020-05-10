@@ -19,41 +19,27 @@ else {
 $EXCLUDE_ARCH = "s390x", "ppc64le", "386"
 $EXCLUDE_VARIANT = "v6", "v5"
 
+# $env:SOURCE_DOCKER_REGISTRY = "mirror.io"
+# $env:SOURCE_DOCKER_REGISTRY=
+
+# $env:DEST_DOCKER_REGISTRY = "default.dest.ccs.tencentyun.com"
+# $env:DEST_DOCKER_REGISTRY =
+
+Import-Module -force $PSScriptRoot/sdk/dockerhub/imageParser/imageParser.psm1
+
 Function _sync() {
-  $source_image, $source_ref = $source.split(':')
-  if ($source.split('/').Count -ge 3 ) {
-    $source_registry, $source_image = $source_image.split('/', 2)
-  }
-  else {
-    $source_registry = $env:SOURCE_DOCKER_REGISTRY
-  }
+  $source_registry, $source_image, $source_ref = imageParser $source
+  $dest_registry, $dest_image, $dest_ref = imageParser $dest $false
 
-  if (!$source_image.contains('/')) {
-    $source_image = "library/$source_image"
+  if (!$dest_registry) {
+    Write-Host "==> [error] [ $dest ] dest registry parse error, skip" `
+      -ForegroundColor Red
+
+    return
   }
 
-  $dest_image, $dest_ref = $dest.split(':')
-  $dest_registry, $dest_image = $dest_image.split('/', 2)
-
-  if (!$source_registry) {
-    $source_registry = 'hub-mirror.c.163.com'
-  }
-
-  write-host (Convertfrom-Json -InputObject @"
-{
-    "registry": "$source_registry",
-    "image": "$source_image",
-    "ref":"$source_ref"
-}
-"@) -ForegroundColor Red
-
-  write-host (Convertfrom-Json -InputObject @"
-{
-    "registry": "$dest_registry",
-    "image": "$dest_image",
-    "ref":"$dest_ref"
-}
-"@) -ForegroundColor Red
+  # test
+  # return
 
   Function _getSourceToken() {
     $env:DOCKER_PASSWORD = $null

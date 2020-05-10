@@ -5,7 +5,7 @@
   },
   {
     "source": "node:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/node:alpine"
+    "dest": "khs1994/node:alpine"
   },
   {
     "source": "node:14.2.0-alpine",
@@ -217,10 +217,10 @@
   },
   {
     "source": "quay.io/coreos/etcd:v3.4.7-arm64",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/etcd:v3.4.7-arm64"
+    "dest": "khs1994/etcd:v3.4.7-arm64"
   },
   {
     "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller:0.32.0"
+    "dest": "khs1994/nginx-ingress-controller:0.32.0"
   }
 ]

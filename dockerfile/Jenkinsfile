@@ -10,7 +10,7 @@ pipeline {
     LWPM_DIST_ONLY = 'true'
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
-    LWPM_DOCKER_REGISTRY_MIRROR = "ccr.ccs.tencentyun.com"
+    DEST_DOCKER_REGISTRY = "ccr.ccs.tencentyun.com"
     // 请修改此环境变量的值为 K8S 版本号
     LWPM_K8S_VERSION = "${env.LWPM_K8S_VERSION}"
   }
@@ -83,6 +83,7 @@ pipeline {
         sh "docker run -i --rm -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=\${DOCKER_PASSWORD} \
             -e SOURCE_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
+            -e DEST_DOCKER_REGISTRY=\${DEST_DOCKER_REGISTRY} \
             -e CI=true \
             -v \$PWD/docker-image-sync.json:/root/lnmp/windows/docker-image-sync.json \
             khs1994/docker-image-sync"

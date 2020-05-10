@@ -1,0 +1,50 @@
+[
+  {
+    "source": "docker.io/library/golang:latest",
+    "dest": "ccr.ccs.tencentyun.com/library/golang:latest"
+  },
+  {
+    "source": "docker.io/library/golang",
+    "dest": "ccr.ccs.tencentyun.com/library/golang"
+  },
+  {
+    "source": "docker.io/golang:latest",
+    "dest": "ccr.ccs.tencentyun.com/golang:latest"
+  },
+  {
+    "source": "docker.io/golang",
+    "dest": "ccr.ccs.tencentyun.com/golang"
+  },
+  {
+    "source": "docker.io:9000/library/golang:latest",
+    "dest": "ccr.ccs.tencentyun.com:9000/library/golang:latest"
+  },
+  {
+    "source": "docker.io:9000/library/golang",
+    "dest": "ccr.ccs.tencentyun.com:9000/library/golang"
+  },
+  {
+    "source": "docker.io:9000/golang:latest",
+    "dest": "ccr.ccs.tencentyun.com:9000/golang:latest"
+  },
+  {
+    "source": "docker.io:9000/golang",
+    "dest": "ccr.ccs.tencentyun.com:9000/golang"
+  },
+  {
+    "source": "library/golang:latest",
+    "dest": "library/golang:latest"
+  },
+  {
+    "source": "library/golang",
+    "dest": "library/golang"
+  },
+  {
+    "source": "golang:latest",
+    "dest": "golang:latest"
+  },
+  {
+    "source": "golang",
+    "dest": "golang"
+  }
+]
