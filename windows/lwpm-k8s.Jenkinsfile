@@ -76,6 +76,10 @@ pipeline {
       steps {
         sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/kubernetes/kubernetes-release/docker-image-sync.json"
 
+        sh "sed -i \"s#K8S_VERSION#\${LWPM_K8S_VERSION}#g\" docker-image-sync.json"
+
+        sh "cat docker-image-sync.json"
+
         sh "docker run -i --rm -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=\${DOCKER_PASSWORD} \
             -e SOURCE_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
