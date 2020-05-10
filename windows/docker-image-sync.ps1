@@ -10,7 +10,12 @@ $manifest_list_media_type = "application/vnd.docker.distribution.manifest.list.v
 $manifest_media_type = "application/vnd.docker.distribution.manifest.v2+json"
 $image_media_type = "application/vnd.docker.container.image.v1+json"
 
-$EXCLUDE_OS = $("windows")
+if ($env:SYNC_WINDOWS -eq 'true') {
+  $EXCLUDE_OS = $('w')
+}
+else {
+  $EXCLUDE_OS = $("windows")
+}
 $EXCLUDE_ARCH = "s390x", "ppc64le", "386"
 $EXCLUDE_VARIANT = "v6", "v5"
 

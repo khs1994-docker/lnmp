@@ -1,0 +1,10 @@
+[
+  {
+    "source": "lwpm/kubernetes-node:1.18.0",
+    "dest": "ccr.ccs.tencentyun.com/lwpm/kubernetes-node:1.18.0"
+  },
+  {
+    "source": "lwpm/kubernetes-server:1.18.0",
+    "dest": "ccr.ccs.tencentyun.com/lwpm/kubernetes-server:1.18.0"
+  }
+]
