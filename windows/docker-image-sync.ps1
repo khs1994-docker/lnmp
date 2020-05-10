@@ -10,6 +10,7 @@ $manifest_list_media_type = "application/vnd.docker.distribution.manifest.list.v
 $manifest_media_type = "application/vnd.docker.distribution.manifest.v2+json"
 $image_media_type = "application/vnd.docker.container.image.v1+json"
 
+$EXCLUDE_OS = $("windows")
 $EXCLUDE_ARCH = "s390x", "ppc64le", "386"
 $EXCLUDE_VARIANT = "v6", "v5"
 
@@ -134,15 +135,15 @@ Function _sync() {
       $os = $platform.os
       $variant = $platform.variant
 
-      if ($EXCLUDE_ARCH.indexof($architecture) -ne -1 ) {
-        write-host "==> SKIP handle $platform" -ForegroundColor Red
+      if (($EXCLUDE_OS.indexof($os) -ne -1) `
+          -or ($EXCLUDE_ARCH.indexof($architecture) -ne -1) `
+          -or ($EXCLUDE_VARIANT.indexof($variant) -ne -1 )) {
+        write-host "==> SKIP sync $platform" -ForegroundColor Red
         continue
       }
 
-      if ($EXCLUDE_VARIANT.indexof($variant) -ne -1 ) {
-        write-host "==> SKIP handle $platform" -ForegroundColor Red
-        continue
-      }
+      write-host "==> WILL sync $platform" -ForegroundColor Green
+
       $manifests_sync_count++
       $manifests_sync[$i] = $manifest
     }
@@ -158,7 +159,7 @@ Function _sync() {
     }
     $manifest_list_json.manifests = $manifests
 
-    ConvertTo-Json -depth 3 $manifest_list_json -Compress `
+    ConvertTo-Json -depth 5 $manifest_list_json -Compress `
     | set-content  -NoNewline "$manifest_list_json_path.sync.json"
 
     $manifest_list_json_path = "$manifest_list_json_path.sync.json"
@@ -172,6 +173,8 @@ Function _sync() {
       $architecture = $platform.architecture
       $os = $platform.os
       $variant = $platform.variant
+
+      write-host "==> [sync platform] Handle $platform" -ForegroundColor Blue
     }
     else {
       $manifest_digest = $dest_ref
@@ -240,7 +243,7 @@ Function _sync() {
   }
 
   if ($manifests_list_not_exists) {
-    write-host "==> manifest list not exists, skip " -ForegroundColor Yellow
+    write-host "==> [sync end] manifest list not exists, skip " -ForegroundColor Yellow
 
     return
   }
@@ -250,6 +253,8 @@ Function _sync() {
   $dest_token = _getDestToken
   upload $dest_token $dest_image $dest_ref $manifest_list_json_path `
     $manifest_list_media_type $dest_registry
+
+  write-host "==> [sync end]" -ForegroundColor Blue
 }
 
 if (!(Test-Path $PSScriptRoot/docker-image-sync.json)) {
@@ -264,7 +269,7 @@ foreach ($item in $sync_config) {
   $source = $item.source
   $dest = $item.dest
 
-  write-host "==> Sync [ $source ] to [ $dest ]" -ForegroundColor Blue
+  write-host "==> [sync start] Sync [ $source ] to [ $dest ]" -ForegroundColor Blue
 
   _sync $source $dest
 }
