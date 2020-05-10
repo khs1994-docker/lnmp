@@ -96,7 +96,7 @@ Function _sync() {
   if (!$env:DEST_DOCKER_PASSWORD -or !$env:DEST_DOCKER_USERNAME) {
     write-host "==> please set `$env:DEST_DOCKER_PASSWORD and `$env:DEST_DOCKER_USERNAME" -ForegroundColor Red
 
-    exit
+    exit 1
   }
 
   . $PSScriptRoot/sdk/dockerhub/manifests/list.ps1
@@ -117,6 +117,51 @@ Function _sync() {
   else {
     $manifests_list_not_exists = $false
     $manifests = $manifest_list_json.manifests
+
+    # exclude
+    $manifests_count = $manifests.Count
+
+    $manifests_sync = 0..($manifests_count - 1)
+
+    $i = -1
+    $manifests_sync_count = 0
+    foreach ($manifest in $manifests) {
+      $i++
+      $manifest_digest = $manifest.digest
+      $platform = $manifest.platform
+
+      $architecture = $platform.architecture
+      $os = $platform.os
+      $variant = $platform.variant
+
+      if ($EXCLUDE_ARCH.indexof($architecture) -ne -1 ) {
+        write-host "==> SKIP handle $platform" -ForegroundColor Red
+        continue
+      }
+
+      if ($EXCLUDE_VARIANT.indexof($variant) -ne -1 ) {
+        write-host "==> SKIP handle $platform" -ForegroundColor Red
+        continue
+      }
+      $manifests_sync_count++
+      $manifests_sync[$i] = $manifest
+    }
+
+    $i = -1
+    $manifests = 0..($manifests_sync_count - 1 )
+
+    foreach ($item in $manifests_sync) {
+      if (!($item -is [int])) {
+        $i++
+        $manifests[$i] = $item
+      }
+    }
+    $manifest_list_json.manifests = $manifests
+
+    ConvertTo-Json -depth 3 $manifest_list_json -Compress `
+    | set-content  -NoNewline "$manifest_list_json_path.sync.json"
+
+    $manifest_list_json_path = "$manifest_list_json_path.sync.json"
   }
 
   foreach ($manifest in $manifests) {
@@ -127,17 +172,6 @@ Function _sync() {
       $architecture = $platform.architecture
       $os = $platform.os
       $variant = $platform.variant
-
-      # if ($EXCLUDE_ARCH.indexof($architecture) -ne -1 ){
-      #   write-host "==> SKIP handle $platform" -ForegroundColor Red
-      #   continue
-      # }
-
-      # if ($EXCLUDE_VARIANT.indexof($variant) -ne -1 ){
-      #   write-host "==> SKIP handle $platform" -ForegroundColor Red
-      #   continue
-      # }
-
     }
     else {
       $manifest_digest = $dest_ref
@@ -218,10 +252,10 @@ Function _sync() {
     $manifest_list_media_type $dest_registry
 }
 
-if(!(Test-Path $PSScriptRoot/docker-image-sync.json)){
+if (!(Test-Path $PSScriptRoot/docker-image-sync.json)) {
   write-host "==> file [ $PSScriptRoot/docker-image-sync.json ] not exists" -ForegroundColor Red
 
-  exit
+  exit 1
 }
 
 $sync_config = ConvertFrom-Json (cat $PSScriptRoot/docker-image-sync.json -raw)
