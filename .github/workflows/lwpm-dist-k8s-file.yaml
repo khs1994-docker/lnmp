@@ -10,7 +10,7 @@ jobs:
     name: lwpm-dist-k8s-file
     runs-on: ${{ matrix.os }}-latest
     env:
-      LWPM_K8S_VERSION: "1.19.0-alpha.3"
+      LWPM_K8S_VERSION: "1.18.2"
 
       LWPM_DOCKER_USERNAME: khs1994
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -47,6 +47,30 @@ jobs:
 
           ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-node@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-node@${env:LWPM_K8S_VERSION}
+
+  trigger-coding-net-ci:
+    needs: lwpm-dist-k8s-file
+    name: trigger-coding-net-ci
+    runs-on: ubuntu-latest
+    env:
+      LWPM_K8S_VERSION: "1.18.2"
+    steps:
       - name: trigger-coding.net-ci
+        env:
+          CODING_PASSWORD: ${{secrets.CODING_LWPM_K8S_CI_PASSWORD}}
         run: |
-          echo ''
+          set -x
+          curl -u pto8bv6hoj8e:${CODING_PASSWORD} \
+          -v -X POST  'https://pcit.coding.net/api/cci/job/234348/trigger' \
+          -H 'Content-Type: application/json' \
+          -d "
+          {
+            \"ref\": \"master\",
+            \"envs\": [
+              {
+                \"name\": \"LWPM_K8S_VERSION\",
+                \"value\": \"${LWPM_K8S_VERSION}\",
+                \"sensitive\": 0
+              }
+            ]
+          }"

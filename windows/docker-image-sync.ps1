@@ -88,7 +88,7 @@ Function _sync() {
       return $dest_token
     }
     catch {
-      write-host "==> get dest token error" -ForegroundColor Red
+      write-host "==> [error] get $dest_registry dest token error" -ForegroundColor Red
       write-host $_.Exception
     }
   }
@@ -148,7 +148,7 @@ Function _sync() {
       -raw $false -registry $source_registry
 
     if (!$manifest_json_path) {
-      write-host "==> Image manifest not found, skip" -ForegroundColor Red
+      write-host "==> [error] Image $source_image $source_ref manifest not found, skip" -ForegroundColor Red
 
       return
     }
@@ -167,7 +167,7 @@ Function _sync() {
       $token = _getSourceToken
       $blob_dest = get $token $source_image $config_digest $source_registry
       if (!$blob_dest) {
-        write-host "==> get blob error" -ForegroundColor Red
+        write-host "==> [error] get blob error" -ForegroundColor Red
 
         return
       }
@@ -188,7 +188,7 @@ Function _sync() {
         $token = _getSourceToken
         $blob_dest = get $token $source_image $layer_digest -registry $source_registry
         if (!$blob_dest) {
-          write-host "==> get blob error" -ForegroundColor Red
+          write-host "==> [error] get blob error" -ForegroundColor Red
 
           return
         }
@@ -216,6 +216,12 @@ Function _sync() {
   $dest_token = _getDestToken
   upload $dest_token $dest_image $dest_ref $manifest_list_json_path `
     $manifest_list_media_type $dest_registry
+}
+
+if(!(Test-Path $PSScriptRoot/docker-image-sync.json)){
+  write-host "==> file [ $PSScriptRoot/docker-image-sync.json ] not exists" -ForegroundColor Red
+
+  exit
 }
 
 $sync_config = ConvertFrom-Json (cat $PSScriptRoot/docker-image-sync.json -raw)

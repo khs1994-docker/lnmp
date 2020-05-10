@@ -1,19 +1,23 @@
 [
   {
+    "source": "khs1994/not-exists:latest",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/not-exists:latest"
+  },
+  {
     "source": "node:alpine",
     "dest": "ccr.ccs.tencentyun.com/khs1994/node:alpine"
   },
   {
-    "source": "library/node:14.2.0-alpine",
+    "source": "node:14.2.0-alpine",
     "dest": "ccr.ccs.tencentyun.com/khs1994/node:14.2.0-alpine"
   },
   {
-    "source": "library/go:1.14.2-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/go:1.14.2-alpine"
+    "source": "golang:1.14.2-alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/golang:1.14.2-alpine"
   },
   {
-    "source": "library/go:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/go:alpine"
+    "source": "golang:alpine",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/golang:alpine"
   },
   {
     "source": "library/alpine:3.11",
@@ -190,6 +194,14 @@
   {
     "source": "khs1994/acme:2.8.6",
     "dest": "ccr.ccs.tencentyun.com/khs1994/acme:2.8.6"
+  },
+  {
+    "source": "khs1994/docker-image-sync:latest",
+    "dest": "ccr.ccs.tencentyun.com/khs1994/docker-image-sync:latest"
+  },
+  {
+    "source": "lwpm/lwpm:latest",
+    "dest": "ccr.ccs.tencentyun.com/lwpm/lwpm:latest"
   },
   {
     "source": "library/bash:latest",

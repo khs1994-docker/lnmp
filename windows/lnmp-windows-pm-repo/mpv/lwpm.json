@@ -2,7 +2,7 @@
   "name": "mpv",
   "description": "Video player based on MPlayer/mplayer2",
   "version": "0.32.0",
-  "pre-version": "20200412-git-530a086",
+  "pre-version": "20200426-git-640db1e",
   "homepage": "https://mpv.io/",
   "bug": "https://mpv.io/bug-reports/",
   "github": "mpv-player/mpv",
@@ -15,6 +15,7 @@
   "command": "mpv",
   "scripts": {
     "install": [
+      "# https://sourceforge.net/projects/mpv-player-windows/files/",
       "_mkdir ${env:ProgramData}/mpv",
       "powershell -c \"7z x $filename -aoa -r -o${env:ProgramData}/mpv\"",
       "_ln ${env:ProgramData}\\mpv\\mpv.exe $HOME\\Desktop\\mpv.exe"
