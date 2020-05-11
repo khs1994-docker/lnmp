@@ -1,7 +1,7 @@
 [
   {
     "source": "khs1994/not-exists:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/not-exists:latest"
+    "dest": "khs1994/not-exists:latest"
   },
   {
     "source": "node:alpine",
@@ -9,211 +9,211 @@
   },
   {
     "source": "node:14.2.0-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/node:14.2.0-alpine"
+    "dest": "khs1994/node:14.2.0-alpine"
   },
   {
     "source": "golang:1.14.2-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/golang:1.14.2-alpine"
+    "dest": "khs1994/golang:1.14.2-alpine"
   },
   {
     "source": "golang:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/golang:alpine"
+    "dest": "khs1994/golang:alpine"
   },
   {
     "source": "library/alpine:3.11",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/alpine:3.11"
+    "dest": "khs1994/alpine:3.11"
   },
   {
     "source": "library/alpine:edge",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/alpine:edge"
+    "dest": "khs1994/alpine:edge"
   },
   {
     "source": "library/alpine:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/alpine:latest"
+    "dest": "khs1994/alpine:latest"
   },
   {
     "source": "library/python:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/python:alpine"
+    "dest": "khs1994/python:alpine"
   },
   {
     "source": "library/python:3.8.2-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/python:3.8.2-alpine"
+    "dest": "khs1994/python:3.8.2-alpine"
   },
   {
     "source": "library/mysql:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mysql:latest"
+    "dest": "khs1994/mysql:latest"
   },
   {
     "source": "library/mysql:8.0.20",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mysql:8.0.20"
+    "dest": "khs1994/mysql:8.0.20"
   },
   {
     "source": "library/mysql:5.7.30",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mysql:5.7.30"
+    "dest": "khs1994/mysql:5.7.30"
   },
   {
     "source": "library/mysql:5.6.48",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mysql:5.6.48"
+    "dest": "khs1994/mysql:5.6.48"
   },
   {
     "source": "library/mariadb:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mariadb:latest"
+    "dest": "khs1994/mariadb:latest"
   },
   {
     "source": "library/mariadb:10.5.2",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mariadb:10.5.2"
+    "dest": "khs1994/mariadb:10.5.2"
   },
   {
     "source": "library/mariadb:10.4.12",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mariadb:10.4.12"
+    "dest": "khs1994/mariadb:10.4.12"
   },
   {
     "source": "library/mariadb:10.3.22",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mariadb:10.3.22"
+    "dest": "khs1994/mariadb:10.3.22"
   },
   {
     "source": "library/registry:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/registry:latest"
+    "dest": "khs1994/registry:latest"
   },
   {
     "source": "library/registry:2.7.1",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/registry:2.7.1"
+    "dest": "khs1994/registry:2.7.1"
   },
   {
     "source": "library/mongo:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mongo:latest"
+    "dest": "khs1994/mongo:latest"
   },
   {
     "source": "library/mongo:4.2.6",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/mongo:4.2.6"
+    "dest": "khs1994/mongo:4.2.6"
   },
   {
     "source": "library/kong:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/kong:latest"
+    "dest": "khs1994/kong:latest"
   },
   {
     "source": "library/kong:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/kong:alpine"
+    "dest": "khs1994/kong:alpine"
   },
   {
     "source": "library/kong:2.0.4",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/kong:2.0.4"
+    "dest": "khs1994/kong:2.0.4"
   },
   {
     "source": "library/kong:2.0.4-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/kong:2.0.4-alpine"
+    "dest": "khs1994/kong:2.0.4-alpine"
   },
   {
     "source": "library/redis:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/redis:alpine"
+    "dest": "khs1994/redis:alpine"
   },
   {
     "source": "library/redis:5.0.9-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/redis:5.0.9-alpine"
+    "dest": "khs1994/redis:5.0.9-alpine"
   },
   {
     "source": "library/redis:6.0.1-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/redis:6.0.1-alpine"
+    "dest": "khs1994/redis:6.0.1-alpine"
   },
   {
     "source": "library/memcached:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/memcached:alpine"
+    "dest": "khs1994/memcached:alpine"
   },
   {
     "source": "library/memcached:1.6.5-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/memcached:1.6.5-alpine"
+    "dest": "khs1994/memcached:1.6.5-alpine"
   },
   {
     "source": "library/nginx:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/nginx:alpine"
+    "dest": "khs1994/nginx:alpine"
   },
   {
     "source": "library/nginx:1.18.0-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/nginx:1.18.0-alpine"
+    "dest": "khs1994/nginx:1.18.0-alpine"
   },
   {
     "source": "library/nginx:1.17.10-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/nginx:1.17.10-alpine"
+    "dest": "khs1994/nginx:1.17.10-alpine"
   },
   {
     "source": "library/httpd:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/httpd:alpine"
+    "dest": "khs1994/httpd:alpine"
   },
   {
     "source": "library/httpd:2.4.43-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/httpd:2.4.43-alpine"
+    "dest": "khs1994/httpd:2.4.43-alpine"
   },
   {
     "source": "library/postgres:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/postgres:alpine"
+    "dest": "khs1994/postgres:alpine"
   },
   {
     "source": "library/postgres:12.2-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/postgres:12.2-alpine"
+    "dest": "khs1994/postgres:12.2-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/rabbitmq:alpine"
+    "dest": "khs1994/rabbitmq:alpine"
   },
   {
     "source": "library/rabbitmq:3.8.3-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/rabbitmq:3.8.3-alpine"
+    "dest": "khs1994/rabbitmq:3.8.3-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/rabbitmq:management-alpine"
+    "dest": "khs1994/rabbitmq:management-alpine"
   },
   {
     "source": "library/rabbitmq:3.8.3-management-alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/rabbitmq:3.8.3-management-alpine"
+    "dest": "khs1994/rabbitmq:3.8.3-management-alpine"
   },
   {
     "source": "phpmyadmin/phpmyadmin:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/phpmyadmin:latest"
+    "dest": "khs1994/phpmyadmin:latest"
   },
   {
     "source": "minio/minio:RELEASE.2020-03-25T07-03-04Z",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/minio:RELEASE.2020-03-25T07-03-04Z"
+    "dest": "khs1994/minio:RELEASE.2020-03-25T07-03-04Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",
-    "dest": "ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice:vuepress"
+    "dest": "dockerpracticesig/docker_practice:vuepress"
   },
   {
     "source": "dockerpracticesig/docker_practice:gitbook",
-    "dest": "ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice:gitbook"
+    "dest": "dockerpracticesig/docker_practice:gitbook"
   },
   {
     "source": "dockerpracticesig/docker_practice:latest",
-    "dest": "ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice:latest"
+    "dest": "dockerpracticesig/docker_practice:latest"
   },
   {
     "source": "dockerpracticesig/docker_practice:us-en",
-    "dest": "ccr.ccs.tencentyun.com/dockerpracticesig/docker_practice:us-en"
+    "dest": "dockerpracticesig/docker_practice:us-en"
   },
   {
     "source": "khs1994/acme:2.8.6",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/acme:2.8.6"
+    "dest": "khs1994/acme:2.8.6"
   },
   {
     "source": "khs1994/docker-image-sync:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/docker-image-sync:latest"
+    "dest": "khs1994/docker-image-sync:latest"
   },
   {
     "source": "lwpm/lwpm:latest",
-    "dest": "ccr.ccs.tencentyun.com/lwpm/lwpm:latest"
+    "dest": "lwpm/lwpm:latest"
   },
   {
     "source": "library/bash:latest",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/bash:latest"
+    "dest": "khs1994/bash:latest"
   },
   {
     "source": "library/caddy:alpine",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/caddy:alpine"
+    "dest": "khs1994/caddy:alpine"
   },
   {
     "source": "quay.io/coreos/etcd:v3.4.7",
-    "dest": "ccr.ccs.tencentyun.com/khs1994/etcd:v3.4.7"
+    "dest": "khs1994/etcd:v3.4.7"
   },
   {
     "source": "quay.io/coreos/etcd:v3.4.7-arm64",

@@ -294,6 +294,11 @@ foreach ($item in $sync_config) {
   $source = $item.source
   $dest = $item.dest
 
+  if (!$dest) {
+    write-host "==> dest config not exists, use source config" -ForegroundColor Yellow
+    $dest = $source
+  }
+
   write-host "==> [sync start] Sync [ $source ] to [ $dest ]" -ForegroundColor Blue
 
   _sync $source $dest

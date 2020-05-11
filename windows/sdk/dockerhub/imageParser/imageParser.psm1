@@ -3,8 +3,12 @@
 # docker.io docker.io:9000 library - golang latest -
 
 # 12 - 4 = 8
-# $env:SOURCE_DOCKER_REGISTRY=
+
+# $env:SOURCE_DOCKER_REGISTRY =
 # $env:DEST_DOCKER_REGISTRY = "default.dest.ccs.tencentyun.com"
+
+# $env:SOURCE_NAMESPACE = "library"
+# $env:DEST_NAMESPACE = "library"
 
 Function imageParser([string] $config, [boolean] $source = $true) {
   # host:port/user/image:ref
@@ -62,8 +66,17 @@ Function imageParser([string] $config, [boolean] $source = $true) {
     }
   }
 
+  if ($source) {
+    $namespace = $env:SOURCE_NAMESPACE
+  }
+  else {
+    $namespace = $env:DEST_NAMESPACE
+  }
+
+  if (!$namespace) { $namespace = "library" }
+
   if (!$image.contains('/')) {
-    $image = "library/$image"
+    $image = "$namespace/$image"
   }
 
   # default source registry

@@ -5,12 +5,13 @@ $i = -1
 foreach ($item in $(cat manifest.txt)) {
   $i++
 
-  $source = "khs1994/php:$item"
-  $dest = "ccr.ccs.tencentyun.com/khs1994/php:$item"
+  $source = "php:$item"
+  # $dest = "ccr.ccs.tencentyun.com/khs1994/php:$item"
+  # $dest = "php:$item"
 
   $config = @{
     "source" = "$source";
-    "dest"   = "$dest"
+    # "dest"   = "$dest"
   }
 
   $sync_config[$i] = $config
