@@ -5,7 +5,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
   if(!$header){
     $header=$header_default
 
-    Write-host "==> Get manifest list ..." -ForegroundColor Green
+    Write-host "==> Get [ $image $ref ] manifest list ..." -ForegroundColor Green
   }
 
   . $PSScriptRoot/../cache/cache.ps1
@@ -33,7 +33,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
       #   return
       # }
 
-      Write-host "==> Get manifest list error [ $($result.StatusCode) ], please try get manifest ..." -ForegroundColor Red
+      Write-host "==> Get [ $image $ref ] manifest list error [ $($result.StatusCode) ], please try get manifest ..." -ForegroundColor Red
 
       if(!$raw){
         return $false
@@ -46,7 +46,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
 "@
     }
 
-    Write-Host "==> [error] Get manifest error [ $($result.StatusCode) ]" -ForegroundColor Red
+    Write-Host "==> [error] Get [ $image $ref ] manifest error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false
   }

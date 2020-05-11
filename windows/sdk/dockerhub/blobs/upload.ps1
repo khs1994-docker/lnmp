@@ -8,7 +8,7 @@ Function _sha256($file){
 
 # application/vnd.docker.container.image.v1+json
 
-Function _isExists($token, $image, $sha256, $registry = "registry.hub.docker.com") {
+Function _isExists([string] $token, $image, $sha256, $registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
       -Authentication OAuth `

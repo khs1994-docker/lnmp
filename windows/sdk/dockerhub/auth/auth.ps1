@@ -1,3 +1,5 @@
+Import-Module $PSScriptRoot/../../log/log.psm1 -force
+
 function getToken($image,
                   $action="pull",
                   $tokenServer="https://auth.docker.io/token",
@@ -57,7 +59,7 @@ try{
     -UserAgent "Docker-Client/19.03.5 (Windows)"
   }
 }catch{
-  write-host $_.Exception.ToString() -ForegroundColor Red
+  _error $_.InvocationInfo $_.Exception
 
   return $null
 }
