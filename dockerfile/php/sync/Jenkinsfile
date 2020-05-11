@@ -19,7 +19,7 @@ pipeline {
 
     stage('同步镜像') {
       steps {
-        sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/php/docker-image-sync.json"
+        sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/php/sync/docker-image-sync.json"
 
         sh "docker run -i --rm -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=\${DOCKER_PASSWORD} \

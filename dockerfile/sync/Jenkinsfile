@@ -11,8 +11,8 @@ pipeline {
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     DEST_DOCKER_REGISTRY = "ccr.ccs.tencentyun.com"
-    // 请修改此环境变量的值为 K8S 版本号
-    LWPM_K8S_VERSION = "${env.LWPM_K8S_VERSION}"
+
+    REGISTRY_NAMESPACE = "khs1994"
   }
   stages {
     stage("os-manifest"){
@@ -78,12 +78,13 @@ pipeline {
 
     stage('同步镜像') {
       steps {
-        sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/docker-image-sync.json"
+        sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/sync/docker-image-sync.json"
 
         sh "docker run -i --rm -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=\${DOCKER_PASSWORD} \
             -e SOURCE_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
             -e DEST_DOCKER_REGISTRY=\${DEST_DOCKER_REGISTRY} \
+            -e DEST_NAMESPACE=\${REGISTRY_NAMESPACE} \
             -e CI=true \
             -v \$PWD/docker-image-sync.json:/root/lnmp/windows/docker-image-sync.json \
             khs1994/docker-image-sync"

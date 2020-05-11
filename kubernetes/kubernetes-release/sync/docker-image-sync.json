@@ -1,0 +1,10 @@
+[
+  {
+    "source": "lwpm/kubernetes-node:K8S_VERSION",
+    "dest": "lwpm/kubernetes-node:K8S_VERSION"
+  },
+  {
+    "source": "lwpm/kubernetes-server:K8S_VERSION",
+    "dest": "lwpm/kubernetes-server:K8S_VERSION"
+  }
+]

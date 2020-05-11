@@ -1,179 +1,179 @@
 [
   {
-    "source": "khs1994/not-exists:latest",
-    "dest": "khs1994/not-exists:latest"
+    "source": "not-exists:latest",
+    "dest": "not-exists:latest"
   },
   {
     "source": "node:alpine",
-    "dest": "khs1994/node:alpine"
+    "dest": "node:alpine"
   },
   {
     "source": "node:14.2.0-alpine",
-    "dest": "khs1994/node:14.2.0-alpine"
+    "dest": "node:14.2.0-alpine"
   },
   {
     "source": "golang:1.14.2-alpine",
-    "dest": "khs1994/golang:1.14.2-alpine"
+    "dest": "golang:1.14.2-alpine"
   },
   {
     "source": "golang:alpine",
-    "dest": "khs1994/golang:alpine"
+    "dest": "golang:alpine"
   },
   {
     "source": "library/alpine:3.11",
-    "dest": "khs1994/alpine:3.11"
+    "dest": "alpine:3.11"
   },
   {
     "source": "library/alpine:edge",
-    "dest": "khs1994/alpine:edge"
+    "dest": "alpine:edge"
   },
   {
     "source": "library/alpine:latest",
-    "dest": "khs1994/alpine:latest"
+    "dest": "alpine:latest"
   },
   {
     "source": "library/python:alpine",
-    "dest": "khs1994/python:alpine"
+    "dest": "python:alpine"
   },
   {
     "source": "library/python:3.8.2-alpine",
-    "dest": "khs1994/python:3.8.2-alpine"
+    "dest": "python:3.8.2-alpine"
   },
   {
     "source": "library/mysql:latest",
-    "dest": "khs1994/mysql:latest"
+    "dest": "mysql:latest"
   },
   {
     "source": "library/mysql:8.0.20",
-    "dest": "khs1994/mysql:8.0.20"
+    "dest": "mysql:8.0.20"
   },
   {
     "source": "library/mysql:5.7.30",
-    "dest": "khs1994/mysql:5.7.30"
+    "dest": "mysql:5.7.30"
   },
   {
     "source": "library/mysql:5.6.48",
-    "dest": "khs1994/mysql:5.6.48"
+    "dest": "mysql:5.6.48"
   },
   {
     "source": "library/mariadb:latest",
-    "dest": "khs1994/mariadb:latest"
+    "dest": "mariadb:latest"
   },
   {
     "source": "library/mariadb:10.5.2",
-    "dest": "khs1994/mariadb:10.5.2"
+    "dest": "mariadb:10.5.2"
   },
   {
     "source": "library/mariadb:10.4.12",
-    "dest": "khs1994/mariadb:10.4.12"
+    "dest": "mariadb:10.4.12"
   },
   {
     "source": "library/mariadb:10.3.22",
-    "dest": "khs1994/mariadb:10.3.22"
+    "dest": "mariadb:10.3.22"
   },
   {
     "source": "library/registry:latest",
-    "dest": "khs1994/registry:latest"
+    "dest": "registry:latest"
   },
   {
     "source": "library/registry:2.7.1",
-    "dest": "khs1994/registry:2.7.1"
+    "dest": "registry:2.7.1"
   },
   {
     "source": "library/mongo:latest",
-    "dest": "khs1994/mongo:latest"
+    "dest": "mongo:latest"
   },
   {
     "source": "library/mongo:4.2.6",
-    "dest": "khs1994/mongo:4.2.6"
+    "dest": "mongo:4.2.6"
   },
   {
     "source": "library/kong:latest",
-    "dest": "khs1994/kong:latest"
+    "dest": "kong:latest"
   },
   {
     "source": "library/kong:alpine",
-    "dest": "khs1994/kong:alpine"
+    "dest": "kong:alpine"
   },
   {
     "source": "library/kong:2.0.4",
-    "dest": "khs1994/kong:2.0.4"
+    "dest": "kong:2.0.4"
   },
   {
     "source": "library/kong:2.0.4-alpine",
-    "dest": "khs1994/kong:2.0.4-alpine"
+    "dest": "kong:2.0.4-alpine"
   },
   {
     "source": "library/redis:alpine",
-    "dest": "khs1994/redis:alpine"
+    "dest": "redis:alpine"
   },
   {
     "source": "library/redis:5.0.9-alpine",
-    "dest": "khs1994/redis:5.0.9-alpine"
+    "dest": "redis:5.0.9-alpine"
   },
   {
     "source": "library/redis:6.0.1-alpine",
-    "dest": "khs1994/redis:6.0.1-alpine"
+    "dest": "redis:6.0.1-alpine"
   },
   {
     "source": "library/memcached:alpine",
-    "dest": "khs1994/memcached:alpine"
+    "dest": "memcached:alpine"
   },
   {
     "source": "library/memcached:1.6.5-alpine",
-    "dest": "khs1994/memcached:1.6.5-alpine"
+    "dest": "memcached:1.6.5-alpine"
   },
   {
     "source": "library/nginx:alpine",
-    "dest": "khs1994/nginx:alpine"
+    "dest": "nginx:alpine"
   },
   {
     "source": "library/nginx:1.18.0-alpine",
-    "dest": "khs1994/nginx:1.18.0-alpine"
+    "dest": "nginx:1.18.0-alpine"
   },
   {
     "source": "library/nginx:1.17.10-alpine",
-    "dest": "khs1994/nginx:1.17.10-alpine"
+    "dest": "nginx:1.17.10-alpine"
   },
   {
     "source": "library/httpd:alpine",
-    "dest": "khs1994/httpd:alpine"
+    "dest": "httpd:alpine"
   },
   {
     "source": "library/httpd:2.4.43-alpine",
-    "dest": "khs1994/httpd:2.4.43-alpine"
+    "dest": "httpd:2.4.43-alpine"
   },
   {
     "source": "library/postgres:alpine",
-    "dest": "khs1994/postgres:alpine"
+    "dest": "postgres:alpine"
   },
   {
     "source": "library/postgres:12.2-alpine",
-    "dest": "khs1994/postgres:12.2-alpine"
+    "dest": "postgres:12.2-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
-    "dest": "khs1994/rabbitmq:alpine"
+    "dest": "rabbitmq:alpine"
   },
   {
     "source": "library/rabbitmq:3.8.3-alpine",
-    "dest": "khs1994/rabbitmq:3.8.3-alpine"
+    "dest": "rabbitmq:3.8.3-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
-    "dest": "khs1994/rabbitmq:management-alpine"
+    "dest": "rabbitmq:management-alpine"
   },
   {
     "source": "library/rabbitmq:3.8.3-management-alpine",
-    "dest": "khs1994/rabbitmq:3.8.3-management-alpine"
+    "dest": "rabbitmq:3.8.3-management-alpine"
   },
   {
     "source": "phpmyadmin/phpmyadmin:latest",
-    "dest": "khs1994/phpmyadmin:latest"
+    "dest": "phpmyadmin:latest"
   },
   {
     "source": "minio/minio:RELEASE.2020-03-25T07-03-04Z",
-    "dest": "khs1994/minio:RELEASE.2020-03-25T07-03-04Z"
+    "dest": "minio:RELEASE.2020-03-25T07-03-04Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",
@@ -192,12 +192,12 @@
     "dest": "dockerpracticesig/docker_practice:us-en"
   },
   {
-    "source": "khs1994/acme:2.8.6",
-    "dest": "khs1994/acme:2.8.6"
+    "source": "acme:2.8.6",
+    "dest": "acme:2.8.6"
   },
   {
-    "source": "khs1994/docker-image-sync:latest",
-    "dest": "khs1994/docker-image-sync:latest"
+    "source": "docker-image-sync:latest",
+    "dest": "docker-image-sync:latest"
   },
   {
     "source": "lwpm/lwpm:latest",
@@ -205,22 +205,22 @@
   },
   {
     "source": "library/bash:latest",
-    "dest": "khs1994/bash:latest"
+    "dest": "bash:latest"
   },
   {
     "source": "library/caddy:alpine",
-    "dest": "khs1994/caddy:alpine"
+    "dest": "caddy:alpine"
   },
   {
     "source": "quay.io/coreos/etcd:v3.4.7",
-    "dest": "khs1994/etcd:v3.4.7"
+    "dest": "etcd:v3.4.7"
   },
   {
     "source": "quay.io/coreos/etcd:v3.4.7-arm64",
-    "dest": "khs1994/etcd:v3.4.7-arm64"
+    "dest": "etcd:v3.4.7-arm64"
   },
   {
     "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0",
-    "dest": "khs1994/nginx-ingress-controller:0.32.0"
+    "dest": "nginx-ingress-controller:0.32.0"
   }
 ]
