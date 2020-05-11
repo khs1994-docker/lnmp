@@ -220,7 +220,7 @@
     "dest": "etcd:v3.4.7-arm64"
   },
   {
-    "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0",
+    "source": "khs1994/nginx-ingress-controller:0.32.0",
     "dest": "nginx-ingress-controller:0.32.0"
   }
 ]
