@@ -5,6 +5,8 @@
 #
 # Generated on: 2019/7/8
 #
+# @see https://docs.microsoft.com/zh-cn/powershell/scripting/developer/module/how-to-write-a-powershell-module-manifest?view=powershell-7
+#
 
 @{
 

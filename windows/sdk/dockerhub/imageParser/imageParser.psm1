@@ -6,7 +6,7 @@
 # $env:SOURCE_DOCKER_REGISTRY=
 # $env:DEST_DOCKER_REGISTRY = "default.dest.ccs.tencentyun.com"
 
-Function imageParser($config, $source = $true) {
+Function imageParser([string] $config, [boolean] $source = $true) {
   # host:port/user/image:ref
   # host:port/image:ref -
   if ($config.split(':').count -eq 3) {
@@ -89,3 +89,5 @@ Function imageParser($config, $source = $true) {
 
   return $registry, $image, $ref
 }
+
+Export-ModuleMember -Function imageParser

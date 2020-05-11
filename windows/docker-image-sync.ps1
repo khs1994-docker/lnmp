@@ -229,7 +229,7 @@ Function _sync() {
     . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
     # upload manifests
     $dest_token = _getDestToken
-    upload $dest_token $dest_image $manifest_digest $manifest_json_path `
+    upload $dest_token $dest_image $dest_ref $manifest_json_path `
       $manifest_media_type $dest_registry
   }
 
