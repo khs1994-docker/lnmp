@@ -2,5 +2,9 @@
   {
     "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0",
     "dest": "nginx-ingress-controller:0.32.0"
+  },
+  {
+    "source": "gcr.io/google-containers/pause:3.2",
+    "dest": "pause:3.2"
   }
 ]

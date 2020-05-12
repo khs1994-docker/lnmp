@@ -7,8 +7,8 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 # ENV SOURCE_DOCKER_REGISTRY=
 # ENV DEST_DOCKER_REGISTRY=
 
-ENV SOURCE_NAMESPACE=library
-ENV DEST_NAMESPACE=library
+# ENV SOURCE_NAMESPACE=library
+# ENV DEST_NAMESPACE=library
 
 RUN apk add --no-cache curl
 
