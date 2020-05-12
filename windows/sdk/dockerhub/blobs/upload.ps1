@@ -24,6 +24,10 @@ Function _isExists([string] $token, $image, $sha256, $registry = "registry.hub.d
   catch {
     write-host "==> Check blob exists error" -ForegroundColor Yellow
     write-host $_.Exception
+
+    if($_.Exception.Response.StatusCode -eq 401){
+      throw '401'
+    }
   }
 
   return $false

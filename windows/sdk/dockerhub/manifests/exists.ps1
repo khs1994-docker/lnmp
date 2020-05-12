@@ -9,8 +9,12 @@ Function _is_exists($token, $image, $sha256, $contentType = "application/vnd.doc
       -UserAgent "Docker-Client/19.03.5 (Windows)"
   }
   catch {
-    write-host "==> check manifest exists error $($_.Exception.Response.StatusCode)" `
+    write-host "==> check manifest exists error [ $($_.Exception.Response.StatusCode) ]" `
       -ForegroundColor Red
+
+    if($_.Exception.Response.StatusCode -eq 401){
+      throw '401'
+    }
 
     return $false
   }

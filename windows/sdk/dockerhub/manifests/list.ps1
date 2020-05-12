@@ -4,11 +4,21 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
 
   if(!$header){
     $header=$header_default
-
-    Write-host "==> Get [ $image $ref ] manifest list ..." -ForegroundColor Green
   }
 
+  $type = "manifest"
+
+  if($header -eq $header_default){
+    $type = "manifest list"
+  }
+
+  Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Green
+
   . $PSScriptRoot/../cache/cache.ps1
+
+  if (!($ref -is [string])) {
+    $ref = $ref.toString()
+  }
 
   $cache_file = getCachePath "manifest@${registry}@$($image.replace('/','@'))@$($ref.replace('sha256:','')).json"
 
@@ -33,7 +43,7 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
       #   return
       # }
 
-      Write-host "==> Get [ $image $ref ] manifest list error [ $($result.StatusCode) ], please try get manifest ..." -ForegroundColor Red
+      Write-host "==> Get [ $image $ref ] $type error [ $($result.StatusCode) ], please try get manifest ..." -ForegroundColor Red
 
       if(!$raw){
         return $false
@@ -46,10 +56,12 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
 "@
     }
 
-    Write-Host "==> [error] Get [ $image $ref ] manifest error [ $($result.StatusCode) ]" -ForegroundColor Red
+    Write-Host "==> [error] Get [ $image $ref ] $type error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false
   }
+
+  write-host "==> $type digest is $($result.Headers.'Docker-Content-Digest')" -ForegroundColor Green
 
   if($raw){
     return ConvertFrom-Json (Get-Content $cache_file -Raw)

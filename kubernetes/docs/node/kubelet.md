@@ -82,8 +82,9 @@ kubelet 启动后使用 `--bootstrap-kubeconfig` 向 kube-apiserver 发送 CSR �
 
 `kubelet-client.crt` 该文件在 kubelet 完成 TLS bootstrapping 后生成，此证书是由 `controller-manager` 签署的，此后 kubelet 将会加载该证书，用于与 apiserver 建立 TLS 通讯，同时使用该证书的 CN 字段作为用户名，O 字段作为用户组向 apiserver 发起其他请求
 
-## pause
+## pause 容器
 
+* https://github.com/kubernetes/kubernetes/tree/master/build/pause
 * https://github.com/rootsongjc/kubernetes-handbook/blob/master/concepts/pause-container.md
 
 ## 动态 kubelet 配置（Dynamic Kubelet Configuration）

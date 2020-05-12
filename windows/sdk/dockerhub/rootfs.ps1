@@ -158,7 +158,7 @@ foreach($manifest in $manifests){
 
     $digest = $layers[$layersIndex].digest
 
-    Write-Host "==> Digest is $digest" -ForegroundColor Green
+    Write-Host "==> Blob(layer) digest is $digest" -ForegroundColor Green
 
     . $PSScriptRoot/blobs/get.ps1
 

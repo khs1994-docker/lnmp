@@ -178,8 +178,16 @@ Function _sync() {
       # check manifest exists
       . $PSScriptRoot/sdk/dockerhub/manifests/exists.ps1
       $dest_token = _getDestToken
-      if (_is_exists $dest_token $dest_image $manifest_digest `
-          -registry $dest_registry) {
+      try {
+        $manifest_exists = _is_exists $dest_token $dest_image $manifest_digest -registry $dest_registry
+      }
+      catch {
+        write-host "==> [error] check manifest error, skip" -ForegroundColor Red
+
+        return
+      }
+
+      if ($manifest_exists) {
         write-host "==> [sync platform] Skip Handle $platform `
 manifest $manifest_digest already exists" `
           -ForegroundColor Blue
@@ -216,8 +224,17 @@ manifest not found, skip" -ForegroundColor Red
     $config_digest = $manifest_json.config.digest
     . $PSScriptRoot/sdk/dockerhub/blobs/upload.ps1
     $dest_token = _getDestToken
-    if (_isExists $dest_token $dest_image $config_digest.split(':')[-1] `
-        $dest_registry) {
+    try {
+      $blob_exists = _isExists $dest_token $dest_image $config_digest.split(':')[-1] `
+        $dest_registry
+    }
+    catch {
+      write-host "==> [error] check blob error, skip" -ForegroundColor Red
+
+      return
+    }
+
+    if ($blob_exists) {
 
     }
     else {

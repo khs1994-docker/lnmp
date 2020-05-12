@@ -6,5 +6,13 @@
   {
     "source": "gcr.io/google-containers/pause:3.2",
     "dest": "pause:3.2"
+  },
+  {
+    "source": "gcr.io/google-containers/coredns:1.6.7",
+    "dest": "coredns:1.6.7"
+  },
+  {
+    "source": "gcr.io/google-containers/metrics-server-amd64:v0.3.6",
+    "dest": "metrics-server-amd64:v0.3.6"
   }
 ]
