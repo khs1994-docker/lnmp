@@ -2,11 +2,12 @@
 
 FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 
-ENV LWPM_DIST_ONLY='true' \
-    LWPM_DOCKER_USERNAME= \
-    LWPM_DOCKER_PASSWORD= \
-    LWPM_DOCKER_REGISTRY= \
-    GITHUB_TOKEN=
+ENV LWPM_DIST_ONLY='true'
+
+# ENV LWPM_DOCKER_USERNAME
+# ENV LWPM_DOCKER_PASSWORD
+# ENV LWPM_DOCKER_REGISTRY
+# ENV GITHUB_TOKEN
 
 RUN apk add --no-cache curl
 

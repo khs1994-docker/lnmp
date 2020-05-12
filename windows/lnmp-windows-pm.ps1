@@ -40,6 +40,14 @@ remove-service  Remove service [ServiceName]
 start-service   Start service
 stop-service    Stop service
 
+ENV:
+
+LWPM_DIST_ONLY
+LWPM_DOCKER_USERNAME
+LWPM_DOCKER_PASSWORD
+LWPM_DOCKER_REGISTRY
+GITHUB_TOKEN
+
 "
 }
 
