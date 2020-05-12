@@ -11,6 +11,8 @@
 # $env:DEST_NAMESPACE = "library"
 
 Function imageParser([string] $config, [boolean] $source = $true) {
+  $config, $digest = $config.split('@')
+
   # host:port/user/image:ref
   # host:port/image:ref -
   if ($config.split(':').count -eq 3) {
@@ -96,11 +98,12 @@ Function imageParser([string] $config, [boolean] $source = $true) {
   {
       "registry": "$registry",
       "image": "$image",
-      "ref":"$ref"
+      "ref": "$ref",
+      "digest": "$digest"
   }
 "@) -ForegroundColor Red
 
-  return $registry, $image, $ref
+  return $registry, $image, $ref, $digest
 }
 
 Export-ModuleMember -Function imageParser

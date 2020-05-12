@@ -28,8 +28,10 @@ $EXCLUDE_VARIANT = "v6", "v5"
 Import-Module -force $PSScriptRoot/sdk/dockerhub/imageParser/imageParser.psm1
 
 Function _sync() {
-  $source_registry, $source_image, $source_ref = imageParser $source
-  $dest_registry, $dest_image, $dest_ref = imageParser $dest $false
+  $source_registry, $source_image, $source_ref, $source_image_with_digest = imageParser $source
+  $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false
+
+  if ($source_image_with_digest) { $source_ref = $source_image_with_digest }
 
   if (!$dest_registry) {
     Write-Host "==> [error] [ $dest ] dest registry parse error, skip" `
@@ -117,6 +119,16 @@ Function _sync() {
     $manifests_list_not_exists = $true
     $manifests = $(1)
   }
+  elseif ($source_image_with_digest) {
+    $manifests_list_not_exists = $false
+    $manifests = $manifest_list_json.manifests
+
+    # 镜像包含 digest，是 manifest list 或 manifest 的 sha256
+    # dest 的 manifest list 必须和 source 的一致，不能排除 platform
+
+    write-host "==> source image include digest, can't exclude platform" `
+      -ForegroundColor Yellow
+  }
   else {
     $manifests_list_not_exists = $false
     $manifests = $manifest_list_json.manifests
@@ -170,6 +182,8 @@ Function _sync() {
     $manifest_list_json_path = "$manifest_list_json_path.sync.json"
   }
 
+  $push_manifest_once = $false
+
   foreach ($manifest in $manifests) {
     if (!$manifests_list_not_exists) {
       $manifest_digest = $manifest.digest
@@ -191,6 +205,25 @@ Function _sync() {
         write-host "==> [sync platform] Skip Handle $platform `
 manifest $manifest_digest already exists" `
           -ForegroundColor Blue
+
+        # 有的仓库不能展示 manifest list，推送一次 manifest 以显示
+
+        if (!$push_manifest_once) {
+          Write-Host "==> Push manifest once" -ForegroundColor Blue
+
+          $token = _getSourceToken
+          $manifest_json_path = list $token $source_image $manifest_digest `
+            $manifest_media_type `
+            -raw $false -registry $source_registry
+
+          . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
+          # upload manifests once
+          $dest_token = _getDestToken
+          upload $dest_token $dest_image $dest_ref $manifest_json_path `
+            $manifest_media_type $dest_registry
+
+          $push_manifest_once = $true
+        }
 
         continue;
       }
@@ -292,8 +325,13 @@ manifest not found, skip" -ForegroundColor Red
   . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
   # upload manifests list
   $dest_token = _getDestToken
-  upload $dest_token $dest_image $dest_ref $manifest_list_json_path `
+  $length, $digest = upload $dest_token $dest_image $dest_ref $manifest_list_json_path `
     $manifest_list_media_type $dest_registry
+
+  if ($dest_image_with_digest -and ("sha256:$digest" -ne $dest_image_with_digest)) {
+    write-host "==> [error] push manifest list $digest not eq $dest_image_with_digest" `
+      -ForegroundColor Red
+  }
 
   write-host "==> [sync end]" -ForegroundColor Blue
 }

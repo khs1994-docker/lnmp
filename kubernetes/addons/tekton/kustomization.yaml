@@ -1,3 +1,25 @@
 resources:
 - tekton.yaml
 - dashboard.yaml
+# configMapGenerator:
+#   - name: config-artifact-bucket
+#     namespace: tekton-pipelines
+#     literals:
+#       - location=gs://bucket-name
+#       - location=s3://mybucket
+#       - bucket.service.account.secret.name=tekton-storage
+#       - bucket.service.account.secret.key=boto-config
+#       - bucket.service.account.field.name=BOTO_CONFIG
+#   - name: config-artifact-pvc
+#     namespace: tekton-pipelines
+#     literals:
+#       - size=5Gi
+#       - storageClassName=storage-class-name
+# secretGenerator:
+#   - name: tekton-storage
+#     namespace: tekton-pipelines
+#     type: kubernetes.io/opaque
+#     files:
+#       - boto-config
+generatorOptions:
+  disableNameSuffixHash: true
