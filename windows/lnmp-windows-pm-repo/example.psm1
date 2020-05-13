@@ -154,6 +154,8 @@ Function _install($VERSION = 0, $isPre = 0) {
     foreach ($item in $lwpm.scripts.download) {
       _iex $item
     }
+
+    return
   }
 
   # 验证原始 zip 文件

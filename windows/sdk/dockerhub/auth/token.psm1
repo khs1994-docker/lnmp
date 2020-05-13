@@ -1,4 +1,4 @@
-Function getTokenServerAndService($registry) {
+Function Get-TokenServerAndService($registry) {
   try {
     $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/x/y/manifests/latest `
         -Method Head -MaximumRedirection 0 -UserAgent "Docker-Client/19.03.5 (Windows)" `

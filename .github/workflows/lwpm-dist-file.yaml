@@ -1,4 +1,4 @@
-name: lwpm-dist-k8s-dep-file
+name: lwpm-dist-file
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
       - "19.03"
 
 jobs:
-  lwpm-dist-k8s-dep-file:
-    name: lwpm-dist-k8s-dep-file
+  lwpm-dist-file:
+    name: lwpm-dist-file
     runs-on: ${{ matrix.os }}-latest
     if: |
-      contains( github.event.head_commit.message, '[dist k8s]')
+      contains( github.event.head_commit.message, '[lwpm dist]')
     env:
       LWPM_DOCKER_USERNAME: khs1994
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -29,7 +29,8 @@ jobs:
           path: lnmp
       - name: handle-conmon
         shell: pwsh
-        if: matrix.os == 'ubuntu'
+        if: matrix.os == 'ubuntu' &&
+            contains( github.event.head_commit.message, '[k8s]')
         env:
           VERSION: 2.0.15
         run: |
@@ -39,7 +40,8 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}
       - name: handle-containerd
         shell: pwsh
-        if: matrix.os == 'ubuntu'
+        if: matrix.os == 'ubuntu' &&
+            contains( github.event.head_commit.message, '[k8s]')
         env:
           VERSION: 1.3.4
         run: |
@@ -49,7 +51,8 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    containerd@${env:VERSION}
       - name: handle-crictl
         shell: pwsh
-        if: matrix.os == 'windows'
+        if: matrix.os == 'windows' &&
+            contains( github.event.head_commit.message, '[k8s]')
         env:
           VERSION: 1.18.0
         run: |
@@ -73,7 +76,8 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    helm@${env:VERSION}
       - name: handle-runc
         shell: pwsh
-        if: matrix.os == 'windows'
+        if: matrix.os == 'windows' &&
+            contains( github.event.head_commit.message, '[k8s]')
         env:
           VERSION: 1.0.0-rc10
         run: |
@@ -81,7 +85,8 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 push    runc@${env:VERSION}
       - name: handle-runsc
         shell: pwsh
-        if: matrix.os == 'ubuntu'
+        if: matrix.os == 'ubuntu' &&
+            contains( github.event.head_commit.message, '[k8s]')
         env:
           VERSION: nightly
         run: |
@@ -89,3 +94,16 @@ jobs:
 
           ./lnmp/windows/lnmp-windows-pm.ps1 install runsc@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    runsc@${env:VERSION}
+
+      - name: handle-compose
+        shell: pwsh
+        if: |
+          matrix.os == 'ubuntu' &&
+            contains( github.event.head_commit.message, '[compose]')
+        env:
+          VERSION: 1.25.5
+        run: |
+          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
+
+          ./lnmp/windows/lnmp-windows-pm.ps1 install compose@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    compose@${env:VERSION}

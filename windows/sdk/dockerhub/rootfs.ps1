@@ -20,6 +20,8 @@
 Import-Module $PSScriptRoot/tags/list.psm1
 Import-Module $PSScriptRoot/manifests/get.psm1
 Import-Module $PSScriptRoot/blobs/get.psm1
+Import-Module $PSScriptRoot\auth\token.psm1
+Import-Module $PSScriptRoot/auth/auth.psm1
 
 function rootfs($image="alpine",
                 $ref="latest",
@@ -52,9 +54,7 @@ function rootfs($image="alpine",
   $FormatEnumerationLimit=-1
   write-host "==> Get token ..." -ForegroundColor Green
 
-  . $PSScriptRoot\auth\token.ps1
-
-  $tokenServerByParser,$tokenServiceByParser = getTokenServerAndService $registry
+  $tokenServerByParser,$tokenServiceByParser = Get-TokenServerAndService $registry
 
   if($tokenServerByParser){$tokenServer=$tokenServerByParser}
   if($tokenServiceByParser){$tokenService=$tokenServiceByParser}
@@ -83,9 +83,7 @@ write-host "==> Wait 3s, continue ..." -ForegroundColor Green
 
 sleep 3
 
-. $PSScriptRoot/auth/auth.ps1
-
-$token=getToken $image pull $tokenServer $tokenService
+$token=Get-DockerRegistryToken $image pull $tokenServer $tokenService
 
 # write-host $token
 

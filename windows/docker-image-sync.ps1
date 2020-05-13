@@ -11,6 +11,8 @@ Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\exists.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 
 $manifest_list_media_type = "application/vnd.docker.distribution.manifest.list.v2+json"
 $manifest_media_type = "application/vnd.docker.distribution.manifest.v2+json"
@@ -133,15 +135,13 @@ Function _sync() {
   Function _getSourceToken() {
     $env:DOCKER_PASSWORD = $null
     $env:DOCKER_USERNAME = $null
-    . $PSScriptRoot/sdk/dockerhub/auth/token.ps1
 
     try {
-      $tokenServer, $tokenService = getTokenServerAndService $source_registry
-      . $PSScriptRoot/sdk/dockerhub/auth/auth.ps1
+      $tokenServer, $tokenService = Get-TokenServerAndService $source_registry
       if (!$tokenServer) {
         throw "tokenServer not found"
       }
-      $token = getToken $source_image 'pull' $tokenServer $tokenService
+      $token = Get-DockerRegistryToken $source_image 'pull' $tokenServer $tokenService
 
       return $token
     }
@@ -150,21 +150,19 @@ Function _sync() {
       write-host $_.Exception
     }
 
-    return getToken $source_image
+    return Get-DockerRegistryToken $source_image
   }
 
   Function _getDestToken() {
-    . $PSScriptRoot/sdk/dockerhub/auth/token.ps1
     try {
-      $tokenServer, $tokenService = getTokenServerAndService $dest_registry
+      $tokenServer, $tokenService = Get-TokenServerAndService $dest_registry
       if (!$tokenServer) {
         throw "tokenServer not found"
       }
 
-      . $PSScriptRoot/sdk/dockerhub/auth/auth.ps1
       $env:DOCKER_PASSWORD = $env:DEST_DOCKER_PASSWORD
       $env:DOCKER_USERNAME = $env:DEST_DOCKER_USERNAME
-      $dest_token = getToken $dest_image 'push,pull' $tokenServer $tokenService
+      $dest_token = Get-DockerRegistryToken $dest_image 'push,pull' $tokenServer $tokenService
 
       return $dest_token
     }

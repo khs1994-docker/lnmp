@@ -10,8 +10,10 @@ getToken(){
   tokenService=${4:-registry.docker.io}
   cache=${5:-0}
 
+  mkdir -p `getCachePath token`
+
   token_file=`getCachePath \
-             "token@$(echo $image | sed 's#/#@#g' )@${action}@$(echo $tokenService | sed 's#:#-#g')" `
+             "token/$(echo $image | sed 's#/#@#g' )@${action}@$(echo $tokenService | sed 's#:#-#g')" `
 
   echo "==> Token file is $token_file" > /dev/stderr
 

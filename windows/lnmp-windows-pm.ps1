@@ -17,8 +17,8 @@ LNMP Windows Package Manager
 
 COMMANDS:
 
-install     Install soft [--pre| ]
-uninstall   Uninstall soft [--prune| ]
+install     Install soft [ --pre | ]
+uninstall   Uninstall soft [ --prune | ]
 remove      Uninstall soft
 list        List available softs
 outdated    Shows a list of installed packages that have updates available
@@ -29,7 +29,7 @@ releases    Opens the package's releases page in your browser
 help        Print help info
 add         Add package [ --all-platform | ]
 dist        Dist package
-init        Init a new package (developer) [--custom]
+init        Init a new package (developer) [ --custom | ]
 push        Push a package to docker registry (developer)
 toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
 
@@ -70,6 +70,8 @@ Import-Module $PSScriptRoot\sdk\dockerhub\manifests\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
@@ -80,15 +82,11 @@ if (!$Env:PSModulePathSystem) {
   $Env:PSModulePathSystem = $Env:PSModulePath
 }
 
-if ($IsWindows) {
-  $Env:PSModulePath = "$Env:PSModulePathSystem" + ";" `
-    + $PSScriptRoot + "/powershell_system" + ";"
+$Env:PSModulePath = "$Env:PSModulePathSystem" + [System.IO.Path]::PathSeparator `
++ $PSScriptRoot + "/powershell_system" + [System.IO.Path]::PathSeparator
 
+if ($IsWindows) {
   _exportPath "C:\bin"
-}
-else {
-  $Env:PSModulePath = "$Env:PSModulePathSystem" + ":" `
-    + $PSScriptRoot + "/powershell_system" + ":"
 }
 
 Function _rename($src, $target) {
@@ -211,6 +209,16 @@ Function _import_module($soft) {
   Import-Module -Name $soft_ps_module_dir
 }
 
+Function _uname_parse($string){
+  if($string -eq "windows"){return "Windows"}
+  if($string -eq "linux"){return "Linux"}
+  if($string -eq "darwin"){return "Darwin"}
+
+  if($string -eq "arm64"){return "aarch64"}
+  if($string -eq "amd64"){return "x86_64"}
+  if($string -eq "arm"){return "armv7l"}
+}
+
 Function __install($softs) {
   $preVersion = 0
 
@@ -238,7 +246,9 @@ Function __install($softs) {
 
       foreach ($platform in $platforms) {
         $env:lwpm_architecture = $platform.architecture
+        $env:LWPM_UNAME_M = _uname_parse $env:lwpm_architecture
         $env:lwpm_os = $platform.os
+        $env:LWPM_UNAME_S = _uname_parse $env:lwpm_os
 
         if ($version) {
           _install $version $preVersion
@@ -255,7 +265,9 @@ Function __install($softs) {
     }
 
     $env:lwpm_architecture = "amd64"
+    $env:LWPM_UNAME_M = "x86_64"
     $env:lwpm_os = "windows"
+    $env:LWPM_UNAME_S = "Windows"
 
     if ($version) {
       _install $version $preVersion
@@ -300,12 +312,8 @@ Function getLwpmDockerRegistry() {
 }
 
 Function getDockerRegistryToken($image, $action = "push,pull") {
-  . $PSScriptRoot\sdk\dockerhub\auth\auth.ps1
-
   if ($env:LWPM_DOCKER_REGISTRY) {
-    . $PSScriptRoot\sdk\dockerhub\auth\token.ps1
-
-    $tokenServer, $tokenService = getTokenServerAndService $env:LWPM_DOCKER_REGISTRY
+    $tokenServer, $tokenService = Get-TokenServerAndService $env:LWPM_DOCKER_REGISTRY
 
     if (!($tokenServer)) {
       Write-Host "==> Get tokenServer error,use default" -ForegroundColor Red
@@ -317,10 +325,10 @@ Function getDockerRegistryToken($image, $action = "push,pull") {
       $tokenService = 'registry.docker.io'
     }
 
-    return getToken $image $action $tokenServer $tokenService
+    return Get-DockerRegistryToken $image $action $tokenServer $tokenService
   }
 
-  return getToken $image $action
+  return Get-DockerRegistryToken $image $action
 }
 
 Function _getlwpmConfig($image, $ref) {

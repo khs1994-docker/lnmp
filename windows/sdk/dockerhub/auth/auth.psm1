@@ -1,12 +1,14 @@
 Import-Module $PSScriptRoot/../../log/log.psm1 -force
 Import-Module $PSScriptRoot/../cache/cache.psm1 -force
 
-function getToken($image,
+function Get-DockerRegistryToken($image,
                   $action="pull",
                   $tokenServer="https://auth.docker.io/token",
                   $tokenService="registry.docker.io",
                   $cache=$false){
-  $token_file=Get-CachePath "token@$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
+  New-Item -force -type Directory (Get-CachePath token) | out-null
+
+  $token_file=Get-CachePath "token/$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
 
   if (Test-Path $token_file) {
     $file_timestrap = (((ls $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
