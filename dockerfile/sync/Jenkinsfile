@@ -67,15 +67,6 @@ pipeline {
     //   }
     // }
 
-    stage('构建镜像-pcit-amd64-arm64') {
-      steps {
-        sh "curl -L -O https://raw.githubusercontent.com/pcit-ce/pcit/master/.docker/manifest.txt"
-        sh "sed -i 's/master/master/g' manifest.txt"
-        sh "cat manifest.txt"
-        sh "for IMAGE in `cat manifest.txt`;do docker buildx build -t ccr.ccs.tencentyun.com/\${IMAGE} --build-arg IMAGE=\${IMAGE} --platform linux/amd64,linux/arm64 --push .;done"
-      }
-    }
-
     stage('同步镜像') {
       steps {
         sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/sync/docker-image-sync.json"

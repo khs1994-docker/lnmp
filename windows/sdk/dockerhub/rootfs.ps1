@@ -16,6 +16,11 @@
 
 #>
 #Requires -Version 6.0.0
+
+Import-Module $PSScriptRoot/tags/list.psm1
+Import-Module $PSScriptRoot/manifests/get.psm1
+Import-Module $PSScriptRoot/blobs/get.psm1
+
 function rootfs($image="alpine",
                 $ref="latest",
                 $arch="amd64",
@@ -95,20 +100,16 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 
 Write-Host "==> $image tags list" -ForegroundColor Green
 
-. $PSScriptRoot/tags/list.ps1
+ConvertFrom-Json (Get-Tag $token $image $registry) | Format-List | out-host
 
-ConvertFrom-Json (tagList $token $image $registry) | Format-List | out-host
-
-. $PSScriptRoot/manifests/list.ps1
-
-$result = list $token $image $ref $null $registry
+$result = Get-Manifest $token $image $ref $null $registry
 
 if($result){
   Write-host "==> Manifest list is found" -ForegroundColor Green
 }else{
   Write-Host "==> Manifest list not found" -ForegroundColor Red
 
-  $result = list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
+  $result = Get-Manifest $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
 
   if(!$result){
     return
@@ -124,9 +125,7 @@ if($result){
     return $false
   }
 
-  . $PSScriptRoot/blobs/get.ps1
-
-  $dest = get $token $image $digest $registry $dest
+  $dest = Get-Blob $token $image $digest $registry $dest
 
   if(!($dest)){
     return;
@@ -146,7 +145,7 @@ foreach($manifest in $manifests){
   if($current_arch -eq $arch -and ($current_os -eq $os)){
     $digest = $manifest.digest
 
-    $result = list $token $image $digest "application/vnd.docker.distribution.manifest.v2+json" $registry
+    $result = Get-Manifest $token $image $digest "application/vnd.docker.distribution.manifest.v2+json" $registry
 
     $layers = $result.layers
 
@@ -154,9 +153,7 @@ foreach($manifest in $manifests){
 
     Write-Host "==> Blob(layer) digest is $digest" -ForegroundColor Green
 
-    . $PSScriptRoot/blobs/get.ps1
-
-    $dest = get $token $image $digest $registry $dest
+    $dest = Get-Blob $token $image $digest $registry $dest
 
     if(!($dest)){
       return;

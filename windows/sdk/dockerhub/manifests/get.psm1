@@ -1,4 +1,5 @@
-function list($token, $image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
+Import-Module $PSScriptRoot/../cache/cache.psm1
+function Get-Manifest($token, $image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
   $manifest_header = "application/vnd.docker.distribution.manifest.v2+json"
   $manifest_list_header = "application/vnd.docker.distribution.manifest.list.v2+json"
 
@@ -10,14 +11,12 @@ function list($token, $image, $ref, $header, $registry = "registry.hub.docker.co
 
   Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Blue
 
-  . $PSScriptRoot/../cache/cache.ps1
-
   if (!($ref -is [string])) {
     $ref = $ref.toString()
   }
 
-  New-Item -force -type Directory (getCachePath manifests) | out-null
-  $cache_file = getCachePath "manifests/$($ref.replace('sha256:','')).json"
+  New-Item -force -type Directory (get-CachePath manifests) | out-null
+  $cache_file = Get-CachePath "manifests/$($ref.replace('sha256:','')).json"
 
   try {
     $result = Invoke-WebRequest `
@@ -55,3 +54,5 @@ function list($token, $image, $ref, $header, $registry = "registry.hub.docker.co
 
   return $cache_file
 }
+
+Export-ModuleMember -Function Get-Manifest

@@ -1,4 +1,4 @@
-Function _is_exists($token, $image, $sha256, $contentType = "application/vnd.docker.distribution.manifest.v2+json", $registry = "registry.hub.docker.com") {
+Function Test-Manifest($token, $image, $sha256, $contentType = "application/vnd.docker.distribution.manifest.v2+json", $registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
       -Authentication OAuth `
@@ -12,7 +12,7 @@ Function _is_exists($token, $image, $sha256, $contentType = "application/vnd.doc
     write-host "==> check manifest exists error [ $($_.Exception.Response.StatusCode) ]" `
       -ForegroundColor Red
 
-    if($_.Exception.Response.StatusCode -eq 401){
+    if ($_.Exception.Response.StatusCode -eq 401) {
       throw '401'
     }
 
@@ -21,3 +21,5 @@ Function _is_exists($token, $image, $sha256, $contentType = "application/vnd.doc
 
   return $true
 }
+
+Export-ModuleMember -Function Test-Manifest

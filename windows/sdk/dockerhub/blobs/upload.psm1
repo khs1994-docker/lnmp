@@ -1,14 +1,8 @@
-Function _sha256($file){
-  if($IsWindows){
-    return (certutil -hashfile $file SHA256).split()[4]
-  }
-
-  return (sha256sum $file | cut -d ' ' -f 1)
-}
+Import-Module $PSScriptRoot/../utils/sha256.psm1
 
 # application/vnd.docker.container.image.v1+json
 
-Function _isExists([string] $token, $image, $sha256, $registry = "registry.hub.docker.com") {
+Function Test-Blob([string] $token, $image, $sha256, $registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
       -Authentication OAuth `
@@ -25,7 +19,7 @@ Function _isExists([string] $token, $image, $sha256, $registry = "registry.hub.d
     write-host "==> Check blob exists error" -ForegroundColor Yellow
     write-host $_.Exception
 
-    if($_.Exception.Response.StatusCode -eq 401){
+    if ($_.Exception.Response.StatusCode -eq 401) {
       throw '401'
     }
   }
@@ -33,13 +27,13 @@ Function _isExists([string] $token, $image, $sha256, $registry = "registry.hub.d
   return $false
 }
 
-Function upload($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
-  $sha256 = _sha256 $file
+Function New-Blob($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
+  $sha256 = sha256 $file
   $length = (ls $file).Length
 
-  if(!($IsWindows)){ $env:TEMP="/tmp" }
+  if (!($IsWindows)) { $env:TEMP = "/tmp" }
 
-  if(_isExists $token $image $sha256 $registry){
+  if (Test-Blob $token $image $sha256 $registry) {
     write-host (ConvertFrom-Json -InputObject @"
     {
       "file": "$($file.replace('\','\\'))",
@@ -47,7 +41,7 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
     }
 "@) -ForegroundColor Yellow
 
-     return $length,$sha256
+    return $length, $sha256
   }
 
   write-host "==> Upload blob ..." -ForegroundColor Blue
@@ -73,7 +67,7 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
     -D $env:TEMP/curl_resp_header.txt `
     "$uuid&digest=sha256:$sha256"
 
-  if(!($result)){
+  if (!($result)) {
     write-host "==> Blob upload success" -ForegroundColor Green
 
     write-host (ConvertFrom-Json -InputObject @"
@@ -84,7 +78,10 @@ Function upload($token, $image, $file, $contentType = "application/octet-stream"
 "@) -ForegroundColor Blue
   }
 
-  write-host "==> Response header `n$(cat $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
+  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
 
-  return $length,$sha256
+  return $length, $sha256
 }
+
+Export-ModuleMember -Function Test-Blob
+Export-ModuleMember -Function New-Blob

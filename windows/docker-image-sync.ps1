@@ -6,6 +6,12 @@ else {
   Import-Alias -Force $PSScriptRoot/pwsh-alias.txt
 }
 
+Import-Module $PSScriptRoot\sdk\dockerhub\manifests\get.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\manifests\exists.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
+
 $manifest_list_media_type = "application/vnd.docker.distribution.manifest.list.v2+json"
 $manifest_media_type = "application/vnd.docker.distribution.manifest.v2+json"
 $image_media_type = "application/vnd.docker.container.image.v1+json"
@@ -28,10 +34,84 @@ $EXCLUDE_VARIANT = "v6", "v5"
 Import-Module -force $PSScriptRoot/sdk/dockerhub/imageParser/imageParser.psm1
 
 Function _upload_manifest($token, $image, $ref, $manifest_json_path, $registry) {
-  . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
-
-  upload $token $image $ref $manifest_json_path `
+  New-Manifest $token $image $ref $manifest_json_path `
     $manifest_media_type $registry
+}
+
+Function _exclude_platform($manifests, $manifest_list_json_path) {
+  write-host "==> exclude some platform" -ForegroundColor Blue
+  $manifests_count = $manifests.Count
+
+  $manifests_sync = 0..($manifests_count - 1)
+
+  $i = -1
+  $manifests_sync_count = 0
+  foreach ($manifest in $manifests) {
+    $i++
+    $manifest_digest = $manifest.digest
+    $platform = $manifest.platform
+
+    $architecture = $platform.architecture
+    $os = $platform.os
+    $variant = $platform.variant
+
+    if (($EXCLUDE_OS.indexof($os) -ne -1) `
+        -or ($EXCLUDE_ARCH.indexof($architecture) -ne -1) `
+        -or ($EXCLUDE_VARIANT.indexof($variant) -ne -1 )) {
+      write-host "==> SKIP sync $platform" -ForegroundColor Red
+      continue
+    }
+
+    write-host "==> WILL sync $platform" -ForegroundColor Green
+
+    $manifests_sync_count++
+    $manifests_sync[$i] = $manifest
+  }
+
+  write-host "==> [end] exclude platform" -ForegroundColor Blue
+
+  $i = -1
+  $manifests = 0..($manifests_sync_count - 1 )
+
+  foreach ($item in $manifests_sync) {
+    if (!($item -is [int])) {
+      $i++
+      $manifests[$i] = $item
+    }
+  }
+  $manifest_list_json.manifests = $manifests
+
+  ConvertTo-Json -depth 5 $manifest_list_json -Compress `
+  | set-content  -NoNewline "$manifest_list_json_path.sync.json"
+
+  $manifest_list_json_path = "$manifest_list_json_path.sync.json"
+
+  return $manifests, $manifest_list_json_path
+}
+
+Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
+  $source_token, $source_image, $source_registry, $media_type
+) {
+  try {
+    $blob_exists = Test-Blob $dest_token $dest_image $digest.split(':')[-1] `
+      $dest_registry
+  }
+  catch {
+    write-host "==> [error] check blob error, skip" -ForegroundColor Red
+
+    throw 'error'
+  }
+
+  if (!$blob_exists) {
+    $blob_dest = Get-Blob $source_token $source_image $digest $source_registry
+    if (!$blob_dest) {
+      write-host "==> [error] get blob error" -ForegroundColor Red
+
+      throw 'error'
+    }
+    # upload  blob
+    New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry
+  }
 }
 
 Function _sync() {
@@ -110,10 +190,9 @@ Function _sync() {
     return
   }
 
-  . $PSScriptRoot/sdk/dockerhub/manifests/list.ps1
-
+  # get manifest list
   $token = _getSourceToken
-  $manifest_list_json_path = list $token $source_image $source_ref -raw $false `
+  $manifest_list_json_path = Get-Manifest $token $source_image $source_ref -raw $false `
     -registry $source_registry
   if ($manifest_list_json_path) {
     $manifest_list_json = ConvertFrom-Json (cat $manifest_list_json_path -raw)
@@ -141,53 +220,9 @@ Function _sync() {
     $manifests_list_not_exists = $false
     $manifests = $manifest_list_json.manifests
 
-    # exclude
-    write-host "==> exclude some platform" -ForegroundColor Blue
-    $manifests_count = $manifests.Count
-
-    $manifests_sync = 0..($manifests_count - 1)
-
-    $i = -1
-    $manifests_sync_count = 0
-    foreach ($manifest in $manifests) {
-      $i++
-      $manifest_digest = $manifest.digest
-      $platform = $manifest.platform
-
-      $architecture = $platform.architecture
-      $os = $platform.os
-      $variant = $platform.variant
-
-      if (($EXCLUDE_OS.indexof($os) -ne -1) `
-          -or ($EXCLUDE_ARCH.indexof($architecture) -ne -1) `
-          -or ($EXCLUDE_VARIANT.indexof($variant) -ne -1 )) {
-        write-host "==> SKIP sync $platform" -ForegroundColor Red
-        continue
-      }
-
-      write-host "==> WILL sync $platform" -ForegroundColor Green
-
-      $manifests_sync_count++
-      $manifests_sync[$i] = $manifest
-    }
-
-    write-host "==> [end] exclude platform" -ForegroundColor Blue
-
-    $i = -1
-    $manifests = 0..($manifests_sync_count - 1 )
-
-    foreach ($item in $manifests_sync) {
-      if (!($item -is [int])) {
-        $i++
-        $manifests[$i] = $item
-      }
-    }
-    $manifest_list_json.manifests = $manifests
-
-    ConvertTo-Json -depth 5 $manifest_list_json -Compress `
-    | set-content  -NoNewline "$manifest_list_json_path.sync.json"
-
-    $manifest_list_json_path = "$manifest_list_json_path.sync.json"
+    # exclude platform
+    $manifests, $manifest_list_json_path = `
+      _exclude_platform $manifests $manifest_list_json_path
   }
 
   $push_manifest_once = $false
@@ -198,10 +233,9 @@ Function _sync() {
       $platform = $manifest.platform
 
       # check manifest exists
-      . $PSScriptRoot/sdk/dockerhub/manifests/exists.ps1
       $dest_token = _getDestToken
       try {
-        $manifest_exists = _is_exists $dest_token $dest_image $manifest_digest -registry $dest_registry
+        $manifest_exists = Test-Manifest $dest_token $dest_image $manifest_digest -registry $dest_registry
       }
       catch {
         write-host "==> [error] check manifest error, skip" -ForegroundColor Red
@@ -220,7 +254,7 @@ manifest $manifest_digest already exists" `
           Write-Host "==> Push manifest once" -ForegroundColor Blue
 
           $token = _getSourceToken
-          $manifest_json_path = list $token $source_image $manifest_digest `
+          $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
             $manifest_media_type `
             -raw $false -registry $source_registry
 
@@ -240,13 +274,13 @@ manifest $manifest_digest already exists" `
       $variant = $platform.variant
 
       write-host "==> [sync platform] Handle $platform" -ForegroundColor Blue
-    }
+    } # manifest list exists end
     else {
       # manifest list not exists
       $manifest_digest = $source_ref
       # get source manifest
       $token = _getSourceToken
-      $source_manifest_digest = list $token $source_image $manifest_digest `
+      $source_manifest_digest = Get-Manifest $token $source_image $manifest_digest `
         $manifest_media_type `
         -raw $false -registry $source_registry -return_digest_only $true
       if (!$source_manifest_digest) {
@@ -256,10 +290,9 @@ manifest $manifest_digest already exists" `
       }
 
       # check manifest digest exists in dest
-      . $PSScriptRoot/sdk/dockerhub/manifests/exists.ps1
       $dest_token = _getDestToken
       try {
-        $manifest_exists = _is_exists $dest_token $dest_image $source_manifest_digest -registry $dest_registry
+        $manifest_exists = Test-Manifest $dest_token $dest_image $source_manifest_digest -registry $dest_registry
       }
       catch {
         write-host "==> [error] check manifest error, skip" -ForegroundColor Red
@@ -271,18 +304,20 @@ manifest $manifest_digest already exists" `
         write-host "==> source manifest is exists on dest, repush" -ForegroundColor Blue
 
         $token = _getSourceToken
-        $manifest_json_path = list $token $source_image $manifest_digest `
+        $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
           $manifest_media_type -raw $false -registry $source_registry
 
         $dest_token = _getDestToken
         _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
           $dest_registry
+
         return;
       }
-    }
+    } # manifest list not exists end
 
+    # get manifest
     $token = _getSourceToken
-    $manifest_json_path = list $token $source_image $manifest_digest `
+    $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
       $manifest_media_type -raw $false -registry $source_registry
 
     if (!$manifest_json_path) {
@@ -294,60 +329,32 @@ manifest not found, skip" -ForegroundColor Red
 
     $manifest_json = ConvertFrom-Json (cat $manifest_json_path -raw)
 
-    . $PSScriptRoot/sdk/dockerhub/blobs/get.ps1
-
     $config_digest = $manifest_json.config.digest
-    . $PSScriptRoot/sdk/dockerhub/blobs/upload.ps1
+
+    # check config blob exists
     $dest_token = _getDestToken
+    $source_token = _getSourceToken
+
     try {
-      $blob_exists = _isExists $dest_token $dest_image $config_digest.split(':')[-1] `
-        $dest_registry
+      _upload_blob $dest_token $dest_image $config_digest `
+        $dest_registry $source_token $source_image $source_registry $image_media_type
     }
-    catch {
-      write-host "==> [error] check blob error, skip" -ForegroundColor Red
+    catch { return }
 
-      return
-    }
-
-    if ($blob_exists) {
-
-    }
-    else {
-      $token = _getSourceToken
-      $blob_dest = get $token $source_image $config_digest $source_registry
-      if (!$blob_dest) {
-        write-host "==> [error] get blob error" -ForegroundColor Red
-
-        return
-      }
-      # upload image config blob
-      $dest_token = _getDestToken
-      upload $dest_token $dest_image $blob_dest $image_media_type $dest_registry
-    }
-
+    # handle layers blob
     $layers = $manifest_json.layers
 
     foreach ($layer in $layers) {
       $layer_digest = $layer.digest
       $dest_token = _getDestToken
-      if (_isExists $dest_token $dest_image $layer_digest.split(':')[-1] `
-          $dest_registry) {
+      $source_token = _getSourceToken
 
+      try {
+        _upload_blob $dest_token $dest_image $layer_digest `
+          $dest_registry $source_token $source_image $source_registry `
+          "application/octet-stream"
       }
-      else {
-        $token = _getSourceToken
-        $blob_dest = get $token $source_image $layer_digest -registry `
-          $source_registry
-        if (!$blob_dest) {
-          write-host "==> [error] get blob error" -ForegroundColor Red
-
-          return
-        }
-        # upload image layer blob
-        $dest_token = _getDestToken
-        upload $dest_token $dest_image $blob_dest "application/octet-stream" `
-          $dest_registry
-      }
+      catch { return }
     }
 
     # upload manifests
@@ -363,10 +370,9 @@ manifest not found, skip" -ForegroundColor Red
     return
   }
 
-  . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
   # upload manifests list
   $dest_token = _getDestToken
-  $length, $digest = upload $dest_token $dest_image $dest_ref $manifest_list_json_path `
+  $length, $digest = New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
     $manifest_list_media_type $dest_registry
 
   if ($dest_image_with_digest -and ("sha256:$digest" -ne $dest_image_with_digest)) {
