@@ -1,18 +1,14 @@
-function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$raw=$true){
-  # application/vnd.docker.distribution.manifest.v2+json
-  $header_default="application/vnd.docker.distribution.manifest.list.v2+json"
+function list($token, $image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
+  $manifest_header = "application/vnd.docker.distribution.manifest.v2+json"
+  $manifest_list_header = "application/vnd.docker.distribution.manifest.list.v2+json"
 
-  if(!$header){
-    $header=$header_default
-  }
+  if (!$header) { $header = $manifest_list_header }
 
   $type = "manifest"
 
-  if($header -eq $header_default){
-    $type = "manifest list"
-  }
+  if ($header -eq $manifest_list_header) { $type = "manifest list" }
 
-  Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Green
+  Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Blue
 
   . $PSScriptRoot/../cache/cache.ps1
 
@@ -20,9 +16,10 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
     $ref = $ref.toString()
   }
 
-  $cache_file = getCachePath "manifest@${registry}@$($image.replace('/','@'))@$($ref.replace('sha256:','')).json"
+  New-Item -force -type Directory (getCachePath manifests) | out-null
+  $cache_file = getCachePath "manifests/$($ref.replace('sha256:','')).json"
 
-  try{
+  try {
     $result = Invoke-WebRequest `
       -Authentication OAuth `
       -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
@@ -31,39 +28,28 @@ function list($token,$image,$ref,$header,$registry="registry.hub.docker.com",$ra
       -PassThru `
       -OutFile $cache_file `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
-  }catch{
+  }
+  catch {
     $result = $_.Exception.Response
-
-    if($header -eq $header_default){
-      # $result = $_.Exception.Response
-      # write-host $result.StatusCode
-      # $code = (ConvertFrom-Json $content).errors[0].code
-      # if($code -ne "MANIFEST_UNKNOWN"){
-
-      #   return
-      # }
-
-      Write-host "==> Get [ $image $ref ] $type error [ $($result.StatusCode) ], please try get manifest ..." -ForegroundColor Red
-
-      if(!$raw){
-        return $false
-      }
-
-      return ConvertFrom-Json -InputObject @"
-{
-  "schemaVersion": 1
-}
-"@
-    }
 
     Write-Host "==> [error] Get [ $image $ref ] $type error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false
   }
 
+  if ($result.Headers.'Content-Type' -ne $header) {
+    Write-Host "==> [error] Get [ $image $ref ] $type error" -ForegroundColor Red
+
+    return $false
+  }
+
   write-host "==> $type digest is $($result.Headers.'Docker-Content-Digest')" -ForegroundColor Green
 
-  if($raw){
+  if ($return_digest_only) {
+    return $result.Headers.'Docker-Content-Digest'
+  }
+
+  if ($raw) {
     return ConvertFrom-Json (Get-Content $cache_file -Raw)
   }
 

@@ -23,3 +23,13 @@ resources:
 #       - boto-config
 generatorOptions:
   disableNameSuffixHash: true
+images:
+  - name: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:3b4dc45de5ae0e741099018afe3e1108cb93f70aa24138456be03d9fde677269
+    newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-dashboard
+    digest: sha256:3b4dc45de5ae0e741099018afe3e1108cb93f70aa24138456be03d9fde677269
+  - name: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook@sha256:f183f19b46375111a928d92dcf28d09f60beeb3dc0be889f3465592eb52873c4
+    newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-webhook
+    digest: sha256:f183f19b46375111a928d92dcf28d09f60beeb3dc0be889f3465592eb52873c4
+  - name: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller@sha256:70c85c0e8201cb8c90908fbc4ac5b9fe05cc6d85744aaf647d58bd059c5c4344
+    newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-controller
+    digest: sha256:70c85c0e8201cb8c90908fbc4ac5b9fe05cc6d85744aaf647d58bd059c5c4344

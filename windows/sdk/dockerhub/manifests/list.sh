@@ -16,8 +16,9 @@ list(){
   image_conver=`echo $image | sed 's#/#@#g'`
   ref_conver=`echo $ref | sed 's#sha256:##g'`
 
-  local cache_file=`getCachePath \
-        "manifest@${registry}@${image_conver}@${ref_conver}.json" `
+  mkdir -p `getCachePath manifests`
+
+  local cache_file=`getCachePath "manifests/${ref_conver}.json" `
 
 curl -L \
 -H "Authorization:Bearer $token" \

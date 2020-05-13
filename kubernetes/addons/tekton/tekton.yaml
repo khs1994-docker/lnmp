@@ -1282,12 +1282,12 @@ spec:
         args: [
           # These images are built on-demand by `ko resolve` and are replaced
           # by image references by digest.
-          "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter@sha256:0197014d3df2f450dc1e9896f07ec277f51c1e2e84126c9df72493867b1addba",
-          "-creds-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/creds-init@sha256:632e1870f8188dcb9977cfa4be681246ef9ceb2795731cd67c83dacd931c0625",
-          "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:b3cf4f912c58115e1ba9eb44a1e2d7a61445337e83117eeaec0eddbaf04ecf03",
-          "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint@sha256:67f93630931aae98f449b5dfb764d80f7ada7c3c67950c1563ed4ec406fad2f9",
-          "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter@sha256:e10990d20d14e45311c22cc3df228bdfbfcf708db3f83124efc0ea6f50ea2fd0",
-          "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init@sha256:1f989b77e3bbd6813d2451f90b3364c0e09448d0eb976da0634eb028f9dc8a5b",
+          "-kubeconfig-writer-image", "ccr.ccs.tencentyun.com/khs1994/tektoncd-kubeconfigwriter@sha256:0197014d3df2f450dc1e9896f07ec277f51c1e2e84126c9df72493867b1addba",
+          "-creds-image", "ccr.ccs.tencentyun.com/khs1994/tektoncd-creds-init@sha256:632e1870f8188dcb9977cfa4be681246ef9ceb2795731cd67c83dacd931c0625",
+          "-git-image", "ccr.ccs.tencentyun.com/khs1994/tektoncd-git-init@sha256:b3cf4f912c58115e1ba9eb44a1e2d7a61445337e83117eeaec0eddbaf04ecf03",
+          "-entrypoint-image", "ccr.ccs.tencentyun.com/khs1994/tektoncd-entrypoint@sha256:67f93630931aae98f449b5dfb764d80f7ada7c3c67950c1563ed4ec406fad2f9",
+          "-imagedigest-exporter-image", "ccr.ccs.tencentyun.com/khs1994/tektoncd-imagedigestexporter@sha256:e10990d20d14e45311c22cc3df228bdfbfcf708db3f83124efc0ea6f50ea2fd0",
+          "-pr-image", "ccr.ccs.tencentyun.com/khs1994/tektoncd-pullrequest-init@sha256:1f989b77e3bbd6813d2451f90b3364c0e09448d0eb976da0634eb028f9dc8a5b",
           "-build-gcs-fetcher-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/vendor/github.com/googlecloudplatform/cloud-builders/gcs-fetcher/cmd/gcs-fetcher@sha256:4d7b59810918f27f04df4b4a10a41c19ba04668196f33313019b170d8b331625",
           # These images are pulled from Dockerhub, by digest, as of April 15, 2020.
           "-nop-image", "tianon/true@sha256:009cce421096698832595ce039aa13fa44327d96beedb84282a69d3dbcf5a81b",

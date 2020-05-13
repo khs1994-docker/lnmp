@@ -27,6 +27,13 @@ $EXCLUDE_VARIANT = "v6", "v5"
 
 Import-Module -force $PSScriptRoot/sdk/dockerhub/imageParser/imageParser.psm1
 
+Function _upload_manifest($token, $image, $ref, $manifest_json_path, $registry) {
+  . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
+
+  upload $token $image $ref $manifest_json_path `
+    $manifest_media_type $registry
+}
+
 Function _sync() {
   $source_registry, $source_image, $source_ref, $source_image_with_digest = imageParser $source
   $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false
@@ -115,7 +122,8 @@ Function _sync() {
     $manifest_list_json = $null
   }
 
-  if ((!$manifest_list_json) -or ($manifest_list_json.schemaVersion -eq 1)) {
+  if (!($manifest_list_json)) {
+    write-host "==> manifest list not found" -ForegroundColor Yellow
     $manifests_list_not_exists = $true
     $manifests = $(1)
   }
@@ -216,11 +224,10 @@ manifest $manifest_digest already exists" `
             $manifest_media_type `
             -raw $false -registry $source_registry
 
-          . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
           # upload manifests once
           $dest_token = _getDestToken
-          upload $dest_token $dest_image $dest_ref $manifest_json_path `
-            $manifest_media_type $dest_registry
+          _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
+            $dest_registry
 
           $push_manifest_once = $true
         }
@@ -235,13 +242,48 @@ manifest $manifest_digest already exists" `
       write-host "==> [sync platform] Handle $platform" -ForegroundColor Blue
     }
     else {
+      # manifest list not exists
       $manifest_digest = $source_ref
+      # get source manifest
+      $token = _getSourceToken
+      $source_manifest_digest = list $token $source_image $manifest_digest `
+        $manifest_media_type `
+        -raw $false -registry $source_registry -return_digest_only $true
+      if (!$source_manifest_digest) {
+        write-host "==> [error] get source manifest error, skip" -ForegroundColor Red
+
+        return
+      }
+
+      # check manifest digest exists in dest
+      . $PSScriptRoot/sdk/dockerhub/manifests/exists.ps1
+      $dest_token = _getDestToken
+      try {
+        $manifest_exists = _is_exists $dest_token $dest_image $source_manifest_digest -registry $dest_registry
+      }
+      catch {
+        write-host "==> [error] check manifest error, skip" -ForegroundColor Red
+
+        return
+      }
+
+      if ($manifest_exists) {
+        write-host "==> source manifest is exists on dest, repush" -ForegroundColor Blue
+
+        $token = _getSourceToken
+        $manifest_json_path = list $token $source_image $manifest_digest `
+          $manifest_media_type -raw $false -registry $source_registry
+
+        $dest_token = _getDestToken
+        _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
+          $dest_registry
+        return;
+      }
     }
 
     $token = _getSourceToken
     $manifest_json_path = list $token $source_image $manifest_digest `
-      $manifest_media_type `
-      -raw $false -registry $source_registry
+      $manifest_media_type -raw $false -registry $source_registry
 
     if (!$manifest_json_path) {
       write-host "==> [error] Image [ $source_image $source_ref ] `
@@ -308,15 +350,14 @@ manifest not found, skip" -ForegroundColor Red
       }
     }
 
-    . $PSScriptRoot/sdk/dockerhub/manifests/upload.ps1
     # upload manifests
     $dest_token = _getDestToken
-    upload $dest_token $dest_image $dest_ref $manifest_json_path `
-      $manifest_media_type $dest_registry
+    _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
+      $dest_registry
   }
 
   if ($manifests_list_not_exists) {
-    write-host "==> [sync end] manifest list not exists, skip " `
+    write-host "==> [sync end] manifest list not exists" `
       -ForegroundColor Yellow
 
     return
@@ -335,6 +376,8 @@ manifest not found, skip" -ForegroundColor Red
 
   write-host "==> [sync end]" -ForegroundColor Blue
 }
+
+# main
 
 if (!(Test-Path $PSScriptRoot/docker-image-sync.json)) {
   write-host "==> file [ $PSScriptRoot/docker-image-sync.json ] not exists" `

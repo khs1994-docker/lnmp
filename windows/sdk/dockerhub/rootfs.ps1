@@ -103,9 +103,9 @@ ConvertFrom-Json (tagList $token $image $registry) | Format-List | out-host
 
 $result = list $token $image $ref $null $registry
 
-if($result.schemaVersion -eq 1){
-  # write-host $result
-
+if($result){
+  Write-host "==> Manifest list is found" -ForegroundColor Green
+}else{
   Write-Host "==> Manifest list not found" -ForegroundColor Red
 
   $result = list $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
@@ -135,12 +135,6 @@ if($result.schemaVersion -eq 1){
   Write-Host "==> Download success to $dest" -ForegroundColor Green
 
   return $dest
-}elseif($result.schemaVersion -eq 2){
-  Write-host "==> Manifest list is found" -ForegroundColor Green
-}else{
-  Write-host "==> [error] Get manifest error, exit" -ForegroundColor Red
-
-  return $false
 }
 
 $manifests=$result.manifests
