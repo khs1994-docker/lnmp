@@ -1,4 +1,7 @@
 Function _exportPath($items){
+  if(!($IsWindows)){
+    return
+  }
 
   $env_path=[environment]::GetEnvironmentvariable("Path","user")
   $env_path_array=$env_path.split(';') | Sort-Object -unique

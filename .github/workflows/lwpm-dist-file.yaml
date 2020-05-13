@@ -107,3 +107,16 @@ jobs:
 
           ./lnmp/windows/lnmp-windows-pm.ps1 install compose@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    compose@${env:VERSION}
+
+      - name: handle-jx
+        shell: pwsh
+        if: |
+          matrix.os == 'ubuntu' &&
+            contains( github.event.head_commit.message, '[jx]')
+        env:
+          VERSION: 2.1.33
+        run: |
+          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
+
+          ./lnmp/windows/lnmp-windows-pm.ps1 install jx@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push    jx@${env:VERSION}

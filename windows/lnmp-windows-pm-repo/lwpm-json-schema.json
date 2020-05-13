@@ -120,12 +120,12 @@
             "array"
           ],
           "default": [
-            "# Write-Host \"`nPlease download on this website: ${releases}`n\" -ForegroundColor Green",
-            "# _unzip $filename $unzipDesc",
-            "# Copy-item -r -force \"$unzipDesc/\" \"\"",
-            "# cp $env:LWPM_PKG_ROOT\\dist\\file \\dest\\path",
-            "# Start-Process -FilePath $filename -wait",
-            "# _cleanup \"$unzipDesc\""
+            "# Write-Host \"`nPlease download on this website: \\${releases\\}`n\" -ForegroundColor Green",
+            "# _unzip \\$filename \\$unzipDesc",
+            "# Copy-item -r -force \"\\$unzipDesc/\" \"\"",
+            "# cp \\$env:LWPM_PKG_ROOT\\dist\\file \\dest\\path",
+            "# Start-Process -FilePath \\$filename -wait",
+            "# _cleanup \"\\$unzipDesc\""
           ]
         },
         "postinstall": {
@@ -191,10 +191,10 @@
           ],
           "description": "download",
           "default": [
-            "# _mkdir $env:LWPM_PKG_ROOT/dist",
+            "# _mkdir \\$env:LWPM_PKG_ROOT/dist",
             "# curl -L `",
-            "# $url `",
-            "# -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename"
+            "# \\$url `",
+            "# -o \\$env:LWPM_PKG_ROOT/dist/\\${env:lwpm_os\\}-\\${env:lwpm_architecture\\}/\\$filename"
           ]
         }
       },

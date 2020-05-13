@@ -90,6 +90,22 @@ $ lnmp-windows-pm.ps1 stop-service minio
 
 **$env:LWPM_DIST_ONLY='true' install** 从软件源下载文件并打包
 
+```bash
+ package
+ |__dist
+    |
+    |__os-arch
+       |
+       |__dist_file-os-arch
+    |__linux-amd64
+       |
+       |__dist_file-linux-amd64
+    |__linux-arm
+       |
+       |__dist_file-linux-arm
+ |__lwpm.json
+```
+
 **add --platform** 获取所有架构的文件（适用于从 docker hub 获取文件）
 
 ```bash
@@ -121,3 +137,17 @@ $ lnmp-windows-pm.ps1 stop-service minio
 ```
 
 **push** 推送到 Docker Registry
+
+## lwpm.json 支持的变量
+
+* ${VERSION}
+
+* $filename
+
+* $env:lwpm_os
+* $env:lwpm_architecture
+
+* $env:LWPM_UNAME_S
+* $env:LWPM_UNAME_M
+
+* $env:LWPM_PKG_ROOT

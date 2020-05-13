@@ -27,3 +27,5 @@ platform:
     os: darwin
   - architecture: amd64
     os: linux
+path:
+  - C:\bin
