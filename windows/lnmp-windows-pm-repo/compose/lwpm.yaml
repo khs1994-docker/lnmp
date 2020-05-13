@@ -13,6 +13,7 @@ scripts:
 
     if(${env:lwpm_os} -ne "windows"){
       $url = $url.trim('.exe')
+      $filename = $filename.trim('.exe')
     }
 
     curl -L `

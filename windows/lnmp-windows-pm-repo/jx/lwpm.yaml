@@ -15,6 +15,9 @@ scripts:
     if(${env:lwpm_os} -ne "windows"){
       $url = $url.trim('zip')
       $url = "${url}tar.gz"
+
+      $filename = $filename.trim('zip')
+      $filename = "${filename}tar.gz"
     }
 
     curl -L $url `
