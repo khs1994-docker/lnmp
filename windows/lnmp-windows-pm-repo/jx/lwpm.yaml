@@ -6,7 +6,13 @@ github: jenkins-x/jx
 command: jx
 scripts:
   install: |
-    _unzip  ,# Copy-item -r -force "/" "",# cp :LWPM_PKG_ROOT\dist\file \dest\path,# Start-Process -FilePath  -wait,# _cleanup ""
+    _cleanup jx
+
+    _unzip $filename jx
+
+    Copy-item -r -force "jx/jx.exe" C:\bin\
+
+    _cleanup jx
   uninstall: |
     _cleanup C:\bin\jx.exe
   download: |
@@ -22,6 +28,7 @@ scripts:
 
     curl -L $url `
     -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
+  version: jx --version
 platform:
   - architecture: amd64
     os: windows

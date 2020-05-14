@@ -1395,6 +1395,7 @@ _local_cleanup(){
 if [ "${LNMP_CN_ENV}" = 'false' ];then
   print_info "CN Mirror disabled, I will replace cn mirror ... "
   $(_sudo) sed -i "s#hub-mirror.c.163.com#mirror.gcr.io#g" `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
+  $(_sudo) sed -i "s#mirror.baidubce.com#mirror.gcr.io#g" `grep mirror.baidubce.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
 

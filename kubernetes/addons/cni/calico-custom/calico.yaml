@@ -11,8 +11,9 @@ data:
   typha_service_name: "none"
   # Configure the backend to use.
   calico_backend: "bird"
-
-  # Configure the MTU to use
+  # Configure the MTU to use for workload interfaces and the
+  # tunnels.  For IPIP, set to your network MTU - 20; for VXLAN
+  # set to your network MTU - 50.
   veth_mtu: "1440"
 
   # The CNI network configuration to install on each node.  The special
@@ -135,6 +136,8 @@ spec:
     kind: GlobalNetworkPolicy
     plural: globalnetworkpolicies
     singular: globalnetworkpolicy
+    shortNames:
+    - gnp
 
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
@@ -224,6 +227,19 @@ spec:
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
+  name: kubecontrollersconfigurations.crd.projectcalico.org
+spec:
+  scope: Cluster
+  group: crd.projectcalico.org
+  version: v1
+  names:
+    kind: KubeControllersConfiguration
+    plural: kubecontrollersconfigurations
+    singular: kubecontrollersconfiguration
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
   name: networkpolicies.crd.projectcalico.org
 spec:
   scope: Namespaced
@@ -290,6 +306,16 @@ rules:
       - create
       - update
       - delete
+  # kube-controllers manages hostendpoints.
+  - apiGroups: ["crd.projectcalico.org"]
+    resources:
+      - hostendpoints
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
   # Needs access to update clusterinformations.
   - apiGroups: ["crd.projectcalico.org"]
     resources:
@@ -298,6 +324,19 @@ rules:
       - get
       - create
       - update
+  # KubeControllersConfiguration is where it gets its config
+  - apiGroups: ["crd.projectcalico.org"]
+    resources:
+      - kubecontrollersconfigurations
+    verbs:
+      # read its own config
+      - get
+      # create a default if none exists
+      - create
+      # update status
+      - update
+      # watch for changes
+      - watch
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -518,7 +557,7 @@ spec:
         # It can be deleted if this is a fresh installation, or if you have already
         # upgraded to use calico-ipam.
         - name: upgrade-ipam
-          image: calico/cni:v3.13.2
+          image: calico/cni:v3.14.0
           command: ["/opt/cni/bin/calico-ipam", "-upgrade"]
           env:
             - name: KUBERNETES_NODE_NAME
@@ -540,7 +579,7 @@ spec:
         # This container installs the CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
-          image: calico/cni:v3.13.2
+          image: calico/cni:v3.14.0
           command: ["/install-cni.sh"]
           env:
             # Name of the CNI config file to create.
@@ -578,7 +617,7 @@ spec:
         # Adds a Flex Volume Driver that creates a per-pod Unix Domain Socket to allow Dikastes
         # to communicate with Felix over the Policy Sync API.
         - name: flexvol-driver
-          image: calico/pod2daemon-flexvol:v3.13.2
+          image: calico/pod2daemon-flexvol:v3.14.0
           volumeMounts:
           - name: flexvol-driver-host
             mountPath: /host/driver
@@ -589,7 +628,7 @@ spec:
         # container programs network policy and routes on each
         # host.
         - name: calico-node
-          image: calico/node:v3.13.2
+          image: calico/node:v3.14.0
           env:
             # Use Kubernetes API as the backing datastore.
             - name: DATASTORE_TYPE
@@ -620,6 +659,12 @@ spec:
               value: $(CALICO_IPV4POOL_IPIP)
             # Set MTU for tunnel device used if ipip is enabled
             - name: FELIX_IPINIPMTU
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: veth_mtu
+            # Set MTU for the VXLAN tunnel device.
+            - name: FELIX_VXLANMTU
               valueFrom:
                 configMapKeyRef:
                   name: calico-config
@@ -731,7 +776,6 @@ metadata:
 
 ---
 # Source: calico/templates/calico-kube-controllers.yaml
-
 # See https://github.com/projectcalico/kube-controllers
 apiVersion: apps/v1
 kind: Deployment
@@ -769,7 +813,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
         - name: calico-kube-controllers
-          image: calico/kube-controllers:v3.13.2
+          image: calico/kube-controllers:v3.14.0
           env:
             # Choose which controllers to run.
             - name: ENABLED_CONTROLLERS
@@ -789,11 +833,3 @@ kind: ServiceAccount
 metadata:
   name: calico-kube-controllers
   namespace: kube-system
----
-# Source: calico/templates/calico-etcd-secrets.yaml
-
----
-# Source: calico/templates/calico-typha.yaml
-
----
-# Source: calico/templates/configure-canal.yaml

@@ -1,7 +1,9 @@
 {
-  "url": "https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}.exe",
   "command": "docker-compose",
-  "version": "1.25.5",
+  "name": "compose",
+  "path": [
+    "C:\\bin"
+  ],
   "platform": [
     {
       "architecture": "amd64",
@@ -16,16 +18,14 @@
       "os": "linux"
     }
   ],
+  "pre-version": "1.26.0-rc4",
   "scripts": {
-    "uninstall": "_cleanup C:\\bin\\docker-compose.exe\n",
+    "download": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\nif(${env:lwpm_os} -ne \"windows\"){\n  $url = $url.trim('.exe')\n  $filename = $filename.trim('.exe')\n}\n\ncurl -L `\n$url `\n-o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n",
     "install": "Copy-Item -Force $filename C:\\bin\\docker-compose.exe\n",
     "test": "docker-compose --version",
-    "version": "(docker-compose --version).split(' ')[2].trim(',')",
-    "download": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\nif(${env:lwpm_os} -ne \"windows\"){\n  $url = $url.trim('.exe')\n  $filename = $filename.trim('.exe')\n}\n\ncurl -L `\n$url `\n-o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n"
+    "uninstall": "_cleanup C:\\bin\\docker-compose.exe\n",
+    "version": "(docker-compose --version).split(' ')[2].trim(',')"
   },
-  "name": "compose",
-  "pre-version": "1.26.0-rc4",
-  "path": [
-    "C:\\bin"
-  ]
+  "url": "https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}.exe",
+  "version": "1.25.5"
 }

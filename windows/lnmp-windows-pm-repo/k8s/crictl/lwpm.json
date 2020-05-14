@@ -1,26 +1,26 @@
 {
-  "url": "https://github.com/kubernetes-sigs/cri-tools/releases/download/v${VERSION}/crictl-v${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
+  "name": "crictl",
+  "platform": [
+    {
+      "architecture": "amd64",
+      "os": "windows"
+    },
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    {
+      "architecture": "arm64",
+      "os": "linux"
+    },
+    {
+      "architecture": "arm",
+      "os": "linux"
+    }
+  ],
   "scripts": {
     "download": "_mkdir $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename\n"
   },
-  "platform": [
-    {
-      "os": "windows",
-      "architecture": "amd64"
-    },
-    {
-      "os": "linux",
-      "architecture": "amd64"
-    },
-    {
-      "os": "linux",
-      "architecture": "arm64"
-    },
-    {
-      "os": "linux",
-      "architecture": "arm"
-    }
-  ],
-  "name": "crictl",
+  "url": "https://github.com/kubernetes-sigs/cri-tools/releases/download/v${VERSION}/crictl-v${VERSION}-${env:lwpm_os}-${env:lwpm_architecture}.tar.gz",
   "version": "1.18.0"
 }

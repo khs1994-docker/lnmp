@@ -39,4 +39,3 @@ health:
 proxy:
   remoteurl: https://registry.cn-hangzhou.aliyuncs.com
   # gcr.mirrors.ustc.edu.cn
-  # gcr-mirror.qiniu.com

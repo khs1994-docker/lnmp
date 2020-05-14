@@ -83,7 +83,7 @@ if (!$Env:PSModulePathSystem) {
 }
 
 $Env:PSModulePath = "$Env:PSModulePathSystem" + [System.IO.Path]::PathSeparator `
-+ $PSScriptRoot + "/powershell_system" + [System.IO.Path]::PathSeparator
+  + $PSScriptRoot + "/powershell_system" + [System.IO.Path]::PathSeparator
 
 if ($IsWindows) {
   _exportPath "C:\bin"
@@ -209,14 +209,14 @@ Function _import_module($soft) {
   Import-Module -Name $soft_ps_module_dir
 }
 
-Function _uname_parse($string){
-  if($string -eq "windows"){return "Windows"}
-  if($string -eq "linux"){return "Linux"}
-  if($string -eq "darwin"){return "Darwin"}
+Function _uname_parse($string) {
+  if ($string -eq "windows") { return "Windows" }
+  if ($string -eq "linux") { return "Linux" }
+  if ($string -eq "darwin") { return "Darwin" }
 
-  if($string -eq "arm64"){return "aarch64"}
-  if($string -eq "amd64"){return "x86_64"}
-  if($string -eq "arm"){return "armv7l"}
+  if ($string -eq "arm64") { return "aarch64" }
+  if ($string -eq "amd64") { return "x86_64" }
+  if ($string -eq "arm") { return "armv7l" }
 }
 
 Function __install($softs) {
@@ -746,6 +746,34 @@ function _push($opt) {
   $manifest_length, $manifest_sha256 = New-Manifest $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry
 }
 
+function _sort_object($obj){
+  $obj = convertfrom-json (convertTo-json $obj) -AsHashtable
+  $json_obj = ConvertFrom-Json -InputObject '{}'
+
+  foreach ($item in ($obj.keys | sort-object)) {
+    $json_obj | add-member -Name $item -value $obj.$item -MemberType NoteProperty
+  }
+
+  return $json_obj
+}
+
+function _yaml_to_json_and_sort($yaml) {
+  $yaml = ConvertFrom-Yaml $yaml
+  $yaml_obj = ConvertFrom-Json ( $yaml | ConvertTo-Yaml -JsonCompatible)
+  $json_obj = ConvertFrom-Json -InputObject '{}'
+
+  foreach ($item in ($yaml.keys | sort-object)) {
+    $value = $yaml_obj.$item
+    if($yaml_obj.$item.getType() -eq [Management.Automation.PSCustomObject]){
+      $value = _sort_object $value
+    }
+
+    $json_obj | add-member -Name $item -value $value -MemberType NoteProperty
+  }
+
+  return ConvertTo-Json $json_obj
+}
+
 function _toJson($soft) {
   get-command ConvertFrom-Yaml | out-null
 
@@ -765,9 +793,13 @@ function _toJson($soft) {
     return
   }
 
-  ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) `
-    | ConvertTo-Yaml -JsonCompatible)) `
-  | Set-Content $pkg_root\lwpm.json
+  # ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) `
+  #   | ConvertTo-Yaml -JsonCompatible)) `
+  # | Set-Content $pkg_root\lwpm.json
+
+  $yaml = Get-Content $pkg_root\$yaml_file -raw
+
+  _yaml_to_json_and_sort $yaml | Set-Content $pkg_root\lwpm.json
 
   _tolf $pkg_root\lwpm.json
 
