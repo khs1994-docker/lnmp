@@ -18,7 +18,7 @@ Function New-Manifest($token, $image, $ref, $manifest_json_path, $contentType = 
 
   write-host "==> $contentType push success, manifest is sha256:$manifest_sha256" -ForegroundColor Green
 
-  $manifest_length = (ls $manifest_json_path).Length
+  $manifest_length = (Get-ChildItem $manifest_json_path).Length
 
   return $manifest_length, $manifest_sha256
 }

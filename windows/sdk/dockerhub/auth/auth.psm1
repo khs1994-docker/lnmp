@@ -11,7 +11,7 @@ function Get-DockerRegistryToken($image,
   $token_file=Get-CachePath "token/$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
 
   if (Test-Path $token_file) {
-    $file_timestrap = (((ls $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
+    $file_timestrap = (((Get-ChildItem $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
     $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
     if (($now_timestrap - $file_timestrap) -lt 249) {
       write-host "==> Token file cache find, not expire, use it" -ForegroundColor Green

@@ -12,7 +12,7 @@ function Get-Dist($dist, $distTemp) {
 }
 
 function _sha256_checker($filename) {
-  $sha256 = (ls $filename).name.split('.')[0]
+  $sha256 = (Get-ChildItem $filename).name.split('.')[0]
   $current_sha256 = sha256 $filename
 
   if ($sha256 -ne $current_sha256 ) {
