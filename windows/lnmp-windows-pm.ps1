@@ -210,6 +210,13 @@ Function _import_module($soft) {
 }
 
 Function _uname_parse($string) {
+  # aarch64  arm64
+  # armhf    arm
+  # armel    arm/v6
+  # i386     386
+  # x86_64   amd64
+  # x86-64   amd64
+
   if ($string -eq "windows") { return "Windows" }
   if ($string -eq "linux") { return "Linux" }
   if ($string -eq "darwin") { return "Darwin" }
@@ -746,7 +753,7 @@ function _push($opt) {
   $manifest_length, $manifest_sha256 = New-Manifest $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry
 }
 
-function _sort_object($obj){
+function _sort_object($obj) {
   $obj = convertfrom-json (convertTo-json $obj) -AsHashtable
   $json_obj = ConvertFrom-Json -InputObject '{}'
 
@@ -764,7 +771,7 @@ function _yaml_to_json_and_sort($yaml) {
 
   foreach ($item in ($yaml.keys | sort-object)) {
     $value = $yaml_obj.$item
-    if($yaml_obj.$item.getType() -eq [Management.Automation.PSCustomObject]){
+    if ($yaml_obj.$item.getType() -eq [Management.Automation.PSCustomObject]) {
       $value = _sort_object $value
     }
 

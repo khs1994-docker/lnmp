@@ -28,8 +28,10 @@ Function Test-Blob([string] $token, $image, $sha256, $registry = "registry.hub.d
 }
 
 Function New-Blob($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
+  write-host "==> Blob type is $contentType" -ForegroundColor Green
+
   $sha256 = sha256 $file
-  $length = (ls $file).Length
+  $length = (Get-ChildItem $file).Length
 
   if (!($IsWindows)) { $env:TEMP = "/tmp" }
 
@@ -55,7 +57,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 
   $uuid = $result.Headers.'Location'
 
-  $length = (ls $file).Length
+  $length = (Get-ChildItem $file).Length
 
   $result = curl -L `
     -H "Content-Length: $length" `
@@ -78,7 +80,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 "@) -ForegroundColor Blue
   }
 
-  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
+  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Blue
 
   return $length, $sha256
 }

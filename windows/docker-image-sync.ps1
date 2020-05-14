@@ -19,12 +19,12 @@ $manifest_media_type = "application/vnd.docker.distribution.manifest.v2+json"
 $image_media_type = "application/vnd.docker.container.image.v1+json"
 
 if ($env:SYNC_WINDOWS -eq 'true') {
-  $EXCLUDE_OS = $('w')
+  $EXCLUDE_OS = $('x')
 }
 else {
   $EXCLUDE_OS = $("windows")
 }
-$EXCLUDE_ARCH = "s390x", "ppc64le", "386"
+$EXCLUDE_ARCH = "s390x", "ppc64le", "386", "mips64le"
 $EXCLUDE_VARIANT = "v6", "v5"
 
 # $env:SOURCE_DOCKER_REGISTRY = "mirror.io"
@@ -141,6 +141,9 @@ Function _sync() {
       if (!$tokenServer) {
         throw "tokenServer not found"
       }
+
+      $env:DOCKER_PASSWORD = $env:SOURCE_DOCKER_PASSWORD
+      $env:DOCKER_USERNAME = $env:SOURCE_DOCKER_USERNAME
       $token = Get-DockerRegistryToken $source_image 'pull' $tokenServer $tokenService
 
       return $token
@@ -208,8 +211,8 @@ Function _sync() {
     $manifests_list_not_exists = $false
     $manifests = $manifest_list_json.manifests
 
-    # 镜像包含 digest，是 manifest list 或 manifest 的 sha256
-    # dest 的 manifest list 必须和 source 的一致，不能排除 platform
+    # 镜像包含 digest，digest 是 manifest list 或 manifest 的 sha256
+    # 所以 dest 的 manifest list 必须和 source 的一致，不能排除 platform
 
     write-host "==> source image include digest, can't exclude platform" `
       -ForegroundColor Yellow
@@ -218,9 +221,14 @@ Function _sync() {
     $manifests_list_not_exists = $false
     $manifests = $manifest_list_json.manifests
 
-    # exclude platform
-    $manifests, $manifest_list_json_path = `
-      _exclude_platform $manifests $manifest_list_json_path
+    if ($env:EXCLUDE_PLATFORM -eq "false") {
+      write-host "==> Exclude platform is disabled" -ForegroundColor Yellow
+    }
+    else {
+      # exclude platform
+      $manifests, $manifest_list_json_path = `
+        _exclude_platform $manifests $manifest_list_json_path
+    }
   }
 
   $push_manifest_once = $false
@@ -337,7 +345,7 @@ manifest not found, skip" -ForegroundColor Red
       _upload_blob $dest_token $dest_image $config_digest `
         $dest_registry $source_token $source_image $source_registry $image_media_type
     }
-    catch { return }
+    catch { write-host $_.Exception ; return }
 
     # handle layers blob
     $layers = $manifest_json.layers
@@ -352,7 +360,7 @@ manifest not found, skip" -ForegroundColor Red
           $dest_registry $source_token $source_image $source_registry `
           "application/octet-stream"
       }
-      catch { return }
+      catch { write-host $_.Exception ; return }
     }
 
     # upload manifests
