@@ -10,13 +10,13 @@ wsl -d wsl-k8s -u root -- cp $K8S_WSL2_ROOT/conf/cni/99-loopback.conf ${K8S_ROOT
 
 # wsl -d wsl-k8s -u root -- cat ${K8S_ROOT}/cni/net.d/99-loopback.conf
 
-(Get-Content $PSScriptRoot/conf/kube-containerd/1.3/config.toml.temp) `
+(Get-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml.temp) `
   -replace "##K8S_ROOT##",$K8S_ROOT `
   -replace "90621",$env:USERNAME `
-  | Set-Content $PSScriptRoot/conf/kube-containerd/1.3/config.toml
+  | Set-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml
 
 $command=wsl -d wsl-k8s -u root -- echo $K8S_ROOT/bin/kube-containerd `
---config ${K8S_WSL2_ROOT}/conf/kube-containerd/1.3/config.toml
+--config ${K8S_WSL2_ROOT}/conf/kube-containerd/1.4/config.toml
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 

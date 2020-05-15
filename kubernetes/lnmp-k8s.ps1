@@ -160,6 +160,7 @@ switch ($args[0])
 {
   "kubectl-install" {
     $KUBECTL_VERSION=get_kubectl_version
+    write-host $KUBECTL_VERSION
     $url="${KUBECTL_URL}/${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe"
     if(Test-Path C:\bin\kubectl.exe){
       print_info "kubectl already install"

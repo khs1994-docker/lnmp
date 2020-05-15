@@ -48,6 +48,7 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --requestheader-group-headers=X-Remote-Group `
 --requestheader-username-headers=X-Remote-User `
 --service-account-key-file=${K8S_ROOT}/certs/ca.pem `
+--service-account-signing-key-file=${K8S_ROOT}/certs/ca-key.pem `
 --authorization-mode=Node,RBAC `
 --runtime-config=api/all=true `
 --enable-admission-plugins=NodeRestriction `
@@ -57,6 +58,7 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --kubelet-certificate-authority=${K8S_ROOT}/certs/ca.pem `
 --kubelet-client-certificate=${K8S_ROOT}/certs/apiserver-kubelet-client.pem `
 --kubelet-client-key=${K8S_ROOT}/certs/apiserver-kubelet-client-key.pem `
+--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname `
 --kubelet-https=true `
 --kubelet-timeout=10s `
 --proxy-client-cert-file=${K8S_ROOT}/certs/proxy-client.pem `
@@ -64,6 +66,8 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --service-cluster-ip-range=10.254.0.0/16 `
 --service-node-port-range="1-65535" `
 --logtostderr=true `
+--service-account-issuer=api `
+--api-audiences=api `
 --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
