@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.10-alpha3
+.VERSION 19.03.10
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 

@@ -1,5 +1,11 @@
 #!/usr/bin/env pwsh
 
+Import-Module $PSScriptRoot/tags/list.psm1
+Import-Module $PSScriptRoot/manifests/get.psm1
+Import-Module $PSScriptRoot/blobs/get.psm1
+Import-Module $PSScriptRoot\auth\token.psm1
+Import-Module $PSScriptRoot/auth/auth.psm1
+
 <#
 .SYNOPSIS
   download docker image rootfs
@@ -16,12 +22,6 @@
 
 #>
 #Requires -Version 6.0.0
-
-Import-Module $PSScriptRoot/tags/list.psm1
-Import-Module $PSScriptRoot/manifests/get.psm1
-Import-Module $PSScriptRoot/blobs/get.psm1
-Import-Module $PSScriptRoot\auth\token.psm1
-Import-Module $PSScriptRoot/auth/auth.psm1
 
 function rootfs($image="alpine",
                 $ref="latest",
