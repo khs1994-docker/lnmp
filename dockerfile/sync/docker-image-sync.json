@@ -156,16 +156,16 @@
     "dest": "rabbitmq:alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.3-alpine",
-    "dest": "rabbitmq:3.8.3-alpine"
+    "source": "library/rabbitmq:3.8.2-alpine",
+    "dest": "rabbitmq:3.8.2-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
     "dest": "rabbitmq:management-alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.3-management-alpine",
-    "dest": "rabbitmq:3.8.3-management-alpine"
+    "source": "library/rabbitmq:3.8.2-management-alpine",
+    "dest": "rabbitmq:3.8.2-management-alpine"
   },
   {
     "source": "phpmyadmin/phpmyadmin:latest",

@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.30
+ARG PHP_VERSION=7.2.31
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 

@@ -149,7 +149,7 @@ jobs:
         -t ${DOCKER_HUB_USERNAME}/php:7.0-custom custom/7.0
 
         docker buildx build --push \
-        --build-arg PHP_VERSION=7.3.17 \
+        --build-arg PHP_VERSION=7.3.18 \
         --build-arg USERNAME=khs1994 \
         -t ${DOCKER_HUB_USERNAME}/php:7.1-custom custom/7.1
 
@@ -170,7 +170,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.17
+        PHP_TAG_VERSION: 7.3.18
         TYPE: ${{ matrix.TYPE }}
         # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
       name: 'Build Image'

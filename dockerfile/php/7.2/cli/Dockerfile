@@ -6,7 +6,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=7.2.30
+ARG PHP_VERSION=7.2.31
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -140,7 +140,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ENV PHP_VERSION=${PHP_VERSION}
 
-# ENV PHP_URL="https://www.php.net/get/php-7.2.30.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.2.30.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.2.31.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.2.31.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -151,8 +151,8 @@ ENV PHP_VERSION=${PHP_VERSION}
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.2.30-alpine,source=/usr/src,target=/usr/local/src,rw \
-  --mount=type=bind,from=php:7.2.30-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/src,rw \
+  --mount=type=bind,from=php:7.2.31-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -316,7 +316,7 @@ ENV PECL_EXTENSION \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.2.30-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
