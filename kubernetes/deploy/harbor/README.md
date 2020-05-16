@@ -1,7 +1,7 @@
 # [Harbor](https://github.com/goharbor/harbor)
 
 * web 界面使用 用户名 `admin` 密码 `Harbor12345`
-* web 界面使用 `chrome` 打开，`firefox` 打不开（笔者测试）首次登录请等待（数据库需要初始化一段时间）
+* 首次登录请等待片刻（数据库需要初始化一段时间）
 
 ## 准备
 
@@ -36,7 +36,16 @@ $ ./generate
 
 ```bash
 $ kubectl apply -k custom2
+
+# 修改数据卷权限
+
+# /var/lib/khs1994-docker-lnmp/harbor/registry 为 registry pvc 的 hostpath
+
+$ mkdir -p /var/lib/khs1994-docker-lnmp/harbor/registry/docker
+$ chown -R 10000:10000 /var/lib/khs1994-docker-lnmp/harbor/registry/docker
 ```
+
+访问地址请查看 `custom/ingress.yaml`
 
 ## 开发者
 
@@ -47,9 +56,21 @@ $ helm repo add harbor https://helm.goharbor.io
 
 $ helm repo update
 
-$ helm template harbor/harbor
+$ helm template harbor/harbor > base/harbor.yaml
+
+# harbor.t.khs1994.com
+# notary.t.khs1994.com
+# 替换为自己的域名
+$ helm template harbor/harbor \
+  --set expose.ingress.hosts.core=harbor.t.khs1994.com \
+  --set expose.ingress.hosts.notary=notary-harbor.t.khs1994.com \
+  --set externalURL=https://harbor.t.khs1994.com:28443 \
+  > base/harbor.yaml
 ```
 
-**替换**
+`RELEASE-NAME-` 替换为空
+`core.harbor.domain` 替换为自己的域名（e.g.: harbor.t.khs1994.com:28443）
 
-* `core.harbor.domain` => `harbor.t.khs1994.com:28443`
+## 使用
+
+* 若使用私有证书请查看 https://docs.lnmp.khs1994.com/registry.html

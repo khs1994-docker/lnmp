@@ -17,3 +17,6 @@ $WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com"
 $WSL2_DOMAIN_1=""
 $WSL2_DOMAIN_2=""
 # $WSL2_DOMAIN_20=""
+
+# 替换为自己的镜像源，例如 阿里云
+$MY_DOCKER_REGISTRY_MIRROR="my-registry"

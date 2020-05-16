@@ -177,7 +177,7 @@ Function _sync() {
   }
 
   if (!$env:DEST_DOCKER_PASSWORD -or !$env:DEST_DOCKER_USERNAME) {
-    write-host "==> please set `$env:DEST_DOCKER_PASSWORD and `$env:DEST_DOCKER_USERNAME" -ForegroundColor Red
+    write-host "==> please set `$env:DEST_DOCKER_USERNAME and `$env:DEST_DOCKER_PASSWORD" -ForegroundColor Red
 
     exit 1
   }
@@ -345,7 +345,7 @@ manifest not found, skip" -ForegroundColor Red
       _upload_blob $dest_token $dest_image $config_digest `
         $dest_registry $source_token $source_image $source_registry $image_media_type
     }
-    catch { write-host $_.Exception ; return }
+    catch { write-host $_.Exception -ForegroundColor Red; return }
 
     # handle layers blob
     $layers = $manifest_json.layers
@@ -360,7 +360,7 @@ manifest not found, skip" -ForegroundColor Red
           $dest_registry $source_token $source_image $source_registry `
           "application/octet-stream"
       }
-      catch { write-host $_.Exception ; return }
+      catch { write-host $_.Exception -ForegroundColor Red; return }
     }
 
     # upload manifests
@@ -380,6 +380,10 @@ manifest not found, skip" -ForegroundColor Red
   $dest_token = _getDestToken
   $length, $digest = New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
     $manifest_list_media_type $dest_registry
+
+  if(!$digest){
+    write-host "==> [error] Manifest list push error" -ForegroundColor Red
+  }
 
   if ($dest_image_with_digest -and ("sha256:$digest" -ne $dest_image_with_digest)) {
     write-host "==> [error] push manifest list $digest not eq $dest_image_with_digest" `

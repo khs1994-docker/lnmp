@@ -12,6 +12,7 @@ spec:
     storage: 5Gi
   hostPath:
     path: /var/lib/khs1994-docker-lnmp/harbor/chartmuseum
+    type: DirectoryOrCreate
 ---
 kind: PersistentVolume
 apiVersion: v1
@@ -27,6 +28,7 @@ spec:
     storage: 1Gi
   hostPath:
     path: /var/lib/khs1994-docker-lnmp/harbor/jobservice
+    type: DirectoryOrCreate
 ---
 kind: PersistentVolume
 apiVersion: v1
@@ -42,3 +44,4 @@ spec:
     storage: 5Gi
   hostPath:
     path: /var/lib/khs1994-docker-lnmp/harbor/registry
+    type: DirectoryOrCreate

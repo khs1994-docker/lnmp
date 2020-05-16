@@ -59,7 +59,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 
   $length = (Get-ChildItem $file).Length
 
-  $result = curl -L `
+  $result = curl -k -L `
     -H "Content-Length: $length" `
     -H "Content-Type: $contentType" `
     -H "Authorization: Bearer $token" `

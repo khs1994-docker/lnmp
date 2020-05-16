@@ -141,7 +141,7 @@ jobs:
               --platform ${PLATFORM} ${IS_PUSH} sami
         fi
 
-        if [ "$TYPE" != "CLI" ];then exit 0; fi
+        if [ "$TYPE" != "FPM" ];then exit 0; fi
 
         docker buildx build --push \
         --build-arg PHP_VERSION=7.0.33 \

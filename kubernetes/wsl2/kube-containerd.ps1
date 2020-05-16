@@ -13,6 +13,7 @@ wsl -d wsl-k8s -u root -- cp $K8S_WSL2_ROOT/conf/cni/99-loopback.conf ${K8S_ROOT
 (Get-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml.temp) `
   -replace "##K8S_ROOT##",$K8S_ROOT `
   -replace "90621",$env:USERNAME `
+  -replace "my-registry",$MY_DOCKER_REGISTRY_MIRROR `
   | Set-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml
 
 $command=wsl -d wsl-k8s -u root -- echo $K8S_ROOT/bin/kube-containerd `

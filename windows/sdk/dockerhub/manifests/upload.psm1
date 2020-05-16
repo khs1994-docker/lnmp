@@ -3,7 +3,7 @@ Function New-Manifest($token, $image, $ref, $manifest_json_path, $contentType = 
 
   if (!($IsWindows)) { $env:TEMP = "/tmp" }
 
-  curl -L `
+  curl -k -L `
     -H "Content-Type: $contentType" `
     -H "Authorization: Bearer $token" `
     -X PUT `
