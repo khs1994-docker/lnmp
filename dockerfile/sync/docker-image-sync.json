@@ -12,8 +12,8 @@
     "dest": "node:14.2.0-alpine"
   },
   {
-    "source": "golang:1.14.2-alpine",
-    "dest": "golang:1.14.2-alpine"
+    "source": "golang:1.14.3-alpine",
+    "dest": "golang:1.14.3-alpine"
   },
   {
     "source": "golang:alpine",
@@ -112,8 +112,8 @@
     "dest": "redis:5.0.9-alpine"
   },
   {
-    "source": "library/redis:6.0.1-alpine",
-    "dest": "redis:6.0.1-alpine"
+    "source": "library/redis:6.0.2-alpine",
+    "dest": "redis:6.0.2-alpine"
   },
   {
     "source": "library/memcached:alpine",
@@ -148,8 +148,8 @@
     "dest": "postgres:alpine"
   },
   {
-    "source": "library/postgres:12.2-alpine",
-    "dest": "postgres:12.2-alpine"
+    "source": "library/postgres:12.3-alpine",
+    "dest": "postgres:12.3-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
