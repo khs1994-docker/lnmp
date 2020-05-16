@@ -10,9 +10,9 @@
       "# https://docs.python.org/3.7/using/windows.html#installing-without-ui\n\nStart-Process $filename -Wait `\n-ArgumentList @( `\n  '/quiet', `\n  'InstallAllUsers=1', `\n  \"DefaultAllUsersTargetDir=${env:ProgramData}\\Python\", `\n  \"DefaultJustForMeTargetDir=${env:ProgramData}\\Python\", `\n  \"TargetDir=${env:ProgramData}\\Python\", `\n  'PrependPath=1', `\n  'Shortcuts=0', `\n  'Include_doc=0', `\n  'Include_pip=1', `\n  'Include_test=0' `\n);\n"
     ]
   },
-  "version": "3.8.2",
+  "version": "3.8.3",
   "github": "python/cpython",
-  "pre-version": "3.8.2",
+  "pre-version": "3.8.3",
   "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
   "name": "python",
   "releases": "https://www.python.org/downloads/",

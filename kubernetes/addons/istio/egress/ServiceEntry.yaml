@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: baidu-ext
+spec:
+  hosts:
+  - www.baidu.com
+  ports:
+  - number: 443     # 80
+    name: https     # http
+    protocol: HTTPS # HTTP
+  resolution: DNS
+  location: MESH_EXTERNAL

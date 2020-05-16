@@ -36,8 +36,8 @@
     "dest": "python:alpine"
   },
   {
-    "source": "library/python:3.8.2-alpine",
-    "dest": "python:3.8.2-alpine"
+    "source": "library/python:3.8.3-alpine",
+    "dest": "python:3.8.3-alpine"
   },
   {
     "source": "library/mysql:latest",
