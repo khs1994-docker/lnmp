@@ -16,10 +16,11 @@ jobs:
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       LWPM_DIST_ONLY: 'true'
       LWPM_DOCKER_REGISTRY: registry-1.docker.io
+      DOCKER_ROOTFS_PHASE: "manifest list"
     strategy:
       matrix:
         os: ["windows","ubuntu"]
-      fail-fast: true
+      fail-fast: false
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,15 +31,26 @@ jobs:
         shell: pwsh
         if: matrix.os == 'windows'
         run: |
+          echo $ErrorActionPreference
+          $ErrorActionPreference = "Continue"
+
           ./lnmp/windows/lnmp-windows-pm.ps1 install kubectl@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    kubectl@${env:LWPM_K8S_VERSION}
+
+          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
+          rootfs lwpm/kubectl ${env:LWPM_K8S_VERSION}
       - name: handle-kubernetes-server
         shell: pwsh
         if: matrix.os == 'windows'
         run: |
+          echo $ErrorActionPreference
+          $ErrorActionPreference = "Continue"
 
           ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-server@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-server@${env:LWPM_K8S_VERSION}
+
+          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
+          rootfs lwpm/kubernetes-server ${env:LWPM_K8S_VERSION}
       - name: handle-kubernetes-node
         shell: pwsh
         if: matrix.os == 'ubuntu'
@@ -48,6 +60,8 @@ jobs:
           ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-node@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-node@${env:LWPM_K8S_VERSION}
 
+          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
+          rootfs lwpm/kubernetes-node ${env:LWPM_K8S_VERSION}
   trigger-coding-net-ci:
     needs: lwpm-dist-k8s-file
     name: trigger-coding-net-ci

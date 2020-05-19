@@ -5,6 +5,11 @@ Import-Module $PSScriptRoot/manifests/get.psm1
 Import-Module $PSScriptRoot/blobs/get.psm1
 Import-Module $PSScriptRoot\auth\token.psm1
 Import-Module $PSScriptRoot/auth/auth.psm1
+Import-Module $PSScriptRoot/registry/registry.psm1
+
+# $env:DOCKER_ROOTFS_PHASE="tag"
+# $env:DOCKER_ROOTFS_PHASE="manifest"
+# $env:DOCKER_ROOTFS_PHASE="manifest list"
 
 <#
 .SYNOPSIS
@@ -14,6 +19,13 @@ Import-Module $PSScriptRoot/auth/auth.psm1
 
   PS > . $HOME\lnmp\windows\sdk\dockerhub\rootfs.ps1
   PS > rootfs alpine latest amd64 linux
+
+  ENV:
+  $env:REGISTRY_MIRROR
+
+  $env:DOCKER_ROOTFS_PHASE="tag"            get tag only
+  $env:DOCKER_ROOTFS_PHASE="manifest"       get manifest only
+  $env:DOCKER_ROOTFS_PHASE="manifest list"  get manifest list only
 .INPUTS
 
 .OUTPUTS
@@ -34,25 +46,14 @@ function rootfs($image="alpine",
                 $tokenService="registry.docker.io"){
   # $dest 下载到哪里
 
-  if(!($registry)){
-    if($env:REGISTRY_MIRROR){
-      $registry = $env:REGISTRY_MIRROR
-      Write-host "==> Read `$registry from `$env:REGISTRY_MIRROR($env:REGISTRY_MIRROR)" -ForegroundColor Green
-    }else{
-      if($env:LNMP_CN_ENV -ne "false"){
-        $registry = "hub-mirror.c.163.com"
-      }else{
-        $registry = "registry.hub.docker.com"
-      }
-    }
-  }
+  $registry = Get-Registry $registry
 
   if($env:CI -or $CI){
     $ProgressPreference = 'SilentlyContinue'
   }
 
   $FormatEnumerationLimit=-1
-  write-host "==> Get token ..." -ForegroundColor Green
+  write-host "==> Get token ..." -ForegroundColor Blue
 
   $tokenServerByParser,$tokenServiceByParser = Get-TokenServerAndService $registry
 
@@ -96,9 +97,15 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
   return
 }
 
-Write-Host "==> $image tags list" -ForegroundColor Green
+  Write-Host "==> $image tags list" -ForegroundColor Blue
 
 ConvertFrom-Json (Get-Tag $token $image $registry) | Format-List | out-host
+
+  if ($env:DOCKER_ROOTFS_PHASE -eq "tag") {
+    write-host "==> find `$env:DOCKER_ROOTFS_PHASE='tag' exit" -ForegroundColor Blue
+
+    return
+  }
 
 $result = Get-Manifest $token $image $ref $null $registry
 
@@ -107,7 +114,19 @@ if($result){
 }else{
   Write-Host "==> Manifest list not found" -ForegroundColor Red
 
+    if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
+      write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest list' exit" -ForegroundColor Blue
+
+      throw '404';
+    }
+
   $result = Get-Manifest $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
+
+    if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
+      write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest' exit" -ForegroundColor Blue
+
+      return;
+    }
 
   if(!$result){
     return
@@ -134,6 +153,14 @@ if($result){
   return $dest
 }
 
+  if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
+    write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest list' exit" -ForegroundColor Blue
+
+    ConvertTo-Json $result | out-host
+
+    return
+  }
+
 $manifests=$result.manifests
 
 foreach($manifest in $manifests){
@@ -144,6 +171,14 @@ foreach($manifest in $manifests){
     $digest = $manifest.digest
 
     $result = Get-Manifest $token $image $digest "application/vnd.docker.distribution.manifest.v2+json" $registry
+
+      if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
+        write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest' exit" -ForegroundColor Blue
+
+        ConvertTo-Json $result | out-host
+
+        return;
+      }
 
     $layers = $result.layers
 

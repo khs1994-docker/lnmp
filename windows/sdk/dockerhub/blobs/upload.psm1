@@ -69,6 +69,8 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
     -D $env:TEMP/curl_resp_header.txt `
     "$uuid&digest=sha256:$sha256"
 
+  write-host "==> exit code is $?" -ForegroundColor Blue
+
   if (!($result)) {
     write-host "==> Blob upload success" -ForegroundColor Green
 
