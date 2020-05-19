@@ -10,7 +10,7 @@ jobs:
     name: lwpm-dist-k8s-file
     runs-on: ${{ matrix.os }}-latest
     env:
-      LWPM_K8S_VERSION: "1.18.2"
+      LWPM_K8S_VERSION: "1.19.0-beta.0"
 
       LWPM_DOCKER_USERNAME: khs1994
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}

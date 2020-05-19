@@ -212,19 +212,19 @@
     "dest": "caddy:alpine"
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.7",
-    "dest": "etcd:v3.4.7",
+    "source": "quay.io/coreos/etcd:v3.4.8",
+    "dest": "etcd:v3.4.8",
     "platform": [
       {
         "os": "linux",
         "architecture": "arm64",
         "variant": "v8",
-        "image": "quay.io/coreos/etcd:v3.4.7-arm64"
+        "image": "quay.io/coreos/etcd:v3.4.8-arm64"
       }
     ]
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.7-arm64",
-    "dest": "etcd:v3.4.7-arm64"
+    "source": "quay.io/coreos/etcd:v3.4.8-arm64",
+    "dest": "etcd:v3.4.8-arm64"
   }
 ]
