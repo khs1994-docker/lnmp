@@ -7,15 +7,15 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 ENV PHP_VERSION 7.3.8
 
 RUN $url = ('https://windows.php.net/downloads/releases/php-{0}-nts-Win32-VC15-x64.zip' -f $env:PHP_VERSION); \
-	      Write-Host ('Downloading {0} ...' -f $url); \
-	      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-	      Invoke-WebRequest -Uri $url -OutFile 'php.zip'; \
-       	\
+        Write-Host ('Downloading {0} ...' -f $url); \
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+        Invoke-WebRequest -Uri $url -OutFile 'php.zip'; \
+         \
         Write-Host 'Installing ...'; \
         Expand-Archive -Path php.zip -DestinationPath C:/PHP -Force; \
         \
         Write-Host 'Updating PATH ...'; \
-	      $env:PATH = 'C:\php;' + $env:PATH; \
+        $env:PATH = 'C:\php;' + $env:PATH; \
         [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine); \
         \
         Write-Host 'Verifying install ...'; \

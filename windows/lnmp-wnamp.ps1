@@ -224,7 +224,7 @@ $WSL_SOFT="wsl-nginx","wsl-php","wsl-httpd","wsl-mysql","wsl-redis","wsl-memcach
 if ($args.length -eq 1){
   if ($args[0] -eq 'status' -or $args[0] -eq 'ps'){
     _status
-	exit
+  exit
   }
 }elseif($args.length -lt 2){
   print_help_info

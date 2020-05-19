@@ -1,5 +1,5 @@
 # https://coredns.io/plugins/
-.:53 {	# 监听tcp和udp的53端口
+.:53 {  # 监听tcp和udp的53端口
     # bind 127.0.0.1 ::1
     # https://coredns.io/plugins/etcd/
     # etcd [ZONES...] {
