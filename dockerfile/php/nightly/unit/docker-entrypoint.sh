@@ -4,6 +4,7 @@
 
 # /var/lib/unit               => /usr/local/nginx-unit/state
 # /var/run/control.unit.sock  => /usr/local/nginx-unit/control.unit.sock
+# /var/run/unit.pid           => /usr/local/nginx-unit/unit.pid
 
 echo "==> Initial Configuration, please see https://unit.nginx.org/installation/#initial-configuration"
 
@@ -62,7 +63,7 @@ if [ "$1" = "unitd" ]; then
             done
 
             echo "$0: Stopping Unit daemon after initial configuration..."
-            kill -TERM `/bin/cat /var/run/unit.pid`
+            kill -TERM `/bin/cat /usr/local/nginx-unit/unit.pid`
 
             while [ -S /usr/local/nginx-unit/control.unit.sock ]; do echo "$0: Waiting for control socket to be removed..."; /bin/sleep 0.1; done
 
