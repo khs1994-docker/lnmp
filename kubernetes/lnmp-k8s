@@ -178,9 +178,7 @@ _get_kubernetes_server_by_docker_image(){
   "" 0 ${K8S_IMAGE_REGISTRY:-registry.hub.docker.com}
   )
 
-  tar -zxvf $dist -C $ScriptRoot/kubernetes-release/release/
-
-  mv kubernetes-release/release/kubernetes-${TYPE}/dist/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
+  mv $dist \
     kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
 
   set +x

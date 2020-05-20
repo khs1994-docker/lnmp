@@ -13,7 +13,7 @@ function Get-DockerRegistryToken([string]$image,
   if (Test-Path $token_file) {
     $file_timestrap = (((Get-ChildItem $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
     $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
-    if (($now_timestrap - $file_timestrap) -lt 249) {
+    if (($now_timestrap - $file_timestrap) -lt 205) {
       write-host "==> Token file cache find, not expire, use it" -ForegroundColor Green
 
       return (Get-Content $token_file -raw -Encoding utf8).trim()

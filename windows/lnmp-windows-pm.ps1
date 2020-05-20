@@ -734,6 +734,7 @@ function _push($opt) {
     $layers = $()
 
     foreach ($layer_file in $layers_file) {
+      $token = getDockerRegistryToken $opt
       try {
         $length, $sha256 = New-Blob $token $opt $layer_file -registry $registry
       }
@@ -770,6 +771,7 @@ function _push($opt) {
     }
 
     # push manifest
+    $token = getDockerRegistryToken $opt
     $manifest_length, $manifest_sha256 = New-Manifest $token $opt $version $manifest_json_path -registry $registry
 
     # generate manifest list
@@ -798,6 +800,7 @@ function _push($opt) {
   Write-Host $(cat $manifest_list_json_path -raw)
 
   # push manifest list
+  $token = getDockerRegistryToken $opt
   $manifest_length, $manifest_sha256 = New-Manifest $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry
 }
 
