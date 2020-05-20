@@ -351,9 +351,9 @@ Function _getlwpmConfig($image, $ref) {
     throw "404"
   }
 
-  $config_sha256 = $result.config.digest
+  $config_digest = $result.config.digest
 
-  $dest = Get-Blob $token $image $config_sha256 $registry
+  $dest = Get-Blob $token $image $config_digest $registry
 
   return cat $dest
 }
@@ -723,7 +723,7 @@ function _push($opt) {
     $config_file = "$lwpm_temp/lwpm.json"
 
     try {
-      $config_length, $config_sha256 = New-Blob $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry
+      $config_length, $config_digest = New-Blob $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry
     }
     catch {
       Write-Host $_.Exception
@@ -736,7 +736,7 @@ function _push($opt) {
     foreach ($layer_file in $layers_file) {
       $token = getDockerRegistryToken $opt
       try {
-        $length, $sha256 = New-Blob $token $opt $layer_file -registry $registry
+        $length, $digest = New-Blob $token $opt $layer_file -registry $registry
       }
       catch {
         Write-Host $_.Exception
@@ -746,7 +746,7 @@ function _push($opt) {
       $layer = @{
         "mediaType" = "application/vnd.docker.image.rootfs.diff.tar.gzip";
         "size"      = $length;
-        "digest"    = "sha256:$sha256";
+        "digest"    = "$digest";
       }
 
       $layers += , $layer
@@ -758,7 +758,7 @@ function _push($opt) {
       "config"        = @{
         "mediaType" = "application/vnd.docker.container.image.v1+json";
         "size"      = $config_length;
-        "digest"    = "sha256:$config_sha256";
+        "digest"    = "$config_digest";
       };
       "layers"        = $layers
     } -Compress
@@ -772,11 +772,11 @@ function _push($opt) {
 
     # push manifest
     $token = getDockerRegistryToken $opt
-    $manifest_length, $manifest_sha256 = New-Manifest $token $opt $version $manifest_json_path -registry $registry
+    $manifest_length, $manifest_digest = New-Manifest $token $opt $version $manifest_json_path -registry $registry
 
     # generate manifest list
     $manifest = @{
-      "digest"    = "sha256:$manifest_sha256";
+      "digest"    = "$manifest_digest";
       "mediaType" = "application/vnd.docker.distribution.manifest.v2+json";
       "platform"  = @{
         "architecture" = $env:lwpm_architecture;
@@ -801,7 +801,7 @@ function _push($opt) {
 
   # push manifest list
   $token = getDockerRegistryToken $opt
-  $manifest_length, $manifest_sha256 = New-Manifest $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry
+  $manifest_length, $manifest_digest = New-Manifest $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry
 }
 
 function _sort_object($obj) {

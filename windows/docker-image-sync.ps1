@@ -80,8 +80,7 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
   $source_token, $source_image, $source_registry, $media_type
 ) {
   try {
-    $blob_exists = Test-Blob $dest_token $dest_image $digest.split(':')[-1] `
-      $dest_registry
+    $blob_exists = Test-Blob $dest_token $dest_image $digest $dest_registry
   }
   catch {
     write-host "==> [error] check blob error, skip" -ForegroundColor Red

@@ -16,13 +16,13 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
 
   write-host "==> Response header `n$(Get-Content $env:TEMP/curl_resp_header.txt -raw)" -ForegroundColor Blue
 
-  $manifest_sha256 = ((Get-Content $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split('sha256:')[-1]
+  $manifest_digest = ((Get-Content $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split(' ')[-1]
 
-  write-host "==> $contentType push success, manifest is sha256:$manifest_sha256" -ForegroundColor Green
+  write-host "==> $contentType push success, manifest is $manifest_digest" -ForegroundColor Green
 
   $manifest_length = (Get-ChildItem $manifest_json_path).Length
 
-  return $manifest_length, $manifest_sha256
+  return $manifest_length, $manifest_digest
 }
 
 Export-ModuleMember -Function New-Manifest

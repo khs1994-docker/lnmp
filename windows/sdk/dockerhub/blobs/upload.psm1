@@ -1,14 +1,15 @@
 Import-Module $PSScriptRoot/../utils/sha256.psm1
+Import-Module $PSScriptRoot/../utils/sha512.psm1
 
 # application/vnd.docker.container.image.v1+json
 
-Function Test-Blob([string] $token, [string]$image, [string]$sha256, [string]$registry = "registry.hub.docker.com") {
+Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
       -Authentication OAuth `
       -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
       -Method 'HEAD' `
-      -Uri "https://$registry/v2/$image/blobs/sha256:$sha256" `
+      -Uri "https://$registry/v2/$image/blobs/$digest" `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
 
     write-host "==> Blob found, skip upload" -ForegroundColor Yellow
@@ -31,19 +32,24 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   write-host "==> Blob type is $contentType" -ForegroundColor Green
 
   $sha256 = sha256 $file
+  $digest = "sha256:$sha256"
+
+  # $sha512 = sha512 $file
+  # $digest = "sha512:$sha512"
+
   $length = (Get-ChildItem $file).Length
 
   if (!($IsWindows)) { $env:TEMP = "/tmp" }
 
-  if (Test-Blob $token $image $sha256 $registry) {
+  if (Test-Blob $token $image $digest $registry) {
     write-host (ConvertFrom-Json -InputObject @"
     {
       "file": "$($file.replace('\','\\'))",
-      "digest": "sha256:$sha256"
+      "digest": "$digest"
     }
 "@) -ForegroundColor Yellow
 
-    return $length, $sha256
+    return $length, $digest
   }
 
   write-host "==> Upload blob ..." -ForegroundColor Blue
@@ -67,7 +73,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
     -T $file `
     -A "Docker-Client/19.03.5 (Windows)" `
     -D $env:TEMP/curl_resp_header.txt `
-    "$uuid&digest=sha256:$sha256"
+    "$uuid&digest=$digest"
 
   write-host "==> exit code is $?" -ForegroundColor Blue
 
@@ -77,14 +83,14 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
     write-host (ConvertFrom-Json -InputObject @"
 {
   "file": "$($file.replace('\','\\'))",
-  "digest": "sha256:$sha256"
+  "digest": "$digest"
 }
 "@) -ForegroundColor Blue
   }
 
   write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Blue
 
-  return $length, $sha256
+  return $length, $digest
 }
 
 Export-ModuleMember -Function Test-Blob

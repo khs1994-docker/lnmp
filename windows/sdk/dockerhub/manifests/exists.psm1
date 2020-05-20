@@ -1,10 +1,10 @@
-Function Test-Manifest([string]$token, [string]$image, [string]$sha256, [string]$contentType = "application/vnd.docker.distribution.manifest.v2+json", [string]$registry = "registry.hub.docker.com") {
+Function Test-Manifest([string]$token, [string]$image, [string]$digest, [string]$contentType = "application/vnd.docker.distribution.manifest.v2+json", [string]$registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
       -Authentication OAuth `
       -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
       -Headers @{"Accept" = "$contentType" } `
-      "https://$registry/v2/$image/manifests/$sha256" `
+      "https://$registry/v2/$image/manifests/$digest" `
       -Method Head `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
   }
