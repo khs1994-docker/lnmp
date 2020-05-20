@@ -1,4 +1,4 @@
-Function Get-Registry($registry) {
+Function Get-Registry($registry=$null) {
   if (!($registry)) {
     if ($env:REGISTRY_MIRROR) {
       $registry = $env:REGISTRY_MIRROR

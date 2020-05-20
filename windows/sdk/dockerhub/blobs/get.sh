@@ -33,9 +33,10 @@ get(){
   local image_conver=`echo $image | sed "s#/#@#g"`
   local digest_conver=`echo $digest | sed "s#sha256:##g"`
 
-  mkdir -p `getCachePath blobs`
+  prefix=${digest_conver:0:2}
+  mkdir -p `getCachePath blobs/sha256/$prefix`
 
-  local distTemp=`getCachePath "blobs/$digest_conver.tar.gz" `
+  local distTemp=`getCachePath "blobs/sha256/$prefix/$digest_conver" `
 
   if [ -f $distTemp ];then
     result=`_sha256_checker $distTemp && echo 0 || echo 1`

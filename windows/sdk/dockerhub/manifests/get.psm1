@@ -1,5 +1,5 @@
 Import-Module $PSScriptRoot/../cache/cache.psm1
-function Get-Manifest($token, $image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
+function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
   $manifest_header = "application/vnd.docker.distribution.manifest.v2+json"
   $manifest_list_header = "application/vnd.docker.distribution.manifest.list.v2+json"
 

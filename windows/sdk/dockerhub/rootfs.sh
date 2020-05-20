@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 rootfs(){
   local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"

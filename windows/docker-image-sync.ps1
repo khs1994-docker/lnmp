@@ -42,15 +42,10 @@ Function _upload_manifest($token, $image, $ref, $manifest_json_path, $registry) 
 
 Function _exclude_platform($manifests, $manifest_list_json_path) {
   write-host "==> exclude some platform" -ForegroundColor Blue
-  $manifests_count = $manifests.Count
 
-  $manifests_sync = 0..($manifests_count - 1)
+  $manifests_sync = $()
 
-  $i = -1
-  $manifests_sync_count = 0
   foreach ($manifest in $manifests) {
-    $i++
-    $manifest_digest = $manifest.digest
     $platform = $manifest.platform
 
     $architecture = $platform.architecture
@@ -66,22 +61,12 @@ Function _exclude_platform($manifests, $manifest_list_json_path) {
 
     write-host "==> WILL sync $platform" -ForegroundColor Green
 
-    $manifests_sync_count++
-    $manifests_sync[$i] = $manifest
+    $manifests_sync += ,$manifest
   }
 
   write-host "==> [end] exclude platform" -ForegroundColor Blue
 
-  $i = -1
-  $manifests = 0..($manifests_sync_count - 1 )
-
-  foreach ($item in $manifests_sync) {
-    if (!($item -is [int])) {
-      $i++
-      $manifests[$i] = $item
-    }
-  }
-  $manifest_list_json.manifests = $manifests
+  $manifest_list_json.manifests = $manifests_sync
 
   ConvertTo-Json -depth 5 $manifest_list_json -Compress `
   | set-content  -NoNewline "$manifest_list_json_path.sync.json"

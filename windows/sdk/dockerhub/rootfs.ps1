@@ -35,15 +35,15 @@ Import-Module $PSScriptRoot/registry/registry.psm1
 #>
 #Requires -Version 6.0.0
 
-function rootfs($image="alpine",
-                $ref="latest",
-                $arch="amd64",
-                $os="linux",
-                $dest,
-                $layersIndex=0,
-                $registry=$null,
-                $tokenServer="https://auth.docker.io/token",
-                $tokenService="registry.docker.io"){
+function rootfs([string]$image="alpine",
+                [string]$ref="latest",
+                [string]$arch="amd64",
+                [string]$os="linux",
+                [string]$dest,
+                [int]$layersIndex=0,
+                [string]$registry=$null,
+                [string]$tokenServer="https://auth.docker.io/token",
+                [string]$tokenService="registry.docker.io"){
   # $dest 下载到哪里
 
   $registry = Get-Registry $registry

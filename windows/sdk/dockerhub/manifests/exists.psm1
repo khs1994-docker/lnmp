@@ -1,4 +1,4 @@
-Function Test-Manifest($token, $image, $sha256, $contentType = "application/vnd.docker.distribution.manifest.v2+json", $registry = "registry.hub.docker.com") {
+Function Test-Manifest([string]$token, [string]$image, [string]$sha256, [string]$contentType = "application/vnd.docker.distribution.manifest.v2+json", [string]$registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
       -Authentication OAuth `

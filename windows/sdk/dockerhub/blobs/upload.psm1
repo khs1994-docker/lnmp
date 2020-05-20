@@ -2,7 +2,7 @@ Import-Module $PSScriptRoot/../utils/sha256.psm1
 
 # application/vnd.docker.container.image.v1+json
 
-Function Test-Blob([string] $token, $image, $sha256, $registry = "registry.hub.docker.com") {
+Function Test-Blob([string] $token, [string]$image, [string]$sha256, [string]$registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
       -Authentication OAuth `

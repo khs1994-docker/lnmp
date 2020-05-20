@@ -21,10 +21,10 @@ Function imageParser([string] $config, [boolean] $source = $true) {
   }
   # host:port/user/image
   # host:port/image -
-  # user/image:ref
+  # user/image:ref          user/x/y/z/image:ref
   # host/image:ref -
   # host/user/image:ref
-  # image:ref
+  # image:ref               x/y/z/image:ref
   elseif ($config.split(':').count -eq 2) {
     if (!($config.contains('/'))) {
       # image:ref
@@ -45,9 +45,9 @@ Function imageParser([string] $config, [boolean] $source = $true) {
       }
     }
   }
-  # image
+  # image               x/y/z/image
   # host/image -
-  # user/image
+  # user/image          user/x/y/z/image
   # host/user/image
   else {
     $image, $ref = $config.split(':')
@@ -101,7 +101,7 @@ Function imageParser([string] $config, [boolean] $source = $true) {
       "ref": "$ref",
       "digest": "$digest"
   }
-"@) -ForegroundColor Red
+"@) -ForegroundColor Blue
 
   return $registry, $image, $ref, $digest
 }

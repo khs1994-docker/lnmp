@@ -1,4 +1,4 @@
-Function sha256($file) {
+Function sha256([string]$file) {
   if ($IsWindows) {
     return (certutil -hashfile $file SHA256).split()[4]
   }

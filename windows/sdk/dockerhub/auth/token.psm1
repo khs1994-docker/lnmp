@@ -1,4 +1,4 @@
-Function Get-TokenServerAndService($registry) {
+Function Get-TokenServerAndService([string]$registry) {
   try {
     $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/x/y/manifests/latest `
         -Method Head -MaximumRedirection 0 -UserAgent "Docker-Client/19.03.5 (Windows)" `
@@ -20,6 +20,7 @@ Function Get-TokenServerAndService($registry) {
   }
 
   if ($WWW_Authenticate) {
+    # Bearer realm="https://auth.docker.io/token",service="registry.docker.io",scope="repository:x/y:pull"
     $result = $WWW_Authenticate.split(',').split('=')
 
     if ($result[0] -eq 'Bearer realm') {

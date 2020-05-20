@@ -1,8 +1,8 @@
 Import-Module $PSScriptRoot/../../log/log.psm1 -force
 Import-Module $PSScriptRoot/../cache/cache.psm1 -force
 
-function Get-DockerRegistryToken($image,
-                  $action="pull",
+function Get-DockerRegistryToken([string]$image,
+                  [string]$action="pull",
                   $tokenServer="https://auth.docker.io/token",
                   $tokenService="registry.docker.io",
                   $cache=$false){

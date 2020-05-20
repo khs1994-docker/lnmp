@@ -1,4 +1,4 @@
-function Get-Tag($token, $image, $registry = "registry.hub.docker.com") {
+function Get-Tag([string]$token, [string]$image, [string]$registry = "registry.hub.docker.com") {
   $result = Invoke-WebRequest `
     -Authentication OAuth `
     -Token (ConvertTo-SecureString $token -Force -AsPlainText) `

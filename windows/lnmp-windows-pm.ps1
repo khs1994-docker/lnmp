@@ -644,14 +644,11 @@ function _push($opt) {
 "@
   }
 
-  $manifests = 0..($platforms.count - 1)
-  $i = -1
+  $manifests = $()
 
   foreach ($platform in $platforms) {
     $env:lwpm_architecture = $platform.architecture
     $env:lwpm_os = $platform.os
-
-    $i += 1
 
     Write-Host "==> Handle $platform" -ForegroundColor Blue
 
@@ -735,7 +732,7 @@ function _push($opt) {
       "size"      = $manifest_length;
     }
 
-    $manifests[$i] = $manifest
+    $manifests += ,$manifest
   }
 
   $data = ConvertTo-Json -InputObject @{
