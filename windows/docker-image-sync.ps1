@@ -61,7 +61,7 @@ Function _exclude_platform($manifests, $manifest_list_json_path) {
 
     write-host "==> WILL sync $platform" -ForegroundColor Green
 
-    $manifests_sync += ,$manifest
+    $manifests_sync += , $manifest
   }
 
   write-host "==> [end] exclude platform" -ForegroundColor Blue
@@ -366,7 +366,7 @@ manifest not found, skip" -ForegroundColor Red
   $length, $digest = New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
     $manifest_list_media_type $dest_registry
 
-  if(!$digest){
+  if (!$digest) {
     write-host "==> [error] Manifest list push error" -ForegroundColor Red
   }
 

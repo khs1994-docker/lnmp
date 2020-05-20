@@ -420,17 +420,24 @@ Function _add($softs) {
       $os = $platform.os
       $architecture = $platform.architecture
 
-      $dest = rootfs $soft $ref -os $os -arch $architecture
+      $env:DOCKER_ROOTFS_PHASE = $null
+      $lwpm_json, $lwpm_dist, $lwpm_script = rootfs $soft $ref -os $os -arch $architecture $null 'config', 0, 1
 
-      if (!($dest)) {
-        Write-Host "==> $soft $ref not found" -ForegroundColor Red
+      if (!($lwpm_json -and $lwpm_dist -and $lwpm_script)) {
+        Write-Host "==> $soft $ref not found or download failed" -ForegroundColor Red
 
         continue
       }
 
-      $dist = "$PSScriptRoot/../vendor/lwpm"
-      _mkdir $dist | out-null
-      tar -zxvf $dest -C $dist
+      $soft_folder = "$PSScriptRoot/../vendor/lwpm"
+      _mkdir $soft_folder
+      write-host "==> Handle lwpm.json" -ForegroundColor Blue
+      _mkdir $soft_folder/$($soft.split('/')[-1])
+      copy-item -Force $lwpm_json $soft_folder/$($soft.split('/')[-1])/lwpm.json
+      write-host "==> Handle lwpm dist" -ForegroundColor Blue
+      tar -zxvf $lwpm_dist -C $soft_folder
+      write-host "==> Handle lwpm script" -ForegroundColor Blue
+      tar -zxvf $lwpm_script -C $soft_folder
     } # platforms end
 
   } # softs end
@@ -663,37 +670,85 @@ function _push($opt) {
     _mkdir $lwpm_temp | out-null
     _mkdir $lwpm_dist_temp | out-null
 
-    ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
-      ConvertTo-Json -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
-
     try { cp $pkg_root\README.md $lwpm_temp }catch { }
-    if (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}) {
-      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
-    }
-    else {
-      try { cp -r $pkg_root\dist   $lwpm_temp }catch { }
-    }
 
     if (Test-Path $pkg_root\$soft.psm1) {
       cp $pkg_root\${soft}.psm1 $lwpm_temp
     }
 
-    $tar_file = "$lwpm_dist_temp/lwpm.tar.gz"
+    $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
     cd $lwpm_temp\..\
-    tar -zcvf lwpm.tar.gz $soft
-    mv lwpm.tar.gz $tar_file
+    tar -zcvf script.tar.gz $soft
+    mv script.tar.gz $script_tar_file
+
+    ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
+      ConvertTo-Json -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
+
+    $layers_file = $()
+
+    if (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz) {
+      write-host "==> found platform .tar.gz file, use it" -ForegroundColor Blue
+      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+
+      foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
+        write-host "==> .tar.gz file is $item" -ForegroundColor Blue
+        $layers_file += , ${item}.FullName
+
+        break
+      }
+    }
+    elseif (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}) {
+      write-host "==> found platform file" -ForegroundColor Blue
+      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+    }
+    else {
+      write-host "==> NO platform file" -ForegroundColor Blue
+      try { cp -r $pkg_root\dist   $lwpm_temp }catch { }
+    }
+
+    if ($layers_file.Count -eq 0) {
+      $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
+      cd $lwpm_temp/../
+      tar -zcvf dist.tar.gz $soft/dist
+      mv dist.tar.gz $dist_tar_file
+
+      $layers_file += , $dist_tar_file
+    }
+
+    $layers_file += , $script_tar_file
 
     $token = getDockerRegistryToken $opt
 
+    # upload config blob
     $config_file = "$lwpm_temp/lwpm.json"
 
     try {
-      $length, $sha256 = New-Blob $token $opt $tar_file -registry $registry
       $config_length, $config_sha256 = New-Blob $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry
     }
     catch {
       Write-Host $_.Exception
       return;
+    }
+
+    # upload layers blob
+    $layers = $()
+
+    foreach ($layer_file in $layers_file) {
+      try {
+        $length, $sha256 = New-Blob $token $opt $layer_file -registry $registry
+      }
+      catch {
+        Write-Host $_.Exception
+        return;
+      }
+
+      $layer = @{
+        "mediaType" = "application/vnd.docker.image.rootfs.diff.tar.gzip";
+        "size"      = $length;
+        "digest"    = "sha256:$sha256";
+      }
+
+      $layers += , $layer
     }
 
     $data = ConvertTo-Json @{
@@ -704,11 +759,7 @@ function _push($opt) {
         "size"      = $config_length;
         "digest"    = "sha256:$config_sha256";
       };
-      "layers"        = @(@{
-          "mediaType" = "application/vnd.docker.image.rootfs.diff.tar.gzip";
-          "size"      = $length;
-          "digest"    = "sha256:$sha256";
-        })
+      "layers"        = $layers
     } -Compress
 
     $manifest_json_path = "$lwpm_dist_temp/manifest.json"
@@ -732,7 +783,7 @@ function _push($opt) {
       "size"      = $manifest_length;
     }
 
-    $manifests += ,$manifest
+    $manifests += , $manifest
   }
 
   $data = ConvertTo-Json -InputObject @{

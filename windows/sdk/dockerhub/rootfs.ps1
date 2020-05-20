@@ -35,37 +35,41 @@ Import-Module $PSScriptRoot/registry/registry.psm1
 #>
 #Requires -Version 6.0.0
 
-function rootfs([string]$image="alpine",
-                [string]$ref="latest",
-                [string]$arch="amd64",
-                [string]$os="linux",
-                [string]$dest,
-                [int]$layersIndex=0,
-                [string]$registry=$null,
-                [string]$tokenServer="https://auth.docker.io/token",
-                [string]$tokenService="registry.docker.io"){
+function rootfs([string]$image = "alpine",
+  [string]$ref = "latest",
+  [string]$arch = "amd64",
+  [string]$os = "linux",
+  [string]$dest,
+  $layersIndex = 0,
+  [string]$registry = $null,
+  [string]$tokenServer = "https://auth.docker.io/token",
+  [string]$tokenService = "registry.docker.io") {
   # $dest 下载到哪里
+
+  # $layersIndex = 0
+  # $layersIndex = 0,1
+  # $layersIndex = 'config',0,1
 
   $registry = Get-Registry $registry
 
-  if($env:CI -or $CI){
+  if ($env:CI -or $CI) {
     $ProgressPreference = 'SilentlyContinue'
   }
 
-  $FormatEnumerationLimit=-1
+  $FormatEnumerationLimit = -1
   write-host "==> Get token ..." -ForegroundColor Blue
 
-  $tokenServerByParser,$tokenServiceByParser = Get-TokenServerAndService $registry
+  $tokenServerByParser, $tokenServiceByParser = Get-TokenServerAndService $registry
 
-  if($tokenServerByParser){$tokenServer=$tokenServerByParser}
-  if($tokenServiceByParser){$tokenService=$tokenServiceByParser}
+  if ($tokenServerByParser) { $tokenServer = $tokenServerByParser }
+  if ($tokenServiceByParser) { $tokenService = $tokenServiceByParser }
 
-  if(!($image | select-string '/')){
+  if (!($image | select-string '/')) {
     $image = "library/$image"
   }
 
-  if(!$arch){$arch = "amd64"}
-  if(!$os){$os = "linux"}
+  if (!$arch) { $arch = "amd64" }
+  if (!$os) { $os = "linux" }
 
   ConvertFrom-Json -InputObject @"
 {
@@ -80,122 +84,155 @@ function rootfs([string]$image="alpine",
 }
 "@ | out-host
 
-write-host "==> Wait 3s, continue ..." -ForegroundColor Green
+  write-host "==> Wait 3s, continue ..." -ForegroundColor Green
 
-sleep 3
+  sleep 3
 
-$token=Get-DockerRegistryToken $image pull $tokenServer $tokenService
+  $token = Get-DockerRegistryToken $image pull $tokenServer $tokenService
 
-# write-host $token
+  # write-host $token
 
-if(!$token){
-  Write-Host "==> Get token error
+  if (!$token) {
+    Write-Host "==> Get token error
 
 Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 " -ForegroundColor Red
 
-  return
-}
+    return
+  }
 
   Write-Host "==> $image tags list" -ForegroundColor Blue
 
-ConvertFrom-Json (Get-Tag $token $image $registry) | Format-List | out-host
+  ConvertFrom-Json (Get-Tag $token $image $registry) | Format-List | out-host
 
   if ($env:DOCKER_ROOTFS_PHASE -eq "tag") {
-    write-host "==> find `$env:DOCKER_ROOTFS_PHASE='tag' exit" -ForegroundColor Blue
+    write-host "==> find `$env:DOCKER_ROOTFS_PHASE='tag', exit" -ForegroundColor Blue
 
     return
   }
 
-$result = Get-Manifest $token $image $ref $null $registry
+  $result = Get-Manifest $token $image $ref $null $registry
 
-if($result){
-  Write-host "==> Manifest list is found" -ForegroundColor Green
-}else{
-  Write-Host "==> Manifest list not found" -ForegroundColor Red
+  if ($result) {
+    Write-host "==> Manifest list is found" -ForegroundColor Green
+  }
+  else {
+    Write-Host "==> Manifest list not found" -ForegroundColor Red
 
     if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
-      write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest list' exit" -ForegroundColor Blue
+      write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest list', exit" -ForegroundColor Blue
 
       throw '404';
     }
 
-  $result = Get-Manifest $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
+    $result = Get-Manifest $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
 
     if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
-      write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest' exit" -ForegroundColor Blue
+      write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest', exit" -ForegroundColor Blue
 
-      return;
+      return ConvertTo-Json -Depth 5 $result
     }
 
-  if(!$result){
-    return
-  }
+    if (!$result) {
+      return
+    }
 
-  $digest = $result.layers[$layersIndex].digest
+    $dests = $()
 
-  Write-Host "==> Digest is $digest" -ForegroundColor Green
+    foreach ($index in $layersIndex) {
+      write-host "==> Download layers index $index" -ForegroundColor Blue
 
-  if(!$digest){
-    Write-Host "==> [error] Image not found, exit" -ForegroundColor Red
+      if ($index -eq 'config') {
+        $digest = $result.config.digest
+      }
+      else {
+        $digest = $result.layers[$index].digest
+      }
 
-    return $false
-  }
+      Write-Host "==> Digest is $digest" -ForegroundColor Green
 
-  $dest = Get-Blob $token $image $digest $registry $dest
+      if (!$digest) {
+        Write-Host "==> [error] Image not found, exit" -ForegroundColor Red
 
-  if(!($dest)){
-    return;
-  }
+        return $false
+      }
 
-  Write-Host "==> Download success to $dest" -ForegroundColor Green
+      $dest = Get-Blob $token $image $digest $registry $dest
 
-  return $dest
-}
-
-  if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
-    write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest list' exit" -ForegroundColor Blue
-
-    ConvertTo-Json $result | out-host
-
-    return
-  }
-
-$manifests=$result.manifests
-
-foreach($manifest in $manifests){
-  $current_arch = $manifest.platform.architecture
-  $current_os = $manifest.platform.os
-
-  if($current_arch -eq $arch -and ($current_os -eq $os)){
-    $digest = $manifest.digest
-
-    $result = Get-Manifest $token $image $digest "application/vnd.docker.distribution.manifest.v2+json" $registry
-
-      if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
-        write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest' exit" -ForegroundColor Blue
-
-        ConvertTo-Json $result | out-host
-
+      if (!($dest)) {
         return;
       }
 
-    $layers = $result.layers
+      Write-Host "==> Download success to $dest" -ForegroundColor Green
 
-    $digest = $layers[$layersIndex].digest
-
-    Write-Host "==> Blob(layer) digest is $digest" -ForegroundColor Green
-
-    $dest = Get-Blob $token $image $digest $registry $dest
-
-    if(!($dest)){
-      return;
+      $dests += , $dest
+      $dest = $null
     }
 
-    Write-Host "==> Download success to $dest" -ForegroundColor Green
+    if ($dests.Count -eq 1) {
+      return $dests[0]
+    }
 
-    return $dest
+    return $dests
   }
+
+  if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
+    write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest list', exit" -ForegroundColor Blue
+
+    return ConvertTo-Json -Depth 5 $result
+  }
+
+  $manifests = $result.manifests
+
+  foreach ($manifest in $manifests) {
+    $current_arch = $manifest.platform.architecture
+    $current_os = $manifest.platform.os
+
+    if ($current_arch -eq $arch -and ($current_os -eq $os)) {
+      $digest = $manifest.digest
+
+      $result = Get-Manifest $token $image $digest "application/vnd.docker.distribution.manifest.v2+json" $registry
+
+      if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
+        write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest', exit" -ForegroundColor Blue
+
+        return ConvertTo-Json -Depth 5 $result
+      }
+
+      $layers = $result.layers
+      $dests = $()
+
+      foreach ($index in $layersIndex) {
+        write-host "==> Download layers index $index" -ForegroundColor Blue
+
+        if ($index -eq 'config') {
+          $digest = $result.config.digest
+        }
+        else {
+          $digest = $layers[$index].digest
+        }
+
+        Write-Host "==> Blob(layer) digest is $digest" -ForegroundColor Green
+
+        $dest = Get-Blob $token $image $digest $registry $dest
+
+        if (!($dest)) {
+          return;
+        }
+
+        Write-Host "==> Download success to $dest" -ForegroundColor Green
+
+        $dests += , $dest
+
+        $dest = $null
+      }
+
+      if ($dests.Count -eq 1) {
+        return $dests[0]
+      }
+
+      return $dests
+    }
   }
 
   Write-Host "==> Can't find ${image}:$ref $os $arch image" -ForegroundColor Red
