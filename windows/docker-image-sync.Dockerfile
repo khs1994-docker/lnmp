@@ -11,6 +11,7 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 # ENV DEST_DOCKER_REGISTRY=
 
 # ENV EXCLUDE_PLATFORM=true
+# ENV SYNC_WINDOWS=false
 
 # ENV SOURCE_NAMESPACE=library
 # ENV DEST_NAMESPACE=library

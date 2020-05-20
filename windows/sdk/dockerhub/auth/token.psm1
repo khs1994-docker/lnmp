@@ -1,4 +1,20 @@
 Function Get-TokenServerAndService([string]$registry) {
+  if ($env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER) {
+    try {
+      $token_server_and_service = ConvertFrom-Json $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER
+      $cache = $token_server_and_service.$registry
+    }
+    catch {
+      $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = $null
+    }
+
+    if ($cache) {
+      write-host "==> Get registry token server and service from cache" -ForegroundColor Blue
+      write-host $cache -ForegroundColor Blue
+
+      return $cache.server, $cache.service
+    }
+  }
   try {
     $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/x/y/manifests/latest `
         -Method Head -MaximumRedirection 0 -UserAgent "Docker-Client/19.03.5 (Windows)" `
@@ -31,6 +47,22 @@ Function Get-TokenServerAndService([string]$registry) {
       $tokenService = $result[3].replace('"', '')
     }
   }
+
+  if (!$env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER) {
+    $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = ConvertFrom-Json '{}'
+  }
+  else {
+    $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = ConvertFrom-Json $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER
+  }
+
+  $value = @{
+    "server"  = $tokenServer;
+    "service" = $tokenService;
+  }
+
+  $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER | Add-Member -name $registry -value $value -MemberType NoteProperty -Force
+
+  $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = ConvertTo-Json $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER
 
   return $tokenServer, $tokenService
 }

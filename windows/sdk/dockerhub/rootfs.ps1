@@ -23,6 +23,9 @@ Import-Module $PSScriptRoot/registry/registry.psm1
   ENV:
   $env:REGISTRY_MIRROR
 
+  $env:DOCKER_USERNAME
+  $env:DOCKER_PASSWORD
+
   $env:DOCKER_ROOTFS_PHASE="tag"            get tag only
   $env:DOCKER_ROOTFS_PHASE="manifest"       get manifest only
   $env:DOCKER_ROOTFS_PHASE="manifest list"  get manifest list only
@@ -41,9 +44,7 @@ function rootfs([string]$image = "alpine",
   [string]$os = "linux",
   [string]$dest,
   $layersIndex = 0,
-  [string]$registry = $null,
-  [string]$tokenServer = "https://auth.docker.io/token",
-  [string]$tokenService = "registry.docker.io") {
+  [string]$registry = $null) {
   # $dest 下载到哪里
 
   # $layersIndex = 0
@@ -59,10 +60,7 @@ function rootfs([string]$image = "alpine",
   $FormatEnumerationLimit = -1
   write-host "==> Get token ..." -ForegroundColor Blue
 
-  $tokenServerByParser, $tokenServiceByParser = Get-TokenServerAndService $registry
-
-  if ($tokenServerByParser) { $tokenServer = $tokenServerByParser }
-  if ($tokenServiceByParser) { $tokenService = $tokenServiceByParser }
+  $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
   if (!($image | select-string '/')) {
     $image = "library/$image"
@@ -163,7 +161,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
         return;
       }
 
-      Write-Host "==> Download success to $dest" -ForegroundColor Green
+      Write-Host "==> Download success to $dest" -ForegroundColor Blue
 
       $dests += , $dest
       $dest = $null
@@ -220,7 +218,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
           return;
         }
 
-        Write-Host "==> Download success to $dest" -ForegroundColor Green
+        Write-Host "==> Download success to $dest" -ForegroundColor Blue
 
         $dests += , $dest
 

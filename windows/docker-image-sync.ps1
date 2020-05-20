@@ -73,7 +73,7 @@ Function _exclude_platform($manifests, $manifest_list_json_path) {
 
   $manifest_list_json_path = "$manifest_list_json_path.sync.json"
 
-  return $manifests, $manifest_list_json_path
+  return $manifests_sync, $manifest_list_json_path
 }
 
 Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
@@ -122,9 +122,6 @@ Function _sync() {
 
     try {
       $tokenServer, $tokenService = Get-TokenServerAndService $source_registry
-      if (!$tokenServer) {
-        throw "tokenServer not found"
-      }
 
       $env:DOCKER_PASSWORD = $env:SOURCE_DOCKER_PASSWORD
       $env:DOCKER_USERNAME = $env:SOURCE_DOCKER_USERNAME
@@ -143,9 +140,6 @@ Function _sync() {
   Function _getDestToken() {
     try {
       $tokenServer, $tokenService = Get-TokenServerAndService $dest_registry
-      if (!$tokenServer) {
-        throw "tokenServer not found"
-      }
 
       $env:DOCKER_PASSWORD = $env:DEST_DOCKER_PASSWORD
       $env:DOCKER_USERNAME = $env:DEST_DOCKER_USERNAME

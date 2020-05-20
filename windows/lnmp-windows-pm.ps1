@@ -28,7 +28,6 @@ bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
 add         Add package [ --all-platform | ]
-dist        Dist package
 init        Init a new package (developer) [ --custom | ]
 push        Push a package to docker registry (developer)
 toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
@@ -319,23 +318,11 @@ Function getLwpmDockerRegistry() {
 }
 
 Function getDockerRegistryToken($image, $action = "push,pull") {
-  if ($env:LWPM_DOCKER_REGISTRY) {
-    $tokenServer, $tokenService = Get-TokenServerAndService $env:LWPM_DOCKER_REGISTRY
+  $registry = getLwpmDockerRegistry
 
-    if (!($tokenServer)) {
-      Write-Host "==> Get tokenServer error,use default" -ForegroundColor Red
-      $tokenServer = "https://auth.docker.io/token"
-    }
+  $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
-    if (!($tokenService)) {
-      Write-Host "==> Get tokenService error,use default" -ForegroundColor Red
-      $tokenService = 'registry.docker.io'
-    }
-
-    return Get-DockerRegistryToken $image $action $tokenServer $tokenService
-  }
-
-  return Get-DockerRegistryToken $image $action
+  return Get-DockerRegistryToken $image $action $tokenServer $tokenService
 }
 
 Function _getlwpmConfig($image, $ref) {
@@ -572,36 +559,6 @@ function __bug($soft) {
 
 function _tolf($file) {
   (cat $file -raw) -replace "`r`n", "`n" | Set-Content -NoNewline $file
-}
-
-function _lwpm_dist($soft) {
-  Write-Host "==> Dist $soft" -ForegroundColor Blue
-
-  $soft, $ref = $soft.split('@')
-
-  $pkg_root = pkg_root $soft
-
-  $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
-
-  if (!($platforms)) {
-    Write-Host "==> lwpm.json not include platform, skip dist" -ForegroundColor Red
-  }
-
-  try {
-    _import_module $soft
-  }
-  catch {
-    continue;
-  }
-
-  foreach ($platform in $platforms) {
-    $env:lwpm_architecture = $platform.architecture
-    $env:lwpm_os = $platform.os
-
-    Write-Host "==> Handle $platform" -ForegroundColor Blue
-
-    _dist $ref
-  }
 }
 
 function _push($opt) {
@@ -978,12 +935,6 @@ switch ($command) {
     foreach ($item in $opt) {
       Write-Host "==> Stop service $item" -ForegroundColor Red
       start-process "net" -ArgumentList "stop", $item -Verb RunAs
-    }
-  }
-
-  "dist" {
-    foreach ($item in $opt) {
-      _lwpm_dist $item
     }
   }
 

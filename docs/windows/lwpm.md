@@ -118,24 +118,6 @@ $ lnmp-windows-pm.ps1 stop-service minio
  |__lwpm.json
 ```
 
-**dist** 按架构将文件放置（适用于重新打包文件）
-
-```bash
- package
- |__dist
-    |
-    |__os-arch
-       |
-       |__dist_file-os-arch
-    |__linux-amd64
-       |
-       |__dist_file-linux-amd64
-    |__linux-arm
-       |
-       |__dist_file-linux-arm
- |__lwpm.json
-```
-
 **push** 推送到 Docker Registry
 
 ## lwpm.json 支持的变量

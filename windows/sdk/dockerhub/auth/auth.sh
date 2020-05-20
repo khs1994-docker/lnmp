@@ -6,9 +6,18 @@ getToken(){
 
   image=$1
   action=${2:-pull}
-  tokenSever=${3:-"https://auth.docker.io/token"}
-  tokenService=${4:-registry.docker.io}
+  tokenSever=${3}
+  tokenService=${4}
   cache=${5:-0}
+
+  if [ -z $tokenSever ];then
+    echo "==> tokenServer and tokenService is not found" > /dev/stderr
+    echo "==> This registry maybe not need token" > /dev/stderr
+
+    token='token'
+
+    return
+  fi
 
   mkdir -p `getCachePath token`
 

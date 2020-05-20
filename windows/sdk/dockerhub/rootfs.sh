@@ -35,9 +35,6 @@ if [ $? -eq 0 ];then
   fi
 fi
 
-  if [ -z "$tokenServer" ];then tokenServer=${8:-"https://auth.docker.io/token"} ;fi
-  if [ -z "$tokenService" ];then tokenService=${9:-"registry.docker.io"} ;fi
-
   echo $image | grep -q '/' || image="library/$image"
 
   echo "
@@ -59,7 +56,7 @@ sleep 3
 
 . $ScriptRoot/auth/auth.sh
 
-getToken $image pull $tokenServer $tokenService 0 || return 1
+getToken $image pull "${tokenServer}" "${tokenService}" 0 || return 1
 
 if [ -z "$token" ];then
   echo "==> get token error
