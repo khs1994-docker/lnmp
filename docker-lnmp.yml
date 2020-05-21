@@ -142,7 +142,7 @@ services:
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - type: volume
-        source: composer_cache-data
+        source: composer-cache-data
         target: /tmp/cache
       - ./config/composer/config.json:/tmp/config.json:delegated
 
@@ -202,3 +202,16 @@ services:
       - php7
     healthcheck:
       test: ["CMD","nginx","-t"]
+
+  mutagen-wsl2:
+    << : *default-common
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        while : ;do sleep 3600; done
+    volumes:
+      - /app:/app
+      - mutagen-wsl2-data:/root
+    read_only: true

@@ -59,7 +59,9 @@ volumes:
     << : *default-common
   phpmyadmin-data:
     << : *default-common
-  composer_cache-data:
+  composer-cache-data:
+    << : *default-common
+  mutagen-wsl2-data:
     << : *default-common
 
 secrets:

@@ -503,7 +503,7 @@ Function satis(){
 
   docker run --rm -it `
       --mount type=bind,src=${APP_ROOT}/satis,target=/build `
-      --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
+      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
 }
 
 Function get_compose_options($compose_files,$isBuild=0){
@@ -763,17 +763,27 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 
     printInfo "Use LNMP CLI in $PWD"
     cd $env:LNMP_PATH
-    # cd $PSScriptRoot
-    cd $APP_ROOT
-    $APP_ROOT=$PWD
+    if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
+      printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    }
+    else {
+      # cd $PSScriptRoot
+      cd $APP_ROOT
+      $APP_ROOT = $PWD
+    }
     cd $env:LNMP_PATH
     # cd $PSScriptRoot
   }
 
 }else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
-  cd $APP_ROOT
-  $APP_ROOT=$PWD
+  if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
+    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+  }
+  else {
+    cd $APP_ROOT
+    $APP_ROOT = $PWD
+  }
   cd $EXEC_CMD_DIR
 }
 

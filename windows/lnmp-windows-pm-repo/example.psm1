@@ -69,7 +69,7 @@ Function _getUrl($url, $url_mirror, $VERSION) {
   return $download_url
 }
 
-Function _install($VERSION = 0, $isPre = 0) {
+Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   if ($isPre) {
     if (!($VERSION)) {
       $VERSION = $pre_version
@@ -77,7 +77,7 @@ Function _install($VERSION = 0, $isPre = 0) {
 
     # stable 与 pre 的 url 不相同
     if ($lwpm.'pre-url') {
-       $download_url = _getUrl $pre_url $pre_url_mirror $VERSION
+      $download_url = _getUrl $pre_url $pre_url_mirror $VERSION
     }
 
   }
@@ -96,7 +96,7 @@ Function _install($VERSION = 0, $isPre = 0) {
     $url = $download_url
   }
 
-  if($url){ $url = iex "echo $url" }
+  if ($url) { $url = iex "echo $url" }
 
   # Write-Host "Please download on this website:
 
@@ -114,7 +114,7 @@ Function _install($VERSION = 0, $isPre = 0) {
 
   if ($lwpm.path) { _exportPath $lwpm.path }
 
-  if ($lwpm.command -and $(_command $lwpm.command)) {
+  if ($lwpm.command -and $(_command $lwpm.command) -and !$force) {
     $ErrorActionPreference = 'Continue'
     $CURRENT_VERSION = ""
 
@@ -148,7 +148,7 @@ Function _install($VERSION = 0, $isPre = 0) {
       $VERSION
   }
 
-  if($lwpm.scripts.download -and ($env:LWPM_DIST_ONLY -eq 'true')){
+  if ($lwpm.scripts.download -and ($env:LWPM_DIST_ONLY -eq 'true')) {
     write-host "==> Dist files, Download from $url" -ForegroundColor Green
 
     foreach ($item in $lwpm.scripts.download) {
@@ -241,15 +241,4 @@ function _getLatestVersion() {
   # TODO
 
   return $stable_version, $pre_version
-}
-
-function _dist($VERSION=$null){
-  if(!($lwpm.scripts.dist)){
-
-    return;
-  }
-
-  foreach ($item in $lwpm.scripts.dist) {
-    _iex $item
-  }
 }

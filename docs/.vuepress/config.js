@@ -150,6 +150,7 @@ module.exports = {
             '/ab',
             '/minio',
             '/windows/wsl2',
+            '/windows/mutagen',
             '/powershell',
             '/go',
             '/github',

@@ -227,13 +227,17 @@ Function _uname_parse($string) {
 
 Function __install($softs) {
   $preVersion = 0
+  $force = $false
 
   if ($softs -contains '--pre') {
     $preVersion = 1
   }
+  if (($softs -contains '--force') -or ($softs -contains '-f')) {
+    $force = $true
+  }
 
   Foreach ($soft in $softs) {
-    if ($soft -eq '--pre') {
+    if (($soft -eq '--pre') -or ($soft -eq '--force') -or ($soft -eq '-f')) {
       continue
     }
     $soft, $version = $soft.split('@')
@@ -257,10 +261,10 @@ Function __install($softs) {
         $env:LWPM_UNAME_S = _uname_parse $env:lwpm_os
 
         if ($version) {
-          _install $version $preVersion
+          _install $version $preVersion $force
         }
         else {
-          _install -isPre $preVersion
+          _install -isPre $preVersion -force $force
         }
       }
       $env:lwpm_architecture = $null
@@ -276,10 +280,10 @@ Function __install($softs) {
     $env:LWPM_UNAME_S = "Windows"
 
     if ($version) {
-      _install $version $preVersion
+      _install $version $preVersion $force
     }
     else {
-      _install -isPre $preVersion
+      _install -isPre $preVersion -force $force
     }
     _remove_module $soft
   }

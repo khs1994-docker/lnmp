@@ -16,6 +16,7 @@
       "_mkdir \"$env:ProgramData\\ComposerSetup\\bin\\\"",
       "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer\"      \"$env:ProgramData\\ComposerSetup\\bin\\\"",
       "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer.ps1\"  \"$env:ProgramData\\ComposerSetup\\bin\\\"",
+      "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer.bat\"  \"$env:ProgramData\\ComposerSetup\\bin\\\"",
       "Copy-item -r -force $filename                                   \"$env:ProgramData\\ComposerSetup\\bin\\composer.phar\""
     ],
     "test": [

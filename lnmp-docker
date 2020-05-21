@@ -291,7 +291,7 @@ _satis(){
   fi
 
   docker run --rm -i ${tty} --mount type=bind,src=${APP_ROOT}/satis,target=/build \
-      --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
+      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
 }
 
 _get_compose_options(){

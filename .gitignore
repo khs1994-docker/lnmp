@@ -71,3 +71,7 @@ __pycache__
 /lnmp-docker-custom-script.ps1
 
 lwpm.lock.json
+
+mutagen.yml.lock
+
+mutagen.yml

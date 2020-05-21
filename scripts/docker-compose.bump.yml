@@ -47,7 +47,7 @@ services:
     image: kong:2.0.4-alpine
 
   node:
-    image: node:14.2.0-alpine
+    image: node:14.3.0-alpine
 
   go:
     image: golang:1.14.3-alpine
@@ -60,3 +60,6 @@ services:
 
   docker-binfmt:
     image: docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+
+  docker:
+    image: docker:19.03.9

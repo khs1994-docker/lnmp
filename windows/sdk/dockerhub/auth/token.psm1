@@ -9,8 +9,8 @@ Function Get-TokenServerAndService([string]$registry) {
     }
 
     if ($cache) {
-      write-host "==> Get registry token server and service from cache" -ForegroundColor Blue
-      write-host $cache -ForegroundColor Blue
+      write-host "==> Get registry token server and service from cache" -ForegroundColor Yellow
+      write-host $cache -ForegroundColor Green
 
       return $cache.server, $cache.service
     }

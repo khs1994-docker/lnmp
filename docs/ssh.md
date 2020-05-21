@@ -13,9 +13,9 @@ Could not load host key: /etc/ssh/ssh_host_ed25519_key
 ```
 
 ```bash
-$ ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-$ ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
-$ ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
+$ sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
+$ sudo ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key
+$ sudo ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 ```
 
 ## 公钥放置到服务端 `~/.ssh/authorized_keys`
