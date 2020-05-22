@@ -4,7 +4,9 @@
   "name": "php-demo",
 
   // The order of the files is important since later files override previous ones
-  "dockerComposeFile": ["../docker-workspace.yml"],
+  "dockerComposeFile": [
+    "../docker-workspace.yml"
+  ],
 
   // fix me
   "service": "workspace",

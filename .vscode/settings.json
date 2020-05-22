@@ -8,6 +8,10 @@
     "windows/lnmp-windows-pm-repo/lwpm-json-schema.json": [
       "lwpm.yaml",
       "lwpm.yml"
+    ],
+    "scripts/mutagen/schema.json" : [
+      "mutagen.yml",
+      "mutagen.example.yml"
     ]
   },
   "json.schemas": [
@@ -27,5 +31,7 @@
   "sync.gist": "76f5fad88768a18910fadf6f8bc35c6c",
   "editor.renderControlCharacters": true,
   "editor.renderWhitespace": "all",
-  "files.eol": "\n"
+  "files.eol": "\n",
+  // "docker.host":"ssh://your-remote-user@your-remote-machine-fqdn-or-ip-here",
+  // "docker.host":"tcp://your-remote-machine-fqdn-or-ip-here:port",
 }

@@ -10,6 +10,7 @@ services:
       - backend
     volumes:
       - vscode-server:/root/.vscode-server
+      - vscode-server-insiders:/root/.vscode-server-insiders
       - phpls-cache:/root/.phpls
       # fix me
       - ./:/app/demo

@@ -764,7 +764,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
     printInfo "Use LNMP CLI in $PWD"
     cd $env:LNMP_PATH
     if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-      printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+      printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2, project in windows sync to WSL2 by mutagen"
     }
     else {
       # cd $PSScriptRoot
@@ -778,7 +778,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 }else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2, project in windows sync to WSL2 by mutagen"
   }
   else {
     cd $APP_ROOT
@@ -1136,6 +1136,15 @@ switch -regex ($command){
     }
 
     php7-cli {
+      if ($other){
+        _bash_cli php7 $other
+        exit
+      }
+
+      _bash_cli php7 bash
+    }
+
+    php-cli {
       if ($other){
         _bash_cli php7 $other
         exit
