@@ -32,7 +32,7 @@ $ ./lnmp-docker up
 
 1. 打开 `vsCode`(`$ code`)
 
-2. Press `F1`, select `Remote-Containers: Open Folder in Container...`. 选择项目文件夹(包含 `.devcontainer`, `docker-workspace.yml`).
+2. Press `F1`（或者点击左下角【打开远程窗口】）, select `Remote-Containers: Open Folder in Container...`. 选择项目文件夹(包含 `.devcontainer`, `docker-workspace.yml`).
 
 3. 扩展需要在 `远程` 安装(以前安装过的扩展在 **远程** 重新安装)
 
@@ -89,6 +89,6 @@ $ lnmp-docker composer install | update | require XXX
 
 * 可以在 **终端** 直接执行命令(`vsCode` -> `查看` -> `终端` -> 右上角 `+` 号) `$ php artisan`
 
-## Dockerd 运行在 WSL2 ?
+## 使用 WSL2 远程开发?
 
 请查看 [WSL2](https://github.com/khs1994-docker/lnmp/tree/master/wsl2)

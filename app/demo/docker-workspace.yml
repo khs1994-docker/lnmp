@@ -15,6 +15,10 @@ services:
       # fix me
       - ./:/app/demo
       # fix me 将依赖挂载到数据卷
+
+      # fix me
+      # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项
+      # - /app/demo:/app/demo
       - vendor:/app/demo/vendor
       - type: volume
         source: composer-cache-data
@@ -49,6 +53,7 @@ volumes:
     external: true
     name: lnmp_composer-cache-data
   vscode-server:
+  vscode-server-insiders:
   phpls-cache:
   vendor:
     # 或者复用其他数据卷
