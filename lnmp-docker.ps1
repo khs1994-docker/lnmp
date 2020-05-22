@@ -990,7 +990,7 @@ switch -regex ($command){
     }
 
     checkout {
-      git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
+      git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" --depth=1
       git checkout "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
       _update
     }

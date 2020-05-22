@@ -122,14 +122,22 @@ $ lnmp-windows-pm.ps1 stop-service minio
 
 ## lwpm.json 支持的变量
 
-* ${VERSION}
+* `${VERSION}`
 
-* $filename
+* `$filename` 下载的文件
 
-* $env:lwpm_os
-* $env:lwpm_architecture
+* `$env:lwpm_os` (e.g. linux)
+* `$env:lwpm_architecture` (e.g. amd64)
 
-* $env:LWPM_UNAME_S
-* $env:LWPM_UNAME_M
+* `$env:LWPM_UNAME_S` (e.g. Linux)
+* `$env:LWPM_UNAME_M` (e.g. x86_64)
 
-* $env:LWPM_PKG_ROOT
+* `$env:LWPM_PKG_ROOT`(lwpm.json 所在文件夹)
+
+## lwpm.json 支持的部分函数
+
+* `printError` `printInfo` `PrintWarning`
+* `_cleanup`
+* `_unzip`
+* `_mkdir`
+* `start-process file.exe -wait`

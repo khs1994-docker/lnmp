@@ -71,6 +71,8 @@ Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
+Import-Module $PSScriptRoot/sdk/dockerhub/utils/sha256.psm1
+Import-Module $PSScriptRoot/sdk/dockerhub/utils/sha512.psm1
 
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
@@ -94,17 +96,9 @@ Function _rename($src, $target) {
   }
 }
 
-Function _echo_line() {
-  Write-Host "
-
-
-"
-}
-
 Function _installer($zip, $unzip_path, $unzip_folder_name = 'null', $soft_path = 'null') {
   if (Test-Path $soft_path) {
-    Write-Host "==> $unzip_folder_name already installed" -ForegroundColor Green
-    _echo_line
+    Write-Host "==> $unzip_folder_name already installed`n" -ForegroundColor Green
     return
   }
 
@@ -643,7 +637,7 @@ function _push($opt) {
     mv script.tar.gz $script_tar_file
 
     ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
-      ConvertTo-Json -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
+      ConvertTo-Json -Depth 5 -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
 
     $layers_file = $()
 
@@ -722,7 +716,7 @@ function _push($opt) {
         "digest"    = "$config_digest";
       };
       "layers"        = $layers
-    } -Compress
+    } -Compress -Depth 5
 
     $manifest_json_path = "$lwpm_dist_temp/manifest.json"
     write-output $data | Set-Content -NoNewline $manifest_json_path
@@ -766,7 +760,7 @@ function _push($opt) {
 }
 
 function _sort_object($obj) {
-  $obj = convertfrom-json (convertTo-json $obj) -AsHashtable
+  $obj = convertfrom-json -Depth 5 (convertTo-json $obj) -AsHashtable
   $json_obj = ConvertFrom-Json -InputObject '{}'
 
   foreach ($item in ($obj.keys | sort-object)) {
@@ -778,7 +772,7 @@ function _sort_object($obj) {
 
 function _yaml_to_json_and_sort($yaml) {
   $yaml = ConvertFrom-Yaml $yaml
-  $yaml_obj = ConvertFrom-Json ( $yaml | ConvertTo-Yaml -JsonCompatible)
+  $yaml_obj = ConvertFrom-Json -Depth 5 ( $yaml | ConvertTo-Yaml -JsonCompatible)
   $json_obj = ConvertFrom-Json -InputObject '{}'
 
   foreach ($item in ($yaml.keys | sort-object)) {
@@ -790,7 +784,7 @@ function _yaml_to_json_and_sort($yaml) {
     $json_obj | add-member -Name $item -value $value -MemberType NoteProperty
   }
 
-  return ConvertTo-Json $json_obj
+  return ConvertTo-Json -Depth 5 $json_obj
 }
 
 function _toJson($soft) {

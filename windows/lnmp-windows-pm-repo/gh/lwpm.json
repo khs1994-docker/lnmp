@@ -1,8 +1,8 @@
 {
   "name": "gh",
   "description": "GitHub’s official command line tool",
-  "version": "0.7.0",
-  "pre-version": "0.8.0-pre.0",
+  "version": "0.8.0",
+  "pre-version": "0.8.0",
   "homepage": "https://cli.github.com/",
   "bug": "https://github.com/cli/cli/issues",
   "github": "cli/cli",
@@ -33,7 +33,12 @@
     "pretest": "",
     "test": "echo \"gh $((gh --version).split()[2]) install success\"",
     "posttest": "",
-    "version": "(gh --version).split()[2]"
+    "version": "(gh --version).split()[2]",
+    "hash": [
+      "invoke-webrequest https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_checksums.txt -OutFile Temp:/gh_checksum",
+      "$env:hash=(cat Temp:/gh_checksum | select-string gh_${VERSION}_windows_amd64.zip).line.split(' ')[0]",
+      "if($env:hash -and ((sha256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed\"}"
+    ]
   },
   "path": [
     "C:\\bin"

@@ -25,6 +25,21 @@
         "windows",
         "darwin"
       ]
+    },
+    "hash": {
+      "type": "object",
+      "description": "soft package hash",
+      "properties": {
+        "sha512": {
+          "type": "string",
+          "description": "sha512 hash"
+        },
+        "sha256": {
+          "type": "string",
+          "description": "sha256 hash"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "properties": {
@@ -95,6 +110,9 @@
           },
           "os": {
             "$ref": "#/definitions/os"
+          },
+          "hash": {
+            "$ref": "#/definitions/hash"
           }
         },
         "additionalProperties": false
@@ -183,6 +201,13 @@
             "array"
           ],
           "description": "how to get version string"
+        },
+        "hash": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "how to check soft package hash"
         },
         "download": {
           "type": [

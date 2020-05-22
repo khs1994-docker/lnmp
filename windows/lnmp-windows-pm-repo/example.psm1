@@ -13,10 +13,10 @@ if (Test-Path $PSScriptRoot\lwpm-json-schema.json) {
 
     exit 1
   }
-  $lwpm = ConvertFrom-Json -InputObject (get-content $env:LWPM_MANIFEST_PATH -Raw)
+  $lwpm = ConvertFrom-Json -Depth 5 -InputObject (get-content $env:LWPM_MANIFEST_PATH -Raw)
 }
 else {
-  $lwpm = ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+  $lwpm = ConvertFrom-Json -Depth 5 -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 }
 
 $stable_version = $lwpm.version
@@ -38,7 +38,11 @@ Function _iex($str) {
     return;
   }
 
+  try{
   iex $str
+  }catch{
+    printError $_.Exception
+  }
 }
 
 Function _install_after() {
@@ -141,11 +145,41 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   if ($url -and ($env:LWPM_DIST_ONLY -ne 'true')) {
     write-host "==> Download from $url" -ForegroundColor Green
 
+    if ($lwpm.platform) {
+      foreach ($item in $lwpm.platform) {
+        if ($item.os -eq $env:lwpm_os -and $item.architecture -eq $env:lwpm_architecture) {
+          if ($item.hash.sha256) {
+            $hashType = 'sha256'
+            $hash = $item.hash.sha256
+
+            break;
+          }
+
+          if ($item.hash.sha512) {
+            $hashType = 'sha512'
+            $hash = $item.hash.sha512
+
+            break;
+          }
+
+          break
+        }
+      }
+    }
+
     _downloader `
       $url `
       $filename `
       $name `
-      $VERSION
+      $VERSION `
+      -HashType $hashType `
+      -Hash $hash
+
+    if($lwpm.scripts.hash){
+      foreach ($item in $lwpm.scripts.hash) {
+        _iex $item
+      }
+    }
   }
 
   if ($lwpm.scripts.download -and ($env:LWPM_DIST_ONLY -eq 'true')) {
