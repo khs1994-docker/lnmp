@@ -4,7 +4,7 @@
 #   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh
 #
 # CN mirror
-#   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh --mirror aliyun | coding | tgit | gitee
+#   $ curl -fsSL lnmp.khs1994.com -o lnmp.sh ; sh lnmp.sh --mirror gitee
 #
 # Support Documents
 #
@@ -100,21 +100,13 @@ clone(){
 
 mirror(){
 case $1 in
-  coding )
-  LNMP_GIT_SSH_URL=git@git.coding.net:khs1994/lnmp.git
-  LNMP_GIT_HTTPS_URL=https://git.coding.net/khs1994/lnmp
-  ;;
-  tgit )
-  LNMP_GIT_SSH_URL=git@git.qcloud.com:khs1994-docker/lnmp.git
-  LNMP_GIT_HTTPS_URL=https://git.qcloud.com/khs1994-docker/lnmp
-  ;;
   gitee )
   LNMP_GIT_SSH_URL=git@gitee.com:khs1994/lnmp.git
   LNMP_GIT_HTTPS_URL=https://gitee.com/khs1994/lnmp
   ;;
   * )
-  LNMP_GIT_SSH_URL=git@code.aliyun.com:khs1994-docker/lnmp.git
-  LNMP_GIT_HTTPS_URL=https://code.aliyun.com/khs1994-docker/lnmp
+  LNMP_GIT_SSH_URL=git@gitee.com:khs1994/lnmp.git
+  LNMP_GIT_HTTPS_URL=https://gitee.com/khs1994/lnmp
   ;;
 esac
 }
