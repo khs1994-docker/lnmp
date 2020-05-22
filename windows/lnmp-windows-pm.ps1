@@ -71,8 +71,7 @@ Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
-Import-Module $PSScriptRoot/sdk/dockerhub/utils/sha256.psm1
-Import-Module $PSScriptRoot/sdk/dockerhub/utils/sha512.psm1
+Import-Module $PSScriptRoot/sdk/dockerhub/utils/Get-SHA.psm1
 
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")

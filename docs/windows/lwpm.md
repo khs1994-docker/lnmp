@@ -141,3 +141,4 @@ $ lnmp-windows-pm.ps1 stop-service minio
 * `_unzip`
 * `_mkdir`
 * `start-process file.exe -wait`
+* `Get-SHA256` `Get-SHA384` `Get-SHA512`

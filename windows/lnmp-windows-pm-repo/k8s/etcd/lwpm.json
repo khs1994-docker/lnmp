@@ -1,8 +1,8 @@
 {
   "name": "etcd",
   "description": "Distributed reliable key-value store for the most critical data of a distributed system",
-  "version": "3.4.8",
-  "pre-version": "3.4.8",
+  "version": "3.4.9",
+  "pre-version": "3.4.9",
   "homepage": "https://etcd.io/",
   "bug": "https://github.com/etcd-io/etcd/issues",
   "github": "etcd-io/etcd",
@@ -24,7 +24,7 @@
     "hash": [
       "invoke-webrequest https://mirrors.huaweicloud.com/etcd/v${VERSION}/SHA256SUMS -outFile Temp:/etcd-sha256",
       "$env:hash=(get-content Temp:/etcd-sha256 | select-string etcd-v${VERSION}-windows-amd64.zip).Line.split(' ')[0]",
-      "if($env:hash -and ((sha256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed \"}"
+      "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed \"}"
     ]
   },
   "path": [

@@ -1,4 +1,4 @@
-Import-Module $PSScriptRoot/../utils/sha256.psm1
+Import-Module $PSScriptRoot/../utils/Get-SHA.psm1
 Import-Module $PSScriptRoot/../cache/cache.psm1
 
 function Get-Dist($dist, $distTemp) {
@@ -13,7 +13,7 @@ function Get-Dist($dist, $distTemp) {
 
 function _sha256_checker($filename) {
   $sha256 = (Get-ChildItem $filename).name.split('.')[0]
-  $current_sha256 = sha256 $filename
+  $current_sha256 = Get-SHA256 $filename
 
   if ($sha256 -ne $current_sha256 ) {
     Write-Host "==> $filename sha256 check failed" -ForegroundColor Red

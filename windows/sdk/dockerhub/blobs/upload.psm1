@@ -1,5 +1,4 @@
-Import-Module $PSScriptRoot/../utils/sha256.psm1
-Import-Module $PSScriptRoot/../utils/sha512.psm1
+Import-Module $PSScriptRoot/../utils/Get-SHA.psm1
 
 # application/vnd.docker.container.image.v1+json
 
@@ -31,10 +30,10 @@ Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$re
 Function New-Blob($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
   write-host "==> Blob type is $contentType" -ForegroundColor Green
 
-  $sha256 = sha256 $file
+  $sha256 = Get-SHA256 $file
   $digest = "sha256:$sha256"
 
-  # $sha512 = sha512 $file
+  # $sha512 = Get-SHA512 $file
   # $digest = "sha512:$sha512"
 
   $length = (Get-ChildItem $file).Length

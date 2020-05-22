@@ -37,7 +37,7 @@
     "hash": [
       "invoke-webrequest https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_checksums.txt -OutFile Temp:/gh_checksum",
       "$env:hash=(cat Temp:/gh_checksum | select-string gh_${VERSION}_windows_amd64.zip).line.split(' ')[0]",
-      "if($env:hash -and ((sha256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed\"}"
+      "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed\"}"
     ]
   },
   "path": [
