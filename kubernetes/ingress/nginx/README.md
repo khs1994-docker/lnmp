@@ -20,10 +20,10 @@
 
 ```bash
 # 裸机 通过 nodeport
-$ kubectl apply -k addons/ingress-nginx/nodeport
+$ kubectl apply -k addons/ingress/nginx/nodeport
 
 # Docker 桌面版
-$ kubectl apply -k addons/ingress-nginx/docker-desktop
+$ kubectl apply -k addons/ingress/nginx/docker-desktop
 ```
 
 ## 端口
@@ -61,7 +61,7 @@ metadata:
 
 请参考 `ingress/nginx/registry`
 
-## 4 层代理
+## 4 层代理(tcp udp)
 
 * https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/exposing-tcp-udp-services.md
 

@@ -6,12 +6,23 @@ getToken(){
 
   image=$1
   action=${2:-pull}
-  tokenSever=${3:-"https://auth.docker.io/token"}
-  tokenService=${4:-registry.docker.io}
+  tokenSever=${3}
+  tokenService=${4}
   cache=${5:-0}
 
+  if [ -z $tokenSever ];then
+    echo "==> tokenServer and tokenService is not found" > /dev/stderr
+    echo "==> This registry maybe not need token" > /dev/stderr
+
+    token='token'
+
+    return
+  fi
+
+  mkdir -p `getCachePath token`
+
   token_file=`getCachePath \
-             ".token@$(echo $image | sed 's#/#@#g' )@${action}@$(echo $tokenService | sed 's#:#-#g')" `
+             "token/$(echo $image | sed 's#/#@#g' )@${action}@$(echo $tokenService | sed 's#:#-#g')" `
 
   echo "==> Token file is $token_file" > /dev/stderr
 
@@ -27,12 +38,19 @@ if [ -z "${DOCKER_USERNAME}" -o -z "${DOCKER_PASSWORD}" ];then
   echo "==> ENV var DOCKER_USERNAME DOCKER_PASSWORD not set" > /dev/stderr
 fi
 
-basic=`echo -n "${DOCKER_USERNAME:-usernamekhs1994666}:${DOCKER_PASSWORD:-passwordkhs1994666}" | base64`
+if [ -n "${DOCKER_USERNAME}" -a -n "${DOCKER_PASSWORD}" ];then
+  basic=`echo -n "${DOCKER_USERNAME:-usernamekhs1994666}:${DOCKER_PASSWORD:-passwordkhs1994666}" | base64`
 
-curl -H "Authorization:basic $basic" \
+  curl -L -H "Authorization:basic $basic" \
 "${tokenSever}?service=${tokenService}&scope=repository:${image}:${action}" \
 -o $token_file \
 -A "Docker-Client/19.03.5 (Linux)"
+else
+  curl -L \
+"${tokenSever}?service=${tokenService}&scope=repository:${image}:${action}" \
+-o $token_file \
+-A "Docker-Client/19.03.5 (Linux)"
+fi
 
 token=`cat $token_file | jq '.token' | sed 's#"##g' `
 

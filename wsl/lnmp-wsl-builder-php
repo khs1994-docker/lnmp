@@ -58,7 +58,7 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.10.5
+export COMPOSER_VERSION=1.10.6
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -973,8 +973,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.5
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.5
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.6
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.6
 
 _get_phpnum $PHP_VERSION
 
@@ -1011,18 +1011,18 @@ $(_sudo) apt install -y libargon2-0-dev > /dev/null 2>&1 || export ARGON2=false
 
 if [ "$ID" = 'debian' ] && [ "$VERSION_ID" = "9" ];then
 ##<argon2>##
-	sed -e 's/stretch/buster/g' /etc/apt/sources.list | $(_sudo) tee /etc/apt/sources.list.d/buster.list; \
-	{ \
-		echo 'Package: *'; \
-		echo 'Pin: release n=buster'; \
-		echo 'Pin-Priority: -10'; \
-		echo; \
-		echo 'Package: libargon2*'; \
-		echo 'Pin: release n=buster'; \
-		echo 'Pin-Priority: 990'; \
-	} | $(_sudo) tee /etc/apt/preferences.d/argon2-buster
+  sed -e 's/stretch/buster/g' /etc/apt/sources.list | $(_sudo) tee /etc/apt/sources.list.d/buster.list; \
+  { \
+    echo 'Package: *'; \
+    echo 'Pin: release n=buster'; \
+    echo 'Pin-Priority: -10'; \
+    echo; \
+    echo 'Package: libargon2*'; \
+    echo 'Pin: release n=buster'; \
+    echo 'Pin-Priority: 990'; \
+  } | $(_sudo) tee /etc/apt/preferences.d/argon2-buster
 
-	$(_sudo) apt update
+  $(_sudo) apt update
   $(_sudo) apt install -y --no-install-recommends libargon2-dev
   export ARGON2=true
 fi

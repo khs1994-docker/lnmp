@@ -56,8 +56,9 @@ if ($? -and !$global:FORCE){
   return
 }
 
-""
 write-host "==> write WSL2 ip to [ $hosts_path ]" -ForegroundColor Green
+
+write-host "==> Requires Administrator allow" -ForegroundColor Red
 
 $exists_hosts_content_array=get-content $hosts_path
 

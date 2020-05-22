@@ -3,4 +3,5 @@ resources:
 images:
 - name: k8s.gcr.io/coredns
   # newName: gcr.mirror/google-containers/coredns
+  # newName: gcr.mirror/khs1994/coredns
   newName: registry.cn-hangzhou.aliyuncs.com/google_containers/coredns

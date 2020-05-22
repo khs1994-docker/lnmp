@@ -64,10 +64,12 @@ oom_score = 0
     restrict_oom_score_adj = false
     max_concurrent_downloads = 3
     disable_proc_mount = false
+    unset_seccomp_profile = ""
     [plugins."io.containerd.grpc.v1.cri".containerd]
       snapshotter = "overlayfs"
       default_runtime_name = "runc"
       no_pivot = false
+      disable_snapshot_annotations = false
       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
           # runtime_type = "io.containerd.runtime.v1.linux"
@@ -112,6 +114,7 @@ oom_score = 0
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
           # endpoint = ["https://registry-1.docker.io"]
+          # https://mirror.baidubce.com
           endpoint = ["https://hub-mirror.c.163.com"]
         # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.io"]
         #  endpoint = ["https://gcr.mirror"]
@@ -125,6 +128,8 @@ oom_score = 0
           #  password = ""
           #  auth = ""
           #  identitytoken = ""
+    [plugins."io.containerd.grpc.v1.cri".image_decryption]
+      key_model = ""
     [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]
       tls_cert_file = ""
       tls_key_file = ""
@@ -143,7 +148,7 @@ oom_score = 0
     runtime = "runc"
     runtime_root = ""
     # do not use a shim when starting containers, saves on memory but
-	  # live restore is not supported
+    # live restore is not supported
     no_shim = false
     # display shim logs in the containerd daemon's log output
     shim_debug = false
@@ -155,3 +160,4 @@ oom_score = 0
     root_path = ""
     pool_name = ""
     base_image_size = ""
+    async_remove = false

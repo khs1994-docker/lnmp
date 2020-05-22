@@ -77,6 +77,8 @@ services:
     image: username/image
 ```
 
+参考最开始的小节，在 `.env` 文件中修改 `LNMP_SERVICES` 变量，增加服务名。
+
 ## 单独启动某个软件
 
 > **我想单独启动某个软件，可以！**

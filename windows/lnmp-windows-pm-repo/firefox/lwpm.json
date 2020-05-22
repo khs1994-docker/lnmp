@@ -8,5 +8,13 @@
   "support": "https://github.com/mozilla",
   "releases": "https://ftp.mozilla.org/",
   "url": "https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US",
-  "pre-url": "https://download.mozilla.org/?product=firefox-beta-latest&os=win64&lang=en-US"
+  "pre-url": "https://download.mozilla.org/?product=firefox-beta-latest&os=win64&lang=en-US",
+  "command": "$env:ProgramFiles\\Mozilla Firefox\\firefox.exe",
+  "scripts": {
+    "install": [
+      "Start-Process -FilePath $filename -wait"
+    ],
+    "uninstall": "& \"$env:ProgramFiles\\Mozilla Firefox\\uninstall\\helper.exe\"",
+    "test": "& get-command \"$env:ProgramFiles\\Mozilla Firefox\\firefox.exe\""
+  }
 }

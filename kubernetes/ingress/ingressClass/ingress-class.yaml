@@ -1,11 +1,8 @@
-kind: IngressClass
 apiVersion: networking.k8s.io/v1beta1
+kind: IngressClass
 metadata:
-  name: nginx
+  name: "nginx"
   annotations:
-    ingressclass.kubernetes.io/is-default-class: "true"
+    ingressclass.kubernetes.io/is-default-class: 'true'
 spec:
-  controller: string
-  parameters:
-    kind: ''
-    name: ''
+  controller: "k8s.io/ingress-nginx"

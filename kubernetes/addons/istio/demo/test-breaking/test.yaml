@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: nginx
+spec:
+  host: nginx
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1
+      http:
+        http1MaxPendingRequests: 1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutiveErrors: 1
+      interval: 1s
+      baseEjectionTime: 3m
+      maxEjectionPercent: 100
+
+# 规则含义：如果并发的连接和请求数超过一个，
+# 在 istio-proxy 进行进一步的请求和连接时，后续请求或连接将被阻止
+# $ h2load -n 100 -c 10 http://wsl2:19749
+# 36 succeeded, 64 failed

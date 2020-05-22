@@ -1,0 +1,230 @@
+[
+  {
+    "source": "not-exists:latest",
+    "dest": "not-exists:latest"
+  },
+  {
+    "source": "node:alpine",
+    "dest": "node:alpine"
+  },
+  {
+    "source": "node:14.3.0-alpine",
+    "dest": "node:14.3.0-alpine"
+  },
+  {
+    "source": "golang:1.14.3-alpine",
+    "dest": "golang:1.14.3-alpine"
+  },
+  {
+    "source": "golang:alpine",
+    "dest": "golang:alpine"
+  },
+  {
+    "source": "library/alpine:3.11",
+    "dest": "alpine:3.11"
+  },
+  {
+    "source": "library/alpine:edge",
+    "dest": "alpine:edge"
+  },
+  {
+    "source": "library/alpine:latest",
+    "dest": "alpine:latest"
+  },
+  {
+    "source": "library/python:alpine",
+    "dest": "python:alpine"
+  },
+  {
+    "source": "library/python:3.8.3-alpine",
+    "dest": "python:3.8.3-alpine"
+  },
+  {
+    "source": "library/mysql:latest",
+    "dest": "mysql:latest"
+  },
+  {
+    "source": "library/mysql:8.0.20",
+    "dest": "mysql:8.0.20"
+  },
+  {
+    "source": "library/mysql:5.7.30",
+    "dest": "mysql:5.7.30"
+  },
+  {
+    "source": "library/mysql:5.6.48",
+    "dest": "mysql:5.6.48"
+  },
+  {
+    "source": "library/mariadb:latest",
+    "dest": "mariadb:latest"
+  },
+  {
+    "source": "library/mariadb:10.5.3",
+    "dest": "mariadb:10.5.3"
+  },
+  {
+    "source": "library/mariadb:10.4.12",
+    "dest": "mariadb:10.4.12"
+  },
+  {
+    "source": "library/mariadb:10.3.22",
+    "dest": "mariadb:10.3.22"
+  },
+  {
+    "source": "library/registry:latest",
+    "dest": "registry:latest"
+  },
+  {
+    "source": "library/registry:2.7.1",
+    "dest": "registry:2.7.1"
+  },
+  {
+    "source": "library/mongo:latest",
+    "dest": "mongo:latest"
+  },
+  {
+    "source": "library/mongo:4.2.6",
+    "dest": "mongo:4.2.6"
+  },
+  {
+    "source": "library/kong:latest",
+    "dest": "kong:latest"
+  },
+  {
+    "source": "library/kong:alpine",
+    "dest": "kong:alpine"
+  },
+  {
+    "source": "library/kong:2.0.4",
+    "dest": "kong:2.0.4"
+  },
+  {
+    "source": "library/kong:2.0.4-alpine",
+    "dest": "kong:2.0.4-alpine"
+  },
+  {
+    "source": "library/redis:alpine",
+    "dest": "redis:alpine"
+  },
+  {
+    "source": "library/redis:5.0.9-alpine",
+    "dest": "redis:5.0.9-alpine"
+  },
+  {
+    "source": "library/redis:6.0.3-alpine",
+    "dest": "redis:6.0.3-alpine"
+  },
+  {
+    "source": "library/memcached:alpine",
+    "dest": "memcached:alpine"
+  },
+  {
+    "source": "library/memcached:1.6.6-alpine",
+    "dest": "memcached:1.6.6-alpine"
+  },
+  {
+    "source": "library/nginx:alpine",
+    "dest": "nginx:alpine"
+  },
+  {
+    "source": "library/nginx:1.18.0-alpine",
+    "dest": "nginx:1.18.0-alpine"
+  },
+  {
+    "source": "library/nginx:1.17.10-alpine",
+    "dest": "nginx:1.17.10-alpine"
+  },
+  {
+    "source": "library/httpd:alpine",
+    "dest": "httpd:alpine"
+  },
+  {
+    "source": "library/httpd:2.4.43-alpine",
+    "dest": "httpd:2.4.43-alpine"
+  },
+  {
+    "source": "library/postgres:alpine",
+    "dest": "postgres:alpine"
+  },
+  {
+    "source": "library/postgres:12.3-alpine",
+    "dest": "postgres:12.3-alpine"
+  },
+  {
+    "source": "library/rabbitmq:alpine",
+    "dest": "rabbitmq:alpine"
+  },
+  {
+    "source": "library/rabbitmq:3.8.3-alpine",
+    "dest": "rabbitmq:3.8.3-alpine"
+  },
+  {
+    "source": "library/rabbitmq:management-alpine",
+    "dest": "rabbitmq:management-alpine"
+  },
+  {
+    "source": "library/rabbitmq:3.8.3-management-alpine",
+    "dest": "rabbitmq:3.8.3-management-alpine"
+  },
+  {
+    "source": "phpmyadmin/phpmyadmin:latest",
+    "dest": "phpmyadmin:latest"
+  },
+  {
+    "source": "minio/minio:RELEASE.2020-03-25T07-03-04Z",
+    "dest": "minio:RELEASE.2020-03-25T07-03-04Z"
+  },
+  {
+    "source": "dockerpracticesig/docker_practice:vuepress",
+    "dest": "dockerpracticesig/docker_practice:vuepress"
+  },
+  {
+    "source": "dockerpracticesig/docker_practice:gitbook",
+    "dest": "dockerpracticesig/docker_practice:gitbook"
+  },
+  {
+    "source": "dockerpracticesig/docker_practice:latest",
+    "dest": "dockerpracticesig/docker_practice:latest"
+  },
+  {
+    "source": "dockerpracticesig/docker_practice:us-en",
+    "dest": "dockerpracticesig/docker_practice:us-en"
+  },
+  {
+    "source": "acme:2.8.6",
+    "dest": "acme:2.8.6"
+  },
+  {
+    "source": "docker-image-sync:latest",
+    "dest": "docker-image-sync:latest"
+  },
+  {
+    "source": "lwpm/lwpm:latest",
+    "dest": "lwpm/lwpm:latest"
+  },
+  {
+    "source": "library/bash:latest",
+    "dest": "bash:latest"
+  },
+  {
+    "source": "library/caddy:alpine",
+    "dest": "caddy:alpine"
+  },
+  {
+    "source": "quay.io/coreos/etcd:v3.4.9",
+    "dest": "etcd:v3.4.9",
+    "platform": [
+      {
+        "os": "linux",
+        "architecture": "arm64",
+        "variant": "v8",
+        "image": "quay.io/coreos/etcd:v3.4.9-arm64"
+      }
+    ]
+  },
+  {
+    "source": "quay.io/coreos/etcd:v3.4.9-arm64",
+    "dest": "etcd:v3.4.9-arm64"
+  }
+]

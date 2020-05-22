@@ -13,7 +13,9 @@
   "pre-url-mirror": "",
   "scripts": {
     "preinstall": "",
-    "install": "",
+    "install": [
+      "Write-Host \"`nPlease download on this website: ${releases}`n\" -ForegroundColor Green"
+    ],
     "postinstall": "",
     "preuninstall": "",
     "uninstall": "",
@@ -23,6 +25,6 @@
     "posttest":""
   },
   "path": [
-    "C:/bin"
+    "C:\\bin"
   ]
 }

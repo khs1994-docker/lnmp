@@ -134,32 +134,6 @@ if [ $GOOS = 'darwin' ];then
   alias sed=gsed
 fi
 
-_build_k8s_image(){
-  cd kubernetes-release
-
-  # 仅在 CI 环境构建镜像
-  if [ -z "${CI_KUBERNETES_VERSION}" ];then
-    cd .. > /dev/null
-    return
-  fi
-
-  if [ -z "${KUBERNETES_TYPE}" ];then
-    KUBERNETES_TYPE=server
-  fi
-
-  set -x
-  docker buildx build \
-    --build-arg KUBERNETES_VERSION=v${CI_KUBERNETES_VERSION} \
-    --build-arg TYPE=${KUBERNETES_TYPE} \
-    --platform linux/amd64,linux/arm64,linux/arm/v7 \
-    --push \
-    -t khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
-    -t ${K8S_IMAGE_REGISTRY:-uswccr.ccs.tencentyun.com}/khs1994/kubernetes-${KUBERNETES_TYPE}:v${CI_KUBERNETES_VERSION} \
-    -f Dockerfile.buildx .
-  set +x
-  cd .. > /dev/null
-}
-
 _get_kubernetes_server_by_docker_image(){
   local TYPE=server
   test -n "${1}" && local GOOS=$1
@@ -176,15 +150,15 @@ _get_kubernetes_server_by_docker_image(){
     if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
       K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
-      K8S_IMAGE=khs1994/kubernetes-${TYPE}-${GOOS}-${GOARCH}
+      K8S_IMAGE=lwpm/kubernetes-${TYPE}
     else
       # 国外
-      K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
-      K8S_IMAGE=khs1994/kubernetes-${TYPE}
+      # K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
+      K8S_IMAGE=lwpm/kubernetes-${TYPE}
     fi
   fi
 
-  $(_sudo) docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} || _build_k8s_image
+  # docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:${KUBERNETES_VERSION}
   # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   # docker container create --name khs1994-kubernetes-${TYPE} \
   #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
@@ -198,15 +172,13 @@ _get_kubernetes_server_by_docker_image(){
 
   dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
   ${K8S_IMAGE} \
-  v${KUBERNETES_VERSION} \
+  ${KUBERNETES_VERSION} \
   ${GOARCH} \
   ${GOOS} \
   "" 0 ${K8S_IMAGE_REGISTRY:-registry.hub.docker.com}
   )
 
-  tar -zxvf $dist -C $ScriptRoot/kubernetes-release/release/
-
-  mv kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz \
+  mv $dist \
     kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
 
   set +x
@@ -548,7 +520,7 @@ fi
 httpCode=`curl -sI ${1}/v${ETCD_VERSION}/${TAR_FILE} | head -1 | awk '{print $2}'`
 
 if [ $httpCode != 200 ];then
-  echo 'cn mirror http response code is not 200'
+  echo 'cn mirror http response code is not 200, not use'
   return 1;
 fi
 }
@@ -636,8 +608,8 @@ _gvisor_containerd_conf(){
     return
   fi
 
-# containerd 1.3.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
+# containerd 1.4.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
   # runtime_engine = ""
@@ -703,10 +675,10 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 1.3 already install"; \
+    print_info "containerd 1.4 already install"; \
     ${K8S_ROOT}/bin/kube-containerd --version;return; fi
 
-  print_info "install containerd 1.3 ..."
+  print_info "install containerd 1.4 ..."
 
   local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
@@ -917,6 +889,17 @@ _cri_sysctl(){
 }
 
 _conmon_install(){
+  if [ -f /usr/local/bin/conmon ];then
+    return
+  fi
+
+  if [ $OS = "linux" -a $ARCH = "amd64"];then
+    $(_sudo) $(_curl) -o /usr/local/bin/conmon \
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
+
+    return
+  fi
+
   cd /tmp
 
   if [ -d conmon/.git ];then
@@ -1055,12 +1038,10 @@ EOF
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.3
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.4
   # containerd config default > ${K8S_ROOT}/etc/kube-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.3/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.3/config.toml
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.4/config.toml \
+    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 
   _cri_sysctl
 
@@ -1412,6 +1393,7 @@ _local_cleanup(){
 if [ "${LNMP_CN_ENV}" = 'false' ];then
   print_info "CN Mirror disabled, I will replace cn mirror ... "
   $(_sudo) sed -i "s#hub-mirror.c.163.com#mirror.gcr.io#g" `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
+  $(_sudo) sed -i "s#mirror.baidubce.com#mirror.gcr.io#g" `grep mirror.baidubce.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
 

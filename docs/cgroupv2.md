@@ -2,6 +2,7 @@
 
 * https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/cgroup-v2.rst
 * https://blog.csdn.net/juS3Ve/article/details/78769197
+* https://blog.csdn.net/sinat_20184565/article/details/98475824
 * https://hustcat.github.io/cgroup-v2-and-writeback-support/
 * https://www.codercto.com/a/57439.html
 * https://my.oschina.net/u/1262062/blog/2051159
@@ -9,6 +10,7 @@
 * http://www.jinbuguo.com/systemd/systemd.html#systemd.unified_cgroup_hierarchy
 * https://www.redhat.com/sysadmin/fedora-31-control-group-v2
 * https://facebookmicrosites.github.io/cgroup2/
+* https://wiki.archlinux.org/index.php?title=Cgroups&oldid=596909
 
 ## Fedora 31+ 恢复到 cGroupv1
 

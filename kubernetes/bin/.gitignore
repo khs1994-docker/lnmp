@@ -4,3 +4,4 @@
 !generate-kubelet-bootstrap-kubeconfig.sh
 !.gitignore
 !fcos-etcdctl
+!lwpm.ps1

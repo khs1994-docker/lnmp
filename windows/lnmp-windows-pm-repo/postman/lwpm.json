@@ -5,7 +5,11 @@
   "pre-version": "7.6.0",
   "homepage": "https://www.getpostman.com/",
   "bug": "https://www.getpostman.com/support",
-  "support": "postmanlabs/postman-app-support",
+  "github": "postmanlabs/postman-app-support",
   "releases": "",
-  "url": "https://dl.pstmn.io/download/latest/win64"
+  "url": "https://dl.pstmn.io/download/latest/win64",
+  "command": "${env:APPDATA}\\..\\Local\\Postman\\app-${VERSION}\\Postman.exe",
+  "scripts": {
+    "version": "echo 7.6.0"
+  }
 }

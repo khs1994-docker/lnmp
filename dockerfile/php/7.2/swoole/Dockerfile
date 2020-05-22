@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.2.30
+ARG PHP_VERSION=7.2.31
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
@@ -18,11 +18,11 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=4.4.16
+ENV SWOOLE_VERSION=4.5.1
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=php:7.2.30-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/local/bin,target=/opt/bin,rw \
     sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && apk add --no-cache --virtual .pecl_build_deps \
                                       $PHPIZE_DEPS \

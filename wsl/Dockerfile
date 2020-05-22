@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.4.5
+ARG PHP_VERSION=7.4.6
 
 ARG PHP_NUM=74
 
@@ -41,47 +41,47 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 ENV PHP_URL="https://www.php.net/get/php-${PHP_VERSION}.tar.xz/from/this/mirror"
 
 ENV PHPIZE_DEPS \
-		autoconf \
-		dpkg-dev \
-		file \
-		g++ \
-		gcc \
-		libc-dev \
-		make \
-		pkg-config \
-		re2c
+    autoconf \
+    dpkg-dev \
+    file \
+    g++ \
+    gcc \
+    libc-dev \
+    make \
+    pkg-config \
+    re2c
 
 RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         && sed -i "s!security.debian.org!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
         && set -eux; \
-    	{ \
-    		echo 'Package: php*'; \
-    		echo 'Pin: release *'; \
-    		echo 'Pin-Priority: -1'; \
-    	} > /etc/apt/preferences.d/no-debian-php \
-	&& apt update && apt-get install -y --no-install-recommends \
+      { \
+        echo 'Package: php*'; \
+        echo 'Pin: release *'; \
+        echo 'Pin-Priority: -1'; \
+      } > /etc/apt/preferences.d/no-debian-php \
+  && apt update && apt-get install -y --no-install-recommends \
     libargon2-0 \
-		libargon2-0-dev \
+    libargon2-0-dev \
     libbz2-1.0 \
     libbz2-dev \
     libc-client2007e \
     libc-client2007e-dev \
-		libcurl4-openssl-dev \
+    libcurl4-openssl-dev \
     libedit2 \
-		libedit-dev \
+    libedit-dev \
     libenchant1c2a \
     libenchant-dev \
     # libsodium18 \
     libsodium23 \
-		libsodium-dev \
+    libsodium-dev \
     libsqlite3-0 \
-		libsqlite3-dev \
+    libsqlite3-dev \
     libssl1.1 \
-		libssl-dev \
+    libssl-dev \
     libxml2 \
-		libxml2-dev \
+    libxml2-dev \
     zlib1g \
-		zlib1g-dev \
+    zlib1g-dev \
     libxslt1.1 \
     libxslt1-dev \
     libfreetype6 \
@@ -101,13 +101,13 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libzip-dev \
     libyaml-0-2 \
     libyaml-dev \
-		${PHP_EXTRA_BUILD_DEPS:-} \
+    ${PHP_EXTRA_BUILD_DEPS:-} \
     $PHPIZE_DEPS \
-		ca-certificates \
-		curl \
+    ca-certificates \
+    curl \
     tar \
     wget \
-		xz-utils \
+    xz-utils \
     # libtidy5 \
     libtidy5deb1 \
     libtidy-dev \
@@ -144,51 +144,51 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     libffi-dev \
   && mkdir -p $PHP_INI_DIR/conf.d; \
       mkdir -p /usr/src; \
-	    cd /usr/src; \
-	    wget -O php.tar.xz "$PHP_URL" \
+      cd /usr/src; \
+      wget -O php.tar.xz "$PHP_URL" \
   && set -eux; \
-	savedAptMark="$(apt-mark showmanual)"; \
-	export \
-		CFLAGS="$PHP_CFLAGS" \
-		CPPFLAGS="$PHP_CPPFLAGS" \
-		LDFLAGS="$PHP_LDFLAGS" \
-	&& docker-php-source extract; \
-	cd /usr/src/php; \
-	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
-	debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
+  savedAptMark="$(apt-mark showmanual)"; \
+  export \
+    CFLAGS="$PHP_CFLAGS" \
+    CPPFLAGS="$PHP_CPPFLAGS" \
+    LDFLAGS="$PHP_LDFLAGS" \
+  && docker-php-source extract; \
+  cd /usr/src/php; \
+  gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
+  debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
   # https://bugs.php.net/bug.php?id=74125
-	if [ ! -d /usr/include/curl ]; then \
-		ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
-	fi; \
+  if [ ! -d /usr/include/curl ]; then \
+    ln -sT "/usr/include/$debMultiarch/curl" /usr/local/include/curl; \
+  fi; \
   # X https://www.howtoforge.com/tutorial/how-to-install-php-7-on-debian/
   # https://stackoverflow.com/questions/34272444/compiling-php7-error
   ln -sf /usr/lib/libc-client.so.2007e.0 /usr/lib/x86_64-linux-gnu/libc-client.a; \
   # https://stackoverflow.com/questions/43617752/docker-php-and-freetds-cannot-find-freetds-in-know-installation-directories
   # ln -sf /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/ ; \
-	./configure \
+  ./configure \
     --prefix=${PHP_PREFIX} \
     --sysconfdir=${PHP_INI_DIR} \
-		--build="$gnuArch" \
-		--with-config-file-path="$PHP_INI_DIR" \
-		--with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
+    --build="$gnuArch" \
+    --with-config-file-path="$PHP_INI_DIR" \
+    --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
     --enable-fpm --with-fpm-user=nginx --with-fpm-group=nginx \
-		\
-		--disable-cgi \
-		\
+    \
+    --disable-cgi \
+    \
 # --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically
 # (see https://github.com/docker-library/php/issues/236)
-		--enable-ftp \
+    --enable-ftp \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly
 # (see https://github.com/docker-library/php/issues/195)
-		--enable-mbstring \
+    --enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are
 # (since it's a plugin for several extensions, not an extension in itself)
-		--enable-mysqlnd \
+    --enable-mysqlnd \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
-		--with-password-argon2 \
+    --with-password-argon2 \
 # https://wiki.php.net/rfc/libsodium
-		--with-sodium=shared \
-		\
+    --with-sodium=shared \
+    \
     --with-curl \
     --with-gettext \
     --with-gd \
@@ -249,31 +249,31 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     \
   # bundled pcre does not support JIT on s390x
   # https://manpages.debian.org/stretch/libpcre3-dev/pcrejit.3.en.html#AVAILABILITY_OF_JIT_SUPPORT
-		$(test "$gnuArch" = 's390x-linux-gnu' && echo '--without-pcre-jit') \
-		--with-libdir="lib/$debMultiarch" \
-		\
-		${PHP_EXTRA_CONFIGURE_ARGS:-} ; \
-	make -j "$(nproc)"; \
-	make install \
+    $(test "$gnuArch" = 's390x-linux-gnu' && echo '--without-pcre-jit') \
+    --with-libdir="lib/$debMultiarch" \
+    \
+    ${PHP_EXTRA_CONFIGURE_ARGS:-} ; \
+  make -j "$(nproc)"; \
+  make install \
   && rm -rf /usr/local/sbin \
   && for file in $( ls ${PHP_PREFIX}/bin ); do ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done \
-	&& pecl update-channels \
-	&& rm -rf /tmp/pear ~/.pearrc \
+  && pecl update-channels \
+  && rm -rf /tmp/pear ~/.pearrc \
   && set -ex \
-	&& cd ${PHP_INI_DIR} \
-	&& if [ -d php-fpm.d ]; then \
-		# for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
-		sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
-		cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
-	else \
-		# PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
-		mkdir php-fpm.d; \
-		cp php-fpm.conf.default php-fpm.d/www.conf; \
-		{ \
-			echo '[global]'; \
-			echo 'include=${PHP_INI_DIR}/php-fpm.d/*.conf'; \
-		} | tee php-fpm.conf; \
-	fi \
+  && cd ${PHP_INI_DIR} \
+  && if [ -d php-fpm.d ]; then \
+    # for some reason, upstream's php-fpm.conf.default has "include=NONE/etc/php-fpm.d/*.conf"
+    sed 's!=NONE/!=!g' php-fpm.conf.default | tee php-fpm.conf > /dev/null; \
+    cp php-fpm.d/www.conf.default php-fpm.d/www.conf; \
+  else \
+    # PHP 5.x doesn't use "include=" by default, so we'll create our own simple config that mimics PHP 7+ for consistency
+    mkdir php-fpm.d; \
+    cp php-fpm.conf.default php-fpm.d/www.conf; \
+    { \
+      echo '[global]'; \
+      echo 'include=${PHP_INI_DIR}/php-fpm.d/*.conf'; \
+    } | tee php-fpm.conf; \
+  fi \
   && cp /usr/src/php/php.ini-* ${PHP_INI_DIR} \
   && cp ${PHP_INI_DIR}/php.ini-development ${PHP_INI_DIR}/php.ini \
   && pecl install mongodb \
@@ -348,7 +348,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:6.0-rc4 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:6.0.3 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 

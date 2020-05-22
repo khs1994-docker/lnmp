@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: nginx
+        version: v1
+    spec:
+      initContainers:
+        - image: busybox
+          name: init
+          args:
+          - sh
+          - -c
+          - |
+            echo v1 > /usr/share/nginx/html/index.html
+          volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
+      containers:
+      - name: nginx
+        image: tencent.mirror/khs1994/nginx:alpine
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: www
+            mountPath: /usr/share/nginx/html
+      volumes:
+        - name: www
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-v2
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: nginx
+        version: v2
+    spec:
+      initContainers:
+        - image: busybox
+          name: init
+          args:
+          - sh
+          - -c
+          - |
+            echo v2 > /usr/share/nginx/html/index.html
+          volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
+      containers:
+      - name: nginx
+        image: tencent.mirror/khs1994/nginx:alpine
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: www
+            mountPath: /usr/share/nginx/html
+      volumes:
+        - name: www
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    name: http

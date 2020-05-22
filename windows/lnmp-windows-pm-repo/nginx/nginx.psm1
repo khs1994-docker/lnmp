@@ -18,7 +18,7 @@ $description=$lwpm.description
 $url=$lwpm.url
 $url_mirror=$lwpm.'url-mirror'
 
-Function install_after(){
+Function _install_after(){
   _mkdir C:\nginx\conf\conf.d
 
   _ln C:\nginx\conf\conf.d $home\lnmp\windows\nginx
@@ -39,7 +39,7 @@ Function install_after(){
   }
 }
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
@@ -66,7 +66,7 @@ Function install($VERSION=0,$isPre=0){
     if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"
 
-        install_after
+        _install_after
         return
     }
   }
@@ -101,13 +101,13 @@ Function install($VERSION=0,$isPre=0){
   _exportPath "C:\nginx"
 
   cp $PSScriptRoot/../../config/nginx.conf C:/nginx/conf
-  install_after
+  _install_after
 
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   nginx -v
 }
 
-Function uninstall(){
+Function _uninstall(){
   _cleanup C:\nginx
 }

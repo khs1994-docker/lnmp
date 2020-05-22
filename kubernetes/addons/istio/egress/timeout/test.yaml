@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: baidu-ext
+spec:
+  hosts:
+    - www.baidu.com
+  http:
+  - timeout: 3s
+    route:
+      - destination:
+          host: www.baidu.com
+        weight: 100
+
+# pod 访问 www.baidu.com 超时时间为 3s，超过 3s 将会返回错误

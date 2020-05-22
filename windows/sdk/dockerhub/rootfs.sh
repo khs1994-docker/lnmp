@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 rootfs(){
   local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
@@ -17,7 +17,7 @@ rootfs(){
 
   echo "==> Get token ..." > /dev/stderr
 
-  WWW_Authenticate=`curl https://$registry/v2/x/y/manifests/latest \
+  WWW_Authenticate=`curl -L https://$registry/v2/x/y/manifests/latest \
 -X HEAD -I -A "Docker-Client/19.03.5 (Linux)" | grep -i 'www\-authenticate' `
 
 if [ $? -eq 0 ];then
@@ -34,9 +34,6 @@ if [ $? -eq 0 ];then
     tokenService=`echo "$service" | cut -d "=" -f 2 | sed 's#"##g' | sed 's#\\r##g'`
   fi
 fi
-
-  if [ -z "$tokenServer" ];then tokenServer=${8:-"https://auth.docker.io/token"} ;fi
-  if [ -z "$tokenService" ];then tokenService=${9:-"registry.docker.io"} ;fi
 
   echo $image | grep -q '/' || image="library/$image"
 
@@ -59,10 +56,10 @@ sleep 3
 
 . $ScriptRoot/auth/auth.sh
 
-getToken $image pull $tokenServer $tokenService 0 || return 1
+getToken $image pull "${tokenServer}" "${tokenService}" 0 || return 1
 
 if [ -z "$token" ];then
-  echo "get token error
+  echo "==> get token error
 
 Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 " > /dev/stderr
@@ -89,7 +86,7 @@ if [ "$schemaVersion" -eq 1 ];then
   local digest=`cat $manifest_json_file | jq ".layers[$layersIndex].digest" | sed 's/"//g'`
 
   if [ "${digest}" = 'null' ];then
-    echo "image not found, exit" > /dev/stderr
+    echo "==> image not found, exit" > /dev/stderr
 
     exit 1
   fi
@@ -100,7 +97,7 @@ if [ "$schemaVersion" -eq 1 ];then
 
   dest=`get $token $image $digest $registry "${dest}"`
 
-  echo "Download success to $dest" > /dev/stderr
+  echo "==> Download success to $dest" > /dev/stderr
 
   echo $dest
 
@@ -121,7 +118,7 @@ do
 local current_arch=`cat $manifest_list_json_file | jq ".manifests[$i].platform.architecture" | sed 's/"//g'`
 
 if [ $current_arch = null ];then
-  echo "Can't find ${image}:$ref $os $arch image" > /dev/stderr
+  echo "==> Can't find ${image}:$ref $os $arch image" > /dev/stderr
 
   return
 fi
@@ -141,7 +138,7 @@ local current_os=`cat $manifest_list_json_file | jq ".manifests[$i].platform.os"
 
     dest=`get $token $image $digest $registry "${dest}"`
 
-    echo "Download success to $dest" > /dev/stderr
+    echo "==> Download success to $dest" > /dev/stderr
 
     echo $dest
 

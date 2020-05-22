@@ -1,15 +1,10 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.5
+ARG PHP_VERSION=7.4.6
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
 
 # install composer
-
-ARG VCS_REF="unknow"
-
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
 ENV COMPOSER_DEP_APKS \
       git \
@@ -20,13 +15,13 @@ ENV COMPOSER_DEP_APKS \
       tini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.10.5 \
+    COMPOSER_VERSION=1.10.6 \
     PS1="[\u@\h \w]# " \
     COMPOSER_NO_INTERACTION=1
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.5,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.10.6,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
     && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
@@ -68,3 +63,8 @@ RUN --mount=type=bind,from=composer:1.10.5,source=/usr/bin/composer,target=/opt/
 ENTRYPOINT ["/docker-entrypoint.composer"]
 
 CMD ["composer"]
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"

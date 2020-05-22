@@ -6,4 +6,4 @@ services:
       context: .
       args:
         ALPINE_URL: mirrors.ustc.edu.cn
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/redis:${TAG:-6.0-rc4}-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/redis:${TAG:-6.0.3}-alpine

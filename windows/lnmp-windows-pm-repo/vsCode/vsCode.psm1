@@ -14,7 +14,7 @@ $description=$lwpm.description
 $url=$lwpm.url
 $pre_url=$lwpm.'pre-url'
 
-Function getVersion($url){
+Function _getVersion($url){
   try{
     Invoke-WebRequest `
       -MaximumRedirection 0 `
@@ -29,16 +29,16 @@ Function getVersion($url){
     return $version,$url
 }
 
-Function getLatestVersion(){
-  return $(getVersion $url)[0],$(getVersion $pre_url)[0]
+Function _getLatestVersion(){
+  return $(_getVersion $url)[0],$(_getVersion $pre_url)[0]
 }
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
   if(!($VERSION)){
-    $VERSION,$url=getVersion $url
+    $VERSION,$url=_getVersion $url
   }
   if($isPre){
-    $VERSION,$url=getVersion $pre_url
+    $VERSION,$url=_getVersion $pre_url
   }
 
   $filename="VSCodeUserSetup-x64-${VERSION}.exe"
@@ -75,7 +75,7 @@ Function install($VERSION=0,$isPre=0){
   code --version
 }
 
-Function uninstall(){
+Function _uninstall(){
   ""
   # Remove-item
 }

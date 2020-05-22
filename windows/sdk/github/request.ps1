@@ -4,6 +4,7 @@ Function request($method="GET",$url){
 Please set GitHub Token :
 
 $ [environment]::SetEnvironmentvariable('GITHUB_TOKEN', 'XXX', 'User')
+$ [environment]::SetEnvironmentvariable('GITHUB_TOKEN', 'XXX', 'Process')
 " -ForegroundColor Red
     exit
 

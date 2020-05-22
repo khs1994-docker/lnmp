@@ -12,10 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # "torvalds/linux"
-        repo: ["microsoft/WSL2-Linux-Kernel"]
+        repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
         ref: ["master","linux-msft-wsl-4.19.y"]
+        exclude:
+        - repo: "torvalds/linux"
+          ref: "linux-msft-wsl-4.19.y"
       fail-fast: false
+    if: |
+      ! contains( github.event.head_commit.message, '[skip ci]')
     steps:
     - uses: actions/checkout@master
       with:
@@ -41,6 +45,11 @@ jobs:
           mkdir Microsoft/
           curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/${ref}/Microsoft/config-wsl \
             || curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/linux-msft-wsl-4.19.y/Microsoft/config-wsl
+
+          curl -fsSL -O \
+          https://raw.githubusercontent.com/khs1994/WSL2-Linux-Kernel/master/memory-reclaim.diff
+
+          patch -p1 < memory-reclaim.diff
         fi
 
         echo "

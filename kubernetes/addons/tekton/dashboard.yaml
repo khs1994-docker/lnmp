@@ -1,11 +1,3 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: tekton-dashboard
-  name: tekton-dashboard
-  namespace: tekton-pipelines
----
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -14,8 +6,8 @@ spec:
   group: dashboard.tekton.dev
   names:
     categories:
-    - all
-    - tekton-pipelines
+    - tekton
+    - tekton-dashboard
     kind: Extension
     plural: extensions
   scope: Namespaced
@@ -23,12 +15,123 @@ spec:
     status: {}
   version: v1alpha1
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: tekton-dashboard
+  name: tekton-dashboard
+  namespace: tekton-pipelines
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: tekton-dashboard-minimal
   namespace: tekton-pipelines
 rules:
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  verbs:
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  - configmaps
+  verbs:
+  - create
+  - update
+  - delete
+- apiGroups:
+  - extensions
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - tekton.dev
+  resources:
+  - tasks
+  - clustertasks
+  - taskruns
+  - pipelines
+  - pipelineruns
+  - pipelineresources
+  - conditions
+  verbs:
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - tekton.dev
+  resources:
+  - taskruns/finalizers
+  - pipelineruns/finalizers
+  verbs:
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - tekton.dev
+  resources:
+  - tasks/status
+  - clustertasks/status
+  - taskruns/status
+  - pipelines/status
+  - pipelineruns/status
+  verbs:
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - dashboard.tekton.dev
+  resources:
+  - extensions
+  verbs:
+  - create
+  - update
+  - delete
+  - patch
+- apiGroups:
+  - triggers.tekton.dev
+  resources:
+  - clustertriggerbindings
+  - eventlisteners
+  - triggerbindings
+  - triggertemplates
+  verbs:
+  - create
+  - update
+  - delete
+  - patch
+  - add
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - get
+  - list
 - apiGroups:
   - security.openshift.io
   resources:
@@ -58,8 +161,7 @@ rules:
   verbs:
   - get
   - list
-  - update
-  - patch
+  - watch
 - apiGroups:
   - ""
   resources:
@@ -68,10 +170,6 @@ rules:
   verbs:
   - get
   - list
-  - create
-  - update
-  - delete
-  - patch
   - watch
 - apiGroups:
   - ""
@@ -91,10 +189,7 @@ rules:
   verbs:
   - get
   - list
-  - create
-  - update
   - watch
-  - delete
 - apiGroups:
   - extensions
   - apps
@@ -103,10 +198,6 @@ rules:
   verbs:
   - get
   - list
-  - create
-  - update
-  - delete
-  - patch
   - watch
 - apiGroups:
   - tekton.dev
@@ -117,13 +208,10 @@ rules:
   - pipelines
   - pipelineruns
   - pipelineresources
+  - conditions
   verbs:
   - get
   - list
-  - create
-  - update
-  - delete
-  - patch
   - watch
 - apiGroups:
   - tekton.dev
@@ -133,10 +221,6 @@ rules:
   verbs:
   - get
   - list
-  - create
-  - update
-  - delete
-  - patch
   - watch
 - apiGroups:
   - tekton.dev
@@ -149,10 +233,6 @@ rules:
   verbs:
   - get
   - list
-  - create
-  - update
-  - delete
-  - patch
   - watch
 - apiGroups:
   - dashboard.tekton.dev
@@ -161,10 +241,17 @@ rules:
   verbs:
   - get
   - list
-  - create
-  - update
-  - delete
-  - patch
+  - watch
+- apiGroups:
+  - triggers.tekton.dev
+  resources:
+  - clustertriggerbindings
+  - eventlisteners
+  - triggerbindings
+  - triggertemplates
+  verbs:
+  - get
+  - list
   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -180,11 +267,32 @@ subjects:
   name: tekton-dashboard
   namespace: tekton-pipelines
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tekton-dashboard
+    dashboard.tekton.dev/release: v0.6.1
+    version: v0.6.1
+  name: tekton-dashboard
+  namespace: tekton-pipelines
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 9097
+    protocol: TCP
+    targetPort: 9097
+  selector:
+    app: tekton-dashboard
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: tekton-dashboard
+    dashboard.tekton.dev/release: v0.6.1
+    version: v0.6.1
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
@@ -202,15 +310,21 @@ spec:
       - env:
         - name: PORT
           value: "9097"
+        - name: READ_ONLY
+          value: "false"
         - name: WEB_RESOURCES_DIR
           value: /var/run/ko/web
         - name: PIPELINE_RUN_SERVICE_ACCOUNT
           value: ""
+        - name: TRIGGERS_NAMESPACE
+          value: tekton-pipelines
+        - name: PIPELINE_NAMESPACE
+          value: tekton-pipelines
         - name: INSTALLED_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: gcr.azk8s.cn/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:fa7cef8ad3cbb1d79af45d87ec7e8913f886b3d55b10acd55995f907aced9ebb
+        image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:3b4dc45de5ae0e741099018afe3e1108cb93f70aa24138456be03d9fde677269
         livenessProbe:
           httpGet:
             path: /health
@@ -222,99 +336,6 @@ spec:
           httpGet:
             path: /readiness
             port: 9097
-        resources: null
       serviceAccountName: tekton-dashboard
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: tekton-dashboard
-  name: tekton-dashboard
-  namespace: tekton-pipelines
-spec:
-  ports:
-  - name: http
-    port: 9097
-    protocol: TCP
-    targetPort: 9097
-  selector:
-    app: tekton-dashboard
-  type: NodePort
-
----
-apiVersion: tekton.dev/v1alpha1
-kind: Task
-metadata:
-  name: pipeline0-task
-  namespace: tekton-pipelines
-spec:
-  inputs:
-    params:
-    - default: /workspace/git-source
-      description: The path to the resource files to apply
-      name: pathToResourceFiles
-      type: string
-    - default: .
-      description: The directory from which resources are to be applied
-      name: apply-directory
-      type: string
-    - default: tekton-pipelines
-      description: The namespace in which to create the resources being imported
-      name: target-namespace
-      type: string
-    resources:
-    - name: git-source
-      type: git
-  steps:
-  - args:
-    - apply
-    - -f
-    - $(inputs.params.pathToResourceFiles)/$(inputs.params.apply-directory)
-    - -n
-    - $(inputs.params.target-namespace)
-    command:
-    - kubectl
-    image: lachlanevenson/k8s-kubectl:latest
-    name: kubectl-apply
-
----
-apiVersion: tekton.dev/v1alpha1
-kind: Pipeline
-metadata:
-  name: pipeline0
-  namespace: tekton-pipelines
-spec:
-  params:
-  - default: /workspace/git-source
-    description: The path to the resource files to apply
-    name: pathToResourceFiles
-    type: string
-  - default: .
-    description: The directory from which resources are to be applied
-    name: apply-directory
-    type: string
-  - default: tekton-pipelines
-    description: The namespace in which to create the resources being imported
-    name: target-namespace
-    type: string
-  resources:
-  - name: git-source
-    type: git
-  tasks:
-  - name: pipeline0-task
-    params:
-    - name: pathToResourceFiles
-      value: $(params.pathToResourceFiles)
-    - name: apply-directory
-      value: $(params.apply-directory)
-    - name: target-namespace
-      value: $(params.target-namespace)
-    resources:
-      inputs:
-      - name: git-source
-        resource: git-source
-    taskRef:
-      name: pipeline0-task
 
 ---

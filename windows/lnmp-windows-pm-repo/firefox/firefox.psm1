@@ -16,7 +16,7 @@ $description=$lwpm.description
 $url=$lwpm.url
 $pre_url=$lwpm.'pre-url'
 
-Function getVersion($url=$null){
+Function _getVersion($url=$null){
   try{
     Invoke-WebRequest `
       -MaximumRedirection 0 `
@@ -29,18 +29,18 @@ Function getVersion($url=$null){
     return $version
 }
 
-Function getLatestVersion(){
-  return $(getVersion $url),$(getVersion $pre_url)
+Function _getLatestVersion(){
+  return $(_getVersion $url),$(_getVersion $pre_url)
 }
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
 
   if(!($VERSION)){
-    $VERSION=getVersion $url
+    $VERSION=_getVersion $url
   }
 
   if($isPre){
-    $VERSION=getVersion $pre_url
+    $VERSION=_getVersion $pre_url
   }
 
   $url="https://download-installer.cdn.mozilla.net/pub/firefox/releases/${VERSION}/win64/en-US/Firefox%20Setup%20${VERSION}.exe"
@@ -83,6 +83,6 @@ Function install($VERSION=0,$isPre=0){
   & get-command "$env:ProgramFiles\Mozilla Firefox\firefox.exe"
 }
 
-Function uninstall(){
+Function _uninstall(){
   & "$env:ProgramFiles\Mozilla Firefox\uninstall\helper.exe"
 }

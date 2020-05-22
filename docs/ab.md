@@ -13,5 +13,7 @@ $ ab -c100 -n100 https://test2.t.khs1994.com/index.php
 * https://github.com/nghttp2/nghttp2/releases
 
 ```bash
+$ sudo apt install nghttp2
+
 $ h2load -n 100 -c 10 url
 ```

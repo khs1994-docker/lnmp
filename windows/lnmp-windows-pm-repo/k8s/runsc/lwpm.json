@@ -1,0 +1,14 @@
+{
+  "name": "runsc",
+  "platform": [
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  ],
+  "scripts": {
+    "download": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"
+  },
+  "url": "https://github.com/docker-practice/gvisor-mirror/releases/download/nightly/runsc-linux-amd64.tar.gz",
+  "version": "nightly"
+}

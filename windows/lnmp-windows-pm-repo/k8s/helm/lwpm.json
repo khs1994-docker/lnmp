@@ -1,0 +1,27 @@
+{
+  "name": "helm",
+  "description": "The Kubernetes Package Manager",
+  "version": "3.2.0",
+  "pre-version": "3.2.0",
+  "homepage": "https://helm.sh/",
+  "bug": "https://github.com/helm/helm/issues",
+  "github": "helm/helm",
+  "releases": "https://github.com/helm/helm/releases",
+  "url": "https://get.helm.sh/helm-v${VERSION}-windows-amd64.zip",
+  "url-mirror": "https://mirrors.huaweicloud.com/helm/v${VERSION}/helm-v${VERSION}-windows-amd64.zip",
+  "command": "helm",
+  "scripts": {
+    "version": "(ConvertFrom-Json -InputObject (helm version).trim('version.BuildInfo')).Version.trim('v')",
+    "test": "helm version",
+    "install": [
+      "_cleanup helm",
+      "_unzip $filename $unzipDesc",
+      "Copy-item -r -force helm\\windows-amd64\\helm.exe C:\\bin\\",
+      "_cleanup helm"
+    ],
+    "uninstall": "_cleanup C:\\bin\\helm.exe"
+  },
+  "path": [
+    "C:\\bin"
+  ]
+}

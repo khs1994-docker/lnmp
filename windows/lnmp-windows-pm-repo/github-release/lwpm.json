@@ -6,5 +6,18 @@
   "homepage": "https://github.com/aktau/github-release",
   "bug": "https://github.com/aktau/github-release/issues",
   "github": "aktau/github-release",
-  "releases": "https://github.com/aktau/github-release/releases"
+  "releases": "https://github.com/aktau/github-release/releases",
+  "url": "https://github.com/aktau/github-release/releases/download/v${VERSION}/windows-amd64-github-release.zip",
+  "command": "github-release",
+  "scripts": {
+    "version": "(github-release --version).split(' ')[1].trim('v')",
+    "test": "github-release --version",
+    "install": [
+      "_cleanup github-release",
+      "_unzip $filename $unzipDesc",
+      "Copy-item -r -force github-release\\bin\\windows\\amd64\\github-release.exe C:\\bin",
+      "_cleanup github-release"
+    ],
+    "uninstall": "_cleanup C:\\bin\\github-release.exe"
+  }
 }

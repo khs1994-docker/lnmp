@@ -76,7 +76,7 @@ services:
 
   mysql:
     << : *default-common
-    image: mysql:${CI_MYSQL_VERSION:-8.0.19}
+    image: mysql:${CI_MYSQL_VERSION:-8.0.20}
     env_file: secrets/mysql.env
     volumes:
       - mysql-data:/var/lib/mysql:rw
@@ -85,7 +85,7 @@ services:
 
   redis:
     << : *default-common
-    image: redis:${CI_REDIS_VERSION:-6.0-rc4}-alpine
+    image: redis:${CI_REDIS_VERSION:-6.0.3}-alpine
     volumes:
       - redis-data:/data
 

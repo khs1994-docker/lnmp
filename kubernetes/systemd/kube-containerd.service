@@ -9,7 +9,7 @@ Wants=network-online.target network.target
 ExecStartPre=-/sbin/modprobe overlay
 
 ExecStart=/opt/k8s/bin/kube-containerd \
-          --config /opt/k8s/etc/kube-containerd/1.3/config.toml
+          --config /opt/k8s/etc/kube-containerd/1.4/config.toml
 
 KillMode=process
 Delegate=yes

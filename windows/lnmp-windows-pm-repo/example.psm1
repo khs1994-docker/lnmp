@@ -5,137 +5,274 @@ Import-Module cleanup
 Import-Module exportPath
 Import-Module getHttpCode
 
-$ErrorActionPreference='stop'
+$ErrorActionPreference = 'stop'
 
-$lwpm=ConvertFrom-Json -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
+if (Test-Path $PSScriptRoot\lwpm-json-schema.json) {
+  if (!($env:LWPM_MANIFEST_PATH)) {
+    Write-Host "==> lwpm package without custom script load error" -ForegroundColor Red
 
-$stable_version=$lwpm.version
-$pre_version=$lwpm.'pre-version'
-$github_repo=$lwpm.github
-# $homepage=$lwpm.homepage
-$releases=$lwpm.releases
-# $bug=$lwpm.bug
-$name=$lwpm.name
-# $description=$lwpm.description
-$url=$lwpm.url
-$url_mirror=$lwpm.'url-mirror'
-$pre_url=$lwpm.'pre-url'
-$pre_url_mirror=$lwpm.'pre-url-mirror'
-$insert_path=$lwpm.path
-
-Function install_after(){
-
+    exit 1
+  }
+  $lwpm = ConvertFrom-Json -Depth 5 -InputObject (get-content $env:LWPM_MANIFEST_PATH -Raw)
+}
+else {
+  $lwpm = ConvertFrom-Json -Depth 5 -InputObject (get-content $PSScriptRoot/lwpm.json -Raw)
 }
 
-Function install($VERSION=0,$isPre=0){
-  if(!($VERSION)){
-    $VERSION=$stable_version
+$stable_version = $lwpm.version
+$pre_version = $lwpm.'pre-version'
+$github_repo = $lwpm.github
+# $homepage=$lwpm.homepage
+$releases = $lwpm.releases
+# $bug=$lwpm.bug
+$name = $lwpm.name
+# $description=$lwpm.description
+$url = $lwpm.url
+$url_mirror = $lwpm.'url-mirror'
+$pre_url = $lwpm.'pre-url'
+$pre_url_mirror = $lwpm.'pre-url-mirror'
+$insert_path = $lwpm.path
+
+Function _iex($str) {
+  if (!($str)) {
+    return;
   }
 
-  # stable 与 pre url 不同
-  # 先定义 stable url
-  # $download_url=$url_mirror.replace('${VERSION}',${VERSION});
-  # if((_getHttpCode $download_url)[0] -eq 4){
-    # $download_url=$url.replace('${VERSION}',${VERSION});
-  # }
+  try{
+  iex $str
+  }catch{
+    printError $_.Exception
+  }
+}
 
-  if($isPre){
-    $VERSION=$pre_version
+Function _install_after() {
+  if (!$lwpm.scripts.postinstall) {
 
-    # 后定义 pre url
-    # $download_url=$pre_url_mirror.replace('${VERSION}',${VERSION});
-    # if((_getHttpCode $download_url)[0] -eq 4){
-      # $download_url=$pre_url.replace('${VERSION}',${VERSION});
-    # }
-  }else{
-
+    return
   }
 
-  # stable 与 pre url 相同，默认
-  # $download_url=$url_mirror.replace('${VERSION}',${VERSION});
-  # if((_getHttpCode $download_url)[0] -eq 4){
-  $download_url=$url.replace('${VERSION}',${VERSION});
-  # }
-
-  if($download_url){
-    $url=$download_url
+  foreach ($item in $lwpm.scripts.postinstall) {
+    _iex $item
   }
+}
+
+Function _getUrl($url, $url_mirror, $VERSION) {
+  if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
+    Write-Host "==> Try use Download url mirror" -ForegroundColor Green
+    $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
+    if ((_getHttpCode $download_url)[0] -eq '4') {
+      $download_url = $url.replace('${VERSION}', ${VERSION})
+
+      Write-Host "==> Download url mirror not work" -ForegroundColor Yellow
+    }
+  }
+  else {
+    $download_url = $url.replace('${VERSION}', ${VERSION})
+  }
+
+  return $download_url
+}
+
+Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
+  if ($isPre) {
+    if (!($VERSION)) {
+      $VERSION = $pre_version
+    }
+
+    # stable 与 pre 的 url 不相同
+    if ($lwpm.'pre-url') {
+      $download_url = _getUrl $pre_url $pre_url_mirror $VERSION
+    }
+
+  }
+  else {
+    if (!($VERSION)) {
+      $VERSION = $stable_version
+    }
+  }
+
+  if (!$download_url) {
+    # stable 与 pre 的 url 相同
+    $download_url = _getUrl $url $url_mirror $VERSION
+  }
+
+  if ($download_url) {
+    $url = $download_url
+  }
+
+  if ($url) { $url = iex "echo $url" }
 
   # Write-Host "Please download on this website:
 
-# ${releases}
+  # ${releases}
 
-# " -ForegroundColor Green
-#  exit
+  # " -ForegroundColor Green
+  #  exit
 
-  # fix me
-  $filename=""
-  $unzipDesc=$name
+  $filename = $url.split('/')[-1]
+  if ($lwpm.'download-filename') {
+    $filename = ($lwpm.'download-filename').replace('${VERSION}', ${VERSION})
+  }
 
-  # _exportPath $lwpm.path
+  $unzipDesc = $name
 
-  if($(_command example)){
-    $ErrorActionPreference='Continue'
-    $CURRENT_VERSION=""
+  if ($lwpm.path) { _exportPath $lwpm.path }
 
-    if($lwpm.scripts.version){
-      $CURRENT_VERSION=powershell -c $lwpm.scripts.version
+  if ($lwpm.command -and $(_command $lwpm.command) -and !$force) {
+    $ErrorActionPreference = 'Continue'
+    $CURRENT_VERSION = ""
+
+    if ($lwpm.scripts.version) {
+      foreach ($item in $lwpm.scripts.version) {
+        $CURRENT_VERSION = _iex $item
+      }
     }
 
-    if ($CURRENT_VERSION -eq $VERSION){
-        Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
-        return
+    # Write-Host $CURRENT_VERSION
+
+    if ($CURRENT_VERSION -eq $VERSION) {
+      Write-Host "==> $name $VERSION already install" -ForegroundColor Yellow
+
+      # _install_after
+
+      return
     }
-    $ErrorActionPreference='stop'
+    $ErrorActionPreference = 'stop'
   }
 
   # 下载原始 zip 文件，若存在则不再进行下载
 
-  _downloader `
-    $url `
-    $filename `
-    $name `
-    $VERSION
+  if ($url -and ($env:LWPM_DIST_ONLY -ne 'true')) {
+    write-host "==> Download from $url" -ForegroundColor Green
 
-  # 验证原始 zip 文件 Fix me
+    if ($lwpm.platform) {
+      foreach ($item in $lwpm.platform) {
+        if ($item.os -eq $env:lwpm_os -and $item.architecture -eq $env:lwpm_architecture) {
+          if ($item.hash.sha256) {
+            $hashType = 'sha256'
+            $hash = $item.hash.sha256
 
-  # 解压 zip 文件 Fix me
+            break;
+          }
+
+          if ($item.hash.sha512) {
+            $hashType = 'sha512'
+            $hash = $item.hash.sha512
+
+            break;
+          }
+
+          break
+        }
+      }
+    }
+
+    _downloader `
+      $url `
+      $filename `
+      $name `
+      $VERSION `
+      -HashType $hashType `
+      -Hash $hash
+
+    if($lwpm.scripts.hash){
+      foreach ($item in $lwpm.scripts.hash) {
+        _iex $item
+      }
+    }
+  }
+
+  if ($lwpm.scripts.download -and ($env:LWPM_DIST_ONLY -eq 'true')) {
+    write-host "==> Dist files, Download from $url" -ForegroundColor Green
+
+    foreach ($item in $lwpm.scripts.download) {
+      _iex $item
+    }
+
+    return
+  }
+
+  # 验证原始 zip 文件
+
+  # 解压 zip 文件
   # _cleanup "$unzipDesc"
-  _unzip $filename $unzipDesc
+  # _unzip $filename $unzipDesc
 
-  # 安装 Fix me
-  Copy-item -r -force "$unzipDesc/" ""
+  if ($lwpm.scripts.preinstall) {
+    foreach ($item in $lwpm.scripts.preinstall) {
+      _iex $item
+    }
+  }
+
+  # install
+  # Copy-item -r -force "$unzipDesc/" ""
+  if ($lwpm.scripts.install) {
+    foreach ($item in $lwpm.scripts.install) {
+      _iex $item
+    }
+  }
   # Start-Process -FilePath $filename -wait
   # _cleanup "$unzipDesc"
 
   # [environment]::SetEnvironmentvariable("", "", "User")
-  # _exportPath $lwpm.path
+  if ($lwpm.path) { _exportPath $lwpm.path }
 
-  install_after
+  _install_after
 
   Write-Host "==> Checking ${name} ${VERSION} install ..." -ForegroundColor Green
-  # 验证 Fix me
-  if($lwpm.scripts.test){
-    powershell -c $lwpm.scripts.test
+  # test
+  if ($lwpm.scripts.pretest) {
+    foreach ($item in $lwpm.scripts.pretest) {
+      _iex $item
+    }
+  }
+  if ($lwpm.scripts.test) {
+    foreach ($item in $lwpm.scripts.test) {
+      _iex $item
+    }
+  }
+  if ($lwpm.scripts.posttest) {
+    foreach ($item in $lwpm.scripts.posttest) {
+      _iex $item
+    }
   }
 }
 
-Function uninstall($prune=0){
-  Write-Host "Not Support" -ForegroundColor Red
-  # _cleanup ""
-  # user data
-  if($prune){
-    # _cleanup ""
+Function _uninstall($prune = 0) {
+  if (!($lwpm.scripts.uninstall)) {
+    Write-Host "==> Not Support" -ForegroundColor Red
+
+    return
   }
+
+  # _cleanup ""
+  foreach ($item in $lwpm.scripts.preuninstall) {
+    _iex $item
+  }
+  foreach ($item in $lwpm.scripts.uninstall) {
+    _iex $item
+  }
+  foreach ($item in $lwpm.scripts.postuninstall) {
+    _iex $item
+  }
+  # user data
+  if ($prune) {
+    # _cleanup ""
+    foreach ($item in $lwpm.scripts.pruneuninstall) {
+      _iex $item
+    }
+  }
+
+  Write-Host "==> uninstall success" -ForegroundColor Green
 }
 
 # 自定义获取最新版本号的方法
 
-function getLatestVersion(){
+function _getLatestVersion() {
   $stable_version = $null
   $pre_version = $null
 
   # TODO
 
-  return $stable_version,$pre_version
+  return $stable_version, $pre_version
 }

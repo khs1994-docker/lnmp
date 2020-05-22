@@ -1,8 +1,8 @@
 {
   "name": "gh",
   "description": "GitHub’s official command line tool",
-  "version": "0.7.0",
-  "pre-version": "0.7.0",
+  "version": "0.8.0",
+  "pre-version": "0.8.0",
   "homepage": "https://cli.github.com/",
   "bug": "https://github.com/cli/cli/issues",
   "github": "cli/cli",
@@ -11,19 +11,36 @@
   "url-mirror": "",
   "pre-url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_windows_amd64.zip",
   "pre-url-mirror": "",
+  "command": "gh",
   "scripts": {
     "preinstall": "",
-    "install": "",
-    "postinstall": "",
+    "install": [
+      "_cleanup $unzipDesc",
+      "_unzip $filename $unzipDesc",
+      "Copy-item -r -force $unzipDesc/bin/* C:\\bin\\",
+      "_cleanup $unzipDesc"
+    ],
+    "postinstall": [
+      "$env:ps_module_dir=${env:PSModulePath}.split(';')[0]+\"\\gh\"",
+      "mkdir -Force $env:ps_module_dir | out-null",
+      "gh completion --shell powershell > $env:ps_module_dir\\gh.psm1",
+      "if((cat $PROFILE | select-string \"Import-Module gh\").line.Length -eq 0){echo \"Import-Module gh\" >> $PROFILE}",
+      "Import-Module gh"
+    ],
     "preuninstall": "",
-    "uninstall": "",
+    "uninstall": "_cleanup C:\\bin\\gh.exe",
     "postuninstall": "",
     "pretest": "",
-    "test": "(gh --version).split()[2]",
-    "posttest":"",
-    "version": "(gh --version).split()[2]"
+    "test": "echo \"gh $((gh --version).split()[2]) install success\"",
+    "posttest": "",
+    "version": "(gh --version).split()[2]",
+    "hash": [
+      "invoke-webrequest https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_checksums.txt -OutFile Temp:/gh_checksum",
+      "$env:hash=(cat Temp:/gh_checksum | select-string gh_${VERSION}_windows_amd64.zip).line.split(' ')[0]",
+      "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed\"}"
+    ]
   },
   "path": [
-    "C:/bin"
+    "C:\\bin"
   ]
 }

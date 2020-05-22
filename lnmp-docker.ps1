@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.10-alpha2
+.VERSION 19.03.11-alpha1
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -49,7 +49,7 @@ $LNMP_CACHE="$HOME/.khs1994-docker-lnmp"
 
 if ($args[0] -eq "install"){
   if(get-command git){
-    git clone -b 19.03 --depth=1 https://github.com/khs1994-docker/lnmp.git $home/lnmp
+    git clone -b 19.03 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
 
     exit
   }
@@ -104,6 +104,14 @@ if($args[0] -eq "env-file"){
   echo $LNMP_ENV_FILE,$LNMP_ENV_FILE_PS1
 
   exit
+}
+
+if (!(Test-Path $PSScriptRoot\cli\khs1994-robot.enc )){
+    Write-Host "lnmp-docker.ps1 not in lnmp ROOT PATH" -ForegroundColor Red
+
+    Write-Host "Please remove $((get-command lnmp-docker).Source)" -ForegroundColor Red
+
+    exit 1
 }
 
 printInfo "Load env file [ $LNMP_ENV_FILE ] and [ $LNMP_ENV_FILE_PS1 ]"
@@ -495,7 +503,7 @@ Function satis(){
 
   docker run --rm -it `
       --mount type=bind,src=${APP_ROOT}/satis,target=/build `
-      --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
+      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
 }
 
 Function get_compose_options($compose_files,$isBuild=0){
@@ -744,24 +752,38 @@ if($APP_ENV_CONTENT){
 if (!(Test-Path cli/khs1994-robot.enc )){
   # 在项目目录外
   if ($env:LNMP_PATH.Length -eq 0){
-  # 没有设置系统环境变量，则退出
-    throw "Please set system environment LNMP_PATH, more information please see bin/README.md"
 
+  # 没有设置系统环境变量，则退出
+
+    printError "Please set system environment LNMP_PATH, more information please see bin/README.md"
+
+    exit 1
   }else{
     # 设置了系统环境变量
 
     printInfo "Use LNMP CLI in $PWD"
-    # cd $env:LNMP_PATH
-    cd $PSScriptRoot
-    cd $APP_ROOT
-    $APP_ROOT=$PWD
-    cd $PSScriptRoot
+    cd $env:LNMP_PATH
+    if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
+      printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    }
+    else {
+      # cd $PSScriptRoot
+      cd $APP_ROOT
+      $APP_ROOT = $PWD
+    }
+    cd $env:LNMP_PATH
+    # cd $PSScriptRoot
   }
 
 }else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
-  cd $APP_ROOT
-  $APP_ROOT=$PWD
+  if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
+    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+  }
+  else {
+    cd $APP_ROOT
+    $APP_ROOT = $PWD
+  }
   cd $EXEC_CMD_DIR
 }
 
@@ -968,7 +990,7 @@ switch -regex ($command){
     }
 
     checkout {
-      git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
+      git fetch origin "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}":"${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" --depth=1
       git checkout "${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}"
       _update
     }
@@ -1367,15 +1389,15 @@ XXX
       $a=Select-String 'demo.ci.khs1994.com' pcit/conf/pcit.conf
 
       if ($a.Length -ne 0){
-        throw "PCIT nginx conf error, please see pcit/README.md"
+        printError "PCIT nginx conf error, please see pcit/README.md"
       }
 
       if(!(Test-Path pcit/ssl/ci.crt)){
-        throw "PCIT Website SSL key not found, please see pcit/README.md"
+        printError "PCIT Website SSL key not found, please see pcit/README.md"
       }
 
       if(!(Test-Path pcit/key/private.key)){
-        throw "PCIT GitHub App private key not found, please see pcit/README.md"
+        printError "PCIT GitHub App private key not found, please see pcit/README.md"
       }
 
       if(!(Test-Path pcit/key/public.key)){
@@ -1450,6 +1472,8 @@ printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSI
         --mount type=bind,src=$LNMP_CACHE/registry,target=/var/lib/registry `
         --label com.khs1994.lnmp.gcr.io `
         registry
+
+      # -v $pwd/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd `
 
       if ('--no-pull' -eq $args[1]){
         printInfo "Up gcr.io Server Success"

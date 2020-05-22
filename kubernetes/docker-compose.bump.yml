@@ -5,7 +5,7 @@ services:
     image: k8s.gcr.io/kube-apiserver:v1.18.0
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.0.0
+    image: kubernetesui/dashboard:v2.0.1
 
   k8s_dashboard_metrics-scraper:
     image: kubernetesui/metrics-scraper:v1.0.4
@@ -18,10 +18,10 @@ services:
     # https://github.com/kubernetes/kubernetes/tree/master/build/pause
 
   calico:
-    image: calico/cni:v3.13.2
+    image: calico/cni:v3.14.0
 
   ingress_nginx:
-    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0
+    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0
 
   metrics_server:
     image: k8s.gcr.io/metrics-server-amd64:v0.3.6

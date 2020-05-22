@@ -4,14 +4,14 @@ workspace:
 
 steps:
   bash:
-    image: khs1994/php:7.4.5-composer-alpine
+    image: khs1994/php:7.4.6-composer-alpine
     run:
       - pwd
       - bash ./lnmp-docker
 
   # https://hub.docker.com/_/microsoft-powershell?tab=description
   powershell:
-    image: mcr.microsoft.com/powershell:preview-alpine-3.10
+    image: mcr.microsoft.com/powershell:preview-alpine-3.11
     run:
       - pwsh ./lnmp-docker.ps1
 

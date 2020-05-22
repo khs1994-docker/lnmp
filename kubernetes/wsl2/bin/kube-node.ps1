@@ -8,14 +8,15 @@ if ($args[0] -eq 'stop'){
   exit
 }
 
-Function _mountKubelet(){
-  wsl -d wsl-k8s -u root -- bash -c "mountpoint -q /var/lib/kubelet"
-  if(!$?){
-    wsl -d wsl-k8s -u root -- bash -c "mkdir -p /var/lib/kubelet"
-    Write-Warning "try mount /var/lib/kubelet ..."
-    wsl -d wsl-k8s -u root -- bash -c "mount --bind ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet"
-  }else{
-    Write-Warning "/var/lib/kubelet already mount"
+Function _mountKubelet($source, $dest) {
+  wsl -d wsl-k8s -u root -- bash -c "mountpoint -q $dest"
+  if (!$?) {
+    wsl -d wsl-k8s -u root -- bash -c "mkdir -p $source $dest"
+    Write-Warning "try mount $source to $dest ..."
+    wsl -d wsl-k8s -u root -- bash -c "mount --bind $source $dest"
+  }
+  else {
+    Write-Warning "$dest already mount"
   }
 }
 
@@ -65,7 +66,8 @@ if(!$?){
 & $PSScriptRoot/supervisorctl update
 & $PSScriptRoot/../kubelet init
 
-_mountKubelet
+_mountKubelet ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
+_mountKubelet ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-lnmp
 wsl -d wsl-k8s -u root -- supervisorctl start kube-node:
 
 Write-Warning "

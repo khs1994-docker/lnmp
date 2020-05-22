@@ -1,14 +1,26 @@
 {
-  "name": "python",
-  "description": "Python is a programming language that lets you work quickly and integrate systems more effectively",
-  "version": "3.8.2",
-  "pre-version": "3.8.2",
-  "homepage": "https://www.python.org/",
   "bug": "",
-  "github": "python/cpython",
-  "releases": "https://www.python.org/downloads/",
+  "homepage": "https://www.python.org/",
   "url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "command": "python",
+  "scripts": {
+    "version": "($(python --version) -split \" \")[1]",
+    "test": "python --version",
+    "install": [
+      "# https://docs.python.org/3.7/using/windows.html#installing-without-ui\n\nStart-Process $filename -Wait `\n-ArgumentList @( `\n  '/quiet', `\n  'InstallAllUsers=1', `\n  \"DefaultAllUsersTargetDir=${env:ProgramData}\\Python\", `\n  \"DefaultJustForMeTargetDir=${env:ProgramData}\\Python\", `\n  \"TargetDir=${env:ProgramData}\\Python\", `\n  'PrependPath=1', `\n  'Shortcuts=0', `\n  'Include_doc=0', `\n  'Include_pip=1', `\n  'Include_test=0' `\n);\n"
+    ]
+  },
+  "version": "3.8.3",
+  "github": "python/cpython",
+  "pre-version": "3.8.3",
+  "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "name": "python",
+  "releases": "https://www.python.org/downloads/",
   "url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
+  "path": [
+    "${env:ProgramData}\\Python",
+    "${env:ProgramData}\\Python\\Scripts"
+  ],
   "pre-url": "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe",
-  "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
+  "description": "Python is a programming language that lets you work quickly and integrate systems more effectively"
 }

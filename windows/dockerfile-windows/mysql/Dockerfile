@@ -7,16 +7,16 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 ENV MYSQL_VERSION 8.0.17
 
 RUN $url = ('https://dev.mysql.com/get/Downloads/MySQL-${0}/mysql-${1}-winx64.zip' -f '8.0' $env:MYSQL_VERSION); \
-	      Write-Host ('Downloading {0} ...' -f $url); \
-	      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-	      Invoke-WebRequest -Uri $url -OutFile 'mysql.zip'; \
-       	\
+        Write-Host ('Downloading {0} ...' -f $url); \
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+        Invoke-WebRequest -Uri $url -OutFile 'mysql.zip'; \
+         \
         Write-Host 'Installing ...'; \
         Expand-Archive -Path mysql.zip -DestinationPath C:/ -Force; \
         Move-Item C:/mysql-${env:MYSQL_VERSION}-winx64 C:/mysql; \
         \
         Write-Host 'Updating PATH ...'; \
-	      $env:PATH = 'C:\mysql;' + $env:PATH; \
+        $env:PATH = 'C:\mysql;' + $env:PATH; \
         [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine); \
         \
         Write-Host 'Verifying install ...'; \

@@ -1,0 +1,14 @@
+{
+  "name": "runc",
+  "platform": [
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  ],
+  "scripts": {
+    "download": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/runc\n"
+  },
+  "url": "https://github.com/opencontainers/runc/releases/download/v${VERSION}/runc.amd64",
+  "version": "1.0.0-rc10"
+}

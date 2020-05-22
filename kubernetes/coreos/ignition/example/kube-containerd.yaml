@@ -42,7 +42,7 @@ systemd:
         ExecStartPre=/usr/bin/env cp -a /usr/libexec/cni/. /opt/k8s/opt/cni/bin
         ExecStartPre=-/usr/bin/env modprobe overlay
         ExecStart=/usr/local/bin/kube-containerd \
-                  --config /opt/k8s/etc/kube-containerd/1.3/config.toml
+                  --config /opt/k8s/etc/kube-containerd/1.4/config.toml
         KillMode=process
         Delegate=yes
         LimitNOFILE=1048576
@@ -59,10 +59,10 @@ systemd:
         WantedBy=multi-user.target
 storage:
   files:
-    - path: /opt/k8s/etc/kube-containerd/1.3/config.toml
+    - path: /opt/k8s/etc/kube-containerd/1.4/config.toml
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/etc/kube-containerd/1.3/config.toml
+        source: http://{{SERVER_HOST}}:8080/etc/kube-containerd/1.4/config.toml
     - path: ${K8S_ROOT}/etc/cni/net.d/99-loopback.conf
       mode: 0644
       contents:

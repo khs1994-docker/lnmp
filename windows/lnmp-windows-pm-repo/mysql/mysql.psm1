@@ -20,7 +20,7 @@ $pre_url=$lwpm.'pre-url'
 $pre_url_mirror=$lwpm.'pre-url-mirror'
 $insert_path=$lwpm.path
 
-Function install_after(){
+Function _install_after(){
   if(!(Test-Path C:\mysql\data)){
 
     Write-Host "mysql is init ..."
@@ -65,7 +65,7 @@ mysql> GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
 "
 }
 
-Function install($VERSION=0,$isPre=0){
+Function _install($VERSION=0,$isPre=0){
   if(!($VERSION)){
     $VERSION=$stable_version
   }
@@ -123,14 +123,14 @@ Function install($VERSION=0,$isPre=0){
   # [environment]::SetEnvironmentvariable("", "", "User")
   _exportPath "C:\mysql\bin"
 
-  install_after
+  _install_after
 
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me
   mysql --version
 }
 
-Function uninstall(){
+Function _uninstall(){
   _sudo "mysqld --uninstall"
   _cleanup C:\mysql
 }

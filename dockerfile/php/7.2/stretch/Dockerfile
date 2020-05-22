@@ -2,7 +2,7 @@
 
 # https://sources.debian.org/src/php7.2/7.2.4-1/debian/control/
 
-ARG PHP_VERSION=7.2.30
+ARG PHP_VERSION=7.2.31
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-stretch
 
@@ -52,7 +52,7 @@ ARG DEB_SECURITY_URL=security.debian.org/debian-security
 RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     && sed -i "s!security.debian.org/debian-security!${DEB_SECURITY_URL}!g" /etc/apt/sources.list \
     && set -xe \
-	      && buildDeps=" \
+        && buildDeps=" \
         wget \
         unzip \
         libfreetype6-dev \
@@ -75,7 +75,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libenchant-dev \
         libc-client2007e-dev \
         libkrb5-dev \
-	" \
+  " \
   # libtidy-dev \
   # libxslt1-dev \
   && runDeps=" \
@@ -159,12 +159,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.10.5 \
+    COMPOSER_VERSION=1.10.6 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.5,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.10.6,source=/usr/bin/composer,target=/opt/bin/composer \
     echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \

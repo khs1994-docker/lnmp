@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    helm.sh/chart: ingress-nginx-2.0.0
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: 0.31.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+      nodePort: 28080
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+      nodePort: 28443
+    # - name: proxied-udp-53
+    #   port: 53
+    #   targetPort: 53
+    #   protocol: UDP
+    #   nodePort: 53
+    # - name: proxied-tcp-53
+    #   port: 53
+    #   targetPort: 53
+    #   protocol: TCP
+    #   nodePort: 53
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/component: controller

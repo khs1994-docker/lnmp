@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-vs-demo
+spec:
+  gateways:
+  - demo-gw
+  hosts:
+  - "*"
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: nginx # 事先新建 nginx 服务
+        port:
+          number: 80

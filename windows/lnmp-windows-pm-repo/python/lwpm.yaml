@@ -1,0 +1,36 @@
+name: "python"
+description: "Python is a programming language that lets you work quickly and integrate systems more effectively"
+version: "3.8.3"
+pre-version: "3.8.3"
+homepage: "https://www.python.org/"
+bug: ""
+github: "python/cpython"
+releases: "https://www.python.org/downloads/"
+url: "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe"
+url-mirror: "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
+pre-url: "https://www.python.org/ftp/python/${VERSION}/python-${VERSION}-amd64.exe"
+pre-url-mirror: "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe"
+path:
+  - ${env:ProgramData}\Python
+  - ${env:ProgramData}\Python\Scripts
+scripts:
+  install:
+    - |
+      # https://docs.python.org/3.7/using/windows.html#installing-without-ui
+
+      Start-Process $filename -Wait `
+      -ArgumentList @( `
+        '/quiet', `
+        'InstallAllUsers=1', `
+        "DefaultAllUsersTargetDir=${env:ProgramData}\Python", `
+        "DefaultJustForMeTargetDir=${env:ProgramData}\Python", `
+        "TargetDir=${env:ProgramData}\Python", `
+        'PrependPath=1', `
+        'Shortcuts=0', `
+        'Include_doc=0', `
+        'Include_pip=1', `
+        'Include_test=0' `
+      );
+  test: python --version
+  version: ($(python --version) -split " ")[1]
+command: python

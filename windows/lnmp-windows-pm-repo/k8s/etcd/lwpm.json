@@ -1,0 +1,39 @@
+{
+  "name": "etcd",
+  "description": "Distributed reliable key-value store for the most critical data of a distributed system",
+  "version": "3.4.9",
+  "pre-version": "3.4.9",
+  "homepage": "https://etcd.io/",
+  "bug": "https://github.com/etcd-io/etcd/issues",
+  "github": "etcd-io/etcd",
+  "releases": "https://github.com/etcd-io/etcd/releases",
+  "url": "https://github.com/etcd-io/etcd/releases/download/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip",
+  "url-mirror": "https://mirrors.huaweicloud.com/etcd/v${VERSION}/etcd-v${VERSION}-windows-amd64.zip",
+  "command": "etcd",
+  "scripts": {
+    "install": [
+      "_cleanup etcd",
+      "_unzip $filename $unzipDesc",
+      "Copy-item -r -force etcd\\etcd-v${VERSION}-windows-amd64\\etcd.exe C:\\bin\\",
+      "Copy-item -r -force etcd\\etcd-v${VERSION}-windows-amd64\\etcdctl.exe C:\\bin\\",
+      "_cleanup etcd"
+    ],
+    "uninstall": "_cleanup C:\\bin\\etcd.exe C:\\bin\\etcdctl.exe",
+    "test": "printInfo $(etcd --version)",
+    "version": "(etcd --version).split(' ')[2]",
+    "hash": [
+      "invoke-webrequest https://mirrors.huaweicloud.com/etcd/v${VERSION}/SHA256SUMS -outFile Temp:/etcd-sha256",
+      "$env:hash=(get-content Temp:/etcd-sha256 | select-string etcd-v${VERSION}-windows-amd64.zip).Line.split(' ')[0]",
+      "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed \"}"
+    ]
+  },
+  "path": [
+    "C:\\bin"
+  ],
+  "platform": [
+    {
+      "os": "windows",
+      "architecture": "amd64"
+    }
+  ]
+}

@@ -4,10 +4,11 @@ metadata:
   name: harbor-postgresql-data
   labels:
     app: harbor
-    component: postgresql
+    component: database
 spec:
   hostPath:
     path: /var/lib/khs1994-docker-lnmp/harbor/postgresql
+    type: DirectoryOrCreate
   capacity:
     storage: 1Gi
   accessModes:
@@ -23,6 +24,7 @@ metadata:
 spec:
   hostPath:
     path: /var/lib/khs1994-docker-lnmp/harbor/redis
+    type: DirectoryOrCreate
   capacity:
     storage: 1Gi
   accessModes:

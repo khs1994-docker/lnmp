@@ -37,8 +37,6 @@ WINDOWS_IP windows.k8s.khs1994.com
 ```powershell
 $ cd ~/lnmp
 
-$ $env:DOCKER_USERNAME="your_docker_hub_username"
-$ $env:DOCKER_PASSWORD="your_docker_hub_password"
 # $ $env:REGISTRY_MIRROR="xxxx.mirror.aliyuncs.com"
 
 $ . ./windows/sdk/dockerhub/rootfs

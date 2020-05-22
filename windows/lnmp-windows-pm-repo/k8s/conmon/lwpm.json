@@ -1,0 +1,14 @@
+{
+  "name": "conmon",
+  "platform": [
+    {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  ],
+  "scripts": {
+    "download": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon\n"
+  },
+  "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon",
+  "version": "2.0.15"
+}

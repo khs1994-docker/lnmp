@@ -44,6 +44,9 @@ spec:
         - name: DRONE_AGENTS_ENABLED
           value: "true"
 
+        - name: DRONE_GOGS_SERVER
+          value: http://gogs
+
         - name: DRONE_LOGS_DEBUG
           value: "true"
         - name: DRONE_SERVER_HOST
@@ -52,8 +55,6 @@ spec:
           value: http
         - name: DRONE_RPC_SECRET
           value: secret
-        - name: DRONE_GOGS_SERVER
-          value: http://gogs
         - name: DRONE_TLS_AUTOCERT
           value: "false"
         - name: DRONE_DATABASE_DRIVER
@@ -61,6 +62,7 @@ spec:
         - name: DRONE_DATABASE_DATASOURCE
           value: root:mytest@tcp(mysql)/drone?parseTime=true
 
+        # s3
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
@@ -82,12 +84,16 @@ spec:
         - name: DRONE_S3_PATH_STYLE
           value: "true"
 
-        # 将值作为 webhooks 地址，drone 运行于内网，下面的值设为公网地址
+        # DRONE_SERVER_PROXY_HOST 将作为 webhooks 地址
+        # 适用于 drone 运行于内网，DRONE_SERVER_PROXY_HOST 的值设为公网地址
+        # 如果不设置此值，webhooks 将使用 DRONE_SERVER_HOST 作为 webhooks 地址
+        # 外部将访问不到
         # - name: DRONE_SERVER_PROXY_HOST
         #   value: ""
         # - name: DRONE_SERVER_PROXY_PROTO
         #   value: https
 
+        # 服务端地址，接收 drone webhooks
         # - name: DRONE_WEBHOOK_ENDPOINT
         #   value: ""
         # - name: DRONE_WEBHOOK_EVENTS

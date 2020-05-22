@@ -5,25 +5,39 @@
   "pre-version": "x.y.z-alpha.1",
   "homepage": "",
   "bug": "",
-  "github": "repo/name",
+  "github": "user/repo",
   "releases": "",
   "url": "",
   "url-mirror": "",
   "pre-url": "",
   "pre-url-mirror": "",
+  "command": "",
+  "download-filename": "",
+  "architecture": "amd64",
+  "os": "windows",
   "scripts": {
-    "preinstall": "",
-    "install": "",
+    "preinstall": [
+      "# _cleanup \"$unzipDesc\""
+    ],
+    "install": [
+      "# Write-Host \"`nPlease download on this website: ${releases}`n\" -ForegroundColor Green",
+      "# _unzip $filename $unzipDesc",
+      "# Copy-item -r -force \"$unzipDesc/\" \"\"",
+      "# cp $env:LWPM_PKG_ROOT\\dist\\file \\dest\\path",
+      "# Start-Process -FilePath $filename -wait",
+      "# _cleanup \"$unzipDesc\""
+    ],
     "postinstall": "",
     "preuninstall": "",
-    "uninstall": "",
+    "uninstall": "# _cleanup /soft/path",
     "postuninstall": "",
+    "pruneuninstall": "",
     "pretest": "",
     "test": "",
-    "posttest":"",
+    "posttest": "",
     "version": ""
   },
   "path": [
-    "C:/bin"
+    "C:\\bin"
   ]
 }

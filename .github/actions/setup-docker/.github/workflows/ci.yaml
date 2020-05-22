@@ -42,6 +42,8 @@ jobs:
         with:
           fetch-depth: 2
       # 必须先登录后安装 Docker
+      # Login docker hub or other docker registry
+      # test docker login
       - uses: azure/docker-login@v1
         with:
           # login-server: contoso.azurecr.io
@@ -52,8 +54,6 @@ jobs:
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
       - run: docker version
-      # Login docker hub or other docker registry
-      # test docker login
       - name: Docker Push Image
         run: |
           set -x

@@ -26,16 +26,30 @@ $ lnmp-windows-pm.ps1 init example
 
 编辑 `~/lnmp/vendor/lwpm-dev/example` 文件夹中的文件。
 
-编辑好之后推送到 GitHub，并发布到 composer。
+编辑好之后推送到 docker hub 或者其他私有 docker registry(通过 `$env:LWPM_DOCKER_REGISTRY="docker-registry.domain.com"` 设置)
+
+```bash
+# $ $env:LWPM_DOCKER_REGISTRY="docker-registry.domain.com"
+
+$ $env:LWPM_DOCKER_USERNAME="your_username"
+$ $env:LWPM_DOCKER_PASSWORD="your_password"
+
+$ lnmp-windows-pm.ps1 push docker_registry_username/example
+```
 
 * 示例: https://github.com/khs1994-docker/lwpm-openjdk
 
 ## 添加一个包，并安装软件
 
-在 https://packagist.org/packages/lwpm/ 寻找一个包，并使用以下命令添加包并安装该包所提供的软件：
+在 https://hub.docker.com/u/lwpm 寻找一个包，并使用以下命令添加包并安装该包所提供的软件：
 
 ```bash
 $ cd ~/lnmp
+
+# $ $env:LWPM_DOCKER_REGISTRY="docker-registry.domain.com"
+
+# $ $env:LWPM_DOCKER_USERNAME="your_username"
+# $ $env:LWPM_DOCKER_PASSWORD="your_password"
 
 $ lnmp-windows-pm.ps1 add example
 
@@ -44,7 +58,7 @@ $ lnmp-windows-pm.ps1 install example
 
 ## 优先级(开发者)
 
-`vendor/lwpm-dev` 优先级大于 `vendor/lwpm`
+`vendor/lwpm-dev` 大于 `vendor/lwpm` 大于 `默认自带包（windows/lnmp-windows-pm-repo）`
 
 ## 注册 Windows 服务
 
@@ -71,3 +85,60 @@ $ lnmp-windows-pm.ps1 start-service minio
 ```powershell
 $ lnmp-windows-pm.ps1 stop-service minio
 ```
+
+## 开发者
+
+**$env:LWPM_DIST_ONLY='true' install** 从软件源下载文件并打包
+
+```bash
+ package
+ |__dist
+    |
+    |__os-arch
+       |
+       |__dist_file-os-arch
+    |__linux-amd64
+       |
+       |__dist_file-linux-amd64
+    |__linux-arm
+       |
+       |__dist_file-linux-arm
+ |__lwpm.json
+```
+
+**add --platform** 获取所有架构的文件（适用于从 docker hub 获取文件）
+
+```bash
+ package
+ |__dist
+    |
+    |__dist_file-os-arch
+    |__dist_file-linux-amd64
+    |__dist_file-linux-arm
+ |__lwpm.json
+```
+
+**push** 推送到 Docker Registry
+
+## lwpm.json 支持的变量
+
+* `${VERSION}`
+
+* `$filename` 下载的文件
+
+* `$env:lwpm_os` (e.g. linux)
+* `$env:lwpm_architecture` (e.g. amd64)
+
+* `$env:LWPM_UNAME_S` (e.g. Linux)
+* `$env:LWPM_UNAME_M` (e.g. x86_64)
+
+* `$env:LWPM_PKG_ROOT`(lwpm.json 所在文件夹)
+
+## lwpm.json 支持的部分函数
+
+* `printError` `printInfo` `PrintWarning`
+* `_cleanup`
+* `_unzip`
+* `_mkdir`
+* `start-process file.exe -wait`
+* `Get-SHA256` `Get-SHA384` `Get-SHA512`

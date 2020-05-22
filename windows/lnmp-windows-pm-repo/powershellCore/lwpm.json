@@ -1,11 +1,24 @@
 {
   "name": "powershellCore",
   "description": "PowerShell is a task-based command-line shell and scripting language built on .NET",
-  "version": "7.0.0",
-  "pre-version": "7.0.0",
+  "version": "7.0.1",
+  "pre-version": "7.1.0-preview.2",
   "homepage": "https://docs.microsoft.com/zh-cn/powershell",
   "bug": "https://github.com/PowerShell/PowerShell/issues",
   "github": "PowerShell/PowerShell",
   "releases": "https://github.com/PowerShell/PowerShell/releases",
-  "url": "https://github.com/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-win-x64.msi"
+  "url": "https://github.com/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-win-x64.msi",
+  "command": "pwsh",
+  "scripts": {
+    "version": "(pwsh --version).split(' ')[1]",
+    "install": [
+      "Start-Process -FilePath $filename",
+      "# https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-windows?view=powershell-7#administrative-install-from-the-command-line",
+      "# https://docs.microsoft.com/en-us/windows/win32/msi/command-line-options",
+      "# msiexec.exe /package $filename /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1"
+    ]
+  },
+  "path": [
+    "$env:ProgramFiles\\PowerShell\\7"
+  ]
 }

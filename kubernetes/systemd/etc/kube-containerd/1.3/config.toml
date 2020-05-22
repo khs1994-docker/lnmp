@@ -112,7 +112,21 @@ oom_score = 0
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
           # endpoint = ["https://registry-1.docker.io"]
+          # endpoint = ["https://ccr.ccs.tencentyun.com"]
+          # mirror.baidubce.com
           endpoint = ["https://hub-mirror.c.163.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."baidu.mirror"]
+          endpoint = ["https://hub.baidubce.com","https://registry.baidubce.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."tencent.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."aliyun.mirror"]
+          endpoint = ["https://registry.cn-hangzhou.aliyuncs.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com","https://mirror.baidubce.com","https://hub-mirror.c.163.com"]
         # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.io"]
         #  endpoint = ["https://gcr.mirror"]
         # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
@@ -150,7 +164,7 @@ oom_score = 0
     runtime = "runc"
     runtime_root = ""
     # do not use a shim when starting containers, saves on memory but
-	  # live restore is not supported
+    # live restore is not supported
     no_shim = false
     # display shim logs in the containerd daemon's log output
     shim_debug = false

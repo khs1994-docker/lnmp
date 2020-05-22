@@ -55,8 +55,10 @@ kubeAPIBurst: 2000
 serializeImagePulls: false
 evictionHard:
   memory.available:  "100Mi"
+  # 保存 kubelet 的卷和守护进程日志等。
   nodefs.available:  "10%"
   nodefs.inodesFree: "5%"
+  # 在容器运行时，用于保存镜像以及可写入层。
   imagefs.available: "15%"
 evictionMinimumReclaim:
   imagefs.available: "15%"
@@ -70,6 +72,7 @@ kubeReserved: {}
 systemReservedCgroup: ""
 kubeReservedCgroup: ""
 enforceNodeAllocatable: ["pods"]
+# volumePluginDir: /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 featureGates:
   # AllAlpha: true
   # BoundServiceAccountTokenVolume: false

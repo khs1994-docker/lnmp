@@ -240,6 +240,8 @@ _gcr_io(){
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 
+      # -v $PWD/config/registry/nginx.htpasswd:/etc/docker/registry/auth/nginx.htpasswd \
+
       if [ "$quit" = 1 ];then
         print_error "Please stop soft who bind 443 port first"
         exit 1
@@ -289,7 +291,7 @@ _satis(){
   fi
 
   docker run --rm -i ${tty} --mount type=bind,src=${APP_ROOT}/satis,target=/build \
-      --mount type=volume,src=lnmp_composer_cache-data,target=/composer composer/satis
+      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
 }
 
 _get_compose_options(){
@@ -599,9 +601,9 @@ update(){
 
   set_git_remote_origin_url
 
-  for force in "$@"
+  for item in "$@"
   do
-    if [ "$force" = '-f' ];then force='true'; fi
+    if [ "$item" = '-f' ];then force='true'; fi
   done
 
   GIT_STATUS=`git status -s --ignore-submodules`
@@ -1848,7 +1850,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
   checkout )
     if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit 1; fi
 
-    git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} || true
+    git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} --depth=2 || true
     git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
     update
     ;;

@@ -1,11 +1,28 @@
 {
   "name": "go",
   "description": "Go is an open source programming language that makes it easy to build simple, reliable, and efficient software",
-  "version": "1.14.2",
-  "pre-version": "1.14.2",
+  "version": "1.14.3",
+  "pre-version": "1.14.3",
   "homepage": "https://golang.google.cn/",
   "bug": "https://github.com/golang/go/issues",
   "github": "golang/go",
   "releases": "https://github.com/golang/go/releases",
-  "url": "https://dl.google.com/go/go${VERSION}.windows-amd64.zip"
+  "url": "https://dl.google.com/go/go${VERSION}.windows-amd64.zip",
+  "command": "go",
+  "scripts": {
+    "version": "($(go version) -split ' ')[2].trim('go')",
+    "test": "go version",
+    "install": [
+      "_cleanup go",
+      "_unzip $filename $unzipDesc",
+      "_cleanup C:\\go",
+      "Copy-item -r -force go/go C:\\",
+      "_cleanup go"
+    ],
+    "uninstall": "_cleanup C:\\go"
+  },
+  "path": [
+    "C:\\go\\bin",
+    "$HOME\\go\\bin"
+  ]
 }

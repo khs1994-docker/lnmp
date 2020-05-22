@@ -1,12 +1,18 @@
 {
   "name": "docker",
   "description": "Docker: the open-source application container engine",
-  "version": "stable",
-  "pre-version": "edge",
+  "version": "19.03.8",
+  "pre-version": "19.03.8",
   "homepage": "https://www.docker.com/",
   "bug": "https://github.com/docker/for-win/issues",
   "github": "docker/docker-ce",
   "releases": "https://github.com/docker/docker-ce/releases",
   "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe",
-  "pre-url": "https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe"
+  "pre-url": "https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe",
+  "command": "docker",
+  "scripts": {
+    "version": "(docker --version).split(' ')[2].trim(',')",
+    "install": "Start-Process -FilePath $filename -wait",
+    "test": "docker --version"
+  }
 }

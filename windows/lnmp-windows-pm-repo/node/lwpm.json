@@ -1,12 +1,33 @@
 {
   "name": "node",
   "description": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine",
-  "version": "12.16.2",
-  "pre-version": "14.0.0",
+  "version": "12.16.3",
+  "pre-version": "14.3.0",
   "homepage": "https://nodejs.org/en/",
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",
   "releases": "https://nodejs.org/en/download/",
   "url": "https://nodejs.org/dist/v${VERSION}/node-v${VERSION}-win-x64.zip",
-  "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-win-x64.zip"
+  "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-win-x64.zip",
+  "command": "node.exe",
+  "scripts": {
+    "version": "(node.exe --version).trim('v')",
+    "install": [
+      "_cleanup node",
+      "_unzip $filename $unzipDesc",
+      "_mkdir \"$env:ProgramData\\node\"",
+      "Copy-item -r -force \"node\\node-v${VERSION}-win-x64\\*\" \"$env:ProgramData\\node\"",
+      "_cleanup node"
+    ],
+    "postinstall": [
+      "[environment]::SetEnvironmentvariable('NODE_PATH', \"%ProgramData%\\npm\\node_modules\", 'User');"
+    ],
+    "uninstall": "_cleanup $env:ProgramData\\node",
+    "pruneuninstall": "_cleanup $env:ProgramData\\npm",
+    "test": "node.exe --version"
+  },
+  "path": [
+    "$env:ProgramData\\node",
+    "$env:ProgramData\\npm"
+  ]
 }

@@ -5,7 +5,7 @@ version: "3.7"
 services:
   workspace:
     &workspace
-    image: khs1994/php:7.4.5-cli-alpine
+    image: khs1994/php:7.4.6-cli-alpine
     networks:
       - backend
     volumes:
@@ -16,7 +16,7 @@ services:
       # fix me 将依赖挂载到数据卷
       - vendor:/app/demo/vendor
       - type: volume
-        source: composer_cache-data
+        source: composer-cache-data
         target: /tmp/cache
       - ./.devcontainer/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini
       - ./.devcontainer/php-log:/var/log/php
@@ -33,7 +33,7 @@ services:
   composer:
     << : *workspace
     restart: "no"
-    image: "khs1994/php:7.4.5-composer-alpine"
+    image: "khs1994/php:7.4.6-composer-alpine"
     # fix me
     working_dir: /app/demo
     command: [] # install | update
@@ -44,9 +44,9 @@ networks:
     name: lnmp_backend
 
 volumes:
-  composer_cache-data:
+  composer-cache-data:
     external: true
-    name: lnmp_composer_cache-data
+    name: lnmp_composer-cache-data
   vscode-server:
   phpls-cache:
   vendor:

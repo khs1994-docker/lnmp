@@ -1,0 +1,8 @@
+#!/bin/bash
+
+docker build \
+--build-arg DEST_DOCKER_REGISTRY \
+--build-arg DEST_DOCKER_USERNAME \
+--build-arg DEST_DOCKER_PASSWORD \
+--build-arg DEST_NAMESPACE \
+-f $DOCKERFILE_PATH -t $IMAGE_NAME .

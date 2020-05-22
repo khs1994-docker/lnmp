@@ -7,16 +7,16 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 ENV NGINX_VERSION 1.17.3
 
 RUN $url = ('http://nginx.org/download/nginx-{0}.zip' -f $env:NGINX_VERSION); \
-	      Write-Host ('Downloading {0} ...' -f $url); \
-	      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-	      Invoke-WebRequest -Uri $url -OutFile 'nginx.zip'; \
-       	\
+        Write-Host ('Downloading {0} ...' -f $url); \
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+        Invoke-WebRequest -Uri $url -OutFile 'nginx.zip'; \
+         \
         Write-Host 'Installing ...'; \
         Expand-Archive -Path nginx.zip -DestinationPath C:/ -Force; \
         Move-Item C:/nginx-${env:NGINX_VERSION} C:/nginx; \
         \
         Write-Host 'Updating PATH ...'; \
-	      $env:PATH = 'C:\nginx;' + $env:PATH; \
+        $env:PATH = 'C:\nginx;' + $env:PATH; \
         [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine); \
         \
         Write-Host 'Verifying install ...'; \

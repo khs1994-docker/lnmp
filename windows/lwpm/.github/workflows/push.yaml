@@ -1,0 +1,29 @@
+name: push
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  push:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 2
+    - name: diff
+      shell: bash
+      run: |
+        git reset --soft HEAD^
+        git status -s | awk '{print $2}' | grep softs
+    - name: cp_diff
+      run: |
+        mkdir $HOME/lnmp/vendor/lwpm-dev/
+        cp -r $soft $HOME/lnmp/vendor/lwpm-dev/
+    - run: |
+        $soft =
+        $HOME/lnmp/windows/lnmp-windows-pm.ps1 push lwpm/$soft
+      shell: pwsh
+      env:
+        LWPM_DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+        LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}

@@ -25,9 +25,9 @@ services:
   # php7:
   #   &php7
   #   # ! change php7 default image
-  #   image: username/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+  #   image: username/php:${LNMP_PHP_VERSION:-7.4.6}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.5}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.6}-fpm-alpine
   #   # ! open more port
   #   ports:
   #     - "9000"
@@ -58,7 +58,7 @@ services:
 
   swoole:
     << : *default-common
-    image: khs1994/php:7.4.5-swoole-alpine
+    image: khs1994/php:7.4.6-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php
