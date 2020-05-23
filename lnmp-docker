@@ -614,7 +614,7 @@ update(){
      print_error "Please commit then update"
      exit 1
   fi
-  git fetch --depth=1 origin
+  git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
   print_info "Branch is ${BRANCH}"
   git reset --hard origin/${BRANCH}
   # print_info "Update Git Submodule"
@@ -1862,8 +1862,9 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
   checkout )
     if [ -z "${DOCKER_VERSION_YY}" ];then print_error "check Docker version error"; exit 1; fi
 
-    git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} --depth=2 || true
+    git fetch origin ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}:${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} --depth=2
     git checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
+    BRANCH=${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}
     update
     ;;
 

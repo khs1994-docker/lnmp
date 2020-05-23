@@ -462,13 +462,13 @@ Function _update(){
   }
 
   # git remote rm origin
-  if($(git status).split("")[-1] -eq 'clean' -eq $False){
+  if(!($(git status).split(" ")[-1] -eq 'clean')){
     printError "Somefile changed, please commit or stash first"
     exit 1
   }
 
-  git fetch --depth=1 origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
+  git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
   git reset --hard origin/${BRANCH}
   # git submodule update --init --recursive
 }
