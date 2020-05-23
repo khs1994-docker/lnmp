@@ -34,6 +34,11 @@ Function _getLatestVersion(){
 }
 
 Function _install($VERSION=0,$isPre=0){
+  if(!$IsWindows){
+    $url=$url.replace('win32-x64-user',$env:lwpm_os)
+    $pre_url=$pre_url.replace('win32-x64-user',$env:lwpm_os)
+  }
+
   if(!($VERSION)){
     $VERSION,$url=_getVersion $url
   }
@@ -41,8 +46,14 @@ Function _install($VERSION=0,$isPre=0){
     $VERSION,$url=_getVersion $pre_url
   }
 
+  write-host "==> Download from $url" -ForegroundColor Blue
+
   $filename="VSCodeUserSetup-x64-${VERSION}.exe"
   $unzipDesc="vscode"
+
+  if(!$IsWindows){
+    $filename="VSCode-${env:lwpm_os}.zip"
+  }
 
   if($(_command code)){
     $CURRENT_VERSION=(code --version)[0]
@@ -67,8 +78,16 @@ Function _install($VERSION=0,$isPre=0){
   # _unzip $filename $unzipDesc
   # 安装 Fix me
   # Copy-item "" ""
+  if($IsWindows){
+    Start-Process -FilePath $filename -wait
+  }else{
+    unzip $filename -d /Applications/
 
-  Start-Process -FilePath $filename -wait
+    "==> Checking ${name} ${VERSION} install ..."
+    & "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --version | Out-Host
+
+    return
+  }
 
   "==> Checking ${name} ${VERSION} install ..."
   # 验证 Fix me

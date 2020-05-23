@@ -267,10 +267,18 @@ Function __install($softs) {
       continue
     }
 
-    $env:lwpm_architecture = "amd64"
-    $env:LWPM_UNAME_M = "x86_64"
-    $env:lwpm_os = "windows"
-    $env:LWPM_UNAME_S = "Windows"
+    if ($IsWindows) {
+      $env:lwpm_architecture = "amd64"
+      $env:LWPM_UNAME_M = "x86_64"
+      $env:lwpm_os = "windows"
+      $env:LWPM_UNAME_S = "Windows"
+    }
+    else {
+      $env:lwpm_architecture = "amd64"
+      $env:LWPM_UNAME_M = uname -m
+      $env:lwpm_os = "darwin"
+      $env:LWPM_UNAME_S = uname -s
+    }
 
     if ($version) {
       _install $version $preVersion $force
