@@ -2,24 +2,55 @@
 
 version: "3.7"
 
+x-common:
+  &common
+  # fix me
+  working_dir: /app/demo
+  restart: "no"
+
 services:
   workspace:
     &workspace
-    image: khs1994/php:7.4.6-cli-alpine
+    image: khs1994/php:7.4.6-composer-alpine
     networks:
       - backend
     volumes:
       - vscode-server:/root/.vscode-server
-      - phpls-cache:/root/.phpls
+      - vscode-server-insiders:/root/.vscode-server-insiders
+      - vscode-phpls-cache:/root/.phpls
       # fix me
       - ./:/app/demo
       # fix me 将依赖挂载到数据卷
       - vendor:/app/demo/vendor
+
+      # fix me
+      # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项
+      # - /app/demo:/app/demo
+
+      # composer
       - type: volume
         source: composer-cache-data
         target: /tmp/cache
-      - ./.devcontainer/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini
+      - type: bind
+        source: ./.devcontainer/composer.config.json
+        target: /tmp/config.json
+      # - type: bind
+      #   source: ./.devcontainer/composer.auth.json
+      #   target: /tmp/auth.json
+
+      # php
+      - type: bind
+        source: ./.devcontainer/docker-php.ini
+        target: /usr/local/etc/php/conf.d/docker-php.ini
       - ./.devcontainer/php-log:/var/log/php
+
+      # node
+      # 如果你修改了 .npmrc 中的路径，请同步更改这里的数据卷映射关系
+      - type: bind
+        source: ./.devcontainer/.npmrc
+        target: /usr/local/etc/npmrc
+      - npm-global-data:/tmp/node/npm
+      - npm-cache-data:/tmp/node/.npm
     # 如果在 PhpStorm 中使用，无需开放端口，必须注释掉 `ports` 项
     # vsCode 运行在容器中，故必须开放 9001 供 xdebug 连接
     ports:
@@ -32,11 +63,16 @@ services:
 
   composer:
     << : *workspace
-    restart: "no"
+    << : *common
     image: "khs1994/php:7.4.6-composer-alpine"
-    # fix me
-    working_dir: /app/demo
     command: [] # install | update
+
+  npm:
+    << : *workspace
+    << : *common
+    image: node:14.3.0-alpine
+    entrypoint: npm
+    command: [] # install | "run","dev" |
 
 networks:
   backend:
@@ -48,8 +84,13 @@ volumes:
     external: true
     name: lnmp_composer-cache-data
   vscode-server:
-  phpls-cache:
+  vscode-server-insiders:
+  vscode-phpls-cache:
   vendor:
     # 或者复用其他数据卷
     # external: true
     # name: lnmp_laravel_vendor
+  npm-global-data:
+  npm-cache-data:
+    external: true
+    name: lnmp_npm-cache-data

@@ -51,7 +51,7 @@ sync:
     beta: "docker://lnmp_mutagen-wsl2_1/app"
     permissions:
       defaultFileMode: 0666
-      defaultDirectoryMode: 765
+      defaultDirectoryMode: 777
       # defaultOwner: www-data
       # defaultGroup: id:33
 
@@ -63,3 +63,9 @@ sync:
 # $ mutagen project start
 # $ mutagen project list
 # $ mutagen project terminate
+
+beforeCreate:
+  - pwsh lnmp-docker.ps1 up mutagen-wsl2
+
+afterTerminate:
+  - pwsh lnmp-docker.ps1 stop mutagen-wsl2

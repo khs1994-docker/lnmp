@@ -329,6 +329,8 @@ Commands:
   services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
+  vscode-remote        Init vsCode remote development env
+  vscode-remote-run    Run command on vsCode remote workspace
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -460,13 +462,13 @@ Function _update(){
   }
 
   # git remote rm origin
-  if($(git status).split("")[-1] -eq 'clean' -eq $False){
+  if(!($(git status).split(" ")[-1] -eq 'clean')){
     printError "Somefile changed, please commit or stash first"
     exit 1
   }
 
-  git fetch --depth=1 origin
   ${BRANCH}=(git rev-parse --abbrev-ref HEAD)
+  git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
   git reset --hard origin/${BRANCH}
   # git submodule update --init --recursive
 }
@@ -764,7 +766,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
     printInfo "Use LNMP CLI in $PWD"
     cd $env:LNMP_PATH
     if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-      printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+      printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2, project in windows sync to WSL2 by mutagen"
     }
     else {
       # cd $PSScriptRoot
@@ -778,7 +780,7 @@ if (!(Test-Path cli/khs1994-robot.enc )){
 }else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2, project in windows sync to WSL2 by mutagen"
   }
   else {
     cd $APP_ROOT
@@ -1136,6 +1138,15 @@ switch -regex ($command){
     }
 
     php7-cli {
+      if ($other){
+        _bash_cli php7 $other
+        exit
+      }
+
+      _bash_cli php7 bash
+    }
+
+    php-cli {
       if ($other){
         _bash_cli php7 $other
         exit
@@ -1553,6 +1564,18 @@ Example: ./lnmp-docker composer /app/demo install
       printInfo "Download docker-compose $LNMP_DOCKER_COMPOSE_VERSION to $DIST ..."
 
       start-process "curl.exe" -ArgumentList "-L","https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe","-o","$DIST" -Verb Runas -wait -WindowStyle Hidden
+    }
+
+    "^vscode-remote$" {
+      cd $EXEC_CMD_DIR
+
+      Copy-Item -r $PSScriptRoot/vscode-remote/*
+    }
+
+    "^vscode-remote-run$" {
+      cd $EXEC_CMD_DIR
+
+      docker-compose -f docker-workspace.yml run --rm $other
     }
 
     default {
