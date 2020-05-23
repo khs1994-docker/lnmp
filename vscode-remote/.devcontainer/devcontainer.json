@@ -24,5 +24,19 @@
   "settings": {
     // If you are using an Alpine-based image, change this to /bin/ash
     // "terminal.integrated.shell.linux": "/bin/bash"
-  }
+  },
+  // "forwardPorts": [
+
+  // ],
+  // "postCreateCommand": [
+
+  // ],
+  // "initializeCommand": [
+
+  // ],
+  // "remoteEnv": {
+
+  // },
+  // "remoteUser": "",
+  // "devPort": 0
 }

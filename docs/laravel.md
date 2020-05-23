@@ -7,7 +7,7 @@
 ```bash
 $ cd app
 
-$ lnmp-laravel new laravel
+$ lnmp-laravel-by-composer new laravel
 ```
 
 具体请查看 [这里](command.md)

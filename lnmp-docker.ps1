@@ -329,6 +329,8 @@ Commands:
   services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
+  vscode-remote        Init vsCode remote development env
+  vscode-remote-run    Run command on vsCode remote workspace
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -1562,6 +1564,18 @@ Example: ./lnmp-docker composer /app/demo install
       printInfo "Download docker-compose $LNMP_DOCKER_COMPOSE_VERSION to $DIST ..."
 
       start-process "curl.exe" -ArgumentList "-L","https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe","-o","$DIST" -Verb Runas -wait -WindowStyle Hidden
+    }
+
+    "^vscode-remote$" {
+      cd $EXEC_CMD_DIR
+
+      Copy-Item -r $PSScriptRoot/vscode-remote/*
+    }
+
+    "^vscode-remote-run$" {
+      cd $EXEC_CMD_DIR
+
+      docker-compose -f docker-workspace.yml run --rm $other
     }
 
     default {

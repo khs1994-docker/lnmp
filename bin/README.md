@@ -77,7 +77,7 @@ $ debug=true lnmp-composer
 ```bash
 $ cd app
 
-$ lnmp-laravel new my_laravel_app
+$ lnmp-laravel-by-composer new my_laravel_app
 ```
 
 #### `Laravel` 项目预览
