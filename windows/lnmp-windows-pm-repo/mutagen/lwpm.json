@@ -1,0 +1,12 @@
+{
+  "command": "mutagen",
+  "name": "mutagen",
+  "scripts": {
+    "install": "_unzip $filename C:\\bin",
+    "test": "printInfo mutagen $(mutagen version) install success",
+    "uninstall": "_cleanup C:\\bin\\mutagen.exe",
+    "version": "mutagen version"
+  },
+  "url": "https://github.com/mutagen-io/mutagen/releases/download/v${VERSION}/mutagen_windows_amd64_v${VERSION}.zip",
+  "version": "0.11.4"
+}

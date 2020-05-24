@@ -38,9 +38,10 @@ Function _iex($str) {
     return;
   }
 
-  try{
-  iex $str
-  }catch{
+  try {
+    iex $str
+  }
+  catch {
     printError $_.Exception
   }
 }
@@ -71,6 +72,18 @@ Function _getUrl($url, $url_mirror, $VERSION) {
   }
 
   return $download_url
+}
+
+Function Get-HashFromUrl($url) {
+  try {
+    Invoke-WebRequest $url -OutFile Temp:/hash-$name
+
+    return (Get-Content Temp:/hash-$name | Select-String $filename).Line.split(' ')[0]
+  }
+  catch {
+    printInfo get hash from url failed
+    return;
+  }
 }
 
 Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
@@ -167,6 +180,23 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
       }
     }
 
+    if ($lwpm.'hash-url') {
+      if ($hash_url = $lwpm.'hash-url'.sha256) {
+        $hashType = 'sha256'
+        $hash = Get-HashFromUrl $(iex "echo $hash_url")
+      }
+
+      if ($hash_url = $lwpm.'hash-url'.sha384) {
+        $hashType = 'sha384'
+        $hash = Get-HashFromUrl $(iex "echo $hash_url")
+      }
+
+      if ($hash_url = $lwpm.'hash-url'.sha512) {
+        $hashType = 'sha512'
+        $hash = Get-HashFromUrl $(iex "echo $hash_url")
+      }
+    }
+
     _downloader `
       $url `
       $filename `
@@ -175,7 +205,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
       -HashType $hashType `
       -Hash $hash
 
-    if($lwpm.scripts.hash){
+    if ($lwpm.scripts.hash) {
       foreach ($item in $lwpm.scripts.hash) {
         _iex $item
       }

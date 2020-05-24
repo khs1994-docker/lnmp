@@ -73,6 +73,25 @@
       "description": "soft pre version download url",
       "type": "string"
     },
+    "hash-url": {
+      "type": "object",
+      "description": "hash url",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "description": "sha256 url"
+        },
+        "sha384": {
+          "type": "string",
+          "description": "sha384 url"
+        },
+        "sha512": {
+          "type": "string",
+          "description": "sha512 url"
+        }
+      },
+      "additionalProperties": false
+    },
     "pre-url-mirror": {
       "description": "soft pre version download url mirror",
       "type": "string"

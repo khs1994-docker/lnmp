@@ -33,6 +33,7 @@ $ istioctl manifest generate --set profile=demo \
 **部署**
 
 ```bash
+$ kubectl create ns istio-system
 $ kubectl apply -f istio.yaml
 ```
 
@@ -41,6 +42,7 @@ $ kubectl apply -f istio.yaml
 当使用 kubectl apply 来部署应用时，如果 pod 启动在标有 `istio-injection=enabled` 的命名空间中，那么，Istio sidecar 注入器将自动注入 Envoy 容器到应用的 pod 中：
 
 ```bash
+$ kubectl create ns istio-test
 $ kubectl label namespace istio-test istio-injection=enabled
 ```
 

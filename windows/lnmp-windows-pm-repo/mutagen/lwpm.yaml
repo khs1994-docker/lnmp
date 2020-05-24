@@ -1,0 +1,9 @@
+name: mutagen
+version: 0.11.4
+url: https://github.com/mutagen-io/mutagen/releases/download/v${VERSION}/mutagen_windows_amd64_v${VERSION}.zip
+scripts:
+  install: _unzip $filename C:\bin
+  uninstall: _cleanup C:\bin\mutagen.exe
+  test: printInfo mutagen $(mutagen version) install success
+  version: mutagen version
+command: mutagen
