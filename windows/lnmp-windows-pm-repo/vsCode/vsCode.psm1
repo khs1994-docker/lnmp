@@ -34,9 +34,15 @@ Function _getLatestVersion(){
 }
 
 Function _install($VERSION=0,$isPre=0){
-  if(!$IsWindows){
+  if($IsMacOS){
     $url=$url.replace('win32-x64-user',$env:lwpm_os)
     $pre_url=$pre_url.replace('win32-x64-user',$env:lwpm_os)
+  }
+
+  if($IsLinux){
+    printInfo Please download from "[ https://code.visualstudio.com/#alt-downloads ]"
+
+    return
   }
 
   if(!($VERSION)){

@@ -18,8 +18,7 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 
 RUN apk add --no-cache curl
 
-COPY docker-image-sync.ps1 \
-     pwsh-alias.txt        /root/lnmp/windows/
+COPY docker-image-sync.ps1 /root/lnmp/windows/
 COPY sdk                   /root/lnmp/windows/sdk
 COPY powershell_system     /root/lnmp/windows/powershell_system
 

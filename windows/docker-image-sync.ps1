@@ -1,11 +1,5 @@
 #!/usr/bin/env pwsh
 
-if ($IsWindows) {
-}
-else {
-  Import-Alias -Force $PSScriptRoot/pwsh-alias.txt
-}
-
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\exists.psm1

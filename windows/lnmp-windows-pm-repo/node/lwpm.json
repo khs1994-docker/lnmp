@@ -7,27 +7,32 @@
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",
   "releases": "https://nodejs.org/en/download/",
-  "url": "https://nodejs.org/dist/v${VERSION}/node-v${VERSION}-win-x64.zip",
-  "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-win-x64.zip",
-  "command": "node.exe",
+  "url": "https://nodejs.org/dist/v${VERSION}/node-v${VERSION}-$(if($IsWindows){echo win}else{echo ${env:lwpm_os}})-x64.$(if($IsWindows){echo zip}else{echo tar.gz})",
+  "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-$(if($IsWindows){echo win}else{echo ${env:lwpm_os}})-x64.$(if($IsWindows){echo zip}else{echo tar.gz})",
+  "command": "node",
   "scripts": {
-    "version": "(node.exe --version).trim('v')",
+    "version": "(node --version).trim('v')",
     "install": [
       "_cleanup node",
-      "_unzip $filename $unzipDesc",
-      "_mkdir \"$env:ProgramData\\node\"",
-      "Copy-item -r -force \"node\\node-v${VERSION}-win-x64\\*\" \"$env:ProgramData\\node\"",
-      "_cleanup node"
+      "if($IsWindows){_unzip $filename $unzipDesc}",
+      "if($IsWindows){_mkdir \"$env:ProgramData\\node\"}",
+      "if($IsWindows){Copy-item -r -force \"node\\node-v${VERSION}-win-x64\\*\" \"$env:ProgramData\\node\"}",
+      "if(!$IsWindows){sudo mkdir -p /usr/local/node ; sudo tar -zxvf $filename -C /usr/local ; sudo cp -r -f /usr/local/node-v${VERSION}-${env:lwpm_os}-x64/. /usr/local/node/ ; sudo rm -rf /usr/local/node-v${VERSION}-${env:lwpm_os}-x64; sudo ln -sf /usr/local/node/bin/* /usr/local/bin/ ; npm config set prefix ~/.npm }",
+      "_cleanup node",
+      "if(!$ISWindows){printInfo Please add [ $HOME/.npm/bin ] to PATH}"
     ],
     "postinstall": [
-      "[environment]::SetEnvironmentvariable('NODE_PATH', \"%ProgramData%\\npm\\node_modules\", 'User');"
+      "if($IsWindows){[environment]::SetEnvironmentvariable('NODE_PATH', \"%ProgramData%\\npm\\node_modules\", 'User')}"
     ],
     "uninstall": "_cleanup $env:ProgramData\\node",
     "pruneuninstall": "_cleanup $env:ProgramData\\npm",
-    "test": "printInfo node.js $(node.exe --version) install success"
+    "test": "printInfo node.js $(node --version) install success"
   },
   "path": [
     "$env:ProgramData\\node",
     "$env:ProgramData\\npm"
-  ]
+  ],
+  "hash-url": {
+    "sha256": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v14.3.0/SHASUMS256.txt"
+  }
 }

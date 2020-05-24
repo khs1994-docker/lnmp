@@ -7,17 +7,17 @@
   "bug": "https://github.com/golang/go/issues",
   "github": "golang/go",
   "releases": "https://github.com/golang/go/releases",
-  "url": "https://dl.google.com/go/go${VERSION}.windows-amd64.zip",
+  "url": "https://dl.google.com/go/go${VERSION}.${env:lwpm_os}-${env:lwpm_architecture}.$(if($IsWindows){echo zip}else{echo tar.gz})",
   "command": "go",
   "scripts": {
     "version": "($(go version) -split ' ')[2].trim('go')",
     "test": "printInfo $(go version) install success",
     "install": [
       "_cleanup go",
-      "_unzip $filename $unzipDesc",
-      "_cleanup C:\\go",
-      "Copy-item -r -force go/go C:\\",
-      "_cleanup go"
+      "if($IsWindows){_unzip $filename $unzipDesc}else{sudo mkdir -p /usr/local ; sudo tar -zxvf $filename -C /usr/local/ ; sudo ln -sf /usr/local/go/bin/* /usr/local/bin/}",
+      "if($IsWindows){_cleanup C:\\go}",
+      "if($IsWindows){Copy-item -r -force go/go C:\\}",
+      "if($IsWindows){_cleanup go}"
     ],
     "uninstall": "_cleanup C:\\go"
   },

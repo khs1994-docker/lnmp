@@ -59,9 +59,6 @@ if ($env:CI -or $CI) {
 if ($IsWindows) {
   . "$PSScriptRoot/common.ps1"
 }
-else {
-  Import-Alias -Force $PSScriptRoot/pwsh-alias.txt
-}
 
 $EXEC_CMD_DIR = $PWD
 

@@ -1,13 +1,14 @@
-Function _getHttpCode($url){
-  if(!$url){
+Function _getHttpCode($url) {
+  if (!$url) {
     return "404"
   }
 
-  $header=curl -sI $url
-
-  if(!$header){
-    return "404"
+  try {
+    (Invoke-WebRequest -Method HEAD $url).StatusCode | out-null
+  }
+  catch {
+    return '404'
   }
 
-  return $header.split(" ")[1].toString()
+  return '200'
 }
