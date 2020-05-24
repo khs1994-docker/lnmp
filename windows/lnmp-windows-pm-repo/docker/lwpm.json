@@ -13,6 +13,6 @@
   "scripts": {
     "version": "(docker --version).split(' ')[2].trim(',')",
     "install": "Start-Process -FilePath $filename -wait",
-    "test": "docker --version"
+    "test": "printInfo $(docker --version) install success"
   }
 }

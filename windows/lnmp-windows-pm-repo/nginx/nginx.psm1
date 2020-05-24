@@ -61,7 +61,7 @@ Function _install($VERSION=0,$isPre=0){
 
   if($(_command nginx)){
     nginx -v > $env:TEMP/.nginx.version 2>&1
-    $CURRENT_VERSION=$(cat $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]
+    $CURRENT_VERSION=$(Get-Content $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]
     rm -r $env:TEMP/.nginx.version
     if ($CURRENT_VERSION -eq $VERSION){
         "==> $name $VERSION already install"

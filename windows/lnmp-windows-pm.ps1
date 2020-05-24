@@ -121,10 +121,10 @@ _mkdir $home\Downloads\lnmp-docker-cache
 
 _mkdir $home\lnmp\windows\logs
 
-cd $home\Downloads\lnmp-docker-cache
+Set-Location $home\Downloads\lnmp-docker-cache
 
 function _exit() {
-  cd $EXEC_CMD_DIR
+  Set-Location $EXEC_CMD_DIR
 
   exit
 }
@@ -245,7 +245,7 @@ Function __install($softs) {
 
     if ($env:LWPM_DIST_ONLY -eq "true") {
       $pkg_root = pkg_root $soft
-      $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
+      $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
       foreach ($platform in $platforms) {
         $env:lwpm_architecture = $platform.architecture
@@ -276,8 +276,9 @@ Function __install($softs) {
     else {
       $env:lwpm_architecture = "amd64"
       $env:LWPM_UNAME_M = uname -m
-      $env:lwpm_os = "darwin"
+
       $env:LWPM_UNAME_S = uname -s
+      $env:lwpm_os = $env:LWPM_UNAME_S.ToLower()
     }
 
     if ($version) {
@@ -348,7 +349,7 @@ Function _getlwpmConfig($image, $ref) {
 
   $dest = Get-Blob $token $image $config_digest $registry
 
-  return cat $dest
+  return Get-Content $dest
 }
 
 Function _add($softs) {
@@ -438,7 +439,7 @@ Function _add($softs) {
 
 Function __list() {
   ""
-  ls "${PSScriptRoot}\lnmp-windows-pm-repo" -Name -Directory
+  Get-ChildItem "${PSScriptRoot}\lnmp-windows-pm-repo" -Name -Directory
   ""
   _exit
 }
@@ -470,7 +471,7 @@ function __init($soft, $custom_script = $false) {
 
   Write-Host "==> Please edit $SOFT_ROOT files" -ForegroundColor Green
 
-  cd $EXEC_CMD_DIR
+  Set-Location $EXEC_CMD_DIR
 }
 
 function manifest($soft) {
@@ -564,7 +565,7 @@ function __bug($soft) {
 }
 
 function _tolf($file) {
-  (cat $file -raw) -replace "`r`n", "`n" | Set-Content -NoNewline $file
+  (Get-Content $file -raw) -replace "`r`n", "`n" | Set-Content -NoNewline $file
 }
 
 function _push($opt) {
@@ -603,7 +604,7 @@ function _push($opt) {
 
   Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
 
-  $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
+  $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
   if (!($platforms)) {
     $platforms = ConvertFrom-Json -InputObject @"
@@ -627,31 +628,31 @@ function _push($opt) {
     $lwpm_temp = "$PSScriptRoot/../vendor/lwpm-temp/${env:lwpm_os}-${env:lwpm_architecture}/$soft"
     $lwpm_dist_temp = "$PSScriptRoot/../vendor/lwpm-temp/dist/$soft/${env:lwpm_os}-${env:lwpm_architecture}"
 
-    try { rm -r -force $lwpm_temp }catch { }
-    try { rm -r -force $lwpm_dist_temp }catch { }
+    try { Remove-Item -r -force $lwpm_temp }catch { }
+    try { Remove-Item -r -force $lwpm_dist_temp }catch { }
 
     _mkdir $lwpm_temp | out-null
     _mkdir $lwpm_dist_temp | out-null
 
-    try { cp $pkg_root\README.md $lwpm_temp }catch { }
+    try { Copy-Item $pkg_root\README.md $lwpm_temp }catch { }
 
     if (Test-Path $pkg_root\$soft.psm1) {
-      cp $pkg_root\${soft}.psm1 $lwpm_temp
+      Copy-Item $pkg_root\${soft}.psm1 $lwpm_temp
     }
 
     $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
-    cd $lwpm_temp\..\
+    Set-Location $lwpm_temp\..\
     tar -zcvf script.tar.gz $soft
-    mv script.tar.gz $script_tar_file
+    Move-Item script.tar.gz $script_tar_file
 
-    ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
+    ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw) | `
       ConvertTo-Json -Depth 5 -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
 
     $layers_file = $()
 
     if (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz) {
       write-host "==> found platform .tar.gz file, use it" -ForegroundColor Blue
-      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+      Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
 
       foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
         write-host "==> .tar.gz file is $item" -ForegroundColor Blue
@@ -662,18 +663,18 @@ function _push($opt) {
     }
     elseif (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}) {
       write-host "==> found platform file" -ForegroundColor Blue
-      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+      Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
     }
     else {
       write-host "==> NO platform file" -ForegroundColor Blue
-      try { cp -r $pkg_root\dist   $lwpm_temp }catch { }
+      try { Copy-Item -r $pkg_root\dist   $lwpm_temp }catch { }
     }
 
     if ($layers_file.Count -eq 0) {
       $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
-      cd $lwpm_temp/../
+      Set-Location $lwpm_temp/../
       tar -zcvf dist.tar.gz $soft/dist
-      mv dist.tar.gz $dist_tar_file
+      Move-Item dist.tar.gz $dist_tar_file
 
       $layers_file += , $dist_tar_file
     }
@@ -760,7 +761,7 @@ function _push($opt) {
   $manifest_list_json_path = "$lwpm_dist_temp/manifest_list.json"
   write-output $data | Set-Content -NoNewline $manifest_list_json_path
 
-  Write-Host $(cat $manifest_list_json_path -raw)
+  Write-Host $(Get-Content $manifest_list_json_path -raw)
 
   # push manifest list
   $token = getDockerRegistryToken $opt -registry $registry
@@ -814,7 +815,7 @@ function _toJson($soft) {
     return
   }
 
-  # ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) `
+  # ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (Get-Content $pkg_root\$yaml_file -raw) `
   #   | ConvertTo-Yaml -JsonCompatible)) `
   # | Set-Content $pkg_root\lwpm.json
 
@@ -961,4 +962,4 @@ switch ($command) {
   }
 }
 
-cd $EXEC_CMD_DIR
+Set-Location $EXEC_CMD_DIR

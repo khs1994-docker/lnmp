@@ -11,7 +11,7 @@
   "command": "github-release",
   "scripts": {
     "version": "(github-release --version).split(' ')[1].trim('v')",
-    "test": "github-release --version",
+    "test": "printInfo $(github-release --version) install success",
     "install": [
       "_cleanup github-release",
       "_unzip $filename $unzipDesc",

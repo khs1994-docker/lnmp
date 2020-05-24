@@ -94,3 +94,6 @@ jobs:
     - name: List docker image rootfs
       run : |
         ls -la ~/.khs1994-docker-lnmp/dockerhub
+    - name: lpm-on-linux
+      run: |
+        ./lpm install coredns

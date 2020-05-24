@@ -12,7 +12,7 @@
   "command": "helm",
   "scripts": {
     "version": "(ConvertFrom-Json -InputObject (helm version).trim('version.BuildInfo')).Version.trim('v')",
-    "test": "helm version",
+    "test": "printInfo $(helm version) install success",
     "install": [
       "_cleanup helm",
       "_unzip $filename $unzipDesc",

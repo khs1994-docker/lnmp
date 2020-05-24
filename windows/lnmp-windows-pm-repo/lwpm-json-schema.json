@@ -206,6 +206,9 @@
           "type": [
             "string",
             "array"
+          ],
+          "default": [
+            "printInfo $(command --version) install success"
           ]
         },
         "posttest": {
@@ -261,6 +264,13 @@
     "download-filename": {
       "type": "string",
       "description": "download filename"
+    },
+    "$comment": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "description": "Comments from this package"
     }
   },
   "required": [

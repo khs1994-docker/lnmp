@@ -24,7 +24,7 @@
     ],
     "uninstall": "_cleanup $env:ProgramData\\node",
     "pruneuninstall": "_cleanup $env:ProgramData\\npm",
-    "test": "node.exe --version"
+    "test": "printInfo node.js $(node.exe --version) install success"
   },
   "path": [
     "$env:ProgramData\\node",

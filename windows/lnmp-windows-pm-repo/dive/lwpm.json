@@ -10,7 +10,7 @@
   "url": "https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_windows_amd64.zip",
   "command": "dive",
   "scripts": {
-    "test": "dive --version",
+    "test": "printInfo $(dive --version) install success",
     "version": "(dive --version).split(' ')[1]",
     "install": [
       "_cleanup dive",

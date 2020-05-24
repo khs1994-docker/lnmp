@@ -6,7 +6,7 @@ Function _downloader([string]$url, [string]$path, $soft, $version = 'null versio
     _wget $url $path
   }
   else {
-    Write-Host "==> Skip download $soft $version, file already exists`n" -NoNewLine -ForegroundColor Yellow
+    Write-Host "==> Skip download $soft $version, file [ $path ] already exists`n" -NoNewLine -ForegroundColor Yellow
   }
 
   if (!($(Test-Hash $path $HashType $hash))) {

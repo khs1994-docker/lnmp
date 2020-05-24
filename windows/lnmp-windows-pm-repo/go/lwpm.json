@@ -11,7 +11,7 @@
   "command": "go",
   "scripts": {
     "version": "($(go version) -split ' ')[2].trim('go')",
-    "test": "go version",
+    "test": "printInfo $(go version) install success",
     "install": [
       "_cleanup go",
       "_unzip $filename $unzipDesc",

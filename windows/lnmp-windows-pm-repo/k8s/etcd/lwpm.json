@@ -19,11 +19,11 @@
       "_cleanup etcd"
     ],
     "uninstall": "_cleanup C:\\bin\\etcd.exe C:\\bin\\etcdctl.exe",
-    "test": "printInfo $(etcd --version)",
+    "test": "printInfo $(etcd --version)[0] install success",
     "version": "(etcd --version).split(' ')[2]",
     "hash": [
       "invoke-webrequest https://mirrors.huaweicloud.com/etcd/v${VERSION}/SHA256SUMS -outFile Temp:/etcd-sha256",
-      "$env:hash=(get-content Temp:/etcd-sha256 | select-string etcd-v${VERSION}-windows-amd64.zip).Line.split(' ')[0]",
+      "$env:hash=(get-content Temp:/etcd-sha256 | select-string $filename).Line.split(' ')[0]",
       "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed \"}"
     ]
   },

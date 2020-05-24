@@ -16,7 +16,7 @@
     "install": [
       "Start-Process -FilePath $filename -wait"
     ],
-    "test": "git --version",
+    "test": "printInfo $(git --version) install success",
     "uninstall": "& $env:ProgramFiles\\Git\\unins001.exe"
   }
 }
