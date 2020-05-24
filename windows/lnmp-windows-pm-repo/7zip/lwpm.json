@@ -21,6 +21,9 @@
     "uninstall": "& $env:programFiles\\7-Zip\\Uninstall.exe",
     "test": [
       "write-host 7-zip $((7z.exe).split(' ')[2]) already install"
+    ],
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
     ]
   },
   "path": [

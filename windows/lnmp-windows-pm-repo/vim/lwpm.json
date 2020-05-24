@@ -10,6 +10,9 @@
   "url": "https://github.com/vim/vim-win32-installer/releases/download/v${VERSION}/gvim_${VERSION}_x86.exe",
   "command": "vim",
   "scripts": {
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
+    ],
     "install": [
       "Start-Process -FilePath $filename"
     ],

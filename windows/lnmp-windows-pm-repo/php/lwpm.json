@@ -9,5 +9,10 @@
   "releases": "https://www.php.net/downloads.php",
   "path": [
     "C:\\php"
-  ]
+  ],
+  "scripts": {
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
+    ]
+  }
 }

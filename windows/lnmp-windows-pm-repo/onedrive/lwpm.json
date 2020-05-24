@@ -20,7 +20,10 @@
     "postuninstall": "",
     "pretest": "",
     "test": "",
-    "posttest":""
+    "posttest":"",
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
+    ]
   },
   "path": [
   ]

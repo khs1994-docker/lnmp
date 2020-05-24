@@ -244,7 +244,7 @@ manifest $manifest_digest already exists" `
           $push_manifest_once = $true
         }
 
-        continue;
+        continue
       }
 
       $architecture = $platform.architecture
@@ -289,7 +289,7 @@ manifest $manifest_digest already exists" `
         _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
           $dest_registry
 
-        return;
+        return
       }
     } # manifest list not exists end
 

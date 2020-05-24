@@ -35,7 +35,7 @@ $insert_path = $lwpm.path
 
 Function _iex($str) {
   if (!($str)) {
-    return;
+    return
   }
 
   try {
@@ -58,9 +58,10 @@ Function _install_after() {
 }
 
 Function _getUrl($url, $url_mirror, $VERSION) {
-  $url = iex "echo $url"
-  $url_mirror = iex "echo $url_mirror"
+  if ($url) { $url = _iex "echo $url" }
+
   if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
+    $url_mirror = _iex "echo $url_mirror"
     Write-Host "==> Try use Download url mirror" -ForegroundColor Green
     $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
 
@@ -85,11 +86,23 @@ Function Get-HashFromUrl($url) {
   }
   catch {
     printInfo get hash from url failed
-    return;
+    return
   }
 }
 
 Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
+  if ($lwpm.scripts.'platform-reqs') {
+    foreach ($item in $lwpm.scripts.'platform-reqs') {
+      $result = _iex $item
+    }
+
+    if ($result -eq $false) {
+      printError "Not Support this platform $env:lwpm_os $env:lwpm_architecture , skip"
+
+      return
+    }
+  }
+
   if ($isPre) {
     if (!($VERSION)) {
       $VERSION = $pre_version
@@ -116,7 +129,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     $url = $download_url
   }
 
-  if ($url) { $url = iex "echo $url" }
+  if ($url) { $url = _iex "echo $url" }
 
   # Write-Host "Please download on this website:
 
@@ -168,14 +181,14 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
             $hashType = 'sha256'
             $hash = $item.hash.sha256
 
-            break;
+            break
           }
 
           if ($item.hash.sha512) {
             $hashType = 'sha512'
             $hash = $item.hash.sha512
 
-            break;
+            break
           }
 
           break
@@ -186,17 +199,17 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     if ($lwpm.'hash-url') {
       if ($hash_url = $lwpm.'hash-url'.sha256) {
         $hashType = 'sha256'
-        $hash = Get-HashFromUrl $(iex "echo $hash_url")
+        $hash = Get-HashFromUrl $(_iex "echo $hash_url")
       }
 
       if ($hash_url = $lwpm.'hash-url'.sha384) {
         $hashType = 'sha384'
-        $hash = Get-HashFromUrl $(iex "echo $hash_url")
+        $hash = Get-HashFromUrl $(_iex "echo $hash_url")
       }
 
       if ($hash_url = $lwpm.'hash-url'.sha512) {
         $hashType = 'sha512'
-        $hash = Get-HashFromUrl $(iex "echo $hash_url")
+        $hash = Get-HashFromUrl $(_iex "echo $hash_url")
       }
     }
 

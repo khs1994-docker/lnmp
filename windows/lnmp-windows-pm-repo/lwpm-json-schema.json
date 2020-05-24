@@ -142,6 +142,16 @@
     "scripts": {
       "type": "object",
       "properties": {
+        "platform-reqs": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "if latest command echo $false, means not support this platform. e.g. echo $False",
+          "default": [
+            "if(!$IsWindows){echo $False}"
+          ]
+        },
         "preinstall": {
           "type": [
             "string",

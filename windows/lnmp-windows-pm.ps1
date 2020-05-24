@@ -237,7 +237,7 @@ Function __install($softs) {
       _import_module $soft
     }
     catch {
-      continue;
+      continue
     }
 
     if ($env:LWPM_DIST_ONLY -eq "true") {
@@ -296,7 +296,7 @@ Function __uninstall($softs) {
       _import_module $soft
     }
     catch {
-      continue;
+      continue
     }
 
     _uninstall
@@ -482,7 +482,7 @@ function getVersionByProvider($soft) {
     _import_module $soft
   }
   catch {
-    return;
+    return
   }
 
   $ErrorActionPreference = "Continue"
@@ -688,7 +688,7 @@ function _push($opt) {
     }
     catch {
       Write-Host $_.Exception
-      return;
+      return
     }
 
     # upload layers blob
@@ -701,7 +701,7 @@ function _push($opt) {
       }
       catch {
         Write-Host $_.Exception
-        return;
+        return
       }
 
       $layer = @{

@@ -12,6 +12,11 @@
   "scripts": {
     "install": "Start-Process -FilePath $filename -wait",
     "test": "ls 'C:\\Program Files\\Zeal\\zeal.exe'",
-    "version": "echo 0.6.1"
+    "version": "echo 0.6.1",
+    "platform-reqs": [
+      "PrintTips Only support windows",
+      "echo $True",
+      "if(!$IsWindows){echo $False}"
+    ]
   }
 }

@@ -13,6 +13,7 @@
     "https://www.microsoft.com/en-us/download/details.aspx?id=40784"
   ],
   "scripts": {
+    "platform-reqs": "if(!$IsWindows){echo $False}",
     "install": [
       "Start-Process -FilePath $filename -wait"
     ]
