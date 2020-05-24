@@ -65,27 +65,27 @@ jobs:
         fetch-depth: 2
     - name: Download docker hub docker image rootfs
       run: |
-        sh ./windows/sdk/dockerhub/rootfs.sh hello-world
+        bash ./windows/sdk/dockerhub/rootfs.sh hello-world
       # env:
       #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
       #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     - name: Download aliyun docker image rootfs
       run: |
-        sh ./windows/sdk/dockerhub/rootfs.sh \
+        bash ./windows/sdk/dockerhub/rootfs.sh \
         khs1994/hello-world latest '' '' '' 0 registry.us-west-1.aliyuncs.com
       # env:
       #   DOCKER_USERNAME: ${{secrets.DOCKER_ALIYUN_USERNAME}}
       #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     - name: Download tencent cloud docker image rootfs
       run: |
-        sh ./windows/sdk/dockerhub/rootfs.sh \
+        bash ./windows/sdk/dockerhub/rootfs.sh \
         khs1994/hello-world latest '' '' '' 0 uswccr.ccs.tencentyun.com
       # env:
       #   DOCKER_USERNAME: ${{secrets.DOCKER_TENCENT_CLOUD_USERNAME}}
       #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
     - name: Download mirror.gcr.io docker image rootfs
       run: |
-        sh ./windows/sdk/dockerhub/rootfs.sh \
+        bash ./windows/sdk/dockerhub/rootfs.sh \
         hello-world latest '' '' '' 0 mirror.gcr.io
       # env:
       #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}

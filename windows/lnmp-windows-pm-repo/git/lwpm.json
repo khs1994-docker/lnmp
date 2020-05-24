@@ -12,6 +12,9 @@
   "url-mirror":"https://mirrors.huaweicloud.com/git-for-windows/v${VERSION}.windows.1/Git-${VERSION}-64-bit.exe",
   "command": "git",
   "scripts": {
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
+    ],
     "version": "(git --version).split(' ')[2].trim('.windows.1')",
     "install": [
       "Start-Process -FilePath $filename -wait"

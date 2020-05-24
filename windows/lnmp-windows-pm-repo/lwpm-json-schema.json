@@ -147,7 +147,7 @@
             "string",
             "array"
           ],
-          "description": "if latest command echo $false, means not support this platform. e.g. echo $False",
+          "description": "if last command echo $false, means not support this platform. e.g. echo $False",
           "default": [
             "if(!$IsWindows){echo $False}"
           ]
