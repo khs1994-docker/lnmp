@@ -8,6 +8,9 @@
     "test": "printInfo $(python --version) install success",
     "install": [
       "# https://docs.python.org/3.7/using/windows.html#installing-without-ui\n\nStart-Process $filename -Wait `\n-ArgumentList @( `\n  '/quiet', `\n  'InstallAllUsers=1', `\n  \"DefaultAllUsersTargetDir=${env:ProgramData}\\Python\", `\n  \"DefaultJustForMeTargetDir=${env:ProgramData}\\Python\", `\n  \"TargetDir=${env:ProgramData}\\Python\", `\n  'PrependPath=1', `\n  'Shortcuts=0', `\n  'Include_doc=0', `\n  'Include_pip=1', `\n  'Include_test=0' `\n);\n"
+    ],
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
     ]
   },
   "version": "3.8.3",

@@ -7,10 +7,13 @@
   "bug": "https://github.com/docker/for-win/issues",
   "github": "docker/docker-ce",
   "releases": "https://github.com/docker/docker-ce/releases",
-  "url": "https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe",
-  "pre-url": "https://download.docker.com/win/edge/Docker%20Desktop%20Installer.exe",
+  "url": "https://download.docker.com/$(if($IsWindows){echo win}else{echo mac})/stable/$(if($isWindows){echo Docker%20Desktop%20Installer.exe}else{echo Docker.dmg})",
+  "pre-url": "https://download.docker.com/$(if($IsWindows){echo win}else{echo mac})/edge/$(if($isWindows){echo Docker%20Desktop%20Installer.exe}else{echo Docker.dmg})",
   "command": "docker",
   "scripts": {
+    "platform-reqs": [
+      "if($IsLinux){echo $False}"
+    ],
     "version": "(docker --version).split(' ')[2].trim(',')",
     "install": "Start-Process -FilePath $filename -wait",
     "test": "printInfo $(docker --version) install success"

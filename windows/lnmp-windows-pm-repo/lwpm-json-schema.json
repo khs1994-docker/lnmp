@@ -267,6 +267,16 @@
         "C:\\bin"
       ]
     },
+    "unix-path": {
+      "type": "array",
+      "description": "unix system(e.g. Linux/macOS) PATH, add to ~/.bashrc manual",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "/path/bin"
+      ]
+    },
     "command": {
       "type": "string",
       "description": "what command this package provide"

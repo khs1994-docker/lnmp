@@ -11,7 +11,8 @@
   "command": "${env:ProgramFiles(x86)}\\Tencent\\WeChat\\WeChat.exe",
   "scripts": {
     "platform-reqs": [
-      "if($IsLinux){echo $False}"
+      "if($IsMacOs){printTips You can get wechat from App Store}",
+      "if(!$IsWindows){echo $False}"
     ],
     "install": "Start-Process -FilePath $filename -wait",
     "uninstall": "& ${env:ProgramFiles(x86)}\\Tencent\\WeChat\\Uninstall.exe",

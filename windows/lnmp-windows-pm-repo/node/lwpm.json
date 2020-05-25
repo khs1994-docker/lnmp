@@ -17,7 +17,11 @@
       "if($IsWindows){_unzip $filename $unzipDesc}",
       "if($IsWindows){_mkdir \"$env:ProgramData\\node\"}",
       "if($IsWindows){Copy-item -r -force \"node\\node-v${VERSION}-win-x64\\*\" \"$env:ProgramData\\node\"}",
-      "if(!$IsWindows){sudo mkdir -p /usr/local/node ; sudo tar -zxvf $filename -C /usr/local ; sudo cp -r -f /usr/local/node-v${VERSION}-${env:lwpm_os}-x64/. /usr/local/node/ ; sudo rm -rf /usr/local/node-v${VERSION}-${env:lwpm_os}-x64; sudo ln -sf /usr/local/node/bin/* /usr/local/bin/ ; npm config set prefix ~/.npm }",
+      "if(!$IsWindows){sudo mkdir -p /usr/local/node ; sudo tar -zxf $filename -C /usr/local ; sudo cp -r -f /usr/local/node-v${VERSION}-${env:lwpm_os}-x64/. /usr/local/node/ ; sudo rm -rf /usr/local/node-v${VERSION}-${env:lwpm_os}-x64}",
+      "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm}",
+      "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx}",
+      "if(!$ISWindows){sudo ln -sf /usr/local/node/bin/node /usr/local/bin/}",
+      "if(!$IsWindows){npm config set prefix ~/.npm ; npm config set registry https://registry.npm.taobao.org}",
       "_cleanup node",
       "if(!$ISWindows){printInfo Please add [ $HOME/.npm/bin ] to PATH}"
     ],
@@ -34,5 +38,8 @@
   ],
   "hash-url": {
     "sha256": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v14.3.0/SHASUMS256.txt"
-  }
+  },
+  "unix-path" : [
+    "$HOME/.npm/bin"
+  ]
 }

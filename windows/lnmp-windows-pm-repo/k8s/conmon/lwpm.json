@@ -7,7 +7,10 @@
     }
   ],
   "scripts": {
-    "download": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon\n"
+    "download": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/conmon\n",
+    "platform-reqs": [
+      "if(!$IsLinux){echo $False}"
+    ]
   },
   "url": "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon",
   "version": "2.0.15"

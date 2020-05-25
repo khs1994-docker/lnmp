@@ -91,7 +91,7 @@ Function Get-HashFromUrl($url) {
 }
 
 Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
-  if ($lwpm.scripts.'platform-reqs') {
+  if ($lwpm.scripts.'platform-reqs' -and ($env:LWPM_DIST_ONLY -ne 'true')) {
     foreach ($item in $lwpm.scripts.'platform-reqs') {
       $result = _iex $item
     }
@@ -147,7 +147,10 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
 
   if ($lwpm.path) { _exportPath $lwpm.path }
 
-  if ($lwpm.command -and $(_command $lwpm.command) -and !$force) {
+  if ($lwpm.command `
+      -and $(_command $lwpm.command) `
+      -and !$force `
+      -and ($env:LWPM_DIST_ONLY -ne 'true')) {
     $ErrorActionPreference = 'Continue'
     $CURRENT_VERSION = ""
 
@@ -234,6 +237,14 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     foreach ($item in $lwpm.scripts.download) {
       _iex $item
     }
+
+    printInfo Dist only`, skip install
+
+    return
+  }
+
+  if ($env:LWPM_DIST_ONLY -eq 'true') {
+    printInfo Dist only`, skip install
 
     return
   }

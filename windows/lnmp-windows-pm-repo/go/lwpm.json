@@ -14,7 +14,7 @@
     "test": "printInfo $(go version) install success",
     "install": [
       "_cleanup go",
-      "if($IsWindows){_unzip $filename $unzipDesc}else{sudo mkdir -p /usr/local ; sudo tar -zxvf $filename -C /usr/local/ ; sudo ln -sf /usr/local/go/bin/* /usr/local/bin/}",
+      "if($IsWindows){_unzip $filename $unzipDesc}else{sudo mkdir -p /usr/local ; sudo tar -zxf $filename -C /usr/local/ ; sudo ln -sf /usr/local/go/bin/* /usr/local/bin/}",
       "if($IsWindows){_cleanup C:\\go}",
       "if($IsWindows){Copy-item -r -force go/go C:\\}",
       "if($IsWindows){_cleanup go}"

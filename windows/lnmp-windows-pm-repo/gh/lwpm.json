@@ -7,17 +7,17 @@
   "bug": "https://github.com/cli/cli/issues",
   "github": "cli/cli",
   "releases": "https://github.com/cli/cli/releases",
-  "url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
+  "url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
   "url-mirror": "",
-  "pre-url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
+  "pre-url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
   "pre-url-mirror": "",
   "command": "gh",
   "scripts": {
     "preinstall": "",
     "install": [
       "_cleanup $unzipDesc",
-      "if($IsWindows){_unzip $filename $unzipDesc}else{_mkdir $unzipDesc ; tar -zxvf $filename -C $unzipDesc}",
-      "if($IsWindows){Copy-item -r -force $unzipDesc/bin/* C:\\bin\\}else{sudo cp $unzipDesc/gh_0.8.0_${env:lwpm_os}_${env:lwpm_architecture}/bin/gh /usr/local/bin ; sudo chmod +x /usr/local/bin/gh }",
+      "if($IsWindows){_unzip $filename $unzipDesc}else{_mkdir $unzipDesc ; tar -zxf $filename -C $unzipDesc}",
+      "if($IsWindows){Copy-item -r -force $unzipDesc/bin/* C:\\bin\\}else{sudo cp $unzipDesc/gh_0.8.0_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}/bin/gh /usr/local/bin ; sudo chmod +x /usr/local/bin/gh }",
       "_cleanup $unzipDesc"
     ],
     "postinstall": [

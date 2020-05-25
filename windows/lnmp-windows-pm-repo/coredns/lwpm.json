@@ -16,7 +16,7 @@
       ""
     ],
     "install": [
-      "if($IsWindows){tar -zxf $filename -C C:\\bin\\}else{sudo tar -zxvf $filename -C /usr/local/bin; sudo chmod +x /usr/local/bin/coredns}"
+      "if($IsWindows){tar -zxf $filename -C C:\\bin\\}else{sudo tar -zxf $filename -C /usr/local/bin; sudo chmod +x /usr/local/bin/coredns}"
     ],
     "uninstall": "_cleanup C:\\bin\\coredns.exe"
   },

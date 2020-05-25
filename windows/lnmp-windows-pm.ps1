@@ -31,6 +31,7 @@ add         Add package [ --all-platform | ]
 init        Init a new package (developer) [ --custom | ]
 push        Push a package to docker registry (developer)
 toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
+path        What PATH add to ~/.bashrc manual (Only Support in Linux/macOS)
 
 SERVICES [Require RunAsAdministrator]:
 
@@ -198,21 +199,25 @@ Function _import_module($soft) {
   Import-Module -Name $soft_ps_module_dir
 }
 
-Function _uname_parse($string) {
-  # aarch64  arm64
-  # armhf    arm
-  # armel    arm/v6
-  # i386     386
-  # x86_64   amd64
-  # x86-64   amd64
+class Uname {
+  static [string] parser($string) {
+    # aarch64  arm64
+    # armhf    arm
+    # armel    arm/v6
+    # i386     386
+    # x86_64   amd64
+    # x86-64   amd64
 
-  if ($string -eq "windows") { return "Windows" }
-  if ($string -eq "linux") { return "Linux" }
-  if ($string -eq "darwin") { return "Darwin" }
+    if ($string -eq "windows") { return "Windows" }
+    if ($string -eq "linux") { return "Linux" }
+    if ($string -eq "darwin") { return "Darwin" }
 
-  if ($string -eq "arm64") { return "aarch64" }
-  if ($string -eq "amd64") { return "x86_64" }
-  if ($string -eq "arm") { return "armv7l" }
+    if ($string -eq "arm64") { return "aarch64" }
+    if ($string -eq "amd64") { return "x86_64" }
+    if ($string -eq "arm") { return "armv7l" }
+
+    return ''
+  }
 }
 
 Function __install($softs) {
@@ -244,11 +249,23 @@ Function __install($softs) {
       $pkg_root = pkg_root $soft
       $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
+      if(!$platforms){
+        printError `$env:LWPM_DIST_ONLY is true`, but platform is empty`, skip
+      }
+
       foreach ($platform in $platforms) {
         $env:lwpm_architecture = $platform.architecture
-        $env:LWPM_UNAME_M = _uname_parse $env:lwpm_architecture
+        $env:LWPM_UNAME_M = [Uname]::parser($env:lwpm_architecture)
         $env:lwpm_os = $platform.os
-        $env:LWPM_UNAME_S = _uname_parse $env:lwpm_os
+        $env:LWPM_UNAME_S = [Uname]::parser($env:lwpm_os)
+
+        $global:_IsMacOs = $false
+        $global:_IsWindows = $false
+        $global:_IsLinux = $false
+
+        if ($env:lwpm_os -eq 'darwin') { $global:_IsMacOs = $true }
+        if ($env:lwpm_os -eq 'windows') { $global:_IsWindows = $true }
+        if ($env:lwpm_os -eq 'linux') { $global:_IsLinux = $true }
 
         if ($version) {
           _install $version $preVersion $force
@@ -264,11 +281,17 @@ Function __install($softs) {
       continue
     }
 
+    $global:_IsMacOs = $false
+    $global:_IsWindows = $false
+    $global:_IsLinux = $false
+
     if ($IsWindows) {
       $env:lwpm_architecture = "amd64"
       $env:LWPM_UNAME_M = "x86_64"
       $env:lwpm_os = "windows"
       $env:LWPM_UNAME_S = "Windows"
+
+      $global:_IsWindows = $true
     }
     else {
       $env:lwpm_architecture = "amd64"
@@ -277,6 +300,9 @@ Function __install($softs) {
       $env:LWPM_UNAME_S = uname -s
       $env:lwpm_os = $env:LWPM_UNAME_S.ToLower()
     }
+
+    if ($IsMacOs) { $global:_IsMacOs = $true }
+    if ($IsLinux) { $global:_IsLinux = $true }
 
     if ($version) {
       _install $version $preVersion $force
@@ -497,6 +523,23 @@ function getVersionByProvider($soft) {
   _remove_module $soft
 
   return $latestVersion, $latestPreVersion
+}
+
+function _path($softs) {
+  if ($IsWindows) {
+    printError This command not support Windows
+
+    exit 1
+  }
+
+  foreach ($soft in $softs) {
+    $lwpm = manifest $soft
+    if ($lwpm.'unix-path') {
+      foreach ($soft_path in $lwpm.'unix-path') {
+        Write-Output $soft_path
+      }
+    }
+  }
 }
 
 function __info($soft) {
@@ -794,8 +837,11 @@ function _yaml_to_json_and_sort($yaml) {
 }
 
 function _toJson($soft) {
-  get-command ConvertFrom-Yaml | out-null
+  if (!(_command ConvertFrom-Yaml)) {
+    printError Please install ConvertFrom-Yaml by exec $ Install-Module powershell-yaml
 
+    exit 1
+  }
   try { $pkg_root = pkg_root $soft }catch { return }
 
   if (Test-Path $pkg_root/lwpm.yml) {
@@ -952,6 +998,10 @@ switch ($command) {
     foreach ($item in $opt) {
       _toJson $item
     }
+  }
+
+  "path" {
+    _path $opt
   }
 
   Default {

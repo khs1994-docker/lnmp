@@ -7,14 +7,14 @@
   "bug": "https://developers.weixin.qq.com/community/develop/question",
   "github": "https://github.com/wechat-miniprogram",
   "releases": "https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html",
-  "url": "https://dldir1.qq.com/WechatWebDev/nightly/p-7aa88fbb60d64e4a96fac38999591e31/0.44.6/wechat_devtools_${VERSION}_x64.exe",
+  "url": "https://dldir1.qq.com/WechatWebDev/nightly/p-7aa88fbb60d64e4a96fac38999591e31/0.44.6/wechat_devtools_${VERSION}$(if($IsWindows){echo _x64.exe}else{echo .dmg})",
   "command": "'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat'",
   "scripts": {
     "platform-reqs": [
       "if($IsLinux){echo $False}"
     ],
     "uninstall": "& 'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\卸载微信开发者工具.exe'",
-    "test": "get-command 'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat'",
+    "test": "if($IsWindows){get-command 'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat')",
     "install": [
       "Start-Process -FilePath $filename -wait"
     ],

@@ -132,6 +132,8 @@ $ lnmp-windows-pm.ps1 stop-service minio
 * `$env:LWPM_UNAME_S` (e.g. Linux)
 * `$env:LWPM_UNAME_M` (e.g. x86_64)
 
+* `$_IsWindows` `$_IsMacOS` `$_IsLinux` 指当前处理的目标平台（注意与 `$IsWindows` 等变量的区别，这些变量指当前 powershell 运行的平台 ）
+
 * `$env:LWPM_PKG_ROOT`(lwpm.json 所在文件夹)
 
 ## lwpm.json 支持的部分函数
