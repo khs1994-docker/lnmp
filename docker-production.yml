@@ -361,8 +361,6 @@ services:
       dockerfile: Dockerfile
       # args:
       #   foo: bar
-      # cache_from:
-      #   - alpine:3.7
     command: php-fpm -R -F
     networks:
       - frontend
