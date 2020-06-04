@@ -5,6 +5,7 @@ on: push
 jobs:
   setup-k8s:
    runs-on: ubuntu-latest
+   timeout-minutes: 20
    if: |
      ! contains( github.event.head_commit.message, '[skip ci]')
    env:
@@ -325,6 +326,11 @@ jobs:
          curl ${SERVER_IP}:${HTTP_PORT}
 
          test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
+     - name: cleanup
+       run: |
+         rm -rf ${K8S_ROOT:-/opt/k8s}/bin/*.tar
+         rm -rf ${K8S_ROOT:-/opt/k8s}/bin/apiextensions-apiserver
+         rm -rf ${K8S_ROOT:-/opt/k8s}/bin/kubeadm
      - name: Test k8s
        run: |
          set -x
