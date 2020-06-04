@@ -21,7 +21,7 @@ if([Version]$kube_scheduler_version -ge [Version]"1.19.0"){
   $config_context = Get-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
 
   $config_context `
-  -replace "kubescheduler.config.k8s.io/v1alpha1","kubescheduler.config.k8s.io/v1alpha2" `
+  -replace "kubescheduler.config.k8s.io/v1alpha1","kubescheduler.config.k8s.io/v1beta1" `
   | Set-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
 }
 

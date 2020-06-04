@@ -188,7 +188,7 @@ jobs:
          if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
            echo "replace kube-scheduler config version" \
            && echo "remove it when version ge 1.19" \
-           && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1alpha2#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
+           && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
          fi
          sudo systemctl start kube-scheduler || sudo journalctl -u kube-scheduler
          # worker

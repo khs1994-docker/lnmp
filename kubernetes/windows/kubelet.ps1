@@ -13,7 +13,6 @@ kubelet `
 --volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
 --logtostderr=true `
 --dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
---experimental-check-node-capabilities-before-mount=true `
 --v=2 `
 --pod-infra-container-image=mcr.microsoft.com/k8s/core/pause:1.2.0 `
 --image-pull-progress-deadline=20m `

@@ -6,7 +6,7 @@
 
 * Helm 3
 
-## v1.19.0-alpha.2
+## v1.19.0
 
-* `kubescheduler.config.k8s.io/v1alpha1` 替换为 `kubescheduler.config.k8s.io/v1alpha2`
+* `kubescheduler.config.k8s.io/v1alpha1` 替换为 `kubescheduler.config.k8s.io/v1beta1`
 * The Kubelet's `--volume-plugin-dir` option is now available via the Kubelet config file field `VolumePluginDir`.
