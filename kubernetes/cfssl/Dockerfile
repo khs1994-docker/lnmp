@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM alpine:3.12
 
 ENV KUBECTL_VERSION=v1.18.0
 
@@ -10,7 +10,7 @@ RUN apk add --no-cache curl \
       && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl \
       && apk del --no-network curl
 
-FROM alpine:3.11
+FROM alpine:3.12
 
 LABEL maintainer="khs1994@khs1994.com" \
       version="1.18.0"

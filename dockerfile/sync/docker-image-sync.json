@@ -20,8 +20,8 @@
     "dest": "golang:alpine"
   },
   {
-    "source": "library/alpine:3.11",
-    "dest": "alpine:3.11"
+    "source": "library/alpine:3.12",
+    "dest": "alpine:3.12"
   },
   {
     "source": "library/alpine:edge",
@@ -132,8 +132,8 @@
     "dest": "nginx:1.18.0-alpine"
   },
   {
-    "source": "library/nginx:1.17.10-alpine",
-    "dest": "nginx:1.17.10-alpine"
+    "source": "library/nginx:1.19.0-alpine",
+    "dest": "nginx:1.19.0-alpine"
   },
   {
     "source": "library/httpd:alpine",

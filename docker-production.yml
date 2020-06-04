@@ -402,7 +402,7 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.17.10-alpine
+    image: nginx:1.19.0-alpine
     # image: ranadeeppolavarapu/nginx-http3
     ports:
       - "443:443/tcp"

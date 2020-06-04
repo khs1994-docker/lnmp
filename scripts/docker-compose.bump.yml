@@ -17,10 +17,10 @@ services:
     image: php:7.4.6-fpm-alpine
 
   composer:
-    image: composer:1.10.6
+    image: composer:1.10.7
 
   nginx:
-    image: nginx:1.17.10-alpine
+    image: nginx:1.19.0-alpine
 
   rabbitmq:
     image: rabbitmq:3.8.3-management-alpine
@@ -53,7 +53,7 @@ services:
     image: golang:1.14.3-alpine
 
   alpine:
-    image: alpine:3.11
+    image: alpine:3.12
 
   python:
     image: python:3.8.3-alpine
