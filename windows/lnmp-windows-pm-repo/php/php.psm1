@@ -73,9 +73,9 @@ Function _install_ext($PHP_PREFIX){
     "==> install $extension ..."
 
     if (Test-Path $HOME/github/pickle/bin/pickle){
-      & ${PHP_BIN} $HOME/github/pickle/bin/pickle install $extension --php ${PHP_BIN} -k
+      & ${PHP_BIN} $HOME/github/pickle/bin/pickle install $extension --php ${PHP_BIN}
     }else{
-      & ${PHP_BIN} C:\bin\pickle install $extension --php ${PHP_BIN} -k
+      & ${PHP_BIN} C:\bin\pickle install $extension --php ${PHP_BIN}
     }
   }
 

@@ -681,7 +681,7 @@ _containerd_install(){
   print_info "install containerd 1.4 ..."
 
   local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
-  local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
+  local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   __download(){
     if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
