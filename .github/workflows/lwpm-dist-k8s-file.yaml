@@ -57,7 +57,6 @@ jobs:
         if: matrix.os == 'ubuntu'
         run: |
           echo $ErrorActionPreference
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
 
           ./lnmp/windows/lnmp-windows-pm.ps1 install kubernetes-node@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    kubernetes-node@${env:LWPM_K8S_VERSION}
