@@ -48,7 +48,6 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --service-account-private-key-file=${K8S_ROOT}/certs/ca-key.pem \
 --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
 --logtostderr=true \
---feature-gates=DynamicAuditing=true \
 --cluster-cidr=10.244.0.0/16 \
 --allocate-node-cidrs=true \
 --v=2

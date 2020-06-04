@@ -73,4 +73,3 @@ enforceNodeAllocatable: []
 featureGates:
   # AllAlpha: true
   # BoundServiceAccountTokenVolume: false
-  DynamicAuditing: true

@@ -143,7 +143,6 @@ systemd:
         --advertise-address={{IP_{{n}}}} \
         --default-not-ready-toleration-seconds=360 \
         --default-unreachable-toleration-seconds=360 \
-        --feature-gates=DynamicAuditing=true \
         --max-mutating-requests-inflight=2000 \
         --max-requests-inflight=4000 \
         --default-watch-cache-size=200 \
@@ -158,7 +157,6 @@ systemd:
         --tls-cert-file=${K8S_ROOT}/certs/apiserver.pem \
         --tls-private-key-file=${K8S_ROOT}/certs/apiserver-key.pem \
         --insecure-port=0 \
-        --audit-dynamic-configuration \
         --audit-log-maxage=15 \
         --audit-log-maxbackup=3 \
         --audit-log-maxsize=100 \
@@ -260,7 +258,6 @@ systemd:
         --service-account-private-key-file=${K8S_ROOT}/certs/ca-key.pem \
         --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
         --logtostderr=true \
-        --feature-gates=DynamicAuditing=true \
         --v=2
 
         Restart=on-failure
@@ -302,7 +299,6 @@ systemd:
         --requestheader-username-headers=X-Remote-User \
         --authorization-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
         --logtostderr=true \
-        --feature-gates=DynamicAuditing=true \
         --v=2
 
         Restart=on-failure
@@ -525,7 +521,6 @@ storage:
           featureGates:
             # AllAlpha: true
             # BoundServiceAccountTokenVolume: false
-            DynamicAuditing: true
     - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
       mode: 0644
       contents:

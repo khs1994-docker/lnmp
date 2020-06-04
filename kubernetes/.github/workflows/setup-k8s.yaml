@@ -16,6 +16,7 @@ jobs:
      LNMP_K8S_LOCAL_INSTALL_OPTIONS: ${{matrix.LNMP_K8S_LOCAL_INSTALL_OPTIONS}}
      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
      DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+     LNMP_DOCKER_MIRROR: registry-1.docker.io
    strategy:
      max-parallel: 1
      matrix:
@@ -175,13 +176,13 @@ jobs:
          ls -la /etc/systemd/system/
 
          sudo systemctl cat etcd
-         sudo systemctl start etcd
+         sudo systemctl start etcd || sudo journalctl -u etcd
          # master
          sudo systemctl cat kube-apiserver
-         sudo systemctl start kube-apiserver
+         sudo systemctl start kube-apiserver || sudo journalctl -u kube-apiserver
 
          sudo systemctl cat kube-controller-manager
-         sudo systemctl start kube-controller-manager
+         sudo systemctl start kube-controller-manager || sudo journalctl -u kube-controller-manager
 
          sudo systemctl cat kube-scheduler
          if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
@@ -189,10 +190,10 @@ jobs:
            && echo "remove it when version ge 1.19" \
            && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1alpha2#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
          fi
-         sudo systemctl start kube-scheduler
+         sudo systemctl start kube-scheduler || sudo journalctl -u kube-scheduler
          # worker
          sudo systemctl cat kube-proxy
-         sudo systemctl start kube-proxy
+         sudo systemctl start kube-proxy || sudo journalctl -u kube-proxy
 
          sudo systemctl cat docker
 
@@ -264,6 +265,7 @@ jobs:
 
          sleep 40
          kubectl get all -A
+         kubectl describe deployment.apps/calico-kube-controllers -n kube-system
          kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
          ip addr
 
@@ -278,6 +280,7 @@ jobs:
          sleep 20
          kubectl get all -A
 
+         kubectl describe deployment.apps/calico-kube-controllers -n kube-system
          kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
          sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
          # sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
@@ -288,6 +291,7 @@ jobs:
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
          df -h
+         ip addr
 
          kubectl apply -k addons/coredns
          kubectl apply -k addons/dashboard

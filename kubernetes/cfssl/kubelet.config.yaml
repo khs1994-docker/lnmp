@@ -76,4 +76,3 @@ enforceNodeAllocatable: ["pods"]
 featureGates:
   # AllAlpha: true
   # BoundServiceAccountTokenVolume: false
-  DynamicAuditing: true
