@@ -168,7 +168,7 @@ Function _sync() {
   $manifest_list_json_path = Get-Manifest $token $source_image $source_ref -raw $false `
     -registry $source_registry
   if ($manifest_list_json_path) {
-    $manifest_list_json = ConvertFrom-Json (cat $manifest_list_json_path -raw)
+    $manifest_list_json = ConvertFrom-Json (Get-Content $manifest_list_json_path -raw)
   }
   else {
     $manifest_list_json = $null
@@ -305,7 +305,7 @@ manifest not found, skip" -ForegroundColor Red
       return
     }
 
-    $manifest_json = ConvertFrom-Json (cat $manifest_json_path -raw)
+    $manifest_json = ConvertFrom-Json (Get-Content $manifest_json_path -raw)
 
     $config_digest = $manifest_json.config.digest
 
@@ -374,7 +374,7 @@ if (!(Test-Path $PSScriptRoot/docker-image-sync.json)) {
   exit 1
 }
 
-$sync_config = ConvertFrom-Json (cat $PSScriptRoot/docker-image-sync.json -raw)
+$sync_config = ConvertFrom-Json (Get-Content $PSScriptRoot/docker-image-sync.json -raw)
 
 foreach ($item in $sync_config) {
   $source = $item.source
