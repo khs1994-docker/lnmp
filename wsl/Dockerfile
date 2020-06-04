@@ -111,8 +111,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     # libtidy5 \
     libtidy5deb1 \
     libtidy-dev \
-    libxmlrpc-epi0 \
-    libxmlrpc-epi-dev \
+    # libxmlrpc-epi0 \
+    # libxmlrpc-epi-dev \
     libexif12 \
     libexif-dev \
     libgmp10 \
@@ -232,7 +232,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --with-imap=shared \
         --with-imap-ssl \
         --with-kerberos \
-    --with-xmlrpc \
+    # --with-xmlrpc \
     --with-pic \
     --with-enchant=shared \
     --enable-fileinfo=shared \

@@ -197,7 +197,7 @@ $ docker rm -f CONTAINER_ID
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader
-* [x] xmlrpc
+* [ ] xmlrpc
 * [x] xmlwriter
 * [x] xsl
 * [ ] zend_test

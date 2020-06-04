@@ -36,7 +36,7 @@ ENV PHP_EXTENSION \
       sysvsem \
       sysvshm \
       # tidy \
-      xmlrpc \
+      # xmlrpc \
       # xsl \
       zip \
       shmop \
@@ -72,7 +72,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libbz2 \
                          libexif \
                          gmp \
-                         xmlrpc-c \
+                         # xmlrpc-c \
                          enchant \
                          c-client \
                          icu-libs \
@@ -98,7 +98,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          yaml-dev \
                          libexif-dev \
                          gmp-dev \
-                         xmlrpc-c-dev \
+                         # xmlrpc-c-dev \
                          bzip2-dev \
                          enchant-dev \
                          imap-dev \

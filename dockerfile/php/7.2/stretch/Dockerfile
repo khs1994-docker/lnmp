@@ -31,7 +31,7 @@ ENV PHP_EXTENSION \
       sysvsem \
       sysvshm \
       # tidy \
-      xmlrpc \
+      # xmlrpc \
       # xsl \
       zip
 
@@ -65,7 +65,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libzip-dev \
         zlib1g-dev \
         libyaml-dev \
-        libxmlrpc-epi-dev \
+        # libxmlrpc-epi-dev \
         libbz2-dev \
         libexif-dev \
         libgmp-dev \
@@ -89,7 +89,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libzip4 \
        zlib1g \
        libyaml-0-2 \
-       libxmlrpc-epi0 \
+       # libxmlrpc-epi0 \
        libbz2-1.0 \
        libexif12 \
        libgmp10 \

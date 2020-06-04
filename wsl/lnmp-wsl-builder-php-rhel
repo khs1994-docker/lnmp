@@ -206,7 +206,6 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo "libsodium"; \
    fi ) \
 libyaml \
-xmlrpc-c \
 bzip2 \
 libexif \
 gmp \
@@ -262,7 +261,6 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-devel \
-                   xmlrpc-c-devel \
                    bzip2-devel \
                    libexif-devel \
                    gmp-devel \
@@ -413,7 +411,6 @@ _builder(){
         --with-gmp \
         --with-imap=shared \
             --with-imap-ssl \
-        --with-xmlrpc \
         \
         --with-pic \
         --with-enchant=shared \

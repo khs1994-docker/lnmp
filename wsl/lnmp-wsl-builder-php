@@ -289,7 +289,6 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo $( $(_sudo) apt install -y libzip5 > /dev/null 2>&1 && echo libzip5) ;\
    fi ) \
 libyaml-0-2 \
-libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
 libgmp10 \
@@ -356,7 +355,6 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-dev \
-                   libxmlrpc-epi-dev \
                    libbz2-dev \
                    libexif-dev \
                    libgmp-dev \
@@ -523,7 +521,6 @@ set +e
       --with-gmp \
       --with-imap=shared \
           --with-imap-ssl \
-      --with-xmlrpc \
       \
       --with-pic \
       --with-enchant=shared \

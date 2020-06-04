@@ -145,7 +145,6 @@
 │   │               │   │   ├── php-ext-sysvshm.ini
 │   │               │   │   ├── php-ext-tideways_xhprof.ini.default
 │   │               │   │   ├── php-ext-xdebug.ini.default
-│   │               │   │   ├── php-ext-xmlrpc.ini
 │   │               │   │   └── php-ext-yaml.ini
 │   │               │   ├── php.ini-development
 │   │               │   └── php.ini-production

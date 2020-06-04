@@ -101,7 +101,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-kerberos \
         --with-imap=shared \
             --with-imap-ssl \
-        --with-xmlrpc=shared \
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
@@ -209,7 +208,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           libexif-dev \
           # libxslt-dev \
           gmp-dev \
-          xmlrpc-c-dev \
           bzip2-dev \
           enchant-dev \
           imap-dev \
@@ -309,7 +307,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            sysvsem \
                            sysvshm \
                            # tidy \
-                           xmlrpc \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \
