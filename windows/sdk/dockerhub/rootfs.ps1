@@ -157,8 +157,10 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 
       $dest = Get-Blob $token $image $digest $registry $dest
 
-      if (!($dest)) {
-        return;
+      if ($dest -eq $false) {
+        write-host "==> Download failed" -ForegroundColor Red
+
+        return $false;
       }
 
       Write-Host "==> Download success to $dest" -ForegroundColor Blue
@@ -214,8 +216,10 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 
         $dest = Get-Blob $token $image $digest $registry $dest
 
-        if (!($dest)) {
-          return;
+        if ($dest -eq $false) {
+          write-host "==> Download failed" -ForegroundColor Red
+
+          return $false;
         }
 
         Write-Host "==> Download success to $dest" -ForegroundColor Blue

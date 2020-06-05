@@ -29,3 +29,19 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: harbor-trivy-data
+  labels:
+    app: harbor
+    component: trivy
+spec:
+  hostPath:
+    path: /var/lib/khs1994-docker-lnmp/harbor/trivy
+    type: DirectoryOrCreate
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce

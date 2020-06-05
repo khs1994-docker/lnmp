@@ -249,7 +249,7 @@ Function __install($softs) {
       $pkg_root = pkg_root $soft
       $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
-      if(!$platforms){
+      if (!$platforms) {
         printError `$env:LWPM_DIST_ONLY is true`, but platform is empty`, skip
       }
 
@@ -440,7 +440,7 @@ Function _add($softs) {
       $env:DOCKER_ROOTFS_PHASE = $null
       $lwpm_json, $lwpm_dist, $lwpm_script = rootfs $soft $ref -os $os -arch $architecture $null 'config', 0, 1
 
-      if (!($lwpm_json -and $lwpm_dist -and $lwpm_script)) {
+      if (($lwpm_json -eq $false) -or ($lwpm_dist -eq $false) -or ($lwpm_script -eq $false)) {
         Write-Host "==> $soft $ref not found or download failed" -ForegroundColor Red
 
         continue

@@ -11,7 +11,7 @@ ARG VCS_REF="unknow"
 LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
-ENV NGINX_UNIT_VERSION 1.17.0
+ENV NGINX_UNIT_VERSION 1.18.0
 
 RUN cd /usr/src \
   && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
