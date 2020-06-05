@@ -84,8 +84,8 @@
     "dest": "mongo:latest"
   },
   {
-    "source": "library/mongo:4.2.6",
-    "dest": "mongo:4.2.6"
+    "source": "library/mongo:4.2.7",
+    "dest": "mongo:4.2.7"
   },
   {
     "source": "library/kong:latest",

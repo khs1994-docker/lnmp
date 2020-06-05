@@ -9,4 +9,4 @@ x-common:
 services:
   mongodb:
     << : *default-common
-    image: mongo:${LNMP_MONGODB_VERSION:-4.2.6}
+    image: mongo:${LNMP_MONGODB_VERSION:-4.2.7}
