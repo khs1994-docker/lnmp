@@ -180,6 +180,7 @@ RUN --mount=type=bind,from=php:7.3.18-alpine,source=/usr/src,target=/usr/local/s
           # net-snmp-dev \
           openldap-dev \
           gnu-libiconv-dev \
+          patch \
           ${APK_DEV_EXTRA:-} \
   \
   && export CFLAGS="$PHP_CFLAGS" \
