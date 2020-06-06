@@ -75,7 +75,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libexif \
                          gmp \
                          # xmlrpc-c \
-                         enchant \
+                         enchant2 \
                          c-client \
                          icu-libs \
                          gnu-libiconv \
@@ -101,7 +101,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gmp-dev \
                          # xmlrpc-c-dev \
                          bzip2-dev \
-                         enchant-dev \
+                         enchant2-dev \
                          imap-dev \
                          gettext-dev \
                          libwebp-dev \
@@ -118,6 +118,13 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && chmod +x /usr/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \
+# enchant-2.patch
+        && cd /usr/src/php \
+        && curl -fsSL -o enchant-2.patch https://git.alpinelinux.org/aports/plain/community/php7/enchant-2.patch?h=3.12-stable \
+        && patch -p1 < enchant-2.patch \
+        && rm -rf enchant-2.patch \
+        && cd - \
+           \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-install zip \

@@ -203,7 +203,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           # libxslt-dev \
           gmp-dev \
           bzip2-dev \
-          enchant-dev \
+          enchant2-dev \
           imap-dev \
           gettext-dev \
           icu-dev \
