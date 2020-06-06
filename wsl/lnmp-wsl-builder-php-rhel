@@ -301,7 +301,7 @@ _test(){
 
     $(_sudo) ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
 
-    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || echo ; $(_sudo) rm -rf /usr/local/sbin/php
+    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || true ; $(_sudo) rm -rf /usr/local/sbin/php
 
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
@@ -362,7 +362,6 @@ _builder(){
                                              --with-webp \
                                              --with-xpm \
                                              --with-ffi=shared \
-                                             --with-libxml \
                                              --with-zip" \
         || echo "--with-pcre-regex \
                  --with-gd=shared \
@@ -370,14 +369,11 @@ _builder(){
                    --with-jpeg-dir=/usr/lib \
                    --with-png-dir=/usr/lib \
                    --with-xpm-dir=/usr/lib \
-                   --enable-libxml \
                    --enable-zip") \
             --disable-gd-jis-conv \
         --enable-ftp \
         --enable-mysqlnd \
         --enable-bcmath \
-        --enable-inline-optimization \
-        --enable-mbregex \
         --enable-mbstring \
         --enable-pcntl=shared \
         --enable-soap=shared \
@@ -385,7 +381,6 @@ _builder(){
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
-        --enable-xml \
         --enable-calendar=shared \
         --enable-intl=shared \
         --enable-embed=shared \
@@ -414,11 +409,8 @@ _builder(){
         \
         --with-pic \
         --with-enchant=shared \
-        --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        --enable-phar \
-        --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
         "
@@ -622,9 +614,7 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       intl \
                       imap \
                       enchant \
-                      fileinfo \
                       ldap \
-                      posix \
                       pspell \
                       \
                       mongodb \

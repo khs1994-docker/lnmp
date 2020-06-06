@@ -471,7 +471,6 @@ set +e
                     --with-webp \
                     --with-xpm \
                     --with-ffi=shared \
-                    --with-libxml \
                     --with-zip" \
             || echo "--with-pcre-regex \
                      --with-gd=shared \
@@ -479,14 +478,11 @@ set +e
                        --with-jpeg-dir=/usr/lib \
                        --with-png-dir=/usr/lib \
                        --with-xpm-dir=/usr/lib \
-                       --enable-libxml \
                        --enable-zip") \
         --disable-gd-jis-conv \
       --enable-ftp \
       --enable-mysqlnd \
       --enable-bcmath \
-      --enable-inline-optimization \
-      --enable-mbregex \
       --enable-mbstring \
       --enable-pcntl=shared \
       --enable-soap=shared \
@@ -494,7 +490,6 @@ set +e
       --enable-sysvmsg=shared \
       --enable-sysvsem=shared \
       --enable-sysvshm=shared \
-      --enable-xml \
       --enable-calendar=shared \
       --enable-intl=shared \
       --enable-embed=shared \
@@ -524,11 +519,8 @@ set +e
       \
       --with-pic \
       --with-enchant=shared \
-      --enable-fileinfo \
       --with-ldap=shared \
           --with-ldap-sasl \
-      --enable-phar \
-      --enable-posix=shared \
       --with-pspell=shared \
       --enable-shmop=shared \
       $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
@@ -745,7 +737,6 @@ exts=" pdo_pgsql \
                       imap \
                       enchant \
                       ldap \
-                      posix \
                       pspell \
                       \
                       mongodb \

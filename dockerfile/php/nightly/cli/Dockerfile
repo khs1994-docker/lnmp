@@ -81,8 +81,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
         --enable-bcmath=shared \
-        --enable-inline-optimization \
-        --enable-mbregex \
         --enable-pcntl=shared \
         --enable-shmop=shared \
         # --enable-soap=shared \
@@ -90,7 +88,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
-        --enable-xml \
         --with-zip \
         --enable-calendar=shared \
         --enable-intl=shared \
@@ -103,11 +100,8 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-imap-ssl \
         --with-pic \
         --with-enchant=shared \
-        --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        --enable-phar \
-        --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
         # --with-snmp=shared \
@@ -236,7 +230,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   && mv /usr/include/gnu-libiconv/*.h /usr/include \
   && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
-  && make clean || echo \
+  && make clean || true \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./buildconf --force \
   && ./configure \
@@ -285,7 +279,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            calendar \
                            enchant \
                            exif \
-                           fileinfo \
                            gd \
                            gettext \
                            gmp \
@@ -296,7 +289,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
-                           posix \
                            pspell \
                            shmop \
                            # snmp \

@@ -210,9 +210,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --with-zlib \
     --with-mhash \
     --enable-bcmath \
-    --enable-libxml \
-    --enable-inline-optimization \
-    --enable-mbregex \
     --enable-pcntl=shared \
     --enable-shmop=shared \
     --enable-soap=shared \
@@ -220,7 +217,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --enable-sysvmsg=shared \
     --enable-sysvsem=shared \
     --enable-sysvshm=shared \
-    --enable-xml \
     --enable-zip \
         --with-libzip \
     --enable-calendar=shared \
@@ -235,11 +231,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     # --with-xmlrpc \
     --with-pic \
     --with-enchant=shared \
-    --enable-fileinfo=shared \
     --with-ldap=shared \
         --with-ldap-sasl \
-    --enable-phar \
-    --enable-posix=shared \
     --with-pspell=shared \
     --enable-shmop=shared \
     # --with-snmp=shared \
@@ -310,9 +303,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            intl \
                            imap \
                            enchant \
-                           fileinfo \
                            ldap \
-                           posix \
                            pspell \
                            # snmp \
                            mysqli \

@@ -79,9 +79,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
         --enable-bcmath=shared \
-        --enable-libxml \
-        --enable-inline-optimization \
-        --enable-mbregex \
         --enable-pcntl=shared \
         --enable-shmop=shared \
         # --enable-soap=shared \
@@ -89,7 +86,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
-        --enable-xml \
         --enable-zip \
             --with-libzip \
         --enable-calendar=shared \
@@ -105,11 +101,8 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-xmlrpc=shared \
         --with-pic \
         --with-enchant=shared \
-        --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        --enable-phar \
-        --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
         # --with-snmp=shared \
@@ -240,7 +233,6 @@ RUN --mount=type=bind,from=php:7.3.18-alpine,source=/usr/src,target=/usr/local/s
                            calendar \
                            enchant \
                            exif \
-                           fileinfo \
                            gd \
                            gettext \
                            gmp \
@@ -251,7 +243,6 @@ RUN --mount=type=bind,from=php:7.3.18-alpine,source=/usr/src,target=/usr/local/s
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
-                           posix \
                            pspell \
                            shmop \
                            # snmp \
