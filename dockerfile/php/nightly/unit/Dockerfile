@@ -18,11 +18,6 @@ RUN cd /usr/src \
      | tar -zxvf - \
   && mv unit-${NGINX_UNIT_VERSION} unit \
   && cd /usr/src/unit \
-  \
-  && echo "apply patch, remove when pr425 merge" \
-  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/425.diff -O \
-  && patch -p1 < 425.diff \
-  \
   && apk add --no-cache --virtual .build-deps \
                                   $PHPIZE_DEPS \
                                   openssl-dev \
