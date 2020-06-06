@@ -194,6 +194,7 @@ RUN --mount=type=bind,from=php:7.3.18-alpine,source=/usr/src,target=/usr/local/s
   && curl -fsSL -o enchant-2.patch https://git.alpinelinux.org/aports/plain/community/php7/enchant-2.patch?h=3.12-stable \
   && patch -p1 < enchant-2.patch \
   && rm -rf enchant-2.patch \
+  && ./buildconf --force \
      \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./configure \
