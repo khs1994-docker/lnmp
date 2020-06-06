@@ -1013,7 +1013,7 @@ switch -regex ($command){
       $options=get_compose_options "docker-lnmp.yml", `
                                    "docker-lnmp.override.yml"
 
-      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up -d $services}
+      & {docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up --no-build -d $services}
 
       #@custom
       __lnmp_custom_up $services

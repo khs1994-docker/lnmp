@@ -1458,7 +1458,7 @@ For information please run $ docker service update --help
     _get_compose_options docker-lnmp.yml \
                          docker-lnmp.override.yml
 
-    docker-compose $options up $opt ${service}
+    docker-compose $options up $opt --no-build ${service}
 
     #@custom
     __lnmp_custom_up "$@" 2>/dev/null || true

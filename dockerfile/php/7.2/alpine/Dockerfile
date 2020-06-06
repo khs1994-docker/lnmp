@@ -1,6 +1,6 @@
 ARG PHP_VERSION=7.2.31
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.11 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
