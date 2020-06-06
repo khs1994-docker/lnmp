@@ -100,6 +100,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-imap-ssl \
         --with-pic \
         --with-enchant=shared \
+        --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
         --with-pspell=shared \
@@ -279,6 +280,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            calendar \
                            enchant \
                            exif \
+                           fileinfo \
                            gd \
                            gettext \
                            gmp \

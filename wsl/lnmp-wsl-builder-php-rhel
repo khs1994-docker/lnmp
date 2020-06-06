@@ -409,6 +409,7 @@ _builder(){
         \
         --with-pic \
         --with-enchant=shared \
+        --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
         --with-pspell=shared \
@@ -611,6 +612,7 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       sysvsem \
                       sysvshm \
                       calendar \
+                      fileinfo \
                       intl \
                       imap \
                       enchant \

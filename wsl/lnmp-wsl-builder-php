@@ -519,6 +519,7 @@ set +e
       \
       --with-pic \
       --with-enchant=shared \
+      --enable-fileinfo=shared \
       --with-ldap=shared \
           --with-ldap-sasl \
       --with-pspell=shared \
@@ -733,6 +734,7 @@ exts=" pdo_pgsql \
                       sysvsem \
                       sysvshm \
                       calendar \
+                      fileinfo \
                       intl \
                       imap \
                       enchant \

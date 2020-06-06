@@ -231,6 +231,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     # --with-xmlrpc \
     --with-pic \
     --with-enchant=shared \
+    --enable-fileinfo=shared \
     --with-ldap=shared \
         --with-ldap-sasl \
     --with-pspell=shared \
@@ -290,6 +291,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            opcache \
                            swoole \
                            \
+                           fileinfo \
                            pdo_pgsql \
                            xsl \
                            pcntl \
