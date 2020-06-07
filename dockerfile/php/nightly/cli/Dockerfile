@@ -117,7 +117,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pdo-sqlite=shared,/usr \
         --enable-phar=shared \
         --enable-posix=shared \
-        --with-recode=shared \
         --enable-session=shared \
         --enable-simplexml=shared \
         --with-sqlite3=shared,/usr \
@@ -329,7 +328,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            pdo_sqlite \
                            phar \
                            posix \
-                           recode \
                            session \
                            simplexml \
                            sqlite3 \
