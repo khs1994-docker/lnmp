@@ -1,4 +1,4 @@
-# Istio
+# Istio 1.6
 
 * https://github.com/istio
 
@@ -19,7 +19,7 @@ $ istioctl manifest generate --set profile=demo \
   --set values.cni.cniBinDir=/wsl/wsl-k8s-data/k8s/opt/cni/bin \
   --set values.cni.cniConfDir=/wsl/wsl-k8s-data/k8s/etc/cni/net.d \
 
-  --set values.global.outboundTrafficPolicy.mode=REGISTRY_ONLY \
+  --set values.meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY \
   # pod 可以访问集群内部服务 值为 kube-apiserver --service-cluster-ip-range 参数的值
   --set values.global.proxy.includeIPRanges="10.254.0.0/16" \
   # 若集群支持 LoadBalancer ,则无需使用该 set

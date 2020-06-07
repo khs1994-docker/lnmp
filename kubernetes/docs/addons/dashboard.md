@@ -1,6 +1,6 @@
 # dashboard 插件
 
-* https://github.com/kubernetes/dashboard/tree/v1.10.1/src/deploy/recommended
+* https://github.com/kubernetes/dashboard/blob/master/aio/deploy/recommended.yaml
 
 ```bash
 $ kubectl apply -k addons/dashboard
@@ -23,7 +23,7 @@ http://127.0.0.1:8086/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 
 * https://github.com/AliyunContainerService/k8s-for-docker-desktop
 
-#### macOS
+**macOS**
 
 ```bash
 $ TOKEN=$(kubectl -n kube-system describe secret default| awk '$1=="token:"{print $2}')
@@ -31,7 +31,7 @@ $ TOKEN=$(kubectl -n kube-system describe secret default| awk '$1=="token:"{prin
 $ kubectl config set-credentials docker-desktop --token="${TOKEN}"
 ```
 
-#### Windows
+**Windows**
 
 ```powershell
 $ $TOKEN=((kubectl -n kube-system describe secret default | Select-String "token:") -split " +")[1]
@@ -45,7 +45,7 @@ $ kubectl config set-credentials docker-desktop --token="${TOKEN}"
 
 * **Windows** `%UserProfile%\.kube\config`
 
-### Linux(自行部署的 Kubernetes)
+### 自行部署的 Kubernetes
 
 ```bash
 $ kubectl create sa dashboard-admin -n kube-system
