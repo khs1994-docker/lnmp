@@ -36,7 +36,7 @@ RUN --mount=type=bind,from=composer:1.10.7,source=/usr/bin/composer,target=/opt/
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.9/docker-entrypoint.sh \
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.10/docker-entrypoint.sh \
          -o /docker-entrypoint.composer \
     && chmod +x /docker-entrypoint.composer \
     && cp -a /opt/bin/composer /usr/bin/composer \

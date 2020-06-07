@@ -47,6 +47,7 @@ RUN set -ex \
                  xz \
 # https://github.com/docker-library/php/issues/494
                  openssl \
+                 bash \
                  tzdata \
 # ensure www-data user exists
 # RUN set -x \
