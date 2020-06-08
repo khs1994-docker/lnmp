@@ -73,7 +73,7 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        options="--build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
+        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
 
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \

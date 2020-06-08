@@ -748,3 +748,5 @@ spec:
           successThreshold: 1
           timeoutSeconds: 1
       serviceAccountName: kong-serviceaccount
+      nodeSelector:
+        kubernetes.io/os: linux

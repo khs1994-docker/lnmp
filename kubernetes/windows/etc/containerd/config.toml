@@ -25,7 +25,7 @@ oom_score = 0
   address = ""
   uid = 0
   gid = 0
-  level = "debug"
+  level = ""
 
 [metrics]
   address = ""
@@ -63,26 +63,32 @@ oom_score = 0
     restrict_oom_score_adj = false
     max_concurrent_downloads = 3
     disable_proc_mount = false
+    unset_seccomp_profile = ""
+    tolerate_missing_hugepages_controller = false
     [plugins."io.containerd.grpc.v1.cri".containerd]
       snapshotter = "windows"
       default_runtime_name = "runhcs-wcow-process"
       no_pivot = false
+      disable_snapshot_annotations = false
       [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
         runtime_type = ""
         runtime_engine = ""
         runtime_root = ""
         privileged_without_host_devices = false
+        base_runtime_spec = ""
       [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime]
         runtime_type = ""
         runtime_engine = ""
         runtime_root = ""
         privileged_without_host_devices = false
+        base_runtime_spec = ""
       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runhcs-wcow-process]
           runtime_type = "io.containerd.runhcs.v1"
           runtime_engine = ""
           runtime_root = ""
           privileged_without_host_devices = false
+          base_runtime_spec = ""
     [plugins."io.containerd.grpc.v1.cri".cni]
       bin_dir = "C:\\bin\\cni"
       conf_dir = "C:\\Users\\90621\\lnmp\\kubernetes\\windows\\etc\\cni"
@@ -108,6 +114,6 @@ oom_score = 0
   [plugins."io.containerd.metadata.v1.bolt"]
     content_sharing_policy = "shared"
   [plugins."io.containerd.runtime.v2.task"]
-    platforms = ["windows/amd64"]
+    platforms = ["windows/amd64", "linux/amd64"]
   [plugins."io.containerd.service.v1.diff-service"]
-    default = ["windows"]
+    default = ["windows", "windows-lcow"]
