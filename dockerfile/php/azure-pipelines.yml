@@ -157,7 +157,7 @@ jobs:
   - name: DOCKER_CLI_EXPERIMENTAL
     value: enabled
   - name: DOCKER_COMPOSE_VERSION
-    value: 1.25.0
+    value: 1.26.0
   timeoutInMinutes: 0
   steps:
   - script: |

@@ -64,27 +64,38 @@ jobs:
          dist: bionic
          CI_KUBERNETES_VERSION: 1.16.8
          LNMP_K8S_GET: --url
-     # TODO
-     fail-fast: true
+     fail-fast: false
    steps:
-     - run: df -h
      - uses: actions/checkout@v2
        with:
          fetch-depth: 2
      - uses: docker-practice/actions-setup-docker@master
-     - uses: actions/cache@v1
+     - uses: actions/cache@v2
        name: k8s-files-caches
        with:
-         path: kubernetes-release/release/v${{matrix.CI_KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin
+         path: |
+           kubernetes-release/release/v${{matrix.CI_KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin
          key: ${{matrix.CI_KUBERNETES_VERSION}}
-     - uses: actions/cache@v1
+     - uses: actions/cache@v2
        name: khs1994-docker-lnmp-caches
        with:
          path: ~/.khs1994-docker-lnmp/caches
          key: khs1994-docker-lnmp-caches
-     - uses: actions/setup-go@v1
-       with:
-         go-version: '1.14.4'
+     - run: |
+         set -x
+
+         df -h
+
+         docker image ls
+         docker system df
+         docker system prune -a -f
+         docker system df
+
+         df -h
+       name: os-metadata
+    #  - uses: actions/setup-go@v1
+    #    with:
+    #      go-version: '1.14.4'
      - name: Setup dns
        run: |
          set -x
@@ -108,7 +119,8 @@ jobs:
          sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
          sestatus || true
-         ls ~/.khs1994-docker-lnmp/caches || true
+         ls -la ~/.khs1994-docker-lnmp/caches || true
+         ls -la kubernetes-release/release/ || true
          echo $PATH
 
          sudo netstat -lnpt
@@ -133,7 +145,7 @@ jobs:
          ./lnmp-k8s > /dev/null
          echo $SERVER_IP > .server_ip
      - run: |
-         echo "1" > .is_github_tag_event
+         echo is_github_tag_event
        if: github.event_name == 'push' && contains(github.ref,'refs/tags/')
        name: Is tag event
      - name: Install k8s
@@ -141,11 +153,11 @@ jobs:
          set -x
 
          SERVER_IP=`cat .server_ip`
-         # echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+
          export KUBERNETES_TYPE=server
          sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
          sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" systemd/.env
-         # test -f .is_github_tag_event && ./lnmp-k8s _build_k8s_image || true
+
          cat systemd/.env
          sudo hostnamectl set-hostname node1
          echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
@@ -158,16 +170,18 @@ jobs:
 
          sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=false#g" ./.env
 
+         sudo mkdir -p /home/runner/.khs1994-docker-lnmp/dockerhub
+         sudo chmod -R 777 /home/runner/.khs1994-docker-lnmp
          ./lnmp-k8s kubernetes-server ${LNMP_K8S_GET}
          ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
          # debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
-         rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
-         rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
-         rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
-         rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/cloud-controller-manager
-         rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/hyperkube
-         rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/mounter
+         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
+         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
+         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
+         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/cloud-controller-manager
+         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/hyperkube
+         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/mounter
      - name: Start k8s
        run: |
          set -x
@@ -328,9 +342,15 @@ jobs:
          test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
      - name: cleanup
        run: |
-         rm -rf ${K8S_ROOT:-/opt/k8s}/bin/*.tar
-         rm -rf ${K8S_ROOT:-/opt/k8s}/bin/apiextensions-apiserver
-         rm -rf ${K8S_ROOT:-/opt/k8s}/bin/kubeadm
+         set -x
+
+         df -h
+
+         sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/*.tar
+         sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/apiextensions-apiserver
+         sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/kubeadm
+
+         df -h
      - name: Test k8s
        run: |
          set -x
@@ -345,7 +365,7 @@ jobs:
          cd cli ; (sh generate.sh || true); cd ..
          git diff
          sudo netstat -lnpt
-         ./tests/test.sh
+         # ./tests/test.sh
 
          sudo crictl version
          sudo crictl info

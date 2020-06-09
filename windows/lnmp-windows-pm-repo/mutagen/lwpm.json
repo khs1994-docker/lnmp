@@ -8,5 +8,5 @@
     "version": "mutagen version"
   },
   "url": "https://github.com/mutagen-io/mutagen/releases/download/v${VERSION}/mutagen_${env:lwpm_os}_${env:lwpm_architecture}_v${VERSION}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
-  "version": "0.11.4"
+  "version": "0.11.5"
 }

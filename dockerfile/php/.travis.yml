@@ -105,7 +105,7 @@ env:
   - PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly COMPOSER=1
 
   global:
-  - DOCKER_COMPOSE_VERSION=1.23.2
+  - DOCKER_COMPOSE_VERSION=1.26.0
   - DOCKER_BUILDKIT=1
   - DOCKER_CHANNEL=test # stable test nightly
   - DOCKER_HUB_USERNAME=khs1994
