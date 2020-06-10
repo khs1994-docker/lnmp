@@ -14,4 +14,4 @@
 
 * [PHP `7.4.6` `7.3.18` `7.2.31`](https://www.php.net/ChangeLog-7.php#7.4.6)
 * [NGINX `1.19.0`](https://nginx.org/en/CHANGES)
-* [Redis `6.0.4`](https://raw.githubusercontent.com/antirez/redis/6.0/00-RELEASENOTES)
+* [Redis `6.0.5`](https://raw.githubusercontent.com/antirez/redis/6.0/00-RELEASENOTES)

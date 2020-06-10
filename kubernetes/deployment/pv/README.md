@@ -16,10 +16,10 @@
 
 ## Windows (hostpath)
 
-* `/c/Users/username/app`
-* `/c/Users/username/.docker/Volumes/lnmp-log`
-* `/c/Users/username/.docker/Volumes/lnmp-mysql`
-* `/c/Users/username/.docker/Volumes/lnmp-redis`
+* `/run/desktop/mnt/host/c/Users/username/app`
+* `/run/desktop/mnt/host/c/Users/username/.docker/Volumes/lnmp-log`
+* `/run/desktop/mnt/host/c/Users/username/.docker/Volumes/lnmp-mysql`
+* `/run/desktop/mnt/host/c/Users/username/.docker/Volumes/lnmp-redis`
 
 ## NFS
 

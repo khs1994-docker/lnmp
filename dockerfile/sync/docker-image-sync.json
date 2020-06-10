@@ -112,8 +112,8 @@
     "dest": "redis:5.0.9-alpine"
   },
   {
-    "source": "library/redis:6.0.4-alpine",
-    "dest": "redis:6.0.4-alpine"
+    "source": "library/redis:6.0.5-alpine",
+    "dest": "redis:6.0.5-alpine"
   },
   {
     "source": "library/memcached:alpine",

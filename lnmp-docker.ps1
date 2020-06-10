@@ -717,6 +717,12 @@ function _pcit_cp(){
   docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 }
 
+function _edit_hosts(){
+  Start-Process -FilePath "notepad.exe" `
+        -ArgumentList "C:\Windows\System32\drivers\etc\hosts" `
+        -Verb RunAs
+}
+
 # main
 
 # .env .env.ps1
@@ -1452,7 +1458,7 @@ XXX
 127.0.0.1 gcr.io k8s.gcr.io
 "
 
-        explorer.exe C:\Windows\System32\drivers\etc
+        _edit_hosts
         exit
       }
 
@@ -1542,9 +1548,7 @@ Example: ./lnmp-docker composer /app/demo install
       }
 
     hosts {
-      Start-Process -FilePath "notepad.exe" `
-        -ArgumentList "C:\Windows\System32\drivers\etc\hosts" `
-        -Verb RunAs
+      _edit_hosts
     }
 
     dockerd {
