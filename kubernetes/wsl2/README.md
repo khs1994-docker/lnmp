@@ -157,7 +157,7 @@ $ ./wsl2/bin/kubectl-config-set-cluster
 # $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig
 
 # 封装上边的命令
-$ ./wsl2/bin/kubectl
+$ ./wsl2/bin/wsl-k8s kubectl
 ```
 
 ## 7. crictl
@@ -252,7 +252,7 @@ csr-9pvrm   11m    system:node:wsl2          Pending
 根据提示 **签署** 证书,一般为最后一个
 
 ```bash
-$ ./wsl2/bin/kubectl certificate approve csr-9pvrm
+$ ./wsl2/bin/wsl-k8s kubectl certificate approve csr-9pvrm
 ```
 
 如果使用 NFS 卷
