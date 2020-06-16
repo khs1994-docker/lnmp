@@ -28,7 +28,7 @@ $ cd demo
 
 ## 说明
 
-* 本项目以 PHP 最新的主线版本 `7.4.6` 为例，如果你需要其他版本，或多种版本请到 https://github.com/khs1994-docker/lnmp/issues/354 反馈
+* 本项目以 PHP 最新的主线版本 `7.4.7` 为例，如果你需要其他版本，或多种版本请到 https://github.com/khs1994-docker/lnmp/issues/354 反馈
 
 * Laravel 项目，请查看 https://github.com/khs1994-docker/laravel-demo
 
