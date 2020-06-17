@@ -1900,7 +1900,7 @@ env_status && . ./.env && . cli/.env
 if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then export LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
 if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then export LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi
 
-APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
+APP_ROOT=$(mkdir -p ${APP_ROOT:-./app}; cd ${APP_ROOT:-./app}; pwd)
 
 print_info "APP_ROOT is $APP_ROOT"
 

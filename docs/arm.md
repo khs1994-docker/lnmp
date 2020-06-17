@@ -10,6 +10,7 @@ $ ./lnmp-docker up
 
 ## arm 暂不支持 MySQL、PHPMyAdmin
 
+* arm32 位(armv7l) 无法使用 `mariadb`
 * 在 `.env` 文件中将 `mysql` 替换为 `mariadb`
 * 在 `.env` 文件中将 `phpmyadmin` 去掉
 * 在 `.env` 文件中 `LREW_INCLUDE` 新增 `mariadb`
@@ -44,7 +45,7 @@ $ sudo apt install libffi-dev
 
 ## ARM64
 
-由于 [bamarni/pi64](https://github.com/bamarni/pi64) 不再更新,笔者 [fork](https://github.com/khs1994/pi64) 了此项目并持续更新.
+官方测试版 https://www.raspberrypi.org/forums/viewtopic.php?f=117&t=275370
 
 ## 参考
 
