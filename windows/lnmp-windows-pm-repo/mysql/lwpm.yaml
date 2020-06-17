@@ -61,7 +61,7 @@ scripts:
     _cleanup mysql
   test: printInfo mysql (mysql --version).split(" ")[3] install success
   uninstall: |
-    _sudo mysqld --uninstall
+    _sudo mysqld --remove
     _cleanup C:\mysql
   version: (mysql --version).split(" ")[3]
   platform-reqs: if(!$IsWindows){echo $False}
