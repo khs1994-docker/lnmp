@@ -24,7 +24,7 @@
       "printInfo $(composer --version) install success"
     ],
     "uninstall": [
-      "_sudo \"remove-item -r -force $env:ProgramData\\ComposerSetup\""
+      "_sudo remove-item -r -force $env:ProgramData\\ComposerSetup"
     ],
     "pruneuninstall": [
       "_cleanup \"$HOME\\AppData\\Roaming\\Composer\"",

@@ -1,0 +1,69 @@
+name: mysql
+description: MySQL Server, the world's most popular open source database, and MySQL Cluster, a real-time, open source transactional database"
+version: "8.0.20"
+pre-version: "8.0.20"
+homepage: "http://www.mysql.com/"
+bug: ""
+github: "mysql/mysql-server"
+releases: "https://github.com/mysql/mysql-server/releases"
+url: "https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
+url-mirror: "https://mirrors.huaweicloud.com/mysql/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip"
+scripts:
+  postinstall: |
+    if(!(Test-Path C:\mysql\data)){
+    Write-Host "mysql is init ..."
+
+    mysqld --initialize
+
+    # 安装服务
+
+    _sudo mysqld --install
+
+    # 禁止开机启动
+
+    _sudo set-service mysql -StartupType Manual
+    }
+
+    if (!(Test-Path C:/mysql/my.cnf)){
+    Copy-Item $env:LWPM_PKG_ROOT/../../config/my.cnf C:/mysql/my.cnf
+    }
+
+    $mysql_password=($(select-string `
+    "A temporary password is generated for" C:\mysql\data\*.err) -split " ")[12]
+
+    Write-host "
+
+    Please exec command start(or init) mysql
+
+    $ net start mysql
+
+    $ mysql -uroot -p`"$mysql_password`"
+
+    mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mytest';
+
+    mysql> FLUSH PRIVILEGES;
+
+    mysql> GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+
+    # add remote login user
+
+    mysql> CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+
+    mysql> GRANT ALL ON *.* TO 'root'@'%' WITH GRANT OPTION;
+    "
+  install: |
+    _cleanup mysql
+    _unzip $filename mysql
+
+    _mkdir C:\mysql
+    Copy-item -r -force "mysql\mysql-${VERSION}-winx64\*" "C:\mysql\"
+
+    _cleanup mysql
+  test: printInfo mysql (mysql --version).split(" ")[3] install success
+  uninstall: |
+    _sudo mysqld --uninstall
+    _cleanup C:\mysql
+  version: (mysql --version).split(" ")[3]
+  platform-reqs: if(!$IsWindows){echo $False}
+path: ["C:\\mysql\\bin"]
+command: mysql
