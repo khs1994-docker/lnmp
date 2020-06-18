@@ -190,6 +190,13 @@ Function _import_module($soft) {
 
   if (!(Test-Path $soft_ps_module_dir/$soft.psm1)) {
     $env:LWPM_MANIFEST_PATH = "$soft_ps_module_dir/lwpm.json"
+
+    if (!(Test-Path $env:LWPM_MANIFEST_PATH)) {
+      printError "$env:LWPM_MANIFEST_PATH not exists"
+      Set-Location $EXEC_CMD_DIR
+      exit 1
+    }
+
     $soft_ps_module_dir = "$PSScriptRoot\lnmp-windows-pm-repo\example.psm1"
   }
   else {
@@ -530,7 +537,7 @@ function getVersionByProvider($soft) {
 function _path($softs) {
   if ($IsWindows) {
     printError This command not support Windows
-
+    Set-Location $EXEC_CMD_DIR
     exit 1
   }
 
@@ -629,7 +636,7 @@ function _push($opt) {
 
   if (!$env:LWPM_DOCKER_USERNAME -or !$env:LWPM_DOCKER_PASSWORD) {
     Write-Host ==> please set `$env:LWPM_DOCKER_USERNAME and `$env:LWPM_DOCKER_PASSWORD -ForegroundColor Red
-
+    Set-Location $EXEC_CMD_DIR
     exit 1
   }
 
@@ -841,7 +848,7 @@ function _yaml_to_json_and_sort($yaml) {
 function _toJson($soft) {
   if (!(_command ConvertFrom-Yaml)) {
     printError Please install ConvertFrom-Yaml by exec $ Install-Module powershell-yaml
-
+    Set-Location $EXEC_CMD_DIR
     exit 1
   }
   try { $pkg_root = pkg_root $soft }catch { return }

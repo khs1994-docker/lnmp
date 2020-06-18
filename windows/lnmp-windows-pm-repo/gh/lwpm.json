@@ -21,9 +21,9 @@
       "_cleanup $unzipDesc"
     ],
     "postinstall": [
-      "$env:ps_module_dir=${env:PSModulePath}.split([System.IO.Path]::PathSeparator)[0]+\"\\gh\"",
-      "_mkdir $env:ps_module_dir | out-null",
-      "gh completion --shell powershell > $env:ps_module_dir\\gh.psm1",
+      "$ps_module_dir=${env:PSModulePath}.split([System.IO.Path]::PathSeparator)[0]+\"\\gh\"",
+      "_mkdir $ps_module_dir | out-null",
+      "gh completion --shell powershell > $ps_module_dir\\gh.psm1",
       "if(!(Test-Path $PROFILE)){_mkdir $PROFILE; Remove-Item -r -Force $PROFILE;New-Item $PROFILE | out-null}",
       "if((get-content $PROFILE | select-string \"Import-Module gh\").line.Length -eq 0){echo \"Import-Module gh\" >> $PROFILE}",
       "Import-Module gh"
@@ -37,8 +37,8 @@
     "version": "(gh --version).split()[2]",
     "hash": [
       "invoke-webrequest https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_checksums.txt -OutFile Temp:/gh_checksum",
-      "$env:hash=(Get-Content Temp:/gh_checksum | select-string $filename).line.split(' ')[0]",
-      "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed\"}"
+      "$hash=(Get-Content Temp:/gh_checksum | select-string $filename).line.split(' ')[0]",
+      "if($hash -and ((Get-SHA256 $filename) -ne $hash)){printError \"$filename sha256 check failed\"}"
     ]
   },
   "path": [

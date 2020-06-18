@@ -19,7 +19,7 @@ scripts:
   version: ($(httpd -v) -split " ")[2].trim("Apache/")
   install:
   - |
-    $env:HTTPD_MOD_FCGID_VERSION="2.3.10"
+    $HTTPD_MOD_FCGID_VERSION="2.3.10"
 
     _downloader `
     "https://www.apachelounge.com/download/VS16/modules/mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip" `
@@ -41,11 +41,11 @@ scripts:
 
     _cleanup mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16
     }
-  - $env:HTTPD_IS_RUN=0
+  - $HTTPD_IS_RUN=0
   - |
     if (!(get-service Apache2.4 -ErrorAction Continue > $null 2>&1)){
       _sudo httpd -k install
-      $env:HTTPD_IS_RUN=1
+      $HTTPD_IS_RUN=1
     }
   - _sudo set-service Apache2.4 -StartupType Manual
   - mkdir $env:USERPROFILE\lnmp\windows\httpd | out-null

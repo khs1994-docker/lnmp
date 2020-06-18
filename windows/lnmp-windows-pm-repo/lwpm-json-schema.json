@@ -234,6 +234,20 @@
           ],
           "description": "how to get version string"
         },
+        "get-latest-version": {
+          "type": "string",
+          "description": "Function Get-LatestVersion(){ }",
+          "default": [
+            "Function Get-LatestVersion(){ }"
+          ]
+        },
+        "get-version": {
+          "type": "string",
+          "description": "set arg $VERSION",
+          "default": [
+            "if($isPre){$VERSION='x.y.z-beta'}else{$VERSION='x.y.z'}"
+          ]
+        },
         "hash": {
           "type": [
             "string",

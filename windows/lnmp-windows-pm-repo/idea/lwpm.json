@@ -15,8 +15,8 @@
     ],
     "test": "if($IsWindows){get-command ${env:APPDATA}\\..\\Local\\JetBrains\\Toolbox\\bin\\jetbrains-toolbox.exe}",
     "version": [
-      "$env:version = (get-command ${env:APPDATA}\\..\\Local\\JetBrains\\Toolbox\\bin\\jetbrains-toolbox.exe).Version",
-      "${env:version}.trim('.0')"
+      "$version = (get-command ${env:APPDATA}\\..\\Local\\JetBrains\\Toolbox\\bin\\jetbrains-toolbox.exe).Version",
+      "${version}.trim('.0')"
     ],
     "platform-reqs": [
       "if($IsLinux){echo $False}"

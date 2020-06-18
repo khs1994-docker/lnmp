@@ -33,19 +33,6 @@ $pre_url = $lwpm.'pre-url'
 $pre_url_mirror = $lwpm.'pre-url-mirror'
 $insert_path = $lwpm.path
 
-Function _iex($str) {
-  if (!($str)) {
-    return
-  }
-
-  try {
-    iex $str
-  }
-  catch {
-    printError $_.Exception
-  }
-}
-
 Function _install_after() {
   if (!$lwpm.scripts.postinstall) {
 
@@ -53,15 +40,15 @@ Function _install_after() {
   }
 
   foreach ($item in $lwpm.scripts.postinstall) {
-    _iex $item
+    try { iex $item }catch { printError $_.Exception }
   }
 }
 
 Function _getUrl($url, $url_mirror, $VERSION) {
-  if ($url) { $url = _iex "echo $url" }
+  if ($url) { $url = iex "echo $url" }
 
   if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
-    $url_mirror = _iex "echo $url_mirror"
+    $url_mirror = iex "echo $url_mirror"
     Write-Host "==> Try use Download url mirror" -ForegroundColor Green
     $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
 
@@ -93,7 +80,7 @@ Function Get-HashFromUrl($url) {
 Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   if ($lwpm.scripts.'platform-reqs' -and ($env:LWPM_DIST_ONLY -ne 'true')) {
     foreach ($item in $lwpm.scripts.'platform-reqs') {
-      $result = _iex $item
+      try { $result = iex $item }catch {}
     }
 
     if ($result -eq $false) {
@@ -101,6 +88,10 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
 
       return
     }
+  }
+
+  if ($lwpm.scripts.'get-version' -and !$VERSION) {
+    try { iex $lwpm.scripts.'get-version' }catch { printError $_.Exception }
   }
 
   if ($isPre) {
@@ -129,7 +120,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     $url = $download_url
   }
 
-  if ($url) { $url = _iex "echo $url" }
+  if ($url) { $url = iex "echo $url" }
 
   # Write-Host "Please download on this website:
 
@@ -139,8 +130,8 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   #  exit
 
   $filename = $url.split('/')[-1]
-  if ($lwpm.'download-filename') {
-    $filename = ($lwpm.'download-filename').replace('${VERSION}', ${VERSION})
+  if ($download_filename = $lwpm.'download-filename') {
+    $filename = iex "echo $download_filename"
   }
 
   $unzipDesc = $name
@@ -156,7 +147,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
 
     if ($lwpm.scripts.version) {
       foreach ($item in $lwpm.scripts.version) {
-        $CURRENT_VERSION = _iex $item
+        try { $CURRENT_VERSION = iex $item }catch {}
       }
     }
 
@@ -202,17 +193,17 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     if ($lwpm.'hash-url') {
       if ($hash_url = $lwpm.'hash-url'.sha256) {
         $hashType = 'sha256'
-        $hash = Get-HashFromUrl $(_iex "echo $hash_url")
+        $hash = Get-HashFromUrl $(iex "echo $hash_url")
       }
 
       if ($hash_url = $lwpm.'hash-url'.sha384) {
         $hashType = 'sha384'
-        $hash = Get-HashFromUrl $(_iex "echo $hash_url")
+        $hash = Get-HashFromUrl $(iex "echo $hash_url")
       }
 
       if ($hash_url = $lwpm.'hash-url'.sha512) {
         $hashType = 'sha512'
-        $hash = Get-HashFromUrl $(_iex "echo $hash_url")
+        $hash = Get-HashFromUrl $(iex "echo $hash_url")
       }
     }
 
@@ -226,7 +217,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
 
     if ($lwpm.scripts.hash) {
       foreach ($item in $lwpm.scripts.hash) {
-        _iex $item
+        try { iex $item }catch { printError $_.Exception }
       }
     }
   }
@@ -235,7 +226,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     write-host "==> Dist files, Download from $url" -ForegroundColor Green
 
     foreach ($item in $lwpm.scripts.download) {
-      _iex $item
+      try { iex $item }catch { printError $_.Exception }
     }
 
     printInfo Dist only`, skip install
@@ -257,7 +248,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
 
   if ($lwpm.scripts.preinstall) {
     foreach ($item in $lwpm.scripts.preinstall) {
-      _iex $item
+      iex $item
     }
   }
 
@@ -265,7 +256,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   # Copy-item -r -force "$unzipDesc/" ""
   if ($lwpm.scripts.install) {
     foreach ($item in $lwpm.scripts.install) {
-      _iex $item
+      try { iex $item }catch { printError $_.Exception }
     }
   }
   # Start-Process -FilePath $filename -wait
@@ -280,17 +271,17 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   # test
   if ($lwpm.scripts.pretest) {
     foreach ($item in $lwpm.scripts.pretest) {
-      _iex $item
+      try { iex $item }catch { printError $_.Exception }
     }
   }
   if ($lwpm.scripts.test) {
     foreach ($item in $lwpm.scripts.test) {
-      _iex $item
+      try { iex $item }catch { printError $_.Exception }
     }
   }
   if ($lwpm.scripts.posttest) {
     foreach ($item in $lwpm.scripts.posttest) {
-      _iex $item
+      try { iex $item }catch { printError $_.Exception }
     }
   }
 }
@@ -304,19 +295,19 @@ Function _uninstall($prune = 0) {
 
   # _cleanup ""
   foreach ($item in $lwpm.scripts.preuninstall) {
-    _iex $item
+    try { iex $item }catch { printError $_.Exception }
   }
   foreach ($item in $lwpm.scripts.uninstall) {
-    _iex $item
+    try { iex $item }catch { printError $_.Exception }
   }
   foreach ($item in $lwpm.scripts.postuninstall) {
-    _iex $item
+    try { iex $item }catch { printError $_.Exception }
   }
   # user data
   if ($prune) {
     # _cleanup ""
     foreach ($item in $lwpm.scripts.pruneuninstall) {
-      _iex $item
+      try { iex $item }catch { printError $_.Exception }
     }
   }
 
@@ -330,6 +321,13 @@ function _getLatestVersion() {
   $pre_version = $null
 
   # TODO
+
+  if ($lwpm.scripts.'get-latest-version') {
+    iex $lwpm.scripts.'get-latest-version'
+    if (Get-Command Get-LatestVersion -ErrorAction SilentlyContinue) {
+      return Get-LatestVersion
+    }
+  }
 
   return $stable_version, $pre_version
 }

@@ -23,8 +23,8 @@
     "version": "(etcd --version).split(' ')[2]",
     "hash": [
       "invoke-webrequest https://mirrors.huaweicloud.com/etcd/v${VERSION}/SHA256SUMS -outFile Temp:/etcd-sha256",
-      "$env:hash=(get-content Temp:/etcd-sha256 | select-string $filename).Line.split(' ')[0]",
-      "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed \"}"
+      "$hash=(get-content Temp:/etcd-sha256 | select-string $filename).Line.split(' ')[0]",
+      "if($hash -and ((Get-SHA256 $filename) -ne $hash)){printError \"$filename sha256 check failed \"}"
     ]
   },
   "path": [

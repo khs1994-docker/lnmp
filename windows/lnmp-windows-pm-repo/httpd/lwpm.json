@@ -12,14 +12,14 @@
   "releases": "https://httpd.apache.org/download.cgi",
   "scripts": {
     "install": [
-      "$env:HTTPD_MOD_FCGID_VERSION=\"2.3.10\"\n\n_downloader `\n\"https://www.apachelounge.com/download/VS16/modules/mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip\" `\n\"mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip\" `\n\"httpd_mod_fcgid\" `\n${env:HTTPD_MOD_FCGID_VERSION}\n",
+      "$HTTPD_MOD_FCGID_VERSION=\"2.3.10\"\n\n_downloader `\n\"https://www.apachelounge.com/download/VS16/modules/mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip\" `\n\"mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip\" `\n\"httpd_mod_fcgid\" `\n${env:HTTPD_MOD_FCGID_VERSION}\n",
       "_cleanup $unzipDesc",
       "_unzip $filename $unzipDesc",
       "_mkdir C:\\Apache24",
       "Copy-item -r -force \"httpd\\Apache24\" \"C:\\\"",
       "if (!(Test-Path C:\\Apache24\\modules\\mod_fcgid.so)){\n_unzip mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `\n       mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16\n\ncopy-item mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16\\mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}\\mod_fcgid.so `\n          C:\\Apache24\\modules\n\n_cleanup mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16\n}\n",
-      "$env:HTTPD_IS_RUN=0",
-      "if (!(get-service Apache2.4 -ErrorAction Continue > $null 2>&1)){\n  _sudo httpd -k install\n  $env:HTTPD_IS_RUN=1\n}\n",
+      "$HTTPD_IS_RUN=0",
+      "if (!(get-service Apache2.4 -ErrorAction Continue > $null 2>&1)){\n  _sudo httpd -k install\n  $HTTPD_IS_RUN=1\n}\n",
       "_sudo set-service Apache2.4 -StartupType Manual",
       "mkdir $env:USERPROFILE\\lnmp\\windows\\httpd | out-null",
       "mkdir $env:USERPROFILE\\lnmp\\windows\\logs\\httpd | out-null",
