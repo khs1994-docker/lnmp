@@ -1,12 +1,12 @@
 name: istioctl
 url: https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-win.zip
-version: 1.6.1
+version: 1.6.3
 scripts:
   install:
     - _unzip $filename C:\bin\
   uninstall: _cleanup C:\bin\istioctl.exe
   version: istioctl version  --remote=false -s
-  test: printInfo $(istioctl version  --remote=false -s) install success
+  test: printInfo istioctl $(istioctl version  --remote=false -s) install success
 command: istioctl
 hash-url:
   sha256: https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-win.zip.sha256
