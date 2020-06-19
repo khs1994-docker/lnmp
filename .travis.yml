@@ -442,8 +442,8 @@ stages:
       tag =~ /^(v19)/
   - name: swarm
     if: |
-      branch = "19.03" OR \
-      tag =~ /^(v19)/
+      branch = "18.03" OR \
+      tag =~ /^(v18)/
   - name: checkConfig
     if: |
       branch = "19.03"
