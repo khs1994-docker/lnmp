@@ -1,12 +1,12 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
-ARG NGINX_VERSION=1.17.4
+ARG NGINX_VERSION=1.19.0
 
 ARG DEB_URL=deb.debian.org
 
 ARG DEB_SECURITY_URL=security.debian.org/debian-security
 
-ARG OPENSSL_URL=https://github.com/openssl/openssl
+ARG OPENSSL_URL=https://github.com/google/boringssl
 
 ARG OPENSSL_BRANCH=OpenSSL_1_1_1a
 
@@ -120,9 +120,9 @@ RUN set -x ; sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
-LABEL maintainer="khs1994.com nginx With TLSv1.3"
+LABEL maintainer="khs1994.com nginx With HTTP3"
 
 COPY --from=0 /etc/nginx /etc/nginx
 COPY --from=0 /usr/lib/nginx /usr/lib/nginx
@@ -136,7 +136,7 @@ RUN groupadd -r nginx \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
   && mkdir -p /var/cache/nginx
 
-EXPOSE 80 443
+EXPOSE 80 443/tcp 443/udp
 
 STOPSIGNAL SIGTERM
 

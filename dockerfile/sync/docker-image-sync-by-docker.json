@@ -1,6 +1,6 @@
 [
   {
-    "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:",
+    "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0",
     "dest": "nginx-ingress-controller:0.33.0"
   },
   {
@@ -32,7 +32,7 @@
     "dest": "tektoncd-gcs-fetcher@sha256:4d7b59810918f27f04df4b4a10a41c19ba04668196f33313019b170d8b331625"
   },
   {
-    "source":"gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init@sha256:1f989b77e3bbd6813d2451f90b3364c0e09448d0eb976da0634eb028f9dc8a5b",
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init@sha256:1f989b77e3bbd6813d2451f90b3364c0e09448d0eb976da0634eb028f9dc8a5b",
     "dest": "tektoncd-pullrequest-init@sha256:1f989b77e3bbd6813d2451f90b3364c0e09448d0eb976da0634eb028f9dc8a5b"
   },
   {

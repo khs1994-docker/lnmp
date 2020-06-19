@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -x
+
+docker run -it --rm $IMAGE_NAME nginx -V
