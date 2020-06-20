@@ -16,4 +16,4 @@
 
 ## CNI
 
-* [calico](https://docs.projectcalico.org/v3.14/getting-started/kubernetes/installation/calico) `3.14`
+* [calico](https://docs.projectcalico.org/v3.15/getting-started/kubernetes/installation/calico) `3.15`

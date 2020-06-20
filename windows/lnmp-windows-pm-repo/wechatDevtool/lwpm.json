@@ -1,8 +1,8 @@
 {
   "name": "wechatDevtool",
   "description": "WeChat Dev tool",
-  "version": "1.04.2006112",
-  "pre-version": "1.04.2006112",
+  "version": "1.04.2006192",
+  "pre-version": "1.04.2006192",
   "homepage": "https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html",
   "bug": "https://developers.weixin.qq.com/community/develop/question",
   "github": "https://github.com/wechat-miniprogram",
@@ -14,7 +14,7 @@
       "if($IsLinux){echo $False}"
     ],
     "uninstall": "& 'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\卸载微信开发者工具.exe'",
-    "test": "if($IsWindows){get-command 'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat')",
+    "test": "if($IsWindows){get-command 'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat'}",
     "install": [
       "Start-Process -FilePath $filename -wait"
     ],
