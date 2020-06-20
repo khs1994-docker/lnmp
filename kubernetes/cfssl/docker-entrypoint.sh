@@ -284,7 +284,7 @@ EOF
         "ST": "BeiJing",
         "L": "BeiJing",
         "O": "k8s",
-        "OU": "4Paradigm"
+        "OU": "khs1994"
       }
     ]
   }' |
@@ -292,6 +292,28 @@ EOF
       -ca-key=ca-key.pem  \
       -config=ca-config.json  \
       -profile=kubernetes - | cfssljson -bare proxy-client
+
+  echo '{
+    "CN": "'${CN}'",
+    "hosts": [],
+    "key": {
+      "algo": "ecdsa",
+      "size": 384
+    },
+    "names": [
+      {
+        "C": "CN",
+        "ST": "BeiJing",
+        "L": "BeiJing",
+        "O": "k8s",
+        "OU": "khs1994"
+      }
+    ]
+  }' |
+     cfssl gencert -ca=ca.pem \
+      -ca-key=ca-key.pem  \
+      -config=ca-config.json  \
+      -profile=kubernetes - | cfssljson -bare front-proxy-client
 
 # system:kube-controller-manager (server + client)
   # 1. 与 kube-apiserver 的安全端口通信
