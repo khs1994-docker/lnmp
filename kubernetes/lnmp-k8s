@@ -1108,7 +1108,7 @@ _cri_handler(){
 _k8s_install_conf_cp(){
   print_info "copy kubernetes conf and cert file ..."
 
-  $(_sudo) cp systemd/certs/*.pem ${K8S_ROOT}/certs/
+  $(_sudo) cp systemd/certs/*.pem systemd/certs/sa.pub systemd/certs/sa.key ${K8S_ROOT}/certs/
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
     echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi

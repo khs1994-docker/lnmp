@@ -3,9 +3,8 @@ FROM alpine:3.12
 ENV KUBECTL_VERSION=v1.18.0
 
 RUN apk add --no-cache curl \
-      && curl -L https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 > /usr/local/bin/cfssl \
-      # && curl -s -L -o /usr/local/bin/cfssljson https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 \
-      && curl -L https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 > /usr/local/bin/cfssljson \
+      && curl -L https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_amd64 > /usr/local/bin/cfssl \
+      && curl -L https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_amd64 > /usr/local/bin/cfssljson \
       && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > /usr/local/bin/kubectl \
       && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl \
       && apk del --no-network curl
@@ -17,7 +16,7 @@ LABEL maintainer="khs1994@khs1994.com" \
 
 COPY --from=0 /usr/local/bin /usr/local/bin
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash openssl
 
 WORKDIR /srv/cfssl
 

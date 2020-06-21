@@ -6,6 +6,34 @@ set -ex
 
 env
 
+_ca(){
+  if [ -f $1-ca.pem ];then
+    echo "$1-ca exists, skip"
+
+    return
+  fi
+
+    echo '{
+      "CN":"kubernetes",
+      "key":{
+        "algo":"ecdsa",
+        "size": 384
+      },
+      "names": [
+      {
+        "C":"CN",
+        "ST":"Beijing",
+        "L":"Beijing",
+        "O":"k8s",
+        "OU":"khs1994.com"
+      }],
+      "ca": {
+        "expiry": "876000h"
+      }
+    }' \
+         | cfssl gencert -initca - | cfssljson -bare $1-ca -
+}
+
 main (){
   mkdir -p cert
 
@@ -71,11 +99,21 @@ main (){
     cd ..
   fi
 
+  cp etcd-ca* cert/ || true
+  cp front-proxy-ca* cert/ || true
+  cp sa.key sa.pub cert/ || true
+
   rm -rf *.pem
   rm -rf *.csr
 
   # 复制 CA
   cp cert/* .
+
+# etcd ca
+_ca etcd
+
+# front-proxy-ca
+_ca front-proxy
 
 # docker (server) hosts 为节点所在 IP
   export CN_NAME=server
@@ -89,7 +127,7 @@ main (){
     }
   }' \
     | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
-       -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+       -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare docker-$CN_NAME
 
 # docker (client) 无需提供 hosts
   export CN_NAME=client
@@ -103,7 +141,7 @@ main (){
       }
     }' \
       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem -profile=kubernetes \
-      - | cfssljson -bare $CN_NAME
+      - | cfssljson -bare docker-$CN_NAME
 
 # registry (server)
   # export CN_NAME=registry
@@ -132,7 +170,29 @@ main (){
       }
     ]
 }' \
-       | cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json \
+       | cfssl gencert -ca=etcd-ca.pem -ca-key=etcd-ca-key.pem -config=ca-config.json \
+      -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
+
+# etcd (peer) hosts 为 Etcd 节点 IP
+  export CN_NAME=etcd-peer
+
+  echo '{
+    "CN":"'$CN_NAME'",
+    "hosts":[""],
+    "key":{
+      "algo":"ecdsa",
+      "size": 384
+    },
+    "names":[{
+      "C":"CN",
+      "ST":"Beijing",
+      "L":"Beijing",
+      "O":"k8s",
+      "OU":"khs1994.com"
+      }
+    ]
+}' \
+       | cfssl gencert -ca=etcd-ca.pem -ca-key=etcd-ca-key.pem -config=ca-config.json \
       -profile=kubernetes -hostname="${LNMP_K8S_DOMAINS},127.0.0.1,localhost,${NODE_IPS}" - | cfssljson -bare $CN_NAME
 
 # etcd-client 连接 Etcd
@@ -152,7 +212,7 @@ main (){
     "OU":"khs1994.com"
   }]
 }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
+       | cfssl gencert -config=ca-config.json -ca=etcd-ca.pem -ca-key=etcd-ca-key.pem \
        -profile=kubernetes - | cfssljson -bare $CN_NAME
 
 # /apiserver-etcd-client
@@ -175,7 +235,7 @@ main (){
     "OU":"khs1994.com"
   }]
 }' \
-       | cfssl gencert -config=ca-config.json -ca=ca.pem -ca-key=ca-key.pem \
+       | cfssl gencert -config=ca-config.json -ca=etcd-ca.pem -ca-key=etcd-ca-key.pem \
        -profile=kubernetes - | cfssljson -bare apiserver-etcd-client
 
 # admin (client) 用于 kubectl
@@ -288,30 +348,8 @@ EOF
       }
     ]
   }' |
-     cfssl gencert -ca=ca.pem \
-      -ca-key=ca-key.pem  \
-      -config=ca-config.json  \
-      -profile=kubernetes - | cfssljson -bare proxy-client
-
-  echo '{
-    "CN": "'${CN}'",
-    "hosts": [],
-    "key": {
-      "algo": "ecdsa",
-      "size": 384
-    },
-    "names": [
-      {
-        "C": "CN",
-        "ST": "BeiJing",
-        "L": "BeiJing",
-        "O": "k8s",
-        "OU": "khs1994"
-      }
-    ]
-  }' |
-     cfssl gencert -ca=ca.pem \
-      -ca-key=ca-key.pem  \
+     cfssl gencert -ca=front-proxy-ca.pem \
+      -ca-key=front-proxy-ca-key.pem  \
       -config=ca-config.json  \
       -profile=kubernetes - | cfssljson -bare front-proxy-client
 
@@ -390,14 +428,18 @@ EOF
             -profile=kubernetes - | cfssljson -bare kube-proxy
 
 # docker tls cert
-  mv client-key.pem key.pem
-  mv client.pem cert.pem
-  mv server.pem server-cert.pem
-
   mkdir -p docker
-  mv key.pem cert.pem server-cert.pem server-key.pem docker/
+  mv docker-client-key.pem docker/key.pem
+  mv docker-client.pem docker/cert.pem
+  mv docker-server-key.pem docker/server-key.pem
+  mv docker-server.pem docker/server-cert.pem
 
   rm -rf cert *.csr
+
+  if ! [ -f sa.key ];then
+    openssl genrsa -out sa.key 2048
+    openssl rsa -in sa.key -pubout -out sa.pub
+  fi
 
 # kubectl.kubeconfig
 

@@ -25,7 +25,7 @@ $ lnmp-docker gcr.io
 ### Windows
 
 * `~/.kube`
-* `C:\ProgramData\DockerDesktop\pki`
+* `$home\AppData\Local\Docker\pki`
 
 ## 切换 context
 

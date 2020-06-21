@@ -45,6 +45,7 @@ Function _install_after() {
 }
 
 Function _getUrl($url, $url_mirror, $VERSION) {
+  if (!$url) { return }
   if ($url) { $url = iex "echo $url" }
 
   if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
@@ -129,7 +130,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   # " -ForegroundColor Green
   #  exit
 
-  $filename = $url.split('/')[-1]
+  if ($url) { $filename = $url.split('/')[-1] }
   if ($download_filename = $lwpm.'download-filename') {
     $filename = iex "echo $download_filename"
   }

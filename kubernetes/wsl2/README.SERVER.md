@@ -102,26 +102,6 @@ $ wsl -d wsl-k8s -u root -- mkdir -p /wsl/wsl-k8s-data
 $ wsl -d wsl-k8s -u root -- mount /dev/sdX /wsl/wsl-k8s-data
 ```
 
-## 安装 Docker 和 docker-compose
-
-[安装](https://github.com/khs1994-docker/lnmp/blob/master/wsl2/README.DOCKER.md) 之后启动
-
-[切换 iptables](README.switch.iptables.md)
-
-**安装 docker-compose**
-
-```bash
-$ lnmp-docker compose
-```
-
-**启动 Docker**
-
-```powershell
-# $ sudo service docker start
-
-PS> lnmp-docker dockerd start
-```
-
 ## 获取 kubernetes
 
 ```bash
@@ -138,11 +118,18 @@ $ ./lnmp-k8s kubernetes-server --url
 
 ## 生成证书文件
 
+**启动桌面版 Docker**
+
 ```bash
 $ cd ~/lnmp/kubernetes
 
-$ wsl -d wsl-k8s
 $ docker-compose up cfssl-wsl2
+```
+
+**退出 桌面版 Docker**
+
+```bash
+$ wsl --shutdown
 ```
 
 ## `WSL2` 文件准备

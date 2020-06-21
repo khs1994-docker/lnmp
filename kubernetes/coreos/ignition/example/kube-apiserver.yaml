@@ -27,14 +27,18 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/encryption-config.yaml
-    - path: ${K8S_ROOT}/certs/proxy-client.pem
+    - path: ${K8S_ROOT}/certs/front-proxy-ca.pem
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/cert/proxy-client.pem
-    - path: ${K8S_ROOT}/certs/proxy-client-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/front-proxy-ca.pem
+    - path: ${K8S_ROOT}/certs/front-proxy-client.pem
       mode: 0644
       contents:
-        source: http://{{SERVER_HOST}}:8080/cert/proxy-client-key.pem
+        source: http://{{SERVER_HOST}}:8080/cert/front-proxy-client.pem
+    - path: ${K8S_ROOT}/certs/front-proxy-client-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/front-proxy-client-key.pem
     - path: ${K8S_ROOT}/certs/apiserver.pem
       mode: 0644
       contents:
@@ -43,6 +47,10 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/apiserver-key.pem
+    - path: ${K8S_ROOT}/certs/etcd-ca.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-ca.pem
     - path: ${K8S_ROOT}/certs/apiserver-etcd-client.pem
       mode: 0644
       contents:
@@ -59,6 +67,14 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/apiserver-kubelet-client-key.pem
+    - path: ${K8S_ROOT}/certs/sa.pub
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/sa.pub
+    - path: ${K8S_ROOT}/certs/sa.key
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/sa.key
     # - path: ${K8S_ROOT}/bin/kube-apiserver
     #   mode: 0755
     #   contents:

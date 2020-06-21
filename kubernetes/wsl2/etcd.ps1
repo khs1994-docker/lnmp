@@ -37,11 +37,11 @@ Start-Process -FilePath etcd `
   --cert-file="${K8S_ROOT}/certs/etcd.pem" `
   --key-file="${K8S_ROOT}/certs/etcd-key.pem" `
   --client-cert-auth=true `
-  --trusted-ca-file="${K8S_ROOT}/certs/ca.pem" `
-  --peer-cert-file="${K8S_ROOT}/certs/etcd.pem" `
-  --peer-key-file="${K8S_ROOT}/certs/etcd-key.pem" `
+  --trusted-ca-file="${K8S_ROOT}/certs/etcd-ca.pem" `
+  --peer-cert-file="${K8S_ROOT}/certs/etcd-peer.pem" `
+  --peer-key-file="${K8S_ROOT}/certs/etcd-peer-key.pem" `
   --peer-client-cert-auth=true `
-  --peer-trusted-ca-file="${K8S_ROOT}/certs/ca.pem").split(' ')
+  --peer-trusted-ca-file="${K8S_ROOT}/certs/etcd-ca.pem").split(' ')
 
 Start-Sleep 1
 

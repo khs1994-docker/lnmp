@@ -6,7 +6,7 @@ exec podman run --rm --network host --privileged \
   quay.io/coreos/etcd:v${ETCD_VERSION:-3.4.9} \
   etcdctl \
   --endpoints=$etcd_endpoints \
-  --cacert="${K8S_ROOT:-/opt/k8s}/certs/ca.pem" \
+  --cacert="${K8S_ROOT:-/opt/k8s}/certs/etcd-ca.pem" \
   --cert="${K8S_ROOT:-/opt/k8s}/certs/etcd-client.pem" \
   --key="${K8S_ROOT:-/opt/k8s}/certs/etcd-client-key.pem" \
   "$@"
