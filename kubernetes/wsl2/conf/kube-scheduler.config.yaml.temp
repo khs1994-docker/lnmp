@@ -1,7 +1,6 @@
 # https://github.com/kubernetes/kubernetes/blob/master/pkg/scheduler/apis/config/types.go
 apiVersion: kubescheduler.config.k8s.io/v1alpha1
 kind: KubeSchedulerConfiguration
-bindTimeoutSeconds: 600
 clientConnection:
   burst: 200
   kubeconfig: "##K8S_ROOT##/conf/kube-scheduler.kubeconfig"

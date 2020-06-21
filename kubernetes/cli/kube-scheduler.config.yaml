@@ -1,5 +1,4 @@
 apiVersion: kubescheduler.config.k8s.io/v1alpha2
-bindTimeoutSeconds: 600
 clientConnection:
   acceptContentTypes: ""
   burst: 100
