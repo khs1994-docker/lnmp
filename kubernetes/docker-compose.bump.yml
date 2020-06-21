@@ -5,7 +5,7 @@ services:
     image: k8s.gcr.io/kube-apiserver:v1.18.0
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.0.1
+    image: kubernetesui/dashboard:v2.0.2
 
   k8s_dashboard_metrics-scraper:
     image: kubernetesui/metrics-scraper:v1.0.4

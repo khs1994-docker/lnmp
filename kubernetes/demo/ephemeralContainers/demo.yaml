@@ -1,0 +1,12 @@
+kind: EphemeralContainers
+apiVersion: v1
+metadata:
+  name: demo
+ephemeralContainers:
+  command: [
+    "sh"
+  ]
+  image: busybox
+  name: debugger
+  stdin: true
+  tty: true
