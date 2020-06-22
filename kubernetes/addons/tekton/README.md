@@ -1,11 +1,12 @@
 # [Tekton](https://github.com/tektoncd/pipeline)
 
 * https://github.com/tektoncd/pipeline/blob/master/docs/install.md
+* https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 
 **dashboard**
 
 * https://github.com/tektoncd/dashboard
-* https://github.com/tektoncd/dashboard/releases/download/v0.6.1/tekton-dashboard-release.yaml
+* https://github.com/tektoncd/dashboard/releases/download/v0.7.0/tekton-dashboard-release.yaml
 
 **CI/CD**
 

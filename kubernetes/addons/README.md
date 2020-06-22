@@ -17,3 +17,7 @@
 ## CNI
 
 * [calico](https://docs.projectcalico.org/v3.15/getting-started/kubernetes/installation/calico) `3.15`
+
+## CI/CD
+
+* tekton `0.13.2`
