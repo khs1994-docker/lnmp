@@ -45,7 +45,7 @@ cgroupDriver: cgroupfs
 runtimeRequestTimeout: 10m
 hairpinMode: promiscuous-bridge
 maxPods: 220
-podCIDR: "10.244.0.0/16"
+podCIDR: "10.244.0.0/16,fc00::/48"
 podPidsLimit: -1
 resolvConf: /etc/resolv.conf
 maxOpenFiles: 1000000
@@ -74,3 +74,4 @@ enforceNodeAllocatable: ["pods"]
 featureGates:
   # AllAlpha: true
   # BoundServiceAccountTokenVolume: false
+  IPv6DualStack: true

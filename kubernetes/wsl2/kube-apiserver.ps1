@@ -61,11 +61,12 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --kubelet-timeout=10s `
 --proxy-client-cert-file=${K8S_ROOT}/certs/front-proxy-client.pem `
 --proxy-client-key-file=${K8S_ROOT}/certs/front-proxy-client-key.pem `
---service-cluster-ip-range=10.254.0.0/16 `
+--service-cluster-ip-range=10.254.0.0/16,fd00::/108 `
 --service-node-port-range="1-65535" `
 --logtostderr=true `
 --service-account-issuer=api `
 --api-audiences=api `
+--feature-gates="IPv6DualStack=true" `
 --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null

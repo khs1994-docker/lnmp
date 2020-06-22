@@ -9,6 +9,13 @@ vars:
       kind: ConfigMap
     fieldref:
       fieldpath: data.podCIDR
+  - name: CALICO_IPV6POOL_CIDR
+    objref:
+      name: calico.conf
+      apiVersion: v1
+      kind: ConfigMap
+    fieldref:
+      fieldpath: data.IPV6podCIDR
   - name: CALICO_IPV4POOL_IPIP
     objref:
       name: calico.conf

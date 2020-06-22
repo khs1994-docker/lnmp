@@ -18,6 +18,8 @@ $WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
 # and --cleanup are deprecated. Please begin using a config file ASAP.
 $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-proxy `
 --config=${K8S_WSL2_ROOT}/conf/kube-proxy.config.yaml `
+--feature-gates="IPv6DualStack=true" `
+--cluster-cidr=10.244.0.0/16,fc00::/48 `
 --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null

@@ -32,7 +32,9 @@ data:
           "nodename": "__KUBERNETES_NODE_NAME__",
           "mtu": __CNI_MTU__,
           "ipam": {
-              "type": "calico-ipam"
+              "type": "calico-ipam",
+              "assign_ipv6": "false",
+              "assign_ipv4": "true"
           },
           "policy": {
               "type": "k8s"
@@ -3581,8 +3583,9 @@ spec:
               value: $(CALICO_IPV4POOL_CIDR)
             # fix me
             # - name: IP_AUTODETECTION_METHOD
-            #  value: "interface=eth0"
-
+            #   value: "interface=eth0"
+            # - name: IP6_AUTODETECTION_METHOD
+            #   value: "interface=eth0"
             # - name: CALICO_IPV4POOL_CIDR
             #   value: "192.168.0.0/16"
             # Set MTU for the Wireguard tunnel device.
@@ -3600,6 +3603,10 @@ spec:
             # Disable IPv6 on Kubernetes.
             - name: FELIX_IPV6SUPPORT
               value: "false"
+            # - name: IP6
+            #   value: autodetect
+            - name: CALICO_IPV6POOL_CIDR
+              value: $(CALICO_IPV6POOL_CIDR)
             # Set Felix logging to "info"
             - name: FELIX_LOGSEVERITYSCREEN
               value: "info"
