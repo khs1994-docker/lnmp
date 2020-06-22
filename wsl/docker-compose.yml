@@ -33,6 +33,15 @@ services:
         - OS_TYPE=debian:buster-slim
     image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.7}-debian-buster_amd64
 
+  wsl-php-builder-nightly:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=nightly
+        - OS_TYPE=debian:buster-slim
+    image: khs1994/wsl:khs1994-wsl-php80_nightly-debian-buster_amd64
+
 # latest php and debian
   wsl-php-builder-debian11-74:
     build:
@@ -78,6 +87,15 @@ services:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.7}
         - OS_TYPE=ubuntu:20.04
     image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.7}-ubuntu-focal_amd64
+
+  wsl-php-builder-ubuntu2004-nightly:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.Dockerfile
+      args:
+        - PHP_VERSION=nightly
+        - OS_TYPE=ubuntu:20.04
+    image: khs1994/wsl:khs1994-wsl-php80_nightly-ubuntu-focal_amd64
 
 # latest php and ubuntu
   wsl-php-builder-ubuntu2010-74:
@@ -141,6 +159,15 @@ services:
         - PHP_VERSION=${PHP_VERSION_74:-7.4.7}
         - OS_TYPE=fedora:32
     image: khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.7}-fedora-32_amd64
+
+  wsl-php-builder-fc32-nightly:
+    build:
+      context: .
+      dockerfile: wsl.phpbuilder.rhel.Dockerfile
+      args:
+        - PHP_VERSION=nightly
+        - OS_TYPE=fedora:32
+    image: khs1994/wsl:khs1994-wsl-php80_nightly-fedora-32_amd64
 
 # latest php and fedora
   wsl-php-builder-fc33-74:

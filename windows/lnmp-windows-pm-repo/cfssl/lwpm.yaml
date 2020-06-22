@@ -24,6 +24,7 @@ scripts:
         curl -fsSL $url/${pkg}_${VERSION}_${env:lwpm_os}_amd64$(if($_isWindows){echo .exe}) -o $dist
       }else{
         sudo curl -fsSL $url/${pkg}_${VERSION}_${env:lwpm_os}_amd64$(if($_isWindows){echo .exe}) -o $dist
+        sudo chmod +x $dist
       }
 
     }
