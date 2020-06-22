@@ -172,8 +172,8 @@
     "dest": "phpmyadmin:latest"
   },
   {
-    "source": "minio/minio:RELEASE.2020-03-25T07-03-04Z",
-    "dest": "minio:RELEASE.2020-03-25T07-03-04Z"
+    "source": "minio/minio:RELEASE.2020-06-22T03-12-50Z",
+    "dest": "minio:RELEASE.2020-06-22T03-12-50Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",
