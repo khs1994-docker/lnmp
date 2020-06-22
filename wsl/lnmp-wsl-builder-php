@@ -856,12 +856,16 @@ _tar(){
 
 _deb(){
 
-cd /tmp; $(_sudo) rm -rf khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} ; mkdir -p khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}
+PHP_PKG_VERSION=${PHP_VERSION}
+
+test $PHP_VERSION = 'nightly' && PHP_PKG_VERSION=0.0.0 || true
+
+cd /tmp; $(_sudo) rm -rf khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION} ; mkdir -p khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION}/DEBIAN ; cd khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION}
 
 ################################################################################
 
 echo "Package: khs1994-wsl-php${PHP_NUM}
-Version: ${PHP_VERSION}
+Version: ${PHP_PKG_VERSION}
 Prioritt: optional
 Section: php
 Architecture: amd64
@@ -933,9 +937,9 @@ $(_sudo) cp -a ${PHP_PREFIX} usr/local/php${PHP_NUM} ; $(_sudo) cp -a ${PHP_INI_
 
 cd ..
 
-DEB_NAME=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
+DEB_NAME=khs1994-wsl-php${PHP_NUM}_${PHP_PKG_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
 
-$(_sudo) dpkg-deb -b khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} $DEB_NAME
+$(_sudo) dpkg-deb -b khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION} $DEB_NAME
 
 $(_sudo) cp -a /tmp/${DEB_NAME} /
 

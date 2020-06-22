@@ -254,15 +254,6 @@ _gcr_io(){
       return
     fi
 
-    if [ "$OS" = 'Darwin' ];then
-      cat ~/.docker/daemon.json | grep -q gcr.io || please_set=1
-
-      if [ "$please_set" = 1 ];then \
-          print_error \
-          "Please add gcr.io k8s.gcr.io as Insecure registries In [ Docker Menu -> preferences -> Daemon -> Basic -> Insecure registries ]"; \
-          exit 1; fi
-    fi
-
     images="kube-controller-manager:v${KUBERNETES_VERSION} \
     kube-apiserver:v${KUBERNETES_VERSION} \
     kube-scheduler:v${KUBERNETES_VERSION} \

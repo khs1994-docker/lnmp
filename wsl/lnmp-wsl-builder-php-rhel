@@ -730,6 +730,10 @@ _tar(){
 
 _rpm(){
 
+PHP_PKG_VERSION=${PHP_VERSION}
+
+test $PHP_VERSION = 'nightly' && PHP_PKG_VERSION=0.0.0 || true
+
 cd /tmp
 
 if [ ${ID} = 'fedora' ];then
@@ -739,7 +743,7 @@ else
 fi
 
 echo "Name:       khs1994-wsl-php${PHP_NUM}
-Version:    ${PHP_VERSION}
+Version:    ${PHP_PKG_VERSION}
 Release:    ${rpm_release_name}
 Summary:    PHP scripting language for creating dynamic web sites
 
@@ -809,7 +813,7 @@ cat /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
 rpmbuild -bb /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}-${rpm_release_name}.x86_64.rpm
+RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION}-${rpm_release_name}.x86_64.rpm
 
 echo "\$ yum install -y ${RPM_NAME}"
 

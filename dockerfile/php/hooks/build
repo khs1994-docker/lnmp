@@ -12,11 +12,14 @@ docker buildx create --use --name=mybuilder --driver docker-container
 
 docker buildx ls
 
+# PLATFORM="linux/amd64,linux/arm64"
+PLATFORM="linux/amd64"
+
 set +x
 
 docker buildx build --push \
   --build-arg CUSTOM=$VAR \
   -f $DOCKERFILE_PATH \
   -t $IMAGE_NAME \
-  --platform linux/amd64,linux/arm64 \
+  --platform $PLATFORM \
   .

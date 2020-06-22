@@ -191,7 +191,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export DEB_NAME=khs1994-wsl-php80_nightly-debian-buster_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php80_0.0.0-debian-buster_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -305,7 +305,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export DEB_NAME=khs1994-wsl-php80_nightly-ubuntu-focal_amd64.deb
+        - export DEB_NAME=khs1994-wsl-php80_0.0.0-ubuntu-focal_amd64.deb
         - docker cp $( docker container ls -a --format {{.ID}} ):/${DEB_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${DEB_NAME}" --file "${DEB_NAME}" -R
 
@@ -419,7 +419,7 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export RPM_NAME=khs1994-wsl-php80-nightly-1.fc32.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php80-0.0.0-1.fc32.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 

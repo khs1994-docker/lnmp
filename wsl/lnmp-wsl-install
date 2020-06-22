@@ -136,8 +136,18 @@ _php(){
       export PHP_NUM=74
       ;;
 
+    # 8.0.* )
+    #   export PHP_NUM=80
+    #   PHP_VERSION=0.0.0
+    #   ;;
+
+    nightly )
+      export PHP_NUM=80
+      PHP_VERSION=0.0.0
+      ;;
+
     * )
-      echo "ONLY SUPPORT 5.6 +"
+      echo "ONLY SUPPORT 5.6.x 7.0.x 7.1.x 7.2.x 7.3.x 7.4.x nightly"
       exit 1
   esac
 
