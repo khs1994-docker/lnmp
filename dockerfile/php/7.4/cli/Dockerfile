@@ -23,7 +23,7 @@ ARG PHP_EXTRA_CONFIGURE_ARGS_NEW="--enable-gd=shared \
                                     --with-jpeg \
                                     --with-webp \
                                     --with-xpm \
-                                  --with-mhash \
+                                  --with-zip=shared \
                                   --with-ffi=shared \
                                  "
 
@@ -91,7 +91,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
-        --with-zip=shared \
         --enable-calendar=shared \
         --enable-intl=shared \
         --enable-exif=shared \
@@ -218,7 +217,7 @@ RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/src,target=/usr/local/sr
     --enable-option-checking=fatal \
     \
 # https://github.com/docker-library/php/issues/439
-    # --with-mhash \
+    --with-mhash \
     \
 # --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically (see https://github.com/docker-library/php/issues/236)
     --enable-ftp=shared \

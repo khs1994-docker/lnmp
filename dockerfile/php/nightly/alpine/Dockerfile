@@ -85,7 +85,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
-        --with-zip \
+        --with-zip=shared \
         --enable-calendar=shared \
         --enable-intl=shared \
         --enable-exif=shared \
@@ -299,6 +299,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            # tidy \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
+                           zip \
                            opcache \
                            # 7.4 +
                            ffi \
