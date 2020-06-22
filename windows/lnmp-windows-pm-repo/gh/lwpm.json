@@ -7,37 +7,38 @@
   "bug": "https://github.com/cli/cli/issues",
   "github": "cli/cli",
   "releases": "https://github.com/cli/cli/releases",
-  "url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_windows_amd64.zip",
+  "url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
   "url-mirror": "",
-  "pre-url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_windows_amd64.zip",
+  "pre-url": "https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}.$(if($IsWindows){echo 'zip'}else{echo 'tar.gz'})",
   "pre-url-mirror": "",
   "command": "gh",
   "scripts": {
     "preinstall": "",
     "install": [
       "_cleanup $unzipDesc",
-      "_unzip $filename $unzipDesc",
-      "Copy-item -r -force $unzipDesc/bin/* C:\\bin\\",
+      "if($IsWindows){_unzip $filename $unzipDesc}else{_mkdir $unzipDesc ; tar -zxf $filename -C $unzipDesc}",
+      "if($IsWindows){Copy-item -r -force $unzipDesc/bin/* C:\\bin\\}else{sudo cp $unzipDesc/gh_0.8.0_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}/bin/gh /usr/local/bin ; sudo chmod +x /usr/local/bin/gh }",
       "_cleanup $unzipDesc"
     ],
     "postinstall": [
-      "$env:ps_module_dir=${env:PSModulePath}.split(';')[0]+\"\\gh\"",
-      "mkdir -Force $env:ps_module_dir | out-null",
-      "gh completion --shell powershell > $env:ps_module_dir\\gh.psm1",
-      "if((cat $PROFILE | select-string \"Import-Module gh\").line.Length -eq 0){echo \"Import-Module gh\" >> $PROFILE}",
+      "$ps_module_dir=${env:PSModulePath}.split([System.IO.Path]::PathSeparator)[0]+\"\\gh\"",
+      "_mkdir $ps_module_dir | out-null",
+      "gh completion --shell powershell > $ps_module_dir\\gh.psm1",
+      "if(!(Test-Path $PROFILE)){_mkdir $PROFILE; Remove-Item -r -Force $PROFILE;New-Item $PROFILE | out-null}",
+      "if((get-content $PROFILE | select-string \"Import-Module gh\").line.Length -eq 0){echo \"Import-Module gh\" >> $PROFILE}",
       "Import-Module gh"
     ],
     "preuninstall": "",
     "uninstall": "_cleanup C:\\bin\\gh.exe",
     "postuninstall": "",
     "pretest": "",
-    "test": "echo \"gh $((gh --version).split()[2]) install success\"",
+    "test": "printInfo gh $((gh --version).split()[2]) install success",
     "posttest": "",
     "version": "(gh --version).split()[2]",
     "hash": [
       "invoke-webrequest https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_checksums.txt -OutFile Temp:/gh_checksum",
-      "$env:hash=(cat Temp:/gh_checksum | select-string gh_${VERSION}_windows_amd64.zip).line.split(' ')[0]",
-      "if($env:hash -and ((Get-SHA256 $filename) -ne $env:hash)){printError \"$filename sha256 check failed\"}"
+      "$hash=(Get-Content Temp:/gh_checksum | select-string $filename).line.split(' ')[0]",
+      "if($hash -and ((Get-SHA256 $filename) -ne $hash)){printError \"$filename sha256 check failed\"}"
     ]
   },
   "path": [

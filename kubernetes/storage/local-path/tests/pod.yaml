@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: local-path-test
+  labels:
+    name: local-path-test
+spec:
+  containers:
+  - name: local-path-test
+    image: nginx:1.19.0-alpine
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    volumeMounts:
+      - mountPath: /var/lib/data
+        name: data
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+          claimName: local-path-test-pvc
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-path-test-pvc
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.18
+ARG PHP_VERSION=7.3.19
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -37,7 +37,7 @@ ENV PHP_EXTENSION \
       sysvsem \
       sysvshm \
       # tidy \
-      xmlrpc \
+      # xmlrpc \
       # xsl \
       zip \
       shmop \
@@ -74,8 +74,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libbz2 \
                          libexif \
                          gmp \
-                         xmlrpc-c \
-                         enchant \
+                         # xmlrpc-c \
+                         enchant2 \
                          c-client \
                          icu-libs \
                          gnu-libiconv \
@@ -99,9 +99,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          yaml-dev \
                          libexif-dev \
                          gmp-dev \
-                         xmlrpc-c-dev \
+                         # xmlrpc-c-dev \
                          bzip2-dev \
-                         enchant-dev \
+                         enchant2-dev \
                          imap-dev \
                          gettext-dev \
                          libwebp-dev \
@@ -111,13 +111,21 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          # tidyhtml-dev \
                          # libxslt-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
-        && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
+        && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS patch \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         && curl -fsSL -o /usr/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
         && chmod +x /usr/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \
+# enchant-2.patch
+        && cd /usr/src/php \
+        && curl -fsSL -o enchant-2.patch https://git.alpinelinux.org/aports/plain/community/php7/enchant-2.patch?h=3.12-stable \
+        && patch -p1 < enchant-2.patch \
+        && rm -rf enchant-2.patch \
+        && ./buildconf --force \
+        && cd - \
+           \
         && docker-php-ext-configure zip \
                                     --with-libzip \
         && docker-php-ext-install zip \

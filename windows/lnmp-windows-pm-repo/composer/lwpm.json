@@ -1,8 +1,8 @@
 {
   "name": "composer",
   "description": "Dependency Manager for PHP",
-  "version": "1.10.6",
-  "pre-version": "1.10.6",
+  "version": "1.10.7",
+  "pre-version": "1.10.7",
   "homepage": "https://getcomposer.org/",
   "bug": "https://github.com/composer/composer/issues",
   "github": "composer/composer",
@@ -13,17 +13,18 @@
   "scripts": {
     "version": "(composer --version).split(' ')[2]",
     "install": [
-      "_mkdir \"$env:ProgramData\\ComposerSetup\\bin\\\"",
-      "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer\"      \"$env:ProgramData\\ComposerSetup\\bin\\\"",
-      "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer.ps1\"  \"$env:ProgramData\\ComposerSetup\\bin\\\"",
-      "Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer.bat\"  \"$env:ProgramData\\ComposerSetup\\bin\\\"",
-      "Copy-item -r -force $filename                                   \"$env:ProgramData\\ComposerSetup\\bin\\composer.phar\""
+      "if($isWindows){_mkdir \"$env:ProgramData\\ComposerSetup\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer\"      \"$env:ProgramData\\ComposerSetup\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer.ps1\"  \"$env:ProgramData\\ComposerSetup\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force \"$env:LWPM_PKG_ROOT\\dist\\composer.bat\"  \"$env:ProgramData\\ComposerSetup\\bin\\\"}",
+      "if($isWindows){Copy-item -r -force $filename                                   \"$env:ProgramData\\ComposerSetup\\bin\\composer.phar\"}",
+      "if(!$IsWindows){sudo install -m755 $filename /usr/local/bin/composer}"
     ],
     "test": [
-      "composer --version"
+      "printInfo $(composer --version) install success"
     ],
     "uninstall": [
-      "_sudo \"remove-item -r -force $env:ProgramData\\ComposerSetup\""
+      "_sudo remove-item -r -force $env:ProgramData\\ComposerSetup"
     ],
     "pruneuninstall": [
       "_cleanup \"$HOME\\AppData\\Roaming\\Composer\"",

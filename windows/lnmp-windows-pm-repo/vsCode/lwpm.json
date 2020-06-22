@@ -1,12 +1,23 @@
 {
-  "name": "vsCode",
-  "description": "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications",
-  "version": "",
-  "pre-version": "",
-  "homepage": "https://code.visualstudio.com/",
   "bug": "https://github.com/Microsoft/vscode/issues",
+  "command": "code",
+  "description": "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications",
+  "download-filename": "VSCode$(if($IsWindows){echo .exe}else{echo .zip})\n",
   "github": "microsoft/vscode",
+  "homepage": "https://code.visualstudio.com/",
+  "name": "vsCode",
+  "pre-url": "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/insider",
+  "pre-version": "",
   "releases": "https://github.com/Microsoft/vscode/releases",
-  "url": "https://update.code.visualstudio.com/latest/win32-x64-user/stable",
-  "pre-url": "https://update.code.visualstudio.com/latest/win32-x64-user/insider"
+  "scripts": {
+    "get-latest-version": "iex $lwpm.scripts.'get-version-function'\n\nFunction Get-LatestVersion(){\n  return $(Get-Version $(iex \"echo $url\"))[0],$(Get-Version $(iex \"echo $pre_url\"))[0]\n}\n",
+    "get-version": "iex $lwpm.scripts.'get-version-function'\n\nif($isPre){\n$VERSION,$url=Get-Version $(iex \"echo $pre_url\")\n}else{\n$VERSION,$url=Get-Version $(iex \"echo $url\")\n}\n",
+    "get-version-function": "Function Get-Version($url){\ntry{\nInvoke-WebRequest `\n  -MaximumRedirection 0 `\n  -Method Head `\n  -uri $url\n}catch{\n  $location = $_.Exception.Response.Headers.Location\n  $url=$location.AbsoluteUri\n  $version=$location.Segments[3].split('-')[2].trim('.exe')\n}\nreturn $version,$url\n}\n",
+    "install": "if($IsWindows){\nStart-Process -FilePath $filename -wait\n\nreturn\n}\n\nunzip $filename -d /Applications/\n",
+    "platform-reqs": "if($IsLinux){\nprintInfo Please download from \"[ https://code.visualstudio.com/#alt-downloads ]\"\necho $False\n}\n",
+    "test": "if($_isWindows){\n  & \"$home\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code.cmd\" --version\n}else{\n  & \"/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code\" --version | Out-Host\n}\n",
+    "version": "$(code --version).split(' ')[0]"
+  },
+  "url": "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/stable",
+  "version": ""
 }

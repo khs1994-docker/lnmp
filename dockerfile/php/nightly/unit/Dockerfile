@@ -11,18 +11,13 @@ ARG VCS_REF="unknow"
 LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
-ENV NGINX_UNIT_VERSION 1.17.0
+ENV NGINX_UNIT_VERSION 1.18.0
 
 RUN cd /usr/src \
   && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
      | tar -zxvf - \
   && mv unit-${NGINX_UNIT_VERSION} unit \
   && cd /usr/src/unit \
-  \
-  && echo "apply patch, remove when pr425 merge" \
-  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/425.diff -O \
-  && patch -p1 < 425.diff \
-  \
   && apk add --no-cache --virtual .build-deps \
                                   $PHPIZE_DEPS \
                                   openssl-dev \

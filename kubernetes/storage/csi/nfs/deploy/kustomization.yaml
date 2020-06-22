@@ -1,10 +1,9 @@
 resources:
-- namespace.yaml
-- csi-attacher-nfsplugin.yaml
-- csi-attacher-rbac.yaml
+- configMap.yaml
+- csi-nfs-driverinfo.yaml
 - csi-nodeplugin-nfsplugin.yaml
 - csi-nodeplugin-rbac.yaml
-- configMap.yaml
+- namespace.yaml
 vars:
 - name: KUBELET_ROOT
   objref:

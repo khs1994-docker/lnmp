@@ -19,13 +19,13 @@ ENV COMPOSER_DEP_APKS \
       tini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.10.6 \
+    COMPOSER_VERSION=1.10.7 \
     PS1="[\u@\h \w]# " \
     COMPOSER_NO_INTERACTION=1
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.6,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.10.7,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .php-fpm-apks $COMPOSER_DEP_APKS \
     && echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
@@ -40,7 +40,7 @@ RUN --mount=type=bind,from=composer:1.10.6,source=/usr/bin/composer,target=/opt/
  #        exit(1); \
  #    }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
-    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.9/docker-entrypoint.sh \
+    && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.10/docker-entrypoint.sh \
          -o /docker-entrypoint.composer \
     && chmod +x /docker-entrypoint.composer \
     && cp -a /opt/bin/composer /usr/bin/composer \

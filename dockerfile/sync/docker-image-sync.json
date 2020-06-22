@@ -8,20 +8,20 @@
     "dest": "node:alpine"
   },
   {
-    "source": "node:14.3.0-alpine",
-    "dest": "node:14.3.0-alpine"
+    "source": "node:14.4.0-alpine",
+    "dest": "node:14.4.0-alpine"
   },
   {
-    "source": "golang:1.14.3-alpine",
-    "dest": "golang:1.14.3-alpine"
+    "source": "golang:1.14.4-alpine",
+    "dest": "golang:1.14.4-alpine"
   },
   {
     "source": "golang:alpine",
     "dest": "golang:alpine"
   },
   {
-    "source": "library/alpine:3.11",
-    "dest": "alpine:3.11"
+    "source": "library/alpine:3.12",
+    "dest": "alpine:3.12"
   },
   {
     "source": "library/alpine:edge",
@@ -84,8 +84,8 @@
     "dest": "mongo:latest"
   },
   {
-    "source": "library/mongo:4.2.6",
-    "dest": "mongo:4.2.6"
+    "source": "library/mongo:4.2.7",
+    "dest": "mongo:4.2.7"
   },
   {
     "source": "library/kong:latest",
@@ -112,8 +112,8 @@
     "dest": "redis:5.0.9-alpine"
   },
   {
-    "source": "library/redis:6.0.3-alpine",
-    "dest": "redis:6.0.3-alpine"
+    "source": "library/redis:6.0.5-alpine",
+    "dest": "redis:6.0.5-alpine"
   },
   {
     "source": "library/memcached:alpine",
@@ -132,8 +132,8 @@
     "dest": "nginx:1.18.0-alpine"
   },
   {
-    "source": "library/nginx:1.17.10-alpine",
-    "dest": "nginx:1.17.10-alpine"
+    "source": "library/nginx:1.19.0-alpine",
+    "dest": "nginx:1.19.0-alpine"
   },
   {
     "source": "library/httpd:alpine",

@@ -33,7 +33,7 @@ jobs:
         sudo mv docker-compose /usr/local/bin
       name: 'Setup Docker Compose'
       env:
-        DOCKER_COMPOSE_VERSION: 1.24.1
+        DOCKER_COMPOSE_VERSION: 1.26.0
     - uses: docker-practice/actions-setup-docker@master
     - run: |
         set -x
@@ -73,7 +73,7 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        options="--build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
+        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
 
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -149,7 +149,7 @@ jobs:
         -t ${DOCKER_HUB_USERNAME}/php:7.0-custom custom/7.0
 
         docker buildx build --push \
-        --build-arg PHP_VERSION=7.3.18 \
+        --build-arg PHP_VERSION=7.3.19 \
         --build-arg USERNAME=khs1994 \
         -t ${DOCKER_HUB_USERNAME}/php:7.1-custom custom/7.1
 
@@ -170,7 +170,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.18
+        PHP_TAG_VERSION: 7.3.19
         TYPE: ${{ matrix.TYPE }}
         # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
       name: 'Build Image'

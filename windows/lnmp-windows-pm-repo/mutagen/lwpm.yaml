@@ -1,0 +1,9 @@
+name: mutagen
+version: 0.11.5
+url: https://github.com/mutagen-io/mutagen/releases/download/v${VERSION}/mutagen_${env:lwpm_os}_${env:lwpm_architecture}_v${VERSION}.$(if($_IsWindows){echo zip}else{echo tar.gz})
+scripts:
+  install: if($IsWindows){_unzip $filename C:\bin}else{sudo tar -zxf $filename -C /usr/local/bin}
+  uninstall: _cleanup C:\bin\mutagen.exe
+  test: printInfo mutagen $(mutagen version) install success
+  version: mutagen version
+command: mutagen

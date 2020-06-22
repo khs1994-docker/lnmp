@@ -12,6 +12,8 @@ spec:
       labels:
         app: php-fpm-exporter
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
         - name: php-fpm-exporter
           image: bakins/php-fpm-exporter:v0.6.1

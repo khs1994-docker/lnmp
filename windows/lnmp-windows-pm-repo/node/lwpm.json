@@ -1,33 +1,45 @@
 {
   "name": "node",
   "description": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine",
-  "version": "12.16.3",
-  "pre-version": "14.3.0",
+  "version": "12.18.1",
+  "pre-version": "14.4.0",
   "homepage": "https://nodejs.org/en/",
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",
   "releases": "https://nodejs.org/en/download/",
-  "url": "https://nodejs.org/dist/v${VERSION}/node-v${VERSION}-win-x64.zip",
-  "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-win-x64.zip",
-  "command": "node.exe",
+  "url": "https://nodejs.org/dist/v${VERSION}/node-v${VERSION}-$(if($IsWindows){echo win}else{echo ${env:lwpm_os}})-x64.$(if($IsWindows){echo zip}else{echo tar.gz})",
+  "url-mirror": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/node-v${VERSION}-$(if($IsWindows){echo win}else{echo ${env:lwpm_os}})-x64.$(if($IsWindows){echo zip}else{echo tar.gz})",
+  "command": "node",
   "scripts": {
-    "version": "(node.exe --version).trim('v')",
+    "version": "(node --version).trim('v')",
     "install": [
       "_cleanup node",
-      "_unzip $filename $unzipDesc",
-      "_mkdir \"$env:ProgramData\\node\"",
-      "Copy-item -r -force \"node\\node-v${VERSION}-win-x64\\*\" \"$env:ProgramData\\node\"",
-      "_cleanup node"
+      "if($IsWindows){_unzip $filename $unzipDesc}",
+      "if($IsWindows){_mkdir \"$env:ProgramData\\node\"}",
+      "if($IsWindows){Copy-item -r -force \"node\\node-v${VERSION}-win-x64\\*\" \"$env:ProgramData\\node\"}",
+      "if(!$IsWindows){sudo mkdir -p /usr/local/node ; sudo tar -zxf $filename -C /usr/local ; sudo cp -r -f /usr/local/node-v${VERSION}-${env:lwpm_os}-x64/. /usr/local/node/ ; sudo rm -rf /usr/local/node-v${VERSION}-${env:lwpm_os}-x64}",
+      "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm}",
+      "if(!$IsWindows){sudo ln -sf /usr/local/node/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx}",
+      "if(!$ISWindows){sudo ln -sf /usr/local/node/bin/node /usr/local/bin/}",
+      "if(!$IsWindows){npm config set prefix ~/.npm ; npm config set registry https://registry.npm.taobao.org}",
+      "_cleanup node",
+      "if(!$ISWindows){printInfo Please add [ $HOME/.npm/bin ] to PATH}"
     ],
     "postinstall": [
-      "[environment]::SetEnvironmentvariable('NODE_PATH', \"%ProgramData%\\npm\\node_modules\", 'User');"
+      "if($IsWindows){[environment]::SetEnvironmentvariable('NODE_PATH', \"%ProgramData%\\npm\\node_modules\", 'User')}"
     ],
     "uninstall": "_cleanup $env:ProgramData\\node",
     "pruneuninstall": "_cleanup $env:ProgramData\\npm",
-    "test": "node.exe --version"
+    "test": "printInfo node.js $(node --version) install success"
   },
   "path": [
     "$env:ProgramData\\node",
     "$env:ProgramData\\npm"
+  ],
+  "hash-url": {
+    "sha256": "https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${VERSION}/SHASUMS256.txt"
+  },
+  "unix-path": [
+    "$HOME/.npm/bin"
   ]
 }

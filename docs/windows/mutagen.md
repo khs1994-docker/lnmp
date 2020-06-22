@@ -29,10 +29,13 @@ sync:
       # defaultGroup: id:33
 
 beforeCreate:
-  - pwsh lnmp-docker.ps1 up mutagen-wsl2
+  - powershell lnmp-docker.ps1 up mutagen-wsl2
+  # - pwsh lnmp-docker.ps1 up mutagen-wsl2
 
 afterTerminate:
-  - pwsh lnmp-docker.ps1 stop mutagen-wsl2
+  - powershell lnmp-docker.ps1 stop mutagen-wsl2
+  # - pwsh lnmp-docker.ps1 stop mutagen-wsl2
+
 ```
 
 在 https://github.com/mutagen-io/mutagen/releases 下载，解压后将 `mutagen.exe` `mutagen-agents.tar.gz` 两个文件都放到 `PATH`(例如: `C:\bin`)

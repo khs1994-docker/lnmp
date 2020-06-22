@@ -1,0 +1,33 @@
+name: cfssl
+version: 1.4.1
+github: cloudflare/cfssl
+releases: https://github.com/cloudflare/cfssl/releases
+scripts:
+  install: |
+    $url = "https://github.com/cloudflare/cfssl/releases/download/v${VERSION}"
+    $pkgs='cfssl','cfssl-bundle','cfssl-certinfo','cfssl-newkey','cfssl-scan','cfssljson','mkbundle','multirootca'
+    foreach($pkg in $pkgs){
+      printInfo Downloading $pkg ...
+
+      if($_isWindows){
+        $dist="C:\bin\${pkg}.exe"
+      }else{
+        $dist="/usr/local/bin/${pkg}"
+      }
+
+      if(Test-Path $dist){
+        printTips $pkg exists`, skip
+        continue;
+      }
+
+      if($_isWindows){
+        curl -fsSL $url/${pkg}_${VERSION}_${env:lwpm_os}_amd64$(if($_isWindows){echo .exe}) -o $dist
+      }else{
+        sudo curl -fsSL $url/${pkg}_${VERSION}_${env:lwpm_os}_amd64$(if($_isWindows){echo .exe}) -o $dist
+        sudo chmod +x $dist
+      }
+
+    }
+  test: cfssl version
+path:
+  - C:\bin

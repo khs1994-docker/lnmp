@@ -73,6 +73,25 @@
       "description": "soft pre version download url",
       "type": "string"
     },
+    "hash-url": {
+      "type": "object",
+      "description": "hash url",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "description": "sha256 url"
+        },
+        "sha384": {
+          "type": "string",
+          "description": "sha384 url"
+        },
+        "sha512": {
+          "type": "string",
+          "description": "sha512 url"
+        }
+      },
+      "additionalProperties": false
+    },
     "pre-url-mirror": {
       "description": "soft pre version download url mirror",
       "type": "string"
@@ -123,6 +142,16 @@
     "scripts": {
       "type": "object",
       "properties": {
+        "platform-reqs": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "if last command echo $false, means not support this platform. e.g. echo $False",
+          "default": [
+            "if(!$IsWindows){echo $False}"
+          ]
+        },
         "preinstall": {
           "type": [
             "string",
@@ -187,6 +216,9 @@
           "type": [
             "string",
             "array"
+          ],
+          "default": [
+            "printInfo $(command --version) install success"
           ]
         },
         "posttest": {
@@ -201,6 +233,20 @@
             "array"
           ],
           "description": "how to get version string"
+        },
+        "get-latest-version": {
+          "type": "string",
+          "description": "Function Get-LatestVersion(){ }",
+          "default": [
+            "Function Get-LatestVersion(){ }"
+          ]
+        },
+        "get-version": {
+          "type": "string",
+          "description": "set arg $VERSION",
+          "default": [
+            "if($isPre){$VERSION='x.y.z-beta'}else{$VERSION='x.y.z'}"
+          ]
         },
         "hash": {
           "type": [
@@ -235,6 +281,16 @@
         "C:\\bin"
       ]
     },
+    "unix-path": {
+      "type": "array",
+      "description": "unix system(e.g. Linux/macOS) PATH, add to ~/.bashrc manual",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "/path/bin"
+      ]
+    },
     "command": {
       "type": "string",
       "description": "what command this package provide"
@@ -242,6 +298,13 @@
     "download-filename": {
       "type": "string",
       "description": "download filename"
+    },
+    "$comment": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "description": "Comments from this package"
     }
   },
   "required": [

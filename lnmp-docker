@@ -254,15 +254,6 @@ _gcr_io(){
       return
     fi
 
-    if [ "$OS" = 'Darwin' ];then
-      cat ~/.docker/daemon.json | grep -q gcr.io || please_set=1
-
-      if [ "$please_set" = 1 ];then \
-          print_error \
-          "Please add gcr.io k8s.gcr.io as Insecure registries In [ Docker Menu -> preferences -> Daemon -> Basic -> Insecure registries ]"; \
-          exit 1; fi
-    fi
-
     images="kube-controller-manager:v${KUBERNETES_VERSION} \
     kube-apiserver:v${KUBERNETES_VERSION} \
     kube-scheduler:v${KUBERNETES_VERSION} \
@@ -1458,7 +1449,7 @@ For information please run $ docker service update --help
     _get_compose_options docker-lnmp.yml \
                          docker-lnmp.override.yml
 
-    docker-compose $options up $opt ${service}
+    docker-compose $options up $opt --no-build ${service}
 
     #@custom
     __lnmp_custom_up "$@" 2>/dev/null || true
@@ -1900,7 +1891,7 @@ env_status && . ./.env && . cli/.env
 if [ -n "${LNMP_SERVICES_SYSTEM_ENV}" ];then export LNMP_SERVICES=$LNMP_SERVICES_SYSTEM_ENV;fi
 if [ -n "${LREW_INCLUDE_SYSTEM_ENV}" ];then export LREW_INCLUDE=$LREW_INCLUDE_SYSTEM_ENV;fi
 
-APP_ROOT=$(cd ${APP_ROOT:-./app}; pwd)
+APP_ROOT=$(mkdir -p ${APP_ROOT:-./app}; cd ${APP_ROOT:-./app}; pwd)
 
 print_info "APP_ROOT is $APP_ROOT"
 

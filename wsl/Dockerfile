@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.4.6
+ARG PHP_VERSION=7.4.7
 
 ARG PHP_NUM=74
 
@@ -111,8 +111,8 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     # libtidy5 \
     libtidy5deb1 \
     libtidy-dev \
-    libxmlrpc-epi0 \
-    libxmlrpc-epi-dev \
+    # libxmlrpc-epi0 \
+    # libxmlrpc-epi-dev \
     libexif12 \
     libexif-dev \
     libgmp10 \
@@ -210,9 +210,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --with-zlib \
     --with-mhash \
     --enable-bcmath \
-    --enable-libxml \
-    --enable-inline-optimization \
-    --enable-mbregex \
     --enable-pcntl=shared \
     --enable-shmop=shared \
     --enable-soap=shared \
@@ -220,7 +217,6 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --enable-sysvmsg=shared \
     --enable-sysvsem=shared \
     --enable-sysvshm=shared \
-    --enable-xml \
     --enable-zip \
         --with-libzip \
     --enable-calendar=shared \
@@ -232,14 +228,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
     --with-imap=shared \
         --with-imap-ssl \
         --with-kerberos \
-    --with-xmlrpc \
+    # --with-xmlrpc \
     --with-pic \
     --with-enchant=shared \
     --enable-fileinfo=shared \
     --with-ldap=shared \
         --with-ldap-sasl \
-    --enable-phar \
-    --enable-posix=shared \
     --with-pspell=shared \
     --enable-shmop=shared \
     # --with-snmp=shared \
@@ -297,6 +291,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            opcache \
                            swoole \
                            \
+                           fileinfo \
                            pdo_pgsql \
                            xsl \
                            pcntl \
@@ -310,9 +305,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
                            intl \
                            imap \
                            enchant \
-                           fileinfo \
                            ldap \
-                           posix \
                            pspell \
                            # snmp \
                            mysqli \
@@ -348,7 +341,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
       # redis
 
-COPY --from=redis:6.0.3 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
+COPY --from=redis:6.0.5 /usr/local/bin/redis-* ${PHP_PREFIX}/bin/
 
       # memcached
 

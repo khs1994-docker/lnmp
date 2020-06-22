@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -x
+
+export DOCKER_CLI_EXPERIMENTAL=enabled
+
+docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+
+docker buildx version
+
+docker buildx create --use --name=mybuilder --driver docker-container
+
+docker buildx ls
+
+#PLATFORM="linux/amd64,linux/arm64"
+PLATFORM="linux/amd64"
+
+set +x
+
+docker buildx build --push -f $DOCKERFILE_PATH -t $IMAGE_NAME --platform $PLATFORM .

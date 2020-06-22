@@ -1,15 +1,21 @@
 {
-  "name": "postman",
-  "description": "Manage all of your organization's APIs in Postman, with the industry's most complete API development environment",
-  "version": "7.6.0",
-  "pre-version": "7.6.0",
-  "homepage": "https://www.getpostman.com/",
   "bug": "https://www.getpostman.com/support",
+  "command": "${env:APPDATA}\\..\\Local\\Postman\\Postman.exe",
+  "description": "Manage all of your organization's APIs in Postman, with the industry's most complete API development environment",
+  "download-filename": "Postman-win64-${VERSION}-Setup.exe",
   "github": "postmanlabs/postman-app-support",
+  "homepage": "https://www.getpostman.com/",
+  "name": "postman",
+  "pre-version": "",
   "releases": "",
-  "url": "https://dl.pstmn.io/download/latest/win64",
-  "command": "${env:APPDATA}\\..\\Local\\Postman\\app-${VERSION}\\Postman.exe",
   "scripts": {
-    "version": "echo 7.6.0"
-  }
+    "get-latest-version": "Function Get-LatestVersion(){\n$result = Invoke-WebRequest -Method Head `\n-uri $url\n\nreturn $result.Headers.'Content-Disposition'.split('-')[2]\n}\n",
+    "get-version": "iex $lwpm.scripts.'get-latest-version'\n\nif(!($VERSION)){\n$VERSION=Get-LatestVersion\n}\nif($isPre){\n$VERSION=Get-LatestVersion\n}\n",
+    "install": "Start-Process -FilePath $filename -wait",
+    "platform-reqs": "if(!$IsWindows){echo $False}",
+    "test": "& Get-Command $env:APPDATA\\..\\Local\\Postman\\Postman.exe\n",
+    "version": "echo ${VERSION}"
+  },
+  "url": "https://dl.pstmn.io/download/latest/win64",
+  "version": ""
 }

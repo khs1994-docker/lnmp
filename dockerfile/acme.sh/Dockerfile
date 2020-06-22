@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM alpine:3.12
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

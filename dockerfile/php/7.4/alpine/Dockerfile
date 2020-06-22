@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.6
+ARG PHP_VERSION=7.4.7
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.11 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -37,7 +37,7 @@ ENV PHP_EXTENSION \
       sysvsem \
       sysvshm \
       # tidy \
-      xmlrpc \
+      # xmlrpc \
       # xsl \
       zip \
       shmop \
@@ -74,7 +74,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libbz2 \
                          libexif \
                          gmp \
-                         xmlrpc-c \
+                         # xmlrpc-c \
                          enchant \
                          c-client \
                          icu-libs \
@@ -100,7 +100,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          yaml-dev \
                          libexif-dev \
                          gmp-dev \
-                         xmlrpc-c-dev \
+                         # xmlrpc-c-dev \
                          bzip2-dev \
                          enchant-dev \
                          imap-dev \

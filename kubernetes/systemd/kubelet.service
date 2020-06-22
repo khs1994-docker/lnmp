@@ -35,7 +35,6 @@ ExecStart=/opt/k8s/bin/kubelet \
 --logtostderr=true \
 --v=2 \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
---experimental-check-node-capabilities-before-mount=true \
 $KUBELET_CRI
 
 # --container-runtime=docker \

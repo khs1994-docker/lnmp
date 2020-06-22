@@ -14,13 +14,12 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --advertise-address=${KUBE_APISERVER_HOST} \
 --default-not-ready-toleration-seconds=360 \
 --default-unreachable-toleration-seconds=360 \
---feature-gates=DynamicAuditing=true \
 --max-mutating-requests-inflight=2000 \
 --max-requests-inflight=4000 \
 --default-watch-cache-size=200 \
 --delete-collection-workers=2 \
 --encryption-provider-config=${K8S_ROOT}/conf/encryption-config.yaml \
---etcd-cafile=${K8S_ROOT}/certs/ca.pem \
+--etcd-cafile=${K8S_ROOT}/certs/etcd-ca.pem \
 --etcd-certfile=${K8S_ROOT}/certs/apiserver-etcd-client.pem \
 --etcd-keyfile=${K8S_ROOT}/certs/apiserver-etcd-client-key.pem \
 --etcd-servers="https://${K8S_ETCD_HOST}:2379" \
@@ -29,7 +28,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --tls-cert-file=${K8S_ROOT}/certs/apiserver.pem \
 --tls-private-key-file=${K8S_ROOT}/certs/apiserver-key.pem \
 --insecure-port=0 \
---audit-dynamic-configuration \
 --audit-log-maxage=15 \
 --audit-log-maxbackup=3 \
 --audit-log-maxsize=100 \
@@ -41,11 +39,11 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --client-ca-file=${K8S_ROOT}/certs/ca.pem \
 --enable-bootstrap-token-auth \
 --requestheader-allowed-names="aggregator" \
---requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
+--requestheader-client-ca-file=${K8S_ROOT}/certs/front-proxy-ca.pem \
 --requestheader-extra-headers-prefix="X-Remote-Extra-" \
 --requestheader-group-headers=X-Remote-Group \
 --requestheader-username-headers=X-Remote-User \
---service-account-key-file=${K8S_ROOT}/certs/ca.pem \
+--service-account-key-file=${K8S_ROOT}/certs/sa.pub \
 --authorization-mode=Node,RBAC \
 --runtime-config=api/all=true \
 --enable-admission-plugins=NodeRestriction \
@@ -57,8 +55,8 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --kubelet-client-key=${K8S_ROOT}/certs/apiserver-kubelet-client-key.pem \
 --kubelet-https=true \
 --kubelet-timeout=10s \
---proxy-client-cert-file=${K8S_ROOT}/certs/proxy-client.pem \
---proxy-client-key-file=${K8S_ROOT}/certs/proxy-client-key.pem \
+--proxy-client-cert-file=${K8S_ROOT}/certs/front-proxy-client.pem \
+--proxy-client-key-file=${K8S_ROOT}/certs/front-proxy-client-key.pem \
 --service-cluster-ip-range=10.254.0.0/16 \
 --service-node-port-range="1-65535" \
 --logtostderr=true \

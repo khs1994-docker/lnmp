@@ -118,10 +118,10 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: coredns
-        # image: k8s.gcr.io/coredns:1.6.7
-        # image: gcr.mirror/google-containers/coredns:1.6.7
-        # image: gcr.mirror/khs1994/coredns:1.6.7
-        image: registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.7
+        # image: k8s.gcr.io/coredns:1.6.9
+        # image: gcr.mirror/google-containers/coredns:1.6.9
+        # image: gcr.mirror/khs1994/coredns:1.6.9
+        image: coredns/coredns:1.6.9
         imagePullPolicy: IfNotPresent
         resources:
           limits:

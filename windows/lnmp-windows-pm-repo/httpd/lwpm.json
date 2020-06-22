@@ -1,14 +1,43 @@
 {
-  "name": "httpd",
-  "description": "",
-  "version": "2.4.43",
-  "pre-version": "2.4.43",
-  "homepage": "https://httpd.apache.org/",
   "bug": "https://httpd.apache.org/bug_report.html",
+  "command": "httpd",
+  "description": "",
   "github": "apache/httpd",
-  "releases": "https://httpd.apache.org/download.cgi",
-  "url": "https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip",
+  "homepage": "https://httpd.apache.org/",
+  "name": "httpd",
   "path": [
     "C:\\Apache24\\bin"
-  ]
+  ],
+  "pre-version": "2.4.43",
+  "releases": "https://httpd.apache.org/download.cgi",
+  "scripts": {
+    "install": [
+      "$HTTPD_MOD_FCGID_VERSION=\"2.3.10\"\n\n_downloader `\n\"https://www.apachelounge.com/download/VS16/modules/mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip\" `\n\"mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip\" `\n\"httpd_mod_fcgid\" `\n${env:HTTPD_MOD_FCGID_VERSION}\n",
+      "_cleanup $unzipDesc",
+      "_unzip $filename $unzipDesc",
+      "_mkdir C:\\Apache24",
+      "Copy-item -r -force \"httpd\\Apache24\" \"C:\\\"",
+      "if (!(Test-Path C:\\Apache24\\modules\\mod_fcgid.so)){\n_unzip mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16.zip `\n       mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16\n\ncopy-item mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16\\mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}\\mod_fcgid.so `\n          C:\\Apache24\\modules\n\n_cleanup mod_fcgid-${env:HTTPD_MOD_FCGID_VERSION}-win64-VS16\n}\n",
+      "$HTTPD_IS_RUN=0",
+      "if (!(get-service Apache2.4 -ErrorAction Continue > $null 2>&1)){\n  _sudo httpd -k install\n  $HTTPD_IS_RUN=1\n}\n",
+      "_sudo set-service Apache2.4 -StartupType Manual",
+      "mkdir $env:USERPROFILE\\lnmp\\windows\\httpd | out-null",
+      "mkdir $env:USERPROFILE\\lnmp\\windows\\logs\\httpd | out-null",
+      "_ln $env:USERPROFILE\\lnmp\\windows\\httpd C:\\Apache24\\conf.d",
+      "_ln $env:USERPROFILE\\lnmp\\windows\\logs\\httpd C:\\Apache24\\logs",
+      "_cleanup $unzipDesc"
+    ],
+    "platform-reqs": "if(!$IsWindows){echo $False}",
+    "postinstall": [
+      "if ($(Select-String 'IncludeOptional conf.d/' C:\\Apache24\\conf\\httpd.conf).Length -eq 0){ \"==> Add config in C:\\Apache24\\conf\\httpd.conf\"\necho \"`nIncludeOptional conf.d/*.conf `nLoadModule ssl_module modules/mod_ssl.so `nLoadModule headers_module modules/mod_headers.so `nLoadModule socache_shmcb_module modules/mod_socache_shmcb.so \" | out-file -Append C:\\Apache24\\conf\\httpd.conf -Encoding utf8 }"
+    ],
+    "test": "printInfo $(httpd -v).split(' ')[2] install success",
+    "uninstall": [
+      "_sudo httpd -k uninstall",
+      "_cleanup C:\\Apache24"
+    ],
+    "version": "($(httpd -v) -split \" \")[2].trim(\"Apache/\")"
+  },
+  "url": "https://www.apachelounge.com/download/VS16/binaries/httpd-${VERSION}-win64-VS16.zip",
+  "version": "2.4.43"
 }

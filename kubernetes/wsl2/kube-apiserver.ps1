@@ -16,13 +16,12 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --advertise-address=${KUBE_APISERVER_HOST} `
 --default-not-ready-toleration-seconds=360 `
 --default-unreachable-toleration-seconds=360 `
---feature-gates=DynamicAuditing=true `
 --max-mutating-requests-inflight=2000 `
 --max-requests-inflight=4000 `
 --default-watch-cache-size=200 `
 --delete-collection-workers=2 `
 --encryption-provider-config=${K8S_ROOT}/conf/encryption-config.yaml `
---etcd-cafile=${K8S_ROOT}/certs/ca.pem `
+--etcd-cafile=${K8S_ROOT}/certs/etcd-ca.pem `
 --etcd-certfile=${K8S_ROOT}/certs/apiserver-etcd-client.pem `
 --etcd-keyfile=${K8S_ROOT}/certs/apiserver-etcd-client-key.pem `
 --etcd-servers=$K8S_ETCD_ENTRYPOINTS `
@@ -31,7 +30,6 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --tls-cert-file=${K8S_ROOT}/certs/apiserver.pem `
 --tls-private-key-file=${K8S_ROOT}/certs/apiserver-key.pem `
 --insecure-port=0 `
---audit-dynamic-configuration `
 --audit-log-maxage=15 `
 --audit-log-maxbackup=3 `
 --audit-log-maxsize=100 `
@@ -43,12 +41,12 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --client-ca-file=${K8S_ROOT}/certs/ca.pem `
 --enable-bootstrap-token-auth `
 --requestheader-allowed-names="aggregator" `
---requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem `
+--requestheader-client-ca-file=${K8S_ROOT}/certs/front-proxy-ca.pem `
 --requestheader-extra-headers-prefix="X-Remote-Extra-" `
 --requestheader-group-headers=X-Remote-Group `
 --requestheader-username-headers=X-Remote-User `
---service-account-key-file=${K8S_ROOT}/certs/ca.pem `
---service-account-signing-key-file=${K8S_ROOT}/certs/ca-key.pem `
+--service-account-key-file=${K8S_ROOT}/certs/sa.pub `
+--service-account-signing-key-file=${K8S_ROOT}/certs/sa.key `
 --authorization-mode=Node,RBAC `
 --runtime-config=api/all=true `
 --enable-admission-plugins=NodeRestriction `
@@ -61,13 +59,14 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
 --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname `
 --kubelet-https=true `
 --kubelet-timeout=10s `
---proxy-client-cert-file=${K8S_ROOT}/certs/proxy-client.pem `
---proxy-client-key-file=${K8S_ROOT}/certs/proxy-client-key.pem `
---service-cluster-ip-range=10.254.0.0/16 `
+--proxy-client-cert-file=${K8S_ROOT}/certs/front-proxy-client.pem `
+--proxy-client-key-file=${K8S_ROOT}/certs/front-proxy-client-key.pem `
+--service-cluster-ip-range=10.254.0.0/16,fd00::/108 `
 --service-node-port-range="1-65535" `
 --logtostderr=true `
 --service-account-issuer=api `
 --api-audiences=api `
+--feature-gates="IPv6DualStack=true" `
 --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null

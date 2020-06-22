@@ -62,7 +62,7 @@ cd current
 
 items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
       fedora-coreos-${FCOS_VERSION}-live.x86_64.iso \
-      fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz.sig " 
+      fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz.sig "
 
 for item in $items;do
 
@@ -133,7 +133,7 @@ case "$1" in
       --boot1 dvd \
       --nic2 bridged \
       --nic1 hostonly \
-      --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || echo ) \
+      --bridgeadapter2 $(test `uname -s` = 'Linux' && (ip route list | grep default | awk '{print $5}') || true ) \
       --hostonlyadapter1 vboxnet1 \
       --firmware efi
 

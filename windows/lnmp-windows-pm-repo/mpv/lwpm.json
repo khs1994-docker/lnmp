@@ -21,7 +21,7 @@
       "_ln ${env:ProgramData}\\mpv\\mpv.exe $HOME\\Desktop\\mpv.exe"
     ],
     "version": "# (mpv).split()[1]\n echo ${VERSION}",
-    "test": "write-host $((mpv).split()[1]) install success",
+    "test": "printInfo mpv $((mpv).split()[1]) install success",
     "uninstall": "_cleanup $env:ProgramData\\mpv"
   }
 }

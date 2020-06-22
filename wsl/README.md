@@ -222,7 +222,7 @@ $ for ext in `ls`; do echo '*' $( php -r "if(extension_loaded('$ext')){echo '[x]
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader
-* [x] xmlrpc
+* [ ] xmlrpc
 * [x] xmlwriter
 * [x] xsl
 * [ ] zend_test

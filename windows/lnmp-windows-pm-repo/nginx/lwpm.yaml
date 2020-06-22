@@ -1,0 +1,55 @@
+name: "nginx"
+description: "small, powerful, scalable web/proxy server"
+version: "1.18.0"
+pre-version: "1.19.0"
+homepage: "https://nginx.org"
+bug: "http://nginx.org/en/support.html"
+github: "nginx/nginx"
+releases: "https://nginx.org/en/download.html"
+url-mirror: "https://mirrors.huaweicloud.com/nginx/nginx-${VERSION}.zip"
+url: "https://nginx.org/download/nginx-${VERSION}.zip"
+path:
+  - C:\nginx
+command: nginx
+scripts:
+  version: |
+    nginx -v > $env:TEMP/.nginx.version 2>&1
+    $(Get-Content $env:TEMP/.nginx.version).split(' ')[2].split('/')[1]
+  test: nginx -v
+  install: |
+    _cleanup nginx
+    _unzip $filename nginx
+
+    _mkdir C:\nginx
+
+    if(Test-Path C:\nginx\conf\nginx.conf){
+    Copy-Item C:\nginx\conf\nginx.conf ~/Downloads/lnmp-docker-cache/nginx.conf.backup
+    }
+
+    Copy-item -r -force "nginx\nginx-${VERSION}\*" "C:\nginx"
+
+    _cleanup nginx
+
+    cp $home/lnmp/windows/config/nginx.conf C:/nginx/conf
+  postinstall: |
+    _mkdir $home\lnmp\windows\nginx
+
+    _ln $home\lnmp\windows\nginx C:\nginx\conf\conf.d
+
+    mkdir -f $home\lnmp\windows\logs\nginx | out-null
+
+    _ln $home\lnmp\windows\logs\nginx C:\nginx\logs
+
+    if(Test-Path $home/Downloads/lnmp-docker-cache/nginx.conf.backup){
+    Copy-Item $home/Downloads/lnmp-docker-cache/nginx.conf.backup C:\nginx\conf\nginx.conf
+    }
+
+    Get-Process nginx -ErrorAction "SilentlyContinue" | out-null
+
+    if (!($?)){
+    echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\access.log -ErrorAction "SilentlyContinue"
+    echo ' ' | out-file -Append $home\lnmp\windows\logs\nginx\error.log -ErrorAction "SilentlyContinue"
+    }
+  uninstall: |
+    _cleanup C:\nginx
+  platform-reqs: if(!$IsWindows){echo $False}

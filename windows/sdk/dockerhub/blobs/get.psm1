@@ -25,8 +25,8 @@ function _sha256_checker($filename) {
 }
 
 function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com", $dist) {
-  $sha256=$digest.split(':')[1]
-  $prefix=$sha256.Substring(0,2)
+  $sha256 = $digest.split(':')[1]
+  $prefix = $sha256.Substring(0, 2)
   New-Item -force -type Directory (Get-CachePath blobs/sha256/$prefix) | out-null
   $distTemp = Get-CachePath "blobs/sha256/$prefix/$sha256"
 
@@ -58,9 +58,9 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
     if (!$statusCode) {
       Write-Host $_.Exception
     }
-
-    # Write-Host $_.Exception
-    Write-Host "==> HTTP StatusCode is $statusCode"
+    else {
+      Write-Host "==> HTTP StatusCode is $statusCode" -ForegroundColor Red
+    }
 
     if ($statusCode -lt 400 -and $statusCode -gt 200) {
       $url = $result.Headers.Location

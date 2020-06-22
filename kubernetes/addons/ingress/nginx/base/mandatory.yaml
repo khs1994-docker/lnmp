@@ -302,7 +302,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: controller
-          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:

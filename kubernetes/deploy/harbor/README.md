@@ -43,6 +43,14 @@ $ kubectl apply -k custom2
 
 $ mkdir -p /var/lib/khs1994-docker-lnmp/harbor/registry/docker
 $ chown -R 10000:10000 /var/lib/khs1994-docker-lnmp/harbor/registry/docker
+
+$ mkdir -p /var/lib/khs1994-docker-lnmp/harbor/trivy/trivy
+$ chown -R 10000:10000 /var/lib/khs1994-docker-lnmp/harbor/trivy/trivy
+
+$ mkdir -p /var/lib/khs1994-docker-lnmp/harbor/trivy/reports
+$ chown -R 10000:10000 /var/lib/khs1994-docker-lnmp/harbor/trivy/reports
+
+$ chown -R 999:999 /var/lib/khs1994-docker-lnmp/harbor/redis
 ```
 
 访问地址请查看 `custom/ingress.yaml`
@@ -65,11 +73,13 @@ $ helm template harbor/harbor \
   --set expose.ingress.hosts.core=harbor.t.khs1994.com \
   --set expose.ingress.hosts.notary=notary-harbor.t.khs1994.com \
   --set externalURL=https://harbor.t.khs1994.com:28443 \
+  # --set trivy.gitHubToken="your_github_token" \
   > base/harbor.yaml
 ```
 
 `RELEASE-NAME-` 替换为空
 `core.harbor.domain` 替换为自己的域名（e.g.: harbor.t.khs1994.com:28443）
+搜索 `volumeClaimTemplates` 增加 `selector`
 
 ## 使用
 

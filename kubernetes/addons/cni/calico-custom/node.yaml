@@ -1,0 +1,9 @@
+# https://docs.projectcalico.org/reference/resources/node
+apiVersion: projectcalico.org/v3
+kind: Node
+metadata:
+  name: node-hostname
+spec:
+  bgp:
+    ipv4Address: 192.168.39.114/20
+    ipv6Address: fe80::215:5dff:fe27:77fc/64

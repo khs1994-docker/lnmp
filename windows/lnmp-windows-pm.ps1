@@ -1,5 +1,7 @@
 #!/usr/bin/env pwsh
 
+#Requires -Version 5.0.0
+
 #
 # $ set-ExecutionPolicy Bypass
 #
@@ -31,6 +33,7 @@ add         Add package [ --all-platform | ]
 init        Init a new package (developer) [ --custom | ]
 push        Push a package to docker registry (developer)
 toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
+path        What PATH add to ~/.bashrc manual (Only Support in Linux/macOS)
 
 SERVICES [Require RunAsAdministrator]:
 
@@ -58,9 +61,6 @@ if ($env:CI -or $CI) {
 
 if ($IsWindows) {
   . "$PSScriptRoot/common.ps1"
-}
-else {
-  Import-Alias -Force $PSScriptRoot/pwsh-alias.txt
 }
 
 $EXEC_CMD_DIR = $PWD
@@ -121,10 +121,10 @@ _mkdir $home\Downloads\lnmp-docker-cache
 
 _mkdir $home\lnmp\windows\logs
 
-cd $home\Downloads\lnmp-docker-cache
+Set-Location $home\Downloads\lnmp-docker-cache
 
 function _exit() {
-  cd $EXEC_CMD_DIR
+  Set-Location $EXEC_CMD_DIR
 
   exit
 }
@@ -190,6 +190,13 @@ Function _import_module($soft) {
 
   if (!(Test-Path $soft_ps_module_dir/$soft.psm1)) {
     $env:LWPM_MANIFEST_PATH = "$soft_ps_module_dir/lwpm.json"
+
+    if (!(Test-Path $env:LWPM_MANIFEST_PATH)) {
+      printError "$env:LWPM_MANIFEST_PATH not exists"
+      Set-Location $EXEC_CMD_DIR
+      exit 1
+    }
+
     $soft_ps_module_dir = "$PSScriptRoot\lnmp-windows-pm-repo\example.psm1"
   }
   else {
@@ -201,21 +208,25 @@ Function _import_module($soft) {
   Import-Module -Name $soft_ps_module_dir
 }
 
-Function _uname_parse($string) {
-  # aarch64  arm64
-  # armhf    arm
-  # armel    arm/v6
-  # i386     386
-  # x86_64   amd64
-  # x86-64   amd64
+class Uname {
+  static [string] parser($string) {
+    # aarch64  arm64
+    # armhf    arm
+    # armel    arm/v6
+    # i386     386
+    # x86_64   amd64
+    # x86-64   amd64
 
-  if ($string -eq "windows") { return "Windows" }
-  if ($string -eq "linux") { return "Linux" }
-  if ($string -eq "darwin") { return "Darwin" }
+    if ($string -eq "windows") { return "Windows" }
+    if ($string -eq "linux") { return "Linux" }
+    if ($string -eq "darwin") { return "Darwin" }
 
-  if ($string -eq "arm64") { return "aarch64" }
-  if ($string -eq "amd64") { return "x86_64" }
-  if ($string -eq "arm") { return "armv7l" }
+    if ($string -eq "arm64") { return "aarch64" }
+    if ($string -eq "amd64") { return "x86_64" }
+    if ($string -eq "arm") { return "armv7l" }
+
+    return ''
+  }
 }
 
 Function __install($softs) {
@@ -240,18 +251,30 @@ Function __install($softs) {
       _import_module $soft
     }
     catch {
-      continue;
+      continue
     }
 
     if ($env:LWPM_DIST_ONLY -eq "true") {
       $pkg_root = pkg_root $soft
-      $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
+      $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
+
+      if (!$platforms) {
+        printError `$env:LWPM_DIST_ONLY is true`, but platform is empty`, skip
+      }
 
       foreach ($platform in $platforms) {
         $env:lwpm_architecture = $platform.architecture
-        $env:LWPM_UNAME_M = _uname_parse $env:lwpm_architecture
+        $env:LWPM_UNAME_M = [Uname]::parser($env:lwpm_architecture)
         $env:lwpm_os = $platform.os
-        $env:LWPM_UNAME_S = _uname_parse $env:lwpm_os
+        $env:LWPM_UNAME_S = [Uname]::parser($env:lwpm_os)
+
+        $global:_IsMacOs = $false
+        $global:_IsWindows = $false
+        $global:_IsLinux = $false
+
+        if ($env:lwpm_os -eq 'darwin') { $global:_IsMacOs = $true }
+        if ($env:lwpm_os -eq 'windows') { $global:_IsWindows = $true }
+        if ($env:lwpm_os -eq 'linux') { $global:_IsLinux = $true }
 
         if ($version) {
           _install $version $preVersion $force
@@ -267,10 +290,28 @@ Function __install($softs) {
       continue
     }
 
-    $env:lwpm_architecture = "amd64"
-    $env:LWPM_UNAME_M = "x86_64"
-    $env:lwpm_os = "windows"
-    $env:LWPM_UNAME_S = "Windows"
+    $global:_IsMacOs = $false
+    $global:_IsWindows = $false
+    $global:_IsLinux = $false
+
+    if ($IsWindows) {
+      $env:lwpm_architecture = "amd64"
+      $env:LWPM_UNAME_M = "x86_64"
+      $env:lwpm_os = "windows"
+      $env:LWPM_UNAME_S = "Windows"
+
+      $global:_IsWindows = $true
+    }
+    else {
+      $env:lwpm_architecture = "amd64"
+      $env:LWPM_UNAME_M = uname -m
+
+      $env:LWPM_UNAME_S = uname -s
+      $env:lwpm_os = $env:LWPM_UNAME_S.ToLower()
+    }
+
+    if ($IsMacOs) { $global:_IsMacOs = $true }
+    if ($IsLinux) { $global:_IsLinux = $true }
 
     if ($version) {
       _install $version $preVersion $force
@@ -290,7 +331,7 @@ Function __uninstall($softs) {
       _import_module $soft
     }
     catch {
-      continue;
+      continue
     }
 
     _uninstall
@@ -340,7 +381,7 @@ Function _getlwpmConfig($image, $ref) {
 
   $dest = Get-Blob $token $image $config_digest $registry
 
-  return cat $dest
+  return Get-Content $dest
 }
 
 Function _add($softs) {
@@ -408,7 +449,7 @@ Function _add($softs) {
       $env:DOCKER_ROOTFS_PHASE = $null
       $lwpm_json, $lwpm_dist, $lwpm_script = rootfs $soft $ref -os $os -arch $architecture $null 'config', 0, 1
 
-      if (!($lwpm_json -and $lwpm_dist -and $lwpm_script)) {
+      if (($lwpm_json -eq $false) -or ($lwpm_dist -eq $false) -or ($lwpm_script -eq $false)) {
         Write-Host "==> $soft $ref not found or download failed" -ForegroundColor Red
 
         continue
@@ -430,7 +471,7 @@ Function _add($softs) {
 
 Function __list() {
   ""
-  ls "${PSScriptRoot}\lnmp-windows-pm-repo" -Name -Directory
+  Get-ChildItem "${PSScriptRoot}\lnmp-windows-pm-repo" -Name -Directory
   ""
   _exit
 }
@@ -462,7 +503,7 @@ function __init($soft, $custom_script = $false) {
 
   Write-Host "==> Please edit $SOFT_ROOT files" -ForegroundColor Green
 
-  cd $EXEC_CMD_DIR
+  Set-Location $EXEC_CMD_DIR
 }
 
 function manifest($soft) {
@@ -476,7 +517,7 @@ function getVersionByProvider($soft) {
     _import_module $soft
   }
   catch {
-    return;
+    return
   }
 
   $ErrorActionPreference = "Continue"
@@ -491,6 +532,23 @@ function getVersionByProvider($soft) {
   _remove_module $soft
 
   return $latestVersion, $latestPreVersion
+}
+
+function _path($softs) {
+  if ($IsWindows) {
+    printError This command not support Windows
+    Set-Location $EXEC_CMD_DIR
+    exit 1
+  }
+
+  foreach ($soft in $softs) {
+    $lwpm = manifest $soft
+    if ($lwpm.'unix-path') {
+      foreach ($soft_path in $lwpm.'unix-path') {
+        Write-Output $soft_path
+      }
+    }
+  }
 }
 
 function __info($soft) {
@@ -556,7 +614,7 @@ function __bug($soft) {
 }
 
 function _tolf($file) {
-  (cat $file -raw) -replace "`r`n", "`n" | Set-Content -NoNewline $file
+  (Get-Content $file -raw) -replace "`r`n", "`n" | Set-Content -NoNewline $file
 }
 
 function _push($opt) {
@@ -578,7 +636,7 @@ function _push($opt) {
 
   if (!$env:LWPM_DOCKER_USERNAME -or !$env:LWPM_DOCKER_PASSWORD) {
     Write-Host ==> please set `$env:LWPM_DOCKER_USERNAME and `$env:LWPM_DOCKER_PASSWORD -ForegroundColor Red
-
+    Set-Location $EXEC_CMD_DIR
     exit 1
   }
 
@@ -595,7 +653,7 @@ function _push($opt) {
 
   Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
 
-  $platforms = (ConvertFrom-Json (cat $pkg_root\lwpm.json -raw)).platform
+  $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
   if (!($platforms)) {
     $platforms = ConvertFrom-Json -InputObject @"
@@ -619,31 +677,31 @@ function _push($opt) {
     $lwpm_temp = "$PSScriptRoot/../vendor/lwpm-temp/${env:lwpm_os}-${env:lwpm_architecture}/$soft"
     $lwpm_dist_temp = "$PSScriptRoot/../vendor/lwpm-temp/dist/$soft/${env:lwpm_os}-${env:lwpm_architecture}"
 
-    try { rm -r -force $lwpm_temp }catch { }
-    try { rm -r -force $lwpm_dist_temp }catch { }
+    try { Remove-Item -r -force $lwpm_temp }catch { }
+    try { Remove-Item -r -force $lwpm_dist_temp }catch { }
 
     _mkdir $lwpm_temp | out-null
     _mkdir $lwpm_dist_temp | out-null
 
-    try { cp $pkg_root\README.md $lwpm_temp }catch { }
+    try { Copy-Item $pkg_root\README.md $lwpm_temp }catch { }
 
     if (Test-Path $pkg_root\$soft.psm1) {
-      cp $pkg_root\${soft}.psm1 $lwpm_temp
+      Copy-Item $pkg_root\${soft}.psm1 $lwpm_temp
     }
 
     $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
-    cd $lwpm_temp\..\
+    Set-Location $lwpm_temp\..\
     tar -zcvf script.tar.gz $soft
-    mv script.tar.gz $script_tar_file
+    Move-Item script.tar.gz $script_tar_file
 
-    ConvertFrom-Json (cat $pkg_root\lwpm.json -raw) | `
+    ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw) | `
       ConvertTo-Json -Depth 5 -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
 
     $layers_file = $()
 
     if (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz) {
       write-host "==> found platform .tar.gz file, use it" -ForegroundColor Blue
-      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+      Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
 
       foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
         write-host "==> .tar.gz file is $item" -ForegroundColor Blue
@@ -654,18 +712,18 @@ function _push($opt) {
     }
     elseif (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}) {
       write-host "==> found platform file" -ForegroundColor Blue
-      cp -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+      Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
     }
     else {
       write-host "==> NO platform file" -ForegroundColor Blue
-      try { cp -r $pkg_root\dist   $lwpm_temp }catch { }
+      try { Copy-Item -r $pkg_root\dist   $lwpm_temp }catch { }
     }
 
     if ($layers_file.Count -eq 0) {
       $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
-      cd $lwpm_temp/../
+      Set-Location $lwpm_temp/../
       tar -zcvf dist.tar.gz $soft/dist
-      mv dist.tar.gz $dist_tar_file
+      Move-Item dist.tar.gz $dist_tar_file
 
       $layers_file += , $dist_tar_file
     }
@@ -682,7 +740,7 @@ function _push($opt) {
     }
     catch {
       Write-Host $_.Exception
-      return;
+      return
     }
 
     # upload layers blob
@@ -695,7 +753,7 @@ function _push($opt) {
       }
       catch {
         Write-Host $_.Exception
-        return;
+        return
       }
 
       $layer = @{
@@ -752,7 +810,7 @@ function _push($opt) {
   $manifest_list_json_path = "$lwpm_dist_temp/manifest_list.json"
   write-output $data | Set-Content -NoNewline $manifest_list_json_path
 
-  Write-Host $(cat $manifest_list_json_path -raw)
+  Write-Host $(Get-Content $manifest_list_json_path -raw)
 
   # push manifest list
   $token = getDockerRegistryToken $opt -registry $registry
@@ -788,8 +846,11 @@ function _yaml_to_json_and_sort($yaml) {
 }
 
 function _toJson($soft) {
-  get-command ConvertFrom-Yaml | out-null
-
+  if (!(_command ConvertFrom-Yaml)) {
+    printError Please install ConvertFrom-Yaml by exec $ Install-Module powershell-yaml
+    Set-Location $EXEC_CMD_DIR
+    exit 1
+  }
   try { $pkg_root = pkg_root $soft }catch { return }
 
   if (Test-Path $pkg_root/lwpm.yml) {
@@ -806,7 +867,7 @@ function _toJson($soft) {
     return
   }
 
-  # ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (cat $pkg_root\$yaml_file -raw) `
+  # ConvertTo-Json (ConvertFrom-Json (ConvertFrom-Yaml (Get-Content $pkg_root\$yaml_file -raw) `
   #   | ConvertTo-Yaml -JsonCompatible)) `
   # | Set-Content $pkg_root\lwpm.json
 
@@ -948,9 +1009,13 @@ switch ($command) {
     }
   }
 
+  "path" {
+    _path $opt
+  }
+
   Default {
     print_help_info
   }
 }
 
-cd $EXEC_CMD_DIR
+Set-Location $EXEC_CMD_DIR

@@ -20,37 +20,37 @@ jobs:
       # PHP_73_CLI:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.18
+      #   PHP_TAG_VERSION: 7.3.19
       #   TYPE: CLI
       # PHP_73_FPM:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.18
+      #   PHP_TAG_VERSION: 7.3.19
       #   TYPE: FPM
       # PHP_73_COMPOSER:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.18
+      #   PHP_TAG_VERSION: 7.3.19
       #   TYPE: COMPOSER
       # PHP_73_SWOOLE:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.18
+      #   PHP_TAG_VERSION: 7.3.19
       #   TYPE: SWOOLE
       # PHP_73_UNIT:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.18
+      #   PHP_TAG_VERSION: 7.3.19
       #   TYPE: UNIT
       # PHP_73_SUPERVISORD:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.18
+      #   PHP_TAG_VERSION: 7.3.19
       #   TYPE: SUPERVISORD
       # PHP_73_PPM:
       #   PHP_VERSION: 7_3_X
       #   FOLDER: 7.3
-      #   PHP_TAG_VERSION: 7.3.18
+      #   PHP_TAG_VERSION: 7.3.19
       #   TYPE: PPM
 
       # PHP_56_FPM:
@@ -110,22 +110,22 @@ jobs:
       # PHP_74_CLI:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.6
+      #   PHP_TAG_VERSION: 7.4.7
       #   TYPE: CLI
       # PHP_74_FPM:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.6
+      #   PHP_TAG_VERSION: 7.4.7
       #   TYPE: FPM
       # PHP_74_COMPOSER:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.6
+      #   PHP_TAG_VERSION: 7.4.7
       #   TYPE: COMPOSER
       # PHP_74_SWOOLE:
       #   PHP_VERSION: 7_4_X
       #   FOLDER: 7.4
-      #   PHP_TAG_VERSION: 7.4.6
+      #   PHP_TAG_VERSION: 7.4.7
       #   TYPE: SWOOLE
 
       # PHP_nightly_CLI:
@@ -157,7 +157,7 @@ jobs:
   - name: DOCKER_CLI_EXPERIMENTAL
     value: enabled
   - name: DOCKER_COMPOSE_VERSION
-    value: 1.25.0
+    value: 1.26.0
   timeoutInMinutes: 0
   steps:
   - script: |
@@ -224,7 +224,7 @@ jobs:
       fi
 
       VCS_REF=`git rev-parse --short HEAD`
-      options="--build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
+      options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
       echo $options
 
       if [ "$TYPE" = "UNIT" ];then docker buildx build $options \

@@ -1,0 +1,62 @@
+name: "vsCode"
+description: "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications"
+version: ""
+pre-version: ""
+homepage: "https://code.visualstudio.com/"
+bug: "https://github.com/Microsoft/vscode/issues"
+github: "microsoft/vscode"
+releases: "https://github.com/Microsoft/vscode/releases"
+url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/stable"
+pre-url: "https://update.code.visualstudio.com/latest/$(if($_isWindows){echo win32-x64-user}else{echo $env:lwpm_os})/insider"
+command: code
+download-filename: |
+  VSCode$(if($IsWindows){echo .exe}else{echo .zip})
+scripts:
+  test: |
+    if($_isWindows){
+      & "$home\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd" --version
+    }else{
+      & "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" --version | Out-Host
+    }
+  version: $(code --version).split(' ')[0]
+  get-version-function: |
+    Function Get-Version($url){
+    try{
+    Invoke-WebRequest `
+      -MaximumRedirection 0 `
+      -Method Head `
+      -uri $url
+    }catch{
+      $location = $_.Exception.Response.Headers.Location
+      $url=$location.AbsoluteUri
+      $version=$location.Segments[3].split('-')[2].trim('.exe')
+    }
+    return $version,$url
+    }
+  get-version: |
+    iex $lwpm.scripts.'get-version-function'
+
+    if($isPre){
+    $VERSION,$url=Get-Version $(iex "echo $pre_url")
+    }else{
+    $VERSION,$url=Get-Version $(iex "echo $url")
+    }
+  get-latest-version: |
+    iex $lwpm.scripts.'get-version-function'
+
+    Function Get-LatestVersion(){
+      return $(Get-Version $(iex "echo $url"))[0],$(Get-Version $(iex "echo $pre_url"))[0]
+    }
+  platform-reqs: |
+    if($IsLinux){
+    printInfo Please download from "[ https://code.visualstudio.com/#alt-downloads ]"
+    echo $False
+    }
+  install: |
+    if($IsWindows){
+    Start-Process -FilePath $filename -wait
+
+    return
+    }
+
+    unzip $filename -d /Applications/

@@ -33,4 +33,5 @@ scripts:
       );
   test: python --version
   version: ($(python --version) -split " ")[1]
+  platform-reqs: if(!$IsWindows){echo $False}
 command: python

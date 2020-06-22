@@ -1,26 +1,29 @@
 {
   "name": "coredns",
   "description": "CoreDNS is a DNS server that chains plugins",
-  "version": "1.6.7",
-  "pre-version": "1.6.7",
+  "version": "1.6.9",
+  "pre-version": "1.6.9",
   "homepage": "https://coredns.io/",
   "bug": "https://github.com/coredns/coredns/issues",
   "github": "coredns/coredns",
   "releases": "https://github.com/coredns/coredns/releases",
-  "url": "https://github.com/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_windows_amd64.tgz",
+  "url": "https://github.com/coredns/coredns/releases/download/v${VERSION}/coredns_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.tgz",
   "command": "coredns",
   "scripts": {
-    "test": "coredns --version",
+    "test": "printInfo $(coredns --version)[0] install success",
     "version": "(coredns --version).split('CoreDNS-')[1]",
     "preinstall": [
       ""
     ],
     "install": [
-      "tar -zxf $filename -C C:\\bin\\"
+      "if($IsWindows){tar -zxf $filename -C C:\\bin\\}else{sudo tar -zxf $filename -C /usr/local/bin; sudo chmod +x /usr/local/bin/coredns}"
     ],
     "uninstall": "_cleanup C:\\bin\\coredns.exe"
   },
   "path": [
     "C:\\bin"
-  ]
+  ],
+  "hash-url": {
+    "sha256": "https://github.com/coredns/coredns/releases/download/v${VERSION}/${filename}.sha256"
+  }
 }

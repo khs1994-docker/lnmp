@@ -1,0 +1,122 @@
+name: "php"
+description: "PHP is a popular general-purpose scripting language that is especially suited to web development"
+version: "7.4.7"
+pre-version: "7.4.7"
+homepage: "https://www.php.net/"
+bug: "https://www.php.net/"
+github: "php/php-src"
+releases: "https://www.php.net/downloads.php"
+path: ["C:\\php"]
+command: php
+download-filename: php-${VERSION}-${VC_VERSION}-x64.zip
+scripts:
+  platform-reqs: ["if(!$IsWindows){echo $False}"]
+  uninstall: _cleanup "C:\php"
+  version: (php -v).split(" ")[1]
+  postinstall: |
+    if (!(Test-Path $PHP_PREFIX\php.ini)){
+    Copy-Item $PHP_PREFIX\php.ini-development $PHP_PREFIX\php.ini
+    }
+
+    _install_ext $PHP_PREFIX
+  test: |
+    & ${PHP_PREFIX}/php -v
+  install: |
+    Function _install_ext($PHP_PREFIX){
+    $PHP_CACERT_DATE="2020-01-01"
+
+    $PHP_INI="${PHP_PREFIX}/php.ini"
+    $PHP_BIN="${PHP_PREFIX}/php.exe"
+
+    $extensions='yaml',`
+         'xdebug',`
+         'redis',`
+         'mongodb',`
+         'igbinary'
+
+    _downloader `
+      http://redmine.lighttpd.net/attachments/download/660/RunHiddenConsole.zip `
+      RunHiddenConsole.zip `
+      RunHiddenConsole
+
+    _downloader `
+      https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar `
+      pickle `
+      pickle
+
+    _unzip RunHiddenConsole.zip RunHiddenConsole
+
+    copy-item -r -force RunHiddenConsole\RunHiddenConsole.exe C:\bin
+    copy-item -r -force pickle C:\bin
+    _cleanup RunHiddenConsole
+
+    _downloader `
+      https://github.com/deemru/php-cgi-spawner/releases/download/1.1.23/php-cgi-spawner.exe `
+      php-cgi-spawner.exe `
+      php-cgi-spawner
+
+    Get-Process php-cgi-spawner -ErrorAction "SilentlyContinue" | out-null
+
+    if(!($?)){
+    cp php-cgi-spawner.exe C:\php
+    }
+
+    # https://curl.haxx.se/docs/caextract.html
+    # https://github.com/khs1994-docker/lnmp/issues/339
+    _downloader `
+      https://curl.haxx.se/ca/cacert-${PHP_CACERT_DATE}.pem `
+      cacert-${PHP_CACERT_DATE}.pem `
+      cacert-${PHP_CACERT_DATE}.pem
+
+    copy-item -r -force cacert-${PHP_CACERT_DATE}.pem C:\bin
+
+    Foreach ($extension in $extensions){
+    "==> install $extension ..."
+
+    if (Test-Path $HOME/github/pickle/bin/pickle){
+      & ${PHP_BIN} $HOME/github/pickle/bin/pickle install $extension --php ${PHP_BIN}
+    }else{
+      & ${PHP_BIN} C:\bin\pickle install $extension --php ${PHP_BIN}
+    }
+    }
+
+    #
+    # Windows php curl ssl
+    #
+    # @link https://github.com/khs1994-docker/lnmp/issues/339
+    #
+
+    $a = php -r "echo ini_get('curl.cainfo');"
+
+    if ($a -ne "C:\bin\cacert-${PHP_CACERT_DATE}.pem"){
+    "curl.cainfo=C:\bin\cacert-${PHP_CACERT_DATE}.pem" `
+    | out-file -Append $PHP_INI -encoding utf8
+    }
+
+    php -r "echo ini_get('curl.cainfo');"
+
+    echo `n
+    }
+
+    _cleanup $unzipDesc
+    _unzip $filename $unzipDesc
+
+    Copy-item -r -force $unzipDesc "C:\"
+
+    _cleanup $unzipDesc
+  get-version: |
+    if(!($VERSION)){
+    $VERSION=$stable_version
+    }
+    if($isPre){
+    $VC_VERSION="nts-Win32-vc15"
+    $VERSION=$pre_version
+    $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $unzipDesc="php-pre"
+    $global:PHP_PREFIX="C:\php-pre"
+    }else{
+    $VC_VERSION="nts-Win32-VC15"
+    $url="https://windows.php.net/downloads/releases/php-${VERSION}-${VC_VERSION}-x64.zip"
+    $unzipDesc="php"
+    $global:PHP_PREFIX="C:\php"
+    }

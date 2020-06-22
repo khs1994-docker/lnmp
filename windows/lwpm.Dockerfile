@@ -13,8 +13,7 @@ RUN apk add --no-cache curl
 
 COPY lnmp-windows-pm-repo  /root/lnmp/windows/lnmp-windows-pm-repo
 COPY lnmp-windows-pm.ps1 \
-     docker-image-sync.ps1 \
-     pwsh-alias.txt        /root/lnmp/windows/
+     docker-image-sync.ps1 /root/lnmp/windows/
 COPY sdk                   /root/lnmp/windows/sdk
 COPY powershell_system     /root/lnmp/windows/powershell_system
 

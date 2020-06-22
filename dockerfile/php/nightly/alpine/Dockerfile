@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-FROM --platform=$TARGETPLATFORM alpine:3.11 as php
+FROM --platform=$TARGETPLATFORM alpine:3.12 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -78,8 +78,6 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
         --enable-bcmath=shared \
-        --enable-inline-optimization \
-        --enable-mbregex \
         --enable-pcntl=shared \
         --enable-shmop=shared \
         # --enable-soap=shared \
@@ -87,8 +85,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
-        --enable-xml \
-        --with-zip \
+        --with-zip=shared \
         --enable-calendar=shared \
         --enable-intl=shared \
         --enable-exif=shared \
@@ -98,14 +95,11 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-kerberos \
         --with-imap=shared \
             --with-imap-ssl \
-        --with-xmlrpc=shared \
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        --enable-phar \
-        --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
         # --with-snmp=shared \
@@ -205,9 +199,8 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           libexif-dev \
           # libxslt-dev \
           gmp-dev \
-          xmlrpc-c-dev \
           bzip2-dev \
-          enchant-dev \
+          enchant2-dev \
           imap-dev \
           gettext-dev \
           icu-dev \
@@ -234,7 +227,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
   && mv /usr/include/gnu-libiconv/*.h /usr/include \
   && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
-  && make clean || echo \
+  && make clean || true \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./buildconf --force \
   && ./configure \
@@ -294,7 +287,6 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
-                           posix \
                            pspell \
                            shmop \
                            # snmp \
@@ -305,9 +297,9 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            sysvsem \
                            sysvshm \
                            # tidy \
-                           xmlrpc \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
+                           zip \
                            opcache \
                            # 7.4 +
                            ffi \

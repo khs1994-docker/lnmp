@@ -1,0 +1,33 @@
+name: "postman"
+description: "Manage all of your organization's APIs in Postman, with the industry's most complete API development environment"
+version: ""
+pre-version: ""
+homepage: "https://www.getpostman.com/"
+bug: "https://www.getpostman.com/support"
+github: "postmanlabs/postman-app-support"
+releases: ""
+url: "https://dl.pstmn.io/download/latest/win64"
+command: "${env:APPDATA}\\..\\Local\\Postman\\Postman.exe"
+download-filename: Postman-win64-${VERSION}-Setup.exe
+scripts:
+  version: "echo ${VERSION}"
+  test: |
+    & Get-Command $env:APPDATA\..\Local\Postman\Postman.exe
+  get-latest-version: |
+    Function Get-LatestVersion(){
+    $result = Invoke-WebRequest -Method Head `
+    -uri $url
+
+    return $result.Headers.'Content-Disposition'.split('-')[2]
+    }
+  get-version: |
+    iex $lwpm.scripts.'get-latest-version'
+
+    if(!($VERSION)){
+    $VERSION=Get-LatestVersion
+    }
+    if($isPre){
+    $VERSION=Get-LatestVersion
+    }
+  install: Start-Process -FilePath $filename -wait
+  platform-reqs: if(!$IsWindows){echo $False}

@@ -10,10 +10,11 @@ scripts:
       $url `
       -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
   install:
-    tar -zxvf $filename -C C:\bin
+    if($IsWindows){tar -zxf $filename -C C:\bin}else{sudo tar -zxf $filename -C /usr/local/bin}
   version: (crictl --version).split(' ')[2].trim('v')
   uninstall: _cleanup C:\bin\crictl.exe
   test: crictl --version
+  platform-reqs: if($IsMacOs){echo $False}
 platform:
   - architecture: amd64
     os: windows

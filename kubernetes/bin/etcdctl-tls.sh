@@ -10,7 +10,7 @@ fi
 
 exec etcdctl \
 --endpoints=${etcd_endpoints} \
---cacert=${CERT_DIR:-/opt/k8s}/certs/ca.pem \
+--cacert=${CERT_DIR:-/opt/k8s}/certs/etcd-ca.pem \
 --cert=${CERT_DIR:-/opt/k8s}/certs/${filename}.pem \
 --key=${CERT_DIR:-/opt/k8s}/certs/${filename}-key.pem \
 "$@"

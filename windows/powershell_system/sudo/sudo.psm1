@@ -1,4 +1,4 @@
-Function _sudo($command){
+Function _sudo() {
   Start-Process powershell -Verb runAs `
-    -argumentlist '-NoExit',"-WorkingDirectory","$PWD","-c","$command" -wait
+    -argumentlist '-NoExit', "-c", "$args" -wait
 }

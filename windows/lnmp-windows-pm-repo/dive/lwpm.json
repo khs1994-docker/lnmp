@@ -7,15 +7,18 @@
   "bug": "https://github.com/wagoodman/dive/issues",
   "github": "wagoodman/dive",
   "releases": "https://github.com/wagoodman/dive/releases",
-  "url": "https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_windows_amd64.zip",
+  "url": "https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
+  "hash-url": {
+    "sha256": "https://github.com/wagoodman/dive/releases/download/v${VERSION}/dive_${VERSION}_checksums.txt"
+  },
   "command": "dive",
   "scripts": {
-    "test": "dive --version",
+    "test": "printInfo $(dive --version) install success",
     "version": "(dive --version).split(' ')[1]",
     "install": [
       "_cleanup dive",
-      "_unzip $filename $unzipDesc",
-      "Copy-item dive\\dive.exe C:\\bin\\",
+      "if($IsWindows){_unzip $filename $unzipDesc}else{sudo tar -zxf $filename -C /usr/local/bin}",
+      "if($IsWindows){Copy-item dive\\dive.exe C:\\bin\\}",
       "_cleanup dive"
     ],
     "uninstall": "_cleanup C:\\bin\\dive.exe"

@@ -2,7 +2,7 @@ name: compose
 version: 1.25.5
 pre-version: 1.26.0-rc4
 command: docker-compose
-url: https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}.exe
+url: https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
 scripts:
   install: |
     Copy-Item -Force $filename C:\bin\docker-compose.exe
@@ -21,6 +21,7 @@ scripts:
     -o $env:LWPM_PKG_ROOT/dist/${env:lwpm_os}-${env:lwpm_architecture}/$filename
   version: (docker-compose --version).split(' ')[2].trim(',')
   test: docker-compose --version
+  platform-reqs: if(!$IsLinux){echo $False}
 platform:
   - architecture: amd64
     os: windows

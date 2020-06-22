@@ -1,0 +1,17 @@
+apiVersion: node.k8s.io/v1beta1  # RuntimeClass is defined in the node.k8s.io API group
+kind: RuntimeClass
+metadata:
+  name: myclass  # The name the RuntimeClass will be referenced by
+  # RuntimeClass is a non-namespaced resource
+# handler: myconfiguration  # The name of the corresponding CRI configuration
+handler: runsc # 值与 OCI 配置文件对应
+# scheduling:
+#   nodeSelector:
+#     kubernetes.io/os: 'windows'
+#     kubernetes.io/arch: 'amd64'
+#     node.kubernetes.io/windows-build: '10.0.17763'
+#   tolerations:
+#   - effect: NoSchedule
+#     key: os
+#     operator: Equal
+#     value: "windows"

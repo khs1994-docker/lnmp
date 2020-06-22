@@ -20,7 +20,10 @@
 
 * **mcrypt** 7.2 移除
 * **mysql** 7.0 移除
+* **interbase** 7.4 移除
 * **wddx** 7.4 移除
+* **recode** 7.4 移除
+* **xmlrpc** 8.0 移除
 
 ## 自行增加扩展
 
@@ -197,7 +200,7 @@ $ docker rm -f CONTAINER_ID
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader
-* [x] xmlrpc
+* [ ] xmlrpc
 * [x] xmlwriter
 * [x] xsl
 * [ ] zend_test

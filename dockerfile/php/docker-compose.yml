@@ -16,21 +16,21 @@ services:
     build:
       context: ./7.4/alpine
       args:
-        PHP_VERSION: 7.4.6
+        PHP_VERSION: 7.4.7
         IMAGE: alpine
         ALPINE_URL: mirrors.ustc.edu.cn
       target: php
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_74:-7.4.6}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_74:-7.4.7}-fpm-alpine
 
   7_3_X:
     build:
       context: ./7.3/alpine
       args:
-        PHP_VERSION: ${PHP_VERSION_73:-7.3.18}
+        PHP_VERSION: ${PHP_VERSION_73:-7.3.19}
         IMAGE: php
         ALPINE_URL: mirrors.ustc.edu.cn
       target: php
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.18}-fpm-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.19}-fpm-alpine
 
   7_2_X:
     build:

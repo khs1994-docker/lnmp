@@ -65,7 +65,9 @@ sync:
 # $ mutagen project terminate
 
 beforeCreate:
-  - pwsh lnmp-docker.ps1 up mutagen-wsl2
+  - powershell lnmp-docker.ps1 up mutagen-wsl2
+  # - pwsh lnmp-docker.ps1 up mutagen-wsl2
 
 afterTerminate:
-  - pwsh lnmp-docker.ps1 stop mutagen-wsl2
+  - powershell lnmp-docker.ps1 stop mutagen-wsl2
+  # - pwsh lnmp-docker.ps1 stop mutagen-wsl2

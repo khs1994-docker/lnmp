@@ -87,6 +87,17 @@ kubelet 启动后使用 `--bootstrap-kubeconfig` 向 kube-apiserver 发送 CSR �
 * https://github.com/kubernetes/kubernetes/tree/master/build/pause
 * https://github.com/rootsongjc/kubernetes-handbook/blob/master/concepts/pause-container.md
 
+```bash
+$ docker run -it --rm --name pause -p 8081:80 --ipc shareable registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2
+
+$ docker run -it --rm \
+    --network container:pause \
+    --pid container:pause \
+    --ipc=container:pause \
+    nginx:1.19.0-alpine
+# 能访问到 80 端口
+```
+
 ## 动态 kubelet 配置（Dynamic Kubelet Configuration）
 
 `Kubelet` **动态配置** 可以使让我们及其方便的大规模更新集群 `Kubelet` 配置，让我们可以像配置集群中其他应用一样通过 `ConfigMap` 配置 `Kubelet`，并且 `Kubelet` 能动态感知到配置的变化，自动退出重新加载最新配置。不仅如此，Kubelet Dynamic Config 还有本地 `Checkpoint` 数据、失败回滚到上一个可用配置集等美丽特性。

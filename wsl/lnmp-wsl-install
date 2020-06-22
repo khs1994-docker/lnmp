@@ -49,13 +49,13 @@ PG_MAJOR=10
 
 GO_PREFIX=/usr/local
 
-GO_VERSION=1.14.3
+GO_VERSION=1.14.4
 
-NODE_VERSION=14.3.0
+NODE_VERSION=14.4.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.4.6
+PHP_VERSION=7.4.7
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -107,9 +107,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (7.4.6)
+  # default install latest php version (7.4.7)
 
-  PHP_VERSION=${1:-7.4.6}
+  PHP_VERSION=${1:-7.4.7}
 
   case ${PHP_VERSION} in
     5.6.* )
@@ -136,8 +136,18 @@ _php(){
       export PHP_NUM=74
       ;;
 
+    # 8.0.* )
+    #   export PHP_NUM=80
+    #   PHP_VERSION=0.0.0
+    #   ;;
+
+    nightly )
+      export PHP_NUM=80
+      PHP_VERSION=0.0.0
+      ;;
+
     * )
-      echo "ONLY SUPPORT 5.6 +"
+      echo "ONLY SUPPORT 5.6.x 7.0.x 7.1.x 7.2.x 7.3.x 7.4.x nightly"
       exit 1
   esac
 

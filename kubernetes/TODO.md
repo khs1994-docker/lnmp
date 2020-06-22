@@ -6,5 +6,3 @@
 * 10249  kube-proxy      metrics
 * 10251  kube-scheduler  metrics healthz
 * 10256  kube-proxy      healthz
-
-## 分离集群 CA 和 Etcd CA

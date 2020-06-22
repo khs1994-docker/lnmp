@@ -20,7 +20,11 @@
     "postuninstall": "",
     "pretest": "",
     "test": "",
-    "posttest":""
+    "posttest":"",
+    "platform-reqs": [
+      "if($IsMacOS){printTips You can get onedrive from App Store}",
+      "if(!$IsWindows){echo $False}"
+    ]
   },
   "path": [
   ]

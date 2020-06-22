@@ -10,17 +10,20 @@
   "url": "https://github.com/vim/vim-win32-installer/releases/download/v${VERSION}/gvim_${VERSION}_x86.exe",
   "command": "vim",
   "scripts": {
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
+    ],
     "install": [
       "Start-Process -FilePath $filename"
     ],
     "uninstall": [
-      "$env:VERSION_X=(vim --version).split(' ')[4].split('.')[0]",
-      "$env:VERSION_Y=(vim --version).split(' ')[4].split('.')[1]",
-      "start-process -wait -path ${env:ProgramFiles(x86)}\\Vim\\vim${env:VERSION_X}${env:VERSION_Y}\\uninstall-gui.exe"
+      "$VERSION_X=(vim --version).split(' ')[4].split('.')[0]",
+      "$VERSION_Y=(vim --version).split(' ')[4].split('.')[1]",
+      "start-process -wait -path ${env:ProgramFiles(x86)}\\Vim\\vim${VERSION_X}${VERSION_Y}\\uninstall-gui.exe"
     ],
-    "test": "vim --version",
+    "test": "printInfo $(vim --version)[0] install success",
     "version": [
-      "echo 8.2.0671"
+      "echo ${VERSION}"
     ]
   }
 }

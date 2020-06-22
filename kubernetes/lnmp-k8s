@@ -681,7 +681,7 @@ _containerd_install(){
   print_info "install containerd 1.4 ..."
 
   local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
-  local TAR_FILE="containerd-${CONTAINERD_VERSION}.${GOOS}-${GOARCH}.tar.gz"
+  local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
 
   __download(){
     if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
@@ -1108,7 +1108,7 @@ _cri_handler(){
 _k8s_install_conf_cp(){
   print_info "copy kubernetes conf and cert file ..."
 
-  $(_sudo) cp systemd/certs/*.pem ${K8S_ROOT}/certs/
+  $(_sudo) cp systemd/certs/*.pem systemd/certs/sa.pub systemd/certs/sa.key ${K8S_ROOT}/certs/
 
   if ! [ -f systemd/certs/admin-key.pem ];then \
     echo "Please Generate certs first $ docker-compose up cfssl-local"; exit; fi
@@ -1392,8 +1392,8 @@ _local_cleanup(){
 
 if [ "${LNMP_CN_ENV}" = 'false' ];then
   print_info "CN Mirror disabled, I will replace cn mirror ... "
-  $(_sudo) sed -i "s#hub-mirror.c.163.com#mirror.gcr.io#g" `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
-  $(_sudo) sed -i "s#mirror.baidubce.com#mirror.gcr.io#g" `grep mirror.baidubce.com -rl $PWD/systemd` || true
+  $(_sudo) sed -i "s#hub-mirror.c.163.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
+  $(_sudo) sed -i "s#mirror.baidubce.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" `grep mirror.baidubce.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
 

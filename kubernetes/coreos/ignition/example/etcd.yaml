@@ -4,6 +4,14 @@ systemd:
   units:
 storage:
   files:
+    - path: ${K8S_ROOT}/certs/etcd-ca.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-ca.pem
+    - path: ${K8S_ROOT}/certs/etcd-ca-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-ca-key.pem
     - path: ${K8S_ROOT}/certs/etcd.pem
       mode: 0644
       contents:
@@ -12,6 +20,14 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/etcd-key.pem
+    - path: ${K8S_ROOT}/certs/etcd-peer.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-peer.pem
+    - path: ${K8S_ROOT}/certs/etcd-peer-key.pem
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/etcd-peer-key.pem
     - path: ${K8S_ROOT}/bin/fcos-etcdctl
       mode: 0755
       contents:

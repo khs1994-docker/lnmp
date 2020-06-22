@@ -82,10 +82,10 @@ systemd:
           --name="coreos{{n}}" \
           --cert-file=${K8S_ROOT}/certs/etcd.pem \
           --key-file=${K8S_ROOT}/certs/etcd-key.pem \
-          --trusted-ca-file=${K8S_ROOT}/certs/ca.pem \
-          --peer-cert-file=${K8S_ROOT}/certs/etcd.pem \
-          --peer-key-file=${K8S_ROOT}/certs/etcd-key.pem \
-          --peer-trusted-ca-file=${K8S_ROOT}/certs/ca.pem \
+          --trusted-ca-file=${K8S_ROOT}/certs/etcd-ca.pem \
+          --peer-cert-file=${K8S_ROOT}/certs/etcd-peer.pem \
+          --peer-key-file=${K8S_ROOT}/certs/etcd-peer-key.pem \
+          --peer-trusted-ca-file=${K8S_ROOT}/certs/etcd-ca.pem \
           --peer-client-cert-auth \
           --client-cert-auth \
           --listen-peer-urls=https://{{IP_{{n}}}}:2380 \
@@ -142,13 +142,12 @@ systemd:
         --advertise-address={{IP_{{n}}}} \
         --default-not-ready-toleration-seconds=360 \
         --default-unreachable-toleration-seconds=360 \
-        --feature-gates=DynamicAuditing=true \
         --max-mutating-requests-inflight=2000 \
         --max-requests-inflight=4000 \
         --default-watch-cache-size=200 \
         --delete-collection-workers=2 \
         --encryption-provider-config=${K8S_ROOT}/conf/encryption-config.yaml \
-        --etcd-cafile=${K8S_ROOT}/certs/ca.pem \
+        --etcd-cafile=${K8S_ROOT}/certs/etcd-ca.pem \
         --etcd-certfile=${K8S_ROOT}/certs/apiserver-etcd-client.pem \
         --etcd-keyfile=${K8S_ROOT}/certs/apiserver-etcd-client-key.pem \
         --etcd-servers=${ETCD_ENDPOINTS} \
@@ -157,7 +156,6 @@ systemd:
         --tls-cert-file=${K8S_ROOT}/certs/apiserver.pem \
         --tls-private-key-file=${K8S_ROOT}/certs/apiserver-key.pem \
         --insecure-port=0 \
-        --audit-dynamic-configuration \
         --audit-log-maxage=15 \
         --audit-log-maxbackup=3 \
         --audit-log-maxsize=100 \
@@ -169,11 +167,11 @@ systemd:
         --client-ca-file=${K8S_ROOT}/certs/ca.pem \
         --enable-bootstrap-token-auth \
         --requestheader-allowed-names="aggregator" \
-        --requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-client-ca-file=${K8S_ROOT}/certs/front-proxy-ca.pem \
         --requestheader-extra-headers-prefix="X-Remote-Extra-" \
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
-        --service-account-key-file=${K8S_ROOT}/certs/ca.pem \
+        --service-account-key-file=${K8S_ROOT}/certs/sa.pub \
         --authorization-mode=Node,RBAC \
         --runtime-config=api/all=true \
         --enable-admission-plugins=NodeRestriction \
@@ -185,8 +183,8 @@ systemd:
         --kubelet-client-key=${K8S_ROOT}/certs/apiserver-kubelet-client-key.pem \
         --kubelet-https=true \
         --kubelet-timeout=10s \
-        --proxy-client-cert-file=${K8S_ROOT}/certs/proxy-client.pem \
-        --proxy-client-key-file=${K8S_ROOT}/certs/proxy-client-key.pem \
+        --proxy-client-cert-file=${K8S_ROOT}/certs/front-proxy-client.pem \
+        --proxy-client-key-file=${K8S_ROOT}/certs/front-proxy-client-key.pem \
         --service-cluster-ip-range=10.254.0.0/16 \
         --service-node-port-range="1-65535" \
         --logtostderr=true \
@@ -256,10 +254,9 @@ systemd:
         --pod-eviction-timeout=6m \
         --terminated-pod-gc-threshold=10000 \
         --root-ca-file=${K8S_ROOT}/certs/ca.pem \
-        --service-account-private-key-file=${K8S_ROOT}/certs/ca-key.pem \
+        --service-account-private-key-file=${K8S_ROOT}/certs/sa.key \
         --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
         --logtostderr=true \
-        --feature-gates=DynamicAuditing=true \
         --v=2
 
         Restart=on-failure
@@ -301,7 +298,6 @@ systemd:
         --requestheader-username-headers=X-Remote-User \
         --authorization-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
         --logtostderr=true \
-        --feature-gates=DynamicAuditing=true \
         --v=2
 
         Restart=on-failure
@@ -363,7 +359,6 @@ systemd:
         --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
         --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
-        --experimental-check-node-capabilities-before-mount=true \
         --v=2
 
         # cri is docker
@@ -432,7 +427,6 @@ storage:
         inline: |
           apiVersion: kubescheduler.config.k8s.io/v1alpha1
           kind: KubeSchedulerConfiguration
-          bindTimeoutSeconds: 600
           clientConnection:
             burst: 200
             kubeconfig: "${K8S_ROOT}/conf/kube-scheduler.kubeconfig"
@@ -522,7 +516,6 @@ storage:
           featureGates:
             # AllAlpha: true
             # BoundServiceAccountTokenVolume: false
-            DynamicAuditing: true
     - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
       mode: 0644
       contents:

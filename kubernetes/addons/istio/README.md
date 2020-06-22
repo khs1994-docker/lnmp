@@ -1,4 +1,4 @@
-# Istio
+# Istio 1.6
 
 * https://github.com/istio
 
@@ -19,7 +19,7 @@ $ istioctl manifest generate --set profile=demo \
   --set values.cni.cniBinDir=/wsl/wsl-k8s-data/k8s/opt/cni/bin \
   --set values.cni.cniConfDir=/wsl/wsl-k8s-data/k8s/etc/cni/net.d \
 
-  --set values.global.outboundTrafficPolicy.mode=REGISTRY_ONLY \
+  --set values.meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY \
   # pod 可以访问集群内部服务 值为 kube-apiserver --service-cluster-ip-range 参数的值
   --set values.global.proxy.includeIPRanges="10.254.0.0/16" \
   # 若集群支持 LoadBalancer ,则无需使用该 set
@@ -33,6 +33,7 @@ $ istioctl manifest generate --set profile=demo \
 **部署**
 
 ```bash
+$ kubectl create ns istio-system
 $ kubectl apply -f istio.yaml
 ```
 
@@ -41,6 +42,7 @@ $ kubectl apply -f istio.yaml
 当使用 kubectl apply 来部署应用时，如果 pod 启动在标有 `istio-injection=enabled` 的命名空间中，那么，Istio sidecar 注入器将自动注入 Envoy 容器到应用的 pod 中：
 
 ```bash
+$ kubectl create ns istio-test
 $ kubectl label namespace istio-test istio-injection=enabled
 ```
 

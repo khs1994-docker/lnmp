@@ -22,6 +22,9 @@ metadata:
     addonmanager.kubernetes.io/mode: Reconcile
     test: "true"
 spec:
+  selector:
+    matchLabels:
+      app: nginx-ds
   template:
     metadata:
       labels:

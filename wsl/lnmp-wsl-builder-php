@@ -58,7 +58,7 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.10.6
+export COMPOSER_VERSION=1.10.7
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -289,7 +289,6 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo $( $(_sudo) apt install -y libzip5 > /dev/null 2>&1 && echo libzip5) ;\
    fi ) \
 libyaml-0-2 \
-libxmlrpc-epi0 \
 libbz2-1.0 \
 libexif12 \
 libgmp10 \
@@ -356,7 +355,6 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-dev \
-                   libxmlrpc-epi-dev \
                    libbz2-dev \
                    libexif-dev \
                    libgmp-dev \
@@ -473,7 +471,6 @@ set +e
                     --with-webp \
                     --with-xpm \
                     --with-ffi=shared \
-                    --with-libxml \
                     --with-zip" \
             || echo "--with-pcre-regex \
                      --with-gd=shared \
@@ -481,14 +478,11 @@ set +e
                        --with-jpeg-dir=/usr/lib \
                        --with-png-dir=/usr/lib \
                        --with-xpm-dir=/usr/lib \
-                       --enable-libxml \
                        --enable-zip") \
         --disable-gd-jis-conv \
       --enable-ftp \
       --enable-mysqlnd \
       --enable-bcmath \
-      --enable-inline-optimization \
-      --enable-mbregex \
       --enable-mbstring \
       --enable-pcntl=shared \
       --enable-soap=shared \
@@ -496,7 +490,6 @@ set +e
       --enable-sysvmsg=shared \
       --enable-sysvsem=shared \
       --enable-sysvshm=shared \
-      --enable-xml \
       --enable-calendar=shared \
       --enable-intl=shared \
       --enable-embed=shared \
@@ -523,15 +516,12 @@ set +e
       --with-gmp \
       --with-imap=shared \
           --with-imap-ssl \
-      --with-xmlrpc \
       \
       --with-pic \
       --with-enchant=shared \
-      --enable-fileinfo \
+      --enable-fileinfo=shared \
       --with-ldap=shared \
           --with-ldap-sasl \
-      --enable-phar \
-      --enable-posix=shared \
       --with-pspell=shared \
       --enable-shmop=shared \
       $( test "$host" != 'x86_64-linux-gnu' && echo "--with-libxml-dir=/opt/${host}/libxml2 \
@@ -744,11 +734,11 @@ exts=" pdo_pgsql \
                       sysvsem \
                       sysvshm \
                       calendar \
+                      fileinfo \
                       intl \
                       imap \
                       enchant \
                       ldap \
-                      posix \
                       pspell \
                       \
                       mongodb \
@@ -866,12 +856,16 @@ _tar(){
 
 _deb(){
 
-cd /tmp; $(_sudo) rm -rf khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} ; mkdir -p khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}/DEBIAN ; cd khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}
+PHP_PKG_VERSION=${PHP_VERSION}
+
+test $PHP_VERSION = 'nightly' && PHP_PKG_VERSION=0.0.0 || true
+
+cd /tmp; $(_sudo) rm -rf khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION} ; mkdir -p khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION}/DEBIAN ; cd khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION}
 
 ################################################################################
 
 echo "Package: khs1994-wsl-php${PHP_NUM}
-Version: ${PHP_VERSION}
+Version: ${PHP_PKG_VERSION}
 Prioritt: optional
 Section: php
 Architecture: amd64
@@ -943,9 +937,9 @@ $(_sudo) cp -a ${PHP_PREFIX} usr/local/php${PHP_NUM} ; $(_sudo) cp -a ${PHP_INI_
 
 cd ..
 
-DEB_NAME=khs1994-wsl-php${PHP_NUM}_${PHP_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
+DEB_NAME=khs1994-wsl-php${PHP_NUM}_${PHP_PKG_VERSION}-${ID}-$( lsb_release -cs )_amd64.deb
 
-$(_sudo) dpkg-deb -b khs1994-wsl-php${PHP_NUM}-${PHP_VERSION} $DEB_NAME
+$(_sudo) dpkg-deb -b khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION} $DEB_NAME
 
 $(_sudo) cp -a /tmp/${DEB_NAME} /
 
@@ -973,8 +967,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.6
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.6
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.7
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.7
 
 _get_phpnum $PHP_VERSION
 

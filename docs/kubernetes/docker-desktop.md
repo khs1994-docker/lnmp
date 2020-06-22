@@ -10,8 +10,6 @@
 127.0.0.1 k8s.gcr.io gcr.io
 ```
 
-**macOS** 需要在 Docker 设置中将 `gcr.io` `k8s.gcr.io` 加入到非安全仓库中。
-
 ### 拉取镜像
 
 ```bash
@@ -25,7 +23,7 @@ $ lnmp-docker gcr.io
 ### Windows
 
 * `~/.kube`
-* `C:\ProgramData\DockerDesktop\pki`
+* `$home\AppData\Local\Docker\pki`
 
 ## 切换 context
 

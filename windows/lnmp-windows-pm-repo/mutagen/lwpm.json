@@ -1,0 +1,12 @@
+{
+  "command": "mutagen",
+  "name": "mutagen",
+  "scripts": {
+    "install": "if($IsWindows){_unzip $filename C:\\bin}else{sudo tar -zxf $filename -C /usr/local/bin}",
+    "test": "printInfo mutagen $(mutagen version) install success",
+    "uninstall": "_cleanup C:\\bin\\mutagen.exe",
+    "version": "mutagen version"
+  },
+  "url": "https://github.com/mutagen-io/mutagen/releases/download/v${VERSION}/mutagen_${env:lwpm_os}_${env:lwpm_architecture}_v${VERSION}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
+  "version": "0.11.5"
+}

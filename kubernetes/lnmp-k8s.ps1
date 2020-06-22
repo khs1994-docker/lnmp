@@ -245,7 +245,7 @@ $ kubectl config use-context docker-desktop
       return
     }
 
-    kubectl get pvc/lnmp-app -n $NAMESPACE -o json > $env:TEMP/null
+    kubectl get pvc/lnmp-app -n $NAMESPACE -o json | out-null
 
     if ($?){
       "==> PVC exists, SKIP create PV and PVC"

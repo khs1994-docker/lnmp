@@ -34,8 +34,6 @@ jobs:
         env:
           VERSION: 2.0.15
         run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
           ./lnmp/windows/lnmp-windows-pm.ps1 install conmon@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}
       - name: handle-containerd
@@ -45,8 +43,6 @@ jobs:
         env:
           VERSION: 1.3.4
         run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
           ./lnmp/windows/lnmp-windows-pm.ps1 install containerd@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    containerd@${env:VERSION}
       - name: handle-crictl
@@ -90,8 +86,6 @@ jobs:
         env:
           VERSION: nightly
         run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
           ./lnmp/windows/lnmp-windows-pm.ps1 install runsc@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    runsc@${env:VERSION}
 
@@ -103,8 +97,6 @@ jobs:
         env:
           VERSION: 1.25.5
         run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
           ./lnmp/windows/lnmp-windows-pm.ps1 install compose@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    compose@${env:VERSION}
 
@@ -116,7 +108,5 @@ jobs:
         env:
           VERSION: 2.1.33
         run: |
-          Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
           ./lnmp/windows/lnmp-windows-pm.ps1 install jx@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    jx@${env:VERSION}

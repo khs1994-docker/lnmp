@@ -1,0 +1,50 @@
+name: "firefox"
+description: "Mozilla Firefox web browser"
+version: ""
+pre-version: ""
+homepage: "https://www.mozilla.org/en-US/"
+bug: "https://bugzilla.mozilla.org/"
+support: "https://github.com/mozilla"
+releases: "https://ftp.mozilla.org/"
+url: https://ftp.mozilla.org/pub/firefox/releases/${VERSION}/win64/en-US/Firefox%20Setup%20${VERSION}.exe
+pre-url: https://ftp.mozilla.org/pub/firefox/releases/${VERSION}/win64/en-US/Firefox%20Setup%20${VERSION}.exe
+command: "$env:ProgramFiles\\Mozilla Firefox\\firefox.exe"
+scripts:
+  install: ["Start-Process -FilePath $filename -wait"]
+  uninstall: "& \"$env:ProgramFiles\\Mozilla Firefox\\uninstall\\helper.exe\""
+  test: "& get-command \"$env:ProgramFiles\\Mozilla Firefox\\firefox.exe\""
+  get-version-function: |
+    Function Get-Version($url=$null){
+    try{
+    Invoke-WebRequest `
+      -MaximumRedirection 0 `
+      -Method Head `
+      -uri $url
+    }catch{
+      $version=$_.Exception.Response.Headers.Location.LocalPath.split('/')[4]
+    }
+
+    return $version
+    }
+  get-version: |
+    iex $lwpm.scripts.'get-version-function'
+
+    $_url="https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US"
+    $_pre_url="https://download.mozilla.org/?product=firefox-beta-latest&os=win64&lang=en-US"
+
+    if($isPre){$VERSION=Get-Version $_pre_url}else{$VERSION=Get-Version $_url}
+  get-latest-version: |
+    iex $lwpm.scripts.'get-version-function'
+
+    $_url="https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US"
+    $_pre_url="https://download.mozilla.org/?product=firefox-beta-latest&os=win64&lang=en-US"
+
+    Function Get-LatestVersion(){
+    return $(Get-Version $_url),$(Get-Version $_pre_url)
+    }
+  platform-reqs: |
+    if(!$IsWindows){
+      printInfo please download from https://www.mozilla.org/en-US/firefox/all/#product-desktop-release
+      echo $False
+    }
+  version: echo "${VERSION}"

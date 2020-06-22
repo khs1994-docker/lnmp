@@ -1,134 +1,103 @@
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 29336574d..534e0beff 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -379,6 +379,8 @@ struct hv_tsc_emulation_status {
- #define HVCALL_RETARGET_INTERRUPT		0x007e
- #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
- #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
-+#define HVCALL_QUERY_CAPABILITIES		0x8001
-+#define HVCALL_MEMORY_HEAT_HINT			0x8003
- 
- #define HV_X64_MSR_VP_ASSIST_PAGE_ENABLE	0x00000001
- #define HV_X64_MSR_VP_ASSIST_PAGE_ADDRESS_SHIFT	12
-@@ -877,6 +879,12 @@ union hv_gpa_page_range {
- 		u64 largepage:1;
- 		u64 basepfn:52;
- 	} page;
-+	struct {
-+		u64:12;
-+		u64 page_size:1;
-+		u64 reserved:8;
-+		u64 base_large_pfn:43;
-+	};
- };
- 
- /*
-@@ -950,4 +958,21 @@ struct hv_retarget_device_interrupt {
- 	u64 reserved2;
- 	struct hv_device_interrupt_target int_target;
- } __packed __aligned(8);
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index a54c6a401581..2f4d3a92eed1 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -525,3 +525,27 @@ bool hv_is_hibernation_supported(void)
+ 	return acpi_sleep_state_supported(ACPI_STATE_S4);
+ }
+ EXPORT_SYMBOL_GPL(hv_is_hibernation_supported);
 +
-+#ifdef CONFIG_PAGE_REPORTING
-+#define HV_CAPABILITY_MEMORY_COLD_DISCARD_HINT	BIT(8)
++u64 hv_query_ext_cap(void)
++{
++	u64 *cap;
++	unsigned long flags;
++	u64 ext_cap = 0;
 +
-+// The whole argument should fit in a page to be able to pass to the hypervisor
-+// in one hypercall.
-+#define HV_MAX_GPA_PAGE_RANGES ((PAGE_SIZE - 8)/sizeof(union hv_gpa_page_range))
++	/*
++	 * Querying extended capabilities is an extended hypercall. Check if the
++	 * partition supports extended hypercall, first.
++	 */
++	if (!(ms_hyperv.b_features & HV_ENABLE_EXTENDED_HYPERCALLS))
++		return 0;
 +
-+/* HvExtMemoryHeatHint hypercall */
-+#define HV_MEMORY_HINT_TYPE_COLD_DISCARD	BIT(1)
-+struct hv_memory_hint {
-+	u64 type:2;
-+	u64 reserved:62;
-+	union hv_gpa_page_range ranges[1];
-+};
++	local_irq_save(flags);
++	cap = *(u64 **)this_cpu_ptr(hyperv_pcpu_input_arg);
++	if (hv_do_hypercall(HV_EXT_CALL_QUERY_CAPABILITIES, NULL, cap) ==
++	    HV_STATUS_SUCCESS)
++		ext_cap = *cap;
 +
-+#endif //CONFIG_PAGE_REPORTING
- #endif
-diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-index 79e5356a7..66c794d92 100644
---- a/drivers/hv/Kconfig
-+++ b/drivers/hv/Kconfig
-@@ -23,6 +23,7 @@ config HYPERV_UTILS
- config HYPERV_BALLOON
- 	tristate "Microsoft Hyper-V Balloon driver"
- 	depends on HYPERV
-+	select PAGE_REPORTING
- 	help
- 	  Select this option to enable Hyper-V Balloon driver.
- 
++	local_irq_restore(flags);
++	return ext_cap;
++}
++EXPORT_SYMBOL_GPL(hv_query_ext_cap);
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index af94f05a5c66..809dd77b0df1 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -220,11 +220,13 @@ static void __init ms_hyperv_init_platform(void)
+ 	 * Extract the features and hints
+ 	 */
+ 	ms_hyperv.features = cpuid_eax(HYPERV_CPUID_FEATURES);
++	ms_hyperv.b_features = cpuid_ebx(HYPERV_CPUID_FEATURES);
+ 	ms_hyperv.misc_features = cpuid_edx(HYPERV_CPUID_FEATURES);
+ 	ms_hyperv.hints    = cpuid_eax(HYPERV_CPUID_ENLIGHTMENT_INFO);
+
+-	pr_info("Hyper-V: features 0x%x, hints 0x%x, misc 0x%x\n",
+-		ms_hyperv.features, ms_hyperv.hints, ms_hyperv.misc_features);
++	pr_info("Hyper-V: features 0x%x, additional features: 0x%x, hints 0x%x, misc 0x%x\n",
++		ms_hyperv.features, ms_hyperv.b_features, ms_hyperv.hints,
++		ms_hyperv.misc_features);
+
+ 	ms_hyperv.max_vp_index = cpuid_eax(HYPERV_CPUID_IMPLEMENT_LIMITS);
+ 	ms_hyperv.max_lp_index = cpuid_ebx(HYPERV_CPUID_IMPLEMENT_LIMITS);
 diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index 32e3bc0aa..59c36292e 100644
+index 32e3bc0aa665..77be31094556 100644
 --- a/drivers/hv/hv_balloon.c
 +++ b/drivers/hv/hv_balloon.c
-@@ -21,12 +21,14 @@
+@@ -21,6 +21,7 @@
  #include <linux/memory.h>
  #include <linux/notifier.h>
  #include <linux/percpu_counter.h>
--
 +#include <linux/page_reporting.h>
+
  #include <linux/hyperv.h>
  #include <asm/hyperv-tlfs.h>
- 
- #include <asm/mshyperv.h>
- 
-+#include <asm/mshyperv.h>
-+
- #define CREATE_TRACE_POINTS
- #include "hv_trace_balloon.h"
- 
-@@ -563,6 +565,10 @@ struct hv_dynmem_device {
+@@ -563,6 +564,10 @@ struct hv_dynmem_device {
  	 * The negotiated version agreed by host.
  	 */
  	__u32 version;
 +
 +#ifdef CONFIG_PAGE_REPORTING
-+	struct page_reporting_dev_info ph_dev_info;
++	struct page_reporting_dev_info pr_dev_info;
 +#endif
  };
- 
+
  static struct hv_dynmem_device dm_device;
-@@ -1565,6 +1571,93 @@ static void balloon_onchannelcallback(void *context)
- 
+@@ -1565,6 +1570,83 @@ static void balloon_onchannelcallback(void *context)
+
  }
- 
+
 +#ifdef CONFIG_PAGE_REPORTING
-+static u64 hyperv_query_ext_cap(void)
-+{
-+	u64 *cap;
-+	unsigned long flags;
-+	u64 ret = 0;
-+
-+	local_irq_save(flags);
-+	cap = *(u64 **)this_cpu_ptr(hyperv_pcpu_input_arg);
-+	if (hv_do_hypercall(HVCALL_QUERY_CAPABILITIES, NULL, cap) ==
-+	    HV_STATUS_SUCCESS)
-+		ret = *cap;
-+
-+	local_irq_restore(flags);
-+	return ret;
-+}
-+
-+static void hyperv_discard_pages(struct scatterlist **sgs, unsigned int nents)
++static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
++		    struct scatterlist *sgl, unsigned int nents)
 +{
 +	unsigned long flags;
 +	struct hv_memory_hint *hint;
 +	int i;
-+	struct scatterlist *sg;
 +	u64 status;
++	struct scatterlist *sg;
 +
 +	WARN_ON(nents > HV_MAX_GPA_PAGE_RANGES);
 +	local_irq_save(flags);
 +	hint = *(struct hv_memory_hint **)this_cpu_ptr(hyperv_pcpu_input_arg);
 +	if (!hint) {
 +		local_irq_restore(flags);
-+		return;
++		return -ENOSPC;
 +	}
 +
-+	hint->type = HV_MEMORY_HINT_TYPE_COLD_DISCARD;
++	hint->type = HV_EXT_MEMORY_HEAT_HINT_TYPE_COLD_DISCARD;
 +	hint->reserved = 0;
-+	for (i = 0, sg = sgs[0]; sg; sg = sg_next(sg), i++) {
++	for (i = 0, sg = sgl; sg; sg = sg_next(sg), i++) {
 +		int order;
 +		union hv_gpa_page_range *range;
 +
@@ -140,69 +109,167 @@ index 32e3bc0aa..59c36292e 100644
 +		range->base_large_pfn = page_to_pfn(sg_page(sg)) >> 9;
 +	}
 +
-+	WARN_ON(i != nents);
-+
-+	status = hv_do_rep_hypercall(HVCALL_MEMORY_HEAT_HINT, nents, 0,
++	status = hv_do_rep_hypercall(HV_EXT_CALL_MEMORY_HEAT_HINT, nents, 0,
 +				     hint, NULL);
 +	local_irq_restore(flags);
 +	status &= HV_HYPERCALL_RESULT_MASK;
-+	WARN_ON(status != HV_STATUS_SUCCESS);
-+}
++	if (status != HV_STATUS_SUCCESS) {
++		pr_err("Cold memory discard hypercall failed with status %llx\n",
++			status);
++		return -1;
++	}
 +
-+static int hv_page_hinting(struct page_reporting_dev_info *ph_dev_info,
-+			   struct scatterlist *sg, unsigned int nents)
-+{
-+	hyperv_discard_pages(&sg, nents);
 +	return 0;
 +}
 +
-+static int enable_hinting(void)
++static int enable_page_reporting(void)
 +{
 +	int ret;
 +
-+	if (!(hyperv_query_ext_cap() &
-+	      HV_CAPABILITY_MEMORY_COLD_DISCARD_HINT)) {
-+		pr_info("cold discard hint not supported\n");
++	if (!(hv_query_ext_cap() &
++	      HV_EXT_CAPABILITY_MEMORY_COLD_DISCARD_HINT)) {
++		pr_info("Cold memory discard hint not supported by Hyper-V\n");
 +		return 0;
 +	}
 +
-+	dm_device.ph_dev_info.report = hv_page_hinting;
-+	ret = page_reporting_register(&dm_device.ph_dev_info);
-+	if (ret == 0)
-+		pr_info("cold memory discard enabled\n");
++	BUILD_BUG_ON(PAGE_REPORTING_CAPACITY > HV_MAX_GPA_PAGE_RANGES);
++	dm_device.pr_dev_info.report = hv_free_page_report;
++	ret = page_reporting_register(&dm_device.pr_dev_info);
++	if (ret < 0) {
++		dm_device.pr_dev_info.report = NULL;
++		pr_err("Failed to enable cold memory discard: %d\n", ret);
++	} else {
++		pr_info("Cold memory discard hint enabled\n");
++	}
++
 +	return ret;
 +}
 +
-+static void disable_hinting(void)
++static void disable_page_reporting(void)
 +{
-+	if (dm_device.ph_dev_info.report)
-+		page_reporting_unregister(&dm_device.ph_dev_info);
++	if (dm_device.pr_dev_info.report) {
++		page_reporting_unregister(&dm_device.pr_dev_info);
++		dm_device.pr_dev_info.report = NULL;
++	}
 +}
-+#endif
++#endif //CONFIG_PAGE_REPORTING
 +
  static int balloon_connect_vsp(struct hv_device *dev)
  {
  	struct dm_version_request version_req;
-@@ -1719,6 +1812,11 @@ static int balloon_probe(struct hv_device *dev,
- 		goto probe_error;
- 	}
- 
+@@ -1710,6 +1792,11 @@ static int balloon_probe(struct hv_device *dev,
+ 	if (ret != 0)
+ 		return ret;
+
 +#ifdef CONFIG_PAGE_REPORTING
-+	if (enable_hinting() < 0)
++	if (enable_page_reporting() < 0)
 +		goto probe_error;
 +#endif
 +
- 	return 0;
- 
- probe_error:
-@@ -1745,6 +1843,10 @@ static int balloon_remove(struct hv_device *dev)
- 	cancel_work_sync(&dm->balloon_wrk.wrk);
- 	cancel_work_sync(&dm->ha_wrk.wrk);
- 
-+#ifdef CONFIG_PAGE_REPORTING
-+	disable_hinting();
-+#endif
-+
- 	kthread_stop(dm->thread);
- 	vmbus_close(dev->channel);
+ 	dm_device.state = DM_INITIALIZED;
+
+ 	dm_device.thread =
+@@ -1728,6 +1815,9 @@ static int balloon_probe(struct hv_device *dev,
  #ifdef CONFIG_MEMORY_HOTPLUG
+ 	unregister_memory_notifier(&hv_memory_nb);
+ 	restore_online_page_callback(&hv_online_page);
++#endif
++#ifdef CONFIG_PAGE_REPORTING
++	disable_page_reporting();
+ #endif
+ 	return ret;
+ }
+@@ -1750,6 +1840,9 @@ static int balloon_remove(struct hv_device *dev)
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ 	unregister_memory_notifier(&hv_memory_nb);
+ 	restore_online_page_callback(&hv_online_page);
++#endif
++#ifdef CONFIG_PAGE_REPORTING
++	disable_page_reporting();
+ #endif
+ 	spin_lock_irqsave(&dm_device.ha_lock, flags);
+ 	list_for_each_entry_safe(has, tmp, &dm->ha_region_list, list) {
+diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+index e73a11850055..9ea0e562f3d9 100644
+--- a/include/asm-generic/hyperv-tlfs.h
++++ b/include/asm-generic/hyperv-tlfs.h
+@@ -89,6 +89,7 @@
+ #define HV_ACCESS_STATS				BIT(8)
+ #define HV_DEBUGGING				BIT(11)
+ #define HV_CPU_POWER_MANAGEMENT			BIT(12)
++#define HV_ENABLE_EXTENDED_HYPERCALLS		BIT(20)
+
+
+ /*
+@@ -152,11 +153,18 @@ struct ms_hyperv_tsc_page {
+ #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+ #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+
++/* Extended hypercalls */
++#define HV_EXT_CALL_QUERY_CAPABILITIES		0x8001
++#define HV_EXT_CALL_MEMORY_HEAT_HINT		0x8003
++
+ #define HV_FLUSH_ALL_PROCESSORS			BIT(0)
+ #define HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES	BIT(1)
+ #define HV_FLUSH_NON_GLOBAL_MAPPINGS_ONLY	BIT(2)
+ #define HV_FLUSH_USE_EXTENDED_RANGE_FORMAT	BIT(3)
+
++/* Extended capability bits */
++#define HV_EXT_CAPABILITY_MEMORY_COLD_DISCARD_HINT BIT(8)
++
+ enum HV_GENERIC_SET_FORMAT {
+ 	HV_GENERIC_SET_SPARSE_4K,
+ 	HV_GENERIC_SET_ALL,
+@@ -375,6 +383,12 @@ union hv_gpa_page_range {
+ 		u64 largepage:1;
+ 		u64 basepfn:52;
+ 	} page;
++	struct {
++		u64:12;
++		u64 page_size:1;
++		u64 reserved:8;
++		u64 base_large_pfn:43;
++	};
+ };
+
+ /*
+@@ -494,4 +508,19 @@ struct hv_set_vp_registers_input {
+ 	} element[];
+ } __packed;
+
++/*
++ * The whole argument should fit in a page to be able to pass to the hypervisor
++ * in one hypercall.
++ */
++#define HV_MAX_GPA_PAGE_RANGES ((PAGE_SIZE - sizeof(u64)) / \
++				sizeof(union hv_gpa_page_range))
++
++/* HvExtCallMemoryHeatHint hypercall */
++#define HV_EXT_MEMORY_HEAT_HINT_TYPE_COLD_DISCARD	2
++struct hv_memory_hint {
++	u64 type:2;
++	u64 reserved:62;
++	union hv_gpa_page_range ranges[1];
++};
++
+ #endif
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 1c4fd950f091..c664af4a7503 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -27,6 +27,7 @@
+
+ struct ms_hyperv_info {
+ 	u32 features;
++	u32 b_features;
+ 	u32 misc_features;
+ 	u32 hints;
+ 	u32 nested_features;
+@@ -169,6 +170,7 @@ bool hv_is_hyperv_initialized(void);
+ bool hv_is_hibernation_supported(void);
+ void hyperv_cleanup(void);
+ void hv_setup_sched_clock(void *sched_clock);
++u64 hv_query_ext_cap(void);
+ #else /* CONFIG_HYPERV */
+ static inline bool hv_is_hyperv_initialized(void) { return false; }
+ static inline bool hv_is_hibernation_supported(void) { return false; }

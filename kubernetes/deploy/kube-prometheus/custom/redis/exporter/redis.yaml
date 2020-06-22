@@ -14,6 +14,8 @@ spec:
       labels:
         app: redis-exporter
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
         - name: redis-exporter
           image: oliver006/redis_exporter:latest

@@ -120,8 +120,10 @@ server {
   sleep 10
 
   if ! [ -d app/.pcit ];then \
-    git clone --depth=1 https://github.com/khs1994-php/pcit app/.pcit; \
+    git clone --depth=1 https://github.com/pcit-ce/pcit app/.pcit; \
   fi
+
+  cp pcit/.env.example pcit/.env.production
 
   docker stack deploy -c docker-production.yml lnmp
 

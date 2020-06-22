@@ -7,15 +7,17 @@
   "bug": "https://github.com/fatedier/frp/issues",
   "github": "fatedier/frp",
   "releases": "https://github.com/fatedier/frp/releases",
-  "url": "https://github.com/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_windows_amd64.zip",
+  "url": "https://github.com/fatedier/frp/releases/download/v${VERSION}/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}.$(if($_IsWindows){echo zip}else{echo tar.gz})",
   "command": "frpc",
   "scripts": {
-    "test": "",
+    "test": "printInfo frp $(frpc --version) install success",
     "version": "frpc --version",
     "install": [
-      "_unzip $filename $unzipDesc",
-      "Copy-item frp\\frp_${VERSION}_windows_amd64\\frpc.exe C:\\bin\\",
-      "rm -r -force frp"
+      "if($IsWindows){_unzip $filename $unzipDesc}else{_mkdir frp ; tar -zxf $filename -C frp}",
+      "if($IsWindows){Copy-item frp\\frp_${VERSION}_windows_amd64\\frpc.exe C:\\bin\\}",
+      "if(!$IsWindows){sudo install -m755 frp/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}/frpc /usr/local/bin}",
+      "if(!$IsWindows){sudo install -m755 frp/frp_${VERSION}_${env:lwpm_os}_${env:lwpm_architecture}/frps /usr/local/bin}",
+      "_cleanup frp"
     ],
     "uninstall": "Remove-item C:\\bin\\frpc.exe"
   },

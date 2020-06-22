@@ -24,12 +24,12 @@ resources:
 generatorOptions:
   disableNameSuffixHash: true
 images:
-  - name: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:3b4dc45de5ae0e741099018afe3e1108cb93f70aa24138456be03d9fde677269
+  - name: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:9ba9c755e868942143868dbbc7a0d9ab29241014833dd0a7ac6156d66e45fe9b
     newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-dashboard
-    digest: sha256:3b4dc45de5ae0e741099018afe3e1108cb93f70aa24138456be03d9fde677269
-  - name: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook@sha256:f183f19b46375111a928d92dcf28d09f60beeb3dc0be889f3465592eb52873c4
+    digest: sha256:9ba9c755e868942143868dbbc7a0d9ab29241014833dd0a7ac6156d66e45fe9b
+  - name: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.13.2@sha256:cd3c83221f860746c9d757a6750f762a8a7351a7513acfc1bfc661ba2f265764
     newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-webhook
-    digest: sha256:f183f19b46375111a928d92dcf28d09f60beeb3dc0be889f3465592eb52873c4
-  - name: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller@sha256:70c85c0e8201cb8c90908fbc4ac5b9fe05cc6d85744aaf647d58bd059c5c4344
+    digest: sha256:cd3c83221f860746c9d757a6750f762a8a7351a7513acfc1bfc661ba2f265764
+  - name: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.13.2@sha256:c44f6810aa63cd96210c832034c4a6dbe593c5df85a3cbb22fffef46a1596f58
     newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-controller
-    digest: sha256:70c85c0e8201cb8c90908fbc4ac5b9fe05cc6d85744aaf647d58bd059c5c4344
+    digest: sha256:c44f6810aa63cd96210c832034c4a6dbe593c5df85a3cbb22fffef46a1596f58

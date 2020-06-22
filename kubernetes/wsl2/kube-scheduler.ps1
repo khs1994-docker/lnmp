@@ -21,7 +21,7 @@ if([Version]$kube_scheduler_version -ge [Version]"1.19.0"){
   $config_context = Get-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
 
   $config_context `
-  -replace "kubescheduler.config.k8s.io/v1alpha1","kubescheduler.config.k8s.io/v1alpha2" `
+  -replace "kubescheduler.config.k8s.io/v1alpha1","kubescheduler.config.k8s.io/v1beta1" `
   | Set-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
 }
 
@@ -35,7 +35,7 @@ $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-scheduler `
 --authentication-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig `
 --client-ca-file=${K8S_ROOT}/certs/ca.pem `
 --requestheader-allowed-names="" `
---requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem `
+--requestheader-client-ca-file=${K8S_ROOT}/certs/front-proxy-ca.pem `
 --requestheader-extra-headers-prefix="X-Remote-Extra-" `
 --requestheader-group-headers=X-Remote-Group `
 --requestheader-username-headers=X-Remote-User `

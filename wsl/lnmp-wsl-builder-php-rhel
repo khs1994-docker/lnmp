@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://gitee.com/mirrors/php-src
 fi
 
-export COMPOSER_VERSION=1.10.6
+export COMPOSER_VERSION=1.10.7
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp
 export TZ=Asia/Shanghai
@@ -206,7 +206,6 @@ $( if [ $PHP_NUM -ge "72" ];then \
      echo "libsodium"; \
    fi ) \
 libyaml \
-xmlrpc-c \
 bzip2 \
 libexif \
 gmp \
@@ -262,7 +261,6 @@ _install_php_build_dep(){
                       fi ) \
                       \
                    libyaml-devel \
-                   xmlrpc-c-devel \
                    bzip2-devel \
                    libexif-devel \
                    gmp-devel \
@@ -303,7 +301,7 @@ _test(){
 
     $(_sudo) ln -sf ${PHP_PREFIX}/bin/php /usr/local/sbin/php
 
-    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || echo ; $(_sudo) rm -rf /usr/local/sbin/php
+    ${PHP_PREFIX}/bin/composer --ansi --version --no-interaction || true ; $(_sudo) rm -rf /usr/local/sbin/php
 
     ${PHP_PREFIX}/bin/php -i | grep .ini
 
@@ -364,7 +362,6 @@ _builder(){
                                              --with-webp \
                                              --with-xpm \
                                              --with-ffi=shared \
-                                             --with-libxml \
                                              --with-zip" \
         || echo "--with-pcre-regex \
                  --with-gd=shared \
@@ -372,14 +369,11 @@ _builder(){
                    --with-jpeg-dir=/usr/lib \
                    --with-png-dir=/usr/lib \
                    --with-xpm-dir=/usr/lib \
-                   --enable-libxml \
                    --enable-zip") \
             --disable-gd-jis-conv \
         --enable-ftp \
         --enable-mysqlnd \
         --enable-bcmath \
-        --enable-inline-optimization \
-        --enable-mbregex \
         --enable-mbstring \
         --enable-pcntl=shared \
         --enable-soap=shared \
@@ -387,7 +381,6 @@ _builder(){
         --enable-sysvmsg=shared \
         --enable-sysvsem=shared \
         --enable-sysvshm=shared \
-        --enable-xml \
         --enable-calendar=shared \
         --enable-intl=shared \
         --enable-embed=shared \
@@ -413,15 +406,12 @@ _builder(){
         --with-gmp \
         --with-imap=shared \
             --with-imap-ssl \
-        --with-xmlrpc \
         \
         --with-pic \
         --with-enchant=shared \
         --enable-fileinfo=shared \
         --with-ldap=shared \
             --with-ldap-sasl \
-        --enable-phar \
-        --enable-posix=shared \
         --with-pspell=shared \
         --enable-shmop=shared \
         "
@@ -622,12 +612,11 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       sysvsem \
                       sysvshm \
                       calendar \
+                      fileinfo \
                       intl \
                       imap \
                       enchant \
-                      fileinfo \
                       ldap \
-                      posix \
                       pspell \
                       \
                       mongodb \
@@ -741,6 +730,10 @@ _tar(){
 
 _rpm(){
 
+PHP_PKG_VERSION=${PHP_VERSION}
+
+test $PHP_VERSION = 'nightly' && PHP_PKG_VERSION=0.0.0 || true
+
 cd /tmp
 
 if [ ${ID} = 'fedora' ];then
@@ -750,7 +743,7 @@ else
 fi
 
 echo "Name:       khs1994-wsl-php${PHP_NUM}
-Version:    ${PHP_VERSION}
+Version:    ${PHP_PKG_VERSION}
 Release:    ${rpm_release_name}
 Summary:    PHP scripting language for creating dynamic web sites
 
@@ -820,7 +813,7 @@ cat /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
 rpmbuild -bb /tmp/khs1994-wsl-php${PHP_NUM}.spec
 
-RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_VERSION}-${rpm_release_name}.x86_64.rpm
+RPM_NAME=khs1994-wsl-php${PHP_NUM}-${PHP_PKG_VERSION}-${rpm_release_name}.x86_64.rpm
 
 echo "\$ yum install -y ${RPM_NAME}"
 
@@ -848,10 +841,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=7.4.6 ; fi
+    PHP_VERSION=7.4.7 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=7.4.6 ; fi
+    PHP_VERSION=7.4.7 ; fi
 
 _get_phpnum $PHP_VERSION
 

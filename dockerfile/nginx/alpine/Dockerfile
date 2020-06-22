@@ -1,26 +1,48 @@
-FROM alpine:3.11
-
-LABEL maintainer="khs1994.com nginx With TLSv1.3"
-
-ARG NGINX_VERSION=1.17.4
+# syntax=docker/dockerfile:experimental
+FROM alpine:3.12 as boringssl-builder
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 ARG OPENSSL_BRANCH=OpenSSL_1_1_1a
 
-ARG OPENSSL_URL=https://github.com/openssl/openssl
+ARG OPENSSL_URL=https://github.com/google/boringssl
 
-RUN set -x ; apk add --no-cache git \
-     && git clone -b $OPENSSL_BRANCH --depth=1 $OPENSSL_URL /srv/openssl \
-     && cd /srv/openssl \
-     && wget https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-1.1.1a_ciphers.patch \
-     && patch -p1 < openssl-equal-1.1.1a_ciphers.patch \
-     && cd / \
+RUN set -x \
+     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+     && apk add --no-cache --virtual .build-deps \
+        git \
+        cmake \
+        samurai \
+        libstdc++ \
+        build-base \
+        go \
+        perl-dev \
+        linux-headers \
+        libunwind-dev \
+     # && curl -fSL https://github.com/google/boringssl/archive/master.tar.gz -o boringssl.tar.gz \
+     && git clone --depth=1 -b master ${OPENSSL_URL} /usr/src/boringssl \
+     && cd /usr/src/boringssl \
+     && mkdir build \
+     && cd build \
+     && cmake -GNinja .. \
+     && ninja \
+     && ls -la \
+     && ls -la ../include \
+     && apk del --no-network .build-deps
+
+FROM alpine:3.12
+
+LABEL maintainer="khs1994.com nginx With HTTP3"
+
+ARG NGINX_VERSION=1.19.0
+
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
+
+RUN --mount=type=bind,from=boringssl-builder,source=/usr/src/boringssl,target=/usr/src/boringssl \
+  set -x \
      && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
      && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
      && CONFIG="\
-    --with-openssl=/srv/openssl \
-    --with-openssl-opt='enable-tls1_3' \
     --prefix=/etc/nginx \
     --sbin-path=/usr/sbin/nginx \
     --modules-path=/usr/lib/nginx/modules \
@@ -64,7 +86,7 @@ RUN set -x ; apk add --no-cache git \
     --with-compat \
     --with-file-aio \
     --with-http_v2_module \
-    --with-http_v2_hpack_enc \
+    --with-http_v3_module \
   " \
   && addgroup -S nginx \
   && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
@@ -72,7 +94,7 @@ RUN set -x ; apk add --no-cache git \
     gcc \
     libc-dev \
     make \
-    openssl-dev \
+    # openssl-dev \
     pcre-dev \
     zlib-dev \
     linux-headers \
@@ -81,39 +103,40 @@ RUN set -x ; apk add --no-cache git \
     libxslt-dev \
     gd-dev \
     geoip-dev \
-    perl \
     perl-dev \
-    gettext \
-  && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
-  && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc -o nginx.tar.gz.asc \
-  && export GNUPGHOME="$(mktemp -d)" \
-  && found=''; \
-  for server in \
-    ha.pool.sks-keyservers.net \
-    hkp://keyserver.ubuntu.com:80 \
-    hkp://p80.pool.sks-keyservers.net:80 \
-    pgp.mit.edu \
-  ; do \
-    echo "Fetching GPG key $GPG_KEYS from $server"; \
-    gpg --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPG_KEYS" && found=yes && break; \
-  done; \
-  test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPG_KEYS" && exit 1; \
-  gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz \
-  && rm -rf "$GNUPGHOME" nginx.tar.gz.asc \
+  && curl -fSL https://hg.nginx.org/nginx-quic/archive/quic.tar.gz -o nginx.tar.gz \
+  # && curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc -o nginx.tar.gz.asc \
+  # && export GNUPGHOME="$(mktemp -d)" \
+  # && found=''; \
+  # for server in \
+  #   ha.pool.sks-keyservers.net \
+  #   hkp://keyserver.ubuntu.com:80 \
+  #   hkp://p80.pool.sks-keyservers.net:80 \
+  #   pgp.mit.edu \
+  # ; do \
+  #   echo "Fetching GPG key $GPG_KEYS from $server"; \
+  #   gpg --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$GPG_KEYS" && found=yes && break; \
+  # done; \
+  # test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPG_KEYS" && exit 1; \
+  # gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz \
+  # && rm -rf "$GNUPGHOME" nginx.tar.gz.asc \
   && mkdir -p /usr/src \
   && tar -zxC /usr/src -f nginx.tar.gz \
-  && rm nginx.tar.gz \
-  && cd /usr/src/nginx-$NGINX_VERSION \
-  && wget https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/nginx_hpack_push_1.15.3.patch \
-  && patch -p1 < nginx_hpack_push_1.15.3.patch \
-  ; ./configure $CONFIG --with-debug \
+  # && tar -zxC /usr/src -f boringssl.tar.gz \
+  && rm -rf nginx.tar.gz boringssl.tar.gz \
+  && cd /usr/src/nginx-quic-quic \
+  && ./auto/configure $CONFIG --with-debug \
+       --with-cc-opt="-I../boringssl/include" \
+       --with-ld-opt="-L../boringssl/build/ssl  -L../boringssl/build/crypto" \
   && make -j$(getconf _NPROCESSORS_ONLN) \
   && mv objs/nginx objs/nginx-debug \
   && mv objs/ngx_http_xslt_filter_module.so objs/ngx_http_xslt_filter_module-debug.so \
   && mv objs/ngx_http_image_filter_module.so objs/ngx_http_image_filter_module-debug.so \
   && mv objs/ngx_http_geoip_module.so objs/ngx_http_geoip_module-debug.so \
   && mv objs/ngx_stream_geoip_module.so objs/ngx_stream_geoip_module-debug.so \
-  && ./configure $CONFIG \
+  && ./auto/configure $CONFIG \
+       --with-cc-opt="-I../boringssl/include" \
+       --with-ld-opt="-L../boringssl/build/ssl  -L../boringssl/build/crypto" \
   && make -j$(getconf _NPROCESSORS_ONLN) \
   && make install \
   && rm -rf /etc/nginx/html/index.html \
@@ -127,11 +150,11 @@ RUN set -x ; apk add --no-cache git \
   && ln -s /usr/lib/nginx/modules /etc/nginx/modules \
   && strip /usr/sbin/nginx* \
   && strip /usr/lib/nginx/modules/*.so \
-  && rm -rf /usr/src/nginx-$NGINX_VERSION \
-  # Bring in gettext so we can get `envsubst`, then throw
-  # the rest away. To do this, we need to install `gettext`
-  # then move `envsubst` out of the way so `gettext` can
-  # be deleted completely, then move `envsubst` back.
+  && rm -rf /usr/src/nginx-quic-quic \
+# Bring in gettext so we can get `envsubst`, then throw
+# the rest away. To do this, we need to install `gettext`
+# then move `envsubst` out of the way so `gettext` can
+# be deleted completely, then move `envsubst` back.
   && apk add --no-cache --virtual .gettext gettext \
   && mv /usr/bin/envsubst /tmp/ \
   \
@@ -144,23 +167,23 @@ RUN set -x ; apk add --no-cache git \
   && apk add --no-cache --virtual .nginx-rundeps $runDeps \
   && apk del --no-network .build-deps \
   && apk del --no-network .gettext \
-  && apk del --no-network git \
   && mv /tmp/envsubst /usr/local/bin/ \
   \
-  # Bring in tzdata so users could set the timezones through the environment
-  # variables
+# Bring in tzdata so users could set the timezones through the environment
+# variables
   && apk add --no-cache tzdata \
+# Bring in curl and ca-certificates to make registering on DNS SD easier
+  && apk add --no-cache curl ca-certificates \
   \
-  # forward request and error logs to docker log collector
+# forward request and error logs to docker log collector
   && ln -sf /dev/stdout /var/log/nginx/access.log \
-  && ln -sf /dev/stderr /var/log/nginx/error.log \
-  && rm -rf /srv/openssl
+  && ln -sf /dev/stderr /var/log/nginx/error.log
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 COPY index.html /etc/nginx/html/
 
-EXPOSE 80
+EXPOSE 80/tcp 443/tcp 443/udp
 
 STOPSIGNAL SIGTERM
 

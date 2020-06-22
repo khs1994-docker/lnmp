@@ -31,7 +31,7 @@ ENV PHP_EXTENSION \
       sysvsem \
       sysvshm \
       # tidy \
-      xmlrpc \
+      # xmlrpc \
       # xsl \
       zip
 
@@ -65,7 +65,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
         libzip-dev \
         zlib1g-dev \
         libyaml-dev \
-        libxmlrpc-epi-dev \
+        # libxmlrpc-epi-dev \
         libbz2-dev \
         libexif-dev \
         libgmp-dev \
@@ -89,7 +89,7 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
        libzip4 \
        zlib1g \
        libyaml-0-2 \
-       libxmlrpc-epi0 \
+       # libxmlrpc-epi0 \
        libbz2-1.0 \
        libexif12 \
        libgmp10 \
@@ -159,12 +159,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 # install composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
-    COMPOSER_VERSION=1.10.6 \
+    COMPOSER_VERSION=1.10.7 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.6,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.10.7,source=/usr/bin/composer,target=/opt/bin/composer \
     echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
     && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \
@@ -177,7 +177,7 @@ RUN --mount=type=bind,from=composer:1.10.6,source=/usr/bin/composer,target=/opt/
  #           exit(1); \
  #       }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.9/docker-entrypoint.sh > /docker-entrypoint.composer \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.10/docker-entrypoint.sh > /docker-entrypoint.composer \
  && chmod +x /docker-entrypoint.composer \
  && cp -a /opt/bin/composer /usr/bin/composer \
  && composer --ansi --version --no-interaction \

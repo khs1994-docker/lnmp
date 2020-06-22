@@ -8,6 +8,7 @@ scripts:
     curl -L `
       $url `
       -o $env:LWPM_PKG_ROOT/dist/conmon
+  platform-reqs: if(!$IsLinux){echo $False}
 platform:
   - architecture: amd64
     os: linux

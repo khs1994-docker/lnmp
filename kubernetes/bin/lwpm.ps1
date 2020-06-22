@@ -1,5 +1,3 @@
-Import-Alias ./lnmp/windows/pwsh-alias.txt -Force
-
 $env:LWPM_DOCKER_REGISTRY="mirror.ccs.tencentyun.com"
 
 ./lnmp/windows/lnmp-windows-pm.ps1 add `

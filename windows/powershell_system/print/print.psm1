@@ -1,11 +1,15 @@
-Function printInfo($str){
-  write-host "==> $str" -ForegroundColor Blue
+Function printInfo() {
+  write-host "==> $args" -ForegroundColor Blue
 }
 
-Function printWarning($str){
-  write-host "==> $str" -ForegroundColor Yellow
+Function printWarning() {
+  write-host "==> $args" -ForegroundColor Yellow
 }
 
-Function printError($str){
-  write-host "==> $str" -ForegroundColor Red
+Function printError() {
+  write-host "==> $args" -ForegroundColor Red
+}
+
+Function printTips() {
+  write-host "==> $args" -ForegroundColor Green
 }

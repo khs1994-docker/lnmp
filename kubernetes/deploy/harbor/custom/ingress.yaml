@@ -1,8 +1,11 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: harbor
+  name: "harbor-ingress"
   labels:
+    heritage: Helm
+    release: RELEASE-NAME
+    chart: harbor
     app: "harbor"
   annotations:
     ingress.kubernetes.io/proxy-body-size: "0"

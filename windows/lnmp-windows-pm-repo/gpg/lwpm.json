@@ -20,9 +20,12 @@
     "uninstall": "Start-Process -FilePath \"C:\\Program Files (x86)\\Gpg4win\\gpg4win-uninstall\" -Wait",
     "postuninstall": "",
     "pretest": "",
-    "test": "gpg --version",
+    "test": "printInfo $(gpg --version)[0] install success",
     "posttest":"",
-    "version": "echo 3.1.11"
+    "version": "echo 3.1.11",
+    "platform-reqs": [
+      "if(!$IsWindows){echo $False}"
+    ]
   },
   "path": [
     "C:\\Program Files (x86)\\GnuPG\\bin"

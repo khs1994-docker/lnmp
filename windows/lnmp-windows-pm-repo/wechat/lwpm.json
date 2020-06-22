@@ -10,6 +10,10 @@
   "url": "https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe",
   "command": "${env:ProgramFiles(x86)}\\Tencent\\WeChat\\WeChat.exe",
   "scripts": {
+    "platform-reqs": [
+      "if($IsMacOs){printTips You can get wechat from App Store}",
+      "if(!$IsWindows){echo $False}"
+    ],
     "install": "Start-Process -FilePath $filename -wait",
     "uninstall": "& ${env:ProgramFiles(x86)}\\Tencent\\WeChat\\Uninstall.exe",
     "version": "echo latest",

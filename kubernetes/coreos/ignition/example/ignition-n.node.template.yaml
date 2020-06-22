@@ -92,7 +92,6 @@ systemd:
         --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
         --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
-        --experimental-check-node-capabilities-before-mount=true \
         --v=2
 
         # cri is docker
@@ -212,7 +211,6 @@ storage:
           featureGates:
             # AllAlpha: true
             # BoundServiceAccountTokenVolume: false
-            DynamicAuditing: true
     - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
       mode: 0644
       contents:
