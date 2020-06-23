@@ -10,7 +10,7 @@
 
 * CoreDNS `1.6.9`
 
-* Dashboard `2.0.2`
+* Dashboard `2.0.3`
 
 * Istio `1.6.1`
 
