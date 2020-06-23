@@ -93,7 +93,7 @@ volumes:
   composer-cache-data:
     << : *default-labels
   mutagen-wsl2-data:
-    << : *default-common
+    << : *default-labels
 
 secrets:
   db_root_password:
