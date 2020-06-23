@@ -503,7 +503,7 @@ stages:
   - name: development
     if: branch = "master"
   - name: swarm
-    if: branch = "master"
+    if: tag =~ /^(v18)/
   - name: checkConfig
     if: |
       branch = "19.03"
