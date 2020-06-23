@@ -47,6 +47,9 @@ jobs:
     - name: Up
       run: |
         set -x
+        ./lnmp-docker build-config > docker-compose.yml
+        docker-compose config -q
+
         ./lnmp-docker config > docker-compose.yml
         docker-compose config -q
 

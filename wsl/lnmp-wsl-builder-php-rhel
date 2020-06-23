@@ -601,8 +601,8 @@ if [ $# -ne 0 ];then
 
   return
 fi
-
-wsl-php-ext-enable.sh pdo_pgsql \
+set +e
+exts=" pdo_pgsql \
                       xsl \
                       pcntl \
                       shmop \
@@ -630,7 +630,13 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       mysqli \
                       pgsql \
                       gd \
-                      $( test $PHP_NUM -ge "74" && echo ffi )
+                      $( test $PHP_NUM -ge "74" && echo ffi )"
+
+set -e
+for ext in $exts
+do
+  wsl-php-ext-enable.sh $ext || echo "$ext install error" | tee -a ${PHP_INSTALL_LOG}
+done
 
 # config opcache
 
