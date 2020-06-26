@@ -184,6 +184,8 @@ Function _cp_init_file(){
 
   _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
+  _cp_only_not_exists config/php8/docker-php.ini.example config/php8/docker-php.ini
+  _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
 
   _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
   _cp_only_not_exists config/npm/.env.example config/npm/.env

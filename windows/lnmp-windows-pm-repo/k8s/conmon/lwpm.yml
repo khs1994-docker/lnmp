@@ -1,5 +1,5 @@
 name: conmon
-version: 2.0.15
+version: 2.0.17
 url: "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon"
 scripts:
   download: |

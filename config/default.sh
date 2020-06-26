@@ -23,6 +23,8 @@ mkdir -p php/default/usr/local \
 
 docker cp config_php7_1_666:/usr/local/etc php/default/usr/local/
 
+docker cp config_php8_1_666:/usr/local/etc php8/default/usr/local/
+
 docker cp config_nginx_1_666:/etc/nginx/nginx.conf etc/default/nginx/
 
 docker cp config_nginx_1_666:/etc/nginx/conf.d etc/default/nginx/

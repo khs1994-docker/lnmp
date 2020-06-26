@@ -32,7 +32,7 @@ jobs:
         if: matrix.os == 'ubuntu' &&
             contains( github.event.head_commit.message, '[k8s]')
         env:
-          VERSION: 2.0.15
+          VERSION: 2.0.17
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 install conmon@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}
@@ -66,7 +66,7 @@ jobs:
         if: endsWith('a', 'b')
         shell: pwsh
         env:
-          VERSION: 3.2.0
+          VERSION: 3.2.4
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 install helm@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    helm@${env:VERSION}

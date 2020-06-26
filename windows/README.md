@@ -66,7 +66,7 @@ Current application environment: windows
 
 ## vclib
 
-部分软件依赖 `vclib`，请首先安装，请查看 `windows/lnmp-windows-pm-repo/vclib`
+部分软件（例如：MySQL）依赖 `vclib`，请首先安装，请查看 `windows/lnmp-windows-pm-repo/vclib`
 
 ## MySQL
 

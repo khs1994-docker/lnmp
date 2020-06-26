@@ -91,7 +91,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     }
   }
 
-  if ($lwpm.scripts.'get-version' -and !$VERSION) {
+  if ($lwpm.scripts.'get-version') {
     try { iex $lwpm.scripts.'get-version' }catch { printError $_.Exception }
   }
 
@@ -135,7 +135,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     $filename = iex "echo $download_filename"
   }
 
-  $unzipDesc = $name
+  if (!$unzipDesc) { $unzipDesc = $name }
 
   if ($lwpm.path) { _exportPath $lwpm.path }
 

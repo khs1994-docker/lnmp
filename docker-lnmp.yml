@@ -135,6 +135,46 @@ services:
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
 
+  php8:
+    &php8
+    << : *default-common
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0alpha1}-fpm-alpine"
+    # container_name: khs1994-docker-lnmp-php-fpm
+    volumes:
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      # fpm config
+      - ./config/php8/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      # php.ini
+      - ./config/php8/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
+      # php.ini override
+      - ./config/php8/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      # log,etc
+      - ./log/php8:/var/log/php:delegated
+      - ./log/supervisord.log:/var/log/supervisord.log:delegated
+      - ./log/supervisord:/var/log/supervisord:delegated
+      - type: volume
+        source: zoneinfo-data
+        target: /usr/share/zoneinfo
+        volume:
+          nocopy: false
+      - type: tmpfs
+        target: /run
+        # tmpfs:
+        #   size: 1000
+    networks:
+      - frontend
+      - backend
+    expose:
+      - "9000"
+    command: php-fpm -R -F
+    # command: php-fpm -F
+    environment:
+      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
+      - APP_ENV=development
+      - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
+      - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
+
   composer:
     << : *default-common
     restart: "no"

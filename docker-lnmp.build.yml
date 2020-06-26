@@ -59,6 +59,16 @@ services:
     environment:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Build Docker Image
 
+  php8:
+    << : *default-labels
+    build:
+      << : *default-labels
+      << : *default-build
+      # << : *default-build-debian
+      context: ./dockerfile/php/
+    environment:
+      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Build Docker Image
+
   nginx:
     << : *default-labels
     build:

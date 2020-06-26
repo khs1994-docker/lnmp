@@ -10,6 +10,7 @@
 !nginx-unit
 !npm
 !php
+!php8
 !python
 !redis
 !registry
