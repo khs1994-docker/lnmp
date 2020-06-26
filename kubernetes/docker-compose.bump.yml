@@ -11,7 +11,7 @@ services:
     image: kubernetesui/metrics-scraper:v1.0.4
 
   coredns:
-    image: k8s.gcr.io/coredns:1.6.7
+    image: k8s.gcr.io/coredns:1.7.0
 
   pause:
     image: k8s.gcr.io/pause:3.2
