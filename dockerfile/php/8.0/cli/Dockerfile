@@ -108,7 +108,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-iconv=/usr \
         --enable-ctype=shared \
         --enable-dom=shared \
-        --enable-pdo \
+        --enable-pdo=shared \
         --with-pdo-sqlite=shared,/usr \
         --enable-phar=shared \
         --enable-posix=shared \
@@ -262,6 +262,7 @@ RUN --mount=type=bind,from=php:8.0.0alpha1-alpine,source=/usr/src,target=/usr/lo
                            ldap \
                            mysqli \
                            pcntl \
+                           pdo \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
@@ -281,7 +282,6 @@ RUN --mount=type=bind,from=php:8.0.0alpha1-alpine,source=/usr/src,target=/usr/lo
                            opcache \
                            ctype \
                            dom \
-                           # pdo \
                            pdo_sqlite \
                            phar \
                            posix \

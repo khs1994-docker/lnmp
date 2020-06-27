@@ -261,6 +261,7 @@ RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/src,target=/usr/local/sr
                            ldap \
                            mysqli \
                            pcntl \
+                           pdo \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
@@ -281,7 +282,6 @@ RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/src,target=/usr/local/sr
                            ctype \
                            dom \
                            json \
-                           pdo \
                            pdo_sqlite \
                            phar \
                            posix \

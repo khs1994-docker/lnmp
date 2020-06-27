@@ -302,6 +302,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            ldap \
                            mysqli \
                            pcntl \
+                           pdo \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
@@ -322,7 +323,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            ffi \
                            ctype \
                            dom \
-                           pdo \
                            pdo_sqlite \
                            posix \
                            session \

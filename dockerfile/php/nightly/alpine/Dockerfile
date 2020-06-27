@@ -74,6 +74,8 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-jpeg \
             --with-webp \
             --with-xpm \
+        --enable-pdo=shared \
+        --with-pdo-sqlite=shared,/usr \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
@@ -284,6 +286,8 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            intl \
                            mysqli \
                            pcntl \
+                           pdo \
+                           pdo-sqlite \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
@@ -299,8 +303,8 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            # tidy \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
-                           zip \
                            opcache \
+                           zip \
                            # 7.4 +
                            ffi \
                            ${PHP_EXTENSION_EXTRA:-} \
