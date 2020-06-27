@@ -382,7 +382,7 @@ ENV PECL_RUN_DEPS \
 
 ENV PECL_EXTENSION \
       # mongodb \
-      https://github.com/mongodb/mongo-php-library/archive/master.tar.gz \
+      # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
       igbinary \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \

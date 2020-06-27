@@ -14,7 +14,7 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, SUPERVISORD]
+        TYPE: [CLI, FPM, COMPOSER, SWOOLE, SUPERVISORD, UNIT]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -135,8 +135,8 @@ jobs:
         DOCKER_HUB_USERNAME: khs1994
         DOCKER_HUB_USERNAME_TEST: lrew
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
-        PHP_VERSION: PHP_8_X
-        FOLDER: 8.0
+        PHP_VERSION: PHP_8_0_X
+        FOLDER: "8.0"
         PHP_TAG_VERSION: 8.0.0alpha1
         TYPE: ${{ matrix.TYPE }}
         # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php

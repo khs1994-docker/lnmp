@@ -46,7 +46,7 @@ ENV PHP_EXTENSION \
 
 ENV PECL_EXTENSION \
       # mongodb \
-      https://github.com/mongodb/mongo-php-library/archive/master.tar.gz \
+      # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
       igbinary \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
@@ -78,7 +78,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libexif \
                          gmp \
                          # xmlrpc-c \
-                         enchant \
+                         enchant2 \
                          c-client \
                          icu-libs \
                          libgcrypt \

@@ -108,7 +108,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         --with-iconv=/usr \
         --enable-ctype=shared \
         --enable-dom=shared \
-        --enable-pdo=shared \
+        --enable-pdo \
         --with-pdo-sqlite=shared,/usr \
         --enable-phar=shared \
         --enable-posix=shared \
@@ -281,7 +281,7 @@ RUN --mount=type=bind,from=php:8.0.0alpha1-alpine,source=/usr/src,target=/usr/lo
                            opcache \
                            ctype \
                            dom \
-                           pdo \
+                           # pdo \
                            pdo_sqlite \
                            phar \
                            posix \
@@ -330,7 +330,7 @@ ENV PECL_RUN_DEPS \
 
 ENV PECL_EXTENSION \
       # mongodb \
-      https://github.com/mongodb/mongo-php-library/archive/master.tar.gz \
+      # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
       igbinary \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
