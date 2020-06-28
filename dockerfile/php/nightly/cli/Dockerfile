@@ -269,6 +269,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --with-curl=shared \
     --with-libedit \
     --with-openssl=shared \
+      --with-system-ciphers \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \

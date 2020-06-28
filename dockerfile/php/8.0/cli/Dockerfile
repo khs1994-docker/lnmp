@@ -231,6 +231,7 @@ RUN --mount=type=bind,from=php:8.0.0alpha1-alpine,source=/usr/src,target=/usr/lo
     --with-curl=shared \
     --with-libedit \
     --with-openssl=shared \
+      --with-system-ciphers \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \
