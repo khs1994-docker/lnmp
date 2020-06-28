@@ -1,5 +1,23 @@
 [
   {
+    "source": "php:8.0.0alpha1-cli-alpine"
+  },
+  {
+    "source": "php:8.0.0alpha1-fpm-alpine"
+  },
+  {
+    "source": "php:8.0.0alpha1-unit-alpine"
+  },
+  {
+    "source": "php:8.0.0alpha1-composer-alpine"
+  },
+  {
+    "source": "php:8.0.0alpha1-swoole-alpine"
+  },
+  {
+    "source": "php:8.0.0alpha1-supervisord-alpine"
+  },
+  {
     "source": "php:7.4.7-cli-alpine"
   },
   {

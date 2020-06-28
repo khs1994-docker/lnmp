@@ -83,6 +83,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-xsl=shared \
         --enable-bcmath=shared \
         --enable-pcntl=shared \
+        --with-external-pcre \
         --enable-shmop=shared \
         # --enable-soap=shared \
         --enable-sockets=shared \
@@ -230,8 +231,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           openldap-dev \
           \
           bison \
-          libgcrypt-dev \
-          libgpg-error-dev \
           gnu-libiconv-dev \
           ${APK_DEV_EXTRA:-} \
   \
@@ -263,7 +262,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
     --enable-mbstring=shared \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-    --enable-mysqlnd \
+    --enable-mysqlnd=shared \
 # https://wiki.php.net/rfc/libsodium
     --with-sodium=shared \
     \
@@ -294,14 +293,16 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            enchant \
                            exif \
                            fileinfo \
-                           gd \
+                           # gd \
                            gettext \
                            gmp \
                            imap \
                            intl \
                            ldap \
-                           mysqli \
                            pcntl \
+                           openssl \
+                           mysqlnd \
+                           # mysqli \
                            pdo \
                            pdo_mysql \
                            pdo_pgsql \
@@ -319,7 +320,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \
-                           # 7.4 +
                            ffi \
                            ctype \
                            dom \
@@ -335,9 +335,11 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            ftp \
                            mbstring \
                            curl \
-                           openssl \
                            zip \
+                           # iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
+  && echo "extension=gd.so" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
+  && echo "extension=mysqli.so" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
       | tr ',' '\n' \
@@ -364,6 +366,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       yaml-dev \
+      pcre2-dev \
       zlib-dev
 
 ENV PECL_RUN_DEPS \
@@ -401,7 +404,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
-      && ls -la $(php-config --extension-dir)
+      && ls -la $(php-config --extension-dir) \
+      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
 
 ENTRYPOINT ["docker-php-entrypoint"]
 

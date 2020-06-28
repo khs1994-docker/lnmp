@@ -30,6 +30,7 @@ RUN --mount=type=bind,from=php:8.0.0alpha1-alpine,source=/usr/local/bin,target=/
       && apk add --no-cache --virtual .pecl_build_deps \
                                       $PHPIZE_DEPS \
                                       openssl-dev \
+                                      pcre2-dev \
       && export PATH=$PATH:/opt/bin \
       && echo " \
            --enable-openssl \

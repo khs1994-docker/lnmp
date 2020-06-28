@@ -7,7 +7,7 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-composer-alpine
 
 # php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer
 
-ENV PHP_CS_FIXER_VERSION=2.16.3 \
+ENV PHP_CS_FIXER_VERSION=2.16.4 \
     PHP_CS_FIXER_IGNORE_ENV=1
 
 RUN curl -fsSL https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${PHP_CS_FIXER_VERSION}/php-cs-fixer.phar > /usr/local/bin/php-cs-fixer \

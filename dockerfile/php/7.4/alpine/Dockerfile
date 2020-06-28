@@ -78,7 +78,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant \
                          c-client \
                          icu-libs \
-                         libgcrypt \
                          gnu-libiconv \
                          ${APK_EXTRA:-} \
                          " \
@@ -107,20 +106,26 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
-                         libgpg-error-dev \
-                         libgcrypt-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
                          # libxslt-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
-        && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
+        && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS patch \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
         && curl -fsSL -o /usr/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
         && chmod +x /usr/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \
+# enchant-2.patch
+        && cd /usr/src/php \
+        && curl -fsSL -o enchant-2.patch https://git.alpinelinux.org/aports/plain/community/php7/enchant-2.patch?id=f09d70c946d9953ab11d45e4345ecd6705c1903c \
+#        && patch -p1 < enchant-2.patch \
+        && rm -rf enchant-2.patch \
+#        && ./buildconf --force \
+        && cd - \
+        \
         && docker-php-ext-configure zip \
                                     --with-zip \
         && docker-php-ext-install zip \
@@ -158,7 +163,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && chmod -R 777 /var/log/php-fpm \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         && php -m \
-        && ls -la $(php-config --extension-dir)
+        && ls -la $(php-config --extension-dir) \
+        && LD_PRELOAD="/usr/lib/preloadable_libiconv.so php" php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 

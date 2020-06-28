@@ -81,7 +81,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          enchant2 \
                          c-client \
                          icu-libs \
-                         libgcrypt \
                          gnu-libiconv \
                          ${APK_EXTRA:-} \
                          " \
@@ -110,8 +109,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
-                         libgpg-error-dev \
-                         libgcrypt-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
@@ -162,7 +159,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && chmod -R 777 /var/log/php-fpm \
         && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
         && php -m \
-        && ls -la $(php-config --extension-dir)
+        && ls -la $(php-config --extension-dir) \
+        && LD_PRELOAD="/usr/lib/preloadable_libiconv.so php" php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 
