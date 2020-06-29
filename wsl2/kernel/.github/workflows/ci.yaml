@@ -17,6 +17,8 @@ jobs:
         exclude:
         - repo: "torvalds/linux"
           ref: "linux-msft-wsl-4.19.y"
+        - repo: microsoft/WSL2-Linux-Kernel
+          ref: master
       fail-fast: false
     if: |
       ! contains( github.event.head_commit.message, '[skip ci]')
@@ -41,16 +43,20 @@ jobs:
         sudo apt update
         sudo apt install -y build-essential flex bison libssl-dev libelf-dev rsync
 
+        mkdir -p Microsoft/
+
         if ! [ -f Microsoft/config-wsl ];then
-          mkdir Microsoft/
-          curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/${ref}/Microsoft/config-wsl \
-            || curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/linux-msft-wsl-4.19.y/Microsoft/config-wsl
+          # mkdir -p Microsoft/
+          # curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/${ref}/Microsoft/config-wsl \
+          #  || curl -fsSL -o Microsoft/config-wsl https://raw.githubusercontent.com/microsoft/WSL2-Linux-Kernel/linux-msft-wsl-4.19.y/Microsoft/config-wsl
 
           curl -fsSL -O \
           https://raw.githubusercontent.com/khs1994/WSL2-Linux-Kernel/master/memory-reclaim.diff
 
           patch -p1 < memory-reclaim.diff
         fi
+
+        curl -fsSL -o Microsoft/config-wsl https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl
 
         echo "
         # nfs
@@ -69,7 +75,7 @@ jobs:
         CONFIG_NUMA=y
         " >> Microsoft/config-wsl
 
-        sudo sed -i "s/microsoft-standard/microsoft-WSL2-standard/g" Microsoft/config-wsl
+        # sudo sed -i "s/microsoft-standard/microsoft-WSL2-standard/g" Microsoft/config-wsl
 
         make LOCALVERSION="" KCONFIG_CONFIG=Microsoft/config-wsl -j $(nproc)
 

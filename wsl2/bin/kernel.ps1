@@ -1,7 +1,7 @@
 $tips="You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\conf\.wslconfig"
 
 $WSL_DIST='wsl-k8s'
-$kernelversion="4.19.104"
+$kernelversion="4.19.121"
 
 if($env:WSL_DIST){
   $WSL_DIST=$env:WSL_DIST
