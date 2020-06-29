@@ -289,7 +289,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
                            mysqlnd \
                            # mysqli \
                            pdo \
-                           pdo-sqlite \
+                           pdo_sqlite \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
