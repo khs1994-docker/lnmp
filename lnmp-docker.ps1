@@ -1576,6 +1576,8 @@ Example: ./lnmp-docker composer /app/demo install
       cd $EXEC_CMD_DIR
 
       Copy-Item -r $PSScriptRoot/vscode-remote/*
+
+      printInfo "vsCode remote project init success"
     }
 
     "^vscode-remote-run$" {

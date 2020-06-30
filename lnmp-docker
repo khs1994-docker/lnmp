@@ -1225,6 +1225,7 @@ main() {
 
   vscode-remote )
     cp -r vscode-remote/. $EXEC_CMD_DIR/
+    print_info "vsCode remote project init success"
     ;;
 
   vscode-remote-run )
