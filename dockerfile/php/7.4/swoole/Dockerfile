@@ -6,7 +6,7 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG PHP_EXTENSION_EXTRA="ffi"
+ARG PHP_EXTENSION_EXTRA
 
 ARG PECL_EXTENSION_EXTRA
 
