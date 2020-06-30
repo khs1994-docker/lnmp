@@ -22,7 +22,7 @@ ARG PHP_EXTRA_CONFIGURE_ARGS_NEW="--enable-gd=shared \
                                     --with-freetype \
                                     --with-jpeg \
                                     --with-webp \
-                                    --with-xpm \
+                                    --with-xpm=no \
                                   --with-zip=shared \
                                   --with-ffi=shared \
                                  "
@@ -182,7 +182,7 @@ RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/src,target=/usr/local/sr
           libpng-dev \
           freetype-dev \
           libjpeg-turbo-dev \
-          libxpm-dev \
+          # libxpm-dev \
           libwebp-dev \
           libexif-dev \
           # libxslt-dev \
