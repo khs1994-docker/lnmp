@@ -60,8 +60,8 @@
     "dest": "mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.5.3",
-    "dest": "mariadb:10.5.3"
+    "source": "library/mariadb:10.5.4",
+    "dest": "mariadb:10.5.4"
   },
   {
     "source": "library/mariadb:10.4.12",
@@ -84,8 +84,8 @@
     "dest": "mongo:latest"
   },
   {
-    "source": "library/mongo:4.2.7",
-    "dest": "mongo:4.2.7"
+    "source": "library/mongo:4.2.8",
+    "dest": "mongo:4.2.8"
   },
   {
     "source": "library/kong:latest",
