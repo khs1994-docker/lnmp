@@ -317,6 +317,12 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
   && strip --strip-all /usr/local/lib/libphp7.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network .build-deps \
+  && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
+           /usr/local/include/php/TSRM/tsrm_config.w32.h \
+           /usr/local/include/php/Zend/zend_config.w32.h \
+           /usr/local/include/php/ext/mysqlnd/config-win.h \
+           /usr/local/include/php/ext/standard/winver.h \
+           /usr/local/php/man \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
   && rm -rf /tmp/pear ~/.pearrc \
@@ -354,9 +360,9 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/local/bin,target=/opt/b
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && curl -fsSL -o /usr/bin/pickle \
+      && curl -fsSL -o /usr/local/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-      && chmod +x /usr/bin/pickle \
+      && chmod +x /usr/local/bin/pickle \
       && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
       && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \

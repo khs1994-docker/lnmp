@@ -14,9 +14,9 @@ ARG PHP_EXTENSION_EXTRA="ffi"
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA="oniguruma"
+ARG APK_EXTRA="oniguruma libffi"
 
-ARG APK_DEV_EXTRA="oniguruma-dev"
+ARG APK_DEV_EXTRA="oniguruma-dev libffi-dev"
 
 ARG PHP_EXTRA_CONFIGURE_ARGS_NEW="--enable-gd=shared \
                                     --with-freetype \
@@ -324,6 +324,12 @@ RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/src,target=/usr/local/sr
   && strip --strip-all /usr/local/lib/libphp7.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network .build-deps \
+  && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
+           /usr/local/include/php/TSRM/tsrm_config.w32.h \
+           /usr/local/include/php/Zend/zend_config.w32.h \
+           /usr/local/include/php/ext/mysqlnd/config-win.h \
+           /usr/local/include/php/ext/standard/winver.h \
+           /usr/local/php/man \
   \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
@@ -358,9 +364,9 @@ RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/local/bin,target=/opt/bi
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && curl -fsSL -o /usr/bin/pickle \
+      && curl -fsSL -o /usr/local/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-      && chmod +x /usr/bin/pickle \
+      && chmod +x /usr/local/bin/pickle \
       && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
       && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
