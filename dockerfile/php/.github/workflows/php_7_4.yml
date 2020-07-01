@@ -76,65 +76,85 @@ jobs:
         VCS_REF=`git rev-parse --short HEAD`
         options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
 
+        echo "##[group]Build Unit"
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-unit-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit; \
         fi
+        echo "##[endgroup]"
 
+        echo "##[group]Build SUPERVISORD"
         if [ "$TYPE" = "SUPERVISORD" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-supervisord-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; \
         fi
+        echo "##[endgroup]"
 
+        echo "##[group]Build COMPOSER"
         if [ "$TYPE" = "COMPOSER" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-composer-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; \
         fi
+        echo "##[endgroup]"
 
+        echo "##[group]Build SINGLE"
         if [ "$TYPE" = "SINGLE" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine \
           ${IS_PUSH} ${FOLDER}/single; \
         fi
+        echo "##[endgroup]"
 
+        echo "##[group]Build SWOOLE"
         if [ "$TYPE" = "SWOOLE" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-swoole-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole; \
         fi
+        echo "##[endgroup]"
 
-        if [ "$TYPE" = "FPM" ];then docker buildx build $options \
+        if [ "$TYPE" = "FPM" ];then \
+          echo "##[group]Build $TYPE"; \
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
           ${fpmTagOptions} \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; \
+          echo "##[endgroup]"; \
         fi
 
-        if [ "$TYPE" = "CLI" ];then docker buildx build $options \
+        if [ "$TYPE" = "CLI" ];then \
+          echo "##[group]Build $TYPE"; \
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-cli-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; \
+          echo "##[endgroup]"; \
         fi
 
-        if [ "$TYPE" = "PPM" ];then docker buildx build $options \
+        if [ "$TYPE" = "PPM" ];then \
+          echo "##[group]Build $TYPE"; \
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ppm-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; \
+          echo "##[endgroup]"; \
         fi
 
         if [ "$TYPE" = "SWOOLE" ];then
           for PHP_EXT in `ls ${FOLDER}/ext`;
           do
+            echo "##[group]Build $PHP_EXT"
             options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF"
 
             docker buildx build $options \
@@ -142,12 +162,15 @@ jobs:
             -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine \
             $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine ";done) \
             --platform ${PLATFORM} ${FOLDER}/ext/${PHP_EXT}
+            echo "##[endgroup]"
 
+            echo "##[group]Push ${PHP_EXT}"
             docker buildx build $options \
             --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
             -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine \
             $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine ";done) \
             --platform ${PLATFORM} --target bundle ${IS_PUSH} ${FOLDER}/ext/${PHP_EXT}
+            echo "##[endgroup]"
           done
         fi
       env:

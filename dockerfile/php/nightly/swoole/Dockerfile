@@ -23,7 +23,8 @@ ENV PECL_EXTENSION \
       swoole \
       ${PECL_EXTENSION_EXTRA:-}
 
-ENV SWOOLE_VERSION=4.5.2
+# ENV SWOOLE_VERSION=v4.5.2
+ENV SWOOLE_VERSION=master
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
@@ -35,8 +36,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     && export PATH=$PATH:/opt/bin \
     && echo "--enable-openssl --enable-http2" \
            > /tmp/swoole.configure.options \
-    && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
-           -n --defaults --strip --cleanup --continue-on-error \
+    && pickle install https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz \
+           -n --defaults --strip --cleanup \
     && apk del --no-network .pecl_build_deps \
     && rm -rf /tmp/* \
     && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*

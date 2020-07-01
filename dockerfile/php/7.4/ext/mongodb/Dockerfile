@@ -12,7 +12,7 @@ ENV EXT_DEV_DIR="/usr/local/include/php/ext/${EXT_NAME}"
 
 ARG APK_EXTRA
 
-ARG APK_DEV_EXTRA
+ARG APK_DEV_EXTRA="pcre2-dev"
 
 ENV TZ=Asia/Shanghai
 
