@@ -65,7 +65,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-fpm-group=www-data \
         # https://github.com/docker-library/php/issues/510
         --enable-embed=shared \
-        # --disable-cgi \
+        --disable-cgi \
         --with-gettext=shared \
         --with-gd=shared \
             --with-freetype-dir=/usr \

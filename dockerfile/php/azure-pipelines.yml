@@ -101,11 +101,11 @@ jobs:
         FOLDER: 7.2
         PHP_TAG_VERSION: 7.2.31
         TYPE: SUPERVISORD
-      PHP_72_PPM:
-        PHP_VERSION: 7_2_X
-        FOLDER: 7.2
-        PHP_TAG_VERSION: 7.2.31
-        TYPE: PPM
+      # PHP_72_PPM:
+      #   PHP_VERSION: 7_2_X
+      #   FOLDER: 7.2
+      #   PHP_TAG_VERSION: 7.2.31
+      #   TYPE: PPM
 
       # PHP_74_CLI:
       #   PHP_VERSION: 7_4_X

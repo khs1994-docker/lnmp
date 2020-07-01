@@ -70,7 +70,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-fpm-user=www-data \
         # --with-fpm-group=www-data \
         --enable-embed=shared \
-        # --disable-cgi \
+        --disable-cgi \
         --with-gettext=shared \
         --enable-gd=shared \
             --with-freetype \
