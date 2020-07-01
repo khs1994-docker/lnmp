@@ -26,19 +26,20 @@ ENV PECL_EXTENSION \
 ENV SWOOLE_VERSION=4.5.2
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
-    sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
-      && apk add --no-cache --virtual .pecl_build_deps \
-                                      $PHPIZE_DEPS \
-                                      openssl-dev \
-                                      pcre2-dev \
-      && export PATH=$PATH:/opt/bin \
-      && echo "--enable-openssl --enable-http2" \
+    set -x \
+    && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+    && apk add --no-cache --virtual .pecl_build_deps \
+                                    $PHPIZE_DEPS \
+                                    openssl-dev \
+                                    pcre2-dev \
+    && export PATH=$PATH:/opt/bin \
+    && echo "--enable-openssl --enable-http2" \
            > /tmp/swoole.configure.options \
-      && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
+    && pickle install https://github.com/swoole/swoole-src/archive/v${SWOOLE_VERSION}.tar.gz \
            -n --defaults --strip --cleanup --continue-on-error \
-      && apk del --no-network .pecl_build_deps \
-      && rm -rf /tmp/* \
-      && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
+    && apk del --no-network .pecl_build_deps \
+    && rm -rf /tmp/* \
+    && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/*
 
 WORKDIR /app
 

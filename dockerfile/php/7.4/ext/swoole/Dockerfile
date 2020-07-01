@@ -6,11 +6,17 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-swoole-alpine as 
 
 WORKDIR /
 
+ARG EXT_NAME=swoole
+
+ENV EXT_DEV_DIR=/usr/local/include/php/ext/${EXT_NAME}
+
 RUN set -x \
-    && echo $(php-config --extension-dir)/swoole.so > /tmp/ext-swoole-manifest.txt \
-    && echo /usr/local/include/php/ext/swoole >> /tmp/ext-swoole-manifest.txt \
-    && echo /tmp/ext-swoole-manifest.txt >> /tmp/ext-swoole-manifest.txt \
-    && tar -zcvf ext-swoole.tar.gz --files-from /tmp/ext-swoole-manifest.txt
+    && { \
+    echo $(php-config --extension-dir)/${EXT_NAME}.so; \
+    echo $( if [ -d ${EXT_DEV_DIR} ];then echo ${EXT_DEV_DIR}; fi ); \
+    echo /tmp/ext-${EXT_NAME}-manifest.txt; \
+     } | tee /tmp/ext-${EXT_NAME}-manifest.txt \
+    && tar -zcvf ext-${EXT_NAME}.tar.gz --files-from /tmp/ext-${EXT_NAME}-manifest.txt
 
 FROM scratch as bundle
 
@@ -21,23 +27,29 @@ ARG VCS_REF="unknow"
 LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
-COPY --from=builder /ext-swoole.tar.gz /srv/
+ARG EXT_NAME=swoole
+
+COPY --from=builder /ext-${EXT_NAME}.tar.gz /srv/
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine as test
 
-COPY --from=bundle /srv/ext-swoole.tar.gz /
+ARG EXT_NAME=swoole
+
+COPY --from=bundle /srv/ext-${EXT_NAME}.tar.gz /
 
 RUN set -x \
-    && tar -zxvf /ext-swoole.tar.gz -C / \
-    && echo "extension=swoole" > ${PHP_INI_DIR}/conf.d/docker-php-ext-swoole.ini \
-    && cat /tmp/ext-swoole-manifest.txt \
+    && tar -zxvf /ext-${EXT_NAME}.tar.gz -C / \
+    && echo "extension=${EXT_NAME}" > ${PHP_INI_DIR}/conf.d/docker-php-ext-${EXT_NAME}.ini \
+    && cat /tmp/ext-${EXT_NAME}-manifest.txt \
     && php -m
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine as test-buildkit
 
+ARG EXT_NAME=swoole
+
 RUN --mount=type=bind,from=bundle,source=/srv,target=/srv \
     set -x \
-    && tar -zxvf /srv/ext-swoole.tar.gz -C / \
-    && echo "extension=swoole" > ${PHP_INI_DIR}/conf.d/docker-php-ext-swoole.ini \
-    && cat /tmp/ext-swoole-manifest.txt \
+    && tar -zxvf /srv/ext-${EXT_NAME}.tar.gz -C / \
+    && echo "extension=${EXT_NAME}" > ${PHP_INI_DIR}/conf.d/docker-php-ext-${EXT_NAME}.ini \
+    && cat /tmp/ext-${EXT_NAME}-manifest.txt \
     && php -m
