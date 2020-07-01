@@ -292,7 +292,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            bz2 \
                            calendar \
                            enchant \
-                           exif \
+                           # exif \
                            fileinfo \
                            # gd \
                            gettext \
@@ -339,8 +339,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            zip \
                            # iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
-  && echo "extension=gd.so" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
-  && echo "extension=mysqli.so" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
+  && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
+  && echo "extension=gd" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
+  && echo "extension=mysqli" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
       | tr ',' '\n' \

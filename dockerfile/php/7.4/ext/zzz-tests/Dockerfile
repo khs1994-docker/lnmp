@@ -20,13 +20,19 @@ RUN --mount=type=bind,from=zstd,source=/srv,target=/srv/zstd \
     --mount=type=bind,from=swoole,source=/srv,target=/srv/swoole \
     --mount=type=bind,from=yaml,source=/srv,target=/srv/yaml \
     --mount=type=bind,from=mongodb,source=/srv,target=/srv/mongodb \
+    \
     set -x \
     && php -m \
     && apk add --no-cache ${EXT_RUN_DEPS} \
+    \
     && tar -zxvf /srv/zstd/ext-zstd.tar.gz -C / \
     && tar -zxvf /srv/swoole/ext-swoole.tar.gz -C / \
+    && tar -zxvf /srv/yaml/ext-yaml.tar.gz -C / \
+    && tar -zxvf /srv/mongodb/ext-mongodb.tar.gz -C / \
+    \
     && echo "extension=zstd" > ${PHP_INI_DIR}/conf.d/docker-php-ext-zstd.ini \
     && echo "extension=swoole" > ${PHP_INI_DIR}/conf.d/docker-php-ext-swoole.ini \
     && echo "extension=yaml" > ${PHP_INI_DIR}/conf.d/docker-php-ext-yaml.ini \
     && echo "extension=mongodb" > ${PHP_INI_DIR}/conf.d/docker-php-ext-mongodb.ini \
+    \
     && php -m

@@ -254,7 +254,7 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
                            bz2 \
                            calendar \
                            enchant \
-                           exif \
+                           # exif \
                            fileinfo \
                            # gd \
                            gettext \
@@ -303,8 +303,10 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
                            zip \
                            iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
-  && echo "extension=gd.so" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
-  && echo "extension=mysqli.so" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
+# 7.2+ 不再需要 .so 后缀
+  && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
+  && echo "extension=gd" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
+  && echo "extension=mysqli" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
       | tr ',' '\n' \
