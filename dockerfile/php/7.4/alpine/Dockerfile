@@ -44,13 +44,11 @@ ENV PHP_EXTENSION \
       ${PHP_EXTENSION_EXTRA:-}
 
 ENV PECL_EXTENSION \
-      mongodb \
       igbinary \
       redis \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \
-      yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
@@ -70,7 +68,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo \
                          libxpm \
                          libwebp \
-                         yaml \
                          libbz2 \
                          libexif \
                          gmp \
@@ -96,7 +93,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo-dev \
                          libxpm-dev \
                          libwebp-dev \
-                         yaml-dev \
                          libexif-dev \
                          gmp-dev \
                          # xmlrpc-c-dev \

@@ -340,22 +340,18 @@ RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/src,target=/usr/local/sr
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
-      yaml-dev \
       pcre2-dev \
       zlib-dev
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
-      yaml \
       zlib
 
 ENV PECL_EXTENSION \
-      mongodb \
       igbinary \
       redis \
       memcached \
       # xdebug-beta \
-      yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:7.4.7-alpine,source=/usr/local/bin,target=/opt/bin,rw \
