@@ -8,8 +8,8 @@
     "dest": "pause:3.2"
   },
   {
-    "source": "gcr.io/google-containers/coredns:1.6.7",
-    "dest": "coredns:1.6.7"
+    "source": "gcr.io/google-containers/coredns:1.7.0",
+    "dest": "coredns:1.7.0"
   },
   {
     "source": "gcr.io/google-containers/metrics-server-amd64:v0.3.6",
@@ -58,5 +58,9 @@
   {
     "source": "gcr.io/distroless/base@sha256:f79e093f9ba639c957ee857b1ad57ae5046c328998bf8f72b30081db4d8edbe4",
     "dest": "gcr-distroless-base@sha256:f79e093f9ba639c957ee857b1ad57ae5046c328998bf8f72b30081db4d8edbe4"
+  },
+  {
+    "source": "mcr.microsoft.com/powershell:preview-alpine-3.11",
+    "dest": "powershell:preview-alpine-3.11"
   }
 ]
