@@ -31,7 +31,8 @@ autostart=false
 autorestart=false
 startretries=2
 user=root
-stopsignal=HUP
+stopasgroup=true
+killasgroup=true
 startsecs=10" > $PSScriptRoot/supervisor.d/kube-containerd.ini
 
 if($args[0] -eq 'start' -and $args[1] -eq '-d'){
