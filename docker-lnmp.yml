@@ -117,8 +117,9 @@ services:
         target: /usr/share/zoneinfo
         volume:
           nocopy: false
-      - type: tmpfs
-        target: /run
+      # if /run is tmpfs, s6 can't run
+      # - type: tmpfs
+      #  target: /run
         # tmpfs:
         #   size: 1000
     networks:

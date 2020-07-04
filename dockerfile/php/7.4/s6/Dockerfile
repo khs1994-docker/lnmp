@@ -10,11 +10,29 @@ ARG TARGETARCH
 RUN set -x \
     && curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${TARGETARCH}.tar.gz -o /tmp/s6-overlay.tar.gz \
     && tar -zxvf /tmp/s6-overlay.tar.gz -C / \
-    && rm -rf /tmp/s6-overlay.tar.gz
+#    && tar -zxvf /tmp/s6-overlay.tar.gz -C / --exclude='./bin' \
+#    && tar -zxvf /tmp/s6-overlay.tar.gz -C /usr ./bin \
+    && rm -rf /tmp/s6-overlay.tar.gz \
+# https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa
+    && ln -s /init /s6-init
 
-ENTRYPOINT ["/bin/s6-svscan"]
+VOLUME [ "/etc/services.d", "/etc/fix-attrs.d", "/etc/cont-init.d", "cont-finish.d" ]
 
-CMD ["/usr/local/etc/s6"]
+ENV S6_KEEP_ENV=0 \
+    S6_LOGGING=0 \
+    S6_BEHAVIOUR_IF_STAGE2_FAILS=0 \
+    S6_KILL_FINISH_MAXTIME=5000 \
+    S6_SERVICES_GRACETIME=3000 \
+    S6_KILL_GRACETIME=3000 \
+    S6_LOGGING_SCRIPT="n20 s1000000 T" \
+    S6_CMD_ARG0= \
+    S6_FIX_ATTRS_HIDDEN=0 \
+    S6_CMD_WAIT_FOR_SERVICES=0  \
+    S6_CMD_WAIT_FOR_SERVICES_MAXTIME=5000 \
+    S6_READ_ONLY_ROOT=0 \
+    S6_SYNC_DISKS=0
+
+ENTRYPOINT ["/s6-init"]
 
 ARG VCS_REF="unknow"
 

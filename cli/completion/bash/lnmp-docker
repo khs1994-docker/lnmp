@@ -80,6 +80,7 @@ complete -W "acme.sh \
         lrew-outdated \
         lrew-backup \
         lrew-update \
-        vscode-remote \
+        vscode-remote-init \
         vscode-remote-run \
+        vscode-remote-exec \
         nfs" lnmp-docker

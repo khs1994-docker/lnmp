@@ -28,7 +28,7 @@ lnmp-wnamp.ps1 restart nginx wsl-memcached
 
 $EXEC_CMD_DIR=$pwd
 
-Function printInfo($info,$color){
+Function printInfo($info,$color='Red'){
   Write-Host "==> $info" -ForegroundColor $color
 }
 

@@ -140,8 +140,9 @@ Commands:
   services             List services
   update               Upgrades LNMP [ -f | ]
   upgrade              Upgrades LNMP [ -f | ]
-  vscode-remote        Init vsCode remote development env
+  vscode-remote-init   Init vsCode remote development env
   vscode-remote-run    Run command on vsCode remote workspace
+  vscode-remote-exec   Exec command on vsCode remote workspace
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -1223,7 +1224,7 @@ main() {
     exec docker-compose $options run -w $WORKING_DIR --rm composer "$@"
     ;;
 
-  vscode-remote )
+  vscode-remote-init )
     cp -r vscode-remote/. $EXEC_CMD_DIR/
     print_info "vsCode remote project init success"
     ;;
@@ -1232,6 +1233,12 @@ main() {
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml run --rm "$@"
+    ;;
+
+  vscode-remote-exec )
+    cd $EXEC_CMD_DIR
+
+    docker-compose -f docker-workspace.yml exec "$@"
     ;;
 
   cleanup )

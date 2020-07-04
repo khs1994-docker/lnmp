@@ -19,7 +19,7 @@ services:
       - vscode-server-insiders:/root/.vscode-server-insiders
       - vscode-phpls-cache:/root/.phpls
       # fix me
-      # - ./:/app/demo
+      # - ./app:/app
       # fix me 将依赖挂载到数据卷
       # - vendor:/app/demo/vendor
 

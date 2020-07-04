@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/with-contenv sh
 # Crontabs are located by default in /var/spool/cron/crontabs/
 # The default configuration is also calling all the scripts in /etc/periodic/${period}
 

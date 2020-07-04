@@ -1,0 +1,4 @@
+event
+supervise
+.s6-svscan/lock
+.s6-svscan/control
