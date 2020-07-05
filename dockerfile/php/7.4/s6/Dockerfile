@@ -8,6 +8,8 @@ ARG S6_VERSION=2.0.0.1
 ARG TARGETARCH
 
 RUN set -x \
+    && if [ "${TARGETARCH}" = 'arm64' ];then TARGETARCH=aarch64; fi \
+    && if [ "${TARGETARCH}" = 'arm32' ];then TARGETARCH=arm; fi \
     && curl -L https://github.com/just-containers/s6-overlay/releases/download/v${S6_VERSION}/s6-overlay-${TARGETARCH}.tar.gz -o /tmp/s6-overlay.tar.gz \
     && tar -zxvf /tmp/s6-overlay.tar.gz -C / \
 #    && tar -zxvf /tmp/s6-overlay.tar.gz -C / --exclude='./bin' \

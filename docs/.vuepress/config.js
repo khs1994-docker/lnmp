@@ -139,6 +139,7 @@ module.exports = {
           collapsable: false,
           children: [
             '/dockerd',
+            '/dockerfiles',
             '/systemd',
             '/journalctl',
             '/git',

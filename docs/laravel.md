@@ -109,7 +109,7 @@ $ lnmp-docker composer /app/laravel install
 
 ## 运行 Laravel 队列(Queue)
 
-使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md)
+使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md) 或者参考 `config/s6` 在一个容器中同时运行多个服务。
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
@@ -117,7 +117,7 @@ $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 
 ## 运行 Laravel 调度器(Schedule)
 
-使用 **宿主机** 的系统级的计划任务（systemd、crontab 等）执行以下命令即可
+参考上一节队列的说明。
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan schedule:run
