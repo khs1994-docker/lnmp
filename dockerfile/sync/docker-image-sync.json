@@ -8,8 +8,8 @@
     "dest": "node:alpine"
   },
   {
-    "source": "node:14.4.0-alpine",
-    "dest": "node:14.4.0-alpine"
+    "source": "node:14.5.0-alpine",
+    "dest": "node:14.5.0-alpine"
   },
   {
     "source": "golang:1.14.4-alpine",
