@@ -51,6 +51,8 @@ services:
 
   # composer:
   #   << : *php7
+  #   volumes:
+  #     - ./config/composer/auth.json:/tmp/composer/auth.json:delegated
 
   # nginx-unit:
   #   << : *php7

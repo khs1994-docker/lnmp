@@ -158,15 +158,18 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
 # install composer
 
-ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_HOME=/tmp \
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+    COMPOSER_HOME=/tmp/composer \
     COMPOSER_VERSION=1.10.8 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
 RUN --mount=type=bind,from=composer:1.10.8,source=/usr/bin/composer,target=/opt/bin/composer \
-    echo "memory_limit=-1" > "$PHP_INI_DIR/conf.d/memory-limit.ini" \
-    && echo "date.timezone=${PHP_TIMEZONE:-PRC}" > "$PHP_INI_DIR/conf.d/date_timezone.ini" \
+    set -x \
+    && { echo "memory_limit=-1"; \
+         echo "date.timezone=${PHP_TIMEZONE:-PRC}"; \
+       } | tee ${PHP_INI_DIR}/conf.d/php-cli.ini \
  #    && curl -s -f -L -o /tmp/installer.php https://raw.githubusercontent.com/composer/getcomposer.org/cb19f2aa3aeaa2006c0cd69a7ef011eb31463067/web/installer \
  #    && php -r " \
  #       \$signature = '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5'; \
@@ -186,10 +189,13 @@ RUN --mount=type=bind,from=composer:1.10.8,source=/usr/bin/composer,target=/opt/
  && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ \
  \
  # laravel 安装程序
- && composer global require --prefer-dist "laravel/installer" \
+ # && composer global require --prefer-dist "laravel/installer" \
  \
- && ln -sf /tmp/vendor/bin/* /usr/local/bin \
- && rm -rf /tmp/cache /tmp/installer.php /tmp/*.pub /tmp/composer.lock
+ # && ln -sf /tmp/composer/vendor/bin/* /usr/local/bin \
+ && rm -rf /tmp/composer/cache \
+           /tmp/composer/composer.lock \
+           /tmp/installer.php \
+           /tmp/*.pub
 
 WORKDIR /app
 

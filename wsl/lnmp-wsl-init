@@ -20,7 +20,7 @@ if [ -z "$APP_ENV" ];then echo "export APP_ENV=wsl" >> ~/.bashrc; fi
 
 if [ -z "$WSL_HOME" ];then echo "export WSL_HOME=/mnt/c/Users/90621" >> ~/.bashrc; fi
 
-if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bashrc; fi
+if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp/composer" >> ~/.bashrc; fi
 
 if [ -z "$DOCKER_BUILDKIT" ];then echo "export DOCKER_BUILDKIT=1" >> ~/.bashrc; fi
 

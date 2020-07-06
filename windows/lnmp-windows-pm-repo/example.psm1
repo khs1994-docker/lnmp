@@ -50,7 +50,7 @@ Function _getUrl($url, $url_mirror, $VERSION) {
 
   if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
     $url_mirror = iex "echo $url_mirror"
-    Write-Host "==> Try use Download url mirror" -ForegroundColor Green
+    Write-Host "==> Try download from mirror" -ForegroundColor Green
     $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
 
     if ((_getHttpCode $download_url)[0] -eq '4') {

@@ -9,7 +9,7 @@ RUN mkdir /ppm \
       && composer config -g --unset repos.packagist \
       && composer require php-pm/php-pm --no-cache \
       && composer require php-pm/httpkernel-adapter --no-cache \
-      && rm -rf /tmp/cache /ppm/composer*
+      && rm -rf /tmp/composer/cache /ppm/composer*
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
 

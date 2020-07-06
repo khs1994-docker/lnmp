@@ -105,7 +105,7 @@ spec:
           mountPath: /usr/local/etc/php-fpm.d/zz-docker.conf
           subPath: zz-docker.conf
         - name: lnmp-php-conf
-          mountPath: /tmp/config.json
+          mountPath: /tmp/composer/config.json
           subPath: config.json
         - name: lnmp-php-log
           mountPath: /var/log

@@ -30,13 +30,13 @@ services:
       # composer
       - type: volume
         source: composer-cache-data
-        target: /tmp/cache
+        target: /tmp/composer/cache
       - type: bind
         source: ./.devcontainer/composer.config.json
-        target: /tmp/config.json
+        target: /tmp/composer/config.json
       # - type: bind
       #   source: ./.devcontainer/composer.auth.json
-      #   target: /tmp/auth.json
+      #   target: /tmp/composer/auth.json
 
       # php
       - type: bind

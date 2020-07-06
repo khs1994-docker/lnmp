@@ -51,7 +51,7 @@ fi
 
 export COMPOSER_VERSION=1.10.8
 export COMPOSER_ALLOW_SUPERUSER=1
-export COMPOSER_HOME=/tmp
+export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 # export CC=gcc CXX=g++
