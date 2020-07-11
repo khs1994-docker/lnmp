@@ -252,6 +252,6 @@ services:
       - |
         while : ;do sleep 3600; done
     volumes:
-      - /app:/app
+      - ${APP_ROOT}:/app
       - mutagen-wsl2-data:/root
     read_only: true

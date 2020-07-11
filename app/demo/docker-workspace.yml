@@ -25,7 +25,7 @@ services:
 
       # fix me
       # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项
-      # - /app/demo:/app/demo
+      # - /var/lib/app/demo:/app/demo
 
       # composer
       - type: volume

@@ -10,7 +10,7 @@ if (!($args -contains 'new')){
   write-warning "
 Example:
 
-lnmp-laravel-by-composer new [My-project] [VERSION:-5.5]"
+lnmp-laravel-by-composer new [My-project] [VERSION:-7]"
   exit 1
 }
 
@@ -18,14 +18,14 @@ if ($args.Count -lt 2 ){
     write-warning "
 Example:
 
-lnmp-laravel-by-composer new [My-project] [VERSION:-5.5]"
+lnmp-laravel-by-composer new [My-project] [VERSION:-7]"
     exit 1
 }
 
 $LARAVEL_PATH=$args[1]
 
 if (!$args[2]){
-  $VERSION=5.5
+  $VERSION=7
 }else{
   $VERSION=$args[2]
 }

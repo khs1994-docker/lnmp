@@ -40,9 +40,6 @@ services:
   #     - "10001:10001"
   #   # ! add more volumes
   #   volumes:
-  #     - type: volume
-  #       source: laravel_vendor
-  #       target: /app/laravel/vendor
   #     - git-sync-data:/app/git-sync
 
   # nginx:
@@ -81,4 +78,4 @@ services:
       - ./log/php:/var/log/php:delegated
 
 # volumes:
-  # laravel_vendor:
+  # git-sync-data:

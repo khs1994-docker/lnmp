@@ -65,7 +65,7 @@ $(_sudo) apt update && $(_sudo) apt -y install \
 # composer cn mirror
 
 command -v /usr/local/bin/composer \
-  && composer config -g repo.packagist composer https://php.cnpkg.org || true
+  && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ || true
 
 # 命令行补全
 

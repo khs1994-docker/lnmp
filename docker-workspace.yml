@@ -25,7 +25,7 @@ services:
 
       # fix me
       # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项
-      - /app:/app
+      - ${APP_ROOT}:/app
 
       # composer
       - type: volume
@@ -76,13 +76,9 @@ services:
 
 networks:
   backend:
-    external: true
-    name: lnmp_backend
 
 volumes:
   composer-cache-data:
-    external: true
-    name: lnmp_composer-cache-data
   vscode-server:
   vscode-server-insiders:
   vscode-phpls-cache:
@@ -92,5 +88,3 @@ volumes:
     # name: lnmp_laravel_vendor
   npm-global-data:
   npm-cache-data:
-    external: true
-    name: lnmp_npm-cache-data

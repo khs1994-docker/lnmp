@@ -74,7 +74,7 @@ jobs:
       run: |
         echo ::add-path::`pwd`
         echo ::add-path::`pwd`/bin
-        echo ::set-env name=LNMP_PATH::`pwd`
+        #echo ::set-env name=LNMP_PATH::`pwd`
     - name: lnmp-CLI
       run: |
         set -x

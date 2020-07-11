@@ -30,7 +30,7 @@ steps:
     image: khs1994/php:7.4.7-composer-alpine
     commands:
       - pwd
-      - composer config -g repo.packagist composer https://php.cnpkg.org
+      - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
       - composer install -q --ignore-platform-reqs
       # - composer update -q --ignore-platform-reqs
     volumes:

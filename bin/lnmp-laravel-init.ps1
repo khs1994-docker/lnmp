@@ -10,10 +10,6 @@ if (Test-Path .env){
 
 $LARAVEL_CONFIG_PATH="$PsScriptRoot/../app"
 
-if($env:LNMP_PATH){
-  $LARAVEL_CONFIG_PATH="$env:LNMP_PATH/app"
-}
-
 cp $LARAVEL_CONFIG_PATH/.env* .
 
 cp $LARAVEL_CONFIG_PATH/demo/.editorconfig .

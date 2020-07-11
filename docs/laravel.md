@@ -59,53 +59,68 @@ MEMCACHED_HOST=memcached
 
 2. 或者 `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_improving-container-disk-performance) 的说明和笔者提出的方案原理大致相同
 
-编辑 `docker-lnmp.include.yml` 文件，重写默认的 `php` `composer` 配置。
+3. 将项目文件夹放置于 WSL2，使用 vsCode remote WSL (推荐使用)
 
-```yaml
-version: "3.7"
+**在 Docker 设置中启用 WSL2 集成**
 
-services:
-  # 这里增加的条目会重写本项目的默认配置
-  php7:
-    &php7
-    # vendor 目录使用数据卷
-    volumes:
-      # 假设 laravel 目录位于 `./app/laravel/`
-      - type: volume
-        source: laravel_vendor
-        target: /app/laravel/vendor
-      # 假设还有一个 Laravel 应用位于 `./app/laravel2` 与 `./app/laravel` 版本一致（依赖一致），那么可以共用 vendor 数据卷
-      - type: volume
-        source: laravel_vendor
-        target: /app/laravel2/vendor
-      # 假设还有一个 laravel 5.5 应用位于 `./app/laravel5.5`，由于与 `./app/laravel` 版本或依赖不一致，必须使用新的数据卷
-      - type: volume
-        source: laravel_55_vendor
-        target: /app/laravel5.5/vendor
+`Resources` -> `WSL INTEGRATION`-> `Enable integration with additional distros:` -> `开启你所使用的 WSL2 （例如：Ubuntu）`
 
-  composer:
-    << : *php7
-
-# 定义数据卷
-volumes:
-  laravel_vendor:
-  laravel_57_vendor:
-```
-
-修改之后启动
+**安装 vsCode 扩展**
 
 ```bash
-$ lnmp-docker up
+$ code --install-extension ms-vscode-remote.remote-wsl
 ```
 
-在容器中运行 composer ，安装依赖
+**在 .env .env.ps1 中修改变量**
 
 ```bash
-# $ lnmp-docker composer LARAVEL_ROOT COMPOSER_COMMAND
-$ lnmp-docker composer /app/laravel install
+# .env
+APP_ROOT=/root/app
 ```
 
-以后若在 `composer.json` 中添加依赖，重复上述步骤。
+```powershell
+# .env.ps1
+$WSL2_DIST="ubuntu"
+```
+
+**打开 vsCode**
+
+```powershell
+$ lnmp-docker vscode-remote
+```
+
+在 vsCode 中点击菜单栏 `查看` -> `终端`
+
+在出现的终端中执行命令，本例以添加 Laravel UI 组件为例：(请提前将本项目的 `bin` 目录加入到 PATH)
+
+```bash
+# 安装 laravel 到 laravel 文件夹
+# $ lnmp-laravel-by-composer new laravel
+$ cd laravel
+
+$ lnmp-composer require laravel/ui
+
+$ lnmp-php artisan ui vue --auth
+Vue scaffolding installed successfully.
+Please run "npm install && npm run dev" to compile your fresh scaffolding.
+Authentication scaffolding generated successfully.
+
+$ lnmp-npm install
+
+$ lnmp-npm run dev
+
+# 打开 127.0.0.1/register 查看页面
+```
+
+附录：查看本项目的 `bin` 目录在 WSL2 中的路径
+
+在 Windows 终端中执行
+
+```powershell
+$ cd ~/lnmp/bin
+
+$ wsl -d <WSL名称> -- wslpath "'$PWD'"
+```
 
 ## 运行 Laravel 队列(Queue)
 

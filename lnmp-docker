@@ -52,17 +52,17 @@ _cp_only_not_exists(){
 
 export EXEC_CMD_DIR=`pwd`
 
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD"
 else
-    if ! [ -z "${LNMP_PATH}" ];then
-      # 存在环境变量，进入
-      print_info "Use LNMP CLI in $PWD"
-      cd ${LNMP_PATH}
-    else
-      print_error  "You must set system env LNMP_PATH, please see docs/cli.md"
-      exit 1
-    fi
+    print_info "Use LNMP CLI in $PWD"
+    cd ${ScriptRoot}
+fi
+
+if ! [ -f cli/khs1994-robot.enc ];then
+    exit 1
 fi
 
 LNMP_ENV_FILE=".env"
@@ -97,10 +97,6 @@ _cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
 _cp_only_not_exists config/yarn/.env.example config/yarn/.env
 
 _cp_only_not_exists config/registry/config.example.yml config/registry/config.yml
-
-# PHPer command
-
-if [ -z "$LNMP_PATH" ];then print_warning "Try lnmp-* commands? Please see docs/cli.md"; fi
 
 help(){
   echo  -e "
