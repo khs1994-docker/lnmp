@@ -132,8 +132,8 @@
     "dest": "nginx:1.18.0-alpine"
   },
   {
-    "source": "library/nginx:1.19.0-alpine",
-    "dest": "nginx:1.19.0-alpine"
+    "source": "library/nginx:1.19.1-alpine",
+    "dest": "nginx:1.19.1-alpine"
   },
   {
     "source": "library/httpd:alpine",
