@@ -507,9 +507,16 @@ Function satis() {
     Write-Warning "Please modify ${APP_ROOT}/satis/satis.json"
   }
 
-  docker run --rm -it `
-    --mount type=bind, src=${APP_ROOT}/satis, target=/build `
-    --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
+  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
+    wsl -d $WSL2_DIST -- docker run --rm -it `
+      --mount type=bind, src=${APP_ROOT}/satis, target=/build `
+      --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
+  }
+  else {
+    docker run --rm -it `
+      --mount type=bind, src=${APP_ROOT}/satis, target=/build `
+      --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
+  }
 }
 
 Function get_compose_options($compose_files, $isBuild = 0) {
@@ -728,7 +735,12 @@ function _pcit_cp() {
   rm -r -force ${APP_ROOT}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
   docker pull pcit/pcit:frontend
-  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
+  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
+    wsl -d $WSL2_DIST -- docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
+  }
+  else {
+    docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
+  }
 }
 
 function _edit_hosts() {
