@@ -264,6 +264,20 @@ after_success:
   - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
 
   - kubectl get node -o yaml
+
+  - |
+    if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.0' ];then
+      cd /tmp
+      git clone -b master --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+      cd lnmp-k8s
+
+      sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+      cd cli ; (sh generate.sh || true); cd ..
+
+      git add .
+      git commit -m "Update v$CI_KUBERNETES_VERSION config"
+      git push origin master:config -f
+    fi
 env:
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
@@ -304,3 +318,7 @@ jobs:
   allow_failures:
   - env: CI_KUBERNETES_VERSION=1.19.0-rc.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
   - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+
+branches:
+  only:
+    - master
