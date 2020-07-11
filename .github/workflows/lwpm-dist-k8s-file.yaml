@@ -6,7 +6,7 @@ on:
       - bump-k8s
 
 env:
-  LWPM_K8S_VERSION: "1.19.0-beta.2"
+  LWPM_K8S_VERSION: "1.19.0-rc.0"
 
 jobs:
   lwpm-dist-k8s-file:

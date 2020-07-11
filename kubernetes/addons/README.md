@@ -2,7 +2,7 @@
 
 * EFK
 
-* ingress-nginx `0.33.0`
+* ingress-nginx `0.34.0`
 
 * ingress-kong `0.9.0`
 

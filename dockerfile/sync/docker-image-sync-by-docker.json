@@ -1,9 +1,5 @@
 [
   {
-    "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0",
-    "dest": "nginx-ingress-controller:0.33.0"
-  },
-  {
     "source": "gcr.io/google-containers/pause:3.2",
     "dest": "pause:3.2"
   },
@@ -62,5 +58,9 @@
   {
     "source": "mcr.microsoft.com/powershell:preview-alpine-3.11",
     "dest": "powershell:preview-alpine-3.11"
+  },
+  {
+    "source": "us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069",
+    "dest": "nginx-ingress-controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069"
   }
 ]
