@@ -100,9 +100,9 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com 127.0.0.1 localhost
 
 * https://zerossl.com/
 
-## TLSv1.3
+## HTTP3
 
-[原生支持 TLSv1.3](https://github.com/khs1994-website/tls-1.3).
+* https://github.com/khs1994-docker/nginx
 
 # More Information
 

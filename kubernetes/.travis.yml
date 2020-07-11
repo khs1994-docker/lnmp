@@ -264,6 +264,20 @@ after_success:
   - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
 
   - kubectl get node -o yaml
+
+  - |
+    if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.0' ];then
+      git pull origin master
+      git reset --hard origin/master
+
+      sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+      cd cli ; (sh generate.sh || true); cd ..
+
+      git add .
+      git commit -m "Update v$CI_KUBERNETES_VERSION config"
+      git remote set-url origin https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s"
+      git push origin master:config -f
+    fi
 env:
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
