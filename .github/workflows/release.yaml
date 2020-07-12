@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-    - v19.03.*
+    - v18.03.*
 
 name: release
 
