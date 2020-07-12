@@ -72,9 +72,9 @@ Options:
       --storage-opt list                        Storage driver options
       --swarm-default-advertise-addr string     Set default address or interface for swarm advertised address
       --tls                                     Use TLS; implied by --tlsverify
-      --tlscacert string                        Trust certs signed only by this CA (default "/home/khs1994/.docker/ca.pem")
-      --tlscert string                          Path to TLS certificate file (default "/home/khs1994/.docker/cert.pem")
-      --tlskey string                           Path to TLS key file (default "/home/khs1994/.docker/key.pem")
+      --tlscacert string                        Trust certs signed only by this CA (default "/home/travis/.docker/ca.pem")
+      --tlscert string                          Path to TLS certificate file (default "/home/travis/.docker/cert.pem")
+      --tlskey string                           Path to TLS key file (default "/home/travis/.docker/key.pem")
       --tlsverify                               Use TLS and verify the remote
       --userland-proxy                          Use userland proxy for loopback traffic (default true)
       --userland-proxy-path string              Path to the userland proxy binary

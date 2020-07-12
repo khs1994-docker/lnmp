@@ -267,12 +267,16 @@ after_success:
 
   - |
     if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.0' ];then
+      set -x
       cd /tmp
       git clone -b master --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
       cd lnmp-k8s
 
-      sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
-      cd cli ; (sh generate.sh || true); cd ..
+      stty size
+      stty cols 200
+
+      # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+      cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
 
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
