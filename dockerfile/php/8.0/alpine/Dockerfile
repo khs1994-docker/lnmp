@@ -47,13 +47,15 @@ ENV PHP_EXTENSION \
 ENV PECL_EXTENSION \
       # mongodb \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      igbinary \
+      # igbinary \
+      https://github.com/igbinary/igbinary/archive/master.tar.gz \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \
-      yaml \
+      # yaml \
+      https://github.com/andypost/pecl-file_formats-yaml/archive/php8.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org

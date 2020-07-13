@@ -45,6 +45,7 @@ RUN set -ex \
                  xz \
 # https://github.com/docker-library/php/issues/494
                  openssl \
+                 bash \
                  tzdata \
 # ensure www-data user exists
 # RUN set -x \
@@ -399,12 +400,14 @@ ENV PECL_RUN_DEPS \
 ENV PECL_EXTENSION \
       # mongodb \
       # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
-      igbinary \
+      # igbinary \
+      https://github.com/igbinary/igbinary/archive/master.tar.gz \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
       # xdebug-beta \
-      yaml \
+      # yaml \
+      https://github.com/andypost/pecl-file_formats-yaml/archive/php8.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
