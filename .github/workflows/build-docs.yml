@@ -11,6 +11,7 @@ on:
       - '*'
     branches:
       - "19.03"
+  workflow_dispatch:
 
 name: Build Docs
 
@@ -20,6 +21,7 @@ jobs:
     if: |
       contains( github.ref, 'refs/tags/' )
       || contains( github.event.head_commit.message, '[Docs]')
+      || github.event == 'workflow_dispatch'
     steps:
     - uses: actions/checkout@master
       with:
