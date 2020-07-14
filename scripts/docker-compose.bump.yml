@@ -50,7 +50,7 @@ services:
     image: node:14.5.0-alpine
 
   go:
-    image: golang:1.14.4-alpine
+    image: golang:1.14.5-alpine
 
   alpine:
     image: alpine:3.12
