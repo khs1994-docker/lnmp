@@ -24,9 +24,8 @@ $ import-module k8s-helper
 
 下载以下文件并移入 PATH
 
-* https://github.com/containerd/containerd/releases/download/v1.4.0-beta.1/containerd-1.4.0-beta.0-windows-amd64.tar.gz **containerd.exe** **ctr.exe**
+* https://github.com/containerd/containerd/releases/download/v1.4.0-beta.2/containerd-1.4.0-beta.0-windows-amd64.tar.gz **containerd.exe** **ctr.exe** **containerd-shim-runhcs-v1.exe**
 * https://github.com/microsoft/hcsshim/releases **runhcs.exe**
-* https://aksenginee2etestimages.blob.core.windows.net/test-content/windows-cri-containerd.zip **containerd-shim-runhcs-v1.exe**
 
 ```powershell
 $ containerd --register-service
