@@ -14,7 +14,7 @@
 # - vendor:/app/demo/vendor
 
 # 取消注释以下数据卷
-- /app/demo:/app/demo
+- /var/lib/app/demo:/app/demo
 ```
 
 **创建数据卷**

@@ -30,6 +30,7 @@ Subcommands for internal use only:
 	boot             launch a sandbox process (internal use only)
 	debug            shows a variety of debug information
 	gofer            launch a gofer process that serves files over 9P protocol (internal use only)
+	state            shows information about a statefile
 
 
 Use "runsc flags" for a list of top-level flags

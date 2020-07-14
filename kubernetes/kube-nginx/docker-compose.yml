@@ -2,6 +2,6 @@ version: "3.7"
 
 services:
   kube-nginx:
-    image: khs1994/kube-nginx:1.19.0
+    image: khs1994/kube-nginx:1.19.1
     build:
       context: ./

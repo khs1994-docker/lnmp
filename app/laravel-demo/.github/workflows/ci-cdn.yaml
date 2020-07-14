@@ -55,7 +55,7 @@ jobs:
           lnmp-composer config -g --unset repos.packagist
 
           cd ..
-          lnmp-laravel-by-composer new laravel 7.0
+          lnmp-laravel-by-composer new laravel 7
           cp -r laravel-demo/{.dockerignore,Dockerfile.backend} laravel/
           cp -r laravel-demo/.test/* laravel/
           ls -la laravel
@@ -65,6 +65,8 @@ jobs:
           lnmp-composer require league/flysystem
           lnmp-composer require league/flysystem-aws-s3-v3
           lnmp-php artisan ui vue
+          lnmp-npm i
+          lnmp-npm run dev
       - name: Build Frontend
         run: |
           set -x

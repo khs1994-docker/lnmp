@@ -47,6 +47,9 @@ jobs:
     - name: Up
       run: |
         set -x
+        ./lnmp-docker build-config > docker-compose.yml
+        docker-compose config -q
+
         ./lnmp-docker config > docker-compose.yml
         docker-compose config -q
 
@@ -71,7 +74,7 @@ jobs:
       run: |
         echo ::add-path::`pwd`
         echo ::add-path::`pwd`/bin
-        echo ::set-env name=LNMP_PATH::`pwd`
+        #echo ::set-env name=LNMP_PATH::`pwd`
     - name: lnmp-CLI
       run: |
         set -x

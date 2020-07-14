@@ -43,6 +43,7 @@ systemd:
         ExecStartPre=-/usr/bin/env modprobe overlay
         ExecStart=/usr/local/bin/kube-containerd \
                   --config /opt/k8s/etc/kube-containerd/1.4/config.toml
+        Type=notify
         KillMode=process
         Delegate=yes
         LimitNOFILE=1048576

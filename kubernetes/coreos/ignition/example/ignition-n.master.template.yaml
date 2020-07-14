@@ -173,6 +173,9 @@ systemd:
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
         --service-account-key-file=${K8S_ROOT}/certs/sa.pub \
+        --service-account-signing-key-file=${K8S_ROOT}/certs/sa.key \
+        --service-account-issuer=api \
+        --api-audiences=api \
         --authorization-mode=Node,RBAC \
         --runtime-config=api/all=true \
         --enable-admission-plugins=NodeRestriction \

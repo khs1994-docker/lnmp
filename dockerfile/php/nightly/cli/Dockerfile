@@ -70,7 +70,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-fpm-user=www-data \
         # --with-fpm-group=www-data \
         --enable-embed=shared \
-        # --disable-cgi \
+        --disable-cgi \
         --with-gettext=shared \
         --enable-gd=shared \
             --with-freetype \
@@ -83,6 +83,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-xsl=shared \
         --enable-bcmath=shared \
         --enable-pcntl=shared \
+        --with-external-pcre \
         --enable-shmop=shared \
         # --enable-soap=shared \
         --enable-sockets=shared \
@@ -230,8 +231,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           openldap-dev \
           \
           bison \
-          libgcrypt-dev \
-          libgpg-error-dev \
           gnu-libiconv-dev \
           ${APK_DEV_EXTRA:-} \
   \
@@ -252,7 +251,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
     --with-config-file-path="$PHP_INI_DIR" \
     --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
     \
-# make sure invalid --configure-flags are fatal errors intead of just warnings
+# make sure invalid --configure-flags are fatal errors instead of just warnings
     --enable-option-checking=fatal \
     \
 # https://github.com/docker-library/php/issues/439
@@ -263,13 +262,14 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
     --enable-mbstring=shared \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-    --enable-mysqlnd \
+    --enable-mysqlnd=shared \
 # https://wiki.php.net/rfc/libsodium
     --with-sodium=shared \
     \
     --with-curl=shared \
     --with-libedit \
     --with-openssl=shared \
+      --with-system-ciphers \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \
@@ -292,16 +292,19 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            bz2 \
                            calendar \
                            enchant \
-                           exif \
+                           # exif \
                            fileinfo \
-                           gd \
+                           # gd \
                            gettext \
                            gmp \
                            imap \
                            intl \
                            ldap \
-                           mysqli \
                            pcntl \
+                           openssl \
+                           mysqlnd \
+                           # mysqli \
+                           pdo \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
@@ -318,11 +321,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            # xsl \
                            # opcache 已默认安装，需要自行载入
                            opcache \
-                           # 7.4 +
                            ffi \
                            ctype \
                            dom \
-                           pdo \
                            pdo_sqlite \
                            posix \
                            session \
@@ -335,9 +336,12 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
                            ftp \
                            mbstring \
                            curl \
-                           openssl \
                            zip \
+                           # iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
+  && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
+  && echo "extension=gd" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
+  && echo "extension=mysqli" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
       | tr ',' '\n' \
@@ -345,9 +349,16 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       | awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
   )" \
   && apk add --no-cache $runDeps \
+  && strip --strip-all /usr/local/lib/libphp.so \
   \
 #  && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network .build-deps \
+  && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
+           /usr/local/include/php/TSRM/tsrm_config.w32.h \
+           /usr/local/include/php/Zend/zend_config.w32.h \
+           /usr/local/include/php/ext/mysqlnd/config-win.h \
+           /usr/local/include/php/ext/standard/winver.h \
+           /usr/local/php/man \
   \
 # sodium was built as a shared module (so that it can be replaced later if so desired), so let's enable it too (https://github.com/docker-library/php/issues/598)
 # RUN docker-php-ext-enable sodium
@@ -356,13 +367,14 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   \
 # RUN set -ex \
   && rm -rf /usr/src/php \
-  && curl -fsSL -o /usr/bin/pickle \
+  && curl -fsSL -o /usr/local/bin/pickle \
        https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-  && chmod +x /usr/bin/pickle
+  && chmod +x /usr/local/bin/pickle
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       yaml-dev \
+      pcre2-dev \
       zlib-dev
 
 ENV PECL_RUN_DEPS \
@@ -372,13 +384,15 @@ ENV PECL_RUN_DEPS \
 
 ENV PECL_EXTENSION \
       # mongodb \
-      https://github.com/mongodb/mongo-php-library/archive/master.tar.gz \
-      igbinary \
+      # https://github.com/mongodb/mongo-php-driver/archive/master.tar.gz \
+      # igbinary \
+      https://github.com/igbinary/igbinary/archive/master.tar.gz \
       # redis \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz \
       memcached \
       # xdebug-beta \
-      yaml \
+      # yaml \
+      https://github.com/andypost/pecl-file_formats-yaml/archive/php8.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
@@ -400,7 +414,8 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
-      && ls -la $(php-config --extension-dir)
+      && ls -la $(php-config --extension-dir) \
+      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
 
 ENTRYPOINT ["docker-php-entrypoint"]
 

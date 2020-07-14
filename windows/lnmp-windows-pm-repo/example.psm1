@@ -50,7 +50,7 @@ Function _getUrl($url, $url_mirror, $VERSION) {
 
   if ($url_mirror -and ($env:LNMP_CN_ENV -ne "false")) {
     $url_mirror = iex "echo $url_mirror"
-    Write-Host "==> Try use Download url mirror" -ForegroundColor Green
+    Write-Host "==> Try download from mirror" -ForegroundColor Green
     $download_url = $url_mirror.replace('${VERSION}', ${VERSION})
 
     if ((_getHttpCode $download_url)[0] -eq '4') {
@@ -91,7 +91,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     }
   }
 
-  if ($lwpm.scripts.'get-version' -and !$VERSION) {
+  if ($lwpm.scripts.'get-version') {
     try { iex $lwpm.scripts.'get-version' }catch { printError $_.Exception }
   }
 
@@ -135,7 +135,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     $filename = iex "echo $download_filename"
   }
 
-  $unzipDesc = $name
+  if (!$unzipDesc) { $unzipDesc = $name }
 
   if ($lwpm.path) { _exportPath $lwpm.path }
 

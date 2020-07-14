@@ -44,7 +44,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: lnmp-php7
-        image: khs1994/php:7.4.7-fpm-alpine
+        image: khs1994/php:7.4.8-fpm-alpine
         imagePullPolicy: IfNotPresent
         args:
         - php-fpm
@@ -105,7 +105,7 @@ spec:
           mountPath: /usr/local/etc/php-fpm.d/zz-docker.conf
           subPath: zz-docker.conf
         - name: lnmp-php-conf
-          mountPath: /tmp/config.json
+          mountPath: /tmp/composer/config.json
           subPath: config.json
         - name: lnmp-php-log
           mountPath: /var/log

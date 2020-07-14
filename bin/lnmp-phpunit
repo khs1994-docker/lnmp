@@ -28,13 +28,12 @@ if [ "$debug" = 'true' ];then set -x; fi
 
 exec docker run --init -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
-  --mount src=lnmp_composer-cache-data,target=/tmp/cache \
+  --mount src=lnmp_composer-cache-data,target=/tmp/composer/cache \
   --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
   --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
   --network $network \
-  --entrypoint vendor/bin/phpunit \
+  --entrypoint gosu \
   -e APP_ENV=testing \
   -e TZ=${TZ} \
-  --user ${LNMP_USER:-root:root} \
   ${DOCKER_IMAGE}:${TAG} \
-  -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log "$@"
+  ${LNMP_USER:-root:root} vendor/bin/phpunit -d zend_extension=xdebug -d error_log=/var/log/php/php_errors.log "$@"

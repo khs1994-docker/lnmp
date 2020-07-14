@@ -26,18 +26,20 @@ services:
   # php7:
   #   &php7
   #   # ! change php7 default image
-  #   image: username/php:${LNMP_PHP_VERSION:-7.4.7}-fpm-alpine
+  #   image: username/php:${LNMP_PHP_VERSION:-7.4.8}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.7}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.8}-fpm-alpine
+  #   # ! s6
+  #   # image: khs1994/php:${LNMP_PHP_VERSION:-7.4.8}-s6-alpine
+  #   # command: []
+  #   # volumes:
+  #   #   - ./config/s6/services.d:/etc/services.d
   #   # ! open more port
   #   ports:
   #     - "9000"
   #     - "10001:10001"
   #   # ! add more volumes
   #   volumes:
-  #     - type: volume
-  #       source: laravel_vendor
-  #       target: /app/laravel/vendor
   #     - git-sync-data:/app/git-sync
 
   # nginx:
@@ -46,6 +48,8 @@ services:
 
   # composer:
   #   << : *php7
+  #   volumes:
+  #     - ./config/composer/auth.json:/tmp/composer/auth.json:delegated
 
   # nginx-unit:
   #   << : *php7
@@ -59,7 +63,7 @@ services:
 
   swoole:
     << : *default-common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.7}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.8}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php
@@ -74,4 +78,4 @@ services:
       - ./log/php:/var/log/php:delegated
 
 # volumes:
-  # laravel_vendor:
+  # git-sync-data:

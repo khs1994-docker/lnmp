@@ -52,7 +52,7 @@ if [ "$1" = '-S' ];then
 
   exec docker run --init -i ${tty} --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=cached \
-    --mount src=lnmp_composer-cache-data,target=/tmp/cache \
+    --mount src=lnmp_composer-cache-data,target=/tmp/composer/cache \
     --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
     --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
     --network $network \
@@ -72,7 +72,7 @@ fi
 
 exec docker run --init -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=cached \
-  --mount src=lnmp_composer-cache-data,target=/tmp/cache \
+  --mount src=lnmp_composer-cache-data,target=/tmp/composer/cache \
   --mount type=bind,src=$ScriptRoot/../config/php/${PHP_INI:-php.development.ini},target=/usr/local/etc/php/php.ini \
   --mount type=bind,src=$ScriptRoot/../log/php/cli_error.log,target=/var/log/php/php_errors.log \
   --network $network \

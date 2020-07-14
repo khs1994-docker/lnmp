@@ -4,7 +4,8 @@ if [ "$debug" = 'true' ];then set -x; fi
 
 set -e
 
-if [ -z "$LNMP_PATH" ];then echo "Please set system env LNMP_PATH"; exit ; fi
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+LNMP_PATH="$( cd $ScriptRoot/../ && pwd )"
 
 source $LNMP_PATH/.env.example
 

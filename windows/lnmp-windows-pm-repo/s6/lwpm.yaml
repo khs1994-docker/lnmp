@@ -1,0 +1,10 @@
+name: s6
+version: 2.0.0.1
+url: https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-amd64.tar.gz
+scripts:
+  platform-reqs: if(!$_IsLinux){echo $false}
+  install: |
+     sudo tar -zxf $filename -C /
+platform:
+  - architecture: amd64
+    os: linux

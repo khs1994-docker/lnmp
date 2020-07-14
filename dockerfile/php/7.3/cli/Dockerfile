@@ -6,7 +6,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=7.3.19
+ARG PHP_VERSION=7.3.20
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -65,7 +65,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-fpm-group=www-data \
         # https://github.com/docker-library/php/issues/510
         --enable-embed=shared \
-        # --disable-cgi \
+        --disable-cgi \
         --with-gettext=shared \
         --with-gd=shared \
             --with-freetype-dir=/usr \
@@ -109,7 +109,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-snmp=shared \
         --with-mysqli=shared \
         --with-pgsql=shared \
-        --with-iconv=/usr \
+        --with-iconv=shared,/usr \
         --enable-ctype=shared \
         --enable-dom=shared \
         --enable-json=shared \
@@ -140,7 +140,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
 ENV PHP_VERSION=${PHP_VERSION}
-# ENV PHP_URL="https://www.php.net/get/php-7.3.19.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.19.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.3.20.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.20.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -151,8 +151,8 @@ ENV PHP_VERSION=${PHP_VERSION}
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:7.3.19-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.3.20-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.3.20-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -190,7 +190,7 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
           krb5-dev \
           aspell-dev \
           openldap-dev \
-          pcre-dev \
+          pcre2-dev \
           # tidyhtml-dev \
           # net-snmp-dev \
           openldap-dev \
@@ -217,7 +217,7 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
     --with-config-file-path="$PHP_INI_DIR" \
     --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
     \
-# make sure invalid --configure-flags are fatal errors intead of just warnings
+# make sure invalid --configure-flags are fatal errors instead of just warnings
     --enable-option-checking=fatal \
     \
 # https://github.com/docker-library/php/issues/439
@@ -228,13 +228,14 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
     --enable-mbstring=shared \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-    --enable-mysqlnd \
+    --enable-mysqlnd=shared \
 # https://wiki.php.net/rfc/libsodium
     --with-sodium=shared \
     \
     --with-curl=shared \
     --with-libedit \
     --with-openssl=shared \
+      --with-system-ciphers \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     --with-password-argon2 \
@@ -254,16 +255,19 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
                            bz2 \
                            calendar \
                            enchant \
-                           exif \
+                           # exif \
                            fileinfo \
-                           gd \
+                           # gd \
                            gettext \
                            gmp \
                            imap \
                            intl \
                            ldap \
-                           mysqli \
                            pcntl \
+                           openssl \
+                           mysqlnd \
+                           # mysqli \
+                           pdo \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
@@ -284,7 +288,6 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
                            ctype \
                            dom \
                            json \
-                           pdo \
                            pdo_sqlite \
                            phar \
                            posix \
@@ -298,9 +301,12 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
                            ftp \
                            mbstring \
                            curl \
-                           openssl \
                            zip \
+                           iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
+  && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
+  && echo "extension=gd" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
+  && echo "extension=mysqli" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
       | tr ',' '\n' \
@@ -312,6 +318,12 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
   && strip --strip-all /usr/local/lib/libphp7.so \
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && apk del --no-network .build-deps \
+  && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
+           /usr/local/include/php/TSRM/tsrm_config.w32.h \
+           /usr/local/include/php/Zend/zend_config.w32.h \
+           /usr/local/include/php/ext/mysqlnd/config-win.h \
+           /usr/local/include/php/ext/standard/winver.h \
+           /usr/local/php/man \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
   && rm -rf /tmp/pear ~/.pearrc \
@@ -326,6 +338,7 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/src,target=/usr/local/s
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       yaml-dev \
+      pcre2-dev \
       zlib-dev
 
 ENV PECL_RUN_DEPS \
@@ -342,15 +355,15 @@ ENV PECL_EXTENSION \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.3.20-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && curl -fsSL -o /usr/bin/pickle \
+      && curl -fsSL -o /usr/local/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-      && chmod +x /usr/bin/pickle \
+      && chmod +x /usr/local/bin/pickle \
       && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
       && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
@@ -363,7 +376,8 @@ RUN --mount=type=bind,from=php:7.3.19-alpine,source=/usr/local/bin,target=/opt/b
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
-      && ls -la $(php-config --extension-dir)
+      && ls -la $(php-config --extension-dir) \
+      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
 
 WORKDIR /app
 

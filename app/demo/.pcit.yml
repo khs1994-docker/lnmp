@@ -18,11 +18,11 @@ pipeline:
   # install dep
   install:
     # image: composer:${COMPOSER_VERSION}
-    image: khs1994/php:7.2.31-composer-alpine
+    image: khs1994/php:7.2.32-composer-alpine
     shell: bash
     commands:
       - pwd
-      - composer config -g repo.packagist composer https://php.cnpkg.org
+      - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
       # 由于 composer 镜像缺少某些扩展，故忽略这些
       - composer install -q --ignore-platform-reqs
       # - composer update -q --ignore-platform-reqs
@@ -79,7 +79,7 @@ pipeline:
       event: tag
 
   after_success:
-    image: khs1994/php:7.2.31-composer-alpine
+    image: khs1994/php:7.2.32-composer-alpine
     shell: bash
     when:
       status: success
@@ -126,11 +126,11 @@ services:
 
 matrix:
   COMPOSER_VERSION:
-    - 1.8.0
+    - 1.8.1
   PHP_VERSION:
-    - 7.4.7
-    - 7.3.19
-    - 7.2.31
+    - 7.4.8
+    - 7.3.20
+    - 7.2.32
     # - 7.1.33
     # - 7.0.33
     # - 5.6.40

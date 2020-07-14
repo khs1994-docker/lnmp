@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.4.7
+ARG PHP_VERSION=7.4.8
 
 ARG PHP_NUM=74
 
@@ -14,7 +14,7 @@ ARG COMPOSER_VERSION=1.8.5
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-ENV COMPOSER_HOME=/tmp
+ENV COMPOSER_HOME=/tmp/composer
 
 ENV TZ Asia/Shanghai
 

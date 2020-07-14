@@ -10,6 +10,7 @@
 !nginx-unit
 !npm
 !php
+!php8
 !python
 !redis
 !registry
@@ -20,3 +21,4 @@
 !README.md
 !frpc.ini
 !path.md
+!s6

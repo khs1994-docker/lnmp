@@ -103,7 +103,7 @@ _env(){
 }
 
 _composer(){
-  composer config -g repo.packagist composer https://php.cnpkg.org
+  composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 }
 
 _brew

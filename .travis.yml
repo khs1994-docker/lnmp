@@ -15,7 +15,7 @@ env:
   - TZ=Asia/Shanghai
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
-  - LNMP_PATH=/home/travis/build/khs1994-docker/lnmp
+  # - LNMP_PATH=/home/travis/build/khs1994-docker/lnmp
   - LNMP_BRANCH=19.03
 
 # jobs:

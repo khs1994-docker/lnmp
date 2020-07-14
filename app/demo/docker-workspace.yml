@@ -11,7 +11,7 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:7.4.7-composer-alpine
+    image: khs1994/php:7.4.8-composer-alpine
     networks:
       - backend
     volumes:
@@ -25,18 +25,18 @@ services:
 
       # fix me
       # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项
-      # - /app/demo:/app/demo
+      # - /var/lib/app/demo:/app/demo
 
       # composer
       - type: volume
         source: composer-cache-data
-        target: /tmp/cache
+        target: /tmp/composer/cache
       - type: bind
         source: ./.devcontainer/composer.config.json
-        target: /tmp/config.json
+        target: /tmp/composer/config.json
       # - type: bind
       #   source: ./.devcontainer/composer.auth.json
-      #   target: /tmp/auth.json
+      #   target: /tmp/composer/auth.json
 
       # php
       - type: bind
@@ -64,13 +64,13 @@ services:
   composer:
     << : *workspace
     << : *common
-    image: "khs1994/php:7.4.7-composer-alpine"
+    image: "khs1994/php:7.4.8-composer-alpine"
     command: [] # install | update
 
   npm:
     << : *workspace
     << : *common
-    image: node:14.4.0-alpine
+    image: node:14.5.0-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 

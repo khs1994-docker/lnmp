@@ -1,0 +1,6 @@
+/*
+!.gitignore
+!devcontainer.json
+!docker-php.ini
+!.npmrc
+!composer.config.json

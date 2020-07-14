@@ -49,9 +49,9 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://gitee.com/mirrors/php-src
 fi
 
-export COMPOSER_VERSION=1.10.7
+export COMPOSER_VERSION=1.10.8
 export COMPOSER_ALLOW_SUPERUSER=1
-export COMPOSER_HOME=/tmp
+export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 # export CC=gcc CXX=g++
@@ -601,8 +601,8 @@ if [ $# -ne 0 ];then
 
   return
 fi
-
-wsl-php-ext-enable.sh pdo_pgsql \
+set +e
+exts=" pdo_pgsql \
                       xsl \
                       pcntl \
                       shmop \
@@ -630,7 +630,13 @@ wsl-php-ext-enable.sh pdo_pgsql \
                       mysqli \
                       pgsql \
                       gd \
-                      $( test $PHP_NUM -ge "74" && echo ffi )
+                      $( test $PHP_NUM -ge "74" && echo ffi )"
+
+set -e
+for ext in $exts
+do
+  wsl-php-ext-enable.sh $ext || echo "$ext install error" | tee -a ${PHP_INSTALL_LOG}
+done
 
 # config opcache
 
@@ -841,10 +847,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=7.4.7 ; fi
+    PHP_VERSION=7.4.8 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=7.4.7 ; fi
+    PHP_VERSION=7.4.8 ; fi
 
 _get_phpnum $PHP_VERSION
 

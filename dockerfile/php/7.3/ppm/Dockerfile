@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.3.19
+ARG PHP_VERSION=7.3.18
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-composer-alpine as composer
@@ -9,7 +9,7 @@ RUN mkdir /ppm \
       && composer config -g --unset repos.packagist \
       && composer require php-pm/php-pm --no-cache \
       && composer require php-pm/httpkernel-adapter --no-cache \
-      && rm -rf /tmp/cache /ppm/composer*
+      && rm -rf /tmp/composer/cache /ppm/composer*
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
 

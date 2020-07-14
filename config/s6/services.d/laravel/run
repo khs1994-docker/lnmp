@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv sh
+
+if test -f ./setup; then
+    source ./setup
+fi
+
+mkdir -p /var/log/laravel
+chown nobody:nogroup /var/log/laravel
+
+exec php /app/laravel/artisan queue:work redis --sleep=3 --tries=3

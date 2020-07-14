@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: local-path-test
-    image: nginx:1.19.0-alpine
+    image: nginx:alpine
     resources:
       limits:
         memory: "128Mi"

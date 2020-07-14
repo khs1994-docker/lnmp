@@ -10,7 +10,7 @@ if (!($args -contains 'new')){
   write-warning "
 Example:
 
-lnmp-laravel-by-composer new [My-project] [VERSION:-5.5]"
+lnmp-laravel-by-composer new [My-project] [VERSION:-7]"
   exit 1
 }
 
@@ -18,14 +18,14 @@ if ($args.Count -lt 2 ){
     write-warning "
 Example:
 
-lnmp-laravel-by-composer new [My-project] [VERSION:-5.5]"
+lnmp-laravel-by-composer new [My-project] [VERSION:-7]"
     exit 1
 }
 
 $LARAVEL_PATH=$args[1]
 
 if (!$args[2]){
-  $VERSION=5.5
+  $VERSION=7
 }else{
   $VERSION=$args[2]
 }
@@ -39,7 +39,7 @@ docker run -it --rm `
     --mount type=bind,src=$( wslpath $PSScriptRoot/../config/composer/config.json),target=${COMPOSER_HOME}/config.json `
     --env-file $PSScriptRoot/../config/composer/.env `
     -e LARAVEL_PATH=${LARAVEL_PATH} `
-    khs1994/php:7.4.7-composer-alpine `
+    khs1994/php:7.4.8-composer-alpine `
     composer create-project --prefer-dist laravel/laravel=$VERSION.* "$LARAVEL_PATH"
 
 # tar -zxvf .\${LARAVEL_PATH}.tar.gz

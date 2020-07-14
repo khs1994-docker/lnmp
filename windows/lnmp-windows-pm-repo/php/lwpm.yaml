@@ -1,7 +1,7 @@
 name: "php"
 description: "PHP is a popular general-purpose scripting language that is especially suited to web development"
-version: "7.4.7"
-pre-version: "7.4.7"
+version: "7.4.8"
+pre-version: "8.0.0alpha2"
 homepage: "https://www.php.net/"
 bug: "https://www.php.net/"
 github: "php/php-src"
@@ -109,7 +109,7 @@ scripts:
     $VERSION=$stable_version
     }
     if($isPre){
-    $VC_VERSION="nts-Win32-vc15"
+    $VC_VERSION="nts-Win32-vs16"
     $VERSION=$pre_version
     $url="https://windows.php.net/downloads/qa/php-${VERSION}-${VC_VERSION}-x64.zip"
     $unzipDesc="php-pre"

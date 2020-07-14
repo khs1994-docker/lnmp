@@ -1,5 +1,5 @@
-I0407 10:40:15.055044   49969 registry.go:150] Registering EvenPodsSpread predicate and priority function
-I0407 10:40:15.055109   49969 registry.go:150] Registering EvenPodsSpread predicate and priority function
+I0712 12:56:47.864763    4380 registry.go:150] Registering EvenPodsSpread predicate and priority function
+I0712 12:56:47.864813    4380 registry.go:150] Registering EvenPodsSpread predicate and priority function
 The Kubernetes scheduler is a policy-rich, topology-aware,
 workload-specific function that significantly impacts availability, performance,
 and capacity. The scheduler needs to take into account individual and collective

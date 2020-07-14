@@ -58,9 +58,9 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.10.7
+export COMPOSER_VERSION=1.10.8
 export COMPOSER_ALLOW_SUPERUSER=1
-export COMPOSER_HOME=/tmp
+export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
 # export CC=clang CXX=clang
 export CC=gcc CXX=g++
@@ -967,8 +967,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.7
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.7
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.8
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.8
 
 _get_phpnum $PHP_VERSION
 

@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv sh
+
+if test -f ./setup; then
+    source ./setup
+fi
+
+exec php-fpm

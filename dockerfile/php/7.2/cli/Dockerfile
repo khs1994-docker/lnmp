@@ -6,7 +6,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=7.2.31
+ARG PHP_VERSION=7.2.32
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -14,9 +14,9 @@ ARG PHP_EXTENSION_EXTRA
 
 ARG PECL_EXTENSION_EXTRA
 
-ARG APK_EXTRA="libzip"
+ARG APK_EXTRA="libzip libsodium"
 
-ARG APK_DEV_EXTRA="libzip-dev"
+ARG APK_DEV_EXTRA="libzip-dev libsodium-dev argon2-dev"
 
 ARG PHP_EXTRA_CONFIGURE_ARGS_NEW="--with-sodium=shared \
                                   --with-password-argon2"
@@ -72,7 +72,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-fpm-group=www-data \
         # https://github.com/docker-library/php/issues/510
         --enable-embed=shared \
-        # --disable-cgi \
+        --disable-cgi \
         --with-gettext=shared \
         --with-gd=shared \
             --with-freetype-dir=/usr \
@@ -116,7 +116,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
         # --with-snmp=shared \
         --with-mysqli=shared \
         --with-pgsql=shared \
-        --with-iconv=/usr \
+        --with-iconv=shared,/usr \
         --enable-ctype=shared \
         --enable-dom=shared \
         --enable-json=shared \
@@ -148,7 +148,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 
 ENV PHP_VERSION=${PHP_VERSION}
 
-# ENV PHP_URL="https://www.php.net/get/php-7.2.31.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.2.31.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.2.32.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.2.32.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -159,8 +159,8 @@ ENV PHP_VERSION=${PHP_VERSION}
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/src,rw \
-  --mount=type=bind,from=php:7.2.31-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.2.32-alpine,source=/usr/src,target=/usr/local/src,rw \
+  --mount=type=bind,from=php:7.2.32-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -173,10 +173,8 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
           curl-dev \
           libedit-dev \
           openssl-dev \
-          libsodium-dev \
           libxml2-dev \
           sqlite-dev \
-          argon2-dev \
           cyrus-sasl-dev \
           postgresql-dev \
           # libzip-dev \
@@ -218,7 +216,7 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
     --with-config-file-path="$PHP_INI_DIR" \
     --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
     \
-# make sure invalid --configure-flags are fatal errors intead of just warnings
+# make sure invalid --configure-flags are fatal errors instead of just warnings
     --enable-option-checking=fatal \
     \
 # https://github.com/docker-library/php/issues/439
@@ -229,13 +227,14 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
     --enable-mbstring=shared \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
-    --enable-mysqlnd \
+    --enable-mysqlnd=shared \
 # https://wiki.php.net/rfc/libsodium
     # --with-sodium=shared \
     \
     --with-curl=shared \
     --with-libedit \
     --with-openssl=shared \
+      --with-system-ciphers \
     --with-zlib \
 # https://wiki.php.net/rfc/argon2_password_hash (7.2+)
     # --with-password-argon2 \
@@ -255,16 +254,19 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
                            bz2 \
                            calendar \
                            enchant \
-                           exif \
+                           # exif \
                            fileinfo \
-                           gd \
+                           # gd \
                            gettext \
                            gmp \
                            imap \
                            intl \
                            ldap \
-                           mysqli \
                            pcntl \
+                           openssl \
+                           mysqlnd \
+                           # mysqli \
+                           pdo \
                            pdo_mysql \
                            pdo_pgsql \
                            pgsql \
@@ -285,7 +287,6 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
                            ctype \
                            dom \
                            json \
-                           pdo \
                            pdo_sqlite \
                            phar \
                            posix \
@@ -299,9 +300,13 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
                            ftp \
                            mbstring \
                            curl \
-                           openssl \
                            zip \
+                           iconv \
                            ${PHP_EXTENSION_EXTRA:-} \
+# 7.2+ 不再需要 .so 后缀
+  && echo "extension=exif" > $PHP_INI_DIR/conf.d/docker-php-ext-z-exif.ini \
+  && echo "extension=gd" > $PHP_INI_DIR/conf.d/docker-php-ext-z-gd.ini \
+  && echo "extension=mysqli" > $PHP_INI_DIR/conf.d/docker-php-ext-z-mysqli.ini \
   && runDeps="$( \
     scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
       | tr ',' '\n' \
@@ -320,6 +325,12 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/src,target=/usr/local/s
   && { find $(php-config --extension-dir) -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && strip --strip-all /usr/local/lib/libphp7.so \
   && apk del --no-network .build-deps \
+  && rm -rf /usr/local/include/php/TSRM/tsrm_win32.h \
+           /usr/local/include/php/TSRM/tsrm_config.w32.h \
+           /usr/local/include/php/Zend/zend_config.w32.h \
+           /usr/local/include/php/ext/mysqlnd/config-win.h \
+           /usr/local/include/php/ext/standard/winver.h \
+           /usr/local/php/man \
   # 创建日志文件夹
   && ln -sf /dev/stderr /var/log/xdebug-remote.log \
   && rm -rf /usr/src/*
@@ -343,14 +354,14 @@ ENV PECL_EXTENSION \
       yaml \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.2.32-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && curl -fsSL -o /usr/bin/pickle \
+      && curl -fsSL -o /usr/local/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-      && chmod +x /usr/bin/pickle \
+      && chmod +x /usr/local/bin/pickle \
       && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
       && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
@@ -363,7 +374,8 @@ RUN --mount=type=bind,from=php:7.2.31-alpine,source=/usr/local/bin,target=/opt/b
       && rm -rf /tmp/* \
       && rm -rf /usr/local/lib/php/.registry/.channel.pecl.php.net/* \
       && php -m \
-      && ls -la $(php-config --extension-dir)
+      && ls -la $(php-config --extension-dir) \
+      && php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
 
 WORKDIR /app
 

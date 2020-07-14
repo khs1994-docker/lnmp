@@ -52,17 +52,17 @@ _cp_only_not_exists(){
 
 export EXEC_CMD_DIR=`pwd`
 
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
 if [ -f cli/khs1994-robot.enc ];then
     print_info "Use LNMP CLI in LNMP Root $PWD"
 else
-    if ! [ -z "${LNMP_PATH}" ];then
-      # 存在环境变量，进入
-      print_info "Use LNMP CLI in $PWD"
-      cd ${LNMP_PATH}
-    else
-      print_error  "You must set system env LNMP_PATH, please see docs/cli.md"
-      exit 1
-    fi
+    print_info "Use LNMP CLI in $PWD"
+    cd ${ScriptRoot}
+fi
+
+if ! [ -f cli/khs1994-robot.enc ];then
+    exit 1
 fi
 
 LNMP_ENV_FILE=".env"
@@ -81,7 +81,11 @@ print_info "Exec custom scripts"
 
 . ./lnmp-docker-custom-script
 
+_cp_only_not_exists config/php/php.development.ini config/php/php.ini
 _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
+
+_cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
+_cp_only_not_exists config/php8/docker-php.ini.example config/php8/docker-php.ini
 
 _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 _cp_only_not_exists config/composer/.env.example config/composer/.env
@@ -93,10 +97,6 @@ _cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
 _cp_only_not_exists config/yarn/.env.example config/yarn/.env
 
 _cp_only_not_exists config/registry/config.example.yml config/registry/config.yml
-
-# PHPer command
-
-if [ -z "$LNMP_PATH" ];then print_warning "Try lnmp-* commands? Please see docs/cli.md"; fi
 
 help(){
   echo  -e "
@@ -136,8 +136,9 @@ Commands:
   services             List services
   update               Upgrades LNMP [ -f | ]
   upgrade              Upgrades LNMP [ -f | ]
-  vscode-remote        Init vsCode remote development env
+  vscode-remote-init   Init vsCode remote development env
   vscode-remote-run    Run command on vsCode remote workspace
+  vscode-remote-exec   Exec command on vsCode remote workspace
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -1219,14 +1220,21 @@ main() {
     exec docker-compose $options run -w $WORKING_DIR --rm composer "$@"
     ;;
 
-  vscode-remote )
+  vscode-remote-init )
     cp -r vscode-remote/. $EXEC_CMD_DIR/
+    print_info "vsCode remote project init success"
     ;;
 
   vscode-remote-run )
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml run --rm "$@"
+    ;;
+
+  vscode-remote-exec )
+    cd $EXEC_CMD_DIR
+
+    docker-compose -f docker-workspace.yml exec "$@"
     ;;
 
   cleanup )

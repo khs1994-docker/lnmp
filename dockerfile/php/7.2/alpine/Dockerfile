@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.2.31
+ARG PHP_VERSION=7.2.32
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.11 as php
 
@@ -112,9 +112,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
-        && curl -fsSL -o /usr/bin/pickle \
+        && curl -fsSL -o /usr/local/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
-        && chmod +x /usr/bin/pickle \
+        && chmod +x /usr/local/bin/pickle \
 # 安装内置扩展
         && docker-php-source extract \
         && docker-php-ext-configure zip \
@@ -155,7 +155,8 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && ln -sf /dev/stderr /var/log/php-fpm/xdebug-remote.log \
         && chmod -R 777 /var/log/php-fpm \
         && php -m \
-        && ls -la $(php-config --extension-dir)
+        && ls -la $(php-config --extension-dir) \
+        && LD_PRELOAD="/usr/lib/preloadable_libiconv.so php" php -d error_reporting=22527 -d display_errors=1 -r 'var_dump(iconv("UTF-8", "UTF-8//IGNORE", "This is the Euro symbol '\''€'\''."));'
 
 ENV LD_PRELOAD="/usr/lib/preloadable_libiconv.so php"
 

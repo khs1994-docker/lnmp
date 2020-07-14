@@ -12,8 +12,6 @@ source $ScriptRoot/../config/composer/.env
 
 if [ "$debug" = 'true' ];then set -x; fi
 
-LNMP_USER=`id -u`:`id -g`
-
 checkNetwork=`docker network ls -f driver=bridge -f name=lnmp_backend -q`
 
 test -n "$checkNetwork" && network="lnmp_backend" || network="bridge"
@@ -37,9 +35,8 @@ exec docker run -i ${tty} --rm \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --env-file $ScriptRoot/../config/composer/.env \
   --env PATH=${COMPOSER_HOME}/vendor/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-  --user ${LNMP_USER:-root:root} \
   --network $network \
   ${DOCKER_IMAGE}:${TAG} \
-  composer "$@"
+  gosu ${LNMP_USER:-root:root} composer "$@"
 
 # --entrypoint /docker-entrypoint.composer \

@@ -11,7 +11,7 @@ ARG VCS_REF="unknow"
 LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
-ENV NGINX_UNIT_VERSION 1.18.0
+ENV NGINX_UNIT_VERSION master
 
 RUN cd /usr/src \
   && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
@@ -22,6 +22,12 @@ RUN cd /usr/src \
                                   $PHPIZE_DEPS \
                                   openssl-dev \
                                   linux-headers \
+                                  patch \
+  \
+  && echo "apply patch, remove when pr441 merge" \
+  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/441.diff -O \
+  && patch -p1 < 441.diff \
+  \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php80 \

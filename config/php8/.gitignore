@@ -1,0 +1,8 @@
+/*
+!.gitignore
+!default
+!docker-php.ini.example
+!php.development.ini
+!php.production.ini
+!zz-docker*.conf
+!zz-docker.production.conf

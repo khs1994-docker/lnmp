@@ -1,6 +1,7 @@
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 name: Manifest
 
@@ -12,7 +13,8 @@ jobs:
       || contains( github.event.head_commit.message, '[skip actions]')
       || contains( github.event.head_commit.message, '[ci skip]')
       || contains( github.event.head_commit.message, '[actions skip]')
-      || contains( github.event.head_commit.message, '[action skip]')))
+      || contains( github.event.head_commit.message, '[action skip]'))
+      ) || github.event == 'workflow_dispatch'
     strategy:
       matrix:
         os:

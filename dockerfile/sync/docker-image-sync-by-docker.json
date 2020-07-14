@@ -1,15 +1,11 @@
 [
   {
-    "source": "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0",
-    "dest": "nginx-ingress-controller:0.33.0"
-  },
-  {
     "source": "gcr.io/google-containers/pause:3.2",
     "dest": "pause:3.2"
   },
   {
-    "source": "gcr.io/google-containers/coredns:1.6.7",
-    "dest": "coredns:1.6.7"
+    "source": "gcr.io/google-containers/coredns:1.7.0",
+    "dest": "coredns:1.7.0"
   },
   {
     "source": "gcr.io/google-containers/metrics-server-amd64:v0.3.6",
@@ -58,5 +54,13 @@
   {
     "source": "gcr.io/distroless/base@sha256:f79e093f9ba639c957ee857b1ad57ae5046c328998bf8f72b30081db4d8edbe4",
     "dest": "gcr-distroless-base@sha256:f79e093f9ba639c957ee857b1ad57ae5046c328998bf8f72b30081db4d8edbe4"
+  },
+  {
+    "source": "mcr.microsoft.com/powershell:preview-alpine-3.11",
+    "dest": "powershell:preview-alpine-3.11"
+  },
+  {
+    "source": "us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069",
+    "dest": "nginx-ingress-controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069"
   }
 ]

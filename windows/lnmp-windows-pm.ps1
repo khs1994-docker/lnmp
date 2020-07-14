@@ -60,7 +60,7 @@ if ($env:CI -or $CI) {
 }
 
 if ($IsWindows) {
-  . "$PSScriptRoot/common.ps1"
+  . "$PSScriptRoot/../bin/common.ps1"
 }
 
 $EXEC_CMD_DIR = $PWD

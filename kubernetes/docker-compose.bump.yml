@@ -11,7 +11,7 @@ services:
     image: kubernetesui/metrics-scraper:v1.0.4
 
   coredns:
-    image: k8s.gcr.io/coredns:1.6.7
+    image: k8s.gcr.io/coredns:1.7.0
 
   pause:
     image: k8s.gcr.io/pause:3.2
@@ -21,7 +21,7 @@ services:
     image: calico/cni:v3.15.0
 
   ingress_nginx:
-    image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0
+    image: us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller:v0.34.0
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.0

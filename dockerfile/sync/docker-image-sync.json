@@ -8,8 +8,8 @@
     "dest": "node:alpine"
   },
   {
-    "source": "node:14.4.0-alpine",
-    "dest": "node:14.4.0-alpine"
+    "source": "node:14.5.0-alpine",
+    "dest": "node:14.5.0-alpine"
   },
   {
     "source": "golang:1.14.4-alpine",
@@ -60,8 +60,8 @@
     "dest": "mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.5.3",
-    "dest": "mariadb:10.5.3"
+    "source": "library/mariadb:10.5.4",
+    "dest": "mariadb:10.5.4"
   },
   {
     "source": "library/mariadb:10.4.12",
@@ -84,8 +84,8 @@
     "dest": "mongo:latest"
   },
   {
-    "source": "library/mongo:4.2.7",
-    "dest": "mongo:4.2.7"
+    "source": "library/mongo:4.2.8",
+    "dest": "mongo:4.2.8"
   },
   {
     "source": "library/kong:latest",
@@ -132,8 +132,8 @@
     "dest": "nginx:1.18.0-alpine"
   },
   {
-    "source": "library/nginx:1.19.0-alpine",
-    "dest": "nginx:1.19.0-alpine"
+    "source": "library/nginx:1.19.1-alpine",
+    "dest": "nginx:1.19.1-alpine"
   },
   {
     "source": "library/httpd:alpine",

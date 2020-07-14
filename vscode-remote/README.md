@@ -6,6 +6,8 @@
 
 `工具链(PHP)` `vsCode Server` 位于容器, `vsCode` 位于本地
 
+> 本示例 一个项目配置一个 vsCode 远程开发配置文件。或者你可以将整个 /app 作为一个项目，避免繁琐的配置。具体请参考 lnmp 根目录的 `.devcontainer` 文件夹及 `docker-workspace.yml` 文件。
+
 ## 准备
 
 **项目文件夹**

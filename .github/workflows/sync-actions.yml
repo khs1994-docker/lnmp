@@ -6,6 +6,7 @@ on:
       - 19.03
     # paths:
     #   - '/.github/actions/*'
+  workflow_dispatch:
 
 name: Sync Actions
 
@@ -16,6 +17,7 @@ jobs:
       contains( github.ref, 'refs/tags/' )
       || contains( github.event.head_commit.message, '[sync actions]')
       || contains( github.event.head_commit.message, '[sync action]')
+      || github.event == 'workflow_dispatch'
     steps:
       - run: echo "sync continue !"
   sync-actions:

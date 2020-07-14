@@ -4,15 +4,15 @@ Usage:	docker [OPTIONS] COMMAND
 A self-sufficient runtime for containers
 
 Options:
-      --config string      Location of client config files (default "/home/khs1994/.docker")
+      --config string      Location of client config files (default "/home/travis/.docker")
   -c, --context string     Name of the context to use to connect to the daemon (overrides DOCKER_HOST env var and default context set with "docker context use")
   -D, --debug              Enable debug mode
   -H, --host list          Daemon socket(s) to connect to
   -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
       --tls                Use TLS; implied by --tlsverify
-      --tlscacert string   Trust certs signed only by this CA (default "/home/khs1994/.docker/ca.pem")
-      --tlscert string     Path to TLS certificate file (default "/home/khs1994/.docker/cert.pem")
-      --tlskey string      Path to TLS key file (default "/home/khs1994/.docker/key.pem")
+      --tlscacert string   Trust certs signed only by this CA (default "/home/travis/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/home/travis/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/home/travis/.docker/key.pem")
       --tlsverify          Use TLS and verify the remote
   -v, --version            Print version information and quit
 
@@ -43,7 +43,6 @@ Commands:
   commit      Create a new image from a container's changes
   cp          Copy files/folders between a container and the local filesystem
   create      Create a new container
-  deploy      Deploy a new stack or update an existing stack
   diff        Inspect changes to files or directories on a container's filesystem
   events      Get real time events from the server
   exec        Run a command in a running container

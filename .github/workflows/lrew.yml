@@ -34,7 +34,7 @@ jobs:
         echo ::add-path::$(pwd)
         echo ::add-path::$(pwd)\windows
         echo ::add-path::C:\ProgramData\ComposerSetup\bin
-        echo ::set-env name=LNMP_PATH::$(pwd)
+        #echo ::set-env name=LNMP_PATH::$(pwd)
     - name: install composer
       shell: powershell
       run: lnmp-windows-pm.ps1 install composer

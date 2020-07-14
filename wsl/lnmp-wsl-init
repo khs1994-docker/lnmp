@@ -20,7 +20,7 @@ if [ -z "$APP_ENV" ];then echo "export APP_ENV=wsl" >> ~/.bashrc; fi
 
 if [ -z "$WSL_HOME" ];then echo "export WSL_HOME=/mnt/c/Users/90621" >> ~/.bashrc; fi
 
-if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp" >> ~/.bashrc; fi
+if [ -z "$COMPOSER_HOME" ];then echo "export COMPOSER_HOME=/tmp/composer" >> ~/.bashrc; fi
 
 if [ -z "$DOCKER_BUILDKIT" ];then echo "export DOCKER_BUILDKIT=1" >> ~/.bashrc; fi
 
@@ -65,7 +65,7 @@ $(_sudo) apt update && $(_sudo) apt -y install \
 # composer cn mirror
 
 command -v /usr/local/bin/composer \
-  && composer config -g repo.packagist composer https://php.cnpkg.org || true
+  && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ || true
 
 # 命令行补全
 

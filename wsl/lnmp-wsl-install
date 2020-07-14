@@ -51,11 +51,11 @@ GO_PREFIX=/usr/local
 
 GO_VERSION=1.14.4
 
-NODE_VERSION=14.4.0
+NODE_VERSION=14.5.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.4.7
+PHP_VERSION=7.4.8
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -107,9 +107,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (7.4.7)
+  # default install latest php version (7.4.8)
 
-  PHP_VERSION=${1:-7.4.7}
+  PHP_VERSION=${1:-7.4.8}
 
   case ${PHP_VERSION} in
     5.6.* )
@@ -286,7 +286,7 @@ php -i | grep .ini
 
 # composer cn mirror
 
-command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://php.cnpkg.org || true
+command -v /usr/local/bin/composer && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/ || true
 
 }
 

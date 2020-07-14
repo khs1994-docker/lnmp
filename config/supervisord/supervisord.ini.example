@@ -31,3 +31,15 @@ startsecs=60
 ; numprocs=8
 ; redirect_stderr=true
 ; stdout_logfile=/var/log/supervisord/laravel_work.log
+
+; laravel horizon
+; https://laravel.com/docs/7.x/horizon
+; [program:horizon]
+; process_name=%(program_name)s
+; command=php /app/laravel/artisan horizon
+; autostart=true
+; autorestart=true
+; user=root
+; redirect_stderr=true
+; stdout_logfile=/var/log/supervisord/laravel_horizon.log
+; stopwaitsecs=3600

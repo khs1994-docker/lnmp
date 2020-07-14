@@ -11,6 +11,7 @@ ExecStartPre=-/sbin/modprobe overlay
 ExecStart=/opt/k8s/bin/kube-containerd \
           --config /etc/kubernetes/kubeadm-containerd-config.toml
 
+Type=notify
 KillMode=process
 Delegate=yes
 LimitNOFILE=1048576
