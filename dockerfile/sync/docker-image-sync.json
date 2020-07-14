@@ -44,8 +44,8 @@
     "dest": "mysql:latest"
   },
   {
-    "source": "library/mysql:8.0.20",
-    "dest": "mysql:8.0.20"
+    "source": "library/mysql:8.0.21",
+    "dest": "mysql:8.0.21"
   },
   {
     "source": "library/mysql:5.7.30",

@@ -14,3 +14,4 @@
 
 * [NGINX `1.19.1`](https://nginx.org/en/CHANGES)
 * [PHP `7.4.8` `7.3.20` `7.2.32`](https://www.php.net/ChangeLog-7.php#7.4.8)
+* [MySQL `8.0.21`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-21.html)
