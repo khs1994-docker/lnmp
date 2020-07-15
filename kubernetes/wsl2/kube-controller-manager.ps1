@@ -6,7 +6,7 @@ $wsl_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' 
 $K8S_CM_HOST=$wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
+$WINDOWS_HOME_ON_WSL2=wsl -d wsl-k8s -- wslpath "'$HOME'"
 
 $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
 --profiling `

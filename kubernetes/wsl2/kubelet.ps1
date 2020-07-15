@@ -6,8 +6,8 @@ $wsl_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' 
 $NODE_NAME="wsl2"
 # $KUBE_APISERVER='https://x.x.x.x:16443'
 # $K8S_ROOT="/opt/k8s"
-$K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl -d wsl-k8s pwd"
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
+$K8S_WSL2_ROOT=wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_ON_WSL2=wsl -d wsl-k8s -- wslpath "'$HOME'"
 
 (Get-Content $PSScriptRoot/conf/kubelet.config.yaml.temp) `
     -replace "##NODE_NAME##",$NODE_NAME `

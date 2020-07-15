@@ -6,8 +6,8 @@ $wsl_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' 
 $K8S_S_HOST=$wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl -d wsl-k8s pwd"
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
+$K8S_WSL2_ROOT=wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_ON_WSL2=wsl -d wsl-k8s -- wslpath "'$HOME'"
 
 $kube_scheduler_version_string=wsl -d wsl-k8s /wsl/wsl-k8s-data/k8s/bin/kube-scheduler --version | select-string v1.1
 $kube_scheduler_version=($kube_scheduler_version_string).line.split()[1].Trim('v').split('-')[0]

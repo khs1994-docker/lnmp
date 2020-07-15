@@ -15,7 +15,7 @@
 . $PSScriptRoot/../.env.example.ps1
 . $PSScriptRoot/../.env.ps1
 
-$WINDOWS_HOME_ON_WSL=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
+$WINDOWS_HOME_ON_WSL=wsl -d wsl-k8s -- wslpath "'$HOME'"
 
 wsl -d wsl-k8s -- mkdir -p ~/.kube
 wsl -d wsl-k8s -- cp $WINDOWS_HOME_ON_WSL/.kube/config ~/.kube/config

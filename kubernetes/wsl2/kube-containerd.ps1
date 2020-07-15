@@ -1,8 +1,8 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl -d wsl-k8s pwd"
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
+$K8S_WSL2_ROOT=wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_ON_WSL2=wsl -d wsl-k8s -- wslpath "'$HOME'"
 
 wsl -d wsl-k8s -u root -- mkdir -p ${K8S_ROOT}/etc/cni/net.d
 
