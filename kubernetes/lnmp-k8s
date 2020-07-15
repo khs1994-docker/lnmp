@@ -208,7 +208,14 @@ _kubernetes_server_install(){
     test -n "${2}" && local GOARCH=$2
     test -n "${3}" && local TYPE=$3
     test -n "${4}" && local KUBERNETES_VERSION=$4
-    tar -zxvf kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
+
+    tar -zxvf \
+      kubernetes-${TYPE:-server}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz \
+      --exclude "kubernetes/LICENSES" \
+      --exclude "kubernetes/server/bin/*.docker_tag" \
+      --exclude "kubernetes/server/bin/*.tar" \
+      --exclude "kubernetes/kubernetes-src.tar.gz"
+
     # pwd => kubernetes-release/release/
     mv kubernetes v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/
   }

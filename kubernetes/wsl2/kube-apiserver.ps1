@@ -8,8 +8,7 @@ $KUBE_APISERVER_HOST=$wsl_ip
 # wsl1
 # $KUBE_APISERVER_HOST="x.x.x.x"
 
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
-
+$WINDOWS_HOME_ON_WSL2=wsl -d wsl-k8s -- wslpath "'$HOME'"
 # $K8S_ROOT='/opt/k8s'
 
 $command=wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `

@@ -9,8 +9,8 @@ $wsl_ip=wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' 
     -replace "##K8S_ROOT##",$K8S_ROOT `
   | Set-Content $PSScriptRoot/conf/kube-proxy.config.yaml
 
-$K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot ; wsl -d wsl-k8s pwd"
-$WINDOWS_HOME_ON_WSL2=powershell -c "cd $HOME ; wsl -d wsl-k8s pwd"
+  $K8S_WSL2_ROOT=wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+  $WINDOWS_HOME_ON_WSL2=wsl -d wsl-k8s -- wslpath "'$HOME'"
 
 # WARNING: all flags other than
 # --config,

@@ -7,7 +7,7 @@ Function printInfo(){
 Function _cp_conf(){
   printInfo "Copy WSL2 supervisor conf file to WSL2 /etc/supervisor.d/ ..."
   # 复制配置文件
-  $K8S_WSL2_ROOT=powershell -c "cd $PSScriptRoot/../ ; wsl -d wsl-k8s pwd"
+  $K8S_WSL2_ROOT=wsl -d wsl-k8s -- wslpath "'$PSScriptRoot/..'"
   wsl -d wsl-k8s -u root -- cp ${K8S_WSL2_ROOT}/supervisor.d/*.ini /etc/supervisor.d/
 }
 
