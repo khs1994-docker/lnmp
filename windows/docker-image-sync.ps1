@@ -94,8 +94,19 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
   }
 }
 
-Function _sync() {
-  $source_registry, $source_image, $source_ref, $source_image_with_digest = imageParser $source
+Function _sync($source, $dest, $config) {
+  if ($config.registry) {
+    write-host "==> skip parse source image, read from config"
+
+    $source_registry = $item.registry
+    $source_image = $item.image
+    $source_ref = $item.ref
+    $source_image_with_digest = $item.digest
+  }
+  else {
+    $source_registry, $source_image, $source_ref, $source_image_with_digest = imageParser $source
+  }
+
   $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false
 
   if ($source_image_with_digest) { $source_ref = $source_image_with_digest }
@@ -387,5 +398,5 @@ foreach ($item in $sync_config) {
 
   write-host "==> [sync start] Sync [ $source ] to [ $dest ]" -ForegroundColor Blue
 
-  _sync $source $dest
+  _sync $source $dest $item
 }

@@ -1,4 +1,4 @@
-# You Can overwrite this file in .env.ps1
+# You can overwrite this file in .env.ps1
 
 $CI_HOST="ci.khs1994.com:10000"
 

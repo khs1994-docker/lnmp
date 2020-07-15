@@ -12,8 +12,8 @@
     "dest": "node:14.5.0-alpine"
   },
   {
-    "source": "golang:1.14.4-alpine",
-    "dest": "golang:1.14.4-alpine"
+    "source": "golang:1.14.5-alpine",
+    "dest": "golang:1.14.5-alpine"
   },
   {
     "source": "golang:alpine",
@@ -96,12 +96,12 @@
     "dest": "kong:alpine"
   },
   {
-    "source": "library/kong:2.0.4",
-    "dest": "kong:2.0.4"
+    "source": "library/kong:2.0.5",
+    "dest": "kong:2.0.5"
   },
   {
-    "source": "library/kong:2.0.4-alpine",
-    "dest": "kong:2.0.4-alpine"
+    "source": "library/kong:2.0.5-alpine",
+    "dest": "kong:2.0.5-alpine"
   },
   {
     "source": "library/redis:alpine",

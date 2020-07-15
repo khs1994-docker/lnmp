@@ -839,6 +839,7 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
     # cd $PSScriptRoot
     cd $APP_ROOT
     $APP_ROOT = $PWD
+    printInfo "APP_ROOT is $APP_ROOT"
   }
   cd $PSScriptRoot
 }
@@ -850,11 +851,10 @@ else {
   else {
     cd $APP_ROOT
     $APP_ROOT = $PWD
+    printInfo "APP_ROOT is $APP_ROOT"
   }
   cd $EXEC_CMD_DIR
 }
-
-printInfo "APP_ROOT is $APP_ROOT"
 
 $env:APP_ROOT = $APP_ROOT
 
