@@ -743,6 +743,19 @@ function _pcit_cp() {
   }
 }
 
+function convert_args_to_string_if_use_wsl2() {
+  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '0') {
+    return $args
+  }
+
+  $string = ""
+  foreach ($item in $args) {
+    $string += " $item "
+  }
+
+  return $string
+}
+
 function _edit_hosts() {
   Start-Process -FilePath "notepad.exe" `
     -ArgumentList "C:\Windows\System32\drivers\etc\hosts" `
@@ -783,6 +796,19 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
   $env:USE_WSL2_DOCKER_COMPOSE = '1'
 
   printInfo "Use WSL2 compose"
+
+  $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
+
+  wsl -d ${WSL2_DIST} -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
+
+  wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
+
+  if (!$?) {
+    printInfo "please check WSL2($WSL2_DIST) /etc/wsl.conf`n`n[interop]`nenabled=true"
+
+    cd $EXEC_CMD_DIR
+    exit 1
+  }
 
   function docker-compose() {
     if ($args[0] -eq '--version') {
@@ -841,7 +867,7 @@ else {
   $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis', 'phpmyadmin'
 }
 
-if ($env:USE_WSL2_DOCKER_COMPOSE) {
+if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
   $LNMP_SERVICES_STRING = ""
   foreach ($item in $LNMP_SERVICES) {
     $LNMP_SERVICES_STRING += " $item"
@@ -932,7 +958,7 @@ switch -regex ($command) {
 
   "^build$" {
     if ($other) {
-      $services = $other
+      $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
@@ -962,7 +988,7 @@ switch -regex ($command) {
     init
 
     if ($other) {
-      $services = $other
+      $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
@@ -980,7 +1006,7 @@ switch -regex ($command) {
 
   build-push {
     if ($other) {
-      $services = $other
+      $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
@@ -997,7 +1023,7 @@ switch -regex ($command) {
 
   build-pull {
     if ($other) {
-      $services = $other
+      $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
@@ -1042,7 +1068,7 @@ switch -regex ($command) {
     init
 
     if ($other) {
-      $services = $other
+      $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
@@ -1060,7 +1086,7 @@ switch -regex ($command) {
   "^pull$" {
 
     if ($other) {
-      $services = $other
+      $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}

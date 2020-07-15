@@ -10,7 +10,7 @@ services:
 
   drone-server:
     << : *default-common
-    image: drone/drone:${CI_DRONE_VERSION:-1.8.1}
+    image: drone/drone:${CI_DRONE_VERSION:-1.9.0}
     volumes:
       - drone-data-v1:/data:rw
     networks:
