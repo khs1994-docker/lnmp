@@ -19,6 +19,7 @@ services:
       - vscode-server-insiders:/root/.vscode-server-insiders
       - vscode-phpls-cache:/root/.phpls
       # fix me
+      # linux/macOS
       # - ./app:/app
       # fix me 将依赖挂载到数据卷
       # - vendor:/app/demo/vendor
@@ -56,6 +57,7 @@ services:
     ports:
       # xdebug port
       - 9001:9001
+    restart: always
     command: /bin/sh -c "while sleep 1000; do :; done"
     environment:
       APP_ENV: development

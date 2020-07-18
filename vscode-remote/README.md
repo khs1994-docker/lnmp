@@ -25,6 +25,10 @@ $ docker volume create lnmp_npm-cache-data
 
 2. `vsCode` 安装 `Remote Development` 扩展
 
+```bash
+$ code --install-extension ms-vscode-remote.remote-containers
+```
+
 3. 适当调大 Docker 桌面版内存(建议 `4GB`)
 
 4. 启动 `khs1994-docker/lnmp`

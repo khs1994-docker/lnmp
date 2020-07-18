@@ -182,6 +182,8 @@ Function _cp_init_file() {
 
   _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
 
+  _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
+
   _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
   _cp_only_not_exists config/php8/docker-php.ini.example config/php8/docker-php.ini
@@ -286,7 +288,7 @@ Function check_docker_version() {
 Function init() {
   logs
   # git submodule update --init --recursive
-  printInfo 'Init is SUCCESS'
+  printInfo 'Init success'
   #@custom
   __lnmp_custom_init
 }
@@ -331,10 +333,10 @@ Commands:
   services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
-  vscode-remote        Open WSL2 app path on vscode
-  vscode-remote-init   Init vsCode remote development env
-  vscode-remote-run    Run command on vsCode remote workspace
-  vscode-remote-exec   Exec command on vsCode remote workspace
+  code                 Open WSL2 app path on vscode wsl remote
+  code-init            Init vsCode remote development env
+  code-run             Run command on vsCode remote workspace (e.g. ./lnmp-docker code-run -w /app/laravel composer install)
+  code-exec            Exec command on vsCode remote workspace (e.g. ./lnmp-docker code-exec -w /app/laravel workspace composer install)
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -581,7 +583,7 @@ Function get_compose_options($compose_files, $isBuild = 0) {
 
   $options += " --env-file $LNMP_ENV_FILE "
 
-  $options += " -f docker-lnmp.include.yml "
+  $options += " -f docker-lnmp.include.yml -f docker-workspace.yml"
 
   if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
     return $options
@@ -1646,7 +1648,7 @@ Example: ./lnmp-docker composer /app/demo install
     start-process "curl.exe" -ArgumentList "-L", "https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe", "-o", "$DIST" -Verb Runas -wait -WindowStyle Hidden
   }
 
-  "^vscode-remote-init$" {
+  "^code-init$" {
     cd $EXEC_CMD_DIR
 
     Copy-Item -r $PSScriptRoot/vscode-remote/*
@@ -1654,19 +1656,19 @@ Example: ./lnmp-docker composer /app/demo install
     printInfo "vsCode remote project init success"
   }
 
-  "^vscode-remote-run$" {
+  "^code-run$" {
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml run --rm $other
   }
 
-  "^vscode-remote-exec$" {
+  "^code-exec$" {
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml exec $other
   }
 
-  "^vscode-remote$" {
+  "^code$" {
     code --remote wsl+$WSL2_DIST $APP_ROOT
   }
 
