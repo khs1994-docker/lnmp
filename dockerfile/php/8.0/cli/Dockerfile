@@ -367,7 +367,8 @@ RUN --mount=type=bind,from=php:8.0.0alpha2-alpine,source=/usr/local/bin,target=/
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
          # xdebug \
-         https://github.com/xdebug/xdebug/archive/master.tar.gz \
+         # https://github.com/xdebug/xdebug/archive/master.tar.gz \
+         https://github.com/xdebug/xdebug/archive/b9f3c6fefb98b9e84c6257d2c68a76dc1ee224e3.tar.gz \
 # https://github.com/tideways/php-xhprof-extension.git
          https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz \
          -n --defaults --no-write --strip --cleanup \
