@@ -74,7 +74,7 @@ fi
 print_info "Load env file [ $LNMP_ENV_FILE ]"
 
 _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
-
+_cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
 _cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
 print_info "Exec custom scripts"

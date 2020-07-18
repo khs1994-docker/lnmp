@@ -793,11 +793,20 @@ else {
 }
 
 $env:USE_WSL2_DOCKER_COMPOSE = '0'
+$env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
 
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
   $env:USE_WSL2_DOCKER_COMPOSE = '1'
 
-  printInfo "Use WSL2 compose"
+  docker info > $null 2>&1
+
+  if ($?) {
+    printInfo "Use WSL2 compose"
+  }
+  else {
+    $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '1'
+    printInfo "Use WSL2 compose, but docker not running"
+  }
 
   $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
 
@@ -814,6 +823,9 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
   function docker-compose() {
     if ($args[0] -eq '--version') {
+      if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
+        return docker-compose.exe --version
+      }
       return wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose --version"
     }
     wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose $args"
