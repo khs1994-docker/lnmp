@@ -24,7 +24,7 @@ services:
       - type: volume
         source: mongodb-data
         target: /data/db
-      - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log:delegated
+      - ./log/mongodb/mongo.log:/var/log/mongodb/mongo.log:cached
     ports:
       - "${LNMP_MONGODB_PORT:-127.0.0.1:27017}:27017"
     command: ["mongod","--config","/etc/mongod.conf"]

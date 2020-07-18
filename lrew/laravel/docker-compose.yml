@@ -32,7 +32,7 @@ services:
       # php.ini override
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
-      - ./log/php:/var/log/php:delegated
+      - ./log/php:/var/log/php:cached
       - ./lrew/laravel/.env.development:/app/laravel-docker/.env.development
       - laravel_cache_views:/app/laravel-docker/storage/framework/views
       - type: volume

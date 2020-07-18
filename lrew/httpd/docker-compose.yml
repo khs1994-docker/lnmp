@@ -26,7 +26,7 @@ services:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf:cached
       - ./config/${LNMP_HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d:cached
-      - ./log/httpd:/usr/local/apache2/logs:delegated
+      - ./log/httpd:/usr/local/apache2/logs:cached
     working_dir: /app
     networks:
       - frontend

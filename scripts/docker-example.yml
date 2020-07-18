@@ -212,12 +212,13 @@ services:
         target: /app
         volume:
           nocopy: true
-        read_only: true
         bind:
           propagation: rprivate
       - type: bind
         source: ${APP_ROOT:-./app}
         target: /app
+        consistency: consistent
+        read_only: false
       - type: tmpfs
         target: /app
         tmpfs:

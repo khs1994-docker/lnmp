@@ -49,7 +49,7 @@ services:
   # composer:
   #   << : *php7
   #   volumes:
-  #     - ./config/composer/auth.json:/tmp/composer/auth.json:delegated
+  #     - ./config/composer/auth.json:/tmp/composer/auth.json:cached
 
   # nginx-unit:
   #   << : *php7
@@ -75,7 +75,7 @@ services:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
-      - ./log/php:/var/log/php:delegated
+      - ./log/php:/var/log/php:cached
 
 # volumes:
   # git-sync-data:

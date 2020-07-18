@@ -38,7 +38,7 @@ services:
       - type: volume
         source: mysql-data
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
-      - ./log/mysql:/var/log/mysql:delegated
+      - ./log/mysql:/var/log/mysql:cached
       - ./scripts/backup/mysql:/backup
       - type: tmpfs
         target: /run
@@ -64,7 +64,7 @@ services:
         target: /data
         volume:
           nocopy: true
-      - ./log/redis:/var/log/redis:delegated
+      - ./log/redis:/var/log/redis:cached
       - type: tmpfs
         target: /run
     # set config by command
@@ -100,7 +100,7 @@ services:
     << : *default-common
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-fpm-alpine"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:delegated
       # fpm config
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
@@ -108,9 +108,9 @@ services:
       # php.ini override
       - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
-      - ./log/php:/var/log/php:delegated
-      - ./log/supervisord.log:/var/log/supervisord.log:delegated
-      - ./log/supervisord:/var/log/supervisord:delegated
+      - ./log/php:/var/log/php:cached
+      - ./log/supervisord.log:/var/log/supervisord.log:cached
+      - ./log/supervisord:/var/log/supervisord:cached
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
@@ -140,7 +140,7 @@ services:
     << : *default-common
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0alpha2}-fpm-alpine"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:delegated
       # fpm config
       - ./config/php8/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
@@ -148,9 +148,9 @@ services:
       # php.ini override
       - ./config/php8/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
-      - ./log/php8:/var/log/php:delegated
-      - ./log/supervisord.log:/var/log/supervisord.log:delegated
-      - ./log/supervisord:/var/log/supervisord:delegated
+      - ./log/php8:/var/log/php:cached
+      - ./log/supervisord.log:/var/log/supervisord.log:cached
+      - ./log/supervisord:/var/log/supervisord:cached
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo
@@ -179,12 +179,12 @@ services:
     restart: "no"
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-composer-alpine"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:delegated
       - type: volume
         source: composer-cache-data
         target: /tmp/composer/cache
-      - ./config/composer/config.json:/tmp/composer/config.json:delegated
-      # - ./config/composer/auth.json:/tmp/composer/auth.json:delegated
+      - ./config/composer/config.json:/tmp/composer/config.json:cached
+      # - ./config/composer/auth.json:/tmp/composer/auth.json:cached
 
   # https://docs.docker.com/config/containers/multi-service_container/
   # http://supervisord.org/running.html
@@ -230,9 +230,9 @@ services:
       - type: bind
         source: ./config/${LNMP_NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
+      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:delegated
       - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:delegated
+      - ./log/nginx:/var/log/nginx:cached
       - type: tmpfs
         target: /run
     working_dir: /app

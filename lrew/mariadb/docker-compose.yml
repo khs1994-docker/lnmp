@@ -36,7 +36,7 @@ services:
       - type: volume
         source: mariadb-data
         target: ${LNMP_MARIADB_DATA:-/var/lib/mysql}
-      - ./log/mariadb:/var/log/mysql:delegated
+      - ./log/mariadb:/var/log/mysql:cached
       - ./scripts/backup/mariadb:/backup
     command:
       - mysqld

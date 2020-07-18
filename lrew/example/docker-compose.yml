@@ -27,7 +27,7 @@ services:
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/config/${LNMP_EXAMPLE_CONF:-example.conf}:/usr/local/etc/example.conf:cached
-      - ./log/example:/usr/local/apache2/logs:delegated
+      - ./log/example:/usr/local/apache2/logs:cached
     # env_file:
     #   - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env.example
     #   - ./vendor/${LREW_EXAMPLE_VENDOR:-lrew}/example/.env
