@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   restart: always
   env_file: ./cli/timezone.env
   networks:
@@ -11,15 +11,15 @@ x-common:
   #   - ${DNS:-114.114.114.114}
 
 x-common-label:
-  &default-common-label
+  &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   example:
-    << : *default-common
-    << : *default-common-label
+    << : *common
+    << : *common-label
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/example:${LNMP_EXAMPLE_VERSION:-x.y.z}-alpine"
     # ports:
     #   - "${LNMP_EXAMPLE_HTTPS_PORT:-0.0.0.0:443}:443"

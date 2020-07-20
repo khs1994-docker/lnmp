@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   restart: always
   networks:
     - backend
@@ -9,7 +9,7 @@ x-common:
 services:
 
   drone-server:
-    << : *default-common
+    << : *common
     image: drone/drone:${CI_DRONE_VERSION:-1.9.0}
     volumes:
       - drone-data-v1:/data:rw
@@ -26,7 +26,7 @@ services:
     #     target: /var/run/docker.sock
 
   drone-docker-runner:
-    << : *default-common
+    << : *common
     image: drone/drone-runner-docker:1
     depends_on:
       - drone-server
@@ -49,7 +49,7 @@ services:
       # - DRONE_HTTP_PROTO=http
 
   gogs:
-    << : *default-common
+    << : *common
     image: gogs/gogs:latest
     ports:
       - "${CI_HOST:?CI_HOST}:${CI_GOGS_SSH_PORT}:22"
@@ -63,7 +63,7 @@ services:
       - ./config/gogs/app.ini:/data/gogs/conf/app.ini:rw
 
   registry:
-    << : *default-common
+    << : *common
     image: registry:latest
     ports:
       - "${CI_HOST:?CI_HOST}:${CI_REGISTRY_PORT:-5000}:5000"
@@ -75,7 +75,7 @@ services:
       - registry-data:/var/lib/registry:rw
 
   mysql:
-    << : *default-common
+    << : *common
     image: mysql:${CI_MYSQL_VERSION:-8.0.21}
     env_file: secrets/mysql.env
     volumes:
@@ -84,13 +84,13 @@ services:
     command: ["mysqld","--character-set-server=utf8mb4","--default-authentication-plugin=mysql_native_password"]
 
   redis:
-    << : *default-common
+    << : *common
     image: redis:${CI_REDIS_VERSION:-6.0.5}-alpine
     volumes:
       - redis-data:/data
 
   nginx:
-    << : *default-common
+    << : *common
     # image: khs1994/nginx:${CI_NGINX_VERSION:-1.19.1}-alpine
     image: nginx:${CI_NGINX_VERSION:-1.19.1}-alpine
     networks:

@@ -1,12 +1,12 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   example:
-    << : *default-common
+    << : *common
     image: example:${LNMP_EXAMPLE_VERSION:-x.y.z}-alpine

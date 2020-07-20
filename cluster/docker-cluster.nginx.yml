@@ -7,7 +7,7 @@ version: "3.7"
 #
 
 x-common:
-  &default-common
+  &common
   # image: "khs1994/nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine"
   image: "nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine"
   restart: always
@@ -24,7 +24,7 @@ x-common:
 services:
 
   nginx_main:
-    << : *default-common
+    << : *common
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
@@ -48,7 +48,7 @@ services:
 
   nginx-1:
     &nginx_node
-    << : *default-common
+    << : *common
     volumes:
       - type: bind
         source: ./config/${LNMP_NGINX_CONF_D:-nginx}
@@ -59,8 +59,8 @@ services:
 
   nginx-2:
     << : *nginx_node
-    << : *default-common
+    << : *common
 
   nginx-3:
     << : *nginx_node
-    << : *default-common
+    << : *common

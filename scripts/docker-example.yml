@@ -9,7 +9,7 @@ version: "3.7"
 # @see https://docs.docker.com/compose/compose-file/
 
 x-common:
-  &default-common
+  &common
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
 
@@ -20,7 +20,7 @@ x-labels:
 
 services:
   redis:
-    << : *default-common
+    << : *common
     # build: ./dir
     build: # no Swarm mode
       << : *default-labels

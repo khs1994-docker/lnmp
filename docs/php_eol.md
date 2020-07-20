@@ -9,7 +9,7 @@ services:
     - php5
 
   php5:
-    << : *default-common
+    << : *common
     restart: ${LNMP_RESTART:-always}
     env_file: ./cli/timezone.env
     build:

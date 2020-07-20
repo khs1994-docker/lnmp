@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   restart: always
   env_file: ./cli/timezone.env
   networks:
@@ -10,14 +10,14 @@ x-common:
   #   - ${DNS:-114.114.114.114}
 
 x-common-label:
-  &default-common-label
+  &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   nginx-unit:
-    << : *default-common
+    << : *common
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-unit-alpine"
     volumes:
       - ./config/${LNMP_NGINX_UNIT_CONF:-nginx-unit}:/etc/nginx-unit:cached
@@ -48,4 +48,4 @@ services:
       - unix:/usr/local/nginx-unit/control.unit.sock
 volumes:
   nginx_unit_state-data:
-    << : *default-common-label
+    << : *common-label

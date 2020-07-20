@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   restart: always
   env_file: ./cli/timezone.env
   networks:
@@ -10,14 +10,14 @@ x-common:
   #   - ${DNS:-114.114.114.114}
 
 x-common-label:
-  &default-common-label
+  &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   mongodb:
-    << : *default-common
+    << : *common
     image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/mongo:${LNMP_MONGODB_VERSION:-4.2.8}
     volumes:
       - ./config/mongodb/${LNMP_MONGODB_CONF:-mongod.conf}:/etc/mongod.conf:ro,cached
@@ -31,4 +31,4 @@ services:
 
 volumes:
   mongodb-data:
-    << : *default-common-label
+    << : *common-label

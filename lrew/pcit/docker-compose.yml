@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common-label:
-  &default-common-label
+  &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
@@ -10,7 +10,7 @@ services:
   # web server + daemon + agent
   pcit:
     &pcit
-    << : *default-common-label
+    << : *common-label
     # restart: always
     image: pcit/pcit:unit
     volumes:
@@ -70,4 +70,4 @@ services:
 
 volumes:
   pcit-tmp:
-    << : *default-common-label
+    << : *common-label

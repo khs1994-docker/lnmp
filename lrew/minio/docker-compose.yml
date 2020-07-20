@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   restart: always
   env_file: ./cli/timezone.env
   networks:
@@ -10,14 +10,14 @@ x-common:
   #   - ${DNS:-114.114.114.114}
 
 x-common-label:
-  &default-common-label
+  &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   minio:
-    << : *default-common
+    << : *common
     image: minio/minio:${LNMP_MINIO_VERSION:-RELEASE.2020-06-22T03-12-50Z}
     volumes:
       - type: volume
@@ -42,4 +42,4 @@ services:
 
 volumes:
   minio-data:
-    << : *default-common-label
+    << : *common-label

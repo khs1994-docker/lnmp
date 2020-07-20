@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   restart: always
   env_file: ./cli/timezone.env
   networks:
@@ -10,14 +10,14 @@ x-common:
   #   - ${DNS:-114.114.114.114}
 
 x-common-label:
-  &default-common-label
+  &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   rabbitmq:
-    << : *default-common
+    << : *common
     image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.8.3}-management-alpine
     volumes:
       - type: volume
@@ -29,4 +29,4 @@ services:
 
 volumes:
   rabbitmq-data:
-    << : *default-common-label
+    << : *common-label

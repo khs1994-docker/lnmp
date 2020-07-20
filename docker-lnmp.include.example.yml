@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
@@ -62,7 +62,7 @@ services:
 # More Demo
 
   swoole:
-    << : *default-common
+    << : *common
     image: khs1994/php:${LNMP_PHP_VERSION:-7.4.8}-swoole-alpine
     # command 指令只需传入文件名即可
     command:

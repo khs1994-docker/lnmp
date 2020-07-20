@@ -10,7 +10,7 @@ version: "3.7"
 #
 
 x-common:
-  &default-common
+  &common
   image: memcached:1.6.5-alpine
   restart: always
   networks:
@@ -40,7 +40,7 @@ x-labels:
 services:
 
   memcached-1:
-    << : *default-common
+    << : *common
     << : *default-labels
     ports:
       - "21211:11211"
@@ -58,7 +58,7 @@ services:
       #     memory: 20M
 
   memcached-2:
-    << : *default-common
+    << : *common
     << : *default-labels
     ports:
       - "21212:11211"
@@ -76,7 +76,7 @@ services:
       #     memory: 20M
 
   memcached-3:
-    << : *default-common
+    << : *common
     << : *default-labels
     ports:
       - "21213:11211"
