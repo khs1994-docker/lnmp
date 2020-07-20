@@ -6,9 +6,7 @@
 $ code --install-extension ms-vscode-remote.remote-containers
 ```
 
-2. 新建空白文件夹或在已有项目中将 `.devcontainer` `docker-workspace.yml` 复制进来。(或者执行 `$ lnmp-docker code-init`)
-
-**修改 `docker-workspace.yml`**
+2. 新建空白文件夹或在已有项目中将 `.devcontainer` `docker-workspace.yml` 复制进来(或者执行 `$ lnmp-docker code-init`) 并根据实际进行调整。
 
 **创建数据卷**
 
