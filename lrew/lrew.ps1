@@ -1,17 +1,20 @@
-$command,$pkg,$_=$args
+$command, $pkg, $_ = $args
 
 switch ($command) {
   add {
-    $lrew_dist="$PSScriptRoot/../vendor/lrew2/$pkg"
+    $lrew_dist = "$PSScriptRoot/../vendor/lrew2/$pkg"
 
-    if(Test-Path $lrew_dist){
+    if (Test-Path $lrew_dist) {
       Write-Warning "[ $pkg ] already install"
 
       exit
     }
+    else {
+      mkdir $lrew_dist | out-null
+    }
 
     . $PSScriptRoot/../windows/sdk/dockerhub/rootfs.ps1
-    $dist=rootfs lrewpkg/$pkg latest
+    $dist = rootfs lrewpkg/$pkg latest
 
     tar -zxvf $dist -C $lrew_dist
   }
