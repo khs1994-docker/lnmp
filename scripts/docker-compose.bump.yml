@@ -56,7 +56,7 @@ services:
     image: alpine:3.12
 
   python:
-    image: python:3.8.3-alpine
+    image: python:3.8.5-alpine
 
   docker-binfmt:
     image: docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
