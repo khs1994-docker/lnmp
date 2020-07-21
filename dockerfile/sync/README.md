@@ -4,6 +4,7 @@
 
 * 支持同步 manifest
 * 默认排除不常用的架构
+* 不包含 Tag 时，则表示 Tag 为 latest，不表示同步全部 Tag
 
 ## 配置文件
 
@@ -97,9 +98,29 @@ $ docker run -i --rm \
 
 请查看 [Dockerfile](Dockerfile) 文件
 
-环境变量通过 `--build-arg K=V` 传入，构建选项请在 Docker 仓库的构建选项中配置。
+环境变量通过 `--build-arg K=V` 传入，构建参数请在 Docker 仓库的构建选项中配置。
 
-**腾讯云** 构建在国外环境，无需配置
-**阿里云** 请在配置中选择国外构建环境
+**腾讯云**
+
+在国外环境构建，无需配置
 
 * [腾讯云 Docker 仓库](https://cloud.tencent.com/document/product/457/10152)
+![](https://main.qcloudimg.com/raw/6e1a949c69b8df8e53e9811c128681ac.png)
+
+在 **构建参数** 中点击 **新增变量**：
+
+`DEST_DOCKER_USERNAME` -> `my_username`
+
+其他变量自行设置
+
+**阿里云**
+
+请在配置中选择国外构建环境
+
+阿里云不支持配置构建参数，请将仓库设为私有，在 Dockerfile 文件中设置 ARG
+
+```docker
+ARG DEST_DOCKER_USERNAME=my_username
+```
+
+其他变量自行设置

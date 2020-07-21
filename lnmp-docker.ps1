@@ -1446,7 +1446,7 @@ XXX
     clear
 
     printInfo "please try kubernetes on website"
-    Start-Process -FilePath "https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61"
+    Start-Process -FilePath "https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61"
   }
 
   zan {
