@@ -1,11 +1,3 @@
-get-command wsl -ErrorAction ignore
-
-if(!$?){
-  Write-Warning "WSL not found, please install WSL first"
-
-  exit
-}
-
 $command,$pkg,$_=$args
 
 switch ($command) {
@@ -21,11 +13,7 @@ switch ($command) {
     . $PSScriptRoot/../windows/sdk/dockerhub/rootfs.ps1
     $dist=rootfs lrewpkg/$pkg latest
 
-    $dist_on_wsl=wsl -- wslpath "'$dist'"
-    $lrew_dist_on_wsl=wsl -- wslpath "'$lrew_dist'"
-
-    wsl -- mkdir -p $lrew_dist_on_wsl
-    wsl -- tar -zxvf $dist_on_wsl -C $lrew_dist_on_wsl
+    tar -zxvf $dist -C $lrew_dist
   }
   Default {
     write-host "

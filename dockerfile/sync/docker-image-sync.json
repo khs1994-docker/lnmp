@@ -4,8 +4,7 @@
     "dest": "not-exists:latest"
   },
   {
-    "source": "node:alpine",
-    "dest": "node:alpine"
+    "source": "node:alpine"
   },
   {
     "source": "node:14.5.0-alpine",

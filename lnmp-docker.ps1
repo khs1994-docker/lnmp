@@ -560,6 +560,12 @@ Function get_compose_options($compose_files, $isBuild = 0) {
       continue
     }
 
+    if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
+      printError "Docker not running"
+      cd $EXEC_CMD_DIR
+      exit 1
+    }
+
     if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
       $LREW_INCLUDE_ROOT = wsl -d $WSL2_DIST -- wslpath "'$LREW_INCLUDE_ROOT'"
     }
@@ -802,25 +808,24 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
   if ($?) {
     printInfo "Use WSL2 compose"
+
+    $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
+
+    wsl -d ${WSL2_DIST} -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
+
+    wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
+
+    if (!$?) {
+      printInfo "please check WSL2($WSL2_DIST) /etc/wsl.conf`n`n[interop]`nenabled=true"
+
+      cd $EXEC_CMD_DIR
+      exit 1
+    }
   }
   else {
     $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '1'
     printInfo "Use WSL2 compose, but docker not running"
   }
-
-  $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
-
-  wsl -d ${WSL2_DIST} -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
-
-  wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
-
-  if (!$?) {
-    printInfo "please check WSL2($WSL2_DIST) /etc/wsl.conf`n`n[interop]`nenabled=true"
-
-    cd $EXEC_CMD_DIR
-    exit 1
-  }
-
   function docker-compose() {
     if ($args[0] -eq '--version') {
       if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
@@ -828,7 +833,14 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
       }
       return wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose --version"
     }
-    wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose $args"
+    if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
+      printError "Docker not running"
+      cd $EXEC_CMD_DIR
+      exit 1
+    }
+    else {
+      wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose $args"
+    }
   }
 }
 
