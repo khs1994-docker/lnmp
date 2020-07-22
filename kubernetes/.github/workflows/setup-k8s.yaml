@@ -263,9 +263,11 @@ jobs:
 
          sleep 30
 
+         sudo journalctl -u etcd
          sudo journalctl -u kube-apiserver
          sudo journalctl -u kube-controller-manager
          sudo journalctl -u kube-scheduler
+
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet
          sudo journalctl -u kube-containerd || true

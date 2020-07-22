@@ -171,10 +171,14 @@ Function _all_in_one($config) {
       "size"      = $size
     }
 
+    if ($platform.variant) {
+      $manifest.platform.variant = $platform.variant
+    }
+
     $manifests += , $manifest
   }
 
-  write-host "==> push all-in-one manifest list"
+  write-host "==> push all-in-one manifest list" -ForegroundColor Blue
 
   $data = ConvertTo-Json -InputObject @{
     "mediaType"     = "application/vnd.docker.distribution.manifest.list.v2+json";

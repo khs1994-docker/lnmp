@@ -231,17 +231,20 @@
     "dest": "flannel:v0.11.0",
     "platforms": [
       {
-        "source": "quay.io/coreos/flannel:v0.11.0-amd64"
+        "source": "quay.io/coreos/flannel:v0.11.0-amd64",
+        "dest": "flannel:v0.11.0-amd64"
       },
       {
         "os": "linux",
         "architecture": "arm64",
+        "variant": "v8",
         "source": "quay.io/coreos/flannel:v0.11.0-arm64",
         "dest": "flannel:v0.11.0-arm64"
       },
       {
         "os": "linux",
         "architecture": "arm",
+        "variant": "v7",
         "dest": "flannel:v0.11.0-arm",
         "registry": "quay.io",
         "image": "coreos/flannel",
