@@ -1571,8 +1571,11 @@ XXX
       exit
     }
 
-    docker container rm -f `
-    $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
+    try {
+      docker container rm -f `
+      $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
+    }
+    catch {}
 
     printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes ${KUBERNETES_VERSION}"
 
@@ -1617,8 +1620,11 @@ XXX
       docker rmi  gcr.io/google_containers/$image
     }
 
-    docker container rm -f `
-    $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
+    try {
+      docker container rm -f `
+      $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
+    }
+    catch {}
   }
 
   composer {

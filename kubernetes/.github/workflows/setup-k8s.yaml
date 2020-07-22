@@ -158,6 +158,7 @@ jobs:
          cat systemd/.env
          sudo hostnamectl set-hostname node1
          echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
+         echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
          sudo cat /etc/hosts || true
 
          docker-compose up cfssl-local
@@ -388,11 +389,13 @@ jobs:
 
          echo ::group::Test k8s with nfs pv
          debug=1 ./lnmp-k8s create
-         echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
+         # echo ${SERVER_IP} laravel2.t.khs1994.com | sudo tee -a /etc/hosts
          ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
+         nslookup laravel2.t.khs1994.com
+         cat /etc/hosts
          sleep 120
          kubectl get -n lnmp all
-         curl -k https://laravel2.t.khs1994.com || true
+         curl -k --connect-timeout 20 https://laravel2.t.khs1994.com
          ./lnmp-k8s delete
          ./lnmp-k8s cleanup
          ./lnmp-k8s nfs down
@@ -403,7 +406,7 @@ jobs:
          ./lnmp-k8s create development --no-nfs
          sleep 50
          kubectl get -n lnmp all
-         curl -k https://laravel2.t.khs1994.com
+         curl -k --connect-timeout 20 https://laravel2.t.khs1994.com
          echo ::endgroup::
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
@@ -425,3 +428,5 @@ jobs:
          echo ::group::kubectl get node
          kubectl get node -o yaml
          echo ::endgroup::
+    #  - name: Setup tmate session
+    #    uses: mxschmitt/action-tmate@v2
