@@ -1131,6 +1131,20 @@ encryption-config.yaml} \
     ${K8S_ROOT}/conf/
 }
 
+# https://github.com/kubernetes/kubeadm/issues/273
+# 16.04 not use systemd-resolved
+# 18.04 use systemd-resolved
+
+_replace_kubelet_resolv_conf(){
+  local REPLACE_KUBELET_RESOLV_CONF=true
+  $(_sudo) systemctl is-active systemd-resolved || local REPLACE_KUBELET_RESOLV_CONF=false
+  if [ $REPLACE_KUBELET_RESOLV_CONF = 'true' ];then
+    print_info "replace_kubelet_resolv_conf"
+    $(_sudo) sed -i "s#^resolvConf.*#resolvConf: /run/systemd/resolve/resolv.conf#g" \
+    ${K8S_ROOT}/conf/kubelet.config.yaml
+  fi
+}
+
 _k8s_install_conf_replace(){
   local files=("kube-proxy.config.yaml" "kubelet.config.yaml" "kube-scheduler.config.yaml")
 
@@ -1209,6 +1223,7 @@ _k8s_install(){
   _k8s_install_conf_cp
 
   _k8s_install_conf_replace
+  _replace_kubelet_resolv_conf
 
   _gvisor_install
 
@@ -1319,6 +1334,7 @@ _k8s_join(){
   _k8s_join_conf_cp
 
   _k8s_join_conf_replace
+  _replace_kubelet_resolv_conf
 
   _gvisor_install
   _crictl_install

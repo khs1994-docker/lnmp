@@ -48,6 +48,9 @@ hairpinMode: promiscuous-bridge
 maxPods: 220
 podCIDR: "10.244.0.0/16"
 podPidsLimit: -1
+# systemctl is-active systemd-resolved -> exit 0
+# 则使用
+# resolvConf: /run/systemd/resolve/resolv.conf
 resolvConf: /etc/resolv.conf
 maxOpenFiles: 1000000
 kubeAPIQPS: 1000

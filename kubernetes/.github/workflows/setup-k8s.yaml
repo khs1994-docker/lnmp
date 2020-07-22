@@ -131,18 +131,19 @@ jobs:
          ls -la kubernetes-release/release/ || true
          echo $PATH
 
-         sudo netstat -lnpt
-         cat /etc/resolv.conf
-         cat /etc/systemd/resolved.conf || true
-         sudo systemd-resolve --status || true
-         sudo systemctl status systemd-resolved || true
-         sudo systemctl stop systemd-resolved || true
-         sudo netstat -lnpt
-         cat /etc/resolv.conf
-         echo "nameserver 168.63.129.16" | sudo tee /etc/resolv.conf
+         # sudo netstat -lnpt
+         # cat /etc/resolv.conf
+         # cat /etc/systemd/resolved.conf || true
+         # cat /run/systemd/resolve/resolv.conf || true
+         # sudo systemd-resolve --status || true
+         # sudo systemctl status systemd-resolved || true
+         # sudo systemctl stop systemd-resolved || true
+         # sudo netstat -lnpt
+         # cat /etc/resolv.conf
+         # echo "nameserver 168.63.129.16" | sudo tee /etc/resolv.conf
          # echo "search google.internal" | sudo tee -a /etc/resolv.conf
-         cat /etc/resolv.conf
-         nslookup gcr.io
+         # cat /etc/resolv.conf
+         # nslookup gcr.io
 
          docker-compose --version
          docker --version
