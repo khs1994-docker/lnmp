@@ -17,7 +17,7 @@ services:
 
   redis:
     << : *common
-    image: redis:${LNMP_REDIS_VERSION:-6.0.5}-alpine
+    image: redis:${LNMP_REDIS_VERSION:-6.0.6}-alpine
 
   memcached:
     << : *common

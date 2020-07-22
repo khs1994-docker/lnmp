@@ -95,12 +95,12 @@
     "dest": "kong:alpine"
   },
   {
-    "source": "library/kong:2.0.5",
-    "dest": "kong:2.0.5"
+    "source": "library/kong:2.1.0",
+    "dest": "kong:2.1.0"
   },
   {
-    "source": "library/kong:2.0.5-alpine",
-    "dest": "kong:2.0.5-alpine"
+    "source": "library/kong:2.1.0-alpine",
+    "dest": "kong:2.1.0-alpine"
   },
   {
     "source": "library/redis:alpine",
@@ -111,8 +111,8 @@
     "dest": "redis:5.0.9-alpine"
   },
   {
-    "source": "library/redis:6.0.5-alpine",
-    "dest": "redis:6.0.5-alpine"
+    "source": "library/redis:6.0.6-alpine",
+    "dest": "redis:6.0.6-alpine"
   },
   {
     "source": "library/memcached:alpine",
