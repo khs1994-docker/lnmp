@@ -102,6 +102,8 @@ $ docker run -i --rm \
 
 **腾讯云**
 
+* https://cloud.tencent.com/product/tke
+
 在国外环境构建，无需配置
 
 * [腾讯云 Docker 仓库](https://cloud.tencent.com/document/product/457/10152)
@@ -114,6 +116,8 @@ $ docker run -i --rm \
 其他变量自行设置
 
 **阿里云**
+
+* https://www.aliyun.com/product/containerservice
 
 请在配置中选择国外构建环境
 

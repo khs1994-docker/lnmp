@@ -443,20 +443,13 @@ manifest not found, skip" -ForegroundColor Red
 
 # main
 
-if (!(Test-Path $PSScriptRoot/docker-image-sync.json)) {
-  write-host "==> file [ $PSScriptRoot/docker-image-sync.json ] not exists" `
-    -ForegroundColor Red
-
-  exit 1
-}
-
 if ($env:CONFIG_URL) {
   write-host "==> Get config from url"
 
   curl -fsSL $env:CONFIG_URL -o $PSScriptRoot/docker-image-sync.json
 }
 
-if (Test-Path /.dockerenv -and Test-Path /docker-entrypoint.d/docker-image-sync.json ) {
+if ((Test-Path /.dockerenv) -and (Test-Path /docker-entrypoint.d/docker-image-sync.json )) {
   $sync_config = ConvertFrom-Json (Get-Content /docker-entrypoint.d/docker-image-sync.json -raw)
 }
 elseif (Test-Path $PSScriptRoot/docker-image-sync.json) {
