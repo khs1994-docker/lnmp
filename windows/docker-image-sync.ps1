@@ -450,7 +450,23 @@ if (!(Test-Path $PSScriptRoot/docker-image-sync.json)) {
   exit 1
 }
 
-$sync_config = ConvertFrom-Json (Get-Content $PSScriptRoot/docker-image-sync.json -raw)
+if ($env:CONFIG_URL) {
+  write-host "==> Get config from url"
+
+  curl -fsSL $env:CONFIG_URL -o $PSScriptRoot/docker-image-sync.json
+}
+
+if (Test-Path /.dockerenv -and Test-Path /docker-entrypoint.d/docker-image-sync.json ) {
+  $sync_config = ConvertFrom-Json (Get-Content /docker-entrypoint.d/docker-image-sync.json -raw)
+}
+elseif (Test-Path $PSScriptRoot/docker-image-sync.json) {
+  $sync_config = ConvertFrom-Json (Get-Content $PSScriptRoot/docker-image-sync.json -raw)
+}
+
+# 配置文件优先级
+# 1. /docker-entrypoint.d/docker-image-sync.json
+# 2. $env:CONFIG_URL
+# 3. $PSScriptRoot/docker-image-sync.json
 
 foreach ($item in $sync_config) {
   $source = $item.source

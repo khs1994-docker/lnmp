@@ -86,7 +86,7 @@ $ docker run -i --rm \
       -e DEST_NAMESPACE=${REGISTRY_NAMESPACE} \
       -e EXCLUDE_PLATFORM=true \
       -e SYNC_WINDOWS=false \
-      -v $PWD/docker-image-sync.json:/root/lnmp/windows/docker-image-sync.json \
+      -v $PWD/docker-image-sync.json:/docker-entrypoint.d/docker-image-sync.json \
       khs1994/docker-image-sync
 ```
 

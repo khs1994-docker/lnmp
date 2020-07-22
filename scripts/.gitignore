@@ -17,3 +17,4 @@
 !Switch-DockerLinux.ps1
 !tls.md
 !mutagen
+!docker-image-sync

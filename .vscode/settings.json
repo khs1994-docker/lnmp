@@ -20,6 +20,13 @@
         "lwpm.json"
       ],
       "url": "./windows/lnmp-windows-pm-repo/lwpm-json-schema.json"
+    },
+    {
+      "fileMatch": [
+        "docker-image-sync.json",
+        "docker-image-sync*.json"
+      ],
+      "url": "./scripts/docker-image-sync/schema.json"
     }
   ],
   "yaml.trace.server": "verbose",

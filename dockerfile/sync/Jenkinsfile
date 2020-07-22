@@ -77,7 +77,8 @@ pipeline {
             -e DEST_DOCKER_REGISTRY=\${DEST_DOCKER_REGISTRY} \
             -e DEST_NAMESPACE=\${REGISTRY_NAMESPACE} \
             -e CI=true \
-            -v \$PWD/docker-image-sync.json:/root/lnmp/windows/docker-image-sync.json \
+            -e CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/sync/docker-image-sync.json \
+            -v \$PWD/docker-image-sync.json:/docker-entrypoint.d/docker-image-sync.json \
             khs1994/docker-image-sync"
       }
     }

@@ -14,8 +14,7 @@ ENV DEST_DOCKER_PASSWORD $DEST_DOCKER_PASSWORD
 ENV DEST_NAMESPACE $DEST_NAMESPACE
 ENV CONFIG_URL $CONFIG_URL
 
-RUN curl -L ${env:CONFIG_URL} -o docker-image-sync.json \
-  ; ./docker-image-sync.ps1 \
+RUN ./docker-image-sync.ps1 \
   ; rm -rf /root/.khs1994-docker-lnmp
 
 # --build-arg DEST_DOCKER_REGISTRY
