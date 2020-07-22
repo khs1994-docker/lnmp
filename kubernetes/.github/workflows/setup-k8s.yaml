@@ -131,20 +131,6 @@ jobs:
          ls -la kubernetes-release/release/ || true
          echo $PATH
 
-         # sudo netstat -lnpt
-         # cat /etc/resolv.conf
-         # cat /etc/systemd/resolved.conf || true
-         # cat /run/systemd/resolve/resolv.conf || true
-         # sudo systemd-resolve --status || true
-         # sudo systemctl status systemd-resolved || true
-         # sudo systemctl stop systemd-resolved || true
-         # sudo netstat -lnpt
-         # cat /etc/resolv.conf
-         # echo "nameserver 168.63.129.16" | sudo tee /etc/resolv.conf
-         # echo "search google.internal" | sudo tee -a /etc/resolv.conf
-         # cat /etc/resolv.conf
-         # nslookup gcr.io
-
          docker-compose --version
          docker --version
 
@@ -373,8 +359,8 @@ jobs:
          sudo crictl info
          ip addr
          git diff
-         cd cli ; (sh generate.sh || true); cd ..
-         git diff
+         # cd cli ; (sh generate.sh || true); cd ..
+         # git diff
          sudo netstat -lnpt
          # ./tests/test.sh
 
@@ -396,7 +382,7 @@ jobs:
          echo "set LNMP_NFS_SERVER_HOST .env"
          sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
 
-         # ./lnmp-k8s create
+         debug=1 ./lnmp-k8s create
          # echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
          # ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
          # sleep 120

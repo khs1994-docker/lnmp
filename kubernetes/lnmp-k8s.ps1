@@ -20,7 +20,6 @@ cd $PSScriptRoot
 
 ################################################################################
 
-$MINIKUBE_VERSION = "1.3.1"
 $KUBECTL_URL = "https://storage.googleapis.com/kubernetes-release/release"
 $KUBECTL_URL = "https://mirror.azure.cn/kubernetes/kubectl"
 
@@ -58,8 +57,7 @@ if (Test-Path .env.ps1 ) {
 
 $k8s_current_context = kubectl config current-context
 
-"==> Kubernetes context is [ $k8s_current_context ]"
-""
+write-host "==> Kubernetes context is [ $k8s_current_context ]" -ForegroundColor Blue
 
 Function print_info($message) {
   write-host "==> $message"
@@ -67,7 +65,6 @@ Function print_info($message) {
 
 Function print_help_info() {
   echo "
-
 Usage: lnmp-k8s.ps1 COMMAND
 
 Commands:
@@ -176,15 +173,6 @@ switch ($args[0]) {
 
   "create" {
     if ( $k8s_current_context -ne "docker-desktop") {
-      Write-Warning "==> You can use this script on WSL2:
-
-PS:> $ wsl -- ./lnmp-k8s $args
-"
-
-      exit
-    }
-
-    if ( $k8s_current_context -ne "docker-desktop") {
       Write-Warning "
 ==> This Script ONLY Support [ K8S on Docker Desktop ] On Winodws
 
@@ -244,7 +232,7 @@ $ kubectl config use-context docker-desktop
       return
     }
 
-    kubectl get pvc/lnmp-app -n $NAMESPACE -o json | out-null
+    kubectl get pvc/lnmp-app -n $NAMESPACE -o json > $null 2>&1
 
     if ($?) {
       "==> PVC exists, SKIP create PV and PVC"

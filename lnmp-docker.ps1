@@ -130,8 +130,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.16.5"
-$DOCKER_DESKTOP_VERSION = "2.2.2.0 (43066)"
+$KUBERNETES_VERSION = "1.18.3"
+$DOCKER_DESKTOP_VERSION = "2.3.2.0"
 $EXEC_CMD_DIR = $PWD
 
 Function _command($command) {
@@ -511,12 +511,12 @@ Function satis() {
 
   if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
     wsl -d $WSL2_DIST -- docker run --rm -it `
-      --mount type=bind, src=${APP_ROOT}/satis, target=/build `
+      -v ${APP_ROOT}/satis:/build `
       --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
   }
   else {
     docker run --rm -it `
-      --mount type=bind, src=${APP_ROOT}/satis, target=/build `
+      -v ${APP_ROOT}/satis:/build `
       --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
   }
 }
@@ -1182,7 +1182,7 @@ switch -regex ($command) {
 
   ssl-self {
     docker run --init -it --rm `
-      --mount type=bind, src=$pwd/config/nginx/ssl-self, target=/ssl khs1994/tls $other
+      -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
 
     printInfo `
       'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
@@ -1503,7 +1503,7 @@ XXX
     }
 
     if (!(Test-Path pcit/key/public.key)) {
-      docker run -it --rm --mount type=bind, src=$PWD/pcit/key, target=/app pcit/pcit `
+      docker run -it --rm -v $PWD/pcit/key:/app pcit/pcit `
         openssl rsa -in private.key -pubout -out public.key
     }
 
@@ -1528,7 +1528,7 @@ XXX
       if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
         wsl -d $WSL2_DIST -- docker run -d --restart=always `
           -p 2376:2375 `
-          --mount type=bind, src=/var/run/docker.sock, target=/var/run/docker.sock `
+          -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
           --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
           shipyard/docker-proxy
@@ -1536,7 +1536,7 @@ XXX
       else {
         docker run -d --restart=always `
           -p 2376:2375 `
-          --mount type=bind, src=/var/run/docker.sock, target=/var/run/docker.sock `
+          -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
           --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
           shipyard/docker-proxy
@@ -1572,7 +1572,7 @@ XXX
     }
 
     docker container rm -f `
-    $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
+    $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
 
     printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes ${KUBERNETES_VERSION}"
 
@@ -1586,9 +1586,9 @@ XXX
     docker run -it -d `
       -p 443:443 `
       -p 80:80 `
-      --mount type=bind, src=$pwd/config/registry/config.gcr.io.yml, target=/etc/docker/registry/config.yml `
-      --mount type=bind, src=$pwd/config/registry, target=/etc/docker/registry/ssl `
-      --mount type=bind, src=$LNMP_CACHE/registry, target=/var/lib/registry `
+      -v $pwd/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml `
+      -v $pwd/config/registry:/etc/docker/registry/ssl `
+      -v $LNMP_CACHE/registry:/var/lib/registry `
       --label com.khs1994.lnmp.gcr.io `
       registry
 
