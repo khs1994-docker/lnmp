@@ -392,7 +392,7 @@ jobs:
          ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
          sleep 120
          kubectl get -n lnmp all
-         curl -k https://laravel2.t.khs1994.com
+         curl -k https://laravel2.t.khs1994.com || true
          ./lnmp-k8s delete
          ./lnmp-k8s cleanup
          ./lnmp-k8s nfs down

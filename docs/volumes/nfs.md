@@ -132,11 +132,16 @@ $ lnmp-docker nfs [down]
 或者执行 `$ docker run XXX`
 
 ```bash
+# exports.txt
+/nfs *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)
+/nfs/data *(rw,insecure,no_root_squash,no_subtree_check)
+```
+
+```bash
 $ docker run -it \
     -v /nfs:/nfs:rw \
     -p 2049:2049 \
-    -e NFS_EXPORT_0='/nfs *(rw,fsid=0,insecure,no_root_squash,no_subtree_check)'  \
-    -e NFS_EXPORT_1='/nfs/data *(rw,insecure,no_root_squash,no_subtree_check)'  \
+    -v ${PWD}/exports.txt:/etc/exports:ro \
     -e NFS_DISABLE_VERSION_3=1 \
     --cap-add SYS_ADMIN \
     --privileged \

@@ -7,6 +7,7 @@ if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
 if ! [ -f nfs-server/.env ];then cp nfs-server/.env.example nfs-server/.env; fi
+if ! [ -f nfs-server/exports.txt ];then cp nfs-server/exports.example.txt nfs-server/exports.txt; fi
 if ! [ -f wsl2/.env ];then cp wsl2/.env.example wsl2/.env; fi
 
 source ./systemd/.env.example
