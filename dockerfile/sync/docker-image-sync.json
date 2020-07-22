@@ -227,25 +227,25 @@
     ]
   },
   {
-    "source": "quay.io/coreos/flannel:v0.12.0-amd64",
-    "dest": "flannel:v0.12.0",
+    "source": "quay.io/coreos/flannel:v0.11.0-amd64",
+    "dest": "flannel:v0.11.0",
     "platforms": [
       {
-        "source": "quay.io/coreos/flannel:v0.12.0-amd64"
+        "source": "quay.io/coreos/flannel:v0.11.0-amd64"
       },
       {
         "os": "linux",
         "architecture": "arm64",
-        "source": "quay.io/coreos/flannel:v0.12.0-arm64",
-        "dest": "flannel:v0.12.0-arm64"
+        "source": "quay.io/coreos/flannel:v0.11.0-arm64",
+        "dest": "flannel:v0.11.0-arm64"
       },
       {
         "os": "linux",
         "architecture": "arm",
-        "dest": "flannel:v0.12.0-arm",
+        "dest": "flannel:v0.11.0-arm",
         "registry": "quay.io",
         "image": "coreos/flannel",
-        "ref": "v0.12.0-arm"
+        "ref": "v0.11.0-arm"
       }
     ]
   }

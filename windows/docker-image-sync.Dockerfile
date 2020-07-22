@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 # source 仓库的凭证，若为公开仓库则可以不设置
 # ENV SOURCE_DOCKER_USERNAME=
 # ENV SOURCE_DOCKER_PASSWORD=
-# ENV SOURCE_DOCKER_REGISTRY=
+# ENV SOURCE_DOCKER_REGISTRY=hub-mirror.c.163.com
 
 # dest 仓库的凭证，必须设置
 # ENV DEST_DOCKER_USERNAME=
@@ -20,7 +20,7 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 # ENV SOURCE_NAMESPACE=library
 # ENV DEST_NAMESPACE=library
 
-# 支持远程的配置文件
+# 远程的配置文件
 # ENV CONFIG_URL
 
 RUN apk add --no-cache curl

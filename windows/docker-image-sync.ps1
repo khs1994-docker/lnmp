@@ -91,7 +91,7 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
       throw 'error'
     }
     # upload  blob
-    New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry
+    New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry | out-host
   }
 }
 
@@ -174,6 +174,8 @@ Function _all_in_one($config) {
     $manifests += , $manifest
   }
 
+  write-host "==> push all-in-one manifest list"
+
   $data = ConvertTo-Json -InputObject @{
     "mediaType"     = "application/vnd.docker.distribution.manifest.list.v2+json";
     "schemaVersion" = 2;
@@ -195,10 +197,10 @@ Function _sync($source, $dest, $config) {
   if ($config.registry) {
     write-host "==> skip parse source image, read from config"
 
-    $source_registry = $item.registry
-    $source_image = $item.image
-    $source_ref = $item.ref
-    $source_image_with_digest = $item.digest
+    $source_registry = $config.registry
+    $source_image = $config.image
+    $source_ref = $config.ref
+    $source_image_with_digest = $config.digest
   }
   else {
     $source_registry, $source_image, $source_ref, $source_image_with_digest = imageParser $source

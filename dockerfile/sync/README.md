@@ -21,9 +21,9 @@
 ]
 ```
 
-更多示例请查看 `docker-image-sync.json` 和 `docker-image-sync-by-docker.json`
+更多示例请查看 [docker-image-sync.json](docker-image-sync.json) 和 [docker-image-sync-by-docker.json](docker-image-sync-by-docker.json)
 
-部分格式的镜像无法解析，需要详细设置，请查看示例：https://github.com/khs1994-docker/lnmp/blob/master/windows/tests/docker-image-sync-test-full.json
+对于无命名空间的镜像（例如：`mcr.microsoft.com/powershell:preview-alpine-3.11`）无法解析(无法判定 `mcr.microsoft.com` 是命名空间还是仓库网址)，需要详细设置，请查看示例：https://github.com/khs1994-docker/lnmp/blob/master/windows/tests/docker-image-sync-test-full.json
 
 **配置文件简化**
 
@@ -90,7 +90,7 @@ $ docker run -i --rm \
       khs1994/docker-image-sync
 ```
 
-如果你在 Jenkins 中运行此命令，可以参考 [Jenkinsfile](Jenkinsfile)
+如果你在 `Jenkins` 中运行此命令，可以参考 [Jenkinsfile](Jenkinsfile)
 
 ## 在 docker build 中同步
 
@@ -107,24 +107,69 @@ $ docker run -i --rm \
 在国外环境构建，无需配置
 
 * [腾讯云 Docker 仓库](https://cloud.tencent.com/document/product/457/10152)
+
 ![](https://main.qcloudimg.com/raw/6e1a949c69b8df8e53e9811c128681ac.png)
 
 在 **构建参数** 中点击 **新增变量**：
 
 `DEST_DOCKER_USERNAME` -> `my_username`
 
-其他变量自行设置
+依次类推，其他变量自行设置
 
 **阿里云**
 
-* https://www.aliyun.com/product/containerservice
+* https://www.aliyun.com/product/acr
 
-请在配置中选择国外构建环境
+在 **默认实例** 中新建镜像仓库
+
+如果要同步国内访问不到的镜像（例如 `gcr.io`），请在配置中选择国外构建环境。如果仅同步 Docker Hub 中的镜像则国内国外均可。
 
 阿里云不支持配置构建参数，请将仓库设为私有，在 Dockerfile 文件中设置 ARG
 
-```docker
-ARG DEST_DOCKER_USERNAME=my_username
+```diff
+- ARG DEST_DOCKER_USERNAME
++ ARG DEST_DOCKER_USERNAME=my_username
 ```
 
-其他变量自行设置
+依此类推，其他变量自行设置
+
+## 注意事项
+
+如果你的同步源是私有的并且每个源需要不同的凭证，你必须把凭证一致的写到一起，然后分开同步。
+
+例如你需要同步 `registry1.com` 和 `registry2.com` 的私有镜像，并且两个仓库的凭证不一致，那么就不能在配置文件中写到一起：
+
+```json
+[
+  {
+    "source": "registry1.com/ns/x",
+    "dest": "my_registry/ns/x"
+  },
+  {
+    "source": "registry2.com/ns/y",
+    "dest": "my_registry/ns/y"
+  }
+]
+```
+
+必须把它们分开，分别同步
+
+```json
+[
+  {
+    "source": "registry1.com/ns/x",
+    "dest": "my_registry/ns/x"
+  }
+]
+```
+
+```json
+[
+  {
+    "source": "registry2.com/ns/y",
+    "dest": "my_registry/ns/y"
+  }
+]
+```
+
+对于目标仓库也是一样的。
