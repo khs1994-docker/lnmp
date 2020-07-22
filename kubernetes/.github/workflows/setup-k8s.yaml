@@ -99,6 +99,8 @@ jobs:
          docker system prune -a -f
          docker system df
 
+         sudo apt install -y tree
+
          df -h
        name: os-metadata
     #  - uses: actions/setup-go@v1
@@ -171,12 +173,7 @@ jobs:
          ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
          # debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
-         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
-         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
-         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
-         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/cloud-controller-manager
-         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/hyperkube
-         sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/mounter
+         tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
      - name: Start k8s
        run: |
          set -x
@@ -336,14 +333,13 @@ jobs:
          SERVER_IP=`cat .server_ip`
          curl ${SERVER_IP}:${HTTP_PORT}
 
-         test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
+         # test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
      - name: cleanup
        run: |
          set -x
 
          df -h
 
-         sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/*.tar
          sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/apiextensions-apiserver
          sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/kubeadm
 
@@ -356,9 +352,15 @@ jobs:
          export SERVER_IP=`cat .server_ip`
 
          sudo crictl version
+         echo ::group::crictl info
          sudo crictl info
+         echo ::endgroup::
+
          ip addr
+         echo ::group::git diff
          git diff
+         echo ::endgroup::
+
          # cd cli ; (sh generate.sh || true); cd ..
          # git diff
          sudo netstat -lnpt
@@ -368,7 +370,7 @@ jobs:
          mkdir -p ../app/laravel/public
          cp deployment/app/index.php ../app/laravel/public/
 
-         echo "Up nfs server"
+         echo ::group::Up nfs server"
          ./lnmp-k8s nfs
          sleep 30
          docker ps -a
@@ -377,26 +379,33 @@ jobs:
          # install nfs dep
          sudo apt install -y nfs-common
          sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
+         sudo mount -t nfs4
          sudo umount /tmp2
+         echo ::endgroup::
 
          echo "set LNMP_NFS_SERVER_HOST .env"
          sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
 
+         echo ::group::Test k8s with nfs pv
          debug=1 ./lnmp-k8s create
-         # echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
-         # ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
-         # sleep 120
-         # kubectl get -n lnmp all
-         # curl -k https://laravel2.t.khs1994.com
-         # ./lnmp-k8s delete
-         # ./lnmp-k8s cleanup
-         # ./lnmp-k8s nfs down
-         # echo "Test noNFS volume"
-         # cp -rf ../app ~/app-development
-         # ./lnmp-k8s create development --no-nfs
-         # sleep 50
-         # kubectl get -n lnmp all
-         # curl -k https://laravel2.t.khs1994.com
+         echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
+         ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
+         sleep 120
+         kubectl get -n lnmp all
+         curl -k https://laravel2.t.khs1994.com
+         ./lnmp-k8s delete
+         ./lnmp-k8s cleanup
+         ./lnmp-k8s nfs down
+         echo ::endgroup::
+
+         echo ::group:: Test k8s with hostpath pv"
+         cp -rf ../app ~/app-development
+         ./lnmp-k8s create development --no-nfs
+         sleep 50
+         kubectl get -n lnmp all
+         curl -k https://laravel2.t.khs1994.com
+         echo ::endgroup::
+
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine uname -a || true
@@ -413,4 +422,6 @@ jobs:
          sudo ls -la /opt/k8s || true
          sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
 
+         echo ::group::kubectl get node
          kubectl get node -o yaml
+         echo ::endgroup::

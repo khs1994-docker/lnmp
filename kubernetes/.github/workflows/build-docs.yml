@@ -7,13 +7,16 @@ on:
     - 'docs/**'
   schedule:
     - cron: '0 0 * * 4'
+  workflow_dispatch:
 
 name: Build Docs
 
 jobs:
   docs:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
+    if: |
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch'
     steps:
     - uses: actions/checkout@master
       with:
