@@ -7,7 +7,8 @@ metadata:
   labels:
     lnmp: test
 spec:
-  runtimeClassName: myclass
+  runtimeClassName: runsc
+  # runtimeClassName: runc
   # runtimeClassName: runcv1
   # runtimeClassName: runclinux
   containers:

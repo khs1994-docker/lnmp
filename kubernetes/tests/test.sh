@@ -37,7 +37,7 @@ sleep 50
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
 
-test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
+test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.containerd.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine uname -a || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm alpine uname -a || true
@@ -46,3 +46,4 @@ kubectl get all
 kubectl get pod
 POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1` || true
 kubectl exec ${POD_NAME} -- uname -a || true
+kubectl describe pod/${POD_NAME} || true

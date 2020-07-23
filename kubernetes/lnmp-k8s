@@ -615,7 +615,7 @@ _gvisor_containerd_conf(){
 
     return
   fi
-
+print_info "config containerd with gvisor(runsc) ..."
 # containerd 1.4.x
 cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
@@ -904,7 +904,10 @@ _conmon_install(){
     return
   fi
 
-  if [ $OS = "Linux" -a $GOARCH = "amd64"];then
+  if [ $OS = "Linux" -a $GOARCH = "amd64" ];then
+    $(_sudo) $(_curl) -o /usr/local/bin/conmon \
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION} \
+    || \
     $(_sudo) $(_curl) -o /usr/local/bin/conmon \
       https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
 
@@ -1430,13 +1433,14 @@ _local_cleanup(){
 }
 
 if [ "${LNMP_CN_ENV}" = 'false' ];then
-  print_info "CN Mirror disabled, I will replace cn mirror ... "
+  print_info "CN mirror disabled, I will replace cn mirror ... "
   $(_sudo) sed -i "s#hub-mirror.c.163.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#mirror.baidubce.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" `grep mirror.baidubce.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller#us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller#g" `grep ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller -rl $PWD/addons` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/addons` || true
+  print_info "[end] CN mirror disabled"
 fi
 
 _command=$1
