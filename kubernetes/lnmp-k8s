@@ -720,13 +720,11 @@ _containerd_install(){
 
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
-
-  $(_sudo) chmod +x /usr/local/bin/*
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
 }
 
 _cni_install(){
@@ -943,7 +941,6 @@ _crio_install(){
   command -v yum > /dev/null && isRPM=1
 
   test -n "$isRPM" && $(_sudo) yum install -y \
-  containers-common \
   git \
   glib2-devel \
   glibc-devel \
@@ -955,8 +952,7 @@ _crio_install(){
   libseccomp-devel \
   libselinux-devel \
   pkgconfig \
-  make \
-  runc
+  make
 
   # $(_sudo) sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
@@ -964,14 +960,15 @@ _crio_install(){
   # $(_sudo) sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
+  # && . /etc/os-release \
+  # && sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
+  # && wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add - \
+  # && $(_sudo) apt-get update -qq \
+
   command -v apt > /dev/null \
   && $(_sudo) apt update -qq || true \
   ; $(_sudo) apt install -y software-properties-common \
-  && . /etc/os-release \
-  && sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
-  && wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add - \
-  && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
-  containers-common \
+  ; $(_sudo) apt-get install -y \
   git \
   $(command -v go > /dev/null || echo "golang-go") \
   libassuan-dev \
@@ -983,10 +980,12 @@ _crio_install(){
   libsystemd-dev \
   libselinux1-dev \
   pkg-config \
-  $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
   gcc \
   make
+
+  # containers-common
+  $(_sudo) cp -r systemd/etc/containers/. /etc/containers
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
@@ -1071,7 +1070,7 @@ _docker_default_conf(){
 # k8s install
 
 _check_master_ip(){
-  if [ ${MASTER_IP} == '192.168.199.100' ];then
+  if [ ${MASTER_IP} = '192.168.199.100' ];then
     clear
     echo ""
     echo "======================================================"

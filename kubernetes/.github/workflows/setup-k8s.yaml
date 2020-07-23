@@ -7,7 +7,7 @@ on:
 
 jobs:
   setup-k8s:
-   runs-on: ubuntu-latest
+   runs-on: ubuntu-${{matrix.dist}}
    timeout-minutes: 20
    if: |
      ! contains( github.event.head_commit.message, '[skip ci]')
@@ -26,50 +26,50 @@ jobs:
      matrix:
        include:
        - os: ubuntu
-         dist: 18.04
+         dist: 20.04
          CI_KUBERNETES_VERSION: 1.19.0-rc.2
          LNMP_K8S_GET: --url
          K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
-         dist: 18.04
+         dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0-alpha.0
          LNMP_K8S_GET: --url
          K8S_IMAGE: lwpm/kubernetes-server
        # next version
       #  - os: ubuntu
-      #    dist: 18.04
+      #    dist: 20.04
       #    CI_KUBERNETES_VERSION: 1.17.0
       #    LNMP_K8S_GET: --url
       #    K8S_IMAGE: lwpm/kubernetes-server
        # current stable version
        - os: ubuntu
-         dist: 18.04
+         dist: 20.04
          CI_KUBERNETES_VERSION: 1.18.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
-         dist: 16.04
+         dist: 20.04
          CI_KUBERNETES_VERSION: 1.18.6
          LNMP_K8S_GET: --url
          K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
-         dist: 16.04
+         dist: 20.04
          CI_KUBERNETES_VERSION: 1.18.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
          K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
-         dist: 16.04
+         dist: 20.04
          CI_KUBERNETES_VERSION: 1.18.6
          LNMP_K8S_GET: --url
          K8S_IMAGE: lwpm/kubernetes-server
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
-         dist: bionic
+         dist: 20.04
          CI_KUBERNETES_VERSION: 1.17.9
          LNMP_K8S_GET: --url
        - os: ubuntu
-         dist: bionic
+         dist: 16.04
          CI_KUBERNETES_VERSION: 1.16.13
          LNMP_K8S_GET: --url
      fail-fast: false
@@ -367,7 +367,7 @@ jobs:
          sudo netstat -lnpt
 
          echo ::group::Test k8s
-         # ./tests/test.sh
+         ./tests/test.sh
          echo ::endgroup::
 
          sudo crictl version
