@@ -852,7 +852,7 @@ _k8s_install_cp_bin(){
     $(_sudo) cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* ${K8S_ROOT}/bin/
   fi
 
-  $(_sudo) cp bin/*.sh ${K8S_ROOT}/bin/
+  $(_sudo) install -m755 bin/*.sh ${K8S_ROOT}/bin/
 
   $(_sudo) chmod +x ${K8S_ROOT}/bin/*
 }
@@ -1330,7 +1330,7 @@ _k8s_join(){
 
   test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \
   (print_info "skip cp k8s bin" ; \
-     $(_sudo) cp bin/*.sh ${K8S_ROOT}/bin/ ; \
+     $(_sudo) install -m755 bin/*.sh ${K8S_ROOT}/bin/ ; \
      $(_sudo) chmod +x ${K8S_ROOT}/bin/*)
 
   _k8s_join_conf_cp

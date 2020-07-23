@@ -15,8 +15,8 @@ systemd:
         RestartSec=5
         WorkingDirectory=/opt/.khs1994-docker-lnmp/caches
         ExecStartPre=mkdir -p /usr/local/bin
-        ExecStartPre=bash -c "if ! [ `/usr/local/bin/crictl --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/crictl; fi"
-        ExecStartPre=bash -c "if ! [ -f /usr/local/bin/crictl ];then \
+        ExecStartPre=/usr/bin/env bash -c "if ! [ `/usr/local/bin/crictl --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/crictl; fi"
+        ExecStartPre=/usr/bin/env bash -c "if ! [ -f /usr/local/bin/crictl ];then \
           tar -zxvf crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz -C /usr/local/bin ; fi"
         ExecStart=echo success
 

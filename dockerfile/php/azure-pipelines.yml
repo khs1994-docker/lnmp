@@ -175,8 +175,7 @@ jobs:
       sudo apt-get -y install docker-ce
       sudo rm /usr/local/bin/docker-compose
       curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-      chmod +x docker-compose
-      sudo mv docker-compose /usr/local/bin
+      sudo install -m755 docker-compose /usr/local/bin
       sudo mkdir -p /etc/systemd/system/docker.service.d
       echo -e '[Service]\nExecStart=\nExecStart=/usr/bin/dockerd' | sudo tee /etc/systemd/system/docker.service.d/docker.conf
       echo '{"hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:2375"],"experimental":true}' | sudo tee /etc/docker/daemon.json

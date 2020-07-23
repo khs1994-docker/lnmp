@@ -99,7 +99,7 @@ jobs:
          docker system prune -a -f
          docker system df
 
-         sudo apt install -y tree
+         sudo apt install -y tree net-tools
 
          df -h
        name: os-metadata
@@ -232,7 +232,7 @@ jobs:
          sudo sed -i "s/5%/1%/g" ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
          sudo sed -i "s/11%/1%/g" ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
          cat ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
-         sudo systemctl start kubelet
+         sudo systemctl start kubelet || sudo journalctl -u kubelet
 
          sleep 10
          # sudo systemctl status etcd
