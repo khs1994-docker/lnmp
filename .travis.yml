@@ -5,6 +5,7 @@ language: bash
 # dist: trusty # 14.04
 # dist: xenial # 16.04
 dist: bionic # 18.04
+# dist: focal # 20.04
 
 services:
 - docker
@@ -73,9 +74,7 @@ before_install:
 
 - echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
 
-#
 # github release
-#
 
 - sudo apt update ; sudo apt install -y golang
 - go get github.com/aktau/github-release

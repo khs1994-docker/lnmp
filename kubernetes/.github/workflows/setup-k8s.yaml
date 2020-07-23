@@ -128,7 +128,7 @@ jobs:
          ls /etc/apt/sources.list.d || true
          sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
-         sestatus || true
+         sudo sestatus || true
          ls -la ~/.khs1994-docker-lnmp/caches || true
          ls -la kubernetes-release/release/ || true
          echo $PATH
@@ -184,24 +184,36 @@ jobs:
          ls -la /etc/systemd/system/
 
          sudo systemctl cat etcd
-         sudo systemctl start etcd || sudo journalctl -u etcd
+         sudo systemctl start etcd || CMD_FAILED=1
+         test -n "$CMD_FAILED" && sudo journalctl -u etcd || true
+         test -n "$CMD_FAILED" && false || true
+
          # master
          sudo systemctl cat kube-apiserver
-         sudo systemctl start kube-apiserver || sudo journalctl -u kube-apiserver
+         sudo systemctl start kube-apiserver || CMD_FAILED=1
+         test -n "$CMD_FAILED" && sudo journalctl -u kube-apiserver || true
+         test -n "$CMD_FAILED" && false || true
 
          sudo systemctl cat kube-controller-manager
-         sudo systemctl start kube-controller-manager || sudo journalctl -u kube-controller-manager
+         sudo systemctl start kube-controller-manager || CMD_FAILED=1
+         test -n "$CMD_FAILED" && sudo journalctl -u kube-controller-manager || true
+         test -n "$CMD_FAILED" && false || true
 
          sudo systemctl cat kube-scheduler
          if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
            echo "replace kube-scheduler config version" \
-           && echo "remove it when version ge 1.19" \
+           && echo "remove it when k8s version ge 1.19" \
            && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
          fi
-         sudo systemctl start kube-scheduler || sudo journalctl -u kube-scheduler
+         sudo systemctl start kube-scheduler || CMD_FAILED=1
+         test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true
+         test -n "$CMD_FAILED" && false || true
+
          # worker
          sudo systemctl cat kube-proxy
-         sudo systemctl start kube-proxy || sudo journalctl -u kube-proxy
+         sudo systemctl start kube-proxy || CMD_FAILED=1
+         test -n "$CMD_FAILED" && sudo journalctl -u kube-proxy || true
+         test -n "$CMD_FAILED" && false || true
 
          sudo systemctl cat docker
 
@@ -232,7 +244,9 @@ jobs:
          sudo sed -i "s/5%/1%/g" ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
          sudo sed -i "s/11%/1%/g" ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
          cat ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
-         sudo systemctl start kubelet || sudo journalctl -u kubelet
+         sudo systemctl start kubelet || CMD_FAILED=1
+         test -n "$CMD_FAILED" && sudo journalctl -u kubelet || true
+         test -n "$CMD_FAILED" && false || true
 
          sleep 10
          # sudo systemctl status etcd

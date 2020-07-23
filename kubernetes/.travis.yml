@@ -34,7 +34,7 @@ before_install:
   - ls /etc/apt/sources.list.d || true
   - sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
-  - sestatus || true
+  - sudo sestatus || true
   - ls /home/travis/.khs1994-docker-lnmp/caches
   - echo $PATH
 
@@ -73,11 +73,11 @@ before_install:
   - sudo cat /etc/docker/daemon.json
   - echo '{"registry-mirrors":["https://mirror.gcr.io"]}' | sudo tee /etc/docker/daemon.json
   - sudo cat /etc/docker/daemon.json
-  - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-  - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-  - docker buildx create --name mybuilder
-  - docker buildx use mybuilder
-  - docker buildx inspect --bootstrap
+  # - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+  # - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+  # - docker buildx create --name mybuilder
+  # - docker buildx use mybuilder
+  # - docker buildx inspect --bootstrap
   - ip addr
   - hostnamectl
   - export SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
@@ -85,12 +85,12 @@ before_install:
   - echo $SERVER_IP
 install:
   - sudo apt install -y tree
-  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
-  - export KUBERNETES_TYPE=server
+  # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+  # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
+  # - export KUBERNETES_TYPE=server
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" systemd/.env
-  - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
+  # - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
   - cat systemd/.env
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
@@ -113,25 +113,35 @@ before_script:
   - ls -la /etc/systemd/system/
 
   - sudo systemctl cat etcd
-  - sudo systemctl start etcd || sudo journalctl -u etcd
+  - sudo systemctl start etcd || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u etcd || true
+  - test -n "$CMD_FAILED" && false || true
   # master
   - sudo systemctl cat kube-apiserver
-  - sudo systemctl start kube-apiserver || sudo journalctl -u kube-apiserver
+  - sudo systemctl start kube-apiserver || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-apiserver || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sudo systemctl cat kube-controller-manager
-  - sudo systemctl start kube-controller-manager || sudo journalctl -u kube-controller-manager
+  - sudo systemctl start kube-controller-manager || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-controller-manager || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sudo systemctl cat kube-scheduler
   - |
     if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
       echo "replace kube-scheduler config version" \
-      && echo "remove it when version ge 1.19" \
+      && echo "remove it when k8s version ge 1.19" \
       && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
     fi
-  - sudo systemctl start kube-scheduler || sudo journalctl -u kube-scheduler
+  - sudo systemctl start kube-scheduler || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true
+  - test -n "$CMD_FAILED" && false || true
   # worker
   - sudo systemctl cat kube-proxy
-  - sudo systemctl start kube-proxy || sudo journalctl -u kube-proxy
+  - sudo systemctl start kube-proxy || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-proxy || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sudo systemctl cat docker
 
@@ -157,7 +167,9 @@ before_script:
 
   - sleep 10
   - sudo systemctl cat kubelet
-  - sudo systemctl start kubelet || sudo journalctl -u kubelet
+  - sudo systemctl start kubelet || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kubelet || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sleep 10
   # - sudo systemctl status etcd
@@ -182,8 +194,6 @@ before_script:
   - sudo journalctl -u kubelet
   - sudo journalctl -u kube-containerd || true
   - sudo journalctl -u crio || true
-
-  - cat ${K8S_ROOT:-/opt/k8s}/conf/kubelet.config.yaml
 
   - kubectl get csr
   - CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
@@ -288,6 +298,23 @@ after_success:
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
       git push origin master:v$CI_KUBERNETES_VERSION-config -f
+    fi
+  - |
+    if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.0' ];then
+      set -x
+      cd /tmp
+      git clone -b 1.19.0-rc.2-config --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+      cd lnmp-k8s
+
+      stty size
+      stty cols 200
+
+      # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+      cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
+
+      git add .
+      git commit -m "Update v$CI_KUBERNETES_VERSION config"
+      git push origin 1.19.0-rc.2-config:v$CI_KUBERNETES_VERSION-config -f
     fi
 env:
   global:

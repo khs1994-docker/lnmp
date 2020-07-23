@@ -528,6 +528,7 @@ EOF
   cp /*.yaml .
 
   chmod 777 *
+  chmod 777 docker/* || true
 }
 
 main
