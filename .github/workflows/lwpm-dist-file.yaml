@@ -34,7 +34,7 @@ jobs:
         if: matrix.os == 'ubuntu' &&
             contains( github.event.head_commit.message, '[k8s]')
         env:
-          VERSION: 2.0.17
+          VERSION: 2.0.19
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 install conmon@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}

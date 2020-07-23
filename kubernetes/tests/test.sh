@@ -29,12 +29,14 @@ curl -k https://laravel2.t.khs1994.com
 ./lnmp-k8s delete
 ./lnmp-k8s cleanup
 ./lnmp-k8s nfs down
+
 echo "Test noNFS volume"
 cp -rf ../app ~/app-development
 ./lnmp-k8s create development --no-nfs
 sleep 50
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
+
 test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine uname -a || true

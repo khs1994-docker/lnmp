@@ -49,7 +49,7 @@ jobs:
          K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
          dist: 16.04
-         CI_KUBERNETES_VERSION: 1.18.3
+         CI_KUBERNETES_VERSION: 1.18.6
          LNMP_K8S_GET: --url
          K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
@@ -59,18 +59,18 @@ jobs:
          K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
          dist: 16.04
-         CI_KUBERNETES_VERSION: 1.18.3
+         CI_KUBERNETES_VERSION: 1.18.6
          LNMP_K8S_GET: --url
          K8S_IMAGE: lwpm/kubernetes-server
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: bionic
-         CI_KUBERNETES_VERSION: 1.17.6
+         CI_KUBERNETES_VERSION: 1.17.9
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: bionic
-         CI_KUBERNETES_VERSION: 1.16.10
+         CI_KUBERNETES_VERSION: 1.16.13
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -158,6 +158,7 @@ jobs:
          cat systemd/.env
          sudo hostnamectl set-hostname node1
          echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
+         echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
          sudo cat /etc/hosts || true
 
          docker-compose up cfssl-local
@@ -364,60 +365,17 @@ jobs:
          # cd cli ; (sh generate.sh || true); cd ..
          # git diff
          sudo netstat -lnpt
+
+         echo ::group::Test k8s
          # ./tests/test.sh
-
-         echo "Set app"
-         mkdir -p ../app/laravel/public
-         cp deployment/app/index.php ../app/laravel/public/
-
-         echo ::group::Up nfs server"
-         ./lnmp-k8s nfs
-         sleep 30
-         docker ps -a
-         ./lnmp-k8s nfs logs
-         sudo mkdir -p /tmp2
-         # install nfs dep
-         sudo apt install -y nfs-common
-         sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
-         sudo mount -t nfs4
-         sudo umount /tmp2
          echo ::endgroup::
-
-         echo "set LNMP_NFS_SERVER_HOST .env"
-         sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
-
-         echo ::group::Test k8s with nfs pv
-         debug=1 ./lnmp-k8s create
-         echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
-         ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
-         sleep 120
-         kubectl get -n lnmp all
-         curl -k https://laravel2.t.khs1994.com || true
-         ./lnmp-k8s delete
-         ./lnmp-k8s cleanup
-         ./lnmp-k8s nfs down
-         echo ::endgroup::
-
-         echo ::group:: Test k8s with hostpath pv"
-         cp -rf ../app ~/app-development
-         ./lnmp-k8s create development --no-nfs
-         sleep 50
-         kubectl get -n lnmp all
-         curl -k https://laravel2.t.khs1994.com
-         echo ::endgroup::
-
-         test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
-         test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/pod.yaml) || true
-         test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine uname -a || true
-         test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm alpine uname -a || true
-         sleep 10
-         kubectl get all
-         kubectl get pod
-         POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1` || true
-         kubectl exec ${POD_NAME} -- uname -a || true
 
          sudo crictl version
+
+         echo ::group::crictl info
          sudo crictl info
+         echo ::endgroup::
+
          sudo ls -la /opt || true
          sudo ls -la /opt/k8s || true
          sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
@@ -425,3 +383,5 @@ jobs:
          echo ::group::kubectl get node
          kubectl get node -o yaml
          echo ::endgroup::
+    #  - name: Setup tmate session
+    #    uses: mxschmitt/action-tmate@v2

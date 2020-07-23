@@ -967,7 +967,9 @@ _crio_install(){
   command -v apt > /dev/null \
   && $(_sudo) apt update -qq || true \
   ; $(_sudo) apt install -y software-properties-common \
-  && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
+  && . /etc/os-release \
+  && sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
+  && wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add - \
   && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
   containers-common \
   git \
