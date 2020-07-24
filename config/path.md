@@ -11,11 +11,7 @@
 │   │   └── buildkitd.toml
 │   ├── default
 │   │   ├── apache2
-│   │   │   └── httpd.conf
 │   │   └── nginx
-│   │       ├── conf.d
-│   │       │   └── default.conf
-│   │       └── nginx.conf
 │   ├── docker
 │   │   ├── daemon.json
 │   │   ├── daemon.production.json
@@ -43,19 +39,6 @@
 ├── mariadb
 │   ├── default
 │   │   └── etc
-│   │       └── mysql
-│   │           ├── conf.d
-│   │           │   └── docker.cnf
-│   │           ├── debian.cnf
-│   │           ├── debian-start
-│   │           ├── mariadb.cnf
-│   │           ├── mariadb.conf.d
-│   │           │   ├── 50-client.cnf
-│   │           │   ├── 50-mysql-clients.cnf
-│   │           │   ├── 50-mysqld_safe.cnf
-│   │           │   ├── 50-server.cnf
-│   │           │   └── 60-galera.cnf
-│   │           └── my.cnf -> mariadb.cnf
 │   ├── docker.cnf
 │   └── docker.production.cnf
 ├── mongodb
@@ -64,12 +47,6 @@
 ├── mysql
 │   ├── default
 │   │   └── etc
-│   │       └── mysql
-│   │           ├── conf.d
-│   │           │   ├── docker.cnf
-│   │           │   └── mysql.cnf
-│   │           ├── my.cnf
-│   │           └── my.cnf.fallback
 │   ├── docker.cnf
 │   └── docker.production.cnf
 ├── nginx
@@ -117,47 +94,6 @@
 │   ├── default
 │   │   └── usr
 │   │       └── local
-│   │           └── etc
-│   │               ├── php
-│   │               │   ├── conf.d
-│   │               │   │   ├── docker-php-ext-sodium.ini
-│   │               │   │   ├── docker-php-ext-zip.ini
-│   │               │   │   ├── php-ext-bcmath.ini
-│   │               │   │   ├── php-ext-bz2.ini
-│   │               │   │   ├── php-ext-calendar.ini
-│   │               │   │   ├── php-ext-enchant.ini
-│   │               │   │   ├── php-ext-exif.ini
-│   │               │   │   ├── php-ext-ffi.ini
-│   │               │   │   ├── php-ext-gd.ini
-│   │               │   │   ├── php-ext-gettext.ini
-│   │               │   │   ├── php-ext-gmp.ini
-│   │               │   │   ├── php-ext-igbinary.ini
-│   │               │   │   ├── php-ext-imap.ini
-│   │               │   │   ├── php-ext-intl.ini
-│   │               │   │   ├── php-ext-memcached.ini
-│   │               │   │   ├── php-ext-mysqli.ini
-│   │               │   │   ├── php-ext-opcache.ini
-│   │               │   │   ├── php-ext-pcntl.ini
-│   │               │   │   ├── php-ext-pdo_mysql.ini
-│   │               │   │   ├── php-ext-pdo_pgsql.ini
-│   │               │   │   ├── php-ext-pgsql.ini
-│   │               │   │   ├── php-ext-redis.ini
-│   │               │   │   ├── php-ext-shmop.ini
-│   │               │   │   ├── php-ext-sockets.ini
-│   │               │   │   ├── php-ext-sysvmsg.ini
-│   │               │   │   ├── php-ext-sysvsem.ini
-│   │               │   │   ├── php-ext-sysvshm.ini
-│   │               │   │   ├── php-ext-tideways_xhprof.ini.default
-│   │               │   │   └── php-ext-xdebug.ini.default
-│   │               │   ├── php.ini-development
-│   │               │   └── php.ini-production
-│   │               ├── php-fpm.conf
-│   │               ├── php-fpm.conf.default
-│   │               └── php-fpm.d
-│   │                   ├── docker.conf
-│   │                   ├── www.conf
-│   │                   ├── www.conf.default
-│   │                   └── zz-docker.conf
 │   ├── docker-php.ini.example
 │   ├── php.development.ini
 │   ├── php.production.ini
@@ -250,5 +186,5 @@
 │   └── supervisord.ini.example
 └── yarn
 
-60 directories, 189 files
+50 directories, 135 files
 ```
