@@ -56,7 +56,7 @@ oom_score = 0
     # sandbox_image = "gcr.mirror/google-containers/pause:3.2"
     sandbox_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
     stats_collect_period = 10
-    systemd_cgroup = false
+    # systemd_cgroup = false
     enable_tls_streaming = false
     max_container_log_line_size = 16384
     disable_cgroup = false
@@ -79,11 +79,11 @@ oom_score = 0
           runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            SystemdCgroup = true
-            # BinaryName is the binary name of the runc binary.
-            # BinaryName = ""
-            # BinaryName = "runc"
-            # BinaryName = "crun"
+            systemd_cgroup = true
+            # binary_name is the binary name of the runc binary.
+            # binary_name = ""
+            # binary_name = "runc"
+            # binary_name = "crun"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"

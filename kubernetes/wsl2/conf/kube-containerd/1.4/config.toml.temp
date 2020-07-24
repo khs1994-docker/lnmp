@@ -74,8 +74,8 @@ oom_score = 0
           runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            SystemdCgroup = false
-            # BinaryName = ""
+            systemd_cgroup = false
+            # binary_name = ""
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"

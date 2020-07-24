@@ -1,5 +1,3 @@
-# sed "s#myclass#runcv1#g" demo/runtimeClass/pod.yaml | kubectl apply -f -
-
 kind: Pod
 apiVersion: v1
 metadata:
