@@ -9,6 +9,7 @@ go:
 services:
 - docker
 
+os: linux
 dist: xenial
 # dist: bionic
 
@@ -298,12 +299,17 @@ after_success:
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
       git push origin master:v$CI_KUBERNETES_VERSION-config -f
+
+      cd /tmp
+      rm -rf lnmp-k8s
     fi
   - |
+    PRE_VERSION=1.19.0-rc.2
     if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.0' ];then
       set -x
       cd /tmp
-      git clone -b 1.19.0-rc.2-config --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+      rm -rf lnmp-k8s
+      git clone -b v${PRE_VERSION}-config --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
       cd lnmp-k8s
 
       stty size
@@ -314,7 +320,7 @@ after_success:
 
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
-      git push origin 1.19.0-rc.2-config:v$CI_KUBERNETES_VERSION-config -f
+      git push origin v${PRE_VERSION}-config:v$CI_KUBERNETES_VERSION-config -f
     fi
 env:
   global:

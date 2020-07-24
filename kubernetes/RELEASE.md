@@ -30,3 +30,7 @@ containerd-nightly.linux-arm64
     ├── containerd-stress
     └── ctr
 ```
+
+## 国外镜像
+
+默认使用国内镜像，请在 `lnmp-k8s` 中判断运行环境，若为国外环境，执行 `sed` 替换为国外镜像

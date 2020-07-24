@@ -624,6 +624,7 @@ cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
   # runtime_root = ""
   # privileged_without_host_devices = false
   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
+    SystemdCgroup = false
 EOF
 }
 
@@ -1439,6 +1440,7 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller#us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller#g" `grep ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller -rl $PWD/addons` || true
+  $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/metrics-server#k8s.gcr.io/metrics-server/metrics-server#g" `grep ccr.ccs.tencentyun.com/khs1994/metrics-server -rl $PWD/addons` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/addons` || true
   print_info "[end] CN mirror disabled"
 fi

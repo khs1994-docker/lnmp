@@ -2,7 +2,7 @@
 
 * EFK
 
-* metrics-server `0.3.6`
+* metrics-server `0.3.7`
 
 * CoreDNS `1.7.0`
 
