@@ -13,9 +13,9 @@
       "if(!$IsWindows){echo $False}"
     ]
   },
-  "version": "3.8.3",
+  "version": "3.8.5",
   "github": "python/cpython",
-  "pre-version": "3.8.3",
+  "pre-version": "3.8.5",
   "pre-url-mirror": "https://mirrors.huaweicloud.com/python/${VERSION}/python-${VERSION}-amd64.exe",
   "name": "python",
   "releases": "https://www.python.org/downloads/",
