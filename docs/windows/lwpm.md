@@ -88,7 +88,7 @@ $ lnmp-windows-pm.ps1 stop-service minio
 
 ## 开发者
 
-**$env:LWPM_DIST_ONLY='true' install** 从软件源下载文件并打包
+**dist** 从软件源下载文件并打包
 
 ```bash
  package

@@ -10,7 +10,7 @@
     "platform-reqs": [
       "if(!$IsLinux){echo $False}"
     ],
-    "download": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"
+    "dist": "_mkdir $env:LWPM_PKG_ROOT/dist\n\ncurl -L `\n  $url `\n  -o $env:LWPM_PKG_ROOT/dist/$filename\n"
   },
   "url": "https://github.com/containerd/containerd/releases/download/v${VERSION}/containerd-${VERSION}.linux-amd64.tar.gz",
   "version": "1.3.4"

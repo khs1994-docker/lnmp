@@ -7,7 +7,6 @@ pipeline {
     DOCKER_CLI_EXPERIMENTAL = "enabled"
     BUILDX_IMAGE= "dockerpracticesig/buildkit:master-tencent"
 
-    LWPM_DIST_ONLY = 'true'
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     LWPM_DOCKER_REGISTRY_MIRROR = "ccr.ccs.tencentyun.com"
@@ -33,7 +32,6 @@ pipeline {
 
     // stage('lwpm') {
     //   steps {
-    //     // sh "pwsh -c 'echo $env:LWPM_DIST_ONLY' "
     //     // sh "pwsh -c 'echo $env:LWPM_DOCKER_USERNAME' "
     //     // sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
     //     // sh "git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp"

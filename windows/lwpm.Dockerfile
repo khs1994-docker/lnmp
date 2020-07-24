@@ -2,8 +2,6 @@
 
 FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 
-ENV LWPM_DIST_ONLY='true'
-
 # ENV LWPM_DOCKER_USERNAME
 # ENV LWPM_DOCKER_PASSWORD
 # ENV LWPM_DOCKER_REGISTRY

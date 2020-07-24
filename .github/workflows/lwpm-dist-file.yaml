@@ -16,7 +16,6 @@ jobs:
     env:
       LWPM_DOCKER_USERNAME: khs1994
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      LWPM_DIST_ONLY: 'true'
       LWPM_DOCKER_REGISTRY: registry-1.docker.io
     strategy:
       matrix:
@@ -36,8 +35,8 @@ jobs:
         env:
           VERSION: 2.0.19
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install conmon@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    conmon@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist conmon@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push conmon@${env:VERSION}
       - name: handle-containerd
         shell: pwsh
         if: matrix.os == 'ubuntu' &&
@@ -45,8 +44,8 @@ jobs:
         env:
           VERSION: 1.3.4
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install containerd@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    containerd@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist containerd@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push containerd@${env:VERSION}
       - name: handle-crictl
         shell: pwsh
         if: matrix.os == 'windows' &&
@@ -54,24 +53,24 @@ jobs:
         env:
           VERSION: 1.18.0
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install crictl@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    crictl@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist crictl@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push crictl@${env:VERSION}
       - name: handle-etcd
         if: endsWith('a', 'b')
         shell: pwsh
         env:
           VERSION: 3.4.10
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install etcd@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    etcd@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist etcd@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push etcd@${env:VERSION}
       - name: handle-helm
         if: endsWith('a', 'b')
         shell: pwsh
         env:
           VERSION: 3.2.4
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install helm@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    helm@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist helm@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push helm@${env:VERSION}
       - name: handle-runc
         shell: pwsh
         if: matrix.os == 'windows' &&
@@ -79,8 +78,8 @@ jobs:
         env:
           VERSION: 1.0.0-rc10
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install runc@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    runc@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist runc@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push runc@${env:VERSION}
       - name: handle-runsc
         shell: pwsh
         if: matrix.os == 'ubuntu' &&
@@ -88,8 +87,8 @@ jobs:
         env:
           VERSION: nightly
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install runsc@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    runsc@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist runsc@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push runsc@${env:VERSION}
 
       - name: handle-compose
         shell: pwsh
@@ -99,8 +98,8 @@ jobs:
         env:
           VERSION: 1.25.5
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install compose@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    compose@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist compose@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push compose@${env:VERSION}
 
       - name: handle-jx
         shell: pwsh
@@ -110,5 +109,5 @@ jobs:
         env:
           VERSION: 2.1.33
         run: |
-          ./lnmp/windows/lnmp-windows-pm.ps1 install jx@${env:VERSION}
-          ./lnmp/windows/lnmp-windows-pm.ps1 push    jx@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 dist jx@${env:VERSION}
+          ./lnmp/windows/lnmp-windows-pm.ps1 push jx@${env:VERSION}

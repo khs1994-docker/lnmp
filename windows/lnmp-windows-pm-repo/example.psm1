@@ -223,20 +223,20 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
     }
   }
 
-  if ($lwpm.scripts.download -and ($env:LWPM_DIST_ONLY -eq 'true')) {
+  if ($lwpm.scripts.dist -and ($env:LWPM_DIST_ONLY -eq 'true')) {
     write-host "==> Dist files, Download from $url" -ForegroundColor Green
 
-    foreach ($item in $lwpm.scripts.download) {
+    foreach ($item in $lwpm.scripts.dist) {
       try { iex $item }catch { printError $_.Exception }
     }
 
-    printInfo Dist only`, skip install
+    printInfo Dist success
 
     return
   }
 
   if ($env:LWPM_DIST_ONLY -eq 'true') {
-    printInfo Dist only`, skip install
+    printInfo Dist success
 
     return
   }

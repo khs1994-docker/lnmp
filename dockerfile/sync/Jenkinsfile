@@ -7,7 +7,6 @@ pipeline {
     DOCKER_CLI_EXPERIMENTAL = "enabled"
     BUILDX_IMAGE= "dockerpracticesig/buildkit:master-tencent"
 
-    LWPM_DIST_ONLY = 'true'
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     DEST_DOCKER_REGISTRY = "ccr.ccs.tencentyun.com"

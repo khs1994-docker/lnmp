@@ -19,6 +19,7 @@ LNMP Windows Package Manager
 
 COMMANDS:
 
+add         Add package [ --all-platform | ]
 install     Install soft [ --pre | ]
 uninstall   Uninstall soft [ --prune | ]
 remove      Uninstall soft
@@ -29,11 +30,14 @@ homepage    Opens the package's repository URL or homepage in your browser
 bug         Opens the package's bug report page in your browser
 releases    Opens the package's releases page in your browser
 help        Print help info
-add         Add package [ --all-platform | ]
-init        Init a new package (developer) [ --custom | ]
-push        Push a package to docker registry (developer)
-toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
 path        What PATH add to ~/.bashrc manual (Only Support in Linux/macOS)
+
+DEVELOPER:
+
+init        Init a new package [ --custom | ]
+dist        download package dist files
+toJson      Convert lwpm.y(a)ml to lwpm.json (need ``$ Install-Module powershell-yaml` )
+push        Push a package to docker registry
 
 SERVICES [Require RunAsAdministrator]:
 
@@ -44,7 +48,6 @@ stop-service    Stop service
 
 ENV:
 
-LWPM_DIST_ONLY
 LWPM_DOCKER_USERNAME
 LWPM_DOCKER_PASSWORD
 LWPM_DOCKER_REGISTRY
@@ -229,6 +232,43 @@ class Uname {
   }
 }
 
+Function _dist($soft, $version, $preVersion) {
+  $pkg_root = pkg_root $soft
+  $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
+
+  if (!$platforms) {
+    printError "dist package lwpm.json must include platform"
+
+    return
+  }
+
+  foreach ($platform in $platforms) {
+    $env:lwpm_architecture = $platform.architecture
+    $env:LWPM_UNAME_M = [Uname]::parser($env:lwpm_architecture)
+    $env:lwpm_os = $platform.os
+    $env:LWPM_UNAME_S = [Uname]::parser($env:lwpm_os)
+
+    $global:_IsMacOs = $false
+    $global:_IsWindows = $false
+    $global:_IsLinux = $false
+
+    if ($env:lwpm_os -eq 'darwin') { $global:_IsMacOs = $true }
+    if ($env:lwpm_os -eq 'windows') { $global:_IsWindows = $true }
+    if ($env:lwpm_os -eq 'linux') { $global:_IsLinux = $true }
+
+    if ($version) {
+      _install $version $preVersion $force
+    }
+    else {
+      _install -isPre $preVersion -force $force
+    }
+  }
+  $env:lwpm_architecture = $null
+  $env:lwpm_os = $null
+
+  _remove_module $soft
+}
+
 Function __install($softs) {
   $preVersion = 0
   $force = $false
@@ -255,38 +295,8 @@ Function __install($softs) {
     }
 
     if ($env:LWPM_DIST_ONLY -eq "true") {
-      $pkg_root = pkg_root $soft
-      $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
+      _dist $soft $version $preVersion $force
 
-      if (!$platforms) {
-        printError `$env:LWPM_DIST_ONLY is true`, but platform is empty`, skip
-      }
-
-      foreach ($platform in $platforms) {
-        $env:lwpm_architecture = $platform.architecture
-        $env:LWPM_UNAME_M = [Uname]::parser($env:lwpm_architecture)
-        $env:lwpm_os = $platform.os
-        $env:LWPM_UNAME_S = [Uname]::parser($env:lwpm_os)
-
-        $global:_IsMacOs = $false
-        $global:_IsWindows = $false
-        $global:_IsLinux = $false
-
-        if ($env:lwpm_os -eq 'darwin') { $global:_IsMacOs = $true }
-        if ($env:lwpm_os -eq 'windows') { $global:_IsWindows = $true }
-        if ($env:lwpm_os -eq 'linux') { $global:_IsLinux = $true }
-
-        if ($version) {
-          _install $version $preVersion $force
-        }
-        else {
-          _install -isPre $preVersion -force $force
-        }
-      }
-      $env:lwpm_architecture = $null
-      $env:lwpm_os = $null
-
-      _remove_module $soft
       continue
     }
 
@@ -700,7 +710,9 @@ function _push($opt) {
     $layers_file = $()
 
     if (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz) {
+      # pkg/dist/linux-amd64/dist.tar.gz
       write-host "==> found platform .tar.gz file, use it" -ForegroundColor Blue
+      # tmp/linux-amd64/pkg/dist/dist.tar.gz
       Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
 
       foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
@@ -711,17 +723,23 @@ function _push($opt) {
       }
     }
     elseif (Test-Path $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}) {
+      # pkg/dist/linux-amd64/file
       write-host "==> found platform file" -ForegroundColor Blue
+      # tmp/linux-amd64/pkg/dist/file
       Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
     }
     else {
+      # pkg/dist/file
       write-host "==> NO platform file" -ForegroundColor Blue
+      # tmp/linux-amd64/pkg/dist
       try { Copy-Item -r $pkg_root\dist   $lwpm_temp }catch { }
     }
 
     if ($layers_file.Count -eq 0) {
+      # tmp/dist/pkg/linux-amd64/dist.tar.gz
       $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
       Set-Location $lwpm_temp/../
+      # tmp/linux-amd64
       tar -zcvf dist.tar.gz $soft/dist
       Move-Item dist.tar.gz $dist_tar_file
 
@@ -880,8 +898,18 @@ function _toJson($soft) {
   Write-Host "==> Handle [ $soft ] success, please see $pkg_root/lwpm.json" -ForegroundColor Green
 }
 
+$env:LWPM_DIST_ONLY = "false"
+
 if ($args[0] -eq 'install') {
   $_, $softs = $args
+  __install $softs
+
+  _exit
+}
+
+if ($args[0] -eq 'dist') {
+  $_, $softs = $args
+  $env:LWPM_DIST_ONLY = "true"
   __install $softs
 
   _exit

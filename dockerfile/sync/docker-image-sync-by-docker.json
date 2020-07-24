@@ -1,7 +1,7 @@
 [
   {
-    "source": "gcr.io/google-containers/pause:3.2",
-    "dest": "pause:3.2"
+    "source": "gcr.io/google-containers/pause:3.3",
+    "dest": "pause:3.3"
   },
   {
     "source": "gcr.io/google-containers/coredns:1.7.0",

@@ -18,7 +18,6 @@ jobs:
     env:
       LWPM_DOCKER_USERNAME: khs1994
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      LWPM_DIST_ONLY: 'true'
       LWPM_DOCKER_REGISTRY: registry-1.docker.io
       DOCKER_ROOTFS_PHASE: "manifest list"
     strategy:
