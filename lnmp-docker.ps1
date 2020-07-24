@@ -130,8 +130,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.16.5"
-$DOCKER_DESKTOP_VERSION = "2.2.2.0 (43066)"
+$KUBERNETES_VERSION = "1.18.3"
+$DOCKER_DESKTOP_VERSION = "2.3.2.0"
 $EXEC_CMD_DIR = $PWD
 
 Function _command($command) {
@@ -181,6 +181,8 @@ Function _cp_init_file() {
   }
 
   _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
+
+  _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
 
   _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
@@ -286,7 +288,7 @@ Function check_docker_version() {
 Function init() {
   logs
   # git submodule update --init --recursive
-  printInfo 'Init is SUCCESS'
+  printInfo 'Init success'
   #@custom
   __lnmp_custom_init
 }
@@ -331,10 +333,10 @@ Commands:
   services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
-  vscode-remote        Open WSL2 app path on vscode
-  vscode-remote-init   Init vsCode remote development env
-  vscode-remote-run    Run command on vsCode remote workspace
-  vscode-remote-exec   Exec command on vsCode remote workspace
+  code                 Open WSL2 app path on vscode wsl remote
+  code-init            Init vsCode remote development env
+  code-run             Run command on vsCode remote workspace (e.g. ./lnmp-docker code-run -w /app/laravel composer install)
+  code-exec            Exec command on vsCode remote workspace (e.g. ./lnmp-docker code-exec -w /app/laravel workspace composer install)
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -509,12 +511,12 @@ Function satis() {
 
   if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
     wsl -d $WSL2_DIST -- docker run --rm -it `
-      --mount type=bind, src=${APP_ROOT}/satis, target=/build `
+      -v ${APP_ROOT}/satis:/build `
       --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
   }
   else {
     docker run --rm -it `
-      --mount type=bind, src=${APP_ROOT}/satis, target=/build `
+      -v ${APP_ROOT}/satis:/build `
       --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
   }
 }
@@ -558,6 +560,12 @@ Function get_compose_options($compose_files, $isBuild = 0) {
       continue
     }
 
+    if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
+      printError "Docker not running"
+      cd $EXEC_CMD_DIR
+      exit 1
+    }
+
     if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
       $LREW_INCLUDE_ROOT = wsl -d $WSL2_DIST -- wslpath "'$LREW_INCLUDE_ROOT'"
     }
@@ -581,7 +589,7 @@ Function get_compose_options($compose_files, $isBuild = 0) {
 
   $options += " --env-file $LNMP_ENV_FILE "
 
-  $options += " -f docker-lnmp.include.yml "
+  $options += " -f docker-lnmp.include.yml -f docker-workspace.yml"
 
   if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
     return $options
@@ -791,30 +799,48 @@ else {
 }
 
 $env:USE_WSL2_DOCKER_COMPOSE = '0'
+$env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
 
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
   $env:USE_WSL2_DOCKER_COMPOSE = '1'
 
-  printInfo "Use WSL2 compose"
+  docker info > $null 2>&1
 
-  $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
+  if ($?) {
+    printInfo "Use WSL2 compose"
 
-  wsl -d ${WSL2_DIST} -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
+    $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
 
-  wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
+    wsl -d ${WSL2_DIST} -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
 
-  if (!$?) {
-    printInfo "please check WSL2($WSL2_DIST) /etc/wsl.conf`n`n[interop]`nenabled=true"
+    wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
 
-    cd $EXEC_CMD_DIR
-    exit 1
+    if (!$?) {
+      printInfo "please check WSL2($WSL2_DIST) /etc/wsl.conf`n`n[interop]`nenabled=true"
+
+      cd $EXEC_CMD_DIR
+      exit 1
+    }
   }
-
+  else {
+    $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '1'
+    printInfo "Use WSL2 compose, but docker not running"
+  }
   function docker-compose() {
     if ($args[0] -eq '--version') {
+      if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
+        return docker-compose.exe --version
+      }
       return wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose --version"
     }
-    wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose $args"
+    if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
+      printError "Docker not running"
+      cd $EXEC_CMD_DIR
+      exit 1
+    }
+    else {
+      wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose $args"
+    }
   }
 }
 
@@ -1156,7 +1182,7 @@ switch -regex ($command) {
 
   ssl-self {
     docker run --init -it --rm `
-      --mount type=bind, src=$pwd/config/nginx/ssl-self, target=/ssl khs1994/tls $other
+      -v $pwd/config/nginx/ssl-self:/ssl khs1994/tls $other
 
     printInfo `
       'Import ./config/nginx/ssl-self/root-ca.crt to Browsers,then set hosts in C:\Windows\System32\drivers\etc\hosts'
@@ -1420,7 +1446,7 @@ XXX
     clear
 
     printInfo "please try kubernetes on website"
-    Start-Process -FilePath "https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61"
+    Start-Process -FilePath "https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61"
   }
 
   zan {
@@ -1477,7 +1503,7 @@ XXX
     }
 
     if (!(Test-Path pcit/key/public.key)) {
-      docker run -it --rm --mount type=bind, src=$PWD/pcit/key, target=/app pcit/pcit `
+      docker run -it --rm -v $PWD/pcit/key:/app pcit/pcit `
         openssl rsa -in private.key -pubout -out public.key
     }
 
@@ -1502,7 +1528,7 @@ XXX
       if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
         wsl -d $WSL2_DIST -- docker run -d --restart=always `
           -p 2376:2375 `
-          --mount type=bind, src=/var/run/docker.sock, target=/var/run/docker.sock `
+          -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
           --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
           shipyard/docker-proxy
@@ -1510,7 +1536,7 @@ XXX
       else {
         docker run -d --restart=always `
           -p 2376:2375 `
-          --mount type=bind, src=/var/run/docker.sock, target=/var/run/docker.sock `
+          -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
           --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
           shipyard/docker-proxy
@@ -1545,8 +1571,11 @@ XXX
       exit
     }
 
-    docker container rm -f `
-    $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
+    try {
+      docker container rm -f `
+      $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
+    }
+    catch {}
 
     printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes ${KUBERNETES_VERSION}"
 
@@ -1560,9 +1589,9 @@ XXX
     docker run -it -d `
       -p 443:443 `
       -p 80:80 `
-      --mount type=bind, src=$pwd/config/registry/config.gcr.io.yml, target=/etc/docker/registry/config.yml `
-      --mount type=bind, src=$pwd/config/registry, target=/etc/docker/registry/ssl `
-      --mount type=bind, src=$LNMP_CACHE/registry, target=/var/lib/registry `
+      -v $pwd/config/registry/config.gcr.io.yml:/etc/docker/registry/config.yml `
+      -v $pwd/config/registry:/etc/docker/registry/ssl `
+      -v $LNMP_CACHE/registry:/var/lib/registry `
       --label com.khs1994.lnmp.gcr.io `
       registry
 
@@ -1591,8 +1620,11 @@ XXX
       docker rmi  gcr.io/google_containers/$image
     }
 
-    docker container rm -f `
-    $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) | out-null
+    try {
+      docker container rm -f `
+      $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > $null 2>&1
+    }
+    catch {}
   }
 
   composer {
@@ -1646,7 +1678,7 @@ Example: ./lnmp-docker composer /app/demo install
     start-process "curl.exe" -ArgumentList "-L", "https://github.com/docker/compose/releases/download/${LNMP_DOCKER_COMPOSE_VERSION}/docker-compose-Windows-x86_64.exe", "-o", "$DIST" -Verb Runas -wait -WindowStyle Hidden
   }
 
-  "^vscode-remote-init$" {
+  "^code-init$" {
     cd $EXEC_CMD_DIR
 
     Copy-Item -r $PSScriptRoot/vscode-remote/*
@@ -1654,19 +1686,19 @@ Example: ./lnmp-docker composer /app/demo install
     printInfo "vsCode remote project init success"
   }
 
-  "^vscode-remote-run$" {
+  "^code-run$" {
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml run --rm $other
   }
 
-  "^vscode-remote-exec$" {
+  "^code-exec$" {
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml exec $other
   }
 
-  "^vscode-remote$" {
+  "^code$" {
     code --remote wsl+$WSL2_DIST $APP_ROOT
   }
 

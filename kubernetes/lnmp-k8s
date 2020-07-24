@@ -7,6 +7,7 @@ if ! [ -f .env ];then cp .env.example .env; fi
 if ! [ -f coreos/.env ];then cp coreos/.env.example coreos/.env; fi
 if ! [ -f systemd/.env ];then cp systemd/.env.example systemd/.env; fi
 if ! [ -f nfs-server/.env ];then cp nfs-server/.env.example nfs-server/.env; fi
+if ! [ -f nfs-server/exports.txt ];then cp nfs-server/exports.example.txt nfs-server/exports.txt; fi
 if ! [ -f wsl2/.env ];then cp wsl2/.env.example wsl2/.env; fi
 
 source ./systemd/.env.example
@@ -614,7 +615,7 @@ _gvisor_containerd_conf(){
 
     return
   fi
-
+print_info "config containerd with gvisor(runsc) ..."
 # containerd 1.4.x
 cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
@@ -623,6 +624,7 @@ cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
   # runtime_root = ""
   # privileged_without_host_devices = false
   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
+    SystemdCgroup = false
 EOF
 }
 
@@ -719,13 +721,11 @@ _containerd_install(){
 
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
-  $(_sudo) mv ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
-
-  $(_sudo) chmod +x /usr/local/bin/*
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
 }
 
 _cni_install(){
@@ -777,6 +777,7 @@ _crictl_docker_conf(){
 
 _crictl_containerd_conf(){
   $(_sudo) rm -rf /etc/crictl.yaml
+  print_info "conf crictl with containerd"
   cat <<EOF | $(_sudo) tee -a /etc/crictl.yaml
 runtime-endpoint: unix:///run/kube-containerd/containerd.sock
 image-endpoint: unix:///run/kube-containerd/containerd.sock
@@ -787,6 +788,7 @@ EOF
 
 _crictl_crio_conf(){
   $(_sudo) rm -rf /etc/crictl.yaml
+  print_info "conf crictl with cri-o"
   cat <<EOF | $(_sudo) tee -a /etc/crictl.yaml
 runtime-endpoint: unix:///var/run/crio/crio.sock
 image-endpoint: unix:///var/run/crio/crio.sock
@@ -814,8 +816,10 @@ _crictl_install(){
   if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
     local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
     if ! [ $sha256 = "876dd2b3d0d1c2590371f940fb1bf1fbd5f15aebfbe456703ee465d959700f4a" ];then
-      test $GOARCH = 'amd64' && $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
-      test $GOARCH = 'amd64' && __download
+      if [ $GOARCH = 'amd64' ];then
+        $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+        __download
+      fi
     fi
   else
       __download
@@ -843,6 +847,7 @@ _k8s_install_dep(){
 
 _k8s_install_disable_firewalld(){
   # 关闭防火墙
+  print_info "stop and disable firewalld"
   $(_sudo) systemctl stop firewalld && $(_sudo) systemctl disable firewalld || true
 }
 
@@ -853,7 +858,7 @@ _k8s_install_cp_bin(){
     $(_sudo) cp $PWD/kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}/kubernetes/server/bin/* ${K8S_ROOT}/bin/
   fi
 
-  $(_sudo) cp bin/*.sh ${K8S_ROOT}/bin/
+  $(_sudo) install -m755 bin/*.sh ${K8S_ROOT}/bin/
 
   $(_sudo) chmod +x ${K8S_ROOT}/bin/*
 }
@@ -900,10 +905,14 @@ _conmon_install(){
     return
   fi
 
-  if [ $OS = "linux" -a $ARCH = "amd64"];then
+  if [ $OS = "Linux" -a $GOARCH = "amd64" ];then
+    $(_sudo) $(_curl) -o /usr/local/bin/conmon \
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION} \
+    || \
     $(_sudo) $(_curl) -o /usr/local/bin/conmon \
       https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
 
+    $(_sudo) chmod +x /usr/local/bin/conmon
     return
   fi
 
@@ -942,7 +951,6 @@ _crio_install(){
   command -v yum > /dev/null && isRPM=1
 
   test -n "$isRPM" && $(_sudo) yum install -y \
-  containers-common \
   git \
   glib2-devel \
   glibc-devel \
@@ -954,8 +962,7 @@ _crio_install(){
   libseccomp-devel \
   libselinux-devel \
   pkgconfig \
-  make \
-  runc
+  make
 
   # $(_sudo) sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
@@ -963,12 +970,15 @@ _crio_install(){
   # $(_sudo) sed -i "s#archive.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.ubuntu.com#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
 
+  # && . /etc/os-release \
+  # && sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list" \
+  # && wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add - \
+  # && $(_sudo) apt-get update -qq \
+
   command -v apt > /dev/null \
   && $(_sudo) apt update -qq || true \
   ; $(_sudo) apt install -y software-properties-common \
-  && $(_sudo) apt-add-repository -y ppa:projectatomic/ppa \
-  && $(_sudo) apt-get update -qq ; $(_sudo) apt-get install -y \
-  containers-common \
+  ; $(_sudo) apt-get install -y \
   git \
   $(command -v go > /dev/null || echo "golang-go") \
   libassuan-dev \
@@ -980,10 +990,12 @@ _crio_install(){
   libsystemd-dev \
   libselinux1-dev \
   pkg-config \
-  $(command -v runc > /dev/null || echo "cri-o-runc") \
   libudev-dev \
   gcc \
   make
+
+  # containers-common
+  $(_sudo) cp -r systemd/etc/containers/. /etc/containers
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
@@ -1034,6 +1046,8 @@ _crio_config(){
 
   _cri_sysctl
 
+  print_info "config kubelet with cri-o"
+
   local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
 
   cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-crio.conf
@@ -1052,6 +1066,8 @@ _containerd_cri_config(){
 
   _cri_sysctl
 
+  print_info "config kubelet with containerd"
+
   local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
 
   cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-containerd.conf
@@ -1068,7 +1084,7 @@ _docker_default_conf(){
 # k8s install
 
 _check_master_ip(){
-  if [ ${MASTER_IP} == '192.168.199.100' ];then
+  if [ ${MASTER_IP} = '192.168.199.100' ];then
     clear
     echo ""
     echo "======================================================"
@@ -1129,6 +1145,24 @@ csr-crb.yaml,\
 kube-scheduler.config.yaml,\
 encryption-config.yaml} \
     ${K8S_ROOT}/conf/
+}
+
+# https://github.com/kubernetes/kubeadm/issues/273
+# 16.04 not use systemd-resolved
+# 18.04 use systemd-resolved
+
+_replace_kubelet_resolv_conf(){
+  local REPLACE_KUBELET_RESOLV_CONF=true
+  $(_sudo) systemctl is-active systemd-resolved > /dev/null \
+    || local REPLACE_KUBELET_RESOLV_CONF=false
+
+  if [ $REPLACE_KUBELET_RESOLV_CONF = 'true' ];then
+    print_info "replace_kubelet_resolv_conf"
+    $(_sudo) sed -i "s#^resolvConf.*#resolvConf: /run/systemd/resolve/resolv.conf#g" \
+    ${K8S_ROOT}/conf/kubelet.config.yaml
+  fi
+
+  $(_sudo) cat ${K8S_ROOT}/conf/kubelet.config.yaml | grep resolvConf
 }
 
 _k8s_install_conf_replace(){
@@ -1209,6 +1243,7 @@ _k8s_install(){
   _k8s_install_conf_cp
 
   _k8s_install_conf_replace
+  _replace_kubelet_resolv_conf
 
   _gvisor_install
 
@@ -1313,12 +1348,13 @@ _k8s_join(){
 
   test $SKIP_CP_K8S_BIN -ne 1 && _k8s_install_cp_bin || \
   (print_info "skip cp k8s bin" ; \
-     $(_sudo) cp bin/*.sh ${K8S_ROOT}/bin/ ; \
+     $(_sudo) install -m755 bin/*.sh ${K8S_ROOT}/bin/ ; \
      $(_sudo) chmod +x ${K8S_ROOT}/bin/*)
 
   _k8s_join_conf_cp
 
   _k8s_join_conf_replace
+  _replace_kubelet_resolv_conf
 
   _gvisor_install
   _crictl_install
@@ -1398,13 +1434,15 @@ _local_cleanup(){
 }
 
 if [ "${LNMP_CN_ENV}" = 'false' ];then
-  print_info "CN Mirror disabled, I will replace cn mirror ... "
+  print_info "CN mirror disabled, I will replace cn mirror ... "
   $(_sudo) sed -i "s#hub-mirror.c.163.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" `grep hub-mirror.c.163.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#mirror.baidubce.com#${LNMP_DOCKER_MIRROR:-mirror.gcr.io}#g" `grep mirror.baidubce.com -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
   $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller#us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller#g" `grep ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller -rl $PWD/addons` || true
+  $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/metrics-server#k8s.gcr.io/metrics-server/metrics-server#g" `grep ccr.ccs.tencentyun.com/khs1994/metrics-server -rl $PWD/addons` || true
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/addons` || true
+  print_info "[end] CN mirror disabled"
 fi
 
 _command=$1

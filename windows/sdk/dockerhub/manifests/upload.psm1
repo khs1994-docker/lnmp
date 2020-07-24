@@ -1,5 +1,5 @@
 Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$manifest_json_path, [string]$contentType = "application/vnd.docker.distribution.manifest.v2+json", [string]$registry = "registry.hub.docker.com") {
-  write-host "==> push [ $image $ref ] $contentType" -ForegroundColor Green
+  write-host "==> push [ $image $ref ] $contentType" -ForegroundColor Blue
 
   if (!($IsWindows)) { $env:TEMP = "/tmp" }
 

@@ -90,6 +90,6 @@ jobs:
         options: -v mysql-data:/var/lib/mysql --restart always --workdir=/
 
       redis:
-        image: redis:6.0.5-alpine
+        image: redis:6.0.6-alpine
         ports:
           - 6379:6379

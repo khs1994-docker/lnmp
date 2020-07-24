@@ -4,16 +4,15 @@
     "dest": "not-exists:latest"
   },
   {
-    "source": "node:alpine",
-    "dest": "node:alpine"
+    "source": "node:alpine"
   },
   {
     "source": "node:14.5.0-alpine",
     "dest": "node:14.5.0-alpine"
   },
   {
-    "source": "golang:1.14.5-alpine",
-    "dest": "golang:1.14.5-alpine"
+    "source": "golang:1.14.6-alpine",
+    "dest": "golang:1.14.6-alpine"
   },
   {
     "source": "golang:alpine",
@@ -36,8 +35,8 @@
     "dest": "python:alpine"
   },
   {
-    "source": "library/python:3.8.3-alpine",
-    "dest": "python:3.8.3-alpine"
+    "source": "library/python:3.8.5-alpine",
+    "dest": "python:3.8.5-alpine"
   },
   {
     "source": "library/mysql:latest",
@@ -96,12 +95,12 @@
     "dest": "kong:alpine"
   },
   {
-    "source": "library/kong:2.0.5",
-    "dest": "kong:2.0.5"
+    "source": "library/kong:2.1.0",
+    "dest": "kong:2.1.0"
   },
   {
-    "source": "library/kong:2.0.5-alpine",
-    "dest": "kong:2.0.5-alpine"
+    "source": "library/kong:2.1.0-alpine",
+    "dest": "kong:2.1.0-alpine"
   },
   {
     "source": "library/redis:alpine",
@@ -112,8 +111,8 @@
     "dest": "redis:5.0.9-alpine"
   },
   {
-    "source": "library/redis:6.0.5-alpine",
-    "dest": "redis:6.0.5-alpine"
+    "source": "library/redis:6.0.6-alpine",
+    "dest": "redis:6.0.6-alpine"
   },
   {
     "source": "library/memcached:alpine",
@@ -156,16 +155,16 @@
     "dest": "rabbitmq:alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.3-alpine",
-    "dest": "rabbitmq:3.8.3-alpine"
+    "source": "library/rabbitmq:3.8.5-alpine",
+    "dest": "rabbitmq:3.8.5-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
     "dest": "rabbitmq:management-alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.3-management-alpine",
-    "dest": "rabbitmq:3.8.3-management-alpine"
+    "source": "library/rabbitmq:3.8.5-management-alpine",
+    "dest": "rabbitmq:3.8.5-management-alpine"
   },
   {
     "source": "phpmyadmin/phpmyadmin:latest",
@@ -212,19 +211,45 @@
     "dest": "caddy:alpine"
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.9",
-    "dest": "etcd:v3.4.9",
-    "platform": [
+    "source": "quay.io/coreos/etcd:v3.4.10",
+    "dest": "etcd:v3.4.10",
+    "platforms": [
+      {
+        "source": "quay.io/coreos/etcd:v3.4.10"
+      },
       {
         "os": "linux",
         "architecture": "arm64",
         "variant": "v8",
-        "image": "quay.io/coreos/etcd:v3.4.9-arm64"
+        "source": "quay.io/coreos/etcd:v3.4.10-arm64",
+        "dest": "etcd:v3.4.10-arm64"
       }
     ]
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.9-arm64",
-    "dest": "etcd:v3.4.9-arm64"
+    "source": "quay.io/coreos/flannel:v0.12.0-amd64",
+    "dest": "flannel:v0.12.0",
+    "platforms": [
+      {
+        "source": "quay.io/coreos/flannel:v0.12.0-amd64",
+        "dest": "flannel:v0.12.0-amd64"
+      },
+      {
+        "os": "linux",
+        "architecture": "arm64",
+        "variant": "v8",
+        "source": "quay.io/coreos/flannel:v0.12.0-arm64",
+        "dest": "flannel:v0.12.0-arm64"
+      },
+      {
+        "os": "linux",
+        "architecture": "arm",
+        "variant": "v7",
+        "dest": "flannel:v0.12.0-arm",
+        "registry": "quay.io",
+        "image": "coreos/flannel",
+        "ref": "v0.12.0-arm"
+      }
+    ]
   }
 ]

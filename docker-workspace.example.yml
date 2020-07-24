@@ -11,7 +11,7 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:7.4.8-composer-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.8}-composer-alpine
     networks:
       - backend
     volumes:
@@ -19,6 +19,7 @@ services:
       - vscode-server-insiders:/root/.vscode-server-insiders
       - vscode-phpls-cache:/root/.phpls
       # fix me
+      # linux/macOS
       # - ./app:/app
       # fix me 将依赖挂载到数据卷
       # - vendor:/app/demo/vendor
@@ -56,6 +57,7 @@ services:
     ports:
       # xdebug port
       - 9001:9001
+    restart: always
     command: /bin/sh -c "while sleep 1000; do :; done"
     environment:
       APP_ENV: development
@@ -64,13 +66,13 @@ services:
   composer:
     << : *workspace
     << : *common
-    image: "khs1994/php:7.4.8-composer-alpine"
+    image: "khs1994/php:${LNMP_PHP_VERSION:-7.4.8}-composer-alpine"
     command: [] # install | update
 
   npm:
     << : *workspace
     << : *common
-    image: node:14.5.0-alpine
+    image: node:${LNMP_NODE_VERSION:-14.5.0}-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 

@@ -70,6 +70,7 @@ systemd:
         Environment="K8S_ROOT=${K8S_ROOT}"
 
         ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
+        ExecStartPre=-/usr/bin/env chmod 700 /opt/k8s/var/lib/etcd
 
         ExecStartPre=-podman container rm etcd
         ExecStartPre=-/bin/podman pull quay.io/coreos/etcd:v${ETCD_VERSION}

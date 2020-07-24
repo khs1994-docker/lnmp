@@ -2,19 +2,26 @@
 
 FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 
+# source 仓库的凭证，若为公开仓库则可以不设置
 # ENV SOURCE_DOCKER_USERNAME=
 # ENV SOURCE_DOCKER_PASSWORD=
-# ENV SOURCE_DOCKER_REGISTRY=
+# ENV SOURCE_DOCKER_REGISTRY=hub-mirror.c.163.com
 
+# dest 仓库的凭证，必须设置
 # ENV DEST_DOCKER_USERNAME=
 # ENV DEST_DOCKER_PASSWORD=
 # ENV DEST_DOCKER_REGISTRY=
 
+# 是否排除 manifest 中 "s390x", "ppc64le", "386", "mips64le" 架构的镜像，默认为 true 排除
 # ENV EXCLUDE_PLATFORM=true
+# 是否同步 windows 镜像，默认为 false 不同步
 # ENV SYNC_WINDOWS=false
 
 # ENV SOURCE_NAMESPACE=library
 # ENV DEST_NAMESPACE=library
+
+# 远程的配置文件
+# ENV CONFIG_URL
 
 RUN apk add --no-cache curl
 

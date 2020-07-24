@@ -1,12 +1,12 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   rabbitmq:
-    << : *default-common
-    image: rabbitmq:${LNMP_RABBITMQ_VERSION:-3.8.3}-management-alpine
+    << : *common
+    image: rabbitmq:${LNMP_RABBITMQ_VERSION:-3.8.5}-management-alpine

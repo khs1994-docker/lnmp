@@ -10,11 +10,6 @@
 * Docker 服务端(`dockerd`) 运行于 `WSL2`
 * 数据放到 `wsl-k8s-data` WSL2 发行版
 
-## 准备(自定义 DNS 服务器)
-
-* `etcd`
-* `coreDNS`
-
 ## docker-lnmp CLI
 
 * 直接在终端执行 `$ ./lnmp-docker` 无需切换到 WSL2
@@ -29,13 +24,9 @@ enabled = true
 root = /
 ```
 
-## 2. [配置 Docker](https://docs.docker.com/engine/reference/commandline/dockerd/)
+## 2. [配置 Docker](https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file)
 
-`/etc/default/docker`
-
-```bash
-DOCKER_OPTS="--registry-mirror=https://hub-mirror.c.163.com --host tcp://0.0.0.0:2375 --host unix:///var/run/docker.sock --data-root=/wsl/wsl-k8s-data/docker"
-```
+复制 `config/etc/docker/daemon.example.json` 到 `config/etc/docker/daemon.json`
 
 ## 3. 不要设置 `DOCKER_HOST` 环境变量
 
@@ -46,7 +37,7 @@ DOCKER_OPTS="--registry-mirror=https://hub-mirror.c.163.com --host tcp://0.0.0.0
 Windows `~/.docker/config.json` 增加 `"experimental": "enabled"`
 
 ```bash
-$ docker context create wsl2 --description "wsl2" --docker "host=tcp://localhost:2375"
+$ docker context create wsl2 --description "wsl2" --docker "host=tcp://localhost:2376"
 
 $ docker context use wsl2
 ```
@@ -59,25 +50,15 @@ $ docker context use wsl2
 $ ./lnmp-docker dockerd start
 ```
 
-* 监听 WSL2 IP 变化,并写入 hosts
-
 ## 6. 使用
 
 ```bash
 $ ./lnmp-docker up
 ```
 
-## 7. 设置 hosts
-
-`kubernetes/wsl2/.env.ps1` 自行添加要解析到 WSL2 的域名
-
-```powershell
-$WSL2_DOMAIN="wsl.t.khs1994.com","test2.t.khs1994.com"
-```
-
 ## 8. 原理说明
 
-* DOCKER_HOST `tcp://wsl2:2375`
+* DOCKER_HOST `tcp://127.0.0.1:2376`
 * COMPOSE_CONVERT_WINDOWS_PATHS=1
 
 ## 9. Xdebug
@@ -96,7 +77,7 @@ LNMP_XDEBUG_REMOTE_HOST=wsl2.lnmp.khs1994.com
 
 ### vsCode 设置(远程开发)
 
-`文件` -> `首选项` -> `设置` -> `搜索 Docker:host` -> `改为 tcp://wsl2:2375`
+`文件` -> `首选项` -> `设置` -> `搜索 Docker:host` -> `改为 tcp://127.0.0.1:2376`
 
 ```powershell
 # $ [environment]::SetEnvironmentvariable("COMPOSE_CONVERT_WINDOWS_PATHS", "1", "User")

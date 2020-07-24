@@ -30,3 +30,6 @@ deployment/**/*.custom.ini
 deployment/**/*.custom.json
 
 my-custom
+
+*.zip
+*.tar.gz

@@ -15,8 +15,8 @@ systemd:
         RestartSec=5
         WorkingDirectory=/tmp
 
-        ExecStartPre=bash -c "if ! [ `/usr/local/bin/kube-containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/kube-containerd; fi"
-        ExecStartPre=bash -c "if ! [ -f /usr/local/bin/kube-containerd ];then \
+        ExecStartPre=/usr/bin/env bash -c "if ! [ `/usr/local/bin/kube-containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/kube-containerd; fi"
+        ExecStartPre=/usr/bin/env bash -c "if ! [ -f /usr/local/bin/kube-containerd ];then \
           rm -rf /tmp/bin ;\
           tar -zxvf /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz \
           -C /tmp ;\

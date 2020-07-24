@@ -6,11 +6,11 @@
 
 ## vsCode 远程开发
 
-* 请查看 https://github.com/khs1994-docker/lnmp/tree/19.03/vscode-remote
+Windows 用户建议使用 vsCode 远程开发，具体请查看 https://github.com/khs1994-docker/lnmp/tree/19.03/vscode-remote
 
 ## Create PHP Application by Composer
 
-[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php-demo.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php-demo) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/example.svg)](https://packagist.org/packages/khs1994/example) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/php-demo/all.svg)](https://github.com/khs1994-docker/php-demo/releases) [![Build Status](https://travis-ci.com/khs1994-docker/php-demo.svg?branch=master)](https://travis-ci.com/khs1994-docker/php-demo) [![StyleCI](https://styleci.io/repos/124168962/shield?branch=master)](https://styleci.io/repos/124168962) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+[![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/php-demo.svg?style=social&label=Stars)](https://github.com/khs1994-docker/php-demo) [![PHP from Packagist](https://img.shields.io/packagist/php-v/khs1994/example.svg)](https://packagist.org/packages/khs1994/example) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/php-demo/all.svg)](https://github.com/khs1994-docker/php-demo/releases) [![Build Status](https://travis-ci.com/khs1994-docker/php-demo.svg?branch=master)](https://travis-ci.com/khs1994-docker/php-demo) [![StyleCI](https://styleci.io/repos/124168962/shield?branch=master)](https://styleci.io/repos/124168962) [![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ```bash
 $ composer create-project --prefer-dist khs1994/example demo
@@ -28,13 +28,9 @@ $ cd demo
 
 ## 说明
 
-* 本项目以 PHP 最新的主线版本 `7.4.8` 为例，如果你需要其他版本，或多种版本请到 https://github.com/khs1994-docker/lnmp/issues/354 反馈
-
 * Laravel 项目，请查看 https://github.com/khs1994-docker/laravel-demo
 
 ## 初始化
-
-> 注意本项目专用于 khs1994.com PHP 开源项目，他人使用请按以下步骤进行初始化，严禁直接使用。
 
 * 编辑 `.pcit.php` 文件中的常量
 
@@ -170,12 +166,6 @@ $ lnmp-composer require phpunit/phpunit
 $ lnmp-composer install [--ignore-platform-reqs]
 ```
 
-在容器内安装依赖(为了提高性能，依赖放到数据卷中，所以本地和容器都需执行一次 composer 命令)。
-
-```bash
-$ lnmp-docker composer install
-```
-
 ### 9. 编写 PHP 代码
 
 ### 10. 编写 PHPUnit 测试代码
@@ -212,7 +202,7 @@ $ lnmp-phpunit [参数]
 自行修改 `.env` `docker-compose.yml` 文件，保留所需的 PHP 版本，其他的注释
 
 ```bash
-$ docker-compose build php72 nginx
+$ docker-compose build php nginx
 ```
 
 ### 13. 将项目提交到 Git
@@ -254,7 +244,3 @@ CI/CD 可以到 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 查看
 #### 4. 使用 `daemonset` 部署 `gti-sync`（代码不在镜像中）
 
 让 **每个节点** 都拥有一份代码，这样就不用关心 `pod` 调度到哪个节点。
-
-## 五 已知问题
-
-1. Windows 使用 composer 容器安装依赖较缓慢

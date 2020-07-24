@@ -2,17 +2,19 @@
 
 * EFK
 
-* ingress-nginx `0.34.0`
-
-* ingress-kong `0.9.0`
-
-* metrics-server `0.3.6`
+* metrics-server `0.3.7`
 
 * CoreDNS `1.7.0`
 
 * Dashboard `2.0.3`
 
 * Istio `1.6.1`
+
+## ingress
+
+* ingress-nginx `0.34.0`
+
+* ingress-kong `0.9.0`
 
 ## CNI
 

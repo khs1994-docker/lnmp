@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   restart: always
   env_file: ./cli/timezone.env
   networks:
@@ -10,14 +10,14 @@ x-common:
   #   - ${DNS:-114.114.114.114}
 
 x-common-label:
-  &default-common-label
+  &common-label
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   httpd:
-    << : *default-common
+    << : *common
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${LNMP_HTTPD_VERSION:-2.4.43}-alpine"
     ports:
       - "${LNMP_HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
@@ -26,7 +26,7 @@ services:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/httpd/${LNMP_HTTPD_CONF:-httpd.conf}:/usr/local/apache2/conf/httpd.conf:cached
       - ./config/${LNMP_HTTPD_CONF_D:-httpd}:/usr/local/apache2/conf.d:cached
-      - ./log/httpd:/usr/local/apache2/logs:delegated
+      - ./log/httpd:/usr/local/apache2/logs:cached
     working_dir: /app
     networks:
       - frontend

@@ -7,6 +7,7 @@ Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
+Import-Module $PSScriptRoot\sdk\dockerhub\utils\Get-SHA.psm1
 
 $manifest_list_media_type = "application/vnd.docker.distribution.manifest.list.v2+json"
 $manifest_media_type = "application/vnd.docker.distribution.manifest.v2+json"
@@ -31,7 +32,7 @@ Import-Module -force $PSScriptRoot/sdk/dockerhub/imageParser/imageParser.psm1
 
 Function _upload_manifest($token, $image, $ref, $manifest_json_path, $registry) {
   New-Manifest $token $image $ref $manifest_json_path `
-    $manifest_media_type $registry
+    $manifest_media_type $registry | out-host
 }
 
 Function _exclude_platform($manifests, $manifest_list_json_path) {
@@ -90,21 +91,129 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
       throw 'error'
     }
     # upload  blob
-    New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry
+    New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry | out-host
   }
+}
+
+Function _getSourceToken($source_registry, $source_image) {
+  $env:DOCKER_PASSWORD = $null
+  $env:DOCKER_USERNAME = $null
+
+  try {
+    $tokenServer, $tokenService = Get-TokenServerAndService $source_registry
+
+    $env:DOCKER_PASSWORD = $env:SOURCE_DOCKER_PASSWORD
+    $env:DOCKER_USERNAME = $env:SOURCE_DOCKER_USERNAME
+    $token = Get-DockerRegistryToken $source_image 'pull' $tokenServer $tokenService
+
+    return $token
+  }
+  catch {
+    write-host "==> get source token error" -ForegroundColor Yellow
+    write-host $_.Exception
+  }
+
+  return Get-DockerRegistryToken $source_image
+}
+
+Function _getDestToken($dest_registry, $dest_image) {
+  try {
+    $tokenServer, $tokenService = Get-TokenServerAndService $dest_registry
+
+    $env:DOCKER_PASSWORD = $env:DEST_DOCKER_PASSWORD
+    $env:DOCKER_USERNAME = $env:DEST_DOCKER_USERNAME
+    $dest_token = Get-DockerRegistryToken $dest_image 'push,pull' $tokenServer $tokenService
+
+    return $dest_token
+  }
+  catch {
+    write-host "==> [error] get $dest_registry dest token error" `
+      -ForegroundColor Red
+    write-host $_.Exception
+  }
+}
+
+Function _all_in_one($config) {
+  # 把不支持 manifest list 的镜像组合成 manifest list
+  $manifests = $()
+
+  foreach ($platform in $config.platforms) {
+    $dest = $config.dest
+    if ($platform.dest) {
+      $dest = $platform.dest
+    }
+
+    $manifest_json_path = _sync $platform.source $dest $platform
+
+    if (!($manifest_json_path)) {
+      write-host "==> [error] get manifest error, skip" -ForegroundColor Red
+
+      return
+    }
+    write-host $manifest_json_path
+    $size = (ls $manifest_json_path).Length
+    $digest = Get-SHA256 $manifest_json_path
+    $architecture = "amd64"
+    $os = "linux"
+    if ($platform.architecture) {
+      $architecture = $platform.architecture
+    }
+    if ($platform.os) {
+      $os = $platform.os
+    }
+    $manifest = @{
+      "digest"    = "sha256:$digest";
+      "mediaType" = "application/vnd.docker.distribution.manifest.v2+json";
+      "platform"  = @{
+        "architecture" = $architecture;
+        "os"           = $os;
+      };
+      "size"      = $size
+    }
+
+    if ($platform.variant) {
+      $manifest.platform.variant = $platform.variant
+    }
+
+    $manifests += , $manifest
+  }
+
+  write-host "==> push all-in-one manifest list" -ForegroundColor Blue
+
+  $data = ConvertTo-Json -InputObject @{
+    "mediaType"     = "application/vnd.docker.distribution.manifest.list.v2+json";
+    "schemaVersion" = 2;
+    "manifests"     = $manifests
+  } -Compress -Depth 10
+
+  $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000).tostring().Substring(0, 10)
+  $manifest_list_json_path = "$HOME/.khs1994-docker-lnmp/dockerhub/manifests/${now_timestrap}_all_in_one.json"
+  Write-Output $data | Set-Content -NoNewline $manifest_list_json_path
+
+  $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $config.dest $false
+
+  $dest_token = _getDestToken $dest_registry $dest_image
+  New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
+    $manifest_list_media_type $dest_registry
 }
 
 Function _sync($source, $dest, $config) {
   if ($config.registry) {
     write-host "==> skip parse source image, read from config"
 
-    $source_registry = $item.registry
-    $source_image = $item.image
-    $source_ref = $item.ref
-    $source_image_with_digest = $item.digest
+    $source_registry = $config.registry
+    $source_image = $config.image
+    $source_ref = $config.ref
+    $source_image_with_digest = $config.digest
   }
   else {
     $source_registry, $source_image, $source_ref, $source_image_with_digest = imageParser $source
+  }
+
+  if ($config.platforms) {
+    _all_in_one $config
+
+    return
   }
 
   $dest_registry, $dest_image, $dest_ref, $dest_image_with_digest = imageParser $dest $false
@@ -121,52 +230,14 @@ Function _sync($source, $dest, $config) {
   # test
   # return
 
-  Function _getSourceToken() {
-    $env:DOCKER_PASSWORD = $null
-    $env:DOCKER_USERNAME = $null
-
-    try {
-      $tokenServer, $tokenService = Get-TokenServerAndService $source_registry
-
-      $env:DOCKER_PASSWORD = $env:SOURCE_DOCKER_PASSWORD
-      $env:DOCKER_USERNAME = $env:SOURCE_DOCKER_USERNAME
-      $token = Get-DockerRegistryToken $source_image 'pull' $tokenServer $tokenService
-
-      return $token
-    }
-    catch {
-      write-host "==> get source token error" -ForegroundColor Yellow
-      write-host $_.Exception
-    }
-
-    return Get-DockerRegistryToken $source_image
-  }
-
-  Function _getDestToken() {
-    try {
-      $tokenServer, $tokenService = Get-TokenServerAndService $dest_registry
-
-      $env:DOCKER_PASSWORD = $env:DEST_DOCKER_PASSWORD
-      $env:DOCKER_USERNAME = $env:DEST_DOCKER_USERNAME
-      $dest_token = Get-DockerRegistryToken $dest_image 'push,pull' $tokenServer $tokenService
-
-      return $dest_token
-    }
-    catch {
-      write-host "==> [error] get $dest_registry dest token error" `
-        -ForegroundColor Red
-      write-host $_.Exception
-    }
-  }
-
   if (!$env:DEST_DOCKER_PASSWORD -or !$env:DEST_DOCKER_USERNAME) {
     write-host "==> please set `$env:DEST_DOCKER_USERNAME and `$env:DEST_DOCKER_PASSWORD" -ForegroundColor Red
 
     exit 1
   }
 
-  $source_token = _getSourceToken
-  $dest_token = _getDestToken
+  $source_token = _getSourceToken $source_registry $source_image
+  $dest_token = _getDestToken $dest_registry $dest_image
 
   if (!$source_token -or !$dest_token) {
     write-host "==> [error] get source or dest token error " -ForegroundColor Red
@@ -175,7 +246,7 @@ Function _sync($source, $dest, $config) {
   }
 
   # get manifest list
-  $token = _getSourceToken
+  $token = _getSourceToken $source_registry $source_image
   $manifest_list_json_path = Get-Manifest $token $source_image $source_ref -raw $false `
     -registry $source_registry
   if ($manifest_list_json_path) {
@@ -222,7 +293,7 @@ Function _sync($source, $dest, $config) {
       $platform = $manifest.platform
 
       # check manifest exists
-      $dest_token = _getDestToken
+      $dest_token = _getDestToken $dest_registry $dest_image
       try {
         $manifest_exists = Test-Manifest $dest_token $dest_image $manifest_digest -registry $dest_registry
       }
@@ -242,13 +313,13 @@ manifest $manifest_digest already exists" `
         if (!$push_manifest_once) {
           Write-Host "==> Push manifest once" -ForegroundColor Blue
 
-          $token = _getSourceToken
+          $token = _getSourceToken $source_registry $source_image
           $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
             $manifest_media_type `
             -raw $false -registry $source_registry
 
           # upload manifests once
-          $dest_token = _getDestToken
+          $dest_token = _getDestToken $dest_registry $dest_image
           _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
             $dest_registry
 
@@ -268,7 +339,7 @@ manifest $manifest_digest already exists" `
       # manifest list not exists
       $manifest_digest = $source_ref
       # get source manifest
-      $token = _getSourceToken
+      $token = _getSourceToken $source_registry $source_image
       $source_manifest_digest = Get-Manifest $token $source_image $manifest_digest `
         $manifest_media_type `
         -raw $false -registry $source_registry -return_digest_only $true
@@ -279,7 +350,7 @@ manifest $manifest_digest already exists" `
       }
 
       # check manifest digest exists in dest
-      $dest_token = _getDestToken
+      $dest_token = _getDestToken $dest_registry $dest_image
       try {
         $manifest_exists = Test-Manifest $dest_token $dest_image $source_manifest_digest -registry $dest_registry
       }
@@ -292,20 +363,20 @@ manifest $manifest_digest already exists" `
       if ($manifest_exists) {
         write-host "==> source manifest is exists on dest, repush" -ForegroundColor Blue
 
-        $token = _getSourceToken
+        $token = _getSourceToken $source_registry $source_image
         $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
           $manifest_media_type -raw $false -registry $source_registry
 
-        $dest_token = _getDestToken
+        $dest_token = _getDestToken $dest_registry $dest_image
         _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
           $dest_registry
 
-        return
+        return $manifest_json_path
       }
     } # manifest list not exists end
 
     # get manifest
-    $token = _getSourceToken
+    $token = _getSourceToken $source_registry $source_image
     $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
       $manifest_media_type -raw $false -registry $source_registry
 
@@ -321,8 +392,8 @@ manifest not found, skip" -ForegroundColor Red
     $config_digest = $manifest_json.config.digest
 
     # check config blob exists
-    $dest_token = _getDestToken
-    $source_token = _getSourceToken
+    $dest_token = _getDestToken $dest_registry $dest_image
+    $source_token = _getSourceToken $source_registry $source_image
 
     try {
       _upload_blob $dest_token $dest_image $config_digest `
@@ -335,8 +406,8 @@ manifest not found, skip" -ForegroundColor Red
 
     foreach ($layer in $layers) {
       $layer_digest = $layer.digest
-      $dest_token = _getDestToken
-      $source_token = _getSourceToken
+      $dest_token = _getDestToken $dest_registry $dest_image
+      $source_token = _getSourceToken $source_registry $source_image
 
       try {
         _upload_blob $dest_token $dest_image $layer_digest `
@@ -347,7 +418,7 @@ manifest not found, skip" -ForegroundColor Red
     }
 
     # upload manifests
-    $dest_token = _getDestToken
+    $dest_token = _getDestToken $dest_registry $dest_image
     _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
       $dest_registry
   }
@@ -356,11 +427,11 @@ manifest not found, skip" -ForegroundColor Red
     write-host "==> [sync end] manifest list not exists" `
       -ForegroundColor Yellow
 
-    return
+    return $manifest_json_path
   }
 
   # upload manifests list
-  $dest_token = _getDestToken
+  $dest_token = _getDestToken $dest_registry $dest_image
   $length, $digest = New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
     $manifest_list_media_type $dest_registry
 
@@ -378,14 +449,23 @@ manifest not found, skip" -ForegroundColor Red
 
 # main
 
-if (!(Test-Path $PSScriptRoot/docker-image-sync.json)) {
-  write-host "==> file [ $PSScriptRoot/docker-image-sync.json ] not exists" `
-    -ForegroundColor Red
+if ($env:CONFIG_URL) {
+  write-host "==> Get config from url"
 
-  exit 1
+  curl -fsSL $env:CONFIG_URL -o $PSScriptRoot/docker-image-sync.json
 }
 
-$sync_config = ConvertFrom-Json (Get-Content $PSScriptRoot/docker-image-sync.json -raw)
+if ((Test-Path /.dockerenv) -and (Test-Path /docker-entrypoint.d/docker-image-sync.json )) {
+  $sync_config = ConvertFrom-Json (Get-Content /docker-entrypoint.d/docker-image-sync.json -raw)
+}
+elseif (Test-Path $PSScriptRoot/docker-image-sync.json) {
+  $sync_config = ConvertFrom-Json (Get-Content $PSScriptRoot/docker-image-sync.json -raw)
+}
+
+# 配置文件优先级
+# 1. /docker-entrypoint.d/docker-image-sync.json
+# 2. $env:CONFIG_URL
+# 3. $PSScriptRoot/docker-image-sync.json
 
 foreach ($item in $sync_config) {
   $source = $item.source

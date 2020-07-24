@@ -255,12 +255,12 @@
           ],
           "description": "how to check soft package hash"
         },
-        "download": {
+        "dist": {
           "type": [
             "string",
             "array"
           ],
-          "description": "download",
+          "description": "how to dist files",
           "default": [
             "# _mkdir \\$env:LWPM_PKG_ROOT/dist",
             "# curl -L `",

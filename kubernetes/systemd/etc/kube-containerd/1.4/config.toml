@@ -53,11 +53,14 @@ oom_score = 0
     stream_server_port = "0"
     stream_idle_timeout = "4h0m0s"
     enable_selinux = false
+    selinux_category_range = 1024
     # sandbox_image = "gcr.mirror/google-containers/pause:3.2"
     sandbox_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
     stats_collect_period = 10
-    systemd_cgroup = false
+    # systemd_cgroup = false
     enable_tls_streaming = false
+    tolerate_missing_hugetlb_controller = true
+    ignore_image_defined_volumes = false
     max_container_log_line_size = 16384
     disable_cgroup = false
     disable_apparmor = false
@@ -78,12 +81,40 @@ oom_score = 0
           runtime_engine = ""
           runtime_root = ""
           privileged_without_host_devices = false
+          base_runtime_spec = ""
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            SystemdCgroup = true
-            # BinaryName is the binary name of the runc binary.
-            # BinaryName = ""
-            # BinaryName = "runc"
-            # BinaryName = "crun"
+            # systemd_cgroup enables systemd cgroups.
+            systemd_cgroup = true
+            # binary_name is the binary name of the runc binary.
+            # binary_name = ""
+            # binary_name = "runc"
+            # binary_name = "crun"
+            # no_pivot_root disables pivot root when creating a container.
+            # no_pivot_root = false
+
+            # no_new_keyring disables new keyring for the container.
+            # no_new_keyring = false
+
+            # shim_cgroup places the shim in a cgroup.
+            # shim_cgroup = ""
+
+            # io_uid sets the I/O's pipes uid.
+            # io_uid = 0
+
+            # io_gid sets the I/O's pipes gid.
+            # io_gid = 0
+
+            # root is the runc root directory.
+            root = ""
+
+            # criu_path is the criu binary path.
+            # criu_path = ""
+
+            # criu_image_path is the criu image path
+            # criu_image_path = ""
+
+            # criu_work_path is the criu work path.
+            # criu_work_path = ""
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"
@@ -111,6 +142,8 @@ oom_score = 0
       max_conf_num = 1
       conf_template = ""
     [plugins."io.containerd.grpc.v1.cri".registry]
+      [plugins."io.containerd.grpc.v1.cri".registry.headers]
+        # Foo = ["bar"]
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
           # endpoint = ["https://registry-1.docker.io"]

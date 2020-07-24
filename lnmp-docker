@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.16.5"
-readonly DOCKER_DESKTOP_VERSION="2.2.2.0 (43066)"
+readonly KUBERNETES_VERSION="1.18.3"
+readonly DOCKER_DESKTOP_VERSION="2.3.2.0"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -74,7 +74,7 @@ fi
 print_info "Load env file [ $LNMP_ENV_FILE ]"
 
 _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
-
+_cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
 _cp_only_not_exists lnmp-docker-custom-script.example lnmp-docker-custom-script
 
 print_info "Exec custom scripts"
@@ -136,9 +136,9 @@ Commands:
   services             List services
   update               Upgrades LNMP [ -f | ]
   upgrade              Upgrades LNMP [ -f | ]
-  vscode-remote-init   Init vsCode remote development env
-  vscode-remote-run    Run command on vsCode remote workspace
-  vscode-remote-exec   Exec command on vsCode remote workspace
+  code-init            Init vsCode remote development env
+  code-run             Run command on vsCode remote workspace
+  code-exec            Exec command on vsCode remote workspace
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -189,7 +189,7 @@ You must Update $LNMP_ENV_FILE file when update this project.
 
 Donate https://zan.khs1994.com
 
-AD Tencent Kubernetes Engine https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61
+AD Tencent Kubernetes Engine https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61
 "
 }
 
@@ -239,7 +239,7 @@ _gcr_io(){
       -p 80:80 \
       --mount type=bind,src=$PWD/config/registry/config.gcr.io.yml,target=/etc/docker/registry/config.yml \
       --mount type=bind,src=$PWD/config/registry,target=/etc/docker/registry/ssl \
-      --mount type=bind,src=$HOME/.khs1994-docker-lnmp/registry,target=/var/lib/registry:delegated \
+      --mount type=bind,src=$HOME/.khs1994-docker-lnmp/registry,target=/var/lib/registry:cached \
       --label com.khs1994.lnmp.gcr.io \
       registry || quit=1
 
@@ -560,7 +560,7 @@ init() {
   #@custom
   __lnmp_custom_init 2>/dev/null || true
   # 初始化完成提示
-  print_info "Init is SUCCESS"
+  print_info "Init success"
 }
 
 # 更新项目
@@ -1220,18 +1220,18 @@ main() {
     exec docker-compose $options run -w $WORKING_DIR --rm composer "$@"
     ;;
 
-  vscode-remote-init )
+  code-init )
     cp -r vscode-remote/. $EXEC_CMD_DIR/
     print_info "vsCode remote project init success"
     ;;
 
-  vscode-remote-run )
+  code-run )
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml run --rm "$@"
     ;;
 
-  vscode-remote-exec )
+  code-exec )
     cd $EXEC_CMD_DIR
 
     docker-compose -f docker-workspace.yml exec "$@"

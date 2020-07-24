@@ -19,9 +19,10 @@ services:
       - vscode-server-insiders:/root/.vscode-server-insiders
       - vscode-phpls-cache:/root/.phpls
       # fix me
+      # linux/macOS
       - ./:/app/demo
       # fix me 将依赖挂载到数据卷
-      - vendor:/app/demo/vendor
+      # - vendor:/app/demo/vendor
 
       # fix me
       # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项

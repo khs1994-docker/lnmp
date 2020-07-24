@@ -5,6 +5,7 @@ services:
     restart: "no"
     image: erichough/nfs-server
     volumes:
+      - ./exports.txt:/etc/exports
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs:/nfs
       - ${APP_ROOT:-../app}:/nfs/lnmp/app
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/lnmp/mysql:/nfs/lnmp/mysql
@@ -13,8 +14,10 @@ services:
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/lnmp/log:/nfs/lnmp/log
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/kubernetes_pv:/nfs/kubernetes_pv
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs/kubernetes_csi:/nfs/kubernetes_csi
-    env_file:
-      - ./.env
+    environment:
+    - NFS_DISABLE_VERSION_3=${NFS_DISABLE_VERSION_3:-1}
+    - TZ=${TZ:-Asia/Shanghai}
+    - NFS_LOG_LEVEL=${NFS_LOG_LEVEL:-debug}
     # cap_add:
     #  - SYS_ADMIN
     privileged: true

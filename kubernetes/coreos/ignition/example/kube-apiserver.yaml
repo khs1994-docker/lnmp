@@ -7,11 +7,11 @@ systemd:
         - name: 10-installer.conf
           contents: |
             [Service]
-            # ExecStartPre=bash -c "if ! [ `${K8S_ROOT}/bin/kube-apiserver --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/kube-apiserver; fi"
-            # ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/kube-apiserver ];then \
+            # ExecStartPre=/usr/bin/env bash -c "if ! [ `${K8S_ROOT}/bin/kube-apiserver --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/kube-apiserver; fi"
+            # ExecStartPre=/usr/bin/env bash -c "if ! [ -f ${K8S_ROOT}/bin/kube-apiserver ];then \
             #  curl http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-apiserver \
             #  -o ${K8S_ROOT}/bin/kube-apiserver;fi"
-            # ExecStartPre=chmod +x ${K8S_ROOT}/bin/kube-apiserver
+            # ExecStartPre=/usr/bin/env chmod +x ${K8S_ROOT}/bin/kube-apiserver
             ExecStartPre=-/bin/podman kill kube-apiserver
             ExecStartPre=-/bin/podman rm kube-apiserver
             ExecStartPre=-/bin/podman pull k8s.gcr.io/kube-apiserver:{{KUBERNETES_VERSION}}

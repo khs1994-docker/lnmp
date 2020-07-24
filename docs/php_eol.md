@@ -9,7 +9,7 @@ services:
     - php5
 
   php5:
-    << : *default-common
+    << : *common
     restart: ${LNMP_RESTART:-always}
     env_file: ./cli/timezone.env
     build:
@@ -25,9 +25,9 @@ services:
       # php.ini override
       - ./config/php5/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
-      - ./log/php:/var/log/php:delegated
-      - ./log/supervisord.log:/var/log/supervisord.log:delegated
-      - ./log/supervisord:/var/log/supervisord:delegated
+      - ./log/php:/var/log/php:cached
+      - ./log/supervisord.log:/var/log/supervisord.log:cached
+      - ./log/supervisord:/var/log/supervisord:cached
       - type: volume
         source: zoneinfo-data
         target: /usr/share/zoneinfo

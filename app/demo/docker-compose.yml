@@ -9,8 +9,6 @@ version: "3.7"
 #
 # @link https://docs.docker.com/compose/compose-file/
 #
-# 避免使用 docker build -t ... 命令
-#
 #
 # $ docker-compose build
 #

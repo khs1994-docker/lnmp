@@ -21,8 +21,7 @@ before_install:
 - docker-compose --version
 - sudo rm /usr/local/bin/docker-compose
 - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-- chmod +x docker-compose
-- sudo mv docker-compose /usr/local/bin
+- sudo install -m755 docker-compose /usr/local/bin
 - docker-compose --version
 # ubuntu 14.04
 # - echo 'DOCKER_OPTS="--experimental"' | sudo tee /etc/default/docker
@@ -115,10 +114,10 @@ matrix:
   fast_finish: true
   allow_failures:
   # - env: PHP_VERSION=7_2_X FOLDER=7.2 PHP_TAG_VERSION=7.2.32 SINGLE=1
-  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha2 CLI=1
-  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha2 FPM=1
-  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha2 SWOOLE=1
-  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha2 COMPOSER=1
+  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha3 CLI=1
+  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha3 FPM=1
+  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha3 SWOOLE=1
+  - env: PHP_VERSION=8_0_X FOLDER=8.0 PHP_TAG_VERSION=8.0.0alpha3 COMPOSER=1
   - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly CLI=1
   - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly FPM=1
   - env: PHP_VERSION=nightly FOLDER=nightly PHP_TAG_VERSION=nightly SWOOLE=1

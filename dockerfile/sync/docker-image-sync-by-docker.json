@@ -1,15 +1,11 @@
 [
   {
-    "source": "gcr.io/google-containers/pause:3.2",
-    "dest": "pause:3.2"
+    "source": "gcr.io/google-containers/pause:3.3",
+    "dest": "pause:3.3"
   },
   {
     "source": "gcr.io/google-containers/coredns:1.7.0",
     "dest": "coredns:1.7.0"
-  },
-  {
-    "source": "gcr.io/google-containers/metrics-server-amd64:v0.3.6",
-    "dest": "metrics-server-amd64:v0.3.6"
   },
   {
     "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:9ba9c755e868942143868dbbc7a0d9ab29241014833dd0a7ac6156d66e45fe9b",
@@ -65,5 +61,13 @@
   {
     "source": "us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069",
     "dest": "nginx-ingress-controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069"
+  },
+  {
+    "source": "k8s.gcr.io/metrics-server/metrics-server:v0.3.7",
+    "dest": "metrics-server:v0.3.7"
+  },
+  {
+    "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",
+    "dest":"metrics-server:master"
   }
 ]

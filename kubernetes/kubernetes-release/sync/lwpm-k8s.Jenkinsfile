@@ -7,7 +7,6 @@ pipeline {
     DOCKER_CLI_EXPERIMENTAL = "enabled"
     BUILDX_IMAGE= "dockerpracticesig/buildkit:master-tencent"
 
-    LWPM_DIST_ONLY = 'true'
     LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
     LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     LWPM_DOCKER_REGISTRY_MIRROR = "ccr.ccs.tencentyun.com"
@@ -33,7 +32,6 @@ pipeline {
 
     // stage('lwpm') {
     //   steps {
-    //     // sh "pwsh -c 'echo $env:LWPM_DIST_ONLY' "
     //     // sh "pwsh -c 'echo $env:LWPM_DOCKER_USERNAME' "
     //     // sh "pwsh -c 'echo $env:LWPM_DOCKER_PASSWORD' "
     //     // sh "git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp"
@@ -86,7 +84,8 @@ pipeline {
             -e DEST_DOCKER_REGISTRY=\${LWPM_DOCKER_REGISTRY_MIRROR} \
             -e SYNC_WINDOWS=true \
             -e CI=true \
-            -v \$PWD/docker-image-sync.json:/root/lnmp/windows/docker-image-sync.json \
+            -e CONFIG_URL=https://gitee.com/khs1994-docker/lnmp/raw/19.03/kubernetes/kubernetes-release/sync/docker-image-sync.json \
+            -v \$PWD/docker-image-sync.json:/docker-entrypoint.d/docker-image-sync.json \
             khs1994/docker-image-sync"
       }
     }

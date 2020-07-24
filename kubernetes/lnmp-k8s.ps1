@@ -20,54 +20,51 @@ cd $PSScriptRoot
 
 ################################################################################
 
-$MINIKUBE_VERSION="1.3.1"
-$KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release"
-$KUBECTL_URL="https://mirror.azure.cn/kubernetes/kubectl"
+$KUBECTL_URL = "https://storage.googleapis.com/kubernetes-release/release"
+$KUBECTL_URL = "https://mirror.azure.cn/kubernetes/kubectl"
 
 ################################################################################
 
-if (!(Test-Path .env.ps1 )){
+if (!(Test-Path .env.ps1 )) {
   cp .env.example.ps1 .env.ps1
 }
 
-if (!(Test-Path .env )){
+if (!(Test-Path .env )) {
   cp .env.example .env
 }
 
-if (!(Test-Path coreos/.env )){
+if (!(Test-Path coreos/.env )) {
   cp coreos/.env.example coreos/.env
 }
 
-if (!(Test-Path wsl2/.env )){
+if (!(Test-Path wsl2/.env )) {
   cp wsl2/.env.example wsl2/.env
 }
 
-if (!(Test-Path wsl2/.env.ps1 )){
+if (!(Test-Path wsl2/.env.ps1 )) {
   cp wsl2/.env.example.ps1 wsl2/.env.ps1
 }
 
-if (!(Test-Path systemd/.env )){
+if (!(Test-Path systemd/.env )) {
   cp systemd/.env.example systemd/.env
 }
 
 . "$PSScriptRoot/.env.example.ps1"
 
-if (Test-Path .env.ps1 ){
+if (Test-Path .env.ps1 ) {
   . "$PSScriptRoot/.env.ps1"
 }
 
-$k8s_current_context=kubectl config current-context
+$k8s_current_context = kubectl config current-context
 
-"==> Kubernetes context is [ $k8s_current_context ]"
-""
+write-host "==> Kubernetes context is [ $k8s_current_context ]" -ForegroundColor Blue
 
-Function print_info($message){
+Function print_info($message) {
   write-host "==> $message"
 }
 
-Function print_help_info(){
+Function print_help_info() {
   echo "
-
 Usage: lnmp-k8s.ps1 COMMAND
 
 Commands:
@@ -83,25 +80,26 @@ Commands:
   helm-staging       Install Helm LNMP In Staging
   helm-production    Install Helm LNMP In Production
 
+  dist-containerd-arm64
 "
 }
 
-if (!(Test-Path systemd/.env)){
+if (!(Test-Path systemd/.env)) {
   Copy-Item systemd/.env.example systemd/.env
 }
 
-if ($args.length -eq 0){
+if ($args.length -eq 0) {
   print_help_info
   exit
 }
 
-Function get_kubectl_version(){
-  $url="https://storage.googleapis.com/kubernetes-release/release/stable.txt"
-  $url="https://mirror.azure.cn/kubernetes/kubectl/stable.txt"
-  return $KUBECTL_VERSION=$(curl.exe -fsSL $url)
+Function get_kubectl_version() {
+  $url = "https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+  $url = "https://mirror.azure.cn/kubernetes/kubectl/stable.txt"
+  return $KUBECTL_VERSION = $(curl.exe -fsSL $url)
 }
 
-Function _delete_lnmp($NAMESPACE="lnmp"){
+Function _delete_lnmp($NAMESPACE = "lnmp") {
   kubectl -n $NAMESPACE delete deployment -l app=lnmp
   kubectl -n $NAMESPACE delete service -l app=lnmp
   kubectl -n $NAMESPACE delete secret -l app=lnmp
@@ -109,60 +107,58 @@ Function _delete_lnmp($NAMESPACE="lnmp"){
   kubectl -n $NAMESPACE delete cronjob -l app=lnmp
 }
 
-Function _create_pvc($NAMESPACE="lnmp"){
+Function _create_pvc($NAMESPACE = "lnmp") {
   kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml
 }
 
-Function _create_hostpath($ENVIRONMENT="development"){
-  $items="mysql-data","nginx-data","redis-data","log","registry-data"
-  foreach($item in $items){
+Function _create_hostpath($ENVIRONMENT = "development") {
+  $items = "mysql-data", "nginx-data", "redis-data", "log", "registry-data"
+  foreach ($item in $items) {
     mkdir -Force /Users/$env:username/.docker/Volumes/lnmp-$item-$ENVIRONMENT
   }
 }
 
-Function _create_pv($NAMESPACE="lnmp",$ENVIRONMENT="development"){
+Function _create_pv($NAMESPACE = "lnmp", $ENVIRONMENT = "development") {
   # _create_hostpath $ENVIRONMENT
 
   Get-Content deployment/pv/lnmp-volume.windows.temp.yaml `
-      | %{Write-Output `
-            $_.Replace("/Users/username","/Users/$env:username") `
-          } `
-      | %{Write-Output `
-            $_.Replace("development",$ENVIRONMENT) `
-         } `
-      | kubectl apply -f -
+  | % { Write-Output `
+      $_.Replace("/Users/username", "/Users/$env:username") `
+  } `
+  | % { Write-Output `
+      $_.Replace("development", $ENVIRONMENT) `
+  } `
+  | kubectl apply -f -
 }
 
-Function _helm_lnmp($environment, $debug=0){
+Function _helm_lnmp($environment, $debug = 0) {
   cd helm
 
-  if ($debug){
-    $opts="--debug","--dry-run"
+  if ($debug) {
+    $opts = "--debug", "--dry-run"
   }
 
-  Foreach ($item in $helm_services)
-  {
-  helm install ./$item `
+  Foreach ($item in $helm_services) {
+    helm install ./$item `
       --name lnmp-$item-$environment `
       --namespace lnmp-$environment `
       --set APP_ENV=$environment `
       --set platform=windows `
       --set username=$env:username `
-      $( Foreach ($opt in $opts){ echo $opt} )
+    $( Foreach ($opt in $opts) { echo $opt } )
   }
 
   cd $PSScriptRoot
 }
 
-$command,$others=$args
+$command, $others = $args
 
-switch ($args[0])
-{
+switch ($args[0]) {
   "kubectl-install" {
-    $KUBECTL_VERSION=get_kubectl_version
+    $KUBECTL_VERSION = get_kubectl_version
     write-host $KUBECTL_VERSION
-    $url="${KUBECTL_URL}/${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe"
-    if(Test-Path C:\bin\kubectl.exe){
+    $url = "${KUBECTL_URL}/${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe"
+    if (Test-Path C:\bin\kubectl.exe) {
       print_info "kubectl already install"
       return
     }
@@ -170,22 +166,13 @@ switch ($args[0])
   }
 
   "kubectl-info" {
-    $KUBECTL_VERSION=get_kubectl_version
+    $KUBECTL_VERSION = get_kubectl_version
     "==> Latest Stable Version is: $KUBECTL_VERSION
     "
   }
 
   "create" {
-    if( $k8s_current_context -ne "docker-desktop"){
-      Write-Warning "==> You can use this script on WSL2:
-
-PS:> $ wsl -- ./lnmp-k8s $args
-"
-
-      exit
-    }
-
-    if( $k8s_current_context -ne "docker-desktop"){
+    if ( $k8s_current_context -ne "docker-desktop") {
       Write-Warning "
 ==> This Script ONLY Support [ K8S on Docker Desktop ] On Winodws
 
@@ -202,16 +189,16 @@ $ kubectl config use-context docker-desktop
       exit
     }
 
-    $ENVIRONMENT="development"
-    $NAMESPACE="lnmp"
+    $ENVIRONMENT = "development"
+    $NAMESPACE = "lnmp"
 
-    if ($others){
-      $ENVIRONMENT=$others.split(' ')[0]
-      $_,$options=$others
+    if ($others) {
+      $ENVIRONMENT = $others.split(' ')[0]
+      $_, $options = $others
     }
 
-    if($ENVIRONMENT -ne "development"){
-      $NAMESPACE="lnmp", $ENVIRONMENT -join '-'
+    if ($ENVIRONMENT -ne "development") {
+      $NAMESPACE = "lnmp", $ENVIRONMENT -join '-'
     }
 
     "==> NAMESPACE is $NAMESPACE"
@@ -219,23 +206,23 @@ $ kubectl config use-context docker-desktop
 
     kubectl create namespace $NAMESPACE $options
 
-    if($NAMESPACE -ne "lnmp"){
-      $items="mysql","redis","php","nginx"
+    if ($NAMESPACE -ne "lnmp") {
+      $items = "mysql", "redis", "php", "nginx"
 
       _create_pv $NAMESPACE $ENVIRONMENT $options
       # dont create pvc
 
-      foreach($item in $items){
+      foreach ($item in $items) {
         (get-content deployment/$item/overlays/$ENVIRONMENT/kustomization.yaml) `
-        -replace "# - hostpath.patch.yaml","- hostpath.patch.yaml" `
+          -replace "# - hostpath.patch.yaml", "- hostpath.patch.yaml" `
         | Set-Content deployment/$item/overlays/$ENVIRONMENT/kustomization.yaml
       }
 
-      foreach($item in $items){
+      foreach ($item in $items) {
         kubectl -n $NAMESPACE apply -k deployment/$item/overlays/$ENVIRONMENT/ $options
       }
 
-      foreach($item in $items){
+      foreach ($item in $items) {
         "==> restore kustomization.yaml"
         git checkout -- deployment/$item/overlays/$ENVIRONMENT/kustomization.yaml
       }
@@ -245,43 +232,44 @@ $ kubectl config use-context docker-desktop
       return
     }
 
-    kubectl get pvc/lnmp-app -n $NAMESPACE -o json | out-null
+    kubectl get pvc/lnmp-app -n $NAMESPACE -o json > $null 2>&1
 
-    if ($?){
+    if ($?) {
       "==> PVC exists, SKIP create PV and PVC"
-    }else{
+    }
+    else {
       _create_pv $NAMESPACE $ENVIRONMENT $options
       _create_pvc $NAMESPACE $options
     }
 
-    $CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
+    $CONFIG_ROOT = "deployment/php/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-php-conf `
       --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini `
       --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf `
       --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json `
       --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini `
       --dry-run -o yaml `
-      | kubectl -n $NAMESPACE apply -f - $options
+    | kubectl -n $NAMESPACE apply -f - $options
     kubectl -n $NAMESPACE label configmap lnmp-php-conf app=lnmp version=0.0.1 $options
 
-    $CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
+    $CONFIG_ROOT = "deployment/mysql/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-mysql-cnf `
-       --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf `
-       --dry-run -o yaml `
-       | kubectl -n $NAMESPACE apply -f - $options
+      --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf `
+      --dry-run -o yaml `
+    | kubectl -n $NAMESPACE apply -f - $options
     kubectl -n $NAMESPACE label configmap lnmp-mysql-cnf app=lnmp version=0.0.1 $options
 
-    $CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
+    $CONFIG_ROOT = "deployment/nginx/overlays/${ENVIRONMENT}/config"
     kubectl -n $NAMESPACE create configmap lnmp-nginx-conf `
-       --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf `
-       --dry-run -o yaml `
-       | kubectl -n $NAMESPACE apply -f - $options
+      --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf `
+      --dry-run -o yaml `
+    | kubectl -n $NAMESPACE apply -f - $options
     kubectl -n $NAMESPACE label configmap lnmp-nginx-conf app=lnmp version=0.0.1 $options
 
     kubectl -n $NAMESPACE create configmap lnmp-nginx-conf.d `
       --from-file=deployment/configMap/nginx-conf-d `
       --dry-run -o yaml `
-      | kubectl -n $NAMESPACE apply -f - $options
+    | kubectl -n $NAMESPACE apply -f - $options
     kubectl -n $NAMESPACE label configmap lnmp-nginx-conf.d app=lnmp version=0.0.1 $options
 
     # kubectl -n $NAMESPACE create secret generic lnmp-mysql-password `
@@ -304,16 +292,16 @@ $ kubectl config use-context docker-desktop
   }
 
   "delete" {
-    $ENVIRONMENT="development"
-    $NAMESPACE="lnmp"
+    $ENVIRONMENT = "development"
+    $NAMESPACE = "lnmp"
 
-    if ($others){
-      $ENVIRONMENT=$others.split(' ')[0]
-      $_,$options=$others
+    if ($others) {
+      $ENVIRONMENT = $others.split(' ')[0]
+      $_, $options = $others
     }
 
-    if($ENVIRONMENT -ne "development"){
-      $NAMESPACE="lnmp", $ENVIRONMENT -join '-'
+    if ($ENVIRONMENT -ne "development") {
+      $NAMESPACE = "lnmp", $ENVIRONMENT -join '-'
     }
 
     "==> NAMESPACE is $NAMESPACE"
@@ -322,16 +310,16 @@ $ kubectl config use-context docker-desktop
   }
 
   "cleanup" {
-    $ENVIRONMENT="development"
-    $NAMESPACE="lnmp"
+    $ENVIRONMENT = "development"
+    $NAMESPACE = "lnmp"
 
-    if ($others){
-      $ENVIRONMENT=$others.split(' ')[0]
-      $_,$options=$others
+    if ($others) {
+      $ENVIRONMENT = $others.split(' ')[0]
+      $_, $options = $others
     }
 
-    if($ENVIRONMENT -ne "development"){
-      $NAMESPACE="lnmp", $ENVIRONMENT -join '-'
+    if ($ENVIRONMENT -ne "development") {
+      $NAMESPACE = "lnmp", $ENVIRONMENT -join '-'
     }
 
     "==> NAMESPACE is $NAMESPACE"
@@ -339,9 +327,10 @@ $ kubectl config use-context docker-desktop
 
     kubectl -n $NAMESPACE delete pvc -l app=lnmp
 
-    if($ENVIRONMENT -eq 'development'){
+    if ($ENVIRONMENT -eq 'development') {
       kubectl delete pv -l app=lnmp
-    }else{
+    }
+    else {
       "==> SKIP delete PV"
     }
 
@@ -362,6 +351,19 @@ $ kubectl config use-context docker-desktop
 
   "helm-production" {
     _helm_lnmp production $args[1]
+  }
+
+  "dist-containerd-arm64" {
+    if (Test-Path containerd-nightly.linux-arm64) {
+      rm -r -force containerd-nightly.linux-arm64
+    }
+
+    Expand-Archive -Path linux_arm64.zip -DestinationPath containerd-nightly.linux-arm64
+    mkdir containerd-nightly.linux-arm64/bin | out-null
+    mv containerd-nightly.linux-arm64/containerd* containerd-nightly.linux-arm64/bin/
+    mv containerd-nightly.linux-arm64/ctr containerd-nightly.linux-arm64/bin/
+    tar -zcvf containerd-nightly.linux-arm64.tar.gz containerd-nightly.linux-arm64
+    rm -r -force containerd-nightly.linux-arm64
   }
 
   Default {

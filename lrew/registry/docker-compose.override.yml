@@ -1,12 +1,12 @@
 version: "3.7"
 
 x-common:
-  &default-common
+  &common
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   registry:
-    << : *default-common
+    << : *common
     image: registry:${LNMP_REGISTRY_VERSION:-latest}

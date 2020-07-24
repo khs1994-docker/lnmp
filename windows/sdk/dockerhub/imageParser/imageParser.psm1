@@ -1,11 +1,12 @@
-# 地址 地址+端口 | 用户名 无用户名 | 镜像 | 标签 无标签
+# 地址 地址+端口 | 命名空间(ns) 无命名空间 | 镜像 | 标签 无标签
 
 # docker.io docker.io:9000 library - golang latest -
 
 # 12 - 4 = 8
 
-# $env:SOURCE_DOCKER_REGISTRY =
-# $env:DEST_DOCKER_REGISTRY = "default.dest.ccs.tencentyun.com"
+# $env:SOURCE_DOCKER_REGISTRY = "hub-mirror.c.163.com"
+# $env:DEST_DOCKER_REGISTRY = ""
+# e.g. default.dest.ccs.tencentyun.com
 
 # $env:SOURCE_NAMESPACE = "library"
 # $env:DEST_NAMESPACE = "library"
@@ -13,17 +14,17 @@
 Function imageParser([string] $config, [boolean] $source = $true) {
   $config, $digest = $config.split('@')
 
-  # host:port/user/image:ref
+  # host:port/ns/image:ref
   # host:port/image:ref -
   if ($config.split(':').count -eq 3) {
     $_registry, $port_plus_image, $ref = $config.split(':')
     $image = "${_registry}:${port_plus_image}"
   }
-  # host:port/user/image
+  # host:port/ns/image
   # host:port/image -
-  # user/image:ref          user/x/y/z/image:ref
+  # ns/image:ref          ns/x/y/z/image:ref
   # host/image:ref -
-  # host/user/image:ref
+  # host/ns/image:ref
   # image:ref               x/y/z/image:ref
   elseif ($config.split(':').count -eq 2) {
     if (!($config.contains('/'))) {
@@ -33,11 +34,11 @@ Function imageParser([string] $config, [boolean] $source = $true) {
     else {
       $image, $ref = $config.split(':')
       if ($image.contains('/')) {
-        # host/user/image:ref
-        # user/image:ref
+        # host/ns/image:ref
+        # ns/image:ref
       }
       else {
-        # host:port/user/image
+        # host:port/ns/image
         $_registry, $port_plus_image = $config.split(':')
         $port, $image = $port_plus_image.split('/', 2)
         $registry = "${_registry}:${port}"
@@ -47,8 +48,8 @@ Function imageParser([string] $config, [boolean] $source = $true) {
   }
   # image               x/y/z/image
   # host/image -
-  # user/image          user/x/y/z/image
-  # host/user/image
+  # ns/image          ns/x/y/z/image
+  # host/ns/image
   else {
     $image, $ref = $config.split(':')
     if ($config.split('/') -eq 3) {
@@ -77,6 +78,7 @@ Function imageParser([string] $config, [boolean] $source = $true) {
 
   if (!$namespace) { $namespace = "library" }
 
+  # image 必须包含命名空间 ns/image ns/ns2/ns3/image
   if (!$image.contains('/')) {
     $image = "$namespace/$image"
   }

@@ -26,7 +26,7 @@ docker run -i ${tty} --rm \
   "
 
 exec docker run -i ${tty} --rm \
-    --mount type=bind,src=$PWD,target=/app,consistency=delegated \
+    --mount type=bind,src=$PWD,target=/app,consistency=${APP_ROOT_CONSISTENCY:delegated} \
     --mount type=bind,src=${ScriptRoot}/../config/npm/.npmrc,target=/usr/local/etc/npmrc \
     --mount type=volume,src=lnmp_npm-cache-data,target=/tmp/node/.npm \
     --mount type=volume,src=lnmp_npm-global-data,target=/tmp/node/npm \

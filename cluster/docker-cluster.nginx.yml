@@ -7,7 +7,7 @@ version: "3.7"
 #
 
 x-common:
-  &default-common
+  &common
   # image: "khs1994/nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine"
   image: "nginx:${LNMP_NGINX_VERSION:-1.17.8}-alpine"
   restart: always
@@ -24,7 +24,7 @@ x-common:
 services:
 
   nginx_main:
-    << : *default-common
+    << : *common
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
@@ -39,7 +39,7 @@ services:
         target: /etc/nginx/conf.d/fzjh.conf
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:delegated
+      - ./log/nginx:/var/log/nginx:cached
     depends_on:
       - php7
       - nginx-1
@@ -48,19 +48,19 @@ services:
 
   nginx-1:
     &nginx_node
-    << : *default-common
+    << : *common
     volumes:
       - type: bind
         source: ./config/${LNMP_NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
-      - ./log/nginx:/var/log/nginx:delegated
+      - ./log/nginx:/var/log/nginx:cached
 
   nginx-2:
     << : *nginx_node
-    << : *default-common
+    << : *common
 
   nginx-3:
     << : *nginx_node
-    << : *default-common
+    << : *common

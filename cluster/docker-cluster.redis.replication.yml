@@ -30,7 +30,7 @@ x-deploy:
     order: stop-first
 
 x-common:
-  &default-common
+  &common
   image: redis:5.0.7-alpine
   restart: always
   environment:
@@ -55,7 +55,7 @@ x-labels:
 services:
 
   redis_m_s_master:
-    << : *default-common
+    << : *common
     << : *default-labels
     ports:
        - "22000:22000"
@@ -82,7 +82,7 @@ services:
         constraints: [node.role == manager]
 
   redis_m_s_slave-1:
-    << : *default-common
+    << : *common
     << : *default-labels
     ports:
       - "23000:23000"

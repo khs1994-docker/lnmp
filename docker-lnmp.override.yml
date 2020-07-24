@@ -5,73 +5,73 @@ version: "3.7"
 #
 
 x-common:
-  &default-common
+  &common
   labels:
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}=true
     - ${LNMP_DOMAIN:-com.khs1994.lnmp}.app.env=development
 
 services:
   mysql:
-    << : *default-common
+    << : *common
     image: mysql:${LNMP_MYSQL_VERSION:-8.0.21}
 
   redis:
-    << : *default-common
-    image: redis:${LNMP_REDIS_VERSION:-6.0.5}-alpine
+    << : *common
+    image: redis:${LNMP_REDIS_VERSION:-6.0.6}-alpine
 
   memcached:
-    << : *default-common
+    << : *common
     image: memcached:${LNMP_MEMCACHED_VERSION:-1.6.6}-alpine
 
   php7:
-    << : *default-common
+    << : *common
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-fpm-alpine
 
   php8:
-    << : *default-common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0alpha2}-fpm-alpine
+    << : *common
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0alpha3}-fpm-alpine
 
   composer:
-    << : *default-common
+    << : *common
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-composer-alpine
 
   supervisord:
-    << : *default-common
+    << : *common
     image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-supervisord-alpine
 
   phpmyadmin:
-    << : *default-common
+    << : *common
     image: phpmyadmin/phpmyadmin:latest
 
   nginx:
-    << : *default-common
+    << : *common
     # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.19.1}-alpine
     image: nginx:${LNMP_NGINX_VERSION:-1.19.1}-alpine
 
 networks:
   frontend:
-    << : *default-common
+    << : *common
   backend:
-    << : *default-common
+    << : *common
 
 volumes:
   mysql-data:
-    << : *default-common
+    << : *common
   redis-data:
-    << : *default-common
+    << : *common
   zoneinfo-data:
-    << : *default-common
+    << : *common
   phpmyadmin-data:
-    << : *default-common
+    << : *common
   composer-cache-data:
-    << : *default-common
+    << : *common
   mutagen-wsl2-data:
-    << : *default-common
+    << : *common
 
 secrets:
   db_root_password:
-    << : *default-common
+    << : *common
     file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
   supervisord_ini:
-    << : *default-common
+    << : *common
     file: ./config/supervisord/${LNMP_SUPERVISORD_INI_PATH:-supervisord.ini}

@@ -27,7 +27,7 @@ version: '3.7'
 #
 
 x-common:
-  &default-common
+  &common
   image: redis:5.0.7-alpine
   restart: always
   env_file:
@@ -61,7 +61,7 @@ x-labels:
 services:
 
   redis_up:
-    << : *default-common
+    << : *common
     << : *default-labels
     restart: "on-failure"
     build:
@@ -97,7 +97,7 @@ services:
 
   redis_master-1:
     &redis-master
-    << : *default-common
+    << : *common
     << : *default-labels
     command: [
       "redis-server",
@@ -132,7 +132,7 @@ services:
 
   redis_master-2:
     << : *redis-master
-    << : *default-common
+    << : *common
     << : *default-labels
     depends_on:
       - redis_master-1
@@ -156,7 +156,7 @@ services:
       - cluster_redis_master-2-data:/data
 
   redis_master-3:
-    << : *default-common
+    << : *common
     << : *default-labels
     depends_on:
       - redis_master-1
@@ -181,7 +181,7 @@ services:
 
   redis_slave-1:
     &redis-slave
-    << : *default-common
+    << : *common
     << : *default-labels
     depends_on:
       - redis_master-1
@@ -217,7 +217,7 @@ services:
 
   redis_slave-2:
     << : *redis-slave
-    << : *default-common
+    << : *common
     << : *default-labels
     ports:
       - "8002:8002"
@@ -240,7 +240,7 @@ services:
 
   redis_slave-3:
     << : *redis-slave
-    << : *default-common
+    << : *common
     << : *default-labels
     ports:
       - "8003:8003"

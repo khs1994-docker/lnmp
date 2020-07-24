@@ -1,6 +1,6 @@
 # Laravel 最佳实践
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
 ## 安装 Laravel
 
@@ -86,7 +86,7 @@ $WSL2_DIST="ubuntu"
 **打开 vsCode**
 
 ```powershell
-$ lnmp-docker vscode-remote
+$ lnmp-docker code
 ```
 
 在 vsCode 中点击菜单栏 `查看` -> `终端`
@@ -109,7 +109,7 @@ $ lnmp-npm install
 
 $ lnmp-npm run dev
 
-# 打开 127.0.0.1/register 查看页面
+# 打开 http://127.0.0.1/register 查看页面
 ```
 
 附录：查看本项目的 `bin` 目录在 WSL2 中的路径
@@ -120,6 +120,70 @@ $ lnmp-npm run dev
 $ cd ~/lnmp/bin
 
 $ wsl -d <WSL名称> -- wslpath "'$PWD'"
+```
+
+4. 将项目文件夹放置于 WSL2，使用 vsCode remote container (推荐使用)
+
+**在 Docker 设置中启用 WSL2 集成**
+
+`Resources` -> `WSL INTEGRATION`-> `Enable integration with additional distros:` -> `开启你所使用的 WSL2 （例如：Ubuntu）`
+
+**安装 vsCode 扩展**
+
+```bash
+$ code --install-extension ms-vscode-remote.remote-containers
+```
+
+**在 .env .env.ps1 中修改变量**
+
+```bash
+# .env
+APP_ROOT=/root/app
+
+# 增加 workspace 服务
+LNMP_SERVICES="nginx mysql php7 redis phpmyadmin workspace"
+```
+
+```powershell
+# .env.ps1
+$WSL2_DIST="ubuntu"
+```
+
+**启动 LNMP**
+
+```bash
+$ ./lnmp-docker up
+```
+
+**打开 vsCode**
+
+左下角 `打开远程窗口` -> `Remote-Containers: Attach to Running Container...` -> 选择 `lnmp_workspace_1` 容器 -> 出现新窗口 -> 左面选择打开文件夹 -> 输入 `/app`
+
+在 vsCode 中点击菜单栏 `查看` -> `终端`
+
+在出现的终端中执行命令，本例以添加 Laravel UI 组件为例：
+
+```bash
+# 安装 laravel 到 laravel 文件夹
+# $ composer create-project --prefer-dist laravel/laravel laravel
+$ cd laravel
+
+$ composer require laravel/ui
+
+$ php artisan ui vue --auth
+Vue scaffolding installed successfully.
+Please run "npm install && npm run dev" to compile your fresh scaffolding.
+Authentication scaffolding generated successfully.
+```
+
+在 Windows 终端中执行以下命令：
+
+```powershell
+$ lnmp-docker code-run "-w /app/laravel npm install"
+
+$ lnmp-docker code-run "-w /app/laravel npm run dev"
+
+# 打开 http://127.0.0.1/register 查看页面
 ```
 
 ## 运行 Laravel 队列(Queue)

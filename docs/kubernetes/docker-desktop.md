@@ -1,6 +1,6 @@
 # K8s on Docker Desktop
 
-[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+[![](https://img.shields.io/badge/AD-%E8%85%BE%E8%AE%AF%E4%BA%91%E5%AE%B9%E5%99%A8%E6%9C%8D%E5%8A%A1-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
 ## gcr.io Local Server
 
@@ -82,6 +82,9 @@ $ lnmp-docker gcr.io --no-pull
 $ lnmp-docker gcr.io logs
 
 # 根据日志找出 Docker 桌面版 会拉取哪些镜像,例如
+ERRO[0285] response completed with error                 err.code="manifest unknown" err.detail="unknown tag=v1.18.3" err.message="manifest unknown" go.version=go1.11.2 http.request.host=k8s.gcr.io http.request.id=ec12c017-08cf-46cc-8780-22c351d8712b http.request.method=GET http.request.remoteaddr="172.17.0.1:37926" http.request.uri="/v2/kube-apiserver/manifests/v1.18.3" http.request.useragent="docker/19.03.12 go/go1.13.10 git-commit/48a66213fe kernel/5.8.0-rc3-microsoft-standard os/linux arch/amd64 UpstreamClient(Go-http-client/1.1)" http.response.contenttype="application/json; charset=utf-8"
+ http.response.duration=207.384ms http.response.status=404 http.response.written=97 vars.name=kube-apiserver vars.reference=v1.18.3
 
+# 此日志说明需要 k8s.gcr.io/kube-apiserver:v1.18.3
 # 在 `lnmp-docker(.ps1)` 中更新镜像(搜索 k8s.gcr.io)
 ```

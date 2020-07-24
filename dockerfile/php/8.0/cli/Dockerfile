@@ -6,7 +6,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.0.0alpha2
+ARG PHP_VERSION=8.0.0alpha3
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -153,8 +153,8 @@ ENV PHP_VERSION=${PHP_VERSION}
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:8.0.0alpha2-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:8.0.0alpha2-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:8.0.0alpha3-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:8.0.0alpha3-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -353,7 +353,7 @@ ENV PECL_EXTENSION \
       https://github.com/andypost/pecl-file_formats-yaml/archive/php8.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:8.0.0alpha2-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:8.0.0alpha3-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \

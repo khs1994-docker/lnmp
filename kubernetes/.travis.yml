@@ -9,6 +9,7 @@ go:
 services:
 - docker
 
+os: linux
 dist: xenial
 # dist: bionic
 
@@ -21,6 +22,7 @@ cache:
 #   clone: false
 
 before_install:
+  - env
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
   - pwd
@@ -33,21 +35,27 @@ before_install:
   - ls /etc/apt/sources.list.d || true
   - sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
-  - sestatus || true
+  - sudo sestatus || true
   - ls /home/travis/.khs1994-docker-lnmp/caches
   - echo $PATH
 
+  # https://github.com/kubernetes/kubeadm/issues/273
+  # 16.04 not use systemd-resolved
+  # 18.04 use systemd-resolved
+  # - systemctl is-active systemd-resolved || REPLACE_KUBELET_RESOLV_CONF=false
   - sudo netstat -lnpt
   - cat /etc/resolv.conf
-  - cat /etc/systemd/resolved.conf || true
-  - sudo systemd-resolve --status || true
-  - sudo systemctl status systemd-resolved || true
-  - sudo systemctl stop systemd-resolved || true
-  - sudo netstat -lnpt
-  - cat /etc/resolv.conf
+  - cat /run/systemd/resolve/resolv.conf || true
+  # - cat /etc/systemd/resolved.conf || true
+  # - sudo systemd-resolve --status || true
+  # - sudo systemctl status systemd-resolved || true
+  # - sudo systemctl stop systemd-resolved || true
+  # - sudo netstat -lnpt
+  # - cat /etc/resolv.conf
   - echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
   - echo "search google.internal" | sudo tee -a /etc/resolv.conf
   - cat /etc/resolv.conf
+  # - cat /etc/resolv.conf
   - nslookup gcr.io
 
   - docker-compose --version
@@ -61,29 +69,29 @@ before_install:
   # - docker-compose --version
   # - sudo rm /usr/local/bin/docker-compose
   # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.25.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  # - chmod +x docker-compose
-  # - sudo mv docker-compose /usr/local/bin
+  # - sudo install -m755 docker-compose /usr/local/bin
   # - docker-compose --version
   - sudo cat /etc/docker/daemon.json
   - echo '{"registry-mirrors":["https://mirror.gcr.io"]}' | sudo tee /etc/docker/daemon.json
   - sudo cat /etc/docker/daemon.json
-  - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-  - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-  - docker buildx create --name mybuilder
-  - docker buildx use mybuilder
-  - docker buildx inspect --bootstrap
+  # - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+  # - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+  # - docker buildx create --name mybuilder
+  # - docker buildx use mybuilder
+  # - docker buildx inspect --bootstrap
   - ip addr
   - hostnamectl
   - export SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
 install:
-  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-  - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
-  - export KUBERNETES_TYPE=server
+  - sudo apt install -y tree
+  # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+  # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
+  # - export KUBERNETES_TYPE=server
   - sed -i "s!192.168.199.100!${SERVER_IP}!g" systemd/.env
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" systemd/.env
-  - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
+  # - test -n "${TRAVIS_TAG}" && ./lnmp-k8s _build_k8s_image || true
   - cat systemd/.env
   - sudo hostnamectl set-hostname node1
   - echo "${SERVER_IP} node1" | sudo tee -a /etc/hosts
@@ -101,34 +109,40 @@ install:
   # - debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
   - export PATH=$PATH:${K8S_ROOT:-/opt/k8s}/bin
-  - sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.tar
-  - sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/*.docker_tag
-  - sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/apiextensions-apiserver
-  - sudo rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/mounter
-
+  - tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
 before_script:
   - ls -la /etc/systemd/system/
 
   - sudo systemctl cat etcd
-  - sudo systemctl start etcd || sudo journalctl -u etcd
+  - sudo systemctl start etcd || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u etcd || true
+  - test -n "$CMD_FAILED" && false || true
   # master
   - sudo systemctl cat kube-apiserver
-  - sudo systemctl start kube-apiserver || sudo journalctl -u kube-apiserver
+  - sudo systemctl start kube-apiserver || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-apiserver || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sudo systemctl cat kube-controller-manager
-  - sudo systemctl start kube-controller-manager || sudo journalctl -u kube-controller-manager
+  - sudo systemctl start kube-controller-manager || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-controller-manager || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sudo systemctl cat kube-scheduler
   - |
     if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
       echo "replace kube-scheduler config version" \
-      && echo "remove it when version ge 1.19" \
+      && echo "remove it when k8s version ge 1.19" \
       && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
     fi
-  - sudo systemctl start kube-scheduler || sudo journalctl -u kube-scheduler
+  - sudo systemctl start kube-scheduler || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true
+  - test -n "$CMD_FAILED" && false || true
   # worker
   - sudo systemctl cat kube-proxy
-  - sudo systemctl start kube-proxy || sudo journalctl -u kube-proxy
+  - sudo systemctl start kube-proxy || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kube-proxy || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sudo systemctl cat docker
 
@@ -154,7 +168,9 @@ before_script:
 
   - sleep 10
   - sudo systemctl cat kubelet
-  - sudo systemctl start kubelet
+  - sudo systemctl start kubelet || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kubelet || true
+  - test -n "$CMD_FAILED" && false || true
 
   - sleep 10
   # - sudo systemctl status etcd
@@ -170,9 +186,11 @@ before_script:
 
   - sleep 30
 
+  - sudo journalctl -u etcd
   - sudo journalctl -u kube-apiserver
   - sudo journalctl -u kube-controller-manager
   - sudo journalctl -u kube-scheduler
+
   - sudo journalctl -u kube-proxy
   - sudo journalctl -u kubelet
   - sudo journalctl -u kube-containerd || true
@@ -266,7 +284,7 @@ after_success:
   - kubectl get node -o yaml
 
   - |
-    if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.1' ];then
+    if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.2' ];then
       set -x
       cd /tmp
       git clone -b master --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
@@ -280,7 +298,29 @@ after_success:
 
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
-      git push origin master:config -f
+      git push origin master:v$CI_KUBERNETES_VERSION-config -f
+
+      cd /tmp
+      rm -rf lnmp-k8s
+    fi
+  - |
+    PRE_VERSION=1.19.0-rc.2
+    if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.0' ];then
+      set -x
+      cd /tmp
+      rm -rf lnmp-k8s
+      git clone -b v${PRE_VERSION}-config --depth=5 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+      cd lnmp-k8s
+
+      stty size
+      stty cols 200
+
+      # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+      cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
+
+      git add .
+      git commit -m "Update v$CI_KUBERNETES_VERSION config"
+      git push origin v${PRE_VERSION}-config:v$CI_KUBERNETES_VERSION-config -f
     fi
 env:
   global:
@@ -293,34 +333,34 @@ jobs:
     # alpha version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0-rc.1 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0-rc.2 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
     # next version
     - os: linux
-      dist: bionic
+      dist: focal
       env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
     # current stable version
     - os: linux
-      dist: bionic
+      dist: focal
       env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.18.3 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.18.6 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
-      dist: xenial
+      dist: focal
       env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.18.3 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server K8S_ROOT=/opt/k8s-custom
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.18.6 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server K8S_ROOT=/opt/k8s-custom
     # old version
     - os: linux
-      dist: bionic
-      env: CI_KUBERNETES_VERSION=1.17.6 LNMP_K8S_GET="--url"
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.17.9 LNMP_K8S_GET="--url"
     - os: linux
-      dist: bionic
-      env: CI_KUBERNETES_VERSION=1.16.10 LNMP_K8S_GET="--url"
+      dist: xenial
+      env: CI_KUBERNETES_VERSION=1.16.13 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.19.0-rc.1 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+  - env: CI_KUBERNETES_VERSION=1.19.0-rc.2 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
   - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
 
 branches:

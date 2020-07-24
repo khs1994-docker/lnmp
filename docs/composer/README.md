@@ -17,8 +17,6 @@ $ composer install \
 ```bash
 $ composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu.edu.cn
 
-$ composer config -g repos.packagist composer https://cnpkg.org
-
 $ composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/
 
 $ composer config -g repos.packagist composer https://mirrors.huaweicloud.com/repository/php/

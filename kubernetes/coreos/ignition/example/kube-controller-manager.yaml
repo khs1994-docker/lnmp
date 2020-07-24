@@ -7,11 +7,11 @@ systemd:
         - name: 10-installer.conf
           contents: |
             [Service]
-            # ExecStartPre=bash -c "if ! [ `${K8S_ROOT}/bin/kube-controller-manager --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/kube-controller-manager; fi"
-            # ExecStartPre=bash -c "if ! [ -f ${K8S_ROOT}/bin/kube-controller-manager ];then \
+            # ExecStartPre=/usr/bin/env bash -c "if ! [ `${K8S_ROOT}/bin/kube-controller-manager --version > /dev/null ; echo $?` = 0 ];then rm -rf ${K8S_ROOT}/bin/kube-controller-manager; fi"
+            # ExecStartPre=/usr/bin/env bash -c "if ! [ -f ${K8S_ROOT}/bin/kube-controller-manager ];then \
             #  curl http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-controller-manager \
             #  -o ${K8S_ROOT}/bin/kube-controller-manager;fi"
-            # ExecStartPre=chmod +x ${K8S_ROOT}/bin/kube-controller-manager
+            # ExecStartPre=/usr/bin/env chmod +x ${K8S_ROOT}/bin/kube-controller-manager
             ExecStartPre=-/bin/podman kill kube-controller-manager
             ExecStartPre=-/bin/podman rm kube-controller-manager
             ExecStartPre=-/bin/podman pull k8s.gcr.io/kube-controller-manager:{{KUBERNETES_VERSION}}

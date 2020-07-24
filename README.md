@@ -3,7 +3,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/khs1994-docker/lnmp.svg?style=social&label=Stars)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.com/khs1994-docker/lnmp) [![GitHub release](https://img.shields.io/github/release/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/khs1994-docker/lnmp/all.svg)](https://github.com/khs1994-docker/lnmp/releases) [![license](https://img.shields.io/github/license/khs1994-docker/lnmp.svg)](https://github.com/khs1994-docker/lnmp) [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp)
 
-[![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-Tencent%20Kubernetes%20Engine-blue.svg)](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
+[![star](https://gitee.com/khs1994-docker/lnmp/badge/star.svg?theme=dark)](https://gitee.com/khs1994-docker/lnmp/stargazers) [![](https://img.shields.io/badge/AD-Tencent%20Kubernetes%20Engine-blue.svg)](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61) [![](https://img.shields.io/badge/Support-%E8%85%BE%E8%AE%AF%E4%BA%91%E8%87%AA%E5%AA%92%E4%BD%93-brightgreen.svg)](https://cloud.tencent.com/developer/support-plan?invite_code=13vokmlse8afh)
 
 :computer: :whale: :elephant: :dolphin: :penguin: :rocket: Start LNMP In Less than 2 minutes Powered By Docker Compose, **one command** `$ ./lnmp-docker up`
 
@@ -23,7 +23,7 @@
 
 * [Documents](https://docs.lnmp.khs1994.com)
 
-* [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [腾讯云 Kubernetes](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 * [Asciinema Live Demo](https://asciinema.org/a/215588)
 
@@ -43,7 +43,7 @@ LNMP Docker is supported on Linux, macOS, Windows 10 on `x86_64`, and Debian (Ra
 
 :gift: [Donate](https://zan.khs1994.com)
 
-:whale: [腾讯云 Kubernetes](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+:whale: [腾讯云 Kubernetes](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## WeChat
 
@@ -136,7 +136,7 @@ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 
 **腾讯云 Kubernetes**
 
-* [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [Tencent Kubernetes Engine](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## Advanced
 
@@ -215,11 +215,11 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.43-alpine`          | **2.4.43**          |`alpine:3.12`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.21`                 | **8.0.21**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.4`               | **10.5.4**          |`ubuntu:bionic`  |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.5-alpine`           | **6.0.5**           |`alpine:3.12`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.6-alpine`           | **6.0.6**           |`alpine:3.12`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:7.4.8-fpm-alpine`     | **7.4.8**       |`alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.8-composer-alpine`| **1.10.8**      |`alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.8-composer-alpine`| **1.10.9**      |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.6-alpine`           | **1.6.6**       |`alpine:3.12`    |
-|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.3-management-alpine` | **3.8.3**       |`alpine:3.11`    |
+|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.5-management-alpine` | **3.8.5**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.3-alpine`             | **12.3**        |`alpine:3.12`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.2.8`                      | **4.2.8**       |`ubuntu:bionic`  |
 |[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        |`phpmyadmin/phpmyadmin:latest`     | **latest**      |`alpine:3.11`    |
@@ -308,4 +308,4 @@ You can edit `.env` file `DATA_COLLECTION=false` to disable it.
 
 **腾讯云 Kubernetes**
 
-* [Tencent Kubernetes Engine](https://cloud.tencent.com/redirect.php?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
+* [Tencent Kubernetes Engine](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
