@@ -13,6 +13,7 @@ jobs:
       if: github.event_name == 'push'
     # - uses: docker-practice/actions-setup-docker@master
     - name: push lrew-example latest
+      if: github.event_name == 'push'
       run: |
         set -x
         docker run -i --rm \
@@ -26,4 +27,3 @@ jobs:
         LREW_DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         LREW_DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         LREW_NAME: example
-      if: github.event_name == 'push'
