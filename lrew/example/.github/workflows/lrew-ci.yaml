@@ -1,7 +1,7 @@
 on:
   push:
 
-name: lrew-ci
+name: lrew
 
 jobs:
   ci:
@@ -10,18 +10,20 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 1
-    - uses: azure/docker-login@v1
-      with:
-        # login-server: contoso.azurecr.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
       if: github.event_name == 'push'
-    - uses: docker-practice/actions-setup-docker@master
-    - name: Build
+    # - uses: docker-practice/actions-setup-docker@master
+    - name: push lrew-example latest
       run: |
         set -x
-        docker buildx ls
-        docker buildx build -t ${LREW_PKG} \
-          --push -f Dockerfile.lrew .
+        docker run -i --rm \
+          -v ${PWD}:/docker-entrypoint.d \
+          -e LREW_DOCKER_USERNAME \
+          -e LREW_DOCKER_PASSWORD \
+          -e LREW_DOCKER_REGISTRY \
+          -e LREW_DOCKER_NAMESPACE \
+          lrew/lrew push ${LREW_NAME}
       env:
-        LREW_PKG: lrewpkg/EXAMPLE
+        LREW_DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        LREW_DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        LREW_NAME: example
+      if: github.event_name == 'push'

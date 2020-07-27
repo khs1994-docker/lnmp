@@ -3,7 +3,7 @@ on:
     tags:
     - v18.03.*
 
-name: release
+name: Release
 
 jobs:
   release:

@@ -1,4 +1,4 @@
-name: lwpm-dist-k8s-file
+name: LWPM Dist K8S File
 
 on:
   workflow_dispatch:

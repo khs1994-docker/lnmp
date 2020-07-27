@@ -243,6 +243,7 @@ Function _dist($soft, $version, $preVersion) {
   }
 
   foreach ($platform in $platforms) {
+    printInfo Handle $platform.os $platform.architecture
     $env:lwpm_architecture = $platform.architecture
     $env:LWPM_UNAME_M = [Uname]::parser($env:lwpm_architecture)
     $env:lwpm_os = $platform.os
@@ -632,13 +633,22 @@ function _push($opt) {
 
   $opt, $version = $opt.split('@')
 
+  if (!$env:LWPM_DOCKER_NAMESPACE) {
+    $env:LWPM_DOCKER_NAMESPACE = "lwpm"
+  }
+
   if (!($opt.Contains('/'))) {
-    Write-Host "==> package name [ $opt ] not include '/', package name use 'lwpm/$opt'" -ForegroundColor Yellow
-    $opt = "lwpm/$opt"
+    Write-Host "==> package name [ $opt ] not include '/', package name use '$env:LWPM_DOCKER_NAMESPACE/$opt'" -ForegroundColor Yellow
+    $opt = "$env:LWPM_DOCKER_NAMESPACE/$opt"
   }
 
   try {
-    $pkg_root = pkg_root $opt.split('/')[-1]
+    if ($env:LWPM_PKG_ROOT) {
+      $pkg_root = $env:LWPM_PKG_ROOT
+    }
+    else {
+      $pkg_root = pkg_root $opt.split('/')[-1]
+    }
   }
   catch {
     return
@@ -663,15 +673,27 @@ function _push($opt) {
 
   Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
 
-  $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
+  if (!$env:LWPM_PKG_ROOT) {
+    $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
-  if (!($platforms)) {
-    $platforms = ConvertFrom-Json -InputObject @"
+    if (!($platforms)) {
+      $platforms = ConvertFrom-Json -InputObject @"
     [{
       "architecture": "amd64",
       "os"           : "windows"
     }]
 "@
+    }
+  }
+  else {
+    if (!($platforms)) {
+      $platforms = ConvertFrom-Json -InputObject @"
+    [{
+      "architecture": "amd64",
+      "os"           : "linux"
+    }]
+"@
+    }
   }
 
   $manifests = $()
@@ -693,19 +715,25 @@ function _push($opt) {
     _mkdir $lwpm_temp | out-null
     _mkdir $lwpm_dist_temp | out-null
 
-    try { Copy-Item $pkg_root\README.md $lwpm_temp }catch { }
-
-    if (Test-Path $pkg_root\$soft.psm1) {
-      Copy-Item $pkg_root\${soft}.psm1 $lwpm_temp
-    }
-
     $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
-    Set-Location $lwpm_temp\..\
-    tar -zcvf script.tar.gz $soft
-    Move-Item script.tar.gz $script_tar_file
+    if (!$env:LWPM_PKG_ROOT) {
+      try { Copy-Item $pkg_root\README.md $lwpm_temp }catch { }
 
-    ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw) | `
-      ConvertTo-Json -Depth 5 -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
+      if (Test-Path $pkg_root\$soft.psm1) {
+        Copy-Item $pkg_root\${soft}.psm1 $lwpm_temp
+      }
+
+      $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
+      Set-Location $lwpm_temp\..\
+      tar -zcvf script.tar.gz $soft
+      Move-Item script.tar.gz $script_tar_file
+
+      ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw) | `
+        ConvertTo-Json -Depth 5 -Compress | set-content -NoNewline $lwpm_temp\lwpm.json
+    }
+    else {
+      git -C $pkg_root archive --format=tar.gz -o $script_tar_file HEAD
+    }
 
     $layers_file = $()
 
@@ -728,14 +756,14 @@ function _push($opt) {
       # tmp/linux-amd64/pkg/dist/file
       Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
     }
-    else {
+    elseif (Test-Path $pkg_root\dist) {
       # pkg/dist/file
       write-host "==> NO platform file" -ForegroundColor Blue
       # tmp/linux-amd64/pkg/dist
       try { Copy-Item -r $pkg_root\dist   $lwpm_temp }catch { }
     }
 
-    if ($layers_file.Count -eq 0) {
+    if (($layers_file.Count -eq 0) -and (Test-Path $lwpm_temp/../$soft/dist)) {
       # tmp/dist/pkg/linux-amd64/dist.tar.gz
       $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
       Set-Location $lwpm_temp/../
@@ -752,6 +780,10 @@ function _push($opt) {
 
     # upload config blob
     $config_file = "$lwpm_temp/lwpm.json"
+
+    if (!(Test-Path $config_file)) {
+      write-output "{}" | out-file $config_file
+    }
 
     try {
       $config_length, $config_digest = New-Blob $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry

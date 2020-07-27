@@ -6,5 +6,9 @@
   {
     "source": "lwpm/kubernetes-server:K8S_VERSION",
     "dest": "lwpm/kubernetes-server:K8S_VERSION"
+  },
+  {
+    "source": "lwpm/kubectl:K8S_VERSION",
+    "dest": "lwpm/kubectl:K8S_VERSION"
   }
 ]

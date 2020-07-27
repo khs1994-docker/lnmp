@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
+
+command=$1
+
+shift
+
+case $command in
+  init )
+    exec docker run -i --rm \
+      -v $ScriptRoot/../vendor/lrew-dev:/docker-entrypoint.d \
+      lrew/lrew init $@
+    ;;
+
+  add )
+    exec docker run -i --rm \
+      -v $ScriptRoot/../vendor/lrew:/docker-entrypoint.d \
+      -v lrew-cache:/root/.khs1994-docker-lnmp \
+      -e LREW_DOCKER_REGISTRY \
+      -e LREW_DOCKER_NAMESPACE \
+      lrew/lrew add $@
+    ;;
+
+  push )
+    exec docker run -i --rm \
+      -v $ScriptRoot/../vendor/lrew-dev:/docker-entrypoint.d \
+      -e LREW_DOCKER_USERNAME \
+      -e LREW_DOCKER_PASSWORD \
+      -e LREW_DOCKER_REGISTRY \
+      -e LREW_DOCKER_NAMESPACE \
+      lrew/lrew push $@
+    ;;
+
+  * )
+    exec docker run -i --rm lrew/lrew
+    ;;
+esac

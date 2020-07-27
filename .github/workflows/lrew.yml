@@ -19,25 +19,17 @@ jobs:
   CI:
     runs-on: windows-latest
     needs: skip-ci
+    env:
+      LNMP_CN_ENV: "false"
     steps:
     - uses: actions/checkout@master
       with:
         fetch-depth: 2
-    - name: Init
-      shell: pwsh
-      run: |
-        php -m
-        cat C:\tools\php\php.ini | select-string extension=
-        echo "extension=openssl" C:\tools\php\php.ini > $null
     - name: Set ENV
       run: |
         echo ::add-path::$(pwd)
         echo ::add-path::$(pwd)\windows
-        echo ::add-path::C:\ProgramData\ComposerSetup\bin
         #echo ::set-env name=LNMP_PATH::$(pwd)
-    - name: install composer
-      shell: powershell
-      run: lnmp-windows-pm.ps1 install composer
     - name: lrew-init
       shell: powershell
       run: lnmp-docker.ps1 lrew-init test
@@ -46,54 +38,14 @@ jobs:
       run: |
         $QUITE=$true
         lnmp-docker.ps1 lrew-init test2
-    - name: lrew-add
+    - name: lrew-add-etcd
       shell: pwsh
-      run: lnmp-docker.ps1 lrew-add etcd
-    # need wsl
-    - name: lrew2-add
+      run: |
+        lnmp-docker.ps1 lrew-add etcd
+    - name: lrew-add-smee
       shell: pwsh
-      run: ./lrew/lrew.ps1 add smee
-    - shell: pwsh
+      run: |
+        ./lrew/lrew.ps1 add smee
+    - name: list vendor
       run: |
         ls -r vendor
-  docker-image-rootfs:
-    runs-on: ubuntu-latest
-    needs: skip-ci
-    steps:
-    - uses: actions/checkout@master
-      with:
-        fetch-depth: 2
-    - name: Download docker hub docker image rootfs
-      run: |
-        bash ./windows/sdk/dockerhub/rootfs.sh hello-world
-      # env:
-      #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-      #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-    - name: Download aliyun docker image rootfs
-      run: |
-        bash ./windows/sdk/dockerhub/rootfs.sh \
-        khs1994/hello-world latest '' '' '' 0 registry.us-west-1.aliyuncs.com
-      # env:
-      #   DOCKER_USERNAME: ${{secrets.DOCKER_ALIYUN_USERNAME}}
-      #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-    - name: Download tencent cloud docker image rootfs
-      run: |
-        bash ./windows/sdk/dockerhub/rootfs.sh \
-        khs1994/hello-world latest '' '' '' 0 uswccr.ccs.tencentyun.com
-      # env:
-      #   DOCKER_USERNAME: ${{secrets.DOCKER_TENCENT_CLOUD_USERNAME}}
-      #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-    - name: Download mirror.gcr.io docker image rootfs
-      run: |
-        bash ./windows/sdk/dockerhub/rootfs.sh \
-        hello-world latest '' '' '' 0 mirror.gcr.io
-      # env:
-      #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-      #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      continue-on-error: true
-    - name: List docker image rootfs
-      run : |
-        ls -la ~/.khs1994-docker-lnmp/dockerhub
-    - name: lpm-on-linux
-      run: |
-        ./lpm.ps1 install coredns

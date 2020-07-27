@@ -251,5 +251,13 @@
         "ref": "v0.12.0-arm"
       }
     ]
+  },
+  {
+    "source": "lrew/lrew:latest",
+    "dest": "lrew/lrew:latest"
+  },
+  {
+    "source": "lrewpkg/etcd:latest",
+    "dest": "lrewpkg/etcd:latest"
   }
 ]

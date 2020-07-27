@@ -87,7 +87,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 "@) -ForegroundColor Blue
   }
 
-  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Blue
+  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
 
   return $length, $digest
 }

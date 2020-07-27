@@ -5,7 +5,11 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 # ENV LWPM_DOCKER_USERNAME
 # ENV LWPM_DOCKER_PASSWORD
 # ENV LWPM_DOCKER_REGISTRY
+
 # ENV GITHUB_TOKEN
+
+# ENV LWPM_DOCKER_NAMESPACE="lwpm"
+# ENV LWPM_PKG_ROOT
 
 RUN apk add --no-cache curl
 

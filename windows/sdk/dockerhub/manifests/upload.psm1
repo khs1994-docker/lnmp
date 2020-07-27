@@ -14,7 +14,7 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
 
   write-host "==> exit code is $?" -ForegroundColor Blue
 
-  write-host "==> Response header `n$(Get-Content $env:TEMP/curl_resp_header.txt -raw)" -ForegroundColor Blue
+  write-host "==> Response header `n$(Get-Content $env:TEMP/curl_resp_header.txt -raw)" -ForegroundColor Green
 
   $manifest_digest = ((Get-Content $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split(' ')[-1]
 
