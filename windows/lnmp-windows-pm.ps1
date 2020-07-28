@@ -645,8 +645,8 @@ function _push($opt) {
   }
 
   try {
-    if ($env:LWPM_PKG_ROOT) {
-      $pkg_root = $env:LWPM_PKG_ROOT
+    if ($env:LREW_PKG_ROOT) {
+      $pkg_root = $env:LREW_PKG_ROOT
     }
     else {
       $pkg_root = pkg_root $opt.split('/')[-1]
@@ -675,7 +675,7 @@ function _push($opt) {
 
   Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
 
-  if (!$env:LWPM_PKG_ROOT) {
+  if (!$env:LREW_PKG_ROOT) {
     $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
     if (!($platforms)) {
@@ -718,7 +718,7 @@ function _push($opt) {
     _mkdir $lwpm_dist_temp | out-null
 
     $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
-    if (!$env:LWPM_PKG_ROOT) {
+    if (!$env:LREW_PKG_ROOT) {
       try { Copy-Item $pkg_root\README.md $lwpm_temp }catch { }
 
       if (Test-Path $pkg_root\$soft.psm1) {
