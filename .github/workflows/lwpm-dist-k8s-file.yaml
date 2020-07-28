@@ -1,4 +1,4 @@
-name: lwpm-dist-k8s-file
+name: LWPM Dist K8S File
 
 on:
   workflow_dispatch:
@@ -20,6 +20,7 @@ jobs:
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       LWPM_DOCKER_REGISTRY: registry-1.docker.io
       DOCKER_ROOTFS_PHASE: "manifest list"
+      LNMP_CN_ENV: "false"
     strategy:
       matrix:
         os: ["windows","ubuntu"]

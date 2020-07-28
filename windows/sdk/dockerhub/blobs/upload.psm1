@@ -1,7 +1,5 @@
 Import-Module $PSScriptRoot/../utils/Get-SHA.psm1
 
-# application/vnd.docker.container.image.v1+json
-
 Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `
@@ -87,7 +85,7 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 "@) -ForegroundColor Blue
   }
 
-  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Blue
+  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
 
   return $length, $digest
 }

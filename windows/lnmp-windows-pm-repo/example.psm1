@@ -236,7 +236,7 @@ Function _install($VERSION = 0, $isPre = 0, [boolean]$force = $false) {
   }
 
   if ($env:LWPM_DIST_ONLY -eq 'true') {
-    printInfo Dist success
+    printError "dist script not found"
 
     return
   }

@@ -1,4 +1,4 @@
 /.github             export-ignore
 /.dockerignore       export-ignore
 /.gitignore          export-ignore
-/Dockerfile.lrew     export-ignore
+/.gitattributes      export-ignore

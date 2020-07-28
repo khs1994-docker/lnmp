@@ -1,4 +1,4 @@
-name: lwpm-dist-file
+name: LWPM Dist File
 
 on:
   push:

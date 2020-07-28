@@ -1080,88 +1080,6 @@ _lrew_add(){
   done
 }
 
-_lrew_init(){
-  print_info "LREW init $@ ..."
-
-  if [ -z "$1" ];then
-     print_error "Please Input package name"
-     exit 1
-  fi
-
-  local package=$1
-
-  if [ -d vendor/lrew-dev/$package ];then
-     print_error "This package already exists"
-     exit 1
-  fi
-
-  mkdir -p vendor/lrew-dev
-
-  cp -r lrew/example vendor/lrew-dev/$package
-
-  if [ `command -v composer` ];then
-     composer init -d vendor/lrew-dev/$package \
-       --name "lrew/$package" \
-       --homepage "https://docs.lnmp.khs1994.com/lrew.html" \
-       --license "MIT" \
-       -q
-  fi
-
-  local items="docker-compose.yml docker-compose.override.yml docker-compose.build.yml"
-  local PACKAGE=$(echo $package | tr '[a-z]' '[A-Z]' | tr '-' '_')
-
-  for item in $items
-  do
-    file="vendor/lrew-dev/$package/$item"
-    sed -i "s#LREW_EXAMPLE_VENDOR#LREW_${PACKAGE}_VENDOR#g" $file
-    sed -i "s#LNMP_EXAMPLE_#LNMP_${PACKAGE}_#g" $file
-    sed -i "s#example/#${package}/#g" $file
-    sed -i "s#{{example}}#${package}#g" $file
-  done
-
-  if [ -f "vendor/lrew-dev/$package/.env.example" ];then
-    cp -r "vendor/lrew-dev/$package/.env.example" "vendor/lrew-dev/$package/.env"
-  fi
-}
-
-_lrew_outdated(){
-  print_info "LREW check $@ update ..."
-
-  if ! [ -d vendor/lrew ];then return; fi
-
-  if [ -z "$1" ];then
-    composer outdated "lrew/*"
-    return
-  fi
-
-  composer outdated "$@"
-}
-
-_lrew_backup(){
-  echo ""
-}
-
-_lrew_update(){
-  print_info "LREW update $@ ..."
-
-  if ! [ -d vendor/lrew ];then return; fi
-
-  if [ -z "$1" ];then
-    composer update "lrew/*"
-    return
-  fi
-
-  composer update "$@"
-
-  for package in "$@"
-  do
-    if ! [ -d vendor/lrew/$package ];then continue ; fi
-    cd vendor/lrew/$package
-    if [ -f bin/post-install ];then source bin/post-install ; fi
-    cd ../../ > /dev/null
-  done
-}
-
 # 入口文件
 
 main() {
@@ -1172,19 +1090,19 @@ main() {
     _docker_is_run; acme "$@"
     ;;
   lrew-init )
-    _lrew_init "$@"
+    ./lrew/lrew init "$@"
     ;;
   lrew-add )
-    _lrew_add "$@"
+    ./lrew/lrew add "$@"
     ;;
   lrew-backup )
-    _lrew_backup
+    ./lrew/lrew backup
     ;;
   lrew-update )
-    _lrew_update "$@"
+    ./lrew/lrew update "$@"
     ;;
   lrew-outdated )
-    _lrew_outdated "$@"
+    ./lrew/lrew outdated "$@"
     ;;
   backup )
     _docker_is_run; backup "$@"

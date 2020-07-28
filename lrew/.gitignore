@@ -15,3 +15,6 @@
 !example
 !laravel
 !lrew.ps1
+!lrew
+!Dockerfile
+!.dockerignore

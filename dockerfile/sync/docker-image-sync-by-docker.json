@@ -69,5 +69,9 @@
   {
     "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",
     "dest":"metrics-server:master"
+  },
+  {
+    "source": "gcr.io/google_containers/git-sync:v3.1.6",
+    "dest": "git-sync:v3.1.6"
   }
 ]

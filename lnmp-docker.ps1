@@ -537,14 +537,6 @@ Function get_compose_options($compose_files, $isBuild = 0) {
         "${KEY}=lrew-dev" >> $LNMP_ENV_FILE
       }
     }
-    elseif (Test-Path $PSScriptRoot/vendor/lrew2/$item) {
-      $LREW_INCLUDE_ROOT = "$PSScriptRoot/vendor/lrew2/$item"
-      # unset env
-      if ($content) {
-        @(Get-Content $LNMP_ENV_FILE) -replace `
-          "${KEY}=lrew-dev", '' | Set-Content $LNMP_ENV_FILE
-      }
-    }
     elseif (Test-Path $PSScriptRoot/vendor/lrew/$item) {
       $LREW_INCLUDE_ROOT = "$PSScriptRoot/vendor/lrew/$item"
       # unset env
@@ -597,125 +589,6 @@ Function get_compose_options($compose_files, $isBuild = 0) {
   else {
     return $options.split(' ')
   }
-}
-
-Function _lrew_add($packages = $null) {
-  printInfo "LREW add $packages ..."
-
-  if (!$packages) {
-    printError "Please Input package name"
-    exit 1
-  }
-
-  if (!(Test-Path composer.json)) {
-    composer init -q -n --stability dev
-  }
-  Foreach ($package in $packages) {
-    $ErrorActionPreference = "continue"
-    composer require "lrew/$package" --prefer-source
-  }
-
-  Foreach ($package in $packages) {
-    if (!(Test-Path $PSScriptRoot/vendor/lrew/$package)) {
-      continue
-    }
-
-    cd $PSScriptRoot/vendor/lrew/$package
-    if (Test-Path bin/post-install.ps1) {
-      . ./bin/post-install.ps1
-    }
-  }
-}
-
-Function _lrew_init($package = $null) {
-  printInfo "LREW init $package ..."
-
-  if (!$package) {
-    printError "Please Input package name"
-    exit 1
-  }
-
-  if (Test-Path vendor/lrew-dev/$package) {
-    printError "This package already exists"
-    return
-  }
-
-  cp -r lrew/example vendor/lrew-dev/$package
-
-  if (_command composer) {
-    composer init -d "vendor/lrew-dev/$package" `
-      --name "lrew/$package" `
-      --homepage "https://docs.lnmp.khs1994.com/lrew.html" `
-      --license "MIT" `
-      -q
-  }
-
-  $items = "docker-compose.yml", "docker-compose.override.yml", "docker-compose.build.yml"
-
-  Foreach ($item in $items) {
-    $file = "vendor/lrew-dev/$package/$item"
-
-    @(Get-Content $file) -replace `
-      'LREW_EXAMPLE_VENDOR', "LREW_$( $package -Replace('-','_'))_VENDOR".ToUpper() | Set-Content $file
-
-    @(Get-Content $file) -replace `
-      'LNMP_EXAMPLE_', "LNMP_$( $package -Replace('-','_'))_".ToUpper() | Set-Content $file
-
-    @(Get-Content $file) -replace `
-      'example/', "${package}/" | Set-Content $file
-
-    @(Get-Content $file) -replace `
-      '{{example}}', "${package}" | Set-Content $file
-  }
-
-  if (Test-Path "vendor/lrew-dev/$package/.env.example") {
-    cp -r "vendor/lrew-dev/$package/.env.example" "vendor/lrew-dev/$package/.env"
-  }
-}
-
-Function _lrew_outdated($packages = $null) {
-  printInfo "LREW check $packages update ..."
-
-  if (!(Test-Path vendor/lrew)) {
-    return
-  }
-
-  if (!$packages) {
-    composer outdated "lrew/*"
-    return
-  }
-
-  composer outdated $packages
-}
-
-Function _lrew_update($packages = $null) {
-  printInfo "LREW update $packages ..."
-
-  if (!(Test-Path vendor/lrew)) {
-    return
-  }
-
-  if (!$packages) {
-    composer update "lrew/*"
-    return
-  }
-
-  composer update $packages
-
-  Foreach ($package in $packages) {
-    if (!(Test-Path $PSScriptRoot/vendor/lrew/$package)) {
-      continue
-    }
-
-    cd $PSScriptRoot/vendor/lrew/$package
-    if (Test-Path bin/post-install.ps1) {
-      . ./bin/post-install.ps1
-    }
-  }
-}
-
-Function _lrew_backup() {
-
 }
 
 Function _wsl_check() {
@@ -945,23 +818,23 @@ else {
 
 switch -regex ($command) {
   lrew-init {
-    _lrew_init $other
+    & $PSScriptRoot/lrew/lrew.ps1 init $other
   }
 
   lrew-add {
-    _lrew_add $other
+    & $PSScriptRoot/lrew/lrew.ps1 add $other
   }
 
   lrew-outdated {
-    _lrew_outdated $other
+    & $PSScriptRoot/lrew/lrew.ps1 outdated $other
   }
 
   lrew-backup {
-    _lrew_backup
+    & $PSScriptRoot/lrew/lrew.ps1 backup $other
   }
 
   lrew-update {
-    _lrew_update $other
+    & $PSScriptRoot/lrew/lrew.ps1 update $other
   }
 
   httpd-config {
