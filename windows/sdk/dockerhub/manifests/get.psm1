@@ -1,13 +1,14 @@
 Import-Module $PSScriptRoot/../cache/cache.psm1
-function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
-  $manifest_header = "application/vnd.docker.distribution.manifest.v2+json"
-  $manifest_list_header = "application/vnd.docker.distribution.manifest.list.v2+json"
+. $PSScriptRoot/../DockerImageSpec/DockerImageSpec.ps1
 
-  if (!$header) { $header = $manifest_list_header }
+function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry = "registry.hub.docker.com", $raw = $true, $return_digest_only = $false) {
+
+  if (!$header) { $header = [DockerImageSpec]::manifest_list }
 
   $type = "manifest"
 
-  if ($header -eq $manifest_list_header) { $type = "manifest list" }
+
+  if ($header -eq [DockerImageSpec]::manifest_list) { $type = "manifest list" }
 
   Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Blue
 
@@ -22,7 +23,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
     $result = Invoke-WebRequest `
       -Authentication OAuth `
       -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-      -Headers @{"Accept" = "$header" } `
+      -Headers @{"Accept" = $header } `
       "https://$registry/v2/$image/manifests/$ref" `
       -PassThru `
       -OutFile $cache_file `
@@ -30,7 +31,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
   }
   catch {
     $result = $_.Exception.Response
-
+    write-host $_.Exception
     Write-Host "==> [error] Get [ $image $ref ] $type error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false

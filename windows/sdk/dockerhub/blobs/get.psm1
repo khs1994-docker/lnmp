@@ -1,6 +1,8 @@
 Import-Module $PSScriptRoot/../utils/Get-SHA.psm1
 Import-Module $PSScriptRoot/../cache/cache.psm1
 
+. $PSScriptRoot/../DockerImageSpec/DockerImageSpec.ps1
+
 function Get-Dist($dist, $distTemp) {
   if ($dist) {
     copy-item -force $distTemp $dist
@@ -11,7 +13,7 @@ function Get-Dist($dist, $distTemp) {
   return $distTemp
 }
 
-function _sha256_checker($filename) {
+function Test-SHA256($filename) {
   $sha256 = (Get-ChildItem $filename).name.split('.')[0]
   $current_sha256 = Get-SHA256 $filename
 
@@ -31,7 +33,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
   $distTemp = Get-CachePath "blobs/sha256/$prefix/$sha256"
 
   if (Test-Path $distTemp) {
-    if (_sha256_checker $distTemp) {
+    if (Test-SHA256 $distTemp) {
       Write-Host "==> File already exists, skip download" -ForegroundColor Green
 
       return Get-Dist $dist $distTemp
@@ -41,19 +43,19 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
   }
 
   try {
-    $result = Invoke-WebRequest `
+    $response = Invoke-WebRequest `
       -Authentication OAuth `
       -Token (ConvertTo-SecureString $token -Force -AsPlainText) `
-      -Headers @{"Accept" = "application/vnd.docker.image.rootfs.diff.tar.gzip" } `
+      -Headers @{"Accept" = [DockerImageSpec]::layer } `
       "https://$registry/v2/$image/blobs/$digest" `
       -PassThru `
       -OutFile $distTemp `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
   }
   catch {
-    $result = $_.Exception.Response
+    $response = $_.Exception.Response
 
-    $statusCode = $result.StatusCode
+    $statusCode = $response.StatusCode
 
     if (!$statusCode) {
       Write-Host $_.Exception
@@ -63,26 +65,33 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
     }
 
     if ($statusCode -lt 400 -and $statusCode -gt 200) {
-      $url = $result.Headers.Location
+      $url = $response.Headers.Location
 
       Write-Host "==> Redirect to $url"
 
-      $result3xx = Invoke-WebRequest `
-        "$url" `
-        -PassThru `
-        -OutFile $distTemp `
-        -UserAgent "Docker-Client/19.03.5 (Windows)"
+      try {
+        Invoke-WebRequest `
+          "$url" `
+          -PassThru `
+          -OutFile $distTemp `
+          -UserAgent "Docker-Client/19.03.5 (Windows)" > $null 2>&1
+      }
+      catch {
+        Write-Host $_.Exception
+
+        return $false
+      }
     }
     else {
       return $false
     }
   }
 
-  $size = (($result.RawContentLength)/1024/1024)
+  $size = (($response.RawContentLength) / 1024 / 1024)
 
   Write-Host "Download size is $('{0:n2}' -f $size) M" -ForegroundColor Green
 
-  if (_sha256_checker $distTemp) {
+  if (Test-SHA256 $distTemp) {
     return Get-Dist $dist $distTemp
   }
 

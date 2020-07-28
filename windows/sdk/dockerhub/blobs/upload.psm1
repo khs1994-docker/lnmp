@@ -1,7 +1,5 @@
 Import-Module $PSScriptRoot/../utils/Get-SHA.psm1
 
-# application/vnd.docker.container.image.v1+json
-
 Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com") {
   try {
     Invoke-WebRequest `

@@ -76,6 +76,8 @@ Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 Import-Module $PSScriptRoot/sdk/dockerhub/utils/Get-SHA.psm1
 
+. $PSScriptRoot\sdk\dockerhub\DockerImageSpec\DockerImageSpec.ps1
+
 # 配置环境变量
 [environment]::SetEnvironmentvariable("DOCKER_CLI_EXPERIMENTAL", "enabled", "User")
 [environment]::SetEnvironmentvariable("DOCKER_BUILDKIT", "1", "User")
@@ -380,7 +382,7 @@ Function _getlwpmConfig($image, $ref) {
 
   $token = getDockerRegistryToken $image 'pull'
 
-  $result = Get-Manifest $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
+  $result = Get-Manifest $token $image $ref $([DockerImageSpec]::manifest) $registry
 
   if (!($result)) {
     Write-Host "==> [ $image $ref ] not found" -ForegroundColor Red
@@ -786,7 +788,7 @@ function _push($opt) {
     }
 
     try {
-      $config_length, $config_digest = New-Blob $token $opt $config_file "application/vnd.docker.container.image.v1+json" $registry
+      $config_length, $config_digest = New-Blob $token $opt $config_file $([DockerImageSpec]::container_config) $registry
     }
     catch {
       Write-Host $_.Exception
@@ -807,7 +809,7 @@ function _push($opt) {
       }
 
       $layer = @{
-        "mediaType" = "application/vnd.docker.image.rootfs.diff.tar.gzip";
+        "mediaType" = [DockerImageSpec]::layer;
         "size"      = $length;
         "digest"    = "$digest";
       }
@@ -817,9 +819,9 @@ function _push($opt) {
 
     $data = ConvertTo-Json @{
       "schemaVersion" = 2;
-      "mediaType"     = "application/vnd.docker.distribution.manifest.v2+json";
+      "mediaType"     = [DockerImageSpec]::manifest;
       "config"        = @{
-        "mediaType" = "application/vnd.docker.container.image.v1+json";
+        "mediaType" = [DockerImageSpec]::container_config;
         "size"      = $config_length;
         "digest"    = "$config_digest";
       };
@@ -840,7 +842,7 @@ function _push($opt) {
     # generate manifest list
     $manifest = @{
       "digest"    = "$manifest_digest";
-      "mediaType" = "application/vnd.docker.distribution.manifest.v2+json";
+      "mediaType" = [DockerImageSpec]::manifest;
       "platform"  = @{
         "architecture" = $env:lwpm_architecture;
         "os"           = $env:lwpm_os;
@@ -852,7 +854,7 @@ function _push($opt) {
   }
 
   $data = ConvertTo-Json -InputObject @{
-    "mediaType"     = "application/vnd.docker.distribution.manifest.list.v2+json";
+    "mediaType"     = [DockerImageSpec]::manifest_list;
     "schemaVersion" = 2;
     "manifests"     = $manifests
   } -Compress -Depth 10
@@ -864,7 +866,7 @@ function _push($opt) {
 
   # push manifest list
   $token = getDockerRegistryToken $opt -registry $registry
-  $manifest_length, $manifest_digest = New-Manifest $token $opt $version $manifest_list_json_path "application/vnd.docker.distribution.manifest.list.v2+json" $registry
+  $manifest_length, $manifest_digest = New-Manifest $token $opt $version $manifest_list_json_path $([DockerImageSpec]::manifest_list) $registry
 }
 
 function _sort_object($obj) {

@@ -7,6 +7,8 @@ Import-Module $PSScriptRoot\auth\token.psm1
 Import-Module $PSScriptRoot/auth/auth.psm1
 Import-Module $PSScriptRoot/registry/registry.psm1
 
+. $PSScriptRoot/DockerImageSpec/DockerImageSpec.ps1
+
 # $env:DOCKER_ROOTFS_PHASE="tag"
 # $env:DOCKER_ROOTFS_PHASE="manifest"
 # $env:DOCKER_ROOTFS_PHASE="manifest list"
@@ -21,6 +23,7 @@ Import-Module $PSScriptRoot/registry/registry.psm1
   PS > rootfs alpine latest amd64 linux
 
   ENV:
+  $env:LNMP_CACHE="~/.khs1994-docker-lnmp"
   $env:REGISTRY_MIRROR
 
   $env:DOCKER_USERNAME
@@ -50,6 +53,7 @@ function rootfs([string]$image = "alpine",
   # $layersIndex = 0
   # $layersIndex = 0,1
   # $layersIndex = 'config',0,1
+  # $layersIndex = 'all'
 
   $registry = Get-Registry $registry
 
@@ -123,7 +127,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
       throw '404';
     }
 
-    $result = Get-Manifest $token $image $ref "application/vnd.docker.distribution.manifest.v2+json" $registry
+    $result = Get-Manifest $token $image $ref $([DockerImageSpec]::manifest) $registry
 
     if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
       write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest', exit" -ForegroundColor Blue
@@ -136,6 +140,11 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
     }
 
     $dests = $()
+
+    if ($layersIndex -eq 'all') {
+      $layersIndex = -1..($result.layers.count - 1)
+      $layersIndex[0] = 'config'
+    }
 
     foreach ($index in $layersIndex) {
       write-host "==> Download layers index $index" -ForegroundColor Blue
@@ -191,7 +200,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
     if ($current_arch -eq $arch -and ($current_os -eq $os)) {
       $digest = $manifest.digest
 
-      $result = Get-Manifest $token $image $digest "application/vnd.docker.distribution.manifest.v2+json" $registry
+      $result = Get-Manifest $token $image $digest $([DockerImageSpec]::manifest) $registry
 
       if ($env:DOCKER_ROOTFS_PHASE -eq "manifest") {
         write-host "==> find `$env:DOCKER_ROOTFS_PHASE='manifest', exit" -ForegroundColor Blue
@@ -201,6 +210,11 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
 
       $layers = $result.layers
       $dests = $()
+
+      if ($layersIndex -eq 'all') {
+        $layersIndex = -1..($result.layers.count - 1)
+        $layersIndex[0] = 'config'
+      }
 
       foreach ($index in $layersIndex) {
         write-host "==> Download layers index $index" -ForegroundColor Blue

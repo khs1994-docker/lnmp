@@ -9,9 +9,7 @@ Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\utils\Get-SHA.psm1
 
-$manifest_list_media_type = "application/vnd.docker.distribution.manifest.list.v2+json"
-$manifest_media_type = "application/vnd.docker.distribution.manifest.v2+json"
-$image_media_type = "application/vnd.docker.container.image.v1+json"
+. $PSScriptRoot/sdk/dockerhub/DockerImageSpec/DockerImageSpec.ps1
 
 if ($env:SYNC_WINDOWS -eq 'true') {
   $EXCLUDE_OS = $('x')
@@ -32,7 +30,7 @@ Import-Module -force $PSScriptRoot/sdk/dockerhub/imageParser/imageParser.psm1
 
 Function _upload_manifest($token, $image, $ref, $manifest_json_path, $registry) {
   New-Manifest $token $image $ref $manifest_json_path `
-    $manifest_media_type $registry | out-host
+  $([DockerImageSpec]::manifest) $registry | out-host
 }
 
 Function _exclude_platform($manifests, $manifest_list_json_path) {
@@ -163,7 +161,7 @@ Function _all_in_one($config) {
     }
     $manifest = @{
       "digest"    = "sha256:$digest";
-      "mediaType" = "application/vnd.docker.distribution.manifest.v2+json";
+      "mediaType" = [DockerImageSpec]::manifest;
       "platform"  = @{
         "architecture" = $architecture;
         "os"           = $os;
@@ -181,7 +179,7 @@ Function _all_in_one($config) {
   write-host "==> push all-in-one manifest list" -ForegroundColor Blue
 
   $data = ConvertTo-Json -InputObject @{
-    "mediaType"     = "application/vnd.docker.distribution.manifest.list.v2+json";
+    "mediaType"     = [DockerImageSpec]::manifest_list;
     "schemaVersion" = 2;
     "manifests"     = $manifests
   } -Compress -Depth 10
@@ -194,7 +192,7 @@ Function _all_in_one($config) {
 
   $dest_token = _getDestToken $dest_registry $dest_image
   New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
-    $manifest_list_media_type $dest_registry
+  $([DockerImageSpec]::manifest_list) $dest_registry
 }
 
 Function _sync($source, $dest, $config) {
@@ -315,7 +313,7 @@ manifest $manifest_digest already exists" `
 
           $token = _getSourceToken $source_registry $source_image
           $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-            $manifest_media_type `
+          $([DockerImageSpec]::manifest) `
             -raw $false -registry $source_registry
 
           # upload manifests once
@@ -341,7 +339,7 @@ manifest $manifest_digest already exists" `
       # get source manifest
       $token = _getSourceToken $source_registry $source_image
       $source_manifest_digest = Get-Manifest $token $source_image $manifest_digest `
-        $manifest_media_type `
+      $([DockerImageSpec]::manifest) `
         -raw $false -registry $source_registry -return_digest_only $true
       if (!$source_manifest_digest) {
         write-host "==> [error] get source manifest error, skip" -ForegroundColor Red
@@ -365,7 +363,7 @@ manifest $manifest_digest already exists" `
 
         $token = _getSourceToken $source_registry $source_image
         $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-          $manifest_media_type -raw $false -registry $source_registry
+        $([DockerImageSpec]::manifest) -raw $false -registry $source_registry
 
         $dest_token = _getDestToken $dest_registry $dest_image
         _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
@@ -378,7 +376,7 @@ manifest $manifest_digest already exists" `
     # get manifest
     $token = _getSourceToken $source_registry $source_image
     $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
-      $manifest_media_type -raw $false -registry $source_registry
+    $([DockerImageSpec]::manifest) -raw $false -registry $source_registry
 
     if (!$manifest_json_path) {
       write-host "==> [error] Image [ $source_image $source_ref ] `
@@ -397,7 +395,8 @@ manifest not found, skip" -ForegroundColor Red
 
     try {
       _upload_blob $dest_token $dest_image $config_digest `
-        $dest_registry $source_token $source_image $source_registry $image_media_type
+        $dest_registry $source_token $source_image $source_registry `
+      $([DockerImageSpec]::container_config)
     }
     catch { write-host $_.Exception -ForegroundColor Red; return }
 
@@ -433,7 +432,7 @@ manifest not found, skip" -ForegroundColor Red
   # upload manifests list
   $dest_token = _getDestToken $dest_registry $dest_image
   $length, $digest = New-Manifest $dest_token $dest_image $dest_ref $manifest_list_json_path `
-    $manifest_list_media_type $dest_registry
+  $([DockerImageSpec]::manifest_list) $dest_registry
 
   if (!$digest) {
     write-host "==> [error] Manifest list push error" -ForegroundColor Red

@@ -33,7 +33,7 @@ Function _add($pkg) {
 
     return
   }
-
+  $ErrorActionPreference = "Continue"
   tar -zxvf $dist -C $lrew_dist
   printInfo "add [ $pkg ] success"
 }
