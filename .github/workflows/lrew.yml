@@ -30,10 +30,10 @@ jobs:
         echo ::add-path::$(pwd)
         echo ::add-path::$(pwd)\windows
         #echo ::set-env name=LNMP_PATH::$(pwd)
-    - name: lrew-init
+    - name: lrew-init-test
       shell: powershell
       run: lnmp-docker.ps1 lrew-init test
-    - name: lrew-init-quite
+    - name: lrew-init-test2-quite
       shell: powershell
       run: |
         $QUITE=$true
