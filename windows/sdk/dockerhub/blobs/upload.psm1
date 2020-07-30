@@ -64,46 +64,44 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 
   $length = (Get-ChildItem $file).Length
 
-  if ($contentType -eq [DockerImageSpec]::container_config) {
-    $headers = @{}
-    $headers.Add('Content-Type', $contentType);
-    $headers.Add('Authorization', "Bearer $token")
+  $headers = @{}
+  $headers.Add('Content-Type', $contentType);
+  $headers.Add('Authorization', "Bearer $token")
 
-    try {
-      $response = Invoke-WebRequest `
-        -Uri "$uuid&digest=$digest" `
-        -Headers $headers `
-        -Method 'Put' `
-        -Body $(Get-Content $file -raw) `
-        -UserAgent "Docker-Client/19.03.5 (Windows)"
+  try {
+    $response = Invoke-WebRequest `
+      -Uri "$uuid&digest=$digest" `
+      -Headers $headers `
+      -Method 'Put' `
+      -Infile $file `
+      -UserAgent "Docker-Client/19.03.5 (Windows)"
 
-      $response_digest = $response.Headers.'Docker-Content-Digest'
-    }
-    catch {
-      write-host $_.Exception
-
-      return $false, $false
-    }
+    $response_digest = $response.Headers.'Docker-Content-Digest'
   }
-  else {
-    $result = curl -k -L `
-      -H "Content-Length: $length" `
-      -H "Content-Type: $contentType" `
-      -H "Authorization: Bearer $token" `
-      -X PUT `
-      --data-binary "@$file" `
-      -A "Docker-Client/19.03.5 (Windows)" `
-      -D $env:TEMP/curl_resp_header.txt `
-      "$uuid&digest=$digest"
+  catch {
+    write-host $_.Exception
+    write-host "==> Upload blob failed" -ForegroundColor Red
 
-    # -T $file
-
-    $response_digest = ((Get-Content $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split(' ')[-1]
-
-    write-host "==> exit code is $?" -ForegroundColor Green
-
-    # write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
+    return $false, $false
   }
+
+  # $result = curl -k -L `
+  #   -H "Content-Length: $length" `
+  #   -H "Content-Type: $contentType" `
+  #   -H "Authorization: Bearer $token" `
+  #   -X PUT `
+  #   --data-binary "@$file" `
+  #   -A "Docker-Client/19.03.5 (Windows)" `
+  #   -D $env:TEMP/curl_resp_header.txt `
+  #   "$uuid&digest=$digest"
+
+  # -T $file
+
+  # $response_digest = ((Get-Content $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split(' ')[-1]
+
+  # write-host "==> exit code is $?" -ForegroundColor Green
+
+  # write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
 
   if ($response_digest -ne $digest) {
     write-host "==> Upload blob failed" -ForegroundColor Red
