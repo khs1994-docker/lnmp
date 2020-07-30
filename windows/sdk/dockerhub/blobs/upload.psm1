@@ -31,6 +31,8 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   $sha256 = Get-SHA256 $file
   $digest = "sha256:$sha256"
 
+  write-host "==> Digest: $digest" -ForegroundColor Green
+
   # $sha512 = Get-SHA512 $file
   # $digest = "sha512:$sha512"
 
@@ -104,10 +106,11 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   }
 
   if ($response_digest -ne $digest) {
+    write-host "==> Upload blob failed" -ForegroundColor Red
     return $false, $false
   }
 
-  write-host "==> Blob upload success" -ForegroundColor Green
+  write-host "==> Upload blob success" -ForegroundColor Green
 
   #   write-host (ConvertFrom-Json -InputObject @"
   # {

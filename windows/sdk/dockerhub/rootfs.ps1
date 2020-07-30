@@ -157,8 +157,6 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
         continue
       }
 
-      Write-Host "==> Digest is $digest" -ForegroundColor Green
-
       $dest = Get-Blob $token $image $digest $registry $dest
 
       if ($dest -eq $false) {
@@ -167,7 +165,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
         return $false;
       }
 
-      Write-Host "==> Download success to $dest" -ForegroundColor Blue
+      Write-Host "==> Download success to $dest" -ForegroundColor Green
 
       $dests += , $dest
       $dest = $null
@@ -229,8 +227,6 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
           continue
         }
 
-        Write-Host "==> Blob(layer) digest is $digest" -ForegroundColor Green
-
         $dest = Get-Blob $token $image $digest $registry $dest
 
         if ($dest -eq $false) {
@@ -239,7 +235,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
           return $false;
         }
 
-        Write-Host "==> Download success to $dest" -ForegroundColor Blue
+        Write-Host "==> Download success to $dest" -ForegroundColor Green
 
         $dests += , $dest
 

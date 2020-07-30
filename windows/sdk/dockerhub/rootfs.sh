@@ -87,7 +87,7 @@ if [ "$schemaVersion" -eq 1 ];then
     exit 1
   fi
 
-  echo "==> Digest is $digest" > /dev/stderr
+  echo "==> Digest: $digest" > /dev/stderr
 
   . $ScriptRoot/blobs/get.sh
 
@@ -128,7 +128,7 @@ local current_os=`cat $manifest_list_json_file | jq ".manifests[$i].platform.os"
 
     local digest=`cat $manifest_json_file | jq ".layers[$layersIndex].digest" | sed 's/"//g'`
 
-    echo "==> Digest is $digest" > /dev/stderr
+    echo "==> Digest: $digest" > /dev/stderr
 
     . $ScriptRoot/blobs/get.sh
 

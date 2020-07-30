@@ -42,7 +42,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
     return $false
   }
 
-  write-host "==> $type digest is $($result.Headers.'Docker-Content-Digest')" -ForegroundColor Green
+  write-host "==> Digest: $($result.Headers.'Docker-Content-Digest')" -ForegroundColor Green
 
   if ($return_digest_only) {
     return $result.Headers.'Docker-Content-Digest'

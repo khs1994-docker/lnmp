@@ -480,15 +480,15 @@ Function _add($softs) {
       copy-item -Force $lwpm_json $soft_folder/$($soft.split('/')[-1])/lwpm.json
 
       if ($lwpm_dist -eq $false) {
-        Write-Host "==> This package not include dist" -ForegroundColor Yellow
+        Write-Host "==> This package not include dist" -ForegroundColor Blue
 
       }
       else {
-        write-host "==> Handle lwpm dist" -ForegroundColor Blue
+        write-host "==> Handle lwpm pkg dist" -ForegroundColor Blue
         tar -zxvf $lwpm_dist -C $soft_folder
       }
 
-      write-host "==> Handle lwpm script" -ForegroundColor Blue
+      write-host "==> Handle lwpm pkg script" -ForegroundColor Blue
       tar -zxvf $lwpm_script -C $soft_folder
     } # platforms end
 
@@ -740,7 +740,7 @@ function _push($opt) {
 
       $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
       Set-Location $lwpm_temp\..\
-      write-host "==> Handle pkg script" -ForegroundColor Green
+      write-host "==> Handle lwpm pkg script" -ForegroundColor Green
       tar -zcvf script.tar.gz $soft
       Move-Item script.tar.gz $script_tar_file
 
@@ -784,7 +784,7 @@ function _push($opt) {
       $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
       Set-Location $lwpm_temp/../
       # tmp/linux-amd64
-      write-host "==> Handle pkg dist" -ForegroundColor Green
+      write-host "==> Handle lwpm pkg dist" -ForegroundColor Green
       tar -zcvf dist.tar.gz $soft/dist
       Move-Item dist.tar.gz $dist_tar_file
 

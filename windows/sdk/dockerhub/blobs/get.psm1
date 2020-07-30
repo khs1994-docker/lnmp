@@ -27,6 +27,7 @@ function Test-SHA256($filename) {
 }
 
 function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com", $dist) {
+  Write-Host "==> Digest: $digest" -ForegroundColor Green
   $sha256 = $digest.split(':')[1]
   $prefix = $sha256.Substring(0, 2)
   New-Item -force -type Directory (Get-CachePath blobs/sha256/$prefix) | out-null
@@ -62,7 +63,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
       Write-Host $_.Exception
     }
     else {
-      Write-Host "==> HTTP StatusCode is $statusCode" -ForegroundColor Red
+      Write-Host "==> Get blob failed [ $statusCode ]" -ForegroundColor Red
     }
 
     return $false

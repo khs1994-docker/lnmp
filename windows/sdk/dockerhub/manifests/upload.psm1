@@ -38,7 +38,8 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
 
   $manifest_digest = $response.Headers.'Docker-Content-Digest'
 
-  write-host "==> $contentType push success, digest: $manifest_digest" -ForegroundColor Green
+  write-host "==> Digest: $manifest_digest" -ForegroundColor Green
+  write-host "==> Push $contentType success" -ForegroundColor Green
 
   $manifest_length = (Get-ChildItem $manifest_json_path).Length
 
