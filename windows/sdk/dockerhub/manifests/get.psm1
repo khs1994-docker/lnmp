@@ -7,7 +7,6 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
 
   $type = "manifest"
 
-
   if ($header -eq [DockerImageSpec]::manifest_list) { $type = "manifest list" }
 
   Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Blue

@@ -862,7 +862,7 @@ function _push($opt) {
   $manifest_list_json_path = "$lwpm_dist_temp/manifest_list.json"
   write-output $data | Set-Content -NoNewline $manifest_list_json_path
 
-  Write-Host $(Get-Content $manifest_list_json_path -raw)
+  # Write-Host $(Get-Content $manifest_list_json_path -raw)
 
   # push manifest list
   $token = getDockerRegistryToken $opt -registry $registry

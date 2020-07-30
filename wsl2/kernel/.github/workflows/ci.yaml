@@ -23,7 +23,7 @@ jobs:
     if: |
       ! contains( github.event.head_commit.message, '[skip ci]')
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 1
         repository: ${{ matrix.repo }}
@@ -133,17 +133,17 @@ jobs:
         cp linux.tar.gz           linux-headers-${kernelversion}.tar.gz
         cp linux/lib/modules/$kernelversion/modules.builtin \
                                   ${kernelversion}-modules.builtin
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@main
       name: Upload Kernel
       with:
         name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}.img
         path: kernel-${{ steps.build.outputs.kernelversion }}.img
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@main
       name: Upload Kernel and headers
       with:
         name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}
         path: wsl2_dist
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@main
       name: Upload modules.builtin file
       with:
         name: wsl2-kernel-${{ steps.build.outputs.kernelversion }}-modules.builtin
@@ -183,7 +183,7 @@ jobs:
         sudo dpkg-deb -b linux-headers-${kernelversion} $DEB_NAME
 
         echo ::set-output name=DEB_NAME::${DEB_NAME}
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@main
       name: Upload deb
       with:
         name: ${{ steps.deb.outputs.DEB_NAME }}

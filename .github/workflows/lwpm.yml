@@ -23,7 +23,7 @@ jobs:
     env:
       LNMP_CN_ENV: false
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - name: Set ENV

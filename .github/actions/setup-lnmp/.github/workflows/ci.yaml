@@ -13,7 +13,7 @@ jobs:
           - master
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
       - uses: docker-practice/actions-setup-docker@master
@@ -48,7 +48,7 @@ jobs:
          - macOS-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
       - name: default

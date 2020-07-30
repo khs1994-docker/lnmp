@@ -50,6 +50,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
       "https://$registry/v2/$image/blobs/$digest" `
       -PassThru `
       -OutFile $distTemp `
+      -PreserveAuthorizationOnRedirect `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
   }
   catch {
@@ -64,32 +65,34 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
       Write-Host "==> HTTP StatusCode is $statusCode" -ForegroundColor Red
     }
 
-    if ($statusCode -lt 400 -and $statusCode -gt 200) {
-      $url = $response.Headers.Location
+    return $false
 
-      Write-Host "==> Redirect to $url"
+    # if ($statusCode -lt 400 -and $statusCode -gt 200) {
+    #   $url = $response.Headers.Location
 
-      try {
-        Invoke-WebRequest `
-          "$url" `
-          -PassThru `
-          -OutFile $distTemp `
-          -UserAgent "Docker-Client/19.03.5 (Windows)" > $null 2>&1
-      }
-      catch {
-        Write-Host $_.Exception
+    #   Write-Host "==> Redirect to $url" -ForegroundColor Magenta
 
-        return $false
-      }
-    }
-    else {
-      return $false
-    }
+    #   try {
+    #     Invoke-WebRequest `
+    #       "$url" `
+    #       -PassThru `
+    #       -OutFile $distTemp `
+    #       -UserAgent "Docker-Client/19.03.5 (Windows)" > $null 2>&1
+    #   }
+    #   catch {
+    #     Write-Host $_.Exception
+
+    #     return $false
+    #   }
+    # }
+    # else {
+    #   return $false
+    # }
   }
 
   $size = (($response.RawContentLength) / 1024 / 1024)
 
-  Write-Host "Download size is $('{0:n2}' -f $size) M" -ForegroundColor Green
+  Write-Host "==> Download size is $('{0:n2}' -f $size) M" -ForegroundColor Green
 
   if (Test-SHA256 $distTemp) {
     return Get-Dist $dist $distTemp

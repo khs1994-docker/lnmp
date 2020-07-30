@@ -9,7 +9,7 @@ jobs:
   release:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 10
     - shell: pwsh

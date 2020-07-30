@@ -11,8 +11,7 @@ getToken(){
   cache=${5:-0}
 
   if [ -z $tokenSever ];then
-    echo "==> tokenServer and tokenService is not found" > /dev/stderr
-    echo "==> This registry maybe not need token" > /dev/stderr
+    echo "==> tokenServer and tokenService not found, this registry maybe not need token" > /dev/stderr
 
     token='token'
 

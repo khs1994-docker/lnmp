@@ -50,10 +50,6 @@ fi
 }
 " > /dev/stderr
 
-echo "==> Wait 3s, continue ..." > /dev/stderr
-
-sleep 3
-
 . $ScriptRoot/auth/auth.sh
 
 getToken $image pull "${tokenServer}" "${tokenService}" 0 || return 1
@@ -86,7 +82,7 @@ if [ "$schemaVersion" -eq 1 ];then
   local digest=`cat $manifest_json_file | jq ".layers[$layersIndex].digest" | sed 's/"//g'`
 
   if [ "${digest}" = 'null' ];then
-    echo "==> image not found, exit" > /dev/stderr
+    echo "==> [error] get blob error" > /dev/stderr
 
     exit 1
   fi
@@ -104,7 +100,7 @@ if [ "$schemaVersion" -eq 1 ];then
   return
 
 elif [ "$schemaVersion" -eq 2 ];then
-  echo "==> manifest list is found" > /dev/stderr
+  true
 else
   echo "==> get manifest error, exit" > /dev/stderr
 

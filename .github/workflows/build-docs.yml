@@ -23,7 +23,7 @@ jobs:
       || contains( github.event.head_commit.message, '[Docs]')
       || github.event == 'workflow_dispatch'
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - name: docs-build
