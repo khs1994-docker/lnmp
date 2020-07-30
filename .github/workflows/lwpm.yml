@@ -53,6 +53,11 @@ jobs:
       run: |
         lnmp-windows-pm.ps1 install openjdk
         echo $env:PATH
+    - name: lwpm-add-not-exists-pkg
+      shell: pwsh
+      run: |
+        lnmp-windows-pm.ps1 add ooooooo
+        echo $env:PATH
     - shell: pwsh
       run: |
         ls -r vendor

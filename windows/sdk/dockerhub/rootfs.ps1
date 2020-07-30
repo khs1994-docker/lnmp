@@ -152,7 +152,9 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
       if (!$digest) {
         Write-Host "==> [error] get blob error" -ForegroundColor Red
 
-        return $false
+        $dests += , $false
+
+        continue
       }
 
       Write-Host "==> Digest is $digest" -ForegroundColor Green
@@ -222,7 +224,9 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
         if (!$digest) {
           Write-Host "==> [error] get blob error" -ForegroundColor Red
 
-          return $false
+          $dests += , $false
+
+          continue
         }
 
         Write-Host "==> Blob(layer) digest is $digest" -ForegroundColor Green

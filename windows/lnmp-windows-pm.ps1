@@ -462,10 +462,15 @@ Function _add($softs) {
       $env:DOCKER_ROOTFS_PHASE = $null
       $lwpm_json, $lwpm_dist, $lwpm_script = rootfs $soft $ref -os $os -arch $architecture $null 'config', 0, 1
 
-      if (($lwpm_json -eq $false) -or ($lwpm_dist -eq $false) -or ($lwpm_script -eq $false)) {
+      if (($lwpm_json -eq $false) -or !$lwpm_json ) {
         Write-Host "==> $soft $ref not found or download failed" -ForegroundColor Red
 
         continue
+      }
+
+      if (($lwpm_dist -eq $false) -or ($lwpm_script -eq $false)) {
+        $lwpm_script = $lwpm_dist
+        $lwpm_dist = $false
       }
 
       $soft_folder = "$PSScriptRoot/../vendor/lwpm"
@@ -473,8 +478,16 @@ Function _add($softs) {
       write-host "==> Handle lwpm.json" -ForegroundColor Blue
       _mkdir $soft_folder/$($soft.split('/')[-1])
       copy-item -Force $lwpm_json $soft_folder/$($soft.split('/')[-1])/lwpm.json
-      write-host "==> Handle lwpm dist" -ForegroundColor Blue
-      tar -zxvf $lwpm_dist -C $soft_folder
+
+      if ($lwpm_dist -eq $false) {
+        Write-Host "==> This package not include dist" -ForegroundColor Yellow
+
+      }
+      else {
+        write-host "==> Handle lwpm dist" -ForegroundColor Blue
+        tar -zxvf $lwpm_dist -C $soft_folder
+      }
+
       write-host "==> Handle lwpm script" -ForegroundColor Blue
       tar -zxvf $lwpm_script -C $soft_folder
     } # platforms end

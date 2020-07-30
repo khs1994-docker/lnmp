@@ -46,6 +46,10 @@ jobs:
       shell: pwsh
       run: |
         ./lrew/lrew.ps1 add smee
+    - name: lrew-add-not-exists-pkg
+      shell: pwsh
+      run: |
+        ./lrew/lrew.ps1 add ooooo
     - name: list vendor
       run: |
         ls -r vendor
