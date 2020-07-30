@@ -653,7 +653,7 @@ function _push($opt) {
   }
 
   if (!($opt.Contains('/'))) {
-    Write-Host "==> package name [ $opt ] not include '/', package name use '$env:LWPM_DOCKER_NAMESPACE/$opt'" -ForegroundColor Yellow
+    Write-Host "==> package name [ $opt ] not include '/', package name use '$env:LWPM_DOCKER_NAMESPACE/$opt'" -ForegroundColor Blue
     $opt = "$env:LWPM_DOCKER_NAMESPACE/$opt"
   }
 
@@ -740,6 +740,7 @@ function _push($opt) {
 
       $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
       Set-Location $lwpm_temp\..\
+      write-host "==> Handle pkg script" -ForegroundColor Green
       tar -zcvf script.tar.gz $soft
       Move-Item script.tar.gz $script_tar_file
 
@@ -759,7 +760,7 @@ function _push($opt) {
       Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
 
       foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
-        write-host "==> .tar.gz file is $item" -ForegroundColor Blue
+        write-host "==> Add already exists .tar.gz file: $item" -ForegroundColor Blue
         $layers_file += , ${item}.FullName
 
         break
@@ -783,6 +784,7 @@ function _push($opt) {
       $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
       Set-Location $lwpm_temp/../
       # tmp/linux-amd64
+      write-host "==> Handle pkg dist" -ForegroundColor Green
       tar -zcvf dist.tar.gz $soft/dist
       Move-Item dist.tar.gz $dist_tar_file
 

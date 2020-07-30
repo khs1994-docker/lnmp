@@ -30,7 +30,7 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
     return $false, $false
   }
 
-  # write-host "==> exit code is $?" -ForegroundColor Blue
+  # write-host "==> exit code is $?" -ForegroundColor Green
 
   # write-host "==> Response header `n$(Get-Content $env:TEMP/curl_resp_header.txt -raw)" -ForegroundColor Green
 
@@ -38,7 +38,7 @@ Function New-Manifest([string]$token, [string]$image, [string]$ref, [string]$man
 
   $manifest_digest = $response.Headers.'Docker-Content-Digest'
 
-  write-host "==> $contentType push success, manifest is $manifest_digest" -ForegroundColor Green
+  write-host "==> $contentType push success, digest: $manifest_digest" -ForegroundColor Green
 
   $manifest_length = (Get-ChildItem $manifest_json_path).Length
 

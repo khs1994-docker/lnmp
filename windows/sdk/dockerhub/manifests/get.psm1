@@ -30,7 +30,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
   }
   catch {
     $result = $_.Exception.Response
-    write-host $_.Exception
+
     Write-Host "==> [error] Get [ $image $ref ] $type error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false

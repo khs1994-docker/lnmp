@@ -78,7 +78,8 @@ pipeline {
 
         sh "cat docker-image-sync.json"
 
-        sh "docker run -i --rm -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
+        sh "docker run -i --rm \
+            -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=\${DOCKER_PASSWORD} \
             -e SOURCE_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
             -e DEST_DOCKER_REGISTRY=\${LWPM_DOCKER_REGISTRY_MIRROR} \

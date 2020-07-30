@@ -15,8 +15,7 @@ Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$re
     return $true
   }
   catch {
-    write-host "==> Check blob exists error" -ForegroundColor Yellow
-    write-host $_.Exception
+    write-host "==> Check blob exists error [ $($_.Exception.Response.StatusCode) ]" -ForegroundColor Yellow
 
     if ($_.Exception.Response.StatusCode -eq 401) {
       throw '401'
@@ -27,7 +26,7 @@ Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$re
 }
 
 Function New-Blob($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
-  write-host "==> Blob type is $contentType" -ForegroundColor Green
+  write-host "==> Blob type is $contentType" -ForegroundColor Blue
 
   $sha256 = Get-SHA256 $file
   $digest = "sha256:$sha256"
@@ -40,12 +39,12 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   if (!($IsWindows)) { $env:TEMP = "/tmp" }
 
   if (Test-Blob $token $image $digest $registry) {
-    write-host (ConvertFrom-Json -InputObject @"
-    {
-      "file": "$($file.replace('\','\\'))",
-      "digest": "$digest"
-    }
-"@) -ForegroundColor Yellow
+    #     write-host (ConvertFrom-Json -InputObject @"
+    #     {
+    #       "file": "$($file.replace('\','\\'))",
+    #       "digest": "$digest"
+    #     }
+    # "@) -ForegroundColor Yellow
 
     return $length, $digest
   }
@@ -99,9 +98,9 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 
     $response_digest = ((Get-Content $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split(' ')[-1]
 
-    write-host "==> exit code is $?" -ForegroundColor Blue
+    write-host "==> exit code is $?" -ForegroundColor Green
 
-    write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
+    # write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
   }
 
   if ($response_digest -ne $digest) {
@@ -110,12 +109,12 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 
   write-host "==> Blob upload success" -ForegroundColor Green
 
-  write-host (ConvertFrom-Json -InputObject @"
-{
-  "file": "$($file.replace('\','\\'))",
-  "digest": "$digest"
-}
-"@) -ForegroundColor Blue
+  #   write-host (ConvertFrom-Json -InputObject @"
+  # {
+  #   "file": "$($file.replace('\','\\'))",
+  #   "digest": "$digest"
+  # }
+  # "@) -ForegroundColor Blue
 
   return $length, $digest
 }

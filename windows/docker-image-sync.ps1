@@ -309,7 +309,7 @@ manifest $manifest_digest already exists" `
         # 有的仓库不能展示 manifest list，推送一次 manifest 以显示
 
         if (!$push_manifest_once) {
-          Write-Host "==> Push manifest once" -ForegroundColor Blue
+          Write-Host "==> Registry maybe not show manifest list, push manifest once" -ForegroundColor Blue
 
           $token = _getSourceToken $source_registry $source_image
           $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
