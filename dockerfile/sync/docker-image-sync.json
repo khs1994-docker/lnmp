@@ -7,8 +7,8 @@
     "source": "node:alpine"
   },
   {
-    "source": "node:14.6.0-alpine",
-    "dest": "node:14.6.0-alpine"
+    "source": "node:14.7.0-alpine",
+    "dest": "node:14.7.0-alpine"
   },
   {
     "source": "golang:1.14.6-alpine",
@@ -83,8 +83,8 @@
     "dest": "mongo:latest"
   },
   {
-    "source": "library/mongo:4.2.8",
-    "dest": "mongo:4.2.8"
+    "source": "library/mongo:4.4.0",
+    "dest": "mongo:4.4.0"
   },
   {
     "source": "library/kong:latest",

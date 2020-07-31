@@ -29,7 +29,7 @@ services:
     image: postgres:12.3-alpine
 
   mongodb:
-    image: mongo:4.2.8
+    image: mongo:4.4.0
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -47,7 +47,7 @@ services:
     image: kong:2.1.0-alpine
 
   node:
-    image: node:14.6.0-alpine
+    image: node:14.7.0-alpine
 
   go:
     image: golang:1.14.6-alpine
