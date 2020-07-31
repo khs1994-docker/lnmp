@@ -438,7 +438,7 @@ manifest not found, skip" -ForegroundColor Red
     write-host "==> [error] Manifest list push error" -ForegroundColor Red
   }
 
-  if ($dest_image_with_digest -and ("sha256:$digest" -ne $dest_image_with_digest)) {
+  if ($dest_image_with_digest -and ("$digest" -ne $dest_image_with_digest)) {
     write-host "==> [error] push manifest list $digest not eq $dest_image_with_digest" `
       -ForegroundColor Red
   }

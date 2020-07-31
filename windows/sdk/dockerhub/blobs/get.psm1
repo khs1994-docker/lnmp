@@ -93,7 +93,7 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
 
   $size = (($response.RawContentLength) / 1024 / 1024)
 
-  Write-Host "==> Download size is $('{0:n2}' -f $size) M" -ForegroundColor Green
+  Write-Host "==> Download success, size is $('{0:n2}' -f $size) M" -ForegroundColor Green
 
   if (Test-SHA256 $distTemp) {
     return Get-Dist $dist $distTemp

@@ -10,7 +10,7 @@ Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$re
       -Uri "https://$registry/v2/$image/blobs/$digest" `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
 
-    write-host "==> Blob found, skip upload" -ForegroundColor Yellow
+    write-host "==> Blob exists, skip upload" -ForegroundColor Yellow
 
     return $true
   }
