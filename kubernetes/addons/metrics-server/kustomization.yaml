@@ -9,5 +9,5 @@ resources:
 images:
   - name: k8s.gcr.io/metrics-server/metrics-server:v0.3.7
     # registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server:v0.3.7
-    newName: ccr.ccs.tencentyun.com/khs1994/metrics-server
+    newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
     newTag: v0.3.7
