@@ -4,167 +4,168 @@
     "dest": "not-exists:latest"
   },
   {
-    "source": "node:alpine"
+    "source": "node:alpine",
+    "dest": "library-mirror/node:alpine"
   },
   {
     "source": "node:14.7.0-alpine",
-    "dest": "node:14.7.0-alpine"
+    "dest": "library-mirror/node:14.7.0-alpine"
   },
   {
     "source": "golang:1.14.6-alpine",
-    "dest": "golang:1.14.6-alpine"
+    "dest": "library-mirror/golang:1.14.6-alpine"
   },
   {
     "source": "golang:alpine",
-    "dest": "golang:alpine"
+    "dest": "library-mirror/golang:alpine"
   },
   {
     "source": "library/alpine:3.12",
-    "dest": "alpine:3.12"
+    "dest": "library-mirror/alpine:3.12"
   },
   {
     "source": "library/alpine:edge",
-    "dest": "alpine:edge"
+    "dest": "library-mirror/alpine:edge"
   },
   {
     "source": "library/alpine:latest",
-    "dest": "alpine:latest"
+    "dest": "library-mirror/alpine:latest"
   },
   {
     "source": "library/python:alpine",
-    "dest": "python:alpine"
+    "dest": "library-mirror/python:alpine"
   },
   {
     "source": "library/python:3.8.5-alpine",
-    "dest": "python:3.8.5-alpine"
+    "dest": "library-mirror/python:3.8.5-alpine"
   },
   {
     "source": "library/mysql:latest",
-    "dest": "mysql:latest"
+    "dest": "library-mirror/mysql:latest"
   },
   {
     "source": "library/mysql:8.0.21",
-    "dest": "mysql:8.0.21"
+    "dest": "library-mirror/mysql:8.0.21"
   },
   {
     "source": "library/mysql:5.7.30",
-    "dest": "mysql:5.7.30"
+    "dest": "library-mirror/mysql:5.7.30"
   },
   {
     "source": "library/mysql:5.6.48",
-    "dest": "mysql:5.6.48"
+    "dest": "library-mirror/mysql:5.6.48"
   },
   {
     "source": "library/mariadb:latest",
-    "dest": "mariadb:latest"
+    "dest": "library-mirror/mariadb:latest"
   },
   {
     "source": "library/mariadb:10.5.4",
-    "dest": "mariadb:10.5.4"
+    "dest": "library-mirror/mariadb:10.5.4"
   },
   {
     "source": "library/mariadb:10.4.12",
-    "dest": "mariadb:10.4.12"
+    "dest": "library-mirror/mariadb:10.4.12"
   },
   {
     "source": "library/mariadb:10.3.22",
-    "dest": "mariadb:10.3.22"
+    "dest": "library-mirror/mariadb:10.3.22"
   },
   {
     "source": "library/registry:latest",
-    "dest": "registry:latest"
+    "dest": "library-mirror/registry:latest"
   },
   {
     "source": "library/registry:2.7.1",
-    "dest": "registry:2.7.1"
+    "dest": "library-mirror/registry:2.7.1"
   },
   {
     "source": "library/mongo:latest",
-    "dest": "mongo:latest"
+    "dest": "library-mirror/mongo:latest"
   },
   {
     "source": "library/mongo:4.4.0",
-    "dest": "mongo:4.4.0"
+    "dest": "library-mirror/mongo:4.4.0"
   },
   {
     "source": "library/kong:latest",
-    "dest": "kong:latest"
+    "dest": "library-mirror/kong:latest"
   },
   {
     "source": "library/kong:alpine",
-    "dest": "kong:alpine"
+    "dest": "library-mirror/kong:alpine"
   },
   {
     "source": "library/kong:2.1.0",
-    "dest": "kong:2.1.0"
+    "dest": "library-mirror/kong:2.1.0"
   },
   {
     "source": "library/kong:2.1.0-alpine",
-    "dest": "kong:2.1.0-alpine"
+    "dest": "library-mirror/kong:2.1.0-alpine"
   },
   {
     "source": "library/redis:alpine",
-    "dest": "redis:alpine"
+    "dest": "library-mirror/redis:alpine"
   },
   {
     "source": "library/redis:5.0.9-alpine",
-    "dest": "redis:5.0.9-alpine"
+    "dest": "library-mirror/redis:5.0.9-alpine"
   },
   {
     "source": "library/redis:6.0.6-alpine",
-    "dest": "redis:6.0.6-alpine"
+    "dest": "library-mirror/redis:6.0.6-alpine"
   },
   {
     "source": "library/memcached:alpine",
-    "dest": "memcached:alpine"
+    "dest": "library-mirror/memcached:alpine"
   },
   {
     "source": "library/memcached:1.6.6-alpine",
-    "dest": "memcached:1.6.6-alpine"
+    "dest": "library-mirror/memcached:1.6.6-alpine"
   },
   {
     "source": "library/nginx:alpine",
-    "dest": "nginx:alpine"
+    "dest": "library-mirror/nginx:alpine"
   },
   {
     "source": "library/nginx:1.18.0-alpine",
-    "dest": "nginx:1.18.0-alpine"
+    "dest": "library-mirror/nginx:1.18.0-alpine"
   },
   {
     "source": "library/nginx:1.19.1-alpine",
-    "dest": "nginx:1.19.1-alpine"
+    "dest": "library-mirror/nginx:1.19.1-alpine"
   },
   {
     "source": "library/httpd:alpine",
-    "dest": "httpd:alpine"
+    "dest": "library-mirror/httpd:alpine"
   },
   {
     "source": "library/httpd:2.4.43-alpine",
-    "dest": "httpd:2.4.43-alpine"
+    "dest": "library-mirror/httpd:2.4.43-alpine"
   },
   {
     "source": "library/postgres:alpine",
-    "dest": "postgres:alpine"
+    "dest": "library-mirror/postgres:alpine"
   },
   {
     "source": "library/postgres:12.3-alpine",
-    "dest": "postgres:12.3-alpine"
+    "dest": "library-mirror/postgres:12.3-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
-    "dest": "rabbitmq:alpine"
+    "dest": "library-mirror/rabbitmq:alpine"
   },
   {
     "source": "library/rabbitmq:3.8.5-alpine",
-    "dest": "rabbitmq:3.8.5-alpine"
+    "dest": "library-mirror/rabbitmq:3.8.5-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
-    "dest": "rabbitmq:management-alpine"
+    "dest": "library-mirror/rabbitmq:management-alpine"
   },
   {
     "source": "library/rabbitmq:3.8.5-management-alpine",
-    "dest": "rabbitmq:3.8.5-management-alpine"
+    "dest": "library-mirror/rabbitmq:3.8.5-management-alpine"
   },
   {
     "source": "phpmyadmin/phpmyadmin:latest",
@@ -191,12 +192,19 @@
     "dest": "dockerpracticesig/docker_practice:us-en"
   },
   {
-    "source": "acme:2.8.6",
-    "dest": "acme:2.8.6"
+    "source": "khs1994/acme:2.8.6"
   },
   {
-    "source": "docker-image-sync:latest",
-    "dest": "docker-image-sync:latest"
+    "source": "khs1994/docker-proxy"
+  },
+  {
+    "source": "khs1994/nginx:alpine"
+  },
+  {
+    "source": "khs1994/nginx:1.19.1-alpine"
+  },
+  {
+    "source": "khs1994/docker-image-sync:latest"
   },
   {
     "source": "lwpm/lwpm:latest",
@@ -204,15 +212,15 @@
   },
   {
     "source": "library/bash:latest",
-    "dest": "bash:latest"
+    "dest": "library-mirror/bash:latest"
   },
   {
     "source": "library/caddy:alpine",
-    "dest": "caddy:alpine"
+    "dest": "library-mirror/caddy:alpine"
   },
   {
     "source": "quay.io/coreos/etcd:v3.4.10",
-    "dest": "etcd:v3.4.10",
+    "dest": "quay-mirror/etcd:v3.4.10",
     "platforms": [
       {
         "source": "quay.io/coreos/etcd:v3.4.10"
@@ -222,30 +230,30 @@
         "architecture": "arm64",
         "variant": "v8",
         "source": "quay.io/coreos/etcd:v3.4.10-arm64",
-        "dest": "etcd:v3.4.10-arm64"
+        "dest": "quay-mirror/etcd:v3.4.10-arm64"
       }
     ]
   },
   {
     "source": "quay.io/coreos/flannel:v0.12.0-amd64",
-    "dest": "flannel:v0.12.0",
+    "dest": "quay-mirror/flannel:v0.12.0",
     "platforms": [
       {
         "source": "quay.io/coreos/flannel:v0.12.0-amd64",
-        "dest": "flannel:v0.12.0-amd64"
+        "dest": "quay-mirror/flannel:v0.12.0-amd64"
       },
       {
         "os": "linux",
         "architecture": "arm64",
         "variant": "v8",
         "source": "quay.io/coreos/flannel:v0.12.0-arm64",
-        "dest": "flannel:v0.12.0-arm64"
+        "dest": "quay-mirror/flannel:v0.12.0-arm64"
       },
       {
         "os": "linux",
         "architecture": "arm",
         "variant": "v7",
-        "dest": "flannel:v0.12.0-arm",
+        "dest": "quay-mirror/flannel:v0.12.0-arm",
         "registry": "quay.io",
         "image": "coreos/flannel",
         "ref": "v0.12.0-arm"

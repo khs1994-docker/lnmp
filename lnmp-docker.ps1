@@ -1393,7 +1393,7 @@ XXX
 
   daemon-socket {
     try {
-      Invoke-WebRequest 127.0.0.1:2376/info | out-null
+      Invoke-WebRequest 127.0.0.1:2376/_ping | out-null
 
       printInfo "Already run"
     }
@@ -1403,7 +1403,7 @@ XXX
           -p 2376:2375 `
           -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
+          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
           khs1994/docker-proxy
       }
       else {
@@ -1411,7 +1411,7 @@ XXX
           -p 2376:2375 `
           -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
+          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
           khs1994/docker-proxy
       }
     }

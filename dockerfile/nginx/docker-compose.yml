@@ -9,7 +9,7 @@ services:
         NGINX_VERSION: ${NGINX_VERSION:-1.19.1}
         ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
         OPENSSL_URL: https://gitee.com/mirrors/boringssl
-    image: khs1994/nginx:${NGINX_VERSION:-1.19.1}-alpine
+    image: khs1994/nginx:alpine
     ports:
       - 443:443/tcp
       - 443:443/udp

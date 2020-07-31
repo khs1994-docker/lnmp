@@ -1,4 +1,4 @@
-# 重新构建 shipyard/docker-proxy
+# REBUILD shipyard/docker-proxy
 
 ## why
 
