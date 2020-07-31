@@ -1404,7 +1404,7 @@ XXX
           -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
           --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
-          shipyard/docker-proxy
+          khs1994/docker-proxy
       }
       else {
         docker run -d --restart=always `
@@ -1412,7 +1412,7 @@ XXX
           -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
           --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
-          shipyard/docker-proxy
+          khs1994/docker-proxy
       }
     }
   }

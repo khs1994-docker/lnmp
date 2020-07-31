@@ -1578,7 +1578,7 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
      --mount type=bind,src=/var/run/docker.sock,target=/var/run/docker.sock \
      -e PORT=2375 \
      --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" \
-     shipyard/docker-proxy
+     khs1994/docker-proxy
    ;;
 
   clusterkit )

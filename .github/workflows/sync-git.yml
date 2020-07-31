@@ -22,6 +22,12 @@ jobs:
   sync-git:
     runs-on: ubuntu-latest
     needs: skip-ci
+    env:
+      PCIT_EMAIL: khs1994@khs1994.com
+      PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+      PCIT_USERNAME: khs1994
+      PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
+      PCIT_KEEP_HISTORY: "true"
     steps:
     - uses: actions/checkout@main
       with:
@@ -147,3 +153,14 @@ jobs:
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
         PCIT_TARGET_BRANCH: master
         PCIT_USERNAME: khs1994
+    - name: sync-docker-proxy
+      uses: docker://pcit/pages
+      env:
+        # PCIT_EMAIL: khs1994@khs1994.com
+        # PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}
+        PCIT_GIT_URL: github.com/khs1994-docker/docker-proxy
+        # PCIT_KEEP_HISTORY: "true"
+        PCIT_LOCAL_DIR: dockerfile/docker-proxy
+        # PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
+        PCIT_TARGET_BRANCH: master
+        # PCIT_USERNAME: khs1994

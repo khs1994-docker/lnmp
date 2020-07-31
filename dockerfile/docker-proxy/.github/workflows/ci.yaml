@@ -1,0 +1,25 @@
+name: ci
+
+on: push
+
+jobs:
+  ci:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 1
+    - uses: docker-practice/actions-setup-docker@master
+    - run: |
+        echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+      name: Docker Login
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build Docker Image
+      run: |
+        docker buildx build \
+          -t khs1994/docker-proxy \
+          --platform linux/arm,linux/arm64,linux/amd64 \
+          --push .
