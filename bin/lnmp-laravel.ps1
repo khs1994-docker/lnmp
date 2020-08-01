@@ -10,7 +10,7 @@ if (!($args -contains 'new')){
   write-warning "
 Example:
 
-lnmp-laravel-by-composer new [My-project] [VERSION:-7]"
+lnmp-laravel new [My-project] [VERSION:-7]"
   exit 1
 }
 
@@ -18,7 +18,7 @@ if ($args.Count -lt 2 ){
     write-warning "
 Example:
 
-lnmp-laravel-by-composer new [My-project] [VERSION:-7]"
+lnmp-laravel new [My-project] [VERSION:-7]"
     exit 1
 }
 

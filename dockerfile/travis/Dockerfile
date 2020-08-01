@@ -1,4 +1,13 @@
-FROM khs1994/builder:ruby
+FROM alpine:3.11
+
+ARG ALPINE_URL=dl-cdn.alpinelinux.org
+
+RUN set -x \
+    && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
+    && apk add --no-cache \
+            ruby \
+            ruby-rdoc \
+            ruby-irb
 
 RUN apk add --no-cache \
             ruby-dev \

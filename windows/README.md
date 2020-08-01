@@ -52,7 +52,7 @@ $ [environment]::SetEnvironmentvariable("Path", "$env:Path;c:\php;c:\mysql\bin;c
 $ [environment]::SetEnvironmentvariable("APP_ENV", "windows", "User")
 ```
 
-**退出 PowerShell，重新打开，若以下命令不生效的话请注销登陆**
+**退出 PowerShell，重新打开，若以下命令不生效的话请注销之后再登录**
 
 ```bash
 $ cd LARAVEL_APP_PATH
@@ -277,11 +277,7 @@ Plan C `WSL` 请查看 [WSL 快速搭建 LNMP 环境](https://github.com/khs1994
 打开 PowerShell
 
 ```bash
-$ cd $HOME
-
-$ wsl
-
-$ pwd
+$ wsl -- wslpath "'$HOME'"
 
 /mnt/c/Users/90621 # 记住这个值，此值与下方 WSL_HOME 的设置值对应
 

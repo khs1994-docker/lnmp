@@ -48,11 +48,11 @@ _command(){
   cd ..
 
   date
-  lnmp-laravel-by-composer new laravel5_5 5.5
-  lnmp-laravel-by-composer new laravel6_0 6.0
+  lnmp-laravel new laravel5_5 5.5
+  lnmp-laravel new laravel6_0 6.0
   date
 
-  lnmp-laravel-by-composer new laravel
+  lnmp-laravel new laravel
   date
 
   lnmp-mysql mysql -V

@@ -4,10 +4,12 @@
 
 ## 安装 Laravel
 
+> 国内使用 [laravel/installer](https://laravel.com/docs/7.x/installation#installing-laravel) 安装 Laravel 不会使用 composer 镜像，故安装十分缓慢。
+
 ```bash
 $ cd app
 
-$ lnmp-laravel-by-composer new laravel
+$ lnmp-laravel new laravel
 ```
 
 具体请查看 [这里](command.md)
@@ -16,14 +18,14 @@ $ lnmp-laravel-by-composer new laravel
 
 由于本项目的 PHP 镜像内置的是 Laravel 安装器，而安装器只能安装最新版本。
 
-所以如果你想要安装特定版本（例如 `5.5.x`）请使用 [`lnmp-laravel-by-composer`](command.md) 安装。
+所以如果你想要安装特定版本（例如 `5.5.x`）请使用 [`lnmp-laravel`](command.md) 安装。
 
 ```bash
 $ cd app
 
-# $ lnmp-laravel-by-composer new FOLDER VERSION
+# $ lnmp-laravel new FOLDER VERSION
 
-$ lnmp-laravel-by-composer new laravel5.5 5.5
+$ lnmp-laravel new laravel5.5 5.5
 ```
 
 或者直接使用 `composer` 安装
@@ -95,7 +97,7 @@ $ lnmp-docker code
 
 ```bash
 # 安装 laravel 到 laravel 文件夹
-# $ lnmp-laravel-by-composer new laravel
+# $ lnmp-laravel new laravel
 $ cd laravel
 
 $ lnmp-composer require laravel/ui
