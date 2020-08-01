@@ -9,4 +9,4 @@ x-common:
 services:
   registry:
     << : *common
-    image: registry:${LNMP_REGISTRY_VERSION:-latest}
+    image: ${LNMP_LIBRARY_NS:-library}/registry:${LNMP_REGISTRY_VERSION:-latest}

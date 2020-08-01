@@ -456,8 +456,8 @@ Function cleanup() {
 }
 
 Function _update() {
-  if (!(_command git)) {
-    printError "Git not install, not support update"
+  if (!(_command git) -or !(Test-Path .git)) {
+    printError "Git not install or this folder not git project, not support update"
     return
   }
 
@@ -475,6 +475,8 @@ Function _update() {
 
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
   git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
+  $ErrorActionPreference="continue"
+  git pull origin ${BRANCH}
   git reset --hard origin/${BRANCH}
   # git submodule update --init --recursive
 }
@@ -600,7 +602,7 @@ Function _wsl_check() {
   }
 }
 
-Function _wsl2_docker_init() {
+Function _wsl2_docker_check() {
   wsl -u root -- chmod -R 777 log
   $env:COMPOSE_CONVERT_WINDOWS_PATHS = 1
   wsl -u root -- ls /c/Users | out-null

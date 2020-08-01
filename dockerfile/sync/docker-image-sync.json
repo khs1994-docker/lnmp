@@ -20,6 +20,22 @@
     "dest": "library-mirror/golang:alpine"
   },
   {
+    "source": "docker:dind",
+    "dest": "library-mirror/docker:dind"
+  },
+  {
+    "source": "docker:test-dind",
+    "dest": "library-mirror/docker:test-dind"
+  },
+  {
+    "source": "docker:dind-rootless",
+    "dest": "library-mirror/docker:dind-rootless"
+  },
+  {
+    "source": "docker:test-dind-rootless",
+    "dest": "library-mirror/docker:test-dind-rootless"
+  },
+  {
     "source": "library/alpine:3.12",
     "dest": "library-mirror/alpine:3.12"
   },

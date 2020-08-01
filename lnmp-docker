@@ -603,11 +603,12 @@ update(){
   GIT_STATUS=`git status -s --ignore-submodules`
   if [ ! -z "${GIT_STATUS}" ] && [ ! "$force" = 'true' ];then
      git status -s --ignore-submodules
-     print_error "Please commit then update"
+     print_error "Somefile changed, please commit or stash first"
      exit 1
   fi
   git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
   print_info "Branch is ${BRANCH}"
+  git pull origin ${BRANCH} || true
   git reset --hard origin/${BRANCH}
   # print_info "Update Git Submodule"
   # git submodule update --init --recursive

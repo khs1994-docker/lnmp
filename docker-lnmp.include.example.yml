@@ -19,7 +19,7 @@ services:
 
   # add service
   my-service:
-    image: bash
+    image: ${LNMP_LIBRARY_NS:-library}/bash
 
   # override service
 
