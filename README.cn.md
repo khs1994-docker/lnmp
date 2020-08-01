@@ -62,7 +62,7 @@
 
 :two: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 19.03 Stable +
 
-:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.25.0+
+:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.26.0+
 
 :four: WSL (**Windows** Only)
 
