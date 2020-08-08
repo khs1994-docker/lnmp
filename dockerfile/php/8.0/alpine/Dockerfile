@@ -62,6 +62,26 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
+      \
+      && apk add --no-cache patch \
+      && cd / \
+      && { \
+        echo "--- a/usr/local/lib/php/build/php.m4"; \
+        echo "+++ b/usr/local/lib/php/build/php.m4"; \
+        echo "@@ -305,7 +305,7 @@"; \
+        echo " ])"; \
+        echo ""; \
+        echo " AC_DEFUN([PHP_CHECK_GCC_ARG],["; \
+        echo "-  AC_MSG_ERROR([Use AX_CHECK_COMPILE_FLAG instead])"; \
+        echo "+  AC_MSG_ERROR([[Use AX_CHECK_COMPILE_FLAG instead]])"; \
+        echo " ])"; \
+        echo ""; \
+        echo " dnl"; \
+        } | tee 1.diff \
+      && patch -p1 < 1.diff \
+      && apk del --no-network patch \
+      && rm -rf 1.diff \
+      \
 # 不要删除
       && PHP_FPM_RUN_DEPS=" \
                          bash \
