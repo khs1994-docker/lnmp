@@ -133,10 +133,12 @@ jobs:
         if [ "$TYPE" = "COMPOSER" ];then
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
               -t $DOCKER_HUB_USERNAME/php-cs-fixer \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --platform ${PLATFORM} ${IS_PUSH} php-cs-fixer
 
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
               -t $DOCKER_HUB_USERNAME/sami \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --platform ${PLATFORM} ${IS_PUSH} sami
         fi
 
