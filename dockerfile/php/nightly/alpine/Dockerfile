@@ -407,7 +407,7 @@ ENV PECL_EXTENSION \
       memcached \
       # xdebug-beta \
       # yaml \
-      https://github.com/andypost/pecl-file_formats-yaml/archive/php8.tar.gz \
+      https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
