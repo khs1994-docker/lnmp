@@ -335,6 +335,8 @@ services:
     networks:
       - backend
       - frontend
+    extra_hosts:
+      - "api.github.com:140.82.114.5"
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -496,9 +498,9 @@ services:
   #     # << : *default-build-debian
   #     context: ./config/httpd
   #     dockerfile: Dockerfile
-  #   image: "httpd:2.4.43-alpine"
+  #   image: "httpd:2.4.46-alpine"
   #   # image: username/lnmp-httpd:tag
-  #   # image: khs1994/lnmp-httpd:2.4.43
+  #   # image: khs1994/lnmp-httpd:2.4.46
   #   ports:
   #     - "443:443"
   #     - "80:80"
