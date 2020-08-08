@@ -144,7 +144,7 @@ jobs:
 
         docker buildx build --push \
         --build-arg PHP_VERSION=7.0.33 \
-        --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
+        --build-arg USERNAME=khs1994 \
         -t ${DOCKER_HUB_USERNAME}/php:7.0-custom custom/7.0
 
         docker buildx build --push \
