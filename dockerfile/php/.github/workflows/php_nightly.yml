@@ -16,7 +16,7 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, SWOOLE, UNIT]
+        TYPE: [CLI, FPM, COMPOSER, UNIT, SWOOLE]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
