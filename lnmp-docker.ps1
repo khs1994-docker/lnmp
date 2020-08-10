@@ -475,7 +475,7 @@ Function _update() {
 
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
   git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
-  $ErrorActionPreference="continue"
+  $ErrorActionPreference = "continue"
   git pull origin ${BRANCH}
   git reset --hard origin/${BRANCH}
   # git submodule update --init --recursive
@@ -679,9 +679,9 @@ $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
   $env:USE_WSL2_DOCKER_COMPOSE = '1'
 
-  docker info > $null 2>&1
+  $_arch = docker version -f "{{.Server.Arch}}"
 
-  if ($?) {
+  if ($_arch -eq 'amd64') {
     printInfo "Use WSL2 compose"
 
     $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
@@ -923,18 +923,23 @@ switch -regex ($command) {
   }
 
   build-pull {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
+
     if ($other) {
       $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
+      if ($services.GetType() -eq [String]) {
+        $services = $services.split(' ')
+      }
     }
 
     $options = get_compose_options "docker-lnmp.yml", `
       "docker-lnmp.build.yml" `
       1
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services }
+    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 
     #@custom
     __lnmp_custom_pull
@@ -985,18 +990,22 @@ switch -regex ($command) {
   }
 
   "^pull$" {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
 
     if ($other) {
       $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
+      if ($services.GetType() -eq [String]) {
+        $services = $services.split(' ')
+      }
     }
 
     $options = get_compose_options "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services }
+    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 
     #@custom
     __lnmp_custom_pull
