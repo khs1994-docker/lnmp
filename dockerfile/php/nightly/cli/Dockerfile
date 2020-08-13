@@ -240,8 +240,6 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
             ARGON2_LIBS="-largon2" \
             ARGON2_CFLAGS="-I/usr/include" \
   # && docker-php-source extract \
-  && mv /usr/include/gnu-libiconv/*.h /usr/include \
-  && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
   && make clean || true \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
