@@ -26,12 +26,12 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 \
     # COMPOSER_MEMORY_LIMIT= \
     COMPOSER_PROCESS_TIMEOUT=300 \
     # COMPOSER_SELF_UPDATE_TARGET= \
-    COMPOSER_VERSION=1.10.9 \
+    COMPOSER_VERSION=1.10.10 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.9,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:1.10.10,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && apk add --no-cache --virtual .composer_deps $COMPOSER_DEP_APKS \
     && { echo "memory_limit=-1"; \

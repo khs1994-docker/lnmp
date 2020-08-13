@@ -9,4 +9,4 @@ x-common:
 services:
   mariadb:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/mariadb:${LNMP_MARIADB_VERSION:-10.5.4}
+    image: ${LNMP_LIBRARY_NS:-library}/mariadb:${LNMP_MARIADB_VERSION:-10.5.5}

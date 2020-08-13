@@ -213,10 +213,10 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/19.03/docs#%E
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.9-unit-alpine`| **1.18.0**          |`alpine:3.11`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.46-alpine`          | **2.4.46**          |`alpine:3.12`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.21`                 | **8.0.21**          |`debian:buster-slim`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.4`               | **10.5.4**          |`ubuntu:bionic`  |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.5`               | **10.5.5**          |`ubuntu:bionic`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.6-alpine`           | **6.0.6**           |`alpine:3.12`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:7.4.9-fpm-alpine`     | **7.4.9**       |`alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.9-composer-alpine`| **1.10.9**      |`alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.9-composer-alpine`| **1.10.10**      |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.6-alpine`           | **1.6.6**       |`alpine:3.12`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.5-management-alpine` | **3.8.5**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.3-alpine`             | **12.3**        |`alpine:3.12`    |
