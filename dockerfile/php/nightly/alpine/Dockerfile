@@ -3,10 +3,9 @@ FROM --platform=$TARGETPLATFORM alpine:3.12 as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ARG VCS_REF="unknow"
+ARG PHP_VCS_REF="master"
 
-LABEL org.opencontainers.image.revision=$VCS_REF \
-      org.opencontainers.image.source="https://github.com/khs1994-docker/php"
+LABEL com.github.php.php-src.revision=$PHP_VCS_REF
 
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
@@ -153,11 +152,12 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
   && apk add --no-cache git openssh-client \
   \
   && if [ -d php ];then \
-       cd php; \
-       git reset --hard origin/master; \
-       git pull --depth=1; \
+       git -C php reset --hard origin/master; \
+       git -C php pull --depth=15; \
+       git -C php reset --hard ${PHP_VCS_REF}; \
      else \
-       git clone --depth=1 ${PHP_GIT} php; \
+       git clone --depth=15 ${PHP_GIT} php; \
+       git -C php reset --hard ${PHP_VCS_REF}; \
      fi \
   \
   && apk del --no-network git openssh-client \
@@ -226,8 +226,6 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
             ARGON2_LIBS="-largon2" \
             ARGON2_CFLAGS="-I/usr/include" \
   # && docker-php-source extract \
-  && mv /usr/include/gnu-libiconv/*.h /usr/include \
-  && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
   && make clean || true \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
@@ -407,7 +405,7 @@ ENV PECL_EXTENSION \
       memcached \
       # xdebug-beta \
       # yaml \
-      https://github.com/andypost/pecl-file_formats-yaml/archive/php8.tar.gz \
+      https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
@@ -441,3 +439,8 @@ EXPOSE 9000
 CMD ["php-fpm"]
 
 WORKDIR /app
+
+ARG VCS_REF="unknow"
+
+LABEL org.opencontainers.image.revision=$VCS_REF \
+      org.opencontainers.image.source="https://github.com/khs1994-docker/php"

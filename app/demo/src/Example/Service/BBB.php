@@ -10,8 +10,6 @@ class BBB
 
     /**
      * 依赖注入，控制反转.
-     *
-     * @param AAA $aaa
      */
     public function __construct(AAA $aaa)
     {

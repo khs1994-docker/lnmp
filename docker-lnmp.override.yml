@@ -13,31 +13,31 @@ x-common:
 services:
   mysql:
     << : *common
-    image: mysql:${LNMP_MYSQL_VERSION:-8.0.21}
+    image: ${LNMP_LIBRARY_NS:-library}/mysql:${LNMP_MYSQL_VERSION:-8.0.21}
 
   redis:
     << : *common
-    image: redis:${LNMP_REDIS_VERSION:-6.0.6}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.0.6}-alpine
 
   memcached:
     << : *common
-    image: memcached:${LNMP_MEMCACHED_VERSION:-1.6.6}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.6}-alpine
 
   php7:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.9}-fpm-alpine
 
   php8:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0alpha3}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0beta1}-fpm-alpine
 
   composer:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-composer-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.9}-composer-alpine
 
   supervisord:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.8}-supervisord-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.9}-supervisord-alpine
 
   phpmyadmin:
     << : *common
@@ -46,7 +46,7 @@ services:
   nginx:
     << : *common
     # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.19.1}-alpine
-    image: nginx:${LNMP_NGINX_VERSION:-1.19.1}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.19.1}-alpine
 
 networks:
   frontend:

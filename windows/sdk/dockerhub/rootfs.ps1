@@ -86,10 +86,6 @@ function rootfs([string]$image = "alpine",
 }
 "@ | out-host
 
-  write-host "==> Wait 3s, continue ..." -ForegroundColor Green
-
-  sleep 3
-
   $token = Get-DockerRegistryToken $image pull $tokenServer $tokenService
 
   # write-host $token
@@ -103,22 +99,19 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
     return
   }
 
-  Write-Host "==> $image tags list" -ForegroundColor Blue
-
-  ConvertFrom-Json (Get-Tag $token $image $registry) | Format-List | out-host
-
   if ($env:DOCKER_ROOTFS_PHASE -eq "tag") {
     write-host "==> find `$env:DOCKER_ROOTFS_PHASE='tag', exit" -ForegroundColor Blue
+
+    Write-Host "==> $image tags list" -ForegroundColor Blue
+
+    ConvertFrom-Json (Get-Tag $token $image $registry) | Format-List | out-host
 
     return
   }
 
   $result = Get-Manifest $token $image $ref $null $registry
 
-  if ($result) {
-    Write-host "==> Manifest list is found" -ForegroundColor Green
-  }
-  else {
+  if (!$result) {
     Write-Host "==> Manifest list not found" -ForegroundColor Red
 
     if ($env:DOCKER_ROOTFS_PHASE -eq "manifest list") {
@@ -156,12 +149,12 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
         $digest = $result.layers[$index].digest
       }
 
-      Write-Host "==> Digest is $digest" -ForegroundColor Green
-
       if (!$digest) {
-        Write-Host "==> [error] Image not found, exit" -ForegroundColor Red
+        Write-Host "==> [error] get blob error" -ForegroundColor Red
 
-        return $false
+        $dests += , $false
+
+        continue
       }
 
       $dest = Get-Blob $token $image $digest $registry $dest
@@ -172,7 +165,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
         return $false;
       }
 
-      Write-Host "==> Download success to $dest" -ForegroundColor Blue
+      Write-Host "==> Download success to $dest" -ForegroundColor Green
 
       $dests += , $dest
       $dest = $null
@@ -226,7 +219,13 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
           $digest = $layers[$index].digest
         }
 
-        Write-Host "==> Blob(layer) digest is $digest" -ForegroundColor Green
+        if (!$digest) {
+          Write-Host "==> [error] get blob error" -ForegroundColor Red
+
+          $dests += , $false
+
+          continue
+        }
 
         $dest = Get-Blob $token $image $digest $registry $dest
 
@@ -236,7 +235,7 @@ Please check DOCKER_USERNAME DOCKER_PASSWORD env value
           return $false;
         }
 
-        Write-Host "==> Download success to $dest" -ForegroundColor Blue
+        Write-Host "==> Download success to $dest" -ForegroundColor Green
 
         $dests += , $dest
 

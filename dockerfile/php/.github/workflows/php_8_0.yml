@@ -17,7 +17,7 @@ jobs:
         TYPE: [CLI, FPM, COMPOSER, SWOOLE, UNIT]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - run: |
@@ -136,7 +136,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: PHP_8_0_X
         FOLDER: "8.0"
-        PHP_TAG_VERSION: 8.0.0alpha3
+        PHP_TAG_VERSION: 8.0.0beta1
         TYPE: ${{ matrix.TYPE }}
         # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
       name: 'Build Image'

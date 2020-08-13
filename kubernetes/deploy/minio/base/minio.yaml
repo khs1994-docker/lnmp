@@ -35,7 +35,7 @@ spec:
       containers:
       - name: minio
         imagePullPolicy: IfNotPresent
-        image: minio/minio:RELEASE.2020-06-22T03-12-50Z
+        image: minio/minio:RELEASE.2020-07-31T03-39-05Z
         ports:
         - containerPort: 9000
           name: http

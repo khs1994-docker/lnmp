@@ -462,10 +462,15 @@ Function _add($softs) {
       $env:DOCKER_ROOTFS_PHASE = $null
       $lwpm_json, $lwpm_dist, $lwpm_script = rootfs $soft $ref -os $os -arch $architecture $null 'config', 0, 1
 
-      if (($lwpm_json -eq $false) -or ($lwpm_dist -eq $false) -or ($lwpm_script -eq $false)) {
+      if (($lwpm_json -eq $false) -or !$lwpm_json ) {
         Write-Host "==> $soft $ref not found or download failed" -ForegroundColor Red
 
         continue
+      }
+
+      if (($lwpm_dist -eq $false) -or ($lwpm_script -eq $false)) {
+        $lwpm_script = $lwpm_dist
+        $lwpm_dist = $false
       }
 
       $soft_folder = "$PSScriptRoot/../vendor/lwpm"
@@ -473,9 +478,17 @@ Function _add($softs) {
       write-host "==> Handle lwpm.json" -ForegroundColor Blue
       _mkdir $soft_folder/$($soft.split('/')[-1])
       copy-item -Force $lwpm_json $soft_folder/$($soft.split('/')[-1])/lwpm.json
-      write-host "==> Handle lwpm dist" -ForegroundColor Blue
-      tar -zxvf $lwpm_dist -C $soft_folder
-      write-host "==> Handle lwpm script" -ForegroundColor Blue
+
+      if ($lwpm_dist -eq $false) {
+        Write-Host "==> This package not include dist" -ForegroundColor Blue
+
+      }
+      else {
+        write-host "==> Handle lwpm pkg dist" -ForegroundColor Blue
+        tar -zxvf $lwpm_dist -C $soft_folder
+      }
+
+      write-host "==> Handle lwpm pkg script" -ForegroundColor Blue
       tar -zxvf $lwpm_script -C $soft_folder
     } # platforms end
 
@@ -640,13 +653,13 @@ function _push($opt) {
   }
 
   if (!($opt.Contains('/'))) {
-    Write-Host "==> package name [ $opt ] not include '/', package name use '$env:LWPM_DOCKER_NAMESPACE/$opt'" -ForegroundColor Yellow
+    Write-Host "==> package name [ $opt ] not include '/', package name use '$env:LWPM_DOCKER_NAMESPACE/$opt'" -ForegroundColor Blue
     $opt = "$env:LWPM_DOCKER_NAMESPACE/$opt"
   }
 
   try {
-    if ($env:LWPM_PKG_ROOT) {
-      $pkg_root = $env:LWPM_PKG_ROOT
+    if ($env:LREW_PKG_ROOT) {
+      $pkg_root = $env:LREW_PKG_ROOT
     }
     else {
       $pkg_root = pkg_root $opt.split('/')[-1]
@@ -675,7 +688,7 @@ function _push($opt) {
 
   Write-Host "==> package found in $pkg_root" -ForegroundColor Blue
 
-  if (!$env:LWPM_PKG_ROOT) {
+  if (!$env:LREW_PKG_ROOT) {
     $platforms = (ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw)).platform
 
     if (!($platforms)) {
@@ -718,7 +731,7 @@ function _push($opt) {
     _mkdir $lwpm_dist_temp | out-null
 
     $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
-    if (!$env:LWPM_PKG_ROOT) {
+    if (!$env:LREW_PKG_ROOT) {
       try { Copy-Item $pkg_root\README.md $lwpm_temp }catch { }
 
       if (Test-Path $pkg_root\$soft.psm1) {
@@ -727,6 +740,7 @@ function _push($opt) {
 
       $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
       Set-Location $lwpm_temp\..\
+      write-host "==> Handle lwpm pkg script" -ForegroundColor Green
       tar -zcvf script.tar.gz $soft
       Move-Item script.tar.gz $script_tar_file
 
@@ -746,7 +760,7 @@ function _push($opt) {
       Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
 
       foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
-        write-host "==> .tar.gz file is $item" -ForegroundColor Blue
+        write-host "==> Add already exists .tar.gz file: $item" -ForegroundColor Blue
         $layers_file += , ${item}.FullName
 
         break
@@ -770,6 +784,7 @@ function _push($opt) {
       $dist_tar_file = "$lwpm_dist_temp/dist.tar.gz"
       Set-Location $lwpm_temp/../
       # tmp/linux-amd64
+      write-host "==> Handle lwpm pkg dist" -ForegroundColor Green
       tar -zcvf dist.tar.gz $soft/dist
       Move-Item dist.tar.gz $dist_tar_file
 
@@ -862,7 +877,7 @@ function _push($opt) {
   $manifest_list_json_path = "$lwpm_dist_temp/manifest_list.json"
   write-output $data | Set-Content -NoNewline $manifest_list_json_path
 
-  Write-Host $(Get-Content $manifest_list_json_path -raw)
+  # Write-Host $(Get-Content $manifest_list_json_path -raw)
 
   # push manifest list
   $token = getDockerRegistryToken $opt -registry $registry

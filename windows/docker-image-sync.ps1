@@ -309,7 +309,7 @@ manifest $manifest_digest already exists" `
         # 有的仓库不能展示 manifest list，推送一次 manifest 以显示
 
         if (!$push_manifest_once) {
-          Write-Host "==> Push manifest once" -ForegroundColor Blue
+          Write-Host "==> Registry maybe not show manifest list, push manifest once" -ForegroundColor Blue
 
           $token = _getSourceToken $source_registry $source_image
           $manifest_json_path = Get-Manifest $token $source_image $manifest_digest `
@@ -438,7 +438,7 @@ manifest not found, skip" -ForegroundColor Red
     write-host "==> [error] Manifest list push error" -ForegroundColor Red
   }
 
-  if ($dest_image_with_digest -and ("sha256:$digest" -ne $dest_image_with_digest)) {
+  if ($dest_image_with_digest -and ("$digest" -ne $dest_image_with_digest)) {
     write-host "==> [error] push manifest list $digest not eq $dest_image_with_digest" `
       -ForegroundColor Red
   }

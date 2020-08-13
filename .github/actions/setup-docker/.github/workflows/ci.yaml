@@ -19,7 +19,7 @@ jobs:
           # - nightly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
       - name: setup Docker
@@ -38,7 +38,7 @@ jobs:
   docker-default:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
       # 必须先登录后安装 Docker
@@ -64,7 +64,7 @@ jobs:
   docker-nightly:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
       - name: setup docker(Without version)
@@ -83,7 +83,7 @@ jobs:
          - macOS-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
       - name: setup docker(default)

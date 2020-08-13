@@ -1,5 +1,7 @@
 # https://styleci.io/
 
+risky: true
+
 preset: Symfony
 
 enabled:

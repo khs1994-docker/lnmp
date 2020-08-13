@@ -95,18 +95,18 @@ Function _push($pkg) {
   $env:LWPM_DOCKER_REGISTRY = $env:LREW_DOCKER_REGISTRY
 
   if ($IsDocker) {
-    $env:LWPM_PKG_ROOT = "/docker-entrypoint.d/$pkg"
-    if (!(Test-Path $env:LWPM_PKG_ROOT)) {
-      $env:LWPM_PKG_ROOT = "/docker-entrypoint.d"
-      if (!(Test-Path "$env:LWPM_PKG_ROOT/docker-compose.yml")) {
-        printError "$env:LWPM_PKG_ROOT not include docker-compose.yml"
+    $env:LREW_PKG_ROOT = "/docker-entrypoint.d/$pkg"
+    if (!(Test-Path $env:LREW_PKG_ROOT)) {
+      $env:LREW_PKG_ROOT = "/docker-entrypoint.d"
+      if (!(Test-Path "$env:LREW_PKG_ROOT/docker-compose.yml")) {
+        printError "$env:LREW_PKG_ROOT not include docker-compose.yml"
 
         return
       }
     }
   }
   else {
-    $env:LWPM_PKG_ROOT = "$PSScriptRoot/../vendor/lrew-dev/$pkg"
+    $env:LREW_PKG_ROOT = "$PSScriptRoot/../vendor/lrew-dev/$pkg"
   }
 
   if ($env:LREW_DOCKER_NAMESPACE) {
@@ -116,7 +116,7 @@ Function _push($pkg) {
     $env:LWPM_DOCKER_NAMESPACE = "lrewpkg"
   }
   & $PSScriptRoot/../windows/lnmp-windows-pm.ps1 push $pkg
-  $env:LWPM_PKG_ROOT = $null
+  $env:LREW_PKG_ROOT = $null
   $env:LWPM_DOCKER_NAMESPACE = $null
 }
 

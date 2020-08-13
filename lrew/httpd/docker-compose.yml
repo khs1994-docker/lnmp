@@ -18,7 +18,7 @@ x-common-label:
 services:
   httpd:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${LNMP_HTTPD_VERSION:-2.4.43}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/httpd:${LNMP_HTTPD_VERSION:-2.4.46}-alpine"
     ports:
       - "${LNMP_HTTPD_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_HTTPD_HTTP_PORT:-0.0.0.0:80}:80"

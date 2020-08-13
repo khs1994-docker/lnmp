@@ -77,7 +77,7 @@ $ debug=true lnmp-composer
 ```bash
 $ cd app
 
-$ lnmp-laravel-by-composer new my_laravel_app
+$ lnmp-laravel new my_laravel_app
 ```
 
 #### `Laravel` 项目预览
@@ -108,18 +108,6 @@ $ lnmp-composer [install | update]
 
 ```bash
 $ lnmp-php-cs-fixer fix
-```
-
-#### travis
-
-使用前务必设置 `GITHUB_TOKEN` 环境变量为自己的 `GITHUB_TOKEN`
-
-不知道是什么的，请自行搜索 `github token` 查看生成方法，实在不会请在本项目 GitHub 提出 Issue
-
-```bash
-$ cd project
-
-$ lnmp-travis env list
 ```
 
 #### npm with git

@@ -22,7 +22,7 @@ jobs:
     env:
       LNMP_CN_ENV: "false"
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - name: Set ENV
@@ -30,10 +30,10 @@ jobs:
         echo ::add-path::$(pwd)
         echo ::add-path::$(pwd)\windows
         #echo ::set-env name=LNMP_PATH::$(pwd)
-    - name: lrew-init
+    - name: lrew-init-test
       shell: powershell
       run: lnmp-docker.ps1 lrew-init test
-    - name: lrew-init-quite
+    - name: lrew-init-test2-quite
       shell: powershell
       run: |
         $QUITE=$true
@@ -46,6 +46,10 @@ jobs:
       shell: pwsh
       run: |
         ./lrew/lrew.ps1 add smee
+    - name: lrew-add-not-exists-pkg
+      shell: pwsh
+      run: |
+        ./lrew/lrew.ps1 add ooooo
     - name: list vendor
       run: |
         ls -r vendor

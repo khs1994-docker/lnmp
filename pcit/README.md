@@ -17,12 +17,11 @@
 │   └── pcit.config
 ├── key
 │   ├── private.key
-│   └── public.key
 └── ssl
     └── ci.crt
 ```
 
-## 新建 GitHub OAuth App 和 GitHub App
+## 新建 GitHub App 并启用 OAuth
 
 ## 配置 PCIT
 

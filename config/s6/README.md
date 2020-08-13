@@ -4,15 +4,21 @@
 * https://github.com/skarnet/s6
 
 `/etc/cont-finish.d` 挂载到容器的 `/etc/cont-finish.d`
+
 `/etc/cont-init.d` 挂载到容器的 `/etc/cont-init.d`
+
 `/etc/fix-attrs.d` 挂载到容器的 `/etc/fix-attrs.d`
+
 `/etc/services.d` 挂载到容器的 `/etc/services.d`
 
 ## 文件作用
 
 `run`     服务如何启动
+
 `down`    如果 `down` 文件存在，则 S6 不会启动该服务
+
 `finish`  程序退出后的操作
+
 `log/run` 启动日志服务
 
 ## env

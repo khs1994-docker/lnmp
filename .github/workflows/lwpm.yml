@@ -23,7 +23,7 @@ jobs:
     env:
       LNMP_CN_ENV: false
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - name: Set ENV
@@ -39,19 +39,24 @@ jobs:
     - run: php -m
     - shell: powershell
       run: cat C:\tools\php\php.ini | select-string extension
-    - name: install composer
+    - name: lwpm-install-composer
       shell: powershell
       run: lnmp-windows-pm.ps1 install composer
-    - name: lwpm-init
+    - name: lwpm-init-test
       shell: powershell
       run: lnmp-windows-pm.ps1 init test
-    - name: lwpm-add
+    - name: lwpm-add-openjdk
       shell: pwsh
       run: lnmp-windows-pm.ps1 add openjdk
-    - name: lwpm-install
+    - name: lwpm-install-openjdk
       shell: pwsh
       run: |
         lnmp-windows-pm.ps1 install openjdk
+        echo $env:PATH
+    - name: lwpm-add-not-exists-pkg
+      shell: pwsh
+      run: |
+        lnmp-windows-pm.ps1 add ooooooo
         echo $env:PATH
     - shell: pwsh
       run: |

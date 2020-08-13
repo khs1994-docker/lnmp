@@ -5,7 +5,7 @@ services:
     image: mysql:8.0.21
 
   mariadb:
-    image: mariadb:10.5.4
+    image: mariadb:10.5.5
 
   redis:
     image: redis:6.0.6-alpine
@@ -14,10 +14,10 @@ services:
     image: memcached:1.6.6-alpine
 
   php:
-    image: php:7.4.8-fpm-alpine
+    image: php:7.4.9-fpm-alpine
 
   composer:
-    image: composer:1.10.9
+    image: composer:1.10.10
 
   nginx:
     image: nginx:1.19.1-alpine
@@ -29,28 +29,28 @@ services:
     image: postgres:12.3-alpine
 
   mongodb:
-    image: mongo:4.2.8
+    image: mongo:4.4.0
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
 
   httpd:
-    image: httpd:2.4.43-alpine
+    image: httpd:2.4.46-alpine
 
   etcd:
     image: quay.io/coreos/etcd:v3.4.10
 
   minio:
-    image: minio/minio:RELEASE.2020-06-22T03-12-50Z
+    image: minio/minio:RELEASE.2020-07-31T03-39-05Z
 
   kong:
-    image: kong:2.1.0-alpine
+    image: kong:2.1.1-alpine
 
   node:
-    image: node:14.5.0-alpine
+    image: node:14.8.0-alpine
 
   go:
-    image: golang:1.14.6-alpine
+    image: golang:1.15.0-alpine
 
   alpine:
     image: alpine:3.12

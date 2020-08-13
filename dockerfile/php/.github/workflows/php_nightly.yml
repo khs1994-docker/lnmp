@@ -16,10 +16,10 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, SWOOLE, UNIT]
+        TYPE: [CLI, FPM, COMPOSER, UNIT, SWOOLE]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - run: |
@@ -74,7 +74,11 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        options="--build-arg VCS_REF=$VCS_REF"
+
+        git clone --depth=1 https://github.com/php/php-src $HOME/php-src
+        PHP_VCS_REF=`git -C $HOME/php-src rev-parse --short HEAD`
+
+        options="--build-arg VCS_REF=$VCS_REF --build-arg PHP_VCS_REF=$PHP_VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
         echo $options
 
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \

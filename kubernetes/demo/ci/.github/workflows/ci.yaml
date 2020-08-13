@@ -8,7 +8,7 @@ jobs:
     name: ci
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 1
     - run: |

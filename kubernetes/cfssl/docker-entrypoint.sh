@@ -99,14 +99,16 @@ main (){
     cd ..
   fi
 
+  # 使用已有的 CA
   cp etcd-ca* cert/ || true
   cp front-proxy-ca* cert/ || true
   cp sa.key sa.pub cert/ || true
 
+  # 清理原有的证书文件
   rm -rf *.pem
   rm -rf *.csr
 
-  # 复制 CA
+  # 恢复 CA
   cp cert/* .
 
 # etcd ca

@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.13-alpha1
+.VERSION 19.03.14-alpha1
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -456,8 +456,8 @@ Function cleanup() {
 }
 
 Function _update() {
-  if (!(_command git)) {
-    printError "Git not install, not support update"
+  if (!(_command git) -or !(Test-Path .git)) {
+    printError "Git not install or this folder not git project, not support update"
     return
   }
 
@@ -475,6 +475,8 @@ Function _update() {
 
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
   git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
+  $ErrorActionPreference = "continue"
+  git pull origin ${BRANCH}
   git reset --hard origin/${BRANCH}
   # git submodule update --init --recursive
 }
@@ -600,7 +602,7 @@ Function _wsl_check() {
   }
 }
 
-Function _wsl2_docker_init() {
+Function _wsl2_docker_check() {
   wsl -u root -- chmod -R 777 log
   $env:COMPOSE_CONVERT_WINDOWS_PATHS = 1
   wsl -u root -- ls /c/Users | out-null
@@ -677,9 +679,9 @@ $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
   $env:USE_WSL2_DOCKER_COMPOSE = '1'
 
-  docker info > $null 2>&1
+  $_arch = docker version -f "{{.Server.Arch}}"
 
-  if ($?) {
+  if ($_arch -eq 'amd64') {
     printInfo "Use WSL2 compose"
 
     $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
@@ -921,18 +923,23 @@ switch -regex ($command) {
   }
 
   build-pull {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
+
     if ($other) {
       $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
+      if ($services.GetType() -eq [String]) {
+        $services = $services.split(' ')
+      }
     }
 
     $options = get_compose_options "docker-lnmp.yml", `
       "docker-lnmp.build.yml" `
       1
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services }
+    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 
     #@custom
     __lnmp_custom_pull
@@ -983,18 +990,22 @@ switch -regex ($command) {
   }
 
   "^pull$" {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
 
     if ($other) {
       $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
       $services = ${LNMP_SERVICES}
+      if ($services.GetType() -eq [String]) {
+        $services = $services.split(' ')
+      }
     }
 
     $options = get_compose_options "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services }
+    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options pull $services
 
     #@custom
     __lnmp_custom_pull
@@ -1393,7 +1404,7 @@ XXX
 
   daemon-socket {
     try {
-      Invoke-WebRequest 127.0.0.1:2376/info | out-null
+      Invoke-WebRequest 127.0.0.1:2376/_ping | out-null
 
       printInfo "Already run"
     }
@@ -1403,16 +1414,16 @@ XXX
           -p 2376:2375 `
           -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
-          shipyard/docker-proxy
+          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
+          khs1994/docker-proxy
       }
       else {
         docker run -d --restart=always `
           -p 2376:2375 `
           -v /var/run/docker.sock:/var/run/docker.sock `
           -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/info -O /proc/self/fd/2" `
-          shipyard/docker-proxy
+          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
+          khs1994/docker-proxy
       }
     }
   }

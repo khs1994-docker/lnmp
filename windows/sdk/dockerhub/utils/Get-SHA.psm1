@@ -1,6 +1,7 @@
 Function Get-SHA256([string]$file) {
   if ($IsWindows) {
-    return (certutil -hashfile $file SHA256).split()[4]
+    # return (certutil -hashfile $file SHA256).split()[4]
+    return (Get-FileHash -Algorithm SHA256 -Path $file).Hash.tolower()
   }
 
   if ($IsMacOS) {
@@ -12,7 +13,8 @@ Function Get-SHA256([string]$file) {
 
 Function Get-SHA384([string]$file) {
   if ($IsWindows) {
-    return (certutil -hashfile $file SHA384).split()[4]
+    # return (certutil -hashfile $file SHA384).split()[4]
+    return (Get-FileHash -Algorithm SHA384 -Path $file).Hash.tolower()
   }
 
   if ($IsMacOS) {
@@ -24,7 +26,8 @@ Function Get-SHA384([string]$file) {
 
 Function Get-SHA512([string]$file) {
   if ($IsWindows) {
-    return (certutil -hashfile $file SHA512).split()[4]
+    # return (certutil -hashfile $file SHA512).split()[4]
+    return (Get-FileHash -Algorithm SHA512 -Path $file).Hash.tolower()
   }
 
   if ($IsMacOS) {

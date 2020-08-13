@@ -9,4 +9,4 @@ x-common:
 services:
   postgresql:
     << : *common
-    image: postgres:${LNMP_POSTGRESQL_VERSION:-12.3}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/postgres:${LNMP_POSTGRESQL_VERSION:-12.3}-alpine

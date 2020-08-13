@@ -1,78 +1,78 @@
 [
   {
-    "source": "php:8.0.0alpha3-cli-alpine"
+    "source": "php:8.0.0beta1-cli-alpine"
   },
   {
-    "source": "php:8.0.0alpha3-fpm-alpine"
+    "source": "php:8.0.0beta1-fpm-alpine"
   },
   {
-    "source": "php:8.0.0alpha3-unit-alpine"
+    "source": "php:8.0.0beta1-unit-alpine"
   },
   {
-    "source": "php:8.0.0alpha3-composer-alpine"
+    "source": "php:8.0.0beta1-composer-alpine"
   },
   {
-    "source": "php:8.0.0alpha3-swoole-alpine"
+    "source": "php:8.0.0beta1-swoole-alpine"
   },
   {
-    "source": "php:8.0.0alpha3-supervisord-alpine"
+    "source": "php:8.0.0beta1-supervisord-alpine"
   },
   {
-    "source": "php:7.4.8-cli-alpine"
+    "source": "php:7.4.9-cli-alpine"
   },
   {
-    "source": "php:7.4.8-fpm-alpine"
+    "source": "php:7.4.9-fpm-alpine"
   },
   {
-    "source": "php:7.4.8-unit-alpine"
+    "source": "php:7.4.9-unit-alpine"
   },
   {
-    "source": "php:7.4.8-composer-alpine"
+    "source": "php:7.4.9-composer-alpine"
   },
   {
-    "source": "php:7.4.8-swoole-alpine"
+    "source": "php:7.4.9-swoole-alpine"
   },
   {
-    "source": "php:7.4.8-supervisord-alpine"
+    "source": "php:7.4.9-supervisord-alpine"
   },
   {
-    "source": "php:7.4.8-s6-alpine"
+    "source": "php:7.4.9-s6-alpine"
   },
   {
-    "source": "php:7.3.20-cli-alpine"
+    "source": "php:7.3.21-cli-alpine"
   },
   {
-    "source": "php:7.3.20-fpm-alpine"
+    "source": "php:7.3.21-fpm-alpine"
   },
   {
-    "source": "php:7.3.20-unit-alpine"
+    "source": "php:7.3.21-unit-alpine"
   },
   {
-    "source": "php:7.3.20-composer-alpine"
+    "source": "php:7.3.21-composer-alpine"
   },
   {
-    "source": "php:7.3.20-swoole-alpine"
+    "source": "php:7.3.21-swoole-alpine"
   },
   {
-    "source": "php:7.3.20-supervisord-alpine"
+    "source": "php:7.3.21-supervisord-alpine"
   },
   {
-    "source": "php:7.2.32-cli-alpine"
+    "source": "php:7.2.33-cli-alpine"
   },
   {
-    "source": "php:7.2.32-fpm-alpine"
+    "source": "php:7.2.33-fpm-alpine"
   },
   {
-    "source": "php:7.2.32-unit-alpine"
+    "source": "php:7.2.33-unit-alpine"
   },
   {
-    "source": "php:7.2.32-composer-alpine"
+    "source": "php:7.2.33-composer-alpine"
   },
   {
-    "source": "php:7.2.32-swoole-alpine"
+    "source": "php:7.2.33-swoole-alpine"
   },
   {
-    "source": "php:7.2.32-supervisord-alpine"
+    "source": "php:7.2.33-supervisord-alpine"
   },
   {
     "source": "php:nightly-cli-alpine"

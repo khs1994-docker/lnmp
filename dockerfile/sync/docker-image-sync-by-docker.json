@@ -1,11 +1,11 @@
 [
   {
-    "source": "gcr.io/google-containers/pause:3.3",
-    "dest": "pause:3.3"
+    "source": "gcr.io/google-containers/pause:3.2",
+    "dest": "gcr-mirror/pause:3.2"
   },
   {
     "source": "gcr.io/google-containers/coredns:1.7.0",
-    "dest": "coredns:1.7.0"
+    "dest": "gcr-mirror/coredns:1.7.0"
   },
   {
     "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:9ba9c755e868942143868dbbc7a0d9ab29241014833dd0a7ac6156d66e45fe9b",
@@ -64,14 +64,14 @@
   },
   {
     "source": "k8s.gcr.io/metrics-server/metrics-server:v0.3.7",
-    "dest": "metrics-server:v0.3.7"
+    "dest": "gcr-mirror/metrics-server:v0.3.7"
   },
   {
     "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",
-    "dest":"metrics-server:master"
+    "dest": "gcr-mirror/metrics-server:master"
   },
   {
     "source": "gcr.io/google_containers/git-sync:v3.1.6",
-    "dest": "git-sync:v3.1.6"
+    "dest": "gcr-mirror/git-sync:v3.1.6"
   }
 ]

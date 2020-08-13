@@ -16,7 +16,7 @@ jobs:
         TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, SUPERVISORD]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - run: |
@@ -133,10 +133,12 @@ jobs:
         if [ "$TYPE" = "COMPOSER" ];then
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
               -t $DOCKER_HUB_USERNAME/php-cs-fixer \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --platform ${PLATFORM} ${IS_PUSH} php-cs-fixer
 
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
               -t $DOCKER_HUB_USERNAME/sami \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --platform ${PLATFORM} ${IS_PUSH} sami
         fi
 
@@ -148,8 +150,8 @@ jobs:
         -t ${DOCKER_HUB_USERNAME}/php:7.0-custom custom/7.0
 
         docker buildx build --push \
-        --build-arg PHP_VERSION=7.3.20 \
-        --build-arg USERNAME=khs1994 \
+        --build-arg PHP_VERSION=7.3.21 \
+        --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
         -t ${DOCKER_HUB_USERNAME}/php:7.1-custom custom/7.1
 
         echo "full custom"
@@ -160,7 +162,7 @@ jobs:
         --build-arg APK_EXTRA="libxslt imagemagick-libs musl" \
         --build-arg APK_DEV_EXTRA="libxslt-dev imagemagick-dev imagemagick" \
         --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
-        --build-arg USERNAME=khs1994 \
+        --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
         --push \
         -t ${DOCKER_HUB_USERNAME}/php:7.3-full-custom 7.3/alpine \
       env:
@@ -169,7 +171,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.20
+        PHP_TAG_VERSION: 7.3.21
         TYPE: ${{ matrix.TYPE }}
         # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
       name: 'Build Image'

@@ -27,6 +27,7 @@ function Test-SHA256($filename) {
 }
 
 function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com", $dist) {
+  Write-Host "==> Digest: $digest" -ForegroundColor Green
   $sha256 = $digest.split(':')[1]
   $prefix = $sha256.Substring(0, 2)
   New-Item -force -type Directory (Get-CachePath blobs/sha256/$prefix) | out-null
@@ -59,15 +60,13 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
 
     if (!$statusCode) {
       Write-Host $_.Exception
-    }
-    else {
-      Write-Host "==> HTTP StatusCode is $statusCode" -ForegroundColor Red
-    }
 
-    if ($statusCode -lt 400 -and $statusCode -gt 200) {
+      return $false
+    }
+    elseif ($statusCode -lt 400 -and $statusCode -gt 200) {
       $url = $response.Headers.Location
 
-      Write-Host "==> Redirect to $url"
+      # Write-Host "==> Redirect to $url" -ForegroundColor Magenta
 
       try {
         Invoke-WebRequest `
@@ -83,13 +82,15 @@ function Get-Blob([string]$token, [string]$image, [string]$digest, [string]$regi
       }
     }
     else {
+      Write-Host "==> Get blob failed [ $statusCode ]" -ForegroundColor Red
+
       return $false
     }
   }
 
   $size = (($response.RawContentLength) / 1024 / 1024)
 
-  Write-Host "Download size is $('{0:n2}' -f $size) M" -ForegroundColor Green
+  Write-Host "==> Download success, size is $('{0:n2}' -f $size) M" -ForegroundColor Green
 
   if (Test-SHA256 $distTemp) {
     return Get-Dist $dist $distTemp

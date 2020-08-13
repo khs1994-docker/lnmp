@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=8.0.0alpha3
+ARG PHP_VERSION=8.0.0beta1
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -55,13 +55,33 @@ ENV PECL_EXTENSION \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \
       # yaml \
-      https://github.com/andypost/pecl-file_formats-yaml/archive/php8.tar.gz \
+      https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
+      \
+      && apk add --no-cache patch \
+      && cd / \
+      && { \
+        echo "--- a/usr/local/lib/php/build/php.m4"; \
+        echo "+++ b/usr/local/lib/php/build/php.m4"; \
+        echo "@@ -305,7 +305,7 @@"; \
+        echo " ])"; \
+        echo ""; \
+        echo " AC_DEFUN([PHP_CHECK_GCC_ARG],["; \
+        echo "-  AC_MSG_ERROR([Use AX_CHECK_COMPILE_FLAG instead])"; \
+        echo "+  AC_MSG_ERROR([[Use AX_CHECK_COMPILE_FLAG instead]])"; \
+        echo " ])"; \
+        echo ""; \
+        echo " dnl"; \
+        } | tee 1.diff \
+      && patch -p1 < 1.diff \
+      && apk del --no-network patch \
+      && rm -rf 1.diff \
+      \
 # 不要删除
       && PHP_FPM_RUN_DEPS=" \
                          bash \

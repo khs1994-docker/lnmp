@@ -7,7 +7,6 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
 
   $type = "manifest"
 
-
   if ($header -eq [DockerImageSpec]::manifest_list) { $type = "manifest list" }
 
   Write-host "==> Get [ $image $ref ] $type ..." -ForegroundColor Blue
@@ -31,7 +30,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
   }
   catch {
     $result = $_.Exception.Response
-    write-host $_.Exception
+
     Write-Host "==> [error] Get [ $image $ref ] $type error [ $($result.StatusCode) ]" -ForegroundColor Red
 
     return $false
@@ -43,7 +42,7 @@ function Get-Manifest([string]$token, [string]$image, $ref, $header, $registry =
     return $false
   }
 
-  write-host "==> $type digest is $($result.Headers.'Docker-Content-Digest')" -ForegroundColor Green
+  write-host "==> Digest: $($result.Headers.'Docker-Content-Digest')" -ForegroundColor Green
 
   if ($return_digest_only) {
     return $result.Headers.'Docker-Content-Digest'

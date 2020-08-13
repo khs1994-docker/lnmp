@@ -9,7 +9,7 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
         with:
           fetch-depth: 2
       - uses: docker-practice/actions-setup-docker@master
@@ -55,7 +55,7 @@ jobs:
           lnmp-composer config -g --unset repos.packagist
 
           cd ..
-          lnmp-laravel-by-composer new laravel 7
+          lnmp-laravel new laravel 7
           cp -r laravel-demo/{.dockerignore,Dockerfile.backend} laravel/
           cp -r laravel-demo/.test/* laravel/
           ls -la laravel

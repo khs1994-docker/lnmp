@@ -19,3 +19,5 @@
 # idleThreshold = <integer>  # Set the idle threshold for memory compaction, 0 disables the feature (default 1).
 
 # kernelCommandLine = <string> # Additional kernel command line arguments
+
+nestedVirtualization=true

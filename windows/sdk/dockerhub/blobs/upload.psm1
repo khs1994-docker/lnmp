@@ -1,4 +1,5 @@
 Import-Module $PSScriptRoot/../utils/Get-SHA.psm1
+. $PSScriptRoot/../DockerImageSpec/DockerImageSpec.ps1
 
 Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$registry = "registry.hub.docker.com") {
   try {
@@ -9,13 +10,12 @@ Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$re
       -Uri "https://$registry/v2/$image/blobs/$digest" `
       -UserAgent "Docker-Client/19.03.5 (Windows)"
 
-    write-host "==> Blob found, skip upload" -ForegroundColor Yellow
+    write-host "==> Blob exists, skip upload" -ForegroundColor Yellow
 
     return $true
   }
   catch {
-    write-host "==> Check blob exists error" -ForegroundColor Yellow
-    write-host $_.Exception
+    write-host "==> Check blob exists error [ $($_.Exception.Response.StatusCode) ]" -ForegroundColor Yellow
 
     if ($_.Exception.Response.StatusCode -eq 401) {
       throw '401'
@@ -26,10 +26,12 @@ Function Test-Blob([string] $token, [string]$image, [string]$digest, [string]$re
 }
 
 Function New-Blob($token, $image, $file, $contentType = "application/octet-stream", $registry = "registry.hub.docker.com") {
-  write-host "==> Blob type is $contentType" -ForegroundColor Green
+  write-host "==> Blob type is $contentType" -ForegroundColor Blue
 
   $sha256 = Get-SHA256 $file
   $digest = "sha256:$sha256"
+
+  write-host "==> Digest: $digest" -ForegroundColor Green
 
   # $sha512 = Get-SHA512 $file
   # $digest = "sha512:$sha512"
@@ -39,12 +41,12 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   if (!($IsWindows)) { $env:TEMP = "/tmp" }
 
   if (Test-Blob $token $image $digest $registry) {
-    write-host (ConvertFrom-Json -InputObject @"
-    {
-      "file": "$($file.replace('\','\\'))",
-      "digest": "$digest"
-    }
-"@) -ForegroundColor Yellow
+    #     write-host (ConvertFrom-Json -InputObject @"
+    #     {
+    #       "file": "$($file.replace('\','\\'))",
+    #       "digest": "$digest"
+    #     }
+    # "@) -ForegroundColor Yellow
 
     return $length, $digest
   }
@@ -62,30 +64,58 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
 
   $length = (Get-ChildItem $file).Length
 
-  $result = curl -k -L `
-    -H "Content-Length: $length" `
-    -H "Content-Type: $contentType" `
-    -H "Authorization: Bearer $token" `
-    -X PUT `
-    -T $file `
-    -A "Docker-Client/19.03.5 (Windows)" `
-    -D $env:TEMP/curl_resp_header.txt `
-    "$uuid&digest=$digest"
+  $headers = @{}
+  $headers.Add('Content-Type', $contentType);
+  $headers.Add('Authorization', "Bearer $token")
 
-  write-host "==> exit code is $?" -ForegroundColor Blue
+  try {
+    $response = Invoke-WebRequest `
+      -Uri "$uuid&digest=$digest" `
+      -Headers $headers `
+      -Method 'Put' `
+      -Infile $file `
+      -UserAgent "Docker-Client/19.03.5 (Windows)"
 
-  if (!($result)) {
-    write-host "==> Blob upload success" -ForegroundColor Green
+    $response_digest = $response.Headers.'Docker-Content-Digest'
+  }
+  catch {
+    write-host $_.Exception
+    write-host "==> Upload blob failed" -ForegroundColor Red
 
-    write-host (ConvertFrom-Json -InputObject @"
-{
-  "file": "$($file.replace('\','\\'))",
-  "digest": "$digest"
-}
-"@) -ForegroundColor Blue
+    return $false, $false
   }
 
-  write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
+  # $result = curl -k -L `
+  #   -H "Content-Length: $length" `
+  #   -H "Content-Type: $contentType" `
+  #   -H "Authorization: Bearer $token" `
+  #   -X PUT `
+  #   --data-binary "@$file" `
+  #   -A "Docker-Client/19.03.5 (Windows)" `
+  #   -D $env:TEMP/curl_resp_header.txt `
+  #   "$uuid&digest=$digest"
+
+  # -T $file
+
+  # $response_digest = ((Get-Content $env:TEMP/curl_resp_header.txt) | select-string 'Docker-Content-Digest').Line.split(' ')[-1]
+
+  # write-host "==> exit code is $?" -ForegroundColor Green
+
+  # write-host "==> Response header `n$(Get-Content $env:TEMP\curl_resp_header.txt -raw)" -ForegroundColor Green
+
+  if ($response_digest -ne $digest) {
+    write-host "==> Upload blob failed" -ForegroundColor Red
+    return $false, $false
+  }
+
+  write-host "==> Upload blob success" -ForegroundColor Green
+
+  #   write-host (ConvertFrom-Json -InputObject @"
+  # {
+  #   "file": "$($file.replace('\','\\'))",
+  #   "digest": "$digest"
+  # }
+  # "@) -ForegroundColor Blue
 
   return $length, $digest
 }

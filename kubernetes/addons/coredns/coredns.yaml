@@ -122,7 +122,6 @@ spec:
       - name: coredns
         # image: k8s.gcr.io/coredns:1.7.0
         # image: gcr.mirror/google-containers/coredns:1.7.0
-        # image: gcr.mirror/khs1994/coredns:1.7.0
         image: coredns/coredns:1.7.0
         imagePullPolicy: IfNotPresent
         resources:

@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://gitee.com/mirrors/php-src
 fi
 
-export COMPOSER_VERSION=1.10.9
+export COMPOSER_VERSION=1.10.10
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -847,10 +847,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=7.4.8 ; fi
+    PHP_VERSION=7.4.9 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=7.4.8 ; fi
+    PHP_VERSION=7.4.9 ; fi
 
 _get_phpnum $PHP_VERSION
 

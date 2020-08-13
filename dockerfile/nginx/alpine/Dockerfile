@@ -87,6 +87,8 @@ RUN --mount=type=bind,from=boringssl-builder,source=/usr/src/boringssl,target=/u
     --with-file-aio \
     --with-http_v2_module \
     --with-http_v3_module \
+    --with-http_quic_module \
+    --with-stream_quic_module \
   " \
   && addgroup -S nginx \
   && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \

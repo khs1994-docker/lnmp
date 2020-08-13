@@ -126,6 +126,7 @@ req/s           :      14.26       16.78       15.52        0.96    50.00%
 * https://github.com/hakasenyang/openssl-patch
 * https://www.nginx.com/blog/introducing-technology-preview-nginx-support-for-quic-http-3/
 * https://quic.nginx.org/README
+* https://hg.nginx.org/nginx-quic
 * https://asnokaze.hatenablog.com/entry/2020/06/11/133357
 * https://www.grottedubarbu.fr/nginx-quic-http3/
 * https://jiyiren.github.io/2020/06/17/quic-explain-build/

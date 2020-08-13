@@ -6,5 +6,5 @@ resources:
 - service.yaml
 images:
   - name: gcr.io/k8s-staging-metrics-server/metrics-server:master
-    newName: ccr.ccs.tencentyun.com/khs1994/metrics-server
+    newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
     newTag: master

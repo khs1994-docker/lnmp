@@ -30,6 +30,8 @@ get(){
   local registry=${4:-"registry.hub.docker.com"}
   local dist=$5
 
+  echo "==> Digest: $digest" > /dev/stderr
+
   local image_conver=`echo $image | sed "s#/#@#g"`
   local digest_conver=`echo $digest | sed "s#sha256:##g"`
 
