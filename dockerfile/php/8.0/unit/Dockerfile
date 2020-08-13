@@ -19,9 +19,9 @@ RUN cd /usr/src \
                                   linux-headers \
                                   patch \
   \
-  && echo "apply patch, remove when pr441 merge" \
-  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/441.diff -O \
-  && patch -p1 < 441.diff \
+  # && echo "apply patch, remove when pr441 merge" \
+  # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/441.diff -O \
+  # && patch -p1 < 441.diff \
   \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
