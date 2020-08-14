@@ -597,11 +597,19 @@ set +e
     fi
 
     echo "
+;;;;;;;;;;;;;;;;;;
+; Global Options ;
+;;;;;;;;;;;;;;;;;;
+
 [global]
 
 pid = /var/run/php${PHP_NUM}-fpm.pid
 
 error_log = /var/log/php${PHP_NUM}-fpm.error.log
+
+;;;;;;;;;;;;;;;;;;;;
+; Pool Definitions ;
+;;;;;;;;;;;;;;;;;;;;
 
 [www]
 
@@ -624,10 +632,16 @@ catch_workers_output = yes
 ; wsl
 ;
 
+; WSL1 not support listen ip:port
+; listen = 127.0.0.1:9000
+
+; WSL1 please use sock
 listen = /var/run/php${PHP_NUM}-fpm.sock
+
 listen.owner = nginx
 listen.group = nginx
 listen.mode = 0660
+
 env[APP_ENV] = wsl
 
 " | $(_sudo) tee ${PHP_INI_DIR}/php-fpm.d/zz-${ID}.conf
@@ -660,12 +674,21 @@ _install_pecl_ext_by_pickle(){
   echo "--enable-redis-igbinary" > /tmp/redis.configure.options
   echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options
 
+  if [ ${PHP_NUM} -ge "80" ];then
+  $(_sudo) pickle install https://github.com/igbinary/igbinary/archive/master.tar.gz --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install https://github.com/phpredis/phpredis/archive/develop.tar.gz --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install https://github.com/xdebug/xdebug/archive/master.tar.gz --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install https://github.com/swoole/swoole-src/archive/master.tar.gz --defaults ${PICKLE_OPTIONS}
+  else
   $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
-  $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
-  $(_sudo) pickle install yaml --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
+  fi
+
+  $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
+  $(_sudo) pickle install yaml --defaults ${PICKLE_OPTIONS}
   $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)

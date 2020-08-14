@@ -373,12 +373,14 @@ ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       yaml-dev \
       pcre2-dev \
-      zlib-dev
+      zlib-dev \
+      zstd-dev
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
       yaml \
-      zlib
+      zlib \
+      zstd-libs
 
 ENV PECL_EXTENSION \
       # mongodb \
@@ -391,6 +393,7 @@ ENV PECL_EXTENSION \
       # xdebug-beta \
       # yaml \
       https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
@@ -400,8 +403,9 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
       && export PATH=$PATH:/opt/bin \
       && apk add --no-cache --virtual .pecl_build_deps $PECL_BUILD_DEPS $PHPIZE_DEPS \
       && apk add --no-cache --virtual .pecl_run_deps $PECL_RUN_DEPS \
-      && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+      && echo "--enable-redis-igbinary --enable-redis-zstd" > /tmp/redis.configure.options \
       && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
+      && echo "--with-libzstd" > /tmp/zstd.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup --continue-on-error \
       && pickle install \
            https://github.com/xdebug/xdebug/archive/master.tar.gz \

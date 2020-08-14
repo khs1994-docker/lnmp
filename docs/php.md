@@ -212,7 +212,7 @@ $ docker rm -f CONTAINER_ID
 ```ini
 session.save_handler = redis
 
-session.save_path ="tcp://redis:6379?auth=redis密码
+session.save_path ="tcp://redis:6379?auth=redis密码"
 ```
 
 ## More Information

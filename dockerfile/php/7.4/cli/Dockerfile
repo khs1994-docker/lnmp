@@ -342,17 +342,20 @@ RUN --mount=type=bind,from=php:7.4.9-alpine,source=/usr/src,target=/usr/local/sr
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
       pcre2-dev \
-      zlib-dev
+      zlib-dev \
+      zstd-dev
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
-      zlib
+      zlib \
+      zstd-libs
 
 ENV PECL_EXTENSION \
       igbinary \
       redis \
       memcached \
       # xdebug-beta \
+      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 RUN --mount=type=bind,from=php:7.4.9-alpine,source=/usr/local/bin,target=/opt/bin,rw \
@@ -364,8 +367,9 @@ RUN --mount=type=bind,from=php:7.4.9-alpine,source=/usr/local/bin,target=/opt/bi
       && curl -fsSL -o /usr/local/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
       && chmod +x /usr/local/bin/pickle \
-      && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+      && echo "--enable-redis-igbinary --enable-redis-zstd" > /tmp/redis.configure.options \
       && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
+      && echo "--with-libzstd" > /tmp/zstd.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
          xdebug \

@@ -56,6 +56,7 @@ ENV PECL_EXTENSION \
       # xdebug-beta \
       # yaml \
       https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
@@ -104,6 +105,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          c-client \
                          icu-libs \
                          gnu-libiconv \
+                         zstd-libs \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
@@ -131,6 +133,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
+                         zstd-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
@@ -158,8 +161,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \
 # 安装 PECL 扩展
-        && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+        && echo "--enable-redis-igbinary --enable-redis-zstd" > /tmp/redis.configure.options \
         && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
+        && echo "--with-libzstd" > /tmp/zstd.configure.options \
         && pickle install $PECL_EXTENSION -n --defaults \
            --strip --cleanup \
 # 默认不启用的扩展

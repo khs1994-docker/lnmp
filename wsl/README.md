@@ -79,11 +79,15 @@ $ lnmp-wsl-install php | mysql ...
 $ lnmp-wsl-install enable php73 php72 | php71 | php70 | php56
 ```
 
-#### PHP 安装路径
+**PHP 安装路径**
 
 * `/usr/local/phpXX`
 * `/usr/local/etc/phpXX`
 * `/var/log/phpXX`
+
+**WSL1 + PHP-FPM** 不支持监听 （listen） `ip:port` 请监听 **unix socket**.
+
+* https://github.com/microsoft/WSL/issues/393
 
 ## NGINX
 
@@ -101,16 +105,28 @@ http {
 }
 ```
 
+**建立 nginx 用户及用户组**
+
+```bash
+$ sudo groupadd nginx
+
+$ sudo useradd nginx -g nginx -G root
+```
+
 ## 建立文件链接
 
 **本例假设将 khs1994-docker/lnmp 放到了用户家目录**
 
 为了方便配置，NGINX 的子配置文件目录在本项目 `wsl/nginx` 文件夹中，之后在 WSL 中通过 **软链接** 链接到软件配置目录。所以你要配置 WSL 中的 NGINX，直接在 Windows 编辑本项目文件夹内的 `wsl/nginx/*.conf` 文件即可。
 
-```bash
-$ sudo ln -sf $WSL_HOME/lnmp/wsl/nginx/ /usr/local/etc/nginx/conf.d
+```powershell
+$ cd ~/lnmp
 
-$ sudo ln -sf $WSL_HOME/lnmp/wsl/config/php.fpm.zz-wsl.conf /usr/local/php73/etc/php-fpm.d/zz-wsl.conf
+$ wsl -- sudo rm -rf /usr/local/etc/nginx/conf.d
+
+$ wsl -- sudo ln -sf `$`(wslpath "'$PWD'"`)/wsl/nginx /usr/local/etc/nginx/conf.d
+
+$ wsl -- sudo ln -sf `$`(wslpath "'$PWD'"`)/wsl/config/php.fpm.zz-wsl.conf /usr/local/php73/etc/php-fpm.d/zz-wsl.conf
 
 $ cat $WSL_HOME/lnmp/wsl/config/mysql.wsl.cnf | sudo tee /etc/mysql/conf.d/wsl.cnf
 ```

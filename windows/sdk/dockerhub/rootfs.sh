@@ -12,6 +12,7 @@ rootfs(){
   local layersIndex=${6:-0}
 
   registry="hub-mirror.c.163.com"
+  # registry="mirror.baidubce.com"
   if [ -n "${REGISTRY_MIRROR}" ];then registry=${REGISTRY_MIRROR}; fi
   if [ -n "$7" ];then registry=$7; fi
 
