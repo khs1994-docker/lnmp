@@ -906,10 +906,10 @@ _conmon_install(){
 
   if [ $OS = "Linux" -a $GOARCH = "amd64" ];then
     $(_sudo) $(_curl) -o /usr/local/bin/conmon \
-      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION} \
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon \
     || \
     $(_sudo) $(_curl) -o /usr/local/bin/conmon \
-      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION}
 
     $(_sudo) chmod +x /usr/local/bin/conmon
     return

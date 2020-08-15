@@ -346,6 +346,7 @@ metadata:
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
+  type: NodePort
   ports:
   - name: http
     port: 9097
