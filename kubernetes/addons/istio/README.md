@@ -4,6 +4,8 @@
 
 ## 部署
 
+**命令举例**
+
 ```bash
 # https://istio.io/docs/setup/additional-setup/config-profiles/
 $ istioctl profile list
@@ -33,7 +35,10 @@ $ istioctl manifest generate --set profile=demo \
 **部署**
 
 ```bash
+$ ./manifest.ps1
+
 $ kubectl create ns istio-system
+
 $ kubectl apply -f istio.yaml
 ```
 

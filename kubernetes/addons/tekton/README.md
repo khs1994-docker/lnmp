@@ -2,11 +2,12 @@
 
 * https://github.com/tektoncd/pipeline/blob/master/docs/install.md
 * https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+* https://github.com/tektoncd/pipeline/releases
 
 **dashboard**
 
 * https://github.com/tektoncd/dashboard
-* https://github.com/tektoncd/dashboard/releases/download/v0.7.0/tekton-dashboard-release.yaml
+* https://github.com/tektoncd/dashboard/releases tekton-dashboard-release.yaml
 
 **CI/CD**
 
@@ -33,3 +34,13 @@ webhook 使用了 kubernetes 的 admissionwebhook 机制，所以，在我们 ku
 
 * https://github.com/tektoncd/pipeline/blob/master/docs/migrating-v1alpha1-to-v1beta1.md
 * `PipelineResources` 废弃
+
+## 部署
+
+```bash
+$ kubectl apply -k .
+```
+
+## 国内镜像
+
+**ccr.ccs.tencentyun.com/khs1994**

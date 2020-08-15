@@ -27,7 +27,6 @@ containerd-nightly.linux-arm64
     ├── containerd-shim
     ├── containerd-shim-runc-v1
     ├── containerd-shim-runc-v2
-    ├── containerd-stress
     └── ctr
 ```
 

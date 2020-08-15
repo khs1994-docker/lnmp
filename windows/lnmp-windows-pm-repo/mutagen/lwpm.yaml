@@ -1,5 +1,5 @@
 name: mutagen
-version: 0.11.6
+version: 0.11.7
 pre-version: 0.12.0-beta1
 url: https://github.com/mutagen-io/mutagen/releases/download/v${VERSION}/mutagen_${env:lwpm_os}_${env:lwpm_architecture}_v${VERSION}.$(if($_IsWindows){echo zip}else{echo tar.gz})
 scripts:

@@ -1,6 +1,7 @@
 name: istioctl
 url: https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-win.zip
 version: 1.6.3
+pre-version: 1.7.0-rc.1
 scripts:
   install:
     - _unzip $filename C:\bin\

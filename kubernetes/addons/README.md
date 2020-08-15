@@ -12,7 +12,7 @@
 
 ## ingress
 
-* ingress-nginx `0.34.0`
+* ingress-nginx `0.34.1`
 
 * ingress-kong `0.9.0`
 
@@ -22,4 +22,4 @@
 
 ## CI/CD
 
-* tekton `0.13.2`
+* tekton `0.15.2`

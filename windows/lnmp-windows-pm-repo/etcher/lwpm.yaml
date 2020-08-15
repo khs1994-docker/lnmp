@@ -4,4 +4,4 @@ scripts:
   platform-reqs: if($env:lwpm_os -eq 'linux'){echo $false}
   install: Start-Process -FilePath $filename -wait
 url: https://github.com/balena-io/etcher/releases/download/v${VERSION}/balenaEtcher-$(if($env:lwpm_os -eq 'windows'){echo Setup-${VERSION}.exe}else{echo ${VERSION.dmg}})
-version: 1.5.99
+version: 1.5.102

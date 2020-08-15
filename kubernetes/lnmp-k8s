@@ -725,7 +725,6 @@ _containerd_install(){
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
 }
 
 _cni_install(){
