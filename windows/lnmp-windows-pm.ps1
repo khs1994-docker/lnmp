@@ -45,6 +45,7 @@ install-service Install service [ServiceName] [CommandLine] [LogFile]
 remove-service  Remove service [ServiceName]
 start-service   Start service
 stop-service    Stop service
+restart-service Restart service
 
 ENV:
 
@@ -1071,6 +1072,14 @@ switch ($command) {
     foreach ($item in $opt) {
       Write-Host "==> Stop service $item" -ForegroundColor Red
       start-process "net" -ArgumentList "stop", $item -Verb RunAs
+    }
+  }
+
+  "restart-service" {
+    foreach ($item in $opt) {
+      Write-Host "==> Restart service $item" -ForegroundColor Yellow
+      start-process "net" -ArgumentList "stop", $item -Verb RunAs
+      start-process "net" -ArgumentList "start", $item -Verb RunAs
     }
   }
 

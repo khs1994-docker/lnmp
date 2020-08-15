@@ -60,7 +60,9 @@ $ lnmp-windows-pm.ps1 install example
 
 `vendor/lwpm-dev` 大于 `vendor/lwpm` 大于 `默认自带包（windows/lnmp-windows-pm-repo）`
 
-## 注册 Windows 服务
+## Windows 服务
+
+**注册（新增）服务**
 
 请以 **管理员** 打开 `powershell` 执行下面的命令(这里以 minio 为例)
 
@@ -84,6 +86,12 @@ $ lnmp-windows-pm.ps1 start-service minio
 
 ```powershell
 $ lnmp-windows-pm.ps1 stop-service minio
+```
+
+**重启服务**
+
+```powershell
+$ lnmp-windows-pm.ps1 restart-service minio
 ```
 
 ## 开发者

@@ -1,13 +1,13 @@
 {
   "name": "wechatDevtool",
   "description": "WeChat Dev tool",
-  "version": "1.04.2008122",
-  "pre-version": "1.04.2008122",
+  "version": "1.04.2008142",
+  "pre-version": "1.04.2008142",
   "homepage": "https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html",
   "bug": "https://developers.weixin.qq.com/community/develop/question",
   "github": "https://github.com/wechat-miniprogram",
   "releases": "https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html",
-  "url": "https://dldir1.qq.com/WechatWebDev/nightly/p-7aa88fbb60d64e4a96fac38999591e31/0.44.6/wechat_devtools_${VERSION}$(if($IsWindows){echo _x64.exe}else{echo .dmg})",
+  "url": "https://dldir1.qq.com/WechatWebDev/nightly/p-cce2e2982a29467caacdf6b5959b67da/0.44.6/wechat_devtools_${VERSION}$(if($IsWindows){echo _x64.exe}else{echo .dmg})",
   "command": "'C:\\Program Files (x86)\\Tencent\\微信web开发者工具\\cli.bat'",
   "scripts": {
     "platform-reqs": [
