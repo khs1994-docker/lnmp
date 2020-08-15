@@ -20,6 +20,7 @@
 * 7.4.9-composer-alpine     (based fpm)
 * 7.4.9-swoole-alpine       (based cli)
 * 7.4.9-supervisord-alpine  (based fpm)
+* 7.4.9-s6-alpine           (based fpm)
 
 ## Supported tags and respective `Dockerfile` links
 

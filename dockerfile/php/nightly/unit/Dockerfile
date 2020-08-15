@@ -13,11 +13,11 @@ LABEL org.opencontainers.image.revision=$VCS_REF \
 
 ENV NGINX_UNIT_VERSION master
 
-RUN cd /usr/src \
-  && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
-     | tar -zxvf - \
-  && mv unit-${NGINX_UNIT_VERSION} unit \
+RUN set -x \
+  && mkdir -p /usr/src/unit \
   && cd /usr/src/unit \
+  && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
+     | tar --strip=1 -zxvf - \
   && apk add --no-cache --virtual .build-deps \
                                   $PHPIZE_DEPS \
                                   openssl-dev \

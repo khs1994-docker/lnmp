@@ -371,14 +371,14 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
-      yaml-dev \
+      # yaml-dev \
       pcre2-dev \
       zlib-dev \
       zstd-dev
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
-      yaml \
+      # yaml \
       zlib \
       zstd-libs
 
@@ -392,7 +392,7 @@ ENV PECL_EXTENSION \
       memcached \
       # xdebug-beta \
       # yaml \
-      https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
+      # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
       https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 

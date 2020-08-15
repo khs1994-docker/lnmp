@@ -1,6 +1,6 @@
 # 使用 systemd 部署单节点 Kubernetes 集群
 
-> 主要参考了 https://github.com/opsnull/follow-me-install-kubernetes-cluster，笔者将步骤写成了 shell 脚本，便于一键部署。
+> 主要参考了 https://github.com/opsnull/follow-me-install-kubernetes-cluster ，笔者将步骤写成了 shell 脚本，便于一键部署。
 
 ## 准备
 

@@ -61,7 +61,7 @@ $ kubectl label namespace istio-test istio-injection=enabled
 
 ingress 控制外部到 pod，egress 反过来控制 pod 到外部
 
-设置为 `REGISTRY_ONLY`，pod 访问不到外部服务 `$ wget https://www.baidu.com` 无法正确执行`wget: server returned error: HTTP/1.1 502 Bad Gateway`
+`values.meshConfig.outboundTrafficPolicy.mode` 设置为 `REGISTRY_ONLY`，pod 访问不到外部服务 `$ wget https://www.baidu.com` 无法正确执行`wget: server returned error: HTTP/1.1 502 Bad Gateway`
 
 应用访问规则
 

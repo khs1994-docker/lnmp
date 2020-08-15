@@ -50,7 +50,7 @@ ENV PECL_EXTENSION \
       memcached \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \
-      yaml \
+      # yaml \
       https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
@@ -71,7 +71,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo \
                          libxpm \
                          libwebp \
-                         yaml \
                          libbz2 \
                          libexif \
                          gmp \
@@ -85,6 +84,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          " \
                          # tidyhtml-libs \
                          # libxslt \
+                         # yaml \
 # *-dev 编译之后删除
       && PHP_FPM_BUILD_DEPS=" \
                          openssl-dev \
@@ -98,7 +98,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo-dev \
                          libxpm-dev \
                          libwebp-dev \
-                         yaml-dev \
                          libexif-dev \
                          gmp-dev \
                          # xmlrpc-c-dev \
@@ -113,6 +112,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          " \
                          # tidyhtml-dev \
                          # libxslt-dev \
+                         # yaml-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS patch \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \

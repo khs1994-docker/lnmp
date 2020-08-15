@@ -337,13 +337,13 @@ RUN --mount=type=bind,from=php:7.2.33-alpine,source=/usr/src,target=/usr/local/s
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
-      yaml-dev \
+      # yaml-dev \
       zlib-dev \
       zstd-dev
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
-      yaml \
+      # yaml \
       zlib \
       zstd-libs
 
@@ -353,7 +353,7 @@ ENV PECL_EXTENSION \
       redis \
       memcached \
       # xdebug \
-      yaml \
+      # yaml \
       https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 

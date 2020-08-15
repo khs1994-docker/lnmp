@@ -1,4 +1,4 @@
-# Deploy Kubernetes on [Fedora CoreOS（FCOS）](https://getfedora.org/en/coreos/download/)
+# Deploy Kubernetes on [Fedora CoreOS（FCOS）](https://getfedora.org/en/coreos/download?tab=metal_virtualized&stream=next)
 
 ## Overview
 
@@ -114,26 +114,24 @@ $ ./coreos mount-iso N
 * `192.168.57.111`
 * `192.168.57.112`
 
-## 修改 .kube 权限
-
-```bash
-$ sudo chown -R core:core ~/.kube
-```
-
-## 部署 CNI -- calico
-
-**仅需执行一次**
-
-```bash
-$ kubectl apply -f /home/core/calico.yaml
-```
-
-## 安装 ipset (否则将不能启用 IPVS)
+**安装 ipset (否则将不能启用 IPVS 模式)**
 
 每个节点都安装之后重启
 
 ```bash
 $ sudo rpm-ostree install ipset
+```
+
+**修改 .kube 权限**
+
+```bash
+$ sudo chown -R core:core ~/.kube
+```
+
+**部署 CNI -- calico**
+
+```bash
+$ kubectl apply -f /home/core/calico.yaml
 ```
 
 ## 测试 k8s 集群功能
