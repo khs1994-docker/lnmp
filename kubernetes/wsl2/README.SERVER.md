@@ -4,7 +4,7 @@
 
 * `wsl2.k8s.khs1994.com` 解析到 WSL2 IP
 * `windows.k8s.khs1994.com` 解析到 Windows IP
-* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(kube-nginx 代理)`
+* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(使用 netsh.exe 代理 wsl2 到 windows)`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
@@ -13,7 +13,7 @@
 ## Master
 
 * `Etcd` Windows
-* `kube-nginx` Windows
+* `kube-wsl2windows` Windows
 * `kube-apiserver` WSL2
 * `kube-controller-manager` WSL2
 * `kube-scheduler` WSL2
@@ -161,14 +161,10 @@ $ ./wsl2/etcd
 $ get-process etcd
 ```
 
-## Windows 启动 kube-nginx
-
-`lwpm` 安装 NGINX
+## Windows 启动 wsl2windows 代理
 
 ```powershell
-$ ./wsl2/kube-nginx
-
-$ get-process nginx
+$ ./wsl2/kube-wsl2windows k8s
 ```
 
 ## kube-apiserver
@@ -304,15 +300,15 @@ $ ./wsl2/bin/supervisorctl start kube-server:
 
 ## 最终脚本(日常使用)
 
-> 请先手动启动 `kube-nginx` `kube-etcd`
-
 ```powershell
-# $ ./wsl2/kube-nginx
-# $ ./wsl2/etcd
+$ ./wsl2/kube-wsl2windows k8s
+$ ./wsl2/etcd
 
 $ ./wsl2/bin/kube-server
 
-# $ ./wsl2/bin/kube-server stop
-# $ ./wsl2/kube-nginx stop
-# $ ./wsl2/etcd stop
+# STOP
+
+$ ./wsl2/bin/kube-server stop
+$ ./wsl2/kube-wsl2windows k8s-stop
+$ ./wsl2/etcd stop
 ```
