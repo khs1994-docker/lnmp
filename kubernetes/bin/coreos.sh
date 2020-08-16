@@ -27,9 +27,9 @@ $ curl xxx | NODE_NAME=1 bash
   exit
 fi
 
-IGNITION_FILE_NAME=ignition-${NODE_NAME}.json
+IGNITION_FILE_NAME=ignition-${NODE_NAME}.ign
 
-if [ $NODE_NAME = 'basic' ];then IGNITION_FILE_NAME=basic.json; fi
+if [ $NODE_NAME = 'basic' ];then IGNITION_FILE_NAME=basic.ign; fi
 
 curl -O http://${SERVER_HOST:-192.168.57.1}:${port:-8080}/ignition/$IGNITION_FILE_NAME
 

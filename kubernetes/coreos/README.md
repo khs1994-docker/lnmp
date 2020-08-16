@@ -62,7 +62,7 @@ $ for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
 
 自行调整配置
 
-### 自行配置 `ignition-n.yaml`
+### 自行配置 `ignition-n.fcc`
 
 本项目默认支持 **3** 节点，如果你要增加节点，请进行如下操作
 

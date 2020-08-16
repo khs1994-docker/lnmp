@@ -9,9 +9,13 @@
       "lwpm.yaml",
       "lwpm.yml"
     ],
-    "scripts/mutagen/mutagen.schema.json" : [
+    "scripts/mutagen/mutagen.schema.json": [
       "mutagen.yml",
       "mutagen.example.yml"
+    ],
+    "https://raw.githubusercontent.com/coreos/ignition/master/config/v3_1/schema/ignition.json": [
+      "*.fcc",
+      "*.ign"
     ]
   },
   "json.schemas": [
@@ -41,4 +45,9 @@
   "files.eol": "\n",
   // "docker.host":"ssh://your-remote-user@your-remote-machine-fqdn-or-ip-here",
   // "docker.host":"tcp://your-remote-machine-fqdn-or-ip-here:port",
+  // 文件类型关联
+  "files.associations": {
+    "*.ign": "json",
+    "*.fcc": "yaml"
+  }
 }

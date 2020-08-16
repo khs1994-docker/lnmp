@@ -17,10 +17,10 @@ fcct --version ; fcct --help || true
 
 cd ignition
 
-rm -rf *.json *.yaml
+rm -rf *.ign *.fcc
 
-cp example/* .
-cp ignition-local.example.yaml ignition-local.yaml
+cp fcc/* .
+cp ignition-local.example.fcc ignition-local.fcc
 
 MERGE_LIST="crictl \
             docker \
@@ -50,21 +50,21 @@ do
             ${NETWORK_GATEWAY} \
             ${DEFAULT_GATEWAY} \
            ' \
-  < $item.yaml > $item.yaml.source
+  < $item.fcc > $item.fcc.source
 
-  cp $item.yaml.source $item.yaml
+  cp $item.fcc.source $item.fcc
 done
 
 for i in `seq ${NODE_NUM}`;do
-  cp ignition-n.master.template.yaml ignition-$i.example.yaml
-  sed -i "s#{{n}}#$i#g" ignition-$i.example.yaml
-  cp ignition-$i.example.yaml ignition-$i.yaml
+  cp ignition-n.master.template.fcc ignition-$i.example.fcc
+  sed -i "s#{{n}}#$i#g" ignition-$i.example.fcc
+  cp ignition-$i.example.fcc ignition-$i.fcc
 
-  if ! [ -f ignition-$i.yaml ];then
+  if ! [ -f ignition-$i.fcc ];then
     break
   fi
 
-  echo "handle ignition-$i.yaml ...
+  echo "handle ignition-$i.fcc ...
 
 "
   envsubst '${K8S_ROOT} \
@@ -78,17 +78,17 @@ for i in `seq ${NODE_NUM}`;do
             ${CONTAINERD_VERSION} \
             ${NETWORK_GATEWAY} \
            ' \
-  < ignition-$i.yaml > ignition-$i.yaml.source
+  < ignition-$i.fcc > ignition-$i.fcc.source
 
-  cp ignition-$i.yaml.source ignition-$i.yaml
+  cp ignition-$i.fcc.source ignition-$i.fcc
 
-  sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.yaml
-  sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.yaml
-  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.yaml
-  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.yaml
+  sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" ignition-$i.fcc
+  sed -i "s#{{DISCOVERY_URL}}#${DISCOVERY_URL}#g" ignition-$i.fcc
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" ignition-$i.fcc
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" ignition-$i.fcc
 done
 
-cp ../pxe/pxe-ignition.example.yaml ../pxe/pxe-ignition.yaml
+cp ../pxe/pxe-ignition.example.fcc ../pxe/pxe-ignition.fcc
 
 # replace
 
@@ -97,7 +97,7 @@ for i in `seq ${NODE_NUM}` ; do
   IP=$(echo ${NODE_IPS} | cut -d ',' -f $i)
 
   if [ -n "$IP" ];then
-    sed -i "s/{{IP_$i}}/${IP}/g" $( ls *.yaml )
+    sed -i "s/{{IP_$i}}/${IP}/g" $( ls *.fcc )
   fi
 done
 
@@ -108,39 +108,39 @@ _fcct(){
 }
 
 sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" \
-  ignition-local.yaml \
-  basic.yaml \
-  ../pxe/pxe-ignition.yaml
+  ignition-local.fcc \
+  basic.fcc \
+  ../pxe/pxe-ignition.fcc
 
 sed -i "s#{{SSH_PUB}}#${SSH_PUB}#g" \
-  ignition-local.yaml \
-  basic.yaml \
-  ../pxe/pxe-ignition.yaml
+  ignition-local.fcc \
+  basic.fcc \
+  ../pxe/pxe-ignition.fcc
 
-sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.yaml
+sed -i "s#{{ETCD_VERSION}}#${ETCD_VERSION}#g" basic.fcc
 
 for i in `seq ${NODE_NUM}` ; do
 
-  if [ -f ignition-$i.yaml ];then
-    $(_fcct) ignition-$i.yaml > ignition-$i.json
+  if [ -f ignition-$i.fcc ];then
+    $(_fcct) ignition-$i.fcc > ignition-$i.ign
   fi
 
 done
 
 for item in $MERGE_LIST
 do
-  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" $item.yaml
-  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" $item.yaml
-  $(_fcct) $item.yaml > $item.json
+  sed -i "s#{{SERVER_HOST}}#${SERVER_HOST}#g" $item.fcc
+  sed -i "s#{{KUBERNETES_VERSION}}#v${KUBERNETES_VERSION}#g" $item.fcc
+  $(_fcct) $item.fcc > $item.ign
 done
 
-$(_fcct) ignition-local.yaml > ignition-local.json
-$(_fcct) basic.yaml > basic.json
+$(_fcct) ignition-local.fcc > ignition-local.ign
+$(_fcct) basic.fcc > basic.ign
 
 rm -rf *.source
 
 cd ../pxe
 
-$(_fcct) pxe-ignition.yaml > pxe-config.ign
+$(_fcct) pxe-ignition.fcc > pxe-config.ign
 
 exec nginx -g "daemon off;"

@@ -28,3 +28,6 @@ services:
 
   metrics_server:
     image: k8s.gcr.io/metrics-server/metrics-server:v0.3.7
+
+  fcct:
+    image: quay.io/coreos/fcct:v0.6.0

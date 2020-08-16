@@ -112,6 +112,14 @@ storage:
           addr-gen-mode=stable-privacy
           dns-search=
           method=auto
+    # - path: /etc/ssh/sshd_config.d/20-enable-passwords.conf
+    #   mode: 0644
+    #   contents:
+    #     inline: |
+    #       # Fedora CoreOS disables SSH password login by default.
+    #       # Enable it.
+    #       # This file must sort before 40-disable-passwords.conf.
+    #       PasswordAuthentication yes
     - path: /opt/.khs1994-docker-lnmp/caches/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
       mode: 0644
       contents:

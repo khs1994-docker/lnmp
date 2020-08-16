@@ -5,17 +5,17 @@ version: 1.0.0
 ignition:
   config:
     merge:
-      - source: http://{{SERVER_HOST}}:8080/ignition/merge-common.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/crictl.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/docker.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/etcd.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-nginx.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-proxy.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-scheduler.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kubelet.json
+      - source: http://{{SERVER_HOST}}:8080/ignition/merge-common.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/crictl.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/docker.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/etcd.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-nginx.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-proxy.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-scheduler.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kubelet.ign
 passwd:
   users:
     - name: core
@@ -72,8 +72,10 @@ systemd:
         ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
         ExecStartPre=-/usr/bin/env chmod 700 /opt/k8s/var/lib/etcd
 
-        ExecStartPre=-podman container rm etcd
-        ExecStart= podman run --name etcd --network host --privileged \
+        ExecStartPre=-/bin/podman container kill etcd
+        ExecStartPre=-/bin/podman container rm etcd
+        ExecStartPre=-/bin/podman pull quay.io/coreos/etcd:v${ETCD_VERSION}
+        ExecStart= /bin/podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
           -v /opt/k8s/var/lib/etcd:/var/lib/etcd \
           -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
@@ -103,8 +105,8 @@ systemd:
           --heartbeat-interval=250 \
           --election-timeout=2000
 
-        ExecStop=podman stop etcd
-        ExecStopPost=podman container rm etcd
+        ExecStop=/bin/podman stop etcd
+        ExecStopPost=/bin/podman container rm etcd
 
         # ExecStartPost
         # ExecReload：重启当前服务时执行的命令
@@ -133,7 +135,7 @@ systemd:
 
         ExecStartPre=mkdir -p /opt/k8s/var/log/kubernetes
 
-        ExecStart=podman run \
+        ExecStart=/bin/podman run \
         --name kube-apiserver \
         -v ${K8S_ROOT}:${K8S_ROOT} \
         -v /opt/k8s/var/log/kubernetes:${K8S_ROOT}/var/log/kubernetes \
@@ -220,7 +222,7 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStart=podman run \
+        ExecStart=/bin/podman run \
         --name kube-controller-manager \
         -v ${K8S_ROOT}:${K8S_ROOT} \
         --network host \
@@ -282,7 +284,7 @@ systemd:
 
         Environment="K8S_ROOT=${K8S_ROOT}"
 
-        ExecStart=podman run --name=kube-scheduler \
+        ExecStart=/bin/podman run --name=kube-scheduler \
         --network host \
         -v ${K8S_ROOT}:${K8S_ROOT} \
         k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}} \
@@ -344,8 +346,8 @@ systemd:
 
         ExecStartPre=-/usr/bin/env swapoff -a
         ExecStartPre=-${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
-        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
         ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
         ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
         ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
         ExecStartPre=-/usr/bin/env mkdir -p /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
@@ -373,6 +375,8 @@ systemd:
         # --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
         # --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
         # --image-pull-progress-deadline=15m \
+
+        ExecStartPost=/usr/bin/env chown -R core:core /home/core/.kube
 
         ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
         ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
@@ -547,18 +551,19 @@ storage:
       mode: 0755
       contents:
         source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubectl
-    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+    - path: /etc/NetworkManager/system-connections/eth0.nmconnection
       mode: 0600
       contents:
         inline: |
           [connection]
-          id=eth1
-          interface-name=eth1
+          id=eth0
+          interface-name=eth0
           type=ethernet
           autoconnect=true
 
           [ipv4]
           method=manual
-          dns=114.114.114.114
+          dns=114.114.114.114;8.8.8.8;1.1.1.1
           addresses={{IP_{{n}}}}/24
           gateway=${NETWORK_GATEWAY}
+          # dns-search=redhat.com

@@ -143,7 +143,7 @@ $ ./lnmp-k8s cleanup development
 
 * [pod 网络出错](docs/guide/network.md)
 
-## Ubuntu 19.04 / Debian 10(buster) / Fedora 29
+## Ubuntu 19.04+ / Debian 10(buster)+ / Fedora 29+
 
 **Ensure iptables tooling does not use the nftables backend**
 

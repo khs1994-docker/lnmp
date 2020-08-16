@@ -5,17 +5,17 @@ version: 1.0.0
 ignition:
   config:
     merge:
-      - source: http://{{SERVER_HOST}}:8080/ignition/merge-common.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/crictl.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/docker.json
-      # - source: http://{{SERVER_HOST}}:8080/ignition/etcd.json
-      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.json
-      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.json
-      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-nginx.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kube-proxy.json
-      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-scheduler.json
-      - source: http://{{SERVER_HOST}}:8080/ignition/kubelet.json
+      - source: http://{{SERVER_HOST}}:8080/ignition/merge-common.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/crictl.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/docker.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/etcd.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-nginx.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-proxy.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-scheduler.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kubelet.ign
 passwd:
   users:
     - name: core
@@ -250,6 +250,7 @@ storage:
 
           [ipv4]
           method=manual
-          dns=114.114.114.114
+          dns=114.114.114.114;8.8.8.8;1.1.1.1
           addresses={{IP_{{n}}}}/24
           gateway=${NETWORK_GATEWAY}
+          # dns-search=redhat.com
