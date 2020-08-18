@@ -694,7 +694,7 @@ _containerd_install(){
 
   __download(){
     if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
-      url="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly.linux-arm64.tar.gz"
+      url="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly-linux-arm64.tar.gz"
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
 
       return

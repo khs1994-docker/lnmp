@@ -33,3 +33,4 @@ my-custom
 
 *.zip
 *.tar.gz
+*.sha256sum

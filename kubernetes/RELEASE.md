@@ -16,12 +16,12 @@
 $ ./lnmp-k8s.ps1 dist-containerd-arm64
 ```
 
-将 containerd-nightly.linux-arm64.tar.gz 上传到 https://github.com/docker-practice/containerd/releases/tag/nightly
+将 `containerd-nightly-linux-arm64.tar.gz` `containerd-nightly-linux-arm64.tar.gz.sha256sum` 上传到 https://github.com/docker-practice/containerd/releases/tag/nightly
 
 **.tar.gz 文件结构**
 
 ```bash
-containerd-nightly.linux-arm64
+containerd-nightly-linux-arm64
 └── bin
     ├── containerd
     ├── containerd-shim

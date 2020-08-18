@@ -1,4 +1,4 @@
-$tips = "You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\conf\.wslconfig"
+$tips = "You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\config\.wslconfig"
 
 $WSL_DIST = 'wsl-k8s'
 $kernelversion = "4.19.121"
@@ -38,7 +38,6 @@ $deb = "linux-headers-${kernelversion}-microsoft-standard_$(${kernelversion}.spl
 mkdir -f ~/.wsl | out-null
 
 cd ~/.wsl
-
 
 Function _downloader($name, $url) {
   if (Test-Path $name) {

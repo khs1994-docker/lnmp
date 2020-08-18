@@ -354,16 +354,20 @@ $ kubectl config use-context docker-desktop
   }
 
   "dist-containerd-arm64" {
-    if (Test-Path containerd-nightly.linux-arm64) {
-      rm -r -force containerd-nightly.linux-arm64
+    if (Test-Path containerd-nightly-linux-arm64) {
+      rm -r -force containerd-nightly-linux-arm64
     }
 
-    Expand-Archive -Path linux_arm64.zip -DestinationPath containerd-nightly.linux-arm64
-    mkdir containerd-nightly.linux-arm64/bin | out-null
-    mv containerd-nightly.linux-arm64/containerd* containerd-nightly.linux-arm64/bin/
-    mv containerd-nightly.linux-arm64/ctr containerd-nightly.linux-arm64/bin/
-    tar -zcvf containerd-nightly.linux-arm64.tar.gz containerd-nightly.linux-arm64
-    rm -r -force containerd-nightly.linux-arm64
+    Expand-Archive -Path linux_arm64.zip -DestinationPath containerd-nightly-linux-arm64
+    mkdir containerd-nightly-linux-arm64/bin | out-null
+    mv containerd-nightly-linux-arm64/containerd* containerd-nightly-linux-arm64/bin/
+    mv containerd-nightly-linux-arm64/ctr containerd-nightly-linux-arm64/bin/
+    tar -zcvf containerd-nightly-linux-arm64.tar.gz containerd-nightly-linux-arm64
+    rm -r -force containerd-nightly-linux-arm64
+
+    $sha256_hash = (Get-FileHash .\containerd-nightly-linux-arm64.tar.gz -Algorithm sha256).Hash.ToLower()
+
+    echo "$sha256_hash containerd-nightly-linux-arm64.tar.gz" > containerd-nightly-linux-arm64.tar.gz.sha256sum
   }
 
   Default {

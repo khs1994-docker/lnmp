@@ -13,10 +13,12 @@ jobs:
     strategy:
       matrix:
         repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
-        ref: ["master","linux-msft-wsl-4.19.y"]
+        ref: ["master","linux-msft-wsl-4.19.y","linux-msft-wsl-5.4.y"]
         exclude:
         - repo: "torvalds/linux"
           ref: "linux-msft-wsl-4.19.y"
+        - repo: "torvalds/linux"
+          ref: "linux-msft-wsl-5.4.y"
         - repo: microsoft/WSL2-Linux-Kernel
           ref: master
       fail-fast: false
@@ -57,6 +59,20 @@ jobs:
         fi
 
         curl -fsSL -o Microsoft/config-wsl https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl
+
+        if [ $ref = "linux-msft-wsl-5.4.y" -o $ref = "master" ];then
+          curl -fsSL -o Microsoft/config-wsl \
+            https://github.com/khs1994/WSL2-Linux-Kernel/raw/master/config-wsl-5.4
+        fi
+
+        if [ $ref = "master" ];then
+          curl -L -o gpu.diff https://github.com/microsoft/WSL2-Linux-Kernel/commit/cba4696a38f9d54a5a71a4d1907a8d790b756372.patch
+          curl -L -o 1.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/74ea0082a08d11a0454e97d5d0569c5992bb6191.patch
+          curl -L -o 2.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/43cea7bd52b2ed17e8369b23865a9df2632704bd.patch
+          patch -p1 < gpu.diff
+          patch -p1 < 1.diff
+          patch -p1 < 2.diff
+        fi
 
         echo "
         # nfs
