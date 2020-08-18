@@ -1,5 +1,5 @@
 variant: fcos
-version: 1.0.0
+version: 1.1.0
 systemd:
   units:
 storage:
@@ -30,5 +30,5 @@ storage:
         source: http://{{SERVER_HOST}}:8080/etc/calico/calico.yaml
     - path: /etc/sysctl.d/99-kubernetes-calico.conf
       mode: 0644
-      contents: 
+      contents:
         inline: net.ipv4.conf.all.rp_filter = 1

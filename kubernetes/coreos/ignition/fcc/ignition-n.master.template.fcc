@@ -1,7 +1,7 @@
 # https://github.com/coreos/fcct/blob/master/docs/configuration-v1_0.md
 # master
 variant: fcos
-version: 1.0.0
+version: 1.1.0
 ignition:
   config:
     merge:
