@@ -53,7 +53,8 @@ oom_score = 0
     stream_server_port = "0"
     stream_idle_timeout = "4h0m0s"
     enable_selinux = false
-    sandbox_image = "mcr.microsoft.com/k8s/core/pause:1.2.0"
+    selinux_category_range = 0
+    sandbox_image = "mcr.microsoft.com/oss/kubernetes/pause:1.4.0"
     stats_collect_period = 10
     systemd_cgroup = false
     enable_tls_streaming = false
@@ -65,11 +66,14 @@ oom_score = 0
     disable_proc_mount = false
     unset_seccomp_profile = ""
     tolerate_missing_hugepages_controller = false
+    disable_hugetlb_controller = false
+    ignore_image_defined_volumes = false
     [plugins."io.containerd.grpc.v1.cri".containerd]
       snapshotter = "windows"
       default_runtime_name = "runhcs-wcow-process"
       no_pivot = false
       disable_snapshot_annotations = false
+      discard_unpacked_layers = false
       [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
         runtime_type = ""
         runtime_engine = ""

@@ -48,6 +48,7 @@
   // 文件类型关联
   "files.associations": {
     "*.ign": "json",
-    "*.fcc": "yaml"
+    "*.fcc": "yaml",
+    "*.conflist": "json"
   }
 }

@@ -8,6 +8,7 @@ data:
   # 改为和 flannel 一致
   podCIDR: 10.244.0.0/16
   # ipip is default
-  ipip: "Always"
+  # ipip: "Always"
+  ipip: CrossSubnet
   # enable BGP
   # ipip: "Never"

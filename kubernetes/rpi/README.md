@@ -27,9 +27,10 @@ $ $items="kube-proxy","kubelet","kubectl","kubeadm","mounter"
 $ foreach($item in $items){scp ./kubernetes-release/release/v1.18.0-linux-arm64/kubernetes/server/bin/$item pi@192.168.199.101:/home/pi/}
 ```
 
-## 升级 libseccomp2 到 [2.4.x](https://packages.debian.org/bullseye/libseccomp2)
+## (不再需要此步骤) 升级 libseccomp2 到 [2.4.x](https://packages.debian.org/bullseye/libseccomp2)
 
 * https://github.com/containerd/containerd/issues/3871
+* https://pkgs.org/search/?q=libseccomp
 
 ```bash
 $ curl -L -O http://ftp.cn.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.3-1+b1_arm64.deb

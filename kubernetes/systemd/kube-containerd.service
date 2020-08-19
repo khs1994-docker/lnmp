@@ -6,7 +6,7 @@ After=network.target local-fs.target
 Wants=network-online.target network.target
 
 [Service]
-ExecStartPre=-/sbin/modprobe overlay
+ExecStartPre=-/sbin/modprobe overlay br_netfilter
 
 ExecStart=/opt/k8s/bin/kube-containerd \
           --config /opt/k8s/etc/kube-containerd/1.4/config.toml
@@ -14,11 +14,13 @@ ExecStart=/opt/k8s/bin/kube-containerd \
 Type=notify
 KillMode=process
 Delegate=yes
-LimitNOFILE=1048576
+LimitNOFILE=infinity
 # Having non-zero Limit*s causes performance problems due to accounting overhead
 # in the kernel. We recommend using cgroups to do container-local accounting.
 LimitNPROC=infinity
 LimitCORE=infinity
+# Comment TasksMax if your systemd version does not supports it.
+# Only systemd 226 and above support this version.
 TasksMax=infinity
 
 Restart=on-failure

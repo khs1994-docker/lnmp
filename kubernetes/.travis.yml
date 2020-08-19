@@ -4,7 +4,7 @@ language: go
 # language: bash
 
 go:
-- 1.14
+- 1.15
 
 services:
 - docker

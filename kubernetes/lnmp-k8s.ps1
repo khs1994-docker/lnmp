@@ -362,7 +362,10 @@ $ kubectl config use-context docker-desktop
     mkdir containerd-nightly-linux-arm64/bin | out-null
     mv containerd-nightly-linux-arm64/containerd* containerd-nightly-linux-arm64/bin/
     mv containerd-nightly-linux-arm64/ctr containerd-nightly-linux-arm64/bin/
-    tar -zcvf containerd-nightly-linux-arm64.tar.gz containerd-nightly-linux-arm64
+
+    cd containerd-nightly-linux-arm64
+    tar -zcvf containerd-nightly-linux-arm64.tar.gz bin
+    cd ..
     rm -r -force containerd-nightly-linux-arm64
 
     $sha256_hash = (Get-FileHash .\containerd-nightly-linux-arm64.tar.gz -Algorithm sha256).Hash.ToLower()

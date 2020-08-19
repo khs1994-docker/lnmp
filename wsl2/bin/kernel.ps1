@@ -23,7 +23,7 @@ install   install linux-headers to WSL2($WSL_DIST) (`${env:WSL_DIST:-wsl-k8s})
 
 ENV:
 
-WSL_KERNEL_VERSION  default is [ 4.19.121 ] , more value see https://github.com/khs1994/WSL2-Linux-Kernel/releases
+WSL_KERNEL_VERSION  default is [ 4.19.121 ] , more version see https://github.com/khs1994/WSL2-Linux-Kernel/releases
 WSL_DIST            default is [ wsl-k8s ]
 
 "

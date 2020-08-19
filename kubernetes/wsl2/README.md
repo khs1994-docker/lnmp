@@ -133,9 +133,6 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_N
 ## 5. 部署 CNI -- calico
 
 ```bash
-$ source wsl2/.env
-$ sed -i "s#/opt/k8s#${K8S_ROOT}#g" addons/cni/calico-custom/calico.yaml
-
 $ kubectl apply -k addons/cni/calico-custom
 
 $ git checkout -- addons/cni/calico-custom

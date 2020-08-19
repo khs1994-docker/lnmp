@@ -69,6 +69,10 @@ jobs:
           curl -L -o gpu.diff https://github.com/microsoft/WSL2-Linux-Kernel/commit/cba4696a38f9d54a5a71a4d1907a8d790b756372.patch
           curl -L -o 1.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/74ea0082a08d11a0454e97d5d0569c5992bb6191.patch
           curl -L -o 2.diff https://github.com/nathanchance/WSL2-Linux-Kernel/commit/43cea7bd52b2ed17e8369b23865a9df2632704bd.patch
+
+          sed -i "s/down_read(&current->mm->mmap_sem);/mmap_read_lock(current->mm);/g" gpu.diff
+          sed -i "s/up_read(&current->mm->mmap_sem);/mmap_read_unlock(current->mm);/g" gpu.diff
+
           patch -p1 < gpu.diff
           patch -p1 < 1.diff
           patch -p1 < 2.diff

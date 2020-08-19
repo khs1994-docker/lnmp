@@ -53,6 +53,7 @@ oom_score = 0
     stream_server_port = "0"
     stream_idle_timeout = "4h0m0s"
     enable_selinux = false
+    selinux_category_range = 1024
     sandbox_image = "k8s.gcr.io/pause:3.2"
     stats_collect_period = 10
     systemd_cgroup = false
@@ -64,27 +65,35 @@ oom_score = 0
     max_concurrent_downloads = 3
     disable_proc_mount = false
     unset_seccomp_profile = ""
+    tolerate_missing_hugetlb_controller = true
+    disable_hugetlb_controller = true
+    ignore_image_defined_volumes = false
     [plugins."io.containerd.grpc.v1.cri".containerd]
       snapshotter = "overlayfs"
       default_runtime_name = "runc"
       no_pivot = false
       disable_snapshot_annotations = false
+      discard_unpacked_layers = false
       [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
         runtime_type = ""
         runtime_engine = ""
         runtime_root = ""
         privileged_without_host_devices = false
+        base_runtime_spec = ""
       [plugins."io.containerd.grpc.v1.cri".containerd.untrusted_workload_runtime]
         runtime_type = ""
         runtime_engine = ""
         runtime_root = ""
         privileged_without_host_devices = false
+        base_runtime_spec = ""
       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
           runtime_type = "io.containerd.runc.v2"
           runtime_engine = ""
           runtime_root = ""
           privileged_without_host_devices = false
+          base_runtime_spec = ""
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
     [plugins."io.containerd.grpc.v1.cri".cni]
       bin_dir = "/opt/cni/bin"
       conf_dir = "/etc/cni/net.d"
