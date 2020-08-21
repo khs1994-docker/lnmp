@@ -45,7 +45,7 @@ jobs:
         set -x
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
-        echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-west-1.aliyuncs.com
+        echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-east-1.aliyuncs.com
         echo ${GITHUB_TOKEN} | docker login -u khs1994 --password-stdin docker.pkg.github.com
       name: 'Docker Login'
       env:
@@ -178,7 +178,7 @@ jobs:
         FOLDER: 7.3
         PHP_TAG_VERSION: 7.3.21
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: docker.pkg.github.com/khs1994-docker/php/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994/php2 # docker.pkg.github.com/khs1994-docker/php/php
       name: 'Build Image'
       shell: bash
     - run: |
