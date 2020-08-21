@@ -44,21 +44,23 @@ jobs:
     - run: |
         set -x
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-        echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
-        echo #echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-west-1.aliyuncs.com
+        # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
+        echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-west-1.aliyuncs.com
+        echo ${GITHUB_TOKEN} | docker login -u khs1994 --password-stdin docker.pkg.github.com
       name: 'Docker Login'
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         TENCENT_DOCKER_USERNAME: ${{secrets.TENCENT_DOCKER_USERNAME}}
         ALIYUN_DOCKER_USERNAME: ${{secrets.ALIYUN_DOCKER_USERNAME}}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - run: |
         cp .env.example .env
         set -ex
 
         if [ ! `echo $GITHUB_REF | grep 'refs/tags/'` ];then \
           export PLATFORM=linux/amd64; \
-          if [ "$PHP_VERSION" = 8_0_X -o "$PHP_VERSION" = nightly ];then \
+          if [ "$PHP_VERSION" = 8_1_X -o "$PHP_VERSION" = nightly ];then \
             export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
             IS_PUSH=--push; \
             mirror="${add_mirror}"; \
@@ -71,8 +73,11 @@ jobs:
           && mirror="${add_mirror}"; \
         fi
 
+        # CACHE_IMAGE=docker.pkg.github.com/khs1994-docker/php/php
+        CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
         VCS_REF=`git rev-parse --short HEAD`
-        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache"
+
+        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
 
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -173,7 +178,7 @@ jobs:
         FOLDER: 7.3
         PHP_TAG_VERSION: 7.3.21
         TYPE: ${{ matrix.TYPE }}
-        # add_mirror: uswccr.ccs.tencentyun.com/khs1994/php registry.us-west-1.aliyuncs.com/khs1994/php
+        add_mirror: docker.pkg.github.com/khs1994-docker/php/php
       name: 'Build Image'
       shell: bash
     - run: |

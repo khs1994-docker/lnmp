@@ -48,7 +48,6 @@ jobs:
           ls ~/.khs1994-docker-lnmp/dockerhub
   linux:
     runs-on: ubuntu-latest
-    needs: skip-ci
     steps:
       - uses: actions/checkout@main
         with:
