@@ -211,6 +211,18 @@
     "source": "khs1994/acme:2.8.6"
   },
   {
+    "source": "khs1994/tls"
+  },
+  {
+    "source": "khs1994/kube-nginx:1.19.2"
+  },
+  {
+    "source": "khs1994/kube-nginx"
+  },
+  {
+    "source": "khs1994/node"
+  },
+  {
     "source": "khs1994/docker-proxy"
   },
   {
