@@ -1,4 +1,7 @@
-# 运行一个后台脚本，让 WSL 一直处于运行状态
+<#
+.DESCRIPTION
+  运行一个后台脚本，让 WSL 一直处于运行状态
+#>
 
 $DIST="wsl-k8s-data"
 

@@ -1,4 +1,4 @@
-# Istio 1.6
+# Istio 1.7
 
 * https://github.com/istio
 
@@ -49,7 +49,22 @@ $ kubectl apply -f istio.yaml
 ```bash
 $ kubectl create ns istio-test
 $ kubectl label namespace istio-test istio-injection=enabled
+
+$ kubectl apply -f demo -n istio-test
 ```
+
+**istio-ingress 端口**
+
+```bash
+$ kubectl get service istio-ingressgateway -n istio-system
+
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)                                                                      AGE
+istio-ingressgateway   NodePort   10.254.108.59   <none>        15021:49971/TCP,80:19250/TCP,443:10208/TCP,31400:30444/TCP,15443:35362/TCP   122m
+```
+
+上面的示例说明端口为 `19250`
+
+访问 `NODE_IP:19250` 测试
 
 `demo` 文件夹中所进行的测试均在 `istio-test` namespace 中进行
 
@@ -81,6 +96,30 @@ $ kubectl apply -f egress/ServiceEntry.yaml -n istio-test
 `--set values.global.proxy.includeIPRanges="10.254.0.0/16"`
 
 `$ wget --no-check-certificate https://kubernetes.default.svc.cluster.local`
+
+## [integrations](https://istio.io/latest/docs/ops/integrations/)
+
+从 1.7 版本开始不再包含 `kiali` 等组件
+
+**kiali**
+
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml
+```
+
+**Grafana**
+
+* https://istio.io/latest/docs/ops/integrations/grafana/#configuration
+
+* **7639 Mesh Dashboard** provides an overview of all services in the mesh.
+* **7636 Service Dashboard** provides a detailed breakdown of metrics for a service.
+* **7630 Workload Dashboard** provides a detailed breakdown of metrics for a workload.
+* **11829 Performance Dashboard** monitors the resource usage of the mesh.
+* **7645 Control Plane Dashboard** monitors the health and performance of the control plane.
+
+**prometheus**
+
+使用 `kube-prometheus` 参考 `deploy/kube-prometheus/kustomize/istio`
 
 ## 参考
 

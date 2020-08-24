@@ -1,0 +1,14 @@
+bases:
+  - ../base
+  # - ../storage
+secretGenerator:
+  - name: prometheus-istio-scrape-config
+    files:
+      - prometheus-istio-scrape-config.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+namespace: monitoring
+patchesStrategicMerge:
+  - patch.yaml
+resources:
+  - rbac.yaml

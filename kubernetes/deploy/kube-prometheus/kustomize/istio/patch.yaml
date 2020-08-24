@@ -1,0 +1,9 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: k8s
+spec:
+  additionalScrapeConfigs:
+    key: prometheus-istio-scrape-config.yaml
+    name: prometheus-istio-scrape-config
+    optional: false

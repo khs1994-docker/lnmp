@@ -1,3 +1,6 @@
+# don't edit, patch it by ../patch.yaml
+# copy from
+# https://github.com/prometheus-operator/kube-prometheus/blob/master/manifests/alertmanager-alertmanager.yaml
 apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:

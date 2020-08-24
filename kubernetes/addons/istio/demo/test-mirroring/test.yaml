@@ -1,3 +1,6 @@
+# 请求路由到 v2 ，查看 v1 容器也有日志输出
+# curl -H "foo: bar" http://wsl2:19749/
+
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -17,6 +20,3 @@ spec:
       host: nginx
       subset: v1
     mirror_percent: 100
-
-# 请求路由到 v2 ，查看 v1 容器也有日志输出
-# curl -H "foo: bar" http://wsl2:19749/

@@ -2,19 +2,14 @@
 .SYNOPSIS
   get wsl2 host
 .DESCRIPTION
+
   get wsl2 host
-.EXAMPLE
-  PS C:\> wsl2host
-  get wsl2 host
-.EXAMPLE
-  PS C:\> wsl2host --write
+
+  $ wsl2host
+
   get wsl2 host and write hosts to C:\Windows\System32\drivers\etc\hosts
-.INPUTS
 
-.OUTPUTS
-
-.NOTES
-  get wsl2 host
+  $ wsl2host --write [ -f ]
 #>
 
 . $PSScriptRoot/../.env.example.ps1

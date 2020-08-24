@@ -1,3 +1,6 @@
+# 请求头包含 foo: bar 路由到 v2，并且会延迟 7 秒
+# curl -H "foo: bar" http://wsl2:19749/
+
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -25,6 +28,3 @@ spec:
     - destination:
         host: nginx
         subset: v1
-
-# 请求头包含 foo: bar 路由到 v2，并且会延迟 7 秒
-# curl -H "foo: bar" http://wsl2:19749/

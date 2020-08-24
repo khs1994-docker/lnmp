@@ -1,3 +1,4 @@
+exit
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 & $PSScriptRoot/bin/wsl2d.ps1 wsl-k8s

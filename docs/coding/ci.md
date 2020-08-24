@@ -94,7 +94,7 @@ pipeline {
     }
     stage('setup-buildx'){
       steps {
-        sh "docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64 | true"
+        sh "docker run --rm --privileged tonistiigi/binfmt:latest --install all | true"
         sh "docker buildx create --use --name mybuilder --driver-opt image=${BUILDX_IMAGE}"
         sh "docker buildx ls"
 

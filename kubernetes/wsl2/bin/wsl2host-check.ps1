@@ -1,7 +1,7 @@
-# 检查 wsl2 /etc/hosts 的
-# wsl2.k8s.khs1994.com
-# windows.k8s.khs1994.com
-# ip 是否正确
+<#
+.DESCRIPTION
+  检查 wsl2 /etc/hosts 的 `wsl2.k8s.khs1994.com` `windows.k8s.khs1994.com` ip 是否正确
+#>
 
 # wsl -d wsl-k8s -u root -- bash -c `
 # "cat /etc/hosts | grep -q 'wsl2.k8s.khs1994.com' && ping -c 1 wsl2.k8s.khs1994.com -W 1" | out-null

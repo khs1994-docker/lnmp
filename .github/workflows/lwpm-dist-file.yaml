@@ -59,7 +59,7 @@ jobs:
         if: endsWith('a', 'b')
         shell: pwsh
         env:
-          VERSION: 3.4.11
+          VERSION: 3.4.12
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist etcd@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push etcd@${env:VERSION}
@@ -67,7 +67,7 @@ jobs:
         if: endsWith('a', 'b')
         shell: pwsh
         env:
-          VERSION: 3.2.4
+          VERSION: 3.3.0
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist helm@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push helm@${env:VERSION}
