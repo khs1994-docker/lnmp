@@ -148,7 +148,8 @@
 │   │               │   │   ├── php-ext-sysvsem.ini
 │   │               │   │   ├── php-ext-sysvshm.ini
 │   │               │   │   ├── php-ext-tideways_xhprof.ini.default
-│   │               │   │   └── php-ext-xdebug.ini.default
+│   │               │   │   ├── php-ext-xdebug.ini.default
+│   │               │   │   └── php-ext-zstd.ini
 │   │               │   ├── php.ini-development
 │   │               │   └── php.ini-production
 │   │               ├── php-fpm.conf
@@ -200,7 +201,8 @@
 │   │               │   │   ├── php-ext-sysvshm.ini
 │   │               │   │   ├── php-ext-tideways_xhprof.ini.default
 │   │               │   │   ├── php-ext-xdebug.ini.default
-│   │               │   │   └── php-ext-yaml.ini
+│   │               │   │   ├── php-ext-yaml.ini
+│   │               │   │   └── php-ext-zstd.ini
 │   │               │   ├── php.ini-development
 │   │               │   └── php.ini-production
 │   │               ├── php-fpm.conf
@@ -250,5 +252,5 @@
 │   └── supervisord.ini.example
 └── yarn
 
-60 directories, 189 files
+60 directories, 191 files
 ```
