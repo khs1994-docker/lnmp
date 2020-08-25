@@ -1,4 +1,4 @@
-if ($args.Length -ne 0){
+if ($args.Length -ne 0) {
   Write-Warning "==> EXEC: supervisord $args"
   wsl -d wsl-k8s -u root -- supervisord $args
 

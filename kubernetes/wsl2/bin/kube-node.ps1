@@ -1,7 +1,7 @@
 . $PSScriptRoot/../.env.example.ps1
 . $PSScriptRoot/../.env.ps1
 
-if ($args[0] -eq 'stop'){
+if ($args[0] -eq 'stop') {
   write-host "==> stop kube-node ..." -ForegroundColor Red
   wsl -d wsl-k8s -u root -- supervisorctl stop kube-node:
 
@@ -26,7 +26,7 @@ Function _mountKubelet($source, $dest) {
 write-host "==> check kube-server $KUBE_APISERVER" -ForegroundColor Green
 curl.exe -k --cacert certs/ca.pem $KUBE_APISERVER | out-null
 
-if(!$?){
+if (!$?) {
   Write-Warning "kube-server $KUBE_APISERVER can't connent, maybe not running"
   Write-Warning "Please up kube-server first!"
 
@@ -37,7 +37,7 @@ if(!$?){
 
 wsl -d wsl-k8s -- bash -c "ls /wsl/wsl-k8s-data/k8s/bin/kube-containerd > /dev/null 2>&1"
 
-if(!$?){
+if (!$?) {
   write-host "please install node files, see README.md" -ForegroundColor Red
 
   exit 1
@@ -45,18 +45,18 @@ if(!$?){
 
 wsl -d wsl-k8s -- bash -c "if ! [ -f /lib/modules/`$(uname -r)/modules.builtin ];then exit 1;fi"
 
-if(!$?){
+if (!$?) {
   Write-Warning "
 ==> Default WSL2 kernel not support kube-proxy [ IPVS ] mode, you MUST update WSL2 kernel, please see wsl2/README.KERNEL.md
 
 "
 
-exit 1
+  exit 1
 }
 
 wsl -d wsl-k8s -- sh -c "command -v runc > /dev/null 2>&1"
 
-if(!$?){
+if (!$?) {
   Write-Warning "==> WSL [ runc ] not found, please install docker-ce first on WSL"
 
   exit 1

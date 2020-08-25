@@ -99,6 +99,8 @@ if ($args[0] -eq 'k8s-stop') {
   sleep 1
   netsh interface portproxy show all
 
+  Remove-Item $PSScriptRoot/conf/.wsl2windowsip
+
   return
 }
 

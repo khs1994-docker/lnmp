@@ -37,3 +37,6 @@ services:
 
   fcct:
     image: quay.io/coreos/fcct:v0.6.0
+
+  php-fpm-exporter:
+    image: bakins/php-fpm-exporter:v0.6.1

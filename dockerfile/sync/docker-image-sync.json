@@ -112,12 +112,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.1.2",
-    "dest": "library-mirror/kong:2.1.2"
+    "source": "library/kong:2.1.3",
+    "dest": "library-mirror/kong:2.1.3"
   },
   {
-    "source": "library/kong:2.1.2-alpine",
-    "dest": "library-mirror/kong:2.1.2-alpine"
+    "source": "library/kong:2.1.3-alpine",
+    "dest": "library-mirror/kong:2.1.3-alpine"
   },
   {
     "source": "library/redis:alpine",

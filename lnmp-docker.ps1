@@ -35,6 +35,8 @@
   khs1994-docker/lnmp CLI
 .DESCRIPTION
   khs1994-docker/lnmp CLI
+
+  PS C:\> lnmp-docker up
 .EXAMPLE
   PS C:\> lnmp-docker up
 .INPUTS

@@ -101,13 +101,28 @@ $ kubectl apply -f egress/ServiceEntry.yaml -n istio-test
 
 从 1.7 版本开始不再包含 `kiali` 等组件
 
+**jaeger**
+
+```bash
+$ $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/jaeger.yaml
+```
+
 **kiali**
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml
+# 第一次执行可能报错，稍等片刻再执行一次即可
+# $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml
+
+# bash
+$ curl https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml | sed -e "s/prometheus:9090/prometheus-k8s.monitoring:9090/g" -e "s/grafana:3000/grafana.monitoring:3000/g" | kubectl apply -f -
+
+# PS1
+$ (Invoke-WebRequest https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml).toString().replace('prometheus:9090','prometheus-k8s.monitoring:9090').replace('grafana:3000','grafana.monitoring:3000') | kubectl apply -f -
 ```
 
 **Grafana**
+
+使用 `kube-prometheus`
 
 * https://istio.io/latest/docs/ops/integrations/grafana/#configuration
 

@@ -1,8 +1,8 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$K8S_WSL2_ROOT=wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_ON_WSL2=wsl -d wsl-k8s -- wslpath "'$HOME'"
+$K8S_WSL2_ROOT = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_ON_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
 
 wsl -d wsl-k8s -u root -- mkdir -p ${K8S_ROOT}/etc/cni/net.d
 
@@ -11,13 +11,13 @@ wsl -d wsl-k8s -u root -- cp $K8S_WSL2_ROOT/conf/cni/99-loopback.conf ${K8S_ROOT
 # wsl -d wsl-k8s -u root -- cat ${K8S_ROOT}/cni/net.d/99-loopback.conf
 
 (Get-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml.temp) `
-  -replace "##K8S_ROOT##",$K8S_ROOT `
-  -replace "90621",$env:USERNAME `
-  -replace "my-registry",$MY_DOCKER_REGISTRY_MIRROR `
-  | Set-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml
+  -replace "##K8S_ROOT##", $K8S_ROOT `
+  -replace "90621", $env:USERNAME `
+  -replace "my-registry", $MY_DOCKER_REGISTRY_MIRROR `
+| Set-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml
 
-$command=wsl -d wsl-k8s -u root -- echo $K8S_ROOT/bin/kube-containerd `
---config ${K8S_WSL2_ROOT}/conf/kube-containerd/1.4/config.toml
+$command = wsl -d wsl-k8s -u root -- echo $K8S_ROOT/bin/kube-containerd `
+  --config ${K8S_WSL2_ROOT}/conf/kube-containerd/1.4/config.toml
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 
@@ -35,12 +35,12 @@ stopasgroup=true
 killasgroup=true
 startsecs=10" > $PSScriptRoot/supervisor.d/kube-containerd.ini
 
-if($args[0] -eq 'start' -and $args[1] -eq '-d'){
+if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   wsl -d wsl-k8s -u root -- supervisorctl start kube-node:kube-containerd
 
   exit
 }
 
-if($args[0] -eq 'start'){
+if ($args[0] -eq 'start') {
   wsl -d wsl-k8s -u root -- bash -c $command
 }
