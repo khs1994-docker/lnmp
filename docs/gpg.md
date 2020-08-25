@@ -4,15 +4,19 @@
 
 * https://help.github.com/articles/managing-commit-signature-verification/
 
-* Windows
+**Windows**
+
 * https://www.gnupg.org/download/index.html
 * https://gpg4win.org/download.html
+
+**Linux**
 
 ```bash
 $ sudo apt install gnupg
 ```
 
 ```bash
+# 生成 key
 $ gpg --default-new-key-algo rsa4096 --gen-key
 
 # 列出公钥
@@ -25,6 +29,7 @@ sec   rsa4096/<GPG-key-id> 2018-09-15 [SC] [expires: 2020-09-14]
       XXXX
 uid                 [ultimate] khs1994 <khs1994@khs1994.com>
 
+# 导出
 $ gpg --armor --export <GPG-key-id>
 
 # copy output to github
@@ -56,7 +61,9 @@ $ git tag -v mytag
 
 ## 备份
 
-备份分为备份公钥和私钥两个部分，备份公钥：
+备份分为备份公钥和私钥两个部分
+
+**备份公钥：**
 
 ```bash
 $ gpg -o filename.pub --export <GPG-key-id>
@@ -64,13 +71,13 @@ $ gpg -o filename.pub --export <GPG-key-id>
 
 如果没有 KeyID 则是备份所有的公钥，-o 表示输出到文件 filename.pub 中，如果加上 -a 参数则输出文本格式的信息，否则输出的是二进制格式信息。
 
-备份私钥：
+**备份私钥：**
 
 ```bash
 $ gpg -o filename --export-secret-keys <GPG-key-id>
 ```
 
-然后在别的机器上可以通过
+**可以通过以下命令导入**
 
 ```bash
 $ gpg --import filename(.pub)

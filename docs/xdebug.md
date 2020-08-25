@@ -35,7 +35,7 @@
 
 在 Docker 设置中没有配置自定义 DNS 的情况下可以使用 `LNMP_XDEBUG_REMOTE_HOST=host.docker.internal`。
 
-#### 2. Docker for Linux / Docker for WSL2
+#### 2. Docker for Linux
 
 要么电脑固定 IP，要么 IP 变化时编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_HOST` 变量
 

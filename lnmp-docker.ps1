@@ -799,7 +799,7 @@ printInfo "Exec custom script"
 . ./lnmp-docker-custom-script.ps1
 
 if (_command docker) {
-  $DOCKER_VERSION = $($(docker --version).split(' ')[2]).trim(',')
+  $DOCKER_VERSION = $(docker --version).split(' ')[2].split('-')[0].trim(',')
 }
 
 $DOCKER_VERSION_YY = ([System.Version]$DOCKER_VERSION).Major
