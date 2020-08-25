@@ -27,6 +27,7 @@ jobs:
         PCIT_LOCAL_DIR: docs
       with:
         args: build
+        dir: docs
     - name: docs-sync
       uses: docker://pcit/pages
       env:

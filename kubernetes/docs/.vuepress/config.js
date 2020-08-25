@@ -87,7 +87,6 @@ module.exports = {
         'dashboard',
         'efk',
         'metrics-server',
-        'prometheus-operator',
         'registry',
       ],
       "/log/": [
