@@ -204,8 +204,6 @@ RUN --mount=type=bind,from=php:8.0.0beta2-alpine,source=/usr/src,target=/usr/loc
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && mv /usr/include/gnu-libiconv/*.h /usr/include \
-  && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   \
