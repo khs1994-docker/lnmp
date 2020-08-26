@@ -12,9 +12,9 @@ services:
     << : *common
     restart: ${LNMP_RESTART:-always}
     env_file: ./cli/timezone.env
-    build:
-      context: ./dockerfile/php/
-    # 支持 5.6.37 -- 5.6.40 其他版本请自行构建
+    # build:
+    #   context: ./dockerfile/php/
+    # 5.x 只支持 5.6.37 -- 5.6.40 其他版本请自行构建
     image: "khs1994/php:5.6.37-fpm-alpine"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached

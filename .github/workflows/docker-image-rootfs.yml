@@ -3,6 +3,9 @@ name: Docker Image rootfs
 on:
   workflow_dispatch:
 
+env:
+  LNMP_CN_ENV: 'false'
+
 jobs:
   windows:
     runs-on: windows-latest

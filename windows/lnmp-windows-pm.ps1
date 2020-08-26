@@ -73,7 +73,6 @@ Import-Module $PSScriptRoot\sdk\dockerhub\manifests\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
-Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 Import-Module $PSScriptRoot/sdk/dockerhub/utils/Get-SHA.psm1
 
@@ -373,9 +372,8 @@ Function getDockerRegistryToken($image, $action = "push,pull", $registry = $null
   if (!$registry) {
     $registry = getLwpmDockerRegistry
   }
-  $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
-  return Get-DockerRegistryToken $image $action $tokenServer $tokenService
+  return Get-DockerRegistryToken $image $action $registry
 }
 
 Function _getlwpmConfig($image, $ref) {

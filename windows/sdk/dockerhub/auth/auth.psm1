@@ -4,11 +4,84 @@ Import-Module $PSScriptRoot/../cache/cache.psm1 -force
 # "https://auth.docker.io/token"
 # "registry.docker.io"
 
+Function Get-TokenServerAndService([string]$registry = 'registry.hub.docker.com') {
+  if ($registry -eq 'docker.io') {
+    $registry = 'registry.hub.docker.com'
+  }
+
+  if ($env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER) {
+    try {
+      $token_server_and_service = ConvertFrom-Json $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER
+      $cache = $token_server_and_service.$registry
+    }
+    catch {
+      write-host $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER
+      $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = $null
+    }
+
+    if ($cache) {
+      # write-host "==> Get registry token server and service from cache" -ForegroundColor Yellow
+      # write-host $cache -ForegroundColor Green
+
+      return $cache.server, $cache.service
+    }
+  }
+
+  try {
+    $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/ `
+        -Method Head -MaximumRedirection 0 -UserAgent "Docker-Client/19.03.5 (Windows)" `
+    ).Headers['WWW-Authenticate']
+  }
+  catch {
+    $headers = $_.Exception.Response.Headers
+    if ($headers.contains('WWW-Authenticate')) {
+      $headers = $headers.toString().replace(': ', '=')
+
+      $WWW_Authenticate = (ConvertFrom-StringData $headers)['WWW-Authenticate']
+    }
+  }
+
+  $tokenServer = ''
+  $tokenService = ''
+
+  # Www-Authenticate	Bearer realm="https://auth.docker.io/token",service="registry.docker.io"
+  if ($WWW_Authenticate) {
+    $result = $WWW_Authenticate.split(',').split('=')
+
+    if ($result[0] -eq 'Bearer realm') {
+      $tokenServer = $result[1].replace('"', '')
+    }
+
+    if ($result[2] -eq 'service') {
+      $tokenService = $result[3].replace('"', '')
+    }
+  }
+
+  if (!$env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER) {
+    $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = ConvertFrom-Json '{}'
+  }
+  else {
+    $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = ConvertFrom-Json $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER
+  }
+
+  $value = @{
+    "server"  = $tokenServer;
+    "service" = $tokenService;
+  }
+
+  $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER | Add-Member -name $registry -value $value -MemberType NoteProperty -Force
+
+  $env:DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER = ConvertTo-Json $DOCKER_ROOTFS_REGISTRY_TOKEN_SERVER
+
+  return $tokenServer, $tokenService
+}
+
 function Get-DockerRegistryToken([string]$image,
   [string]$action = "pull",
-  [string]$tokenServer = $null,
-  [string]$tokenService = $null,
+  [string]$registry = 'registry.hub.docker.com',
   [boolean]$cache = $false) {
+
+  $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
   if (!($tokenServer -and $tokenService)) {
     # write-host "==> tokenServer and tokenService not set, this registry maybe not need token" -ForegroundColor Yellow
@@ -21,8 +94,8 @@ function Get-DockerRegistryToken([string]$image,
   $token_file = Get-CachePath "token/$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
 
   if (Test-Path $token_file) {
-    $file_timestrap = (((Get-ChildItem $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
-    $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000)/10000000).tostring().Substring(0, 10)
+    $file_timestrap = (((Get-ChildItem $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000) / 10000000).tostring().Substring(0, 10)
+    $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000).tostring().Substring(0, 10)
     if (($now_timestrap - $file_timestrap) -lt 205) {
       # write-host "==> Token file cache find, not expire, use it" -ForegroundColor Green
 
