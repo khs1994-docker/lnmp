@@ -413,27 +413,27 @@ _create_lnmp(){
     --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf \
     --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json \
     --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini \
-    --dry-run -o yaml \
+    --dry-run=client -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-php-conf app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf \
     --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf \
-    --dry-run -o yaml \
+    --dry-run=client -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf \
     --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf \
-    --dry-run -o yaml \
+    --dry-run=client -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf app=lnmp version=0.0.1 $@ || true
 
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf.d \
     --from-file=deployment/configMap/nginx-conf-d \
-    --dry-run -o yaml \
+    --dry-run=client -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d app=lnmp version=0.0.1 $@ || true
 

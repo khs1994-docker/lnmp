@@ -306,7 +306,7 @@ metadata:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: tekton-pipelines-controller-cluster-access
@@ -323,7 +323,7 @@ roleRef:
   name: tekton-pipelines-controller-cluster-access
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: tekton-pipelines-controller-leaderelection
@@ -344,7 +344,7 @@ roleRef:
 # then the ClusterRole would be namespaced. The access described by
 # the tekton-pipelines-controller-tenant-access ClusterRole would
 # be scoped to individual tenant namespaces.
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: tekton-pipelines-controller-tenant-access
@@ -361,7 +361,7 @@ roleRef:
   name: tekton-pipelines-controller-tenant-access
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: tekton-pipelines-webhook-cluster-access
@@ -378,7 +378,7 @@ roleRef:
   name: tekton-pipelines-webhook-cluster-access
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: tekton-pipelines-webhook-leaderelection
@@ -410,7 +410,7 @@ roleRef:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: tekton-pipelines-controller
@@ -428,7 +428,7 @@ roleRef:
   name: tekton-pipelines-controller
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: tekton-pipelines-webhook
@@ -1010,7 +1010,7 @@ metadata:
     pipeline.tekton.dev/release: "v0.15.2"
 # The data is populated at install time.
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: validation.webhook.pipeline.tekton.dev
@@ -1030,7 +1030,7 @@ webhooks:
   sideEffects: None
   name: validation.webhook.pipeline.tekton.dev
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: webhook.pipeline.tekton.dev
@@ -1050,7 +1050,7 @@ webhooks:
   sideEffects: None
   name: webhook.pipeline.tekton.dev
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: config.webhook.pipeline.tekton.dev

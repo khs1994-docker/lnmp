@@ -286,7 +286,7 @@ after_success:
   - |
     PRE_VERSION=v1.19.0-rc.3
     BASE_BRANCH=master
-    if [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$LNMP_K8S_LOCAL_INSTALL_OPTIONS" = "--crio" ];then
+    if [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
       set -x
       cd /tmp
       git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
@@ -346,7 +346,7 @@ jobs:
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server GENERATE_CLI_HELP=true
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=lwpm/kubernetes-server
