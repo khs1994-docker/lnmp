@@ -285,10 +285,11 @@ after_success:
 
   - |
     PRE_VERSION=v1.19.0-rc.3
-    if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.4' ];then
+    BASE_BRANCH=master
+    if [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$LNMP_K8S_LOCAL_INSTALL_OPTIONS" = "--crio" ];then
       set -x
       cd /tmp
-      git clone -b ${PRE_VERSION}-config --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+      git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
       cd lnmp-k8s
 
       stty size
@@ -299,13 +300,13 @@ after_success:
 
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
-      git push origin ${PRE_VERSION}-config:v$CI_KUBERNETES_VERSION-config -f
+      git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
 
       cd /tmp
       rm -rf lnmp-k8s
     fi
   - |
-    PRE_VERSION=v1.19.0-rc.4
+    PRE_VERSION=v1.19.0
     if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.0' ];then
       set -x
       cd /tmp
@@ -332,9 +333,9 @@ jobs:
     # https://kubernetes.io/docs/setup/release/version-skew-policy/#supported-versions
     # 只维护最新的 3 个版本
     # alpha version
-    - os: linux
-      dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0-rc.4 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+    # - os: linux
+    #   dist: focal
+    #   env: CI_KUBERNETES_VERSION=1.19.0-rc.4 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
     # next version
     - os: linux
       dist: focal
@@ -342,17 +343,20 @@ jobs:
     # current stable version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.6 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=lwpm/kubernetes-server
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.6 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server K8S_ROOT=/opt/k8s-custom
     # old version
+    - os: linux
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.18.8 LNMP_K8S_GET="--url"
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.17.9 LNMP_K8S_GET="--url"
@@ -361,8 +365,8 @@ jobs:
       env: CI_KUBERNETES_VERSION=1.16.13 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.19.0-rc.4 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
   - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+  # - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
 
 branches:
   only:
