@@ -19,7 +19,7 @@ $ ./lnmp-docker ssl-self docker.t.khs1994.com
 $ username=root ; password=root
 $ docker run --init --rm \
       --entrypoint htpasswd \
-      registry \
+      httpd:alpine \
       -Bbn $username $password > config/nginx/auth/docker_registry.htpasswd
 
 # 部分 nginx 可能不能解密，你可以替换为下面的命令
