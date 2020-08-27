@@ -51,12 +51,8 @@ require __DIR__.'/vendor/autoload.php';
 
 * [Renovate](https://github.com/marketplace/renovate)
 
-* [Dependabot](https://github.com/marketplace/dependabot)
-
-* [Aliyun CodePipeline](https://www.aliyun.com/product/codepipeline)
-
 * [Docker Build Powered By Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 
-* [Docker Build Powered By Docker Cloud](https://cloud.docker.com)
+* [Docker Build Powered By Docker Hub](https://hub.docker.com)
 
 * [Docker Build Powered By Aliyun Container Service](https://www.aliyun.com/product/containerservice)

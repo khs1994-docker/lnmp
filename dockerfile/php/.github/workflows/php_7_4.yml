@@ -185,7 +185,7 @@ jobs:
         FOLDER: 7.4
         PHP_TAG_VERSION: 7.4.9
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994/us-php # docker.pkg.github.com/khs1994-docker/php/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # docker.pkg.github.com/khs1994-docker/php/php
       name: 'Build Image'
       shell: bash
     - run: |

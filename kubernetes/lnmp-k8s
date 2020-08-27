@@ -150,12 +150,20 @@ _get_kubernetes_server_by_docker_image(){
   if [ -z "${K8S_IMAGE}" ];then
     if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
-      K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
       K8S_IMAGE=lwpm/kubernetes-${TYPE}
     else
       # 国外
-      # K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
       K8S_IMAGE=lwpm/kubernetes-${TYPE}
+    fi
+  fi
+
+  if [ -z "${K8S_IMAGE_REGISTRY}" ];then
+    if [ "${LNMP_CN_ENV}" != 'false' ];then
+      # 国内
+      K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
+    else
+      # 国外
+      K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
     fi
   fi
 

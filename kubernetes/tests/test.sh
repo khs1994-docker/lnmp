@@ -27,7 +27,7 @@ sleep 120
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
 ./lnmp-k8s delete
-./lnmp-k8s cleanup
+debug=true ./lnmp-k8s cleanup
 ./lnmp-k8s nfs down
 
 echo "==> Test noNFS volume"
