@@ -226,7 +226,7 @@ $ ./lnmp-docker down
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.5-management-alpine` | **3.8.5**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.4-alpine`             | **12.4**        |`alpine:3.12`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.0`                      | **4.4.0**       |`ubuntu:bionic`  |
-|[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        |`phpmyadmin/phpmyadmin:latest`     | **latest**      |`alpine:3.11`    |
+|[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        |`phpmyadmin:latest`                | **latest**      |`alpine:3.12`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
 
 ### 文件夹结构
@@ -245,7 +245,6 @@ $ ./lnmp-docker down
 
 * 80
 * 443
-* 8080 `PHPMyAdmin` (仅开发环境)
 
 ## 命令行工具
 

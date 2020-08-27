@@ -9,7 +9,7 @@
 编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名
 
 ```diff
-- LNMP_SERVICES="nginx mysql php7 redis phpmyadmin" # 默认配置
+- LNMP_SERVICES="nginx mysql php7 redis" # 默认配置
 
 + LNMP_SERVICES="httpd mysql php7 redis" # 使用 httpd 代替 nginx
 

@@ -5,7 +5,7 @@
 在 `.env` 文件中将 `supervisord` 包含进来。
 
 ```bash
-LNMP_SERVICES="nginx mysql php7 redis phpmyadmin supervisord"
+LNMP_SERVICES="nginx mysql php7 redis supervisord"
 ```
 
 配置文件位于 `config/supervisord/supervisord.ini`。

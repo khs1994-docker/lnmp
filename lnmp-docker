@@ -1269,7 +1269,7 @@ For information please run $ docker service update --help
     _docker_is_run
     init
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1290,7 +1290,7 @@ For information please run $ docker service update --help
     _docker_is_run
     init
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1315,7 +1315,7 @@ For information please run $ docker service update --help
   build-push )
     _docker_is_run; init
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1334,7 +1334,7 @@ For information please run $ docker service update --help
 
     sleep 2
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1351,7 +1351,7 @@ For information please run $ docker service update --help
     ;;
 
   service* )
-      echo ${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+      echo ${LNMP_SERVICES:-nginx mysql php7 redis}
     ;;
 
   env-file )
@@ -1363,7 +1363,7 @@ For information please run $ docker service update --help
     init
     # 判断架构
 
-    local service=${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+    local service=${LNMP_SERVICES:-nginx mysql php7 redis}
 
     if ! [ -z "$@" ];then
       service="$@"
@@ -1492,7 +1492,7 @@ https://khs1994-website.github.io/server-side-tls/ssl-config-generator/'
     _get_compose_options "docker-lnmp.yml" \
                          "docker-lnmp.override.yml"
 
-    docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php7 redis phpmyadmin}
+    docker-compose $options pull ${LNMP_SERVICES:-nginx mysql php7 redis}
 
     #@custom
     __lnmp_custom_pull "$@" 2>/dev/null || true

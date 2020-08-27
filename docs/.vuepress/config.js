@@ -65,6 +65,7 @@ module.exports = {
           collapsable: false,
           children: [
             '/development',
+            '/phpmyadmin',
             '/custom',
             '/lrew',
             '/backup',

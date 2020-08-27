@@ -41,7 +41,7 @@ services:
 
   phpmyadmin:
     << : *common
-    image: phpmyadmin/phpmyadmin:latest
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:latest
 
   nginx:
     << : *common

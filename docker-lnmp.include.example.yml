@@ -42,10 +42,6 @@ services:
   #   volumes:
   #     - git-sync-data:/app/git-sync
 
-  # nginx:
-  #   volumes:
-  #   - git-sync-data:/app/git-sync
-
   # composer:
   #   << : *php7
   #   volumes:
@@ -60,6 +56,16 @@ services:
   #     - ./data:/var/lib/mysql
 
 # More Demo
+
+  # phpmyadmin:
+  #   image: phpmyadmin:fpm-alpine
+  #   volumes:
+  #     - phpmyadmin:/var/www/html
+
+  # nginx:
+  #   volumes:
+  #   - git-sync-data:/app/git-sync
+  #   - phpmyadmin:/var/www/html
 
   swoole:
     << : *common
@@ -79,3 +85,4 @@ services:
 
 # volumes:
   # git-sync-data:
+  # phpmyadmin:

@@ -188,8 +188,8 @@
     "dest": "library-mirror/rabbitmq:3.8.5-management-alpine"
   },
   {
-    "source": "phpmyadmin/phpmyadmin:latest",
-    "dest": "phpmyadmin:latest"
+    "source": "library/phpmyadmin:latest",
+    "dest": "library-mirror/phpmyadmin:latest"
   },
   {
     "source": "minio/minio:RELEASE.2020-07-31T03-39-05Z",

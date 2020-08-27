@@ -767,7 +767,7 @@ if ($LNMP_SERVICES_CONTENT) {
   $LNMP_SERVICES = $LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }
 else {
-  $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis', 'phpmyadmin'
+  $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis'
 }
 
 if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
