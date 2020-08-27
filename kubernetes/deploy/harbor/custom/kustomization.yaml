@@ -7,7 +7,7 @@ patchesStrategicMerge:
 - secret/harbor-notary-server/patches.yaml
 - secret/harbor-clair/patches.yaml
 - trivy.yaml
-- statefulset.yaml
+- patch.yaml
 resources:
 - namespace.yaml
 - ingress.yaml

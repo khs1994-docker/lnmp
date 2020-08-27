@@ -33,7 +33,7 @@
       "url": "./scripts/docker-image-sync/config.schema.json"
     }
   ],
-  "yaml.trace.server": "verbose",
+  // "yaml.trace.server": "",
   "vs-kubernetes": {
     // "vs-kubernetes.kubectl-path": "C:\\bin\\kubectl.exe",
   },
