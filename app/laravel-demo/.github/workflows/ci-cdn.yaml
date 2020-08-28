@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - "master"
   pull_request:
 
 name: CI-CDN
@@ -15,8 +17,8 @@ jobs:
       - uses: docker-practice/actions-setup-docker@master
       - uses: khs1994-docker/actions-setup-lnmp@master
         with:
-          lnmp_services: "laravel nginx mysql php7 redis minio"
-          lrew_include: "laravel minio"
+          lnmp_services: "nginx mysql php7 redis minio"
+          lrew_include: "minio"
       - name: Init LNMP
         run: |
           set -x
@@ -31,9 +33,12 @@ jobs:
           echo "MINIO_SECRET_KEY=minioadmin" >> $LNMP_PATH/.env
           echo "MINIO_REGION=us-east-1" >> $LNMP_PATH/.env
           echo "MINIO_BROWSER=off" >> $LNMP_PATH/.env
+          echo "LNMP_MINIO_VERSION=latest" >> $LNMP_PATH/.env
 
           cp $LNMP_PATH/config/nginx/minio.config $LNMP_PATH/config/nginx/minio.conf
-          echo "ASSET_URL=https://minio.t.khs1994.com/laravel/asset/" >> $LNMP_PATH/lrew/laravel/.env.development
+
+          echo "ASSET_URL=https://minio.t.khs1994.com/laravel-docker/frontend-assets" \
+              >> $LNMP_PATH/lrew/laravel/.env.development
 
           cat <<EOF | tee -a $LNMP_PATH/lrew/laravel/.env.development
           AWS_ACCESS_KEY_ID=minioadmin
@@ -56,90 +61,68 @@ jobs:
 
           cd ..
           lnmp-laravel new laravel 7
-          cp -r laravel-demo/{.dockerignore,Dockerfile.backend} laravel/
-          cp -r laravel-demo/.test/* laravel/
+
+          cp -r laravel-demo/Dockerfile.cdn laravel/
+          cp -r laravel-demo/.patch/. laravel/
+
           ls -la laravel
           ls -la laravel/resources/views
           cd laravel
+
+          patch -p1 < ../laravel-demo/cdn-patch/config-app.patch
+
           lnmp-composer require --dev laravel/ui
           lnmp-composer require league/flysystem
           lnmp-composer require league/flysystem-aws-s3-v3
           lnmp-php artisan ui vue
           lnmp-npm i
+          lnmp-npm install laravel-mix-versionhash --save
           lnmp-npm run dev
-      - name: Build Frontend
-        run: |
-          set -x
-          cd ../laravel
-
-          npm i
-          npm run production
       - name: Test Laravel
         run: |
           set -x
           cd ../laravel
 
           lnmp-php artisan -V
-          echo "Test Laravel"
       - name: Build Docker Image
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
           set -x
+
           cd ../laravel
-          docker buildx build --load --target=laravel -t khs1994/laravel:6.0 -f Dockerfile.backend .
+
+          lnmp-docker up
+
+          export NODE_IP=`ifconfig eth0 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+
+          docker buildx build --load \
+              --add-host minio.local:${NODE_IP} \
+              \
+              --build-arg NODE_REGISTRY=https://registry.npmjs.org \
+              --target=laravel \
+              -t khs1994/laravel:7 \
+              -f Dockerfile.cdn . \
       - name: Up LNMP
         run: |
           set -x
 
+          export LNMP_SERVICES='nginx mysql php7 redis minio laravel'
+          export LREW_INCLUDE='minio laravel'
+
           lnmp-docker up
           sleep 30
-          lnmp-docker nginx-cli ls /app/laravel-docker/public || cat $LNMP_PATH/log/nginx/error.log
-      - name: New S3 Bucket
-        env:
-          mc: docker run --rm --network host -v minio:/root/.mc minio/mc --insecure
-        run: |
-          set -x
-          ${mc} config host add minio https://minio.t.khs1994.com minioadmin minioadmin
-          ${mc} config host list minio
-          ${mc} mb minio/laravel
-      - name: Upload to S3(CDN)
-        # 由于测试项目的 S3 位于本地，不能使用直接使用 actions
-        # 若 S3 位于公网，则可以使用
-        # uses: peter-evans/s3-backup@v1.0.0
-        env:
-          # ${{ secrets.S3_ACCESS_KEY_ID }}
-          ACCESS_KEY_ID: minioadmin
-          # ${{ secrets.S3_SECRET_ACCESS_KEY }}
-          SECRET_ACCESS_KEY: minioadmin
-          MIRROR_TARGET: laravel/asset/
-          MIRROR_SOURCE: '/home/runner/work/laravel-demo/laravel/public'
-          STORAGE_SERVICE_URL: 'https://minio.t.khs1994.com'
-          STORAGE_SERVICE_ALIAS: 'minio'
-        # with:
-        #   args: --overwrite # --remove
-        run: |
-          set -x
-          STORAGE_SERVICE_ALIAS=${STORAGE_SERVICE_ALIAS:="s3"}
-          STORAGE_SERVICE_URL=${STORAGE_SERVICE_URL:="https://s3.amazonaws.com"}
-          MIRROR_SOURCE=${MIRROR_SOURCE:="."}
-
-          export mc="docker run --rm --network host -v minio:/root/.mc -v $MIRROR_SOURCE:$MIRROR_SOURCE minio/mc --insecure"
-          echo "Execute mc mirror"
-          ${mc} mirror --overwrite "$MIRROR_SOURCE" "$STORAGE_SERVICE_ALIAS/$MIRROR_TARGET"
-      - name: Check S3 files
-        env:
-          mc: docker run --rm --network host -v minio:/root/.mc minio/mc --insecure
-        run: |
-          set -x
-          ${mc} ls -r minio/laravel
-          ${mc} policy set public minio/laravel
-          ${mc} policy get minio/laravel
+          lnmp-docker nginx-cli ls /app/laravel-docker/public \
+              || cat $LNMP_PATH/log/nginx/error.log
       - name: Connect
         run: |
           set -x
           docker ps -a
-          curl -sSk https://laravel-docker.t.khs1994.com
-          curl -sSk https://laravel-docker.t.khs1994.com/test
-          curl -sSk https://laravel-docker.t.khs1994.com/test/view
-          curl -sSk https://laravel-docker.t.khs1994.com/test/s3
+          curl -k https://laravel-docker.t.khs1994.com
+          curl -k https://laravel-docker.t.khs1994.com/test
+          curl -k https://laravel-docker.t.khs1994.com/test/view
+          curl -k https://laravel-docker.t.khs1994.com/test/s3
+
+          docker run -i --rm --entrypoint=sh khs1994/laravel:7 -c "ls -la /app/laravel-docker"
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v2

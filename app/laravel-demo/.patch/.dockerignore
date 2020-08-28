@@ -32,3 +32,5 @@ phpunit.xml
 .env.*
 
 server.php
+
+README.md

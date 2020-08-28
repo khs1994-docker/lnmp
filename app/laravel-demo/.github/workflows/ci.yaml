@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - "master"
   pull_request:
 
 name: CI
@@ -36,14 +38,17 @@ jobs:
 
           cd ..
           lnmp-laravel new laravel 7
-          cp -r laravel-demo/{.dockerignore,Dockerfile,Dockerfile.buildkit} laravel/
-          cp -r laravel-demo/.test/* laravel/
+
+          cp -r laravel-demo/{Dockerfile,Dockerfile.buildkit} laravel/
+          cp -r laravel-demo/.patch/. laravel/
+
           ls -la laravel
           ls -la laravel/resources/views
           cd laravel
           lnmp-composer require laravel/ui
           lnmp-php artisan ui vue
           lnmp-npm install
+          lnmp-npm install laravel-mix-versionhash --save
           lnmp-npm run dev
       - name: Test Laravel
         run: |
@@ -51,15 +56,18 @@ jobs:
           cd ../laravel
 
           lnmp-php artisan -V
-          echo "Test Laravel"
       - name: Build Docker Image
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
           set -x
           cd ../laravel
-          docker buildx build --load --target=laravel -t khs1994/laravel:6.0 -f Dockerfile.buildkit .
-      - name: Up
+          docker buildx build --load \
+              --build-arg NODE_REGISTRY=https://registry.npmjs.org \
+              --target=laravel \
+              -t khs1994/laravel:7 \
+              -f Dockerfile.buildkit .
+      - name: Up LNMP
         run: |
           set -x
 
@@ -71,6 +79,10 @@ jobs:
           set -x
           sleep 30
           docker ps -a
-          curl -sSk https://laravel-docker.t.khs1994.com
-          curl -sSk https://laravel-docker.t.khs1994.com/test
-          curl -sSk https://laravel-docker.t.khs1994.com/test/view
+          curl -k https://laravel-docker.t.khs1994.com
+          curl -k https://laravel-docker.t.khs1994.com/test
+          curl -k https://laravel-docker.t.khs1994.com/test/view
+
+          docker run -i --rm --entrypoint=sh khs1994/laravel:7 -c "ls -la /app/laravel-docker"
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v2

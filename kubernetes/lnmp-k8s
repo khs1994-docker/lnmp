@@ -820,15 +820,16 @@ _crictl_install(){
 
   print_info "install crictl ..."
 
-  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = "876dd2b3d0d1c2590371f940fb1bf1fbd5f15aebfbe456703ee465d959700f4a" ];then
-      if [ $GOARCH = 'amd64' ];then
-        $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
-        __download
-      fi
-    fi
-  else
+  # if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+    # local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    # if ! [ $sha256 = "876dd2b3d0d1c2590371f940fb1bf1fbd5f15aebfbe456703ee465d959700f4a" ];then
+    #   if [ $GOARCH = 'amd64' ];then
+    #     $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+    #     __download
+    #   fi
+    # fi
+  # else
+  if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
       __download
   fi
 

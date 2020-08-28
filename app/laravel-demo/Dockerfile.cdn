@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:experimental
+
 # 此 Dockerfile 使用了多阶段构建，同时构建了 PHP 及 NGINX 两个镜像
 #
 # @link https://docs.docker.com/engine/reference/builder/
@@ -9,14 +11,13 @@
 # !! 搜索 /app/laravel-docker 替换为自己的项目目录 !!
 # 此 Dockerfile 专为 CI 环境设计（国外），请通过 --build-arg ARG=value 设置国内镜像
 #
-# $ docker build --target=laravel -t khs1994/laravel:7 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
+# $ docker buildx build --target=laravel --load -t khs1994/laravel:7 -f Dockerfile.cdn --build-arg CI=false .
 
-ARG NODE_VERSION=14.8.0
 ARG PHP_VERSION=7.4.9
 ARG NGINX_VERSION=1.19.2-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
-# 1.前端构建
+# 1.前端构建，并上传到 CDN
 FROM node:${NODE_VERSION:-14.8.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
@@ -25,18 +26,49 @@ ARG NODE_REGISTRY=https://registry.npmjs.org
 # COPY package.json webpack.mix.js package-lock.json /app/
 COPY package.json webpack.mix.js /app/
 
-RUN set -x ; cd /app \
+RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
+    --mount=type=cache,target=/root/.npm,id=npm_caches \
+      set -x ; cd /app \
       # && yarn install \
       && npm install --registry=${NODE_REGISTRY}
 
 COPY resources/ /app/resources/
 
-RUN set -x ; cd /app \
+RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
+      set -x ; cd /app \
 # File.exists('./artisan'); 如果 artisan 文件存在，则说明是 laravel 项目
       && touch artisan \
       && mkdir -p public \
       # && yarn production \
       && npm run production
+
+FROM minio/mc as frontend-assets-uploader
+
+COPY --from=frontend /app/public/js/ /app/laravel-docker/public/js/
+COPY --from=frontend /app/public/css/ /app/laravel-docker/public/css/
+COPY --from=frontend /app/public/mix-manifest.json /app/laravel-docker/public/mix-manifest.json
+
+# 上传密钥等变量设置
+# 这里为了方便直接给出默认值，实际使用时请通过 --build-arg 传递
+ARG ACCESS_KEY_ID=minioadmin
+
+ARG SECRET_ACCESS_KEY=minioadmin
+
+ARG CDN_HOST=https://minio.local
+
+ARG CDN_BUCKET=laravel-docker
+
+RUN  set -x \
+# 如果域名能通过 DNS 解析则 mc 不会使用 /etc/hosts
+     && mc --insecure config host add minio ${CDN_HOST} $ACCESS_KEY_ID $SECRET_ACCESS_KEY \
+     && mc config host list minio \
+     && mc --insecure mb --ignore-existing minio/${CDN_BUCKET} \
+     && mc --insecure mirror --overwrite /app/laravel-docker/public/js \
+                                         minio/${CDN_BUCKET}/frontend-assets/js/ \
+     && mc --insecure mirror --overwrite /app/laravel-docker/public/css \
+                                         minio/${CDN_BUCKET}/frontend-assets/css/ \
+#     && mc --insecure ls -r minio/${CDN_BUCKET}/frontend-assets \
+     && mc --insecure policy set public minio/${CDN_BUCKET}
 
 # 2.安装 composer 依赖
 FROM ${DOCKER_HUB_USERNAME}/php:7.4.9-composer-alpine as composer
@@ -47,7 +79,8 @@ COPY database/ /app/database/
 
 ARG CI=true
 
-RUN set -x ; cd /app \
+RUN --mount=type=cache,target=/tmp,id=laravel_caches \
+      set -x && cd /app \
       && composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/ \
       && if [ $CI = 'true' ];then composer config -g --unset repos.packagist; fi \
       && composer install --no-dev \
@@ -63,11 +96,10 @@ FROM ${DOCKER_HUB_USERNAME}/php:${PHP_VERSION}-fpm-alpine as laravel
 
 COPY . /app/laravel-docker/
 COPY --from=composer /app/vendor/ /app/laravel-docker/vendor/
-COPY --from=frontend /app/public/js/ /app/laravel-docker/public/js/
-COPY --from=frontend /app/public/css/ /app/laravel-docker/public/css/
-COPY --from=frontend /app/public/mix-manifest.json /app/laravel-docker/public/mix-manifest.json
+COPY --from=frontend-assets-uploader /app/laravel-docker/public/mix-manifest.json /app/laravel-docker/public/mix-manifest.json
 
 VOLUME /app/laravel-docker/storage/framework/views
+VOLUME /app/laravel-docker/bootstrap/cache
 
 ENTRYPOINT [ "sh", "/app/laravel-docker/.docker/docker-entrypoint.sh" ]
 

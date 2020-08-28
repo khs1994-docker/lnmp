@@ -5,7 +5,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    return 1;
+    return '1';
 });
 
 Route::get('/test/view', function () {
@@ -13,5 +13,5 @@ Route::get('/test/view', function () {
 });
 
 Route::get('/test/s3', function () {
-    return Storage::disk('s3')->allFiles();
+    return Storage::disk('s3')->getPath('1.txt');
 });

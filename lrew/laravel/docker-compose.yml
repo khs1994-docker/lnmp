@@ -21,9 +21,10 @@ services:
     volumes:
       - laravel_public:/app/laravel-docker/public
       - ./lrew/laravel/config/laravel.conf:/etc/nginx/conf.d/laravel.conf
+
   laravel:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/laravel:6.0"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/laravel:7"
     volumes:
       # fpm config
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
@@ -34,12 +35,13 @@ services:
       # log,etc
       - ./log/php:/var/log/php:cached
       - ./lrew/laravel/.env.development:/app/laravel-docker/.env.development
-      - laravel_cache_views:/app/laravel-docker/storage/framework/views
+      - laravel_views_cache:/app/laravel-docker/storage/framework/views
+      - laravel_bootstrap_cache:/app/laravel-docker/bootstrap/cache
       - type: volume
         source: laravel_public
-        target: /app/laravel-docker/public
+        target: /app/laravel-docker-public-volume
         volume:
-          nocopy: false
+          nocopy: true
     expose:
       - "9000"
     command: php-fpm -R -F
@@ -52,4 +54,5 @@ services:
 
 volumes:
   laravel_public:
-  laravel_cache_views:
+  laravel_views_cache:
+  laravel_bootstrap_cache:
