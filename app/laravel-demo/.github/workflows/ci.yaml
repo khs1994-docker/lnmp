@@ -40,13 +40,16 @@ jobs:
           lnmp-laravel new laravel 7
 
           cp -r laravel-demo/{Dockerfile,Dockerfile.buildkit} laravel/
-          cp -r laravel-demo/.patch/. laravel/
 
           ls -la laravel
           ls -la laravel/resources/views
           cd laravel
           lnmp-composer require laravel/ui
+          # 此步骤会重置 webpack.mix.js
           lnmp-php artisan ui vue
+
+          cp -r ../laravel-demo/.patch/. .
+
           lnmp-npm install
           lnmp-npm install laravel-mix-versionhash --save
           lnmp-npm run dev
