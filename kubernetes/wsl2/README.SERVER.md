@@ -20,7 +20,7 @@
 
 ## 初始化
 
-```bash
+```powershell
 $ ./lnmp-k8s
 ```
 
@@ -38,8 +38,9 @@ WINDOWS_IP windows.k8s.khs1994.com
 $ cd ~/lnmp
 
 # $ $env:REGISTRY_MIRROR="xxxx.mirror.aliyuncs.com"
+# $ $env:REGISTRY_MIRROR="mirror.baidubce.com"
 
-$ . ./windows/sdk/dockerhub/rootfs
+$ . ../windows/sdk/dockerhub/rootfs
 
 $ wsl --import wsl-k8s `
     C:/wsl-k8s `
@@ -62,7 +63,7 @@ $ wsl -d wsl-k8s-data -- uname -a
 
 ## WSL(wsl-k8s) 修改 APT 源并安装必要软件
 
-```bash
+```powershell
 $ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
 
 $ wsl -d wsl-k8s -- apt update
@@ -76,7 +77,9 @@ $ wsl -d wsl-k8s -- apt install procps
 下载并编辑 `/etc/wsl.conf`
 
 ```bash
-$ sudo curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
+$ apt install curl vim
+
+$ curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
 ```
 
 ```diff
@@ -84,7 +87,7 @@ $ sudo curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/ln
 + root = /
 ```
 
-```bash
+```powershell
 $ wsl --shutdown
 ```
 
@@ -142,13 +145,13 @@ $ wsl -d wsl-k8s
 $ set -x
 $ source wsl2/.env
 
-$ sudo mkdir -p ${K8S_ROOT:?err}
-$ sudo mkdir -p ${K8S_ROOT:?err}/{certs,conf,bin,log}
-$ sudo cp -a wsl2/certs ${K8S_ROOT:?err}/
-$ sudo mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
-$ sudo mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
+$ mkdir -p ${K8S_ROOT:?err}
+$ mkdir -p ${K8S_ROOT:?err}/{certs,conf,bin,log}
+$ cp -a wsl2/certs ${K8S_ROOT:?err}/
+$ mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
+$ mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
 
-$ sudo cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
+$ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
 ## Windows 启动 Etcd

@@ -88,7 +88,8 @@ RUN --mount=type=cache,target=/tmp,id=laravel_caches \
              --prefer-dist \
              --no-interaction \
              --no-scripts \
-             --no-plugins
+             --no-plugins \
+             --optimize-autoloader
 
 # 3.将项目打入 PHP 镜像
 # $ docker build -t khs1994/laravel:TAG --target=laravel .
@@ -96,10 +97,10 @@ FROM ${DOCKER_HUB_USERNAME}/php:${PHP_VERSION}-s6-alpine as laravel
 
 COPY . /app/laravel-docker/
 COPY --from=composer /app/vendor/ /app/laravel-docker/vendor/
+# 不从 frontend 复制是为了触发 frontend-assets-uploader
 COPY --from=frontend-assets-uploader /app/laravel-docker/public/mix-manifest.json /app/laravel-docker/public/mix-manifest.json
 
 VOLUME /app/laravel-docker/storage/framework/views
-VOLUME /app/laravel-docker/bootstrap/cache
 
 ENTRYPOINT [ "sh", "/app/laravel-docker/.docker/docker-entrypoint.sh" ]
 

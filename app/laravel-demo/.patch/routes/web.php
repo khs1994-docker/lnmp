@@ -38,3 +38,7 @@ Route::get('/test/queue/result', function () {
 Route::get('/test/schedule/result', function () {
     return \Storage::disk('local')->get('schedule.txt');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -25,6 +25,8 @@
 ### 设置 PATH
 
 ```bash
+$ wsl -d wsl-k8s
+
 $ vim ~/.bashrc
 
 export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
@@ -33,13 +35,13 @@ export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ### 复制文件
 
 ```bash
-$ wsl
+$ wsl -d wsl-k8s
 
 $ set -x
 $ source ./wsl2/.env
 
-$ sudo mkdir -p ${K8S_ROOT:?err}/bin
-$ sudo cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
+$ mkdir -p ${K8S_ROOT:?err}/bin
+$ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
 ```
 
 在 `Windows` 中执行
@@ -53,7 +55,7 @@ $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ### join
 
 ```bash
-$ wsl
+$ wsl -d wsl-k8s
 
 $ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 ```
@@ -121,7 +123,7 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 
 ## 4. 信任证书
 
-```bash
+```powershell
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 
 NAME        AGE    REQUESTOR                 CONDITION
@@ -132,10 +134,8 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_N
 
 ## 5. 部署 CNI -- calico
 
-```bash
+```powershell
 $ kubectl apply -k addons/cni/calico-custom
-
-$ git checkout -- addons/cni/calico-custom
 ```
 
 > 若不能正确匹配网卡，请修改 `calico.yaml` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
@@ -144,7 +144,7 @@ $ git checkout -- addons/cni/calico-custom
 
 将 WSL2 K8S 配置写入 `~/.kube/config`
 
-```bash
+```powershell
 $ ./wsl2/bin/kubectl-config-set-cluster
 ```
 
@@ -160,7 +160,7 @@ $ ./wsl2/bin/wsl-k8s kubectl
 ## 7. crictl
 
 ```powershell
-$ ./wsl2/bin/crictl
+$ ./wsl2/bin/wsl-k8s crictl
 ```
 
 ## 组件启动方式总结
@@ -238,7 +238,7 @@ $ ./wsl2/bin/kube-node
 
 由于 WSL2 IP 不能固定, 每次重启时 **必须** 签署 kubelet 证书:
 
-```bash
+```powershell
 # 获取 csr
 $ ./wsl2/bin/kubectl-get-csr
 
@@ -248,7 +248,7 @@ csr-9pvrm   11m    system:node:wsl2          Pending
 
 根据提示 **签署** 证书,一般为最后一个
 
-```bash
+```powershell
 $ ./wsl2/bin/wsl-k8s kubectl certificate approve csr-9pvrm
 ```
 

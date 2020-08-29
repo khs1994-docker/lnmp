@@ -246,7 +246,7 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
     return
   fi
 
-  test $GOOS != 'linux' && exit
+  # test $GOOS != 'linux' && exit
 
   # command -v docker > /dev/null
 
@@ -533,7 +533,7 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   return 1;
 fi
 
-httpCode=`curl -sI ${1}/v${ETCD_VERSION}/${TAR_FILE} | head -1 | awk '{print $2}'`
+httpCode=`curl -sI ${1} | head -1 | awk '{print $2}'`
 
 if [ $httpCode != 200 ];then
   echo 'cn mirror http response code is not 200, not use'
@@ -678,8 +678,20 @@ _gvisor_install(){
 _runc_install(){
   if [ `command -v runc` ];then print_info "runc already install";\
     runc --version;return; fi
-  # print_info "install runc ..."
-  print_info "runc not found, please install docker-ce first"
+
+  if ! [ "$GOARCH" = 'amd64' ];then
+    # print_info "install runc ..."
+    print_info "runc not found, please install docker-ce first"
+
+    return
+  fi
+
+  $(_sudo) $(_curl) https://github.com/opencontainers/runc/releases/download/v1.0.0-rc92/runc.amd64 \
+    -o /usr/bin/runc
+
+  $(_sudo) chmod +x /usr/bin/runc
+
+  runc --version
 }
 
 _containerd_install(){

@@ -55,7 +55,8 @@ RUN set -x ; cd /app \
              --prefer-dist \
              --no-interaction \
              --no-scripts \
-             --no-plugins
+             --no-plugins \
+             --optimize-autoloader
 
 # 3.将项目打入 PHP 镜像
 # $ docker build -t khs1994/laravel:TAG --target=laravel .

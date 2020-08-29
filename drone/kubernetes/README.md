@@ -4,9 +4,7 @@
 
 数据存放于 hostPath `/var/lib/ci/XXX`，根据实际自行更改。
 
-## 创建 ns
-
-创建 k8s namespace
+## 创建 k8s namespace
 
 ```bash
 $ kubectl create ns ci
@@ -21,7 +19,8 @@ $ kubectl apply -n ci -k mysql
 默认密码 `mytest`，手动进入创建 `gogs` `drone` `droneKubenative` 数据库 
 
 ```bash
-$ kubectl -n ci exec -it mysql-xxxx sh
+$ kubectl get pod -n ci
+$ kubectl -n ci exec -it mysql-xxxx -- sh
 
 $ mysql -uroot -pmytest
 

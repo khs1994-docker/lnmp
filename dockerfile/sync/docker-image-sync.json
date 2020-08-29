@@ -255,6 +255,10 @@
     "dest": "library-mirror/caddy:alpine"
   },
   {
+    "source": "library/debian:sid",
+    "dest": "library-mirror/debian:sid"
+  },
+  {
     "source": "lrew/lrew:latest",
     "dest": "lrew/lrew:latest"
   },

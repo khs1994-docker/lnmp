@@ -36,7 +36,6 @@ services:
       - ./log/php:/var/log/php:cached
       - ./lrew/laravel/.env.development:/app/laravel-docker/.env.development
       - laravel_views_cache:/app/laravel-docker/storage/framework/views
-      - laravel_bootstrap_cache:/app/laravel-docker/bootstrap/cache
       - type: volume
         source: laravel_public
         target: /app/laravel-docker-public-volume
@@ -49,6 +48,7 @@ services:
     command: php-fpm -R -F
     environment:
       - APP_ENV=development
+      - APP_DEBUG=${APP_DEBUG:-false}
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
@@ -57,6 +57,5 @@ services:
 volumes:
   laravel_public:
   laravel_views_cache:
-  laravel_bootstrap_cache:
   laravel-vscode-server:
   # laravel-vscode-server-insiders:

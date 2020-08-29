@@ -22,7 +22,7 @@ if (!$?) {
   wsl -d wsl-k8s -- sh -c "mountpoint -q /c"
 
   if (!$?) {
-    Write-Warning "==> mount is error, please check WSL dist (wsl-k8s) [ /etc/wsl.conf ], please see README.SERVER.md"
+    Write-Warning "==> WSL2 Windows disk mount point is not / , please check WSL dist (wsl-k8s) [ /etc/wsl.conf ], please see README.SERVER.md"
 
     exit 1
   }

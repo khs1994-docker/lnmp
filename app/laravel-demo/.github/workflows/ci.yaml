@@ -49,7 +49,7 @@ jobs:
 
           lnmp-composer require laravel/ui
           # 此步骤会重置 webpack.mix.js
-          lnmp-php artisan ui vue
+          lnmp-php artisan ui vue --auth
 
           cp -r ../laravel-demo/.patch/. .
 
@@ -86,9 +86,13 @@ jobs:
           sleep 30
           docker ps -a
 
+          echo ::group::Test /
           curl -k https://laravel-docker.t.khs1994.com
+          echo ::endgroup::
 
+          echo ::group::Test Response
           curl -k https://laravel-docker.t.khs1994.com/test
+          echo ::endgroup::
 
           echo ::group::Test View
           curl -k https://laravel-docker.t.khs1994.com/test/view

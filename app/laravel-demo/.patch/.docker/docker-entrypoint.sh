@@ -4,6 +4,15 @@ APP_PATH=/app/laravel-docker
 
 APP_OWN=www-data:www-data
 
+# laravel production cache
+cd $APP_PATH
+php artisan config:cache # config:clear
+php artisan view:cache # view:clear
+# 路由包含闭包无法缓存
+# php artisan route:cache # route:clear
+
+cd /app
+
 # nginx public
 cp -a ${APP_PATH}/public/. ${APP_PATH}-public-volume
 

@@ -44,14 +44,14 @@ $ containerd --register-service
 * https://github.com/containernetworking/plugins/releases
 * https://github.com/microsoft/windows-container-networking
 
-## kubelet kube-proxy
+## 获取 kubelet kube-proxy
 
 ```bash
 $ cd ~/lnmp/kubernetes
 
 $ wsl
 
-$ ./lnmp-k8s kubernetes-server --url windows amd64 node
+$ ./lnmp-k8s kubernetes-server windows amd64 node
 
 # ~/lnmp/kubernetes/kubernetes-release/release/v.x.y.z-windows-amd64
 

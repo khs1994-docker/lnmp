@@ -72,11 +72,11 @@ jobs:
           patch -p1 < ../laravel-demo/cdn-patch/config-app.patch
           patch -p1 < ../laravel-demo/patch/app-console-kernel.patch
 
-          lnmp-composer require --dev laravel/ui
+          lnmp-composer require laravel/ui
           lnmp-composer require league/flysystem
           lnmp-composer require league/flysystem-aws-s3-v3
           # 此步骤会重置 webpack.mix.js
-          lnmp-php artisan ui vue
+          lnmp-php artisan ui vue --auth
 
           cp -r ../laravel-demo/.patch/. .
 
@@ -124,9 +124,13 @@ jobs:
           set -x
           docker ps -a
 
+          echo ::group::Test /
           curl -k https://laravel-docker.t.khs1994.com
+          echo ::endgroup::
 
+          echo ::group::Test Response
           curl -k https://laravel-docker.t.khs1994.com/test
+          echo ::endgroup::
 
           echo ::group::Test View
           curl -k https://laravel-docker.t.khs1994.com/test/view

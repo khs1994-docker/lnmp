@@ -37,12 +37,15 @@ $ echo_supervisord_conf | sudo tee /etc/supervisord.conf
 # 加入以下内容
 [include]
 files = /etc/supervisor.d/*.ini
+```
 
-# 启动服务端
+**启动服务端**
+
+```bash
 $ sudo supervisord -u root -c /etc/supervisord.conf
 ```
 
-关闭服务端
+**关闭服务端**
 
 ```bash
 $ sudo supervisorctl shutdown
