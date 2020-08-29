@@ -9,6 +9,11 @@
 
 默认的使用 `phpmyadmin:latest` 镜像体积很大，可以用 `phpmyadmin:fpm-alpine` 配合 `nginx` 来使用
 
+```bash
+phpmyadmin                   fpm-alpine                     acaf66e70db5        2 days ago          141MB
+phpmyadmin                   latest                         e8e3976e7f7f        2 days ago          469MB
+```
+
 ```yaml
 # docker-lnmp.include.yml
 

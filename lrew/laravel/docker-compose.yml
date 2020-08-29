@@ -42,6 +42,8 @@ services:
         target: /app/laravel-docker-public-volume
         volume:
           nocopy: true
+      - laravel-vscode-server:/root/.vscode-server
+      # - laravel-vscode-server-insiders:/root/.vscode-server-insiders
     expose:
       - "9000"
     command: php-fpm -R -F
@@ -56,3 +58,5 @@ volumes:
   laravel_public:
   laravel_views_cache:
   laravel_bootstrap_cache:
+  laravel-vscode-server:
+  # laravel-vscode-server-insiders:

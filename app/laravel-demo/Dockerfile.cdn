@@ -92,7 +92,7 @@ RUN --mount=type=cache,target=/tmp,id=laravel_caches \
 
 # 3.将项目打入 PHP 镜像
 # $ docker build -t khs1994/laravel:TAG --target=laravel .
-FROM ${DOCKER_HUB_USERNAME}/php:${PHP_VERSION}-fpm-alpine as laravel
+FROM ${DOCKER_HUB_USERNAME}/php:${PHP_VERSION}-s6-alpine as laravel
 
 COPY . /app/laravel-docker/
 COPY --from=composer /app/vendor/ /app/laravel-docker/vendor/

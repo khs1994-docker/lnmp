@@ -21,7 +21,7 @@
 
 `log/run` 启动日志服务
 
-## env
+## s6-overlay
 
 默认的 `S6_KEEP_ENV` 为 `0`，意味着各个脚本将无法使用环境变量。你可以将其设置为 `1`，或者脚本以 `#!/usr/bin/with-contenv sh` 开头。
 

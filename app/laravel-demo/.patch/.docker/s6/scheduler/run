@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+cp /etc/services.d/scheduler/crontab /var/spool/cron/crontabs/root
+
+exec /usr/sbin/crond -fS

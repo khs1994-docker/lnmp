@@ -70,6 +70,7 @@ jobs:
           cd laravel
 
           patch -p1 < ../laravel-demo/cdn-patch/config-app.patch
+          patch -p1 < ../laravel-demo/patch/app-console-kernel.patch
 
           lnmp-composer require --dev laravel/ui
           lnmp-composer require league/flysystem
@@ -118,14 +119,30 @@ jobs:
           sleep 30
           lnmp-docker nginx-cli ls /app/laravel-docker/public \
               || cat $LNMP_PATH/log/nginx/error.log
-      - name: Connect
+      - name: Connect and Test
         run: |
           set -x
           docker ps -a
+
           curl -k https://laravel-docker.t.khs1994.com
+
           curl -k https://laravel-docker.t.khs1994.com/test
+
+          echo ::group::Test View
           curl -k https://laravel-docker.t.khs1994.com/test/view
-          curl -k https://laravel-docker.t.khs1994.com/test/s3
+          echo ::endgroup::
+
+          echo ::group::Test Queue
+          curl -k https://laravel-docker.t.khs1994.com/test/queue
+          sleep 2
+          curl -k https://laravel-docker.t.khs1994.com/test/queue/result
+          echo ::endgroup::
+
+          echo ::group::Test Schedule
+          curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
+          sleep 55
+          curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
+          echo ::endgroup::
 
           docker run -i --rm --entrypoint=sh khs1994/laravel:7 -c "ls -la /app/laravel-docker"
       # - name: Setup tmate session
