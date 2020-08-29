@@ -135,6 +135,8 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_N
 ## 5. 部署 CNI -- calico
 
 ```powershell
+$ update-alternatives --set iptables /usr/sbin/iptables-legacy
+
 $ kubectl apply -k addons/cni/calico-custom
 ```
 
