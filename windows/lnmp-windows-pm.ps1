@@ -738,9 +738,15 @@ function _push($opt) {
       }
 
       $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
+      # tmp/linux-amd64/pkg/README.md
+      # tmp/linux-amd64/pkg/pkg.psm1
       Set-Location $lwpm_temp\..\
+      # tmp/linux-amd64
       write-host "==> Handle lwpm pkg script" -ForegroundColor Green
       tar -zcvf script.tar.gz $soft
+      # pkg/
+      #    /README.md
+      #    /pkg.psm1
       Move-Item script.tar.gz $script_tar_file
 
       ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw) | `
@@ -756,7 +762,7 @@ function _push($opt) {
       # pkg/dist/linux-amd64/dist.tar.gz
       write-host "==> found platform .tar.gz file, use it" -ForegroundColor Blue
       # tmp/linux-amd64/pkg/dist/dist.tar.gz
-      Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+      # Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
 
       foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
         write-host "==> Add already exists .tar.gz file: $item" -ForegroundColor Blue
@@ -774,7 +780,7 @@ function _push($opt) {
     elseif (Test-Path $pkg_root\dist) {
       # pkg/dist/file
       write-host "==> NO platform file" -ForegroundColor Blue
-      # tmp/linux-amd64/pkg/dist
+      # tmp/linux-amd64/pkg/dist/file
       try { Copy-Item -r $pkg_root\dist   $lwpm_temp }catch { }
     }
 
@@ -785,10 +791,23 @@ function _push($opt) {
       # tmp/linux-amd64
       write-host "==> Handle lwpm pkg dist" -ForegroundColor Green
       tar -zcvf dist.tar.gz $soft/dist
+      # pkg/
+      #    /dist
+      #         /file
       Move-Item dist.tar.gz $dist_tar_file
 
       $layers_file += , $dist_tar_file
+      # 1.
+      # tmp/dist/pkg/linux-amd64/dist.tar.gz
+      # tmp/dist/pkg/linux-amd64/script.tar.gz
     }
+
+    # 2.
+    # pkg/dist/linux-amd64/*.tar.gz
+    # tmp/dist/pkg/linux-amd64/script.tar.gz
+
+    # 3.
+    # tmp/dist/pkg/linux-amd64/script.tar.gz
 
     $layers_file += , $script_tar_file
 

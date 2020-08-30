@@ -28,6 +28,7 @@ RUN set -x \
   # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/441.diff -O \
   # && patch -p1 < 441.diff \
   \
+  && sed -i "s/libtinfo.so/libisl.so.15.3.0/g"  auto/modules/php \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php80 \

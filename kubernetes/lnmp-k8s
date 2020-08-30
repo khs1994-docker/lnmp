@@ -147,30 +147,23 @@ _get_kubernetes_server_by_docker_image(){
      return
   fi
 
-  if [ -z "${K8S_IMAGE}" ];then
-    if [ "${LNMP_CN_ENV}" != 'false' ];then
-      # 国内
-      K8S_IMAGE=lwpm/kubernetes-${TYPE}
-    else
-      # 国外
-      K8S_IMAGE=lwpm/kubernetes-${TYPE}
-    fi
+  if [ -z "${K8S_IMAGE_NS}" ];then
+      K8S_IMAGE_NS=lwpm
   fi
 
   if [ -z "${K8S_IMAGE_REGISTRY}" ];then
     if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
       K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
-    else
+    # else
       # 国外
-      K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
+      # K8S_IMAGE_REGISTRY="useccr.ccs.tencentyun.com"
     fi
   fi
 
-  # docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:${KUBERNETES_VERSION}
+  # docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE_NS}/kubernetes-${TYPE}:${KUBERNETES_VERSION}
   # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   # docker container create --name khs1994-kubernetes-${TYPE} \
-  #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
   # docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
   # docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
   # docker container rm khs1994-kubernetes-${TYPE}
@@ -180,7 +173,7 @@ _get_kubernetes_server_by_docker_image(){
   local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
   dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
-  ${K8S_IMAGE} \
+  ${K8S_IMAGE_NS}/kubernetes-${TYPE} \
   ${KUBERNETES_VERSION} \
   ${GOARCH} \
   ${GOOS} \
@@ -413,27 +406,27 @@ _create_lnmp(){
     --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf \
     --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json \
     --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini \
-    --dry-run=client -o yaml \
+    --dry-run -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-php-conf app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf \
     --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf \
-    --dry-run=client -o yaml \
+    --dry-run -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf app=lnmp version=0.0.1 $@ || true
 
   CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf \
     --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf \
-    --dry-run=client -o yaml \
+    --dry-run -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf app=lnmp version=0.0.1 $@ || true
 
   kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf.d \
     --from-file=deployment/configMap/nginx-conf-d \
-    --dry-run=client -o yaml \
+    --dry-run -o yaml \
     | kubectl -n $NAMESPACE apply -f - $options
   kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d app=lnmp version=0.0.1 $@ || true
 
