@@ -24,7 +24,7 @@ services:
 
   laravel:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/laravel:7"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/laravel:${LNMP_LARAVEL_TAG:-7}"
     volumes:
       # fpm config
       - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
@@ -46,6 +46,10 @@ services:
     expose:
       - "9000"
     command: php-fpm -R -F
+    # entrypoint:
+    #   - sh
+    #   - -c
+    #   - sleep 3600000
     environment:
       - APP_ENV=development
       - APP_DEBUG=${APP_DEBUG:-false}
@@ -53,6 +57,22 @@ services:
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
     working_dir: /app
+    cap_add:
+      - CAP_SETGID
+    depends_on:
+      - laravel-chown
+
+  laravel-chown:
+    image: busybox
+    command:
+      - sh
+      - -c
+      - |
+        chown 82:82 /app/laravel-docker/storage/framework/views
+        chown -R 82:82 /app/laravel-docker-public-volume
+    volumes:
+        - laravel_views_cache:/app/laravel-docker/storage/framework/views
+        - laravel_public:/app/laravel-docker-public-volume
 
 volumes:
   laravel_public:

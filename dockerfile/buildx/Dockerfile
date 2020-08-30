@@ -9,3 +9,5 @@ RUN --mount=type=cache,target=/root/.cache ls -la /root/.cache \
       && echo 1 > /root/.cache/1.txt
 
 RUN --mount=type=tmpfs,target=/tmpfs ls -la /tmpfs
+
+RUN --mount=type=bind,from='',source='',target='',rw

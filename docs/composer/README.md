@@ -15,11 +15,11 @@ $ composer install \
 ```bash
 $ composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/
 
-$ composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu.edu.cn
-
 $ composer config -g repos.packagist composer https://mirrors.huaweicloud.com/repository/php/
 
 $ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
+
+$ composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu.edu.cn
 
 $ composer config -g repos.packagist composer https://packagist.phpcomposer.com
 ```

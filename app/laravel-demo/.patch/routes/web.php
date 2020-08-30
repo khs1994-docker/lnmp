@@ -39,6 +39,10 @@ Route::get('/test/schedule/result', function () {
     return \Storage::disk('local')->get('schedule.txt');
 });
 
+Route::get('/test/rootless/result', function () {
+    return \Storage::disk('local')->get('rootless.txt');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

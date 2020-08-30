@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+# 这个文件所在的目录
+pwd
+
+mkdir -p crontabs
+
+cp -a crontab crontabs/www-data
+
+if [ "${APP_DEBUG}" = 'true' ];then
+    /usr/sbin/crond -f -c $PWD/crontabs -l 8
+
+    exit 1
+fi
+
+/usr/sbin/crond -f -c $PWD/crontabs
