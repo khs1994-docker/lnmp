@@ -1,0 +1,7 @@
+[
+  {
+    "op": "replace",
+    "path": "/spec/hostPath/path",
+    "value": "/run/desktop/mnt/host/c/Users/__USERNAME__/.docker/Volumes/lnmp-mysql-data-development"
+  }
+]

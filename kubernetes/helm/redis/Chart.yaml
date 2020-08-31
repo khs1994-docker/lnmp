@@ -1,9 +1,0 @@
-apiVersion: v1
-appVersion: 6.0.2
-description: "A Helm Redis chart for Kubernetes"
-name: redis
-version: 0.0.1
-home: https://lnmp.khs1994.com
-keywords:
-- redis
-- lnmp

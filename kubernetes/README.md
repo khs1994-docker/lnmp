@@ -50,90 +50,15 @@
 
 <p align="center"><strong>关注项目作者微信订阅号，接收项目最新动态</strong></p>
 
-## 注意事项
+## LNMP Demo
 
-* `lnmp-k8s` 脚本在 Windows 或 macOS 上执行的 k8s 目标集群为 **Docker 桌面版启动的 k8s 集群**，未考虑在 Windows 或 macOS 操作 **其他（远程） k8s 集群** 的情况。（相信有能力操作远程集群的人群不再需要本项目的一键脚本）
-
-* 本项目是给大家提供一个 lnmp k8s yaml 文件的模板，具体内容还请根据实际情况自行更改
-
-* 本项目专为 Laravel 设计，能够完美的在 Kubernetes 之上运行 Laravel
-
-* Docker 桌面版 K8s 运行 Laravel 响应慢
-
-* Linux 版本优先考虑多节点方案,所以 `pv` 采用 `NFS` 卷,而不是 `hostPath`(执行 `$ lnmp-k8s nfs` 可以启动 NFS Server )
-
-* Docker 桌面版不支持启动 NFS Server 容器，若需 NFS 卷，请自行在 Linux 上部署 NFS Server 容器或在 `WSL2` 上启动 NFS server 容器(执行 `$ lnmp-k8s nfs` 可以启动 NFS Server 容器, [需设置变量](nfs-server/README.md))
-
-* 由于虚拟机模拟集群环境硬盘空间占用太大，又不能及时回收，为了方便大家学习，本项目支持在 Linux 单机上部署 Kubernetes (通过 systemd 管理)`$ lnmp-k8s local-install`
-
-## Demo
-
-> 部署好 Kubernetes 集群之后，按照以下步骤启动 LNMP Demo
-
-```bash
-# 部署 LNMP
-# 事先部署好 NFS 服务端(v4), 并在 .env 文件中配置 `LNMP_NFS_SERVER_HOST`,具体参考 nfs-server 文件夹中的内容
-# 或者你可以加上 [ --no-nfs ] 避免使用 NFS 数据卷
-
-$ ./lnmp-k8s create development --no-nfs
-
-# PHP 项目开发
-$ cd ~/app # 或者 NFS 路径
-
-$ mkdir my-project
-
-# 在新建的文件夹内进行 PHP 项目开发
-
-# 配置 NGINX
-$ cd ~/lnmp/kubernetes/deployment/configMap/nginx-conf-d
-
-# 新建文件(文件后缀名必须为 conf)或将新增配置追加到已有文件中
-
-$ vi filename.conf
-
-# 创建新版本的 configmap
-$ kubectl -n lnmp create configmap lnmp-nginx-conf.d-0.0.2 --from-file deployment/configMap/nginx-conf-d
-
-$ kubectl -n lnmp label configmap lnmp-nginx-conf.d-0.0.2 app=lnmp version=0.0.2
-
-# 编辑 nginx
-$ kubectl -n lnmp edit deployment nginx
-```
-
-```diff
-apiVersion: apps/v1
-kind: Deployment
-spec:
-  template:
-    spec:
-      volumes:
-      - configMap:
--         name: lnmp-nginx-conf.d
-+         name: lnmp-nginx-conf.d-0.0.2
-        name: lnmp-nginx-conf-d
-```
-
-保存文件,即可更新 nginx。
-
-### 停止 LNMP ,保留数据
-
-```bash
-$ ./lnmp-k8s delete development
-```
-
-### 销毁 LNMP ,不保留数据（谨慎操作）
-
-```bash
-$ ./lnmp-k8s cleanup development
-```
+参考 [lnmp](lnmp) 文件夹。
 
 ## `Helm` or `Kustomize`
 
 固定的 YAML 文件很难扩展，可以使用 `Helm` 或 `Kustomize($ kubectl apply -k XXX)` 灵活的部署应用。具体说明请查看文档。
 
 ## [Helm](helm)
-
-* 完美支持 `开发` `测试` `预上线` `生产` 四种环境
 
 ## Tips
 

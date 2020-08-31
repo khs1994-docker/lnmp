@@ -1,3 +1,0 @@
-resources:
-# - lnmp-nginx.service.yaml
-- lnmp-nginx.yaml
