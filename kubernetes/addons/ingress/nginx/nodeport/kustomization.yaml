@@ -4,3 +4,11 @@ images:
   - name: k8s.gcr.io/ingress-nginx/controller:v0.35.0@sha256:fc4979d8b8443a831c9789b5155cded454cb7de737a8b727bc2ba0106d2eae8b
     newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller
     newTag: v0.35.0@sha256:fc4979d8b8443a831c9789b5155cded454cb7de737a8b727bc2ba0106d2eae8b
+patchesJson6902:
+  - path: patch.json
+    target:
+      kind: Service
+      name: ingress-nginx-controller
+      version: v1
+      namespace: ingress-nginx
+      group: ""

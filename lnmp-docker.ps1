@@ -250,7 +250,7 @@ Function logs() {
   if (! (Test-Path log\php)) {
     New-Item log\php -type directory | Out-Null
     New-Item log\php\error.log -type file | Out-Null
-    New-Item log\php\slow.log -type file | Out-Null
+    New-Item log\php\php-fpm-slow.log -type file | Out-Null
     New-Item log\php\php-fpm-error.log -type file | Out-Null
     New-Item log\php\php-fpm-access.log -type file | Out-Null
     New-Item log\php\xdebug-remote.log -type file | Out-Null

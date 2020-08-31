@@ -11,6 +11,9 @@ php artisan view:cache # view:clear
 # 路由包含闭包无法缓存
 # php artisan route:cache # route:clear
 
+# php artisan migrate
+# php artisan migrate --seed
+
 cd /app
 
 # nginx public

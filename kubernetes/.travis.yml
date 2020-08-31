@@ -202,7 +202,8 @@ before_script:
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
 
-  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/calico.yaml
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
+  - sed -i "s#eth0#ens4#g" addons/cni/calico-custom/patch.json
   - git diff
   - kubectl apply -k addons/cni/calico-custom
 

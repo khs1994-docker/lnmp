@@ -1,0 +1,49 @@
+[
+  {
+    "op": "add",
+    "path": "/spec/template/spec/initContainers/1/env/5",
+    "value": {
+      "name": "CNI_NET_DIR",
+      "value": "/opt/k8s/etc/cni/net.d"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/containers/0/env/17",
+    "value": {
+      "name": "IP_AUTODETECTION_METHOD",
+      "value": "interface=eth0"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/containers/0/env/18",
+    "value": {
+      "name": "IP6_AUTODETECTION_METHOD",
+      "value": "interface=eth0"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/19",
+    "value": {
+      "name": "CALICO_IPV6POOL_CIDR",
+      "value": "$(CALICO_IPV6POOL_CIDR)"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/volumes/5/hostPath/path",
+    "value": "/opt/k8s/opt/cni/bin"
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/volumes/6/hostPath/path",
+    "value": "/opt/k8s/etc/cni/net.d"
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/volumes/9/hostPath/path",
+    "value": "/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/nodeagent~uds"
+  }
+]

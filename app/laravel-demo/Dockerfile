@@ -6,6 +6,8 @@
 #
 # 只有 git 打了 tag 才能将对应的镜像部署到生产环境
 #
+# 为了方便读者阅读没有引入过多的变量，实际使用时可以将公共的部分用变量代替。
+#
 # !! 搜索 /app/laravel-docker 替换为自己的项目目录 !!
 # 此 Dockerfile 专为 CI 环境设计（国外），请通过 --build-arg ARG=value 设置国内镜像
 #
@@ -88,12 +90,9 @@ RUN set -x; \
     && chown www-data:www-data /usr/sbin/crond \
     && setcap cap_setgid=ep /usr/sbin/crond
 
-RUN --mount=type=bind,target=/tmp/build-context,ro \
-    --mount=type=cache,from=laravel,source=/app/laravel-docker,target=/tmp/laravel-docker,ro \
-    set -x \
-    && cp -a /tmp/build-context/. /app/laravel-docker/ \
-    && cp -a /tmp/laravel-docker/. /app/laravel-docker/ \
-    \
+COPY --from=laravel /app/laravel-docker /app/laravel-docker
+
+RUN set -x \
     && chmod -R +x /app/laravel-docker/.docker-rootless/s6 \
     && mkdir -p /app/laravel-docker/storage/app \
                 /app/laravel-docker/storage/framework/views \

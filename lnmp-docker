@@ -405,7 +405,7 @@ logs(){
 
   if ! [ -d log/php ];then
     mkdir -p log/php \
-    && touch log/php/{error.log,slow.log,php-fpm-access.log,php-fpm-error.log,xdebug-remote.log}
+    && touch log/php/{error.log,php-fpm-slow.log,php-fpm-access.log,php-fpm-error.log,xdebug-remote.log}
   fi
 
   if ! [ -d log/redis ];then mkdir -p log/redis && touch log/redis/redis.log ; fi
@@ -427,7 +427,7 @@ cleanup(){
       && echo > log/php/php-fpm-access.log \
       && echo > log/php/php-fpm-error.log \
       && echo > log/php/error.log \
-      && echo > log/php/slow.log \
+      && echo > log/php/php-fpm-slow.log \
       && echo > log/php/xdebug-remote.log \
       && echo > log/redis/redis.log \
       && rm -rf log/httpd/* \

@@ -1,25 +1,20 @@
+bases:
+  - ../calico
 resources:
-- calico.yaml
 - configMap.yaml
 vars:
-  - name: CALICO_IPV4POOL_CIDR
-    objref:
-      name: calico.conf
-      apiVersion: v1
-      kind: ConfigMap
-    fieldref:
-      fieldpath: data.podCIDR
   - name: CALICO_IPV6POOL_CIDR
     objref:
-      name: calico.conf
+      name: calico-custom.conf
       apiVersion: v1
       kind: ConfigMap
     fieldref:
       fieldpath: data.IPV6podCIDR
-  - name: CALICO_IPV4POOL_IPIP
-    objref:
-      name: calico.conf
-      apiVersion: v1
-      kind: ConfigMap
-    fieldref:
-      fieldpath: data.ipip
+patchesJson6902:
+  - target:
+      group: apps
+      version: v1
+      kind: DaemonSet
+      name: calico-node
+      namespace: kube-system
+    path: patch.json

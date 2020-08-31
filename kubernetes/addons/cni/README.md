@@ -7,3 +7,6 @@
 **dual-stack**
 
 * https://docs.projectcalico.org/networking/dual-stack
+
+* `calico` 适用于 kubeadm 创建的集群
+* `calico-custom` 适用于自定义了 CNI 插件目录等情况
