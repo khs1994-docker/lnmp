@@ -8,7 +8,7 @@ metadata:
     type: local
     app: lnmp
     tier: mysql
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
@@ -35,7 +35,7 @@ spec:
   nfs:
     # FIXME: use the right IP
     server: 192.168.199.100
-    path: "/lnmp/mysql"
+    path: "/lnmp/mysql-production"
   storageClassName: slow
 
   # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options
@@ -53,7 +53,7 @@ metadata:
     type: local
     app: lnmp
     tier: redis
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
@@ -62,7 +62,7 @@ spec:
   nfs:
     # FIXME: use the right IP
     server: 192.168.199.100
-    path: "/lnmp/redis"
+    path: "/lnmp/redis-production"
   storageClassName: slow
   mountOptions:
     # - hard
@@ -77,7 +77,7 @@ metadata:
     type: local
     app: lnmp
     tier: code-data
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
@@ -86,7 +86,7 @@ spec:
   nfs:
     # FIXME: use the right IP
     server: 192.168.199.100
-    path: "/lnmp/app"
+    path: "/lnmp/app-production"
   storageClassName: slow
   mountOptions:
     # - hard
@@ -103,7 +103,7 @@ metadata:
     type: local
     app: lnmp
     tier: log
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
@@ -113,7 +113,7 @@ spec:
   nfs:
     # FIXME: use the right IP
     server: 192.168.199.100
-    path: "/lnmp/log"
+    path: "/lnmp/log-production"
   storageClassName: slow
   mountOptions:
     # - hard

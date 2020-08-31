@@ -52,7 +52,7 @@
 
 ## LNMP Demo
 
-参考 [lnmp](lnmp) 文件夹。
+参考 [lnmp](lnmp) 文件夹
 
 ## `Helm` or `Kustomize`
 

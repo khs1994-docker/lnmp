@@ -1,2 +1,2 @@
-bases:
-  - ../base
+resources:
+  - pvc.yaml

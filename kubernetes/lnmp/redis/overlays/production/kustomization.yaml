@@ -1,7 +1,5 @@
 bases:
 - ../../base
-resources:
-- pvc.yaml
 configMapGenerator:
 - name: lnmp-redis-conf
   files:

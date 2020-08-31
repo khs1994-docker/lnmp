@@ -1,5 +1,7 @@
 bases:
-  - ../nfs
+  - ../../../storage/pvc/nfs
+commonLabels:
+  env: production
 patchesJson6902:
   - path: patch.json
     target:

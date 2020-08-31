@@ -8,14 +8,14 @@ metadata:
     type: local
     app: lnmp
     tier: code-data
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
   accessModes: [ "ReadWriteOnce" ]
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /home/__USERNAME__/app-development
+    path: /home/__USERNAME__/app-production
     type: DirectoryOrCreate
   storageClassName: hostpath
 ---
@@ -27,7 +27,7 @@ metadata:
     type: local
     app: lnmp
     tier: mysql
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
@@ -48,7 +48,7 @@ spec:
   # Recycle 删除 PV 上的数据 deprecated
   # Delete 删除 PV
   hostPath:
-    path: /home/__USERNAME__/.docker/Volumes/lnmp-mysql-development
+    path: /home/__USERNAME__/.docker/Volumes/lnmp-mysql-production
     type: DirectoryOrCreate
   storageClassName: hostpath
 
@@ -62,14 +62,14 @@ metadata:
     type: local
     app: lnmp
     tier: redis
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
   accessModes: [ "ReadWriteOnce" ]
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /home/__USERNAME__/.docker/Volumes/lnmp-redis-development
+    path: /home/__USERNAME__/.docker/Volumes/lnmp-redis-production
     type: DirectoryOrCreate
   storageClassName: hostpath
 
@@ -83,7 +83,7 @@ metadata:
     type: local
     app: lnmp
     tier: log
-    env: development
+    env: production
 spec:
   capacity:
     storage: 20Gi
@@ -91,6 +91,6 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /home/__USERNAME__/.docker/Volumes/lnmp-log-development
+    path: /home/__USERNAME__/.docker/Volumes/lnmp-log-production
     type: DirectoryOrCreate
   storageClassName: hostpath

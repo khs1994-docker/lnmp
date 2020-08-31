@@ -1,5 +1,7 @@
 bases:
   - ../linux
+commonLabels:
+  env: production
 patchesJson6902:
   - path: patch-app.json
     target:
