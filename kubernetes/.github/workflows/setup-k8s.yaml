@@ -22,6 +22,7 @@ jobs:
      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
      DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
      LNMP_DOCKER_MIRROR: registry-1.docker.io
+     CNI_CALICO_EBPF: ${{matrix.CNI_CALICO_EBPF}}
    strategy:
      max-parallel: 1
      matrix:
@@ -51,6 +52,11 @@ jobs:
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.19.0
          LNMP_K8S_GET: --url
+       - os: ubuntu
+         dist: 20.04
+         CI_KUBERNETES_VERSION: 1.19.0
+         LNMP_K8S_GET: --url
+         CNI_CALICO_EBPF: 'true'
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.19.0
@@ -91,8 +97,8 @@ jobs:
 
          uname -a
 
-         mount bpffs /sys/fs/bpf -t bpf || true
-         mount -t bpf || true
+         sudo mount bpffs /sys/fs/bpf -t bpf || true
+         sudo mount -t bpf || true
 
          df -h
 
@@ -213,7 +219,9 @@ jobs:
 
          # worker
          sudo systemctl cat kube-proxy
-         sudo systemctl start kube-proxy || CMD_FAILED=1
+         if ! [ "$CNI_CALICO_EBPF" = 'true' ];then
+           sudo systemctl start kube-proxy || CMD_FAILED=1
+         fi
          test -n "$CMD_FAILED" && sudo journalctl -u kube-proxy || true
          test -n "$CMD_FAILED" && false || true
 
@@ -282,8 +290,15 @@ jobs:
 
          sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
          git diff
-         kubectl apply -k addons/cni/calico-custom
-
+         if [ "$CNI_CALICO_EBPF" = 'true' ];then
+           export SERVER_IP=`cat .server_ip`
+           cat addons/cni/calico-eBPF/kubernetes.yaml \
+              | sed -e "s/192.168.199.100/${SERVER_IP}/g" -e "s/16443/6443/g" \
+              | kubectl apply -f -
+           kubectl apply -k addons/cni/calico-eBPF
+         else
+           kubectl apply -k addons/cni/calico-custom
+         fi
          kubectl get node
          kubectl get all -A
          kubectl api-versions
@@ -309,7 +324,7 @@ jobs:
          kubectl describe deployment.apps/calico-kube-controllers -n kube-system
          kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
          sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
-         # sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+         for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
      - name: Setup addons
        run: |
          set -x

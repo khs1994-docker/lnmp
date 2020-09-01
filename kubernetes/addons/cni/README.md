@@ -18,5 +18,5 @@
 * https://www.projectcalico.org/introducing-the-calico-ebpf-dataplane/
 
 ```bash
-$ mount bpffs /sys/fs/bpf -t bpf
+$ sudo mount bpffs /sys/fs/bpf -t bpf
 ```
