@@ -1,0 +1,256 @@
+# https://github.com/coreos/fcct/blob/master/docs/configuration-v1_0.md
+# master
+variant: fcos
+version: 1.1.0
+ignition:
+  config:
+    merge:
+      - source: http://{{SERVER_HOST}}:8080/ignition/merge-common.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/crictl.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/docker.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/etcd.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-apiserver.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-containerd.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-controller-manager.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-nginx.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kube-proxy.ign
+      # - source: http://{{SERVER_HOST}}:8080/ignition/kube-scheduler.ign
+      - source: http://{{SERVER_HOST}}:8080/ignition/kubelet.ign
+passwd:
+  users:
+    - name: core
+      # password_hash: "$1$nwU7Pa6U$zEYWwaz2b/PIv2K.hNu41/"
+      # https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/examples.md#generating-a-password-hash
+      # $ openssl passwd -1
+      ssh_authorized_keys:
+        - ssh-rsa {{SSH_PUB}}
+      groups:
+        - wheel
+        - sudo
+        - docker
+    - name: k8s
+      ssh_authorized_keys:
+        - ssh-rsa {{SSH_PUB}}
+      groups:
+        - wheel
+        - sudo
+        - docker
+      home_dir: /home/k8s
+systemd:
+  units:
+    - name: docker-tls-tcp.socket
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Docker Secured Socket for the API
+
+        [Socket]
+        # ListenStream={{IP_{{n}}}}:2376
+        ListenStream=2376
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+    - name: kubelet.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubernetes Kubelet
+        Documentation=https://github.com/kubernetes/kubernetes
+        # After=docker.service
+        # Requires=docker.service
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]
+        WorkingDirectory=/home/core
+        Environment="NODE_NAME=coreos{{n}}"
+        # Fix me
+        Environment="KUBE_APISERVER=${KUBE_APISERVER}"
+
+        Environment="K8S_ROOT=${K8S_ROOT}"
+
+        ExecStartPre=-/usr/bin/env swapoff -a
+        ExecStartPre=-${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStartPre=-/usr/bin/env mkdir -p /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+        ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+
+        ExecStart=${K8S_ROOT}/bin/kubelet \
+        --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
+        --cert-dir=${K8S_ROOT}/certs \
+        --container-runtime=${CONTAINER_RUNTIME} \
+        --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
+        --root-dir=/opt/k8s/var/lib/kubelet \
+        --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
+        --config=${K8S_ROOT}/conf/kubelet.config.yaml \
+        --hostname-override=coreos{{n}} \
+        --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
+        --logtostderr=true \
+        --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
+        --v=2
+
+        # cri is docker
+        # --network-plugin=cni \
+        # --cni-cache-dir=/opt/k8s/var/lib/cni/cache \
+        # --cni-bin-dir= \
+        # --cni-conf-dir=/opt/k8s/etc/cni/net.d \
+        # --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
+        # --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
+        # --image-pull-progress-deadline=15m \
+
+        ExecStartPost=/usr/bin/env chown -R core:core /home/core/.kube
+
+        Restart=on-failure
+        RestartSec=5
+
+        ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
+        ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    - path: "/etc/hostname"
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: coreos{{n}}
+    - path: "/etc/hosts"
+      mode: 0644
+      overwrite: true
+      contents:
+        inline: |
+          127.0.0.1 localhost
+          ::1       localhost
+          {{IP_1}} gcr.io k8s.gcr.io docker.khs1994.com docker.domain.com
+          {{IP_1}} coreos1
+          {{IP_2}} coreos2
+          {{IP_3}} coreos3
+          {{IP_{{n}}}} coreos{{n}}
+    - path: ${K8S_ROOT}/conf/kubelet.config.yaml
+      mode: 0644
+      contents:
+        inline: |
+          kind: KubeletConfiguration
+          apiVersion: kubelet.config.k8s.io/v1beta1
+          address: "{{IP_{{n}}}}"
+          staticPodPath: ""
+          syncFrequency: 1m
+          fileCheckFrequency: 20s
+          httpCheckFrequency: 20s
+          staticPodURL: ""
+          port: 10250
+          readOnlyPort: 0
+          rotateCertificates: true
+          serverTLSBootstrap: true
+          authentication:
+            anonymous:
+              enabled: false
+            webhook:
+              enabled: true
+            x509:
+              clientCAFile: "${K8S_ROOT}/certs/ca.pem"
+          authorization:
+            mode: Webhook
+          registryPullQPS: 0
+          registryBurst: 20
+          eventRecordQPS: 0
+          eventBurst: 20
+          enableDebuggingHandlers: true
+          enableContentionProfiling: true
+          healthzPort: 10248
+          healthzBindAddress: "{{IP_{{n}}}}"
+          clusterDomain: "cluster.local."
+          clusterDNS:
+            - "10.254.0.2"
+          nodeStatusUpdateFrequency: 10s
+          nodeStatusReportFrequency: 1m
+          imageMinimumGCAge: 2m
+          imageGCHighThresholdPercent: 85
+          imageGCLowThresholdPercent: 80
+          volumeStatsAggPeriod: 1m
+          kubeletCgroups: ""
+          systemCgroups: ""
+          cgroupRoot: ""
+          cgroupsPerQOS: true
+          # cgroupDriver: cgroupfs
+          cgroupDriver: systemd
+          runtimeRequestTimeout: 10m
+          hairpinMode: promiscuous-bridge
+          maxPods: 220
+          podCIDR: "10.244.0.0/16"
+          podPidsLimit: -1
+          resolvConf: /etc/resolv.conf
+          maxOpenFiles: 1000000
+          kubeAPIQPS: 1000
+          kubeAPIBurst: 2000
+          serializeImagePulls: false
+          evictionHard:
+            memory.available:  "100Mi"
+            nodefs.available:  "10%"
+            nodefs.inodesFree: "5%"
+            imagefs.available: "15%"
+          evictionMinimumReclaim:
+            imagefs.available: "15%"
+          evictionSoft: {}
+          enableControllerAttachDetach: true
+          failSwapOn: true
+          containerLogMaxSize: 20Mi
+          containerLogMaxFiles: 10
+          systemReserved: {}
+          kubeReserved: {}
+          systemReservedCgroup: ""
+          kubeReservedCgroup: ""
+          enforceNodeAllocatable: ["pods"]
+          # volumePluginDir: ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          featureGates:
+            # AllAlpha: true
+            # BoundServiceAccountTokenVolume: false
+    - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
+      mode: 0644
+      contents:
+        inline: |
+          kind: KubeProxyConfiguration
+          apiVersion: kubeproxy.config.k8s.io/v1alpha1
+          clientConnection:
+            burst: 200
+            kubeconfig: "${K8S_ROOT}/conf/kube-proxy.kubeconfig"
+            qps: 100
+          bindAddress: {{IP_{{n}}}}
+          healthzBindAddress: {{IP_{{n}}}}:10256
+          metricsBindAddress: {{IP_{{n}}}}:10249
+          enableProfiling: true
+          clusterCIDR: 10.244.0.0/16
+          hostnameOverride: coreos{{n}}
+          mode: "ipvs"
+          portRange: ""
+          iptables:
+            masqueradeAll: false
+          ipvs:
+            scheduler: rr
+            excludeCIDRs: []
+    - path: ${K8S_ROOT}/bin/kubectl
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kubectl
+    - path: /etc/NetworkManager/system-connections/eth1.nmconnection
+      mode: 0600
+      contents:
+        inline: |
+          [connection]
+          id=eth1
+          interface-name=eth1
+          type=ethernet
+          autoconnect=true
+
+          [ipv4]
+          method=manual
+          dns=114.114.114.114;8.8.8.8;1.1.1.1
+          addresses={{IP_{{n}}}}/24
+          gateway=${NETWORK_GATEWAY}
+          # dns-search=redhat.com

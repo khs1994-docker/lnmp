@@ -17,7 +17,7 @@ pipeline {
       }
     }
 
-    stage('同步镜像') {
+    stage('同步镜像-tencent-cloud') {
       steps {
         sh "curl -L -O https://gitee.com/khs1994-docker/lnmp/raw/19.03/dockerfile/php/sync/docker-image-sync.json"
 

@@ -12,7 +12,7 @@
 
 ## 配置 NFS Server 容器
 
-在 `kubernetes/volumes/.env` 文件中配置
+在 `kubernetes/nfs-server/.env` 文件中配置
 
 `NFS_EXPORT_N` 变量值为容器中 `/etc/exports` 中的每一行
 
@@ -121,7 +121,7 @@ $ sudo modprobe {nfs,nfsd,rpcsec_gss_krb5}
 * https://github.com/ehough/docker-nfs-server
 
 ```bash
-$ cd kubernetes/volumes
+$ cd kubernetes/nfs-server
 
 $ docker-compose up [-d] nfs
 

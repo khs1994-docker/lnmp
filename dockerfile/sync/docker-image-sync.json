@@ -8,8 +8,12 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:14.8.0-alpine",
-    "dest": "library-mirror/node:14.8.0-alpine"
+    "source": "node:14.9.0-alpine",
+    "dest": "library-mirror/node:14.9.0-alpine"
+  },
+  {
+    "source": "node:12.18.3-alpine",
+    "dest": "library-mirror/node:12.18.3-alpine"
   },
   {
     "source": "golang:1.15.0-alpine",
@@ -64,12 +68,12 @@
     "dest": "library-mirror/mysql:8.0.21"
   },
   {
-    "source": "library/mysql:5.7.30",
-    "dest": "library-mirror/mysql:5.7.30"
+    "source": "library/mysql:5.7.31",
+    "dest": "library-mirror/mysql:5.7.31"
   },
   {
-    "source": "library/mysql:5.6.48",
-    "dest": "library-mirror/mysql:5.6.48"
+    "source": "library/mysql:5.6.49",
+    "dest": "library-mirror/mysql:5.6.49"
   },
   {
     "source": "library/mariadb:latest",
@@ -80,12 +84,12 @@
     "dest": "library-mirror/mariadb:10.5.5"
   },
   {
-    "source": "library/mariadb:10.4.12",
-    "dest": "library-mirror/mariadb:10.4.12"
+    "source": "library/mariadb:10.4.14",
+    "dest": "library-mirror/mariadb:10.4.14"
   },
   {
-    "source": "library/mariadb:10.3.22",
-    "dest": "library-mirror/mariadb:10.3.22"
+    "source": "library/mariadb:10.3.24",
+    "dest": "library-mirror/mariadb:10.3.24"
   },
   {
     "source": "library/registry:latest",
@@ -112,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.1.1",
-    "dest": "library-mirror/kong:2.1.1"
+    "source": "library/kong:2.1.3",
+    "dest": "library-mirror/kong:2.1.3"
   },
   {
-    "source": "library/kong:2.1.1-alpine",
-    "dest": "library-mirror/kong:2.1.1-alpine"
+    "source": "library/kong:2.1.3-alpine",
+    "dest": "library-mirror/kong:2.1.3-alpine"
   },
   {
     "source": "library/redis:alpine",
@@ -148,8 +152,8 @@
     "dest": "library-mirror/nginx:1.18.0-alpine"
   },
   {
-    "source": "library/nginx:1.19.1-alpine",
-    "dest": "library-mirror/nginx:1.19.1-alpine"
+    "source": "library/nginx:1.19.2-alpine",
+    "dest": "library-mirror/nginx:1.19.2-alpine"
   },
   {
     "source": "library/httpd:alpine",
@@ -164,8 +168,8 @@
     "dest": "library-mirror/postgres:alpine"
   },
   {
-    "source": "library/postgres:12.3-alpine",
-    "dest": "library-mirror/postgres:12.3-alpine"
+    "source": "library/postgres:12.4-alpine",
+    "dest": "library-mirror/postgres:12.4-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
@@ -184,12 +188,16 @@
     "dest": "library-mirror/rabbitmq:3.8.5-management-alpine"
   },
   {
-    "source": "phpmyadmin/phpmyadmin:latest",
-    "dest": "phpmyadmin:latest"
+    "source": "library/phpmyadmin:latest",
+    "dest": "library-mirror/phpmyadmin:latest"
   },
   {
-    "source": "minio/minio:RELEASE.2020-07-31T03-39-05Z",
-    "dest": "minio:RELEASE.2020-07-31T03-39-05Z"
+    "source": "library/phpmyadmin:fpm-alpine",
+    "dest": "library-mirror/phpmyadmin:fpm-alpine"
+  },
+  {
+    "source": "minio/minio:RELEASE.2020-08-27T05-16-20Z",
+    "dest": "minio:RELEASE.2020-08-27T05-16-20Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",
@@ -211,13 +219,25 @@
     "source": "khs1994/acme:2.8.6"
   },
   {
+    "source": "khs1994/tls"
+  },
+  {
+    "source": "khs1994/kube-nginx:1.19.2"
+  },
+  {
+    "source": "khs1994/kube-nginx"
+  },
+  {
+    "source": "khs1994/node"
+  },
+  {
     "source": "khs1994/docker-proxy"
   },
   {
     "source": "khs1994/nginx:alpine"
   },
   {
-    "source": "khs1994/nginx:1.19.1-alpine"
+    "source": "khs1994/nginx:1.19.2-alpine"
   },
   {
     "source": "khs1994/docker-image-sync:latest"
@@ -235,46 +255,8 @@
     "dest": "library-mirror/caddy:alpine"
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.10",
-    "dest": "quay-mirror/etcd:v3.4.10",
-    "platforms": [
-      {
-        "source": "quay.io/coreos/etcd:v3.4.10"
-      },
-      {
-        "os": "linux",
-        "architecture": "arm64",
-        "variant": "v8",
-        "source": "quay.io/coreos/etcd:v3.4.10-arm64",
-        "dest": "quay-mirror/etcd:v3.4.10-arm64"
-      }
-    ]
-  },
-  {
-    "source": "quay.io/coreos/flannel:v0.12.0-amd64",
-    "dest": "quay-mirror/flannel:v0.12.0",
-    "platforms": [
-      {
-        "source": "quay.io/coreos/flannel:v0.12.0-amd64",
-        "dest": "quay-mirror/flannel:v0.12.0-amd64"
-      },
-      {
-        "os": "linux",
-        "architecture": "arm64",
-        "variant": "v8",
-        "source": "quay.io/coreos/flannel:v0.12.0-arm64",
-        "dest": "quay-mirror/flannel:v0.12.0-arm64"
-      },
-      {
-        "os": "linux",
-        "architecture": "arm",
-        "variant": "v7",
-        "dest": "quay-mirror/flannel:v0.12.0-arm",
-        "registry": "quay.io",
-        "image": "coreos/flannel",
-        "ref": "v0.12.0-arm"
-      }
-    ]
+    "source": "library/debian:sid",
+    "dest": "library-mirror/debian:sid"
   },
   {
     "source": "lrew/lrew:latest",

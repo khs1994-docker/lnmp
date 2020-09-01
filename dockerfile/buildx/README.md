@@ -22,9 +22,7 @@ $env:DOCKER_BUILDKIT=1
 构建时使用密钥文件
 
 ```bash
-$ docker pull tonistiigi/dockerfile:20181026-secrets
-
-$ docker build --secret id=mysecret,src=$(pwd)/mysecret.txt --progress=plain -f buildkit.Dockerfile .
+$ docker buildx build --secret id=mysecret,src=$(pwd)/mysecret.txt --progress=plain -f Dockerfile .
 ```
 
 ### `--ssh`
@@ -38,9 +36,7 @@ $ eval $(ssh-agent)
 $ ssh-add ~/.ssh/id_rsa
 (Input your passphrase here)
 
-$ docker pull tonistiigi/dockerfile:20181026-ssh
-
-$ docker build --ssh default=$SSH_AUTH_SOCK --progress=plain -f buildkit.ssh.Dockerfile .
+$ docker buildx build --ssh default=$SSH_AUTH_SOCK --progress=plain -f buildkit.ssh.Dockerfile .
 ```
 
 ### --cache-from=[NAME|type=TYPE[,KEY=VALUE]]
@@ -52,7 +48,7 @@ $ docker buildx build --cache-from=type=local,src=path/to/cache .
 ```
 
 ```bash
-docker buildx build --cache-from=php:7.4.3-fpm-alpine .
+$ docker buildx build --cache-from=php:7.4-fpm-cache .
 ```
 
 ### --cache-to=[NAME|type=TYPE[,KEY=VALUE]]

@@ -1,4 +1,0 @@
-bases:
-- ../../base
-resources:
-- lnmp-nginx.service.yaml

@@ -24,7 +24,7 @@ $ import-module k8s-helper
 
 下载以下文件并移入 PATH
 
-* https://github.com/containerd/containerd/releases/download/v1.4.0-rc.0/containerd-1.4.0-rc.0-windows-amd64.tar.gz **containerd.exe** **ctr.exe** **containerd-shim-runhcs-v1.exe**
+* https://github.com/containerd/containerd/releases/download/v1.4.0/containerd-1.4.0-windows-amd64.tar.gz **containerd.exe** **containerd-shim-runhcs-v1.exe** **ctr.exe**
 * https://github.com/microsoft/hcsshim/releases **runhcs.exe**
 
 ```powershell
@@ -44,14 +44,14 @@ $ containerd --register-service
 * https://github.com/containernetworking/plugins/releases
 * https://github.com/microsoft/windows-container-networking
 
-## kubelet kube-proxy
+## 获取 kubelet kube-proxy
 
 ```bash
 $ cd ~/lnmp/kubernetes
 
 $ wsl
 
-$ ./lnmp-k8s kubernetes-server --url windows amd64 node
+$ ./lnmp-k8s kubernetes-server windows amd64 node
 
 # ~/lnmp/kubernetes/kubernetes-release/release/v.x.y.z-windows-amd64
 

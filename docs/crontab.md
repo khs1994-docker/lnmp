@@ -17,3 +17,8 @@ $ crontab -e
 ```
 
 原理：通过在 **宿主机** 计划执行 `docker exec ***`，变相实现容器内计划任务，只适用于 **单机环境**。
+
+## Alpine 非 root 无法运行 crontab
+
+* https://github.com/gliderlabs/docker-alpine/issues/381
+* https://github.com/inter169/systs/blob/master/alpine/crond/README.md

@@ -35,6 +35,8 @@
   khs1994-docker/lnmp CLI
 .DESCRIPTION
   khs1994-docker/lnmp CLI
+
+  PS C:\> lnmp-docker up
 .EXAMPLE
   PS C:\> lnmp-docker up
 .INPUTS
@@ -248,7 +250,7 @@ Function logs() {
   if (! (Test-Path log\php)) {
     New-Item log\php -type directory | Out-Null
     New-Item log\php\error.log -type file | Out-Null
-    New-Item log\php\slow.log -type file | Out-Null
+    New-Item log\php\php-fpm-slow.log -type file | Out-Null
     New-Item log\php\php-fpm-error.log -type file | Out-Null
     New-Item log\php\php-fpm-access.log -type file | Out-Null
     New-Item log\php\xdebug-remote.log -type file | Out-Null
@@ -765,7 +767,7 @@ if ($LNMP_SERVICES_CONTENT) {
   $LNMP_SERVICES = $LNMP_SERVICES_CONTENT.Line.Split('=')[-1].Trim('"').split(' ')
 }
 else {
-  $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis', 'phpmyadmin'
+  $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis'
 }
 
 if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
@@ -797,7 +799,7 @@ printInfo "Exec custom script"
 . ./lnmp-docker-custom-script.ps1
 
 if (_command docker) {
-  $DOCKER_VERSION = $($(docker --version).split(' ')[2]).trim(',')
+  $DOCKER_VERSION = $(docker --version).split(' ')[2].split('-')[0].trim(',')
 }
 
 $DOCKER_VERSION_YY = ([System.Version]$DOCKER_VERSION).Major

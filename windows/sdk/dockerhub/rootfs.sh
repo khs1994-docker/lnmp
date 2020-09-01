@@ -12,28 +12,10 @@ rootfs(){
   local layersIndex=${6:-0}
 
   registry="hub-mirror.c.163.com"
+  # registry="mirror.baidubce.com"
+  if [ "$LNMP_CN_ENV" = 'false' ];then registry=registry.hub.docker.com; fi
   if [ -n "${REGISTRY_MIRROR}" ];then registry=${REGISTRY_MIRROR}; fi
   if [ -n "$7" ];then registry=$7; fi
-
-  echo "==> Get token ..." > /dev/stderr
-
-  WWW_Authenticate=`curl -L https://$registry/v2/x/y/manifests/latest \
--X HEAD -I -A "Docker-Client/19.03.5 (Linux)" | grep -i 'www\-authenticate' `
-
-if [ $? -eq 0 ];then
-  realm=`echo $WWW_Authenticate | awk -F"," '{print $1}'`
-  service=`echo $WWW_Authenticate | cut -d "," -f 2`
-
-  realmKey=`echo $realm | cut -d " " -f 3 | cut -d "=" -f 1`
-  if [ "$realmKey" = 'realm' ];then
-    tokenServer=`echo $realm | cut -d " " -f 3 | cut -d "=" -f 2 | sed "s#'##g" | sed 's#"##g'`
-  fi
-
-  serviceKey=`echo $service | cut -d "=" -f 1`
-  if [ "$serviceKey" = 'service' ];then
-    tokenService=`echo "$service" | cut -d "=" -f 2 | sed 's#"##g' | sed 's#\\r##g'`
-  fi
-fi
 
   echo $image | grep -q '/' || image="library/$image"
 
@@ -44,15 +26,14 @@ fi
      \"arch\" : \"$arch\",
      \"os\" : \"$os\",
      \"registry\" : \"$registry\",
-     \"tokenServer\" : \"$tokenServer\",
-     \"tokenService\" : \"$tokenService\",
      \"layersIndex\" : \"$layersIndex\"
 }
 " > /dev/stderr
 
+echo "==> Get token ..." > /dev/stderr
 . $ScriptRoot/auth/auth.sh
 
-getToken $image pull "${tokenServer}" "${tokenService}" 0 || return 1
+getToken $image pull $registry 0 || return 1
 
 if [ -z "$token" ];then
   echo "==> get token error

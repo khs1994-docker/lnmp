@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+exec /usr/local/sbin/php-fpm -F -R

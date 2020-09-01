@@ -1,15 +1,15 @@
 name: conmon
-version: 2.0.19
+version: 2.0.20
 url: "https://github.com/containers/conmon/releases/download/v${VERSION}/conmon"
 scripts:
   dist: |
     _mkdir $env:LWPM_PKG_ROOT/dist
 
     curl -L `
-      $url-${VERSION} `
+      $url `
       -o $env:LWPM_PKG_ROOT/dist/conmon `
     || curl -L `
-      $url `
+      $url-${VERSION} `
       -o $env:LWPM_PKG_ROOT/dist/conmon `
   platform-reqs: if(!$IsLinux){echo $False}
 platform:

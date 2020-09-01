@@ -12,9 +12,9 @@ Install WSL soft by shell script
 
 Usage:
 
-$ lnmp-wsl-install php 7.3.0 [ tar | deb | rpm ]
+$ lnmp-wsl-install php 7.4.0 [ tar | deb | rpm ]
 
-$ lnmp-wsl-install enable [ php73 | php72 | php71 | php70 | php56 ]
+$ lnmp-wsl-install enable [ php80 | php74 | php73 | php72 | php71 | php70 | php56 ]
 
 $ lnmp-wsl-install mysql php go node postgresql mongodb swift
 
@@ -24,13 +24,17 @@ $ lnmp-wsl-install php-extension-list
 
 Example:
 
-$ lnmp-wsl-install php 7.3.0 tar
+$ lnmp-wsl-install php 7.4.0 tar
 
-$ lnmp-wsl-install php 7.3.0 deb
+$ lnmp-wsl-install php 7.4.0 deb
 
-$ lnmp-wsl-install php 7.3.0 rpm
+$ lnmp-wsl-install php 7.4.0 rpm
 
-$ lnmp-wsl-install php 7.1.33 [7.0.33] [5.6.40]
+$ lnmp-wsl-install php 7.4.8 [7.3.20] [7.2.33] [7.1.33] [7.0.33] [5.6.40]
+
+$ REGISTRY_MIRROR=mirror.baidubce.com  lnmp-wsl-install php nightly
+
+$ REGISTRY_MIRROR=hub-mirror.c.163.com lnmp-wsl-install php nightly
 
 [ php56 只支持 ubuntu ]
 "
@@ -51,7 +55,7 @@ GO_PREFIX=/usr/local
 
 GO_VERSION=1.15
 
-NODE_VERSION=14.8.0
+NODE_VERSION=14.9.0
 
 NODE_PREFIX=/usr/local
 
@@ -59,7 +63,7 @@ PHP_VERSION=7.4.9
 
 MYSQL_DEB_VERSION=0.8.13-1
 
-SWIFT_VERSION=5.0.1
+SWIFT_VERSION=5.2.5
 
 ################################################################################
 _sudo(){
@@ -389,7 +393,10 @@ _enable(){
 
 _swift(){
   source /etc/os-release
-  if [ ${UBUNTU_CODENAME} != 'xenial' -a ${UBUNTU_CODENAME} != 'bionic' ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04/18.04\n"; exit 1; fi
+  if [ "${UBUNTU_CODENAME}" != 'xenial' \
+    -a "${UBUNTU_CODENAME}" != 'bionic' \
+    -a "${UBUNTU_CODENAME}" != 'focal' \
+     ]; then set +x ; echo -e "\nOnly Support Ubuntu 16.04/18.04/20.04\n"; exit 1; fi
 
   $(_sudo) apt install -y clang libicu-dev
 
@@ -397,8 +404,8 @@ _swift(){
   test -f swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz || \
       wget https://swift.org/builds/swift-${SWIFT_VERSION}-release/ubuntu${VERSION_ID/./''}/swift-${SWIFT_VERSION}-RELEASE/swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz
   $(_sudo) rm -rf $SWIFT_PREFIX ; $(_sudo) mkdir -p $SWIFT_PREFIX
-  $(_sudo) tar -zxvf swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz -C $SWIFT_PREFIX
-  $(_sudo) ln -sf $SWIFT_PREFIX/swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}/usr/bin/* /usr/local/bin
+  $(_sudo) tar --strip=1 -zxvf swift-${SWIFT_VERSION}-RELEASE-ubuntu${VERSION_ID}.tar.gz -C $SWIFT_PREFIX
+  $(_sudo) ln -sf $SWIFT_PREFIX/usr/bin/* /usr/local/bin
 
   swift --version
 }
@@ -408,6 +415,7 @@ _downloader(){
   install_file=$2
   url=$3
   target_path=$4
+  strip=${5:-0}
 
   if ! [ -d $path ];then
 
@@ -417,9 +425,9 @@ _downloader(){
       wget $url
     fi
 
-    $(_sudo) tar -zxvf /tmp/$install_file -C $target_path
+    $(_sudo) tar --strip=${strip} -zxvf /tmp/$install_file -C $target_path
 
-    shift 4
+    shift 5
 
     $(_sudo) $@
 fi
@@ -446,10 +454,12 @@ _node(){
   local realname=node-v${NODE_VERSION}-linux-x64
   local filename=${realname}.tar.gz
 
-  _downloader ${NODE_PREFIX}/node ${filename} \
-      https://mirrors.ustc.edu.cn/node/v${NODE_VERSION}/${filename} \
-      ${NODE_PREFIX} \
-      "mv ${NODE_PREFIX}/${realname} ${NODE_PREFIX}/node"
+  $(_sudo) mkdir -p ${NODE_PREFIX}/node
+
+  _downloader ${NODE_PREFIX}/node/bin ${filename} \
+      https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/v${NODE_VERSION}/${filename} \
+      ${NODE_PREFIX}/node \
+      1
 
   mkdir -p $HOME/.npm
   $(_sudo) chown -R $USER:$USER $HOME/.npm

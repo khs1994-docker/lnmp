@@ -49,7 +49,7 @@ set -gx fish_user_paths $fish_user_paths $LNMP_PATH $LNMP_PATH/bin
 ```bash
 $ [environment]::SetEnvironmentvariable("LNMP_PATH", "$HOME\lnmp", "User")
 
-$ [environment]::SetEnvironmentvariable("Path", "$env:path;$env:LNMP_PATH;$env:LNMP_PATH\windows;$env:LNMP_PATH\wsl", "User")
+$ [environment]::SetEnvironmentvariable("Path", "$env:path;$env:LNMP_PATH;$env:LNMP_PATH\windows;$env:LNMP_PATH\bin;$env:LNMP_PATH\wsl", "User")
 ```
 
 > 如果 `PoswerShell` 禁止执行脚本，请以管理员身份执行 `set-ExecutionPolicy Bypass`,之后输入 `Y` 确认。[说明](https://docs.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-6)

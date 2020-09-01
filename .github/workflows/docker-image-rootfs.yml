@@ -3,6 +3,9 @@ name: Docker Image rootfs
 on:
   workflow_dispatch:
 
+env:
+  LNMP_CN_ENV: 'false'
+
 jobs:
   windows:
     runs-on: windows-latest
@@ -48,7 +51,6 @@ jobs:
           ls ~/.khs1994-docker-lnmp/dockerhub
   linux:
     runs-on: ubuntu-latest
-    needs: skip-ci
     steps:
       - uses: actions/checkout@main
         with:

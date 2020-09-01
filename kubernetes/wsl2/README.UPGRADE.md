@@ -16,13 +16,15 @@ $ ./wsl2/bin/kube-node stop
 
 ## 获取 k8s
 
-```bash
+```powershell
 $ cd ~/lnmp/kubernetes
 
 $ ./wsl2/bin/kube-check
 
 $ wsl -d wsl-k8s
+```
 
+```bash
 $ ./lnmp-k8s kubernetes-server --url
 # $ ./lnmp-k8s kubernetes-server
 ```
@@ -33,7 +35,7 @@ $ ./lnmp-k8s kubernetes-server --url
 $ ./lnmp-k8s _k8s_install_cp_bin -f
 ```
 
-```bash
+```powershell
 $ wsl --shutdown
 ```
 

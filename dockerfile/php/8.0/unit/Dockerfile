@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=8.0.0beta1
+ARG PHP_VERSION=8.0.0beta2
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
@@ -8,21 +8,22 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
 ENV NGINX_UNIT_VERSION master
 
-RUN cd /usr/src \
-  && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
-     | tar -zxvf - \
-  && mv unit-${NGINX_UNIT_VERSION} unit \
+RUN set -x \
+  && mkdir -p /usr/src/unit \
   && cd /usr/src/unit \
+  && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
+     | tar --strip=1 -zxvf - \
   && apk add --no-cache --virtual .build-deps \
                                   $PHPIZE_DEPS \
                                   openssl-dev \
                                   linux-headers \
                                   patch \
   \
-  && echo "apply patch, remove when pr441 merge" \
-  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/441.diff -O \
-  && patch -p1 < 441.diff \
+  # && echo "apply patch, remove when pr441 merge" \
+  # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/441.diff -O \
+  # && patch -p1 < 441.diff \
   \
+  && sed -i "s/libtinfo.so/libisl.so.15.3.0/g"  auto/modules/php \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php80 \

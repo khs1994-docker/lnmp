@@ -1,5 +1,4 @@
 resources:
 - harbor.yaml
 patchesStrategicMerge:
-- harbor-jobservice.yaml
 - pvc.yaml

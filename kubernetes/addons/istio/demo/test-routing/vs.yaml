@@ -1,3 +1,5 @@
+# 请求头包含 foo: bar 路由到 v2，其他情况路由到 v1
+
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -20,5 +22,3 @@ spec:
     - destination:
         host: nginx
         subset: v1
-
-# 请求头包含 foo: bar 路由到 v2，其他情况路由到 v1

@@ -1,0 +1,71 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: smb-test
+spec:
+  containers:
+    - image: alpine
+      name: smb-test
+      command:
+        - "/bin/sh"
+        - "-c"
+        - while true; do echo $(date) >> /mnt/smb/outfile; sleep 1; done
+      volumeMounts:
+        - name: smb01
+          mountPath: "/mnt/smb"
+  volumes:
+    - name: smb01
+      persistentVolumeClaim:
+        claimName: pvc-smb
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-smb
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: pv-smb
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-smb
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - vers=3.0
+  csi:
+    driver: smb.csi.k8s.io
+    readOnly: false
+    volumeHandle: unique-volumeid  # make sure it's a unique id in the cluster
+    volumeAttributes:
+      # fix me
+      source: "//192.168.199.100/Users/90621/Downloads/lnmp-docker-cache"
+    # $ kubectl create secret generic smbcreds \
+    #       --from-literal username=USERNAME \
+    #       --from-literal password="PASSWORD"
+    nodeStageSecretRef:
+      name: smbcreds
+      namespace: default
+---
+# kind: Secret
+# apiVersion: v1
+# metadata:
+#   name: smbcreds
+# data:
+#   # fix me
+#   username: "base64 string"
+#   # fix me
+#   password: "base64 string"

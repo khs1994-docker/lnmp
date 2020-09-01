@@ -7,13 +7,13 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV NGINX_UNIT_VERSION 1.18.0
+ENV NGINX_UNIT_VERSION 1.19.0
 
-RUN cd /usr/src \
-  && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
-     | tar -zxvf - \
-  && mv unit-${NGINX_UNIT_VERSION} unit \
+RUN set -x \
+  && mkdir -p /usr/src/unit \
   && cd /usr/src/unit \
+  && curl -fsSL https://github.com/nginx/unit/archive/${NGINX_UNIT_VERSION}.tar.gz \
+     | tar --strip=1 -zxvf - \
   && apk add --no-cache --virtual .build-deps \
                                   $PHPIZE_DEPS \
                                   openssl-dev \

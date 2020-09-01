@@ -1,0 +1,314 @@
+{
+  "title": "JSON schema for configuring LWPM",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lnmp.khs1994.com",
+  "$comment": "https://docs.lnmp.khs1994.com/windows/lwpm.html",
+  "description": "see https://docs.lnmp.khs1994.com/windows/lwpm.html",
+  "type": "object",
+  "definitions": {
+    "architecture": {
+      "description": "architecture",
+      "default": "amd64",
+      "type": "string",
+      "enum": [
+        "arm",
+        "arm64",
+        "amd64"
+      ]
+    },
+    "os": {
+      "description": "os",
+      "default": "windows",
+      "type": "string",
+      "enum": [
+        "linux",
+        "windows",
+        "darwin"
+      ]
+    },
+    "hash": {
+      "type": "object",
+      "description": "soft package hash",
+      "properties": {
+        "sha512": {
+          "type": "string",
+          "description": "sha512 hash"
+        },
+        "sha256": {
+          "type": "string",
+          "description": "sha256 hash"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "soft name"
+    },
+    "description": {
+      "type": "string",
+      "description": "soft description"
+    },
+    "version": {
+      "type": "string",
+      "description": "soft version",
+      "default": "x.y.z"
+    },
+    "pre-version": {
+      "type": "string",
+      "description": "soft pre version",
+      "default": "x.y.z-alpha.1"
+    },
+    "url": {
+      "description": "soft download url",
+      "type": "string"
+    },
+    "url-mirror": {
+      "description": "soft download url mirror",
+      "type": "string"
+    },
+    "pre-url": {
+      "description": "soft pre version download url",
+      "type": "string"
+    },
+    "hash-url": {
+      "type": "object",
+      "description": "hash url",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "description": "sha256 url"
+        },
+        "sha384": {
+          "type": "string",
+          "description": "sha384 url"
+        },
+        "sha512": {
+          "type": "string",
+          "description": "sha512 url"
+        }
+      },
+      "additionalProperties": false
+    },
+    "pre-url-mirror": {
+      "description": "soft pre version download url mirror",
+      "type": "string"
+    },
+    "homepage": {
+      "description": "soft homepage",
+      "type": "string"
+    },
+    "bug": {
+      "description": "soft bug report",
+      "type": "string"
+    },
+    "github": {
+      "description": "soft github, example: user/repo",
+      "type": "string",
+      "default": "username/repo"
+    },
+    "releases": {
+      "description": "soft releases pages",
+      "type": "string"
+    },
+    "architecture": {
+      "$ref": "#/definitions/architecture"
+    },
+    "os": {
+      "$ref": "#/definitions/os"
+    },
+    "platform": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "architecture": {
+            "$ref": "#/definitions/architecture"
+          },
+          "os": {
+            "$ref": "#/definitions/os"
+          },
+          "hash": {
+            "$ref": "#/definitions/hash"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true,
+      "minimum": 1
+    },
+    "scripts": {
+      "type": "object",
+      "properties": {
+        "platform-reqs": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "if last command echo $false, means not support this platform. e.g. echo $False",
+          "default": [
+            "if(!$IsWindows){echo $False}"
+          ]
+        },
+        "preinstall": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "default": [
+            "# _cleanup \"$unzipDesc\""
+          ]
+        },
+        "install": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "default": [
+            "# Write-Host \"`nPlease download on this website: \\${releases\\}`n\" -ForegroundColor Green",
+            "# _unzip \\$filename \\$unzipDesc",
+            "# Copy-item -r -force \"\\$unzipDesc/\" \"\"",
+            "# cp \\$env:LWPM_PKG_ROOT\\dist\\file \\dest\\path",
+            "# Start-Process -FilePath \\$filename -wait",
+            "# _cleanup \"\\$unzipDesc\""
+          ]
+        },
+        "postinstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "preuninstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "uninstall": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "default": "# _cleanup /soft/path"
+        },
+        "postuninstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "pruneuninstall": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "pretest": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "test": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "default": [
+            "printInfo $(command --version) install success"
+          ]
+        },
+        "posttest": {
+          "type": [
+            "string",
+            "array"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "how to get version string"
+        },
+        "get-latest-version": {
+          "type": "string",
+          "description": "Function Get-LatestVersion(){ }",
+          "default": [
+            "Function Get-LatestVersion(){ }"
+          ]
+        },
+        "get-version": {
+          "type": "string",
+          "description": "set arg $VERSION",
+          "default": [
+            "if($isPre){$VERSION='x.y.z-beta'}else{$VERSION='x.y.z'}"
+          ]
+        },
+        "hash": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "how to check soft package hash"
+        },
+        "dist": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "how to dist files",
+          "default": [
+            "# _mkdir \\$env:LWPM_PKG_ROOT/dist",
+            "# curl -L `",
+            "# \\$url `",
+            "# -o \\$env:LWPM_PKG_ROOT/dist/\\${env:lwpm_os\\}-\\${env:lwpm_architecture\\}/\\$filename"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "path": {
+      "type": "array",
+      "description": "insert path",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "C:\\bin"
+      ]
+    },
+    "unix-path": {
+      "type": "array",
+      "description": "unix system(e.g. Linux/macOS) PATH, add to ~/.bashrc manual",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "/path/bin"
+      ]
+    },
+    "command": {
+      "type": "string",
+      "description": "what command this package provide"
+    },
+    "download-filename": {
+      "type": "string",
+      "description": "download filename"
+    },
+    "$comment": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "description": "Comments from this package"
+    }
+  },
+  "required": [
+    "version"
+  ],
+  "additionalProperties": false
+}

@@ -5,7 +5,6 @@ Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\exists.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
-Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\utils\Get-SHA.psm1
 
@@ -98,11 +97,9 @@ Function _getSourceToken($source_registry, $source_image) {
   $env:DOCKER_USERNAME = $null
 
   try {
-    $tokenServer, $tokenService = Get-TokenServerAndService $source_registry
-
     $env:DOCKER_PASSWORD = $env:SOURCE_DOCKER_PASSWORD
     $env:DOCKER_USERNAME = $env:SOURCE_DOCKER_USERNAME
-    $token = Get-DockerRegistryToken $source_image 'pull' $tokenServer $tokenService
+    $token = Get-DockerRegistryToken $source_image 'pull' $source_registry
 
     return $token
   }
@@ -116,11 +113,9 @@ Function _getSourceToken($source_registry, $source_image) {
 
 Function _getDestToken($dest_registry, $dest_image) {
   try {
-    $tokenServer, $tokenService = Get-TokenServerAndService $dest_registry
-
     $env:DOCKER_PASSWORD = $env:DEST_DOCKER_PASSWORD
     $env:DOCKER_USERNAME = $env:DEST_DOCKER_USERNAME
-    $dest_token = Get-DockerRegistryToken $dest_image 'push,pull' $tokenServer $tokenService
+    $dest_token = Get-DockerRegistryToken $dest_image 'push,pull' $dest_registry
 
     return $dest_token
   }

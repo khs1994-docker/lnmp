@@ -1,7 +1,7 @@
 . $PSScriptRoot/../.env.example.ps1
 . $PSScriptRoot/../.env.ps1
 
-$env:ETCDCTL_API=3
+$env:ETCDCTL_API = 3
 
 etcdctl `
   --endpoints=${K8S_ETCD_ENTRYPOINTS} `
@@ -10,7 +10,7 @@ etcdctl `
   --key="$PSScriptRoot/../certs/etcd-client-key.pem" `
   $args
 
-if (!$?){
+if (!$?) {
   throw "etcdctl exec error"
 }
 

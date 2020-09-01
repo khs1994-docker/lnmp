@@ -1,17 +1,21 @@
 {
   "yaml.schemas": {
     "http://json.schemastore.org/travis": ".travis.yml",
-    "https://github.com/pcit-ce/pcit/raw/master/config/config_schema.json": [
+    "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json": [
       ".pcit.yml",
       ".pcit.yaml"
     ],
-    "windows/lnmp-windows-pm-repo/lwpm-json-schema.json": [
+    "windows/lnmp-windows-pm-repo/lwpm.schema.json": [
       "lwpm.yaml",
       "lwpm.yml"
     ],
-    "scripts/mutagen/schema.json" : [
+    "scripts/mutagen/mutagen.schema.json": [
       "mutagen.yml",
       "mutagen.example.yml"
+    ],
+    "https://raw.githubusercontent.com/coreos/ignition/master/config/v3_1/schema/ignition.json": [
+      "*.fcc",
+      "*.ign"
     ]
   },
   "json.schemas": [
@@ -19,17 +23,17 @@
       "fileMatch": [
         "lwpm.json"
       ],
-      "url": "./windows/lnmp-windows-pm-repo/lwpm-json-schema.json"
+      "url": "./windows/lnmp-windows-pm-repo/lwpm.schema.json"
     },
     {
       "fileMatch": [
         "docker-image-sync.json",
         "docker-image-sync*.json"
       ],
-      "url": "./scripts/docker-image-sync/schema.json"
+      "url": "./scripts/docker-image-sync/config.schema.json"
     }
   ],
-  "yaml.trace.server": "verbose",
+  // "yaml.trace.server": "",
   "vs-kubernetes": {
     // "vs-kubernetes.kubectl-path": "C:\\bin\\kubectl.exe",
   },
@@ -41,4 +45,10 @@
   "files.eol": "\n",
   // "docker.host":"ssh://your-remote-user@your-remote-machine-fqdn-or-ip-here",
   // "docker.host":"tcp://your-remote-machine-fqdn-or-ip-here:port",
+  // 文件类型关联
+  "files.associations": {
+    "*.ign": "json",
+    "*.fcc": "yaml",
+    "*.conflist": "json"
+  }
 }

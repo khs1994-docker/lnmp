@@ -49,21 +49,7 @@ $ kubectl config use-context minikube
 
 > 虽然 Docker 桌面版启用 k8s 之后可以使用 `docker stack` 命令进行部署，但是建议使用 `K8s` 的命令行 `kubectl` 进行部署。
 
-```bash
-$ lnmp-k8s create
-```
-
-**删除 lnmp**
-
-```bash
-$ lnmp-k8s delete
-```
-
-**销毁 lnmp**
-
-```bash
-$ lnmp-k8s cleanup
-```
+参考 `kubernetes/lnmp` 文件夹的说明进行部署。
 
 ## 相关项目
 

@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "https://mutagen.io/documentation/introduction/configuration",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "source": {
+        "description": "source",
+        "type": "string"
+      },
+      "dest": {
+        "description": "dest",
+        "type": "string"
+      },
+      "registry": {
+        "description": "source registry",
+        "type": "string"
+      },
+      "image": {
+        "description": "source image",
+        "type": "string"
+      },
+      "ref": {
+        "description": "source ref",
+        "type": "string"
+      },
+      "digest": {
+        "description": "source digest",
+        "type": "string"
+      },
+      "platforms": {
+        "type": "array",
+        "description": "all in one",
+        "items": {
+          "type": "object",
+          "properties": {
+            "os": {
+              "description": "os",
+              "type": "string",
+              "enum": [
+                "linux",
+                "windows"
+              ]
+            },
+            "architecture": {
+              "description": "architecture",
+              "type": "string",
+              "enum": [
+                "arm",
+                "arm64",
+                "amd64"
+              ]
+            },
+            "variant": {
+              "description": "variant",
+              "type": "string",
+              "enum": [
+                "v5",
+                "v6",
+                "v7",
+                "v8"
+              ]
+            },
+            "source": {
+              "description": "source",
+              "type": "string"
+            },
+            "dest": {
+              "description": "dest",
+              "type": "string"
+            },
+            "registry": {
+              "description": "source registry",
+              "type": "string"
+            },
+            "image": {
+              "description": "source image",
+              "type": "string"
+            },
+            "ref": {
+              "description": "source ref",
+              "type": "string"
+            },
+            "digest": {
+              "description": "source digest",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

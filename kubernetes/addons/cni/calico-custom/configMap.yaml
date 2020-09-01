@@ -1,14 +1,16 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: calico.conf
+  name: calico-custom.conf
 data:
+  # https://docs.projectcalico.org/reference/node/configuration#configuring-the-default-ip-pools
   # 官方默认
   # podCIDR: 192.168.0.0/16
   # 改为和 flannel 一致
   podCIDR: 10.244.0.0/16
   IPV6podCIDR: fc00::/48
   # ipip is default
-  ipip: "Always"
+  # ipip: "Always"
+  ipip: CrossSubnet
   # enable BGP
   # ipip: "Never"

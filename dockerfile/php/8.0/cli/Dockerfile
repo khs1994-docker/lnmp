@@ -6,7 +6,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=8.0.0beta1
+ARG PHP_VERSION=8.0.0beta2
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -153,8 +153,8 @@ ENV PHP_VERSION=${PHP_VERSION}
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:8.0.0beta1-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:8.0.0beta1-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:8.0.0beta2-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:8.0.0beta2-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -204,29 +204,17 @@ RUN --mount=type=bind,from=php:8.0.0beta1-alpine,source=/usr/src,target=/usr/loc
             CPPFLAGS="$PHP_CPPFLAGS" \
             LDFLAGS="$PHP_LDFLAGS" \
   && docker-php-source extract \
-  && mv /usr/include/gnu-libiconv/*.h /usr/include \
-  && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   \
-  && apk add --no-cache patch \
-  && { \
-        echo "--- a/build/php.m4"; \
-        echo "+++ b/build/php.m4"; \
-        echo "@@ -305,7 +305,7 @@"; \
-        echo " ])"; \
-        echo ""; \
-        echo " AC_DEFUN([PHP_CHECK_GCC_ARG],["; \
-        echo "-  AC_MSG_ERROR([Use AX_CHECK_COMPILE_FLAG instead])"; \
-        echo "+  AC_MSG_ERROR([[Use AX_CHECK_COMPILE_FLAG instead]])"; \
-        echo " ])"; \
-        echo ""; \
-        echo " dnl"; \
-        } | tee 1.diff \
-  && patch -p1 < 1.diff \
-  && apk del --no-network patch \
-  && rm -rf 1.diff \
-  && ./buildconf --force \
+  # && apk add --no-cache patch \
+  # && { \
+  #       echo "--- a/build/php.m4"; \
+  #    } | tee 1.diff \
+  # && patch -p1 < 1.diff \
+  # && apk del --no-network patch \
+  # && rm -rf 1.diff \
+  # && ./buildconf --force \
   \
   && ./configure \
     --build="$gnuArch" \
@@ -351,14 +339,16 @@ RUN --mount=type=bind,from=php:8.0.0beta1-alpine,source=/usr/src,target=/usr/loc
 
 ENV PECL_BUILD_DEPS \
       libmemcached-dev \
-      yaml-dev \
+      # yaml-dev \
       pcre2-dev \
-      zlib-dev
+      zlib-dev \
+      zstd-dev
 
 ENV PECL_RUN_DEPS \
       libmemcached-libs \
-      yaml \
-      zlib
+      # yaml \
+      zlib \
+      zstd-libs
 
 ENV PECL_EXTENSION \
       # mongodb \
@@ -370,10 +360,11 @@ ENV PECL_EXTENSION \
       memcached \
       # xdebug-beta \
       # yaml \
-      https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
+      # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:8.0.0beta1-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:8.0.0beta2-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \
@@ -382,8 +373,9 @@ RUN --mount=type=bind,from=php:8.0.0beta1-alpine,source=/usr/local/bin,target=/o
       && curl -fsSL -o /usr/local/bin/pickle \
            https://github.com/khs1994-php/pickle/releases/download/nightly/pickle-debug.phar \
       && chmod +x /usr/local/bin/pickle \
-      && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+      && echo "--enable-redis-igbinary --enable-redis-zstd" > /tmp/redis.configure.options \
       && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
+      && echo "--with-libzstd" > /tmp/zstd.configure.options \
       && pickle install $PECL_EXTENSION -n --defaults --strip --cleanup \
       && pickle install \
          # xdebug \

@@ -1,6 +1,0 @@
-variant: fcos
-version: 1.0.0
-systemd:
-  units:
-storage:
-  files:

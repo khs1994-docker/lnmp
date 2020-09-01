@@ -1,0 +1,5 @@
+resources:
+- csi-smb-controller.yaml
+- csi-smb-driver.yaml
+- csi-smb-node.yaml
+- rbac-csi-smb-controller.yaml

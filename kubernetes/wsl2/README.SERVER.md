@@ -4,7 +4,7 @@
 
 * `wsl2.k8s.khs1994.com` 解析到 WSL2 IP
 * `windows.k8s.khs1994.com` 解析到 Windows IP
-* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(kube-nginx 代理)`
+* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(使用 netsh.exe 代理 wsl2 到 windows)`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
@@ -13,14 +13,14 @@
 ## Master
 
 * `Etcd` Windows
-* `kube-nginx` Windows
+* `kube-wsl2windows` Windows
 * `kube-apiserver` WSL2
 * `kube-controller-manager` WSL2
 * `kube-scheduler` WSL2
 
 ## 初始化
 
-```bash
+```powershell
 $ ./lnmp-k8s
 ```
 
@@ -38,8 +38,9 @@ WINDOWS_IP windows.k8s.khs1994.com
 $ cd ~/lnmp
 
 # $ $env:REGISTRY_MIRROR="xxxx.mirror.aliyuncs.com"
+# $ $env:REGISTRY_MIRROR="mirror.baidubce.com"
 
-$ . ./windows/sdk/dockerhub/rootfs
+$ . ../windows/sdk/dockerhub/rootfs
 
 $ wsl --import wsl-k8s `
     C:/wsl-k8s `
@@ -62,7 +63,7 @@ $ wsl -d wsl-k8s-data -- uname -a
 
 ## WSL(wsl-k8s) 修改 APT 源并安装必要软件
 
-```bash
+```powershell
 $ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
 
 $ wsl -d wsl-k8s -- apt update
@@ -76,7 +77,9 @@ $ wsl -d wsl-k8s -- apt install procps
 下载并编辑 `/etc/wsl.conf`
 
 ```bash
-$ sudo curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
+$ apt install curl vim
+
+$ curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
 ```
 
 ```diff
@@ -84,7 +87,7 @@ $ sudo curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/ln
 + root = /
 ```
 
-```bash
+```powershell
 $ wsl --shutdown
 ```
 
@@ -142,13 +145,13 @@ $ wsl -d wsl-k8s
 $ set -x
 $ source wsl2/.env
 
-$ sudo mkdir -p ${K8S_ROOT:?err}
-$ sudo mkdir -p ${K8S_ROOT:?err}/{certs,conf,bin,log}
-$ sudo cp -a wsl2/certs ${K8S_ROOT:?err}/
-$ sudo mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
-$ sudo mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
+$ mkdir -p ${K8S_ROOT:?err}
+$ mkdir -p ${K8S_ROOT:?err}/{certs,conf,bin,log}
+$ cp -a wsl2/certs ${K8S_ROOT:?err}/
+$ mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
+$ mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
 
-$ sudo cp -a kubernetes-release/release/v1.18.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
+$ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
 ## Windows 启动 Etcd
@@ -161,14 +164,10 @@ $ ./wsl2/etcd
 $ get-process etcd
 ```
 
-## Windows 启动 kube-nginx
-
-`lwpm` 安装 NGINX
+## Windows 启动 wsl2windows 代理
 
 ```powershell
-$ ./wsl2/kube-nginx
-
-$ get-process nginx
+$ ./wsl2/kube-wsl2windows k8s
 ```
 
 ## kube-apiserver
@@ -304,15 +303,15 @@ $ ./wsl2/bin/supervisorctl start kube-server:
 
 ## 最终脚本(日常使用)
 
-> 请先手动启动 `kube-nginx` `kube-etcd`
-
 ```powershell
-# $ ./wsl2/kube-nginx
-# $ ./wsl2/etcd
+$ ./wsl2/kube-wsl2windows k8s
+$ ./wsl2/etcd
 
 $ ./wsl2/bin/kube-server
 
-# $ ./wsl2/bin/kube-server stop
-# $ ./wsl2/kube-nginx stop
-# $ ./wsl2/etcd stop
+# STOP
+
+$ ./wsl2/bin/kube-server stop
+$ ./wsl2/kube-wsl2windows k8s-stop
+$ ./wsl2/etcd stop
 ```

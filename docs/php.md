@@ -14,12 +14,11 @@
 * [redis](https://pecl.php.net/package/redis)
 * [Swoole](http://pecl.php.net/package/swoole)
 * [xdebug (生产环境不启用)](https://pecl.php.net/package/xdebug)
-* [yaml](http://pecl.php.net/package/yaml)
 
 **核心扩展**
 
-* **mcrypt** 7.2 移除
 * **mysql** 7.0 移除
+* **mcrypt** 7.2 移除
 * **interbase** 7.4 移除
 * **wddx** 7.4 移除
 * **recode** 7.4 移除
@@ -212,7 +211,7 @@ $ docker rm -f CONTAINER_ID
 ```ini
 session.save_handler = redis
 
-session.save_path ="tcp://redis:6379?auth=redis密码
+session.save_path ="tcp://redis:6379?auth=redis密码"
 ```
 
 ## More Information

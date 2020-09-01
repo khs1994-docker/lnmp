@@ -7,7 +7,7 @@ Import-Module getHttpCode
 
 $ErrorActionPreference = 'stop'
 
-if (Test-Path $PSScriptRoot\lwpm-json-schema.json) {
+if (Test-Path $PSScriptRoot\lwpm.schema.json) {
   if (!($env:LWPM_MANIFEST_PATH)) {
     Write-Host "==> lwpm package without custom script load error" -ForegroundColor Red
 

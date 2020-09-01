@@ -1,0 +1,13 @@
+--- a/app/Console/Kernel.php
++++ b/app/Console/Kernel.php
+@@ -25,6 +25,10 @@ class Kernel extends ConsoleKernel
+     protected function schedule(Schedule $schedule)
+     {
+         // $schedule->command('inspire')->hourly();
++
++        $schedule->command('env')
++            ->everyMinute()
++            ->appendOutputTo(storage_path('app/schedule.txt'));
+     }
+
+     /**

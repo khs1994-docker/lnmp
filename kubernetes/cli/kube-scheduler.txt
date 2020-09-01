@@ -1,12 +1,12 @@
-I0712 12:56:47.864763    4380 registry.go:150] Registering EvenPodsSpread predicate and priority function
-I0712 12:56:47.864813    4380 registry.go:150] Registering EvenPodsSpread predicate and priority function
-The Kubernetes scheduler is a policy-rich, topology-aware,
-workload-specific function that significantly impacts availability, performance,
-and capacity. The scheduler needs to take into account individual and collective
-resource requirements, quality of service requirements, hardware/software/policy
-constraints, affinity and anti-affinity specifications, data locality, inter-workload
-interference, deadlines, and so on. Workload-specific requirements will be exposed
-through the API as necessary. See [scheduling](https://kubernetes.io/docs/concepts/scheduling/)
+I0827 09:20:05.068852   33251 registry.go:173] Registering SelectorSpread plugin
+I0827 09:20:05.068910   33251 registry.go:173] Registering SelectorSpread plugin
+The Kubernetes scheduler is a control plane process which assigns
+Pods to Nodes. The scheduler determines which Nodes are valid placements for
+each Pod in the scheduling queue according to constraints and available
+resources. The scheduler then ranks each valid Node and binds the Pod to a
+suitable Node. Multiple different schedulers may be used within a cluster;
+kube-scheduler is the reference implementation.
+See [scheduling](https://kubernetes.io/docs/concepts/scheduling-eviction/)
 for more information about scheduling and the kube-scheduler component.
 
 Usage:
@@ -14,7 +14,13 @@ Usage:
 
 Misc flags:
 
-      --config string            The path to the configuration file. Flags override values in this file.
+      --config string            The path to the configuration file. The following flags can overwrite fields in this file:
+                                   --address
+                                   --port
+                                   --use-legacy-policy-config
+                                   --policy-configmap
+                                   --policy-config-file
+                                   --algorithm-provider
       --master string            The address of the Kubernetes API server (overrides any value in kubeconfig)
       --write-config-to string   If set, write the configuration values to this file and exit.
 
@@ -23,9 +29,12 @@ Secure serving flags:
       --bind-address ip                        The IP address on which to listen for the --secure-port port. The associated interface(s) must be reachable by the rest of the cluster, and by CLI/web clients. If blank or an unspecified address (0.0.0.0 or ::), all interfaces will be used. (default 0.0.0.0)
       --cert-dir string                        The directory where the TLS certs are located. If --tls-cert-file and --tls-private-key-file are provided, this flag will be ignored.
       --http2-max-streams-per-connection int   The limit that the server gives to clients for the maximum number of streams in an HTTP/2 connection. Zero means to use golang's default.
+      --permit-port-sharing                    If true, SO_REUSEPORT will be used when binding the port, which allows more than one instance to bind on the same address and port. [default=false]
       --secure-port int                        The port on which to serve HTTPS with authentication and authorization. If 0, don't serve HTTPS at all. (default 10259)
       --tls-cert-file string                   File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
-      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be use.  Possible values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_RC4_128_SHA,TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_3DES_EDE_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_RC4_128_SHA
+      --tls-cipher-suites strings              Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be used.
+                                               Preferred values: TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_RSA_WITH_3DES_EDE_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384.
+                                               Insecure values: TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_RC4_128_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_RC4_128_SHA, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_RC4_128_SHA.
       --tls-min-version string                 Minimum TLS version supported. Possible values: VersionTLS10, VersionTLS11, VersionTLS12, VersionTLS13
       --tls-private-key-file string            File containing the default x509 private key matching --tls-cert-file.
       --tls-sni-cert-key namedCertKey          A pair of x509 certificate and private key file paths, optionally suffixed with a list of domain patterns which are fully qualified domain names, possibly with prefixed wildcard segments. The domain patterns also allow IP addresses, but IPs should only be used if the apiserver has visibility to the IP address requested by a client. If no domain patterns are provided, the names of the certificate are extracted. Non-wildcard matches trump over wildcard matches, explicit domain patterns trump over extracted names. For multiple key/certificate pairs, use the --tls-sni-cert-key multiple times. Examples: "example.crt,example.key" or "foo.crt,foo.key:*.foo.com,foo.com". (default [])
@@ -57,7 +66,7 @@ Authorization flags:
 
 Deprecated flags:
 
-      --algorithm-provider string                  DEPRECATED: the scheduling algorithm provider to use, one of: ClusterAutoscalerProvider | DefaultProvider
+      --algorithm-provider string                  DEPRECATED: the scheduling algorithm provider to use, this sets the default plugins for component config profiles. Choose one of: ClusterAutoscalerProvider | DefaultProvider
       --contention-profiling                       DEPRECATED: enable lock contention profiling, if profiling is enabled (default true)
       --hard-pod-affinity-symmetric-weight int32   DEPRECATED: RequiredDuringScheduling affinity is not symmetric, but there is an implicit PreferredDuringScheduling affinity rule corresponding to every RequiredDuringScheduling affinity rule. --hard-pod-affinity-symmetric-weight represents the weight of implicit PreferredDuringScheduling affinity rule. Must be in the range 0-100.This option was moved to the policy configuration file (default 1)
       --kube-api-burst int32                       DEPRECATED: burst to use while talking with kubernetes apiserver (default 100)
@@ -66,19 +75,19 @@ Deprecated flags:
       --kubeconfig string                          DEPRECATED: path to kubeconfig file with authorization and master location information.
       --lock-object-name string                    DEPRECATED: define the name of the lock object. Will be removed in favor of leader-elect-resource-name (default "kube-scheduler")
       --lock-object-namespace string               DEPRECATED: define the namespace of the lock object. Will be removed in favor of leader-elect-resource-namespace. (default "kube-system")
-      --policy-config-file string                  DEPRECATED: file with scheduler policy configuration. This file is used if policy ConfigMap is not provided or --use-legacy-policy-config=true
-      --policy-configmap string                    DEPRECATED: name of the ConfigMap object that contains scheduler's policy configuration. It must exist in the system namespace before scheduler initialization if --use-legacy-policy-config=false. The config must be provided as the value of an element in 'Data' map with the key='policy.cfg'
-      --policy-configmap-namespace string          DEPRECATED: the namespace where policy ConfigMap is located. The kube-system namespace will be used if this is not provided or is empty. (default "kube-system")
+      --policy-config-file string                  DEPRECATED: file with scheduler policy configuration. This file is used if policy ConfigMap is not provided or --use-legacy-policy-config=true. Note: The scheduler will fail if this is combined with Plugin configs
+      --policy-configmap string                    DEPRECATED: name of the ConfigMap object that contains scheduler's policy configuration. It must exist in the system namespace before scheduler initialization if --use-legacy-policy-config=false. The config must be provided as the value of an element in 'Data' map with the key='policy.cfg'. Note: The scheduler will fail if this is combined with Plugin configs
+      --policy-configmap-namespace string          DEPRECATED: the namespace where policy ConfigMap is located. The kube-system namespace will be used if this is not provided or is empty. Note: The scheduler will fail if this is combined with Plugin configs (default "kube-system")
       --profiling                                  DEPRECATED: enable profiling via web interface host:port/debug/pprof/ (default true)
       --scheduler-name string                      DEPRECATED: name of the scheduler, used to select which pods will be processed by this scheduler, based on pod's "spec.schedulerName". (default "default-scheduler")
-      --use-legacy-policy-config                   DEPRECATED: when set to true, scheduler will ignore policy ConfigMap and uses policy config file
+      --use-legacy-policy-config                   DEPRECATED: when set to true, scheduler will ignore policy ConfigMap and uses policy config file. Note: The scheduler will fail if this is combined with Plugin configs
 
 Leader election flags:
 
       --leader-elect                             Start a leader election client and gain leadership before executing the main loop. Enable this when running replicated components for high availability. (default true)
       --leader-elect-lease-duration duration     The duration that non-leader candidates will wait after observing a leadership renewal until attempting to acquire leadership of a led but unrenewed leader slot. This is effectively the maximum duration that a leader can be stopped before it is replaced by another candidate. This is only applicable if leader election is enabled. (default 15s)
       --leader-elect-renew-deadline duration     The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to the lease duration. This is only applicable if leader election is enabled. (default 10s)
-      --leader-elect-resource-lock endpoints     The type of resource object that is used for locking during leader election. Supported options are endpoints (default) and `configmaps`. (default "endpointsleases")
+      --leader-elect-resource-lock string        The type of resource object that is used for locking during leader election. Supported options are 'endpoints', 'configmaps', 'leases', 'endpointsleases' and 'configmapsleases'. (default "endpointsleases")
       --leader-elect-resource-name string        The name of resource object that is used for locking during leader election. (default "kube-scheduler")
       --leader-elect-resource-namespace string   The namespace of resource object that is used for locking during leader election. (default "kube-system")
       --leader-elect-retry-period duration       The duration the clients should wait between attempting acquisition and renewal of a leadership. This is only applicable if leader election is enabled. (default 2s)
@@ -102,7 +111,7 @@ Feature gate flags:
                                       CSIMigration=true|false (BETA - default=true)
                                       CSIMigrationAWS=true|false (BETA - default=false)
                                       CSIMigrationAWSComplete=true|false (ALPHA - default=false)
-                                      CSIMigrationAzureDisk=true|false (ALPHA - default=false)
+                                      CSIMigrationAzureDisk=true|false (BETA - default=false)
                                       CSIMigrationAzureDiskComplete=true|false (ALPHA - default=false)
                                       CSIMigrationAzureFile=true|false (ALPHA - default=false)
                                       CSIMigrationAzureFileComplete=true|false (ALPHA - default=false)
@@ -110,50 +119,52 @@ Feature gate flags:
                                       CSIMigrationGCEComplete=true|false (ALPHA - default=false)
                                       CSIMigrationOpenStack=true|false (BETA - default=false)
                                       CSIMigrationOpenStackComplete=true|false (ALPHA - default=false)
+                                      CSIMigrationvSphere=true|false (BETA - default=false)
+                                      CSIMigrationvSphereComplete=true|false (BETA - default=false)
+                                      CSIStorageCapacity=true|false (ALPHA - default=false)
+                                      CSIVolumeFSGroupPolicy=true|false (ALPHA - default=false)
                                       ConfigurableFSGroupPolicy=true|false (ALPHA - default=false)
                                       CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
-                                      DefaultIngressClass=true|false (BETA - default=true)
+                                      DefaultPodTopologySpread=true|false (ALPHA - default=false)
                                       DevicePlugins=true|false (BETA - default=true)
-                                      DryRun=true|false (BETA - default=true)
-                                      DynamicAuditing=true|false (ALPHA - default=false)
+                                      DisableAcceleratorUsageMetrics=true|false (ALPHA - default=false)
                                       DynamicKubeletConfig=true|false (BETA - default=true)
                                       EndpointSlice=true|false (BETA - default=true)
-                                      EndpointSliceProxying=true|false (ALPHA - default=false)
+                                      EndpointSliceProxying=true|false (BETA - default=true)
                                       EphemeralContainers=true|false (ALPHA - default=false)
-                                      EvenPodsSpread=true|false (BETA - default=true)
                                       ExpandCSIVolumes=true|false (BETA - default=true)
                                       ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                       ExpandPersistentVolumes=true|false (BETA - default=true)
                                       ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
+                                      GenericEphemeralVolume=true|false (ALPHA - default=false)
                                       HPAScaleToZero=true|false (ALPHA - default=false)
-                                      HugePageStorageMediumSize=true|false (ALPHA - default=false)
+                                      HugePageStorageMediumSize=true|false (BETA - default=true)
                                       HyperVContainer=true|false (ALPHA - default=false)
                                       IPv6DualStack=true|false (ALPHA - default=false)
-                                      ImmutableEphemeralVolumes=true|false (ALPHA - default=false)
+                                      ImmutableEphemeralVolumes=true|false (BETA - default=true)
                                       KubeletPodResources=true|false (BETA - default=true)
-                                      LegacyNodeRoleBehavior=true|false (ALPHA - default=true)
+                                      LegacyNodeRoleBehavior=true|false (BETA - default=true)
                                       LocalStorageCapacityIsolation=true|false (BETA - default=true)
                                       LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
-                                      NodeDisruptionExclusion=true|false (ALPHA - default=false)
-                                      NonPreemptingPriority=true|false (ALPHA - default=false)
+                                      NodeDisruptionExclusion=true|false (BETA - default=true)
+                                      NonPreemptingPriority=true|false (BETA - default=true)
                                       PodDisruptionBudget=true|false (BETA - default=true)
                                       PodOverhead=true|false (BETA - default=true)
                                       ProcMountType=true|false (ALPHA - default=false)
                                       QOSReserved=true|false (ALPHA - default=false)
                                       RemainingItemCount=true|false (BETA - default=true)
                                       RemoveSelfLink=true|false (ALPHA - default=false)
-                                      ResourceLimitsPriorityFunction=true|false (ALPHA - default=false)
-                                      RotateKubeletClientCertificate=true|false (BETA - default=true)
                                       RotateKubeletServerCertificate=true|false (BETA - default=true)
                                       RunAsGroup=true|false (BETA - default=true)
                                       RuntimeClass=true|false (BETA - default=true)
-                                      SCTPSupport=true|false (ALPHA - default=false)
-                                      SelectorIndex=true|false (ALPHA - default=false)
+                                      SCTPSupport=true|false (BETA - default=true)
+                                      SelectorIndex=true|false (BETA - default=true)
                                       ServerSideApply=true|false (BETA - default=true)
                                       ServiceAccountIssuerDiscovery=true|false (ALPHA - default=false)
-                                      ServiceAppProtocol=true|false (ALPHA - default=false)
-                                      ServiceNodeExclusion=true|false (ALPHA - default=false)
+                                      ServiceAppProtocol=true|false (BETA - default=true)
+                                      ServiceNodeExclusion=true|false (BETA - default=true)
                                       ServiceTopology=true|false (ALPHA - default=false)
+                                      SetHostnameAsFQDN=true|false (ALPHA - default=false)
                                       StartupProbe=true|false (BETA - default=true)
                                       StorageVersionHash=true|false (BETA - default=true)
                                       SupportNodePidsLimit=true|false (BETA - default=true)
@@ -165,16 +176,24 @@ Feature gate flags:
                                       TopologyManager=true|false (BETA - default=true)
                                       ValidateProxyRedirects=true|false (BETA - default=true)
                                       VolumeSnapshotDataSource=true|false (BETA - default=true)
+                                      WarningHeaders=true|false (BETA - default=true)
                                       WinDSR=true|false (ALPHA - default=false)
                                       WinOverlay=true|false (ALPHA - default=false)
+                                      WindowsEndpointSliceProxying=true|false (ALPHA - default=false)
 
 Metrics flags:
 
-      --show-hidden-metrics-for-version string   The previous version for which you want to show hidden metrics. Only the previous minor version is meaningful, other values will not be allowed. Accepted format of version is <major>.<minor>, e.g.: '1.16'. The purpose of this format is make sure you have the opportunity to notice if the next release hides additional metrics, rather than being surprised when they are permanently removed in the release after that.
+      --show-hidden-metrics-for-version string   The previous version for which you want to show hidden metrics. Only the previous minor version is meaningful, other values will not be allowed. The format is <major>.<minor>, e.g.: '1.16'. The purpose of this format is make sure you have the opportunity to notice if the next release hides additional metrics, rather than being surprised when they are permanently removed in the release after that.
+
+Logs flags:
+
+      --logging-format string   Sets the log format. Permitted formats: "text", "json".
+                                Non-default formats don't honor these flags: --add_dir_header, --alsologtostderr, --log_backtrace_at, --log_dir, --log_file, --log_file_max_size, --logtostderr, --skip_headers, --skip_log_headers, --stderrthreshold, --vmodule, --log-flush-frequency.
+                                Non-default choices are currently alpha and subject to change without warning. (default "text")
 
 Global flags:
 
-      --add-dir-header                   If true, adds the file directory to the header
+      --add-dir-header                   If true, adds the file directory to the header of the log messages
       --alsologtostderr                  log to standard error as well as files
   -h, --help                             help for kube-scheduler
       --log-backtrace-at traceLocation   when logging hits line file:N, emit a stack trace (default :0)

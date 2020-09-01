@@ -15,7 +15,8 @@ jobs:
      DOCKER_CLI_EXPERIMENTAL: enabled
      CI_KUBERNETES_VERSION: ${{matrix.CI_KUBERNETES_VERSION}}
      LNMP_K8S_GET: ${{matrix.LNMP_K8S_GET}}
-     K8S_IMAGE: ${{matrix.K8S_IMAGE}}
+     K8S_IMAGE_NS: ${{matrix.K8S_IMAGE_NS}}
+     K8S_IMAGE_REGISTRY: ${{matrix.K8S_IMAGE_REGISTRY}}
      K8S_ROOT: ${{matrix.K8S_ROOT}}
      LNMP_K8S_LOCAL_INSTALL_OPTIONS: ${{matrix.LNMP_K8S_LOCAL_INSTALL_OPTIONS}}
      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
@@ -25,16 +26,14 @@ jobs:
      max-parallel: 1
      matrix:
        include:
-       - os: ubuntu
-         dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.0-rc.4
-         LNMP_K8S_GET: --url
-         K8S_IMAGE: lwpm/kubernetes-server
+      #  - os: ubuntu
+      #    dist: 20.04
+      #    CI_KUBERNETES_VERSION: 1.19.0-rc.4
+      #    LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0-alpha.0
          LNMP_K8S_GET: --url
-         K8S_IMAGE: lwpm/kubernetes-server
        # next version
       #  - os: ubuntu
       #    dist: 20.04
@@ -44,33 +43,31 @@ jobs:
        # current stable version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.18.0
+         CI_KUBERNETES_VERSION: 1.19.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
-         K8S_IMAGE: lwpm/kubernetes-server
+         K8S_IMAGE_NS: khs1994
+         K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.18.6
+         CI_KUBERNETES_VERSION: 1.19.0
          LNMP_K8S_GET: --url
-         K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.18.0
+         CI_KUBERNETES_VERSION: 1.19.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
-         K8S_IMAGE: lwpm/kubernetes-server
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.18.6
+         CI_KUBERNETES_VERSION: 1.19.0
          LNMP_K8S_GET: --url
-         K8S_IMAGE: lwpm/kubernetes-server
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.17.9
+         CI_KUBERNETES_VERSION: 1.18.8
          LNMP_K8S_GET: --url
        - os: ubuntu
-         dist: 16.04
-         CI_KUBERNETES_VERSION: 1.16.13
+         dist: 20.04
+         CI_KUBERNETES_VERSION: 1.17.9
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -91,6 +88,11 @@ jobs:
          key: khs1994-docker-lnmp-caches
      - run: |
          set -x
+
+         uname -a
+
+         mount bpffs /sys/fs/bpf -t bpf || true
+         mount -t bpf || true
 
          df -h
 
@@ -278,7 +280,7 @@ jobs:
          kubectl certificate approve $CSR_NAME
          kubectl get csr
 
-         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/calico.yaml
+         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
          git diff
          kubectl apply -k addons/cni/calico-custom
 

@@ -1,0 +1,29 @@
+bases:
+  - ../../../storage/pvc/hostpath
+commonLabels:
+  env: production
+patchesJson6902:
+  - path: patch.json
+    target:
+      group: ""
+      kind: PersistentVolumeClaim
+      name: lnmp-mysql-data
+      version: v1
+  - path: patch.json
+    target:
+      group: ""
+      kind: PersistentVolumeClaim
+      name: lnmp-redis-data
+      version: v1
+  - path: patch.json
+    target:
+      group: ""
+      kind: PersistentVolumeClaim
+      name: lnmp-app
+      version: v1
+  - path: patch.json
+    target:
+      group: ""
+      kind: PersistentVolumeClaim
+      name: lnmp-log
+      version: v1

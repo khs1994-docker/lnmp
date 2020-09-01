@@ -87,17 +87,19 @@ $ ./ci
 ### 安全（务必仔细配置）
 
 ```bash
-# https://docs.drone.io/manage/user/admins/
-# https://docs.drone.io/installation/reference/drone-user-create/
+# https://docs.drone.io/server/user/admin/
+# https://docs.drone.io/server/reference/drone-user-create/
 # 只有管理员账户(admin) 才可以编辑仓库的 `Trusted` 选项
 # 为了启用 `Trusted` 选项，强烈建议编辑此变量
 # 将 USERNAME 替换为自己的 github 用户名
-# 或者参考 https://docs.drone.io/manage/user/admins/ 使用 CLI 设置管理员
+# 或者参考 https://docs.drone.io/server/user/admin/ 使用 CLI 设置管理员
 DRONE_USER_CREATE=
 # DRONE_USER_CREATE=username:USERNAME,admin:true
 # DRONE_USER_CREATE=username:khs1994,machine:false,admin:true,token:TOKEN
 # TOKEN 使用 $ openssl rand -hex 16 生成
-# https://docs.drone.io/installation/security/registration/
+
+# 仅限某些用户或某些组织的成员注册
+# https://docs.drone.io/server/reference/drone-user-filter/
 DRONE_USER_FILTER=
 # DRONE_USER_FILTER=khs1994,github
 ```

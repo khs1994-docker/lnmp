@@ -4,7 +4,7 @@ set -ex
 
 echo "==> Set app"
 mkdir -p ../app/laravel/public
-cp deployment/app/index.php ../app/laravel/public/
+cp lnmp/app/index.php ../app/laravel/public/
 
 echo "==> Up nfs server"
 ./lnmp-k8s nfs
@@ -18,21 +18,40 @@ sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
 sudo umount /tmp2
 
 echo "==> set LNMP_NFS_SERVER_HOST .env"
-sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
+# sed -i "s#192.168.199.100#${SERVER_IP}#g" .env
 
-./lnmp-k8s create
+echo "==> Test LNMP with NFS"
+cd lnmp
+kubectl kustomize storage/pv/nfs | sed "s/192.168.199.100/${SERVER_IP}/g" | kubectl apply -f -
+kubectl create ns lnmp
+kubectl apply -k storage/pvc/nfs -n lnmp
+kubectl apply -k redis/overlays/development -n lnmp
+kubectl apply -k mysql/overlays/development -n lnmp
+kubectl apply -k php/overlays/development -n lnmp
+kubectl apply -k nginx/overlays/development -n lnmp
+kubectl apply -k nginx/overlays/nodePort-80-443 -n lnmp
+cd ..
 echo "${SERVER_IP} laravel2.t.khs1994.com" | sudo tee -a /etc/hosts
 ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
 sleep 120
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
-./lnmp-k8s delete
-./lnmp-k8s cleanup
+kubectl delete ns lnmp
+kubectl delete pv -l app=lnmp
 ./lnmp-k8s nfs down
 
-echo "==> Test noNFS volume"
+echo "==> Test LNMP with hostpath"
 cp -rf ../app ~/app-development
-./lnmp-k8s create development --no-nfs
+cd lnmp
+kubectl kustomize storage/pv/linux | sed "s/__USERNAME__/$(whoami)/g" | kubectl apply -f -
+kubectl create ns lnmp
+kubectl apply -k storage/pvc/hostpath -n lnmp
+kubectl apply -k redis/overlays/development -n lnmp
+kubectl apply -k mysql/overlays/development -n lnmp
+kubectl apply -k php/overlays/development -n lnmp
+kubectl apply -k nginx/overlays/development -n lnmp
+kubectl apply -k nginx/overlays/nodePort-80-443 -n lnmp
+cd ..
 sleep 50
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com

@@ -43,7 +43,7 @@ module.exports = {
         link: 'https://khs1994.com',
       },
       {
-        text: 'Kubernetes 免费实验室',
+        text: '腾讯云容器服务',
         link: 'https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61'
       }
     ],
@@ -87,7 +87,6 @@ module.exports = {
         'dashboard',
         'efk',
         'metrics-server',
-        'prometheus-operator',
         'registry',
       ],
       "/log/": [

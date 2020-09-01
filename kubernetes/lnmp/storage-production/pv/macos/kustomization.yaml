@@ -1,0 +1,29 @@
+bases:
+  - ../linux
+commonLabels:
+  env: production
+patchesJson6902:
+  - path: patch-app.json
+    target:
+      group: ""
+      kind: PersistentVolume
+      name: lnmp-app
+      version: v1
+  - path: patch-mysql.json
+    target:
+      group: ""
+      kind: PersistentVolume
+      name: lnmp-mysql-data
+      version: v1
+  - path: patch-redis.json
+    target:
+      group: ""
+      kind: PersistentVolume
+      name: lnmp-redis-data
+      version: v1
+  - path: patch-log.json
+    target:
+      group: ""
+      kind: PersistentVolume
+      name: lnmp-log
+      version: v1

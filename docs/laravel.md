@@ -143,7 +143,7 @@ $ code --install-extension ms-vscode-remote.remote-containers
 APP_ROOT=/root/app
 
 # 增加 workspace 服务
-LNMP_SERVICES="nginx mysql php7 redis phpmyadmin workspace"
+LNMP_SERVICES="nginx mysql php7 redis workspace"
 ```
 
 ```powershell

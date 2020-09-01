@@ -17,8 +17,6 @@ source ./.env
 
 TMP_ROOT=$HOME/.khs1994-docker-lnmp/caches
 
-# HELM_SERVICES=("redis" "mysql" "nginx-php" "registry")
-
 ################################################################################
 
 if ! [ -f lnmp-k8s ];then if [ -n "$LNMP_PATH" ];then cd $LNMP_PATH/kubernetes > /dev/null; else exit; fi; fi
@@ -63,16 +61,7 @@ Commands:
 
   join                   New worker [NODE_IP] { CRI: --containerd (default) | --crio | --docker } {--hostname=HOST_NAME} {--skip-cp-k8s-bin}
 
-  create                 Deploy lnmp on k8s {ENVIRONMENT: development (default) | testing | staging | production} { --ingress | --no-nfs } {options}
-  delete                 Stop lnmp on k8s, keep data resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
-  cleanup                Stop lnmp on k8s, and remove all resource(pv and pvc) {ENVIRONMENT: development (default) | testing | staging | production}
-
   nfs                    Up NFS server { down | logs }
-
-  helm-development       Install Helm LNMP In Development
-  helm-testing           Install Helm LNMP In Testing
-  helm-staging           Install Helm LNMP In Staging
-  helm-production        Install Helm LNMP In Production
 "
 }
 
@@ -147,22 +136,23 @@ _get_kubernetes_server_by_docker_image(){
      return
   fi
 
-  if [ -z "${K8S_IMAGE}" ];then
+  if [ -z "${K8S_IMAGE_NS}" ];then
+      K8S_IMAGE_NS=lwpm
+  fi
+
+  if [ -z "${K8S_IMAGE_REGISTRY}" ];then
     if [ "${LNMP_CN_ENV}" != 'false' ];then
       # 国内
       K8S_IMAGE_REGISTRY="ccr.ccs.tencentyun.com"
-      K8S_IMAGE=lwpm/kubernetes-${TYPE}
-    else
+    # else
       # 国外
-      # K8S_IMAGE_REGISTRY="uswccr.ccs.tencentyun.com"
-      K8S_IMAGE=lwpm/kubernetes-${TYPE}
+      # K8S_IMAGE_REGISTRY="useccr.ccs.tencentyun.com"
     fi
   fi
 
-  # docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:${KUBERNETES_VERSION}
+  # docker manifest inspect ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE_NS}/kubernetes-${TYPE}:${KUBERNETES_VERSION}
   # docker container rm khs1994-kubernetes-${TYPE} > /dev/null 2>&1 || true
   # docker container create --name khs1994-kubernetes-${TYPE} \
-  #  ${K8S_IMAGE_REGISTRY:-"docker.io"}/${K8S_IMAGE}:v${KUBERNETES_VERSION} command
   # docker container ls -a --filter name=khs1994-kubernetes-${TYPE}
   # docker container cp khs1994-kubernetes-${TYPE}:/kubernetes-${TYPE}-${GOOS}-${GOARCH}.tar.gz kubernetes-release/release/kubernetes-${TYPE}-${GOOS}-${GOARCH}-${KUBERNETES_VERSION}.tar.gz
   # docker container rm khs1994-kubernetes-${TYPE}
@@ -172,7 +162,7 @@ _get_kubernetes_server_by_docker_image(){
   local ScriptRoot="$( cd "$( dirname "$0"  )" && pwd  )"
 
   dist=$($ScriptRoot/../windows/sdk/dockerhub/rootfs.sh \
-  ${K8S_IMAGE} \
+  ${K8S_IMAGE_NS}/kubernetes-${TYPE} \
   ${KUBERNETES_VERSION} \
   ${GOARCH} \
   ${GOOS} \
@@ -238,7 +228,7 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
     return
   fi
 
-  test $GOOS != 'linux' && exit
+  # test $GOOS != 'linux' && exit
 
   # command -v docker > /dev/null
 
@@ -248,204 +238,6 @@ mkdir -p kubernetes-release/release/v${KUBERNETES_VERSION}-${GOOS}-${GOARCH}
     cd kubernetes-release/release
     __untar $@
   # fi
-}
-
-_delete_lnmp(){
-  ENVIRONMENT=${1:-development}
-  NAMESPACE="lnmp"
-
-  if [ $ENVIRONMENT != 'development' ];then
-    NAMESPACE="lnmp-${ENVIRONMENT}"
-  fi
-
-  kubectl delete deployment -l app=lnmp -n $NAMESPACE
-  kubectl delete service -l app=lnmp -n $NAMESPACE
-  kubectl delete secret -l app=lnmp -n $NAMESPACE
-  kubectl delete configmap -l app=lnmp -n $NAMESPACE
-
-  kubectl delete cronjob -l app=lnmp -n $NAMESPACE
-}
-
-_cleanup_lnmp(){
-  ENVIRONMENT=${1:-development}
-  NAMESPACE="lnmp"
-
-  if [ $ENVIRONMENT != 'development' ];then
-    NAMESPACE="lnmp-${ENVIRONMENT}"
-  fi
-
-  _delete_lnmp $ENVIRONMENT
-  kubectl delete pvc -l app=lnmp -n $NAMESPACE
-
-  kubectl delete pv -l app=lnmp
-
-  kubectl delete ingress -l app=lnmp -n $NAMESPACE
-}
-
-_create_pv(){
-  NAMESPACE=${1:-lnmp}
-
-  if [ $NAMESPACE = "lnmp" ];then
-    local ENVIRONMENT="development"
-  else
-    local ENVIRONMENT=`echo $NAMESPACE | cut -d '-' -f 2`
-  fi
-
-  for options in $@
-  do
-    test $options = "--no-nfs" && NO_NFS=1 && shift
-    test $options = "--no-pvc" && NO_PVC=1 && shift
-  done
-
-  shift
-
-  if [ "$OS" = 'Linux' ];then
-    # linux 默认使用 NFS PV
-    if [ -n "$NO_NFS" ];then
-      echo "==> create PV with HOSTPATH"
-      sed "s#/home/username#$HOME#g" deployment/pv/lnmp-volume.linux.temp.yaml \
-        | sed "s#development#${ENVIRONMENT}#g" \
-        | kubectl apply -f - $@
-
-      test -n "$NO_PVC" || \
-        kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml $@
-
-      return
-    fi
-
-    echo "==> create PV with NFS"
-    sed "s#192.168.199.100#${LNMP_NFS_SERVER_HOST}#g" deployment/pv/lnmp-volume.linux.nfs.yaml | \
-      kubectl apply -f - $@
-
-    test -n "$NO_PVC" || \
-      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.linux.nfs.yaml $@
-
-  elif [ "$OS" = 'Darwin' ];then
-    echo "==> create PV with HOSTPATH on macOS"
-
-    sed "s#/Users/username#$HOME#g" deployment/pv/lnmp-volume.macos.temp.yaml \
-      | sed "s#development#${ENVIRONMENT}#g" \
-      | kubectl apply -f - $@
-
-    test -n "$NO_PVC" || \
-      kubectl -n $NAMESPACE apply -f deployment/pvc/lnmp-pvc.yaml $@
-  fi
-}
-
-_create_lnmp(){
-  ENVIRONMENT=${1:-development}
-  NAMESPACE="lnmp"
-
-  if [ ${ENVIRONMENT} != 'development' ];then
-    NAMESPACE="lnmp-${ENVIRONMENT}"
-  fi
-
-  for option in $@
-  do
-    test $option = "--no-nfs" && NFS_OPTIONS=$option && shift
-    test $option = "--ingress" && INGRESS=1 && shift
-  done
-
-  shift || true
-
-  echo "==> NAMESPACE is ${NAMESPACE}"
-  echo "==> OPTIONS is $@"
-
-  k8s_current_context=`kubectl config current-context`
-
-  if [ $k8s_current_context != "docker-desktop" -a "$OS" = 'Darwin' ];then
-     echo "==> This Script ONLY Support [ K8S on Docker Desktop ] On macOS"
-
-     exit
-  fi
-
-  kubectl create namespace $NAMESPACE $@> /dev/null 2>&1 || true
-
-  if [ $NAMESPACE != 'lnmp' ];then
-    echo "==> create storage nfs-client "
-    sed "s/192.168.199.100/${LNMP_NFS_SERVER_HOST:-192.168.199.100}/g" \
-      storage/nfs-client/deploy/deploy.yaml | kubectl apply -f - || true
-
-    items="mysql redis php nginx"
-
-    if [ "$OS" = "Darwin" ] || [ "$NFS_OPTIONS" = "--no-nfs" ];then
-      _create_pv ${NAMESPACE} ${NFS_OPTIONS} --no-pvc $@
-
-      for item in $items
-      do
-        sed -i "s/# - hostpath.patch.yaml/- hostpath.patch.yaml/g" deployment/$item/overlays/${ENVIRONMENT}/kustomization.yaml
-      done
-    fi
-
-    for item in $items
-    do
-      kubectl -n ${NAMESPACE} apply -k deployment/$item/overlays/${ENVIRONMENT}/ $@
-    done
-
-    for item in $items
-    do
-      echo "==> restore kustomization.yaml"
-      git checkout -- deployment/$item/overlays/${ENVIRONMENT}/kustomization.yaml
-    done
-
-    # kubectl -n ${NAMESPACE} apply -k deployment/nginx/overlays/macos/ $@
-
-    return
-  fi
-
-  kubectl get pvc/lnmp-app -n $NAMESPACE -o json > /dev/null 2>&1 \
-    && echo "==> PVC exists, SKIP create PV and PVC" \
-    || _create_pv ${NAMESPACE} ${NFS_OPTIONS} $@
-
-  local options=$@
-
-  CONFIG_ROOT="deployment/php/overlays/${ENVIRONMENT}/config"
-  kubectl -n ${NAMESPACE} create configmap lnmp-php-conf \
-    --from-file=php.ini=${CONFIG_ROOT}/ini/php.${ENVIRONMENT}.ini \
-    --from-file=zz-docker.conf=${CONFIG_ROOT}/zz-docker.${ENVIRONMENT}.conf \
-    --from-file=composer.config.json=${CONFIG_ROOT}/composer/config.${ENVIRONMENT}.json \
-    --from-file=docker.ini=${CONFIG_ROOT}/conf.d/docker.${ENVIRONMENT}.ini \
-    --dry-run -o yaml \
-    | kubectl -n $NAMESPACE apply -f - $options
-  kubectl -n ${NAMESPACE} label configmap lnmp-php-conf app=lnmp version=0.0.1 $@ || true
-
-  CONFIG_ROOT="deployment/mysql/overlays/${ENVIRONMENT}/config"
-  kubectl -n ${NAMESPACE} create configmap lnmp-mysql-cnf \
-    --from-file=docker.cnf=${CONFIG_ROOT}/docker.${ENVIRONMENT}.cnf \
-    --dry-run -o yaml \
-    | kubectl -n $NAMESPACE apply -f - $options
-  kubectl -n ${NAMESPACE} label configmap lnmp-mysql-cnf app=lnmp version=0.0.1 $@ || true
-
-  CONFIG_ROOT="deployment/nginx/overlays/${ENVIRONMENT}/config"
-  kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf \
-    --from-file=nginx.conf=${CONFIG_ROOT}/nginx.${ENVIRONMENT}.conf \
-    --dry-run -o yaml \
-    | kubectl -n $NAMESPACE apply -f - $options
-  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf app=lnmp version=0.0.1 $@ || true
-
-  kubectl -n ${NAMESPACE} create configmap lnmp-nginx-conf.d \
-    --from-file=deployment/configMap/nginx-conf-d \
-    --dry-run -o yaml \
-    | kubectl -n $NAMESPACE apply -f - $options
-  kubectl -n ${NAMESPACE} label configmap lnmp-nginx-conf.d app=lnmp version=0.0.1 $@ || true
-
-  kubectl -n ${NAMESPACE} apply -f deployment/lnmp-configMap.${ENVIRONMENT}.yaml $@
-
-  kubectl -n ${NAMESPACE} apply -f deployment/lnmp-secret.${ENVIRONMENT}.yaml $@
-
-  kubectl -n ${NAMESPACE} apply -f deployment/mysql/base/lnmp-mysql.yaml $@
-
-  kubectl -n ${NAMESPACE} apply -f deployment/redis/base/lnmp-redis.yaml $@
-
-  kubectl -n ${NAMESPACE} apply -f deployment/php/base/lnmp-php7.yaml $@
-
-  kubectl -n ${NAMESPACE} apply -f deployment/nginx/base/lnmp-nginx.yaml $@
-
-  if [ "$OS" = 'Linux' ];then
-    kubectl -n ${NAMESPACE} apply -k deployment/nginx/overlays/linux/ $@ || true
-  elif [ "$OS" = 'Darwin' ];then
-    kubectl -n ${NAMESPACE} apply -f deployment/nginx/base/lnmp-nginx.service.yaml $@
-  fi
 }
 
 kubectl_install(){
@@ -525,7 +317,7 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   return 1;
 fi
 
-httpCode=`curl -sI ${1}/v${ETCD_VERSION}/${TAR_FILE} | head -1 | awk '{print $2}'`
+httpCode=`curl -sI ${1} | head -1 | awk '{print $2}'`
 
 if [ $httpCode != 200 ];then
   echo 'cn mirror http response code is not 200, not use'
@@ -670,8 +462,20 @@ _gvisor_install(){
 _runc_install(){
   if [ `command -v runc` ];then print_info "runc already install";\
     runc --version;return; fi
-  # print_info "install runc ..."
-  print_info "runc not found, please install docker-ce first"
+
+  if ! [ "$GOARCH" = 'amd64' ];then
+    # print_info "install runc ..."
+    print_info "runc not found, please install docker-ce first"
+
+    return
+  fi
+
+  $(_sudo) $(_curl) https://github.com/opencontainers/runc/releases/download/v1.0.0-rc92/runc.amd64 \
+    -o /usr/bin/runc
+
+  $(_sudo) chmod +x /usr/bin/runc
+
+  runc --version
 }
 
 _containerd_install(){
@@ -694,7 +498,7 @@ _containerd_install(){
 
   __download(){
     if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
-      url="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly.linux-arm64.tar.gz"
+      url="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly-linux-arm64.tar.gz"
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
 
       return
@@ -725,7 +529,6 @@ _containerd_install(){
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-stress /usr/local/bin/
 }
 
 _cni_install(){
@@ -813,15 +616,16 @@ _crictl_install(){
 
   print_info "install crictl ..."
 
-  if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
-    local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
-    if ! [ $sha256 = "876dd2b3d0d1c2590371f940fb1bf1fbd5f15aebfbe456703ee465d959700f4a" ];then
-      if [ $GOARCH = 'amd64' ];then
-        $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
-        __download
-      fi
-    fi
-  else
+  # if [ -f ${TMP_ROOT}/${TAR_FILE} ];then
+    # local sha256=$(sha256sum ${TMP_ROOT}/${TAR_FILE} | cut -d " " -f 1)
+    # if ! [ $sha256 = "876dd2b3d0d1c2590371f940fb1bf1fbd5f15aebfbe456703ee465d959700f4a" ];then
+    #   if [ $GOARCH = 'amd64' ];then
+    #     $(_sudo) rm -rf ${TMP_ROOT}/${TAR_FILE}
+    #     __download
+    #   fi
+    # fi
+  # else
+  if ! [ -f ${TMP_ROOT}/${TAR_FILE} ];then
       __download
   fi
 
@@ -907,10 +711,10 @@ _conmon_install(){
 
   if [ $OS = "Linux" -a $GOARCH = "amd64" ];then
     $(_sudo) $(_curl) -o /usr/local/bin/conmon \
-      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION} \
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon \
     || \
     $(_sudo) $(_curl) -o /usr/local/bin/conmon \
-      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
+      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION}
 
     $(_sudo) chmod +x /usr/local/bin/conmon
     return
@@ -1369,23 +1173,6 @@ _k8s_join(){
   _k8s_install_kubectl_conf
 }
 
-_helm_lnmp(){
-  cd helm
-  lnmp_app_env=$1
-
-  if [ "--debug" = "$2" ];then opt="--dry-run --debug"; fi
-  set +e
-  for service in ${HELM_SERVICES[@]}
-  do
-    helm install lnmp-$service-${lnmp_app_env} ./$service \
-        --namespace lnmp-${lnmp_app_env} \
-        --set APP_ENV=${lnmp_app_env} \
-        --set platform=$(uname -s) \
-        --set username=$(whoami) \
-        $opt
-  done
-}
-
 _local_up(){
   echo "
 ETCD:
@@ -1442,7 +1229,7 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   $(_sudo) sed -i "s#registry.cn-hangzhou.aliyuncs.com/google_containers#gcr.io/google-containers#g" \
                `grep registry.cn-hangzhou.aliyuncs.com/google_containers -rl $PWD/systemd` || true
   # $(_sudo) sed -i "s#quay.mirror#quay.io#g" `grep quay.mirror -rl $PWD/systemd` || true
-  $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller#us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller#g" \
+  $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller#k8s.gcr.io/ingress-nginx/controller#g" \
                `grep ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller -rl $PWD/addons` || true
   $(_sudo) sed -i "s#ccr.ccs.tencentyun.com/gcr-mirror/metrics-server#k8s.gcr.io/metrics-server/metrics-server#g" \
                `grep ccr.ccs.tencentyun.com/gcr-mirror/metrics-server -rl $PWD/addons` || true
@@ -1467,17 +1254,6 @@ case $_command in
     kubectl-info )
       kubectl_info
       ;;
-    create )
-      _create_lnmp $@
-      ;;
-    delete )
-      set +e
-      _delete_lnmp $@
-      ;;
-    cleanup )
-      set +e
-      _cleanup_lnmp $@
-      ;;
     local-install )
       _k8s_install $@
       ;;
@@ -1490,18 +1266,6 @@ case $_command in
     join )
       if [ -z $1 ];then echo "Please Input Node Ip"; exit 1; fi
       _k8s_join $@
-      ;;
-    helm-development )
-      _helm_lnmp development "$@"
-      ;;
-    helm-testing )
-      _helm_lnmp testing "$@"
-      ;;
-    helm-staging )
-      _helm_lnmp staging "$@"
-      ;;
-    helm-production )
-      _helm_lnmp production "$@"
       ;;
     nfs )
       $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true

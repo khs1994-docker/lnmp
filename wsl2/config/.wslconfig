@@ -21,3 +21,6 @@
 # kernelCommandLine = <string> # Additional kernel command line arguments
 
 nestedVirtualization=true
+
+# time_in_ms
+vmIdleTimeout=10000

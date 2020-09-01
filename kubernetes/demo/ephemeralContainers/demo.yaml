@@ -1,7 +1,7 @@
 kind: EphemeralContainers
 apiVersion: v1
 metadata:
-  name: demo
+  name: demo-pod
 ephemeralContainers:
   command: [
     "sh"

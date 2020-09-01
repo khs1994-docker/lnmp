@@ -3,7 +3,6 @@
 Import-Module $PSScriptRoot/tags/list.psm1
 Import-Module $PSScriptRoot/manifests/get.psm1
 Import-Module $PSScriptRoot/blobs/get.psm1
-Import-Module $PSScriptRoot\auth\token.psm1
 Import-Module $PSScriptRoot/auth/auth.psm1
 Import-Module $PSScriptRoot/registry/registry.psm1
 
@@ -62,9 +61,6 @@ function rootfs([string]$image = "alpine",
   }
 
   $FormatEnumerationLimit = -1
-  write-host "==> Get token ..." -ForegroundColor Blue
-
-  $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
   if (!($image | select-string '/')) {
     $image = "library/$image"
@@ -80,13 +76,13 @@ function rootfs([string]$image = "alpine",
     "arch" : "$arch",
     "os" : "$os",
     "registry" : "$registry",
-    "tokenServer" : "$tokenServer",
-    "tokenService" : "$tokenService",
     "layersIndex" : "$layersIndex",
 }
 "@ | out-host
 
-  $token = Get-DockerRegistryToken $image pull $tokenServer $tokenService
+  write-host "==> Get token ..." -ForegroundColor Blue
+
+  $token = Get-DockerRegistryToken $image pull $registry
 
   # write-host $token
 

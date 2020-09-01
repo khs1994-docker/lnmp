@@ -1,0 +1,12 @@
+[
+  {
+    "op": "add",
+    "path": "/spec/ports/0/nodePort",
+    "value": 443
+  },
+  {
+    "op": "add",
+    "path": "/spec/ports/1/nodePort",
+    "value": 80
+  }
+]

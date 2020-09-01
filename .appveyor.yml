@@ -14,10 +14,13 @@ clone_folder: C:\Users\appveyor\lnmp
 # clone_folder: D:\lnmp
 
 build_script:
-  - ps: |
+  - pwsh: |
       [System.Environment]::OSVersion
+      $PSVersionTable
       echo $HOME
       echo $env:PATH
+      get-command bash
+      get-command wsl
   - pwsh: docker version
   - pwsh: docker info
   - pwsh: docker-compose --version

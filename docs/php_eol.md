@@ -12,9 +12,9 @@ services:
     << : *common
     restart: ${LNMP_RESTART:-always}
     env_file: ./cli/timezone.env
-    build:
-      context: ./dockerfile/php/
-    # 支持 5.6.37 -- 5.6.40 其他版本请自行构建
+    # build:
+    #   context: ./dockerfile/php/
+    # 5.x 只支持 5.6.37 -- 5.6.40 其他版本请自行构建
     image: "khs1994/php:5.6.37-fpm-alpine"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
@@ -51,9 +51,9 @@ services:
 **2. 编辑 `.env` 文件，在 `LNMP_SERVICES` 变量中增加软件名 `php5`**
 
 ```diff
-- LNMP_SERVICES="nginx mysql php7 redis phpmyadmin" # 默认配置
+- LNMP_SERVICES="nginx mysql php7 redis" # 默认配置
 
-+ LNMP_SERVICES="nginx mysql php7 redis phpmyadmin php5" # 增加 php5
++ LNMP_SERVICES="nginx mysql php7 redis php5" # 增加 php5
 ```
 
 **3. 新建 `config/php5` 文件夹**

@@ -107,8 +107,19 @@ $ docker run -it --rm \
 根据官方文档配置即可。
 
 ```bash
+jq '.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'
+```
+
+此命令在 `kubeletconfig` 字段增加 `kind="KubeletConfiguration"` `apiVersion="kubelet.config.k8s.io/v1beta1"`
+
+```bash
 $ kubectl get no ${NODE_NAME} -o json | jq '.status.config'
 ```
+
+**注意事项**
+
+* kubelet 必须配置重启（systemd），重载配置时 kubelet 会自动退出
+* 如果你的 NODE IP 不固定（WSL2），请不要使用动态配置
 
 * https://cloud.tencent.com/developer/article/1381318
 * https://kubernetes.io/blog/2018/07/11/dynamic-kubelet-configuration/

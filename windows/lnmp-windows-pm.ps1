@@ -45,6 +45,7 @@ install-service Install service [ServiceName] [CommandLine] [LogFile]
 remove-service  Remove service [ServiceName]
 start-service   Start service
 stop-service    Stop service
+restart-service Restart service
 
 ENV:
 
@@ -72,7 +73,6 @@ Import-Module $PSScriptRoot\sdk\dockerhub\manifests\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\manifests\upload.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\get.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\blobs\upload.psm1
-Import-Module $PSScriptRoot\sdk\dockerhub\auth\token.psm1
 Import-Module $PSScriptRoot\sdk\dockerhub\auth\auth.psm1
 Import-Module $PSScriptRoot/sdk/dockerhub/utils/Get-SHA.psm1
 
@@ -372,9 +372,8 @@ Function getDockerRegistryToken($image, $action = "push,pull", $registry = $null
   if (!$registry) {
     $registry = getLwpmDockerRegistry
   }
-  $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
-  return Get-DockerRegistryToken $image $action $tokenServer $tokenService
+  return Get-DockerRegistryToken $image $action $registry
 }
 
 Function _getlwpmConfig($image, $ref) {
@@ -739,9 +738,15 @@ function _push($opt) {
       }
 
       $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
+      # tmp/linux-amd64/pkg/README.md
+      # tmp/linux-amd64/pkg/pkg.psm1
       Set-Location $lwpm_temp\..\
+      # tmp/linux-amd64
       write-host "==> Handle lwpm pkg script" -ForegroundColor Green
       tar -zcvf script.tar.gz $soft
+      # pkg/
+      #    /README.md
+      #    /pkg.psm1
       Move-Item script.tar.gz $script_tar_file
 
       ConvertFrom-Json (Get-Content $pkg_root\lwpm.json -raw) | `
@@ -757,7 +762,7 @@ function _push($opt) {
       # pkg/dist/linux-amd64/dist.tar.gz
       write-host "==> found platform .tar.gz file, use it" -ForegroundColor Blue
       # tmp/linux-amd64/pkg/dist/dist.tar.gz
-      Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
+      # Copy-Item -r $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}   $lwpm_temp\dist
 
       foreach ($item in $(Get-ChildItem $pkg_root\dist\${env:lwpm_os}-${env:lwpm_architecture}\*.tar.gz)) {
         write-host "==> Add already exists .tar.gz file: $item" -ForegroundColor Blue
@@ -775,7 +780,7 @@ function _push($opt) {
     elseif (Test-Path $pkg_root\dist) {
       # pkg/dist/file
       write-host "==> NO platform file" -ForegroundColor Blue
-      # tmp/linux-amd64/pkg/dist
+      # tmp/linux-amd64/pkg/dist/file
       try { Copy-Item -r $pkg_root\dist   $lwpm_temp }catch { }
     }
 
@@ -786,10 +791,23 @@ function _push($opt) {
       # tmp/linux-amd64
       write-host "==> Handle lwpm pkg dist" -ForegroundColor Green
       tar -zcvf dist.tar.gz $soft/dist
+      # pkg/
+      #    /dist
+      #         /file
       Move-Item dist.tar.gz $dist_tar_file
 
       $layers_file += , $dist_tar_file
+      # 1.
+      # tmp/dist/pkg/linux-amd64/dist.tar.gz
+      # tmp/dist/pkg/linux-amd64/script.tar.gz
     }
+
+    # 2.
+    # pkg/dist/linux-amd64/*.tar.gz
+    # tmp/dist/pkg/linux-amd64/script.tar.gz
+
+    # 3.
+    # tmp/dist/pkg/linux-amd64/script.tar.gz
 
     $layers_file += , $script_tar_file
 
@@ -1071,6 +1089,14 @@ switch ($command) {
     foreach ($item in $opt) {
       Write-Host "==> Stop service $item" -ForegroundColor Red
       start-process "net" -ArgumentList "stop", $item -Verb RunAs
+    }
+  }
+
+  "restart-service" {
+    foreach ($item in $opt) {
+      Write-Host "==> Restart service $item" -ForegroundColor Yellow
+      start-process "net" -ArgumentList "stop", $item -Verb RunAs
+      start-process "net" -ArgumentList "start", $item -Verb RunAs
     }
   }
 

@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - "master"
   pull_request:
 
 name: CI
@@ -36,14 +38,23 @@ jobs:
 
           cd ..
           lnmp-laravel new laravel 7
-          cp -r laravel-demo/{.dockerignore,Dockerfile,Dockerfile.buildkit} laravel/
-          cp -r laravel-demo/.test/* laravel/
+
+          cp -r laravel-demo/{Dockerfile,Dockerfile.buildkit} laravel/
+
           ls -la laravel
           ls -la laravel/resources/views
           cd laravel
+
+          patch -p1 < ../laravel-demo/patch/app-console-kernel.patch
+
           lnmp-composer require laravel/ui
-          lnmp-php artisan ui vue
+          # 此步骤会重置 webpack.mix.js
+          lnmp-php artisan ui vue --auth
+
+          cp -r ../laravel-demo/.patch/. .
+
           lnmp-npm install
+          lnmp-npm install laravel-mix-versionhash --save
           lnmp-npm run dev
       - name: Test Laravel
         run: |
@@ -51,26 +62,95 @@ jobs:
           cd ../laravel
 
           lnmp-php artisan -V
-          echo "Test Laravel"
       - name: Build Docker Image
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
           set -x
           cd ../laravel
-          docker buildx build --load --target=laravel -t khs1994/laravel:6.0 -f Dockerfile.buildkit .
-      - name: Up
+          docker buildx build --load \
+              --build-arg NODE_REGISTRY=https://registry.npmjs.org \
+              --target=laravel \
+              -t khs1994/laravel:7 \
+              -f Dockerfile.buildkit .
+
+          docker buildx build --load \
+              --build-arg NODE_REGISTRY=https://registry.npmjs.org \
+              --target=laravel-rootless \
+              -t khs1994/laravel:7-rootless \
+              -f Dockerfile.buildkit .
+      - name: Up LNMP
         run: |
           set -x
 
           lnmp-docker up
           sleep 30
           lnmp-docker nginx-cli ls /app/laravel-docker/public
-      - name: Connect
+      - name: Connect and Test
         run: |
-          set -x
+          docker ps -a
+
+          echo ::group::Test /
+            curl -k https://laravel-docker.t.khs1994.com
+          echo ::endgroup::
+
+          echo ::group::Test Response
+            curl -k https://laravel-docker.t.khs1994.com/test
+          echo ::endgroup::
+
+          echo ::group::Test View
+            curl -k https://laravel-docker.t.khs1994.com/test/view
+          echo ::endgroup::
+
+          echo ::group::Test Queue
+            curl -k https://laravel-docker.t.khs1994.com/test/queue
+            sleep 2
+            curl -k https://laravel-docker.t.khs1994.com/test/queue/result
+          echo ::endgroup::
+
+          echo ::group::Test Schedule
+            curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
+            sleep 55
+            curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
+          echo ::endgroup::
+
+          docker run -i --rm --entrypoint=sh khs1994/laravel:7 -c "ls -la /app/laravel-docker"
+      - name: Connect and Test Rootless
+        run: |
+          echo 'LNMP_LARAVEL_TAG=7-rootless' >> $LNMP_PATH/.env
+          lnmp-docker up
+
           sleep 30
           docker ps -a
-          curl -sSk https://laravel-docker.t.khs1994.com
-          curl -sSk https://laravel-docker.t.khs1994.com/test
-          curl -sSk https://laravel-docker.t.khs1994.com/test/view
+
+          echo ::group::Test /
+            curl -k https://laravel-docker.t.khs1994.com
+          echo ::endgroup::
+
+          echo ::group::Test Response
+            curl -k https://laravel-docker.t.khs1994.com/test
+          echo ::endgroup::
+
+          echo ::group::Test View
+            curl -k https://laravel-docker.t.khs1994.com/test/view
+          echo ::endgroup::
+
+          echo ::group::Test Queue
+            curl -k https://laravel-docker.t.khs1994.com/test/queue
+            sleep 2
+            curl -k https://laravel-docker.t.khs1994.com/test/queue/result
+          echo ::endgroup::
+
+          echo ::group::Test Schedule
+            curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
+            sleep 55
+            curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
+          echo ::endgroup::
+
+          echo ::group::Test Rootless
+            curl -k https://laravel-docker.t.khs1994.com/test/rootless/result
+          echo ::endgroup::
+
+          docker run -i --rm --entrypoint=sh khs1994/laravel:7-rootless -c "ls -la /app/laravel-docker"
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v2

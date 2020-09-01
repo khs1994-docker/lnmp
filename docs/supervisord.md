@@ -5,7 +5,7 @@
 在 `.env` 文件中将 `supervisord` 包含进来。
 
 ```bash
-LNMP_SERVICES="nginx mysql php7 redis phpmyadmin supervisord"
+LNMP_SERVICES="nginx mysql php7 redis supervisord"
 ```
 
 配置文件位于 `config/supervisord/supervisord.ini`。
@@ -37,12 +37,15 @@ $ echo_supervisord_conf | sudo tee /etc/supervisord.conf
 # 加入以下内容
 [include]
 files = /etc/supervisor.d/*.ini
+```
 
-# 启动服务端
+**启动服务端**
+
+```bash
 $ sudo supervisord -u root -c /etc/supervisord.conf
 ```
 
-关闭服务端
+**关闭服务端**
 
 ```bash
 $ sudo supervisorctl shutdown

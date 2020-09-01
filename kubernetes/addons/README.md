@@ -8,18 +8,18 @@
 
 * Dashboard `2.0.3`
 
-* Istio `1.6.1`
+* Istio `1.7.0`
 
 ## ingress
 
-* ingress-nginx `0.34.0`
+* ingress-nginx `0.35.0`
 
-* ingress-kong `0.9.0`
+* ingress-kong `0.9.1`
 
 ## CNI
 
-* [calico](https://docs.projectcalico.org/v3.15/getting-started/kubernetes/installation/calico) `3.15`
+* [calico](https://docs.projectcalico.org/v3.16/getting-started/kubernetes/installation/calico) `3.16`
 
 ## CI/CD
 
-* tekton `0.13.2`
+* tekton `0.15.2`

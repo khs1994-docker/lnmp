@@ -4,52 +4,60 @@
     "dest": "gcr-mirror/pause:3.2"
   },
   {
+    "source": "us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3",
+    "dest": "gcr-mirror/pause:3.3"
+  },
+  {
     "source": "gcr.io/google-containers/coredns:1.7.0",
     "dest": "gcr-mirror/coredns:1.7.0"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:9ba9c755e868942143868dbbc7a0d9ab29241014833dd0a7ac6156d66e45fe9b",
-    "dest": "tektoncd-dashboard@sha256:9ba9c755e868942143868dbbc7a0d9ab29241014833dd0a7ac6156d66e45fe9b"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:4175d6237de3f85d4cfa2e331e244f0b1c20776455af10dcccdb81a3f9ebb012",
+    "dest": "tektoncd-dashboard@sha256:4175d6237de3f85d4cfa2e331e244f0b1c20776455af10dcccdb81a3f9ebb012"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller@sha256:c44f6810aa63cd96210c832034c4a6dbe593c5df85a3cbb22fffef46a1596f58",
-    "dest": "tektoncd-controller@sha256:c44f6810aa63cd96210c832034c4a6dbe593c5df85a3cbb22fffef46a1596f58"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.15.2@sha256:3b9194dbb1ec6282469e1371abb52dce4f462706d08469d29893550f3e2debdf",
+    "dest": "tektoncd-controller:v0.15.2@sha256:3b9194dbb1ec6282469e1371abb52dce4f462706d08469d29893550f3e2debdf"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook@sha256:cd3c83221f860746c9d757a6750f762a8a7351a7513acfc1bfc661ba2f265764",
-    "dest": "tektoncd-webhook@sha256:cd3c83221f860746c9d757a6750f762a8a7351a7513acfc1bfc661ba2f265764"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.15.2@sha256:ef0f1858607e176a5393bcbf043b9276b0ba6c03ad4f157ff379c558bf00732e",
+    "dest": "tektoncd-webhook:v0.15.2@sha256:ef0f1858607e176a5393bcbf043b9276b0ba6c03ad4f157ff379c558bf00732e"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/vendor/github.com/googlecloudplatform/cloud-builders/gcs-fetcher/cmd/gcs-fetcher:v0.13.2@sha256:f5428fd8f88423af1a210d93360c80f3ae41851d506d952f68c91d1496d85f51",
-    "dest": "tektoncd-gcs-fetcher:v0.13.2@sha256:f5428fd8f88423af1a210d93360c80f3ae41851d506d952f68c91d1496d85f51"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/vendor/github.com/googlecloudplatform/cloud-builders/gcs-fetcher/cmd/gcs-fetcher:v0.15.2@sha256:6b008c9eded786360ccc7bbc8d18f21a3ae049ff4604072c38763205346ca14c",
+    "dest": "tektoncd-gcs-fetcher:v0.15.2@sha256:6b008c9eded786360ccc7bbc8d18f21a3ae049ff4604072c38763205346ca14c"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.13.2@sha256:58a6c4933cda2dc7150597a75f43806bce73cbf532de0356a50ae76f56c82a92",
-    "dest": "tektoncd-pullrequest-init:v0.13.2@sha256:58a6c4933cda2dc7150597a75f43806bce73cbf532de0356a50ae76f56c82a92"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.15.2@sha256:af9aea0ccca79b26e60e8f02ad0d46a20772bcb447201f21d477729c01d8e71e",
+    "dest": "tektoncd-pullrequest-init:v0.15.2@sha256:af9aea0ccca79b26e60e8f02ad0d46a20772bcb447201f21d477729c01d8e71e"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.13.2@sha256:9194cb648591d50de8904d998a5ba07aec981569040ecb1997f6c4935e7a8d8d",
-    "dest": "tektoncd-imagedigestexporter:v0.13.2@sha256:9194cb648591d50de8904d998a5ba07aec981569040ecb1997f6c4935e7a8d8d"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.15.2@sha256:e8cc95b323e85788dc82398cd37a259aff1a0bf2ca5489d5af4201aa4eca3743",
+    "dest": "tektoncd-imagedigestexporter:v0.15.2@sha256:e8cc95b323e85788dc82398cd37a259aff1a0bf2ca5489d5af4201aa4eca3743"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.13.2@sha256:162e21cee52cbbca9b17d48a62bcdca709b0e5070a57ff7ce578d9f2694e7ef5",
-    "dest": "tektoncd-entrypoint:v0.13.2@sha256:162e21cee52cbbca9b17d48a62bcdca709b0e5070a57ff7ce578d9f2694e7ef5"
+    "source": "ggcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.15.2@sha256:51037dc2b572748ef2f42e8e0f2d55e67a4dbc014cdaecba083de6280f422f2d",
+    "dest": "tektoncd-entrypoint:v0.15.2@sha256:51037dc2b572748ef2f42e8e0f2d55e67a4dbc014cdaecba083de6280f422f2d"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.13.2@sha256:e7a148b56245aa81b10d2c8fd1eb30a5d831ee5a8366f9ca77f17ac6612c58f3",
-    "dest": "tektoncd-git-init:v0.13.2@sha256:e7a148b56245aa81b10d2c8fd1eb30a5d831ee5a8366f9ca77f17ac6612c58f3"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.15.2@sha256:c6cb2257d718bbd6281f0d028c801c26333221a2c38ce85ae8e23b24bf20e781",
+    "dest": "tektoncd-git-init:v0.15.2@sha256:c6cb2257d718bbd6281f0d028c801c26333221a2c38ce85ae8e23b24bf20e781"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/creds-init:v0.13.2@sha256:c4392abe4d99ed0f563e149b43d2f298aa5296b0e57ce069b6ee560a73e9b8d1",
-    "dest": "tektoncd-creds-init:v0.13.2@sha256:c4392abe4d99ed0f563e149b43d2f298aa5296b0e57ce069b6ee560a73e9b8d1"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/creds-init:v0.15.2@sha256:23387311d42bc6290645a864b2c967b857c531e4178fd5b79e31b2b8eb1ffa5c",
+    "dest": "tektoncd-creds-init:v0.15.2@sha256:23387311d42bc6290645a864b2c967b857c531e4178fd5b79e31b2b8eb1ffa5c"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.13.2@sha256:340806a7e936db368cff3fadef382315fa6ebbc45ab34da1f184a0074b938f38",
-    "dest": "tektoncd-kubeconfigwriter:v0.13.2@sha256:340806a7e936db368cff3fadef382315fa6ebbc45ab34da1f184a0074b938f38"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.15.2@sha256:fafe062ebf497187b3ce7b47573580b4330f78b4924fb38e4c1e8db128711720",
+    "dest": "tektoncd-kubeconfigwriter:v0.15.2@sha256:fafe062ebf497187b3ce7b47573580b4330f78b4924fb38e4c1e8db128711720"
   },
   {
-    "source": "gcr.io/distroless/base@sha256:f79e093f9ba639c957ee857b1ad57ae5046c328998bf8f72b30081db4d8edbe4",
-    "dest": "gcr-distroless-base@sha256:f79e093f9ba639c957ee857b1ad57ae5046c328998bf8f72b30081db4d8edbe4"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.15.2@sha256:e418612699877caba09cae4ed8c73cfaf84aa8840a3c09aadda8c7c4934b857a",
+    "dest": "tektoncd-nop:v0.15.2@sha256:e418612699877caba09cae4ed8c73cfaf84aa8840a3c09aadda8c7c4934b857a"
+  },
+  {
+    "source": "gcr.io/distroless/base@sha256:60f5ffe6fc481e9102747b043b3873a01893a5a8138f970c5f5fc06fb7494656",
+    "dest": "gcr-distroless-base@sha256:60f5ffe6fc481e9102747b043b3873a01893a5a8138f970c5f5fc06fb7494656"
   },
   {
     "source": "mcr.microsoft.com/powershell:preview-alpine-3.11",
@@ -59,8 +67,8 @@
     "ref": "preview-alpine-3.11"
   },
   {
-    "source": "us.gcr.io/k8s-artifacts-prod/ingress-nginx/controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069",
-    "dest": "nginx-ingress-controller:v0.34.0@sha256:56633bd00dab33d92ba14c6e709126a762d54a75a6e72437adefeaaca0abb069"
+    "source": "k8s.gcr.io/ingress-nginx/controller:v0.35.0@sha256:fc4979d8b8443a831c9789b5155cded454cb7de737a8b727bc2ba0106d2eae8b",
+    "dest": "nginx-ingress-controller:v0.35.0@sha256:fc4979d8b8443a831c9789b5155cded454cb7de737a8b727bc2ba0106d2eae8b"
   },
   {
     "source": "k8s.gcr.io/metrics-server/metrics-server:v0.3.7",
@@ -73,5 +81,47 @@
   {
     "source": "gcr.io/google_containers/git-sync:v3.1.6",
     "dest": "gcr-mirror/git-sync:v3.1.6"
+  },
+  {
+    "source": "quay.io/coreos/etcd:v3.4.13",
+    "dest": "quay-mirror/etcd:v3.4.13",
+    "platforms": [
+      {
+        "source": "quay.io/coreos/etcd:v3.4.13"
+      },
+      {
+        "os": "linux",
+        "architecture": "arm64",
+        "variant": "v8",
+        "source": "quay.io/coreos/etcd:v3.4.13-arm64",
+        "dest": "quay-mirror/etcd:v3.4.13-arm64"
+      }
+    ]
+  },
+  {
+    "source": "quay.io/coreos/flannel:v0.12.0-amd64",
+    "dest": "quay-mirror/flannel:v0.12.0",
+    "platforms": [
+      {
+        "source": "quay.io/coreos/flannel:v0.12.0-amd64",
+        "dest": "quay-mirror/flannel:v0.12.0-amd64"
+      },
+      {
+        "os": "linux",
+        "architecture": "arm64",
+        "variant": "v8",
+        "source": "quay.io/coreos/flannel:v0.12.0-arm64",
+        "dest": "quay-mirror/flannel:v0.12.0-arm64"
+      },
+      {
+        "os": "linux",
+        "architecture": "arm",
+        "variant": "v7",
+        "dest": "quay-mirror/flannel:v0.12.0-arm",
+        "registry": "quay.io",
+        "image": "coreos/flannel",
+        "ref": "v0.12.0-arm"
+      }
+    ]
   }
 ]

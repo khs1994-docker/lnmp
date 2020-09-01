@@ -4,7 +4,7 @@ language: go
 # language: bash
 
 go:
-- 1.14
+- 1.15
 
 services:
 - docker
@@ -22,6 +22,9 @@ cache:
 #   clone: false
 
 before_install:
+  - uname -a
+  - mount bpffs /sys/fs/bpf -t bpf || true
+  - mount -t bpf || true
   - env
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
@@ -74,8 +77,8 @@ before_install:
   - sudo cat /etc/docker/daemon.json
   - echo '{"registry-mirrors":["https://mirror.gcr.io"]}' | sudo tee /etc/docker/daemon.json
   - sudo cat /etc/docker/daemon.json
-  # - docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-  # - cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+  # - docker run --rm --privileged tonistiigi/binfmt:latest --install all
+  # - ls -la /proc/sys/fs/binfmt_misc/qemu-aarch64
   # - docker buildx create --name mybuilder
   # - docker buildx use mybuilder
   # - docker buildx inspect --bootstrap
@@ -202,7 +205,8 @@ before_script:
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
 
-  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/calico.yaml
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
+  - sed -i "s#eth0#ens4#g" addons/cni/calico-custom/patch.json
   - git diff
   - kubectl apply -k addons/cni/calico-custom
 
@@ -285,10 +289,11 @@ after_success:
 
   - |
     PRE_VERSION=v1.19.0-rc.3
-    if [ $CI_KUBERNETES_VERSION = '1.19.0-rc.4' ];then
+    BASE_BRANCH=master
+    if [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
       set -x
       cd /tmp
-      git clone -b ${PRE_VERSION}-config --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+      git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
       cd lnmp-k8s
 
       stty size
@@ -299,13 +304,13 @@ after_success:
 
       git add .
       git commit -m "Update v$CI_KUBERNETES_VERSION config"
-      git push origin ${PRE_VERSION}-config:v$CI_KUBERNETES_VERSION-config -f
+      git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
 
       cd /tmp
       rm -rf lnmp-k8s
     fi
   - |
-    PRE_VERSION=v1.19.0-rc.4
+    PRE_VERSION=v1.19.0
     if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.0' ];then
       set -x
       cd /tmp
@@ -332,37 +337,37 @@ jobs:
     # https://kubernetes.io/docs/setup/release/version-skew-policy/#supported-versions
     # 只维护最新的 3 个版本
     # alpha version
-    - os: linux
-      dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0-rc.4 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+    # - os: linux
+    #   dist: focal
+    #   env: CI_KUBERNETES_VERSION=1.19.0-rc.4 LNMP_K8S_GET="--url"
     # next version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
     # current stable version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio"        K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio" k8S_IMAGE_NS=khs1994 k8S_IMAGE_REGISTRY=useccr.ccs.tencentyun.com
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.6 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"      K8S_IMAGE=lwpm/kubernetes-server
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.6 LNMP_K8S_GET="--url"                           K8S_IMAGE=lwpm/kubernetes-server K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
     # old version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.17.9 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.18.8 LNMP_K8S_GET="--url"
     - os: linux
-      dist: xenial
-      env: CI_KUBERNETES_VERSION=1.16.13 LNMP_K8S_GET="--url"
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.17.9 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.19.0-rc.4 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
-  - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url" K8S_IMAGE=lwpm/kubernetes-server
+  - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
+  # - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
 
 branches:
   only:

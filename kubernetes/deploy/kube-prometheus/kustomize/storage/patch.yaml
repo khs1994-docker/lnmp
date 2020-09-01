@@ -1,0 +1,44 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: k8s
+spec:
+  storage:
+    volumeClaimTemplate:
+      metadata:
+        name: prometheus-k8s-db
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        slector:
+          matchLabels:
+            app: prometheus-k8s
+        storageClassName: local-path
+  additionalScrapeConfigs:
+    key: prometheus-istio-scrape-config.yaml
+    name: prometheus-istio-scrape-config
+    optional: false
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: main
+spec:
+  # paused: false
+  storage:
+    volumeClaimTemplate:
+      metadata:
+        name: alertmanager-main-db
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        slector:
+          matchLabels:
+            app: prometheus-alertmanager
+        storageClassName: local-path

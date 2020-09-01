@@ -1,5 +1,4 @@
-*.yaml
-*.yml
-!*.example.yaml
-!*.example.yml
-*.ign
+/*
+!.gitignore
+!pxe-ignition.example.fcc
+!README.md

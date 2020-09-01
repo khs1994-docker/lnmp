@@ -1,0 +1,46 @@
+variant: fcos
+version: 1.1.0
+systemd:
+  units:
+    - name: kube-proxy.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Kubernetes Kube-Proxy Server
+        Documentation=https://github.com/kubernetes/kubernetes
+        After=network-online.target network.target
+        Wants=network-online.target
+
+        [Service]
+
+        ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kube-proxy
+        ExecStartPre=-/usr/bin/env modprobe ip_vs
+        ExecStartPre=-/usr/bin/env modprobe ip_vs_rr
+        ExecStartPre=-/usr/bin/env modprobe ip_vs_wrr
+        ExecStartPre=-/usr/bin/env modprobe ip_vs_sh
+
+        # WorkingDirectory=/opt/k8s/var/lib/kube-proxy
+
+        Environment="K8S_ROOT=${K8S_ROOT}"
+
+        ExecStart=${K8S_ROOT}/bin/kube-proxy \
+        --config=${K8S_ROOT}/conf/kube-proxy.config.yaml \
+        --v=2
+
+        # --feature-gates=AllAlpha=true,BoundServiceAccountTokenVolume=false \
+        Restart=on-failure
+        RestartSec=5
+        LimitNOFILE=65536
+
+        [Install]
+        WantedBy=multi-user.target
+storage:
+  files:
+    - path: ${K8S_ROOT}/conf/kube-proxy.kubeconfig
+      mode: 0644
+      contents:
+        source: http://{{SERVER_HOST}}:8080/cert/kube-proxy.kubeconfig
+    - path: ${K8S_ROOT}/bin/kube-proxy
+      mode: 0755
+      contents:
+        source: http://{{SERVER_HOST}}:8080/kubernetes-release/release/{{KUBERNETES_VERSION}}-linux-amd64/kubernetes/server/bin/kube-proxy

@@ -52,16 +52,16 @@ cmd = sudo_cmd + '''apt install -y gcc \
 
 wsl.install_build_dep(cmd)
 
-cmd = '''git clone -b master --depth=1 https://gitee.com/mirrors/openssl.git /tmp/openssl \
-; cd /tmp/openssl \
-&& curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-pre10_ciphers.patch \
-&& patch -p1 < openssl-equal-pre10_ciphers.patch \
-&& cd /tmp/nginx-''' + input_version + ''' \
-&& curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/nginx_hpack_push_1.15.3.patch \
-&& patch -p1 < nginx_hpack_push_1.15.3.patch
-'''
+# cmd = '''git clone -b master --depth=1 https://gitee.com/mirrors/openssl.git /tmp/openssl \
+# ; cd /tmp/openssl \
+# && curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-pre10_ciphers.patch \
+# && patch -p1 < openssl-equal-pre10_ciphers.patch \
+# && cd /tmp/nginx-''' + input_version + ''' \
+# && curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/nginx_hpack_push_1.15.3.patch \
+# && patch -p1 < nginx_hpack_push_1.15.3.patch
+# '''
 
-wsl.builder_pre(cmd)
+# wsl.builder_pre(cmd)
 
 configure_cmd = '''./configure --prefix={nginx_prefix} \
                        --conf-path={nginx_conf_dir}/nginx.conf \
@@ -101,8 +101,7 @@ configure_cmd = '''./configure --prefix={nginx_prefix} \
                        --with-stream \
                        --with-stream_realip_module \
                        --with-stream_ssl_module \
-                       --with-stream_ssl_preread_module \
-                       --with-http_v2_hpack_enc
+                       --with-stream_ssl_preread_module
 '''.format(nginx_prefix=nginx_prefix, nginx_conf_dir=nginx_conf_dir)
 
 wsl.builder('nginx-' + input_version, configure_cmd, sudo_cmd)
@@ -110,7 +109,9 @@ wsl.builder('nginx-' + input_version, configure_cmd, sudo_cmd)
 def nginx_conf():
     cmd = sudo_cmd + '''nginx -T | grep "fastcgi_buffering off;" \
 || ( curl -fsSL https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/nginx.wsl.conf \
-> /tmp/nginx.conf; sudo cp /tmp/nginx.conf {nginx_conf_dir}/nginx.conf )'''.format(nginx_conf_dir=nginx_conf_dir)
+> /tmp/nginx.conf; \
+{sudo_cmd} cp /tmp/nginx.conf {nginx_conf_dir}/nginx.conf ); \
+{sudo_cmd} mkdir -p /var/cache/nginx/client_temp'''.format(nginx_conf_dir=nginx_conf_dir,sudo_cmd=sudo_cmd)
 
     os.system(cmd)
 

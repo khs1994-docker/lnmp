@@ -10,9 +10,10 @@ Usage:
   kube-proxy [flags]
 
 Flags:
-      --add-dir-header                               If true, adds the file directory to the header
+      --add-dir-header                               If true, adds the file directory to the header of the log messages
       --alsologtostderr                              log to standard error as well as files
       --bind-address ip                              The IP address for the proxy server to serve on (set to '0.0.0.0' for all IPv4 interfaces and '::' for all IPv6 interfaces) (default 0.0.0.0)
+      --bind-address-hard-fail                       If true kube-proxy will treat failure to bind to a port as fatal and exit
       --cleanup                                      If true cleanup iptables and ipvs rules and exit.
       --cluster-cidr string                          The CIDR range of pods in the cluster. When configured, traffic sent to a Service cluster IP from outside this range will be masqueraded and traffic sent from pods to an external LoadBalancer IP will be directed to the respective cluster IP instead
       --config string                                The path to the configuration file.
@@ -39,7 +40,7 @@ Flags:
                                                      CSIMigration=true|false (BETA - default=true)
                                                      CSIMigrationAWS=true|false (BETA - default=false)
                                                      CSIMigrationAWSComplete=true|false (ALPHA - default=false)
-                                                     CSIMigrationAzureDisk=true|false (ALPHA - default=false)
+                                                     CSIMigrationAzureDisk=true|false (BETA - default=false)
                                                      CSIMigrationAzureDiskComplete=true|false (ALPHA - default=false)
                                                      CSIMigrationAzureFile=true|false (ALPHA - default=false)
                                                      CSIMigrationAzureFileComplete=true|false (ALPHA - default=false)
@@ -47,50 +48,52 @@ Flags:
                                                      CSIMigrationGCEComplete=true|false (ALPHA - default=false)
                                                      CSIMigrationOpenStack=true|false (BETA - default=false)
                                                      CSIMigrationOpenStackComplete=true|false (ALPHA - default=false)
+                                                     CSIMigrationvSphere=true|false (BETA - default=false)
+                                                     CSIMigrationvSphereComplete=true|false (BETA - default=false)
+                                                     CSIStorageCapacity=true|false (ALPHA - default=false)
+                                                     CSIVolumeFSGroupPolicy=true|false (ALPHA - default=false)
                                                      ConfigurableFSGroupPolicy=true|false (ALPHA - default=false)
                                                      CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
-                                                     DefaultIngressClass=true|false (BETA - default=true)
+                                                     DefaultPodTopologySpread=true|false (ALPHA - default=false)
                                                      DevicePlugins=true|false (BETA - default=true)
-                                                     DryRun=true|false (BETA - default=true)
-                                                     DynamicAuditing=true|false (ALPHA - default=false)
+                                                     DisableAcceleratorUsageMetrics=true|false (ALPHA - default=false)
                                                      DynamicKubeletConfig=true|false (BETA - default=true)
                                                      EndpointSlice=true|false (BETA - default=true)
-                                                     EndpointSliceProxying=true|false (ALPHA - default=false)
+                                                     EndpointSliceProxying=true|false (BETA - default=true)
                                                      EphemeralContainers=true|false (ALPHA - default=false)
-                                                     EvenPodsSpread=true|false (BETA - default=true)
                                                      ExpandCSIVolumes=true|false (BETA - default=true)
                                                      ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                                      ExpandPersistentVolumes=true|false (BETA - default=true)
                                                      ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
+                                                     GenericEphemeralVolume=true|false (ALPHA - default=false)
                                                      HPAScaleToZero=true|false (ALPHA - default=false)
-                                                     HugePageStorageMediumSize=true|false (ALPHA - default=false)
+                                                     HugePageStorageMediumSize=true|false (BETA - default=true)
                                                      HyperVContainer=true|false (ALPHA - default=false)
                                                      IPv6DualStack=true|false (ALPHA - default=false)
-                                                     ImmutableEphemeralVolumes=true|false (ALPHA - default=false)
+                                                     ImmutableEphemeralVolumes=true|false (BETA - default=true)
                                                      KubeletPodResources=true|false (BETA - default=true)
-                                                     LegacyNodeRoleBehavior=true|false (ALPHA - default=true)
+                                                     LegacyNodeRoleBehavior=true|false (BETA - default=true)
                                                      LocalStorageCapacityIsolation=true|false (BETA - default=true)
                                                      LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
-                                                     NodeDisruptionExclusion=true|false (ALPHA - default=false)
-                                                     NonPreemptingPriority=true|false (ALPHA - default=false)
+                                                     NodeDisruptionExclusion=true|false (BETA - default=true)
+                                                     NonPreemptingPriority=true|false (BETA - default=true)
                                                      PodDisruptionBudget=true|false (BETA - default=true)
                                                      PodOverhead=true|false (BETA - default=true)
                                                      ProcMountType=true|false (ALPHA - default=false)
                                                      QOSReserved=true|false (ALPHA - default=false)
                                                      RemainingItemCount=true|false (BETA - default=true)
                                                      RemoveSelfLink=true|false (ALPHA - default=false)
-                                                     ResourceLimitsPriorityFunction=true|false (ALPHA - default=false)
-                                                     RotateKubeletClientCertificate=true|false (BETA - default=true)
                                                      RotateKubeletServerCertificate=true|false (BETA - default=true)
                                                      RunAsGroup=true|false (BETA - default=true)
                                                      RuntimeClass=true|false (BETA - default=true)
-                                                     SCTPSupport=true|false (ALPHA - default=false)
-                                                     SelectorIndex=true|false (ALPHA - default=false)
+                                                     SCTPSupport=true|false (BETA - default=true)
+                                                     SelectorIndex=true|false (BETA - default=true)
                                                      ServerSideApply=true|false (BETA - default=true)
                                                      ServiceAccountIssuerDiscovery=true|false (ALPHA - default=false)
-                                                     ServiceAppProtocol=true|false (ALPHA - default=false)
-                                                     ServiceNodeExclusion=true|false (ALPHA - default=false)
+                                                     ServiceAppProtocol=true|false (BETA - default=true)
+                                                     ServiceNodeExclusion=true|false (BETA - default=true)
                                                      ServiceTopology=true|false (ALPHA - default=false)
+                                                     SetHostnameAsFQDN=true|false (ALPHA - default=false)
                                                      StartupProbe=true|false (BETA - default=true)
                                                      StorageVersionHash=true|false (BETA - default=true)
                                                      SupportNodePidsLimit=true|false (BETA - default=true)
@@ -102,13 +105,15 @@ Flags:
                                                      TopologyManager=true|false (BETA - default=true)
                                                      ValidateProxyRedirects=true|false (BETA - default=true)
                                                      VolumeSnapshotDataSource=true|false (BETA - default=true)
+                                                     WarningHeaders=true|false (BETA - default=true)
                                                      WinDSR=true|false (ALPHA - default=false)
                                                      WinOverlay=true|false (ALPHA - default=false)
+                                                     WindowsEndpointSliceProxying=true|false (ALPHA - default=false)
       --healthz-bind-address ipport                  The IP address with port for the health check server to serve on (set to '0.0.0.0:10256' for all IPv4 interfaces and '[::]:10256' for all IPv6 interfaces). Set empty to disable. (default 0.0.0.0:10256)
   -h, --help                                         help for kube-proxy
       --hostname-override string                     If non-empty, will use this string as identification instead of the actual hostname.
       --iptables-masquerade-bit int32                If using the pure iptables proxy, the bit of the fwmark space to mark packets requiring SNAT with.  Must be within the range [0, 31]. (default 14)
-      --iptables-min-sync-period duration            The minimum interval of how often the iptables rules can be refreshed as endpoints and services change (e.g. '5s', '1m', '2h22m').
+      --iptables-min-sync-period duration            The minimum interval of how often the iptables rules can be refreshed as endpoints and services change (e.g. '5s', '1m', '2h22m'). (default 1s)
       --iptables-sync-period duration                The maximum interval of how often iptables rules are refreshed (e.g. '5s', '1m', '2h22m').  Must be greater than 0. (default 30s)
       --ipvs-exclude-cidrs strings                   A comma-separated list of CIDR's which the ipvs proxier should not touch when cleaning up IPVS rules.
       --ipvs-min-sync-period duration                The minimum interval of how often the ipvs rules can be refreshed as endpoints and services change (e.g. '5s', '1m', '2h22m').
@@ -134,7 +139,7 @@ Flags:
       --nodeport-addresses strings                   A string slice of values which specify the addresses to use for NodePorts. Values may be valid IP blocks (e.g. 1.2.3.0/24, 1.2.3.4/32). The default empty string slice ([]) means to use all local addresses.
       --oom-score-adj int32                          The oom-score-adj value for kube-proxy process. Values must be within the range [-1000, 1000] (default -999)
       --profiling                                    If true enables profiling via web interface on /debug/pprof handler.
-      --proxy-mode ProxyMode                         Which proxy mode to use: 'userspace' (older) or 'iptables' (faster) or 'ipvs'. If blank, use the best-available proxy (currently iptables).  If the iptables proxy is selected, regardless of how, but the system's kernel or iptables versions are insufficient, this always falls back to the userspace proxy.
+      --proxy-mode ProxyMode                         Which proxy mode to use: 'userspace' (older) or 'iptables' (faster) or 'ipvs' or 'kernelspace' (windows). If blank, use the best-available proxy (currently iptables). If the iptables proxy is selected, regardless of how, but the system's kernel or iptables versions are insufficient, this always falls back to the userspace proxy.
       --proxy-port-range port-range                  Range of host ports (beginPort-endPort, single port or beginPort+offset, inclusive) that may be consumed in order to proxy service traffic. If (unspecified, 0, or 0-0) then ports will be randomly chosen.
       --show-hidden-metrics-for-version string       The previous version for which you want to show hidden metrics. Only the previous minor version is meaningful, other values will not be allowed. The format is <major>.<minor>, e.g.: '1.16'. The purpose of this format is make sure you have the opportunity to notice if the next release hides additional metrics, rather than being surprised when they are permanently removed in the release after that.
       --skip-headers                                 If true, avoid header prefixes in the log messages

@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+# /etc/services.d/scheduler
+pwd
+
+cp crontab /var/spool/cron/crontabs/root
+
+if [ "${APP_DEBUG}" = 'true' ];then
+    exec /usr/sbin/crond -fS -d 0
+fi
+
+exec /usr/sbin/crond -fS

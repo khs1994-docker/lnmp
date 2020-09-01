@@ -9,7 +9,9 @@
       "nodename": "node1",
       "mtu": 1440,
       "ipam": {
-          "type": "calico-ipam"
+          "type": "calico-ipam",
+          "assign_ipv6": "false",
+          "assign_ipv4": "true"
       },
       "policy": {
           "type": "k8s"
@@ -22,6 +24,10 @@
       "type": "portmap",
       "snat": true,
       "capabilities": {"portMappings": true}
+    },
+    {
+      "type": "bandwidth",
+      "capabilities": {"bandwidth": true}
     }
   ]
 }

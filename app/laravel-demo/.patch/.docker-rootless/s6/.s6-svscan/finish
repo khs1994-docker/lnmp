@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm -rf $(find /app/laravel-docker/.docker-rootless/s6 -name 'event')

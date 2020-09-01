@@ -37,7 +37,7 @@ _sudo(){
 function _start(){
     for soft in "$@"
     do
-    echo -e "\033[31mStart $soft\033[0m...\n"
+    echo -e "\033[32m==> Start $soft\033[0m...\n"
     case "$soft" in
       redis )
           if ! [ -f /run/redis.log ];then $(_sudo) touch /run/redis.log; fi
@@ -115,7 +115,7 @@ done
 function _stop(){
   for soft in "$@"
   do
-    echo -e "\033[31mStop $soft\033[0m...\n"
+    echo -e "\033[31m==> Stop $soft\033[0m...\n"
   case "$soft" in
     php )
         $(_sudo) kill $(cat /run/php-fpm.pid)

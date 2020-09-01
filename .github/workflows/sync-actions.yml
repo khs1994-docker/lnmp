@@ -11,7 +11,7 @@ on:
 name: Sync Actions
 
 jobs:
-  skip-ci:
+  skip:
     runs-on: ubuntu-latest
     if: |
       contains( github.ref, 'refs/tags/' )
@@ -22,7 +22,7 @@ jobs:
       - run: echo "sync continue !"
   sync-actions:
     runs-on: ubuntu-latest
-    needs: skip-ci
+    needs: skip
     steps:
     - uses: actions/checkout@main
       with:

@@ -1,8 +1,10 @@
-# Istio 1.6
+# Istio 1.7
 
 * https://github.com/istio
 
 ## 部署
+
+**命令举例**
 
 ```bash
 # https://istio.io/docs/setup/additional-setup/config-profiles/
@@ -33,7 +35,10 @@ $ istioctl manifest generate --set profile=demo \
 **部署**
 
 ```bash
+$ ./manifest.ps1
+
 $ kubectl create ns istio-system
+
 $ kubectl apply -f istio.yaml
 ```
 
@@ -44,7 +49,22 @@ $ kubectl apply -f istio.yaml
 ```bash
 $ kubectl create ns istio-test
 $ kubectl label namespace istio-test istio-injection=enabled
+
+$ kubectl apply -f demo -n istio-test
 ```
+
+**istio-ingress 端口**
+
+```bash
+$ kubectl get service istio-ingressgateway -n istio-system
+
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)                                                                      AGE
+istio-ingressgateway   NodePort   10.254.108.59   <none>        15021:49971/TCP,80:19250/TCP,443:10208/TCP,31400:30444/TCP,15443:35362/TCP   122m
+```
+
+上面的示例说明端口为 `19250`
+
+访问 `NODE_IP:19250` 测试
 
 `demo` 文件夹中所进行的测试均在 `istio-test` namespace 中进行
 
@@ -61,7 +81,7 @@ $ kubectl label namespace istio-test istio-injection=enabled
 
 ingress 控制外部到 pod，egress 反过来控制 pod 到外部
 
-设置为 `REGISTRY_ONLY`，pod 访问不到外部服务 `$ wget https://www.baidu.com` 无法正确执行`wget: server returned error: HTTP/1.1 502 Bad Gateway`
+`values.meshConfig.outboundTrafficPolicy.mode` 设置为 `REGISTRY_ONLY`，pod 访问不到外部服务 `$ wget https://www.baidu.com` 无法正确执行`wget: server returned error: HTTP/1.1 502 Bad Gateway`
 
 应用访问规则
 
@@ -76,6 +96,45 @@ $ kubectl apply -f egress/ServiceEntry.yaml -n istio-test
 `--set values.global.proxy.includeIPRanges="10.254.0.0/16"`
 
 `$ wget --no-check-certificate https://kubernetes.default.svc.cluster.local`
+
+## [integrations](https://istio.io/latest/docs/ops/integrations/)
+
+从 1.7 版本开始不再包含 `kiali` 等组件
+
+**jaeger**
+
+```bash
+$ $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/jaeger.yaml
+```
+
+**kiali**
+
+```bash
+# 第一次执行可能报错，稍等片刻再执行一次即可
+# $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml
+
+# bash
+$ curl https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml | sed -e "s/prometheus:9090/prometheus-k8s.monitoring:9090/g" -e "s/grafana:3000/grafana.monitoring:3000/g" | kubectl apply -f -
+
+# PS1
+$ (Invoke-WebRequest https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml).toString().replace('prometheus:9090','prometheus-k8s.monitoring:9090').replace('grafana:3000','grafana.monitoring:3000') | kubectl apply -f -
+```
+
+**Grafana**
+
+使用 `kube-prometheus`
+
+* https://istio.io/latest/docs/ops/integrations/grafana/#configuration
+
+* **7639 Mesh Dashboard** provides an overview of all services in the mesh.
+* **7636 Service Dashboard** provides a detailed breakdown of metrics for a service.
+* **7630 Workload Dashboard** provides a detailed breakdown of metrics for a workload.
+* **11829 Performance Dashboard** monitors the resource usage of the mesh.
+* **7645 Control Plane Dashboard** monitors the health and performance of the control plane.
+
+**prometheus**
+
+使用 `kube-prometheus` 参考 `deploy/kube-prometheus/kustomize/istio`
 
 ## 参考
 

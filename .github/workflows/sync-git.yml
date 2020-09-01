@@ -11,7 +11,7 @@ on:
 name: Sync Git
 
 jobs:
-  skip-ci:
+  skip:
     runs-on: ubuntu-latest
     if: |
       contains( github.ref, 'refs/tags/' )
@@ -21,7 +21,7 @@ jobs:
       - run: echo "sync continue !"
   sync-git:
     runs-on: ubuntu-latest
-    needs: skip-ci
+    needs: skip
     env:
       PCIT_EMAIL: khs1994@khs1994.com
       PCIT_GIT_TOKEN: ${{ secrets.PCIT_GIT_TOKEN }}

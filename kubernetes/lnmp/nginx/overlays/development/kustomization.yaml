@@ -1,0 +1,17 @@
+bases:
+- ../../base
+- ../../../config/secret
+configMapGenerator:
+- name: lnmp-nginx-conf
+  files:
+  - nginx.conf=config/nginx.development.conf
+- name: lnmp-nginx-conf.d
+  files:
+  - config/conf.d/t.khs1994.com.development.conf
+- name: lnmp-tz
+  literals:
+  - TZ=Asia/Shanghai
+generatorOptions:
+  labels:
+    app: lnmp
+    tier: nginx

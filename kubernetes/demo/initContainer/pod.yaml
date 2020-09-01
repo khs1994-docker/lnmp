@@ -1,0 +1,26 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: demo
+spec:
+  securityContext:
+    runAsUser: 1000
+    # fsGroupChangePolicy: OnRootMismatch
+  initContainers:
+    - image: busybox
+      name: init
+      securityContext:
+        runAsUser: 0
+      command:
+        - "sh"
+        - "-c"
+        - "touch /tmp/1.txt; ls -la /tmp"
+
+  containers:
+    - image: busybox
+      name: demo
+      securityContext:
+        runAsUser: 1001
+      args:
+        - "sleep"
+        - "360000"

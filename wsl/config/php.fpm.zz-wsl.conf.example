@@ -21,6 +21,10 @@ catch_workers_output = yes
 ; listen = 9000
 ; env[APP_ENV] = development
 
+; WSL1 not support listen ip:port
+; listen = 127.0.0.1:9000
+
+; WSL1 please use sock
 listen = /run/php-fpm.sock
 
 listen.owner = nginx

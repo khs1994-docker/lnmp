@@ -1,0 +1,18 @@
+bases:
+  - ../../base
+configMapGenerator:
+- name: lnmp-mysql-cnf
+  files:
+  - docker.cnf=config/docker.production.cnf
+- name: lnmp-tz
+  literals:
+  - TZ=Asia/Shanghai
+secretGenerator:
+- name: lnmp-mysql-password
+  literals:
+  - password=mytest
+generatorOptions:
+  labels:
+    app: lnmp
+    tier: mysql
+  disableNameSuffixHash: true

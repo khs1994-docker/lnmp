@@ -59,8 +59,6 @@ oom_score = 0
     stats_collect_period = 10
     # systemd_cgroup = false
     enable_tls_streaming = false
-    tolerate_missing_hugetlb_controller = true
-    ignore_image_defined_volumes = false
     max_container_log_line_size = 16384
     disable_cgroup = false
     disable_apparmor = false
@@ -68,11 +66,15 @@ oom_score = 0
     max_concurrent_downloads = 3
     disable_proc_mount = false
     unset_seccomp_profile = ""
+    tolerate_missing_hugetlb_controller = true
+    disable_hugetlb_controller = true
+    ignore_image_defined_volumes = false
     [plugins."io.containerd.grpc.v1.cri".containerd]
       snapshotter = "overlayfs"
       default_runtime_name = "runc"
       no_pivot = false
       disable_snapshot_annotations = false
+      discard_unpacked_layers = false
       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
           # runtime_type = "io.containerd.runtime.v1.linux"

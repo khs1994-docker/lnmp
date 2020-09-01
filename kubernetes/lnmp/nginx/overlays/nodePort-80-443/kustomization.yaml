@@ -1,0 +1,9 @@
+bases:
+  - ../nodePort
+patchesJson6902:
+  - path: patch.json
+    target:
+      group: ""
+      kind: Service
+      name: nginx
+      version: v1

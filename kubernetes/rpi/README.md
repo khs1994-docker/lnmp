@@ -3,7 +3,7 @@
 ## 注意事项
 
 * 本例将 `WSL2` 作为 kube-server 节点,请参考 [WSL2 kube-server](../wsl2/README.SERVER.md)
-* 树莓派 固定 IP `192.168.199.101`
+* 树莓派 固定 IP `本文以 192.168.199.101 为例`
 * 由于树莓派只有 `1G` 内存,故 k8s 组件能不放到树莓派就不放到树莓派,组件运行环境查看下方列表
 
 ## Node `树莓派` `192.168.199.101`
@@ -15,18 +15,22 @@
 ## 传输文件到树莓派
 
 ```powershell
+# 下载 k8s
+$ wsl -- ./lnmp-k8s kubernetes-server linux arm64 node
+
 $ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.kubeconfig","kube-proxy.kubeconfig","etcd-client.pem","etcd-client-key.pem"
 
 $ foreach($item in $items){scp ./wsl2/certs/$item pi@192.168.199.101:/home/pi/lnmp/kubernetes/systemd/certs}
 
 $ $items="kube-proxy","kubelet","kubectl","kubeadm","mounter"
 
-$ foreach($item in $items){scp ./kubernetes-release/release/v1.18.0-linux-arm64/kubernetes/server/bin/$item pi@192.168.199.101:/home/pi/}
+$ foreach($item in $items){scp ./kubernetes-release/release/v1.19.0-linux-arm64/kubernetes/server/bin/$item pi@192.168.199.101:/home/pi/}
 ```
 
-## 升级 libseccomp2 到 [2.4.x](https://packages.debian.org/bullseye/libseccomp2)
+## (不再需要此步骤) 升级 libseccomp2 到 [2.4.x](https://packages.debian.org/bullseye/libseccomp2)
 
 * https://github.com/containerd/containerd/issues/3871
+* https://pkgs.org/search/?q=libseccomp
 
 ```bash
 $ curl -L -O http://ftp.cn.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.3-1+b1_arm64.deb
@@ -71,7 +75,7 @@ $ sudo systemctl start kubelet
 ```bash
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 
-$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-d6ndc
+$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve csr-XXXXX
 ```
 
 ## 部署 CNI -- calico

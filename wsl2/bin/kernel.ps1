@@ -1,7 +1,7 @@
-$tips = "You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\conf\.wslconfig"
+$tips = "You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\config\.wslconfig"
 
 $WSL_DIST = 'wsl-k8s'
-$kernelversion = "4.19.121"
+$kernelversion = "4.19.128"
 
 if ($env:WSL_DIST) {
   $WSL_DIST = $env:WSL_DIST
@@ -20,13 +20,20 @@ COMMAND:
 
 download  download kernel only
 install   install linux-headers to WSL2($WSL_DIST) (`${env:WSL_DIST:-wsl-k8s})
+config    Open $HOME\.wslconfig
 
 ENV:
 
-WSL_KERNEL_VERSION  default is [ 4.19.121 ] , more value see https://github.com/khs1994/WSL2-Linux-Kernel/releases
+WSL_KERNEL_VERSION  default is [ 4.19.128 ] , more version see https://github.com/khs1994/WSL2-Linux-Kernel/releases
 WSL_DIST            default is [ wsl-k8s ]
 
 "
+
+  exit
+}
+
+if($args[0] -eq 'config'){
+  notepad.exe $HOME\.wslconfig
 
   exit
 }
@@ -38,7 +45,6 @@ $deb = "linux-headers-${kernelversion}-microsoft-standard_$(${kernelversion}.spl
 mkdir -f ~/.wsl | out-null
 
 cd ~/.wsl
-
 
 Function _downloader($name, $url) {
   if (Test-Path $name) {

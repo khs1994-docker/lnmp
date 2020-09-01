@@ -6,7 +6,7 @@
 * `/etc/containers/storage.conf`
 
 * https://github.com/containers/image/tree/master/docs
-* https://github.com/containers/libpod/tree/master/docs
+* https://github.com/containers/podman/tree/master/docs
 
 ```bash
 $ podman pull alpine

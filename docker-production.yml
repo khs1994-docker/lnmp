@@ -404,8 +404,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.19.1-alpine
-    # image: khs1994/nginx:1.19.1-alpine
+    image: nginx:1.19.2-alpine
+    # image: khs1994/nginx:1.19.2-alpine
     ports:
       - "443:443/tcp"
       - "443:443/udp"
@@ -579,7 +579,7 @@ services:
   minio:
     << : *common
     << : *default-labels
-    image: minio/minio:RELEASE.2020-07-31T03-39-05Z
+    image: minio/minio:RELEASE.2020-08-27T05-16-20Z
     command:
       - server
       - /data

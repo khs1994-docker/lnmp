@@ -1,0 +1,43 @@
+[
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/initContainers/1/image",
+    "value": "calico/cni:v3.15.0"
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/initContainers/1/command",
+    "value": [
+      "/install-cni.sh"
+    ]
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/16",
+    "value": {
+      "name": "CALICO_IPV4POOL_CIDR",
+      "value": "$(CALICO_IPV4POOL_CIDR)"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/17",
+    "value": {
+      "name": "IP_AUTODETECTION_METHOD",
+      "value": "interface=eth0"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/18",
+    "value": {
+      "name": "IP6_AUTODETECTION_METHOD",
+      "value": "interface=eth0"
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/containers/0/env/6/value",
+    "value": "$(CALICO_IPV4POOL_IPIP)"
+  }
+]

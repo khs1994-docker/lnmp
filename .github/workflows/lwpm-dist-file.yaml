@@ -42,7 +42,7 @@ jobs:
         if: matrix.os == 'ubuntu' &&
             contains( github.event.head_commit.message, '[k8s]')
         env:
-          VERSION: 1.3.4
+          VERSION: 1.4.0
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist containerd@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push containerd@${env:VERSION}
@@ -51,7 +51,7 @@ jobs:
         if: matrix.os == 'windows' &&
             contains( github.event.head_commit.message, '[k8s]')
         env:
-          VERSION: 1.18.0
+          VERSION: 1.19.0
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist crictl@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push crictl@${env:VERSION}
@@ -59,7 +59,7 @@ jobs:
         if: endsWith('a', 'b')
         shell: pwsh
         env:
-          VERSION: 3.4.10
+          VERSION: 3.4.13
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist etcd@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push etcd@${env:VERSION}
@@ -67,7 +67,7 @@ jobs:
         if: endsWith('a', 'b')
         shell: pwsh
         env:
-          VERSION: 3.2.4
+          VERSION: 3.3.0
         run: |
           ./lnmp/windows/lnmp-windows-pm.ps1 dist helm@${env:VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push helm@${env:VERSION}

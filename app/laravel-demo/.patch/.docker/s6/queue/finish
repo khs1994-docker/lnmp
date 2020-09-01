@@ -1,0 +1,3 @@
+#!/usr/bin/execlineb -S0
+
+s6-svscanctl -t /etc/services.d

@@ -1,4 +1,10 @@
 bases:
   - ../base
-patchesStrategicMerge:
-  - patches.yaml
+patchesJson6902:
+  - target:
+      name: kong-proxy
+      namespace: kong
+      version: v1
+      group: ""
+      kind: Service
+    path: patch.json

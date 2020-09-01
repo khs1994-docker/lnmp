@@ -4,10 +4,10 @@
 
 * `wsl2.k8s.khs1994.com` 解析到 WSL2 IP
 * `windows.k8s.khs1994.com` 解析到 Windows IP
-* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(kube-nginx 代理)`
+* k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(netsh 代理)`
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
-* WSL2 IP 变化时必须重启 `kube-nginx`
+* WSL2 IP 变化时必须重新执行 `./kube-wsl2windows`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-node)**
 * 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 重新使用本项目
@@ -25,6 +25,8 @@
 ### 设置 PATH
 
 ```bash
+$ wsl -d wsl-k8s
+
 $ vim ~/.bashrc
 
 export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
@@ -33,13 +35,13 @@ export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ### 复制文件
 
 ```bash
-$ wsl
+$ wsl -d wsl-k8s
 
 $ set -x
 $ source ./wsl2/.env
 
-$ sudo mkdir -p ${K8S_ROOT:?err}/bin
-$ sudo cp -a kubernetes-release/release/v1.18.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
+$ mkdir -p ${K8S_ROOT:?err}/bin
+$ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/{kube-proxy,kubectl,kubelet,kubeadm,mounter} ${K8S_ROOT:?err}/bin
 ```
 
 在 `Windows` 中执行
@@ -53,7 +55,7 @@ $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ### join
 
 ```bash
-$ wsl
+$ wsl -d wsl-k8s
 
 $ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 ```
@@ -121,7 +123,7 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 
 ## 4. 信任证书
 
-```bash
+```powershell
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 
 NAME        AGE    REQUESTOR                 CONDITION
@@ -132,13 +134,11 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_N
 
 ## 5. 部署 CNI -- calico
 
-```bash
-$ source wsl2/.env
-$ sed -i "s#/opt/k8s#${K8S_ROOT}#g" addons/cni/calico-custom/calico.yaml
+```powershell
+$ update-alternatives --set iptables /usr/sbin/iptables-legacy
 
-$ kubectl apply -k addons/cni/calico-custom
-
-$ git checkout -- addons/cni/calico-custom
+$ kubectl apply -k addons/cni/calico-eBPF
+# $ kubectl apply -k addons/cni/calico-custom
 ```
 
 > 若不能正确匹配网卡，请修改 `calico.yaml` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
@@ -147,7 +147,7 @@ $ git checkout -- addons/cni/calico-custom
 
 将 WSL2 K8S 配置写入 `~/.kube/config`
 
-```bash
+```powershell
 $ ./wsl2/bin/kubectl-config-set-cluster
 ```
 
@@ -163,7 +163,7 @@ $ ./wsl2/bin/wsl-k8s kubectl
 ## 7. crictl
 
 ```powershell
-$ ./wsl2/bin/crictl
+$ ./wsl2/bin/wsl-k8s crictl
 ```
 
 ## 组件启动方式总结
@@ -241,7 +241,7 @@ $ ./wsl2/bin/kube-node
 
 由于 WSL2 IP 不能固定, 每次重启时 **必须** 签署 kubelet 证书:
 
-```bash
+```powershell
 # 获取 csr
 $ ./wsl2/bin/kubectl-get-csr
 
@@ -251,7 +251,7 @@ csr-9pvrm   11m    system:node:wsl2          Pending
 
 根据提示 **签署** 证书,一般为最后一个
 
-```bash
+```powershell
 $ ./wsl2/bin/wsl-k8s kubectl certificate approve csr-9pvrm
 ```
 

@@ -12,8 +12,6 @@
 
 例如 `lnmp-docker up | down` 对应着 `docker-compose up | down`
 
-`lnmp-k8s create | delete ` 对应着 `kubectl create | delete`
-
 ## 自定义 CLI
 
 可以在 `lnmp-docker-custom-script` 或 `lnmp-docker-custom-script.ps1` (Windows) 中编写自定义脚本。

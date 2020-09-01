@@ -1,0 +1,12 @@
+[
+  {
+    "op": "replace",
+    "path": "/spec/ports/0/port",
+    "value": 28080
+  },
+  {
+    "op": "replace",
+    "path": "/spec/ports/1/port",
+    "value": 28443
+  }
+]

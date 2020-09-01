@@ -1,5 +1,0 @@
-apiVersion: v1
-appVersion: "0.0.1"
-description: "A Helm Registry chart for Kubernetes"
-name: registry
-version: 0.0.1

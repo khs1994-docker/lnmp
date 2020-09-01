@@ -1,0 +1,18 @@
+[
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/containers/0/env/17",
+    "value": {
+      "name": "IP_AUTODETECTION_METHOD",
+      "value": ""
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/containers/0/env/18",
+    "value": {
+      "name": "IP6_AUTODETECTION_METHOD",
+      "value": ""
+    }
+  }
+]

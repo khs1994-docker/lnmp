@@ -214,8 +214,8 @@ $ ./lnmp-docker down
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.8.6`           | **2.8.6**           |`alpine:3.12`    |
-|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.19.1-alpine`          | **1.19.1**          |`alpine:3.11`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.9-unit-alpine`| **1.18.0**          |`alpine:3.11`    |
+|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.19.2-alpine`          | **1.19.2**          |`alpine:3.11`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.9-unit-alpine`| **1.19.0**          |`alpine:3.11`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.46-alpine`          | **2.4.46**          |`alpine:3.12`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.21`                 | **8.0.21**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.5`               | **10.5.5**          |`ubuntu:bionic`  |
@@ -224,9 +224,9 @@ $ ./lnmp-docker down
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.9-composer-alpine`| **1.10.10**      |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.6-alpine`           | **1.6.6**       |`alpine:3.12`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.5-management-alpine` | **3.8.5**       |`alpine:3.11`    |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.3-alpine`             | **12.3**        |`alpine:3.12`    |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.4-alpine`             | **12.4**        |`alpine:3.12`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.0`                      | **4.4.0**       |`ubuntu:bionic`  |
-|[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        |`phpmyadmin/phpmyadmin:latest`     | **latest**      |`alpine:3.11`    |
+|[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        |`phpmyadmin:latest`                | **latest**      |`alpine:3.12`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
 
 ### 文件夹结构
@@ -245,7 +245,6 @@ $ ./lnmp-docker down
 
 * 80
 * 443
-* 8080 `PHPMyAdmin` (仅开发环境)
 
 ## 命令行工具
 
@@ -284,7 +283,7 @@ https://docs.lnmp.khs1994.com
 ## 感谢
 
 * LNMP
-* [Docker Cloud](https://cloud.docker.com)
+* [Docker Hub](https://hub.docker.com)
 * [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
 * [Let's Encrypt](https://letsencrypt.org/)
 * [acme.sh](https://github.com/acmesh-official/acme.sh)

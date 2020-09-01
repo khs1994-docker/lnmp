@@ -4,8 +4,8 @@ language: bash
 
 # dist: trusty # 14.04
 # dist: xenial # 16.04
-dist: bionic # 18.04
-# dist: focal # 20.04
+# dist: bionic # 18.04
+dist: focal # 20.04
 
 services:
 - docker
@@ -27,6 +27,7 @@ env:
 #       dist: xenial
 
 before_install:
+- uname -a
 # remove some apt source
 - cat /etc/apt/sources.list
 - ls /etc/apt/sources.list.d || true
@@ -421,8 +422,8 @@ jobs:
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
-    - stage: wsl-php-builder-fc33-74
-      name: wsl-php-builder-fc33-74
+    - stage: wsl-php-builder-fc33-nightly
+      name: wsl-php-builder-fc33-nightly
       install:
         - ./lnmp-docker compose --official -f
       script:
@@ -433,7 +434,23 @@ jobs:
         - docker-compose push ${TRAVIS_JOB_NAME}
         - docker-compose run ${TRAVIS_JOB_NAME} command || true
         - . .env
-        - export RPM_NAME=khs1994-wsl-php74-${PHP_VERSION_74}-1.fc33.x86_64.rpm
+        - export RPM_NAME=khs1994-wsl-php80-0.0.0-1.fc33.x86_64.rpm
+        - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
+        - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
+
+    - stage: wsl-php-builder-fc34-74
+      name: wsl-php-builder-fc34-74
+      install:
+        - ./lnmp-docker compose --official -f
+      script:
+        - cd wsl
+        # - docker build -t test -f wsl.phpbuilder.rhel.Dockerfile --build-arg PHP_VERSION=7.2.5 .
+        - docker-compose build ${TRAVIS_JOB_NAME}
+      after_success:
+        - docker-compose push ${TRAVIS_JOB_NAME}
+        - docker-compose run ${TRAVIS_JOB_NAME} command || true
+        - . .env
+        - export RPM_NAME=khs1994-wsl-php74-${PHP_VERSION_74}-1.fc34.x86_64.rpm
         - docker cp $( docker container ls -a --format {{.ID}} ):/${RPM_NAME} .
         - github-release upload --user khs1994-docker --repo lnmp --tag ${TRAVIS_TAG} --name "${RPM_NAME}" --file "${RPM_NAME}" -R
 
@@ -550,7 +567,9 @@ stages:
     if: tag =~ /^(v19)/
   - name: wsl-php-builder-fc32-nightly
     if: tag =~ /^(v19)/
-  - name: wsl-php-builder-fc33-74
+  - name: wsl-php-builder-fc33-nightly
+    if: tag =~ /^(v19)/
+  - name: wsl-php-builder-fc34-74
     if: tag =~ /^(v19)/
 
 # branches:

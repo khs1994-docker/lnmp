@@ -1,17 +1,17 @@
-Function printInfo(){
+Function printInfo() {
   write-host "
 ==> $args
 " -ForegroundColor Green
 }
 
-Function _cp_conf(){
+Function _cp_conf() {
   printInfo "Copy WSL2 supervisor conf file to WSL2 /etc/supervisor.d/ ..."
   # 复制配置文件
-  $K8S_WSL2_ROOT=wsl -d wsl-k8s -- wslpath "'$PSScriptRoot/..'"
+  $K8S_WSL2_ROOT = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot/..'"
   wsl -d wsl-k8s -u root -- cp ${K8S_WSL2_ROOT}/supervisor.d/*.ini /etc/supervisor.d/
 }
 
-Function _generate_conf(){
+Function _generate_conf() {
   printInfo "generate supervisor conf ..."
 
   printInfo "handle kube-apiserver supervisor conf ..."
@@ -29,19 +29,19 @@ Function _generate_conf(){
   & $PSScriptRoot/../kube-containerd.ps1
 }
 
-if ($args[0] -eq 'cp'){
+if ($args[0] -eq 'cp') {
   _cp_conf
 
   exit
 }
 
-if ($args[0] -eq 'g' -or $args[0] -eq 'generate'){
+if ($args[0] -eq 'g' -or $args[0] -eq 'generate') {
   _generate_conf
 
   exit
 }
 
-if ($args[0] -eq 'update'){
+if ($args[0] -eq 'update') {
   _cp_conf
 }
 

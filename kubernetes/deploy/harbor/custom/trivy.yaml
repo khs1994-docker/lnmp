@@ -4,4 +4,5 @@ metadata:
   name: harbor-trivy
 data:
   redisURL: cmVkaXM6Ly9oYXJib3ItcmVkaXM6NjM3OS81
+  # fix me
   gitHubToken: ""

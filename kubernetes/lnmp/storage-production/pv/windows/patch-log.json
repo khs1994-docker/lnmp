@@ -1,0 +1,7 @@
+[
+  {
+    "op": "replace",
+    "path": "/spec/hostPath/path",
+    "value": "/Users/__USERNAME__/.docker/Volumes/lnmp-log-production"
+  }
+]

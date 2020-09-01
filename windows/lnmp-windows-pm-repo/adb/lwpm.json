@@ -1,0 +1,43 @@
+{
+  "name": "adb",
+  "description": "",
+  "version": "29.0.5",
+  "pre-version": "29.0.5",
+  "homepage": "https://developer.android.google.cn/studio/releases/platform-tools",
+  "bug": "",
+  "github": "",
+  "releases": "https://developer.android.google.cn/studio/releases/platform-tools",
+  "url": "https://dl.google.com/android/repository/platform-tools-latest-${env:LWPM_OS}.zip",
+  "url-mirror": "",
+  "pre-url": "",
+  "pre-url-mirror": "",
+  "command": "adb",
+  "download-filename": "",
+  "scripts": {
+    "preinstall": [
+      "# _cleanup \"$unzipDesc\""
+    ],
+    "install": [
+      "if($IsWindows){_unzip $filename $env:ProgramData}",
+      "if(!$IsWindows){_unzip $filename /usr/local/platform-tools}"
+    ],
+    "postinstall": "",
+    "preuninstall": "",
+    "uninstall": [
+      "if($IsWindows){_cleanup $env:ProgramData\\platform-tools}",
+      "if(!$IsWindows){_cleanup /usr/local/platform-tools}"
+    ],
+    "postuninstall": "",
+    "pruneuninstall": "",
+    "pretest": "",
+    "test": "adb --version",
+    "posttest": "",
+    "version": "echo ${VERSION}"
+  },
+  "path": [
+    "$env:ProgramData\\platform-tools"
+  ],
+  "unix-path": [
+    "/usr/local/platform-tools"
+  ]
+}

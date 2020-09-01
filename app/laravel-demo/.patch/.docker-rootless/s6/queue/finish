@@ -1,0 +1,3 @@
+#!/usr/bin/execlineb -S0
+
+s6-svscanctl -t /app/laravel-docker/.docker-rootless/s6

@@ -1,0 +1,14 @@
+bases:
+- ../../base
+configMapGenerator:
+- name: lnmp-redis-conf
+  files:
+  - redis.conf=config/redis.development.conf
+- name: lnmp-tz
+  literals:
+  - TZ=Asia/Shanghai
+generatorOptions:
+  labels:
+    app: lnmp
+    tier: redis
+  disableNameSuffixHash: true

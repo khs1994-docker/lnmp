@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=8.0.0beta1
+ARG PHP_VERSION=8.0.0beta2
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
@@ -55,7 +55,8 @@ ENV PECL_EXTENSION \
 # 安装测试版的扩展，可以在扩展名后加 -beta
       # xdebug-beta \
       # yaml \
-      https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
+      # https://github.com/php/pecl-file_formats-yaml/archive/php7.tar.gz \
+      https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
@@ -63,24 +64,14 @@ ARG ALPINE_URL=dl-cdn.alpinelinux.org
 RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
       && set -xe \
       \
-      && apk add --no-cache patch \
-      && cd / \
-      && { \
-        echo "--- a/usr/local/lib/php/build/php.m4"; \
-        echo "+++ b/usr/local/lib/php/build/php.m4"; \
-        echo "@@ -305,7 +305,7 @@"; \
-        echo " ])"; \
-        echo ""; \
-        echo " AC_DEFUN([PHP_CHECK_GCC_ARG],["; \
-        echo "-  AC_MSG_ERROR([Use AX_CHECK_COMPILE_FLAG instead])"; \
-        echo "+  AC_MSG_ERROR([[Use AX_CHECK_COMPILE_FLAG instead]])"; \
-        echo " ])"; \
-        echo ""; \
-        echo " dnl"; \
-        } | tee 1.diff \
-      && patch -p1 < 1.diff \
-      && apk del --no-network patch \
-      && rm -rf 1.diff \
+      # && apk add --no-cache patch \
+      # && cd / \
+      # && { \
+      #   echo "--- a/usr/local/lib/php/build/php.m4"; \
+      #    } | tee 1.diff \
+      # && patch -p1 < 1.diff \
+      # && apk del --no-network patch \
+      # && rm -rf 1.diff \
       \
 # 不要删除
       && PHP_FPM_RUN_DEPS=" \
@@ -95,7 +86,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo \
                          libxpm \
                          libwebp \
-                         yaml \
                          libbz2 \
                          libexif \
                          gmp \
@@ -104,10 +94,12 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          c-client \
                          icu-libs \
                          gnu-libiconv \
+                         zstd-libs \
                          ${APK_EXTRA:-} \
                          " \
                          # tidyhtml-libs \
                          # libxslt \
+                         # yaml \
 # *-dev 编译之后删除
       && PHP_FPM_BUILD_DEPS=" \
                          openssl-dev \
@@ -121,7 +113,6 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libjpeg-turbo-dev \
                          libxpm-dev \
                          libwebp-dev \
-                         yaml-dev \
                          libexif-dev \
                          gmp-dev \
                          # xmlrpc-c-dev \
@@ -131,10 +122,12 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gettext-dev \
                          libwebp-dev \
                          icu-dev \
+                         zstd-dev \
                          ${APK_DEV_EXTRA:-} \
                          " \
                          # tidyhtml-dev \
                          # libxslt-dev \
+                         # yaml-dev \
         && apk add --no-cache --virtual .php-fpm-run-deps $PHP_FPM_RUN_DEPS \
         && apk add --no-cache --virtual .php-fpm-build-deps $PHP_FPM_BUILD_DEPS \
         && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
@@ -158,8 +151,9 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && pickle install $PHP_EXTENSION -n --defaults --strip \
         && docker-php-source delete \
 # 安装 PECL 扩展
-        && echo "--enable-redis-igbinary" > /tmp/redis.configure.options \
+        && echo "--enable-redis-igbinary --enable-redis-zstd" > /tmp/redis.configure.options \
         && echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options \
+        && echo "--with-libzstd" > /tmp/zstd.configure.options \
         && pickle install $PECL_EXTENSION -n --defaults \
            --strip --cleanup \
 # 默认不启用的扩展

@@ -1,0 +1,96 @@
+# 适用于 Linux hostPath 的 PV 定义文件
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-app
+  labels:
+    type: local
+    app: lnmp
+    tier: code-data
+    env: development
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes: [ "ReadWriteOnce" ]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /home/__USERNAME__/app-development
+    type: DirectoryOrCreate
+  storageClassName: hostpath
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-mysql-data
+  labels:
+    type: local
+    app: lnmp
+    tier: mysql
+    env: development
+spec:
+  capacity:
+    storage: 20Gi
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-mode
+  volumeMode: Filesystem # Filesystem | Block
+  accessModes:
+    # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+
+    - ReadWriteOnce    # 被单个节点mount为读写rw模式 RWO
+                       # the volume can be mounted as read-write by a single node
+    # - ReadOnlyMany   # 被多个节点mount为只读ro模式 ROX
+                       # the volume can be mounted read-only by many nodes
+    # - ReadWriteMany  # 被多个节点mount为读写rw模式 RWX
+                       # the volume can be mounted as read-write by many nodes
+  persistentVolumeReclaimPolicy: Retain
+  # https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming
+  # Retain 允许用户手动回收
+  # Recycle 删除 PV 上的数据 deprecated
+  # Delete 删除 PV
+  hostPath:
+    path: /home/__USERNAME__/.docker/Volumes/lnmp-mysql-development
+    type: DirectoryOrCreate
+  storageClassName: hostpath
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-redis-data
+  labels:
+    type: local
+    app: lnmp
+    tier: redis
+    env: development
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes: [ "ReadWriteOnce" ]
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /home/__USERNAME__/.docker/Volumes/lnmp-redis-development
+    type: DirectoryOrCreate
+  storageClassName: hostpath
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: lnmp-log
+  labels:
+    type: local
+    app: lnmp
+    tier: log
+    env: development
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /home/__USERNAME__/.docker/Volumes/lnmp-log-development
+    type: DirectoryOrCreate
+  storageClassName: hostpath

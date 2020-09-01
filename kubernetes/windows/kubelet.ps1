@@ -1,9 +1,9 @@
 $NODE_NAME="windows"
 $K8S_ROOT="c:\kubernetes"
-$ip="192.168.199.100"
+$NODE_IP="192.168.199.100"
 
 kubelet `
---node-ip=$ip `
+--node-ip=$NODE_IP `
 --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
 --cert-dir=${K8S_ROOT}/certs `
 --root-dir=/var/lib/kubelet `
@@ -15,7 +15,8 @@ kubelet `
 --dynamic-config-dir=${K8S_ROOT}/var/lib/kubelet/dynamic-config `
 --container-runtime=remote `
 --container-runtime-endpoint=npipe:////./pipe/containerd-containerd `
---v=2
+--v=6 `
+--enforce-node-allocatable=""
 
 # --container-runtime=docker `
 # --container-runtime-endpoint= `
