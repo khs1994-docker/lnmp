@@ -3,14 +3,6 @@
 * https://github.com/just-containers/s6-overlay
 * https://github.com/skarnet/s6
 
-`/etc/cont-finish.d` 挂载到容器的 `/etc/cont-finish.d`
-
-`/etc/cont-init.d` 挂载到容器的 `/etc/cont-init.d`
-
-`/etc/fix-attrs.d` 挂载到容器的 `/etc/fix-attrs.d`
-
-`/etc/services.d` 挂载到容器的 `/etc/services.d`
-
 ## 文件作用
 
 `run`     服务如何启动
@@ -20,10 +12,6 @@
 `finish`  程序退出后的操作
 
 `log/run` 启动日志服务
-
-## s6-overlay
-
-默认的 `S6_KEEP_ENV` 为 `0`，意味着各个脚本将无法使用环境变量。你可以将其设置为 `1`，或者脚本以 `#!/usr/bin/with-contenv sh` 开头。
 
 ## 参考链接
 
