@@ -32,6 +32,14 @@
     }
   },
   {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/20",
+    "value": {
+      "name": "FELIX_PROMETHEUSMETRICSENABLED",
+      "value": "true"
+    }
+  },
+  {
     "op": "replace",
     "path": "/spec/template/spec/volumes/5/hostPath/path",
     "value": "/opt/k8s/opt/cni/bin"

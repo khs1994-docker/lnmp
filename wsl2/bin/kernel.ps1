@@ -20,6 +20,7 @@ COMMAND:
 
 download  download kernel only
 install   install linux-headers to WSL2($WSL_DIST) (`${env:WSL_DIST:-wsl-k8s})
+config    Open $HOME\.wslconfig
 
 ENV:
 
@@ -27,6 +28,12 @@ WSL_KERNEL_VERSION  default is [ 4.19.128 ] , more version see https://github.co
 WSL_DIST            default is [ wsl-k8s ]
 
 "
+
+  exit
+}
+
+if($args[0] -eq 'config'){
+  notepad.exe $HOME\.wslconfig
 
   exit
 }

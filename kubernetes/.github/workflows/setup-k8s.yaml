@@ -89,6 +89,11 @@ jobs:
      - run: |
          set -x
 
+         uname -a
+
+         mount bpffs /sys/fs/bpf -t bpf || true
+         mount -t bpf || true
+
          df -h
 
          docker image ls

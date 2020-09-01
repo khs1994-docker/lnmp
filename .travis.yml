@@ -4,8 +4,8 @@ language: bash
 
 # dist: trusty # 14.04
 # dist: xenial # 16.04
-dist: bionic # 18.04
-# dist: focal # 20.04
+# dist: bionic # 18.04
+dist: focal # 20.04
 
 services:
 - docker
@@ -27,6 +27,7 @@ env:
 #       dist: xenial
 
 before_install:
+- uname -a
 # remove some apt source
 - cat /etc/apt/sources.list
 - ls /etc/apt/sources.list.d || true

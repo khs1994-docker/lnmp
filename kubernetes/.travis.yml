@@ -22,6 +22,9 @@ cache:
 #   clone: false
 
 before_install:
+  - uname -a
+  - mount bpffs /sys/fs/bpf -t bpf || true
+  - mount -t bpf || true
   - env
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s

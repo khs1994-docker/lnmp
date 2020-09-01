@@ -152,6 +152,7 @@ function _mountKubelet_all() {
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   & $PSScriptRoot/bin/wsl2host-check
   _mountKubelet_all
+  wsl -d wsl-k8s -u root -- mount bpffs /sys/fs/bpf -t bpf
   wsl -d wsl-k8s -u root -- supervisorctl start kube-node:kubelet
 
   exit
@@ -160,5 +161,6 @@ if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
 if ($args[0] -eq 'start') {
   & $PSScriptRoot/bin/wsl2host-check
   _mountKubelet_all
+  wsl -d wsl-k8s -u root -- mount bpffs /sys/fs/bpf -t bpf
   wsl -d wsl-k8s -u root -- bash -c $command
 }

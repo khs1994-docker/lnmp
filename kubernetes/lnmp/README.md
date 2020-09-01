@@ -92,8 +92,10 @@ $ kubectl apply -f cronJob/deploy.yaml
 ## 清理
 
 ```bash
+$ kubectl delete ns lnmp
 $ kubectl delete pv -l app=lnmp -l env=development
 
 # production
+# $ kubectl delete ns lnmp-production
 # $ kubectl delete pv -l app=lnmp -l env=production
 ```
