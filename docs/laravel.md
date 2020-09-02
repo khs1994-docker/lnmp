@@ -48,6 +48,30 @@ REDIS_HOST=redis
 MEMCACHED_HOST=memcached
 ```
 
+## 安装 laravel-ide-helper
+
+```bash
+$ lnmp-composer require --dev barryvdh/laravel-ide-helper
+```
+
+```bash
+$ lnmp-php artisan ide-helper:eloquent
+$ lnmp-php artisan ide-helper:generate
+$ lnmp-php artisan ide-helper:meta
+$ lnmp-php artisan ide-helper:models
+```
+
+**.gitignore**
+
+```bash
+# .gitignore
+
+.phpstorm.meta.php
+_ide_helper.php
+
+.php_cs.cache
+```
+
 ## Windows 运行 Laravel 响应缓慢的问题
 
 * Docker Desktop 上 Docker 运行在虚拟机，项目文件位于 Windows

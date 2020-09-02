@@ -516,12 +516,12 @@ Function satis() {
   if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
     wsl -d $WSL2_DIST -- docker run --rm -it `
       -v ${APP_ROOT}/satis:/build `
-      --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
+      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
   }
   else {
     docker run --rm -it `
       -v ${APP_ROOT}/satis:/build `
-      --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
+      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
   }
 }
 

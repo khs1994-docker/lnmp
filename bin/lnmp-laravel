@@ -61,8 +61,3 @@ if [[ ${OS} = 'Linux' || ${OS} = 'Darwin' ]];then
   $(_sudo) chown -R `id -u`:`id -g` ${LARAVEL_PATH}
   chmod -R 777 ${LARAVEL_PATH}/storage
 fi
-
-cd $LARAVEL_PATH
-
-echo -e "\n\033[32m==> INFO\033[0m  Laravel init ..."
-$ScriptRoot/lnmp-laravel-init

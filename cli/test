@@ -4,11 +4,11 @@ set -ex
 
 if [ -f "khs1994-robot.enc" ];then echo -e "\n\033[32mINFO\033[0m Can't EXEC in cli folder"; exit 1; fi
 
-# 删除原项目
-
 print_info(){
   echo -e "\033[32mINFO\033[0m  $1\n"
 }
+
+# 删除原项目
 
 delete(){
   ./lnmp-docker down -v > /dev/null 2>&1 || true
@@ -48,12 +48,13 @@ _command(){
   cd ..
 
   date
-  lnmp-laravel new laravel5_5 5.5
-  lnmp-laravel new laravel6_0 6.0
+  lnmp-laravel new laravel_7 7.*
   date
 
   lnmp-laravel new laravel
   date
+
+  ls -la
 
   lnmp-mysql mysql -V
 

@@ -47,9 +47,3 @@ docker run -it --rm `
   write-warning "${LARAVEL_PATH} existing"
   exit 1
 }
-
-cd ${LARAVEL_PATH}
-
-. "$PSScriptRoot/lnmp-laravel-init.ps1"
-
-cd ..
