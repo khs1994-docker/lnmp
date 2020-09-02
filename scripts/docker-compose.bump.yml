@@ -8,7 +8,7 @@ services:
     image: mariadb:10.5.5
 
   redis:
-    image: redis:6.0.6-alpine
+    image: redis:6.0.7-alpine
 
   memcached:
     image: memcached:1.6.6-alpine
@@ -50,7 +50,7 @@ services:
     image: node:14.9.0-alpine
 
   go:
-    image: golang:1.15.0-alpine
+    image: golang:1.15.1-alpine
 
   alpine:
     image: alpine:3.12
