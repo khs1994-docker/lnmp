@@ -35,6 +35,7 @@ startsecs=60
 
 ; [program:crond]
 ; command=crond -fS
+; ; 以下命令会输出更多信息，调试的时候可以用
 ; ;command=crond -fS -d 0
 ; autostart=true
 ; autorestart=true

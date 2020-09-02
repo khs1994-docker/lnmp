@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.14-alpha1
+.VERSION 19.03.14-alpha2
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -196,6 +196,8 @@ Function _cp_init_file() {
 
   _cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
   _cp_only_not_exists config/yarn/.env.example config/yarn/.env
+
+  _cp_only_not_exists config/crontabs/root.example config/crontabs/root
 
   _cp_only_not_exists config/composer/.env.example config/composer/.env
   _cp_only_not_exists config/composer/.env.example.ps1 config/composer/.env.ps1
@@ -513,16 +515,9 @@ Function satis() {
     Write-Warning "Please modify ${APP_ROOT}/satis/satis.json"
   }
 
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    wsl -d $WSL2_DIST -- docker run --rm -it `
-      -v ${APP_ROOT}/satis:/build `
-      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
-  }
-  else {
-    docker run --rm -it `
-      -v ${APP_ROOT}/satis:/build `
-      --mount type=volume,src=lnmp_composer-cache-data,target=/composer composer/satis
-  }
+  docker run --rm -it `
+    -v ${APP_ROOT}/satis:/build `
+    --mount -v lnmp_composer-cache-data:/composer composer/satis
 }
 
 Function get_compose_options($compose_files, $isBuild = 0) {
@@ -620,12 +615,8 @@ function _pcit_cp() {
   rm -r -force ${APP_ROOT}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
   docker pull pcit/pcit:frontend
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    wsl -d $WSL2_DIST -- docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
-  }
-  else {
-    docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
-  }
+
+  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 }
 
 function convert_args_to_string_if_use_wsl2() {
@@ -679,16 +670,30 @@ $env:USE_WSL2_DOCKER_COMPOSE = '0'
 $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
 
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
-  $env:USE_WSL2_DOCKER_COMPOSE = '1'
+  # $env:USE_WSL2_DOCKER_COMPOSE = '1'
+  $container_id = docker ps -a -q --filter label=lnmp.khs1994.com/wsl-test
+  if ($container_id) { docker rm -f $container_id > $null 2>&1 }
+
+  $container_id = docker run `
+    -v \\wsl$\${WSL2_DIST}$(${APP_ROOT}.replace('/','\')):/tmp `
+    --label lnmp.khs1994.com/wsl-test `
+    -d busybox sh -c "while true;do sleep 3600;done"
+
+  $APP_ROOT = docker inspect $container_id -f "{{(index .Mounts 0).Source}}"
+
+  if (!$APP_ROOT) {
+    printError "Get APP_ROOT in WSL2 meet error, exit"
+    exit 1
+  }
 
   $_arch = docker version -f "{{.Server.Arch}}"
 
   if ($_arch -eq 'amd64') {
-    printInfo "Use WSL2 compose"
+    # printInfo "Use WSL2 compose"
 
     $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
 
-    wsl -d ${WSL2_DIST} -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
+    wsl -d ${WSL2_DIST} -u root -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
 
     wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
 
@@ -703,7 +708,7 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
     $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '1'
     printInfo "Use WSL2 compose, but docker not running"
   }
-  function docker-compose() {
+  function __docker-compose() {
     if ($args[0] -eq '--version') {
       if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
         return docker-compose.exe --version
@@ -1411,22 +1416,12 @@ XXX
       printInfo "Already run"
     }
     catch {
-      if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-        wsl -d $WSL2_DIST -- docker run -d --restart=always `
-          -p 2376:2375 `
-          -v /var/run/docker.sock:/var/run/docker.sock `
-          -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
-          khs1994/docker-proxy
-      }
-      else {
-        docker run -d --restart=always `
-          -p 2376:2375 `
-          -v /var/run/docker.sock:/var/run/docker.sock `
-          -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
-          khs1994/docker-proxy
-      }
+      docker run -d --restart=always `
+        -p 2376:2375 `
+        -v /var/run/docker.sock:/var/run/docker.sock `
+        -e PORT=2375 `
+        --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
+        khs1994/docker-proxy
     }
   }
 

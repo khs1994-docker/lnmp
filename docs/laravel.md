@@ -214,7 +214,8 @@ $ lnmp-docker code-run "-w /app/laravel npm run dev"
 
 ## 运行 Laravel 队列(Queue)
 
-使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md) 或者参考 `config/s6` 在一个容器中同时运行多个服务。
+* 选择1：使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md)
+* 选择2：参考 `config/s6` 或 `config/supervisord` 在一个容器中同时运行多个服务。
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
@@ -226,4 +227,40 @@ $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan schedule:run
+```
+
+## 运行 Laravel horizon
+
+* https://laravel.com/docs/7.x/horizon
+
+```bash
+$ lnmp-composer require laravel/horizon
+
+$ lnmp-php artisan horizon:install
+```
+
+**配置**
+
+`config/horizon.php` `environments` 数组必须包含当前 Laravel 运行的环境。
+
+**跳过验证**
+
+`app/Providers/HorizonServiceProvider.php`
+
+```php
+protected function gate()
+{
+    Gate::define('viewHorizon', function ($user = null) {
+        return true;
+        return in_array($user->email, [
+            'taylor@laravel.com',
+        ]);
+    });
+}
+```
+
+参考上一节队列的说明。
+
+```bash
+$ lnmp-docker php7-cli php /app/laravel/artisan horizon
 ```
