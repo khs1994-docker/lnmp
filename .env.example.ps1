@@ -19,8 +19,6 @@ $LNMP_NODE_IMAGE="node:alpine"
 
 # $LNMP_CACHE=
 
-# 项目在哪个 WSL2 上
-# 推荐使用 Ubuntu，其他系统（e.g. alpine）可能不会正常工作
-$WSL2_DIST
-
+# 项目存储在 WSL2
+# 推荐使用 Ubuntu，其他系统（例如 alpine）可能会遇到错误
 # $WSL2_DIST="Ubuntu"

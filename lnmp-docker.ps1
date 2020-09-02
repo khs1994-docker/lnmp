@@ -557,10 +557,6 @@ Function get_compose_options($compose_files, $isBuild = 0) {
       exit 1
     }
 
-    if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-      $LREW_INCLUDE_ROOT = wsl -d $WSL2_DIST -- wslpath "'$LREW_INCLUDE_ROOT'"
-    }
-
     if ($isBuild) {
       if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.build.yml")) {
         $options += " -f $LREW_INCLUDE_ROOT/docker-compose.yml "
@@ -582,12 +578,7 @@ Function get_compose_options($compose_files, $isBuild = 0) {
 
   $options += " -f docker-lnmp.include.yml -f docker-workspace.yml"
 
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    return $options
-  }
-  else {
-    return $options.split(' ')
-  }
+  return $options.split(' ')
 }
 
 Function _wsl_check() {
@@ -669,8 +660,18 @@ else {
 $env:USE_WSL2_DOCKER_COMPOSE = '0'
 $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
 
+# 判断项目是否存储在 WSL2
+
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
   # $env:USE_WSL2_DOCKER_COMPOSE = '1'
+  wsl -d ${WSL2_DIST} -u root -- test -d ${APP_ROOT}
+  if (!$?) {
+    printError WSL2 ${WSL2_DIST} [ ${APP_ROOT} ] is not`'t a dir
+    wsl -d ${WSL2_DIST} -u root -- mkdir -p ${APP_ROOT}
+    exit 1
+  }
+  wsl -d ${WSL2_DIST} -u root -- chown 1000:1000 ${APP_ROOT}
+  $APP_ROOT_SOURCE = $APP_ROOT
   $container_id = docker ps -a -q --filter label=lnmp.khs1994.com/wsl-test
   if ($container_id) { docker rm -f $container_id > $null 2>&1 }
 
@@ -683,47 +684,12 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
   if (!$APP_ROOT) {
     printError "Get APP_ROOT in WSL2 meet error, exit"
+
     exit 1
   }
 
-  $_arch = docker version -f "{{.Server.Arch}}"
-
-  if ($_arch -eq 'amd64') {
-    # printInfo "Use WSL2 compose"
-
-    $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
-
-    wsl -d ${WSL2_DIST} -u root -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
-
-    wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
-
-    if (!$?) {
-      printInfo "please check WSL2($WSL2_DIST) /etc/wsl.conf`n`n[interop]`nenabled=true"
-
-      cd $EXEC_CMD_DIR
-      exit 1
-    }
-  }
-  else {
-    $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '1'
-    printInfo "Use WSL2 compose, but docker not running"
-  }
-  function __docker-compose() {
-    if ($args[0] -eq '--version') {
-      if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
-        return docker-compose.exe --version
-      }
-      return wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose --version"
-    }
-    if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
-      printError "Docker not running"
-      cd $EXEC_CMD_DIR
-      exit 1
-    }
-    else {
-      wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose $args"
-    }
-  }
+  # 判断 Docker 服务端是否运行
+  # $_arch = docker version -f "{{.Server.Arch}}"
 }
 
 # APP_ENV
@@ -773,15 +739,6 @@ if ($LNMP_SERVICES_CONTENT) {
 }
 else {
   $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis'
-}
-
-if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-  $LNMP_SERVICES_STRING = ""
-  foreach ($item in $LNMP_SERVICES) {
-    $LNMP_SERVICES_STRING += " $item"
-  }
-
-  $LNMP_SERVICES = $LNMP_SERVICES_STRING
 }
 
 # LREW_INCLUDE
@@ -1580,7 +1537,31 @@ Example: ./lnmp-docker composer /app/demo install
   }
 
   "^code$" {
-    code --remote wsl+$WSL2_DIST $APP_ROOT
+    if ($other) {
+      foreach ($path in $other) {
+        wsl -d $WSL2_DIST -u root -- test -d $APP_ROOT_SOURCE/$path
+        if (!$?) {
+          # 不是 dir
+          printError WSL2 $WSL2_DIST [ ${APP_ROOT_SOURCE}/${path} ] `
+            is not`'t a dir`, [ ${APP_ROOT_SOURCE} ] include this dir:
+
+          write-host `n
+          wsl -d $WSL2_DIST -u root -- ls -la $APP_ROOT_SOURCE
+
+          write-host `n`n
+
+          exit
+        }
+        printInfo Open $WSL2_DIST [ $APP_ROOT_SOURCE/$path ]
+        code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE/$path
+
+        cd $EXEC_CMD_DIR
+
+        exit
+      }
+    }
+    printInfo Open $WSL2_DIST [ $APP_ROOT_SOURCE ]
+    code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE
   }
 
   default {

@@ -101,18 +101,22 @@ $ code --install-extension ms-vscode-remote.remote-wsl
 
 ```bash
 # .env
-APP_ROOT=/root/app
+APP_ROOT=/app
 ```
 
 ```powershell
 # .env.ps1
-$WSL2_DIST="ubuntu"
+$WSL2_DIST="Ubuntu"
 ```
+
+**以上步骤仅需执行一次，后续开发从以下步骤开始**
 
 **打开 vsCode**
 
 ```powershell
 $ lnmp-docker code
+
+# $ lnmp-docker code laravel
 ```
 
 在 vsCode 中点击菜单栏 `查看` -> `终端`
@@ -122,6 +126,11 @@ $ lnmp-docker code
 ```bash
 # 安装 laravel 到 laravel 文件夹
 # $ lnmp-laravel new laravel
+# 文件可能因为权限问题无法编辑，自行更改权限
+# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app/laravel
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/app
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/logs
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework
 $ cd laravel
 
 $ lnmp-composer require laravel/ui
@@ -164,7 +173,7 @@ $ code --install-extension ms-vscode-remote.remote-containers
 
 ```bash
 # .env
-APP_ROOT=/root/app
+APP_ROOT=/app
 
 # 增加 workspace 服务
 LNMP_SERVICES="nginx mysql php7 redis workspace"
@@ -174,6 +183,8 @@ LNMP_SERVICES="nginx mysql php7 redis workspace"
 # .env.ps1
 $WSL2_DIST="ubuntu"
 ```
+
+**以上步骤仅需执行一次，后续开发从以下步骤开始**
 
 **启动 LNMP**
 
@@ -192,6 +203,11 @@ $ ./lnmp-docker up
 ```bash
 # 安装 laravel 到 laravel 文件夹
 # $ composer create-project --prefer-dist laravel/laravel laravel
+# 文件可能因为权限问题无法编辑，自行更改权限
+# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app/laravel
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/app
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/logs
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework
 $ cd laravel
 
 $ composer require laravel/ui
@@ -205,9 +221,9 @@ Authentication scaffolding generated successfully.
 在 Windows 终端中执行以下命令：
 
 ```powershell
-$ lnmp-docker code-run "-w /app/laravel npm install"
+$ lnmp-docker code-run -w /app/laravel npm install
 
-$ lnmp-docker code-run "-w /app/laravel npm run dev"
+$ lnmp-docker code-run -w /app/laravel npm run dev
 
 # 打开 http://127.0.0.1/register 查看页面
 ```
