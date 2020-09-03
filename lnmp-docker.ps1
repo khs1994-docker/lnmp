@@ -337,7 +337,7 @@ Commands:
   services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
-  code                 Open WSL2 app path on vscode wsl remote
+  code                 Open WSL2 app path on vscode wsl remote [ SUB_DIR ] (e.g. ./lnmp-docker code laravel)
   code-init            Init vsCode remote development env
   code-run             Run command on vsCode remote workspace (e.g. ./lnmp-docker code-run -w /app/laravel composer install)
   code-exec            Exec command on vsCode remote workspace (e.g. ./lnmp-docker code-exec -w /app/laravel workspace composer install)
@@ -657,39 +657,83 @@ else {
   $APP_ROOT = './app'
 }
 
-$env:USE_WSL2_DOCKER_COMPOSE = '0'
-$env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
+function Get-DockerWSLPath([string] $APP_ROOT) {
+  # 获取某个 WSL2 在 Docker WSL2 中的挂载路径
 
-# 判断项目是否存储在 WSL2
+  # 判断 Docker 服务端是否运行
+  $_arch = docker version -f "{{.Server.Arch}}"
+  if ($_arch -ne 'amd64') {
+    throw "Docker not running"
+  }
 
-if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
-  # $env:USE_WSL2_DOCKER_COMPOSE = '1'
   wsl -d ${WSL2_DIST} -u root -- test -d ${APP_ROOT}
+
   if (!$?) {
-    printError WSL2 ${WSL2_DIST} [ ${APP_ROOT} ] is not`'t a dir
+    printError WSL2 ${WSL2_DIST} [ ${APP_ROOT} ] is not`'t a dir`, I will try `
+      create it`, please re exec this cli
+
     wsl -d ${WSL2_DIST} -u root -- mkdir -p ${APP_ROOT}
+    wsl -d ${WSL2_DIST} -u root -- chown 1000:1000 ${APP_ROOT}
+
     exit 1
   }
-  wsl -d ${WSL2_DIST} -u root -- chown 1000:1000 ${APP_ROOT}
-  $APP_ROOT_SOURCE = $APP_ROOT
+
+  # $env:USE_WSL2_DOCKER_COMPOSE = '1'
+  if (!(Test-Path $PSScriptRoot/.wsl)) {
+    Set-Content $PSScriptRoot/.wsl '{}'
+  }
+
+  $wsl_path_obj = ConvertFrom-Json $(Get-Content $PSScriptRoot/.wsl -raw)
+
+  try {
+    if ($wsl_path_obj."$WSL2_DIST"."$APP_ROOT") {
+      $APP_ROOT = $wsl_path_obj."$WSL2_DIST"."$APP_ROOT"
+
+      return $APP_ROOT
+    }
+  }
+  catch {
+    # write-host $_.Exception.Message
+  }
+
   $container_id = docker ps -a -q --filter label=lnmp.khs1994.com/wsl-test
   if ($container_id) { docker rm -f $container_id > $null 2>&1 }
 
   $container_id = docker run `
     -v \\wsl$\${WSL2_DIST}$(${APP_ROOT}.replace('/','\')):/tmp `
     --label lnmp.khs1994.com/wsl-test `
-    -d busybox sh -c "while true;do sleep 3600;done"
+    -d busybox sh -c "sleep 120"
 
   $APP_ROOT = docker inspect $container_id -f "{{(index .Mounts 0).Source}}"
 
-  if (!$APP_ROOT) {
-    printError "Get APP_ROOT in WSL2 meet error, exit"
+  ConvertTo-Json @{
+    $WSL2_DIST = @{
+      $APP_ROOT_SOURCE = $APP_ROOT
+    }
+  } | Out-File $PSScriptRoot/.wsl
 
-    exit 1
+  if (!$APP_ROOT) {
+    throw "Get APP_ROOT in WSL2 meet error"
   }
 
-  # 判断 Docker 服务端是否运行
-  # $_arch = docker version -f "{{.Server.Arch}}"
+  return $APP_ROOT
+}
+
+$env:USE_WSL2_DOCKER_COMPOSE = '0'
+$env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
+
+# 判断项目是否存储在 WSL2
+
+if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
+  $APP_ROOT_SOURCE = $APP_ROOT
+
+  try {
+    $APP_ROOT = Get-DockerWSLPath $APP_ROOT
+  }
+  catch {
+    printError $_.Exception.Message `, use $APP_ROOT_SOURCE as APP_ROOT
+    $APP_ROOT = $APP_ROOT_SOURCE
+  }
 }
 
 # APP_ENV
@@ -707,7 +751,7 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
   printInfo "Use LNMP CLI in $PWD"
   cd $PSScriptRoot
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    printInfo "APP_ROOT is WSL2 PATH $APP_ROOT"
   }
   else {
     # cd $PSScriptRoot
@@ -720,7 +764,7 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
 else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    printInfo "APP_ROOT is WSL2 PATH $APP_ROOT"
   }
   else {
     cd $APP_ROOT
@@ -1552,7 +1596,7 @@ Example: ./lnmp-docker composer /app/demo install
 
           exit
         }
-        printInfo Open $WSL2_DIST [ $APP_ROOT_SOURCE/$path ]
+        printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT_SOURCE/$path ]
         code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE/$path
 
         cd $EXEC_CMD_DIR
@@ -1560,7 +1604,7 @@ Example: ./lnmp-docker composer /app/demo install
         exit
       }
     }
-    printInfo Open $WSL2_DIST [ $APP_ROOT_SOURCE ]
+    printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT_SOURCE ]
     code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE
   }
 

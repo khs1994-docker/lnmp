@@ -4,7 +4,7 @@
 
 ## 安装 Laravel
 
-> 国内使用 [laravel/installer](https://laravel.com/docs/7.x/installation#installing-laravel) 安装 Laravel 不会使用 composer 镜像，故安装十分缓慢。
+> 国内使用 [laravel/installer](https://laravel.com/docs/7.x/installation#installing-laravel) 安装 Laravel 不会使用 composer 镜像，故安装十分缓慢。（这里做一提示，下面的命令封装的是 composer create-project 命令）
 
 ```bash
 $ cd app
@@ -14,11 +14,9 @@ $ lnmp-laravel new laravel
 
 具体请查看 [这里](command.md)
 
-### Laravel 版本问题
+### Laravel 版本
 
-由于本项目的 PHP 镜像内置的是 Laravel 安装器，而安装器只能安装最新版本。
-
-所以如果你想要安装特定版本（例如 `5.5.x`）请使用 [`lnmp-laravel`](command.md) 安装。
+上面的命令会安装 Laravel 最新的主线版本（7.x），如果你要安装特定版本可以加上 **版本号**
 
 ```bash
 $ cd app

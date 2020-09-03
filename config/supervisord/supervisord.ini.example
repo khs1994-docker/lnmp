@@ -20,8 +20,8 @@ startretries=10
 
 startsecs=60
 
-; laravel 队列
-; https://docs.khs1994.com/laravel-docs.zh-cn/queues.html#supervisor-configuration
+;; laravel 队列
+;; https://docs.khs1994.com/laravel-docs.zh-cn/queues.html#supervisor-configuration
 
 ; [program:laravel-queue]
 ; process_name=%(program_name)s_%(process_num)02d
@@ -32,6 +32,8 @@ startsecs=60
 ; numprocs=8
 ; redirect_stderr=true
 ; stdout_logfile=/var/log/supervisord/laravel_queue.log
+
+;; Laravel 调度器
 
 ; [program:crond]
 ; command=crond -fS
@@ -44,8 +46,9 @@ startsecs=60
 ; redirect_stderr=true
 ; stdout_logfile=/var/log/supervisord/crond.log
 
-; laravel horizon
-; https://laravel.com/docs/7.x/horizon
+;; laravel horizon
+;; https://laravel.com/docs/7.x/horizon
+
 ; [program:laravel-horizon]
 ; process_name=%(program_name)s_%(process_num)02d
 ; command=php /app/laravel/artisan horizon

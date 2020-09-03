@@ -48,8 +48,9 @@ source /etc/os-release
 
 PHP_TIMEZONE=PRC
 PHP_URL=https://www.php.net/distributions
-host=x86_64-linux-gnu
 PHP_GIT=https://github.com/php/php-src
+
+host=x86_64-linux-gnu
 
 if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_URL=https://mirrors.sohu.com/php
