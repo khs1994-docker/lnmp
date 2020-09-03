@@ -309,6 +309,8 @@ $( $(_sudo) apt install -y libffi6 > /dev/null 2>&1 && echo libffi6) \
 $( $(_sudo) apt install -y libffi7 > /dev/null 2>&1 && echo libffi7) \
 $( $(_sudo) apt install -y libonig4 > /dev/null 2>&1 && echo libonig4) \
 $( $(_sudo) apt install -y libonig5 > /dev/null 2>&1 && echo libonig5) \
+libc6 \
+tzdata \
 "
 
 # $( $(_sudo) apt install -y libtidy-0.99-0 > /dev/null 2>&1 && echo libtidy-0.99-0 ) \
@@ -680,21 +682,22 @@ _install_pecl_ext_by_pickle(){
   echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options
 
   if [ ${PHP_NUM} -ge "80" ];then
-  _install_pecl_ext_by_pickle \
-    https://github.com/igbinary/igbinary/archive/master.tar.gz@igbinary \
-    https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis \
-    https://github.com/xdebug/xdebug/archive/master.tar.gz@xdebug \
-    https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz@tideways_xhprof \
-    https://github.com/swoole/swoole-src/archive/master.tar.gz@swoole
+    _install_pecl_ext_by_pickle \
+      https://github.com/igbinary/igbinary/archive/master.tar.gz@igbinary \
+      https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis \
+      https://github.com/xdebug/xdebug/archive/master.tar.gz@xdebug \
+      https://github.com/tideways/php-xhprof-extension/archive/master.tar.gz@tideways_xhprof \
+      https://github.com/swoole/swoole-src/archive/master.tar.gz@swoole \
+      mongodb \
+      memcached
   else
-  $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
-  $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
-  $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
-  $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install igbinary --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install redis --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install xdebug --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install swoole --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
+    $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
   fi
-
-  $(_sudo) pickle install memcached --defaults ${PICKLE_OPTIONS}
-  $(_sudo) pickle install mongodb --defaults ${PICKLE_OPTIONS}
 
   $(_sudo) chmod 755 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 

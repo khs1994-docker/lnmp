@@ -74,7 +74,7 @@ ENV PHP_EXTRA_CONFIGURE_ARGS \
             --with-png-dir=/usr \
             --with-webp-dir=/usr \
             --with-xpm-dir=/usr \
-        --with-pcre-regex \
+        --with-pcre-regex=/usr \
         --with-pdo-mysql=shared \
         --with-pdo-pgsql=shared \
         # --with-xsl=shared \
