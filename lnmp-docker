@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.18.3"
-readonly DOCKER_DESKTOP_VERSION="2.3.2.0"
+readonly KUBERNETES_VERSION="1.18.8"
+readonly DOCKER_DESKTOP_VERSION="2.3.6.0"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -584,8 +584,7 @@ set_git_remote_origin_url(){
     # 存在但是设置错误
     GIT_REMOTE_ORIGIN=`git remote get-url origin`
     print_error "This git remote origin ${GIT_REMOTE_ORIGIN} NOT set Correct, reseting..."
-    git remote rm origin
-    git remote add origin git@github.com:khs1994-docker/lnmp.git
+    git remote set-url origin git@github.com:khs1994-docker/lnmp.git
     # 不能使用 SSH
     git fetch --depth=1 origin > /dev/null 2>&1 || git remote set-url origin https://github.com/khs1994-docker/lnmp
     print_info `git remote get-url origin`
@@ -608,7 +607,6 @@ update(){
      print_error "Somefile changed, please commit or stash first"
      exit 1
   fi
-  git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
   print_info "Branch is ${BRANCH}"
   git pull origin ${BRANCH} || true
   git reset --hard origin/${BRANCH}

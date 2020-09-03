@@ -132,8 +132,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.18.3"
-$DOCKER_DESKTOP_VERSION = "2.3.2.0"
+$KUBERNETES_VERSION = "1.18.8"
+$DOCKER_DESKTOP_VERSION = "2.3.6.0"
 $EXEC_CMD_DIR = $PWD
 
 Function _command($command) {
@@ -478,7 +478,6 @@ Function _update() {
   }
 
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
-  git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
   $ErrorActionPreference = "continue"
   git pull origin ${BRANCH}
   git reset --hard origin/${BRANCH}
