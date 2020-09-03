@@ -103,6 +103,8 @@ for module in $modules; do
   ini="${PHP_INI_DIR:-/usr/local/etc/php}/conf.d/${iniName:-"wsl-php-ext-$ext.ini"}"
   if ! grep -q "$line" "$ini" 2>/dev/null; then
     echo "$line" | $(_sudo) tee -a "$ini"
+    ${PHP_PREFIX:-/usr/local}/bin/php -m > /dev/null 2>&1 || \
+      sed -i "s/$line/;notwork $line/g" $ini
   fi
 done
 
