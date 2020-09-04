@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=8.0.0beta2
+ARG PHP_VERSION=8.0.0beta3
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine
@@ -19,9 +19,8 @@ RUN set -x \
                                   linux-headers \
                                   patch \
   \
-  # && echo "apply patch, remove when pr441 merge" \
-  # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/441.diff -O \
-  # && patch -p1 < 441.diff \
+  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/474.diff -O \
+  && patch -p1 < 474.diff \
   \
   && sed -i "s/libtinfo.so/libisl.so.15.3.0/g"  auto/modules/php \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \

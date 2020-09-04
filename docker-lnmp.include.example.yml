@@ -26,11 +26,11 @@ services:
   # php7:
   #   &php7
   #   # ! change php7 default image
-  #   image: username/php:${LNMP_PHP_VERSION:-7.4.9}-fpm-alpine
+  #   image: username/php:${LNMP_PHP_VERSION:-7.4.10}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.9}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.10}-fpm-alpine
   #   # ! s6
-  #   # image: khs1994/php:${LNMP_PHP_VERSION:-7.4.9}-s6-alpine
+  #   # image: khs1994/php:${LNMP_PHP_VERSION:-7.4.10}-s6-alpine
   #   # command: []
   #   # volumes:
   #   #   - ./config/s6/services.d:/etc/services.d
@@ -69,7 +69,7 @@ services:
 
   swoole:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.9}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.10}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php
