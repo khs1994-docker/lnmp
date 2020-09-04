@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.14-alpha2
+.VERSION 19.03.14
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -665,6 +665,14 @@ function Get-DockerWSLPath([string] $APP_ROOT) {
     throw "Docker not running"
   }
 
+  wsl -d ${WSL2_DIST} -u root -- test -d /etc > $null 2>&1
+
+  if (!$?) {
+    printError "WSL2 [ ${WSL2_DIST} ] not exists, please check .env.ps1"
+
+    exit 1
+  }
+
   wsl -d ${WSL2_DIST} -u root -- test -d ${APP_ROOT}
 
   if (!$?) {
@@ -682,7 +690,12 @@ function Get-DockerWSLPath([string] $APP_ROOT) {
     Set-Content $PSScriptRoot/.wsl '{}'
   }
 
-  $wsl_path_obj = ConvertFrom-Json $(Get-Content $PSScriptRoot/.wsl -raw)
+  try {
+    $wsl_path_obj = ConvertFrom-Json $(Get-Content $PSScriptRoot/.wsl -raw)
+  }
+  catch {
+    Set-Content $PSScriptRoot/.wsl '{}'
+  }
 
   try {
     if ($wsl_path_obj."$WSL2_DIST"."$APP_ROOT") {
@@ -703,13 +716,20 @@ function Get-DockerWSLPath([string] $APP_ROOT) {
     --label lnmp.khs1994.com/wsl-test `
     -d busybox sh -c "sleep 120"
 
+  if (!$container_id) {
+    printError "[ $WSL2_DIST ] is not WSL2 or enable [ WSL2 Integration ] in Docker settings"
+
+    exit 1
+  }
+
   $APP_ROOT = docker inspect $container_id -f "{{(index .Mounts 0).Source}}"
 
   ConvertTo-Json @{
+    "请不要编辑此文件" = "Don't edit this file"
     $WSL2_DIST = @{
       $APP_ROOT_SOURCE = $APP_ROOT
     }
-  } | Out-File $PSScriptRoot/.wsl
+  } -Compress | Out-File $PSScriptRoot/.wsl -NoNewline
 
   if (!$APP_ROOT) {
     throw "Get APP_ROOT in WSL2 meet error"
