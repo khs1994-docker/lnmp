@@ -1509,6 +1509,7 @@ XXX
       "kube-proxy:v${KUBERNETES_VERSION}", `
       "etcd:3.3.15-0", `
       "coredns:1.6.2", `
+      "pause:3.2", `
       "pause:3.1"
 
     sleep 10
