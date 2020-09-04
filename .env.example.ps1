@@ -12,6 +12,7 @@ $LNMP_PHP_IMAGE="khs1994/php:7.4.10-composer-alpine"
 $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
 
+# used by $ lnmp-wnamp start common
 $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 $LNMP_NODE_IMAGE="node:alpine"
