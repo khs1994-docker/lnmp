@@ -1478,7 +1478,7 @@ XXX
     }
     catch {}
 
-    printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes ${KUBERNETES_VERSION}"
+    printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
 
     if ('down' -eq $args[1]) {
       Write-Warning "Stop gcr.io local server success"
@@ -1507,19 +1507,50 @@ XXX
       "kube-apiserver:v${KUBERNETES_VERSION}", `
       "kube-scheduler:v${KUBERNETES_VERSION}", `
       "kube-proxy:v${KUBERNETES_VERSION}", `
-      "etcd:3.3.15-0", `
-      "coredns:1.6.2", `
+      "etcd:3.4.3-0", `
+      "coredns:1.6.7", `
       "pause:3.2", `
       "pause:3.1"
 
     sleep 10
 
-    foreach ($image in $images) {
-      printInfo "Handle ${image}"
-      docker pull gcr.io/google_containers/$image
-      docker tag  gcr.io/google_containers/$image k8s.gcr.io/$image
+    function Test-GcrImage([string] $image) {
+      if ($(docker image ls -q k8s.gcr.io/$image)) {
+        return $true
+      }
+
+      return $false
+    }
+
+    function Get-GcrImage([string] $image, [string] $mirror) {
+      docker pull $mirror/$image
+      docker tag  $mirror/$image k8s.gcr.io/$image
       # docker push k8s.gcr.io/$image
-      docker rmi  gcr.io/google_containers/$image
+      docker rmi  $mirror/$image
+    }
+
+    # $ErrorActionPreference="SilentlyContinue"
+
+    foreach ($image in $images) {
+      printInfo "Handle ${image} ..."
+
+      if (Test-GcrImage $image) {
+        printInfo "k8s.gcr.io/$image exists"
+
+        continue;
+      }
+
+      Get-GcrImage $image "gcr.io/google_containers"
+
+      if (Test-GcrImage $image) {
+        continue;
+      }
+
+      # 一些镜像 aliyun 可能不存在，从第二个镜像下载
+
+      printError "Download from mirror error, try other mirror"
+
+      Get-GcrImage $image "ccr.ccs.tencentyun.com/gcr-mirror"
     }
 
     try {

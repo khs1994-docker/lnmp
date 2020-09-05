@@ -219,6 +219,23 @@ _gcr_io_down(){
   docker container rm -f $(docker container ls -a -f label=com.khs1994.lnmp.gcr.io -q) > /dev/null 2>&1 || true
 }
 
+_test_gcr_image(){
+  result=$(docker image ls -q k8s.gcr.io/$1)
+
+  if [ -n "$result" ];then
+    return 0
+  fi
+
+  return 1
+}
+
+_get_gcr_image(){
+  docker pull $2/$1
+  docker tag  $2/$1 k8s.gcr.io/$1
+  # docker push k8s.gcr.io/$image
+  docker rmi  $2/$1
+}
+
 _gcr_io(){
   if [ "$1" = down ];then
     _gcr_io_down
@@ -261,20 +278,37 @@ _gcr_io(){
     kube-apiserver:v${KUBERNETES_VERSION} \
     kube-scheduler:v${KUBERNETES_VERSION} \
     kube-proxy:v${KUBERNETES_VERSION} \
-    etcd:3.3.15-0 \
-    coredns:1.6.2 \
+    etcd:3.4.3-0 \
+    coredns:1.6.7 \
     pause:3.2 \
     pause:3.1"
 
     sleep 5
 
+    set +e
+
     for image in $images
     do
-       print_info "Handle ${image}"
-       docker pull gcr.io/google_containers/$image
-       docker tag  gcr.io/google_containers/$image k8s.gcr.io/$image
-       # docker push k8s.gcr.io/$image
-       docker rmi  gcr.io/google_containers/$image
+       print_info "Handle ${image} ..."
+       _test_gcr_image $image
+       if [ $? = 0 ];then
+         print_info "k8s.gcr.io/${image} exists"
+
+         continue
+       fi
+
+       _get_gcr_image $image gcr.io/google_containers
+
+       # 一些镜像 aliyun 可能不存在，从第二个镜像下载
+
+       _test_gcr_image $image
+       if [ $? = 0 ];then
+         continue
+       fi
+
+       print_error "Download from mirror error, try other mirror"
+
+       _get_gcr_image $image ccr.ccs.tencentyun.com/gcr-mirror
     done
 
     _gcr_io_down

@@ -4,6 +4,10 @@
     "dest": "gcr-mirror/pause:3.2"
   },
   {
+    "source": "k8s.gcr.io/pause:3.3",
+    "dest": "gcr-mirror/pause:3.3-try"
+  },
+  {
     "source": "us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3",
     "dest": "gcr-mirror/pause:3.3"
   },
@@ -151,5 +155,19 @@
     "registry": "k8s.gcr.io",
     "image": "kube-scheduler",
     "ref": "v1.18.8"
+  },
+  {
+    "source": "k8s.gcr.io/etcd:3.4.3-0",
+    "dest": "gcr-mirror/etcd:3.4.3-0",
+    "registry": "k8s.gcr.io",
+    "image": "etcd",
+    "ref": "3.4.3-0"
+  },
+  {
+    "source": "k8s.gcr.io/coredns:1.6.7",
+    "dest": "gcr-mirror/coredns:1.6.7",
+    "registry": "k8s.gcr.io",
+    "image": "coredns",
+    "ref": "1.6.7"
   }
 ]
