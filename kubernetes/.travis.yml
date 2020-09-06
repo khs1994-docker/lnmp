@@ -270,6 +270,7 @@ script:
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
+  - kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
   - kubectl delete deployment nginx || true
   - kubectl delete pod nginx || true
   - kubectl get all

@@ -28,8 +28,7 @@ scripts:
     $PHP_INI="${PHP_PREFIX}/php.ini"
     $PHP_BIN="${PHP_PREFIX}/php.exe"
 
-    $extensions='yaml',`
-         'xdebug',`
+    $extensions='xdebug',`
          'redis',`
          'mongodb',`
          'igbinary'

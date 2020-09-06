@@ -21,16 +21,16 @@ Import-Module $PSScriptRoot/registry/registry.psm1
   PS > . $HOME\lnmp\windows\sdk\dockerhub\rootfs.ps1
   PS > rootfs alpine latest amd64 linux
 
+  PS > rootfs alpine -phase "tag"
+  PS > rootfs alpine -phase "manifest"
+  PS > rootfs alpine -phase "manifest list"
+
   ENV:
   $env:LNMP_CACHE="~/.khs1994-docker-lnmp"
   $env:REGISTRY_MIRROR
 
   $env:DOCKER_USERNAME
   $env:DOCKER_PASSWORD
-
-  $env:DOCKER_ROOTFS_PHASE="tag"            get tag only
-  $env:DOCKER_ROOTFS_PHASE="manifest"       get manifest only
-  $env:DOCKER_ROOTFS_PHASE="manifest list"  get manifest list only
 .INPUTS
 
 .OUTPUTS
@@ -46,13 +46,30 @@ function rootfs([string]$image = "alpine",
   [string]$os = "linux",
   [string]$dest,
   $layersIndex = 0,
-  [string]$registry = $null) {
+  [string]$registry = $null,
+  [string]$phase = $null) {
   # $dest 下载到哪里
 
   # $layersIndex = 0
   # $layersIndex = 0,1
   # $layersIndex = 'config',0,1
   # $layersIndex = 'all'
+
+  if ($phase -eq 'tag') {
+    $env:DOCKER_ROOTFS_PHASE = "tag"
+  }
+
+  if ($phase -eq 'manifest') {
+    $env:DOCKER_ROOTFS_PHASE = "manifest"
+  }
+
+  if ($phase -eq 'manifest list') {
+    $env:DOCKER_ROOTFS_PHASE = "manifest list"
+  }
+
+  if(!$phase){
+    $env:DOCKER_ROOTFS_PHASE = $null
+  }
 
   $registry = Get-Registry $registry
 

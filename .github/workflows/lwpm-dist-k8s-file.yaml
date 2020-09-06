@@ -19,7 +19,6 @@ jobs:
       LWPM_DOCKER_USERNAME: khs1994
       LWPM_DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       LWPM_DOCKER_REGISTRY: registry-1.docker.io
-      DOCKER_ROOTFS_PHASE: "manifest list"
       LNMP_CN_ENV: "false"
     strategy:
       matrix:
@@ -50,9 +49,9 @@ jobs:
 
           . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
           $env:DOCKER_USERNAME="khs1994"
-          rootfs lwpm/kubectl ${env:LWPM_K8S_VERSION}
+          rootfs lwpm/kubectl ${env:LWPM_K8S_VERSION} -phase "manifest list"
           $env:DOCKER_USERNAME="906210846"
-          rootfs khs1994/kubectl ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY
+          rootfs khs1994/kubectl ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
       - name: handle-kubernetes-server
         shell: pwsh
         env:
@@ -72,9 +71,9 @@ jobs:
 
           . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
           $env:DOCKER_USERNAME="khs1994"
-          rootfs lwpm/kubernetes-server ${env:LWPM_K8S_VERSION}
+          rootfs lwpm/kubernetes-server ${env:LWPM_K8S_VERSION} -phase "manifest list"
           $env:DOCKER_USERNAME="906210846"
-          rootfs khs1994/kubernetes-server ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY
+          rootfs khs1994/kubernetes-server ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
       - name: handle-kubernetes-node
         shell: pwsh
         if: matrix.os == 'ubuntu'
@@ -93,9 +92,9 @@ jobs:
 
           . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
           $env:DOCKER_USERNAME="khs1994"
-          rootfs lwpm/kubernetes-node ${env:LWPM_K8S_VERSION}
+          rootfs lwpm/kubernetes-node ${env:LWPM_K8S_VERSION} -phase "manifest list"
           $env:DOCKER_USERNAME="906210846"
-          rootfs khs1994/kubernetes-node ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY
+          rootfs khs1994/kubernetes-node ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
   trigger-coding-net-ci:
     needs: lwpm-dist-k8s-file
     name: trigger-coding-net-ci
