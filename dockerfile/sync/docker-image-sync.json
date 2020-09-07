@@ -196,6 +196,14 @@
     "dest": "library-mirror/phpmyadmin:fpm-alpine"
   },
   {
+    "source": "library/phpmyadmin:5.0.2",
+    "dest": "library-mirror/phpmyadmin:5.0.2"
+  },
+  {
+    "source": "library/phpmyadmin:5.0.2-fpm-alpine",
+    "dest": "library-mirror/phpmyadmin:5.0.2-fpm-alpine"
+  },
+  {
     "source": "minio/minio:RELEASE.2020-09-05T07-14-49Z",
     "dest": "minio:RELEASE.2020-09-05T07-14-49Z"
   },

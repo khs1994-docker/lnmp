@@ -5,7 +5,7 @@ $WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
 $WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
-mkdir -Force $PSScriptRoot/crio/crio.conf.d | Out-Null
+mkdir -Force $PSScriptRoot/conf/crio/crio.conf.d | Out-Null
 
 wsl -d wsl-k8s -u root -- mkdir -p ${K8S_ROOT}/etc/cni/net.d
 

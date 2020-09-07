@@ -58,7 +58,7 @@ services:
 # More Demo
 
   # phpmyadmin:
-  #   image: phpmyadmin:fpm-alpine
+  #   image: phpmyadmin:5.0.2-fpm-alpine
   #   volumes:
   #     - phpmyadmin:/var/www/html
 

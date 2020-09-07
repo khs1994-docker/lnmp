@@ -32,7 +32,7 @@ services:
     image: mongo:4.4.0
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin:5.0.2
 
   httpd:
     image: httpd:2.4.46-alpine
@@ -63,3 +63,6 @@ services:
 
   docker:
     image: docker:19.03.12
+
+  gogs:
+    image: gogs/gogs:0.12

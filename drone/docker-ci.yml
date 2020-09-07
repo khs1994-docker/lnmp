@@ -50,7 +50,7 @@ services:
 
   gogs:
     << : *common
-    image: gogs/gogs:latest
+    image: gogs/gogs:0.12
     ports:
       - "${CI_HOST:?CI_HOST}:${CI_GOGS_SSH_PORT}:22"
       - "${CI_HOST:?CI_HOST}:${CI_GOGS_PORT}:3000"
