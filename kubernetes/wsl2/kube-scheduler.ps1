@@ -1,16 +1,18 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+Import-Module $PSScriptRoot/bin/WSL-K8S.psm1
+
+$wsl_ip = Get-WSL2IP
 
 $K8S_S_HOST = $wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$WINDOWS_ROOT_IN_WSL2 = Invoke-WSL wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
-$kube_scheduler_version_string = wsl -d wsl-k8s /wsl/wsl-k8s-data/k8s/bin/kube-scheduler --version | select-string v1.1
+$kube_scheduler_version_string = Invoke-WSL /wsl/wsl-k8s-data/k8s/bin/kube-scheduler --version | select-string v1.1
 $kube_scheduler_version = ($kube_scheduler_version_string).line.split()[1].Trim('v').split('-')[0]
 
 (Get-Content $PSScriptRoot/conf/kube-scheduler.config.yaml.temp) `
@@ -26,7 +28,7 @@ if ([Version]$kube_scheduler_version -ge [Version]"1.19.0") {
   | Set-Content $PSScriptRoot/conf/kube-scheduler.config.yaml
 }
 
-$command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-scheduler `
+$command = Invoke-WSL echo ${K8S_ROOT}/bin/kube-scheduler `
   --config=${WINDOWS_ROOT_IN_WSL2}/conf/kube-scheduler.config.yaml `
   --bind-address=${K8S_S_HOST} `
   --secure-port=10259 `
@@ -60,12 +62,12 @@ startsecs=10" > $PSScriptRoot/supervisor.d/kube-scheduler.ini
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -d wsl-k8s -u root -- supervisorctl start kube-server:kube-scheduler
+  Invoke-WSL supervisorctl start kube-server:kube-scheduler
 
   exit
 }
 
 if ($args[0] -eq 'start') {
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -d wsl-k8s -u root -- bash -c $command
+  Invoke-WSL bash -c $command
 }

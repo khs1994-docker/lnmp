@@ -1,19 +1,22 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+Import-Module $PSScriptRoot/bin/WSL-K8S.psm1
+
+$WINDOWS_ROOT_IN_WSL2 = Invoke-WSL wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 mkdir -Force $PSScriptRoot/conf/crio/crio.conf.d | Out-Null
 
-wsl -d wsl-k8s -u root -- mkdir -p ${K8S_ROOT}/etc/cni/net.d
+Invoke-WSL mkdir -p ${K8S_ROOT}/etc/cni/net.d
 
-wsl -d wsl-k8s -u root -- cp $WINDOWS_ROOT_IN_WSL2/conf/cni/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
+Invoke-WSL cp $WINDOWS_ROOT_IN_WSL2/conf/cni/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
 
-wsl -d wsl-k8s -u root -- echo "runtime-endpoint: unix:///var/run/crio/crio.sock" `> ${K8S_ROOT}/etc/crictl.yaml
+Invoke-WSL echo "runtime-endpoint: `"unix:///var/run/crio/crio.sock`"" `> ${K8S_ROOT}/etc/crictl.yaml
+Invoke-WSL echo "image-endpoint: `"unix:///var/run/crio/crio.sock`"" `>`> ${K8S_ROOT}/etc/crictl.yaml
 
-# wsl -d wsl-k8s -u root -- cat ${K8S_ROOT}/cni/net.d/99-loopback.conf
+# Invoke-WSL cat ${K8S_ROOT}/cni/net.d/99-loopback.conf
 
 (Get-Content $PSScriptRoot/conf/crio/crio.conf.temp) `
   -replace "##K8S_ROOT##", $K8S_ROOT `
@@ -37,9 +40,9 @@ wsl -d wsl-k8s -u root -- echo "runtime-endpoint: unix:///var/run/crio/crio.sock
   -replace "##K8S_ROOT##", $K8S_ROOT `
 | Set-Content $PSScriptRoot/conf/containers/registries.d/default.yaml
 
-wsl -d wsl-k8s -u root -- cp -a $WINDOWS_ROOT_IN_WSL2/conf/containers/. ${K8S_ROOT}/etc/containers
+Invoke-WSL cp -a $WINDOWS_ROOT_IN_WSL2/conf/containers/. ${K8S_ROOT}/etc/containers
 
-$command = wsl -d wsl-k8s -u root -- echo $K8S_ROOT/usr/local/bin/crio `
+$command = Invoke-WSL echo $K8S_ROOT/usr/local/bin/crio `
 --pinns-path=$K8S_ROOT/usr/local/bin/pinns `
 --hooks-dir=$K8S_ROOT/usr/local/share/containers/oci/hooks.d `
 --config=$WINDOWS_ROOT_IN_WSL2/conf/crio/crio.conf `
@@ -65,11 +68,11 @@ killasgroup=true
 startsecs=10" > $PSScriptRoot/supervisor.d/cri-o.ini
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
-  wsl -d wsl-k8s -u root -- supervisorctl start kube-node:cri-o
+  Invoke-WSL supervisorctl start kube-node:cri-o
 
   exit
 }
 
 if ($args[0] -eq 'start') {
-  wsl -d wsl-k8s -u root -- bash -c $command
+  Invoke-WSL bash -c $command
 }

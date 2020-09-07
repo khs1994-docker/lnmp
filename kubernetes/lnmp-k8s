@@ -827,7 +827,7 @@ _crio_install(){
   GO111MODULE=off go get github.com/cpuguy83/go-md2man
 
   make clean
-  make DESTDIR="${K8S_ROOT}" BUILDTAGS='seccomp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper libdm_no_deferred_remove'
+  make DESTDIR="${K8S_ROOT}" BUILDTAGS='seccomp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper'
   # make build-static CONTAINER_RUNTIME=docker
   set +e
   command -v sudo > /dev/null 2>&1
@@ -847,9 +847,6 @@ _crio_install(){
       make DESTDIR="${K8S_ROOT}" install.systemd
   fi
   set -e
-
-  $(_sudo) install -D -m 755 ${K8S_ROOT}/usr/local/bin/crio-status \
-                             /usr/local/bin/crio-status
 
   _conmon_install
   # command -v yum > /dev/null && $(_sudo) yum install cri-o

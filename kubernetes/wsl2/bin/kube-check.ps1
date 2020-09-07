@@ -28,6 +28,7 @@ if (!$?) {
   }
   # 运行一个进程，保持 wsl-k8s-data 不自动推出
   & $PSScriptRoot/wsl2d.ps1
+  & $PSScriptRoot/wsl2d.ps1 wsl-k8s
   # 在 wsl-k8s 挂载 wsl-k8s-data
   write-host "==> try mount WSL dist [ wsl-k8s-data ] to [ wsl-k8s ] /wsl/wsl-k8s-data" -ForegroundColor Green
   $dev_sdx = (wsl -d wsl-k8s-data -- mount).split(' ')[0]

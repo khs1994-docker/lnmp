@@ -21,7 +21,7 @@ $kubeconfig = "$HOME/.kube/config"
 
 # $kubeconfig="$PSScriptRoot/kubectl.kubeconfig"
 
-import-module $PSScriptRoot/wsl2/bin/wsl-k8s.psm1
+import-module $PSScriptRoot/WSL-K8S.psm1
 
 invoke-kubectl config set-cluster wsl2 `
   --certificate-authority=$PSScriptRoot/../certs/ca.pem `

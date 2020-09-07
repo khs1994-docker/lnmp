@@ -19,7 +19,9 @@
 * https://github.com/cri-o/cri-o/blob/master/tutorials/kubernetes.md
 * https://gitee.com/docker_practice/cri-o/blob/master/tutorials/install-distro.md
 
-crio 会加载 `/etc/containers/registries.conf`
+crio 会加载 `/etc/containers/` 下的配置。
+
+* `/var/run/containers/storage`
 
 ### Fedora kubernetes DNS 解析不了
 

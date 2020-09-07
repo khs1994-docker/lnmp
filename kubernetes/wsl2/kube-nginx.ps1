@@ -3,9 +3,11 @@ exit
 . $PSScriptRoot/.env.ps1
 & $PSScriptRoot/bin/wsl2d.ps1 wsl-k8s
 
+Import-Module $PSScriptRoot/bin/WSL-K8S.psm1
+
 mkdir -Force $HOME/.khs1994-docker-lnmp/wsl-k8s/kube-nginx/logs | out-null
 
-$wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+$wsl_ip = Get-WSL2IP
 
 Write-Output $wsl_ip > $PSScriptRoot/conf/.kube_nginx_wsl2_ip
 

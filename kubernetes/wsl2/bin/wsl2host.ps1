@@ -15,7 +15,9 @@
 . $PSScriptRoot/../.env.example.ps1
 . $PSScriptRoot/../.env.ps1
 
-$wsl2_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+Import-Module $PSScriptRoot/WSL-K8S.psm1
+
+$wsl2_ip = Get-WSL2IP
 
 Write-Output $wsl2_ip
 

@@ -3,6 +3,8 @@
 
 & $PSScriptRoot/kube-check
 
+Import-Module $PSScriptRoot/WSL-K8S.psm1
+
 Function printInfo() {
   write-host "
 ==> $args
@@ -12,8 +14,8 @@ Function printInfo() {
 Function _cp_conf() {
   printInfo "Copy WSL2 supervisor conf file to WSL2 /etc/supervisor.d/ ..."
   # 复制配置文件
-  $WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot/..'"
-  wsl -d wsl-k8s -u root -- cp ${WINDOWS_ROOT_IN_WSL2}/supervisor.d/*.ini /etc/supervisor.d/
+  $WINDOWS_ROOT_IN_WSL2 = Invoke-WSL wslpath "'$PSScriptRoot/..'"
+  Invoke-WSL cp ${WINDOWS_ROOT_IN_WSL2}/supervisor.d/*.ini /etc/supervisor.d/
 }
 
 Function _generate_conf() {
@@ -71,4 +73,4 @@ if ($args[0] -eq 'update') {
   _cp_conf
 }
 
-wsl -d wsl-k8s -u root -- bash -ec "supervisorctl $args"
+Invoke-WSL bash -ec "supervisorctl $args"

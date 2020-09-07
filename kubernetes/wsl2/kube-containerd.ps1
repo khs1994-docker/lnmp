@@ -1,15 +1,17 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+Import-Module $PSScriptRoot/bin/WSL-K8S.psm1
+
+$WINDOWS_ROOT_IN_WSL2 = Invoke-WSL wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
-wsl -d wsl-k8s -u root -- mkdir -p ${K8S_ROOT}/etc/cni/net.d
+Invoke-WSL mkdir -p ${K8S_ROOT}/etc/cni/net.d
 
-wsl -d wsl-k8s -u root -- cp $WINDOWS_ROOT_IN_WSL2/conf/cni/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
+Invoke-WSL cp $WINDOWS_ROOT_IN_WSL2/conf/cni/99-loopback.conf ${K8S_ROOT}/etc/cni/net.d
 
-# wsl -d wsl-k8s -u root -- cat ${K8S_ROOT}/cni/net.d/99-loopback.conf
+# Invoke-WSL cat ${K8S_ROOT}/cni/net.d/99-loopback.conf
 
 (Get-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml.temp) `
   -replace "##K8S_ROOT##", $K8S_ROOT `
@@ -17,7 +19,7 @@ wsl -d wsl-k8s -u root -- cp $WINDOWS_ROOT_IN_WSL2/conf/cni/99-loopback.conf ${K
   -replace "my-registry", $MY_DOCKER_REGISTRY_MIRROR `
 | Set-Content $PSScriptRoot/conf/kube-containerd/1.4/config.toml
 
-$command = wsl -d wsl-k8s -u root -- echo $K8S_ROOT/bin/kube-containerd `
+$command = Invoke-WSL echo $K8S_ROOT/bin/kube-containerd `
   --config ${WINDOWS_ROOT_IN_WSL2}/conf/kube-containerd/1.4/config.toml
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
@@ -37,11 +39,11 @@ killasgroup=true
 startsecs=10" > $PSScriptRoot/supervisor.d/kube-containerd.ini
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
-  wsl -d wsl-k8s -u root -- supervisorctl start kube-node:kube-containerd
+  Invoke-WSL supervisorctl start kube-node:kube-containerd
 
   exit
 }
 
 if ($args[0] -eq 'start') {
-  wsl -d wsl-k8s -u root -- bash -c $command
+  Invoke-WSL bash -c $command
 }

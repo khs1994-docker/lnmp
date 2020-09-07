@@ -46,6 +46,7 @@ it later with **--config**. Global options will modify the output.
 
 GLOBAL OPTIONS:
    --additional-devices value       Devices to add to the containers [$CONTAINER_ADDITIONAL_DEVICES]
+   --allow-userns-annotation        [EXPERIMENTAL] Allow usage of the annotation to setup user namespaces (default: false) (default: false) [$ALLOW_USERNS_ANNOTATION]
    --apparmor-profile value         Name of the apparmor profile to be used as the runtime's default. This only takes effect if the user does not specify a profile via the Kubernetes Pod's metadata annotation. (default: "crio-default") [$CONTAINER_APPARMOR_PROFILE]
    --big-files-temporary-dir value  Path to the temporary directory to use for storing big files, used to store image blobs and data streams related to containers image management. [$CONTAINER_BIG_FILES_TEMPORARY_DIR]
    --bind-mount-prefix /            A prefix to use for the source of the bind mounts. This option would be useful if you were running CRI-O in a container. And had / mounted on `/host` in your container. Then if you ran CRI-O with the `--bind-mount-prefix=/host` option, CRI-O would add /host to any bind mounts it is handed over CRI. If Kubernetes asked to have `/var/lib/foobar` bind mounted into the container, then CRI-O would bind mount `/host/var/lib/foobar`. Since CRI-O itself is running in a container with `/` or the host mounted on `/host`, the container would end up with `/var/lib/foobar` from the host mounted in the container rather then `/var/lib/foobar` from the CRI-O container. (default: "") [$CONTAINER_BIND_MOUNT_PREFIX]
@@ -140,7 +141,7 @@ GLOBAL OPTIONS:
    --profile-port value              Port for the pprof profiler (default: 6060) [$CONTAINER_PROFILE_PORT]
    --read-only /run                  Setup all unprivileged containers to run as read-only. Automatically mounts tmpfs on /run, `/tmp` and `/var/tmp`. (default: false) (default: false) [$CONTAINER_READ_ONLY]
    --registry value                  Registry to be prepended when pulling unqualified images, can be specified multiple times [$CONTAINER_REGISTRY]
-   --root value, -r value            The CRI-O root directory (default: "/wsl/wsl-k8s-data/k8s/var/lib/containers/storage") [$CONTAINER_ROOT]
+   --root value, -r value            The CRI-O root directory (default: "/var/lib/containers/storage") [$CONTAINER_ROOT]
    --runroot value                   The CRI-O state directory (default: "/var/run/containers/storage") [$CONTAINER_RUNROOT]
    --runtimes value                  OCI runtimes, format is runtime_name:runtime_path:runtime_root:runtime_type [$CONTAINER_RUNTIMES]
    --seccomp-profile value           Path to the seccomp.json profile to be used as the runtime's default. If not specified, then the internal default seccomp profile will be used. (default: "") [$CONTAINER_SECCOMP_PROFILE]

@@ -1,13 +1,15 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+Import-Module $PSScriptRoot/bin/WSL-K8S.psm1
+
+$wsl_ip = Get-WSL2IP
 
 $NODE_NAME = "wsl2"
 # $KUBE_APISERVER='https://x.x.x.x:16443'
 # $K8S_ROOT="/opt/k8s"
-$WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$WINDOWS_ROOT_IN_WSL2 = Invoke-WSL wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 (Get-Content $PSScriptRoot/conf/kubelet.config.yaml.temp) `
@@ -16,9 +18,9 @@ $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
   -replace "##K8S_ROOT##", $K8S_ROOT `
 | Set-Content $PSScriptRoot/conf/kubelet.config.yaml
 
-wsl -d wsl-k8s -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
-wsl -d wsl-k8s -u root -- `
-  bash -c "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env > /dev/null"
+Invoke-WSL bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
+Invoke-WSL bash -c `
+  "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env > /dev/null"
 
 $CONTAINER_RUNTIME_ENDPOINT = "unix:///run/kube-containerd/containerd.sock"
 
@@ -26,7 +28,7 @@ if ("$CRI" -eq 'cri-o') {
   $CONTAINER_RUNTIME_ENDPOINT = "unix:///var/run/crio/crio.sock"
 }
 
-$command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kubelet `
+$command = Invoke-WSL echo ${K8S_ROOT}/bin/kubelet `
   --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
   --cert-dir=${K8S_ROOT}/certs `
   --container-runtime=remote `
@@ -41,9 +43,9 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kubelet `
   --v=2
 
 Function _reset() {
-  wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
-  wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
-  wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-*
+  Invoke-WSL rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+  Invoke-WSL rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
+  Invoke-WSL rm -rf ${K8S_ROOT}/certs/kubelet-*
 }
 
 if ($args[0] -eq "reset") {
@@ -96,8 +98,8 @@ if ($args[0] -ne 'start' -and $args[0] -ne 'init') {
 
 $env:ErrorActionPreference = "stop"
 
-wsl -d wsl-k8s -u root -- ${K8S_ROOT}/bin/kubeadm version
-wsl -d wsl-k8s -u root -- ls ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
+Invoke-WSL ${K8S_ROOT}/bin/kubeadm version
+Invoke-WSL ls ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
 $env:ErrorActionPreference = "continue"
 
@@ -117,16 +119,16 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip) {
 else {
   Write-Warning "wsl ip changed, reset ..."
   echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-  wsl -d wsl-k8s -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+  Invoke-WSL rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
   # _reset
 }
 
 sleep 2
 
-# wsl -d wsl-k8s -u root -- /usr/sbin/swapoff -a
-# wsl -d wsl-k8s -u root -- /sbin/swapoff -a
-wsl -d wsl-k8s -u root -- ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh ${K8S_ROOT}
-wsl -d wsl-k8s -u root -- mkdir -p ${K8S_ROOT}/var/lib/kubelet
+# Invoke-WSL /usr/sbin/swapoff -a
+# Invoke-WSL /sbin/swapoff -a
+Invoke-WSL ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh ${K8S_ROOT}
+Invoke-WSL mkdir -p ${K8S_ROOT}/var/lib/kubelet
 
 if ($args[0] -eq 'init') {
   "==> kubelet init success !"
@@ -138,9 +140,9 @@ sleep 5
 Function _mountKubelet($source, $dest) {
   wsl -d wsl-k8s -u root -- bash -c "mountpoint -q $dest"
   if (!$?) {
-    wsl -d wsl-k8s -u root -- bash -c "mkdir -p $source $dest"
+    Invoke-WSL bash -c "mkdir -p $source $dest"
     Write-Warning "try mount $source to $dest ..."
-    wsl -d wsl-k8s -u root -- bash -c "mount --bind $source $dest"
+    Invoke-WSL bash -c "mount --bind $source $dest"
   }
   else {
     Write-Warning "$dest already mount"
@@ -159,8 +161,8 @@ function _mountKubelet_all() {
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   & $PSScriptRoot/bin/wsl2host-check
   _mountKubelet_all
-  wsl -d wsl-k8s -u root -- mount bpffs /sys/fs/bpf -t bpf
-  wsl -d wsl-k8s -u root -- supervisorctl start kube-node:kubelet
+  Invoke-WSL mount bpffs /sys/fs/bpf -t bpf
+  Invoke-WSL supervisorctl start kube-node:kubelet
 
   exit
 }
@@ -168,6 +170,6 @@ if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
 if ($args[0] -eq 'start') {
   & $PSScriptRoot/bin/wsl2host-check
   _mountKubelet_all
-  wsl -d wsl-k8s -u root -- mount bpffs /sys/fs/bpf -t bpf
-  wsl -d wsl-k8s -u root -- bash -c $command
+  Invoke-WSL mount bpffs /sys/fs/bpf -t bpf
+  Invoke-WSL bash -c $command
 }
