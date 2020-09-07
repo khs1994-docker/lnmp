@@ -6,7 +6,8 @@ $wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' 
 $K8S_CM_HOST = $wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$WINDOWS_HOME_ON_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
   --profiling `
@@ -55,8 +56,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-controller-manager]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-controller-manager-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-controller-manager-error.log
+stdout_logfile=${SUPERVISOR_LOG_ROOT}/kube-controller-manager-stdout.log
+stderr_logfile=${SUPERVISOR_LOG_ROOT}/kube-controller-manager-error.log
 directory=/
 autostart=false
 autorestart=false

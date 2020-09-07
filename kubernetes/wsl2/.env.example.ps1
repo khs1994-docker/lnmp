@@ -20,3 +20,9 @@ $WSL2_DOMAIN_2=""
 
 # 替换为自己的镜像源，例如 阿里云
 $MY_DOCKER_REGISTRY_MIRROR="my-registry"
+
+$CRI="containerd"
+
+# $CRI="cri-o"
+
+# $CNI_CALICO_EBPF="false"

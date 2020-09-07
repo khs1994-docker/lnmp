@@ -2,16 +2,15 @@
   version_file_persist = "/opt/k8s/var/lib/crio/version"
   log_dir = "/opt/k8s/var/log/crio/pods"
   [crio.runtime]
-    # default_runtime = "runc"
-    cgroup_manager = "systemd"
+    cgroup_manager = "cgroupfs"
     log_level = "debug"
       [crio.runtime.runtimes.runc]
         runtime_path = ""
         runtime_type = "oci"
         runtime_root = "/run/runc"
   [crio.network]
-    network_dir = "/opt/k8s/etc/cni/net.d"
-    plugin_dirs = ["/opt/k8s/opt/cni/bin/",]
+    network_dir = "##K8S_ROOT##/etc/cni/net.d"
+    plugin_dirs = ["##K8S_ROOT##/opt/cni/bin/",]
   [crio.image]
     # pause_image = "gcr.mirror/google-containers/pause:3.2"
     pause_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"

@@ -422,7 +422,7 @@ EOF
 
 _gvisor_crio_conf(){
   print_info "config crio with gvisor(runsc) ..."
-  cat <<EOF | $(_sudo) tee -a /etc/crio/crio.conf
+  cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/crio/crio.conf
 [crio.runtime.runtimes.runsc]
   runtime_path = "/usr/local/bin/runsc"
 EOF
@@ -705,18 +705,18 @@ _cri_sysctl(){
 }
 
 _conmon_install(){
-  if [ -f /usr/local/bin/conmon ];then
+  if [ -f ${K8S_ROOT}/usr/local/bin/conmon ];then
     return
   fi
 
   if [ $OS = "Linux" -a $GOARCH = "amd64" ];then
-    $(_sudo) $(_curl) -o /usr/local/bin/conmon \
+    $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon \
       https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon \
     || \
-    $(_sudo) $(_curl) -o /usr/local/bin/conmon \
+    $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon \
       https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION}
 
-    $(_sudo) chmod +x /usr/local/bin/conmon
+    $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
     return
   fi
 
@@ -733,13 +733,13 @@ _conmon_install(){
 
   cd /tmp/conmon
   make
-  $(_sudo) make install
+  $(_sudo) make PREFIX=${K8S_ROOT}/usr/local install
 }
 
 # https://github.com/cri-o/cri-o/blob/master/tutorials/setup.md
 _crio_install(){
   set +e
-  command -v crio > /dev/null
+  command -v crio > /dev/null 2>&1
   if [ $? -eq 0 ];then print_info "cri-o already install" ; return;fi
   set -e
 
@@ -751,10 +751,10 @@ _crio_install(){
 
   set -x
 
-  command -v dnf > /dev/null && isRPM=1
-  command -v yum > /dev/null && isRPM=1
+  command -v dnf > /dev/null && isRPM=1 || true
+  command -v yum > /dev/null && isRPM=1 || true
 
-  test -n "$isRPM" && $(_sudo) yum install -y \
+  if [ -n "$isRPM" ];then $(_sudo) yum install -y \
   git \
   glib2-devel \
   glibc-devel \
@@ -766,7 +766,7 @@ _crio_install(){
   libseccomp-devel \
   libselinux-devel \
   pkgconfig \
-  make
+  make; fi
 
   # $(_sudo) sed -i "s#deb.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
   # $(_sudo) sed -i "s#security.debian.org#mirrors.ustc.edu.cn#g" /etc/apt/sources.list
@@ -779,10 +779,11 @@ _crio_install(){
   # && wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add - \
   # && $(_sudo) apt-get update -qq \
 
-  command -v apt > /dev/null \
-  && $(_sudo) apt update -qq || true \
-  ; $(_sudo) apt install -y software-properties-common \
-  ; $(_sudo) apt-get install -y \
+  command -v apt > /dev/null && isAPT=1 || true
+  if [ -n "$isAPT" ];then $(_sudo) apt update -qq || true;fi
+  if [ -n "$isAPT" ];then \
+  $(_sudo) apt install -y software-properties-common \
+  && $(_sudo) apt-get install -y \
   git \
   $(command -v go > /dev/null || echo "golang-go") \
   libassuan-dev \
@@ -796,10 +797,10 @@ _crio_install(){
   pkg-config \
   libudev-dev \
   gcc \
-  make
+  make; fi
 
   # containers-common
-  $(_sudo) cp -r systemd/etc/containers/. /etc/containers
+  $(_sudo) cp -r systemd/etc/containers/. ${K8S_ROOT}/etc/containers
 
   go_path=`go env GOPATH | cut -d ":" -f 1`
 
@@ -811,7 +812,7 @@ _crio_install(){
   fi
 
   git clone --depth=1 -b release-${CRIO_VERSION} ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o \
-    || git clone --depth=1 -b master ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o
+    || git clone --depth=1 -b master ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o || true
 
   if ! [ -d $go_path/src/github.com/cri-o/cri-o ];then
     exit 1
@@ -826,11 +827,29 @@ _crio_install(){
   GO111MODULE=off go get github.com/cpuguy83/go-md2man
 
   make clean
-  make BUILDTAGS='seccomp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper libdm_no_deferred_remove'
+  make DESTDIR="${K8S_ROOT}" BUILDTAGS='seccomp exclude_graphdriver_btrfs exclude_graphdriver_devicemapper libdm_no_deferred_remove'
   # make build-static CONTAINER_RUNTIME=docker
-  $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.bin
-  $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.config
-  $(_sudo) PATH=$GOPATH/bin:$PATH GOPATH=$go_path make install.systemd
+  set +e
+  command -v sudo > /dev/null 2>&1
+  if [ $? = 0 ];then
+    sudo PATH=$GOPATH/bin:$PATH GOPATH=$go_path \
+      make DESTDIR="${K8S_ROOT}" install.bin
+    sudo PATH=$GOPATH/bin:$PATH GOPATH=$go_path \
+      make DESTDIR="${K8S_ROOT}" install.config
+    sudo PATH=$GOPATH/bin:$PATH GOPATH=$go_path \
+      make DESTDIR="${K8S_ROOT}" install.systemd
+  else
+    PATH=$GOPATH/bin:$PATH GOPATH=$go_path \
+      make DESTDIR="${K8S_ROOT}" install.bin
+    PATH=$GOPATH/bin:$PATH GOPATH=$go_path \
+      make DESTDIR="${K8S_ROOT}" install.config
+    PATH=$GOPATH/bin:$PATH GOPATH=$go_path \
+      make DESTDIR="${K8S_ROOT}" install.systemd
+  fi
+  set -e
+
+  $(_sudo) install -D -m 755 ${K8S_ROOT}/usr/local/bin/crio-status \
+                             /usr/local/bin/crio-status
 
   _conmon_install
   # command -v yum > /dev/null && $(_sudo) yum install cri-o
@@ -844,9 +863,18 @@ _crio_install(){
 _crio_config(){
   cd $EXEC_CMD_DIR
   print_info "config cri-o ..."
-  $(_sudo) mkdir -p /etc/crio/
   # crio --config="" config --default > crio.conf
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/crio/crio.conf | $(_sudo) tee /etc/crio/crio.conf
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/crio/crio.conf \
+    | $(_sudo) tee ${K8S_ROOT}/etc/crio/crio.conf
+
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/containers.conf
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/storage.conf
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/policy.json
+  $(_sudo) sed -i "s!/opt/k8s!${K8S_ROOT}!g" \
+    ${K8S_ROOT}/etc/containers/registries.d/default.yaml
 
   _cri_sysctl
 
@@ -1192,8 +1220,7 @@ $ $(_sudo) systemctl start kubelet
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
 $ $(_sudo) systemctl start kube-containerd (Containerd runtime only)
-$ $(_sudo) systemctl start kube-containerd-130 (Containerd runtime only)
-$ $(_sudo) systemctl start kube-crio (CRI-O runtime only)
+$ $(_sudo) systemctl start crio (CRI-O runtime only)
 "
 }
 

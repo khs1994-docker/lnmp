@@ -6,8 +6,9 @@ $wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' 
 $NODE_NAME = "wsl2"
 # $KUBE_APISERVER='https://x.x.x.x:16443'
 # $K8S_ROOT="/opt/k8s"
-$K8S_WSL2_ROOT = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_ON_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 (Get-Content $PSScriptRoot/conf/kubelet.config.yaml.temp) `
   -replace "##NODE_NAME##", $NODE_NAME `
@@ -19,14 +20,20 @@ wsl -d wsl-k8s -u root -- bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
 wsl -d wsl-k8s -u root -- `
   bash -c "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env > /dev/null"
 
+$CONTAINER_RUNTIME_ENDPOINT = "unix:///run/kube-containerd/containerd.sock"
+
+if ("$CRI" -eq 'cri-o') {
+  $CONTAINER_RUNTIME_ENDPOINT = "unix:///var/run/crio/crio.sock"
+}
+
 $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kubelet `
   --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
   --cert-dir=${K8S_ROOT}/certs `
   --container-runtime=remote `
-  --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
+  --container-runtime-endpoint=$CONTAINER_RUNTIME_ENDPOINT `
   --root-dir=/var/lib/kubelet `
   --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
-  --config=${K8S_WSL2_ROOT}/conf/kubelet.config.yaml `
+  --config=${WINDOWS_ROOT_IN_WSL2}/conf/kubelet.config.yaml `
   --hostname-override=${NODE_NAME} `
   --volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
   --logtostderr=true `
@@ -74,8 +81,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kubelet]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kubelet-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kubelet-error.log
+stdout_logfile=${SUPERVISOR_LOG_ROOT}/kubelet-stdout.log
+stderr_logfile=${SUPERVISOR_LOG_ROOT}/kubelet-error.log
 directory=/
 autostart=false
 autorestart=false
@@ -146,7 +153,7 @@ function _mountKubelet_all() {
   _mountKubelet ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
   _mountKubelet ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d
   _mountKubelet ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
-
+  _mountKubelet ${K8S_ROOT}/etc/containers /etc/containers
 }
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {

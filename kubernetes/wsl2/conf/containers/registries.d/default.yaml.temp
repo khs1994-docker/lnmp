@@ -13,7 +13,7 @@
 # This is the default signature write location for docker registries.
 default-docker:
 #  sigstore: file:///var/lib/containers/sigstore
-  sigstore-staging: file:///opt/k8s/var/lib/containers/sigstore
+  sigstore-staging: file:///##K8S_ROOT##/var/lib/containers/sigstore
 
 # The 'docker' indicator here is the start of the configuration
 # for docker registries.

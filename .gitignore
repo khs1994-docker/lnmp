@@ -79,3 +79,5 @@ mutagen.yml.lock
 mutagen.yml
 
 .wsl
+
+/*.log

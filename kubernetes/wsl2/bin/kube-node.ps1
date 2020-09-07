@@ -71,6 +71,7 @@ _mountKubelet ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-ln
 _mountKubelet ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
 _mountKubelet ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d
 _mountKubelet ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
+_mountKubelet ${K8S_ROOT}/etc/containers /etc/containers
 
 wsl -d wsl-k8s -u root -- mount bpffs /sys/fs/bpf -t bpf
 wsl -d wsl-k8s -u root -- supervisorctl start kube-node:

@@ -33,7 +33,7 @@ jobs:
           echo "MINIO_SECRET_KEY=minioadmin" >> $LNMP_PATH/.env
           echo "MINIO_REGION=us-east-1" >> $LNMP_PATH/.env
           echo "MINIO_BROWSER=off" >> $LNMP_PATH/.env
-          echo "LNMP_MINIO_VERSION=latest" >> $LNMP_PATH/.env
+          # echo "LNMP_MINIO_VERSION=latest" >> $LNMP_PATH/.env
 
           cp $LNMP_PATH/config/nginx/minio.config $LNMP_PATH/config/nginx/minio.conf
 

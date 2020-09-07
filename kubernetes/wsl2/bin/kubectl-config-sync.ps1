@@ -20,4 +20,4 @@ $WINDOWS_HOME_ON_WSL = wsl -d wsl-k8s -- wslpath "'$HOME'"
 wsl -d wsl-k8s -- mkdir -p ~/.kube
 wsl -d wsl-k8s -- cp $WINDOWS_HOME_ON_WSL/.kube/config ~/.kube/config
 
-wsl -d wsl-k8s -- ${K8S_ROOT}/bin/wsl-k8s kubectl config get-contexts
+wsl -d wsl-k8s -- ${K8S_ROOT}/bin/kubectl config get-contexts

@@ -6,8 +6,9 @@ $wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' 
 $K8S_S_HOST = $wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$K8S_WSL2_ROOT = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_ON_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$WINDOWS_ROOT_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 $kube_scheduler_version_string = wsl -d wsl-k8s /wsl/wsl-k8s-data/k8s/bin/kube-scheduler --version | select-string v1.1
 $kube_scheduler_version = ($kube_scheduler_version_string).line.split()[1].Trim('v').split('-')[0]
@@ -26,7 +27,7 @@ if ([Version]$kube_scheduler_version -ge [Version]"1.19.0") {
 }
 
 $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-scheduler `
-  --config=${K8S_WSL2_ROOT}/conf/kube-scheduler.config.yaml `
+  --config=${WINDOWS_ROOT_IN_WSL2}/conf/kube-scheduler.config.yaml `
   --bind-address=${K8S_S_HOST} `
   --secure-port=10259 `
   --port=0 `
@@ -48,8 +49,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-scheduler]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-scheduler-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-scheduler-error.log
+stdout_logfile=${SUPERVISOR_LOG_ROOT}/kube-scheduler-stdout.log
+stderr_logfile=${SUPERVISOR_LOG_ROOT}/kube-scheduler-error.log
 directory=/
 autostart=false
 autorestart=false
