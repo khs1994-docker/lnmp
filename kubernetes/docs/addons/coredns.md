@@ -26,4 +26,6 @@ $ kubectl exec nginx2-5f48f6bb64-gr5jk -i -t -- /bin/sh
 root@nginx:/# cat /etc/resolv.conf
 
 root@nginx:/# ping nginx
+
+root@nginx:/# curl nginx
 ```

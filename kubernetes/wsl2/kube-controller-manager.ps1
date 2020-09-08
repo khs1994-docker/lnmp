@@ -35,7 +35,7 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manage
   --authorization-kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig `
   --cluster-signing-cert-file=${K8S_ROOT}/certs/ca.pem `
   --cluster-signing-key-file=${K8S_ROOT}/certs/ca-key.pem `
-  --experimental-cluster-signing-duration=1h `
+  --experimental-cluster-signing-duration=876000h `
   --horizontal-pod-autoscaler-sync-period=10s `
   --concurrent-deployment-syncs=10 `
   --concurrent-gc-syncs=30 `
@@ -50,7 +50,7 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manage
   --feature-gates="IPv6DualStack=true" `
   --v=2
 
-# 调为 1h, 方便查看 kubelet 证书轮转
+# 可以调为 1h, 查看 kubelet 证书轮转
 # --experimental-cluster-signing-duration=876000h `
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null

@@ -55,11 +55,20 @@ $ kubectl describe csr CSR_NAME
 * 过期，server 证书也得(必须) **手动 approve**
 
 ```bash
-19:00:13.625470   15572 certificate_manager.go:507] Certificate expiration is 2019-10-31 11:55:00 +0000 UTC, rotation deadline is 2019-10-31 11:43:38.484582973 +0000 UTC
+22:32:52.516590    5468 certificate_manager.go:556] Certificate expiration is 2020-09-07 15:27:50 +0000 UTC, rotation deadline is 2020-09-07 15:11:00.773330597 +0000 UTC
+
+22:32:52.516652    5468 certificate_manager.go:288] Waiting 38m8.256684197s for next certificate rotation
 ...
-19:43:38.494896   15572 certificate_manager.go:381] Rotating certificates
+23:11:00.785321    5468 certificate_manager.go:412] Rotating certificates
+
+23:11:00.883560    5468 reflector.go:207] Starting reflector *v1.CertificateSigningRequest (0s) from k8s.io/client-go/tools/watch/informerwatcher.go:146
 ...
 19:58:38.503176   15572 certificate_manager.go:414] certificate request was not signed: timed out waiting for the condition (未手动 approve 报错)
+# 手动 approve 之后
+23:20:19.916775    5468 csr.go:249] certificate signing request csr-kgd6x is approved, waiting to be issued
+
+23:20:19.967255    5468 csr.go:245] certificate signing request csr-kgd6x is issued
+# 在证书所在文件夹看到证书已经更新
 ```
 
 * 假设过期时间设为 1 小时, `kubelet` 会在 `43` 分钟（具体时间看日志）时轮换
