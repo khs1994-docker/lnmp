@@ -25,3 +25,12 @@ $ sudo mount bpffs /sys/fs/bpf -t bpf
 # 修改 calico-eBPF/kubernetes.yaml 并部署
 $ kubectl apply -f calico-eBPF/kubernetes.yaml
 ```
+
+**禁用 eBPF**
+
+```bash
+$ kubectl edit felixconfiguration -n kube-system
+
+spec:
+    bpfEnabled: false
+```

@@ -40,7 +40,7 @@ $ kubectl apply -k kustomize/storage
 
 * https://github.com/prometheus-operator/kube-prometheus#adding-additional-namespaces-to-monitor
 
-必须应用 RBAC，可以参考 `monitoring-demo/istiod/rbac.yaml`
+监控其他命名空间必须应用 RBAC，可以参考 `monitoring-demo/istiod/rbac.yaml`
 
 ## Grafana
 

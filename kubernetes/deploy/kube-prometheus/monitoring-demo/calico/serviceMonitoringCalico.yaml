@@ -1,0 +1,22 @@
+kind: "ServiceMonitor"
+apiVersion: "monitoring.coreos.com/v1"
+metadata:
+  name: calico-felix
+  labels:
+    app: calico
+  namespace: monitoring
+spec:
+  endpoints:
+  - relabelings:
+    - sourceLabels: [__meta_kubernetes_service_name]
+      regex: felix-metrics-svc
+      replacement: $1
+      action: keep
+    port: metrics-http
+  jobLabel: app
+  namespaceSelector:
+    matchNames:
+      - kube-system
+  selector:
+    matchLabels:
+      app: calico-felix

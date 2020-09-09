@@ -48,7 +48,7 @@ _command(){
   cd ..
 
   date
-  lnmp-laravel new laravel_7 7.*
+  lnmp-laravel new laravel_8 8.*
   date
 
   lnmp-laravel new laravel
