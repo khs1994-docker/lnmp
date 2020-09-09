@@ -8,16 +8,16 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:14.9.0-alpine",
-    "dest": "library-mirror/node:14.9.0-alpine"
+    "source": "node:14.10.0-alpine",
+    "dest": "library-mirror/node:14.10.0-alpine"
   },
   {
     "source": "node:12.18.3-alpine",
     "dest": "library-mirror/node:12.18.3-alpine"
   },
   {
-    "source": "golang:1.15.1-alpine",
-    "dest": "library-mirror/golang:1.15.1-alpine"
+    "source": "golang:1.15.2-alpine",
+    "dest": "library-mirror/golang:1.15.2-alpine"
   },
   {
     "source": "golang:alpine",

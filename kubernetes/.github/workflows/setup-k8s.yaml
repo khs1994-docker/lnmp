@@ -50,11 +50,11 @@ jobs:
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.0
+         CI_KUBERNETES_VERSION: 1.19.1
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.0
+         CI_KUBERNETES_VERSION: 1.19.1
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
        - os: ubuntu
@@ -63,7 +63,7 @@ jobs:
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.0
+         CI_KUBERNETES_VERSION: 1.19.1
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version

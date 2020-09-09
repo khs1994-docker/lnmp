@@ -367,11 +367,11 @@ jobs:
     # containerd
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
     # containerd + cni calico ebpf
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
     # docker
     - os: linux
       dist: focal
@@ -379,7 +379,7 @@ jobs:
     # custom k8s root
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
     # old version
     - os: linux
       dist: focal

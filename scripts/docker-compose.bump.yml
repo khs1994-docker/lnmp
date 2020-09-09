@@ -47,10 +47,10 @@ services:
     image: kong:2.1.3-alpine
 
   node:
-    image: node:14.9.0-alpine
+    image: node:14.10.0-alpine
 
   go:
-    image: golang:1.15.1-alpine
+    image: golang:1.15.2-alpine
 
   alpine:
     image: alpine:3.12
