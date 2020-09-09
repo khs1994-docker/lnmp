@@ -1,17 +1,5 @@
 [
   {
-    "op": "replace",
-    "path": "/spec/template/spec/initContainers/1/image",
-    "value": "calico/cni:v3.15.0"
-  },
-  {
-    "op": "replace",
-    "path": "/spec/template/spec/initContainers/1/command",
-    "value": [
-      "/install-cni.sh"
-    ]
-  },
-  {
     "op": "add",
     "path": "/spec/template/spec/containers/0/env/16",
     "value": {

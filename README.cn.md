@@ -222,7 +222,7 @@ $ ./lnmp-docker down
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.7-alpine`           | **6.0.7**           |`alpine:3.12`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:7.4.10-fpm-alpine`     | **7.4.10**       |`alpine:3.11`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.10-composer-alpine`| **1.10.10**      |`alpine:3.11`    |
-|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.6-alpine`           | **1.6.6**       |`alpine:3.12`    |
+|[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.7-alpine`           | **1.6.7**       |`alpine:3.12`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.5-management-alpine` | **3.8.5**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.4-alpine`             | **12.4**        |`alpine:3.12`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.0`                      | **4.4.0**       |`ubuntu:bionic`  |

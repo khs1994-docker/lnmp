@@ -1,8 +1,8 @@
+* https://docs.projectcalico.org/manifests/calico.yaml
+
 **calico** 适用于 kubeadm 创建的集群
 
 **calico-custom** 适用于自定义了 CNI 插件目录等情况
-
-* https://docs.projectcalico.org/manifests/calico.yaml
 
 **dual-stack**
 

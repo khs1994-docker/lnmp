@@ -24,7 +24,7 @@ services:
     image: mcr.microsoft.com/oss/kubernetes/pause:1.4.0
 
   calico:
-    image: calico/cni:v3.16.0
+    image: calico/cni:v3.16.1
 
   ingress_nginx:
     image: k8s.gcr.io/ingress-nginx/controller:v0.35.0

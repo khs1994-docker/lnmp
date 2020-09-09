@@ -3462,7 +3462,7 @@ spec:
           value: node
         - name: DATASTORE_TYPE
           value: kubernetes
-        image: calico/kube-controllers:v3.16.0
+        image: calico/kube-controllers:v3.16.1
         name: calico-kube-controllers
         readinessProbe:
           exec:
@@ -3551,11 +3551,13 @@ spec:
           value: ""
         - name: CALICO_IPV6POOL_CIDR
           value: fc00::/48
+        - name: FELIX_PROMETHEUSMETRICSENABLED
+          value: "true"
         envFrom:
         - configMapRef:
             name: kubernetes-services-endpoint
             optional: true
-        image: calico/node:v3.16.0
+        image: calico/node:v3.16.1
         livenessProbe:
           exec:
             command:
@@ -3615,7 +3617,7 @@ spec:
         - configMapRef:
             name: kubernetes-services-endpoint
             optional: true
-        image: calico/cni:v3.16.0
+        image: calico/cni:v3.16.1
         name: upgrade-ipam
         securityContext:
           privileged: true
@@ -3625,7 +3627,7 @@ spec:
         - mountPath: /host/opt/cni/bin
           name: cni-bin-dir
       - command:
-        - /install-cni.sh
+        - /opt/cni/bin/install
         env:
         - name: CNI_CONF_NAME
           value: 10-calico.conflist
@@ -3651,7 +3653,7 @@ spec:
         - configMapRef:
             name: kubernetes-services-endpoint
             optional: true
-        image: calico/cni:v3.15.0
+        image: calico/cni:v3.16.1
         name: install-cni
         securityContext:
           privileged: true
@@ -3660,7 +3662,7 @@ spec:
           name: cni-bin-dir
         - mountPath: /host/etc/cni/net.d
           name: cni-net-dir
-      - image: calico/pod2daemon-flexvol:v3.16.0
+      - image: calico/pod2daemon-flexvol:v3.16.1
         name: flexvol-driver
         securityContext:
           privileged: true
