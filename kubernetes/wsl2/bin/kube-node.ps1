@@ -74,6 +74,8 @@ _mountKubelet ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
 _mountKubelet ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d
 _mountKubelet ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
 _mountKubelet ${K8S_ROOT}/etc/containers /etc/containers
+_mountKubelet ${K8S_ROOT}/var/log/containers /var/log/containers
+_mountKubelet ${K8S_ROOT}/var/log/pods /var/log/pods
 
 Invoke-WSL mount bpffs /sys/fs/bpf -t bpf
 Invoke-WSL supervisorctl start kube-node:

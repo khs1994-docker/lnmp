@@ -665,6 +665,14 @@ function Get-DockerWSLPath([string] $APP_ROOT) {
     throw "Docker not running"
   }
 
+  if ($APP_ROOT.Length -gt 53) {
+    if ($APP_ROOT.Substring(0, 53) -eq '/run/desktop/mnt/host/wsl/docker-desktop-bind-mounts/') {
+      printInfo "APP_ROOT is docker-desktop WSL2 real path, use it, skip convert"
+
+      return $APP_ROOT
+    }
+  }
+
   wsl -d ${WSL2_DIST} -u root -- test -d /etc > $null 2>&1
 
   if (!$?) {

@@ -35,8 +35,8 @@
 
 ```bash
 .
-├── app
-└── lnmp
+├── app    # 项目文件夹
+└── lnmp   # khs1994-docker/lnmp
 ```
 
 ## 如何正确的自定义配置文件

@@ -63,7 +63,6 @@ jobs:
           lnmp-laravel new laravel
 
           cp -r laravel-demo/Dockerfile.cdn laravel/
-          cp -r laravel-demo/.patch/. laravel/
 
           ls -la laravel
           ls -la laravel/resources/views

@@ -298,6 +298,7 @@ after_success:
   - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
   - sudo tree ${K8S_ROOT:-/opt/k8s} -L 5 || true
   - sudo tree /var/log -L 3 || true
+  - sudo tree /var/log/pods -L 10 || true
   - sudo tree /var/run -L 3 || true
 
   - kubectl get node -o yaml
