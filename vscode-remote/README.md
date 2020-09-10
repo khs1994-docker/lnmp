@@ -41,7 +41,7 @@ $ ./lnmp-docker up
 
 ## vsCode 扩展
 
-* `felixfbecker.php-pack`
+* `felixfbecker.php-debug`
 
 ## 步骤
 
