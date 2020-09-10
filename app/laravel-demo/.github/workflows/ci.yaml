@@ -37,7 +37,7 @@ jobs:
           lnmp-composer config -g --unset repos.packagist
 
           cd ..
-          lnmp-laravel new laravel 7
+          lnmp-laravel new laravel
 
           cp -r laravel-demo/{Dockerfile,Dockerfile.buildkit} laravel/
 
@@ -71,13 +71,13 @@ jobs:
           docker buildx build --load \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel \
-              -t khs1994/laravel:7 \
+              -t khs1994/laravel:8 \
               -f Dockerfile.buildkit .
 
           docker buildx build --load \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
               --target=laravel-rootless \
-              -t khs1994/laravel:7-rootless \
+              -t khs1994/laravel:8-rootless \
               -f Dockerfile.buildkit .
       - name: Up LNMP
         run: |
@@ -114,10 +114,10 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/schedule/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:7 -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:8 -c "ls -la /app/laravel-docker"
       - name: Connect and Test Rootless
         run: |
-          echo 'LNMP_LARAVEL_TAG=7-rootless' >> $LNMP_PATH/.env
+          echo 'LNMP_LARAVEL_TAG=8-rootless' >> $LNMP_PATH/.env
           lnmp-docker up
 
           sleep 30
@@ -151,6 +151,6 @@ jobs:
             curl -k https://laravel-docker.t.khs1994.com/test/rootless/result
           echo ::endgroup::
 
-          docker run -i --rm --entrypoint=sh khs1994/laravel:7-rootless -c "ls -la /app/laravel-docker"
+          docker run -i --rm --entrypoint=sh khs1994/laravel:8-rootless -c "ls -la /app/laravel-docker"
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v2

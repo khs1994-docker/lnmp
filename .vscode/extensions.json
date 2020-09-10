@@ -16,6 +16,7 @@
       "shan.code-settings-sync",
       "editorconfig.editorconfig",
       "ivory-lab.jenkinsfile-support",
-      "ms-python.vscode-pylance"
+      "ms-python.vscode-pylance",
+      "felixfbecker.php-debug"
   ]
 }

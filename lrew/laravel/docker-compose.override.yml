@@ -9,4 +9,4 @@ x-common:
 services:
   laravel:
     << : *common
-    image: khs1994/laravel:${LNMP_LARAVEL_TAG:-7}
+    image: khs1994/laravel:${LNMP_LARAVEL_TAG:-8}
