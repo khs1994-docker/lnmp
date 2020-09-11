@@ -8,8 +8,8 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:14.10.0-alpine",
-    "dest": "library-mirror/node:14.10.0-alpine"
+    "source": "node:14.10.1-alpine",
+    "dest": "library-mirror/node:14.10.1-alpine"
   },
   {
     "source": "node:12.18.3-alpine",
@@ -132,8 +132,8 @@
     "dest": "library-mirror/redis:5.0.9-alpine"
   },
   {
-    "source": "library/redis:6.0.7-alpine",
-    "dest": "library-mirror/redis:6.0.7-alpine"
+    "source": "library/redis:6.0.8-alpine",
+    "dest": "library-mirror/redis:6.0.8-alpine"
   },
   {
     "source": "library/memcached:alpine",
