@@ -1,0 +1,7 @@
+name: test
+description: test
+runs:
+  using: composite
+  steps:
+    - run: echo "1"
+      shell: sh

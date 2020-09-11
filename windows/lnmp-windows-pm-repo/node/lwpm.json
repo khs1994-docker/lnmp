@@ -2,7 +2,7 @@
   "name": "node",
   "description": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine",
   "version": "12.18.3",
-  "pre-version": "14.9.0",
+  "pre-version": "14.10.0",
   "homepage": "https://nodejs.org/en/",
   "bug": "https://github.com/nodejs/node/issues",
   "github": "nodejs/node",
@@ -29,7 +29,7 @@
       "# /usr/local/node/bin/npm -> ../lib/node_modules/npm/bin/npm-cli.js"
     ],
     "postinstall": [
-      "if($IsWindows){[environment]::SetEnvironmentvariable('NODE_PATH', \"%ProgramData%\\npm\\node_modules\", 'User')}"
+      "if($IsWindows){[environment]::SetEnvironmentvariable('NODE_PATH', \"$env:ProgramData\\npm\\node_modules\", 'User')}"
     ],
     "uninstall": "_cleanup $env:ProgramData\\node",
     "pruneuninstall": "_cleanup $env:ProgramData\\npm",

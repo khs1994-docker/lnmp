@@ -4,6 +4,10 @@
     "dest": "gcr-mirror/pause:3.2"
   },
   {
+    "source": "k8s.gcr.io/pause:3.3",
+    "dest": "gcr-mirror/pause:3.3-try"
+  },
+  {
     "source": "us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3",
     "dest": "gcr-mirror/pause:3.3"
   },
@@ -123,5 +127,47 @@
         "ref": "v0.12.0-arm"
       }
     ]
+  },
+  {
+    "source": "k8s.gcr.io/kube-proxy:v1.18.8",
+    "dest": "gcr-mirror/kube-proxy:v1.18.8",
+    "registry": "k8s.gcr.io",
+    "image": "kube-proxy",
+    "ref": "v1.18.8"
+  },
+  {
+    "source": "k8s.gcr.io/kube-controller-manager:v1.18.8",
+    "dest": "gcr-mirror/kube-controller-manager:v1.18.8",
+    "registry": "k8s.gcr.io",
+    "image": "kube-controller-manager",
+    "ref": "v1.18.8"
+  },
+  {
+    "source": "k8s.gcr.io/kube-apiserver:v1.18.8",
+    "dest": "gcr-mirror/kube-apiserver:v1.18.8",
+    "registry": "k8s.gcr.io",
+    "image": "kube-apiserver",
+    "ref": "v1.18.8"
+  },
+  {
+    "source": "k8s.gcr.io/kube-scheduler:v1.18.8",
+    "dest": "gcr-mirror/kube-scheduler:v1.18.8",
+    "registry": "k8s.gcr.io",
+    "image": "kube-scheduler",
+    "ref": "v1.18.8"
+  },
+  {
+    "source": "k8s.gcr.io/etcd:3.4.3-0",
+    "dest": "gcr-mirror/etcd:3.4.3-0",
+    "registry": "k8s.gcr.io",
+    "image": "etcd",
+    "ref": "3.4.3-0"
+  },
+  {
+    "source": "k8s.gcr.io/coredns:1.6.7",
+    "dest": "gcr-mirror/coredns:1.6.7",
+    "registry": "k8s.gcr.io",
+    "image": "coredns",
+    "ref": "1.6.7"
   }
 ]

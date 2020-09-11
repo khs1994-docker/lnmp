@@ -2,9 +2,9 @@
 
 user=root
 
-[program:example]
+[program:php-fpm]
 
-command=php-fpm -R
+command=php-fpm -F -R
 
 ; stdout_logfile=/var/log/supervisor/stdout.log
 
@@ -20,22 +20,37 @@ startretries=10
 
 startsecs=60
 
-; laravel 队列
-; https://docs.khs1994.com/laravel5.5-docs.zh-cn/queues.html#supervisor-configuration
+;; laravel 队列
+;; https://docs.khs1994.com/laravel-docs.zh-cn/queues.html#supervisor-configuration
 
-; [program:laravel-worker]
+; [program:laravel-queue]
+; process_name=%(program_name)s_%(process_num)02d
 ; command=php /app/laravel/artisan queue:work redis --sleep=3 --tries=3
 ; autostart=true
 ; autorestart=true
 ; user=root
 ; numprocs=8
 ; redirect_stderr=true
-; stdout_logfile=/var/log/supervisord/laravel_work.log
+; stdout_logfile=/var/log/supervisord/laravel_queue.log
 
-; laravel horizon
-; https://laravel.com/docs/7.x/horizon
-; [program:horizon]
-; process_name=%(program_name)s
+;; Laravel 调度器
+
+; [program:crond]
+; command=crond -fS
+; ; 以下命令会输出更多信息，调试的时候可以用
+; ;command=crond -fS -d 0
+; autostart=true
+; autorestart=true
+; user=root
+; numprocs=1
+; redirect_stderr=true
+; stdout_logfile=/var/log/supervisord/crond.log
+
+;; laravel horizon
+;; https://laravel.com/docs/7.x/horizon
+
+; [program:laravel-horizon]
+; process_name=%(program_name)s_%(process_num)02d
 ; command=php /app/laravel/artisan horizon
 ; autostart=true
 ; autorestart=true

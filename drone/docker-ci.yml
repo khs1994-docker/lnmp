@@ -50,7 +50,7 @@ services:
 
   gogs:
     << : *common
-    image: gogs/gogs:latest
+    image: gogs/gogs:0.12
     ports:
       - "${CI_HOST:?CI_HOST}:${CI_GOGS_SSH_PORT}:22"
       - "${CI_HOST:?CI_HOST}:${CI_GOGS_PORT}:3000"
@@ -85,7 +85,7 @@ services:
 
   redis:
     << : *common
-    image: redis:${CI_REDIS_VERSION:-6.0.6}-alpine
+    image: redis:${CI_REDIS_VERSION:-6.0.7}-alpine
     volumes:
       - redis-data:/data
 

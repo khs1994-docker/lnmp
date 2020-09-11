@@ -29,7 +29,7 @@ Function Get-TokenServerAndService([string]$registry = 'registry.hub.docker.com'
 
   try {
     $WWW_Authenticate = (Invoke-WebRequest https://$registry/v2/ `
-        -Method Head -MaximumRedirection 0 -UserAgent "Docker-Client/19.03.5 (Windows)" `
+        -Method Get -MaximumRedirection 0 -UserAgent "Docker-Client/19.03.5 (Windows)" `
     ).Headers['WWW-Authenticate']
   }
   catch {
@@ -83,7 +83,7 @@ function Get-DockerRegistryToken([string]$image,
 
   $tokenServer, $tokenService = Get-TokenServerAndService $registry
 
-  if (!($tokenServer -and $tokenService)) {
+  if (!($tokenServer)) {
     # write-host "==> tokenServer and tokenService not set, this registry maybe not need token" -ForegroundColor Yellow
 
     return 'token'

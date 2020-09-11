@@ -458,7 +458,6 @@ Function _add($softs) {
       $os = $platform.os
       $architecture = $platform.architecture
 
-      $env:DOCKER_ROOTFS_PHASE = $null
       $lwpm_json, $lwpm_dist, $lwpm_script = rootfs $soft $ref -os $os -arch $architecture $null 'config', 0, 1
 
       if (($lwpm_json -eq $false) -or !$lwpm_json ) {

@@ -70,7 +70,9 @@ if (!$IsWindows) {
 . $PSScriptRoot/.env.ps1
 & $PSScriptRoot/bin/wsl2d.ps1 wsl-k8s
 
-$WSL2_HOST = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+Import-Module $PSScriptRoot/bin/WSL-K8S.psm1
+
+$WSL2_HOST = Get-WSL2IP
 $WINDOWS_HOST = "0.0.0.0"
 
 if ($args[0] -eq 'k8s') {

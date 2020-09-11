@@ -13,6 +13,8 @@ if ($args[0] -eq 'stop') {
   exit
 }
 
+Import-Module $PSScriptRoot/WSL-K8S.psm1
+
 Function _supervisor_checker() {
   write-host "==> check WSL dist [ wsl-k8s ] Supervisord running ..." -ForegroundColor Green
   wsl -d wsl-k8s -- sh -c "supervisorctl -h> /dev/null 2>&1"
@@ -26,7 +28,7 @@ Function _supervisor_checker() {
   if (!$?) {
     Write-Warning "WSL dist [ wsl-k8s ] Supervisord not running"
     write-host "==> try start WSL dist [ wsl-k8s ] Supervisord ..." -ForegroundColor Green
-    & $PSScriptRoot/supervisord.ps1
+    Invoke-Supervisord
   }
 }
 
@@ -91,4 +93,4 @@ _etcd_checker
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update
 
-wsl -d wsl-k8s -u root -- supervisorctl start kube-server:
+Invoke-WSL supervisorctl start kube-server:

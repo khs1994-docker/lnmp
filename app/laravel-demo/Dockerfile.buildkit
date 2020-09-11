@@ -8,20 +8,20 @@
 #
 # 只有 git 打了 tag 才能将对应的镜像部署到生产环境
 #
-# 为了方便读者阅读没有引入过多的变量，实际使用时可以将公共的部分用变量代替。
+# 为了方便读者阅读没有引入过多的变量，实际使用时可以将公共的部分用变量代替
 #
 # !! 搜索 /app/laravel-docker 替换为自己的项目目录 !!
 # 此 Dockerfile 专为 CI 环境设计（国外），请通过 --build-arg ARG=value 设置国内镜像
 #
 # $ docker buildx build --target=laravel --load -t khs1994/laravel:7 -f Dockerfile.buildkit --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
-ARG NODE_VERSION=14.9.0
-ARG PHP_VERSION=7.4.9
+ARG NODE_VERSION=14.10.0
+ARG PHP_VERSION=7.4.10
 ARG NGINX_VERSION=1.19.2-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-14.9.0}-alpine as frontend
+FROM node:${NODE_VERSION:-14.10.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -48,7 +48,7 @@ RUN --mount=type=cache,target=/app/node_modules,id=laravel-docker_node_modules \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME}/php:7.4.9-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME}/php:7.4.10-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/

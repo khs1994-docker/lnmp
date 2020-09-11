@@ -7,11 +7,12 @@ $CI_HOST="ci.khs1994.com:10000"
 # $ wsl -l
 $DistributionName="Ubuntu-18.04"
 
-$LNMP_PHP_IMAGE="khs1994/php:7.4.9-composer-alpine"
+$LNMP_PHP_IMAGE="khs1994/php:7.4.10-composer-alpine"
 
 $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
 
+# used by $ lnmp-wnamp start common
 $COMMON_SOFT="nginx","php","mysql","wsl-redis"
 
 $LNMP_NODE_IMAGE="node:alpine"
@@ -19,7 +20,6 @@ $LNMP_NODE_IMAGE="node:alpine"
 
 # $LNMP_CACHE=
 
-# 项目在哪个 WSL2 上
-$WSL2_DIST
-
+# 项目存储在 WSL2
+# 推荐使用 Ubuntu，其他系统（例如 alpine）可能会遇到错误
 # $WSL2_DIST="Ubuntu"

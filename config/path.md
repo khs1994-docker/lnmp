@@ -3,6 +3,9 @@
 ├── composer
 │   ├── auth.example.json
 │   └── config.example.json
+├── crontabs
+│   ├── README.md
+│   └── root.example
 ├── default.sh
 ├── docker-compose.yml
 ├── etc
@@ -81,6 +84,7 @@
 │   │   ├── gitlab.config
 │   │   ├── gzip.config
 │   │   ├── http3.config
+│   │   ├── phpmyadmin.config
 │   │   ├── ppm.config
 │   │   ├── unit-laravel.config
 │   │   └── unit-proxy.config
@@ -233,24 +237,26 @@
 │   ├── kustomization.yaml
 │   └── nginx.htpasswd.demo
 ├── s6
-│   ├── fix-attrs.d
-│   │   └── 01-mysql-data-dir
 │   ├── README.md
 │   └── services.d
 │       ├── crond
-│       │   └── run
-│       ├── laravel
 │       │   └── run
 │       ├── laravel-horizon
 │       │   ├── log
 │       │   │   └── run
 │       │   └── run
+│       ├── laravel-queue
+│       │   └── run
 │       └── php-fpm
 │           ├── finish
 │           └── run
+├── s6-overlay
+│   ├── fix-attrs.d
+│   │   └── 01-mysql-data-dir
+│   └── README.md
 ├── supervisord
 │   └── supervisord.ini.example
 └── yarn
 
-60 directories, 191 files
+62 directories, 195 files
 ```

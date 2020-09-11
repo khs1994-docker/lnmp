@@ -6,7 +6,7 @@ getTokenServerAndService(){
   fi
 
   WWW_Authenticate=`curl -L https://$registry/v2/ \
--X HEAD -I -A "Docker-Client/19.03.5 (Linux)" | grep -i 'www\-authenticate' `
+-X GET -I -A "Docker-Client/19.03.5 (Linux)" | grep -i 'www\-authenticate' `
 
 if [ $? -eq 0 ];then
   realm=`echo $WWW_Authenticate | awk -F"," '{print $1}'`

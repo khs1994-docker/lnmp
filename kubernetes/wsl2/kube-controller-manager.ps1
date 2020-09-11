@@ -1,12 +1,15 @@
 . $PSScriptRoot/.env.example.ps1
 . $PSScriptRoot/.env.ps1
 
-$wsl_ip = wsl -d wsl-k8s -- bash -c "ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1"
+Import-Module $PSScriptRoot/bin/WSL-K8S.psm1
+
+$wsl_ip = Get-WSL2IP
 
 $K8S_CM_HOST = $wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$WINDOWS_HOME_ON_WSL2 = wsl -d wsl-k8s -- wslpath "'$HOME'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
+$SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
   --profiling `
@@ -47,7 +50,7 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manage
   --feature-gates="IPv6DualStack=true" `
   --v=2
 
-# 调为 1h, 方便查看 kubelet 证书轮转
+# 可以调为 1h, 查看 kubelet 证书轮转
 # --experimental-cluster-signing-duration=876000h `
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
@@ -55,8 +58,8 @@ mkdir -Force $PSScriptRoot/supervisor.d | out-null
 echo "[program:kube-controller-manager]
 
 command=$command
-stdout_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-controller-manager-stdout.log
-stderr_logfile=${WINDOWS_HOME_ON_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log/kube-controller-manager-error.log
+stdout_logfile=${SUPERVISOR_LOG_ROOT}/kube-controller-manager-stdout.log
+stderr_logfile=${SUPERVISOR_LOG_ROOT}/kube-controller-manager-error.log
 directory=/
 autostart=false
 autorestart=false
@@ -66,12 +69,12 @@ startsecs=10" > $PSScriptRoot/supervisor.d/kube-controller-manager.ini
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -d wsl-k8s -u root -- supervisorctl start kube-server:kube-controller-manager
+  Invoke-WSL supervisorctl start kube-server:kube-controller-manager
 
   exit
 }
 
 if ($args[0] -eq 'start') {
   & $PSScriptRoot/bin/wsl2host-check
-  wsl -d wsl-k8s -u root -- bash -c $command
+  Invoke-WSL bash -c $command
 }

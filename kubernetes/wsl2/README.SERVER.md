@@ -198,11 +198,6 @@ $ ./wsl2/kube-scheduler start
 
 **请查看 `~/lnmp/docs/supervisord.md`**
 
-### 命令封装
-
-* 使用 `./wsl2/bin/supervisord` 封装 `supervisord`
-* 使用 `./wsl2/bin/supervisorctl` 封装 `supervisorctl` 并增加了额外的命令
-
 ### 1. 启动 supervisor 服务端
 
 ```powershell
@@ -210,7 +205,8 @@ $ ./wsl2/kube-scheduler start
 
 # $ wsl -d wsl-k8s -u root -- supervisord -c /etc/supervisord.conf -u root
 
-$ ./wsl2/bin/supervisord
+$ Import-module ./wsl2/WSL-K8S.psm1
+$ Invoke-supervisord
 ```
 
 ### 2. 生成配置文件

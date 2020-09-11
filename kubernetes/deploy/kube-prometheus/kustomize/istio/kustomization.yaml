@@ -1,5 +1,7 @@
 bases:
+  # 二选一，使用某个请注释其他
   - ../base
+  # 如果你想使用自定义 storage，请基于 storage
   # - ../storage
 secretGenerator:
   - name: prometheus-istio-scrape-config

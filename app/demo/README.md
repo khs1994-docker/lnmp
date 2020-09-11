@@ -4,7 +4,11 @@
 
 * [问题反馈](https://github.com/khs1994-docker/lnmp/issues/187)
 
-## vsCode 远程开发
+## IDE
+
+**本页面以 PHPStorm 为例进行介绍。**
+
+如果你使用的是 VSCode 请参考下面的链接。
 
 Windows 用户建议使用 vsCode 远程开发，具体请查看 https://github.com/khs1994-docker/lnmp/tree/19.03/vscode-remote
 
@@ -120,13 +124,25 @@ $ ./lnmp-docker up
 
 > 你可以通过设置 [`APP_ROOT`](https://github.com/khs1994-docker/lnmp/blob/master/docs/development.md#app_root) 变量来实现 `app` 文件夹与 `khs1994-docker/lnmp` 并列。
 
+```bash
+.
+├── app    # 项目文件夹
+└── lnmp   # khs1994-docker/lnmp
+```
+
 ### 6. CLI settings
 
 由于 PHP 环境位于 Docker 中，必须进行额外的配置
 
+生成 `docker-compose.yml`
+
+```bash
+$ lnmp-docker config > docker-compose.yml
+```
+
 `PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `CLI Interpreter` -> `点击后边三个点`
      -> `左上角添加` -> `From Docker ...` -> `选择 Docker Compose`
-     -> `Configuration file(s)` -> `选择 docker-workspace.yml`
+     -> `Configuration file(s)` -> `选择 docker-compose.yml`
      -> `Services` -> `选择 workspace`
      -> `点击 OK 确认`
 
@@ -136,23 +152,23 @@ $ ./lnmp-docker up
 
 再点击 ok 之后跳转到了 `PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `CLI Interpreter` 这个页面
 
-#### 配置路径对应关系
+#### 配置本地路径与容器内路径对应关系
 
 > 这里的配置 PHPStorm 可能会自动生成，保证正确即可。
 
 这里以 Windows 为例，其他系统同理（添加本机路径与容器路径对应关系即可）。
 
-由于 Windows 与 Linux 路径表示方法不同，我们必须另外添加对应关系。配置容器目录与本地项目之间的对应关系。
+由于 Windows 与 Linux 路径表示方法不同，我们必须另外添加路径对应关系。配置本地项目与容器目录之间的路径对应关系。
 
-假设本地项目目录位于 `C:/Users/username/app/demo` 对应的容器目录位于 `/app/demo`
+假设本地项目目录位于 `C:/Users/username/app/demo` 对应的容器目录位于 `/app/demo`（假设本地项目目录位于 WSL2 `\\wsl$\Ubuntu\app\demo` 对应的容器目录位于 `/app/demo`）
 
-点击 `Path mappings` 添加一个条目 `C:/Users/username/app/demo` => `/app/demo`
+`PHPStorm 设置`-> `Languages & ...` -> `PHP` -> `Path mappings` 添加一个条目 `C:/Users/username/app/demo` => `/app/demo`
 
 ### 7. 设置 Xdebug
 
 请查看 https://github.com/khs1994-docker/lnmp/blob/master/docs/xdebug.md
 
-如果在 PhpStorm 中使用，无需开放端口，必须注释掉 `docker-workspace.yml` 中的 `ports` 项
+如果在 PhpStorm 中使用，无需开放端口，必须注释掉 `docker-compose.yml` 中的 `ports` 项
 
 ### 8. 依赖管理 Composer
 
@@ -244,3 +260,8 @@ CI/CD 可以到 [khs1994-docker/ci](https://github.com/khs1994-docker/ci) 查看
 #### 4. 使用 `daemonset` 部署 `gti-sync`（代码不在镜像中）
 
 让 **每个节点** 都拥有一份代码，这样就不用关心 `pod` 调度到哪个节点。
+
+## BUG
+
+* https://cn.bing.com/search?q=error+while+parsing+docker-compose+config+failed&qs=n&form=QBRE&sp=-1&pq=error+while+parsing+docker-compose+config+failed&sc=0-48&sk=&cvid=EEF0C7500ECD4BBAAD120B49A52EE153
+* https://stackoverflow.com/questions/61520106/pycharm-error-while-parsing-docker-compose-yml-process-docker-compose-confi

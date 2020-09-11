@@ -17,11 +17,16 @@
   "workspaceFolder": "/app",
   "shutdownAction": "stopCompose", // none stopCompose
   "extensions": [
-     "felixfbecker.php-pack",
+     "felixfbecker.php-debug",
      "editorconfig.editorconfig",
      "neilbrayfield.php-docblocker",
      "mehedidracula.php-namespace-resolver",
-     "phiter.phpstorm-snippets"
+     "phiter.phpstorm-snippets",
+     "onecentlin.laravel5-snippets",
+     "getpsalm.psalm-vscode-plugin",
+     "bmewburn.vscode-intelephense-client",
+     "recca0120.vscode-phpunit",
+     "MehediDracula.php-namespace-resolver"
   ],
   // [Optional] If you are using SSH keys w/Git, copy them and set correct permissions
   // "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*"

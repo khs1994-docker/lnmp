@@ -21,19 +21,21 @@ $kubeconfig = "$HOME/.kube/config"
 
 # $kubeconfig="$PSScriptRoot/kubectl.kubeconfig"
 
-& $PSScriptRoot\wsl-k8s kubectl config set-cluster wsl2 `
+import-module $PSScriptRoot/WSL-K8S.psm1
+
+invoke-kubectl config set-cluster wsl2 `
   --certificate-authority=$PSScriptRoot/../certs/ca.pem `
   --embed-certs=true `
   --server=${KUBE_APISERVER} `
   --kubeconfig=$kubeconfig
 
-& $PSScriptRoot\wsl-k8s kubectl config set-credentials wsl2-admin `
+invoke-kubectl config set-credentials wsl2-admin `
   --client-certificate=$PSScriptRoot/../certs/admin.pem `
   --client-key=$PSScriptRoot/../certs/admin-key.pem `
   --embed-certs=true `
   --kubeconfig=$kubeconfig
 
-& $PSScriptRoot\wsl-k8s kubectl config set-context wsl2 `
+invoke-kubectl config set-context wsl2 `
   --cluster=wsl2 `
   --user=wsl2-admin `
   --kubeconfig=$kubeconfig

@@ -84,11 +84,6 @@ $ ./wsl2/kubelet start
 
 在 WSL2 安装配置 `supervisor` 请参考 [kube-server](README.SERVER.md)
 
-### 命令封装
-
-* 使用 `./wsl2/bin/supervisord` 封装 `supervisord`
-* 使用 `./wsl2/bin/supervisorctl` 封装 `supervisorctl` 并增加了额外的命令
-
 ### 1. 生成配置文件
 
 ```powershell
@@ -157,7 +152,9 @@ $ ./wsl2/bin/kubectl-config-set-cluster
 # $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig
 
 # 封装上边的命令
-$ ./wsl2/bin/wsl-k8s kubectl
+$ import-module ./wsl2/bin/WSL-K8S.psm1
+
+$ invoke-kubectl
 ```
 
 ## 7. crictl
@@ -252,7 +249,9 @@ csr-9pvrm   11m    system:node:wsl2          Pending
 根据提示 **签署** 证书,一般为最后一个
 
 ```powershell
-$ ./wsl2/bin/wsl-k8s kubectl certificate approve csr-9pvrm
+$ import-module ./wsl2/bin/WSL-K8S.psm1
+
+$ invoke-kubectl certificate approve csr-9pvrm
 ```
 
 如果使用 NFS 卷

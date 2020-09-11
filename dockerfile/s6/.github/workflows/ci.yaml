@@ -1,0 +1,67 @@
+on: push
+
+name: ci
+
+jobs:
+  build-image:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 1
+      - uses: docker-practice/actions-setup-docker@master
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: build image
+        run: |
+          set -x
+          docker buildx build \
+          -t khs1994/s6 \
+          -t khs1994/s6:2.0.0.1 \
+          -t khs1994/s6:2 \
+          --platform=linux/arm64,linux/arm/v7,linux/amd64 \
+          --push \
+          .
+      - run: docker run --rm ubuntu   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+      - run: docker run --rm centos:7 sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+      - run: docker run --rm centos:8 sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+      - run: docker run --rm centos   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+      - run: docker run --rm fedora   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+
+      - run: docker run --rm alpine   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+      - run: docker run --rm debian   sh -cx "ls -la / ; if [ -h /bin ];then echo 1;fi"
+      - run: docker image ls
+      - name: test alpine
+        run: |
+          set -x
+          docker buildx build -t test \
+          --platform=linux/arm64,linux/arm/v7,linux/amd64 \
+          -f tests/Dockerfile.alpine \
+          tests
+      - name: test debian
+        run: |
+          docker buildx build -t test \
+          --platform=linux/arm64,linux/arm/v7,linux/amd64 \
+          -f tests/Dockerfile.debian \
+          tests
+      - name: test ubuntu
+        run: |
+          docker buildx build -t test \
+          --platform=linux/arm64,linux/arm/v7,linux/amd64 \
+          -f tests/Dockerfile.ubuntu \
+          tests
+      - name: test centos:7
+        run: |
+          docker buildx build -t test \
+          --platform=linux/arm64,linux/arm/v7,linux/amd64 \
+          -f tests/Dockerfile.centos \
+          --build-arg TAG=7 \
+          tests
+      - name: test centos:8
+        run: |
+          docker buildx build -t test \
+          --platform=linux/arm64,linux/amd64 \
+          -f tests/Dockerfile.centos \
+          tests

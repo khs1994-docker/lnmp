@@ -39,7 +39,7 @@ docker run -it --rm `
     --mount type=bind,src=$( wslpath $PSScriptRoot/../config/composer/config.json),target=${COMPOSER_HOME}/config.json `
     --env-file $PSScriptRoot/../config/composer/.env `
     -e LARAVEL_PATH=${LARAVEL_PATH} `
-    khs1994/php:7.4.9-composer-alpine `
+    khs1994/php:7.4.10-composer-alpine `
     composer create-project --prefer-dist laravel/laravel=$VERSION.* "$LARAVEL_PATH"
 
 # tar -zxvf .\${LARAVEL_PATH}.tar.gz
@@ -47,9 +47,3 @@ docker run -it --rm `
   write-warning "${LARAVEL_PATH} existing"
   exit 1
 }
-
-cd ${LARAVEL_PATH}
-
-. "$PSScriptRoot/lnmp-laravel-init.ps1"
-
-cd ..

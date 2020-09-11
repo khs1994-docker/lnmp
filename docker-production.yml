@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:7.4.9-fpm-alpine
+  image: khs1994/php:7.4.10-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -191,9 +191,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:6.0.6-alpine
+    image: redis:6.0.7-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:6.0.6
+    # image: khs1994/lnmp-redis:6.0.7
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -579,7 +579,7 @@ services:
   minio:
     << : *common
     << : *default-labels
-    image: minio/minio:RELEASE.2020-08-27T05-16-20Z
+    image: minio/minio:RELEASE.2020-09-05T07-14-49Z
     command:
       - server
       - /data

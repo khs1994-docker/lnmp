@@ -3,6 +3,7 @@
 **部署 PV**
 
 ```bash
+# 适用于 Linux
 $ kubectl kustomize storage/pv/linux | sed "s/__USERNAME__/$(whoami)/g" | kubectl apply -f -
 
 # 适用于 macOS Docker Desktop k8s
@@ -14,7 +15,7 @@ $ (kubectl kustomize storage/pv/windows).replace('__USERNAME__',$env:USERNAME) |
 # nfs
 $ kubectl kustomize storage/pv/nfs | sed "s/192.168.199.100/YOUR_NFS_SERVER/g" | kubectl apply -f -
 
-# production 环境将 storage 替换为 storage-production
+# production 环境请将 storage 替换为 storage-production
 ```
 
 **创建 NS**
@@ -31,6 +32,7 @@ $ kubectl create ns lnmp
 ```bash
 $ kubectl apply -k storage/pvc/hostpath -n lnmp
 
+# nfs pvc
 # $ kubectl apply -k storage/pvc/nfs
 
 # production

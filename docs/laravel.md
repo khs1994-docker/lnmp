@@ -4,7 +4,7 @@
 
 ## 安装 Laravel
 
-> 国内使用 [laravel/installer](https://laravel.com/docs/7.x/installation#installing-laravel) 安装 Laravel 不会使用 composer 镜像，故安装十分缓慢。
+> 国内使用 [laravel/installer 4.0 以下版本](https://laravel.com/docs/8.x/installation#installing-laravel) 安装 Laravel 不会使用 composer 镜像，故安装十分缓慢。（这里做一提示，下面的命令封装的是 composer create-project 命令，laravel/installer 4.0 及以上会使用 composer 镜像）
 
 ```bash
 $ cd app
@@ -14,11 +14,9 @@ $ lnmp-laravel new laravel
 
 具体请查看 [这里](command.md)
 
-### Laravel 版本问题
+### Laravel 版本
 
-由于本项目的 PHP 镜像内置的是 Laravel 安装器，而安装器只能安装最新版本。
-
-所以如果你想要安装特定版本（例如 `5.5.x`）请使用 [`lnmp-laravel`](command.md) 安装。
+上面的命令会安装 Laravel 最新的主线版本（8.x），如果你要安装特定版本可以加上 **版本号**
 
 ```bash
 $ cd app
@@ -48,6 +46,30 @@ REDIS_HOST=redis
 MEMCACHED_HOST=memcached
 ```
 
+## 安装 [laravel-ide-helper](https://github.com/barryvdh/laravel-ide-helper)
+
+```bash
+$ lnmp-composer require --dev barryvdh/laravel-ide-helper
+```
+
+```bash
+$ lnmp-php artisan ide-helper:eloquent
+$ lnmp-php artisan ide-helper:generate
+$ lnmp-php artisan ide-helper:meta
+$ lnmp-php artisan ide-helper:models
+```
+
+**.gitignore**
+
+```bash
+# .gitignore
+
+.phpstorm.meta.php
+_ide_helper.php
+
+.php_cs.cache
+```
+
 ## Windows 运行 Laravel 响应缓慢的问题
 
 * Docker Desktop 上 Docker 运行在虚拟机，项目文件位于 Windows
@@ -55,13 +77,13 @@ MEMCACHED_HOST=memcached
 
 以上两种情况均为跨主机, 故存在性能问题。
 
-**解决思路**：
+**有以下几种解决思路**：
 
 1. 使用 [mutagen](windows/mutagen.md)，将 Windows 中的项目同步到 WSL2 中。
 
 2. 或者 `vendor` 目录使用数据卷（数据卷存在于虚拟机中）。[vsCode](https://code.visualstudio.com/docs/remote/containers-advanced#_improving-container-disk-performance) 的说明和笔者提出的方案原理大致相同
 
-3. 将项目文件夹放置于 WSL2，使用 vsCode remote WSL (推荐使用)
+3. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote WSL** WSL 远程开发(推荐使用)
 
 **在 Docker 设置中启用 WSL2 集成**
 
@@ -77,18 +99,31 @@ $ code --install-extension ms-vscode-remote.remote-wsl
 
 ```bash
 # .env
-APP_ROOT=/root/app
+APP_ROOT=/app
 ```
 
 ```powershell
 # .env.ps1
-$WSL2_DIST="ubuntu"
+$WSL2_DIST="Ubuntu"
+```
+
+**以上步骤仅需执行一次，后续开发从以下步骤开始**
+
+**启动 LNMP**
+
+```bash
+$ ./lnmp-docker up
 ```
 
 **打开 vsCode**
 
 ```powershell
+# 打开 /app
+# 适用于首次使用，暂无子目录，需要到 /app 中新建项目目录
 $ lnmp-docker code
+
+# 打开 /app 子目录（e.g. laravel）
+# $ lnmp-docker code laravel
 ```
 
 在 vsCode 中点击菜单栏 `查看` -> `终端`
@@ -98,6 +133,11 @@ $ lnmp-docker code
 ```bash
 # 安装 laravel 到 laravel 文件夹
 # $ lnmp-laravel new laravel
+# 文件可能因为权限问题无法编辑，自行更改权限
+# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app/laravel
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/app
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/logs
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework
 $ cd laravel
 
 $ lnmp-composer require laravel/ui
@@ -122,9 +162,10 @@ $ lnmp-npm run dev
 $ cd ~/lnmp/bin
 
 $ wsl -d <WSL名称> -- wslpath "'$PWD'"
+# 将结果追加到 WSL2 中的 PATH 环境变量中
 ```
 
-4. 将项目文件夹放置于 WSL2，使用 vsCode remote container (推荐使用)
+4. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote container** 容器远程开发(推荐使用)
 
 **在 Docker 设置中启用 WSL2 集成**
 
@@ -136,11 +177,11 @@ $ wsl -d <WSL名称> -- wslpath "'$PWD'"
 $ code --install-extension ms-vscode-remote.remote-containers
 ```
 
-**在 .env .env.ps1 中修改变量**
+**在 `.env` `.env.ps1` 中修改变量**
 
 ```bash
 # .env
-APP_ROOT=/root/app
+APP_ROOT=/app
 
 # 增加 workspace 服务
 LNMP_SERVICES="nginx mysql php7 redis workspace"
@@ -150,6 +191,8 @@ LNMP_SERVICES="nginx mysql php7 redis workspace"
 # .env.ps1
 $WSL2_DIST="ubuntu"
 ```
+
+**以上步骤仅需执行一次，后续开发从以下步骤开始**
 
 **启动 LNMP**
 
@@ -168,6 +211,11 @@ $ ./lnmp-docker up
 ```bash
 # 安装 laravel 到 laravel 文件夹
 # $ composer create-project --prefer-dist laravel/laravel laravel
+# 文件可能因为权限问题无法编辑，自行更改权限
+# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app/laravel
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/app
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/logs
+# $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework
 $ cd laravel
 
 $ composer require laravel/ui
@@ -181,20 +229,22 @@ Authentication scaffolding generated successfully.
 在 Windows 终端中执行以下命令：
 
 ```powershell
-$ lnmp-docker code-run "-w /app/laravel npm install"
+$ lnmp-docker code-run -w /app/laravel npm install
 
-$ lnmp-docker code-run "-w /app/laravel npm run dev"
+$ lnmp-docker code-run -w /app/laravel npm run dev
 
 # 打开 http://127.0.0.1/register 查看页面
 ```
 
 ## 运行 Laravel 队列(Queue)
 
-使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md) 或者参考 `config/s6` 在一个容器中同时运行多个服务。
+* 选择1：使用 **宿主机** 的系统级的守护程序（systemd 等）来运行以下命令。具体请查看 [systemd](systemd.md)
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 ```
+
+* 选择2：参考 `config/s6` 或 `config/supervisord` 在一个容器中同时运行多个服务 (两钟方案中均包含了 Laravel 队列等示例)。
 
 ## 运行 Laravel 调度器(Schedule)
 
@@ -202,4 +252,40 @@ $ lnmp-docker php7-cli php /app/laravel/artisan queue:work --tries=3
 
 ```bash
 $ lnmp-docker php7-cli php /app/laravel/artisan schedule:run
+```
+
+## 运行 Laravel horizon
+
+* https://laravel.com/docs/8.x/horizon
+
+```bash
+$ lnmp-composer require laravel/horizon
+
+$ lnmp-php artisan horizon:install
+```
+
+**配置**
+
+`config/horizon.php` `environments` 数组必须包含当前 Laravel 运行的环境。
+
+**跳过验证**
+
+`app/Providers/HorizonServiceProvider.php`
+
+```php
+protected function gate()
+{
+    Gate::define('viewHorizon', function ($user = null) {
+        return true;
+        return in_array($user->email, [
+            'taylor@laravel.com',
+        ]);
+    });
+}
+```
+
+参考上一节队列的说明。
+
+```bash
+$ lnmp-docker php7-cli php /app/laravel/artisan horizon
 ```

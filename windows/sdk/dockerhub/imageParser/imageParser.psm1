@@ -96,6 +96,10 @@ Function imageParser([string] $config, [boolean] $source = $true) {
       -ForegroundColor DarkRed # DarkGray # Magenta # Cyan
   }
 
+  if ($registry -eq 'docker.io') {
+    $registry = 'registry-1.docker.io'
+  }
+
   write-host (Convertfrom-Json -InputObject @"
   {
       "registry": "$registry",

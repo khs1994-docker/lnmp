@@ -1,7 +1,3 @@
-* [sync git]
-* [sync actions]
-* [skip actions]
-
 ## [Checks](https://help.github.com/cn/github/collaborating-with-issues-and-pull-requests/about-status-checks)
 
 ```bash

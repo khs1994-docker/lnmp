@@ -22,3 +22,5 @@
 !frpc.ini
 !path.md
 !s6
+!s6-overlay
+!crontabs

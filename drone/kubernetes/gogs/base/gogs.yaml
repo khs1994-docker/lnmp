@@ -36,7 +36,7 @@ spec:
         kubernetes.io/os: linux
       containers:
       - name: gogs
-        image: gogs/gogs
+        image: gogs/gogs:0.12
         livenessProbe:
           httpGet:
             path: /healthcheck

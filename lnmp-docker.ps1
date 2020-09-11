@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.14-alpha1
+.VERSION 19.03.15
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -132,8 +132,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.18.3"
-$DOCKER_DESKTOP_VERSION = "2.3.2.0"
+$KUBERNETES_VERSION = "1.18.8"
+$DOCKER_DESKTOP_VERSION = "2.3.6.0"
 $EXEC_CMD_DIR = $PWD
 
 Function _command($command) {
@@ -196,6 +196,8 @@ Function _cp_init_file() {
 
   _cp_only_not_exists config/yarn/.yarnrc.example config/yarn/.yarnrc
   _cp_only_not_exists config/yarn/.env.example config/yarn/.env
+
+  _cp_only_not_exists config/crontabs/root.example config/crontabs/root
 
   _cp_only_not_exists config/composer/.env.example config/composer/.env
   _cp_only_not_exists config/composer/.env.example.ps1 config/composer/.env.ps1
@@ -335,7 +337,7 @@ Commands:
   services             List services
   update               Upgrades LNMP
   upgrade              Upgrades LNMP
-  code                 Open WSL2 app path on vscode wsl remote
+  code                 Open WSL2 app path on vscode wsl remote [ SUB_DIR ] (e.g. ./lnmp-docker code laravel)
   code-init            Init vsCode remote development env
   code-run             Run command on vsCode remote workspace (e.g. ./lnmp-docker code-run -w /app/laravel composer install)
   code-exec            Exec command on vsCode remote workspace (e.g. ./lnmp-docker code-exec -w /app/laravel workspace composer install)
@@ -476,7 +478,6 @@ Function _update() {
   }
 
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
-  git fetch origin ${BRANCH}:remotes/origin/${BRANCH} --depth=1
   $ErrorActionPreference = "continue"
   git pull origin ${BRANCH}
   git reset --hard origin/${BRANCH}
@@ -513,16 +514,9 @@ Function satis() {
     Write-Warning "Please modify ${APP_ROOT}/satis/satis.json"
   }
 
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    wsl -d $WSL2_DIST -- docker run --rm -it `
-      -v ${APP_ROOT}/satis:/build `
-      --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
-  }
-  else {
-    docker run --rm -it `
-      -v ${APP_ROOT}/satis:/build `
-      --mount type=volume, src=lnmp_composer-cache-data, target=/composer composer/satis
-  }
+  docker run --rm -it `
+    -v ${APP_ROOT}/satis:/build `
+    --mount -v lnmp_composer-cache-data:/composer composer/satis
 }
 
 Function get_compose_options($compose_files, $isBuild = 0) {
@@ -562,10 +556,6 @@ Function get_compose_options($compose_files, $isBuild = 0) {
       exit 1
     }
 
-    if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-      $LREW_INCLUDE_ROOT = wsl -d $WSL2_DIST -- wslpath "'$LREW_INCLUDE_ROOT'"
-    }
-
     if ($isBuild) {
       if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.build.yml")) {
         $options += " -f $LREW_INCLUDE_ROOT/docker-compose.yml "
@@ -587,12 +577,7 @@ Function get_compose_options($compose_files, $isBuild = 0) {
 
   $options += " -f docker-lnmp.include.yml -f docker-workspace.yml"
 
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    return $options
-  }
-  else {
-    return $options.split(' ')
-  }
+  return $options.split(' ')
 }
 
 Function _wsl_check() {
@@ -620,12 +605,8 @@ function _pcit_cp() {
   rm -r -force ${APP_ROOT}/.pcit
   # git clone --depth=1 https://github.com/pcit-ce/pcit ${APP_ROOT}/.pcit
   docker pull pcit/pcit:frontend
-  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-    wsl -d $WSL2_DIST -- docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
-  }
-  else {
-    docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
-  }
+
+  docker run -it --rm -v ${APP_ROOT}/.pcit/public:/var/www/pcit/public pcit/pcit:frontend
 }
 
 function convert_args_to_string_if_use_wsl2() {
@@ -675,49 +656,110 @@ else {
   $APP_ROOT = './app'
 }
 
+function Get-DockerWSLPath([string] $APP_ROOT) {
+  # 获取某个 WSL2 在 Docker WSL2 中的挂载路径
+
+  # 判断 Docker 服务端是否运行
+  $_arch = docker version -f "{{.Server.Arch}}"
+  if ($_arch -ne 'amd64') {
+    throw "Docker not running"
+  }
+
+  if ($APP_ROOT.Length -gt 53) {
+    if ($APP_ROOT.Substring(0, 53) -eq '/run/desktop/mnt/host/wsl/docker-desktop-bind-mounts/') {
+      printInfo "APP_ROOT is docker-desktop WSL2 real path, use it, skip convert"
+
+      return $APP_ROOT
+    }
+  }
+
+  wsl -d ${WSL2_DIST} -u root -- test -d /etc > $null 2>&1
+
+  if (!$?) {
+    printError "WSL2 [ ${WSL2_DIST} ] not exists, please check .env.ps1"
+
+    exit 1
+  }
+
+  wsl -d ${WSL2_DIST} -u root -- test -d ${APP_ROOT}
+
+  if (!$?) {
+    printError WSL2 ${WSL2_DIST} [ ${APP_ROOT} ] is not`'t a dir`, I will try `
+      create it`, please re exec this cli
+
+    wsl -d ${WSL2_DIST} -u root -- mkdir -p ${APP_ROOT}
+    wsl -d ${WSL2_DIST} -u root -- chown 1000:1000 ${APP_ROOT}
+
+    exit 1
+  }
+
+  # $env:USE_WSL2_DOCKER_COMPOSE = '1'
+  if (!(Test-Path $PSScriptRoot/.wsl)) {
+    Set-Content $PSScriptRoot/.wsl '{}'
+  }
+
+  try {
+    $wsl_path_obj = ConvertFrom-Json $(Get-Content $PSScriptRoot/.wsl -raw)
+  }
+  catch {
+    Set-Content $PSScriptRoot/.wsl '{}'
+  }
+
+  try {
+    if ($wsl_path_obj."$WSL2_DIST"."$APP_ROOT") {
+      $APP_ROOT = $wsl_path_obj."$WSL2_DIST"."$APP_ROOT"
+
+      return $APP_ROOT
+    }
+  }
+  catch {
+    # write-host $_.Exception.Message
+  }
+
+  $container_id = docker ps -a -q --filter label=lnmp.khs1994.com/wsl-test
+  if ($container_id) { docker rm -f $container_id > $null 2>&1 }
+
+  $container_id = docker run `
+    -v \\wsl$\${WSL2_DIST}$(${APP_ROOT}.replace('/','\')):/tmp `
+    --label lnmp.khs1994.com/wsl-test `
+    -d busybox sh -c "sleep 120"
+
+  if (!$container_id) {
+    printError "[ $WSL2_DIST ] is not WSL2 or enable [ WSL2 Integration ] in Docker settings"
+
+    exit 1
+  }
+
+  $APP_ROOT = docker inspect $container_id -f "{{(index .Mounts 0).Source}}"
+
+  ConvertTo-Json @{
+    "请不要编辑此文件" = "Don't edit this file"
+    $WSL2_DIST = @{
+      $APP_ROOT_SOURCE = $APP_ROOT
+    }
+  } -Compress | Out-File $PSScriptRoot/.wsl -NoNewline
+
+  if (!$APP_ROOT) {
+    throw "Get APP_ROOT in WSL2 meet error"
+  }
+
+  return $APP_ROOT
+}
+
 $env:USE_WSL2_DOCKER_COMPOSE = '0'
 $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
 
+# 判断项目是否存储在 WSL2
+
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
-  $env:USE_WSL2_DOCKER_COMPOSE = '1'
+  $APP_ROOT_SOURCE = $APP_ROOT
 
-  $_arch = docker version -f "{{.Server.Arch}}"
-
-  if ($_arch -eq 'amd64') {
-    printInfo "Use WSL2 compose"
-
-    $DOCKER_BIN_DIR = wsl -d ${WSL2_DIST} -- wslpath 'C:\Program Files\Docker\Docker\resources\bin\'
-
-    wsl -d ${WSL2_DIST} -- ln -sf $DOCKER_BIN_DIR/docker-credential-desktop.exe /usr/bin/
-
-    wsl -d ${WSL2_DIST} -- docker-credential-desktop.exe --help | out-null
-
-    if (!$?) {
-      printInfo "please check WSL2($WSL2_DIST) /etc/wsl.conf`n`n[interop]`nenabled=true"
-
-      cd $EXEC_CMD_DIR
-      exit 1
-    }
+  try {
+    $APP_ROOT = Get-DockerWSLPath $APP_ROOT
   }
-  else {
-    $env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '1'
-    printInfo "Use WSL2 compose, but docker not running"
-  }
-  function docker-compose() {
-    if ($args[0] -eq '--version') {
-      if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
-        return docker-compose.exe --version
-      }
-      return wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose --version"
-    }
-    if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
-      printError "Docker not running"
-      cd $EXEC_CMD_DIR
-      exit 1
-    }
-    else {
-      wsl -d $WSL2_DIST -- sh -c "/usr/bin/docker-compose $args"
-    }
+  catch {
+    printError $_.Exception.Message `, use $APP_ROOT_SOURCE as APP_ROOT
+    $APP_ROOT = $APP_ROOT_SOURCE
   }
 }
 
@@ -736,7 +778,7 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
   printInfo "Use LNMP CLI in $PWD"
   cd $PSScriptRoot
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    printInfo "APP_ROOT is WSL2 PATH $APP_ROOT"
   }
   else {
     # cd $PSScriptRoot
@@ -749,7 +791,7 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
 else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is $APP_ROOT , APP_ROOT in WSL2"
+    printInfo "APP_ROOT is WSL2 PATH $APP_ROOT"
   }
   else {
     cd $APP_ROOT
@@ -768,15 +810,6 @@ if ($LNMP_SERVICES_CONTENT) {
 }
 else {
   $LNMP_SERVICES = 'nginx', 'mysql', 'php7', 'redis'
-}
-
-if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-  $LNMP_SERVICES_STRING = ""
-  foreach ($item in $LNMP_SERVICES) {
-    $LNMP_SERVICES_STRING += " $item"
-  }
-
-  $LNMP_SERVICES = $LNMP_SERVICES_STRING
 }
 
 # LREW_INCLUDE
@@ -1411,22 +1444,12 @@ XXX
       printInfo "Already run"
     }
     catch {
-      if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
-        wsl -d $WSL2_DIST -- docker run -d --restart=always `
-          -p 2376:2375 `
-          -v /var/run/docker.sock:/var/run/docker.sock `
-          -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
-          khs1994/docker-proxy
-      }
-      else {
-        docker run -d --restart=always `
-          -p 2376:2375 `
-          -v /var/run/docker.sock:/var/run/docker.sock `
-          -e PORT=2375 `
-          --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
-          khs1994/docker-proxy
-      }
+      docker run -d --restart=always `
+        -p 2376:2375 `
+        -v /var/run/docker.sock:/var/run/docker.sock `
+        -e PORT=2375 `
+        --health-cmd="wget 127.0.0.1:2375/_ping -O /proc/self/fd/2" `
+        khs1994/docker-proxy
     }
   }
 
@@ -1463,7 +1486,7 @@ XXX
     }
     catch {}
 
-    printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes ${KUBERNETES_VERSION}"
+    printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
 
     if ('down' -eq $args[1]) {
       Write-Warning "Stop gcr.io local server success"
@@ -1492,18 +1515,50 @@ XXX
       "kube-apiserver:v${KUBERNETES_VERSION}", `
       "kube-scheduler:v${KUBERNETES_VERSION}", `
       "kube-proxy:v${KUBERNETES_VERSION}", `
-      "etcd:3.3.15-0", `
-      "coredns:1.6.2", `
+      "etcd:3.4.3-0", `
+      "coredns:1.6.7", `
+      "pause:3.2", `
       "pause:3.1"
 
     sleep 10
 
-    foreach ($image in $images) {
-      printInfo "Handle ${image}"
-      docker pull gcr.io/google_containers/$image
-      docker tag  gcr.io/google_containers/$image k8s.gcr.io/$image
+    function Test-GcrImage([string] $image) {
+      if ($(docker image ls -q k8s.gcr.io/$image)) {
+        return $true
+      }
+
+      return $false
+    }
+
+    function Get-GcrImage([string] $image, [string] $mirror) {
+      docker pull $mirror/$image
+      docker tag  $mirror/$image k8s.gcr.io/$image
       # docker push k8s.gcr.io/$image
-      docker rmi  gcr.io/google_containers/$image
+      docker rmi  $mirror/$image
+    }
+
+    # $ErrorActionPreference="SilentlyContinue"
+
+    foreach ($image in $images) {
+      printInfo "Handle ${image} ..."
+
+      if (Test-GcrImage $image) {
+        printInfo "k8s.gcr.io/$image exists"
+
+        continue;
+      }
+
+      Get-GcrImage $image "gcr.io/google_containers"
+
+      if (Test-GcrImage $image) {
+        continue;
+      }
+
+      # 一些镜像 aliyun 可能不存在，从第二个镜像下载
+
+      printError "Download from mirror error, try other mirror"
+
+      Get-GcrImage $image "ccr.ccs.tencentyun.com/gcr-mirror"
     }
 
     try {
@@ -1585,7 +1640,31 @@ Example: ./lnmp-docker composer /app/demo install
   }
 
   "^code$" {
-    code --remote wsl+$WSL2_DIST $APP_ROOT
+    if ($other) {
+      foreach ($path in $other) {
+        wsl -d $WSL2_DIST -u root -- test -d $APP_ROOT_SOURCE/$path
+        if (!$?) {
+          # 不是 dir
+          printError WSL2 $WSL2_DIST [ ${APP_ROOT_SOURCE}/${path} ] `
+            is not`'t a dir`, [ ${APP_ROOT_SOURCE} ] include this dir:
+
+          write-host `n
+          wsl -d $WSL2_DIST -u root -- ls -la $APP_ROOT_SOURCE
+
+          write-host `n`n
+
+          exit
+        }
+        printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT_SOURCE/$path ]
+        code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE/$path
+
+        cd $EXEC_CMD_DIR
+
+        exit
+      }
+    }
+    printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT_SOURCE ]
+    code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE
   }
 
   default {

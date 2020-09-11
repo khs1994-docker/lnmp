@@ -68,6 +68,8 @@ Commands:
   kubectl-install    Install kubectl
   kubectl-info       Get kubectl latest version info
 
+  wsl2               import wsl-k8s utils ps module
+
   dist-containerd-arm64
 "
 }
@@ -125,6 +127,12 @@ switch ($args[0]) {
     $sha256_hash = (Get-FileHash .\containerd-nightly-linux-arm64.tar.gz -Algorithm sha256).Hash.ToLower()
 
     echo "$sha256_hash containerd-nightly-linux-arm64.tar.gz" > containerd-nightly-linux-arm64.tar.gz.sha256sum
+  }
+
+  wsl2 {
+    Import-Module $PSScriptRoot/wsl2/bin/WSL-K8S.psm1 -Force
+
+    Get-Command -Module WSL-K8S
   }
 
   Default {

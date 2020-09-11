@@ -68,9 +68,19 @@ Function New-Blob($token, $image, $file, $contentType = "application/octet-strea
   $headers.Add('Content-Type', $contentType);
   $headers.Add('Authorization', "Bearer $token")
 
+  if ($uuid.substring(0, 4) -eq '/v2/') {
+    $uuid = "https://${registry}${uuid}"
+  }
+
   try {
+    $uri = "$uuid&digest=$digest"
+
+    if (!("$uuid".Contains('?'))) {
+      $uri = "${uuid}?digest=$digest"
+    }
+
     $response = Invoke-WebRequest `
-      -Uri "$uuid&digest=$digest" `
+      -Uri $uri `
       -Headers $headers `
       -Method 'Put' `
       -Infile $file `

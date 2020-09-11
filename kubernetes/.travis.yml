@@ -23,8 +23,8 @@ cache:
 
 before_install:
   - uname -a
-  - mount bpffs /sys/fs/bpf -t bpf || true
-  - mount -t bpf || true
+  - sudo mount bpffs /sys/fs/bpf -t bpf || true
+  - sudo mount -t bpf || true
   - env
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
@@ -143,7 +143,10 @@ before_script:
   - test -n "$CMD_FAILED" && false || true
   # worker
   - sudo systemctl cat kube-proxy
-  - sudo systemctl start kube-proxy || CMD_FAILED=1
+  - |
+    if ! [ "$CNI_CALICO_EBPF" = 'true' ];then
+      sudo systemctl start kube-proxy || CMD_FAILED=1
+    fi
   - test -n "$CMD_FAILED" && sudo journalctl -u kube-proxy || true
   - test -n "$CMD_FAILED" && false || true
 
@@ -208,7 +211,15 @@ before_script:
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
   - sed -i "s#eth0#ens4#g" addons/cni/calico-custom/patch.json
   - git diff
-  - kubectl apply -k addons/cni/calico-custom
+  - |
+    if [ "$CNI_CALICO_EBPF" = 'true' ];then
+      cat addons/cni/calico-eBPF/kubernetes.yaml \
+          | sed -e "s/192.168.199.100/${SERVER_IP}/g" -e "s/16443/6443/g" \
+          | kubectl apply -f -
+      kubectl apply -k addons/cni/calico-eBPF
+    else
+      kubectl apply -k addons/cni/calico-custom
+    fi
 
   - kubectl get node
   - kubectl get all -A
@@ -233,8 +244,8 @@ before_script:
 
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
-  # - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
-
+  - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
+  - for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
 script:
   - df -h
   - kubectl apply -k addons/coredns
@@ -259,6 +270,7 @@ script:
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
+  - kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
   - kubectl delete deployment nginx || true
   - kubectl delete pod nginx || true
   - kubectl get all
@@ -284,6 +296,10 @@ after_success:
   - sudo ls -la /opt || true
   - sudo ls -la /opt/k8s || true
   - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
+  - sudo tree ${K8S_ROOT:-/opt/k8s} -L 5 || true
+  - sudo tree /var/log -L 3 || true
+  - sudo tree /var/log/pods -L 10 || true
+  - sudo tree /var/run -L 3 || true
 
   - kubectl get node -o yaml
 
@@ -345,18 +361,26 @@ jobs:
       dist: focal
       env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
     # current stable version
+    # cri-o
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--crio" k8S_IMAGE_NS=khs1994 k8S_IMAGE_REGISTRY=useccr.ccs.tencentyun.com
+    # containerd
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+    # containerd + cni calico ebpf
+    - os: linux
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+    # docker
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_LOCAL_INSTALL_OPTIONS="--docker"
+    # custom k8s root
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
     # old version
     - os: linux
       dist: focal

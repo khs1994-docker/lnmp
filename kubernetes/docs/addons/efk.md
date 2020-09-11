@@ -6,7 +6,7 @@
 
 * 虚拟机每个节点内存分配 3G，之前分配了 2G 一直报错
 
-* es-statefulset.yaml 的 replicas 参数 **不能** 为 1 **故单集群不能用**
+* es-statefulset.yaml 的 replicas 参数 **不能** 为 1
 
 ## 资源占用
 

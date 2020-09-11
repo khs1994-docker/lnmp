@@ -24,7 +24,7 @@
 
 # Storage driver used to manage the storage of images and containers. Please
 # refer to containers-storage.conf(5) to see all available storage drivers.
-#storage_driver = "vfs"
+#storage_driver = ""
 
 # List to pass options to the storage driver. Please refer to
 # containers-storage.conf(5) to see all available storage options.
@@ -35,8 +35,15 @@
 # the kubelet. The log directory specified must be an absolute directory.
 log_dir = "/var/log/crio/pods"
 
-# Location for CRI-O to lay down the version file
+# Location for CRI-O to lay down the temporary version file.
+# It is used to check if crio wipe should wipe containers, which should
+# always happen on a node reboot
 version_file = "/var/run/crio/version"
+
+# Location for CRI-O to lay down the persistent version file.
+# It is used to check if crio wipe should wipe images, which should
+# only happen when CRI-O has been upgraded
+version_file_persist = "/var/lib/crio/version"
 
 # The crio.api table contains settings for the kubelet/gRPC interface.
 [crio.api]
@@ -86,7 +93,8 @@ grpc_max_recv_msg_size = 16777216
 #]
 
 # default_runtime is the _name_ of the OCI runtime to be used as the default.
-# The name is matched against the runtimes map below.
+# The name is matched against the runtimes map below. If this value is changed,
+# the corresponding existing entry from the runtimes map below will be ignored.
 default_runtime = "runc"
 
 # If true, the runtime will not use pivot_root, but instead use MS_MOVE.
@@ -106,7 +114,13 @@ conmon_cgroup = "system.slice"
 # Environment variable list for the conmon process, used for passing necessary
 # environment variables to conmon or the runtime.
 conmon_env = [
-        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+	"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+]
+
+# Additional environment variables to set for all the
+# containers. These are overridden if set in the
+# container image spec or in the container runtime configuration.
+default_env = [
 ]
 
 # If true, SELinux will be used for pod separation on the host.
@@ -131,15 +145,15 @@ cgroup_manager = "systemd"
 # only the capabilities defined in the containers json file by the user/kube
 # will be added.
 default_capabilities = [
-        "CHOWN",
-        "DAC_OVERRIDE",
-        "FSETID",
-        "FOWNER",
-        "SETGID",
-        "SETUID",
-        "SETPCAP",
-        "NET_BIND_SERVICE",
-        "KILL",
+	"CHOWN",
+	"DAC_OVERRIDE",
+	"FSETID",
+	"FOWNER",
+	"SETGID",
+	"SETUID",
+	"SETPCAP",
+	"NET_BIND_SERVICE",
+	"KILL",
 ]
 
 # List of default sysctls. If it is empty or commented out, only the sysctls
@@ -157,7 +171,7 @@ additional_devices = [
 # Path to OCI hooks directories for automatically executed hooks. If one of the
 # directories does not exist, then CRI-O will automatically skip them.
 hooks_dir = [
-        "/usr/share/containers/oci/hooks.d",
+	"/usr/share/containers/oci/hooks.d",
 ]
 
 # List of default mounts for each container. **Deprecated:** this option will
@@ -228,12 +242,9 @@ gid_mappings = ""
 # value is 30s, whereas lower values are not considered by CRI-O.
 ctr_stop_timeout = 30
 
-# **DEPRECATED** this option is being replaced by manage_ns_lifecycle, which is described below.
-# manage_network_ns_lifecycle = false
-
 # manage_ns_lifecycle determines whether we pin and remove namespaces
 # and manage their lifecycle
-manage_ns_lifecycle = false
+manage_ns_lifecycle = true
 
 # The directory where the state of the managed namespaces gets tracked.
 # Only used when manage_ns_lifecycle is true.
@@ -270,6 +281,10 @@ runtime_type = "oci"
 runtime_root = "/run/runc"
 
 
+# crun is a fast and lightweight fully featured OCI runtime and C library for
+# running containers
+#[crio.runtime.runtimes.crun]
+
 # Kata Containers is an OCI runtime, where containers are run inside lightweight
 # VMs. Kata provides additional isolation towards the host, minimizing the host attack
 # surface and mitigating the consequences of containers breakout.
@@ -301,7 +316,7 @@ global_auth_file = ""
 
 # The image used to instantiate infra containers.
 # This option supports live configuration reload.
-pause_image = "k8s.gcr.io/pause:3.1"
+pause_image = "k8s.gcr.io/pause:3.2"
 
 # The path to a file containing credentials specific for pulling the pause_image from
 # above. The file is similar to that of /var/lib/kubelet/config.json
@@ -338,6 +353,8 @@ image_volumes = "mkdir"
 #registries = [
 # ]
 
+# Temporary directory to use for storing big files
+big_files_temporary_dir = ""
 
 # The crio.network table containers settings pertaining to the management of
 # CNI plugins.
@@ -352,7 +369,7 @@ network_dir = "/etc/cni/net.d/"
 
 # Paths to directories where CNI plugin binaries are located.
 plugin_dirs = [
-        "/opt/cni/bin/",
+	"/opt/cni/bin/",
 ]
 
 # A necessary configuration for Prometheus based metrics retrieval
@@ -363,3 +380,6 @@ enable_metrics = false
 
 # The port on which the metrics server will listen.
 metrics_port = 9090
+
+# Local socket path to bind the metrics server to
+metrics_socket = ""

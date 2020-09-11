@@ -4,7 +4,9 @@
 
 **桌面版 Docker + vsCode 远程开发请查看对应的 README 文件。**
 
-> 本文件夹中的示例 一个项目配置一个 vsCode 远程开发配置文件。或者你可以将整个 /app 作为一个项目，避免繁琐的配置。具体请参考 lnmp 根目录的 `.devcontainer` 文件夹及 `docker-workspace.yml` 文件。
+> 本文件夹中的示例 一个项目配置一个 vsCode 远程开发配置文件。
+
+> 或者你可以将整个 /app 作为一个项目，避免繁琐的配置。具体请参考 lnmp 根目录的 `.devcontainer` 文件夹及 `docker-workspace.yml` 文件。文档 https://docs.lnmp.khs1994.com/laravel.html
 
 ## 说明
 
@@ -39,7 +41,7 @@ $ ./lnmp-docker up
 
 ## vsCode 扩展
 
-* `felixfbecker.php-pack`
+* `felixfbecker.php-debug`
 
 ## 步骤
 
@@ -52,8 +54,6 @@ $ ./lnmp-docker up
 1. 扩展需要在 `远程` 安装(以前安装过的扩展在 **远程** 重新安装)
 
 2. 首次使用,需要初始化,请耐心等待
-
-3. 修改 `.devcontainer` `docker-workspace.yml` 之后需要重新载入. Press `F1`, select `Remote-Containers: Rebuild Container`
 
 ## 依赖管理(执行 composer 命令)
 
@@ -91,7 +91,7 @@ $ lnmp-docker composer install | update | require XXX
 * 远程地址: 192.168.199.100(宿主机 IP，根据实际修改)
 
 * 2. [浏览器安装 `xdebug` 扩展](https://docs.lnmp.khs1994.com/xdebug.html#%e6%b5%8f%e8%a7%88%e5%99%a8%e6%89%a9%e5%b1%95)
-* `vsCode` -> `运行` -> `打开配置` -> `port 改为 9001`
+* `vsCode` -> `运行` -> `打开配置` -> `弹出选项中选择 PHP` -> `port 改为 9001`
 * `vsCode` -> `运行` -> `启动调试` -> `打断点` -> `浏览器刷新页面` -> `在 vsCode 调试`
 
 ## 与 `khs1994-docker/lnmp` 项目关系
@@ -100,4 +100,6 @@ $ lnmp-docker composer install | update | require XXX
 
 ## 功能
 
-* 可以在 **终端** 直接执行命令(`vsCode` -> `查看` -> `终端` -> 右上角 `+` 号) `$ php artisan`
+* 可以在 **终端** 直接执行命令
+
+`vsCode` -> `查看` -> `终端` -> `输入所执行的命令，例如 $ php artisan`

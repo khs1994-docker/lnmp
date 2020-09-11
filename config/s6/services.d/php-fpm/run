@@ -4,4 +4,4 @@ if test -f ./setup; then
     source ./setup
 fi
 
-exec php-fpm
+exec php-fpm -F
