@@ -24,9 +24,10 @@
 
 默认的 PHP 项目目录位于 `./app/*`，你可以通过在 `.env` 文件中设置 `APP_ROOT` 变量来更改 PHP 项目目录。
 
-例如你想要将 PHP 项目目录 `app` 与本项目并列
+例如你想要将 PHP 项目目录 `app` 与本项目并列：
 
 ```diff
+# .env
 - APP_ROOT=./app
 + APP_ROOT=../app
 ```
@@ -37,6 +38,18 @@
 .
 ├── app    # 项目文件夹
 └── lnmp   # khs1994-docker/lnmp
+```
+
+我们也可以将项目放置于 **WSL2** 中，例如我们想要将项目文件放置于 **WSL2** `Ubuntu` 中的 `/app/*` 目录，那么请在 `.env` 和 `.env.ps1` 中进行如下设置
+
+```bash
+# .env
+APP_ROOT=/app
+```
+
+```powershell
+# .env.ps1
+$WSL2_DIST="ubuntu"
 ```
 
 ## 如何正确的自定义配置文件
@@ -58,8 +71,10 @@
 ## 容器数量伸缩
 
 ```bash
+# 扩容
 $ ./lnmp-docker scale php7=3
 
+# 缩容
 $ ./lnmp-docker scale php7=1
 ```
 

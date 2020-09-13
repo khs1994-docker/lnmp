@@ -19,14 +19,17 @@
   "extensions": [
      "felixfbecker.php-debug",
      "editorconfig.editorconfig",
+     // php doc
      "neilbrayfield.php-docblocker",
+     // 提供右键导入命名空间等功能
      "mehedidracula.php-namespace-resolver",
      "phiter.phpstorm-snippets",
+     // Laravel 代码补全
      "onecentlin.laravel5-snippets",
      "getpsalm.psalm-vscode-plugin",
+     // 代码补全
      "bmewburn.vscode-intelephense-client",
-     "recca0120.vscode-phpunit",
-     "MehediDracula.php-namespace-resolver"
+     "recca0120.vscode-phpunit"
   ],
   // [Optional] If you are using SSH keys w/Git, copy them and set correct permissions
   // "postCreateCommand": "mkdir -p ~/.ssh && cp -r ~/.ssh-localhost/* ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*"

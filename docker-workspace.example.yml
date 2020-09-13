@@ -74,7 +74,7 @@ services:
     << : *common
     image: node:${LNMP_NODE_VERSION:-14.10.1}-alpine
     entrypoint: npm
-    command: [] # install | "run","dev" |
+    command: [] # install | ["run","dev"] |
 
 networks:
   backend:

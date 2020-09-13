@@ -1640,8 +1640,23 @@ Example: ./lnmp-docker composer /app/demo install
   }
 
   "^code$" {
+    if ($APP_ROOT_SOURCE.Length -gt 53) {
+      if ($APP_ROOT_SOURCE.Substring(0, 53) -eq '/run/desktop/mnt/host/wsl/docker-desktop-bind-mounts/') {
+        $APP_ROOT_SOURCE = $null
+        
+        if (!$other) {
+          printError "APP_ROOT is real wsl2 docker-desktop path, you must set full path, e.g. $./lnmp-docker code /app/laravel"
+          
+          exit 1
+        }
+      }
+    }
     if ($other) {
       foreach ($path in $other) {
+        if ($path.substring(0, 1) -eq '/') {
+          $path = $path.substring(1)
+        }
+
         wsl -d $WSL2_DIST -u root -- test -d $APP_ROOT_SOURCE/$path
         if (!$?) {
           # 不是 dir
