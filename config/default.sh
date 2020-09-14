@@ -48,7 +48,7 @@ echo "\`\`\`" >> path.md
 set -x
 source ./.env
 
-wget https://github.com/redis/redis/raw/${LNMP_REDIS_VERSION}/redis.conf -O redis/redis.conf
+wget https://github.com/redis/redis/raw/${LNMP_REDIS_VERSION:-6.0.8}/redis.conf -O redis/redis.conf
 
 cp redis/redis.conf redis/redis.production.conf
 
