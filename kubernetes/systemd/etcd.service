@@ -24,6 +24,8 @@ LimitNOFILE=40000
 Environment="ETCD_DATA_DIR=/opt/k8s/var/lib/etcd"
 Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_ETCD_HOST=192.168.199.100"
+# https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
+Environment="_ETCD_UNSUPPORTED_ARCH=__GOARCH__"
 
 ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
 ExecStartPre=-/usr/bin/env chmod 700 /opt/k8s/var/lib/etcd

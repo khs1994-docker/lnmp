@@ -120,7 +120,7 @@ switch ($args[0]) {
     mv containerd-nightly-linux-arm64/ctr containerd-nightly-linux-arm64/bin/
 
     cd containerd-nightly-linux-arm64
-    tar -zcvf containerd-nightly-linux-arm64.tar.gz bin
+    tar -zcvf ../containerd-nightly-linux-arm64.tar.gz bin
     cd ..
     rm -r -force containerd-nightly-linux-arm64
 

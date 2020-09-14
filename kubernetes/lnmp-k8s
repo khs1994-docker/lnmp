@@ -913,7 +913,7 @@ _docker_default_conf(){
 # k8s install
 
 _check_master_ip(){
-  if [ ${MASTER_IP} = '192.168.199.100' ];then
+  if [ "${MASTER_IP}" = '192.168.199.100' ];then
     clear
     echo ""
     echo "======================================================"
@@ -1036,6 +1036,13 @@ _k8s_install_systemd(){
   done
 
   cd - > /dev/null
+
+  # https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
+  if [ "${GOARCH}" = 'arm64' ];then
+    $(_sudo) sed -i -e "s/_ETCD_UNSUPPORTED_ARCH/ETCD_UNSUPPORTED_ARCH/g" \
+        -e "s/__GOARCH__/${GOARCH}/g" \
+        /etc/systemd/system/etcd.service
+  fi
 
   $(_sudo) systemctl daemon-reload || true
 }

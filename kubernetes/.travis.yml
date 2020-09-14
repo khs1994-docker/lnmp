@@ -10,12 +10,12 @@ services:
 - docker
 
 os: linux
-dist: xenial
+dist: focal
 # dist: bionic
 
 cache:
   directories:
-    - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
+    - kubernetes-release/release
     - /home/travis/.khs1994-docker-lnmp/caches
 
 # git:
@@ -26,6 +26,23 @@ before_install:
   - sudo mount bpffs /sys/fs/bpf -t bpf || true
   - sudo mount -t bpf || true
   - env
+
+  - jq --version || true
+  - docker-compose --version || true
+
+  - sudo apt-get update || true
+  - |
+    sudo apt install -y \
+        tree \
+        net-tools \
+        libffi-dev \
+        jq
+  - jq --version || true
+  - docker-compose --version || true
+  - |
+    if [ $(go env GOARCH) = "arm64" ];then
+      sudo rm -rf $(command -v docker-compose) || true
+    fi
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
   - pwd
@@ -33,6 +50,10 @@ before_install:
   - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
   - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
+  - |
+    if [ $(go env GOARCH) = "arm64" ];then
+      $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose -f
+    fi
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true
@@ -55,8 +76,13 @@ before_install:
   # - sudo systemctl stop systemd-resolved || true
   # - sudo netstat -lnpt
   # - cat /etc/resolv.conf
-  - echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
-  - echo "search google.internal" | sudo tee -a /etc/resolv.conf
+  - |
+    if [ $(go env GOARCH) = "amd64" ];then
+      echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
+      echo "search google.internal" | sudo tee -a /etc/resolv.conf
+    else
+      sudo cp -f /run/systemd/resolve/resolv.conf /etc/resolv.conf
+    fi
   - cat /etc/resolv.conf
   # - cat /etc/resolv.conf
   - nslookup gcr.io
@@ -64,7 +90,7 @@ before_install:
   - docker-compose --version
   - docker --version
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+  - sudo add-apt-repository "deb [arch=$(go env GOARCH)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
   - sudo apt-get update || true
   - sudo apt-get -y install docker-ce || sudo apt -f install
   - docker --version
@@ -84,11 +110,17 @@ before_install:
   # - docker buildx inspect --bootstrap
   - ip addr
   - hostnamectl
-  - export SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+  - |
+    export net_interface=ens4
+
+    if [ $(go env GOARCH) = "arm64" ];then
+      export net_interface=ens5
+    fi
+  - export SERVER_IP=`ifconfig ${net_interface} | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+  - if [ -z "${SERVER_IP}" ];then exit 1; fi
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
 install:
-  - sudo apt install -y tree
   # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
   # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
   # - export KUBERNETES_TYPE=server
@@ -103,7 +135,7 @@ install:
   - docker-compose up cfssl-local
   - docker-compose down
   # - source .env
-  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
+  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-$(go env GOARCH)/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-$(go env GOARCH)
 
   - sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=false#g" ./.env
 
@@ -112,7 +144,7 @@ install:
   # - debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
   - export PATH=$PATH:${K8S_ROOT:-/opt/k8s}/bin
-  - tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
+  - tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-$(go env GOARCH)/kubernetes
 before_script:
   - ls -la /etc/systemd/system/
 
@@ -209,7 +241,7 @@ before_script:
   - kubectl get csr
 
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
-  - sed -i "s#eth0#ens4#g" addons/cni/calico-custom/patch.json
+  - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/patch.json
   - git diff
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
@@ -243,6 +275,7 @@ before_script:
   - kubectl get all -A
 
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - kubectl describe pod -n kube-system -l k8s-app=calico-node
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
   - for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
@@ -347,6 +380,7 @@ after_success:
 env:
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
+    - LNMP_CN_ENV=false
 
 jobs:
   include:
@@ -369,6 +403,13 @@ jobs:
     - os: linux
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+    # arm64
+    - os: linux
+      dist: focal
+      arch: arm64-graviton2
+      virt: vm
+      group: edge
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"
     # containerd + cni calico ebpf
     - os: linux
       dist: focal

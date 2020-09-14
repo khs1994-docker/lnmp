@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - "master"
+    tags:
+      - "*"
+  workflow_dispatch:
+
+name: build docker iamge
+
+env:
+  DOCKER_CLI_EXPERIMENTAL: enabled
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@main
+        with:
+          fetch-depth: 1
+      - uses: docker-practice/actions-setup-docker@master
+      - run: |
+          echo ${DOCKER_PASSWORD} | docker login -u khs1994 --password-stdin
+        env:
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      - run: |
+          docker buildx build \
+          --cache-from=khs1994/k8s-cfssl-cache \
+          --cache-to=khs1994/k8s-cfssl-cache \
+          -t khs1994/k8s-cfssl \
+          --push \
+          --platform linux/amd64,linux/arm64 \
+          cfssl
