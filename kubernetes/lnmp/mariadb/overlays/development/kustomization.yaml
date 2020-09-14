@@ -1,0 +1,11 @@
+bases:
+  - ../../../mysql/overlays/development
+patchesJson6902:
+  - path: patch.json
+    target:
+      group: apps
+      kind: Deployment
+      name: mysql
+      version: v1
+patches:
+  - config.yaml

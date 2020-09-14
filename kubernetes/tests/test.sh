@@ -7,6 +7,9 @@ mkdir -p ../app/laravel/public
 cp lnmp/app/index.php ../app/laravel/public/
 
 echo "==> Up nfs server"
+if ! [ $(go env GOARCH) = 'amd64' ];then
+  sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
+fi
 ./lnmp-k8s nfs
 sleep 30
 docker ps -a
@@ -26,7 +29,11 @@ kubectl kustomize storage/pv/nfs | sed "s/192.168.199.100/${SERVER_IP}/g" | kube
 kubectl create ns lnmp
 kubectl apply -k storage/pvc/nfs -n lnmp
 kubectl apply -k redis/overlays/development -n lnmp
-kubectl apply -k mysql/overlays/development -n lnmp
+if [ $(go env GOARCH) = 'amd64' ];then
+  kubectl apply -k mysql/overlays/development -n lnmp
+else
+  kubectl apply -k mariadb/overlays/development -n lnmp
+fi
 kubectl apply -k php/overlays/development -n lnmp
 kubectl apply -k nginx/overlays/development -n lnmp
 kubectl apply -k nginx/overlays/nodePort-80-443 -n lnmp
@@ -47,7 +54,11 @@ kubectl kustomize storage/pv/linux | sed "s/__USERNAME__/$(whoami)/g" | kubectl 
 kubectl create ns lnmp
 kubectl apply -k storage/pvc/hostpath -n lnmp
 kubectl apply -k redis/overlays/development -n lnmp
-kubectl apply -k mysql/overlays/development -n lnmp
+if [ $(go env GOARCH) = 'amd64' ];then
+  kubectl apply -k mysql/overlays/development -n lnmp
+else
+  kubectl apply -k mariadb/overlays/development -n lnmp
+fi
 kubectl apply -k php/overlays/development -n lnmp
 kubectl apply -k nginx/overlays/development -n lnmp
 kubectl apply -k nginx/overlays/nodePort-80-443 -n lnmp

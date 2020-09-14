@@ -4,6 +4,8 @@ services:
   nfs:
     restart: "no"
     image: erichough/nfs-server
+    # https://github.com/ehough/docker-nfs-server/pull/56
+    # image: klutchell/nfs-server
     volumes:
       - ./exports.txt:/etc/exports
       - ${NFS_DATA_ROOT:-./nfs-data}/nfs:/nfs
