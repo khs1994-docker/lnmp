@@ -4,8 +4,17 @@ on:
     - master
     tags:
     - '*'
+  workflow_dispatch:
+    inputs:
+      PHP_VERSION:
+        description: php version
+        required: true
+        default: "7.4.10"
 
 name: PHP_7.4
+
+env:
+  PHP_CUSTOM_VERSION: ${{ github.event.inputs.PHP_VERSION }}
 
 jobs:
   build:
@@ -47,7 +56,7 @@ jobs:
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
         echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-east-1.aliyuncs.com
-        echo ${GITHUB_TOKEN} | docker login -u khs1994 --password-stdin docker.pkg.github.com
+        echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
       name: 'Docker Login'
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -55,12 +64,19 @@ jobs:
         TENCENT_DOCKER_USERNAME: ${{secrets.TENCENT_DOCKER_USERNAME}}
         ALIYUN_DOCKER_USERNAME: ${{secrets.ALIYUN_DOCKER_USERNAME}}
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
     - run: |
         cp .env.example .env
         set -ex
 
-        if [ ! `echo $GITHUB_REF | grep 'refs/tags/'` ];then \
-          export PLATFORM=linux/amd64; \
+        if [ -n "${PHP_CUSTOM_VERSION}" ];then
+          export PHP_TAG_VERSION=$PHP_CUSTOM_VERSION
+        fi
+
+        echo $GITHUB_REF | grep -q 'refs/tags/' && IS_TAG_EVENT=1 || true
+
+        if ! [ -n "${IS_TAG_EVENT}" -o "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ];then \
+          export PLATFORM=linux/amd64,linux/arm64; \
           if [ "$PHP_VERSION" = 8_1_X -o "$PHP_VERSION" = nightly ];then \
             export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
             IS_PUSH=--push; \
@@ -75,10 +91,14 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        # CACHE_IMAGE=docker.pkg.github.com/khs1994-docker/php/php
+        # CACHE_IMAGE=ghcr.io/khs1994/php
         CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
 
-        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
+        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
+        --build-arg VCS_REF=$VCS_REF \
+        --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
+        --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
+        --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
 
         echo ::group::Build Unit
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
@@ -178,6 +198,7 @@ jobs:
           done
         fi
       env:
+        GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994
         DOCKER_HUB_USERNAME_TEST: lrew
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
@@ -185,7 +206,7 @@ jobs:
         FOLDER: 7.4
         PHP_TAG_VERSION: 7.4.10
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # docker.pkg.github.com/khs1994-docker/php/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php ghcr.io/khs1994/php
       name: 'Build Image'
       shell: bash
     - run: |

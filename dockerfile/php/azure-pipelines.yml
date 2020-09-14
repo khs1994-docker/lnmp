@@ -201,7 +201,7 @@ jobs:
       echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
       # echo $(DOCKER_PASSWORD) | docker login -u $(TENCENT_DOCKER_USERNAME) --password-stdin uswccr.ccs.tencentyun.com
       echo $(DOCKER_PASSWORD) | docker login -u $(ALIYUN_DOCKER_USERNAME) --password-stdin registry.us-east-1.aliyuncs.com
-      echo $(GITHUB_TOKEN) | docker login -u khs1994 --password-stdin docker.pkg.github.com
+      echo $(GITHUB_TOKEN) | docker login -u khs1994 --password-stdin ghcr.io
     displayName: 'Docker Login'
 
   - bash: |
@@ -209,7 +209,7 @@ jobs:
       set -ex
 
       if [ ! `echo $BUILD_SOURCEBRANCH | grep 'refs/tags/'` ];then \
-        export PLATFORM=linux/amd64; \
+        export PLATFORM=linux/amd64,linux/arm64; \
         if [ "$PHP_VERSION" = 8_1_X -o "$PHP_VERSION" = nightly ];then \
           export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
           IS_PUSH=--push; \
@@ -224,10 +224,14 @@ jobs:
       fi
 
       VCS_REF=`git rev-parse --short HEAD`
-      # CACHE_IMAGE=docker.pkg.github.com/khs1994-docker/php/php
+      # CACHE_IMAGE=ghcr.io/khs1994-docker/php
       CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
 
-      options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
+      options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
+      --build-arg VCS_REF=$VCS_REF \
+      --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
+      --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
+      --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
       echo $options
 
       if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
@@ -294,7 +298,7 @@ jobs:
       DOCKER_HUB_USERNAME_TEST: lrew
       PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
       # registry.us-west-1.aliyuncs.com/khs1994/php
-      add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # docker.pkg.github.com/khs1994-docker/php/php
+      add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php ghcr.io/khs1994/php
     displayName: 'Build Image'
     timeoutInMinutes: 0
 
