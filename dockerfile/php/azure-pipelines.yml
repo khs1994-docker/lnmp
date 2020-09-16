@@ -160,7 +160,7 @@ jobs:
   - name: DOCKER_CLI_EXPERIMENTAL
     value: enabled
   - name: DOCKER_COMPOSE_VERSION
-    value: 1.26.0
+    value: 1.27.0
   timeoutInMinutes: 0
   steps:
   - script: |
@@ -176,9 +176,10 @@ jobs:
       sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) ${DOCKER_CHANNEL}"
       sudo apt-get update
       sudo apt-get -y install docker-ce
-      sudo rm /usr/local/bin/docker-compose
-      curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-      sudo install -m755 docker-compose /usr/local/bin
+      docker-compose --version || true
+      # sudo rm /usr/local/bin/docker-compose
+      # curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+      # sudo install -m755 docker-compose /usr/local/bin
       sudo mkdir -p /etc/systemd/system/docker.service.d
       echo -e '[Service]\nExecStart=\nExecStart=/usr/bin/dockerd' | sudo tee /etc/systemd/system/docker.service.d/docker.conf
       echo '{"hosts":["unix:///var/run/docker.sock","tcp://0.0.0.0:2375"],"experimental":true}' | sudo tee /etc/docker/daemon.json

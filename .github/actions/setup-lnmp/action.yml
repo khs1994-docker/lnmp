@@ -18,7 +18,7 @@ inputs:
     required: false
   docker_compose_version:
     description: docker compose version
-    default: 1.26.0
+    default: 1.27.0
     required: false
 runs:
   using: 'node12'

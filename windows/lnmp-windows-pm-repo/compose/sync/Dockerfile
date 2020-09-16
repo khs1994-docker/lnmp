@@ -2,7 +2,7 @@ FROM frolvlad/alpine-glibc:latest@sha256:cd2885e3bcc8776ba359eaadd2359fa916f3dcc
 
 ENV PROJECT_NAME=docker-compose
 
-ENV DOCKER_COMPOSE_VERSION=1.26.0
+ENV DOCKER_COMPOSE_VERSION=1.27.0
 
 ENV URL=https://github.com/docker/compose/releases/download/
 

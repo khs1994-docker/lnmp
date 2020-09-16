@@ -97,7 +97,7 @@ before_install:
   # 升级最新 Docker Compose
   # - docker-compose --version
   # - sudo rm /usr/local/bin/docker-compose
-  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.26.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.27.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
   # - sudo install -m755 docker-compose /usr/local/bin
   # - docker-compose --version
   - sudo cat /etc/docker/daemon.json

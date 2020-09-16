@@ -29,14 +29,14 @@ jobs:
         docker --version
         docker-compose --version
       name: 'manifest'
-    - run: |
-        set -x
-        sudo rm /usr/local/bin/docker-compose
-        curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-        sudo install -m755 docker-compose /usr/local/bin
-      name: 'Setup Docker Compose'
-      env:
-        DOCKER_COMPOSE_VERSION: 1.26.0
+    # - run: |
+    #     set -x
+    #     sudo rm /usr/local/bin/docker-compose
+    #     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    #     sudo install -m755 docker-compose /usr/local/bin
+    #   name: 'Setup Docker Compose'
+    #   env:
+    #     DOCKER_COMPOSE_VERSION: 1.27.0
     - uses: docker-practice/actions-setup-docker@master
     - run: |
         set -x

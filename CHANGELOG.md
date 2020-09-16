@@ -10,6 +10,8 @@
 
 ### Changes:
 
+* Require [docker-compose v1.27.0](https://github.com/docker/compose/releases/tag/1.27.0)
+
 ### Updates:
 
 * [PHP `7.4.10` `7.3.22`](https://www.php.net/ChangeLog-7.php#7.4.10)
