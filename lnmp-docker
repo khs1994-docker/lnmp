@@ -508,12 +508,22 @@ install_docker_compose_official(){
 install_docker_compose_arm(){
   print_info "$OS $ARCH docker-compose v$LNMP_DOCKER_COMPOSE_VERSION is installing by pip3 ..."
   command -v pip3 >/dev/null 2>&1 || $(_sudo) apt install -y python3-pip
+  $(_sudo) apt install -y libffi-dev || true
+  local pip_config="[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns"
   if ! [ -d ~/.pip ];then
     if ! [ "${LNMP_CN_ENV}" = "false" ];then
-    mkdir -p ~/.pip; echo -e "[global]\nindex-url = https://pypi.douban.com/simple\n[list]\nformat=columns" \
-        > ~/.pip/pip.conf
+    mkdir -p ~/.pip
+    echo -e $pip_config > ~/.pip/pip.conf
     fi
   fi
+
+  if ! [ -d /root/.pip ];then
+    if ! [ "${LNMP_CN_ENV}" = "false" ];then
+    $(_sudo) mkdir -p /root/.pip || true
+    echo -e $pip_config | $(_sudo) tee /root/.pip/pip.conf || true
+    fi
+  fi
+
   $(_sudo) pip3 install --upgrade docker-compose
 }
 
@@ -719,7 +729,7 @@ XXX
 
 
 
-<!--提交问题之前务必点击预览（Preview）标签-->
+<!--提交问题之前务必点击（Preview）标签进行预览-->
 " >> bug.md
 
   print_warning "Please Edit bug.md, then new issue in [ https://github.com/khs1994-docker/lnmp/issues/new/choose ] with copy bug.md"
