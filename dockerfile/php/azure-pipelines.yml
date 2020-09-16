@@ -12,6 +12,9 @@ trigger:
     include:
     - 7.*
 
+# pr:
+# - master
+
 jobs:
 - job: build
   strategy:
@@ -308,3 +311,4 @@ jobs:
     env:
       DOCKER_HUB_USERNAME: khs1994
     condition: succeeded()
+    # condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
