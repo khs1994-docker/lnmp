@@ -36,7 +36,7 @@ before_install:
 - date
 - docker --version
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+- sudo add-apt-repository "deb [arch=$(go env GOARCH)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
 - sudo apt-get update
 # - sudo apt-get -y install docker-ce || sudo apt -f install
 # https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/
@@ -69,7 +69,7 @@ before_install:
 # verify version
 
 - docker --version
-- docker-compose --version
+- docker-compose --version || true
 
 # docker login
 
@@ -77,7 +77,7 @@ before_install:
 
 # github release
 
-- sudo apt update ; sudo apt install -y golang
+# - sudo apt update ; sudo apt install -y golang
 - go get github.com/aktau/github-release
 - github-release --help
 
@@ -106,9 +106,10 @@ jobs:
         github-release info -u khs1994-docker -r lnmp -t ${TRAVIS_TAG} || \
         cat CHANGELOG.md | github-release release -u khs1994-docker -r lnmp  -t ${TRAVIS_TAG} --draft -d -
 
-    - stage: development
-      install:
-        - sudo rm /usr/local/bin/docker-compose
+    - &development
+      stage: development
+      before_script:
+        - sudo rm -rf /usr/local/bin/docker-compose
         - ./lnmp-docker compose --official -f
       script:
         - ./lnmp-docker services
@@ -121,7 +122,16 @@ jobs:
         - curl 127.0.0.1
         - ./lnmp-docker down
         - QUITE=true ./lnmp-docker test development
-
+    - << : *development
+      stage: arm64-development
+      arch: arm64-graviton2
+      virt: vm
+      group: edge
+      install:
+        - command -v docker-compose
+        - sudo rm -rf $(command -v docker-compose) || true
+        - export LNMP_SERVICES="nginx mariadb php7 redis"
+        - export LREW_INCLUDE="mariadb"
     - stage: swarm
       script:
         - sudo rm /usr/local/bin/docker-compose
@@ -516,6 +526,10 @@ jobs:
 
 stages:
   - name: development
+    if: |
+      branch = "19.03" OR \
+      tag =~ /^(v19)/
+  - name: arm64-development
     if: |
       branch = "19.03" OR \
       tag =~ /^(v19)/

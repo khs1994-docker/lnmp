@@ -10,9 +10,8 @@
 | -- | -- |
 | Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/19.03?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/19.03) |
 | Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=19.03)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
-| macOS | [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=19.03)](https://travis-ci.com/khs1994-docker/lnmp) |
-| Linux arm64v8 | - |
-| Linux arm32v7 | - |
+| macOS | - |
+| Linux arm64v8 | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=19.03)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -60,7 +59,7 @@ To use LNMP Docker, you need:
 
 :two: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 19.03 Stable +
 
-:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.26.0+
+:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.27.0+
 
 :four: WSL (**Windows** Only)
 

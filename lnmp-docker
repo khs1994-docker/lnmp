@@ -493,6 +493,11 @@ move_docker_compose_to_path(){
 
 # 从 GitHub 安装 compose
 install_docker_compose_official(){
+  if [ "$ARCH" != 'x86_64' ];then
+    install_docker_compose "$@"
+
+    return
+  fi
   if [ "$OS" != 'Linux' ];then print_error "Only support Linux" ; exit 1; fi
   curl -sL ${COMPOSE_LINK_OFFICIAL}/$LNMP_DOCKER_COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` \
       > /tmp/docker-compose || print_error "Download docker-compose error, code is $?"
