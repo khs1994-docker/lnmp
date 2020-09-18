@@ -27,6 +27,9 @@ before_install:
   - sudo mount -t bpf || true
   - env
 
+  - sudo update-alternatives --display iptables || true
+  - sudo update-alternatives --list    iptables || true
+
   - jq --version || true
   - docker-compose --version || true
 

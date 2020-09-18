@@ -378,9 +378,29 @@ _enable(){
 
   php_num=$( echo $1 | cut -d 'p' -f 3 )
 
-  if ! [ -d ${PHP_PREFIX} ];then echo -e "\n\n$1 is not install\n\n"; exit 1; fi
+  if ! [ -d ${PHP_PREFIX} ];then echo -e "\n\n$PHP_PREFIX not exists\n\n"; exit 1; fi
 
-  for file in $( ls ${PHP_PREFIX}/bin ); do $(_sudo) ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/ ; done
+  if [ $(command -v update-alternatives > /dev/null 2>&1 ; echo $?) = 0  ];then
+    $(_sudo) update-alternatives --install /usr/local/bin/php php $PHP_PREFIX/bin/php $php_num
+    $(_sudo) update-alternatives --install /usr/local/bin/phar phar $PHP_PREFIX/bin/phar $php_num
+    $(_sudo) update-alternatives --install /usr/local/bin/php-cgi php-cgi $PHP_PREFIX/bin/php-cgi $php_num
+    $(_sudo) update-alternatives --install /usr/local/bin/php-config php-config $PHP_PREFIX/bin/php-config $php_num
+    $(_sudo) update-alternatives --install /usr/local/bin/phpize phpize $PHP_PREFIX/bin/phpize $php_num
+    $(_sudo) update-alternatives --install /usr/local/sbin/php-fpm php-fpm $PHP_PREFIX/sbin/php-fpm $php_num
+
+    $(_sudo) update-alternatives --set php $PHP_PREFIX/bin/php
+    $(_sudo) update-alternatives --set phar $PHP_PREFIX/bin/phar
+    $(_sudo) update-alternatives --set php-cgi $PHP_PREFIX/bin/php-cgi
+    $(_sudo) update-alternatives --set php-config $PHP_PREFIX/bin/php-config
+    $(_sudo) update-alternatives --set phpize $PHP_PREFIX/bin/phpize
+    $(_sudo) update-alternatives --set php-fpm $PHP_PREFIX/sbin/php-fpm
+
+    return
+  fi
+
+  for file in $( ls ${PHP_PREFIX}/bin ); do
+    $(_sudo) ln -sf ${PHP_PREFIX}/bin/$file /usr/local/bin/
+  done
 
   $(_sudo) ln -sf ${PHP_PREFIX}/sbin/php-fpm /usr/local/sbin
 
