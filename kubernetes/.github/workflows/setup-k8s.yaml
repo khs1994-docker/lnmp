@@ -110,6 +110,9 @@ jobs:
 
          sudo apt install -y tree net-tools
 
+         sudo update-alternatives --display iptables || true
+         sudo update-alternatives --list    iptables || true
+
          df -h
        name: os-metadata
     #  - uses: actions/setup-go@v1
