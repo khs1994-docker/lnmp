@@ -213,7 +213,7 @@ jobs:
       set -ex
 
       if [ ! `echo $BUILD_SOURCEBRANCH | grep 'refs/tags/'` ];then \
-        export PLATFORM=linux/amd64,linux/arm64; \
+        export PLATFORM=linux/amd64; \
         if [ "$PHP_VERSION" = 8_1_X -o "$PHP_VERSION" = nightly ];then \
           export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
           IS_PUSH=--push; \
