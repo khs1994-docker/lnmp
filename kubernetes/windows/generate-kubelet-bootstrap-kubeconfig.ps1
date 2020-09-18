@@ -34,12 +34,12 @@ kubectl apply `
   -f ${PSScriptRoot}/../cfssl/csr-crb.yaml `
   --kubeconfig ${KUBECTL_CONFIG_PATH}
 
-if (Test-Path ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig ){exit 0}
+if (Test-Path ${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig ){exit 0}
 
 $BOOTSTRAP_TOKEN=$(wsl -d wsl-k8s /wsl/wsl-k8s-data/k8s/bin/kubeadm token create `
       --description kubelet-bootstrap-token `
       --groups system:bootstrappers:${NODE_NAME} `
-      --kubeconfig /wsl/wsl-k8s-data/k8s/conf/kubectl.kubeconfig)
+      --kubeconfig /wsl/wsl-k8s-data/k8s/etc/kubernetes/kubectl.kubeconfig)
 
     # 设置集群参数
 
@@ -47,21 +47,21 @@ $BOOTSTRAP_TOKEN=$(wsl -d wsl-k8s /wsl/wsl-k8s-data/k8s/bin/kubeadm token create
       --certificate-authority=${PSScriptRoot}/../wsl2/certs/ca.pem `
       --embed-certs=true `
       --server=${KUBE_APISERVER} `
-      --kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+      --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig
 
     # 设置客户端认证参数
 
     kubectl config set-credentials kubelet-bootstrap `
       --token=${BOOTSTRAP_TOKEN} `
-      --kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+      --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig
 
     # 设置上下文参数
 
     kubectl config set-context default `
       --cluster=kubernetes `
       --user=kubelet-bootstrap `
-      --kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+      --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig
 
     # 设置默认上下文
 
-    kubectl config use-context default --kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
+    kubectl config use-context default --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig

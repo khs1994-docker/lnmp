@@ -16,7 +16,7 @@ authentication:
   webhook:
     enabled: true
   x509:
-    clientCAFile: "##K8S_ROOT##/certs/ca.pem"
+    clientCAFile: "##K8S_ROOT##/etc/kubernetes/pki/ca.pem"
 authorization:
   mode: Webhook
 registryPullQPS: 0

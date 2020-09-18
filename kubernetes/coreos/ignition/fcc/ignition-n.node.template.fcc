@@ -81,13 +81,13 @@ systemd:
         ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
         ExecStart=${K8S_ROOT}/bin/kubelet \
-        --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
-        --cert-dir=${K8S_ROOT}/certs \
+        --bootstrap-kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig \
+        --cert-dir=${K8S_ROOT}/etc/kubernetes/pki \
         --container-runtime=${CONTAINER_RUNTIME} \
         --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
         --root-dir=/opt/k8s/var/lib/kubelet \
-        --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
-        --config=${K8S_ROOT}/conf/kubelet.config.yaml \
+        --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
+        --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
         --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
@@ -132,7 +132,7 @@ storage:
           {{IP_2}} coreos2
           {{IP_3}} coreos3
           {{IP_{{n}}}} coreos{{n}}
-    - path: ${K8S_ROOT}/conf/kubelet.config.yaml
+    - path: ${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml
       mode: 0644
       contents:
         inline: |
@@ -154,7 +154,7 @@ storage:
             webhook:
               enabled: true
             x509:
-              clientCAFile: "${K8S_ROOT}/certs/ca.pem"
+              clientCAFile: "${K8S_ROOT}/etc/kubernetes/pki/ca.pem"
           authorization:
             mode: Webhook
           registryPullQPS: 0
@@ -211,7 +211,7 @@ storage:
           featureGates:
             # AllAlpha: true
             # BoundServiceAccountTokenVolume: false
-    - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
+    - path: ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml
       mode: 0644
       contents:
         inline: |
@@ -219,7 +219,7 @@ storage:
           apiVersion: kubeproxy.config.k8s.io/v1alpha1
           clientConnection:
             burst: 200
-            kubeconfig: "${K8S_ROOT}/conf/kube-proxy.kubeconfig"
+            kubeconfig: "${K8S_ROOT}/etc/kubernetes/kube-proxy.kubeconfig"
             qps: 100
           bindAddress: {{IP_{{n}}}}
           healthzBindAddress: {{IP_{{n}}}}:10256

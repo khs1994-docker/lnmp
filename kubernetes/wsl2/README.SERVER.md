@@ -35,8 +35,6 @@ WINDOWS_IP windows.k8s.khs1994.com
 **必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用以下方法。
 
 ```powershell
-$ cd ~/lnmp
-
 # $ $env:REGISTRY_MIRROR="xxxx.mirror.aliyuncs.com"
 # $ $env:REGISTRY_MIRROR="mirror.baidubce.com"
 
@@ -64,7 +62,7 @@ $ wsl -d wsl-k8s-data -- uname -a
 ## WSL(wsl-k8s) 修改 APT 源并安装必要软件
 
 ```powershell
-$ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
+$ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list
 
 $ wsl -d wsl-k8s -- apt update
 
@@ -77,9 +75,13 @@ $ wsl -d wsl-k8s -- apt install procps
 下载并编辑 `/etc/wsl.conf`
 
 ```bash
+$ wsl -d wsl-k8s
+
 $ apt install curl vim
 
 $ curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
+
+$ vim /etc/wsl.conf
 ```
 
 ```diff
@@ -146,10 +148,10 @@ $ set -x
 $ source wsl2/.env
 
 $ mkdir -p ${K8S_ROOT:?err}
-$ mkdir -p ${K8S_ROOT:?err}/{certs,conf,bin,log}
-$ cp -a wsl2/certs ${K8S_ROOT:?err}/
-$ mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
-$ mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
+$ mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin,log}
+$ cp -a wsl2/certs/. ${K8S_ROOT:?err}/etc/kubernetes/pki/
+$ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml ${K8S_ROOT:?err}/etc/kubernetes
+$ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes
 
 $ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```

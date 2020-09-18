@@ -12,3 +12,11 @@ patchesJson6902:
       version: v1
       namespace: ingress-nginx
       group: ""
+  # 默认的部署文件不会代理 tcp，这里增加该功能
+  - path: patch-controller.json
+    target:
+      kind: Deployment
+      group: apps
+      version: v1
+      namespace: ingress-nginx
+      name: ingress-nginx-controller

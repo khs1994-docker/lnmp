@@ -24,7 +24,7 @@ systemd:
         Environment="K8S_ROOT=${K8S_ROOT}"
 
         ExecStart=${K8S_ROOT}/bin/kube-proxy \
-        --config=${K8S_ROOT}/conf/kube-proxy.config.yaml \
+        --config=${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml \
         --v=2
 
         # --feature-gates=AllAlpha=true,BoundServiceAccountTokenVolume=false \
@@ -36,7 +36,7 @@ systemd:
         WantedBy=multi-user.target
 storage:
   files:
-    - path: ${K8S_ROOT}/conf/kube-proxy.kubeconfig
+    - path: ${K8S_ROOT}/etc/kubernetes/kube-proxy.kubeconfig
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-proxy.kubeconfig

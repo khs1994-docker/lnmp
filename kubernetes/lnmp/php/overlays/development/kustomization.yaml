@@ -13,7 +13,7 @@ configMapGenerator:
   - APP_LOG=errorlog
   - LOG_CHANNEL=errorlog
   - LNMP_XDEBUG_REMOTE_HOST=192.168.199.100
-  - LNMP_XDEBUG_REMOTE_PORT="9001"
+  - LNMP_XDEBUG_REMOTE_PORT="9003"
   - LNMP_OPCACHE_ENABLE="1"
 - name: lnmp-tz
   literals:

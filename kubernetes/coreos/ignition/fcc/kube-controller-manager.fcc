@@ -19,15 +19,15 @@ systemd:
             ExecStop=/bin/podman stop kube-controller-manager
 storage:
   files:
-    - path: ${K8S_ROOT}/conf/kube-controller-manager.kubeconfig
+    - path: ${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager.kubeconfig
-    - path: ${K8S_ROOT}/certs/kube-controller-manager.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager.pem
-    - path: ${K8S_ROOT}/certs/kube-controller-manager-key.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager-key.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-controller-manager-key.pem

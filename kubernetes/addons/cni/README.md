@@ -38,3 +38,7 @@ $ kubectl edit felixconfiguration -n kube-system
 spec:
     bpfEnabled: false
 ```
+
+**注意事项**
+
+* eBPF 模式下，无法 ping 服务，但是可以正常访问（使用 curl 测试）

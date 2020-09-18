@@ -2,9 +2,8 @@
 . $PSScriptRoot/.env.ps1
 
 $K8S_ETCD_HOST = "127.0.0.1"
-$K8S_ROOT = $PSScriptRoot
 
-if (!(Test-Path $K8S_ROOT\certs\etcd.pem)) {
+if (!(Test-Path $PSScriptRoot\certs\etcd.pem)) {
   write-host "Please generate cert first, see README.SERVER.md" -ForegroundColor Red
 
   exit 1
@@ -34,14 +33,14 @@ Start-Process -FilePath etcd `
     --initial-cluster-state="new" `
     --initial-cluster-token="mytoken" `
     --advertise-client-urls="http://${K8S_ETCD_HOST}:${K8S_ETCD_LISTEN_CLIENT_PORT}" `
-    --cert-file="${K8S_ROOT}/certs/etcd.pem" `
-    --key-file="${K8S_ROOT}/certs/etcd-key.pem" `
+    --cert-file="${PSScriptRoot}/certs/etcd.pem" `
+    --key-file="${PSScriptRoot}/certs/etcd-key.pem" `
     --client-cert-auth=true `
-    --trusted-ca-file="${K8S_ROOT}/certs/etcd-ca.pem" `
-    --peer-cert-file="${K8S_ROOT}/certs/etcd-peer.pem" `
-    --peer-key-file="${K8S_ROOT}/certs/etcd-peer-key.pem" `
+    --trusted-ca-file="${PSScriptRoot}/certs/etcd-ca.pem" `
+    --peer-cert-file="${PSScriptRoot}/certs/etcd-peer.pem" `
+    --peer-key-file="${PSScriptRoot}/certs/etcd-peer-key.pem" `
     --peer-client-cert-auth=true `
-    --peer-trusted-ca-file="${K8S_ROOT}/certs/etcd-ca.pem").split(' ')
+    --peer-trusted-ca-file="${PSScriptRoot}/certs/etcd-ca.pem").split(' ')
 
 Start-Sleep 1
 

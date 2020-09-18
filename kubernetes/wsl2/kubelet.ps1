@@ -29,12 +29,12 @@ if ("$CRI" -eq 'cri-o') {
 }
 
 $command = Invoke-WSL echo ${K8S_ROOT}/bin/kubelet `
-  --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig `
-  --cert-dir=${K8S_ROOT}/certs `
+  --bootstrap-kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig `
+  --cert-dir=${K8S_ROOT}/etc/kubernetes/pki `
   --container-runtime=remote `
   --container-runtime-endpoint=$CONTAINER_RUNTIME_ENDPOINT `
   --root-dir=/var/lib/kubelet `
-  --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig `
+  --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig `
   --config=${WINDOWS_ROOT_IN_WSL2}/conf/kubelet.config.yaml `
   --hostname-override=${NODE_NAME} `
   --volume-plugin-dir=${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ `
@@ -43,9 +43,9 @@ $command = Invoke-WSL echo ${K8S_ROOT}/bin/kubelet `
   --v=2
 
 Function _reset() {
-  Invoke-WSL rm -rf ${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig
-  Invoke-WSL rm -rf ${K8S_ROOT}/conf/kubelet.kubeconfig
-  Invoke-WSL rm -rf ${K8S_ROOT}/certs/kubelet-*
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/pki/kubelet-*
 }
 
 if ($args[0] -eq "reset") {
@@ -69,14 +69,6 @@ if ($args[0] -eq "reset") {
 #
 # $ kubectl --kubeconfig .\rpi\certs\kubectl.kubeconfig get csr --sort-by='{.metadata.creationTimestamp}'
 #
-
-wsl -d wsl-k8s -- sh -c "command -v runc > /dev/null 2>&1"
-
-if (!$?) {
-  Write-Warning "==> runc not found, please install docker-ce first"
-
-  exit 1
-}
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
 
@@ -112,14 +104,14 @@ if (Test-Path $PSScriptRoot/conf/.wsl_ip) {
   else {
     Write-Warning "wsl ip changed, reset ..."
     echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-    wsl -u root -- rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+    wsl -u root -- rm -rf ${K8S_ROOT}/etc/kubernetes/pki/kubelet-server-*.pem
     # _reset
   }
 }
 else {
   Write-Warning "wsl ip changed, reset ..."
   echo $wsl_ip > $PSScriptRoot/conf/.wsl_ip
-  Invoke-WSL rm -rf ${K8S_ROOT}/certs/kubelet-server-*.pem
+  Invoke-WSL rm -rf ${K8S_ROOT}/etc/kubernetes/pki/kubelet-server-*.pem
   # _reset
 }
 
@@ -133,6 +125,14 @@ Invoke-WSL mkdir -p ${K8S_ROOT}/var/lib/kubelet
 if ($args[0] -eq 'init') {
   "==> kubelet init success !"
   exit
+}
+
+wsl -d wsl-k8s -- sh -c "command -v runc > /dev/null 2>&1"
+
+if (!$?) {
+  Write-Warning "==> runc not found, please install docker-ce first"
+
+  exit 1
 }
 
 sleep 5
@@ -150,12 +150,19 @@ Function _mountKubelet($source, $dest) {
 }
 
 function _mountKubelet_all() {
-  _mountKubelet ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
+  _mountKubelet ${K8S_ROOT}/var/lib/ci         /var/lib/ci
   _mountKubelet ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-lnmp
+
+  _mountKubelet ${K8S_ROOT}/var/lib/docker         /var/lib/docker
+
   _mountKubelet ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
   _mountKubelet ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d
+
+  _mountKubelet ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
   _mountKubelet ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
+
   _mountKubelet ${K8S_ROOT}/etc/containers /etc/containers
+
   _mountKubelet ${K8S_ROOT}/var/log/containers /var/log/containers
   _mountKubelet ${K8S_ROOT}/var/log/pods       /var/log/pods
 }

@@ -13,6 +13,8 @@ docker-compose-Linux-x86_64
 /docker-lnmp.include.yml
 /docker-compose.yml
 /docker-compose.yaml
+/docker-compose.*.yml
+/docker-compose.*.yaml
 /docker-workspace.yml
 
 # cache

@@ -9,9 +9,10 @@ x-common:
 #
 # 这里的文件具有最高优先级，可以通过以下命令查看最终的 compose 文件
 #
-# $ ./lnmp-docker config > 1.yaml
+# $ ./lnmp-docker config > docker-compose.yaml
 #
-# $ ./lnmp-docker build-config > 2.yaml
+# # 自定义镜像
+# $ ./lnmp-docker build-config > docker-compose.build.yaml
 #
 
 services:

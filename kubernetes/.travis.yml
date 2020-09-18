@@ -171,7 +171,7 @@ before_script:
     if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
       echo "replace kube-scheduler config version" \
       && echo "remove it when k8s version ge 1.19" \
-      && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
+      && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
     fi
   - sudo systemctl start kube-scheduler || CMD_FAILED=1
   - test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true

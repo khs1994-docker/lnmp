@@ -17,7 +17,7 @@ ExecStartPre=-/usr/bin/env modprobe ip_vs_sh
 Environment="K8S_ROOT=/opt/k8s"
 
 ExecStart=/opt/k8s/bin/kube-proxy \
---config=${K8S_ROOT}/conf/kube-proxy.config.yaml \
+--config=${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml \
 --v=2
 
 Restart=on-failure
