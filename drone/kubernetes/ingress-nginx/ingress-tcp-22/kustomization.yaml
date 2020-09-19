@@ -1,0 +1,10 @@
+configMapGenerator:
+- name: tcp-services
+  literals:
+    - 22=ci/gogs:22
+namespace: ingress-nginx
+commonLabels:
+  app.kubernetes.io/name: ingress-nginx
+  app.kubernetes.io/part-of: ingress-nginx
+generatorOptions:
+  disableNameSuffixHash: true

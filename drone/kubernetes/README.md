@@ -20,6 +20,7 @@ $ kubectl apply -n ci -k mysql
 
 ```bash
 $ kubectl get pod -n ci
+# 保证处于 Running 状态，再执行以下命令
 $ kubectl -n ci exec -it mysql-xxxx -- sh
 
 $ mysql -uroot -pmytest
@@ -52,9 +53,9 @@ $ kubectl apply -n ci -k minio
 $ kubectl apply -n ci -k gogs
 ```
 
-> 部署 Drone 1 2 任选其一（支持同时部署），新的 drone-kubenative 将任务作为 k8s 的 pod 运行。
+> 部署 Drone 一、二 任选其一（支持同时部署），新的 drone-kubenative 将任务作为 k8s 的 pod 运行。
 
-## 1. [Drone](https://github.com/helm/charts/tree/master/stable/drone) + [Runner](https://docs.drone.io/installation/runners/)
+## 一、[Drone](https://github.com/helm/charts/tree/master/stable/drone) + [Runner](https://docs.drone.io/installation/runners/)
 
 ```bash
 $ kubectl apply -n ci -k drone
@@ -76,7 +77,7 @@ $ kubectl apply -n ci -k drone-runner/docker
 $ kubectl apply -n ci -k drone-runner/kubernetes
 ```
 
-## 2. Drone + kubenative
+## 二、Drone + kubenative
 
 ```bash
 $ kubectl apply -n ci -k drone-kubenative
@@ -88,6 +89,8 @@ $ kubectl apply -n ci -k drone-kubenative
 
 ```bash
 $ kubectl apply -n ci -k ingress-nginx
+
+$ kubectl apply -k ingress-nginx/ingress-tcp-22
 ```
 
 ## docker registry

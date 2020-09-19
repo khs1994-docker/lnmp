@@ -11,6 +11,7 @@
 ### Changes:
 
 * Require [docker-compose v1.27.0+](https://github.com/docker/compose/releases/tag/1.27.0)
+* Xdebug port is `9003`
 
 ### Updates:
 

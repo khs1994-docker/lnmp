@@ -10,3 +10,6 @@ spec:
     matchLabels:
       app: ci
       tier: redis
+  resources:
+    requests:
+      storage: 20Gi

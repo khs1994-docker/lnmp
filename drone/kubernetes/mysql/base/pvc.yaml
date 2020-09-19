@@ -10,6 +10,9 @@ spec:
     matchLabels:
       app: ci
       tier: mysql
+  resources:
+    requests:
+      storage: 20Gi
 ---
 
 kind: PersistentVolumeClaim
@@ -24,3 +27,6 @@ spec:
     matchLabels:
       app: ci
       tier: log
+  resources:
+    requests:
+      storage: 20Gi

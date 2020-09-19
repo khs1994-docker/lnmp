@@ -24,8 +24,8 @@ config    Open $HOME\.wslconfig
 
 ENV:
 
-WSL_KERNEL_VERSION  default is [ 4.19.128 ] , more version see https://github.com/khs1994/WSL2-Linux-Kernel/releases
-WSL_DIST            default is [ wsl-k8s ]
+`$env:WSL_KERNEL_VERSION  default is [ 4.19.128 ] , more version see https://github.com/khs1994/WSL2-Linux-Kernel/releases
+`$env:WSL_DIST            default is [ wsl-k8s ]
 
 "
 

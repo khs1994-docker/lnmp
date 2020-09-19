@@ -7,6 +7,11 @@ on:
   schedule:
     - cron: '0 0 * * 4'
   workflow_dispatch:
+    inputs:
+        PHP_VCS_REF:
+          default: master
+          required: true
+          description: https://github.com/php/php-src/commits/master master branch commit id
 
 name: PHP_nightly
 
@@ -83,8 +88,10 @@ jobs:
         # CACHE_IMAGE=ghcr.io/khs1994/php
         CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
 
-        git clone --depth=1 https://github.com/php/php-src $HOME/php-src
-        PHP_VCS_REF=`git -C $HOME/php-src rev-parse --short HEAD`
+        if [ -z "${PHP_VCS_REF}" -o "${PHP_VCS_REF}" = 'master' ];then
+          git clone --depth=1 https://github.com/php/php-src $HOME/php-src
+          PHP_VCS_REF=`git -C $HOME/php-src rev-parse --short HEAD`
+        fi
 
         options="--build-arg VCS_REF=$VCS_REF \
         --build-arg PHP_VCS_REF=$PHP_VCS_REF \
@@ -158,6 +165,7 @@ jobs:
         PHP_TAG_VERSION: nightly
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php ghcr.io/khs1994/php
+        PHP_VCS_REF: ${{ github.event.inputs.PHP_VCS_REF }}
       name: 'Build Image'
 
     - run: |

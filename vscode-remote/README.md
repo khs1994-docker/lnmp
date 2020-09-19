@@ -88,11 +88,11 @@ $ lnmp-docker composer install | update | require XXX
 
 参考 https://docs.lnmp.khs1994.com/xdebug.html
 
-* 端口: 9001
+* 端口: 9003
 * 远程地址: 192.168.199.100(宿主机 IP，根据实际修改)
 
 * 2. [浏览器安装 `xdebug` 扩展](https://docs.lnmp.khs1994.com/xdebug.html#%e6%b5%8f%e8%a7%88%e5%99%a8%e6%89%a9%e5%b1%95)
-* `vsCode` -> `运行` -> `打开配置` -> `弹出选项中选择 PHP` -> `port 改为 9001`
+* `vsCode` -> `运行` -> `打开配置` -> `弹出选项中选择 PHP` -> `port 改为 9003`
 * `vsCode` -> `运行` -> `启动调试` -> `打断点` -> `浏览器刷新页面` -> `在 vsCode 调试`
 
 ## 与 `khs1994-docker/lnmp` 项目关系

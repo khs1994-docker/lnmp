@@ -138,7 +138,7 @@ services:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
       - APP_ENV=development
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
       # - PHP_INI_SCAN_DIR=:/usr/local/etc/php/conf.d
 
@@ -180,8 +180,9 @@ services:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
       - APP_ENV=development
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
+      # - XDEBUG_MODE
 
   composer:
     << : *common
@@ -207,7 +208,7 @@ services:
         target: /etc/supervisor.d/supervisord.ini
     command: ["/usr/bin/supervisord","-n"]
     expose:
-      - "9001"
+      - "9003"
 
   phpmyadmin:
     << : *common

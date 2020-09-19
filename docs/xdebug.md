@@ -41,7 +41,7 @@
 
 ### 调试端口（可选项）
 
-编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_PORT=9001` 变量，默认 `9001`
+编辑 `.env` 文件中的 `LNMP_XDEBUG_REMOTE_PORT=9003` 变量，默认 `9003`
 
 ### 警告
 
@@ -55,9 +55,9 @@ $ ./lnmp-docker restart php7
 
 ## 在 `IDE` 设置中配置 `Xdebug`
 
-`Preferenences` -> `Languages & ...`-> `PHP` -> `Debug`-> `xdebug`-> `Debug port 9001`(默认为 `9000`，这里改为 `9001`)
+`Preferenences` -> `Languages & ...`-> `PHP` -> `Debug`-> `xdebug`-> `Debug port 9003`(默认为 `9000`，这里改为 `9003`)
 
-> `9001` 端口务必与 `./config/php/docker-xdebug.ini` 一致。
+> `9003` 端口务必与 `./config/php/docker-xdebug.ini` 一致。
 
 ## 浏览器扩展
 
