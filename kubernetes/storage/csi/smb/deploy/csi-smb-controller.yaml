@@ -39,8 +39,8 @@ spec:
               name: socket-dir
           resources:
             limits:
-              cpu: 1
-              memory: 1Gi
+              cpu: 100m
+              memory: 100Mi
             requests:
               cpu: 10m
               memory: 20Mi
@@ -49,29 +49,29 @@ spec:
           args:
             - --csi-address=/csi/csi.sock
             - --connection-timeout=3s
-            - --health-port=29632
+            - --health-port=29642
             - --v=5
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
           resources:
             limits:
-              cpu: 1
-              memory: 1Gi
+              cpu: 100m
+              memory: 100Mi
             requests:
               cpu: 10m
               memory: 20Mi
         - name: smb
-          image: mcr.microsoft.com/k8s/csi/smb-csi:v0.2.0
+          image: mcr.microsoft.com/k8s/csi/smb-csi:v0.3.0
           imagePullPolicy: IfNotPresent
           args:
             - "--v=5"
             - "--endpoint=$(CSI_ENDPOINT)"
           ports:
-            - containerPort: 29632
+            - containerPort: 29642
               name: healthz
               protocol: TCP
-            - containerPort: 29634
+            - containerPort: 29644
               name: metrics
               protocol: TCP
           livenessProbe:
@@ -90,8 +90,8 @@ spec:
               name: socket-dir
           resources:
             limits:
-              cpu: 1
-              memory: 1Gi
+              cpu: 200m
+              memory: 200Mi
             requests:
               cpu: 10m
               memory: 20Mi

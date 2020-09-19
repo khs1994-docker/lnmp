@@ -173,7 +173,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 ### Debian Buster 不支持 7.3 及以下（freetype-config）
 
-* https://salsa.debian.org/cleclerc-guest/php/blob/debian/7.3.9-1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
+* https://salsa.debian.org/php-team/php/-/blob/debian/7.3.9-1/debian/patches/0047-Use-pkg-config-for-FreeType2-detection.patch
 
 * https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=870618
 

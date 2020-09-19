@@ -1,17 +1,3 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: csi-hostpath-resizer
-  labels:
-    app: csi-hostpath-resizer
-spec:
-  selector:
-    app: csi-hostpath-resizer
-  ports:
-    - name: dummy
-      port: 12345
-
----
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
@@ -40,7 +26,7 @@ spec:
       serviceAccountName: csi-resizer
       containers:
         - name: csi-resizer
-          image: quay.io/k8scsi/csi-resizer:v0.3.0
+          image: quay.io/k8scsi/csi-resizer:v0.6.0-rc1
           args:
             - -v=5
             - -csi-address=/csi/csi.sock

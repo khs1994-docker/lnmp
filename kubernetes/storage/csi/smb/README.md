@@ -1,5 +1,7 @@
 # SMB
 
+**静态**
+
 * https://github.com/kubernetes-csi/csi-driver-smb
 
 **test**

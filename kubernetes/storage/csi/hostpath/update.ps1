@@ -1,4 +1,4 @@
-$VERSION="1.17"
+$VERSION="1.18"
 
 $items="csi-hostpath-attacher.yaml",`
 "csi-hostpath-driverinfo.yaml",`

@@ -27,12 +27,12 @@ spec:
           args:
             - --csi-address=/csi/csi.sock
             - --connection-timeout=3s
-            - --health-port=39613
+            - --health-port=29643
             - --v=5
           resources:
             limits:
-              cpu: 1
-              memory: 1Gi
+              cpu: 100m
+              memory: 100Mi
             requests:
               cpu: 10m
               memory: 20Mi
@@ -58,23 +58,23 @@ spec:
               mountPath: /registration
           resources:
             limits:
-              cpu: 1
-              memory: 1Gi
+              cpu: 100m
+              memory: 100Mi
             requests:
               cpu: 10m
               memory: 20Mi
         - name: smb
-          image: mcr.microsoft.com/k8s/csi/smb-csi:v0.2.0
+          image: mcr.microsoft.com/k8s/csi/smb-csi:v0.3.0
           imagePullPolicy: IfNotPresent
           args:
             - "--v=5"
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--nodeid=$(KUBE_NODE_NAME)"
           ports:
-            - containerPort: 39613
+            - containerPort: 29643
               name: healthz
               protocol: TCP
-            - containerPort: 39615
+            - containerPort: 29645
               name: metrics
               protocol: TCP
           livenessProbe:
@@ -103,8 +103,8 @@ spec:
               name: mountpoint-dir
           resources:
             limits:
-              cpu: 1
-              memory: 1Gi
+              cpu: 200m
+              memory: 200Mi
             requests:
               cpu: 10m
               memory: 20Mi

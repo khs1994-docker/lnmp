@@ -1,31 +1,14 @@
----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: openebs-standard
+  name: openebs-hostpath
   annotations:
+    openebs.io/cas-type: local
     cas.openebs.io/config: |
-      - name: ReplicaCount
-        value: "3"
-provisioner: openebs.io/provisioner-iscsi
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: openebs-standalone
-  annotations:
-    cas.openebs.io/config: |
-      - name: ReplicaCount
-        value: "1"
-provisioner: openebs.io/provisioner-iscsi
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: openebs-mongodb
-  annotations:
-    cas.openebs.io/config: |
-      - name: FSType
-        value: "xfs"
-provisioner: openebs.io/provisioner-iscsi
----
+      - name: StorageType
+        value: hostpath
+      - name: BasePath
+        value: /var/local-hostpath
+provisioner: openebs.io/local
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
