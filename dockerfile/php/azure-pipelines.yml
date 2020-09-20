@@ -302,7 +302,7 @@ jobs:
       DOCKER_HUB_USERNAME_TEST: lrew
       PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
       # registry.us-west-1.aliyuncs.com/khs1994/php
-      add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php ghcr.io/khs1994/php
+      add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # ghcr.io/khs1994/php
     displayName: 'Build Image'
     timeoutInMinutes: 0
 

@@ -21,7 +21,7 @@ jobs:
     if: |
       contains( github.ref, 'refs/tags/' )
       || contains( github.event.head_commit.message, '[Docs]')
-      || github.event == 'workflow_dispatch'
+      || github.event_name == 'workflow_dispatch'
     steps:
     - uses: actions/checkout@main
       with:
