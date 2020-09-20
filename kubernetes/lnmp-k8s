@@ -356,7 +356,7 @@ _etcd_install(){
     return
   fi
 
-  $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT} > /dev/null 2>&1
+  $(_sudo) tar --no-same-owner -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
   $(_sudo) cp ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ${K8S_ROOT}/bin/
   $(_sudo) chown -R root:root ${K8S_ROOT}/bin/
   $(_sudo) rm -rf ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}

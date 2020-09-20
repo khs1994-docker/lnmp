@@ -52,6 +52,7 @@ before_install:
     fi
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
+  - ifconfig || true
   - pwd
   - df -h
   - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
@@ -88,7 +89,7 @@ before_install:
       echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
       echo "search google.internal" | sudo tee -a /etc/resolv.conf
     else
-      sudo cp -f /run/systemd/resolve/resolv.conf /etc/resolv.conf
+      sudo cp -f /run/systemd/resolve/resolv.conf /etc/resolv.conf || true
     fi
   - cat /etc/resolv.conf
   # - cat /etc/resolv.conf
@@ -123,7 +124,13 @@ before_install:
     if [ $(go env GOARCH) = "arm64" ];then
       export net_interface=ens5
     fi
-  - export SERVER_IP=`ifconfig ${net_interface} | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+
+    if [ "${IPV6}" = "true" ];then
+      export net_interface=eth0
+    fi
+
+  - echo $net_interface
+  - export SERVER_IP=`ifconfig ${net_interface} | grep "inet" | awk '{ print $2}' | head -1`
   - if [ -z "${SERVER_IP}" ];then exit 1; fi
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
@@ -335,11 +342,21 @@ script:
   - kubectl get deployment/nginx -o yaml || true
   - kubectl get pod/nginx -o yaml
 
-  - curl [${POD_IPV6_IP}]:80 || true
   - |
-    set -x
-    NODE_IPV6_IP=`ifconfig ${net_interface} | grep "inet6" | awk '{ print $2}'`
-    curl [${NODE_IPV6_IP}]:8080 || true
+    if [ "${IPV6}" = 'true' ];then
+      set -x
+      POD_IPV4_IP=`kubectl get pod/nginx -o go-template="{{(index .status.podIPs 0).ip}}"`
+      curl ${POD_IPV4_IP}:80 || true
+
+      POD_IPV6_IP=`kubectl get pod/nginx -o go-template="{{(index .status.podIPs 1).ip}}"` || true
+      curl [${POD_IPV6_IP}]:80 || true
+
+      CLUSTER_IPV6_IP=`kubectl get svc/nginx -o go-template="{{ .spec.clusterIP }}"`
+      curl [${CLUSTER_IPV6_IP}]:80 || true
+
+      NODE_IPV6_IP=`ifconfig ${net_interface} | grep "inet6" | awk '{ print $2}' | head -1`
+      curl [${NODE_IPV6_IP}]:8080 || true
+    fi
 
   - kubectl delete svc nginx || true
   - kubectl delete deployment nginx || true
@@ -453,9 +470,12 @@ jobs:
       dist: focal
       env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
     # containerd + ipv6
-    - os: linux
-      dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            IPV6=true
+    # - os: linux
+    #   dist: focal
+    #   arch: arm64-graviton2
+    #   virt: lxd
+    #   group: edge
+    #   env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            IPV6=true
     # docker
     - os: linux
       dist: focal
