@@ -39,7 +39,6 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manage
   --horizontal-pod-autoscaler-sync-period=10s `
   --concurrent-deployment-syncs=10 `
   --concurrent-gc-syncs=30 `
-  --node-cidr-mask-size=24 `
   --service-cluster-ip-range=10.254.0.0/16,fd00::/108 `
   --pod-eviction-timeout=6m `
   --terminated-pod-gc-threshold=10000 `

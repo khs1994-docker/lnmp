@@ -31,10 +31,10 @@ ExecStart=/opt/k8s/bin/kubelet \
 --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
 --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
 --hostname-override=${NODE_NAME} \
---volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --logtostderr=true \
---v=2 \
+--volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
+--v=2 \
 $KUBELET_CRI
 
 # --container-runtime=docker \

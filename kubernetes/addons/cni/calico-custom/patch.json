@@ -40,6 +40,22 @@
     }
   },
   {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/21",
+    "value": {
+      "name": "_IP6",
+      "value": "autodetect"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/env/22",
+    "value": {
+      "name": "_FELIX_IPV6SUPPORT",
+      "value": "true"
+    }
+  },
+  {
     "op": "replace",
     "path": "/spec/template/spec/volumes/5/hostPath/path",
     "value": "/opt/k8s/opt/cni/bin"

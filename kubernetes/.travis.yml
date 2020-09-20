@@ -25,6 +25,10 @@ before_install:
   - uname -a
   - sudo mount bpffs /sys/fs/bpf -t bpf || true
   - sudo mount -t bpf || true
+  - sudo cat /proc/sys/net/ipv6/conf/all/disable_ipv6 || true
+  - ip addr
+  - sudo sh -c 'echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6'
+  - ip addr
   - env
 
   - sudo update-alternatives --display iptables || true
@@ -245,6 +249,15 @@ before_script:
 
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
   - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/patch.json
+  - |
+    if [ "${IPV6}" = 'true' ];then
+      sed -i -e "s#_IP6#IP6#g" \
+             -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
+          addons/cni/calico-custom/patch.json
+
+      sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
+          addons/cni/calico/calico.yaml
+    fi
   - git diff
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
@@ -303,10 +316,32 @@ script:
   - kubectl get all
   - kubectl get pod -o wide
   - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
+  - kubectl exec ${POD_NAME} -- ip addr
   - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
   - kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
+  - kubectl expose pod/nginx --port=80
+  - kubectl get all
+
+  - kubectl get svc/nginx -o yaml
+  - kubectl get deployment/nginx -o yaml || true
+  - kubectl get pod/nginx -o yaml
+
+  - kubectl delete svc/nginx
+  - kubectl apply -f demo/ipv6
+
+  - kubectl get svc/nginx -o yaml
+  - kubectl get deployment/nginx -o yaml || true
+  - kubectl get pod/nginx -o yaml
+
+  - curl [${POD_IPV6_IP}]:80 || true
+  - |
+    set -x
+    NODE_IPV6_IP=`ifconfig ${net_interface} | grep "inet6" | awk '{ print $2}'`
+    curl [${NODE_IPV6_IP}]:8080 || true
+
+  - kubectl delete svc nginx || true
   - kubectl delete deployment nginx || true
   - kubectl delete pod nginx || true
   - kubectl get all
@@ -405,7 +440,7 @@ jobs:
     # containerd
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
     # arm64
     - os: linux
       dist: focal
@@ -416,7 +451,11 @@ jobs:
     # containerd + cni calico ebpf
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+    # containerd + ipv6
+    - os: linux
+      dist: focal
+      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            IPV6=true
     # docker
     - os: linux
       dist: focal
@@ -424,14 +463,14 @@ jobs:
     # custom k8s root
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
     # old version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.8 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.18.9 LNMP_K8S_GET="--url"
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.17.9 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.17.12 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
   - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"

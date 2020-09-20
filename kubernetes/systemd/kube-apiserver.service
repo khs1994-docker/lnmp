@@ -27,7 +27,6 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --secure-port=6443 \
 --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver.pem \
 --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver-key.pem \
---insecure-port=0 \
 --audit-log-maxage=15 \
 --audit-log-maxbackup=3 \
 --audit-log-maxsize=100 \
@@ -56,13 +55,15 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 --kubelet-certificate-authority=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
 --kubelet-client-certificate=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client.pem \
 --kubelet-client-key=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client-key.pem \
---kubelet-https=true \
 --kubelet-timeout=10s \
 --proxy-client-cert-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client.pem \
 --proxy-client-key-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client-key.pem \
---service-cluster-ip-range=10.254.0.0/16 \
+--service-cluster-ip-range=10.254.0.0/16,fd00::/108 \
 --service-node-port-range="1-65535" \
 --logtostderr=true \
+--feature-gates="IPv6DualStack=true" \
+--insecure-port=0 \
+--kubelet-https=true \
 --v=2
 
 Restart=on-failure
