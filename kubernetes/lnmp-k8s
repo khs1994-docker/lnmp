@@ -95,6 +95,8 @@ $(_sudo) mkdir -p ${K8S_ROOT}/{bin,etc/kubernetes/pki,opt,usr,var}
 
 $(_sudo) mkdir -p ${TMP_ROOT} || TMP_ROOT=/tmp
 
+$(_sudo) chmod 777 $HOME/.khs1994-docker-lnmp || true
+
 export PATH=${K8S_ROOT}/bin:$PATH
 
 case `uname -m` in

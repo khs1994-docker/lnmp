@@ -328,19 +328,19 @@ script:
   - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
   - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
   - kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
-  - kubectl expose pod/nginx --port=80
+  - kubectl expose pod/${POD_NAME} --port=80
   - kubectl get all
 
   - kubectl get svc/nginx -o yaml
   - kubectl get deployment/nginx -o yaml || true
-  - kubectl get pod/nginx -o yaml
+  - kubectl get pod/${POD_NAME} -o yaml
 
   - kubectl delete svc/nginx
   - kubectl apply -f demo/ipv6
 
   - kubectl get svc/nginx -o yaml
   - kubectl get deployment/nginx -o yaml || true
-  - kubectl get pod/nginx -o yaml
+  - kubectl get pod/${POD_NAME} -o yaml
 
   - |
     if [ "${IPV6}" = 'true' ];then
@@ -360,7 +360,7 @@ script:
 
   - kubectl delete svc nginx || true
   - kubectl delete deployment nginx || true
-  - kubectl delete pod nginx || true
+  - kubectl delete pod ${POD_NAME} || true
   - kubectl get all
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`

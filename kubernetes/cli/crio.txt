@@ -17,12 +17,12 @@ scope of the CRI.
 6. Resource isolation as required by the CRI.
 
 VERSION:
-   1.19.0-rc.1
-Version:       1.19.0-rc.1
-GitCommit:     488942f2eac6c3d033be5ef5aa762a854712094f
+   1.19.0
+Version:       1.19.0
+GitCommit:     d802e198b0e0dc383531fd5a0c07060faa234b86
 GitTreeState:  clean
-BuildDate:     2020-09-07T01:56:25Z
-GoVersion:     go1.14.7
+BuildDate:     2020-09-20T13:46:07Z
+GoVersion:     go1.15.2
 Compiler:      gc
 Platform:      linux/amd64
 Linkmode:      dynamic
@@ -46,7 +46,6 @@ it later with **--config**. Global options will modify the output.
 
 GLOBAL OPTIONS:
    --additional-devices value       Devices to add to the containers [$CONTAINER_ADDITIONAL_DEVICES]
-   --allow-userns-annotation        [EXPERIMENTAL] Allow usage of the annotation to setup user namespaces (default: false) (default: false) [$ALLOW_USERNS_ANNOTATION]
    --apparmor-profile value         Name of the apparmor profile to be used as the runtime's default. This only takes effect if the user does not specify a profile via the Kubernetes Pod's metadata annotation. (default: "crio-default") [$CONTAINER_APPARMOR_PROFILE]
    --big-files-temporary-dir value  Path to the temporary directory to use for storing big files, used to store image blobs and data streams related to containers image management. [$CONTAINER_BIG_FILES_TEMPORARY_DIR]
    --bind-mount-prefix /            A prefix to use for the source of the bind mounts. This option would be useful if you were running CRI-O in a container. And had / mounted on `/host` in your container. Then if you ran CRI-O with the `--bind-mount-prefix=/host` option, CRI-O would add /host to any bind mounts it is handed over CRI. If Kubernetes asked to have `/var/lib/foobar` bind mounted into the container, then CRI-O would bind mount `/host/var/lib/foobar`. Since CRI-O itself is running in a container with `/` or the host mounted on `/host`, the container would end up with `/var/lib/foobar` from the host mounted in the container rather then `/var/lib/foobar` from the CRI-O container. (default: "") [$CONTAINER_BIND_MOUNT_PREFIX]
@@ -79,6 +78,7 @@ GLOBAL OPTIONS:
    --default-sysctls value              Sysctls to add to the containers [$CONTAINER_DEFAULT_SYSCTLS]
    --default-transport value            A prefix to prepend to image names that cannot be pulled as-is (default: "docker://") [$CONTAINER_DEFAULT_TRANSPORT]
    --default-ulimits value              Ulimits to apply to containers by default (name=soft:hard) (default: []) [$CONTAINER_DEFAULT_ULIMITS]
+   --drop-infra-ctr                     Determines whether pods are created without an infra container (when the pod is not using a pod level PID namespace). Requires ManageNSLifecycle to be true (default: false) (default: false) [$CONTAINER_DROP_INFRA_CTR]
    --enable-metrics                     Enable metrics endpoint for the server on localhost:9090 (default: false) [$CONTAINER_ENABLE_METRICS]
    --gid-mappings value                 Specify the GID mappings to use for the user namespace (default: "") [$CONTAINER_GID_MAPPINGS]
    --global-auth-file value             Path to a file like /var/lib/kubelet/config.json holding credentials necessary for pulling images from secure registries (default: "") [$CONTAINER_GLOBAL_AUTH_FILE]

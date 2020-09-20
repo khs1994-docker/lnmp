@@ -32,7 +32,6 @@ spec:
     secretName: ingress-nginx-tls-0.0.1
   rules:
   - host: git.t.khs1994.com
-  - host: git.t.khs1994.com
     http:
       paths:
       - path: /

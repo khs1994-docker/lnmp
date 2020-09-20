@@ -21,8 +21,6 @@ $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 # and --cleanup are deprecated. Please begin using a config file ASAP.
 $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-proxy `
   --config=${WINDOWS_ROOT_IN_WSL2}/conf/kube-proxy.config.yaml `
-  --feature-gates="IPv6DualStack=true" `
-  --cluster-cidr=10.244.0.0/16,fc00::/48 `
   --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
