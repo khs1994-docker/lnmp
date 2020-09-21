@@ -124,21 +124,10 @@ $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
 NAME        AGE    REQUESTOR                 CONDITION
 csr-4njmh   2d2h   system:node:wsl2          Pending
 
-$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve CSR_NAME(csr-4njmh)
+$ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve <CSR_NAME(csr-4njmh)>
 ```
 
-## 5. 部署 CNI -- calico
-
-```powershell
-$ update-alternatives --set iptables /usr/sbin/iptables-legacy
-
-$ kubectl apply -k addons/cni/calico-eBPF
-# $ kubectl apply -k addons/cni/calico-custom
-```
-
-> 若不能正确匹配网卡，请修改 `calico.yaml` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
-
-## 6. kubectl
+## 5. kubectl
 
 将 WSL2 K8S 配置写入 `~/.kube/config`
 
@@ -157,11 +146,27 @@ $ import-module ./wsl2/bin/WSL-K8S.psm1
 $ invoke-kubectl
 ```
 
+## 6. 部署 CNI -- calico
+
+```powershell
+# $ update-alternatives --set iptables /usr/sbin/iptables-legacy
+# $ kubectl apply -k addons/cni/calico-custom
+
+$ kubectl apply -f addons/cni/calico-eBPF/kubernetes.yaml
+$ kubectl apply -k addons/cni/calico-eBPF
+```
+
+> 若不能正确匹配网卡，请修改 `addons/cni/calico/patch.json` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
+
 ## 7. crictl
 
 ```powershell
-$ ./wsl2/bin/wsl-k8s crictl
+$ import-module ./wsl2/bin/WSL-K8S.psm1
+
+$ invoke-crictl
 ```
+
+## 8. 部署 CoreDNS 等其他组件
 
 ## 组件启动方式总结
 
@@ -224,7 +229,7 @@ $ ./wsl2/bin/supervisorctl start kube-node:
 certificate_manager.go:464] Current certificate is missing requested IP addresses [172.21.21.166]
 ```
 
-* 每次 IP 变化时删除 `${K8S_ROOT}/certs/kubelet-server-*.pem` 证书.
+* 每次 IP 变化时删除 `${K8S_ROOT}/etc/kubernetes/pki/kubelet-server-*.pem` 证书.
 
 ## 最终脚本(日常使用)
 

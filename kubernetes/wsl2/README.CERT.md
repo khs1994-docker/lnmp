@@ -8,7 +8,7 @@ $ wsl
 $ set -x
 $ source wsl2/.env
 
-$ sudo cp -a wsl2/certs ${K8S_ROOT:?err}/
-$ sudo mv ${K8S_ROOT:?err}/certs/*.yaml ${K8S_ROOT:?err}/conf
-$ sudo mv ${K8S_ROOT:?err}/certs/*.kubeconfig ${K8S_ROOT:?err}/conf
+$ sudo cp -a wsl2/certs/. ${K8S_ROOT:?err}/etc/kubernetes/pki/
+$ sudo mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml ${K8S_ROOT:?err}/etc/kubernetes
+$ sudo mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes
 ```

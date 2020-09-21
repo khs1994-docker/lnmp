@@ -9,9 +9,10 @@ x-common:
 #
 # 这里的文件具有最高优先级，可以通过以下命令查看最终的 compose 文件
 #
-# $ ./lnmp-docker config > 1.yaml
+# $ ./lnmp-docker config > docker-compose.yaml
 #
-# $ ./lnmp-docker build-config > 2.yaml
+# # 自定义镜像
+# $ ./lnmp-docker build-config > docker-compose.build.yaml
 #
 
 services:
@@ -61,6 +62,8 @@ services:
   #   image: phpmyadmin:5.0.2-fpm-alpine
   #   volumes:
   #     - phpmyadmin:/var/www/html
+  #   healthcheck:
+  #     test: ["NONE"]
 
   # nginx:
   #   volumes:
@@ -80,7 +83,7 @@ services:
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       - ./log/php:/var/log/php:cached
 
 # volumes:

@@ -43,7 +43,7 @@ node-csr-j1Ja8wpP3FxFBMnEVNsrwYosgWk_-796bWmRg9cnFTE   63m     system:bootstrap:
 
 # approve 倒数第二个，例如
 # $ kubectl certificate approve csr-sxjxf
-$ kubectl certificate approve CSR_NAME
+$ kubectl certificate approve <CSR_NAME>
 
 $ kubectl describe csr CSR_NAME
 ```

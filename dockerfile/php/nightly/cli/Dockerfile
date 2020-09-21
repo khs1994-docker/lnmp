@@ -164,15 +164,12 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
   && mkdir -p /usr/src \
   && cd /usr/src \
   && apk add --no-cache git openssh-client \
-  \
-  && if [ -d php ];then \
-       git -C php reset --hard origin/master; \
-       git -C php pull --depth=15; \
-       git -C php reset --hard ${PHP_VCS_REF}; \
-     else \
-       git clone --depth=15 ${PHP_GIT} php; \
-       git -C php reset --hard ${PHP_VCS_REF}; \
+  && if ! [ -z "${PHP_VCS_REF}" -o "${PHP_VCS_REF}" = 'master' ];then \
+       export FETCH_DEPTH=100; \
      fi \
+  \
+  && git clone --depth=${FETCH_DEPTH:-15} ${PHP_GIT} php \
+  && git -C php reset --hard ${PHP_VCS_REF} \
   \
   && apk del --no-network git openssh-client \
   # wget -O php.tar.xz "$PHP_URL"; \

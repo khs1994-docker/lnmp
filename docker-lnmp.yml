@@ -53,11 +53,11 @@ services:
 
   redis:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-6.0.7}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/redis:${LNMP_REDIS_VERSION:-6.0.8}-alpine"
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
-      - ./config/redis/${LNMP_REDIS_CONF:-redis.conf}:/redis.conf:ro,cached
+      - ./config/redis/redis.conf:/redis.conf:ro,cached
       # - redis-data:/data:cached
       - type: volume
         source: redis-data
@@ -102,11 +102,11 @@ services:
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       # fpm config
-      - ./config/php/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
-      - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:cached
       # 以下用于 supervisord
@@ -138,21 +138,22 @@ services:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
       - APP_ENV=development
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
+      # - PHP_INI_SCAN_DIR=:/usr/local/etc/php/conf.d
 
   php8:
     &php8
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0beta3}-fpm-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0beta4}-fpm-alpine"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       # fpm config
-      - ./config/php8/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
       - ./config/php8/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
-      - ./config/php8/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php8:/var/log/php:cached
       # 以下用于 supervisord
@@ -179,8 +180,9 @@ services:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
       - APP_ENV=development
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
+      # - XDEBUG_MODE
 
   composer:
     << : *common
@@ -206,7 +208,7 @@ services:
         target: /etc/supervisor.d/supervisord.ini
     command: ["/usr/bin/supervisord","-n"]
     expose:
-      - "9001"
+      - "9003"
 
   phpmyadmin:
     << : *common
@@ -226,6 +228,7 @@ services:
       - frontend
     healthcheck:
       test: ["CMD","curl","-sf","127.0.0.1:80"]
+      # test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
 
   nginx:
     << : *common

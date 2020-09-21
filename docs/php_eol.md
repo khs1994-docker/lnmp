@@ -19,11 +19,11 @@ services:
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       # fpm config
-      - ./config/php5/${LNMP_PHP_FPM_CONF:-zz-docker.conf}:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
+      - ./config/php5/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
       - ./config/php5/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
-      - ./config/php5/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php5/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:cached
       - ./log/supervisord.log:/var/log/supervisord.log:cached
@@ -44,7 +44,7 @@ services:
       - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} PHP_EOL VERSION
       - APP_ENV=development
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
-      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9001}
+      - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
       - LNMP_OPCACHE_ENABLE=${LNMP_OPCACHE_ENABLE:-1}
 ```
 
@@ -78,7 +78,7 @@ access.log = /var/log/php/php-fpm-access.log
 
 * 2. `php.ini` PHP 主配置文件 [参考](https://github.com/php/php-src/blob/PHP-5.6/php.ini-development)
 
-* 3. `docker-php.ini` PHP 子配置文件 (从 `config/php/docker-php.ini.example` 中复制)
+* 3. `docker-php.ini` PHP 子配置文件 (从 `config/php/docker-php.example.ini` 中复制)
 
 提示：php7.1（包含）及以下版本 配置扩展必须加扩展名 `.so`
 

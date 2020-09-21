@@ -149,6 +149,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+      # test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      # test: ["NONE"]
     # healthcheck:
     #   disable: true
     # windows only

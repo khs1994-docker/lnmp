@@ -20,7 +20,7 @@ storage:
       mode: 0755
       contents:
         source: http://{{SERVER_HOST}}:8080/bin/generate-kubelet-bootstrap-kubeconfig.sh
-    - path: ${K8S_ROOT}/conf/csr-crb.yaml
+    - path: ${K8S_ROOT}/etc/kubernetes/csr-crb.yaml
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/csr-crb.yaml

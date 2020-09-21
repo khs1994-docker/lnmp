@@ -10,7 +10,7 @@ services:
 
   drone-server:
     << : *common
-    image: drone/drone:${CI_DRONE_VERSION:-1.9.0}
+    image: drone/drone:${CI_DRONE_VERSION:-1.9.1}
     volumes:
       - drone-data-v1:/data:rw
     networks:
@@ -85,7 +85,7 @@ services:
 
   redis:
     << : *common
-    image: redis:${CI_REDIS_VERSION:-6.0.7}-alpine
+    image: redis:${CI_REDIS_VERSION:-6.0.8}-alpine
     volumes:
       - redis-data:/data
 

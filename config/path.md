@@ -163,10 +163,11 @@
 │   │                   ├── www.conf
 │   │                   ├── www.conf.default
 │   │                   └── zz-docker.conf
-│   ├── docker-php.ini.example
+│   ├── docker-php.example.ini
 │   ├── php.development.ini
+│   ├── php-PHP_SAPI.ini
 │   ├── php.production.ini
-│   ├── zz-docker.conf
+│   ├── zz-docker.example.conf
 │   └── zz-docker.production.conf
 ├── php8
 │   ├── default
@@ -216,15 +217,15 @@
 │   │                   ├── www.conf
 │   │                   ├── www.conf.default
 │   │                   └── zz-docker.conf
-│   ├── docker-php.ini.example
+│   ├── docker-php.example.ini
 │   ├── php.development.ini
 │   ├── php.production.ini
-│   ├── zz-docker.conf
+│   ├── zz-docker.example.conf
 │   └── zz-docker.production.conf
 ├── python
 ├── README.md
 ├── redis
-│   ├── redis.conf
+│   ├── redis.example.conf
 │   └── redis.production.conf
 ├── registry
 │   ├── ca.crt
@@ -258,5 +259,5 @@
 │   └── supervisord.ini.example
 └── yarn
 
-62 directories, 195 files
+62 directories, 196 files
 ```

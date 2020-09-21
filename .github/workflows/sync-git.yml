@@ -16,7 +16,7 @@ jobs:
     if: |
       contains( github.ref, 'refs/tags/' )
       || contains( github.event.head_commit.message, '[sync git]')
-      || github.event == 'workflow_dispatch'
+      || github.event_name == 'workflow_dispatch'
     steps:
       - run: echo "sync continue !"
   sync-git:

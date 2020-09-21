@@ -1,22 +1,32 @@
-FROM alpine:3.12
+FROM --platform=${TARGETPLATFORM} alpine:edge
 
 ENV KUBECTL_VERSION=v1.19.0
 
-RUN apk add --no-cache curl \
-      && curl -L https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_amd64 > /usr/local/bin/cfssl \
-      && curl -L https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_amd64 > /usr/local/bin/cfssljson \
-      && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl > /usr/local/bin/kubectl \
-      && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl \
-      && apk del --no-network curl
+ARG TARGETARCH
 
-FROM alpine:3.12
+RUN set -x \
+    ; echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+    ; apk add --no-cache curl ; \
+    if [ "${TARGETARCH}" = 'amd64' ];then \
+      curl -L https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssl_1.4.1_linux_${TARGETARCH} > /usr/local/bin/cfssl \
+      && curl -L https://github.com/cloudflare/cfssl/releases/download/v1.4.1/cfssljson_1.4.1_linux_${TARGETARCH} > /usr/local/bin/cfssljson; \
+    else \
+      apk add --no-cache cfssl \
+      && cp -a /usr/bin/cfssl /usr/bin/cfssljson /usr/local/bin; \
+    fi \
+    \
+    ; curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl > /usr/local/bin/kubectl \
+    && apk del --no-network curl \
+    && chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson /usr/local/bin/kubectl
+
+FROM --platform=${TARGETPLATFORM} alpine:3.12
 
 LABEL maintainer="khs1994@khs1994.com" \
       version="1.19.0"
 
 COPY --from=0 /usr/local/bin /usr/local/bin
 
-RUN apk add --no-cache bash openssl
+RUN set -x ; apk add --no-cache bash openssl
 
 WORKDIR /srv/cfssl
 

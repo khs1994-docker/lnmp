@@ -26,7 +26,7 @@ $ docker manifest push khs1994/php:7.3.8-fpm-alpine
 
 在 arm 架构中 pull `khs1994/php:7.3.8-fpm-alpine` 实际 pull 的是 `khs1994/arm64v8-php:7.3.8-fpm-alpine`
 
-这样在多种架构中可以很方便的进行 pull，避免架构判断 pull 不同的镜像，极大简化了镜像 pull。
+这样在多种架构中可以很方便的进行 pull，避免通过判断架构 pull 不同的镜像，极大简化了镜像 pull。
 
 ```bash
 $ docker manifest inspect php:7.3.8-fpm-alpine

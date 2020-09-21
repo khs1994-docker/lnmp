@@ -49,6 +49,8 @@ $command = Invoke-WSL echo $K8S_ROOT/usr/local/bin/crio `
 --config-dir=$WINDOWS_ROOT_IN_WSL2/conf/crio/crio.conf.d `
 --conmon-cgroup "pod" `
 --conmon=$K8S_ROOT/usr/local/bin/conmon `
+--manage-ns-lifecycle `
+--drop-infra-ctr `
 --listen /var/run/crio/crio.sock
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null

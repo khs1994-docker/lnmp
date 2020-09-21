@@ -85,6 +85,8 @@ _ide_helper.php
 
 3. 或者将项目文件夹放置于 WSL2，使用 **vsCode remote WSL** WSL 远程开发(推荐使用)
 
+> 项目放置于 WSL2 也可以使用 PHPStorm，请参考 https://github.com/khs1994-docker/php-demo
+
 **在 Docker 设置中启用 WSL2 集成**
 
 `Resources` -> `WSL INTEGRATION`-> `Enable integration with additional distros:` -> `开启你所使用的 WSL2 （例如：Ubuntu）`
@@ -235,6 +237,11 @@ $ lnmp-docker code-run -w /app/laravel npm run dev
 
 # 打开 http://127.0.0.1/register 查看页面
 ```
+
+## PHP 相关的 vsCode 扩展
+
+* `felixfbecker.php-debug`
+* 更多扩展请查看 https://github.com/khs1994-docker/lnmp/blob/master/.devcontainer/devcontainer.json **extensions** 项
 
 ## 运行 Laravel 队列(Queue)
 

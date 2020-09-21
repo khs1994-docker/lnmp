@@ -10,12 +10,12 @@ services:
 - docker
 
 os: linux
-dist: xenial
+dist: focal
 # dist: bionic
 
 cache:
   directories:
-    - kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin
+    - kubernetes-release/release
     - /home/travis/.khs1994-docker-lnmp/caches
 
 # git:
@@ -25,14 +25,43 @@ before_install:
   - uname -a
   - sudo mount bpffs /sys/fs/bpf -t bpf || true
   - sudo mount -t bpf || true
+  - sudo cat /proc/sys/net/ipv6/conf/all/disable_ipv6 || true
+  - ip addr
+  - sudo sh -c 'echo 0 > /proc/sys/net/ipv6/conf/all/disable_ipv6'
+  - ip addr
   - env
+
+  - sudo update-alternatives --display iptables || true
+  - sudo update-alternatives --list    iptables || true
+
+  - jq --version || true
+  - docker-compose --version || true
+
+  - sudo apt-get update || true
+  - |
+    sudo apt install -y \
+        tree \
+        net-tools \
+        libffi-dev \
+        jq
+  - jq --version || true
+  - docker-compose --version || true
+  - |
+    if [ $(go env GOARCH) = "arm64" ];then
+      sudo rm -rf $(command -v docker-compose) || true
+    fi
   # /home/travis/build/khs1994-docker/lnmp-k8s
   # /home/travis/gopath/src/github.com/[secure]-docker/lnmp-k8s
+  - ifconfig || true
   - pwd
   - df -h
   - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
   - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
+  - |
+    if [ $(go env GOARCH) = "arm64" ];then
+      $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose -f
+    fi
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true
@@ -55,8 +84,13 @@ before_install:
   # - sudo systemctl stop systemd-resolved || true
   # - sudo netstat -lnpt
   # - cat /etc/resolv.conf
-  - echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
-  - echo "search google.internal" | sudo tee -a /etc/resolv.conf
+  - |
+    if [ $(go env GOARCH) = "amd64" ];then
+      echo "nameserver 169.254.169.254" | sudo tee /etc/resolv.conf
+      echo "search google.internal" | sudo tee -a /etc/resolv.conf
+    else
+      sudo cp -f /run/systemd/resolve/resolv.conf /etc/resolv.conf || true
+    fi
   - cat /etc/resolv.conf
   # - cat /etc/resolv.conf
   - nslookup gcr.io
@@ -64,14 +98,14 @@ before_install:
   - docker-compose --version
   - docker --version
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
+  - sudo add-apt-repository "deb [arch=$(go env GOARCH)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
   - sudo apt-get update || true
   - sudo apt-get -y install docker-ce || sudo apt -f install
   - docker --version
   # 升级最新 Docker Compose
   # - docker-compose --version
   # - sudo rm /usr/local/bin/docker-compose
-  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.26.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION:-1.27.0}/docker-compose-`uname -s`-`uname -m` > docker-compose
   # - sudo install -m755 docker-compose /usr/local/bin
   # - docker-compose --version
   - sudo cat /etc/docker/daemon.json
@@ -84,11 +118,23 @@ before_install:
   # - docker buildx inspect --bootstrap
   - ip addr
   - hostnamectl
-  - export SERVER_IP=`ifconfig ens4 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
+  - |
+    export net_interface=ens4
+
+    if [ $(go env GOARCH) = "arm64" ];then
+      export net_interface=ens5
+    fi
+
+    if [ "${IPV6}" = "true" ];then
+      export net_interface=eth0
+    fi
+
+  - echo $net_interface
+  - export SERVER_IP=`ifconfig ${net_interface} | grep "inet" | awk '{ print $2}' | head -1`
+  - if [ -z "${SERVER_IP}" ];then exit 1; fi
   - ./lnmp-k8s > /dev/null
   - echo $SERVER_IP
 install:
-  - sudo apt install -y tree
   # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
   # - travis_retry echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME_CCR} --password-stdin uswccr.ccs.tencentyun.com
   # - export KUBERNETES_TYPE=server
@@ -103,7 +149,7 @@ install:
   - docker-compose up cfssl-local
   - docker-compose down
   # - source .env
-  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64
+  - ls kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-$(go env GOARCH)/kubernetes/server/bin/kubectl || rm -rf kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-$(go env GOARCH)
 
   - sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=false#g" ./.env
 
@@ -112,7 +158,7 @@ install:
   # - debug=1 ./lnmp-k8s local-install ${LNMP_K8S_LOCAL_INSTALL_OPTIONS:-}
 
   - export PATH=$PATH:${K8S_ROOT:-/opt/k8s}/bin
-  - tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
+  - tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-$(go env GOARCH)/kubernetes
 before_script:
   - ls -la /etc/systemd/system/
 
@@ -136,7 +182,7 @@ before_script:
     if [ $(echo "${CI_KUBERNETES_VERSION}" | cut -d '.' -f 2) -ge 19 ];then \
       echo "replace kube-scheduler config version" \
       && echo "remove it when k8s version ge 1.19" \
-      && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/conf/kube-scheduler.config.yaml ; \
+      && sudo sed -i "s#kubescheduler.config.k8s.io/v1alpha1#kubescheduler.config.k8s.io/v1beta1#g" ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kube-scheduler.config.yaml ; \
     fi
   - sudo systemctl start kube-scheduler || CMD_FAILED=1
   - test -n "$CMD_FAILED" && sudo journalctl -u kube-scheduler || true
@@ -156,6 +202,7 @@ before_script:
 
   - sudo systemctl cat crio || true
   - sudo cat /etc/sysconfig/crio || true
+  - sudo cat ${K8S_ROOT:-/opt/k8s}/etc/sysconfig/crio || true
   - /usr/local/bin/crio --config=/etc/crio/crio.conf config > crio.conf || true
   - /usr/local/bin/crio config --default > crio.default.conf || true
   - cat crio.conf || true
@@ -209,7 +256,16 @@ before_script:
   - kubectl get csr
 
   - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
-  - sed -i "s#eth0#ens4#g" addons/cni/calico-custom/patch.json
+  - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/patch.json
+  - |
+    if [ "${IPV6}" = 'true' ];then
+      sed -i -e "s#_IP6#IP6#g" \
+             -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
+          addons/cni/calico-custom/patch.json
+
+      sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
+          addons/cni/calico/calico.yaml
+    fi
   - git diff
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
@@ -243,6 +299,7 @@ before_script:
   - kubectl get all -A
 
   - kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+  - kubectl describe pod -n kube-system -l k8s-app=calico-node
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-kube-controllers -q) || true
   - sudo crictl logs $(sudo crictl ps -a --label io.kubernetes.container.name=calico-node -q) || true
   - for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
@@ -266,22 +323,59 @@ script:
   - sleep 20
   - kubectl get all
   - kubectl get pod -o wide
-  - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
-  - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
-  - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
-  - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
-  - kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
+  - NGINX_POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
+  - kubectl exec ${NGINX_POD_NAME} -- ip addr
+  - kubectl exec ${NGINX_POD_NAME} -- cat /etc/resolv.conf
+  - kubectl exec ${NGINX_POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${NGINX_POD_NAME} -- nslookup kubernetes || true
+  - kubectl exec ${NGINX_POD_NAME} -- ping -c 5 github.com || kubectl exec ${NGINX_POD_NAME} -- nslookup github.com
+  - kubectl exec ${NGINX_POD_NAME} -- curl -k https://kubernetes/api || true
+
+  - kubectl expose pod/${NGINX_POD_NAME} --port=80
+  - sleep 2 ; NGINX_SERVICE_NAME=$(echo $(kubectl get svc | grep nginx | awk '{ print $1 }' | cut -d "/" -f 2))
+  - echo $NGINX_SERVICE_NAME
+  - echo $NGINX_POD_NAME
+  - kubectl get all
+  - kubectl exec ${NGINX_POD_NAME} -- curl $NGINX_SERVICE_NAME || true
+
+  - test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
+after_success:
+  - kubectl get svc/${NGINX_SERVICE_NAME} -o yaml
+  - kubectl get deployment/nginx -o yaml || true
+  - kubectl get pod/${NGINX_POD_NAME} -o yaml
+
+  - kubectl delete svc/${NGINX_SERVICE_NAME}
+  # ipv6 svc
+  - kubectl apply -f demo/ipv6
+
+  - kubectl get svc/nginx -o yaml
+  - kubectl get deployment/nginx -o yaml || true
+  - kubectl get pod/${NGINX_POD_NAME} -o yaml
+
+  - |
+    if [ "${IPV6}" = 'true' ];then
+      set -x
+      POD_IPV4_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 0).ip}}"`
+      curl ${POD_IPV4_IP}:80 || true
+
+      POD_IPV6_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 1).ip}}"` || true
+      curl [${POD_IPV6_IP}]:80 || true
+
+      CLUSTER_IPV6_IP=`kubectl get svc/nginx -o go-template="{{ .spec.clusterIP }}"`
+      curl [${CLUSTER_IPV6_IP}]:80 || true
+
+      NODE_IPV6_IP=`ifconfig ${net_interface} | grep "inet6" | awk '{ print $2}' | head -1`
+      curl [${NODE_IPV6_IP}]:8080 || true
+    fi
+
+  - kubectl delete svc nginx || true
   - kubectl delete deployment nginx || true
-  - kubectl delete pod nginx || true
+  - kubectl delete pod ${NGINX_POD_NAME} || true
   - kubectl get all
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
   - curl --version
   - curl ${SERVER_IP}:${HTTP_PORT}
 
-  - test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
-
-after_success:
   - sudo crictl version
   - sudo crictl info
   - ip addr
@@ -302,6 +396,8 @@ after_success:
   - sudo tree /var/run -L 3 || true
 
   - kubectl get node -o yaml
+
+  - sudo ps aux
 
   - |
     PRE_VERSION=v1.19.0-rc.3
@@ -347,6 +443,7 @@ after_success:
 env:
   global:
     - DOCKER_CLI_EXPERIMENTAL=enabled
+    - LNMP_CN_ENV=false
 
 jobs:
   include:
@@ -368,11 +465,25 @@ jobs:
     # containerd
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            GENERATE_CLI_HELP=true
+    # arm64
+    - os: linux
+      dist: focal
+      arch: arm64-graviton2
+      virt: vm
+      group: edge
+      env: CI_KUBERNETES_VERSION=1.19.0 LNMP_K8S_GET="--url"
     # containerd + cni calico ebpf
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            CNI_CALICO_EBPF=true
+    # containerd + ipv6
+    # - os: linux
+    #   dist: focal
+    #   arch: arm64-graviton2
+    #   virt: lxd
+    #   group: edge
+    #   env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            IPV6=true
     # docker
     - os: linux
       dist: focal
@@ -380,14 +491,14 @@ jobs:
     # custom k8s root
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.19.1 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
+      env: CI_KUBERNETES_VERSION=1.19.2 LNMP_K8S_GET="--url"                            K8S_ROOT=/opt/k8s-custom
     # old version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.18.8 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.18.9 LNMP_K8S_GET="--url"
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.17.9 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.17.12 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
   - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"

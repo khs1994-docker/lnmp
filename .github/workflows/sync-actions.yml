@@ -17,7 +17,7 @@ jobs:
       contains( github.ref, 'refs/tags/' )
       || contains( github.event.head_commit.message, '[sync actions]')
       || contains( github.event.head_commit.message, '[sync action]')
-      || github.event == 'workflow_dispatch'
+      || github.event_name == 'workflow_dispatch'
     steps:
       - run: echo "sync continue !"
   sync-actions:

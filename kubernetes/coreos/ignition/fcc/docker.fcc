@@ -20,9 +20,9 @@ storage:
         inline: |
           {
             "tlsverify": true,
-            "tlscert": "${K8S_ROOT}/certs/docker/server.pem",
-            "tlskey": "${K8S_ROOT}/certs/docker/server-key.pem",
-            "tlscacert": "${K8S_ROOT}/certs/ca.pem",
+            "tlscert": "${K8S_ROOT}/etc/kubernetes/pki/docker/server.pem",
+            "tlskey": "${K8S_ROOT}/etc/kubernetes/pki/docker/server-key.pem",
+            "tlscacert": "${K8S_ROOT}/etc/kubernetes/pki/ca.pem",
             "registry-mirrors" : [
               "https://hub-mirror.c.163.com",
               "https://mirror.baidubce.com"
@@ -34,11 +34,11 @@ storage:
             ],
             "experimental" : true
           }
-    - path: ${K8S_ROOT}/certs/docker/server.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/docker/server.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/docker/server-cert.pem
-    - path: ${K8S_ROOT}/certs/docker/server-key.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/docker/server-key.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/docker/server-key.pem

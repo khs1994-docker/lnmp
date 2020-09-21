@@ -74,7 +74,7 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 # $ export K8S_ROOT=/opt/k8s
 
 $ kubectl config set-cluster kubernetes \
-  --certificate-authority=${K8S_ROOT:-/opt/k8s}/certs/ca.pem \
+  --certificate-authority=${K8S_ROOT:-/opt/k8s}/etc/kubernetes/pki/ca.pem \
   --embed-certs=true \
   --server=${KUBE_APISERVER:-https://192.168.57.110:6443} \
   --kubeconfig=$HOME/.kube/dashboard.kubeconfig

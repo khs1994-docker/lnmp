@@ -65,7 +65,7 @@ jobs:
           cp -r laravel-demo/Dockerfile.cdn laravel/
 
           ls -la laravel
-          ls -la laravel/resources/views
+
           cd laravel
 
           patch -p1 < ../laravel-demo/cdn-patch/config-app.patch
@@ -78,6 +78,7 @@ jobs:
           lnmp-php artisan ui vue --auth
 
           cp -r ../laravel-demo/.patch/. .
+          ls -la resources/views
 
           lnmp-npm i
           lnmp-npm install laravel-mix-versionhash --save

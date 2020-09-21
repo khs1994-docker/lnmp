@@ -90,9 +90,9 @@ $ kubectl apply -k addons/cni/calico-custom
 
 将 `docker.conf` 放入 `/etc/systemd/system/docker.service.d/*` 中
 
-将证书文件放入 `${K8S_ROOT}/certs`
+将证书文件放入 `${K8S_ROOT}/etc/kubernetes/pki`
 
-将配置文件放入 `${K8S_ROOT}/conf`
+将配置文件放入 `${K8S_ROOT}/etc/kubernetes`
 
 可执行文件放入 `${K8S_ROOT}/bin`
 

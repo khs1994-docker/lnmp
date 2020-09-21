@@ -17,7 +17,7 @@ services:
 
   redis:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.0.7}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.0.8}-alpine
 
   memcached:
     << : *common
@@ -29,7 +29,7 @@ services:
 
   php8:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0beta3}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0beta4}-fpm-alpine
 
   composer:
     << : *common
@@ -41,7 +41,7 @@ services:
 
   phpmyadmin:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:5.0.2
+    image: ${LNMP_LIBRARY_NS:-library}/phpmyadmin:5.0.2
 
   nginx:
     << : *common
@@ -74,4 +74,4 @@ secrets:
     file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
   supervisord_ini:
     << : *common
-    file: ./config/supervisord/${LNMP_SUPERVISORD_INI_PATH:-supervisord.ini}
+    file: ./config/supervisord/supervisord.ini

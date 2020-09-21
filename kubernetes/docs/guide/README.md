@@ -27,9 +27,9 @@ $ journalctl -u etcd-member
 
 $ ETCDCTL_API=3 etcdctl \
     --endpoints=https://${node_ip:-192.168.57.110}:2379 \
-    --cacert=/etc/kubernetes/certs/etcd-ca.pem \
-    --cert=/etc/kubernetes/certs/etcd-client.pem \
-    --key=/etc/kubernetes/certs/etcd-client-key.pem endpoint health
+    --cacert=/etc/kubernetes/pki/etcd-ca.pem \
+    --cert=/etc/kubernetes/pki/etcd-client.pem \
+    --key=/etc/kubernetes/pki/etcd-client-key.pem endpoint health
 ```
 
 - **2379** 提供 HTTP(S) API 服务，供客户端交互
@@ -81,7 +81,7 @@ $ sudo netstat -lnpt|grep kube-controll
 
 tcp        0      0 127.0.0.1:10257         0.0.0.0:*               LISTEN      638/kube-controller
 
-$ curl -s --cacert /etc/kubernetes/certs/ca.pem https://127.0.0.1:10257/metrics |head
+$ curl -s --cacert /etc/kubernetes/pki/ca.pem https://127.0.0.1:10257/metrics |head
 
 $ kubectl get endpoints kube-controller-manager --namespace=kube-system  -o yaml
 ```

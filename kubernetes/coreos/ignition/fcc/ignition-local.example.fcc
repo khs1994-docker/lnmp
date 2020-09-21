@@ -76,17 +76,17 @@ systemd:
         ExecStart=/bin/podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
           -v /opt/k8s/var/lib/etcd:/var/lib/etcd \
-          -v ${K8S_ROOT}/certs:${K8S_ROOT}/certs \
+          -v ${K8S_ROOT}/etc/kubernetes/pki:${K8S_ROOT}/etc/kubernetes/pki \
           quay.io/coreos/etcd:v${ETCD_VERSION} \
           etcd \
           --enable-v2=true \
           --name="coreos{{n}}" \
-          --cert-file=${K8S_ROOT}/certs/etcd.pem \
-          --key-file=${K8S_ROOT}/certs/etcd-key.pem \
-          --trusted-ca-file=${K8S_ROOT}/certs/etcd-ca.pem \
-          --peer-cert-file=${K8S_ROOT}/certs/etcd-peer.pem \
-          --peer-key-file=${K8S_ROOT}/certs/etcd-peer-key.pem \
-          --peer-trusted-ca-file=${K8S_ROOT}/certs/etcd-ca.pem \
+          --cert-file=${K8S_ROOT}/etc/kubernetes/pki/etcd.pem \
+          --key-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-key.pem \
+          --trusted-ca-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
+          --peer-cert-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-peer.pem \
+          --peer-key-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-peer-key.pem \
+          --peer-trusted-ca-file=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
           --peer-client-cert-auth \
           --client-cert-auth \
           --listen-peer-urls=https://{{IP_{{n}}}}:2380 \
@@ -147,33 +147,33 @@ systemd:
         --max-requests-inflight=4000 \
         --default-watch-cache-size=200 \
         --delete-collection-workers=2 \
-        --encryption-provider-config=${K8S_ROOT}/conf/encryption-config.yaml \
-        --etcd-cafile=${K8S_ROOT}/certs/etcd-ca.pem \
-        --etcd-certfile=${K8S_ROOT}/certs/apiserver-etcd-client.pem \
-        --etcd-keyfile=${K8S_ROOT}/certs/apiserver-etcd-client-key.pem \
+        --encryption-provider-config=${K8S_ROOT}/etc/kubernetes/encryption-config.yaml \
+        --etcd-cafile=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
+        --etcd-certfile=${K8S_ROOT}/etc/kubernetes/pki/apiserver-etcd-client.pem \
+        --etcd-keyfile=${K8S_ROOT}/etc/kubernetes/pki/apiserver-etcd-client-key.pem \
         --etcd-servers=${ETCD_ENDPOINTS} \
         --bind-address={{IP_{{n}}}} \
         --secure-port=6443 \
-        --tls-cert-file=${K8S_ROOT}/certs/apiserver.pem \
-        --tls-private-key-file=${K8S_ROOT}/certs/apiserver-key.pem \
+        --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver.pem \
+        --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver-key.pem \
         --insecure-port=0 \
         --audit-log-maxage=15 \
         --audit-log-maxbackup=3 \
         --audit-log-maxsize=100 \
         --audit-log-truncate-enabled \
         --audit-log-path=${K8S_ROOT}/var/log/kubernetes/kube-apiserver/audit.log \
-        --audit-policy-file=${K8S_ROOT}/conf/audit-policy.yaml \
+        --audit-policy-file=${K8S_ROOT}/etc/kubernetes/audit-policy.yaml \
         --profiling \
         --anonymous-auth=false \
-        --client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --enable-bootstrap-token-auth \
         --requestheader-allowed-names="aggregator" \
-        --requestheader-client-ca-file=${K8S_ROOT}/certs/front-proxy-ca.pem \
+        --requestheader-client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-ca.pem \
         --requestheader-extra-headers-prefix="X-Remote-Extra-" \
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
-        --service-account-key-file=${K8S_ROOT}/certs/sa.pub \
-        --service-account-signing-key-file=${K8S_ROOT}/certs/sa.key \
+        --service-account-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.pub \
+        --service-account-signing-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
         --service-account-issuer=api \
         --api-audiences=api \
         --authorization-mode=Node,RBAC \
@@ -182,13 +182,13 @@ systemd:
         --allow-privileged=true \
         --apiserver-count=3 \
         --event-ttl=168h \
-        --kubelet-certificate-authority=${K8S_ROOT}/certs/ca.pem \
-        --kubelet-client-certificate=${K8S_ROOT}/certs/apiserver-kubelet-client.pem \
-        --kubelet-client-key=${K8S_ROOT}/certs/apiserver-kubelet-client-key.pem \
+        --kubelet-certificate-authority=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+        --kubelet-client-certificate=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client.pem \
+        --kubelet-client-key=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client-key.pem \
         --kubelet-https=true \
         --kubelet-timeout=10s \
-        --proxy-client-cert-file=${K8S_ROOT}/certs/front-proxy-client.pem \
-        --proxy-client-key-file=${K8S_ROOT}/certs/front-proxy-client-key.pem \
+        --proxy-client-cert-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client.pem \
+        --proxy-client-key-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client-key.pem \
         --service-cluster-ip-range=10.254.0.0/16 \
         --service-node-port-range="1-65535" \
         --logtostderr=true \
@@ -236,19 +236,19 @@ systemd:
         --concurrent-service-syncs=2 \
         --bind-address={{IP_{{n}}}} \
         --secure-port=10257 \
-        --tls-cert-file=${K8S_ROOT}/certs/kube-controller-manager.pem \
-        --tls-private-key-file=${K8S_ROOT}/certs/kube-controller-manager-key.pem \
+        --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager.pem \
+        --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager-key.pem \
         --port=0 \
-        --authentication-kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
-        --client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
+        --client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --requestheader-allowed-names="" \
-        --requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --requestheader-extra-headers-prefix="X-Remote-Extra-" \
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
-        --authorization-kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
-        --cluster-signing-cert-file=${K8S_ROOT}/certs/ca.pem \
-        --cluster-signing-key-file=${K8S_ROOT}/certs/ca-key.pem \
+        --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
+        --cluster-signing-cert-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+        --cluster-signing-key-file=${K8S_ROOT}/etc/kubernetes/pki/ca-key.pem \
         --experimental-cluster-signing-duration=876000h \
         --horizontal-pod-autoscaler-sync-period=10s \
         --concurrent-deployment-syncs=10 \
@@ -257,9 +257,9 @@ systemd:
         --service-cluster-ip-range=10.254.0.0/16 \
         --pod-eviction-timeout=6m \
         --terminated-pod-gc-threshold=10000 \
-        --root-ca-file=${K8S_ROOT}/certs/ca.pem \
-        --service-account-private-key-file=${K8S_ROOT}/certs/sa.key \
-        --kubeconfig=${K8S_ROOT}/conf/kube-controller-manager.kubeconfig \
+        --root-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+        --service-account-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
+        --kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
         --logtostderr=true \
         --v=2
 
@@ -287,20 +287,20 @@ systemd:
         -v ${K8S_ROOT}:${K8S_ROOT} \
         k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}} \
         kube-scheduler \
-        --config=${K8S_ROOT}/conf/kube-scheduler.config.yaml \
+        --config=${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml \
         --bind-address={{IP_{{n}}}} \
         --secure-port=10259 \
         --port=0 \
-        --tls-cert-file=${K8S_ROOT}/certs/kube-scheduler.pem \
-        --tls-private-key-file=${K8S_ROOT}/certs/kube-scheduler-key.pem \
-        --authentication-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
-        --client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler.pem \
+        --tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler-key.pem \
+        --authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
+        --client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --requestheader-allowed-names="" \
-        --requestheader-client-ca-file=${K8S_ROOT}/certs/ca.pem \
+        --requestheader-client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
         --requestheader-extra-headers-prefix="X-Remote-Extra-" \
         --requestheader-group-headers=X-Remote-Group \
         --requestheader-username-headers=X-Remote-User \
-        --authorization-kubeconfig=${K8S_ROOT}/conf/kube-scheduler.kubeconfig \
+        --authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig \
         --logtostderr=true \
         --v=2
 
@@ -352,13 +352,13 @@ systemd:
         ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
         ExecStart=${K8S_ROOT}/bin/kubelet \
-        --bootstrap-kubeconfig=${K8S_ROOT}/conf/kubelet-bootstrap.kubeconfig \
-        --cert-dir=${K8S_ROOT}/certs \
+        --bootstrap-kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig \
+        --cert-dir=${K8S_ROOT}/etc/kubernetes/pki \
         --container-runtime=${CONTAINER_RUNTIME} \
         --container-runtime-endpoint=${CONTAINER_RUNTIME_ENDPOINT} \
         --root-dir=/opt/k8s/var/lib/kubelet \
-        --kubeconfig=${K8S_ROOT}/conf/kubelet.kubeconfig \
-        --config=${K8S_ROOT}/conf/kubelet.config.yaml \
+        --kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet.kubeconfig \
+        --config=${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml \
         --hostname-override=coreos{{n}} \
         --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
         --logtostderr=true \
@@ -425,7 +425,7 @@ storage:
                   proxy_pass backend;
               }
           }
-    - path: ${K8S_ROOT}/conf/kube-scheduler.config.yaml
+    - path: ${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml
       mode: 0644
       contents:
         inline: |
@@ -433,7 +433,7 @@ storage:
           kind: KubeSchedulerConfiguration
           clientConnection:
             burst: 200
-            kubeconfig: "${K8S_ROOT}/conf/kube-scheduler.kubeconfig"
+            kubeconfig: "${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig"
             qps: 100
           enableContentionProfiling: false
           enableProfiling: true
@@ -441,7 +441,7 @@ storage:
           leaderElection:
             leaderElect: true
           metricsBindAddress: {{IP_{{n}}}}:10251
-    - path: ${K8S_ROOT}/conf/kubelet.config.yaml
+    - path: ${K8S_ROOT}/etc/kubernetes/kubelet.config.yaml
       mode: 0644
       contents:
         inline: |
@@ -463,7 +463,7 @@ storage:
             webhook:
               enabled: true
             x509:
-              clientCAFile: "${K8S_ROOT}/certs/ca.pem"
+              clientCAFile: "${K8S_ROOT}/etc/kubernetes/pki/ca.pem"
           authorization:
             mode: Webhook
           registryPullQPS: 0
@@ -520,7 +520,7 @@ storage:
           featureGates:
             # AllAlpha: true
             # BoundServiceAccountTokenVolume: false
-    - path: ${K8S_ROOT}/conf/kube-proxy.config.yaml
+    - path: ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml
       mode: 0644
       contents:
         inline: |
@@ -528,7 +528,7 @@ storage:
           apiVersion: kubeproxy.config.k8s.io/v1alpha1
           clientConnection:
             burst: 200
-            kubeconfig: "${K8S_ROOT}/conf/kube-proxy.kubeconfig"
+            kubeconfig: "${K8S_ROOT}/etc/kubernetes/kube-proxy.kubeconfig"
             qps: 100
           bindAddress: {{IP_{{n}}}}
           healthzBindAddress: {{IP_{{n}}}}:10256

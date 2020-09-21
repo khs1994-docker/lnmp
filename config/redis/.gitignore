@@ -1,4 +1,4 @@
 /*
 !.gitignore
-!redis.conf
+!redis.example.conf
 !redis.production.conf

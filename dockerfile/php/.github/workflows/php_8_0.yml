@@ -4,8 +4,17 @@ on:
     - master
     tags:
     - '*'
+  workflow_dispatch:
+    inputs:
+      PHP_VERSION:
+        description: php version
+        required: true
+        default: "8.0.0beta4"
 
 name: PHP_8.0
+
+env:
+  PHP_CUSTOM_VERSION: ${{ github.event.inputs.PHP_VERSION }}
 
 jobs:
   build:
@@ -26,14 +35,14 @@ jobs:
         docker --version
         docker-compose --version
       name: 'manifest'
-    - run: |
-        set -x
-        sudo rm /usr/local/bin/docker-compose
-        curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-        sudo install -m755 docker-compose /usr/local/bin
-      name: 'Setup Docker Compose'
-      env:
-        DOCKER_COMPOSE_VERSION: 1.26.0
+    # - run: |
+    #     set -x
+    #     sudo rm /usr/local/bin/docker-compose
+    #     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    #     sudo install -m755 docker-compose /usr/local/bin
+    #   name: 'Setup Docker Compose'
+    #   env:
+    #     DOCKER_COMPOSE_VERSION: 1.27.0
     - uses: docker-practice/actions-setup-docker@master
     - run: |
         set -x
@@ -47,7 +56,7 @@ jobs:
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
         echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-east-1.aliyuncs.com
-        echo ${GITHUB_TOKEN} | docker login -u khs1994 --password-stdin docker.pkg.github.com
+        echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
       name: 'Docker Login'
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -55,11 +64,18 @@ jobs:
         TENCENT_DOCKER_USERNAME: ${{secrets.TENCENT_DOCKER_USERNAME}}
         ALIYUN_DOCKER_USERNAME: ${{secrets.ALIYUN_DOCKER_USERNAME}}
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
     - run: |
         cp .env.example .env
         set -ex
 
-        if [ ! `echo $GITHUB_REF | grep 'refs/tags/'` ];then \
+        if [ -n "${PHP_CUSTOM_VERSION}" ];then
+          export PHP_TAG_VERSION=$PHP_CUSTOM_VERSION
+        fi
+
+        echo $GITHUB_REF | grep -q 'refs/tags/' && IS_TAG_EVENT=1 || true
+
+        if ! [ -n "${IS_TAG_EVENT}" -o "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ];then \
           export PLATFORM=linux/amd64; \
           if [ "$PHP_VERSION" = 8_1_X -o "$PHP_VERSION" = nightly ];then \
             export PLATFORM=linux/amd64,linux/arm64,linux/arm/v7; \
@@ -75,10 +91,14 @@ jobs:
         fi
 
         VCS_REF=`git rev-parse --short HEAD`
-        # CACHE_IMAGE=docker.pkg.github.com/khs1994-docker/php/php
+        # CACHE_IMAGE=ghcr.io/khs1994/php
         CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
 
-        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
+        options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
+        --build-arg VCS_REF=$VCS_REF \
+        --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
+        --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
+        --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
 
         if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -136,14 +156,15 @@ jobs:
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; \
         fi
       env:
+        GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994
         DOCKER_HUB_USERNAME_TEST: lrew
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: 8_0_X
         FOLDER: "8.0"
-        PHP_TAG_VERSION: 8.0.0beta3
+        PHP_TAG_VERSION: 8.0.0beta4
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # docker.pkg.github.com/khs1994-docker/php/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # ghcr.io/khs1994/php
       name: 'Build Image'
       shell: bash
     - run: |

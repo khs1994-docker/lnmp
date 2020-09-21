@@ -31,6 +31,9 @@ spec:
 
   # roundRobin：轮询模式，即轮询将请求转发到后端的各个Pod上
 
+  ipFamily: IPv4 # IPv6
+  # ipFamily: IPv6
+
   # 定义标签选择器
   selector:
     app: lnmp

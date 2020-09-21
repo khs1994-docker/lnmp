@@ -25,7 +25,7 @@ services:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:cached
       - ./log/nginx-unit:/var/log/nginx-unit:cached
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
-      - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       - ./log/php:/var/log/php:cached
       - type: volume
         source: nginx_unit_state-data

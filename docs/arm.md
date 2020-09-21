@@ -15,6 +15,7 @@ $ ./lnmp-docker up
 * 在 `.env` 文件中 `LREW_INCLUDE` 新增 `mariadb`
 
 ```diff
+# .env
 - LNMP_SERVICES="nginx mysql php7 redis"
 + LNMP_SERVICES="nginx mariadb php7 redis"
 
@@ -28,6 +29,8 @@ $ ./lnmp-docker up
 
 ```bash
 $ sudo apt install libffi-dev
+
+$ ./lnmp-docker compose -f
 ```
 
 ## [Docker ARM 镜像](https://github.com/docker-library/official-images#architectures-other-than-amd64)

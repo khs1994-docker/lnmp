@@ -3,12 +3,12 @@ apiVersion: v1
 metadata:
   name: openebs-test-data
 spec:
+  storageClassName: openebs-hostpath
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
-  storageClassName: openebs-local
+      storage: 5G
 
 ---
 

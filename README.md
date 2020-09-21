@@ -11,9 +11,8 @@
 | -- | -- |
 | Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/master?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/master) |
 | Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
-| macOS | [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=master)](https://travis-ci.com/khs1994-docker/lnmp) |
-| Linux arm64v8 | - |
-| Linux arm32v7 | - |
+| macOS | - |
+| Linux arm64v8 | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 
 <p align="center">
 <img width="600" src="https://user-images.githubusercontent.com/16733187/47264269-2467a780-d546-11e8-8cde-f63207ee28d9.jpg">
@@ -61,7 +60,7 @@ To use LNMP Docker, you need:
 
 :two: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 19.03 Stable +
 
-:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.26.0+
+:three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.27.0+
 
 :four: WSL (**Windows** Only)
 
@@ -131,12 +130,6 @@ $redis->connect('redis', 6379);
 
 $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
-
-## AD :whale:
-
-**腾讯云 Kubernetes**
-
-* [Tencent Kubernetes Engine](https://cloud.tencent.com/act/cps/redirect?redirect=10058&cps_key=3a5255852d5db99dcd5da4c72f05df61)
 
 ## Advanced
 
@@ -210,19 +203,19 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.8.7`           | **2.8.7**           |`alpine:3.12`    |
-|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.19.2-alpine`          | **1.19.2**          |`alpine:3.11`    |
-|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.10-unit-alpine`| **1.19.0**          |`alpine:3.11`    |
-|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.46-alpine`          | **2.4.46**          |`alpine:3.12`    |
-|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.21`                 | **8.0.21**          |`debian:buster-slim`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.5`               | **10.5.5**          |`ubuntu:bionic`  |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.7-alpine`           | **6.0.7**           |`alpine:3.12`    |
+|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.19.2-alpine`           | **1.19.2**          |`alpine:3.12`    |
+|[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.10-unit-alpine`| **1.19.0**          |`alpine:3.12`    |
+|[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.46-alpine`           | **2.4.46**          |`alpine:3.12`    |
+|[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.21`                  | **8.0.21**          |`debian:buster-slim`|
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.5`                | **10.5.5**          |`ubuntu:focal`  |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.8-alpine`            | **6.0.8**           |`alpine:3.12`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:7.4.10-fpm-alpine`     | **7.4.10**       |`alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.10-composer-alpine`| **1.10.10**      |`alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.10-composer-alpine`| **1.10.13**      |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.7-alpine`           | **1.6.7**       |`alpine:3.12`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.5-management-alpine` | **3.8.5**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.4-alpine`             | **12.4**        |`alpine:3.12`    |
-|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.0`                      | **4.4.0**       |`ubuntu:bionic`  |
-|[PHPMyAdmin](https://github.com/phpmyadmin/docker)                        |`phpmyadmin:5.0.2`                 | **latest**      |`alpine:3.12`    |
+|[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.1`                      | **4.4.1**       |`ubuntu:bionic`  |
+|[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.0.2`                | **5.0.2**       |`alpine:3.12`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
 
 ### Folder Structure
@@ -230,7 +223,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |Folder|description|
 |:--|:--|
 |`app`         |PHP project (HTML, PHP, etc) |
-|`backup`      |backup database file|
+|`scripts/backup`|backup database file|
 |`bin`         |PHPer Commands    |
 |`config`      |configuration file|
 |`dockerfile`  |Dockerfile        |
@@ -245,10 +238,6 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 ## CLI
 
 Easy to generate nginx or apache config, etc. Please use [`./lnmp-docker`](docs/cli.md).
-
-## Run in Production
-
-Start `Containers as a Service(CaaS)`. For more information, see [Documents](docs/swarm/README.md).
 
 ## Who use in Production?
 

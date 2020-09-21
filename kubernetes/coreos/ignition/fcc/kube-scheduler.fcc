@@ -14,15 +14,15 @@ systemd:
             ExecStop=/bin/podman stop kube-scheduler
 storage:
   files:
-    - path: ${K8S_ROOT}/conf/kube-scheduler.kubeconfig
+    - path: ${K8S_ROOT}/etc/kubernetes/kube-scheduler.kubeconfig
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.kubeconfig
-    - path: ${K8S_ROOT}/certs/kube-scheduler.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler.pem
-    - path: ${K8S_ROOT}/certs/kube-scheduler-key.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/kube-scheduler-key.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kube-scheduler-key.pem

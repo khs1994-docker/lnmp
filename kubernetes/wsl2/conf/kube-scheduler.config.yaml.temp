@@ -3,7 +3,7 @@ apiVersion: kubescheduler.config.k8s.io/v1alpha1
 kind: KubeSchedulerConfiguration
 clientConnection:
   burst: 200
-  kubeconfig: "##K8S_ROOT##/conf/kube-scheduler.kubeconfig"
+  kubeconfig: "##K8S_ROOT##/etc/kubernetes/kube-scheduler.kubeconfig"
   qps: 100
 enableContentionProfiling: false
 enableProfiling: true

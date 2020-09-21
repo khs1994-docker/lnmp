@@ -1,17 +1,3 @@
-kind: Service
-apiVersion: v1
-metadata:
-  name: csi-hostpath-snapshotter
-  labels:
-    app: csi-hostpath-snapshotter
-spec:
-  selector:
-    app: csi-hostpath-snapshotter
-  ports:
-    - name: dummy
-      port: 12345
-
----
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
@@ -40,9 +26,7 @@ spec:
       serviceAccount: csi-snapshotter
       containers:
         - name: csi-snapshotter
-          # TODO: change to official image when released
-          image: quay.io/k8scsi/csi-snapshotter:v2.0.0-rc2
-          imagePullPolicy: IfNotPresent
+          image: quay.io/k8scsi/csi-snapshotter:v2.1.0
           args:
             - -v=5
             - --csi-address=/csi/csi.sock

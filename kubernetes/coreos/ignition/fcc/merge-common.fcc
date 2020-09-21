@@ -64,15 +64,15 @@ storage:
         name: core
       group:
         name: core
-    - path: ${K8S_ROOT}/conf/kubectl.kubeconfig
+    - path: ${K8S_ROOT}/etc/kubernetes/kubectl.kubeconfig
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/kubectl.kubeconfig
-    - path: ${K8S_ROOT}/certs/ca.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/ca.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/ca.pem
-    - path: ${K8S_ROOT}/certs/ca-key.pem
+    - path: ${K8S_ROOT}/etc/kubernetes/pki/ca-key.pem
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/cert/ca-key.pem
