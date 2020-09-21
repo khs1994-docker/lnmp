@@ -192,8 +192,10 @@ Function _cp_init_file() {
 
   _cp_only_not_exists config/php/docker-php.example.ini config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
+  _cp_only_not_exists config/php/zz-docker.example.conf config/php/zz-docker.conf
   _cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini
   _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
+  _cp_only_not_exists config/php8/zz-docker.example.conf config/php8/zz-docker.conf
 
   _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
   _cp_only_not_exists config/npm/.env.example config/npm/.env
@@ -1649,7 +1651,7 @@ Example: ./lnmp-docker composer /app/demo install
         $APP_ROOT_SOURCE = $null
 
         if (!$other) {
-          printError "APP_ROOT is real wsl2 docker-desktop path, you must set full path, e.g. $./lnmp-docker code /app/laravel"
+          printError "APP_ROOT is real wsl2 docker-desktop path, you must input full path, e.g. $./lnmp-docker code /app/laravel"
 
           exit 1
         }
