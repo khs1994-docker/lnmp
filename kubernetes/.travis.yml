@@ -202,6 +202,7 @@ before_script:
 
   - sudo systemctl cat crio || true
   - sudo cat /etc/sysconfig/crio || true
+  - sudo cat ${K8S_ROOT:-/opt/k8s}/etc/sysconfig/crio || true
   - /usr/local/bin/crio --config=/etc/crio/crio.conf config > crio.conf || true
   - /usr/local/bin/crio config --default > crio.default.conf || true
   - cat crio.conf || true
@@ -343,6 +344,7 @@ after_success:
   - kubectl get pod/${NGINX_POD_NAME} -o yaml
 
   - kubectl delete svc/${NGINX_SERVICE_NAME}
+  # ipv6 svc
   - kubectl apply -f demo/ipv6
 
   - kubectl get svc/nginx -o yaml

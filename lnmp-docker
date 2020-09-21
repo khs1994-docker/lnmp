@@ -82,10 +82,13 @@ print_info "Exec custom scripts"
 . ./lnmp-docker-custom-script
 
 _cp_only_not_exists config/php/php.development.ini config/php/php.ini
-_cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
+_cp_only_not_exists config/php/docker-php.example.ini config/php/docker-php.ini
+if ! [ -f config/redis/redis.conf ];then
+  echo "#" > config/redis/redis.conf
+fi
 
 _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
-_cp_only_not_exists config/php8/docker-php.ini.example config/php8/docker-php.ini
+_cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini
 
 _cp_only_not_exists config/composer/config.example.json config/composer/config.json
 _cp_only_not_exists config/composer/.env.example config/composer/.env

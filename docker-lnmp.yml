@@ -57,7 +57,7 @@ services:
     ports:
       - "${LNMP_REDIS_PORT:-127.0.0.1:6379}:6379"
     volumes:
-      - ./config/redis/${LNMP_REDIS_CONF:-redis.conf}:/redis.conf:ro,cached
+      - ./config/redis/redis.conf:/redis.conf:ro,cached
       # - redis-data:/data:cached
       - type: volume
         source: redis-data
@@ -106,7 +106,7 @@ services:
       # php.ini
       - ./config/php/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
-      - ./config/php/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:cached
       # 以下用于 supervisord
@@ -153,7 +153,7 @@ services:
       # php.ini
       - ./config/php8/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
-      - ./config/php8/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php8:/var/log/php:cached
       # 以下用于 supervisord
@@ -228,6 +228,7 @@ services:
       - frontend
     healthcheck:
       test: ["CMD","curl","-sf","127.0.0.1:80"]
+      # test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
 
   nginx:
     << : *common

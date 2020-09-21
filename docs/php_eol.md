@@ -23,7 +23,7 @@ services:
       # php.ini
       - ./config/php5/${LNMP_PHP_INI:-php.development.ini}:/usr/local/etc/php/php.ini:ro,cached
       # php.ini override
-      - ./config/php5/${LNMP_PHP_EXTRA_INI:-docker-php.ini}:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
+      - ./config/php5/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:cached
       - ./log/supervisord.log:/var/log/supervisord.log:cached
@@ -78,7 +78,7 @@ access.log = /var/log/php/php-fpm-access.log
 
 * 2. `php.ini` PHP 主配置文件 [参考](https://github.com/php/php-src/blob/PHP-5.6/php.ini-development)
 
-* 3. `docker-php.ini` PHP 子配置文件 (从 `config/php/docker-php.ini.example` 中复制)
+* 3. `docker-php.ini` PHP 子配置文件 (从 `config/php/docker-php.example.ini` 中复制)
 
 提示：php7.1（包含）及以下版本 配置扩展必须加扩展名 `.so`
 

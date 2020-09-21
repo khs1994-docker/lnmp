@@ -48,9 +48,9 @@ echo "\`\`\`" >> path.md
 set -x
 source ./.env
 
-wget https://github.com/redis/redis/raw/${LNMP_REDIS_VERSION:-6.0.8}/redis.conf -O redis/redis.conf
+wget https://github.com/redis/redis/raw/${LNMP_REDIS_VERSION:-6.0.8}/redis.conf -O redis/redis.example.conf
 
-cp redis/redis.conf redis/redis.production.conf
+cp redis/redis.example.conf redis/redis.production.conf
 
 curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP_VERSION}/php.ini-production > php/php.production.ini
 

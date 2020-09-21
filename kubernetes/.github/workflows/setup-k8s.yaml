@@ -235,6 +235,7 @@ jobs:
 
          sudo systemctl cat crio || true
          sudo cat /etc/sysconfig/crio || true
+         sudo cat ${K8S_ROOT:-/opt/k8s}/etc/sysconfig/crio || true
          /usr/local/bin/crio --config=/etc/crio/crio.conf config > crio.conf || true
          /usr/local/bin/crio config --default > crio.default.conf || true
          cat crio.conf || true
@@ -356,13 +357,22 @@ jobs:
          sleep 20
          kubectl get all
          kubectl get pod -o wide
-         POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
-         kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
-         kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
-         kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
-         kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
+         NGINX_POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
+         kubectl exec ${NGINX_POD_NAME} -- cat /etc/resolv.conf
+         kubectl exec ${NGINX_POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${NGINX_POD_NAME} -- nslookup kubernetes || true
+         kubectl exec ${NGINX_POD_NAME} -- ping -c 5 github.com || kubectl exec ${NGINX_POD_NAME} -- nslookup github.com
+         kubectl exec ${NGINX_POD_NAME} -- curl -k https://kubernetes/api || true
+
+         kubectl expose pod/${NGINX_POD_NAME} --port=80
+         sleep 2
+         NGINX_SERVICE_NAME=$(echo $(kubectl get svc | grep nginx | awk '{ print $1 }' | cut -d "/" -f 2))
+         echo $NGINX_SERVICE_NAME
+         echo $NGINX_POD_NAME
+         kubectl get all
+         kubectl exec ${NGINX_POD_NAME} -- curl $NGINX_SERVICE_NAME || true
+
          kubectl delete deployment nginx || true
-         kubectl delete pod nginx || true
+         kubectl delete pod ${NGINX_POD_NAME} || true
          kubectl get all
          # test ingress-nginx
          HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`

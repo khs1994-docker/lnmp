@@ -182,13 +182,17 @@ Function _cp_init_file() {
     Copy-Item secrets/minio/secret.example.txt secrets/minio/secret.txt
   }
 
+  if (!(Test-Path config/redis/redis.conf)) {
+    Write-Output "#" | Out-File config/redis/redis.conf
+  }
+
   _cp_only_not_exists docker-lnmp.include.example.yml docker-lnmp.include.yml
 
   _cp_only_not_exists docker-workspace.example.yml docker-workspace.yml
 
-  _cp_only_not_exists config/php/docker-php.ini.example config/php/docker-php.ini
+  _cp_only_not_exists config/php/docker-php.example.ini config/php/docker-php.ini
   _cp_only_not_exists config/php/php.development.ini config/php/php.ini
-  _cp_only_not_exists config/php8/docker-php.ini.example config/php8/docker-php.ini
+  _cp_only_not_exists config/php8/docker-php.example.ini config/php8/docker-php.ini
   _cp_only_not_exists config/php8/php.development.ini config/php8/php.ini
 
   _cp_only_not_exists config/npm/.npmrc.example config/npm/.npmrc
@@ -1643,10 +1647,10 @@ Example: ./lnmp-docker composer /app/demo install
     if ($APP_ROOT_SOURCE.Length -gt 53) {
       if ($APP_ROOT_SOURCE.Substring(0, 53) -eq '/run/desktop/mnt/host/wsl/docker-desktop-bind-mounts/') {
         $APP_ROOT_SOURCE = $null
-        
+
         if (!$other) {
           printError "APP_ROOT is real wsl2 docker-desktop path, you must set full path, e.g. $./lnmp-docker code /app/laravel"
-          
+
           exit 1
         }
       }
