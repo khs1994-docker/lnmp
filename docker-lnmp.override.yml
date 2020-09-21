@@ -74,4 +74,4 @@ secrets:
     file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
   supervisord_ini:
     << : *common
-    file: ./config/supervisord/${LNMP_SUPERVISORD_INI_PATH:-supervisord.ini}
+    file: ./config/supervisord/supervisord.ini
