@@ -322,33 +322,40 @@ script:
   - sleep 20
   - kubectl get all
   - kubectl get pod -o wide
-  - POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
-  - kubectl exec ${POD_NAME} -- ip addr
-  - kubectl exec ${POD_NAME} -- cat /etc/resolv.conf
-  - kubectl exec ${POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${POD_NAME} -- nslookup kubernetes || true
-  - kubectl exec ${POD_NAME} -- ping -c 5 github.com || kubectl exec ${POD_NAME} -- nslookup github.com
-  - kubectl exec ${POD_NAME} -- curl -k https://kubernetes/api || true
-  - kubectl expose pod/${POD_NAME} --port=80
+  - NGINX_POD_NAME=`kubectl get pod | awk '{print $1}' | tail -1`
+  - kubectl exec ${NGINX_POD_NAME} -- ip addr
+  - kubectl exec ${NGINX_POD_NAME} -- cat /etc/resolv.conf
+  - kubectl exec ${NGINX_POD_NAME} -- ping -c 5 kubernetes || kubectl exec ${NGINX_POD_NAME} -- nslookup kubernetes || true
+  - kubectl exec ${NGINX_POD_NAME} -- ping -c 5 github.com || kubectl exec ${NGINX_POD_NAME} -- nslookup github.com
+  - kubectl exec ${NGINX_POD_NAME} -- curl -k https://kubernetes/api || true
+
+  - kubectl expose pod/${NGINX_POD_NAME} --port=80
+  - sleep 2 ; NGINX_SERVICE_NAME=$(echo $(kubectl get svc | grep nginx | awk '{ print $1 }' | cut -d "/" -f 2))
+  - echo $NGINX_SERVICE_NAME
+  - echo $NGINX_POD_NAME
   - kubectl get all
+  - kubectl exec ${NGINX_POD_NAME} -- curl $NGINX_SERVICE_NAME || true
 
-  - kubectl get svc/nginx -o yaml
+  - test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
+after_success:
+  - kubectl get svc/${NGINX_SERVICE_NAME} -o yaml
   - kubectl get deployment/nginx -o yaml || true
-  - kubectl get pod/${POD_NAME} -o yaml
+  - kubectl get pod/${NGINX_POD_NAME} -o yaml
 
-  - kubectl delete svc/nginx
+  - kubectl delete svc/${NGINX_SERVICE_NAME}
   - kubectl apply -f demo/ipv6
 
   - kubectl get svc/nginx -o yaml
   - kubectl get deployment/nginx -o yaml || true
-  - kubectl get pod/${POD_NAME} -o yaml
+  - kubectl get pod/${NGINX_POD_NAME} -o yaml
 
   - |
     if [ "${IPV6}" = 'true' ];then
       set -x
-      POD_IPV4_IP=`kubectl get pod/nginx -o go-template="{{(index .status.podIPs 0).ip}}"`
+      POD_IPV4_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 0).ip}}"`
       curl ${POD_IPV4_IP}:80 || true
 
-      POD_IPV6_IP=`kubectl get pod/nginx -o go-template="{{(index .status.podIPs 1).ip}}"` || true
+      POD_IPV6_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 1).ip}}"` || true
       curl [${POD_IPV6_IP}]:80 || true
 
       CLUSTER_IPV6_IP=`kubectl get svc/nginx -o go-template="{{ .spec.clusterIP }}"`
@@ -360,16 +367,13 @@ script:
 
   - kubectl delete svc nginx || true
   - kubectl delete deployment nginx || true
-  - kubectl delete pod ${POD_NAME} || true
+  - kubectl delete pod ${NGINX_POD_NAME} || true
   - kubectl get all
   # test ingress-nginx
   - HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
   - curl --version
   - curl ${SERVER_IP}:${HTTP_PORT}
 
-  - test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
-
-after_success:
   - sudo crictl version
   - sudo crictl info
   - ip addr
@@ -390,6 +394,8 @@ after_success:
   - sudo tree /var/run -L 3 || true
 
   - kubectl get node -o yaml
+
+  - sudo ps aux
 
   - |
     PRE_VERSION=v1.19.0-rc.3

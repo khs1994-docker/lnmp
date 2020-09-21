@@ -43,6 +43,7 @@ ping -c 1 laravel2.t.khs1994.com || nslookup laravel2.t.khs1994.com
 sleep 120
 kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
+sudo ps aux || true
 kubectl delete ns lnmp
 kubectl delete pv -l app=lnmp
 ./lnmp-k8s nfs down
