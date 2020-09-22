@@ -46,7 +46,7 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manage
   --service-account-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key `
   --kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig `
   --logtostderr=true `
-  --feature-gates="IPv6DualStack=true" `
+  --feature-gates="IPv6DualStack=true,EphemeralContainers=true,GenericEphemeralVolume=true" `
   --v=2
 
 # 可以调为 1h, 查看 kubelet 证书轮转

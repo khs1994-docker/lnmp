@@ -69,7 +69,7 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
   --logtostderr=true `
   --service-account-issuer=api `
   --api-audiences=api `
-  --feature-gates="IPv6DualStack=true" `
+  --feature-gates="IPv6DualStack=true,EphemeralContainers=true,GenericEphemeralVolume=true" `
   --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null

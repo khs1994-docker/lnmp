@@ -75,3 +75,5 @@ featureGates:
   # AllAlpha: true
   # BoundServiceAccountTokenVolume: false
   IPv6DualStack: true
+  EphemeralContainers: true
+  GenericEphemeralVolume: true
