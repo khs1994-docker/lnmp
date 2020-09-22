@@ -69,8 +69,8 @@ kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
 
 echo "==> Test runtimeclass runsc"
-test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.containerd.yaml && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
-test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
+test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/containerd/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
+test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/cri-o/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine uname -a || true
 test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm alpine uname -a || true
 sleep 20

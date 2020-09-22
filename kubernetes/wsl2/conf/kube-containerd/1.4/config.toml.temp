@@ -51,7 +51,7 @@ oom_score = 0
     # sandbox_image = "gcr.mirror/google-containers/pause:3.2"
     sandbox_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
     stats_collect_period = 10
-    systemd_cgroup = false
+    # systemd_cgroup = false
     enable_tls_streaming = false
     max_container_log_line_size = 16384
     disable_cgroup = false
@@ -70,31 +70,42 @@ oom_score = 0
           # runtime_type = "io.containerd.runtime.v1.linux"
           # runtime_type = "io.containerd.runc.v1"
           runtime_type = "io.containerd.runc.v2"
-          runtime_engine = ""
-          runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            systemd_cgroup = false
+            # systemd_cgroup = false
+            SystemdCgroup = false
+            # 小写不起作用?
             # binary_name = ""
+
+            # BinaryName = "runc"
+            # BinaryName = "crun"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
+          runtime_type = "io.containerd.runsc.v1"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
+            SystemdCgroup = false
+            # systemd_cgroup = false
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"
           # runtime_type = "io.containerd.runc.v2"
-          runtime_engine = ""
-          runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1.options]
             SystemdCgroup = false
-            # BinaryName = ""
+            # BinaryName = "runc"
+            # BinaryName = "crun"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux]
           runtime_type = "io.containerd.runtime.v1.linux"
           # runtime_type = "io.containerd.runc.v1"
           # runtime_type = "io.containerd.runc.v2"
+          # 仅在 io.containerd.runtime.v1.linux 生效
           runtime_engine = ""
+          # 仅在 io.containerd.runtime.v1.linux 生效
           runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux.options]
             SystemdCgroup = false
+            # 不起作用
             # BinaryName = ""
     [plugins."io.containerd.grpc.v1.cri".cni]
       bin_dir = "##K8S_ROOT##/opt/cni/bin"
@@ -152,6 +163,7 @@ oom_score = 0
   [plugins."io.containerd.runtime.v1.linux"]
     shim = "kube-containerd-shim"
     runtime = "runc"
+    # runtime = "crun"
     runtime_root = ""
     no_shim = false
     shim_debug = false

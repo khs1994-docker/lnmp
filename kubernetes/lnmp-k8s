@@ -414,8 +414,6 @@ print_info "config containerd with gvisor(runsc) ..."
 cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
-  # runtime_engine = ""
-  # runtime_root = ""
   # privileged_without_host_devices = false
   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
     SystemdCgroup = false

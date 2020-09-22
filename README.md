@@ -118,23 +118,19 @@ More information please see Docker PHP Best Practice https://github.com/khs1994-
 
 ### How to connect Services
 
-:no_entry: ~~`$redis->connect('127.0.0.1',6379);`~~
-
-:no_entry: ~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
-
-```php
+```diff
 $redis = new \Redis();
 
-$redis->connect('redis', 6379);
+- $redis->connect('127.0.0.1',6379);
++ $redis->connect('redis', 6379);
 
-$pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
+- $pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');
++ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
 
 ## Advanced
 
 * [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
-
-* [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
 ## PHPer commands
 

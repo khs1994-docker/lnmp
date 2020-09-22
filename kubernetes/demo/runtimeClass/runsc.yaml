@@ -1,22 +1,23 @@
 kind: Pod
 apiVersion: v1
 metadata:
-  name: test
+  name: runtimeclasss-test
   labels:
-    lnmp: test
+    app: test
 spec:
+  # runtimeClassName: runsclinux
   runtimeClassName: runsc
   # runtimeClassName: runc
   # runtimeClassName: runcv1
   # runtimeClassName: runclinux
   containers:
-  - name: "lnmp-pod"
+  - name: "test"
     image: nginx:alpine
     imagePullPolicy: IfNotPresent
     volumeMounts:
     - name: test
       mountPath: /opt/data
-  # - name: "lnmp-pod2"
+  # - name: "test2"
   #   image: khs1994/php:7.4.1-fpm-alpine
   volumes:
   - name: test

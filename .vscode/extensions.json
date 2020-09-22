@@ -17,6 +17,7 @@
       "ivory-lab.jenkinsfile-support",
       // "ms-python.vscode-pylance",
       "felixfbecker.php-debug",
-      "mikestead.dotenv"
+      "mikestead.dotenv",
+      "be5invis.toml"
   ]
 }
