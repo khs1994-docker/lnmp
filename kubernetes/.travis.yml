@@ -423,7 +423,8 @@ after_success:
     fi
   - |
     PRE_VERSION=v1.19.0
-    if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.0' ];then
+    PRE_VERSION=master
+    if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.1' ];then
       set -x
       cd /tmp
       rm -rf lnmp-k8s
@@ -456,7 +457,7 @@ jobs:
     # next version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.20.0-alpha.1 LNMP_K8S_GET="--url"
     # current stable version
     # cri-o
     - os: linux
@@ -501,7 +502,7 @@ jobs:
       env: CI_KUBERNETES_VERSION=1.17.12 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
+  - env: CI_KUBERNETES_VERSION=1.20.0-alpha.1 LNMP_K8S_GET="--url"
   # - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
 
 branches:
