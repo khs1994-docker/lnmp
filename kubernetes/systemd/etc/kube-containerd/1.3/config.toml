@@ -146,7 +146,7 @@ oom_score = 0
       tls_cert_file = ""
       tls_key_file = ""
   [plugins."io.containerd.internal.v1.opt"]
-    path = "/opt/k8s/kube-containerd"
+    path = "/opt/k8s/opt/kube-containerd"
   [plugins."io.containerd.internal.v1.restart"]
     interval = "10s"
   [plugins."io.containerd.metadata.v1.bolt"]

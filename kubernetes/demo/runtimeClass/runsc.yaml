@@ -5,8 +5,9 @@ metadata:
   labels:
     app: test
 spec:
-  # runtimeClassName: runsclinux
+  # runtimeClassName: kata
   runtimeClassName: runsc
+  # runtimeClassName: runsc-kvm
   # runtimeClassName: runc
   # runtimeClassName: runcv1
   # runtimeClassName: runclinux
