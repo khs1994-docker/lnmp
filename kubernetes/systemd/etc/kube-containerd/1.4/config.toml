@@ -85,39 +85,37 @@ oom_score = 0
           privileged_without_host_devices = false
           base_runtime_spec = ""
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            # systemd_cgroup enables systemd cgroups.
-            # systemd_cgroup = true
+            # SystemdCgroup enables systemd cgroups.
             SystemdCgroup = true
-            # binary_name is the binary name of the runc binary.
-            # binary_name = ""
-            # binary_name = "runc"
-            # binary_name = "crun"
-            # no_pivot_root disables pivot root when creating a container.
-            # no_pivot_root = false
+            # BinaryName is the binary name of the runc binary.
+            # BinaryName = "runc"
+            # BinaryName = "crun"
+            # NoPivotRoot disables pivot root when creating a container.
+            # NoPivotRoot = false
 
-            # no_new_keyring disables new keyring for the container.
-            # no_new_keyring = false
+            # NoNewKeyring disables new keyring for the container.
+            # NoNewKeyring = false
 
-            # shim_cgroup places the shim in a cgroup.
-            # shim_cgroup = ""
+            # ShimCgroup places the shim in a cgroup.
+            # ShimCgroup = ""
 
-            # io_uid sets the I/O's pipes uid.
-            # io_uid = 0
+            # IoUid sets the I/O's pipes uid.
+            # IoUid = 0
 
-            # io_gid sets the I/O's pipes gid.
-            # io_gid = 0
+            # IoGid sets the I/O's pipes gid.
+            # IoGid = 0
 
-            # root is the runc root directory.
-            root = ""
+            # Root is the runc root directory.
+            Root = ""
 
-            # criu_path is the criu binary path.
-            # criu_path = ""
+            # CriuPath is the criu binary path.
+            # CriuPath = ""
 
-            # criu_image_path is the criu image path
-            # criu_image_path = ""
+            # CriuImagePath is the criu image path
+            # CriuImagePath = ""
 
-            # criu_work_path is the criu work path.
-            # criu_work_path = ""
+            # CriuWorkPath is the criu work path.
+            # CriuWorkPath = ""
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"
