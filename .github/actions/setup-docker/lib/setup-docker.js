@@ -7,12 +7,13 @@ const DOCKER_CHANNEL = core.getInput('docker_channel');
 const DOCKER_CLI_EXPERIMENTAL = core.getInput('docker_cli_experimental');
 const DOCKER_DAEMON_JSON = core.getInput('docker_daemon_json');
 const DOCKER_BUILDX = core.getInput('docker_buildx');
+const DOCKER_NIGHTLY_VERSION = core.getInput('docker_nightly_version');
 
 const systemExec = require('child_process').exec;
 
 async function shell(cmd) {
   return await new Promise((resolve, reject) => {
-    systemExec(cmd, function(error, stdout, stderr) {
+    systemExec(cmd, function (error, stdout, stderr) {
       if (error) {
         reject(error);
       }
@@ -36,57 +37,124 @@ async function run() {
     return
   }
 
+  await exec.exec('sudo', [
+    'systemctl',
+    'status',
+    'docker',
+  ]).then(() => { }).catch(() => { });
+
   core.debug('check docker version');
   await exec.exec('docker', [
     'version',
-  ]);
+  ]).catch(() => { });
 
-  core.debug('add apt-key');
-  await exec.exec('curl', [
-    '-fsSL',
-    '-o',
-    '/tmp/docker.gpg',
-    'https://download.docker.com/linux/ubuntu/gpg',
-  ]);
-  await exec.exec('sudo', [
-    'apt-key',
-    'add',
-    '/tmp/docker.gpg',
-  ]);
+  if (DOCKER_CHANNEL === 'nightly') {
+    await exec.exec('curl', [
+      '-fsSL',
+      '-o',
+      '/tmp/moby-snapshot-ubuntu-focal-x86_64-deb.tbz',
+      `https://github.com/AkihiroSuda/moby-snapshot/releases/download/${DOCKER_NIGHTLY_VERSION}/moby-snapshot-ubuntu-focal-x86_64-deb.tbz`
+    ]);
 
-  core.debug('add apt source');
-  const UBUNTU_CODENAME = await shell('lsb_release -cs');
-  await exec.exec('sudo', [
-    'add-apt-repository',
-    `deb [arch=amd64] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}`,
-  ]);
+    await exec.exec('sudo', [
+      'rm',
+      '-rf',
+      '/tmp/*.deb'
+    ]);
 
-  core.debug('update apt cache');
-  await exec.exec('sudo', [
-    'apt-get',
-    'update',
-  ]);
+    await exec.exec('tar', [
+      'xjvf',
+      '/tmp/moby-snapshot-ubuntu-focal-x86_64-deb.tbz',
+      '-C',
+      '/tmp'
+    ]);
 
-  core.debug('show available docker version');
-  await exec.exec('apt-cache', [
-    'madison',
-    'docker-ce',
-    '|',
-    'grep',
-    '19.03'
-  ]);
+    await exec.exec('sudo', [
+      'apt-get',
+      'update',
+    ]);
 
-  const DOCKER_VERSION_STRING = await shell(
-    `apt-cache madison docker-ce | grep ${DOCKER_VERSION} | head -n 1 | awk '{print $3}' | sed s/[[:space:]]//g`)
+    await exec.exec('sudo', [
+      'sh',
+      '-c',
+      "apt remove -y moby-buildx moby-cli moby-containerd moby-engine moby-runc"
+    ]).catch(() => { });
 
-  core.debug('install docker');
-  await exec.exec('sudo', [
-    'apt-get',
-    '-y',
-    'install',
-    DOCKER_VERSION_STRING ? `docker-ce=${DOCKER_VERSION_STRING}` : 'docker-ce',
-    DOCKER_VERSION_STRING ? `docker-ce-cli=${DOCKER_VERSION_STRING}` : 'docker-ce-cli'
-  ]);
+    await exec.exec('sudo', [
+      'sh',
+      '-c',
+      'apt-get install -y /tmp/*.deb'
+    ]).catch(async () => {
+      await exec.exec('curl', [
+        '-fsSL',
+        '-o',
+        '/tmp/libseccomp2_2.4.3-1+b1_amd64.deb',
+        'http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.3-1+b1_amd64.deb'
+      ]);
+
+      await exec.exec('sudo', [
+        'sh',
+        '-c',
+        'dpkg -i /tmp/*.deb'
+      ]);
+    });
+
+  } else {
+    core.debug('add apt-key');
+    await exec.exec('curl', [
+      '-fsSL',
+      '-o',
+      '/tmp/docker.gpg',
+      'https://download.docker.com/linux/ubuntu/gpg',
+    ]);
+    await exec.exec('sudo', [
+      'apt-key',
+      'add',
+      '/tmp/docker.gpg',
+    ]);
+
+    core.debug('add apt source');
+    const UBUNTU_CODENAME = await shell('lsb_release -cs');
+    await exec.exec('sudo', [
+      'add-apt-repository',
+      `deb [arch=amd64] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}`,
+    ]);
+
+    core.debug('update apt cache');
+    await exec.exec('sudo', [
+      'apt-get',
+      'update',
+    ]);
+
+    core.debug('show available docker version');
+    await exec.exec('apt-cache', [
+      'madison',
+      'docker-ce',
+      '|',
+      'grep',
+      '19.03'
+    ]);
+
+    const DOCKER_VERSION_STRING = await shell(
+      `apt-cache madison docker-ce | grep ${DOCKER_VERSION} | head -n 1 | awk '{print $3}' | sed s/[[:space:]]//g`)
+
+    if (!DOCKER_VERSION_STRING) {
+      const OS = await shell(
+        `cat /etc/os-release | grep VERSION_ID | cut -d '=' -f 2`
+      );
+
+      core.warning(`Docker ${DOCKER_VERSION} not available on ubuntu ${OS}, install latest docker version`);
+    }
+
+    core.debug('install docker');
+    await exec.exec('sudo', [
+      'apt-get',
+      '-y',
+      'install',
+      DOCKER_VERSION_STRING ? `docker-ce=${DOCKER_VERSION_STRING}` : 'docker-ce',
+      DOCKER_VERSION_STRING ? `docker-ce-cli=${DOCKER_VERSION_STRING}` : 'docker-ce-cli'
+    ]);
+  }
 
   core.debug('check docker version');
   await exec.exec('docker', [
@@ -155,6 +223,10 @@ async function run() {
       '--use',
       '--name',
       'mybuilder',
+      '--driver',
+      'docker-container',
+      '--driver-opt',
+      'image=moby/buildkit:master'
     ]);
 
     await exec.exec('docker', [

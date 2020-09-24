@@ -8,11 +8,17 @@ inputs:
     description: Docker Version
     default: 19.03
     required: false
+  docker_nightly_version:
+    # https://github.com/AkihiroSuda/moby-snapshot/releases
+    description: Docker nightly Version
+    default: snapshot-20200915
+    required: false
   docker_channel:
+    # https://download.docker.com/linux/ubuntu/dists/focal/pool/
     description: Docker Channel
     default: stable
     # test
-    # nightly
+    # nightly # this channel use https://github.com/AkihiroSuda/moby-snapshot
     required: false
   docker_buildx:
     # https://docs.docker.com/engine/reference/commandline/buildx/
@@ -20,7 +26,7 @@ inputs:
     default: true
     required: false
   docker_cli_experimental:
-    # https://docs.docker.com/engine/reference/commandline/cli/#configuration-files
+    # https://docs.docker.com/engine/reference/commandline/cli/#experimental-features
     description: docker cli experimental
     default: enabled
     required: false

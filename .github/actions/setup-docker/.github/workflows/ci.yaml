@@ -8,16 +8,22 @@ jobs:
   docker:
     name: Docker
     strategy:
+      fail-fast: false
       matrix:
         docker_version:
           - 18.09
           - 19.03
-          - 19.09
+          - 20.03
         docker_channel:
           - stable
           - test
           # - nightly
-    runs-on: ubuntu-latest
+        os:
+          - ubuntu-16.04
+          - ubuntu-18.04
+          - ubuntu-20.04
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@main
         with:
@@ -62,21 +68,30 @@ jobs:
           docker push khs1994/alpine:latest
         if: github.event_name == 'push'
   docker-nightly:
-    runs-on: ubuntu-latest
+    strategy:
+        fail-fast: false
+        matrix:
+          os:
+          - ubuntu-16.04
+          - ubuntu-18.04
+          - ubuntu-20.04
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@main
         with:
           fetch-depth: 2
-      - name: setup docker(Without version)
+      - name: setup docker
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
         with:
-          docker_version: 0.0.0.0
+          docker_nightly_version: snapshot-20200915
           docker_channel: nightly
       - run: docker version
 
   notsupport-platform:
     strategy:
+      fail-fast: false
       matrix:
         os:
          - windows-latest
