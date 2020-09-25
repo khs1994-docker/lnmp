@@ -22,13 +22,25 @@ $ sudo yum install -y nfs-utils
 
 ## 测试
 
+### 部署 NFS 服务端
+
+> 如果你有自己的 NFS 服务端，可以跳过此节
+
+```bash
+$ kubectl apply -k ../../../deploy/nfs-server
+```
+
+### 如果使用自己的 NFS 服务，替换为实际的值
+
 替换 `tests/pv.yaml`
 
 ```yaml
     volumeAttributes:
-      server: 192.168.199.100 # nfs server
-      share: /kubernetes_csi       # nfs export path
+      server: 10.254.0.49              # nfs server
+      share: /kubernetes_nfs_csi       # nfs export path
 ```
+
+### 测试
 
 ```bash
 $ kubectl apply -k tests

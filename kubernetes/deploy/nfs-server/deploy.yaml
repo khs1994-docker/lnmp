@@ -1,0 +1,95 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: nfs-server
+  labels:
+    app: nfs-server
+spec:
+  type: ClusterIP
+  clusterIP: 10.254.0.49
+  selector:
+    app: nfs-server
+  ports:
+    - port: 2049
+      name: nfs
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nfs-server
+  labels:
+    app: nfs-server
+spec:
+  selector:
+    matchLabels:
+      app: nfs-server
+  template:
+    metadata:
+      labels:
+        app: nfs-server
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      initContainers:
+        - name: mkdir
+          image: busybox
+          args:
+            - sh
+            - -c
+            - |
+              set -x
+              for item in $(cat /etc/exports | awk '{print $1}'); \
+              do \
+                if [ $item != '#' ];then \
+                   mkdir -p $item || true; \
+                fi; \
+              done
+          volumeMounts:
+            - name: root
+              mountPath: /nfs
+            - name: exports
+              mountPath: /etc/exports
+              subPath: exports
+      containers:
+        - name: nfs-server
+          # image: erichough/nfs-server
+          image: klutchell/nfs-server
+          ports:
+            - containerPort: 2049
+              name: nfs
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_MODULE
+          env:
+            - name: NFS_DISABLE_VERSION_3
+              value: "true"
+            - name: TZ
+              value: Asia/Shanghai
+            - name: NFS_LOG_LEVEL
+              value: debug
+          volumeMounts:
+            - name: root
+              mountPath: /nfs
+            - name: exports
+              mountPath: /etc/exports
+              subPath: exports
+            - name: lib-modules
+              mountPath: /lib/modules
+      volumes:
+        - name: root
+          hostPath:
+            path: /nfs
+            type: DirectoryOrCreate
+        - name: exports
+          configMap:
+            name: nfs-exports
+            items:
+              - path: exports
+                key: exports
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules

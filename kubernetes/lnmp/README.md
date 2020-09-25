@@ -12,8 +12,11 @@ $ kubectl kustomize storage/pv/macos | sed "s/__USERNAME__/$(whoami)/g" | kubect
 # 适用于 Windows Docker Desktop k8s
 $ (kubectl kustomize storage/pv/windows).replace('__USERNAME__',$env:USERNAME) | kubectl apply -f -
 
-# nfs
-$ kubectl kustomize storage/pv/nfs | sed "s/192.168.199.100/YOUR_NFS_SERVER/g" | kubectl apply -f -
+# nfs 使用集群内的 nfs 具体请查看 ../deploy/nfs-server
+$ kubectl apply -k storage/pv/nfs
+
+# nfs 使用自己的 NFS 服务器
+$ kubectl kustomize storage/pv/nfs | sed "s/10.254.0.49/YOUR_NFS_SERVER/g" | kubectl apply -f -
 
 # production 环境请将 storage 替换为 storage-production
 ```

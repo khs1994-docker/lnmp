@@ -4,9 +4,13 @@
 
 文件位于 `/exported/path/${namespace}-${pvcName}-${pvName}`，archive 文件位于 `/exported/path/archived-${namespace}-${pvcName}-${pvName}`
 
-## 准备
+## 部署 NFS 服务端
 
-* 已经拥有 NFSv4 服务端，这里假设为 `192.168.199.100`，部署时请 **务必** 替换为自己的地址。
+> 如果你已经拥有 NFSv4 服务端，请跳过此步。
+
+```bash
+$ kubectl apply -k ../../deploy/nfs-server
+```
 
 ## 安装依赖(重要)
 
@@ -18,7 +22,7 @@ $ sudo yum install -y nfs-utils
 
 ## 部署
 
-在 `deploy/deploy.yaml` 将 `192.168.199.100` 替换为自己的 NFS 服务端地址，之后部署：
+> 如果你使用的是你自己的 NFS 服务器，请在 `deploy/deploy.yaml` 搜索 `fix me` 将值替换为实际的值。
 
 ```bash
 $ kubectl apply -f deploy
