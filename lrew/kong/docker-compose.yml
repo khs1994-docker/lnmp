@@ -20,7 +20,7 @@ services:
   # https://github.com/Kong/docker-kong/blob/master/compose/docker-compose.yml
   postgresql-kong:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/postgres:${LNMP_POSTGRESQL_VERSION:-12.4}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/postgres:${LNMP_POSTGRESQL_VERSION:-13.0}-alpine
     environment:
       - POSTGRES_PASSWORD=mytest
       - POSTGRES_DB=test
@@ -39,7 +39,7 @@ services:
   kong:
     &kong
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/kong:2.1.3-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/kong:2.1.4-alpine
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: postgresql-kong
