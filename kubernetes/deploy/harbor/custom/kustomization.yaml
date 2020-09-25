@@ -6,10 +6,57 @@ patchesStrategicMerge:
 - secret/harbor-core/patches.yaml
 - secret/harbor-notary-server/patches.yaml
 - secret/harbor-clair/patches.yaml
-- trivy.yaml
-- patch.yaml
 resources:
 - namespace.yaml
 - ingress.yaml
 - pv.yaml
 namespace: harbor
+patchesJson6902:
+  - path: patch/trivy.patch.json
+    target:
+      kind: Secret
+      name: harbor-trivy
+      version: v1
+      group: ""
+  - path: patch/harbor-database.patch.json
+    target:
+      kind: StatefulSet
+      name: harbor-database
+      version: v1
+      group: apps
+  - path: patch/harbor-redis.patch.json
+    target:
+      kind: StatefulSet
+      name: harbor-redis
+      version: v1
+      group: apps
+  - path: patch/harbor-redis.patch.json
+    target:
+      kind: StatefulSet
+      name: harbor-redis
+      version: v1
+      group: apps
+  - path: patch/harbor-trivy.patch.json
+    target:
+      kind: StatefulSet
+      name: harbor-trivy
+      version: v1
+      group: apps
+  - path: patch/harbor-registry.patch.json
+    target:
+      kind: Deployment
+      name: harbor-registry
+      version: v1
+      group: apps
+  - path: patch/harbor-jobservice.patch.json
+    target:
+      kind: Deployment
+      name: harbor-jobservice
+      version: v1
+      group: apps
+  - path: patch/harbor-chartmuseum.patch.json
+    target:
+      kind: Deployment
+      name: harbor-chartmuseum
+      version: v1
+      group: apps
