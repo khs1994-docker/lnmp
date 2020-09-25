@@ -12,6 +12,8 @@
 
 ## 安装依赖
 
+> 插件由 kubelet 在节点调用，必须保证节点安装了挂载文件所需的依赖包。
+
 ```bash
 $ sudo apt install -y cifs-utils jq util-linux coreutils
 ```
@@ -43,6 +45,23 @@ $ PS:> (get-content deploy/deploy.yaml) -Replace "##KUBELET_PLUGINS_VOLUME_PATH#
 
 ## 测试
 
+## 部署服务端
+
+> 如果你有自己的 SMB 服务，可以跳过此步骤，参考下一小节
+
+```bash
+$ kubectl apply -k ../../../deploy/smb-server
+```
+
+上边启动的 smb 服务端固定集群 IP 为 **10.254.0.45**
+
+```bash
+$ kubectl apply -f tests
+$ kubectl apply -f tests/inline
+```
+
+### 自己的 smb 服务端
+
 配置 `secret`
 
 生成用户名及密码
@@ -58,7 +77,7 @@ $ echo -n password | base64
 $ kubectl apply -f tests/secret.yaml
 ```
 
-> `pod.yaml` 中替换 `//HIWIFI/sd/xunlei` 为网络路径
+> `inline/pod.yaml` 中替换 `//HIWIFI/sd/xunlei` 为网络路径
 
 ```bash
 $ kubectl apply -f tests/pod.yaml
@@ -66,17 +85,23 @@ $ kubectl apply -f tests/pod.yaml
 
 进入 `pod` 的 `/data` 目录，新建文件。在 CIFS 服务端查看文件是否存在。
 
-## 挂载 Windows 盘符(例如 C 盘文件)
+### 挂载 Windows 盘符(例如 C 盘文件)
 
 Windows 盘符开启共享请查看 [这里](https://jingyan.baidu.com/article/e2284b2b6d8afbe2e6118d01.html)
 
 假设 `192.168.199.100` 为 Windows IP，网络路径则为: `//192.168.199.100//c`
 
-## 宿主机挂载
+## 参考
+
+### 排错
+
+使用 `describe` 命令或者查看 `kubelet` 的日志。
+
+### 宿主机挂载
 
 ```bash
 # 用 用户/密码 登录
-$ mount -t cifs //<host>/<path> /<localpath> -o user=<user>,password=<user>
+$ mount -t cifs //<host>/<path> /<localpath> -o user=<user>,password=<password>
 
 # 用 游客 登录
 $ mount -t cifs //<host>/<path> /<localpath> -o guest

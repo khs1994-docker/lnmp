@@ -160,6 +160,7 @@ function _mountKubelet_all() {
 
   _mountKubelet ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
   _mountKubelet ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
+  _mountKubelet ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /usr/libexec/kubernetes/kubelet-plugins
 
   _mountKubelet ${K8S_ROOT}/etc/containers /etc/containers
 

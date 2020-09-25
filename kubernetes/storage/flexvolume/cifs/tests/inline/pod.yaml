@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: flexvolume-cifs-test
+  name: flexvolume-cifs-inline-test
   namespace: default
   labels:
     app: test
@@ -23,10 +23,15 @@ spec:
       # (--volume-plugin-dir=/usr/libexec/kubernetes/kubelet-plugins/volume/exec )
       #                                                     vendor~driver/driver
       # /usr/libexec/kubernetes/kubelet-plugins/volume/exec/fstab~cifs/cifs 一致
+      # fstab~cifs/cifs -> driver: fstab/cifs
       driver: "fstab/cifs"
       fsType: "cifs"
       secretRef:
         name: "flexvolume-cifs-secret"
       options:
-        networkPath: "//HIWIFI/sd/xunlei"
-        mountOptions: "dir_mode=0755,file_mode=0644,noperm"
+        # fix me
+        # 插件在节点调用
+        # networkPath: "//HIWIFI/sd/xunlei"
+        # 10.254.0.45 为集群内 smb 服务端地址
+        networkPath: "//10.254.0.45/share"
+        mountOptions: "dir_mode=0777,file_mode=0777,vers=3.0" # noperm

@@ -36,5 +36,4 @@ spec:
           hostPath:
             # TODO Change to the Flexvolume plugin directory of your cluster.
             # path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-            # path: /wsl/wsl-k8s-data/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
             path: ##KUBELET_PLUGINS_VOLUME_PATH##
