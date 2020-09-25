@@ -36,7 +36,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - uses: docker-practice/actions-setup-docker@master
       with:
-        docker_version: 19.03
+        docker_channel: nightly
     - name: Update docker compose
       run: |
         set -x
