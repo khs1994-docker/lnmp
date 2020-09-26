@@ -478,6 +478,55 @@ _runc_install(){
   runc --version
 }
 
+_crun_containerd_conf(){
+  if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
+    print_info "$GOOS $GOARCH not support crun, skip config containerd with crun"
+
+    return
+  fi
+print_info "config containerd with crun ..."
+# containerd 1.4.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
+  runtime_type = "io.containerd.runc.v2"
+  # privileged_without_host_devices = false
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun.options]
+    SystemdCgroup = true
+    BinaryName = "crun"
+EOF
+}
+
+_crun_crio_conf(){
+  print_info "config crio with crun ..."
+  cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/crio/crio.conf
+[crio.runtime.runtimes.crun]
+  runtime_path = "/usr/local/bin/crun"
+EOF
+}
+
+_crun_install(){
+  if [ `command -v crun` ];then print_info "crun already install";\
+    crun --version;return; fi
+
+  if ! [ "$GOARCH" = 'amd64' ];then
+    # print_info "install runc ..."
+    print_info "can't download crun on non-amd64"
+
+    return
+  fi
+
+  $(_sudo) $(_curl) https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64 \
+    -o /usr/bin/crun
+
+  $(_sudo) $(_curl) https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64-disable-systemd \
+    -o /usr/bin/crun-disable-systemd
+
+  $(_sudo) chmod +x /usr/bin/crun /usr/bin/crun-disable-systemd
+
+  crun --version
+  crun-disable-systemd --version
+}
+
 _containerd_install(){
   if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/kube-containerd;fi
 
@@ -1299,8 +1348,8 @@ case $_command in
       _k8s_join $@
       ;;
     nfs )
-      $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
-      $(_sudo) modprobe nfsd || true
+      # $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+      # $(_sudo) modprobe nfsd || true
       cd nfs-server
       if [ "$1" = 'down' ];then
         exec docker-compose stop nfs

@@ -77,6 +77,22 @@ oom_score = 0
 
             # BinaryName = "runc"
             # BinaryName = "crun"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
+          # runtime_type = "io.containerd.runtime.v1.linux"
+          # runtime_type = "io.containerd.runc.v1"
+          runtime_type = "io.containerd.runc.v2"
+          privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun.options]
+            SystemdCgroup = false
+            BinaryName = "crun"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun-disable-systemd]
+          # runtime_type = "io.containerd.runtime.v1.linux"
+          # runtime_type = "io.containerd.runc.v1"
+          runtime_type = "io.containerd.runc.v2"
+          privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun-disable-systemd.options]
+            SystemdCgroup = false
+            BinaryName = "crun-disable-systemd"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
           runtime_type = "io.containerd.runsc.v1"
           # privileged_without_host_devices = false
@@ -95,6 +111,18 @@ oom_score = 0
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata.options]
             # SystemdCgroup = false
             ConfigPath = "##K8S_ROOT##/etc/kata-containers/configuration.toml"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-qemu]
+          runtime_type = "io.containerd.kata.v2"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-qemu.options]
+            # SystemdCgroup = false
+            ConfigPath = "##K8S_ROOT##/etc/kata-containers/configuration-qemu.toml"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-fc]
+          runtime_type = "io.containerd.kata.v2"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-fc.options]
+            # SystemdCgroup = false
+            ConfigPath = "##K8S_ROOT##/etc/kata-containers/configuration-fc.toml"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"

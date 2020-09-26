@@ -6,8 +6,15 @@ metadata:
     app: test
 spec:
   # runtimeClassName: kata
+  # runtimeClassName: kata-qemu
+  # runtimeClassName: kata-fc
+
   runtimeClassName: runsc
   # runtimeClassName: runsc-kvm
+
+  # runtimeClassName: crun
+  # runtimeClassName: crun-disable-systemd
+
   # runtimeClassName: runc
   # runtimeClassName: runcv1
   # runtimeClassName: runclinux
