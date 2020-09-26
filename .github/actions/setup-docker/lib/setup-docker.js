@@ -104,6 +104,12 @@ async function run() {
 
   if (platform === 'darwin') {
     // macos
+    if (os.arch() !== 'x64') {
+      core.warning('only support macOS x86_64, os arch is ' + os.arch());
+
+      return;
+    }
+
     await exec.exec('docker', [
       '--version']).catch(() => { });
 
@@ -204,6 +210,12 @@ echo "-- Docker is ready."
   core.endGroup();
 
   if (DOCKER_CHANNEL === 'nightly') {
+    if (os.arch() !== 'x64') {
+      core.warning('nightly version only support x86_64, os arch is ' + os.arch());
+
+      return;
+    }
+
     core.startGroup('download deb');
     await exec.exec('curl', [
       '-fsSL',
@@ -288,7 +300,7 @@ echo "-- Docker is ready."
     core.startGroup(message);
     await exec.exec('sudo', [
       'add-apt-repository',
-      `deb [arch=amd64] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}`,
+      `deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}`,
     ]);
     core.endGroup();
 
