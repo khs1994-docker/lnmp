@@ -57,7 +57,7 @@ jobs:
         PCIT_KEEP_HISTORY: "true"
         PCIT_LOCAL_DIR: .github/actions/setup-docker
         PCIT_MESSAGE: Sync from khs1994-docker/lnmp@${{github.sha}} by PCIT
-        PCIT_TARGET_BRANCH: master
+        PCIT_TARGET_BRANCH: dev
         PCIT_USERNAME: khs1994
     - name: build-actions-setup-lnmp
       run: |

@@ -19,6 +19,7 @@ inputs:
     default: stable
     # test
     # nightly # this channel use https://github.com/AkihiroSuda/moby-snapshot
+    # edge # for macos
     required: false
   docker_buildx:
     # https://docs.docker.com/engine/reference/commandline/buildx/
