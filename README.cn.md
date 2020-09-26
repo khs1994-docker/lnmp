@@ -12,7 +12,7 @@
 | -- | -- |
 | Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/19.03?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/19.03) |
 | Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=19.03)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
-| macOS | - |
+| macOS | ![CI](https://github.com/khs1994-docker/lnmp/workflows/CI/badge.svg?branch=19.03) |
 | Linux arm64v8 | [![Build Status](https://travis-ci.com/khs1994-docker/lnmp.svg?branch=19.03)](https://travis-ci.com/khs1994-docker/lnmp) |
 
 <p align="center">
