@@ -1,7 +1,7 @@
 version: "3.7"
 
 #
-# Redis 1master-1slave (M-S) Replication
+# Redis 1master-1node (M-S) Replication
 #
 
 #
@@ -9,12 +9,12 @@ version: "3.7"
 #
 # master 22000
 #
-# slave 23000
+# node 23000
 #
 
 #
 # master aof
-# slave rdb
+# node rdb
 #
 
 x-deploy:
@@ -22,7 +22,7 @@ x-deploy:
   restart_policy:
     condition: any
     delay: 5s
-    max_attempts: 5
+    # max_attempts: 5
     window: 123s
   update_config:
     parallelism: 2
@@ -31,7 +31,7 @@ x-deploy:
 
 x-common:
   &common
-  image: redis:5.0.7-alpine
+  image: redis:6.0.8-alpine
   restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}
@@ -69,7 +69,7 @@ services:
       # "--logfile /var/log/redis/redis.log",
       "--bind 0.0.0.0",
       "--replica-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
-      "--replica-announce-port 21000",
+      "--replica-announce-port 22000",
       "--appendonly yes",
       # "--save \"\""
       "--aof-use-rdb-preamble yes"
@@ -81,13 +81,13 @@ services:
       placement:
         constraints: [node.role == manager]
 
-  redis_m_s_slave-1:
+  redis_m_s_node-1:
     << : *common
     << : *default-labels
     ports:
       - "23000:23000"
     volumes:
-      - cluster_redis_m_s_slave-1-data:/data
+      - cluster_redis_m_s_node-1-data:/data
     command: [
       "redis-server",
       "/redis.conf",
@@ -95,7 +95,7 @@ services:
       "--bind 0.0.0.0",
       "--port 23000",
       # "--logfile /var/log/redis/redis.log",
-      "--replicaof redis_m_s_master 21000",
+      "--replicaof redis_m_s_master 22000",
       "--replica-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
       "--replica-announce-port 23000",
       "--appendonly yes",
@@ -115,7 +115,7 @@ volumes:
   cluster_redis_m_s_master-data:
     << : *default-labels
 
-  cluster_redis_m_s_slave-1-data:
+  cluster_redis_m_s_node-1-data:
     << : *default-labels
 
 networks:

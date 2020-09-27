@@ -1182,7 +1182,7 @@ switch -regex ($command) {
     _bash_cli $service sh
   }
 
-  clusterkit {
+  "^clusterkit$" {
     $options = get_compose_options "docker-lnmp.yml", `
       "docker-lnmp.override.yml", `
       "cluster/docker-cluster.mysql.yml", `
@@ -1192,11 +1192,15 @@ switch -regex ($command) {
   }
 
   clusterkit-mysql-up {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
   }
 
   clusterkit-mysql-down {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
+  }
+
+  clusterkit-mysql-config {
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml config $other
   }
 
   clusterkit-mysql-exec {
@@ -1212,11 +1216,15 @@ switch -regex ($command) {
   }
 
   clusterkit-memcached-up {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
   }
 
   clusterkit-memcached-down {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
+  }
+
+  clusterkit-memcached-config {
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml config $other
   }
 
   clusterkit-memcached-exec {
@@ -1232,11 +1240,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-up {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
   }
 
   clusterkit-redis-down {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
+  }
+
+  clusterkit-redis-config {
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml config $other
   }
 
   clusterkit-redis-exec {
@@ -1252,11 +1264,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-replication-up {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
   }
 
   clusterkit-redis-replication-down {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
+  }
+
+  clusterkit-redis-replication-config {
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml config $other
   }
 
   clusterkit-redis-replication-exec {
@@ -1272,11 +1288,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-sentinel-up {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
   }
 
   clusterkit-redis-sentinel-down {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
+  }
+
+  clusterkit-redis-sentinel-config {
+    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml config $other
   }
 
   clusterkit-redis-sentinel-exec {

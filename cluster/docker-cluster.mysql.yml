@@ -24,7 +24,7 @@ version: '3.7'
 
 x-common:
   &common
-  image: mysql:8.0.19
+  image: mysql:8.0.21
   restart: always
   env_file:
     - ./cli/timezone.env
@@ -34,7 +34,7 @@ x-deploy:
   restart_policy:
     condition: any
     delay: 5s
-    max_attempts: 5
+    # max_attempts: 5
     window: 123s
   update_config:
     parallelism: 2
@@ -107,10 +107,6 @@ services:
     << : *mysql_master
     << : *common
     << : *default-labels
-    environment:
-      MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
-      MYSQL_REPLICATION_USER: replication
-      MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
     ports:
       - "13307:3306"
     volumes:
@@ -134,12 +130,6 @@ services:
       cluster_mysql:
         # Not work in Swarm mode
         ipv4_address: 172.28.0.101
-    secrets:
-      - source: cluster_db_root_password
-        target: /etc/mysql/db_root_password
-      - source: cluster_mysql_master_sh
-        target: /docker-entrypoint-initdb.d/1-master-init.sh
-        mode: 0555
 
   mysql_node-1:
     &mysql_node
@@ -184,10 +174,6 @@ services:
     << : *mysql_node
     << : *common
     << : *default-labels
-    environment:
-      MYSQL_ROOT_PASSWORD_FILE: /etc/mysql/db_root_password
-      MYSQL_REPLICATION_USER: replication
-      MYSQL_REPLICATION_PASSWORD_FILE: /etc/mysql/db_root_password
     ports:
       - "13317:3306"
     volumes:
@@ -212,12 +198,6 @@ services:
     networks:
       cluster_mysql:
         ipv4_address: 172.28.0.111
-    secrets:
-      - source: cluster_db_root_password
-        target: /etc/mysql/db_root_password
-      - source: cluster_mysql_node_sh
-        target: /docker-entrypoint-initdb.d/1-node-init.sh
-        mode: 0555
 
 volumes:
   cluster_mysql_master-data:

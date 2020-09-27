@@ -3,7 +3,7 @@ version: "3.7"
 #
 # Redis Sentinel (S)
 #
-# 6 node: 1 master 3 slave 2 sentinel
+# 6 node: 1 master 3 node 2 sentinel
 #
 #
 # @link https://github.com/TomCzHen/redis-sentinel-sample
@@ -16,19 +16,19 @@ version: "3.7"
 #
 # Master 20000
 #
-# Slave 20001 20002 20003
+# node 20001 20002 20003
 #
 # Sentinel 21000 21001
 #
 
 #
 # master aof
-# slave rdb
+# node rdb
 #
 
 x-common:
   &common
-  image: redis:5.0.7-alpine
+  image: redis:6.0.8-alpine
   # restart: always
   environment:
     - REDIS_HOST=${CLUSTERKIT_REDIS_S_HOST:-192.168.199.100}
@@ -49,7 +49,7 @@ x-deploy:
   restart_policy:
     condition: any
     delay: 5s
-    max_attempts: 5
+    # max_attempts: 5
     window: 123s
   update_config:
     parallelism: 2
@@ -98,8 +98,8 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  redis_sentinel_slave-1:
-    &redis_slave
+  redis_sentinel_node-1:
+    &redis_node
     << : *common
     << : *default-labels
     depends_on:
@@ -119,7 +119,7 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
     volumes:
-      - cluster_redis_s_slave-1-data:/data
+      - cluster_redis_s_node-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -135,8 +135,8 @@ services:
     ports:
       - "20001:20001"
 
-  redis_sentinel_slave-2:
-    << : *redis_slave
+  redis_sentinel_node-2:
+    << : *redis_node
     << : *common
     << : *default-labels
     ports:
@@ -155,9 +155,9 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
     volumes:
-      - cluster_redis_s_slave-2-data:/data
+      - cluster_redis_s_node-2-data:/data
 
-  redis_sentinel_slave-3:
+  redis_sentinel_node-3:
     << : *common
     << : *default-labels
     depends_on:
@@ -179,7 +179,7 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
     volumes:
-      - cluster_redis_s_slave-3-data:/data
+      - cluster_redis_s_node-3-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -292,13 +292,13 @@ volumes:
   cluster_redis_s_master-1-data:
     << : *default-labels
 
-  cluster_redis_s_slave-1-data:
+  cluster_redis_s_node-1-data:
     << : *default-labels
 
-  cluster_redis_s_slave-2-data:
+  cluster_redis_s_node-2-data:
     << : *default-labels
 
-  cluster_redis_s_slave-3-data:
+  cluster_redis_s_node-3-data:
     << : *default-labels
 
   cluster_redis_s_sentinel-1-data:

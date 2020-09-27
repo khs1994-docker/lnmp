@@ -7,18 +7,17 @@
 * k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(netsh 代理)`
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
-* WSL2 IP 变化时必须重新执行 `./kube-wsl2windows`
+* WSL2 IP 变化时必须重新执行 `./kube-wsl2windows k8s`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-node)**
-* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 重新使用本项目
-* 一些容器可能需要挂载宿主机的 `/var/lib/kubelet` `/usr/libexec/kubernetes/kubelet-plugins/volume/exec` 。本项目将所有文件放到了 `${K8S_ROOT:-/wsl/wsl-k8s-data/k8s}/XXX`，注意将其替换到实际地址 `${K8S_ROOT:-/wsl/wsl-k8s-data/k8s}/XXX`
+* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
 * **必须** 由于缺少文件 `kube-proxy` 不能使用 `ipvs` 模式，并且容器解析不到外网地址。解决办法请查看 [编译 WSL2 内核](README.KERNEL.md)
 
 ## master
 
 `etcd` `kube-apiserver` `kube-controller-manager` `kube-scheduler`
 
-以上节点请参考 [kube-server](README.SERVER.md)
+以上软件部署请参考 [kube-server](README.SERVER.md)
 
 ## node
 
@@ -149,7 +148,7 @@ $ invoke-kubectl
 ## 6. 部署 CNI -- calico
 
 ```powershell
-# $ update-alternatives --set iptables /usr/sbin/iptables-legacy
+$ update-alternatives --set iptables /usr/sbin/iptables-legacy
 # $ kubectl apply -k addons/cni/calico-custom
 
 $ kubectl apply -f addons/cni/calico-eBPF/kubernetes.yaml
@@ -257,14 +256,4 @@ csr-9pvrm   11m    system:node:wsl2          Pending
 $ import-module ./wsl2/bin/WSL-K8S.psm1
 
 $ invoke-kubectl certificate approve csr-9pvrm
-```
-
-如果使用 NFS 卷
-
-启动 NFS 服务端容器
-
-```bash
-$ sudo service docker start
-
-$ ./lnmp-k8s nfs
 ```

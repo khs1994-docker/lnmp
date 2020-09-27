@@ -16,4 +16,6 @@ do
   sleep 0.5
 done
 
+redis-cli --cluster check $(echo ${CLUSTERKIT_REDIS_NODES} | cut -d ' ' -f 1) && exit 0 || true
+
 echo yes | redis-cli --cluster create --cluster-replicas 1 ${CLUSTERKIT_REDIS_NODES}

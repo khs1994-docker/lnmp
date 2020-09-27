@@ -23,7 +23,7 @@ x-deploy:
   restart_policy:
     condition: any
     delay: 5s
-    max_attempts: 5
+    # max_attempts: 5
     window: 123s
   update_config:
     parallelism: 2
@@ -40,6 +40,7 @@ x-labels:
 services:
 
   memcached-1:
+    &memcached
     << : *common
     << : *default-labels
     ports:
@@ -58,40 +59,14 @@ services:
       #     memory: 20M
 
   memcached-2:
-    << : *common
-    << : *default-labels
+    << : *memcached
     ports:
       - "21212:11211"
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      # placement:
-      #   constraints: [node.role == manager]
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
 
   memcached-3:
-    << : *common
-    << : *default-labels
+    << : *memcached
     ports:
       - "21213:11211"
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      # placement:
-      #   constraints: [node.role == manager]
-      # resources:
-      #   limits:
-      #     cpus: '0.50'
-      #     memory: 50M
-      #   reservations:
-      #     cpus: '0.25'
-      #     memory: 20M
 
 networks:
   cluster_memcached:

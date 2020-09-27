@@ -54,8 +54,6 @@ $ ./lnmp-docker clusterkit-redis-down [-v]
 ## Swarm mode
 
 ```bash
-# 建议写入到 /etc/profile 文件
-
 $ export CLUSTERKIT_REDIS_HOST=192.168.199.100 # 自行替换为自己的 IP
 
 $ ./lnmp-docker clusterkit-redis-deploy
@@ -83,9 +81,9 @@ $obj_cluster = new RedisCluster(NULL, [
 
 ### predis
 
-* https://github.com/nrk/predis
+* https://github.com/predis/predis
 
-* https://github.com/nrk/predis#cluster
+* https://github.com/predis/predis#cluster
 
 ```php
 $parameters = [

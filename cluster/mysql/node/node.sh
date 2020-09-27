@@ -13,7 +13,9 @@ set -ex
 
 # mysql_net=$(ip route | awk '$1=="default" {print $3}' | sed "s/\.[0-9]\+$/.%/g")
 
-MYSQL_ROOT_PASSWORD=$(cat ${MYSQL_ROOT_PASSWORD_FILE})
+env
+
+# MYSQL_ROOT_PASSWORD=$(cat ${MYSQL_ROOT_PASSWORD_FILE})
 
 MYSQL_REPLICATION_PASSWORD=$(cat ${MYSQL_REPLICATION_PASSWORD_FILE})
 
