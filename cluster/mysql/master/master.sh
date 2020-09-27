@@ -2,7 +2,6 @@
 
 set -ex
 
-
 env
 
 # MYSQL_ROOT_PASSWORD=$(cat ${MYSQL_ROOT_PASSWORD_FILE})

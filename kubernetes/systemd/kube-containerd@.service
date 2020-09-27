@@ -9,7 +9,7 @@ Wants=network-online.target network.target
 ExecStartPre=-/sbin/modprobe overlay br_netfilter
 
 ExecStart=/opt/k8s/bin/kube-containerd \
-          --config /opt/k8s/etc/kube-containerd/1.4/config.toml
+          --config /opt/k8s/etc/kube-containerd/%i/config.toml
 
 Type=notify
 KillMode=process

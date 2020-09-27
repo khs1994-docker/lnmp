@@ -231,7 +231,7 @@ jobs:
 
          sudo systemctl cat docker
 
-         sudo systemctl cat kube-containerd
+         sudo systemctl cat kube-containerd@1.4
 
          sudo systemctl cat crio || true
          sudo cat /etc/sysconfig/crio || true
@@ -246,7 +246,7 @@ jobs:
          echo "!! 所有的配置均在 /etc/crio/crio.conf 中进行配置                    !!" > /dev/null
          sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
-         test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd) || true
+         test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd@1.4) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker"  && (sudo systemctl restart docker || sudo journalctl -u docker) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (/usr/local/bin/crio --help; sudo systemctl daemon-reload ; sudo systemctl start crio) || true
 
@@ -284,7 +284,7 @@ jobs:
 
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet
-         sudo journalctl -u kube-containerd || true
+         sudo journalctl -u kube-containerd@1.4 || true
          sudo journalctl -u crio || true
 
          kubectl get csr

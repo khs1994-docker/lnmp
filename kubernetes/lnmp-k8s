@@ -84,7 +84,20 @@ _sudo(){
 
 uname -a | grep -q microsoft && IS_WSL2=1 || IS_WSL2=0
 
-if [ $IS_WSL2 -eq 1 ];then
+systemd-detect-virt || systemd_detect_virt_exit=1
+
+if [ -z ${systemd_detect_virt_exit} ];then
+  if [ $(systemd-detect-virt) = 'wsl' ];then
+     WSL2_SYSTEMD=1
+  fi
+fi
+
+if [ -n "$WSL2_SYSTEMD" ];then
+  print_info "k8s node run on WSL2(systemd)"
+
+  source wsl2/.env
+  TMP_ROOT="${K8S_ROOT}/../.khs1994-docker-lnmp/caches"
+elif [ "$IS_WSL2" -eq 1 ];then
   print_info "k8s node run on WSL2"
   source wsl2/.env
 
@@ -1272,7 +1285,7 @@ $ $(_sudo) systemctl start kube-proxy
 $ $(_sudo) systemctl start kubelet
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start kube-containerd (Containerd runtime only)
+$ $(_sudo) systemctl start kube-containerd@1.4 (Containerd runtime only)
 $ $(_sudo) systemctl start crio (CRI-O runtime only)
 "
 }
@@ -1281,7 +1294,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker kube-containerd crio || true
+    docker kube-containerd@1.4 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}
