@@ -105,8 +105,6 @@ services:
 
   mysql_master-2:
     << : *mysql_master
-    << : *common
-    << : *default-labels
     ports:
       - "13307:3306"
     volumes:
@@ -121,11 +119,6 @@ services:
       # GTID
       # --gtid-mode=on
       # --enforce-gtid-consistency
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      placement:
-        constraints: [node.role == manager]
     networks:
       cluster_mysql:
         # Not work in Swarm mode
@@ -172,8 +165,6 @@ services:
 
   mysql_node-2:
     << : *mysql_node
-    << : *common
-    << : *default-labels
     ports:
       - "13317:3306"
     volumes:
@@ -191,10 +182,6 @@ services:
       # GTID
       # - --gtid-mode=on
       # --enforce-gtid-consistency
-    deploy:
-      << : *default-deploy
-      << : *default-labels
-      replicas: 1
     networks:
       cluster_mysql:
         ipv4_address: 172.28.0.111

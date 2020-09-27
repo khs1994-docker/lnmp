@@ -81,7 +81,9 @@ services:
       placement:
         constraints: [node.role == manager]
 
+  # 从 master 复制数据
   redis_m_s_node-1:
+    &redis_m_s_node
     << : *common
     << : *default-labels
     ports:
@@ -111,11 +113,40 @@ services:
       # placement:
       #   constraints: [node.role == manager]
 
+  # 从节点既可以从 master 节点复制数据
+  # 也可以从 从节点 复制数据
+  # 这里从 从节点 node-1 复制数据
+  redis_m_s_node-2:
+    << : *redis_m_s_node
+    ports:
+      - "24000:24000"
+    volumes:
+      - cluster_redis_m_s_node-2-data:/data
+    command: [
+      "redis-server",
+      "/redis.conf",
+      "--daemonize no",
+      "--bind 0.0.0.0",
+      "--port 24000",
+      # "--logfile /var/log/redis/redis.log",
+      "--replicaof redis_m_s_node-1 23000",
+      "--replica-announce-ip ${CLUSTERKIT_REDIS_M_S_HOST:-192.168.199.100}",
+      "--replica-announce-port 24000",
+      "--appendonly yes",
+      # "--save \"\"",
+      "--aof-use-rdb-preamble yes"
+      ]
+    depends_on:
+      - redis_m_s_node-1
+
 volumes:
   cluster_redis_m_s_master-data:
     << : *default-labels
 
   cluster_redis_m_s_node-1-data:
+    << : *default-labels
+
+  cluster_redis_m_s_node-2-data:
     << : *default-labels
 
 networks:

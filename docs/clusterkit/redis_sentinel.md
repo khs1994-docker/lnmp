@@ -6,15 +6,11 @@
 
 是主从（M-S）的升级版，能够做到自动主从切换。
 
-主负责写，从负责读。
+分为 **主节点** **从节点** **哨兵节点（不能写入数据）** 三种节点
 
-同样的从只有读权限，不能写入数据。
+主负责写，从负责读（从只有 **读权限**，不能写入数据）。
 
 写入数据时必须通过 Sentinel API 动态的获取主节点 IP。
-
-哨兵节点不能写入数据。
-
-销毁之后（不销毁数据卷），再次部署可以恢复。
 
 ```bash
 # 获取主节点 IP
@@ -53,7 +49,7 @@ $ ./lnmp-docker clusterkit-redis-sentinel-remove
 ```php
 //初始化 redis 对象
 $redis = new Redis();
-//连接 sentinel 服务 host 为 ip，port 为端口
+//连接 sentinel 节点， host 为 ip，port 为端口
 $redis->connect($host, $port);
 
 //可能用到的部分命令，其他可以去官方文档查看

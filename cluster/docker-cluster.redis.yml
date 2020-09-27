@@ -127,8 +127,6 @@ services:
 
   redis_master-2:
     << : *redis-master
-    << : *common
-    << : *default-labels
     depends_on:
       - redis_master-1
     ports:
@@ -151,8 +149,7 @@ services:
       - cluster_redis_master-2-data:/data
 
   redis_master-3:
-    << : *common
-    << : *default-labels
+    << : *redis-master
     depends_on:
       - redis_master-1
     ports:
@@ -212,8 +209,6 @@ services:
 
   redis_node-2:
     << : *redis-node
-    << : *common
-    << : *default-labels
     ports:
       - "8002:8002"
       - "18002:18002"
@@ -235,8 +230,6 @@ services:
 
   redis_node-3:
     << : *redis-node
-    << : *common
-    << : *default-labels
     ports:
       - "8003:8003"
       - "18003:18003"
