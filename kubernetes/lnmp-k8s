@@ -644,8 +644,8 @@ _crictl_containerd_conf(){
   $(_sudo) rm -rf /etc/crictl.yaml
   print_info "conf crictl with containerd"
   cat <<EOF | $(_sudo) tee -a /etc/crictl.yaml
-runtime-endpoint: unix:///run/kube-containerd/containerd.sock
-image-endpoint: unix:///run/kube-containerd/containerd.sock
+runtime-endpoint: unix:///run/kube-containerd/kube-containerd.sock
+image-endpoint: unix:///run/kube-containerd/kube-containerd.sock
 timeout: 10
 debug: false
 EOF
@@ -936,15 +936,6 @@ _crio_config(){
     ${K8S_ROOT}/etc/containers/registries.d/default.yaml
 
   _cri_sysctl
-
-  print_info "config kubelet with cri-o"
-
-  local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
-
-  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-crio.conf
-[Service]
-Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock"
-EOF
 }
 
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
@@ -956,15 +947,6 @@ _containerd_cri_config(){
     | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 
   _cri_sysctl
-
-  print_info "config kubelet with containerd"
-
-  local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
-
-  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-containerd.conf
-[Service]
-Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock"
-EOF
 }
 
 _docker_default_conf(){
@@ -1282,7 +1264,15 @@ $ $(_sudo) systemctl start kube-scheduler
 NODE:
 
 $ $(_sudo) systemctl start kube-proxy
+
+# if cri is docker, please exec
 $ $(_sudo) systemctl start kubelet
+
+# if cri is containerd, please exec
+$ $(_sudo) systemctl start kubelet@kube-containerd
+
+# if cri is crio, please exec
+$ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
 $ $(_sudo) systemctl start kube-containerd@1.4 (Containerd runtime only)

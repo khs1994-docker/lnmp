@@ -213,16 +213,31 @@ before_script:
   - echo "!! 所有的配置均在 /etc/crio/crio.conf 中进行配置                    !!" > /dev/null
   - sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
-  - test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd@1.4) || true
-  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker"  && (sudo systemctl restart docker || sudo journalctl -u docker) || true
-  - test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (/usr/local/bin/crio --help; sudo systemctl daemon-reload ; sudo systemctl start crio) || true
+  - |
+    test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
+      && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd@1.4) || true
+  - |
+    test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
+      && (sudo systemctl restart docker || sudo journalctl -u docker) || true
+  - |
+    test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
+      && (/usr/local/bin/crio --help; sudo systemctl daemon-reload ; \
+          sudo systemctl start crio) || true
+  - |
+    test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
+      && export KUBELET_SERVICE='@kube-containerd' || true
+
+    test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
+      && export KUBELET_SERVICE='@crio' || true
+
+    echo kubelet${KUBELET_SERVICE}
 
   - docker info
 
   - sleep 10
-  - sudo systemctl cat kubelet
-  - sudo systemctl start kubelet || CMD_FAILED=1
-  - test -n "$CMD_FAILED" && sudo journalctl -u kubelet || true
+  - sudo systemctl cat kubelet${KUBELET_SERVICE}
+  - sudo systemctl start kubelet${KUBELET_SERVICE} || CMD_FAILED=1
+  - test -n "$CMD_FAILED" && sudo journalctl -u kubelet${KUBELET_SERVICE} || true
   - test -n "$CMD_FAILED" && false || true
 
   - sleep 10
@@ -232,7 +247,7 @@ before_script:
   # - sudo systemctl status kube-controller-manager
   # - sudo systemctl status kube-scheduler
   # - sudo systemctl status kube-proxy
-  # - sudo systemctl status kubelet
+  # - sudo systemctl status kubelet${KUBELET_SERVICE}
 
   - travis_retry kubectl version
   - kubectl cluster-info
@@ -245,7 +260,7 @@ before_script:
   - sudo journalctl -u kube-scheduler
 
   - sudo journalctl -u kube-proxy
-  - sudo journalctl -u kubelet
+  - sudo journalctl -u kubelet${KUBELET_SERVICE}
   - sudo journalctl -u kube-containerd@1.4 || true
   - sudo journalctl -u crio || true
 
@@ -293,7 +308,7 @@ before_script:
 
   - sudo journalctl -u crio || true
 
-  - if [ "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" ];then sudo systemctl restart crio && sudo systemctl restart kubelet ;fi
+  # - if [ "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" ];then sudo systemctl restart crio && sudo systemctl restart kubelet@crio ;fi
 
   - sleep 20
   - kubectl get all -A

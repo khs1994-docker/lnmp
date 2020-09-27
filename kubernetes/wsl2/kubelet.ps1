@@ -22,7 +22,7 @@ Invoke-WSL bash -c "echo NODE_NAME=$NODE_NAME > ${K8S_ROOT}/.env"
 Invoke-WSL bash -c `
   "echo KUBE_APISERVER=$KUBE_APISERVER | tee -a ${K8S_ROOT}/.env > /dev/null"
 
-$CONTAINER_RUNTIME_ENDPOINT = "unix:///run/kube-containerd/containerd.sock"
+$CONTAINER_RUNTIME_ENDPOINT = "unix:///run/kube-containerd/kube-containerd.sock"
 
 if ("$CRI" -eq 'cri-o') {
   $CONTAINER_RUNTIME_ENDPOINT = "unix:///var/run/crio/crio.sock"
@@ -64,7 +64,7 @@ if ($args[0] -eq "reset") {
 # --cni-conf-dir=/opt/k8s/etc/cni/net.d `
 
 # --container-runtime=remote `
-# --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock `
+# --container-runtime-endpoint=unix:///run/kube-containerd/kube-containerd.sock `
 
 #
 # $ kubectl --kubeconfig .\rpi\certs\kubectl.kubeconfig get csr --sort-by='{.metadata.creationTimestamp}'

@@ -35,16 +35,11 @@ ExecStart=/opt/k8s/bin/kubelet \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 --v=2 \
-$KUBELET_CRI
+--container-runtime=remote \
+--container-runtime-endpoint=unix:///run/%i/%i.sock
 
-# --container-runtime=docker \
-# --container-runtime-endpoint=unix:///var/run/dockershim.sock \
-# --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
-# --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
-# --image-pull-progress-deadline=15m \
-
-# --container-runtime=remote \
-# --container-runtime-endpoint=unix:///run/kube-containerd/kube-containerd.sock \
+# kubelet@kube-containerd
+# kubelet@crio
 
 ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
 ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
