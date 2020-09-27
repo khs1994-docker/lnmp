@@ -110,6 +110,8 @@ async function run() {
       return;
     }
 
+    core.exportVariable('DOCKER_CONFIG', '/Users/runner/.docker');
+
     await exec.exec('docker', [
       '--version']).catch(() => { });
 
@@ -216,6 +218,8 @@ echo "-- Docker is ready."
       return;
     }
 
+    core.exportVariable('DOCKER_CONFIG', '/home/runner/.docker');
+
     core.startGroup('download deb');
     await exec.exec('curl', [
       '-fsSL',
@@ -281,6 +285,8 @@ echo "-- Docker is ready."
     core.endGroup();
 
   } else {
+    core.exportVariable('DOCKER_CONFIG', '/home/runner/.docker');
+
     core.debug('add apt-key');
     await exec.exec('curl', [
       '-fsSL',

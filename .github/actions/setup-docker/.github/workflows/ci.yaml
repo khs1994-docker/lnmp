@@ -1,6 +1,7 @@
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 name: CI
 
@@ -89,24 +90,27 @@ jobs:
         run: |
           set -x
 
-          docker pull alpine:latest
-          tag=${version:-19.03}-${channel:-stable}-${os}
-          docker tag alpine:latest khs1994/alpine:${tag}
-        env:
-          os: ${{ matrix.os }}
-          # version: ${{ matrix.docker_version }}
-          # channel: ${{ matrix.docker_channel }}
-      - name: Push Docker Image
-        if: github.event_name == 'push'
-        run: |
-          set -x
+          push=
+          if [ "${push_image}" = 'true' ];then
+             push='--push'
+          fi
+
+          echo 'FROM --platform=${TARGETPLATFORM} alpine' > Dockerfile
+          echo 'RUN set -x ; apk add --no-cache curl' >> Dockerfile
+
+          ls -la ${DOCKER_CONFIG}
 
           tag=${version:-19.03}-${channel:-stable}-${os}
-          docker push khs1994/alpine:${tag}
+          docker buildx build \
+            -t khs1994/alpine:${tag} \
+            ${push} \
+            --platform linux/arm64,linux/amd64 \
+            .
         env:
           os: ${{ matrix.os }}
           # version: ${{ matrix.docker_version }}
           # channel: ${{ matrix.docker_channel }}
+          push_image: ${{ github.event_name == 'push' }}
 
   docker-nightly:
     strategy:
