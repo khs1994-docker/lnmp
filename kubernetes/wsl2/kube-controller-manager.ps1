@@ -8,7 +8,7 @@ $wsl_ip = Get-WSL2IP
 $K8S_CM_HOST = $wsl_ip
 # $K8S_ROOT='/opt/k8s'
 
-$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSLK8S wslpath "'$HOME'"
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-controller-manager `
@@ -68,12 +68,12 @@ startsecs=10" > $PSScriptRoot/supervisor.d/kube-controller-manager.ini
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   & $PSScriptRoot/bin/wsl2host-check
-  Invoke-WSL supervisorctl start kube-server:kube-controller-manager
+  Invoke-WSLK8S supervisorctl start kube-server:kube-controller-manager
 
   exit
 }
 
 if ($args[0] -eq 'start') {
   & $PSScriptRoot/bin/wsl2host-check
-  Invoke-WSL bash -c $command
+  Invoke-WSLK8S bash -c $command
 }

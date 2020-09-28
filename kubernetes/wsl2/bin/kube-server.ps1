@@ -93,4 +93,4 @@ _etcd_checker
 & $PSScriptRoot/supervisorctl g
 & $PSScriptRoot/supervisorctl update
 
-Invoke-WSL supervisorctl start kube-server:
+Invoke-WSLK8S supervisorctl start kube-server:

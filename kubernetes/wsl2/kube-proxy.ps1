@@ -11,8 +11,8 @@ $wsl_ip = Get-WSL2IP
   -replace "##K8S_ROOT##", $K8S_ROOT `
 | Set-Content $PSScriptRoot/conf/kube-proxy.config.yaml
 
-$WINDOWS_ROOT_IN_WSL2 = Invoke-WSL wslpath "'$PSScriptRoot'"
-$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
+$WINDOWS_ROOT_IN_WSL2 = Invoke-WSLK8S wslpath "'$PSScriptRoot'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSLK8S wslpath "'$HOME'"
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
 
 # WARNING: all flags other than
@@ -39,12 +39,12 @@ startsecs=10" > $PSScriptRoot/supervisor.d/kube-proxy.ini
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   & $PSScriptRoot/bin/wsl2host-check
-  Invoke-WSL supervisorctl start kube-node:kube-proxy
+  Invoke-WSLK8S supervisorctl start kube-node:kube-proxy
 
   exit
 }
 
 if ($args[0] -eq 'start') {
   & $PSScriptRoot/bin/wsl2host-check
-  Invoke-WSL bash -c $command
+  Invoke-WSLK8S bash -c $command
 }

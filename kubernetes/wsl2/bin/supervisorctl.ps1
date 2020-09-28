@@ -14,8 +14,8 @@ Function printInfo() {
 Function _cp_conf() {
   printInfo "Copy WSL2 supervisor conf file to WSL2 /etc/supervisor.d/ ..."
   # 复制配置文件
-  $WINDOWS_ROOT_IN_WSL2 = Invoke-WSL wslpath "'$PSScriptRoot/..'"
-  Invoke-WSL cp ${WINDOWS_ROOT_IN_WSL2}/supervisor.d/*.ini /etc/supervisor.d/
+  $WINDOWS_ROOT_IN_WSL2 = Invoke-WSLK8S wslpath "'$PSScriptRoot/..'"
+  Invoke-WSLK8S cp ${WINDOWS_ROOT_IN_WSL2}/supervisor.d/*.ini /etc/supervisor.d/
 }
 
 Function _generate_conf() {
@@ -73,4 +73,4 @@ if ($args[0] -eq 'update') {
   _cp_conf
 }
 
-Invoke-WSL bash -ec "supervisorctl $args"
+Invoke-WSLK8S bash -ec "supervisorctl $args"

@@ -19,6 +19,17 @@ Import-Module $PSScriptRoot/WSL-K8S.psm1
 
 $wsl2_ip = Get-WSL2IP
 
+if(!$wsl2_ip){
+  write-host "==> get wsl2 ip error" -ForegroundColor Red
+
+  exit 1
+}
+
+$env:WSL2_IP = $wsl2_ip
+$env:BASH_ENV = "/etc/bash.bashrc"
+
+$env:WSLENV = "BASH_ENV/u:WSL2_IP/u"
+
 Write-Output $wsl2_ip
 
 if ($args[0] -ne "--write") {
