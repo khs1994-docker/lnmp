@@ -153,11 +153,20 @@ spec:
             - name: PROVISIONER_NAME
               value: fuseim.pri/ifs
             - name: NFS_SERVER
-              value: 192.168.199.100
+              # fix me
+              # your nfs server address
+              # value: 192.168.199.100
+              value: 10.254.0.49 # 集群内 NFS 服务端地址
             - name: NFS_PATH
-              value: /kubernetes_pv
+              # fix me
+              value: /kubernetes_nfs_pv
       volumes:
+        # 存放 archive 数据
         - name: nfs-client-root
           nfs:
-            server: 192.168.199.100
-            path: /kubernetes_pv
+            # fix me
+            # your nfs server address
+            # server: 192.168.199.100
+            server: 10.254.0.49 # 集群内 NFS 服务端地址
+            # fix me
+            path: /kubernetes_nfs_pv

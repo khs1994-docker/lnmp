@@ -8,7 +8,7 @@
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
-* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后重新使用本项目
+* 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
 
 ## Master
 
@@ -115,8 +115,10 @@ $ cd ~/lnmp/kubernetes
 $ wsl -d wsl-k8s
 
 $ ./lnmp-k8s kubernetes-server --url
+# 如果上面的命令出现错误，可以执行这个命令
 # $ ./lnmp-k8s kubernetes-server
 
+# 其他架构
 # $ ./lnmp-k8s kubernetes-server --url linux arm64
 # $ ./lnmp-k8s kubernetes-server linux arm64
 ```
@@ -131,7 +133,7 @@ $ cd ~/lnmp/kubernetes
 $ docker-compose up cfssl-wsl2
 ```
 
-**退出 桌面版 Docker**
+**退出 桌面版 Docker** 并执行以下命令
 
 ```bash
 $ wsl --shutdown
@@ -253,15 +255,15 @@ $ ./wsl2/bin/supervisorctl start kube-server:
 ```powershell
 $ mkdir $home/.kube
 
-$ cp certs/kubectl.kubeconfig $home/.kube/config
+$ ./wsl2/bin/kubectl-config-set-cluster
 ```
 
 **WSL**
 
-将 WSL2 K8S 配置写入 `~/.kube/config`
+将 K8S 配置写入 WSL `~/.kube/config`
 
 ```bash
-$ ./wsl2/bin/kubectl-config-set-cluster
+$ ./wsl2/bin/kubectl-config-sync
 ```
 
 ## 组件启动方式总结

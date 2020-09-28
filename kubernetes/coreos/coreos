@@ -92,7 +92,7 @@ case "$1" in
   fi
 
   cd ..
-  docker-compose up server
+  docker-compose up fcos-server
 
   ;;
 

@@ -1824,8 +1824,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
     ;;
 
   nfs )
-    $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
-    $(_sudo) modprobe nfsd || true
+    # $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+    # $(_sudo) modprobe nfsd || true
     cd kubernetes/nfs-server
     if [ "$1" = 'down' ];then
       exec docker-compose stop nfs

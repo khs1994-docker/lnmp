@@ -1,0 +1,12 @@
+[
+  {
+    "op": "replace",
+    "path": "/data/redisURL",
+    "value": "cmVkaXM6Ly9oYXJib3ItcmVkaXM6NjM3OS81P2lkbGVfdGltZW91dF9zZWNvbmRzPTMw"
+  },
+  {
+    "op": "replace",
+    "path": "/data/gitHubToken",
+    "value": ""
+  }
+]

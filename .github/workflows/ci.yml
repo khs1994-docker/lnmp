@@ -20,9 +20,15 @@ jobs:
       || contains( github.event.head_commit.message, '[action skip]')))
     steps:
       - run: echo "build continue !"
-  linux:
+  ci:
+    strategy:
+        fail-fast: false
+        matrix:
+          os:
+          - ubuntu-latest
+          - macos-latest
     needs: skip
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@main
       with:
@@ -30,6 +36,7 @@ jobs:
     - uses: azure/docker-login@v1
       if: |
         github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
       with:
         # login-server: contoso.azurecr.io
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -41,9 +48,11 @@ jobs:
       run: |
         set -x
         docker-compose --version
-        ./lnmp-docker compose --official
+        ./lnmp-docker compose --official || true
     - name: Stop MySQL
       run: sudo systemctl stop mysql
+      if: |
+        startsWith(matrix.os, 'ubuntu' )
     - name: Up
       run: |
         set -x
@@ -85,17 +94,23 @@ jobs:
         lnmp-yarn -v
     - name: build and push [ lwpm ] image
       if: |
-        contains( github.event.head_commit.message, '[lwpm]' ) && github.event_name == 'push'
+        contains( github.event.head_commit.message, '[lwpm]' )
+        && github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
       run: |
         docker buildx build -t lwpm/lwpm -f windows/lwpm.Dockerfile --push windows
     - name: build and push [ docker-image-sync ] image
       if: |
-        contains( github.event.head_commit.message, '[lwpm]' ) && github.event_name == 'push'
+        contains( github.event.head_commit.message, '[lwpm]' )
+        && github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
       run: |
         docker buildx build -t khs1994/docker-image-sync -f windows/docker-image-sync.Dockerfile --push windows
     - name: build and push [ lrew ] image
       if: |
-        contains( github.event.head_commit.message, '[lrew]' ) && github.event_name == 'push'
+        contains( github.event.head_commit.message, '[lrew]' )
+        && github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
       run: |
         docker buildx build -t lrew/lrew --push lrew
   powershell:

@@ -15,6 +15,9 @@
 kind: pipeline
 name: default
 
+# type: kubernetes
+# type: docker
+
 platform:
   os: linux
   arch: amd64

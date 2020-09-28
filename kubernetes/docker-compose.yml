@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  server:
+  fcos-server:
     image: khs1994/fcos
     env_file:
       - ./coreos/.env.example

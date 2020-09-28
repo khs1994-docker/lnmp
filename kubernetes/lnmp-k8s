@@ -82,9 +82,22 @@ _sudo(){
   command -v sudo > /dev/null && echo sudo || true
 }
 
-uname -a | grep -q microsoft && IS_WSL2=1 || IS_WSL2=0
+uname -a | grep -q microsoft && IS_WSL2=1 || true
 
-if [ $IS_WSL2 -eq 1 ];then
+$(_sudo) systemctl is-system-running -q && IS_SYSTEMD=1 || true
+
+if [ -n "${IS_SYSTEMD}" -a -n "${IS_WSL2}" ];then
+  if [ $(systemd-detect-virt) = 'wsl' ];then
+     WSL2_SYSTEMD=1
+  fi
+fi
+
+if [ -n "$WSL2_SYSTEMD" ];then
+  print_info "k8s node run on WSL2(systemd)"
+
+  source wsl2/.env
+  TMP_ROOT="${K8S_ROOT}/../.khs1994-docker-lnmp/caches"
+elif [ -n "$IS_WSL2" ];then
   print_info "k8s node run on WSL2"
   source wsl2/.env
 
@@ -414,8 +427,6 @@ print_info "config containerd with gvisor(runsc) ..."
 cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
-  # runtime_engine = ""
-  # runtime_root = ""
   # privileged_without_host_devices = false
   [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
     SystemdCgroup = false
@@ -478,6 +489,55 @@ _runc_install(){
   $(_sudo) chmod +x /usr/bin/runc
 
   runc --version
+}
+
+_crun_containerd_conf(){
+  if ! [ "$GOOS" = 'linux' -a "$GOARCH" = 'amd64' ];then
+    print_info "$GOOS $GOARCH not support crun, skip config containerd with crun"
+
+    return
+  fi
+print_info "config containerd with crun ..."
+# containerd 1.4.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
+  runtime_type = "io.containerd.runc.v2"
+  # privileged_without_host_devices = false
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun.options]
+    SystemdCgroup = true
+    BinaryName = "crun"
+EOF
+}
+
+_crun_crio_conf(){
+  print_info "config crio with crun ..."
+  cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/crio/crio.conf
+[crio.runtime.runtimes.crun]
+  runtime_path = "/usr/local/bin/crun"
+EOF
+}
+
+_crun_install(){
+  if [ `command -v crun` ];then print_info "crun already install";\
+    crun --version;return; fi
+
+  if ! [ "$GOARCH" = 'amd64' ];then
+    # print_info "install runc ..."
+    print_info "can't download crun on non-amd64"
+
+    return
+  fi
+
+  $(_sudo) $(_curl) https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64 \
+    -o /usr/bin/crun
+
+  $(_sudo) $(_curl) https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64-disable-systemd \
+    -o /usr/bin/crun-disable-systemd
+
+  $(_sudo) chmod +x /usr/bin/crun /usr/bin/crun-disable-systemd
+
+  crun --version
+  crun-disable-systemd --version
 }
 
 _containerd_install(){
@@ -584,8 +644,8 @@ _crictl_containerd_conf(){
   $(_sudo) rm -rf /etc/crictl.yaml
   print_info "conf crictl with containerd"
   cat <<EOF | $(_sudo) tee -a /etc/crictl.yaml
-runtime-endpoint: unix:///run/kube-containerd/containerd.sock
-image-endpoint: unix:///run/kube-containerd/containerd.sock
+runtime-endpoint: unix:///run/kube-containerd/kube-containerd.sock
+image-endpoint: unix:///run/kube-containerd/kube-containerd.sock
 timeout: 10
 debug: false
 EOF
@@ -876,15 +936,6 @@ _crio_config(){
     ${K8S_ROOT}/etc/containers/registries.d/default.yaml
 
   _cri_sysctl
-
-  print_info "config kubelet with cri-o"
-
-  local CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/crio/crio.sock"
-
-  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-crio.conf
-[Service]
-Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///var/run/crio/crio.sock"
-EOF
 }
 
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
@@ -896,15 +947,6 @@ _containerd_cri_config(){
     | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
 
   _cri_sysctl
-
-  print_info "config kubelet with containerd"
-
-  local CONTAINER_RUNTIME_ENDPOINT="unix:///run/kube-containerd/containerd.sock"
-
-  cat <<EOF | $(_sudo) tee /etc/systemd/system/kubelet.service.d/20-cri-containerd.conf
-[Service]
-Environment="KUBELET_CRI=--container-runtime=remote --container-runtime-endpoint=unix:///run/kube-containerd/containerd.sock"
-EOF
 }
 
 _docker_default_conf(){
@@ -1025,17 +1067,52 @@ _k8s_install_systemd(){
   cd systemd
 
   for file in `ls *.service`; \
-  do \
-    if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
+  do
+    if [ ! -f /etc/systemd/system/$file ];then continue ; fi
     $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
-      /etc/systemd/system/$file ; \
+      /etc/systemd/system/$file
+
+    if [ -z "$WSL2_SYSTEMD" ];then
     $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME:-node1}!g" \
-      /etc/systemd/system/$file ; \
+      /etc/systemd/system/$file
+    fi
+
+    if [ -n "$IS_WSL2" ];then
+      $(_sudo) sed -i "s!##NODE_NAME##!wsl2!g" \
+        /etc/systemd/system/kubelet.service \
+        /etc/systemd/system/kubelet@.service
+    else
+      $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME:-node1}!g" \
+        /etc/systemd/system/kubelet.service \
+        /etc/systemd/system/kubelet@.service
+    fi
+
     $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
-      /etc/systemd/system/$file ; \
+      /etc/systemd/system/$file
   done
+
+  if [ -n "$WSL2_SYSTEMD" ];then
+    ${_sudo} mv /etc/systemd/system/kube-apiserver{.service,@.service}
+    ${_sudo} mv /etc/systemd/system/kube-controller-manager{.service,@.service}
+    ${_sudo} mv /etc/systemd/system/kube-scheduler{.service,@.service}
+    ${_sudo} mv /etc/systemd/system/kube-proxy{.service,@.service}
+
+    cp ../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+    cp ../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+
+    ${_sudo} sed -i \
+      -e 's/192.168.199.100/%i/g' \
+      -e 's/2379/12379/g' \
+      -e 's/_K8S_ETCD_HOST/K8S_ETCD_HOST/g' \
+      /etc/systemd/system/kube-apiserver@.service
+
+    ${_sudo} sed -i \
+      -e 's/192.168.199.100/%i/g' \
+      -e 's/__NODE_NAME__/wsl2/g' \
+      /etc/systemd/system/kube-controller-manager@.service \
+      /etc/systemd/system/kube-scheduler@.service \
+      /etc/systemd/system/kube-proxy@.service
+  fi
 
   cd - > /dev/null
 
@@ -1132,7 +1209,7 @@ _k8s_join_conf_replace(){
 _k8s_join_hostname_handler(){
   KUBE_HOSTNAME=`hostname`
 
-  if [ $IS_WSL2 -eq 1 ];then KUBE_HOSTNAME='wsl2' ; fi
+  if [ -n "$IS_WSL2" ];then KUBE_HOSTNAME='wsl2' ; fi
 
   for options in $@
   do
@@ -1222,10 +1299,18 @@ $ $(_sudo) systemctl start kube-scheduler
 NODE:
 
 $ $(_sudo) systemctl start kube-proxy
+
+# if cri is docker, please exec
 $ $(_sudo) systemctl start kubelet
 
+# if cri is containerd, please exec
+$ $(_sudo) systemctl start kubelet@kube-containerd
+
+# if cri is crio, please exec
+$ $(_sudo) systemctl start kubelet@crio
+
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start kube-containerd (Containerd runtime only)
+$ $(_sudo) systemctl start kube-containerd@1.4 (Containerd runtime only)
 $ $(_sudo) systemctl start crio (CRI-O runtime only)
 "
 }
@@ -1234,7 +1319,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker kube-containerd crio || true
+    docker kube-containerd@1.4 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}
@@ -1301,8 +1386,8 @@ case $_command in
       _k8s_join $@
       ;;
     nfs )
-      $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
-      $(_sudo) modprobe nfsd || true
+      # $(_sudo) modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+      # $(_sudo) modprobe nfsd || true
       cd nfs-server
       if [ "$1" = 'down' ];then
         exec docker-compose stop nfs

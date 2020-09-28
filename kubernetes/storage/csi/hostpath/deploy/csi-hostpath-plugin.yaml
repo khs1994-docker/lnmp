@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: node-driver-registrar
-          image: quay.io/k8scsi/csi-node-driver-registrar:v1.3.0
+          image: quay.io/k8scsi/csi-node-driver-registrar:v2.0.1
           args:
             - --v=5
             - --csi-address=/csi/csi.sock
@@ -61,7 +61,7 @@ spec:
             name: csi-data-dir
 
         - name: hostpath
-          image: quay.io/k8scsi/hostpathplugin:v1.4.0-rc2
+          image: quay.io/k8scsi/hostpathplugin:v1.4.0
           args:
             - "--drivername=hostpath.csi.k8s.io"
             - "--v=5"
@@ -106,7 +106,7 @@ spec:
           volumeMounts:
           - mountPath: /csi
             name: socket-dir
-          image: quay.io/k8scsi/livenessprobe:v1.1.0
+          image: quay.io/k8scsi/livenessprobe:v2.1.0
           args:
           - --csi-address=/csi/csi.sock
           - --health-port=9898

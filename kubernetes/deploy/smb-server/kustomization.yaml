@@ -1,0 +1,9 @@
+resources:
+  - "smb-server.yaml"
+secretGenerator:
+  - name: smbcreds
+    literals:
+      - username=username
+      - password=password
+generatorOptions:
+  disableNameSuffixHash: true

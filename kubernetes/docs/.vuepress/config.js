@@ -50,7 +50,6 @@ module.exports = {
     sidebar: {
       '/guide/': [
         'etcd',
-        'endpoints',
         'network',
         'port',
         'ingress-nginx',
@@ -62,7 +61,6 @@ module.exports = {
         'virtualbox',
         'podman',
         'kubectl',
-        '/resources/deployment',
         '/resources/configMap',
         'mod',
         'ssh',
@@ -111,6 +109,7 @@ module.exports = {
         "cri",
         "cni",
         "crictl",
+        "pause",
         {
           title: "master 节点",
           collapsable: false,

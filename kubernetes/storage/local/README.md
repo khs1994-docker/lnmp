@@ -47,7 +47,7 @@ path "/mnt/disks" is mounted on "/" but it is not a shared or slave mount
 ```
 
 ```bash
-# 解决办法，具体参考上一节中的链接
+# 原因参考上一节中的链接
 
 $ sudo mount --make-shared /
 

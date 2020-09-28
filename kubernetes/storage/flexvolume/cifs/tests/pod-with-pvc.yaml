@@ -38,8 +38,13 @@ spec:
     secretRef:
         name: "flexvolume-cifs-secret"
     options:
-      networkPath: "//HIWIFI/sd/xunlei"
-      mountOptions: "dir_mode=0755,file_mode=0644,noperm"
+      # fix me
+      # your smb server address
+      # 插件在节点调用
+      # networkPath: "//HIWIFI/sd/xunlei"
+      # 10.254.0.45 为集群内 smb 服务端地址
+      networkPath: "//10.254.0.45/share"
+      mountOptions: "dir_mode=0777,file_mode=0777,vers=3.0" # noperm
   persistentVolumeReclaimPolicy: Retain
   storageClassName: cifs
 ---

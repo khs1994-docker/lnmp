@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:5.0.7-alpine
+        image: redis:6.0.8-alpine
     steps:
       - name: Dump GitHub context
         env:

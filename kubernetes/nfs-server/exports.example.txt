@@ -8,5 +8,5 @@
 /nfs/lnmp/redis *(rw,insecure,sync,no_root_squash,anonuid=0,anongid=0,no_subtree_check)
 /nfs/lnmp/registry *(rw,insecure,sync,no_root_squash,anonuid=0,anongid=0,no_subtree_check)
 /nfs/lnmp/log *(rw,insecure,sync,no_root_squash,anonuid=0,anongid=0,no_subtree_check)
-/nfs/kubernetes_pv *(rw,insecure,sync,no_root_squash,anonuid=0,anongid=0,no_subtree_check)
-/nfs/kubernetes_csi *(rw,insecure,sync,no_root_squash,anonuid=0,anongid=0,no_subtree_check)
+/nfs/kubernetes_nfs_pv *(rw,insecure,sync,no_root_squash,anonuid=0,anongid=0,no_subtree_check)
+/nfs/kubernetes_nfs_csi *(rw,insecure,sync,no_root_squash,anonuid=0,anongid=0,no_subtree_check)

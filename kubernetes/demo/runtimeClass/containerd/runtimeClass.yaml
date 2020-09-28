@@ -27,5 +27,53 @@ handler: runclinux
 apiVersion: node.k8s.io/v1beta1
 kind: RuntimeClass
 metadata:
+  name: crun
+handler: crun
+
+---
+
+apiVersion: node.k8s.io/v1beta1
+kind: RuntimeClass
+metadata:
+  name: crun-disable-systemd
+handler: crun-disable-systemd
+
+---
+
+apiVersion: node.k8s.io/v1beta1
+kind: RuntimeClass
+metadata:
   name: runsc
 handler: runsc
+
+---
+
+apiVersion: node.k8s.io/v1beta1
+kind: RuntimeClass
+metadata:
+  name: runsc-kvm
+handler: runsc-kvm
+
+---
+
+apiVersion: node.k8s.io/v1beta1
+kind: RuntimeClass
+metadata:
+  name: kata
+handler: kata
+
+---
+
+apiVersion: node.k8s.io/v1beta1
+kind: RuntimeClass
+metadata:
+  name: kata-qemu
+handler: kata-qemu
+
+---
+
+apiVersion: node.k8s.io/v1beta1
+kind: RuntimeClass
+metadata:
+  name: kata-fc
+handler: kata-fc

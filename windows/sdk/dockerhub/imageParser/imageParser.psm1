@@ -86,6 +86,9 @@ Function imageParser([string] $config, [boolean] $source = $true) {
   # default source registry
   if (!$registry -and $source) {
     $registry = 'hub-mirror.c.163.com'
+    if ($env:LNMP_CN_ENV -eq $false) {
+      $registry = 'registry.hub.docker.com'
+    }
   }
 
   if (!$ref) { $ref = "latest" }

@@ -1,4 +1,5 @@
 {
+  // https://www.schemastore.org/json/
   "yaml.schemas": {
     "http://json.schemastore.org/travis": ".travis.yml",
     "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json": [
@@ -31,6 +32,12 @@
         "docker-image-sync*.json"
       ],
       "url": "./scripts/docker-image-sync/config.schema.json"
+    },
+    {
+      "fileMatch": [
+        "*.patch.json"
+      ],
+      "url": "https://json.schemastore.org/json-patch"
     }
   ],
   // "yaml.trace.server": "",

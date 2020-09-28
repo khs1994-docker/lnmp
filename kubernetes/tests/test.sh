@@ -3,21 +3,42 @@
 set -ex
 
 echo "==> Set app"
-mkdir -p ../app/laravel/public
-cp lnmp/app/index.php ../app/laravel/public/
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# mkdir -p ../app/laravel/public
+# cp lnmp/app/index.php ../app/laravel/public/
+# else
+sudo mkdir -p /nfs/lnmp/app/laravel/public
+sudo cp lnmp/app/index.php /nfs/lnmp/app/laravel/public/
+# fi
 
 echo "==> Up nfs server"
+# fix travis-ci arm64
 if ! [ $(go env GOARCH) = 'amd64' ];then
-  sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
+#   sudo sed -i "s/erichough/klutchell/g" nfs-server/docker-compose.yml
+# fi
+sudo modprobe {nfs,nfsd,rpcsec_gss_krb5} || true
+sudo modprobe nfsd || true
 fi
-./lnmp-k8s nfs
+# ./lnmp-k8s nfs
+# sleep 30
+# docker ps -a
+# ./lnmp-k8s nfs logs
+# else
+kubectl apply -k deploy/nfs-server
 sleep 30
-docker ps -a
-./lnmp-k8s nfs logs
+kubectl logs $(kubectl get pod -l app=nfs-server --no-headers | cut -d ' ' -f 1) || true
+# docker ps -a
+# ./lnmp-k8s nfs logs
+kubectl get all
+# fi
 sudo mkdir -p /tmp2
 # install nfs dep
 sudo apt install -y nfs-common
-sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# sudo mount -t nfs4 -v ${SERVER_IP}:/lnmp/log /tmp2
+# else
+sudo mount -t nfs4 -v 10.254.0.49:/lnmp/log /tmp2
+# fi
 sudo umount /tmp2
 
 echo "==> set LNMP_NFS_SERVER_HOST .env"
@@ -25,7 +46,12 @@ echo "==> set LNMP_NFS_SERVER_HOST .env"
 
 echo "==> Test LNMP with NFS"
 cd lnmp
-kubectl kustomize storage/pv/nfs | sed "s/192.168.199.100/${SERVER_IP}/g" | kubectl apply -f -
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# kubectl kustomize storage/pv/nfs | sed "s/10.254.0.49/${SERVER_IP}/g" \
+#  | kubectl apply -f -
+# else
+kubectl apply -k storage/pv/nfs
+# fi
 kubectl create ns lnmp
 kubectl apply -k storage/pvc/nfs -n lnmp
 kubectl apply -k redis/overlays/development -n lnmp
@@ -46,12 +72,22 @@ curl -k https://laravel2.t.khs1994.com
 sudo ps aux || true
 kubectl delete ns lnmp
 kubectl delete pv -l app=lnmp
-./lnmp-k8s nfs down
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# ./lnmp-k8s nfs down
+# else
+kubectl delete -k deploy/nfs-server
+# fi
 
 echo "==> Test LNMP with hostpath"
-cp -rf ../app ~/app-development
+# if ! [ $(go env GOARCH) = 'amd64' ];then
+# cp -rf ../app ~/app-development
+# else
+cp -rf /nfs/lnmp/app ~/app-development
+# fi
+
 cd lnmp
-kubectl kustomize storage/pv/linux | sed "s/__USERNAME__/$(whoami)/g" | kubectl apply -f -
+kubectl kustomize storage/pv/linux | sed "s/__USERNAME__/$(whoami)/g" \
+  | kubectl apply -f -
 kubectl create ns lnmp
 kubectl apply -k storage/pvc/hostpath -n lnmp
 kubectl apply -k redis/overlays/development -n lnmp
@@ -69,10 +105,16 @@ kubectl get -n lnmp all
 curl -k https://laravel2.t.khs1994.com
 
 echo "==> Test runtimeclass runsc"
-test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runtimeClass.containerd.yaml && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
-test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runtimeClass.yaml && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
-test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm --runtime=runsc alpine uname -a || true
-test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" && docker run -it --rm alpine uname -a || true
+test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
+  && (kubectl apply -f demo/runtimeClass/containerd/runtimeClass.yaml \
+  && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
+test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
+  && (kubectl apply -f demo/runtimeClass/cri-o/runtimeClass.yaml \
+  && kubectl apply -f demo/runtimeClass/runsc.yaml) || true
+test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
+  && docker run -it --rm --runtime=runsc alpine uname -a || true
+test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
+  && docker run -it --rm alpine uname -a || true
 sleep 20
 kubectl get all
 kubectl get pod
@@ -82,8 +124,10 @@ kubectl describe pod/${POD_NAME} || true
 
 echo "==> Test runtimeclass runc"
 kubectl delete -f demo/runtimeClass/runsc.yaml || true
-test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" && (kubectl apply -f demo/runtimeClass/runc.yaml) || true
-test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" && (kubectl apply -f demo/runtimeClass/runc.yaml) || true
+test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
+  && (kubectl apply -f demo/runtimeClass/runc.yaml) || true
+test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
+  && (kubectl apply -f demo/runtimeClass/runc.yaml) || true
 sleep 10
 kubectl get all
 kubectl get pod

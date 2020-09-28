@@ -10,7 +10,7 @@ $KUBE_APISERVER_HOST = $wsl_ip
 # wsl1
 # $KUBE_APISERVER_HOST="x.x.x.x"
 
-$WINDOWS_HOME_IN_WSL2 = Invoke-WSL wslpath "'$HOME'"
+$WINDOWS_HOME_IN_WSL2 = Invoke-WSLK8S wslpath "'$HOME'"
 # $K8S_ROOT='/opt/k8s'
 
 $SUPERVISOR_LOG_ROOT="${WINDOWS_HOME_IN_WSL2}/.khs1994-docker-lnmp/wsl-k8s/log"
@@ -69,7 +69,7 @@ $command = wsl -d wsl-k8s -u root -- echo ${K8S_ROOT}/bin/kube-apiserver `
   --logtostderr=true `
   --service-account-issuer=api `
   --api-audiences=api `
-  --feature-gates="IPv6DualStack=true" `
+  --feature-gates="IPv6DualStack=true,EphemeralContainers=true,GenericEphemeralVolume=true" `
   --v=2
 
 mkdir -Force $PSScriptRoot/supervisor.d | out-null
@@ -88,12 +88,12 @@ startsecs=10" > $PSScriptRoot/supervisor.d/kube-apiserver.ini
 
 if ($args[0] -eq 'start' -and $args[1] -eq '-d') {
   & $PSScriptRoot/bin/wsl2host-check
-  Invoke-WSL supervisorctl start kube-server:kube-apiserver
+  Invoke-WSLK8S supervisorctl start kube-server:kube-apiserver
 
   exit
 }
 
 if ($args[0] -eq 'start') {
   & $PSScriptRoot/bin/wsl2host-check
-  Invoke-WSL bash -c $command
+  Invoke-WSLK8S bash -c $command
 }

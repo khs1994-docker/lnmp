@@ -8,8 +8,6 @@
 
 从节点只有读权限，不能 **写入** 数据。
 
-销毁之后（不销毁数据卷），再次部署可以恢复。
-
 ## 开发环境
 
 在 `.env` 文件中设置 `CLUSTERKIT_REDIS_M_S_HOST` 变量为路由器分配给电脑的 IP，或者集群 IP
@@ -23,8 +21,6 @@ $ ./lnmp-docker clusterkit-redis-replication-down [-v]
 ## Swarm mode
 
 ```bash
-# 建议写入到 /etc/profile 文件
-
 $ export CLUSTERKIT_REDIS_M_S_HOST=192.168.199.100 # 自行替换为你自己的 IP
 
 $ ./lnmp-docker clusterkit-redis-replication-deploy
@@ -36,7 +32,7 @@ $ ./lnmp-docker clusterkit-redis-replication-remove
 
 ### predis
 
-* https://github.com/nrk/predis#replication
+* https://github.com/predis/predis#replication
 
 ```php
 $parameters = [

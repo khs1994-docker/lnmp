@@ -6,8 +6,6 @@
 
 More information please exec `$ redis-cli --cluster help`
 
-销毁之后，不能恢复。
-
 每个节点数据必须为空，才能建立集群。
 
 ```bash
@@ -32,9 +30,9 @@ More information please exec `$ redis-cli --cluster help`
 ```bash
 # 自行调整配置 ./cluster/redis/redis.conf
 
-# 启动，--build 参数表示每次启动前强制构建镜像 -d 表示后台运行
+# -d 表示后台运行
 
-$ ./lnmp-docker clusterkit-redis-up [--build] [-d]
+$ ./lnmp-docker clusterkit-redis-up [-d]
 
 #
 # 提示
@@ -54,8 +52,6 @@ $ ./lnmp-docker clusterkit-redis-down [-v]
 ## Swarm mode
 
 ```bash
-# 建议写入到 /etc/profile 文件
-
 $ export CLUSTERKIT_REDIS_HOST=192.168.199.100 # 自行替换为自己的 IP
 
 $ ./lnmp-docker clusterkit-redis-deploy
@@ -83,9 +79,9 @@ $obj_cluster = new RedisCluster(NULL, [
 
 ### predis
 
-* https://github.com/nrk/predis
+* https://github.com/predis/predis
 
-* https://github.com/nrk/predis#cluster
+* https://github.com/predis/predis#cluster
 
 ```php
 $parameters = [
@@ -176,3 +172,7 @@ $redis->set('foo','bar');
 
 echo $redis->get('foo');
 ```
+
+## 参考
+
+* https://www.cnblogs.com/51life/p/10233340.html

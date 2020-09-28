@@ -52,14 +52,18 @@ spec:
     volumeHandle: unique-volumeid  # make sure it's a unique id in the cluster
     volumeAttributes:
       # fix me
-      source: "//192.168.199.100/Users/90621/Downloads/lnmp-docker-cache"
+      # your smb server address
+      # source: "//192.168.199.100/Users/90621/Downloads/lnmp-docker-cache"
+      source: "//smb-server.default.svc.cluster.local/share"
     # $ kubectl create secret generic smbcreds \
     #       --from-literal username=USERNAME \
     #       --from-literal password="PASSWORD"
     nodeStageSecretRef:
+      # 此 secret 在 ../../../../deploy/smb-server 中定义
       name: smbcreds
       namespace: default
 ---
+# 如果你使用自己的 smb 服务器，请使用 用户名 密码 创建如下 secret
 # kind: Secret
 # apiVersion: v1
 # metadata:

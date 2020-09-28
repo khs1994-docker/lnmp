@@ -11,7 +11,7 @@
 | -- | -- |
 | Windows | [![Build status](https://ci.appveyor.com/api/projects/status/itgp61n808n80b8m/branch/master?svg=true)](https://ci.appveyor.com/project/khs1994-docker/lnmp/branch/master) |
 | Linux |  [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
-| macOS | - |
+| macOS | ![CI](https://github.com/khs1994-docker/lnmp/workflows/CI/badge.svg?branch=master) |
 | Linux arm64v8 | [![Build Status](https://ci.khs1994.com/github/khs1994-docker/lnmp/status?branch=master)](https://ci.khs1994.com/github/khs1994-docker/lnmp) |
 
 <p align="center">
@@ -119,23 +119,19 @@ More information please see Docker PHP Best Practice https://github.com/khs1994-
 
 ### How to connect Services
 
-:no_entry: ~~`$redis->connect('127.0.0.1',6379);`~~
-
-:no_entry: ~~`$pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');`~~
-
-```php
+```diff
 $redis = new \Redis();
 
-$redis->connect('redis', 6379);
+- $redis->connect('127.0.0.1',6379);
++ $redis->connect('redis', 6379);
 
-$pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
+- $pdo = new \PDO('mysql:host=127.0.0.1;dbname=test;port=3306','root','mytest');
++ $pdo = new \PDO('mysql:host=mysql,dbname=test,port=3306', 'root', 'mytest');
 ```
 
 ## Advanced
 
 * [Kubernetes](https://github.com/khs1994-docker/lnmp-k8s)
-
-* [Helm](https://github.com/khs1994-docker/lnmp-k8s/tree/master/helm)
 
 ## PHPer commands
 
@@ -213,7 +209,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.10-composer-alpine`| **1.10.13**      |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.7-alpine`           | **1.6.7**       |`alpine:3.12`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.5-management-alpine` | **3.8.5**       |`alpine:3.11`    |
-|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:12.4-alpine`             | **12.4**        |`alpine:3.12`    |
+|[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.0-alpine`             | **13.0**        |`alpine:3.12`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.1`                      | **4.4.1**       |`ubuntu:bionic`  |
 |[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.0.2`                | **5.0.2**       |`alpine:3.12`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |

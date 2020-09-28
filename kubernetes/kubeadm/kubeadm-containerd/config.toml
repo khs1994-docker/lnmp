@@ -75,21 +75,16 @@ oom_score = 0
           # runtime_type = "io.containerd.runtime.v1.linux"
           # runtime_type = "io.containerd.runc.v1"
           runtime_type = "io.containerd.runc.v2"
-          runtime_engine = ""
-          runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            systemd_cgroup = true
-            # binary_name is the binary name of the runc binary.
-            # binary_name = ""
-            # binary_name = "runc"
-            # binary_name = "crun"
+            SystemdCgroup = true
+            # BinaryName is the binary name of the runc binary.
+            # BinaryName = "runc"
+            # BinaryName = "crun"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"
           # runtime_type = "io.containerd.runc.v2"
-          runtime_engine = ""
-          runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1.options]
             SystemdCgroup = true
@@ -134,7 +129,7 @@ oom_score = 0
       tls_cert_file = ""
       tls_key_file = ""
   [plugins."io.containerd.internal.v1.opt"]
-    path = "/var/lib/kubeadm-containerd"
+    path = "/opt/kubeadm-containerd"
   [plugins."io.containerd.internal.v1.restart"]
     interval = "10s"
   [plugins."io.containerd.metadata.v1.bolt"]

@@ -1,0 +1,4 @@
+[runsc_config]
+debug = "true"
+debug-log = "/wsl/wsl-k8s-data/k8s/var/log/runsc-kvm/debug-%ID%/gvisor.%COMMAND%.log"
+platform = "kvm"

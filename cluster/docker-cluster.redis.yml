@@ -3,7 +3,7 @@ version: '3.7'
 #
 # Redis cluster (by Ruby 5.0 under, 5.0 + please see $ redis-cli --cluster help)
 #
-# 6 node 3 master 3 slave
+# 6 node 3 master 3 node
 #
 # @link https://www.cnblogs.com/lianggp/articles/8136222.html
 #
@@ -19,7 +19,7 @@ version: '3.7'
 
 #
 # master aof
-# slave rdb
+# node rdb
 #
 
 #
@@ -28,7 +28,7 @@ version: '3.7'
 
 x-common:
   &common
-  image: redis:5.0.7-alpine
+  image: redis:6.0.8-alpine
   restart: always
   env_file:
     - ./cli/timezone.env
@@ -44,7 +44,7 @@ x-deploy:
   restart_policy:
     condition: any
     delay: 5s
-    max_attempts: 5
+    # max_attempts: 5
     window: 123s
   update_config:
     parallelism: 2
@@ -64,11 +64,6 @@ services:
     << : *common
     << : *default-labels
     restart: "on-failure"
-    build:
-      context: ./cluster/redis
-      args:
-        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
-        REDIS_URL: gitee.com/mirrors/redis/raw
     volumes:
       - ./cluster/redis/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
     command:
@@ -132,8 +127,6 @@ services:
 
   redis_master-2:
     << : *redis-master
-    << : *common
-    << : *default-labels
     depends_on:
       - redis_master-1
     ports:
@@ -156,8 +149,7 @@ services:
       - cluster_redis_master-2-data:/data
 
   redis_master-3:
-    << : *common
-    << : *default-labels
+    << : *redis-master
     depends_on:
       - redis_master-1
     ports:
@@ -179,8 +171,8 @@ services:
     volumes:
       - cluster_redis_master-3-data:/data
 
-  redis_slave-1:
-    &redis-slave
+  redis_node-1:
+    &redis-node
     << : *common
     << : *default-labels
     depends_on:
@@ -202,7 +194,7 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
     volumes:
-      - cluster_redis_slave-1-data:/data
+      - cluster_redis_node-1-data:/data
     deploy:
       << : *default-deploy
       << : *default-labels
@@ -215,10 +207,8 @@ services:
       #     cpus: '0.25'
       #     memory: 20M
 
-  redis_slave-2:
-    << : *redis-slave
-    << : *common
-    << : *default-labels
+  redis_node-2:
+    << : *redis-node
     ports:
       - "8002:8002"
       - "18002:18002"
@@ -236,12 +226,10 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
     volumes:
-      - cluster_redis_slave-2-data:/data
+      - cluster_redis_node-2-data:/data
 
-  redis_slave-3:
-    << : *redis-slave
-    << : *common
-    << : *default-labels
+  redis_node-3:
+    << : *redis-node
     ports:
       - "8003:8003"
       - "18003:18003"
@@ -259,7 +247,7 @@ services:
       "--aof-use-rdb-preamble yes"
       ]
     volumes:
-      - cluster_redis_slave-3-data:/data
+      - cluster_redis_node-3-data:/data
 
 networks:
   cluster_redis:
@@ -284,11 +272,11 @@ volumes:
   cluster_redis_master-3-data:
     << : *default-labels
 
-  cluster_redis_slave-1-data:
+  cluster_redis_node-1-data:
     << : *default-labels
 
-  cluster_redis_slave-2-data:
+  cluster_redis_node-2-data:
     << : *default-labels
 
-  cluster_redis_slave-3-data:
+  cluster_redis_node-3-data:
     << : *default-labels

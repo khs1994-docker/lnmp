@@ -55,7 +55,7 @@ $ kubectl apply -n ci -k gogs
 
 > 部署 Drone 一、二 任选其一（支持同时部署），新的 drone-kubenative 将任务作为 k8s 的 pod 运行。
 
-## 一、[Drone](https://github.com/helm/charts/tree/master/stable/drone) + [Runner](https://docs.drone.io/installation/runners/)
+## 一、[Drone](https://github.com/helm/charts/tree/master/stable/drone) + [Runner](https://docs.drone.io/runner/overview/)
 
 ```bash
 $ kubectl apply -n ci -k drone
@@ -63,13 +63,13 @@ $ kubectl apply -n ci -k drone
 # $ kubectl apply -n ci -k drone/providers/github
 ```
 
-### 1.1 [Docker runner](https://docker-runner.docs.drone.io/installation/install_linux/)
+### 1.1 [Docker runner](https://docs.drone.io/runner/docker/installation/linux/)
 
 ```bash
 $ kubectl apply -n ci -k drone-runner/docker
 ```
 
-### 1.2 [Kubernetes runner](https://kube-runner.docs.drone.io/installation/installation/)
+### 1.2 [Kubernetes runner](https://docs.drone.io/runner/kubernetes/installation/)
 
 * 任务 pod 运行在 `drone-runner` 命名空间
 
@@ -144,3 +144,7 @@ type: kubernetes
 + clone:
 +   skip_verify: true
 ```
+
+## 参考
+
+* https://github.com/drone/charts

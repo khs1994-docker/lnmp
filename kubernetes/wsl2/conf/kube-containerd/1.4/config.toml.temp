@@ -7,7 +7,7 @@ required_plugins = []
 oom_score = 0
 
 [grpc]
-  address = "/run/kube-containerd/containerd.sock"
+  address = "/run/kube-containerd/kube-containerd.sock"
   tcp_address = ""
   tcp_tls_cert = ""
   tcp_tls_key = ""
@@ -21,6 +21,7 @@ oom_score = 0
   uid = 0
   gid = 0
   level = ""
+  # level = "debug"
 
 [metrics]
   address = "127.0.0.1:1338"
@@ -51,7 +52,7 @@ oom_score = 0
     # sandbox_image = "gcr.mirror/google-containers/pause:3.2"
     sandbox_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
     stats_collect_period = 10
-    systemd_cgroup = false
+    # systemd_cgroup = false
     enable_tls_streaming = false
     max_container_log_line_size = 16384
     disable_cgroup = false
@@ -70,30 +71,78 @@ oom_score = 0
           # runtime_type = "io.containerd.runtime.v1.linux"
           # runtime_type = "io.containerd.runc.v1"
           runtime_type = "io.containerd.runc.v2"
-          runtime_engine = ""
-          runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
-            systemd_cgroup = false
-            # binary_name = ""
+            SystemdCgroup = false
+
+            # BinaryName = "runc"
+            # BinaryName = "crun"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
+          # runtime_type = "io.containerd.runtime.v1.linux"
+          # runtime_type = "io.containerd.runc.v1"
+          runtime_type = "io.containerd.runc.v2"
+          privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun.options]
+            SystemdCgroup = false
+            BinaryName = "crun"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun-disable-systemd]
+          # runtime_type = "io.containerd.runtime.v1.linux"
+          # runtime_type = "io.containerd.runc.v1"
+          runtime_type = "io.containerd.runc.v2"
+          privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun-disable-systemd.options]
+            SystemdCgroup = false
+            BinaryName = "crun-disable-systemd"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
+          runtime_type = "io.containerd.runsc.v1"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
+            # SystemdCgroup = false
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc-kvm]
+          runtime_type = "io.containerd.runsc.v1"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc-kvm.options]
+            # SystemdCgroup = false
+            TypeUrl = "io.containerd.runsc.v1.options"
+            ConfigPath = "##K8S_ROOT##/etc/kube-containerd/runsc-kvm.toml"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata]
+          runtime_type = "io.containerd.kata.v2"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata.options]
+            # SystemdCgroup = false
+            ConfigPath = "##K8S_ROOT##/etc/kata-containers/configuration.toml"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-qemu]
+          runtime_type = "io.containerd.kata.v2"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-qemu.options]
+            # SystemdCgroup = false
+            ConfigPath = "##K8S_ROOT##/etc/kata-containers/configuration-qemu.toml"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-fc]
+          runtime_type = "io.containerd.kata.v2"
+          # privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata-fc.options]
+            # SystemdCgroup = false
+            ConfigPath = "##K8S_ROOT##/etc/kata-containers/configuration-fc.toml"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
           # runtime_type = "io.containerd.runtime.v1.linux"
           runtime_type = "io.containerd.runc.v1"
           # runtime_type = "io.containerd.runc.v2"
-          runtime_engine = ""
-          runtime_root = ""
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1.options]
             SystemdCgroup = false
-            # BinaryName = ""
+            # BinaryName = "runc"
+            # BinaryName = "crun"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux]
           runtime_type = "io.containerd.runtime.v1.linux"
           # runtime_type = "io.containerd.runc.v1"
           # runtime_type = "io.containerd.runc.v2"
-          runtime_engine = ""
-          runtime_root = ""
+          # 仅在 io.containerd.runtime.v1.linux 生效
+          # runtime_engine = "/usr/local/bin/runc"
+          # 仅在 io.containerd.runtime.v1.linux 生效
+          # runtime_root = "/run/containerd/runc"
           privileged_without_host_devices = false
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux.options]
+            # 此处内容不起作用
             SystemdCgroup = false
             # BinaryName = ""
     [plugins."io.containerd.grpc.v1.cri".cni]
@@ -142,7 +191,7 @@ oom_score = 0
       tls_cert_file = ""
       tls_key_file = ""
   [plugins."io.containerd.internal.v1.opt"]
-    path = "##K8S_ROOT##/kube-containerd"
+    path = "##K8S_ROOT##/opt/kube-containerd"
   [plugins."io.containerd.internal.v1.restart"]
     interval = "10s"
   [plugins."io.containerd.metadata.v1.bolt"]
@@ -152,6 +201,7 @@ oom_score = 0
   [plugins."io.containerd.runtime.v1.linux"]
     shim = "kube-containerd-shim"
     runtime = "runc"
+    # runtime = "crun"
     runtime_root = ""
     no_shim = false
     shim_debug = false

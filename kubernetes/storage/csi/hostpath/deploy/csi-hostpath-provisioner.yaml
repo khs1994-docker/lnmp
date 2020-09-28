@@ -26,7 +26,7 @@ spec:
       serviceAccountName: csi-provisioner
       containers:
         - name: csi-provisioner
-          image: quay.io/k8scsi/csi-provisioner:v2.0.0-rc2
+          image: quay.io/k8scsi/csi-provisioner:v2.0.2
           args:
             - -v=5
             - --csi-address=/csi/csi.sock

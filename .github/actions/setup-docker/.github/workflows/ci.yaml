@@ -1,6 +1,7 @@
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 name: CI
 
@@ -8,16 +9,31 @@ jobs:
   docker:
     name: Docker
     strategy:
+      fail-fast: false
       matrix:
         docker_version:
           - 18.09
           - 19.03
-          - 19.09
+          - 20.03
         docker_channel:
           - stable
           - test
           # - nightly
-    runs-on: ubuntu-latest
+        os:
+          - ubuntu-16.04
+          - ubuntu-18.04
+          - ubuntu-20.04
+          - ubuntu-latest
+        include:
+          # macOS
+          - os: macos-latest
+            docker_channel: stable
+            docker_version: 19.03
+          - os: macos-latest
+            docker_channel: edge
+            docker_version: 19.03
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@main
         with:
@@ -32,55 +48,101 @@ jobs:
         run: |
           set -x
           docker version
-          cat /etc/docker/daemon.json
+          cat /etc/docker/daemon.json || true
+          cat /Users/runner/.docker/daemon.json || true
           docker buildx version || true
           docker buildx ls || true
+
   docker-default:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@main
         with:
           fetch-depth: 2
-      # 必须先登录后安装 Docker
-      # Login docker hub or other docker registry
-      # test docker login
-      - uses: docker/login-action@v1
-        with:
-          # registry: contoso.azurecr.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-        if: github.event_name == 'push'
       - name: setup docker(default)
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
       - run: docker version
-      - name: Docker Push Image
+      # Login docker hub or other docker registry
+      # test docker login
+      - uses: azure/docker-login@v1
+        if: |
+          github.event_name == 'push'
+        with:
+          # login-server: contoso.azurecr.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: docker login by cli
+      #   run: |
+      #     echo ${docker_password} | docker login -u ${docker_username} --password-stdin ${docker_registry:-}
+      #   if: |
+      #     github.event_name == 'push'
+      #   env:
+      #     # docker_registry: contoso.azurecr.io
+      #     docker_username: ${{ secrets.DOCKER_USERNAME }}
+      #     docker_password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker Image
         run: |
           set -x
-          docker pull alpine:latest
-          docker tag alpine:latest khs1994/alpine:latest
-          docker push khs1994/alpine:latest
-        if: github.event_name == 'push'
+
+          push=
+          if [ "${push_image}" = 'true' ];then
+             push='--push'
+          fi
+
+          echo 'FROM --platform=${TARGETPLATFORM} alpine' > Dockerfile
+          echo 'RUN set -x ; apk add --no-cache curl' >> Dockerfile
+
+          # fix macos docker auth
+          sed -i "" 's/credsStore/_credsStore/g' ${DOCKER_CONFIG}/config.json || true
+
+          tag=${version:-19.03}-${channel:-stable}-${os}
+          docker buildx build \
+            -t khs1994/alpine:${tag} \
+            ${push} \
+            --platform linux/arm64,linux/amd64 \
+            .
+        env:
+          os: ${{ matrix.os }}
+          # version: ${{ matrix.docker_version }}
+          # channel: ${{ matrix.docker_channel }}
+          push_image: ${{ github.event_name == 'push' }}
+
   docker-nightly:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-16.04
+          - ubuntu-18.04
+          - ubuntu-20.04
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@main
         with:
           fetch-depth: 2
-      - name: setup docker(Without version)
+      - name: setup docker
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
         with:
-          docker_version: 0.0.0.0
+          docker_nightly_version: snapshot-20200915
           docker_channel: nightly
       - run: docker version
 
   notsupport-platform:
     strategy:
+      fail-fast: false
       matrix:
         os:
-         - windows-latest
-         - macOS-latest
+          - windows-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@main

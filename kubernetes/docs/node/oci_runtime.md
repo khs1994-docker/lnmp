@@ -6,7 +6,7 @@
 * [runc](https://github.com/opencontainers/runc)
 * [crun](https://github.com/containers/crun)
 * [runsc](https://github.com/google/gvisor)
-* [kata-containers](https://github.com/kata-containers/runtime)
+* [kata-containers](https://github.com/kata-containers/kata-containers)
 
 ## runc
 

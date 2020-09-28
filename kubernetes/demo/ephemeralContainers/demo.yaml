@@ -10,3 +10,12 @@ ephemeralContainers:
   name: debugger
   stdin: true
   tty: true
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: demo-pod
+spec:
+  containers:
+    - image: nginx:alpine
+      name: test

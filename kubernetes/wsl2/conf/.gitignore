@@ -8,3 +8,4 @@ kube-containerd/1.4/config.toml
 crio/crio.conf
 crio/crio.conf.d
 !containers
+!kata-containers

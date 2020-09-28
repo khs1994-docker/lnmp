@@ -17,9 +17,9 @@
 
 Import-Module $PSScriptRoot/WSL-K8S.psm1
 
-$WINDOWS_HOME_ON_WSL = Invoke-WSL wslpath "'$HOME'"
+$WINDOWS_HOME_ON_WSL = Invoke-WSLK8S wslpath "'$HOME'"
 
-Invoke-WSL mkdir -p ~/.kube
-Invoke-WSL cp $WINDOWS_HOME_ON_WSL/.kube/config ~/.kube/config
+Invoke-WSLK8S mkdir -p ~/.kube
+Invoke-WSLK8S cp $WINDOWS_HOME_ON_WSL/.kube/config ~/.kube/config
 
-Invoke-WSL ${K8S_ROOT}/bin/kubectl config get-contexts
+Invoke-WSLK8S ${K8S_ROOT}/bin/kubectl config get-contexts

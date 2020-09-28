@@ -9,6 +9,14 @@ Wants=network-online.target network.target
 
 Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_S_HOST=192.168.199.100"
+# Environment="K8S_S_HOST=%i"
+
+ExecStartPre=-/usr/bin/env sh -c '\
+if [ -f ${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml.temp ];then \
+cat ${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml.temp \
+| sed -e "s/##NODE_IP##/%i/g" \
+      -e "s!##K8S_ROOT##!${K8S_ROOT}!g" \
+| tee ${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml;fi'
 
 ExecStart=/opt/k8s/bin/kube-scheduler \
 --config=${K8S_ROOT}/etc/kubernetes/kube-scheduler.config.yaml \

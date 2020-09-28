@@ -34,7 +34,8 @@ spec:
   # AWS EBS, GCE PD, Azure Disk, and Cinder volumes support deletion.
   nfs:
     # FIXME: use the right IP
-    server: 192.168.199.100
+    # server: 192.168.199.100
+    server: 10.254.0.49
     path: "/lnmp/mysql-production"
   storageClassName: slow
 
@@ -61,7 +62,8 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     # FIXME: use the right IP
-    server: 192.168.199.100
+    # server: 192.168.199.100
+    server: 10.254.0.49
     path: "/lnmp/redis-production"
   storageClassName: slow
   mountOptions:
@@ -85,7 +87,8 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     # FIXME: use the right IP
-    server: 192.168.199.100
+    # server: 192.168.199.100
+    server: 10.254.0.49
     path: "/lnmp/app-production"
   storageClassName: slow
   mountOptions:
@@ -112,7 +115,8 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     # FIXME: use the right IP
-    server: 192.168.199.100
+    # server: 192.168.199.100
+    server: 10.254.0.49
     path: "/lnmp/log-production"
   storageClassName: slow
   mountOptions:
