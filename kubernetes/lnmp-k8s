@@ -82,11 +82,11 @@ _sudo(){
   command -v sudo > /dev/null && echo sudo || true
 }
 
-uname -a | grep -q microsoft && IS_WSL2=1 || IS_WSL2=0
+uname -a | grep -q microsoft && IS_WSL2=1 || true
 
-systemd-detect-virt || systemd_detect_virt_exit=1
+$(_sudo) systemctl is-system-running -q && IS_SYSTEMD=1 || true
 
-if [ -z ${systemd_detect_virt_exit} ];then
+if [ -n "${IS_SYSTEMD}" -a -n "${IS_WSL2}" ];then
   if [ $(systemd-detect-virt) = 'wsl' ];then
      WSL2_SYSTEMD=1
   fi
@@ -97,7 +97,7 @@ if [ -n "$WSL2_SYSTEMD" ];then
 
   source wsl2/.env
   TMP_ROOT="${K8S_ROOT}/../.khs1994-docker-lnmp/caches"
-elif [ "$IS_WSL2" -eq 1 ];then
+elif [ -n "$IS_WSL2" ];then
   print_info "k8s node run on WSL2"
   source wsl2/.env
 
@@ -1067,17 +1067,46 @@ _k8s_install_systemd(){
   cd systemd
 
   for file in `ls *.service`; \
-  do \
-    if [ ! -f /etc/systemd/system/$file ];then continue ; fi; \
+  do
+    if [ ! -f /etc/systemd/system/$file ];then continue ; fi
     $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" \
-      /etc/systemd/system/$file ; \
+      /etc/systemd/system/$file
+
+    if [ -z "$WSL2_SYSTEMD" ];then
     $(_sudo) sed -i "s/192.168.199.100/${MASTER_IP}/g" \
-      /etc/systemd/system/$file ; \
-    $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME:-node1}!g" \
-      /etc/systemd/system/$file ; \
+      /etc/systemd/system/$file
+    fi
+
+    if [ -n "$IS_WSL2" ];then
+      $(_sudo) sed -i "s!##NODE_NAME##!wsl2!g" \
+        /etc/systemd/system/$file
+    else
+      $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME:-node1}!g" \
+        /etc/systemd/system/$file
+    fi
+
     $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
-      /etc/systemd/system/$file ; \
+      /etc/systemd/system/$file
   done
+
+  if [ -n "$WSL2_SYSTEMD" ];then
+    ${_sudo} mv /etc/systemd/system/kube-apiserver{.service,@.service}
+    ${_sudo} mv /etc/systemd/system/kube-controller-manager{.service,@.service}
+    ${_sudo} mv /etc/systemd/system/kube-scheduler{.service,@.service}
+
+    cp ../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+
+    ${_sudo} sed -i \
+      -e 's/192.168.199.100/%i/g' \
+      -e 's/2379/12379/g' \
+      -e 's/_K8S_ETCD_HOST/K8S_ETCD_HOST/g' \
+      /etc/systemd/system/kube-apiserver@.service
+
+    ${_sudo} sed -i \
+      's/192.168.199.100/%i/g' \
+      /etc/systemd/system/kube-controller-manager@.service \
+      /etc/systemd/system/kube-scheduler@.service
+  fi
 
   cd - > /dev/null
 
@@ -1174,7 +1203,7 @@ _k8s_join_conf_replace(){
 _k8s_join_hostname_handler(){
   KUBE_HOSTNAME=`hostname`
 
-  if [ $IS_WSL2 -eq 1 ];then KUBE_HOSTNAME='wsl2' ; fi
+  if [ -n "$IS_WSL2" ];then KUBE_HOSTNAME='wsl2' ; fi
 
   for options in $@
   do

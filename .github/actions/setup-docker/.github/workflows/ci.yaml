@@ -33,6 +33,7 @@ jobs:
             docker_channel: edge
             docker_version: 19.03
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@main
         with:
@@ -60,6 +61,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@main
         with:
@@ -98,7 +100,8 @@ jobs:
           echo 'FROM --platform=${TARGETPLATFORM} alpine' > Dockerfile
           echo 'RUN set -x ; apk add --no-cache curl' >> Dockerfile
 
-          ls -la ${DOCKER_CONFIG}
+          # fix macos docker auth
+          sed -i "" 's/credsStore/_credsStore/g' ${DOCKER_CONFIG}/config.json || true
 
           tag=${version:-19.03}-${channel:-stable}-${os}
           docker buildx build \

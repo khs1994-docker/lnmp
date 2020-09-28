@@ -123,6 +123,7 @@ Invoke-WSL ${K8S_ROOT}/bin/generate-kubelet-bootstrap-kubeconfig.sh ${K8S_ROOT}
 Invoke-WSL mkdir -p ${K8S_ROOT}/var/lib/kubelet
 
 if ($args[0] -eq 'init') {
+  wsl -d wsl-k8s -- sh -cx "cp $WINDOWS_ROOT_IN_WSL2/conf/kubelet.config.yaml ${K8S_ROOT}/etc/kubernetes/"
   "==> kubelet init success !"
   exit
 }

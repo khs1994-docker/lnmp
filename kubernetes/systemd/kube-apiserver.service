@@ -8,7 +8,9 @@ After=network-online.target network.target
 [Service]
 Environment="K8S_ROOT=/opt/k8s"
 Environment="KUBE_APISERVER_HOST=192.168.199.100"
+# Environment="KUBE_APISERVER_HOST=%i"
 Environment="K8S_ETCD_HOST=192.168.199.100"
+Environment="_K8S_ETCD_HOST=windows.k8s.khs1994.com"
 
 ExecStart=/opt/k8s/bin/kube-apiserver \
 --advertise-address=${KUBE_APISERVER_HOST} \

@@ -9,6 +9,7 @@ After=network-online.target network.target
 
 Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_CM_HOST=192.168.199.100"
+# Environment="K8S_CM_HOST=%i"
 
 ExecStart=/opt/k8s/bin/kube-controller-manager \
 --profiling \

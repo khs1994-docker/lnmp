@@ -1,5 +1,6 @@
 # Release
 
+* k8s 新版本发布时（e.g. 1.18.0），tag 上一个版本（e.g. 1.17.0）
 * 更新 `crictl` 时手动更新 `lnmp-k8s` 脚本中的 crictl sha256sum
 * NGINX 更新时 `khs1994-docker/kube-nginx` 打 TAG，CI 构建 `khs1994/kube-nginx:TAG`
 * 更新 lwpm k8s 包，commit 包含 [lwpm dist] [k8s]
