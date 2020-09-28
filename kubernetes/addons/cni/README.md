@@ -21,6 +21,8 @@
 * https://docs.projectcalico.org/maintenance/enabling-bpf
 * https://www.projectcalico.org/introducing-the-calico-ebpf-dataplane/
 
+**使用 eBPF 不再需要 kube-proxy 服务，请事先停止 kube-proxy**
+
 ```bash
 $ sudo mount bpffs /sys/fs/bpf -t bpf
 ```

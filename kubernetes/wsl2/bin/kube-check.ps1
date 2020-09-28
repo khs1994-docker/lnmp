@@ -67,5 +67,5 @@ foreach ($item in $(wsl -l --running)) {
   }
 }
 
-wsl -d wsl-k8s -u root -- mount --make-shared /
-wsl -d wsl-k8s -u root -- mount --make-shared /sys
+wsl -d wsl-k8s -u root -- sh -cx "mount --make-shared /"
+wsl -d wsl-k8s -u root -- sh -cx "mount --make-shared /sys"

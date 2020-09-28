@@ -246,8 +246,8 @@ $ ./wsl2/bin/kube-node
 # 获取 csr
 $ ./wsl2/bin/kubectl-get-csr
 
-NAME        AGE   REQUESTOR          CONDITION
-csr-9pvrm   11m    system:node:wsl2          Pending
+NAME        AGE    SIGNERNAME                                    REQUESTOR           CONDITION
+csr-9pvrm   23s    kubernetes.io/kubelet-serving                 system:node:wsl2    Pending
 ```
 
 根据提示 **签署** 证书,一般为最后一个

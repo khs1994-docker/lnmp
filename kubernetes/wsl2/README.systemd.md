@@ -44,6 +44,7 @@ $ ./wsl2/kube-wsl2windows k8s
 $ Import-Module ./wsl2/bin/WSL-K8S.psm1
 $ Get-Command -m wsl-k8s
 
+# 保证 ping 命令正常执行，按 ctrl + c 停止
 $ Invoke-WSLK8S ping `$`{WSL2_IP?-wsl2 ip not set`}
 
 $ Invoke-WSLK8S systemctl start kube-apiserver@`$`{WSL2_IP?-wsl2 ip not set`}
@@ -66,4 +67,11 @@ $ ./wsl2/kubelet init
 
 ```powershell
 $ Invoke-WSLK8S systemctl start kubelet@kube-containerd
+```
+
+**手动签署 CSR**
+
+```powershell
+$ ./wsl2/bin/kubectl-get-csr
+# 根据提示手动签署 CSR
 ```

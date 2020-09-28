@@ -1079,10 +1079,12 @@ _k8s_install_systemd(){
 
     if [ -n "$IS_WSL2" ];then
       $(_sudo) sed -i "s!##NODE_NAME##!wsl2!g" \
-        /etc/systemd/system/$file
+        /etc/systemd/system/kubelet.service \
+        /etc/systemd/system/kubelet@.service
     else
       $(_sudo) sed -i "s!##NODE_NAME##!${KUBE_HOSTNAME:-node1}!g" \
-        /etc/systemd/system/$file
+        /etc/systemd/system/kubelet.service \
+        /etc/systemd/system/kubelet@.service
     fi
 
     $(_sudo) sed -i "s!##KUBE_APISERVER##!${KUBE_APISERVER}!g" \
@@ -1093,8 +1095,10 @@ _k8s_install_systemd(){
     ${_sudo} mv /etc/systemd/system/kube-apiserver{.service,@.service}
     ${_sudo} mv /etc/systemd/system/kube-controller-manager{.service,@.service}
     ${_sudo} mv /etc/systemd/system/kube-scheduler{.service,@.service}
+    ${_sudo} mv /etc/systemd/system/kube-proxy{.service,@.service}
 
     cp ../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+    cp ../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
 
     ${_sudo} sed -i \
       -e 's/192.168.199.100/%i/g' \
@@ -1103,9 +1107,11 @@ _k8s_install_systemd(){
       /etc/systemd/system/kube-apiserver@.service
 
     ${_sudo} sed -i \
-      's/192.168.199.100/%i/g' \
+      -e 's/192.168.199.100/%i/g' \
+      -e 's/__NODE_NAME__/wsl2/g' \
       /etc/systemd/system/kube-controller-manager@.service \
-      /etc/systemd/system/kube-scheduler@.service
+      /etc/systemd/system/kube-scheduler@.service \
+      /etc/systemd/system/kube-proxy@.service
   fi
 
   cd - > /dev/null

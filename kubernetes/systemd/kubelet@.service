@@ -24,6 +24,10 @@ ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plug
 ExecStartPre=-/usr/bin/env mkdir -p /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
+ExecStartPre=-/usr/bin/env mount --make-shared /
+ExecStartPre=-/usr/bin/env mount --make-shared /sys
+# ExecStartPre=-/usr/bin/env mount --make-shared /var/lib/kubelet
+
 ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-lnmp
 ExecStartPre=-/usr/bin/env mount --bind ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-lnmp
 ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/var/lib/ci   /var/lib/ci
@@ -36,13 +40,6 @@ ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
 ExecStartPre=-/usr/bin/env mount --bind ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
 ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d
 ExecStartPre=-/usr/bin/env mount --bind ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d
-
-ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
-ExecStartPre=-/usr/bin/env mount --bind ${K8S_ROOT}/var/lib/kubelet /var/lib/kubelet
-ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
-ExecStartPre=-/usr/bin/env mount --bind ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /opt/k8s/usr/libexec/kubernetes/kubelet-plugins
-ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /usr/libexec/kubernetes/kubelet-plugins
-ExecStartPre=-/usr/bin/env mount --bind ${K8S_ROOT}/usr/libexec/kubernetes/kubelet-plugins /usr/libexec/kubernetes/kubelet-plugins
 
 ExecStartPre=-/usr/bin/env mkdir -p ${K8S_ROOT}/etc/containers /etc/containers
 ExecStartPre=-/usr/bin/env mount --bind ${K8S_ROOT}/etc/containers /etc/containers

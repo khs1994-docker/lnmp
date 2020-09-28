@@ -1,0 +1,29 @@
+name: check-link
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-link:
+    name: check-link
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      # search Issues :-(
+      - run: |
+          docker run -i --rm \
+          -v $PWD:/mnt:ro \
+          dkhamsing/awesome_bot \
+          --white-list "localhost","0.0.0.0",\
+          "server","example.com","docker",\
+          "docker.domain.com","YourIP","register",\
+          "https://www.freedesktop.org/wiki/Software/systemd/",\
+          "www.aliyun.com" \
+          --allow-dupe \
+          --skip-save-results \
+          -t 10 \
+          `find . \( -path "./mesos" -o -path "./machine" -o -path "./swarm_mode" \) -prune -o -name "*.md" -exec ls {} \;`
+        name: check-link
+        timeout-minutes: 25
