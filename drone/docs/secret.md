@@ -1,3 +1,3 @@
 # secret
 
-* https://docs.drone.io/configure/secrets/external/
+* https://docs.drone.io/secret/

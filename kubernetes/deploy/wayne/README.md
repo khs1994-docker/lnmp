@@ -1,7 +1,5 @@
 # [Wayne](https://github.com/Qihoo360/wayne)
 
-* https://360yun.org/wayne/
-
 ## 注意事项
 
 * **不要** 事先创建数据库

@@ -260,7 +260,7 @@ Please see [Contributing](CONTRIBUTING.md)
 
 * LNMP
 * [Docker Hub](https://hub.docker.com)
-* [Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
+* [Tencent Cloud Container Service](https://cloud.tencent.com/product/tke)
 * [Let's Encrypt](https://letsencrypt.org/)
 * [acme.sh](https://github.com/acmesh-official/acme.sh)
 

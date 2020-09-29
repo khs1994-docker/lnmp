@@ -6,7 +6,7 @@
 
 ## Supported Versions
 
-* http://php.net/supported-versions.php
+* https://www.php.net/supported-versions.php
 
 ## 中国镜像 [![中国镜像同步状态](https://pcit.coding.net/badges/khs1994-docker/job/234051/build.svg)](https://pcit.coding.net/p/khs1994-docker/ci/job)
 

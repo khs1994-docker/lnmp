@@ -87,7 +87,7 @@ internet
 
 ```
 
-### [Traefik](https://github.com/containous/traefik)
+### [Traefik](https://github.com/traefik/traefik)
 
 ![](https://raw.githubusercontent.com/containous/traefik/master/docs/content/assets/img/traefik-architecture.png)
 
@@ -99,7 +99,7 @@ internet
 
 * https://github.com/kubernetes/examples
 * https://my.oschina.net/u/3797264
-* https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm
+* https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 * https://kubernetes.io/docs/reference/command-line-tools-reference/
 
 # Build Docs(Vue Press)

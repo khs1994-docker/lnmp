@@ -3,7 +3,6 @@
 > 有时部分镜像可能不可用，请尝试另一个即可。
 
 * https://github.com/ustclug/mirrorrequest/issues?utf8=%E2%9C%93&q=gcr
-* https://www.akscn.io/help/gcr-proxy-cache.html
 
 * `https://hub-mirror.c.163.com`
 * `https://mirror.baidubce.com`
@@ -24,5 +23,3 @@ $ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2
 ```
 
 ## quay.io
-
-* `https://quay.mirrors.ustc.edu.cn`

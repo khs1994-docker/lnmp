@@ -7,14 +7,14 @@
 **命令举例**
 
 ```bash
-# https://istio.io/docs/setup/additional-setup/config-profiles/
+# https://istio.io/latest/docs/setup/additional-setup/config-profiles/
 $ istioctl profile list
 
 $ istioctl manifest generate --set profile=default > istio.yaml
 
 $ istioctl manifest generate --set profile=demo > istio.yaml
 
-# https://istio.io/zh/docs/reference/config/installation-options/
+# https://istio.io/latest/zh/docs/reference/config/installation-options/
 $ istioctl manifest generate --set profile=demo \
   # istio-cni
   --set components.cni.enabled=true \
@@ -68,16 +68,16 @@ istio-ingressgateway   NodePort   10.254.108.59   <none>        15021:49971/TCP,
 
 `demo` 文件夹中所进行的测试均在 `istio-test` namespace 中进行
 
-* test-routing   **配置请求路由** https://istio.io/zh/docs/tasks/traffic-management/request-routing/
-* test-fault-*   **故障注入** https://istio.io/zh/docs/tasks/traffic-management/fault-injection/
-* test-shifting  **流量转移** https://istio.io/zh/docs/tasks/traffic-management/traffic-shifting/
-* test-timeout   **设置请求超时** https://istio.io/zh/docs/tasks/traffic-management/request-timeouts/
-* test-breaking  **熔断** https://istio.io/zh/docs/tasks/traffic-management/circuit-breaking/
-* test-mirroring **镜像** https://istio.io/zh/docs/tasks/traffic-management/mirroring/
+* test-routing   **配置请求路由** https://istio.io/latest/zh/docs/tasks/traffic-management/request-routing/
+* test-fault-*   **故障注入** https://istio.io/latest/zh/docs/tasks/traffic-management/fault-injection/
+* test-shifting  **流量转移** https://istio.io/latest/zh/docs/tasks/traffic-management/traffic-shifting/
+* test-timeout   **设置请求超时** https://istio.io/latest/zh/docs/tasks/traffic-management/request-timeouts/
+* test-breaking  **熔断** https://istio.io/latest/zh/docs/tasks/traffic-management/circuit-breaking/
+* test-mirroring **镜像** https://istio.io/latest/zh/docs/tasks/traffic-management/mirroring/
 
 ## egress 控制 pod 访问外部服务
 
-* https://istio.io/zh/docs/tasks/traffic-management/egress/egress-control/
+* https://istio.io/latest/zh/docs/tasks/traffic-management/egress/egress-control/
 
 ingress 控制外部到 pod，egress 反过来控制 pod 到外部
 

@@ -5,6 +5,7 @@ After=network-online.target network.target
 Wants=network-online.target network.target
 # After=docker.service
 # Requires=docker.service
+# RequiresMountsFor=/var/lib/kubelet
 
 [Service]
 # WorkingDirectory=/opt/k8s/var/lib/kubelet

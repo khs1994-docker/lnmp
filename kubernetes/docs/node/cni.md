@@ -35,5 +35,4 @@ CNI 配置文件必须设置 `cniVersion`
 
 ## 参考
 
-* https://www.jianshu.com/p/a3dc796de936
 * https://segmentfault.com/a/1190000017182169

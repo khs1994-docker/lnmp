@@ -1,4 +1,4 @@
-# [NFS-client](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client)
+# [NFS-client](https://github.com/kubernetes-retired/external-storage/tree/master/nfs-client)
 
 **动态**
 

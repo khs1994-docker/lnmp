@@ -1,6 +1,6 @@
 # PersistentVolume（持久化卷 PV）
 
-* https://github.com/kubernetes-incubator/external-storage
+* https://github.com/kubernetes-retired/external-storage
 
 * PV 是 **全局** 的,没有命名空间的概念。
 

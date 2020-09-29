@@ -45,7 +45,7 @@ upstream myapp1 {
 server {
 
   # https://docs.khs1994.com/nginx-docs.zh-cn/%E6%A8%A1%E5%9D%97%E5%8F%82%E8%80%83/http/ngx_http_gzip_module.html
-  # https://juejin.im/post/5b518d1a6fb9a04fe548e8fc
+  # https://juejin.im/post/6844903641317376013
   gzip              on;
   gzip_min_length   1k; # 不要压缩小于1000字节的文件
   gzip_proxied      expired no-cache no-store private auth;

@@ -198,9 +198,7 @@ $ nginx -p C:/nginx -s stop
 
 ## Apache
 
-PHP 在 Windows Apache 下的几种运行模式 [官方文档](https://php.net/manual/fa/install.windows.apache2.php) 讲的很清楚了（暂无中文翻译）。
-
-这里 `Running PHP under FastCGI` 方式
+**FastCGI**
 
 其他通过在配置文件中加载模块 `LoadModule php5_module "c:/php/php7apache2_4.dll"` 即 `Installing as an Apache handler` 等运行模式（网上资料较多）请自行查阅资料。
 
@@ -323,12 +321,12 @@ $ memcached -d
 
 ## More Information
 
-* http://www.jb51.net/article/107752.htm
+* https://www.jb51.net/article/107752.htm
 
-* http://blog.csdn.net/nzing/article/details/7617558
+* https://blog.csdn.net/nzing/article/details/7617558
 
 * https://www.cnblogs.com/52fhy/p/6059685.html
 
 * https://www.cnblogs.com/chuxuezhe/archive/2012/08/29/2661656.html
 
-* http://nbczw8750.iteye.com/blog/2353989
+* https://www.iteye.com/blog/nbczw8750-2353989

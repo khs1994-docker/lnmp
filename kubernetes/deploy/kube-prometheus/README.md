@@ -50,6 +50,5 @@ $ kubectl apply -k kustomize/storage
 
 * https://www.jianshu.com/p/2fbbe767870d
 * https://www.jianshu.com/p/4b669ef7de4a
-* https://www.jianshu.com/p/a18866ac1f24
 * https://www.cnblogs.com/tchua/articles/11177045.html
 * https://blog.csdn.net/weixin_34100227/article/details/92270711

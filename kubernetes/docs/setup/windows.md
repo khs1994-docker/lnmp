@@ -4,7 +4,7 @@ Windows 10 在 Hyper-V 虚拟机中运行 Minikube
 
 首先建立一个外部虚拟交换机 `minikube`，并绑定真实的网卡。
 
-具体图解请看 https://yq.aliyun.com/articles/221687
+具体图解请看 https://developer.aliyun.com/article/221687
 
 ### 安装及启动
 
