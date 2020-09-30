@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:experimental
 ARG USERNAME=khs1994
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-cli-alpine
+ARG BASE=cli
+
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

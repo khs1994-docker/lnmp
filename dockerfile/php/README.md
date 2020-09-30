@@ -19,20 +19,19 @@
 * 7.4.10-unit-alpine         (based cli)
 * 7.4.10-composer-alpine     (based fpm)
 * 7.4.10-swoole-alpine       (based cli)
-* 7.4.10-supervisord-alpine  (based fpm)
 * 7.4.10-s6-alpine           (based fpm)
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`8.0.0beta4-fpm-alpine` (8.0/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/8.0/alpine/Dockerfile)
+* [`8.0.0beta4-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/8.0/fpm/Dockerfile)
 
-* [`7.4.10-fpm-alpine` (7.4/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/7.4/alpine/Dockerfile)
+* [`7.4.10-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/7.4/fpm/Dockerfile)
 
-* [`7.3.22-fpm-alpine` (7.3/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.22/7.3/alpine/Dockerfile)
+* [`7.3.22-fpm-alpine` (7.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.22/7.3/fpm/Dockerfile)
 
-* [`7.2.33-fpm-alpine` (7.2/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/7.2/alpine/Dockerfile)
+* [`7.2.33-fpm-alpine` (7.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/7.2/fpm/Dockerfile)
 
-* [`nightly-fpm-alpine` (nightly/alpine/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/nightly/alpine/Dockerfile)
+* [`nightly-fpm-alpine` (nightly/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/nightly/fpm/Dockerfile)
 
 | VERSION     | DETAILS     |
 | :------------- | :------------- |

@@ -4,7 +4,7 @@ services:
 
   nightly:
     build:
-      context: ./nightly/alpine
+      context: ./nightly/fpm
       args:
         PHP_VERSION: nightly
         IMAGE: alpine
@@ -14,7 +14,7 @@ services:
 
   7_4_X:
     build:
-      context: ./7.4/alpine
+      context: ./7.4/fpm
       args:
         PHP_VERSION: 7.4.10
         IMAGE: alpine
@@ -24,7 +24,7 @@ services:
 
   7_3_X:
     build:
-      context: ./7.3/alpine
+      context: ./7.3/fpm
       args:
         PHP_VERSION: ${PHP_VERSION_73:-7.3.22}
         IMAGE: php
@@ -34,7 +34,7 @@ services:
 
   7_2_X:
     build:
-      context: ./7.2/alpine
+      context: ./7.2/fpm
       args:
         PHP_VERSION: ${PHP_VERSION_72:-7.2.33}
         IMAGE: php

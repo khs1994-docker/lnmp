@@ -279,7 +279,7 @@ jobs:
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
         ${fpmTagOptions} \
         --platform ${PLATFORM} \
-        ${IS_PUSH} ${FOLDER}/alpine; \
+        ${IS_PUSH} ${FOLDER}/fpm; \
       fi
 
       if [ "$TYPE" = "CLI" ];then docker buildx build $options \

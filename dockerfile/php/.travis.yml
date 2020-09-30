@@ -126,7 +126,7 @@ script:
       -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
       --cache-from=${CACHE_IMAGE}:${FOLDER}-arm-fpm-cache \
       --cache-to=${CACHE_IMAGE}:${FOLDER}-arm-fpm-cache \
-      ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; \
+      ${fpmTagOptions} --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm; \
     fi
   - |
     if [ -n "$CLI" ];then \

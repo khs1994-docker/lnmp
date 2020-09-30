@@ -141,7 +141,7 @@ jobs:
           --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
           ${fpmTagOptions} \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm; \
         fi
 
         if [ "$TYPE" = "CLI" ];then docker buildx build $options \
@@ -192,7 +192,7 @@ jobs:
         --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
         --build-arg USERNAME=${DOCKER_HUB_USERNAME} \
         --push \
-        -t ${DOCKER_HUB_USERNAME}/php:7.3-full-custom 7.3/alpine \
+        -t ${DOCKER_HUB_USERNAME}/php:7.3-full-custom 7.3/fpm \
       env:
         GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994

@@ -27,7 +27,7 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, SWOOLE, UNIT]
+        TYPE: [CLI, FPM, COMPOSER, S6, SWOOLE, UNIT]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
@@ -141,7 +141,7 @@ jobs:
           --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
           ${fpmTagOptions} \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm; \
         fi
 
         if [ "$TYPE" = "CLI" ];then docker buildx build $options \
@@ -149,6 +149,16 @@ jobs:
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-cli-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; \
+        fi
+
+        if [ "$TYPE" = "S6" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-s6-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-s6-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/s6
+          echo ::endgroup::
         fi
 
         if [ "$TYPE" = "PPM" ];then docker buildx build $options \

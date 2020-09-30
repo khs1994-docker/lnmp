@@ -153,7 +153,7 @@ jobs:
           --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
           ${fpmTagOptions} \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm; \
           echo ::endgroup::; \
         fi
 

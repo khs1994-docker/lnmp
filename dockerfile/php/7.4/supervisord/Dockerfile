@@ -1,7 +1,8 @@
 ARG PHP_VERSION=7.4.10
 ARG USERNAME=khs1994
+ARG BASE=fpm
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 RUN apk add --no-cache supervisor
 
