@@ -28,7 +28,9 @@ ENV S6_KEEP_ENV=0 \
     S6_READ_ONLY_ROOT=0 \
     S6_SYNC_DISKS=0
 
-ENTRYPOINT ["/s6-init"]
+# ENTRYPOINT ["/s6-init"]
+
+ENTRYPOINT ["s6-svscan", "-t0", "/etc/services.d"]
 
 ARG VCS_REF="unknow"
 

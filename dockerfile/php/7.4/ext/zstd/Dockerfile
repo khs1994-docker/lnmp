@@ -58,7 +58,9 @@ LABEL org.opencontainers.image.revision=$VCS_REF \
 
 ARG EXT_NAME="zstd"
 
-COPY --from=builder /ext-${EXT_NAME}.tar.gz /srv/
+COPY --from=builder /ext-${EXT_NAME}.tar.gz /srv/${EXT_NAME}/
+
+# test
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine as test
 
@@ -66,7 +68,7 @@ ARG EXT_NAME="zstd"
 
 ARG EXT_RUN_DEPS="zstd-libs"
 
-COPY --from=bundle /srv/ext-${EXT_NAME}.tar.gz /
+COPY --from=bundle /srv/${EXT_NAME}/ext-${EXT_NAME}.tar.gz /
 
 RUN set -x \
     && apk add --no-cache ${EXT_RUN_DEPS} \
@@ -83,6 +85,6 @@ ARG EXT_RUN_DEPS="zstd-libs"
 RUN --mount=type=bind,from=bundle,source=/srv,target=/srv \
     set -x \
     && apk add --no-cache ${EXT_RUN_DEPS} \
-    && tar -zxvf /srv/ext-${EXT_NAME}.tar.gz -C / \
+    && tar -zxvf /srv/${EXT_NAME}/ext-${EXT_NAME}.tar.gz -C / \
     && echo "extension=${EXT_NAME}" > ${PHP_INI_DIR}/conf.d/docker-php-ext-${EXT_NAME}.ini \
     && php -m

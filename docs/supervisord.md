@@ -1,5 +1,8 @@
 # Supervisord
 
+> 本项目的 php 8.0 及以上版本已不再构建 8.0.x-supervisord-alpine 镜像，如有需要请自行构建。
+> 请使用 8.0.x-s6-alpine 镜像在一个容器中运行多个服务
+
 * http://supervisord.org
 
 在 `.env` 文件中将 `supervisord` 包含进来。

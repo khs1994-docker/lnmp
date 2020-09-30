@@ -29,13 +29,15 @@ LABEL org.opencontainers.image.revision=$VCS_REF \
 
 ARG EXT_NAME=swoole
 
-COPY --from=builder /ext-${EXT_NAME}.tar.gz /srv/
+COPY --from=builder /ext-${EXT_NAME}.tar.gz /srv/${EXT_NAME}/
+
+# test
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine as test
 
 ARG EXT_NAME=swoole
 
-COPY --from=bundle /srv/ext-${EXT_NAME}.tar.gz /
+COPY --from=bundle /srv/${EXT_NAME}/ext-${EXT_NAME}.tar.gz /
 
 RUN set -x \
     && tar -zxvf /ext-${EXT_NAME}.tar.gz -C / \
@@ -49,7 +51,7 @@ ARG EXT_NAME=swoole
 
 RUN --mount=type=bind,from=bundle,source=/srv,target=/srv \
     set -x \
-    && tar -zxvf /srv/ext-${EXT_NAME}.tar.gz -C / \
+    && tar -zxvf /srv/${EXT_NAME}/ext-${EXT_NAME}.tar.gz -C / \
     && echo "extension=${EXT_NAME}" > ${PHP_INI_DIR}/conf.d/docker-php-ext-${EXT_NAME}.ini \
     && cat /tmp/ext-${EXT_NAME}-manifest.txt \
     && php -m

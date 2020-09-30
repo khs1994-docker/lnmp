@@ -109,9 +109,11 @@ services:
       - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:cached
-      # 以下用于 supervisord
+      # supervisord
       - ./log/supervisord.log:/var/log/supervisord.log:cached
       - ./log/supervisord:/var/log/supervisord:cached
+      # s6
+      - ./config/s6/services.d:/etc/services.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
@@ -156,9 +158,11 @@ services:
       - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php8:/var/log/php:cached
-      # 以下用于 supervisord
-      - ./log/supervisord.log:/var/log/supervisord.log:cached
-      - ./log/supervisord:/var/log/supervisord:cached
+      # supervisord
+      # - ./log/supervisord.log:/var/log/supervisord.log:cached
+      # - ./log/supervisord:/var/log/supervisord:cached
+      # s6
+      - ./config/s6/services.d:/etc/services.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
