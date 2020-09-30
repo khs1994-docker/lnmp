@@ -4,4 +4,9 @@ runs:
   using: composite
   steps:
     - run: echo "1"
-      shell: sh
+      shell: bash --noprofile --norc -exo pipefail {0}
+      # pwsh -command "& '{0}'"
+      # python {0}
+      # sh -e {0}
+      # %ComSpec% /D /E:ON /V:OFF /S /C "CALL "{0}"".
+      # powershell -command "& '{0}'".

@@ -16,6 +16,10 @@ name: PHP_7.3
 env:
   PHP_CUSTOM_VERSION: ${{ github.event.inputs.PHP_VERSION }}
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
 jobs:
   build:
     name: Build
@@ -29,13 +33,11 @@ jobs:
       with:
         fetch-depth: 2
     - run: |
-        set -x
         env
         docker --version
         docker-compose --version
       name: 'manifest'
     # - run: |
-    #     set -x
     #     sudo rm /usr/local/bin/docker-compose
     #     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     #     sudo install -m755 docker-compose /usr/local/bin
@@ -44,18 +46,17 @@ jobs:
     #     DOCKER_COMPOSE_VERSION: 1.27.0
     - uses: docker-practice/actions-setup-docker@master
     - run: |
-        set -x
         docker --version
         docker-compose --version
         docker buildx version
         docker
       name: 'install-after-manifest'
     - run: |
-        set -x
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
         echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-east-1.aliyuncs.com
         echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
+        echo ${CODING_DOCKER_PASSWORD} | docker login -u khs1994-1601432822176 --password-stdin pcit-docker.pkg.coding.net
       name: 'Docker Login'
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -64,6 +65,7 @@ jobs:
         ALIYUN_DOCKER_USERNAME: ${{secrets.ALIYUN_DOCKER_USERNAME}}
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
+        CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
     - run: |
         cp .env.example .env
         set -ex
@@ -200,7 +202,7 @@ jobs:
         FOLDER: 7.3
         PHP_TAG_VERSION: 7.3.22
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # ghcr.io/khs1994/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php # ghcr.io/khs1994/php
       name: 'Build Image'
       shell: bash
     - run: |

@@ -8,6 +8,9 @@ name: CI
 jobs:
   docker:
     name: Docker
+    defaults:
+      run:
+        shell: bash --noprofile --norc -exo pipefail {0}
     strategy:
       fail-fast: false
       matrix:
@@ -46,7 +49,7 @@ jobs:
           docker_channel: ${{ matrix.docker_channel }}
       - name: Test
         run: |
-          set -x
+          # set -x
           docker version
           cat /etc/docker/daemon.json || true
           cat /Users/runner/.docker/daemon.json || true
@@ -62,6 +65,9 @@ jobs:
           - ubuntu-latest
           - macos-latest
     timeout-minutes: 7
+    defaults:
+      run:
+        shell: bash --noprofile --norc -exo pipefail {0}
     steps:
       - uses: actions/checkout@main
         with:
@@ -90,7 +96,7 @@ jobs:
       #     docker_password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
         run: |
-          set -x
+          # set -x
 
           push=
           if [ "${push_image}" = 'true' ];then
@@ -125,6 +131,9 @@ jobs:
           - ubuntu-20.04
           - ubuntu-latest
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash --noprofile --norc -exo pipefail {0}
     steps:
       - uses: actions/checkout@main
         with:

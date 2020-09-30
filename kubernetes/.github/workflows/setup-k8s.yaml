@@ -6,6 +6,10 @@ on:
       - master
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
 jobs:
   setup-k8s:
    runs-on: ubuntu-${{matrix.dist}}
@@ -94,8 +98,6 @@ jobs:
          path: ~/.khs1994-docker-lnmp/caches
          key: khs1994-docker-lnmp-caches
      - run: |
-         set -x
-
          uname -a
 
          sudo mount bpffs /sys/fs/bpf -t bpf || true
@@ -120,7 +122,6 @@ jobs:
     #      go-version: '1.15'
      - name: Setup dns
        run: |
-         set -x
          pwd
          #  /home/runner/work/lnmp-k8s/lnmp-k8s
 
@@ -159,8 +160,6 @@ jobs:
        name: Is tag event
      - name: Install k8s
        run: |
-         set -x
-
          SERVER_IP=`cat .server_ip`
 
          export KUBERNETES_TYPE=server
@@ -189,8 +188,6 @@ jobs:
          tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
      - name: Start k8s
        run: |
-         set -x
-
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
          ls -la /etc/systemd/system/
@@ -344,8 +341,6 @@ jobs:
          for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
      - name: Setup addons
        run: |
-         set -x
-
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
          df -h
@@ -395,8 +390,6 @@ jobs:
          # test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
      - name: cleanup
        run: |
-         set -x
-
          df -h
 
          sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/apiextensions-apiserver
@@ -405,8 +398,6 @@ jobs:
          df -h
      - name: Test k8s
        run: |
-         set -x
-
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          export SERVER_IP=`cat .server_ip`
 

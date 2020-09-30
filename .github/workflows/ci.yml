@@ -29,6 +29,9 @@ jobs:
           - macos-latest
     needs: skip
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash --noprofile --norc -exo pipefail {0}
     steps:
     - uses: actions/checkout@main
       with:
@@ -46,7 +49,6 @@ jobs:
         docker_version: 19.03
     - name: Update docker compose
       run: |
-        set -x
         docker-compose --version
         ./lnmp-docker compose --official || true
     - name: Stop MySQL
@@ -55,7 +57,6 @@ jobs:
         startsWith(matrix.os, 'ubuntu' )
     - name: Up
       run: |
-        set -x
         ./lnmp-docker build-config > docker-compose.yml
         docker-compose config -q
 
@@ -71,7 +72,6 @@ jobs:
         ./lnmp-docker up
     - name: Connect
       run: |
-        set -x
         sleep 20
         curl -fsSL 127.0.0.1
     - name: Down
@@ -86,7 +86,6 @@ jobs:
         #echo ::set-env name=LNMP_PATH::`pwd`
     - name: lnmp-CLI
       run: |
-        set -x
         lnmp-php -v
         lnmp-composer --version
 
