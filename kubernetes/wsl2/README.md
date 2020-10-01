@@ -5,7 +5,7 @@
 * `wsl2.k8s.khs1994.com` 解析到 WSL2 IP
 * `windows.k8s.khs1994.com` 解析到 Windows IP
 * k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(netsh 代理)`
-* 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
+* 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data`（可选） WSL 发行版用于存储数据
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
 * WSL2 IP 变化时必须重新执行 `./kube-wsl2windows k8s`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
@@ -77,7 +77,7 @@ $ ./wsl2/kube-containerd start
 $ ./wsl2/kubelet start
 ```
 
-## 使用 supervisor 管理组件
+## 使用 supervisor 管理组件（或者使用 systemd，参考 README.systemd.md）
 
 * http://www.supervisord.org/running.html#running-supervisorctl
 
@@ -148,7 +148,7 @@ $ invoke-kubectl
 ## 6. 部署 CNI -- calico
 
 ```powershell
-$ update-alternatives --set iptables /usr/sbin/iptables-legacy
+$ wsl -d wsl-k8s -- update-alternatives --set iptables /usr/sbin/iptables-legacy
 # $ kubectl apply -k addons/cni/calico-custom
 
 $ kubectl apply -f addons/cni/calico-eBPF/kubernetes.yaml

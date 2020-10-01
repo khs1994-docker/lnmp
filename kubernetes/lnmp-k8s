@@ -1112,6 +1112,13 @@ _k8s_install_systemd(){
       /etc/systemd/system/kube-controller-manager@.service \
       /etc/systemd/system/kube-scheduler@.service \
       /etc/systemd/system/kube-proxy@.service
+
+    ${_sudo} sed -i \
+      's!##opt/k8s##!/opt/k8s!g' \
+      /etc/systemd/system/kubelet@.service
+
+    ${_sudo} sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
+      /wsl/wsl-k8s-data/k8s/etc/kube-containerd/1.4/config.toml
   fi
 
   cd - > /dev/null
@@ -1277,7 +1284,7 @@ _k8s_join(){
 
   _cri_handler $2
 
-  _k8s_install_systemd kube-proxy kubelet
+  _k8s_install_systemd kube-proxy kubelet kubelet@
 
   _k8s_install_mkdir
 

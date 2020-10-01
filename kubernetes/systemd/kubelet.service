@@ -17,12 +17,12 @@ Environment="K8S_ROOT=/opt/k8s"
 ExecStartPre=/opt/k8s/bin/kubeadm version
 ExecStartPre=-/usr/bin/env swapoff -a
 ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
-ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kubelet
-ExecStartPre=-/usr/bin/env mkdir -p /var/lib/kubelet
-ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/var/lib/kubelet /var/lib/kubelet
-ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-ExecStartPre=-/usr/bin/env mkdir -p /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
-ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+
+ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+/opt/k8s/var/lib/kubelet /var/lib/kubelet
+
+ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
 ExecStartPre=-/usr/bin/env mount --make-shared /
 ExecStartPre=-/usr/bin/env mount --make-shared /sys

@@ -27,11 +27,11 @@
 
 * [`7.4.10-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/7.4/fpm/Dockerfile)
 
-* [`7.3.22-fpm-alpine` (7.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.3.22/7.3/fpm/Dockerfile)
+* [`7.3.22-fpm-alpine` (7.3/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/7.3/fpm/Dockerfile)
 
 * [`7.2.33-fpm-alpine` (7.2/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/7.2/fpm/Dockerfile)
 
-* [`nightly-fpm-alpine` (nightly/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.10/nightly/fpm/Dockerfile)
+* [`nightly-fpm-alpine` (nightly/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/master/nightly/fpm/Dockerfile)
 
 | VERSION     | DETAILS     |
 | :------------- | :------------- |

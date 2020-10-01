@@ -60,7 +60,7 @@ spec:
             name: gogs-config
         - name: data
           hostPath:
-            path: /var/lib/ci/gogs
+            path: /var/lib/k8s/ci/gogs
             type: DirectoryOrCreate
         - name: run
           emptyDir:

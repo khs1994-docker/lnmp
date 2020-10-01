@@ -151,10 +151,9 @@ Function _mountKubelet($source, $dest) {
 }
 
 function _mountKubelet_all() {
-  _mountKubelet ${K8S_ROOT}/var/lib/ci         /var/lib/ci
-  _mountKubelet ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-lnmp
+  _mountKubelet ${K8S_ROOT}/var/lib/k8s         /var/lib/k8s
 
-  _mountKubelet ${K8S_ROOT}/var/lib/docker         /var/lib/docker
+  _mountKubelet ${K8S_ROOT}/var/lib/docker      /var/lib/docker
 
   _mountKubelet ${K8S_ROOT}/opt/cni/bin /opt/k8s/opt/cni/bin
   _mountKubelet ${K8S_ROOT}/etc/cni/net.d /opt/k8s/etc/cni/net.d

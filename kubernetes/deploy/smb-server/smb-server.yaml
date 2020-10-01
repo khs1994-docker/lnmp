@@ -57,5 +57,5 @@ spec:
       volumes:
         - name: data-volume
           hostPath:
-            path: /smbshare-volume  # modify this to specify another path to store smb share data
+            path: /var/lib/k8s/smbshare-volume  # modify this to specify another path to store smb share data
             type: DirectoryOrCreate

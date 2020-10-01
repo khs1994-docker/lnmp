@@ -1,4 +1,7 @@
 # wsl-k8s 是否安装
+
+. $PSScriptRoot/../.env.ps1
+
 wsl -d wsl-k8s -- echo '==> WSL dist [ wsl-k8s ] exists'
 if (!$?) {
   Write-Warning "==> WSL dist [ wsl-k8s ] not found, please see README.SERVER.md"
@@ -10,13 +13,19 @@ if (!$?) {
 wsl -d wsl-k8s -- sh -c "mountpoint -q /wsl/wsl-k8s-data"
 
 if (!$?) {
-  # wsl-k8s-data 未挂载，说明 wsl-k8s-data 未处于运行状态或未进行手动挂载
-  # wsl-k8s-data 是否安装
-  wsl -d wsl-k8s-data -- echo '==> WSL dist [ wsl-k8s-data ] exists'
-  if (!$?) {
-    Write-Warning "==> WSL dist [ wsl-k8s-data ] not found, please see README.SERVER.md"
+  if ($DeviceID) {
+    start-process "wsl" -ArgumentList "--mount", "$DeviceID", "--bare" -Verb runAs
+  }
+  else {
+    # wsl-k8s-data 未挂载，说明 wsl-k8s-data 未处于运行状态或未进行手动挂载
+    # wsl-k8s-data 是否安装
 
-    exit 1
+    wsl -d wsl-k8s-data -- echo '==> WSL dist [ wsl-k8s-data ] exists'
+    if (!$?) {
+      Write-Warning "==> WSL dist [ wsl-k8s-data ] not found, please see README.SERVER.md"
+
+      exit 1
+    }
   }
   # 检查挂载路径
   wsl -d wsl-k8s -- sh -c "mountpoint -q /c"
@@ -26,14 +35,25 @@ if (!$?) {
 
     exit 1
   }
-  # 运行一个进程，保持 wsl-k8s-data 不自动推出
-  & $PSScriptRoot/wsl2d.ps1
+  # 运行一个进程，保持 wsl-k8s 不自动退出
   & $PSScriptRoot/wsl2d.ps1 wsl-k8s
-  # 在 wsl-k8s 挂载 wsl-k8s-data
-  write-host "==> try mount WSL dist [ wsl-k8s-data ] to [ wsl-k8s ] /wsl/wsl-k8s-data" -ForegroundColor Green
-  $dev_sdx = (wsl -d wsl-k8s-data -- mount).split(' ')[0]
+  if ($DeviceID) {
+    if (!$dev_sdx) {
+      wsl -d wsl-k8s -u root -- lsblk
+
+      Write-Warning "please set `$dev_sdx in .env.ps1"
+      exit 1
+    }
+  }
+  else {
+    # 运行一个进程，保持 wsl-k8s-data 不自动退出
+    & $PSScriptRoot/wsl2d.ps1
+    # 在 wsl-k8s 挂载 wsl-k8s-data
+    write-host "==> try mount WSL dist [ wsl-k8s-data ] to [ wsl-k8s ] /wsl/wsl-k8s-data" -ForegroundColor Green
+    $dev_sdx = (wsl -d wsl-k8s-data -- mount).split(' ')[0]
+    write-host "==> wsl-k8s-data DISK is $dev_sdx" -ForegroundColor Green
+  }
   wsl -d wsl-k8s -u root -- mkdir -p /wsl/wsl-k8s-data
-  write-host "==> wsl-k8s-data DISK is $dev_sdx" -ForegroundColor Green
   wsl -d wsl-k8s -u root -- mount $dev_sdx /wsl/wsl-k8s-data
   sleep 1
 }

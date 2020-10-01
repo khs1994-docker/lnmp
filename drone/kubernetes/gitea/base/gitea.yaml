@@ -72,7 +72,7 @@ spec:
       volumes:
         - name: data
           hostPath:
-            path: /var/lib/ci/gitea
+            path: /var/lib/k8s/ci/gitea
             type: DirectoryOrCreate
         - name: config
           configMap:

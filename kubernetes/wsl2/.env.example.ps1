@@ -26,3 +26,8 @@ $CRI="containerd"
 # $CRI="cri-o"
 
 # $CNI_CALICO_EBPF="false"
+
+# wmic diskdrive list brief
+# $DeviceID="\\.\PHYSICALDRIVE0"
+# wsl -d wsl-k8s -- lsblk
+# $dev_sdx="/dev/sdXN"

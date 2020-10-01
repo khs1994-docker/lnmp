@@ -2,7 +2,7 @@
 
 ## 数据
 
-数据存放于 hostPath `/var/lib/ci/XXX`，根据实际自行更改。
+数据存放于 hostPath `/var/lib/k8s/ci/XXX`，根据实际自行更改。
 
 ## 创建 k8s namespace
 

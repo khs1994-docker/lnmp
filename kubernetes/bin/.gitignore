@@ -5,3 +5,4 @@
 !.gitignore
 !fcos-etcdctl
 !lwpm.ps1
+!mount_bind_if_not_mount.sh

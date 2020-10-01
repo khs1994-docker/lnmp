@@ -110,5 +110,5 @@ spec:
       volumes:
       - name: data
         hostPath:
-          path: /var/lib/ci/drone
+          path: /var/lib/k8s/ci/drone
           type: DirectoryOrCreate

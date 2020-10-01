@@ -13,7 +13,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: hostpath
   hostPath:
-    path: /var/lib/ci/minio
+    path: /var/lib/k8s/ci/minio
     type: DirectoryOrCreate
 
 ---
