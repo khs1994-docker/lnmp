@@ -123,7 +123,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && docker-php-source extract \
 # enchant-2.patch
         && cd /usr/src/php \
-        && curl -fsSL -o enchant-2.patch https://git.alpinelinux.org/aports/plain/community/php7/enchant-2.patch?h=3.12-stable \
+        && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/3.12-stable/community/php7/enchant-2.patch \
         && patch -p1 < enchant-2.patch \
         && rm -rf enchant-2.patch \
         && ./buildconf --force \

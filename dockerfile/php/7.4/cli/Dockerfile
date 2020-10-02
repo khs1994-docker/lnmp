@@ -212,7 +212,7 @@ RUN --mount=type=bind,from=php:7.4.11-alpine,source=/usr/src,target=/usr/local/s
   && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
 # enchant-2.patch
-  && curl -fsSL -o enchant-2.patch https://git.alpinelinux.org/aports/plain/community/php7/enchant-2.patch?id=f09d70c946d9953ab11d45e4345ecd6705c1903c \
+  && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/b315e28b96f16c2a8973a55a736e1e35482203dd/community/php7/enchant-2.patch \
   && patch -p1 < enchant-2.patch \
   && rm -rf enchant-2.patch \
   && ./buildconf --force \
