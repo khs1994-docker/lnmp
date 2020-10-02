@@ -26,10 +26,11 @@ jobs:
       with:
         fetch-depth: 2
     - name: Set ENV
+      shell: pwsh
       run: |
-        echo ::add-path::$(pwd)
-        echo ::add-path::$(pwd)\windows
-        #echo ::set-env name=LNMP_PATH::$(pwd)
+        echo "$(pwd)" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "$(pwd)\windows" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        #echo "LNMP_PATH=$(pwd)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: lrew-init-test
       shell: powershell
       run: lnmp-docker.ps1 lrew-init test

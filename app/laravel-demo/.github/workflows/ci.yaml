@@ -6,6 +6,10 @@ on:
 
 name: CI
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
 jobs:
   test:
     name: test
@@ -21,7 +25,6 @@ jobs:
           lrew_include: "laravel"
       - name: Init LNMP
         run: |
-          set -x
           docker-compose --version
           lnmp-docker compose --official
           lnmp-docker services
@@ -30,9 +33,7 @@ jobs:
         env:
           ACTIONS_COMPOSER_BIN_PATH: /home/runner/.composer/vendor/bin
         run: |
-          set -x
-
-          echo "::add-path::$ACTIONS_COMPOSER_BIN_PATH"
+          echo "$ACTIONS_COMPOSER_BIN_PATH" >> $GITHUB_PATH
 
           lnmp-composer config -g --unset repos.packagist
 
@@ -59,7 +60,6 @@ jobs:
           lnmp-npm run dev
       - name: Test Laravel
         run: |
-          set -x
           cd ../laravel
 
           lnmp-php artisan -V
@@ -67,7 +67,6 @@ jobs:
         env:
           DOCKER_CLI_EXPERIMENTAL: enabled
         run: |
-          set -x
           cd ../laravel
           docker buildx build --load \
               --build-arg NODE_REGISTRY=https://registry.npmjs.org \
@@ -82,8 +81,6 @@ jobs:
               -f Dockerfile.buildkit .
       - name: Up LNMP
         run: |
-          set -x
-
           lnmp-docker up
           sleep 30
           lnmp-docker nginx-cli ls /app/laravel-docker/public

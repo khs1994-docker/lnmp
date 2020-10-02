@@ -80,10 +80,11 @@ jobs:
       shell: pwsh
       run: ./lnmp-docker.ps1
     - name: Set ENV
+      shell: bash
       run: |
-        echo ::add-path::`pwd`
-        echo ::add-path::`pwd`/bin
-        #echo ::set-env name=LNMP_PATH::`pwd`
+        echo "$(pwd)" >> $GITHUB_PATH
+        echo "$(pwd)/bin" >> $GITHUB_PATH
+        #echo "LNMP_PATH=$(pwd)" >> $GITHUB_ENV
     - name: lnmp-CLI
       run: |
         lnmp-php -v

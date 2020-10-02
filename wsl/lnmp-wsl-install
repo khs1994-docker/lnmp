@@ -30,7 +30,7 @@ $ lnmp-wsl-install php 7.4.0 deb
 
 $ lnmp-wsl-install php 7.4.0 rpm
 
-$ lnmp-wsl-install php 7.4.8 [7.3.20] [7.2.33] [7.1.33] [7.0.33] [5.6.40]
+$ lnmp-wsl-install php 7.4.8 [7.3.20] [7.2.34] [7.1.33] [7.0.33] [5.6.40]
 
 $ REGISTRY_MIRROR=mirror.baidubce.com  lnmp-wsl-install php nightly
 
@@ -59,7 +59,7 @@ NODE_VERSION=14.11.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.4.10
+PHP_VERSION=7.4.11
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -111,9 +111,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (7.4.10)
+  # default install latest php version (7.4.11)
 
-  PHP_VERSION=${1:-7.4.10}
+  PHP_VERSION=${1:-7.4.11}
 
   case ${PHP_VERSION} in
     5.6.* )

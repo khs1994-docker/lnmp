@@ -18,7 +18,7 @@ pipeline:
   # install dep
   install:
     # image: composer:${COMPOSER_VERSION}
-    image: khs1994/php:7.2.33-composer-alpine
+    image: khs1994/php:7.2.34-composer-alpine
     shell: bash
     commands:
       - pwd
@@ -79,7 +79,7 @@ pipeline:
       event: tag
 
   after_success:
-    image: khs1994/php:7.2.33-composer-alpine
+    image: khs1994/php:7.2.34-composer-alpine
     shell: bash
     when:
       status: success
@@ -128,9 +128,9 @@ matrix:
   COMPOSER_VERSION:
     - 1.8.1
   PHP_VERSION:
-    - 7.4.10
-    - 7.3.22
-    - 7.2.33
+    - 7.4.11
+    - 7.3.23
+    - 7.2.34
     # - 7.1.33
     # - 7.0.33
     # - 5.6.40
