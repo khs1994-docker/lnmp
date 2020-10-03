@@ -27,7 +27,10 @@ $CRI="containerd"
 
 # $CNI_CALICO_EBPF="false"
 
-# wmic diskdrive list brief
-# $DeviceID="\\.\PHYSICALDRIVE0"
+# 挂载物理硬盘
+# $ wmic diskdrive list brief
+# $MountPhysicalDiskDeviceID2WSL2="\\.\PHYSICALDRIVE0"
+# $MountPhysicalDiskPartitions2WSL2="3"
+# $MountPhysicalDiskType2WSL2="ext4"
+
 # wsl -d wsl-k8s -- lsblk
-# $dev_sdx="/dev/sdXN"

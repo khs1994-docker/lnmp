@@ -15,7 +15,7 @@
     "source": "php:8.0.0rc1-swoole-alpine"
   },
   {
-    "source": "php:8.0.0rc1-supervisord-alpine"
+    "source": "php:8.0.0rc1-s6-alpine"
   },
   {
     "source": "php:7.4.11-cli-alpine"
@@ -88,5 +88,8 @@
   },
   {
     "source": "php:nightly-swoole-alpine"
+  },
+  {
+    "source": "php:nightly-s6-alpine"
   }
 ]

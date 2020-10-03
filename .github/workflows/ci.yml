@@ -36,6 +36,9 @@ jobs:
     - uses: actions/checkout@main
       with:
         fetch-depth: 2
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_version: 19.03
     - uses: azure/docker-login@v1
       if: |
         github.event_name == 'push'
@@ -44,9 +47,6 @@ jobs:
         # login-server: contoso.azurecr.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - uses: docker-practice/actions-setup-docker@master
-      with:
-        docker_version: 19.03
     - name: Update docker compose
       run: |
         docker-compose --version

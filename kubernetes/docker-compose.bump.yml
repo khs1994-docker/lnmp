@@ -21,7 +21,7 @@ services:
     image: us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3
 
   mcr-pause:
-    image: mcr.microsoft.com/oss/kubernetes/pause:1.4.0
+    image: mcr.microsoft.com/oss/kubernetes/pause:1.4.1
 
   calico:
     image: calico/cni:v3.16.1

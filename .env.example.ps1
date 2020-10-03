@@ -23,3 +23,9 @@ $LNMP_NODE_IMAGE="node:alpine"
 # 项目存储在 WSL2
 # 推荐使用 Ubuntu，其他系统（例如 alpine）可能会遇到错误
 # $WSL2_DIST="Ubuntu"
+
+# 挂载物理硬盘到 WSL2
+# $ wmic diskdrive list brief
+# $MountPhysicalDiskDeviceID2WSL2="\\.\PHYSICALDRIVE0"
+# $MountPhysicalDiskPartitions2WSL2="3"
+# $MountPhysicalDiskType2WSL2="ext4"

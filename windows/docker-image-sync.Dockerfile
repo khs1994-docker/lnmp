@@ -23,6 +23,9 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 # 远程的配置文件
 # ENV CONFIG_URL
 
+# token 过期时间
+# ENV DOCKER_TOKEN_EXPIRE_TIME
+
 RUN apk add --no-cache curl
 
 COPY docker-image-sync.ps1 /root/lnmp/windows/
