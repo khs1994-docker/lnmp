@@ -14,6 +14,8 @@ name: Sync PHP
 jobs:
   sync-php:
     runs-on: ubuntu-latest
+    if: |
+      github.ref != 'refs/heads/master'
     steps:
     - uses: actions/checkout@main
       with:
