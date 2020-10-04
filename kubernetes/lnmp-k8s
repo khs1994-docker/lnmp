@@ -162,6 +162,7 @@ _get_kubernetes_server_by_docker_image(){
     # else
       # 国外
       # K8S_IMAGE_REGISTRY="useccr.ccs.tencentyun.com"
+      # K8S_IMAGE_NS="khs1994"
     fi
   fi
 
@@ -732,9 +733,9 @@ _k8s_install_cp_bin(){
 _k8s_install_systemd_docker(){
   print_info "Update systemd Docker unit file ..."
   $(_sudo) mkdir -p /etc/systemd/system/docker.service.d
-  $(_sudo) cp systemd/docker-10-cri-docker.conf /etc/systemd/system/docker.service.d/
+  $(_sudo) cp systemd/system/docker-10-cri-docker.conf /etc/systemd/system/docker.service.d/
 
-  $(_sudo) cp systemd/kubelet-20-cri-docker.conf /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
+  $(_sudo) cp systemd/system/kubelet-20-cri-docker.conf /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
   $(_sudo) sed -i "s#/opt/k8s#${K8S_ROOT}#g" /etc/systemd/system/kubelet.service.d/20-cri-docker.conf
 }
 
@@ -1058,13 +1059,13 @@ _k8s_install_systemd(){
   if [ -n "${1}" ];then
     for item in $@
     do
-      $(_sudo) cp systemd/${item}.service /etc/systemd/system/
+      $(_sudo) cp systemd/system/${item}.service /etc/systemd/system/
     done
   else
-    $(_sudo) cp systemd/*.service /etc/systemd/system/
+    $(_sudo) cp systemd/system/*.service /etc/systemd/system/
   fi
 
-  cd systemd
+  cd systemd/system
 
   for file in `ls *.service`; \
   do
@@ -1097,18 +1098,20 @@ _k8s_install_systemd(){
     ${_sudo} mv /etc/systemd/system/kube-scheduler{.service,@.service}
     ${_sudo} mv /etc/systemd/system/kube-proxy{.service,@.service}
 
-    cp ../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
-    cp ../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+    cp ../../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+    cp ../../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
 
     ${_sudo} sed -i \
       -e 's/192.168.199.100/%i/g' \
       -e 's/2379/12379/g' \
+      -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
       -e 's/_K8S_ETCD_HOST/K8S_ETCD_HOST/g' \
       /etc/systemd/system/kube-apiserver@.service
 
     ${_sudo} sed -i \
       -e 's/192.168.199.100/%i/g' \
       -e 's/__NODE_NAME__/wsl2/g' \
+      -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
       /etc/systemd/system/kube-controller-manager@.service \
       /etc/systemd/system/kube-scheduler@.service \
       /etc/systemd/system/kube-proxy@.service
@@ -1119,6 +1122,10 @@ _k8s_install_systemd(){
 
     ${_sudo} sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
       /wsl/wsl-k8s-data/k8s/etc/kube-containerd/1.4/config.toml
+
+    ${_sudo} sed -i \
+      -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
+      /etc/systemd/system/kube-containerd@.service
   fi
 
   cd - > /dev/null

@@ -24,7 +24,7 @@ FROM mcr.microsoft.com/powershell:preview-alpine-3.11
 # ENV CONFIG_URL
 
 # token 过期时间
-# ENV DOCKER_TOKEN_EXPIRE_TIME
+# ENV DOCKER_TOKEN_EXPIRE_TIME=205
 
 RUN apk add --no-cache curl
 

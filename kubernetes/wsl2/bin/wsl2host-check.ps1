@@ -12,7 +12,7 @@ Import-Module $PSScriptRoot/WSL-K8S.psm1
 write-host "==> set WSL2 /etc/hosts wsl2.k8s.khs1994.com ..." -ForegroundColor Green
 $WSL2_IP = & $PSScriptRoot/wsl2host
 
-Invoke-WSLK8S echo $WSL2_IP wsl2 wsl2.k8s.khs1994.com `>`> /etc/hosts
+Invoke-WSLK8S sed -i "\`$a $WSL2_IP wsl2 wsl2.k8s.khs1994.com" /etc/hosts
 # }
 
 Invoke-WSLK8S bash -c `
@@ -23,5 +23,5 @@ write-host "==> set WSL2 /etc/hosts windows.k8s.khs1994.com ..." -ForegroundColo
 
 $WINDOWS_IP = Invoke-WSLK8S cat /etc/resolv.conf `| grep nameserver `| cut -d ' ' -f 2
 
-Invoke-WSLK8S echo $WINDOWS_IP windows.k8s.khs1994.com `>`> /etc/hosts
+Invoke-WSLK8S sed -i "\`$a $WINDOWS_IP windows.k8s.khs1994.com" /etc/hosts
 # }

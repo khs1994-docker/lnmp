@@ -4,6 +4,8 @@ Documentation=https://containerd.io
 After=network.target local-fs.target
 # Conflicts=xxx.service
 Wants=network-online.target network.target
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay br_netfilter

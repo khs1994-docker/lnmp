@@ -4,6 +4,8 @@ Documentation=https://github.com/kubernetes/kubernetes
 Wants=network-online.target network.target
 After=network-online.target network.target
 # Requires=kube-apiserver.service
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 
 [Service]
 
