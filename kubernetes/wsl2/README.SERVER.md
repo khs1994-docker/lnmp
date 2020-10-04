@@ -187,7 +187,7 @@ $ set -x
 $ source wsl2/.env
 
 $ mkdir -p ${K8S_ROOT:?err}
-$ mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin,log}
+$ mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin}
 $ cp -a wsl2/certs/. ${K8S_ROOT:?err}/etc/kubernetes/pki/
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml ${K8S_ROOT:?err}/etc/kubernetes
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes

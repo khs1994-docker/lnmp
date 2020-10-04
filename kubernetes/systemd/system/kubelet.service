@@ -8,6 +8,9 @@ Wants=network-online.target network.target
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 
+After=var-lib-kubelet.mount
+BindsTo=var-lib-kubelet.mount
+
 [Service]
 # WorkingDirectory=/opt/k8s/var/lib/kubelet
 Environment="NODE_NAME=##NODE_NAME##"
@@ -20,11 +23,14 @@ ExecStartPre=/opt/k8s/bin/kubeadm version
 ExecStartPre=-/usr/bin/env swapoff -a
 ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
-ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-/opt/k8s/var/lib/kubelet /var/lib/kubelet
+# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+# /opt/k8s/var/lib/kubelet /var/lib/kubelet
+
+# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+# /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
 ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+/opt/k8s/usr/libexec/kubernetes /usr/libexec/kubernetes
 
 ExecStartPre=-/usr/bin/env mount --make-shared /
 ExecStartPre=-/usr/bin/env mount --make-shared /sys
@@ -52,8 +58,9 @@ $KUBELET_CRI
 # --container-runtime=remote \
 # --container-runtime-endpoint=unix:///run/kube-containerd/kube-containerd.sock \
 
-ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
-ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+# ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
+# ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes
 
 Restart=on-failure
 RestartSec=5

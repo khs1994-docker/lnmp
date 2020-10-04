@@ -13,12 +13,15 @@ After=network-online.target
 [Service]
 
 Type=notify
-Restart=on-failure
 # always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog
-RestartSec=10s
+# http://www.jinbuguo.com/systemd/systemd.service.html#Restart=
+Restart=on-failure
 # 自动重启当前服务间隔的秒数
-TimeoutStartSec=0
+# 在重启服务(Restart=)前暂停多长时间
+RestartSec=10s
 # 定义 Systemd 停止当前服务之前等待的秒数
+TimeoutStartSec=0
+
 LimitNOFILE=40000
 
 Environment="ETCD_DATA_DIR=/opt/k8s/var/lib/etcd"

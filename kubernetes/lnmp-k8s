@@ -1093,22 +1093,22 @@ _k8s_install_systemd(){
   done
 
   if [ -n "$WSL2_SYSTEMD" ];then
-    ${_sudo} mv /etc/systemd/system/kube-apiserver{.service,@.service}
-    ${_sudo} mv /etc/systemd/system/kube-controller-manager{.service,@.service}
-    ${_sudo} mv /etc/systemd/system/kube-scheduler{.service,@.service}
-    ${_sudo} mv /etc/systemd/system/kube-proxy{.service,@.service}
+    $(_sudo) mv /etc/systemd/system/kube-apiserver{.service,@.service}
+    $(_sudo) mv /etc/systemd/system/kube-controller-manager{.service,@.service}
+    $(_sudo) mv /etc/systemd/system/kube-scheduler{.service,@.service}
+    $(_sudo) mv /etc/systemd/system/kube-proxy{.service,@.service}
 
     cp ../../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
     cp ../../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
 
-    ${_sudo} sed -i \
+    $(_sudo) sed -i \
       -e 's/192.168.199.100/%i/g' \
       -e 's/2379/12379/g' \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
       -e 's/_K8S_ETCD_HOST/K8S_ETCD_HOST/g' \
       /etc/systemd/system/kube-apiserver@.service
 
-    ${_sudo} sed -i \
+    $(_sudo) sed -i \
       -e 's/192.168.199.100/%i/g' \
       -e 's/__NODE_NAME__/wsl2/g' \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
@@ -1116,17 +1116,24 @@ _k8s_install_systemd(){
       /etc/systemd/system/kube-scheduler@.service \
       /etc/systemd/system/kube-proxy@.service
 
-    ${_sudo} sed -i \
+    $(_sudo) sed -i \
       's!##opt/k8s##!/opt/k8s!g' \
       /etc/systemd/system/kubelet@.service
 
-    ${_sudo} sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
+    $(_sudo) sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
       /wsl/wsl-k8s-data/k8s/etc/kube-containerd/1.4/config.toml
 
-    ${_sudo} sed -i \
+    $(_sudo) sed -i \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
       /etc/systemd/system/kube-containerd@.service
   fi
+
+  $(_sudo) cp -a mount/. /etc/systemd/system/
+
+  $(_sudo) sed -i \
+  -e "s!/opt/k8s!${K8S_ROOT}!g" \
+  /etc/systemd/system/kube-mkdir@.service \
+  $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
 
   cd - > /dev/null
 
@@ -1291,7 +1298,8 @@ _k8s_join(){
 
   _cri_handler $2
 
-  _k8s_install_systemd kube-proxy kubelet kubelet@
+  # _k8s_install_systemd kube-proxy kubelet kubelet@
+  _k8s_install_systemd
 
   _k8s_install_mkdir
 

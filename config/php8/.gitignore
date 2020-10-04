@@ -1,5 +1,6 @@
 /*
 !.gitignore
+!README.md
 !default
 !docker-php.example.ini
 !php.development.ini

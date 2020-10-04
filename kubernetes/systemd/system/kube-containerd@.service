@@ -32,3 +32,4 @@ RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+DefaultInstance=1.4

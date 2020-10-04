@@ -142,7 +142,7 @@ jobs:
          sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
          sudo sestatus || true
-         ls -la ~/.khs1994-docker-lnmp/caches || true
+         ls -lat ~/.khs1994-docker-lnmp/caches || true
          ls -la kubernetes-release/release/ || true
          echo $PATH
 
@@ -190,7 +190,7 @@ jobs:
        run: |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
-         ls -la /etc/systemd/system/
+         ls -lat /etc/systemd/system/
 
          sudo systemctl cat etcd
          sudo systemctl start etcd || CMD_FAILED=1
@@ -425,9 +425,9 @@ jobs:
          sudo crictl info
          echo ::endgroup::
 
-         sudo ls -la /opt || true
-         sudo ls -la /opt/k8s || true
-         sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
+         sudo ls -lat /opt || true
+         sudo ls -lat /opt/k8s || true
+         sudo ls -lat ${K8S_ROOT:-/opt/k8s} || true
 
          echo ::group::kubectl get node
          kubectl get node -o yaml
