@@ -59,7 +59,7 @@ $KUBELET_CRI
 # ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes
 
-Restart=on-failure
+Restart=always
 RestartSec=5
 
 [Install]

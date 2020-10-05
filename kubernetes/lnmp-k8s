@@ -1111,6 +1111,9 @@ _k8s_install_systemd(){
       -e 's/192.168.199.100/%i/g' \
       -e 's/2379/12379/g' \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
+      -e 's/# ConditionPathIsMountPoint/ConditionPathIsMountPoint/g' \
+      -e 's/# BindsTo/BindsTo/g' \
+      -e 's/# RequiresMountsFor/RequiresMountsFor/g' \
       -e 's/_K8S_ETCD_HOST/K8S_ETCD_HOST/g' \
       /etc/systemd/system/kube-apiserver@.service
 
@@ -1118,6 +1121,9 @@ _k8s_install_systemd(){
       -e 's/192.168.199.100/%i/g' \
       -e 's/__NODE_NAME__/wsl2/g' \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
+      -e 's/# ConditionPathIsMountPoint/ConditionPathIsMountPoint/g' \
+      -e 's/# BindsTo/BindsTo/g' \
+      -e 's/# RequiresMountsFor/RequiresMountsFor/g' \
       /etc/systemd/system/kube-controller-manager@.service \
       /etc/systemd/system/kube-scheduler@.service \
       /etc/systemd/system/kube-proxy@.service
@@ -1131,7 +1137,11 @@ _k8s_install_systemd(){
 
     $(_sudo) sed -i \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
-      /etc/systemd/system/cri-containerd@.service
+      -e 's/# ConditionPathIsMountPoint/ConditionPathIsMountPoint/g' \
+      -e 's/# BindsTo/BindsTo/g' \
+      -e 's/# RequiresMountsFor/RequiresMountsFor/g' \
+      /etc/systemd/system/cri-containerd@.service \
+      /etc/systemd/system/kubelet@.service
 
     $(_sudo) cat /etc/systemd/system/kube-apiserver@.service | $(_sudo) sed \
     's/${KUBE_APISERVER_HOST}/${WSL2_IP}/g' \
@@ -1155,6 +1165,22 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-scheduler.service
     _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.4.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
+
+    $(_sudo) mkdir -p /etc/systemd/system/kube-.service.d
+    {
+       echo "[Unit]";
+       echo "ConditionVirtualization=wsl";
+       echo "ConditionPathIsMountPoint=/wsl/wsl-k8s-data";
+       echo "RequiresMountsFor=/wsl/wsl-k8s-data";
+    } | $(_sudo) tee /etc/systemd/system/kube-.service.d/99-default.conf > /dev/null
+
+    $(_sudo) mkdir -p /etc/systemd/system/cri-.service.d
+    {
+       echo "[Unit]";
+       echo "ConditionVirtualization=wsl";
+       echo "ConditionPathIsMountPoint=/wsl/wsl-k8s-data";
+       echo "RequiresMountsFor=/wsl/wsl-k8s-data";
+    } | $(_sudo) tee /etc/systemd/system/cri-.service.d/99-default.conf > /dev/null
 
   fi
 

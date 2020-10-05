@@ -4,6 +4,12 @@ Documentation=https://github.com/cri-o/cri-o
 Wants=network-online.target
 After=network-online.target
 
+After=kube-apiserver.service
+Before=kubelet.service kubelet@crio.service
+
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+# RequiresMountsFor=/wsl/wsl-k8s-data
 [Service]
 Type=notify
 EnvironmentFile=-/opt/k8s/etc/sysconfig/crio

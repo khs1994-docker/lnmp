@@ -2,10 +2,14 @@
 Description=containerd container runtime for kubernetes
 Documentation=https://containerd.io
 After=network.target local-fs.target
-# Conflicts=xxx.service
 Wants=network-online.target network.target
+# Conflicts=xxx.service
+
+After=kube-apiserver.service
+Before=kubelet.service kubelet@cri-containerd.service
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+# RequiresMountsFor=/wsl/wsl-k8s-data
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay br_netfilter
@@ -32,4 +36,5 @@ RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+WantedBy=wsl-k8s.target
 DefaultInstance=1.4

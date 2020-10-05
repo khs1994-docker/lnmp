@@ -3,9 +3,12 @@ Description=Kubernetes Kube-Proxy Server
 Documentation=https://github.com/kubernetes/kubernetes
 After=network-online.target network.target
 Wants=network-online.target network.target
+
+After=kube-apiserver.service
+
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
-
+# RequiresMountsFor=/wsl/wsl-k8s-data
 [Service]
 
 ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kube-proxy

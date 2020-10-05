@@ -4,8 +4,13 @@ Documentation=https://github.com/kubernetes/kubernetes
 After=network-online.target network.target
 Wants=network-online.target network.target
 
+Requires=kube-reset-kubelet.service
 After=kube-reset-kubelet.service
-Wants=kube-reset-kubelet.service
+
+After=kube-apiserver.service
+
+After=cri-containerd@1.4.service \
+crio.service
 
 After=etc-containers.mount \
 var-lib-cni.mount \
@@ -24,14 +29,17 @@ var-log-calico.mount \
 var-log-containers.mount \
 var-log-pods.mount
 
-RequiresMountsFor=/var/lib/kubelet
+# RequiresMountsFor=/var/lib/kubelet
 
 # After=cri-containerd@1.4.service
 # Requires=cri-containerd@1.4.service
+
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+# RequiresMountsFor=/wsl/wsl-k8s-data
 
 ConditionFileIsExecutable=/opt/k8s/bin/kubelet
+ConditionFileIsExecutable=/opt/k8s/bin/kubeadm
 # cpu cpuacct io blkio memory devices pids
 ConditionControlGroupController=cpu
 [Service]
@@ -110,11 +118,12 @@ ExecStart=/opt/k8s/bin/kubelet \
 # ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes
 
-Restart=on-failure
+Restart=always
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+WantedBy=wsl-k8s.target
 # Also=cri-containerd@1.4.service
 Also=cri-containerd@.service
 DefaultInstance=cri-containerd
