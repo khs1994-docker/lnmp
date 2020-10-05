@@ -9,7 +9,6 @@
 * 问题1: WSL2 暂时不能固定 IP,每次重启必须执行 `$ kubectl certificate approve csr-XXXX`
 * WSL2 IP 变化时必须重新执行 `./kube-wsl2windows k8s`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
-* 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-node)**
 * 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
 * **必须** 由于缺少文件 `kube-proxy` 不能使用 `ipvs` 模式，并且容器解析不到外网地址。解决办法请查看 [编译 WSL2 内核](README.KERNEL.md)
 
@@ -59,63 +58,7 @@ $ wsl -d wsl-k8s
 $ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 ```
 
-## kube-proxy
-
-```powershell
-$ ./wsl2/kube-proxy start
-```
-
-## cri-containerd
-
-```powershell
-$ ./wsl2/cri-containerd start
-```
-
-## kubelet
-
-```powershell
-$ ./wsl2/kubelet start
-```
-
-## 使用 supervisor 管理组件（或者使用 systemd，参考 README.systemd.md）
-
-* http://www.supervisord.org/running.html#running-supervisorctl
-
-在 WSL2 安装配置 `supervisor` 请参考 [kube-server](README.SERVER.md)
-
-### 1. 生成配置文件
-
-```powershell
-# $ ./wsl2/cri-containerd
-
-$ ./wsl2/bin/supervisorctl g
-```
-
-### 2. 重新加载配置
-
-```powershell
-# 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
-# $ wsl -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
-
-$ ./wsl2/bin/supervisorctl update
-```
-
-### 3. 启动组件
-
-```powershell
-$ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
-$ ./wsl2/bin/supervisorctl start kube-node:cri-containerd
-
-# 启动 kubelet 必须先进行初始化
-$ ./wsl2/kubelet init
-$ ./wsl2/bin/supervisorctl start kube-node:kubelet
-
-# 或者可以直接启动全部组件
-$ ./wsl2/kubelet init
-$ ./wsl2/bin/supervisorctl start kube-node:
-```
-
-## 4. 信任证书
+## 信任证书
 
 ```powershell
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig get csr
@@ -126,7 +69,7 @@ csr-4njmh   2d2h   system:node:wsl2          Pending
 $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig certificate approve <CSR_NAME(csr-4njmh)>
 ```
 
-## 5. kubectl
+## kubectl
 
 将 WSL2 K8S 配置写入 `~/.kube/config`
 
@@ -145,7 +88,7 @@ $ import-module ./wsl2/bin/WSL-K8S.psm1
 $ invoke-kubectl
 ```
 
-## 6. 部署 CNI -- calico
+## 部署 CNI -- calico
 
 ```powershell
 $ wsl -d wsl-k8s -- update-alternatives --set iptables /usr/sbin/iptables-legacy
@@ -157,7 +100,7 @@ $ kubectl apply -k addons/cni/calico-eBPF
 
 > 若不能正确匹配网卡，请修改 `addons/cni/calico/patch.json` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
 
-## 7. crictl
+## crictl
 
 ```powershell
 $ import-module ./wsl2/bin/WSL-K8S.psm1
@@ -165,26 +108,7 @@ $ import-module ./wsl2/bin/WSL-K8S.psm1
 $ invoke-crictl
 ```
 
-## 8. 部署 CoreDNS 等其他组件
-
-## 组件启动方式总结
-
-启动组件有三种方式,下面以 `kube-proxy` 组件为例,其他组件同理
-
-```powershell
-# 会占据窗口
-$ ./wsl2/kube-proxy start
-```
-
-```powershell
-# 对 wsl -u root -- supervisorctl 命令的封装
-$ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
-```
-
-```powershell
-# 对上一条命令的封装
-$ ./wsl2/kube-proxy start -d
-```
+## 部署 CoreDNS 等其他组件
 
 ## 添加 hosts
 
@@ -196,32 +120,6 @@ NODE_IP NODE_NAME
 
 或者执行脚本 `./wsl2/bin/wsl2host [ --write ]` 需要管理员权限
 
-## 一键启动
-
-**一键启动之前必须保证 [kube-server](README.SERVER.md) 正常运行**
-
-**生成配置并进行 kubelet 初始化**
-
-```powershell
-$ ./wsl2/bin/supervisorctl g
-
-$ ./wsl2/bin/supervisorctl update
-
-$ ./wsl2/kubelet init
-```
-
-之后一键启动
-
-```powershell
-$ ./wsl2/bin/supervisorctl start kube-node:
-
-# $./wsl2/bin/supervisorctl status kube-node:
-```
-
-## 命令封装
-
-为避免 Windows 与 WSL 切换和执行 WSL 命令时加上 `$ wsl -u root -- XXX` 的繁琐,特封装了部分命令以便于直接在 Windows 上执行,具体请查看 `./wsl2/bin/*`
-
 ## WSL2 IP 变化造成的 kubelet 报错
 
 ```bash
@@ -229,31 +127,3 @@ certificate_manager.go:464] Current certificate is missing requested IP addresse
 ```
 
 * 每次 IP 变化时删除 `${K8S_ROOT}/etc/kubernetes/pki/kubelet-server-*.pem` 证书.
-
-## 最终脚本(日常使用)
-
-> 脚本 **需要** 管理员权限(弹出窗口,点击确定)写入 wsl2hosts 到 `C:\Windows\System32\drivers\etc\hosts`
-
-```powershell
-$ ./wsl2/bin/kube-node
-
-# $ ./wsl2/bin/kube-node stop
-```
-
-由于 WSL2 IP 不能固定, 每次重启时 **必须** 签署 kubelet 证书:
-
-```powershell
-# 获取 csr
-$ ./wsl2/bin/kubectl-get-csr
-
-NAME        AGE    SIGNERNAME                                    REQUESTOR           CONDITION
-csr-9pvrm   23s    kubernetes.io/kubelet-serving                 system:node:wsl2    Pending
-```
-
-根据提示 **签署** 证书,一般为最后一个
-
-```powershell
-$ import-module ./wsl2/bin/WSL-K8S.psm1
-
-$ invoke-kubectl certificate approve csr-9pvrm
-```

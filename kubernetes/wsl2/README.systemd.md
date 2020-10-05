@@ -19,11 +19,15 @@ $ IS_SYSTEMD=1 ./lnmp-k8s _k8s_install_systemd
 
 ```powershell
 $ ./wsl2/bin/kube-check
+```
 
-$ ./wsl2/bin/wsl2host-check
+> 脚本 **需要** 管理员权限(弹出窗口,点击确定)写入 wsl2hosts 到 `C:\Windows\System32\drivers\etc\hosts`
 
+```powershell
 $ ./wsl2/bin/wsl2host --write
+```
 
+```powershell
 $ ./wsl2/etcd
 
 $ ./wsl2/kube-wsl2windows k8s
@@ -38,33 +42,29 @@ $ Import-Module ./wsl2/bin/WSL-K8S.psm1
 $ Get-Command -m wsl-k8s
 
 # 保证 ping 命令正常执行，按 ctrl + c 停止
-$ Invoke-WSLK8S ping `$`{WSL2_IP?-wsl2 ip not set`}
+$ Invoke-WSLK8S ping wsl2
 
-$ Invoke-WSLK8S systemctl start kube-apiserver@`$`{WSL2_IP?-wsl2 ip not set`}
-$ Invoke-WSLK8S systemctl start kube-controller-manager@`$`{WSL2_IP?-wsl2 ip not set`}
-$ Invoke-WSLK8S systemctl start kube-scheduler@`$`{WSL2_IP?-wsl2 ip not set`}
+$ Invoke-WSLK8S systemctl start kube-apiserver
+$ Invoke-WSLK8S systemctl start kube-controller-manager
+$ Invoke-WSLK8S systemctl start kube-scheduler
 
 $ Invoke-WSLK8S systemctl start cri-containerd@1.4
+$ Invoke-WSLK8S systemctl start kubelet@cri-containerd
 
 # 你也可以执行其他命令供调试
 # $ Invoke-WSLK8S CMD
 ```
 
-**初始化 kubelet**
-
-```powershell
-$ ./wsl2/kubelet init
-```
-
-**启动 kubelet**
-
-```powershell
-$ Invoke-WSLK8S systemctl start kubelet@cri-containerd
-```
-
 **手动签署 CSR**
 
+由于 WSL2 IP 不能固定, 每次重启时 **必须** 签署 kubelet 证书:
+
 ```powershell
+# 获取 csr
 $ ./wsl2/bin/kubectl-get-csr
-# 根据提示手动签署 CSR
+
+NAME        AGE    SIGNERNAME                                    REQUESTOR           CONDITION
+csr-9pvrm   23s    kubernetes.io/kubelet-serving                 system:node:wsl2    Pending
 ```
+
+根据提示 **签署** 证书,一般为最后一个

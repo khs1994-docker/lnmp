@@ -7,7 +7,6 @@
 * k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(使用 netsh.exe 代理 wsl2 到 windows)`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data`（可选）WSL 发行版用于存储数据
-* 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
 * 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
 
 ## Master
@@ -211,81 +210,7 @@ $ get-process etcd
 $ ./wsl2/kube-wsl2windows k8s
 ```
 
-## kube-apiserver
-
-```powershell
-$ ./wsl2/kube-apiserver start
-```
-
-## kube-controller-manager
-
-```powershell
-$ ./wsl2/kube-controller-manager start
-```
-
-## kube-scheduler
-
-```powershell
-$ ./wsl2/kube-scheduler start
-```
-
-## 使用 supervisord 管理组件（或者使用 systemd，参考 README.systemd.md）
-
-* http://www.supervisord.org/running.html#running-supervisorctl
-
-上面运行于 `WSL2` 中的组件，启动时会占据窗口，我们可以使用 `supervisord` 管理这些组件，避免窗口占用
-
-### 安装配置 `supervisor`
-
-**请查看 `~/lnmp/docs/supervisord.md`**
-
-### 1. 启动 supervisor 服务端
-
-```powershell
-# $ .\wsl2\bin\supervisorctl.ps1 pid
-
-# $ wsl -d wsl-k8s -u root -- supervisord -c /etc/supervisord.conf -u root
-
-$ Import-module ./wsl2/WSL-K8S.psm1
-$ Invoke-supervisord
-```
-
-### 2. 生成配置文件
-
-```powershell
-# $ ./wsl2/kube-apiserver
-# $ ./wsl2/kube-controller-manager
-# $ ./wsl2/kube-scheduler
-
-$ ./wsl2/bin/supervisorctl g
-```
-
-### 3. 重新载入配置文件
-
-```powershell
-# 复制配置文件,无需执行! ./wsl2/bin/supervisorctl update 已对该命令进行了封装
-# $ wsl -d wsl-k8s -u root -- cp wsl2/supervisor.d/*.ini /etc/supervisor.d/
-
-$ ./wsl2/bin/supervisorctl update
-```
-
-### 4. 启动组件
-
-**program 加入 group 之后,不能再用 program 作为参数,必须使用 group:program**
-
-```powershell
-# 启动单个组件
-$ ./wsl2/bin/supervisorctl start kube-server:kube-apiserver
-$ ./wsl2/bin/supervisorctl start kube-server:kube-controller-manager
-$ ./wsl2/bin/supervisorctl start kube-server:kube-scheduler
-
-# 或者可以直接启动全部组件
-$ ./wsl2/bin/supervisorctl start kube-server:
-
-# $ ./wsl2/bin/supervisorctl status kube-server:
-```
-
-### 5. 设置 ~/.kube/config
+## 设置 ~/.kube/config
 
 **windows**
 
@@ -301,54 +226,4 @@ $ ./wsl2/bin/kubectl-config-set-cluster
 
 ```bash
 $ ./wsl2/bin/kubectl-config-sync
-```
-
-## 组件启动方式总结
-
-启动组件有三种方式，下面以 `kube-apiserver` 组件为例，其他组件同理
-
-```powershell
-# 会占据窗口
-$ ./wsl2/kube-apiserver start
-```
-
-```powershell
-# 对 wsl -d wsl-k8s -u root -- supervisorctl 命令的封装
-$ ./wsl2/bin/supervisorctl start kube-server:kube-apiserver
-```
-
-```powershell
-# 对上一条命令的封装
-$ ./wsl2/kube-apiserver start -d
-```
-
-## 一键启动
-
-**由于 WSL2 IP 一直在变化，每次必须生成并更新配置**
-
-```powershell
-$ ./wsl2/bin/supervisorctl g
-
-$ ./wsl2/bin/supervisorctl update
-```
-
-之后启动
-
-```powershell
-$ ./wsl2/bin/supervisorctl start kube-server:
-```
-
-## 最终脚本(日常使用)
-
-```powershell
-$ ./wsl2/kube-wsl2windows k8s
-$ ./wsl2/etcd
-
-$ ./wsl2/bin/kube-server
-
-# STOP
-
-$ ./wsl2/bin/kube-server stop
-$ ./wsl2/kube-wsl2windows k8s-stop
-$ ./wsl2/etcd stop
 ```

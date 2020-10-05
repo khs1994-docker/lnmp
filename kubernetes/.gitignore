@@ -19,11 +19,6 @@ docs/.vuepress/*
 *.test.yaml
 *.test.yml
 
-wsl2/supervisor.d/*
-!wsl2/supervisor.d/kube-server.ini
-!wsl2/supervisor.d/supervisord.ini.demo
-!wsl2/supervisor.d/kube-node.ini.temp
-
 lnmp/**/*.custom.cnf
 lnmp/**/*.custom.conf
 lnmp/**/*.custom.ini

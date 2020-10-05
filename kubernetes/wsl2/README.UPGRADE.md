@@ -9,9 +9,11 @@ KUBERNETES_VERSION=x.y.z
 ## 停止 k8s
 
 ```powershell
-$ ./wsl2/bin/kube-server stop
+$ touch /non-systemd
 
-$ ./wsl2/bin/kube-node stop
+$ systemctl halt
+
+$ wsl --shutdown
 ```
 
 ## 获取 k8s
@@ -33,6 +35,8 @@ $ ./lnmp-k8s kubernetes-server --url
 
 ```bash
 $ ./lnmp-k8s _k8s_install_cp_bin -f
+
+$ rm -rf /non-systemd
 ```
 
 ```powershell

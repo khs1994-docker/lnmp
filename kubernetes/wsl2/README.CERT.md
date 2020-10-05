@@ -3,7 +3,7 @@
 由于特殊原因，我们需要更新 k8s 所用的证书
 
 ```bash
-$ wsl
+$ wsl -d wsl-k8
 
 $ set -x
 $ source wsl2/.env
