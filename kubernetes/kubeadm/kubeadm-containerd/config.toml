@@ -91,7 +91,7 @@ oom_score = 0
             # BinaryName = ""
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux]
           runtime_type = "io.containerd.runtime.v1.linux"
-          # 二进制文件在下方定义 shim="kube-containerd-shim"
+          # 二进制文件在下方定义 shim="cri-containerd-shim"
           # runtime_type = "io.containerd.runc.v1"
           # runtime_type = "io.containerd.runc.v2"
           runtime_engine = ""
@@ -138,7 +138,7 @@ oom_score = 0
     no_prometheus = false
   [plugins."io.containerd.runtime.v1.linux"]
     # shim binary name/path
-    shim = "kube-containerd-shim"
+    shim = "cri-containerd-shim"
     # runtime binary name/path
     runtime = "runc"
     runtime_root = ""

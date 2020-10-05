@@ -40,7 +40,7 @@ $ curl -L -O https://mirrors.ustc.edu.cn/debian/pool/main/libs/libseccomp/libsec
 $ sudo dpkg -i libseccomp2_2.4.4-1_arm64.deb libseccomp-dev_2.4.4-1_arm64.deb
 
 # 测试
-$ /opt/k8s/bin/kube-containerd -v
+$ /opt/k8s/bin/cri-containerd -v
 ```
 
 ## 登录到树莓派
@@ -65,7 +65,7 @@ $ sudo chmod +x /opt/k8s/bin/kube{-proxy,let,ctl,adm}
 ```bash
 $ sudo systemctl start kube-proxy
 
-$ sudo systemctl start kube-containerd
+$ sudo systemctl start cri-containerd
 
 $ sudo systemctl start kubelet
 ```

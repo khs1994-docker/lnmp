@@ -26,8 +26,8 @@ var-log-pods.mount
 
 RequiresMountsFor=/var/lib/kubelet
 
-# After=kube-containerd@1.4.service
-# Requires=kube-containerd@1.4.service
+# After=cri-containerd@1.4.service
+# Requires=cri-containerd@1.4.service
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 
@@ -103,7 +103,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --container-runtime=remote \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 
-# kubelet@kube-containerd
+# kubelet@cri-containerd
 # kubelet@crio
 
 # ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
@@ -115,7 +115,7 @@ RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
-# Also=kube-containerd@1.4.service
-Also=kube-containerd@.service
-DefaultInstance=kube-containerd
+# Also=cri-containerd@1.4.service
+Also=cri-containerd@.service
+DefaultInstance=cri-containerd
 # Alias=kubelet-alias.service

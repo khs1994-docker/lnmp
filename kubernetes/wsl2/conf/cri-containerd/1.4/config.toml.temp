@@ -1,13 +1,13 @@
 version = 2
-root = "##K8S_ROOT##/var/lib/kube-containerd"
-state = "/run/kube-containerd"
+root = "##K8S_ROOT##/var/lib/cri-containerd"
+state = "/run/cri-containerd"
 plugin_dir = ""
 disabled_plugins = []
 required_plugins = []
 oom_score = 0
 
 [grpc]
-  address = "/run/kube-containerd/kube-containerd.sock"
+  address = "/run/cri-containerd/cri-containerd.sock"
   tcp_address = ""
   tcp_tls_cert = ""
   tcp_tls_key = ""
@@ -104,7 +104,7 @@ oom_score = 0
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc-kvm.options]
             # SystemdCgroup = false
             TypeUrl = "io.containerd.runsc.v1.options"
-            ConfigPath = "##K8S_ROOT##/etc/kube-containerd/runsc-kvm.toml"
+            ConfigPath = "##K8S_ROOT##/etc/cri-containerd/runsc-kvm.toml"
         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.kata]
           runtime_type = "io.containerd.kata.v2"
           # privileged_without_host_devices = false
@@ -191,7 +191,7 @@ oom_score = 0
       tls_cert_file = ""
       tls_key_file = ""
   [plugins."io.containerd.internal.v1.opt"]
-    path = "##K8S_ROOT##/opt/kube-containerd"
+    path = "##K8S_ROOT##/opt/cri-containerd"
   [plugins."io.containerd.internal.v1.restart"]
     interval = "10s"
   [plugins."io.containerd.metadata.v1.bolt"]
@@ -199,7 +199,7 @@ oom_score = 0
   [plugins."io.containerd.monitor.v1.cgroups"]
     no_prometheus = false
   [plugins."io.containerd.runtime.v1.linux"]
-    shim = "kube-containerd-shim"
+    shim = "cri-containerd-shim"
     runtime = "runc"
     # runtime = "crun"
     runtime_root = ""

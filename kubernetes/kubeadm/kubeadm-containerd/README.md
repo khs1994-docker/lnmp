@@ -3,7 +3,7 @@
 kubeadm 默认运行时为 docker,这里简要介绍如何改为 `containerd`
 
 1. 下载 containerd 1.4.x `$ ./lnmp-k8s _containerd_install`
-2. 复制 `kubeadm-containerd.service` 到 `/etc/systemd/system/` 并调整配置（kube-containerd 的绝对路径）
+2. 复制 `kubeadm-containerd.service` 到 `/etc/systemd/system/` 并调整配置（cri-containerd 的绝对路径）
 3. 复制 `config.toml` 到 `/etc/kubernetes/kubeadm-containerd-config.toml`
 4. 执行 `$ sudo systemctl daemon-reload`
 

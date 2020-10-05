@@ -2,13 +2,13 @@
 Description=containerd container runtime for kubernetes
 Documentation=https://containerd.io
 After=network.target local-fs.target
-Conflicts=kube-containerd.service
+Conflicts=cri-containerd.service
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay
 
 # fix me 改为自己的实际路径
-ExecStart=/opt/k8s/bin/kube-containerd \
+ExecStart=/opt/k8s/bin/cri-containerd \
           --config /etc/kubernetes/kubeadm-containerd-config.toml
 
 Type=notify

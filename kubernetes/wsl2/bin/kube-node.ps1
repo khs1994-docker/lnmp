@@ -37,7 +37,7 @@ if (!$?) {
 
 # check bin file
 
-wsl -d wsl-k8s -- bash -c "ls /wsl/wsl-k8s-data/k8s/bin/kube-containerd > /dev/null 2>&1"
+wsl -d wsl-k8s -- bash -c "ls /wsl/wsl-k8s-data/k8s/bin/cri-containerd > /dev/null 2>&1"
 
 if (!$?) {
   write-host "please install node files, see README.md" -ForegroundColor Red

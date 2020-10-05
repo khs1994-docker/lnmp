@@ -425,7 +425,7 @@ _gvisor_containerd_conf(){
   fi
 print_info "config containerd with gvisor(runsc) ..."
 # containerd 1.4.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.4/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
   # privileged_without_host_devices = false
@@ -500,7 +500,7 @@ _crun_containerd_conf(){
   fi
 print_info "config containerd with crun ..."
 # containerd 1.4.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.4/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
   runtime_type = "io.containerd.runc.v2"
   # privileged_without_host_devices = false
@@ -542,7 +542,7 @@ _crun_install(){
 }
 
 _containerd_install(){
-  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/kube-containerd;fi
+  if [ "$1" = "-f" ];then $(_sudo) rm -rf ${K8S_ROOT}/bin/cri-containerd;fi
 
   if ! [ "$GOARCH" = 'amd64' -o "$GOARCH" = 'arm64' ];then
     echo "only support [ amd64 ] and [ arm64 ]"
@@ -550,9 +550,9 @@ _containerd_install(){
     return
   fi
 
-  if [ -f ${K8S_ROOT}/bin/kube-containerd -a ! "$1" = "--dry-run" ];then \
+  if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
     print_info "containerd 1.4 already install"; \
-    ${K8S_ROOT}/bin/kube-containerd --version;return; fi
+    ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
   print_info "install containerd 1.4 ..."
 
@@ -588,8 +588,8 @@ _containerd_install(){
 
   $(_sudo) tar -zxf ${TMP_ROOT}/${TAR_FILE} -C ${K8S_ROOT}
 
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/kube-containerd
-  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/kube-containerd-shim
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd ${K8S_ROOT}/bin/cri-containerd
+  $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim /usr/local/bin/cri-containerd-shim
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v1 /usr/local/bin/
   $(_sudo) install -m755 ${K8S_ROOT}/bin/containerd-shim-runc-v2 /usr/local/bin/
 }
@@ -645,8 +645,8 @@ _crictl_containerd_conf(){
   $(_sudo) rm -rf /etc/crictl.yaml
   print_info "conf crictl with containerd"
   cat <<EOF | $(_sudo) tee -a /etc/crictl.yaml
-runtime-endpoint: unix:///run/kube-containerd/kube-containerd.sock
-image-endpoint: unix:///run/kube-containerd/kube-containerd.sock
+runtime-endpoint: unix:///run/cri-containerd/cri-containerd.sock
+image-endpoint: unix:///run/cri-containerd/cri-containerd.sock
 timeout: 10
 debug: false
 EOF
@@ -942,10 +942,10 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  $(_sudo) mkdir -p ${K8S_ROOT}/etc/kube-containerd/1.4
-  # containerd config default > ${K8S_ROOT}/etc/kube-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/kube-containerd/1.4/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/kube-containerd/1.4/config.toml
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/cri-containerd/1.4
+  # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.4/config.toml \
+    | $(_sudo) tee ${K8S_ROOT}/etc/cri-containerd/1.4/config.toml
 
   _cri_sysctl
 }
@@ -1127,11 +1127,11 @@ _k8s_install_systemd(){
       /etc/systemd/system/kubelet@.service
 
     $(_sudo) sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
-      /wsl/wsl-k8s-data/k8s/etc/kube-containerd/1.4/config.toml
+      /wsl/wsl-k8s-data/k8s/etc/cri-containerd/1.4/config.toml
 
     $(_sudo) sed -i \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
-      /etc/systemd/system/kube-containerd@.service
+      /etc/systemd/system/cri-containerd@.service
 
     $(_sudo) cat /etc/systemd/system/kube-apiserver@.service | $(_sudo) sed \
     's/${KUBE_APISERVER_HOST}/${WSL2_IP}/g' \
@@ -1153,8 +1153,8 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target kube-containerd@.service kube-containerd@1.4.service
-    _enable_wsl_k8s_systemd_target kubelet@.service kubelet@kube-containerd.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.4.service
+    _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
 
   fi
 
@@ -1357,13 +1357,13 @@ $ $(_sudo) systemctl start kube-proxy
 $ $(_sudo) systemctl start kubelet
 
 # if cri is containerd, please exec
-$ $(_sudo) systemctl start kubelet@kube-containerd
+$ $(_sudo) systemctl start kubelet@cri-containerd
 
 # if cri is crio, please exec
 $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start kube-containerd@1.4 (Containerd runtime only)
+$ $(_sudo) systemctl start cri-containerd@1.4 (Containerd runtime only)
 $ $(_sudo) systemctl start crio (CRI-O runtime only)
 "
 }
@@ -1372,7 +1372,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker kube-containerd@1.4 crio || true
+    docker cri-containerd@1.4 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}

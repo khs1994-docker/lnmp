@@ -42,8 +42,8 @@ $ Invoke-WSLK8S systemctl start kube-apiserver
 $ Invoke-WSLK8S systemctl start kube-controller-manager
 $ Invoke-WSLK8S systemctl start kube-scheduler
 
-$ Invoke-WSLK8S systemctl start kube-containerd@1.4
-$ Invoke-WSLK8S systemctl start kubelet@kube-containerd
+$ Invoke-WSLK8S systemctl start cri-containerd@1.4
+$ Invoke-WSLK8S systemctl start kubelet@cri-containerd
 
 # 你也可以执行其他命令供调试
 # $ Invoke-WSLK8S CMD

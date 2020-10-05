@@ -32,8 +32,8 @@ Function _generate_conf() {
   & $PSScriptRoot/../kube-proxy.ps1
   printInfo "handle kubelet supervisor conf ..."
   & $PSScriptRoot/../kubelet.ps1
-  printInfo "handle kube-containerd supervisor conf ..."
-  & $PSScriptRoot/../kube-containerd.ps1
+  printInfo "handle cri-containerd supervisor conf ..."
+  & $PSScriptRoot/../cri-containerd.ps1
 
   printInfo "handle cri-o supervisor conf ..."
   & $PSScriptRoot/../cri-o.ps1
@@ -44,7 +44,7 @@ Function _generate_conf() {
     $NODE_CONF += "cri-o"
   }
   else {
-    $NODE_CONF += "kube-containerd"
+    $NODE_CONF += "cri-containerd"
   }
 
   if ("$CNI_CALICO_EBPF" -ne "true") {

@@ -1,5 +1,5 @@
---- kube-containerd/1.4/config.default.toml     2020-09-01 17:52:14.095499800 +0800
-+++ kube-containerd/1.5/config.default.toml     2020-09-22 11:09:54.593385700 +0800
+--- cri-containerd/1.4/config.default.toml     2020-09-01 17:52:14.095499800 +0800
++++ cri-containerd/1.5/config.default.toml     2020-09-22 11:09:54.593385700 +0800
 @@ -126,8 +126,14 @@
      platforms = ["linux/amd64"]
    [plugins."io.containerd.service.v1.diff-service"]

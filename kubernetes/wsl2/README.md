@@ -65,10 +65,10 @@ $ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 $ ./wsl2/kube-proxy start
 ```
 
-## kube-containerd
+## cri-containerd
 
 ```powershell
-$ ./wsl2/kube-containerd start
+$ ./wsl2/cri-containerd start
 ```
 
 ## kubelet
@@ -86,7 +86,7 @@ $ ./wsl2/kubelet start
 ### 1. 生成配置文件
 
 ```powershell
-# $ ./wsl2/kube-containerd
+# $ ./wsl2/cri-containerd
 
 $ ./wsl2/bin/supervisorctl g
 ```
@@ -104,7 +104,7 @@ $ ./wsl2/bin/supervisorctl update
 
 ```powershell
 $ ./wsl2/bin/supervisorctl start kube-node:kube-proxy
-$ ./wsl2/bin/supervisorctl start kube-node:kube-containerd
+$ ./wsl2/bin/supervisorctl start kube-node:cri-containerd
 
 # 启动 kubelet 必须先进行初始化
 $ ./wsl2/kubelet init

@@ -7,6 +7,6 @@ $ containerd config default > config.default.toml
 ```
 
 ```bash
-$ diff -u kube-containerd/1.4/config.default.toml kube-containerd/1.5/config.default.t
+$ diff -u cri-containerd/1.4/config.default.toml cri-containerd/1.5/config.default.t
 oml
 ```

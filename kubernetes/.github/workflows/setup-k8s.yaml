@@ -228,7 +228,7 @@ jobs:
 
          sudo systemctl cat docker
 
-         sudo systemctl cat kube-containerd@1.4
+         sudo systemctl cat cri-containerd@1.4
 
          sudo systemctl cat crio || true
          sudo cat /etc/sysconfig/crio || true
@@ -244,7 +244,7 @@ jobs:
          sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-           && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd@1.4) || true
+           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@1.4) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
            && (sudo systemctl restart docker || sudo journalctl -u docker) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
@@ -252,7 +252,7 @@ jobs:
                sudo systemctl start crio) || true
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-           && export KUBELET_SERVICE='@kube-containerd' || true
+           && export KUBELET_SERVICE='@cri-containerd' || true
 
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
            && export KUBELET_SERVICE='@crio' || true
@@ -293,7 +293,7 @@ jobs:
 
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet${KUBELET_SERVICE}
-         sudo journalctl -u kube-containerd@1.4 || true
+         sudo journalctl -u cri-containerd@1.4 || true
          sudo journalctl -u crio || true
 
          kubectl get csr

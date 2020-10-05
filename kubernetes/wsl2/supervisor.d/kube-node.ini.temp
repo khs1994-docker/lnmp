@@ -1,8 +1,8 @@
 [group:kube-node]
-;programs=kube-containerd,kube-proxy,kubelet
+;programs=cri-containerd,kube-proxy,kubelet
 
 ;使用 CNI Calico eBPF 不再需要 kube-proxy
-;programs=kube-containerd,kubelet
+;programs=cri-containerd,kubelet
 
 ;使用 cri-o
 ;programs=cri-o,kube-proxy,kubelet

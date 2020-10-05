@@ -2,8 +2,8 @@
 !.gitignore
 !*.temp
 !cni
-!kube-containerd
-kube-containerd/1.4/config.toml
+!cri-containerd
+cri-containerd/1.4/config.toml
 !crio
 crio/crio.conf
 crio/crio.conf.d
