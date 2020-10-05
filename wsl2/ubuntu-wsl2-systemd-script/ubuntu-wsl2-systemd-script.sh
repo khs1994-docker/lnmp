@@ -31,7 +31,7 @@ function sysdrive_prefix {
 				win_location="$pt"
 				break
 			fi
-		fi 
+		fi
 	done
 
 	if [ $hard_reset -eq 0 ]; then
@@ -58,6 +58,9 @@ Defaults        env_keep += WSL_INTEROP
 Defaults        env_keep += WSL_DISTRO_NAME
 Defaults        env_keep += PRE_NAMESPACE_PATH
 Defaults        env_keep += PRE_NAMESPACE_PWD
+
+Defaults        env_keep += WSL2_IP
+
 %sudo ALL=(ALL) NOPASSWD: /usr/sbin/enter-systemd-namespace
 EOF
 

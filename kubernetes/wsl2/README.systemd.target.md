@@ -20,8 +20,6 @@ $ IS_SYSTEMD=1 ./lnmp-k8s _k8s_install_systemd
 ```powershell
 $ ./wsl2/bin/kube-check
 
-$ ./wsl2/bin/wsl2host-check
-
 $ ./wsl2/bin/wsl2host --write
 
 $ ./wsl2/etcd
@@ -38,28 +36,17 @@ $ Import-Module ./wsl2/bin/WSL-K8S.psm1
 $ Get-Command -m wsl-k8s
 
 # 保证 ping 命令正常执行，按 ctrl + c 停止
-$ Invoke-WSLK8S ping `$`{WSL2_IP?-wsl2 ip not set`}
+$ Invoke-WSLK8S ping wsl2
 
-$ Invoke-WSLK8S systemctl start kube-apiserver@`$`{WSL2_IP?-wsl2 ip not set`}
-$ Invoke-WSLK8S systemctl start kube-controller-manager@`$`{WSL2_IP?-wsl2 ip not set`}
-$ Invoke-WSLK8S systemctl start kube-scheduler@`$`{WSL2_IP?-wsl2 ip not set`}
+$ Invoke-WSLK8S systemctl start kube-apiserver
+$ Invoke-WSLK8S systemctl start kube-controller-manager
+$ Invoke-WSLK8S systemctl start kube-scheduler
 
 $ Invoke-WSLK8S systemctl start kube-containerd@1.4
+$ Invoke-WSLK8S systemctl start kubelet@kube-containerd
 
 # 你也可以执行其他命令供调试
 # $ Invoke-WSLK8S CMD
-```
-
-**初始化 kubelet**
-
-```powershell
-$ ./wsl2/kubelet init
-```
-
-**启动 kubelet**
-
-```powershell
-$ Invoke-WSLK8S systemctl start kubelet@kube-containerd
 ```
 
 **手动签署 CSR**

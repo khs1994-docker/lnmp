@@ -4,6 +4,9 @@ Documentation=https://github.com/kubernetes/kubernetes
 After=network-online.target network.target
 Wants=network-online.target network.target
 
+After=kube-reset-kubelet.service
+Wants=kube-reset-kubelet.service
+
 After=etc-containers.mount \
 var-lib-cni.mount \
 var-lib-k8s.mount \
@@ -23,9 +26,8 @@ var-log-pods.mount
 
 RequiresMountsFor=/var/lib/kubelet
 
-# After=docker.service
-# Requires=docker.service
-# RequiresMountsFor=/var/lib/kubelet
+# After=kube-containerd@1.4.service
+# Requires=kube-containerd@1.4.service
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 
@@ -96,6 +98,8 @@ ExecStart=/opt/k8s/bin/kubelet \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 --v=2 \
+#
+;
 --container-runtime=remote \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 

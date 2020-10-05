@@ -1,0 +1,10 @@
+[Unit]
+Description="reset kubelet pem, because wsl2 ip is changed"
+Documentation="https://github.com/khs1994-docker/lnmp-k8s"
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/env rm -rf \
+/opt/k8s/etc/kubernetes/pki/kubelet-server-*.pem
+
+RemainAfterExit=yes

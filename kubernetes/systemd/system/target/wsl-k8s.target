@@ -1,0 +1,9 @@
+[Unit]
+Description=wsl-k8s
+Documentation=https://github.com/khs1994-docker/lnmp-k8s/tree/master/wsl2
+Requires=basic.target
+Wants=basic.target
+After=basic.target
+ConditionVirtualization=wsl
+# RequiresMountsFor=/wsl/wsl-k8s-data
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data

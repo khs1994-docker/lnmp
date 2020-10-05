@@ -1,5 +1,5 @@
 [Unit]
-Description=Kubernetes Kubelet
+Description=Kubernetes Kubelet with Docker
 Documentation=https://github.com/kubernetes/kubernetes
 After=network-online.target network.target
 Wants=network-online.target network.target
@@ -54,9 +54,6 @@ $KUBELET_CRI
 # --pod-infra-container-image=gcr.mirror/google-containers/pause:3.2 \
 # --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
 # --image-pull-progress-deadline=15m \
-
-# --container-runtime=remote \
-# --container-runtime-endpoint=unix:///run/kube-containerd/kube-containerd.sock \
 
 # ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
 # ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/

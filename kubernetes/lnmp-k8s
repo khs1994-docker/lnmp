@@ -1053,6 +1053,11 @@ _k8s_install_conf_replace(){
   done
 }
 
+_enable_wsl_k8s_systemd_target(){
+  $(_sudo) ln -sf /etc/systemd/system/$1 \
+    /etc/systemd/system/wsl-k8s.target.wants/${2:-$1}
+}
+
 _k8s_install_systemd(){
   print_info "copy systemd unit file $@ ... "
 
@@ -1098,8 +1103,9 @@ _k8s_install_systemd(){
     $(_sudo) mv /etc/systemd/system/kube-scheduler{.service,@.service}
     $(_sudo) mv /etc/systemd/system/kube-proxy{.service,@.service}
 
-    cp ../../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
-    cp ../../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+    $(_sudo) cp ../../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+    $(_sudo) cp ../../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+    $(_sudo) cp ../../wsl2/conf/kubelet.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
 
     $(_sudo) sed -i \
       -e 's/192.168.199.100/%i/g' \
@@ -1126,12 +1132,37 @@ _k8s_install_systemd(){
     $(_sudo) sed -i \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
       /etc/systemd/system/kube-containerd@.service
+
+    $(_sudo) cat /etc/systemd/system/kube-apiserver@.service | $(_sudo) sed \
+    's/${KUBE_APISERVER_HOST}/${WSL2_IP}/g' \
+    | $(_sudo) tee /etc/systemd/system/kube-apiserver.service > /dev/null
+
+    $(_sudo) cat /etc/systemd/system/kube-controller-manager@.service | $(_sudo) sed \
+    's/${K8S_CM_HOST}/${WSL2_IP}/g' \
+    | $(_sudo) tee /etc/systemd/system/kube-controller-manager.service > /dev/null
+
+    $(_sudo) cat /etc/systemd/system/kube-scheduler@.service | $(_sudo) sed \
+    's/${K8S_S_HOST}/${WSL2_IP}/g' \
+    | $(_sudo) tee /etc/systemd/system/kube-scheduler.service > /dev/null
+
+    $(_sudo) cp /etc/systemd/system/kube-proxy{@.service,.service}
+
+    $(_sudo) mkdir -p /etc/systemd/system/wsl-k8s.target.wants
+
+    $(_sudo) cp target/wsl-k8s.target /etc/systemd/system/
+    _enable_wsl_k8s_systemd_target kube-apiserver.service
+    _enable_wsl_k8s_systemd_target kube-controller-manager.service
+    _enable_wsl_k8s_systemd_target kube-scheduler.service
+    _enable_wsl_k8s_systemd_target kube-containerd@.service kube-containerd@1.4.service
+    _enable_wsl_k8s_systemd_target kubelet@.service kubelet@kube-containerd.service
+
   fi
 
-  $(_sudo) cp -a mount/. /etc/systemd/system/
+  $(_sudo) cp -r mount/. /etc/systemd/system/
 
   $(_sudo) sed -i \
   -e "s!/opt/k8s!${K8S_ROOT}!g" \
+  -e 's!##opt/k8s##!/opt/k8s!g' \
   /etc/systemd/system/kube-mkdir@.service \
   $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
 
