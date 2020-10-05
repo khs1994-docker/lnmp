@@ -1,6 +1,6 @@
 # Kong
 
-* https://konghq.com/install/
+* https://konghq.com/get-started/#install
 
 ## 初始化数据库
 

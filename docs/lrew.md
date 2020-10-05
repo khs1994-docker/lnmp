@@ -38,7 +38,7 @@ $ lnmp-docker lrew-init example
 
 之后推送到 GitHub，并发布到 Docker Hub。
 
-* 示例：https://github.com/lrew/lrew-example
+* 示例：https://github.com/lrew/lrew-etcd
 
 > 可以参考 `lrew` 文件夹中的示例项目
 

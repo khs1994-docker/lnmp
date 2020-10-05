@@ -1,0 +1,13 @@
+[Unit]
+Description="kube mkdir /opt/k8s/%I"
+Documentation="https://github.com/khs1994-docker/lnmp-k8s"
+ConditionPathExists=/opt/k8s
+ConditionPathIsDirectory=/opt/k8s
+ConditionDirectoryNotEmpty=/opt/k8s
+[Service]
+Type=oneshot
+
+ExecStart=/usr/bin/env mkdir -p \
+/opt/k8s/%I
+
+RemainAfterExit=yes

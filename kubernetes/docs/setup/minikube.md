@@ -2,7 +2,7 @@
 
 * https://github.com/AliyunContainerService/minikube
 
-* https://yq.aliyun.com/articles/221687
+* https://developer.aliyun.com/article/221687
 
 ## 安装
 

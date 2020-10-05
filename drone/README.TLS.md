@@ -67,7 +67,7 @@ DRONE_USER_CREATE=
 # DRONE_USER_CREATE=username:USERNAME,admin:true
 # DRONE_USER_CREATE=username:khs1994,machine:false,admin:true,token:TOKEN
 # TOKEN 使用 $ openssl rand -hex 16 生成
-# https://docs.drone.io/installation/security/registration/
+# https://docs.drone.io/server/reference/drone-user-filter/
 DRONE_USER_FILTER=
 # DRONE_USER_FILTER=khs1994,github
 ```

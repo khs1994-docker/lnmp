@@ -1,4 +1,4 @@
-* https://github.com/martinlindhe/wmi_exporter
+* https://github.com/prometheus-community/windows_exporter
 
 ## 启动 windows metrics
 

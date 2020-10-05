@@ -14,7 +14,7 @@ jobs:
     - run: |
         mkdir -p ~/.kube
         echo ${KUBECTL_KUBECONFIG} | sed 's! !\n!g' | base64 -d > ~/.kube/config
-        echo "::set-env name=KUBECONFIG::${HOME}/.kube/config"
+        echo "KUBECONFIG=${HOME}/.kube/config" >> $GITHUB_ENV
       env:
         KUBECTL_KUBECONFIG: ${{ secrets.KUBECTL_KUBECONFIG }}
     - uses: azure/setup-kubectl@v1

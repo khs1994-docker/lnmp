@@ -13,6 +13,6 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /var/lib/ci/redis
+    path: /var/lib/k8s/ci/redis
     type: DirectoryOrCreate
   storageClassName: hostpath

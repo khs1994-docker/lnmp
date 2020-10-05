@@ -197,10 +197,6 @@ $ ./ci up [-d] [--reset]
 
 ## 使用示例
 
-* [HEXO](https://github.com/khs1994-php/hexo)
-
-* [GitBook](https://github.com/khs1994-php/gitbook)
-
 * [PHP](https://github.com/khs1994-php/tencent-ai)
 
 ## 最佳实践
@@ -209,12 +205,12 @@ https://blog.khs1994.com/categories/CI/Drone/
 
 ## More Information
 
-* [Gogs](https://github.com/gogits/gogs)
+* [Gogs](https://github.com/gogs/gogs)
 
-* [Gogs Docker](https://github.com/gogits/gogs/tree/master/docker)
+* [Gogs Docker](https://github.com/gogs/gogs/tree/master/docker)
 
 * [Drone](https://github.com/drone)
 
-* [Drone Documents](http://docs.drone.io/)
+* [Drone Documents](https://docs.drone.io/)
 
 * [Drone Docker](https://hub.docker.com/u/drone)

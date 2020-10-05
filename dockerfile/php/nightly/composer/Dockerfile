@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:experimental
 
 ARG USERNAME=khs1994
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-fpm-alpine
+ARG BASE=fpm
+
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:nightly-${BASE}-alpine
 
 # install composer
 

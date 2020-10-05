@@ -82,7 +82,7 @@ spec:
       volumes:
         - name: root
           hostPath:
-            path: /nfs
+            path: /var/lib/k8s/nfs
             type: DirectoryOrCreate
         - name: exports
           configMap:

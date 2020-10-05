@@ -40,5 +40,5 @@ $ curl -L https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/
 
 ## 参考
 
-* https://juejin.im/post/5bc07abc6fb9a05d2a1d92b3
+* https://juejin.im/post/6844903689946136584
 * https://blog.51cto.com/14051317/2368383

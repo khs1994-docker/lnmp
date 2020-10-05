@@ -7,8 +7,8 @@ echo "==> Set app"
 # mkdir -p ../app/laravel/public
 # cp lnmp/app/index.php ../app/laravel/public/
 # else
-sudo mkdir -p /nfs/lnmp/app/laravel/public
-sudo cp lnmp/app/index.php /nfs/lnmp/app/laravel/public/
+sudo mkdir -p /var/lib/k8s/nfs/lnmp/app/laravel/public
+sudo cp lnmp/app/index.php /var/lib/k8s/nfs/lnmp/app/laravel/public/
 # fi
 
 echo "==> Up nfs server"
@@ -82,7 +82,7 @@ echo "==> Test LNMP with hostpath"
 # if ! [ $(go env GOARCH) = 'amd64' ];then
 # cp -rf ../app ~/app-development
 # else
-cp -rf /nfs/lnmp/app ~/app-development
+cp -rf /var/lib/k8s/nfs/lnmp/app ~/app-development
 # fi
 
 cd lnmp

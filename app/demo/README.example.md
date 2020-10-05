@@ -51,7 +51,7 @@ require __DIR__.'/vendor/autoload.php';
 
 * [Renovate](https://github.com/marketplace/renovate)
 
-* [Docker Build Powered By Tencent Cloud Container Service](https://cloud.tencent.com/product/ccs)
+* [Docker Build Powered By Tencent Cloud Container Service](https://cloud.tencent.com/product/tke)
 
 * [Docker Build Powered By Docker Hub](https://hub.docker.com)
 

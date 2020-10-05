@@ -13,7 +13,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /var/lib/ci/mysql
+    path: /var/lib/k8s/ci/mysql
     type: DirectoryOrCreate
   storageClassName: hostpath
 
@@ -34,6 +34,6 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /var/lib/ci/log
+    path: /var/lib/k8s/ci/log
     type: DirectoryOrCreate
   storageClassName: hostpath

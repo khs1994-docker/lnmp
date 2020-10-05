@@ -18,8 +18,8 @@ $ wsl -d wsl-k8s
 
 $ cp -a wsl2/certs/. systemd/certs
 
-$ ./lnmp-k8s _k8s_install_conf_cp
-$ ./lnmp-k8s _k8s_install_systemd
+$ IS_SYSTEMD=1 ./lnmp-k8s _k8s_install_conf_cp
+$ IS_SYSTEMD=1 ./lnmp-k8s _k8s_install_systemd
 ```
 
 ## 日常使用

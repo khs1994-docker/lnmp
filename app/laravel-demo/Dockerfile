@@ -14,7 +14,7 @@
 # $ docker build --target=laravel -t khs1994/laravel:7 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
 ARG NODE_VERSION=14.11.0
-ARG PHP_VERSION=7.4.10
+ARG PHP_VERSION=7.4.11
 ARG NGINX_VERSION=1.19.2-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
@@ -41,7 +41,7 @@ RUN set -x ; cd /app \
       && npm run production
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME}/php:7.4.10-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME}/php:7.4.11-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/

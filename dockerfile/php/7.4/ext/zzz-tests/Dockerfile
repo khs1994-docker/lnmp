@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.10
+ARG PHP_VERSION=7.4.11
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-ext-zstd-alpine as zstd
@@ -16,10 +16,10 @@ ARG EXT_NAME="zstd swoole yaml mongodb"
 
 ARG EXT_RUN_DEPS="zstd-libs yaml"
 
-RUN --mount=type=bind,from=zstd,source=/srv,target=/srv/zstd \
-    --mount=type=bind,from=swoole,source=/srv,target=/srv/swoole \
-    --mount=type=bind,from=yaml,source=/srv,target=/srv/yaml \
-    --mount=type=bind,from=mongodb,source=/srv,target=/srv/mongodb \
+RUN --mount=type=bind,from=zstd,source=/srv/zstd,target=/srv/zstd \
+    --mount=type=bind,from=swoole,source=/srv/swoole,target=/srv/swoole \
+    --mount=type=bind,from=yaml,source=/srv/yaml,target=/srv/yaml \
+    --mount=type=bind,from=mongodb,source=/srv/mongodb,target=/srv/mongodb \
     \
     set -x \
     && php -m \

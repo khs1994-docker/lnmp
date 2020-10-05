@@ -24,6 +24,9 @@ jobs:
     services:
       redis:
         image: redis:6.0.8-alpine
+    defaults:
+      run:
+        shell: bash --noprofile --norc -exo pipefail {0}
     steps:
       - name: Dump GitHub context
         env:
@@ -64,8 +67,6 @@ jobs:
           || contains( github.event.head_commit.message, '[action skip]')
       - name: System info
         run: |
-          set -x
-
           env
 
           echo $PATH

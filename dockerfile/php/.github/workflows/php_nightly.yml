@@ -15,6 +15,10 @@ on:
 
 name: PHP_nightly
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
 jobs:
   build:
     name: Build
@@ -22,20 +26,18 @@ jobs:
       max-parallel: 1
       matrix:
         # TYPE: [CLI, FPM, UNIT, COMPOSER, SWOOLE, PPM, SUPERVISORD]
-        TYPE: [CLI, FPM, COMPOSER, UNIT, SWOOLE]
+        TYPE: [CLI, FPM, COMPOSER, S6, UNIT, SWOOLE]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
       with:
         fetch-depth: 2
     - run: |
-        set -x
         env
         docker --version
         docker-compose --version
       name: 'manifest'
     # - run: |
-    #     set -x
     #     sudo rm /usr/local/bin/docker-compose
     #     curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     #     sudo install -m755 docker-compose /usr/local/bin
@@ -44,18 +46,17 @@ jobs:
     #     DOCKER_COMPOSE_VERSION: 1.27.0
     - uses: docker-practice/actions-setup-docker@master
     - run: |
-        set -x
         docker --version
         docker-compose --version
         docker buildx version
         docker
       name: 'install-after-manifest'
     - run: |
-        set -x
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
         echo ${DOCKER_PASSWORD} | docker login -u ${ALIYUN_DOCKER_USERNAME} --password-stdin registry.us-east-1.aliyuncs.com
         echo ${GHCR_IO_TOKEN} | docker login -u khs1994 --password-stdin ghcr.io
+        echo ${CODING_DOCKER_PASSWORD} | docker login -u khs1994-1601432822176 --password-stdin pcit-docker.pkg.coding.net
       name: 'Docker Login'
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -64,6 +65,7 @@ jobs:
         ALIYUN_DOCKER_USERNAME: ${{secrets.ALIYUN_DOCKER_USERNAME}}
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
+        CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
     - run: |
         cp .env.example .env
         set -ex
@@ -139,7 +141,7 @@ jobs:
           --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
           ${fpmTagOptions} \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/alpine; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm; \
         fi
 
         if [ "$TYPE" = "CLI" ];then docker buildx build $options \
@@ -147,6 +149,16 @@ jobs:
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-cli-alpine ";done) \
           --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; \
+        fi
+
+        if [ "$TYPE" = "S6" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
+          --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
+          -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-s6-alpine \
+          $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-s6-alpine ";done) \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/s6
+          echo ::endgroup::
         fi
 
         if [ "$TYPE" = "PPM" ];then docker buildx build $options \
@@ -164,7 +176,7 @@ jobs:
         FOLDER: nightly
         PHP_TAG_VERSION: nightly
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php # ghcr.io/khs1994/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php # ghcr.io/khs1994/php
         PHP_VCS_REF: ${{ github.event.inputs.PHP_VCS_REF }}
       name: 'Build Image'
 

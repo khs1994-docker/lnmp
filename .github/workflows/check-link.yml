@@ -20,10 +20,30 @@ jobs:
           "server","example.com","docker",\
           "docker.domain.com","YourIP","register",\
           "https://www.freedesktop.org/wiki/Software/systemd/",\
+          "cloud.tencent.com",\
+          "zan.khs1994.com",\
+          "storage.khs1994.com",\
+          "test2.t.khs1994.com",\
+          "harbor.t.khs1994.com",\
+          "packages.t.khs1994.com",\
+          "registry.t.khs1994.com",\
+          "minio.t.khs1994.com",\
+          "t.khs1994.com",\
+          "192.168.199.100",\
+          "192.168.57.1",\
+          "192.168.57.112",\
+          "192.168.64.98",\
+          "127.0.0.1",\
+          "IP",\
+          "kubernetes.default.svc.cluster.local",\
+          "gcr.mirrors.ustc.edu.cn",\
+          "mritd.me",\
+          "my.oschina.net",\
+          "xxx",\
           "www.aliyun.com" \
           --allow-dupe \
           --skip-save-results \
           -t 10 \
           `find . \( -path "./mesos" -o -path "./machine" -o -path "./swarm_mode" \) -prune -o -name "*.md" -exec ls {} \;`
         name: check-link
-        timeout-minutes: 25
+        # timeout-minutes: 25

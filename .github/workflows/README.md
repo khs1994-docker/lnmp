@@ -1,4 +1,4 @@
-## [Checks](https://help.github.com/cn/github/collaborating-with-issues-and-pull-requests/about-status-checks)
+## [Checks](https://docs.github.com/cn/free-pro-team@latest/github/collaborating-with-issues-and-pull-requests/about-status-checks)
 
 ```bash
 $ git commit -m "Update README.

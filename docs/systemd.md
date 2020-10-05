@@ -61,5 +61,3 @@ $ sudo journalctl -u cleanup-lnmp-docker
 由 `systemd` 管理
 
 # More Information
-
-* https://blog.khs1994.com/linux/systemd.html

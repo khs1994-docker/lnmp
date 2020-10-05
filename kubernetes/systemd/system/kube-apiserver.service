@@ -1,0 +1,80 @@
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+Wants=network-online.target network.target
+After=network-online.target network.target
+# Requires=etcd.service
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+
+[Service]
+Environment="K8S_ROOT=/opt/k8s"
+Environment="KUBE_APISERVER_HOST=192.168.199.100"
+# Environment="KUBE_APISERVER_HOST=%i"
+Environment="K8S_ETCD_HOST=192.168.199.100"
+Environment="_K8S_ETCD_HOST=windows.k8s.khs1994.com"
+
+ExecStart=/opt/k8s/bin/kube-apiserver \
+--advertise-address=${KUBE_APISERVER_HOST} \
+--default-not-ready-toleration-seconds=360 \
+--default-unreachable-toleration-seconds=360 \
+--max-mutating-requests-inflight=2000 \
+--max-requests-inflight=4000 \
+--default-watch-cache-size=200 \
+--delete-collection-workers=2 \
+--encryption-provider-config=${K8S_ROOT}/etc/kubernetes/encryption-config.yaml \
+--etcd-cafile=${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem \
+--etcd-certfile=${K8S_ROOT}/etc/kubernetes/pki/apiserver-etcd-client.pem \
+--etcd-keyfile=${K8S_ROOT}/etc/kubernetes/pki/apiserver-etcd-client-key.pem \
+--etcd-servers="https://${K8S_ETCD_HOST}:2379" \
+--bind-address=${KUBE_APISERVER_HOST} \
+--secure-port=6443 \
+--tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver.pem \
+--tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/apiserver-key.pem \
+--audit-log-maxage=15 \
+--audit-log-maxbackup=3 \
+--audit-log-maxsize=100 \
+--audit-log-truncate-enabled \
+--audit-log-path=/opt/k8s/var/log/kubernetes/kube-apiserver/audit.log \
+--audit-policy-file=${K8S_ROOT}/etc/kubernetes/audit-policy.yaml \
+--profiling \
+--anonymous-auth=false \
+--client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+--enable-bootstrap-token-auth \
+--requestheader-allowed-names="aggregator" \
+--requestheader-client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-ca.pem \
+--requestheader-extra-headers-prefix="X-Remote-Extra-" \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--service-account-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.pub \
+--service-account-signing-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
+--service-account-issuer=api \
+--api-audiences=api \
+--authorization-mode=Node,RBAC \
+--runtime-config=api/all=true \
+--enable-admission-plugins=NodeRestriction \
+--allow-privileged=true \
+--apiserver-count=1 \
+--event-ttl=168h \
+--kubelet-certificate-authority=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+--kubelet-client-certificate=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client.pem \
+--kubelet-client-key=${K8S_ROOT}/etc/kubernetes/pki/apiserver-kubelet-client-key.pem \
+--kubelet-timeout=10s \
+--proxy-client-cert-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client.pem \
+--proxy-client-key-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-client-key.pem \
+--service-cluster-ip-range=10.254.0.0/16,fd00::/108 \
+--service-node-port-range="1-65535" \
+--logtostderr=true \
+--feature-gates="IPv6DualStack=true" \
+--insecure-port=0 \
+--kubelet-https=true \
+--v=2
+
+Restart=on-failure
+RestartSec=5
+Type=notify
+LimitNOFILE=65536
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

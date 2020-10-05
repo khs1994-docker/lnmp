@@ -102,7 +102,7 @@ ExecStartPre=-modprobe ip_vs_sh
 ```bash
 [Unit]
 Description=kubelet: The Kubernetes Node Agent
-Documentation=https://kubernetes.io/docs/
+Documentation=https://kubernetes.io/docs/home/
 
 [Service]
 ExecStart=/usr/bin/kubelet
@@ -199,13 +199,13 @@ $ kubeadm join 192.168.199.100:6443 --token cz81zt.orsy9gm9v649e5lf \
 
 由于未部署 CNI 插件，CoreDNS 未正常启动。
 
-## 部署 CNI -- calico (3.10)
+## 部署 CNI -- calico
 
-* https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico
+* https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/
 
 修改 `addons/cni/calico/configMap.yaml` 中的 `192.168.0.0/16` 为 `10.244.0.0/16`(同 `flannel` 一致)
 
-有 [三种方式](https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/calico) 存储 calico 数据,这里采用第一种 `Installing with the Kubernetes API datastore—50 nodes or less`
+有 [三种方式](https://docs.projectcalico.org/getting-started/kubernetes/self-managed-onprem/) 存储 calico 数据,这里采用第一种 `Installing with the Kubernetes API datastore—50 nodes or less`
 
 #### 修改内核参数
 

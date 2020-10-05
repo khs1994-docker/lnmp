@@ -33,11 +33,11 @@ $ foreach($item in $items){scp ./kubernetes-release/release/v1.19.0-linux-arm64/
 * https://pkgs.org/search/?q=libseccomp
 
 ```bash
-$ curl -L -O http://ftp.cn.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.3-1+b1_arm64.deb
+$ curl -L -O https://mirrors.ustc.edu.cn/debian/pool/main/libs/libseccomp/libseccomp2_2.4.4-1_arm64.deb
 
-$ curl -L -O https://mirrors.ustc.edu.cn/debian/pool/main/libs/libseccomp/libseccomp-dev_2.4.3-1+b1_arm64.deb
+$ curl -L -O https://mirrors.ustc.edu.cn/debian/pool/main/libs/libseccomp/libseccomp-dev_2.4.4-1_arm64.deb
 
-$ sudo dpkg -i libseccomp2_2.4.3-1+b1_arm64.deb libseccomp-dev_2.4.3-1+b1_arm64.deb
+$ sudo dpkg -i libseccomp2_2.4.4-1_arm64.deb libseccomp-dev_2.4.4-1_arm64.deb
 
 # 测试
 $ /opt/k8s/bin/kube-containerd -v

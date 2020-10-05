@@ -156,7 +156,7 @@ pipeline {
 
 ## 结语
 
-免费版本的 CODING DevOps 提供了 `200次/每周` `30分钟/次` 的配额。
+免费版本的 CODING DevOps 提供了 `1000分钟/每月` `最多30分钟/次` 的配额。
 
 由于国内访问 Docker Hub 较缓慢，以上用到的 Docker 仓库替换为了腾讯云容器服务提供的 Docker 仓库，创建 `Buildx` 实例的 `Buildkit` 镜像使用了替换镜像源为腾讯云的 `dockerpracticesig/buildkit:master-tencent`。
 

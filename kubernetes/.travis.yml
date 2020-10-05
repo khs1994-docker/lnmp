@@ -160,7 +160,7 @@ install:
   - export PATH=$PATH:${K8S_ROOT:-/opt/k8s}/bin
   - tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-$(go env GOARCH)/kubernetes
 before_script:
-  - ls -la /etc/systemd/system/
+  - ls -lat /etc/systemd/system/
 
   - sudo systemctl cat etcd
   - sudo systemctl start etcd || CMD_FAILED=1
@@ -402,9 +402,9 @@ after_success:
 
   - sudo crictl version
   - sudo crictl info
-  - sudo ls -la /opt || true
-  - sudo ls -la /opt/k8s || true
-  - sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
+  - sudo ls -lat /opt || true
+  - sudo ls -lat /opt/k8s || true
+  - sudo ls -lat ${K8S_ROOT:-/opt/k8s} || true
   - sudo tree ${K8S_ROOT:-/opt/k8s} -L 5 || true
   - sudo tree /var/log -L 3 || true
   - sudo tree /var/log/pods -L 10 || true

@@ -6,7 +6,7 @@
 * `windows.k8s.khs1994.com` 解析到 Windows IP
 * k8s 入口为 **域名** `wsl2.k8s.khs1994.com:6443` `windows.k8s.khs1994.com:16443(使用 netsh.exe 代理 wsl2 到 windows)`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
-* 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data` WSL 发行版用于存储数据
+* 新建 `wsl-k8s` WSL 发行版用于 k8s 运行，`wsl-k8s-data`（可选）WSL 发行版用于存储数据
 * 接下来会一步一步列出原理,日常使用请查看最后的 **最终脚本 ($ ./wsl2/bin/kube-server)**
 * 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
 
@@ -30,7 +30,7 @@ $ ./lnmp-k8s
 WINDOWS_IP windows.k8s.khs1994.com
 ```
 
-## 新建 `wsl-k8s` `wsl-k8s-data` WSL2 发行版
+## 新建 `wsl-k8s` `wsl-k8s-data(可选)` WSL2 发行版
 
 **必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用以下方法。
 
@@ -45,19 +45,23 @@ $ wsl --import wsl-k8s `
     $(rootfs debian sid) `
     --version 2
 
+# 可选
 $ wsl --import wsl-k8s-data `
     C:/wsl-k8s-data `
     $(rootfs alpine) `
     --version 2
 
-# 测试
+# 测试，如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试
+# 上面的步骤
 
 $ wsl -d wsl-k8s -- uname -a
 
+# 可选
 $ wsl -d wsl-k8s-data -- uname -a
 ```
 
 > 由于 WSL 存储机制，硬盘空间不能回收，我们将数据放到 `wsl-k8s-data`，若不再需要 `wsl-k8s` 直接删除 `wsl-k8s-data` 即可。例如 WSL2 放入一个 10G 文件，即使删除之后，这 10G 空间仍然占用，无法回收。
+> 第二种方案，使用 wsl --mount 挂载一个物理硬盘
 
 ## WSL(wsl-k8s) 修改 APT 源并安装必要软件
 
@@ -93,7 +97,11 @@ $ vim /etc/wsl.conf
 $ wsl --shutdown
 ```
 
-## 挂载 wsl-k8s-data `/dev/sdX` 到 `/wsl/wsl-k8s-data`
+## 挂载 `wsl-k8s` 的 `/wsl/wsl-k8s-data`
+
+> 以下两种方法二选一
+
+### 1. 挂载 wsl-k8s-data `/dev/sdX` 到 `/wsl/wsl-k8s-data`
 
 ```bash
 $ wsl -d wsl-k8s-data df -h
@@ -105,6 +113,35 @@ Filesystem                Size      Used Available Use% Mounted on
 
 $ wsl -d wsl-k8s -u root -- mkdir -p /wsl/wsl-k8s-data
 $ wsl -d wsl-k8s -u root -- mount /dev/sdX /wsl/wsl-k8s-data
+```
+
+### 2. 挂载物理硬盘到 `wsl-k8s` 的 `/wsl/wsl-k8s-data` ( Windows 20226+)
+
+```powershell
+# 以管理员权限打开 powershell
+$ wmic diskdrive list brief
+Caption                 DeviceID            Model                   Partitions  Size
+KINGSTON SA400S37240G   \\.\PHYSICALDRIVE1  KINGSTON SA400S37240G   3           240054796800
+WDC WDS250G1B0A-00H9H0  \\.\PHYSICALDRIVE0  WDC WDS250G1B0A-00H9H0  2           250056737280
+
+$ wsl --mount \\.\PHYSICALDRIVE0 --bare
+```
+
+```bash
+$ wsl -d wsl-k8s
+
+$ lsblk
+
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+loop1    7:1    0   292M  1 loop
+sdd      8:48   0   256G  0 disk /
+sde      8:64   0 232.9G  0 disk
+|-sde1   8:65   0   200M  0 part
+|-sde2   8:66   0 139.5G  0 part
+`-sde3   8:67   0  93.2G  0 part
+
+$ mkdir -p /wsl/wsl-k8s-data/
+$ mount /dev/sde3 /wsl/wsl-k8s-data/
 ```
 
 ## 获取 kubernetes
@@ -150,7 +187,7 @@ $ set -x
 $ source wsl2/.env
 
 $ mkdir -p ${K8S_ROOT:?err}
-$ mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin,log}
+$ mkdir -p ${K8S_ROOT:?err}/{etc/kubernetes/pki,bin}
 $ cp -a wsl2/certs/. ${K8S_ROOT:?err}/etc/kubernetes/pki/
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml ${K8S_ROOT:?err}/etc/kubernetes
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes
@@ -192,7 +229,7 @@ $ ./wsl2/kube-controller-manager start
 $ ./wsl2/kube-scheduler start
 ```
 
-## 使用 supervisord 管理组件
+## 使用 supervisord 管理组件（或者使用 systemd，参考 README.systemd.md）
 
 * http://www.supervisord.org/running.html#running-supervisorctl
 

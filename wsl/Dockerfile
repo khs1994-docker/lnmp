@@ -2,7 +2,7 @@ FROM debian:buster-slim
 
 ################################################################################
 
-ARG PHP_VERSION=7.4.10
+ARG PHP_VERSION=7.4.11
 
 ARG PHP_NUM=74
 

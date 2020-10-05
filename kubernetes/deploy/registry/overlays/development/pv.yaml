@@ -12,7 +12,7 @@ spec:
   accessModes: [ "ReadWriteOnce" ]
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /var/lib/khs1994-docker-lnmp/registry
+    path: /var/lib/k8s/registry
     type: DirectoryOrCreate
   storageClassName: hostpath
 

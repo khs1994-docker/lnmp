@@ -1665,6 +1665,59 @@ Example: ./lnmp-docker composer /app/demo install
     docker-compose -f docker-workspace.yml exec $other
   }
 
+  "mount" {
+    function _get_dev_sdx($type = "ext4") {
+      $dev_sdx = wsl -d $WSL2_DIST -- mount -t $type `| grep PHYSICALDRIVE `| cut -d ' ' -f 1
+
+      return $dev_sdx
+    }
+
+    printInfo "try mount physical disk to WSL2 $WSL2_DIST"
+    wsl -d $WSL2_DIST -u root -- sh -c "mountpoint -q /app"
+
+    if ($?) {
+      printInfo "$WSL2_DIST /app already mount"
+
+      exit
+    }
+
+    if (!($MountPhysicalDiskDeviceID2WSL2 -and $MountPhysicalDiskPartitions2WSL2)) {
+      printError "please set `$MountPhysicalDiskDeviceID2WSL2 and `$MountPhysicalDiskPartitions2WSL2 in .env.ps1"
+
+      exit 1
+    }
+
+    if (!$MountPhysicalDiskType2WSL2) {
+      $MountPhysicalDiskType2WSL2 = "ext4"
+    }
+
+    $dev_sdx = _get_dev_sdx $MountPhysicalDiskType2WSL2
+
+    if (!$dev_sdx) {
+      printInfo "physical disk not mount, I will exec $ wsl --mount ..."
+      start-process "wsl" `
+        -ArgumentList "--mount", "$MountPhysicalDiskDeviceID2WSL2", "--partition", "$MountPhysicalDiskPartitions2WSL2" `
+        -Verb runAs
+
+      sleep 2
+
+      $dev_sdx = _get_dev_sdx $MountPhysicalDiskType2WSL2
+    }
+    else {
+      printInfo "physical disk already mount to $dev_sdx, I will mount $dev_sdx to /app"
+    }
+
+    if (!$dev_sdx) {
+      printError "please re-exec"
+
+      exit 1
+    }
+
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /app"
+    wsl -d $WSL2_DIST -u root -- sh -cx "chown 1000:1000 /app"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mount $dev_sdx /app"
+  }
+
   "^code$" {
     if ($APP_ROOT_SOURCE.Length -gt 53) {
       if ($APP_ROOT_SOURCE.Substring(0, 53) -eq '/run/desktop/mnt/host/wsl/docker-desktop-bind-mounts/') {

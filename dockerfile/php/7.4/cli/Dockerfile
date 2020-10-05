@@ -6,7 +6,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=7.4.10
+ARG PHP_VERSION=7.4.11
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -146,7 +146,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
 ENV PHP_VERSION=${PHP_VERSION}
-# ENV PHP_URL="https://www.php.net/get/php-7.4.10.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.10.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.4.11.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.4.11.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -157,8 +157,8 @@ ENV PHP_VERSION=${PHP_VERSION}
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.4.10-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:7.4.10-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.11-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.4.11-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -212,7 +212,7 @@ RUN --mount=type=bind,from=php:7.4.10-alpine,source=/usr/src,target=/usr/local/s
   && rm -rf /usr/include/gnu-libiconv \
   && cd /usr/src/php \
 # enchant-2.patch
-  && curl -fsSL -o enchant-2.patch https://git.alpinelinux.org/aports/plain/community/php7/enchant-2.patch?id=f09d70c946d9953ab11d45e4345ecd6705c1903c \
+  && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/b315e28b96f16c2a8973a55a736e1e35482203dd/community/php7/enchant-2.patch \
   && patch -p1 < enchant-2.patch \
   && rm -rf enchant-2.patch \
   && ./buildconf --force \
@@ -358,7 +358,7 @@ ENV PECL_EXTENSION \
       https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.4.10-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.11-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \

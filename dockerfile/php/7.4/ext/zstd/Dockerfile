@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=7.4.10
+ARG PHP_VERSION=7.4.11
 ARG USERNAME=khs1994
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-cli-alpine as builder
@@ -20,7 +20,7 @@ ENV EXT_VERSION=0.9.0
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
-RUN --mount=type=bind,from=php:7.4.10-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.4.11-alpine,source=/usr/local/bin,target=/opt/bin,rw \
     set -x \
     && sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .ext_build_deps \
@@ -58,7 +58,9 @@ LABEL org.opencontainers.image.revision=$VCS_REF \
 
 ARG EXT_NAME="zstd"
 
-COPY --from=builder /ext-${EXT_NAME}.tar.gz /srv/
+COPY --from=builder /ext-${EXT_NAME}.tar.gz /srv/${EXT_NAME}/
+
+# test
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine as test
 
@@ -66,7 +68,7 @@ ARG EXT_NAME="zstd"
 
 ARG EXT_RUN_DEPS="zstd-libs"
 
-COPY --from=bundle /srv/ext-${EXT_NAME}.tar.gz /
+COPY --from=bundle /srv/${EXT_NAME}/ext-${EXT_NAME}.tar.gz /
 
 RUN set -x \
     && apk add --no-cache ${EXT_RUN_DEPS} \
@@ -83,6 +85,6 @@ ARG EXT_RUN_DEPS="zstd-libs"
 RUN --mount=type=bind,from=bundle,source=/srv,target=/srv \
     set -x \
     && apk add --no-cache ${EXT_RUN_DEPS} \
-    && tar -zxvf /srv/ext-${EXT_NAME}.tar.gz -C / \
+    && tar -zxvf /srv/${EXT_NAME}/ext-${EXT_NAME}.tar.gz -C / \
     && echo "extension=${EXT_NAME}" > ${PHP_INI_DIR}/conf.d/docker-php-ext-${EXT_NAME}.ini \
     && php -m

@@ -68,8 +68,7 @@ if (!$?) {
 & $PSScriptRoot/supervisorctl update
 & $PSScriptRoot/../kubelet init
 
-_mountKubelet ${K8S_ROOT}/var/lib/khs1994-docker-lnmp /var/lib/khs1994-docker-lnmp
-_mountKubelet ${K8S_ROOT}/var/lib/ci   /var/lib/ci
+_mountKubelet ${K8S_ROOT}/var/lib/k8s   /var/lib/k8s
 
 _mountKubelet ${K8S_ROOT}/var/lib/docker   /var/lib/docker
 

@@ -46,14 +46,19 @@ Function Get-TokenServerAndService([string]$registry = 'registry.hub.docker.com'
 
   # Www-Authenticate	Bearer realm="https://auth.docker.io/token",service="registry.docker.io"
   if ($WWW_Authenticate) {
-    $result = $WWW_Authenticate.split(',').split('=')
+    foreach ($item in $WWW_Authenticate.split(',')) {
+      $type, $value = $item.split('=', 2)
+      $value = $value.replace('"', '')
 
-    if ($result[0] -eq 'Bearer realm') {
-      $tokenServer = $result[1].replace('"', '')
-    }
+      if ($type -eq 'Bearer realm') {
+        $tokenServer = $value
+        continue
+      }
 
-    if ($result[2] -eq 'service') {
-      $tokenService = $result[3].replace('"', '')
+      if ($type -eq 'service') {
+        $tokenService = $value
+        continue
+      }
     }
   }
 
@@ -93,10 +98,14 @@ function Get-DockerRegistryToken([string]$image,
 
   $token_file = Get-CachePath "token/$($image.replace('/','@'))@${action}@$($tokenService.replace(':','-'))"
 
+  if(!$env:DOCKER_TOKEN_EXPIRE_TIME){
+    $env:DOCKER_TOKEN_EXPIRE_TIME=205
+  }
+
   if (Test-Path $token_file) {
     $file_timestrap = (((Get-ChildItem $token_file).LastWriteTime.ToUniversalTime().Ticks - 621355968000000000) / 10000000).tostring().Substring(0, 10)
     $now_timestrap = (([DateTime]::Now.ToUniversalTime().Ticks - 621355968000000000) / 10000000).tostring().Substring(0, 10)
-    if (($now_timestrap - $file_timestrap) -lt 205) {
+    if (($now_timestrap - $file_timestrap) -lt $env:DOCKER_TOKEN_EXPIRE_TIME) {
       # write-host "==> Token file cache find, not expire, use it" -ForegroundColor Green
 
       return (Get-Content $token_file -raw -Encoding utf8).trim()
@@ -136,14 +145,18 @@ function Get-DockerRegistryToken([string]$image,
   # $credential=Get-Credential
 
   try {
+    $tokenServer, $query = $tokenServer.split('?')
+    if ($query) {
+      $query = "&$query"
+    }
     if ($credential) {
       $result = Invoke-WebRequest -Authentication Basic -credential $credential `
-        "${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}" `
+        "${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}${query}" `
         -UserAgent "Docker-Client/19.03.5 (Windows)"
     }
     else {
       $result = Invoke-WebRequest `
-        "${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}" `
+        "${tokenServer}?service=${tokenService}&scope=repository:${image}:${action}${query}" `
         -UserAgent "Docker-Client/19.03.5 (Windows)"
     }
   }
@@ -152,6 +165,8 @@ function Get-DockerRegistryToken([string]$image,
 
     return $null
   }
+
+  # write-host $result
 
   $token = (ConvertFrom-Json $result.Content).token
 

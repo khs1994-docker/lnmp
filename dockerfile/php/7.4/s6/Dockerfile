@@ -1,9 +1,10 @@
 # syntax=docker/dockerfile:experimental
 
-ARG PHP_VERSION=7.4.10
+ARG PHP_VERSION=7.4.11
 ARG USERNAME=khs1994
+ARG BASE=fpm
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-fpm-alpine
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 RUN --mount=type=bind,from=khs1994/s6:2.1.0.0,source=/,target=/tmp/s6 \
     set -x \
@@ -27,7 +28,9 @@ ENV S6_KEEP_ENV=0 \
     S6_READ_ONLY_ROOT=0 \
     S6_SYNC_DISKS=0
 
-ENTRYPOINT ["/s6-init"]
+# ENTRYPOINT ["/s6-init"]
+
+ENTRYPOINT ["s6-svscan", "-t0", "/etc/services.d"]
 
 ARG VCS_REF="unknow"
 

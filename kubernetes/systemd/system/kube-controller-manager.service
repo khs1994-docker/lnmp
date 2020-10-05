@@ -1,0 +1,62 @@
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+Wants=network-online.target network.target
+After=network-online.target network.target
+# Requires=kube-apiserver.service
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+
+[Service]
+
+Environment="K8S_ROOT=/opt/k8s"
+Environment="K8S_CM_HOST=192.168.199.100"
+# Environment="K8S_CM_HOST=%i"
+
+ExecStart=/opt/k8s/bin/kube-controller-manager \
+--profiling \
+--cluster-name=kubernetes \
+--controllers=*,bootstrapsigner,tokencleaner \
+--kube-api-qps=1000 \
+--kube-api-burst=2000 \
+--leader-elect \
+--use-service-account-credentials \
+--concurrent-service-syncs=2 \
+--bind-address=${K8S_CM_HOST} \
+--secure-port=10257 \
+--tls-cert-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager.pem \
+--tls-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/kube-controller-manager-key.pem \
+--authentication-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
+--client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+--requestheader-allowed-names="" \
+--requestheader-client-ca-file=${K8S_ROOT}/etc/kubernetes/pki/front-proxy-ca.pem \
+--requestheader-extra-headers-prefix="X-Remote-Extra-" \
+--requestheader-group-headers=X-Remote-Group \
+--requestheader-username-headers=X-Remote-User \
+--authorization-kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
+--cluster-signing-cert-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+--cluster-signing-key-file=${K8S_ROOT}/etc/kubernetes/pki/ca-key.pem \
+--horizontal-pod-autoscaler-sync-period=10s \
+--concurrent-deployment-syncs=10 \
+--concurrent-gc-syncs=30 \
+--service-cluster-ip-range=10.254.0.0/16,fd00::/108 \
+--pod-eviction-timeout=6m \
+--terminated-pod-gc-threshold=10000 \
+--root-ca-file=${K8S_ROOT}/etc/kubernetes/pki/ca.pem \
+--service-account-private-key-file=${K8S_ROOT}/etc/kubernetes/pki/sa.key \
+--kubeconfig=${K8S_ROOT}/etc/kubernetes/kube-controller-manager.kubeconfig \
+--logtostderr=true \
+--cluster-cidr=10.244.0.0/16,fc00::/48 \
+--allocate-node-cidrs=true \
+--feature-gates="IPv6DualStack=true" \
+--experimental-cluster-signing-duration=876000h \
+--port=0 \
+--v=2
+
+# --cluster-signing-duration=876000h
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -6,6 +6,10 @@ on:
       - master
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
 jobs:
   setup-k8s:
    runs-on: ubuntu-${{matrix.dist}}
@@ -94,8 +98,6 @@ jobs:
          path: ~/.khs1994-docker-lnmp/caches
          key: khs1994-docker-lnmp-caches
      - run: |
-         set -x
-
          uname -a
 
          sudo mount bpffs /sys/fs/bpf -t bpf || true
@@ -120,7 +122,6 @@ jobs:
     #      go-version: '1.15'
      - name: Setup dns
        run: |
-         set -x
          pwd
          #  /home/runner/work/lnmp-k8s/lnmp-k8s
 
@@ -141,7 +142,7 @@ jobs:
          sudo rm -rf /etc/apt/sources.list.d/pgdg.list || true
 
          sudo sestatus || true
-         ls -la ~/.khs1994-docker-lnmp/caches || true
+         ls -lat ~/.khs1994-docker-lnmp/caches || true
          ls -la kubernetes-release/release/ || true
          echo $PATH
 
@@ -159,8 +160,6 @@ jobs:
        name: Is tag event
      - name: Install k8s
        run: |
-         set -x
-
          SERVER_IP=`cat .server_ip`
 
          export KUBERNETES_TYPE=server
@@ -189,11 +188,9 @@ jobs:
          tree kubernetes-release/release/v${CI_KUBERNETES_VERSION}-linux-amd64/kubernetes
      - name: Start k8s
        run: |
-         set -x
-
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
-         ls -la /etc/systemd/system/
+         ls -lat /etc/systemd/system/
 
          sudo systemctl cat etcd
          sudo systemctl start etcd || CMD_FAILED=1
@@ -344,8 +341,6 @@ jobs:
          for id in $(sudo crictl ps -a -q);do sudo crictl logs $id;done || true
      - name: Setup addons
        run: |
-         set -x
-
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
 
          df -h
@@ -395,8 +390,6 @@ jobs:
          # test "${LNMP_K8S_GET}" = "--url" && sudo rm -rf kubernetes-release/release/ || true
      - name: cleanup
        run: |
-         set -x
-
          df -h
 
          sudo rm -rf ${K8S_ROOT:-/opt/k8s}/bin/apiextensions-apiserver
@@ -405,8 +398,6 @@ jobs:
          df -h
      - name: Test k8s
        run: |
-         set -x
-
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          export SERVER_IP=`cat .server_ip`
 
@@ -434,9 +425,9 @@ jobs:
          sudo crictl info
          echo ::endgroup::
 
-         sudo ls -la /opt || true
-         sudo ls -la /opt/k8s || true
-         sudo ls -la ${K8S_ROOT:-/opt/k8s} || true
+         sudo ls -lat /opt || true
+         sudo ls -lat /opt/k8s || true
+         sudo ls -lat ${K8S_ROOT:-/opt/k8s} || true
 
          echo ::group::kubectl get node
          kubectl get node -o yaml

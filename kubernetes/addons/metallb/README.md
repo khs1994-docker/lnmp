@@ -1,4 +1,4 @@
-# [metalLB](https://github.com/danderson/metallb/tree/main/manifests)
+# [metalLB](https://github.com/metallb/metallb/tree/main/manifests)
 
 **LoadBalancer**
 

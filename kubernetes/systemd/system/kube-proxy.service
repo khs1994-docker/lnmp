@@ -1,0 +1,39 @@
+[Unit]
+Description=Kubernetes Kube-Proxy Server
+Documentation=https://github.com/kubernetes/kubernetes
+After=network-online.target network.target
+Wants=network-online.target network.target
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+
+[Service]
+
+ExecStartPre=-/usr/bin/env mkdir -p /opt/k8s/var/lib/kube-proxy
+ExecStartPre=-/usr/bin/env modprobe ip_vs
+ExecStartPre=-/usr/bin/env modprobe ip_vs_rr
+ExecStartPre=-/usr/bin/env modprobe ip_vs_wrr
+ExecStartPre=-/usr/bin/env modprobe ip_vs_sh
+
+# WorkingDirectory=/opt/k8s/var/lib/kube-proxy
+
+Environment="K8S_ROOT=/opt/k8s"
+Environment="NODE_NAME=__NODE_NAME__"
+
+ExecStartPre=-/usr/bin/env sh -c '\
+if [ -f ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml.temp ];then \
+cat ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml.temp \
+| sed -e "s/##NODE_IP##/%i/g" \
+      -e "s!##NODE_NAME##!${NODE_NAME}!g" \
+      -e "s!##K8S_ROOT##!${K8S_ROOT}!g" \
+| tee ${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml;fi'
+
+ExecStart=/opt/k8s/bin/kube-proxy \
+--config=${K8S_ROOT}/etc/kubernetes/kube-proxy.config.yaml \
+--v=2
+
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

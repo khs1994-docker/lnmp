@@ -7,7 +7,7 @@ metadata:
     component: database
 spec:
   hostPath:
-    path: /var/lib/khs1994-docker-lnmp/harbor/postgresql
+    path: /var/lib/k8s/harbor/postgresql
     type: DirectoryOrCreate
   capacity:
     storage: 1Gi
@@ -23,7 +23,7 @@ metadata:
     component: redis
 spec:
   hostPath:
-    path: /var/lib/khs1994-docker-lnmp/harbor/redis
+    path: /var/lib/k8s/harbor/redis
     type: DirectoryOrCreate
   capacity:
     storage: 1Gi
@@ -39,7 +39,7 @@ metadata:
     component: trivy
 spec:
   hostPath:
-    path: /var/lib/khs1994-docker-lnmp/harbor/trivy
+    path: /var/lib/k8s/harbor/trivy
     type: DirectoryOrCreate
   capacity:
     storage: 5Gi

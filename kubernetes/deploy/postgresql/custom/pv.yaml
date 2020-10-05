@@ -10,4 +10,4 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: /var/lib/khs1994-docker-lnmp/postgresql
+    path: /var/lib/k8s/postgresql

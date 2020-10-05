@@ -1,22 +1,25 @@
 # GitHub
 
-192.30.255.116   api.github.com
+140.82.114.5     api.github.com
 151.101.129.69   cdn.sstatic.net
-52.216.226.0     github-cloud.s3.amazonaws.com
-52.216.169.83    github-production-release-asset-2e65be.s3.amazonaws.com
-151.101.229.194  github.global.ssl.fastly.net
+52.216.185.147   github-cloud.s3.amazonaws.com
+52.217.16.124    github-production-release-asset-2e65be.s3.amazonaws.com
+199.232.69.194   github.global.ssl.fastly.net
+# 140.82.114.3
 140.82.112.4     github.com gist.github.com
-151.101.76.133   avatars1.githubusercontent.com avatars2.githubusercontent.com
-151.101.76.133   avatars0.githubusercontent.com avatars3.githubusercontent.com
+199.232.68.133   avatars1.githubusercontent.com avatars2.githubusercontent.com
+199.232.68.133   avatars0.githubusercontent.com avatars3.githubusercontent.com
 # 34.228.249.31  collector.githubapp.com
 # 199.232.28.133 github.githubassets.com
 216.58.199.16    storage.googleapis.com
-140.82.113.10    codeload.github.com
-151.101.108.133  raw.githubusercontent.com
+140.82.112.10    codeload.github.com
+199.232.68.133   raw.githubusercontent.com
 
 172.217.174.209   proxy.golang.org
 
-18.140.75.175    docker.pkg.github.com pkg.github.com
+140.82.114.34     pkg.github.com
+140.82.114.33     ghcr.io
 
+# https://www.ipaddress.com/
 # http://tool.chinaz.com/dns
 # https://site.ip138.com/

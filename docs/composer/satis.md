@@ -24,7 +24,7 @@ $ lnmp-docker satis
 
 `repositories -> options -> ssl` 用来配置自签名证书的信息，如果私有服务器使用的是正规证书，无需配置此项。
 
-* http://www.php.net/manual/en/context.ssl.php
+* https://www.php.net/manual/en/context.ssl.php
 
 ```json
 {

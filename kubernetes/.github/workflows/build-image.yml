@@ -11,6 +11,10 @@ name: build docker iamge
 env:
   DOCKER_CLI_EXPERIMENTAL: enabled
 
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
 jobs:
   ci:
     runs-on: ubuntu-20.04

@@ -1,4 +1,4 @@
-# Deploy Kubernetes on [Fedora CoreOS（FCOS）](https://getfedora.org/en/coreos/download?tab=metal_virtualized&stream=next)
+# Deploy Kubernetes on [Fedora CoreOS（FCOS）](https://getfedora.org/en/coreos/download/?tab=metal_virtualized&stream=next)
 
 ## Overview
 
@@ -155,13 +155,12 @@ $ sudo route add default gw 192.168.199.1
 
 ## More Information
 
-* https://blog.khs1994.com/categories/Docker/CoreOS/
 * [生成 Docker Daemon 远程连接自签名证书文件](https://blog.khs1994.com/docker/dockerd.html)
 * https://github.com/coreos/coreos-kubernetes
 * https://github.com/opsnull/follow-me-install-kubernetes-cluster
 * https://github.com/Mengkzhaoyun/ansible
 * https://github.com/coreos/fcct/blob/master/docs/configuration-v1_0.md
-* http://www.cnblogs.com/mengkzhaoyun/p/7599695.html
+* https://www.cnblogs.com/mengkzhaoyun/p/7599695.html
 * https://coreos.com/os/docs/latest/generate-self-signed-certificates.html
 * https://github.com/cloudflare/cfssl
 * https://docs.fedoraproject.org/en-US/fedora-coreos/getting-started/

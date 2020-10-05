@@ -7,7 +7,7 @@ $CI_HOST="ci.khs1994.com:10000"
 # $ wsl -l
 $DistributionName="Ubuntu-18.04"
 
-$LNMP_PHP_IMAGE="khs1994/php:7.4.10-composer-alpine"
+$LNMP_PHP_IMAGE="khs1994/php:7.4.11-composer-alpine"
 
 $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
@@ -23,3 +23,9 @@ $LNMP_NODE_IMAGE="node:alpine"
 # 项目存储在 WSL2
 # 推荐使用 Ubuntu，其他系统（例如 alpine）可能会遇到错误
 # $WSL2_DIST="Ubuntu"
+
+# 挂载物理硬盘到 WSL2
+# $ wmic diskdrive list brief
+# $MountPhysicalDiskDeviceID2WSL2="\\.\PHYSICALDRIVE0"
+# $MountPhysicalDiskPartitions2WSL2="3"
+# $MountPhysicalDiskType2WSL2="ext4"

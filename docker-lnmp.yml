@@ -98,7 +98,7 @@ services:
   php7:
     &php7
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.10}-fpm-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.11}-fpm-alpine"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       # fpm config
@@ -109,9 +109,11 @@ services:
       - ./config/php/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php:/var/log/php:cached
-      # 以下用于 supervisord
+      # supervisord
       - ./log/supervisord.log:/var/log/supervisord.log:cached
       - ./log/supervisord:/var/log/supervisord:cached
+      # s6
+      - ./config/s6/services.d:/etc/services.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
@@ -145,7 +147,7 @@ services:
   php8:
     &php8
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0beta4}-fpm-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0rc1}-fpm-alpine"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       # fpm config
@@ -156,9 +158,11 @@ services:
       - ./config/php8/docker-php.ini:/usr/local/etc/php/conf.d/docker-php.ini:ro,cached
       # log,etc
       - ./log/php8:/var/log/php:cached
-      # 以下用于 supervisord
-      - ./log/supervisord.log:/var/log/supervisord.log:cached
-      - ./log/supervisord:/var/log/supervisord:cached
+      # supervisord
+      # - ./log/supervisord.log:/var/log/supervisord.log:cached
+      # - ./log/supervisord:/var/log/supervisord:cached
+      # s6
+      - ./config/s6/services.d:/etc/services.d
       - ./config/crontabs/root:/etc/crontabs/root
       - type: volume
         source: zoneinfo-data
@@ -187,7 +191,7 @@ services:
   composer:
     << : *common
     restart: "no"
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.10}-composer-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.11}-composer-alpine"
     volumes:
       - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       - type: volume
@@ -202,7 +206,7 @@ services:
     << : *php7
     networks:
       - backend
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.10}-supervisord-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.11}-supervisord-alpine"
     secrets:
       - source: supervisord_ini
         target: /etc/supervisor.d/supervisord.ini

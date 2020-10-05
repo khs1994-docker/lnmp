@@ -9,7 +9,7 @@ NGINX 主配置文件位于 `./config/etc/nginx/nginx.conf` （一般情况无�
 主要注意的是 [文件路径](path.md) 问题。下面以 `https` 配置为例进行讲解。
 
 ```nginx
-# https://github.com/khs1994-website/nginx-https
+# https://github.com/khs1994-website/https
 
 server {
   listen      80;

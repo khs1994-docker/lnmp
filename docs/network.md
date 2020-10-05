@@ -34,6 +34,7 @@
 
 * `khs1994/php`           => `ccr.ccs.tencentyun.com/khs1994/php`
 * `khs1994/php`           => `registry.cn-beijing.aliyuncs.com/khs1994/php`
+* `khs1994/php`           => `pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php`
 * `khs1994/nginx`         => `ccr.ccs.tencentyun.com/khs1994/nginx`
 * `phpmyadmin`            => `ccr.ccs.tencentyun.com/library-mirror/phpmyadmin`
 * `nginx`                 => `ccr.ccs.tencentyun.com/library-mirror/nginx`
