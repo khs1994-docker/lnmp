@@ -1,6 +1,8 @@
-# 为什么要编译 WSL2 内核
+## 为什么要编译 WSL2 内核
 
-## `kube-proxy` ipvs 模式
+**由于部分必需模块默认没有编译，所以我们必须自定义 WSL2 内核。**
+
+### `kube-proxy` ipvs 模式
 
 * https://github.com/kubernetes/kubernetes/tree/master/pkg/proxy/ipvs
 * https://github.com/khs1994/WSL2-Linux-Kernel
@@ -19,7 +21,7 @@ I1012 17:07:44.441990    7184 server_others.go:149] Using iptables Proxier.
 
 **第二种方法:** 直接新建 `/lib/modules/$(uname -r)/modules.builtin` 文件，文件内容到 `下载安装` 的第 3 步查看
 
-## CNI Calico eBPF
+### CNI Calico eBPF
 
 ## 自己编译
 

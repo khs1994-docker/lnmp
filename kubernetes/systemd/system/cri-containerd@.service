@@ -3,7 +3,9 @@ Description=containerd container runtime for kubernetes
 Documentation=https://containerd.io
 After=network.target local-fs.target
 Wants=network-online.target network.target
-; Conflicts=xxx.service
+
+Conflicts=cri-o.service
+X-Conflicts=kubelet@crio.service
 
 After=kube-apiserver.service
 Before=kubelet.service kubelet@cri-containerd.service

@@ -7,6 +7,13 @@ After=network-online.target
 After=kube-apiserver.service
 Before=kubelet.service kubelet@crio.service
 
+Conflicts=cri-containerd.service \
+cri-containerd@1.3.service \
+cri-containerd@1.4.service \
+cri-containerd@1.5.service
+
+X-Conflicts=kubelet@cri-containerd.service
+
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 # RequiresMountsFor=/wsl/wsl-k8s-data

@@ -10,13 +10,16 @@
 * WSL2 IP 变化时必须重新执行 `./kube-wsl2windows k8s`
 * WSL2 **不要** 自定义 DNS 服务器(/etc/resolv.conf)
 * 与 Docker 桌面版启动的 dockerd on WSL2 冲突，请停止并执行 `$ wsl --shutdown` 后使用本项目
-* **必须** 由于缺少文件 `kube-proxy` 不能使用 `ipvs` 模式，并且容器解析不到外网地址。解决办法请查看 [编译 WSL2 内核](README.KERNEL.md)
 
 ## master
 
 `etcd` `kube-apiserver` `kube-controller-manager` `kube-scheduler`
 
 以上软件部署请参考 [kube-server](00-README.SERVER.md)
+
+## 自定义 WSL2 内核
+
+请查看 [README.KERNEL.md](README.KERNEL.md)
 
 ## 设置 PATH
 

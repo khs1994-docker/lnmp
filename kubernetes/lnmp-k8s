@@ -1058,6 +1058,15 @@ _enable_wsl_k8s_systemd_target(){
     /etc/systemd/system/wsl-k8s.target.wants/${2:-$1}
 }
 
+_handle_etcd_not_support_arch(){
+  # https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
+  if [ "${GOARCH}" = 'arm64' ];then
+    $(_sudo) sed -i -e "s/_ETCD_UNSUPPORTED_ARCH/ETCD_UNSUPPORTED_ARCH/g" \
+        -e "s/__GOARCH__/${GOARCH}/g" \
+        /etc/systemd/system/etcd.service
+  fi
+}
+
 _k8s_install_systemd(){
   print_info "copy systemd unit file $@ ... "
 
@@ -1165,23 +1174,31 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 
-    $(_sudo) mkdir -p /etc/systemd/system/kube-.service.d
+    $(_sudo) mkdir -p /etc/systemd/system/kube-.service.d \
+                      /etc/systemd/system/cri-.service.d \
+                      /etc/systemd/system/etcd.service.d \
+                      /etc/systemd/system/kubelet@.service.d
     {
        echo "[Unit]";
        echo "ConditionVirtualization=wsl";
        echo "ConditionPathIsMountPoint=/wsl/wsl-k8s-data";
        echo "RequiresMountsFor=/wsl/wsl-k8s-data";
-    } | $(_sudo) tee /etc/systemd/system/kube-.service.d/99-default.conf > /dev/null
+    } | $(_sudo) tee /etc/systemd/system/kube-.service.d/99-must-run-in-wsl2.conf \
+                     /etc/systemd/system/cri-.service.d/99-must-run-in-wsl2.conf \
+                     /etc/systemd/system/etcd.service.d/99-must-run-in-wsl2.conf \
+                     /etc/systemd/system/kubelet@.service.d/99-must-run-in-wsl2.conf \
+                     > /dev/null
 
-    $(_sudo) mkdir -p /etc/systemd/system/cri-.service.d
-    {
-       echo "[Unit]";
-       echo "ConditionVirtualization=wsl";
-       echo "ConditionPathIsMountPoint=/wsl/wsl-k8s-data";
-       echo "RequiresMountsFor=/wsl/wsl-k8s-data";
-    } | $(_sudo) tee /etc/systemd/system/cri-.service.d/99-default.conf > /dev/null
+    # $(_sudo) mkdir -p /etc/systemd/system/cri-.service.d
+    # {
+    #    echo "[Unit]";
+    # } | $(_sudo) tee /etc/systemd/system/cri-.service.d/99-must-run-in-wsl2.conf \
+    #                  > /dev/null
 
-  fi
+    $(_sudo) mkdir -p ${K8S_ROOT}/etc/systemd/system/kube-.service.d
+
+    $(_sudo) cp -r kube-.service.d/. ${K8S_ROOT}/etc/systemd/system/kube-.service.d/
+  fi # wsl2 end
 
   $(_sudo) cp -r mount/. /etc/systemd/system/
 
@@ -1193,12 +1210,7 @@ _k8s_install_systemd(){
 
   cd - > /dev/null
 
-  # https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
-  if [ "${GOARCH}" = 'arm64' ];then
-    $(_sudo) sed -i -e "s/_ETCD_UNSUPPORTED_ARCH/ETCD_UNSUPPORTED_ARCH/g" \
-        -e "s/__GOARCH__/${GOARCH}/g" \
-        /etc/systemd/system/etcd.service
-  fi
+  _handle_etcd_not_support_arch
 
   $(_sudo) systemctl daemon-reload || true
 }

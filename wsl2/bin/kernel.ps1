@@ -1,7 +1,8 @@
 $tips = "You MUST edit $HOME\.wslconfig to custom kernel path, please see $HOME\lnmp\wsl2\config\.wslconfig"
 
 $WSL_DIST = 'wsl-k8s'
-$kernelversion = "4.19.128"
+$defaultKernelVersion = $(Write-Output $(Get-Content $PSScriptRoot/../kernel.version))
+$kernelversion = $defaultKernelVersion
 
 if ($env:WSL_DIST) {
   $WSL_DIST = $env:WSL_DIST
@@ -24,7 +25,8 @@ config    Open $HOME\.wslconfig
 
 ENV:
 
-`$env:WSL_KERNEL_VERSION  default is [ 4.19.128 ] , more version see https://github.com/khs1994/WSL2-Linux-Kernel/releases
+`$env:WSL_KERNEL_VERSION  default is [ $defaultKernelVersion ]
+                         more version see https://github.com/khs1994/WSL2-Linux-Kernel/releases
 `$env:WSL_DIST            default is [ wsl-k8s ]
 
 "
@@ -32,7 +34,7 @@ ENV:
   exit
 }
 
-if($args[0] -eq 'config'){
+if ($args[0] -eq 'config') {
   notepad.exe $HOME\.wslconfig
 
   exit

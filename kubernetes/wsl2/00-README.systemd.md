@@ -2,7 +2,7 @@
 
 ## 初始化（仅需执行一次）
 
-### 1. 启用 systemd
+### 1. 配置 systemd
 
 * https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.systemd.md
 
@@ -29,9 +29,13 @@ $ WSL2_SYSTEMD=1 ./lnmp-k8s _k8s_install_systemd
 
 ## 日常使用
 
+**1. 挂载 `/wsl/wsl-k8s-data`**
+
 ```powershell
 $ ./wsl2/bin/kube-check
 ```
+
+**2. 配置 hosts**
 
 > 脚本 **需要** 管理员权限(弹出窗口,点击确定)写入 wsl2hosts 到 `C:\Windows\System32\drivers\etc\hosts`
 
@@ -39,7 +43,7 @@ $ ./wsl2/bin/kube-check
 $ ./wsl2/bin/wsl2host --write
 ```
 
-**手动签署 CSR**
+**3. 手动签署 CSR**
 
 由于 WSL2 IP 不能固定, 每次重启时 **必须** 签署 kubelet 证书:
 
@@ -53,7 +57,7 @@ csr-9pvrm   23s    kubernetes.io/kubelet-serving                 system:node:wsl
 
 根据提示 **签署** 证书,一般为最后一个
 
-**开始使用**
+**4. 开始使用**
 
 ```powershell
 $ kubectl CMD
