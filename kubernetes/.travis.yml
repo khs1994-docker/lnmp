@@ -285,7 +285,7 @@ before_script:
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
       cat addons/cni/calico-eBPF/kubernetes.yaml \
-          | sed -e "s/192.168.199.100/${SERVER_IP}/g" -e "s/16443/6443/g" \
+          | sed -e "s/wsl2.k8s.khs1994.com/${SERVER_IP}/g" \
           | kubectl apply -f -
       kubectl apply -k addons/cni/calico-eBPF
     else

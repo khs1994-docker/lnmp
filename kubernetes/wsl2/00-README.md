@@ -1,4 +1,4 @@
-# WSL2 Kubernetes 节点 ($ ./wsl2/bin/kube-node)
+# WSL2 Kubernetes 节点
 
 ## 注意事项
 
@@ -18,9 +18,7 @@
 
 以上软件部署请参考 [kube-server](00-README.SERVER.md)
 
-## node
-
-### 设置 PATH
+## 设置 PATH
 
 ```bash
 $ wsl -d wsl-k8s
@@ -30,7 +28,7 @@ $ vim ~/.bashrc
 export PATH=/wsl/wsl-k8s-data/k8s/bin:$PATH
 ```
 
-### 复制文件
+## 复制文件
 
 ```bash
 $ wsl -d wsl-k8s
@@ -50,7 +48,7 @@ $ $items="kubelet.config.yaml","kube-proxy.config.yaml","csr-crb.yaml","kubectl.
 $ foreach($item in $items){cp ./wsl2/certs/$item systemd/certs}
 ```
 
-### join
+## join
 
 ```bash
 $ wsl -d wsl-k8s
@@ -60,26 +58,11 @@ $ debug=1 ./lnmp-k8s join 127.0.0.1 --containerd --skip-cp-k8s-bin
 
 ## 启动 K8S
 
-请查看 `00-README.systemd.md`
+请查看 [00-README.systemd.md](00-README.systemd.md)
 
 ## kubectl
 
-将 WSL2 K8S 配置写入 `~/.kube/config`
-
-```powershell
-$ ./wsl2/bin/kubectl-config-set-cluster
-```
-
-或者 **通过参数** 加载配置文件
-
-```powershell
-# $ kubectl --kubeconfig ./wsl2/certs/kubectl.kubeconfig
-
-# 封装上边的命令
-$ import-module ./wsl2/bin/WSL-K8S.psm1
-
-$ invoke-kubectl
-```
+请查看 [00-README.kubectl.md](00-README.kubectl.md)
 
 ## crictl
 
@@ -102,6 +85,8 @@ $ kubectl apply -f addons/cni/calico-eBPF/kubernetes.yaml
 $ kubectl apply -k addons/cni/calico-eBPF
 ```
 
-> 若不能正确匹配网卡，请修改 `addons/cni/calico/patch.json` 文件中 `IP_AUTODETECTION_METHOD` 变量的值
+> 若不能正确匹配网卡，请修改 [addons/cni/calico/patch.json](../addons/cni/calico/patch.json) 文件中 `IP_AUTODETECTION_METHOD` 变量的值
 
 ### 2. 部署 CoreDNS 等其他组件
+
+> 等待 CNI 处于 `Running` 状态，再部署其他组件。

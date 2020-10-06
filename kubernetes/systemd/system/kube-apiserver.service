@@ -3,17 +3,17 @@ Description=Kubernetes API Server
 Documentation=https://github.com/kubernetes/kubernetes
 Wants=network-online.target network.target
 After=network-online.target network.target
-# Requires=etcd.service
+; Requires=etcd.service
 
 After=etcd.service
 
-# Requires a,          启动该服务，假设a异常退出，该服务仍正常运行
-#                      手动停止 a, 该服务也退出
+; Requires a,          启动该服务，假设a异常退出，该服务仍正常运行
+;                      手动停止 a, 该服务也退出
 
-# Requires + After a , 启动该服务，假设a异常退出，该服务也不会启动
-#                      启动该服务，a因为条件不满足而没有启动，该服务正常运行
+; Requires + After a , 启动该服务，假设a异常退出，该服务也不会启动
+;                      启动该服务，a因为条件不满足而没有启动，该服务正常运行
 
-# BindsTo a,           启动该服务，a因为条件不满足而没有启动，该服务也不会启动
+; BindsTo a,           启动该服务，a因为条件不满足而没有启动，该服务也不会启动
 
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
@@ -21,9 +21,11 @@ After=etcd.service
 [Service]
 Environment="K8S_ROOT=/opt/k8s"
 Environment="KUBE_APISERVER_HOST=192.168.199.100"
-# Environment="KUBE_APISERVER_HOST=%i"
+; Environment="KUBE_APISERVER_HOST=%i"
 Environment="K8S_ETCD_HOST=192.168.199.100"
-Environment="_K8S_ETCD_HOST=windows.k8s.khs1994.com"
+; Environment="_K8S_ETCD_HOST=windows.k8s.khs1994.com"
+; Environment="_K8S_ETCD_HOST=wsl2.k8s.khs1994.com"
+Environment="_K8S_ETCD_HOST=127.0.0.1"
 
 ExecStart=/opt/k8s/bin/kube-apiserver \
 --advertise-address=${KUBE_APISERVER_HOST} \

@@ -11,6 +11,8 @@ $ cd ~/lnmp/wsl2/ubuntu-wsl2-systemd-script
 
 $ wsl -d wsl-k8s
 
+$ apt install sudo
+
 $ bash ubuntu-wsl2-systemd-script.sh
 ```
 
@@ -21,8 +23,8 @@ $ wsl -d wsl-k8s
 
 $ cp -a wsl2/certs/. systemd/certs
 
-$ IS_SYSTEMD=1 ./lnmp-k8s _k8s_install_conf_cp
-$ IS_SYSTEMD=1 ./lnmp-k8s _k8s_install_systemd
+$ WSL2_SYSTEMD=1 ./lnmp-k8s _k8s_install_conf_cp
+$ WSL2_SYSTEMD=1 ./lnmp-k8s _k8s_install_systemd
 ```
 
 ## 日常使用
@@ -35,31 +37,6 @@ $ ./wsl2/bin/kube-check
 
 ```powershell
 $ ./wsl2/bin/wsl2host --write
-```
-
-```powershell
-$ ./wsl2/etcd
-
-# 代理 WSL2 到 Windows 端口
-$ ./wsl2/kube-wsl2windows k8s
-```
-
-```powershell
-$ Import-Module ./wsl2/bin/WSL-K8S.psm1
-$ Get-Command -m wsl-k8s
-
-# 保证 ping 命令正常执行，按 ctrl + c 停止
-$ Invoke-WSLK8S ping wsl2
-
-$ Invoke-WSLK8S systemctl start kube-apiserver
-$ Invoke-WSLK8S systemctl start kube-controller-manager
-$ Invoke-WSLK8S systemctl start kube-scheduler
-
-$ Invoke-WSLK8S systemctl start cri-containerd@1.4
-$ Invoke-WSLK8S systemctl start kubelet@cri-containerd
-
-# 你也可以执行其他命令供调试
-# $ Invoke-WSLK8S CMD
 ```
 
 **手动签署 CSR**
@@ -75,3 +52,32 @@ csr-9pvrm   23s    kubernetes.io/kubelet-serving                 system:node:wsl
 ```
 
 根据提示 **签署** 证书,一般为最后一个
+
+**开始使用**
+
+```powershell
+$ kubectl CMD
+```
+
+## 调试
+
+正常情况下 k8s 各组件会自动启动，你可以执行如下命令进行调试。
+
+```powershell
+$ Import-Module ./wsl2/bin/WSL-K8S.psm1
+$ Get-Command -m wsl-k8s
+
+# 保证 ping 命令正常执行，按 ctrl + c 停止
+$ Invoke-WSLK8S ping wsl2
+
+$ Invoke-WSLK8S systemctl status etcd
+$ Invoke-WSLK8S systemctl status kube-apiserver
+$ Invoke-WSLK8S systemctl status kube-controller-manager
+$ Invoke-WSLK8S systemctl status kube-scheduler
+
+$ Invoke-WSLK8S systemctl status cri-containerd@1.4
+$ Invoke-WSLK8S systemctl status kubelet@cri-containerd
+
+# 你也可以执行其他命令供调试
+# $ Invoke-WSLK8S CMD
+```

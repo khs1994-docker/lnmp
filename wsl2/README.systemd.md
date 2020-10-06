@@ -1,6 +1,8 @@
 ```bash
 $ wsl -d wsl-k8s
 
+$ apt install sudo
+
 $ cd ubuntu-wsl2-systemd-script
 
 $ bash ubuntu-wsl2-systemd-script.sh

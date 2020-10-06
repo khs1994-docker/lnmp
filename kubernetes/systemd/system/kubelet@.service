@@ -20,7 +20,7 @@ var-log-calico.mount \
 var-log-containers.mount \
 var-log-pods.mount
 
-# Requires=var-lib-kubelet.mount
+; Requires=var-lib-kubelet.mount
 BindsTo=etc-containers.mount \
 var-lib-cni.mount \
 var-lib-k8s.mount \
@@ -29,10 +29,10 @@ var-log-calico.mount \
 var-log-containers.mount \
 var-log-pods.mount
 
-# RequiresMountsFor=/var/lib/kubelet
+; RequiresMountsFor=/var/lib/kubelet
 
-# After=cri-containerd@1.4.service
-# Requires=cri-containerd@1.4.service
+; After=cri-containerd@1.4.service
+; Requires=cri-containerd@1.4.service
 
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
@@ -40,10 +40,10 @@ var-log-pods.mount
 
 ConditionFileIsExecutable=/opt/k8s/bin/kubelet
 ConditionFileIsExecutable=/opt/k8s/bin/kubeadm
-# cpu cpuacct io blkio memory devices pids
+; cpu cpuacct io blkio memory devices pids
 ConditionControlGroupController=cpu
 [Service]
-# WorkingDirectory=/opt/k8s/var/lib/kubelet
+; WorkingDirectory=/opt/k8s/var/lib/kubelet
 Environment="NODE_NAME=##NODE_NAME##"
 # Fix me
 Environment="KUBE_APISERVER=##KUBE_APISERVER##"
@@ -54,45 +54,45 @@ ExecStartPre=/opt/k8s/bin/kubeadm version
 ExecStartPre=-/usr/bin/env swapoff -a
 ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# /opt/k8s/var/lib/kubelet /var/lib/kubelet
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; /opt/k8s/var/lib/kubelet /var/lib/kubelet
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
 /opt/k8s/usr/libexec/kubernetes /usr/libexec/kubernetes
 
 ExecStartPre=-/usr/bin/env mount --make-shared /
 ExecStartPre=-/usr/bin/env mount --make-shared /sys
-# ExecStartPre=-/usr/bin/env mount --make-shared /var/lib/kubelet
+; ExecStartPre=-/usr/bin/env mount --make-shared /var/lib/kubelet
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# ${K8S_ROOT}/var/lib/k8s /var/lib/k8s
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; ${K8S_ROOT}/var/lib/k8s /var/lib/k8s
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# ${K8S_ROOT}/var/lib/cni /var/lib/cni
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; ${K8S_ROOT}/var/lib/cni /var/lib/cni
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# ${K8S_ROOT}/var/lib/docker /var/lib/docker
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; ${K8S_ROOT}/var/lib/docker /var/lib/docker
 
 ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-${K8S_ROOT}/opt/cni/bin ##opt/k8s##/opt/cni/bin
+${K8S_ROOT}/opt/cni/bin __opt/k8s__/opt/cni/bin
 ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-${K8S_ROOT}/etc/cni/net.d ##opt/k8s##/etc/cni/net.d
+${K8S_ROOT}/etc/cni/net.d __opt/k8s__/etc/cni/net.d
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# ${K8S_ROOT}/etc/containers /etc/containers
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; ${K8S_ROOT}/etc/containers /etc/containers
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# ${K8S_ROOT}/var/log/containers /var/log/containers
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# ${K8S_ROOT}/var/log/pods /var/log/pods
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; ${K8S_ROOT}/var/log/containers /var/log/containers
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; ${K8S_ROOT}/var/log/pods /var/log/pods
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# ${K8S_ROOT}/var/log/calico /var/log/calico
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; ${K8S_ROOT}/var/log/calico /var/log/calico
 
 ExecStartPre=/usr/bin/env mountpoint /var/lib/kubelet
-ExecStartPre=/usr/bin/env mountpoint ##opt/k8s##/opt/cni/bin
-ExecStartPre=/usr/bin/env mountpoint ##opt/k8s##/etc/cni/net.d
+ExecStartPre=/usr/bin/env mountpoint __opt/k8s__/opt/cni/bin
+ExecStartPre=/usr/bin/env mountpoint __opt/k8s__/etc/cni/net.d
 ExecStartPre=/usr/bin/env mountpoint /usr/libexec/kubernetes
 
 ExecStart=/opt/k8s/bin/kubelet \
@@ -111,11 +111,11 @@ ExecStart=/opt/k8s/bin/kubelet \
 --container-runtime=remote \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 
-# kubelet@cri-containerd
-# kubelet@crio
+; kubelet@cri-containerd
+; kubelet@crio
 
-# ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
-# ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+; ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
+; ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes
 
 Restart=always
@@ -124,7 +124,7 @@ RestartSec=5
 [Install]
 WantedBy=multi-user.target
 WantedBy=wsl-k8s.target
-# Also=cri-containerd@1.4.service
+; Also=cri-containerd@1.4.service
 Also=cri-containerd@.service
 DefaultInstance=cri-containerd
-# Alias=kubelet-alias.service
+; Alias=kubelet-alias.service

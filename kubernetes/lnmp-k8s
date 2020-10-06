@@ -1098,11 +1098,6 @@ _k8s_install_systemd(){
   done
 
   if [ -n "$WSL2_SYSTEMD" ];then
-    $(_sudo) mv /etc/systemd/system/kube-apiserver{.service,@.service}
-    $(_sudo) mv /etc/systemd/system/kube-controller-manager{.service,@.service}
-    $(_sudo) mv /etc/systemd/system/kube-scheduler{.service,@.service}
-    $(_sudo) mv /etc/systemd/system/kube-proxy{.service,@.service}
-
     $(_sudo) cp ../../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
 
     $(_sudo) cp ../../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
@@ -1110,13 +1105,12 @@ _k8s_install_systemd(){
 
     $(_sudo) sed -i \
       -e 's/192.168.199.100/%i/g' \
-      -e 's/2379/12379/g' \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
       -e 's/# ConditionPathIsMountPoint/ConditionPathIsMountPoint/g' \
       -e 's/# BindsTo/BindsTo/g' \
       -e 's/# RequiresMountsFor/RequiresMountsFor/g' \
       -e 's/_K8S_ETCD_HOST/K8S_ETCD_HOST/g' \
-      /etc/systemd/system/kube-apiserver@.service
+      /etc/systemd/system/kube-apiserver.service
 
     $(_sudo) sed -i \
       -e 's/192.168.199.100/%i/g' \
@@ -1125,12 +1119,12 @@ _k8s_install_systemd(){
       -e 's/# ConditionPathIsMountPoint/ConditionPathIsMountPoint/g' \
       -e 's/# BindsTo/BindsTo/g' \
       -e 's/# RequiresMountsFor/RequiresMountsFor/g' \
-      /etc/systemd/system/kube-controller-manager@.service \
-      /etc/systemd/system/kube-scheduler@.service \
-      /etc/systemd/system/kube-proxy@.service
+      /etc/systemd/system/kube-controller-manager.service \
+      /etc/systemd/system/kube-scheduler.service \
+      /etc/systemd/system/kube-proxy.service
 
     $(_sudo) sed -i \
-      's!##opt/k8s##!/opt/k8s!g' \
+      's!__opt/k8s__!/opt/k8s!g' \
       /etc/systemd/system/kubelet@.service
 
     $(_sudo) sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
@@ -1142,21 +1136,24 @@ _k8s_install_systemd(){
       -e 's/# BindsTo/BindsTo/g' \
       -e 's/# RequiresMountsFor/RequiresMountsFor/g' \
       /etc/systemd/system/cri-containerd@.service \
-      /etc/systemd/system/kubelet@.service
+      /etc/systemd/system/kubelet@.service \
+      /etc/systemd/system/etcd.service
 
-    $(_sudo) cat /etc/systemd/system/kube-apiserver@.service | $(_sudo) sed \
-    's/${KUBE_APISERVER_HOST}/${WSL2_IP}/g' \
-    | $(_sudo) tee /etc/systemd/system/kube-apiserver.service > /dev/null
+    $(_sudo) sed -i \
+      's/${KUBE_APISERVER_HOST}/${WSL2_IP}/g' \
+      /etc/systemd/system/kube-apiserver.service
 
-    $(_sudo) cat /etc/systemd/system/kube-controller-manager@.service | $(_sudo) sed \
-    's/${K8S_CM_HOST}/${WSL2_IP}/g' \
-    | $(_sudo) tee /etc/systemd/system/kube-controller-manager.service > /dev/null
+    $(_sudo) sed -i \
+      's/${K8S_CM_HOST}/${WSL2_IP}/g' \
+      /etc/systemd/system/kube-controller-manager.service
 
-    $(_sudo) cat /etc/systemd/system/kube-scheduler@.service | $(_sudo) sed \
-    's/${K8S_S_HOST}/${WSL2_IP}/g' \
-    | $(_sudo) tee /etc/systemd/system/kube-scheduler.service > /dev/null
+    $(_sudo) sed -i \
+      's/${K8S_S_HOST}/${WSL2_IP}/g' \
+      /etc/systemd/system/kube-scheduler.service
 
-    $(_sudo) cp /etc/systemd/system/kube-proxy{@.service,.service}
+    $(_sudo) sed -i \
+      's/${K8S_ETCD_HOST}/127.0.0.1/g' \
+      /etc/systemd/system/etcd.service
 
     $(_sudo) mkdir -p /etc/systemd/system/wsl-k8s.target.wants
 
@@ -1166,6 +1163,7 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-scheduler.service
     _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.4.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
+    _enable_wsl_k8s_systemd_target etcd.service
 
     $(_sudo) mkdir -p /etc/systemd/system/kube-.service.d
     {
@@ -1189,7 +1187,7 @@ _k8s_install_systemd(){
 
   $(_sudo) sed -i \
   -e "s!/opt/k8s!${K8S_ROOT}!g" \
-  -e 's!##opt/k8s##!/opt/k8s!g' \
+  -e 's!__opt/k8s__!/opt/k8s!g' \
   /etc/systemd/system/kube-mkdir@.service \
   $(for item in $(cd mount && ls);do echo /etc/systemd/system/$item;done)
 

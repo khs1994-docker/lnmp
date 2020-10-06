@@ -29,3 +29,8 @@ certificate_manager.go:464] Current certificate is missing requested IP addresse
 ```bash
 $ ps aux --forest
 ```
+
+**某些缺失命令**
+
+* **netstat** `net-tools`
+* **ps** `procps`

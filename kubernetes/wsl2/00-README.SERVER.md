@@ -1,4 +1,4 @@
-# K8s Server on WSL2 ($ ./wsl2/bin/kube-server)
+# K8s Server on WSL2
 
 ## 注意事项
 
@@ -11,7 +11,7 @@
 
 ## Master
 
-* `Etcd` Windows
+* `Etcd` WSL2
 * `kube-wsl2windows` Windows
 * `kube-apiserver` WSL2
 * `kube-controller-manager` WSL2
@@ -44,10 +44,9 @@ $ wsl --import wsl-k8s-data `
     $(rootfs alpine) `
     --version 2
 
-# 测试，如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试
-# 上面的步骤
+# 测试，如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试上面的步骤
 # 如果仍然遇到错误，请将上述命令改为 --version 1
-# 再将 WSL1 转化为 WSL2 $ wsl --set-version wsl-k8s 2
+# 再将 WSL1 转换为 WSL2 $ wsl --set-version wsl-k8s 2
 
 $ wsl -d wsl-k8s -- uname -a
 
@@ -66,7 +65,7 @@ $ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sou
 $ wsl -d wsl-k8s -- apt update
 
 # ps 命令
-$ wsl -d wsl-k8s -- apt install procps
+$ wsl -d wsl-k8s -- apt install procps bash-completion
 ```
 
 ## WSL(wsl-k8s) 配置挂载路径
@@ -187,24 +186,10 @@ $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kuber
 $ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
-## 设置 ~/.kube/config
+## kubectl
 
-**windows**
-
-```powershell
-$ mkdir $home/.kube
-
-$ ./wsl2/bin/kubectl-config-set-cluster
-```
-
-**WSL**
-
-将 K8S 配置写入 WSL `~/.kube/config`
-
-```bash
-$ ./wsl2/bin/kubectl-config-sync
-```
+请查看 [00-README.kubectl.md](00-README.kubectl.md)
 
 ## 启动 K8S
 
-请查看 `00-README.systemd.md`
+请查看 [00-README.systemd.md](00-README.systemd.md)

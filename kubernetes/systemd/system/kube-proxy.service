@@ -17,7 +17,7 @@ ExecStartPre=-/usr/bin/env modprobe ip_vs_rr
 ExecStartPre=-/usr/bin/env modprobe ip_vs_wrr
 ExecStartPre=-/usr/bin/env modprobe ip_vs_sh
 
-# WorkingDirectory=/opt/k8s/var/lib/kube-proxy
+; WorkingDirectory=/opt/k8s/var/lib/kube-proxy
 
 Environment="K8S_ROOT=/opt/k8s"
 Environment="NODE_NAME=__NODE_NAME__"
