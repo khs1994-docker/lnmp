@@ -2,7 +2,7 @@
 
 ## 注意事项
 
-* 本例将 `WSL2` 作为 kube-server 节点,请参考 [WSL2 kube-server](../wsl2/README.SERVER.md)
+* 本例将 `WSL2` 作为 kube-server 节点,请参考 [WSL2 kube-server](../wsl2/00-README.SERVER.md)
 * 树莓派 固定 IP `本文以 192.168.199.101 为例`
 * 由于树莓派只有 `1G` 内存,故 k8s 组件能不放到树莓派就不放到树莓派,组件运行环境查看下方列表
 

@@ -1,10 +1,20 @@
 # WSL2(systemd)
 
-## 启用 systemd
+## 初始化（仅需执行一次）
+
+### 1. 启用 systemd
 
 * https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.systemd.md
 
-## 安装
+```bash
+$ cd ~/lnmp/wsl2/ubuntu-wsl2-systemd-script
+
+$ wsl -d wsl-k8s
+
+$ bash ubuntu-wsl2-systemd-script.sh
+```
+
+### 2. 安装
 
 ```bash
 $ wsl -d wsl-k8s
@@ -30,12 +40,9 @@ $ ./wsl2/bin/wsl2host --write
 ```powershell
 $ ./wsl2/etcd
 
+# 代理 WSL2 到 Windows 端口
 $ ./wsl2/kube-wsl2windows k8s
 ```
-
-**注意事项**
-
-* 不要 enable service (开机自启动)
 
 ```powershell
 $ Import-Module ./wsl2/bin/WSL-K8S.psm1

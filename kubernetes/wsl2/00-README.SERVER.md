@@ -23,12 +23,6 @@
 $ ./lnmp-k8s
 ```
 
-## 修改 windows hosts
-
-```bash
-WINDOWS_IP windows.k8s.khs1994.com
-```
-
 ## 新建 `wsl-k8s` `wsl-k8s-data(可选)` WSL2 发行版
 
 **必须** 使用 Powershell Core 6 以上版本，Windows 自带的 Powershell 无法使用以下方法。
@@ -40,18 +34,20 @@ WINDOWS_IP windows.k8s.khs1994.com
 $ . ../windows/sdk/dockerhub/rootfs
 
 $ wsl --import wsl-k8s `
-    C:/wsl-k8s `
+    $env:LOCALAPPDATA\wsl-k8s `
     $(rootfs debian sid) `
     --version 2
 
 # 可选
 $ wsl --import wsl-k8s-data `
-    C:/wsl-k8s-data `
+    $env:LOCALAPPDATA\wsl-k8s-data `
     $(rootfs alpine) `
     --version 2
 
 # 测试，如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试
 # 上面的步骤
+# 如果仍然遇到错误，请将上述命令改为 --version 1
+# 再将 WSL1 转化为 WSL2 $ wsl --set-version wsl-k8s 2
 
 $ wsl -d wsl-k8s -- uname -a
 
@@ -123,24 +119,21 @@ Caption                 DeviceID            Model                   Partitions  
 KINGSTON SA400S37240G   \\.\PHYSICALDRIVE1  KINGSTON SA400S37240G   3           240054796800
 WDC WDS250G1B0A-00H9H0  \\.\PHYSICALDRIVE0  WDC WDS250G1B0A-00H9H0  2           250056737280
 
-$ wsl --mount \\.\PHYSICALDRIVE0 --bare
+# 以下命令参数值请替换为实际的值
+$ wsl --mount \\.\PHYSICALDRIVE0 --partition 3
 ```
 
 ```bash
 $ wsl -d wsl-k8s
 
-$ lsblk
+$ mount -t ext4
 
-NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-loop1    7:1    0   292M  1 loop
-sdd      8:48   0   256G  0 disk /
-sde      8:64   0 232.9G  0 disk
-|-sde1   8:65   0   200M  0 part
-|-sde2   8:66   0 139.5G  0 part
-`-sde3   8:67   0  93.2G  0 part
+/dev/sdb on / type ext4 (rw,relatime,discard,errors=remount-ro,data=ordered)
+/dev/sda3 on /wsl/PHYSICALDRIVE0p3 type ext4 (rw,relatime)
 
+# /dev/sda3 为物理硬盘，将其挂载到 /wsl/wsl-k8s-data/
 $ mkdir -p /wsl/wsl-k8s-data/
-$ mount /dev/sde3 /wsl/wsl-k8s-data/
+$ mount /dev/sda3 /wsl/wsl-k8s-data/
 ```
 
 ## 获取 kubernetes
@@ -194,22 +187,6 @@ $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kuber
 $ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
-## Windows 启动 Etcd
-
-`lwpm` 安装 Etcd
-
-```powershell
-$ ./wsl2/etcd
-
-$ get-process etcd
-```
-
-## Windows 启动 wsl2windows 代理
-
-```powershell
-$ ./wsl2/kube-wsl2windows k8s
-```
-
 ## 设置 ~/.kube/config
 
 **windows**
@@ -227,3 +204,7 @@ $ ./wsl2/bin/kubectl-config-set-cluster
 ```bash
 $ ./wsl2/bin/kubectl-config-sync
 ```
+
+## 启动 K8S
+
+请查看 `00-README.systemd.md`

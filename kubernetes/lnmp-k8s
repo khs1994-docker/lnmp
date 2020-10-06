@@ -1104,6 +1104,7 @@ _k8s_install_systemd(){
     $(_sudo) mv /etc/systemd/system/kube-proxy{.service,@.service}
 
     $(_sudo) cp ../../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
+
     $(_sudo) cp ../../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
     $(_sudo) cp ../../wsl2/conf/kubelet.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
 
@@ -1390,7 +1391,7 @@ $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
 $ $(_sudo) systemctl start cri-containerd@1.4 (Containerd runtime only)
-$ $(_sudo) systemctl start crio (CRI-O runtime only)
+$ $(_sudo) systemctl start cri-o (CRI-O runtime only)
 "
 }
 
