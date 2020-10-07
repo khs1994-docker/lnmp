@@ -7,11 +7,24 @@ Wants=network-online.target network.target
 Conflicts=cri-o.service
 X-Conflicts=kubelet@crio.service
 
-After=kube-apiserver.service
-Before=kubelet.service kubelet@cri-containerd.service
+Before=kubelet@cri-containerd.service
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 # RequiresMountsFor=/wsl/wsl-k8s-data
+
+After=var-lib-cni.mount \
+var-lib-k8s.mount \
+var-lib-kubelet.mount \
+var-log-calico.mount \
+var-log-containers.mount \
+var-log-pods.mount
+
+BindsTo=var-lib-cni.mount \
+var-lib-k8s.mount \
+var-lib-kubelet.mount \
+var-log-calico.mount \
+var-log-containers.mount \
+var-log-pods.mount
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay br_netfilter

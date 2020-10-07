@@ -7,7 +7,7 @@ RefuseManualStop=yes
 [Service]
 Type=oneshot
 
-ExecStart=/usr/bin/env rm -rf \
-/opt/k8s/etc/kubernetes/pki/kubelet-server-*.pem
+ExecStart=/usr/bin/env sh -cx "rm -rf \
+/opt/k8s/etc/kubernetes/pki/kubelet-server-*.pem"
 
 RemainAfterExit=yes

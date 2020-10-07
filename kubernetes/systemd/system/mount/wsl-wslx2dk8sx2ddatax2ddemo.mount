@@ -11,6 +11,6 @@ Where=/%P
 Type=ext4
 Options=bind
 DirectoryMode=0755
-TimeoutSec=5
+X-TimeoutSec=5
 [Install]
 WantedBy=local-fs.target

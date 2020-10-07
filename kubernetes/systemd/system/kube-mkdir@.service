@@ -10,7 +10,7 @@ RefuseManualStop=yes
 [Service]
 Type=oneshot
 
-ExecStart=/usr/bin/env mkdir -p \
-/opt/k8s/%I
+ExecStart=/usr/bin/env sh -cx "mkdir -p \
+/opt/k8s/%I"
 
 RemainAfterExit=yes

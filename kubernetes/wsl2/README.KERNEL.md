@@ -21,7 +21,7 @@ I1012 17:07:44.441990    7184 server_others.go:149] Using iptables Proxier.
 
 **第二种方法:** 直接新建 `/lib/modules/$(uname -r)/modules.builtin` 文件，文件内容到 `下载安装` 的第 3 步查看
 
-### CNI Calico eBPF
+### CNI Calico eBPF(内核 v5.3+)
 
 ## 自己编译
 
@@ -31,11 +31,10 @@ I1012 17:07:44.441990    7184 server_others.go:149] Using iptables Proxier.
 
 ## 下载安装
 
-1. 进入 https://github.com/khs1994/WSL2-Linux-Kernel/actions
-2. 进入构建结果
-3. 在 `Artifacts`，点击下载(例如 `wsl2-kernel-5.9.0-rc3-microsoft-standard`)
-4. 停止 WSL2 `$ wsl --shutdown`
-5. 解压之后,将 `wsl2Kernel` 放到家目录 `.wsl` 文件夹内(`$home/.wsl`),在 Windows `~/.wslconfig` 中配置 kernel 路径。具体请查看 `~/lnmp/wsl2/config/.wslconfig`
-6. 将 `linux.tar.gz` 解压到 `WSL2` (`$ wsl -d wsl-k8s -u root -- tar -zxvf linux.tar.gz -C /`)
+1. 进入 https://github.com/khs1994/WSL2-Linux-Kernel/releases
+2. 在 `Assets`，下载如下两个文件，例如：`kernel-5.9.0-rc7-microsoft-standard.img` `linux-headers-5.9.0-rc7-microsoft-standard_5.9.0-1_amd64.deb`
+3. 停止 WSL2 `$ wsl --shutdown`
+4. 将 `kernel-5.9.0-rc7-microsoft-standard.img` 放到家目录 `.wsl` 文件夹内(`$home/.wsl`),在 Windows `~/.wslconfig` 中配置 kernel 路径。具体请查看 `~/lnmp/wsl2/config/.wslconfig`
+5. 在 `WSL2` 安装 `linux-headers-5.9.0-rc7-microsoft-standard_5.9.0-1_amd64.deb` (`$ wsl -d wsl-k8s -u root -- dpkg -i linux-headers-5.9.0-rc7-microsoft-standard_5.9.0-1_amd64.deb`)
 
 **或者直接执行 `$ ~/lnmp/wsl2/bin/kernel`**

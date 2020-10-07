@@ -24,7 +24,6 @@ var-log-calico.mount \
 var-log-containers.mount \
 var-log-pods.mount
 
-; Requires=var-lib-kubelet.mount
 BindsTo=etc-containers.mount \
 var-lib-cni.mount \
 var-lib-k8s.mount \
@@ -33,10 +32,8 @@ var-log-calico.mount \
 var-log-containers.mount \
 var-log-pods.mount
 
+; Requires=var-lib-kubelet.mount
 ; RequiresMountsFor=/var/lib/kubelet
-
-; After=cri-containerd@1.4.service
-; Requires=cri-containerd@1.4.service
 
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data

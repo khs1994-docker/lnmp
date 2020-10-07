@@ -45,8 +45,8 @@ $ wsl --import wsl-k8s-data `
     --version 2
 
 # 测试，如果命令不能正确执行，请参考 README.CLEANUP.md 注销 wsl-k8s，重启机器之后再次尝试上面的步骤
-# 如果仍然遇到错误，请将上述命令改为 --version 1
-# 再将 WSL1 转换为 WSL2 $ wsl --set-version wsl-k8s 2
+# 如果仍然遇到错误，请将上述命令改为 --version 1，再将 WSL1 转换为 WSL2 （$ wsl --set-version wsl-k8s 2）
+# 或者先让一个 WSL2 发行版处于运行状态（$ wsl -d ubuntu），再执行上述命令
 
 $ wsl -d wsl-k8s -- uname -a
 

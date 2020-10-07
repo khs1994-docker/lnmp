@@ -78,13 +78,13 @@ if (!$?) {
 
   wsl -d wsl-k8s -u root -- sh -cx "mkdir -p /wsl/wsl-k8s-data"
   wsl -d wsl-k8s -u root -- sh -cx "mount $dev_sdx /wsl/wsl-k8s-data"
-  sleep 1
+  sleep 2
 }
 else {
   write-host "==> WSL dist [ wsl-k8s-data ] or physical disk already mount to [ wsl-k8s ]" -ForegroundColor Green
 }
 
-wsl -d wsl-k8s -- sh -c "mountpoint -q /wsl/wsl-k8s-data"
+wsl -d wsl-k8s -- sh -xc "mountpoint -q /wsl/wsl-k8s-data"
 
 if (!$?) {
   Write-Warning "==> WSL dist [ wsl-k8s-data ] mount error"

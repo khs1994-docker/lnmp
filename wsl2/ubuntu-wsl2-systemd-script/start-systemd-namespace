@@ -11,6 +11,8 @@ if [ "${WSL_DISTRO_NAME}" = 'wsl-k8s' ];then
     mkdir -p /wsl/wsl-k8s-data/k8s/var/log/journal
     mkdir -p /var/log/journal
     mount --bind /wsl/wsl-k8s-data/k8s/var/log/journal /var/log/journal
+
+    sleep 1
   fi
 fi
 
