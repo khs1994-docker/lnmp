@@ -23,7 +23,7 @@ services:
     image: nginx:1.19.3-alpine
 
   rabbitmq:
-    image: rabbitmq:3.8.5-management-alpine
+    image: rabbitmq:3.8.9-management-alpine
 
   postgresql:
     image: postgres:13.0-alpine
@@ -47,7 +47,7 @@ services:
     image: kong:2.1.4-alpine
 
   node:
-    image: node:14.11.0-alpine
+    image: node:14.13.0-alpine
 
   go:
     image: golang:1.15.2-alpine
@@ -56,7 +56,7 @@ services:
     image: alpine:3.12
 
   python:
-    image: python:3.8.5-alpine
+    image: python:3.9.0-alpine
 
   docker-binfmt:
     image: tonistiigi/binfmt:latest
