@@ -13,3 +13,4 @@
 ### Updates:
 
 * [PHP `7.4.11` `7.3.23` `7.2.34`](https://www.php.net/ChangeLog-7.php#7.4.11)
+* [NGINX `1.19.3`](https://nginx.org/en/CHANGES)
