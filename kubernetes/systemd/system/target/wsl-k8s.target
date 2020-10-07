@@ -1,9 +1,7 @@
 [Unit]
-Description=wsl-k8s
+Description=Run Kubernetes on WSL2
 Documentation=https://github.com/khs1994-docker/lnmp-k8s/tree/master/wsl2
-Requires=basic.target
-Wants=basic.target
-After=basic.target
-ConditionVirtualization=wsl
-# RequiresMountsFor=/wsl/wsl-k8s-data
-# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+Requires=wsl.target
+Wants=wsl.target
+After=wsl.target
+BindsTo=wsl.target

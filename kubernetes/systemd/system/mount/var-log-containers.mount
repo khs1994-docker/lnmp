@@ -2,7 +2,9 @@
 Description=mount --bind /opt/k8s/%P /%P
 DefaultDependencies=no
 Conflicts=umount.target
-Before=local-fs.target umount.target
+Before=umount.target
+
+X-Before=local-fs.target
 After=kube-mkdir@%p.service
 Requires=kube-mkdir@%p.service
 

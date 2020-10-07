@@ -107,8 +107,6 @@ ExecStart=/opt/k8s/bin/kubelet \
 --volume-plugin-dir=/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 --v=2 \
-#
-;
 --container-runtime=remote \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 

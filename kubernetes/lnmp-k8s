@@ -1166,7 +1166,9 @@ _k8s_install_systemd(){
 
     $(_sudo) mkdir -p /etc/systemd/system/wsl-k8s.target.wants
 
+    $(_sudo) cp target/wsl.target /etc/systemd/system/
     $(_sudo) cp target/wsl-k8s.target /etc/systemd/system/
+
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
