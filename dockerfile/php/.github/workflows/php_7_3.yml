@@ -181,6 +181,8 @@ jobs:
           echo ::endgroup::
         fi
 
+        ######
+
         if [ "$TYPE" = "COMPOSER" ];then
             echo ::group::Build $TYPE
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \

@@ -180,9 +180,12 @@ jobs:
           echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "SWOOLE" ];then
-          for PHP_EXT in `ls ${FOLDER}/ext`;
-          do
+        if [ "$TYPE" != "SWOOLE" ];then exit 0;fi
+
+        ######
+
+        for PHP_EXT in `ls ${FOLDER}/ext`;
+        do
             echo ::group::Build $PHP_EXT
             options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF"
 
@@ -200,8 +203,7 @@ jobs:
             $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine ";done) \
             --platform ${PLATFORM} --target bundle ${IS_PUSH} ${FOLDER}/ext/${PHP_EXT}
             echo ::endgroup::
-          done
-        fi
+        done
       env:
         GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994
