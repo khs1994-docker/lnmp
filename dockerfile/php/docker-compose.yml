@@ -8,7 +8,7 @@ services:
       args:
         PHP_VERSION: nightly
         IMAGE: alpine
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:nightly-fpm-alpine
 
@@ -18,7 +18,7 @@ services:
       args:
         PHP_VERSION: 7.4.11
         IMAGE: alpine
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_74:-7.4.11}-fpm-alpine
 
@@ -28,7 +28,7 @@ services:
       args:
         PHP_VERSION: ${PHP_VERSION_73:-7.3.23}
         IMAGE: php
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_73:-7.3.23}-fpm-alpine
 
@@ -38,7 +38,7 @@ services:
       args:
         PHP_VERSION: ${PHP_VERSION_72:-7.2.34}
         IMAGE: php
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_72:-7.2.34}-fpm-alpine
 
@@ -48,7 +48,7 @@ services:
       args:
         PHP_VERSION: ${PHP_VERSION_71:-7.1.33}
         IMAGE: php
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_71:-7.1.33}-fpm-alpine
 
@@ -58,7 +58,7 @@ services:
       args:
         PHP_VERSION: ${PHP_VERSION_70:-7.0.33}
         IMAGE: php
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_70:-7.0.33}-fpm-alpine
 
@@ -68,6 +68,6 @@ services:
       args:
         PHP_VERSION: ${PHP_VERSION_56:-5.6.40}
         IMAGE: php
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
       target: php
     image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION_56:-5.6.40}-fpm-alpine

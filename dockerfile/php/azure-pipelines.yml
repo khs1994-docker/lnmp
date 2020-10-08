@@ -238,64 +238,72 @@ jobs:
       --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
       echo $options
 
-      if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
+      if [ "$TYPE" = "UNIT" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine \
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-unit-alpine ";done) \
         --platform ${PLATFORM} \
-        ${IS_PUSH} ${FOLDER}/unit; \
+        ${IS_PUSH} ${FOLDER}/unit
       fi
 
-      if [ "$TYPE" = "SUPERVISORD" ];then docker buildx build $options \
+      if [ "$TYPE" = "SUPERVISORD" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine \
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-supervisord-alpine ";done) \
-        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; \
+        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord
       fi
 
-      if [ "$TYPE" = "COMPOSER" ];then docker buildx build $options \
+      if [ "$TYPE" = "COMPOSER" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine \
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-composer-alpine ";done) \
-        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; \
+        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer
       fi
 
-      if [ "$TYPE" = "SINGLE" ];then docker buildx build $options \
+      if [ "$TYPE" = "SINGLE" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine \
-        ${IS_PUSH} ${FOLDER}/single; \
+        ${IS_PUSH} ${FOLDER}/single
       fi
 
-      if [ "$TYPE" = "SWOOLE" ];then docker buildx build $options \
+      if [ "$TYPE" = "SWOOLE" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine \
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-swoole-alpine ";done) \
-        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole; \
+        --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole
       fi
 
-      if [ "$TYPE" = "FPM" ];then docker buildx build $options \
+      if [ "$TYPE" = "FPM" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
         ${fpmTagOptions} \
         --platform ${PLATFORM} \
-        ${IS_PUSH} ${FOLDER}/fpm; \
+        ${IS_PUSH} ${FOLDER}/fpm
       fi
 
-      if [ "$TYPE" = "CLI" ];then docker buildx build $options \
+      if [ "$TYPE" = "CLI" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine \
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-cli-alpine ";done) \
         --platform ${PLATFORM} \
-        ${IS_PUSH} ${FOLDER}/cli; \
+        ${IS_PUSH} ${FOLDER}/cli
       fi
 
-      if [ "$TYPE" = "PPM" ];then docker buildx build $options \
+      if [ "$TYPE" = "PPM" ];then
+        docker buildx build $options \
         --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
         -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine \
         $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ppm-alpine ";done) \
         --platform ${PLATFORM} \
-        ${IS_PUSH} ${FOLDER}/ppm; \
+        ${IS_PUSH} ${FOLDER}/ppm
       fi
     env:
       DOCKER_HUB_USERNAME: khs1994

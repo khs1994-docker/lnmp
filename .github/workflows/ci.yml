@@ -80,7 +80,6 @@ jobs:
       shell: pwsh
       run: ./lnmp-docker.ps1
     - name: Set ENV
-      shell: bash
       run: |
         echo "$(pwd)" >> $GITHUB_PATH
         echo "$(pwd)/bin" >> $GITHUB_PATH

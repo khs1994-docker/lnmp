@@ -7,7 +7,7 @@ services:
       args:
         # OPENSSL_BRANCH: master
         NGINX_VERSION: ${NGINX_VERSION:-1.19.3}
-        ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
+        ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
         OPENSSL_URL: https://gitee.com/mirrors/boringssl
     image: khs1994/nginx:${NGINX_VERSION:-1.19.3}-alpine
     ports:

@@ -68,7 +68,6 @@ jobs:
         CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
     - run: |
         cp .env.example .env
-        set -ex
 
         echo $GITHUB_REF | grep -q 'refs/tags/' && IS_TAG_EVENT=1 || true
 
@@ -102,56 +101,93 @@ jobs:
         --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
         echo $options
 
-        if [ "$TYPE" = "UNIT" ];then docker buildx build $options \
+        if [ "$TYPE" = "UNIT" ];then
+          echo "::set-output name=type::unit"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine"
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-unit-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-unit-alpine ";done) \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/unit
+          echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "SUPERVISORD" ];then docker buildx build $options \
+        if [ "$TYPE" = "SUPERVISORD" ];then
+          echo "::set-output name=type::supervisord"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine"
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-supervisord-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-supervisord-alpine ";done) \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/supervisord
+          echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "COMPOSER" ];then docker buildx build $options \
+        if [ "$TYPE" = "COMPOSER" ];then
+          echo "::set-output name=type::composer"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine"
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-composer-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-composer-alpine ";done) \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/composer
+          echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "SINGLE" ];then docker buildx build $options \
+        if [ "$TYPE" = "SINGLE" ];then
+          echo "::set-output name=type::single"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine"
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-single-alpine \
-          ${IS_PUSH} ${FOLDER}/single; \
+          ${IS_PUSH} ${FOLDER}/single
+          echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "SWOOLE" ];then docker buildx build $options \
+        if [ "$TYPE" = "SWOOLE" ];then
+          echo "::set-output name=type::swoole"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine"
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-swoole-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-swoole-alpine ";done) \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/swoole
+          echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "FPM" ];then docker buildx build $options \
+        if [ "$TYPE" = "FPM" ];then
+          echo "::set-output name=type::fpm"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine"
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           --target=php -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-fpm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-fpm-alpine ";done) \
           ${fpmTagOptions} \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/fpm
+          echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "CLI" ];then docker buildx build $options \
+        if [ "$TYPE" = "CLI" ];then
+          echo "::set-output name=type::cli"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine"
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-cli-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-cli-alpine ";done) \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/cli
+          echo ::endgroup::
         fi
 
         if [ "$TYPE" = "S6" ];then
+          echo "::set-output name=type::s6"
+          echo "::set-output name=image::$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-s6-alpine"
           echo ::group::Build $TYPE
           docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
@@ -161,11 +197,14 @@ jobs:
           echo ::endgroup::
         fi
 
-        if [ "$TYPE" = "PPM" ];then docker buildx build $options \
+        if [ "$TYPE" = "PPM" ];then
+          echo ::group::Build $TYPE
+          docker buildx build $options \
           --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
           -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ppm-alpine \
           $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ppm-alpine ";done) \
-          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm; \
+          --platform ${PLATFORM} ${IS_PUSH} ${FOLDER}/ppm
+          echo ::endgroup::
         fi
       env:
         GITHUB_EVENT_NAME: ${{github.event_name}}
@@ -179,10 +218,27 @@ jobs:
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php # ghcr.io/khs1994/php
         PHP_VCS_REF: ${{ github.event.inputs.PHP_VCS_REF }}
       name: 'Build Image'
-
+      id: build
     - run: |
         curl -X POST https://hooks.microbadger.com/images/$DOCKER_HUB_USERNAME/php/OMVCEKSr9I0cjhU0DQop3HwjYAc=
       name: 'Trigger hooks'
       env:
         DOCKER_HUB_USERNAME: khs1994
       if: success()
+    - name: Run Snyk to check Docker image for vulnerabilities
+      # Snyk can be used to break the build when it detects vulnerabilities.
+      # In this case we want to upload the issues to GitHub Code Scanning
+      continue-on-error: true
+      uses: snyk/actions/docker@master
+      env:
+        # In order to use the Snyk Action you will need to have a Snyk API token.
+        # More details in https://github.com/snyk/actions#getting-your-snyk-token
+        # or you can signup for free at https://snyk.io/login
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        image: ${{ steps.build.outputs.image }}
+        args: --file=nightly/${{ steps.build.outputs.type }}/Dockerfile
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: snyk.sarif
