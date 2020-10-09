@@ -118,7 +118,7 @@ jobs:
         CONFIG_CRYPTO_USER_API_AEAD=y
 
         # kata container
-        CONFIG_VHOST_VSOCK=y
+        # CONFIG_VHOST_VSOCK=y
         " >> Microsoft/config-wsl
 
         # sudo sed -i "s/microsoft-standard/microsoft-WSL2-standard/g" Microsoft/config-wsl
