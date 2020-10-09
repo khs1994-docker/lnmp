@@ -140,13 +140,13 @@ _php(){
       export PHP_NUM=74
       ;;
 
-    # 8.0.* )
-    #   export PHP_NUM=80
-    #   PHP_VERSION=0.0.0
-    #   ;;
+    8.0.* )
+      export PHP_NUM=80
+      PHP_VERSION=8.0.0
+      ;;
 
     nightly )
-      export PHP_NUM=80
+      export PHP_NUM=81
       PHP_VERSION=0.0.0
       ;;
 

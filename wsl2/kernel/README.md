@@ -6,7 +6,7 @@
 
 如何使用请查看
 
-* https://github.com/khs1994-docker/lnmp/blob/19.03/kubernetes/wsl2/README.KERNEL.md
+* https://github.com/khs1994-docker/lnmp/blob/master/kubernetes/wsl2/README.KERNEL.md
 
 ## 已知问题
 

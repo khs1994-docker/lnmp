@@ -1615,6 +1615,10 @@ Example: ./lnmp-docker composer /app/demo install
   }
 
   "mount" {
+    if (!$WSL2_DIST) {
+      $WSL2_DIST = 'ubuntu'
+    }
+
     function _get_dev_sdx($type = "ext4") {
       $dev_sdx = wsl -d $WSL2_DIST -- mount -t $type `| grep PHYSICALDRIVE `| cut -d ' ' -f 1
 

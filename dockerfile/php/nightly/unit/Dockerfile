@@ -25,8 +25,8 @@ RUN set -x \
                                   linux-headers \
                                   patch \
   \
-  && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/474.diff -O \
-  && patch -p1 < 474.diff \
+  # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/474.diff -O \
+  # && patch -p1 < 474.diff \
   \
   && sed -i "s/libtinfo.so/libisl.so.15.3.0/g"  auto/modules/php \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
