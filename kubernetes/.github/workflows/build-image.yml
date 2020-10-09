@@ -29,8 +29,8 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       - run: |
           docker buildx build \
-          --cache-from=khs1994/k8s-cfssl-cache \
-          --cache-to=khs1994/k8s-cfssl-cache \
+          --cache-from=khs1994/k8s-cfssl:cache \
+          --cache-to=khs1994/k8s-cfssl:cache \
           -t khs1994/k8s-cfssl \
           --push \
           --platform linux/amd64,linux/arm64 \

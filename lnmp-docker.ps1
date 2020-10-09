@@ -80,8 +80,8 @@ Function printInfo() {
   if ($outNull) {
     return
   }
-  Write-Host "`nINFO    " -NoNewLine -ForegroundColor Green
-  Write-Host "$args`n";
+  Write-Host "INFO    " -NoNewLine -ForegroundColor Green
+  Write-Host "$args";
 }
 
 Function getEnvFile() {
@@ -146,24 +146,16 @@ Function printError() {
   if ($outNull) {
     return
   }
-  Write-Host "`nError   " -NoNewLine -ForegroundColor Red
-  Write-Host "$args`n";
-}
-
-Function printInfo() {
-  if ($outNull) {
-    return
-  }
-  Write-Host "`nINFO    " -NoNewLine -ForegroundColor Green
-  Write-Host "$args`n";
+  Write-Host "Error   " -NoNewLine -ForegroundColor Red
+  Write-Host "$args";
 }
 
 Function printWarning() {
   if ($outNull) {
     return
   }
-  Write-Host "`nWarning  " -NoNewLine -ForegroundColor Red
-  Write-Host "$args`n";
+  Write-Host "Warning  " -NoNewLine -ForegroundColor Red
+  Write-Host "$args";
 }
 
 Function _cp_only_not_exists($src, $desc) {
@@ -526,8 +518,10 @@ Function satis() {
 }
 
 Function get_compose_options($compose_files, $isBuild = 0) {
+  $COMPOSE_FILE_ARRAY = @()
+
   Foreach ($compose_file in $compose_files) {
-    $options += " -f $compose_file "
+    $COMPOSE_FILE_ARRAY += $compose_file
   }
   Foreach ($item in $LREW_INCLUDE) {
     $KEY = "LREW_$($item -Replace ('-','_'))_VENDOR".ToUpper();
@@ -556,7 +550,7 @@ Function get_compose_options($compose_files, $isBuild = 0) {
       continue
     }
 
-    if ($env:USE_WSL2_DOCKER_BUT_NOT_RUNNING -eq '1') {
+    if ($env:USE_WSL2_BUT_DOCKER_NOT_RUNNING -eq '1') {
       printError "Docker not running"
       cd $EXEC_CMD_DIR
       exit 1
@@ -564,24 +558,51 @@ Function get_compose_options($compose_files, $isBuild = 0) {
 
     if ($isBuild) {
       if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.build.yml")) {
-        $options += " -f $LREW_INCLUDE_ROOT/docker-compose.yml "
+        $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
         continue
       }
-      $options += " -f $LREW_INCLUDE_ROOT/docker-compose.yml -f $LREW_INCLUDE_ROOT/docker-compose.build.yml "
+      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
+      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.build.yml"
 
       continue
     } # end build
 
     if (!(Test-Path "$LREW_INCLUDE_ROOT/docker-compose.override.yml")) {
-      $options += " -f $LREW_INCLUDE_ROOT/docker-compose.yml "
+      $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
       continue
     }
-    $options += " -f $LREW_INCLUDE_ROOT/docker-compose.yml -f $LREW_INCLUDE_ROOT/docker-compose.override.yml "
+    $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.yml"
+    $COMPOSE_FILE_ARRAY += "$LREW_INCLUDE_ROOT/docker-compose.override.yml"
   }
 
-  $options += " --env-file $LNMP_ENV_FILE "
+  $options += "--env-file $LNMP_ENV_FILE"
 
-  $options += " -f docker-lnmp.include.yml -f docker-workspace.yml"
+  $COMPOSE_FILE_ARRAY += "docker-lnmp.include.yml"
+  $COMPOSE_FILE_ARRAY += "docker-workspace.yml"
+
+  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
+    $COMPOSE_FILE_ARRAY_FULL_PATH = @()
+
+    foreach ($item in $COMPOSE_FILE_ARRAY) {
+      $COMPOSE_FILE_ARRAY_FULL_PATH += (Get-Item $item).FullName
+    }
+
+    $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY_FULL_PATH -join ';'
+
+    $env:WSLENV = 'COMPOSE_FILE/l'
+
+    # __debug
+    # printInfo $(wsl -d ${WSL2_DIST} -- sh -c "echo Load compose files: `$COMPOSE_FILE")
+  }
+  else {
+    $env:COMPOSE_FILE = $COMPOSE_FILE_ARRAY -join ';'
+  }
+
+  # write-host $env:COMPOSE_FILE
+
+  if ($env:USE_WSL2_DOCKER_COMPOSE -eq '1') {
+    return $options
+  }
 
   return $options.split(' ')
 }
@@ -662,111 +683,31 @@ else {
   $APP_ROOT = './app'
 }
 
-function Get-DockerWSLPath([string] $APP_ROOT) {
-  # 获取某个 WSL2 在 Docker WSL2 中的挂载路径
-
-  # 判断 Docker 服务端是否运行
-  $_arch = docker version -f "{{.Server.Arch}}"
-  if ($_arch -ne 'amd64') {
-    throw "Docker not running"
-  }
-
-  if ($APP_ROOT.Length -gt 53) {
-    if ($APP_ROOT.Substring(0, 53) -eq '/run/desktop/mnt/host/wsl/docker-desktop-bind-mounts/') {
-      printInfo "APP_ROOT is docker-desktop WSL2 real path, use it, skip convert"
-
-      return $APP_ROOT
-    }
-  }
-
-  wsl -d ${WSL2_DIST} -u root -- test -d /etc > $null 2>&1
-
-  if (!$?) {
-    printError "WSL2 [ ${WSL2_DIST} ] not exists, please check .env.ps1"
-
-    exit 1
-  }
-
-  wsl -d ${WSL2_DIST} -u root -- test -d ${APP_ROOT}
-
-  if (!$?) {
-    printError WSL2 ${WSL2_DIST} [ ${APP_ROOT} ] is not`'t a dir`, I will try `
-      create it`, please re exec this cli
-
-    wsl -d ${WSL2_DIST} -u root -- mkdir -p ${APP_ROOT}
-    wsl -d ${WSL2_DIST} -u root -- chown 1000:1000 ${APP_ROOT}
-
-    exit 1
-  }
-
-  # $env:USE_WSL2_DOCKER_COMPOSE = '1'
-  if (!(Test-Path $PSScriptRoot/.wsl)) {
-    Set-Content $PSScriptRoot/.wsl '{}'
-  }
-
-  try {
-    $wsl_path_obj = ConvertFrom-Json $(Get-Content $PSScriptRoot/.wsl -raw)
-  }
-  catch {
-    Set-Content $PSScriptRoot/.wsl '{}'
-  }
-
-  try {
-    if ($wsl_path_obj."$WSL2_DIST"."$APP_ROOT") {
-      $APP_ROOT = $wsl_path_obj."$WSL2_DIST"."$APP_ROOT"
-
-      return $APP_ROOT
-    }
-  }
-  catch {
-    # write-host $_.Exception.Message
-  }
-
-  $container_id = docker ps -a -q --filter label=lnmp.khs1994.com/wsl-test
-  if ($container_id) { docker rm -f $container_id > $null 2>&1 }
-
-  $container_id = docker run `
-    -v \\wsl$\${WSL2_DIST}$(${APP_ROOT}.replace('/','\')):/tmp `
-    --label lnmp.khs1994.com/wsl-test `
-    -d busybox sh -c "sleep 120"
-
-  if (!$container_id) {
-    printError "[ $WSL2_DIST ] is not WSL2 or enable [ WSL2 Integration ] in Docker settings"
-
-    exit 1
-  }
-
-  $APP_ROOT = docker inspect $container_id -f "{{(index .Mounts 0).Source}}"
-
-  ConvertTo-Json @{
-    "请不要编辑此文件" = "Don't edit this file"
-    $WSL2_DIST = @{
-      $APP_ROOT_SOURCE = $APP_ROOT
-    }
-  } -Compress | Out-File $PSScriptRoot/.wsl -NoNewline
-
-  if (!$APP_ROOT) {
-    throw "Get APP_ROOT in WSL2 meet error"
-  }
-
-  return $APP_ROOT
-}
-
 $env:USE_WSL2_DOCKER_COMPOSE = '0'
-$env:USE_WSL2_DOCKER_BUT_NOT_RUNNING = '0'
+$env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '0'
 
 # 判断项目是否存储在 WSL2
 
 if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
-  $APP_ROOT_SOURCE = $APP_ROOT
+  $env:USE_WSL2_DOCKER_COMPOSE = '1'
 
-  try {
-    $APP_ROOT = Get-DockerWSLPath $APP_ROOT
+  if (!(Test-Path \\wsl$\ubuntu/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker)) {
+    $env:USE_WSL2_BUT_DOCKER_NOT_RUNNING = '1'
   }
-  catch {
-    printError $_.Exception.Message `, use $APP_ROOT_SOURCE as APP_ROOT
-    $APP_ROOT = $APP_ROOT_SOURCE
+
+  function docker-compose() {
+    # __debug
+    # printInfo "Exec docker-compose in WSL2 ${WSL2_DIST}: $args"
+
+    $COMPOSE_BIN = "/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker-compose"
+    wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $args"
   }
+}
+
+if ($APP_ROOT.Substring(0, 1) -eq '/' -and !($WSL2_DIST)) {
+  printError "APP_ROOT $APP_ROOT start with '/', but `$WSL2_DIST not set in .env.ps1"
+
+  exit 1
 }
 
 # APP_ENV
@@ -784,7 +725,7 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
   printInfo "Use LNMP CLI in $PWD"
   cd $PSScriptRoot
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is WSL2 PATH $APP_ROOT"
+    printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $APP_ROOT"
   }
   else {
     # cd $PSScriptRoot
@@ -797,7 +738,7 @@ if (!(Test-Path cli/khs1994-robot.enc )) {
 else {
   printInfo "Use LNMP CLI in LNMP Root $pwd"
   if ($APP_ROOT.Substring(0, 1) -eq '/' ) {
-    printInfo "APP_ROOT is WSL2 PATH $APP_ROOT"
+    printInfo "APP_ROOT is WSL2 [ $WSL2_DIST ] PATH $APP_ROOT"
   }
   else {
     cd $APP_ROOT
@@ -899,6 +840,8 @@ switch -regex ($command) {
   }
 
   "^build$" {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
+
     if ($other) {
       $services = convert_args_to_string_if_use_wsl2 $other
     }
@@ -912,7 +855,7 @@ switch -regex ($command) {
 
     Write-Host "Build this service image: $services" -ForegroundColor Green
     sleep 3
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel }
+    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options build $service --parallel }
   }
 
   build-config {
@@ -947,6 +890,8 @@ switch -regex ($command) {
   }
 
   build-push {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
+
     if ($other) {
       $services = convert_args_to_string_if_use_wsl2 $other
     }
@@ -960,7 +905,7 @@ switch -regex ($command) {
 
     Write-Host "Push this service image: $services" -ForegroundColor Green
     sleep 3
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service }
+    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options push $service }
   }
 
   build-pull {
@@ -1018,7 +963,7 @@ switch -regex ($command) {
       $services = convert_args_to_string_if_use_wsl2 $other
     }
     else {
-      $services = ${LNMP_SERVICES}
+      $services = convert_args_to_string_if_use_wsl2 ${LNMP_SERVICES}
     }
 
     $options = get_compose_options "docker-lnmp.yml", `
@@ -1034,7 +979,7 @@ switch -regex ($command) {
     $env:USE_WSL2_DOCKER_COMPOSE = '0'
 
     if ($other) {
-      $services = convert_args_to_string_if_use_wsl2 $other
+      $services = $other
     }
     else {
       $services = ${LNMP_SERVICES}
@@ -1053,10 +998,12 @@ switch -regex ($command) {
   }
 
   down {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
+
     $options = get_compose_options "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options down --remove-orphans }
+    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} down --remove-orphans
 
     #@custom
     __lnmp_custom_down
@@ -1089,18 +1036,20 @@ switch -regex ($command) {
   }
 
   swarm-build {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml build $other --parallel
+    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml build $other --parallel
   }
 
   swarm-push {
-    docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml push $other
+    docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f docker-production.yml push $other
   }
 
   restart {
+    $env:USE_WSL2_DOCKER_COMPOSE = '0'
+
     $options = get_compose_options "docker-lnmp.yml", `
       "docker-lnmp.override.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options restart $other }
+    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options restart $other }
     #@custom
     __lnmp_custom_restart $other
   }
@@ -1188,19 +1137,19 @@ switch -regex ($command) {
       "cluster/docker-cluster.mysql.yml", `
       "cluster/docker-cluster.redis.yml"
 
-    & { docker-compose ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up $other }
+    & { docker-compose.exe ${LNMP_COMPOSE_GLOBAL_OPTIONS} $options up $other }
   }
 
   clusterkit-mysql-up {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml up $other
   }
 
   clusterkit-mysql-down {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml down $other
   }
 
   clusterkit-mysql-config {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml config $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.mysql.yml config $other
   }
 
   clusterkit-mysql-exec {
@@ -1216,15 +1165,15 @@ switch -regex ($command) {
   }
 
   clusterkit-memcached-up {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml up $other
   }
 
   clusterkit-memcached-down {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml down $other
   }
 
   clusterkit-memcached-config {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml config $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.memcached.yml config $other
   }
 
   clusterkit-memcached-exec {
@@ -1240,15 +1189,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-up {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml up $other
   }
 
   clusterkit-redis-down {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml down $other
   }
 
   clusterkit-redis-config {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml config $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.yml config $other
   }
 
   clusterkit-redis-exec {
@@ -1264,15 +1213,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-replication-up {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml up $other
   }
 
   clusterkit-redis-replication-down {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml down $other
   }
 
   clusterkit-redis-replication-config {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml config $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.replication.yml config $other
   }
 
   clusterkit-redis-replication-exec {
@@ -1288,15 +1237,15 @@ switch -regex ($command) {
   }
 
   clusterkit-redis-sentinel-up {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml up $other
   }
 
   clusterkit-redis-sentinel-down {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml down $other
   }
 
   clusterkit-redis-sentinel-config {
-    docker-compose --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml config $other
+    docker-compose.exe --project-directory=$PWD ${LNMP_COMPOSE_GLOBAL_OPTIONS} -f cluster/docker-cluster.redis.sentinel.yml config $other
   }
 
   clusterkit-redis-sentinel-exec {
@@ -1719,46 +1668,41 @@ Example: ./lnmp-docker composer /app/demo install
   }
 
   "^code$" {
-    if ($APP_ROOT_SOURCE.Length -gt 53) {
-      if ($APP_ROOT_SOURCE.Substring(0, 53) -eq '/run/desktop/mnt/host/wsl/docker-desktop-bind-mounts/') {
-        $APP_ROOT_SOURCE = $null
+    if ($env:USE_WSL2_DOCKER_COMPOSE -eq '0') {
+      printError "APP_ROOT is not in WSL2, exit"
 
-        if (!$other) {
-          printError "APP_ROOT is real wsl2 docker-desktop path, you must input full path, e.g. $./lnmp-docker code /app/laravel"
-
-          exit 1
-        }
-      }
+      exit 1
     }
+
     if ($other) {
       foreach ($path in $other) {
         if ($path.substring(0, 1) -eq '/') {
           $path = $path.substring(1)
         }
 
-        wsl -d $WSL2_DIST -u root -- test -d $APP_ROOT_SOURCE/$path
+        wsl -d $WSL2_DIST -u root -- test -d $APP_ROOT/$path
         if (!$?) {
           # 不是 dir
           printError WSL2 $WSL2_DIST [ ${APP_ROOT_SOURCE}/${path} ] `
             is not`'t a dir`, [ ${APP_ROOT_SOURCE} ] include this dir:
 
           write-host `n
-          wsl -d $WSL2_DIST -u root -- ls -la $APP_ROOT_SOURCE
+          wsl -d $WSL2_DIST -u root -- ls -la $APP_ROOT
 
           write-host `n`n
 
           exit
         }
-        printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT_SOURCE/$path ]
-        code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE/$path
+        printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT/$path ]
+        code --remote wsl+$WSL2_DIST $APP_ROOT/$path
 
         cd $EXEC_CMD_DIR
 
         exit
       }
     }
-    printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT_SOURCE ]
-    code --remote wsl+$WSL2_DIST $APP_ROOT_SOURCE
+    printInfo Open WSL2 $WSL2_DIST [ $APP_ROOT ]
+    code --remote wsl+$WSL2_DIST $APP_ROOT
   }
 
   default {

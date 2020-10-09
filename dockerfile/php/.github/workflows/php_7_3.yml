@@ -186,12 +186,12 @@ jobs:
         if [ "$TYPE" = "COMPOSER" ];then
             echo ::group::Build $TYPE
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
-              -t $DOCKER_HUB_USERNAME/php-cs-fixer \
+              -t $DOCKER_HUB_USERNAME/php:php-cs-fixer \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --platform ${PLATFORM} ${IS_PUSH} php-cs-fixer
 
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
-              -t $DOCKER_HUB_USERNAME/sami \
+              -t $DOCKER_HUB_USERNAME/php:sami \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --platform ${PLATFORM} ${IS_PUSH} sami
             echo ::endgroup::
