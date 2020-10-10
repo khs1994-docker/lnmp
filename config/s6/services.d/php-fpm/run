@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv sh
+#!/usr/bin/env sh
 
 if test -f ./setup; then
     source ./setup
