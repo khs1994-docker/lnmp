@@ -1,38 +1,38 @@
 function __lnmp_custom_init() {
-  echo ''
+  write-host ''
 }
 
 function __lnmp_custom_backup() {
-  echo ''
+  write-host ''
 }
 
 function __lnmp_custom_restore() {
-  echo ''
+  write-host ''
 }
 
 function __lnmp_custom_cleanup() {
-  echo ''
+  write-host ''
 }
 
 function __lnmp_custom_up() {
-  echo ''
+  write-host ''
 }
 
 function __lnmp_custom_down() {
-  echo ''
+  write-host ''
 }
 
 function __lnmp_custom_pull() {
-  echo ''
+  write-host ''
 }
 
 function __lnmp_custom_restart() {
-  echo ''
+  write-host ''
 }
 
 # 当执行不存在的命令时会调用该函数 `lnmp-dcker no-found-cmd`
 function __lnmp_custom_command() {
-  echo "command [ $args ] not found"
+  write-host "command [" $args "] not found"
 
   # please handle your custom command
 }
