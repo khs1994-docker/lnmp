@@ -1107,6 +1107,8 @@ _k8s_install_systemd(){
   done
 
   if [ -n "$WSL2_SYSTEMD" ];then
+    _etcd_install
+
     $(_sudo) cp ../../wsl2/conf/kube-scheduler.config.yaml.temp ${K8S_ROOT}/etc/kubernetes
 
     $(_sudo) cp ../../wsl2/conf/kube-proxy.config.yaml.temp ${K8S_ROOT}/etc/kubernetes

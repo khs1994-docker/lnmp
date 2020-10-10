@@ -34,3 +34,4 @@ $ ps aux --forest
 
 * **netstat** `net-tools`
 * **ps** `procps`
+* **ip** `iproute2`

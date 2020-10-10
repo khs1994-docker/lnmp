@@ -35,7 +35,7 @@ $ . ../windows/sdk/dockerhub/rootfs
 
 $ wsl --import wsl-k8s `
     $env:LOCALAPPDATA\wsl-k8s `
-    $(rootfs debian sid) `
+    $(rootfs ubuntu 20.04) `
     --version 2
 
 # 可选
@@ -60,7 +60,9 @@ $ wsl -d wsl-k8s-data -- uname -a
 ## WSL(wsl-k8s) 修改 APT 源并安装必要软件
 
 ```powershell
-$ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list
+# $ wsl -d wsl-k8s -- sed -i "s/deb.debian.org/mirrors.tencent.com/g" /etc/apt/sources.list
+$ wsl -d wsl-k8s -- sed -i "s/archive.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
+$ wsl -d wsl-k8s -- sed -i "s/security.ubuntu.com/mirrors.tencent.com/g" /etc/apt/sources.list
 
 $ wsl -d wsl-k8s -- apt update
 
