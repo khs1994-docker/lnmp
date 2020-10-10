@@ -19,5 +19,14 @@
       "targetPort": 22,
       "nodePort": 22
     }
+  },
+  {
+    "op": "replace",
+    "path": "/spec/type",
+    "value": "NodePort"
+  },
+  {
+    "op": "remove",
+    "path": "/spec/externalTrafficPolicy"
   }
 ]

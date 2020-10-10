@@ -1,5 +1,9 @@
 [
   {
+    "op": "remove",
+    "path": "/spec/template/spec/containers/0/args/1"
+  },
+  {
     "op": "add",
     "path": "/spec/template/spec/containers/0/args/-",
     "value": "--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services"

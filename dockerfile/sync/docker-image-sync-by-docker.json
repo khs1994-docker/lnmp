@@ -71,8 +71,8 @@
     "ref": "preview-alpine-3.11"
   },
   {
-    "source": "k8s.gcr.io/ingress-nginx/controller:v0.35.0@sha256:fc4979d8b8443a831c9789b5155cded454cb7de737a8b727bc2ba0106d2eae8b",
-    "dest": "nginx-ingress-controller:v0.35.0@sha256:fc4979d8b8443a831c9789b5155cded454cb7de737a8b727bc2ba0106d2eae8b"
+    "source": "k8s.gcr.io/ingress-nginx/controller:v0.40.2@sha256:46ba23c3fbaafd9e5bd01ea85b2f921d9f2217be082580edc22e6c704a83f02f",
+    "dest": "nginx-ingress-controller:v0.40.2@sha256:46ba23c3fbaafd9e5bd01ea85b2f921d9f2217be082580edc22e6c704a83f02f"
   },
   {
     "source": "k8s.gcr.io/metrics-server/metrics-server:v0.3.7",

@@ -24,10 +24,10 @@ services:
     image: mcr.microsoft.com/oss/kubernetes/pause:1.4.1
 
   calico:
-    image: calico/cni:v3.16.1
+    image: calico/cni:v3.16.3
 
   ingress_nginx:
-    image: k8s.gcr.io/ingress-nginx/controller:v0.35.0
+    image: k8s.gcr.io/ingress-nginx/controller:v0.40.2
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1
