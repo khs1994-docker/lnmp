@@ -1,3 +1,5 @@
+* https://github.com/kubernetes/ingress-nginx/tree/master/deploy/static/provider/cloud
+
 ```yaml
 - name: proxied-udp-53
   port: 53

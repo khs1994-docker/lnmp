@@ -81,10 +81,6 @@ module.exports = {
         'php',
       ],
       '/addons/': [
-        'coredns',
-        'dashboard',
-        'efk',
-        'metrics-server',
         'registry',
       ],
       "/log/": [
