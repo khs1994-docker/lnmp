@@ -5,7 +5,7 @@ on:
     tags:
     - '*'
     branches:
-    - "19.03"
+    - "20.10"
   workflow_dispatch:
 
 name: Sync Git

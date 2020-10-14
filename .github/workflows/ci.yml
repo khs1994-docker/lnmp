@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - "20.10"
     tags:
       - "*"
   pull_request:

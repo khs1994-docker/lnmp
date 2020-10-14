@@ -3,7 +3,7 @@ on:
     tags:
       - '*'
     branches:
-      - 19.03
+      - "20.10"
     # paths:
     #   - '/.github/actions/*'
   workflow_dispatch:

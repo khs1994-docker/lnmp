@@ -17,7 +17,7 @@ env:
   - GOPATH=/home/travis/go
   - PATH=/home/travis/go/bin:$PATH
   # - LNMP_PATH=/home/travis/build/khs1994-docker/lnmp
-  - LNMP_BRANCH=19.03
+  - LNMP_BRANCH=20.10
 
 # jobs:
 #   include:
@@ -99,7 +99,7 @@ jobs:
     #     on:
     #      branch:
     #        - master
-    #        - 19.03
+    #        - 20.10
 
     - stage: tag
       script: |
@@ -544,8 +544,8 @@ jobs:
         - git add .
         - git commit -m "[Config] Update default config" || exit 0
         - git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
-        - git checkout -b 19.03-config
-        - git push github 19.03-config -f
+        - git checkout -b 20.10-config
+        - git push github 20.10-config -f
 
 # stages:
 #   - test
@@ -558,67 +558,67 @@ jobs:
 
 stages:
   - name: development
-    if: branch = "master"
+    if: branch = "20.10"
   - name: arm64-development
-    if: branch = "master"
+    if: branch = "20.10"
   - name: swarm
     if: tag =~ /^(v18)/
   - name: checkConfig
     if: |
-      branch = "19.03"
+      branch = "20.10"
   - name: tag
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   # don't run
   # - name: docs
   #   if: tag =~ /^(vxx)/
   - name: deb
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: rpm
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-72
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-73
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-80
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-nightly
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-debian11-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-ubuntu1804-72
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-ubuntu1804-73
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-ubuntu1804-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-ubuntu2004-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-ubuntu2010-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-ubuntu2004-nightly
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-rhel7-72
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-rhel7-73
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-rhel8-73
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-rhel8-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-fc32-73
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-fc32-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-fc32-80
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-fc32-nightly
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-fc33-nightly
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
   - name: wsl-php-builder-fc34-74
-    if: tag =~ /^(v19)/
+    if: tag =~ /^(v20)/
 
 # branches:
 #   only:

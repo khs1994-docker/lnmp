@@ -5,7 +5,7 @@ on:
     # - '*'
     # Sequence of patterns matched against refs/heads
     branches:
-    - 19.03-pre
+    - 20.10-pre
     # - 'releases/*'   # Push events to branches matching refs/heads/releases/*
   workflow_dispatch:
 
@@ -15,7 +15,7 @@ jobs:
   sync-php:
     runs-on: ubuntu-latest
     if: |
-      github.ref == 'refs/heads/19.03-pre'
+      github.ref == 'refs/heads/20.10-pre'
     steps:
     - uses: actions/checkout@main
       with:

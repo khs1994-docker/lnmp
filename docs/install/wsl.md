@@ -38,6 +38,6 @@ root = /
 $ wsl -- ./lnmp-docker
 ```
 
-# [WSL2](https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.DOCKER.md)
+# [WSL2](https://github.com/khs1994-docker/lnmp/blob/master/wsl2/README.DOCKER.md)
 
 由于 Docker 桌面版启动时间较长，经常出现问题（无法启动），本项目支持 WSL2 Docker。

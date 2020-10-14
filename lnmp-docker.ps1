@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 19.03.16
+.VERSION 20.10.0
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -53,7 +53,7 @@ $env:COMPOSE_FILE = $null
 
 if ($args[0] -eq "install") {
   if (get-command git) {
-    git clone -b 19.03 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
+    git clone -b 20.10 --depth=1 https://github.com/khs1994-docker/lnmp.git $home\lnmp
 
     exit
   }

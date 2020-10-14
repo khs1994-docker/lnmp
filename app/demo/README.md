@@ -10,7 +10,7 @@
 
 如果你使用的是 VSCode 请参考下面的链接。
 
-Windows 用户建议使用 vsCode 远程开发，具体请查看 https://github.com/khs1994-docker/lnmp/tree/19.03/vscode-remote
+Windows 用户建议使用 vsCode 远程开发，具体请查看 https://github.com/khs1994-docker/lnmp/tree/master/vscode-remote
 
 ## Create PHP Application by Composer
 

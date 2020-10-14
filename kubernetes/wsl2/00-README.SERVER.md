@@ -79,7 +79,7 @@ $ wsl -d wsl-k8s
 
 $ apt install curl vim
 
-$ curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/19.03/wsl/config/wsl.conf
+$ curl -o /etc/wsl.conf https://raw.githubusercontent.com/khs1994-docker/lnmp/master/wsl/config/wsl.conf
 
 $ vim /etc/wsl.conf
 ```

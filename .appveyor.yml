@@ -4,7 +4,7 @@ image: Visual Studio 2019
 branches:
   only:
   # - windows
-  - /^19.03$/
+  - /^20.10$/
   - master
   - /v*/
 

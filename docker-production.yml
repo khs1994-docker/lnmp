@@ -369,7 +369,7 @@ services:
       - backend
     environment:
       - APP_ENV=production
-      - LNMP_DOCKER_VERSION=v19.03 x86_64 Docker Swarm
+      - LNMP_DOCKER_VERSION=v20.10 x86_64 Docker Swarm
     # logging: *default-logging
     deploy:
       << : *default-deploy

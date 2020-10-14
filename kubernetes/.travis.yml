@@ -55,7 +55,7 @@ before_install:
   - ifconfig || true
   - pwd
   - df -h
-  - git clone --depth=1 -b 19.03 https://github.com/khs1994-docker/lnmp ~/lnmp
+  - git clone --depth=1 -b 20.10 https://github.com/khs1994-docker/lnmp ~/lnmp
   - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
   - |
@@ -100,7 +100,10 @@ before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=$(go env GOARCH)] https://download.docker.com/linux/ubuntu $(lsb_release -cs) test"
   - sudo apt-get update || true
-  - sudo apt-get -y install docker-ce || sudo apt -f install
+  - apt-cache madison docker-ce | grep 20.10
+  - DOCKER_VERSION=$(apt-cache madison docker-ce | grep 20.10 | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
+  - echo ${DOCKER_VERSION}
+  - sudo apt-get -y install docker-ce=${DOCKER_VERSION} || sudo apt -f install
   - docker --version
   # 升级最新 Docker Compose
   # - docker-compose --version

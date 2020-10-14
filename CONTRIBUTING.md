@@ -5,7 +5,7 @@
 * 在 [GitHub](https://github.com/khs1994-docker/lnmp/fork) 上点击 `fork` 按钮将本仓库 fork 到自己的仓库，如 `yourname/lnmp`，然后 `clone` 到本地。
 
   ```bash
-  $ git clone -b 19.03 git@github.com:yourname/lnmp.git
+  $ git clone -b 20.10 git@github.com:yourname/lnmp.git
 
   $ cd lnmp
 
@@ -21,17 +21,17 @@
 
   $ git commit -a "Fix issue #1: change helo to hello"
 
-  $ git push origin 19.03
+  $ git push origin 20.10
   ```
 
-* 在 [GitHub](https://github.com/khs1994-docker/lnmp) 上提交 `Pull request`，注意请提交到 YY.MM(例如: `19.03`) 分支。
+* 在 [GitHub](https://github.com/khs1994-docker/lnmp) 上提交 `Pull request`，注意请提交到 YY.MM(例如: `20.10`) 分支。
 
 * 请定期更新自己仓库。
 
   ```bash
   $ git fetch upstream
 
-  $ git rebase upstream/19.03
+  $ git rebase upstream/20.10
 
-  $ git push -f origin 19.03
+  $ git push -f origin 20.10
   ```

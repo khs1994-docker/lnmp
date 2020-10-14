@@ -4,7 +4,7 @@
 
 ### 1. 配置 systemd
 
-* https://github.com/khs1994-docker/lnmp/blob/19.03/wsl2/README.systemd.md
+* https://github.com/khs1994-docker/lnmp/blob/master/wsl2/README.systemd.md
 
 ```bash
 $ cd ~/lnmp/wsl2/ubuntu-wsl2-systemd-script
