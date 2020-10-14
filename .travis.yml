@@ -43,10 +43,11 @@ before_install:
 - apt-cache madison docker-ce | grep ${LNMP_BRANCH}
 - DOCKER_VERSION=$(apt-cache madison docker-ce | grep ${LNMP_BRANCH} | head -n 1 | cut -d "|" -f 2 | sed s/[[:space:]]//g)
 - echo ${DOCKER_VERSION}
-- sudo apt-get -y install docker-ce=${DOCKER_VERSION}
+- sudo apt-get -y install docker-ce=${DOCKER_VERSION} docker-ce-cli=${DOCKER_VERSION}
 - sudo cat /etc/docker/daemon.json || true
 - cat /etc/resolv.conf
 - docker version
+- docker info
 
 # 升级最新 Docker Compose
 
