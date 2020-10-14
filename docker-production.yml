@@ -88,6 +88,8 @@ x-php-common:
   configs:
     - source: php_ini
       target: /usr/local/etc/php/php.ini
+    - source: php_ini_include
+      target: /usr/local/etc/php/conf.d/zz-docker-php.ini
     - source: php_fpm_conf_d_zz_docker_conf
       target: /usr/local/etc/php-fpm.d/zz-docker.conf
   secrets:
