@@ -1,6 +1,29 @@
 #!/bin/sh
 
+if [ -f /non-systemd ];then return; fi
+
+if [ "${WSL_DISTRO_NAME}" = 'wsl-k8s' ];then
+  mountpoint -q /wsl/wsl-k8s-data
+  if [ $? != 0 ];then return; fi
+
+  mountpoint -q /var/log/journal
+  if [ $? != 0 ];then
+    mkdir -p /wsl/wsl-k8s-data/k8s/var/log/journal
+    mkdir -p /var/log/journal
+    mount --bind /wsl/wsl-k8s-data/k8s/var/log/journal /var/log/journal
+
+    sleep 1
+  fi
+fi
+
 SYSTEMD_EXE="/lib/systemd/systemd --unit=basic.target"
+
+if [ -f /etc/systemd/system/wsl-k8s.target ];then
+  if [ "${WSL_DISTRO_NAME}" = 'wsl-k8s' ];then
+    SYSTEMD_EXE="/lib/systemd/systemd --unit=wsl-k8s.target"
+  fi
+fi
+
 SYSTEMD_PID="$(ps -eo pid=,args= | awk '$2" "$3=="'"$SYSTEMD_EXE"'" {print $1}')"
 if [ "$LOGNAME" != "4_root" ] && ( [ -z "$SYSTEMD_PID" ] || [ "$SYSTEMD_PID" != "1" ] ); then
     export | sed -e 's/^declare -x //;/^IFS=".*[^"]$/{N;s/\n//}' | \

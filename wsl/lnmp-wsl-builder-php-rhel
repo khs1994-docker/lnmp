@@ -90,21 +90,24 @@ case "$1" in
   7.3.* )
     export PHP_NUM=73
     ;;
+
   7.4.* )
     export PHP_NUM=74
     ;;
-  # 8.0.* )
-  #   export PHP_NUM=80
-  #   export BUILD_FROM_GIT=1
-  #   export PHP_SRC_BRANCH=PHP-8.0
-  #   ;;
-  nightly )
+
+  8.0.* )
     export PHP_NUM=80
+    export BUILD_FROM_GIT=1
+    export PHP_SRC_BRANCH=PHP-8.0
+    ;;
+
+  nightly )
+    export PHP_NUM=81
     export BUILD_FROM_GIT=1
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 8.0 nightly"
     exit 1
 esac
 }

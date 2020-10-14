@@ -3,13 +3,18 @@ on:
   pull_request:
   schedule:
     - cron: '0 0 * * 4'
+  workflow_dispatch:
 
 name: Build
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
 
 jobs:
   build:
     name: Kernel
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
@@ -35,7 +40,6 @@ jobs:
         ref: ${{ matrix.ref }}
       id: build
       run: |
-        set -x
         pwd
 
         if [ -d $PWD/../linux ];then
@@ -114,7 +118,7 @@ jobs:
         CONFIG_CRYPTO_USER_API_AEAD=y
 
         # kata container
-        CONFIG_VHOST_VSOCK=y
+        # CONFIG_VHOST_VSOCK=y
         " >> Microsoft/config-wsl
 
         # sudo sed -i "s/microsoft-standard/microsoft-WSL2-standard/g" Microsoft/config-wsl
@@ -195,8 +199,6 @@ jobs:
       env:
         kernelversion: ${{ steps.build.outputs.kernelversion }}
       run: |
-        set -x
-
         pwd
 
         ls -la
@@ -231,6 +233,8 @@ jobs:
         name: ${{ steps.deb.outputs.DEB_NAME }}
         path: ${{ steps.deb.outputs.DEB_NAME }}
     - uses: docker://pcit/github-release
+      if: |
+        github.event_name != 'pull_request'
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repo: khs1994/WSL2-Linux-Kernel

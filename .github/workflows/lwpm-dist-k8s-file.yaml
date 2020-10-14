@@ -39,19 +39,21 @@ jobs:
         run: |
           echo $ErrorActionPreference
           $ErrorActionPreference = "Continue"
+          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
 
           ./lnmp/windows/lnmp-windows-pm.ps1 dist kubectl@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push kubectl@${env:LWPM_K8S_VERSION}
 
-          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
-          ./lnmp/windows/lnmp-windows-pm.ps1 push khs1994/kubectl@${env:LWPM_K8S_VERSION}
-
-          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
           $env:DOCKER_USERNAME="khs1994"
           rootfs lwpm/kubectl ${env:LWPM_K8S_VERSION} -phase "manifest list"
+
+          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
+          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
+          $NS="khs1994"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubectl@${env:LWPM_K8S_VERSION}
+
           $env:DOCKER_USERNAME="906210846"
-          rootfs khs1994/kubectl ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
+          rootfs $NS/kubectl ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
       - name: handle-kubernetes-server
         shell: pwsh
         env:
@@ -61,19 +63,21 @@ jobs:
         run: |
           echo $ErrorActionPreference
           $ErrorActionPreference = "Continue"
+          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
 
           ./lnmp/windows/lnmp-windows-pm.ps1 dist kubernetes-server@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push kubernetes-server@${env:LWPM_K8S_VERSION}
 
-          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
-          ./lnmp/windows/lnmp-windows-pm.ps1 push khs1994/kubernetes-server@${env:LWPM_K8S_VERSION}
-
-          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
           $env:DOCKER_USERNAME="khs1994"
           rootfs lwpm/kubernetes-server ${env:LWPM_K8S_VERSION} -phase "manifest list"
+
+          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
+          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
+          $NS="khs1994"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-server@${env:LWPM_K8S_VERSION}
+
           $env:DOCKER_USERNAME="906210846"
-          rootfs khs1994/kubernetes-server ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
+          rootfs $NS/kubernetes-server ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
       - name: handle-kubernetes-node
         shell: pwsh
         if: matrix.os == 'ubuntu'
@@ -82,19 +86,21 @@ jobs:
           TENCENT_DOCKER_REGISTRY: useccr.ccs.tencentyun.com
         run: |
           echo $ErrorActionPreference
+          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
 
           ./lnmp/windows/lnmp-windows-pm.ps1 dist kubernetes-node@${env:LWPM_K8S_VERSION}
           ./lnmp/windows/lnmp-windows-pm.ps1 push kubernetes-node@${env:LWPM_K8S_VERSION}
 
-          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
-          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
-          ./lnmp/windows/lnmp-windows-pm.ps1 push khs1994/kubernetes-node@${env:LWPM_K8S_VERSION}
-
-          . ./lnmp/windows/sdk/dockerhub/rootfs.ps1
           $env:DOCKER_USERNAME="khs1994"
           rootfs lwpm/kubernetes-node ${env:LWPM_K8S_VERSION} -phase "manifest list"
+
+          $env:LWPM_DOCKER_USERNAME=$env:TENCENT_DOCKER_USERNAME
+          $env:LWPM_DOCKER_REGISTRY=$env:TENCENT_DOCKER_REGISTRY
+          $NS="khs1994"
+          ./lnmp/windows/lnmp-windows-pm.ps1 push $NS/kubernetes-node@${env:LWPM_K8S_VERSION}
+
           $env:DOCKER_USERNAME="906210846"
-          rootfs khs1994/kubernetes-node ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
+          rootfs $NS/kubernetes-node ${env:LWPM_K8S_VERSION} -registry $env:LWPM_DOCKER_REGISTRY -phase "manifest list"
   trigger-coding-net-ci:
     needs: lwpm-dist-k8s-file
     name: trigger-coding-net-ci

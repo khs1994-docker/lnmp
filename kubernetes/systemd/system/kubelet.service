@@ -1,10 +1,11 @@
 [Unit]
-Description=Kubernetes Kubelet
+Description=Kubernetes Kubelet with Docker
 Documentation=https://github.com/kubernetes/kubernetes
 After=network-online.target network.target
 Wants=network-online.target network.target
-# After=docker.service
-# Requires=docker.service
+; After=docker.service
+; Requires=docker.service
+
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 
@@ -12,7 +13,7 @@ After=var-lib-kubelet.mount
 BindsTo=var-lib-kubelet.mount
 
 [Service]
-# WorkingDirectory=/opt/k8s/var/lib/kubelet
+; WorkingDirectory=/opt/k8s/var/lib/kubelet
 Environment="NODE_NAME=##NODE_NAME##"
 # Fix me
 Environment="KUBE_APISERVER=##KUBE_APISERVER##"
@@ -23,18 +24,18 @@ ExecStartPre=/opt/k8s/bin/kubeadm version
 ExecStartPre=-/usr/bin/env swapoff -a
 ExecStartPre=-/opt/k8s/bin/generate-kubelet-bootstrap-kubeconfig.sh
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# /opt/k8s/var/lib/kubelet /var/lib/kubelet
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; /opt/k8s/var/lib/kubelet /var/lib/kubelet
 
-# ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
-# /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+; ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
+; /opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/ /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 
 ExecStartPre=-/opt/k8s/bin/mount_bind_if_not_mount.sh \
 /opt/k8s/usr/libexec/kubernetes /usr/libexec/kubernetes
 
 ExecStartPre=-/usr/bin/env mount --make-shared /
 ExecStartPre=-/usr/bin/env mount --make-shared /sys
-# ExecStartPre=-/usr/bin/env mount --make-shared /var/lib/kubelet
+; ExecStartPre=-/usr/bin/env mount --make-shared /var/lib/kubelet
 
 ExecStart=/opt/k8s/bin/kubelet \
 --bootstrap-kubeconfig=${K8S_ROOT}/etc/kubernetes/kubelet-bootstrap.kubeconfig \
@@ -55,14 +56,11 @@ $KUBELET_CRI
 # --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2 \
 # --image-pull-progress-deadline=15m \
 
-# --container-runtime=remote \
-# --container-runtime-endpoint=unix:///run/kube-containerd/kube-containerd.sock \
-
-# ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
-# ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+; ExecStopPost=-/usr/bin/env umount /var/lib/kubelet
+; ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
 ExecStopPost=-/usr/bin/env umount /usr/libexec/kubernetes
 
-Restart=on-failure
+Restart=always
 RestartSec=5
 
 [Install]

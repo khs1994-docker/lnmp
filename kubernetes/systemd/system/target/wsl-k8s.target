@@ -1,0 +1,7 @@
+[Unit]
+Description=Run Kubernetes on WSL2
+Documentation=https://github.com/khs1994-docker/lnmp-k8s/tree/master/wsl2
+Requires=wsl.target
+Wants=wsl.target
+After=wsl.target
+BindsTo=wsl.target

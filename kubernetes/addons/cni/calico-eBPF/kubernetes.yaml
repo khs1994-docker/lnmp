@@ -4,5 +4,5 @@ metadata:
   name: kubernetes-services-endpoint
   namespace: kube-system
 data:
-  KUBERNETES_SERVICE_HOST: 192.168.199.100
-  KUBERNETES_SERVICE_PORT: "16443"
+  KUBERNETES_SERVICE_HOST: wsl2.k8s.khs1994.com
+  KUBERNETES_SERVICE_PORT: "6443"

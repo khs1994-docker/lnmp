@@ -18,15 +18,6 @@ $WSL2_DOMAIN_1=""
 $WSL2_DOMAIN_2=""
 # $WSL2_DOMAIN_20=""
 
-# 替换为自己的镜像源，例如 阿里云
-$MY_DOCKER_REGISTRY_MIRROR="my-registry"
-
-$CRI="containerd"
-
-# $CRI="cri-o"
-
-# $CNI_CALICO_EBPF="false"
-
 # 挂载物理硬盘
 # $ wmic diskdrive list brief
 # $MountPhysicalDiskDeviceID2WSL2="\\.\PHYSICALDRIVE0"

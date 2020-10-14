@@ -26,7 +26,7 @@ MERGE_LIST="crictl \
             docker \
             etcd \
             kube-apiserver \
-            kube-containerd \
+            cri-containerd \
             kube-controller-manager \
             kube-nginx \
             kube-proxy \

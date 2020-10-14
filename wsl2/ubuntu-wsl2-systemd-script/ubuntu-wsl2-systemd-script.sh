@@ -1,5 +1,11 @@
 #!/bin/bash
 
+_sudo(){
+  command -v sudo > /dev/null && echo sudo || true
+}
+
+$(_sudo) mkdir -p /etc/sudoers.d
+
 if [ -f /usr/sbin/start-systemd-namespace ] && [ "$1" != "--force" ]; then
   echo "It appears you have already installed the systemd hack."
   echo "To forcibly reinstall, run this script with the \`--force\` parameter."
@@ -31,7 +37,7 @@ function sysdrive_prefix {
 				win_location="$pt"
 				break
 			fi
-		fi 
+		fi
 	done
 
 	if [ $hard_reset -eq 0 ]; then
@@ -44,32 +50,35 @@ function sysdrive_prefix {
 	unset hard_reset
 }
 
-sudo hwclock -s
-sudo apt-get update && sudo apt-get install -yqq daemonize dbus-user-session fontconfig
+$(_sudo) hwclock -s
+$(_sudo) apt-get update && $(_sudo) apt-get install -yqq daemonize dbus-user-session fontconfig
 
-sudo cp "$self_dir/start-systemd-namespace" /usr/sbin/start-systemd-namespace
-sudo cp "$self_dir/enter-systemd-namespace" /usr/sbin/enter-systemd-namespace
-sudo chmod +x /usr/sbin/enter-systemd-namespace
+$(_sudo) cp "$self_dir/start-systemd-namespace" /usr/sbin/start-systemd-namespace
+$(_sudo) cp "$self_dir/enter-systemd-namespace" /usr/sbin/enter-systemd-namespace
+$(_sudo) chmod +x /usr/sbin/enter-systemd-namespace
 
-sudo tee /etc/sudoers.d/systemd-namespace >/dev/null <<EOF
+$(_sudo) tee /etc/sudoers.d/systemd-namespace >/dev/null <<EOF
 Defaults        env_keep += WSLPATH
 Defaults        env_keep += WSLENV
 Defaults        env_keep += WSL_INTEROP
 Defaults        env_keep += WSL_DISTRO_NAME
 Defaults        env_keep += PRE_NAMESPACE_PATH
 Defaults        env_keep += PRE_NAMESPACE_PWD
+
+Defaults        env_keep += WSL2_IP
+
 %sudo ALL=(ALL) NOPASSWD: /usr/sbin/enter-systemd-namespace
 EOF
 
 if ! grep 'start-systemd-namespace' /etc/bash.bashrc >/dev/null; then
-  sudo sed -i 2a"# Start or enter a PID namespace in WSL2\nsource /usr/sbin/start-systemd-namespace\n" /etc/bash.bashrc
+  $(_sudo) sed -i 2a"# Start or enter a PID namespace in WSL2\nsource /usr/sbin/start-systemd-namespace\n" /etc/bash.bashrc
 fi
 
-sudo rm -f /etc/systemd/user/sockets.target.wants/dirmngr.socket
-sudo rm -f /etc/systemd/user/sockets.target.wants/gpg-agent*.socket
-sudo rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.automount
-sudo rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.mount
-sudo rm -f /lib/systemd/system/sysinit.target.wants/systemd-binfmt.service
+$(_sudo) rm -f /etc/systemd/user/sockets.target.wants/dirmngr.socket
+$(_sudo) rm -f /etc/systemd/user/sockets.target.wants/gpg-agent*.socket
+$(_sudo) rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.automount
+$(_sudo) rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.mount
+$(_sudo) rm -f /lib/systemd/system/sysinit.target.wants/systemd-binfmt.service
 
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] && [ "$(head -n1  /proc/sys/fs/binfmt_misc/WSLInterop)" == "enabled" ]; then
   "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx WSLENV BASH_ENV/u

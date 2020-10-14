@@ -2,11 +2,15 @@
 
 * https://github.com/khs1994/WSL2-Linux-Kernel
 
-> 所构建的内核请到 Actions 详情 Artifacts 下载
+> 所构建的内核请到 https://github.com/khs1994/WSL2-Linux-Kernel/releases 或 Actions 详情 Artifacts 下载
 
 如何使用请查看
 
-* https://github.com/khs1994-docker/lnmp/blob/19.03/kubernetes/wsl2/README.KERNEL.md
+* https://github.com/khs1994-docker/lnmp/blob/master/kubernetes/wsl2/README.KERNEL.md
+
+## 已知问题
+
+* 使用最新 Linux 源码编译的内核可能会造成 Docker 桌面版崩溃，推荐使用 https://github.com/microsoft/WSL2-Linux-Kernel/branches 支持的内核版本（例如 **5.4.x** **4.19.x**）
 
 ## .deb
 
@@ -26,6 +30,8 @@
 
 * nfs
 * iscsi
+* ipip (calico CNI)
+* eBPF (calico CNI)
 
 ## 内存回收
 

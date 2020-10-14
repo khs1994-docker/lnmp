@@ -2,5 +2,5 @@
 
 ## kubelet
 
-删除 `conf/kubelet-bootstrap.kubeconfig` `conf/kubelet.kubeconfig`
-删除 `certs/kubelet-client-*` `certs/kubelet-server-*`
+删除 `kubelet-bootstrap.kubeconfig` `kubelet.kubeconfig`
+删除 `pki/kubelet-client-*` `pki/kubelet-server-*`

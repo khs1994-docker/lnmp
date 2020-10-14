@@ -4,7 +4,7 @@ x-build:
   &default-build
   # Dockerfile: my.Dockerfile
   args:
-    ALPINE_URL: mirrors.ustc.edu.cn # dl-cdn.alpinelinux.org
+    ALPINE_URL: mirrors.aliyun.com # dl-cdn.alpinelinux.org
     NPM_REGISTRY: https://registry.npm.taobao.org # https://registry.npmjs.org
 
 x-build-debian:

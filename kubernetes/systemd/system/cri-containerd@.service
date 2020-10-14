@@ -1,0 +1,55 @@
+[Unit]
+Description=containerd container runtime for kubernetes
+Documentation=https://containerd.io
+After=network.target local-fs.target
+Wants=network-online.target network.target
+
+Conflicts=cri-o.service
+X-Conflicts=kubelet@crio.service
+
+Before=kubelet@cri-containerd.service
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+# RequiresMountsFor=/wsl/wsl-k8s-data
+
+After=var-lib-cni.mount \
+var-lib-k8s.mount \
+var-lib-kubelet.mount \
+var-log-calico.mount \
+var-log-containers.mount \
+var-log-pods.mount
+
+BindsTo=var-lib-cni.mount \
+var-lib-k8s.mount \
+var-lib-kubelet.mount \
+var-log-calico.mount \
+var-log-containers.mount \
+var-log-pods.mount
+
+[Service]
+ExecStartPre=-/sbin/modprobe overlay br_netfilter
+
+# %i 表示 @ 后边的字符，例如 cri-containerd@1.4.service , %i 表示 1.4
+
+ExecStart=/opt/k8s/bin/cri-containerd \
+          --config /opt/k8s/etc/cri-containerd/%i/config.toml
+
+Type=notify
+KillMode=process
+Delegate=yes
+LimitNOFILE=infinity
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNPROC=infinity
+LimitCORE=infinity
+# Comment TasksMax if your systemd version does not supports it.
+# Only systemd 226 and above support this version.
+TasksMax=infinity
+
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=wsl-k8s.target
+DefaultInstance=1.4

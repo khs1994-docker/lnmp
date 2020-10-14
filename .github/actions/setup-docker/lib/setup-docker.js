@@ -398,6 +398,10 @@ echo "-- Docker is ready."
   ]);
 
   await core.group('set up buildx', buildx);
+
+  core.startGroup('docker info');
+  await exec.exec('docker', ['info']);
+  core.endGroup();
 }
 
 run().then(() => {

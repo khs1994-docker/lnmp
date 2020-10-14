@@ -2,7 +2,7 @@
 
 ## 注意事项
 
-* 本例将 `WSL2` 作为 kube-server 节点,请参考 [WSL2 kube-server](../wsl2/README.SERVER.md)
+* 本例将 `WSL2` 作为 kube-server 节点,请参考 [WSL2 kube-server](../wsl2/00-README.SERVER.md)
 * 树莓派 固定 IP `本文以 192.168.199.101 为例`
 * 由于树莓派只有 `1G` 内存,故 k8s 组件能不放到树莓派就不放到树莓派,组件运行环境查看下方列表
 
@@ -40,7 +40,7 @@ $ curl -L -O https://mirrors.ustc.edu.cn/debian/pool/main/libs/libseccomp/libsec
 $ sudo dpkg -i libseccomp2_2.4.4-1_arm64.deb libseccomp-dev_2.4.4-1_arm64.deb
 
 # 测试
-$ /opt/k8s/bin/kube-containerd -v
+$ /opt/k8s/bin/cri-containerd -v
 ```
 
 ## 登录到树莓派
@@ -65,7 +65,7 @@ $ sudo chmod +x /opt/k8s/bin/kube{-proxy,let,ctl,adm}
 ```bash
 $ sudo systemctl start kube-proxy
 
-$ sudo systemctl start kube-containerd
+$ sudo systemctl start cri-containerd
 
 $ sudo systemctl start kubelet
 ```

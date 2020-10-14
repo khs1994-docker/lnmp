@@ -1,14 +1,20 @@
 [Unit]
 Description=etcd
 Documentation=https://github.com/etcd-io/etcd
-# Requires= 当前 unit 依赖的
+; Requires= 当前 unit 依赖的
 Wants=network-online.target network.target
 # 我在谁之后启动
 After=network-online.target
-# Befora 我在谁之前启动
-# Conflicts 冲突
-# Condition...：当前 Unit 运行必须满足的条件，否则不会运行
-# Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
+; Befora 我在谁之前启动
+; Conflicts 冲突
+; Condition...：当前 Unit 运行必须满足的条件，否则不会运行
+; Assert...：当前 Unit 运行必须满足的条件，否则会报启动失败
+
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+# RequiresMountsFor=/wsl/wsl-k8s-data
+
+Before=kube-apiserver.service
 
 [Service]
 
@@ -30,7 +36,7 @@ Environment="K8S_ETCD_HOST=192.168.199.100"
 # https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/supported-platform.md
 Environment="_ETCD_UNSUPPORTED_ARCH=__GOARCH__"
 
-ExecStartPre=-/usr/bin/mkdir --parents /opt/k8s/var/lib/etcd
+ExecStartPre=-/usr/bin/env mkdir --parents /opt/k8s/var/lib/etcd
 ExecStartPre=-/usr/bin/env chmod 700 /opt/k8s/var/lib/etcd
 
 ExecStart= /opt/k8s/bin/etcd \
@@ -52,12 +58,12 @@ ExecStart= /opt/k8s/bin/etcd \
   --peer-client-cert-auth=true \
   --peer-trusted-ca-file="${K8S_ROOT}/etc/kubernetes/pki/etcd-ca.pem"
 
-# ExecStartPost
-# ExecReload：重启当前服务时执行的命令
-# ExecStop：停止当前服务时执行的命令
-# ExecStopPost：停止当其服务之后执行的命令
+; ExecStartPost
+; ExecReload：重启当前服务时执行的命令
+; ExecStop：停止当前服务时执行的命令
+; ExecStopPost：停止当其服务之后执行的命令
 [Install]
 WantedBy=multi-user.target
 
-# Alias：当前 Unit 可用于启动的别名
-# Also：当前 Unit 激活（enable）时，会被同时激活的其他 Unit
+; Alias：当前 Unit 可用于启动的别名
+; Also：当前 Unit 激活（enable）时，会被同时激活的其他 Unit

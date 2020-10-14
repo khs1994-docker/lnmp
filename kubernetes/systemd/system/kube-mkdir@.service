@@ -4,10 +4,13 @@ Documentation="https://github.com/khs1994-docker/lnmp-k8s"
 ConditionPathExists=/opt/k8s
 ConditionPathIsDirectory=/opt/k8s
 ConditionDirectoryNotEmpty=/opt/k8s
+
+RefuseManualStart=yes
+RefuseManualStop=yes
 [Service]
 Type=oneshot
 
-ExecStart=/usr/bin/env mkdir -p \
-/opt/k8s/%I
+ExecStart=/usr/bin/env sh -cx "mkdir -p \
+/opt/k8s/%I"
 
 RemainAfterExit=yes

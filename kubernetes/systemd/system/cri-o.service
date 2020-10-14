@@ -1,0 +1,64 @@
+[Unit]
+Description=Container Runtime Interface for OCI (CRI-O)
+Documentation=https://github.com/cri-o/cri-o
+Wants=network-online.target
+After=network-online.target
+
+Before=kubelet@crio.service
+
+Conflicts=cri-containerd.service \
+cri-containerd@1.3.service \
+cri-containerd@1.4.service \
+cri-containerd@1.5.service
+
+X-Conflicts=kubelet@cri-containerd.service
+
+After=etc-containers.mount \
+var-lib-cni.mount \
+var-lib-k8s.mount \
+var-lib-kubelet.mount \
+var-log-calico.mount \
+var-log-containers.mount \
+var-log-pods.mount
+
+BindsTo=etc-containers.mount \
+var-lib-cni.mount \
+var-lib-k8s.mount \
+var-lib-kubelet.mount \
+var-log-calico.mount \
+var-log-containers.mount \
+var-log-pods.mount
+
+# ConditionVirtualization=wsl
+# ConditionPathIsMountPoint=/wsl/wsl-k8s-data
+# RequiresMountsFor=/wsl/wsl-k8s-data
+[Service]
+Type=notify
+EnvironmentFile=-/opt/k8s/etc/sysconfig/crio
+Environment=GOTRACEBACK=crash
+Environment=CONTAINER_PINNS_PATH=/opt/k8s/usr/local/bin/pinns
+Environment=CONTAINER_CONFIG=/opt/k8s/etc/crio/crio.conf
+Environment=CONTAINER_CONFIG_DIR=/opt/k8s/etc/crio/crio.conf.d
+Environment=CONTAINER_HOOKS_DIR=/opt/k8s/usr/local/share/containers/oci/hooks.d
+Environment=CONTAINER_CONMON=/opt/k8s/usr/local/bin/conmon
+Environment="CONTAINER_MANAGE_NS_LIFECYCLE=true"
+Environment="CONTAINER_DROP_INFRA_CTR=true"
+ExecStartPre=-/usr/bin/env mkdir -p /etc/containers
+ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/etc/containers /etc/containers
+ExecStart=/opt/k8s/usr/local/bin/crio \
+          $CRIO_CONFIG_OPTIONS \
+          $CRIO_RUNTIME_OPTIONS \
+          $CRIO_STORAGE_OPTIONS \
+          $CRIO_NETWORK_OPTIONS \
+          $CRIO_METRICS_OPTIONS
+ExecReload=/bin/kill -s HUP $MAINPID
+TasksMax=infinity
+LimitNOFILE=1048576
+LimitNPROC=1048576
+LimitCORE=infinity
+OOMScoreAdjust=-999
+TimeoutStartSec=0
+Restart=on-abnormal
+
+[Install]
+WantedBy=multi-user.target

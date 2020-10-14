@@ -122,19 +122,19 @@ case "$1" in
      export PHP_NUM=74
      ;;
 
-  # 8.0.* )
-  #    export PHP_NUM=80
-  #    export BUILD_FROM_GIT=1
-  #    export PHP_SRC_BRANCH=PHP-8.0
-  #    ;;
+  8.0.* )
+     export PHP_NUM=80
+     export BUILD_FROM_GIT=1
+     export PHP_SRC_BRANCH=PHP-8.0
+     ;;
 
   nightly )
-    export PHP_NUM=80
+    export PHP_NUM=81
     export BUILD_FROM_GIT=1
     ;;
 
   * )
-    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 nightly"
+    echo "ONLY SUPPORT 5.6 7.0 7.1 7.2 7.3 7.4 8.0 nightly"
     exit 1
 esac
 }
@@ -262,6 +262,10 @@ ubuntu_bionic_pkg(){
   echo ""
 }
 
+_test_pkg(){
+  $(_sudo) apt install -y $1 > /dev/null 2>&1 && echo $1 || true
+}
+
 _install_php_run_dep(){
 
     test $host != 'x86_64-linux-gnu' && _build_arm_php_build_dep && return 0
@@ -298,7 +302,8 @@ libkrb5-3 \
 libxpm4 \
 $( $(_sudo) apt install -y libwebp5 > /dev/null 2>&1 && echo libwebp5 ) \
 $( $(_sudo) apt install -y libwebp6 > /dev/null 2>&1 && echo libwebp6 ) \
-libenchant1c2a \
+$( _test_pkg libenchant1c2a ) \
+$( _test_pkg libenchant-2-2 ) \
 libssl1.1 \
 $( $(_sudo) apt install -y libicu55 > /dev/null 2>&1 && echo libicu55) \
 $( $(_sudo) apt install -y libicu57 > /dev/null 2>&1 && echo libicu57) \
@@ -366,7 +371,8 @@ _install_php_build_dep(){
                    \
                    libxpm-dev \
                    libwebp-dev \
-                   libenchant-dev \
+                   $( _test_pkg libenchant-dev ) \
+                   $( _test_pkg libenchant-2-dev ) \
                    libldap2-dev \
                    libpspell-dev \
                    libicu-dev \
@@ -554,7 +560,31 @@ set +e
       fi
     }
 
+    sid_php74_with_enchant2_patch(){
+      # sid only include libenchant-2-2
+      local libenchant2_exists=$(_test_pkg libenchant-2-2)
+
+      if [ "${PHP_NUM}" -lt "74" -a -n "$libenchant2_exists" ];then
+        echo "this os only include libenchant-2-2, PHP 7.3- can't build with libenchant-2-2"
+
+        exit 1
+      fi
+
+      if [ "${PHP_NUM}" -ne "74" ];then return; fi
+
+      if [ -n "$libenchant2_exists" ];then
+        curl -O https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0041-remove-deprecated-call-and-deprecate-function-to-be-.patch
+        curl -O https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0042-Use-libenchant-2-when-available.patch
+
+        patch -p1 < 0041-remove-deprecated-call-and-deprecate-function-to-be-.patch
+        patch -p1 < 0042-Use-libenchant-2-when-available.patch
+
+        ./buildconf --force
+      fi
+    }
+
     buster_patch
+    sid_php74_with_enchant2_patch
 
     if ! [ -f configure ];then ./buildconf --force; fi
 

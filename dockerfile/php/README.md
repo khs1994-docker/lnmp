@@ -186,6 +186,8 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * https://sources.debian.org/src/php7.3/7.3.11-1%7Edeb10u1/debian/control/
 
+* https://sources.debian.org/src/php7.4/7.4.11-1/debian/control/
+
 * https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html
 
 * https://engineering.docker.com/2019/04/multi-arch-images/

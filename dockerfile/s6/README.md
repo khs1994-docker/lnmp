@@ -18,7 +18,7 @@ RUN --mount=type=bind,from=khs1994/s6:2.1.0.0,source=/,target=/tmp/s6 \
 ENTRYPOINT ["/s6-init"]
 ```
 
-对于 `/bin` 是一个软链接的系统，则按照如下方法使用。
+对于 `/bin` 是一个软链接( [usrmerge](https://wiki.debian.org/UsrMerge) )的系统，则按照如下方法使用。
 
 ```bash
 $ ls -la /

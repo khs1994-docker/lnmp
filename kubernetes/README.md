@@ -24,11 +24,9 @@
 
 * [Linux 单机部署(systemd)](systemd)
 
+* [WSL2(systemd)](wsl2)
+
 * [Docker Desktop](docs/setup/docker-desktop.md)
-
-* [Windows(etcd,kube-nginx) + WSL2(master) + 树莓派(node)](rpi)
-
-* [Windows(etcd,kube-nginx) + WSL2(master + node)](wsl2)
 
 ### 其他方案
 

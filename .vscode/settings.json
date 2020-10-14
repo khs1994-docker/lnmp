@@ -57,6 +57,6 @@
     "*.ign": "json",
     "*.fcc": "yaml",
     "*.conflist": "json",
-    "**/system/**.conf": "systemd-unit-file"
+    "**/systemd/**/**.conf": "systemd-unit-file"
   }
 }

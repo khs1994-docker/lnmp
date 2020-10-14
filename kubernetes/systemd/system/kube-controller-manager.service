@@ -3,15 +3,18 @@ Description=Kubernetes Controller Manager
 Documentation=https://github.com/kubernetes/kubernetes
 Wants=network-online.target network.target
 After=network-online.target network.target
-# Requires=kube-apiserver.service
+; Requires=kube-apiserver.service
+
+After=kube-apiserver.service
+
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
-
+# RequiresMountsFor=/wsl/wsl-k8s-data
 [Service]
 
 Environment="K8S_ROOT=/opt/k8s"
 Environment="K8S_CM_HOST=192.168.199.100"
-# Environment="K8S_CM_HOST=%i"
+; Environment="K8S_CM_HOST=%i"
 
 ExecStart=/opt/k8s/bin/kube-controller-manager \
 --profiling \

@@ -25,8 +25,34 @@ if ! command -v /usr/bin/unshare > /dev/null; then
 fi
 
 SYSTEMD_EXE="/lib/systemd/systemd --unit=basic.target"
+
+if [ -f /etc/systemd/system/wsl-k8s.target ];then
+  if [ "${WSL_DISTRO_NAME}" = 'wsl-k8s' ];then
+    SYSTEMD_EXE="/lib/systemd/systemd --unit=wsl-k8s.target"
+  fi
+fi
+
 SYSTEMD_PID="$(ps -eo pid=,args= | awk '$2" "$3=="'"$SYSTEMD_EXE"'" {print $1}')"
 if [ -z "$SYSTEMD_PID" ]; then
+
+    WSL2_IP=$(ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1)
+    mkdir -p /etc/systemd/system.conf.d/
+    {
+      echo "[Manager]";
+      echo "DefaultEnvironment=WSL2_IP=${WSL2_IP}";
+    } | tee /etc/systemd/system.conf.d/99-wsl.conf > /dev/null
+
+    {
+      echo "export WSL2_IP=${WSL2_IP}";
+    } | tee /etc/profile.env > /dev/null
+
+    chmod +x /etc/profile.env || true
+
+    WINDOWS_IP=$(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)
+
+    echo "$WSL2_IP wsl2 wsl2.k8s.khs1994.com" >> /etc/hosts
+    echo "$WINDOWS_IP windows.k8s.khs1994.com" >> /etc/hosts
+
     "$DAEMONIZE" /usr/bin/unshare --fork --pid --mount-proc bash -c 'export container=wsl; mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc; exec '"$SYSTEMD_EXE"
     while [ -z "$SYSTEMD_PID" ]; do
         echo "Sleeping for 1 second to let systemd settle"

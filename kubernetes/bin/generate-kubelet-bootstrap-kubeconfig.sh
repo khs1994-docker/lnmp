@@ -11,6 +11,15 @@ if [ -f ${K8S_ROOT:-/opt/k8s}/.env ];then
   source ${K8S_ROOT:-/opt/k8s}/.env
 fi
 
+if [ -n "${WSL2_IP}" ];then
+  cat ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kubelet.config.yaml.temp \
+  | sed \
+  -e "s/##NODE_NAME##/${NODE_NAME}/g" \
+  -e "s/##NODE_IP##/${WSL2_IP}/g" \
+  -e "s!##K8S_ROOT##!${K8S_ROOT:-/opt/k8s}!g" \
+  | tee ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/kubelet.config.yaml > /dev/null
+fi
+
 until curl --cacert ${K8S_ROOT:-/opt/k8s}/etc/kubernetes/pki/ca.pem ${KUBE_APISERVER}; do
   >&2 echo "KUBE_APISERVER is unavailable - sleeping"
   sleep 3

@@ -17,7 +17,7 @@ jobs:
         docker_version:
           - 18.09
           - 19.03
-          - 20.03
+          - "20.10"
         docker_channel:
           - stable
           - test
@@ -142,7 +142,7 @@ jobs:
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
         with:
-          docker_nightly_version: snapshot-20200915
+          docker_nightly_version: snapshot-20201008
           docker_channel: nightly
       - run: docker version
 

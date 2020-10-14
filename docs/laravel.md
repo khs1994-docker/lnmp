@@ -136,7 +136,7 @@ $ lnmp-docker code
 # 安装 laravel 到 laravel 文件夹
 # $ lnmp-laravel new laravel
 # 文件可能因为权限问题无法编辑，自行更改权限
-# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app/laravel
+# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/app
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/logs
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework
@@ -214,7 +214,7 @@ $ ./lnmp-docker up
 # 安装 laravel 到 laravel 文件夹
 # $ composer create-project --prefer-dist laravel/laravel laravel
 # 文件可能因为权限问题无法编辑，自行更改权限
-# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app/laravel
+# $ wsl -d Ubuntu -u root -- chown -R 1000:1000 /app
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/app
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/logs
 # $ wsl -d Ubuntu -u root -- chmod -R 777 /app/laravel/storage/framework

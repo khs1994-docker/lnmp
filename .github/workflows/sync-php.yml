@@ -15,7 +15,7 @@ jobs:
   sync-php:
     runs-on: ubuntu-latest
     if: |
-      github.ref != 'refs/heads/master'
+      github.ref == 'refs/heads/19.03-pre'
     steps:
     - uses: actions/checkout@main
       with:

@@ -1,0 +1,174 @@
+version = 2
+# persistent data location
+root = "/opt/k8s/var/lib/cri-containerd"
+# runtime state information
+state = "/run/cri-containerd"
+plugin_dir = ""
+disabled_plugins = []
+required_plugins = []
+# set containerd's OOM score
+oom_score = 0
+
+[grpc]
+  address = "/run/cri-containerd/cri-containerd.sock"
+  tcp_address = ""
+  tcp_tls_cert = ""
+  tcp_tls_key = ""
+  # socket uid
+  uid = 0
+  # socket gid
+  gid = 0
+  max_recv_message_size = 16777216
+  max_send_message_size = 16777216
+
+[debug]
+  address = ""
+  uid = 0
+  gid = 0
+  level = ""
+
+[metrics]
+  address = ""
+  grpc_histogram = false
+
+[cgroup]
+  path = ""
+
+[timeouts]
+  "io.containerd.timeout.shim.cleanup" = "5s"
+  "io.containerd.timeout.shim.load" = "5s"
+  "io.containerd.timeout.shim.shutdown" = "3s"
+  "io.containerd.timeout.task.state" = "2s"
+
+[plugins]
+  [plugins."io.containerd.gc.v1.scheduler"]
+    pause_threshold = 0.02
+    deletion_threshold = 0
+    mutation_threshold = 100
+    schedule_delay = "0s"
+    startup_delay = "100ms"
+  [plugins."io.containerd.grpc.v1.cri"]
+    disable_tcp_service = true
+    stream_server_address = "127.0.0.1"
+    stream_server_port = "0"
+    stream_idle_timeout = "4h0m0s"
+    enable_selinux = false
+    # sandbox_image = "gcr.mirror/google-containers/pause:3.2"
+    sandbox_image = "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2"
+    stats_collect_period = 10
+    # systemd_cgroup = false
+    enable_tls_streaming = false
+    max_container_log_line_size = 16384
+    disable_cgroup = false
+    disable_apparmor = false
+    restrict_oom_score_adj = false
+    max_concurrent_downloads = 3
+    disable_proc_mount = false
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      snapshotter = "overlayfs"
+      default_runtime_name = "runc"
+      no_pivot = false
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          # runtime_type = "io.containerd.runtime.v1.linux"
+          # runtime_type = "io.containerd.runc.v1"
+          runtime_type = "io.containerd.runc.v2"
+          privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            SystemdCgroup = true
+            # BinaryName is the binary name of the runc binary.
+            # BinaryName = ""
+            # BinaryName = "runc"
+            # BinaryName = "crun"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1]
+          # runtime_type = "io.containerd.runtime.v1.linux"
+          runtime_type = "io.containerd.runc.v1"
+          # runtime_type = "io.containerd.runc.v2"
+          privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runcv1.options]
+            SystemdCgroup = true
+            # BinaryName = ""
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux]
+          runtime_type = "io.containerd.runtime.v1.linux"
+          # 二进制文件在下方定义 shim="cri-containerd-shim"
+          # runtime_type = "io.containerd.runc.v1"
+          # runtime_type = "io.containerd.runc.v2"
+          runtime_engine = ""
+          runtime_root = ""
+          privileged_without_host_devices = false
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runclinux.options]
+            SystemdCgroup = true
+            # BinaryName = ""
+    [plugins."io.containerd.grpc.v1.cri".cni]
+      bin_dir = "/opt/k8s/opt/cni/bin"
+      conf_dir = "/opt/k8s/etc/cni/net.d"
+      max_conf_num = 1
+      conf_template = ""
+    [plugins."io.containerd.grpc.v1.cri".registry]
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+          # endpoint = ["https://registry-1.docker.io"]
+          # endpoint = ["https://ccr.ccs.tencentyun.com"]
+          # mirror.baidubce.com
+          endpoint = ["https://hub-mirror.c.163.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."baidu.mirror"]
+          endpoint = ["https://hub.baidubce.com","https://registry.baidubce.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."tencent.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."aliyun.mirror"]
+          endpoint = ["https://registry.cn-hangzhou.aliyuncs.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.mirror"]
+          endpoint = ["https://ccr.ccs.tencentyun.com","https://mirror.baidubce.com","https://hub-mirror.c.163.com"]
+        # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.io"]
+        #  endpoint = ["https://gcr.mirror"]
+        # [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
+        #  endpoint = ["https://"]
+      [plugins."io.containerd.grpc.v1.cri".registry.configs]
+        # 私有 registry 验证
+        [plugins."io.containerd.grpc.v1.cri".registry.configs.auths]
+          # [plugins."io.containerd.grpc.v1.cri".registry.configs.auths."https://gcr.io"]
+          #  username = ""
+          #  password = ""
+          #  auth = ""
+          #  identitytoken = ""
+        # 使用自签名证书的 registry
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."registry.t.khs1994.com:28443".tls]
+          ca_file   = "/path/root-ca.crt"
+          cert_file = "/path/t.khs1994.com.crt"
+          key_file  = "/path/t.khs1994.com.key"
+          # 1.3.2 +
+          # insecure_skip_verify = true
+    [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]
+      tls_cert_file = ""
+      tls_key_file = ""
+  [plugins."io.containerd.internal.v1.opt"]
+    path = "/opt/k8s/opt/cri-containerd"
+  [plugins."io.containerd.internal.v1.restart"]
+    interval = "10s"
+  [plugins."io.containerd.metadata.v1.bolt"]
+    content_sharing_policy = "shared"
+  [plugins."io.containerd.monitor.v1.cgroups"]
+    no_prometheus = false
+  [plugins."io.containerd.runtime.v1.linux"]
+    # shim binary name/path
+    shim = "cri-containerd-shim"
+    # runtime binary name/path
+    runtime = "runc"
+    runtime_root = ""
+    # do not use a shim when starting containers, saves on memory but
+    # live restore is not supported
+    no_shim = false
+    # display shim logs in the containerd daemon's log output
+    shim_debug = false
+  [plugins."io.containerd.runtime.v2.task"]
+    platforms = ["linux/amd64"]
+  [plugins."io.containerd.service.v1.diff-service"]
+    default = ["walking"]
+  [plugins."io.containerd.snapshotter.v1.devmapper"]
+    root_path = ""
+    pool_name = ""
+    base_image_size = ""

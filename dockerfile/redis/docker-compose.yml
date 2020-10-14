@@ -5,5 +5,5 @@ services:
     build:
       context: .
       args:
-        ALPINE_URL: mirrors.ustc.edu.cn
+        ALPINE_URL: mirrors.aliyun.com
     image: ${DOCKER_HUB_USERNAME:-khs1994}/redis:${TAG:-6.0.8}-alpine

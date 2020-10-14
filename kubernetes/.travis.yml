@@ -198,9 +198,9 @@ before_script:
 
   - sudo systemctl cat docker
 
-  - sudo systemctl cat kube-containerd@1.4
+  - sudo systemctl cat cri-containerd@1.4
 
-  - sudo systemctl cat crio || true
+  - sudo systemctl cat cri-o || true
   - sudo cat /etc/sysconfig/crio || true
   - sudo cat ${K8S_ROOT:-/opt/k8s}/etc/sysconfig/crio || true
   - /usr/local/bin/crio --config=/etc/crio/crio.conf config > crio.conf || true
@@ -215,17 +215,17 @@ before_script:
 
   - |
     test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-      && (sudo systemctl daemon-reload ; sudo systemctl start kube-containerd@1.4) || true
+      && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@1.4) || true
   - |
     test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
       && (sudo systemctl restart docker || sudo journalctl -u docker) || true
   - |
     test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
       && (/usr/local/bin/crio --help; sudo systemctl daemon-reload ; \
-          sudo systemctl start crio) || true
+          sudo systemctl start cri-o) || true
   - |
     test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-      && export KUBELET_SERVICE='@kube-containerd' || true
+      && export KUBELET_SERVICE='@cri-containerd' || true
 
     test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
       && export KUBELET_SERVICE='@crio' || true
@@ -261,8 +261,8 @@ before_script:
 
   - sudo journalctl -u kube-proxy
   - sudo journalctl -u kubelet${KUBELET_SERVICE}
-  - sudo journalctl -u kube-containerd@1.4 || true
-  - sudo journalctl -u crio || true
+  - sudo journalctl -u cri-containerd@1.4 || true
+  - sudo journalctl -u cri-o || true
 
   - kubectl get csr
   - CSR_NAME=`kubectl get csr | grep system:node:node1 | awk '{print $1}' | head -1`
@@ -285,7 +285,7 @@ before_script:
   - |
     if [ "$CNI_CALICO_EBPF" = 'true' ];then
       cat addons/cni/calico-eBPF/kubernetes.yaml \
-          | sed -e "s/192.168.199.100/${SERVER_IP}/g" -e "s/16443/6443/g" \
+          | sed -e "s/wsl2.k8s.khs1994.com/${SERVER_IP}/g" \
           | kubectl apply -f -
       kubectl apply -k addons/cni/calico-eBPF
     else
@@ -306,9 +306,9 @@ before_script:
   - kubectl get all -A
   - ip addr
 
-  - sudo journalctl -u crio || true
+  - sudo journalctl -u cri-o || true
 
-  # - if [ "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" ];then sudo systemctl restart crio && sudo systemctl restart kubelet@crio ;fi
+  # - if [ "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" ];then sudo systemctl restart cri-o && sudo systemctl restart kubelet@crio ;fi
 
   - sleep 20
   - kubectl get all -A
@@ -438,7 +438,7 @@ after_success:
   - |
     BASE_BRANCH=v1.19.0-config
     BASE_BRANCH=master
-    if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.1' ];then
+    if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.2' ];then
       set -x
       cd /tmp
       rm -rf lnmp-k8s
@@ -471,7 +471,7 @@ jobs:
     # next version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.20.0-alpha.1 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.20.0-alpha.2 LNMP_K8S_GET="--url"
     # current stable version
     # cri-o
     - os: linux
@@ -516,7 +516,7 @@ jobs:
       env: CI_KUBERNETES_VERSION=1.17.12 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.20.0-alpha.1 LNMP_K8S_GET="--url"
+  - env: CI_KUBERNETES_VERSION=1.20.0-alpha.2 LNMP_K8S_GET="--url"
   # - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
 
 branches:

@@ -1,0 +1,32 @@
+[
+  {
+    "op": "add",
+    "path": "/spec/ports/0/nodePort",
+    "value": 28080
+  },
+  {
+    "op": "add",
+    "path": "/spec/ports/1/nodePort",
+    "value": 28443
+  },
+  {
+    "op": "add",
+    "path": "/spec/ports/-",
+    "value": {
+      "name": "tcp-ssh-22",
+      "port": 22,
+      "protocol": "TCP",
+      "targetPort": 22,
+      "nodePort": 22
+    }
+  },
+  {
+    "op": "replace",
+    "path": "/spec/type",
+    "value": "NodePort"
+  },
+  {
+    "op": "remove",
+    "path": "/spec/externalTrafficPolicy"
+  }
+]
