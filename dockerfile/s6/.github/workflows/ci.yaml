@@ -10,6 +10,9 @@ jobs:
         with:
           fetch-depth: 1
       - uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_channel: test
+          docker_version: "20.10"
       - uses: azure/docker-login@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}

@@ -15,6 +15,9 @@ jobs:
         with:
           fetch-depth: 2
       - uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_channel: test
+          docker_version: "20.10"
       - uses: khs1994-docker/actions-setup-lnmp@master
         with:
           lnmp_services: "nginx mysql php7 redis minio"

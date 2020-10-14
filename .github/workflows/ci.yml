@@ -38,7 +38,8 @@ jobs:
         fetch-depth: 2
     - uses: docker-practice/actions-setup-docker@master
       with:
-        docker_channel: nightly
+        docker_channel: test
+        docker_version: "20.10"
     - uses: azure/docker-login@v1
       if: |
         github.event_name == 'push'

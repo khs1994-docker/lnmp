@@ -18,6 +18,9 @@ jobs:
         with:
           fetch-depth: 2
       - uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_channel: test
+          docker_version: ${{ matrix.lnmp_branch }}
       - name: Test
         uses: ./
         # uses: khs1994-docker/actions-setup-lnmp@master

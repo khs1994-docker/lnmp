@@ -45,6 +45,9 @@ jobs:
     #   env:
     #     DOCKER_COMPOSE_VERSION: 1.27.0
     - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: test
+        docker_version: "20.10"
     - run: |
         docker --version
         docker-compose --version
