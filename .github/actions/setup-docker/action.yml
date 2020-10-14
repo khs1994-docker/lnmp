@@ -11,7 +11,7 @@ inputs:
   docker_nightly_version:
     # https://github.com/AkihiroSuda/moby-snapshot/releases
     description: Docker nightly Version
-    default: snapshot-20200915
+    default: snapshot-20201008
     required: false
   docker_channel:
     # https://download.docker.com/linux/ubuntu/dists/focal/pool/

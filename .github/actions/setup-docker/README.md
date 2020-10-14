@@ -8,7 +8,7 @@ Support **Linux** and **macOS**
 
 * [action.yml](https://github.com/docker-practice/actions-setup-docker/blob/master/action.yml)
 
-**Test with Docker 20.03 (Linux only)**
+**Test with Latest Docker (Linux only)**
 
 Thanks https://github.com/AkihiroSuda/moby-snapshot
 
@@ -26,7 +26,7 @@ jobs:
       with:
         docker_channel: nightly
         # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201008
     - run: |
         set -x
 

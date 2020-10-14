@@ -44,6 +44,6 @@ jobs:
           --allow-dupe \
           --skip-save-results \
           -t 10 \
-          `find . \( -path "./mesos" -o -path "./machine" -o -path "./swarm_mode" \) -prune -o -name "*.md" -exec ls {} \;`
+          `find . \( -path "./a" -o -path "./b" \) -prune -o -name "*.md" -exec ls {} \;`
         name: check-link
         # timeout-minutes: 25
