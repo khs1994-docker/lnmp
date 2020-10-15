@@ -16,48 +16,52 @@
     "dest": "gcr-mirror/coredns:1.7.0"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:4175d6237de3f85d4cfa2e331e244f0b1c20776455af10dcccdb81a3f9ebb012",
-    "dest": "tektoncd-dashboard@sha256:4175d6237de3f85d4cfa2e331e244f0b1c20776455af10dcccdb81a3f9ebb012"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:e72593477e8cb09b718b9b0b38731de5b4cb7ef0c04712f7b97f51be5c5e06c7",
+    "dest": "tektoncd-dashboard@sha256:e72593477e8cb09b718b9b0b38731de5b4cb7ef0c04712f7b97f51be5c5e06c7"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.15.2@sha256:3b9194dbb1ec6282469e1371abb52dce4f462706d08469d29893550f3e2debdf",
-    "dest": "tektoncd-controller:v0.15.2@sha256:3b9194dbb1ec6282469e1371abb52dce4f462706d08469d29893550f3e2debdf"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/controller:v0.17.1@sha256:e35782523472e105fe68a91c346df73733f70255ac84fe8cfcbf299c2cbf82c0",
+    "dest": "tektoncd-controller:v0.17.1@sha256:e35782523472e105fe68a91c346df73733f70255ac84fe8cfcbf299c2cbf82c0"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.15.2@sha256:ef0f1858607e176a5393bcbf043b9276b0ba6c03ad4f157ff379c558bf00732e",
-    "dest": "tektoncd-webhook:v0.15.2@sha256:ef0f1858607e176a5393bcbf043b9276b0ba6c03ad4f157ff379c558bf00732e"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook:v0.17.1@sha256:0ebac19d31ae7e76b2a6df13afe4d49b8381c524f21829cbb3b86733de105f67",
+    "dest": "tektoncd-webhook:v0.17.1@sha256:0ebac19d31ae7e76b2a6df13afe4d49b8381c524f21829cbb3b86733de105f67"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/vendor/github.com/googlecloudplatform/cloud-builders/gcs-fetcher/cmd/gcs-fetcher:v0.15.2@sha256:6b008c9eded786360ccc7bbc8d18f21a3ae049ff4604072c38763205346ca14c",
-    "dest": "tektoncd-gcs-fetcher:v0.15.2@sha256:6b008c9eded786360ccc7bbc8d18f21a3ae049ff4604072c38763205346ca14c"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/vendor/github.com/googlecloudplatform/cloud-builders/gcs-fetcher/cmd/gcs-fetcher:v0.17.1@sha256:0252efb5c939c33067b6cc33db07b311aec2108b37855b3fda9409661268b709",
+    "dest": "tektoncd-gcs-fetcher:v0.17.1@sha256:0252efb5c939c33067b6cc33db07b311aec2108b37855b3fda9409661268b709"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.15.2@sha256:af9aea0ccca79b26e60e8f02ad0d46a20772bcb447201f21d477729c01d8e71e",
-    "dest": "tektoncd-pullrequest-init:v0.15.2@sha256:af9aea0ccca79b26e60e8f02ad0d46a20772bcb447201f21d477729c01d8e71e"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.17.1@sha256:7f64f991fab8941d424474fbc3f9fbe124f375382b2ae62c039583b5febc9d64",
+    "dest": "tektoncd-pullrequest-init:v0.17.1@sha256:7f64f991fab8941d424474fbc3f9fbe124f375382b2ae62c039583b5febc9d64"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.15.2@sha256:e8cc95b323e85788dc82398cd37a259aff1a0bf2ca5489d5af4201aa4eca3743",
-    "dest": "tektoncd-imagedigestexporter:v0.15.2@sha256:e8cc95b323e85788dc82398cd37a259aff1a0bf2ca5489d5af4201aa4eca3743"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.17.1@sha256:5821552e75cffb4f739c8cfbeaeab8de511340a74a20233b10535ee2a89829cf",
+    "dest": "tektoncd-imagedigestexporter:v0.17.1@sha256:5821552e75cffb4f739c8cfbeaeab8de511340a74a20233b10535ee2a89829cf"
   },
   {
-    "source": "ggcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.15.2@sha256:51037dc2b572748ef2f42e8e0f2d55e67a4dbc014cdaecba083de6280f422f2d",
-    "dest": "tektoncd-entrypoint:v0.15.2@sha256:51037dc2b572748ef2f42e8e0f2d55e67a4dbc014cdaecba083de6280f422f2d"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.17.1@sha256:ec3db704fd4fd6007f41cb8949f14f1ab0d9d76d472f1942677a9e245a1c35af",
+    "dest": "tektoncd-entrypoint:v0.17.1@sha256:ec3db704fd4fd6007f41cb8949f14f1ab0d9d76d472f1942677a9e245a1c35af"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.15.2@sha256:c6cb2257d718bbd6281f0d028c801c26333221a2c38ce85ae8e23b24bf20e781",
-    "dest": "tektoncd-git-init:v0.15.2@sha256:c6cb2257d718bbd6281f0d028c801c26333221a2c38ce85ae8e23b24bf20e781"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.17.1@sha256:a39b8c647d6eaf609dc04bc7b0fc0f787b3b25fd6b1c9b182066a5c29a64a18c",
+    "dest": "tektoncd-git-init:v0.17.1@sha256:a39b8c647d6eaf609dc04bc7b0fc0f787b3b25fd6b1c9b182066a5c29a64a18c"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/creds-init:v0.15.2@sha256:23387311d42bc6290645a864b2c967b857c531e4178fd5b79e31b2b8eb1ffa5c",
-    "dest": "tektoncd-creds-init:v0.15.2@sha256:23387311d42bc6290645a864b2c967b857c531e4178fd5b79e31b2b8eb1ffa5c"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/creds-init:v0.17.1@sha256:58026c677a33465160177de5bd1e86fd51a5982c72d6bdc59ef3eab630a1e459",
+    "dest": "tektoncd-creds-init:v0.17.1@sha256:58026c677a33465160177de5bd1e86fd51a5982c72d6bdc59ef3eab630a1e459"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.15.2@sha256:fafe062ebf497187b3ce7b47573580b4330f78b4924fb38e4c1e8db128711720",
-    "dest": "tektoncd-kubeconfigwriter:v0.15.2@sha256:fafe062ebf497187b3ce7b47573580b4330f78b4924fb38e4c1e8db128711720"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.17.1@sha256:a0c3c63766ce30bf0c94dd30ff51a0745a629bd5ef10aae863a4aadd31917adc",
+    "dest": "tektoncd-kubeconfigwriter:v0.17.1@sha256:a0c3c63766ce30bf0c94dd30ff51a0745a629bd5ef10aae863a4aadd31917adc"
   },
   {
-    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.15.2@sha256:e418612699877caba09cae4ed8c73cfaf84aa8840a3c09aadda8c7c4934b857a",
-    "dest": "tektoncd-nop:v0.15.2@sha256:e418612699877caba09cae4ed8c73cfaf84aa8840a3c09aadda8c7c4934b857a"
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.17.1@sha256:d0eeff76cc844c502652a4397795a36b4dd84211cddaa538a9d364822398ccb9",
+    "dest": "tektoncd-nop:v0.17.1@sha256:d0eeff76cc844c502652a4397795a36b4dd84211cddaa538a9d364822398ccb9"
+  },
+  {
+    "source": "gcr.io/google.com/cloudsdktool/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f",
+    "dest": "tektoncd-cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f"
   },
   {
     "source": "gcr.io/distroless/base@sha256:60f5ffe6fc481e9102747b043b3873a01893a5a8138f970c5f5fc06fb7494656",
