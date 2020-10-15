@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- "20.10"
+- "master"
 
 pool:
   vmImage: 'windows-2019'

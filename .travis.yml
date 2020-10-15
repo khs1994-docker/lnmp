@@ -559,14 +559,14 @@ jobs:
 
 stages:
   - name: development
-    if: branch = "20.10"
+    if: branch = "master"
   - name: arm64-development
-    if: branch = "20.10"
+    if: branch = "master"
   - name: swarm
     if: tag =~ /^(v18)/
   - name: checkConfig
     if: |
-      branch = "20.10"
+      branch = "master"
   - name: tag
     if: tag =~ /^(v20)/
   # don't run
