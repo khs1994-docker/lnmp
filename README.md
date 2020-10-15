@@ -58,7 +58,7 @@ To use LNMP Docker, you need:
 
 :one: [Git](https://git-scm.com/downloads)
 
-:two: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 20.10 Stable +
+:two: [Docker CE](https://github.com/yeasy/docker_practice/tree/master/install) 19.03 Stable +
 
 :three: [Docker Compose](https://github.com/yeasy/docker_practice/blob/master/compose/install.md) 1.27.0+
 
