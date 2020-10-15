@@ -16,8 +16,8 @@
     "dest": "library-mirror/node:12.18.3-alpine"
   },
   {
-    "source": "golang:1.15.2-alpine",
-    "dest": "library-mirror/golang:1.15.2-alpine"
+    "source": "golang:1.15.3-alpine",
+    "dest": "library-mirror/golang:1.15.3-alpine"
   },
   {
     "source": "golang:alpine",
