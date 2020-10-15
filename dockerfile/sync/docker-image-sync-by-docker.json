@@ -68,6 +68,18 @@
     "dest": "gcr-distroless-base@sha256:60f5ffe6fc481e9102747b043b3873a01893a5a8138f970c5f5fc06fb7494656"
   },
   {
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook:v0.9.0@sha256:1c7fb974323417566027db2efbd80498e4cb625cead855bf5416473d41a4ae84",
+    "dest": "tektoncd-triggers-webhook:v0.9.0@sha256:1c7fb974323417566027db2efbd80498e4cb625cead855bf5416473d41a4ae84"
+  },
+  {
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller:v0.9.0@sha256:c3163fd35d3bc21e21c8a117cbc2ac4a399d3e851ca87f407bd060d0ce09a1d5",
+    "dest": "tektoncd-triggers-controller:v0.9.0@sha256:c3163fd35d3bc21e21c8a117cbc2ac4a399d3e851ca87f407bd060d0ce09a1d5"
+  },
+  {
+    "source": "gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/eventlistenersink:v0.9.0@sha256:3d9cd3788c03ea6f9c85980d3b70ded295766f222e5d30fc1790249e88a10880",
+    "dest": "tektoncd-triggers-eventlistenersink:v0.9.0@sha256:3d9cd3788c03ea6f9c85980d3b70ded295766f222e5d30fc1790249e88a10880"
+  },
+  {
     "source": "mcr.microsoft.com/powershell:preview-alpine-3.11",
     "dest": "powershell:preview-alpine-3.11",
     "registry": "mcr.microsoft.com",

@@ -1,6 +1,7 @@
 resources:
-- tekton.yaml
-- dashboard.yaml
+  - tekton.yaml
+  - dashboard.yaml
+  - triggers.yaml
 # configMapGenerator:
 #   - name: config-artifact-bucket
 #     namespace: tekton-pipelines
@@ -35,11 +36,33 @@ images:
     newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-controller
     newTag: v0.17.1
     digest: sha256:e35782523472e105fe68a91c346df73733f70255ac84fe8cfcbf299c2cbf82c0
+  - name: gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/controller:v0.9.0@sha256:c3163fd35d3bc21e21c8a117cbc2ac4a399d3e851ca87f407bd060d0ce09a1d5
+    newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-triggers-controller
+    newTag: v0.9.0
+    digest: sha256:c3163fd35d3bc21e21c8a117cbc2ac4a399d3e851ca87f407bd060d0ce09a1d5
+  - name: gcr.io/tekton-releases/github.com/tektoncd/triggers/cmd/webhook:v0.9.0@sha256:1c7fb974323417566027db2efbd80498e4cb625cead855bf5416473d41a4ae84
+    newName: ccr.ccs.tencentyun.com/khs1994/tektoncd-triggers-webhook
+    newTag: v0.9.0
+    digest: sha256:1c7fb974323417566027db2efbd80498e4cb625cead855bf5416473d41a4ae84
 patchesJson6902:
-    - path: tekton.patch.json
-      target:
-        group: apps
-        namespace: tekton-pipelines
-        kind: Deployment
-        name: tekton-pipelines-controller
-        version: v1
+  - path: tekton.patch.json
+    target:
+      group: apps
+      namespace: tekton-pipelines
+      kind: Deployment
+      name: tekton-pipelines-controller
+      version: v1
+  - path: dashboard.patch.json
+    target:
+      version: v1
+      namespace: tekton-pipelines
+      name: tekton-dashboard
+      kind: Service
+      group: ""
+  - path: triggers.patch.json
+    target:
+      group: apps
+      namespace: tekton-pipelines
+      kind: Deployment
+      name: tekton-triggers-controller
+      version: v1
