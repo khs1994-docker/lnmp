@@ -23,7 +23,7 @@
 
 ## Supported tags and respective `Dockerfile` links
 
-* [`8.0.0rc1-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.11/8.0/fpm/Dockerfile)
+* [`8.0.0RC2-fpm-alpine` (8.0/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.11/8.0/fpm/Dockerfile)
 
 * [`7.4.11-fpm-alpine` (7.4/fpm/Dockerfile)](https://github.com/khs1994-docker/php/blob/7.4.11/7.4/fpm/Dockerfile)
 
@@ -47,8 +47,8 @@
 | [![](https://images.microbadger.com/badges/version/khs1994/php:7.3.23-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.23-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.3.23-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.3.23-fpm-alpine "Get your own image badge on microbadger.com")       |
 | [![](https://images.microbadger.com/badges/version/library/php:7.4.11-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.4.11-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:7.4.11-fpm-alpine.svg)](https://microbadger.com/images/library/php:7.4.11-fpm-alpine "Get your own image badge on microbadger.com")       |
 | [![](https://images.microbadger.com/badges/version/khs1994/php:7.4.11-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.11-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:7.4.11-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:7.4.11-fpm-alpine "Get your own image badge on microbadger.com")       |
-| [![](https://images.microbadger.com/badges/version/library/php:8.0.0rc1-fpm-alpine.svg)](https://microbadger.com/images/library/php:8.0.0rc1-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:8.0.0rc1-fpm-alpine.svg)](https://microbadger.com/images/library/php:8.0.0rc1-fpm-alpine "Get your own image badge on microbadger.com")       |
-| [![](https://images.microbadger.com/badges/version/khs1994/php:8.0.0rc1-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:8.0.0rc1-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:8.0.0rc1-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:8.0.0rc1-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/library/php:8.0.0RC2-fpm-alpine.svg)](https://microbadger.com/images/library/php:8.0.0RC2-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/library/php:8.0.0RC2-fpm-alpine.svg)](https://microbadger.com/images/library/php:8.0.0RC2-fpm-alpine "Get your own image badge on microbadger.com")       |
+| [![](https://images.microbadger.com/badges/version/khs1994/php:8.0.0RC2-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:8.0.0RC2-fpm-alpine "Get your own version badge on microbadger.com")       | [![](https://images.microbadger.com/badges/image/khs1994/php:8.0.0RC2-fpm-alpine.svg)](https://microbadger.com/images/khs1994/php:8.0.0RC2-fpm-alpine "Get your own image badge on microbadger.com")       |
 
 ## Nightly
 

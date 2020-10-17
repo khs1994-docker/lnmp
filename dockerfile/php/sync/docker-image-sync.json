@@ -1,21 +1,21 @@
 [
   {
-    "source": "php:8.0.0rc1-cli-alpine"
+    "source": "php:8.0.0RC2-cli-alpine"
   },
   {
-    "source": "php:8.0.0rc1-fpm-alpine"
+    "source": "php:8.0.0RC2-fpm-alpine"
   },
   {
-    "source": "php:8.0.0rc1-unit-alpine"
+    "source": "php:8.0.0RC2-unit-alpine"
   },
   {
-    "source": "php:8.0.0rc1-composer-alpine"
+    "source": "php:8.0.0RC2-composer-alpine"
   },
   {
-    "source": "php:8.0.0rc1-swoole-alpine"
+    "source": "php:8.0.0RC2-swoole-alpine"
   },
   {
-    "source": "php:8.0.0rc1-s6-alpine"
+    "source": "php:8.0.0RC2-s6-alpine"
   },
   {
     "source": "php:7.4.11-cli-alpine"

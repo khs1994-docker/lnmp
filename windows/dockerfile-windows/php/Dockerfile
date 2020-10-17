@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/windows${WIN_VERSION}
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-ENV PHP_VERSION 7.3.8
+ENV PHP_VERSION=7.3.8
 
 RUN $url = ('https://windows.php.net/downloads/releases/php-{0}-nts-Win32-VC15-x64.zip' -f $env:PHP_VERSION); \
         Write-Host ('Downloading {0} ...' -f $url); \
