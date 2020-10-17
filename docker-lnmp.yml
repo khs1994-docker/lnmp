@@ -1,6 +1,8 @@
 version: "3.7"
 
 #
+# @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
+#
 # @link https://docs.docker.com/compose/overview/
 # @link https://docs.docker.com/compose/compose-file/#extension-fields
 # @link https://github.com/docker-library/docs
@@ -15,6 +17,13 @@ x-common:
   read_only: ${LNMP_ROOT_FILESYSTEM_READ_ONLY:-false}
   # dns:
   #   - ${DNS:-114.114.114.114}
+
+x-tmpfs:
+  &tmpfs
+  type: tmpfs
+  target: /run
+  # tmpfs:
+  #   size: 1000
 
 services:
   mysql:
@@ -40,10 +49,7 @@ services:
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:cached
       - ./scripts/backup/mysql:/backup
-      - type: tmpfs
-        target: /run
-      - type: tmpfs
-        target: /run/mysqld
+      - << : *tmpfs
     command:
       - mysqld
       - --character-set-server=utf8mb4
@@ -65,8 +71,7 @@ services:
         volume:
           nocopy: true
       - ./log/redis:/var/log/redis:cached
-      - type: tmpfs
-        target: /run
+      - << : *tmpfs
     # set config by command
     command: [
       "redis-server",
@@ -92,15 +97,14 @@ services:
         target: /usr/share/zoneinfo
         volume:
           nocopy: true
-      - type: tmpfs
-        target: /run
+      - << : *tmpfs
 
   php7:
     &php7
     << : *common
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.11}-fpm-alpine"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
+      - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       # fpm config
       - ./config/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
@@ -137,7 +141,7 @@ services:
     command: php-fpm -R -F
     # command: php-fpm -F
     environment:
-      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
+      - &lnmp_docker_version LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
       - APP_ENV=development
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
@@ -149,7 +153,8 @@ services:
     << : *common
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0RC2}-fpm-alpine"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
+      - *bind_app
+      # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       # fpm config
       - ./config/php8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf:ro,cached
       # php.ini
@@ -169,10 +174,7 @@ services:
         target: /usr/share/zoneinfo
         volume:
           nocopy: false
-      - type: tmpfs
-        target: /run
-        # tmpfs:
-        #   size: 1000
+      - << : *tmpfs
     networks:
       - frontend
       - backend
@@ -181,7 +183,7 @@ services:
     command: php-fpm -R -F
     # command: php-fpm -F
     environment:
-      - LNMP_DOCKER_VERSION=${LNMP_DOCKER_VERSION:-v19.03} x86_64 With Pull Docker Image
+      - *lnmp_docker_version
       - APP_ENV=development
       - LNMP_XDEBUG_REMOTE_HOST=${LNMP_XDEBUG_REMOTE_HOST:-192.168.199.100}
       - LNMP_XDEBUG_REMOTE_PORT=${LNMP_XDEBUG_REMOTE_PORT:-9003}
@@ -193,7 +195,8 @@ services:
     restart: "no"
     image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.11}-composer-alpine"
     volumes:
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
+      - *bind_app
+      # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       - type: volume
         source: composer-cache-data
         target: /tmp/composer/cache
@@ -225,8 +228,7 @@ services:
       - type: volume
         source: phpmyadmin-data
         target: /sessions
-      - type: tmpfs
-        target: /run
+      - << : *tmpfs
     networks:
       - backend
       - frontend
@@ -245,11 +247,11 @@ services:
       - type: bind
         source: ./config/${LNMP_NGINX_CONF_D:-nginx}
         target: /etc/nginx/conf.d
-      - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
+      - *bind_app
+      # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       - ./config/etc/nginx/${LNMP_NGINX_CONF:-nginx.conf}:/etc/nginx/nginx.conf:ro,cached
       - ./log/nginx:/var/log/nginx:cached
-      - type: tmpfs
-        target: /run
+      - << : *tmpfs
     working_dir: /app
     networks:
       - frontend

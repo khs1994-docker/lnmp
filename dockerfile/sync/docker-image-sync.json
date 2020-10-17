@@ -12,8 +12,8 @@
     "dest": "library-mirror/node:14.13.1-alpine"
   },
   {
-    "source": "node:12.18.3-alpine",
-    "dest": "library-mirror/node:12.18.3-alpine"
+    "source": "node:12.19.0-alpine",
+    "dest": "library-mirror/node:12.19.0-alpine"
   },
   {
     "source": "golang:1.15.3-alpine",
@@ -84,12 +84,12 @@
     "dest": "library-mirror/mariadb:10.5.6"
   },
   {
-    "source": "library/mariadb:10.4.14",
-    "dest": "library-mirror/mariadb:10.4.14"
+    "source": "library/mariadb:10.4.15",
+    "dest": "library-mirror/mariadb:10.4.15"
   },
   {
-    "source": "library/mariadb:10.3.24",
-    "dest": "library-mirror/mariadb:10.3.24"
+    "source": "library/mariadb:10.3.25",
+    "dest": "library-mirror/mariadb:10.3.25"
   },
   {
     "source": "library/registry:latest",
