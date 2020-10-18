@@ -2,15 +2,23 @@
 
 ARG PHP_VERSION=7.4.11
 ARG USERNAME=khs1994
+ARG BASE=composer
 
-FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-composer-alpine
+FROM alpine as downloader
 
 # php-cs-fixer https://github.com/FriendsOfPHP/PHP-CS-Fixer
 
-ENV PHP_CS_FIXER_VERSION=2.16.4 \
-    PHP_CS_FIXER_IGNORE_ENV=1
+ENV PHP_CS_FIXER_VERSION=2.16.4
 
-RUN set -x ; curl -fsSL https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${PHP_CS_FIXER_VERSION}/php-cs-fixer.phar > /usr/local/bin/php-cs-fixer \
+RUN set -x ; apk add --no-cache curl \
+    && curl -fsSL https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${PHP_CS_FIXER_VERSION}/php-cs-fixer.phar \
+         -o /usr/local/bin/php-cs-fixer \
     && chmod +x /usr/local/bin/php-cs-fixer
+
+FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
+
+ENV PHP_CS_FIXER_IGNORE_ENV=1
+
+COPY --from=downloader /usr/local/bin/php-cs-fixer /usr/local/bin/php-cs-fixer
 
 ENTRYPOINT ["php-cs-fixer"]

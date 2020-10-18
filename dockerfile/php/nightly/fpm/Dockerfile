@@ -185,6 +185,7 @@ RUN --mount=type=bind,from=php:fpm-alpine,source=/usr/local/bin,target=/opt/bin,
           libedit-dev \
           libsodium-dev \
           libxml2-dev \
+          linux-headers \
           oniguruma-dev \
           openssl-dev \
           sqlite-dev \

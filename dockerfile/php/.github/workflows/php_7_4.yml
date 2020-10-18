@@ -189,7 +189,11 @@ jobs:
             echo ::group::Build $PHP_EXT
             options="--build-arg USERNAME=$DOCKER_HUB_USERNAME --build-arg VCS_REF=$VCS_REF"
 
-            docker buildx build $options \
+            docker buildx build \
+            --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+            --build-arg VCS_REF=$VCS_REF \
+            --cache-from=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine-cache \
+            --cache-to=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine-cache \
             --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
             -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine \
             $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine ";done) \
@@ -197,7 +201,10 @@ jobs:
             echo ::endgroup::
 
             echo ::group::Push ${PHP_EXT}
-            docker buildx build $options \
+            docker buildx build \
+            --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+            --build-arg VCS_REF=$VCS_REF \
+            --cache-from=$DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine-cache \
             --build-arg ALPINE_URL=${ALPINE_URL:-dl-cdn.alpinelinux.org} \
             -t $DOCKER_HUB_USERNAME/php:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine \
             $(for item in `echo $mirror`;do echo " -t ${item}:${PHP_TAG_VERSION}-ext-${PHP_EXT}-alpine ";done) \

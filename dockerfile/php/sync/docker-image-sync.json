@@ -91,5 +91,14 @@
   },
   {
     "source": "php:nightly-s6-alpine"
+  },
+  {
+    "source": "php:php-cs-fixer"
+  },
+  {
+    "source": "php:sami"
+  },
+  {
+    "source": "php:phpdox"
   }
 ]

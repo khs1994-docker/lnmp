@@ -16,7 +16,7 @@ ARG PECL_EXTENSION_EXTRA
 
 ARG APK_EXTRA="oniguruma libffi"
 
-ARG APK_DEV_EXTRA="oniguruma-dev libffi-dev"
+ARG APK_DEV_EXTRA="oniguruma-dev libffi-dev linux-headers"
 
 ARG PHP_EXTRA_CONFIGURE_ARGS_NEW="--enable-gd=shared \
                                     --with-freetype \

@@ -169,6 +169,7 @@ RUN --mount=type=bind,from=php:8.0.0RC2-alpine,source=/usr/src,target=/usr/local
           openssl-dev \
           libsodium-dev \
           libxml2-dev \
+          linux-headers \
           sqlite-dev \
           argon2-dev \
           cyrus-sasl-dev \

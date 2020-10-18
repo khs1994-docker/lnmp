@@ -199,6 +199,7 @@ RUN --mount=type=bind,from=php:alpine,source=/usr/local/bin,target=/opt/bin,rw \
           libedit-dev \
           libsodium-dev \
           libxml2-dev \
+          linux-headers \
           oniguruma-dev \
           openssl-dev \
           sqlite-dev \

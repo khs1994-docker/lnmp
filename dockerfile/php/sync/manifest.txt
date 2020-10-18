@@ -29,3 +29,6 @@ nightly-unit-alpine
 nightly-composer-alpine
 nightly-swoole-alpine
 nightly-s6-alpine
+php-cs-fixer
+sami
+phpdox
