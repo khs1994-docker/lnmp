@@ -187,6 +187,7 @@ jobs:
             echo "::group::Build php-cs-fixer"
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
               -t $DOCKER_HUB_USERNAME/php:php-cs-fixer \
+              $(for item in `echo $mirror`;do echo " -t ${item}:php-cs-fixer ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --cache-from=$DOCKER_HUB_USERNAME/php:php-cs-fixer-cache \
               --cache-to=$DOCKER_HUB_USERNAME/php:php-cs-fixer-cache \
@@ -196,6 +197,7 @@ jobs:
             echo "::group::Build sami"
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
               -t $DOCKER_HUB_USERNAME/php:sami \
+              $(for item in `echo $mirror`;do echo " -t ${item}:sami ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --cache-from=$DOCKER_HUB_USERNAME/php:sami-cache \
               --cache-to=$DOCKER_HUB_USERNAME/php:sami-cache \
@@ -205,10 +207,31 @@ jobs:
             echo "::group::Build phpdox"
             docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
               -t $DOCKER_HUB_USERNAME/php:phpdox \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phpdox ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
               --cache-from=$DOCKER_HUB_USERNAME/php:phpdox-cache \
               --cache-to=$DOCKER_HUB_USERNAME/php:phpdox-cache \
               --platform ${PLATFORM} ${IS_PUSH} phpdox
+            echo "::endgroup::"
+
+            echo "::group::Build phpcpd"
+            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+              -t $DOCKER_HUB_USERNAME/php:phpcpd \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phpcpd ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:phpcpd-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phpcpd-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phpcpd
+            echo "::endgroup::"
+
+            echo "::group::Build phploc"
+            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+              -t $DOCKER_HUB_USERNAME/php:phploc \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phploc ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:phploc-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phploc-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phploc
             echo "::endgroup::"
         fi
 
