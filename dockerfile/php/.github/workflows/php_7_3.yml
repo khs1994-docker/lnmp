@@ -185,7 +185,7 @@ jobs:
 
         if [ "$TYPE" = "COMPOSER" ];then
             echo "::group::Build php-cs-fixer"
-            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+            docker buildx build \
               -t $DOCKER_HUB_USERNAME/php:php-cs-fixer \
               $(for item in `echo $mirror`;do echo " -t ${item}:php-cs-fixer ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
@@ -195,7 +195,7 @@ jobs:
             echo "::endgroup::"
 
             echo "::group::Build sami"
-            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+            docker buildx build \
               -t $DOCKER_HUB_USERNAME/php:sami \
               $(for item in `echo $mirror`;do echo " -t ${item}:sami ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
@@ -205,7 +205,7 @@ jobs:
             echo "::endgroup::"
 
             echo "::group::Build phpdox"
-            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+            docker buildx build \
               -t $DOCKER_HUB_USERNAME/php:phpdox \
               $(for item in `echo $mirror`;do echo " -t ${item}:phpdox ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
@@ -214,8 +214,18 @@ jobs:
               --platform ${PLATFORM} ${IS_PUSH} phpdox
             echo "::endgroup::"
 
+            echo "::group::Build phploc"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:phploc \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phploc ";done) \
+              --build-arg USERNAME=$DOCKER_HUB_USERNAME \
+              --cache-from=$DOCKER_HUB_USERNAME/php:phploc-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phploc-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phploc
+            echo "::endgroup::"
+
             echo "::group::Build phpcpd"
-            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
+            docker buildx build \
               -t $DOCKER_HUB_USERNAME/php:phpcpd \
               $(for item in `echo $mirror`;do echo " -t ${item}:phpcpd ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
@@ -224,14 +234,14 @@ jobs:
               --platform ${PLATFORM} ${IS_PUSH} phpcpd
             echo "::endgroup::"
 
-            echo "::group::Build phploc"
-            docker buildx build --build-arg PHP_VERSION=${PHP_TAG_VERSION} \
-              -t $DOCKER_HUB_USERNAME/php:phploc \
-              $(for item in `echo $mirror`;do echo " -t ${item}:phploc ";done) \
+            echo "::group::Build phpmd"
+            docker buildx build \
+              -t $DOCKER_HUB_USERNAME/php:phpmd \
+              $(for item in `echo $mirror`;do echo " -t ${item}:phpmd ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
-              --cache-from=$DOCKER_HUB_USERNAME/php:phploc-cache \
-              --cache-to=$DOCKER_HUB_USERNAME/php:phploc-cache \
-              --platform ${PLATFORM} ${IS_PUSH} phploc
+              --cache-from=$DOCKER_HUB_USERNAME/php:phpmd-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:phpmd-cache \
+              --platform ${PLATFORM} ${IS_PUSH} phpmd
             echo "::endgroup::"
         fi
 

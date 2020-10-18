@@ -4,7 +4,7 @@ ARG BASE=composer
 
 FROM alpine as downloader
 
-ENV PHPDOX_VERSION=0.12.0
+ARG PHPDOX_VERSION=0.12.0
 
 RUN set -x ; apk add --no-cache curl \
     && curl -fsSL https://github.com/theseer/phpdox/releases/download/${PHPDOX_VERSION}/phpdox-${PHPDOX_VERSION}.phar \
