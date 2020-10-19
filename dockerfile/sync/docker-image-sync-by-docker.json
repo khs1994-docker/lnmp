@@ -145,45 +145,45 @@
     ]
   },
   {
-    "source": "k8s.gcr.io/kube-proxy:v1.18.8",
-    "dest": "gcr-mirror/kube-proxy:v1.18.8",
+    "source": "k8s.gcr.io/kube-proxy:v1.19.2",
+    "dest": "gcr-mirror/kube-proxy:v1.19.2",
     "registry": "k8s.gcr.io",
     "image": "kube-proxy",
-    "ref": "v1.18.8"
+    "ref": "v1.19.2"
   },
   {
-    "source": "k8s.gcr.io/kube-controller-manager:v1.18.8",
-    "dest": "gcr-mirror/kube-controller-manager:v1.18.8",
+    "source": "k8s.gcr.io/kube-controller-manager:v1.19.2",
+    "dest": "gcr-mirror/kube-controller-manager:v1.19.2",
     "registry": "k8s.gcr.io",
     "image": "kube-controller-manager",
-    "ref": "v1.18.8"
+    "ref": "v1.19.2"
   },
   {
-    "source": "k8s.gcr.io/kube-apiserver:v1.18.8",
-    "dest": "gcr-mirror/kube-apiserver:v1.18.8",
+    "source": "k8s.gcr.io/kube-apiserver:v1.19.2",
+    "dest": "gcr-mirror/kube-apiserver:v1.19.2",
     "registry": "k8s.gcr.io",
     "image": "kube-apiserver",
-    "ref": "v1.18.8"
+    "ref": "v1.19.2"
   },
   {
-    "source": "k8s.gcr.io/kube-scheduler:v1.18.8",
-    "dest": "gcr-mirror/kube-scheduler:v1.18.8",
+    "source": "k8s.gcr.io/kube-scheduler:v1.19.2",
+    "dest": "gcr-mirror/kube-scheduler:v1.19.2",
     "registry": "k8s.gcr.io",
     "image": "kube-scheduler",
-    "ref": "v1.18.8"
+    "ref": "v1.19.2"
   },
   {
-    "source": "k8s.gcr.io/etcd:3.4.3-0",
-    "dest": "gcr-mirror/etcd:3.4.3-0",
+    "source": "k8s.gcr.io/etcd:3.4.13-0",
+    "dest": "gcr-mirror/etcd:3.4.13-0",
     "registry": "k8s.gcr.io",
     "image": "etcd",
-    "ref": "3.4.3-0"
+    "ref": "3.4.13-0"
   },
   {
-    "source": "k8s.gcr.io/coredns:1.6.7",
-    "dest": "gcr-mirror/coredns:1.6.7",
+    "source": "k8s.gcr.io/coredns:1.7.0",
+    "dest": "gcr-mirror/coredns:1.7.0",
     "registry": "k8s.gcr.io",
     "image": "coredns",
-    "ref": "1.6.7"
+    "ref": "1.7.0"
   }
 ]

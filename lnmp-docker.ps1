@@ -134,8 +134,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.18.8"
-$DOCKER_DESKTOP_VERSION = "2.3.6.0"
+$KUBERNETES_VERSION = "1.19.2"
+$DOCKER_DESKTOP_VERSION = "2.4.2.0"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
@@ -285,7 +285,7 @@ Function Test-DockerVersion() {
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
 
   if (!("${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM}" -eq "${BRANCH}" )) {
-    printWarning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
+    printWarning "Current branch ${BRANCH} incompatible with your docker version, please checkout ${DOCKER_VERSION_YY}`.${DOCKER_VERSION_MM} branch by exec $ ./lnmp-docker checkout"
   }
 }
 
@@ -790,7 +790,11 @@ if (Test-Command docker) {
 }
 
 $DOCKER_VERSION_YY = ([System.Version]$DOCKER_VERSION).Major
-$DOCKER_VERSION_MM = "0" + ([System.Version]$DOCKER_VERSION).Minor
+$DOCKER_VERSION_MM = ([System.Version]$DOCKER_VERSION).Minor
+
+if($DOCKER_VERSION_MM -lt 10){
+  $DOCKER_VERSION_MM = '0' + $DOCKER_VERSION_MM
+}
 
 New-InitFile
 New-LogFile
@@ -1444,8 +1448,8 @@ XXX
       "kube-apiserver:v${KUBERNETES_VERSION}", `
       "kube-scheduler:v${KUBERNETES_VERSION}", `
       "kube-proxy:v${KUBERNETES_VERSION}", `
-      "etcd:3.4.3-0", `
-      "coredns:1.6.7", `
+      "etcd:3.4.13-0", `
+      "coredns:1.7.0", `
       "pause:3.2", `
       "pause:3.1"
 
