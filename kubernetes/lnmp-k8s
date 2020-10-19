@@ -871,7 +871,7 @@ _crio_install(){
 
   CRIO_GIT=https://github.com/cri-o/cri-o
   if ! [ "${LNMP_CN_ENV}" = "false" ];then
-      CRIO_GIT=https://gitee.com/docker_practice/cri-o.git
+      CRIO_GIT=https://github.com.cnpmjs.org/cri-o/cri-o
   fi
 
   git clone --depth=1 -b release-${CRIO_VERSION} ${CRIO_GIT} $go_path/src/github.com/cri-o/cri-o \

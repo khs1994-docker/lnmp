@@ -29,7 +29,7 @@ services:
 
   php8:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0rc1}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0RC2}-fpm-alpine
 
   composer:
     << : *common

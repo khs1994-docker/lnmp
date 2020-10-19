@@ -12,7 +12,7 @@ ARG VCS_REF="unknow"
 LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
-ENV NGINX_UNIT_VERSION master
+ENV NGINX_UNIT_VERSION=master
 
 RUN set -x \
   && mkdir -p /usr/src/unit \

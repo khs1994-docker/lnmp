@@ -7,12 +7,17 @@
 **dashboard**
 
 * https://github.com/tektoncd/dashboard
-* https://github.com/tektoncd/dashboard/releases tekton-dashboard-release.yaml
+* https://github.com/tektoncd/dashboard/releases **tekton-dashboard-release.yaml**
 
 **CI/CD**
 
 * https://blog.csdn.net/shenshouer/article/details/89334956
 * https://segmentfault.com/a/1190000020182215
+
+**triggers**
+
+* https://github.com/tektoncd/triggers
+* https://github.com/tektoncd/triggers/releases **release.yaml**
 
 **CRD**
 

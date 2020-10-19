@@ -8,3 +8,5 @@ images:
   - name: gcr.io/k8s-staging-metrics-server/metrics-server:master
     newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
     newTag: master
+commonLabels:
+  k8s-app: metrics-server

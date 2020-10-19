@@ -9,10 +9,14 @@ KUBERNETES_VERSION=x.y.z
 ## 停止 k8s
 
 ```powershell
+$ wsl -d wsl-k8s
+```
+
+```bash
 $ touch /non-systemd
+```
 
-$ systemctl halt
-
+```powershell
 $ wsl --shutdown
 ```
 
