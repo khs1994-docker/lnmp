@@ -26,7 +26,7 @@
 
 编辑 `docker-lnmp.include.yml` 文件，增加服务名，修改指令即可。
 
-**建议每次修改之后执行 `$ lnmp-docker config > 1.yaml` 查看配置是否正确，之后启动。**
+**建议每次修改之后执行 `$ lnmp-docker config > docker-compose.yaml` 查看配置是否正确，之后启动。**
 
 ### 自定义镜像
 
