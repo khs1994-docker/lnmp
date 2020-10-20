@@ -566,7 +566,7 @@ stages:
     if: tag =~ /^(v18)/
   - name: checkConfig
     if: |
-      branch = "master"
+      branch = "20.10"
   - name: tag
     if: tag =~ /^(v20)/
   # don't run
