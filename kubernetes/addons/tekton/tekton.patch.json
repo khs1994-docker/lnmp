@@ -1,0 +1,30 @@
+[
+  {
+    "op": "replace",
+    "path": "/spec/template/spec/containers/0/args",
+    "value": [
+      "-version",
+      "v0.17.1",
+      "-kubeconfig-writer-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-kubeconfigwriter:v0.17.1@sha256:a0c3c63766ce30bf0c94dd30ff51a0745a629bd5ef10aae863a4aadd31917adc",
+      "-creds-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-creds-init:v0.17.1@sha256:58026c677a33465160177de5bd1e86fd51a5982c72d6bdc59ef3eab630a1e459",
+      "-git-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-git-init:v0.17.1@sha256:a39b8c647d6eaf609dc04bc7b0fc0f787b3b25fd6b1c9b182066a5c29a64a18c",
+      "-entrypoint-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-entrypoint:v0.17.1@sha256:ec3db704fd4fd6007f41cb8949f14f1ab0d9d76d472f1942677a9e245a1c35af",
+      "-nop-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-nop:v0.17.1@sha256:d0eeff76cc844c502652a4397795a36b4dd84211cddaa538a9d364822398ccb9",
+      "-imagedigest-exporter-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-imagedigestexporter:v0.17.1@sha256:5821552e75cffb4f739c8cfbeaeab8de511340a74a20233b10535ee2a89829cf",
+      "-pr-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-pullrequest-init:v0.17.1@sha256:7f64f991fab8941d424474fbc3f9fbe124f375382b2ae62c039583b5febc9d64",
+      "-build-gcs-fetcher-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-googlecloudplatform/cloud-builders/gcs-fetcher/cmd/gcs-fetcher:v0.17.1@sha256:0252efb5c939c33067b6cc33db07b311aec2108b37855b3fda9409661268b709",
+      "-gsutil-image",
+      "ccr.ccs.tencentyun.com/khs1994/tektoncd-cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f",
+      "-shell-image",
+      "ccr.ccs.tencentyun.com/khs1994/gcr-distroless-base@sha256:60f5ffe6fc481e9102747b043b3873a01893a5a8138f970c5f5fc06fb7494656"
+    ]
+  }
+]

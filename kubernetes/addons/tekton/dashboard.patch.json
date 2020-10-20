@@ -1,0 +1,7 @@
+[
+  {
+    "op": "add",
+    "path": "/spec/type",
+    "value": "NodePort"
+  }
+]

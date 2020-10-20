@@ -52,7 +52,7 @@ cmd = sudo_cmd + '''apt install -y gcc \
 
 wsl.install_build_dep(cmd)
 
-# cmd = '''git clone -b master --depth=1 https://gitee.com/mirrors/openssl.git /tmp/openssl \
+# cmd = '''git clone -b master --depth=1 https://github.com.cnpmjs.org/openssl/openssl.git /tmp/openssl \
 # ; cd /tmp/openssl \
 # && curl -fsSLO https://raw.githubusercontent.com/hakasenyang/openssl-patch/master/openssl-equal-pre10_ciphers.patch \
 # && patch -p1 < openssl-equal-pre10_ciphers.patch \

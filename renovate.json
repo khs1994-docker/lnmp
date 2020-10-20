@@ -6,7 +6,7 @@
     "khs1994"
   ],
   "baseBranches": [
-    "19.03"
+    "20.10"
   ],
   "commitBody": "[skip ci]",
   "labels": [
@@ -17,12 +17,6 @@
     "config:base",
     "docker:enableMajor"
   ],
-  "ignorePaths": [
-    "wsl/docker-compose.yml",
-    "wsl/Dockerfile",
-    "dockerfile/php/",
-    "app/"
-  ],
   "docker": {
     "enabled": true
   },
@@ -30,11 +24,11 @@
     "enabled": true,
     "digest": {
       "enabled": false
-    }
+    },
+    "fileMatch": [
+      "docker-compose.bump.yml"
+    ]
   },
-  "fileMatch": [
-    "docker-compose.bump.yml"
-  ],
   "includePaths": [
     "scripts/docker-compose.bump.yml",
     "kubernetes/docker-compose.bump.yml",

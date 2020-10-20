@@ -18,7 +18,6 @@ COPY --from=builder /src/path /target/path
 
 COPY --from=builder /file /file2 /target/path/
 
-ENV <key> <value>
 ENV <key>=<value> ...
 
 USER <user>[:<group>]

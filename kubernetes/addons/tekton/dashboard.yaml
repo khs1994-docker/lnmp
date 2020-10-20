@@ -137,22 +137,6 @@ rules:
   - deployments
   verbs:
   - list
-- apiGroups:
-  - route.openshift.io
-  resources:
-  - routes
-  verbs:
-  - get
-  - list
-- apiGroups:
-  - extensions
-  - apps
-  resources:
-  - ingresses
-  verbs:
-  - get
-  - list
-  - watch
 ---
 aggregationRule:
   clusterRoleSelectors:
@@ -340,13 +324,12 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.8.2
-    dashboard.tekton.dev/release: v0.8.2
-    version: v0.8.2
+    app.kubernetes.io/version: v0.10.1
+    dashboard.tekton.dev/release: v0.10.1
+    version: v0.10.1
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
-  type: NodePort
   ports:
   - name: http
     port: 9097
@@ -367,9 +350,9 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.8.2
-    dashboard.tekton.dev/release: v0.8.2
-    version: v0.8.2
+    app.kubernetes.io/version: v0.10.1
+    dashboard.tekton.dev/release: v0.10.1
+    version: v0.10.1
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
@@ -388,7 +371,7 @@ spec:
         app.kubernetes.io/instance: default
         app.kubernetes.io/name: dashboard
         app.kubernetes.io/part-of: tekton-dashboard
-        app.kubernetes.io/version: v0.8.2
+        app.kubernetes.io/version: v0.10.1
       name: tekton-dashboard
     spec:
       containers:
@@ -404,12 +387,13 @@ spec:
         - --namespace=
         - --openshift=false
         - --stream-logs=false
+        - --external-logs=
         env:
         - name: INSTALLED_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:4175d6237de3f85d4cfa2e331e244f0b1c20776455af10dcccdb81a3f9ebb012
+        image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:e72593477e8cb09b718b9b0b38731de5b4cb7ef0c04712f7b97f51be5c5e06c7
         livenessProbe:
           httpGet:
             path: /health
@@ -423,6 +407,7 @@ spec:
             port: 9097
       securityContext:
         runAsNonRoot: true
+        runAsUser: 65532
       serviceAccountName: tekton-dashboard
       volumes: []
 

@@ -11,4 +11,4 @@
 
 * https://github.com/kubernetes/kubernetes/pull/94624
 
-## WSL2 切换到 systemd 方案
+## 使用 `kustomization.yaml` 自定义，尽量不修改源文件

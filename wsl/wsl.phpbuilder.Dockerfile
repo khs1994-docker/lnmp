@@ -2,7 +2,7 @@ ARG OS_TYPE=debian:buster-slim
 
 FROM ${OS_TYPE} as builder
 
-ENV TZ Asia/Shanghai
+ENV TZ=Asia/Shanghai
 
 ARG LNMP_CN_ENV=false
 

@@ -43,9 +43,7 @@ $ kubectl CMD
 ## 关闭
 
 ```bash
-$ wsl -d wsl-k8s
-
-$ systemctl halt
+$ wsl --shutdown
 ```
 
 ## 调试

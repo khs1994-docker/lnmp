@@ -1,4 +1,7 @@
 # COMPOSE_CONVERT_WINDOWS_PATHS=1
+#
+# @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
+#
 
 version: "3.7"
 

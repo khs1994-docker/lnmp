@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.18.8"
-readonly DOCKER_DESKTOP_VERSION="2.3.6.0"
+readonly KUBERNETES_VERSION="1.19.2"
+readonly DOCKER_DESKTOP_VERSION="2.4.2.0"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -283,8 +283,8 @@ _gcr_io(){
     kube-apiserver:v${KUBERNETES_VERSION} \
     kube-scheduler:v${KUBERNETES_VERSION} \
     kube-proxy:v${KUBERNETES_VERSION} \
-    etcd:3.4.3-0 \
-    coredns:1.6.7 \
+    etcd:3.4.13-0 \
+    coredns:1.7.0 \
     pause:3.2 \
     pause:3.1"
 

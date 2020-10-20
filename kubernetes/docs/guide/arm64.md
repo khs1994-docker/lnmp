@@ -40,5 +40,5 @@ $ sudo sed -i 's|security.debian.org|mirrors.ustc.edu.cn/debian-security|g' /etc
 
 * https://github.com/DieterReuter/workshop-raspberrypi-64bit-os
 * https://github.com/bamarni/pi64/
-* https://docker_practice.gitee.io/install/raspberry-pi.html
+* https://vuepress.mirror.docker-practice.com/install/raspberry-pi/
 * 刷机工具 https://www.balena.io/etcher/
