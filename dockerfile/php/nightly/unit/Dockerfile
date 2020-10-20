@@ -31,7 +31,7 @@ RUN set -x \
   && sed -i "s/libtinfo.so/libisl.so.15.3.0/g" auto/modules/php \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
-       --module=php80 \
+       --module=php81 \
        --lib-path=/usr/local/lib \
        --config=/usr/local/bin/php-config \
   && make -j "$(nproc)" \

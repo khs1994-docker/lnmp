@@ -53,6 +53,12 @@ jobs:
                     /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
             set -x
             php -v
+      - name: Custom image
+        uses: ./
+        with:
+          image: khs1994/php:phpcpd
+          args: |
+            phpcpd --help
 
   notsupport-platform:
     strategy:

@@ -16,6 +16,14 @@ inputs:
     description: The id of the container network. The runner creates the network used by all containers in a job
     default: bridge
     required: false
+  args:
+    description: shell script
+    default: ''
+    required: false
+  image:
+    description: your image, e.g. username/php
+    default: ''
+    required: false
 runs:
   using: 'node12'
   main: 'lib/setup-php.js'
