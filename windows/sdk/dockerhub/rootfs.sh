@@ -53,7 +53,7 @@ manifest_list_json_file=`list "$token" "$image" "$ref" '' "$registry"`
 
 local schemaVersion=`cat $manifest_list_json_file | jq '.schemaVersion'`
 
-if [ "$schemaVersion" -eq 1 ];then
+if [ "$schemaVersion" = 1 ];then
   # cat $manifest_list_json_file > /dev/stderr
 
   echo "==> manifest list not found" > /dev/stderr
@@ -80,7 +80,7 @@ if [ "$schemaVersion" -eq 1 ];then
 
   return
 
-elif [ "$schemaVersion" -eq 2 ];then
+elif [ "$schemaVersion" = 2 ];then
   true
 else
   echo "==> get manifest error, exit" > /dev/stderr

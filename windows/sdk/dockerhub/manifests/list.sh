@@ -20,7 +20,7 @@ list(){
 
   local cache_file=`getCachePath "manifests/${ref_conver}.json" `
 
-curl -L \
+curl -fsSL \
 -H "Authorization:Bearer $token" \
 -H "Accept:$header" \
 "https://$registry/v2/$image/manifests/$ref" \
