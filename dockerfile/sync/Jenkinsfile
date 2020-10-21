@@ -7,8 +7,14 @@ pipeline {
     DOCKER_CLI_EXPERIMENTAL = "enabled"
     BUILDX_IMAGE= "dockerpracticesig/buildkit:master-tencent"
 
-    LWPM_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
-    LWPM_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
+    SOURCE_DOCKER_USERNAME = "${env.DOCKER_USERNAME}"
+    SOURCE_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
+    SOURCE_DOCKER_REGISTRY = "registry.hub.docker.com"
+
+    // SOURCE_DOCKER_REGISTRY = "mirror.ccs.tencentyun.com"
+
+    DEST_DOCKER_USERNAME = "${env.TENCENT_DOCKER_USERNAM}"
+    DEST_DOCKER_PASSWORD = "${env.DOCKER_PASSWORD}"
     DEST_DOCKER_REGISTRY = "ccr.ccs.tencentyun.com"
 
     REGISTRY_NAMESPACE = "khs1994"
@@ -74,7 +80,9 @@ pipeline {
         docker run -i --rm \
             -e DEST_DOCKER_USERNAME=\${TENCENT_DOCKER_USERNAME} \
             -e DEST_DOCKER_PASSWORD=\${DOCKER_PASSWORD} \
-            -e SOURCE_DOCKER_REGISTRY=mirror.ccs.tencentyun.com \
+            -e SOURCE_DOCKER_USERNAME \
+            -e SOURCE_DOCKER_PASSWORD \
+            -e SOURCE_DOCKER_REGISTRY \
             -e DEST_DOCKER_REGISTRY=\${DEST_DOCKER_REGISTRY} \
             -e DEST_NAMESPACE=\${REGISTRY_NAMESPACE} \
             -e CI=true \

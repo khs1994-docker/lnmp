@@ -348,10 +348,10 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 50M
+          memory: 128M
         reservations:
           cpus: '0.25'
-          memory: 20M
+          memory: 128M
 
   php7:
     << : *common
