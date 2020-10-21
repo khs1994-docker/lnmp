@@ -8,7 +8,7 @@
   "path": [
     "C:\\mysql\\bin"
   ],
-  "pre-version": "8.0.21",
+  "pre-version": "8.0.22",
   "releases": "https://github.com/mysql/mysql-server/releases",
   "scripts": {
     "install": "_cleanup mysql\n_unzip $filename mysql\n\n_mkdir C:\\mysql\nCopy-item -r -force \"mysql\\mysql-${VERSION}-winx64\\*\" \"C:\\mysql\\\"\n\n_cleanup mysql\n",
@@ -20,5 +20,5 @@
   },
   "url": "https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip",
   "url-mirror": "https://mirrors.huaweicloud.com/mysql/Downloads/MySQL-8.0/mysql-${VERSION}-winx64.zip",
-  "version": "8.0.21"
+  "version": "8.0.22"
 }

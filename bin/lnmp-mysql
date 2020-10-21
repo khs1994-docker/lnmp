@@ -17,7 +17,7 @@ source $ScriptRoot/.init
 
 if [ "$debug" = 'true' ];then set -x; fi
 
-image=mysql:${LNMP_MYSQL_VERSION:-8.0.21}
+image=mysql:${LNMP_MYSQL_VERSION:-8.0.22}
 
 if ! [ $(uname -s) = 'x86_64' ];then
   image=mariadb:${LNMP_MARIADB_VERSION:-10.5.6}

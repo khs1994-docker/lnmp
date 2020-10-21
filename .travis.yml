@@ -536,6 +536,7 @@ jobs:
 
     - stage: checkConfig
       script:
+        - ./lnmp-docker compose --official -f
         - sudo apt install -y tree
         - cd config
         - ./default.sh
