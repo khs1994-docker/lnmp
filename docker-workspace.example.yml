@@ -3,7 +3,7 @@
 # @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
 #
 
-version: "3.7"
+version: "3.8"
 
 x-common:
   &common
