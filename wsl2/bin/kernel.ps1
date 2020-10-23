@@ -42,7 +42,7 @@ if ($args[0] -eq 'config') {
 
 $EXEC_CMD_DIR = pwd
 
-$deb = "linux-headers-${kernelversion}-microsoft-standard_$(${kernelversion}.split('-')[0])-1_amd64.deb"
+$deb = "linux-headers-${kernelversion}-microsoft-standard-WSL2_$(${kernelversion}.split('-')[0])-1_amd64.deb"
 
 mkdir -f ~/.wsl | out-null
 
@@ -60,8 +60,8 @@ Function _downloader($name, $url) {
 
 # 下载文件
 
-_downloader "kernel-${kernelversion}-microsoft-standard.img" "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard/kernel-${kernelversion}-microsoft-standard.img"
-_downloader $deb "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard/$deb"
+_downloader "kernel-${kernelversion}-microsoft-standard-WSL2.img" "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard-WSL2/kernel-${kernelversion}-microsoft-standard-WSL2.img"
+_downloader $deb "https://github.com/khs1994/WSL2-Linux-Kernel/releases/download/${kernelversion}-microsoft-standard-WSL2/$deb"
 
 # 复制配置文件
 
