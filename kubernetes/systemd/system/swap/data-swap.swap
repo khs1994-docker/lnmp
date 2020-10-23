@@ -1,0 +1,4 @@
+[Swap]
+# http://www.jinbuguo.com/systemd/systemd.swap.html#
+
+What=/data/swap
