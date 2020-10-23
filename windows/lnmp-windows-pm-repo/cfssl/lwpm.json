@@ -9,5 +9,5 @@
     "install": "$url = \"https://github.com/cloudflare/cfssl/releases/download/v${VERSION}\"\n$pkgs='cfssl','cfssl-bundle','cfssl-certinfo','cfssl-newkey','cfssl-scan','cfssljson','mkbundle','multirootca'\nforeach($pkg in $pkgs){\n  printInfo Downloading $pkg ...\n\n  if($_isWindows){\n    $dist=\"C:\\bin\\${pkg}.exe\"\n  }else{\n    $dist=\"/usr/local/bin/${pkg}\"\n  }\n\n  if(Test-Path $dist){\n    printTips $pkg exists`, skip\n    continue;\n  }\n\n  if($_isWindows){\n    curl -fsSL $url/${pkg}_${VERSION}_${env:lwpm_os}_amd64$(if($_isWindows){echo .exe}) -o $dist\n  }else{\n    sudo curl -fsSL $url/${pkg}_${VERSION}_${env:lwpm_os}_amd64$(if($_isWindows){echo .exe}) -o $dist\n    sudo chmod +x $dist\n  }\n\n}\n",
     "test": "cfssl version"
   },
-  "version": "1.4.1"
+  "version": "1.5.0"
 }

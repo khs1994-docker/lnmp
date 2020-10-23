@@ -72,7 +72,7 @@ services:
   npm:
     << : *workspace
     << : *common
-    image: node:14.13.1-alpine
+    image: node:15.0.0-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 
