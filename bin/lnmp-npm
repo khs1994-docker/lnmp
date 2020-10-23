@@ -25,6 +25,11 @@ docker run -i ${tty} --rm \
    chown -R ${LNMP_USER} /tmp/node/npm; \
   "
 
+if [ "$LNMP_CN_ENV" = 'false' ];then
+  sed -i 's/^registry=.*//g' \
+  ${ScriptRoot}/../config/npm/.npmrc
+fi
+
 exec docker run -i ${tty} --rm \
     --mount type=bind,src=$PWD,target=/app,consistency=${APP_ROOT_CONSISTENCY:delegated} \
     --mount type=bind,src=${ScriptRoot}/../config/npm/.npmrc,target=/usr/local/etc/npmrc \

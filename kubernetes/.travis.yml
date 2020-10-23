@@ -59,9 +59,9 @@ before_install:
   - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
   - |
-    if [ $(go env GOARCH) = "arm64" ];then
-      $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose -f
-    fi
+    # if [ $(go env GOARCH) = "arm64" ];then
+      $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose --official -f
+    # fi
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true

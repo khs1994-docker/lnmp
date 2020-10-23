@@ -28,6 +28,11 @@ docker run -i ${tty} --rm \
    chown -R ${LNMP_USER} ${COMPOSER_HOME}; \
   "
 
+if [ "$LNMP_CN_ENV" = 'false' ];then
+  sed -i 's!https://mirrors.aliyun.com/composer/!https://repo.packagist.org!g' \
+  $ScriptRoot/../config/composer/config.json
+fi
+
 exec docker run -i ${tty} --rm \
   --mount type=bind,src=$PWD,target=/app,consistency=${APP_ROOT_CONSISTENCY:delegated} \
   --mount src=lnmp_composer-cache-data,target=${COMPOSER_CACHE_DIR} \
