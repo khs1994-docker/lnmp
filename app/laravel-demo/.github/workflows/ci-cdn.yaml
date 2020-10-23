@@ -22,6 +22,7 @@ jobs:
           docker_version: "20.10"
       - uses: khs1994-docker/actions-setup-lnmp@master
         with:
+          lnmp_branch: "20.10"
           lnmp_services: "nginx mysql php7 redis minio"
           lrew_include: "minio"
       - name: Init LNMP
