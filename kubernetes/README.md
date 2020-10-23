@@ -30,8 +30,6 @@
 
 ### 其他方案
 
-* [MiniKube](docs/setup/minikube.md)
-
 * [kubeadm](docs/setup/kubeadm.md)
 
 * [k3s](docs/setup/k3s.md)

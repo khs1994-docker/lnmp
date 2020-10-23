@@ -37,6 +37,7 @@ jobs:
           "IP",\
           "kubernetes.default.svc.cluster.local",\
           "gcr.mirrors.ustc.edu.cn",\
+          "github.com/settings/tokens",\
           "mritd.me",\
           "my.oschina.net",\
           "xxx",\

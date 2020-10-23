@@ -5,8 +5,6 @@
 # 基础设施
 
 * [Docker Desktop](setup/docker-desktop.md)
-* [Minikube](setup/minikube.md)
-* [Minikube On Windows](setup/windows.md)
 
 # 错误排查
 
