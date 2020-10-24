@@ -58,7 +58,7 @@ jobs:
           # 此步骤会重置 webpack.mix.js
           lnmp-php artisan ui vue --auth
 
-          cp -r ../laravel-demo/.patch/. .
+          cp -r ../laravel-demo/laravel-patch/. .
           ls -la resources/views
 
           lnmp-npm install
