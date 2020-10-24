@@ -3,7 +3,7 @@
     "https://hub-mirror.c.163.com"
   ],
   "experimental": true,
-  "data-root": "/wsl/wsl-k8s-data/docker",
+  "data-root": "/wsl/wsl-k8s-data/k8s/var/lib/docker",
   "hosts": [
     "unix:///var/run/docker.sock",
     "tcp://127.0.0.1:2376"

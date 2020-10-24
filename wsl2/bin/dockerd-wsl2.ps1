@@ -4,7 +4,7 @@ if (!$?) {
   exit 1
 }
 
-wsl -d wsl-k8s -u root -- mkdir -p /wsl/wsl-k8s-data/docker
+wsl -d wsl-k8s -u root -- mkdir -p /wsl/wsl-k8s-data/k8s/var/lib/docker
 
 wsl -d wsl-k8s -- sh -c "rm -rf /etc/default/docker"
 

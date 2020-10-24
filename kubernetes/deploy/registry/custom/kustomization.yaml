@@ -1,5 +1,10 @@
 bases:
-- ../overlays/development
-- ../../../../config/registry
-patches:
-- patch.yaml
+  - ../overlays/development
+  - ../../../../config/registry
+patchesJson6902:
+  - path: custom.patch.json
+    target:
+      group: apps
+      kind: Deployment
+      name: registry
+      version: v1
