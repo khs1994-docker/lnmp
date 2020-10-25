@@ -72,11 +72,12 @@
 
 ## 学习
 
-* 存储 `pv` `pvc` `flexvolume` `csi`
-* 网络 `cni` `calico`
+* 存储 `pv` `pvc` [csi](storage/csi) `flexvolume`
+* 网络 `cni` [calico](addons/cni)
+* 服务 [ingress](addons/ingress)
 * 容器运行时 `cri` `docker` `cri-containerd` `cri-o`
-* 监控
-* 服务 `ingress`
+* 监控 [Prometheus](deploy/kube-prometheus)
+* 日志 [efk](addons/efk)
 
 ## More Information
 
