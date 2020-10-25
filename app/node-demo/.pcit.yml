@@ -1,11 +1,11 @@
-language: node_js
-
-pipeline:
+steps:
 
   install:
-    commands:
+    run:
       - npm install
 
   scripts:
-    commands:
+    run:
       - npm test
+
+image: node

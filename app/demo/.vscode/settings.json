@@ -1,0 +1,10 @@
+{
+  "yaml.schemas": {
+    "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json": [
+      ".pcit.yml",
+      ".pcit.yaml",
+      ".pcit/*.yml",
+      ".pcit/*.yaml"
+    ]
+  }
+}

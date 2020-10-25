@@ -267,6 +267,10 @@
     "dest": "library-mirror/debian:sid"
   },
   {
+    "source": "library/ubuntu:20.04",
+    "dest": "library-mirror/ubuntu:20.04"
+  },
+  {
     "source": "lrew/lrew:latest",
     "dest": "lrew/lrew:latest"
   },
