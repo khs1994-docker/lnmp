@@ -1,6 +1,7 @@
 # EFK 插件
 
 * https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
+* https://github.com/opsnull/follow-me-install-kubernetes-cluster/blob/master/08-5.EFK%E6%8F%92%E4%BB%B6.md
 
 ## 注意事项
 
@@ -41,6 +42,10 @@ $ kubectl proxy --address='127.0.0.1' --port=8086 --accept-hosts='^*$'
 ```bash
 $ kubectl delete -k addons/efk
 ```
+
+## 工具
+
+* https://fluentular.herokuapp.com
 
 ## More Information
 

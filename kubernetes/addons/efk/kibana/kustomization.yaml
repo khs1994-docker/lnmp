@@ -1,0 +1,3 @@
+resources:
+- kibana-deployment.yaml
+- kibana-service.yaml
