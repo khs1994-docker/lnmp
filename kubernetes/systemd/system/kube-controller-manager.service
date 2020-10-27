@@ -54,6 +54,7 @@ ExecStart=/opt/k8s/bin/kube-controller-manager \
 --feature-gates="IPv6DualStack=true" \
 --experimental-cluster-signing-duration=876000h \
 --port=0 \
+# --logging-format=json \
 --v=2
 
 # --cluster-signing-duration=876000h

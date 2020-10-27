@@ -43,6 +43,7 @@ Environment=CONTAINER_HOOKS_DIR=/opt/k8s/usr/local/share/containers/oci/hooks.d
 Environment=CONTAINER_CONMON=/opt/k8s/usr/local/bin/conmon
 Environment="CONTAINER_MANAGE_NS_LIFECYCLE=true"
 Environment="CONTAINER_DROP_INFRA_CTR=true"
+Environment="CONTAINER_LOG_FORMAT=json"
 ExecStartPre=-/usr/bin/env mkdir -p /etc/containers
 ExecStartPre=-/usr/bin/env mount --bind /opt/k8s/etc/containers /etc/containers
 ExecStart=/opt/k8s/usr/local/bin/crio \
