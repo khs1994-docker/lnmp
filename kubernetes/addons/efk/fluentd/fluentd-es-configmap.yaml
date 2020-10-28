@@ -11,7 +11,7 @@ data:
       root_dir /tmp/fluentd-buffers/
     </system>
 
-  containers.input.conf: |-
+  containers.input.conf.back: |-
     # This configuration file for Fluentd / td-agent is used
     # to watch changes to Docker log files. The kubelet creates symlinks that
     # capture the pod name, namespace, container name & Docker container ID
@@ -178,7 +178,7 @@ data:
       </parse>
     </filter>
 
-  system.input.conf: |-
+  system.input.conf.back: |-
     # Example:
     # 2015-12-21 23:17:22,066 [salt.state       ][INFO    ] Completed state [net.ipv4.ip_forward] at time 23:17:22.066081
     <source>
@@ -439,16 +439,16 @@ data:
     </source>
 
     <source>
-      @id journald-kubelet@cri-o
+      @id journald-kubelet@crio
       @type systemd
-      matches [{ "_SYSTEMD_UNIT": "kubelet@cri-o.service" }]
+      matches [{ "_SYSTEMD_UNIT": "kubelet@crio.service" }]
       <storage>
         @type local
         persistent true
-        path /var/log/journald-kubelet@cri-o.pos
+        path /var/log/journald-kubelet@crio.pos
       </storage>
       read_from_head true
-      tag kubelet@cri-o
+      tag kubelet@crio
       @label @KUBE
       # <entry>
       #   field_map {"MESSAGE": "log", "_PID": ["process", "pid"], "_CMDLINE": "process", "_COMM": "cmd"}
@@ -713,13 +713,25 @@ data:
       </match>
     </label>
 
-  forward.input.conf: |-
-    # https://docs.fluentbit.io/manual/pipeline/outputs/forward
+  forward.input.conf.back: |-
     # Takes the messages sent over TCP
     <source>
       @id forward
       @type forward
     </source>
+
+  flb_forward.input.conf: |-
+    # # https://docs.fluentbit.io/manual/pipeline/outputs/forward
+    <source>
+      @type forward
+      bind 0.0.0.0
+      port 24224
+    </source>
+
+    # <match **>
+    #   @type relabel
+    #   @label @OUTPUT
+    # </match>
 
   monitoring.conf: |-
     # Prometheus Exporter Plugin
