@@ -31,8 +31,12 @@ spec:
 
   # roundRobin：轮询模式，即轮询将请求转发到后端的各个Pod上
 
-  ipFamily: IPv4 # IPv6
+  # ipFamily: IPv4 # IPv6
   # ipFamily: IPv6
+  # 1.20+
+  # ipFamilyPolicy: SingleStack PreferDualStack RequireDualStack
+  # ipFamilies:
+  # clusterIPs:
 
   # 定义标签选择器
   selector:
