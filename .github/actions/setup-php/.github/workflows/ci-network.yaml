@@ -21,4 +21,4 @@ jobs:
             ping redis -c 4
     services:
       redis:
-        image: redis:6.0.8-alpine
+        image: redis:6.0.9-alpine

@@ -17,11 +17,11 @@ services:
 
   redis:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.0.8}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/redis:${LNMP_REDIS_VERSION:-6.0.9}-alpine
 
   memcached:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.7}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.8}-alpine
 
   php7:
     << : *common

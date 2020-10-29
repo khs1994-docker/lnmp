@@ -12,8 +12,8 @@
     "dest": "library-mirror/node:15.0.1-alpine"
   },
   {
-    "source": "node:12.19.0-alpine",
-    "dest": "library-mirror/node:12.19.0-alpine"
+    "source": "node:14.15.0-alpine",
+    "dest": "library-mirror/node:14.15.0-alpine"
   },
   {
     "source": "golang:1.15.3-alpine",
@@ -132,16 +132,16 @@
     "dest": "library-mirror/redis:5.0.9-alpine"
   },
   {
-    "source": "library/redis:6.0.8-alpine",
-    "dest": "library-mirror/redis:6.0.8-alpine"
+    "source": "library/redis:6.0.9-alpine",
+    "dest": "library-mirror/redis:6.0.9-alpine"
   },
   {
     "source": "library/memcached:alpine",
     "dest": "library-mirror/memcached:alpine"
   },
   {
-    "source": "library/memcached:1.6.7-alpine",
-    "dest": "library-mirror/memcached:1.6.7-alpine"
+    "source": "library/memcached:1.6.8-alpine",
+    "dest": "library-mirror/memcached:1.6.8-alpine"
   },
   {
     "source": "library/nginx:alpine",

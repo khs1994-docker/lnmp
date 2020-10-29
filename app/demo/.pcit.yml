@@ -138,7 +138,7 @@ jobs:
   NGINX_VERSION:
     - 1.17.0
   REDIS_VERSION:
-    - 6.0.8
+    - 6.0.9
   MYSQL_VERSION:
     # - 8.0.11
     - 5.7.22

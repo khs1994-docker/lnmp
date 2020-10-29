@@ -45,7 +45,7 @@ spec:
       containers:
       - name: lnmp-redis
         imagePullPolicy: IfNotPresent
-        image: redis:6.0.8-alpine
+        image: redis:6.0.9-alpine
         args:
         - redis-server
         - /redis.conf

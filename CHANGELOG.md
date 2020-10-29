@@ -13,3 +13,4 @@
 ### Updates:
 
 * [MySQL `8.0.22`](https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-22.html)
+* [Redis `6.0.9`](https://raw.githubusercontent.com/antirez/redis/6.0/00-RELEASENOTES)

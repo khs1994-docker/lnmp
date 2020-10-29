@@ -214,7 +214,7 @@ services:
   #     - POSTGRES_DB=test
 
   - name: redis
-    image: redis:6.0.8-alpine
+    image: redis:6.0.9-alpine
 
   # - name: mongodb
   #   image: mongo:4.1.0
@@ -238,7 +238,7 @@ volumes:
 #   NGINX_VERSION:
 #     - 1.17.0
 #   REDIS_VERSION:
-#     - 6.0.8
+#     - 6.0.9
 #   MYSQL_VERSION:
 #     # - 8.0.22
 #     - 5.7.22
@@ -250,9 +250,9 @@ volumes:
 # matrix:
 #   include:
 #     - PHP_VERSION=7.2.34
-#       REDIS_VERSION=6.0.8
+#       REDIS_VERSION=6.0.9
 #     - PHP_VERSION=7.1.33
-#       REDIS_VERSION=6.0.8
+#       REDIS_VERSION=6.0.9
 
 # trigger:
 #   branch:

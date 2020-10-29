@@ -12,7 +12,7 @@ if len(sys.argv) == 3:
     input_version = sys.argv[1]
     input_sudo = sys.argv[2]
 else:
-    wsl.print_help_info('lnmp-wsl-builder-redis.py', 'Redis', '6.0.8')
+    wsl.print_help_info('lnmp-wsl-builder-redis.py', 'Redis', '6.0.9')
     exit(0)
 
 sudo_cmd = 'echo ' + input_sudo + ' | sudo -S '
