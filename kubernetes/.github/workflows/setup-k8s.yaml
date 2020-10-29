@@ -305,7 +305,7 @@ jobs:
          kubectl certificate approve $CSR_NAME
          kubectl get csr
 
-         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
+         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/custom.patch.json
          git diff
          if [ "$CNI_CALICO_EBPF" = 'true' ];then
            export SERVER_IP=`cat .server_ip`

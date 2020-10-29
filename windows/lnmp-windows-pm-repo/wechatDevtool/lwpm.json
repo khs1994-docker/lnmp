@@ -1,8 +1,8 @@
 {
   "name": "wechatDevtool",
   "description": "WeChat Dev tool",
-  "version": "1.04.2010162",
-  "pre-version": "1.04.2010162",
+  "version": "1.04.2010232",
+  "pre-version": "1.04.2010232",
   "homepage": "https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html",
   "bug": "https://developers.weixin.qq.com/community/develop/question",
   "github": "https://github.com/wechat-miniprogram",

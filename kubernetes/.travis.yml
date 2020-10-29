@@ -274,13 +274,13 @@ before_script:
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
 
-  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
-  - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/patch.json
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/custom.patch.json
+  - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/custom.patch.json
   - |
     if [ "${IPV6}" = 'true' ];then
       sed -i -e "s#_IP6#IP6#g" \
              -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
-          addons/cni/calico-custom/patch.json
+          addons/cni/calico-custom/custom.patch.json
 
       sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
           addons/cni/calico/calico.yaml

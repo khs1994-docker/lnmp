@@ -88,7 +88,7 @@ $ kubectl apply -f addons/cni/calico-eBPF/kubernetes.yaml
 $ kubectl apply -k addons/cni/calico-eBPF
 ```
 
-> 若不能正确匹配网卡，请修改 [addons/cni/calico/patch.json](../addons/cni/calico/patch.json) 文件中 `IP_AUTODETECTION_METHOD` 变量的值
+> 若不能正确匹配网卡，请修改 [addons/cni/calico/basic.patch.json](../addons/cni/calico/basic.patch.json) 文件中 `IP_AUTODETECTION_METHOD` 变量的值
 
 ### 2. 部署 CoreDNS 等其他组件
 
