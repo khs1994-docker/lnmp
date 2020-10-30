@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 #
 # 警告 compose 文件中包含中文可能会报错，所以阅读之后请删掉中文
@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: deploy/test.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.4.11}
+        - PHP_VERSION=${PHP_VERSION:-7.4.12}
     image: ${DOCKER_HUB_USERNAME:-khs1994}/EXAMPLE
 
   nginx:
@@ -39,7 +39,7 @@ services:
       dockerfile: Dockerfile
       target: php
       args:
-        - PHP_VERSION=${PHP_VERSION:-7.4.11}
-        - NODE_VERSION=${NODE_VERSION:-14.13.1}
+        - PHP_VERSION=${PHP_VERSION:-7.4.12}
+        - NODE_VERSION=${NODE_VERSION:-15.0.1}
         - NODE_REGISTRY=https://registry.npm.taobao.org
-    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-7.4.11}-pro-alpine
+    image: ${DOCKER_HUB_USERNAME:-khs1994}/php:${PHP_VERSION:-7.4.12}-pro-alpine

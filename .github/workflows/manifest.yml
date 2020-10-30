@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:6.0.8-alpine
+        image: redis:6.0.9-alpine
     defaults:
       run:
         shell: bash --noprofile --norc -exo pipefail {0}
@@ -65,6 +65,9 @@ jobs:
           || contains( github.event.head_commit.message, '[skip action]')
           || contains( github.event.head_commit.message, '[ci skip]')
           || contains( github.event.head_commit.message, '[action skip]')
+      - run: docker version
+      - run: docker info
+      - run: docker-compose --version
       - name: System info
         run: |
           env
@@ -78,12 +81,9 @@ jobs:
           sudo systemctl -t service --all | grep redis || true
           sudo systemctl -t service --all | grep php || true
 
-          docker version
           docker network ls
           docker network ls | grep github || true
           docker ps -a
-
-          docker-compose --version
 
           mysql --version
           sudo systemctl status mysql || true

@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 #
 # khs1994.com Docker Swarm mode
@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:7.4.11-fpm-alpine
+  image: khs1994/php:7.4.12-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -113,8 +113,8 @@ services:
       << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-    image: mysql:8.0.21
-    # image: khs1994/lnmp-mysql:8.0.21
+    image: mysql:8.0.22
+    # image: khs1994/lnmp-mysql:8.0.22
     # image: username/lnmp-mysql:tag
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
@@ -193,9 +193,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:6.0.8-alpine
+    image: redis:6.0.9-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:6.0.8
+    # image: khs1994/lnmp-redis:6.0.9
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -348,10 +348,10 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 50M
+          memory: 128M
         reservations:
           cpus: '0.25'
-          memory: 20M
+          memory: 128M
 
   php7:
     << : *common

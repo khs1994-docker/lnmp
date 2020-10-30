@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 x-common:
   &common
@@ -76,7 +76,7 @@ services:
 
   mysql:
     << : *common
-    image: mysql:${CI_MYSQL_VERSION:-8.0.21}
+    image: mysql:${CI_MYSQL_VERSION:-8.0.22}
     env_file: secrets/mysql.env
     volumes:
       - mysql-data:/var/lib/mysql:rw
@@ -85,7 +85,7 @@ services:
 
   redis:
     << : *common
-    image: redis:${CI_REDIS_VERSION:-6.0.8}-alpine
+    image: redis:${CI_REDIS_VERSION:-6.0.9}-alpine
     volumes:
       - redis-data:/data
 

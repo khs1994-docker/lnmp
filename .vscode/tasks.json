@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "command": "lnmp-docker",
+      "windows": {
+        "command": "lnmp-docker.ps1"
+      },
+      "args": [
+        "config",
+        ">",
+        "docker-compose.yml"
+      ],
+      "group": "build",
+      "problemMatcher": [],
+      "label": "lnmp-docker config",
+      "detail": "show lnmp-docker compose config"
+    }
+  ]
+}

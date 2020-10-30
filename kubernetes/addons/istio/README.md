@@ -18,8 +18,8 @@ $ istioctl manifest generate --set profile=demo > istio.yaml
 $ istioctl manifest generate --set profile=demo \
   # istio-cni
   --set components.cni.enabled=true \
-  --set values.cni.cniBinDir=/wsl/wsl-k8s-data/k8s/opt/cni/bin \
-  --set values.cni.cniConfDir=/wsl/wsl-k8s-data/k8s/etc/cni/net.d \
+  --set values.cni.cniBinDir=/opt/k8s/opt/cni/bin \
+  --set values.cni.cniConfDir=/opt/k8s/etc/cni/net.d \
 
   --set values.meshConfig.outboundTrafficPolicy.mode=REGISTRY_ONLY \
   # pod 可以访问集群内部服务 值为 kube-apiserver --service-cluster-ip-range 参数的值

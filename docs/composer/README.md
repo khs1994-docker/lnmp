@@ -12,17 +12,23 @@ $ composer install \
 
 **国内镜像**
 
+* https://github.com/Webysther/packagist-mirror
+
 ```bash
+# 每 5min 更新
 $ composer config -g repos.packagist composer https://mirrors.aliyun.com/composer/
 
-$ composer config -g repos.packagist composer https://mirrors.huaweicloud.com/repository/php/
-
+# 每日更新
 $ composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/
 
+# 不推荐
 $ composer config -g repos.packagist composer https://packagist.mirrors.sjtug.sjtu.edu.cn
-
-$ composer config -g repos.packagist composer https://packagist.phpcomposer.com
 ```
+
+**过时**
+
+* https://packagist.phpcomposer.com
+* https://mirrors.huaweicloud.com/repository/php/
 
 **取消配置**
 

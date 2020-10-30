@@ -59,7 +59,7 @@ fi
 
 PHP_INSTALL_LOG=/tmp/php-builder/$(date +%s).install.log
 
-export COMPOSER_VERSION=1.10.13
+export COMPOSER_VERSION=2.0.3
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -1027,8 +1027,8 @@ command -v wget > /dev/null || $(_sudo) apt install wget -y
 
 mkdir -p /tmp/php-builder
 
-test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.11
-test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.11
+test "$PHP_VERSION" = 'apt' && PHP_VERSION=7.4.12
+test "$PHP_VERSION" = 'apt-dev' && PHP_VERSION=7.4.12
 
 _get_phpnum $PHP_VERSION
 

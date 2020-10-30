@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 #
 # @link https://www.ruanyifeng.com/blog/2016/07/yaml.html
@@ -31,11 +31,11 @@ services:
   # php7:
   #   &php7
   #   # ! change php7 default image
-  #   image: username/php:${LNMP_PHP_VERSION:-7.4.11}-fpm-alpine
+  #   image: username/php:${LNMP_PHP_VERSION:-7.4.12}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.11}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.12}-fpm-alpine
   #   # ! s6
-  #   # image: khs1994/php:${LNMP_PHP_VERSION:-7.4.11}-s6-alpine
+  #   # image: khs1994/php:${LNMP_PHP_VERSION:-7.4.12}-s6-alpine
   #   # command: []
   #   # volumes:
   #   #   - ./config/s6/services.d:/etc/services.d
@@ -76,7 +76,7 @@ services:
 
   swoole:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.11}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.12}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php

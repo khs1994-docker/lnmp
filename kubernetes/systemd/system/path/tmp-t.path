@@ -1,0 +1,5 @@
+[Path]
+# http://www.jinbuguo.com/systemd/systemd.path.html#
+
+PathExists=/tmp/t
+Unit=t.service

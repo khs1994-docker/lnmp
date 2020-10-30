@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.8"
 
 #
 # Redis cluster (by Ruby 5.0 under, 5.0 + please see $ redis-cli --cluster help)
@@ -28,7 +28,7 @@ version: '3.7'
 
 x-common:
   &common
-  image: redis:6.0.8-alpine
+  image: redis:6.0.9-alpine
   restart: always
   env_file:
     - ./cli/timezone.env

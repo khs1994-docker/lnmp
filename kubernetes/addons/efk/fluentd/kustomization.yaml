@@ -1,0 +1,4 @@
+resources:
+- fluentd-es-configmap.yaml
+- fluentd-es-ds.yaml
+- fluent-bit-configmap.yaml

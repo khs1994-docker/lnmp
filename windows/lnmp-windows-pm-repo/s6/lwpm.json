@@ -11,5 +11,5 @@
     "platform-reqs": "if(!$_IsLinux){echo $false}"
   },
   "url": "https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-amd64.tar.gz",
-  "version": "2.1.0.0"
+  "version": "2.1.0.2"
 }

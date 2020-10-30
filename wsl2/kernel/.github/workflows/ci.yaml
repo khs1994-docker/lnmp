@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         repo: ["microsoft/WSL2-Linux-Kernel","torvalds/linux"]
-        ref: ["master","linux-msft-wsl-4.19.y","linux-msft-wsl-5.4.y"]
+        ref: ["master","linux-msft-wsl-5.4.y"]
         exclude:
         - repo: "torvalds/linux"
           ref: "linux-msft-wsl-4.19.y"
@@ -130,7 +130,7 @@ jobs:
 
         ls -lah arch/x86/boot/bzImage
 
-        kernelversion=$(make -s kernelversion)-microsoft-WSL2-standard
+        kernelversion=$(make -s kernelversion)-microsoft-standard-WSL2
         kernelversion=`ls linux/lib/modules`
         echo ::set-output name=kernelversion::`echo $kernelversion`
     - name: Dist

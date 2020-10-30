@@ -1,0 +1,7 @@
+[Mount]
+# http://www.jinbuguo.com/systemd/systemd.mount.html#
+
+Where=/tmp/t
+What=/tmp
+Type=none
+Options=bind

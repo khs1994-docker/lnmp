@@ -74,11 +74,11 @@ if ! grep 'start-systemd-namespace' /etc/bash.bashrc >/dev/null; then
   $(_sudo) sed -i 2a"# Start or enter a PID namespace in WSL2\nsource /usr/sbin/start-systemd-namespace\n" /etc/bash.bashrc
 fi
 
-$(_sudo) rm -f /etc/systemd/user/sockets.target.wants/dirmngr.socket
-$(_sudo) rm -f /etc/systemd/user/sockets.target.wants/gpg-agent*.socket
-$(_sudo) rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.automount
-$(_sudo) rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.mount
-$(_sudo) rm -f /lib/systemd/system/sysinit.target.wants/systemd-binfmt.service
+$(_sudo) ln -sf /dev/null /etc/systemd/user/sockets.target.wants/dirmngr.socket || true
+$(_sudo) ln -sf /dev/null /etc/systemd/user/sockets.target.wants/gpg-agent*.socket || true
+$(_sudo) ln -sf /dev/null /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.automount || true
+$(_sudo) ln -sf /dev/null /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.mount || true
+$(_sudo) ln -sf /dev/null /lib/systemd/system/sysinit.target.wants/systemd-binfmt.service || true
 
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] && [ "$(head -n1  /proc/sys/fs/binfmt_misc/WSLInterop)" == "enabled" ]; then
   "$(interop_prefix)$(sysdrive_prefix)"/Windows/System32/cmd.exe /C setx WSLENV BASH_ENV/u

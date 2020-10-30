@@ -15,12 +15,12 @@
 #
 # $ docker buildx build --target=laravel --load -t khs1994/laravel:7 -f Dockerfile.cdn --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
-ARG PHP_VERSION=7.4.11
+ARG PHP_VERSION=7.4.12
 ARG NGINX_VERSION=1.19.3-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建，并上传到 CDN
-FROM node:${NODE_VERSION:-14.13.1}-alpine as frontend
+FROM node:${NODE_VERSION:-15.0.1}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
@@ -73,7 +73,7 @@ RUN  set -x \
      && mc --insecure policy set public minio/${CDN_BUCKET}
 
 # 2.安装 composer 依赖
-FROM ${DOCKER_HUB_USERNAME}/php:7.4.11-composer-alpine as composer
+FROM ${DOCKER_HUB_USERNAME}/php:7.4.12-composer-alpine as composer
 
 # COPY composer.json composer.lock /app/
 COPY composer.json /app/

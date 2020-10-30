@@ -19,7 +19,7 @@
 > 例如 PHP 默认没有开放端口，我们想开放 `10001` 端口。
 
 ```bash
-version: "3.7"
+version: "3.8"
 
 services:
 

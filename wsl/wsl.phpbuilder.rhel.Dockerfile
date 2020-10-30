@@ -8,7 +8,7 @@ ARG LNMP_CN_ENV=false
 
 ENV LNMP_CN_ENV=${LNMP_CN_ENV}
 
-ARG PHP_VERSION=7.4.11
+ARG PHP_VERSION=7.4.12
 
 COPY lnmp-wsl-builder-php-rhel /lnmp-wsl-builder-php-rhel.sh
 

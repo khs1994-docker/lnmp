@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   nginx:
@@ -42,7 +42,7 @@ services:
         target: /etc/nginx/conf.d/ssl/khs1994.com.key
 
   php7:
-    image: khs1994/php:7.4.11-pro-alpine
+    image: khs1994/php:7.4.12-pro-alpine
     environment:
       - TZ=Asia/Shanghai
     networks:

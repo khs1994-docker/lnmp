@@ -30,7 +30,7 @@ steps:
   # install dep
   - name: install
     # image: composer:1.8.4
-    image: khs1994/php:7.4.11-composer-alpine
+    image: khs1994/php:7.4.12-composer-alpine
     commands:
       - pwd
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
@@ -42,7 +42,7 @@ steps:
 
   # test script
   - name: script
-    image: khs1994/php:7.4.11-fpm-alpine
+    image: khs1994/php:7.4.12-fpm-alpine
     # pull: always
     # detach: true
     # privileged: true
@@ -86,7 +86,7 @@ steps:
     settings:
       # registry: docker.khs1994.com
       repo: khs1994/php
-      tags: 7.4.11-pro-${DRONE_TAG}-alpine
+      tags: 7.4.12-pro-${DRONE_TAG}-alpine
       target: php
       mirror: https://hub-mirror.c.163.com
       # build_args:
@@ -136,7 +136,7 @@ steps:
     image: plugins/docker
     settings:
       repo: khs1994/php
-      tags: 7.4.11-pro-${DRONE_TAG}-alpine
+      tags: 7.4.12-pro-${DRONE_TAG}-alpine
       target: php
       mirror: https://hub-mirror.c.163.com
       username:
@@ -173,7 +173,7 @@ steps:
       event: [ tag ]
 
   - name: after_success
-    image: khs1994/php:7.4.11-composer-alpine
+    image: khs1994/php:7.4.12-composer-alpine
     when:
       status: success
     commands:
@@ -214,7 +214,7 @@ services:
   #     - POSTGRES_DB=test
 
   - name: redis
-    image: redis:6.0.8-alpine
+    image: redis:6.0.9-alpine
 
   # - name: mongodb
   #   image: mongo:4.1.0
@@ -229,8 +229,8 @@ volumes:
 #   COMPOSER_VERSION:
 #     - 1.8.1
 #   PHP_VERSION:
-#     - 7.4.11
-#     - 7.3.23
+#     - 7.4.12
+#     - 7.3.24
 #     - 7.2.34
 #     - 7.1.33
 #     # - 7.0.33
@@ -238,9 +238,9 @@ volumes:
 #   NGINX_VERSION:
 #     - 1.17.0
 #   REDIS_VERSION:
-#     - 6.0.8
+#     - 6.0.9
 #   MYSQL_VERSION:
-#     # - 8.0.21
+#     # - 8.0.22
 #     - 5.7.22
 #   MONGODB_VERSION:
 #     - 4.1.0
@@ -250,9 +250,9 @@ volumes:
 # matrix:
 #   include:
 #     - PHP_VERSION=7.2.34
-#       REDIS_VERSION=6.0.8
+#       REDIS_VERSION=6.0.9
 #     - PHP_VERSION=7.1.33
-#       REDIS_VERSION=6.0.8
+#       REDIS_VERSION=6.0.9
 
 # trigger:
 #   branch:

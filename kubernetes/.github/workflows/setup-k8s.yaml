@@ -38,7 +38,7 @@ jobs:
       #    LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0-alpha.2
+         CI_KUBERNETES_VERSION: 1.20.0-beta.0
          LNMP_K8S_GET: --url
        # next version
       #  - os: ubuntu
@@ -305,7 +305,7 @@ jobs:
          kubectl certificate approve $CSR_NAME
          kubectl get csr
 
-         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
+         sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/custom.patch.json
          git diff
          if [ "$CNI_CALICO_EBPF" = 'true' ];then
            export SERVER_IP=`cat .server_ip`

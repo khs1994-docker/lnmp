@@ -68,8 +68,6 @@ module.exports = {
       '/setup/': [
         'systemd',
         'coreos',
-        'minikube',
-        'windows',
         'kubeadm',
         'k3s',
         'rpi',

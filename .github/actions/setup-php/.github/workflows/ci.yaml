@@ -10,9 +10,9 @@ jobs:
       matrix:
         php_version:
           - nightly
-          - 8.0.0RC2
-          - 7.4.11
-          - 7.3.23
+          - 8.0.0RC3
+          - 7.4.12
+          - 7.3.24
           - 7.2.34
           - 7.1.33
           - 7.0.33
@@ -53,6 +53,12 @@ jobs:
                     /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true
             set -x
             php -v
+      - name: Custom image
+        uses: ./
+        with:
+          image: khs1994/php:phpcpd
+          args: |
+            phpcpd --help
 
   notsupport-platform:
     strategy:

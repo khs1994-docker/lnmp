@@ -722,15 +722,17 @@ function _push($opt) {
     $lwpm_temp = "$PSScriptRoot/../vendor/lwpm-temp/${env:lwpm_os}-${env:lwpm_architecture}/$soft"
     $lwpm_dist_temp = "$PSScriptRoot/../vendor/lwpm-temp/dist/$soft/${env:lwpm_os}-${env:lwpm_architecture}"
 
-    try { Remove-Item -r -force $lwpm_temp }catch { }
-    try { Remove-Item -r -force $lwpm_dist_temp }catch { }
+    if (Test-Path $lwpm_temp) { Remove-Item -r -force $lwpm_temp }
+    if (Test-Path $lwpm_dist_temp) { Remove-Item -r -force $lwpm_dist_temp }
 
     _mkdir $lwpm_temp | out-null
     _mkdir $lwpm_dist_temp | out-null
 
     $script_tar_file = "$lwpm_dist_temp/script.tar.gz"
     if (!$env:LREW_PKG_ROOT) {
-      try { Copy-Item $pkg_root\README.md $lwpm_temp }catch { }
+      if (Test-Path $pkg_root\README.md) {
+        Copy-Item $pkg_root\README.md $lwpm_temp
+      }
 
       if (Test-Path $pkg_root\$soft.psm1) {
         Copy-Item $pkg_root\${soft}.psm1 $lwpm_temp
@@ -780,7 +782,7 @@ function _push($opt) {
       # pkg/dist/file
       write-host "==> NO platform file" -ForegroundColor Blue
       # tmp/linux-amd64/pkg/dist/file
-      try { Copy-Item -r $pkg_root\dist   $lwpm_temp }catch { }
+      Copy-Item -r $pkg_root\dist $lwpm_temp
     }
 
     if (($layers_file.Count -eq 0) -and (Test-Path $lwpm_temp/../$soft/dist)) {

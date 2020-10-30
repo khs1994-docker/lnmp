@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.8"
 
 #
 #  MySQL 1 master 2 node
@@ -24,7 +24,7 @@ version: '3.7'
 
 x-common:
   &common
-  image: mysql:8.0.21
+  image: mysql:8.0.22
   restart: always
   env_file:
     - ./cli/timezone.env

@@ -4,7 +4,9 @@
     "http://json.schemastore.org/travis": ".travis.yml",
     "https://github.com/pcit-ce/pcit/raw/master/config/config.schema.json": [
       ".pcit.yml",
-      ".pcit.yaml"
+      ".pcit.yaml",
+      ".pcit/*.yml",
+      ".pcit/*.yaml"
     ],
     "windows/lnmp-windows-pm-repo/lwpm.schema.json": [
       "lwpm.yaml",
@@ -58,5 +60,6 @@
     "*.fcc": "yaml",
     "*.conflist": "json",
     "**/systemd/**/**.conf": "systemd-unit-file"
-  }
+  },
+  "terminal.integrated.shell.windows": "pwsh.exe"
 }

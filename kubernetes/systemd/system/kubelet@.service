@@ -108,6 +108,7 @@ ExecStart=/opt/k8s/bin/kubelet \
 --dynamic-config-dir=/opt/k8s/var/lib/kubelet/dynamic-config \
 --v=2 \
 --container-runtime=remote \
+# --logging-format=json \
 --container-runtime-endpoint=unix:///run/%i/%i.sock
 
 ; kubelet@cri-containerd

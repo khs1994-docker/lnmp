@@ -160,12 +160,12 @@ RUN sed -i "s!deb.debian.org!${DEB_URL}!g" /etc/apt/sources.list \
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/tmp/composer \
-    COMPOSER_VERSION=1.10.13 \
+    COMPOSER_VERSION=2.0.3 \
     PS1="[\u@\h \w]# "
 
 # https://github.com/composer/docker
 
-RUN --mount=type=bind,from=composer:1.10.13,source=/usr/bin/composer,target=/opt/bin/composer \
+RUN --mount=type=bind,from=composer:2.0.3,source=/usr/bin/composer,target=/opt/bin/composer \
     set -x \
     && { echo "memory_limit=-1"; \
          echo "date.timezone=${PHP_TIMEZONE:-PRC}"; \
@@ -180,7 +180,7 @@ RUN --mount=type=bind,from=composer:1.10.13,source=/usr/bin/composer,target=/opt
  #           exit(1); \
  #       }" \
  # && php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION} \
- && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/1.10/docker-entrypoint.sh > /docker-entrypoint.composer \
+ && curl -fsSL https://raw.githubusercontent.com/composer/docker/master/2.0/docker-entrypoint.sh > /docker-entrypoint.composer \
  && chmod +x /docker-entrypoint.composer \
  && cp -a /opt/bin/composer /usr/bin/composer \
  && composer --ansi --version --no-interaction \

@@ -6,7 +6,15 @@ metadata:
   name: nginx
   namespace: default
 spec:
-  ipFamily: IPv6
+  # ipFamily: IPv6
+  # 1.20+
+  # ipFamilyPolicy: SingleStack PreferDualStack RequireDualStack
+  # ipFamilies:
+  # - IPv6
+  # - IPv4
+  # clusterIPs:
+  # -
+
   ports:
   - port: 80
     protocol: TCP

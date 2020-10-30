@@ -6,7 +6,7 @@ author: 'khs1994'
 inputs:
   php_version:
     description: PHP version
-    default: 7.4.11
+    default: 7.4.12
     required: false
   php_type:
     description: php image type, fpm | composer | swoole | php-cs-fixer | sami
@@ -15,6 +15,14 @@ inputs:
   job_container_network:
     description: The id of the container network. The runner creates the network used by all containers in a job
     default: bridge
+    required: false
+  args:
+    description: shell script
+    default: ''
+    required: false
+  image:
+    description: your image, e.g. username/php
+    default: ''
     required: false
 runs:
   using: 'node12'

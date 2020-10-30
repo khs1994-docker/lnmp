@@ -23,4 +23,4 @@ patchesJson6902:
       kind: DaemonSet
       name: calico-node
       namespace: kube-system
-    path: patch.json
+    path: basic.patch.json

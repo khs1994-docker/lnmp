@@ -14,5 +14,5 @@ nfs:
   server: 192.168.199.100
 
 mysql:
-  image: mysql:8.0.21
+  image: mysql:8.0.22
   password: mytest

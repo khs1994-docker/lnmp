@@ -1,0 +1,40 @@
+[
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/volumeMounts/-",
+    "value": {
+      "name": "config",
+      "mountPath": "/etc/docker/registry/config.yml",
+      "subPath": "config.yml"
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/ports/-",
+    "value": {
+      "name": "debug",
+      "containerPort": 5001
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/containers/0/livenessProbe",
+    "value": {
+      "httpGet": {
+        "path": "/metrics",
+        "port": "debug",
+        "scheme": "HTTP"
+      }
+    }
+  },
+  {
+    "op": "add",
+    "path": "/spec/template/spec/volumes/-",
+    "value": {
+      "name": "config",
+      "configMap": {
+        "name": "registry-config"
+      }
+    }
+  }
+]

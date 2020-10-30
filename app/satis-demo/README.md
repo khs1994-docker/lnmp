@@ -4,7 +4,7 @@
 
 * https://github.com/composer/satis
 
-* https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#satis
+* https://getcomposer.org/doc/articles/handling-private-packages.md#satis
 
 ## GitHub API 等的频率限制
 

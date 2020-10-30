@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 x-common:
   &common
@@ -9,4 +9,4 @@ x-common:
 services:
   nginx-unit:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.11}-unit-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.12}-unit-alpine

@@ -1,6 +1,6 @@
 # COMPOSE_CONVERT_WINDOWS_PATHS=1
 
-version: "3.7"
+version: "3.8"
 
 x-common:
   &common
@@ -11,7 +11,7 @@ x-common:
 services:
   workspace:
     &workspace
-    image: khs1994/php:7.4.11-composer-alpine
+    image: khs1994/php:7.4.12-composer-alpine
     networks:
       - backend
     volumes:
@@ -66,13 +66,13 @@ services:
   composer:
     << : *workspace
     << : *common
-    image: "khs1994/php:7.4.11-composer-alpine"
+    image: "khs1994/php:7.4.12-composer-alpine"
     command: [] # install | update
 
   npm:
     << : *workspace
     << : *common
-    image: node:14.13.1-alpine
+    image: node:15.0.1-alpine
     entrypoint: npm
     command: [] # install | "run","dev" |
 

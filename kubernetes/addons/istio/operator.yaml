@@ -1,3 +1,13 @@
+# install
+# $ istioctl operator init
+# $ istioctl install -f .\addons\istio\operator.yaml
+
+# uninstall
+# https://istio.io/latest/docs/setup/install/operator/#uninstall
+# $ istioctl operator remove
+# $ istioctl manifest generate -f operator.yaml | kubectl delete -f -
+# $ kubectl delete ns istio-system --grace-period=0 --force
+
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
@@ -5,3 +15,20 @@ metadata:
   name: example-istiocontrolplane
 spec:
   profile: demo
+  components:
+    cni:
+      enabled: true
+  values:
+    cni:
+      cniBinDir: /opt/k8s/opt/cni/bin
+      cniConfDir: /opt/k8s/etc/cni/net.d
+    meshConfig:
+      outboundTrafficPolicy:
+        mode: REGISTRY_ONLY
+    global:
+      proxy:
+        includeIPRanges: "10.254.0.0/16"
+    gateways:
+      istio-ingressgateway:
+        type: NodePort
+        autoscaleMax: 1

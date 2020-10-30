@@ -1,23 +1,23 @@
-version: "3.7"
+version: "3.8"
 
 services:
   mysql:
-    image: mysql:8.0.21
+    image: mysql:8.0.22
 
   mariadb:
     image: mariadb:10.5.6
 
   redis:
-    image: redis:6.0.8-alpine
+    image: redis:6.0.9-alpine
 
   memcached:
-    image: memcached:1.6.7-alpine
+    image: memcached:1.6.8-alpine
 
   php:
-    image: php:7.4.11-fpm-alpine
+    image: php:7.4.12-fpm-alpine
 
   composer:
-    image: composer:1.10.13
+    image: composer:2.0.3
 
   nginx:
     image: nginx:1.19.3-alpine
@@ -47,7 +47,7 @@ services:
     image: kong:2.1.4-alpine
 
   node:
-    image: node:14.13.1-alpine
+    image: node:15.0.1-alpine
 
   go:
     image: golang:1.15.3-alpine

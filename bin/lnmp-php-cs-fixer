@@ -19,5 +19,5 @@ exec docker run -i ${tty} --rm \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   --env-file $ScriptRoot/../config/composer/.env \
   --entrypoint gosu \
-  khs1994/php-cs-fixer \
+  khs1994/php:php-cs-fixer \
   ${LNMP_USER:-root:root} php-cs-fixer "$@"

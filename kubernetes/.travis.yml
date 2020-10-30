@@ -59,9 +59,9 @@ before_install:
   - cp -r ~/lnmp/. ~/gopath/src/github.com/khs1994-docker
   - ls -la ~/gopath/src/github.com/khs1994-docker
   - |
-    if [ $(go env GOARCH) = "arm64" ];then
-      $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose -f
-    fi
+    # if [ $(go env GOARCH) = "arm64" ];then
+      $HOME/gopath/src/github.com/khs1994-docker/lnmp-docker compose --official -f
+    # fi
   # remove some apt source
   - cat /etc/apt/sources.list
   - ls /etc/apt/sources.list.d || true
@@ -274,13 +274,13 @@ before_script:
   - kubectl certificate approve $CSR_NAME
   - kubectl get csr
 
-  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/patch.json
-  - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/patch.json
+  - sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/custom.patch.json
+  - sed -i "s#eth0#${net_interface}#g" addons/cni/calico-custom/custom.patch.json
   - |
     if [ "${IPV6}" = 'true' ];then
       sed -i -e "s#_IP6#IP6#g" \
              -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
-          addons/cni/calico-custom/patch.json
+          addons/cni/calico-custom/custom.patch.json
 
       sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
           addons/cni/calico/calico.yaml
@@ -444,7 +444,7 @@ after_success:
   - |
     BASE_BRANCH=v1.19.0-config
     BASE_BRANCH=master
-    if [ $CI_KUBERNETES_VERSION = '1.20.0-alpha.2' ];then
+    if [ $CI_KUBERNETES_VERSION = '1.20.0-beta.0' ];then
       set -x
       cd /tmp
       rm -rf lnmp-k8s
@@ -478,7 +478,7 @@ jobs:
     # next version
     - os: linux
       dist: focal
-      env: CI_KUBERNETES_VERSION=1.20.0-alpha.2 LNMP_K8S_GET="--url"
+      env: CI_KUBERNETES_VERSION=1.20.0-beta.0 LNMP_K8S_GET="--url"
     # current stable version
     # cri-o
     - os: linux
@@ -523,8 +523,8 @@ jobs:
       env: CI_KUBERNETES_VERSION=1.17.12 LNMP_K8S_GET="--url"
   fast_finish: true
   allow_failures:
-  - env: CI_KUBERNETES_VERSION=1.20.0-alpha.2 LNMP_K8S_GET="--url"
-  # - env: CI_KUBERNETES_VERSION=1.20.0-alpha.0 LNMP_K8S_GET="--url"
+  - env: CI_KUBERNETES_VERSION=1.20.0-beta.0 LNMP_K8S_GET="--url"
+  # - env: CI_KUBERNETES_VERSION=1.20.0-beta.0 LNMP_K8S_GET="--url"
 
 branches:
   only:

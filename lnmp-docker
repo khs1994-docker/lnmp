@@ -284,6 +284,7 @@ _gcr_io(){
     kube-scheduler:v${KUBERNETES_VERSION} \
     kube-proxy:v${KUBERNETES_VERSION} \
     etcd:3.4.13-0 \
+    etcd:3.3.15-0 \
     coredns:1.7.0 \
     pause:3.2 \
     pause:3.1"

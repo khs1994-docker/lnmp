@@ -1,10 +1,13 @@
 # EFK 插件
 
+* https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
+* https://github.com/opsnull/follow-me-install-kubernetes-cluster/blob/master/08-5.EFK%E6%8F%92%E4%BB%B6.md
+
 ## 注意事项
 
 * 推荐宿主机内存 16G
 
-* 虚拟机每个节点内存分配 3G，之前分配了 2G 一直报错
+* es 占用内存较大，内存不足会退出，每个 es 实例至少需要 3GB 内存
 
 * es-statefulset.yaml 的 replicas 参数 **不能** 为 1
 
@@ -20,10 +23,6 @@
 
 * kibana 负责图形化展示日志信息。
 
-## 部署
-
-* https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
-
 ### 部署
 
 ```bash
@@ -33,10 +32,10 @@ $ kubectl get pods -n kube-system -o wide|grep -E 'elasticsearch|fluentd|kibana'
 
 $ kubectl cluster-info|grep -E 'Elasticsearch|Kibana'
 
-$ kubectl proxy --address='192.168.57.1' --port=8086 --accept-hosts='^*$'
+$ kubectl proxy --address='127.0.0.1' --port=8086 --accept-hosts='^*$'
 ```
 
-http://192.168.57.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/proxy
+访问 http://127.0.0.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/proxy
 
 ## 删除
 
@@ -44,15 +43,9 @@ http://192.168.57.1:8086/api/v1/namespaces/kube-system/services/kibana-logging/p
 $ kubectl delete -k addons/efk
 ```
 
-## 资源列表
+## 工具
 
-```bash
-service/elasticsearch-logging
-
-service/kibana-logging
-
-daemonset.apps/fluentd
-```
+* https://fluentular.herokuapp.com
 
 ## More Information
 

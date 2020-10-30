@@ -1,4 +1,4 @@
-ARG PHP_VERSION=7.4.11
+ARG PHP_VERSION=7.4.12
 
 FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.11
 
@@ -331,4 +331,4 @@ ARG VCS_REF="unknow"
 LABEL org.opencontainers.image.revision=$VCS_REF \
       org.opencontainers.image.source="https://github.com/khs1994-docker/php"
 
-RUN php -m
+RUN set -x ; php -m || true

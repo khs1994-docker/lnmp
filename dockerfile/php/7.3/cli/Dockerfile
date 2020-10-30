@@ -6,7 +6,7 @@ LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 ENV TZ=Asia/Shanghai \
     APP_ENV=development
 
-ARG PHP_VERSION=7.3.23
+ARG PHP_VERSION=7.3.24
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
@@ -140,7 +140,7 @@ ENV PHP_LDFLAGS="-Wl,-O1 -pie"
 # ENV GPG_KEYS 1729F83938DA44E27BA0F4D3DBDB397470D12172 B1B44D8F021E4E2D6021E995DC9FF8D3EE5AF27F
 
 ENV PHP_VERSION=${PHP_VERSION}
-# ENV PHP_URL="https://www.php.net/get/php-7.3.23.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.23.tar.xz.asc/from/this/mirror"
+# ENV PHP_URL="https://www.php.net/get/php-7.3.24.tar.xz/from/this/mirror" PHP_ASC_URL="https://www.php.net/get/php-7.3.24.tar.xz.asc/from/this/mirror"
 # ENV PHP_SHA256="da1a705c0bc46410e330fc6baa967666c8cd2985378fb9707c01a8e33b01d985" PHP_MD5=""
 
 # COPY --from=php:alpine /usr/local/bin/docker-php-* /usr/local/bin/
@@ -151,8 +151,8 @@ ENV PHP_VERSION=${PHP_VERSION}
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-enable /usr/local/bin/
 # COPY --from=php:alpine /usr/local/bin/docker-php-ext-install /usr/local/bin/
 
-RUN --mount=type=bind,from=php:7.3.23-alpine,source=/usr/src,target=/usr/local/src,rw \
-    --mount=type=bind,from=php:7.3.23-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.3.24-alpine,source=/usr/src,target=/usr/local/src,rw \
+    --mount=type=bind,from=php:7.3.24-alpine,source=/usr/local/bin,target=/opt/bin,rw \
   set -xe \
   && mkdir -p /usr/src \
   && cp /usr/local/src/* /usr/src/ \
@@ -358,7 +358,7 @@ ENV PECL_EXTENSION \
       https://github.com/kjdev/php-ext-zstd/archive/0.9.0.tar.gz \
       ${PECL_EXTENSION_EXTRA:-}
 
-RUN --mount=type=bind,from=php:7.3.23-alpine,source=/usr/local/bin,target=/opt/bin,rw \
+RUN --mount=type=bind,from=php:7.3.24-alpine,source=/usr/local/bin,target=/opt/bin,rw \
       set -x \
       && cp -a /opt/bin/docker-php-entrypoint /usr/local/bin \
       && export PATH=$PATH:/opt/bin \

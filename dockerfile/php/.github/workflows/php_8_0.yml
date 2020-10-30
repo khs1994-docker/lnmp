@@ -9,7 +9,7 @@ on:
       PHP_VERSION:
         description: php version
         required: true
-        default: "8.0.0RC2"
+        default: "8.0.0RC3"
 
 name: PHP_8.0
 
@@ -200,7 +200,7 @@ jobs:
         PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
         PHP_VERSION: 8_0_X
         FOLDER: "8.0"
-        PHP_TAG_VERSION: 8.0.0RC2
+        PHP_TAG_VERSION: 8.0.0RC3
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php # ghcr.io/khs1994/php
       name: 'Build Image'

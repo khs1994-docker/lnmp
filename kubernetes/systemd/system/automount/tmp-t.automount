@@ -1,0 +1,6 @@
+# 对应 tmp-t.mount
+
+[Automount]
+# http://www.jinbuguo.com/systemd/systemd.automount.html#
+
+Where=/tmp/t

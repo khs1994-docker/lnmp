@@ -39,12 +39,12 @@ $ ./lnmp-k8s kubernetes-server --url
 
 ```bash
 $ ./lnmp-k8s _k8s_install_cp_bin -f
-
-$ rm -rf /non-systemd
 ```
 
 ```powershell
-$ wsl --shutdown
+$ Remove-Item \\wsl$\wsl-k8s\non-systemd
+
+$ wsl -d wsl-k8s
 ```
 
-## 重启 k8s，完成升级
+## 开始使用

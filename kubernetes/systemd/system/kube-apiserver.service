@@ -83,6 +83,7 @@ ExecStart=/opt/k8s/bin/kube-apiserver \
 #
 ;
 --kubelet-https=true \
+# --logging-format=json \
 --v=2
 
 Restart=on-failure

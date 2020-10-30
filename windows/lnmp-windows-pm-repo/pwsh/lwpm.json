@@ -2,7 +2,7 @@
   "name": "pwsh",
   "description": "PowerShell is a task-based command-line shell and scripting language built on .NET",
   "version": "7.0.3",
-  "pre-version": "7.1.0-rc.1",
+  "pre-version": "7.1.0-rc.2",
   "homepage": "https://docs.microsoft.com/zh-cn/powershell",
   "bug": "https://github.com/PowerShell/PowerShell/issues",
   "github": "PowerShell/PowerShell",

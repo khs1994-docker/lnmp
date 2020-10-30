@@ -22,7 +22,7 @@ jobs:
           set -x
           docker buildx build \
           -t khs1994/s6 \
-          -t khs1994/s6:2.1.0.0 \
+          -t khs1994/s6:2.1.0.2 \
           -t khs1994/s6:2 \
           --platform=linux/arm64,linux/arm/v7,linux/amd64 \
           --push \

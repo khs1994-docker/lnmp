@@ -2,8 +2,6 @@
 # @see https://github.com/khs1994-php/pcit/blob/master/docs/SUMMARY.md
 #
 
-languages: php
-
 # cache:
 #   directories:
 #   - cache
@@ -13,14 +11,14 @@ workspace:
   # path: .
   path: src
 
-pipeline:
+steps:
 
   # install dep
   install:
     # image: composer:${COMPOSER_VERSION}
     image: khs1994/php:7.2.34-composer-alpine
     shell: bash
-    commands:
+    run:
       - pwd
       - composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
       # 由于 composer 镜像缺少某些扩展，故忽略这些
@@ -32,7 +30,7 @@ pipeline:
     image: khs1994/php:${PHP_VERSION}-fpm-alpine
     pull: true
     shell: bash
-    environment:
+    env:
       - CI_REDIS_HOST=redis
       - CI_REDIS_PORT=6379
       - CI_MYSQL_HOST=mysql
@@ -40,13 +38,13 @@ pipeline:
       - CI_MYSQL_USERNAME=root
       - CI_MYSQL_PASSWORD=mytest
       - CI_MYSQL_DBNAME=test
-    commands:
+    run:
       - pwd
       - mv ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini.default ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
       # 服务初始化需要时间，这里延迟执行
       - sleep 30
       - vendor/bin/phpunit --coverage-clover=coverage.xml
-    when:
+    with:
       # platform: linux/amd64
       # platform:  [ linux/*, windows/amd64 ]
 
@@ -66,45 +64,48 @@ pipeline:
 
   # when tag push build docker image
   publish_php:
-    image: ci_docker_build
+    image: pcit/docker
     # registry: docker.khs1994.com
-    repo: khs1994/php
-    tags: ${PHP_VERSION}-pro-${CI_TAG}-alpine
-    # target: php
-    build_args:
+    with:
+      repo: khs1994/php
+      tags: ${PHP_VERSION}-pro-${CI_TAG}-alpine
+      # target: php
+      build_args:
       - key=value
-    # dockerfile: Dockerfile
-    # dockerfile: path/to/Dockerfile
-    when:
+      # dockerfile: Dockerfile
+      # dockerfile: path/to/Dockerfile
+      username: ${DOCKER_USERNAME}
+      password: ${DOCKER_PASSWORD}
+    if:
       event: tag
 
   after_success:
     image: khs1994/php:7.2.34-composer-alpine
     shell: bash
-    when:
+    if:
       status: success
-    commands:
+    run:
       # please set env CODECOV_TOKEN=XXX
       - bash <(curl -s https://codecov.io/bash)
 
   after_failure:
     image: bash
-    when:
+    if:
       status: failure
-    commands:
+    run:
       - echo "build failure"
 
   changed:
     image: bash
-    when:
+    if:
       status: changed
-    commands:
+    run:
       - echo "build status changed"
 
 services:
   mysql:
     image: mysql:${MYSQL_VERSION}
-    environment:
+    env:
       - MYSQL_DATABASE=test
       - MYSQL_ROOT_PASSWORD=mytest
     # entrypoint: [ "mysqld" ]
@@ -124,12 +125,12 @@ services:
   #   image: mongo:${MONGODB_VERSION}
   #   command: [ --smallfiles ]
 
-matrix:
+jobs:
   COMPOSER_VERSION:
     - 1.8.1
   PHP_VERSION:
-    - 7.4.11
-    - 7.3.23
+    - 7.4.12
+    - 7.3.24
     - 7.2.34
     # - 7.1.33
     # - 7.0.33
@@ -137,7 +138,7 @@ matrix:
   NGINX_VERSION:
     - 1.17.0
   REDIS_VERSION:
-    - 6.0.8
+    - 6.0.9
   MYSQL_VERSION:
     # - 8.0.11
     - 5.7.22

@@ -46,7 +46,7 @@ spec:
         # https://kubernetes.io/zh/docs/concepts/overview/working-with-objects/common-labels/
         # app.kubernetes.io/name: mysql
         # app.kubernetes.io/instance: lnmp-xxx
-        # app.kubernetes.io/version: 8.0.21
+        # app.kubernetes.io/version: 8.0.22
         # app.kubernetes.io/component: database
         # app.kubernetes.io/part-of: lnmp
         # app.kubernetes.io/managed-by: helm
@@ -68,7 +68,7 @@ spec:
       # restartPolicy: Never # Always、OnFailure 和 Never
       containers:
       - name: lnmp-mysql
-        image: mysql:8.0.21
+        image: mysql:8.0.22
         imagePullPolicy: IfNotPresent
         # resources:
         # envFrom:

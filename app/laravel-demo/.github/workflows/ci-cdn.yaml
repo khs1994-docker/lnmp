@@ -10,6 +10,8 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    env:
+      LNMP_CN_ENV: false
     steps:
       - uses: actions/checkout@main
         with:
@@ -20,6 +22,7 @@ jobs:
           docker_version: "20.10"
       - uses: khs1994-docker/actions-setup-lnmp@master
         with:
+          lnmp_branch: "20.10"
           lnmp_services: "nginx mysql php7 redis minio"
           lrew_include: "minio"
       - name: Init LNMP
@@ -80,7 +83,7 @@ jobs:
           # 此步骤会重置 webpack.mix.js
           lnmp-php artisan ui vue --auth
 
-          cp -r ../laravel-demo/.patch/. .
+          cp -r ../laravel-demo/laravel-patch/. .
           ls -la resources/views
 
           lnmp-npm i

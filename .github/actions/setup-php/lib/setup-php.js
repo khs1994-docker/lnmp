@@ -4,6 +4,7 @@ const os = require('os');
 
 const PHP_VERSION = core.getInput('php_version');
 const ARGS = core.getInput('args');
+let IMAGE = core.getInput('image');
 const PHP_TYPE = core.getInput('php_type');
 const NETWORK = core.getInput('job_container_network') || 'bridge';
 
@@ -33,7 +34,7 @@ async function run() {
     const systemExec = require('child_process').exec;
     const cmd = 'docker network ls --filter name=github -q';
 
-    systemExec(cmd, function(error, stdout, stderr) {
+    systemExec(cmd, function (error, stdout, stderr) {
       if (error) {
         reject(error);
       }
@@ -48,14 +49,16 @@ async function run() {
 
   core.debug(`docker network create by actions is : "${NETWORK}"`)
 
-  let IMAGE = `khs1994/php:${PHP_VERSION}-${PHP_TYPE}-alpine`;
+  if (!IMAGE) {
+    IMAGE = `khs1994/php:${PHP_VERSION}-${PHP_TYPE}-alpine`;
 
-  if(PHP_TYPE === 'php-cs-fixer'){
-    IMAGE = 'khs1994/php-cs-fixer'
-  }
+    if (PHP_TYPE === 'php-cs-fixer') {
+      IMAGE = 'khs1994/php:php-cs-fixer'
+    }
 
-  if(PHP_TYPE === 'sami'){
-    IMAGE = 'khs1994/sami'
+    if (PHP_TYPE === 'sami') {
+      IMAGE = 'khs1994/php:sami'
+    }
   }
 
   core.debug('pull docker image : ' + IMAGE);

@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 
 services:
   k8s_apiserver:
@@ -36,7 +36,7 @@ services:
     image: k8s.gcr.io/metrics-server/metrics-server:v0.3.7
 
   fcct:
-    image: quay.io/coreos/fcct:v0.6.0
+    image: quay.io/coreos/fcct:v0.7.0
 
   php-fpm-exporter:
     image: bakins/php-fpm-exporter:v0.6.1

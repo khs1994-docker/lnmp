@@ -6,7 +6,7 @@ ARG BASE=fpm
 
 FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
-RUN --mount=type=bind,from=khs1994/s6:2.1.0.0,source=/,target=/tmp/s6 \
+RUN --mount=type=bind,from=khs1994/s6:2.1.0.2,source=/,target=/tmp/s6 \
     set -x \
     && tar -zxvf /tmp/s6/s6-overlay.tar.gz -C / \
 # https://github.com/MinchinWeb/docker-base/commit/f5e350dcf3523a424772a1e42a3dba3200d7a2aa

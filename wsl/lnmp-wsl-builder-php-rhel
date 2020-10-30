@@ -49,7 +49,7 @@ if [ "${LNMP_CN_ENV}" != 'false' ];then
   PHP_GIT=https://github.com.cnpmjs.org/php/php-src
 fi
 
-export COMPOSER_VERSION=1.10.13
+export COMPOSER_VERSION=2.0.3
 export COMPOSER_ALLOW_SUPERUSER=1
 export COMPOSER_HOME=/tmp/composer
 export TZ=Asia/Shanghai
@@ -877,10 +877,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=7.4.11 ; fi
+    PHP_VERSION=7.4.12 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=7.4.11 ; fi
+    PHP_VERSION=7.4.12 ; fi
 
 _get_phpnum $PHP_VERSION
 
