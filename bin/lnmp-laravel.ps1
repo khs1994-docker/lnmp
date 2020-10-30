@@ -39,7 +39,7 @@ docker run -it --rm `
     --mount type=bind,src=$( wslpath $PSScriptRoot/../config/composer/config.json),target=${COMPOSER_HOME}/config.json `
     --env-file $PSScriptRoot/../config/composer/.env `
     -e LARAVEL_PATH=${LARAVEL_PATH} `
-    khs1994/php:7.4.11-composer-alpine `
+    khs1994/php:7.4.12-composer-alpine `
     composer create-project --prefer-dist laravel/laravel=$VERSION.* "$LARAVEL_PATH"
 
 # tar -zxvf .\${LARAVEL_PATH}.tar.gz

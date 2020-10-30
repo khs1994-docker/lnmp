@@ -7,7 +7,7 @@ $CI_HOST="ci.khs1994.com:10000"
 # $ wsl -l
 $DistributionName="Ubuntu-18.04"
 
-$LNMP_PHP_IMAGE="khs1994/php:7.4.11-composer-alpine"
+$LNMP_PHP_IMAGE="khs1994/php:7.4.12-composer-alpine"
 
 $NGINX_PATH="C:/nginx"
 $PHP_PATH="C:/php"
