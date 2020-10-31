@@ -1,0 +1,4 @@
+[Unit]
+Description=Shutdown Kubernetes on WSL2
+Documentation=https://github.com/khs1994-docker/lnmp-k8s/tree/master/wsl2
+DefaultDependencies=no

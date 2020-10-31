@@ -7,6 +7,8 @@ After=network-online.target network.target
 
 After=etcd.service
 
+Conflicts=wsl-k8s-shutdown.target
+
 ; Requires a,          启动该服务，假设a异常退出，该服务仍正常运行
 ;                      手动停止 a, 该服务也退出
 

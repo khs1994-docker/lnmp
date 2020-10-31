@@ -7,6 +7,8 @@ After=network-online.target network.target
 
 After=kube-apiserver.service
 
+Conflicts=wsl-k8s-shutdown.target
+
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
 # RequiresMountsFor=/wsl/wsl-k8s-data

@@ -13,6 +13,8 @@ cri-containerd@1.5.service
 
 X-Conflicts=kubelet@cri-containerd.service
 
+Conflicts=wsl-k8s-shutdown.target
+
 After=etc-containers.mount \
 var-lib-cni.mount \
 var-lib-k8s.mount \

@@ -7,6 +7,8 @@ Wants=network-online.target network.target
 Conflicts=cri-o.service
 X-Conflicts=kubelet@crio.service
 
+Conflicts=wsl-k8s-shutdown.target
+
 Before=kubelet@cri-containerd.service
 # ConditionVirtualization=wsl
 # ConditionPathIsMountPoint=/wsl/wsl-k8s-data
@@ -36,6 +38,7 @@ ExecStart=/opt/k8s/bin/cri-containerd \
 
 Type=notify
 KillMode=process
+# KillMode=control-group
 Delegate=yes
 LimitNOFILE=infinity
 # Having non-zero Limit*s causes performance problems due to accounting overhead

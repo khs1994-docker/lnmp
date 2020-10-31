@@ -5,3 +5,4 @@ Requires=wsl.target
 Wants=wsl.target
 After=wsl.target
 BindsTo=wsl.target
+Conflicts=wsl-k8s-shutdown.target
