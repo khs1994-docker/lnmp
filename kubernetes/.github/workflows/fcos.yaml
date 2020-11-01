@@ -50,6 +50,8 @@ jobs:
 
           cp -r ignition/ci/* ignition/fcc/
 
+          echo '#' > etc/containers/registries.conf
+
           sed -i 's/eth0/enp1s0/g' \
           ignition/fcc/ignition-n.node.template.fcc \
           ignition/fcc/ignition-n.master.template.fcc

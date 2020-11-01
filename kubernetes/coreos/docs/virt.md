@@ -28,6 +28,7 @@ virsh list --all
 ```bash
 qemu-img create -f raw test_add.img 10G
 # qemu-img create -f qcow2 image2.qcow2 10G
+# qemu-img create -f qcow2 -b fedora-coreos-qemu.qcow2 my-fcos-vm.qcow2
 virsh attach-disk fcos-test-01 /home/p_w_picpaths/test_add.img vdb --cache none
 # 虚拟机内执行
 fdisk -l
