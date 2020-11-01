@@ -157,4 +157,4 @@ jobs:
 
           docker run -i --rm --entrypoint=sh khs1994/laravel:8-rootless -c "ls -la /app/laravel-docker"
       # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v2
+      #   uses: mxschmitt/action-tmate@v3

@@ -1,4 +1,4 @@
-name: setup-k8s
+name: Test k8s
 
 on:
   push:
@@ -99,7 +99,7 @@ jobs:
        name: khs1994-docker-lnmp-caches
        with:
          path: ~/.khs1994-docker-lnmp/caches
-         key: khs1994-docker-lnmp-caches
+         key: khs1994-docker-lnmp-caches-20201101-0
      - run: |
          uname -a
 
@@ -436,4 +436,4 @@ jobs:
          kubectl get node -o yaml
          echo ::endgroup::
     #  - name: Setup tmate session
-    #    uses: mxschmitt/action-tmate@v2
+    #    uses: mxschmitt/action-tmate@v3

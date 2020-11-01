@@ -1,0 +1,21 @@
+[Unit]
+Description=mount --bind /wsl/wsl-k8s-data/libvirt-images /%P
+DefaultDependencies=no
+Conflicts=umount.target
+Before=umount.target
+
+X-Before=local-fs.target
+Before=libvirtd.service
+
+StopWhenUnneeded=yes
+RefuseManualStart=yes
+RefuseManualStop=yes
+[Mount]
+What=/wsl/wsl-k8s-data/libvirt-images
+Where=/%P
+Type=none
+Options=bind
+DirectoryMode=0755
+X-TimeoutSec=5
+[Install]
+WantedBy=local-fs.target

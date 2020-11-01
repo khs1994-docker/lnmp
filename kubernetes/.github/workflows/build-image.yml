@@ -6,7 +6,7 @@ on:
       - "*"
   workflow_dispatch:
 
-name: build docker iamge
+name: Build docker iamge
 
 env:
   DOCKER_CLI_EXPERIMENTAL: enabled
