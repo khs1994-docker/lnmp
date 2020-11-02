@@ -74,7 +74,7 @@ systemd:
 
         ExecStartPre=-/bin/podman container kill etcd
         ExecStartPre=-/bin/podman container rm etcd
-        ExecStartPre=-/bin/podman pull quay.io/coreos/etcd:v${ETCD_VERSION}
+        # ExecStartPre=-/bin/podman pull quay.io/coreos/etcd:v${ETCD_VERSION}
         ExecStart= /bin/podman run --name etcd --network host --privileged \
           -e ETCD_DATA_DIR \
           -v /opt/k8s/var/lib/etcd:/var/lib/etcd \

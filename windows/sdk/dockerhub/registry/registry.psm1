@@ -10,6 +10,7 @@ Function Get-Registry($registry=$null) {
       }
       else {
         $registry = "registry.hub.docker.com"
+        # $registry = "registry-1.docker.io"
       }
     }
   }

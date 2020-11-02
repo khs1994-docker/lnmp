@@ -71,7 +71,7 @@ items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
 
 if [ ${1:-''} = 'qemu' ];then
   local QEMU_QCOW2=fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2
-  if [ -f $QEMU_QCOW2 ];then echo "$QEMU_QCOW2 exists, skip download"; return; fi
+  if [ -f $QEMU_QCOW2 ];then echo "[ $QEMU_QCOW2 ] exists, skip download"; return; fi
   items=$QEMU_QCOW2.xz
 fi
 

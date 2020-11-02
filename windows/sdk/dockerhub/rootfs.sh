@@ -13,6 +13,7 @@ rootfs(){
 
   registry="hub-mirror.c.163.com"
   # registry="mirror.baidubce.com"
+  # registry-1.docker.io
   if [ "$LNMP_CN_ENV" = 'false' ];then registry=registry.hub.docker.com; fi
   if [ -n "${REGISTRY_MIRROR}" ];then registry=${REGISTRY_MIRROR}; fi
   if [ -n "$7" ];then registry=$7; fi

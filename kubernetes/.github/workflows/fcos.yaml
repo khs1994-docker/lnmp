@@ -50,9 +50,10 @@ jobs:
 
           cp -r ignition/ci/* ignition/fcc/
 
-          echo '#' > etc/containers/registries.conf
+          echo 'unqualified-search-registries = ["docker.io"]' > etc/containers/registries.conf
 
-          sed -i 's/eth0/enp1s0/g' \
+          sed -i -e 's/eth0/enp1s0/g' \
+          -e 's/apiserver-count=3/apiserver-count=2/g' \
           ignition/fcc/ignition-n.node.template.fcc \
           ignition/fcc/ignition-n.master.template.fcc
 
@@ -79,7 +80,7 @@ jobs:
 
           ./coreos virt-install 1
           ./coreos virt-install 2
-          ./coreos virt-install 3
+          # ./coreos virt-install 3
       - run: sudo virsh list --all
       - name: VM is work?
         run: |
