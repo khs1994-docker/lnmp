@@ -70,6 +70,8 @@ Commands:
 
   wsl2               import wsl-k8s utils ps module
 
+  wsl                [check|write-hosts|proxy]
+
   dist-containerd-arm64
 "
 }
@@ -133,6 +135,27 @@ switch ($args[0]) {
     Import-Module $PSScriptRoot/wsl2/bin/WSL-K8S.psm1 -Force
 
     Get-Command -Module WSL-K8S
+  }
+
+  wsl {
+    if($others -eq 'check'){
+      & $PSScriptRoot/wsl2/bin/kube-check.ps1
+
+      exit
+    }
+
+    if($others -eq 'write-hosts'){
+      & $PSScriptRoot/wsl2/bin/wsl2host.ps1 --write
+
+      exit
+    }
+
+    if($others -eq 'proxy'){
+      & $PSScriptRoot/wsl2/kube-wsl2windows.ps1 k8s
+
+      exit
+    }
+
   }
 
   Default {
