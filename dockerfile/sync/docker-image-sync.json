@@ -277,5 +277,13 @@
   {
     "source": "lrewpkg/etcd:latest",
     "dest": "lrewpkg/etcd:latest"
+  },
+  {
+    "source": "tonistiigi/binfmt:master",
+    "dest": "khs1994/binfmt:master"
+  },
+  {
+    "source": "tonistiigi/binfmt",
+    "dest": "khs1994/binfmt"
   }
 ]

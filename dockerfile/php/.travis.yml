@@ -36,6 +36,7 @@ before_install:
 - sudo systemctl daemon-reload
 - sudo systemctl cat docker
 - sudo systemctl restart docker
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - sleep 5
 - docker run --rm --privileged tonistiigi/binfmt:latest --install all
 - ls -la /proc/sys/fs/binfmt_misc
@@ -46,7 +47,7 @@ before_install:
 
 script:
   - cp .env.example .env
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   # - docker-compose build ${PHP_VERSION} --parallel
   # - source tag.sh
 
