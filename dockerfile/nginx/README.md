@@ -9,8 +9,8 @@
 
 | Verson     | Details     |
 | :------------- | :------------- |
-| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.19.3-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.19.3-alpine "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.19.3-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.19.3-alpine "Get your own image badge on microbadger.com") |
-| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.19.3-buster.svg)](https://microbadger.com/images/khs1994/nginx:1.19.3-buster "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.19.3-buster.svg)](https://microbadger.com/images/khs1994/nginx:1.19.3-buster "Get your own image badge on microbadger.com") |
+| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.19.4-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.19.4-alpine "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.19.4-alpine.svg)](https://microbadger.com/images/khs1994/nginx:1.19.4-alpine "Get your own image badge on microbadger.com") |
+| [![](https://images.microbadger.com/badges/version/khs1994/nginx:1.19.4-buster.svg)](https://microbadger.com/images/khs1994/nginx:1.19.4-buster "Get your own version badge on microbadger.com") | [![](https://images.microbadger.com/badges/image/khs1994/nginx:1.19.4-buster.svg)](https://microbadger.com/images/khs1994/nginx:1.19.4-buster "Get your own image badge on microbadger.com") |
 
 ## 注意
 
@@ -41,7 +41,7 @@ version: "3"
 
 services:
   nginx:
-    image: "khs1994/nginx:1.19.3-alpine"
+    image: "khs1994/nginx:1.19.4-alpine"
     ports:
       - "80:80"
       - "443:443/tcp"
@@ -62,7 +62,7 @@ $ docker run -dit \
          -p 443:443/udp \
          -v $PWD/app:/app \
          -v $PWD/conf.d:/etc/nginx/conf.d \
-         khs1994/nginx:1.19.3-alpine
+         khs1994/nginx:1.19.4-alpine
 ```
 
 # Who use it?

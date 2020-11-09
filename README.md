@@ -199,19 +199,19 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |Name|Docker Image|Version|Based|
 |:-- |:--         |:--    |:--  |
 |[ACME.sh](https://github.com/acmesh-official/acme.sh)                     |`khs1994/acme:2.8.7`           | **2.8.7**           |`alpine:3.12`    |
-|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.19.3-alpine`           | **1.19.3**          |`alpine:3.12`    |
+|[NGINX](https://github.com/khs1994-docker/nginx)                          |`nginx:1.19.4-alpine`           | **1.19.4**          |`alpine:3.12`    |
 |[NGINX Unit](https://github.com/nginx/unit)                               |`khs1994/php:7.4.12-unit-alpine`| **1.20.0**          |`alpine:3.12`    |
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.46-alpine`           | **2.4.46**          |`alpine:3.12`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.22`                  | **8.0.22**          |`debian:buster-slim`|
-|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.6`                | **10.5.6**          |`ubuntu:focal`  |
+|[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.7`                | **10.5.7**          |`ubuntu:focal`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.9-alpine`            | **6.0.9**           |`alpine:3.12`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:7.4.12-fpm-alpine`     | **7.4.12**       |`alpine:3.11`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.12-composer-alpine`| **2.0.3**      |`alpine:3.11`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:7.4.12-composer-alpine`| **2.0.4**      |`alpine:3.11`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.8-alpine`           | **1.6.8**       |`alpine:3.12`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.9-management-alpine` | **3.8.9**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.0-alpine`             | **13.0**        |`alpine:3.12`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.1`                      | **4.4.1**       |`ubuntu:bionic`  |
-|[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.0.2`                | **5.0.2**       |`alpine:3.12`    |
+|[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.0.4`                | **5.0.4**       |`alpine:3.12`    |
 |[Registry](https://github.com/khs1994-docker/registry)                    |`registry:latest`                  | **latest**      |`alpine:3.11`    |
 
 ### Folder Structure

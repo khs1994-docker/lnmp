@@ -8,16 +8,16 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:15.0.1-alpine",
-    "dest": "library-mirror/node:15.0.1-alpine"
+    "source": "node:15.1.0-alpine",
+    "dest": "library-mirror/node:15.1.0-alpine"
   },
   {
     "source": "node:14.15.0-alpine",
     "dest": "library-mirror/node:14.15.0-alpine"
   },
   {
-    "source": "golang:1.15.3-alpine",
-    "dest": "library-mirror/golang:1.15.3-alpine"
+    "source": "golang:1.15.4-alpine",
+    "dest": "library-mirror/golang:1.15.4-alpine"
   },
   {
     "source": "golang:alpine",
@@ -80,8 +80,8 @@
     "dest": "library-mirror/mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.5.6",
-    "dest": "library-mirror/mariadb:10.5.6"
+    "source": "library/mariadb:10.5.7",
+    "dest": "library-mirror/mariadb:10.5.7"
   },
   {
     "source": "library/mariadb:10.4.15",
@@ -116,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.1.4",
-    "dest": "library-mirror/kong:2.1.4"
+    "source": "library/kong:2.2.0",
+    "dest": "library-mirror/kong:2.2.0"
   },
   {
-    "source": "library/kong:2.1.4-alpine",
-    "dest": "library-mirror/kong:2.1.4-alpine"
+    "source": "library/kong:2.2.0-alpine",
+    "dest": "library-mirror/kong:2.2.0-alpine"
   },
   {
     "source": "library/redis:alpine",
@@ -152,8 +152,8 @@
     "dest": "library-mirror/nginx:1.18.0-alpine"
   },
   {
-    "source": "library/nginx:1.19.3-alpine",
-    "dest": "library-mirror/nginx:1.19.3-alpine"
+    "source": "library/nginx:1.19.4-alpine",
+    "dest": "library-mirror/nginx:1.19.4-alpine"
   },
   {
     "source": "library/httpd:alpine",
@@ -196,12 +196,12 @@
     "dest": "library-mirror/phpmyadmin:fpm-alpine"
   },
   {
-    "source": "library/phpmyadmin:5.0.2",
-    "dest": "library-mirror/phpmyadmin:5.0.2"
+    "source": "library/phpmyadmin:5.0.4",
+    "dest": "library-mirror/phpmyadmin:5.0.4"
   },
   {
-    "source": "library/phpmyadmin:5.0.2-fpm-alpine",
-    "dest": "library-mirror/phpmyadmin:5.0.2-fpm-alpine"
+    "source": "library/phpmyadmin:5.0.4-fpm-alpine",
+    "dest": "library-mirror/phpmyadmin:5.0.4-fpm-alpine"
   },
   {
     "source": "minio/minio:RELEASE.2020-09-26T03-44-56Z",
@@ -230,7 +230,7 @@
     "source": "khs1994/tls"
   },
   {
-    "source": "khs1994/kube-nginx:1.19.3"
+    "source": "khs1994/kube-nginx:1.19.4"
   },
   {
     "source": "khs1994/kube-nginx"
@@ -245,7 +245,7 @@
     "source": "khs1994/nginx:alpine"
   },
   {
-    "source": "khs1994/nginx:1.19.3-alpine"
+    "source": "khs1994/nginx:1.19.4-alpine"
   },
   {
     "source": "khs1994/docker-image-sync:latest"

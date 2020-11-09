@@ -1,4 +1,4 @@
-FROM phpmyadmin:5.0.2
+FROM phpmyadmin:5.0.4
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 

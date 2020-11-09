@@ -219,7 +219,7 @@ services:
 
   phpmyadmin:
     << : *common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.0.2}
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.0.4}
     environment:
       - PMA_HOST=mysql
     ports:
@@ -238,7 +238,7 @@ services:
 
   nginx:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.19.3}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.19.4}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
