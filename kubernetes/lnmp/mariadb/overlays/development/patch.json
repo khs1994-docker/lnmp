@@ -2,7 +2,7 @@
   {
     "op": "replace",
     "path": "/spec/template/spec/containers/0/image",
-    "value": "mariadb:10.5.7"
+    "value": "mariadb:10.5.8"
   },
   {
     "op": "remove",

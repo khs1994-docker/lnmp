@@ -8,8 +8,8 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:15.1.0-alpine",
-    "dest": "library-mirror/node:15.1.0-alpine"
+    "source": "node:15.2.0-alpine",
+    "dest": "library-mirror/node:15.2.0-alpine"
   },
   {
     "source": "node:14.15.0-alpine",
@@ -80,8 +80,8 @@
     "dest": "library-mirror/mariadb:latest"
   },
   {
-    "source": "library/mariadb:10.5.7",
-    "dest": "library-mirror/mariadb:10.5.7"
+    "source": "library/mariadb:10.5.8",
+    "dest": "library-mirror/mariadb:10.5.8"
   },
   {
     "source": "library/mariadb:10.4.15",

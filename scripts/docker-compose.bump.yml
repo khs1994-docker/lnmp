@@ -5,7 +5,7 @@ services:
     image: mysql:8.0.22
 
   mariadb:
-    image: mariadb:10.5.7
+    image: mariadb:10.5.8
 
   redis:
     image: redis:6.0.9-alpine
@@ -17,7 +17,7 @@ services:
     image: php:7.4.12-fpm-alpine
 
   composer:
-    image: composer:2.0.4
+    image: composer:2.0.6
 
   nginx:
     image: nginx:1.19.4-alpine
@@ -47,7 +47,7 @@ services:
     image: kong:2.2.0-alpine
 
   node:
-    image: node:15.1.0-alpine
+    image: node:15.2.0-alpine
 
   go:
     image: golang:1.15.4-alpine
