@@ -57,7 +57,9 @@
 │   │           │   ├── 50-mysql-clients.cnf
 │   │           │   ├── 50-mysqld_safe.cnf
 │   │           │   ├── 50-server.cnf
-│   │           │   └── 60-galera.cnf
+│   │           │   ├── 60-galera.cnf
+│   │           │   └── 99-enable-encryption.cnf.preset
+│   │           │       └── enable_encryption.preset
 │   │           └── my.cnf -> mariadb.cnf
 │   ├── docker.cnf
 │   └── docker.production.cnf
@@ -261,5 +263,5 @@
 │   └── supervisord.ini.example
 └── yarn
 
-62 directories, 198 files
+63 directories, 199 files
 ```
