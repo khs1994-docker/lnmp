@@ -16,8 +16,8 @@
     "dest": "library-mirror/node:14.15.0-alpine"
   },
   {
-    "source": "golang:1.15.4-alpine",
-    "dest": "library-mirror/golang:1.15.4-alpine"
+    "source": "golang:1.15.5-alpine",
+    "dest": "library-mirror/golang:1.15.5-alpine"
   },
   {
     "source": "golang:alpine",
@@ -168,8 +168,8 @@
     "dest": "library-mirror/postgres:alpine"
   },
   {
-    "source": "library/postgres:13.0-alpine",
-    "dest": "library-mirror/postgres:13.0-alpine"
+    "source": "library/postgres:13.1-alpine",
+    "dest": "library-mirror/postgres:13.1-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
