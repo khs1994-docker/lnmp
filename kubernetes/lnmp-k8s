@@ -450,8 +450,11 @@ _gvisor_install(){
   fi
 
   print_info "install gvisor(runsc) ..."
-  local url="https://github.com/docker-practice/gvisor-mirror/releases/download/nightly"
+  local url_official="https://github.com/docker-practice/gvisor-mirror/releases/download/nightly"
+  local url="https://download.fastgit.org/docker-practice/gvisor-mirror/releases/download/nightly"
   local TAR_FILE="runsc-${GOOS}-${GOARCH}.tar.gz"
+
+  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
 
   __download(){
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
@@ -484,7 +487,12 @@ _runc_install(){
     return
   fi
 
-  $(_sudo) $(_curl) https://github.com/opencontainers/runc/releases/download/v1.0.0-rc92/runc.amd64 \
+  local url_official=https://github.com/opencontainers/runc/releases/download/v1.0.0-rc92/runc.amd64
+  local url=https://download.fastgit.org/opencontainers/runc/releases/download/v1.0.0-rc92/runc.amd64
+
+  _use_cn_mirror $url || url=$url_official
+
+  $(_sudo) $(_curl) $url \
     -o /usr/bin/runc
 
   $(_sudo) chmod +x /usr/bin/runc
@@ -528,11 +536,16 @@ _crun_install(){
 
     return
   fi
-
-  $(_sudo) $(_curl) https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64 \
+  local url=https://download.fastgit.org/containers/crun/releases/download/0.15/crun-0.15-linux-amd64
+  local url_official=https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64
+  _use_cn_mirror $url || url=$url_official
+  $(_sudo) $(_curl) $url \
     -o /usr/bin/crun
 
-  $(_sudo) $(_curl) https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64-disable-systemd \
+  url=https://download.fastgit.org/containers/crun/releases/download/0.15/crun-0.15-linux-amd64-disable-systemd
+  url_official=https://github.com/containers/crun/releases/download/0.15/crun-0.15-linux-amd64-disable-systemd
+  _use_cn_mirror $url || url=$url_official
+  $(_sudo) $(_curl) $url \
     -o /usr/bin/crun-disable-systemd
 
   $(_sudo) chmod +x /usr/bin/crun /usr/bin/crun-disable-systemd
@@ -556,12 +569,17 @@ _containerd_install(){
 
   print_info "install containerd 1.4 ..."
 
-  local url="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+  local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
+  local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local TAR_FILE="containerd-${CONTAINERD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+
+  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
 
   __download(){
     if [ "$GOOS" = "linux" -a "$GOARCH" = 'arm64' ];then
-      url="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly-linux-arm64.tar.gz"
+      local url_official="https://github.com/docker-practice/containerd/releases/download/nightly/containerd-nightly-linux-arm64.tar.gz"
+      local url="https://download.fastgit.org/docker-practice/containerd/releases/download/nightly/containerd-nightly-linux-arm64.tar.gz"
+      _use_cn_mirror ${url} || url=$url_official
       $(_sudo) $(_curl) ${url} -o ${TMP_ROOT}/${TAR_FILE}
 
       return
@@ -671,8 +689,12 @@ _crictl_install(){
     return
   fi
 
-  local url="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
+  local url_official="https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
+  local url="https://download.fastgit.org/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}"
   local TAR_FILE="crictl-v${CRICTL_VERSION}-linux-${GOARCH}.tar.gz"
+
+  _use_cn_mirror ${url}/${TAR_FILE} || url=$url_official
+
   __download(){
     $(_sudo) $(_curl) ${url}/${TAR_FILE} -o ${TMP_ROOT}/${TAR_FILE}
   }
@@ -772,12 +794,17 @@ _conmon_install(){
     return
   fi
 
+  local url=https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
+  local url_official=https://download.fastgit.org/containers/conmon/releases/download/v${CONMON_VERSION}/conmon
+
+  _use_cn_mirror $url || url=$url_official
+
   if [ $OS = "Linux" -a $GOARCH = "amd64" ];then
     $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon \
-      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon \
+      $url \
     || \
     $(_sudo) $(_curl) -o ${K8S_ROOT}/usr/local/bin/conmon \
-      https://github.com/containers/conmon/releases/download/v${CONMON_VERSION}/conmon-${CONMON_VERSION}
+      $url-${CONMON_VERSION}
 
     $(_sudo) chmod +x ${K8S_ROOT}/usr/local/bin/conmon
     return

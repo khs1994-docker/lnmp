@@ -8,6 +8,7 @@
   "github": "denoland/deno",
   "releases": "https://github.com/denoland/deno/releases",
   "url": "https://github.com/denoland/deno/releases/download/v${VERSION}/deno-x86_64-$(if($IsWindows){echo pc-windows-msvc}elseif($IsMacOS){echo apple-darwin}else{echo unknown-linux-gnu}).zip",
+  "url-mirror": "https://download.fastgit.org/denoland/deno/releases/download/v${VERSION}/deno-x86_64-$(if($IsWindows){echo pc-windows-msvc}elseif($IsMacOS){echo apple-darwin}else{echo unknown-linux-gnu}).zip",
   "command": "deno",
   "download-filename": "deno-${VERSION}-x86_64-pc-windows-msvc.zip",
   "scripts": {

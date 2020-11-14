@@ -8,6 +8,7 @@
   "github": "zealdocs/zeal",
   "releases": "https://github.com/zealdocs/zeal/releases",
   "url": "https://github.com/zealdocs/zeal/releases/download/v${VERSION}/zeal-${VERSION}-windows-x64.msi",
+  "url-mirror": "https://download.fastgit.org/zealdocs/zeal/releases/download/v${VERSION}/zeal-${VERSION}-windows-x64.msi",
   "command": "${env:ProgramFiles}\\Zeal\\zeal.exe",
   "scripts": {
     "install": "Start-Process -FilePath $filename -wait",

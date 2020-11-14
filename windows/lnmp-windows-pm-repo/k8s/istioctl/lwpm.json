@@ -13,6 +13,7 @@
     "version": "istioctl version  --remote=false -s"
   },
   "url": "https://github.com/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-win.zip",
+  "url-mirror": "https://download.fastgit.org/istio/istio/releases/download/${VERSION}/istioctl-${VERSION}-win.zip",
   "version": "1.7.0",
   "pre-version": "1.8.0-alpha.2"
 }
