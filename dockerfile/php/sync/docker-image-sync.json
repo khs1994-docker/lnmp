@@ -96,9 +96,21 @@
     "source": "php:php-cs-fixer"
   },
   {
-    "source": "php:sami"
+    "source": "php:doctum"
   },
   {
     "source": "php:phpdox"
+  },
+  {
+    "source": "php:phpcpd"
+  },
+  {
+    "source": "php:phpdox"
+  },
+  {
+    "source": "php:phploc"
+  },
+  {
+    "source": "php:phpmd"
   }
 ]

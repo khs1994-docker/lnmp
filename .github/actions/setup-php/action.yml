@@ -9,7 +9,7 @@ inputs:
     default: 7.4.12
     required: false
   php_type:
-    description: php image type, fpm | composer | swoole | php-cs-fixer | sami
+    description: php image type, fpm | composer | swoole | php-cs-fixer | doctum
     default: fpm
     required: false
   job_container_network:

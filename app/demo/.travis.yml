@@ -98,8 +98,8 @@ before_install:
 install:
   - composer install -q
   # - composer update -q
-  # - curl -fsSL http://get.sensiolabs.org/sami.phar -o sami
-  # - chmod +x sami
+  # - curl -fsSL https://doctum.long-term.support/releases/latest/doctum.phar -o doctum
+  # - chmod +x doctum
 
 script:
   # - phpenv config-rm xdebug.ini || echo "xdebug not available"
@@ -107,7 +107,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  # - ./sami update .sami.php
+  # - ./doctum update .doctum.php
 
 # deploy:
 #   provider: pages

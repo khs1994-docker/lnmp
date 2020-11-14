@@ -56,7 +56,7 @@ $ cd demo
 | `.editorconfig`   | [定义文件格式规则（例如 缩进方式）](https://editorconfig.org/)|
 | `.pcit.yml`       | [`PCIT` CI 工具](https://ci.khs1994.com) |
 | `.php_cs`         | [PHP 代码格式化工具](https://github.com/FriendsOfPHP/PHP-CS-Fixer) |
-| `.sami.php`       | [PHP 文档生成工具](https://github.com/FriendsOfPHP/Sami) |
+| `.doctum.php`       | [PHP 文档生成工具](https://github.com/code-lts/doctum) |
 | `.styleci.yml`    | [`Style CI` PHP 代码格式化 CI 工具](https://styleci.io/) |
 | `.travis.yml`     | [`Travis` CI 工具](https://www.travis-ci.com) |
 
