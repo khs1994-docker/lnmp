@@ -10,7 +10,7 @@ jobs:
       matrix:
         php_version:
           - nightly
-          - 8.0.0RC3
+          - 8.0.0RC4
           - 7.4.12
           - 7.3.24
           - 7.2.34
