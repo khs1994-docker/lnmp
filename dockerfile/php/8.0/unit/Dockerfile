@@ -18,6 +18,7 @@ RUN set -x \
                                   $PHPIZE_DEPS \
                                   openssl-dev \
                                   linux-headers \
+                                  pcre2-dev \
                                   patch \
   \
   # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/474.diff -O \
