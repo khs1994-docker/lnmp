@@ -91,8 +91,8 @@
     "dest": "nginx-ingress-controller:v0.41.2@sha256:1f4f402b9c14f3ae92b11ada1dfe9893a88f0faeb0b2f4b903e2c67a0c3bf0de"
   },
   {
-    "source": "k8s.gcr.io/metrics-server/metrics-server:v0.4.0",
-    "dest": "gcr-mirror/metrics-server:v0.4.0"
+    "source": "k8s.gcr.io/metrics-server/metrics-server:v0.4.1",
+    "dest": "gcr-mirror/metrics-server:v0.4.1"
   },
   {
     "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",

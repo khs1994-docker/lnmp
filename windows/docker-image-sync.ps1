@@ -16,7 +16,7 @@ if ($env:SYNC_WINDOWS -eq 'true') {
 else {
   $EXCLUDE_OS = $("windows")
 }
-$EXCLUDE_ARCH = "s390x", "ppc64le", "386", "mips64le"
+$EXCLUDE_ARCH = "s390x", "ppc64le", "386", "mips64le", "riscv64"
 $EXCLUDE_VARIANT = "v6", "v5"
 
 # $env:SOURCE_DOCKER_REGISTRY = "mirror.io"

@@ -38,8 +38,9 @@ jobs:
       #    LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0-beta.1
+         CI_KUBERNETES_VERSION: 1.20.0-beta.2
          LNMP_K8S_GET: --url
+         GENERATE_CLI_HELP: "true"
        # next version
       #  - os: ubuntu
       #    dist: 20.04
@@ -435,5 +436,48 @@ jobs:
          echo ::group::kubectl get node
          kubectl get node -o yaml
          echo ::endgroup::
+     - run:
+        |
+         BASE_BRANCH=master
+         if [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+         set -x
+         cd /tmp
+         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+         cd lnmp-k8s
+
+         stty size
+         stty cols 200
+
+         # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+         cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
+
+         git add .
+         git commit -m "Update v$CI_KUBERNETES_VERSION config"
+         git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
+
+         cd /tmp
+         rm -rf lnmp-k8s
+         fi
+     - run:
+        |
+         BASE_BRANCH=v1.19.0-config
+         BASE_BRANCH=master
+         if [ $CI_KUBERNETES_VERSION = '1.20.0-beta.2' ];then
+         set -x
+         cd /tmp
+         rm -rf lnmp-k8s
+         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+         cd lnmp-k8s
+
+         stty size
+         stty cols 200
+
+         # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+         cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
+
+         git add .
+         git commit -m "Update v$CI_KUBERNETES_VERSION config"
+         git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
+         fi
     #  - name: Setup tmate session
     #    uses: mxschmitt/action-tmate@v3

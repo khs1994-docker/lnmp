@@ -4,8 +4,8 @@ resources:
 - rbac.yaml
 - service.yaml
 images:
-  - name: k8s.gcr.io/metrics-server/metrics-server:v0.4.0
+  - name: k8s.gcr.io/metrics-server/metrics-server:v0.4.1
     newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
-    newTag: v0.4.0
+    newTag: v0.4.1
 commonLabels:
   k8s-app: metrics-server

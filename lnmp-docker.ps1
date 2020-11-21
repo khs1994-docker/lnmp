@@ -134,8 +134,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.19.2"
-$DOCKER_DESKTOP_VERSION = "2.4.2.0"
+$KUBERNETES_VERSION = "1.19.3"
+$DOCKER_DESKTOP_VERSION = "2.5.1.0"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
