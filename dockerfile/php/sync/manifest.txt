@@ -1,9 +1,9 @@
-8.0.0RC4-cli-alpine
-8.0.0RC4-fpm-alpine
-8.0.0RC4-unit-alpine
-8.0.0RC4-composer-alpine
-8.0.0RC4-swoole-alpine
-8.0.0RC4-s6-alpine
+8.0.0RC5-cli-alpine
+8.0.0RC5-fpm-alpine
+8.0.0RC5-unit-alpine
+8.0.0RC5-composer-alpine
+8.0.0RC5-swoole-alpine
+8.0.0RC5-s6-alpine
 7.4.12-cli-alpine
 7.4.12-fpm-alpine
 7.4.12-unit-alpine

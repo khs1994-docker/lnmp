@@ -333,7 +333,7 @@ if [ "${LNMP_CN_ENV}" = 'false' ];then
   return 1;
 fi
 
-httpCode=`curl -sI ${1} | head -1 | awk '{print $2}'`
+httpCode=`curl -X GET -sI ${1} | head -1 | awk '{print $2}'`
 
 if [ $httpCode != 200 ];then
   echo 'cn mirror http response code is not 200, not use'
