@@ -104,8 +104,8 @@
     "dest": "library-mirror/mongo:latest"
   },
   {
-    "source": "library/mongo:4.4.1",
-    "dest": "library-mirror/mongo:4.4.1"
+    "source": "library/mongo:4.4.2",
+    "dest": "library-mirror/mongo:4.4.2"
   },
   {
     "source": "library/kong:latest",
