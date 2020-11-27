@@ -436,8 +436,13 @@ jobs:
          echo ::group::kubectl get node
          kubectl get node -o yaml
          echo ::endgroup::
-     - run:
+     - run: |
+          git config --global user.email "gh-bot@khs1994.com"
+          git config --global user.name "gh-bot"
+     - name: Update k8s cli help info
+       run:
         |
+         export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=master
          if [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
          set -x
@@ -452,14 +457,16 @@ jobs:
          cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
 
          git add .
-         git commit -m "Update v$CI_KUBERNETES_VERSION config"
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s
          git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
 
          cd /tmp
          rm -rf lnmp-k8s
          fi
-     - run:
+     - name: Update k8s beta cli help info
+       run:
         |
+         export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=v1.19.0-config
          BASE_BRANCH=master
          if [ $CI_KUBERNETES_VERSION = '1.20.0-beta.2' ];then
@@ -476,7 +483,7 @@ jobs:
          cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
 
          git add .
-         git commit -m "Update v$CI_KUBERNETES_VERSION config"
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s
          git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
          fi
     #  - name: Setup tmate session

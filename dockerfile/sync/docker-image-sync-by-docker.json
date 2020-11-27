@@ -103,18 +103,18 @@
     "dest": "gcr-mirror/git-sync:v3.1.6"
   },
   {
-    "source": "quay.io/coreos/etcd:v3.4.13",
-    "dest": "quay-mirror/etcd:v3.4.13",
+    "source": "quay.io/coreos/etcd:v3.4.14",
+    "dest": "quay-mirror/etcd:v3.4.14",
     "platforms": [
       {
-        "source": "quay.io/coreos/etcd:v3.4.13"
+        "source": "quay.io/coreos/etcd:v3.4.14"
       },
       {
         "os": "linux",
         "architecture": "arm64",
         "variant": "v8",
-        "source": "quay.io/coreos/etcd:v3.4.13-arm64",
-        "dest": "quay-mirror/etcd:v3.4.13-arm64"
+        "source": "quay.io/coreos/etcd:v3.4.14-arm64",
+        "dest": "quay-mirror/etcd:v3.4.14-arm64"
       }
     ]
   },
@@ -173,11 +173,11 @@
     "ref": "v1.19.2"
   },
   {
-    "source": "k8s.gcr.io/etcd:3.4.13-0",
-    "dest": "gcr-mirror/etcd:3.4.13-0",
+    "source": "k8s.gcr.io/etcd:3.4.14-0",
+    "dest": "gcr-mirror/etcd:3.4.14-0",
     "registry": "k8s.gcr.io",
     "image": "etcd",
-    "ref": "3.4.13-0"
+    "ref": "3.4.14-0"
   },
   {
     "source": "k8s.gcr.io/coredns:1.7.0",
