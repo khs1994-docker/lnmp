@@ -21,7 +21,7 @@ services:
 
   memcached:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.8}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.9}-alpine
 
   php7:
     << : *common
@@ -45,8 +45,8 @@ services:
 
   nginx:
     << : *common
-    # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.19.4}-alpine
-    image: ${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.19.4}-alpine
+    # image: khs1994/nginx:${LNMP_NGINX_VERSION:-1.19.5}-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/nginx:${LNMP_NGINX_VERSION:-1.19.5}-alpine
 
 networks:
   frontend:

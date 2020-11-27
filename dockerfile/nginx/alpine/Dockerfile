@@ -34,7 +34,7 @@ FROM alpine:3.12
 
 LABEL maintainer="khs1994.com nginx With HTTP3"
 
-ARG NGINX_VERSION=1.19.4
+ARG NGINX_VERSION=1.19.5
 
 ARG ALPINE_URL=dl-cdn.alpinelinux.org
 
