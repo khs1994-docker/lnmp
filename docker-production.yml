@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:7.4.12-fpm-alpine
+  image: khs1994/php:8.0.0-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -749,17 +749,17 @@ configs:
   #   << : *default-labels
 
   php_ini:
-    file: ./config/php/php.production.ini
+    file: ./config/php8/php.production.ini
     << : *default-labels
   php_development_ini:
-    file: ./config/php/php.development.ini
+    file: ./config/php8/php.development.ini
     << : *default-labels
   # 重写 php.ini
   php_ini_include:
-    file: ./config/php/docker-php.ini
+    file: ./config/php8/docker-php.ini
     << : *default-labels
   php_fpm_conf_d_zz_docker_conf:
-    file: ./config/php/zz-docker.production.conf
+    file: ./config/php8/zz-docker.production.conf
     << : *default-labels
   redis_conf:
     file: ./config/redis/redis.production.conf

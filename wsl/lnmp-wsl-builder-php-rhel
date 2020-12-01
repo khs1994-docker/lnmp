@@ -97,8 +97,12 @@ case "$1" in
 
   8.0.* )
     export PHP_NUM=80
+    ;;
+
+  8.1.* )
+    export PHP_NUM=81
     export BUILD_FROM_GIT=1
-    export PHP_SRC_BRANCH=PHP-8.0
+    export PHP_SRC_BRANCH=PHP-8.1
     ;;
 
   nightly )
@@ -877,10 +881,10 @@ command -v wget > /dev/null || $(_sudo) yum install -y wget
 mkdir -p /tmp/php-builder
 
 if [ "$PHP_VERSION" = 'rpm' -o "$PHP_VERSION" = 'yum' -o "$PHP_VERSION" = 'dnf' ];then \
-    PHP_VERSION=7.4.12 ; fi
+    PHP_VERSION=7.4.13 ; fi
 
 if [ "$PHP_VERSION" = 'rpm-devel' -o "$PHP_VERSION" = 'yum-devel' -o "$PHP_VERSION" = 'dnf-devel' ];then \
-    PHP_VERSION=7.4.12 ; fi
+    PHP_VERSION=7.4.13 ; fi
 
 _get_phpnum $PHP_VERSION
 
