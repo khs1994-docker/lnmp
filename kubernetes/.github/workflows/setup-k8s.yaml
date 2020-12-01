@@ -28,6 +28,7 @@ jobs:
      DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
      LNMP_DOCKER_MIRROR: registry-1.docker.io
      CNI_CALICO_EBPF: ${{matrix.CNI_CALICO_EBPF}}
+     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
    strategy:
      max-parallel: 1
      matrix:
@@ -436,7 +437,8 @@ jobs:
          echo ::group::kubectl get node
          kubectl get node -o yaml
          echo ::endgroup::
-     - run: |
+     - name: Config git
+       run: |
           git config --global user.email "gh-bot@khs1994.com"
           git config --global user.name "gh-bot"
      - name: Update k8s cli help info
