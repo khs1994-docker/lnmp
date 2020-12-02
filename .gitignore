@@ -83,3 +83,5 @@ mutagen.yml
 .wsl
 
 /*.log
+
+.travis.yml

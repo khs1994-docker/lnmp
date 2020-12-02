@@ -1,19 +1,98 @@
 on:
   push:
     tags:
-    - v18.03.*
+    - v20.10.*
 
 name: Release
 
 jobs:
   release:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      # max-parallel: 1
+      matrix:
+        include:
+          - JOB_NAME: wsl-php-builder-73
+            DIST_FILE: khs1994-wsl-php73_7.3.25-debian-buster_amd64.deb
+          - JOB_NAME: wsl-php-builder-74
+            DIST_FILE: khs1994-wsl-php74_7.4.13-debian-buster_amd64.deb
+          - JOB_NAME: wsl-php-builder-80
+            DIST_FILE: khs1994-wsl-php80_8.0.0-debian-buster_amd64.deb
+          - JOB_NAME: wsl-php-builder-nightly
+            DIST_FILE: khs1994-wsl-php81_0.0.0-debian-buster_amd64.deb
+          - JOB_NAME: wsl-php-builder-debian11-74
+            DIST_FILE: khs1994-wsl-php74_7.4.13-debian-bullseye_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu1804-73
+            DIST_FILE: khs1994-wsl-php73_7.3.25-ubuntu-bionic_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu1804-74
+            DIST_FILE: khs1994-wsl-php74_7.4.13-ubuntu-bionic_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2004-74
+            DIST_FILE: khs1994-wsl-php74_7.4.13-ubuntu-focal_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2010-74
+            DIST_FILE: khs1994-wsl-php74_7.4.13-ubuntu-groovy_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2004-nightly
+            DIST_FILE: khs1994-wsl-php81_0.0.0-ubuntu-focal_amd64.deb
+          - JOB_NAME: wsl-php-builder-rhel7-73
+            DIST_FILE: khs1994-wsl-php73-7.3.25-1.el7.centos.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-rhel8-73
+            DIST_FILE: khs1994-wsl-php73-7.3.25-1.el8.centos.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-rhel8-74
+            DIST_FILE: khs1994-wsl-php74-7.4.13-1.el8.centos.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc32-73
+            DIST_FILE: khs1994-wsl-php73-7.3.25-1.fc32.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc32-74
+            DIST_FILE: khs1994-wsl-php74-7.4.13-1.fc32.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc32-80
+            DIST_FILE: khs1994-wsl-php80-8.0.0-1.fc32.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc32-nightly
+            DIST_FILE: khs1994-wsl-php81-0.0.0-1.fc32.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc33-nightly
+            DIST_FILE: khs1994-wsl-php81-0.0.0-1.fc33.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc34-74
+            DIST_FILE: khs1994-wsl-php74-7.4.13-1.fc34.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc33-nightly
+            DIST_FILE: khs1994-wsl-php81-0.0.0-1.fc33.x86_64.rpm
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@main
       with:
-        fetch-depth: 10
-    - shell: pwsh
-      env:
-        NUGET_API_KEY: ${{secrets.NUGET_API_KEY}}
+        fetch-depth: 1
+    # - shell: pwsh
+    #   env:
+    #     NUGET_API_KEY: ${{secrets.NUGET_API_KEY}}
+    #   run: |
+    #     Publish-Script -Path ${PWD}/lnmp-docker.ps1 -NuGetApiKey $env:NUGET_API_KEY -Force
+    - name: gh auth
       run: |
-        Publish-Script -Path ${PWD}/lnmp-docker.ps1 -NuGetApiKey $env:NUGET_API_KEY -Force
+        echo ${GITHUB_TOKEN} | gh auth login --with-token
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Create release
+      run: |
+        if [ "$JOB_NAME" == 'wsl-php-builder-73' ];then
+          export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
+          gh release create $GITHUB_TAG -F CHANGELOG.md --target 20.10 || true
+        fi
+      env:
+        GITHUB_REF: ${{ github.ref }}
+        JOB_NAME: ${{ matrix.JOB_NAME }}
+    - uses: azure/docker-login@v1
+      with:
+        # login-server: contoso.azurecr.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - run: |
+        ./lnmp-docker compose --official -f
+        cd wsl
+        docker-compose build ${JOB_NAME}
+        docker-compose push ${JOB_NAME}
+        docker-compose run ${JOB_NAME} command || true
+        . .env
+        docker cp $( docker container ls -a --format {{.ID}} ):/${DIST_FILE} .
+        export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
+        gh release upload ${GITHUB_TAG} "${DIST_FILE}" --repo khs1994-docker/lnmp --clobber
+      env:
+        JOB_NAME: ${{ matrix.JOB_NAME }}
+        GITHUB_REF: ${{ github.ref }}
+        DIST_FILE: ${{ matrix.DIST_FILE }}
+      name: Build

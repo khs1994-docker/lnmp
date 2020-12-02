@@ -577,11 +577,11 @@ set +e
       if [ "${PHP_NUM}" -ne "74" ];then return; fi
 
       if [ -n "$libenchant2_exists" ];then
-        curl -O https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0041-remove-deprecated-call-and-deprecate-function-to-be-.patch
-        curl -O https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0042-Use-libenchant-2-when-available.patch
+        curl -O https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0040-remove-deprecated-call-and-deprecate-function-to-be-.patch
+        curl -O https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0041-Use-libenchant-2-when-available.patch
 
-        patch -p1 < 0041-remove-deprecated-call-and-deprecate-function-to-be-.patch
-        patch -p1 < 0042-Use-libenchant-2-when-available.patch
+        patch -p1 < 0040-remove-deprecated-call-and-deprecate-function-to-be-.patch
+        patch -p1 < 0041-Use-libenchant-2-when-available.patch
 
         ./buildconf --force
       fi
