@@ -255,8 +255,8 @@ services:
     working_dir: /app
     networks:
       - frontend
-    depends_on:
-      - php7
+    # depends_on:
+    #   - php8
     healthcheck:
       test: ["CMD","nginx","-t"]
 

@@ -69,10 +69,12 @@ services:
   #   healthcheck:
   #     test: ["NONE"]
 
-  # nginx:
-  #   volumes:
-  #   - git-sync-data:/app/git-sync
-  #   - phpmyadmin:/var/www/html
+  nginx:
+    # volumes:
+    # - git-sync-data:/app/git-sync
+    # - phpmyadmin:/var/www/html
+    depends_on:
+      - php8
 
   swoole:
     << : *common

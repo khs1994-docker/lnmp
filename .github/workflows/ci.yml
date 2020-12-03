@@ -88,6 +88,8 @@ jobs:
         # sudo rm -rf $(command -v docker-compose) || true
         # export LNMP_SERVICES="nginx mariadb php7 redis"
         # export LREW_INCLUDE="mariadb"
+
+        ./lnmp-docker up
     - name: Connect
       run: |
         sleep 20
