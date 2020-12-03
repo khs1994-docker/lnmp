@@ -39,6 +39,7 @@ _command(){
 
   lnmp-php -v
 
+  lnmp-composer -V
   # lnmp-composer global config github-oauth.github.com ${GITHUB_TOKEN}
   lnmp-composer config -g --unset repos.packagist
   lnmp-composer install
