@@ -496,7 +496,7 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.20.0-config
+         BASE_BRANCH=v1.20.0-rc.0-config
          # BASE_BRANCH=master
          if [ $CI_KUBERNETES_VERSION = '1.21.0-alpha.0' ];then
          set -x

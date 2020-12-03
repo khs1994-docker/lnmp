@@ -71,7 +71,7 @@ jobs:
       run: |
         if [ "$JOB_NAME" == 'wsl-php-builder-73' ];then
           export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
-          gh release create $GITHUB_TAG -F CHANGELOG.md --target 20.10 || true
+          gh release create $GITHUB_TAG -F CHANGELOG.md --target 20.10 -t $GITHUB_TAG || true
         fi
       env:
         GITHUB_REF: ${{ github.ref }}
