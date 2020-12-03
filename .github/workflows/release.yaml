@@ -69,10 +69,30 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Create release
       run: |
-        if [ "$JOB_NAME" == 'wsl-php-builder-73' ];then
-          export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
-          gh release create $GITHUB_TAG -F CHANGELOG.md --target 20.10 -t $GITHUB_TAG || true
+        if [ "$JOB_NAME" != 'wsl-php-builder-73' ];then
+          exit 0
         fi
+
+        export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
+        gh release create $GITHUB_TAG -F CHANGELOG.md --target 20.10 -t $GITHUB_TAG || true
+
+        sh cli/build.sh deb ${GITHUB_TAG}
+        export VERSION=$( echo ${GITHUB_TAG} | cut -d "v" -f 2 )
+        export DEB_NAME=khs1994-docker-lnmp_${VERSION}_amd64.deb
+        ls -la cli
+        sudo dpkg -i cli/${DEB_NAME}
+        gh release upload ${GITHUB_TAG} cli/${DEB_NAME} --repo khs1994-docker/lnmp --clobber
+
+        test $( echo "${GITHUB_TAG}" | grep alpha ) && exit 0 || true
+        test $( echo "${GITHUB_TAG}" | grep beta ) && exit 0 || true
+        test $( echo "${GITHUB_TAG}" | grep rc ) && exit 0 || true
+        sudo apt install -y rpm
+        sh cli/build.sh rpm ${GITHUB_TAG}
+        export VERSION=$( echo ${GITHUB_TAG} | cut -d "v" -f 2 )
+        export RPM_NAME=$( cd $HOME; ls *.rpm )
+        ls -la ~/*.rpm
+        gh release upload ${GITHUB_TAG} ${HOME}/${RPM_NAME} --repo khs1994-docker/lnmp --clobber
+
       env:
         GITHUB_REF: ${{ github.ref }}
         JOB_NAME: ${{ matrix.JOB_NAME }}

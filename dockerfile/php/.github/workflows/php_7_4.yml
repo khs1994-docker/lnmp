@@ -207,7 +207,7 @@ jobs:
         GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994
         DOCKER_HUB_USERNAME_TEST: lrew
-        PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
+        PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: 7_4_X
         FOLDER: 7.4
         PHP_TAG_VERSION: 7.4.13
