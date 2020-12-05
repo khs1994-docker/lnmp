@@ -63,11 +63,6 @@ jobs:
       run: sudo systemctl stop mysql
       if: |
         startsWith(matrix.os, 'ubuntu' )
-    - name: Test Swarm mode
-      run: |
-        QUITE=true ./lnmp-docker test swarm
-      if: |
-        startsWith(matrix.os, 'ubuntu' )
     - name: Up
       run: |
         ./lnmp-docker build-config > docker-compose.yml
@@ -99,6 +94,11 @@ jobs:
         curl -fsSL 127.0.0.1
     - name: Down
       run: ./lnmp-docker down
+    - name: Test Swarm mode
+      run: |
+        QUITE=true ./lnmp-docker test swarm
+      if: |
+        startsWith(matrix.os, 'ubuntu' )
     - name: pwsh
       shell: pwsh
       run: ./lnmp-docker.ps1

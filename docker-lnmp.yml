@@ -49,7 +49,8 @@ services:
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:cached
       - ./scripts/backup/mysql:/backup
-      - << : *tmpfs
+      - type: tmpfs
+        target: /var/run/mysqld
     command:
       - mysqld
       - --character-set-server=utf8mb4
