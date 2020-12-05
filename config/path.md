@@ -1,5 +1,6 @@
 ```bash
 .
+├── README.md
 ├── composer
 │   ├── auth.example.json
 │   └── config.example.json
@@ -34,6 +35,7 @@
 │   └── supervisord.conf
 ├── frpc.ini
 ├── httpd
+│   ├── README.md
 │   ├── demo-ajax-header.config
 │   ├── demo-https.config
 │   ├── demo-laravel.config
@@ -41,16 +43,15 @@
 │   │   ├── root-ca.crt
 │   │   ├── t.khs1994.com.crt
 │   │   └── t.khs1994.com.key
-│   ├── demo-vhost.conf
-│   └── README.md
+│   └── demo-vhost.conf
 ├── mariadb
 │   ├── default
 │   │   └── etc
 │   │       └── mysql
 │   │           ├── conf.d
 │   │           │   └── docker.cnf
-│   │           ├── debian.cnf
 │   │           ├── debian-start
+│   │           ├── debian.cnf
 │   │           ├── mariadb.cnf
 │   │           ├── mariadb.conf.d
 │   │           │   ├── 50-client.cnf
@@ -78,18 +79,10 @@
 │   ├── docker.cnf
 │   └── docker.production.cnf
 ├── nginx
+│   ├── README.md
 │   ├── auth
 │   │   └── README.md
 │   ├── demo-ajax-header.config
-│   ├── demo.config
-│   │   ├── docker.mirror.config
-│   │   ├── gitlab.config
-│   │   ├── gzip.config
-│   │   ├── http3.config
-│   │   ├── phpmyadmin.config
-│   │   ├── ppm.config
-│   │   ├── unit-laravel.config
-│   │   └── unit-proxy.config
 │   ├── demo-fzjh-80.config
 │   ├── demo-fzjh.config
 │   ├── demo-include-php.config
@@ -106,20 +99,29 @@
 │   ├── demo-toolkit-docs.conf
 │   ├── demo-www.conf
 │   ├── demo-www.config
+│   ├── demo.config
+│   │   ├── docker.mirror.config
+│   │   ├── gitlab.config
+│   │   ├── gzip.config
+│   │   ├── http3.config
+│   │   ├── phpmyadmin.config
+│   │   ├── ppm.config
+│   │   ├── unit-laravel.config
+│   │   └── unit-proxy.config
 │   ├── fzjh.conf
 │   ├── gogs.config
 │   ├── minio.config
-│   ├── README.md
 │   ├── ssl-self
 │   └── wait-for-php.sh
 ├── nginx-unit
+│   ├── README.md
 │   ├── demo-php.json
 │   ├── full.json
-│   ├── laravel.json.back
-│   └── README.md
+│   └── laravel.json.back
 ├── npm
 ├── path.md
 ├── php
+│   ├── README.md
 │   ├── default
 │   │   └── usr
 │   │       └── local
@@ -166,17 +168,18 @@
 │   │                   ├── www.conf.default
 │   │                   └── zz-docker.conf
 │   ├── docker-php.example.ini
-│   ├── php.development.ini
 │   ├── php-PHP_SAPI.ini
+│   ├── php.development.ini
 │   ├── php.production.ini
-│   ├── README.md
 │   ├── zz-docker.example.conf
 │   └── zz-docker.production.conf
 ├── php8
+│   ├── README.md
 │   ├── default
 │   │   └── usr
 │   │       └── local
 │   │           └── etc
+│   │               ├── pear.conf
 │   │               ├── php
 │   │               │   ├── conf.d
 │   │               │   │   ├── docker-php-ext-sodium.ini
@@ -223,11 +226,9 @@
 │   ├── docker-php.example.ini
 │   ├── php.development.ini
 │   ├── php.production.ini
-│   ├── README.md
 │   ├── zz-docker.example.conf
 │   └── zz-docker.production.conf
 ├── python
-├── README.md
 ├── redis
 │   ├── redis.example.conf
 │   └── redis.production.conf
@@ -256,12 +257,12 @@
 │           ├── finish
 │           └── run
 ├── s6-overlay
-│   ├── fix-attrs.d
-│   │   └── 01-mysql-data-dir
-│   └── README.md
+│   ├── README.md
+│   └── fix-attrs.d
+│       └── 01-mysql-data-dir
 ├── supervisord
 │   └── supervisord.ini.example
 └── yarn
 
-63 directories, 199 files
+63 directories, 200 files
 ```
