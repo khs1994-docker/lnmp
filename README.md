@@ -206,7 +206,7 @@ Please see [Documents](https://github.com/khs1994-docker/lnmp/tree/master/docs#%
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.8`                | **10.5.8**          |`ubuntu:focal`  |
 |[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.9-alpine`            | **6.0.9**           |`alpine:3.12`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.0.0-fpm-alpine`     | **8.0.0**       |`alpine:3.12`    |
-|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.0-composer-alpine`| **2.0.7**      |`alpine:3.12`    |
+|[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.0-composer-alpine`| **2.0.8**      |`alpine:3.12`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.9-alpine`           | **1.6.9**       |`alpine:3.12`    |
 |[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.9-management-alpine` | **3.8.9**       |`alpine:3.11`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.1-alpine`             | **13.1**        |`alpine:3.12`    |

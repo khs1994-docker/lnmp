@@ -76,6 +76,7 @@ jobs:
         export GITHUB_TAG=$(echo $GITHUB_REF | cut -d '/' -f 3)
         gh release create $GITHUB_TAG -F CHANGELOG.md --target 20.10 -t $GITHUB_TAG || true
 
+        # deb
         sh cli/build.sh deb ${GITHUB_TAG}
         export VERSION=$( echo ${GITHUB_TAG} | cut -d "v" -f 2 )
         export DEB_NAME=khs1994-docker-lnmp_${VERSION}_amd64.deb
@@ -83,6 +84,7 @@ jobs:
         sudo dpkg -i cli/${DEB_NAME}
         gh release upload ${GITHUB_TAG} cli/${DEB_NAME} --repo khs1994-docker/lnmp --clobber
 
+        # rpm
         test $( echo "${GITHUB_TAG}" | grep alpha ) && exit 0 || true
         test $( echo "${GITHUB_TAG}" | grep beta ) && exit 0 || true
         test $( echo "${GITHUB_TAG}" | grep rc ) && exit 0 || true

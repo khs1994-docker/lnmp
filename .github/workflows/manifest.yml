@@ -93,6 +93,8 @@ jobs:
           which php7.1 && php7.1 -v || true
           which php7.2 && php7.2 -v || true
           which php7.3 && php7.3 -v || true
+          which php7.4 && php7.4 -v || true
+          which php8.0 && php8.0 -v || true
           which php && php -v || true
 
           which composer && composer -V && composer config -g -l || true

@@ -63,6 +63,11 @@ jobs:
       run: sudo systemctl stop mysql
       if: |
         startsWith(matrix.os, 'ubuntu' )
+    - name: Test Swarm mode
+      run: |
+        QUITE=true ./lnmp-docker test swarm
+      if: |
+        startsWith(matrix.os, 'ubuntu' )
     - name: Up
       run: |
         ./lnmp-docker build-config > docker-compose.yml
@@ -81,8 +86,6 @@ jobs:
         ./lnmp-docker down
 
         QUITE=true ./lnmp-docker test development
-
-        QUITE=true ./lnmp-docker test swarm
 
         # command -v docker-compose
         # sudo rm -rf $(command -v docker-compose) || true

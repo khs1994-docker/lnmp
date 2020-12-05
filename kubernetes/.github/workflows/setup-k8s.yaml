@@ -450,7 +450,10 @@ jobs:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+         if ! [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+           exit 0
+         fi
+
          set -x
          cd /tmp
          git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
@@ -463,19 +466,22 @@ jobs:
          cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
 
          git add .
-         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s
-         git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
+         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         || true
 
          cd /tmp
          rm -rf lnmp-k8s
-         fi
      - name: Update k8s next cli help info
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=v1.19.0-config
          BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION = '1.20.0-rc.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.20.0-rc.0' ];then
+           exit 0
+         fi
+
          set -x
          cd /tmp
          rm -rf lnmp-k8s
@@ -489,16 +495,20 @@ jobs:
          cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
 
          git add .
-         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s
-         git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
-         fi
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
+         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         || true
+
      - name: Update k8s next next cli help info
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=v1.20.0-rc.0-config
          # BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION = '1.21.0-alpha.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.0' ];then
+           exit 0
+         fi
+
          set -x
          cd /tmp
          rm -rf lnmp-k8s
@@ -512,9 +522,9 @@ jobs:
          cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
 
          git add .
-         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s
-         git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f
-         fi
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
+         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         || true
 
 
 

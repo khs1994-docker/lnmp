@@ -25,7 +25,7 @@ services:
 
   php7:
     << : *common
-    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.13}-fpm-alpine
+    image: ${LNMP_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.13}-fpm-alpine
 
   php8:
     << : *common

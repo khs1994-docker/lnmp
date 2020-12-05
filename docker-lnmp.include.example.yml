@@ -28,14 +28,14 @@ services:
 
   # override service
 
-  # php7:
-  #   &php7
-  #   # ! change php7 default image
-  #   image: username/php:${LNMP_PHP_VERSION:-7.4.13}-fpm-alpine
+  # php8:
+  #   &php8
+  #   # ! change php8 default image
+  #   image: username/php:${LNMP_PHP8_VERSION:-8.0.0}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.13}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.0.0}-fpm-alpine
   #   # ! s6
-  #   # image: khs1994/php:${LNMP_PHP_VERSION:-7.4.13}-s6-alpine
+  #   # image: khs1994/php:${LNMP_PHP8_VERSION:-8.0.0}-s6-alpine
   #   # command: []
   #   # volumes:
   #   #   - ./config/s6/services.d:/etc/services.d
@@ -48,12 +48,12 @@ services:
   #     - git-sync-data:/app/git-sync
 
   # composer:
-  #   << : *php7
+  #   << : *php8
   #   volumes:
   #     - ./config/composer/auth.json:/tmp/composer/auth.json:cached
 
   # nginx-unit:
-  #   << : *php7
+  #   << : *php8
 
   # mysql:
   #   # change default volumes settings
@@ -78,7 +78,7 @@ services:
 
   swoole:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.13}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.0}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php
