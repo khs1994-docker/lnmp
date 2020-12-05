@@ -133,7 +133,6 @@ services:
         - OS_TYPE=centos:8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.25}-centos-8_amd64
 
-# latest stable php and rhel
   wsl-php-builder-rhel8-74:
     build:
       context: .
@@ -143,6 +142,7 @@ services:
         - OS_TYPE=centos:8
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.13}-centos-8_amd64
 
+# latest stable php and rhel
   wsl-php-builder-rhel8-80:
     build:
       context: .

@@ -142,7 +142,6 @@ _php(){
 
     8.0.* )
       export PHP_NUM=80
-      PHP_VERSION=8.0.0
       ;;
 
     nightly )

@@ -138,6 +138,13 @@ jobs:
       run: |
         git config --global user.email "ci@khs1994.com"
         git config --global user.name "gh-bot"
+    - run: |
+        cd ..
+        sudo rm -rf lnmp
+        mkdir lnmp
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 2
     - name: Check config
       run: |
         sudo apt install -y tree

@@ -45,3 +45,5 @@ package-lock.json
 
 # laravel
 mix-manifest.json
+
+.phpunit.result.cache
