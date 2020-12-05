@@ -9,8 +9,8 @@ set -e
 tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
-readonly KUBERNETES_VERSION="1.19.2"
-readonly DOCKER_DESKTOP_VERSION="2.4.2.0"
+readonly KUBERNETES_VERSION="1.19.3"
+readonly DOCKER_DESKTOP_VERSION="2.5.1.0"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -1865,7 +1865,8 @@ $ ./lnmp-docker ssl-self khs1994.com *.khs1994.com *.t.khs1994.com 127.0.0.1 ...
 if [ "$debug" = 'true' -o "$DEBUG" = 'true' ];then set -x; fi
 
 COMPOSE_LINK_OFFICIAL=https://github.com/docker/compose/releases/download
-COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
+# COMPOSE_LINK=https://code.aliyun.com/khs1994-docker/compose-cn-mirror/raw
+COMPOSE_LINK=https://download.fastgit.org/docker/compose/releases/download
 
 # 在加载 .env 文件之前，先检查是否在环境变量中设置了以下变量，若设置，则使用环境变量
 if [ -n "${LNMP_SERVICES}" ];then LNMP_SERVICES_SYSTEM_ENV=$LNMP_SERVICES;fi

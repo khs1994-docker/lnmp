@@ -18,7 +18,7 @@ systemd:
         ExecStartPre=/usr/bin/env bash -c "if ! [ `/usr/local/bin/cri-containerd --version > /dev/null ; echo $?` = 0 ];then rm -rf /usr/local/bin/cri-containerd; fi"
         ExecStartPre=/usr/bin/env bash -c "if ! [ -f /usr/local/bin/cri-containerd ];then \
           rm -rf /tmp/bin ;\
-          tar -zxvf /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz \
+          tar -zxvf /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz \
           -C /tmp ;\
           cp /tmp/bin/containerd /tmp/bin/cri-containerd ; \
           cp /tmp/bin/containerd-shim /tmp/bin/cri-containerd-shim ; \
@@ -68,8 +68,8 @@ storage:
       mode: 0644
       contents:
         source: http://{{SERVER_HOST}}:8080/etc/cni/99-loopback.conf
-    - path: /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
+    - path: /opt/.khs1994-docker-lnmp/caches/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz
       mode: 0644
       contents:
         compression: null
-        source: http://{{SERVER_HOST}}:8080/releases/containerd-${CONTAINERD_VERSION}.linux-amd64.tar.gz
+        source: http://{{SERVER_HOST}}:8080/releases/containerd-${CONTAINERD_VERSION}-linux-amd64.tar.gz

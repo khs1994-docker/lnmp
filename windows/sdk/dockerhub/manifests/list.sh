@@ -25,7 +25,8 @@ curl -fsSL \
 -H "Accept:$header" \
 "https://$registry/v2/$image/manifests/$ref" \
 -A "Docker-Client/19.03.5 (Linux)" \
--o $cache_file
+-o $cache_file \
+-D $cache_file.header
 
 errorCode=`cat $cache_file | jq '.errors[0].code' | sed 's#"##g'`
 
@@ -35,6 +36,8 @@ if [ "$errorCode" = "MANIFEST_UNKNOWN" -a $header = $header_default ];then
   echo '{"schemaVersion":1}' > $cache_file
 
 fi
+
+cat $cache_file.header | grep RateLimit > /dev/stderr 2>&1 || true
 
 echo $cache_file
 

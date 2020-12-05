@@ -1,13 +1,11 @@
 resources:
-- aggregated-metrics-reader.yaml
-- auth-delegator.yaml
-- auth-reader.yaml
-- metrics-apiservice.yaml
-- metrics-server-deployment.yaml
-- metrics-server-service.yaml
-- resource-reader.yaml
+- apiservice.yaml
+- deployment.yaml
+- rbac.yaml
+- service.yaml
 images:
-  - name: k8s.gcr.io/metrics-server/metrics-server:v0.3.7
-    # registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server:v0.3.7
+  - name: k8s.gcr.io/metrics-server/metrics-server:v0.4.1
     newName: ccr.ccs.tencentyun.com/gcr-mirror/metrics-server
-    newTag: v0.3.7
+    newTag: v0.4.1
+commonLabels:
+  k8s-app: metrics-server

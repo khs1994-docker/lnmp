@@ -41,6 +41,13 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 2
+      - uses: azure/docker-login@v1
+        if: |
+          github.event_name == 'push'
+        with:
+          # login-server: contoso.azurecr.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: setup Docker
         uses: ./
         # uses: docker-practice/actions-setup-docker@master
@@ -138,6 +145,13 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 2
+      - uses: azure/docker-login@v1
+        if: |
+          github.event_name == 'push'
+        with:
+          # login-server: contoso.azurecr.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: setup docker
         uses: ./
         # uses: docker-practice/actions-setup-docker@master

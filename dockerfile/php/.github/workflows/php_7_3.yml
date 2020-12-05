@@ -9,7 +9,7 @@ on:
       PHP_VERSION:
         description: php version
         required: true
-        default: "7.3.24"
+        default: "7.3.25"
 
 name: PHP_7.3
 
@@ -44,16 +44,6 @@ jobs:
     #   name: 'Setup Docker Compose'
     #   env:
     #     DOCKER_COMPOSE_VERSION: 1.27.0
-    - uses: docker-practice/actions-setup-docker@master
-      with:
-        docker_channel: test
-        docker_version: "20.10"
-    - run: |
-        docker --version
-        docker-compose --version
-        docker buildx version
-        docker
-      name: 'install-after-manifest'
     - run: |
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
@@ -69,6 +59,16 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
         CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: test
+        docker_version: "20.10"
+    - run: |
+        docker --version
+        docker-compose --version
+        docker buildx version
+        docker
+      name: 'install-after-manifest'
     - run: |
         cp .env.example .env
 
@@ -197,14 +197,14 @@ jobs:
               --platform ${PLATFORM} ${IS_PUSH} php-cs-fixer
             echo "::endgroup::"
 
-            echo "::group::Build sami"
+            echo "::group::Build doctum"
             docker buildx build \
-              -t $DOCKER_HUB_USERNAME/php:sami \
-              $(for item in `echo $mirror`;do echo " -t ${item}:sami ";done) \
+              -t $DOCKER_HUB_USERNAME/php:doctum \
+              $(for item in `echo $mirror`;do echo " -t ${item}:doctum ";done) \
               --build-arg USERNAME=$DOCKER_HUB_USERNAME \
-              --cache-from=$DOCKER_HUB_USERNAME/php:sami-cache \
-              --cache-to=$DOCKER_HUB_USERNAME/php:sami-cache \
-              --platform ${PLATFORM} ${IS_PUSH} sami
+              --cache-from=$DOCKER_HUB_USERNAME/php:doctum-cache \
+              --cache-to=$DOCKER_HUB_USERNAME/php:doctum-cache \
+              --platform ${PLATFORM} ${IS_PUSH} doctum
             echo "::endgroup::"
 
             echo "::group::Build phpdox"
@@ -280,10 +280,10 @@ jobs:
         GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994
         DOCKER_HUB_USERNAME_TEST: lrew
-        PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
+        PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: 7_3_X
         FOLDER: 7.3
-        PHP_TAG_VERSION: 7.3.24
+        PHP_TAG_VERSION: 7.3.25
         TYPE: ${{ matrix.TYPE }}
         add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php # ghcr.io/khs1994/php
       name: 'Build Image'

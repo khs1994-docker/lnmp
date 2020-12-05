@@ -16,7 +16,7 @@ jobs:
   test:
     strategy:
       matrix:
-        php_version: ["7.3.24","7.4.12"]
+        php_version: ["7.3.25","7.4.13","8.0.0"]
     runs-on: ubuntu-latest
     # needs: job
     steps:
@@ -60,7 +60,7 @@ jobs:
         run: |
           set -x
           mysql -uroot --password=mytest -h 127.0.0.1 -P 13306 -e "show databases"
-          bash <(curl -s https://codecov.io/bash) --help
+          bash <(curl -s https://codecov.io/bash) -h
           bash <(curl -s https://codecov.io/bash) -e PHP_VERSION -n "GitHub Actions"
         if: success()
       - name: after_failure

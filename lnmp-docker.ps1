@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 20.10.1
+.VERSION 20.10.2
 
 .GUID 9769fa4f-70c7-43ed-8d2b-a0018f7dc89f
 
@@ -134,8 +134,8 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.19.2"
-$DOCKER_DESKTOP_VERSION = "2.4.2.0"
+$KUBERNETES_VERSION = "1.19.3"
+$DOCKER_DESKTOP_VERSION = "2.5.1.0"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {

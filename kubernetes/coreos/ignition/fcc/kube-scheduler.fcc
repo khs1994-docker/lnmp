@@ -9,7 +9,7 @@ systemd:
             [Service]
             ExecStartPre=-/bin/podman kill kube-scheduler
             ExecStartPre=-/bin/podman rm kube-scheduler
-            ExecStartPre=-/bin/podman pull k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}}
+            # ExecStartPre=-/bin/podman pull k8s.gcr.io/kube-scheduler:{{KUBERNETES_VERSION}}
 
             ExecStop=/bin/podman stop kube-scheduler
 storage:

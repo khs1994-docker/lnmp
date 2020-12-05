@@ -8,6 +8,7 @@
   "github": "vim/vim-win32-installer",
   "releases": "https://github.com/vim/vim-win32-installer/releases",
   "url": "https://github.com/vim/vim-win32-installer/releases/download/v${VERSION}/gvim_${VERSION}_x86.exe",
+  "url-mirror": "https://download.fastgit.org/vim/vim-win32-installer/releases/download/v${VERSION}/gvim_${VERSION}_x86.exe",
   "command": "vim",
   "scripts": {
     "platform-reqs": [

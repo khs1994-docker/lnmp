@@ -24,16 +24,16 @@ services:
     image: mcr.microsoft.com/oss/kubernetes/pause:1.4.1
 
   calico:
-    image: calico/cni:v3.16.3
+    image: calico/cni:v3.17.0
 
   ingress_nginx:
-    image: k8s.gcr.io/ingress-nginx/controller:v0.40.2
+    image: k8s.gcr.io/ingress-nginx/controller:v0.41.2
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1
 
   metrics_server:
-    image: k8s.gcr.io/metrics-server/metrics-server:v0.3.7
+    image: k8s.gcr.io/metrics-server/metrics-server:v0.4.1
 
   fcct:
     image: quay.io/coreos/fcct:v0.7.0

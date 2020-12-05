@@ -30,5 +30,6 @@
     ]
   },
   "url": "https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})",
+  "url-mirror": "https://download.fastgit.org/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})",
   "version": "1.27.0"
 }

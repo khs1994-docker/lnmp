@@ -49,7 +49,8 @@ services:
         target: ${LNMP_MYSQL_DATA:-/var/lib/mysql}
       - ./log/mysql:/var/log/mysql:cached
       - ./scripts/backup/mysql:/backup
-      - << : *tmpfs
+      - type: tmpfs
+        target: /var/run/mysqld
     command:
       - mysqld
       - --character-set-server=utf8mb4
@@ -88,7 +89,7 @@ services:
 
   memcached:
     << : *common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.8}-alpine
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/memcached:${LNMP_MEMCACHED_VERSION:-1.6.9}-alpine
     ports:
       - "${LNMP_MEMCACHED_PORT:-127.0.0.1:11211}:11211"
     volumes:
@@ -102,7 +103,7 @@ services:
   php7:
     &php7
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.12}-fpm-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP7_VERSION:-7.4.13}-fpm-alpine"
     volumes:
       - &bind_app ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
       # fpm config
@@ -151,7 +152,7 @@ services:
   php8:
     &php8
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0RC3}-fpm-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP8_VERSION:-8.0.0}-fpm-alpine"
     volumes:
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
@@ -193,7 +194,7 @@ services:
   composer:
     << : *common
     restart: "no"
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.12}-composer-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-8.0.0}-composer-alpine"
     volumes:
       - *bind_app
       # - ${APP_ROOT:-./app}:${LNMP_PHP_PATH:-/app}:${APP_ROOT_CONSISTENCY:-delegated}
@@ -209,7 +210,7 @@ services:
     << : *php7
     networks:
       - backend
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.12}-supervisord-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/php:${LNMP_PHP_VERSION:-7.4.13}-supervisord-alpine"
     secrets:
       - source: supervisord_ini
         target: /etc/supervisor.d/supervisord.ini
@@ -219,7 +220,7 @@ services:
 
   phpmyadmin:
     << : *common
-    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.0.2}
+    image: ${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/phpmyadmin:${LNMP_PHPMYADMIN_VERSION:-5.0.4}
     environment:
       - PMA_HOST=mysql
     ports:
@@ -238,7 +239,7 @@ services:
 
   nginx:
     << : *common
-    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.19.3}-alpine"
+    image: "${LNMP_BUILD_DOCKER_IMAGE_PREFIX:-khs1994}/nginx:${LNMP_NGINX_VERSION:-1.19.5}-alpine"
     ports:
       - "${LNMP_NGINX_HTTPS_PORT:-0.0.0.0:443}:443"
       - "${LNMP_NGINX_HTTP_PORT:-0.0.0.0:80}:80"
@@ -255,8 +256,8 @@ services:
     working_dir: /app
     networks:
       - frontend
-    depends_on:
-      - php7
+    # depends_on:
+    #   - php8
     healthcheck:
       test: ["CMD","nginx","-t"]
 

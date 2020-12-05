@@ -67,7 +67,7 @@
   },
   {
     "op": "replace",
-    "path": "/spec/template/spec/volumes/9/hostPath/path",
+    "path": "/spec/template/spec/volumes/10/hostPath/path",
     "value": "/opt/k8s/usr/libexec/kubernetes/kubelet-plugins/volume/exec/nodeagent~uds"
   }
 ]

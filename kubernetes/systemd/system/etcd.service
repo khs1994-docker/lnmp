@@ -16,6 +16,8 @@ After=network-online.target
 
 Before=kube-apiserver.service
 
+Conflicts=wsl-k8s-shutdown.target
+
 [Service]
 
 Type=notify

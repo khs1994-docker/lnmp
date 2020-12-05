@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:7.4.12-fpm-alpine
+  image: khs1994/php:8.0.0-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -155,9 +155,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mariadb/
   #     dockerfile: Dockerfile
-  #   image: "mariadb:10.5.6"
+  #   image: "mariadb:10.5.8"
   #   # image: username/lnmp-mariadb:tag
-  #   # image: khs1994/lnmp-mariadb:10.5.6
+  #   # image: khs1994/lnmp-mariadb:10.5.8
   #   environment:
   #     MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
   #     MYSQL_DATABASE: test
@@ -302,9 +302,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
-  #   image: mongo:4.4.1
+  #   image: mongo:4.4.2
   #   # image: username/lnmp-mongodb:tag
-  #   # image: khs1994/lnmp-mongodb:4.4.1
+  #   # image: khs1994/lnmp-mongodb:4.4.2
   #   volumes:
   #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db
@@ -348,7 +348,7 @@ services:
       resources:
         limits:
           cpus: '0.50'
-          memory: 128M
+          memory: 256M
         reservations:
           cpus: '0.25'
           memory: 128M
@@ -406,8 +406,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.19.3-alpine
-    # image: khs1994/nginx:1.19.3-alpine
+    image: nginx:1.19.5-alpine
+    # image: khs1994/nginx:1.19.5-alpine
     ports:
       - "443:443/tcp"
       - "443:443/udp"
@@ -749,17 +749,17 @@ configs:
   #   << : *default-labels
 
   php_ini:
-    file: ./config/php/php.production.ini
+    file: ./config/php8/php.production.ini
     << : *default-labels
   php_development_ini:
-    file: ./config/php/php.development.ini
+    file: ./config/php8/php.development.ini
     << : *default-labels
   # 重写 php.ini
   php_ini_include:
-    file: ./config/php/docker-php.ini
+    file: ./config/php8/docker-php.ini
     << : *default-labels
   php_fpm_conf_d_zz_docker_conf:
-    file: ./config/php/zz-docker.production.conf
+    file: ./config/php8/zz-docker.production.conf
     << : *default-labels
   redis_conf:
     file: ./config/redis/redis.production.conf

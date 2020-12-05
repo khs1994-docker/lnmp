@@ -1,0 +1,10 @@
+<network>
+  <name>vir-nat1</name>
+  <bridge name="vir-nat1"/>
+  <forward/>
+  <ip address="192.168.57.1" netmask="255.255.255.0">
+    <dhcp>
+      <range start="192.168.57.2" end="192.168.57.254"/>
+    </dhcp>
+  </ip>
+</network>

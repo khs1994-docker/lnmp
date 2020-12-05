@@ -36,6 +36,13 @@ jobs:
     - uses: actions/checkout@main
       with:
         fetch-depth: 2
+    - uses: azure/docker-login@v1
+      if: |
+        github.event_name == 'push'
+      with:
+        # login-server: contoso.azurecr.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
@@ -71,12 +78,27 @@ jobs:
         quite=true ./lnmp-docker down
 
         ./lnmp-docker up
+        ./lnmp-docker down
+
+        QUITE=true ./lnmp-docker test development
+
+        # command -v docker-compose
+        # sudo rm -rf $(command -v docker-compose) || true
+        # export LNMP_SERVICES="nginx mariadb php7 redis"
+        # export LREW_INCLUDE="mariadb"
+
+        ./lnmp-docker up
     - name: Connect
       run: |
         sleep 20
         curl -fsSL 127.0.0.1
     - name: Down
       run: ./lnmp-docker down
+    - name: Test Swarm mode
+      run: |
+        QUITE=true ./lnmp-docker test swarm
+      if: |
+        startsWith(matrix.os, 'ubuntu' )
     - name: pwsh
       shell: pwsh
       run: ./lnmp-docker.ps1
@@ -113,6 +135,27 @@ jobs:
         && startsWith(matrix.os, 'ubuntu' )
       run: |
         docker buildx build -t lrew/lrew --push lrew
+    - name: Config git
+      run: |
+        git config --global user.email "ci@khs1994.com"
+        git config --global user.name "gh-bot"
+    - name: Check config
+      run: |
+        sudo apt install -y tree
+        cd config
+        ./default.sh
+        tree .
+        cd ..
+        git status | grep "nothing to commit" && exit 0 || true
+        git add .
+        git commit -m "[Config] Update default config" || exit 0
+        git remote add github https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp.git
+        git checkout -b 20.10-config
+        git push github 20.10-config -f
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      if: |
+        startsWith(matrix.os, 'ubuntu' )
   powershell:
     needs: skip
     runs-on: windows-latest

@@ -19,3 +19,10 @@ $ sudo ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key
 ```
 
 ## 公钥放置到服务端 `~/.ssh/authorized_keys`
+
+## 通过密码登录
+
+```bash
+# /etc/ssh/sshd_config.d/20-enable-passwords.conf
+PasswordAuthentication yes
+```

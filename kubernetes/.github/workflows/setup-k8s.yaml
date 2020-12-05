@@ -1,4 +1,4 @@
-name: setup-k8s
+name: Test k8s
 
 on:
   push:
@@ -28,6 +28,7 @@ jobs:
      DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
      LNMP_DOCKER_MIRROR: registry-1.docker.io
      CNI_CALICO_EBPF: ${{matrix.CNI_CALICO_EBPF}}
+     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
    strategy:
      max-parallel: 1
      matrix:
@@ -36,16 +37,21 @@ jobs:
       #    dist: 20.04
       #    CI_KUBERNETES_VERSION: 1.19.0-rc.4
       #    LNMP_K8S_GET: --url
+
+      # next next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0-beta.0
+         CI_KUBERNETES_VERSION: 1.21.0-alpha.0
          LNMP_K8S_GET: --url
-       # next version
-      #  - os: ubuntu
-      #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.17.0
-      #    LNMP_K8S_GET: --url
-      #    K8S_IMAGE: lwpm/kubernetes-server
+         GENERATE_CLI_HELP: "true"
+
+      # next version
+       - os: ubuntu
+         dist: 20.04
+         CI_KUBERNETES_VERSION: 1.20.0-rc.0
+         LNMP_K8S_GET: --url
+         GENERATE_CLI_HELP: "true"
+
        # current stable version
        - os: ubuntu
          dist: 20.04
@@ -99,7 +105,7 @@ jobs:
        name: khs1994-docker-lnmp-caches
        with:
          path: ~/.khs1994-docker-lnmp/caches
-         key: khs1994-docker-lnmp-caches
+         key: khs1994-docker-lnmp-caches-20201101-0
      - run: |
          uname -a
 
@@ -363,7 +369,7 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image nginx:1.19.3-alpine
+         kubectl run nginx --image nginx:1.19.5-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide
@@ -435,5 +441,93 @@ jobs:
          echo ::group::kubectl get node
          kubectl get node -o yaml
          echo ::endgroup::
+     - name: Config git
+       run: |
+          git config --global user.email "gh-bot@khs1994.com"
+          git config --global user.name "gh-bot"
+     - name: Update k8s cli help info
+       run:
+        |
+         export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
+         BASE_BRANCH=master
+         if ! [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+           exit 0
+         fi
+
+         set -x
+         cd /tmp
+         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+         cd lnmp-k8s
+
+         stty size || true
+         stty cols 200 || true
+
+         # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+         cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
+
+         git add .
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
+         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         || true
+
+         cd /tmp
+         rm -rf lnmp-k8s
+     - name: Update k8s next cli help info
+       run:
+        |
+         export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
+         BASE_BRANCH=v1.19.0-config
+         BASE_BRANCH=master
+         if [ $CI_KUBERNETES_VERSION != '1.20.0-rc.0' ];then
+           exit 0
+         fi
+
+         set -x
+         cd /tmp
+         rm -rf lnmp-k8s
+         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+         cd lnmp-k8s
+
+         stty size || true
+         stty cols 200 || true
+
+         # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+         cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
+
+         git add .
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
+         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         || true
+
+     - name: Update k8s next next cli help info
+       run:
+        |
+         export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
+         BASE_BRANCH=v1.20.0-rc.0-config
+         # BASE_BRANCH=master
+         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.0' ];then
+           exit 0
+         fi
+
+         set -x
+         cd /tmp
+         rm -rf lnmp-k8s
+         git clone -b ${BASE_BRANCH} --depth=3 https://khs1994:${GITHUB_TOKEN}@github.com/khs1994-docker/lnmp-k8s
+         cd lnmp-k8s
+
+         stty size || true
+         stty cols 200 || true
+
+         # sudo sed -i "s#^LNMP_CN_ENV=.*#LNMP_CN_ENV=true#g" ./.env
+         cd cli ; (COLUMNS=200 sh generate.sh || true); cd ..
+
+         git add .
+         git commit -m "Update v$CI_KUBERNETES_VERSION config" -s \
+         && git push origin ${BASE_BRANCH}:v$CI_KUBERNETES_VERSION-config -f \
+         || true
+
+
+
+
     #  - name: Setup tmate session
-    #    uses: mxschmitt/action-tmate@v2
+    #    uses: mxschmitt/action-tmate@v3

@@ -3,6 +3,7 @@ version: 1.27.0
 pre-version: 1.27.0
 command: docker-compose
 url: https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
+url-mirror: https://download.fastgit.org/docker/compose/releases/download/${VERSION}/docker-compose-${env:LWPM_UNAME_S}-${env:LWPM_UNAME_M}$(if($_IsWindows){echo .exe})
 scripts:
   install: |
     Copy-Item -Force $filename C:\bin\docker-compose.exe

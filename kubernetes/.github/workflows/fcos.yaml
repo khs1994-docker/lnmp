@@ -1,0 +1,112 @@
+on:
+  workflow_dispatch:
+
+name: FCOS
+
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+
+env:
+  LNMP_CN_ENV: false
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - uses: actions/cache@v2
+        name: khs1994-docker-lnmp-caches
+        with:
+          path: ~/.khs1994-docker-lnmp/caches
+          key: khs1994-docker-lnmp-caches-20201101-0
+      - uses: actions/cache@v2
+        name: fcos qcow2 cache
+        with:
+          path: /home/runner/work/lnmp-k8s/lnmp-k8s/coreos/current
+          key: fcos-qcow2-20201101-0
+      - name: Config ssh
+        run: |
+          echo -e 'y\n'|ssh-keygen -q -t rsa -N "" -f ~/.ssh/id_rsa
+
+          {
+          echo 'Host *'
+          echo 'ServerAliveInterval 60'
+          echo 'StrictHostKeyChecking no'
+          echo 'UserKnownHostsFile /dev/null'
+          } | tee $HOME/.ssh/config
+
+          chmod 0600 $HOME/.ssh/config
+      - name: Download
+        run: |
+          ./lnmp-k8s kubernetes-server --url
+
+          items="crictl containerd"
+          for item in $items;do ./lnmp-k8s _${item}_install --dry-run;done
+
+          cd coreos
+
+          cp -r ignition/ci/* ignition/fcc/
+
+          echo 'unqualified-search-registries = ["docker.io"]' > etc/containers/registries.conf
+
+          sed -i -e 's/eth0/enp1s0/g' \
+          -e 's/apiserver-count=3/apiserver-count=2/g' \
+          ignition/fcc/ignition-n.node.template.fcc \
+          ignition/fcc/ignition-n.master.template.fcc
+
+          ./coreos server -d
+
+          cd ..
+
+          docker-compose logs
+      - uses: ./.github/actions/setup-libvirt
+      - name: libvirt
+        run: |
+          sudo virsh net-define coreos/libvirt/networks/vir-nat1.xml
+          sudo virsh net-start vir-nat1
+          sudo virsh net-list --all
+      - name: Setup vm
+        run: |
+          cd coreos
+
+          ./coreos init qemu
+
+          ls -la current
+
+          sudo chmod -R 777 ignition
+
+          ./coreos virt-install 1
+          ./coreos virt-install 2
+          # ./coreos virt-install 3
+      - run: sudo virsh list --all
+      - name: VM is work?
+        run: |
+          while :;
+          do
+            ssh core@192.168.57.110 systemctl && break || true
+            sleep 10
+          done
+      - name: Test k8s
+        run: |
+          mkdir -p ~/.kube
+          cp coreos/cert/kubectl.kubeconfig ~/.kube/config
+          sudo chown `id -u`:`id -g` ~/.kube/config
+          sed -i 's/127.0.0.1:18443/192.168.57.110:6443/g' ~/.kube/config
+
+          kubectl cluster-info
+
+          kubectl get node
+
+          kubectl get csr
+
+          kubectl certificate approve
+
+          kubectl apply -k addons/coredns
+
+          kubectl get all -A
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ always() }}

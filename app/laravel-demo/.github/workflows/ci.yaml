@@ -20,6 +20,13 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 2
+      - uses: azure/docker-login@v1
+        if: |
+          github.event_name == 'push'
+        with:
+          # login-server: contoso.azurecr.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - uses: docker-practice/actions-setup-docker@master
         with:
           docker_channel: test
@@ -157,4 +164,4 @@ jobs:
 
           docker run -i --rm --entrypoint=sh khs1994/laravel:8-rootless -c "ls -la /app/laravel-docker"
       # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v2
+      #   uses: mxschmitt/action-tmate@v3

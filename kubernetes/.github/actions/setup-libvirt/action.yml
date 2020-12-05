@@ -1,0 +1,22 @@
+name: setup-libvirt
+description: setup-libvirt
+runs:
+  using: composite
+  steps:
+    - run: |
+        echo net.ipv4.ip_forward=1 | sudo tee /etc/sysctl.d/99-libvirtd.conf
+        sudo sysctl -p
+
+        sudo apt install -y virtinst
+        sudo apt install -y libvirt-daemon-system
+
+        {
+            echo 'user = "root"'
+            echo 'group = "root"'
+            echo 'security_driver = "none"'
+        } | sudo tee -a /etc/libvirt/qemu.conf
+
+        sudo systemctl start libvirtd
+        sudo systemctl restart libvirtd
+        sudo systemctl status libvirtd
+      shell: bash --noprofile --norc -exo pipefail {0}

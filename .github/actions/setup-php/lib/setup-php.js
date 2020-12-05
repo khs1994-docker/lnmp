@@ -56,8 +56,8 @@ async function run() {
       IMAGE = 'khs1994/php:php-cs-fixer'
     }
 
-    if (PHP_TYPE === 'sami') {
-      IMAGE = 'khs1994/php:sami'
+    if (PHP_TYPE === 'doctum') {
+      IMAGE = 'khs1994/php:doctum'
     }
   }
 

@@ -17,7 +17,7 @@
     "issues": "https://github.com/{{ EXAMPLE_GIT_USERNAME_EXAMPLE }}/{{ EXAMPLE_GIT_REPO_EXAMPLE }}/issues"
   },
   "require": {
-    "php": "^7.2.0",
+    "php": ">=7.3.0",
     "ext-json": "*",
     "ext-curl": "*",
     "ext-PDO": "*",

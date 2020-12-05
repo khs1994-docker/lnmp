@@ -1,10 +1,10 @@
-FROM nginx:1.19.3-alpine
+FROM nginx:1.19.5-alpine
 
 LABEL maintainer="khs1994@khs1994.com" \
       version="1.19.0"
 
 ARG FCCT_URL=https://github.com/coreos/fcct/releases/download/
-ARG FCCT_VERSION=v0.6.0
+ARG FCCT_VERSION=v0.8.0
 
 COPY --from=quay.io/coreos/fcct:v0.7.0 /usr/local/bin/fcct /usr/local/bin/fcct
 

@@ -1,3 +1,7 @@
 #!/bin/sh
 
+set -x
+
 rm -rf $(find /etc/services.d -name 'event')
+rm -rf $(find /etc/services.d -name 'supervise')
+rm -rf $(find /etc/services.d -name 'lock')

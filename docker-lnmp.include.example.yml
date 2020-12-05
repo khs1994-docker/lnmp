@@ -28,14 +28,14 @@ services:
 
   # override service
 
-  # php7:
-  #   &php7
-  #   # ! change php7 default image
-  #   image: username/php:${LNMP_PHP_VERSION:-7.4.12}-fpm-alpine
+  # php8:
+  #   &php8
+  #   # ! change php8 default image
+  #   image: username/php:${LNMP_PHP8_VERSION:-8.0.0}-fpm-alpine
   #   # ! cn mirror image
-  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP_VERSION:-7.4.12}-fpm-alpine
+  #   # image: ccr.ccs.tencentyun.com/khs1994/php:${LNMP_PHP8_VERSION:-8.0.0}-fpm-alpine
   #   # ! s6
-  #   # image: khs1994/php:${LNMP_PHP_VERSION:-7.4.12}-s6-alpine
+  #   # image: khs1994/php:${LNMP_PHP8_VERSION:-8.0.0}-s6-alpine
   #   # command: []
   #   # volumes:
   #   #   - ./config/s6/services.d:/etc/services.d
@@ -48,12 +48,12 @@ services:
   #     - git-sync-data:/app/git-sync
 
   # composer:
-  #   << : *php7
+  #   << : *php8
   #   volumes:
   #     - ./config/composer/auth.json:/tmp/composer/auth.json:cached
 
   # nginx-unit:
-  #   << : *php7
+  #   << : *php8
 
   # mysql:
   #   # change default volumes settings
@@ -63,20 +63,22 @@ services:
 # More Demo
 
   # phpmyadmin:
-  #   image: phpmyadmin:5.0.2-fpm-alpine
+  #   image: phpmyadmin:5.0.4-fpm-alpine
   #   volumes:
   #     - phpmyadmin:/var/www/html
   #   healthcheck:
   #     test: ["NONE"]
 
-  # nginx:
-  #   volumes:
-  #   - git-sync-data:/app/git-sync
-  #   - phpmyadmin:/var/www/html
+  nginx:
+    # volumes:
+    # - git-sync-data:/app/git-sync
+    # - phpmyadmin:/var/www/html
+    depends_on:
+      - php8
 
   swoole:
     << : *common
-    image: khs1994/php:${LNMP_PHP_VERSION:-7.4.12}-swoole-alpine
+    image: khs1994/php:${LNMP_PHP_VERSION:-8.0.0}-swoole-alpine
     # command 指令只需传入文件名即可
     command:
       - /app/swoole/index.php

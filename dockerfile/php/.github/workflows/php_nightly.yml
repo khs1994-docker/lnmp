@@ -39,16 +39,6 @@ jobs:
     #   name: 'Setup Docker Compose'
     #   env:
     #     DOCKER_COMPOSE_VERSION: 1.27.0
-    - uses: docker-practice/actions-setup-docker@master
-      with:
-        docker_channel: test
-        docker_version: "20.10"
-    - run: |
-        docker --version
-        docker-compose --version
-        docker buildx version
-        docker
-      name: 'install-after-manifest'
     - run: |
         echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
         # echo ${DOCKER_PASSWORD} | docker login -u ${TENCENT_DOCKER_USERNAME} --password-stdin uswccr.ccs.tencentyun.com
@@ -64,6 +54,16 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GHCR_IO_TOKEN: ${{secrets.GHCR_IO_TOKEN}}
         CODING_DOCKER_PASSWORD: ${{secrets.CODING_DOCKER_PASSWORD}}
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: test
+        docker_version: "20.10"
+    - run: |
+        docker --version
+        docker-compose --version
+        docker buildx version
+        docker
+      name: 'install-after-manifest'
     - run: |
         cp .env.example .env
 
@@ -208,7 +208,7 @@ jobs:
         GITHUB_EVENT_NAME: ${{github.event_name}}
         DOCKER_HUB_USERNAME: khs1994
         DOCKER_HUB_USERNAME_TEST: lrew
-        PLATFORM: linux/amd64,linux/arm64,linux/arm/v7
+        PLATFORM: linux/amd64,linux/arm64 #,linux/arm/v7
         PHP_VERSION: nightly
         FOLDER: nightly
         PHP_TAG_VERSION: nightly

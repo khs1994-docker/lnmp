@@ -53,13 +53,13 @@ PG_MAJOR=10
 
 GO_PREFIX=/usr/local
 
-GO_VERSION=1.15.3
+GO_VERSION=1.15.5
 
-NODE_VERSION=15.0.1
+NODE_VERSION=15.3.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=7.4.12
+PHP_VERSION=8.0.0
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -111,9 +111,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (7.4.12)
+  # default install latest php version (8.0.0)
 
-  PHP_VERSION=${1:-7.4.12}
+  PHP_VERSION=${1:-8.0.0}
 
   case ${PHP_VERSION} in
     5.6.* )

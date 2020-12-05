@@ -10,7 +10,7 @@ services:
 
   drone-server:
     << : *common
-    image: drone/drone:${CI_DRONE_VERSION:-1.9.1}
+    image: drone/drone:${CI_DRONE_VERSION:-1.9.2}
     volumes:
       - drone-data-v1:/data:rw
     networks:
@@ -91,8 +91,8 @@ services:
 
   nginx:
     << : *common
-    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.19.3}-alpine
-    image: nginx:${CI_NGINX_VERSION:-1.19.3}-alpine
+    # image: khs1994/nginx:${CI_NGINX_VERSION:-1.19.5}-alpine
+    image: nginx:${CI_NGINX_VERSION:-1.19.5}-alpine
     networks:
       - frontend
     ports:

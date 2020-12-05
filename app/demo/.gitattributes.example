@@ -11,7 +11,7 @@
 /.gitignore          export-ignore
 /.gitmodules         export-ignore
 /.php_cs             export-ignore
-/.sami.php           export-ignore
+/.doctum.php         export-ignore
 /.styleci.yml        export-ignore
 /.travis.yml         export-ignore
 .travis.yml          export-ignore

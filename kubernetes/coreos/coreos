@@ -26,7 +26,7 @@ FCOS: $FCOS_VERSION
 
 Usages:
 
-init              Download CoreOS ISO files
+init              Download CoreOS ISO files [qemu]
 server            Up CoreOS install local server
 cert              Generate Self-Signed Certificates
 
@@ -38,6 +38,11 @@ cleanup           Cleanup Cache
 
 mount-iso         Mount ISO [N]
 remove-iso        Remove ISO [N]
+
+virt-install      [1|2|3]
+virt-destroy      [1|2|3]
+virt-start        [1|2|3]
+virt-shutdown     [1|2|3]
 "
 }
 
@@ -64,14 +69,28 @@ items="fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz \
       fedora-coreos-${FCOS_VERSION}-live.x86_64.iso \
       fedora-coreos-${FCOS_VERSION}-metal.x86_64.raw.xz.sig "
 
+if [ ${1:-''} = 'qemu' ];then
+  local QEMU_QCOW2=fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2
+  if [ -f $QEMU_QCOW2 ];then echo "[ $QEMU_QCOW2 ] exists, skip download"; return; fi
+  items=$QEMU_QCOW2.xz
+fi
+
 for item in $items;do
+
+CHANNEL=next
 
 if ! [ -f $item ];then
   echo "==> download $item"
   echo ""
   echo ""
   curl -O \
-    https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/${FCOS_VERSION}/x86_64/$item
+    https://builds.coreos.fedoraproject.org/prod/streams/${CHANNEL}/builds/${FCOS_VERSION}/x86_64/$item
+else
+  echo "[ $item ] exists"
+fi
+
+if [ `uname -a | grep -q WSL2 ; echo $?` -ne 0 ];then
+  xz -d $items
 fi
 
 done
@@ -80,7 +99,7 @@ cd .. > /dev/null
 
 }
 
-if [ "$1" = 'init' ];then _init ; exit; fi
+if [ "$1" = 'init' ];then _init $2; exit; fi
 
 case "$1" in
 
@@ -92,7 +111,8 @@ case "$1" in
   fi
 
   cd ..
-  docker-compose up fcos-server
+  shift
+  docker-compose up $@ fcos-server
 
   ;;
 
@@ -165,6 +185,54 @@ case "$1" in
           --port 0 --device 1 --type dvddrive --medium current/fedora-coreos-${FCOS_VERSION}-live.x86_64.iso
 
   ;;
+
+  virt-install )
+    num=${2:-1}
+    # https://ubuntu.com/server/docs/virtualization-virt-tools
+
+    # fcct $PWD/ignition/basic.fcc > $PWD/ignition/basic.ign
+
+    IGNITION_CONFIG=$PWD/ignition/ignition-${num}.ign
+    # IMAGE="/path/to/image.qcow2"
+
+    IMAGE=$PWD/current/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2
+    VNC=none
+    if [ `uname -a | grep -q WSL2 ; echo $?` -eq 0 ];then
+      IMAGE=/wsl/wsl-k8s-data/fedora-coreos-${FCOS_VERSION}-qemu.x86_64.qcow2
+      VNC="vnc,listen=0.0.0.0,port=590${num}"
+      IGNITION_CONFIG=$PWD/ignition/basic.ign
+    fi
+
+    VM_NAME="fcos-test-0${num}"
+    VCPUS="2"
+    RAM_MB="2048"
+    DISK_GB="10"
+
+    set -x
+    sudo virt-install --connect="qemu:///system" --name="${VM_NAME}" --vcpus="${VCPUS}" --memory="${RAM_MB}" \
+        --os-variant="fedora31" --import --graphics=${VNC} \
+        --disk="size=${DISK_GB},backing_store=${IMAGE}" \
+        --qemu-commandline="-fw_cfg name=opt/com.coreos/config,file=${IGNITION_CONFIG}" \
+        --network network=vir-nat1 \
+        --noautoconsole
+
+    ;;
+
+    virt-destroy )
+      num=${2:-1}
+      virsh destroy fcos-test-0${num}
+      virsh undefine fcos-test-0${num}
+    ;;
+
+    virt-start )
+      num=${2:-1}
+      virsh start fcos-test-0${num}
+    ;;
+
+    virt-shutdown )
+      num=${2:-1}
+      virsh shutdown fcos-test-0${num}
+    ;;
 
   * )
     print_help_info

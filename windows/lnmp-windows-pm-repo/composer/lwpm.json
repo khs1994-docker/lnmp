@@ -1,13 +1,14 @@
 {
   "name": "composer",
   "description": "Dependency Manager for PHP",
-  "version": "2.0.3",
-  "pre-version": "2.0.3",
+  "version": "2.0.8",
+  "pre-version": "2.0.8",
   "homepage": "https://getcomposer.org/",
   "bug": "https://github.com/composer/composer/issues",
   "github": "composer/composer",
   "releases": "https://getcomposer.org/download/",
   "url": "https://github.com/composer/composer/releases/download/${VERSION}/composer.phar",
+  "url-mirror": "https://download.fastgit.org/composer/composer/releases/download/${VERSION}/composer.phar",
   "command": "composer",
   "download-filename": "composer-${VERSION}.phar",
   "scripts": {

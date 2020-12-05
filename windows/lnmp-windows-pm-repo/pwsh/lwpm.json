@@ -1,13 +1,14 @@
 {
   "name": "pwsh",
   "description": "PowerShell is a task-based command-line shell and scripting language built on .NET",
-  "version": "7.0.3",
-  "pre-version": "7.1.0-rc.2",
+  "version": "7.1.0",
+  "pre-version": "7.2.0-preview.1",
   "homepage": "https://docs.microsoft.com/zh-cn/powershell",
   "bug": "https://github.com/PowerShell/PowerShell/issues",
   "github": "PowerShell/PowerShell",
   "releases": "https://github.com/PowerShell/PowerShell/releases",
   "url": "https://github.com/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-$(if($IsWindows){echo win}else{echo osx})-x64.$(if($IsWindows){echo msi}else{echo pkg})",
+  "url-mirror": "https://download.fastgit.org/PowerShell/PowerShell/releases/download/v${VERSION}/PowerShell-${VERSION}-$(if($IsWindows){echo win}else{echo osx})-x64.$(if($IsWindows){echo msi}else{echo pkg})",
   "command": "pwsh",
   "scripts": {
     "platform-reqs": [

@@ -1,4 +1,4 @@
-ARG OS_TYPE=centos:7.8.2003
+ARG OS_TYPE=centos:7.9.2009
 
 FROM ${OS_TYPE} as builder
 
@@ -8,7 +8,7 @@ ARG LNMP_CN_ENV=false
 
 ENV LNMP_CN_ENV=${LNMP_CN_ENV}
 
-ARG PHP_VERSION=7.4.12
+ARG PHP_VERSION=8.0.0
 
 COPY lnmp-wsl-builder-php-rhel /lnmp-wsl-builder-php-rhel.sh
 
