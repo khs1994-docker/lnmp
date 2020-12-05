@@ -99,8 +99,7 @@ jobs:
         QUITE=true ./lnmp-docker test swarm
       if: |
         startsWith(matrix.os, 'ubuntu' )
-    - name: pwsh
-      shell: pwsh
+    - shell: pwsh
       run: ./lnmp-docker.ps1
     - name: Set ENV
       run: |
