@@ -1,4 +1,4 @@
-# Istio 1.7
+# Istio 1.8
 
 * https://github.com/istio
 
