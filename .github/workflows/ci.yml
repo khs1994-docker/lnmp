@@ -138,7 +138,8 @@ jobs:
       run: |
         git config --global user.email "ci@khs1994.com"
         git config --global user.name "gh-bot"
-    - run: |
+    - name: rm lnmp
+      run: |
         cd ..
         sudo rm -rf lnmp
         mkdir lnmp

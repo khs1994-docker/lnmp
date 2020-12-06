@@ -52,9 +52,9 @@ wget https://github.com/redis/redis/raw/${LNMP_REDIS_VERSION:-6.0.9}/redis.conf 
 
 cp redis/redis.example.conf redis/redis.production.conf
 
-curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP7_VERSION}/php.ini-production > php8/php.production.ini
+curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP7_VERSION}/php.ini-production > php/php.production.ini
 
-curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP7_VERSION}/php.ini-development > php8/php.development.ini
+curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP7_VERSION}/php.ini-development > php/php.development.ini
 
 curl -L https://raw.githubusercontent.com/php/php-src/php-${LNMP_PHP8_VERSION}/php.ini-production > php8/php.production.ini
 
