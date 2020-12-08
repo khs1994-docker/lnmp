@@ -56,7 +56,7 @@ services:
     image: alpine:3.12
 
   python:
-    image: python:3.9.0-alpine
+    image: python:3.9.1-alpine
 
   docker-binfmt:
     image: tonistiigi/binfmt:latest
