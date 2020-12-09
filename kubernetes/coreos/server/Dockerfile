@@ -1,7 +1,7 @@
 FROM nginx:1.19.5-alpine
 
 LABEL maintainer="khs1994@khs1994.com" \
-      version="1.19.0"
+      version="1.20.0"
 
 ARG FCCT_URL=https://github.com/coreos/fcct/releases/download/
 ARG FCCT_VERSION=v0.8.0
