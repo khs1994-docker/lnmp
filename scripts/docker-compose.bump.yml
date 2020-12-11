@@ -47,7 +47,7 @@ services:
     image: kong:2.2.1-alpine
 
   node:
-    image: node:15.3.0-alpine
+    image: node:15.4.0-alpine
 
   go:
     image: golang:1.15.6-alpine
@@ -56,13 +56,13 @@ services:
     image: alpine:3.12
 
   python:
-    image: python:3.9.0-alpine
+    image: python:3.9.1-alpine
 
   docker-binfmt:
     image: tonistiigi/binfmt:latest
 
   docker:
-    image: docker:19.03.13
+    image: docker:20.10.0
 
   gogs:
     image: gogs/gogs:0.12

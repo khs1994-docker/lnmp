@@ -20,7 +20,6 @@ RUN set -x \
                                   openssl-dev \
                                   linux-headers \
                                   pcre-dev \
-  && sed -i "s/libtinfo.so/libisl.so.15.3.0/g" auto/modules/php \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php72 \
