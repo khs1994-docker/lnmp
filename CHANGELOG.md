@@ -15,3 +15,4 @@
 ### Updates:
 
 * [PHP `8.0.0` `7.4.13` `7.3.25`](https://www.php.net/ChangeLog-8.php#8.0.0)
+* [NGINX `1.19.6`](https://nginx.org/en/CHANGES)

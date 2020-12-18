@@ -1105,11 +1105,6 @@ pcit_init(){
     print_error "PCIT GitHub App private key not found, please see pcit/README.md"
     exit 1
   fi
-
-  if ! [ -f pcit/key/public.key ];then
-    docker run -i ${tty} --rm --mount type=bind,src=$PWD/pcit/key,target=/app pcit/pcit \
-      openssl rsa -in private.key -pubout -out public.key
-  fi
 }
 
 _lrew_add(){

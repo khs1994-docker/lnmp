@@ -406,8 +406,8 @@ services:
       # context: ./dockerfile/nginx/
       context: ./config/nginx
       dockerfile: Dockerfile
-    image: nginx:1.19.5-alpine
-    # image: khs1994/nginx:1.19.5-alpine
+    image: nginx:1.19.6-alpine
+    # image: khs1994/nginx:1.19.6-alpine
     ports:
       - "443:443/tcp"
       - "443:443/udp"
