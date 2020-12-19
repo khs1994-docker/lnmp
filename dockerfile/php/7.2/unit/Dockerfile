@@ -20,12 +20,11 @@ RUN set -x \
                                   openssl-dev \
                                   linux-headers \
                                   pcre-dev \
-  && ./configure --prefix=/usr/local/nginx-unit --openssl \
+  && ./configure --prefix=/usr/local/nginx-unit --openssl --no-pcre2 \
   && ./configure php \
        --module=php72 \
        --lib-path=/usr/local/lib \
        --config=/usr/local/bin/php-config \
-       --no-pcre2 \
   && make -j "$(nproc)" \
   && make install \
   && strip --strip-all /usr/local/nginx-unit/sbin/unitd \
