@@ -23,7 +23,7 @@ scripts:
     & ${PHP_PREFIX}/php -v
   install: |
     Function _install_ext($PHP_PREFIX){
-    $PHP_CACERT_DATE="2020-01-01"
+    $PHP_CACERT_DATE="2020-12-08"
 
     $PHP_INI="${PHP_PREFIX}/php.ini"
     $PHP_BIN="${PHP_PREFIX}/php.exe"

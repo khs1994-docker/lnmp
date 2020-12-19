@@ -12,8 +12,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "cross-env INPUT_DOCKER_VERSION='19.03' INPUT_DOCKER_CHANNEL=stable node lib/setup-docker",
-    "test:noversion": "cross-env INPUT_DOCKER_VERSION='19.09' INPUT_DOCKER_CHANNEL=stable node lib/setup-docker"
+    "test": "cross-env INPUT_DOCKER_VERSION='20.10' INPUT_DOCKER_CHANNEL=stable node lib/setup-docker",
+    "test:noversion": "cross-env INPUT_DOCKER_VERSION='20.10' INPUT_DOCKER_CHANNEL=stable node lib/setup-docker"
   },
   "author": "",
   "license": "ISC"

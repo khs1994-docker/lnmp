@@ -122,7 +122,7 @@ async function run() {
     await exec.exec('brew', [
       'cask',
       'install',
-      DOCKER_CHANNEL !== 'stable' ? 'docker-edge' : 'docker'
+      DOCKER_CHANNEL !== 'stable' ? 'docker' : 'docker'
     ]);
     core.endGroup();
 
@@ -327,7 +327,7 @@ echo "-- Docker is ready."
       'docker-ce',
       '|',
       'grep',
-      '19.03'
+      '20.10'
     ]);
     core.endGroup()
 
