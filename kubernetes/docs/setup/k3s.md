@@ -1,6 +1,6 @@
 # k3s 部署 kubernetes
 
-* https://github.com/rancher/k3s
+* https://github.com/k3s-io/k3s
 
 * https://gist.github.com/ibuildthecloud/1b7d6940552ada6d37f54c71a89f7d00
 
