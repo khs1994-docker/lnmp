@@ -89,7 +89,7 @@ $ ./lnmp-docker restart php7
 
 ## More Information
 
-* https://xdebug.org/docs/remote
+* https://xdebug.org/docs/step_debug
 
 * https://segmentfault.com/a/1190000010833434
 

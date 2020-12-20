@@ -8,7 +8,7 @@
   "github": "docker/docker-ce",
   "releases": "https://github.com/docker/docker-ce/releases",
   "url": "https://download.docker.com/$(if($IsWindows){echo win}else{echo mac})/stable/$(if($isWindows){echo Docker%20Desktop%20Installer.exe}else{echo Docker.dmg})",
-  "pre-url": "https://download.docker.com/$(if($IsWindows){echo win}else{echo mac})/edge/$(if($isWindows){echo Docker%20Desktop%20Installer.exe}else{echo Docker.dmg})",
+  "pre-url": "",
   "command": "docker",
   "scripts": {
     "platform-reqs": [

@@ -21,4 +21,4 @@ $ New-Item \\wsl$\wsl-k8s\non-systemd
 
 ## 类似项目
 
-* https://github.com/yuk7/ArchWSL2
+* https://github.com/yuk7/container-systemd-init-tool

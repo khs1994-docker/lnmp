@@ -254,7 +254,7 @@ _gcr_io(){
 
   _gcr_io_down
 
-  print_info "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
+  print_info "This local server support Docker Desktop v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
 
   mkdir -p $HOME/.khs1994-docker-lnmp/registry
 

@@ -1419,7 +1419,7 @@ XXX
     }
     catch {}
 
-    printInfo "This local server support Docker Desktop EDGE v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
+    printInfo "This local server support Docker Desktop v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
 
     if ('down' -eq $args[1]) {
       Write-Warning "Stop gcr.io local server success"
