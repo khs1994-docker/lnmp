@@ -36,6 +36,11 @@ SYSTEMD_PID="$(ps -eo pid=,args= | awk '$2" "$3=="'"$SYSTEMD_EXE"'" {print $1}')
 if [ -z "$SYSTEMD_PID" ]; then
 
     WSL2_IP=$(ip addr | grep eth0 | grep inet | cut -d ' ' -f 6 | cut -d '/' -f 1)
+
+    if [ -z "$WSL2_IP" ];then
+       exit 1
+    fi
+
     mkdir -p /etc/systemd/system.conf.d/
     {
       echo "[Manager]";

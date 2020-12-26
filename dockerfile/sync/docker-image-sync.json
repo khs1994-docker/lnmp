@@ -8,8 +8,8 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:15.4.0-alpine",
-    "dest": "library-mirror/node:15.4.0-alpine"
+    "source": "node:15.5.0-alpine",
+    "dest": "library-mirror/node:15.5.0-alpine"
   },
   {
     "source": "node:14.15.0-alpine",
