@@ -84,7 +84,7 @@ _sudo(){
 
 uname -a | grep -q microsoft && IS_WSL2=1 || true
 
-$(_sudo) systemctl is-system-running -q && IS_SYSTEMD=1 || true
+$(_sudo) systemctl is-system-running -q > /dev/null 2>&1 && IS_SYSTEMD=1 || true
 
 if [ -n "${IS_SYSTEMD}" -a -n "${IS_WSL2}" ];then
   if [ $(systemd-detect-virt) = 'wsl' ];then

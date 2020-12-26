@@ -1,4 +1,4 @@
-# WSL2(systemd)
+# WSL2 systemd+k8s
 
 ## 首次使用必须进行初始化（仅需执行一次）
 

@@ -1,8 +1,6 @@
-# WSL2(systemd)
+# WSL2 systemd+k8s 初始化
 
-## 初始化（仅需执行一次）
-
-### 1. 配置 systemd
+## 1. 配置 systemd
 
 * https://github.com/khs1994-docker/lnmp/blob/master/wsl2/README.systemd.md
 
@@ -16,9 +14,11 @@ $ apt install sudo
 $ bash ubuntu-wsl2-systemd-script.sh
 ```
 
-### 2. 安装
+## 2. 配置 k8s
 
 ```bash
+$ cd ~/lnmp/kubernetes
+
 $ wsl -d wsl-k8s
 
 $ cp -a wsl2/certs/. systemd/certs
