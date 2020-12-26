@@ -63,6 +63,16 @@ jobs:
       run: sudo systemctl stop mysql
       if: |
         startsWith(matrix.os, 'ubuntu' )
+    - name: Test
+      run: |
+        QUITE=true ./lnmp-docker test development
+
+        # command -v docker-compose
+        # sudo rm -rf $(command -v docker-compose) || true
+        # export LNMP_SERVICES="nginx mariadb php7 redis"
+        # export LREW_INCLUDE="mariadb"
+      if: |
+        startsWith(matrix.os, 'ubuntu' )
     - name: Up
       run: |
         ./lnmp-docker build-config > docker-compose.yml
@@ -78,16 +88,6 @@ jobs:
         quite=true ./lnmp-docker down
 
         ./lnmp-docker up
-        ./lnmp-docker down
-
-        QUITE=true ./lnmp-docker test development
-
-        # command -v docker-compose
-        # sudo rm -rf $(command -v docker-compose) || true
-        # export LNMP_SERVICES="nginx mariadb php7 redis"
-        # export LREW_INCLUDE="mariadb"
-
-        ./lnmp-docker up
     - name: Connect
       run: |
         sleep 20
@@ -99,8 +99,7 @@ jobs:
         QUITE=true ./lnmp-docker test swarm
       if: |
         startsWith(matrix.os, 'ubuntu' )
-    - name: pwsh
-      shell: pwsh
+    - shell: pwsh
       run: ./lnmp-docker.ps1
     - name: Set ENV
       run: |
@@ -139,6 +138,14 @@ jobs:
       run: |
         git config --global user.email "ci@khs1994.com"
         git config --global user.name "gh-bot"
+    - name: rm lnmp
+      run: |
+        cd ..
+        sudo rm -rf lnmp
+        mkdir lnmp
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 2
     - name: Check config
       run: |
         sudo apt install -y tree

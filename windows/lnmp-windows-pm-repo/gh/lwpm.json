@@ -1,8 +1,8 @@
 {
   "name": "gh",
   "description": "GitHub’s official command line tool",
-  "version": "1.3.1",
-  "pre-version": "1.3.1",
+  "version": "1.4.0",
+  "pre-version": "1.4.0",
   "homepage": "https://cli.github.com/",
   "bug": "https://github.com/cli/cli/issues",
   "github": "cli/cli",
@@ -17,7 +17,7 @@
     "install": [
       "_cleanup $unzipDesc",
       "if($IsWindows){_unzip $filename $unzipDesc}else{_mkdir $unzipDesc ; tar -zxf $filename -C $unzipDesc}",
-      "if($IsWindows){Copy-item -r -force $unzipDesc/bin/* C:\\bin\\}else{sudo cp $unzipDesc/gh_0.8.0_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}/bin/gh /usr/local/bin ; sudo chmod +x /usr/local/bin/gh }",
+      "if($IsWindows){Copy-item -r -force $unzipDesc/bin/* C:\\bin\\}else{sudo cp $unzipDesc/gh_${VERSION}_$(if($IsMacOS){echo macos}else{echo ${env:lwpm_os}})_${env:lwpm_architecture}/bin/gh /usr/local/bin ; sudo chmod +x /usr/local/bin/gh }",
       "_cleanup $unzipDesc"
     ],
     "postinstall": [

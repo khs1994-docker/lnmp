@@ -7,7 +7,7 @@ FROM --platform=$TARGETPLATFORM ${USERNAME}/php:${PHP_VERSION}-${BASE}-alpine
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
-ENV NGINX_UNIT_VERSION=master
+ENV NGINX_UNIT_VERSION=1.21.0
 
 RUN set -x \
   && mkdir -p /usr/src/unit \
@@ -24,7 +24,6 @@ RUN set -x \
   # && curl -L https://patch-diff.githubusercontent.com/raw/nginx/unit/pull/474.diff -O \
   # && patch -p1 < 474.diff \
   \
-  && sed -i "s/libtinfo.so/libisl.so.15.3.0/g" auto/modules/php \
   && ./configure --prefix=/usr/local/nginx-unit --openssl \
   && ./configure php \
        --module=php80 \

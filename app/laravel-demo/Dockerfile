@@ -13,13 +13,13 @@
 #
 # $ docker build --target=laravel -t khs1994/laravel:7 --build-arg NODE_REGISTRY=https://registry.npm.taobao.org --build-arg CI=false .
 
-ARG NODE_VERSION=15.3.0
+ARG NODE_VERSION=15.5.0
 ARG PHP_VERSION=8.0.0
-ARG NGINX_VERSION=1.19.5-alpine
+ARG NGINX_VERSION=1.19.6-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建
-FROM node:${NODE_VERSION:-15.3.0}-alpine as frontend
+FROM node:${NODE_VERSION:-15.5.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 

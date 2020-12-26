@@ -1,5 +1,5 @@
 variant: fcos
-version: 1.1.0
+version: 1.3.0
 systemd:
   units:
     - name: kube-nginx.service
@@ -18,8 +18,8 @@ systemd:
         # ExecStart=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx
         # ExecReload=${K8S_ROOT}/kube-nginx/sbin/nginx -c ${K8S_ROOT}/kube-nginx/conf/kube-nginx.conf -p ${K8S_ROOT}/kube-nginx -s reload
         ExecStartPre=-/bin/podman container rm kube-nginx
-        ExecStartPre=/bin/podman container run --rm $OPTIONS khs1994/kube-nginx:1.19.5 -t
-        ExecStart=/bin/podman container run --name kube-nginx $OPTIONS khs1994/kube-nginx:1.19.5
+        ExecStartPre=/bin/podman container run --rm $OPTIONS khs1994/kube-nginx:1.19.6 -t
+        ExecStart=/bin/podman container run --name kube-nginx $OPTIONS khs1994/kube-nginx:1.19.6
         ExecStop=/bin/podman container stop kube-nginx
         ExecStopPost=/bin/podman container rm kube-nginx
         PrivateTmp=true

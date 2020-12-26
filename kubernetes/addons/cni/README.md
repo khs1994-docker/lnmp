@@ -10,7 +10,7 @@
 
 **dual-stack**
 
-* https://docs.projectcalico.org/networking/dual-stack
+* https://docs.projectcalico.org/networking/ipv6
 
 **环境变量**
 

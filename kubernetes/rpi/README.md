@@ -27,22 +27,6 @@ $ $items="kube-proxy","kubelet","kubectl","kubeadm","mounter"
 $ foreach($item in $items){scp ./kubernetes-release/release/v1.19.0-linux-arm64/kubernetes/server/bin/$item pi@192.168.199.101:/home/pi/}
 ```
 
-## (不再需要此步骤) 升级 libseccomp2 到 [2.4.x](https://packages.debian.org/bullseye/libseccomp2)
-
-* https://github.com/containerd/containerd/issues/3871
-* https://pkgs.org/search/?q=libseccomp
-
-```bash
-$ curl -L -O https://mirrors.ustc.edu.cn/debian/pool/main/libs/libseccomp/libseccomp2_2.4.4-1_arm64.deb
-
-$ curl -L -O https://mirrors.ustc.edu.cn/debian/pool/main/libs/libseccomp/libseccomp-dev_2.4.4-1_arm64.deb
-
-$ sudo dpkg -i libseccomp2_2.4.4-1_arm64.deb libseccomp-dev_2.4.4-1_arm64.deb
-
-# 测试
-$ /opt/k8s/bin/cri-containerd -v
-```
-
 ## 登录到树莓派
 
 ```bash

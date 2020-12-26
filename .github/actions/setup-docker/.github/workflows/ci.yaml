@@ -31,10 +31,7 @@ jobs:
           # macOS
           - os: macos-latest
             docker_channel: stable
-            docker_version: 19.03
-          - os: macos-latest
-            docker_channel: edge
-            docker_version: 19.03
+            docker_version: 20.10
     runs-on: ${{ matrix.os }}
     timeout-minutes: 7
     steps:
@@ -116,7 +113,7 @@ jobs:
           # fix macos docker auth
           sed -i "" 's/credsStore/_credsStore/g' ${DOCKER_CONFIG}/config.json || true
 
-          tag=${version:-19.03}-${channel:-stable}-${os}
+          tag=${version:-20.10}-${channel:-stable}-${os}
           docker buildx build \
             -t khs1994/alpine:${tag} \
             ${push} \

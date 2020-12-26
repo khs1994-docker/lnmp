@@ -29,6 +29,7 @@ jobs:
      LNMP_DOCKER_MIRROR: registry-1.docker.io
      CNI_CALICO_EBPF: ${{matrix.CNI_CALICO_EBPF}}
      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+     GENERATE_CLI_HELP: ${{matrix.GENERATE_CLI_HELP}}
    strategy:
      max-parallel: 1
      matrix:
@@ -46,45 +47,46 @@ jobs:
          GENERATE_CLI_HELP: "true"
 
       # next version
-       - os: ubuntu
-         dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0-rc.0
-         LNMP_K8S_GET: --url
-         GENERATE_CLI_HELP: "true"
+      #  - os: ubuntu
+      #    dist: 20.04
+      #    CI_KUBERNETES_VERSION: 1.20.0-rc.0
+      #    LNMP_K8S_GET: --url
+      #    GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.0
+         CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --crio
          K8S_IMAGE_NS: khs1994
          K8S_IMAGE_REGISTRY: useccr.ccs.tencentyun.com
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.2
+         CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_GET: --url
+         GENERATE_CLI_HELP: "true"
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.2
+         CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_GET: --url
          CNI_CALICO_EBPF: 'true'
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.0
+         CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_LOCAL_INSTALL_OPTIONS: --docker
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.19.2
+         CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_GET: --url
          K8S_ROOT: /opt/k8s-custom
        # old version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.18.9
+         CI_KUBERNETES_VERSION: 1.19.4
          LNMP_K8S_GET: --url
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.17.12
+         CI_KUBERNETES_VERSION: 1.18.12
          LNMP_K8S_GET: --url
      fail-fast: false
    steps:
@@ -369,7 +371,7 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image nginx:1.19.5-alpine
+         kubectl run nginx --image nginx:1.19.6-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide
@@ -450,7 +452,7 @@ jobs:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=master
-         if ! [ $CI_KUBERNETES_VERSION = '1.19.0' -a "$GENERATE_CLI_HELP" = "true" ];then
+         if ! [ $CI_KUBERNETES_VERSION = '1.20.0' -a "$GENERATE_CLI_HELP" = "true" ];then
            exit 0
          fi
 
@@ -504,7 +506,7 @@ jobs:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=v1.20.0-rc.0-config
-         # BASE_BRANCH=master
+         BASE_BRANCH=master
          if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.0' ];then
            exit 0
          fi

@@ -1,0 +1,19 @@
+on: workflow_dispatch
+
+name: Trigger Docker Image Sync
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: |
+          curl -u pto8bv6hoj8e:${CODING_PASSWORD} \
+          -v -X POST  'https://pcit.coding.net/api/cci/job/240121/trigger' \
+          -H 'Content-Type: application/json' \
+          -d '
+          {
+          "ref": "master",
+          "envs": []
+          }'
+        env:
+          CODING_PASSWORD: ${{secrets.CODING_LWPM_K8S_CI_PASSWORD}}

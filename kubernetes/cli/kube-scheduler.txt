@@ -1,5 +1,3 @@
-I0827 09:20:05.068852   33251 registry.go:173] Registering SelectorSpread plugin
-I0827 09:20:05.068910   33251 registry.go:173] Registering SelectorSpread plugin
 The Kubernetes scheduler is a control plane process which assigns
 Pods to Nodes. The scheduler determines which Nodes are valid placements for
 each Pod in the scheduling queue according to constraints and available
@@ -87,7 +85,7 @@ Leader election flags:
       --leader-elect                             Start a leader election client and gain leadership before executing the main loop. Enable this when running replicated components for high availability. (default true)
       --leader-elect-lease-duration duration     The duration that non-leader candidates will wait after observing a leadership renewal until attempting to acquire leadership of a led but unrenewed leader slot. This is effectively the maximum duration that a leader can be stopped before it is replaced by another candidate. This is only applicable if leader election is enabled. (default 15s)
       --leader-elect-renew-deadline duration     The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to the lease duration. This is only applicable if leader election is enabled. (default 10s)
-      --leader-elect-resource-lock string        The type of resource object that is used for locking during leader election. Supported options are 'endpoints', 'configmaps', 'leases', 'endpointsleases' and 'configmapsleases'. (default "endpointsleases")
+      --leader-elect-resource-lock string        The type of resource object that is used for locking during leader election. Supported options are 'endpoints', 'configmaps', 'leases', 'endpointsleases' and 'configmapsleases'. (default "leases")
       --leader-elect-resource-name string        The name of resource object that is used for locking during leader election. (default "kube-scheduler")
       --leader-elect-resource-namespace string   The namespace of resource object that is used for locking during leader election. (default "kube-system")
       --leader-elect-retry-period duration       The duration the clients should wait between attempting acquisition and renewal of a leadership. This is only applicable if leader election is enabled. (default 2s)
@@ -96,8 +94,9 @@ Feature gate flags:
 
       --feature-gates mapStringBool   A set of key=value pairs that describe feature gates for alpha/experimental features. Options are:
                                       APIListChunking=true|false (BETA - default=true)
-                                      APIPriorityAndFairness=true|false (ALPHA - default=false)
+                                      APIPriorityAndFairness=true|false (BETA - default=true)
                                       APIResponseCompression=true|false (BETA - default=true)
+                                      APIServerIdentity=true|false (ALPHA - default=false)
                                       AllAlpha=true|false (ALPHA - default=false)
                                       AllBeta=true|false (BETA - default=false)
                                       AllowInsecureBackendProxy=true|false (BETA - default=true)
@@ -121,31 +120,40 @@ Feature gate flags:
                                       CSIMigrationOpenStackComplete=true|false (ALPHA - default=false)
                                       CSIMigrationvSphere=true|false (BETA - default=false)
                                       CSIMigrationvSphereComplete=true|false (BETA - default=false)
+                                      CSIServiceAccountToken=true|false (ALPHA - default=false)
                                       CSIStorageCapacity=true|false (ALPHA - default=false)
-                                      CSIVolumeFSGroupPolicy=true|false (ALPHA - default=false)
-                                      ConfigurableFSGroupPolicy=true|false (ALPHA - default=false)
+                                      CSIVolumeFSGroupPolicy=true|false (BETA - default=true)
+                                      ConfigurableFSGroupPolicy=true|false (BETA - default=true)
+                                      CronJobControllerV2=true|false (ALPHA - default=false)
                                       CustomCPUCFSQuotaPeriod=true|false (ALPHA - default=false)
-                                      DefaultPodTopologySpread=true|false (ALPHA - default=false)
+                                      DefaultPodTopologySpread=true|false (BETA - default=true)
                                       DevicePlugins=true|false (BETA - default=true)
-                                      DisableAcceleratorUsageMetrics=true|false (ALPHA - default=false)
+                                      DisableAcceleratorUsageMetrics=true|false (BETA - default=true)
+                                      DownwardAPIHugePages=true|false (ALPHA - default=false)
                                       DynamicKubeletConfig=true|false (BETA - default=true)
+                                      EfficientWatchResumption=true|false (ALPHA - default=false)
                                       EndpointSlice=true|false (BETA - default=true)
+                                      EndpointSliceNodeName=true|false (ALPHA - default=false)
                                       EndpointSliceProxying=true|false (BETA - default=true)
+                                      EndpointSliceTerminatingCondition=true|false (ALPHA - default=false)
                                       EphemeralContainers=true|false (ALPHA - default=false)
                                       ExpandCSIVolumes=true|false (BETA - default=true)
                                       ExpandInUsePersistentVolumes=true|false (BETA - default=true)
                                       ExpandPersistentVolumes=true|false (BETA - default=true)
                                       ExperimentalHostUserNamespaceDefaulting=true|false (BETA - default=false)
                                       GenericEphemeralVolume=true|false (ALPHA - default=false)
+                                      GracefulNodeShutdown=true|false (ALPHA - default=false)
+                                      HPAContainerMetrics=true|false (ALPHA - default=false)
                                       HPAScaleToZero=true|false (ALPHA - default=false)
                                       HugePageStorageMediumSize=true|false (BETA - default=true)
-                                      HyperVContainer=true|false (ALPHA - default=false)
                                       IPv6DualStack=true|false (ALPHA - default=false)
                                       ImmutableEphemeralVolumes=true|false (BETA - default=true)
+                                      KubeletCredentialProviders=true|false (ALPHA - default=false)
                                       KubeletPodResources=true|false (BETA - default=true)
                                       LegacyNodeRoleBehavior=true|false (BETA - default=true)
                                       LocalStorageCapacityIsolation=true|false (BETA - default=true)
                                       LocalStorageCapacityIsolationFSQuotaMonitoring=true|false (ALPHA - default=false)
+                                      MixedProtocolLBService=true|false (ALPHA - default=false)
                                       NodeDisruptionExclusion=true|false (BETA - default=true)
                                       NonPreemptingPriority=true|false (BETA - default=true)
                                       PodDisruptionBudget=true|false (BETA - default=true)
@@ -153,32 +161,26 @@ Feature gate flags:
                                       ProcMountType=true|false (ALPHA - default=false)
                                       QOSReserved=true|false (ALPHA - default=false)
                                       RemainingItemCount=true|false (BETA - default=true)
-                                      RemoveSelfLink=true|false (ALPHA - default=false)
+                                      RemoveSelfLink=true|false (BETA - default=true)
+                                      RootCAConfigMap=true|false (BETA - default=true)
                                       RotateKubeletServerCertificate=true|false (BETA - default=true)
                                       RunAsGroup=true|false (BETA - default=true)
-                                      RuntimeClass=true|false (BETA - default=true)
-                                      SCTPSupport=true|false (BETA - default=true)
-                                      SelectorIndex=true|false (BETA - default=true)
                                       ServerSideApply=true|false (BETA - default=true)
-                                      ServiceAccountIssuerDiscovery=true|false (ALPHA - default=false)
-                                      ServiceAppProtocol=true|false (BETA - default=true)
+                                      ServiceAccountIssuerDiscovery=true|false (BETA - default=true)
+                                      ServiceLBNodePortControl=true|false (ALPHA - default=false)
                                       ServiceNodeExclusion=true|false (BETA - default=true)
                                       ServiceTopology=true|false (ALPHA - default=false)
-                                      SetHostnameAsFQDN=true|false (ALPHA - default=false)
-                                      StartupProbe=true|false (BETA - default=true)
+                                      SetHostnameAsFQDN=true|false (BETA - default=true)
+                                      SizeMemoryBackedVolumes=true|false (ALPHA - default=false)
+                                      StorageVersionAPI=true|false (ALPHA - default=false)
                                       StorageVersionHash=true|false (BETA - default=true)
-                                      SupportNodePidsLimit=true|false (BETA - default=true)
-                                      SupportPodPidsLimit=true|false (BETA - default=true)
                                       Sysctls=true|false (BETA - default=true)
                                       TTLAfterFinished=true|false (ALPHA - default=false)
-                                      TokenRequest=true|false (BETA - default=true)
-                                      TokenRequestProjection=true|false (BETA - default=true)
                                       TopologyManager=true|false (BETA - default=true)
                                       ValidateProxyRedirects=true|false (BETA - default=true)
-                                      VolumeSnapshotDataSource=true|false (BETA - default=true)
                                       WarningHeaders=true|false (BETA - default=true)
                                       WinDSR=true|false (ALPHA - default=false)
-                                      WinOverlay=true|false (ALPHA - default=false)
+                                      WinOverlay=true|false (BETA - default=true)
                                       WindowsEndpointSliceProxying=true|false (ALPHA - default=false)
 
 Metrics flags:
@@ -187,9 +189,11 @@ Metrics flags:
 
 Logs flags:
 
-      --logging-format string   Sets the log format. Permitted formats: "text", "json".
-                                Non-default formats don't honor these flags: --add_dir_header, --alsologtostderr, --log_backtrace_at, --log_dir, --log_file, --log_file_max_size, --logtostderr, --skip_headers, --skip_log_headers, --stderrthreshold, --vmodule, --log-flush-frequency.
-                                Non-default choices are currently alpha and subject to change without warning. (default "text")
+      --experimental-logging-sanitization   [Experimental] When enabled prevents logging of fields tagged as sensitive (passwords, keys, tokens).
+                                            Runtime log sanitization may introduce significant computation overhead and therefore should not be enabled in production.
+      --logging-format string               Sets the log format. Permitted formats: "json", "text".
+                                            Non-default formats don't honor these flags: --add_dir_header, --alsologtostderr, --log_backtrace_at, --log_dir, --log_file, --log_file_max_size, --logtostderr, --one_output, --skip_headers, --skip_log_headers, --stderrthreshold, --vmodule, --log-flush-frequency.
+                                            Non-default choices are currently alpha and subject to change without warning. (default "text")
 
 Global flags:
 
@@ -202,6 +206,7 @@ Global flags:
       --log-file-max-size uint           Defines the maximum size a log file can grow to. Unit is megabytes. If the value is 0, the maximum file size is unlimited. (default 1800)
       --log-flush-frequency duration     Maximum number of seconds between log flushes (default 5s)
       --logtostderr                      log to standard error instead of files (default true)
+      --one-output                       If true, only write logs to their native severity level (vs also writing to each lower severity level
       --skip-headers                     If true, avoid header prefixes in the log messages
       --skip-log-headers                 If true, avoid headers when opening log files
       --stderrthreshold severity         logs at or above this threshold go to stderr (default 2)

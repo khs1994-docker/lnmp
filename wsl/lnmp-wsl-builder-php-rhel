@@ -534,7 +534,7 @@ _install_pecl_ext_by_pickle(){
   export PATH=${PHP_PREFIX}/bin:$PATH
   $(_sudo) chmod 777 $(${PHP_PREFIX}/bin/php-config --extension-dir)
 
-  if [ ${PHP_NUM} -ge "80" ];then set +e; fi
+  if [ ${PHP_NUM} -ge "81" ];then set +e; fi
 
   PICKLE_OPTIONS="-n --php=${PHP_PREFIX}/bin/php -vvv"
 
@@ -560,7 +560,7 @@ _install_pecl_ext_by_pickle(){
   echo "--enable-redis-igbinary" > /tmp/redis.configure.options
   echo "--enable-memcached-igbinary" > /tmp/memcached.configure.options
 
-  if [ ${PHP_NUM} -ge "80" ];then
+  if [ ${PHP_NUM} -ge "81" ];then
     _install_pecl_ext_by_pickle \
       https://github.com/igbinary/igbinary/archive/master.tar.gz@igbinary \
       https://github.com/phpredis/phpredis/archive/develop.tar.gz@redis \

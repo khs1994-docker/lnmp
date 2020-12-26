@@ -13,32 +13,32 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 2
-      - shell: pwsh
-        name: Download docker hub docker image rootfs
+      - name: Download docker hub docker image rootfs
+        shell: pwsh
         run: |
           . ./windows/sdk/dockerhub/rootfs.ps1
           rootfs hello-world
         # env:
         #   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      - shell: pwsh
-        name: Download aliyun docker image rootfs
+      - name: Download aliyun docker image rootfs
+        shell: pwsh
         run: |
           . ./windows/sdk/dockerhub/rootfs.ps1
           rootfs khs1994/hello-world latest '' '' '' 0 registry.us-west-1.aliyuncs.com
         # env:
         #   DOCKER_USERNAME: ${{secrets.DOCKER_ALIYUN_USERNAME}}
         #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      - shell: pwsh
-        name: Download tencent cloud docker image rootfs
+      - name: Download tencent cloud docker image rootfs
+        shell: pwsh
         run: |
           . ./windows/sdk/dockerhub/rootfs.ps1
           rootfs khs1994/hello-world latest '' '' '' 0 uswccr.ccs.tencentyun.com
         # env:
         #   DOCKER_USERNAME: ${{secrets.DOCKER_TENCENT_CLOUD_USERNAME}}
         #   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      - shell: pwsh
-        name: Download mirror.gcr.io docker image rootfs
+      - name: Download mirror.gcr.io docker image rootfs
+        shell: pwsh
         run: |
           . ./windows/sdk/dockerhub/rootfs.ps1
           rootfs hello-world latest '' '' '' 0 mirror.gcr.io

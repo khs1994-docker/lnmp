@@ -68,6 +68,7 @@ $ wsl -d wsl-k8s -- apt update
 
 # ps 命令
 $ wsl -d wsl-k8s -- apt install procps bash-completion
+$ wsl -d wsl-k8s -- apt install iproute2
 ```
 
 ## WSL(wsl-k8s) 配置挂载路径
@@ -122,6 +123,19 @@ WDC WDS250G1B0A-00H9H0  \\.\PHYSICALDRIVE0  WDC WDS250G1B0A-00H9H0  2           
 
 # 以下命令参数值请替换为实际的值
 $ wsl --mount \\.\PHYSICALDRIVE0 --partition 3
+
+# 格式化空白硬盘
+# $ wsl --mount \\.\PHYSICALDRIVE0 --bare
+# $ fdisk /dev/sdX
+# $ mkfs.ext4 /dev/sdXN
+```
+
+**设置 .env.ps1 文件**
+
+```powershell
+$MountPhysicalDiskDeviceID2WSL2="\\.\PHYSICALDRIVE0"
+$MountPhysicalDiskPartitions2WSL2="3"
+$MountPhysicalDiskType2WSL2="ext4"
 ```
 
 ```bash
@@ -185,7 +199,7 @@ $ cp -a wsl2/certs/. ${K8S_ROOT:?err}/etc/kubernetes/pki/
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.yaml ${K8S_ROOT:?err}/etc/kubernetes
 $ mv ${K8S_ROOT:?err}/etc/kubernetes/pki/*.kubeconfig ${K8S_ROOT:?err}/etc/kubernetes
 
-$ cp -a kubernetes-release/release/v1.19.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
+$ cp -a kubernetes-release/release/v1.20.0-linux-amd64/kubernetes/server/bin/kube-{apiserver,controller-manager,scheduler} ${K8S_ROOT:?err}/bin
 ```
 
 ## kubectl

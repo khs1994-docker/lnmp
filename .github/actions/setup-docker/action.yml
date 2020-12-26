@@ -6,7 +6,7 @@ author: 'khs1994'
 inputs:
   docker_version:
     description: Docker Version
-    default: 19.03
+    default: "20.10"
     required: false
   docker_nightly_version:
     # https://github.com/AkihiroSuda/moby-snapshot/releases
@@ -19,7 +19,6 @@ inputs:
     default: stable
     # test
     # nightly # this channel use https://github.com/AkihiroSuda/moby-snapshot
-    # edge # for macos
     required: false
   docker_buildx:
     # https://docs.docker.com/engine/reference/commandline/buildx/
