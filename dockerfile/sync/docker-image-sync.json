@@ -68,12 +68,12 @@
     "dest": "library-mirror/mysql:8.0.22"
   },
   {
-    "source": "library/mysql:5.7.31",
-    "dest": "library-mirror/mysql:5.7.31"
+    "source": "library/mysql:5.7.32",
+    "dest": "library-mirror/mysql:5.7.32"
   },
   {
-    "source": "library/mysql:5.6.49",
-    "dest": "library-mirror/mysql:5.6.49"
+    "source": "library/mysql:5.6.50",
+    "dest": "library-mirror/mysql:5.6.50"
   },
   {
     "source": "library/mariadb:latest",
@@ -84,12 +84,12 @@
     "dest": "library-mirror/mariadb:10.5.8"
   },
   {
-    "source": "library/mariadb:10.4.15",
-    "dest": "library-mirror/mariadb:10.4.15"
+    "source": "library/mariadb:10.4.17",
+    "dest": "library-mirror/mariadb:10.4.17"
   },
   {
-    "source": "library/mariadb:10.3.25",
-    "dest": "library-mirror/mariadb:10.3.25"
+    "source": "library/mariadb:10.3.27",
+    "dest": "library-mirror/mariadb:10.3.27"
   },
   {
     "source": "library/registry:latest",
@@ -128,8 +128,8 @@
     "dest": "library-mirror/redis:alpine"
   },
   {
-    "source": "library/redis:5.0.9-alpine",
-    "dest": "library-mirror/redis:5.0.9-alpine"
+    "source": "library/redis:5.0.10-alpine",
+    "dest": "library-mirror/redis:5.0.10-alpine"
   },
   {
     "source": "library/redis:6.0.9-alpine",

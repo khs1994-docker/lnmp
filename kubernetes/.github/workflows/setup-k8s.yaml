@@ -12,7 +12,8 @@ defaults:
 
 jobs:
   setup-k8s:
-   runs-on: ubuntu-${{matrix.dist}}
+   # runs-on: ubuntu-${{matrix.dist}}
+   runs-on: ubuntu-20.04
    timeout-minutes: 20
    if: |
      ! contains( github.event.head_commit.message, '[skip ci]')
@@ -34,24 +35,19 @@ jobs:
      max-parallel: 1
      matrix:
        include:
+      # next next version
       #  - os: ubuntu
       #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.19.0-rc.4
+      #    CI_KUBERNETES_VERSION: 1.22.0-alpha.0
       #    LNMP_K8S_GET: --url
+      #    GENERATE_CLI_HELP: "true"
 
-      # next next version
+      # next version
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.21.0-alpha.0
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
-
-      # next version
-      #  - os: ubuntu
-      #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.20.0-rc.0
-      #    LNMP_K8S_GET: --url
-      #    GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
@@ -64,7 +60,7 @@ jobs:
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_GET: --url
-         GENERATE_CLI_HELP: "true"
+         # GENERATE_CLI_HELP: "true"
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0
