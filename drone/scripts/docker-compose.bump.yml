@@ -2,4 +2,4 @@ version: "3.8"
 
 services:
   drone:
-    image: drone/drone:1.9.2
+    image: drone/drone:1.10.1

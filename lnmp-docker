@@ -118,7 +118,7 @@ PCIT EE:
   pcit-cp              Copy PCIT files to app/.pcit
 
 Commands:
-  up                   Up LNMP
+  up                   Up LNMP (Support x86_64 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks
   acme.sh              Run original acme.sh command to issue SSL certificate
   backup               Backup MySQL databases

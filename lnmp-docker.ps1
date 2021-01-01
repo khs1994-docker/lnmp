@@ -314,7 +314,7 @@ PCIT EE:
   pcit-up              Up(Run) PCIT EE https://github.com/pcit-ce/pcit
 
 Commands:
-  up                   Up LNMP (Support x86_64 arm32v7 arm64v8)
+  up                   Up LNMP (Support x86_64 arm64v8)
   down                 Stop and remove LNMP Docker containers, networks, images, and volumes
   backup               Backup MySQL databases
   build                Build or rebuild your LNMP images (Only Support x86_64)
@@ -701,7 +701,7 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
   function docker-compose() {
     #@debug
-    # printInfo "Exec docker-compose in WSL2 ${WSL2_DIST}: $args"
+    printInfo "Exec docker-compose command in WSL2 [ ${WSL2_DIST} ]"
 
     $COMPOSE_BIN = "/mnt/wsl/docker-desktop/cli-tools/usr/bin/docker-compose"
 
@@ -1577,10 +1577,16 @@ Example: ./lnmp-docker composer /app/demo install
       $WSL2_DIST = 'ubuntu'
     }
 
-    function _get_dev_sdx($type = "ext4") {
+    function Get-wsl2_mount_physicaldiskdevice_dev_sdx($type = "ext4") {
       $dev_sdx = wsl -d $WSL2_DIST -- mount -t $type `| grep PHYSICALDRIVE `| cut -d ' ' -f 1
 
       return $dev_sdx
+    }
+
+    function Get-wsl2_mount_physicaldiskdevice_path($type = "ext4"){
+      $wsl2_mount_physicaldiskdevice_path = wsl -d $WSL2_DIST -- mount -t $type `| grep PHYSICALDRIVE `| cut -d ' ' -f 3
+
+      return $wsl2_mount_physicaldiskdevice_path
     }
 
     printInfo "try mount physical disk to WSL2 $WSL2_DIST"
@@ -1602,7 +1608,7 @@ Example: ./lnmp-docker composer /app/demo install
       $MountPhysicalDiskType2WSL2 = "ext4"
     }
 
-    $dev_sdx = _get_dev_sdx $MountPhysicalDiskType2WSL2
+    $dev_sdx = Get-wsl2_mount_physicaldiskdevice_dev_sdx $MountPhysicalDiskType2WSL2
 
     if (!$dev_sdx) {
       printInfo "physical disk not mount, I will exec $ wsl --mount ..."
@@ -1612,21 +1618,24 @@ Example: ./lnmp-docker composer /app/demo install
 
       sleep 2
 
-      $dev_sdx = _get_dev_sdx $MountPhysicalDiskType2WSL2
+      $dev_sdx = Get-wsl2_mount_physicaldiskdevice_dev_sdx $MountPhysicalDiskType2WSL2
     }
     else {
       printInfo "physical disk already mount to $dev_sdx, I will mount $dev_sdx to /app"
     }
 
     if (!$dev_sdx) {
-      printError "please re-exec"
+      printError 'please re-exec, or check $MountPhysicalDiskDeviceID2WSL2 and $MountPhysicalDiskPartitions2WSL2 in .env.ps1'
 
       exit 1
     }
 
+    $wsl2_mount_physicaldiskdevice_path = Get-wsl2_mount_physicaldiskdevice_path $MountPhysicalDiskType2WSL2
+
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /app"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p $wsl2_mount_physicaldiskdevice_path/app"
+    wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind $wsl2_mount_physicaldiskdevice_path/app /app"
     wsl -d $WSL2_DIST -u root -- sh -cx "chown 1000:1000 /app"
-    wsl -d $WSL2_DIST -u root -- sh -cx "mount $dev_sdx /app"
   }
 
   "^code$" {
