@@ -24,7 +24,7 @@ docker run -it --rm `
     --mount type=bind,src=$(wslpath $PSScriptRoot/../config/composer/config.json),target=${COMPOSER_HOME}/config.json `
     --env-file $PSScriptRoot/../config/composer/.env `
     --network ${NETWORK} `
-    khs1994/php:8.0.0-composer-alpine `
+    khs1994/php:8.0.1-composer-alpine `
     composer $args
 
 $end_at=date

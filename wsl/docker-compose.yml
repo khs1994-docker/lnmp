@@ -11,27 +11,27 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.25}
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.26}
         - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.25}-debian-buster_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.26}-debian-buster_amd64
 
   wsl-php-builder-74:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_74:-7.4.13}
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.14}
         - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.13}-debian-buster_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.14}-debian-buster_amd64
 
   wsl-php-builder-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=debian:buster-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.0}-debian-buster_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.1}-debian-buster_amd64
 
   wsl-php-builder-nightly:
     build:
@@ -48,54 +48,54 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=debian:bullseye-slim
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.0}-debian-bullseye_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.1}-debian-bullseye_amd64
 
   wsl-php-builder-ubuntu1804-73:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.25}
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.26}
         - OS_TYPE=ubuntu:18.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.25}-ubuntu-bionic_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.26}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu1804-74:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_74:-7.4.13}
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.14}
         - OS_TYPE=ubuntu:18.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.13}-ubuntu-bionic_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.14}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu1804-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=ubuntu:18.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.0}-ubuntu-bionic_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.1}-ubuntu-bionic_amd64
 
   wsl-php-builder-ubuntu2004-74:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_74:-7.4.13}
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.14}
         - OS_TYPE=ubuntu:20.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.13}-ubuntu-focal_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.14}-ubuntu-focal_amd64
 
   wsl-php-builder-ubuntu2004-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=ubuntu:20.04
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.0}-ubuntu-focal_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.1}-ubuntu-focal_amd64
 
   wsl-php-builder-ubuntu2004-nightly:
     build:
@@ -112,35 +112,35 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=ubuntu:20.10
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.0}-ubuntu-groovy_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.1}-ubuntu-groovy_amd64
 
   wsl-php-builder-rhel7-73:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.25}
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.25}-centos-7_amd64
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.26}
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.26}-centos-7_amd64
 
   wsl-php-builder-rhel8-73:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.25}
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.26}
         - OS_TYPE=centos:8
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.25}-centos-8_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.26}-centos-8_amd64
 
   wsl-php-builder-rhel8-74:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_74:-7.4.13}
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.14}
         - OS_TYPE=centos:8
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.13}-centos-8_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.14}-centos-8_amd64
 
 # latest stable php and rhel
   wsl-php-builder-rhel8-80:
@@ -148,36 +148,36 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=centos:8
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.0}-centos-8_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.1}-centos-8_amd64
 
   wsl-php-builder-fc33-73:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_73:-7.3.25}
+        - PHP_VERSION=${PHP_VERSION_73:-7.3.26}
         - OS_TYPE=fedora:33
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.25}-fedora-33_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php73_${PHP_VERSION_73:-7.3.26}-fedora-33_amd64
 
   wsl-php-builder-fc33-74:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_74:-7.4.13}
+        - PHP_VERSION=${PHP_VERSION_74:-7.4.14}
         - OS_TYPE=fedora:33
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.13}-fedora-33_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php74_${PHP_VERSION_74:-7.4.14}-fedora-33_amd64
 
   wsl-php-builder-fc33-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=fedora:33
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_8.0.0-fedora-33_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_8.0.1-fedora-33_amd64
 
   wsl-php-builder-fc33-nightly:
     build:
@@ -194,6 +194,6 @@ services:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
-        - PHP_VERSION=${PHP_VERSION_80:-8.0.0}
+        - PHP_VERSION=${PHP_VERSION_80:-8.0.1}
         - OS_TYPE=fedora:rawhide
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.0}-fedora-34_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.1}-fedora-34_amd64
