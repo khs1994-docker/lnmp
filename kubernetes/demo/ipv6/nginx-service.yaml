@@ -7,6 +7,7 @@ metadata:
   namespace: default
 spec:
   # ipFamily: IPv6
+
   # 1.20+
   # ipFamilyPolicy: SingleStack PreferDualStack RequireDualStack
   # ipFamilies:
@@ -15,6 +16,10 @@ spec:
   # clusterIPs:
   # -
 
+  ipFamilyPolicy: PreferDualStack
+  ipFamilies:
+  - IPv6
+  - IPv4
   ports:
   - port: 80
     protocol: TCP

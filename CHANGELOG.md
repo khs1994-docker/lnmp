@@ -14,3 +14,4 @@
 ### Updates:
 
 * [PHP `8.0.1` `7.4.14` `7.3.26`](https://www.php.net/ChangeLog-8.php#8.0.1)
+* [Redis `6.0.10`](https://raw.githubusercontent.com/antirez/redis/6.0/00-RELEASENOTES)

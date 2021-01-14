@@ -208,7 +208,7 @@ $ ./lnmp-docker down
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.46-alpine`           | **2.4.46**          |`alpine:3.12`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.22`                  | **8.0.22**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.8`                | **10.5.8**          |`ubuntu:focal`  |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.9-alpine`            | **6.0.9**           |`alpine:3.12`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.0.10-alpine`            | **6.0.10**           |`alpine:3.12`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.0.1-fpm-alpine`     | **8.0.1**      |`alpine:3.12`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.1-composer-alpine`| **2.0.8**     |`alpine:3.12`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.9-alpine`           | **1.6.9**       |`alpine:3.12`    |

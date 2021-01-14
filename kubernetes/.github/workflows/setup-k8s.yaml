@@ -45,7 +45,7 @@ jobs:
       # next version
        - os: ubuntu
          dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0-alpha.0
+         CI_KUBERNETES_VERSION: 1.21.0-alpha.1
          LNMP_K8S_GET: --url
          GENERATE_CLI_HELP: "true"
 
@@ -61,6 +61,12 @@ jobs:
          CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_GET: --url
          # GENERATE_CLI_HELP: "true"
+       # ipv6
+       - os: ubuntu
+         dist: 20.04
+         CI_KUBERNETES_VERSION: 1.20.0
+         LNMP_K8S_GET: --url
+         IPV6: "true"
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0
@@ -158,6 +164,7 @@ jobs:
 
          ip addr
          hostnamectl
+         ifconfig eth0
          export SERVER_IP=`ifconfig eth0 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
          ./lnmp-k8s > /dev/null
          echo $SERVER_IP > .server_ip
@@ -310,6 +317,15 @@ jobs:
          kubectl get csr
 
          sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/custom.patch.json
+
+         if [ "${IPV6}" = 'true' ];then
+           sed -i -e "s#_IP6#IP6#g" \
+             -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
+             addons/cni/calico-custom/custom.patch.json
+           sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
+             addons/cni/calico/calico.yaml
+         fi
+
          git diff
          if [ "$CNI_CALICO_EBPF" = 'true' ];then
            export SERVER_IP=`cat .server_ip`
@@ -385,8 +401,31 @@ jobs:
          kubectl get all
          kubectl exec ${NGINX_POD_NAME} -- curl $NGINX_SERVICE_NAME || true
 
+         kubectl delete svc/${NGINX_SERVICE_NAME}
+
+         # ipv6
+         kubectl apply -f demo/ipv6
+
+         kubectl get svc/nginx -o yaml
+         kubectl get deployment/nginx -o yaml || true
+         kubectl get pod/${NGINX_POD_NAME} -o yaml
+
+         if [ "${IPV6}" = 'true' ];then
+           set -x
+           POD_IPV4_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 0).ip}}"`
+           curl ${POD_IPV4_IP}:80 || true
+           POD_IPV6_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 1).ip}}"` || true
+           curl [${POD_IPV6_IP}]:80 || true
+           CLUSTER_IPV6_IP=`kubectl get svc/nginx -o go-template="{{ .spec.clusterIP }}"`
+           curl [${CLUSTER_IPV6_IP}]:80 || true
+           NODE_IPV6_IP=`ifconfig eth0 | grep "inet6" | awk '{ print $2}' | head -1`
+           curl [${NODE_IPV6_IP}]:8080 || true
+         fi
+
          kubectl delete deployment nginx || true
          kubectl delete pod ${NGINX_POD_NAME} || true
+         kubectl delete svc/${NGINX_SERVICE_NAME} || true
+
          kubectl get all
          # test ingress-nginx
          HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
@@ -503,7 +542,7 @@ jobs:
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
          BASE_BRANCH=v1.20.0-rc.0-config
          BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.1' ];then
            exit 0
          fi
 
