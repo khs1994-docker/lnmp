@@ -40,8 +40,8 @@
     "dest": "library-mirror/docker:test-dind-rootless"
   },
   {
-    "source": "library/alpine:3.12",
-    "dest": "library-mirror/alpine:3.12"
+    "source": "library/alpine:3.13",
+    "dest": "library-mirror/alpine:3.13"
   },
   {
     "source": "library/alpine:edge",
@@ -116,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.2.1",
-    "dest": "library-mirror/kong:2.2.1"
+    "source": "library/kong:2.3.0",
+    "dest": "library-mirror/kong:2.3.0"
   },
   {
-    "source": "library/kong:2.2.1-alpine",
-    "dest": "library-mirror/kong:2.2.1-alpine"
+    "source": "library/kong:2.3.0-alpine",
+    "dest": "library-mirror/kong:2.3.0-alpine"
   },
   {
     "source": "library/redis:alpine",
