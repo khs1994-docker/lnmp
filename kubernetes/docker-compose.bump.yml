@@ -5,7 +5,7 @@ services:
     image: k8s.gcr.io/kube-apiserver:v1.20.0
 
   k8s_dashboard:
-    image: kubernetesui/dashboard:v2.0.5
+    image: kubernetesui/dashboard:v2.1.0
 
   coredns:
     image: k8s.gcr.io/coredns:1.7.0
@@ -18,13 +18,13 @@ services:
     image: us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3
 
   mcr-pause:
-    image: mcr.microsoft.com/oss/kubernetes/pause:1.4.1
+    image: mcr.microsoft.com/oss/kubernetes/pause:3.4.1
 
   calico:
     image: calico/cni:v3.17.0
 
   ingress_nginx:
-    image: k8s.gcr.io/ingress-nginx/controller:v0.41.2
+    image: k8s.gcr.io/ingress-nginx/controller:v0.43.0
 
   ingress-kong:
     image: kong-docker-kubernetes-ingress-controller.bintray.io/kong-ingress-controller:0.9.1
