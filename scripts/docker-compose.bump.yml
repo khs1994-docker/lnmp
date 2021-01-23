@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mysql:
-    image: mysql:8.0.22
+    image: mysql:8.0.23
 
   mariadb:
     image: mariadb:10.5.8
@@ -23,7 +23,7 @@ services:
     image: nginx:1.19.6-alpine
 
   rabbitmq:
-    image: rabbitmq:3.8.9-management-alpine
+    image: rabbitmq:3.8.11-management-alpine
 
   postgresql:
     image: postgres:13.1-alpine
@@ -47,10 +47,10 @@ services:
     image: kong:2.3.0-alpine
 
   node:
-    image: node:15.5.0-alpine
+    image: node:15.6.0-alpine
 
   go:
-    image: golang:1.15.6-alpine
+    image: golang:1.15.7-alpine
 
   alpine:
     image: alpine:3.13

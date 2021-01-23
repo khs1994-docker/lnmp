@@ -405,13 +405,13 @@ jobs:
          kubectl delete svc/${NGINX_SERVICE_NAME}
 
          # ipv6
-         kubectl apply -f demo/ipv6
-
-         kubectl get svc/nginx -o yaml
-         kubectl get deployment/nginx -o yaml || true
-         kubectl get pod/${NGINX_POD_NAME} -o yaml
-
          if [ "${IPV6}" = 'true' ];then
+           kubectl apply -f demo/ipv6
+
+           kubectl get svc/nginx -o yaml
+           kubectl get deployment/nginx -o yaml || true
+           kubectl get pod/${NGINX_POD_NAME} -o yaml
+
            set -x
            POD_IPV4_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 0).ip}}"`
            curl ${POD_IPV4_IP}:80 || true

@@ -241,7 +241,7 @@ volumes:
 #   REDIS_VERSION:
 #     - 6.0.10
 #   MYSQL_VERSION:
-#     # - 8.0.22
+#     # - 8.0.23
 #     - 5.7.22
 #   MONGODB_VERSION:
 #     - 4.1.0
