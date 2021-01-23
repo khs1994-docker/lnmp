@@ -86,7 +86,7 @@ jobs:
 
           lnmp-composer require laravel/ui
           lnmp-composer require league/flysystem 1.x
-          lnmp-composer require league/flysystem-aws-s3-v3
+          lnmp-composer require league/flysystem-aws-s3-v3 1.x
           # 此步骤会重置 webpack.mix.js
           lnmp-php artisan ui vue --auth
 

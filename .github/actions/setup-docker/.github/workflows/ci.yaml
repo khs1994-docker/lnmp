@@ -33,7 +33,7 @@ jobs:
             docker_channel: stable
             docker_version: 20.10
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 7
+    timeout-minutes: 11
     steps:
       - uses: actions/checkout@main
         with:
@@ -68,7 +68,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
-    timeout-minutes: 7
+    timeout-minutes: 11
     defaults:
       run:
         shell: bash --noprofile --norc -exo pipefail {0}

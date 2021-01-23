@@ -120,8 +120,8 @@ async function run() {
 
     core.startGroup('install docker')
     await exec.exec('brew', [
-      'cask',
       'install',
+      '--cask',
       DOCKER_CHANNEL !== 'stable' ? 'docker' : 'docker'
     ]);
     core.endGroup();

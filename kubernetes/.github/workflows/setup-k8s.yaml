@@ -31,6 +31,7 @@ jobs:
      CNI_CALICO_EBPF: ${{matrix.CNI_CALICO_EBPF}}
      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
      GENERATE_CLI_HELP: ${{matrix.GENERATE_CLI_HELP}}
+     IPV6: ${{matrix.IPV6}}
    strategy:
      max-parallel: 1
      matrix:
@@ -513,9 +514,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.19.0-config
-         BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.20.0-rc.0' ];then
+         BASE_BRANCH=v1.21.0-alpha.0-config
+         # BASE_BRANCH=master
+         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.1' ];then
            exit 0
          fi
 
@@ -540,9 +541,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.20.0-rc.0-config
+         BASE_BRANCH=v1.21.0-alpha.1-config
          BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.1' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.22.0-alpha.0' ];then
            exit 0
          fi
 
