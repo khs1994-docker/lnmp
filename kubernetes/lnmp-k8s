@@ -424,8 +424,8 @@ _gvisor_containerd_conf(){
     return
   fi
 print_info "config containerd with gvisor(runsc) ..."
-# containerd 1.4.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.4/config.toml
+# containerd 1.5.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
   runtime_type = "io.containerd.runsc.v1"
   # privileged_without_host_devices = false
@@ -507,8 +507,8 @@ _crun_containerd_conf(){
     return
   fi
 print_info "config containerd with crun ..."
-# containerd 1.4.x
-cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.4/config.toml
+# containerd 1.5.x
+cat <<EOF | $(_sudo) tee -a ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.crun]
   runtime_type = "io.containerd.runc.v2"
   # privileged_without_host_devices = false
@@ -564,10 +564,10 @@ _containerd_install(){
   fi
 
   if [ -f ${K8S_ROOT}/bin/cri-containerd -a ! "$1" = "--dry-run" ];then \
-    print_info "containerd 1.4 already install"; \
+    print_info "containerd 1.5 already install"; \
     ${K8S_ROOT}/bin/cri-containerd --version;return; fi
 
-  print_info "install containerd 1.4 ..."
+  print_info "install containerd 1.5 ..."
 
   local url_official="https://github.com/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
   local url="https://download.fastgit.org/containerd/containerd/releases/download/v${CONTAINERD_VERSION}"
@@ -969,10 +969,10 @@ _crio_config(){
 # https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
 _containerd_cri_config(){
   print_info "config containerd ..."
-  $(_sudo) mkdir -p ${K8S_ROOT}/etc/cri-containerd/1.4
+  $(_sudo) mkdir -p ${K8S_ROOT}/etc/cri-containerd/1.5
   # containerd config default > ${K8S_ROOT}/etc/cri-containerd/config.toml
-  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.4/config.toml \
-    | $(_sudo) tee ${K8S_ROOT}/etc/cri-containerd/1.4/config.toml
+  sed "s!/opt/k8s!${K8S_ROOT}!g" systemd/etc/cri-containerd/1.5/config.toml \
+    | $(_sudo) tee ${K8S_ROOT}/etc/cri-containerd/1.5/config.toml
 
   _cri_sysctl
 }
@@ -1166,7 +1166,7 @@ _k8s_install_systemd(){
       /etc/systemd/system/kubelet@.service
 
     $(_sudo) sed -i 's/SystemdCgroup = true/SystemdCgroup = false/g' \
-      /wsl/wsl-k8s-data/k8s/etc/cri-containerd/1.4/config.toml
+      /wsl/wsl-k8s-data/k8s/etc/cri-containerd/1.5/config.toml
 
     $(_sudo) sed -i \
       -e 's/# ConditionVirtualization/ConditionVirtualization/g' \
@@ -1202,7 +1202,7 @@ _k8s_install_systemd(){
     _enable_wsl_k8s_systemd_target kube-apiserver.service
     _enable_wsl_k8s_systemd_target kube-controller-manager.service
     _enable_wsl_k8s_systemd_target kube-scheduler.service
-    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.4.service
+    _enable_wsl_k8s_systemd_target cri-containerd@.service cri-containerd@1.5.service
     _enable_wsl_k8s_systemd_target kubelet@.service kubelet@cri-containerd.service
     _enable_wsl_k8s_systemd_target etcd.service
 
@@ -1432,7 +1432,7 @@ $ $(_sudo) systemctl start kubelet@cri-containerd
 $ $(_sudo) systemctl start kubelet@crio
 
 $ $(_sudo) systemctl start docker (Docker runtime only)
-$ $(_sudo) systemctl start cri-containerd@1.4 (Containerd runtime only)
+$ $(_sudo) systemctl start cri-containerd@1.5 (Containerd runtime only)
 $ $(_sudo) systemctl start cri-o (CRI-O runtime only)
 "
 }
@@ -1441,7 +1441,7 @@ _local_cleanup(){
   $(_sudo) systemctl stop etcd \
     kube-apiserver kube-controller-manager kube-scheduler \
     kube-proxy kubelet \
-    docker cri-containerd@1.4 crio || true
+    docker cri-containerd@1.5 crio || true
 
   set +e
   $(_sudo) rm -rf ${K8S_ROOT}

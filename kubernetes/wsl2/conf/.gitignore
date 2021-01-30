@@ -3,7 +3,7 @@
 !*.temp
 !cni
 !cri-containerd
-cri-containerd/1.4/config.toml
+cri-containerd/1.5/config.toml
 !crio
 crio/crio.conf
 crio/crio.conf.d
