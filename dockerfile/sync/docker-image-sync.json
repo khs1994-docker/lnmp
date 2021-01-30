@@ -8,8 +8,8 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:15.6.0-alpine",
-    "dest": "library-mirror/node:15.6.0-alpine"
+    "source": "node:15.7.0-alpine",
+    "dest": "library-mirror/node:15.7.0-alpine"
   },
   {
     "source": "node:14.15.0-alpine",
@@ -116,12 +116,12 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.3.0",
-    "dest": "library-mirror/kong:2.3.0"
+    "source": "library/kong:2.3.1",
+    "dest": "library-mirror/kong:2.3.1"
   },
   {
-    "source": "library/kong:2.3.0-alpine",
-    "dest": "library-mirror/kong:2.3.0-alpine"
+    "source": "library/kong:2.3.1-alpine",
+    "dest": "library-mirror/kong:2.3.1-alpine"
   },
   {
     "source": "library/redis:alpine",

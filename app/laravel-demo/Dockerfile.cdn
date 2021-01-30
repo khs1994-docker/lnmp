@@ -20,7 +20,7 @@ ARG NGINX_VERSION=1.19.6-alpine
 ARG DOCKER_HUB_USERNAME=khs1994
 
 # 1.前端构建，并上传到 CDN
-FROM node:${NODE_VERSION:-15.6.0}-alpine as frontend
+FROM node:${NODE_VERSION:-15.7.0}-alpine as frontend
 
 ARG NODE_REGISTRY=https://registry.npmjs.org
 
