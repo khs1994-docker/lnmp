@@ -1,8 +1,8 @@
 {
   "name": "idea",
   "description": "Manage your tools the easy way",
-  "version": "1.18.7609",
-  "pre-version": "1.18.7609",
+  "version": "1.19.7784",
+  "pre-version": "1.19.7784",
   "homepage": "https://www.jetbrains.com/",
   "bug": "",
   "github": "",
@@ -20,7 +20,8 @@
     ],
     "platform-reqs": [
       "if($IsLinux){echo $False}"
-    ]
+    ],
+    "uninstall": "& $env:APPDATA\\..\\Local\\JetBrains\\Toolbox\\bin\\Uninstall.exe"
   },
   "$comment": [
     "https://www.jetbrains.com/toolbox-app/"

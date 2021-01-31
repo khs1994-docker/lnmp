@@ -476,6 +476,10 @@ _gvisor_install(){
   runsc --version
 }
 
+_runsc_install(){
+   _gvisor_install
+}
+
 _runc_install(){
   if [ `command -v runc` ];then print_info "runc already install";\
     runc --version;return; fi

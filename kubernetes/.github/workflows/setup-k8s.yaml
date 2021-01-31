@@ -63,11 +63,11 @@ jobs:
          LNMP_K8S_GET: --url
          # GENERATE_CLI_HELP: "true"
        # ipv6
-       - os: ubuntu
-         dist: 20.04
-         CI_KUBERNETES_VERSION: 1.20.0
-         LNMP_K8S_GET: --url
-         IPV6: "true"
+       # - os: ubuntu
+       #  dist: 20.04
+       #  CI_KUBERNETES_VERSION: 1.20.0
+       #  LNMP_K8S_GET: --url
+       #  IPV6: "true"
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0
