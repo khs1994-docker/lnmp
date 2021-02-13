@@ -26,7 +26,7 @@ jobs:
       with:
         docker_channel: nightly
         # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
-        docker_nightly_version: snapshot-20201008
+        docker_nightly_version: snapshot-20210202
     - run: |
         set -x
 

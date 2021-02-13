@@ -26,7 +26,7 @@ services:
     image: rabbitmq:3.8.11-management-alpine
 
   postgresql:
-    image: postgres:13.1-alpine
+    image: postgres:13.2-alpine
 
   mongodb:
     image: mongo:4.4.3
@@ -47,10 +47,10 @@ services:
     image: kong:2.3.1-alpine
 
   node:
-    image: node:15.7.0-alpine
+    image: node:15.8.0-alpine
 
   go:
-    image: golang:1.15.7-alpine
+    image: golang:1.15.8-alpine
 
   alpine:
     image: alpine:3.13
