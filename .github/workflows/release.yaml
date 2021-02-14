@@ -53,6 +53,8 @@ jobs:
           - JOB_NAME: wsl-php-builder-fc34-80
             DIST_FILE: khs1994-wsl-php80-8.0.1-1.fc34.x86_64.rpm
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
     - uses: actions/checkout@main
       with:
@@ -62,11 +64,6 @@ jobs:
     #     NUGET_API_KEY: ${{secrets.NUGET_API_KEY}}
     #   run: |
     #     Publish-Script -Path ${PWD}/lnmp-docker.ps1 -NuGetApiKey $env:NUGET_API_KEY -Force
-    - name: gh auth
-      run: |
-        echo ${GITHUB_TOKEN} | gh auth login --with-token
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
     - name: Create release
       run: |
         if [ "$JOB_NAME" != 'wsl-php-builder-73' ];then

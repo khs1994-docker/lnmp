@@ -4,12 +4,11 @@
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v20.10.2...20.10
+* https://github.com/khs1994-docker/lnmp/compare/v20.10.2...v20.10.3
 
 ### Bug fixes:
 
 ### Changes:
-
 
 ### Updates:
 
