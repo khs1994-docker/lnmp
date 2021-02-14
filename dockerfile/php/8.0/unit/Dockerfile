@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG PHP_VERSION=8.0.1
+ARG PHP_VERSION=8.0.2
 ARG USERNAME=khs1994
 ARG BASE=cli
 

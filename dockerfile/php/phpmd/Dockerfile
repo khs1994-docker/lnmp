@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:experimental
 
-ARG PHP_VERSION=7.4.14
+ARG PHP_VERSION=7.4.15
 ARG USERNAME=khs1994
 ARG BASE=composer
 

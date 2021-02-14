@@ -59,7 +59,7 @@ NODE_VERSION=15.8.0
 
 NODE_PREFIX=/usr/local
 
-PHP_VERSION=8.0.1
+PHP_VERSION=8.0.2
 
 MYSQL_DEB_VERSION=0.8.13-1
 
@@ -111,9 +111,9 @@ _php(){
   # command -v docker > /dev/null || exit 1
 
   # include redis memcached
-  # default install latest php version (8.0.1)
+  # default install latest php version (8.0.2)
 
-  PHP_VERSION=${1:-8.0.1}
+  PHP_VERSION=${1:-8.0.2}
 
   case ${PHP_VERSION} in
     5.6.* )
