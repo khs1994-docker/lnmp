@@ -93,8 +93,8 @@ jobs:
           && mirror="${add_mirror}"; \
         fi
 
-        # CACHE_IMAGE=ghcr.io/khs1994/php
-        CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
+        CACHE_IMAGE=ghcr.io/${DOCKER_HUB_USERNAME}/php
+        # CACHE_IMAGE=${DOCKER_HUB_USERNAME}/php
         VCS_REF=`git rev-parse --short HEAD`
 
         options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
@@ -102,6 +102,7 @@ jobs:
         --build-arg PHP_VERSION=$PHP_TAG_VERSION \
         --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
         --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
+        --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache \
         --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
         "
 
