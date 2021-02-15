@@ -182,7 +182,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * [Official PHP Dockerfiles](https://github.com/docker-library/php)
 
-* https://git.alpinelinux.org/cgit/aports/tree/community/php7/APKBUILD
+* https://git.alpinelinux.org/cgit/aports/tree/community/php8/APKBUILD
 
 * https://sources.debian.org/src/php7.3/7.3.11-1%7Edeb10u1/debian/control/
 
@@ -190,6 +190,6 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 
 * https://ram.tianon.xyz/post/2017/12/26/dockerize-compiled-software.html
 
-* https://engineering.docker.com/2019/04/multi-arch-images/
+* https://www.docker.com/blog/multi-arch-images/
 
-* https://engineering.docker.com/2019/06/getting-started-with-docker-for-arm-on-linux/
+* https://www.docker.com/blog/getting-started-with-docker-for-arm-on-linux/

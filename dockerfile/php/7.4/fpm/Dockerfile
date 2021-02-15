@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:experimental
 ARG PHP_VERSION=7.4.15
 
-FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine3.11 as php
+FROM --platform=$TARGETPLATFORM php:${PHP_VERSION}-fpm-alpine as php
 
 LABEL maintainer="khs1994-docker/lnmp <khs1994@khs1994.com>"
 
@@ -73,7 +73,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          libexif \
                          gmp \
                          # xmlrpc-c \
-                         enchant \
+                         enchant2 \
                          c-client \
                          icu-libs \
                          gnu-libiconv \
@@ -99,7 +99,7 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
                          gmp-dev \
                          # xmlrpc-c-dev \
                          bzip2-dev \
-                         enchant-dev \
+                         enchant2-dev \
                          imap-dev \
                          gettext-dev \
                          libwebp-dev \
@@ -119,10 +119,13 @@ RUN sed -i "s/dl-cdn.alpinelinux.org/${ALPINE_URL}/g" /etc/apk/repositories \
         && docker-php-source extract \
 # enchant-2.patch
         && cd /usr/src/php \
-        && curl -fsSL -o enchant-2.patch https://raw.githubusercontent.com/alpinelinux/aports/b315e28b96f16c2a8973a55a736e1e35482203dd/community/php7/enchant-2.patch \
-#        && patch -p1 < enchant-2.patch \
-        && rm -rf enchant-2.patch \
+        && curl -fsSL -o enchant-2-1.patch https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0040-remove-deprecated-call-and-deprecate-function-to-be-.patch \
+        && curl -fsSL -o enchant-2-2.patch https://salsa.debian.org/php-team/php/-/raw/debian/main/7.4/debian/patches/0041-Use-libenchant-2-when-available.patch \
+        && patch -p1 < enchant-2-1.patch \
+        && patch -p1 < enchant-2-2.patch \
+        && rm -rf enchant-2-*.patch \
 #        && ./buildconf --force \
+        && docker-php-ext-configure enchant \
         && cd - \
         \
         && docker-php-ext-configure zip \

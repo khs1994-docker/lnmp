@@ -99,6 +99,7 @@ jobs:
 
         options="--build-arg USERNAME=$DOCKER_HUB_USERNAME \
         --build-arg VCS_REF=$VCS_REF \
+        --build-arg PHP_VERSION=$PHP_TAG_VERSION \
         --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
         --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
         --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
