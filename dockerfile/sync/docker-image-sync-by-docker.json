@@ -1,15 +1,11 @@
 [
   {
-    "source": "gcr.io/google-containers/pause:3.2",
-    "dest": "gcr-mirror/pause:3.2"
+    "source": "gcr.io/google-containers/pause:3.4.1",
+    "dest": "gcr-mirror/pause:3.4.1-1"
   },
   {
-    "source": "k8s.gcr.io/pause:3.3",
-    "dest": "gcr-mirror/pause:3.3-try"
-  },
-  {
-    "source": "us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3",
-    "dest": "gcr-mirror/pause:3.3"
+    "source": "us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.4.1",
+    "dest": "gcr-mirror/pause:3.4.1-2"
   },
   {
     "source": "gcr.io/google-containers/coredns:1.7.0",
@@ -185,5 +181,12 @@
     "registry": "k8s.gcr.io",
     "image": "coredns",
     "ref": "1.7.0"
+  },
+  {
+    "source": "k8s.gcr.io/pause:3.4.1",
+    "dest": "gcr-mirror/pause:3.4.1",
+    "registry": "k8s.gcr.io",
+    "image": "pause",
+    "ref": "3.4.1"
   }
 ]

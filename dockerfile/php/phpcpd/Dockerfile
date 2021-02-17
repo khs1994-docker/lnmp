@@ -8,7 +8,7 @@ FROM alpine as downloader
 
 # Copy/Paste Detector (CPD) for PHP code.  https://github.com/sebastianbergmann/phpcpd
 
-ARG PHPCPD_VERSION=6.0.2
+ARG PHPCPD_VERSION=6.0.3
 
 RUN set -x ; apk add --no-cache curl \
     && curl -fsSL https://phar.phpunit.de/phpcpd-${PHPCPD_VERSION}.phar -o /usr/local/bin/phpcpd \
