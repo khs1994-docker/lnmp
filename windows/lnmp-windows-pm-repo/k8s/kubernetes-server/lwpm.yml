@@ -14,5 +14,5 @@ platform:
     os: linux
   - architecture: arm64
     os: linux
-  - architecture: arm
-    os: linux
+  # - architecture: arm
+  #   os: linux
