@@ -15,15 +15,26 @@ scripts:
   version: (php -v).split(" ")[1]
   postinstall: |
     if (!(Test-Path $PHP_PREFIX\php.ini)){
-    Copy-Item $PHP_PREFIX\php.ini-development $PHP_PREFIX\php.ini
+      Copy-Item $PHP_PREFIX\php.ini-development $PHP_PREFIX\php.ini
     }
+
+    # https://www.php.net/manual/en/openssl.installation.php
+    # $OPENSSL_CONF="$env:ProgramFiles\Common Files\SSL\openssl.cnf"
+
+    # if (!(Test-Path $OPENSSL_CONF)){
+    #   if(!(Test-Path $OPENSSL_CONF\..\)){
+    #     New-Item -ItemType Directory $OPENSSL_CONF\..\
+    #   }
+
+    #   Copy-Item $PHP_PREFIX\extras\ssl\openssl.cnf $OPENSSL_CONF
+    # }
 
     _install_ext $PHP_PREFIX
   test: |
     & ${PHP_PREFIX}/php -v
   install: |
     Function _install_ext($PHP_PREFIX){
-    $PHP_CACERT_DATE="2020-12-08"
+    $PHP_CACERT_DATE="2021-01-19"
 
     $PHP_INI="${PHP_PREFIX}/php.ini"
     $PHP_BIN="${PHP_PREFIX}/php.exe"
@@ -85,14 +96,12 @@ scripts:
     # @link https://github.com/khs1994-docker/lnmp/issues/339
     #
 
-    $a = php -r "echo ini_get('curl.cainfo');"
-
-    if ($a -ne "C:\bin\cacert-${PHP_CACERT_DATE}.pem"){
-    "curl.cainfo=C:\bin\cacert-${PHP_CACERT_DATE}.pem" `
-    | out-file -Append $PHP_INI -encoding utf8
+    if(!(Get-Content $PHP_INI | Select-String "^curl.cainfo=C:\\bin\\cacert-${PHP_CACERT_DATE}.pem")){
+      "curl.cainfo=C:\bin\cacert-${PHP_CACERT_DATE}.pem" `
+      | out-file -Append $PHP_INI -encoding utf8
     }
 
-    php -r "echo ini_get('curl.cainfo');"
+    Get-Content $PHP_INI | Select-String "^curl.cainfo=C:\\bin\\cacert-${PHP_CACERT_DATE}.pem"
 
     echo `n
     }
@@ -103,7 +112,7 @@ scripts:
     Copy-item -r -force $unzipDesc "C:\"
 
     _cleanup $unzipDesc
-  get-version: |
+  get-version: |-
     if(!($VERSION)){
     $VERSION=$stable_version
     }

@@ -1,9 +1,9 @@
 resources:
 - deploy.yaml
 images:
-  - name: k8s.gcr.io/ingress-nginx/controller:v0.43.0@sha256:9bba603b99bf25f6d117cf1235b6598c16033ad027b143c90fa5b3cc583c5713
+  - name: k8s.gcr.io/ingress-nginx/controller:v0.44.0@sha256:3dd0fac48073beaca2d67a78c746c7593f9c575168a17139a9955a82c63c4b9a
     newName: ccr.ccs.tencentyun.com/khs1994/nginx-ingress-controller
-    newTag: v0.43.0@sha256:9bba603b99bf25f6d117cf1235b6598c16033ad027b143c90fa5b3cc583c5713
+    newTag: v0.44.0@sha256:3dd0fac48073beaca2d67a78c746c7593f9c575168a17139a9955a82c63c4b9a
 patchesJson6902:
   - path: port.patch.json
     target:

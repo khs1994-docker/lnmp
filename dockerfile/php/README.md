@@ -118,7 +118,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] imap
 * [x] intl
 * [x] json
-* [x] ldap
+* [ ] ldap
 * [x] libxml
 * [x] mbstring
 * [x] mysqli
@@ -140,7 +140,7 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] pgsql
 * [x] phar
 * [x] posix
-* [x] pspell
+* [ ] pspell
 * [x] readline
 * [x] reflection
 * [x] session
@@ -161,7 +161,6 @@ $ for ext in `ls /usr/src/php/ext`; do echo '*' $( php -r "if(extension_loaded('
 * [x] tokenizer
 * [x] xml
 * [x] xmlreader
-* [ ] xmlrpc
 * [x] xmlwriter
 * [ ] xsl
 * [ ] zend_test

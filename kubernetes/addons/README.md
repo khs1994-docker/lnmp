@@ -8,11 +8,11 @@
 
 * Dashboard `2.1.0`
 
-* Istio `1.8.0`
+* Istio `1.9.0`
 
 ## ingress
 
-* ingress-nginx `0.43.0`
+* ingress-nginx `0.44.0`
 
 * ingress-kong `1.0`
 

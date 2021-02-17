@@ -23,3 +23,7 @@ $ docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.2
 ```
 
 ## quay.io
+
+## mcr.microsoft.com
+
+* https://github.com/microsoft/containerregistry/blob/master/docs/mcr-endpoints-guidance.md
