@@ -75,7 +75,7 @@ x-build-debian:
 
 x-php-common:
   &default-php
-  image: khs1994/php:8.0.0-fpm-alpine
+  image: khs1994/php:8.0.2-fpm-alpine
   volumes:
     - ./app:/app
     - type: volume
@@ -113,8 +113,8 @@ services:
       << : *default-build-debian
       context: ./dockerfile/mysql/
       dockerfile: Dockerfile
-    image: mysql:8.0.22
-    # image: khs1994/lnmp-mysql:8.0.22
+    image: mysql:8.0.23
+    # image: khs1994/lnmp-mysql:8.0.23
     # image: username/lnmp-mysql:tag
     environment:
       # MYSQL_ROOT_PASSWORD: mytest
@@ -193,9 +193,9 @@ services:
       # << : *default-build-debian
       context: ./dockerfile/redis/
       dockerfile: Dockerfile
-    image: redis:6.0.9-alpine
+    image: redis:6.0.10-alpine
     # image: username/lnmp-redis:tag
-    # image: khs1994/lnmp-redis:6.0.9
+    # image: khs1994/lnmp-redis:6.0.10
     # ports:
     #   - "127.0.0.1:6379:6379"
     volumes:
@@ -302,9 +302,9 @@ services:
   #     << : *default-build-debian
   #     context: ./dockerfile/mongodb/
   #     dockerfile: Dockerfile
-  #   image: mongo:4.4.2
+  #   image: mongo:4.4.3
   #   # image: username/lnmp-mongodb:tag
-  #   # image: khs1994/lnmp-mongodb:4.4.2
+  #   # image: khs1994/lnmp-mongodb:4.4.3
   #   volumes:
   #     # - ./config/mongodb/mongod.conf:/etc/mongod.conf:ro
   #     - mongodb-data:/data/db
@@ -581,7 +581,7 @@ services:
   minio:
     << : *common
     << : *default-labels
-    image: minio/minio:RELEASE.2020-09-26T03-44-56Z
+    image: minio/minio:RELEASE.2021-01-30T00-20-58Z
     command:
       - server
       - /data

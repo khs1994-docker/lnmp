@@ -1,4 +1,4 @@
-# Istio 1.8
+# Istio 1.9
 
 * https://github.com/istio
 
@@ -104,20 +104,20 @@ $ kubectl apply -f egress/ServiceEntry.yaml -n istio-test
 **jaeger**
 
 ```bash
-$ $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/jaeger.yaml
+$ $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/jaeger.yaml
 ```
 
 **kiali**
 
 ```bash
 # 第一次执行可能报错，稍等片刻再执行一次即可
-# $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml
+# $ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/kiali.yaml
 
 # bash
-$ curl https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml | sed -e "s/prometheus:9090/prometheus-k8s.monitoring:9090/g" -e "s/grafana:3000/grafana.monitoring:3000/g" | kubectl apply -f -
+$ curl https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/kiali.yaml | sed -e "s/prometheus:9090/prometheus-k8s.monitoring:9090/g" -e "s/grafana:3000/grafana.monitoring:3000/g" | kubectl apply -f -
 
 # PS1
-$ (Invoke-WebRequest https://raw.githubusercontent.com/istio/istio/release-1.7/samples/addons/kiali.yaml).toString().replace('prometheus:9090','prometheus-k8s.monitoring:9090').replace('grafana:3000','grafana.monitoring:3000') | kubectl apply -f -
+$ (Invoke-WebRequest https://raw.githubusercontent.com/istio/istio/release-1.9/samples/addons/kiali.yaml).toString().replace('prometheus:9090','prometheus-k8s.monitoring:9090').replace('grafana:3000','grafana.monitoring:3000') | kubectl apply -f -
 ```
 
 **Grafana**

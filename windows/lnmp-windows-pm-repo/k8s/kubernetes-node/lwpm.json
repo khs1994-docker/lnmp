@@ -10,10 +10,6 @@
       "os": "linux"
     },
     {
-      "architecture": "arm",
-      "os": "linux"
-    },
-    {
       "architecture": "amd64",
       "os": "windows"
     }

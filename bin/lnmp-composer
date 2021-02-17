@@ -24,7 +24,10 @@ docker run -i ${tty} --rm \
   --mount type=bind,src=$ScriptRoot/../config/composer/config.json,target=${COMPOSER_HOME}/config.json \
   bash \
   bash -c \
-  "set -x;chown -R ${LNMP_USER} ${COMPOSER_CACHE_DIR}; \
+  "set -x; \
+   mkdir -p ${COMPOSER_CACHE_DIR}/repo; \
+   mkdir -p ${COMPOSER_CACHE_DIR}/files; \
+   chown -R ${LNMP_USER} ${COMPOSER_CACHE_DIR}; \
    chown -R ${LNMP_USER} ${COMPOSER_HOME}; \
   "
 

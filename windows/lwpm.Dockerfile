@@ -1,6 +1,6 @@
 # https://hub.docker.com/_/microsoft-powershell?tab=description
 
-FROM mcr.microsoft.com/powershell:preview-alpine-3.11
+FROM mcr.microsoft.com/powershell:preview-alpine-3.12
 
 # ENV LWPM_DOCKER_USERNAME=
 # ENV LWPM_DOCKER_PASSWORD=

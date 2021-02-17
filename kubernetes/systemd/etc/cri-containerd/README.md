@@ -7,6 +7,5 @@ $ containerd config default > config.default.toml
 ```
 
 ```bash
-$ diff -u cri-containerd/1.4/config.default.toml cri-containerd/1.5/config.default.t
-oml
+$ diff -u 1.4/config.default.toml 1.5/config.default.toml
 ```

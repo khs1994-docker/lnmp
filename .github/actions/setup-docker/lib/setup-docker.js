@@ -120,8 +120,8 @@ async function run() {
 
     core.startGroup('install docker')
     await exec.exec('brew', [
-      'cask',
       'install',
+      '--cask',
       DOCKER_CHANNEL !== 'stable' ? 'docker' : 'docker'
     ]);
     core.endGroup();
@@ -244,18 +244,18 @@ echo "-- Docker is ready."
     ]);
     core.endGroup();
 
-    core.startGroup('update apt cache');
-    await exec.exec('sudo', [
-      'apt-get',
-      'update',
-    ]).catch(() => { });
-    core.endGroup();
-
     core.startGroup('remove default moby');
     await exec.exec('sudo', [
       'sh',
       '-c',
       "apt remove -y moby-buildx moby-cli moby-containerd moby-engine moby-runc"
+    ]).catch(() => { });
+    core.endGroup();
+
+    core.startGroup('update apt cache');
+    await exec.exec('sudo', [
+      'apt-get',
+      'update',
     ]).catch(() => { });
     core.endGroup();
 
@@ -265,12 +265,12 @@ echo "-- Docker is ready."
       '-c',
       'apt-get install -y /tmp/*.deb'
     ]).catch(async () => {
-      core.startGroup('download libseccomp2_2.4.3 deb for old os');
+      core.startGroup('download libseccomp2_2.4.4 deb for old os');
       await exec.exec('curl', [
         '-fsSL',
         '-o',
-        '/tmp/libseccomp2_2.4.3-1+b1_amd64.deb',
-        'http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.3-1+b1_amd64.deb'
+        '/tmp/libseccomp2_2.4.4-1~bpo10+1_amd64.deb',
+        'http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.4-1~bpo10+1_amd64.deb'
       ]);
       core.endGroup();
 

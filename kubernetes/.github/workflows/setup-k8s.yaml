@@ -12,7 +12,8 @@ defaults:
 
 jobs:
   setup-k8s:
-   runs-on: ubuntu-${{matrix.dist}}
+   # runs-on: ubuntu-${{matrix.dist}}
+   runs-on: ubuntu-20.04
    timeout-minutes: 20
    if: |
      ! contains( github.event.head_commit.message, '[skip ci]')
@@ -30,28 +31,24 @@ jobs:
      CNI_CALICO_EBPF: ${{matrix.CNI_CALICO_EBPF}}
      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
      GENERATE_CLI_HELP: ${{matrix.GENERATE_CLI_HELP}}
+     IPV6: ${{matrix.IPV6}}
    strategy:
      max-parallel: 1
      matrix:
        include:
-      #  - os: ubuntu
-      #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.19.0-rc.4
-      #    LNMP_K8S_GET: --url
-
       # next next version
-       - os: ubuntu
-         dist: 20.04
-         CI_KUBERNETES_VERSION: 1.21.0-alpha.0
-         LNMP_K8S_GET: --url
-         GENERATE_CLI_HELP: "true"
-
-      # next version
       #  - os: ubuntu
       #    dist: 20.04
-      #    CI_KUBERNETES_VERSION: 1.20.0-rc.0
+      #    CI_KUBERNETES_VERSION: 1.22.0-alpha.0
       #    LNMP_K8S_GET: --url
       #    GENERATE_CLI_HELP: "true"
+
+      # next version
+       - os: ubuntu
+         dist: 20.04
+         CI_KUBERNETES_VERSION: 1.21.0-alpha.3
+         LNMP_K8S_GET: --url
+         GENERATE_CLI_HELP: "true"
 
        # current stable version
        - os: ubuntu
@@ -64,7 +61,13 @@ jobs:
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0
          LNMP_K8S_GET: --url
-         GENERATE_CLI_HELP: "true"
+         # GENERATE_CLI_HELP: "true"
+       # ipv6
+       # - os: ubuntu
+       #  dist: 20.04
+       #  CI_KUBERNETES_VERSION: 1.20.0
+       #  LNMP_K8S_GET: --url
+       #  IPV6: "true"
        - os: ubuntu
          dist: 20.04
          CI_KUBERNETES_VERSION: 1.20.0
@@ -162,6 +165,7 @@ jobs:
 
          ip addr
          hostnamectl
+         ifconfig eth0
          export SERVER_IP=`ifconfig eth0 | grep "inet" | awk '{ print $2}' | cut -d ':' -f 2`
          ./lnmp-k8s > /dev/null
          echo $SERVER_IP > .server_ip
@@ -239,7 +243,7 @@ jobs:
 
          sudo systemctl cat docker
 
-         sudo systemctl cat cri-containerd@1.4
+         sudo systemctl cat cri-containerd@1.5
 
          sudo systemctl cat cri-o || true
          sudo cat /etc/sysconfig/crio || true
@@ -255,7 +259,7 @@ jobs:
          sudo rm -rf /etc/crio/crio.conf.d/00-default.conf || true
 
          test -z "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" \
-           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@1.4) || true
+           && (sudo systemctl daemon-reload ; sudo systemctl start cri-containerd@1.5) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--docker" \
            && (sudo systemctl restart docker || sudo journalctl -u docker) || true
          test "${LNMP_K8S_LOCAL_INSTALL_OPTIONS}" = "--crio" \
@@ -304,7 +308,7 @@ jobs:
 
          sudo journalctl -u kube-proxy
          sudo journalctl -u kubelet${KUBELET_SERVICE}
-         sudo journalctl -u cri-containerd@1.4 || true
+         sudo journalctl -u cri-containerd@1.5 || true
          sudo journalctl -u crio || true
 
          kubectl get csr
@@ -314,6 +318,15 @@ jobs:
          kubectl get csr
 
          sed -i "s#/opt/k8s#${K8S_ROOT:-/opt/k8s}#g" addons/cni/calico-custom/custom.patch.json
+
+         if [ "${IPV6}" = 'true' ];then
+           sed -i -e "s#_IP6#IP6#g" \
+             -e "s#_FELIX_IPV6SUPPORT#FELIX_IPV6SUPPORT#g" \
+             addons/cni/calico-custom/custom.patch.json
+           sed -i 's#assign_ipv6": "false#assign_ipv6": "true#g' \
+             addons/cni/calico/calico.yaml
+         fi
+
          git diff
          if [ "$CNI_CALICO_EBPF" = 'true' ];then
            export SERVER_IP=`cat .server_ip`
@@ -389,8 +402,31 @@ jobs:
          kubectl get all
          kubectl exec ${NGINX_POD_NAME} -- curl $NGINX_SERVICE_NAME || true
 
+         kubectl delete svc/${NGINX_SERVICE_NAME}
+
+         # ipv6
+         if [ "${IPV6}" = 'true' ];then
+           kubectl apply -f demo/ipv6
+
+           kubectl get svc/nginx -o yaml
+           kubectl get deployment/nginx -o yaml || true
+           kubectl get pod/${NGINX_POD_NAME} -o yaml
+
+           set -x
+           POD_IPV4_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 0).ip}}"`
+           curl ${POD_IPV4_IP}:80 || true
+           POD_IPV6_IP=`kubectl get pod/${NGINX_POD_NAME} -o go-template="{{(index .status.podIPs 1).ip}}"` || true
+           curl [${POD_IPV6_IP}]:80 || true
+           CLUSTER_IPV6_IP=`kubectl get svc/nginx -o go-template="{{ .spec.clusterIP }}"`
+           curl [${CLUSTER_IPV6_IP}]:80 || true
+           NODE_IPV6_IP=`ifconfig eth0 | grep "inet6" | awk '{ print $2}' | head -1`
+           curl [${NODE_IPV6_IP}]:8080 || true
+         fi
+
          kubectl delete deployment nginx || true
          kubectl delete pod ${NGINX_POD_NAME} || true
+         kubectl delete svc/${NGINX_SERVICE_NAME} || true
+
          kubectl get all
          # test ingress-nginx
          HTTP_PORT=`kubectl get service -n ingress-nginx | grep ingress-nginx | grep NodePort | awk '{print $5}' | cut -d ':' -f 2 | cut -d / -f 1`
@@ -478,9 +514,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.19.0-config
-         BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.20.0-rc.0' ];then
+         BASE_BRANCH=v1.21.0-alpha.2-config
+         # BASE_BRANCH=master
+         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.3' ];then
            exit 0
          fi
 
@@ -505,9 +541,9 @@ jobs:
        run:
         |
          export PATH=${K8S_ROOT:-/opt/k8s}/bin:$PATH
-         BASE_BRANCH=v1.20.0-rc.0-config
+         BASE_BRANCH=v1.21.0-alpha.1-config
          BASE_BRANCH=master
-         if [ $CI_KUBERNETES_VERSION != '1.21.0-alpha.0' ];then
+         if [ $CI_KUBERNETES_VERSION != '1.22.0-alpha.0' ];then
            exit 0
          fi
 

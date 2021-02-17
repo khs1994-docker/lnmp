@@ -1,0 +1,34 @@
+--- 1.4/config.default.toml	2020-10-14 19:46:29.797933300 +0800
++++ 1.5/config.default.toml	2021-01-30 20:20:14.176327400 +0800
+@@ -26,6 +26,7 @@
+   uid = 0
+   gid = 0
+   level = ""
++  format = ""
+ 
+ [metrics]
+   address = ""
+@@ -72,7 +73,7 @@
+       snapshotter = "overlayfs"
+       default_runtime_name = "runc"
+       no_pivot = false
+-      disable_snapshot_annotations = false
++      disable_snapshot_annotations = true
+       discard_unpacked_layers = false
+       [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
+         runtime_type = ""
+@@ -126,8 +127,14 @@
+     platforms = ["linux/amd64"]
+   [plugins."io.containerd.service.v1.diff-service"]
+     default = ["walking"]
++  [plugins."io.containerd.snapshotter.v1.btrfs"]
++    root_path = ""
+   [plugins."io.containerd.snapshotter.v1.devmapper"]
+     root_path = ""
+     pool_name = ""
+     base_image_size = ""
+     async_remove = false
++  [plugins."io.containerd.snapshotter.v1.native"]
++    root_path = ""
++  [plugins."io.containerd.snapshotter.v1.overlayfs"]
++    root_path = ""

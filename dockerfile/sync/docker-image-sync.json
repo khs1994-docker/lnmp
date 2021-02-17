@@ -8,16 +8,16 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:15.5.0-alpine",
-    "dest": "library-mirror/node:15.5.0-alpine"
+    "source": "node:15.8.0-alpine",
+    "dest": "library-mirror/node:15.8.0-alpine"
   },
   {
     "source": "node:14.15.0-alpine",
     "dest": "library-mirror/node:14.15.0-alpine"
   },
   {
-    "source": "golang:1.15.6-alpine",
-    "dest": "library-mirror/golang:1.15.6-alpine"
+    "source": "golang:1.16.0-alpine",
+    "dest": "library-mirror/golang:1.16.0-alpine"
   },
   {
     "source": "golang:alpine",
@@ -40,8 +40,8 @@
     "dest": "library-mirror/docker:test-dind-rootless"
   },
   {
-    "source": "library/alpine:3.12",
-    "dest": "library-mirror/alpine:3.12"
+    "source": "library/alpine:3.13",
+    "dest": "library-mirror/alpine:3.13"
   },
   {
     "source": "library/alpine:edge",
@@ -64,16 +64,16 @@
     "dest": "library-mirror/mysql:latest"
   },
   {
-    "source": "library/mysql:8.0.22",
-    "dest": "library-mirror/mysql:8.0.22"
+    "source": "library/mysql:8.0.23",
+    "dest": "library-mirror/mysql:8.0.23"
   },
   {
-    "source": "library/mysql:5.7.31",
-    "dest": "library-mirror/mysql:5.7.31"
+    "source": "library/mysql:5.7.32",
+    "dest": "library-mirror/mysql:5.7.32"
   },
   {
-    "source": "library/mysql:5.6.49",
-    "dest": "library-mirror/mysql:5.6.49"
+    "source": "library/mysql:5.6.50",
+    "dest": "library-mirror/mysql:5.6.50"
   },
   {
     "source": "library/mariadb:latest",
@@ -84,12 +84,12 @@
     "dest": "library-mirror/mariadb:10.5.8"
   },
   {
-    "source": "library/mariadb:10.4.15",
-    "dest": "library-mirror/mariadb:10.4.15"
+    "source": "library/mariadb:10.4.17",
+    "dest": "library-mirror/mariadb:10.4.17"
   },
   {
-    "source": "library/mariadb:10.3.25",
-    "dest": "library-mirror/mariadb:10.3.25"
+    "source": "library/mariadb:10.3.27",
+    "dest": "library-mirror/mariadb:10.3.27"
   },
   {
     "source": "library/registry:latest",
@@ -104,8 +104,8 @@
     "dest": "library-mirror/mongo:latest"
   },
   {
-    "source": "library/mongo:4.4.2",
-    "dest": "library-mirror/mongo:4.4.2"
+    "source": "library/mongo:4.4.3",
+    "dest": "library-mirror/mongo:4.4.3"
   },
   {
     "source": "library/kong:latest",
@@ -116,24 +116,24 @@
     "dest": "library-mirror/kong:alpine"
   },
   {
-    "source": "library/kong:2.2.1",
-    "dest": "library-mirror/kong:2.2.1"
+    "source": "library/kong:2.3.2",
+    "dest": "library-mirror/kong:2.3.2"
   },
   {
-    "source": "library/kong:2.2.1-alpine",
-    "dest": "library-mirror/kong:2.2.1-alpine"
+    "source": "library/kong:2.3.2-alpine",
+    "dest": "library-mirror/kong:2.3.2-alpine"
   },
   {
     "source": "library/redis:alpine",
     "dest": "library-mirror/redis:alpine"
   },
   {
-    "source": "library/redis:5.0.9-alpine",
-    "dest": "library-mirror/redis:5.0.9-alpine"
+    "source": "library/redis:5.0.10-alpine",
+    "dest": "library-mirror/redis:5.0.10-alpine"
   },
   {
-    "source": "library/redis:6.0.9-alpine",
-    "dest": "library-mirror/redis:6.0.9-alpine"
+    "source": "library/redis:6.0.10-alpine",
+    "dest": "library-mirror/redis:6.0.10-alpine"
   },
   {
     "source": "library/memcached:alpine",
@@ -168,24 +168,24 @@
     "dest": "library-mirror/postgres:alpine"
   },
   {
-    "source": "library/postgres:13.1-alpine",
-    "dest": "library-mirror/postgres:13.1-alpine"
+    "source": "library/postgres:13.2-alpine",
+    "dest": "library-mirror/postgres:13.2-alpine"
   },
   {
     "source": "library/rabbitmq:alpine",
     "dest": "library-mirror/rabbitmq:alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.9-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.9-alpine"
+    "source": "library/rabbitmq:3.8.11-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.11-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
     "dest": "library-mirror/rabbitmq:management-alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.9-management-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.9-management-alpine"
+    "source": "library/rabbitmq:3.8.11-management-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.11-management-alpine"
   },
   {
     "source": "library/phpmyadmin:latest",
@@ -204,8 +204,8 @@
     "dest": "library-mirror/phpmyadmin:5.0.4-fpm-alpine"
   },
   {
-    "source": "minio/minio:RELEASE.2020-09-26T03-44-56Z",
-    "dest": "minio:RELEASE.2020-09-26T03-44-56Z"
+    "source": "minio/minio:RELEASE.2021-01-30T00-20-58Z",
+    "dest": "minio:RELEASE.2021-01-30T00-20-58Z"
   },
   {
     "source": "dockerpracticesig/docker_practice:vuepress",

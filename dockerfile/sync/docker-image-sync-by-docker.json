@@ -80,19 +80,19 @@
     "dest": "tektoncd-triggers-eventlistenersink:v0.9.0@sha256:3d9cd3788c03ea6f9c85980d3b70ded295766f222e5d30fc1790249e88a10880"
   },
   {
-    "source": "mcr.microsoft.com/powershell:preview-alpine-3.11",
-    "dest": "powershell:preview-alpine-3.11",
+    "source": "mcr.microsoft.com/powershell:preview-alpine-3.12",
+    "dest": "powershell:preview-alpine-3.12",
     "registry": "mcr.microsoft.com",
     "image": "powershell",
-    "ref": "preview-alpine-3.11"
+    "ref": "preview-alpine-3.12"
   },
   {
-    "source": "k8s.gcr.io/ingress-nginx/controller:v0.41.2@sha256:1f4f402b9c14f3ae92b11ada1dfe9893a88f0faeb0b2f4b903e2c67a0c3bf0de",
-    "dest": "nginx-ingress-controller:v0.41.2@sha256:1f4f402b9c14f3ae92b11ada1dfe9893a88f0faeb0b2f4b903e2c67a0c3bf0de"
+    "source": "k8s.gcr.io/ingress-nginx/controller:v0.44.0@sha256:3dd0fac48073beaca2d67a78c746c7593f9c575168a17139a9955a82c63c4b9a",
+    "dest": "nginx-ingress-controller:v0.44.0@sha256:3dd0fac48073beaca2d67a78c746c7593f9c575168a17139a9955a82c63c4b9a"
   },
   {
-    "source": "k8s.gcr.io/metrics-server/metrics-server:v0.4.1",
-    "dest": "gcr-mirror/metrics-server:v0.4.1"
+    "source": "k8s.gcr.io/metrics-server/metrics-server:v0.4.2",
+    "dest": "gcr-mirror/metrics-server:v0.4.2"
   },
   {
     "source": "gcr.io/k8s-staging-metrics-server/metrics-server:master",
