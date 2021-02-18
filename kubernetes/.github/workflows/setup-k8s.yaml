@@ -384,7 +384,7 @@ jobs:
          # test dns
          kubectl describe pod coredns -n kube-system
          kubectl logs $(kubectl describe pod coredns -n kube-system | grep "Name:" | head -1 | awk '{ print $2}') -n kube-system
-         kubectl run nginx --image nginx:1.19.6-alpine
+         kubectl run nginx --image nginx:1.19.7-alpine
          sleep 20
          kubectl get all
          kubectl get pod -o wide

@@ -103,7 +103,6 @@ jobs:
         --build-arg PHP_VERSION=$PHP_TAG_VERSION \
         --cache-from=khs1994/php:${FOLDER}-arm-${TYPE,,}-cache \
         --cache-from=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache \
-        --cache-from=${DOCKER_HUB_USERNAME}/php:${FOLDER}-${TYPE,,}-cache \
         --cache-to=${CACHE_IMAGE}:${FOLDER}-${TYPE,,}-cache"
 
         echo ::group::Build Unit
