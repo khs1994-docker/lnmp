@@ -9,4 +9,4 @@ x-common:
 services:
   rabbitmq:
     << : *common
-    image: ${LNMP_LIBRARY_NS:-library}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.8.11}-management-alpine
+    image: ${LNMP_LIBRARY_NS:-library}/rabbitmq:${LNMP_RABBITMQ_VERSION:-3.8.12}-management-alpine

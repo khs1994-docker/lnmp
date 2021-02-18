@@ -104,8 +104,8 @@
     "dest": "library-mirror/mongo:latest"
   },
   {
-    "source": "library/mongo:4.4.3",
-    "dest": "library-mirror/mongo:4.4.3"
+    "source": "library/mongo:4.4.4",
+    "dest": "library-mirror/mongo:4.4.4"
   },
   {
     "source": "library/kong:latest",
@@ -176,16 +176,16 @@
     "dest": "library-mirror/rabbitmq:alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.11-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.11-alpine"
+    "source": "library/rabbitmq:3.8.12-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.12-alpine"
   },
   {
     "source": "library/rabbitmq:management-alpine",
     "dest": "library-mirror/rabbitmq:management-alpine"
   },
   {
-    "source": "library/rabbitmq:3.8.11-management-alpine",
-    "dest": "library-mirror/rabbitmq:3.8.11-management-alpine"
+    "source": "library/rabbitmq:3.8.12-management-alpine",
+    "dest": "library-mirror/rabbitmq:3.8.12-management-alpine"
   },
   {
     "source": "library/phpmyadmin:latest",

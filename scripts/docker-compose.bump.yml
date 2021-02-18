@@ -23,13 +23,13 @@ services:
     image: nginx:1.19.7-alpine
 
   rabbitmq:
-    image: rabbitmq:3.8.11-management-alpine
+    image: rabbitmq:3.8.12-management-alpine
 
   postgresql:
     image: postgres:13.2-alpine
 
   mongodb:
-    image: mongo:4.4.3
+    image: mongo:4.4.4
 
   phpmyadmin:
     image: phpmyadmin:5.0.4
