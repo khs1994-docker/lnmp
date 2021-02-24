@@ -32,7 +32,7 @@ services:
     image: mongo:4.4.4
 
   phpmyadmin:
-    image: phpmyadmin:5.0.4
+    image: phpmyadmin:5.1.0
 
   httpd:
     image: httpd:2.4.46-alpine
