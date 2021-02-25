@@ -8,8 +8,8 @@
     "dest": "library-mirror/node:alpine"
   },
   {
-    "source": "node:15.8.0-alpine",
-    "dest": "library-mirror/node:15.8.0-alpine"
+    "source": "node:15.10.0-alpine",
+    "dest": "library-mirror/node:15.10.0-alpine"
   },
   {
     "source": "node:14.15.0-alpine",
@@ -196,12 +196,12 @@
     "dest": "library-mirror/phpmyadmin:fpm-alpine"
   },
   {
-    "source": "library/phpmyadmin:5.0.4",
-    "dest": "library-mirror/phpmyadmin:5.0.4"
+    "source": "library/phpmyadmin:5.1.0",
+    "dest": "library-mirror/phpmyadmin:5.1.0"
   },
   {
-    "source": "library/phpmyadmin:5.0.4-fpm-alpine",
-    "dest": "library-mirror/phpmyadmin:5.0.4-fpm-alpine"
+    "source": "library/phpmyadmin:5.1.0-fpm-alpine",
+    "dest": "library-mirror/phpmyadmin:5.1.0-fpm-alpine"
   },
   {
     "source": "minio/minio:RELEASE.2021-01-30T00-20-58Z",

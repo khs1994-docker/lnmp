@@ -19,7 +19,7 @@ phpmyadmin                   latest                         e8e3976e7f7f        
 
 services:
   phpmyadmin:
-    image: phpmyadmin:5.0.4-fpm-alpine
+    image: phpmyadmin:5.1.0-fpm-alpine
     volumes:
       - phpmyadmin:/var/www/html
 
