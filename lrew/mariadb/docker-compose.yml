@@ -30,7 +30,7 @@ services:
     ports:
       - "${LNMP_MYSQL_PORT:-127.0.0.1:3306}:3306"
     volumes:
-      - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
+      # - ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}:/etc/mysql/conf.d/docker.cnf:ro,cached
       # @link https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
       - ./scripts/backup/init:/docker-entrypoint-initdb.d:ro,cached
       - type: volume
@@ -43,11 +43,19 @@ services:
       - --character-set-server=utf8mb4
     secrets:
       - db_root_password
+      - source: mariadb_conf
+        target: /etc/mysql/conf.d/docker.cnf
+        # mode: 0444
+        # uid: "999"
+        # gid: "999"
 
 secrets:
   db_root_password:
     << : *common-label
     file: ./secrets/${LNMP_DB_ROOT_PASSWORD_PATH:-db_root_password.txt}
+  mariadb_conf:
+    << : *common-label
+    file: ./config/mariadb/${LNMP_MARIADB_CONF:-docker.cnf}
 
 volumes:
   mariadb-data:

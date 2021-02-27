@@ -341,6 +341,7 @@ Commands:
   code-init            Init vsCode remote development env
   code-run             Run command on vsCode remote workspace (e.g. ./lnmp-docker code-run -w /app/laravel composer install)
   code-exec            Exec command on vsCode remote workspace (e.g. ./lnmp-docker code-exec -w /app/laravel workspace composer install)
+  mount                Attaches and mounts a physical disk in all WSL2 distributions.(please exec this command before docker desktop running)
 
 lrew(package):
   lrew-init            Init a new lrew package
@@ -707,7 +708,13 @@ if ($APP_ROOT.Substring(0, 1) -eq '/' -and $WSL2_DIST) {
 
     $cmd = convert_args_to_string_if_use_wsl2 $args
 
-    wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
+    wsl -d $WSL2_DIST command -v $COMPOSE_BIN `> /dev/null `|`| exit 1
+
+    if($?){
+      wsl -d $WSL2_DIST -- sh -xc "$COMPOSE_BIN $cmd"
+    }else{
+      printWarning "Docker Desktop not running"
+    }
   }
 }
 
