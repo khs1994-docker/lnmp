@@ -61,7 +61,7 @@
 │   │           │   ├── 60-galera.cnf
 │   │           │   └── 99-enable-encryption.cnf.preset
 │   │           │       └── enable_encryption.preset
-│   │           └── my.cnf -> mariadb.cnf
+│   │           └── my.cnf -> /etc/alternatives/my.cnf
 │   ├── docker.cnf
 │   └── docker.production.cnf
 ├── mongodb
