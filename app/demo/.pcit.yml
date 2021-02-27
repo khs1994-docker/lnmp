@@ -127,7 +127,7 @@ services:
 
 jobs:
   COMPOSER_VERSION:
-    - 2.0.9
+    - 2.0.11
   PHP_VERSION:
     - 8.0.2
     - 7.4.15
@@ -139,7 +139,7 @@ jobs:
   NGINX_VERSION:
     - 1.17.0
   REDIS_VERSION:
-    - 6.0.10
+    - 6.2.0
   MYSQL_VERSION:
     # - 8.0.21
     - 5.7.22

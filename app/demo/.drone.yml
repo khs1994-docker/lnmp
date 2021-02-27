@@ -29,7 +29,7 @@ clone:
 steps:
   # install dep
   - name: install
-    # image: composer:2.0.9
+    # image: composer:2.0.11
     image: khs1994/php:8.0.2-composer-alpine
     commands:
       - pwd
@@ -214,7 +214,7 @@ services:
   #     - POSTGRES_DB=test
 
   - name: redis
-    image: redis:6.0.10-alpine
+    image: redis:6.2.0-alpine
 
   # - name: mongodb
   #   image: mongo:4.1.0
@@ -227,7 +227,7 @@ volumes:
 
 # matrix:
 #   COMPOSER_VERSION:
-#     - 2.0.9
+#     - 2.0.11
 #   PHP_VERSION:
 #     - 8.0.2
 #     - 7.4.15
@@ -239,7 +239,7 @@ volumes:
 #   NGINX_VERSION:
 #     - 1.17.0
 #   REDIS_VERSION:
-#     - 6.0.10
+#     - 6.2.0
 #   MYSQL_VERSION:
 #     # - 8.0.23
 #     - 5.7.22
@@ -251,9 +251,9 @@ volumes:
 # matrix:
 #   include:
 #     - PHP_VERSION=7.2.34
-#       REDIS_VERSION=6.0.10
+#       REDIS_VERSION=6.2.0
 #     - PHP_VERSION=7.1.33
-#       REDIS_VERSION=6.0.10
+#       REDIS_VERSION=6.2.0
 
 # trigger:
 #   branch:
