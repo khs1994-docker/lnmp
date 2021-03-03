@@ -75,7 +75,12 @@ async function buildx() {
       '--driver',
       'docker-container',
       '--driver-opt',
-      'image=moby/buildkit:master'
+      // 'image=moby/buildkit:master'
+      // moby/buildkit:buildx-stable-1
+      'image=ghcr.io/dpsigs/moby-buildkit:master'
+      // $ docker pull moby/buildkit:master
+      // $ docker tag moby/buildkit:master ghcr.io/dpsigs/moby-buildkit:master
+      // $ docker push ghcr.io/dpsigs/moby-buildkit:master
     ]);
     core.endGroup();
 

@@ -214,7 +214,7 @@ jobs:
         FOLDER: nightly
         PHP_TAG_VERSION: nightly
         TYPE: ${{ matrix.TYPE }}
-        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php # ghcr.io/khs1994/php
+        add_mirror: registry.us-east-1.aliyuncs.com/khs1994-us/php pcit-docker.pkg.coding.net/khs1994-docker/khs1994/php ghcr.io/khs1994/php
         PHP_VCS_REF: ${{ github.event.inputs.PHP_VCS_REF }}
       name: 'Build Image'
       id: build
