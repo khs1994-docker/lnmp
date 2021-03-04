@@ -76,7 +76,7 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
   }
   catch {
     write-host "==> [error] check blob error, skip" -ForegroundColor Red
-
+    if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
     throw 'error'
   }
 
@@ -84,7 +84,7 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
     $blob_dest = Get-Blob $source_token $source_image $digest $source_registry
     if (!$blob_dest) {
       write-host "==> [error] get blob error" -ForegroundColor Red
-
+      if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
       throw 'error'
     }
     # upload  blob
@@ -418,9 +418,10 @@ manifest not found, skip" -ForegroundColor Red
   }
 
   if ($manifests_list_not_exists) {
+
     write-host "==> [sync end] manifest list not exists" `
       -ForegroundColor Yellow
-
+    if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
     return $manifest_json_path
   }
 
@@ -439,6 +440,7 @@ manifest not found, skip" -ForegroundColor Red
   }
 
   write-host "==> [sync end]" -ForegroundColor Blue
+  if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
 }
 
 # main
@@ -470,6 +472,7 @@ foreach ($item in $sync_config) {
     $dest = $source
   }
 
+  if ($env:GITHUB_ACTIONS) { Write-Host "::group::Sync [ $source ] to [ $dest ]" }
   write-host "==> [sync start] Sync [ $source ] to [ $dest ]" -ForegroundColor Blue
 
   _sync $source $dest $item
