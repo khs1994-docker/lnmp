@@ -208,11 +208,11 @@ $ ./lnmp-docker down
 |[HTTPD](https://github.com/docker-library/docs/tree/master/httpd)         |`httpd:2.4.46-alpine`           | **2.4.46**          |`alpine:3.12`    |
 |[MySQL](https://github.com/docker-library/docs/tree/master/mysql)         |`mysql:8.0.23`                  | **8.0.23**          |`debian:buster-slim`|
 |[MariaDB](https://github.com/docker-library/docs/tree/master/mariadb)     |`mariadb:10.5.9`                | **10.5.9**          |`ubuntu:focal`  |
-|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.2.0-alpine`            | **6.2.0**           |`alpine:3.13`    |
+|[Redis](https://github.com/docker-library/docs/tree/master/redis)         |`redis:6.2.1-alpine`            | **6.2.1**           |`alpine:3.13`    |
 |[PHP-FPM](https://github.com/khs1994-docker/php)                          |`khs1994/php:8.0.2-fpm-alpine`     | **8.0.2**      |`alpine:3.13`    |
 |[Composer](https://github.com/docker-library/docs/tree/master/composer)   |`khs1994/php:8.0.2-composer-alpine`| **2.0.11**     |`alpine:3.13`    |
 |[Memcached](https://github.com/docker-library/docs/tree/master/memcached) |`memcached:1.6.9-alpine`           | **1.6.9**       |`alpine:3.13`    |
-|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.12-management-alpine` | **3.8.12**       |`alpine:3.13`    |
+|[RabbitMQ](https://github.com/docker-library/docs/tree/master/rabbitmq)   |`rabbitmq:3.8.14-management-alpine` | **3.8.14**       |`alpine:3.13`    |
 |[PostgreSQL](https://github.com/docker-library/docs/tree/master/postgres) |`postgres:13.2-alpine`             | **13.2**        |`alpine:3.13`    |
 |[MongoDB](https://github.com/docker-library/docs/tree/master/mongo)       |`mongo:4.4.4`                      | **4.4.4**       |`ubuntu:bionic`  |
 |[PHPMyAdmin](https://github.com/docker-library/docs/tree/master/phpmyadmin)|`phpmyadmin:5.1.0`                | **5.1.0**       |`alpine:3.13`    |
