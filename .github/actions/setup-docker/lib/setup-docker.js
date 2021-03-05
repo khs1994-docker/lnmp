@@ -270,13 +270,6 @@ echo "-- Docker is ready."
       '-c',
       'apt-get install -y /tmp/*.deb'
     ]).catch(async () => {
-      core.startGroup('download libseccomp2_2.4.4 deb for old os');
-      await exec.exec('curl', [
-        '-fsSL',
-        '-o',
-        '/tmp/libseccomp2_2.4.4-1~bpo10+1_amd64.deb',
-        'http://ftp.us.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.4.4-1~bpo10+1_amd64.deb'
-      ]);
       core.endGroup();
 
       core.startGroup('install docker');
