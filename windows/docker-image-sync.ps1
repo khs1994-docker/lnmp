@@ -76,7 +76,10 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
   }
   catch {
     write-host "==> [error] check blob error, skip" -ForegroundColor Red
-    if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
+    if ($env:GITHUB_ACTIONS) {
+      Write-Host "::warning::check blob error, skip"
+      Write-Host "::endgroup::"
+    }
     throw 'error'
   }
 
@@ -84,11 +87,21 @@ Function _upload_blob($dest_token, $dest_image, $digest, $dest_registry,
     $blob_dest = Get-Blob $source_token $source_image $digest $source_registry
     if (!$blob_dest) {
       write-host "==> [error] get blob error" -ForegroundColor Red
-      if ($env:GITHUB_ACTIONS) { Write-Host "::endgroup::" }
-      throw 'error'
+      if ($env:GITHUB_ACTIONS) {
+        Write-Host "::warning::get blob error"
+        Write-Host "::endgroup::"
+      }
+      throw 'get blob error'
     }
     # upload  blob
-    New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry | out-host
+    $result, $_ = New-Blob $dest_token $dest_image $blob_dest $media_type $dest_registry
+    if (!$result) {
+      if ($env:GITHUB_ACTIONS) {
+        Write-Host "::warning::upload blob error"
+        Write-Host "::endgroup::"
+      }
+      throw 'upload blob error'
+    }
   }
 }
 
