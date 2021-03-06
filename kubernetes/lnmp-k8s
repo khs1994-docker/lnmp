@@ -344,7 +344,7 @@ fi
 _etcd_install(){
   local url_official="https://github.com/etcd-io/etcd/releases/download"
   local url="https://mirrors.huaweicloud.com/etcd"
-  local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar.gz"
+  local TAR_FILE="etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}.tar"
   __download(){
     _use_cn_mirror ${url}/v${ETCD_VERSION}/${TAR_FILE} || url=$url_official
 
@@ -372,7 +372,7 @@ _etcd_install(){
     return
   fi
 
-  $(_sudo) tar --no-same-owner -zxf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
+  $(_sudo) tar --no-same-owner -xf ${TMP_ROOT}/${TAR_FILE} -C ${TMP_ROOT}
   $(_sudo) cp ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}/etcd* ${K8S_ROOT}/bin/
   $(_sudo) chown -R root:root ${K8S_ROOT}/bin/
   $(_sudo) rm -rf ${TMP_ROOT}/etcd-v${ETCD_VERSION}-${GOOS}-${GOARCH}

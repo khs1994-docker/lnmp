@@ -53,7 +53,7 @@ async function buildx() {
       'run',
       '--rm',
       '--privileged',
-      'tonistiigi/binfmt:latest',
+      'ghcr.io/dpsigs/tonistiigi-binfmt:latest',
       "--install",
       "all"
     ]);
@@ -124,6 +124,7 @@ async function run() {
       '--version']).catch(() => { });
 
     core.startGroup('install docker')
+    await exec.exec('brew', ['update'])
     await exec.exec('brew', [
       'install',
       '--cask',
