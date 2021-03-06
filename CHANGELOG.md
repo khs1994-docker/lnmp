@@ -1,10 +1,10 @@
 # Changelog
 
-## v20.10.4
+## v20.10.5
 
 ### Compare
 
-* https://github.com/khs1994-docker/lnmp/compare/v20.10.3...v20.10.4
+* https://github.com/khs1994-docker/lnmp/compare/v20.10.4...20.10
 
 ### Bug fixes:
 
@@ -12,6 +12,4 @@
 
 ### Updates:
 
-* [PHP `8.0.2` `7.4.15` `7.3.27`](https://www.php.net/ChangeLog-8.php#8.0.2)
-* [NGINX `1.19.7`](https://nginx.org/en/CHANGES)
-* [Redis `6.2.1`](https://raw.githubusercontent.com/redis/redis/6.2/00-RELEASENOTES)
+* [PHP `8.0.3` `7.4.16` `7.3.27`](https://www.php.net/ChangeLog-8.php#8.0.3)
