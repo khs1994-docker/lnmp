@@ -161,7 +161,6 @@ $ sudo route add default gw 192.168.199.1
 * https://github.com/Mengkzhaoyun/ansible
 * https://github.com/coreos/fcct/blob/master/docs/config-fcos-v1_1.md
 * https://www.cnblogs.com/mengkzhaoyun/p/7599695.html
-* https://coreos.com/os/docs/latest/generate-self-signed-certificates.html
 * https://github.com/cloudflare/cfssl
 * https://docs.fedoraproject.org/en-US/fedora-coreos/getting-started/
 * https://github.com/coreos/coreos-installer/
