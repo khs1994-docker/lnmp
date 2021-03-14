@@ -50,8 +50,8 @@ jobs:
             DIST_FILE: khs1994-wsl-php80-8.0.3-1.fc33.x86_64.rpm
           - JOB_NAME: wsl-php-builder-fc33-nightly
             DIST_FILE: khs1994-wsl-php81-0.0.0-1.fc33.x86_64.rpm
-          - JOB_NAME: wsl-php-builder-fc34-80
-            DIST_FILE: khs1994-wsl-php80-8.0.3-1.fc34.x86_64.rpm
+          - JOB_NAME: wsl-php-builder-fc35-80
+            DIST_FILE: khs1994-wsl-php80-8.0.3-1.fc35.x86_64.rpm
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

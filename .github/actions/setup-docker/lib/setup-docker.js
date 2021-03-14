@@ -287,26 +287,19 @@ echo "-- Docker is ready."
     core.exportVariable('DOCKER_CONFIG', '/home/runner/.docker');
 
     core.debug('add apt-key');
-    await exec.exec('curl', [
-      '-fsSL',
-      '-o',
-      '/tmp/docker.gpg',
-      'https://download.docker.com/linux/ubuntu/gpg',
-    ]);
-    await exec.exec('sudo', [
-      'apt-key',
-      'add',
-      '/tmp/docker.gpg',
-    ]);
+    await shell(`
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    `);
 
     message = 'add apt source';
     core.debug(message);
     const UBUNTU_CODENAME = await shell('lsb_release -cs');
     core.startGroup(message);
-    await exec.exec('sudo', [
-      'add-apt-repository',
-      `deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}`,
-    ]);
+    await shell(`
+    echo \
+      "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+      ${UBUNTU_CODENAME} ${DOCKER_CHANNEL}" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    `)
     core.endGroup();
 
     message = 'update apt cache'
