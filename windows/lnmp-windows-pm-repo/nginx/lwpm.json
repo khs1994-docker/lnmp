@@ -8,7 +8,7 @@
   "path": [
     "C:\\nginx"
   ],
-  "pre-version": "1.19.7",
+  "pre-version": "1.19.8",
   "releases": "https://nginx.org/en/download.html",
   "scripts": {
     "install": "_cleanup nginx\n_unzip $filename nginx\n\n_mkdir C:\\nginx\n\nif(Test-Path C:\\nginx\\conf\\nginx.conf){\nCopy-Item C:\\nginx\\conf\\nginx.conf ~/Downloads/lnmp-docker-cache/nginx.conf.backup\n}\n\nCopy-item -r -force \"nginx\\nginx-${VERSION}\\*\" \"C:\\nginx\"\n\n_cleanup nginx\n\ncp $home/lnmp/windows/config/nginx.conf C:/nginx/conf\n",

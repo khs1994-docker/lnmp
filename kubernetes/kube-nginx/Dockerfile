@@ -1,6 +1,6 @@
 FROM alpine:3.13
 
-ENV NGINX_VERSION=1.19.7
+ENV NGINX_VERSION=1.19.8
 
 RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g" /etc/apk/repositories \
     && apk add --no-cache --virtual .build_deps \

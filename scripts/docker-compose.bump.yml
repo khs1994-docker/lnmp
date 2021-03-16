@@ -20,7 +20,7 @@ services:
     image: composer:2.0.11
 
   nginx:
-    image: nginx:1.19.7-alpine
+    image: nginx:1.19.8-alpine
 
   rabbitmq:
     image: rabbitmq:3.8.14-management-alpine
@@ -50,7 +50,7 @@ services:
     image: node:15.11.0-alpine
 
   go:
-    image: golang:1.16.0-alpine
+    image: golang:1.16.2-alpine
 
   alpine:
     image: alpine:3.13
