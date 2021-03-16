@@ -152,20 +152,32 @@ _download_src(){
 
 # 2. install packages
 
-_install_php_run_dep(){
+_install_epel(){
+  $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
 
+  $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
+}
+
+_install_remi(){
+  $(_sudo) wget -N https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
+  $(_sudo) rpm -Uvh remi-release-${VERSION_ID}.rpm
+  $(_sudo) dnf --enablerepo=remi install libtidy -y
+}
+
+_install_php_run_dep(){
     cd /tmp
 
-    if ! [ ${ID} = 'fedora' ];then
-      $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-${VERSION_ID}.noarch.rpm
+    if ! [ "${ID}" = 'fedora' ];then
+      _install_epel
+    fi
 
-      $(_sudo) rpm -Uvh epel-release-latest-${VERSION_ID}.noarch.rpm
+    if [ "${VERSION_ID}" -ge 35 -a "${ID}" = 'fedora' ];then
+      $(_sudo) wget -N https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      $(_sudo) rpm -Uvh epel-release-latest-8.noarch.rpm
     fi
 
     # if [ ${VERSION_ID} -ge 8 -a ${ID} != 'fedora' ];then
-    #   $(_sudo) wget -N https://rpms.remirepo.net/enterprise/remi-release-${VERSION_ID}.rpm
-    #   $(_sudo) rpm -Uvh remi-release-${VERSION_ID}.rpm
-    #   $(_sudo) dnf --enablerepo=remi install libtidy -y
+    #  _install_remi
     # fi
 
 _libzip(){
@@ -177,7 +189,7 @@ _libzip(){
 
     if [ ${VERSION_ID} -ge 8 ];then
       $(_sudo) dnf install -y pkgconf-pkg-config
-      $(_sudo) dnf --repo AppStream install -y libzip libzip-devel
+      $(_sudo) dnf install -y libzip libzip-devel
 
       return
     fi
@@ -295,7 +307,7 @@ if [ $VERSION_ID -ge 8 -a ${ID} != 'fedora' ];then
   # $(_sudo) dnf --enablerepo=remi install libtidy-devel -y
 
   $(_sudo) dnf install -y dnf-utils
-  $(_sudo) yum-config-manager --enable PowerTools
+  $(_sudo) yum-config-manager --enable powertools
 fi
 
 $(_sudo) yum install -y ${DEP_SOFTS}
