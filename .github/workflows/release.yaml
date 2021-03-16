@@ -30,8 +30,8 @@ jobs:
             DIST_FILE: khs1994-wsl-php80_8.0.3-ubuntu-bionic_amd64.deb
           - JOB_NAME: wsl-php-builder-ubuntu2004-74
             DIST_FILE: khs1994-wsl-php74_7.4.16-ubuntu-focal_amd64.deb
-          - JOB_NAME: wsl-php-builder-ubuntu2010-80
-            DIST_FILE: khs1994-wsl-php80_8.0.3-ubuntu-groovy_amd64.deb
+          - JOB_NAME: wsl-php-builder-ubuntu2104-80
+            DIST_FILE: khs1994-wsl-php80_8.0.3-ubuntu-hirsute_amd64.deb
           - JOB_NAME: wsl-php-builder-ubuntu2004-nightly
             DIST_FILE: khs1994-wsl-php81_0.0.0-ubuntu-focal_amd64.deb
           - JOB_NAME: wsl-php-builder-rhel7-73

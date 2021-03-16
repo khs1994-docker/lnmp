@@ -107,14 +107,14 @@ services:
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_0.0.0-ubuntu-focal_amd64
 
 # latest stable php and ubuntu
-  wsl-php-builder-ubuntu2010-80:
+  wsl-php-builder-ubuntu2104-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.3}
-        - OS_TYPE=ubuntu:20.10
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.3}-ubuntu-groovy_amd64
+        - OS_TYPE=ubuntu:21.04
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.3}-ubuntu-hirsute_amd64
 
   wsl-php-builder-rhel7-73:
     build:
@@ -189,11 +189,11 @@ services:
     image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php81_0.0.0-fedora-33_amd64
 
 # latest php and fedora
-  wsl-php-builder-fc34-80:
+  wsl-php-builder-fc35-80:
     build:
       context: .
       dockerfile: wsl.phpbuilder.rhel.Dockerfile
       args:
         - PHP_VERSION=${PHP_VERSION_80:-8.0.3}
         - OS_TYPE=fedora:rawhide
-    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.3}-fedora-34_amd64
+    image: ${registry:-docker.io}/khs1994/wsl:khs1994-wsl-php80_${PHP_VERSION_80:-8.0.3}-fedora-35_amd64
