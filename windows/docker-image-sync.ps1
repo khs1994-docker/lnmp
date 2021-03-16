@@ -291,7 +291,11 @@ Function _sync($source, $dest, $config) {
     }
   }
 
-  $push_manifest_once = $false
+  $already_push_manifest_once = $false
+
+  if ($env:PUSH_MANIFEST_ONCE -eq 'false' -or !$env:PUSH_MANIFEST_ONCE) {
+    $already_push_manifest_once = $true
+  }
 
   foreach ($manifest in $manifests) {
     if (!$manifests_list_not_exists) {
@@ -316,7 +320,7 @@ manifest $manifest_digest already exists" `
 
         # 有的仓库不能展示 manifest list，推送一次 manifest 以显示
 
-        if (!$push_manifest_once) {
+        if (!$already_push_manifest_once) {
           Write-Host "==> Registry maybe not show manifest list, push manifest once" -ForegroundColor Blue
 
           $token = _getSourceToken $source_registry $source_image
@@ -329,7 +333,7 @@ manifest $manifest_digest already exists" `
           _upload_manifest $dest_token $dest_image $dest_ref $manifest_json_path `
             $dest_registry
 
-          $push_manifest_once = $true
+          $already_push_manifest_once = $true
         }
 
         continue
