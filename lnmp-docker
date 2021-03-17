@@ -10,7 +10,6 @@ tty=
 tty -s > /dev/null 2>&1 && tty=--tty || true
 
 readonly KUBERNETES_VERSION="1.19.3"
-readonly DOCKER_DESKTOP_VERSION="2.5.1.0"
 readonly OS=`uname -s`
 readonly ARCH=`uname -m`
 
@@ -165,7 +164,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | ]
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -254,7 +253,7 @@ _gcr_io(){
 
   _gcr_io_down
 
-  print_info "This local server support Docker Desktop v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
+  print_info "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
 
   mkdir -p $HOME/.khs1994-docker-lnmp/registry
 

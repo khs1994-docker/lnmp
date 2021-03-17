@@ -1,9 +1,5 @@
 [
   {
-    "source": "us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.4.1",
-    "dest": "gcr-mirror/pause:3.4.1-2"
-  },
-  {
     "source": "gcr.io/google-containers/coredns:1.7.0",
     "dest": "gcr-mirror/coredns:1.7.0"
   },

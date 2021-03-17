@@ -56,6 +56,14 @@ jobs:
         login-server: ghcr.io
         username: khs1994
         password: ${{ secrets.GHCR_IO_TOKEN }}
+    - uses: azure/docker-login@v1
+      if: |
+        github.event_name == 'push'
+        && startsWith(matrix.os, 'ubuntu' )
+      with:
+        login-server: pcit-docker.pkg.coding.net
+        username: khs1994-1601432822176
+        password: ${{secrets.CODING_DOCKER_PASSWORD}}
     - name: Update docker compose
       run: |
         docker-compose --version
@@ -122,6 +130,7 @@ jobs:
       run: |
         docker buildx build -t lwpm/lwpm \
                             -t ghcr.io/khs1994/lwpm \
+                            -t pcit-docker.pkg.coding.net/khs1994-docker/lwpm/lwpm \
                             -f windows/lwpm.Dockerfile --push windows
     - name: build and push [ docker-image-sync ] image
       if: |
@@ -131,6 +140,7 @@ jobs:
       run: |
         docker buildx build -t khs1994/docker-image-sync \
                             -t ghcr.io/khs1994/docker-image-sync \
+                            -t pcit-docker.pkg.coding.net/khs1994-docker/khs1994/docker-image-sync \
                             -f windows/docker-image-sync.Dockerfile --push windows
     - name: build and push [ lrew ] image
       if: |
@@ -139,7 +149,9 @@ jobs:
         && startsWith(matrix.os, 'ubuntu' )
       run: |
         docker buildx build -t lrew/lrew \
-                            -t ghcr.io/lrew/lrew --push lrew
+                            -t ghcr.io/lrew/lrew \
+                            -t pcit-docker.pkg.coding.net/khs1994-docker/lrew/lrew \
+                            --push lrew
     - name: Config git
       run: |
         git config --global user.email "ci@khs1994.com"

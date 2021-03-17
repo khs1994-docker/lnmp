@@ -11,14 +11,9 @@ services:
     image: k8s.gcr.io/coredns:1.7.0
 
   pause:
+    # image: us.gcr.io/k8s-artifacts-prod/kubernetes/pause:TAG
     image: k8s.gcr.io/pause:3.4.1
     # https://github.com/kubernetes/kubernetes/tree/master/build/pause
-
-  new-pause:
-    image: us.gcr.io/k8s-artifacts-prod/kubernetes/pause:3.3
-
-  mcr-pause:
-    image: mcr.microsoft.com/oss/kubernetes/pause:3.4.1
 
   calico:
     image: calico/cni:v3.18.0

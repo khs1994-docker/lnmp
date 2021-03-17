@@ -24,8 +24,6 @@ services:
       # fix me 将依赖挂载到数据卷
       # - vendor:/app/demo/vendor
 
-      # fix me
-      # mutagen: 若使用 mutagen 请注释掉上方两项，取消注释下方一项
       # - /var/lib/app/demo:/app/demo
 
       # composer

@@ -134,8 +134,7 @@ if (Test-Path "$PSScriptRoot/$LNMP_ENV_FILE_PS1") {
 # Stop, Continue, Inquire, Ignore, Suspend, Break
 
 # $DOCKER_DEFAULT_PLATFORM="linux"
-$KUBERNETES_VERSION = "1.19.3"
-$DOCKER_DESKTOP_VERSION = "2.5.1.0"
+$KUBERNETES_VERSION = "1.19.7"
 $EXEC_CMD_DIR = $PWD
 
 Function Test-Command($command) {
@@ -360,7 +359,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | ]
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -1426,7 +1425,7 @@ XXX
     }
     catch {}
 
-    printInfo "This local server support Docker Desktop v${DOCKER_DESKTOP_VERSION} with Kubernetes v${KUBERNETES_VERSION}"
+    printInfo "This local server support Docker Desktop with Kubernetes v${KUBERNETES_VERSION}"
 
     if ('down' -eq $args[1]) {
       Write-Warning "Stop gcr.io local server success"

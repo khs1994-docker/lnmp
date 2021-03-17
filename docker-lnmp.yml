@@ -265,16 +265,3 @@ services:
     #   - php8
     healthcheck:
       test: ["CMD","nginx","-t"]
-
-  mutagen-wsl2:
-    << : *common
-    image: busybox
-    command:
-      - sh
-      - -c
-      - |
-        while : ;do sleep 3600; done
-    volumes:
-      - ${APP_ROOT}:/app
-      - mutagen-wsl2-data:/root
-    read_only: true

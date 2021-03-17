@@ -65,8 +65,6 @@ volumes:
     << : *common
   composer-cache-data:
     << : *common
-  mutagen-wsl2-data:
-    << : *common
 
 secrets:
   db_root_password:
