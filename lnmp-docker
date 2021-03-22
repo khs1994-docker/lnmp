@@ -164,7 +164,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | ]
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm mode LNMP images (nginx php7)
@@ -649,6 +649,7 @@ set_git_remote_origin_url(){
 }
 
 update(){
+  local force=
   if ! [ -d .git ];then git init > /dev/null 2>&1; BRANCH=master; fi
 
   set_git_remote_origin_url
@@ -665,8 +666,9 @@ update(){
      exit 1
   fi
   print_info "Branch is ${BRANCH}"
-  git pull origin ${BRANCH} || true
-  git reset --hard origin/${BRANCH}
+  git fetch origin ${BRANCH}:lnmp-temp/${BRANCH} || true
+  git reset --hard lnmp-temp/${BRANCH}
+  git branch -D lnmp-temp/${BRANCH}
   # print_info "Update Git Submodule"
   # git submodule update --init --recursive
   command -v bash > /dev/null 2>&1 || sed -i 's!^#\!/bin/bash.*!#\!/bin/sh!g' lnmp-docker

@@ -127,6 +127,7 @@ $ wsl --mount \\.\PHYSICALDRIVE0 --partition 3
 # 格式化空白硬盘
 # $ wsl --mount \\.\PHYSICALDRIVE0 --bare
 # $ fdisk /dev/sdX
+# 自行学习使用 fdisk 命令
 # $ mkfs.ext4 /dev/sdXN
 ```
 

@@ -359,7 +359,7 @@ Composer:
   satis                Build Satis
 
 Kubernets:
-  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | ]
+  gcr.io               Up local gcr.io registry server to start Docker Desktop Kubernetes [ --no-pull | logs | down | ]
 
 Swarm mode:
   swarm-build          Build Swarm image (nginx php7)
@@ -479,8 +479,9 @@ Function _update() {
 
   ${BRANCH} = (git rev-parse --abbrev-ref HEAD)
   $ErrorActionPreference = "continue"
-  git pull origin ${BRANCH}
-  git reset --hard origin/${BRANCH}
+  git fetch origin ${BRANCH}:lnmp-temp/${BRANCH}
+  git reset --hard lnmp-temp/${BRANCH}
+  git branch -D lnmp-temp/${BRANCH}
   # git submodule update --init --recursive
 }
 
@@ -1595,7 +1596,7 @@ Example: ./lnmp-docker composer /app/demo install
       return $wsl2_mount_physicaldiskdevice_path
     }
 
-    printInfo "try mount physical disk to WSL2 $WSL2_DIST"
+    printInfo "try mount physical disk to WSL2 [ $WSL2_DIST ]"
     wsl -d $WSL2_DIST -u root -- sh -c "mountpoint -q /app"
 
     if ($?) {
@@ -1638,6 +1639,7 @@ Example: ./lnmp-docker composer /app/demo install
 
     $wsl2_mount_physicaldiskdevice_path = Get-wsl2_mount_physicaldiskdevice_path $MountPhysicalDiskType2WSL2
 
+    & $PSScriptRoot/kubernetes/wsl2/bin/wsl2d.ps1 $WSL2_DIST
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p /app"
     wsl -d $WSL2_DIST -u root -- sh -cx "mkdir -p $wsl2_mount_physicaldiskdevice_path/app"
     wsl -d $WSL2_DIST -u root -- sh -cx "mount --bind $wsl2_mount_physicaldiskdevice_path/app /app"
